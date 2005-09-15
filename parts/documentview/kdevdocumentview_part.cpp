@@ -56,6 +56,8 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent, const char *name, c
 
     m_widget = new QWidget( 0 );
     new QVBoxLayout( m_widget );
+    m_widget->setIcon( SmallIcon( "kmultiple" ) );
+    m_widget->setCaption( i18n( "Documents" ) );
 
     m_documentView = new KDevDocumentView( this, m_widget );
     KDevDocumentViewDelegate *delegate = new KDevDocumentViewDelegate( m_documentView, this );
@@ -90,7 +92,7 @@ KDevDocumentViewPart::~KDevDocumentViewPart()
 void KDevDocumentViewPart::import( RefreshPolicy /*policy*/ )
 {}
 
-void KDevDocumentViewPart::saveFile( const KURL &/*url*/ )
+void KDevDocumentViewPart::saveFile( const KURL & /*url*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
@@ -113,12 +115,12 @@ void KDevDocumentViewPart::loadFile( const KURL &url )
     }
 }
 
-void KDevDocumentViewPart::closeFile( const KURL &/*url*/ )
+void KDevDocumentViewPart::closeFile( const KURL & /*url*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::dirtyFile( const KURL &/*url*/ )
+void KDevDocumentViewPart::dirtyFile( const KURL & /*url*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
