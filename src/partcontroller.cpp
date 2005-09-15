@@ -550,10 +550,7 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
   if ( !ro_part ) return;
 
-  if ( ro_part->url().isLocalFile() )
-    emit loadedFile( ro_part->url().path() );
-  else
-    emit loadedFile( ro_part->url() );
+  emit loadedFile( ro_part->url() );
 
   connect( part, SIGNAL(modifiedOnDisc(Kate::Document*, bool, unsigned char)), this, SLOT(slotDocumentDirty(Kate::Document*, bool, unsigned char)) );
 
