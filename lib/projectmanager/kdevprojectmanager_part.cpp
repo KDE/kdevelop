@@ -107,10 +107,6 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
   m_widget = new QWidget(0);
   QVBoxLayout *vbox = new QVBoxLayout(m_widget);
 
-#ifdef __GNUC__
-#  warning "harald fix your KFilterModel!!"
-#endif
-
 #if 0
   QLineEdit *editor = new QLineEdit(m_widget);
   vbox->addWidget(editor);
@@ -119,23 +115,39 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
 
   KDevProjectManagerDelegate *delegate = new KDevProjectManagerDelegate(this);
 
+  QAbstractItemModel *overviewModel = m_projectModel;
+#ifdef USE_KFILTER_MODEL
+  overviewModel = new KDevProjectOverviewFilter(m_projectModel, this);
+#endif
+
   m_projectOverview = new KDevProjectManager(this, m_widget);
-  m_projectOverview->setModel(new KDevProjectOverviewFilter(m_projectModel, m_projectOverview));
+  m_projectOverview->setModel(overviewModel);
   m_projectOverview->setItemDelegate(delegate);
   m_projectOverview->setWhatsThis(i18n("Project Overview"));
   vbox->add(m_projectOverview);
 
+  connect(m_projectOverview, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
+
+
+
+#ifdef WITH_PROJECT_DETAILS
+  QAbstractItemModel *detailsModel = m_projectModel;
+#ifdef USE_KFILTER_MODEL
+  detailsModel = new KDevProjectDetailsFilter(m_projectModel, this);
+#endif
+
   m_projectDetails = new KDevProjectManager(this, m_widget);
-  m_projectDetails->setModel(new KDevProjectDetailsFilter(m_projectModel, m_projectDetails));
+  m_projectDetails->setModel(detailsModel);
   m_projectDetails->setItemDelegate(delegate);
   m_projectDetails->setWhatsThis(i18n("Project Details"));
   vbox->add(m_projectDetails);
 
-  // ### connect(m_projectOverview, SIGNAL(currentChanged(KDevProjectItem*)), this, SLOT(updateDetails(KDevProjectItem*)));
   connect(m_projectDetails, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
 
   connect(m_projectOverview->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
           m_projectDetails, SLOT(setRootIndex(QModelIndex)));
+#endif
+
 
   mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
 
