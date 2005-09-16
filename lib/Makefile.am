@@ -19,7 +19,6 @@ SUBDIRS = \
     util \
     interfaces \
     widgets \
-    cppparser \
     projectmanager
 
 DOXYGEN_EMPTY = YES
