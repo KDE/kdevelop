@@ -25,7 +25,7 @@
 
 class Problem
 {
-private:
+public:
   Problem();
   Problem(const Problem &other);
   Problem &operator = (const Problem &other);

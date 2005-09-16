@@ -21,6 +21,7 @@
 
 #include "symbol.h"
 #include "memorypool.h"
+#include "problem.h"
 
 #include <QtCore/QHash>
 
@@ -55,13 +56,16 @@ public:
   Control();
   ~Control();
 
-  inline bool skipFunctionBody() const { return _M_skipFunctionBody; }
-  inline void setSkipFunctionBody(bool skip) { _M_skipFunctionBody = skip; }
+  int problemCount() const;
+  Problem problem(int index) const;
 
-  Context *current_context;
+  void reportProblem(const Problem &problem);
+
+  inline bool skipFunctionBody() const { return _M_skip_function_body; }
+  inline void setSkipFunctionBody(bool skip) { _M_skip_function_body = skip; }
 
   inline Context *currentContext() const
-  { return current_context; }
+  { return _M_current_context; }
 
   void pushContext();
   void popContext();
@@ -70,15 +74,17 @@ public:
   void declare(const NameSymbol *name, Type *type);
 
   inline const NameSymbol *findOrInsertName(const char *data, size_t count)
-  { return name_table.findOrInsert(data, count); }
+  { return _M_name_table.findOrInsert(data, count); }
 
   void declareTypedef(const NameSymbol *name, Declarator *d);
   bool isTypedef(const NameSymbol *name) const;
 
 private:
-  NameTable name_table;
-  QHash<const NameSymbol*, Declarator*> stl_typedef_table;
-  bool _M_skipFunctionBody;
+  bool _M_skip_function_body;
+  Context *_M_current_context;
+  NameTable _M_name_table;
+  QHash<const NameSymbol*, Declarator*> _M_typedef_table;
+  QList<Problem> _M_problems;
 };
 
 #endif // CONTROL_H

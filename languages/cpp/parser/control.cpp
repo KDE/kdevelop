@@ -20,8 +20,9 @@
 #include "lexer.h"
 
 Control::Control()
-  : current_context(0),
-    _M_skipFunctionBody(false)
+  : _M_skip_function_body(false),
+    _M_current_context(0)
+
 {
   pushContext();
 
@@ -33,14 +34,29 @@ Control::~Control()
 {
   popContext();
 
-  Q_ASSERT(current_context == 0);
+  Q_ASSERT(_M_current_context == 0);
+}
+
+int Control::problemCount() const
+{
+  return _M_problems.count();
+}
+
+Problem Control::problem(int index) const
+{
+  return _M_problems.at(index);
+}
+
+void Control::reportProblem(const Problem &problem)
+{
+  _M_problems.append(problem);
 }
 
 Type *Control::lookupType(const NameSymbol *name) const
 {
-  Q_ASSERT(current_context != 0);
+  Q_ASSERT(_M_current_context != 0);
 
-  return current_context->resolve(name);
+  return _M_current_context->resolve(name);
 }
 
 void Control::declare(const NameSymbol *name, Type *type)
@@ -48,26 +64,26 @@ void Control::declare(const NameSymbol *name, Type *type)
   //printf("*** Declare:");
   //printSymbol(name);
   //putchar('\n');
-  Q_ASSERT(current_context != 0);
+  Q_ASSERT(_M_current_context != 0);
 
-  current_context->bind(name, type);
+  _M_current_context->bind(name, type);
 }
 
 void Control::pushContext()
 {
   // printf("+Context\n");
   Context *new_context = new Context;
-  new_context->parent = current_context;
-  current_context = new_context;
+  new_context->parent = _M_current_context;
+  _M_current_context = new_context;
 }
 
 void Control::popContext()
 {
   // printf("-Context\n");
-  Q_ASSERT(current_context != 0);
+  Q_ASSERT(_M_current_context != 0);
 
-  Context *old_context = current_context;
-  current_context = current_context->parent;
+  Context *old_context = _M_current_context;
+  _M_current_context = _M_current_context->parent;
 
   delete old_context;
 }
@@ -77,16 +93,16 @@ void Control::declareTypedef(const NameSymbol *name, Declarator *d)
   //  printf("declared typedef:");
   //  printSymbol(name);
   //  printf("\n");
-  stl_typedef_table.insert(name, d);
+  _M_typedef_table.insert(name, d);
 }
 
 bool Control::isTypedef(const NameSymbol *name) const
 {
   //  printf("is typedef:");
   //  printSymbol(name);
-  // printf("= %d\n", (stl_typedef_table.find(name) != stl_typedef_table.end()));
+  // printf("= %d\n", (_M_typedef_table.find(name) != _M_typedef_table.end()));
 
-  return stl_typedef_table.contains(name);
+  return _M_typedef_table.contains(name);
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
