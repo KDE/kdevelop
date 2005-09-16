@@ -27,7 +27,7 @@
 #include "codemodel.h"
 
 #include <QtCore/QFile>
-#include <QtCore/qdebug.h>
+#include <iostream>
 
 static bool dump = false;
 static bool bind = false;
@@ -57,6 +57,16 @@ bool parse_file(const QString &fileName)
       CodeModel model;
       Binder binder(&model, &p.token_stream);
       FileModelItem dom = binder.run(ast);
+    }
+
+  for (int i=0; i<control.problemCount(); ++i)
+    {
+      Problem p = control.problem(i);
+
+      std::cerr << "** ERRROR: " << qPrintable(p.fileName())
+                << ":" << p.line()
+                << ": " << qPrintable(p.message())
+                << std::endl;
     }
 
   return control.problemCount() == 0;

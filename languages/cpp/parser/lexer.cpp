@@ -161,9 +161,12 @@ void Lexer::scan_preprocessor()
   while (*cursor && *cursor != '\n')
     ++cursor;
 
-  Problem p = createProblem();
-  p.setMessage("expected end of line");
-  control->reportProblem(p);
+  if (*cursor != '\n')
+    {
+      Problem p = createProblem();
+      p.setMessage("expected end of line");
+      control->reportProblem(p);
+    }
 }
 
 void Lexer::extract_line(int offset, int *line, QString *filename) const
@@ -248,7 +251,7 @@ void Lexer::scan_char_constant()
       ++cursor;
     }
 
-  if (*cursor == '\'')
+  if (*cursor != '\'')
     {
       Problem p = createProblem();
       p.setMessage("expected '");
@@ -286,7 +289,7 @@ void Lexer::scan_string_constant()
       ++cursor;
     }
 
-  if (*cursor == '"')
+  if (*cursor != '"')
     {
       Problem p = createProblem();
       p.setMessage("expected \"");
@@ -296,8 +299,6 @@ void Lexer::scan_string_constant()
     {
       ++cursor;
     }
-
-  ++cursor;
 
   token_stream[index].extra.symbol =
     control->findOrInsertName((const char*) begin, cursor - begin);
