@@ -52,7 +52,7 @@ void Lexer::positionAt(std::size_t offset, int *line, int *column,
   int ppline, ppcolumn;
   line_table.positionAt(offset, &ppline, &ppcolumn);
 
-  int base_line;
+  int base_line = 1;
   extract_line(line_table[ppline-1], &base_line, filename);
 
   int line2, column2;
@@ -171,6 +171,12 @@ void Lexer::scan_preprocessor()
 
 void Lexer::extract_line(int offset, int *line, QString *filename) const
 {
+  if (*cursor != '#')
+    {
+      // nothing to do
+      return;
+    }
+
   const unsigned char *cursor = begin_buffer + offset;
 
   ++cursor; // skip '#'
@@ -794,9 +800,6 @@ void Lexer::scan_invalid_input()
 void LocationTable::positionAt(std::size_t offset,
 			       int *line, int *column) const
 {
-  if (!(line && column && current_line != 0))
-    return;
-
   int first = 0;
   int len = current_line;
   int half;
@@ -1845,12 +1848,14 @@ void Lexer::scanKeyword16()
 
 Problem Lexer::createProblem() const
 {
+  Q_ASSERT(index > 0);
+
   Problem p; // ### fill me
 
   int line = 0, column = 0;
   QString fileName;
 
-  positionAt(index, &line, &column, &fileName);
+  positionAt(index - 1, &line, &column, &fileName);
   p.setLine(line);
   p.setColumn(column);
   p.setFileName(fileName);
