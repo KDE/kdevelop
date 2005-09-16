@@ -19,7 +19,7 @@
 #ifndef FASTLIST_H
 #define FASTLIST_H
 
-#include "smallobject.h"
+#include "memorypool.h"
 
 template <typename Tp>
 struct ListNode

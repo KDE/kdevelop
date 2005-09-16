@@ -7,10 +7,10 @@ DEFINES += RXX_ALLOCATOR_INIT_0
 
 HEADERS += $$RXXPATH/ast.h \
            $$RXXPATH/lexer.h \
-           $$RXXPATH/list.h \
+           $$RXXPATH/listnode.h \
            $$RXXPATH/parser.h \
            $$RXXPATH/rxx_allocator.h \
-           $$RXXPATH/smallobject.h \
+           $$RXXPATH/memorypool.h \
            $$RXXPATH/tokens.h \
            $$RXXPATH/symbol.h \
            $$RXXPATH/control.h \
@@ -28,9 +28,9 @@ HEADERS += $$RXXPATH/ast.h \
            $$RXXPATH/compiler_utils.h
 SOURCES += $$RXXPATH/ast.cpp \
            $$RXXPATH/lexer.cpp \
-           $$RXXPATH/list.cpp \
+           $$RXXPATH/listnode.cpp \
            $$RXXPATH/parser.cpp \
-           $$RXXPATH/smallobject.cpp \
+           $$RXXPATH/memorypool.cpp \
            $$RXXPATH/control.cpp \
            $$RXXPATH/visitor.cpp \
            $$RXXPATH/default_visitor.cpp \

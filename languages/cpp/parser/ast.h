@@ -19,8 +19,8 @@
 #ifndef AST_H
 #define AST_H
 
-#include "smallobject.h"
-#include "list.h"
+#include "memorypool.h"
+#include "listnode.h"
 
 #define DECLARE_AST_NODE(k) \
     enum { __node_kind = Kind_##k };

@@ -16,25 +16,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef SMALLOBJECT_H
-#define SMALLOBJECT_H
-
-#include "rxx_allocator.h"
-#include <cstring>
-
-class pool
-{
-  rxx_allocator<char> __alloc;
-
-public:
-  inline void *allocate(std::size_t __size);
-};
-
-inline void *pool::allocate(std::size_t __size)
-{
-  return __alloc.allocate(__size);
-}
-
-#endif
+#include "listnode.h"
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

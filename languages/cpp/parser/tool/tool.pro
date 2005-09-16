@@ -1,7 +1,7 @@
-SOURCES = ../main.cpp
-LIBS += ../lib/libr++.a
-INCLUDEPATH += ..
+
+include(../rxx.pri)
+SOURCES += main.cpp
 
 TEMPLATE = app
 QT = core
-TARGET = ../r++0
+TARGET = r++0

@@ -20,7 +20,7 @@
 #define CONTROL_H
 
 #include "symbol.h"
-#include "smallobject.h"
+#include "memorypool.h"
 
 #include <QtCore/QHash>
 
