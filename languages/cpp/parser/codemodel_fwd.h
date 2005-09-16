@@ -19,7 +19,8 @@
 #ifndef CODEMODEL_FWD_H
 #define CODEMODEL_FWD_H
 
-#include <ksharedptr.h>
+#include "kdevsharedptr.h"
+
 #include <QtCore/QList>
 
 // forward declarations
@@ -41,21 +42,21 @@ class _VariableModelItem;
 class _MemberModelItem;
 class TypeInfo;
 
-typedef KSharedPtr<_ArgumentModelItem> ArgumentModelItem;
-typedef KSharedPtr<_ClassModelItem> ClassModelItem;
-typedef KSharedPtr<_CodeModelItem> CodeModelItem;
-typedef KSharedPtr<_EnumModelItem> EnumModelItem;
-typedef KSharedPtr<_EnumeratorModelItem> EnumeratorModelItem;
-typedef KSharedPtr<_FileModelItem> FileModelItem;
-typedef KSharedPtr<_FunctionDefinitionModelItem> FunctionDefinitionModelItem;
-typedef KSharedPtr<_FunctionModelItem> FunctionModelItem;
-typedef KSharedPtr<_NamespaceModelItem> NamespaceModelItem;
-typedef KSharedPtr<_ScopeModelItem> ScopeModelItem;
-typedef KSharedPtr<_TemplateModelItem> TemplateModelItem;
-typedef KSharedPtr<_TemplateParameterModelItem> TemplateParameterModelItem;
-typedef KSharedPtr<_TypeAliasModelItem> TypeAliasModelItem;
-typedef KSharedPtr<_VariableModelItem> VariableModelItem;
-typedef KSharedPtr<_MemberModelItem> MemberModelItem;
+typedef KDevSharedPtr<_ArgumentModelItem> ArgumentModelItem;
+typedef KDevSharedPtr<_ClassModelItem> ClassModelItem;
+typedef KDevSharedPtr<_CodeModelItem> CodeModelItem;
+typedef KDevSharedPtr<_EnumModelItem> EnumModelItem;
+typedef KDevSharedPtr<_EnumeratorModelItem> EnumeratorModelItem;
+typedef KDevSharedPtr<_FileModelItem> FileModelItem;
+typedef KDevSharedPtr<_FunctionDefinitionModelItem> FunctionDefinitionModelItem;
+typedef KDevSharedPtr<_FunctionModelItem> FunctionModelItem;
+typedef KDevSharedPtr<_NamespaceModelItem> NamespaceModelItem;
+typedef KDevSharedPtr<_ScopeModelItem> ScopeModelItem;
+typedef KDevSharedPtr<_TemplateModelItem> TemplateModelItem;
+typedef KDevSharedPtr<_TemplateParameterModelItem> TemplateParameterModelItem;
+typedef KDevSharedPtr<_TypeAliasModelItem> TypeAliasModelItem;
+typedef KDevSharedPtr<_VariableModelItem> VariableModelItem;
+typedef KDevSharedPtr<_MemberModelItem> MemberModelItem;
 
 typedef QList<ArgumentModelItem> ArgumentList;
 typedef QList<ClassModelItem> ClassList;

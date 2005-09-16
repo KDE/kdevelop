@@ -26,6 +26,7 @@ HEADERS += $$RXXPATH/ast.h \
            $$RXXPATH/class_compiler.h \
            $$RXXPATH/codemodel_finder.h \
            $$RXXPATH/compiler_utils.h \
+           $$RXXPATH/kdevsharedptr.h \
            $$RXXPATH/problem.h
 
 SOURCES += $$RXXPATH/ast.cpp \

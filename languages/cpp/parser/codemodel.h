@@ -20,7 +20,6 @@
 #define CODEMODEL_H
 
 #include "codemodel_fwd.h"
-#include <ksharedptr.h>
 
 #include <QtCore/QHash>
 #include <QtCore/QList>
@@ -30,7 +29,7 @@
 
 #define DECLARE_MODEL_NODE(k) \
     enum { __node_kind = Kind_##k }; \
-    typedef KSharedPtr<k##ModelItem> Pointer;
+    typedef KDevSharedPtr<k##ModelItem> Pointer;
 
 template <class _Target, class _Source>
 _Target model_static_cast(_Source item)
@@ -129,7 +128,7 @@ private:
     uint m_indirections : 6;
 };
 
-class _CodeModelItem: public KShared
+class _CodeModelItem: public KDevShared
 {
 public:
   enum Kind

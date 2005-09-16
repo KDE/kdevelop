@@ -13,7 +13,7 @@ libkdevcppparser_la_SOURCES = \
 
 noinst_HEADERS = \
 	ast.h               codemodel.h            dumptree.h    name_compiler.h  type_compiler.h \
-	binder.h            compiler_utils.h       ksharedptr.h  parser.h         visitor.h \
+	binder.h            compiler_utils.h       kdevsharedptr.h  parser.h         visitor.h \
 	class_compiler.h    control.h              lexer.h       rxx_allocator.h \
 	codemodel_finder.h  declarator_compiler.h  listnode.h    symbol.h \
 	codemodel_fwd.h     default_visitor.h      memorypool.h  tokens.h \
