@@ -21,7 +21,6 @@
 #include "control.h"
 
 #include <cctype>
-#include <iostream>
 
 scan_fun_ptr Lexer::s_scan_keyword_table[] = {
   &Lexer::scanKeyword0, &Lexer::scanKeyword0,
@@ -161,7 +160,10 @@ void Lexer::scan_preprocessor()
 
   while (*cursor && *cursor != '\n')
     ++cursor;
-  Q_ASSERT(*cursor == '\n');
+
+  Problem p = createProblem();
+  p.setMessage("expected end of line");
+  control->reportProblem(p);
 }
 
 void Lexer::extract_line(int offset, int *line, QString *filename) const
@@ -173,30 +175,56 @@ void Lexer::extract_line(int offset, int *line, QString *filename) const
     {
       ++cursor;
       char buffer[1024], *cp = buffer;
-      do {
-	*cp++ = *cursor++;
-      } while (std::isdigit(*cursor));
+      do { *cp++ = *cursor++; }  // ### FIXME unsafe!
+      while (std::isdigit(*cursor));
       *cp = '\0';
-      int l = strtol(buffer, 0, 0);
+      int line_number = strtol(buffer, 0, 0);
 
-      Q_ASSERT(std::isspace(*cursor));
-      ++cursor;
+      if (! std::isspace(*cursor))
+        {
+          Problem p = createProblem();
+          p.setMessage("expected white space");
+          control->reportProblem(p);
+          goto skip_line;
+        }
 
-      Q_ASSERT(*cursor == '"');
+      ++cursor; // skip the white space
+
+      if (*cursor != '"')
+        {
+          Problem p = createProblem();
+          p.setMessage("expected \"");
+          control->reportProblem(p);
+          goto skip_line;
+        }
+
       ++cursor;
 
       cp = buffer;
-      do {
-	*cp++ = *cursor++;
-      } while (*cursor && *cursor != '"');
+      do { *cp++ = *cursor++; } // ### FIXME unsafe!
+      while (*cursor && *cursor != '"');
       *cp = '\0';
-      Q_ASSERT(*cursor == '"');
+
+      if (*cursor != '"')
+        {
+          Problem p = createProblem();
+          p.setMessage("expected \"");
+          control->reportProblem(p);
+          goto skip_line;
+        }
+
       ++cursor;
 
       *filename = buffer;
-      *line = l;
+      *line = line_number;
       // printf("filename: %s line: %d\n", buffer, line);
+      return;
     }
+
+skip_line:
+  // skip the line
+  while (*cursor && *cursor != '\n')
+    ++cursor;
 }
 
 void Lexer::scan_char_constant()
@@ -206,15 +234,30 @@ void Lexer::scan_char_constant()
   ++cursor;
   while (*cursor && *cursor != '\'')
     {
-      Q_ASSERT(*cursor != '\n');
+       if (*cursor == '\n')
+        {
+          Problem p = createProblem();
+          p.setMessage("unexpected new line");
+          control->reportProblem(p);
+          break;
+        }
 
       if (*cursor == '\\')
 	++cursor;
+
       ++cursor;
     }
 
-  Q_ASSERT(*cursor == '\'');
-  ++cursor;
+  if (*cursor == '\'')
+    {
+      Problem p = createProblem();
+      p.setMessage("expected '");
+      control->reportProblem(p);
+    }
+  else
+    {
+      ++cursor;
+    }
 
   token_stream[index].extra.symbol =
     control->findOrInsertName((const char*) begin, cursor - begin);
@@ -229,14 +272,31 @@ void Lexer::scan_string_constant()
   ++cursor;
   while (*cursor && *cursor != '"')
     {
-      Q_ASSERT(*cursor != '\n');
+       if (*cursor == '\n')
+        {
+          Problem p = createProblem();
+          p.setMessage("unexpected new line");
+          control->reportProblem(p);
+          break;
+        }
 
       if (*cursor == '\\')
 	++cursor;
+
       ++cursor;
     }
 
-  Q_ASSERT(*cursor == '"');
+  if (*cursor == '"')
+    {
+      Problem p = createProblem();
+      p.setMessage("expected \"");
+      control->reportProblem(p);
+    }
+  else
+    {
+      ++cursor;
+    }
+
   ++cursor;
 
   token_stream[index].extra.symbol =
@@ -723,9 +783,11 @@ void Lexer::scan_EOF()
 
 void Lexer::scan_invalid_input()
 {
-  std::cerr << "** ERROR invalid input: ``" << int(*cursor) << "''" << std::endl;
+  Problem p = createProblem();
+  p.setMessage("invalid input");
+  control->reportProblem(p);
+
   ++cursor;
-  Q_ASSERT(0);
 }
 
 void LocationTable::positionAt(std::size_t offset,
@@ -758,8 +820,6 @@ void LocationTable::positionAt(std::size_t offset,
 
   *line = std::max(first, 1);
   *column = offset - lines[*line - 1] - 1;
-
-  Q_ASSERT(*column >= 0);
 }
 
 void Lexer::scanKeyword0()
@@ -1780,6 +1840,21 @@ void Lexer::scanKeyword16()
     }
 
   token_stream[index++].kind = Token_identifier;
+}
+
+Problem Lexer::createProblem() const
+{
+  Problem p; // ### fill me
+
+  int line = 0, column = 0;
+  QString fileName;
+
+  positionAt(index, &line, &column, &fileName);
+  p.setLine(line);
+  p.setColumn(column);
+  p.setFileName(fileName);
+
+  return p;
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

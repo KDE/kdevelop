@@ -27,6 +27,7 @@
 struct NameSymbol;
 class Lexer;
 class Control;
+class Problem;
 
 typedef void (Lexer::*scan_fun_ptr)();
 
@@ -170,7 +171,7 @@ public:
   LocationTable &line_table;
 
   void positionAt(std::size_t offset, int *line, int *column,
-		  QString *filename) const;
+                  QString *filename) const;
 
 private:
   void initialize_scan_table();
@@ -229,6 +230,8 @@ private:
   void scan_EOF();
 
   void extract_line(int offset, int *line, QString *filename) const;
+
+  Problem createProblem() const;
 
 private:
   Control *control;
