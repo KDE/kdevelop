@@ -5,7 +5,7 @@
 ## The include_xxxx variables are controlled by configure.in.in
 ##
 
-SUBDIRS = fake
+SUBDIRS = fake cpp
 
 DOXYGEN_EMPTY = YES
 include ../Doxyfile.am
