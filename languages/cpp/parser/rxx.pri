@@ -25,7 +25,9 @@ HEADERS += $$RXXPATH/ast.h \
            $$RXXPATH/declarator_compiler.h \
            $$RXXPATH/class_compiler.h \
            $$RXXPATH/codemodel_finder.h \
-           $$RXXPATH/compiler_utils.h
+           $$RXXPATH/compiler_utils.h \
+           $$RXXPATH/problem.h
+
 SOURCES += $$RXXPATH/ast.cpp \
            $$RXXPATH/lexer.cpp \
            $$RXXPATH/listnode.cpp \
@@ -43,4 +45,5 @@ SOURCES += $$RXXPATH/ast.cpp \
            $$RXXPATH/declarator_compiler.cpp \
            $$RXXPATH/class_compiler.cpp \
            $$RXXPATH/codemodel_finder.cpp \
-           $$RXXPATH/compiler_utils.cpp
+           $$RXXPATH/compiler_utils.cpp \
+           $$RXXPATH/problem.cpp

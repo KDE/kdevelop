@@ -23,7 +23,6 @@
 
 #include <QtCore/QString>
 #include <cstdlib>
-#include <cassert>
 
 struct NameSymbol;
 class Lexer;
