@@ -29,7 +29,10 @@
 #include <QtCore/QFile>
 #include <QtCore/qdebug.h>
 
-bool parse_file(const QString &fileName, bool dump = false)
+static bool dump = false;
+static bool bind = false;
+
+bool parse_file(const QString &fileName)
 {
   QFile file(fileName);
   if (!file.open(QFile::ReadOnly))
@@ -49,30 +52,31 @@ bool parse_file(const QString &fileName, bool dump = false)
       dump.dump(ast);
     }
 
-  CodeModel model;
-  Binder binder(&model, &p.token_stream);
-  FileModelItem dom = binder.run(ast);
-
-  if (p.problemCount() == 0)
+  if (ast && bind)
     {
-      QHash<QString, ClassModelItem> typeMap = dom->classMap();
-      // ### do something
+      CodeModel model;
+      Binder binder(&model, &p.token_stream);
+      FileModelItem dom = binder.run(ast);
     }
 
-  return p.problemCount() == 0;
+  return control.problemCount() == 0;
 }
 
 int main(int, char *argv[])
 {
   const char *filename = 0;
-  bool dump = false;
 
   do
     {
       const char *arg = *++argv;
+
       if (!strcmp(arg, "-dump"))
 	{
 	  dump = true;
+        }
+      else if (!strcmp(arg, "-bind"))
+        {
+          bind = true;
         }
       else
 	{
@@ -86,7 +90,7 @@ int main(int, char *argv[])
 
   if (filename)
     {
-      parsed = parse_file(filename, dump);
+      parsed = parse_file(filename);
     }
   else
     {

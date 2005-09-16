@@ -24,6 +24,9 @@ while :; do
       -dump)
         rxx_flags="$rxx_flags -dump"
         shift;;
+      -bind)
+        rxx_flags="$rxx_flags -bind"
+        shift;;
       -I*|-D*|-U*)
         cxx_flags="$cxx_flags $1"
 	shift;;
@@ -47,7 +50,7 @@ done
 #echo "the out file is $outfile"
 
 if [ -z $filename ]; then
-    echo "usage: r++ [-dump] file.cpp"
+    echo "usage: r++ [-dump | -bind] file.cpp"
     exit 255
 fi
 
