@@ -1,4 +1,5 @@
 INCLUDES = \
+	-I$(top_srcdir)/lib \
 	-I$(top_srcdir)/lib/interfaces \
 	-I$(top_srcdir)/lib/util \
 	$(all_includes)
@@ -6,7 +7,6 @@ INCLUDES = \
 kde_module_LTLIBRARIES = libkdevprojectmanager.la
 libkdevprojectmanager_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevprojectmanager_la_LIBADD = \
-	$(top_builddir)/lib/util/libkdevutil.la \
 	$(top_builddir)/lib/libkdevelop.la
 
 libkdevprojectmanager_la_SOURCES = \
@@ -14,7 +14,8 @@ libkdevprojectmanager_la_SOURCES = \
 	kdevprojectmanager.cpp \
 	kdevprojectfilter.cpp \
 	kdevprojectmanagerdelegate.cpp \
-	importprojectjob.cpp
+	importprojectjob.cpp \
+	importsourcefile_job.cpp
 
 METASOURCES = AUTO
 

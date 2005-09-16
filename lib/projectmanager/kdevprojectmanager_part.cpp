@@ -451,6 +451,4 @@ void KDevProjectManagerPart::updateDetails(KDevProjectItem *)
 {
 }
 
-#include "kdevprojectmanager_part.moc"
-
-// kate: indent-width 2;
+// kate: space-indent on; indent-width 2; replace-tabs on;

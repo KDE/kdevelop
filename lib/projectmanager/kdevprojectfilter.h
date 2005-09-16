@@ -49,5 +49,5 @@ protected:
 
 #endif // KDEVPROJECTFILTER_H
 
-// kate: indent-width 2;
+// kate: space-indent on; indent-width 2; replace-tabs on;
 

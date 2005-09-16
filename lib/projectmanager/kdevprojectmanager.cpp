@@ -164,4 +164,4 @@ void KDevProjectManager::slotCurrentChanged(const QModelIndex &index)
     }
 }
 
-// kate: indent-width 2;
+// kate: space-indent on; indent-width 2; replace-tabs on;
