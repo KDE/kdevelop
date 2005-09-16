@@ -162,8 +162,13 @@ void Parser::reportError(const QString& msg)
       lexer.positionAt(token_stream.position(tok),
                        &line, &column, &fileName);
 
-      std::cerr << "** ERROR " << qPrintable(msg) << std::endl
-                << "\t" << qPrintable(fileName) << ":" << line << std::endl;
+      Problem p;
+      p.setFileName(fileName);
+      p.setLine(line);
+      p.setColumn(column);
+      p.setMessage(msg);
+
+      control->reportProblem(p);
     }
 }
 
