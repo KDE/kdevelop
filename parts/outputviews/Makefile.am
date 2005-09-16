@@ -23,7 +23,6 @@ noinst_HEADERS = filterdlg.h
 
 libkdevmakeview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevmakeview_la_LIBADD = \
-	$(top_builddir)/lib/widgets/libkdevwidgets.la \
 	$(top_builddir)/lib/libkdevelop.la \
 	$(LIB_KHTML)
 
@@ -35,9 +34,8 @@ libkdevmakeview_la_SOURCES = \
 
 libkdevappview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevappview_la_LIBADD = \
-	$(top_builddir)/lib/widgets/libkdevwidgets.la \
 	$(top_builddir)/lib/libkdevelop.la \
-	$(LIB_KHTML) 
+	$(LIB_KHTML)
 
 libkdevappview_la_SOURCES = \
 	appoutputviewpart.cpp appoutputwidget.cpp \

@@ -6,6 +6,7 @@ INCLUDES = \
 kde_module_LTLIBRARIES = libkdevprojectmanager.la
 libkdevprojectmanager_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevprojectmanager_la_LIBADD = \
+	$(top_builddir)/lib/util/libkdevutil.la \
 	$(top_builddir)/lib/libkdevelop.la
 
 libkdevprojectmanager_la_SOURCES = \

@@ -1,24 +1,23 @@
-INCLUDES = -I$(top_srcdir)/lib/util \
-	$(all_includes)
+INCLUDES = $(all_includes)
 
 noinst_LTLIBRARIES = libkdevinterfaces.la
 
 libkdevinterfaces_la_SOURCES = \
-kdevapi.cpp		kdevlanguagesupport.cpp      kdevplugininfo.cpp \
-kdevappfrontend.cpp	kdevmainwindow.cpp	     kdevprojectbuilder.cpp \
-kdevcatalog.cpp		kdevmakefrontend.cpp	     kdevproject.cpp \
-kdevcodemodel.cpp	kdevpartcontroller.cpp	     kdevprojecteditor.cpp \
-kdevcoderepository.cpp	KDevPartControllerIface.cpp  kdevprojectiface.cpp \
-kdevcore.cpp		kdevpcsimporter.cpp	     kdevprojectimporter.cpp \
-KDevCoreIface.cpp	kdevplugincontroller.cpp     kdevprojectmodel.cpp \
-kdevdifffrontend.cpp	kdevplugin.cpp		     tag.cpp \
-KDevPartControllerIface.skel KDevCoreIface.skel kdevprojectiface.skel
+	kdevapi.cpp		kdevlanguagesupport.cpp      kdevplugininfo.cpp \
+	kdevappfrontend.cpp	kdevmainwindow.cpp	     kdevprojectbuilder.cpp \
+	kdevcatalog.cpp		kdevmakefrontend.cpp	     kdevproject.cpp \
+	kdevcodemodel.cpp	kdevpartcontroller.cpp	     kdevprojecteditor.cpp \
+	kdevcoderepository.cpp	KDevPartControllerIface.cpp  kdevprojectiface.cpp \
+	kdevcore.cpp		kdevpcsimporter.cpp	     kdevprojectimporter.cpp \
+	KDevCoreIface.cpp	kdevplugincontroller.cpp     kdevprojectmodel.cpp \
+	kdevdifffrontend.cpp	kdevplugin.cpp		     tag.cpp \
+	domutil.cpp 		kdevitemmodel.cpp	     urlutil.cpp \
+	KDevPartControllerIface.skel KDevCoreIface.skel kdevprojectiface.skel
 
 libkdevinterfaces_la_LDFLAGS = \
 	$(DB3LDFLAGS) \
 	-no-undefined $(all_libraries)
 libkdevinterfaces_la_LIBADD = \
-	$(top_builddir)/lib/util/libkdevutil.la \
 	-l$(DB3LIB) $(LIB_KDEUI) $(LIB_KHTML) $(LIB_KPARTS) \
 	-lktexteditor -lkscript
 
@@ -33,11 +32,12 @@ kdevelopinclude_HEADERS = \
 	kdevcore.h			kdevprojectbuilder.h \
 	KDevCoreIface.h			kdevprojecteditor.h \
 	kdevcreatefile.h		kdevproject.h \
-	kdevdifffrontend.h		\
+	kdevdifffrontend.h		domutil.h \
 	kdevgenericfactory.h		kdevprojectimporter.h \
 	kdevlanguagesupport.h		kdevprojectmodel.h \
 	kdevmainwindow.h		tag.h \
-	kdevmakefrontend.h
+	kdevmakefrontend.h		kdevitemmodel.h \
+	urlutil.h
 
 servicetypedir = $(kde_servicetypesdir)
 servicetype_DATA = \
