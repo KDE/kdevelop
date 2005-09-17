@@ -18,11 +18,9 @@
 #include <q3vbox.h>
 #include <q3buttongroup.h>
 #include <qcombobox.h>
-#include <qtabwidget.h>
-#include <q3widgetstack.h>
 #include <qdir.h>
+#include <qfile.h>
 #include <qfileinfo.h>
-#include <q3grid.h>
 #include <q3header.h>
 #include <qmap.h>
 #include <q3multilineedit.h>
@@ -34,10 +32,11 @@
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qvalidator.h>
-//Added by qt3to4:
+#include <qlayout.h>
 #include <QPixmap>
 #include <QHBoxLayout>
 #include <Q3ValueList>
+
 #include <klistview.h>
 #include <kiconview.h>
 #include <kconfig.h>
@@ -54,19 +53,15 @@
 #include <kfile.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
-
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
 #include <kio/netaccess.h>
-#include <qfile.h>
 #include <kmacroexpander.h>
 #include <karchive.h>
 #include <ktar.h>
 #include <ktempdir.h>
 #include <kfileitem.h>
 #include <kio/chmodjob.h>
-
-#include <qlayout.h>
 
 #include "domutil.h"
 #include "kdevmakefrontend.h"
@@ -89,18 +84,18 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
 	setupUi(this);
 
-	m_customOptions = 0L;
 	loadLicenses();
+
 	connect( this, SIGNAL( selected( const QString & ) ),
 			 this, SLOT( pageChanged() ) );
 	connect( templates_listview, SIGNAL( selectionChanged( Q3ListViewItem* ) ),
 			 this, SLOT( templatesTreeViewClicked( Q3ListViewItem* ) ) );
 	connect( version_edit, SIGNAL( textChanged( const QString & ) ),
-			 this, SLOT( textChanged() ) );
+			 this, SLOT( updateNextButtons() ) );
 	connect( author_edit, SIGNAL( textChanged( const QString & ) ),
-			 this, SLOT( textChanged() ) );
+			 this, SLOT( updateNextButtons() ) );
 	connect( appname_edit, SIGNAL( textChanged( const QString & ) ),
-			 this, SLOT( textChanged() ) );
+			 this, SLOT( updateNextButtons() ) );
 	connect( appname_edit, SIGNAL( textChanged( const QString & ) ),
 			 this, SLOT( projectLocationChanged() ) );
 	connect( dest_edit, SIGNAL( urlSelected( const QString & ) ),
@@ -108,7 +103,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 	connect( dest_edit, SIGNAL( textChanged( const QString & ) ),
 			 this, SLOT( projectLocationChanged() ) );
 	connect( dest_edit, SIGNAL( textChanged( const QString & ) ),
-			 this, SLOT( textChanged() ) );
+			 this, SLOT( updateNextButtons() ) );
 	connect( favourites_iconview, SIGNAL( selectionChanged( Q3IconViewItem* ) ),
 			 this, SLOT( favouritesIconViewClicked( Q3IconViewItem* ) ) );
 	connect( templates_listview, SIGNAL( contextMenuRequested( Q3ListViewItem*, const QPoint &, int ) ),
@@ -119,6 +114,8 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 			 this, SLOT( favouritesContextMenu( Q3IconViewItem*, const QPoint & ) ) );
 	connect( showAll_box, SIGNAL( toggled( bool ) ),
 			 this, SLOT( showTemplates( bool ) ) );
+	connect( license_combo, SIGNAL( activated( int ) ),
+			 this, SLOT( licenseChanged() ) );
 
 	helpButton()->hide();
     templates_listview->header()->hide();
@@ -139,9 +136,6 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
     KConfig *config = kapp->config();
 
-	//config->setGroup("AppWizard");
-	//templates_tabwidget->setCurrentPage(config->readNumEntry("CurrentTab", 0));
-
 	config->setGroup("General Options");
     QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
 
@@ -151,14 +145,14 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     kdDebug(9010) << "Templates: " << endl;
     QStringList categories;
 
-    QStringList::Iterator it;
-    for (it = m_templateNames.begin(); it != m_templateNames.end(); ++it) {
-        kdDebug(9010) << (*it) << endl;
+    foreach( QString templateName, m_templateNames )
+	{
+		kdDebug(9010) << templateName << endl;
 
         ApplicationInfo *info = new ApplicationInfo;
 		//info->propValues = new PropertyLib::PropertyList();
-		info->templateFile = KGlobal::dirs()->findResource("apptemplates", *it);
-        info->templateName = (*it);
+		info->templateFile = KGlobal::dirs()->findResource("apptemplates", templateName);
+        info->templateName = templateName;
 
 		KConfig templateConfig(info->templateFile);
         templateConfig.setGroup("General");
@@ -201,12 +195,11 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 		info->subMap.insert("kdevelop", source );
 
 		// Add includes to the main template...
-		QStringList::Iterator include = info->includes.begin();
-		for( ; include != info->includes.end(); ++include)
+		foreach( QString include, info->includes )
 		{
-			if( !(*include).isEmpty() )
+			if( !include.isEmpty() )
 			{
-				QString file = KMacroExpander::expandMacros( ( *include ), info->subMap);
+				QString file = KMacroExpander::expandMacros( include, info->subMap);
 				KConfig tmpCfg( file );
 				tmpCfg.copyTo( "", &templateConfig);
 				kdDebug(9010) << "Merging: " << tmpCfg.name() << endl;
@@ -261,28 +254,25 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 			}
 			else if( type == "finishcmd" )
 			{
-                                info->finishCmd=templateConfig.readPathEntry("Command");
-                                info->finishCmdDir=templateConfig.readPathEntry("Directory");
+				info->finishCmd=templateConfig.readPathEntry("Command");
+				info->finishCmdDir=templateConfig.readPathEntry("Directory");
 			}
 			else if( type == "ui")
 			{
-				QString name = templateConfig.readPathEntry("File");
-				info->customUI = name;
+				info->customUI = templateConfig.readPathEntry("File");
 			}
 			else if( type == "message" )
 			{
 				info->message = templateConfig.readEntry( "Comment" );
 			}
 		}
-
-
-        m_appsInfo.append(info);
+		m_appsInfo.append(info);
     }
 
     // Insert categories into list view
     categories.sort();
-    for (it = categories.begin(); it != categories.end(); ++it)
-        insertCategoryIntoTreeView(*it);
+    foreach( QString category, categories )
+        insertCategoryIntoTreeView(category);
 
     // Insert items into list view
     Q3PtrListIterator<ApplicationInfo> ait(m_appsInfo);
@@ -337,11 +327,9 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
             license_combo->setCurrentItem( idx - 1 );
     }
 
-	connect( license_combo, SIGNAL(activated(int)), this, SLOT(licenseChanged()) );
-	
 	m_custom_options_layout = new QHBoxLayout( custom_options );
 	m_custom_options_layout->setAutoAdd(true);
-	
+
 	showTemplates(false);
 }
 
@@ -350,61 +338,6 @@ AppWizardDialog::~AppWizardDialog()
 
 void AppWizardDialog::loadVcs()
 {
-/*
-	m_vcsForm = new VcsForm();
-
-	int i=0;
-	m_vcsForm->combo->insertItem( i18n("no version control system", "None"), i );
-	m_vcsForm->stack->addWidget( 0, i++ );
-
-	// We query for all vcs integrators for KDevelop
-	KTrader::OfferList offers = KTrader::self()->query("KDevelop/VCSIntegrator", "");
-	KTrader::OfferList::const_iterator serviceIt = offers.begin();
-	for (; serviceIt != offers.end(); ++serviceIt)
-	{
-		KService::Ptr service = *serviceIt;
-		kdDebug(9010) << "AppWizardDialog::loadVcs: creating vcs integrator "
-			<< service->name() << endl;
-
-		KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
-		if (!factory) {
-			QString errorMessage = KLibLoader::self()->lastErrorMessage();
-			kdDebug(9010) << "There was an error loading the module " << service->name() << endl <<
-			"The diagnostics is:" << endl << errorMessage << endl;
-			exit(1);
-		}
-		QStringList args;
-		QObject *obj = factory->create(0, service->name().latin1(),
-									"KDevVCSIntegrator", args);
-		KDevVCSIntegrator *integrator = (KDevVCSIntegrator*) obj;
-
-		if (!integrator)
-			kdDebug(9010) << "    failed to create vcs integrator " << service->name() << endl;
-		else
-		{
-			kdDebug(9010) << "    success" << endl;
-
-			QString vcsName = service->property("X-KDevelop-VCS").toString();
-			m_vcsForm->combo->insertItem(vcsName, i);
-			m_integrators.insert(vcsName, integrator);
-
-			VCSDialog *vcs = integrator->integrator(m_vcsForm->stack);
-			if (vcs)
-			{
-				m_integratorDialogs[i] = vcs;
-				QWidget *w = vcs->self();
-				if (w)
-					m_vcsForm->stack->addWidget(w, i++);
-				else
-					kdDebug(9010) << "    integrator widget is 0" << endl;
-			}
-			else
-				kdDebug(9010) << "    integrator is 0" << endl;
-		}
-	}
-
-	addPage(m_vcsForm, i18n("Version Control System"));
-*/
 }
 
 void AppWizardDialog::updateNextButtons()
@@ -418,11 +351,6 @@ void AppWizardDialog::updateNextButtons()
 	setFinishEnabled(m_lastPage, validGeneralPage && validPropsPage);
 	nextButton()->setEnabled(
 		currentPage() == generalPage ? validGeneralPage : validPropsPage );
-}
-
-void AppWizardDialog::textChanged()
-{
-	updateNextButtons();
 }
 
 void AppWizardDialog::licenseChanged()
@@ -485,13 +413,9 @@ void AppWizardDialog::accept()
 
 	KTempDir archDir;
 	archDir.setAutoDelete(true);
-	kdDebug(9010) << "Befor KTar constructor fn='" << source + "/" + m_pCurrentAppInfo->sourceArchive << "'" << endl;
 	KTar templateArchive( source + "/" + m_pCurrentAppInfo->sourceArchive, "application/x-gzip" );
-	kdDebug(9010) << "After KTar constructor" << endl;
 	if( templateArchive.open( QIODevice::ReadOnly ) )
 	{
-		kdDebug(9010) << "After KTar::open success" << endl;
-		//templateArchive.directory()->copyTo(archDir.name(), true);
 		unpackArchive(templateArchive.directory(), archDir.name(), false);
 	}
 	else
@@ -878,14 +802,14 @@ void AppWizardDialog::templatesTreeViewClicked(Q3ListViewItem *item)
             addPage(edit, i18n("Template for .%1 Files").arg(fileTemplate.suffix));
             m_fileTemplates.append(fileTemplate);
         }
-        licenseChanged();	// to populate the template views
-        textChanged(); // update Next button state
-    } else {
-	m_customOptions=0;
-        m_pCurrentAppInfo=0;
-        icon_label->clear();
-        desc_textview->clear();
-        nextButton()->setEnabled(false);
+        licenseChanged();
+        updateNextButtons();
+	} else
+	{
+		m_pCurrentAppInfo=0;
+		icon_label->clear();
+		desc_textview->clear();
+		nextButton()->setEnabled(false);
     }
 }
 
