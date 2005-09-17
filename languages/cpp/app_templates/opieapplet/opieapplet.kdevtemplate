@@ -1,0 +1,76 @@
+# KDE Config File
+[General]
+Name=Opie Applet
+Name[da]=Opie-applet
+Name[de]=Opie-Miniprogramm (Applet)
+Name[et]=Opie aplett
+Name[fr]=Applet Opie
+Name[ga]=Feidhmchláirín Opie
+Name[hu]=Opie-s kisalkalmazás
+Name[it]=Applet Opie
+Name[ru]=Аплет opie
+Name[sv]=Opie-miniprogram
+Name[tr]=Opie Küçük Uygulaması
+Name[zh_CN]=Opie 小程序
+Icon=qmakeapp.png
+Category=C++/Embedded
+Comment=Generate an Opie applet.
+Comment[da]=Generér en Opie-applet.
+Comment[de]=Erstellt ein Opie-Miniprogramm (Applet).
+Comment[et]=Opie apleti loomine.
+Comment[fr]=Génèrer une applet Opie
+Comment[hu]=Létrehoz egy Opie-s kisalkalmazást.
+Comment[it]=Genera un'applet Opie.
+Comment[sv]=Skapa ett Opie-miniprogram.
+Comment[zh_CN]=生成一个 Opie 小程序。
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
+Archive=opieapplet.tar.gz
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[MkDir0]
+Type=mkdir
+Dir=%{dest}/pics
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/pics/%{APPNAMELC}
+
+[FILE2]
+Type=install
+Source=%{src}/Example.png
+Dest=%{dest}/pics/%{APPNAMELC}/%{APPNAMELC}.png
+
+[FILE3]
+Type=install
+Source=%{src}/app.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[FILE4]
+Type=install
+Source=%{src}/simpleimpl.cpp
+Dest=%{dest}/%{APPNAMELC}.cpp
+
+[FILE5]
+Type=install
+Source=%{src}/simpleimpl.h
+Dest=%{dest}/%{APPNAMELC}.h
+
+[MSG]
+Type=message
+Comment=An opie applet was created in %{dest}
+Comment[da]=En opie-applet blev oprettet i %{dest}
+Comment[de]=Ein Opie-Miniprogramm (Applet) wurde in %{dest} erstellt.
+Comment[et]=Opie aplett loodi asukohta %{dest}
+Comment[fr]=Une applet Opie a été créée dans %{dest}
+Comment[hu]=Létrejött egy Opie-s kisalkalmazás itt: %{dest}
+Comment[it]=È stata creata un'applet Opie in %{dest}
+Comment[ru]=Аплет opie был создан в %{dest}
+Comment[sv]=Ett Opie-miniprogram skapades i %{dest}
+Comment[tr]=Bir Opie küçük uygulaması %{dest} içinde yaratıldı.
+Comment[zh_CN]=在 %{dest} 中创建了一个 opie 小程序

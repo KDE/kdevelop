@@ -1,0 +1,15 @@
+Begin3
+Title:          %{APPNAME} -- Some description
+Version:        %{VERSION}
+Entered-date:   
+Description:    
+Keywords:       GNOME
+Author:         %{AUTHOR} <%{EMAIL}>
+Maintained-by:  %{AUTHOR} <%{EMAIL}>
+Home-page:      
+Alternate-site: 
+Primary-site:   xxxxxx  %{APPNAMELC}-%{VERSION}.tar.gz
+                xxx     %{APPNAMELC}-%{VERSION}.lsm
+Platform:       Linux. Needs GNOME 1.4
+Copying-policy: %{LICENSE}
+End

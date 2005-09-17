@@ -1,0 +1,41 @@
+## Makefile.am for %{APPNAMELC}
+
+# this is the program that gets installed.  it's name is used for all
+# of the other Makefile.am variables
+bin_PROGRAMS = %{APPNAMELC}
+
+# set the include path for X, qt and KDE
+INCLUDES         = $(all_includes)
+
+# let automoc handle all of the meta source files (moc)
+METASOURCES = AUTO
+
+# the library search path. 
+%{APPNAMELC}_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+
+# the libraries to link against.
+%{APPNAMELC}_LDADD   = $(LIB_KFILE) $(LIB_KDEPRINT)
+
+# which sources should be compiled for %{APPNAMELC}
+%{APPNAMELC}_SOURCES = settings.kcfgc main.cpp %{APPNAMELC}.cpp %{APPNAMELC}view.cpp \
+        %{APPNAMELC}view_base.ui prefs-base.ui prefs.cpp
+
+xdg_apps_DATA = %{APPNAMELC}.desktop
+kde_kcfg_DATA = %{APPNAMELC}.kcfg
+
+# these are the headers for your project
+noinst_HEADERS = %{APPNAMELC}.h %{APPNAMELC}view.h prefs.h
+
+messages: rc.cpp
+	$(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
+	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot
+
+KDE_ICON = AUTO
+
+# this is where the kdelnk file will go 
+kdelnkdir   = $(kde_appsdir)/Utilities
+kdelnk_DATA = %{APPNAMELC}.desktop
+
+# this is where the XML-GUI resource file goes
+rcdir = $(kde_datadir)/%{APPNAMELC}
+rc_DATA = %{APPNAMELC}ui.rc

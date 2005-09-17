@@ -1,0 +1,20 @@
+INCLUDES    = $(all_includes)
+METASOURCES = AUTO
+
+KDE_ICON = AUTO
+
+# Install this plugin in the KDE modules directory
+kde_module_LTLIBRARIES = lib%{APPNAMELC}plugin.la
+
+lib%{APPNAMELC}plugin_la_SOURCES = plugin_%{APPNAMELC}.cpp
+lib%{APPNAMELC}plugin_la_LIBADD = -lkateinterfaces
+lib%{APPNAMELC}plugin_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+
+pluginsdir = $(kde_datadir)/kate/plugins/%{APPNAMELC}
+plugins_DATA = plugin_%{APPNAMELC}.rc
+
+kde_services_DATA = %{APPNAMELC}.desktop
+
+messages: rc.cpp
+	$(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
+	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot

@@ -1,0 +1,5 @@
+[GNU]
+Type=install archive
+Source=%{kdevelop}/template-common/gnu.tar.gz
+Dest=%{dest}
+

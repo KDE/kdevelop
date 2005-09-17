@@ -1,0 +1,11 @@
+This template configures KDevelop to be used with libSDL
+
+Got it working using this tutorial:
+http://www.geekcomix.com/snh/files/docs/sdl-kdev/sdl-kdev-mini-how2.html
+and not to forget -lSDL has to get passed to ld :)
+
+This was submitted via a whishlist:
+http://bugs.kde.org/show_bug.cgi?id=53702
+
+Thanks to: Mårten Woxberg < marwo264 (at) student.liu.se >
+For supplying this template.

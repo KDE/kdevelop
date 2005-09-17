@@ -1,0 +1,147 @@
+# KDE Config File
+[General]
+Name=KDevelop Plugin (KDevelop source tree build)
+Name[da]=KDevelop Plugin (KDevelop kildetræ bygning)
+Name[de]=KDevelop-Plugin (Erstellung im KDevelop-Quelltextbaum)
+Name[et]=KDevelopi plugin (Kdevelopi lähtekoodipuus)
+Name[hu]=KDevelop-bővítőmodul (KDevelopos forráskönyvtáron belül)
+Name[it]=Plugin di KDevelop (compila l'albero sorgente di KDevelop)
+Name[sv]=KDevelop-insticksprogram (att bygga i KDevelops källkodsträd)
+Name[tr]=KDevelop Eklentisi (KDevelop kaynak ağacı kurulumu)
+Name[zh_CN]=KDevelop 插件(KDevelop 源代码树编译)
+Category=C++/KDevelop/
+Comment=This generates a plugin for KDevelop, for building within the KDevelop source tree
+Comment[da]=Dette genererer et plugin for KDevelop, til at bygges indenfor  KDevelop's kildetræ
+Comment[de]=Hiermit wird ein Plugin für KDevelop erstellt, dessen Erstellen innerhalb des Quelltextbaumes von KDevelop erfolgt.
+Comment[et]=KDevelopi plugina loomine, mis ehitatakse KDevelopi lähtekoodipuus.
+Comment[hu]=Létrehoz egy KDevelop-bővítőmodult, mely a KDevelopos forráskönyvtáron belül fordítható le
+Comment[it]=Genera un plugin per KDevelop, per compilarlo assieme all'albero sorgente di KDevelop
+Comment[sv]=Det här skapar ett insticksprogram för KDevelop, att byggas inne i KDevelops källkodsträd.
+Comment[tr]=Bu KDevelop için, KDevelop kaynak ağacınında olacak, bir eklenti yaratır.
+Comment[zh_CN]=这将生成 KDevelop 的插件，该插件需要与 KDevelop 源代码树一起编译
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}part.cpp
+Archive=kdevpart.tar.gz
+
+[SCOPE]
+Type = value
+ValueType=QString
+Value= SCOPE
+Comment= The scope of a plugin (Global, Project, Core)
+Comment[da]= Et plugins omfang (Globalt, Projekt, Kerne)
+Comment[de]= Gültigkeitsbereich eines Plugins (Global, Projekt, Kern)
+Comment[et]=Plugina skoop (globaalne, projekt, tuum)
+Comment[hu]=A modul hatóköre (globális, projektszintű, alap)
+Comment[it]=Il contesto di un plugin (Globale, Progetto, Core)
+Comment[sv]= Insticksprogrammets omfattning (Global, Projekt, Kärna)
+Comment[tr]=Bir eklentinin alanı (Genel, Proje, İç)
+Comment[zh_CN]=插件的范围(全局、工程、核心)
+Default= Global
+
+[PROPS]
+Type = value
+ValueType=QString
+Value= PROPS
+Comment= The list of supported KDevelop properties
+Comment[da]= Listen af understøttede KDevelop-egenskaber
+Comment[de]= Die Liste der unterstützten KDevelop-Eigenschaften
+Comment[et]= KDevelopi toetatud omaduste nimekiri
+Comment[fr]= La liste des propriétés KDevelop prises en charge
+Comment[hu]=A támogatott KDevelop-tulajdonságok
+Comment[it]=Lista delle proprietà supportate da KDevelop
+Comment[sv]= Listan med egenskaper i KDevelop som stöds
+Comment[tr]=Desteklenen KDevelop özellikleri
+Comment[zh_CN]=列出支持的 KDevelop 属性
+Default=
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE3]
+Type=install
+Source=%{src}/kdevpart_part.cpp
+Dest=%{dest}/%{APPNAMELC}part.cpp
+
+[FILE4]
+Type=install
+Source=%{src}/kdevpart_part.h
+Dest=%{dest}/%{APPNAMELC}part.h
+
+[FILE5]
+Type=install
+Source=%{src}/kdevpart_widget.cpp
+Dest=%{dest}/%{APPNAMELC}widget.cpp
+
+[FILE6]
+Type=install
+Source=%{src}/kdevpart_widget.h
+Dest=%{dest}/%{APPNAMELC}widget.h
+
+[FILE7]
+Type=install
+EscapeXML=true
+Source=%{src}/kdevpart_part.rc
+Dest=%{dest}/kdev%{APPNAMELC}.rc
+
+[FILE71]
+Type=install
+EscapeXML=true
+Source=%{src}/globalconfigbase.ui
+Dest=%{dest}/%{APPNAMELC}globalconfigbase.ui
+
+[FILE711]
+Type=install
+Source=%{src}/globalconfig.h
+Dest=%{dest}/%{APPNAMELC}globalconfig.h
+
+[FILE712]
+Type=install
+Source=%{src}/globalconfig.cpp
+Dest=%{dest}/%{APPNAMELC}globalconfig.cpp
+
+[FILE72]
+Type=install
+EscapeXML=true
+Source=%{src}/projectconfigbase.ui
+Dest=%{dest}/%{APPNAMELC}projectconfigbase.ui
+
+[FILE721]
+Type=install
+Source=%{src}/projectconfig.h
+Dest=%{dest}/%{APPNAMELC}projectconfig.h
+
+[FILE722]
+Type=install
+Source=%{src}/projectconfig.cpp
+Dest=%{dest}/%{APPNAMELC}projectconfig.cpp
+
+[FILE8]
+Type=install
+Source=%{src}/kdevpart.desktop
+Dest=%{dest}/kdev%{APPNAMELC}.desktop
+
+[FILE9]
+Type=install
+Source=%{src}/README.dox
+Dest=%{dest}/README.dox
+
+[MSG]
+Type=message
+Comment=A KDevelop plugin was created in %{dest}
+Comment[da]=Et KDevelop plugin blev oprettet i %{dest}
+Comment[de]=Ein KDevelop-Plugin wurde in %{dest} erstellt.
+Comment[et]=KDevelopi plugin loodi asukohta %{dest}
+Comment[fr]=Un module KDevelop a été créé dans %{dest}
+Comment[hu]=Létrejött egy KDevelop-bővítőmodul itt: %{dest}
+Comment[it]=È stato creato un plugin per KDevelop in %{dest}
+Comment[sv]=Ett insticksprogram för KDevelop skapades i %{dest}
+Comment[tr]=Bir KDevelop eklentisi %{dest} içinde yaratıldı.
+Comment[zh_CN]=在 %{dest} 中创建了 KDevelop 插件

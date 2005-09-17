@@ -1,0 +1,1 @@
+$(top_srcdir)/aclocal.m4: /opt/gnome/share/aclocal/gnome2-macros/compiler-flags.m4 /opt/gnome/share/aclocal/gnome2-macros/curses.m4 /opt/gnome/share/aclocal/gnome2-macros/gnome-common.m4 /opt/gnome/share/aclocal/gnome2-macros/gnome-deprecated-macros.m4

@@ -1,0 +1,15 @@
+INCLUDES= $(all_includes)
+METASOURCES = AUTO
+
+lib_LTLIBRARIES = %{APPNAMELC}_panelapplet.la
+
+%{APPNAMELC}_panelapplet_la_SOURCES = %{APPNAMELC}.cpp
+%{APPNAMELC}_panelapplet_la_LDFLAGS = -module -avoid-version $(all_libraries)
+%{APPNAMELC}_panelapplet_la_LIBADD = $(LIB_KDEUI) 
+
+%{APPNAMELC}_DATA = %{APPNAMELC}.desktop
+%{APPNAMELC}dir = $(kde_datadir)/kicker/applets
+
+messages: rc.cpp
+	$(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
+	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot

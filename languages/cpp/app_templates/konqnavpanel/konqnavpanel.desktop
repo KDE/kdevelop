@@ -1,0 +1,31 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Link
+URL=
+Icon=wizard
+Comment=A konqueror navigation panel plugin  called $NAME$
+Comment[da]=Et Konqueror navigationspanel plugin der hedder $NAME$
+Comment[de]=Ein Plugin für den Navigationsbereich von Konqueror mit Namen $NAME$
+Comment[es]=Un plugin del panel de navegación de Konqueror llamado $NAME$
+Comment[et]=Konquerori liikumispaneeli plugin nimega $NAME$
+Comment[fr]=Un module externe pour le panneau de navigation de Konqueror nommé $NAME$
+Comment[hu]=Bővítőmodul a Konqueror navigációs paneljéhez ($NAMES$)
+Comment[it]=Un plugin per la navigazione in konqueror chiamato $NAME$
+Comment[nl]=Een konqueror navigatiepaneel-plugin met de naam $NAME$
+Comment[pl]=Wtyczka do panelu nawigacyjnego konquerora o nazwie $NAME$
+Comment[pt]=Um 'plugin' do painel de navegação do konqueror chamado $NAME$
+Comment[pt_BR]=Um plugin de painel de navegação do konqueror chamado $NAME$
+Comment[ru]=Модуль панели навигации konqueror $NAME$
+Comment[sl]=Konquerorjev vstavek pulta za navigacijo z imenom $NAME$
+Comment[sr]=Кonqueror-ов прикључак за навигациони панел по имену $NAME$
+Comment[sr@Latn]=Konqueror-ov priključak za navigacioni panel po imenu $NAME$
+Comment[sv]=Ett insticksprogram i Konquerors navigeringspanel som heter $NAME$
+Comment[tr]=$NAME$ adında bir konqueror gezinme paneli eklentisi
+Comment[xx]=xxA konqueror navigation panel plugin  called $NAME$xx
+Comment[zh_CN]=一个称作 $NAME$ 的 konqueror 导航面板插件
+Name=%{APPNAMELC}
+Name[xx]=xx%{APPNAMELC}xx
+
+Open=false
+X-KDE-KonqSidebarModule=konqsidebar_%{APPNAMELC}
+

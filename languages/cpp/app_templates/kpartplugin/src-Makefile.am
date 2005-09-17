@@ -1,0 +1,22 @@
+INCLUDES    = $(all_includes)
+METASOURCES = AUTO
+
+KDE_ICON = AUTO
+
+# Install this plugin in the KDE modules directory
+kde_module_LTLIBRARIES = lib%{APPNAMELC}plugin.la
+
+# This is all standard.  Remove the LIB_KHTML reference if you are not
+# using the KHTML Part
+lib%{APPNAMELC}plugin_la_SOURCES = plugin_%{APPNAMELC}.cpp
+lib%{APPNAMELC}plugin_la_LIBADD = $(LIB_KPARTS) $(LIB_KHTML)
+lib%{APPNAMELC}plugin_la_LDFLAGS = -module -avoid-version -no-undefined $(KDE_PLUGIN) $(all_libraries)
+
+# Install the .rc file in the Part's directory (in this case, the part
+# is KHTMLPart)
+pluginsdir = $(kde_datadir)/khtml/kpartplugins
+plugins_DATA = plugin_%{APPNAMELC}.rc
+
+messages: rc.cpp
+	$(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
+	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot

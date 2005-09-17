@@ -1,0 +1,35 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=%{APPNAME} Info
+Name[br]=Titouriñ diwar-benn %{APPNAME}
+Name[ca]=Informació %{APPNAME}
+Name[da]=%{APPNAME} info
+Name[es]=Información de %{APPNAME}
+Name[et]=%{APPNAME} info
+Name[eu]=%{APPNAME} informazioa
+Name[fr]=Informations sur %{APPNAME}
+Name[ga]=Eolas faoi %{APPNAME}
+Name[hu]=%{APPNAME} jellemzői
+Name[it]=Informazioni su %{APPNAME}
+Name[pl]=Informacje dla %{APPNAME}
+Name[pt]=Informação do %{APPNAME}
+Name[pt_BR]=Informações de %{APPNAME}
+Name[ru]=Информация о %{APPNAME}
+Name[sl]=Informacije o %{APPNAME}
+Name[sr]=Информације за %{APPNAME}
+Name[sr@Latn]=Informacije za %{APPNAME}
+Name[sv]=%{APPNAME} information
+Name[ta]=%{APPNAME} தகவல்
+Name[tg]=Маълумот дар бораи %{APPNAME} 
+Name[uk]=Інформація про %{APPNAME}
+Name[xx]=xx%{APPNAME} Infoxx
+Name[zh_CN]=%{APPNAME}的信息
+ServiceTypes=KFilePlugin
+X-KDE-Library=kfile_%{APPNAMELC}
+# change MimeType here! (example: inode/directory)
+MimeType=
+# change PreferredGroups here! (example: FolderInfo)
+PreferredGroups=
+# change PreferredItems here! (example: Items;Size)
+PreferredItems=

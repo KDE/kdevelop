@@ -1,0 +1,139 @@
+# KDE Config File
+[General]
+Name=KBear Plugin
+Name[br]=Lugent KBear
+Name[da]=KBear plugin
+Name[de]=KBear-Plugin
+Name[et]=KBeari plugin
+Name[fr]=Module KBear
+Name[ga]=Breiseán KBear
+Name[hu]=Kbear-bővítőmodul
+Name[it]=Plugin per KBear
+Name[sv]=KBear-insticksprogram
+Name[tr]=KBear Eklentisi
+Name[zh_CN]=KBear 插件
+Category=C++/KDE
+Icon=kbearplugin.png
+Comment=Generates a simple KBear plugin with a config page and an output widget.
+Comment[da]=Genererer et simpelt KBear plugin med en indstillingsside og en output-kontrol.
+Comment[de]=Erstellt ein einfaches KBear-Plugin mit einer Konfigurationsseite und einem Ausgabewidget.
+Comment[et]=Lihtsa KBeari plugina loomine koos seadistustedialoogi ja väljundvidinaga.
+Comment[hu]=Létrehoz egy egyszerű KBear-bővítőmodult beállítólappal és kimeneti grafikus elemmel.
+Comment[it]=Genera un semplice plugin per KBear con pagina di configurazione e un elemento grafico di output.
+Comment[sv]=Skapar ett enkelt insticksprogram för KBear med en inställningssida och grafisk utmatningskomponent.
+Comment[tr]=Bir ayar sayfası ve çıktı parçacığı olan basit bir KBear eklentisi yaratır.
+Comment[zh_CN]=生成一个带配置页和输出部件的简单 KBear 插件。
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/src/kbear%{APPNAMELC}plugin.cpp
+Archive=kbearplugin.tar.gz
+
+[ADMIN]
+Type=include
+File=%{kdevelop}/template-common/admin.kdevtemplate
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/plugin.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{kdevelop}/template-common/kde-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE3]
+Type=install
+Source=%{kdevelop}/template-common/kde-Makefile.cvs
+Dest=%{dest}/Makefile.cvs
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/po
+
+[FILE4]
+Type=install
+Source=%{kdevelop}/template-common/kde-po-Makefile.am
+Dest=%{dest}/po/Makefile.am
+
+[FILE5]
+Type=install
+Source=%{src}/subdirs
+Dest=%{dest}/subdirs
+
+[FILE6]
+Type=install
+Source=%{src}/kbearplugin-configure.in.in
+Dest=%{dest}/configure.in.in
+
+[MkDir2]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE7]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/src/Makefile.am
+
+[FILE8]
+Type=install
+Source=%{src}/plugin.cpp
+Dest=%{dest}/src/kbear%{APPNAMELC}plugin.cpp
+
+[FILE9]
+Type=install
+Source=%{src}/plugin.h
+Dest=%{dest}/src/kbear%{APPNAMELC}plugin.h
+
+[FILE10]
+Type=install
+Source=%{src}/configwidget.cpp
+Dest=%{dest}/src/kbear%{APPNAMELC}configwidget.cpp
+
+[FILE11]
+Type=install
+Source=%{src}/configwidget.h
+Dest=%{dest}/src/kbear%{APPNAMELC}configwidget.h
+
+[FILE12]
+Type=install
+Source=%{src}/outputwidget.cpp
+Dest=%{dest}/src/kbear%{APPNAMELC}outputwidget.cpp
+
+[FILE13]
+Type=install
+Source=%{src}/outputwidget.h
+Dest=%{dest}/src/kbear%{APPNAMELC}outputwidget.h
+
+[FILE14]
+Type=install
+EscapeXML=true
+Source=%{src}/plugin.rc
+Dest=%{dest}/src/kbear%{APPNAMELC}.rc
+
+[FILE15]
+Type=install
+Source=%{src}/kbearplugin.desktop
+Dest=%{dest}/src/kbear%{APPNAMELC}.desktop
+
+[FILE16]
+Type=install
+Source=%{src}/hi32-action-plugin.png
+Dest=%{dest}/src/hi32-action-kbear%{APPNAMELC}.png
+
+[MSG]
+Type=message
+Comment=A plugin for KBear was created in %{dest}
+Comment[da]=Et plugin for KBear blev oprettet i %{dest}
+Comment[de]=Ein Plugin für KBear wurde in %{dest} erstellt.
+Comment[et]=KBeari plugin loodi asukohta %{dest}
+Comment[fr]=Un module pour KBear a été créé dans %{dest}
+Comment[hu]=Létrejött egy KBear-bővítőmodul itt: %{dest}
+Comment[it]=È stato creato un plugin per KBear in %{dest}
+Comment[sv]=Ett insticksprogram för KBear skapades i %{dest}
+Comment[tr]=KBear için bir eklenti %{dest} içinde yaratılmıştır.
+Comment[zh_CN]=在 %{dest} 中创建了一个 KBear 插件

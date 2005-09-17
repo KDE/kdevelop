@@ -1,0 +1,52 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>%{APPNAME}WidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>%{APPNAMELC}widgetbase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>220</width>
+            <height>133</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string></string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QPushButton" row="1" column="0">
+            <property name="name">
+                <cstring>button</cstring>
+            </property>
+            <property name="text">
+                <string>Click Me!</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>label</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>button</sender>
+        <signal>clicked()</signal>
+        <receiver>%{APPNAMELC}widgetbase</receiver>
+        <slot>button_clicked()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>button_clicked()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

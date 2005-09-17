@@ -1,0 +1,24 @@
+INCLUDES = $(all_includes)
+
+KDE_ICON = AUTO
+
+kde_module_LTLIBRARIES = libkbear%{APPNAMELC}.la
+
+libkbear%{APPNAMELC}_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -lkbearcore
+libkbear%{APPNAMELC}_la_SOURCES = kbear%{APPNAMELC}plugin.cpp kbear%{APPNAMELC}outputwidget.cpp kbear%{APPNAMELC}configwidget.cpp
+libkbear%{APPNAMELC}_la_METASOURCES = AUTO
+
+noinst_HEADERS = kbear%{APPNAMELC}plugin.h kbear%{APPNAMELC}outputwidget.h kbear%{APPNAMELC}configwidget.h
+servicedir = $(kde_servicesdir)
+service_DATA = kbear%{APPNAMELC}.desktop
+
+rcdir = $(kde_datadir)/kbear%{APPNAMELC}
+rc_DATA = kbear%{APPNAMELC}.rc
+
+messages: rc.cpp
+	$(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.pp
+	$(XGETTEXT) *.cpp -o $(podir)/kbear%{APPNAMELC}.pot
+
+AM_CFLAGS =
+AM_CXXFLAGS = -DQT_CLEAN_NAMESPACE -UQT_NO_COMPAT -DQT_NO_ASCII_CAST
+AM_FFLAGS =

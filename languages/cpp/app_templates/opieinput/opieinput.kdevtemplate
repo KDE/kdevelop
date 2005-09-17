@@ -1,0 +1,74 @@
+# KDE Config File
+[General]
+Name=Opie Input
+Name[da]=Opie-input
+Name[de]=Opie Eingabe
+Name[et]=Opie sisestus
+Name[fr]=Entrée Opie
+Name[ga]=Ionchur Opie
+Name[hu]=Opie-s bemeneti modul
+Name[it]=Input di Opie
+Name[sv]=Opie-inmatning
+Name[tr]=Opie Girdisi
+Name[zh_CN]=Opie 输入法
+Icon=qmakeapp.png
+Category=C++/Embedded
+Comment=Generate an Opie input method plugin.
+Comment[da]=Generér en Opie input-metode-plugin.
+Comment[de]=Erstellt ein Eingabemethode-Plugin für Opie
+Comment[et]=Opie sisestusmeetodi plugina loomine.
+Comment[hu]=Létrehoz egy Opie-s bemeneti modult.
+Comment[it]=Genera un plugin per il metodo di input Opie.
+Comment[sv]=Skapa ett insticksprogram för Opie-inmatning.
+Comment[tr]=Bir Opie girdi yöntemi eklentisi yarat
+Comment[zh_CN]=生成一个 Opie 输入法插件。
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
+Archive=opieinput.tar.gz
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[MkDir0]
+Type=mkdir
+Dir=%{dest}/pics
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/pics/%{APPNAMELC}
+
+[FILE2]
+Type=install
+Source=%{src}/Example.png
+Dest=%{dest}/pics/%{APPNAMELC}/%{APPNAMELC}.png
+
+[FILE3]
+Type=install
+Source=%{src}/app.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[FILE4]
+Type=install
+Source=%{src}/simpleimpl.cpp
+Dest=%{dest}/%{APPNAMELC}.cpp
+
+[FILE5]
+Type=install
+Source=%{src}/simpleimpl.h
+Dest=%{dest}/%{APPNAMELC}.h
+
+[MSG]
+Type=message
+Comment=An opie input method plugin was created in %{dest}
+Comment[da]=At opie input-metode-plugin blev oprettet i %{dest}
+Comment[de]=Ein Eingabemethode-Plugin für Opie wurde in %{dest} erstellt.
+Comment[et]=Opie sisestusmeetodi plugin loodi asukohta %{dest}
+Comment[hu]=Létrejött egy Opie-s bemeneti modul itt: %{dest}
+Comment[it]=È stato creato un plugin per il metodo di input Opie in %{dest}
+Comment[sv]=Ett insticksprogram för Opie-inmatning skapades i %{dest}
+Comment[tr]=Bir opie girdi yöntemi eklentisi %{dest} içinde yaratıldı.
+Comment[zh_CN]=在 %{dest} 中创建了一个 opie 输入法
+

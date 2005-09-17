@@ -5,4 +5,4 @@
 ## The include_xxxx variables are controlled by configure.in.in
 ##
 
-SUBDIRS = parser
+SUBDIRS = parser app_templates

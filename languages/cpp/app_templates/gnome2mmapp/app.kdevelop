@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<kdevelop>
+ <general>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
+  <projectmanagement>KDevAutoProject</projectmanagement>
+  <primarylanguage>C++</primarylanguage>
+  <keywords>
+   <keyword>C++</keyword>
+   <keyword>Code</keyword>
+   <keyword>GNOME</keyword>
+  </keywords>
+ </general>
+ <kdevautoproject>
+  <general>
+   <activetarget>src/%{APPNAMELC}</activetarget>
+   <useconfiguration>debug</useconfiguration>
+  </general>
+  <run>
+   <mainprogram>src/%{APPNAMELC}</mainprogram>
+  </run>
+    <configurations>
+      <optimized>
+        <builddir>optimized</builddir>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevg77options</f77compiler>
+        <cflags>-O2 -g0</cflags>
+        <cxxflags>-O2 -g0</cxxflags>
+      </optimized>
+      <debug>
+        <configargs>--enable-debug=full</configargs>
+        <builddir>debug</builddir>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevg77options</f77compiler>
+        <cflags>-O0 -g3</cflags>
+        <cxxflags>-O0 -g3</cxxflags>
+      </debug>
+    </configurations>
+ </kdevautoproject>
+ <kdevfileview>
+  <groups>
+   <group pattern="*.cpp;*.h" name="Sources" />
+   <group pattern="*.glade" name="User Interface" />
+   <group pattern="*.png" name="Icons" />
+   <group pattern="*.po" name="Translations" />
+   <group pattern="*" name="Others" />
+  </groups>
+ </kdevfileview>
+ <kdevdebugger>
+  <general>
+   <dbgshell>libtool</dbgshell>
+  </general>
+ </kdevdebugger>
+ <kdevfilecreate>
+  <useglobaltypes>
+   <type ext="cpp"/>
+   <type ext="h"/>
+  </useglobaltypes>
+ </kdevfilecreate>
+  <kdevdocumentation>
+    <projectdoc>
+      <docsystem>Doxygen Documentation Collection</docsystem>
+      <docurl>%{APPNAMELC}.tag</docurl>
+    </projectdoc>
+  </kdevdocumentation>
+</kdevelop>

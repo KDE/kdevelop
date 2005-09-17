@@ -1,0 +1,150 @@
+# KDE Config File
+[General]
+Name=Kate plugin with config page
+Name[da]=Kate plugin med indstillingsside
+Name[de]=Kate-Plugin mit Einstellungsseite
+Name[et]=Kate plugin seadistustedialoogiga
+Name[fr]=Module Kate avec page de configuration
+Name[hu]=Kate-bővítőmodul beállítólappal
+Name[it]=Plugin per Kate con pagina di configurazione
+Name[sv]=Kate-insticksprogram med inställningssida
+Name[tr]=Ayar sayfası olan bir Kate eklentisi
+Name[zh_CN]=带配置页的 Kate 插件
+Icon=kateplugin2.png
+Category=C++/KDE
+Comment=Generates a plugin with config page for Kate the text editor.
+Comment[da]=Generere et plugin med indstillingsside for teksteditoren Kate.
+Comment[de]=Erstellt ein Plugin mit Konfigurationsseite für den Texteditor Kate.
+Comment[et]=Seadistustedialoogiga plugina loomine tekstiredaktorile Kate.
+Comment[hu]=Létrehoz egy bővítőmodult beállítólappal a Kate szövegszerkesztőhöz.
+Comment[it]=Genera un plugin con pagina di configurazione per l'editor di testo Kate.
+Comment[sv]=Skapar ett insticksprogram för texteditorn Kate med en inställningssida.
+Comment[tr]=Kate metin düzenleyicisi için ayar sayfası olan bir eklenti yaratır.
+Comment[zh_CN]=生成带配置页的 Kate 文本编辑器插件。
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
+Archive=kateplugin2.tar.gz
+
+[ADMIN]
+Type=include
+File=%{kdevelop}/template-common/admin.kdevtemplate
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[MKDIR_DOCBOOK1]
+Type=mkdir
+Dir=%{dest}/doc
+
+[MKDIR_DOCBOOK2]
+Type=mkdir
+Dir=%{dest}/doc/en
+
+[FILE1]
+Type=install
+Source=%{kdevelop}/template-common/kde-doc-Makefile.am
+Dest=%{dest}/doc/Makefile.am
+
+[FILE2]
+Type=install
+Source=%{kdevelop}/template-common/kde-doc-en-Makefile.am
+Dest=%{dest}/doc/en/Makefile.am
+
+[FILE3]
+Type=install
+EscapeXML=true
+Source=%{kdevelop}/template-common/kde-index.docbook
+Dest=%{dest}/doc/en/index.docbook
+
+[FILE4]
+Type=install
+EscapeXML=true
+Source=%{src}/plugin.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE5]
+Type=install
+Source=%{kdevelop}/template-common/kde-Makefile.cvs
+Dest=%{dest}/Makefile.cvs
+
+[FILE6]
+Type=install
+Source=%{kdevelop}/template-common/kde-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE7]
+Type=install
+Source=%{kdevelop}/template-common/kde-configure.in.in
+Dest=%{dest}/configure.in.in
+
+[MkDir3]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE8]
+Type=install
+Source=%{kdevelop}/template-common/kde-app.lsm
+Dest=%{dest}/src/%{APPNAMELC}.lsm
+
+[MkDir4]
+Type=mkdir
+Dir=%{dest}/po
+
+[FILE9]
+Type=install
+Source=%{kdevelop}/template-common/kde-po-Makefile.am
+Dest=%{dest}/po/Makefile.am
+
+[FILE10]
+Type=install
+Source=%{src}/subdirs
+Dest=%{dest}/subdirs
+
+[FILE11]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/src/Makefile.am
+
+[FILE12]
+Type=install
+Source=%{src}/plugin.desktop
+Dest=%{dest}/src/%{APPNAMELC}.desktop
+
+[FILE13]
+Type=install
+Source=%{src}/plugin_app.cpp
+Dest=%{dest}/src/plugin_%{APPNAMELC}.cpp
+
+[FILE14]
+Type=install
+Source=%{src}/plugin_app.h
+Dest=%{dest}/src/plugin_%{APPNAMELC}.h
+
+[FILE15]
+Type=install
+EscapeXML=true
+Source=%{src}/plugin_app.rc
+Dest=%{dest}/src/plugin_%{APPNAMELC}.rc
+
+[FILE16]
+Type=install
+Source=%{src}/hi16-action-plugin.png
+Dest=%{dest}/src/hi16-action-plugin.png
+
+[FILE17]
+Type=install
+Source=%{src}/hi22-action-plugin.png
+Dest=%{dest}/src/hi32-action-plugin.png
+
+[MSG]
+Type=message
+Comment=A plugin for Kate with a config page was created in %{dest}
+Comment[da]=Et plugin for Kate med en indstillingsside blev oprettet i %{dest}
+Comment[de]=Ein Plugin für Kate mit Konfigurationsseite wurde in %{dest} erstellt.
+Comment[et]=Seadistustedialoogiga Kate plugin loodi asukohta %{dest}
+Comment[hu]=Létrejött egy Kate-bővítőmodul (beállítólappal) itt: %{dest}
+Comment[it]=È stato creato un plugin per Kate con pagina di configurazione in %{dest}
+Comment[sv]=Ett insticksprogram för Kate med en inställningssida skapades i %{dest}
+Comment[tr]=Kate için ayar sayfası olan bir eklenti %{dest} içinde yaratıldı.
+Comment[zh_CN]=在 %{dest} 中创建了一个带配置页的 Kate 插件

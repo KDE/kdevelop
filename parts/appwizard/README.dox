@@ -1,0 +1,80 @@
+/** \class AppWizardPart
+Application Wizard.
+
+\verbatim
+The config files for the application Wizard understands following options
+
+Group [General]
+Name:      this name will be displayed in the Treeview (Application Wizard)
+Icon:      a screenshot from your application (190x140 pixel)
+Category:  the category, will we displayed hierarchic in a
+           treeview (current implementation)
+Comment:   a small comment for the template, longer comments should go
+           into a README.devel and shown on startup
+ShowFilesAfterGeneration:
+           this comma separated list of files will be opened after the project
+           generation, for instance a readme, path is relative to the project dir,
+           APPNAMEUC will be replaced with the project name in uppercase,
+           APPNAMELC will be replaced with the project name in lowercase,
+           APPNAME will be replaced with the project name.
+           (example: ShowFilesAfterGeneration=README.devel,APPNAMELC_plugin.cpp)
+DefaultDestinatonDir:
+           changes the default destination dir for the project (~)
+           to your value, HOMEDIR is a keyword
+FileTemplates:
+           a list of pairs of strings, where the first element is the
+           name a file template to be created, and the second element
+           is either CStyle, PStyle, ShellStyle, or None. With CStyle, the
+           application wizard proposes a file header in C comment style.
+           With PStyle the application wizard creates a header
+           in Pascal comment style. With ShellStyle, the application
+           wizard creates a header in shell comment style.
+
+an example for a php template:
+
+[General]
+Name=Simple PHP script
+Category=PHP
+Comment=This generates a simplistic 'Hello world' program in PHP (http://www.php.net)
+Icon= php.png
+ShowFilesAfterGeneration=README.devel
+DefaultDestinatonDir=HOMEDIR/public_html
+FileTemplates=php,ShellStyle
+
+The template project files (*.kdevelop) defines which parts are
+loaded for the project and how they are configured. The set of
+loaded parts is primarily determined by a set of key words.
+The following keywords are currently used:
+
+C         C language
+C++       C++ language
+Java      Java language
+Pascal    Pascal language
+Python    Python language
+PHP       PHP language
+Perl      Perl language
+Code      Compiled to native, debuggable code
+JVM       Executed and debugged in the Java VM
+GBA       Game Boy Advance
+KDE       KDE application/applet
+Qt        Qt based
+Kicker    Kicker applet
+kioslave  KDE ioslave
+KOffice   KOffice application
+KDevelop  KDevelop plugin
+GNOME     GNOME application
+\endverbatim
+
+\authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
+
+\feature Provide a basic application framework (for plugins and applications for many languages) that you can use as a starting point.
+\feature Development for 3rd party developers made easy. :)
+\feature A further step to rapid application development (RAD).
+
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=appwizard&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">appwizard component at Bugzilla database</a>
+\bug The C/C++ applications use libtool as a degugging shell. That doesn't work. Please remove libtool from "Project Options...-> Debugger -> Debugging Shell" to make them work.
+
+\requirement <a href="http://www.perl.com"> perl </a> >= 5.004
+
+
+*/

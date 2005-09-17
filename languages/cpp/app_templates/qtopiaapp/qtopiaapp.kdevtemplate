@@ -1,0 +1,93 @@
+# KDE Config File
+[General]
+Name=Qtopia Application
+Name[da]=Qtopia-program
+Name[de]=Qtopia-Anwendung
+Name[et]=Qtopia rakendus
+Name[fr]=Application Qtopia
+Name[ga]=Feidhmchlár Qtopia
+Name[hu]=Qtopia-alkalmazás
+Name[it]=Applicazione Qtopia
+Name[sv]=Qtopia-program
+Name[tr]=Qtopia Uygulaması
+Name[zh_CN]=Qtopia 应用程序
+Icon=qmakeapp.png
+Category=C++/Embedded
+Category[fr]=C++/Environnement embarqu�
+Comment=Generate a TMake/Qt based application for Qtopia 1.x
+Comment[da]=Generér et TMake/Qt baseret program for Qtopia 1.x
+Comment[de]=Erstellt eine auf TMake/Qt basierende Anwendung für Qtopia 1.x
+Comment[et]=Qtopia 1.x rakenduse loomine TMake'i/Qt põhjal 
+Comment[fr]=Génère une application basée sur TMake / Qt pour Qtopia 1.x
+Comment[hu]=Létrehoz egy TMake/Qt-alapú alkalmazást a Qtopia 1.x rendszerhez
+Comment[it]=Genera un'applicazione basat su TMake/Qt per Qtopia 1.x
+Comment[sv]=Skapa ett TMake/Qt-baserat program för Qtopia 1.x
+Comment[tr]=Qtopia 1.x için TMake/Qt tabanlı bir uygulama yarat
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
+Archive=qtopiaapp.tar.gz
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/Example.png
+Dest=%{dest}/%{APPNAME}.png
+
+[FILE3]
+Type=install
+Source=%{src}/app.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[FILE4]
+Type=install
+Source=%{src}/example.cpp
+Dest=%{dest}/%{APPNAMELC}.cpp
+
+[FILE5]
+Type=install
+Source=%{src}/example.h
+Dest=%{dest}/%{APPNAMELC}.h
+
+[FILE6]
+Type=install
+EscapeXML=true
+Source=%{src}/examplebase.ui
+Dest=%{dest}/%{APPNAMELC}base.ui
+
+[FILE7]
+Type=install
+Source=%{src}/example.control
+Dest=%{dest}/%{APPNAMELC}.control
+
+[FILE8]
+Type=install
+Source=%{src}/example.desktop
+Dest=%{dest}/%{APPNAMELC}.desktop
+
+[FILE9]
+Type=install
+EscapeXML=true
+Source=%{src}/example.html
+Dest=%{dest}/%{APPNAMELC}.html
+
+[FILE10]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/main.cpp
+
+[MSG]
+Type=message
+Comment=A Qtopia application was created in %{dest}
+Comment[da]=Et Qtopia program blev oprettet i %{dest}
+Comment[de]=Eine Qtopia-Anwendung wurde in %{dest} erstellt.
+Comment[et]=Qtopia rakendus loodi asukohta %{dest}
+Comment[fr]=Une application Qtopia a été créée dans %{dest}
+Comment[hu]=Létrejött egy Qtopia-alkalmazás itt: %{dest}
+Comment[it]=È stata creata un'applicazione Qtopia in %{dest}
+Comment[sv]=Ett Qtopia-program skapades i %{dest}
+Comment[tr]=Bir Qtopia uygulaması %{dest} içinde yaratıldı.

@@ -15,7 +15,8 @@ SUBDIRS = fullscreen \
     valgrind \
     partexplorer \
     quickopen \
-    tipofday
+    tipofday \
+    appwizard
 
 # SUBDIRS = \
 #     abbrev \

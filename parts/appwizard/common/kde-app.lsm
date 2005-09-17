@@ -1,0 +1,16 @@
+Begin3
+Title:          %{APPNAME} -- Some description
+Version:        %{VERSION}
+Entered-date:   
+Description:    
+Keywords:       KDE Qt
+Author:         %{AUTHOR} <%{EMAIL}>
+Maintained-by:  %{AUTHOR} <%{EMAIL}>
+Home-page:      
+Alternate-site: 
+Primary-site:   ftp://ftp.kde.org/pub/kde/unstable/apps/utils
+                xxxxxx  %{APPNAMELC}-%{VERSION}.tar.gz
+                xxx     %{APPNAMELC}-%{VERSION}.lsm
+Platform:       Linux. Needs KDE
+Copying-policy: %{LICENSE}
+End

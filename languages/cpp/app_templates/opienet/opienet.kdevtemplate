@@ -1,0 +1,85 @@
+# KDE Config File
+[General]
+Name=Opie Networksettings
+Name[da]=Opie netværksopsætning
+Name[de]=Opie Netzwerkeinstellungen
+Name[et]=Opie võrguseadustused
+Name[fr]=Paramètres réseau Opie
+Name[hu]=Opie-s hálózati beállítómodul
+Name[it]=Impostazioni di rete di Opie
+Name[sv]=Opie nätverksinställningar
+Name[tr]=Opie Ağ Ayarları
+Name[zh_CN]=Opie 网络设置
+Icon=qmakeapp.png
+Category=C++/Embedded
+Comment=Generate an Opie network config plugin.
+Comment[da]=Generér en Opie netværks-config-plugin.
+Comment[de]=Erstelle ein Opie-Netzwerkeinstellungen-Plugin
+Comment[et]=Opie võrguseadistuste plugina loomine.
+Comment[fr]=Génère un module de configuration réseau pour Opie.
+Comment[hu]=Létrehoz egy Opie-s hálózati beállítómodult.
+Comment[it]=Genera un plugin di configurazione di rete Opie.
+Comment[sv]=Skapa ett Opie-insticksprogram för nätverksinställning.
+Comment[tr]=Opie ağ ayar eklentisi yarat.
+Comment[zh_CN]=生成一个 Opie 网络配置插件。
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
+Archive=opienet.tar.gz
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[MkDir0]
+Type=mkdir
+Dir=%{dest}/pics
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/pics/%{APPNAMELC}
+
+[FILE2]
+Type=install
+Source=%{src}/Example.png
+Dest=%{dest}/pics/%{APPNAMELC}/%{APPNAMELC}.png
+
+[FILE3]
+Type=install
+Source=%{src}/app.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[FILE4]
+Type=install
+Source=%{src}/simplemodule.cpp
+Dest=%{dest}/%{APPNAMELC}module.cpp
+
+[FILE5]
+Type=install
+Source=%{src}/simpleiface.cpp
+Dest=%{dest}/%{APPNAMELC}iface.cpp
+
+[FILE6]
+Type=install
+Source=%{src}/simplemodule.h
+Dest=%{dest}/%{APPNAMELC}module.h
+
+[FILE7]
+Type=install
+Source=%{src}/simpleiface.h
+Dest=%{dest}/%{APPNAMELC}iface.h
+
+[MSG]
+Type=message
+Comment=An opie network settings plugin was created in %{dest}
+Comment[da]=En opie netværksopsætning-plugin blev oprettet i %{dest}
+Comment[de]=Ein Opie-Netzwerkeinstellungen-Plugin wurde in %{dest} erstellt.
+Comment[et]=Opie võrguseadistuste plugin loodi asukohta %{dest}
+Comment[fr]=Un module de configuration réseau pour Opie a été créé dans %{dest}
+Comment[hu]=Létrejött egy Opie-s hálózati beállítómodul itt: %{dest}
+Comment[it]=È stato creato un plugin per le impostazioni di rete di Opie in %{dest}
+Comment[sv]=Ett Opie-insticksprogram för nätverksinställning skapades i %{dest}
+Comment[tr]=Bir opie ağ ayar eklentisi %{dest} içinde yaratıldı.
+Comment[zh_CN]=在 %{dest} 中创建了一个 opie 网络设置插件
+

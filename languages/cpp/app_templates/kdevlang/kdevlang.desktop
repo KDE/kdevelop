@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=%{APPNAME}
+Comment[pt]=%{APPNAME$}
+Comment[xx]=xx%{APPNAME}xx
+Name=KDev%{APPNAME}
+Name[sv]=KDevelop %{APPNAME}
+Name[ta]=கெடெவ்%{APPNAME}
+Name[xx]=xxKDev%{APPNAME}xx
+Icon=kdevelop
+ServiceTypes=KDevelop/LanguageSupport
+X-KDevelop-Language=ChangeMe
+X-KDE-Library=libkdev%{APPNAMELC}
+X-KDevelop-Version=3

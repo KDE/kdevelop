@@ -1,0 +1,14 @@
+bin_PROGRAMS = %{APPNAMELC}
+
+%{APPNAMELC}_SOURCES = \
+	%{APPNAMELC}.cc\
+	main_window_glade.cc \
+	main_window.cc 
+
+noinst_HEADERS = \
+	main_window_glade.hh \
+	main_window.hh 
+
+AM_CXXFLAGS = @CXXFLAGS@ @GNOMEMM_CFLAGS@ 
+
+%{APPNAMELC}_LDADD = @LIBS@ @GNOMEMM_LIBS@ 

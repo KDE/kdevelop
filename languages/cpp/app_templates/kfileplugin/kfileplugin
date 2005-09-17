@@ -1,0 +1,8 @@
+# KDE Config File
+[General]
+Name=KFile plugin
+Icon=kfileplugin.png
+Category=C++/KDE
+Comment=Generates a KFile plugin for konqueror to display meta information.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=README.devel,src/kfile_APPNAMELC.cpp

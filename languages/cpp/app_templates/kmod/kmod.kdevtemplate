@@ -1,0 +1,52 @@
+# KDE Config File
+[General]
+Name=Linux Kernel module
+Name[br]=Mollad ar galon Linux
+Name[da]=Linux kernemodul
+Name[de]=Linux Kernelmodul
+Name[et]=Linuxi kerneli moodul
+Name[fr]=Module du noyau Linux
+Name[hu]=Linuxos kernelmodul
+Name[it]=Modulo del kernel Linux
+Name[sv]=Modul för Linux kärna
+Name[tr]=Linux Çekirdek Birimi
+Name[zh_CN]=Linux 内核模块
+Icon=
+Category=C
+Comment=Generates a template for a Linux kernel module.
+Comment[da]=Genererer en skabelon for en Linux kernemodul.
+Comment[de]=Erstellt eine Vorlage für ein Linux Kernelmodul.
+Comment[et]=Linuxi kerneli mooduli malli loomine.
+Comment[fr]=Génère un modèle de module pour le noyau Linux.
+Comment[hu]=Létrehoz egy sablont linuxos kernelmodul készítéséhez.
+Comment[it]=Genera un modello per un modulo del kernel Linux kernel.
+Comment[sv]=Skapar en mall för en modul i Linux kärna.
+Comment[tr]=Bir Linux çekirdek birimi için bir şablon yaratır.
+Comment[zh_CN]=生成一个 Linux 内核模块的模板。
+FileTemplates=h,CStyle,c,CStyle
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}-driver.c
+Archive=kmod.tar.gz
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/kmod.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/src-Makefile
+Dest=%{dest}/Makefile
+
+[FILE3]
+Type=install
+Source=%{src}/kmod-driver.c
+Dest=%{dest}/%{APPNAMELC}-driver.c
+
+[MSG]
+Type=message
+Command=A linux kernel module was created in %{dest}

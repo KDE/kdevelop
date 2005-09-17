@@ -1,0 +1,129 @@
+# KDE Config File
+[General]
+Name=GNOME 1 Application framework
+Name[da]=GNOME 1 programskelet
+Name[de]=GNOME 1 Anwendungsgerüst
+Name[et]=GNOME 1 rakenduse raamistik
+Name[hu]=GNOME 1 alkalmazás-keretrendszer
+Name[it]=GNOME 1 infrastruttura applicativa
+Name[sv]=GNOME 1 programramverk
+Name[tr]=GNOME 1 Uygulama Çatısı
+Name[zh_CN]=GNOME 1 应用程序框架
+Icon=gnomeapp.png
+Category=C/GNOME
+Comment=Generates a simple GNOME application with one toplevel window, menus and toolbars.
+Comment[da]=Genererer et simpelt GNOME program med et vindue på topniveau, menuer og værktøjslinjer.
+Comment[de]=Erstellt eine einfache GNOME-Anwendung mit einem Toplevel-Fenster, Menüs und Werkzeugleisten.
+Comment[et]=Lihtsa GNOME rakenduse loomine ühe tipptaseme akna, menüüde ja tööriistaribadega.
+Comment[hu]=Létrehoz egy egyszerű GNOME-os alkalmazást egy főablakkal, menükkel és eszköztárakkal.
+Comment[it]=Genera una semplice applicazione di GNOME con una finestra toplevel, menu e barre degli strumenti.
+Comment[sv]=Skapar ett enkelt GNOME-program med ett toppnivåfönster, menyer och verktygsrader.
+Comment[tr]=Bir üst seviye penceresi, menüleri ve araç çubukları olan basit bir GNOME uygulaması yaratır.
+Comment[zh_CN]=生成带一个顶层窗口、菜单和工具栏的简单 GNOME 应用程序。
+FileTemplates=h,CStyle,c,CStyle
+ShowFilesAfterGeneration=%{dest}/src/main.c
+Archive=gnomeapp.tar.gz
+
+[INCADMIN]
+Type=include
+File=%{kdevelop}/template-common/incadmin.kdevtemplate
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[GNOME]
+Type=include
+File=%{kdevelop}/template-common/gnome.kdevtemplate
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE2]
+Type=install
+Source=%{kdevelop}/template-common/gnome-app.lsm
+Dest=%{dest}/src/%{APPNAMELC}.lsm
+
+[FILE3]
+Type=install
+Source=%{kdevelop}/template-common/gnome-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE4]
+Type=install
+Source=%{kdevelop}/template-common/gnome-Makefile.cvs
+Dest=%{dest}/Makefile.cvs
+
+[MkDir2]
+Type=mkdir
+Dir=%{dest}/pixmaps
+
+[FILE5]
+Type=install
+Source=%{kdevelop}/template-common/gnome-pixmaps-Makefile.am
+Dest=%{dest}/pixmaps/Makefile.am
+
+[FILE6]
+Type=install
+Source=%{kdevelop}/template-common/gnome-app.png
+Dest=%{dest}/pixmaps/%{APPNAMELC}.png
+
+[FILE7]
+Type=install
+Source=%{src}/app.desktop
+Dest=%{dest}/src/%{APPNAMELC}.desktop
+
+[FILE8]
+Type=install
+Source=%{src}/configure.in
+Dest=%{dest}/configure.in
+
+[FILE9]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/src/Makefile.am
+
+[FILE10]
+Type=install
+Source=%{src}/app.c
+Dest=%{dest}/src/%{APPNAMELC}.c
+
+[FILE11]
+Type=install
+Source=%{src}/app.h
+Dest=%{dest}/src/%{APPNAMELC}.h
+
+[FILE12]
+Type=install
+Source=%{src}/menus.c
+Dest=%{dest}/src/menus.c
+
+[FILE13]
+Type=install
+Source=%{src}/menus.h
+Dest=%{dest}/src/menus.h
+
+[FILE14]
+Type=install
+Source=%{src}/main.c
+Dest=%{dest}/src/main.c
+
+[MSG]
+Type=message
+Comment=A GNOME application framework was created in %{dest}
+Comment[da]=Et GNOME programskelet blev oprettet i %{dest}
+Comment[de]=Ein GNOME-Anwendungsgerüst wurde in %{dest} erstellt.
+Comment[et]=GNOME rakenduse raamistik loodi asukohta %{dest}
+Comment[hu]=Létrejött egy GNOME-s alkalmazás-keretrendszer itt: %{dest}
+Comment[it]=È stata creata un'infrastruttura d'applicazione GNOME in %{dest}
+Comment[sv]=Ett GNOME-programramverk skapades i %{dest}
+Comment[tr]=Bir GNOME uygulaması çatısı %{dest} içinde yaratıldı.
+Comment[zh_CN]=在 %{dest} 中创建了一个 GNOME 应用程序框架
+

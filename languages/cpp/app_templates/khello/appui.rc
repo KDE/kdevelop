@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="%{APPNAMELC}" version="1">
+<MenuBar>
+  <Menu name="custom"><text>C&amp;ustom</text>
+    <Action name="custom_action" />
+  </Menu>
+</MenuBar>
+</kpartgui>

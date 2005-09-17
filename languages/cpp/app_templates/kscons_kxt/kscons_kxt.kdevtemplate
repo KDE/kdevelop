@@ -1,0 +1,187 @@
+# KDE Config File
+[General]
+Name=Scons-based KDE application
+Name[da]=Scons-baseret KDE program
+Name[de]=Scons-basierte KDE-Anwendung
+Name[et]=KDE rakendus Sconsi põhjal
+Name[sv]=Scons-baserat KDE-program
+Name[tr]=Scons-tabanlı KDE Uygulaması
+Name[zh_CN]=基于 Scons 的 KDE 应用程序
+Category=C++/KDE
+Icon=kscons_kxt.png
+Comment=Generates a simple KDE application with one widget, a configuration dialog and a dcop interface. Scons scripts are provided for compiling and installing the application.
+Comment[da]=Genererer et simpelt KDE program med en kontrol, en indstillingsdialog og en dcop-grænseflade. Der sørges for scons-scripter til at kompilere og installere programmet.
+Comment[de]=Erstellt eine einfache KDE-Anwendung mit einem Widget, einem Einstellungsdialog und einer DCOP-Schnittstelle. Scons-Skripte für das Kompileren und Installieren der Anwendung werden zur Verfügung gestellt.
+Comment[en_GB]=Generates a simple KDE application with one widget, a configuration dialogue and a dcop interface. Scons scripts are provided for compiling and installing the application.
+Comment[et]=Lihtsa KDE rakenduse loomine ühe vidina, seadistusdialoogi ja DCOP-liidesega. Luuakse ka Sconsi skriptid rakenduse kompileerimiseks ja paigaldamiseks.
+Comment[sv]=Skapar ett enkelt KDE-program med en grafisk komponent, en inställningsdialogruta och ett DCOP-gränssnitt. Scons-script tillhandahålls för att kompilera och installera programmet.
+Comment[tr]=Bir parçacıklı, ayar pencereli ve bir dcop arayüzü olan basit bir KDE uygulaması yaratır. Uygulamayı derlemek ve kurmak için scons betikleri sağlanmıştır.
+Comment[zh_CN]=生成一个带一个部件、一个配置对话框和一个 DCOP 接口的简单 KDE 应用程序。此时会提供 Scons 脚本以供编译并安装应用程序。
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/QUICKSTART
+Archive=kscons_kxt.tar.gz
+
+[SCONS]
+Type=include
+File=%{kdevelop}/template-common/scons.kdevtemplate
+
+[MKDIR_DOCBOOK1]
+Type=mkdir
+Dir=%{dest}/doc
+
+[MKDIR_DOCBOOK2]
+Type=mkdir
+Dir=%{dest}/doc/en
+
+[FILE1]
+Type=install
+Source=%{src}/SConscript-doc
+Dest=%{dest}/doc/SConscript
+
+[FILE2]
+Type=install
+EscapeXML=true
+Source=%{kdevelop}/template-common/kde-index.docbook
+Dest=%{dest}/doc/en/index.docbook
+
+[FILE3]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE4]
+Type=install
+Source=%{src}/SConstruct
+Dest=%{dest}/SConstruct
+
+[MkDir3]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE6]
+Type=install
+Source=%{kdevelop}/template-common/kde-app.desktop
+Dest=%{dest}/src/%{APPNAMELC}.desktop
+
+[FILE7]
+Type=install
+Source=%{kdevelop}/template-common/hi16-app-app.png
+Dest=%{dest}/src/hi16-app-%{APPNAMELC}.png
+
+[FILE8]
+Type=install
+Source=%{kdevelop}/template-common/hi32-app-app.png
+Dest=%{dest}/src/hi32-app-%{APPNAMELC}.png
+
+[MkDir4]
+Type=mkdir
+Dir=%{dest}/po
+
+[FILE10]
+Type=install
+Source=%{src}/SConscript-src
+Dest=%{dest}/src/SConscript
+
+[FILE11]
+Type=install
+Source=%{src}/app.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+
+[FILE12]
+Type=install
+Source=%{src}/app.h
+Dest=%{dest}/src/%{APPNAMELC}.h
+
+[FILE13]
+Type=install
+EscapeXML=true
+Source=%{src}/appview_base.ui
+Dest=%{dest}/src/%{APPNAMELC}view_base.ui
+
+[FILE14]
+Type=install
+Source=%{src}/appview.cpp
+Dest=%{dest}/src/%{APPNAMELC}view.cpp
+
+[FILE15]
+Type=install
+Source=%{src}/appview.h
+Dest=%{dest}/src/%{APPNAMELC}view.h
+
+[FILE16]
+Type=install
+EscapeXML=true
+Source=%{src}/prefs-base.ui
+Dest=%{dest}/src/prefs-base.ui
+
+[FILE17]
+Type=install
+Source=%{src}/prefs.cpp
+Dest=%{dest}/src/prefs.cpp
+
+[FILE18]
+Type=install
+Source=%{src}/prefs.h
+Dest=%{dest}/src/prefs.h
+
+[FILE19]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/src/main.cpp
+
+[FILE20]
+Type=install
+EscapeXML=true
+Source=%{src}/appui.rc
+Dest=%{dest}/src/%{APPNAMELC}ui.rc
+
+[FILE21]
+Type=install
+Source=%{src}/README
+Dest=%{dest}/src/README
+
+[FILE22]
+Type=install
+Source=%{src}/app.kcfg
+Dest=%{dest}/src/%{APPNAMELC}.kcfg
+
+[FILE23]
+Type=install
+Source=%{src}/settings.kcfgc
+Dest=%{dest}/src/settings.kcfgc
+
+[FILE24]
+Type=install
+Source=%{src}/tips
+Dest=%{dest}/src/tips
+
+[FILE26]
+Type=install
+Source=%{src}/VERSION
+Dest=%{dest}/VERSION
+
+[FILE29]
+Type=install
+Source=%{src}/INSTALL
+Dest=%{dest}/INSTALL
+
+[FILE30]
+Type=install
+Source=%{src}/QUICKSTART
+Dest=%{dest}/QUICKSTART
+
+[FILE31]
+Type=install
+Source=%{src}/messages.sh
+Dest=%{dest}/po/messages.sh
+
+[MSG]
+Type=message
+Comment=A KDE application with scons scripts was created in %{dest}
+Comment[da]=Et KDE program med scons-scripter blev oprette i %{dest}
+Comment[de]=Eine KDE-Anwendung mit scons-Skripten wurde in %{dest} erstellt.
+Comment[et]=KDE rakendus Sconsi skriptidega loodi asukohta %{dest}
+Comment[sv]=Ett KDE-program med Scons-skript skapades i %{dest}
+Comment[tr]=Scons betikleri olan bir KDE uygulaması %{dest} içinde yaratıldı.
+Comment[zh_CN]=在 %{dest} 中创建了带 scons 脚本的 KDE 应用程序

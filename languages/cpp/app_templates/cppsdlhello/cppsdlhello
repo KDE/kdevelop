@@ -1,0 +1,10 @@
+# KDE Config File
+[General]
+Name=Simple SDL program
+Name[fr]=Un simple programme avec SDL
+Icon=cppsdl.png
+Category=C++
+Comment=Generates a simple SDL program in C++
+Comment[fr]=Génère un simple programme de test avec la bibliothéque SDL dans le language C++.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp

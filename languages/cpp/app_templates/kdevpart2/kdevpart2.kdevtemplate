@@ -1,0 +1,179 @@
+# KDE Config File
+[General]
+Name=KDevelop Plugin (Standalone build)
+Name[da]=KDevelop plugin (Alenestående)
+Name[de]=KDevelop-Plugin (Unabhängige Erstellung)
+Name[et]=KDevelopi plugin (autonoomne)
+Name[hu]=KDevelop-bővítőmodul (önálló)
+Name[it]=Plugin di KDevelop (compilazione indipendente)
+Name[sv]=KDevelop-insticksprogram (att bygga fristående)
+Name[tr]=KDevelop Eklentisi (Kendi başına çalışabilen)
+Name[zh_CN]=KDevelop 插件(独立编译)
+Category=C++/KDevelop/
+Comment=This generates a KPart for KDevelop, to be built outside of the KDevelop source tree.
+Comment[da]=Dette genererer en KPart for KDevelop, til at bygges udenfor  KDevelop's kildetræ.
+Comment[de]=Hiermit wird eine Komponente (KPart) für KDevelop generiert, die außerhalb des Quelltextbaumes von KDevelop erstellt wird.
+Comment[et]=KDevelopi KPart'i loomine, mida saab ehitada väljaspool KDevelopi lähtekoodipuud.
+Comment[hu]=Létrehoz egy KDevelop-bővítőmodult, mely a KDevelopos forráskönyvtáron kívül fordítható le.
+Comment[it]=Genera un KPart per KDevelop, da compilare al di fuori dell'albero sorgente di KDevelop.
+Comment[sv]=Detta skapar ett KDevelop-delprogram, att bygga utanför KDevelops källkodsträd.
+Comment[tr]=Bu, KDevelop için, KDevelop kaynak ağacının dışında yapılacak, bir KPart yaratır.
+Comment[zh_CN]=这将生成一个 KDevelop 的 KPart，可以在 KDevelop 源代码树之外编译。
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}_part.cpp
+Archive=kdevpart2.tar.gz
+
+[SCOPE]
+Type = value
+ValueType=QString
+Value= SCOPE
+Comment= The scope of a plugin (Global, Project, Core)
+Comment[da]= Et plugins omfang (Globalt, Projekt, Kerne)
+Comment[de]= Gültigkeitsbereich eines Plugins (Global, Projekt, Kern)
+Comment[et]=Plugina skoop (globaalne, projekt, tuum)
+Comment[hu]=A modul hatóköre (globális, projektszintű, alap)
+Comment[it]=Il contesto di un plugin (Globale, Progetto, Core)
+Comment[sv]= Insticksprogrammets omfattning (Global, Projekt, Kärna)
+Comment[tr]=Bir eklentinin alanı (Genel, Proje, İç)
+Comment[zh_CN]=插件的范围(全局、工程、核心)
+Default= Global
+
+[PROPS]
+Type = value
+ValueType=QString
+Value= PROPS
+Comment= The list of supported KDevelop properties
+Comment[da]= Listen af understøttede KDevelop-egenskaber
+Comment[de]= Die Liste der unterstützten KDevelop-Eigenschaften
+Comment[et]= KDevelopi toetatud omaduste nimekiri
+Comment[fr]= La liste des propriétés KDevelop prises en charge
+Comment[hu]=A támogatott KDevelop-tulajdonságok
+Comment[it]=Lista delle proprietà supportate da KDevelop
+Comment[sv]= Listan med egenskaper i KDevelop som stöds
+Comment[tr]=Desteklenen KDevelop özellikleri
+Comment[zh_CN]=列出支持的 KDevelop 属性
+Default=
+
+[ADMIN]
+Type=include
+File=%{kdevelop}/template-common/admin.kdevtemplate
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{kdevelop}/template-common/kde-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE3]
+Type=install
+Source=%{kdevelop}/template-common/kde-Makefile.cvs
+Dest=%{dest}/Makefile.cvs
+
+[FILE4]
+Type=install
+Source=%{src}/subdirs
+Dest=%{dest}/subdirs
+
+[FILE5]
+Type=install
+Source=%{src}/kdevpart-configure.in.in
+Dest=%{dest}/configure.in.in
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE6]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/src/Makefile.am
+
+[FILE7]
+Type=install
+Source=%{src}/kdevpart_part.cpp
+Dest=%{dest}/src/%{APPNAMELC}part.cpp
+
+[FILE71]
+Type=install
+EscapeXML=true
+Source=%{src}/globalconfigbase.ui
+Dest=%{dest}/src/%{APPNAMELC}globalconfigbase.ui
+
+[FILE711]
+Type=install
+Source=%{src}/globalconfig.h
+Dest=%{dest}/src/%{APPNAMELC}globalconfig.h
+
+[FILE712]
+Type=install
+Source=%{src}/globalconfig.cpp
+Dest=%{dest}/src/%{APPNAMELC}globalconfig.cpp
+
+[FILE72]
+Type=install
+EscapeXML=true
+Source=%{src}/projectconfigbase.ui
+Dest=%{dest}/src/%{APPNAMELC}projectconfigbase.ui
+
+[FILE721]
+Type=install
+Source=%{src}/projectconfig.h
+Dest=%{dest}/src/%{APPNAMELC}projectconfig.h
+
+[FILE722]
+Type=install
+Source=%{src}/projectconfig.cpp
+Dest=%{dest}/src/%{APPNAMELC}projectconfig.cpp
+
+[FILE8]
+Type=install
+Source=%{src}/kdevpart_part.h
+Dest=%{dest}/src/%{APPNAMELC}part.h
+
+[FILE9]
+Type=install
+Source=%{src}/kdevpart_widget.cpp
+Dest=%{dest}/src/%{APPNAMELC}widget.cpp
+
+[FILE10]
+Type=install
+Source=%{src}/kdevpart_widget.h
+Dest=%{dest}/src/%{APPNAMELC}widget.h
+
+[FILE11]
+Type=install
+EscapeXML=true
+Source=%{src}/kdevpart_part.rc
+Dest=%{dest}/src/kdev%{APPNAMELC}.rc
+
+[FILE12]
+Type=install
+Source=%{src}/kdevpart.desktop
+Dest=%{dest}/src/kdev%{APPNAMELC}.desktop
+
+[FILE13]
+Type=install
+Source=%{src}/README.dox
+Dest=%{dest}/src/README.dox
+
+[MSG]
+Type=message
+Comment=A KDevelop plugin was created in %{dest}
+Comment[da]=Et KDevelop plugin blev oprettet i %{dest}
+Comment[de]=Ein KDevelop-Plugin wurde in %{dest} erstellt.
+Comment[et]=KDevelopi plugin loodi asukohta %{dest}
+Comment[fr]=Un module KDevelop a été créé dans %{dest}
+Comment[hu]=Létrejött egy KDevelop-bővítőmodul itt: %{dest}
+Comment[it]=È stato creato un plugin per KDevelop in %{dest}
+Comment[sv]=Ett insticksprogram för KDevelop skapades i %{dest}
+Comment[tr]=Bir KDevelop eklentisi %{dest} içinde yaratıldı.
+Comment[zh_CN]=在 %{dest} 中创建了 KDevelop 插件

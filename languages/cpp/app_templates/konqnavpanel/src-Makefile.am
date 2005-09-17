@@ -1,0 +1,11 @@
+INCLUDES= $(all_includes)
+METASOURCES = AUTO
+
+kde_module_LTLIBRARIES=konqsidebar_%{APPNAMELC}.la
+
+konqsidebar_%{APPNAMELC}_la_SOURCES = %{APPNAMELC}.cpp
+konqsidebar_%{APPNAMELC}_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) -lkonqsidebarplugin
+konqsidebar_%{APPNAMELC}_la_LIBADD = $(LIB_KPARTS) $(LIB_KFILE)
+
+%{APPNAMELC}_entry_DATA = %{APPNAMELC}.desktop
+%{APPNAMELC}_entrydir = $(kde_datadir)/konqsidebartng/entries

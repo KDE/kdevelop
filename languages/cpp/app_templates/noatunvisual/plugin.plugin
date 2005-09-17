@@ -1,0 +1,8 @@
+Filename=noatun_%{APPNAMELC}plugin.la
+Author=%{AUTHOR}
+Site=http://noatun.kde.org/
+Email=%{EMAIL}
+Type=visualization
+License=$LICENSE$
+Name=%{APPNAME}
+Comment=My scope visualization plugin

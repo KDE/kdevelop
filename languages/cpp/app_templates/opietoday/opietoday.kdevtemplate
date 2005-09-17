@@ -1,0 +1,91 @@
+# KDE Config File
+[General]
+Name=Opie Today Plugin
+Name[da]=Opie Today-plugin
+Name[de]=Opie Today-Plugin
+Name[et]=Opie Today plugin
+Name[hu]=Opie Today-modul
+Name[it]=Plugin today di Opie
+Name[sv]=Opie Idag-insticksprogram
+Name[tr]=Opie Bugün Eklentisi
+Name[zh_CN]=Opie 今日插件
+Icon=qmakeapp.png
+Category=C++/Embedded
+Comment=Generate an Opie today plugin.
+Comment[da]=Generér et Opie today-plugin.
+Comment[de]=Erstellt ein Opie Today-Plugin
+Comment[et]=Opie Today plugina loomine.
+Comment[hu]=Létrehoz egy Opie Today-modult.
+Comment[it]=Genera un plugin today di Opie.
+Comment[sv]=Skapar ett Opie Idag-insticksprogram.
+Comment[tr]=Bir Opie bugün eklentisi yarat
+Comment[zh_CN]=生成一个 Opie 今日插件。
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
+Archive=opietoday.tar.gz
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[MkDir0]
+Type=mkdir
+Dir=%{dest}/pics
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/pics/%{APPNAMELC}
+
+[FILE2]
+Type=install
+Source=%{src}/Example.png
+Dest=%{dest}/pics/%{APPNAMELC}/%{APPNAMELC}.png
+
+[FILE3]
+Type=install
+Source=%{src}/app.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[FILE4]
+Type=install
+Source=%{src}/exampleplugin.cpp
+Dest=%{dest}/%{APPNAMELC}.cpp
+
+[FILE5]
+Type=install
+Source=%{src}/examplepluginwidget.cpp
+Dest=%{dest}/%{APPNAMELC}widget.cpp
+
+[FILE6]
+Type=install
+Source=%{src}/examplepluginimpl.cpp
+Dest=%{dest}/%{APPNAMELC}impl.cpp
+
+[FILE7]
+Type=install
+Source=%{src}/exampleplugin.h
+Dest=%{dest}/%{APPNAMELC}.h
+
+[FILE8]
+Type=install
+Source=%{src}/examplepluginwidget.h
+Dest=%{dest}/%{APPNAMELC}widget.h
+
+[FILE9]
+Type=install
+Source=%{src}/examplepluginimpl.h
+Dest=%{dest}/%{APPNAMELC}impl.h
+
+[MSG]
+Type=message
+Comment=An opie today plugin was created in %{dest}
+Comment[da]=Et opie today-plugin blev oprettet i %{dest}
+Comment[de]=Ein Opie Today-Plugin wurde in %{dest} erstellt.
+Comment[et]=Opie Today plugin loodi asukohta %{dest}
+Comment[hu]=Létrejött egy Opie Today-modul itt: %{dest}
+Comment[it]=È stato creato un plugin today di Opie in %{dest}
+Comment[sv]=Ett Opie Idag-insticksprogram skapades i %{dest}
+Comment[tr]=Bir Opie bugün eklentisi %{dest} içinde yaratıldı.
+Comment[zh_CN]=在 %{dest} 中创建了一个 opie 今日插件

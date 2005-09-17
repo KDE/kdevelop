@@ -1,0 +1,72 @@
+#! /usr/bin/env python
+# SConscript for %{APPNAMELC} compilation and installation
+
+############################
+## Configuration
+
+## use the environment set in the top-level
+## SConstruct file
+
+Import('env')
+myenv=env.Copy()
+
+#############################
+## Programs to build
+
+%{APPNAMELC}_sources="""
+settings.kcfgc
+main.cpp
+prefs.cpp
+%{APPNAMELC}.skel
+%{APPNAMELC}.cpp
+%{APPNAMELC}view.cpp
+prefs-base.ui
+%{APPNAMELC}view_base.ui
+"""
+
+# Our main program
+# KDEprogram add the file to the install targets automatically,
+# so you do not need to write myenv.KDEinstall( env['KDEBIN'], %{APPNAMELC})
+myenv.KDEprogram( "%{APPNAMELC}", %{APPNAMELC}_sources )
+
+############################
+## Customization
+
+## Additional include paths for compiling the source files
+## Always add '../' (top-level directory) because moc makes code that needs it
+myenv.KDEaddpaths_includes( "./ ../" )
+
+## Necessary libraries to link against
+myenv.KDEaddlibs( "qt-mt kio kdecore kdeprint" )
+
+## This shows how to add other link flags to the program
+# myenv.KDEaddflags_link('-export-dynamic')
+
+## If you are using QThread, add this line
+# myenv.KDEaddflags_link( '-DQT_THREAD_SUPPORT' )
+
+#############################
+## Installation
+
+## NOTE 1: The program is installed automatically
+## NOTE 2: KDEinstall( resource_type, subdirectory, list_of_files )
+
+## The ui.rc file and the tips go into datadir/appname/
+myenv.KDEinstall( 'KDEDATA', '/%{APPNAMELC}', '%{APPNAMELC}ui.rc' )
+myenv.KDEinstall( 'KDEDATA', '/%{APPNAMELC}', 'tips' )
+
+## The kcfg file is installed in a global kcfg directory
+myenv.KDEinstall( 'KDEKCFG', '', '%{APPNAMELC}.kcfg' )
+
+## Warning : there is a difference between the normal destop file used for the menu
+##     and the servicetype desktop file, so they go in different directories
+myenv.KDEinstall( 'KDEMENU', 'Utilities/', '%{APPNAMELC}.desktop' )
+
+## Use this when you need to install a mimetype file
+#myenv.KDEinstall( 'KDEMIME', 'application', 'x-%{APPNAMELC}.desktop' )
+
+## Installing icons is easy (hi-16-app-%{APPNAMELC}.png, hi-22-app-%{APPNAMELC}.png)
+#myenv.KDEicon()
+
+## do not forget that this is a python script so even loops are allowed... :)
+

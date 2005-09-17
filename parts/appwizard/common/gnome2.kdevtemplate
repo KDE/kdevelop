@@ -1,0 +1,5 @@
+[GNOME2]
+Type=install archive
+Source=%{kdevelop}/template-common/gnome2.tar.gz
+Dest=%{dest}
+
