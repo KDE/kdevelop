@@ -34,3 +34,4 @@ private slots:
 };
 
 #endif
+// kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

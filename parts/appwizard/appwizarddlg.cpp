@@ -77,56 +77,56 @@
 #include "filetemplate.h"
 
 AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const char *name)
-    : Q3Wizard( parent, name, true), m_pCurrentAppInfo(0), 
-	m_profileSupport(new ProfileSupport(part))
+    : Q3Wizard( parent, name, true), m_pCurrentAppInfo(0),
+    m_profileSupport(new ProfileSupport(part))
 {
-	kdDebug( 9000 ) << "  ** AppWizardDialog::AppWizardDialog()" << endl;
+    kdDebug( 9000 ) << "  ** AppWizardDialog::AppWizardDialog()" << endl;
 
-	setupUi(this);
+    setupUi(this);
 
-	loadLicenses();
+    loadLicenses();
 
-	connect( this, SIGNAL( selected( const QString & ) ),
-			 this, SLOT( pageChanged() ) );
-	connect( templates_listview, SIGNAL( selectionChanged( Q3ListViewItem* ) ),
-			 this, SLOT( templatesTreeViewClicked( Q3ListViewItem* ) ) );
-	connect( version_edit, SIGNAL( textChanged( const QString & ) ),
-			 this, SLOT( updateNextButtons() ) );
-	connect( author_edit, SIGNAL( textChanged( const QString & ) ),
-			 this, SLOT( updateNextButtons() ) );
-	connect( appname_edit, SIGNAL( textChanged( const QString & ) ),
-			 this, SLOT( updateNextButtons() ) );
-	connect( appname_edit, SIGNAL( textChanged( const QString & ) ),
-			 this, SLOT( projectLocationChanged() ) );
-	connect( dest_edit, SIGNAL( urlSelected( const QString & ) ),
-			 this, SLOT( destButtonClicked( const QString & ) ) );
-	connect( dest_edit, SIGNAL( textChanged( const QString & ) ),
-			 this, SLOT( projectLocationChanged() ) );
-	connect( dest_edit, SIGNAL( textChanged( const QString & ) ),
-			 this, SLOT( updateNextButtons() ) );
-	connect( favourites_iconview, SIGNAL( selectionChanged( Q3IconViewItem* ) ),
-			 this, SLOT( favouritesIconViewClicked( Q3IconViewItem* ) ) );
-	connect( templates_listview, SIGNAL( contextMenuRequested( Q3ListViewItem*, const QPoint &, int ) ),
-			 this, SLOT( templatesContextMenu( Q3ListViewItem* ,const QPoint & , int) ) );
-	connect( favourites_iconview, SIGNAL( contextMenuRequested(Q3IconViewItem*,const QPoint& ) ),
-			 this, SLOT( favouritesContextMenu(Q3IconViewItem*,const QPoint & ) ) );
-	connect( favourites_iconview, SIGNAL( contextMenuRequested( Q3IconViewItem*, const QPoint & ) ),
-			 this, SLOT( favouritesContextMenu( Q3IconViewItem*, const QPoint & ) ) );
-	connect( showAll_box, SIGNAL( toggled( bool ) ),
-			 this, SLOT( showTemplates( bool ) ) );
-	connect( license_combo, SIGNAL( activated( int ) ),
-			 this, SLOT( licenseChanged() ) );
+    connect( this, SIGNAL( selected( const QString & ) ),
+             this, SLOT( pageChanged() ) );
+    connect( templates_listview, SIGNAL( selectionChanged( Q3ListViewItem* ) ),
+             this, SLOT( templatesTreeViewClicked( Q3ListViewItem* ) ) );
+    connect( version_edit, SIGNAL( textChanged( const QString & ) ),
+             this, SLOT( updateNextButtons() ) );
+    connect( author_edit, SIGNAL( textChanged( const QString & ) ),
+             this, SLOT( updateNextButtons() ) );
+    connect( appname_edit, SIGNAL( textChanged( const QString & ) ),
+             this, SLOT( updateNextButtons() ) );
+    connect( appname_edit, SIGNAL( textChanged( const QString & ) ),
+             this, SLOT( projectLocationChanged() ) );
+    connect( dest_edit, SIGNAL( urlSelected( const QString & ) ),
+             this, SLOT( destButtonClicked( const QString & ) ) );
+    connect( dest_edit, SIGNAL( textChanged( const QString & ) ),
+             this, SLOT( projectLocationChanged() ) );
+    connect( dest_edit, SIGNAL( textChanged( const QString & ) ),
+             this, SLOT( updateNextButtons() ) );
+    connect( favourites_iconview, SIGNAL( selectionChanged( Q3IconViewItem* ) ),
+             this, SLOT( favouritesIconViewClicked( Q3IconViewItem* ) ) );
+    connect( templates_listview, SIGNAL( contextMenuRequested( Q3ListViewItem*, const QPoint &, int ) ),
+             this, SLOT( templatesContextMenu( Q3ListViewItem* ,const QPoint & , int) ) );
+    connect( favourites_iconview, SIGNAL( contextMenuRequested(Q3IconViewItem*,const QPoint& ) ),
+             this, SLOT( favouritesContextMenu(Q3IconViewItem*,const QPoint & ) ) );
+    connect( favourites_iconview, SIGNAL( contextMenuRequested( Q3IconViewItem*, const QPoint & ) ),
+             this, SLOT( favouritesContextMenu( Q3IconViewItem*, const QPoint & ) ) );
+    connect( showAll_box, SIGNAL( toggled( bool ) ),
+             this, SLOT( showTemplates( bool ) ) );
+    connect( license_combo, SIGNAL( activated( int ) ),
+             this, SLOT( licenseChanged() ) );
 
-	helpButton()->hide();
+    helpButton()->hide();
     templates_listview->header()->hide();
     templates_listview->addColumn( "x" );
-	templates_listview->setColumnWidthMode(0, Q3ListView::Maximum);	//to provide horiz scrollbar.
+    templates_listview->setColumnWidthMode(0, Q3ListView::Maximum); //to provide horiz scrollbar.
 
-	m_templatesMenu = new KPopupMenu(templates_listview);
-	m_templatesMenu->insertItem(i18n("&Add to Favorites"), this, SLOT(addTemplateToFavourites()));
+    m_templatesMenu = new KPopupMenu(templates_listview);
+    m_templatesMenu->insertItem(i18n("&Add to Favorites"), this, SLOT(addTemplateToFavourites()));
 
-	m_favouritesMenu = new KPopupMenu(favourites_iconview);
-	m_favouritesMenu->insertItem(i18n("&Remove Favorite"), this, SLOT(removeFavourite()));
+    m_favouritesMenu = new KPopupMenu(favourites_iconview);
+    m_favouritesMenu->insertItem(i18n("&Remove Favorite"), this, SLOT(removeFavourite()));
 
     m_pathIsValid=false;
     m_part = part;
@@ -136,7 +136,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
     KConfig *config = kapp->config();
 
-	config->setGroup("General Options");
+    config->setGroup("General Options");
     QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
 
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
@@ -146,15 +146,15 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     QStringList categories;
 
     foreach( QString templateName, m_templateNames )
-	{
-		kdDebug(9010) << templateName << endl;
+    {
+        kdDebug(9010) << templateName << endl;
 
         ApplicationInfo *info = new ApplicationInfo;
-		//info->propValues = new PropertyLib::PropertyList();
-		info->templateFile = KGlobal::dirs()->findResource("apptemplates", templateName);
+        //info->propValues = new PropertyLib::PropertyList();
+        info->templateFile = KGlobal::dirs()->findResource("apptemplates", templateName);
         info->templateName = templateName;
 
-		KConfig templateConfig(info->templateFile);
+        KConfig templateConfig(info->templateFile);
         templateConfig.setGroup("General");
 
         info->name = templateConfig.readEntry("Name");
@@ -173,100 +173,100 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
             category.prepend("/"); // prepend /
         categories.append(category);
         info->category = category;
-		info->sourceArchive = templateConfig.readEntry("Archive");
+        info->sourceArchive = templateConfig.readEntry("Archive");
 
-		// Grab includes list
-		QStringList groups = templateConfig.groupList();
-		groups.remove("General");
-		QStringList::Iterator group = groups.begin();
-		for(  ; group != groups.end(); ++group)
-		{
-			templateConfig.setGroup( (*group) );
-			QString type = templateConfig.readEntry("Type").lower();
-			if( type == "include" )  // Add value
-			{
-				info->includes.append( templateConfig.readEntry( "File" ) );
-				kdDebug(9010) << "Adding: " << templateConfig.readEntry( "File" ) << endl;
-			}
-		}
+        // Grab includes list
+        QStringList groups = templateConfig.groupList();
+        groups.remove("General");
+        QStringList::Iterator group = groups.begin();
+        for(  ; group != groups.end(); ++group)
+        {
+            templateConfig.setGroup( (*group) );
+            QString type = templateConfig.readEntry("Type").lower();
+            if( type == "include" )  // Add value
+            {
+                info->includes.append( templateConfig.readEntry( "File" ) );
+                kdDebug(9010) << "Adding: " << templateConfig.readEntry( "File" ) << endl;
+            }
+        }
 
-		// Build builtins map to bootstrap.
-		QString source = kdevRoot( info->templateName );
-		info->subMap.insert("kdevelop", source );
+        // Build builtins map to bootstrap.
+        QString source = kdevRoot( info->templateName );
+        info->subMap.insert("kdevelop", source );
 
-		// Add includes to the main template...
-		foreach( QString include, info->includes )
-		{
-			if( !include.isEmpty() )
-			{
-				QString file = KMacroExpander::expandMacros( include, info->subMap);
-				KConfig tmpCfg( file );
-				tmpCfg.copyTo( "", &templateConfig);
-				kdDebug(9010) << "Merging: " << tmpCfg.name() << endl;
-			}
-		}
+        // Add includes to the main template...
+        foreach( QString include, info->includes )
+        {
+            if( !include.isEmpty() )
+            {
+                QString file = KMacroExpander::expandMacros( include, info->subMap);
+                KConfig tmpCfg( file );
+                tmpCfg.copyTo( "", &templateConfig);
+                kdDebug(9010) << "Merging: " << tmpCfg.name() << endl;
+            }
+        }
 
-		groups = templateConfig.groupList();  // Must get this again since its changed!
-		group = groups.begin();
-		for(  ; group != groups.end(); ++group)
-		{
-			templateConfig.setGroup( (*group) );
-			QString type = templateConfig.readEntry("Type", "value").lower();
-//			kdDebug(9010) << "Reading " <<  (*group) << " of type " << type << endl;
-			if( type == "value" )  // Add value
-			{
-				QString name = templateConfig.readEntry( "Value" );
-				QString label = templateConfig.readEntry( "Comment" );
-				QString type = templateConfig.readEntry( "ValueType", "String" );
-				QVariant::Type variantType = QVariant::nameToType( type.latin1());
-				QVariant value = templateConfig.readPropertyEntry( "Default", variantType );
-				value.cast( variantType );  // fix this in kdelibs...
-//				if( !name.isEmpty() && !label.isEmpty() )
-//					info->propValues->addProperty( new PropertyLib::Property( (int)variantType, name, label, value ) );
-				
-			}
-			else if( type == "install" ) // copy dir
-			{
-				installFile file;
-				file.source = templateConfig.readPathEntry("Source");
-				file.dest = templateConfig.readPathEntry("Dest");
-				file.process = templateConfig.readBoolEntry("Process",true);
-				file.isXML = templateConfig.readBoolEntry("EscapeXML",false);
-				file.option = templateConfig.readEntry("Option");
-				info->fileList.append(file);
-			}
-			else if( type == "install archive" )
-			{
-				installArchive arch;
-				arch.source = templateConfig.readPathEntry("Source");
-				arch.dest = templateConfig.readPathEntry("Dest");
-				arch.process = templateConfig.readBoolEntry("Process",true);
-				arch.option = templateConfig.readEntry("Option", "" );
-				info->archList.append(arch);
-			}
-			else if( type == "mkdir" )
-			{
-				installDir dir;
-				dir.dir = templateConfig.readPathEntry("Dir");
-				dir.option = templateConfig.readEntry("Option", "" );
-				dir.perms = templateConfig.readNumEntry("Perms", 0777 );
-				info->dirList.append(dir);
-			}
-			else if( type == "finishcmd" )
-			{
-				info->finishCmd=templateConfig.readPathEntry("Command");
-				info->finishCmdDir=templateConfig.readPathEntry("Directory");
-			}
-			else if( type == "ui")
-			{
-				info->customUI = templateConfig.readPathEntry("File");
-			}
-			else if( type == "message" )
-			{
-				info->message = templateConfig.readEntry( "Comment" );
-			}
-		}
-		m_appsInfo.append(info);
+        groups = templateConfig.groupList();  // Must get this again since its changed!
+        group = groups.begin();
+        for(  ; group != groups.end(); ++group)
+        {
+            templateConfig.setGroup( (*group) );
+            QString type = templateConfig.readEntry("Type", "value").lower();
+//          kdDebug(9010) << "Reading " <<  (*group) << " of type " << type << endl;
+            if( type == "value" )  // Add value
+            {
+                QString name = templateConfig.readEntry( "Value" );
+                QString label = templateConfig.readEntry( "Comment" );
+                QString type = templateConfig.readEntry( "ValueType", "String" );
+                QVariant::Type variantType = QVariant::nameToType( type.latin1());
+                QVariant value = templateConfig.readPropertyEntry( "Default", variantType );
+                value.cast( variantType );  // fix this in kdelibs...
+//              if( !name.isEmpty() && !label.isEmpty() )
+//                  info->propValues->addProperty( new PropertyLib::Property( (int)variantType, name, label, value ) );
+
+            }
+            else if( type == "install" ) // copy dir
+            {
+                installFile file;
+                file.source = templateConfig.readPathEntry("Source");
+                file.dest = templateConfig.readPathEntry("Dest");
+                file.process = templateConfig.readBoolEntry("Process",true);
+                file.isXML = templateConfig.readBoolEntry("EscapeXML",false);
+                file.option = templateConfig.readEntry("Option");
+                info->fileList.append(file);
+            }
+            else if( type == "install archive" )
+            {
+                installArchive arch;
+                arch.source = templateConfig.readPathEntry("Source");
+                arch.dest = templateConfig.readPathEntry("Dest");
+                arch.process = templateConfig.readBoolEntry("Process",true);
+                arch.option = templateConfig.readEntry("Option", "" );
+                info->archList.append(arch);
+            }
+            else if( type == "mkdir" )
+            {
+                installDir dir;
+                dir.dir = templateConfig.readPathEntry("Dir");
+                dir.option = templateConfig.readEntry("Option", "" );
+                dir.perms = templateConfig.readNumEntry("Perms", 0777 );
+                info->dirList.append(dir);
+            }
+            else if( type == "finishcmd" )
+            {
+                info->finishCmd=templateConfig.readPathEntry("Command");
+                info->finishCmdDir=templateConfig.readPathEntry("Directory");
+            }
+            else if( type == "ui")
+            {
+                info->customUI = templateConfig.readPathEntry("File");
+            }
+            else if( type == "message" )
+            {
+                info->message = templateConfig.readEntry( "Comment" );
+            }
+        }
+        m_appsInfo.append(info);
     }
 
     // Insert categories into list view
@@ -281,20 +281,20 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
                       << ait.current()->category << "'" << endl;
         Q3ListViewItem *item = m_categoryMap.find(ait.current()->category);
         if (item)
-		{
+        {
             item = new KListViewItem(item, ait.current()->name);
-			item->setPixmap(0, SmallIcon("kdevelop"));
-		}
+            item->setPixmap(0, SmallIcon("kdevelop"));
+        }
         else
             kdDebug(9010) << "Error can't find category in categoryMap: "
                           << ait.current()->category << endl;
         ait.current()->item = item;
     }
 
-	//Load favourites from config
-	populateFavourites();
+    //Load favourites from config
+    populateFavourites();
 
-	QString author, email;
+    QString author, email;
     AppWizardUtil::guessAuthorAndEmail(&author, &email);
     author_edit->setText(author);
     email_edit->setText(email);
@@ -327,10 +327,10 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
             license_combo->setCurrentItem( idx - 1 );
     }
 
-	m_custom_options_layout = new QHBoxLayout( custom_options );
-	m_custom_options_layout->setAutoAdd(true);
+    m_custom_options_layout = new QHBoxLayout( custom_options );
+    m_custom_options_layout->setAutoAdd(true);
 
-	showTemplates(false);
+    showTemplates(false);
 }
 
 AppWizardDialog::~AppWizardDialog()
@@ -342,52 +342,52 @@ void AppWizardDialog::loadVcs()
 
 void AppWizardDialog::updateNextButtons()
 {
-	bool validGeneralPage = m_pCurrentAppInfo
-							&& !appname_edit->text().isEmpty()
-							&& m_pathIsValid;
-	bool validPropsPage = !version_edit->text().isEmpty()
-							&& !author_edit->text().isEmpty();
+    bool validGeneralPage = m_pCurrentAppInfo
+                            && !appname_edit->text().isEmpty()
+                            && m_pathIsValid;
+    bool validPropsPage = !version_edit->text().isEmpty()
+                            && !author_edit->text().isEmpty();
 
-	setFinishEnabled(m_lastPage, validGeneralPage && validPropsPage);
-	nextButton()->setEnabled(
-		currentPage() == generalPage ? validGeneralPage : validPropsPage );
+    setFinishEnabled(m_lastPage, validGeneralPage && validPropsPage);
+    nextButton()->setEnabled(
+        currentPage() == generalPage ? validGeneralPage : validPropsPage );
 }
 
 void AppWizardDialog::licenseChanged()
 {
-	Q3ValueList<AppWizardFileTemplate>::Iterator it;
-	if( license_combo->currentItem() == 0 )
-	{
-		for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it)
-		{
-			Q3MultiLineEdit *edit = (*it).edit;
-			edit->setText( QString::null );
-		}
-	} else {
-		KDevLicense* lic = licenses()[ license_combo->currentText() ];
-		for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
-			QString style = (*it).style;
-			Q3MultiLineEdit *edit = (*it).edit;
+    Q3ValueList<AppWizardFileTemplate>::Iterator it;
+    if( license_combo->currentItem() == 0 )
+    {
+        for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it)
+        {
+            Q3MultiLineEdit *edit = (*it).edit;
+            edit->setText( QString::null );
+        }
+    } else {
+        KDevLicense* lic = licenses()[ license_combo->currentText() ];
+        for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
+            QString style = (*it).style;
+            Q3MultiLineEdit *edit = (*it).edit;
 
-			KDevFile::CommentingStyle commentStyle = KDevFile::CPPStyle;
-			if (style == "PStyle") {
-				commentStyle = KDevFile::PascalStyle;
-			} else if (style == "AdaStyle") {
-				commentStyle = KDevFile::AdaStyle;
-			} else if (style == "ShellStyle") {
-				commentStyle = KDevFile::BashStyle;
-			}
+            KDevFile::CommentingStyle commentStyle = KDevFile::CPPStyle;
+            if (style == "PStyle") {
+                commentStyle = KDevFile::PascalStyle;
+            } else if (style == "AdaStyle") {
+                commentStyle = KDevFile::AdaStyle;
+            } else if (style == "ShellStyle") {
+                commentStyle = KDevFile::BashStyle;
+            }
 
-			QString text;
-			text = lic->assemble( commentStyle, author_edit->text(), email_edit->text() , 0 );
-			edit->setText(text);
-		}
-	}
+            QString text;
+            text = lic->assemble( commentStyle, author_edit->text(), email_edit->text() , 0 );
+            edit->setText(text);
+        }
+    }
 }
 
 QString AppWizardDialog::kdevRoot(const QString &templateName ) const
 {
-	QString source;
+    QString source;
     QFileInfo finfo(templateName);
     QDir dir(finfo.dir());
     dir.cdUp();
@@ -407,102 +407,102 @@ void AppWizardDialog::accept()
         return;
     }
 
-	QString source = kdevRoot( m_pCurrentAppInfo->templateName );
+    QString source = kdevRoot( m_pCurrentAppInfo->templateName );
 
-	// Unpack template archive to temp dir, and get the name
+    // Unpack template archive to temp dir, and get the name
 
-	KTempDir archDir;
-	archDir.setAutoDelete(true);
-	KTar templateArchive( source + "/" + m_pCurrentAppInfo->sourceArchive, "application/x-gzip" );
-	if( templateArchive.open( QIODevice::ReadOnly ) )
-	{
-		unpackArchive(templateArchive.directory(), archDir.name(), false);
-	}
-	else
-	{
-		kdDebug(9010) << "After KTar::open fail" << endl;
-		KMessageBox::sorry(this, i18n("The template %1 cannot be opened.").arg( source + "/" + m_pCurrentAppInfo->sourceArchive ) );
-		templateArchive.close();
-		return;
-	}
-	templateArchive.close();
+    KTempDir archDir;
+    archDir.setAutoDelete(true);
+    KTar templateArchive( source + "/" + m_pCurrentAppInfo->sourceArchive, "application/x-gzip" );
+    if( templateArchive.open( QIODevice::ReadOnly ) )
+    {
+        unpackArchive(templateArchive.directory(), archDir.name(), false);
+    }
+    else
+    {
+        kdDebug(9010) << "After KTar::open fail" << endl;
+        KMessageBox::sorry(this, i18n("The template %1 cannot be opened.").arg( source + "/" + m_pCurrentAppInfo->sourceArchive ) );
+        templateArchive.close();
+        return;
+    }
+    templateArchive.close();
 
-	// Build KMacroExpander map
-	//m_customOptions->dataForm()->fillPropertyMap(&m_pCurrentAppInfo->subMap);
-//	PropertyLib::PropertyList::Iterator idx = m_pCurrentAppInfo->propValues->begin();
-//	for( ; idx != m_pCurrentAppInfo->propValues->end(); ++idx)
-//		m_pCurrentAppInfo->subMap.insert( idx.data()->name(), idx.data()->value().toString() );
-	
-	m_pCurrentAppInfo->subMap.insert("src", archDir.name() );
-	m_pCurrentAppInfo->subMap.insert("dest", finalLoc_label->text() );
-	m_pCurrentAppInfo->subMap.insert("APPNAME", appname_edit->text() );
-	m_pCurrentAppInfo->subMap.insert("APPNAMELC", appname_edit->text().lower() );
-	m_pCurrentAppInfo->subMap.insert("APPNAMESC", QString(appname_edit->text()[0]).upper() + appname_edit->text().mid(1));
-	m_pCurrentAppInfo->subMap.insert("APPNAMEUC", appname_edit->text().upper() );
-	m_pCurrentAppInfo->subMap.insert("AUTHOR", author_edit->text() );
-	m_pCurrentAppInfo->subMap.insert("EMAIL", email_edit->text() );
-	m_pCurrentAppInfo->subMap.insert("VERSION", version_edit->text());
-	m_pCurrentAppInfo->subMap.insert( "I18N", "i18n" );
-	m_pCurrentAppInfo->subMap.insert("YEAR", QString::number( QDate::currentDate().year() ) );
-	
-	// This isn't too pretty, but we have several templates that use KAboutData::License_${LICENSE}
-	// and unsurprisingly, KAboutData doesn't cover every imaginable case.
-	// These are the licenses known to KDE-3.2 KAboutData, KDevelop doesn't have all of these as prepared options today
-	QString license = license_combo->currentText();
-	if ( license == "GPL" || license == "GPL_V2" || license == "LGPL" || license == "LGPL_V2"||
-		license == "BSD" || license == "Artistic" || license == "QPL" || license == "QPL_V1_0" )
-	{
-		m_pCurrentAppInfo->subMap.insert("LICENSE", license );
-	}
-	else
-	{
-		m_pCurrentAppInfo->subMap.insert("LICENSE", "Custom" );
-	}
+    // Build KMacroExpander map
+    //m_customOptions->dataForm()->fillPropertyMap(&m_pCurrentAppInfo->subMap);
+//  PropertyLib::PropertyList::Iterator idx = m_pCurrentAppInfo->propValues->begin();
+//  for( ; idx != m_pCurrentAppInfo->propValues->end(); ++idx)
+//      m_pCurrentAppInfo->subMap.insert( idx.data()->name(), idx.data()->value().toString() );
+
+    m_pCurrentAppInfo->subMap.insert("src", archDir.name() );
+    m_pCurrentAppInfo->subMap.insert("dest", finalLoc_label->text() );
+    m_pCurrentAppInfo->subMap.insert("APPNAME", appname_edit->text() );
+    m_pCurrentAppInfo->subMap.insert("APPNAMELC", appname_edit->text().lower() );
+    m_pCurrentAppInfo->subMap.insert("APPNAMESC", QString(appname_edit->text()[0]).upper() + appname_edit->text().mid(1));
+    m_pCurrentAppInfo->subMap.insert("APPNAMEUC", appname_edit->text().upper() );
+    m_pCurrentAppInfo->subMap.insert("AUTHOR", author_edit->text() );
+    m_pCurrentAppInfo->subMap.insert("EMAIL", email_edit->text() );
+    m_pCurrentAppInfo->subMap.insert("VERSION", version_edit->text());
+    m_pCurrentAppInfo->subMap.insert( "I18N", "i18n" );
+    m_pCurrentAppInfo->subMap.insert("YEAR", QString::number( QDate::currentDate().year() ) );
+
+    // This isn't too pretty, but we have several templates that use KAboutData::License_${LICENSE}
+    // and unsurprisingly, KAboutData doesn't cover every imaginable case.
+    // These are the licenses known to KDE-3.2 KAboutData, KDevelop doesn't have all of these as prepared options today
+    QString license = license_combo->currentText();
+    if ( license == "GPL" || license == "GPL_V2" || license == "LGPL" || license == "LGPL_V2"||
+        license == "BSD" || license == "Artistic" || license == "QPL" || license == "QPL_V1_0" )
+    {
+        m_pCurrentAppInfo->subMap.insert("LICENSE", license );
+    }
+    else
+    {
+        m_pCurrentAppInfo->subMap.insert("LICENSE", "Custom" );
+    }
 
 
-	QStringList cleanUpSubstMap;
-	cleanUpSubstMap << "src" << "I18N" << "kdevelop";
+    QStringList cleanUpSubstMap;
+    cleanUpSubstMap << "src" << "I18N" << "kdevelop";
 
-	// Add template files to the fileList
-	installDir templateDir;
-	templateDir.dir = "%{dest}/templates";
-	m_pCurrentAppInfo->dirList.prepend(templateDir);
+    // Add template files to the fileList
+    installDir templateDir;
+    templateDir.dir = "%{dest}/templates";
+    m_pCurrentAppInfo->dirList.prepend(templateDir);
 
-	installDir baseDir;
-	baseDir.dir = "%{dest}";
-	m_pCurrentAppInfo->dirList.prepend( baseDir );
+    installDir baseDir;
+    baseDir.dir = "%{dest}";
+    m_pCurrentAppInfo->dirList.prepend( baseDir );
 
-	// This is too silly for words, but it's either this or reimplementing FileTemplate
-	QString tempProjectDomSource = "<!DOCTYPE kdevelop><kdevelop><general><author>%1</author><email>%2</email><version>%3</version></general></kdevelop>";
-	tempProjectDomSource = tempProjectDomSource.arg( author_edit->text() ).arg( email_edit->text() ).arg( version_edit->text() );
-	QDomDocument tempProjectDom;
-	tempProjectDom.setContent( tempProjectDomSource ); 
-	
+    // This is too silly for words, but it's either this or reimplementing FileTemplate
+    QString tempProjectDomSource = "<!DOCTYPE kdevelop><kdevelop><general><author>%1</author><email>%2</email><version>%3</version></general></kdevelop>";
+    tempProjectDomSource = tempProjectDomSource.arg( author_edit->text() ).arg( email_edit->text() ).arg( version_edit->text() );
+    QDomDocument tempProjectDom;
+    tempProjectDom.setContent( tempProjectDomSource );
+
     Q3ValueList<AppWizardFileTemplate>::Iterator it;
     for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
         KTempFile *tempFile = new KTempFile();
         m_tempFiles.append(tempFile);
 
-		QString templateText( FileTemplate::makeSubstitutions( tempProjectDom, (*it).edit->text() ) );
-		QFile f;
-		f.open(QIODevice::WriteOnly, tempFile->handle());
-		QTextStream temps(&f);
-		temps << templateText;
-		f.flush();
-		QString templateName( QString( "%1_TEMPLATE" ).arg( (*it).suffix ).upper() );
-		cleanUpSubstMap << templateName;
-		m_pCurrentAppInfo->subMap.insert( templateName, KMacroExpander::expandMacros(templateText , m_pCurrentAppInfo->subMap)  );
+        QString templateText( FileTemplate::makeSubstitutions( tempProjectDom, (*it).edit->text() ) );
+        QFile f;
+        f.open(QIODevice::WriteOnly, tempFile->handle());
+        QTextStream temps(&f);
+        temps << templateText;
+        f.flush();
+        QString templateName( QString( "%1_TEMPLATE" ).arg( (*it).suffix ).upper() );
+        cleanUpSubstMap << templateName;
+        m_pCurrentAppInfo->subMap.insert( templateName, KMacroExpander::expandMacros(templateText , m_pCurrentAppInfo->subMap)  );
 
-		installFile file;
-		file.source = tempFile->name();
-		file.dest = QString( "%{dest}/templates/%1" ).arg( (*it).suffix );
-		file.process = true;
-		file.isXML = false;
-		m_pCurrentAppInfo->fileList.append( file );
+        installFile file;
+        file.source = tempFile->name();
+        file.dest = QString( "%{dest}/templates/%1" ).arg( (*it).suffix );
+        file.process = true;
+        file.isXML = false;
+        m_pCurrentAppInfo->fileList.append( file );
     }
 
-	// Add license file to the file list
-	QString licenseFile, licenseName = i18n("Custom");
+    // Add license file to the file list
+    QString licenseFile, licenseName = i18n("Custom");
 
     if( license_combo->currentItem() != 0 )
     {
@@ -511,104 +511,104 @@ void AppWizardDialog::accept()
         if( lic )
         {
             QStringList files( lic->copyFiles() );
-			QStringList::Iterator it = files.begin();
-			for( ; it != files.end(); ++it )
-			{
-				installFile file;
-				file.source = QString( "%{kdevelop}/template-common/%1" ).arg( *it );
-				file.dest = QString("%{dest}/%1").arg( *it );
-				file.process = true;
-				file.isXML = false;
-				m_pCurrentAppInfo->fileList.append( file );
-			}
+            QStringList::Iterator it = files.begin();
+            for( ; it != files.end(); ++it )
+            {
+                installFile file;
+                file.source = QString( "%{kdevelop}/template-common/%1" ).arg( *it );
+                file.dest = QString("%{dest}/%1").arg( *it );
+                file.process = true;
+                file.isXML = false;
+                m_pCurrentAppInfo->fileList.append( file );
+            }
 
-			m_pCurrentAppInfo->subMap.insert("LICENSEFILE", files.first()  );
+            m_pCurrentAppInfo->subMap.insert("LICENSEFILE", files.first()  );
         }
     }
 
-	// Run macro expander on both the dir map and file maps
-	Q3ValueList<installFile>::Iterator fileIt = m_pCurrentAppInfo->fileList.begin();
-	for( ; fileIt != m_pCurrentAppInfo->fileList.end(); ++fileIt)
-	{
-		(*fileIt).source = KMacroExpander::expandMacros((*fileIt).source , m_pCurrentAppInfo->subMap);
-		(*fileIt).dest = KMacroExpander::expandMacros((*fileIt).dest , m_pCurrentAppInfo->subMap);
-	}
+    // Run macro expander on both the dir map and file maps
+    Q3ValueList<installFile>::Iterator fileIt = m_pCurrentAppInfo->fileList.begin();
+    for( ; fileIt != m_pCurrentAppInfo->fileList.end(); ++fileIt)
+    {
+        (*fileIt).source = KMacroExpander::expandMacros((*fileIt).source , m_pCurrentAppInfo->subMap);
+        (*fileIt).dest = KMacroExpander::expandMacros((*fileIt).dest , m_pCurrentAppInfo->subMap);
+    }
 
-	Q3ValueList<installArchive>::Iterator archIt = m_pCurrentAppInfo->archList.begin();
-	for( ; archIt != m_pCurrentAppInfo->archList.end(); ++archIt)
-	{
-		(*archIt).source = KMacroExpander::expandMacros((*archIt).source , m_pCurrentAppInfo->subMap);
-		(*archIt).dest = KMacroExpander::expandMacros((*archIt).dest , m_pCurrentAppInfo->subMap);
-	}
+    Q3ValueList<installArchive>::Iterator archIt = m_pCurrentAppInfo->archList.begin();
+    for( ; archIt != m_pCurrentAppInfo->archList.end(); ++archIt)
+    {
+        (*archIt).source = KMacroExpander::expandMacros((*archIt).source , m_pCurrentAppInfo->subMap);
+        (*archIt).dest = KMacroExpander::expandMacros((*archIt).dest , m_pCurrentAppInfo->subMap);
+    }
 
-	Q3ValueList<installDir>::Iterator dirIt = m_pCurrentAppInfo->dirList.begin();
-	for( ; dirIt != m_pCurrentAppInfo->dirList.end(); ++dirIt)
-	{
-		(*dirIt).dir = KMacroExpander::expandMacros((*dirIt).dir , m_pCurrentAppInfo->subMap);
-	}
+    Q3ValueList<installDir>::Iterator dirIt = m_pCurrentAppInfo->dirList.begin();
+    for( ; dirIt != m_pCurrentAppInfo->dirList.end(); ++dirIt)
+    {
+        (*dirIt).dir = KMacroExpander::expandMacros((*dirIt).dir , m_pCurrentAppInfo->subMap);
+    }
 
-	QMap<QString,QString>::Iterator mapIt( m_pCurrentAppInfo->subMap.begin() );
-	for( ; mapIt != m_pCurrentAppInfo->subMap.end(); ++mapIt )
-	{
-		QString escaped( mapIt.data() );
-		escaped.replace( "&", "&amp;" );
-		escaped.replace( "<", "&lt;" );
-		escaped.replace( ">", "&gt;" );
-		m_pCurrentAppInfo->subMapXML.insert( mapIt.key(), escaped );
-	}
+    QMap<QString,QString>::Iterator mapIt( m_pCurrentAppInfo->subMap.begin() );
+    for( ; mapIt != m_pCurrentAppInfo->subMap.end(); ++mapIt )
+    {
+        QString escaped( mapIt.data() );
+        escaped.replace( "&", "&amp;" );
+        escaped.replace( "<", "&lt;" );
+        escaped.replace( ">", "&gt;" );
+        m_pCurrentAppInfo->subMapXML.insert( mapIt.key(), escaped );
+    }
 
-	// Create dirs
-	dirIt = m_pCurrentAppInfo->dirList.begin();
-	for( ; dirIt != m_pCurrentAppInfo->dirList.end(); ++dirIt)
-	{
-		kdDebug( 9000 ) << "Process dir " << (*dirIt).dir  << endl;
-		if( m_pCurrentAppInfo->subMap[(*dirIt).option] != "false" )
-		{
-			if( ! KIO::NetAccess::mkdir( (*dirIt).dir, this ) )
-			{
-				KMessageBox::sorry(this, i18n("The directory %1 cannot be created.").arg( (*dirIt).dir ) );
-				return;
-			}
-		}
-	}
-	// Unpack archives
-	archIt = m_pCurrentAppInfo->archList.begin();
-	for( ; archIt != m_pCurrentAppInfo->archList.end(); ++archIt)
-	{
-		if( m_pCurrentAppInfo->subMap[(*archIt).option] != "false" )
-		{
-			kdDebug( 9010 ) << "unpacking archive " << (*archIt).source << endl;
-			KTar archive( (*archIt).source, "application/x-gzip" );
-			if( archive.open( QIODevice::ReadOnly ) )
-			{
-				unpackArchive( archive.directory(), (*archIt).dest, (*archIt).process );
-			}
-			else
-			{
-				KMessageBox::sorry(this, i18n("The archive %1 cannot be opened.").arg( (*archIt).source ) );
-				archive.close();
-				return;
-			}
-			archive.close();
-		}
+    // Create dirs
+    dirIt = m_pCurrentAppInfo->dirList.begin();
+    for( ; dirIt != m_pCurrentAppInfo->dirList.end(); ++dirIt)
+    {
+        kdDebug( 9000 ) << "Process dir " << (*dirIt).dir  << endl;
+        if( m_pCurrentAppInfo->subMap[(*dirIt).option] != "false" )
+        {
+            if( ! KIO::NetAccess::mkdir( (*dirIt).dir, this ) )
+            {
+                KMessageBox::sorry(this, i18n("The directory %1 cannot be created.").arg( (*dirIt).dir ) );
+                return;
+            }
+        }
+    }
+    // Unpack archives
+    archIt = m_pCurrentAppInfo->archList.begin();
+    for( ; archIt != m_pCurrentAppInfo->archList.end(); ++archIt)
+    {
+        if( m_pCurrentAppInfo->subMap[(*archIt).option] != "false" )
+        {
+            kdDebug( 9010 ) << "unpacking archive " << (*archIt).source << endl;
+            KTar archive( (*archIt).source, "application/x-gzip" );
+            if( archive.open( QIODevice::ReadOnly ) )
+            {
+                unpackArchive( archive.directory(), (*archIt).dest, (*archIt).process );
+            }
+            else
+            {
+                KMessageBox::sorry(this, i18n("The archive %1 cannot be opened.").arg( (*archIt).source ) );
+                archive.close();
+                return;
+            }
+            archive.close();
+        }
 
-	}
+    }
 
-	// Copy files & Process
-	fileIt = m_pCurrentAppInfo->fileList.begin();
-	for( ; fileIt != m_pCurrentAppInfo->fileList.end(); ++fileIt)
-	{
-		kdDebug( 9010 ) << "Process file " << (*fileIt).source << endl;
-		if( m_pCurrentAppInfo->subMap[(*fileIt).option] != "false" )
-		{
-			if( !copyFile( *fileIt ) )
-			{
-				KMessageBox::sorry(this, i18n("The file %1 cannot be created.").arg( (*fileIt).dest) );
-				return;
-			}
-			setPermissions(*fileIt);
-		}
-	}
+    // Copy files & Process
+    fileIt = m_pCurrentAppInfo->fileList.begin();
+    for( ; fileIt != m_pCurrentAppInfo->fileList.end(); ++fileIt)
+    {
+        kdDebug( 9010 ) << "Process file " << (*fileIt).source << endl;
+        if( m_pCurrentAppInfo->subMap[(*fileIt).option] != "false" )
+        {
+            if( !copyFile( *fileIt ) )
+            {
+                KMessageBox::sorry(this, i18n("The file %1 cannot be created.").arg( (*fileIt).dest) );
+                return;
+            }
+            setPermissions(*fileIt);
+        }
+    }
     // if dir still does not exist
     if (!fi.dir().exists()) {
       KMessageBox::sorry(this, i18n("The directory above the chosen location does not exist and cannot be created."));
@@ -617,133 +617,133 @@ void AppWizardDialog::accept()
       return;
     }
 
-//	KMessageBox::information(this, KMacroExpander::expandMacros(m_pCurrentAppInfo->message, m_pCurrentAppInfo->subMap));
+//  KMessageBox::information(this, KMacroExpander::expandMacros(m_pCurrentAppInfo->message, m_pCurrentAppInfo->subMap));
 
-	QStringList::Iterator cleanIt = cleanUpSubstMap.begin();
-	for(;cleanIt != cleanUpSubstMap.end(); ++cleanIt )
-	{
-		m_pCurrentAppInfo->subMap.remove( *cleanIt );
-	}
+    QStringList::Iterator cleanIt = cleanUpSubstMap.begin();
+    for(;cleanIt != cleanUpSubstMap.end(); ++cleanIt )
+    {
+        m_pCurrentAppInfo->subMap.remove( *cleanIt );
+    }
 
         if  (!m_pCurrentAppInfo->finishCmd.isEmpty())
            if (KDevAppFrontend *appFrontend = m_part->extension<KDevAppFrontend>("KDevelop/AppFrontend"))
               appFrontend->startAppCommand(KMacroExpander::expandMacros(m_pCurrentAppInfo->finishCmdDir, m_pCurrentAppInfo->subMap), KMacroExpander::expandMacros(m_pCurrentAppInfo->finishCmd, m_pCurrentAppInfo->subMap), false);
 
-	openAfterGeneration();
+    openAfterGeneration();
 
-	/*
-	int id = m_vcsForm->stack->id(m_vcsForm->stack->visibleWidget());
-	if (id)
-	{
-		VCSDialog *vcs = m_integratorDialogs[id];
-		if (vcs)
-		{
-			kdDebug(9010) << "vcs integrator dialog is ready" << endl;
-			vcs->accept();
-		}
-		else
-			kdDebug(9010) << "no vcs integrator dialog" << endl;
-	}
-	else
-		kdDebug(9010) << "vcs integrator wasn't selected" << endl;
-	*/
-	Q3Wizard::accept();
+    /*
+    int id = m_vcsForm->stack->id(m_vcsForm->stack->visibleWidget());
+    if (id)
+    {
+        VCSDialog *vcs = m_integratorDialogs[id];
+        if (vcs)
+        {
+            kdDebug(9010) << "vcs integrator dialog is ready" << endl;
+            vcs->accept();
+        }
+        else
+            kdDebug(9010) << "no vcs integrator dialog" << endl;
+    }
+    else
+        kdDebug(9010) << "vcs integrator wasn't selected" << endl;
+    */
+    Q3Wizard::accept();
 }
 
 bool AppWizardDialog::copyFile( const installFile& file )
 {
-	return
-		copyFile( file.source, file.dest, file.isXML, file.process );
+    return
+        copyFile( file.source, file.dest, file.isXML, file.process );
 }
 
-#include <sys/types.h> 
-#include <sys/stat.h> 
-#include <unistd.h> 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 bool AppWizardDialog::copyFile( const QString &source, const QString &dest, bool isXML, bool process )
 {
-	kdDebug( 9010 ) << "Copy: " << source << " to " << dest << endl;
-	if( process )
-	{
-		// Process the file and save it at the destFile location
-		QFile inputFile( source);
-		QFile outputFile( dest );
+    kdDebug( 9010 ) << "Copy: " << source << " to " << dest << endl;
+    if( process )
+    {
+        // Process the file and save it at the destFile location
+        QFile inputFile( source);
+        QFile outputFile( dest );
 
-		const QMap<QString,QString> &subMap = isXML ?
-			m_pCurrentAppInfo->subMapXML : m_pCurrentAppInfo->subMap;
-		if( inputFile.open( QIODevice::ReadOnly ) && outputFile.open(QIODevice::WriteOnly) )
-		{
-			QTextStream input( &inputFile );
-			QTextStream output( &outputFile );
-			while( !input.atEnd() )
-				output << KMacroExpander::expandMacros(input.readLine(), subMap) << "\n";
-			// Preserve file mode...
-			struct stat fmode;
-			::fstat( inputFile.handle(), &fmode);
-			::fchmod( outputFile.handle(), fmode.st_mode );
+        const QMap<QString,QString> &subMap = isXML ?
+            m_pCurrentAppInfo->subMapXML : m_pCurrentAppInfo->subMap;
+        if( inputFile.open( QIODevice::ReadOnly ) && outputFile.open(QIODevice::WriteOnly) )
+        {
+            QTextStream input( &inputFile );
+            QTextStream output( &outputFile );
+            while( !input.atEnd() )
+                output << KMacroExpander::expandMacros(input.readLine(), subMap) << "\n";
+            // Preserve file mode...
+            struct stat fmode;
+            ::fstat( inputFile.handle(), &fmode);
+            ::fchmod( outputFile.handle(), fmode.st_mode );
 
-		}
-		else
-		{
-			inputFile.close();
-			outputFile.close();
-			return false;
-		}
-	}
-	else
-	{
-		// Copy the source file to the destFile.
-		return KIO::NetAccess::copy( source, dest, this );
-	}
-	return true;
+        }
+        else
+        {
+            inputFile.close();
+            outputFile.close();
+            return false;
+        }
+    }
+    else
+    {
+        // Copy the source file to the destFile.
+        return KIO::NetAccess::copy( source, dest, this );
+    }
+    return true;
 }
 
 void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString &dest, bool process )
 {
-	KIO::NetAccess::mkdir( dest , this );
-	kdDebug(9010) << "Dir : " << dir->name() << " at " << dest << endl;
-	QStringList entries = dir->entries();
-	kdDebug(9010) << "Entries : " << entries.join(",") << endl;
+    KIO::NetAccess::mkdir( dest , this );
+    kdDebug(9010) << "Dir : " << dir->name() << " at " << dest << endl;
+    QStringList entries = dir->entries();
+    kdDebug(9010) << "Entries : " << entries.join(",") << endl;
 
-	KTempDir tdir;
+    KTempDir tdir;
 
-	QStringList::Iterator entry = entries.begin();
-	for( ; entry != entries.end(); ++entry )
-	{
+    QStringList::Iterator entry = entries.begin();
+    for( ; entry != entries.end(); ++entry )
+    {
 
-		if( dir->entry( (*entry) )->isDirectory()  )
-		{
-			const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry( (*entry) );
-			unpackArchive( file , dest + "/" + file->name(), process);
-		}
-		else if( dir->entry( (*entry) )->isFile()  )
-		{
-			const KArchiveFile *file = (KArchiveFile *) dir->entry( (*entry) );
-			if( !process )
-			{
-				file->copyTo( dest );
-				setPermissions(file, dest + "/" + file->name());
-			}
-			else
-			{
-				file->copyTo(tdir.name());
-				// assume that an archive does not contain XML files
-				// ( where should we currently get that info from? )
-				if ( !copyFile( QDir::cleanDirPath(tdir.name()+"/"+file->name()), dest + "/" + file->name(), false, process ) )
-				{
-					KMessageBox::sorry(this, i18n("The file %1 cannot be created.").arg( dest) );
-					return;
-				}
-				setPermissions(file, dest + "/" + file->name());
-			}
-		}
-	}
-	tdir.unlink();
+        if( dir->entry( (*entry) )->isDirectory()  )
+        {
+            const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry( (*entry) );
+            unpackArchive( file , dest + "/" + file->name(), process);
+        }
+        else if( dir->entry( (*entry) )->isFile()  )
+        {
+            const KArchiveFile *file = (KArchiveFile *) dir->entry( (*entry) );
+            if( !process )
+            {
+                file->copyTo( dest );
+                setPermissions(file, dest + "/" + file->name());
+            }
+            else
+            {
+                file->copyTo(tdir.name());
+                // assume that an archive does not contain XML files
+                // ( where should we currently get that info from? )
+                if ( !copyFile( QDir::cleanDirPath(tdir.name()+"/"+file->name()), dest + "/" + file->name(), false, process ) )
+                {
+                    KMessageBox::sorry(this, i18n("The file %1 cannot be created.").arg( dest) );
+                    return;
+                }
+                setPermissions(file, dest + "/" + file->name());
+            }
+        }
+    }
+    tdir.unlink();
 }
 
 void AppWizardDialog::templatesTreeViewClicked(Q3ListViewItem *item)
 {
-//	delete m_customOptions;
+//  delete m_customOptions;
 
     // Delete old file template pages
     while (!m_fileTemplates.isEmpty()) {
@@ -772,10 +772,10 @@ void AppWizardDialog::templatesTreeViewClicked(Q3ListViewItem *item)
         m_projectLocationWasChanged = false;
         //projectNameChanged(); // set the dest new
 
-		// Populate new custom options form
-//		m_customOptions = new PropertyLib::PropertyEditor( custom_options );
-//		m_customOptions->populateProperties(info->propValues);
-		
+        // Populate new custom options form
+//      m_customOptions = new PropertyLib::PropertyEditor( custom_options );
+//      m_customOptions->populateProperties(info->propValues);
+
 
         // Create new file template pages
         QStringList l = QStringList::split(",", info->fileTemplates);
@@ -804,12 +804,12 @@ void AppWizardDialog::templatesTreeViewClicked(Q3ListViewItem *item)
         }
         licenseChanged();
         updateNextButtons();
-	} else
-	{
-		m_pCurrentAppInfo=0;
-		icon_label->clear();
-		desc_textview->clear();
-		nextButton()->setEnabled(false);
+    } else
+    {
+        m_pCurrentAppInfo=0;
+        icon_label->clear();
+        desc_textview->clear();
+        nextButton()->setEnabled(false);
     }
 }
 
@@ -860,7 +860,7 @@ void AppWizardDialog::projectLocationChanged()
   } else {
     m_pathIsValid=true;
   }
-	updateNextButtons();
+    updateNextButtons();
 }
 
 
@@ -905,131 +905,131 @@ ApplicationInfo *AppWizardDialog::templateForItem(Q3ListViewItem *item)
 
 void AppWizardDialog::openAfterGeneration()
 {
-	QString projectFile( finalLoc_label->text() + "/" + appname_edit->text().lower() + ".kdevelop" );
+    QString projectFile( finalLoc_label->text() + "/" + appname_edit->text().lower() + ".kdevelop" );
 
-	// Read the DOM of the newly created project
-	QFile file( projectFile );
-	if( !file.open( QIODevice::ReadOnly ) )
-		return;
-	QDomDocument projectDOM;
-	
-	int errorLine, errorCol;
-	QString errorMsg;
-	bool success = projectDOM.setContent( &file, &errorMsg, &errorLine, &errorCol);
-	file.close();
-	if ( !success )
-	{
-		KMessageBox::sorry( 0, i18n("This is not a valid project file.\n"
-				"XML error in line %1, column %2:\n%3")
-				.arg(errorLine).arg(errorCol).arg(errorMsg));
-		return;
-	}
+    // Read the DOM of the newly created project
+    QFile file( projectFile );
+    if( !file.open( QIODevice::ReadOnly ) )
+        return;
+    QDomDocument projectDOM;
 
-	// DOM Modifications go here
-	DomUtil::writeMapEntry( projectDOM, "substmap", m_pCurrentAppInfo->subMap );
+    int errorLine, errorCol;
+    QString errorMsg;
+    bool success = projectDOM.setContent( &file, &errorMsg, &errorLine, &errorCol);
+    file.close();
+    if ( !success )
+    {
+        KMessageBox::sorry( 0, i18n("This is not a valid project file.\n"
+                "XML error in line %1, column %2:\n%3")
+                .arg(errorLine).arg(errorCol).arg(errorMsg));
+        return;
+    }
 
-	/*
-	//save the selected vcs
-	KTrader::OfferList offers = KTrader::self()->query("KDevelop/VCSIntegrator", QString("[X-KDevelop-VCS]=='%1'").arg(m_vcsForm->combo->currentText()));
-	if (offers.count() == 1)
-	{
-		KService::Ptr service = offers.first();
-		DomUtil::writeEntry(projectDOM, "/general/versioncontrol", service->property("X-KDevelop-VCSPlugin").toString());
-	}
-	*/
+    // DOM Modifications go here
+    DomUtil::writeMapEntry( projectDOM, "substmap", m_pCurrentAppInfo->subMap );
 
-	
-	KConfig * config = kapp->config();
-	config->setGroup("IgnorePerDefault");
-	QStringList ignoreparts = config->readListEntry( "KDevelop" );
-	DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", ignoreparts );
-	
-	
+    /*
+    //save the selected vcs
+    KTrader::OfferList offers = KTrader::self()->query("KDevelop/VCSIntegrator", QString("[X-KDevelop-VCS]=='%1'").arg(m_vcsForm->combo->currentText()));
+    if (offers.count() == 1)
+    {
+        KService::Ptr service = offers.first();
+        DomUtil::writeEntry(projectDOM, "/general/versioncontrol", service->property("X-KDevelop-VCSPlugin").toString());
+    }
+    */
+
+
+    KConfig * config = kapp->config();
+    config->setGroup("IgnorePerDefault");
+    QStringList ignoreparts = config->readListEntry( "KDevelop" );
+    DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", ignoreparts );
+
+
 //FIXME PROFILES!!!!!!!!
 //BEGIN Plugin Profile
 
-/*	QString category = m_pCurrentAppInfo->category;
-	if ( category.left( 1 ) == "/" )
-	{
-		category = category.right( category.length() -1 );
-	}
+/*  QString category = m_pCurrentAppInfo->category;
+    if ( category.left( 1 ) == "/" )
+    {
+        category = category.right( category.length() -1 );
+    }
 
-	QString profile = Profiles::getProfileForCategory( category );
-	QStringList loadList = Profiles::getPluginsForProfile( profile );
+    QString profile = Profiles::getProfileForCategory( category );
+    QStringList loadList = Profiles::getPluginsForProfile( profile );
 
-	QStringList ignoreList;
+    QStringList ignoreList;
 
-	KTrader::OfferList offers = KTrader::self()->query("KDevelop/Plugin", "[X-KDevelop-Scope] == 'Project'");
-	KTrader::OfferList::ConstIterator itt = offers.begin();
-	while( itt != offers.end() )
-	{
-		if ( !loadList.contains( (*itt)->name() ) )
-		{
-			ignoreList << (*itt)->name();
-		}
-		++itt;
-	}
+    KTrader::OfferList offers = KTrader::self()->query("KDevelop/Plugin", "[X-KDevelop-Scope] == 'Project'");
+    KTrader::OfferList::ConstIterator itt = offers.begin();
+    while( itt != offers.end() )
+    {
+        if ( !loadList.contains( (*itt)->name() ) )
+        {
+            ignoreList << (*itt)->name();
+        }
+        ++itt;
+    }
 
-	DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", ignoreList );*/
+    DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", ignoreList );*/
 
 //END Plugin Profile
 
-	// write the dom back
-	if( !file.open( QIODevice::WriteOnly ) )
-		return;
-	QTextStream ts( &file );
-	ts << projectDOM.toString(2);
-	file.close();
+    // write the dom back
+    if( !file.open( QIODevice::WriteOnly ) )
+        return;
+    QTextStream ts( &file );
+    ts << projectDOM.toString(2);
+    file.close();
 
-	// open the new project
-	m_part->core()->openProject( projectFile );
+    // open the new project
+    m_part->core()->openProject( projectFile );
 
-	// open files to open
-	QStringList::Iterator it = m_pCurrentAppInfo->openFilesAfterGeneration.begin();
-	for( ; it != m_pCurrentAppInfo->openFilesAfterGeneration.end(); ++it )
-	{
-		QString fileName( *it );
-		if ( !fileName.isNull() )
-		{
-			fileName = KMacroExpander::expandMacros(fileName, m_pCurrentAppInfo->subMap);
-			m_part->partController()->editDocument( fileName );
-		}
-	}
+    // open files to open
+    QStringList::Iterator it = m_pCurrentAppInfo->openFilesAfterGeneration.begin();
+    for( ; it != m_pCurrentAppInfo->openFilesAfterGeneration.end(); ++it )
+    {
+        QString fileName( *it );
+        if ( !fileName.isNull() )
+        {
+            fileName = KMacroExpander::expandMacros(fileName, m_pCurrentAppInfo->subMap);
+            m_part->partController()->editDocument( fileName );
+        }
+    }
 }
 
 void AppWizardDialog::pageChanged()
 {
-	kdDebug(9010) << "AppWizardDialog::pageChanged()" << endl;
-	projectLocationChanged();
+    kdDebug(9010) << "AppWizardDialog::pageChanged()" << endl;
+    projectLocationChanged();
 
 /*
-	//it is possible that project name was changed - we need to update all vcs integrator dialogs
-	for (QMap<int, VCSDialog*>::iterator it = m_integratorDialogs.begin();
-		it != m_integratorDialogs.end(); ++it)
-		(*it)->init(getProjectName(), getProjectLocation());
+    //it is possible that project name was changed - we need to update all vcs integrator dialogs
+    for (QMap<int, VCSDialog*>::iterator it = m_integratorDialogs.begin();
+        it != m_integratorDialogs.end(); ++it)
+        (*it)->init(getProjectName(), getProjectLocation());
 */
 }
 
 void AppWizardDialog::addTemplateToFavourites()
 {
-	addFavourite(templates_listview->currentItem());
+    addFavourite(templates_listview->currentItem());
 }
 
 void AppWizardDialog::addFavourite(Q3ListViewItem* item, QString favouriteName)
 {
-	if(item->childCount())
-		return;
+    if(item->childCount())
+        return;
 
-	ApplicationInfo* info = templateForItem(item);
+    ApplicationInfo* info = templateForItem(item);
 
-	if(!info->favourite)
-	{
-		info->favourite = new KIconViewItem(favourites_iconview,
-											((favouriteName=="")?info->name:favouriteName),
-											DesktopIcon("kdevelop"));
+    if(!info->favourite)
+    {
+        info->favourite = new KIconViewItem(favourites_iconview,
+                                            ((favouriteName=="")?info->name:favouriteName),
+                                            DesktopIcon("kdevelop"));
 
-		info->favourite->setRenameEnabled(true);
-	}
+        info->favourite->setRenameEnabled(true);
+    }
 }
 
 ApplicationInfo* AppWizardDialog::findFavouriteInfo(Q3IconViewItem* item)
@@ -1039,248 +1039,248 @@ ApplicationInfo* AppWizardDialog::findFavouriteInfo(Q3IconViewItem* item)
         if (info.current()->favourite == item)
             return info.current();
 
-	return 0;
+    return 0;
 }
 
 void AppWizardDialog::favouritesIconViewClicked( Q3IconViewItem* item)
 {
-	ApplicationInfo* info = findFavouriteInfo(item);
-	templatesTreeViewClicked(info->item);
+    ApplicationInfo* info = findFavouriteInfo(item);
+    templatesTreeViewClicked(info->item);
 }
 
 void AppWizardDialog::removeFavourite()
 {
-	Q3IconViewItem* curFavourite = favourites_iconview->currentItem();
+    Q3IconViewItem* curFavourite = favourites_iconview->currentItem();
 
-	//remove reference to favourite from associated appinfo
-	Q3PtrListIterator<ApplicationInfo> info(m_appsInfo);
-	for (; info.current(); ++info)
-	{
+    //remove reference to favourite from associated appinfo
+    Q3PtrListIterator<ApplicationInfo> info(m_appsInfo);
+    for (; info.current(); ++info)
+    {
         if(info.current()->favourite && info.current()->favourite == curFavourite)
-		{
-			info.current()->favourite = 0;
-		}
-	}
+        {
+            info.current()->favourite = 0;
+        }
+    }
 
-	//remove favourite from iconview
-	delete curFavourite;
-	curFavourite=0;
-	favourites_iconview->sort();	//re-arrange all items.
+    //remove favourite from iconview
+    delete curFavourite;
+    curFavourite=0;
+    favourites_iconview->sort();    //re-arrange all items.
 }
 
 void AppWizardDialog::populateFavourites()
 {
-	KConfig* config = kapp->config();
-	config->setGroup("AppWizard");
+    KConfig* config = kapp->config();
+    config->setGroup("AppWizard");
 
-	//favourites are stored in config as a list of templates and a seperate
-	//list of icon names.
-	QStringList templatesList = config->readPathListEntry("FavTemplates");
-	QStringList iconNamesList = config->readListEntry("FavNames");
+    //favourites are stored in config as a list of templates and a seperate
+    //list of icon names.
+    QStringList templatesList = config->readPathListEntry("FavTemplates");
+    QStringList iconNamesList = config->readListEntry("FavNames");
 
-	QStringList::Iterator curTemplate = templatesList.begin();
-	QStringList::Iterator curIconName = iconNamesList.begin();
-	while(curTemplate != templatesList.end())
-	{
-		Q3PtrListIterator<ApplicationInfo> info(m_appsInfo);
-		for (; info.current(); ++info)
-		{
-			if(info.current()->templateName == *curTemplate)
-			{
-				addFavourite(info.current()->item, *curIconName);
-				break;
-			}
-		}
-		curTemplate++;
-		curIconName++;
-	}
+    QStringList::Iterator curTemplate = templatesList.begin();
+    QStringList::Iterator curIconName = iconNamesList.begin();
+    while(curTemplate != templatesList.end())
+    {
+        Q3PtrListIterator<ApplicationInfo> info(m_appsInfo);
+        for (; info.current(); ++info)
+        {
+            if(info.current()->templateName == *curTemplate)
+            {
+                addFavourite(info.current()->item, *curIconName);
+                break;
+            }
+        }
+        curTemplate++;
+        curIconName++;
+    }
 }
 
 void AppWizardDialog::done(int r)
 {
-	//need to save the template for each favourite and
-	//it's icon name.  We have a one list for the templates
-	//and one for the names.
+    //need to save the template for each favourite and
+    //it's icon name.  We have a one list for the templates
+    //and one for the names.
 
-	QStringList templatesList;
-	QStringList iconNamesList;
+    QStringList templatesList;
+    QStringList iconNamesList;
 
-	//Built the stringlists for each template that has a favourite.
-	Q3PtrListIterator<ApplicationInfo> it(m_appsInfo);
-	for (; it.current(); ++it)
-	{
+    //Built the stringlists for each template that has a favourite.
+    Q3PtrListIterator<ApplicationInfo> it(m_appsInfo);
+    for (; it.current(); ++it)
+    {
         if(it.current()->favourite)
-		{
-			templatesList.append(it.current()->templateName);
-			iconNamesList.append(it.current()->favourite->text());
-		}
-	}
+        {
+            templatesList.append(it.current()->templateName);
+            iconNamesList.append(it.current()->favourite->text());
+        }
+    }
 
-	KConfig* config = kapp->config();
-	config->setGroup("AppWizard");
-	config->writePathEntry("FavTemplates", templatesList);
-	config->writeEntry("FavNames", iconNamesList);
-	//config->writeEntry("CurrentTab", templates_tabwidget->currentPageIndex());
-	config->sync();
+    KConfig* config = kapp->config();
+    config->setGroup("AppWizard");
+    config->writePathEntry("FavTemplates", templatesList);
+    config->writeEntry("FavNames", iconNamesList);
+    //config->writeEntry("CurrentTab", templates_tabwidget->currentPageIndex());
+    config->sync();
 
-	QDialog::done(r);
+    QDialog::done(r);
 }
 
 void AppWizardDialog::templatesContextMenu(Q3ListViewItem* item, const QPoint& point, int)
 {
-	if(item && !item->childCount())
-		m_templatesMenu->popup(point);
+    if(item && !item->childCount())
+        m_templatesMenu->popup(point);
 }
 
 void AppWizardDialog::favouritesContextMenu(Q3IconViewItem* item, const QPoint& point)
 {
-	if(item)
-		m_favouritesMenu->popup(point);
+    if(item)
+        m_favouritesMenu->popup(point);
 }
 
 void AppWizardDialog::setPermissions(const KArchiveFile *source, QString dest)
 {
-	kdDebug(9010) << "AppWizardDialog::setPermissions(const KArchiveFile *source, QString dest)" << endl;
-	kdDebug(9010) << "	dest: " << dest << endl;
+    kdDebug(9010) << "AppWizardDialog::setPermissions(const KArchiveFile *source, QString dest)" << endl;
+    kdDebug(9010) << "  dest: " << dest << endl;
 
-	if (source->permissions() & 00100)
-	{
-		kdDebug(9010) << "source is executable" << endl;
-		KIO::UDSEntry entry;
-		KURL kurl = KURL::fromPathOrURL(dest);
-		if (KIO::NetAccess::stat(kurl, entry, 0))
-		{
-			KFileItem it(entry, kurl);
-			int mode = it.permissions();
-			kdDebug(9010) << "stat shows permissions: " << mode << endl;
-			KIO::chmod(KURL::fromPathOrURL(dest), mode | 00100 );
-		}
-	}
+    if (source->permissions() & 00100)
+    {
+        kdDebug(9010) << "source is executable" << endl;
+        KIO::UDSEntry entry;
+        KURL kurl = KURL::fromPathOrURL(dest);
+        if (KIO::NetAccess::stat(kurl, entry, 0))
+        {
+            KFileItem it(entry, kurl);
+            int mode = it.permissions();
+            kdDebug(9010) << "stat shows permissions: " << mode << endl;
+            KIO::chmod(KURL::fromPathOrURL(dest), mode | 00100 );
+        }
+    }
 }
 
 void AppWizardDialog::setPermissions(const installFile &file)
 {
-	kdDebug(9010) << "AppWizardDialog::setPermissions(const installFile &file)" << endl;
-	kdDebug(9010) << "	dest: " << file.dest << endl;
+    kdDebug(9010) << "AppWizardDialog::setPermissions(const installFile &file)" << endl;
+    kdDebug(9010) << "  dest: " << file.dest << endl;
 
-	KIO::UDSEntry sourceentry;
-	KURL sourceurl = KURL::fromPathOrURL(file.source);
-	if (KIO::NetAccess::stat(sourceurl, sourceentry, 0))
-	{
-		KFileItem sourceit(sourceentry, sourceurl);
-		int sourcemode = sourceit.permissions();
-		if (sourcemode & 00100)
-		{
-			kdDebug(9010) << "source is executable" << endl;
-			KIO::UDSEntry entry;
-			KURL kurl = KURL::fromPathOrURL(file.dest);
-			if (KIO::NetAccess::stat(kurl, entry, 0))
-			{
-				KFileItem it(entry, kurl);
-				int mode = it.permissions();
-				kdDebug(9010) << "stat shows permissions: " << mode << endl;
-				KIO::chmod(KURL::fromPathOrURL(file.dest), mode | 00100 );
-			}
-		}
-	}
+    KIO::UDSEntry sourceentry;
+    KURL sourceurl = KURL::fromPathOrURL(file.source);
+    if (KIO::NetAccess::stat(sourceurl, sourceentry, 0))
+    {
+        KFileItem sourceit(sourceentry, sourceurl);
+        int sourcemode = sourceit.permissions();
+        if (sourcemode & 00100)
+        {
+            kdDebug(9010) << "source is executable" << endl;
+            KIO::UDSEntry entry;
+            KURL kurl = KURL::fromPathOrURL(file.dest);
+            if (KIO::NetAccess::stat(kurl, entry, 0))
+            {
+                KFileItem it(entry, kurl);
+                int mode = it.permissions();
+                kdDebug(9010) << "stat shows permissions: " << mode << endl;
+                KIO::chmod(KURL::fromPathOrURL(file.dest), mode | 00100 );
+            }
+        }
+    }
 }
 
 Q3Dict<KDevLicense> AppWizardDialog::licenses()
 {
-	return m_licenses;
+    return m_licenses;
 }
 
 void AppWizardDialog::loadLicenses()
 {
-	// kdDebug(9010) << "======================== Entering loadLicenses" << endl;
-	KStandardDirs* dirs = KGlobal::dirs();
-	dirs->addResourceType( "licenses", KStandardDirs::kde_default( "data" ) + "kdevelop/licenses/" );
-	QStringList licNames = dirs->findAllResources( "licenses", QString::null, false, true );
+    // kdDebug(9010) << "======================== Entering loadLicenses" << endl;
+    KStandardDirs* dirs = KGlobal::dirs();
+    dirs->addResourceType( "licenses", KStandardDirs::kde_default( "data" ) + "kdevelop/licenses/" );
+    QStringList licNames = dirs->findAllResources( "licenses", QString::null, false, true );
 
-	QStringList::Iterator it;
-	for (it = licNames.begin(); it != licNames.end(); ++it)
-	{
-		QString licPath( dirs->findResource( "licenses", *it ) );
-		kdDebug(9010) << "Loading license file: " << licPath << endl;
-		QString licName = licPath.mid( licPath.findRev('/') + 1 );
-		KDevLicense* lic = new KDevLicense( licName, licPath );
-		m_licenses.insert( licName, lic );
-	}
-	// kdDebug(9000) << "======================== Done loadLicenses" << endl;
+    QStringList::Iterator it;
+    for (it = licNames.begin(); it != licNames.end(); ++it)
+    {
+        QString licPath( dirs->findResource( "licenses", *it ) );
+        kdDebug(9010) << "Loading license file: " << licPath << endl;
+        QString licName = licPath.mid( licPath.findRev('/') + 1 );
+        KDevLicense* lic = new KDevLicense( licName, licPath );
+        m_licenses.insert( licName, lic );
+    }
+    // kdDebug(9000) << "======================== Done loadLicenses" << endl;
 }
 
 void AppWizardDialog::showTemplates(bool all)
 {
-	if (all)
-	{
-		Q3ListViewItemIterator it(templates_listview);
-		while ( it.current() ) {
-			it.current()->setVisible(true);
-			++it;
-		}
-	}
-	else
-	{
-		Q3PtrListIterator<ApplicationInfo> ait(m_appsInfo);
-		for (; ait.current(); ++ait) 
-		{
-			ait.current()->item->setVisible(m_profileSupport->isInTemplateList(ait.current()->templateName));
-		}
-		
-		Q3DictIterator<Q3ListViewItem> dit(m_categoryMap);
-		for (; dit.current(); ++dit) 
-		{
-			//checking whether all children are not visible
-			kdDebug(9010) << "check: " << dit.current()->text(0) << endl;
-			bool visible = false;
-			Q3ListViewItemIterator it(dit.current());
-			while ( it.current() ) {
-				if ((it.current()->childCount() == 0) && it.current()->isVisible())
-				{
-					kdDebug(9010) << "	visible: " << it.current()->text(0) << endl;
-					visible = true;
-					break;
-				}
-				++it;
-			}
-			dit.current()->setVisible(visible);
-		}
-		checkAndHideItems(templates_listview);
-	}
+    if (all)
+    {
+        Q3ListViewItemIterator it(templates_listview);
+        while ( it.current() ) {
+            it.current()->setVisible(true);
+            ++it;
+        }
+    }
+    else
+    {
+        Q3PtrListIterator<ApplicationInfo> ait(m_appsInfo);
+        for (; ait.current(); ++ait)
+        {
+            ait.current()->item->setVisible(m_profileSupport->isInTemplateList(ait.current()->templateName));
+        }
+
+        Q3DictIterator<Q3ListViewItem> dit(m_categoryMap);
+        for (; dit.current(); ++dit)
+        {
+            //checking whether all children are not visible
+            kdDebug(9010) << "check: " << dit.current()->text(0) << endl;
+            bool visible = false;
+            Q3ListViewItemIterator it(dit.current());
+            while ( it.current() ) {
+                if ((it.current()->childCount() == 0) && it.current()->isVisible())
+                {
+                    kdDebug(9010) << "  visible: " << it.current()->text(0) << endl;
+                    visible = true;
+                    break;
+                }
+                ++it;
+            }
+            dit.current()->setVisible(visible);
+        }
+        checkAndHideItems(templates_listview);
+    }
 }
 
 void AppWizardDialog::checkAndHideItems(Q3ListView *view)
 {
-	Q3ListViewItem *item = view->firstChild();
-	while (item)
-	{
-		if (!m_categoryItems.contains(item))
-			continue;
-		checkAndHideItems(item);
-		item = item->nextSibling();
-	}
+    Q3ListViewItem *item = view->firstChild();
+    while (item)
+    {
+        if (!m_categoryItems.contains(item))
+            continue;
+        checkAndHideItems(item);
+        item = item->nextSibling();
+    }
 }
 
 bool AppWizardDialog::checkAndHideItems(Q3ListViewItem *item)
 {
-	if (!m_categoryItems.contains(item))
-		return !item->isVisible();
-	Q3ListViewItem *child = item->firstChild();
-	bool hide = true;
-	while (child)
-	{
-		hide = hide && checkAndHideItems(child);
-		child = child->nextSibling();
-	}
-	kdDebug(9010) << "check_: " << item->text(0) << " hide: " <<  hide << endl;
-	if (hide)
-	{
-		item->setVisible(false);
-		return true;
-	}
-	return false;
+    if (!m_categoryItems.contains(item))
+        return !item->isVisible();
+    Q3ListViewItem *child = item->firstChild();
+    bool hide = true;
+    while (child)
+    {
+        hide = hide && checkAndHideItems(child);
+        child = child->nextSibling();
+    }
+    kdDebug(9010) << "check_: " << item->text(0) << " hide: " <<  hide << endl;
+    if (hide)
+    {
+        item->setVisible(false);
+        return true;
+    }
+    return false;
 }
 
 #include "appwizarddlg.moc"
 
-// kate: indent-width 4; replace-tabs off; tab-width 4; space-indent off;
+// kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

@@ -81,4 +81,4 @@ void AppWizardPart::slotImportProject()
 
 #include "appwizardpart.moc"
 
-// kate: indent-width 4; replace-tabs off; tab-width 4; space-indent off;
+// kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

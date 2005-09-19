@@ -22,7 +22,7 @@ class AppWizardFactory : public KDevGenericFactory<AppWizardPart>
 {
 public:
     AppWizardFactory();
-    
+
     static const KDevPluginInfo *info();
 
 protected:
@@ -30,3 +30,4 @@ protected:
 };
 
 #endif
+// kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

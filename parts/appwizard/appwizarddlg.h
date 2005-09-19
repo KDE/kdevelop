@@ -42,26 +42,26 @@ class ProfileSupport;
 
 struct installFile
 {
-	QString source;
-	QString dest;
-	QString option;
-	bool process;
-	bool isXML;
+    QString source;
+    QString dest;
+    QString option;
+    bool process;
+    bool isXML;
 };
 
 struct installArchive
 {
-	QString source;
-	QString dest;
-	QString option;
-	bool process;
+    QString source;
+    QString dest;
+    QString option;
+    bool process;
 };
 
 struct installDir
 {
-	QString dir;
-	QString option;
-	int perms;
+    QString dir;
+    QString option;
+    int perms;
 };
 
 struct ApplicationInfo
@@ -95,7 +95,7 @@ struct ApplicationInfo
     Q3ListViewItem *item;
 
     //! pointer to favourite icon (NULL if there isn't one)
-    Q3IconViewItem *favourite;	
+    Q3IconViewItem *favourite;
 
     ApplicationInfo()
     : item( 0 ), favourite( 0 )
@@ -193,4 +193,4 @@ public slots:
 
 #endif
 
-// kate: indent-width 4; replace-tabs off; tab-width 4; space-indent off;
+// kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

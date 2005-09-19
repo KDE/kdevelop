@@ -26,9 +26,11 @@ class ProfileSupport{
 public:
     ProfileSupport(KDevPlugin *parent);
     bool isInTemplateList(const QString &templateUrl);
-    
+
 private:
     QStringList m_templateList;
 };
 
 #endif
+
+// kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

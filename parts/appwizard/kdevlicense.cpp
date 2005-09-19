@@ -25,86 +25,88 @@
 #include <QTextStream>
 
 KDevLicense::KDevLicense( const QString& name, const QString& fileName )
-	: m_name( name )
+    : m_name( name )
 {
-	readFile( fileName );
+    readFile( fileName );
 }
 
 void KDevLicense::readFile( const QString& fileName )
 {
-	QFile f(fileName);
-	if (!f.open(QIODevice::ReadOnly))
-		return;
-	QTextStream stream(&f);
-	QString str;
-	enum { readingText, readingFiles } mode = readingText;
-	for(;;)
-	{
-		str = stream.readLine();
-		if( str.isNull() )
-			break;
-		if( str == "[FILES]" )
-			mode = readingFiles;
-		else if( str == "[PREFIX]" )
-			mode = readingText;
-		else if( mode == readingFiles )
-		{
-			if( !str.isEmpty() )
-			{
-				m_copyFiles.append( str );
-			}
-		} else
-		m_rawLines.append( str );
-	}
+    QFile f(fileName);
+    if (!f.open(QIODevice::ReadOnly))
+        return;
+    QTextStream stream(&f);
+    QString str;
+    enum { readingText, readingFiles } mode = readingText;
+    for(;;)
+    {
+        str = stream.readLine();
+        if( str.isNull() )
+            break;
+        if( str == "[FILES]" )
+            mode = readingFiles;
+        else if( str == "[PREFIX]" )
+            mode = readingText;
+        else if( mode == readingFiles )
+        {
+            if( !str.isEmpty() )
+            {
+                m_copyFiles.append( str );
+            }
+        } else
+        m_rawLines.append( str );
+    }
 
 }
 
 QString KDevLicense::assemble( KDevFile::CommentingStyle commentingStyle, const QString& author, const QString& email, int leadingSpaces )
 {
-	// first, build a CPP Style license
-	
-	QString strFill;
-	strFill.fill( ' ', leadingSpaces );
-	
-	QString str = 
-		strFill + "/***************************************************************************\n" +
-		strFill + " *   Copyright (C) $YEAR$ by $AUTHOR$   *\n" +
-		strFill + " *   $EMAIL$   *\n" +
-		strFill + " *                                                                         *\n";
-	
-//	str = str.arg(QDate::currentDate().year()).arg(author.left(45),-45).arg(email.left(67),-67);
-	
-	QStringList::Iterator it;
-	for( it = m_rawLines.begin(); it != m_rawLines.end(); ++it )
-	{
-		str += QString( "%1 *   %2 *\n").arg( strFill ).arg( *it, -69 );
-	}
-	
-	str += strFill + " ***************************************************************************/\n";
+    // first, build a CPP Style license
 
-	switch( commentingStyle )
-	{
-		case KDevFile::CPPStyle:
-			return str;
-			
-		case KDevFile::PascalStyle:
-			str.replace(QRegExp("/\\**\n \\*"), "{\n  ");
-			str.replace(QRegExp("\\*\n \\*"), " \n  ");
-			str.replace(QRegExp(" *\\**/\n"), "}\n");
-			return str;
-			
-		case KDevFile::AdaStyle:
-			str.replace(QRegExp("/\\*"), "--");
-			str.replace(QRegExp(" \\*"), "--");
-			str.replace(QRegExp("\\*/"), "*");
-			return str;
-			
-		case KDevFile::BashStyle:
-			str.replace(QRegExp("\\*|/"), "#");
-			str.replace(QRegExp("\n ##"), "\n##");
-			str.replace(QRegExp("\n #"), "\n# ");
-			return str;
-	}
+    QString strFill;
+    strFill.fill( ' ', leadingSpaces );
 
-	return "currently unknown/unsupported commenting style";
+    QString str =
+        strFill + "/***************************************************************************\n" +
+        strFill + " *   Copyright (C) $YEAR$ by $AUTHOR$   *\n" +
+        strFill + " *   $EMAIL$   *\n" +
+        strFill + " *                                                                         *\n";
+
+//  str = str.arg(QDate::currentDate().year()).arg(author.left(45),-45).arg(email.left(67),-67);
+
+    QStringList::Iterator it;
+    for( it = m_rawLines.begin(); it != m_rawLines.end(); ++it )
+    {
+        str += QString( "%1 *   %2 *\n").arg( strFill ).arg( *it, -69 );
+    }
+
+    str += strFill + " ***************************************************************************/\n";
+
+    switch( commentingStyle )
+    {
+        case KDevFile::CPPStyle:
+            return str;
+
+        case KDevFile::PascalStyle:
+            str.replace(QRegExp("/\\**\n \\*"), "{\n  ");
+            str.replace(QRegExp("\\*\n \\*"), " \n  ");
+            str.replace(QRegExp(" *\\**/\n"), "}\n");
+            return str;
+
+        case KDevFile::AdaStyle:
+            str.replace(QRegExp("/\\*"), "--");
+            str.replace(QRegExp(" \\*"), "--");
+            str.replace(QRegExp("\\*/"), "*");
+            return str;
+
+        case KDevFile::BashStyle:
+            str.replace(QRegExp("\\*|/"), "#");
+            str.replace(QRegExp("\n ##"), "\n##");
+            str.replace(QRegExp("\n #"), "\n# ");
+            return str;
+    }
+
+    return "currently unknown/unsupported commenting style";
 }
+
+// kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

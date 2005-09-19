@@ -48,10 +48,12 @@ public:
     /**@return A commenting style for a given mime type.
     @param mimeType A string which defines a mime type (like "text/x-c+++src").*/
     static CommentingStyle commentingStyleFromMimeType(const QString& mimeType);
-    
+
     /**@return A commenting style for a given mime type.
     @param mimeType The mime type.*/
     static CommentingStyle commentingStyleFromMimeType( KMimeType::Ptr mimeType );
 };
 
 #endif
+
+// kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

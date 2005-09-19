@@ -29,7 +29,7 @@
 ProfileSupport::ProfileSupport(KDevPlugin *parent)
 {
     KURL::List resources = parent->pluginController()->profileResourcesRecursive("*.appwizard");
-    
+
     for (KURL::List::const_iterator it = resources.constBegin(); it != resources.constEnd(); ++it)
     {
         KConfig config((*it).path());
@@ -42,3 +42,5 @@ bool ProfileSupport::isInTemplateList(const QString &templateUrl)
 {
     return m_templateList.contains(QFileInfo(templateUrl).baseName());
 }
+
+// kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

@@ -54,3 +54,4 @@ void AppWizardUtil::guessAuthorAndEmail(QString *author, QString *email)
     *email = fromAddr;
 }
 
+// kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;
