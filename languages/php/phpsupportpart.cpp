@@ -499,6 +499,7 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
 {
    kdDebug(9018) << "phpSupportPart::customEvent(" << ev->type() << ")" << endl;
 
+   kapp->lock();
    if ( ev->type() == int(Event_StartParse) ) {
       FileParseEvent* event = (FileParseEvent*) ev;
       kdDebug(9018) << " removedSourceInfo(" << event->fileName() << ")" << endl;
@@ -514,7 +515,7 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
       kdDebug(9018) << " addedSourceInfo(" << event->fileName() << ")" << endl;
       emit addedSourceInfo( event->fileName() );
    }
-
+   kapp->unlock();
 }
 
 PHPErrorView *PHPSupportPart::ErrorView( ) {

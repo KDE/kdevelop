@@ -78,6 +78,7 @@ QStringList PHPFile::readFromEditor()
 {
    QStringList contents;
 
+   kapp->lock();
    QPtrList<KParts::Part> parts( *m_phpSupport->partController()->parts() );
    QPtrListIterator<KParts::Part> it( parts );
    while( it.current() ){
@@ -91,6 +92,8 @@ QStringList PHPFile::readFromEditor()
       contents = QStringList::split("\n", editIface->text().ascii(), true);
       break;
    }
+   kapp->unlock();
+
    return contents;
 }
 
@@ -137,8 +140,8 @@ void PHPFile::Analyse() {
    }
 
    ParseSource();
-   PHPCheck();
 
+   PHPCheck();
    modified = false;
 }
 
