@@ -121,7 +121,7 @@ QString QuickOpenPart::getWordInEditor()
 
     QString wordstr;
     bool hasMultilineSelection = false;
-    if (view && view->hasSelection())
+    if (view && view->selection())
     {
         hasMultilineSelection = ( view->selectionText().contains('\n') != 0 );
         if (!hasMultilineSelection)
