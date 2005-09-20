@@ -245,6 +245,9 @@
                                 <property name="name">
                                     <cstring>m_qtRoot</cstring>
                                 </property>
+                                <property name="mode">
+                                    <number>2</number>
+                                </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>The path where your choosen Qt version is installed.</string>
                                 </property>
