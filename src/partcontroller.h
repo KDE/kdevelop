@@ -22,9 +22,10 @@ namespace KTextEditor
 {
   class Document;
   class Editor;
+  class ModificationInterface;
 }
 
-namespace Kate { class Document; }
+typedef int ModifiedOnDiskReason;
 
 class QTabWidget;
 class KAction;
@@ -129,7 +130,7 @@ private slots:
 
   void updateMenuItems();
 
-  void slotDocumentDirty( Kate::Document * doc, bool isModified, unsigned char reason );
+  void slotDocumentDirty( KTextEditor::Document * doc, bool isModified, ModifiedOnDiskReason reason );
   void slotNewStatus();
   void slotNewDesignerStatus(const QString &formName, int status);
 
@@ -174,28 +175,28 @@ private:
 
   QList<KParts::ReadWritePart*> _dirtyDocuments;
 
-  QMap< KParts::ReadOnlyPart*, KURL > _partURLMap;	// used to note when a URL changes (a file changes name)
+  QMap< KParts::ReadOnlyPart*, KURL > _partURLMap;  // used to note when a URL changes (a file changes name)
 
   QPointer<KParts::Factory> _editorFactory;
 
-	struct HistoryEntry
-	{
-		HistoryEntry() {}
-		HistoryEntry( const KURL & url, int line, int col );
+    struct HistoryEntry
+    {
+        HistoryEntry() {}
+        HistoryEntry( const KURL & url, int line, int col );
 
-		KURL url;
-		int line;
-		int col;
-		int id;
-	};
+        KURL url;
+        int line;
+        int col;
+        int id;
+    };
 
-	void addHistoryEntry();
-	HistoryEntry createHistoryEntry();
-	void jumpTo( const HistoryEntry & );
+    void addHistoryEntry();
+    HistoryEntry createHistoryEntry();
+    void jumpTo( const HistoryEntry & );
 
-	QList<HistoryEntry> m_backHistory;
-	QList<HistoryEntry> m_forwardHistory;
-	bool m_isJumping;
+    QList<HistoryEntry> m_backHistory;
+    QList<HistoryEntry> m_forwardHistory;
+    bool m_isJumping;
 };
 
 

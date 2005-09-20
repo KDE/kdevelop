@@ -43,6 +43,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/editor.h>
+#include <ktexteditor/modificationinterface.h>
 
 #include "toplevel.h"
 #include "api.h"
@@ -552,7 +553,9 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
 
   emit loadedFile( ro_part->url() );
 
-  connect( part, SIGNAL(modifiedOnDisc(Kate::Document*, bool, unsigned char)), this, SLOT(slotDocumentDirty(Kate::Document*, bool, unsigned char)) );
+    if ( dynamic_cast<KTextEditor::ModificationInterface*>(part) )
+        connect( part, SIGNAL(modifiedOnDisk(KTextEditor::Document*, bool, ModifiedOnDiskReason)),
+                 this, SLOT(slotDocumentDirty(KTextEditor::Document*, bool, ModifiedOnDiskReason)) );
 
   // let's get notified when a document has been changed
   connect(part, SIGNAL(completed()), this, SLOT(slotUploadFinished()));
@@ -1130,7 +1133,7 @@ void PartController::showPart( KParts::Part* part, const QString& name, const QS
   addPart( part );
 }
 
-void PartController::slotDocumentDirty( Kate::Document * d, bool isModified, unsigned char reason )
+void PartController::slotDocumentDirty( KTextEditor::Document * d, bool isModified, ModifiedOnDiskReason reason )
 {
     kdDebug(9000) << k_funcinfo << endl;
 
