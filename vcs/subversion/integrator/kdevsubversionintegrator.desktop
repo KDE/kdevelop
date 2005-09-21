@@ -8,6 +8,7 @@ Name[xx]=xxKDevSubversionIntegratorxx
 Comment=Subversion Project Integration Facility
 Comment[da]=Subversion projektintegration
 Comment[de]=Cervisia-Projektintegration
+Comment[el]=Λειτουργία ενσωμάτωσης Subversion στο έργο
 Comment[es]=Facilidad para integración con proyectos que utilicen Subversion
 Comment[et]=Subversion projekti põimimisvahend
 Comment[fr]=Service d'intégration pour un projet utilisant Subversion

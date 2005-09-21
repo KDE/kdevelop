@@ -5,6 +5,7 @@ MimeType=application/x-%{APPNAMELC}
 Comment= A really awesome KOffice application
 Comment[da]=Et helt fantastisk KOffice program
 Comment[de]=Eine wirklich großartige KOffice-Anwendung
+Comment[el]= Μια πραγματικά όμορφη εφαρμογή KOffice
 Comment[es]=Una aplicación de KOffice realmente intesesante
 Comment[et]=Tõesti imeline KOffice'i rakendus
 Comment[fr]=Une application pour KOffice vraiment superbe

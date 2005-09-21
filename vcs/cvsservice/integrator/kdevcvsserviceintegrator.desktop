@@ -8,6 +8,7 @@ Name[xx]=xxKDevCVSIntegratorxx
 Comment=CVS Service Project Integration Facility
 Comment[da]=CVS service projektintegration
 Comment[de]=CVS-Dienst Projektintegration
+Comment[el]=Λειτουργία ενσωμάτωσης υπηρεσίας CVS στο έργο
 Comment[es]=Facilidad de integración con proyectos que utilicen CVS
 Comment[et]=CVS-teenuse projekti põimimisvahend
 Comment[fr]=Service d'intégration pour un projet utilisant CVS

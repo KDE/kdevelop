@@ -8,6 +8,7 @@ Name[br]=Sil enporzh evit %{APPNAME}
 Name[ca]=Filtre d'importació per a %{APPNAME}
 Name[da]=%{APPNAME} importfilter
 Name[de]=%{APPNAME} Import-Filter
+Name[el]=Φίλτρο εισαγωγής %{APPNAME}
 Name[es]=Filtro de importación de %{APPNAME}
 Name[et]=%{APPNAME} impordifilter
 Name[eu]=%{APPNAME} inportazio iragazkia

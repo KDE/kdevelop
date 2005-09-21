@@ -9,6 +9,7 @@ Icon=remote
 Description=A kioslave for %{APPNAMELC}
 Description[da]=En kioslave til %{APPNAMELC}
 Description[de]=Ein Ein-/Ausgabemodul für %{APPNAMELC}
+Description[el]=Ένα υπηρέτης kio για %{APPNAMELC}
 Description[es]=Un kioslave para %{APPNAMELC}
 Description[et]=%{APPNAMELC} IO-moodul
 Description[fr]=Un module d'entrée / sortie pour %{APPNAMELC}
