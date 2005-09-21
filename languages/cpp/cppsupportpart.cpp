@@ -495,7 +495,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 	{
 		int id;
 		
-		id = popup->insertItem( "Switch header/implementation", this, SLOT( slotSwitchHeader() ) );
+		id = popup->insertItem( i18n("Switch Header/Implementation"), this, SLOT( slotSwitchHeader() ) );
 		popup->setWhatsThis( id, i18n( "<b>Switch Header/Implementation</b><p>"
 		                               "If you are currently looking at a header file, this "
 		                               "brings you to the corresponding implementation file. "
