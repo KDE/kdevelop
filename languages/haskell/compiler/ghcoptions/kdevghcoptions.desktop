@@ -6,6 +6,7 @@ Exec=ghc --make
 Comment=Glasgow Haskell Compiler
 Comment[ca]=Compilador Haskell de Glasgow
 Comment[da]=Glasgow Haskell oversætter
+Comment[el]=Μεταγλωττιστής Glasgow Haskell
 Comment[es]=Compilador Glasgow Haskell
 Comment[et]=Glasgow Haskelli kompilaator
 Comment[eu]=Glasgow Haskell konpiladorea

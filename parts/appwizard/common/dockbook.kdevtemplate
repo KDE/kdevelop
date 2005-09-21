@@ -5,6 +5,7 @@ Value=INSTALL_DOCS
 Comment= Install Docbook documentation templates.
 Comment[da]= Installerer Docbook dokumentationsskabeloner.
 Comment[de]= Installiere Docbook-Vorlagen für Dokumentation
+Comment[el]= Εγκατάσταση προτύπων τεκμηρίωσης Docbook.
 Comment[es]=Instalar plantillas de documentación Docbook.
 Comment[et]= Docbook-dokumendimallide paigaldamine.
 Comment[eu]= Instalatu Docbook dokumentazioaren txantiloiak.

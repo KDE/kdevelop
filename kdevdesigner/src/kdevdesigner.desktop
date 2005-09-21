@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KDevelop Designer
+Name[el]=Σχεδιαστής KDevelop
 Name[es]=Diseñador de KDevelop
 Name[et]=KDevelopi Disainer
 Name[eu]=KDevelop disenatzailea
@@ -19,7 +20,7 @@ GenericName=Interface Designer
 GenericName[br]=Ergrafer etrefas
 GenericName[cy]=Dylunydd Rhyngwyneb
 GenericName[de]=Oberflächen-Designer
-GenericName[el]=Σχεδιαστής περιβάλλοντος
+GenericName[el]=Σχεδιαστής διασυνδέσεων
 GenericName[es]=Diseñador de interfaces
 GenericName[et]=Liidesedisainer
 GenericName[eu]=Interfazeen diseinatzailea
@@ -44,7 +45,7 @@ Comment=GUI Designer for Qt/KDE
 Comment[ca]=Dissenyador de GUI per Qt/KDE
 Comment[da]=Grafisk brugerfladedesigner til Qt/KDE
 Comment[de]=Auf Qt-Designer basierender GUI-Designer
-Comment[el]=Σχεδιαστής γραφικού περιβάλλοντος για Qt/KDE
+Comment[el]=Σχεδιαστής GUI για Qt/KDE
 Comment[es]=Diseñador de interfaces para Qt/KDE
 Comment[et]=Qt/KDE graafilise kasutajaliidese disainer
 Comment[eu]=GUI diseinatzailea Qt/KDE-rako

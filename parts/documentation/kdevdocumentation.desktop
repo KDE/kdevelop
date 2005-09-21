@@ -5,6 +5,7 @@ Exec=blubb
 Comment=The Documentation plugin offers browsing and searching in local and online documentation with support for multiple documentation systems.
 Comment[da]=Dokumentations-plugin tilbyder visning og søgning i lokal og online dokumentation med understøttelse af flere dokumentations-systemer.
 Comment[de]=Die Dokumentations-Komponente bietet eine Browsefunktion und Unterstützung für die Suche in mehreren Hilfedokumenten und Dokumentationssystemen.
+Comment[el]=Το πρόσθετο τεκμηρίωσης προσφέρει περιήγηση και αναζήτηση σε τοπική και απομακρυσμένη τεκμηρίωση για πολλαπλά συστήματα τεκμηρίωσης.
 Comment[es]=El plugin de documentación provee navegación y búsqueda en documentación tanto local como en línea, y soporta múltiples sistemas de documentación.
 Comment[et]=Dokumentatsiooniplugin võimaldab lehitseda ja otsida nii kohalikus kui võrgudokumentatsioonis paljusid dokumentatsioonisüsteeme kasutades.
 Comment[eu]=Dokumentazio-pluginak lokaleko eta urruneko dokumentazio arakatzeko eta bilatzeko aukera ematen dizu, eta dokumentazio-sistema anitz onartzen ditu.

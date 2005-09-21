@@ -3,6 +3,7 @@ Comment=An %{APPNAME} Program
 Comment[ca]=Un programa %{APPNAME}
 Comment[da]=Et %{APPNAME} program
 Comment[de]=Ein %{APPNAME} Program
+Comment[el]=Ένα πρόγραμμα %{APPNAME}
 Comment[es]=Un programa %{APPNAME}
 Comment[et]=%{APPNAME} programm
 Comment[eu]=%{APPNAME} programa bat

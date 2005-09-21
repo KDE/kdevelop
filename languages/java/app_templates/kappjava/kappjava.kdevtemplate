@@ -3,6 +3,7 @@
 Name=Application framework
 Name[da]=Programskelet
 Name[de]=Anwendungsgrundgerüst
+Name[el]=Πλαίσιο εφαρμογής
 Name[es]=Infraestructura de aplicación
 Name[et]=Rakenduse raamistik
 Name[eu]=Aplikazioen lan-markoa
@@ -21,6 +22,7 @@ Category=Java/KDE
 Comment=Generates a simple Java KDE application with one toplevel window, menus and  toolbars.
 Comment[da]=Genererer et simpelt Java KDE program med et vindue på topniveau, menuer og værktøjslinjer.
 Comment[de]=Erstellt eine einfache Java KDE-Anwendung mit einem Toplevel-Fenster, Menüs und Werkzeugleisten.
+Comment[el]=Δημιουργεί μια απλή εφαρμογή Java του KDE με ένα ανώτερο παράθυρο, μενού, και γραμμές εργαλείων.
 Comment[es]=Genera una sencilla aplicación para KDE en Java, con una ventana principal, menús y barras de herramientas.
 Comment[et]=Lihtsa Java KDE rakenduse loomine ühe tipptaseme akna, menüüde ja tööriistaribadega.
 Comment[eu]=Goi-mailako lehio bat, menuak eta tresna-barrak dituen Java KDE aplikazio bat sortzen du.
