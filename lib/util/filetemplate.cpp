@@ -34,19 +34,11 @@
 
 bool FileTemplate::exists(KDevPlugin *part, const QString &name, Policy p)
 {
-    //QString fileName = (p == Default) ?
-    //   (part->project()->projectDirectory() + "/templates/" + name) : name;
-
     return QFile::exists( fullPathForName(part,name,p) );
 }
 
 QString FileTemplate::read(KDevPlugin *part, const QString &name, Policy p)
 {
-    
-  //KDevProject *project = part->project();
-    //QString fileName = (p == Default) ? (project->projectDirectory() +
-//					 "/templates/" + name) : name;
-
     return readFile(part, fullPathForName(part, name, p) );
 }
 
