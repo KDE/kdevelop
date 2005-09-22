@@ -13,14 +13,15 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef _FILETEMPLATE_H_
 #define _FILETEMPLATE_H_
 
-#include <qstring.h>
+#include <QString>
+#include <QHash>
 
 class KDevPlugin;
 class QDomDocument;
@@ -83,6 +84,11 @@ public:
      * for the template in the project directory if it doesn't exist.
      */
     static QString fullPathForName(KDevPlugin *part, const QString &name, Policy p = Default);
+
+    /**
+     * Escape a substitution map for usage on a XML file.
+     */
+    static QHash<QString,QString> normalSubstMapToXML( const QHash<QString,QString>& src );
 };
 
 #endif

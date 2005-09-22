@@ -113,3 +113,19 @@ QString FileTemplate::fullPathForName(KDevPlugin *part, const QString &name,
     QString globalName = ::locate("data", "kdevfilecreate/file-templates/" + name);
     return globalName.isNull() ? fileName : globalName;
 }
+
+
+QHash<QString,QString> FileTemplate::normalSubstMapToXML( const QHash<QString,QString>& src )
+{
+    QHash<QString,QString> result;
+    QHash<QString,QString>::Iterator it( src.begin() );
+    for( ; it != src.end(); ++it )
+    {
+        QString escaped( it.value() );
+        escaped.replace( "&", "&amp;" );
+        escaped.replace( "<", "&lt;" );
+        escaped.replace( ">", "&gt;" );
+        result.insert( it.key(), escaped );
+    }
+    return result;
+}
