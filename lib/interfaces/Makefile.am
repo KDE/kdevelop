@@ -12,7 +12,8 @@ libkdevinterfaces_la_SOURCES = \
 	KDevCoreIface.cpp	kdevplugincontroller.cpp     kdevprojectmodel.cpp \
 	kdevdifffrontend.cpp	kdevplugin.cpp		     tag.cpp \
 	domutil.cpp 		kdevitemmodel.cpp	     urlutil.cpp \
-	KDevPartControllerIface.skel KDevCoreIface.skel kdevprojectiface.skel
+	KDevPartControllerIface.skel KDevCoreIface.skel kdevprojectiface.skel \
+	filetemplate.cpp
 
 libkdevinterfaces_la_LDFLAGS = \
 	$(DB3LDFLAGS) \
@@ -37,7 +38,7 @@ kdevelopinclude_HEADERS = \
 	kdevlanguagesupport.h		kdevprojectmodel.h \
 	kdevmainwindow.h		tag.h \
 	kdevmakefrontend.h		kdevitemmodel.h \
-	urlutil.h
+	urlutil.h			filetemplate.h
 
 servicetypedir = $(kde_servicetypesdir)
 servicetype_DATA = \

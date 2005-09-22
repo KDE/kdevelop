@@ -29,12 +29,15 @@
 #include <qfileinfo.h>
 #include <qtimer.h>
 #include "kdevprojectiface.h"
+#include "filetemplate.h"
 
 struct KDevProject::Private {
     QMap<QString, QString> m_absToRel;
     QStringList m_symlinkList;
     QTimer *m_timer;
     KDevProjectIface *m_iface;
+    QHash<QString, QString> m_templExpandMap;
+    QHash<QString, QString> m_templExpandMapXML;
 };
 
 KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent)
@@ -114,6 +117,7 @@ void KDevProject::slotBuildFileMap()
 void KDevProject::openProject( const QString & /*dirName*/, const QString & /*projectName*/ )
 {
     buildFileMap();
+    readSubstitutionMap();
 }
 
 QStringList KDevProject::symlinkProjectFiles( )
@@ -150,6 +154,24 @@ void KDevProject::slotRemoveFilesFromFileMap( const QStringList & fileList )
 
 		++it;
 	}
+}
+
+void KDevProject::readSubstitutionMap()
+{
+    d->m_templExpandMap = DomUtil::readHashEntry(*projectDom(), "substmap");
+    d->m_templExpandMapXML = FileTemplate::normalSubstMapToXML(d->m_templExpandMap);
+}
+
+const QHash<QString, QString>& KDevProject::substMap( SubstitutionMapTypes type )
+{
+    switch( type )
+    {
+    default:
+    case NormalFile:
+        return d->m_templExpandMap;
+    case XMLFile:
+        return d->m_templExpandMapXML;
+    }
 }
 
 #include "kdevproject.moc"

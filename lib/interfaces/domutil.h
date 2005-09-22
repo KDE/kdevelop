@@ -14,10 +14,11 @@
 #define _DOMUTIL_H_
 
 #include <qdom.h>
-#include <qpair.h>
-#include <qstringlist.h>
-#include <qlist.h>
-#include <qmap.h>
+#include <QPair>
+#include <QStringList>
+#include <QList>
+#include <QMap>
+#include <QHash>
 
 /**
 @file domutil.h
@@ -77,6 +78,10 @@ public:
      * Reads a string to string map. See writeMapEntry()
      */
     static QMap<QString, QString> readMapEntry(const QDomDocument &doc, const QString &path);
+    /**
+     * Reads a string to string hash. See writeHashEntry()
+     */
+    static QHash<QString, QString> readHashEntry(const QDomDocument &doc, const QString &path);
     /**
      * Retrieves an element by path, return null if any item along
      * the path does not exist.
@@ -151,9 +156,14 @@ public:
                                    const PairList &value);
     /**
      * Writes a string to string map. This map is stored in a way, that it can be read with
-     * readMapEntry() and readEntry()
+     * readMapEntry() readHashEntry() and readEntry()
      */
     static void writeMapEntry(QDomDocument &doc, const QString& path, const QMap<QString,QString> &map);
+    /**
+     * Writes a string to string hash. This hash is stored in a way, that it can be read with
+     * readMapEntry() readHashEntry() and readEntry()
+     */
+    static void writeHashEntry(QDomDocument &doc, const QString& path, const QHash<QString,QString> &hash);
 
     /**
      * Resolves an extended path
@@ -195,12 +205,12 @@ public:
     static QDomElement elementByPathExt(QDomDocument &doc, const QString &pathstring);
 
     /**
-    * Open file - filename - and set setContents of doc
+    * Open file @a filename and set setContents of @a doc
     */
     static bool openDOMFile(QDomDocument &doc, QString filename);
 
     /**
-    * Store contents of doc in file - filename. Existing file will be truncated!
+    * Store contents of @a doc in file @a filename. Existing file will be truncated!
     */
     static bool saveDOMFile(QDomDocument &doc, QString filename);
 

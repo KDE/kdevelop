@@ -38,6 +38,13 @@ KDevelop project interface.
 
 class QTimer;
 
+/** Types of substitution maps */
+enum SubstitutionMapTypes
+{
+    NormalFile,        //!< For a normal file
+    XMLFile            //!< For a xml file
+};
+
 /**
 KDevelop project interface.
 Plugins implementing the KDevProject interfaces are used to manage projects.
@@ -160,6 +167,12 @@ public:
     /**@return The list of files known to the project through symlinks.*/
     virtual QStringList symlinkProjectFiles();
     
+    /** Reread template substitution map from dom */
+    virtual void readSubstitutionMap();
+
+    /**@return The template substitution map. */
+    virtual const QHash<QString, QString>& substMap( SubstitutionMapTypes type = NormalFile );
+
 private slots:
     void buildFileMap();
     void slotBuildFileMap();

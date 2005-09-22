@@ -15,11 +15,9 @@
 #include "domutil.h"
 
 #include <kdebug.h>
-#include <qstringlist.h>
-#include <qfile.h>
-//Added by qt3to4:
+#include <QStringList>
+#include <QFile>
 #include <QTextStream>
-
 
 void DomUtil::makeEmpty( QDomElement& e )
 {
@@ -133,6 +131,18 @@ QMap<QString, QString> DomUtil::readMapEntry(const QDomDocument &doc, const QStr
     return map;
 }
 
+QHash<QString, QString> DomUtil::readHashEntry(const QDomDocument &doc, const QString& path)
+{
+    QHash<QString, QString> hash;
+    QDomElement el = elementByPath(doc, path);
+    QDomElement subEl = el.firstChild().toElement();
+    while (!subEl.isNull()) {
+        hash[subEl.tagName()] = subEl.firstChild().toText().data();
+        subEl = subEl.nextSibling().toElement();
+    }
+    return hash;
+}
+
 QDomElement DomUtil::namedChildElement( QDomElement& el, const QString& name )
 {
     QDomElement child = el.namedItem( name ).toElement();
@@ -173,9 +183,21 @@ void DomUtil::writeMapEntry(QDomDocument &doc, const QString &path, const QMap<Q
     QMap<QString,QString>::ConstIterator it;
     for (it = map.begin(); it != map.end(); ++it)
     {
-        kdDebug( 9010 ) << "writing " << basePath << ";" << it.key() << ";" << it.data() << endl;
+        kdDebug( 9010 ) << "writing " << basePath << ";" << it.key() << ";" << it.value() << endl;
 	if( ! it.key().isEmpty() )
-            writeEntry(doc, basePath + it.key(), it.data() );
+            writeEntry(doc, basePath + it.key(), it.value() );
+    }
+}
+
+void DomUtil::writeHashEntry(QDomDocument &doc, const QString &path, const QHash<QString, QString> &hash)
+{
+    QString basePath( path + "/" );
+    QHash<QString,QString>::ConstIterator it;
+    for (it = hash.begin(); it != hash.end(); ++it)
+    {
+        kdDebug( 9010 ) << "writing " << basePath << ";" << it.key() << ";" << it.value() << endl;
+	if( ! it.key().isEmpty() )
+            writeEntry(doc, basePath + it.key(), it.value() );
     }
 }
 
