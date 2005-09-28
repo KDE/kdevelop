@@ -414,7 +414,7 @@ void  Catalog::setEnabled( bool isEnabled )
 
     cursors[ current ] = 0;
 
-    if( current > 0) {
+    if( current == args.size() ) {
 
         DBC* join_curs = 0;
         int rtn = d->dbp->join( d->dbp, cursors, &join_curs, 0 );
