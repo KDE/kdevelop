@@ -151,6 +151,7 @@ Comment[nl]=Een DCOP-service is aangemaakt in  %{dest}
 Comment[pl]=Usługa KDE DCOP została utworzona w %{dest}
 Comment[pt]=Foi criado um serviço de DCOP do KDE em %{dest}
 Comment[pt_BR]=Foi criado um serviço de DCOP do KDE em %{dest}
+Comment[sl]=Storitev DCOP za KDE je bila ustvarjena v %{dest}
 Comment[sv]=En KDE DCOP-tjänst skapades i %{dest}
 Comment[tr]=Bir KDE DCOP Hizmeti %{dest} içinde yaratılmıştır.
 Comment[xx]=xxA KDE DCOP Service was created in %{dest}xx
