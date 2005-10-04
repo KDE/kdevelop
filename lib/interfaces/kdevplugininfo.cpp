@@ -27,6 +27,11 @@
 
 #include "kdevplugincontroller.h"
 
+/** @todo remove this include when kdelibs development settled down.
+   #include <Q3ValueList> is needed to use KTrader::OfferList as of current kdelibs4_snapshot
+*/
+#include <Q3ValueList>
+
 struct KDevPluginInfo::Private {
     QString m_pluginName;
     QString m_rawGenericName;
