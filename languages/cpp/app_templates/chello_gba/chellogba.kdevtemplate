@@ -121,6 +121,7 @@ Comment[el]=Ένα πρόγραμμα Γεια σου Κόσμε δημιουρ�
 Comment[es]=Un programa «Hola mundo» ha sido creado en %{dest}
 Comment[et]="Tere, maailm" programm loodi asukohta %{dest}
 Comment[it]=È stato creato un programma di "Hello World" in %{dest}
+Comment[nl]=Een Hello World-programma is aangemaakt in %{dest}
 Comment[pl]=Program 'Witaj świecie' utworzony w %{dest}.
 Comment[pt]=Foi criado um programa Olá Mundo em %{dest}
 Comment[pt_BR]=Foi criado um programa Olá Mundo em %{dest}

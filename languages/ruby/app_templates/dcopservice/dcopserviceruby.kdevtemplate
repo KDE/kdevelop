@@ -25,6 +25,7 @@ Comment[el]=Δημιουργεί ένα πλαίσιο για μια υπηρε�
 Comment[es]=Genera una infraestructura para un servicio DCOP de KDE y una biblioteca de acceso cliente.
 Comment[et]=KDE DCOP-teenuse raamistiku ja kliendi ligipääsu teegi loomine.
 Comment[it]=Genera un'infrastruttura per un servizio DCOP di KDE e una libreria per l'accesso da client.
+Comment[nl]=Genereert een framework voor een KDE DCOP-service- en client-bibliotheek.
 Comment[pl]=Generuje schemat dla usługi KDE DCOP i biblioteki dostępu użytkownika.
 Comment[pt]=Gera a plataforma para um serviço de DCOP do KDE e a biblioteca de acesso dos clientes.
 Comment[pt_BR]=Gera a plataforma para um serviço de DCOP do KDE e a biblioteca de acesso dos clientes.
