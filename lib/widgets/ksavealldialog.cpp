@@ -26,7 +26,7 @@
 #include <kpushbutton.h>
 #include <kstdguiitem.h>
 
-#include <q3vbox.h>
+#include <kvbox.h>
 
 #include "ksavealldialog.h"
 
@@ -63,7 +63,7 @@ KSaveSelectDialog::KSaveSelectDialog( KURL::List const & filelist, KURL::List co
   KDialogBase( parent, "SaveAllDialog", true, i18n("Save Modified Files?"),
 	       Ok | User1 | Close )
 {
-  Q3VBox *top = makeVBoxMainWidget();
+  KVBox *top = makeVBoxMainWidget();
 
   (void)new QLabel( i18n("The following files have been modified. Save them?"), top );
 
@@ -72,7 +72,7 @@ KSaveSelectDialog::KSaveSelectDialog( KURL::List const & filelist, KURL::List co
 	_listview->header()->hide();
 	_listview->header()->setResizeMode(0, QHeaderView::Stretch);
 
-	setButtonOKText( i18n("Save &Selected"), i18n("Saves all selected files") );
+	setButtonOK( KGuiItem(i18n("Save &Selected"), QString::null, i18n("Saves all selected files")) );
 	setButtonText( User1, i18n("Save &None") );
 	setButtonText( Close, KStdGuiItem::cancel().text() );
 	setButtonTip( User1, i18n("Lose all modifications") );
@@ -151,14 +151,14 @@ KSaveAllDialog::KSaveAllDialog( const QStringList& filenames, QWidget* parent ) 
 {
   m_result = Cancel;
 
-  Q3VBox *top = makeVBoxMainWidget();
+  KVBox *top = makeVBoxMainWidget();
 
   (void)new QLabel( i18n("The following files have been modified. Save them?"), top );
   QListWidget* lb = new QListWidget( top );
   lb->setMinimumHeight( lb->fontMetrics().height() * 5 );
   lb->addItems( filenames );
 
-  setButtonOKText( i18n("Save &All"), i18n("Saves all modified files") );
+  setButtonOK( KGuiItem(i18n("Save &All"), QString::null, i18n("Saves all modified files")) );
   setButtonText( User1, i18n("Save &None") );
   setButtonText( Close, KStdGuiItem::cancel().text() );
   setButtonTip( User1, i18n("Lose all modifications") );

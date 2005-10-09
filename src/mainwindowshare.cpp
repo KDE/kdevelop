@@ -36,8 +36,9 @@
 #include <kedittoolbar.h>
 #include <kbugreport.h>
 #include <kurlrequester.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kiconloader.h>
+#include <kxmlguifactory.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>

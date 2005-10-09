@@ -26,7 +26,7 @@
 #include <kdevpartcontroller.h>
 
 class KAction;
-class KPopupMenu;
+class KMenu;
 class MainWindowShare;
 
 namespace KParts {
@@ -95,7 +95,7 @@ private:
     KURL m_currentTabURL;
     QMap<QWidget*, DDockWindow::Position> m_docks;
     KAction *m_raiseEditor;
-    KPopupMenu *m_windowMenu;
+    KMenu *m_windowMenu;
     typedef QPair<int, KURL> WinInfo;
     QList<WinInfo> m_windowList;
 };

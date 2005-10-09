@@ -12,7 +12,6 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kapplication.h>
-#include <kmdidefines.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -22,6 +21,7 @@
 #include <kactioncollection.h>
 #include <klocale.h>
 #include <kstdaccel.h>
+#include <kaction.h>
 
 #include "toplevel.h"
 #include "partcontroller.h"
@@ -35,6 +35,16 @@ using namespace KTextEditor;
 
 EditorProxy *EditorProxy::s_instance = 0;
 
+// FIXME remove - legacy
+namespace KMdi {
+   enum MdiMode {
+      UndefinedMode  = 0,
+      ToplevelMode   = 1,
+      ChildframeMode = 2,
+      TabPageMode    = 3,
+      IDEAlMode      = 4
+   };
+}
 
 EditorProxy::EditorProxy()
   : QObject()

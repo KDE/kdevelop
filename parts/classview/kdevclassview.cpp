@@ -24,7 +24,7 @@
 #include <QtGui/QHeaderView>
 
 #include <kdevcore.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <klocale.h>
@@ -152,7 +152,7 @@ void KDevClassView::popupContextMenu(const QPoint &pos)
 
   if (KDevCodeItem *item = codeModel()->item(index))
     {
-      KPopupMenu menu(this);
+      KMenu menu(this);
 
       CodeItemContext context(item);
       part()->core()->fillContextMenu(&menu, &context);

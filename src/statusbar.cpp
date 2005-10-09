@@ -29,7 +29,7 @@
 #include "qdebug.h"
 
 KDevStatusBar::KDevStatusBar(QWidget *parent, const char *name)
-    : KStatusBar(parent, name), _activePart(0), _view(0)
+    : KStatusBar(parent), _activePart(0), _view(0)
 {
 	QWidget * w = new QWidget( this );
 	addWidget( w, 1, true );

@@ -20,7 +20,7 @@ class QRadioButton;
 class KTempFile;
 class Q3WidgetStack;
 class Q3VBox;
-class KPopupMenu;
+class KMenu;
 class QHBoxLayout;
 class KArchiveDirectory;
 class KArchiveFile;
@@ -75,8 +75,8 @@ struct ApplicationInfo
     QString fileTemplates;
     QStringList openFilesAfterGeneration;
     QString templateFile;
-    QMap<QString,QString> subMap;
-    QMap<QString,QString> subMapXML;
+    QHash<QString,QString> subMap;
+    QHash<QString,QString> subMapXML;
     QStringList includes;
 
     //QMap<autoKey,QVariant> subValues;
@@ -180,8 +180,8 @@ private: //data
     ApplicationInfo* m_pCurrentAppInfo;
     bool m_projectLocationWasChanged;
     bool m_pathIsValid;
-    KPopupMenu* m_favouritesMenu;
-    KPopupMenu* m_templatesMenu;
+    KMenu* m_favouritesMenu;
+    KMenu* m_templatesMenu;
 
     Q3Dict<KDevLicense> m_licenses;
 

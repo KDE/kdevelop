@@ -31,6 +31,7 @@
 #include <ktrader.h>
 #include <kurllabel.h>
 #include <kapplication.h>
+#include <ktoolinvocation.h>
 #include "domutil.h"
 
 #include <profileengine.h>
@@ -217,7 +218,7 @@ void PartSelectWidget::itemSelected( Q3ListViewItem * item )
 
 void PartSelectWidget::openURL( const QString & url )
 {
-	kapp->invokeBrowser( url );
+	KToolInvocation::invokeBrowser( url );
 }
 
 void PartSelectWidget::saveProjectConfig()

@@ -24,6 +24,7 @@
 #include <kdebug.h>
 #include <kcombobox.h>
 #include <kservicetype.h>
+#include <kpushbutton.h>
 
 #include "partexplorerformbase.h"
 #include "partexplorerform.h"
@@ -63,7 +64,7 @@ class ResultsList : public KListView
 {
 public:
     ResultsList( QWidget *parent )
-        : KListView( parent, "resultslist" )
+        : KListView( parent )
     {
         this->setShowToolTips( false );
     }

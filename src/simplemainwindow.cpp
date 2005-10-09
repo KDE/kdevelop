@@ -25,7 +25,7 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kparts/part.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -339,8 +339,8 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
     if (!tabWidget)
         return;
 
-    KPopupMenu tabMenu;
-    tabMenu.insertTitle(tabWidget->tabLabel(w));
+    KMenu tabMenu;
+    tabMenu.addTitle(tabWidget->tabLabel(w));
 
     //Find the document on whose tab the user clicked
     m_currentTabURL = QString();
@@ -435,13 +435,13 @@ bool SimpleMainWindow::queryExit()
 void SimpleMainWindow::setupWindowMenu()
 {
     // get the xmlgui created one instead
-    m_windowMenu = qFindChild<KPopupMenu *>(main(), QLatin1String("window"));
+    m_windowMenu = qFindChild<KMenu *>(main(), QLatin1String("window"));
 
     if (!m_windowMenu)
     {
         kdDebug(9000) << "Couldn't find the XMLGUI window menu. Creating new." << endl;
 
-        m_windowMenu = new KPopupMenu(main(), "window");
+        m_windowMenu = new KMenu(main());
         menuBar()->insertItem(i18n("&Window"), m_windowMenu);
     }
 

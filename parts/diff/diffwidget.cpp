@@ -24,7 +24,6 @@
 #include <klocale.h>
 #include <kservice.h>
 #include <ktempfile.h>
-#include <kpopupmenu.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>

@@ -26,6 +26,7 @@
 #include <kdevcreatefile.h>
 #include <kdevplugininfo.h>
 #include <kaction.h>
+#include <kxmlguifactory.h>
 
 #include <profileengine.h>
 

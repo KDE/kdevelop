@@ -12,7 +12,6 @@
 #include <urlutil.h>
 
 #include <kiconloader.h>
-#include <kpopupmenu.h>
 #include <kdebug.h>
 #include <kmimetype.h>
 #include <ktrader.h>

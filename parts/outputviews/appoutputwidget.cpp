@@ -22,7 +22,6 @@
 #include <kstatusbar.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kpopupmenu.h>
 #include <q3buttongroup.h>
 #include <klineedit.h>
 #include <qcheckbox.h>

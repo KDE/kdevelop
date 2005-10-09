@@ -25,7 +25,7 @@ Boston, MA 02111-1307, USA.
 
 #include <kdevcore.h>
 #include <kdevapi.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <klocale.h>
@@ -74,7 +74,7 @@ void KDevDocumentView::popupContextMenu( const QPoint &pos )
         if ( KDevFileItem * fileItem = item->fileItem() )
         {
             QModelIndexList indexes = selectedIndexes();
-            KPopupMenu menu( this );
+            KMenu menu( this );
             KURL::List list;
             list << fileItem->URL();
             FileContext context( list );

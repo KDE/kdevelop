@@ -27,7 +27,7 @@
 #include <kiconloader.h>
 
 #include <kdevcore.h>
-
+#include <kvbox.h>
 
 #include "configwidgetproxy.h"
 

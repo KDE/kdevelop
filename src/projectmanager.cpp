@@ -30,6 +30,7 @@ class QDomDocument;
 #include <kmenubar.h>
 #include <kstatusbar.h>
 #include <kiconloader.h>
+#include <kvbox.h>
 
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"
@@ -146,11 +147,11 @@ void ProjectManager::slotProjectOptions()
                   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, TopLevel::getInstance()->main(),
                   "project options dialog");
 
-	Q3VBox *box = dlg.addVBoxPage( i18n("General"), i18n("General"), BarIcon( "kdevelop", KIcon::SizeMedium ) );
+	KVBox *box = dlg.addVBoxPage( i18n("General"), i18n("General"), BarIcon( "kdevelop", KIcon::SizeMedium ) );
     GeneralInfoWidget *g = new GeneralInfoWidget(*API::getInstance()->projectDom(), box, "general informations widget");
     connect (&dlg, SIGNAL(okClicked()), g, SLOT(accept()));
 
-  Q3VBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
+  KVBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
   PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
   connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
   connect( w, SIGNAL(accepted()), this, SLOT(loadLocalParts()) );

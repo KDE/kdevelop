@@ -24,7 +24,7 @@
 #include <QtGui/QHeaderView>
 
 #include <kdevcore.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <klocale.h>
@@ -134,7 +134,7 @@ void KDevProjectManager::popupContextMenu(const QPoint &pos)
 
   if (KDevProjectItem *item = projectModel()->item(index))
     {
-      KPopupMenu menu(this);
+      KMenu menu(this);
 
       if (KDevProjectFolderItem *folder = item->folder())
         {

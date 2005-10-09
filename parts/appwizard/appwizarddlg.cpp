@@ -52,7 +52,7 @@
 #include <kfiledialog.h>
 #include <kfile.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
 #include <kio/netaccess.h>
@@ -122,10 +122,10 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     templates_listview->addColumn( "x" );
     templates_listview->setColumnWidthMode(0, Q3ListView::Maximum); //to provide horiz scrollbar.
 
-    m_templatesMenu = new KPopupMenu(templates_listview);
+    m_templatesMenu = new KMenu(templates_listview);
     m_templatesMenu->insertItem(i18n("&Add to Favorites"), this, SLOT(addTemplateToFavourites()));
 
-    m_favouritesMenu = new KPopupMenu(favourites_iconview);
+    m_favouritesMenu = new KMenu(favourites_iconview);
     m_favouritesMenu->insertItem(i18n("&Remove Favorite"), this, SLOT(removeFavourite()));
 
     m_pathIsValid=false;
@@ -547,10 +547,10 @@ void AppWizardDialog::accept()
         (*dirIt).dir = KMacroExpander::expandMacros((*dirIt).dir , m_pCurrentAppInfo->subMap);
     }
 
-    QMap<QString,QString>::Iterator mapIt( m_pCurrentAppInfo->subMap.begin() );
+    QHash<QString,QString>::Iterator mapIt( m_pCurrentAppInfo->subMap.begin() );
     for( ; mapIt != m_pCurrentAppInfo->subMap.end(); ++mapIt )
     {
-        QString escaped( mapIt.data() );
+        QString escaped( mapIt.value() );
         escaped.replace( "&", "&amp;" );
         escaped.replace( "<", "&lt;" );
         escaped.replace( ">", "&gt;" );
@@ -669,7 +669,7 @@ bool AppWizardDialog::copyFile( const QString &source, const QString &dest, bool
         QFile inputFile( source);
         QFile outputFile( dest );
 
-        const QMap<QString,QString> &subMap = isXML ?
+        const QHash<QString,QString> &subMap = isXML ?
             m_pCurrentAppInfo->subMapXML : m_pCurrentAppInfo->subMap;
         if( inputFile.open( QIODevice::ReadOnly ) && outputFile.open(QIODevice::WriteOnly) )
         {
@@ -926,7 +926,7 @@ void AppWizardDialog::openAfterGeneration()
     }
 
     // DOM Modifications go here
-    DomUtil::writeMapEntry( projectDOM, "substmap", m_pCurrentAppInfo->subMap );
+    DomUtil::writeHashEntry( projectDOM, "substmap", m_pCurrentAppInfo->subMap );
 
     /*
     //save the selected vcs

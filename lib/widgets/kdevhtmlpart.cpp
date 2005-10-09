@@ -8,7 +8,7 @@
 #include <kstdaction.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kiconloader.h>
 #include <kmainwindow.h>
 #include <khtmlview.h>
@@ -90,15 +90,15 @@ KDevHTMLPart::KDevHTMLPart()
 
 void KDevHTMLPart::popup( const QString & url, const QPoint & p )
 {
-//  KPopupMenu popup( i18n( "Documentation Viewer" ), this->widget() );
-  KPopupMenu popup(this->widget());
+//  KMenu popup( i18n( "Documentation Viewer" ), this->widget() );
+  KMenu popup(this->widget());
 
   bool needSep = false;  
-  int idNewWindow = -2;
+  QAction* idNewWindow = 0L;
   if (!url.isEmpty() && (m_options & CanOpenInNewWindow))
   {
-    idNewWindow = popup.insertItem(QIcon(SmallIcon("window_new")),i18n("Open in New Tab"));
-    popup.setWhatsThis(idNewWindow, i18n("<b>Open in new window</b><p>Opens current link in a new window."));
+    idNewWindow = popup.addAction(QIcon(SmallIcon("window_new")),i18n("Open in New Tab"));
+    idNewWindow->setWhatsThis(i18n("<b>Open in new window</b><p>Opens current link in a new window."));
     needSep = true;
   }
   if (m_options & CanDuplicate)
@@ -134,7 +134,7 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
   if (ac)
     ac->plug(&popup);
 
-  int r = popup.exec(p);
+  QAction* r = popup.exec(p);
 
   if (r == idNewWindow)
   {
@@ -409,7 +409,7 @@ void KDevHTMLPart::slotForward()
 
 void KDevHTMLPart::slotBackAboutToShow()
 {
-	KPopupMenu *popup = m_backAction->popupMenu();
+	KMenu *popup = m_backAction->popupMenu();
 	popup->clear();
 
 	if ( m_Current == m_history.begin() ) return;
@@ -434,7 +434,7 @@ void KDevHTMLPart::slotBackAboutToShow()
 
 void KDevHTMLPart::slotForwardAboutToShow()
 {
-	KPopupMenu *popup = m_forwardAction->popupMenu();
+	KMenu *popup = m_forwardAction->popupMenu();
 	popup->clear();
 
 	if ( m_Current == lastElement() ) return;

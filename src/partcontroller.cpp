@@ -27,7 +27,7 @@
 #include <kaction.h>
 #include <kstatusbar.h>
 #include <khtml_part.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kio/netaccess.h>
 #include <kdialogbase.h>
 #include <klineedit.h>
@@ -39,6 +39,7 @@
 #include <kuserprofile.h>
 #include <kencodingfiledialog.h>
 #include <ksqueezedtextlabel.h>
+#include <kxmlguifactory.h>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -1353,7 +1354,7 @@ void PartController::slotForward()
 
 void PartController::slotBackAboutToShow()
 {
-    KPopupMenu *popup = m_backAction->popupMenu();
+    KMenu *popup = m_backAction->popupMenu();
     popup->clear();
 
     if ( m_backHistory.isEmpty()) return;
@@ -1370,7 +1371,7 @@ void PartController::slotBackAboutToShow()
 
 void PartController::slotForwardAboutToShow( )
 {
-    KPopupMenu * popup = m_forwardAction->popupMenu();
+    KMenu * popup = m_forwardAction->popupMenu();
     popup->clear();
 
     if ( m_forwardHistory.isEmpty() ) return;
