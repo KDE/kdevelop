@@ -148,7 +148,7 @@ void KDiffTextEdit::clearSyntaxHighlight()
     clearParagraphBackground( i );
   }
 }
- 
+
 void KDiffTextEdit::searchExtParts()
 {
   // only execute once

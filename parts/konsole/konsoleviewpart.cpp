@@ -11,8 +11,6 @@
 
 #include "konsoleviewpart.h"
 
-#include <q3whatsthis.h>
-
 #include <kdevgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -23,7 +21,6 @@
 
 #include "konsoleviewwidget.h"
 
-
 static const KDevPluginInfo data("kdevkonsoleview");
 K_EXPORT_COMPONENT_FACTORY( libkdevkonsoleview, KDevGenericFactory<KonsoleViewPart>( data ) )
 
@@ -33,14 +30,12 @@ KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStrin
     setObjectName(QString::fromUtf8(name));
     m_widget = new KonsoleViewWidget(this);
 
-    Q3WhatsThis::add(m_widget, i18n("<b>Konsole</b><p>"
-        "This window contains an embedded konsole window. It will try to follow you when "
-        "you navigate in the source directories")
-    );
+    m_widget->setWhatsThis(i18n("<b>Konsole</b><p>"
+                                "This window contains an embedded command line terminal."));
 
     m_widget->setIcon( SmallIcon("konsole") );
     m_widget->setCaption(i18n("Konsole"));
-    
+
     mainWindow()->embedOutputView(m_widget, i18n("Konsole"), i18n("Embedded console window"));
 }
 

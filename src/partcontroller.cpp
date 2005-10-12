@@ -481,8 +481,8 @@ void PartController::showDocument(const KURL &url, bool newWin)
   {
     part = new HTMLDocumentationPart;
     integratePart(part,docUrl);
-    connect(part, SIGNAL(fileNameChanged(KParts::ReadOnlyPart* )),
-        this, SIGNAL(partURLChanged(KParts::ReadOnlyPart* )));
+    connect( part, SIGNAL(documentURLChanged( const KURL &, const KURL & ) ),
+             this, SIGNAL(documentURLChanged( const KURL &, const KURL & ) ) );
   }
   else
   {
@@ -561,10 +561,6 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
   // let's get notified when a document has been changed
   connect(part, SIGNAL(completed()), this, SLOT(slotUploadFinished()));
 
-  // yes, we're cheating again. this signal exists for katepart's
-  // Document object and our HTMLDocumentationPart
-//  connect(part, SIGNAL(fileNameChanged()), this, SLOT(slotFileNameChanged()));
-
   // Connect to the document's views newStatus() signal in order to keep track of the
   // modified-status of the document.
 
@@ -624,6 +620,7 @@ bool PartController::partURLHasChanged( KParts::ReadOnlyPart * ro_part )
     {
         if ( _partURLMap[ ro_part ] != ro_part->url() )
         {
+            emit documentURLChanged( _partURLMap[ ro_part ], ro_part->url() );
             return true;
         }
     }
@@ -647,7 +644,6 @@ void PartController::slotUploadFinished()
 
     if ( partURLHasChanged( ro_part ) )
     {
-        emit partURLChanged( ro_part );
         updatePartURL( ro_part );
     }
 }
@@ -799,7 +795,7 @@ void PartController::reloadFile( const KURL & url )
         part->openURL( url );
 
         _dirtyDocuments.remove( part );
-        emit documentChangedState( url, Clean );
+        emit documentStateChanged( url, Clean );
 
         if (view)
             view->setCursorPosition(cursor);
@@ -915,7 +911,7 @@ bool PartController::saveFile( const KURL & url, bool force )
     if ( part->save() )
     {
         _dirtyDocuments.remove( part );
-        emit documentChangedState( url, Clean );
+        emit documentStateChanged( url, Clean );
         emit savedFile( url );
     }
 
@@ -1169,7 +1165,7 @@ void PartController::slotDocumentDirty( KTextEditor::Document * d, bool isModifi
         if ( reactToDirty( url, reason ) )
         {
             // file has been reloaded
-            emit documentChangedState( url, Clean );
+            emit documentStateChanged( url, Clean );
             _dirtyDocuments.remove( doc );
         }
         else
@@ -1180,7 +1176,7 @@ void PartController::slotDocumentDirty( KTextEditor::Document * d, bool isModifi
     else
     {
         _dirtyDocuments.remove( doc );
-        emit documentChangedState( url, Clean );
+        emit documentStateChanged( url, Clean );
     }
 
     kdDebug(9000) << doc->url().url() << endl;
@@ -1250,7 +1246,7 @@ void PartController::slotNewDesignerStatus(const QString &formName, int status)
 {
     kdDebug(9000) << k_funcinfo << endl;
     kdDebug(9000) << " formName: " << formName << ", status: " << status << endl;
-    emit documentChangedState( KURL::fromPathOrURL(formName), DocumentState(status) );
+    emit documentStateChanged( KURL::fromPathOrURL(formName), DocumentState(status) );
 }
 
 void PartController::slotNewStatus( )
@@ -1293,7 +1289,7 @@ DocumentState PartController::documentState( KURL const & url )
 
 void PartController::doEmitState( KURL const & url )
 {
-    emit documentChangedState( url, documentState( url ) );
+    emit documentStateChanged( url, documentState( url ) );
 }
 
 KURL::List PartController::openURLs( )

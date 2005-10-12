@@ -10,11 +10,9 @@
  ***************************************************************************/
 
 #include <qlineedit.h>
-#include <q3textedit.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
 #include <qlayout.h>
-#include <q3whatsthis.h>
 #include <qlabel.h>
 #include <qevent.h>
 
@@ -108,7 +106,7 @@ PartExplorerForm::PartExplorerForm( QWidget *parent )
     m_resultsList->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)3,
         (QSizePolicy::SizeType)3, 0, 0,
         m_resultsList->sizePolicy().hasHeightForWidth() ) );
-    Q3WhatsThis::add( m_resultsList, i18n("<b>Matching services</b><p>Results (if any) are shown grouped by matching service name.") );
+    m_resultsList->setWhatsThis( i18n("<b>Matching services</b><p>Results (if any) are shown grouped by matching service name.") );
     m_base->resultsLabel->setBuddy(m_resultsList);
     m_base->layout()->add( m_resultsList );
     setMainWidget( m_base );
@@ -127,17 +125,17 @@ PartExplorerForm::PartExplorerForm( QWidget *parent )
 //    connect( m_base->typeCombo->lineEdit(), SIGNAL( textChanged ( const QString & ) ), this,  SLOT( slotServicetypeChanged( const QString&  ) ) );
 //    slotServicetypeChanged( m_base->typeCombo->lineEdit()->text() );
 
-	// populating with all known servicetypes
-	KServiceType::List serviceList = KServiceType::allServiceTypes();
-	QStringList list;
-	KServiceType::List::Iterator it = serviceList.begin();
-	while( it != serviceList.end() )
-	{
-		list << (*it)->name();
-		++it;
-	}
-	list.sort();
-	m_base->typeCombo->insertStringList( list );
+    // populating with all known servicetypes
+    KServiceType::List serviceList = KServiceType::allServiceTypes();
+    QStringList list;
+    KServiceType::List::Iterator it = serviceList.begin();
+    while( it != serviceList.end() )
+    {
+        list << (*it)->name();
+        ++it;
+    }
+    list.sort();
+    m_base->typeCombo->insertStringList( list );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -150,8 +148,8 @@ PartExplorerForm::~PartExplorerForm()
 
 void PartExplorerForm::slotSearchRequested()
 {
-	QString serviceType = m_base->typeCombo->lineEdit()->text();
-	QString constraints = m_base->constraintsText->text();
+    QString serviceType = m_base->typeCombo->lineEdit()->text();
+    QString constraints = m_base->constraintsText->text();
 
     kdDebug(9000) << "===> PartExplorerForm::slotSearchRequested(): " <<
         " serviceType = " << serviceType << ", constraints = " << constraints << endl;

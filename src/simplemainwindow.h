@@ -73,9 +73,9 @@ private slots:
     void gotoLastWindow();
     void slotCoreInitialized();
     void projectOpened();
-    void slotPartURLChanged(KParts::ReadOnlyPart *part);
+    void slotDocumentURLChanged( const KURL &oldURL, const KURL &newURL );
     void activePartChanged(KParts::Part *part);
-    void documentChangedState(const KURL &url, DocumentState state);
+    void documentStateChanged(const KURL &url, DocumentState state);
     void tabContextActivated(int);
     void configureToolbars();
     void slotNewToolbarConfig();

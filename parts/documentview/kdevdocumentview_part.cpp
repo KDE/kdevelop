@@ -38,7 +38,6 @@ Boston, MA 02111-1307, USA.
 #include <kdevplugininfo.h>
 #include <kdevmainwindow.h>
 #include <kdevgenericfactory.h>
-#include <kdevpartcontroller.h>
 #include <kfiltermodel.h>
 
 typedef KDevGenericFactory<KDevDocumentViewPart> KDevDocumentViewFactory;
@@ -70,8 +69,8 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent, const char *name, c
     connect( partController(), SIGNAL( loadedFile( const KURL & ) ), this, SLOT( loadFile( const KURL & ) ) );
     connect( partController(), SIGNAL( closedFile( const KURL & ) ), this, SLOT( closeFile( const KURL & ) ) );
     connect( partController(), SIGNAL( fileDirty( const KURL & ) ), this, SLOT( dirtyFile( const KURL & ) ) );
-    //     connect( partController(), SIGNAL( partURLChanged(KParts::ReadOnlyPart *) ), this, SLOT() );
-    //     connect( partController(), SIGNAL( documentChangedState(const KURL &, DocumentState) ), this, SLOT() );
+    connect( partController(), SIGNAL( documentURLChanged( const KURL &, const KURL & ) ), this, SLOT( saveAsFile( const KURL &, const KURL & ) ) );
+    connect( partController(), SIGNAL( documentStateChanged(const KURL &, DocumentState) ), this, SLOT( stateChanged( const KURL &, DocumentState ) ) );
 
     setXMLFile( "kdevdocumentview.rc" );
 }
@@ -117,6 +116,16 @@ void KDevDocumentViewPart::closeFile( const KURL & /*url*/ )
 }
 
 void KDevDocumentViewPart::dirtyFile( const KURL & /*url*/ )
+{
+    kdDebug() << k_funcinfo << endl;
+}
+
+void KDevDocumentViewPart::saveAsFile( const KURL & /*oldurl*/, const KURL & /*newurl*/ )
+{
+    kdDebug() << k_funcinfo << endl;
+}
+
+void KDevDocumentViewPart::stateChanged( const KURL & /*url*/, DocumentState /*state*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }

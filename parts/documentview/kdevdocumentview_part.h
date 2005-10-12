@@ -23,6 +23,7 @@
 #include <QtCore/QPointer>
 
 #include <kdevplugin.h>
+#include <kdevpartcontroller.h>
 
 class QModelIndex;
 class KURL;
@@ -55,12 +56,14 @@ private slots:
     void loadFile( const KURL &url );
     void closeFile( const KURL &url );
     void dirtyFile( const KURL &url );
+    void saveAsFile( const KURL &oldurl, const KURL &newurl );
+    void stateChanged( const KURL &url, DocumentState state );
     void filePressed( const QModelIndex & index );
 
 private:
     KDevDocumentModel *m_documentModel;
     KDevDocumentItem *m_documentItem;
-    KDevDocumentView *m_documentView;
+    QPointer<KDevDocumentView> m_documentView;
 };
 
 #endif

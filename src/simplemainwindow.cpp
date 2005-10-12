@@ -96,14 +96,14 @@ void SimpleMainWindow::init()
 
     connect(Core::getInstance(), SIGNAL(coreInitialized()), this, SLOT(slotCoreInitialized()));
     connect(Core::getInstance(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
-    connect(PartController::getInstance(), SIGNAL(partURLChanged(KParts::ReadOnlyPart *)),
-        this, SLOT(slotPartURLChanged(KParts::ReadOnlyPart * )));
+    connect(PartController::getInstance(), SIGNAL(documentURLChanged( const KURL &, const KURL & )),
+            this, SLOT(slotDocumentURLChanged( const KURL &, const KURL & )));
     connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
-        this, SLOT(activePartChanged(KParts::Part*)));
+            this, SLOT(activePartChanged(KParts::Part*)));
 
     connect(PartController::getInstance(),
-        SIGNAL(documentChangedState(const KURL &, DocumentState)),
-        this, SLOT(documentChangedState(const KURL&, DocumentState)));
+            SIGNAL(documentStateChanged(const KURL &, DocumentState)),
+            this, SLOT(documentStateChanged(const KURL&, DocumentState)));
 
     loadSettings();
 }
@@ -283,18 +283,17 @@ void SimpleMainWindow::projectOpened()
     setCaption(QString());
 }
 
-void SimpleMainWindow::slotPartURLChanged(KParts::ReadOnlyPart *part)
+void SimpleMainWindow::slotDocumentURLChanged( const KURL &oldURL, const KURL &newURL )
 {
-    if (QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(part))
-        widget->setCaption(part->url().fileName());
-        //do smth with caption: ro_part->url().fileName()
+    if (QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(
+        PartController::getInstance()->partForURL(newURL)))
+        widget->setCaption(newURL.fileName());
 }
 
-void SimpleMainWindow::documentChangedState(const KURL &url, DocumentState state)
+void SimpleMainWindow::documentStateChanged(const KURL &url, DocumentState state)
 {
     QWidget * widget = EditorProxy::getInstance()->topWidgetForPart(
         PartController::getInstance()->partForURL(url));
-    kdDebug() << "SimpleMainWindow::documentChangedState: " << widget << endl;
     if (widget)
     {
         //calculate the icon size if showTabIcons is false

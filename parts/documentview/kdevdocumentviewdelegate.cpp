@@ -37,7 +37,8 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
     if ( !model->parent( index ).isValid() )
     {
         // this is a top-level item.
-        QStyleOptionButton buttonOption;
+/*        QStyleOptionButton buttonOption;*/
+        QStyleOptionHeader buttonOption;
 
         buttonOption.state = option.state;
 #ifdef Q_WS_MAC
@@ -48,10 +49,14 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
         buttonOption.state &= ~QStyle::State_HasFocus;
 
         buttonOption.rect = option.rect;
+        buttonOption.rect.setLeft( option.rect.left() - 1 );
+        buttonOption.rect.setRight( option.rect.right() - 1 );
         buttonOption.palette = option.palette;
-        buttonOption.features = QStyleOptionButton::None;
+/*        buttonOption.features = QStyleOptionButton::None;*/
+        buttonOption.section = QStyleOptionHeader::OnlyOneSection;
+        buttonOption.textAlignment = Qt::AlignCenter;
         buttonOption.text = model->data( index, Qt::DisplayRole ).toString();
-        m_view->style() ->drawControl( QStyle::CE_PushButton, &buttonOption, painter, m_view );
+        m_view->style() ->drawControl( QStyle::CE_Header, &buttonOption, painter, m_view );
 
         QStyleOption branchOption;
         static const int i = 9; // ### hardcoded in qcommonstyle.cpp

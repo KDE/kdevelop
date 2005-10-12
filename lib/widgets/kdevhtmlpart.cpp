@@ -24,7 +24,7 @@ KDevHTMLPart::KDevHTMLPart()
   : KHTMLPart(0L, 0L, 0L, "KDevHTMLPart", DefaultGUI )
 {
   setXMLFile(locate("data", "kdevelop/kdevhtml_partui.rc"), true);
-  
+
   connect(browserExtension(), SIGNAL(openURLRequestDelayed(const KURL &,const KParts::URLArgs &)),
           this, SLOT(openURLRequest(const KURL &)) );
 
@@ -48,8 +48,8 @@ KDevHTMLPart::KDevHTMLPart()
   connect( this, SIGNAL(popupMenu(const QString &, const QPoint &)), this, SLOT(popup(const QString &, const QPoint &)));
   connect(this, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 
-//BEGIN documentation history stuff  
-    
+//BEGIN documentation history stuff
+
   m_backAction = new KToolBarPopupAction(i18n("Back"), "back", 0,
     this, SLOT(slotBack()),
     actions, "browser_back");
@@ -73,11 +73,11 @@ KDevHTMLPart::KDevHTMLPart()
          this, SLOT(slotForwardAboutToShow()));
   connect(m_forwardAction->popupMenu(), SIGNAL(activated(int)),
          this, SLOT(slotPopupActivated(int)));
-  
+
   m_restoring = false;
   m_Current = m_history.end();
-//END documentation history stuff  
-  
+//END documentation history stuff
+
   //settings:
   KConfig *appConfig = KGlobal::config();
   appConfig->setGroup("KHTMLPart");
@@ -93,7 +93,7 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
 //  KMenu popup( i18n( "Documentation Viewer" ), this->widget() );
   KMenu popup(this->widget());
 
-  bool needSep = false;  
+  bool needSep = false;
   QAction* idNewWindow = 0L;
   if (!url.isEmpty() && (m_options & CanOpenInNewWindow))
   {
@@ -108,7 +108,7 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
   }
   if (needSep)
       popup.insertSeparator();
-    
+
   m_backAction->plug( &popup );
   m_forwardAction->plug( &popup );
   reloadAction->plug(&popup);
@@ -117,10 +117,10 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
 
   copyAction->plug( &popup );
   popup.insertSeparator();
-  
+
   printAction->plug(&popup);
   popup.insertSeparator();
-    
+
   KAction * incFontAction = this->action("incFontSizes");
   KAction * decFontAction = this->action("decFontSizes");
   if ( incFontAction && decFontAction )
@@ -323,36 +323,37 @@ bool KDevHTMLPart::openURL(const KURL &url)
 {
   QString path = resolveEnvVarsInURL(url.url());
   KURL newUrl(path);
-  
+  KURL oldUrl = KDevHTMLPart::url();
+
   bool retval = KHTMLPart::openURL(newUrl);
   if ( retval )
   {
-    emit fileNameChanged(this);
-	if ( !m_restoring ) 
-	{
-		addHistoryEntry();
-	}
+    emit documentURLChanged( oldUrl, newUrl );
+    if ( !m_restoring )
+    {
+        addHistoryEntry();
+    }
   }
-  
+
   m_backAction->setEnabled( m_Current != m_history.begin() );
   m_forwardAction->setEnabled( m_Current != lastElement() );
-  
+
   return retval;
 }
 
 QLinkedList<DocumentationHistoryEntry>::Iterator KDevHTMLPart::lastElement()
 {
-	return --m_history.end();
+    return --m_history.end();
 }
-    
+
 void KDevHTMLPart::openURLRequest(const KURL &url)
 {
-	openURL( url );
+    openURL( url );
 }
 
 void KDevHTMLPart::slotReload( )
 {
-	openURL( url() );
+    openURL( url() );
 }
 
 void KDevHTMLPart::slotStop( )
@@ -387,114 +388,114 @@ void KDevHTMLPart::slotPrint( )
 
 void KDevHTMLPart::slotBack()
 {
-	if ( m_Current != m_history.begin() )
-	{
-		--m_Current;
-		m_restoring = true;
-		openURL( (*m_Current).url );
-		m_restoring = false;
-	}
+    if ( m_Current != m_history.begin() )
+    {
+        --m_Current;
+        m_restoring = true;
+        openURL( (*m_Current).url );
+        m_restoring = false;
+    }
 }
 
 void KDevHTMLPart::slotForward()
 {
-	if (  m_Current != lastElement() )
-	{
-		++m_Current;
-		m_restoring = true;
-		openURL( (*m_Current).url );
-		m_restoring = false;
-	}
+    if (  m_Current != lastElement() )
+    {
+        ++m_Current;
+        m_restoring = true;
+        openURL( (*m_Current).url );
+        m_restoring = false;
+    }
 }
 
 void KDevHTMLPart::slotBackAboutToShow()
 {
-	KMenu *popup = m_backAction->popupMenu();
-	popup->clear();
+    KMenu *popup = m_backAction->popupMenu();
+    popup->clear();
 
-	if ( m_Current == m_history.begin() ) return;
+    if ( m_Current == m_history.begin() ) return;
 
-	QLinkedList<DocumentationHistoryEntry>::Iterator it = m_Current;
-	--it;
-	
-	int i = 0;
-	while( i < 10 )
-	{
-		if ( it == m_history.begin() )
-		{
-			popup->insertItem( (*it).url.url(), (*it).id );
-			return;
-		} 
-		
-		popup->insertItem( (*it).url.url(), (*it).id );
-		++i;
-		--it;
-	} 
+    QLinkedList<DocumentationHistoryEntry>::Iterator it = m_Current;
+    --it;
+
+    int i = 0;
+    while( i < 10 )
+    {
+        if ( it == m_history.begin() )
+        {
+            popup->insertItem( (*it).url.url(), (*it).id );
+            return;
+        }
+
+        popup->insertItem( (*it).url.url(), (*it).id );
+        ++i;
+        --it;
+    }
 }
 
 void KDevHTMLPart::slotForwardAboutToShow()
 {
-	KMenu *popup = m_forwardAction->popupMenu();
-	popup->clear();
+    KMenu *popup = m_forwardAction->popupMenu();
+    popup->clear();
 
-	if ( m_Current == lastElement() ) return;
+    if ( m_Current == lastElement() ) return;
 
-	QLinkedList<DocumentationHistoryEntry>::Iterator it = m_Current;
-	++it;
-	
-	int i = 0;
-	while( i < 10 )
-	{
-		if ( it == lastElement() )
-		{
-			popup->insertItem( (*it).url.url(), (*it).id );
-			return;
-		} 
-		
-		popup->insertItem( (*it).url.url(), (*it).id );
-		++i;
-		++it;
-	} 
+    QLinkedList<DocumentationHistoryEntry>::Iterator it = m_Current;
+    ++it;
+
+    int i = 0;
+    while( i < 10 )
+    {
+        if ( it == lastElement() )
+        {
+            popup->insertItem( (*it).url.url(), (*it).id );
+            return;
+        }
+
+        popup->insertItem( (*it).url.url(), (*it).id );
+        ++i;
+        ++it;
+    }
 }
 
 void KDevHTMLPart::slotPopupActivated( int id )
 {
-	kdDebug(9000) << "id: " << id << endl;
+    kdDebug(9000) << "id: " << id << endl;
 
-	QLinkedList<DocumentationHistoryEntry>::Iterator it = m_history.begin();
-	while( it != m_history.end() )
-	{
-		kdDebug(9000) << "(*it).id: " << (*it).id << endl;
-		if ( (*it).id == id )
-		{
-			m_Current = it;
-			m_restoring = true;
-			openURL( (*m_Current).url );
-			m_restoring = false;
-			return;
-		}
-		++it;
-	}
+    QLinkedList<DocumentationHistoryEntry>::Iterator it = m_history.begin();
+    while( it != m_history.end() )
+    {
+        kdDebug(9000) << "(*it).id: " << (*it).id << endl;
+        if ( (*it).id == id )
+        {
+            m_Current = it;
+            m_restoring = true;
+            openURL( (*m_Current).url );
+            m_restoring = false;
+            return;
+        }
+        ++it;
+    }
 }
 
 void KDevHTMLPart::addHistoryEntry()
 {
-	QLinkedList<DocumentationHistoryEntry>::Iterator it = m_Current;
-	
-	// if We're not already the last entry, we truncate the list here before adding an entry
-	if ( it != m_history.end() && it != lastElement() )
-	{
-		m_history.erase( ++it, m_history.end() );
-	}
-	
-	DocumentationHistoryEntry newEntry( url() );
-		
-	// Only save the new entry if it is different from the last
-	if ( newEntry.url != (*m_Current).url )
-	{
-		m_history.append( newEntry );
-		m_Current = lastElement();
-	}
+    QLinkedList<DocumentationHistoryEntry>::Iterator it = m_Current;
+
+    // if We're not already the last entry, we truncate the list here before adding an entry
+    if ( it != m_history.end() && it != lastElement() )
+    {
+        m_history.erase( ++it, m_history.end() );
+    }
+
+    DocumentationHistoryEntry newEntry( url() );
+
+    // Only save the new entry if it is different from the last
+    if ( newEntry.url != (*m_Current).url )
+    {
+        m_history.append( newEntry );
+        m_Current = lastElement();
+    }
 }
 
 void KDevHTMLPart::slotCopy( )

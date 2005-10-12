@@ -1,4 +1,3 @@
-#include <q3whatsthis.h>
 #include <qregexp.h>
 #include <qfile.h>
 //Added by qt3to4:
@@ -48,9 +47,9 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
 
   m_widget = new ValgrindWidget( this );
   m_widget->setIcon( SmallIcon("fork") );
-  m_widget->setCaption(i18n("Valgrind Output"));
-  
-  Q3WhatsThis::add( m_widget, i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br>"
+  m_widget->setCaption( i18n("Valgrind Output"));
+
+  m_widget->setWhatsThis( i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br>"
     "use of uninitialized memory<br>"
     "reading/writing memory after it has been free'd<br>"
     "reading/writing off the end of malloc'd blocks<br>"
@@ -61,15 +60,15 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
     "some abuses of the POSIX pthread API." ) );
 
   KAction* action = new KAction( i18n("&Valgrind Memory Leak Check"), 0, this,
-	       SLOT(slotExecValgrind()), actionCollection(), "tools_valgrind" );
+           SLOT(slotExecValgrind()), actionCollection(), "tools_valgrind" );
   action->setToolTip(i18n("Valgrind memory leak check"));
   action->setWhatsThis(i18n("<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you find memory-management problems in your programs."));
 
   action = new KAction( i18n("P&rofile with KCachegrind"), 0, this,
-	       SLOT(slotExecCalltree()), actionCollection(), "tools_calltree" );
+           SLOT(slotExecCalltree()), actionCollection(), "tools_calltree" );
   action->setToolTip(i18n("Profile with KCachegrind"));
   action->setWhatsThis(i18n("<b>Profile with KCachegrind</b><p>Runs your program in calltree and then displays profiler information in KCachegrind."));
-  
+
   mainWindow()->embedOutputView( m_widget, "Valgrind", i18n("Valgrind memory leak check") );
 }
 
@@ -296,7 +295,7 @@ void ValgrindPart::processExited( KProcess* p )
     currentMessage = QString();
     lastPiece = QString();
     core()->running( this, false );
-    
+
     if (kcInfo.runKc)
     {
         KProcess *kcProc = new KProcess;
@@ -346,7 +345,7 @@ void ValgrindPart::savePartialProjectSession( QDomElement* el )
 
   QDomElement kcElem = domDoc.createElement( "kcachegrind" );
   kcElem.setAttribute( "path", _lastKcExec );
-    
+
   el->appendChild( execElem );
   el->appendChild( valElem );
   el->appendChild( ctElem );

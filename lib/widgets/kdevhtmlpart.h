@@ -21,17 +21,17 @@ class KParts::ReadOnlyPart;
 struct DocumentationHistoryEntry {
     KURL url;
     int id;
-    
+
     DocumentationHistoryEntry() {}
-    DocumentationHistoryEntry( const KURL& u ): url( u ) 
+    DocumentationHistoryEntry( const KURL& u ): url( u )
     {
-        id = abs( QTime::currentTime().msecsTo( QTime() ) );	// nasty, but should provide a reasonably unique number
+        id = abs( QTime::currentTime().msecsTo( QTime() ) );    // nasty, but should provide a reasonably unique number
     }
 };
 
 /**
 Customized KHTML part for KDevelop.
-Used as HTML documentation and file viewer. 
+Used as HTML documentation and file viewer.
 
 Represents customized BrowserViewGUI mode of KHTMLPart. Provides also actions for:
 - reload;
@@ -49,30 +49,31 @@ class KDevHTMLPart : public KHTMLPart
     Q_OBJECT
 
 public:
-    
+
     enum Options { CanDuplicate=1, CanOpenInNewWindow=2 };
 
     KDevHTMLPart();
-    
+
     void setContext(const QString &context);
     QString context() const;
     virtual bool openURL(const KURL &url);
     static QString resolveEnvVarsInURL(const QString& url);
-    
+
     void setOptions(int options) { m_options = options; }
 
 signals:
-    void fileNameChanged(KParts::ReadOnlyPart *part);
+/*    void fileNameChanged(KParts::ReadOnlyPart *part);*/
+    void documentURLChanged( const KURL &oldURL, const KURL &newURL );
 
 protected slots:
 
     void slotStarted(KIO::Job *);
     void slotCompleted();
     void slotCancelled(const QString &errMsg);
-    
+
     void openURLRequest(const KURL &url);
     void popup( const QString & url, const QPoint & p );
-    
+
     void slotReload();
     void slotStop();
     virtual void slotDuplicate() = 0;
@@ -88,9 +89,9 @@ protected slots:
 
     void slotPopupActivated( int id );
     void addHistoryEntry();
-  
+
     QLinkedList<DocumentationHistoryEntry>::Iterator lastElement();
-  
+
 private:
 
     QLinkedList< DocumentationHistoryEntry > m_history;
@@ -98,7 +99,7 @@ private:
 
     KToolBarPopupAction* m_backAction;
     KToolBarPopupAction* m_forwardAction;
-    
+
     bool m_restoring;
 
     QString m_context;
@@ -107,7 +108,7 @@ private:
     KAction *duplicateAction;
     KAction *printAction;
     KAction *copyAction;
-    
+
     int m_options;
 };
 

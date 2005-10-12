@@ -149,12 +149,12 @@ signals:
     void fileDirty(const KURL &);
 
     /**This is typically emitted when an editorpart does "save as"
-    which will change the part's URL.*/
-    void partURLChanged(KParts::ReadOnlyPart *);
+    which will change the document's URL from 'old' to 'new'*/
+    void documentURLChanged( const KURL &oldURL, const KURL &newURL );
 
-    /**This is emitted when the document changes,
-    either internally or on disc.*/
-    void documentChangedState(const KURL &, DocumentState);
+    /**This is emitted when the document changes, either internally
+    or on disc.*/
+    void documentStateChanged(const KURL &, DocumentState);
 
 };
 

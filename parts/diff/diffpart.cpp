@@ -11,7 +11,6 @@
 
 #include <sys/stat.h>
 
-#include <q3whatsthis.h>
 #include <qmenu.h>
 
 #include <klocale.h>
@@ -51,14 +50,14 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   diffWidget->setIcon( SmallIcon("editcopy") );
   QString nm( i18n( "Diff" ) );
   diffWidget->setCaption( i18n( "Diff Output" ) );
-  Q3WhatsThis::add(diffWidget, i18n("<b>Difference viewer</b><p>Shows output of the diff format. "
+  diffWidget->setWhatsThis( i18n("<b>Difference viewer</b><p>Shows output of the diff format. "
     "Can utilize every installed component that is able to show diff output. "
-    "For example if you have Kompare installed, Difference Viewer can use its graphical diff view."));
+    "For example if you have Kompare installed, Difference Viewer can use its graphical diff view.") );
   mainWindow()->embedOutputView( diffWidget, nm, i18n("Output of the diff command") );
 
   KAction *action = new KAction( i18n("Difference Viewer..."), 0,
-	       this, SLOT(slotExecDiff()),
-	       actionCollection(), "tools_diff" );
+           this, SLOT(slotExecDiff()),
+           actionCollection(), "tools_diff" );
   action->setToolTip(i18n("Difference viewer"));
   action->setWhatsThis(i18n("<b>Difference viewer</b><p>Shows the contents of a patch file."));
 
@@ -99,31 +98,31 @@ static KParts::ReadWritePart* partForURL(const KURL &url, KDevPartController* pc
 
 void DiffPart::contextMenu( QMenu* popup, const Context* context )
 {
-	if ( context->hasType( Context::EditorContext ) )
-	{
-		const EditorContext *eContext = static_cast<const EditorContext*>(context);
-		popupFile = eContext->url();
-	}
-	else if ( context->hasType( Context::FileContext ) )
-	{
-		const FileContext * fContext = static_cast<const FileContext*>( context );
-		popupFile.setPath( fContext->urls().first().fileName() );	//@fixme - assuming absolute path. is this correct?
-	}
-	else
-	{
-		return;
-	}
+    if ( context->hasType( Context::EditorContext ) )
+    {
+        const EditorContext *eContext = static_cast<const EditorContext*>(context);
+        popupFile = eContext->url();
+    }
+    else if ( context->hasType( Context::FileContext ) )
+    {
+        const FileContext * fContext = static_cast<const FileContext*>( context );
+        popupFile.setPath( fContext->urls().first().fileName() );   //@fixme - assuming absolute path. is this correct?
+    }
+    else
+    {
+        return;
+    }
 
-	KParts::ReadWritePart* rw_part = partForURL( popupFile, partController() );
-	if ( !rw_part ) return;
-	
-	if ( partController()->documentState( rw_part->url() ) != Clean )
-	{
-		int id = popup->insertItem( i18n( "Difference to Disk File" ),
-							this, SLOT(localDiff()) );
-		popup->setWhatsThis(id, i18n("<b>Difference to disk file</b><p>Shows the difference between "
-			"the file contents in this editor and the file contents on disk."));
-	}
+    KParts::ReadWritePart* rw_part = partForURL( popupFile, partController() );
+    if ( !rw_part ) return;
+
+    if ( partController()->documentState( rw_part->url() ) != Clean )
+    {
+        int id = popup->insertItem( i18n( "Difference to Disk File" ),
+                            this, SLOT(localDiff()) );
+        popup->setWhatsThis(id, i18n("<b>Difference to disk file</b><p>Shows the difference between "
+            "the file contents in this editor and the file contents on disk."));
+    }
 }
 
 DiffPart::~DiffPart()

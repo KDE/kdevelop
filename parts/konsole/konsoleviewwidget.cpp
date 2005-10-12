@@ -54,7 +54,7 @@ void KonsoleViewWidget::activate()
     kdDebug(9035) << k_funcinfo << endl;
 
     static bool initialized = false;
-          
+
     if (initialized)
         return;
 
