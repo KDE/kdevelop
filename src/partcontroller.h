@@ -66,17 +66,17 @@ public:
 
   KURL::List openURLs();
 
-  bool querySaveFiles();
+  bool querySaveDocuments();
 
-  bool saveAllFiles();
-  bool saveFiles( const KURL::List & list);
+  bool saveAllDocuments();
+  bool saveDocuments( const KURL::List & list);
   bool saveFile( const KURL & url, bool force = false );
 
-  void revertAllFiles();
-  void revertFiles( const KURL::List & list );
+  void revertAllDocuments();
+  void revertDocuments( const KURL::List & list );
 
-  bool closeAllFiles();
-  bool closeFiles( const KURL::List & list );
+  bool closeAllDocuments();
+  bool closeDocuments( const KURL::List & list );
 
   DocumentState documentState( KURL const & );
 
@@ -108,8 +108,8 @@ private slots:
 
   void slotWaitForFactoryHack();
 
-  void slotSaveAllFiles();
-  void slotRevertAllFiles();
+  void slotSaveAllDocuments();
+  void slotRevertAllDocuments();
 
   void slotOpenFile();
   void slotOpenRecent(const KURL&);
@@ -140,8 +140,8 @@ private:
 
   void setupActions();
 
-  bool closeFilesDialog( KURL::List const & ignoreList );
-  bool saveFilesDialog( KURL::List const & ignoreList );
+  bool closeDocumentsDialog( KURL::List const & ignoreList );
+  bool saveDocumentsDialog( KURL::List const & ignoreList );
 
   void doEmitState( KURL const & );
 
@@ -163,7 +163,7 @@ private:
 
   static PartController *s_instance;
 
-  KAction *m_closeWindowAction, *m_saveAllFilesAction, *m_revertAllFilesAction;
+  KAction *m_closeWindowAction, *m_saveAllDocumentsAction, *m_revertAllDocumentsAction;
   KAction *m_closeAllWindowsAction, *m_closeOtherWindowsAction, *m_switchToAction;
   KRecentFilesAction *m_openRecentAction;
   QString m_presetEncoding;

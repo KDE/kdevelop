@@ -117,21 +117,21 @@ void PartController::setupActions()
   m_openRecentAction = KStdAction::openRecent( this, SLOT(slotOpenRecent(const KURL&) ),
     ac, "file_open_recent" );
   m_openRecentAction->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(m_openRecentAction->text())).arg(i18n("Opens recently opened file.")));
-  m_openRecentAction->loadEntries( kapp->config(), "RecentFiles" );
+  m_openRecentAction->loadEntries( kapp->config(), "RecentDocuments" );
 
-  m_saveAllFilesAction = new KAction(i18n("Save Al&l"), 0,
-    this, SLOT(slotSaveAllFiles()),
+  m_saveAllDocumentsAction = new KAction(i18n("Save Al&l"), 0,
+    this, SLOT(slotSaveAllDocuments()),
     ac, "file_save_all");
-  m_saveAllFilesAction->setToolTip( i18n("Save all modified files") );
-  m_saveAllFilesAction->setWhatsThis(i18n("<b>Save all</b><p>Saves all modified files."));
-  m_saveAllFilesAction->setEnabled(false);
+  m_saveAllDocumentsAction->setToolTip( i18n("Save all modified files") );
+  m_saveAllDocumentsAction->setWhatsThis(i18n("<b>Save all</b><p>Saves all modified files."));
+  m_saveAllDocumentsAction->setEnabled(false);
 
-  m_revertAllFilesAction = new KAction(i18n("Rever&t All"), 0,
-    this, SLOT(slotRevertAllFiles()),
+  m_revertAllDocumentsAction = new KAction(i18n("Rever&t All"), 0,
+    this, SLOT(slotRevertAllDocuments()),
     ac, "file_revert_all");
-  m_revertAllFilesAction->setToolTip(i18n("Revert all changes"));
-  m_revertAllFilesAction->setWhatsThis(i18n("<b>Revert all</b><p>Reverts all changes in opened files. Prompts to save changes so the reversion can be canceled for each modified file."));
-  m_revertAllFilesAction->setEnabled(false);
+  m_revertAllDocumentsAction->setToolTip(i18n("Revert all changes"));
+  m_revertAllDocumentsAction->setWhatsThis(i18n("<b>Revert all</b><p>Reverts all changes in opened files. Prompts to save changes so the reversion can be canceled for each modified file."));
+  m_revertAllDocumentsAction->setEnabled(false);
 
   m_closeWindowAction = KStdAction::close(
     this, SLOT(slotCloseWindow()),
@@ -372,7 +372,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
             m_openNextAsText = false;
 
             m_openRecentAction->addURL( url );
-            m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
+            m_openRecentAction->saveEntries( kapp->config(), "RecentDocuments" );
 
             return;
         }
@@ -428,7 +428,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
             }
 
             m_openRecentAction->addURL( url );
-            m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
+            m_openRecentAction->saveEntries( kapp->config(), "RecentDocuments" );
         }
     }
     else
@@ -754,8 +754,8 @@ void PartController::updateMenuItems()
       hasReadOnlyParts = true;
   }
 
-  m_saveAllFilesAction->setEnabled(hasWriteParts);
-  m_revertAllFilesAction->setEnabled(hasWriteParts);
+  m_saveAllDocumentsAction->setEnabled(hasWriteParts);
+  m_revertAllDocumentsAction->setEnabled(hasWriteParts);
   m_closeWindowAction->setEnabled(hasReadOnlyParts);
   m_closeAllWindowsAction->setEnabled(hasReadOnlyParts);
   m_closeOtherWindowsAction->setEnabled(hasReadOnlyParts);
@@ -763,9 +763,9 @@ void PartController::updateMenuItems()
   m_backAction->setEnabled( !m_backHistory.isEmpty() );
 }
 
-void PartController::slotRevertAllFiles()
+void PartController::slotRevertAllDocuments()
 {
-    revertAllFiles();
+    revertAllDocuments();
 }
 
 void PartController::reloadFile( const KURL & url )
@@ -802,7 +802,7 @@ void PartController::reloadFile( const KURL & url )
     }
 }
 
-void PartController::revertFiles( const KURL::List & list  )
+void PartController::revertDocuments( const KURL::List & list  )
 {
     KURL::List::ConstIterator it = list.begin();
     while ( it != list.end() )
@@ -812,9 +812,9 @@ void PartController::revertFiles( const KURL::List & list  )
     }
 }
 
-void PartController::revertAllFiles()
+void PartController::revertAllDocuments()
 {
-    revertFiles( openURLs() );
+    revertDocuments( openURLs() );
 }
 
 void PartController::slotCloseWindow()
@@ -824,7 +824,7 @@ void PartController::slotCloseWindow()
 
 KURL::List PartController::modifiedDocuments()
 {
-    KURL::List modFiles;
+    KURL::List modDocuments;
 
     Q3PtrListIterator<KParts::Part> it( *parts() );
     while( it.current() )
@@ -832,11 +832,11 @@ KURL::List PartController::modifiedDocuments()
         KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(it.current());
         if ( rw_part && rw_part->isModified() )
         {
-            modFiles << rw_part->url();
+            modDocuments << rw_part->url();
         }
         ++it;
     }
-    return modFiles;
+    return modDocuments;
 }
 
 void PartController::slotSave()
@@ -859,9 +859,9 @@ void PartController::slotReload()
     }
 }
 
-void PartController::slotSaveAllFiles()
+void PartController::slotSaveAllDocuments()
 {
-  saveAllFiles();
+  saveAllDocuments();
 }
 
 bool PartController::saveFile( const KURL & url, bool force )
@@ -918,12 +918,12 @@ bool PartController::saveFile( const KURL & url, bool force )
     return true;
 }
 
-bool PartController::saveAllFiles()
+bool PartController::saveAllDocuments()
 {
-    return saveFiles( openURLs() );
+    return saveDocuments( openURLs() );
 }
 
-bool PartController::saveFiles( KURL::List const & filelist )
+bool PartController::saveDocuments( KURL::List const & filelist )
 {
     KURL::List::ConstIterator it = filelist.begin();
     while ( it != filelist.end() )
@@ -935,9 +935,9 @@ bool PartController::saveFiles( KURL::List const & filelist )
         return true;
 }
 
-bool PartController::querySaveFiles()
+bool PartController::querySaveDocuments()
 {
-    return saveFilesDialog( KURL::List() );
+    return saveDocumentsDialog( KURL::List() );
 }
 
 void PartController::clearModified( KURL::List const & filelist )
@@ -954,7 +954,7 @@ void PartController::clearModified( KURL::List const & filelist )
     }
 }
 
-bool PartController::saveFilesDialog( KURL::List const & ignoreList )
+bool PartController::saveDocumentsDialog( KURL::List const & ignoreList )
 {
     KURL::List modList = modifiedDocuments();
 
@@ -963,7 +963,7 @@ bool PartController::saveFilesDialog( KURL::List const & ignoreList )
         KSaveSelectDialog dlg( modList, ignoreList, TopLevel::getInstance()->main() );
         if ( dlg.exec() == QDialog::Accepted )
         {
-            saveFiles( dlg.filesToSave() );
+            saveDocuments( dlg.filesToSave() );
             clearModified( dlg.filesNotToSave() );
         }
         else
@@ -974,9 +974,9 @@ bool PartController::saveFilesDialog( KURL::List const & ignoreList )
     return true;
 }
 
-bool PartController::closeFilesDialog( KURL::List const & ignoreList )
+bool PartController::closeDocumentsDialog( KURL::List const & ignoreList )
 {
-    if ( !saveFilesDialog( ignoreList ) ) return false;
+    if ( !saveDocumentsDialog( ignoreList ) ) return false;
 
     Q3PtrList<KParts::Part> partList( *parts() );
     Q3PtrListIterator<KParts::Part> it( partList );
@@ -992,7 +992,7 @@ bool PartController::closeFilesDialog( KURL::List const & ignoreList )
     return true;
 }
 
-bool PartController::closeFiles( const KURL::List & list )
+bool PartController::closeDocuments( const KURL::List & list )
 {
     KURL::List::ConstIterator it = list.begin();
     while ( it != list.end() )
@@ -1011,14 +1011,14 @@ bool PartController::closeFile( const KURL & url )
     return closePart( partForURL( url ) );
 }
 
-bool PartController::closeAllFiles()
+bool PartController::closeAllDocuments()
 {
-    return closeFilesDialog( KURL::List() );
+    return closeDocumentsDialog( KURL::List() );
 }
 
 void PartController::slotCloseAllWindows()
 {
-    closeAllFiles();
+    closeAllDocuments();
 }
 
 bool PartController::closeAllOthers( const KURL & url )
@@ -1026,7 +1026,7 @@ bool PartController::closeAllOthers( const KURL & url )
     KURL::List ignoreList;
     ignoreList.append( url );
 
-    return closeFilesDialog( ignoreList );
+    return closeDocumentsDialog( ignoreList );
 }
 
 
@@ -1061,7 +1061,7 @@ bool PartController::readyToClose()
 {
     blockSignals( true );
 
-    closeAllFiles(); // this should never return false, as the files are already saved
+    closeAllDocuments(); // this should never return false, as the files are already saved
 
     return true;
 }
@@ -1522,7 +1522,7 @@ void PartController::openEmptyTextDocument()
         EditorProxy::getInstance()->setLineNumber(document, 0, 0);
 
 //        m_openRecentAction->addURL( url );
-//        m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
+//        m_openRecentAction->saveEntries( kapp->config(), "RecentDocuments" );
     }
 }
 

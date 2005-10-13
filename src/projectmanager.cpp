@@ -123,14 +123,14 @@ void ProjectManager::createActions( KActionCollection* ac )
 
 void ProjectManager::slotOpenProject()
 {
-	KConfig *config = kapp->config();
-	config->setGroup("General Options");
-	QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
+    KConfig *config = kapp->config();
+    config->setGroup("General Options");
+    QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
 
   KURL url = KFileDialog::getOpenURL(defaultProjectsDir,
-		i18n("*.kdevelop|KDevelop 3 Project Files\n"
-		     "*.kdevprj|KDevelop 2 Project Files"),
-		TopLevel::getInstance()->main(), i18n("Open Project") );
+        i18n("*.kdevelop|KDevelop 3 Project Files\n"
+             "*.kdevprj|KDevelop 2 Project Files"),
+        TopLevel::getInstance()->main(), i18n("Open Project") );
 
   if( url.isEmpty() )
       return;
@@ -143,11 +143,11 @@ void ProjectManager::slotOpenProject()
 
 void ProjectManager::slotProjectOptions()
 {
-	KDialogBase dlg(KDialogBase::IconList, i18n("Project Options"),
+    KDialogBase dlg(KDialogBase::IconList, i18n("Project Options"),
                   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, TopLevel::getInstance()->main(),
                   "project options dialog");
 
-	KVBox *box = dlg.addVBoxPage( i18n("General"), i18n("General"), BarIcon( "kdevelop", KIcon::SizeMedium ) );
+    KVBox *box = dlg.addVBoxPage( i18n("General"), i18n("General"), BarIcon( "kdevelop", KIcon::SizeMedium ) );
     GeneralInfoWidget *g = new GeneralInfoWidget(*API::getInstance()->projectDom(), box, "general informations widget");
     connect (&dlg, SIGNAL(okClicked()), g, SLOT(accept()));
 
@@ -220,10 +220,10 @@ bool ProjectManager::loadProject(const KURL &url)
 
   if( projectLoaded() && !closeProject() )
   {
-	m_openRecentProjectAction->setCurrentItem( -1 );
-	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
-	kapp->restoreOverrideCursor();
-	return false;
+    m_openRecentProjectAction->setCurrentItem( -1 );
+    TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
+    kapp->restoreOverrideCursor();
+    return false;
   }
 
   m_info = new ProjectInfo;
@@ -242,8 +242,8 @@ void ProjectManager::slotLoadProject( )
     m_openRecentProjectAction->removeURL(m_info->m_projectURL);
     delete m_info; m_info = 0;
     saveSettings();
-	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
-	kapp->restoreOverrideCursor();
+    TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
+    kapp->restoreOverrideCursor();
     return;
   }
 
@@ -251,16 +251,16 @@ void ProjectManager::slotLoadProject( )
 
   if( !loadLanguageSupport(m_info->m_language) ) {
     delete m_info; m_info = 0;
-	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
-	kapp->restoreOverrideCursor();
+    TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
+    kapp->restoreOverrideCursor();
     return;
   }
 
   if( !loadProjectPart() ) {
     unloadLanguageSupport();
     delete m_info; m_info = 0;
-	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
-	kapp->restoreOverrideCursor();
+    TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
+    kapp->restoreOverrideCursor();
     return;
   }
 
@@ -271,14 +271,14 @@ void ProjectManager::slotLoadProject( )
   loadLocalParts();
 
   // shall we try to load a session file from network?? Probably not.
-	if (m_info->m_projectURL.isLocalFile())
-	{
-		// first restore the project session stored in a .kdevses file
-		if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() ))
-		{
-			kdWarning() << i18n("error during restoring of the KDevelop session !") << endl;
-		}
-	}
+    if (m_info->m_projectURL.isLocalFile())
+    {
+        // first restore the project session stored in a .kdevses file
+        if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() ))
+        {
+            kdWarning() << i18n("error during restoring of the KDevelop session !") << endl;
+        }
+    }
 
   m_openRecentProjectAction->addURL(projectFile());
 
@@ -302,12 +302,12 @@ bool ProjectManager::closeProject( bool exiting )
     return true;
 
   // save the session if it is a local file
-	if (m_info->m_projectURL.isLocalFile())
-	{
-		m_pProjectSession->saveToFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() );
-	}
+    if (m_info->m_projectURL.isLocalFile())
+    {
+        m_pProjectSession->saveToFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() );
+    }
 
-  if ( !PartController::getInstance()->querySaveFiles() )
+  if ( !PartController::getInstance()->querySaveDocuments() )
     return false;
 
   Core::getInstance()->doEmitProjectClosed();
@@ -559,12 +559,12 @@ void ProjectManager::unloadLanguageSupport()
 
 void ProjectManager::loadLocalParts()
 {
-	// Make sure to refresh load/ignore lists
-	getGeneralInfo();
+    // Make sure to refresh load/ignore lists
+    getGeneralInfo();
 
-	PluginController::getInstance()->unloadPlugins( m_info->m_ignoreParts );
-	PluginController::getInstance()->loadProjectPlugins( m_info->m_ignoreParts );
-	PluginController::getInstance()->loadGlobalPlugins( m_info->m_ignoreParts );
+    PluginController::getInstance()->unloadPlugins( m_info->m_ignoreParts );
+    PluginController::getInstance()->loadProjectPlugins( m_info->m_ignoreParts );
+    PluginController::getInstance()->loadGlobalPlugins( m_info->m_ignoreParts );
 }
 
 KURL ProjectManager::projectFile() const
