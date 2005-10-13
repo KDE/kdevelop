@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #include <kdebug.h>
 #include <dcopclient.h>
@@ -28,9 +28,9 @@
 KDevPartControllerIface::KDevPartControllerIface(KDevPartController *pc)
   : QObject(pc), DCOPObject("KDevPartController"), m_controller(pc)
 {
-  connect(pc, SIGNAL(loadedFile(const KURL &)), this, SLOT(forwardLoadedFile(const KURL &)));
-  connect(pc, SIGNAL(savedFile(const KURL &)), this, SLOT(forwardSavedFile(const KURL &)));
-  connect(pc, SIGNAL(closedFile(const KURL &)), this, SLOT(forwardClosedFile(const KURL &)));  
+  connect(pc, SIGNAL(loadedDocument(const KURL &)), this, SLOT(forwardLoadedDocument(const KURL &)));
+  connect(pc, SIGNAL(savedDocument(const KURL &)), this, SLOT(forwardSavedDocument(const KURL &)));
+  connect(pc, SIGNAL(documentClosed(const KURL &)), this, SLOT(forwardClosedDocument(const KURL &)));
 }
 
 
@@ -63,22 +63,22 @@ void KDevPartControllerIface::revertAllFiles()
 }
 
 
-void KDevPartControllerIface::forwardLoadedFile(const KURL &fileName)
+void KDevPartControllerIface::forwardLoadedDocument(const KURL &url)
 {
-  kdDebug(9000) << "dcop emitting loadedFile " << fileName << endl;
+  kdDebug(9000) << "dcop emitting loadedDocument " << url << endl;
   emitDCOPSignal("projectOpened()", QByteArray());
 }
 
 
-void KDevPartControllerIface::forwardSavedFile(const KURL &fileName)
+void KDevPartControllerIface::forwardSavedDocument(const KURL &url)
 {
-  kdDebug(9000) << "dcop emitting savedFile " << fileName << endl;
+  kdDebug(9000) << "dcop emitting savedDocument " << url << endl;
   emitDCOPSignal("projectClosed()", QByteArray());
 }
 
-void KDevPartControllerIface::forwardClosedFile(const KURL &fileName)
+void KDevPartControllerIface::forwardClosedDocument(const KURL &url)
 {
-  kdDebug(9000) << "dcop emitting closedFile " << fileName << endl;
+  kdDebug(9000) << "dcop emitting closedDocument " << url << endl;
   emitDCOPSignal("projectClosed()", QByteArray());
 }
 

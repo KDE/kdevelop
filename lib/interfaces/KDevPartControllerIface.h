@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef _KDEVPARTCONTROLLERIFACE_H_
 #define _KDEVPARTCONTROLLERIFACE_H_
@@ -29,9 +29,9 @@ class KDevPartControllerIface : public QObject, public DCOPObject
 {
   Q_OBJECT
   K_DCOP
-    
+
 public:
-    
+
   KDevPartControllerIface(KDevPartController *pc);
   ~KDevPartControllerIface();
 
@@ -45,18 +45,18 @@ k_dcop:
   void revertAllFiles();
 
   bool closeAllFiles();
-  uint documentState( const KURL & url );
+  uint documentState( const KURL &url );
 
 private slots:
-	
-  void forwardLoadedFile(const KURL &fileName);
-  void forwardSavedFile(const KURL &fileName);
-  void forwardClosedFile(const KURL &fileName);  
+
+  void forwardLoadedDocument(const KURL &url);
+  void forwardSavedDocument(const KURL &url);
+  void forwardClosedDocument(const KURL &url);
 
 private:
-  
+
   KDevPartController *m_controller;
-    
+
 };
 
 

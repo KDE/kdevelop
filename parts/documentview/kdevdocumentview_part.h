@@ -52,13 +52,13 @@ signals:
     void refresh();
 
 private slots:
-    void saveFile( const KURL &url );
-    void loadFile( const KURL &url );
-    void closeFile( const KURL &url );
-    void dirtyFile( const KURL &url );
-    void saveAsFile( const KURL &oldurl, const KURL &newurl );
+    void saved( const KURL &url );
+    void loaded( const KURL &url );
+    void closed( const KURL &url );
+    void externallyModified( const KURL &url );
+    void URLChanged( const KURL &oldurl, const KURL &newurl );
     void stateChanged( const KURL &url, DocumentState state );
-    void filePressed( const QModelIndex & index );
+    void pressed( const QModelIndex & index );
 
 private:
     KDevDocumentModel *m_documentModel;

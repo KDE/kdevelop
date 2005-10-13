@@ -552,7 +552,7 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
   if ( !ro_part ) return;
 
-  emit loadedFile( ro_part->url() );
+  emit documentLoaded( ro_part->url() );
 
     if ( dynamic_cast<KTextEditor::ModificationInterface*>(part) )
         connect( part, SIGNAL(modifiedOnDisk(KTextEditor::Document*, bool, ModifiedOnDiskReason)),
@@ -706,7 +706,7 @@ bool PartController::closePart(KParts::Part *part)
         }
         _dirtyDocuments.remove( static_cast<KParts::ReadWritePart*>( ro_part ) );
 
-        emit closedFile( url );
+        emit documentClosed( url );
 //        removeTimestamp( url );
     }
 
@@ -912,7 +912,7 @@ bool PartController::saveFile( const KURL & url, bool force )
     {
         _dirtyDocuments.remove( part );
         emit documentStateChanged( url, Clean );
-        emit savedFile( url );
+        emit documentSaved( url );
     }
 
     return true;

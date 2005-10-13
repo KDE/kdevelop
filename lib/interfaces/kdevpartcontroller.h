@@ -137,16 +137,16 @@ public:
 signals:
 
     /**Emitted when a document has been saved.*/
-    void savedFile(const KURL &);
+    void documentSaved(const KURL &);
 
     /**Emitted when a document has been loaded.*/
-    void loadedFile(const KURL &);
+    void documentLoaded(const KURL &);
 
     /**Emitted when a document has been closed.*/
-    void closedFile(const KURL &);
+    void documentClosed(const KURL &);
 
     /**Emitted when a file has been modified outside of KDevelop.*/
-    void fileDirty(const KURL &);
+    void documentExternallyModifed( const KURL & );
 
     /**This is typically emitted when an editorpart does "save as"
     which will change the document's URL from 'old' to 'new'*/

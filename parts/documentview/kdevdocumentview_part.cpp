@@ -64,12 +64,12 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent, const char *name, c
 
     mainWindow() ->embedSelectView( m_documentView, i18n( "Documents" ), i18n( "Documents" ) );
 
-    connect( m_documentView, SIGNAL( pressed( QModelIndex ) ), this, SLOT( filePressed( QModelIndex ) ) );
-    connect( partController(), SIGNAL( savedFile( const KURL & ) ), this, SLOT( saveFile( const KURL & ) ) );
-    connect( partController(), SIGNAL( loadedFile( const KURL & ) ), this, SLOT( loadFile( const KURL & ) ) );
-    connect( partController(), SIGNAL( closedFile( const KURL & ) ), this, SLOT( closeFile( const KURL & ) ) );
-    connect( partController(), SIGNAL( fileDirty( const KURL & ) ), this, SLOT( dirtyFile( const KURL & ) ) );
-    connect( partController(), SIGNAL( documentURLChanged( const KURL &, const KURL & ) ), this, SLOT( saveAsFile( const KURL &, const KURL & ) ) );
+    connect( m_documentView, SIGNAL( pressed( QModelIndex ) ), this, SLOT( pressed( QModelIndex ) ) );
+    connect( partController(), SIGNAL( documentSaved( const KURL & ) ), this, SLOT( saved( const KURL & ) ) );
+    connect( partController(), SIGNAL( documentLoaded( const KURL & ) ), this, SLOT( loaded( const KURL & ) ) );
+    connect( partController(), SIGNAL( documentClosed( const KURL & ) ), this, SLOT( closed( const KURL & ) ) );
+    connect( partController(), SIGNAL( documentExternallyModified( const KURL & ) ), this, SLOT( externallyModified( const KURL & ) ) );
+    connect( partController(), SIGNAL( documentURLChanged( const KURL &, const KURL & ) ), this, SLOT( URLChanged( const KURL &, const KURL & ) ) );
     connect( partController(), SIGNAL( documentStateChanged(const KURL &, DocumentState) ), this, SLOT( stateChanged( const KURL &, DocumentState ) ) );
 
     setXMLFile( "kdevdocumentview.rc" );
@@ -87,12 +87,12 @@ KDevDocumentViewPart::~KDevDocumentViewPart()
 void KDevDocumentViewPart::import( RefreshPolicy /*policy*/ )
 {}
 
-void KDevDocumentViewPart::saveFile( const KURL & /*url*/ )
+void KDevDocumentViewPart::saved( const KURL & /*url*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::loadFile( const KURL &url )
+void KDevDocumentViewPart::loaded( const KURL &url )
 {
     QString mimeType = KMimeType::findByURL( url ) ->comment();
     KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( mimeType );
@@ -110,17 +110,17 @@ void KDevDocumentViewPart::loadFile( const KURL &url )
     }
 }
 
-void KDevDocumentViewPart::closeFile( const KURL & /*url*/ )
+void KDevDocumentViewPart::closed( const KURL & /*url*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::dirtyFile( const KURL & /*url*/ )
+void KDevDocumentViewPart::externallyModified( const KURL & /*url*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::saveAsFile( const KURL & /*oldurl*/, const KURL & /*newurl*/ )
+void KDevDocumentViewPart::URLChanged( const KURL & /*oldurl*/, const KURL & /*newurl*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
@@ -130,7 +130,7 @@ void KDevDocumentViewPart::stateChanged( const KURL & /*url*/, DocumentState /*s
     kdDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::filePressed( const QModelIndex & index )
+void KDevDocumentViewPart::pressed( const QModelIndex & index )
 {
     if ( index.parent().isValid() )
         partController() ->editDocument(
