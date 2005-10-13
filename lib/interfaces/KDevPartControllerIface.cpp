@@ -51,15 +51,15 @@ void KDevPartControllerIface::showDocument(const QString &url, bool newWin)
 }
 
 
-void KDevPartControllerIface::saveAllFiles()
+void KDevPartControllerIface::saveAllDocuments()
 {
-  m_controller->saveAllFiles();
+  m_controller->saveAllDocuments();
 }
 
 
-void KDevPartControllerIface::revertAllFiles()
+void KDevPartControllerIface::revertAllDocuments()
 {
-  m_controller->revertAllFiles();
+  m_controller->revertAllDocuments();
 }
 
 
@@ -82,9 +82,9 @@ void KDevPartControllerIface::forwardClosedDocument(const KURL &url)
   emitDCOPSignal("projectClosed()", QByteArray());
 }
 
-bool KDevPartControllerIface::closeAllFiles( )
+bool KDevPartControllerIface::closeAllDocuments( )
 {
-  return m_controller->closeAllFiles();
+  return m_controller->closeAllDocuments();
 }
 
 uint KDevPartControllerIface::documentState( const KURL & url )

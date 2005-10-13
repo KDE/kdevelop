@@ -97,28 +97,28 @@ public:
     /**@return The list of open documents*/
     virtual KURL::List openURLs() = 0;
 
-    /**Saves all open files.
+    /**Saves all open documents.
      @return false if it was cancelled by the user, true otherwise */
-    virtual bool saveAllFiles() = 0;
+    virtual bool saveAllDocuments() = 0;
 
-    /**Saves a list of files.
+    /**Saves a list of documents.
     @param list The list of URLs to save.
     @return false if it was cancelled by the user, true otherwise */
-    virtual bool saveFiles(const KURL::List &list) = 0;
+    virtual bool saveDocuments(const KURL::List &list) = 0;
 
-    /**Reloads all open files.*/
-    virtual void revertAllFiles() = 0;
+    /**Reloads all open documents.*/
+    virtual void revertAllDocuments() = 0;
 
-    /**Reloads a list of files.
+    /**Reloads a list of documents.
     * @param list The list of URLs to reload.*/
-    virtual void revertFiles(const KURL::List &list) = 0;
+    virtual void revertDocuments(const KURL::List &list) = 0;
 
-    /**Closes all open files.*/
-    virtual bool closeAllFiles() = 0;
+    /**Closes all open documents.*/
+    virtual bool closeAllDocuments() = 0;
 
-    /**Closes a list of files.
-    @param list The list of URLs for the files to close.*/
-    virtual bool closeFiles(const KURL::List &list) = 0;
+    /**Closes a list of documents.
+    @param list The list of URLs for the documents to close.*/
+    virtual bool closeDocuments(const KURL::List &list) = 0;
 
     /**Closes this part (closes the window/tab for this part).
     @param part The part to close.
@@ -145,7 +145,7 @@ signals:
     /**Emitted when a document has been closed.*/
     void documentClosed(const KURL &);
 
-    /**Emitted when a file has been modified outside of KDevelop.*/
+    /**Emitted when a document has been modified outside of KDevelop.*/
     void documentExternallyModifed( const KURL & );
 
     /**This is typically emitted when an editorpart does "save as"

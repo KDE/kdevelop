@@ -41,10 +41,10 @@ k_dcop:
   void editDocument(const QString &url, int lineNum);
   void showDocument(const QString &url, bool newWin);
 
-  void saveAllFiles();
-  void revertAllFiles();
+  void saveAllDocuments();
+  void revertAllDocuments();
 
-  bool closeAllFiles();
+  bool closeAllDocuments();
   uint documentState( const KURL &url );
 
 private slots:
