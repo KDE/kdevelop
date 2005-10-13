@@ -107,11 +107,11 @@ public:
     virtual bool saveDocuments(const KURL::List &list) = 0;
 
     /**Reloads all open documents.*/
-    virtual void revertAllDocuments() = 0;
+    virtual void reloadAllDocuments() = 0;
 
     /**Reloads a list of documents.
     * @param list The list of URLs to reload.*/
-    virtual void revertDocuments(const KURL::List &list) = 0;
+    virtual void reloadDocuments(const KURL::List &list) = 0;
 
     /**Closes all open documents.*/
     virtual bool closeAllDocuments() = 0;
@@ -146,7 +146,7 @@ signals:
     void documentClosed(const KURL &);
 
     /**Emitted when a document has been modified outside of KDevelop.*/
-    void documentExternallyModifed( const KURL & );
+    void documentExternallyModified( const KURL & );
 
     /**This is typically emitted when an editorpart does "save as"
     which will change the document's URL from 'old' to 'new'*/

@@ -386,13 +386,13 @@ void SimpleMainWindow::tabContextActivated(int id)
     switch(id)
     {
         case 0:
-            PartController::getInstance()->closeFile(m_currentTabURL);
+            PartController::getInstance()->closeDocument(m_currentTabURL);
             break;
         case 1:
-            PartController::getInstance()->saveFile(m_currentTabURL);
+            PartController::getInstance()->saveDocument(m_currentTabURL);
             break;
         case 2:
-            PartController::getInstance()->reloadFile(m_currentTabURL);
+            PartController::getInstance()->reloadDocument(m_currentTabURL);
             break;
         case 3:
             PartController::getInstance()->showDocument(m_currentTabURL, true);

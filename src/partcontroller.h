@@ -70,10 +70,10 @@ public:
 
   bool saveAllDocuments();
   bool saveDocuments( const KURL::List & list);
-  bool saveFile( const KURL & url, bool force = false );
+  bool saveDocument( const KURL & url, bool force = false );
 
-  void revertAllDocuments();
-  void revertDocuments( const KURL::List & list );
+  void reloadAllDocuments();
+  void reloadDocuments( const KURL::List & list );
 
   bool closeAllDocuments();
   bool closeDocuments( const KURL::List & list );
@@ -84,9 +84,9 @@ public:
 
   bool readyToClose();
 
-  bool closeFile( const KURL & );
+  bool closeDocument( const KURL & );
   bool closeAllOthers( const KURL & );
-  void reloadFile( const KURL & url );
+  void reloadDocument( const KURL & url );
 
   void openEmptyTextDocument();
 
@@ -111,7 +111,7 @@ private slots:
   void slotSaveAllDocuments();
   void slotRevertAllDocuments();
 
-  void slotOpenFile();
+  void slotOpenDocument();
   void slotOpenRecent(const KURL&);
 
   void slotBack();

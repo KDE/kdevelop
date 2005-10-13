@@ -42,7 +42,7 @@ k_dcop:
   void showDocument(const QString &url, bool newWin);
 
   void saveAllDocuments();
-  void revertAllDocuments();
+  void reloadAllDocuments();
 
   bool closeAllDocuments();
   uint documentState( const KURL &url );

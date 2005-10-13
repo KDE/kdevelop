@@ -109,7 +109,7 @@ void PartController::setupActions()
 {
   KActionCollection *ac = TopLevel::getInstance()->main()->actionCollection();
 
-  KAction* newAction = KStdAction::open(this, SLOT(slotOpenFile()),
+  KAction* newAction = KStdAction::open(this, SLOT(slotOpenDocument()),
     ac, "file_open");
   newAction->setToolTip( i18n("Open file") );
   newAction->setWhatsThis( i18n("<b>Open file</b><p>Opens an existing file without adding it to the project.</p>") );
@@ -765,10 +765,10 @@ void PartController::updateMenuItems()
 
 void PartController::slotRevertAllDocuments()
 {
-    revertAllDocuments();
+    reloadAllDocuments();
 }
 
-void PartController::reloadFile( const KURL & url )
+void PartController::reloadDocument( const KURL & url )
 {
     KParts::ReadWritePart * part = dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) );
     if ( part )
@@ -777,7 +777,7 @@ void PartController::reloadFile( const KURL & url )
         {
             if ( KMessageBox::warningYesNo( TopLevel::getInstance()->main(),
                 i18n( "The file \"%1\" is modified in memory. Are you sure you want to reload it? (Local changes will be lost.)" ).arg( url.path() ),
-                i18n( "File is Modified" ) ) == KMessageBox::Yes )
+                i18n( "Document is Modified" ) ) == KMessageBox::Yes )
             {
                 part->setModified( false );
             }
@@ -802,19 +802,19 @@ void PartController::reloadFile( const KURL & url )
     }
 }
 
-void PartController::revertDocuments( const KURL::List & list  )
+void PartController::reloadDocuments( const KURL::List & list  )
 {
     KURL::List::ConstIterator it = list.begin();
     while ( it != list.end() )
     {
-        reloadFile( *it );
+        reloadDocument( *it );
         ++it;
     }
 }
 
-void PartController::revertAllDocuments()
+void PartController::reloadAllDocuments()
 {
-    revertDocuments( openURLs() );
+    reloadDocuments( openURLs() );
 }
 
 void PartController::slotCloseWindow()
@@ -845,7 +845,7 @@ void PartController::slotSave()
 
     if ( KParts::ReadWritePart * part = dynamic_cast<KParts::ReadWritePart*>( activePart() ) )
     {
-        saveFile( part->url() );
+        saveDocument( part->url() );
     }
 }
 
@@ -855,7 +855,7 @@ void PartController::slotReload()
 
     if ( KParts::ReadWritePart * part = dynamic_cast<KParts::ReadWritePart*>( activePart() ) )
     {
-        reloadFile( part->url() );
+        reloadDocument( part->url() );
     }
 }
 
@@ -864,7 +864,7 @@ void PartController::slotSaveAllDocuments()
   saveAllDocuments();
 }
 
-bool PartController::saveFile( const KURL & url, bool force )
+bool PartController::saveDocument( const KURL & url, bool force )
 {
     KParts::ReadWritePart * part = dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) );
     if ( !part ) return true;
@@ -888,7 +888,7 @@ bool PartController::saveFile( const KURL & url, bool force )
             {
                 int code = KMessageBox::warningYesNoCancel( TopLevel::getInstance()->main(),
                     i18n("The file \"%1\" is modified on disk.\n\nAre you sure you want to overwrite it? (External changes will be lost.)").arg( url.path() ),
-                    i18n("File Externally Modified") );
+                    i18n("Document Externally Modified") );
                 if ( code == KMessageBox::Yes )
                 {
                     kdDebug(9000) << "Dirty save!!" << endl;
@@ -928,7 +928,7 @@ bool PartController::saveDocuments( KURL::List const & filelist )
     KURL::List::ConstIterator it = filelist.begin();
     while ( it != filelist.end() )
     {
-                if (saveFile( *it )==false)
+                if (saveDocument( *it )==false)
                    return false; //user cancelled
         ++it;
     }
@@ -1006,7 +1006,7 @@ bool PartController::closeDocuments( const KURL::List & list )
     return true;
 }
 
-bool PartController::closeFile( const KURL & url )
+bool PartController::closeDocument( const KURL & url )
 {
     return closePart( partForURL( url ) );
 }
@@ -1038,7 +1038,7 @@ void PartController::slotCloseOtherWindows()
     }
 }
 
-void PartController::slotOpenFile()
+void PartController::slotOpenDocument()
 {
     KEncodingFileDialog::Result result = KEncodingFileDialog::getOpenURLsAndEncoding(QString::null, QString::null,
         QString::null, TopLevel::getInstance()->main(), QString::null);
@@ -1222,7 +1222,7 @@ bool PartController::reactToDirty( KURL const & url, unsigned char reason )
         KMessageBox::sorry( TopLevel::getInstance()->main(),
             i18n("Warning: The file \"%1\" has been deleted on disk.\n\n"
                     "If this was not your intention, make sure to save this file now.").arg( url.path() ),
-            i18n("File Deleted") );
+            i18n("Document Deleted") );
         return false;
     }
 
@@ -1230,14 +1230,14 @@ bool PartController::reactToDirty( KURL const & url, unsigned char reason )
     {
         if ( KMessageBox::warningYesNo( TopLevel::getInstance()->main(),
                i18n("The file \"%1\" has changed on disk.\n\nDo you want to reload it?").arg( url.path() ),
-            i18n("File Changed") ) == KMessageBox::No )
+            i18n("Document Changed") ) == KMessageBox::No )
         {
             return false;
         }
     }
 
     // here we either answered yes above or are in autoreload mode
-    reloadFile( url );
+    reloadDocument( url );
 
     return true;
 }

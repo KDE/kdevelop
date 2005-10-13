@@ -57,9 +57,9 @@ void KDevPartControllerIface::saveAllDocuments()
 }
 
 
-void KDevPartControllerIface::revertAllDocuments()
+void KDevPartControllerIface::reloadAllDocuments()
 {
-  m_controller->revertAllDocuments();
+  m_controller->reloadAllDocuments();
 }
 
 
