@@ -515,17 +515,8 @@ void MakeWidget::searchItem( int parag )
     {
         // open the file
         kdDebug( 9004 ) << "Opening file: " << guessFileName( item->fileName, parag ) << endl;
-        if ( item->m_cursor )
-        {
-            KTextEditor::Cursor c = item->m_cursor->cursorPosition();
-            int line = c.line(), col = c.column();
-            kdDebug() << "Cursor new position: " << col << endl;
-            m_part->partController() ->editDocument( KURL( guessFileName( item->fileName, parag ) ), line, col );
-        }
-        else
-        {
-            m_part->partController() ->editDocument( KURL( guessFileName( item->fileName, parag ) ), item->lineNum );
-        }
+        m_part->partController() ->editDocument( KURL( guessFileName( item->fileName, parag ) ), item->cursor().line(), item->cursor().column() );
+
         m_part->mainWindow() ->statusBar() ->message( item->m_error, 10000 );
         m_part->mainWindow() ->lowerView( this );
         m_lastErrorSelected = parag;
@@ -661,7 +652,7 @@ void MakeWidget::insertItem( MakeItem* new_item )
 {
     ErrorItem * e = dynamic_cast<ErrorItem*>( new_item );
     if ( e )
-        createCursor( e, 0L );
+        checkIfDocumentLoaded(e);
 
     displayPendingItem();
     m_pendingItem = new_item;
@@ -680,80 +671,39 @@ void MakeWidget::insertItem( MakeItem* new_item )
 
 void MakeWidget::slotDocumentOpened( const KURL & filename )
 {
-    KParts::Part * part = m_part->partController() ->partForURL( filename );
-    KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
+    KParts::Part* part = m_part->partController()->partForURL( filename );
+    KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>( part );
 
     if ( !doc )
     {
         kdWarning() << k_funcinfo << "Couldn't find the document that was just opened." << endl;
-        return ;
+        return;
     }
 
-    connect( part, SIGNAL( destroyed( QObject* ) ), this, SLOT( slotDocumentClosed( QObject* ) ) );
+    connect( doc, SIGNAL(aboutToClose(KTextEditor::Document*)), this, SLOT(slotDocumentAboutToClose(KTextEditor::Document*)) );
 
     for ( Q3ValueVector<MakeItem*>::iterator it = m_items.begin(); it != m_items.end(); ++it )
     {
         ErrorItem* e = dynamic_cast<ErrorItem*>( *it );
 
-        if ( !e || e->m_cursor )
+        if ( !e || e->document() )
             continue;
 
         if ( filename.path().endsWith( e->fileName ) )
-            createCursor( e, doc );
+            checkIfDocumentLoaded(e);
     }
 }
 
-void MakeWidget::createCursor( ErrorItem* e, KTextEditor::Document* doc )
+void MakeWidget::slotDocumentAboutToClose(KTextEditor::Document* doc)
 {
-    // Disabled for now - comment out to test. You need an up-to-date cvs head katepart to avoid mem leaks
-    return ;
-
-    // try to get a KTextEditor::Cursor, so that we can retain position in
-    // a document even when it is edited
-    if ( !doc )
-        doc = dynamic_cast<KTextEditor::Document*>( m_part->partController() ->partForURL( KURL( guessFileName( e->fileName, m_paragraphs + 1 ) ) ) );
-
-#ifdef __GNUC__
-#  warning "MakeWidget::createCursor() -- port me"
-#endif
-
-#if 0  // port me
-
-    if ( doc )
+    foreach ( MakeItem* makeItem, m_items )
     {
-        KTextEditor::Document * edit = doc;
-        KTextEditor::View* cursor = view;
-        if ( cursor )
-        {
-            e->m_cursor = cursor->createCursor();
-            uint col = 0;
-            static QRegExp startOfText( "[\\S]" );
-            if ( edit )
-            {
-                int newcol = edit->textLine( e->lineNum ).find( startOfText );
-                if ( newcol != -1 )
-                    col = uint( newcol );
-            }
-            e->m_cursor->setPosition( e->lineNum, col );
-            e->m_doc = doc;
-        }
-    }
-#endif
-}
+        ErrorItem* e = dynamic_cast<ErrorItem*>( makeItem );
 
-void MakeWidget::slotDocumentClosed( QObject* doc )
-{
-    KTextEditor::Document * document = static_cast<KTextEditor::Document*>( doc );
-
-    for ( Q3ValueVector<MakeItem*>::iterator it = m_items.begin(); it != m_items.end(); ++it )
-    {
-        ErrorItem* e = dynamic_cast<ErrorItem*>( *it );
-
-        if ( !e || e->m_doc != document )
+        if ( !e || e->document() != doc )
             continue;
 
-        e->m_cursor = 0L;
-        e->m_doc = 0L;
+        e->setDocument(0L);
     }
 }
 
@@ -918,8 +868,14 @@ bool MakeWidget::scanErrorBackward( int parag )
         searchItem( it );
         return true;
     }
-    return false;
 #endif
+    return false;
+}
+
+void MakeWidget::checkIfDocumentLoaded( ErrorItem * e )
+{
+    if (KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>( m_part->partController()->partForURL( KURL( guessFileName( e->fileName, m_paragraphs + 1 ) ) )) )
+        e->setDocument(doc);
 }
 
 #include "makewidget.moc"

@@ -18,6 +18,7 @@
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/smartinterface.h>
 
 MakeItem::MakeItem()
 {
@@ -79,38 +80,23 @@ QString MakeItem::formattedText( EOutputLevel level, bool bright_bg )
 	{
 		return QString::fromUtf8("<code>")
         .append( icon() ).append("<font color=\"").append( color( bright_bg) ).append("\">")
-        .append( txt ).append("</font></code>").append( br() );
+        .append( txt ).append("</font></code>");
 	}
-}
-
-QString MakeItem::br()
-{
-    // Qt >= 3.1 doesn't need a <br>.
-#if QT_VERSION < 0x040000
-    static const QString br = QString::fromLatin1( qVersion() ).section( ".", 1, 1 ).toInt() > 0 ? "" : "<br>";
-#else
-    static const QString br;
-#endif
-    return br;
 }
 
 ErrorItem::ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line, bool isWarning, const QString& compiler )
 	: MakeItem( line )
 	, fileName(fn)
-	, lineNum(ln)
 	, m_error(tx)
-	, m_cursor(0L)
-	, m_doc(0L)
 	, m_isWarning(isWarning)
 	, m_compiler(compiler)
+	, m_cursor(new KTextEditor::Cursor(ln, 0))
+	, m_doc(0L)
 {}
 
 ErrorItem::~ErrorItem()
 {
-#warning "what?"
-#if 0 // 
-	// if (m_cursor) m_cursor->setCursorPosition(uint(-2), uint(-2));
-#endif
+	delete m_cursor;
 }
 
 bool ErrorItem::append( const QString& text )
@@ -124,6 +110,33 @@ bool ErrorItem::append( const QString& text )
 	m_error = m_error.simplifyWhiteSpace();
 	m_text = m_text.simplifyWhiteSpace();
 	return true;
+}
+
+void ErrorItem::setDocument(KTextEditor::Document* document)
+{
+	if (m_doc == document)
+		return;
+
+	m_doc = document;
+
+	if ( KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(m_doc) ) {
+		// try to get a KTextEditor::SmartCursor, so that we can retain position in
+		// a document even when it is edited
+		KTextEditor::Cursor* temp = m_cursor;
+		m_cursor = smart->newSmartCursor(*temp);
+		delete temp;
+
+		// Go to the start of the text in the line
+		static QRegExp startOfText( "[\\S]" );
+		int newColumn = m_doc->line( cursor().line() ).find( startOfText );
+		if (newColumn != -1)
+			cursor().setColumn(newColumn);
+
+	} else {
+		KTextEditor::Cursor* temp = m_cursor;
+		m_cursor = new KTextEditor::Cursor(*temp);
+		delete temp;
+	}
 }
 
 ExitStatusItem::ExitStatusItem( bool normalExit, int exitStatus )

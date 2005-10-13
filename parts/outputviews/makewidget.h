@@ -79,9 +79,10 @@ private slots:
     void slotExitedDirectory( ExitingDirectoryItem* );
     void insertItem( MakeItem* );
     void slotDocumentOpened(const KURL& filename);
-    void slotDocumentClosed(QObject* doc);
+    void slotDocumentAboutToClose(KTextEditor::Document* doc);
 
 private:
+    void checkIfDocumentLoaded(ErrorItem* e);
     void specialCheck( const QString& file, QString& fName ) const;
     virtual void keyPressEvent(QKeyEvent *e);
     void searchItem(int parag);
@@ -89,7 +90,6 @@ private:
     QString directory(int parag) const;
     bool brightBg();
     void refill();
-    void createCursor(ErrorItem* e, KTextEditor::Document* doc);
 
     bool scanErrorForward(int parag);
     bool scanErrorBackward(int parag);

@@ -14,6 +14,13 @@
 
 #include <qstring.h>
 
+namespace KTextEditor {
+  class Cursor;
+  class Document;
+}
+
+class MakeViewPart;
+
 enum EOutputLevel
 {
 	// appropriate to the ID's in the button group of settingswidget.ui
@@ -30,13 +37,13 @@ public:
 	MakeItem( const QString& text );
 	virtual ~MakeItem();
 
-  enum DisplayModes
-  {
-    DelayedDisplay = 0, // item can be displayed later
-    ImmDisplay = 1,     // item has to be displayed ASAP
-    Append = 2          // item's text can be appended (append has been overloaded)
-  };
-  virtual int displayMode() const { return ImmDisplay; }
+	enum DisplayModes
+	{
+		DelayedDisplay = 0, // item can be displayed later
+		ImmDisplay = 1,     // item has to be displayed ASAP
+		Append = 2          // item's text can be appended (append has been overloaded)
+	};
+	virtual int displayMode() const { return ImmDisplay; }
 	virtual bool append( const QString& ) { return false; }
 	virtual Type type() { return Diagnostic; }
 	virtual bool visible( EOutputLevel level ) { return level > eVeryShort; }
@@ -44,8 +51,6 @@ public:
 	virtual QString formattedText( EOutputLevel, bool bright_bg );
 	QString icon();
 	QString color( bool bright_bg );
-
-	static QString br();
 
 	QString m_text;
 };
@@ -122,8 +127,6 @@ public:
 	virtual QString text( EOutputLevel );
 };
 
-namespace KTextEditor { class View; class Document; }
-
 class ErrorItem : public MakeItem
 {
 public:
@@ -131,18 +134,24 @@ public:
 	virtual ~ErrorItem();
 
 	Type type() { return m_isWarning ? Warning : Error; }
-        
+
 	virtual bool append( const QString& text );
 	virtual int displayMode() const { return DelayedDisplay | Append; }
 	virtual bool visible( EOutputLevel ) { return true; }
 
 	QString fileName;
-	int lineNum;
 	QString m_error;
-	KTextEditor::View* m_cursor;
-	KTextEditor::Document* m_doc;
 	bool m_isWarning;
 	QString m_compiler;
+
+	KTextEditor::Document* document() { return m_doc; }
+	void setDocument(KTextEditor::Document* document);
+
+	KTextEditor::Cursor& cursor() { return *m_cursor; }
+
+private:
+	KTextEditor::Cursor* m_cursor;
+	KTextEditor::Document* m_doc;
 };
 
 class ActionItem : public MakeItem
