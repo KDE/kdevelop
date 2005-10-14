@@ -24,24 +24,24 @@
 #include <ktexteditor/view.h>
 
 #include "statusbar.h"
-#include "partcontroller.h"
+#include "documentcontroller.h"
 
 #include "qdebug.h"
 
 KDevStatusBar::KDevStatusBar(QWidget *parent, const char *name)
     : KStatusBar(parent), _activePart(0), _view(0)
 {
-	QWidget * w = new QWidget( this );
-	addWidget( w, 1, true );
-	w->hide();
+    QWidget * w = new QWidget( this );
+    addWidget( w, 1, true );
+    w->hide();
 
-	_status = new QLabel( this );
-	_status->setMinimumWidth(_status->fontMetrics().width("Line: XXXXX Col: XXX  OVR NORM * "));
-	_status->setAlignment(Qt::AlignCenter);
-	addWidget(_status, 0, true);
+    _status = new QLabel( this );
+    _status->setMinimumWidth(_status->fontMetrics().width("Line: XXXXX Col: XXX  OVR NORM * "));
+    _status->setAlignment(Qt::AlignCenter);
+    addWidget(_status, 0, true);
 
-	connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
-		this, SLOT(activePartChanged(KParts::Part*)));
+    connect(DocumentController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
+        this, SLOT(activePartChanged(KParts::Part*)));
 }
 
 
@@ -84,21 +84,21 @@ void KDevStatusBar::cursorPositionChanged()
 
 void KDevStatusBar::setStatus(const QString &str)
 {
-	_status->setText(str);
+    _status->setText(str);
 }
 
 
 void KDevStatusBar::setCursorPosition(int line, int col)
 {
-	_status->setText(i18n(" Line: %1 Col: %2 ").arg(line+1).arg(col));
+    _status->setText(i18n(" Line: %1 Col: %2 ").arg(line+1).arg(col));
 }
 
 void KDevStatusBar::addWidget ( QWidget *widget, int stretch, bool permanent)
 {
-	KStatusBar::addWidget(widget,stretch,permanent);
+    KStatusBar::addWidget(widget,stretch,permanent);
 
-	if(widget->sizeHint().height() + 4 > height())
-		setFixedHeight(widget->sizeHint().height() + 4);
+    if(widget->sizeHint().height() + 4 > height())
+        setFixedHeight(widget->sizeHint().height() + 4);
 }
 
 #include "statusbar.moc"

@@ -26,7 +26,7 @@
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 #include <kdevproject.h>
-#include <kdevpartcontroller.h>
+#include <kdevdocumentcontroller.h>
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
@@ -134,7 +134,7 @@ void ReplaceWidget::clear()
 
 void ReplaceWidget::editDocument( QString const & file, int line )
 {
-    m_part->partController()->editDocument( KURL( file ), line );
+    m_part->documentController()->editDocument( KURL( file ), line );
 }
 
 void ReplaceWidget::stopButtonClicked( KDevPlugin * which )
@@ -275,7 +275,7 @@ bool ReplaceWidget::makeReplacements()
         m_part->project()->changedFiles( changedFiles );
     }
 
-    m_part->partController()->saveAllFiles();
+    m_part->documentController()->saveAllFiles();
 
     m_part->core()->running( m_part, false );
 
@@ -356,7 +356,7 @@ QStringList ReplaceWidget::openProjectFiles()
     QStringList openfiles;
 
     if( const Q3PtrList<KParts::Part> * partlist = m_part->
-            partController()->parts() )
+            documentController()->parts() )
     {
         Q3PtrListIterator<KParts::Part> it( *partlist );
         while ( KParts::Part* part = it.current() )
@@ -378,7 +378,7 @@ QStringList ReplaceWidget::openProjectFiles()
 KTextEditor::EditInterface * ReplaceWidget::getEditInterfaceForFile( QString const & file )
 {
     if( const Q3PtrList<KParts::Part> * partlist = m_part->
-            partController()->parts() )
+            documentController()->parts() )
     {
         Q3PtrListIterator<KParts::Part> it( *partlist );
         while ( KParts::Part* part = it.current() )

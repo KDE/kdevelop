@@ -29,7 +29,7 @@
 #include "kdevapi.h"
 #include "kdevcore.h"
 #include "kdevplugininfo.h"
-#include "kdevpartcontroller.h"
+#include "kdevdocumentcontroller.h"
 #include "kdevplugincontroller.h"
 
 #include <kaction.h>
@@ -63,7 +63,7 @@ KDevPlugin::KDevPlugin(const KDevPluginInfo *info, QObject *parent)
     actionCollection()->setHighlightingEnabled( true );
 
     d->info = info;
-    KGlobal::iconLoader()->addAppDir("kdevelop");    
+    KGlobal::iconLoader()->addAppDir("kdevelop");
 }
 
 KDevPlugin::~KDevPlugin()
@@ -101,9 +101,9 @@ KDevLanguageSupport *KDevPlugin::languageSupport() const
     return m_api->languageSupport();
 }
 
-KDevPartController *KDevPlugin::partController() const
+KDevDocumentController *KDevPlugin::documentController() const
 {
-    return m_api->partController();
+    return m_api->documentController();
 }
 
 KDevPluginController *KDevPlugin::pluginController() const

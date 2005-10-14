@@ -12,7 +12,7 @@ class API : public KDevApi
 public:
 
   virtual KDevMainWindow *mainWindow() const;
-  virtual KDevPartController *partController() const;
+  virtual KDevDocumentController *documentController() const;
   virtual KDevPluginController *pluginController() const;
   virtual KDevCore *core() const;
   virtual KDevCodeModel *codeModel() const;

@@ -11,7 +11,7 @@
 #include <kglobal.h>
 
 #include "toplevel.h"
-#include "partcontroller.h"
+#include "documentcontroller.h"
 #include "api.h"
 #include "projectmanager.h"
 
@@ -46,13 +46,13 @@ bool Core::queryClose()
   config->setGroup("General Options");
   config->writePathEntry("Last Project",ProjectManager::getInstance()->projectFile().url());
 
-  if ( !PartController::getInstance()->querySaveDocuments() )
+    if ( !DocumentController::getInstance()->querySaveDocuments() )
       return false;
 
-  if ( !ProjectManager::getInstance()->closeProject( true ) )
+    if ( !ProjectManager::getInstance()->closeProject( true ) )
       return false;
 
-  if ( !PartController::getInstance()->readyToClose() )
+    if ( !DocumentController::getInstance()->readyToClose() )
       return false;
 
   return true;

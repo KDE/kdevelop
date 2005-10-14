@@ -41,7 +41,7 @@ class QDomDocument;
 #include "core.h"
 #include "api.h"
 #include "plugincontroller.h"
-#include "partcontroller.h"
+#include "documentcontroller.h"
 #include "partselectwidget.h"
 #include "languageselectwidget.h"
 #include "generalinfowidget.h"
@@ -307,7 +307,7 @@ bool ProjectManager::closeProject( bool exiting )
         m_pProjectSession->saveToFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() );
     }
 
-  if ( !PartController::getInstance()->querySaveDocuments() )
+    if ( !DocumentController::getInstance()->querySaveDocuments() )
     return false;
 
   Core::getInstance()->doEmitProjectClosed();
@@ -334,7 +334,7 @@ bool ProjectManager::closeProject( bool exiting )
 
   if ( !exiting )
   {
-    PartController::getInstance()->slotCloseAllWindows();
+      DocumentController::getInstance()->slotCloseAllWindows();
   }
 
   return true;

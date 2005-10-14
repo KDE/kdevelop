@@ -16,7 +16,7 @@
 #include "splashscreen.h"
 #include "toplevel.h"
 #include "plugincontroller.h"
-#include "partcontroller.h"
+#include "documentcontroller.h"
 #include "core.h"
 #include "projectmanager.h"
 
@@ -24,8 +24,8 @@
 
 static KCmdLineOptions options[] =
 {
-    { "profile <profile>",	I18N_NOOP("Profile to load"), 0 },
-    { "+file(s)",		I18N_NOOP("Files to load"), 0 },
+    { "profile <profile>",  I18N_NOOP("Profile to load"), 0 },
+    { "+file(s)",       I18N_NOOP("Files to load"), 0 },
     { 0,0,0 }
 };
 
@@ -121,14 +121,14 @@ int main(int argc, char *argv[])
       KURL url = args->url( 0 );
       QString ext = QFileInfo( url.fileName() ).extension();
       if( ext == "kdevelop" ){
-	  ProjectManager::getInstance()->loadProject( url );
-	  openProject = true;
+      ProjectManager::getInstance()->loadProject( url );
+      openProject = true;
       }
   }
 
   if( !openProject ){
       for( int a=0; a<args->count(); ++a ){
-	  PartController::getInstance()->editDocument( KURL(args->url(a)) );
+          DocumentController::getInstance()->editDocument( KURL(args->url(a)) );
       }
   }
 

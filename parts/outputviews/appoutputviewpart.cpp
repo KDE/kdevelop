@@ -25,7 +25,7 @@
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
 #include "appoutputwidget.h"
-#include "kdevpartcontroller.h"
+#include "kdevdocumentcontroller.h"
 #include "settings.h"
 
 static const KDevPluginInfo data("kdevappoutputview");
@@ -79,8 +79,8 @@ void AppOutputViewPart::stopApplication()
 void AppOutputViewPart::slotProcessExited()
 {
     core()->running( this, false );
-    if ( partController()->activePart() && partController()->activePart()->widget() )
-        partController()->activePart()->widget()->setFocus();
+    if ( documentController()->activePart() && documentController()->activePart()->widget() )
+        documentController()->activePart()->widget()->setFocus();
 }
 
 /**

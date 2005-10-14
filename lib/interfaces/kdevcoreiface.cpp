@@ -1,5 +1,3 @@
-
-
 /* This file is part of the KDE project
    Copyright (C) 2001 Bernd Gehrmann <bernd@kdevelop.org>
    Copyright (C) 2001-2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
@@ -17,12 +15,12 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #include <kdebug.h>
 #include <dcopclient.h>
-#include "KDevCoreIface.h"
+#include "kdevcoreiface.h"
 #include "kdevcore.h"
 
 
@@ -56,4 +54,4 @@ void KDevCoreIface::openProject( const QString & projectFileName )
     m_core->openProject(projectFileName);
 }
 
-#include "KDevCoreIface.moc"
+#include "kdevcoreiface.moc"

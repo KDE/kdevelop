@@ -38,7 +38,7 @@
 #include <kurlrequester.h>
 #include <kstdguiitem.h>
 #include <kparts/part.h>
-#include <kdevpartcontroller.h>
+#include <kdevdocumentcontroller.h>
 
 #include "grepviewpart.h"
 
@@ -149,13 +149,13 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     dir_combo->setMinimumWidth(dir_combo->fontMetrics().maxWidth()*25);
     dir_layout->addWidget( url_requester, 10 );
 
-	synch_button = new QPushButton(".", this );
-	QToolTip::add( synch_button, i18n("Set directory to that of the current file") );
-	dir_layout->addWidget( synch_button );
+    synch_button = new QPushButton(".", this );
+    QToolTip::add( synch_button, i18n("Set directory to that of the current file") );
+    dir_layout->addWidget( synch_button );
 
     QBoxLayout *dir_checks_layout = new QHBoxLayout(4);
     layout->addLayout(dir_checks_layout, 4, 1);
-	
+
     recursive_box = new QCheckBox(i18n("&Recursive"), this);
     recursive_box->setChecked(config->readBoolEntry("recursive", true));
     dir_checks_layout->addSpacing(10);
@@ -165,12 +165,12 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     case_sens_box->setChecked(config->readBoolEntry("case_sens", true));
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(case_sens_box);
-    
+
     keep_output_box = new QCheckBox(i18n("New view"), this);
     keep_output_box->setChecked(config->readBoolEntry("new_view", true));
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(keep_output_box);
-    
+
     ignore_scm_box = new QCheckBox(i18n("S&kip VCS dirs"), this);
     ignore_scm_box->setChecked(config->readBoolEntry("vcs_dirs", true));
     dir_checks_layout->addSpacing(10);
@@ -188,47 +188,47 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     resize(sizeHint());
 
     Q3WhatsThis::add(pattern_combo,
-		    i18n("<qt>Enter the regular expression you want to search for here.<p>"
-			 "Possible meta characters are:"
+            i18n("<qt>Enter the regular expression you want to search for here.<p>"
+             "Possible meta characters are:"
                          "<ul>"
-			 "<li><b>.</b> - Matches any character"
-			 "<li><b>^</b> - Matches the beginning of a line"
-			 "<li><b>$</b> - Matches the end of a line"
-	                 "<li><b>\\&lt;</b> - Matches the beginning of a word"
+             "<li><b>.</b> - Matches any character"
+             "<li><b>^</b> - Matches the beginning of a line"
+             "<li><b>$</b> - Matches the end of a line"
+                     "<li><b>\\&lt;</b> - Matches the beginning of a word"
                          "<li><b>\\&gt;</b> - Matches the end of a word"
-			 "</ul>"
-			 "The following repetition operators exist:"
+             "</ul>"
+             "The following repetition operators exist:"
                          "<ul>"
-			 "<li><b>?</b> - The preceding item is matched at most once"
-			 "<li><b>*</b> - The preceding item is matched zero or more times"
-			 "<li><b>+</b> - The preceding item is matched one or more times"
-			 "<li><b>{<i>n</i>}</b> - The preceding item is matched exactly <i>n</i> times"
-			 "<li><b>{<i>n</i>,}</b> - The preceding item is matched <i>n</i> or more times"
-			 "<li><b>{,<i>n</i>}</b> - The preceding item is matched at most <i>n</i> times"
-			 "<li><b>{<i>n</i>,<i>m</i>}</b> - The preceding item is matched at least <i>n</i>, "
-			 "but at most <i>m</i> times."
-			 "</ul>"
-			 "Furthermore, backreferences to bracketed subexpressions are "
-			 "available via the notation \\<i>n</i>.</qt>"
-			 ));
+             "<li><b>?</b> - The preceding item is matched at most once"
+             "<li><b>*</b> - The preceding item is matched zero or more times"
+             "<li><b>+</b> - The preceding item is matched one or more times"
+             "<li><b>{<i>n</i>}</b> - The preceding item is matched exactly <i>n</i> times"
+             "<li><b>{<i>n</i>,}</b> - The preceding item is matched <i>n</i> or more times"
+             "<li><b>{,<i>n</i>}</b> - The preceding item is matched at most <i>n</i> times"
+             "<li><b>{<i>n</i>,<i>m</i>}</b> - The preceding item is matched at least <i>n</i>, "
+             "but at most <i>m</i> times."
+             "</ul>"
+             "Furthermore, backreferences to bracketed subexpressions are "
+             "available via the notation \\<i>n</i>.</qt>"
+             ));
     Q3WhatsThis::add(files_combo,
-		    i18n("Enter the file name pattern of the files to search here. "
-			 "You may give several patterns separated by commas"));
+            i18n("Enter the file name pattern of the files to search here. "
+             "You may give several patterns separated by commas"));
     Q3WhatsThis::add(template_edit,
-		    i18n("You can choose a template for the pattern from the combo box "
-			 "and edit it here. The string %s in the template is replaced "
-			 "by the pattern input field, resulting in the regular expression "
-			 "to search for."));
+            i18n("You can choose a template for the pattern from the combo box "
+             "and edit it here. The string %s in the template is replaced "
+             "by the pattern input field, resulting in the regular expression "
+             "to search for."));
 
     connect( template_combo, SIGNAL(activated(int)),
-	     SLOT(templateActivated(int)) );
+         SLOT(templateActivated(int)) );
     connect( search_button, SIGNAL(clicked()),
-	     SLOT(slotSearchClicked()) );
+         SLOT(slotSearchClicked()) );
     connect( done_button, SIGNAL(clicked()),
-	     SLOT(hide()) );
+         SLOT(hide()) );
     connect( pattern_combo->lineEdit(), SIGNAL( textChanged ( const QString & ) ),
              SLOT( slotPatternChanged( const QString & ) ) );
-	connect( synch_button, SIGNAL(clicked()), this, SLOT(slotSynchDirectory()) );
+    connect( synch_button, SIGNAL(clicked()), this, SLOT(slotSynchDirectory()) );
     slotPatternChanged( pattern_combo->currentText() );
 }
 
@@ -237,9 +237,9 @@ static QStringList qCombo2StringList( QComboBox* combo )
 {
     QStringList list;
     if (!combo)
-	return list;
+    return list;
     for (int i = 0; i < combo->count(); ++i ) {
-	list << combo->text(i);
+    list << combo->text(i);
     }
     return list;
 }
@@ -250,10 +250,10 @@ GrepDialog::~GrepDialog()
     // memorize the last patterns and paths
     config->writeEntry("LastSearchItems", qCombo2StringList(pattern_combo));
     config->writePathEntry("LastSearchPaths", qCombo2StringList(dir_combo));
-	config->writeEntry("recursive", recursive_box->isChecked());
-	config->writeEntry("case_sens", case_sens_box->isChecked());
-	config->writeEntry("new_view", keep_output_box->isChecked());
-	config->writeEntry("vcs_dirs", ignore_scm_box->isChecked());
+    config->writeEntry("recursive", recursive_box->isChecked());
+    config->writeEntry("case_sens", case_sens_box->isChecked());
+    config->writeEntry("new_view", keep_output_box->isChecked());
+    config->writeEntry("vcs_dirs", ignore_scm_box->isChecked());
 }
 
 void GrepDialog::slotPatternChanged( const QString & _text )
@@ -270,11 +270,11 @@ void GrepDialog::templateActivated(int index)
 static bool qComboContains( const QString& s, QComboBox* combo )
 {
     if (!combo)
-	return false;
+    return false;
     for (int i = 0; i < combo->count(); ++i ) {
-	if (combo->text(i) == s) {
-	    return true;
-	}
+    if (combo->text(i) == s) {
+        return true;
+    }
     }
     return false;
 }
@@ -282,22 +282,22 @@ static bool qComboContains( const QString& s, QComboBox* combo )
 void GrepDialog::slotSearchClicked()
 {
     if (pattern_combo->currentText().isEmpty()) {
-	KMessageBox::sorry(this, i18n("Please enter a search pattern"));
-	pattern_combo->setFocus();
-	return;
+    KMessageBox::sorry(this, i18n("Please enter a search pattern"));
+    pattern_combo->setFocus();
+    return;
     }
     // add the last patterns and paths to the combo
     if (!qComboContains(pattern_combo->currentText(), pattern_combo)) {
-	pattern_combo->insertItem(pattern_combo->currentText(), 0);
+    pattern_combo->insertItem(pattern_combo->currentText(), 0);
     }
     if (pattern_combo->count() > 15) {
-	pattern_combo->removeItem(15);
+    pattern_combo->removeItem(15);
     }
     if (!qComboContains(dir_combo->currentText(), dir_combo)) {
-	dir_combo->insertItem(dir_combo->currentText(), 0);
+    dir_combo->insertItem(dir_combo->currentText(), 0);
     }
     if (dir_combo->count() > 15) {
-	dir_combo->removeItem(15);
+    dir_combo->removeItem(15);
     }
 
     emit searchClicked();
@@ -316,15 +316,15 @@ void GrepDialog::show()
 
 void GrepDialog::slotSynchDirectory( )
 {
-	KParts::ReadOnlyPart * part = dynamic_cast<KParts::ReadOnlyPart*>( m_part->partController()->activePart() );
-	if ( part )
-	{
-		KURL url = part->url();
-		if ( url.isLocalFile() )
-		{
-			dir_combo->setEditText( url.upURL().path( +1 ) );
-		}
-	}
+    KParts::ReadOnlyPart * part = dynamic_cast<KParts::ReadOnlyPart*>( m_part->documentController()->activePart() );
+    if ( part )
+    {
+        KURL url = part->url();
+        if ( url.isLocalFile() )
+        {
+            dir_combo->setEditText( url.upURL().path( +1 ) );
+        }
+    }
 }
 
 #include "grepdlg.moc"

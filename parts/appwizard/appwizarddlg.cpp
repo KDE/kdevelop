@@ -65,7 +65,7 @@
 
 #include "domutil.h"
 #include "kdevmakefrontend.h"
-#include "kdevpartcontroller.h"
+#include "kdevdocumentcontroller.h"
 #include "kdevappfrontend.h"
 #include "kdevplugininfo.h"
 #include "kdevlicense.h"
@@ -992,7 +992,7 @@ void AppWizardDialog::openAfterGeneration()
         if ( !fileName.isNull() )
         {
             fileName = KMacroExpander::expandMacros(fileName, m_pCurrentAppInfo->subMap);
-            m_part->partController()->editDocument( fileName );
+            m_part->documentController()->editDocument( fileName );
         }
     }
 }

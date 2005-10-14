@@ -25,7 +25,7 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "konsoleviewpart.h"
-#include "kdevpartcontroller.h"
+#include "kdevdocumentcontroller.h"
 
 #include "konsoleviewwidget.h"
 
@@ -35,7 +35,7 @@ KonsoleViewWidget::KonsoleViewWidget(KonsoleViewPart *part)
  : QWidget(0), part(0), owner( part )
 {
     setObjectName(QString::fromUtf8("konsole widget"));
-    connect(part->partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
+    connect(part->documentController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
     vbox = new QVBoxLayout(this);
 }
 

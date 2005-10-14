@@ -23,7 +23,7 @@
 
 #include <kfiltermodel.h>
 #include <kdevcore.h>
-#include <kdevpartcontroller.h>
+#include <kdevdocumentcontroller.h>
 #include <kdevmainwindow.h>
 #include <urlutil.h>
 

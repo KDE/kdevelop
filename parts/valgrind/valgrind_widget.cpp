@@ -13,7 +13,7 @@
 #include <kstatusbar.h>
 
 #include <kdevcore.h>
-#include <kdevpartcontroller.h>
+#include <kdevdocumentcontroller.h>
 #include <kdevmainwindow.h>
 #include <kdevproject.h>
 
@@ -147,7 +147,7 @@ void ValgrindWidget::addMessage( const ValgrindItem& vi )
 void ValgrindWidget::executed( Q3ListViewItem* lvi )
 {
   Q_ASSERT( _part );
-  Q_ASSERT( _part->partController() );
+  Q_ASSERT( _part->documentController() );
   Q_ASSERT( _part->mainWindow() );
 
   if ( !lvi || lvi->rtti() != VALLISTVIEWITEMRTTI )
@@ -166,7 +166,7 @@ void ValgrindWidget::executed( Q3ListViewItem* lvi )
   }
   if ( vli ) {
     // display the file
-    _part->partController()->editDocument( KURL( vli->fileName() ), vli->line() - 1 );
+    _part->documentController()->editDocument( KURL( vli->fileName() ), vli->line() - 1 );
     _part->mainWindow()->statusBar()->message( vli->message(), 10000 );
     _part->mainWindow()->lowerView( this );
   }

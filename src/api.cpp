@@ -2,7 +2,7 @@
 #include <kdevcodemodel.h>
 
 #include "core.h"
-#include "partcontroller.h"
+#include "documentcontroller.h"
 #include "plugincontroller.h"
 #include "toplevel.h"
 #include "api.h"
@@ -16,9 +16,9 @@ KDevMainWindow *API::mainWindow() const
   return TopLevel::getInstance();
 }
 
-KDevPartController *API::partController() const
+KDevDocumentController *API::documentController() const
 {
-  return PartController::getInstance();
+  return DocumentController::getInstance();
 }
 
 

@@ -6,7 +6,7 @@
 
 #include <kdevprojectmodel.h>
 #include <kdevgenericfactory.h>
-#include <kdevpartcontroller.h>
+#include <kdevdocumentcontroller.h>
 #include <kdevcore.h>
 #include <kdevplugininfo.h>
 #include <urlutil.h>
@@ -26,7 +26,7 @@ OpenWithPart::OpenWithPart(QObject *parent, const char *name, const QStringList 
   : KDevPlugin(&data, parent)
 {
   setObjectName(QString::fromUtf8(name));
-  
+
   connect(core(), SIGNAL(contextMenu(QMenu*,const Context*)),
           this, SLOT(fillContextMenu(QMenu*,const Context*)));
 }
@@ -66,7 +66,7 @@ void OpenWithPart::fillContextMenu(QMenu *popup, const Context *context)
 void OpenWithPart::populateMenu(QMenu *popup)
 {
   popup->addSeparator();
-  
+
   QAction *action = popup->addAction(i18n("Open With"));
   action->setWhatsThis(i18n("<b>Open With</b><p>Lists all applications that can be used to open the selected file."));
 
@@ -79,7 +79,7 @@ void OpenWithPart::openWithService()
     {
       KURL::List list;
       list << m_url;
-    
+
       KRun::run(*ptr, list);
     }
 }
@@ -93,8 +93,8 @@ void OpenWithPart::openWithDialog()
 
 void OpenWithPart::openAsEncoding(int /*id*/)
 {
-  partController()->setEncoding("utf8");
-  partController()->editDocument(m_url);
+  documentController()->setEncoding("utf8");
+  documentController()->editDocument(m_url);
 }
 
 #include "openwithpart.moc"

@@ -1,4 +1,4 @@
-#include "partcontroller.h"
+#include "documentcontroller.h"
 
 #include "documentationpart.h"
 
@@ -10,12 +10,12 @@ HTMLDocumentationPart::HTMLDocumentationPart()
 
 void HTMLDocumentationPart::slotDuplicate( )
 {
-    PartController::getInstance()->showDocument(url(), true);
+    DocumentController::getInstance()->showDocument(url(), true);
 }
 
 void HTMLDocumentationPart::slotOpenInNewWindow( const KURL & url )
 {
-    PartController::getInstance()->showDocument(url, true);
+    DocumentController::getInstance()->showDocument(url, true);
 }
 
 #include "documentationpart.moc"

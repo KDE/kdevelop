@@ -65,12 +65,12 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent, const char *name, c
     mainWindow() ->embedSelectView( m_documentView, i18n( "Documents" ), i18n( "Documents" ) );
 
     connect( m_documentView, SIGNAL( pressed( QModelIndex ) ), this, SLOT( pressed( QModelIndex ) ) );
-    connect( partController(), SIGNAL( documentSaved( const KURL & ) ), this, SLOT( saved( const KURL & ) ) );
-    connect( partController(), SIGNAL( documentLoaded( const KURL & ) ), this, SLOT( loaded( const KURL & ) ) );
-    connect( partController(), SIGNAL( documentClosed( const KURL & ) ), this, SLOT( closed( const KURL & ) ) );
-    connect( partController(), SIGNAL( documentExternallyModified( const KURL & ) ), this, SLOT( externallyModified( const KURL & ) ) );
-    connect( partController(), SIGNAL( documentURLChanged( const KURL &, const KURL & ) ), this, SLOT( URLChanged( const KURL &, const KURL & ) ) );
-    connect( partController(), SIGNAL( documentStateChanged(const KURL &, DocumentState) ), this, SLOT( stateChanged( const KURL &, DocumentState ) ) );
+    connect( documentController(), SIGNAL( documentSaved( const KURL & ) ), this, SLOT( saved( const KURL & ) ) );
+    connect( documentController(), SIGNAL( documentLoaded( const KURL & ) ), this, SLOT( loaded( const KURL & ) ) );
+    connect( documentController(), SIGNAL( documentClosed( const KURL & ) ), this, SLOT( closed( const KURL & ) ) );
+    connect( documentController(), SIGNAL( documentExternallyModified( const KURL & ) ), this, SLOT( externallyModified( const KURL & ) ) );
+    connect( documentController(), SIGNAL( documentURLChanged( const KURL &, const KURL & ) ), this, SLOT( URLChanged( const KURL &, const KURL & ) ) );
+    connect( documentController(), SIGNAL( documentStateChanged(const KURL &, DocumentState) ), this, SLOT( stateChanged( const KURL &, DocumentState ) ) );
 
     setXMLFile( "kdevdocumentview.rc" );
 }
@@ -133,7 +133,7 @@ void KDevDocumentViewPart::stateChanged( const KURL & /*url*/, DocumentState /*s
 void KDevDocumentViewPart::pressed( const QModelIndex & index )
 {
     if ( index.parent().isValid() )
-        partController() ->editDocument(
+        documentController() ->editDocument(
             m_documentModel->item( index ) ->fileItem() ->URL() );
 }
 

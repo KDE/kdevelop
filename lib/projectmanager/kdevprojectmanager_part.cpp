@@ -28,7 +28,7 @@
 
 #include <kfiltermodel.h>
 #include <kdevcore.h>
-#include <kdevpartcontroller.h>
+#include <kdevdocumentcontroller.h>
 #include <kdevmainwindow.h>
 #include <urlutil.h>
 
@@ -169,7 +169,7 @@ KDevProjectManagerPart::~KDevProjectManagerPart()
 
 void KDevProjectManagerPart::openURL(const KURL &url)
 {
-  partController()->editDocument(url);
+  documentController()->editDocument(url);
 }
 
 KDevProjectFolderItem *KDevProjectManagerPart::activeFolder()

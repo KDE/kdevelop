@@ -27,7 +27,7 @@
 #include "appwizarddlg.h"
 #include "appwizardfactory.h"
 #include <kdevmakefrontend.h>
-#include <kdevpartcontroller.h>
+#include <kdevdocumentcontroller.h>
 #include <kdevlanguagesupport.h>
 
 AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringList &)

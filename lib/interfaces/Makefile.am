@@ -6,13 +6,13 @@ libkdevinterfaces_la_SOURCES = \
 	kdevapi.cpp		kdevlanguagesupport.cpp      kdevplugininfo.cpp \
 	kdevappfrontend.cpp	kdevmainwindow.cpp	     kdevprojectbuilder.cpp \
 	kdevcatalog.cpp		kdevmakefrontend.cpp	     kdevproject.cpp \
-	kdevcodemodel.cpp	kdevpartcontroller.cpp	     kdevprojecteditor.cpp \
-	kdevcoderepository.cpp	KDevPartControllerIface.cpp  kdevprojectiface.cpp \
+	kdevcodemodel.cpp	kdevdocumentcontroller.cpp	     kdevprojecteditor.cpp \
+	kdevcoderepository.cpp	kdevdocumentcontrolleriface.cpp  kdevprojectiface.cpp \
 	kdevcore.cpp		kdevpcsimporter.cpp	     kdevprojectimporter.cpp \
-	KDevCoreIface.cpp	kdevplugincontroller.cpp     kdevprojectmodel.cpp \
+	kdevcoreiface.cpp	kdevplugincontroller.cpp     kdevprojectmodel.cpp \
 	kdevdifffrontend.cpp	kdevplugin.cpp		     tag.cpp \
 	domutil.cpp 		kdevitemmodel.cpp	     urlutil.cpp \
-	KDevPartControllerIface.skel KDevCoreIface.skel kdevprojectiface.skel \
+	kdevdocumentcontrolleriface.skel kdevcoreiface.skel kdevprojectiface.skel \
 	filetemplate.cpp
 
 libkdevinterfaces_la_LDFLAGS = -no-undefined $(DB3LDFLAGS) $(all_libraries)
@@ -21,14 +21,14 @@ libkdevinterfaces_la_LIBADD = -l$(DB3LIB) $(LIB_KDEUI) $(LIB_KHTML) \
 
 kdevelopincludedir = $(includedir)/kdevelop/interfaces
 kdevelopinclude_HEADERS = \
-	kdevpartcontroller.h \
-	kdevapi.h			KDevPartControllerIface.h \
+	kdevdocumentcontroller.h \
+	kdevapi.h			kdevdocumentcontrolleriface.h \
 	kdevappfrontend.h		kdevpcsimporter.h \
 	kdevcatalog.h			kdevplugincontroller.h \
 	kdevcodemodel.h			kdevplugin.h \
 	kdevcoderepository.h		kdevplugininfo.h \
 	kdevcore.h			kdevprojectbuilder.h \
-	KDevCoreIface.h			kdevprojecteditor.h \
+	kdevcoreiface.h			kdevprojecteditor.h \
 	kdevcreatefile.h		kdevproject.h \
 	kdevdifffrontend.h		domutil.h \
 	kdevgenericfactory.h		kdevprojectimporter.h \

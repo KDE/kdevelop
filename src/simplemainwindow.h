@@ -23,7 +23,7 @@
 #include <dmainwindow.h>
 #include <kdevplugin.h>
 #include <kdevmainwindow.h>
-#include <kdevpartcontroller.h>
+#include <kdevdocumentcontroller.h>
 
 class KAction;
 class KMenu;

@@ -16,7 +16,7 @@
 #include "splashscreen.h"
 #include "toplevel.h"
 #include "plugincontroller.h"
-#include "partcontroller.h"
+#include "documentcontroller.h"
 #include "core.h"
 #include "projectmanager.h"
 
@@ -24,8 +24,8 @@
 
 static KCmdLineOptions options[] =
 {
-    { "profile <profile>",	I18N_NOOP("Profile to load"), 0 },
-/*    { "+file(s)",		I18N_NOOP("Files to load"), 0 },*/
+    { "profile <profile>",  I18N_NOOP("Profile to load"), 0 },
+/*    { "+file(s)",     I18N_NOOP("Files to load"), 0 },*/
     { 0,0,0 }
 };
 
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
   app.processEvents();
 
   QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
-		   splash, SLOT(showMessage(const QString &)));
+           splash, SLOT(showMessage(const QString &)));
 
   if (splash) splash->message( i18n( "Loading Settings" ) );
   TopLevel::getInstance()->loadSettings();

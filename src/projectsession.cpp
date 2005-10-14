@@ -30,7 +30,7 @@
 #include "ktexteditor/view.h"
 
 #include "api.h"
-#include "partcontroller.h"
+#include "documentcontroller.h"
 #include "domutil.h"
 #include "documentationpart.h"
 #include "toplevel.h"
@@ -103,22 +103,22 @@ bool ProjectSession::restoreFromFile( const QString & sessionFileName, const Q3V
     recreateDocs(session);
   }
 
-	// now also let the plugins load their session stuff
-	QDomElement pluginListEl = session.namedItem("pluginList").toElement();
-	Q3ValueList<KDevPlugin*>::ConstIterator it = plugins.begin();
-	while( it != plugins.end() )
-	{
-		KDevPlugin* pPlugin = (*it);
-		QString pluginName = pPlugin->instance()->instanceName();
-		QDomElement pluginEl = pluginListEl.namedItem(pluginName).toElement();
-		if (!pluginEl.isNull()) {
-			// now plugin, load what you find!
-			pPlugin->restorePartialProjectSession(&pluginEl);
-		}
-		++it;
-	}
+       // now also let the plugins load their session stuff
+       QDomElement pluginListEl = session.namedItem("pluginList").toElement();
+       Q3ValueList<KDevPlugin*>::ConstIterator it = plugins.begin();
+       while( it != plugins.end() )
+       {
+              KDevPlugin* pPlugin = (*it);
+              QString pluginName = pPlugin->instance()->instanceName();
+              QDomElement pluginEl = pluginListEl.namedItem(pluginName).toElement();
+              if (!pluginEl.isNull()) {
+                     // now plugin, load what you find!
+                     pPlugin->restorePartialProjectSession(&pluginEl);
+              }
+              ++it;
+       }
 
-	QTimer::singleShot( 0, this, SLOT(loadDocument()) );
+       QTimer::singleShot( 0, this, SLOT(loadDocument()) );
 
   return true;
 }
@@ -149,7 +149,7 @@ void ProjectSession::recreateDocs(QDomElement& el)
       KURL url(docName);
       // create the views of this document, the first view creation will also create the document
       kdDebug() << k_funcinfo << "Doc to be activated? " << (nDoc == nNrOfDocs - 1) << endl;
-	  recreateViews(url, docEl, (nDoc == nNrOfDocs - 1));
+         recreateViews(url, docEl, (nDoc == nNrOfDocs - 1));
     }
   }
 
@@ -171,17 +171,17 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl, bool activate)
   // we should restore every view, but right now we only support a single view per document
   // so use this simple method for now
 
-	if ( nNrOfViews > 0 )
-	{
-		QDomElement viewEl = docEl.firstChild().toElement();
-		DocumentData dd;
-		dd.type = viewEl.attribute("Type");
-		dd.line = viewEl.attribute("line", "0").toInt();
-		dd.url = url;
-		dd.activate = activate;
+       if ( nNrOfViews > 0 )
+       {
+              QDomElement viewEl = docEl.firstChild().toElement();
+              DocumentData dd;
+              dd.type = viewEl.attribute("Type");
+              dd.line = viewEl.attribute("line", "0").toInt();
+              dd.url = url;
+              dd.activate = activate;
 
-		_docDataList << dd;
-	}
+              _docDataList << dd;
+       }
 
 /*
   // loop over all views of this document
@@ -207,10 +207,10 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl, bool activate)
       if (viewEl.hasAttribute("line")) {
         line = viewEl.attribute("line", "0").toInt();
       }
-      PartController::getInstance()->editDocument(url, line);
+      DocumentController::getInstance()->editDocument(url, line);
     }
     else {
-      PartController::getInstance()->showDocument(url);
+      DocumentController::getInstance()->showDocument(url);
     }
     QDomElement viewPropertiesEl = viewEl.namedItem("AdditionalSettings").toElement();
     if (!viewPropertiesEl.isNull()) {
@@ -263,45 +263,45 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const Q3ValueL
     }
   }
 
-	Q3PtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
-	for ( ; it.current(); ++it )
-	{
+    Q3PtrListIterator<KParts::Part> it( *DocumentController::getInstance()->parts() );
+       for ( ; it.current(); ++it )
+       {
 
-		KParts::ReadOnlyPart* pReadOnlyPart = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
-		if (!pReadOnlyPart)
-			continue;
+              KParts::ReadOnlyPart* pReadOnlyPart = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+              if (!pReadOnlyPart)
+                     continue;
 
-		QString url = pReadOnlyPart->url().url();
+              QString url = pReadOnlyPart->url().url();
 
-		docIdStr.setNum(nDocs);
-		QDomElement docEl = domdoc.createElement("Doc" + docIdStr);
-		docEl.setAttribute( "URL", url);
-		docsAndViewsEl.appendChild( docEl);
-		nDocs++;
-		docEl.setAttribute( "NumberOfViews", 1);
+              docIdStr.setNum(nDocs);
+              QDomElement docEl = domdoc.createElement("Doc" + docIdStr);
+              docEl.setAttribute( "URL", url);
+              docsAndViewsEl.appendChild( docEl);
+              nDocs++;
+              docEl.setAttribute( "NumberOfViews", 1);
 
-		QDomElement viewEl = domdoc.createElement( "View0");
-		docEl.appendChild( viewEl);
+              QDomElement viewEl = domdoc.createElement( "View0");
+              docEl.appendChild( viewEl);
 
-		if ( dynamic_cast<HTMLDocumentationPart*>(pReadOnlyPart) )
-		{
-			viewEl.setAttribute("Type", "Documentation");
-		}
-		else if ( pReadOnlyPart->inherits("KTextEditor::Document") )
-		{
-			viewEl.setAttribute("Type", "Source");
+              if ( dynamic_cast<HTMLDocumentationPart*>(pReadOnlyPart) )
+              {
+                     viewEl.setAttribute("Type", "Documentation");
+              }
+              else if ( pReadOnlyPart->inherits("KTextEditor::Document") )
+              {
+                     viewEl.setAttribute("Type", "Source");
                         KTextEditor::View *view = qobject_cast<KTextEditor::View *>(pReadOnlyPart->widget());
-			if (view)
-				viewEl.setAttribute( "line", view->cursorPosition().line() );
-		}
-		else
-		{
-			viewEl.setAttribute("Type", "Other");
-		}
-	}
+                     if (view)
+                            viewEl.setAttribute( "line", view->cursorPosition().line() );
+              }
+              else
+              {
+                     viewEl.setAttribute("Type", "Other");
+              }
+       }
 
 /*
-  QPtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
+  QPtrListIterator<KParts::Part> it( *DocumentController::getInstance()->parts() );
   for ( ; it.current(); ++it ) {
 ////    QString partName = it.current()->name();
 ////    QMessageBox::information(0L,"",partName);
@@ -378,23 +378,23 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const Q3ValueL
     }
   }
 
-	Q3ValueList<KDevPlugin*>::ConstIterator itt = plugins.begin();
-	while( itt != plugins.end() )
-	{
-		KDevPlugin* pPlugin = (*itt);
-		QString pluginName = pPlugin->instance()->instanceName();
-		QDomElement pluginEl = domdoc.createElement(pluginName);
+       Q3ValueList<KDevPlugin*>::ConstIterator itt = plugins.begin();
+       while( itt != plugins.end() )
+       {
+              KDevPlugin* pPlugin = (*itt);
+              QString pluginName = pPlugin->instance()->instanceName();
+              QDomElement pluginEl = domdoc.createElement(pluginName);
 
-		// now plugin, save what you have!
-		pPlugin->savePartialProjectSession(&pluginEl);
+              // now plugin, save what you have!
+              pPlugin->savePartialProjectSession(&pluginEl);
 
-		// if the plugin wrote anything, accept itt for the session, otherwise forget itt
-		if (pluginEl.hasChildNodes() || pluginEl.hasAttributes())
-		{
-			pluginListEl.appendChild(pluginEl);
-		}
-		++itt;
-	}
+              // if the plugin wrote anything, accept itt for the session, otherwise forget itt
+              if (pluginEl.hasChildNodes() || pluginEl.hasAttributes())
+              {
+                     pluginListEl.appendChild(pluginEl);
+              }
+              ++itt;
+       }
 
   // Write it out to the session file on disc
   QFile f(sessionFileName);
@@ -411,28 +411,28 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const Q3ValueL
 
 void ProjectSession::loadDocument( )
 {
-	if ( !_docDataList.isEmpty() )
-	{
-		DocumentData & dd = _docDataList.first();
-		if ( dd.type == "Source" )
-		{
-			PartController::getInstance()->editDocumentInternal( dd.url, dd.line, -1, dd.activate );
-		}
-		else if ( dd.type == "Documentation" )
-		{
-			// FIXME needs to be deferred if !activate ?
-			PartController::getInstance()->showDocument( dd.url, true );
-		}
-		else
-		{
-			// FIXME needs to be deferred if !activate ?
-			PartController::getInstance()->editDocument( dd.url );
-		}
-		_docDataList.pop_front();
+       if ( !_docDataList.isEmpty() )
+       {
+              DocumentData & dd = _docDataList.first();
+              if ( dd.type == "Source" )
+              {
+            DocumentController::getInstance()->editDocumentInternal( dd.url, dd.line, -1, dd.activate );
+              }
+              else if ( dd.type == "Documentation" )
+              {
+                     // FIXME needs to be deferred if !activate ?
+                  DocumentController::getInstance()->showDocument( dd.url, true );
+              }
+              else
+              {
+                     // FIXME needs to be deferred if !activate ?
+                  DocumentController::getInstance()->editDocument( dd.url );
+              }
+              _docDataList.pop_front();
 
-		loadDocument();
-		//QTimer::singleShot( 0, this, SLOT(loadDocument()) );
-	}
+              loadDocument();
+              //QTimer::singleShot( 0, this, SLOT(loadDocument()) );
+       }
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

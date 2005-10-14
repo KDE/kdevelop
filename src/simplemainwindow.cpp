@@ -45,7 +45,7 @@
 #include "plugincontroller.h"
 #include "mainwindowshare.h"
 #include "shellextension.h"
-#include "partcontroller.h"
+#include "documentcontroller.h"
 #include "statusbar.h"
 #include "documentationpart.h"
 #include "toplevel.h"
@@ -96,12 +96,14 @@ void SimpleMainWindow::init()
 
     connect(Core::getInstance(), SIGNAL(coreInitialized()), this, SLOT(slotCoreInitialized()));
     connect(Core::getInstance(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
-    connect(PartController::getInstance(), SIGNAL(documentURLChanged( const KURL &, const KURL & )),
+    connect(DocumentController::getInstance(),
+            SIGNAL(documentURLChanged( const KURL &, const KURL & )),
             this, SLOT(slotDocumentURLChanged( const KURL &, const KURL & )));
-    connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
+    connect(DocumentController::getInstance(),
+            SIGNAL(activePartChanged(KParts::Part*)),
             this, SLOT(activePartChanged(KParts::Part*)));
 
-    connect(PartController::getInstance(),
+    connect(DocumentController::getInstance(),
             SIGNAL(documentStateChanged(const KURL &, DocumentState)),
             this, SLOT(documentStateChanged(const KURL&, DocumentState)));
 
@@ -210,10 +212,11 @@ KMainWindow *SimpleMainWindow::main()
 
 void SimpleMainWindow::createFramework()
 {
-    PartController::createInstance( this );
+    DocumentController::createInstance( this );
 
-    connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
-        this, SLOT(createGUI(KParts::Part*)));
+    connect(DocumentController::getInstance(),
+            SIGNAL(activePartChanged(KParts::Part*)),
+            this, SLOT(createGUI(KParts::Part*)));
 }
 
 void SimpleMainWindow::createActions()
@@ -242,7 +245,7 @@ void SimpleMainWindow::createActions()
 
 void SimpleMainWindow::raiseEditor()
 {
-    KDevPartController *partcontroller = API::getInstance()->partController();
+    KDevDocumentController *partcontroller = API::getInstance()->documentController();
     if (partcontroller->activePart() && partcontroller->activePart()->widget())
         partcontroller->activePart()->widget()->setFocus();
 }
@@ -286,14 +289,14 @@ void SimpleMainWindow::projectOpened()
 void SimpleMainWindow::slotDocumentURLChanged( const KURL &oldURL, const KURL &newURL )
 {
     if (QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(
-        PartController::getInstance()->partForURL(newURL)))
+        DocumentController::getInstance()->partForURL(newURL)))
         widget->setCaption(newURL.fileName());
 }
 
 void SimpleMainWindow::documentStateChanged(const KURL &url, DocumentState state)
 {
     QWidget * widget = EditorProxy::getInstance()->topWidgetForPart(
-        PartController::getInstance()->partForURL(url));
+        DocumentController::getInstance()->partForURL(url));
     if (widget)
     {
         //calculate the icon size if showTabIcons is false
@@ -343,7 +346,7 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
 
     //Find the document on whose tab the user clicked
     m_currentTabURL = QString();
-    Q3PtrListIterator<KParts::Part> it(*PartController::getInstance()->parts());
+    Q3PtrListIterator<KParts::Part> it(*DocumentController::getInstance()->parts());
     while (KParts::Part* part = it.current())
     {
         QWidget *top_widget = EditorProxy::getInstance()->topWidgetForPart(part);
@@ -354,7 +357,7 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
                 m_currentTabURL = ro_part->url();
                 tabMenu.insertItem(i18n("Close"), 0);
 
-                if (PartController::getInstance()->parts()->count() > 1)
+                if (DocumentController::getInstance()->parts()->count() > 1)
                     tabMenu.insertItem(i18n("Close All Others"), 4);
 
                 if (qobject_cast<HTMLDocumentationPart*>(ro_part))
@@ -386,19 +389,19 @@ void SimpleMainWindow::tabContextActivated(int id)
     switch(id)
     {
         case 0:
-            PartController::getInstance()->closeDocument(m_currentTabURL);
+            DocumentController::getInstance()->closeDocument(m_currentTabURL);
             break;
         case 1:
-            PartController::getInstance()->saveDocument(m_currentTabURL);
+            DocumentController::getInstance()->saveDocument(m_currentTabURL);
             break;
         case 2:
-            PartController::getInstance()->reloadDocument(m_currentTabURL);
+            DocumentController::getInstance()->reloadDocument(m_currentTabURL);
             break;
         case 3:
-            PartController::getInstance()->showDocument(m_currentTabURL, true);
+            DocumentController::getInstance()->showDocument(m_currentTabURL, true);
             break;
         case 4:
-            PartController::getInstance()->closeAllOthers(m_currentTabURL);
+            DocumentController::getInstance()->closeAllOthers(m_currentTabURL);
             break;
         default:
             break;
@@ -416,7 +419,7 @@ void SimpleMainWindow::configureToolbars()
 void SimpleMainWindow::slotNewToolbarConfig()
 {
 //    setupWindowMenu();
-    m_mainWindowShare->slotGUICreated(PartController::getInstance()->activePart());
+    m_mainWindowShare->slotGUICreated(DocumentController::getInstance()->activePart());
     applyMainWindowSettings(KGlobal::config(), QLatin1String("SimpleMainWindow"));
 }
 
@@ -457,7 +460,7 @@ void SimpleMainWindow::openURL(int w)
     foreach(WinInfo pair, m_windowList) {
         if (pair.first == w) {
             if (!pair.second.isEmpty()) {
-                PartController::getInstance()->editDocument(pair.second);
+                DocumentController::getInstance()->editDocument(pair.second);
                 return;
             }
         }
@@ -475,7 +478,7 @@ void SimpleMainWindow::fillWindowMenu()
 
     QMap<QString, KURL> map;
     QStringList string_list;
-    KURL::List list = PartController::getInstance()->openURLs();
+    KURL::List list = DocumentController::getInstance()->openURLs();
     KURL::List::Iterator itt = list.begin();
     while (itt != list.end())
     {
@@ -507,12 +510,12 @@ void SimpleMainWindow::fillWindowMenu()
 void SimpleMainWindow::slotSplitVertical()
 {
     DTabWidget *tab = splitVertical();
-    PartController::getInstance()->openEmptyTextDocument();
+    DocumentController::getInstance()->openEmptyTextDocument();
 
     //FIXME: adymo: we can't put another kate view into the tab just added - weird crashes :(
     //more: kdevelop part controller doesn't handle such situation - it assumes the part to
     //have only one widget
-/*    KParts::Part *activePart = PartController::getInstance()->activePart();
+/*    KParts::Part *activePart = DocumentController::getInstance()->activePart();
     if (!activePart)
         return;
     KTextEditor::Document *activeDoc = dynamic_cast<KTextEditor::Document *>(activePart);
@@ -527,19 +530,19 @@ void SimpleMainWindow::slotSplitVertical()
 void SimpleMainWindow::slotSplitHorizontal()
 {
     DTabWidget *tab = splitHorizontal();
-    PartController::getInstance()->openEmptyTextDocument();
+    DocumentController::getInstance()->openEmptyTextDocument();
 }
 
 void SimpleMainWindow::closeTab(QWidget *w)
 {
-    const Q3PtrList<KParts::Part> *partlist = PartController::getInstance()->parts();
+    const Q3PtrList<KParts::Part> *partlist = DocumentController::getInstance()->parts();
     Q3PtrListIterator<KParts::Part> it(*partlist);
     while (KParts::Part* part = it.current())
     {
         QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(part);
         if (widget && widget == w)
         {
-            PartController::getInstance()->closePart(part);
+            DocumentController::getInstance()->closePart(part);
             return;
         }
         ++it;

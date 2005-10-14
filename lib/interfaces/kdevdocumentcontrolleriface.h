@@ -16,13 +16,48 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#include "KDevPartControllerIface.h"
-#include "kdevpartcontroller.h"
+#ifndef _KDEVDOCUMENTCONTROLLERIFACE_H_
+#define _KDEVDOCUMENTCONTROLLERIFACE_H_
 
-KDevPartController::KDevPartController(QWidget *parent)
-  : KParts::PartManager(parent)
+#include <dcopobject.h>
+#include <dcopref.h>
+#include <kurl.h>
+
+class KDevDocumentController;
+
+class KDevDocumentControllerIface : public QObject, public DCOPObject
 {
-  new KDevPartControllerIface(this);
-}
+  Q_OBJECT
+  K_DCOP
 
-#include "kdevpartcontroller.moc"
+public:
+
+  KDevDocumentControllerIface(KDevDocumentController *pc);
+  ~KDevDocumentControllerIface();
+
+
+k_dcop:
+
+  void editDocument(const QString &url, int lineNum);
+  void showDocument(const QString &url, bool newWin);
+
+  void saveAllDocuments();
+  void reloadAllDocuments();
+
+  bool closeAllDocuments();
+  uint documentState( const KURL &url );
+
+private slots:
+
+  void forwardLoadedDocument(const KURL &url);
+  void forwardSavedDocument(const KURL &url);
+  void forwardClosedDocument(const KURL &url);
+
+private:
+
+  KDevDocumentController *m_controller;
+
+};
+
+
+#endif

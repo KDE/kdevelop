@@ -51,7 +51,7 @@
 
 #include <config.h>
 
-#include "partcontroller.h"
+#include "documentcontroller.h"
 #include "projectmanager.h"
 #include "core.h"
 #include "api.h"
@@ -178,8 +178,8 @@ void MainWindowShare::createActions()
   m_configureEditorAction->setWhatsThis(i18n("<b>Configure editor</b><p>Opens editor configuration dialog."));
   m_configureEditorAction->setEnabled( false );
 
-  KDevPartController * partController = API::getInstance()->partController();
-  connect( partController, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )) );
+  KDevDocumentController * documentController = API::getInstance()->documentController();
+  connect( documentController, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )) );
 }
 
 void MainWindowShare::slotReportBug()
@@ -324,8 +324,8 @@ void MainWindowShare::slotConfigureEditors()
 {
     kdDebug(9000) << " *** MainWindowShare::slotConfigureEditors()" << endl;
 
-    KDevPartController * partController = API::getInstance()->partController();
-    KParts::Part * part = partController->activePart();
+    KDevDocumentController * documentController = API::getInstance()->documentController();
+    KParts::Part * part = documentController->activePart();
 
     KTextEditor::Document *doc = qobject_cast<KTextEditor::Document *>(part);
     KTextEditor::Editor *editor = doc ? doc->editor() : 0;
@@ -367,19 +367,19 @@ void MainWindowShare::slotGUICreated( KParts::Part * part )
         action->unplugAll();
     }
 
-	if ( KAction * action = part->action("file_save") )
-	{
-		kdDebug(9000) << " *** found \"file_save\" action - disconnecting" << endl;
-		disconnect( action, SIGNAL(activated()), 0, 0 );
-		connect( action, SIGNAL(activated()), PartController::getInstance(), SLOT(slotSave()) );
-	}
+    if ( KAction * action = part->action("file_save") )
+    {
+        kdDebug(9000) << " *** found \"file_save\" action - disconnecting" << endl;
+        disconnect( action, SIGNAL(activated()), 0, 0 );
+        connect( action, SIGNAL(activated()), DocumentController::getInstance(), SLOT(slotSave()) );
+    }
 
-	if ( KAction * action = part->action("file_reload") )
-	{
-		kdDebug(9000) << " *** found \"file_reload\" action - disconnecting" << endl;
-		disconnect( action, SIGNAL(activated()), 0, 0 );
-		connect( action, SIGNAL(activated()), PartController::getInstance(), SLOT(slotReload()) );
-	}
+    if ( KAction * action = part->action("file_reload") )
+    {
+        kdDebug(9000) << " *** found \"file_reload\" action - disconnecting" << endl;
+        disconnect( action, SIGNAL(activated()), 0, 0 );
+        connect( action, SIGNAL(activated()), DocumentController::getInstance(), SLOT(slotReload()) );
+    }
 }
 
 // called when OK ar Apply is clicked in the EditToolbar Dialog
@@ -389,7 +389,7 @@ void MainWindowShare::slotNewToolbarConfig()
 
   m_pMainWnd->applyMainWindowSettings( KGlobal::config(), "Mainwindow" );
 
-//   PartController::getInstance()->reinstallPopups();
+//   DocumentController::getInstance()->reinstallPopups();
 }
 
 void MainWindowShare::slotKeyBindings()
@@ -404,7 +404,7 @@ void MainWindowShare::slotKeyBindings()
   {
   // this is needed for when we have multiple embedded kateparts and change one of them.
   // it also needs to be done to their views, as they too have actioncollections to update
-    if( const Q3PtrList<KParts::Part> * partlist = PartController::getInstance()->parts() )
+    if( const Q3PtrList<KParts::Part> * partlist = DocumentController::getInstance()->parts() )
     {
         Q3PtrListIterator<KParts::Part> it( *partlist );
         while ( KParts::Part* part = it.current() )

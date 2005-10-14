@@ -23,7 +23,7 @@
 #include <QtCore/QPointer>
 
 #include <kdevplugin.h>
-#include <kdevpartcontroller.h>
+#include <kdevdocumentcontroller.h>
 
 class QModelIndex;
 class KURL;

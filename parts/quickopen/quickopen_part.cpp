@@ -38,7 +38,7 @@
 
 #include <kdevmainwindow.h>
 #include <kdevcore.h>
-#include <kdevpartcontroller.h>
+#include <kdevdocumentcontroller.h>
 #include <kdevproject.h>
 
 #include <QtGui/QtGui> // todo: remove me
@@ -112,7 +112,7 @@ void QuickOpenPart::slotQuickOpen( )
 QString QuickOpenPart::getWordInEditor()
 {
     KParts::ReadOnlyPart *
-        ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
+        ro_part = dynamic_cast<KParts::ReadOnlyPart*>(documentController()->activePart());
     if (!ro_part)
         return "";
 

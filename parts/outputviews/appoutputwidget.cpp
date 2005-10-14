@@ -29,7 +29,7 @@
 
 #include "appoutputviewpart.h"
 #include "filterdlg.h"
-#include "kdevpartcontroller.h"
+#include "kdevdocumentcontroller.h"
 #include "kdevmainwindow.h"
 
 AppOutputWidget::AppOutputWidget(AppOutputViewPart* part)
@@ -59,18 +59,18 @@ void AppOutputWidget::childFinished(bool normal, int status)
 }
 
 void AppOutputWidget::slotRowSelected(QListWidgetItem* row)
-{  
+{
   if (row)
     {
       if (assertMatch.exactMatch(row->text()))
         {
-          m_part->partController()->editDocument(KURL( assertMatch.cap(2) ), assertMatch.cap(3).toInt() - 1);
+          m_part->documentController()->editDocument(KURL( assertMatch.cap(2) ), assertMatch.cap(3).toInt() - 1);
           m_part->mainWindow()->statusBar()->message(i18n("Assertion failed: %1").arg(assertMatch.cap(1)), 10000);
           m_part->mainWindow()->lowerView(this);
         }
       else if (lineInfoMatch.search(row->text()) != -1)
         {
-          m_part->partController()->editDocument(KURL( lineInfoMatch.cap(1) ), lineInfoMatch.cap(2).toInt() - 1);
+          m_part->documentController()->editDocument(KURL( lineInfoMatch.cap(1) ), lineInfoMatch.cap(2).toInt() - 1);
           m_part->mainWindow()->statusBar()->message(row->text(), 10000);
           m_part->mainWindow()->lowerView(this);
         }
@@ -130,7 +130,7 @@ void AppOutputWidget::popupContextMenu(const QPoint &pos)
             iFilterType = eFilterStr;
           else if (dlg.rFilterRegExp->isChecked())
             iFilterType = eFilterRegExp;
-            
+
           strFilterStr = dlg.leFilterStr->text();
           bCS = dlg.cbCase->isChecked();
         }
@@ -138,7 +138,7 @@ void AppOutputWidget::popupContextMenu(const QPoint &pos)
         {
           iFilterType = eNoFilter;
         }
-  
+
       //copy the first item from the listbox
       //if a programm was started, this contains the issued command
       QString strFirst;

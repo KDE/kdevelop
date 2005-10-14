@@ -23,7 +23,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
-#include "kdevpartcontroller.h"
+#include "kdevdocumentcontroller.h"
 #include "kdevappfrontend.h"
 #include "kdevplugininfo.h"
 #include "urlutil.h"
@@ -39,18 +39,18 @@ static const KDevPluginInfo data("kdevtools");
 K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( data ) )
 
 ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
-	: KDevPlugin( &data, parent )
+    : KDevPlugin( &data, parent )
 {
   setObjectName(QString::fromUtf8(name));
   setInstance(ToolsFactory::instance());
 
   setXMLFile("kdevpart_tools.rc");
 
-	m_configProxy = new ConfigWidgetProxy( core() );
-	m_configProxy->createGlobalConfigPage( i18n("Tools Menu"), TOOLSSETTINGS, info()->icon() );
-	m_configProxy->createGlobalConfigPage( i18n("External Tools"), EXTRATOOLSSETTINGS, info()->icon() );
-	connect( m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
-		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
+    m_configProxy = new ConfigWidgetProxy( core() );
+    m_configProxy->createGlobalConfigPage( i18n("Tools Menu"), TOOLSSETTINGS, info()->icon() );
+    m_configProxy->createGlobalConfigPage( i18n("External Tools"), EXTRATOOLSSETTINGS, info()->icon() );
+    connect( m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
+        this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
   connect(core(), SIGNAL(coreInitialized()), this, SLOT(updateMenu()));
 
@@ -69,18 +69,18 @@ ToolsPart::~ToolsPart()
 
 void ToolsPart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )
 {
-	if ( pagenumber == TOOLSSETTINGS )
-	{
-		ToolsConfig *w = new ToolsConfig( page, "tools config widget" );
-		connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
-		connect(dlg, SIGNAL(destroyed()), this, SLOT(updateMenu()));
-	}
-	else if ( pagenumber == EXTRATOOLSSETTINGS )
-	{
-		ToolsConfigWidget *w2 = new ToolsConfigWidget( page, "tools config widget" );
-		connect(dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
-		connect(dlg, SIGNAL(destroyed()), this, SLOT(updateToolsMenu()));
-	}
+    if ( pagenumber == TOOLSSETTINGS )
+    {
+        ToolsConfig *w = new ToolsConfig( page, "tools config widget" );
+        connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
+        connect(dlg, SIGNAL(destroyed()), this, SLOT(updateMenu()));
+    }
+    else if ( pagenumber == EXTRATOOLSSETTINGS )
+    {
+        ToolsConfigWidget *w2 = new ToolsConfigWidget( page, "tools config widget" );
+        connect(dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
+        connect(dlg, SIGNAL(destroyed()), this, SLOT(updateToolsMenu()));
+    }
 }
 
 void ToolsPart::updateMenu()
@@ -94,17 +94,17 @@ void ToolsPart::updateMenu()
 
   QStringList list = config->readListEntry("Tools");
   for (QStringList::Iterator it = list.begin(); it != list.end(); ++it)
-	{
-	  QString name = *it;
+    {
+      QString name = *it;
 
-	  KDesktopFile df(name, true);
-	  if (df.readName().isNull())
-		continue;
+      KDesktopFile df(name, true);
+      if (df.readName().isNull())
+        continue;
 
-	  KAction *action = new KAction(df.readName(), df.readIcon(), 0,
+      KAction *action = new KAction(df.readName(), df.readIcon(), 0,
                                         this, SLOT(slotToolActivated()), (QObject*)0, name.latin1());
-	  actions.append(action);
-	}
+      actions.append(action);
+    }
 
   plugActionList("tools_list", actions);
 }
@@ -136,7 +136,7 @@ static QString currentWord(KTextEditor::EditInterface *editiface,
 
 void ToolsPart::startCommand(QString cmdline, bool captured, QString fileName)
 {
-    KParts::Part *part = partController()->activePart();
+    KParts::Part *part = documentController()->activePart();
     KParts::ReadWritePart *rwpart
         = dynamic_cast<KParts::ReadWritePart*>(part);
     KTextEditor::SelectionInterface *selectionIface
@@ -148,11 +148,11 @@ void ToolsPart::startCommand(QString cmdline, bool captured, QString fileName)
 
     if (fileName.isNull() && rwpart)
         fileName = rwpart->url().path();
-    
+
     QString projectDirectory;
     if (project())
         projectDirectory = project()->projectDirectory();
-    
+
     QString selection;
     if (selectionIface)
         selection = KShellProcess::quote(selectionIface->selection());
@@ -160,12 +160,12 @@ void ToolsPart::startCommand(QString cmdline, bool captured, QString fileName)
     QString word;
     if (editIface && cursorIface)
         word = KShellProcess::quote(currentWord(editIface, cursorIface));
-    
+
     // This should really be checked before inserting into the popup
     if (cmdline.contains("%D") && projectDirectory.isNull())
         return;
     cmdline.replace(QRegExp("%D"), projectDirectory);
-    
+
     if (cmdline.contains("%S") && fileName.isNull())
         return;
     cmdline.replace(QRegExp("%S"), fileName);
@@ -183,7 +183,7 @@ void ToolsPart::startCommand(QString cmdline, bool captured, QString fileName)
        if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
             appFrontend->startAppCommand(QString::QString(), cmdline, false);
     }
-    else 
+    else
     {
         KShellProcess proc;
         proc << cmdline;
@@ -228,7 +228,7 @@ void ToolsPart::contextMenu(Q3PopupMenu *popup, const Context *context)
     const FileContext *fcontext = static_cast<const FileContext*>(context);
     m_contextPopup = popup;
     m_contextFileName = fcontext->urls().first().path();
-    
+
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("External Tools");
     QStringList filecontextList = config->readListEntry("File Context");
@@ -268,7 +268,7 @@ void ToolsPart::toolsMenuActivated()
 void ToolsPart::fileContextActivated(int id)
 {
     QString menutext = m_contextPopup->text(id);
-    
+
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("File Context " + menutext);
     QString cmdline = config->readPathEntry("CommandLine");

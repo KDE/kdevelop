@@ -24,7 +24,7 @@
 #include <kaction.h>
 
 #include "toplevel.h"
-#include "partcontroller.h"
+#include "documentcontroller.h"
 #include "core.h"
 
 
@@ -49,14 +49,14 @@ namespace KMdi {
 EditorProxy::EditorProxy()
   : QObject()
 {
-	KConfig *config = kapp->config();
-	config->setGroup("UI");
-	int mdimode = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
+    KConfig *config = kapp->config();
+    config->setGroup("UI");
+    int mdimode = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
 
-	m_delayedViewCreationCompatibleUI = (mdimode == KMdi::IDEAlMode || mdimode == KMdi::TabPageMode);
+    m_delayedViewCreationCompatibleUI = (mdimode == KMdi::IDEAlMode || mdimode == KMdi::TabPageMode);
 
-	KAction *ac = new KAction( i18n("Show Context Menu"), 0, this,
-		SLOT(showPopup()), TopLevel::getInstance()->main()->actionCollection(), "show_popup" );
+    KAction *ac = new KAction( i18n("Show Context Menu"), 0, this,
+        SLOT(showPopup()), TopLevel::getInstance()->main()->actionCollection(), "show_popup" );
     KShortcut cut ;/*= KStdAccel::shortcut(KStdAccel::PopupMenuContext);*/
     cut.append(KKey(Qt::CTRL + Qt::Key_Return));
     ac->setShortcut(cut);
@@ -122,7 +122,7 @@ void EditorProxy::installPopup( KParts::Part * part )
             case KMdi::AlwaysShowTabs:
                 break;
             case KMdi::ShowWhenMoreThanOneTab:
-                if(PartController::getInstance()->parts()->count() > 1)
+                if(DocumentController::getInstance()->parts()->count() > 1)
                     break;
             case KMdi::NeverShowTabs:
                 // I'm not sure if this is papering over a bug in xmlgui or not, but this test is
@@ -191,17 +191,17 @@ void EditorProxy::popupAboutToShow()
 //        kdDebug(9000) << "leaving id " << id << endl;
     }
   }
-/*	// why twice !?!?
+/*  // why twice !?!?
   // ugly hack: mark the "original" items
   m_popupIds.resize(popup->count());
   for (uint index=0; index < popup->count(); ++index)
     m_popupIds[index] = popup->idAt(index);
 */
 
-  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(PartController::getInstance()->activePart());
+  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(DocumentController::getInstance()->activePart());
   if (!ro_part)
     return;
-/*	// I disagree.. the EditorContext shouldn't emit the filecontext event
+/*  // I disagree.. the EditorContext shouldn't emit the filecontext event
   // fill the menu in the file context
   FileContext context(ro_part->url().path(), false);
   Core::getInstance()->fillContextMenu(popup, &context);
@@ -267,19 +267,19 @@ void EditorProxy::popupAboutToShow()
 void EditorProxy::showPopup( )
 {
 #if 0
-	kdDebug(9000) << k_funcinfo << endl;
+    kdDebug(9000) << k_funcinfo << endl;
 
-	if ( KParts::Part * part = PartController::getInstance()->activePart() )
-	{
-		ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>( part->widget() );
-		if ( iface )
-		{
-			KTextEditor::View * view = static_cast<KTextEditor::View*>( part->widget() );
-			Q3PopupMenu * popup = static_cast<Q3PopupMenu*>( view->factory()->container("ktexteditor_popup", view ) );
+    if ( KParts::Part * part = DocumentController::getInstance()->activePart() )
+    {
+        ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>( part->widget() );
+        if ( iface )
+        {
+            KTextEditor::View * view = static_cast<KTextEditor::View*>( part->widget() );
+            Q3PopupMenu * popup = static_cast<Q3PopupMenu*>( view->factory()->container("ktexteditor_popup", view ) );
 
-			popup->exec( view->mapToGlobal( iface->cursorCoordinates() ) );
-		}
-	}
+            popup->exec( view->mapToGlobal( iface->cursorCoordinates() ) );
+        }
+    }
 #endif // ####TODO
 }
 
@@ -355,7 +355,7 @@ void EditorWrapper::show()
 
   m_doc->insertChildClient(m_view);
 
-  PartController::getInstance()->integrateTextEditorPart(m_doc);
+  DocumentController::getInstance()->integrateTextEditorPart(m_doc);
 
   if (m_view) {
     m_view->setCursorPosition(Cursor(m_line, m_col == -1 ? 0 : m_col));
@@ -370,43 +370,43 @@ void EditorWrapper::show()
 
 QWidget * EditorProxy::widgetForPart( KParts::Part * part )
 {
-	if ( !part ) return 0;
+    if ( !part ) return 0;
 
-	if (part->widget())
-		return part->widget();
+    if (part->widget())
+        return part->widget();
 
         foreach (EditorWrapper *wrapper, m_editorParts) {
             if (wrapper->document() == part)
                 return wrapper;
         }
 
-	return 0L;
+    return 0L;
 }
 
 QWidget * EditorProxy::topWidgetForPart( KParts::Part * part )
 {
-	if ( !part ) return 0;
+    if ( !part ) return 0;
 
         foreach (EditorWrapper *wrapper, m_editorParts) {
             if (wrapper->document() == part)
                 return wrapper;
         }
 
-	if (part->widget())
-		return part->widget();
+    if (part->widget())
+        return part->widget();
 
-	return 0L;
+    return 0L;
 }
 
 bool EditorProxy::isDelayedViewCapable( )
 {
-	return m_delayedViewCreationCompatibleUI;
+    return m_delayedViewCreationCompatibleUI;
 }
 
 void EditorWrapper::focusInEvent( QFocusEvent * ev )
 {
-	if (visibleWidget())
-		visibleWidget()->setFocus();
+    if (visibleWidget())
+        visibleWidget()->setFocus();
 }
 
 #include "editorproxy.moc"

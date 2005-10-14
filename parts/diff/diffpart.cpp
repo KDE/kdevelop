@@ -27,7 +27,7 @@
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
-#include "kdevpartcontroller.h"
+#include "kdevdocumentcontroller.h"
 #include "kdevplugininfo.h"
 
 #include "diffpart.h"
@@ -81,7 +81,7 @@ static bool urlIsEqual(const KURL &a, const KURL &b)
   return a == b;
 }
 
-static KParts::ReadWritePart* partForURL(const KURL &url, KDevPartController* pc)
+static KParts::ReadWritePart* partForURL(const KURL &url, KDevDocumentController* pc)
 {
   if ( !pc )
     return 0;
@@ -113,10 +113,10 @@ void DiffPart::contextMenu( QMenu* popup, const Context* context )
         return;
     }
 
-    KParts::ReadWritePart* rw_part = partForURL( popupFile, partController() );
+    KParts::ReadWritePart* rw_part = partForURL( popupFile, documentController() );
     if ( !rw_part ) return;
 
-    if ( partController()->documentState( rw_part->url() ) != Clean )
+    if ( documentController()->documentState( rw_part->url() ) != Clean )
     {
         int id = popup->insertItem( i18n( "Difference to Disk File" ),
                             this, SLOT(localDiff()) );
@@ -137,7 +137,7 @@ DiffPart::~DiffPart()
 void DiffPart::localDiff()
 {
 #if 0
-  KParts::ReadWritePart* rw_part = partForURL( popupFile, partController() );
+  KParts::ReadWritePart* rw_part = partForURL( popupFile, documentController() );
   if ( !rw_part )
     return;
 
