@@ -96,7 +96,7 @@ public:
 
     /**@return The feature set of the language. This is e.g. used
     by the class view to decide which organizer items to display and which not.*/
-    virtual Features features() const = 0;
+    virtual int features() const = 0;
     
     /**@return A typical mimetype list for the support language, this list 
     should be configurable in the languagesupport dialog.*/
