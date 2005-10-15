@@ -7,11 +7,12 @@
 
 SUBDIRS = parser app_templates
 
-AM_CPPFLAGS = $(all_includes) -I$(top_srcdir)/lib/interfaces
+AM_CPPFLAGS = -I$(top_srcdir)/lib/interfaces \
+	$(all_includes)
 
-lib_LTLIBRARIES = libkdevcpplanguagesupport.la
+kde_module_LTLIBRARIES = libkdevcpplanguagesupport.la
 libkdevcpplanguagesupport_la_SOURCES = cpplanguagesupport.cpp cppsupportfactory.cpp
-libkdevcpplanguagesupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
+libkdevcpplanguagesupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 libkdevcpplanguagesupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 METASOURCES = AUTO

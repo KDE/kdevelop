@@ -1,6 +1,7 @@
 /*
  * KDevelop C++ Language Support
  *
+ * Copyright (c) 2005 Matt Rogers <mattr@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -18,6 +19,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <kdebug.h>
 #include <kinstance.h>
 #include <kstandarddirs.h>
 
@@ -39,6 +41,18 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
                  KDevLanguageSupport::Signals |
                  KDevLanguageSupport::Slots |
                  KDevLanguageSupport::Declarations;
+    //I don't particular like this long string, but it seems easier
+    //this way
+    QString types = QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
+    QStringList typesList = types.split( "," );
+    foreach ( QString s, typesList )
+    {
+        kdDebug(9007) << k_funcinfo << "Attempting to add mimetype: " << s << endl;
+        KMimeType::Ptr mimeType = KMimeType::mimeType( s );
+        if ( mimeType->is( s ) )
+            m_mimetypes.append( mimeType );
+    }
+
 }
 
 CppLanguageSupport::~CppLanguageSupport()

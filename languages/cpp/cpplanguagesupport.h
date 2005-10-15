@@ -1,6 +1,7 @@
 /*
  * KDevelop C++ Language Support
  *
+ * Copyright (c) 2005 Matt Rogers <mattr@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
