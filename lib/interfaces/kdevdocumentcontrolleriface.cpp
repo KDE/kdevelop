@@ -20,55 +20,46 @@
 #include <dcopclient.h>
 #include <kurl.h>
 
-
 #include "kdevdocumentcontrolleriface.h"
 #include "kdevdocumentcontroller.h"
-
 
 KDevDocumentControllerIface::KDevDocumentControllerIface(KDevDocumentController *pc)
   : QObject(pc), DCOPObject("KDevDocumentController"), m_controller(pc)
 {
-  connect(pc, SIGNAL(loadedDocument(const KURL &)), this, SLOT(forwardLoadedDocument(const KURL &)));
-  connect(pc, SIGNAL(savedDocument(const KURL &)), this, SLOT(forwardSavedDocument(const KURL &)));
+  connect(pc, SIGNAL(documentLoaded(const KURL &)), this, SLOT(forwardLoadedDocument(const KURL &)));
+  connect(pc, SIGNAL(documentSaved(const KURL &)), this, SLOT(forwardSavedDocument(const KURL &)));
   connect(pc, SIGNAL(documentClosed(const KURL &)), this, SLOT(forwardClosedDocument(const KURL &)));
 }
-
 
 KDevDocumentControllerIface::~KDevDocumentControllerIface()
 {
 }
-
 
 void KDevDocumentControllerIface::editDocument(const QString &url, int lineNum)
 {
   m_controller->editDocument(KURL(url), lineNum);
 }
 
-
 void KDevDocumentControllerIface::showDocument(const QString &url, bool newWin)
 {
   m_controller->showDocument(KURL(url), newWin);
 }
-
 
 void KDevDocumentControllerIface::saveAllDocuments()
 {
   m_controller->saveAllDocuments();
 }
 
-
 void KDevDocumentControllerIface::reloadAllDocuments()
 {
   m_controller->reloadAllDocuments();
 }
-
 
 void KDevDocumentControllerIface::forwardLoadedDocument(const KURL &url)
 {
   kdDebug(9000) << "dcop emitting loadedDocument " << url << endl;
   emitDCOPSignal("projectOpened()", QByteArray());
 }
-
 
 void KDevDocumentControllerIface::forwardSavedDocument(const KURL &url)
 {
