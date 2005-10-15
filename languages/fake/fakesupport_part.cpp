@@ -18,9 +18,9 @@ FakeLanguageSupport::~FakeLanguageSupport()
 {
 }
 
-FakeLanguageSupport::Features FakeLanguageSupport::features() const
+int FakeLanguageSupport::features() const
 {
-  return Features();
+  return 0; 
 }
 
 KMimeType::List FakeLanguageSupport::mimeTypes() const
