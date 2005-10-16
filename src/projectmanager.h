@@ -105,7 +105,7 @@ private:
 
   QString m_oldProfileName;
 
-  bool m_toolbarStatus[4];
+  bool m_toolbarStatus[5];
 };
 
 

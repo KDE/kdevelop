@@ -243,6 +243,10 @@ bool ProjectManager::loadProject(const KURL &url)
     TopLevel::getInstance()->main()->toolBar("viewToolBar")->setIconText(KToolBar::IconOnly);
     TopLevel::getInstance()->main()->toolBar("browserToolBar")->setIconSize(22);
     TopLevel::getInstance()->main()->toolBar("browserToolBar")->setIconText(KToolBar::IconOnly);
+    if (TopLevel::getInstance()->main()->toolBar("debugToolBar")) {
+        TopLevel::getInstance()->main()->toolBar("debugToolBar")->setIconSize(22);
+        TopLevel::getInstance()->main()->toolBar("debugToolBar")->setIconText(KToolBar::IconOnly);
+    }
   }
 
   m_toolbarStatus[0] = TopLevel::getInstance()->main()->toolBar("mainToolBar")->isShown();
@@ -253,6 +257,10 @@ bool ProjectManager::loadProject(const KURL &url)
   TopLevel::getInstance()->main()->toolBar("viewToolBar")->hide();
   m_toolbarStatus[3] = TopLevel::getInstance()->main()->toolBar("browserToolBar")->isShown();
   TopLevel::getInstance()->main()->toolBar("browserToolBar")->hide();
+  if (TopLevel::getInstance()->main()->toolBar("debugToolBar")) {
+    m_toolbarStatus[4] = TopLevel::getInstance()->main()->toolBar("debugToolBar")->isShown();
+    TopLevel::getInstance()->main()->toolBar("debugToolBar")->hide();
+  }
 
   // no one cares about this value
   return true;
@@ -269,6 +277,9 @@ void ProjectManager::slotRestoreToolbars()
     TopLevel::getInstance()->main()->toolBar("viewToolBar")->show();
   if (m_toolbarStatus[3])
     TopLevel::getInstance()->main()->toolBar("browserToolBar")->show();
+  if (TopLevel::getInstance()->main()->toolBar("debugToolBar"))
+    if (m_toolbarStatus[4])
+      TopLevel::getInstance()->main()->toolBar("debugToolBar")->show();
 }
 
 void ProjectManager::slotLoadProject( )
