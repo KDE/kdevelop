@@ -231,8 +231,31 @@ bool ProjectManager::loadProject(const KURL &url)
 
   QTimer::singleShot( 0, this, SLOT(slotLoadProject()) );
 
+  // Super Hack!!!
+  m_toolbarStatus[0] = TopLevel::getInstance()->main()->toolBar("mainToolBar")->isShown();
+  TopLevel::getInstance()->main()->toolBar("mainToolBar")->hide();
+  m_toolbarStatus[1] = TopLevel::getInstance()->main()->toolBar("buildToolBar")->isShown();
+  TopLevel::getInstance()->main()->toolBar("buildToolBar")->hide();
+  m_toolbarStatus[2] = TopLevel::getInstance()->main()->toolBar("viewToolBar")->isShown();
+  TopLevel::getInstance()->main()->toolBar("viewToolBar")->hide();
+  m_toolbarStatus[3] = TopLevel::getInstance()->main()->toolBar("browserToolBar")->isShown();
+  TopLevel::getInstance()->main()->toolBar("browserToolBar")->hide();
+
   // no one cares about this value
   return true;
+}
+
+void ProjectManager::slotRestoreToolbars()
+{
+  // Reverse Super Hack!!!
+  if (m_toolbarStatus[0])
+    TopLevel::getInstance()->main()->toolBar("mainToolBar")->show();
+  if (m_toolbarStatus[1])
+    TopLevel::getInstance()->main()->toolBar("buildToolBar")->show();
+  if (m_toolbarStatus[2])
+    TopLevel::getInstance()->main()->toolBar("viewToolBar")->show();
+  if (m_toolbarStatus[3])
+    TopLevel::getInstance()->main()->toolBar("browserToolBar")->show();
 }
 
 void ProjectManager::slotLoadProject( )
@@ -291,6 +314,8 @@ void ProjectManager::slotLoadProject( )
   kapp->restoreOverrideCursor();
 
   TopLevel::getInstance()->statusBar()->message( i18n("Project loaded."), 3000 );
+
+  QTimer::singleShot( 0, this, SLOT(slotRestoreToolbars()) );
 
   return;
 }

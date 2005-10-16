@@ -70,6 +70,7 @@ private slots:
   void slotProjectOptions();
 
   void slotLoadProject();
+  void slotRestoreToolbars();
 
   void loadLocalParts();
 
@@ -103,6 +104,8 @@ private:
   QString m_vcsName;
 
   QString m_oldProfileName;
+
+  bool m_toolbarStatus[4];
 };
 
 
