@@ -232,6 +232,19 @@ bool ProjectManager::loadProject(const KURL &url)
   QTimer::singleShot( 0, this, SLOT(slotLoadProject()) );
 
   // Super Hack!!!
+  static bool toolbarsHacked = false;
+  if (!toolbarsHacked) {
+    toolbarsHacked = true;
+    TopLevel::getInstance()->main()->toolBar("mainToolBar")->setIconSize(22);
+    TopLevel::getInstance()->main()->toolBar("mainToolBar")->setIconText(KToolBar::IconOnly);
+    TopLevel::getInstance()->main()->toolBar("buildToolBar")->setIconSize(22);
+    TopLevel::getInstance()->main()->toolBar("buildToolBar")->setIconText(KToolBar::IconOnly);
+    TopLevel::getInstance()->main()->toolBar("viewToolBar")->setIconSize(22);
+    TopLevel::getInstance()->main()->toolBar("viewToolBar")->setIconText(KToolBar::IconOnly);
+    TopLevel::getInstance()->main()->toolBar("browserToolBar")->setIconSize(22);
+    TopLevel::getInstance()->main()->toolBar("browserToolBar")->setIconText(KToolBar::IconOnly);
+  }
+
   m_toolbarStatus[0] = TopLevel::getInstance()->main()->toolBar("mainToolBar")->isShown();
   TopLevel::getInstance()->main()->toolBar("mainToolBar")->hide();
   m_toolbarStatus[1] = TopLevel::getInstance()->main()->toolBar("buildToolBar")->isShown();
