@@ -24,6 +24,7 @@
 
 #include <kdevlanguagesupport.h>
 
+class BackgroundParser;
 
 class CppLanguageSupport : public KDevLanguageSupport
 {
@@ -35,16 +36,26 @@ public:
 
     //KDevLanguageSupport implementation
     virtual int features() const;
-    virtual KMimeType::List mimeTypes() const;
+    virtual QStringList mimeTypes() const;
 
     virtual QString formatTag( const Tag& /*tag*/ ) const { return QString(); }
     virtual QString formatModelItem( const KDevCodeItem* /*item*/, bool ) const { return QString(); }
     virtual QString formatClassName( const QString& name ) const { return name; }
     virtual QString unformatClassName( const QString& name ) const { return name; }
 
+private slots:
+    void documentLoaded( const KURL &url );
+    void documentClosed( const KURL &url );
+
+private:
+    bool isCppLanguageDocument( const KURL &url );
+
 private:
     int m_features;
-    KMimeType::List m_mimetypes;
+    QStringList m_mimetypes;
+    BackgroundParser *m_backgroundParser;
 };
 
 #endif
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

@@ -20,12 +20,12 @@ FakeLanguageSupport::~FakeLanguageSupport()
 
 int FakeLanguageSupport::features() const
 {
-  return 0; 
+  return 0;
 }
 
-KMimeType::List FakeLanguageSupport::mimeTypes() const
+QStringList FakeLanguageSupport::mimeTypes() const
 {
-  return KMimeType::List();
+  return QStringList();
 }
 
 QString FakeLanguageSupport::formatTag(const Tag& tag) const

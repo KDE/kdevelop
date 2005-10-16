@@ -2,6 +2,7 @@
  * KDevelop C++ Language Support
  *
  * Copyright (c) 2005 Matt Rogers <mattr@kde.org>
+ * Copyright (c) 2005 Adam Treat <treat@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -23,9 +24,11 @@
 #include <kinstance.h>
 #include <kstandarddirs.h>
 
+#include <kdevdocumentcontroller.h>
+
+#include "backgroundparser.h"
 #include "cppsupportfactory.h"
 #include "cpplanguagesupport.h"
-
 
 CppLanguageSupport::CppLanguageSupport( QObject* parent,
                                         const char* name,
@@ -41,18 +44,16 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
                  KDevLanguageSupport::Signals |
                  KDevLanguageSupport::Slots |
                  KDevLanguageSupport::Declarations;
-    //I don't particular like this long string, but it seems easier
-    //this way
-    QString types = QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
-    QStringList typesList = types.split( "," );
-    foreach ( QString s, typesList )
-    {
-        kdDebug(9007) << k_funcinfo << "Attempting to add mimetype: " << s << endl;
-        KMimeType::Ptr mimeType = KMimeType::mimeType( s );
-        if ( mimeType->is( s ) )
-            m_mimetypes.append( mimeType );
-    }
 
+    QString types = QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
+    m_mimetypes = types.split( "," );
+
+    m_backgroundParser = new BackgroundParser( this );
+
+    connect( documentController(), SIGNAL( documentLoaded( const KURL & ) ),
+             this, SLOT( documentLoaded( const KURL & ) ) );
+    connect( documentController(), SIGNAL( documentClosed( const KURL & ) ),
+             this, SLOT( documentClosed( const KURL & ) ) );
 }
 
 CppLanguageSupport::~CppLanguageSupport()
@@ -64,11 +65,32 @@ int CppLanguageSupport::features() const
     return m_features;
 }
 
-KMimeType::List CppLanguageSupport::mimeTypes() const
+QStringList CppLanguageSupport::mimeTypes() const
 {
     return m_mimetypes;
 }
 
+void CppLanguageSupport::documentLoaded( const KURL &url )
+{
+    if ( isCppLanguageDocument( url ) )
+        m_backgroundParser->addDocument( url );
+}
+
+void CppLanguageSupport::documentClosed( const KURL &url )
+{
+    if ( isCppLanguageDocument( url ) )
+        m_backgroundParser->removeDocument( url );
+}
+
+bool CppLanguageSupport::isCppLanguageDocument( const KURL &url )
+{
+    KMimeType::Ptr mimetype = KMimeType::findByURL( url );
+    foreach ( QString mime, m_mimetypes )
+        if ( mimetype->is( mime ) )
+            return true;
+    return false;
+}
+
 #include "cpplanguagesupport.moc"
 
-//kate: space-indent on; indent-width 4;
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

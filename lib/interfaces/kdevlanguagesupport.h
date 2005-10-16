@@ -68,12 +68,12 @@ public:
         Structs=2        /**<Language has structures or records.*/,
         Functions=4      /**<Language has functions.*/,
         Variables=8      /**<Language has variables.*/,
-        
+
         Namespaces=16    /**<Language has namespaces.*/,
         Signals=32       /**<Language has signals (or qt library bindings are available).*/,
         Slots=64         /**<Language has slots (or qt library bindings are available).*/,
         Declarations=128 /**<Language has function declarations (like c, c++ and pascal).*/,
-                   
+
         /*features of the language support part*/
         NewClass=512        /**<Language support can create classes.*/,
         AddMethod=1024      /**<Language support can create methods.*/,
@@ -97,15 +97,15 @@ public:
     /**@return The feature set of the language. This is e.g. used
     by the class view to decide which organizer items to display and which not.*/
     virtual int features() const = 0;
-    
-    /**@return A typical mimetype list for the support language, this list 
+
+    /**@return A typical mimetype list for the support language, this list
     should be configurable in the languagesupport dialog.*/
-    virtual KMimeType::List mimeTypes() const = 0;
+    virtual QStringList mimeTypes() const = 0;
 
     /**Formats a Tag as used by the persistant symbol store to the human-readable convention.
     @param tag Tag to format.*/
     virtual QString formatTag(const Tag& tag) const = 0;
-    
+
     /**Formats a KDevCodeItem as used by the CodeModel to the human-readable convention.
     @param item Symbol to format.
     @param shortDescription Show short description of a symbol. For example, when
@@ -113,12 +113,12 @@ public:
     the return type and argument default values.*/
     virtual QString formatModelItem(const KDevCodeItem *item, bool shortDescription=false) const = 0;
 
-    /**Formats a canonicalized class path as used by the symbol store to the 
+    /**Formats a canonicalized class path as used by the symbol store to the
     human-readable convention. For example, the C++ support part formats the
     string "KParts.Part" into "KParts::Part".
     @param name Class name.*/
     virtual QString formatClassName(const QString &name) const = 0;
-    
+
     /**The opposite of @ref formatClassName. Reverts formatting.
     @param name Class name.*/
     virtual QString unformatClassName(const QString &name) const = 0;

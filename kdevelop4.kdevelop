@@ -9,7 +9,7 @@
     <author>KDevelop Authors</author>
     <email>kdevelop-devel@kdevelop.org</email>
     <version>CVS</version>
-    <primarylanguage>Fake</primarylanguage>
+    <primarylanguage>C++</primarylanguage>
     <keywords>
       <keyword>Qt</keyword>
       <keyword>KDE</keyword>

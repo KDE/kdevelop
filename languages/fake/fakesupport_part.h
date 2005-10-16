@@ -16,7 +16,7 @@ public:
 
   /**@return A typical mimetype list for the support language, this list
   should be configurable in the languagesupport dialog.*/
-  virtual KMimeType::List mimeTypes() const;
+  virtual QStringList mimeTypes() const;
 
   /**Formats a Tag as used by the persistant symbol store to the human-readable convention.
   @param tag Tag to format.*/
