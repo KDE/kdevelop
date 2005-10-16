@@ -32,6 +32,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevautomakeimporter,
 AutoMakeImporter::AutoMakeImporter( QObject* parent, const char* name,
                                     const QStringList& )
     : KDevProjectEditor( parent )
+    , m_rootItem(0L)
 {
     setObjectName( QString::fromUtf8( name ) );
     m_project = qobject_cast<KDevProject*>( parent );
