@@ -25,4 +25,4 @@ Icon=gear
 ServiceTypes=KDevelop/ProjectImporter
 X-KDE-Library=libkdevautomakeimporter
 X-KDevelop-ProjectImporter=
-X-KDevelop-Version=4
+X-KDevelop-Version=3

@@ -19,86 +19,82 @@
 #ifndef AUTOMAKEPROJECTMODEL_H
 #define AUTOMAKEPROJECTMODEL_H
 
-#include <kdevprojectmodel.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
+#include <QIcon>
+#include "kdevprojectmodel.h"
 
-class AutomakeFolderModel;
-class AutomakeTargetModel;
-class AutomakeFileModel;
-
-typedef KSharedPtr<AutomakeFolderModel> AutomakeFolderDom;
-typedef KSharedPtr<AutomakeTargetModel> AutomakeTargetDom;
-typedef KSharedPtr<AutomakeFileModel> AutomakeFileDom;
-
-typedef Q3ValueList<AutomakeFolderDom> AutomakeFolderList;
-typedef Q3ValueList<AutomakeTargetDom> AutomakeTargetList;
-typedef Q3ValueList<AutomakeFileDom> AutomakeFileList;
-
-class AutomakeTargetModel: public ProjectTargetModel
+class AutoMakeItem : public KDevProjectItem
 {
 public:
-    typedef AutomakeTargetDom Ptr;
-    
-protected:
-    AutomakeTargetModel(ProjectModel *projectModel)
-        : ProjectTargetModel(projectModel) {}
-        
-public: 
-    static AutomakeTargetDom from(ProjectTargetDom dom)
-    { return AutomakeTargetDom(dynamic_cast<AutomakeTargetModel*>(dom.data())); }
+    AutoMakeItem( const QString& name,  KDevItemGroup* parent = 0 );
+    virtual ~AutoMakeItem();
 
-// ### use attribute/setAttribute    
-    QString path;
-    QString primary;
-    QString prefix;
-    
-    QString ldflags;
-    QString ldadd;
-    QString libadd;
-    QString dependencies;
-    
-private:
-    friend class ProjectModel;
+    virtual KDevProjectItem* itemAt( int index ) const;
+    virtual KDevProjectFolderItem* folder() const { return 0; }
+    virtual KDevProjectTargetItem* target() const { return 0; }
+    virtual KDevProjectFileItem* file() const { return 0; }
+
+    virtual QList<KDevProjectFolderItem*> folderList() const
+    {
+        return QList<KDevProjectFolderItem*>();
+    }
+
+    virtual QList<KDevProjectTargetItem*> targetList() const
+    {
+        return QList<KDevProjectTargetItem*>();
+    }
+
+    virtual QList<KDevProjectFileItem*> fileList() const
+    {
+        return QList<KDevProjectFileItem*>();
+    }
+
 };
 
-class AutomakeFileModel: public ProjectFileModel
+class AutoMakeDirItem : public KDevProjectFolderItem
 {
 public:
-    typedef AutomakeFileDom Ptr;
-    
-protected:
-    AutomakeFileModel(ProjectModel *projectModel)
-        : ProjectFileModel(projectModel) {}
+    AutoMakeDirItem( const QString& name, KDevItemGroup* parent = 0 );
+    virtual ~AutoMakeDirItem();
 
-public:
-    static AutomakeFileDom from(ProjectFileDom dom)
-    { return AutomakeFileDom(dynamic_cast<AutomakeFileModel*>(dom.data())); }
-    
-private:
-    friend class ProjectModel;
+    virtual KDevProjectFolderItem* folder() const
+    {
+        return const_cast<AutoMakeDirItem*>( this );
+    }
 };
 
-class AutomakeFolderModel: public ProjectFolderModel
+class AutoMakeFileItem : public KDevProjectFileItem
 {
 public:
-    typedef AutomakeFolderDom Ptr;
-    
-protected:
-    AutomakeFolderModel(ProjectModel *projectModel)
-        : ProjectFolderModel(projectModel) {}
-            
-public:
-    static AutomakeFolderDom from(ProjectFolderDom dom)
-    { return AutomakeFolderDom(dynamic_cast<AutomakeFolderModel*>(dom.data())); }
-    
-    QStringList subdirs() const;
-    void addSubdir(const QString &path);
+    AutoMakeFileItem( const QFileInfo& fileInfo, KDevItemGroup* parent = 0 );
+    virtual ~AutoMakeFileItem();
 
-    QMap<QString, QString> prefixes;
-    
+    virtual KDevProjectFileItem* fileItem() const
+    {
+        return const_cast<AutoMakeFileItem*>( this );
+    }
+
+    virtual QIcon icon() const { return QIcon(); }
+
+};
+
+class AutoMakeTargetItem : public KDevProjectTargetItem
+{
+public:
+    AutoMakeTargetItem( const QString& name, KDevItemGroup* parent = 0 );
+    virtual ~AutoMakeTargetItem();
+
+    virtual KDevProjectTargetItem* target() const
+    {
+        return const_cast<AutoMakeTargetItem*>( this );
+    }
+
+
 private:
-    friend class ProjectModel;
+    QString m_prefix;
+    QString m_target;
+    QList<AutoMakeFileItem*> m_fileList;
+
 };
 
 #endif // AUTOMAKEPROJECTMODEL_H

@@ -1,37 +1,66 @@
-/* This file is part of KDevelop
-    Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
+/*
+ *  KDevelop Automake Support
+ *  Copyright (C) 2005 Matt Rogers <mattr@kde.org>
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public License
+ *  along with this library; see the file COPYING.LIB.  If not, write to
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
+ */
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-    Boston, MA 02111-1307, USA.
-*/
 #include "automakeprojectmodel.h"
 
-#include <urlutil.h>
-
-#include <qregexp.h>
-
-QStringList AutomakeFolderModel::subdirs() const
+AutoMakeItem::AutoMakeItem( const QString& name, KDevItemGroup* parent )
+    : KDevProjectItem( name, parent )
 {
-    QString s = attribute("SUBDIRS").toString();
-    return QStringList::split(QRegExp("[ \t]+"), s);
 }
 
-void AutomakeFolderModel::addSubdir(const QString &path)
+AutoMakeItem::~AutoMakeItem()
 {
-    QString s = URLUtil::relativePathToFile(name(), path);
-    Q_ASSERT(!s.isEmpty());
-    QString subdirs = attribute("SUBDIRS").toString() + " " + s;
-    setAttribute("SUBDIRS", subdirs.stripWhiteSpace());
 }
+
+KDevProjectItem* AutoMakeItem::itemAt( int index ) const
+{
+    return dynamic_cast<KDevProjectItem*>( KDevItemCollection::itemAt( index ) );
+}
+
+
+AutoMakeDirItem::AutoMakeDirItem( const QString& name, KDevItemGroup* parent )
+    : KDevProjectFolderItem( name, parent )
+{
+}
+
+AutoMakeDirItem::~AutoMakeDirItem()
+{
+}
+
+
+AutoMakeFileItem::AutoMakeFileItem( const QFileInfo& name, KDevItemGroup* parent )
+    : KDevProjectFileItem( name, parent )
+{
+}
+
+AutoMakeFileItem::~AutoMakeFileItem()
+{
+}
+
+AutoMakeTargetItem::AutoMakeTargetItem( const QString& name, KDevItemGroup* parent )
+    : KDevProjectTargetItem( name, parent )
+{
+}
+
+AutoMakeTargetItem::~AutoMakeTargetItem()
+{
+}
+
+#include "automakeprojectmodel.h"

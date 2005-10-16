@@ -10,19 +10,23 @@ METASOURCES = AUTO
 lib_LTLIBRARIES = \
     libkdevautomakeimporter.la
 
-noinst_HEADERS = \
-    kdevautomakeimporter.h \
-    automakeprojectmodel.h
-    
-libkdevautomakeimporter_la_SOURCES = \
-    kdevautomakeimporter.cpp \
-    automakeprojectmodel.cpp
+libkdevautomakeimporter_la_SOURCES = autotoolsast.cpp autotoolsdriver.cpp \
+    automakeprojectmodel.cpp autotools_yacc.cpp automakeimporter.cpp
 
 kde_services_DATA =  kdevautomakeimporter.desktop
 
 libkdevautomakeimporter_la_LIBADD = \
-    $(top_builddir)/lib/projectmanager/interfaces/libprojectmanager_interfaces.la \
+    $(top_builddir)/lib/projectmanager/libkdevprojectmanager.la \
     $(top_builddir)/lib/libkdevelop.la
     
 libkdevautomakeimporter_la_LDFLAGS = \
-    -module $(all_libraries) $(KDE_PLUGIN)
+    $(all_libraries) $(KDE_PLUGIN)
+
+parser:
+	cd $(srcdir) ; \
+        bison -d autotools.yy -o autotools_yacc.cpp ; \
+        mv -f autotools_yacc.hpp autotools_yacc.h ; \
+        flex -oautotools_lex.cpp autotools.ll
+
+EXTRA_DIST = autotools.yy autotools.ll
+

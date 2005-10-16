@@ -1,4 +1,4 @@
 
-SUBDIRS = generic
-#### TODO automake  qmake
+SUBDIRS = generic automake
+### TODO automake  qmake
 
