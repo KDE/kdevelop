@@ -40,6 +40,11 @@ namespace KParts
 class ReadOnlyPart;
 }
 
+namespace KTextEditor
+{
+class Document;
+}
+
 /**Document state enum.*/
 enum DocumentState
 {
@@ -89,6 +94,11 @@ public:
     @param url The URL of the document.
     @return The corresponding part, 0 if not found.*/
     virtual KParts::ReadOnlyPart *partForURL( const KURL & url ) = 0;
+
+    /**Finds the embedded KTextEditor document corresponding to a given URL.
+    @param url The URL of the document.
+    @return The corresponding document, 0 if not found.*/
+    virtual KTextEditor::Document* documentForURL( const KURL & url ) = 0;
 
     /**Finds the embedded part corresponding to a given main widget
     @param widget The parts main widget.

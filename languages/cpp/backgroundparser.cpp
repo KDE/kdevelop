@@ -19,10 +19,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kdebug.h>
+#include "backgroundparser.h"
 
 #include <QList>
 #include <QTimer>
+
+#include <kdebug.h>
+
+#include <ktexteditor/document.h>
+
+#include "kdevdocumentcontroller.h"
 
 #include <ThreadWeaver.h>
 #include "preprocessjob.h"
@@ -32,16 +38,18 @@
 #include "parser/control.h"
 #include "parser/parser.h"
 
-#include "backgroundparser.h"
+#include "cpplanguagesupport.h"
 
 BackgroundParser::BackgroundParser( QObject* parent )
     : QObject( parent )
 {
     m_weaver = ThreadWeaver::Weaver::instance();
-    m_timer = new QTimer( this );
     m_preprocessor = new Preprocessor( this );
     m_control = new Control();
     m_parser = new Parser( m_control );
+
+    m_timer = new QTimer( this );
+    m_timer->setSingleShot(true);
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
     m_timer->start( 500 );
 }
@@ -56,29 +64,46 @@ void BackgroundParser::addDocument( const KURL &url )
 {
     if ( !m_documents.contains( url ) )
     {
-        m_documents.append( url );
+        m_documents.insert( url, true );
+
+        if (KTextEditor::Document* doc = static_cast<CppLanguageSupport*>(parent())->documentController()->documentForURL(url))
+            connect(doc, SIGNAL(textChanged(KTextEditor::Document*)), SLOT(documentChanged(KTextEditor::Document*)));
+
         parseDocuments();
     }
 }
 
 void BackgroundParser::removeDocument( const KURL &url )
 {
-    m_documents.removeAll( url );
+    m_documents.remove( url );
 }
 
 void BackgroundParser::parseDocuments()
 {
     QList< ThreadWeaver::Job* > jobs;
-    foreach ( KURL url, m_documents )
+    for ( QMap<KURL,bool>::Iterator it = m_documents.begin(); it != m_documents.end(); ++it )
     {
 //         PreprocessJob *preprocess =
 //             new PreprocessJob( url, m_preprocessor, this );
-        ParseJob *parse = new ParseJob( url, m_parser, this );
+        if (it.value()) {
+            ParseJob *parse = new ParseJob( it.key(), m_parser, this );
+            it.value() = false;
+
 //         parse->addDependency( preprocess );
 //         jobs.append( preprocess );
-        jobs.append( parse );
+
+            jobs.append( parse );
+        }
     }
     m_weaver->enqueue( jobs );
+}
+
+void BackgroundParser::documentChanged( KTextEditor::Document * document )
+{
+    Q_ASSERT(m_documents.contains(document->url()));
+    m_documents.insert(document->url(), true);
+    if (!m_timer->isActive())
+        m_timer->start( 500 );
 }
 
 #include "backgroundparser.moc"

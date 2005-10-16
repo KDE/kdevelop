@@ -52,7 +52,8 @@ void ParseJob::run()
     size = st.st_size + 1;
 
     int fd = open( fileName, O_RDONLY );
-    assert( fd != -1 );
+    if ( fd == -1 )
+        return;
 
     contents = ( char * ) mmap( 0, size, PROT_READ, MAP_SHARED, fd, 0 );
     assert( contents != ( void* ) - 1 );

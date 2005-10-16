@@ -763,6 +763,11 @@ KParts::ReadOnlyPart *DocumentController::partForURL( const KURL &url )
     return 0;
 }
 
+KTextEditor::Document * DocumentController::documentForURL( const KURL & url )
+{
+    return qobject_cast<KTextEditor::Document*>(partForURL(url));
+}
+
 KParts::Part * DocumentController::partForWidget( const QWidget * widget )
 {
     Q3PtrListIterator<KParts::Part> it( *parts() );

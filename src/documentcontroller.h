@@ -61,6 +61,8 @@ public:
                    const QString& shortDescription );
 
     KParts::ReadOnlyPart *partForURL( const KURL &url );
+    KTextEditor::Document* documentForURL( const KURL & url );
+
     KParts::Part * partForWidget( const QWidget * widget );
 
     void activatePart( KParts::Part * part );

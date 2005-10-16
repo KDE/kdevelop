@@ -56,7 +56,7 @@ QString URLUtil::directory(const QString & name) {
 QString URLUtil::relativePath(const KURL & parent, const KURL & child, uint slashPolicy) {
   bool slashPrefix = slashPolicy & SLASH_PREFIX;
   bool slashSuffix = slashPolicy & SLASH_SUFFIX;
-  if (parent.cmp(child,true))
+  if (parent.equals(child,true))
     return slashPrefix ? QString("/") : QString("");
 
   if (!parent.isParentOf(child)) return QString();
@@ -84,13 +84,13 @@ QString URLUtil::upDir(const QString & path, bool slashSuffix) {
 KURL URLUtil::mergeURL(const KURL & source, const KURL & dest, const KURL & child) {
 
   // if already a child of source, then fine
-  if (source.isParentOf(child) || source.cmp(child,true)) return child;
+  if (source.isParentOf(child) || source.equals(child,true)) return child;
 
   // if not a child of dest, return blank URL (error)
-  if (!dest.isParentOf(child) && !dest.cmp(child,true)) return KURL();
+  if (!dest.isParentOf(child) && !dest.equals(child,true)) return KURL();
 
   // if child is same as dest, return source
-  if (dest.cmp(child,true)) return source;
+  if (dest.equals(child,true)) return source;
 
   // calculate
   QString childUrlStr = child.url(-1);

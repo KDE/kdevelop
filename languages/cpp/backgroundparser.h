@@ -24,10 +24,16 @@
 
 #include <QObject>
 #include <kurl.h>
+#include <QMap>
 
 namespace ThreadWeaver
 {
 class Weaver;
+}
+
+namespace KTextEditor
+{
+class Document;
 }
 
 class QTimer;
@@ -46,10 +52,13 @@ public slots:
     void addDocument( const KURL &url );
     void removeDocument( const KURL &url );
     void parseDocuments();
+    void documentChanged(KTextEditor::Document* document);
 
 private:
     ThreadWeaver::Weaver *m_weaver;
-    QList<KURL> m_documents;
+
+    // A list of known documents, and whether they are due to be parsed or not
+    QMap<KURL,bool> m_documents;
     QTimer *m_timer;
 
     Preprocessor *m_preprocessor;
