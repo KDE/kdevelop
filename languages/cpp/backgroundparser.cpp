@@ -42,7 +42,6 @@ BackgroundParser::BackgroundParser( QObject* parent )
     m_preprocessor = new Preprocessor( this );
     m_control = new Control();
     m_parser = new Parser( m_control );
-
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
     m_timer->start( 500 );
 }
@@ -56,7 +55,10 @@ BackgroundParser::~BackgroundParser()
 void BackgroundParser::addDocument( const KURL &url )
 {
     if ( !m_documents.contains( url ) )
+    {
         m_documents.append( url );
+        parseDocuments();
+    }
 }
 
 void BackgroundParser::removeDocument( const KURL &url )
@@ -66,17 +68,17 @@ void BackgroundParser::removeDocument( const KURL &url )
 
 void BackgroundParser::parseDocuments()
 {
-    /*QList< ThreadWeaver::Job* > jobs;
+    QList< ThreadWeaver::Job* > jobs;
     foreach ( KURL url, m_documents )
     {
-        PreprocessJob *preprocess =
-            new PreprocessJob( url, m_preprocessor, this );
+//         PreprocessJob *preprocess =
+//             new PreprocessJob( url, m_preprocessor, this );
         ParseJob *parse = new ParseJob( url, m_parser, this );
-        parse->addDependency( preprocess );
-        jobs.append( preprocess );
+//         parse->addDependency( preprocess );
+//         jobs.append( preprocess );
         jobs.append( parse );
     }
-    m_weaver->enqueue( jobs );*/
+    m_weaver->enqueue( jobs );
 }
 
 #include "backgroundparser.moc"

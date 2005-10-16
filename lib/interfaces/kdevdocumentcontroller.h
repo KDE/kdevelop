@@ -135,7 +135,14 @@ public:
     @return The DocumentState enum corresponding to the document state.*/
     virtual DocumentState documentState( KURL const & url ) = 0;
 
+    /**Refers to the document currently active or focused.
+    @return The URL of the active document.*/
+    virtual KURL activeDocument() = 0;
+
 signals:
+
+    /**Emitted when the document is given focus or activated.*/
+    void documentActivated( const KURL & );
 
     /**Emitted when a document has been saved.*/
     void documentSaved( const KURL & );
