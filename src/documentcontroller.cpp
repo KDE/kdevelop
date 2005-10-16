@@ -1197,13 +1197,12 @@ bool DocumentController::readyToClose()
     return true;
 }
 
-void DocumentController::slotActivePartChanged( KParts::Part * )
+void DocumentController::slotActivePartChanged( KParts::Part *part )
 {
     kdDebug( 9000 ) << k_funcinfo << endl;
-
     updateMenuItems();
-
     QTimer::singleShot( 100, this, SLOT( slotWaitForFactoryHack() ) );
+    emit documentActivated( activeDocument() );
 }
 
 void DocumentController::slotSwitchTo()
@@ -1446,6 +1445,16 @@ DocumentState DocumentController::documentState( KURL const & url )
     }
 
     return state;
+}
+
+KURL DocumentController::activeDocument()
+{
+    if ( !activePart() )
+        return KURL();
+
+    KParts::ReadOnlyPart * ro_part =
+        dynamic_cast<KParts::ReadOnlyPart*>( activePart() );
+    return ro_part->url();
 }
 
 void DocumentController::doEmitState( KURL const & url )

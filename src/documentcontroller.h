@@ -81,6 +81,7 @@ public:
     bool closeDocuments( const KURL::List & list );
 
     DocumentState documentState( KURL const & );
+    KURL activeDocument();
 
     bool readyToClose();
 
