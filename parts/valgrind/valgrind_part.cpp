@@ -224,7 +224,17 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
 
 //  proc->setWorkingDirectory(KURL(exec).directory());
   proc->clearArguments();
-  *proc << valExec << /*"--tool=memcheck" << */valParams << exec << params;
+
+  DomUtil::PairList run_envvars = project()->runEnvironmentVars();
+
+  QStringList envVarList;
+  DomUtil::PairList::ConstIterator it;
+  for (it = run_envvars.begin(); it != run_envvars.end(); ++it)
+  {
+    envVarList << QString("%1=\"%2\" ").arg((*it).first).arg((*it).second);
+  }
+
+  *proc << envVarList.join("") << valExec << valParams << exec << params;
   proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
   mainWindow()->raiseView( m_widget );
   core()->running( this, true );
