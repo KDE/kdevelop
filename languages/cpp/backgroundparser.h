@@ -41,6 +41,7 @@ class QTimer;
 class Preprocessor;
 class Control;
 class Parser;
+class pool;
 class TranslationUnitAST;
 class CppLanguageSupport;
 
@@ -71,6 +72,7 @@ private:
     Preprocessor *m_preprocessor;
     Control *m_control;
     Parser *m_parser;
+    pool *m_memoryPool;
     QMap<KURL, TranslationUnitAST*> m_url2unit;
 };
 

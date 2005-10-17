@@ -36,6 +36,8 @@
 #include "parser/preprocessor.h"
 #include "parser/control.h"
 #include "parser/parser.h"
+#include "parser/memorypool.h"
+#include "parser/dumptree.h"
 
 #include "cpplanguagesupport.h"
 #include <kdevdocumentcontroller.h>
@@ -50,6 +52,7 @@ BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
     m_preprocessor = new Preprocessor( this );
     m_control = new Control();
     m_parser = new Parser( m_control );
+    m_memoryPool = new pool();
     m_timer = new QTimer( this );
     m_timer->setSingleShot( true );
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
@@ -92,7 +95,8 @@ void BackgroundParser::parseDocuments()
         bool &p = it.value();
         if ( p )
         {
-            ParseJob * parse = new ParseJob( url, m_parser, m_preprocessor, this );
+            ParseJob * parse = new ParseJob( url, m_preprocessor,
+                                             m_parser, m_memoryPool, this );
             p = false;
 
             if ( url == m_cppSupport->documentController() ->activeDocument() )

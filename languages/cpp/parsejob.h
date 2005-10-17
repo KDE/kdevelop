@@ -34,8 +34,9 @@ class ParseJob : public ThreadWeaver::Job
 {
     Q_OBJECT
 public:
-    ParseJob( const KURL &url, Parser *parser,
-              Preprocessor *preprocessor, QObject* parent );
+    ParseJob( const KURL &url, Preprocessor *preprocessor,
+              Parser *parser, pool *memoryPool,
+              QObject* parent );
     virtual ~ParseJob();
 
     void setContents( const QByteArray &contents )
@@ -51,8 +52,9 @@ protected:
 
 private:
     KURL m_document;
-    Parser *m_parser;
     Preprocessor *m_preprocessor;
+    Parser *m_parser;
+    pool *m_memoryPool;
     QByteArray m_contents;
     TranslationUnitAST *m_translationUnit;
 };
