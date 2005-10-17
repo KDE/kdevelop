@@ -22,6 +22,7 @@
 
 #include <kdevitemmodel.h>
 #include <kurl.h>
+#include <kiconloader.h>
 
 class KURL;
 class KDevDocumentItem;
@@ -81,8 +82,21 @@ public:
         m_url = url;
     }
 
+    QIcon icon() const
+    {
+        return m_icon;
+    }
+
+    void KDevFileItem::setIcon( const QString &icon )
+    {
+        QPixmap pixmap = SmallIcon( icon );
+        Q_ASSERT( !pixmap.isNull() );
+        m_icon = QIcon( pixmap );
+    }
+
 private:
     KURL m_url;
+    QIcon m_icon;
 };
 
 class KDevDocumentModel: public KDevItemModel

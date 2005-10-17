@@ -13,7 +13,8 @@ libkdevdocumentview_la_LIBADD = \
   $(LIB_KHTML)
 
 libkdevdocumentview_la_SOURCES = kdevdocumentview.cpp \
-	kdevdocumentviewdelegate.cpp kdevdocumentview_part.cpp kdevdocumentmodel.cpp
+		kdevdocumentviewdelegate.cpp kdevdocumentview_part.cpp kdevdocumentmodel.cpp \
+	kdevdocumentselection.cpp
 
 METASOURCES = AUTO
 
@@ -22,3 +23,4 @@ service_DATA = kdevdocumentview.desktop
 
 rcdir = $(kde_datadir)/kdevdocumentview
 rc_DATA = kdevdocumentview.rc
+noinst_HEADERS = kdevdocumentselection.h

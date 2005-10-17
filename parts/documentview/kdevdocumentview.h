@@ -38,6 +38,8 @@ signals:
     void activateURL( const KURL &url );
 
 protected slots:
+    void currentChanged( const QModelIndex & current,
+                         const QModelIndex & previous );
     void handleMousePress( const QModelIndex & index );
     void popupContextMenu( const QPoint &pos );
 

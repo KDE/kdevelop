@@ -21,6 +21,8 @@
 
 #include <QtGui/QTreeView>
 
+#include <kdebug.h>
+
 KDevDocumentViewDelegate::KDevDocumentViewDelegate( QTreeView *view, QObject *parent )
         : QItemDelegate( parent ),
         m_view( view )
@@ -72,7 +74,10 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
     }
     else
     {
-        QItemDelegate::paint( painter, option, index );
+        QStyleOptionViewItem opt = option;
+        if ( !model->data( index, Qt::DecorationRole ).isNull() )
+            opt.rect.setLeft( option.rect.left() - option.decorationSize.width() - 2);
+        QItemDelegate::paint( painter, opt, index );
     }
 }
 

@@ -21,6 +21,7 @@ Boston, MA 02111-1307, USA.
 #include "kdevdocumentviewdelegate.h"
 #include "kdevdocumentview.h"
 #include "kdevdocumentmodel.h"
+#include "kdevdocumentselection.h"
 
 #include <QtGui/QVBoxLayout>
 
@@ -63,6 +64,8 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
     KDevDocumentViewDelegate *delegate =
         new KDevDocumentViewDelegate( m_documentView, this );
     m_documentView->setModel( m_documentModel );
+    m_documentView->setSelectionModel(
+        new KDevDocumentSelection( m_documentModel ) );
     m_documentView->setItemDelegate( delegate );
     m_documentView->setWhatsThis( i18n( "Document View" ) );
 
@@ -170,9 +173,9 @@ void KDevDocumentViewPart::URLChanged( const KURL & /*oldurl*/,
 }
 
 void KDevDocumentViewPart::stateChanged( const KURL & /*url*/,
-        DocumentState /*state*/ )
+        DocumentState state )
 {
-    kdDebug() << k_funcinfo << endl;
+/*    kdDebug() << url.fileName() << " STATE CHANGED " << state << endl;*/
 }
 
 void KDevDocumentViewPart::pressed( const QModelIndex & index )

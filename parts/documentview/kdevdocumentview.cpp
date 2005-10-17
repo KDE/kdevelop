@@ -55,6 +55,15 @@ KDevDocumentViewPart *KDevDocumentView::part() const
     return m_part;
 }
 
+void KDevDocumentView::currentChanged( const QModelIndex & current,
+                                       const QModelIndex & previous )
+{
+    if ( !current.parent().isValid() )
+        setCurrentIndex( previous );
+    else
+        KDevTreeView::currentChanged( current, previous );
+}
+
 void KDevDocumentView::handleMousePress( const QModelIndex & index )
 {
     if ( !index.parent().isValid() )
