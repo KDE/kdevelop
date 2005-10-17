@@ -31,7 +31,6 @@
 #include "kdevdocumentcontroller.h"
 
 #include <ThreadWeaver.h>
-#include "preprocessjob.h"
 #include "parsejob.h"
 
 #include "parser/preprocessor.h"
@@ -69,7 +68,7 @@ void BackgroundParser::addDocument( const KURL &url )
     {
         m_documents.insert( url, true );
 
-        if ( Document * doc =
+        if ( KTextEditor::Document * doc =
                     m_cppSupport->documentController() ->documentForURL( url ) )
             connect( doc, SIGNAL( textChanged( KTextEditor::Document* ) ),
                      SLOT( documentChanged( KTextEditor::Document* ) ) );
@@ -93,14 +92,12 @@ void BackgroundParser::parseDocuments()
         bool &p = it.value();
         if ( p )
         {
-            //         PreprocessJob *preprocess =
-            //             new PreprocessJob( url, m_preprocessor, this );
-            ParseJob * parse = new ParseJob( url, m_parser, this );
+            ParseJob * parse = new ParseJob( url, m_parser, m_preprocessor, this );
             p = false;
 
             if ( url == m_cppSupport->documentController() ->activeDocument() )
             {
-                Document * doc =
+                KTextEditor::Document * doc =
                     m_cppSupport->documentController() ->documentForURL( url );
 
                 parse->setContents( doc->text().toAscii() );

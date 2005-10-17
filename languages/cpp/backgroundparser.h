@@ -45,7 +45,6 @@ class TranslationUnitAST;
 class CppLanguageSupport;
 
 using namespace ThreadWeaver;
-using namespace KTextEditor;
 
 class BackgroundParser : public QObject
 {

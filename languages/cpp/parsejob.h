@@ -26,6 +26,7 @@
 #include <kurl.h>
 
 class Parser;
+class Preprocessor;
 class QByteArray;
 class TranslationUnitAST;
 
@@ -33,10 +34,11 @@ class ParseJob : public ThreadWeaver::Job
 {
     Q_OBJECT
 public:
-    ParseJob( const KURL &url, Parser *parser, QObject* parent );
+    ParseJob( const KURL &url, Parser *parser,
+              Preprocessor *preprocessor, QObject* parent );
     virtual ~ParseJob();
 
-    void setContents( QByteArray contents )
+    void setContents( const QByteArray &contents )
     {
         m_contents = contents;
     }
@@ -50,6 +52,7 @@ protected:
 private:
     KURL m_document;
     Parser *m_parser;
+    Preprocessor *m_preprocessor;
     QByteArray m_contents;
     TranslationUnitAST *m_translationUnit;
 };

@@ -32,12 +32,15 @@
 
 #include "parser/parser.h"
 #include "parser/dumptree.h"
+#include "parser/preprocessor.h"
 #include "parsejob.h"
 
-ParseJob::ParseJob( const KURL &url, Parser *parser, QObject* parent )
+ParseJob::ParseJob( const KURL &url, Parser *parser,
+                    Preprocessor *preprocessor, QObject* parent )
         : ThreadWeaver::Job( parent ),
         m_document( url ),
-        m_parser( parser )
+        m_parser( parser ),
+        m_preprocessor( preprocessor )
 {
     m_contents = QByteArray();
 }
@@ -88,14 +91,21 @@ void ParseJob::run()
     << " size: " << size
     << endl;
 
+//     QByteArray preprocessed = m_preprocessor->run( contents );
+//     std::size_t pre_size = preprocessed.length() + 1;
+
     pool _p;
+//     m_translationUnit = m_parser->parse( preprocessed, pre_size, &_p );
     m_translationUnit = m_parser->parse( contents, size, &_p );
 
 //     DumpTree dumpTree;
 //     dumpTree.dump( m_translationUnit );
 
-    munmap( contents, size );
+    if ( readFromDisk )
+        munmap( contents, size );
+
     m_parser = 0;
+    m_preprocessor = 0;
 }
 
 #include "parsejob.moc"
