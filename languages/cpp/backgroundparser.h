@@ -59,7 +59,7 @@ public slots:
     void removeDocument( const KURL &url );
     void parseDocuments();
     void parseComplete( Job* );
-    void documentChanged( Document* document );
+    void documentChanged( KTextEditor::Document* document );
 
 private:
     CppLanguageSupport *m_cppSupport;

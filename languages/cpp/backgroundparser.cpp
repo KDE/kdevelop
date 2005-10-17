@@ -71,8 +71,8 @@ void BackgroundParser::addDocument( const KURL &url )
 
         if ( Document * doc =
                     m_cppSupport->documentController() ->documentForURL( url ) )
-            connect( doc, SIGNAL( textChanged( Document* ) ),
-                     SLOT( documentChanged( Document* ) ) );
+            connect( doc, SIGNAL( textChanged( KTextEditor::Document* ) ),
+                     SLOT( documentChanged( KTextEditor::Document* ) ) );
 
         parseDocuments();
     }
@@ -119,7 +119,7 @@ void BackgroundParser::parseComplete( Job *job )
     m_url2unit[ parseJob->document() ] = parseJob->translationUnit();
 }
 
-void BackgroundParser::documentChanged( Document * document )
+void BackgroundParser::documentChanged( KTextEditor::Document * document )
 {
     Q_ASSERT( m_documents.contains( document->url() ) );
     m_documents.insert( document->url(), true );
