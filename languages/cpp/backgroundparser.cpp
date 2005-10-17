@@ -103,9 +103,7 @@ void BackgroundParser::parseDocuments()
                 Document * doc =
                     m_cppSupport->documentController() ->documentForURL( url );
 
-                const char * contents = doc->text().ascii();
-                parse->setContents( contents );
-                parse->setSize( qstrlen( contents ) );
+                parse->setContents( doc->text().toAscii() );
             }
             connect( parse, SIGNAL( done( Job* ) ),
                      this, SLOT( parseComplete( Job* ) ) );

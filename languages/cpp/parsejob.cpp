@@ -24,6 +24,8 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 
+#include <QByteArray>
+
 #include <kdebug.h>
 
 #include <kdevdocumentcontroller.h>
@@ -37,7 +39,7 @@ ParseJob::ParseJob( const KURL &url, Parser *parser, QObject* parent )
         m_document( url ),
         m_parser( parser )
 {
-    m_size = -1;
+    m_contents = QByteArray();
 }
 
 ParseJob::~ParseJob()
@@ -55,14 +57,14 @@ TranslationUnitAST *ParseJob::translationUnit() const
 
 void ParseJob::run()
 {
-    bool readFromDisk = ( m_size == -1 );
+    bool readFromDisk = m_contents.isNull();
     char *contents;
     std::size_t size;
 
     if ( !readFromDisk )
     {
-        contents = qstrdup( m_contents );
-        size = m_size + 1;
+        contents = m_contents.data();
+        size = m_contents.length() + 1;
     }
     else
     {
@@ -89,8 +91,8 @@ void ParseJob::run()
     pool _p;
     m_translationUnit = m_parser->parse( contents, size, &_p );
 
-    //     DumpTree dumpTree;
-    //     dumpTree.dump( m_translationUnit );
+//     DumpTree dumpTree;
+//     dumpTree.dump( m_translationUnit );
 
     munmap( contents, size );
     m_parser = 0;
