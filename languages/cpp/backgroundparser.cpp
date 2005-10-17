@@ -39,17 +39,20 @@
 #include "parser/parser.h"
 
 #include "cpplanguagesupport.h"
+#include <kdevdocumentcontroller.h>
 
-BackgroundParser::BackgroundParser( QObject* parent )
-    : QObject( parent )
+#include "backgroundparser.h"
+
+BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
+        : QObject( cppSupport ),
+        m_cppSupport( cppSupport )
 {
-    m_weaver = ThreadWeaver::Weaver::instance();
+    m_weaver = Weaver::instance();
     m_preprocessor = new Preprocessor( this );
     m_control = new Control();
     m_parser = new Parser( m_control );
-
     m_timer = new QTimer( this );
-    m_timer->setSingleShot(true);
+    m_timer->setSingleShot( true );
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
     m_timer->start( 500 );
 }
@@ -66,8 +69,10 @@ void BackgroundParser::addDocument( const KURL &url )
     {
         m_documents.insert( url, true );
 
-        if (KTextEditor::Document* doc = static_cast<CppLanguageSupport*>(parent())->documentController()->documentForURL(url))
-            connect(doc, SIGNAL(textChanged(KTextEditor::Document*)), SLOT(documentChanged(KTextEditor::Document*)));
+        if ( Document * doc =
+                    m_cppSupport->documentController() ->documentForURL( url ) )
+            connect( doc, SIGNAL( textChanged( Document* ) ),
+                     SLOT( documentChanged( Document* ) ) );
 
         parseDocuments();
     }
@@ -80,29 +85,47 @@ void BackgroundParser::removeDocument( const KURL &url )
 
 void BackgroundParser::parseDocuments()
 {
-    QList< ThreadWeaver::Job* > jobs;
-    for ( QMap<KURL,bool>::Iterator it = m_documents.begin(); it != m_documents.end(); ++it )
+    QList< Job* > jobs;
+    for ( QMap<KURL, bool>::Iterator it = m_documents.begin();
+            it != m_documents.end(); ++it )
     {
-//         PreprocessJob *preprocess =
-//             new PreprocessJob( url, m_preprocessor, this );
-        if (it.value()) {
-            ParseJob *parse = new ParseJob( it.key(), m_parser, this );
-            it.value() = false;
+        KURL url = it.key();
+        bool &p = it.value();
+        if ( p )
+        {
+            //         PreprocessJob *preprocess =
+            //             new PreprocessJob( url, m_preprocessor, this );
+            ParseJob * parse = new ParseJob( url, m_parser, this );
+            p = false;
 
-//         parse->addDependency( preprocess );
-//         jobs.append( preprocess );
+            if ( url == m_cppSupport->documentController() ->activeDocument() )
+            {
+                Document * doc =
+                    m_cppSupport->documentController() ->documentForURL( url );
 
+                const char * contents = doc->text().ascii();
+                parse->setContents( contents );
+                parse->setSize( qstrlen( contents ) );
+            }
+            connect( parse, SIGNAL( done( Job* ) ),
+                     this, SLOT( parseComplete( Job* ) ) );
             jobs.append( parse );
         }
     }
     m_weaver->enqueue( jobs );
 }
 
-void BackgroundParser::documentChanged( KTextEditor::Document * document )
+void BackgroundParser::parseComplete( Job *job )
 {
-    Q_ASSERT(m_documents.contains(document->url()));
-    m_documents.insert(document->url(), true);
-    if (!m_timer->isActive())
+    ParseJob * parseJob = dynamic_cast<ParseJob*>( job );
+    m_url2unit[ parseJob->document() ] = parseJob->translationUnit();
+}
+
+void BackgroundParser::documentChanged( Document * document )
+{
+    Q_ASSERT( m_documents.contains( document->url() ) );
+    m_documents.insert( document->url(), true );
+    if ( !m_timer->isActive() )
         m_timer->start( 500 );
 }
 

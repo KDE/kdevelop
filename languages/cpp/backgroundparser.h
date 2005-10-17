@@ -29,6 +29,7 @@
 namespace ThreadWeaver
 {
 class Weaver;
+class Job;
 }
 
 namespace KTextEditor
@@ -40,30 +41,38 @@ class QTimer;
 class Preprocessor;
 class Control;
 class Parser;
+class TranslationUnitAST;
+class CppLanguageSupport;
+
+using namespace ThreadWeaver;
+using namespace KTextEditor;
 
 class BackgroundParser : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    BackgroundParser( QObject* parent );
+    BackgroundParser( CppLanguageSupport* cppSupport );
     virtual ~BackgroundParser();
 
 public slots:
     void addDocument( const KURL &url );
     void removeDocument( const KURL &url );
     void parseDocuments();
-    void documentChanged(KTextEditor::Document* document);
+    void parseComplete( Job* );
+    void documentChanged( Document* document );
 
 private:
-    ThreadWeaver::Weaver *m_weaver;
+    CppLanguageSupport *m_cppSupport;
+    Weaver *m_weaver;
 
     // A list of known documents, and whether they are due to be parsed or not
-    QMap<KURL,bool> m_documents;
+    QMap<KURL, bool> m_documents;
     QTimer *m_timer;
 
     Preprocessor *m_preprocessor;
     Control *m_control;
     Parser *m_parser;
+    QMap<KURL, TranslationUnitAST*> m_url2unit;
 };
 
 #endif
