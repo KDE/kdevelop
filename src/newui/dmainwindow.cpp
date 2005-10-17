@@ -207,10 +207,11 @@ DTabWidget *DMainWindow::createTab()
 bool DMainWindow::eventFilter(QObject *obj, QEvent *ev)
 {
     QWidget *w = (QWidget*)obj;
+
     if (!m_widgets.contains(w))
         return KParts::MainWindow::eventFilter(obj, ev);
 
-    if ((m_currentWidget != w) && (ev->type() == QEvent::FocusIn))
+    if ((m_currentWidget != w) && (ev->type() == QEvent::Show))
     {
         m_currentWidget = w;
         emit widgetChanged(w);

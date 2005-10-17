@@ -349,23 +349,12 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
             url.setPath( path );
     }
 
-    // is it already open?
-    KParts::Part *existingPart = partForURL( url );
-    if ( existingPart )
-    {
-        addHistoryEntry();
-        activatePart( existingPart );
-        EditorProxy::getInstance() ->setLineNumber( existingPart,
-                lineNum, col );
-        return ;
-    }
+    KMimeType::Ptr mimeType = KMimeType::findByURL( url );
 
-    KMimeType::Ptr MimeType = KMimeType::findByURL( url );
-
-    kdDebug( 9000 ) << "mimeType = " << MimeType->name() << endl;
+    kdDebug( 9000 ) << "mimeType = " << mimeType->name() << endl;
 
     // is the URL pointing to a directory?
-    if ( MimeType->is( "inode/directory" ) )
+    if ( mimeType->is( "inode/directory" ) )
     {
         return ;
     }
@@ -378,26 +367,26 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
     KConfig *config = kapp->config();
     config->setGroup( "General" );
 
-    QStringList texttypeslist = config->readListEntry( "TextTypes" );
-    if ( texttypeslist.contains( MimeType->name() ) )
+    QStringList textTypesList = config->readListEntry( "TextTypes" );
+    if ( textTypesList.contains( mimeType->name() ) )
     {
         m_openNextAsText = true;
     }
 
     // is this regular text - open in editor
     if ( m_openNextAsText
-            || MimeType->is( "text/plain" )
-            || MimeType->is( "text/html" )
-            || MimeType->is( "application/x-zerosize" ) )
+         || mimeType->is( "text/plain" )
+         || mimeType->is( "text/html" )
+         || mimeType->is( "application/x-zerosize" ) )
     {
-        KTextEditor::Document * editorpart = createEditorPart( activate );
+        KTextEditor::Document * editorPart = createEditorPart( activate );
 
-        if ( editorpart )
+        if ( editorPart )
         {
             if ( !m_presetEncoding.isNull() )
             {
                 KParts::BrowserExtension * extension =
-                    KParts::BrowserExtension::childObject( editorpart );
+                    KParts::BrowserExtension::childObject( editorPart );
                 if ( extension )
                 {
                     KParts::URLArgs args;
@@ -408,9 +397,9 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
                 m_presetEncoding = QString::null;
             }
 
-            editorpart->openURL( url );
+            editorPart->openURL( url );
 
-            QWidget* widget = editorpart->widget();
+            QWidget* widget = editorPart->widget();
 
             if ( !widget )
             {
@@ -419,16 +408,16 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
                 // create a tab for it, so use a QWidgetStack subclass instead
                 kdDebug() << k_lineinfo << "Creating Editor wrapper..." << endl;
                 KTextEditor::Document* doc =
-                    static_cast<KTextEditor::Document*>( editorpart );
+                    static_cast<KTextEditor::Document*>( editorPart );
                 widget = new EditorWrapper( doc,
                                             activate,
                                             TopLevel::getInstance() ->main() );
             }
 
             addHistoryEntry();
-            integratePart( editorpart, url, widget, true, activate );
+            integratePart( editorPart, url, widget, true, activate );
 
-            EditorProxy::getInstance() ->setLineNumber( editorpart,
+            EditorProxy::getInstance() ->setLineNumber( editorPart,
                     lineNum, col );
 
             m_openNextAsText = false;
@@ -444,8 +433,6 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
     // OK, it's not text and it's not a designer file..
     // let's see what else we can come up with..
 
-#warning "cleanup"
-
     KParts::Factory *factory = 0;
     QString className;
 
@@ -454,17 +441,17 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
                              "KParts/ReadWritePart", "KParts/ReadOnlyPart"
                          };
 
-    QString classnames[] = {
+    QString classNames[] = {
                                "KParts::ReadWritePart", "KParts::ReadOnlyPart",
                                "KParts::ReadWritePart", "KParts::ReadOnlyPart"
                            };
 
     for ( uint i = 0; i < 4; ++i )
     {
-        factory = findPartFactory( MimeType->name(), services[ i ] );
+        factory = findPartFactory( mimeType->name(), services[ i ] );
         if ( factory )
         {
-            className = classnames[ i ];
+            className = classNames[ i ];
             break;
         }
     }
@@ -505,13 +492,13 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
     {
         MimeWarningDialog dlg;
         dlg.text2->setText( QString( "<qt><b>%1</b></qt>" ).arg( url.path() ) );
-        dlg.text3->setText( dlg.text3->text().arg( MimeType->name() ) );
+        dlg.text3->setText( dlg.text3->text().arg( mimeType->name() ) );
 
         if ( dlg.exec() == QDialog::Accepted )
         {
             if ( dlg.open_with_kde->isChecked() )
             {
-                KRun::runURL( url, MimeType->name() );
+                KRun::runURL( url, mimeType->name() );
             }
             else
             {
@@ -519,10 +506,10 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
                 {
                     KConfig * config = kapp->config();
                     config->setGroup( "General" );
-                    QStringList texttypeslist =
+                    QStringList textTypesList =
                         config->readListEntry( "TextTypes" );
-                    texttypeslist << MimeType->name();
-                    config->writeEntry( "TextTypes", texttypeslist );
+                    textTypesList << mimeType->name();
+                    config->writeEntry( "TextTypes", textTypesList );
                 }
                 m_openNextAsText = true;
                 editDocument( url, lineNum, col );
@@ -800,6 +787,8 @@ void DocumentController::activatePart( KParts::Part *part )
     QWidget* w2 = EditorProxy::getInstance() ->widgetForPart( part );
     if ( w2 != widget )
         w2->setFocus();
+
+    emit documentActivated( activeDocument() );
 }
 
 bool DocumentController::closePart( KParts::Part *part )

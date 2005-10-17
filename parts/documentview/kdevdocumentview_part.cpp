@@ -42,9 +42,12 @@ Boston, MA 02111-1307, USA.
 
 typedef KDevGenericFactory<KDevDocumentViewPart> KDevDocumentViewFactory;
 static const KDevPluginInfo data( "kdevdocumentview" );
-K_EXPORT_COMPONENT_FACTORY( libkdevdocumentview, KDevDocumentViewFactory( data ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevdocumentview,
+                            KDevDocumentViewFactory( data ) );
 
-KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent, const char *name, const QStringList& )
+KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
+        const char *name,
+        const QStringList& )
         : KDevPlugin( &data, parent )
 {
     setObjectName( QString::fromUtf8( name ) );
@@ -57,20 +60,34 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent, const char *name, c
     m_documentView->setIcon( SmallIcon( "kmultiple" ) );
     m_documentView->setCaption( i18n( "Documents" ) );
 
-    KDevDocumentViewDelegate *delegate = new KDevDocumentViewDelegate( m_documentView, this );
+    KDevDocumentViewDelegate *delegate =
+        new KDevDocumentViewDelegate( m_documentView, this );
     m_documentView->setModel( m_documentModel );
     m_documentView->setItemDelegate( delegate );
     m_documentView->setWhatsThis( i18n( "Document View" ) );
 
-    mainWindow() ->embedSelectView( m_documentView, i18n( "Documents" ), i18n( "Documents" ) );
+    mainWindow() ->embedSelectView( m_documentView,
+                                    i18n( "Documents" ), i18n( "Documents" ) );
 
-    connect( m_documentView, SIGNAL( pressed( QModelIndex ) ), this, SLOT( pressed( QModelIndex ) ) );
-    connect( documentController(), SIGNAL( documentSaved( const KURL & ) ), this, SLOT( saved( const KURL & ) ) );
-    connect( documentController(), SIGNAL( documentLoaded( const KURL & ) ), this, SLOT( loaded( const KURL & ) ) );
-    connect( documentController(), SIGNAL( documentClosed( const KURL & ) ), this, SLOT( closed( const KURL & ) ) );
-    connect( documentController(), SIGNAL( documentExternallyModified( const KURL & ) ), this, SLOT( externallyModified( const KURL & ) ) );
-    connect( documentController(), SIGNAL( documentURLChanged( const KURL &, const KURL & ) ), this, SLOT( URLChanged( const KURL &, const KURL & ) ) );
-    connect( documentController(), SIGNAL( documentStateChanged(const KURL &, DocumentState) ), this, SLOT( stateChanged( const KURL &, DocumentState ) ) );
+    connect( m_documentView, SIGNAL( pressed( QModelIndex ) ),
+             this, SLOT( pressed( QModelIndex ) ) );
+    connect( documentController(), SIGNAL( documentActivated( const KURL & ) ),
+             this, SLOT( activated( const KURL & ) ) );
+    connect( documentController(), SIGNAL( documentSaved( const KURL & ) ),
+             this, SLOT( saved( const KURL & ) ) );
+    connect( documentController(), SIGNAL( documentLoaded( const KURL & ) ),
+             this, SLOT( loaded( const KURL & ) ) );
+    connect( documentController(), SIGNAL( documentClosed( const KURL & ) ),
+             this, SLOT( closed( const KURL & ) ) );
+    connect( documentController(),
+             SIGNAL( documentExternallyModified( const KURL & ) ),
+             this, SLOT( externallyModified( const KURL & ) ) );
+    connect( documentController(),
+             SIGNAL( documentURLChanged( const KURL &, const KURL & ) ),
+             this, SLOT( URLChanged( const KURL &, const KURL & ) ) );
+    connect( documentController(),
+             SIGNAL( documentStateChanged( const KURL &, DocumentState ) ),
+             this, SLOT( stateChanged( const KURL &, DocumentState ) ) );
 
     setXMLFile( "kdevdocumentview.rc" );
 }
@@ -86,6 +103,11 @@ KDevDocumentViewPart::~KDevDocumentViewPart()
 
 void KDevDocumentViewPart::import( RefreshPolicy /*policy*/ )
 {}
+
+void KDevDocumentViewPart::activated( const KURL & url )
+{
+    m_documentView->setCurrentIndex( m_url2index[ url.path() ] );
+}
 
 void KDevDocumentViewPart::saved( const KURL & /*url*/ )
 {
@@ -105,14 +127,35 @@ void KDevDocumentViewPart::loaded( const KURL &url )
 
     if ( !mimeItem->file( url ) )
     {
-        m_documentModel->appendItem( new KDevFileItem( url ), mimeItem );
+        KDevFileItem * fileItem = new KDevFileItem( url );
+        m_documentModel->appendItem( fileItem, mimeItem );
+        m_documentView->setCurrentIndex( m_documentModel->indexOf( fileItem ) );
+        m_url2index[ url.path() ] = m_documentModel->indexOf( fileItem );
         m_documentModel->sort( 0, Qt::Ascending );
     }
 }
 
-void KDevDocumentViewPart::closed( const KURL & /*url*/ )
+void KDevDocumentViewPart::closed( const KURL & url )
 {
     kdDebug() << k_funcinfo << endl;
+    QModelIndex fileIndex = m_url2index[ url.path() ];
+    KDevDocumentItem *fileItem = m_documentModel->item( fileIndex );
+    if ( !fileItem )
+        return ;
+
+    QModelIndex mimeIndex = m_documentModel->parent( fileIndex );
+
+    m_documentModel->removeItem( fileItem );
+    m_url2index.remove( url.path() );
+
+    if ( m_documentModel->hasChildren( mimeIndex ) )
+        return ;
+
+    KDevDocumentItem *mimeItem = m_documentModel->item( mimeIndex );
+    if ( !mimeItem )
+        return ;
+
+    m_documentModel->removeItem( mimeItem );
 }
 
 void KDevDocumentViewPart::externallyModified( const KURL & /*url*/ )
@@ -120,12 +163,14 @@ void KDevDocumentViewPart::externallyModified( const KURL & /*url*/ )
     kdDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::URLChanged( const KURL & /*oldurl*/, const KURL & /*newurl*/ )
+void KDevDocumentViewPart::URLChanged( const KURL & /*oldurl*/,
+                                       const KURL & /*newurl*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::stateChanged( const KURL & /*url*/, DocumentState /*state*/ )
+void KDevDocumentViewPart::stateChanged( const KURL & /*url*/,
+        DocumentState /*state*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }

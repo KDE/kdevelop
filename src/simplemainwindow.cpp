@@ -102,6 +102,8 @@ void SimpleMainWindow::init()
     connect(DocumentController::getInstance(),
             SIGNAL(activePartChanged(KParts::Part*)),
             this, SLOT(activePartChanged(KParts::Part*)));
+    connect(this, SIGNAL(widgetChanged(QWidget*)),
+            this, SLOT(tabWidgetChanged(QWidget*)));
 
     connect(DocumentController::getInstance(),
             SIGNAL(documentStateChanged(const KURL &, DocumentState)),
@@ -531,6 +533,13 @@ void SimpleMainWindow::slotSplitHorizontal()
 {
     DTabWidget *tab = splitHorizontal();
     DocumentController::getInstance()->openEmptyTextDocument();
+}
+
+void SimpleMainWindow::tabWidgetChanged( QWidget *tabWidget )
+{
+    if ( KParts::Part *part =
+            DocumentController::getInstance()->partForWidget( tabWidget ) )
+    DocumentController::getInstance()->activatePart( part );
 }
 
 void SimpleMainWindow::closeTab(QWidget *w)

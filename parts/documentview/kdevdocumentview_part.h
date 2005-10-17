@@ -20,13 +20,14 @@
 #ifndef __KDEVPART_KDEVDOCUMENTVIEW_H__
 #define __KDEVPART_KDEVDOCUMENTVIEW_H__
 
+#include <QtCore/QHash>
 #include <QtCore/QPointer>
 
 #include <kdevplugin.h>
 #include <kdevdocumentcontroller.h>
 
-class QModelIndex;
 class KURL;
+class QModelIndex;
 class KDevDocumentView;
 class KDevDocumentModel;
 class KDevDocumentItem;
@@ -43,7 +44,8 @@ public:
     };
 
 public:
-    KDevDocumentViewPart( QObject *parent, const char *name, const QStringList & );
+    KDevDocumentViewPart( QObject *parent, const char *name,
+                          const QStringList & );
     virtual ~KDevDocumentViewPart();
 
     void import( RefreshPolicy policy = Refresh );
@@ -52,6 +54,7 @@ signals:
     void refresh();
 
 private slots:
+    void activated( const KURL &url );
     void saved( const KURL &url );
     void loaded( const KURL &url );
     void closed( const KURL &url );
@@ -64,6 +67,7 @@ private:
     KDevDocumentModel *m_documentModel;
     KDevDocumentItem *m_documentItem;
     QPointer<KDevDocumentView> m_documentView;
+    QHash< QString, QModelIndex > m_url2index;
 };
 
 #endif

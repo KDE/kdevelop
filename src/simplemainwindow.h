@@ -84,6 +84,7 @@ private slots:
     void fillWindowMenu();
     void slotSplitVertical();
     void slotSplitHorizontal();
+    void tabWidgetChanged( QWidget *tabWidget );
 
 private:
     void createFramework();
