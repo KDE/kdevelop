@@ -50,6 +50,7 @@ Name[de]=Das Miniprogramm %{APPNAME}
 Name[el]=Το εφαρμογίδιο %{APPNAME}
 Name[es]=Applet %{APPNAME}
 Name[et]=%{APPNAME} aplett
+Name[eu]=%{APPNAME} applet-a
 Name[fr]=L'applet %{APPNAME}
 Name[ga]=An Feidhmchláirín %{APPNAME}
 Name[hu]=%{APPNAME} kisalkalmazás
