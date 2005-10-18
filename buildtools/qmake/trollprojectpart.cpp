@@ -404,7 +404,7 @@ void TrollProjectPart::addFiles ( const QStringList &fileList )
     for (QStringList::iterator it = files.begin(); it != files.end(); ++it)
 //        if (!(*it).contains(projectDirectory()))
         if (!isProjectFile(projectDirectory() + "/" + (*it)))
-            *it = projectDirectory() + "/" + (*it);
+            *it = QDir::cleanDirPath(projectDirectory() + "/" + (*it));
 
     m_widget->addFiles(files);
 
