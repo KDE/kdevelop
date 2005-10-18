@@ -431,7 +431,7 @@ void AntProjectPart::slotTargetMenuActivated(int id)
 
 void AntProjectPart::ant(const QString &target)
 {
-  QString cmd = "%0 cd %1 && ant %2 -buildfile %3 %4 %5";
+  QString cmd = "cd %0 && %1 ant %2 -buildfile %3 %4 %5";
 
   QString verb = "";
   switch (m_antOptions.m_verbosity)
@@ -457,7 +457,7 @@ void AntProjectPart::ant(const QString &target)
   if (!m_classPath.count() == 0)
     cp = "CLASSPATH="+m_classPath.join(":");
   
-  makeFrontend()->queueCommand(m_projectDirectory, cmd.arg(cp).arg(m_projectDirectory).arg(target).arg(m_antOptions.m_buildXML).arg(verb).arg(options));
+  makeFrontend()->queueCommand(m_projectDirectory, cmd.arg(m_projectDirectory).arg(cp).arg(target).arg(m_antOptions.m_buildXML).arg(verb).arg(options));
 }
 
 
