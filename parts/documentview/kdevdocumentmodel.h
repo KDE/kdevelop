@@ -21,6 +21,8 @@
 #define KDEVDOCUMENTMODEL_H
 
 #include <kdevitemmodel.h>
+#include <kdevdocumentcontroller.h>
+
 #include <kurl.h>
 #include <kiconloader.h>
 
@@ -44,6 +46,36 @@ public:
     {
         return 0;
     }
+
+    QIcon icon() const
+    {
+        switch ( m_documentState )
+        {
+        case Clean:
+            return QIcon();
+        case Modified:
+            return QIcon( SmallIcon( "filesave" ) );
+        case Dirty:
+            return QIcon( SmallIcon( "revert" ) );
+        case DirtyAndModified:
+            return QIcon( SmallIcon( "stop" ) );
+        default:
+            return QIcon();
+        }
+    }
+
+    DocumentState documentState() const
+    {
+        return m_documentState;
+    }
+
+    void setDocumentState( DocumentState state )
+    {
+        m_documentState = state;
+    }
+
+private:
+    DocumentState m_documentState;
 };
 
 class KDevMimeTypeItem: public KDevDocumentItem
@@ -82,21 +114,8 @@ public:
         m_url = url;
     }
 
-    QIcon icon() const
-    {
-        return m_icon;
-    }
-
-    void KDevFileItem::setIcon( const QString &icon )
-    {
-        QPixmap pixmap = SmallIcon( icon );
-        Q_ASSERT( !pixmap.isNull() );
-        m_icon = QIcon( pixmap );
-    }
-
 private:
     KURL m_url;
-    QIcon m_icon;
 };
 
 class KDevDocumentModel: public KDevItemModel

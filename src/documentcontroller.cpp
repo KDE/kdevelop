@@ -652,19 +652,8 @@ void DocumentController::integratePart( KParts::Part *part, const KURL &url,
 
 void DocumentController::integrateTextEditorPart( KTextEditor::Document* doc )
 {
-    //EditorProxy::getInstance()->installPopup(doc, contextPopupMenu());
-
-    // What's potentially problematic is that this signal isn't officially part
-    // of the KTextEditor::View interface. It is nevertheless there, and used in
-    // kate and kwrite. There doesn't seem to be any othere way of making this
-    // work with katepart, and since signals are dynamic, if we try to connect
-    // to an editorpart that lacks this signal, all we get is a runtime warning.
-    // At this point in time we are only really supported by katepart anyway so
-    // IMHO this hack is justified.
-    //teatime
-    QList<KDocument::View *> list = doc->views();
-    foreach( KDocument::View * view, list )
-    connect( view, SIGNAL( newStatus() ), this, SLOT( slotNewStatus() ) );
+    connect( doc, SIGNAL( textChanged( KTextEditor::Document* ) ),
+             this, SLOT( slotNewStatus( KTextEditor::Document* ) ) );
 }
 
 void DocumentController::slotPartAdded( KParts::Part * part )
@@ -1401,16 +1390,9 @@ void DocumentController::slotNewDesignerStatus( const QString &formName,
                                DocumentState( status ) );
 }
 
-void DocumentController::slotNewStatus( )
+void DocumentController::slotNewStatus( KTextEditor::Document * doc )
 {
-    kdDebug( 9000 ) << k_funcinfo << endl;
-
-    QObject * senderobj = const_cast<QObject*>( sender() );
-    KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( senderobj );
-    if ( view )
-    {
-        doEmitState( view->document() ->url() );
-    }
+    doEmitState( doc ->url() );
 }
 
 DocumentState DocumentController::documentState( KURL const & url )

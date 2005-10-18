@@ -130,7 +130,7 @@ private slots:
     void slotDocumentDirty( KTextEditor::Document * doc,
                             bool isModified,
                             ModifiedOnDiskReason reason );
-    void slotNewStatus();
+    void slotNewStatus( KTextEditor::Document * doc );
     void slotNewDesignerStatus( const QString &formName, int status );
 
 private:

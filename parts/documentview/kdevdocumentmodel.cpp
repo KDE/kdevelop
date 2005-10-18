@@ -21,7 +21,8 @@
 #include <QtCore/qdebug.h>
 
 KDevDocumentItem::KDevDocumentItem( const QString &name, KDevItemGroup *parent )
-        : KDevItemCollection( name, parent )
+        : KDevItemCollection( name, parent ),
+        m_documentState( Clean )
 {}
 
 KDevDocumentItem::~KDevDocumentItem()

@@ -172,10 +172,20 @@ void KDevDocumentViewPart::URLChanged( const KURL & /*oldurl*/,
     kdDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::stateChanged( const KURL & /*url*/,
+void KDevDocumentViewPart::stateChanged( const KURL & url,
         DocumentState state )
 {
-/*    kdDebug() << url.fileName() << " STATE CHANGED " << state << endl;*/
+    KDevDocumentItem * documentItem =
+        m_documentModel->item( m_url2index[ url.path() ] );
+
+    if ( !documentItem )
+        return ;
+
+    if ( documentItem->documentState() == state )
+        return;
+
+    documentItem->setDocumentState( state );
+    m_documentView->doItemsLayout();
 }
 
 void KDevDocumentViewPart::pressed( const QModelIndex & index )

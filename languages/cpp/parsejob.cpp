@@ -98,8 +98,8 @@ void ParseJob::run()
 //     m_translationUnit = m_parser->parse( preprocessed, pre_size, m_memoryPool );
     m_translationUnit = m_parser->parse( contents, size, m_memoryPool );
 
-    DumpTree dumpTree;
-    dumpTree.dump( m_translationUnit );
+//     DumpTree dumpTree;
+//     dumpTree.dump( m_translationUnit );
 
     if ( readFromDisk )
         munmap( contents, size );
