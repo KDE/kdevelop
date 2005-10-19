@@ -12,12 +12,12 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description></description>
+    <description/>
     <ignoreparts>
       <part>kdevbookmarks</part>
+      <part>kdevdebugger</part>
       <part>kdevfilegroups</part>
       <part>kdevfileview</part>
-      <part>kdevsecurity</part>
       <part>kdevvalgrind</part>
     </ignoreparts>
     <versioncontrol>kdevsubversion</versioncontrol>
@@ -78,11 +78,11 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs></programargs>
-      <gdbpath></gdbpath>
-      <configGdbScript></configGdbScript>
-      <runShellScript></runShellScript>
-      <runGdbScript></runGdbScript>
+      <programargs/>
+      <gdbpath/>
+      <configGdbScript/>
+      <runShellScript/>
+      <runGdbScript/>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -94,6 +94,7 @@
     </display>
   </kdevdebugger>
   <kdevfilecreate>
+    <filetypes/>
     <useglobaltypes>
       <type ext="ui" />
       <type ext="cpp" />
@@ -114,16 +115,16 @@
         <envvar value="1" name="WANT_AUTOMAKE_1_6" />
       </envvars>
       <abortonerror>true</abortonerror>
-      <numberofjobs>1</numberofjobs>
+      <numberofjobs>3</numberofjobs>
       <dontact>false</dontact>
-      <makebin>unsermake</makebin>
+      <makebin>unsermake install</makebin>
       <prio>0</prio>
     </make>
     <run>
-      <directoryradio>build</directoryradio>
+      <directoryradio>executable</directoryradio>
       <customdirectory>/</customdirectory>
       <mainprogram>src/kdevelop</mainprogram>
-      <programargs>kdevelop4.kdevelop</programargs>
+      <programargs>../kdevelop4.kdevelop</programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars>
@@ -187,7 +188,7 @@
       <headerCompletionDelay>250</headerCompletionDelay>
     </codecompletion>
     <creategettersetter>
-      <prefixGet></prefixGet>
+      <prefixGet/>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
@@ -195,8 +196,14 @@
       <inlineSet>true</inlineSet>
     </creategettersetter>
     <references>
-      <pcs>Qt4-copy</pcs>
-      <pcs>KDE4Libs</pcs>
+      <pcs>Qt4</pcs>
     </references>
   </kdevcppsupport>
+  <kdevdocumentation>
+    <projectdoc>
+      <docsystem>Doxygen Documentation Collection</docsystem>
+      <docurl>apidocs/index.html</docurl>
+      <usermanualurl/>
+    </projectdoc>
+  </kdevdocumentation>
 </kdevelop>

@@ -48,9 +48,6 @@ public:
     KDevClassViewPart(QObject *parent, const char *name, const QStringList &);
     virtual ~KDevClassViewPart();
 
-    inline KDevCodeModel *codeModel() const
-    { return m_codeModel; }
-
     KDevCodeNamespaceItem *currentNamespaceItem() const;
     KDevCodeClassItem *currentClassItem() const;
     KDevCodeFunctionItem *currentFunctionItem() const;
@@ -64,7 +61,6 @@ signals:
     void aboutToRemoveProjectItem(KDevCodeItem *dom);
 
 private:
-    KDevCodeModel *m_codeModel;
     KDevCodeItem *m_workspace;
     QPointer<QWidget> m_widget;
     KDevClassView *m_classView;

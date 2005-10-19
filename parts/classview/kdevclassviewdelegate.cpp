@@ -51,3 +51,5 @@ void KDevClassViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 }
 
 #include "kdevclassviewdelegate.moc"
+
+// kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

@@ -36,7 +36,7 @@ KDevClassView::KDevClassView(KDevClassViewPart *part, QWidget *parent)
     m_part(part)
 {
   header()->hide();
-  
+
   setContextMenuPolicy(Qt::CustomContextMenu);
 
   connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(popupContextMenu(QPoint)));
@@ -160,3 +160,5 @@ void KDevClassView::popupContextMenu(const QPoint &pos)
       menu.exec(mapToGlobal(pos));
     }
 }
+
+// kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

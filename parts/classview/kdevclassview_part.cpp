@@ -54,7 +54,6 @@ KDevClassViewPart::KDevClassViewPart(QObject *parent, const char *name, const QS
   setObjectName(QString::fromUtf8(name));
 
   m_workspace = 0;
-  m_codeModel = new KDevCodeModel(this);
 
   setInstance(KDevClassViewFactory::instance());
 
@@ -69,9 +68,9 @@ KDevClassViewPart::KDevClassViewPart(QObject *parent, const char *name, const QS
   KDevClassViewDelegate *delegate = new KDevClassViewDelegate(this);
 
   m_classView = new KDevClassView(this, m_widget);
-  m_classView->setModel(m_codeModel);
+  m_classView->setModel( codeModel() );
   m_classView->setItemDelegate(delegate);
-  m_classView->setWhatsThis(i18n("Class View"));
+  m_classView->setWhatsThis(i18n("Classes"));
   m_widget->layout()->add(m_classView);
 
   //KFilterModel *filterModel = new KFilterModel(m_codeModel, m_codeModel);
@@ -80,14 +79,10 @@ KDevClassViewPart::KDevClassViewPart(QObject *parent, const char *name, const QS
 
   connect(m_classView, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
 
-  mainWindow()->embedSelectView(m_widget, tr("Class View"), tr("Class View"));
+  mainWindow()->embedSelectView(m_widget, i18n("Classes"), i18n("Classes"));
 
   setXMLFile("kdevclassview.rc");
 
-  for (int i=0; i<1000; ++i)
-    {
-      codeModel()->appendItem(new KDevCodeNamespaceItem(QLatin1String("Class_") + QString::number(i)));
-    }
   //Q_ASSERT(0);
 
   //codeModel()->refresh();
@@ -126,3 +121,5 @@ void KDevClassViewPart::import(RefreshPolicy policy)
 }
 
 #include "kdevclassview_part.moc"
+
+// kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on
