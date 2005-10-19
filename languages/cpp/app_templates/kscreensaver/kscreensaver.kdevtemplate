@@ -63,7 +63,7 @@ Dest=%{dest}/doc/en/index.docbook
 [FILE4]
 Type=install
 EscapeXML=true
-Source=%{src}/kscreensaver.kdevelop
+Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
 [MkDir3]
@@ -111,23 +111,23 @@ Dest=%{dest}/src/Makefile.am
 
 [FILE12]
 Type=install
-Source=%{src}/kscreensaver.cpp
+Source=%{src}/app.cpp
 Dest=%{dest}/src/%{APPNAMELC}.cpp
 
 [FILE13]
 Type=install
-Source=%{src}/kscreensaver_template.h
+Source=%{src}/app.h
 Dest=%{dest}/src/%{APPNAMELC}.h
 
 [FILE14]
 Type=install
-Source=%{src}/kscreensaver.desktop
+Source=%{src}/app.desktop
 Dest=%{dest}/src/%{APPNAMELC}.desktop
 
 [FILE15]
 Type=install
 EscapeXML=true
-Source=%{src}/kscreensaverui.ui
+Source=%{src}/appui.ui
 Dest=%{dest}/src/%{APPNAMELC}ui.ui
 
 [MSG]
