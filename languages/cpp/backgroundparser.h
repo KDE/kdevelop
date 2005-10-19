@@ -69,9 +69,7 @@ private:
     QMap<KURL, bool> m_documents;
     QTimer *m_timer;
 
-    Preprocessor *m_preprocessor;
     Control *m_control;
-    Parser *m_parser;
     pool *m_memoryPool;
     QMap<KURL, TranslationUnitAST*> m_url2unit;
 };

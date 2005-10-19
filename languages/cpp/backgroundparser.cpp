@@ -28,16 +28,16 @@
 
 #include <ktexteditor/document.h>
 
+#include "kdevcodemodel.h"
 #include "kdevdocumentcontroller.h"
 
 #include <ThreadWeaver.h>
 #include "parsejob.h"
 
-#include "parser/preprocessor.h"
 #include "parser/control.h"
-#include "parser/parser.h"
-#include "parser/memorypool.h"
 #include "parser/dumptree.h"
+#include "parser/codemodel.h"
+#include "parser/memorypool.h"
 
 #include "cpplanguagesupport.h"
 #include <kdevdocumentcontroller.h>
@@ -49,9 +49,7 @@ BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
         m_cppSupport( cppSupport )
 {
     m_weaver = Weaver::instance();
-    m_preprocessor = new Preprocessor( this );
     m_control = new Control();
-    m_parser = new Parser( m_control );
     m_memoryPool = new pool();
     m_timer = new QTimer( this );
     m_timer->setSingleShot( true );
@@ -62,7 +60,7 @@ BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
 BackgroundParser::~BackgroundParser()
 {
     delete m_control;
-    delete m_parser;
+    delete m_memoryPool;
 }
 
 void BackgroundParser::addDocument( const KURL &url )
@@ -95,8 +93,8 @@ void BackgroundParser::parseDocuments()
         bool &p = it.value();
         if ( p )
         {
-            ParseJob * parse = new ParseJob( url, m_preprocessor,
-                                             m_parser, m_memoryPool, this );
+            ParseJob * parse = new ParseJob( url, m_control,
+                                             m_memoryPool, this );
             p = false;
 
             if ( url == m_cppSupport->documentController() ->activeDocument() )
@@ -118,6 +116,82 @@ void BackgroundParser::parseComplete( Job *job )
 {
     ParseJob * parseJob = dynamic_cast<ParseJob*>( job );
     m_url2unit[ parseJob->document() ] = parseJob->translationUnit();
+
+    KDevCodeModel *cm = m_cppSupport->codeModel();
+    FileModelItem file = parseJob->fileModelItem();
+
+    // This of course can be made vastly more efficient and it should
+    // be broken out into it's own class/method, but something quick
+    // for testing now
+    foreach ( NamespaceModelItem _namespace, file->namespaces() )
+    {
+        KDevCodeNamespaceItem *n =
+            new KDevCodeNamespaceItem( _namespace->name() );
+        cm->appendItem( n );
+
+        foreach ( ClassModelItem _class, _namespace->classes() )
+        {
+            KDevCodeClassItem *c =
+                new KDevCodeClassItem( _class->name() );
+            cm->appendItem( c, n );
+
+            foreach ( FunctionModelItem _function, _class->functions() )
+            {
+                KDevCodeFunctionItem *f =
+                    new KDevCodeFunctionItem( _function->name() );
+                cm->appendItem( f, c );
+            }
+            foreach ( VariableModelItem _variable, _class->variables() )
+            {
+                KDevCodeVariableItem *v =
+                    new KDevCodeVariableItem( _variable->name() );
+                cm->appendItem( v, c );
+            }
+        }
+        foreach ( FunctionModelItem _function, _namespace->functions() )
+        {
+            KDevCodeFunctionItem *f =
+                new KDevCodeFunctionItem( _function->name() );
+            cm->appendItem( f, n );
+        }
+        foreach ( VariableModelItem _variable, _namespace->variables() )
+        {
+            KDevCodeVariableItem *v =
+                new KDevCodeVariableItem( _variable->name() );
+            cm->appendItem( v, n );
+        }
+    }
+    foreach ( ClassModelItem _class, file->classes() )
+    {
+        KDevCodeClassItem *c =
+            new KDevCodeClassItem( _class->name() );
+        cm->appendItem( c );
+
+        foreach ( FunctionModelItem _function, _class->functions() )
+        {
+            KDevCodeFunctionItem *f =
+                new KDevCodeFunctionItem( _function->name() );
+            cm->appendItem( f, c );
+        }
+        foreach ( VariableModelItem _variable, _class->variables() )
+        {
+            KDevCodeVariableItem *v =
+                new KDevCodeVariableItem( _variable->name() );
+            cm->appendItem( v, c );
+        }
+    }
+    foreach ( FunctionModelItem _function, file->functions() )
+    {
+        KDevCodeFunctionItem *f =
+            new KDevCodeFunctionItem( _function->name() );
+        cm->appendItem( f );
+    }
+    foreach ( VariableModelItem _variable, file->variables() )
+    {
+        KDevCodeVariableItem *v =
+            new KDevCodeVariableItem( _variable->name() );
+        cm->appendItem( v );
+    }
 }
 
 void BackgroundParser::documentChanged( KTextEditor::Document * document )

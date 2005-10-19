@@ -30,17 +30,19 @@
 
 #include <kdevdocumentcontroller.h>
 
+#include "parser/binder.h"
 #include "parser/parser.h"
+#include "parser/control.h"
 #include "parser/dumptree.h"
 #include "parser/preprocessor.h"
+
 #include "parsejob.h"
 
-ParseJob::ParseJob( const KURL &url, Preprocessor *preprocessor,
-                    Parser *parser, pool *memoryPool, QObject* parent )
+ParseJob::ParseJob( const KURL &url, Control *control,
+                    pool *memoryPool, QObject* parent )
         : ThreadWeaver::Job( parent ),
         m_document( url ),
-        m_preprocessor( preprocessor ),
-        m_parser( parser ),
+        m_control( control ),
         m_memoryPool( memoryPool )
 {
     m_contents = QByteArray();
@@ -57,6 +59,11 @@ KURL ParseJob::document() const
 TranslationUnitAST *ParseJob::translationUnit() const
 {
     return m_translationUnit;
+}
+
+FileModelItem ParseJob::fileModelItem() const
+{
+    return m_fileModelItem;
 }
 
 void ParseJob::run()
@@ -92,11 +99,17 @@ void ParseJob::run()
     << " size: " << size
     << endl;
 
-//     QByteArray preprocessed = m_preprocessor->run( contents );
+//     Preprocessor preprocessor( this );
+    Parser parser( m_control );
+//     QByteArray preprocessed = preprocessor.run( contents );
 //     std::size_t pre_size = preprocessed.length() + 1;
 
-//     m_translationUnit = m_parser->parse( preprocessed, pre_size, m_memoryPool );
-    m_translationUnit = m_parser->parse( contents, size, m_memoryPool );
+//     m_translationUnit = parser.parse( preprocessed, pre_size, m_memoryPool );
+    m_translationUnit = parser.parse( contents, size, m_memoryPool );
+
+    CodeModel model;
+    Binder binder( &model, &parser.token_stream );
+    m_fileModelItem = binder.run( m_translationUnit );
 
 //     DumpTree dumpTree;
 //     dumpTree.dump( m_translationUnit );
@@ -104,8 +117,7 @@ void ParseJob::run()
     if ( readFromDisk )
         munmap( contents, size );
 
-    m_preprocessor = 0;
-    m_parser = 0;
+    m_control = 0;
     m_memoryPool =0;
 }
 
