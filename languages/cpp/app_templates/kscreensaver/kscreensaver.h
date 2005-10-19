@@ -3,6 +3,8 @@
 #ifndef %{APPNAME}_H__
 #define %{APPNAME}_H__
 
+#include "kscreensaver.h"
+
 #include "%{APPNAMELC}ui.h"
 
 class %{APPNAME} : public KScreenSaver
