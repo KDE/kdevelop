@@ -54,15 +54,15 @@ public:
     void showPart( KParts::Part* part, const QString& name,
                    const QString& shortDescription );
 
-    KParts::ReadOnlyPart *partForURL( const KURL &url );
-    KTextEditor::Document* textPartForURL( const KURL & url );
-    /*    void* designerPartForURL( const KURL & url );*/
-    KDevHTMLPart* htmlPartForURL( const KURL & url );
-    KDevDocumentType documentTypeForURL( const KURL & url );
+    KParts::ReadOnlyPart *partForURL( const KURL &url ) const;
+    KTextEditor::Document* textPartForURL( const KURL & url ) const;
+    /*    void* designerPartForURL( const KURL & url ) const;*/
+    KDevHTMLPart* htmlPartForURL( const KURL & url ) const;
+    KDevDocumentType documentTypeForURL( const KURL & url ) const;
 
-    KParts::Part * partForWidget( const QWidget * widget );
+    KParts::Part * partForWidget( const QWidget * widget ) const;
 
-    KURL::List openURLs();
+    KURL::List openURLs() const;
 
     bool saveAllDocuments();
     bool saveDocument( const KURL & url, bool force = false );
@@ -81,13 +81,12 @@ public:
     void activatePart( KParts::Part * part );
 
     DocumentState documentState( KURL const & );
-    KURL activeDocument();
-    KDevDocumentType activeDocumentType();
+    KURL activeDocument() const;
+    KDevDocumentType activeDocumentType() const;
+    //END KDevDocumentController
 
     static void createInstance( QWidget *parent );
     static DocumentController *getInstance();
-    //END KDevDocumentController
-
     bool readyToClose();
     bool querySaveDocuments();
     void openEmptyTextDocument();
@@ -164,6 +163,12 @@ private:
 
     bool saveDocumentsDialog( KURL::List const & ignoreList );
     bool closeDocumentsDialog( KURL::List const & ignoreList );
+
+    KParts::ReadOnlyPart* activeReadOnly() const;
+    KParts::ReadWritePart* activeReadWrite() const;
+    KParts::ReadOnlyPart* readOnly( KParts::Part *part ) const;
+    KParts::ReadWritePart* readWrite( KParts::Part *part ) const;
+    KParts::ReadWritePart* readWriteForURL( const KURL& url ) const;
 
     static DocumentController *s_instance;
 

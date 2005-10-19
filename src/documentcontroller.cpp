@@ -114,20 +114,19 @@ void DocumentController::showDocument( const KURL &url, bool newWin )
 
     addHistoryEntry();
 
-    HTMLDocumentationPart *part =
-        dynamic_cast<HTMLDocumentationPart*>( activePart() );
-    if ( !part || newWin )
+    KDevHTMLPart *html = htmlPartForURL( activeDocument() );
+    if ( !html || newWin )
     {
-        part = new HTMLDocumentationPart;
-        integratePart( part, docUrl );
-        connect( part, SIGNAL( documentURLChanged( const KURL &, const KURL & ) ),
+        html = new HTMLDocumentationPart;
+        integratePart( html, docUrl );
+        connect( html, SIGNAL( documentURLChanged( const KURL &, const KURL & ) ),
                  this, SIGNAL( documentURLChanged( const KURL &, const KURL & ) ) );
     }
     else
     {
-        activatePart( part );
+        activatePart( html );
     }
-    part->openURL( docUrl );
+    html->openURL( docUrl );
 }
 
 void DocumentController::showPart( KParts::Part* part,
@@ -157,20 +156,19 @@ void DocumentController::showPart( KParts::Part* part,
     addPart( part );
 }
 
-KParts::ReadOnlyPart *DocumentController::partForURL( const KURL &url )
+KParts::ReadOnlyPart *DocumentController::partForURL( const KURL &url ) const
 {
     Q3PtrListIterator<KParts::Part> it( *parts() );
     for ( ; it.current(); ++it )
     {
-        KParts::ReadOnlyPart *ro_part =
-            dynamic_cast<KParts::ReadOnlyPart*>( it.current() );
+        KParts::ReadOnlyPart *ro_part = readOnly( it.current() );
         if ( ro_part && url == ro_part->url() )
             return ro_part;
     }
     return 0;
 }
 
-KTextEditor::Document * DocumentController::textPartForURL( const KURL & url )
+KTextEditor::Document * DocumentController::textPartForURL( const KURL & url ) const
 {
     return qobject_cast<KTextEditor::Document*>( partForURL( url ) );
 }
@@ -180,12 +178,12 @@ KTextEditor::Document * DocumentController::textPartForURL( const KURL & url )
 //     return qobject_cast<void*>( partForURL( url ) );
 // }
 
-KDevHTMLPart* DocumentController::htmlPartForURL( const KURL & url )
+KDevHTMLPart* DocumentController::htmlPartForURL( const KURL & url ) const
 {
     return qobject_cast<KDevHTMLPart*>( partForURL( url ) );
 }
 
-KDevDocumentType DocumentController::documentTypeForURL( const KURL & url )
+KDevDocumentType DocumentController::documentTypeForURL( const KURL & url ) const
 {
     if ( textPartForURL( url ) )
         return TextDocument;
@@ -195,7 +193,7 @@ KDevDocumentType DocumentController::documentTypeForURL( const KURL & url )
         return Invalid;
 }
 
-KParts::Part * DocumentController::partForWidget( const QWidget * widget )
+KParts::Part * DocumentController::partForWidget( const QWidget * widget ) const
 {
     Q3PtrListIterator<KParts::Part> it( *parts() );
     for ( ; it.current(); ++it )
@@ -208,14 +206,13 @@ KParts::Part * DocumentController::partForWidget( const QWidget * widget )
     return 0;
 }
 
-KURL::List DocumentController::openURLs( )
+KURL::List DocumentController::openURLs( ) const
 {
     KURL::List list;
     Q3PtrListIterator<KParts::Part> it( *parts() );
     for ( ; it.current(); ++it )
     {
-        if ( KParts::ReadOnlyPart * ro_part =
-                    dynamic_cast<KParts::ReadOnlyPart*>( it.current() ) )
+        if ( KParts::ReadOnlyPart * ro_part = readOnly( it.current() ) )
         {
             list << ro_part->url();
         }
@@ -230,8 +227,7 @@ bool DocumentController::saveAllDocuments()
 
 bool DocumentController::saveDocument( const KURL & url, bool force )
 {
-    KParts::ReadWritePart * part =
-        dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) );
+    KParts::ReadWritePart * part = readWriteForURL( url );
     if ( !part )
         return true;
 
@@ -308,8 +304,7 @@ void DocumentController::reloadAllDocuments()
 
 void DocumentController::reloadDocument( const KURL & url )
 {
-    KParts::ReadWritePart * part =
-        dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) );
+    KParts::ReadWritePart * part = readWriteForURL( url );
     if ( part )
     {
         if ( part->isModified() )
@@ -390,49 +385,24 @@ bool DocumentController::closeAllOthers( const KURL & url )
 bool DocumentController::closePart( KParts::Part *part )
 {
     if ( !part )
-        return true;
+        return false;
 
-    if ( KParts::ReadOnlyPart * ro_part =
-                dynamic_cast<KParts::ReadOnlyPart*>( part ) )
+    if ( KParts::ReadWritePart * rw_part = readWrite( part ) )
     {
-        KURL url = ro_part->url();
-        if ( ! ro_part->closeURL() )
-        {
+        KURL url = rw_part->url();
+        if ( ! rw_part->closeURL() )
             return false;
-        }
-        m_dirtyDocuments.remove(
-            static_cast<KParts::ReadWritePart*>( ro_part ) );
 
+        m_dirtyDocuments.remove( rw_part );
         emit documentClosed( url );
-        //        removeTimestamp( url );
     }
 
-    // FIXME correct? relevant?
-
-    // If we didn't call removePart(), KParts::PartManager::slotObjectDestroyed
-    // would get called from the destroyed signal of the part being deleted
-    // below. The call chain from that looks like this:
-    // QObject::destroyed()
-    //   KParts::PartManager::slotWidgetDestroyed() -> setActivePart() -> activePartChanged()
-    //     TopLevelXXX::createGUI()
-    //       KXMLGUIFactory::removeClient()
-    // But then KXMLGUIFactory tries to remove the already-deleted part.
-    // Normally this would work, because the factory uses a QGuardedPtr to the
-    // part. But the QGuardedPtr is connected to the _same_ destroyed() slot
-    // that got us to that point (slots are called in an undefined order)!
-
-    // Previously, the comment was:
-    // The following line can be removed with kdelibs HEAD! (2002-05-26)
-    //
-    // Now, this is needed for proper functioning, so leave...
-    //  removePart( part );
     TopLevel::getInstance() ->main() ->guiFactory() ->removeClient( part );
 
     if ( QWidget * w = EditorProxy::getInstance() ->topWidgetForPart( part ) )
         TopLevel::getInstance() ->removeView( w );
 
     delete part;
-
     return true;
 }
 
@@ -460,8 +430,8 @@ void DocumentController::activatePart( KParts::Part *part )
 
 DocumentState DocumentController::documentState( KURL const & url )
 {
-    KParts::ReadWritePart * rw_part =
-        dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) );
+    KParts::ReadWritePart * rw_part = readWriteForURL( url );
+
     if ( !rw_part )
         return Clean;
 
@@ -486,17 +456,16 @@ DocumentState DocumentController::documentState( KURL const & url )
     return state;
 }
 
-KURL DocumentController::activeDocument()
+KURL DocumentController::activeDocument() const
 {
     if ( !activePart() )
         return KURL();
 
-    KParts::ReadOnlyPart * ro_part =
-        dynamic_cast<KParts::ReadOnlyPart*>( activePart() );
+    KParts::ReadOnlyPart * ro_part = activeReadOnly();
     return ro_part->url();
 }
 
-KDevDocumentType DocumentController::activeDocumentType()
+KDevDocumentType DocumentController::activeDocumentType() const
 {
     return documentTypeForURL( activeDocument() );
 }
@@ -737,7 +706,7 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
                 // create a tab for it, so use a QWidgetStack subclass instead
                 kdDebug() << k_lineinfo << "Creating Editor wrapper..." << endl;
                 KTextEditor::Document* doc =
-                    static_cast<KTextEditor::Document*>( editorPart );
+                    qobject_cast<KTextEditor::Document*>( editorPart );
                 widget = new EditorWrapper( doc,
                                             activate,
                                             TopLevel::getInstance() ->main() );
@@ -790,8 +759,7 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
     if ( factory )
     {
         // create the object of the desired class
-        KParts::ReadOnlyPart * part =
-            static_cast<KParts::ReadOnlyPart*>( factory->createPart(
+        KParts::ReadOnlyPart * part = readOnly( factory->createPart(
                                                     TopLevel::getInstance() ->main(),
                                                     0, 0, 0, className.toLatin1() ) );
         if ( part )
@@ -851,8 +819,7 @@ void DocumentController::slotSave()
 {
     kdDebug( 9000 ) << k_funcinfo << endl;
 
-    if ( KParts::ReadWritePart * part =
-                dynamic_cast<KParts::ReadWritePart*>( activePart() ) )
+    if ( KParts::ReadWritePart * part = activeReadWrite() )
     {
         saveDocument( part->url() );
     }
@@ -862,8 +829,7 @@ void DocumentController::slotReload()
 {
     kdDebug( 9000 ) << k_funcinfo << endl;
 
-    if ( KParts::ReadWritePart * part =
-                dynamic_cast<KParts::ReadWritePart*>( activePart() ) )
+    if ( KParts::ReadWritePart * part = activeReadWrite() )
     {
         reloadDocument( part->url() );
     }
@@ -881,8 +847,7 @@ void DocumentController::slotCloseAllWindows()
 
 void DocumentController::slotCloseOtherWindows()
 {
-    if ( KParts::ReadOnlyPart * active =
-                dynamic_cast<KParts::ReadOnlyPart*>( activePart() ) )
+    if ( KParts::ReadOnlyPart * active = activeReadOnly() )
     {
         closeAllOthers( active->url() );
     }
@@ -1079,8 +1044,7 @@ void DocumentController::slotSwitchTo()
         kdDebug( 9000 ) << "Part..." << endl;
         if ( part->inherits( "KParts::ReadOnlyPart" ) )
         {
-            KParts::ReadOnlyPart * ro_part =
-                static_cast<KParts::ReadOnlyPart*>( part );
+            KParts::ReadOnlyPart * ro_part = readOnly( part );
             QString name = ro_part->url().fileName();
             part_list.append( name );
             parts_map[ name ] = ro_part;
@@ -1113,8 +1077,7 @@ void DocumentController::slotPartAdded( KParts::Part * part )
 {
     kdDebug( 9000 ) << k_funcinfo << endl;
 
-    if ( KParts::ReadOnlyPart * ro_part =
-                dynamic_cast<KParts::ReadOnlyPart*>( part ) )
+    if ( KParts::ReadOnlyPart * ro_part = readOnly( part ) )
     {
         updatePartURL( ro_part );
     }
@@ -1126,7 +1089,7 @@ void DocumentController::slotPartRemoved( KParts::Part * part )
 {
     kdDebug( 9000 ) << k_funcinfo << endl;
 
-    m_partURLMap.remove( static_cast<KParts::ReadOnlyPart*>( part ) );
+    m_partURLMap.remove( readOnly( part ) );
 
     updateMenuItems();
 }
@@ -1136,8 +1099,6 @@ void DocumentController::slotUploadFinished()
     KParts::ReadOnlyPart * ro_part =
         const_cast<KParts::ReadOnlyPart*>(
             dynamic_cast<const KParts::ReadOnlyPart*>( sender() ) );
-    if ( !ro_part )
-        return ;
 
     if ( partURLHasChanged( ro_part ) )
     {
@@ -1461,24 +1422,25 @@ void DocumentController::integratePart( KParts::Part *part, const KURL &url,
     addPart( part, activate );
 
     // tell the parts we loaded a document
-    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part );
+    KParts::ReadOnlyPart *ro_part = readOnly( part );
     if ( !ro_part )
         return ;
 
     emit documentLoaded( ro_part->url() );
 
-    if ( dynamic_cast<KTextEditor::ModificationInterface*>( part ) )
-        connect( part, SIGNAL( modifiedOnDisk( KTextEditor::Document*, bool, ModifiedOnDiskReason ) ),
-                 this, SLOT( slotDocumentDirty( KTextEditor::Document*, bool, ModifiedOnDiskReason ) ) );
+    if ( qobject_cast<KTextEditor::ModificationInterface*>( part ) )
+        connect( part, SIGNAL( modifiedOnDisk( KTextEditor::Document*,
+                                               bool,
+                                               ModifiedOnDiskReason ) ),
+                 this, SLOT( slotDocumentDirty( KTextEditor::Document*,
+                                                bool,
+                                                ModifiedOnDiskReason ) ) );
 
     // let's get notified when a document has been changed
     connect( part, SIGNAL( completed() ), this, SLOT( slotUploadFinished() ) );
 
-    // Connect to the document's views newStatus() signal in order to keep
-    // track of the modified-status of the document.
-
     if ( isTextEditor )
-        integrateTextEditorPart( static_cast<KTextEditor::Document*>( part ) );
+        integrateTextEditorPart( qobject_cast<KTextEditor::Document*>( part ) );
 }
 
 KURL::List DocumentController::modifiedDocuments()
@@ -1488,8 +1450,7 @@ KURL::List DocumentController::modifiedDocuments()
     Q3PtrListIterator<KParts::Part> it( *parts() );
     while ( it.current() )
     {
-        KParts::ReadWritePart * rw_part =
-            dynamic_cast<KParts::ReadWritePart*>( it.current() );
+        KParts::ReadWritePart * rw_part = readWrite( it.current() );
         if ( rw_part && rw_part->isModified() )
         {
             modDocuments << rw_part->url();
@@ -1504,8 +1465,7 @@ void DocumentController::clearModified( KURL::List const & filelist )
     KURL::List::ConstIterator it = filelist.begin();
     while ( it != filelist.end() )
     {
-        KParts::ReadWritePart * rw_part =
-            dynamic_cast<KParts::ReadWritePart*>( partForURL( *it ) );
+        KParts::ReadWritePart * rw_part = readWriteForURL( *it );
         if ( rw_part )
         {
             rw_part->setModified( false );
@@ -1516,8 +1476,7 @@ void DocumentController::clearModified( KURL::List const & filelist )
 
 bool DocumentController::isDirty( KURL const & url )
 {
-    return m_dirtyDocuments.contains(
-               static_cast<KTextEditor::Document*>( partForURL( url ) ) );
+    return m_dirtyDocuments.contains( textPartForURL( url ) );
 }
 
 bool DocumentController::reactToDirty( KURL const & url, unsigned char reason )
@@ -1530,8 +1489,7 @@ bool DocumentController::reactToDirty( KURL const & url, unsigned char reason )
         return false;
 
     bool isModified = true;
-    if ( KParts::ReadWritePart * part =
-                dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) ) )
+    if ( KParts::ReadWritePart * part = readWriteForURL( url ) )
     {
         isModified = part->isModified();
     }
@@ -1553,7 +1511,7 @@ bool DocumentController::reactToDirty( KURL const & url, unsigned char reason )
         return false;
     }
 
-    if ( reason == 3 )                                // means the file was deleted
+    if ( reason == 3 )                                 // means the file was deleted
     {
         KMessageBox::sorry( TopLevel::getInstance() ->main(),
                             i18n( "Warning: The file \"%1\" has been deleted on"
@@ -1644,8 +1602,7 @@ bool DocumentController::closeDocumentsDialog( KURL::List const & ignoreList )
     Q3PtrListIterator<KParts::Part> it( partList );
     while ( KParts::Part * part = it.current() )
     {
-        KParts::ReadOnlyPart * ro_part =
-            dynamic_cast<KParts::ReadOnlyPart*>( part );
+        KParts::ReadOnlyPart * ro_part = readOnly( part );
         if ( ro_part && !ignoreList.contains( ro_part->url() ) || !ro_part )
         {
             closePart( part );
@@ -1653,6 +1610,31 @@ bool DocumentController::closeDocumentsDialog( KURL::List const & ignoreList )
         ++it;
     }
     return true;
+}
+
+KParts::ReadOnlyPart* DocumentController::activeReadOnly() const
+{
+    return readOnly( activePart() );
+}
+
+KParts::ReadWritePart* DocumentController::activeReadWrite() const
+{
+    return readWrite( activePart() );
+}
+
+KParts::ReadOnlyPart* DocumentController::readOnly( KParts::Part *part ) const
+{
+    return qobject_cast<KParts::ReadOnlyPart*>( part );
+}
+
+KParts::ReadWritePart* DocumentController::readWrite( KParts::Part *part ) const
+{
+    return qobject_cast<KParts::ReadWritePart*>( part );
+}
+
+KParts::ReadWritePart* DocumentController::readWriteForURL( const KURL& url ) const
+{
+    return qobject_cast<KParts::ReadWritePart*>( partForURL( url ) );
 }
 
 DocumentController::HistoryEntry::HistoryEntry( const KURL & u, int l, int c )
@@ -1664,18 +1646,17 @@ DocumentController::HistoryEntry::HistoryEntry( const KURL & u, int l, int c )
 
 DocumentController::HistoryEntry DocumentController::createHistoryEntry()
 {
-    KParts::ReadOnlyPart * ro_part =
-        dynamic_cast<KParts::ReadOnlyPart*>( activePart() );
-    if ( !ro_part )
+    KTextEditor::Document * doc = textPartForURL( activeDocument() );
+    if ( !doc )
         return HistoryEntry();
 
     KTextEditor::View *view =
-        qobject_cast<KTextEditor::View *>( ro_part->widget() );
+        qobject_cast<KTextEditor::View *>( doc->activeView() );
     if ( !view )
         return HistoryEntry();
 
     KTextEditor::Cursor cursor = view->cursorPosition();
-    return HistoryEntry( ro_part->url(), cursor.line(), cursor.column() );
+    return HistoryEntry( activeDocument(), cursor.line(), cursor.column() );
 }
 
 // this should be called _before_ a jump is made

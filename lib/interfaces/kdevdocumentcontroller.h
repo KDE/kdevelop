@@ -104,38 +104,38 @@ public:
     /**Finds the embedded part corresponding to a given URL.
     @param url The URL of the document.
     @return The corresponding part, 0 if not found.*/
-    virtual KParts::ReadOnlyPart *partForURL( const KURL & url ) = 0;
+    virtual KParts::ReadOnlyPart *partForURL( const KURL & url ) const = 0;
 
     /**Finds the embedded KTextEditor document corresponding to a given URL.
     @param url The URL of the document.
     @return The corresponding document, 0 if not found or DocumentType
     is Invalid.*/
-    virtual KTextEditor::Document* textPartForURL( const KURL & url ) = 0;
+    virtual KTextEditor::Document* textPartForURL( const KURL & url )  const = 0;
 
     /**Finds the embedded Qt Designer part corresponding to a given URL.
     @param url The URL of the document.
     @return The corresponding designer part, 0 if not found or DocumentType
     is Invalid.*/
-//     virtual void* designerPartForURL( const KURL & url ) = 0;
+//     virtual void* designerPartForURL( const KURL & url ) const = 0;
 
     /**Finds the embedded HTML document part corresponding to a given URL.
     @param url The URL of the document.
     @return The corresponding HTML document part, 0 if not found or DocumentType
     is Invalid.*/
-    virtual KDevHTMLPart* htmlPartForURL( const KURL & url ) = 0;
+    virtual KDevHTMLPart* htmlPartForURL( const KURL & url ) const = 0;
 
     /**Finds the document type corresponding to a given URL.
     @param url The URL of the document.
     @return The corresponding DocumentType, DocumentType::Invalid if not found.*/
-    virtual KDevDocumentType documentTypeForURL( const KURL & url ) = 0;
+    virtual KDevDocumentType documentTypeForURL( const KURL & url ) const = 0;
 
     /**Finds the embedded part corresponding to a given main widget
     @param widget The parts main widget.
     @return The corresponding part, 0 if not found.*/
-    virtual KParts::Part *partForWidget( const QWidget *widget ) = 0;
+    virtual KParts::Part *partForWidget( const QWidget *widget ) const = 0;
 
     /**@return The list of open documents*/
-    virtual KURL::List openURLs() = 0;
+    virtual KURL::List openURLs() const = 0;
 
     /**Saves all open documents.
      @return false if it was cancelled by the user, true otherwise */
@@ -188,11 +188,11 @@ public:
 
     /**Refers to the document currently active or focused.
     @return The URL of the active document.*/
-    virtual KURL activeDocument() = 0;
+    virtual KURL activeDocument() const = 0;
 
     /**Refers to the document currently active or focused.
     @return The corresponding DocumentType, DocumentType::Invalid if not found.*/
-    virtual KDevDocumentType activeDocumentType() = 0;
+    virtual KDevDocumentType activeDocumentType() const = 0;
 
 signals:
 
