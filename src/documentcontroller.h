@@ -33,7 +33,6 @@ class KAction;
 class KToolBarPopupAction;
 class KRecentFilesAction;
 class HTMLDocumentationPart;
-class HistoryEntry;
 class KDirWatch;
 
 /**
@@ -63,12 +62,7 @@ public:
 
     KParts::Part * partForWidget( const QWidget * widget );
 
-    void activatePart( KParts::Part * part );
-    bool closePart( KParts::Part * part );
-
     KURL::List openURLs();
-
-    bool querySaveDocuments();
 
     bool saveAllDocuments();
     bool saveDocument( const KURL & url, bool force = false );
@@ -83,6 +77,9 @@ public:
     bool closeDocuments( const KURL::List & list );
     bool closeAllOthers( const KURL & );
 
+    bool closePart( KParts::Part * part );
+    void activatePart( KParts::Part * part );
+
     DocumentState documentState( KURL const & );
     KURL activeDocument();
     KDevDocumentType activeDocumentType();
@@ -91,21 +88,20 @@ public:
     static DocumentController *getInstance();
     //END KDevDocumentController
 
+    bool readyToClose();
+    bool querySaveDocuments();
+    void openEmptyTextDocument();
+    void integrateTextEditorPart( KTextEditor::Document* doc );
     void editDocumentInternal( const KURL &inputUrl, int lineNum = -1,
                                int col = -1, bool activate = true );
-    void integrateTextEditorPart( KTextEditor::Document* doc );
-
-    bool readyToClose();
-    void openEmptyTextDocument();
 
 public slots:
-    void slotActivePartChanged( KParts::Part* part );
-    void slotCloseWindow();
-    void slotCloseOtherWindows();
-    void slotCloseAllWindows();
-
     void slotSave();
     void slotReload();
+    void slotCloseWindow();
+    void slotCloseAllWindows();
+    void slotCloseOtherWindows();
+    void slotActivePartChanged( KParts::Part* part );
 
 private slots:
     void slotWaitForFactoryHack();
@@ -139,20 +135,16 @@ private slots:
     void slotNewDesignerStatus( const QString &formName, int status );
 
 private:
-    KURL findURLInProject( const KURL& url );
-    KParts::Part* findOpenDocument( const KURL& url );
-
     void setupActions();
-
-    bool closeDocumentsDialog( KURL::List const & ignoreList );
-    bool saveDocumentsDialog( KURL::List const & ignoreList );
-
     void doEmitState( KURL const & );
 
+    KURL findURLInProject( const KURL& url );
+    KParts::Part* findOpenDocument( const KURL& url );
     KParts::Factory *findPartFactory( const QString &mimeType,
                                       const QString &partType,
                                       const QString &preferredName
                                       = QString::null );
+
     KTextEditor::Document *createEditorPart( bool activate );
 
     void integratePart( KParts::Part *part, const KURL &url,
@@ -169,6 +161,9 @@ private:
     KURL storedURLForPart( KParts::ReadOnlyPart * );
     void updatePartURL( KParts::ReadOnlyPart * );
     bool partURLHasChanged( KParts::ReadOnlyPart * );
+
+    bool saveDocumentsDialog( KURL::List const & ignoreList );
+    bool closeDocumentsDialog( KURL::List const & ignoreList );
 
     static DocumentController *s_instance;
 
@@ -205,13 +200,13 @@ private:
         int id;
     };
 
-    void addHistoryEntry();
-    HistoryEntry createHistoryEntry();
-    void jumpTo( const HistoryEntry & );
-
     QList<HistoryEntry> m_backHistory;
     QList<HistoryEntry> m_forwardHistory;
     bool m_isJumping;
+
+    HistoryEntry createHistoryEntry();
+    void addHistoryEntry();
+    void jumpTo( const HistoryEntry & );
 };
 
 #endif
