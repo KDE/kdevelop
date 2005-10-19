@@ -50,6 +50,7 @@ Comment[el]= Η εμβέλεια ενός πρόσθετου (Καθολική, 
 Comment[es]=El alcance de un plugin (global, proyecto, núcleo)
 Comment[et]=Plugina skoop (globaalne, projekt, tuum)
 Comment[eu]= Pluginaren barrutia (Globala, Projektua, Nukleoa)
+Comment[fr]= La portée d'un module (globale, projet, cœur)
 Comment[hu]=A modul hatóköre (globális, projektszintű, alap)
 Comment[it]=Il contesto di un plugin (Globale, Progetto, Core)
 Comment[nl]=Het bereik van een plugin (globaal, project, core)

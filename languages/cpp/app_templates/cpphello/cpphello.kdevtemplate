@@ -96,6 +96,7 @@ Comment[el]=Ένα απλό πρόγραμμα Γεια σου Κόσμε δημ
 Comment[es]=Un sencillo programa «Hola mundo» ha sido creado en %{dest}
 Comment[et]=Lihtne "Tere, maailm" programm loodi asukohta %{dest}
 Comment[eu]="Kaixo mundua" programa sinple bat sortu da hemen: %{dest}
+Comment[fr]=Un simple programme « Hello world » a été créé dans %{dest}.
 Comment[hu]=Létrejött egy egyszerű Hello world program itt: %{dest}
 Comment[it]=È stato creato un semplice programma di "Hello World" in %{dest}
 Comment[nl]=Een eenvoudig Hello World-programma is aangemaakt in %{dest}

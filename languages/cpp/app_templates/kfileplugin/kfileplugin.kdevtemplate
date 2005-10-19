@@ -29,6 +29,7 @@ Comment[el]=Δημιουργεί ένα πρόσθετο KFile για την ε�
 Comment[es]=Genera un plugin KFile de Konqueror para mostrar metainformación.
 Comment[et]=Konqueroro KFile'i plugina loomine, mis näitab metainfot.
 Comment[eu]=Meta-informazioa bistaratzeko Konqueror-en KFile plugin bat sortzen du.
+Comment[fr]=Génère un module KFile pour Konqueror afin d'afficher des méta-informations.
 Comment[hu]=Létrehoz egy KFile-bővítőmodult, mellyel a Konquerorban dokumentumjellemzőket lehet megjeleníteni.
 Comment[it]=Genera un plugin KFile per Konqueror per mostrare meta informazioni.
 Comment[nl]=Genereert een KFile-plugin voor konqueror voor het weergeven van meta-informatie.
