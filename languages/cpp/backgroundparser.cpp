@@ -49,7 +49,10 @@ BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
         m_cppSupport( cppSupport )
 {
     m_weaver = Weaver::instance();
+
+    //Probably need more than one control object
     m_control = new Control();
+
     m_memoryPool = new pool();
     m_timer = new QTimer( this );
     m_timer->setSingleShot( true );
@@ -120,7 +123,7 @@ void BackgroundParser::parseComplete( Job *job )
     KDevCodeModel *cm = m_cppSupport->codeModel();
     FileModelItem file = parseJob->fileModelItem();
 
-    // This of course can be made vastly more efficient and it should
+    // This of course can be made more efficient and it should
     // be broken out into it's own class/method, but something quick
     // for testing now
     foreach ( NamespaceModelItem _namespace, file->namespaces() )
