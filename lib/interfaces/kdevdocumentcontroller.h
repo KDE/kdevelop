@@ -51,8 +51,19 @@ enum DocumentState
     Clean,             /**<Document is not touched.*/
     Modified,          /**<Document is modified inside a shell.*/
     Dirty,             /**<Document is modified by an external process.*/
-    DirtyAndModified  /**<Document is modified inside a shell and at the same time by an external process.*/
+    DirtyAndModified   /**<Document is modified inside a shell and at the same time by an external process.*/
 };
+
+/**Document type enum.*/
+enum KDevDocumentType
+{
+    Invalid,           /**<Document is a text document.*/
+    TextDocument,      /**<Document is a text document.*/
+    DesignerDocument,  /**<Document is a designer document.*/
+    HTMLDocument       /**<Document is an html document.*/
+};
+
+class KDevHTMLPart;
 
 /**
 Interface to control loaded parts and other documents.
@@ -97,8 +108,26 @@ public:
 
     /**Finds the embedded KTextEditor document corresponding to a given URL.
     @param url The URL of the document.
-    @return The corresponding document, 0 if not found.*/
-    virtual KTextEditor::Document* documentForURL( const KURL & url ) = 0;
+    @return The corresponding document, 0 if not found or DocumentType
+    is Invalid.*/
+    virtual KTextEditor::Document* textPartForURL( const KURL & url ) = 0;
+
+    /**Finds the embedded Qt Designer part corresponding to a given URL.
+    @param url The URL of the document.
+    @return The corresponding designer part, 0 if not found or DocumentType
+    is Invalid.*/
+//     virtual void* designerPartForURL( const KURL & url ) = 0;
+
+    /**Finds the embedded HTML document part corresponding to a given URL.
+    @param url The URL of the document.
+    @return The corresponding HTML document part, 0 if not found or DocumentType
+    is Invalid.*/
+    virtual KDevHTMLPart* htmlPartForURL( const KURL & url ) = 0;
+
+    /**Finds the document type corresponding to a given URL.
+    @param url The URL of the document.
+    @return The corresponding DocumentType, DocumentType::Invalid if not found.*/
+    virtual KDevDocumentType documentTypeForURL( const KURL & url ) = 0;
 
     /**Finds the embedded part corresponding to a given main widget
     @param widget The parts main widget.
@@ -120,20 +149,32 @@ public:
     /**Reloads all open documents.*/
     virtual void reloadAllDocuments() = 0;
 
+    /**Reloads a document.
+    * @param url The URL to reload.*/
+    virtual void reloadDocument( const KURL & url ) = 0;
+
     /**Reloads a list of documents.
     * @param list The list of URLs to reload.*/
     virtual void reloadDocuments( const KURL::List &list ) = 0;
+
+    /**Closes a document.
+    * @param url The URL to close.*/
+    virtual bool closeDocument( const KURL &url ) = 0;
 
     /**Closes all open documents.*/
     virtual bool closeAllDocuments() = 0;
 
     /**Closes a list of documents.
-    @param list The list of URLs for the documents to close.*/
+    @param list The list of URLs to close.*/
     virtual bool closeDocuments( const KURL::List &list ) = 0;
+
+    /**Closes all other open documents.
+    @param list The  URL of the document not to close.*/
+    virtual bool closeAllOthers( const KURL &url ) = 0;
 
     /**Closes this part (closes the window/tab for this part).
     @param part The part to close.
-    @return true if the part was sucessfuly closed.*/
+    @return true if the part was sucessfully closed.*/
     virtual bool closePart( KParts::Part *part ) = 0;
 
     /**Activate this part.
@@ -148,6 +189,10 @@ public:
     /**Refers to the document currently active or focused.
     @return The URL of the active document.*/
     virtual KURL activeDocument() = 0;
+
+    /**Refers to the document currently active or focused.
+    @return The corresponding DocumentType, DocumentType::Invalid if not found.*/
+    virtual KDevDocumentType activeDocumentType() = 0;
 
 signals:
 

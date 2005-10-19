@@ -375,9 +375,9 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
 
     // is this regular text - open in editor
     if ( m_openNextAsText
-         || mimeType->is( "text/plain" )
-         || mimeType->is( "text/html" )
-         || mimeType->is( "application/x-zerosize" ) )
+            || mimeType->is( "text/plain" )
+            || mimeType->is( "text/html" )
+            || mimeType->is( "application/x-zerosize" ) )
     {
         KTextEditor::Document * editorPart = createEditorPart( activate );
 
@@ -596,7 +596,7 @@ KTextEditor::Document *DocumentController::createEditorPart( bool activate )
             kapp->config() ->readPathEntry( "EmbeddedKTextEditor" );
 
         m_editorFactory = findPartFactory( "text/plain",
-                                          "KTextEditor/Document", preferred );
+                                           "KTextEditor/Document", preferred );
 
         if ( !m_editorFactory )
             return 0;
@@ -739,9 +739,29 @@ KParts::ReadOnlyPart *DocumentController::partForURL( const KURL &url )
     return 0;
 }
 
-KTextEditor::Document * DocumentController::documentForURL( const KURL & url )
+KTextEditor::Document * DocumentController::textPartForURL( const KURL & url )
 {
-    return qobject_cast<KTextEditor::Document*>(partForURL(url));
+    return qobject_cast<KTextEditor::Document*>( partForURL( url ) );
+}
+
+// void* DocumentController::designerPartForURL( const KURL & url )
+// {
+//     return qobject_cast<void*>( partForURL( url ) );
+// }
+
+KDevHTMLPart* DocumentController::htmlPartForURL( const KURL & url )
+{
+    return qobject_cast<KDevHTMLPart*>( partForURL( url ) );
+}
+
+KDevDocumentType DocumentController::documentTypeForURL( const KURL & url )
+{
+    if ( textPartForURL( url ) )
+        return TextDocument;
+    else if ( htmlPartForURL( url ) )
+        return HTMLDocument;
+    else
+        return Invalid;
 }
 
 KParts::Part * DocumentController::partForWidget( const QWidget * widget )
@@ -1352,7 +1372,7 @@ bool DocumentController::reactToDirty( KURL const & url, unsigned char reason )
         return false;
     }
 
-    if ( reason == 3 )                              // means the file was deleted
+    if ( reason == 3 )                               // means the file was deleted
     {
         KMessageBox::sorry( TopLevel::getInstance() ->main(),
                             i18n( "Warning: The file \"%1\" has been deleted on"
@@ -1431,6 +1451,12 @@ KURL DocumentController::activeDocument()
     KParts::ReadOnlyPart * ro_part =
         dynamic_cast<KParts::ReadOnlyPart*>( activePart() );
     return ro_part->url();
+}
+
+
+KDevDocumentType DocumentController::activeDocumentType()
+{
+    return documentTypeForURL( activeDocument() );
 }
 
 void DocumentController::doEmitState( KURL const & url )

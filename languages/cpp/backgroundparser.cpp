@@ -72,7 +72,7 @@ void BackgroundParser::addDocument( const KURL &url )
         m_documents.insert( url, true );
 
         if ( KTextEditor::Document * doc =
-                    m_cppSupport->documentController() ->documentForURL( url ) )
+                    m_cppSupport->documentController() ->textPartForURL( url ) )
             connect( doc, SIGNAL( textChanged( KTextEditor::Document* ) ),
                      SLOT( documentChanged( KTextEditor::Document* ) ) );
 
@@ -102,7 +102,7 @@ void BackgroundParser::parseDocuments()
             if ( url == m_cppSupport->documentController() ->activeDocument() )
             {
                 KTextEditor::Document * doc =
-                    m_cppSupport->documentController() ->documentForURL( url );
+                    m_cppSupport->documentController() ->textPartForURL( url );
 
                 parse->setContents( doc->text().toAscii() );
             }

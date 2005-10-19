@@ -46,22 +46,20 @@ public:
     DocumentController( QWidget *toplevel );
     virtual ~DocumentController();
 
-    static void createInstance( QWidget *parent );
-    static DocumentController *getInstance();
-
+    //BEGIN KDevDocumentController
     void setEncoding( const QString &encoding );
     void editDocument( const KURL &inputUrl, int lineNum = -1,
                        int col = -1 );
-    void editDocumentInternal( const KURL &inputUrl, int lineNum = -1,
-                               int col = -1, bool activate = true );
-    void integrateTextEditorPart( KTextEditor::Document* doc );
 
     void showDocument( const KURL &url, bool newWin = false );
     void showPart( KParts::Part* part, const QString& name,
                    const QString& shortDescription );
 
     KParts::ReadOnlyPart *partForURL( const KURL &url );
-    KTextEditor::Document* documentForURL( const KURL & url );
+    KTextEditor::Document* textPartForURL( const KURL & url );
+    /*    void* designerPartForURL( const KURL & url );*/
+    KDevHTMLPart* htmlPartForURL( const KURL & url );
+    KDevDocumentType documentTypeForURL( const KURL & url );
 
     KParts::Part * partForWidget( const QWidget * widget );
 
@@ -73,24 +71,31 @@ public:
     bool querySaveDocuments();
 
     bool saveAllDocuments();
-    bool saveDocuments( const KURL::List & list );
     bool saveDocument( const KURL & url, bool force = false );
+    bool saveDocuments( const KURL::List & list );
 
     void reloadAllDocuments();
+    void reloadDocument( const KURL & url );
     void reloadDocuments( const KURL::List & list );
 
     bool closeAllDocuments();
+    bool closeDocument( const KURL & );
     bool closeDocuments( const KURL::List & list );
+    bool closeAllOthers( const KURL & );
 
     DocumentState documentState( KURL const & );
     KURL activeDocument();
+    KDevDocumentType activeDocumentType();
+
+    static void createInstance( QWidget *parent );
+    static DocumentController *getInstance();
+    //END KDevDocumentController
+
+    void editDocumentInternal( const KURL &inputUrl, int lineNum = -1,
+                               int col = -1, bool activate = true );
+    void integrateTextEditorPart( KTextEditor::Document* doc );
 
     bool readyToClose();
-
-    bool closeDocument( const KURL & );
-    bool closeAllOthers( const KURL & );
-    void reloadDocument( const KURL & url );
-
     void openEmptyTextDocument();
 
 public slots:
