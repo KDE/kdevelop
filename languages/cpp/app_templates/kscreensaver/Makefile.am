@@ -1,6 +1,6 @@
-dataFiles = kscreensaver.desktop kscreensaver.png kscreensaver.h \
-	kscreensaverui.ui src-Makefile.am kscreensaver.cpp \
-	kscreensaver.kdevelop subdirs
+dataFiles = app.desktop kscreensaver.png app.h \
+	appui.ui src-Makefile.am app.cpp \
+	app.kdevelop subdirs
 
 templateName= kscreensaver
 
