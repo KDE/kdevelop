@@ -142,7 +142,7 @@ KDevCodeModel *KDevClassView::codeModel() const
   return qobject_cast<KDevCodeModel*>(model());
 }
 
-void KDevClassView::slotActivated(const QModelIndex &index)
+void KDevClassView::slotActivated(const QModelIndex &/*index*/)
 {
 }
 

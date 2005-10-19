@@ -57,21 +57,13 @@ KDevClassViewPart::KDevClassViewPart(QObject *parent, const char *name, const QS
 
   setInstance(KDevClassViewFactory::instance());
 
-  m_widget = new QWidget(0);
-  new QVBoxLayout(m_widget);
-
-  QLineEdit *editor = new QLineEdit(m_widget);
-  m_widget->layout()->addWidget(editor);
-
-  editor->hide();
-
   KDevClassViewDelegate *delegate = new KDevClassViewDelegate(this);
 
-  m_classView = new KDevClassView(this, m_widget);
-  m_classView->setModel( codeModel() );
+  m_classView = new KDevClassView(this, 0);
+  m_classView->setIcon(SmallIcon( "view_tree"));
+  m_classView->setModel(codeModel());
   m_classView->setItemDelegate(delegate);
   m_classView->setWhatsThis(i18n("Classes"));
-  m_widget->layout()->add(m_classView);
 
   //KFilterModel *filterModel = new KFilterModel(m_codeModel, m_codeModel);
   //connect(editor, SIGNAL(textChanged(QString)), filterModel, SLOT(setFilter(QString)));
@@ -79,7 +71,7 @@ KDevClassViewPart::KDevClassViewPart(QObject *parent, const char *name, const QS
 
   connect(m_classView, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
 
-  mainWindow()->embedSelectView(m_widget, i18n("Classes"), i18n("Classes"));
+  mainWindow()->embedSelectView(m_classView, i18n("Classes"), i18n("Classes"));
 
   setXMLFile("kdevclassview.rc");
 
@@ -91,8 +83,8 @@ KDevClassViewPart::KDevClassViewPart(QObject *parent, const char *name, const QS
 KDevClassViewPart::~KDevClassViewPart()
 {
   if (m_classView) {
-    mainWindow()->removeView(m_widget);
-    delete m_widget;
+    mainWindow()->removeView(m_classView);
+    delete m_classView;
   }
 }
 
@@ -116,7 +108,7 @@ KDevCodeVariableItem *KDevClassViewPart::currentVariableItem() const
   return m_classView->currentVariableItem();
 }
 
-void KDevClassViewPart::import(RefreshPolicy policy)
+void KDevClassViewPart::import(RefreshPolicy /*policy*/)
 {
 }
 

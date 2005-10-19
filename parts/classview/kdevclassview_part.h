@@ -62,8 +62,7 @@ signals:
 
 private:
     KDevCodeItem *m_workspace;
-    QPointer<QWidget> m_widget;
-    KDevClassView *m_classView;
+    QPointer<KDevClassView> m_classView;
 };
 
 #endif
