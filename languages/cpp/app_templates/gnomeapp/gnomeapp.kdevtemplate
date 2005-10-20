@@ -74,6 +74,7 @@ Dest=%{dest}/pixmaps/Makefile.am
 Type=install
 Source=%{kdevelop}/template-common/gnome-app.png
 Dest=%{dest}/pixmaps/%{APPNAMELC}.png
+Process=false
 
 [FILE7]
 Type=install

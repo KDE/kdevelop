@@ -37,6 +37,7 @@ Dest=%{dest}/%{APPNAMELC}.kdevelop
 Type=install
 Source=%{src}/Example.png
 Dest=%{dest}/%{APPNAME}.png
+Process=false
 
 [FILE3]
 Type=install
