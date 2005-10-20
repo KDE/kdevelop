@@ -115,11 +115,13 @@ Dest=%{dest}/src/%{APPNAMELC}.lsm
 Type=install
 Source=%{kdevelop}/template-common/hi16-app-app.png
 Dest=%{dest}/src/hi16-app-%{APPNAMELC}.png
+Process=false
 
 [FILE11]
 Type=install
 Source=%{kdevelop}/template-common/hi32-app-app.png
 Dest=%{dest}/src/hi32-app-%{APPNAMELC}.png
+Process=false
 
 [MkDir4]
 Type=mkdir

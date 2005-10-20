@@ -60,6 +60,7 @@ Dir=%{dest}/pics/%{APPNAMELC}
 Type=install
 Source=%{src}/Example.png
 Dest=%{dest}/pics/%{APPNAMELC}/%{APPNAMELC}.png
+Process=false
 
 [FILE3]
 Type=install

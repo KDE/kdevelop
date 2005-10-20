@@ -150,11 +150,13 @@ Dest=%{dest}/src/plugin_%{APPNAMELC}.rc
 Type=install
 Source=%{src}/hi16-action-plugin.png
 Dest=%{dest}/src/hi16-action-plugin.png
+Process=false
 
 [FILE17]
 Type=install
 Source=%{src}/hi22-action-plugin.png
 Dest=%{dest}/src/hi32-action-plugin.png
+Process=false
 
 [MSG]
 Type=message

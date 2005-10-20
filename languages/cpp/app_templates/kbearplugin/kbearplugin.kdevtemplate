@@ -141,6 +141,7 @@ Dest=%{dest}/src/kbear%{APPNAMELC}.desktop
 Type=install
 Source=%{src}/hi32-action-plugin.png
 Dest=%{dest}/src/hi32-action-kbear%{APPNAMELC}.png
+Process=false
 
 [MSG]
 Type=message
