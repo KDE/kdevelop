@@ -6,6 +6,7 @@ Exec=%{APPNAMELC}
 X-DCOP-ServiceType=Unique
 X-KDE-StartupNotify=false
 Comment=Template for dcop services
+Comment[br]=Patrom evit servijoù dcop
 Comment[ca]=Plantilla per als serveis dcop
 Comment[cy]=Patrymlun ar gyfer gwasanaethau dcop
 Comment[da]=Skabelon for DCOP-tjenester
