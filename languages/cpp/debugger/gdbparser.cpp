@@ -402,7 +402,7 @@ DataType GDBParser::determineType(const char *buf) const
                 // $1 = 0x804ddf3 ' ' <repeats 20 times>, "TESTSTRING"
                 // after having finished with the "repeats"-block we need
                 // to check if the string continues
-                if ( buf[0] == ',' && buf[2] == '"' ) {
+                if ( buf[0] == ',' && (buf[2] == '\"' || buf[2] == '\'') ) {
                     buf++; //set the buffer behind the comma to indicate that the string continues
                 }
                 break;
@@ -573,7 +573,7 @@ const char *GDBParser::skipTokenEnd(const char *buf) const
             // $1 = 0x804ddf3 ' ' <repeats 20 times>, "TESTSTRING"
             // after having finished with the "repeats"-block we need
             // to check if the string continues
-            if ( buf[0] == ',' && buf[2] == '"' ) {
+            if ( buf[0] == ',' && (buf[2] == '\"' || buf[2] == '\'') ) {
                 buf++; //set the buffer behind the comma to indicate that the string continues
             }
             return buf;

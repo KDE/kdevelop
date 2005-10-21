@@ -1,4 +1,4 @@
-COMPILE_FIRST = bdb lib parts
+COMPILE_FIRST = lib parts
 
 EXTRA_DIST = AUTHORS COPYING COPYING.LIB NEWS ChangeLog INSTALL README TODO HACKING HACKING.language admin configure.in.bot
 

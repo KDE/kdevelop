@@ -272,7 +272,7 @@ void CreatePCSDialog::slotSelected( const QString & )
 
 		KStandardDirs *dirs = m_part->instance() ->dirs();
 
-		QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + "/" + importer->dbName() + ".db";
+		QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + importer->dbName() + ".db";
 		kdDebug( 9007 ) << "================================> dbName = " << dbName << endl;
 
 		m_part->removeCatalog( dbName );
