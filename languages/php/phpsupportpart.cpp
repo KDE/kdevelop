@@ -13,7 +13,7 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
 
@@ -499,7 +499,6 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
 {
    kdDebug(9018) << "phpSupportPart::customEvent(" << ev->type() << ")" << endl;
 
-   kapp->lock();
    if ( ev->type() == int(Event_StartParse) ) {
       FileParseEvent* event = (FileParseEvent*) ev;
       kdDebug(9018) << " removedSourceInfo(" << event->fileName() << ")" << endl;
@@ -515,7 +514,7 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
       kdDebug(9018) << " addedSourceInfo(" << event->fileName() << ")" << endl;
       emit addedSourceInfo( event->fileName() );
    }
-   kapp->unlock();
+
 }
 
 PHPErrorView *PHPSupportPart::ErrorView( ) {

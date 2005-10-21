@@ -103,7 +103,6 @@ void GDBOutputWidget::slotReceivedStdout(const char* line)
         m_gdbView->append(QString("<font color=\"blue\">").append( line ).append("</font>") );
     else
         m_gdbView->append(line);
-    m_gdbView->scrollToBottom();
 }
 
 /***************************************************************************/
@@ -111,7 +110,6 @@ void GDBOutputWidget::slotReceivedStdout(const char* line)
 void GDBOutputWidget::slotReceivedStderr(const char* line)
 {
     m_gdbView->append(QString("<font color=\"red\">").append( line ).append("</font>") );
-    m_gdbView->scrollToBottom();
 }
 
 /***************************************************************************/
@@ -154,7 +152,6 @@ void GDBOutputWidget::slotDbgStatus(const QString &, int statusFlag)
 
 void GDBOutputWidget::focusInEvent(QFocusEvent */*e*/)
 {
-    m_gdbView->scrollToBottom();
     m_userGDBCmdEditor->setFocus();
 }
 

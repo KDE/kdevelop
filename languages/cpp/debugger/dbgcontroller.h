@@ -52,8 +52,7 @@ enum DBGStateFlags
   s_core              = 1024,
   s_waitTimer         = 2048,
   s_shuttingDown      = 4096,
-  s_viewThreads       = 8192,
-  s_explicitBreakInto = (s_viewThreads << 1)
+  s_viewThreads       = 8192
 };
 /***************************************************************************/
 /***************************************************************************/

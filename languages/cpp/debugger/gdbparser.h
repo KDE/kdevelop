@@ -71,7 +71,7 @@ private:
         to the position right after the value.
     */
     QCString getValue(const char **buf);
-    QCString undecorateValue(DataType type, const QCString& s);
+    QCString GDBParser::undecorateValue(DataType type, const QCString& s);
     void setItem(TrimmableItem *parent, const QString &varName, DataType dataType,
                  const QCString &value, bool requested);
 

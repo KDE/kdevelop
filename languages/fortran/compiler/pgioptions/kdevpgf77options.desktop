@@ -5,7 +5,6 @@ Exec=pgf77
 Comment=Portland Group Fortran77 Compiler
 Comment[ca]=Compilador Fortran 77 de Portland Group
 Comment[da]=Portland Group Fortran77 oversætter
-Comment[el]=Μεταγλωττιστής Fortran77 ομάδας Portland
 Comment[es]=Compilador de Fortran 77 de Portland Group
 Comment[et]=Portland Group Fortran77 kompilaator
 Comment[eu]=Portland Group Fortran77 konpiladorea

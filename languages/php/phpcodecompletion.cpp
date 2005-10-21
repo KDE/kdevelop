@@ -13,7 +13,7 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
 
@@ -151,7 +151,6 @@ void PHPCodeCompletion::cursorPositionChanged(){
       if (pos1 > pos2 && pos1 != -1 && pos3 < pos1) {
          QString line = lineStr.mid(pos2 + 1, pos1 - pos2 - 1).stripWhiteSpace();
          checkForArgHint(line, col);
-         kdDebug(9018) << "end checkForArgHint" << endl;
       }
 
    }
@@ -164,33 +163,24 @@ void PHPCodeCompletion::cursorPositionChanged(){
       int pos = lineStr.findRev(QRegExp("[ \\t=;\\$\\.\\(\\)]"), col - 1);
       QString line = lineStr.mid(pos + 1, col - pos).stripWhiteSpace();
 
-      if (checkForVariable(line, col)) {
-kdDebug(9018) << "end checkForVariable" << endl;
+      if (checkForVariable(line, col))
          return;
-      }
-      if (checkForStaticFunction(line, col)) {
-kdDebug(9018) << "end checkForStaticFunction" << endl;
-         return;
-      }
 
-      if(checkForGlobalFunction(line, col)) {
-kdDebug(9018) << "end checkForGlobalFunction" << endl;
+      if (checkForStaticFunction(line, col))
          return;
-      }
+
+      if(checkForGlobalFunction(line, col))
+         return;
+
 
       pos = lineStr.stripWhiteSpace().findRev(QRegExp("[ \\t=;\\$\\.\\(\\)]"), col - 1);
       line = lineStr.mid(pos + 1, col - pos);
 
-      if (checkForNew(line, col)) {
-kdDebug(9018) << "end checkForNew" << endl;
+      if (checkForNew(line, col))
          return;
-      }
 
-      if (checkForExtends(line, col)) {
-kdDebug(9018) << "end checkForExtends" << endl;
+      if (checkForExtends(line, col))
          return;
-      }
-kdDebug(9018) << "end checkFor" << endl;
   }
 }
 

@@ -6,7 +6,6 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
-#include <qpushbutton.h>
 #include <keditlistbox.h>
 #include <kmessagebox.h>
 
@@ -18,8 +17,7 @@ namespace GDBDebugger
                             QWidget* parent, const char* name)
     : DebuggerTracingDialogBase(parent, name), bp_(bp)
     {
-        expressions->upButton()->hide();
-        expressions->downButton()->hide();
+        expressions->setButtons(KEditListBox::Add | KEditListBox::Remove);
 
         connect(enable, SIGNAL(stateChanged(int)),
                 this, SLOT(enableOrDisable(int)));        
@@ -28,7 +26,7 @@ namespace GDBDebugger
                 this, SLOT(enableOrDisableCustomFormat(int)));
 
         enable->setChecked(bp_->tracingEnabled());
-        expressions->insertStringList(bp_->tracedExpressions());
+        expressions->setItems(bp_->tracedExpressions());
         enableCustomFormat->setChecked(bp_->traceFormatStringEnabled());
         customFormat->setText(bp_->traceFormatString());
         

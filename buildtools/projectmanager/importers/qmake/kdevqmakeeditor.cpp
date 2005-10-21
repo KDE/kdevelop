@@ -226,7 +226,6 @@ bool KDevQMakeEditor::configureFolder( ProjectFolderDom folder)
 		ProjectConfigurationDlg dlg(model,0);
 		return dlg.exec();
         }
-        return false;
 }
 
 #include "kdevqmakeeditor.moc"

@@ -5,7 +5,6 @@ Name=%{APPNAME} Info
 Name[br]=Titouriñ diwar-benn %{APPNAME}
 Name[ca]=Informació %{APPNAME}
 Name[da]=%{APPNAME} info
-Name[el]=Πληροφορίες %{APPNAME}
 Name[es]=Información de %{APPNAME}
 Name[et]=%{APPNAME} info
 Name[eu]=%{APPNAME} informazioa

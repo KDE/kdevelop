@@ -12,7 +12,7 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
 
@@ -78,7 +78,6 @@ QStringList PHPFile::readFromEditor()
 {
    QStringList contents;
 
-   kapp->lock();
    QPtrList<KParts::Part> parts( *m_phpSupport->partController()->parts() );
    QPtrListIterator<KParts::Part> it( parts );
    while( it.current() ){
@@ -92,8 +91,6 @@ QStringList PHPFile::readFromEditor()
       contents = QStringList::split("\n", editIface->text().ascii(), true);
       break;
    }
-   kapp->unlock();
-
    return contents;
 }
 
@@ -140,8 +137,8 @@ void PHPFile::Analyse() {
    }
 
    ParseSource();
-
    PHPCheck();
+
    modified = false;
 }
 

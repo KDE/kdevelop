@@ -197,7 +197,7 @@ void  Catalog::setEnabled( bool isEnabled )
 	}
 
         if ((ret = dbp->open(
-	    dbp, NULL, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
+	    dbp, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
 	    kdDebug() << "db_open: " << db_strerror(ret) << endl;
 	    dbp->close( dbp, 0 );
 	    return;
@@ -258,7 +258,7 @@ void  Catalog::setEnabled( bool isEnabled )
     }
 
     if ((ret = d->dbp->open(
-	d->dbp, NULL, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
+	d->dbp, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
 	kdDebug() << "db_open: " << db_strerror(ret) << endl;
 	close();
 	return;
@@ -414,7 +414,7 @@ void  Catalog::setEnabled( bool isEnabled )
 
     cursors[ current ] = 0;
 
-    if( current == args.size() ) {
+    if( current > 0) {
 
         DBC* join_curs = 0;
         int rtn = d->dbp->join( d->dbp, cursors, &join_curs, 0 );

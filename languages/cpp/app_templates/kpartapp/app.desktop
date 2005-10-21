@@ -2,7 +2,6 @@
 Encoding=UTF-8
 Name=%{APPNAME}Part
 Name[br]=Perzh%{APPNAME}
-Name[el]=Τμήμα%{APPNAME}
 Name[et]=%{APPNAME} komponent
 Name[ja]=%{APPNAME} パート
 Name[pt_BR]=Parte %{APPNAME}
