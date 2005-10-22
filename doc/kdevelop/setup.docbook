@@ -33,19 +33,23 @@ We will discuss these configurations in a different order, split up into the mai
 <para>
 If you want directly look up a certain configuration item use one of the following links.
 </para>
+
 <simplelist>
   <member><link linkend="setup-main">General</link></member>
-  <member><link linkend="setup-plugins">Plugins</link></member>
-  <member><link linkend="setup-format">Source Formatter</link></member>
-  <member><link linkend="setup-new-file-wizard">New File Wizard</link></member>
   <member><link linkend="setup-ui">User Interface</link></member>
-  <member><link linkend="setup-editor">Editor</link></member>
-  <member><link linkend="setup-abbrev">Abbreviations</link></member>
+  <member><link linkend="setup-templates">File Templates</link></member>
+<member><link linkend="setup-editor">Editor</link></member>
+ <member><link linkend="setup-abbrev">Abbreviations</link></member>
+ <member><link linkend="setup-scripting">Scripting</link></member>
   <member><link linkend="setup-menu-standard">Tools Menu</link></member>
   <member><link linkend="setup-menu-external">External Tools</link></member>
   <member><link linkend="setup-docu">Documentation</link></member>
   <member><link linkend="setup-snippets">Code Snippets</link></member>
-  <member><link linkend="setup-fileselector">File Selector</link></member>
+  <member><link linkend="setup-file-list">File List</link></member>
+  <member><link linkend="setup-file-selector">File Selector</link></member>
+  <member><link linkend="setup-c++-generator">C++ Class generator</link></member>
+  <member><link linkend="setup-formatting">Formatting</link></member>
+  <member><link linkend="setup-c++-parsing">C++ Parsing</link></member>
 </simplelist>
 
 <sect1 id="setup-general">
@@ -76,7 +80,7 @@ General configuration concerns the more common tasks of tailoring &kdevelop; as 
     </itemizedlist>
   </listitem>
   <listitem><para>
-  <link linkend="setup-fileselector">Configuring the File Selector</link>
+  <link linkend="setup-file-selector">Configuring the File Selector</link>
   </para></listitem>
 </itemizedlist>
 
@@ -186,11 +190,47 @@ You may of course change the directory path of a new project at the time you set
 <term id="setup-main-messages-font"><guilabel>Window font:</guilabel></term>
 <listitem>
 <para>
+The <guilabel>Application Output View</guilabel> window is used to display error and state information from applications which are run from inside &kdevelop;. These are informations the applications usually sends to the console when run stand-alone. So you do not need to leave the IDE when testing the application you currently work on.
+</para>
+<para>
 To select a font suitable for the <guilabel>Messages Output View</guilabel> window click the <guilabel>Window Font</guilabel> button showing the currently selected font (it says <quote>Luxi Sans</quote> in the above illustration). The &kde; standard <guilabel>Select Font</guilabel> dialog will pop up from which you may select the font to be used.
 </para>
 <note><para>
 On first start-up, &kdevelop; initializes this font setting to the standard font for which your &kde; user has been configured. <emphasis>This setting is fixed</emphasis>, so if you alter <menuchoice><guimenuitem>Preferences</guimenuitem><guimenuitem>Appearances &amp; Themes</guimenuitem><guimenuitem>Fonts</guimenuitem></menuchoice> in the <guilabel>Control Center</guilabel>, this will not effect this &kdevelop; font selection. You will have to explicitely reselect the <guilabel>Messages Output View</guilabel> window font.
 </para></note>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="setup-main-compile"><guilabel>Compiler Output</guilabel></term>
+<listitem>
+<para>
+&kdevelop; preprocesses the messages the <guilabel>Messages Output View</guilabel> window receives during the build processes in order to filter superfluous information. You can control the level of detail &kdevelop; will display using the dropdown box in this field.
+</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>Very Short</guilabel></term>
+<listitem><para>
+Displays only warnings, errors, and the filenames which are compiled.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Short</guilabel></term>
+<listitem><para>
+Suppresses all compiler flags and formats the output to be more readable.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Full</guilabel></term>
+<listitem><para>
+Displays all output messages unmodified.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+<tip><para>
+There is an alternative way to switch the compiler output detail. Just right click in the <guilabel>Messages Output View</guilabel> window and select the according detail level from the popup menu.
+</para></tip>
 </listitem>
 </varlistentry>
 
@@ -219,55 +259,6 @@ Changes in this setting effect the processing of new messages only. Old director
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term id="setup-main-compile"><guilabel>Compiler Output</guilabel></term>
-<listitem>
-<para>
-&kdevelop; preprocesses the messages the <guilabel>Messages Output View</guilabel> window receives during the build processes in order to filter superfluous information. You can control the level of detail &kdevelop; will display using the radio buttons in this field.
-</para>
-<variablelist>
-  <varlistentry>
-    <term><guilabel>Very Short</guilabel></term>
-    <listitem><para>
-    Displays only warnings, errors, and the filenames which are compiled.
-    </para></listitem>
-  </varlistentry>
-  <varlistentry>
-    <term><guilabel>Short</guilabel></term>
-    <listitem><para>
-    Suppresses all compiler flags and formats the output to be more readable.
-    </para></listitem>
-  </varlistentry>
-  <varlistentry>
-    <term><guilabel>Full</guilabel></term>
-    <listitem><para>
-    Displays all output messages unmodified.
-    </para></listitem>
-  </varlistentry>
-</variablelist>
-
-<tip><para>
-There is an alternative way to switch the compiler output detail. Just right click in the <guilabel>Messages Output View</guilabel> window and select the according detail level from the popup menu.
-</para></tip>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term id="setup-main-applications-font"><guilabel>Application Output
-View</guilabel> <guilabel>Window font:</guilabel></term>
-<listitem>
-<para>
-The <guilabel>Application Output View</guilabel> window is used to display error and state information from applications which are run from inside &kdevelop;. These are informations the applications usually sends to the console when run stand-alone. So you do not need to leave the IDE when testing the application you currently work on.
-</para>
-
-<para>
-To select a font suitable for the <guilabel>Application Output View</guilabel> window click the <guilabel>Window Font</guilabel> button showing the currently selected font (it says <quote>Luxi Sans</quote> in the above illustration). The &kde; standard <guilabel>Select Font</guilabel> dialog will pop up from which you may select the font to be used.
-</para>
-<note><para>
-On first start-up, &kdevelop; initializes this font setting to the standard font for which your &kde; user has been configured. <emphasis>This setting is fixed</emphasis>, so if you alter <menuchoice><guimenuitem>Preferences</guimenuitem><guimenuitem>Appearances &amp; Themes</guimenuitem><guimenuitem>Fonts</guimenuitem></menuchoice> in the <guilabel>Control Center</guilabel>, this will not effect this &kdevelop; font selection. You will have to explicitely reselect the <guilabel>Application Output View</guilabel> window font.
-</para></note>
-</listitem>
-</varlistentry>
 </variablelist>
 
 </sect2> <!-- setup-main -->
@@ -286,16 +277,19 @@ As already said in the <link linkend="uimodes-survey">Available User Interface M
 </para>
 <itemizedlist>
   <listitem><para>
-  <link linkend="ideal-desc">IDEAl Mode</link>
+  <link linkend="ideal-desc">Simplified IDEAl window mode</link>
   </para></listitem>
   <listitem><para>
-  <link linkend="mdi-desc">Child Frame Windows Mode</link>
+  <link linkend="ideal-desc">IDEAl window mode</link>
   </para></listitem>
   <listitem><para>
-  <link linkend="tabbed-desc">Tabbed Pages Mode</link>
+  <link linkend="mdi-desc">Child Frame window mode</link>
   </para></listitem>
   <listitem><para>
-  <link linkend="toplevel-desc">Toplevel Windows Mode</link>
+  <link linkend="tabbed-desc">Tabbed Pages mode</link>
+  </para></listitem>
+  <listitem><para>
+  <link linkend="toplevel-desc">Toplevel window mode</link>
   </para></listitem>
 </itemizedlist>
 
@@ -323,11 +317,11 @@ Do not forget to restart &kdevelop; in order to let any of these selections take
 </para></note>
 
 <para>
-When you selected either the <guilabel>IDEAl window mode</guilabel> or the <guilabel>Tabbed pages mode</guilabel> two more configuration sections will become available: <link linkend="setup-ui-tabs">Use Tabs</link> and <link linkend="setup-ui-hover">Use Close On Hover</link>. These allow to configure under which circumstances tabs will be shown on top of the document windows and whether you may close the document by a click on the tab icon.
+When you selected either the <guilabel>Simplified IDEAl window mode</guilabel> or the <guilabel>IDEAl window mode</guilabel> or the <guilabel>Tabbed pages mode</guilabel> two more configuration sections will become available: <link linkend="setup-ui-tabs">Use Tabs</link> and <link linkend="setup-ui-hover">Use Close On Hover</link>. These allow to configure under which circumstances tabs will be shown on top of the document windows and whether you may close the document by a click on the tab icon.
 </para>
 
 <para>
-In <guilabel>IDEAl window mode</guilabel> only yet another configuration section will be available, <link linkend="setup-ui-toolview">Toolview Tab Layout</link> which effectively allows to select between different sizes of the toolview tabs which surround the main working area in this mode.
+In <guilabel>Simplified IDEAl window mode</guilabel> and in <guilabel>IDEAl window mode</guilabel> only yet another configuration section will be available, <link linkend="setup-ui-toolview">Toolview Tab Layout</link> which effectively allows to select between different sizes of the toolview tabs which surround the main working area in this mode.
 </para>
 
 <variablelist>
@@ -455,6 +449,10 @@ The active toolview window must be shown fixed (non-overlap mode), sharing the w
 
 </sect2> <!-- setup-ui -->
 
+<sect2 id="setup-templates">
+<title>File Templates</title>
+</sect2> <!-- setup-templates -->
+
 <sect2 id="setup-editor">
 <title>Selecting an Editor</title>
 
@@ -520,6 +518,63 @@ Changing the editor will not effect already open files. There are two possibilit
 KDevelop lets you use editor interfaces which have registered with &kde; and that provide a KatePart interface. If you miss one one of the selections shown above check your &kde; installation if the corresponding KPart was correctly installed.
 </para></important>
 </sect2> <!-- setup-editor -->
+
+<sect2 id="setup-abbrev">
+<title>Abbreviations for the Word Completion</title>
+
+<para>
+(... to be written ...)
+</para>
+</sect2> <!-- setup-abbrev -->
+
+<sect2 id="setup-scripting">
+<title>Scripting</title>
+
+<para>
+(... to be written ...)
+</para>
+</sect2> <!-- setup-scripting -->
+
+<sect2 id="setup-menu-standard">
+<title>Adding &kde; Standard Applications to the Tools Menu</title>
+
+<para>
+(... to be written ...)
+</para>
+</sect2> <!-- setup-menu-standard  Tools Menu-->
+
+<sect2 id="setup-menu-external">
+<title>Adding External Applications to Menus</title>
+
+<para>
+(... to be written ...)
+</para>
+
+<sect3 id="setup-menu-external-tools">
+<title>Adding to the Tools Menu</title>
+
+<para>
+(... to be written ...)
+</para>
+</sect3> <!-- setup-menu-external-tools -->
+
+<sect3 id="setup-menu-external-filecontext">
+<title>Adding to the File Context Menu</title>
+
+<para>
+(... to be written ...)
+</para>
+</sect3> <!-- setup-menu-external-filecontext -->
+
+<sect3 id="setup-menu-external-dircontext">
+<title>Adding to the Directory Context Menu</title>
+
+<para>
+(... to be written ...)
+</para>
+</sect3> <!-- setup-menu-external-dircontext -->
+
+</sect2> <!-- setup-menu-external -->
 
 <sect2 id="setup-format">
 <title>Selecting a Source Format Style</title>
@@ -926,7 +981,16 @@ variables' mechanism. You can set up it's behaviour in the
 
 </sect2> <!-- setup-snippets -->
 
-<sect2 id="setup-fileselector">
+<sect2 id="setup-file-list">
+<title>File List</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect2> <!-- setup-file-list-->
+
+<sect2 id="setup-file-selector">
 <title>Configuring the File Selector</title>
 
 <para>
@@ -1134,16 +1198,34 @@ If &kdevelop; was automatically restarted by the &kde; session manager the chang
 </varlistentry>
 </variablelist>
 
-</sect2> <!-- setup-fileselector -->
+</sect2> <!-- setup-file-selector -->
 
-<sect2 id="setup-new-file-wizard">
-<title>Configuring the New File Wizard</title>
+<sect2 id="setup-c++-generator">
+<title>C++ Class Generator</title>
 
 <para>
 (... to be written ...)
 </para>
 
-</sect2> <!-- setup-new-file-wizard -->
+</sect2> <!-- setup-c++-generator-->
+
+<sect2 id="setup-formatting">
+<title>Formatting</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect2> <!-- setup-formatting-->
+
+<sect2 id="setup-c++-parsing">
+<title>C++ Parsing</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect2> <!-- setup-c++-parsing-->
 
 </sect1> <!-- setup-general -->
 
@@ -1827,56 +1909,6 @@ Custom documention cannot be indexed or searched. Thus the <guilabel>Index</guil
 (... to be written ...)
 </para>
 </sect2> <!-- setup-plugins -->
-
-<sect2 id="setup-abbrev">
-<title>Abbreviations for the Word Completion</title>
-
-<para>
-(... to be written ...)
-</para>
-</sect2> <!-- setup-abbrev -->
-
-<sect2 id="setup-menu-standard">
-<title>Adding &kde; Standard Applications to the Tools Menu</title>
-
-<para>
-(... to be written ...)
-</para>
-</sect2> <!-- setup-menu-standard -->
-
-
-<sect2 id="setup-menu-external">
-<title>Adding External Applications to Menus</title>
-
-<para>
-(... to be written ...)
-</para>
-
-<sect3 id="setup-menu-external-tools">
-<title>Adding to the Tools Menu</title>
-
-<para>
-(... to be written ...)
-</para>
-</sect3> <!-- setup-menu-external-tools -->
-
-<sect3 id="setup-menu-external-filecontext">
-<title>Adding to the File Context Menu</title>
-
-<para>
-(... to be written ...)
-</para>
-</sect3> <!-- setup-menu-external-filecontext -->
-
-<sect3 id="setup-menu-external-dircontext">
-<title>Adding to the Directory Context Menu</title>
-
-<para>
-(... to be written ...)
-</para>
-</sect3> <!-- setup-menu-external-dircontext -->
-
-</sect2> <!-- setup-menu-external -->
 
 </sect1> <!-- setup-advanced -->
 
