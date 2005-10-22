@@ -48,8 +48,6 @@ BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
         : QObject( cppSupport ),
         m_cppSupport( cppSupport )
 {
-    m_weaver = Weaver::instance();
-
     //Probably need more than one control object
     m_control = new Control();
 
@@ -62,6 +60,7 @@ BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
 
 BackgroundParser::~BackgroundParser()
 {
+    Weaver::instance()->finish();
     delete m_control;
     delete m_memoryPool;
 }
@@ -112,7 +111,7 @@ void BackgroundParser::parseDocuments()
             jobs.append( parse );
         }
     }
-    m_weaver->enqueue( jobs );
+    Weaver::instance()->enqueue( jobs );
 }
 
 void BackgroundParser::parseComplete( Job *job )

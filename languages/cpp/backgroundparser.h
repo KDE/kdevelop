@@ -63,7 +63,6 @@ public slots:
 
 private:
     CppLanguageSupport *m_cppSupport;
-    Weaver *m_weaver;
 
     // A list of known documents, and whether they are due to be parsed or not
     QMap<KURL, bool> m_documents;

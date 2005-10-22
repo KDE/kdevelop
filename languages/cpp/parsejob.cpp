@@ -58,11 +58,13 @@ KURL ParseJob::document() const
 
 TranslationUnitAST *ParseJob::translationUnit() const
 {
+    Q_ASSERT ( isFinished () );
     return m_translationUnit;
 }
 
 FileModelItem ParseJob::fileModelItem() const
 {
+    Q_ASSERT ( isFinished () );
     return m_fileModelItem;
 }
 
@@ -99,11 +101,11 @@ void ParseJob::run()
     << " size: " << size
     << endl;
 
-//     Preprocessor preprocessor( this );
+//     Preprocessor preprocessor;
     Parser parser( m_control );
 //     QByteArray preprocessed = preprocessor.run( contents );
 //     std::size_t pre_size = preprocessed.length() + 1;
-
+//
 //     m_translationUnit = parser.parse( preprocessed, pre_size, m_memoryPool );
     m_translationUnit = parser.parse( contents, size, m_memoryPool );
 
