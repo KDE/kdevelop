@@ -22,7 +22,6 @@ Name[sr@Latn]=KDevelop-ov VCS integrator
 Name[sv]=KDevelop VCS-import
 Name[tr]=KDevelop VCS Bütünleyicisi
 Name[xx]=xxKDevelop VCS Integratorxx
-Name[zh_CN]=KDevelop VCS 集成器
 
 [PropertyDef::X-KDevelop-VCS]
 Type=QString

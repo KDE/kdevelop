@@ -19,7 +19,6 @@ Comment[pt_BR]= Instala os modelos de documentação em Docbook.
 Comment[sv]= Installera Docbook-dokumentationsmallar.
 Comment[tr]=Docbook belgelendirme şablonlarını yükle.
 Comment[xx]=xx Install Docbook documentation templates.xx
-Comment[zh_CN]=安装 Docbook 文档模板。
 Default=true
 
 [DOCSDIR]

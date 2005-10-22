@@ -26,7 +26,6 @@ Comment[ta]=சுலபமான கோப்பு ஏற்றும் ச�
 Comment[tg]=Модули оддӣ барои додани файлҳо ба хидмадгор бо ёрии KIO.
 Comment[tr]=Basit dosya yukarı yükleyici eklentisi. Herhangi bir KIO destekli protokol üzerinden dosya kopyalaması yapar.
 Comment[xx]=xxSimple file uploader plugin. It does a file copy over any KIO supported protocol.xx
-Comment[zh_CN]=简单文件上传插件。它可以通过 KIO 支持的任何协议复制文件。
 Name=KDevcopyto
 Name[da]=KDevelop kopiér til
 Name[sv]=KDevelop-kopiera till

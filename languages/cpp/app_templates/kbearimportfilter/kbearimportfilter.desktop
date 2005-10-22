@@ -30,5 +30,4 @@ Name[tg]=Воридот аз %{APPNAME}
 Name[tr]=%{APPNAME} Aktarım Filtresi
 Name[uk]=Фільтр імпортування %{APPNAME}
 Name[xx]=xx%{APPNAME} Import Filterxx
-Name[zh_CN]=%{APPNAME} 导入过滤器
 X-KBear-ImportFile=sitemanager

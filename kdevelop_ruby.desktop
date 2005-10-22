@@ -10,7 +10,6 @@ Name=KDevelop: Ruby
 Name[br]=KDevelop : Ruby
 Name[fr]=KDevelop : Ruby
 Name[xx]=xxKDevelop: Rubyxx
-Name[zh_CN]=KDevelop：Ruby
 GenericName=IDE for Ruby
 GenericName[da]=Integreret udviklingsmiljø til Ruby
 GenericName[de]=IDE für Ruby
@@ -32,7 +31,6 @@ GenericName[sr@Latn]=IDE za Ruby
 GenericName[sv]=Utvecklingsmiljö för Ruby
 GenericName[tr]=Ruby için Bütünleşik Geliştirme Ortamı
 GenericName[xx]=xxIDE for Rubyxx
-GenericName[zh_CN]=Ruby 的 IDE
 X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
 

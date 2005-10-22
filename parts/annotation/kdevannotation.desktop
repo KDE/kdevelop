@@ -21,7 +21,6 @@ GenericName[pt_BR]='Plugin' de Anotação
 GenericName[sv]=Noteringsinsticksprogram
 GenericName[tr]=annotation Eklentisi
 GenericName[xx]=xxannotation Pluginxx
-GenericName[zh_CN]=批注插件
 Comment=annotation Description
 Comment[da]=annotationsbeskrivelse
 Comment[de]=Anmerkungs-Beschreibung
@@ -37,7 +36,6 @@ Comment[pt_BR]=Descrição da Anotação
 Comment[sv]=Noteringsbeskrivning
 Comment[tr]=annotation Tanımı
 Comment[xx]=xxannotation Descriptionxx
-Comment[zh_CN]=批注描述
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 

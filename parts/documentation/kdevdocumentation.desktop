@@ -59,7 +59,6 @@ GenericName[tg]=Намоиши ҳуҷҷатҳо
 GenericName[tr]=Belgelendirme
 GenericName[uk]=Документація
 GenericName[xx]=xxDocumentationxx
-GenericName[zh_CN]=文档
 Icon=khelpcenter
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Global

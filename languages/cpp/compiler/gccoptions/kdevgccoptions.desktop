@@ -30,7 +30,6 @@ Comment[ta]=GNU Cதொகுப்பி
 Comment[tg]=Талфифгари GNU C 
 Comment[uk]=Кімпілятор GNU C
 Comment[xx]=xxGNU C Compilerxx
-Comment[zh_CN]=GNU C编译器
 Name=GccOptions
 Name[de]=GCC-Einstellungen (KDevelop)
 Name[el]=GccΕπιλογές

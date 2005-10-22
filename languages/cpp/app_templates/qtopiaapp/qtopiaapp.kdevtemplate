@@ -19,7 +19,6 @@ Name[sl]=Program za Qtopio
 Name[sv]=Qtopia-program
 Name[tr]=Qtopia Uygulaması
 Name[xx]=xxQtopia Applicationxx
-Name[zh_CN]=Qtopia 应用程序
 Icon=qmakeapp.png
 Category=C++/Embedded
 Category[fr]=C++/Environnement embarqu�

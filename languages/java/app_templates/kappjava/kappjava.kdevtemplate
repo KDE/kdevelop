@@ -18,7 +18,6 @@ Name[sl]=Ogrodje programa
 Name[sv]=Programramverk
 Name[tr]=Uygulama Çatısı
 Name[xx]=xxApplication frameworkxx
-Name[zh_CN]=应用程序框架
 Icon=kappjava.png
 Category=Java/KDE
 Comment=Generates a simple Java KDE application with one toplevel window, menus and  toolbars.

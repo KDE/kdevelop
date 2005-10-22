@@ -18,7 +18,6 @@ Name[sl]=Preprost program Hello world
 Name[sv]=Enkelt Hello world-program
 Name[tr]=Basit Merhaba dünya programı
 Name[xx]=xxSimple Hello world programxx
-Name[zh_CN]=简单的 Hello world 程序
 Icon=fortranhello.png
 Category=Fortran
 Comment=Generates a simple Hello world program in Fortran

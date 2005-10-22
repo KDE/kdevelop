@@ -18,7 +18,6 @@ Name[sl]=Ogrodje programa
 Name[sv]=Programramverk
 Name[tr]=Uygulama Çatısı
 Name[xx]=xxApplication frameworkxx
-Name[zh_CN]=应用程序框架
 Icon=kapp.png
 Category=Ruby/KDE
 Comment=Generates a simple Korundum application with one toplevel window, menus and toolbars. A DCOP interface is also provided, so that your application can provide a scripting interface

@@ -22,7 +22,6 @@ Name[sl]=Program
 Name[sv]=Program
 Name[tr]=Uygulama
 Name[xx]=xxApplicationxx
-Name[zh_CN]=应用程序
 Icon=qmakeapp.png
 Category=C++/QMake project
 Category[fr]=C++/QMake

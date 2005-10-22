@@ -17,7 +17,6 @@ Name[sl]=Program Hello world
 Name[sv]=Hello world-program
 Name[tr]=Merhaba Dünya Programı
 Name[xx]=xxHello world programxx
-Name[zh_CN]=Hello world 程序
 Icon=qmakesimple.png
 Category=C++/QMake project
 Category[fr]=C++/QMake

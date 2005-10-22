@@ -35,7 +35,6 @@ Comment[ta]=கெடெவலப் கெடெலிப்ஸ் பிசி
 Comment[tg]=Пурборкунии нишонаҳо аз китобхонаи KDELibs дар синфҳои анборӣ
 Comment[tr]=KDevelop KDELibs PCS Aktarıcısı
 Comment[xx]=xxKDevelop KDELibs PCS Importerxx
-Comment[zh_CN]=KDevelop KDELibs PCS 导入器
 Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevkdelibsimporter

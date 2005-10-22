@@ -25,7 +25,6 @@ Name[ta]=ஆப் முன்னிருந்த இடைமுகம்
 Name[tg]=Интерфейси мудири гузориш
 Name[tr]=Uygulama Önucu Arayüzü
 Name[xx]=xxApp Frontend Interfacexx
-Name[zh_CN]=应用程序前端接口
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

@@ -37,7 +37,6 @@ Name[sv]=Inställning...
 Name[tr]=Kurulum...
 Name[uk]=Налаштувати...
 Name[xx]=xxSetup...xx
-Name[zh_CN]=设置...
 Icon=kscreensaver
 
 [Desktop Action InWindow]
@@ -69,7 +68,6 @@ Name[sv]=Visa i angivet fönster
 Name[tr]=Belirtilen Pencerede Göster
 Name[uk]=Відобразити у вказаному вікні
 Name[xx]=xxDisplay in Specified Windowxx
-Name[zh_CN]=在指定窗口中显示
 NoDisplay=true
 
 [Desktop Action Root]
@@ -101,5 +99,4 @@ Name[sv]=Visa i rotfönster
 Name[tr]=Kök Pencerede Göster
 Name[uk]=Відобразити в кореневому вікні
 Name[xx]=xxDisplay in Root Windowxx
-Name[zh_CN]=在根窗口中显示
 NoDisplay=true

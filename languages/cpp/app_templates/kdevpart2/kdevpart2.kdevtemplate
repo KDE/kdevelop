@@ -19,7 +19,6 @@ Name[sl]=Vstavek za KDevelop (samostojna izgradnja)
 Name[sv]=KDevelop-insticksprogram (att bygga fristående)
 Name[tr]=KDevelop Eklentisi (Kendi başına çalışabilen)
 Name[xx]=xxKDevelop Plugin (Standalone build)xx
-Name[zh_CN]=KDevelop 插件(独立编译)
 Category=C++/KDevelop/
 Comment=This generates a KPart for KDevelop, to be built outside of the KDevelop source tree.
 Comment[da]=Dette genererer en KPart for KDevelop, til at bygges udenfor  KDevelop's kildetræ.
@@ -38,7 +37,6 @@ Comment[pt_BR]=Isto gera uma KPart para o KDevelop, de modo a ser compilada fora
 Comment[sv]=Detta skapar ett KDevelop-delprogram, att bygga utanför KDevelops källkodsträd.
 Comment[tr]=Bu, KDevelop için, KDevelop kaynak ağacının dışında yapılacak, bir KPart yaratır.
 Comment[xx]=xxThis generates a KPart for KDevelop, to be built outside of the KDevelop source tree.xx
-Comment[zh_CN]=这将生成一个 KDevelop 的 KPart，可以在 KDevelop 源代码树之外编译。
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}_part.cpp
 Archive=kdevpart2.tar.gz
@@ -64,7 +62,6 @@ Comment[pt_BR]=O âmbito de um 'plugin' (Global, Projecto, Núcleo)
 Comment[sv]= Insticksprogrammets omfattning (Global, Projekt, Kärna)
 Comment[tr]=Bir eklentinin alanı (Genel, Proje, İç)
 Comment[xx]=xx The scope of a plugin (Global, Project, Core)xx
-Comment[zh_CN]=插件的范围(全局、工程、核心)
 Default= Global
 
 [PROPS]
@@ -89,7 +86,6 @@ Comment[sl]=Seznam podprtih lastnosti KDevelop
 Comment[sv]= Listan med egenskaper i KDevelop som stöds
 Comment[tr]=Desteklenen KDevelop özellikleri
 Comment[xx]=xx The list of supported KDevelop propertiesxx
-Comment[zh_CN]=列出支持的 KDevelop 属性
 Default=
 
 [ADMIN]
@@ -223,4 +219,3 @@ Comment[sl]=Vstavek za KDevelop je bil ustvarjen v %{dest}
 Comment[sv]=Ett insticksprogram för KDevelop skapades i %{dest}
 Comment[tr]=Bir KDevelop eklentisi %{dest} içinde yaratıldı.
 Comment[xx]=xxA KDevelop plugin was created in %{dest}xx
-Comment[zh_CN]=在 %{dest} 中创建了 KDevelop 插件

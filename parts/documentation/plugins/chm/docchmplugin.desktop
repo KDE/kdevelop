@@ -32,7 +32,6 @@ Comment[ta]= CHM ஆவணத்திற்கான ஆவணச் சொர�
 Comment[tg]=Модул барои намоиши файлҳои CHM-е, ки ҳуҷҷатҳо мавҷуд аст
 Comment[tr]=CHM belgelendirmesi için belgelendirme eklentisi
 Comment[xx]=xxDocumentation plugin for CHM documentationxx
-Comment[zh_CN]=CHM 文档的文档插件
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=3
 X-KDE-Library=libdocchmplugin

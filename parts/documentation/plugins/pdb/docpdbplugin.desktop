@@ -30,7 +30,6 @@ Comment[ta]= CHM ஆவணத்திற்கான ஆவணச் சொர�
 Comment[tg]=Модул барои наоиш намудани ҳуҷҷатҳо дар формати Palmdoc
 Comment[tr]=Palmdoc biçimi için belgelendirme eklentisi
 Comment[xx]=xxDocumentation plugin for Palmdoc formatxx
-Comment[zh_CN]=Palmdoc 格式的文档插件
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=1
 X-KDE-Library=libdocpdbplugin

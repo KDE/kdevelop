@@ -23,7 +23,6 @@ Comment[sr@Latn]=KDevelop-ov automake uvoznik
 Comment[sv]=KDevelop Automake-import
 Comment[tr]=KDevelop Automake Aktarıcısı
 Comment[xx]=xxKDevelop Automake Importerxx
-Comment[zh_CN]=KDevelop Automake 导入器
 Icon=gear
 ServiceTypes=KDevelop/ProjectBuilder
 X-KDE-Library=libkdevmakebuilder
