@@ -3,6 +3,7 @@
 <appendixinfo>
   <authorgroup>
     <author><firstname>Bernd</firstname><surname>Pol</surname></author>
+    <author><firstname>Anne-Marie</firstname><surname>Mahfouf</surname></author>
     <!-- ROLES_OF_TRANSLATORS -->
   </authorgroup>
 </appendixinfo>
@@ -17,7 +18,7 @@ In this chapter we will discuss the steps necessary to compile and install the &
 
 <itemizedlist>
   <listitem><para>
-  <link linkend="kdevelop-install-howto">How to obtain &kdevelop;</link> mainly concentrates on downloading the most recent &kdevelop; sources from CVS.
+  <link linkend="kdevelop-install-howto">How to obtain &kdevelop;</link> mainly concentrates on downloading the most recent &kdevelop; sources from svn.
   </para></listitem>
   <listitem><para>
   <link linkend="requirements">&kdevelop; requirements</link> lists the programs and libraries which you need installed to successfully compile the IDE.
@@ -47,27 +48,28 @@ In this chapter we will discuss the steps necessary to compile and install the &
 You may as well obtain the &kdevelop; sources, compile and install them by yourself. These sources can be found via the project home page at <ulink url="http://www.kdevelop.org"> http://www.kdevelop.org</ulink> or via the <ulink url="http://download.kde.org">&kde; ftp site</ulink>.
 </para>
 
-<sect2 id="howto-cvs">
-<title>Get Daily &kdevelop; Snapshots from &CVS;</title>
+<sect2 id="howto-svn">
+<title>Get Daily &kdevelop; Snapshots from svn</title>
 
-<indexterm zone="howto-cvs">
-  <primary>CVS</primary></indexterm>
+<indexterm zone="howto-svn">
+  <primary>svn</primary></indexterm>
 
-<para>If you want be in front of current development, anonymous &CVS; repository snapshots are available.  The module name is <emphasis>kdevelop</emphasis> at <filename class="directory">:pserver:anonymous@anoncvs.kde.org:/home/kde</filename>.
+<para>If you want to be in front of current development, anonymous svn repository snapshots are available.</para>
+<para>The module name is <emphasis>kdevelop</emphasis> at <filename class="directory">svn co svn://anonsvn.kde.org/home/kde/branches/KDE/3.5/kdevelop</filename>.
 </para>
 
-<sect3 id="howto-cvs-co">
-<title>Initial &CVS; Checkout</title>
+<sect3 id="howto-svn-co">
+<title>Initial svn Checkout</title>
 
-<indexterm zone="howto-cvs-co">
+<indexterm zone="howto-svn-co">
   <primary>checkout</primary></indexterm>
-<indexterm zone="howto-cvs-co">
+<indexterm zone="howto-svn-co">
   <primary>&kdevelop;</primary>
-  <secondary>CVS</secondary>
+  <secondary>svn</secondary>
   <tertiary>checkout</tertiary></indexterm>
 
 <para>
-To obtain an initial version of &kdevelop; you must download it from anonymous &CVS;.  For this so-called <emphasis>checkout</emphasis> operation follow these steps.
+To obtain an initial version of &kdevelop; you must download it from anonymous svn.  For this so-called <emphasis>checkout</emphasis> operation follow these steps.
 </para>
 
 <note><para>
@@ -88,7 +90,7 @@ We assume you want to put your &kdevelop; copy into the <filename class="directo
   </member>
   <member>
     <prompt>~/kde3src&gt; </prompt>
-    <userinput>cvs -z3 -d :pserver:anonymous@anoncvs.kde.org:/home/kde co kdevelop</userinput>
+    <userinput>svn co svn://anonsvn.kde.org/home/kde/branches/KDE/3.5/kdevelop</userinput>
   </member>
   <member>
     <prompt>~/kde3src&gt; </prompt>
@@ -101,27 +103,27 @@ We assume you want to put your &kdevelop; copy into the <filename class="directo
 </para></note>
 
 <important><para>
-  Keep the server load low. <emphasis>Please do not checkout every time you want to keep your &kdevelop; up to date!</emphasis> Use CVS update for this purpose.
+  Keep the server load low. <emphasis>Please do not checkout every time you want to keep your &kdevelop; up to date!</emphasis> Use svn update for this purpose.
 </para></important>
 
 <para>
 Now you may compile your &kdevelop; version as shown in the <link linkend="compile-and-install">&kdevelop; Compilation and Installation</link> section.
 </para>
 
-</sect3> <!-- howto-cvs-co -->
+</sect3> <!-- howto-svn-co -->
 
-<sect3 id="howto-cvs-up">
-<title>Keeping Your &CVS; Copy up to Date</title>
+<sect3 id="howto-svn-up">
+<title>Keeping Your svn Copy up to Date</title>
 
-<indexterm zone="howto-cvs-up">
+<indexterm zone="howto-svn-up">
   <primary>update</primary></indexterm>
-<indexterm zone="howto-cvs-up">
+<indexterm zone="howto-svn-up">
   <primary>&kdevelop;</primary>
-  <secondary>CVS</secondary>
+  <secondary>svn</secondary>
   <tertiary>update</tertiary></indexterm>
 
 <para>
-After you checked out (and successfully compiled) &kdevelop; from CVS as shown above, you'll want to keep it up to date in order to get all the patches. Follow these steps. (We again assume you have put your &kdevelop; copy into the <filename class="directory">kde3src</filename> directory.)
+After you checked out (and successfully compiled) &kdevelop; from svn as shown above, you'll want to keep it up to date in order to get all the patches. Follow these steps. (We again assume you have put your &kdevelop; copy into the <filename class="directory">kde3src</filename> directory.)
 </para>
 <para>
 Note the <command>up</command> (= <emphasis>update</emphasis>) command instead of the <command>co</command> (which stands for <emphasis>checkout</emphasis>).
@@ -134,24 +136,24 @@ Note the <command>up</command> (= <emphasis>update</emphasis>) command instead o
   </member>
   <member>
     <prompt>~/kde3src&gt; </prompt>
-    <userinput>cvs -z3 -d :pserver:anonymous@anoncvs.kde.org:/home/kde up kdevelop</userinput>
+    <userinput>cd kdevelop</userinput>
   </member>
   <member>
     <prompt>~/kde3src&gt; </prompt>
-    <userinput>cd kdevelop</userinput>
+    <userinput>svn up</userinput>
   </member>
 </simplelist></informalexample>
 
 <note><para>
-Keep an eye on the messages &CVS; produces during the update sequence. The exact steps in the compilation sequence depend on this.
+Keep an eye on the messages svn produces during the update sequence. The exact steps in the compilation sequence depend on this.
 </para></note>
 
 <para>
-Now you can compile a new &kdevelop; version as shown in the <link linkend="compile-and-install-make-cvs">Special &CVS; compilation considerations</link> chapter.
+Now you can compile a new &kdevelop; version as shown in the <link linkend="compile-and-install-make-svn">Special svn compilation considerations</link> chapter.
 </para>
-</sect3> <!-- howto-cvs-up -->
+</sect3> <!-- howto-svn-up -->
 
-</sect2> <!-- howto-cvs -->
+</sect2> <!-- howto-svn -->
 
 </sect1> <!-- howto -->
 
@@ -246,7 +248,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   </listitem>
   <listitem>
   <para>
-    &Qt; &ge; 3.0.3 (or higher)
+    &Qt; &ge; 3.3.0 (or higher)
     <indexterm>
       <primary>Qt</primary>
       <secondary>requirements</secondary></indexterm>
@@ -257,7 +259,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   </listitem>
   <listitem>
   <para>
-    <application>KDE</application> &ge; 3.0.2 (or higher)
+    <application>KDE</application> &ge; 3.4.0 (or higher)
     <indexterm>
       <primary>KDE</primary>
       <secondary>requirements</secondary></indexterm>
@@ -290,9 +292,9 @@ In order to successfully compile and use &kdevelop;, you need the following prog
     <indexterm><primary>valgrind</primary></indexterm>
   </para></listitem>
   <listitem><para>
-    <emphasis><application>CVS</application></emphasis> from <ulink url="http://www.cvshome.org">http://www.cvshome.org</ulink> if you want to use the &CVS; versioning system.
+    <emphasis><application>svn</application></emphasis> from <ulink url="http://subversion.tigris.org/">http://subversion.tigris.org/</ulink> if you want to use the svn versioning system.
     <indexterm>
-      <primary>CVS</primary>
+      <primary>svn</primary>
       <secondary>requirements</secondary></indexterm>
   </para></listitem>
   <listitem><para>
@@ -353,7 +355,7 @@ Once all requirements are met, you are ready to compile and install &kdevelop;. 
   <link linkend="compile-and-install-preliminaries">Preliminary Steps</link> tells you about setting up a proper environment.
   </para></listitem>
   <listitem><para>
-  <link linkend="compile-and-install-make">Compile &kdevelop;</link> deals with obtaining the &kdevelop; sources from &cvs;, how to prepare them for the installation process, and finally shows the steps necessary to compile and install &kdevelop;.
+  <link linkend="compile-and-install-make">Compile &kdevelop;</link> deals with obtaining the &kdevelop; sources from svn, how to prepare them for the installation process, and finally shows the steps necessary to compile and install &kdevelop;.
   </para></listitem>
   <listitem><para>
   <link linkend="compile-and-install-options">Some Notes on configure Options</link> tells you how to run &kdevelop; if it has been installed in a location other than the &kde; directory.
@@ -437,16 +439,16 @@ If you use the tcsh shell add the following lines:
 In the following discussion we assume that you have put your &kdevelop; sources in the <filename class="directory">~/kde3src/kdevelop</filename> directory.
 </para></note>
 
-<sect3 id="compile-and-install-make-cvs">
-<title>Special &CVS; Compilation Considerations</title>
+<sect3 id="compile-and-install-make-svn">
+<title>Special svn Compilation Considerations</title>
 
 <para>
-In case you use a &kdevelop; snapshot from &CVS; the initial compilation steps depend on whether you just did a complete checkout or only updated the source.
+In case you use a &kdevelop; snapshot from svn the initial compilation steps depend on whether you just did a complete checkout or only updated the source.
 </para>
 
 <variablelist>
 <varlistentry>
-<term id="compile-and-install-make-cvs-co">After a CVS Checkout</term>
+<term id="compile-and-install-make-svn-co">After a svn Checkout</term>
 <listitem>
 <para>
 You must <emphasis>initialize the make system</emphasis> after a fresh checkout. The same is true every time you need to start over from scratch. Type:
@@ -454,25 +456,25 @@ You must <emphasis>initialize the make system</emphasis> after a fresh checkout.
 
 <informalexample><simplelist><member>
   <prompt>~/kde3src/kdevelop&gt; </prompt>
-  <userinput>make -f admin/Makefile.common cvs-clean</userinput>
+  <userinput>make -f admin/Makefile.common svn-clean</userinput>
 </member></simplelist></informalexample>
 <para>
 and then <emphasis>all of the following steps</emphasis>.
 </para>
 <note><para>
-You might need access to the &CVS; repository for the clean-up if any corrupted or missing files must be reconstructed.
+You might need access to the svn repository for the clean-up if any corrupted or missing files must be reconstructed.
 </para></note>
 <important><para>
-The <command>cvs-clean</command> command will <emphasis>remove every file</emphasis> not in &CVS; from the directory! Make sure to back up any valuable information before you issue this clean-up command.
+The <command>svn-clean</command> command will <emphasis>remove every file</emphasis> not in svn from the directory! Make sure to back up any valuable information before you issue this clean-up command.
 </para></important>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term id="compile-and-install-make-cvs-up">After a CVS Update</term>
+<term id="compile-and-install-make-svn-up">After a svn Update</term>
 <listitem>
 <para>
-The next step depends on the output of the &CVS; update sequence. If you got something like (there may be a U or a P marker in the leftmost column, both denoting the file has been changed):
+The next step depends on the output of the svn update sequence. If you got something like (there may be a U or a P marker in the leftmost column, both denoting the file has been changed):
 </para>
 
 <screen>
@@ -483,7 +485,7 @@ or if you just did a full checkout, you must enter:
 </para>
 <informalexample><simplelist><member>
   <prompt>~/kde3src/kdevelop&gt; </prompt>
-  <userinput>make -f Makefile.cvs</userinput>
+  <userinput>make -f Makefile.svn</userinput>
 </member></simplelist></informalexample>
 <para>
 before you proceed with <emphasis>all of the following steps</emphasis>.
@@ -491,7 +493,7 @@ before you proceed with <emphasis>all of the following steps</emphasis>.
 </listitem>
 </varlistentry>
 </variablelist>
-</sect3> <!-- compile-and-install-make-cvs -->
+</sect3> <!-- compile-and-install-make-svn -->
 
 <sect3 id="compile-and-install-make-basic">
 <title>Basic <command>make</command> Command Sequence</title>

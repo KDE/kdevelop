@@ -47,9 +47,9 @@ If you want directly look up a certain configuration item use one of the followi
   <member><link linkend="setup-snippets">Code Snippets</link></member>
   <member><link linkend="setup-file-list">File List</link></member>
   <member><link linkend="setup-file-selector">File Selector</link></member>
-  <member><link linkend="setup-c++-generator">C++ Class generator</link></member>
+  <member><link linkend="setup-cpp-generator">C++ Class generator</link></member>
   <member><link linkend="setup-formatting">Formatting</link></member>
-  <member><link linkend="setup-c++-parsing">C++ Parsing</link></member>
+  <member><link linkend="setup-cpp-parsing">C++ Parsing</link></member>
 </simplelist>
 
 <sect1 id="setup-general">
@@ -118,8 +118,8 @@ View</link> &kdevelop; uses to communicate &eg; compilation progresses,
 and</para>
 </listitem>
 <listitem>
-<para>the <link linkend="setup-main-applications-font">Application Output
-View</link> which will show error and state information concerning a running
+<para>the <!--<link linkend="setup-main-applications-font">-->Application Output
+View<!--</link>--> which will show error and state information concerning a running
 application.</para>
 </listitem>
 </itemizedlist>
@@ -451,6 +451,7 @@ The active toolview window must be shown fixed (non-overlap mode), sharing the w
 
 <sect2 id="setup-templates">
 <title>File Templates</title>
+<para></para>
 </sect2> <!-- setup-templates -->
 
 <sect2 id="setup-editor">
@@ -1200,7 +1201,7 @@ If &kdevelop; was automatically restarted by the &kde; session manager the chang
 
 </sect2> <!-- setup-file-selector -->
 
-<sect2 id="setup-c++-generator">
+<sect2 id="setup-cpp-generator">
 <title>C++ Class Generator</title>
 
 <para>
@@ -1218,7 +1219,7 @@ If &kdevelop; was automatically restarted by the &kde; session manager the chang
 
 </sect2> <!-- setup-formatting-->
 
-<sect2 id="setup-c++-parsing">
+<sect2 id="setup-cpp-parsing">
 <title>C++ Parsing</title>
 
 <para>

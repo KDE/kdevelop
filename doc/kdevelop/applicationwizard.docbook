@@ -317,10 +317,21 @@ This is done in the second row input field of the <guilabel>Properties</guilabel
 <para>
 Alter the <guilabel>Location</guilabel> field contents so that the application development directory shown in the <guilabel>Final location</guilabel> line will be unique.
 </para>
-
+<!--TODO add tab description Project Options -->
 <note><para>
 Take care that the path you enter in the <guilabel>Location</guilabel> field already exists. Otherwise you will not be able to continue to the next step. The &appwizard; will <emphasis>warn</emphasis> you about non-existing paths by appending <quote>(invalid)</quote> to the <guilabel>Final location</guilabel> line.
 </para></note>
+
+<screenshot id="screenshot-createnewprojectoptions">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="createnewprojectoptions.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Set new project up for CVS
+    </para></caption>
+  </mediaobject>
+</screenshot>
 
 <formalpara>
 <title>Personal Information</title>
