@@ -2,12 +2,11 @@
 
 #original Makefile.am contents follow:
 
-#dataFiles = kbearplugin.desktop subdirs hi32-action-plugin.png \
-#	outputwidget.cpp plugin.h configwidget.cpp \
-#	outputwidget.h plugin.rc src-Makefile.am Makefile.am \
-#	kbearplugin-configure.in.in configwidget.h plugin.cpp \
-#	plugin.kdevelop kbearplugin.png
-#templateName = kbearplugin
+#dataFiles = src-Makefile.am app.cpp app.h main.cpp appui.rc app.kdevelop \
+#	subdirs app.desktop preview.png appview.h appview.cpp appview_base.ui \
+#	prefs-base.ui prefs.cpp prefs.h app.kcfg settings.kcfgc README \
+#	src-configure.in.in
+#templateName= kxt
 #
 #### no need to change below:
 #template_DATA = $(templateName).kdevtemplate

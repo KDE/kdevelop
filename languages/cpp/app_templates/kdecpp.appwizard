@@ -1,2 +1,2 @@
 [General]
-List=kdedcop,kioslave,kxt,kdevlang,kmake,kapp,kdevlang,kdevpart,kateplugin,kdevpart2,kopart,noatunui,kateplugin2,kfileplugin,konqnavpanel,noatunvisual,dcopservice,kbearimportfilter,khello,kpartapp,kbearplugin,khello2,kpartplugin,kcmodule,kicker,kscreensaver,kscons_kxt,kscons_kmdi
+List=kdedcop,kioslave,kxt,kdevlang,kmake,kapp,kconfig35,kdevlang,kdevpart,kateplugin,kdevpart2,kopart,noatunui,kateplugin2,kfileplugin,konqnavpanel,noatunvisual,dcopservice,khello,kpartapp,khello2,kpartplugin,kcmodule,kicker,kscreensaver,kscons_kxt,kscons_kmdi
