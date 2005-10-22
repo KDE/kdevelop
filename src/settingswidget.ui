@@ -26,6 +26,12 @@
             <property name="text">
                 <string>Lo&amp;ad last project on startup</string>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Check this if you want KDevelop to load the last opened project on startup</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Mark this checkbox if you want to continue to work with the last project you worked on. This will cause KDevelop to automatically load this project on start-up. It will usually be shown in the state you left work so you can readily proceed.</string>
+            </property>
         </widget>
         <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
@@ -45,6 +51,12 @@
             <property name="text">
                 <string>Line &amp;wrapping</string>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>By default, KDevelop will wrap long lines around in the Messages Output View window</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>By default, KDevelop will wrap long lines around in the Messages Output View window so that valuable information will not be easily overlooked. In some cases this will clutter long message lists. Remove the checkbox mark if you do not want the lines wrap around.</string>
+            </property>
         </widget>
         <widget class="QCheckBox" row="9" column="1">
             <property name="name">
@@ -52,6 +64,12 @@
             </property>
             <property name="text">
                 <string>Directory &amp;navigation messages</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Check this if you want to know what directory make is in</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>The make tool usually will display messages like “Entering directory”, or “Leaving directory” when it switches the directories it currently works in. As this clutters the messages list in the Messages Output View window, KDevelop suppresses those messages by default. Mark the checkbox if you want to protocol which directories make worked in.</string>
             </property>
         </widget>
         <widget class="QLayoutWidget" row="6" column="1">
@@ -89,7 +107,10 @@
                         <cstring>outputViewFontCombo</cstring>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>The font to use for the output views</string>
+                        <string>Select a font suitable for the Messages Output View window</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>To select a font suitable for the Messages Output View window click the Window Font button showing the currently selected font (it says “Luxi Sans” in the above illustration). The KDE standard Select Font dialog will pop up from which you may select the font to be used.</string>
                     </property>
                 </widget>
             </hbox>
@@ -141,7 +162,13 @@
                         </sizepolicy>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string></string>
+                        <string>Choose what sort of output you want from the build process</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>KDevelop preprocesses the messages the Messages Output View window receives during the build processes in order to filter superfluous information. You can control the level of detail KDevelop will display using the dropdown box in this field. 
+&lt;b&gt;Very Short&lt;/b&gt;  Displays only warnings, errors, and the filenames which are compiled. 
+&lt;b&gt;Short&lt;/b&gt;  Suppresses all compiler flags and formats the output to be more readable. 
+&lt;b&gt;Full&lt;/b&gt;  Displays all output messages unmodified.</string>
                     </property>
                 </widget>
             </hbox>
@@ -376,6 +403,12 @@
                     </property>
                     <property name="focusPolicy">
                         <enum>WheelFocus</enum>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Set the directory where you want your projects in.</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>By default, KDevelop uses a common parent directory for all new projects. Enter the absolute path of this common directory in the box or select it from your directory structure. KDevelop will place the any new project here as a subdirectory.</string>
                     </property>
                 </widget>
             </hbox>
