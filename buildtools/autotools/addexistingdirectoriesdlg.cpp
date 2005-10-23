@@ -165,7 +165,7 @@ void AddExistingDirectoriesDialog::slotOk()
     for ( ; items.current(); ++items )
     {
         //if the directory is outside the project directory
-//        kdDebug() << "dir to add " << items.current()->url().path() << "   subproject " << m_spitem->path << endl;
+//        kdDebug( 9020 ) << "dir to add " << items.current()->url().path() << "   subproject " << m_spitem->path << endl;
         if (items.current()->url().path() != m_spitem->path)
         {
             //copy
@@ -304,7 +304,7 @@ void AddExistingDirectoriesDialog::slotRemoveAll()
 
 	for ( ; it.current(); ++it )
 	{
-		kdDebug ( 9000 ) << "AddExistingDirectoriesDialog::slotRemoveAll()" << endl;
+		kdDebug ( 9020 ) << "AddExistingDirectoriesDialog::slotRemoveAll()" << endl;
 		//deletedFiles.append ( ( *it )->url() );
 		if ( (*it ) ) importView->removeItem ( *it );
 	}
@@ -347,7 +347,7 @@ void AddExistingDirectoriesDialog::slotRemoveSelected()
 
 void AddExistingDirectoriesDialog::slotDropped ( QDropEvent* ev )
 {
-    kdDebug ( 9000 ) << "AddExistingDirectoriesDialog::dropped()" << endl;
+    kdDebug ( 9020 ) << "AddExistingDirectoriesDialog::dropped()" << endl;
 
 	KURL::List urls;
 

@@ -103,7 +103,7 @@ ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, AutoProjectP
 	if ( d->widget->activeTarget() && d->widget->activeSubproject() )
 	{
 		d->chosenTarget = d->widget->activeTarget();
-		//kdDebug ( 9000 ) << "1) Chosen target is " << d->chosenTarget->name << endl;
+		//kdDebug ( 9020 ) << "1) Chosen target is " << d->chosenTarget->name << endl;
 		d->chosenSubproject = widget->activeSubproject();
 		d->baseUI->chosenTargetLabel->setText( ( widget->activeSubproject()->path + "/<b>" +
 		                                         d->widget->activeTarget()->name + "</b>" )
@@ -183,7 +183,7 @@ void ChooseTargetDialog::slotSubprojectChanged ( const QString& name )
 						d->baseUI->targetComboBox->setCurrentItem( titem->name );
 						d->baseUI->chosenTargetLabel->setText( ( spitem->path + "/<b>" + titem->name + "</b>" ).mid( d->part->projectDirectory().length() + 1 ) );
 						d->chosenTarget = titem;
-						//kdDebug ( 9000 ) << "2) Chosen target is " << d->chosenTarget->name << endl;
+						//kdDebug ( 9020 ) << "2) Chosen target is " << d->chosenTarget->name << endl;
 					}
 					else
 					{
@@ -196,7 +196,7 @@ void ChooseTargetDialog::slotSubprojectChanged ( const QString& name )
 
 							d->chosenTarget = titem;
 						}
-						//kdDebug ( 9000 ) << "2a) Chosen target is " << d->chosenTarget->name << endl;
+						//kdDebug ( 9020 ) << "2a) Chosen target is " << d->chosenTarget->name << endl;
 					}
 				}
 			}
@@ -219,7 +219,7 @@ void ChooseTargetDialog::slotTargetChanged( const QString& name )
 		if ( titem->name == name )
 		{
 			d->chosenTarget = titem;
-			//kdDebug ( 9000 ) << "4) Chosen target is " << d->chosenTarget->name << endl;
+			//kdDebug ( 9020 ) << "4) Chosen target is " << d->chosenTarget->name << endl;
 
 			break;
 		}
@@ -236,7 +236,7 @@ void ChooseTargetDialog::slotOk()
 	if ( !d->chosenSubproject || !d->chosenTarget )
 		return;
 
-	//kdDebug ( 9000 ) << "3) Chosen target is " << d->chosenTarget->name << endl;
+	//kdDebug ( 9020 ) << "3) Chosen target is " << d->chosenTarget->name << endl;
 
 	QStringList newFileList;
 	QStringList::iterator it;

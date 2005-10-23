@@ -1,7 +1,7 @@
 /***************************************************************************
                              -------------------
     begin                : 21.11.2002
-    copyright            : (C) 2002 by Victor Röder
+    copyright            : (C) 2002 by Victor Rï¿½er
     email                : victor_roeder@gmx.de
  ***************************************************************************/
 
@@ -65,7 +65,7 @@ RemoveTargetDialog::RemoveTargetDialog( AutoProjectWidget *widget, AutoProjectPa
 	m_widget = widget;
 	m_part = part;
 
-	//kdDebug ( 9000 ) << "+++++ " << titem->primary << " " << titem->prefix << " " << titem->name << endl;
+	//kdDebug ( 9020 ) << "+++++ " << titem->primary << " " << titem->prefix << " " << titem->name << endl;
 
 	init();
 }
@@ -221,7 +221,7 @@ void RemoveTargetDialog::accept ()
 	{
 		for ( titem = m_spitem->targets.first(); titem; titem = m_spitem->targets.next() )
 		{
-			//kdDebug (9000) << "******** " << m_spitem->subdir << endl;
+			//kdDebug (9020) << "******** " << m_spitem->subdir << endl;
 			if ( titem->primary == "PROGRAMS" || titem->primary == "LTLIBRARIES" )
 			{
 				QString curCanonname = AutoProjectTool::canonicalize ( titem->name );
@@ -230,7 +230,7 @@ void RemoveTargetDialog::accept ()
 				{
 					removeMap.insert ( curCanonname + "_LIBADD", "" );
 
-					//kdDebug (9000) << "Removing from " << m_spitem->subdir << " " << curCanonname << "_LIBADD" << endl;
+					//kdDebug (9020) << "Removing from " << m_spitem->subdir << " " << curCanonname << "_LIBADD" << endl;
 
 					AutoProjectTool::removeFromMakefileam ( m_spitem->path + "/Makefile.am", removeMap );
 

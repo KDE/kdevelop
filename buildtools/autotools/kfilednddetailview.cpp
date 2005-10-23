@@ -2,7 +2,7 @@
 *                        kfilednddetailview.cpp  -  description
 *                           -------------------
 *  begin                : Wed Nov 1 2000
-*  copyright            : (C) 2000 by Björn Sahlström
+*  copyright            : (C) 2000 by Bjï¿½n Sahlstrï¿½
 *  email                : kbjorn@users.sourceforge.net
 ***************************************************************************/
 
@@ -80,7 +80,7 @@ void KFileDnDDetailView::slotOpenFolder(){
 //-----------------------------------------------
 void KFileDnDDetailView::contentsDragEnterEvent( QDragEnterEvent *e ) {
 
-	kdDebug () << "KFileDnDDetailView::contentsDragEnterEvent" << endl;
+    kdDebug (9020) << "KFileDnDDetailView::contentsDragEnterEvent" << endl;
 
 	if ( ! acceptDrag( e ) ) {
 		e->accept( false );
@@ -96,7 +96,7 @@ void KFileDnDDetailView::contentsDragEnterEvent( QDragEnterEvent *e ) {
 //-----------------------------------------------
 void KFileDnDDetailView::contentsDragMoveEvent( QDragMoveEvent *e ) {
 
-	kdDebug () << "KFileDnDDetailView::contentsDragMoveEvent" << endl;
+    kdDebug (9020) << "KFileDnDDetailView::contentsDragMoveEvent" << endl;
 
 	if ( ! acceptDrag( e ) ) {
 		e->accept( false );
@@ -119,7 +119,7 @@ void KFileDnDDetailView::contentsDragMoveEvent( QDragMoveEvent *e ) {
 //-----------------------------------------------
 void KFileDnDDetailView::contentsDragLeaveEvent( QDragLeaveEvent* ) {
 
-	kdDebug () << "KFileDnDDetailView::contentsDragLeaveEvent" << endl;
+    kdDebug (9020) << "KFileDnDDetailView::contentsDragLeaveEvent" << endl;
 
 	if( m_useAutoOpenTimer ) {
 		m_autoOpenTimer.stop();
@@ -129,7 +129,7 @@ void KFileDnDDetailView::contentsDragLeaveEvent( QDragLeaveEvent* ) {
 //-----------------------------------------------
 void KFileDnDDetailView::contentsDropEvent( QDropEvent* e ) {
 
-	kdDebug () << "KFileDndDetailView::contentsDropEvent" << endl;
+    kdDebug (9020) << "KFileDndDetailView::contentsDropEvent" << endl;
 
 	if( m_useAutoOpenTimer ) {
 		m_autoOpenTimer.stop();
@@ -150,7 +150,7 @@ void KFileDnDDetailView::contentsDropEvent( QDropEvent* e ) {
 //-----------------------------------------------
 void KFileDnDDetailView::startDrag(){
 
-	kdDebug () << "KFileDnDDetailView::startDrag()" << endl;
+    kdDebug (9020) << "KFileDnDDetailView::startDrag()" << endl;
 
 	// create a list of the URL:s that we want to drag
 	KURL::List urls;

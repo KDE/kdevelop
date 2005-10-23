@@ -1256,7 +1256,7 @@ KDevProject::Options AutoProjectPart::options() const
 
 QStringList recursiveATFind( const QString &currDir, const QString &baseDir )
 {
-    kdDebug() << "Dir " << currDir << endl;
+    kdDebug(9020) << "Dir " << currDir << endl;
     QStringList fileList;
 
     if( !currDir.contains( "/..") && !currDir.contains("/.") )

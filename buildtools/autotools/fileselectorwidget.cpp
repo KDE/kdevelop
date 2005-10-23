@@ -168,7 +168,7 @@ void FileSelectorWidget::dragEnterEvent ( QDragEnterEvent* /*ev*/ )
 
 void FileSelectorWidget::dropEvent ( QDropEvent* /*ev*/ )
 {
-    kdDebug ( 9000 ) << "Dropped" << endl;
+    kdDebug ( 9020 ) << "Dropped" << endl;
 
     QString path = "Something was dropped in the Destination directory file-selector";
 

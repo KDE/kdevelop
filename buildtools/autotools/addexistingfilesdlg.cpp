@@ -243,7 +243,7 @@ void AddExistingFilesDialog::slotOk()
 
 	for ( ; items.current(); ++items )
 	{
-		// kdDebug ( 9000 ) << " **** " << (  *items )->url().directory() << "***** " << m_spitem->path << endl;
+		// kdDebug ( 9020 ) << " **** " << (  *items )->url().directory() << "***** " << m_spitem->path << endl;
 		if ( (  *items )->url().directory() != m_spitem->path )
 		{
 			stringList.append ( ( *items )->name() );
@@ -369,7 +369,7 @@ void AddExistingFilesDialog::slotRemoveAll()
 
 	for ( ; it.current(); ++it )
 	{
-		kdDebug ( 9000 ) << "AddExistingFilesDialog::slotRemoveAll()" << endl;
+		kdDebug ( 9020 ) << "AddExistingFilesDialog::slotRemoveAll()" << endl;
 		//deletedFiles.append ( ( *it )->url() );
 		if ( (*it ) ) importView->removeItem ( *it );
 	}
@@ -413,7 +413,7 @@ void AddExistingFilesDialog::slotRemoveSelected()
 
 void AddExistingFilesDialog::slotDropped ( QDropEvent* ev )
 {
-    kdDebug ( 9000 ) << "AddExistingFilesDialog::dropped()" << endl;
+    kdDebug ( 9020 ) << "AddExistingFilesDialog::dropped()" << endl;
 
 	KURL::List urls;
 

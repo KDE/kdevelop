@@ -83,7 +83,7 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
     QCheckListItem *lastItem = 0;
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it) {
-	kdDebug(9013) << "----------> subproject = " << (*it) << endl;
+    kdDebug(9020) << "----------> subproject = " << (*it) << endl;
 	QString subProjectName = *it;
 
 	if( subProjectName.isEmpty() ){
