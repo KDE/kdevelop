@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2002 by Bernd Gehrmann and Harald Fernengel             *
  *   bernd@kdevelop.org, harry@kdevelop.org                                *
+ *   Copyright (C) 2004-2005 by Sascha Cunz                                *
+ *   sascha@kdevelop.org                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -11,12 +13,15 @@
 
 #include "misc.h"
 
-#include <qstring.h>
-#include <kemailsettings.h>
+#include <QString>
+#include <QDir>
+#include <QFileInfo>
 
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
+
+#include <kemailsettings.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
@@ -52,6 +57,14 @@ void AppWizardUtil::guessAuthorAndEmail(QString *author, QString *email)
     *email = QString(pw->pw_name) + "@" + hostname;
   else
     *email = fromAddr;
+}
+
+QString AppWizardUtil::kdevRoot(const QString &templateName)
+{
+    QFileInfo finfo(templateName);
+    QDir dir(finfo.dir());
+    dir.cdUp();
+    return dir.absPath();
 }
 
 // kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

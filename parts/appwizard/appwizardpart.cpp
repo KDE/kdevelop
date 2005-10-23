@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2004-2005 by Sascha Cunz                                *
+ *   sascha@kdevelop.org                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -9,10 +11,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qdir.h>
-#include <qwidget.h>
+#include <QDir>
+#include <QWidget>
 #include <Q3Wizard>
-#include "appwizardpart.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -22,15 +23,17 @@
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
 #include <kaction.h>
-#include <qmessagebox.h>
+#include <kiconloader.h>
+#include <kmacroexpander.h>
 
+#include "appwizardpart.h"
 #include "appwizarddlg.h"
 #include "appwizardfactory.h"
 #include <kdevmakefrontend.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevlanguagesupport.h>
 
-AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringList &)
+AppWizardPart::AppWizardPart(QObject *parent, const char */*name*/, const QStringList &)
     : KDevPlugin(AppWizardFactory::info(), parent)
 {
     setInstance(AppWizardFactory::instance());

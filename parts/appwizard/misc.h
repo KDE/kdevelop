@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2002 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2004-2005 by Sascha Cunz                                *
+ *   sascha@kdevelop.org                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -12,12 +14,13 @@
 #ifndef _MISC_H_
 #define _MISC_H_
 
-#include <qstring.h>
+class QString;
 
 class AppWizardUtil
 {
 public:
     static void guessAuthorAndEmail(QString *author, QString *email);
+    static QString kdevRoot(const QString &templateName);
 };
 
 #endif

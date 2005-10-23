@@ -3,6 +3,8 @@
  *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2001 by Sandy Meier                                     *
  *   smeier@kdevelop.org                                                   *
+ *   Copyright (C) 2004-2005 by Sascha Cunz                                *
+ *   sascha@kdevelop.org                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -14,112 +16,41 @@
 #ifndef _APPWIZARDDIALOG_H_
 #define _APPWIZARDDIALOG_H_
 
-class AppWizardPart;
-class Q3MultiLineEdit;
-class QRadioButton;
-class KTempFile;
-class Q3WidgetStack;
-class Q3VBox;
-class KMenu;
+class QTextEdit;
 class QHBoxLayout;
-class KArchiveDirectory;
-class KArchiveFile;
+
+class KTempFile;
+class KMenu;
+
 class ProfileSupport;
 
-#include <Q3PtrList>
-#include <Q3Dict>
-#include <QLineEdit>
-#include <QLabel>
+#include <QList>
+#include <QLinkedList>
 #include <QStringList>
-#include <QHBoxLayout>
-#include <Q3ValueList>
 
 #include <klistview.h>
 #include <kiconview.h>
 
 #include "appwizarddlgbase.h"
 #include "kdevlicense.h"
-
-struct installFile
-{
-    QString source;
-    QString dest;
-    QString option;
-    bool process;
-    bool isXML;
-};
-
-struct installArchive
-{
-    QString source;
-    QString dest;
-    QString option;
-    bool process;
-};
-
-struct installDir
-{
-    QString dir;
-    QString option;
-    int perms;
-};
-
-struct ApplicationInfo
-{
-    QString templateName;
-    QString name;
-    QString comment;
-    QString icon;
-    QString category;
-    QString defaultDestDir;
-    QString fileTemplates;
-    QStringList openFilesAfterGeneration;
-    QString templateFile;
-    QHash<QString,QString> subMap;
-    QHash<QString,QString> subMapXML;
-    QStringList includes;
-
-    //QMap<autoKey,QVariant> subValues;
-    //PropertyLib::PropertyList *propValues;
-
-    Q3ValueList<installFile> fileList;
-    Q3ValueList<installArchive> archList;
-    Q3ValueList<installDir> dirList;
-    QString customUI;
-    QString message;
-    QString finishCmd;
-    QString finishCmdDir;
-    QString sourceArchive;
-
-    //! item pointer to the listview
-    Q3ListViewItem *item;
-
-    //! pointer to favourite icon (NULL if there isn't one)
-    Q3IconViewItem *favourite;
-
-    ApplicationInfo()
-    : item( 0 ), favourite( 0 )
-    {}
-};
+#include "appwizardpart.h"
+#include "kdevapptemplate.h"
 
 struct AppWizardFileTemplate
 {
+    AppWizardFileTemplate() : edit( 0 ){}
+
     QString suffix;
     QString style;
-    Q3MultiLineEdit *edit;
-
-    AppWizardFileTemplate()
-    : edit( 0 )
-    {}
+    QTextEdit *edit;
 };
-
 
 class AppWizardDialog : public Q3Wizard, public Ui_AppWizardDialogBase
 {
     Q_OBJECT
 
 public:
-    AppWizardDialog( AppWizardPart *part, QWidget *parent=0, const char *name=0 );
+    AppWizardDialog( AppWizardPart *appwizardpart, QWidget *parent=0, const char *name=0 );
     ~AppWizardDialog();
     QString getProjectName() { return appname_edit->text().lower(); }
     QString getProjectLocation() { return finalLoc_label->text(); }
@@ -127,68 +58,49 @@ public:
 protected:
     virtual void accept();
 
-    virtual Q3Dict<KDevLicense> licenses();
+    const QHash<QString, KDevLicense>& licenses();
     void loadLicenses();
 
 protected slots:
-    virtual void templatesTreeViewClicked(Q3ListViewItem*);
+    virtual void templatesTreeViewActivated(const QModelIndex& index);
     virtual void updateNextButtons();
     virtual void licenseChanged();
     virtual void destButtonClicked(const QString&);
-    virtual void projectNameChanged();
     virtual void projectLocationChanged();
-    virtual void favouritesIconViewClicked( Q3IconViewItem * );
-    virtual void templatesContextMenu(Q3ListViewItem*, const QPoint&, int);
-    virtual void favouritesContextMenu(Q3IconViewItem* item, const QPoint& point);
-    virtual void addTemplateToFavourites();
+//  virtual void favouritesIconViewClicked( Q3IconViewItem * );
+//  virtual void templatesContextMenu(Q3ListViewItem*, const QPoint&, int);
+//  virtual void favouritesContextMenu(Q3IconViewItem* item, const QPoint& point);
+//  virtual void addTemplateToFavourites();
+//  virtual void removeFavourite();
     virtual void done(int r);
-    virtual void removeFavourite();
     virtual void pageChanged();
+    virtual void showTemplates(bool all);
 
 private: //methods
-    ApplicationInfo *templateForItem(Q3ListViewItem *item);
-    void insertCategoryIntoTreeView(const QString &completeCategoryPath);
     void loadVcs();
     void populateFavourites();
-    void addFavourite(Q3ListViewItem* item, QString favouriteName="");
-    ApplicationInfo* findFavouriteInfo(Q3IconViewItem* item);
+//  void addFavourite(Q3ListViewItem* item, QString favouriteName="");
+//  ApplicationInfo* findFavouriteInfo(Q3IconViewItem* item);
 
-    void unpackArchive( const KArchiveDirectory *dir, const QString &dest, bool process );
-    bool copyFile( const installFile& file );
-    bool copyFile( const QString &source, const QString &dest, bool isXML, bool process );
-    QString kdevRoot(const QString &templateName ) const;
     void openAfterGeneration();
-
-    void setPermissions(const KArchiveFile *source, QString dest);
-    void setPermissions(const installFile &file);
-
     void checkAndHideItems(Q3ListView *view);
     bool checkAndHideItems(Q3ListViewItem *item);
+    void clearTemplateSelection();
 
 private: //data
-    Q3PtrList<ApplicationInfo> m_appsInfo;
-    Q3ValueList<AppWizardFileTemplate> m_fileTemplates;
-    //! Store the category name and the pointer in the treeview
-    Q3Dict<Q3ListViewItem> m_categoryMap;
-    Q3ValueList<Q3ListViewItem*> m_categoryItems;
-
+    QLinkedList<AppWizardFileTemplate*> m_fileTemplates;
     QHBoxLayout *m_custom_options_layout;
-    //PropertyLib::PropertyEditor *m_customOptions;
     AppWizardPart *m_part;
     QWidget *m_lastPage;
-    Q3PtrList<KTempFile> m_tempFiles;
-    ApplicationInfo* m_pCurrentAppInfo;
+    QList<KTempFile*> m_tempFiles;
+    KDevAppTemplateModel m_templateModel;
+    KDevAppTemplate* m_currentTemplate;
     bool m_projectLocationWasChanged;
     bool m_pathIsValid;
     KMenu* m_favouritesMenu;
     KMenu* m_templatesMenu;
-
-    Q3Dict<KDevLicense> m_licenses;
-
+    QHash<QString, KDevLicense*> m_licenses;
     ProfileSupport *m_profileSupport;
-
-public slots:
-    virtual void showTemplates(bool all);
 };
 
 #endif

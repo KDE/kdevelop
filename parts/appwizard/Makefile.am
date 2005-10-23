@@ -10,7 +10,8 @@ libkdevappwizard_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/
 
 libkdevappwizard_la_SOURCES = appwizardfactory.cpp appwizardpart.cpp \
 		appwizarddlg.cpp appwizarddlgbase.ui misc.cpp \
-		kdevfile.cpp kdevlicense.cpp profilesupport.cpp
+		kdevfile.cpp kdevlicense.cpp profilesupport.cpp \
+		kdevapptemplate.cpp
 
 METASOURCES = AUTO
 
