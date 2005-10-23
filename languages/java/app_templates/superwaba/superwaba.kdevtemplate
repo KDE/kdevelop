@@ -21,6 +21,7 @@ Comment[pt_BR]=Um modelo simples para criara aplicações Java, baseadas no Supe
 Comment[sv]=En enkel mall för att bygga SuperWaba Java-baserade program på WinCE och PalmOS. Mer information hittas på http://www.superwaba.org.
 Comment[tr]=WinCE ve PalmOS üstünde SuperWaba tabanlı Java uygulamarı yapmak için basit bir şablon. Daha fazla bilgi http://www.superwaba.org/ adresinde bulunabilir.
 Comment[xx]=xxA simple template for building SuperWaba Java based apps on WinCE and PalmOS.  More information can be found at http://www.superwaba.orgxx
+Comment[zh_CN]=在 WinCE 和 PalmOS 上构建基于 SuperWaba Java 应用程序的简单模板。更多信息可以在 http://www.superwaba.org 找到
 FileTemplates=java
 ShowFilesAfterGeneration=%{dest}/%{APPNAME}.java
 Archive=superwaba.tar.gz
@@ -44,6 +45,7 @@ Comment[pt]=A localização de base do seu Java
 Comment[pt_BR]=A localização de base do seu Java
 Comment[sv]=Sökväg till Java-rotkatalog
 Comment[xx]=xxPath to your java rootxx
+Comment[zh_CN]=您的 Java 根路径
 Default=/usr/lib/java
 ValueType=QString
 
@@ -67,6 +69,7 @@ Comment[pt_BR]=A localização de base do seu SuperWaba
 Comment[sv]=Sökväg till SuperWaba-rotkatalog
 Comment[tr]=SuperWaba kök dizininizin yolu
 Comment[xx]=xxPath to your SuperWaba rootxx
+Comment[zh_CN]=您的 SuperWaba 根路径
 Default=/usr/lib
 ValueType=QString
 
@@ -116,6 +119,7 @@ Comment[pt_BR]=A sua aplicação está preparada para ser compilada. Edite os al
 Comment[sv]=Programmet är inställt att byggas. Redigera byggmålen för att anpassa filen.
 Comment[tr]=Uygulamanız derlenmeye hazır. Dosyayı özelleştirmek için make hedeflerini düzenleyin.
 Comment[xx]=xxYour application is setup to build. Edit the make targets to customize the file.xx
+Comment[zh_CN]=您的应用程序已设置为构建。编辑 make 目标可自定义文件。
 Archive=superwaba.tar.gz
 
 [GNU]

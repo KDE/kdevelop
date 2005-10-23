@@ -30,6 +30,7 @@ Comment[ta]=Fortran மூலக்கோப்பு
 Comment[tg]=Файли берунии Fortran
 Comment[tr]=Fortran Kaynak Dosyası
 Comment[xx]=xxFortran Source Filexx
+Comment[zh_CN]=Fortran 源文件
 Hidden=false
 Icon=source_f
 MimeType=text/x-fortran

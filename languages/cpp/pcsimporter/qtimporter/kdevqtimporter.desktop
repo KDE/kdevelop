@@ -34,6 +34,7 @@ Comment[ta]=கெடெவலப் Qt PCS இறக்குமதியாள
 Comment[tg]=Пурборкунии нишонаҳо аз китобхонаи Qt дар дар синфҳои анборӣ
 Comment[tr]=KDevelop Qt PCS Aktarıcısı
 Comment[xx]=xxKDevelop Qt PCS Importerxx
+Comment[zh_CN]=KDevelop Qt PCS 导入器
 Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevqtimporter

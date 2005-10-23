@@ -28,6 +28,7 @@ Comment[ta]=HTML உதவி பார்வையாளரை உட்பொ�
 Comment[tg]=Намоиши ҳамвори HTMLHelp 
 Comment[tr]=Gömülebilir HTMLHelp Görüntüleyicisi
 Comment[xx]=xxEmbeddable HTMLHelp Viewerxx
+Comment[zh_CN]=嵌入的 HTML 帮助查看器
 MimeType=application/chm
 Name=KChmPart
 Name[de]=Chm-Betrachter (KDevelop)

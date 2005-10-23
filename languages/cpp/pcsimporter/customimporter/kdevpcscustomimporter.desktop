@@ -31,6 +31,7 @@ Comment[ta]=கெடெவலப் கஸ்டம் டைரக்ட்ர
 Comment[tg]=Пурборкунии нишонаҳо аз анбори синфҳои каталог
 Comment[tr]=KDevelop Özel Dizin PCS Aktarıcısı
 Comment[xx]=xxKDevelop Custom Directory PCS Importerxx
+Comment[zh_CN]=KDevelop 自定义目录的 PCS 导入器
 Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevcustompcsimporter

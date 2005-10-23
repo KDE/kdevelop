@@ -24,6 +24,7 @@ Comment[sv]= Ett riktigt suveränt Koffice-program
 Comment[tr]=Gerçekten harika bir KOffice uygulaması
 Comment[uk]=Дійсно чудова програма для KOffice
 Comment[xx]=xx A really awesome KOffice applicationxx
+Comment[zh_CN]=一个非常杰出的 KOffice 应用程序
 Type=MimeType
 #You need to change the mime type below to match what your application will handle...
 Patterns=*.xmpl;

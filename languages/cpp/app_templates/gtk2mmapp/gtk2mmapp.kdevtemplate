@@ -18,6 +18,7 @@ Name[sl]=Ogrodje programa za Gtk--
 Name[sv]=Gtk-- programramverk
 Name[tr]=Gtk-- Uygulama Çatısı
 Name[xx]=xxGtk-- Application frameworkxx
+Name[zh_CN]=Gtk-- 应用程序框架
 Category=C++/GTK+
 Icon=gtk2mmapp.png
 Comment=Generates a simple Gtk-- application. Gtkmm >= 1.2.8 and < 1.3.0 should be installed. To edit glade file glade-- (http://home.wtal.de/petig/Gtk/) is required.
@@ -37,6 +38,7 @@ Comment[pt_BR]=Gera uma aplicação simples em Gtk--. Deverá estar instalado o 
 Comment[sv]=Skapar ett enkelt Gtk-- program. Gtkmm >= 1.2.8 och < 1.3.0 måste vara installerat. För att redigera glade-filer krävs glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[tr]=Basit bir Gtk-- uygulaması yaratır. Gtkmm >= 1.2.8 ve < 1.3.0 yüklü olmalı. Glade dosyasını düzenlemek için glade-- (http://home.wtal.de/petig/Gtk/) gereklidir.
 Comment[xx]=xxGenerates a simple Gtk-- application. Gtkmm >= 1.2.8 and < 1.3.0 should be installed. To edit glade file glade-- (http://home.wtal.de/petig/Gtk/) is required.xx
+Comment[zh_CN]=生成简单的 Gtk-- 应用程序。必须安装 1.2.8 到 1.3.0 之间的 Gtkmm。要编辑 glade 文件，需要使用 glade-- (http://home.wtal.de/petig/Gtk/)。
 FileTemplates=hh,CStyle,cc,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=gtk2mmapp.tar.gz
@@ -144,3 +146,4 @@ Comment[sl]=Ogrodje za program v Gtk-- je bil ustvarjen v %{dest}
 Comment[sv]=Ett Gtk-- programramverk skapades i %{dest}
 Comment[tr]=Bir Gtk-- uygulama çatısı %{dest} içinde yaratıldı.
 Comment[xx]=xxA Gtk-- application framework was created in %{dest}xx
+Comment[zh_CN]=在 %{dest} 创建了一个 Gtk-- 应用程序框架

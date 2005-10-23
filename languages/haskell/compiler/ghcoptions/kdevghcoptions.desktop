@@ -31,6 +31,7 @@ Comment[ta]=கிலாஸ்கொ ஹாஸ்கெல் தொகுப்
 Comment[tg]=Талфифгари Glasgow Haskell
 Comment[tr]=Glasgow Haskell Derleyicisi
 Comment[xx]=xxGlasgow Haskell Compilerxx
+Comment[zh_CN]=Glasgow Haskell 编译器
 Name=GhcOptions
 Name[da]=Glasgow Haskell indstillinger
 Name[de]=Ghc-Einstellungen (KDevelop)

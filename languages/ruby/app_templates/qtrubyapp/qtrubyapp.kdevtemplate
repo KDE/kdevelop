@@ -18,6 +18,7 @@ Name[pt_BR]=Aplicação em QtRuby
 Name[sv]=QtRuby-program
 Name[tr]=QtRuby Uygulaması
 Name[xx]=xxQtRuby Applicationxx
+Name[zh_CN]=QtRuby 应用程序
 Icon=qtrubyapp.png
 Category=Ruby/Qt
 Category[fr]=Ruby/Qt

@@ -35,6 +35,7 @@ Comment[sr@Latn]=Menadžer sistema kontrole verzija
 Comment[sv]=Hantering av versionskontrollsystem
 Comment[tr]=Sürüm Kontrol Sistemi Yöneticisi
 Comment[xx]=xxVersion Control System Managerxx
+Comment[zh_CN]=版本控制系统管理器
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 

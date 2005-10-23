@@ -25,4 +25,5 @@ Description[sr@Latn]=KIOSlave za prikaz WinHelp fajlova
 Description[sv]=En I/O-slav för att visa WinHelp-filer
 Description[tr]=WinHelp dosyalarını görüntülemek için bir kioslave
 Description[xx]=xxA kioslave for displaying WinHelp filesxx
+Description[zh_CN]=显示 WinHelp 文件的 kioslave
 Icon=help

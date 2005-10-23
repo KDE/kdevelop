@@ -18,6 +18,7 @@ Comment[pt_BR]=Importa e edita projectos qmake.
 Comment[sv]=Importerar och redigerar Qmake-projekt
 Comment[tr]=qmake projelerini aktarır ve düzenler
 Comment[xx]=xxImports and edits qmake projectsxx
+Comment[zh_CN]=导入并编辑 qmake 工程
 Icon=gear
 X-KDevelop-Version=3
 ServiceTypes=KDevelop/ProjectImporter

@@ -30,6 +30,7 @@ GenericName[sv]=%{APPNAME} insticksprogram
 GenericName[tr]=%{APPNAME} Eklentisi
 GenericName[uk]=Втулок %{APPNAME}
 GenericName[xx]=xx%{APPNAME} Pluginxx
+GenericName[zh_CN]=%{APPNAME} 插件
 Comment=%{APPNAME} Description
 Comment[br]=Deskrivadur %{APPNAME}
 Comment[da]=%{APPNAME} beskrivelse
@@ -54,6 +55,7 @@ Comment[sv]=%{APPNAME} beskrivning
 Comment[tr]=%{APPNAME} Tanımı
 Comment[uk]=Опис %{APPNAME}
 Comment[xx]=xx%{APPNAME} Descriptionxx
+Comment[zh_CN]=%{APPNAME} 描述
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 
