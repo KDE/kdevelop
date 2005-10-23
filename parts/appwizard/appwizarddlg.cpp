@@ -221,6 +221,9 @@ void AppWizardDialog::licenseChanged()
 
 void AppWizardDialog::accept()
 {
+    if( !m_currentTemplate )    // safety
+        return;
+
     // check /again/ whether the dir already exists;
     // maybe users create it in the meantime
     QFileInfo fi(finalLoc_label->text());
@@ -234,6 +237,7 @@ void AppWizardDialog::accept()
         return;
     }
 
+    m_currentTemplate->delayedLoadDetails();
     m_currentTemplate->unpackTemplateArchive();
 
     // Build KMacroExpander map

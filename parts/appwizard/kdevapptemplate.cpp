@@ -42,10 +42,7 @@
 
 inline void expandMacros( QString& str, const QHash<QString,QString>& hash )
 {
-    QString s;
-    kdDebug(9010) << "expandMacros1" << endl;
-    s = KMacroExpander::expandMacros( str, hash );
-    kdDebug(9010) << "expandMacros2" << endl;
+    QString s( KMacroExpander::expandMacros( str, hash ) );
     str = s;
 }
 
@@ -63,97 +60,127 @@ KDevAppGroup::KDevAppGroup(const QString &name, const QString path, KDevItemGrou
     m_icon = SmallIcon( "folder" );
 }
 
-KDevAppTemplate::KDevAppTemplate( KConfig& config, const QString& rootDir, KDevAppGroup* parent )
-        : KDevAppItem("root", parent), m_basePath( rootDir )
+KDevAppTemplate::KDevAppTemplate( KConfig* config, const QString& rootDir, KDevAppGroup* parent )
+        : KDevAppItem("root", parent), m_config( config  ), m_basePath( rootDir )
 {
-    m_name = config.readEntry("Name");
-    m_iconName = config.readEntry("Icon");
+    m_haveLoadedDetails = false;
+
+    // do load only things that we need for the GUI
+    // load every other thing from delayedLoadDetails
+
+    m_name = m_config->readEntry("Name");
+    m_iconName = m_config->readEntry("Icon");
     m_icon = SmallIcon( "kdevelop" );
-    m_comment = config.readEntry("Comment");
-    m_fileTemplates = config.readEntry("FileTemplates");
-    m_openFilesAfterGeneration = config.readListEntry("ShowFilesAfterGeneration");
-    m_sourceArchive = config.readEntry("Archive");
+    m_comment = m_config->readEntry("Comment");
+    m_fileTemplates = m_config->readEntry("FileTemplates");
+    m_sourceArchive = m_config->readEntry("Archive");
+    m_openFilesAfterGeneration = m_config->readListEntry("ShowFilesAfterGeneration");
 
     // Grab includes list
-    QStringList groups = config.groupList();
+    QStringList groups = m_config->groupList();
     groups.remove("General");
-    QString group;
-    foreach( group, groups )
+    foreach( QString group, groups )
     {
-        config.setGroup( group );
-        if( config.readEntry("Type").lower() == "include" )
+        config->setGroup( group );
+        if( config->readEntry("Type").lower() == "include" )
         {
-            QString include( config.readEntry( "File" ) );
-            kdDebug(9010) << "Adding: " << include << endl;
+            QString include( m_config->readEntry( "File" ) );
+            // kdDebug(9010) << "Adding: " << include << endl;
             QHash<QString,QString> hash;
             hash["kdevelop"] = rootDir;
             expandMacros( include, hash );
             if( !include.isEmpty() )
             {
                 KConfig tmpCfg( include );
-                tmpCfg.copyTo( "", &config);
-                kdDebug(9010) << "Merging: " << tmpCfg.name() << endl;
+                tmpCfg.copyTo( "", m_config);
+                // kdDebug(9010) << "Merging: " << tmpCfg.name() << endl;
             }
         }
     }
 
-    groups = config.groupList();    // may be changed by the merging above
-    foreach( group, groups )
+    groups = m_config->groupList();    // may be changed by the merging above
+    groups.remove("General");
+    foreach( QString group, groups )
     {
-        config.setGroup( group );
-        QString type = config.readEntry("Type").lower();
+        m_config->setGroup( group );
+        QString type = m_config->readEntry("Type").lower();
         if( type == "value" )  // Add value
         {
-            QString name = config.readEntry( "Value" );
-            QString label = config.readEntry( "Comment" );
-            QString type = config.readEntry( "ValueType", "String" );
+            QString name = m_config->readEntry( "Value" );
+            QString label = m_config->readEntry( "Comment" );
+            QString type = m_config->readEntry( "ValueType", "String" );
             QVariant::Type variantType = QVariant::nameToType( type.latin1());
-            QVariant value = config.readPropertyEntry( "Default", variantType );
+            QVariant value = m_config->readPropertyEntry( "Default", variantType );
             value.cast( variantType );  // fix this in kdelibs...
             //if( !name.isEmpty() && !label.isEmpty() )
                 //info->propValues->addProperty( new PropertyLib::Property( (int)variantType, name, label, value ) );
         }
-        else if( type == "install" ) // copy dir
+        else if( type == "ui")
+        {
+            m_customUI = m_config->readPathEntry("File");
+        }
+    }
+}
+
+KDevAppTemplate::~KDevAppTemplate()
+{
+    delete m_config;
+}
+
+void KDevAppTemplate::delayedLoadDetails()
+{
+    if( m_haveLoadedDetails )
+        return;
+
+    QStringList groups = m_config->groupList();
+    groups.remove("General");
+    foreach( QString group, groups )
+    {
+        m_config->setGroup( group );
+        QString type = m_config->readEntry("Type").lower();
+        if( type == "install" ) // copy dir
         {
             File file;
-            file.source = config.readPathEntry("Source");
-            file.dest = config.readPathEntry("Dest");
-            file.process = config.readBoolEntry("Process",true);
-            file.isXML = config.readBoolEntry("EscapeXML",false);
-            file.option = config.readEntry("Option");
+            file.source = m_config->readPathEntry("Source");
+            file.dest = m_config->readPathEntry("Dest");
+            file.process = m_config->readBoolEntry("Process",true);
+            file.isXML = m_config->readBoolEntry("EscapeXML",false);
+            file.option = m_config->readEntry("Option");
             addFile( file );
         }
         else if( type == "install archive" )
         {
             Archive arch;
-            arch.source = config.readPathEntry("Source");
-            arch.dest = config.readPathEntry("Dest");
-            arch.process = config.readBoolEntry("Process",true);
-            arch.option = config.readEntry("Option", "" );
+            arch.source = m_config->readPathEntry("Source");
+            arch.dest = m_config->readPathEntry("Dest");
+            arch.process = m_config->readBoolEntry("Process",true);
+            arch.option = m_config->readEntry("Option", "" );
             m_archList.append( arch );
         }
         else if( type == "mkdir" )
         {
             Dir dir;
-            dir.dir = config.readPathEntry("Dir");
-            dir.option = config.readEntry("Option", "" );
-            dir.perms = config.readNumEntry("Perms", 0777 );
+            dir.dir = m_config->readPathEntry("Dir");
+            dir.option = m_config->readEntry("Option", "" );
+            dir.perms = m_config->readNumEntry("Perms", 0777 );
             m_dirList.append( dir );
         }
         else if( type == "finishcmd" )
         {
-            m_finishCmd = config.readPathEntry("Command");
-            m_finishCmdDir = config.readPathEntry("Directory");
-        }
-        else if( type == "ui")
-        {
-            m_customUI = config.readPathEntry("File");
+            m_finishCmd = m_config->readPathEntry("Command");
+            m_finishCmdDir = m_config->readPathEntry("Directory");
         }
         else if( type == "message" )
         {
-            m_message = config.readEntry( "Comment" );
+            m_message = m_config->readEntry( "Comment" );
         }
     }
+
+    m_haveLoadedDetails = true;
+
+    // no need to store the config any further
+    delete m_config;
+    m_config = 0;
 }
 
 void KDevAppTemplate::addDir( Dir& dir )
@@ -444,10 +471,10 @@ KDevAppTemplateModel::KDevAppTemplateModel(QObject *parent)
     {
         QString templateFile = KGlobal::dirs()->findResource("apptemplates", templateName);
         kdDebug(9010) << templateName << " in " << templateFile << endl;
-        KConfig templateConfig(templateFile);
-        templateConfig.setGroup("General");
+        KConfig* templateConfig = new KConfig( templateFile );
+        templateConfig->setGroup("General");
 
-        QString category = templateConfig.readEntry("Category");
+        QString category = templateConfig->readEntry("Category");
         if( category.endsWith('/') )
             category.remove(category.length()-1, 1);
         if( category.startsWith('/') )

@@ -25,6 +25,7 @@
 #include "kdevitemmodel.h"
 
 class KArchiveDirectory;
+class KConfig;
 
 class AppWizardPart;
 
@@ -63,7 +64,8 @@ public:
     struct Dir;
 
 public:
-    KDevAppTemplate( KConfig& config, const QString& rootDir, KDevAppGroup* parent );
+    KDevAppTemplate( KConfig* config, const QString& rootDir, KDevAppGroup* parent );
+    virtual ~KDevAppTemplate();
 
     QString name() const{ return m_name; }
     QIcon icon() const{ return m_icon; }
@@ -75,6 +77,8 @@ public:
     QStringList openFilesAfterGeneration(){ return m_openFilesAfterGeneration; }
     QString fileTemplates(){ return m_fileTemplates; }
     QString iconName(){ return m_iconName; }
+
+    void delayedLoadDetails();
 
     void addDir( Dir& dir );
     void addFile( File file );
@@ -92,6 +96,8 @@ public:
     QList<File> files(){ return m_fileList; }
 
 private:
+    KConfig* m_config;
+    bool m_haveLoadedDetails;
     QString m_basePath;
     QString m_name;
     QString m_iconName;
