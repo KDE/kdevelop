@@ -105,7 +105,6 @@ public:
 
 signals:
     void toggleWatchpoint(const QString &varName);
-    void selectFrame(int frameNo, int threadNo);
     void expandItem(TrimmableItem *item);
     void expandUserItem(ValueCallback* callback, const QString &request);
     void setLocalViewState(bool localsOn);
