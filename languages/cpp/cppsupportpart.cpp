@@ -1022,7 +1022,10 @@ bool CppSupportPart::shouldSplitDocument(const KURL &url)
 	{
 		QString candidate = sourceOrHeaderCandidate( ( *it ) );
 		if ( candidate.isEmpty() )
+		{
+			++it;
 			continue;
+		}
 		
 		KURL urlCandidate;
 		urlCandidate.setPath( candidate );
