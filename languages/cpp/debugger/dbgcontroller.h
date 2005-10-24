@@ -30,6 +30,9 @@ class Breakpoint;
 class DbgCommand;
 class TrimmableItem;
 class VarItem;
+class MemoryCallback;
+class ValueCallback;
+
 
 /***************************************************************************/
 /**
@@ -52,7 +55,8 @@ enum DBGStateFlags
   s_core              = 1024,
   s_waitTimer         = 2048,
   s_shuttingDown      = 4096,
-  s_viewThreads       = 8192
+  s_viewThreads       = 8192,
+  s_explicitBreakInto = (s_viewThreads << 1)
 };
 /***************************************************************************/
 /***************************************************************************/
@@ -108,13 +112,14 @@ public slots:
     virtual void slotBPState(const Breakpoint&)                             = 0;
 
     virtual void slotDisassemble(const QString &start, const QString &end)  = 0;
-    virtual void slotMemoryDump(const QString &start, const QString &amount)= 0;
+    virtual void slotMemoryDump(MemoryCallback* callback,
+                                const QString &start, const QString &amount)= 0;
     virtual void slotRegisters()                                            = 0;
     virtual void slotLibraries()                                            = 0;
 
     virtual void slotExpandItem(TrimmableItem *parent)                     = 0;
-    virtual void slotExpandUserItem(VarItem *parent,
-                                    const QCString &userRequest)            = 0;
+    virtual void slotExpandUserItem(ValueCallback* callback,
+                                    const QString &expression)             = 0;
     virtual void slotSelectFrame(int frame, int thread, bool needFrames)    = 0;
     virtual void slotSetLocalViewState(bool onOff)                          = 0;
 

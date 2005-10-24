@@ -38,6 +38,8 @@ class FramestackWidget;
 class VarItem;
 class VariableTree;
 class STTY;
+class MemoryCallback;
+class ValueCallback;
 
 /**
  * A front end implementation to the gdb command line debugger
@@ -65,7 +67,7 @@ private:
     void parseWhatis          (char *buf);
     void parseLine            (char *buf);
     void parseFrameSelected   (char *buf);
-    //  void parseFileStart       (char *buf);
+    void parseMemoryDump      (char *buf);
 
     char *parse               (char *buf);
     char *parseOther          (char *buf);
@@ -111,12 +113,14 @@ public slots:
     void slotClearAllBreakpoints();
 
     void slotDisassemble(const QString &start, const QString &end);
-    void slotMemoryDump(const QString &start, const QString &amount);
+    void slotMemoryDump(MemoryCallback* callback,
+                        const QString &start, const QString &amount);
     void slotRegisters();
     void slotLibraries();
 
     void slotExpandItem(TrimmableItem *parent);
-    void slotExpandUserItem(VarItem *parent, const QCString &userRequest);
+    void slotExpandUserItem(ValueCallback* callback, 
+                            const QString &expression);
     void slotSelectFrame(int frameNo, int threadNo, bool needFrames);
     void slotSetLocalViewState(bool onOff);
     void slotProduceBacktrace(int threadNo);
@@ -145,7 +149,7 @@ protected slots:
 signals:
     void acceptPendingBPs     ();
     void unableToSetBPNow     (int BPNo);
-    void debuggerRunError(int errorCode);
+    void debuggerAbnormalExit();
     // Emitted whenever parameters info for the current frame is ready.
     void parametersReady(const char* buf);
     // Emitted whenever local vars info for the the current frame is ready.
@@ -172,6 +176,7 @@ private:
 
     QPtrList<DbgCommand> cmdList_;
     DbgCommand*       currentCmd_;
+    MemoryCallback*   currentMemoryCallback_;
 
     STTY*             tty_;
     QString           badCore_;

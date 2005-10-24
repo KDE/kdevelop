@@ -10,7 +10,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include "debuggerpart.h"
 
 #include <qdir.h>
 #include <qvbox.h>
@@ -60,6 +59,7 @@
 #include <kdevplugininfo.h>
 #include <debugger.h>
 
+#include "debuggerpart.h"
 
 namespace GDBDebugger
 {
@@ -89,7 +89,6 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     // Setup widgets and dbgcontroller
     variableWidget = new VariableWidget( 0, "variablewidget");
     mainWindow()->embedSelectView(variableWidget, i18n("Variables"), i18n("Debugger variable-view"));
-
 
     gdbBreakpointWidget = new GDBBreakpointWidget( 0, "gdbBreakpointWidget" );
     gdbBreakpointWidget->setCaption(i18n("Breakpoint List"));
@@ -160,6 +159,15 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
              this,             SLOT(slotRefreshBPState(const Breakpoint&)));
     connect( gdbBreakpointWidget, SIGNAL(gotoSourcePosition(const QString&, int)),
              this,             SLOT(slotGotoSource(const QString&, int)) );
+
+
+    viewerWidget = new ViewerWidget( 0, "view");
+    mainWindow()->embedSelectView(viewerWidget, 
+                                  i18n("Debug views"), 
+                                  i18n("Special debugger views"));
+    mainWindow()->setViewAvailable(viewerWidget, false);
+    connect(viewerWidget, SIGNAL(setViewShown(bool)),
+            this, SLOT(slotShowView(bool)));
 
     // Now setup the actions
     KAction *action;
@@ -546,8 +554,8 @@ void DebuggerPart::setupController()
     // variableTree -> controller
     connect( variableTree,          SIGNAL(expandItem(TrimmableItem*)),
              controller,            SLOT(slotExpandItem(TrimmableItem*)));
-    connect( variableTree,          SIGNAL(expandUserItem(VarItem*, const QCString&)),
-             controller,            SLOT(slotExpandUserItem(VarItem*, const QCString&)));
+    connect( variableTree,          SIGNAL(expandUserItem(ValueCallback*, const QString&)),
+             controller,            SLOT(slotExpandUserItem(ValueCallback*, const QString&)));
     connect( variableTree,          SIGNAL(setLocalViewState(bool)),
              controller,            SLOT(slotSetLocalViewState(bool)));
     connect( variableTree,          SIGNAL(varItemConstructed(VarItem*)),
@@ -586,6 +594,25 @@ void DebuggerPart::setupController()
     connect( gdbOutputWidget,       SIGNAL(breakInto()),
              controller,            SLOT(slotBreakInto()));
 
+    // viewerWidget -> controller
+    connect( viewerWidget,          SIGNAL(getMemory(
+                                               MemoryCallback*, 
+                                               const QString&,
+                                               const QString&)),
+             controller,            SLOT(slotMemoryDump(
+                                             MemoryCallback*,
+                                             const QString&,
+                                             const QString&)));
+
+    connect( viewerWidget, SIGNAL(evaluateExpression(ValueCallback*, 
+                                  const QString&)),
+             controller, SLOT(slotExpandUserItem(ValueCallback*, 
+                              const QString&)));
+
+    connect( viewerWidget, SIGNAL(setValue(const QString&, const QString&)),
+             controller, SLOT(slotSetValue(const QString&, const QString&)));
+
+    
     // controller -> gdbBreakpointWidget
     connect( controller,            SIGNAL(acceptPendingBPs()),
              gdbBreakpointWidget,   SLOT(slotSetPendingBPs()));
@@ -607,8 +634,8 @@ void DebuggerPart::setupController()
              this,                  SLOT(slotStatus(const QString&, int)));
     connect( controller,            SIGNAL(showStepInSource(const QString&, int, const QString&)),
              this,                  SLOT(slotShowStep(const QString&, int)));
-    connect( controller,            SIGNAL(debuggerRunError(int)),
-	     this,                  SLOT(errRunningDebugger(int)));
+    connect( controller,            SIGNAL(debuggerAbnormalExit()),
+	     this,                  SLOT(slotDebuggerAbnormalExit()));
 
     // controller -> procLineMaker
     connect( controller,            SIGNAL(ttyStdout(const char*)),
@@ -639,6 +666,10 @@ void DebuggerPart::setupController()
              variableTree, SLOT(slotLocalsReady(const char*)));
     connect( controller, SIGNAL(currentFrame(int, int)),
              variableTree, SLOT(slotCurrentFrame(int, int)));
+
+    // controller -> viewerWidget
+    connect( controller, SIGNAL(dbgStatus(const QString&, int)),
+             viewerWidget, SLOT(slotDebuggerState(const QString&, int)));
 
     // gdbBreakpointWidget -> disassembleWidget
     connect( gdbBreakpointWidget,   SIGNAL(publishBPState(const Breakpoint&)),
@@ -758,14 +789,29 @@ void DebuggerPart::slotStopDebugger()
     core()->running(this, false);
 }
 
-void DebuggerPart::errRunningDebugger(int errorCode)
+void DebuggerPart::slotShowView(bool show)
 {
-  if (errorCode == 127)
-  {
-    KMessageBox::error(mainWindow()->main(), i18n("GDB could not be found. Please make sure it is installed"
-                                     " and in the path and try again"), i18n("Debugger Not Found"));
-  }
-  slotStopDebugger();
+    const QWidget* s = static_cast<const QWidget*>(sender());
+    QWidget* ncs = const_cast<QWidget*>(s);    
+    mainWindow()->setViewAvailable(ncs, show);
+    if (show)
+        mainWindow()->raiseView(ncs);
+}
+
+void DebuggerPart::slotDebuggerAbnormalExit()
+{
+    mainWindow()->raiseView(gdbOutputWidget);
+
+    KMessageBox::error(
+        mainWindow()->main(), 
+        i18n("<b>GDB exited abnormally</b>"
+             "<p>This is likely a bug in GDB. "
+             "Examine the gdb output window and then stop the debugger"),
+        i18n("GDB exited abnormally"));
+
+    // Note: we don't stop the debugger here, becuse that will hide gdb
+    // window and prevent the user from finding the exact reason of the
+    // problem.
 }
 
 void DebuggerPart::projectClosed()
@@ -931,29 +977,7 @@ void DebuggerPart::slotStepOut()
 
 void DebuggerPart::slotMemoryView()
 {
-    // Hmm, couldn't this be made non-modal?
-
-    MemoryViewDialog *dlg = new MemoryViewDialog();
-    connect( dlg,        SIGNAL(disassemble(const QString&, const QString&)),
-             controller, SLOT(slotDisassemble(const QString&, const QString&)));
-    connect( dlg,        SIGNAL(memoryDump(const QString&, const QString&)),
-             controller, SLOT(slotMemoryDump(const QString&, const QString&)));
-    connect( dlg,        SIGNAL(registers()),
-             controller, SLOT(slotRegisters()));
-    connect( dlg,        SIGNAL(libraries()),
-             controller, SLOT(slotLibraries()));
-
-    connect( controller, SIGNAL(rawGDBMemoryDump(char*)),
-             dlg,        SLOT(slotRawGDBMemoryView(char*)));
-    connect( controller, SIGNAL(rawGDBDisassemble(char*)),
-             dlg,        SLOT(slotRawGDBMemoryView(char*)));
-    connect( controller, SIGNAL(rawGDBRegisters(char*)),
-             dlg,        SLOT(slotRawGDBMemoryView(char*)));
-    connect( controller, SIGNAL(rawGDBLibraries(char*)),
-             dlg,        SLOT(slotRawGDBMemoryView(char*)));
-
-    dlg->exec();
-    delete dlg;
+    viewerWidget->slotAddMemoryView();
 }
 
 

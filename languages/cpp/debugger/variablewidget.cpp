@@ -1102,8 +1102,8 @@ void VarItem::handleSpecialTypes()
         waitingForData();
         emit ((VariableTree*)listView())->expandUserItem(
             this,
-            QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
-                               gdbExpression().latin1()));
+            QString("(($len=($data=%1.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")")
+            .arg(gdbExpression()));
     }
 }
 

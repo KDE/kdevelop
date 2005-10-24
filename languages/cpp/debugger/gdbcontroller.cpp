@@ -38,6 +38,7 @@
 #include <qregexp.h>
 #include <qstring.h>
 #include <qdir.h>
+#include <qvaluevector.h>
 
 #include <iostream>
 #include <ctype.h>
@@ -136,6 +137,7 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
         gdbOutput_(new char[2048]),
         holdingZone_(),
         currentCmd_(0),
+        currentMemoryCallback_(0),
         tty_(0),
         badCore_(QString()),
         state_(s_dbgNotStarted|s_appNotStarted|s_silent),
@@ -208,7 +210,6 @@ void GDBController::configure()
         bool restart = false;
         if (stateIsOn(s_appBusy))
         {
-            setStateOn(s_silent);
             pauseApp();
             restart = true;
         }
@@ -375,6 +376,8 @@ void GDBController::removeInfoRequests()
 // commands as well.
 void GDBController::pauseApp()
 {
+    setStateOn(s_silent);
+
     int i = cmdList_.count();
     while (i)
     {
@@ -505,7 +508,16 @@ void GDBController::parseLine(char* buf)
             // application is running.
             // And the user does this to stop the program also.
             if (strstr(buf+23, "SIGINT") && stateIsOn(s_silent))
+            {
+                // If this is explicit break into the program, show
+                // the source line
+                if (stateIsOn(s_explicitBreakInto))
+                {
+                    setStateOff(s_silent|s_explicitBreakInto);
+                    actOnProgramPause(QString(buf));                
+                }
                 return;
+            }
 
             // Whenever we have a signal raised then tell the user, but don't
             // end the program as we want to allow the user to look at why the
@@ -882,12 +894,25 @@ void GDBController::parseRequestedData(char *buf)
     if (GDBItemCommand *gdbItemCommand = dynamic_cast<GDBItemCommand*> (currentCmd_))
     {
         // Fish out the item from the command and let it deal with the data
-        VarItem *item = gdbItemCommand->getItem();
-        varTree_->viewport()->setUpdatesEnabled(false);
-        item->updateValue(buf);
-        item->trim();
-        varTree_->viewport()->setUpdatesEnabled(true);
-        varTree_->repaint();
+        ValueCallback *item = gdbItemCommand->getItem();
+        // This code is used in two contexts:
+        // - getting a variable for variableview
+        // - getting a value for tooltip
+        // In the latter case we should not be messing with
+        // varTree at all. Ideally, we should not be messing with
+        // varTree here, but that's refactoring for later.
+        if (VarItem* var = dynamic_cast<VarItem*>(item))
+        {
+            varTree_->viewport()->setUpdatesEnabled(false);
+            var->updateValue(buf);
+            var->trim();
+            varTree_->viewport()->setUpdatesEnabled(true);
+            varTree_->repaint();
+        }
+        else
+        {
+            item->updateValue(buf);
+        }
     }
 }
 
@@ -899,11 +924,16 @@ void GDBController::parseWhatis(char *buf)
     if (GDBItemCommand *gdbItemCommand = dynamic_cast<GDBItemCommand*> (currentCmd_))
     {
         // Fish out the item from the command and let it deal with the data
-        VarItem *item = gdbItemCommand->getItem();
+        ValueCallback* callback = gdbItemCommand->getItem();
+        VarItem* var = dynamic_cast<VarItem*>(callback);
+
+        Q_ASSERT(var);
+        if (!var)
+            return;
+
         varTree_->viewport()->setUpdatesEnabled(false);
 
-        item->updateType(buf);
-//        item->trim();
+        var->updateType(buf);
 
         varTree_->viewport()->setUpdatesEnabled(true);
         varTree_->repaint();
@@ -961,6 +991,102 @@ void GDBController::parseLocals(char type, char *buf)
     {
         emit localsReady(buf);
     }
+}
+
+void GDBController::parseMemoryDump(char* buf)
+{
+    unsigned start;
+    if (strncmp(buf, "0x", 2) == 0)
+    {
+        buf += 2;
+
+        start = strtoul(buf, 0, 16);
+
+        QValueVector<char> result;
+
+        // The output has format:
+        // address <symbol name>: data \n
+        // ..........
+        
+        // Now replace address/symbol name with spaces.
+        char* current = buf;
+        for(;;)
+        {
+            // For for the start of data on this line.
+            unsigned angles = 0;
+            
+            char* colon = current;
+            for(; *colon; ++colon)
+            {
+                if (*colon == '<')
+                    ++angles;
+                else if (*colon == '>')
+                    --angles;
+                else if (*colon == ':')
+                {
+                    // Inside '<>', colon is probably a part 
+                    // of type name
+                    if (angles == 0)
+                        break;
+                }
+            }
+           
+            if (*colon == 0)
+                break;
+
+            for(char* p = current; p <= colon; ++p)
+                *p = ' ';
+
+            char* newline = strchr(colon, '\n');
+            if (!newline)
+                break;
+
+            *newline = ' ';
+            current = newline;
+        }
+
+        // Consume the raw data.
+        current = buf;
+        for(;;)
+        {
+            while (*current && isspace(*current))
+                ++current;
+            if (!*current)
+                break;
+
+            char* end;
+            char b = strtol(current, &end, 16);
+            result.push_back(b);
+            if (end == current)
+            {
+                // Something seriously wrong with the data.
+                // break the loop to avoid looping here forever.
+                break;
+            }
+            current = end;
+        }        
+
+        char* real_result = new char[result.size()];
+        for(unsigned i = 0; i < result.size(); ++i)
+            real_result[i] = result[i];
+
+        currentMemoryCallback_->memoryContentAvailable(
+            start, result.size(), real_result);        
+    }
+    else
+    {
+        // We can't emit an error message here, since it goes to
+        // stderr and might not arrived yet. It's a pity but
+        // we can't do anything else.
+        KMessageBox::error(
+            0, 
+            i18n("<b>Could not read memory</b>."
+                 "<p>Check the gdb window for further information."),
+            i18n("Error reading memory"));
+    }
+    
+
+    currentMemoryCallback_ = 0;
 }
 
 // **************************************************************************
@@ -1039,7 +1165,7 @@ char *GDBController::parseCmdBlock(char *buf)
             emit rawGDBDisassemble    (buf);
             break;
         case MEMDUMP:
-            emit rawGDBMemoryDump     (buf);
+            parseMemoryDump           (buf);
             break;
         case REGISTERS:
             emit rawGDBRegisters      (buf);
@@ -1458,6 +1584,13 @@ void GDBController::slotStopDebugger()
     delete dbgProcess_;    dbgProcess_ = 0;
     delete tty_;           tty_ = 0;
 
+    // The gdb output buffer might contain start marker of some
+    // previously issued command that crashed gdb (so there's no end marker)
+    // If we don't clear this, then after restart, we'll be trying to search
+    // for the end marker of the command issued in previous gdb session,
+    // and never succeed. 
+    gdbOutputLen_ = 0;
+
     state_ = s_dbgNotStarted | s_appNotStarted | s_silent;
     emit dbgStatus (i18n("Debugger stopped"), state_);
 }
@@ -1577,7 +1710,6 @@ void GDBController::slotRestart()
 
     if (stateIsOn(s_appBusy))
     {
-        setStateOn(s_silent);
         pauseApp();
     }
 
@@ -1668,6 +1800,7 @@ void GDBController::slotStepOutOff()
 // Only interrupt a running program.
 void GDBController::slotBreakInto()
 {
+    setStateOn(s_explicitBreakInto);
     pauseApp();
 }
 
@@ -1692,7 +1825,6 @@ void GDBController::slotBPState( const Breakpoint& BP )
 
         // When forcing breakpoints to be set/unset, interrupt a running app
         // and change the state.
-        setStateOn(s_silent);
         pauseApp();
         restart = true;
     }
@@ -1739,7 +1871,6 @@ void GDBController::slotClearAllBreakpoints()
 
         // When forcing breakpoints to be set/unset, interrupt a running app
         // and change the state.
-        setStateOn(s_silent);
         pauseApp();
         restart = true;
     }
@@ -1767,13 +1898,17 @@ void GDBController::slotDisassemble(const QString &start, const QString &end)
 
 // **************************************************************************
 
-void GDBController::slotMemoryDump(const QString &address, const QString &amount)
+void GDBController::slotMemoryDump(
+    MemoryCallback* callback,
+    const QString &address, const QString &amount)
 {
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    QCString cmd = QCString().sprintf("x/%sb %s", amount.latin1(),
-                                                  address.latin1());
+    QCString cmd = QCString().sprintf("x/%sb %s", 
+                                      amount.stripWhiteSpace().latin1(),
+                                      address.latin1());
+    currentMemoryCallback_ = callback;
     queueCmd(new GDBCommand(cmd, NOTRUNCMD, INFOCMD, MEMDUMP));
 }
 
@@ -1955,19 +2090,21 @@ void GDBController::slotExpandItem(TrimmableItem *genericItem)
 // This is called when an item needs special processing to show a value.
 // Example = QStrings. We want to display the QString string against the var name
 // so the user doesn't have to open the qstring to find it. Here's where that happens
-void GDBController::slotExpandUserItem(VarItem *item, const QCString &userRequest)
+void GDBController::slotExpandUserItem(ValueCallback* callback, 
+                                       const QString &expression)
 {
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    Q_ASSERT(item);
+    Q_ASSERT(callback);
 
     // Bad user data!!
-    if (userRequest.isEmpty())
+    if (expression.isEmpty())
         return;
 
-    queueCmd(new GDBItemCommand(item, QCString("print ")+userRequest.data(),
-                                        false, DATAREQUEST));
+    queueCmd(new GDBItemCommand(callback, 
+                                ("print " + expression).latin1(),
+                                false, DATAREQUEST));
 }
 
 // **************************************************************************
@@ -2113,8 +2250,8 @@ void GDBController::slotDbgWroteStdin(KProcess *)
 
 void GDBController::slotDbgProcessExited(KProcess* process)
 {
-    if ( process->exitStatus() == 127 )
-      emit debuggerRunError(127);
+    if ( !process->normalExit() )
+        emit debuggerAbnormalExit();
 
     destroyCmds();
     state_ = s_dbgNotStarted|s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown));

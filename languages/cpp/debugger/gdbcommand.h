@@ -23,6 +23,7 @@ namespace GDBDebugger
 
 class Breakpoint;
 class VarItem;
+class ValueCallback;
 
 // sigh - namespace's don't work on some of the older compilers
 enum GDBCmd
@@ -103,14 +104,14 @@ private:
 class GDBItemCommand : public GDBCommand
 {
 public:
-    GDBItemCommand(VarItem *item, const QCString &command,
+    GDBItemCommand(ValueCallback* item, const QCString &command,
                    bool isRunCmd=false, char prompt=DATAREQUEST);
     virtual ~GDBItemCommand();
 
-    VarItem *getItem()      { return item_; }
+    ValueCallback* getItem()      { return item_; }
 
 private:
-    VarItem *item_;
+    ValueCallback* item_;
 };
 
 /***************************************************************************/

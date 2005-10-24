@@ -17,6 +17,7 @@
 #define _VARIABLEWIDGET_H_
 
 #include "gdbcontroller.h"
+#include "callbacks.h"
 
 #include <klistview.h>
 #include <kcombobox.h>
@@ -34,6 +35,7 @@ class WatchRoot;
 class VarItem;
 class VariableTree;
 class DbgController;
+class ValueCallback;
 
 enum { VarNameCol = 0, ValueCol = 1, VarTypeCol = 2};
 enum DataType { typeUnknown, typeValue, typePointer, typeReference,
@@ -105,7 +107,7 @@ signals:
     void toggleWatchpoint(const QString &varName);
     void selectFrame(int frameNo, int threadNo);
     void expandItem(TrimmableItem *item);
-    void expandUserItem(VarItem *item, const QCString &request);
+    void expandUserItem(ValueCallback* callback, const QString &request);
     void setLocalViewState(bool localsOn);
     // Emitted when *this is interested in args and locals for the
     // current frame.
@@ -180,7 +182,7 @@ private:
     'trim' method is called, removing all variables which were not recieved
     from gdbr.    
  */
-class TrimmableItem : public KListViewItem
+class TrimmableItem : public KListViewItem, public ValueCallback
 {
 public:
     TrimmableItem(VariableTree *parent);

@@ -46,12 +46,12 @@ GDBCommand::~GDBCommand()
 /***************************************************************************/
 /***************************************************************************/
 
-GDBItemCommand::GDBItemCommand( VarItem *item,
+GDBItemCommand::GDBItemCommand( ValueCallback* callback,
                                 const QCString &command,
                                 bool isRunCmd,
                                 char prompt)
     : GDBCommand(command, isRunCmd, true, prompt),
-      item_(item)
+      item_(callback)
 {
 }
 

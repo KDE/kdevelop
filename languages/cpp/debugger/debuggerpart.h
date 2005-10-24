@@ -41,6 +41,7 @@ class DbgController;
 class DbgToolBar;
 class VariableWidget;
 class GDBOutputWidget;
+class ViewerWidget;
 
 class DebuggerPart : public KDevPlugin, virtual public DebuggerDCOPInterface
 {
@@ -91,8 +92,10 @@ private slots:
     void slotDCOPApplicationRegistered(const QCString &appId);
     void slotCloseDrKonqi();
 
-    //! There was an error running the debugger
-    void errRunningDebugger( int errorCode );
+    // Hide or show the view that's the sender of this signal.
+    void slotShowView(bool enabled);
+
+    void slotDebuggerAbnormalExit();
 
 private:
     KDevAppFrontend *appFrontend();
@@ -107,6 +110,7 @@ private:
     QGuardedPtr<FramestackWidget> framestackWidget;
     QGuardedPtr<DisassembleWidget> disassembleWidget;
     QGuardedPtr<GDBOutputWidget> gdbOutputWidget;
+    QGuardedPtr<ViewerWidget> viewerWidget;
     DbgController *controller;
     QGuardedPtr<QLabel> statusBarIndicator;
     QGuardedPtr<DbgToolBar> floatingToolBar;
