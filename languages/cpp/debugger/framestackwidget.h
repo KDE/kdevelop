@@ -111,6 +111,9 @@ private:
 private:
 
     ThreadStackItem *viewedThread_;
+    int currentFrame_;
+
+    friend class FrameStackItem;
 };
 
 }

@@ -187,6 +187,7 @@ void FramestackWidget::parseGDBBacktraceList(char *str)
         str = end+1;                          // next string
     }
 
+    currentFrame_ = 0;
     // Make sure the first frame in the stopped backtrace is selected
     // and open
     if (viewedThread_)
@@ -325,9 +326,16 @@ QListViewItem *FrameStackItem::lastChild() const
 // **************************************************************************
 
 void FrameStackItem::setOpen(bool open)
-{
+{    
     if (open)
-        ((FramestackWidget*)listView())->slotSelectFrame(0, threadNo());
+    {
+        FramestackWidget* owner = (FramestackWidget*)listView();
+        if (this->threadNo() != owner->viewedThread() &&
+            this->frameNo() != owner->currentFrame_)
+        {
+            ((FramestackWidget*)listView())->slotSelectFrame(0, threadNo());
+        }
+    }
 
     QListViewItem::setOpen(open);
 }
