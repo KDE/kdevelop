@@ -41,7 +41,7 @@ CppSplitHeaderSourceConfig::~CppSplitHeaderSourceConfig()
 void CppSplitHeaderSourceConfig::init( )
 {
     m_splitEnable =
-        DomUtil::readBoolEntry( *m_dom, defaultPath + "/enabled", true );
+        DomUtil::readBoolEntry( *m_dom, defaultPath + "/enabled", false );
     m_splitSync =
         DomUtil::readBoolEntry( *m_dom, defaultPath + "/synchronize", true );
     m_splitOrientation =
