@@ -58,6 +58,7 @@
 #include "designer.h"
 #include "kdevlanguagesupport.h"
 
+#include "multibuffer.h"
 #include "partcontroller.h"
 
 PartController *PartController::s_instance = 0;
@@ -224,10 +225,30 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 {
   editDocumentInternal(inputUrl, lineNum, col);
 }
- 
-void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, int col, bool activate )
+
+void PartController::splitCurrentDocument(const KURL &inputUrl, 
+                                          int lineNum, int col)
 {
-	kdDebug(9000) << k_funcinfo << inputUrl.prettyURL() << " linenum " << lineNum << " activate? " << activate << endl;
+  editDocumentInternal(inputUrl, lineNum, col, true, true);
+}
+
+void PartController::scrollToLineColumn(const KURL &inputUrl, 
+                                        int lineNum, int col)
+{
+    if ( KParts::Part *existingPart = partForURL( inputUrl ) )
+    {
+        EditorProxy::getInstance()->setLineNumber( existingPart, lineNum, col );
+        return;
+    }
+}
+
+void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, 
+                                           int col, bool activate, 
+                                           bool addToCurrentBuffer )
+{
+    kdDebug(9000) << k_funcinfo << "\n " << inputUrl.prettyURL() 
+        << " linenum " << lineNum << " activate? " << activate 
+        << " addToCurrentBuffer? " << addToCurrentBuffer << endl;
 	
 	KURL url = inputUrl;
 	
@@ -237,7 +258,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 	{
 		addHistoryEntry();
 		activatePart( existingPart );
-		EditorProxy::getInstance()->setLineNumber( existingPart, lineNum, col );
+    	EditorProxy::getInstance()->setLineNumber( existingPart, lineNum, col );
 		return;
 	}
 
@@ -308,7 +329,23 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 		EditorProxy::getInstance()->setLineNumber(existingPart, lineNum, col);
 		return;
 	}
-	
+    
+    if ( !addToCurrentBuffer )
+    {
+        // Let the language part override the addToCurrentBuffer flag 
+        // if it decides to...
+        addToCurrentBuffer =
+            API::getInstance()->languageSupport()->shouldSplitDocument( inputUrl );
+
+        if ( addToCurrentBuffer )
+        {
+            kdDebug(9000) << "languagePart() insists addToCurrentBuffer = true" << endl;
+            // Set activate = true, otherwise we have hard to fix multi-buffer 
+            // delayed activation.  I'll re-look at this later...
+            activate = true;
+        }
+    }
+    
 	KMimeType::Ptr MimeType = KMimeType::findByURL( url );
 	
 	kdDebug(9000) << "mimeType = " << MimeType->name() << endl;
@@ -375,45 +412,38 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 	// is this regular text - open in editor
 	if ( m_openNextAsText || isText || MimeType->is( "application/x-zerosize" ) )
 	{
-		KTextEditor::Editor * editorpart = createEditorPart(activate);
+        KTextEditor::Editor *editorpart = 
+            createEditorPart( activate, addToCurrentBuffer, url );
+        if ( editorpart )
+        {
+            if ( !m_presetEncoding.isNull() )
+            {
+                KParts::BrowserExtension * extension = 
+                    KParts::BrowserExtension::childObject( editorpart );
+                if ( extension )
+                {
+                    KParts::URLArgs args;
+                    args.serviceType = QString( "text/plain;" ) + m_presetEncoding;
+                    extension->setURLArgs(args);
+                }
+                m_presetEncoding = QString::null;
+            }
 
-		if ( editorpart )
-		{
-			if ( !m_presetEncoding.isNull() )
-			{
-				KParts::BrowserExtension * extension = KParts::BrowserExtension::childObject( editorpart );
-				if ( extension )
-				{
-					KParts::URLArgs args;
-					args.serviceType = QString( "text/plain;" ) + m_presetEncoding;
-					extension->setURLArgs(args);
-				}
-				m_presetEncoding = QString::null;
-			}
-				
-			editorpart->openURL( url );
+            addHistoryEntry();
 
-			QWidget* widget = editorpart->widget();
-		
-			if (!widget) {
-				// We're being lazy about creating the view, but kmdi _needs_ a widget to
-				// create a tab for it, so use a QWidgetStack subclass instead
-				kdDebug() << k_lineinfo << "Creating Editor wrapper..." << endl;
-				widget = new EditorWrapper(static_cast<KTextEditor::Document*>(editorpart), activate, TopLevel::getInstance()->main());
-			}
+            QWidget * widget = 
+                EditorProxy::getInstance()->topWidgetForPart( editorpart );
 
-			addHistoryEntry();
-			integratePart(editorpart, url, widget, true, activate);
+            integratePart(editorpart, url, widget, true, activate, addToCurrentBuffer);
+            EditorProxy::getInstance()->setLineNumber(editorpart, lineNum, col);
 
-			EditorProxy::getInstance()->setLineNumber(editorpart, lineNum, col);
-			
-			m_openNextAsText = false;
-			
-			m_openRecentAction->addURL( url );
-			m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
+            m_openNextAsText = false;
 
-			return;
-		}
+            m_openRecentAction->addURL( url );
+            m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
+
+            return;
+        }
 	}
 	
 	// OK, it's not text and it's not a designer file.. let's see what else we can come up with..
@@ -544,26 +574,55 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
   return 0;
 }
 
-KTextEditor::Editor * PartController::createEditorPart( bool activate )
+KTextEditor::Editor * PartController::createEditorPart( bool activate, 
+                                                        bool addToCurrentBuffer,
+                                                        const KURL &url )
 {
-	static bool alwaysActivate = true;
-	
-	if ( !_editorFactory )
-	{
-		kapp->config()->setGroup("Editor");
-		QString preferred = kapp->config()->readPathEntry("EmbeddedKTextEditor");
-		if ( preferred != "kyzispart" ) //if we are not using kyzis => Don't create non-wrapped views for now, avoid two paths (== two chances for bad bugs)
-			alwaysActivate = false;
-		
-		_editorFactory = findPartFactory( "text/plain", "KTextEditor/Document", preferred );
-		
-		if ( !_editorFactory ) return 0L;
-	}
-	
-	return static_cast<KTextEditor::Editor*>( _editorFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, alwaysActivate | activate ? "KTextEditor/Editor" : "KTextEditor::Document" ) );
+    MultiBuffer *multiBuffer = 0;
+    if ( addToCurrentBuffer )
+    {
+        multiBuffer = 
+            dynamic_cast<MultiBuffer*>(
+                    EditorProxy::getInstance()->topWidgetForPart( activePart() )
+                                      );
+        TopLevel::getInstance() ->showTabs( false );
+    }
+    if ( !multiBuffer )
+    {
+        kdDebug(9000) << "Creating a new MultiBuffer for " 
+            << url.fileName() << endl;
+        multiBuffer = new MultiBuffer( TopLevel::getInstance()->main() );
+    }
+
+    static bool alwaysActivate = true;
+
+    kapp->config()->setGroup("Editor");
+    QString preferred = kapp->config()->readPathEntry("EmbeddedKTextEditor");
+    // If we are not using kyzis...
+    // Don't create non-wrapped views for now, 
+    // avoid two paths (== two chances for bad bugs)
+    if ( preferred != "kyzispart" )
+        alwaysActivate = false;
+
+    KTextEditor::Editor *editorpart =
+        dynamic_cast<KTextEditor::Editor*>(multiBuffer->createPart( "text/plain",
+            "KTextEditor/Document",
+            alwaysActivate | activate ?
+            "KTextEditor::Editor" : "KTextEditor::Document",
+            preferred
+            ));
+
+    if ( url.isValid() )
+        editorpart->openURL( url );
+
+    multiBuffer->registerURL( url, editorpart );
+    multiBuffer->setDelayedActivation( !activate );
+    return editorpart;
 }
 
-void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget* widget, bool isTextEditor, bool activate )
+void PartController::integratePart(KParts::Part *part, const KURL &url, 
+                                   QWidget* widget, bool isTextEditor, 
+                                   bool activate, bool addToCurrentBuffer )
 {
   if (!widget) widget = part->widget();
 
@@ -573,8 +632,8 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
       return; // to avoid later crash
   }
 
-      
-  TopLevel::getInstance()->embedPartView(widget, url.fileName(), url.url());
+  if ( !addToCurrentBuffer )
+    TopLevel::getInstance()->embedPartView(widget, url.fileName(), url.url());
 
   addPart(part, activate);
   
@@ -801,48 +860,51 @@ void PartController::activatePart(KParts::Part *part)
 
 bool PartController::closePart(KParts::Part *part)
 {
-	if ( !part ) return true;
+    KParts::ReadOnlyPart * ro_part = 
+        dynamic_cast<KParts::ReadOnlyPart*>( part );
 
-	if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part ) )
-	{
-		KURL url = ro_part->url();
-		if ( ! ro_part->closeURL() )
-		{
-			return false;
-		}
-		_dirtyDocuments.remove( static_cast<KParts::ReadWritePart*>( ro_part ) );
-		
-		emit closedFile( url );
-//		removeTimestamp( url );
-	}
-	
-  // FIXME correct? relevant?
+    if ( !ro_part ) return true;
 
-  // If we didn't call removePart(), KParts::PartManager::slotObjectDestroyed would
-  // get called from the destroyed signal of the part being deleted below.
-  // The call chain from that looks like this:
-  // QObject::destroyed()
-  //   KParts::PartManager::slotWidgetDestroyed() -> setActivePart() -> activePartChanged()
-  //     TopLevelXXX::createGUI()
-  //       KXMLGUIFactory::removeClient()
-  // But then KXMLGUIFactory tries to remove the already-deleted part.
-  // Normally this would work, because the factory uses a QGuardedPtr to the part.
-  // But the QGuardedPtr is connected to the _same_ destroyed() slot that got us to
-  // that point (slots are called in an undefined order)!
+    KURL url = ro_part->url();
 
-  // Previously, the comment was:
-  // The following line can be removed with kdelibs HEAD! (2002-05-26)
-  //
-  // Now, this is needed for proper functioning, so leave...
-//  removePart( part );
-  TopLevel::getInstance()->main()->guiFactory()->removeClient(part);
+    TopLevel::getInstance()->main()->guiFactory()->removeClient( part );
 
-  if (QWidget* w = EditorProxy::getInstance()->topWidgetForPart(part))
-    TopLevel::getInstance()->removeView(w);
+    if (QWidget* w = EditorProxy::getInstance()->topWidgetForPart( part ) )
+    {
+        if ( MultiBuffer *multiBuffer = dynamic_cast<MultiBuffer*>( w ) )
+        {
+            kdDebug(9000) << "About to delete MultiBuffered document..." 
+                << " numberOfBuffers: " << multiBuffer->numberOfBuffers()
+                << " isActivated: " << multiBuffer->isActivated()
+                << endl;
+            if ( !multiBuffer->closeURL( url ) )
+                return false;
 
-  delete part;
+            if ( multiBuffer->numberOfBuffers() == 0 
+                 || !multiBuffer->isActivated() )
+            {
+                TopLevel::getInstance()->removeView( w );
+                _dirtyDocuments.remove( static_cast<KParts::ReadWritePart*>( ro_part ) );
+                emit closedFile( url );
+/*                kdDebug(9000) << "Deleting Part" << endl;*/
+                delete part;
+/*                kdDebug(9000) << "DeleteLater MultiBuffer" << endl;*/
+                multiBuffer->deleteLater();
+                return true;
+            }
+        }
+        else if ( !ro_part->closeURL() )
+            return false;
+    }
+    else if ( !ro_part->closeURL() )
+        return false;
 
-  return true;
+    _dirtyDocuments.remove( static_cast<KParts::ReadWritePart*>( ro_part ) );
+    emit closedFile( url );
+
+/*    kdDebug(9000) << "Deleting Part" << endl;*/
+    delete part;
+    return true;
 }
 
 
@@ -1613,43 +1675,34 @@ KParts::ReadOnlyPart *PartController::qtDesignerPart()
 	return 0;
 }
 
-void PartController::openEmptyTextDocument()
+KTextEditor::Editor *PartController::openTextDocument( bool activate )
 {
-	KTextEditor::Editor * editorpart = createEditorPart(true);
+    KTextEditor::Editor *editorpart =
+        createEditorPart( activate, false, KURL( i18n("unnamed") ) );
 
-	if ( editorpart )
-	{
-		if ( !m_presetEncoding.isNull() )
-		{
-			KParts::BrowserExtension * extension = KParts::BrowserExtension::childObject( editorpart );
-			if ( extension )
-			{
-				KParts::URLArgs args;
-				args.serviceType = QString( "text/plain;" ) + m_presetEncoding;
-				extension->setURLArgs(args);
-			}
-			m_presetEncoding = QString::null;
-		}
-                
-//		editorpart->openURL( url );
+    if ( editorpart )
+    {
+        if ( !m_presetEncoding.isNull() )
+        {
+            KParts::BrowserExtension * extension = 
+                KParts::BrowserExtension::childObject( editorpart );
+            if ( extension )
+            {
+                KParts::URLArgs args;
+                args.serviceType = QString( "text/plain;" ) + m_presetEncoding;
+                extension->setURLArgs(args);
+            }
+            m_presetEncoding = QString::null;
+        }
 
-		QWidget* widget = editorpart->widget();
-	
-		if (!widget) {
-			// We're being lazy about creating the view, but kmdi _needs_ a widget to
-			// create a tab for it, so use a QWidgetStack subclass instead
-			kdDebug() << k_lineinfo << "Creating Editor wrapper..." << endl;
-			widget = new EditorWrapper(static_cast<KTextEditor::Document*>(editorpart), true, TopLevel::getInstance()->main());
-		}
+        QWidget * widget = 
+            EditorProxy::getInstance()->topWidgetForPart( editorpart );
 
-		addHistoryEntry();
-		integratePart(editorpart, KURL(i18n("unnamed")), widget, true, true);
+        addHistoryEntry();
+        integratePart(editorpart, KURL(i18n("unnamed")), widget, true, true);
 
-		EditorProxy::getInstance()->setLineNumber(editorpart, 0, 0);
-		
-//		m_openRecentAction->addURL( url );
-//		m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
-	}
+        EditorProxy::getInstance()->setLineNumber(editorpart, 0, 0);
+    }
 }
 
 #include "partcontroller.moc"

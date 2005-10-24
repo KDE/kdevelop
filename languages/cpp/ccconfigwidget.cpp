@@ -51,6 +51,7 @@
 #include "qtbuildconfig.h"
 #include "cppsupportpart.h"
 #include "cppcodecompletionconfig.h"
+#include "cppsplitheadersourceconfig.h"
 #include "createpcsdialog.h"
 #include "creategettersetterconfiguration.h"
 
@@ -70,6 +71,7 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
 	initQtTab();
 	initCodeCompletionTab( );
 	initGetterSetterTab( );
+	initSplitTab();
 	inputCodeCompletion->setRange( 0, 2000, 100, false );
 	inputArgumentsHint->setRange( 0, 2000, 100, false );
 }
@@ -98,6 +100,7 @@ void CCConfigWidget::accept( )
 	saveQtTab();
 	saveCodeCompletionTab();
 	saveGetterSetterTab();
+	saveSplitTab();
 }
 
 void CCConfigWidget::saveFileTemplatesTab( )
@@ -171,6 +174,12 @@ void CCConfigWidget::slotNewPCS( )
 	CreatePCSDialog dlg( m_pPart, m_pPart->mainWindow() ->main() );
 	dlg.importerListView->setFocus();
 	dlg.exec();
+}
+
+void CCConfigWidget::slotEnableSplit( bool b )
+{
+	m_splitSync->setEnabled( b );
+	m_splitOrientationBox->setEnabled( b );
 }
 
 void CCConfigWidget::slotRemovePCS()
@@ -314,6 +323,39 @@ void CCConfigWidget::saveGetterSetterTab( )
 	config->setPrefixSet( m_edtSet->text() );
 	config->setPrefixVariable( QStringList::split( ",", m_edtRemovePrefix->text().replace( " ", "" ) ) );
 	config->setParameterName( m_edtParameterName->text() );
+	config->store();
+}
+
+void CCConfigWidget::initSplitTab( )
+{
+	CppSplitHeaderSourceConfig * config = m_pPart->splitHeaderSourceConfig();
+	
+	if ( config == 0 )
+		return ;
+	
+	m_splitEnable->setChecked( config->splitEnabled() );
+	m_splitSync->setChecked( config->autoSync() );
+	
+	QString o = config->orientation();
+	m_splitVertical->setChecked( o == "Vertical" );
+	m_splitHorizontal->setChecked( o == "Horizontal" );
+}
+
+void CCConfigWidget::saveSplitTab( )
+{
+	CppSplitHeaderSourceConfig * config = m_pPart->splitHeaderSourceConfig();
+	
+	if ( config == 0 )
+		return ;
+	
+	config->setSplitEnable( m_splitEnable->isChecked() );
+	config->setAutoSync( m_splitSync->isChecked() );
+	
+	if ( m_splitVertical->isChecked() )
+		config->setOrientation( "Vertical" );
+	else if ( m_splitHorizontal->isChecked() )
+		config->setOrientation( "Horizontal" );
+	
 	config->store();
 }
 

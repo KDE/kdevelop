@@ -53,7 +53,10 @@ public:
   
   void setEncoding(const QString &encoding);
   void editDocument(const KURL &inputUrl, int lineNum=-1, int col=-1);
-  void editDocumentInternal(const KURL &inputUrl, int lineNum=-1, int col=-1, bool activate = true);
+  void splitCurrentDocument(const KURL &inputUrl, int lineNum=-1, int col=-1);
+  void scrollToLineColumn(const KURL &url, int lineNum=-1, int col=-1);
+  void editDocumentInternal(const KURL &inputUrl, int lineNum=-1, int col=-1, 
+                            bool activate = true, bool addToCurrentBuffer = false );
   void integrateTextEditorPart(KTextEditor::Document* doc);
   
   void showDocument(const KURL &url, bool newWin = false);
@@ -90,7 +93,10 @@ public:
   bool closeAllOthers( const KURL & );
   void reloadFile( const KURL & url );
   
-  void openEmptyTextDocument();
+  KTextEditor::Editor *openTextDocument( bool activate = true );
+  KParts::Factory *findPartFactory(const QString &mimeType, 
+                                   const QString &partType, 
+                                   const QString &preferredName = QString::null );
 
 public slots:
 
@@ -147,10 +153,13 @@ private:
   
   void doEmitState( KURL const & );
 
-  KParts::Factory *findPartFactory(const QString &mimeType, const QString &partType, const QString &preferredName = QString::null );
-  KTextEditor::Editor * createEditorPart(bool activate);
+  KTextEditor::Editor * createEditorPart( bool activate, 
+                                          bool addToCurrentBuffer = false,
+                                          const KURL &url = KURL() );
 
-  void integratePart(KParts::Part *part, const KURL &url, QWidget* widget = 0, bool isTextEditor=false, bool activate=true );
+  void integratePart(KParts::Part *part, const KURL &url, QWidget* widget = 0, 
+                       bool isTextEditor=false, bool activate=true, 
+                       bool addToCurrentBuffer = false );
 
   // returns a list of modified documents
   KURL::List modifiedDocuments();

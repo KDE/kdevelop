@@ -16,7 +16,8 @@ libkdevshell_la_SOURCES = api.cpp core.cpp documentationpart.cpp \
 	editorproxy.cpp generalinfowidget.cpp languageselectwidget.cpp mainwindowshare.cpp \
 	newmainwindow.cpp partcontroller.cpp partselectwidget.cpp plugincontroller.cpp \
 	projectmanager.cpp projectsession.cpp splashscreen.cpp statusbar.cpp toplevel.cpp \
-	generalinfowidgetbase.ui mimewarningdialog.ui shellextension.cpp simplemainwindow.cpp
+	generalinfowidgetbase.ui mimewarningdialog.ui shellextension.cpp simplemainwindow.cpp \
+	multibuffer.cpp
 
 bin_PROGRAMS = kdevelop kdevassistant
 
@@ -46,7 +47,8 @@ shellinclude_HEADERS = api.h core.h documentationpart.h editorproxy.h\
 	newmainwindow.h partcontroller.h partselectwidget.h plugincontroller.h\
 	projectmanager.h projectsession.h shellextension.h\
 	splashscreen.h statusbar.h toplevel.h generalinfowidgetbase.h\
-	mimewarningdialog.h settingswidget.h simplemainwindow.h
+	mimewarningdialog.h settingswidget.h simplemainwindow.h \
+	multibuffer.h
 
 DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevutil kdevinterfaces kdevextensions
 DOXYGEN_PROJECTNAME = KDevelop Generic Shell

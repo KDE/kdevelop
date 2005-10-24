@@ -73,6 +73,20 @@ public:
     @param col The column number to place the cursor at, if applicable.*/
     virtual void editDocument(const KURL &url, int lineNum=-1, int col=-1) = 0;
     
+    /**Opens a new or existing document by splitting the view with the current,
+    if applicable. Offers split views of source code and header files for instance.
+    @param url The URL of the document to open.
+    @param lineNum The line number to place the cursor at, if applicable.
+    @param col The column number to place the cursor at, if applicable.*/
+    virtual void splitCurrentDocument(const KURL &url, int lineNum=-1, int col=-1) = 0;
+    
+    /**Scrolls the viewport of the already opened document to the specified line
+    and column if applicable, but does not give focus to the document.
+    @param url The URL of the already opened document.
+    @param lineNum The line number to place the cursor at, if applicable.
+    @param col The column number to place the cursor at, if applicable.*/
+    virtual void scrollToLineColumn(const KURL &url, int lineNum=-1, int col=-1) = 0;
+    
     /**Shows a HTML document in the documentation viewer.
     @param url The URL of the document to view.
     @param newWin If true, the new window will be created instead of using current.*/

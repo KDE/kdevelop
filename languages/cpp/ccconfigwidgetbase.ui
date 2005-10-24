@@ -837,6 +837,131 @@
                     </spacer>
                 </grid>
             </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Split &amp;View</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout7</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_splitEnable</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>E&amp;nable split of Header/Source files</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+N</string>
+                                </property>
+                            </widget>
+                            <widget class="QButtonGroup">
+                                <property name="name">
+                                    <cstring>m_splitOrientationBox</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="title">
+                                    <string>Orientation</string>
+                                </property>
+                                <property name="exclusive">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Select which Qt version your project is using.</string>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_splitVertical</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Ve&amp;rtical</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+R</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select this if your project is using Qt version 3.x.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_splitHorizontal</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Hori&amp;zontal</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+Z</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select this if your project is using Qt version 4.x.</string>
+                                        </property>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout6</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_splitSync</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="text">
+                                    <string>Automatic S&amp;ynchronize</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+Y</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer12_2_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>170</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
         </widget>
     </vbox>
 </widget>
@@ -903,6 +1028,12 @@
         <receiver>CCConfigWidgetBase</receiver>
         <slot>slotToogleQtUsed()</slot>
     </connection>
+    <connection>
+        <sender>m_splitEnable</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>slotEnableSplit(bool)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>interface_suffix</tabstop>
@@ -935,6 +1066,7 @@
     <slot access="protected">slotGetterSetterValuesChanged()</slot>
     <slot access="protected">slotRemovePCS()</slot>
     <slot>slotToogleQtUsed()</slot>
+    <slot access="protected">slotEnableSplit( bool )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>

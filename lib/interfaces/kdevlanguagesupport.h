@@ -125,6 +125,17 @@ public:
     /**The opposite of @ref formatClassName. Reverts formatting.
     @param name Class name.*/
     virtual QString unformatClassName(const QString &name);
+    
+    /**Determines whether the document should be opened in a split view.  The 
+    language part can determine this internally and then set the active document 
+    and if so, set the active document so that the newly opened one will be split
+    with it.
+    @param name URL of the document in question.*/
+    virtual bool shouldSplitDocument( const KURL &url );
+    
+    /**Returns the language parts Split View orientation.
+    By default Qt::Vertical.*/
+    virtual Qt::Orientation splitOrientation() const;
 
     /**Opens a "New class" dialog and adds the configured class to the sources.
     Define NewClass feature if you reimplement this method.*/
@@ -241,6 +252,9 @@ signals:
 
     /**Emitted when a file has been added to the memory symbol store.*/
     void addedSourceInfo( const QString& fileName );
+
+    /**Emitted when the language part changes the Split View orientation.*/
+    void splitOrientationChanged( Qt::Orientation orientation );
 };
 
 #endif

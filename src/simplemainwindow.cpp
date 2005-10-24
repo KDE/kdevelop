@@ -206,6 +206,9 @@ void SimpleMainWindow::saveSettings( )
     saveMainWindowSettings(config, "SimpleMainWindow");
 }
 
+void SimpleMainWindow::showTabs( bool showTabs )
+{}
+
 KMainWindow *SimpleMainWindow::main()
 {
     return this;
@@ -520,7 +523,7 @@ void SimpleMainWindow::fillWindowMenu()
 void SimpleMainWindow::slotSplitVertical()
 {
     DTabWidget *tab = splitVertical();
-    PartController::getInstance()->openEmptyTextDocument();
+    PartController::getInstance()->openTextDocument();
     
     //FIXME: adymo: we can't put another kate view into the tab just added - weird crashes :(
     //more: kdevelop part controller doesn't handle such situation - it assumes the part to
@@ -540,7 +543,7 @@ void SimpleMainWindow::slotSplitVertical()
 void SimpleMainWindow::slotSplitHorizontal()
 {
     DTabWidget *tab = splitHorizontal();
-    PartController::getInstance()->openEmptyTextDocument();
+    PartController::getInstance()->openTextDocument();
 }
 
 void SimpleMainWindow::closeTab(QWidget *w)

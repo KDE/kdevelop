@@ -55,6 +55,7 @@ public:
   void lowerView(QWidget *view);
 
   void loadSettings();
+  void showTabs( bool showTabs );
 
   /** Reimplemented from KMdiChildView to handle save prompt */
   virtual void childWindowCloseRequest( KMdiChildView * );

@@ -702,6 +702,13 @@ void NewMainWindow::loadSettings() {
     applyMainWindowSettings(config, "Mainwindow");
 }
 
+void NewMainWindow::showTabs( bool viewTabs )
+{
+    if ( viewTabs )
+        setTabWidgetVisibility( KMdi::AlwaysShowTabs );
+    else
+        setTabWidgetVisibility( KMdi::NeverShowTabs );
+}
 
 void NewMainWindow::saveSettings()
 {

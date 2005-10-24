@@ -30,6 +30,7 @@
 #include "cpp_tags.h"
 #include "kdevdriver.h"
 #include "cppcodecompletionconfig.h"
+#include "cppsplitheadersourceconfig.h"
 #include "tag_creator.h"
 #include "cppsupport_utils.h"
 #include "classgeneratorconfig.h"
@@ -153,8 +154,11 @@ m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 	setInstance( CppSupportFactory::instance() );
 	
 	m_pCompletionConfig = new CppCodeCompletionConfig( this, projectDom() );
-	m_pCreateGetterSetterConfiguration = new CreateGetterSetterConfiguration( this );
-	connect( m_pCompletionConfig, SIGNAL( stored() ), this, SLOT( codeCompletionConfigStored() ) );
+	m_pSplitHeaderSourceConfig = new CppSplitHeaderSourceConfig( this, projectDom() );
+	m_pCreateGetterSetterConfiguration = new CreateGetterSetterConfiguration( this );	connect( m_pSplitHeaderSourceConfig, SIGNAL( stored() ), 
+		this, SLOT( splitHeaderSourceConfigStored() ) );
+	connect( m_pCompletionConfig, SIGNAL( stored() ), 
+	         this, SLOT( codeCompletionConfigStored() ) );
 	m_qtBuildConfig = new QtBuildConfig( this, projectDom() );
 	
 	m_driver = new CppDriver( this );
@@ -787,14 +791,24 @@ QString CppSupportPart::findSourceFile()
 	return m_activeFileName;
 }
 
-QString CppSupportPart::sourceOrHeaderCandidate()
+QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 {
-	KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( partController() ->activePart() );
-	if ( !doc )
-		return QString::null;
+	QString urlPath;
+	if ( url.isEmpty() )
+	{
+		KTextEditor::Document * doc = 
+			dynamic_cast<KTextEditor::Document*>( partController() ->activePart() );
+		if ( !doc )
+			return QString::null;
+		urlPath = doc->url().path();
+	}
+	else
+	{
+		urlPath = url.path();
+	}
 	
 	// get the path of the currently active document
-	QFileInfo fi( doc->url().path() );
+	QFileInfo fi( urlPath );
 	QString path = fi.filePath();
 	// extract the exension
 	QString ext = fi.extension();
@@ -852,7 +866,7 @@ QString CppSupportPart::sourceOrHeaderCandidate()
 	return QString::null;
 }
 
-void CppSupportPart::slotSwitchHeader()
+void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 {
 	QString candidate = sourceOrHeaderCandidate();
 	if ( candidate == QString::null )
@@ -900,7 +914,12 @@ void CppSupportPart::slotSwitchHeader()
 							( *it_def ) ->getStartPosition( &line, &column );
 							KURL url;
 							url.setPath( candidate );
-							partController() ->editDocument( url, line );
+							if ( scrollOnly )
+								partController() ->scrollToLineColumn( url, line );
+							else if ( !splitHeaderSourceConfig()->splitEnabled() )
+								partController() ->editDocument( url, line );
+							else
+								partController() ->splitCurrentDocument( url, line );
 							return ;
 						}
 					}
@@ -936,7 +955,12 @@ void CppSupportPart::slotSwitchHeader()
 							( *it_decl ) ->getStartPosition( &line, &column );
 							KURL url;
 							url.setPath( candidate );
-							partController() ->editDocument( url, line );
+							if ( scrollOnly )
+								partController() ->scrollToLineColumn( url, line );
+							else if ( !splitHeaderSourceConfig()->splitEnabled() )
+								partController() ->editDocument( url, line );
+							else
+								partController() ->splitCurrentDocument( url, line );
 							return ;
 						}
 					}
@@ -950,7 +974,13 @@ void CppSupportPart::slotSwitchHeader()
 	// last chance
 	KURL url;
 	url.setPath( candidate );
-	partController() ->editDocument( url );
+	
+	if ( scrollOnly )
+		return;
+	else if ( !splitHeaderSourceConfig()->splitEnabled() )
+		partController() ->editDocument( url );
+	else
+		partController() ->splitCurrentDocument( url );
 }
 
 void CppSupportPart::slotGotoIncludeFile()
@@ -979,6 +1009,42 @@ QString CppSupportPart::unformatClassName( const QString &name )
 {
 	QString n = name;
 	return n.replace( "::", "." );
+}
+
+bool CppSupportPart::shouldSplitDocument(const KURL &url)
+{
+	if ( !splitHeaderSourceConfig()->splitEnabled() )
+		return false;
+	
+	KURL::List list = partController()->openURLs();
+	KURL::List::ConstIterator it = list.begin();
+	while ( it != list.end() )
+	{
+		QString candidate = sourceOrHeaderCandidate( ( *it ) );
+		if ( candidate.isEmpty() )
+			continue;
+		
+		KURL urlCandidate;
+		urlCandidate.setPath( candidate );
+		if ( url == urlCandidate )
+		{
+			// It is already open, so switch to it so 
+			// our split view will open with it
+			partController() ->editDocument( ( *it ) );
+			return true;
+		}
+		++it;
+	}
+	return false;
+}
+
+Qt::Orientation CppSupportPart::splitOrientation() const
+{
+	QString o = splitHeaderSourceConfig()->orientation();
+	if ( o == "Vertical" )
+		return Qt::Vertical;
+	else
+		return Qt::Horizontal;
 }
 
 void CppSupportPart::slotNewClass()
@@ -1552,6 +1618,15 @@ void CppSupportPart::codeCompletionConfigStored( )
 	partController() ->setActivePart( partController() ->activePart() );
 }
 
+void CppSupportPart::splitHeaderSourceConfigStored( )
+{
+	QString o = splitHeaderSourceConfig()->orientation();
+	if ( o == "Vertical" )
+		emit splitOrientationChanged( Qt::Vertical );
+	else if ( o == "Horizontal" )
+		emit splitOrientationChanged( Qt::Horizontal );
+}
+
 void CppSupportPart::removeWithReferences( const QString & fileName )
 {
 kdDebug( 9007 ) << "remove with references: " << fileName << endl;
@@ -1950,6 +2025,9 @@ FunctionDefinitionDom CppSupportPart::functionDefinitionAt( FunctionDefinitionDo
 void CppSupportPart::slotCursorPositionChanged()
 {
 	//    m_functionHintTimer->changeInterval( 1000 );
+	if ( splitHeaderSourceConfig()->splitEnabled() 
+	     && splitHeaderSourceConfig()->autoSync() )
+		slotSwitchHeader( true );
 }
 
 void CppSupportPart::slotFunctionHint( )

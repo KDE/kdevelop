@@ -1,10 +1,3 @@
-// Ewww... need this to access KParts::Part::setWidget(), so that kdevelop
-// doesn't need to be rearchitected for multiple views before the lazy view
-// creation can go in
-#define protected public
-#include <kparts/part.h>
-#undef protected
-
 #include <qwidget.h>
 #include <qpopupmenu.h>
 #include <qtimer.h>
@@ -14,6 +7,8 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kmdidefines.h>
+
+#include <kparts/part.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -33,10 +28,9 @@
 #include "partcontroller.h"
 #include "core.h"
 #include "newmainwindow.h"
-
+#include "multibuffer.h"
 
 #include "editorproxy.h"
-
 
 using namespace KTextEditor;
 
@@ -77,15 +71,16 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
   if ( lineNum < 0 )
     return;
 
+  KURL url = dynamic_cast<KParts::ReadOnlyPart*>( part )->url();
+
   ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>(part->widget());
   if (iface)
     iface->setCursorPositionReal(lineNum, col == -1 ? 0 : col);
   else {
     // Save the position for a rainy day (or when the view gets activated and wants its position)
-    for (QValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
-      if ((*it)->document() == part) {
-        (*it)->setLine(lineNum);
-        (*it)->setCol(col);
+    for (QValueList<MultiBuffer*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
+        if ((*it)->hasURL( url )) {
+            (*it)->registerDelayedActivation( part, lineNum, col );
         return;
       }
 
@@ -279,93 +274,16 @@ void EditorProxy::showPopup( )
 			popup->exec( view->mapToGlobal( iface->cursorCoordinates() ) );
 		}
 	}
-
 }
 
-void EditorProxy::registerEditor(EditorWrapper* wrapper)
+void EditorProxy::registerEditor(MultiBuffer* wrapper)
 {
   m_editorParts.append(wrapper);
 }
 
-void EditorProxy::deregisterEditor(EditorWrapper* wrapper)
+void EditorProxy::deregisterEditor(MultiBuffer* wrapper)
 {
   m_editorParts.remove(wrapper);
-}
-
-EditorWrapper::EditorWrapper(KTextEditor::Document* editor, bool activate, QWidget* parent, const char* name)
-  : QWidgetStack(parent, name)
-  , m_doc(editor)
-  , m_view(0L)
-  , m_line(0)
-  , m_col(0)
-  , m_first(!activate && EditorProxy::getInstance()->isDelayedViewCapable())
-{
-  EditorProxy::getInstance()->registerEditor(this);
-}
-
-EditorWrapper::~EditorWrapper()
-{
-  kdDebug() << k_funcinfo << this << endl;
-  EditorProxy::getInstance()->deregisterEditor(this);
-}
-
-KTextEditor::Document* EditorWrapper::document() const
-{
-  return m_doc;
-}
-
-void EditorWrapper::setLine(int line)
-{
-  m_line = line;
-}
-
-void EditorWrapper::setCol(int col)
-{
-  m_col = col;
-}
-
-void EditorWrapper::show()
-{
-  if ( !m_doc ) {
-    QWidgetStack::show();
-    return;
-  }
-
-  if (m_first) {
-    m_first = false;
-    QWidgetStack::show();
-    return;
-  }
-
-  if (m_doc->widget()) {
-    QWidgetStack::show();
-    return;
-  }
-
-  m_view = m_doc->createView(this);
-
-  addWidget(m_view);
-
-  m_doc->setWidget(m_view);
-  // FIXME assumption check
-  // We're managing the view deletion by being its parent, don't let the part self-destruct
-  disconnect( m_view, SIGNAL( destroyed() ), m_doc, SLOT( slotWidgetDestroyed() ) );
-  //connect( m_view, SIGNAL( destroyed() ), this, SLOT( deleteLater() ) );
-
-  m_doc->insertChildClient(m_view);
-
-  PartController::getInstance()->integrateTextEditorPart(m_doc);
-
-  ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>(static_cast<KTextEditor::View*>(m_view));
-  if (iface) {
-    iface->setCursorPositionReal(m_line, m_col == -1 ? 0 : m_col);
-
-  } else {
-    // Shouldn't get here
-    Q_ASSERT(false);
-  }
-
-  QWidgetStack::show();
 }
 
 QWidget * EditorProxy::widgetForPart( KParts::Part * part )
@@ -374,9 +292,11 @@ QWidget * EditorProxy::widgetForPart( KParts::Part * part )
 
 	if (part->widget())
 		return part->widget();
-
-	for (QValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
-		if ((*it)->document() == part)
+    
+    KURL url = dynamic_cast<KParts::ReadOnlyPart*>( part )->url();
+    
+    for (QValueList<MultiBuffer*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
+        if ((*it)->hasURL( url ))
 			return *it;
 
 	return 0L;
@@ -385,9 +305,11 @@ QWidget * EditorProxy::widgetForPart( KParts::Part * part )
 QWidget * EditorProxy::topWidgetForPart( KParts::Part * part )
 {
 	if ( !part ) return 0;
-
-	for (QValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
-		if ((*it)->document() == part)
+    
+    KURL url = dynamic_cast<KParts::ReadOnlyPart*>( part )->url();
+    
+    for (QValueList<MultiBuffer*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
+        if ((*it)->hasURL( url ))
 			return *it;
 
 	if (part->widget())
@@ -399,12 +321,6 @@ QWidget * EditorProxy::topWidgetForPart( KParts::Part * part )
 bool EditorProxy::isDelayedViewCapable( )
 {
 	return m_delayedViewCreationCompatibleUI;
-}
-
-void EditorWrapper::focusInEvent( QFocusEvent * ev )
-{
-	if (visibleWidget())
-		visibleWidget()->setFocus();
 }
 
 #include "editorproxy.moc"

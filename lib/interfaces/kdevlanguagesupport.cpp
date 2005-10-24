@@ -63,6 +63,16 @@ QString KDevLanguageSupport::unformatClassName(const QString &name)
     return name;
 }
 
+bool KDevLanguageSupport::shouldSplitDocument(const KURL &url)
+{
+    return false;
+}
+
+Qt::Orientation KDevLanguageSupport::splitOrientation() const
+{
+    return Qt::Vertical;
+}
+
 void KDevLanguageSupport::addClass()
 {
 }

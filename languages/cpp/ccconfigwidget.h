@@ -29,7 +29,8 @@ public:
 
 public slots:
 	void accept( );
-	void slotNewPCS();
+    void slotNewPCS();
+    void slotEnableSplit( bool b );
 
 protected slots:
 	void slotGetterSetterValuesChanged();
@@ -52,6 +53,9 @@ private:
 
 	void initGetterSetterTab();
 	void saveGetterSetterTab();
+    
+    void initSplitTab();
+    void saveSplitTab();
 
 private:
 	CppSupportPart* m_pPart;

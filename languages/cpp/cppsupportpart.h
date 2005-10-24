@@ -32,6 +32,7 @@
 class Context;
 class CppCodeCompletion;
 class CppCodeCompletionConfig;
+class CppSplitHeaderSourceConfig;
 class CreateGetterSetterConfiguration;
 class QtBuildConfig;
 class ProblemReporter;
@@ -77,25 +78,28 @@ public:
 	// @fixme - isValid is used to avoid using the problem reporter
 	// when a project is first parsed. This because the problem reporter
 	// is currently a great slowdown for large projects (see bug #73671)
-	ProblemReporter* problemReporter()
+    ProblemReporter* problemReporter() const
 	{
 		return isValid() ? static_cast<ProblemReporter *>( m_problemReporter ) : 0;
 	}
 
-	BackgroundParser* backgroundParser()
+    BackgroundParser* backgroundParser() const
 	{
 		return m_backgroundParser;
 	}
-	CppCodeCompletion* codeCompletion()
+    CppCodeCompletion* codeCompletion() const
 	{
 		return m_pCompletion;
 	}
-	CppCodeCompletionConfig* codeCompletionConfig()
+    CppCodeCompletionConfig* codeCompletionConfig() const
 	{
 		return m_pCompletionConfig;
 	}
-
-	CreateGetterSetterConfiguration* createGetterSetterConfiguration()
+    CppSplitHeaderSourceConfig* splitHeaderSourceConfig() const
+    {
+        return m_pSplitHeaderSourceConfig;
+    }
+    CreateGetterSetterConfiguration* createGetterSetterConfiguration() const
 	{
 		return m_pCreateGetterSetterConfiguration;
 	}
@@ -106,7 +110,7 @@ public:
 	*/
 	inline QtBuildConfig* qtBuildConfig() const { return m_qtBuildConfig; }
 
-	const QPtrList<Catalog>& catalogList()
+    const QPtrList<Catalog>& catalogList() const
 	{
 		return m_catalogList;
 	}
@@ -167,6 +171,8 @@ protected:
 	virtual KMimeType::List mimeTypes();
 	virtual QString formatClassName( const QString &name );
 	virtual QString unformatClassName( const QString &name );
+    virtual bool shouldSplitDocument( const KURL &url );
+    virtual Qt::Orientation splitOrientation() const;
 	virtual void addMethod( ClassDom klass );
 	virtual void addAttribute( ClassDom klass );
 
@@ -184,10 +190,11 @@ private slots:
 	void changedFilesInProject( const QStringList & fileList );
 	void slotProjectCompiled();
 	void setupCatalog();
-	void codeCompletionConfigStored();
+    void codeCompletionConfigStored();
+    void splitHeaderSourceConfigStored();
 	void recomputeCodeModel( const QString& fileName );
 	void slotNewClass();
-	void slotSwitchHeader();
+	void slotSwitchHeader( bool scrollOnly = false );
 	void slotGotoIncludeFile();
 	void slotCompleteText();
 	void slotMakeMember();
@@ -256,7 +263,7 @@ private:
 
 	void MakeMemberHelper( QString& text, int& atline, int& atcol );
 
-	QString sourceOrHeaderCandidate();
+    QString sourceOrHeaderCandidate( const KURL &url = KURL() );
 
 	QStringList modifiedFileList();
 	QString findSourceFile();
@@ -269,6 +276,7 @@ private:
 
 	CppCodeCompletion* m_pCompletion;
 	CppCodeCompletionConfig* m_pCompletionConfig;
+    CppSplitHeaderSourceConfig* m_pSplitHeaderSourceConfig;
 
 	CreateGetterSetterConfiguration* m_pCreateGetterSetterConfiguration;
 	class KAction* m_createGetterSetterAction;

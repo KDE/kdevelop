@@ -51,6 +51,7 @@ public:
 
     virtual void loadSettings();
     virtual void saveSettings();
+    virtual void showTabs( bool showTabs );
     
     virtual KMainWindow *main();
     
