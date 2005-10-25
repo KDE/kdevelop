@@ -666,10 +666,6 @@ void DebuggerPart::setupController()
     // controller -> viewerWidget
     connect( controller, SIGNAL(dbgStatus(const QString&, int)),
              viewerWidget, SLOT(slotDebuggerState(const QString&, int)));
-
-    // gdbBreakpointWidget -> disassembleWidget
-    connect( gdbBreakpointWidget,   SIGNAL(publishBPState(const Breakpoint&)),
-             disassembleWidget,     SLOT(slotBPState(const Breakpoint &)));
 }
 
 

@@ -75,14 +75,6 @@ bool DisassembleWidget::displayCurrent()
 
 /***************************************************************************/
 
-void DisassembleWidget::slotBPState(const Breakpoint&)
-{
-    if (!active_)
-        return;
-}
-
-/***************************************************************************/
-
 void DisassembleWidget::slotDisassemble(char *buf)
 {
     if (!active_)
