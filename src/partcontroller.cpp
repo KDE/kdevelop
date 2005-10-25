@@ -332,17 +332,22 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
     
     if ( !addToCurrentBuffer )
     {
-        // Let the language part override the addToCurrentBuffer flag 
-        // if it decides to...
-        addToCurrentBuffer =
-            API::getInstance()->languageSupport()->shouldSplitDocument( inputUrl );
-
-        if ( addToCurrentBuffer )
+        if ( KDevLanguageSupport *lang =
+             API::getInstance()->languageSupport() )
         {
-            kdDebug(9000) << "languagePart() insists addToCurrentBuffer = true" << endl;
-            // Set activate = true, otherwise we have hard to fix multi-buffer 
-            // delayed activation.  I'll re-look at this later...
-            activate = true;
+            // Let the language part override the addToCurrentBuffer flag 
+            // if it decides to...
+            addToCurrentBuffer = lang->shouldSplitDocument( inputUrl );
+    
+            if ( addToCurrentBuffer )
+            {
+                kdDebug(9000) << 
+                    "languagePart() insists addToCurrentBuffer = true" << endl;
+                // Set activate = true, otherwise we have hard to fix 
+                // multi-buffer delayed activation.  
+                // I'll re-look at this later...
+                activate = true;
+            }
         }
     }
     

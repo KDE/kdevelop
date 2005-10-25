@@ -53,10 +53,17 @@ MultiBuffer::MultiBuffer( QWidget *parent )
         m_activeBuffer( 0 )
 {
     EditorProxy::getInstance() ->registerEditor( this );
-    KDevLanguageSupport *language = API::getInstance() ->languageSupport();
-    setOrientation( language->splitOrientation() );
-    connect( language, SIGNAL( splitOrientationChanged( Qt::Orientation ) ),
-             this, SLOT( setOrientation( Qt::Orientation ) ) );
+    if ( KDevLanguageSupport *lang = 
+         API::getInstance() ->languageSupport() )
+    {
+        setOrientation( lang->splitOrientation() );
+        connect( lang, SIGNAL( splitOrientationChanged( Qt::Orientation ) ),
+                 this, SLOT( setOrientation( Qt::Orientation ) ) );
+    }
+    else
+    {
+        setOrientation( Qt::Vertical );
+    }
 }
 
 MultiBuffer::~MultiBuffer()
