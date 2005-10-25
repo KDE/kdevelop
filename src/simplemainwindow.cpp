@@ -206,7 +206,7 @@ void SimpleMainWindow::saveSettings( )
     saveMainWindowSettings(config, "SimpleMainWindow");
 }
 
-void SimpleMainWindow::showTabs( bool showTabs )
+void SimpleMainWindow::setCurrentDocumentCaption( const QString &caption )
 {}
 
 KMainWindow *SimpleMainWindow::main()

@@ -238,6 +238,7 @@ void ProjectviewPart::init()
   // create the toolview
   m_widget = new QWidget(0, "filelist widget");
   m_widget->setIcon( SmallIcon(info()->icon()) );
+  m_widget->setCaption(i18n("File List"));
   
   QBoxLayout * l = new QVBoxLayout(m_widget);
   

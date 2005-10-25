@@ -51,7 +51,7 @@ public:
 
     virtual void loadSettings();
     virtual void saveSettings();
-    virtual void showTabs( bool showTabs );
+    virtual void setCurrentDocumentCaption( const QString &caption );
     
     virtual KMainWindow *main();
     

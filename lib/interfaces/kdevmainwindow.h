@@ -84,9 +84,9 @@ public:
     /**Loads main window settings.*/
     virtual void loadSettings() = 0;
 
-    /**Sets whether to show the tab bar.
-    @param showTabs true if tabs to be shown, false if not.*/
-    virtual void showTabs( bool showTabs ) = 0;
+    /**Sets the current document's caption, if applicable.
+    @param caption the caption to set.*/
+    virtual void setCurrentDocumentCaption( const QString &caption ) = 0;
 
     /**@return KMainWindow object which actually represents the main window.*/
     virtual KMainWindow *main() = 0;

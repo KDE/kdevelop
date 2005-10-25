@@ -585,7 +585,6 @@ KTextEditor::Editor * PartController::createEditorPart( bool activate,
             dynamic_cast<MultiBuffer*>(
                     EditorProxy::getInstance()->topWidgetForPart( activePart() )
                                       );
-        TopLevel::getInstance() ->showTabs( false );
     }
     if ( !multiBuffer )
     {
@@ -886,10 +885,20 @@ bool PartController::closePart(KParts::Part *part)
                 TopLevel::getInstance()->removeView( w );
                 _dirtyDocuments.remove( static_cast<KParts::ReadWritePart*>( ro_part ) );
                 emit closedFile( url );
-/*                kdDebug(9000) << "Deleting Part" << endl;*/
+/*                kdDebug(9000) << "Deleting MultiBuffer Part" << endl;*/
                 delete part;
-/*                kdDebug(9000) << "DeleteLater MultiBuffer" << endl;*/
+/*                kdDebug(9000) << "DeleteLater Actual MultiBuffer" << endl;*/
                 multiBuffer->deleteLater();
+                return true;
+            }
+            else
+            {
+/*                kdDebug(9000) << "Deleting MultiBuffer Part" << endl;*/
+                _dirtyDocuments.remove( static_cast<KParts::ReadWritePart*>( ro_part ) );
+                emit closedFile( url );
+                delete part;
+                // Switch to a remaining buffer
+                setActivePart( multiBuffer->activeBuffer() );
                 return true;
             }
         }
@@ -902,7 +911,7 @@ bool PartController::closePart(KParts::Part *part)
     _dirtyDocuments.remove( static_cast<KParts::ReadWritePart*>( ro_part ) );
     emit closedFile( url );
 
-/*    kdDebug(9000) << "Deleting Part" << endl;*/
+/*    kdDebug(9000) << "Deleting Regular Part" << endl;*/
     delete part;
     return true;
 }
@@ -1238,13 +1247,25 @@ bool PartController::readyToClose()
 	return true;
 }
 
-void PartController::slotActivePartChanged( KParts::Part * )
+void PartController::slotActivePartChanged( KParts::Part *part )
 {
-	kdDebug(9000) << k_funcinfo << endl;
-	
-	updateMenuItems();
+    kdDebug(9000) << k_funcinfo << endl;
 
-	QTimer::singleShot( 100, this, SLOT(slotWaitForFactoryHack()) );
+    updateMenuItems();
+
+    QTimer::singleShot( 100, this, SLOT(slotWaitForFactoryHack()) );
+
+    if ( MultiBuffer *multiBuffer = 
+         dynamic_cast<MultiBuffer*>(
+            EditorProxy::getInstance()->topWidgetForPart( part ) ) 
+       )
+    {
+        KURL url = dynamic_cast<KParts::ReadOnlyPart*>( part )->url();
+        multiBuffer->activePartChanged( url );
+        // Really unfortunate, but the mainWindow relies upon this
+        // to set the tab's icon
+        emit documentChangedState( url, documentState( url ) );
+    }
 }
 
 void PartController::slotSwitchTo()

@@ -49,10 +49,11 @@ MultiBuffer::MultiBuffer( QWidget *parent )
         : QSplitter( parent, "MultiBuffer" ),
         m_editorFactory( 0 ),
         m_delayActivate( false ),
-        m_activated( false )
+        m_activated( false ),
+        m_activeBuffer( 0 )
 {
     EditorProxy::getInstance() ->registerEditor( this );
-    KDevLanguageSupport *language = API::getInstance()->languageSupport();
+    KDevLanguageSupport *language = API::getInstance() ->languageSupport();
     setOrientation( language->splitOrientation() );
     connect( language, SIGNAL( splitOrientationChanged( Qt::Orientation ) ),
              this, SLOT( setOrientation( Qt::Orientation ) ) );
@@ -61,6 +62,17 @@ MultiBuffer::MultiBuffer( QWidget *parent )
 MultiBuffer::~MultiBuffer()
 {
     EditorProxy::getInstance() ->deregisterEditor( this );
+}
+
+KParts::Part *MultiBuffer::activeBuffer( ) const
+{
+    if ( m_activeBuffer )
+        return m_activeBuffer;
+    // The active buffer might just been deleted...
+    else if ( m_buffers.begin().data() )
+        return ( m_buffers.begin().data() );
+    else
+        return 0;
 }
 
 bool MultiBuffer::hasURL( const KURL &url ) const
@@ -196,7 +208,7 @@ void MultiBuffer::show()
         KTextEditor::View *view = document->createView( this );
         document->setWidget( view );
 
-        // We're managing the view deletion by being its parent, 
+        // We're managing the view deletion by being its parent,
         // don't let the part self-destruct
         disconnect( view, SIGNAL( destroyed() ),
                     document, SLOT( slotWidgetDestroyed() ) );
@@ -218,8 +230,8 @@ void MultiBuffer::show()
             Q_ASSERT( false );
         }
         view->show();
-        kdDebug(9000) << "Delayed activation of " 
-            << document->url().fileName() << " is now complete." << endl;
+        kdDebug( 9000 ) << "Delayed activation of "
+        << document->url().fileName() << " is now complete." << endl;
     }
 
     m_activated = true;
@@ -229,6 +241,15 @@ void MultiBuffer::show()
 void MultiBuffer::setOrientation( Qt::Orientation orientation )
 {
     QSplitter::setOrientation( orientation );
+}
+
+void MultiBuffer::activePartChanged( const KURL &url )
+{
+    if ( !m_buffers.contains( url ) )
+        return ;
+
+    m_activeBuffer = m_buffers[ url ];
+    TopLevel::getInstance() ->setCurrentDocumentCaption( url.fileName() );
 }
 
 #include "multibuffer.moc"

@@ -65,6 +65,7 @@
 #include "editorproxy.h"
 
 #include "toplevel.h"
+#include "multibuffer.h"
 #include "mainwindowshare.h"
 #include "newmainwindow.h"
 
@@ -229,7 +230,20 @@ void NewMainWindow::tabContext(QWidget* widget,const QPoint & pos)
 		QWidget * top_widget = EditorProxy::getInstance()->topWidgetForPart( part );
 		if ( top_widget && top_widget->parentWidget() == widget)
 		{
-			if( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part))
+    		KParts::ReadOnlyPart * ro_part = 0;
+    		if ( MultiBuffer *multiBuffer = 
+    		     dynamic_cast<MultiBuffer*>( top_widget ) )
+    		{
+        		if ( multiBuffer->numberOfBuffers() > 1 )
+            		ro_part = dynamic_cast<KParts::ReadOnlyPart*>(multiBuffer->activeBuffer());
+    		}
+    		
+    		if( !ro_part )
+    		{
+        		ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
+    		}
+    		
+    		if( ro_part )
 			{
 				m_currentTabURL = ro_part->url();
 
@@ -492,6 +506,9 @@ void NewMainWindow::embedPartView(QWidget *view, const QString &name, const QStr
         if (tabWidget()->count() > 0)
             tabIndex = tabWidget()->currentPageIndex() + 1;
     addWindow(child, mdiFlags, tabIndex);
+
+    if ( mdiMode() == KMdi::ToplevelMode )
+        PartController::getInstance()->addManagedTopLevelWidget( child );
 }
 
 void NewMainWindow::embedSelectView(QWidget *view, const QString &name, const QString &toolTip)
@@ -702,12 +719,33 @@ void NewMainWindow::loadSettings() {
     applyMainWindowSettings(config, "Mainwindow");
 }
 
-void NewMainWindow::showTabs( bool viewTabs )
+void NewMainWindow::setCurrentDocumentCaption( const QString &caption )
 {
-    if ( viewTabs )
-        setTabWidgetVisibility( KMdi::AlwaysShowTabs );
+    // Make sure we are in an applicable MDI mode
+    if ( mdiMode() == KMdi::TabPageMode 
+         || mdiMode() == KMdi::IDEAlMode )
+    {
+        if ( KMdiChildView *view = 
+            dynamic_cast<KMdiChildView *>( tabWidget()->currentPage() ) )
+        {
+            // Because setTabCaption() doesn't update the UI
+            // Oh, happy days, KMDI!
+            view->setCaption( caption );
+            // Because the context menu's depend on it nevertheless
+            view->setTabCaption( caption );
+        }
+    }
     else
-        setTabWidgetVisibility( KMdi::NeverShowTabs );
+    {
+        if ( activeWindow() )
+        {
+            // Because what KMDI means by an active window
+            // and what is normally meant are two very different
+            // things :(
+            if ( activeWindow()->isActiveWindow() )
+                activeWindow()->setCaption( caption );
+        }
+    }
 }
 
 void NewMainWindow::saveSettings()

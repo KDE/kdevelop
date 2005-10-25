@@ -44,6 +44,7 @@ public:
     MultiBuffer( QWidget * parent = 0 );
     virtual ~MultiBuffer();
 
+    KParts::Part *activeBuffer() const;
     bool hasURL( const KURL &url ) const;
     int numberOfBuffers() const;
     bool isActivated() const;
@@ -63,6 +64,7 @@ public:
 public slots:
     virtual void show();
     virtual void setOrientation( Qt::Orientation );
+    void activePartChanged( const KURL &url );
 
 private:
     KParts::Part* createPart( const KURL &url );
@@ -73,6 +75,7 @@ private:
     ActivationMap m_delayedActivation;
     bool m_delayActivate;
     bool m_activated;
+    QGuardedPtr<KParts::Part> m_activeBuffer;
 };
 
 #endif
