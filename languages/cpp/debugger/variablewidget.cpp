@@ -70,7 +70,7 @@ namespace GDBDebugger
 {
 
 VariableWidget::VariableWidget(QWidget *parent, const char *name)
-    : QWidget(parent, name), firstShow_(true)
+    : QWidget(parent, name)
 {
     setIcon(SmallIcon("math_brace"));
     setCaption(i18n("Variable Tree"));
@@ -142,23 +142,6 @@ void VariableWidget::clear()
 
 // **************************************************************************
 
-// When the variables view is shown the first time, 
-// set the width of 'variable name' column to half the total
-// width.
-// Ideally, KMDI should emit 'initial size set' signal, but
-// it does not, so we rely on the fact that size is already
-// set when the widget is first shown.
-void VariableWidget::showEvent(QShowEvent *)
-{
-    if (firstShow_)
-    {
-        firstShow_ = false;
-        varTree_->setColumnWidth(0, width()/2);
-    }
-}
-
-// **************************************************************************
-
 void VariableWidget::slotAddWatchVariable()
 {
 //    QString watchVar(watchVarEntry_->text());
@@ -224,13 +207,16 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
 {
     setRootIsDecorated(true);
     setAllColumnsShowFocus(true);
-    setColumnWidthMode(0, Manual);
     setSorting(-1);
-    QListView::setSelectionMode(QListView::Single);
+    QListView::setSelectionMode(QListView::Single);    
 
-    addColumn(i18n("Variable"), 100 );
-    addColumn(i18n("Value"), 100 );
-    addColumn(i18n("Type"), 100 );
+    // Note: it might be reasonable to set width of value
+    // column to 10 characters ('0x12345678'), and rely on
+    // tooltips for showing larger values. Currently, both
+    // columns will get roughly equal width.
+    addColumn(i18n("Variable"));
+    addColumn(i18n("Value"));
+    setResizeMode(AllColumns);
 
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              SLOT(slotContextMenu(KListView*, QListViewItem*)) );
@@ -315,7 +301,6 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         {
             QClipboard *qb = KApplication::clipboard();
             QString text = "{ \"" + item->text( 0 ) + "\", " + // name
-                            "\"" + item->text( 2 ) + "\", " + // type
                             "\"" + item->text( 1 ) + "\" }";  // value
 
 #if KDE_VERSION > 305
@@ -491,8 +476,6 @@ QListViewItem *VariableTree::lastChild() const
 
 void VariableTree::maybeTip(const QPoint &p)
 {
-    kdDebug(9012) << "ToolTip::maybeTip()" << endl;
-
     VarItem * item = dynamic_cast<VarItem*>( itemAt( p ) );
     if ( item )
     {
@@ -999,7 +982,6 @@ void VarItem::updateType(char *buf)
 
     originalValueType_ = str.latin1();
 
-    setText(VarTypeCol, str);
     handleSpecialTypes();    
 }
 
@@ -1123,6 +1105,14 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
     if ( !p )
         return;
 
+    // Draw values in fixed font. For example, when there are several
+    // pointer variables, it's nicer if they are aligned -- it allows
+    // to easy see the diferrence between the pointers.
+    if (column == ValueCol)
+    {
+        p->setFont(KGlobalSettings::fixedFont());
+    }
+
     if (column == ValueCol && highlight_) {
         QColorGroup hl_cg( cg.foreground(), cg.background(), cg.light(),
                            cg.dark(), cg.mid(), red, cg.base());
@@ -1138,10 +1128,13 @@ QString VarItem::tipText() const
     const unsigned int maxTooltipSize = 70;
     QString tip = text( ValueCol );
 
-    if (tip.length() < maxTooltipSize )
-	    return tip;
-    else
-	    return tip.mid( 0, maxTooltipSize - 1 ) + " [...]";
+    if (tip.length() > maxTooltipSize)
+        tip = tip.mid(0, maxTooltipSize - 1 ) + " [...]";
+
+    if (!tip.isEmpty())
+        tip += "\n" + originalValueType_;
+
+    return tip;
 }
 
 // **************************************************************************

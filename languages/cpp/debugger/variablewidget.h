@@ -54,7 +54,6 @@ public:
     { return varTree_; }
 
 protected: // QWidget overrides
-    void showEvent(QShowEvent *);
     void focusInEvent(QFocusEvent *e);
 
 public slots:
@@ -69,7 +68,6 @@ private:
     friend class VariableTree;
 
     KHistoryCombo *watchVarEditor_;
-    bool firstShow_;
 };
 
 /***************************************************************************/
