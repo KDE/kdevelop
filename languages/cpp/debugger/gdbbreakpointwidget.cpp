@@ -219,9 +219,10 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
 
     QPopupMenu *addMenu = new QPopupMenu( this );
     addMenu->insertItem( i18n( "File:line" ),   BP_TYPE_FilePos );
-    addMenu->insertItem( i18n( "Watchpoint" ),  BP_TYPE_Watchpoint );
-    addMenu->insertItem( i18n( "Address" ),     BP_TYPE_Address );
     addMenu->insertItem( i18n( "Method()" ),    BP_TYPE_Function );
+    addMenu->insertItem( i18n( "Watchpoint" ),  BP_TYPE_Watchpoint );
+    addMenu->insertItem( i18n( "Read watchpoint" ),  BP_TYPE_ReadWatchpoint );
+    addMenu->insertItem( i18n( "Address" ),     BP_TYPE_Address );
     m_add->setPopup( addMenu );
     m_add->setPopupDelay(1);
 
@@ -652,6 +653,11 @@ void GDBBreakpointWidget::slotAddBlankBreakpoint(int idx)
       case BP_TYPE_Watchpoint:
           btr = addBreakpoint(new Watchpoint(""));
           break;
+
+      case BP_TYPE_ReadWatchpoint:
+          btr = addBreakpoint(new ReadWatchpoint(""));
+          break;
+
 
       case BP_TYPE_Address:
           btr = addBreakpoint(new AddressBreakpoint(""));

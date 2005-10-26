@@ -314,6 +314,32 @@ bool Watchpoint::match(const Breakpoint* brkpt) const
     return (varName_ == check->varName_);
 }
 
+ReadWatchpoint::ReadWatchpoint(const QString& varName, bool temporary, bool enabled)
+    : Watchpoint(varName, temporary, enabled)
+{
+}
+
+QString ReadWatchpoint::dbgSetCommand() const
+{
+   return QString("rwatch ")+varName();
+}
+
+bool ReadWatchpoint::match(const Breakpoint* brkpt) const
+{
+    // simple case
+    if (this == brkpt)
+        return true;
+
+    // Type case
+    const ReadWatchpoint *check = dynamic_cast<const ReadWatchpoint*>(brkpt);
+    if (!check)
+        return false;
+
+    // member case
+    return (varName() == check->varName());
+}
+
+
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/

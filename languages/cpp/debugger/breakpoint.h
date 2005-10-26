@@ -33,6 +33,7 @@ enum BP_TYPES
     BP_TYPE_Invalid,
     BP_TYPE_FilePos,
     BP_TYPE_Watchpoint,
+    BP_TYPE_ReadWatchpoint,
     BP_TYPE_Address,
     BP_TYPE_Function
 };
@@ -242,6 +243,19 @@ public:
 private:
     QString varName_;
 };
+
+class ReadWatchpoint : public Watchpoint
+{
+public:
+    ReadWatchpoint(const QString &varName, bool temporary=false, bool enabled=true);
+    virtual QString dbgSetCommand() const;
+    bool match(const Breakpoint *brkpt) const;
+
+    BP_TYPES type () const                      { return BP_TYPE_ReadWatchpoint; }
+    QString displayType() const                 { return i18n("Read Watchpoint"); }
+};
+
+
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
