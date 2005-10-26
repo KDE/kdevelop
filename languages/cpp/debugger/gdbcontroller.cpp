@@ -442,9 +442,18 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
     viewedThread_ = -1;
     currentFrame_ = 0;
 
-    // Delete the tty that waits for application output. Without
-    // this, KDevelop will be hanging, eating 100% CPU. Don't know
-    // why and don't understand this TTY stuff either.
+    // The application has existed, but it's possible that
+    // some of application output is still in the pipe. We use
+    // different pipes to communicate with gdb and to get application
+    // output, so "exited" message from gdb might have arrived before
+    // last application output. Get this last bit.
+    tty_->readRemaining();
+
+    // Tty is no longer usable, delete it. Without this, QSocketNotifier
+    // will continiously bomd STTY with signals, so we need to either disable
+    // QSocketNotifier, or delete STTY. The latter is simpler, since we can't
+    // reuse it for future debug sessions anyway.
+
     delete tty_;
     tty_ = 0;
 
@@ -1620,39 +1629,39 @@ void GDBController::slotRun()
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    // Create tty that will be used to get output from the program, as opposed 
-    // to output from gdb itself. Need to do this before each run, as when
-    // the program ends, we need to delete STTY object -- otherwise, it will
-    // be repeatedly reading from pipe, eating 100% CPU.
-    // It might be possible to just disable QSockedNotifier inside STTY object,
-    // but I'm not sure it's possible to revive the PTY. Creating it fresh
-    // is more reliable.
-    
-    tty_ = new STTY(config_dbgTerminal_, Settings::terminalEmulatorName( *kapp->config() ));
-    if (!config_dbgTerminal_)
-    {
-        connect( tty_, SIGNAL(OutOutput(const char*)), SIGNAL(ttyStdout(const char*)) );
-        connect( tty_, SIGNAL(ErrOutput(const char*)), SIGNAL(ttyStderr(const char*)) );
-    }
-
-    QString tty(tty_->getSlave());
-    if (tty.isEmpty())
-    {
-        KMessageBox::error(0, i18n("GDB cannot use the tty* or pty* devices.\n"
-                                   "Check the settings on /dev/tty* and /dev/pty*\n"
-                                   "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
-                                   "and/or add the user to the tty group using "
-                                   "\"usermod -G tty username\"."));
-
-        delete tty_;
-        tty_ = 0;
-        return;
-    }
-
-    queueCmd(new GDBCommand(QCString("tty ")+tty.latin1(), NOTRUNCMD, NOTINFOCMD));
-
-
     if (stateIsOn(s_appNotStarted)) {
+
+        // Create tty that will be used to get output from the program, as opposed 
+        // to output from gdb itself. Need to do this before each run, as when
+        // the program ends, we need to delete STTY object -- otherwise, it will
+        // be repeatedly reading from pipe, eating 100% CPU.
+        // It might be possible to just disable QSockedNotifier inside STTY object,
+        // but I'm not sure it's possible to revive the PTY. Creating it fresh
+        // is more reliable.
+
+        delete tty_;        
+        tty_ = new STTY(config_dbgTerminal_, Settings::terminalEmulatorName( *kapp->config() ));
+        if (!config_dbgTerminal_)
+        {
+            connect( tty_, SIGNAL(OutOutput(const char*)), SIGNAL(ttyStdout(const char*)) );
+            connect( tty_, SIGNAL(ErrOutput(const char*)), SIGNAL(ttyStderr(const char*)) );
+        }
+        
+        QString tty(tty_->getSlave());
+        if (tty.isEmpty())
+        {
+            KMessageBox::error(0, i18n("GDB cannot use the tty* or pty* devices.\n"
+                                       "Check the settings on /dev/tty* and /dev/pty*\n"
+                                       "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
+                                       "and/or add the user to the tty group using "
+                                       "\"usermod -G tty username\"."));
+            
+            delete tty_;
+            tty_ = 0;
+            return;
+        }
+        
+        queueCmd(new GDBCommand(QCString("tty ")+tty.latin1(), NOTRUNCMD, NOTINFOCMD));        
 
         if (!config_runShellScript_.isEmpty()) {
             // Special for remote debug...

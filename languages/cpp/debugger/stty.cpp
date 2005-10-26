@@ -264,6 +264,12 @@ void STTY::OutReceived(int f)
         else
             emit ErrOutput(buf);
     }
+    
+}
+
+void STTY::readRemaining()
+{
+    OutReceived(fout);
 }
 
 // **************************************************************************

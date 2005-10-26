@@ -42,6 +42,7 @@ public:
     ~STTY();
 
     QString getSlave()    { return ttySlave; };
+    void readRemaining();
 
 private slots:
     void OutReceived(int);
