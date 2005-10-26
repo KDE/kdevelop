@@ -604,6 +604,11 @@ void GDBBreakpointWidget::slotParseGDBBreakpointSet(char *str, int BPKey)
         }
         else if ((strncmp(str, "Watchpoint ", 11) == 0))
             startNo = str+11;
+        else if (strncmp(str, "Hardware read watchpoint ", 25) == 0)
+            startNo = str+25;
+        else if (strncmp(str, "Read watchpoint ", 16) == 0)
+            startNo = str+16;
+                
     }
 
     if (startNo)
