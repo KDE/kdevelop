@@ -245,6 +245,9 @@
                                 <property name="name">
                                     <cstring>m_qtRoot</cstring>
                                 </property>
+                                <property name="mode">
+                                    <number>2</number>
+                                </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>The path where your choosen Qt version is installed.</string>
                                 </property>
@@ -863,9 +866,6 @@
                                 <property name="text">
                                     <string>E&amp;nable split of Header/Source files</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+N</string>
-                                </property>
                             </widget>
                             <widget class="QButtonGroup">
                                 <property name="name">
@@ -894,9 +894,6 @@
                                         <property name="text">
                                             <string>Ve&amp;rtical</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+R</string>
-                                        </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Select this if your project is using Qt version 3.x.</string>
                                         </property>
@@ -907,9 +904,6 @@
                                         </property>
                                         <property name="text">
                                             <string>Hori&amp;zontal</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+Z</string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Select this if your project is using Qt version 4.x.</string>
@@ -936,9 +930,6 @@
                                 </property>
                                 <property name="text">
                                     <string>Automatic S&amp;ynchronize</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+Y</string>
                                 </property>
                             </widget>
                         </vbox>
