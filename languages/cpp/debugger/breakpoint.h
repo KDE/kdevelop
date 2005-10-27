@@ -46,7 +46,19 @@ public:
 
     virtual QString dbgSetCommand() const                 = 0;
     virtual QString dbgRemoveCommand() const;
-    virtual bool match(const Breakpoint* brkpt) const     = 0;
+    /** Returns true if 'breakpoint' is identical to *this.
+        Checks for trival cases like pointer equality and
+        differing typeid() and then calls virtual 
+        match_data.
+    */
+    bool match(const Breakpoint* breakpoint) const;
+    /** Returns true if essential data in 'breakpoint' is equivalent
+        to *this. The caller should guarantee that dynamic type
+        of *this and *breakpoint is the same.
+    */
+    virtual bool match_data(const Breakpoint* breakpoint) const = 0;
+
+
     virtual void reset();
 
     void setActive(int active, int id);
@@ -172,7 +184,7 @@ public:
                       bool temporary=false, bool enabled=true);
     virtual ~FilePosBreakpoint();
     virtual QString dbgSetCommand() const;
-    virtual bool match(const Breakpoint *brkpt) const;
+    virtual bool match_data(const Breakpoint *brkpt) const;
 
     BP_TYPES type () const                      { return BP_TYPE_FilePos; }
     QString displayType() const                 { return i18n( "File:line" ); }
@@ -230,7 +242,7 @@ public:
     Watchpoint(const QString &varName, bool temporary=false, bool enabled=true);
     virtual ~Watchpoint();
     virtual QString dbgSetCommand() const;
-    bool match(const Breakpoint *brkpt) const;
+    bool match_data(const Breakpoint *brkpt) const;
 
     BP_TYPES type () const                      { return BP_TYPE_Watchpoint; }
     QString displayType() const                 { return i18n("Watchpoint"); }
@@ -249,7 +261,7 @@ class ReadWatchpoint : public Watchpoint
 public:
     ReadWatchpoint(const QString &varName, bool temporary=false, bool enabled=true);
     virtual QString dbgSetCommand() const;
-    bool match(const Breakpoint *brkpt) const;
+    bool match_data(const Breakpoint *brkpt) const;
 
     BP_TYPES type () const                      { return BP_TYPE_ReadWatchpoint; }
     QString displayType() const                 { return i18n("Read Watchpoint"); }
@@ -265,7 +277,7 @@ public:
     AddressBreakpoint(const QString &breakAddress, bool temporary=false, bool enabled=true);
     virtual ~AddressBreakpoint();
     virtual QString dbgSetCommand() const;
-    bool match(const Breakpoint *brkpt) const;
+    bool match_data(const Breakpoint *brkpt) const;
 
     BP_TYPES type () const                              { return BP_TYPE_Address; }
     QString displayType() const                         { return i18n("Address"); }
@@ -287,7 +299,7 @@ public:
     FunctionBreakpoint(const QString &functionName, bool temporary=false, bool enabled=true);
     virtual ~FunctionBreakpoint();
     virtual QString dbgSetCommand() const;
-    bool match(const Breakpoint *brkpt) const;
+    bool match_data(const Breakpoint *brkpt) const;
 
     BP_TYPES type () const                              { return BP_TYPE_Function; }
     QString displayType() const                         { return i18n("Method()"); }

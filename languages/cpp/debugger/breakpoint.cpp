@@ -24,6 +24,7 @@
 #include <qstring.h>
 
 #include <stdio.h>
+#include <typeinfo>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -70,6 +71,20 @@ Breakpoint::~Breakpoint()
 {
 }
 
+
+bool Breakpoint::match(const Breakpoint* breakpoint) const
+{
+    // simple case
+    if (this == breakpoint)
+        return true;
+
+    // Type case
+    if (typeid(*this) != typeid(*breakpoint))
+        return false;
+
+    return match_data(breakpoint);
+}
+
 /***************************************************************************/
 
 QString Breakpoint::dbgRemoveCommand() const
@@ -79,6 +94,7 @@ QString Breakpoint::dbgRemoveCommand() const
 
     return QString();
 }
+
 
 /***************************************************************************/
 
@@ -229,20 +245,13 @@ QString FilePosBreakpoint::dbgSetCommand() const
 
 /***************************************************************************/
 
-bool FilePosBreakpoint::match(const Breakpoint *brkpt) const
+bool FilePosBreakpoint::match_data(const Breakpoint *xb) const
 {
-    // simple case
-    if (this == brkpt)
-        return true;
-
-    // Type case
-    const FilePosBreakpoint* check = dynamic_cast<const FilePosBreakpoint*>(brkpt);
-    if (!check)
-        return false;
-
+    const FilePosBreakpoint* b = static_cast<const FilePosBreakpoint*>(xb);
+    
     // member case
-    return  ( (fileName_ == check->fileName_) &&
-              (lineNo_ == check->lineNo_));
+    return  ( (fileName_ == b->fileName_) &&
+              (lineNo_ == b->lineNo_));
 }
 
 /***************************************************************************/
@@ -299,19 +308,11 @@ QString Watchpoint::dbgSetCommand() const
 
 /***************************************************************************/
 
-bool Watchpoint::match(const Breakpoint* brkpt) const
+bool Watchpoint::match_data(const Breakpoint* xb) const
 {
-    // simple case
-    if (this == brkpt)
-        return true;
+    const Watchpoint* b = static_cast<const Watchpoint*>(xb);
 
-    // Type case
-    const Watchpoint *check = dynamic_cast<const Watchpoint*>(brkpt);
-    if (!check)
-        return false;
-
-    // member case
-    return (varName_ == check->varName_);
+    return (varName_ == b->varName_);
 }
 
 ReadWatchpoint::ReadWatchpoint(const QString& varName, bool temporary, bool enabled)
@@ -324,19 +325,11 @@ QString ReadWatchpoint::dbgSetCommand() const
    return QString("rwatch ")+varName();
 }
 
-bool ReadWatchpoint::match(const Breakpoint* brkpt) const
+bool ReadWatchpoint::match_data(const Breakpoint* xb) const
 {
-    // simple case
-    if (this == brkpt)
-        return true;
+    const ReadWatchpoint* b = static_cast<const ReadWatchpoint*>(xb);
 
-    // Type case
-    const ReadWatchpoint *check = dynamic_cast<const ReadWatchpoint*>(brkpt);
-    if (!check)
-        return false;
-
-    // member case
-    return (varName() == check->varName());
+    return (varName() == b->varName());
 }
 
 
@@ -365,19 +358,11 @@ QString AddressBreakpoint::dbgSetCommand() const
 
 /***************************************************************************/
 
-bool AddressBreakpoint::match(const Breakpoint* brkpt) const
+bool AddressBreakpoint::match_data(const Breakpoint* xb) const
 {
-    // simple case
-    if (this == brkpt)
-        return true;
+    const AddressBreakpoint* b = static_cast<const AddressBreakpoint*>(xb);
 
-    // Type case
-    const AddressBreakpoint *check = dynamic_cast<const AddressBreakpoint*>(brkpt);
-    if (!check)
-        return false;
-
-    // member case
-    return (m_breakAddress == check->m_breakAddress);
+    return (m_breakAddress == b->m_breakAddress);
 }
 
 /***************************************************************************/
@@ -405,19 +390,11 @@ QString FunctionBreakpoint::dbgSetCommand() const
 
 /***************************************************************************/
 
-bool FunctionBreakpoint::match(const Breakpoint* brkpt) const
+bool FunctionBreakpoint::match_data(const Breakpoint* xb) const
 {
-    // simple case
-    if (this == brkpt)
-        return true;
+    const FunctionBreakpoint* b = static_cast<const FunctionBreakpoint*>(xb);
 
-    // Type case
-    const FunctionBreakpoint *check = dynamic_cast<const FunctionBreakpoint*>(brkpt);
-    if (!check)
-        return false;
-
-    // member case
-    return (m_functionName == check->m_functionName);
+    return (m_functionName == b->m_functionName);
 }
 
 /***************************************************************************/
