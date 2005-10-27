@@ -1,0 +1,114 @@
+# KDE Config File
+[General]
+Name=Qt4 Application
+Name[br]=Arload
+Name[cy]=Cymhwysiad
+Name[da]=Program
+Name[de]=Anwendung
+Name[et]=Rakendus
+Name[ga]=Feidhmchlár
+Name[hu]=Alkalmazások
+Name[it]=Applicazione
+Name[rw]=Porogaramu
+Name[sv]=Program
+Name[tr]=Uygulama
+Name[zh_CN]=应用程序
+Icon=qt4makeapp.png
+Category=C++/QMake project
+Category[fr]=C++/QMake
+Comment=Generate a QMake/Qt4 based application (crossplatform compatible) - Needs Qt4
+Comment[da]=Generér et QMake/Qt4 baseret program (krydsplatform kompatibel)
+Comment[de]=Erstellt eine QMake/Qt4 basierte Anwendung (Crossplattform kompatibel)
+Comment[et]=Rakenduse loomine QMake'i/Qt4 põhjal (multiplatvormne)
+Comment[hu]=Létrehoz egy QMake/Qt4-alapú, keresztfordításra is megfelelő alkalmazást
+Comment[it]=Genera un'applicazione basata su QMake/Qt4 (compatibile multipiattaforma)
+Comment[sv]=Skapar ett QMake/Qt4-baserat program (fungerar på andra plattformar)
+Comment[tr]=QMake/Qt4 tabanlı bir uygulama yarat (Platformlararası geçimli)
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
+Archive=qt4makeapp.tar.gz
+
+[FILE1]
+Type=install
+Source=%{src}/qt4makeapp.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/qt4makeapp.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE3]
+Type=install
+Source=%{src}/src.pro
+Dest=%{dest}/src/src.pro
+
+[FILE4]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/src/main.cpp
+
+[FILE5]
+Type=install
+Source=%{src}/qt4makeapp.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+
+[FILE6]
+Type=install
+Source=%{src}/qt4makeapp.h
+Dest=%{dest}/src/%{APPNAMELC}.h
+
+[FILE7]
+Type=install
+Source=%{src}/fileopen.xpm
+Dest=%{dest}/src/fileopen.xpm
+
+[FILE8]
+Type=install
+Source=%{src}/filesave.xpm
+Dest=%{dest}/src/filesave.xpm
+
+[FILE9]
+Type=install
+Source=%{src}/filenew.xpm
+Dest=%{dest}/src/filenew.xpm
+
+[FILE10]
+Type=install
+Source=%{src}/editcopy.xpm
+Dest=%{dest}/src/editcopy.xpm
+
+[FILE11]
+Type=install
+Source=%{src}/editpaste.xpm
+Dest=%{dest}/src/editpaste.xpm
+
+[FILE12]
+Type=install
+Source=%{src}/editcut.xpm
+Dest=%{dest}/src/editcut.xpm
+
+[FILE13]
+Type=install
+Source=%{src}/application.qrc
+Dest=%{dest}/src/application.qrc
+
+[FILE14]
+Type=install
+Source=%{src}/ReadMe
+Dest=%{dest}/src/ReadMe
+
+[MSG]
+Type=message
+Comment=A Qt4/Qmake based application was created in %{dest}
+Comment[da]=Et Qt4/Qmake baseret program blev oprettet i %{dest}
+Comment[de]=Eine QMake/Qt4 basierte Anwendung wurde in %{dest} erstellt.
+Comment[et]=Rakendus QMkae'i põhjal loodi asukohta %{dest}
+Comment[hu]=Létrejött egy Qt4/Qmake-alapú alkalmazás itt: %{dest}
+Comment[it]=È stata creata un'applicazione basata su Qt4/Qmake in %{dest}
+Comment[sv]=Ett QMake/Qt4-baserat program skapades i %{dest}
+Comment[tr]=Bir Qt4/QMake tabanlı uygulama %{dest} içinde yaratıldı.

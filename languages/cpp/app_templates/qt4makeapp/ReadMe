@@ -1,0 +1,22 @@
+READ THIS IN ORDER TO COMPILE THE Qt4 TEMPLATE
+----------------------------------------------
+
+BEFORE building your project, quit KDevelop.
+
+In a terminal (Konsole for example) set your QTDIR environment variable to point to Qt4 installation and be sure that your PATH includes the $QTDIR/bin.
+
+For Bash users, you will do this by typing the following commands in the terminal:
+export QTDIR=/path/to/qt4
+export PATH=$QTDIR/bin:$PATH 
+
+Then run KDevelop from this terminal by typing:
+kdevelop &
+
+Then Build your template using the Build menu in KDevelop.
+
+
+This ensures qmake from qt4 is used to build your project.
+
+------------------
+Anne-Marie MAHFOUF
+October 2005 
