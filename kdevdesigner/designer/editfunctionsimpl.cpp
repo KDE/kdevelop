@@ -34,6 +34,7 @@
 
 #include <kiconloader.h>
 #include "kdevdesigner_part.h"
+#include <kdebug.h>
 
 #include <qlistview.h>
 #include <qpushbutton.h>
@@ -127,6 +128,19 @@ EditFunctions::EditFunctions( QWidget *parent, FormWindow *fw, bool justSlots )
 			  SLOT( setText( const QString & ) ) );
     }
     delete l;
+
+	functionSpecifier->insertItem( "non virtual" );
+	functionSpecifier->insertItem( "virtual" );
+	functionSpecifier->insertItem( "pure virtual" );
+	functionSpecifier->insertItem( "static" );
+	
+	functionAccess->insertItem( "public" );
+	functionAccess->insertItem( "protected" );
+	functionAccess->insertItem( "private" );
+	
+	functionType->insertItem( "slot" );
+	functionType->insertItem( "function" );
+
 }
 
 void EditFunctions::okClicked()

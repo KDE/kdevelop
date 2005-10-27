@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>EditFunctionsBase</class>
 <comment>*********************************************************************
 ** Copyright (C) 2000 Trolltech AS.  All rights reserved.
@@ -169,7 +169,7 @@
                         <enum>StrongFocus</enum>
                     </property>
                     <property name="text">
-                        <string>Only d&amp;isplay slots</string>
+                        <string>On&amp;ly display slots</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Change displaying mode for functions</string>
@@ -281,7 +281,7 @@
                                         <cstring>Label8</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>&amp;Function:</string>
+                                        <string>F&amp;unction:</string>
                                     </property>
                                     <property name="alignment">
                                         <set>AlignVCenter|AlignRight</set>
@@ -387,26 +387,6 @@
                                     </property>
                                 </widget>
                                 <widget class="QComboBox">
-                                    <item>
-                                        <property name="text">
-                                            <string>non virtual</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>virtual</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>pure virtual</string>
-                                        </property>
-                                    </item>
-				    <item>
-                                        <property name="text">
-                                            <string>static</string>
-                                        </property>
-                                    </item>
                                     <property name="name">
                                         <cstring>functionSpecifier</cstring>
                                     </property>
@@ -440,21 +420,6 @@
                                     </property>
                                 </widget>
                                 <widget class="QComboBox">
-                                    <item>
-                                        <property name="text">
-                                            <string>public</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>protected</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>private</string>
-                                        </property>
-                                    </item>
                                     <property name="name">
                                         <cstring>functionAccess</cstring>
                                     </property>
@@ -478,7 +443,7 @@
                                         <cstring>TextLabel1_2</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>&amp;Type:</string>
+                                        <string>T&amp;ype:</string>
                                     </property>
                                     <property name="alignment">
                                         <set>AlignVCenter|AlignRight</set>
@@ -488,16 +453,6 @@
                                     </property>
                                 </widget>
                                 <widget class="QComboBox">
-                                    <item>
-                                        <property name="text">
-                                            <string>slot</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>function</string>
-                                        </property>
-                                    </item>
                                     <property name="name">
                                         <cstring>functionType</cstring>
                                     </property>
