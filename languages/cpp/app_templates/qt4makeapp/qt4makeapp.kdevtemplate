@@ -25,7 +25,7 @@ Comment[it]=Genera un'applicazione basata su QMake/Qt4 (compatibile multipiattaf
 Comment[sv]=Skapar ett QMake/Qt4-baserat program (fungerar på andra plattformar)
 Comment[tr]=QMake/Qt4 tabanlı bir uygulama yarat (Platformlararası geçimli)
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp,%{dest}/src/ReadMe
 Archive=qt4makeapp.tar.gz
 
 [FILE1]
