@@ -38,7 +38,7 @@ Comment[tr]=Bir parçacığı ve ayar penceresi olan basit bir KDE uygulaması y
 Comment[xx]=xxGenerates a simple KDE application with one widget and a configuration dialogxx
 Comment[zh_CN]=生成带一个部件和一个配置对话框的简单 KDE 应用程序
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp,%{dest}/README
 Archive=kconfig35.tar.gz
 
 [ADMIN]
@@ -193,7 +193,7 @@ Dest=%{dest}/src/%{APPNAMELC}ui.rc
 [FILE25]
 Type=install
 Source=%{src}/README
-Dest=%{dest}/src/README
+Dest=%{dest}/README
 
 [FILE26]
 Type=install

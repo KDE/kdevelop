@@ -7,6 +7,10 @@ Date: 2004-03-22
 This README file explains you basic things for starting with
 this application template.
 
+-----------------------------------------------
+--NOTE--: you need kdelibs 3.5 and kdelibs headers 3.5 (devel package) in order to build this template.
+Qt version might be 3.3.4 or 3.3.5
+-----------------------------------------------
 
 ** Building and installing **
 
