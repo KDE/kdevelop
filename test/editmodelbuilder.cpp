@@ -42,7 +42,7 @@ EditModelBuilder::~EditModelBuilder()
 
 void EditModelBuilder::visit_node( cool_ast_node * node )
 {
-  visit_node( node );
+  cool_default_visitor::visit_node( node );
 
   kdDebug() << k_funcinfo << tokenToPosition(node->start_token) << " " << tokenToPosition(node->end_token) << endl;
 }
