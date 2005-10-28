@@ -319,6 +319,7 @@ bool Parser::parseName(NameAST *&node, bool acceptTemplateId)
   parseWinDeclSpec(winDeclSpec);
 
   NameAST *ast = CreateNode<NameAST>(_M_pool);
+  ast->qualified_names = 0;
 
   if (token_stream.lookAhead() == Token_scope)
     {
@@ -376,6 +377,7 @@ bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
 
   std::size_t start = token_stream.cursor();
   TranslationUnitAST *ast = CreateNode<TranslationUnitAST>(_M_pool);
+  ast->declarations = 0;
 
   while (token_stream.lookAhead())
     {
@@ -1099,6 +1101,8 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
   std::size_t start = token_stream.cursor();
 
   DeclaratorAST *ast = CreateNode<DeclaratorAST>(_M_pool);
+  ast->sub_declarator = 0;
+  ast->ptr_ops = 0;
 
   DeclaratorAST *decl = 0;
   NameAST *declId = 0;
@@ -1251,6 +1255,8 @@ bool Parser::parseAbstractDeclarator(DeclaratorAST *&node)
   std::size_t start = token_stream.cursor();
 
   DeclaratorAST *ast = CreateNode<DeclaratorAST>(_M_pool);
+  ast->sub_declarator = 0;
+
   DeclaratorAST *decl = 0;
 
   PtrOperatorAST *ptrOp = 0;
@@ -1619,6 +1625,7 @@ bool Parser::parseParameterDeclarationClause(ParameterDeclarationClauseAST *&nod
 
   ParameterDeclarationClauseAST *ast
     = CreateNode<ParameterDeclarationClauseAST>(_M_pool);
+  ast->parameter_declarations = 0;
 
   if (!parseParameterDeclarationList(ast->parameter_declarations))
     {
@@ -1913,6 +1920,7 @@ bool Parser::parseCtorInitializer(CtorInitializerAST *&node)
 
   CtorInitializerAST *ast = CreateNode<CtorInitializerAST>(_M_pool);
   ast->colon = start;
+  ast->member_initializers = 0;
 
   if (!parseMemInitializerList(ast->member_initializers))
     {
@@ -2333,6 +2341,7 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
   ast->tilde = tilde;
   ast->id = id;
   ast->operator_id = operator_id;
+  ast->template_arguments = 0;
 
   if (parseTemplateId && !tilde)
     {
@@ -2693,6 +2702,7 @@ bool Parser::parseCompoundStatement(StatementAST *&node)
   CHECK('{');
 
   CompoundStatementAST *ast = CreateNode<CompoundStatementAST>(_M_pool);
+  ast->statements = 0;
 
   while (token_stream.lookAhead())
     {
