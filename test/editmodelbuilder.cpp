@@ -22,6 +22,8 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
 
+#include "coolhighlights.h"
+
 using namespace KTextEditor;
 
 EditModelBuilder::EditModelBuilder(KTextEditor::SmartRange* topRange)
@@ -37,13 +39,21 @@ EditModelBuilder::~EditModelBuilder()
 void EditModelBuilder::visit_class( class_ast * ast )
 {
   m_currentRange = newRange(ast->start_token, ast->end_token);
+  m_currentRange->setAttribute(CoolHighlights::classHighlight());
+
   cool_default_visitor::visit_class(ast);
+
   m_currentRange = m_currentRange->parentRange();
 }
 
 SmartRange * EditModelBuilder::newRange( std::size_t start_token, std::size_t end_token )
 {
-  dynamic_cast<SmartInterface*>(m_topRange->document())->newSmartRange(m_topRange);
+  int startLine = 0;
+  int startCol = 0;
+  int endLine = 0;
+  int endCol = 0;
+
+  return dynamic_cast<SmartInterface*>(m_topRange->document())->newSmartRange(startLine, startCol, endLine, endCol, m_topRange);
 }
 
 
