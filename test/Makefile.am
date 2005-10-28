@@ -10,12 +10,10 @@ INCLUDES = -I$(top_srcdir)/test/include $(all_includes)
 #	-I$(top_srcdir)/interfaces/kregexpeditor -I$(top_srcdir)/kdefx -I$(top_srcdir)/kutils -I$(top_builddir)/kjs \
 #	$(all_includes)
 
-katehighlight_SOURCES = katetest.cpp arbitraryhighlighttest.cpp \
-	decoder.cpp \
-	cool.cpp \
-	cool-lexer.ll \
-	main.cpp
+katehighlight_SOURCES = katetest.cpp arbitraryhighlighttest.cpp 	decoder.cpp \
+		cool.cpp 	cool-lexer.ll 	main.cpp editmodelbuilder.cpp
 
 katehighlight_LDADD = -lktexteditor
 katehighlight_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 SUBDIRS = include
+noinst_HEADERS = editmodelbuilder.h

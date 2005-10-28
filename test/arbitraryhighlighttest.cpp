@@ -25,6 +25,9 @@
 
 #include <QTimer>
 
+#include "cool.h"
+#include "editmodelbuilder.h"
+
 using namespace KTextEditor;
 
 ArbitraryHighlightTest::ArbitraryHighlightTest(Document* parent)
@@ -48,11 +51,45 @@ KTextEditor::SmartInterface * ArbitraryHighlightTest::smart( ) const
   return dynamic_cast<SmartInterface*>(doc());
 }
 
+/// Cool stuff...
+#include <cstdlib>
+#include <cstdio>
+#include <iostream>
+#include <fstream>
+
+#define MAX_BUFF (10 * 1024)
+
+char *_G_contents;
+std::size_t _M_token_begin, _M_token_end;
+std::size_t _G_current_offset;
+
+static void tokenize(cool &m);
+int yylex();
+
+static void tokenize(cool &m)
+{
+  // tokenize
+  int kind = cool::Token_EOF;
+  do
+    {
+      kind = ::yylex();
+      if (!kind)
+        kind = cool::Token_EOF;
+
+      cool::token_type &t = m.token_stream->next();
+      t.kind = kind;
+      t.begin = _M_token_begin;
+      t.end = _M_token_end;
+      t.text = _G_contents;
+    }
+  while (kind != cool::Token_EOF);
+
+  m.yylex(); // produce the look ahead token
+}
+
 void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mostSpecificChild)
 {
   static Attribute* ranges[10] = {0,0,0,0,0,0,0,0,0,0};
-  static const QChar openBrace = QChar('{');
-  static const QChar closeBrace = QChar('}');
 
   if (!ranges[0]) {
     for (int i = 0; i < 10; ++i) {
@@ -62,11 +99,11 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
     //ranges[2]->setFontBold();
     //ranges[2]->setForeground(Qt::red);
 
-    Attribute* dyn = new Attribute();
+    /*Attribute* dyn = new Attribute();
     dyn->setBackground(Qt::blue);
     dyn->setForeground(Qt::white);
     ranges[2]->setDynamicAttribute(Attribute::ActivateMouseIn, dyn, true);
-    ranges[2]->setEffects(Attribute::EffectFadeIn | Attribute::EffectFadeOut);
+    ranges[2]->setEffects(Attribute::EffectFadeIn | Attribute::EffectFadeOut);*/
 
     //ranges[3]->setFontUnderline(true);
     //ranges[3]->setSelectedForeground(Qt::magenta);
@@ -75,7 +112,7 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
     //ranges[5]->setForeground(Qt::white);
   }
 
-  SmartRange* currentRange = mostSpecificChild;
+  /*SmartRange* currentRange = mostSpecificChild;
   currentRange->deleteChildRanges();
 
   Cursor current = currentRange->start();
@@ -94,25 +131,37 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
     current += Cursor(0,1);
   }
 
-  text = currentRange->document()->textLines(textNeeded);
+  text = currentRange->document()->textLines(textNeeded);*/
 
-  foreach (QString string, text) {
-    for (int i = 0; i < string.length(); ++i) {
-      if (string.at(i) == openBrace) {
-        currentRange = smart()->newSmartRange(current, currentRange->end(), currentRange);
-        if (currentRange->depth() < 10)
-          currentRange->setAttribute(ranges[currentRange->depth()]);
+  // Nuke current children -- to be replaced
+  range->deleteChildRanges();
 
-      } else if (string.at(i) == closeBrace && currentRange->parentRange()) {
-        currentRange->end() = current + Cursor(0,1);
-        currentRange = currentRange->parentRange();
-      }
-      current.setColumn(current.column() + 1);
+  cool::token_stream_type token_stream;
+  cool::memory_pool_type memory_pool;
+
+  // 0) setup
+  cool parser;
+  parser.set_token_stream(&token_stream);
+  parser.set_memory_pool(&memory_pool);
+
+  // 1) tokenize
+  tokenize(parser);
+
+  // 2) parse
+  program_ast *ast = 0;
+  if (parser.parse_program(&ast))
+    {
+      EditModelBuilder builder(range);
+      builder.visit_node(ast);
     }
-    current.setPosition(current.line() + 1, 0);
-  }
+  else
+    {
+      std::cerr << "** ERROR expected a declaration: token position:" << _M_token_begin << std::endl;
+    }
 
-  //outputRange(range, mostSpecificChild);
+  delete[] _G_contents;
+
+  outputRange(range, mostSpecificChild);
 }
 
 void ArbitraryHighlightTest::outputRange( KTextEditor::SmartRange * range, KTextEditor::SmartRange * mostSpecific )
