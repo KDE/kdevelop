@@ -44,7 +44,7 @@ void EditModelBuilder::visit_node( cool_ast_node * node )
 {
   cool_default_visitor::visit_node( node );
 
-  kdDebug() << k_funcinfo << tokenToPosition(node->start_token) << " " << tokenToPosition(node->end_token) << endl;
+  //kdDebug() << k_funcinfo << tokenToPosition(node->start_token) << " " << tokenToPosition(node->end_token) << endl;
 }
 
 void EditModelBuilder::visit_class( class_ast * ast )
@@ -64,6 +64,9 @@ SmartRange * EditModelBuilder::newRange( std::size_t start_token, std::size_t en
 
 Cursor EditModelBuilder::tokenToPosition( std::size_t token )
 {
+  if (token == 0)
+    return Cursor();
+
   for (int i = 0; i < _G_tokenLocations.count(); ++i)
     if (token > _G_tokenLocations[i])
         return Cursor(i, token - _G_tokenLocations[i]);
