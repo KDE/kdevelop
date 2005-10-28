@@ -21,6 +21,8 @@
 
 #include "cool.h"
 
+#include <ktexteditor/cursor.h>
+
 namespace KTextEditor {
   class SmartRange;
 }
@@ -31,8 +33,8 @@ class EditModelBuilder : public cool_default_visitor
     EditModelBuilder(KTextEditor::SmartRange* m_topRange);
     virtual ~EditModelBuilder();
 
-    /*virtual void visit_node(cool_ast_node *node);
-    virtual void visit_additive_expression(additive_expression_ast *ast);
+    virtual void visit_node(cool_ast_node *node);
+    /*virtual void visit_additive_expression(additive_expression_ast *ast);
     virtual void visit_block_expression(block_expression_ast *ast);
     virtual void visit_case_condition(case_condition_ast *ast);
     virtual void visit_case_expression(case_expression_ast *ast);*/
@@ -53,6 +55,7 @@ class EditModelBuilder : public cool_default_visitor
 
   private:
     KTextEditor::SmartRange* newRange(std::size_t start_token, std::size_t end_token);
+    KTextEditor::Cursor tokenToPosition(std::size_t token);
 
     KTextEditor::SmartRange* m_topRange;
     KTextEditor::SmartRange* m_currentRange;

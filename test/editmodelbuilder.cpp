@@ -24,7 +24,11 @@
 
 #include "coolhighlights.h"
 
+#include <QVector>
+
 using namespace KTextEditor;
+
+QVector<int> _G_tokenLocations;
 
 EditModelBuilder::EditModelBuilder(KTextEditor::SmartRange* topRange)
   : m_topRange(topRange)
@@ -34,6 +38,13 @@ EditModelBuilder::EditModelBuilder(KTextEditor::SmartRange* topRange)
 
 EditModelBuilder::~EditModelBuilder()
 {
+}
+
+void EditModelBuilder::visit_node( cool_ast_node * node )
+{
+  visit_node( node );
+
+  kdDebug() << k_funcinfo << tokenToPosition(node->start_token) << " " << tokenToPosition(node->end_token) << endl;
 }
 
 void EditModelBuilder::visit_class( class_ast * ast )
@@ -48,12 +59,14 @@ void EditModelBuilder::visit_class( class_ast * ast )
 
 SmartRange * EditModelBuilder::newRange( std::size_t start_token, std::size_t end_token )
 {
-  int startLine = 0;
-  int startCol = 0;
-  int endLine = 0;
-  int endCol = 0;
-
-  return dynamic_cast<SmartInterface*>(m_topRange->document())->newSmartRange(startLine, startCol, endLine, endCol, m_topRange);
+  return dynamic_cast<SmartInterface*>(m_topRange->document())->newSmartRange(tokenToPosition(start_token), tokenToPosition(end_token), m_topRange);
 }
 
+Cursor EditModelBuilder::tokenToPosition( std::size_t token )
+{
+  for (int i = 0; i < _G_tokenLocations.count(); ++i)
+    if (token > _G_tokenLocations[i])
+        return Cursor(i, token - _G_tokenLocations[i]);
 
+  return Cursor::invalid();
+}

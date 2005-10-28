@@ -1,10 +1,12 @@
 
 %{
 #include "cool.h"
+#include <QVector>
 
 extern std::size_t _M_token_begin, _M_token_end;
 extern char *_G_contents;
 extern std::size_t _G_current_offset;
+extern QVector<int> _G_tokenLocations;
 
 #define YY_INPUT(buf, result, max_size) \
  do \
@@ -16,7 +18,8 @@ extern std::size_t _G_current_offset;
 
 #define YY_USER_INIT \
   _M_token_begin = _M_token_end = 0; \
-  _G_current_offset = 0;
+  _G_current_offset = 0; \
+  _G_tokenLocations.clear();
 
 #define YY_USER_ACTION \
   _M_token_begin = _M_token_end; \
@@ -28,8 +31,10 @@ extern std::size_t _G_current_offset;
 
 %%
 
-[ \t\r\n]+  /* skip */ ;
+[ \t\r]+  /* skip */ ;
 "--".*      /* skip */ ;
+
+"\n" _G_tokenLocations.append(yyleng);
 
 "@" return cool::Token_AT;
 "case" return cool::Token_CASE;

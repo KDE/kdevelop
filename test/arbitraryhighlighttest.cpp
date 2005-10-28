@@ -89,29 +89,6 @@ static void tokenize(cool &m)
 
 void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mostSpecificChild)
 {
-  static Attribute* ranges[10] = {0,0,0,0,0,0,0,0,0,0};
-
-  if (!ranges[0]) {
-    for (int i = 0; i < 10; ++i) {
-      ranges[i] = new Attribute();
-      ranges[i]->setBackground(QColor(0xFF - (i * 0x20), 0xFF, 0xFF));
-    }
-    //ranges[2]->setFontBold();
-    //ranges[2]->setForeground(Qt::red);
-
-    /*Attribute* dyn = new Attribute();
-    dyn->setBackground(Qt::blue);
-    dyn->setForeground(Qt::white);
-    ranges[2]->setDynamicAttribute(Attribute::ActivateMouseIn, dyn, true);
-    ranges[2]->setEffects(Attribute::EffectFadeIn | Attribute::EffectFadeOut);*/
-
-    //ranges[3]->setFontUnderline(true);
-    //ranges[3]->setSelectedForeground(Qt::magenta);
-    //ranges[4]->setFontStrikeOut(true);
-    //ranges[5]->setOutline(Qt::blue);
-    //ranges[5]->setForeground(Qt::white);
-  }
-
   /*SmartRange* currentRange = mostSpecificChild;
   currentRange->deleteChildRanges();
 
@@ -136,6 +113,10 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
   // Nuke current children -- to be replaced
   range->deleteChildRanges();
 
+  // Get text
+  QByteArray documentContents = doc()->text().toLatin1();
+  _G_contents = documentContents.data();
+
   cool::token_stream_type token_stream;
   cool::memory_pool_type memory_pool;
 
@@ -158,8 +139,6 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
     {
       std::cerr << "** ERROR expected a declaration: token position:" << _M_token_begin << std::endl;
     }
-
-  delete[] _G_contents;
 
   outputRange(range, mostSpecificChild);
 }
