@@ -1,0 +1,9 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>The KDevelop C++ KDE templates explained</title>
+<base href="http://women.kde.org/articles/tutorials/kdevelop_templates"/>
+<tocsect1 name="General KDE templates" url="index.php"/>
+<tocsect1 name="Other KDE templates" url="others.php/"/>
+<tocsect1 name="SCons templates" url="scons.php"/>
+<tocsect1 name="Qt templates" url="qt.php"/>
+</kdeveloptoc>
