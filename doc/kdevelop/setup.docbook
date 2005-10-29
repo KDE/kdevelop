@@ -483,7 +483,7 @@ To select a new editor, click on the arrow on the drop down list field. Dependin
   This is the &kde; standard <application>Kate</application> editor part.
   </para></listitem>
   </varlistentry>
-  <varlistentry>
+ <!-- obsolete <varlistentry>
   <term><guilabel>Embedded Vim Component</guilabel></term>
   <listitem>
     <para>
@@ -498,7 +498,7 @@ To select a new editor, click on the arrow on the drop down list field. Dependin
       </para></listitem>
     </itemizedlist></note>
   </listitem>
-  </varlistentry>
+  </varlistentry>-->
   <varlistentry>
   <term><guilabel>Qt Designer Based Text Editor</guilabel></term>
   <listitem><para>
