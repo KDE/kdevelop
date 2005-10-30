@@ -228,6 +228,9 @@
                     <property name="text">
                         <string>Use KDe&amp;velop's embedded designer</string>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Start KDevelop own designer embedded within KDevelop</string>
+                    </property>
                     <property name="whatsThis" stdset="0">
                         <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to integrate the UI designer into KDevelop.</string>
                     </property>
@@ -239,6 +242,9 @@
                     <property name="text">
                         <string>Run KDevelop's &amp;designer as a separate application</string>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Start KDevelop own designer externally</string>
+                    </property>
                     <property name="whatsThis" stdset="0">
                         <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to run KDevelop's UI designer as a separate program.</string>
                     </property>
@@ -249,6 +255,9 @@
                     </property>
                     <property name="text">
                         <string>Run Qt Desi&amp;gner</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Use Qt Designer externally</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Check this button if you wish to use Qt Designer rather than KDevelop's integrated designer.</string>
@@ -314,6 +323,12 @@
                     <property name="text">
                         <string>&amp;Other:</string>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Set a different terminal than the KDE default one</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Choose some other terminal different from the default one.</string>
+                    </property>
                 </widget>
                 <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
                     <property name="name">
@@ -324,6 +339,12 @@
                     </property>
                     <property name="checked">
                         <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Use the terminal as set in KControl</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If checked, KDevelop will use the default terminal as set in KControl in KDE components, Component Chooser.</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="1" column="1">
@@ -432,6 +453,8 @@
         </spacer>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kfontcombo.h</includehint>
