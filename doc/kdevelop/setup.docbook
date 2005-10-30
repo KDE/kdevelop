@@ -10,7 +10,7 @@
 <title>Configuring &kdevelop;</title>
 
 <para>
-&kdevelop; is a very powerful and flexible IDE which offers many ways to tailor it to your needs. To start configuration select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>. This will cause the configuration dialog to pop up consisting of a selection window to the left and the configuration dialog on the right hand side whose contents will vary upon the configuration item you did select.
+&kdevelop; is a very powerful and flexible IDE which offers many ways to tailor it to your needs. To start configuration select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure &kdevelop;...</guimenuitem></menuchoice>. This will cause the configuration dialog to pop up consisting of a selection window to the left and the configuration dialog on the right hand side whose contents will vary upon the configuration item you did select.
 </para>
 
 <screenshot>
@@ -259,6 +259,55 @@ Changes in this setting effect the processing of new messages only. Old director
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term id="ui-designer-integration"><guilabel>UI Designer  Integration</guilabel></term>
+<listitem>
+<para>
+This let you choose the way you want <filename>.ui</filename> files to be displayed in &kdevelop;. &kdevelop; comes with its own UI designer called KDeveDesigner that can either be embedded or be run as a separate program. Qt Designer can also be used to edit <filename>.ui</filename> files.
+</para>
+<itemizedlist>
+  <listitem><para>
+  Use &kdevelop;'s embedded designer
+  </para><para>This uses &kdevelop; own designer embedded within &kdevelop;</para></listitem>
+  <listitem><para>
+  Run &kdevelop;'s designer as a separate application
+  </para><para>The KDevDesigner application will be run separately in its own window.</para>
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevdesigner.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+   KDevDesigner in its own window
+    </para></caption>
+  </mediaobject>
+</screenshot>
+</listitem>
+  <listitem><para>
+Run Qt Designer
+  </para><para>Qt Designer from your Qt installation will be started externally whenever you click on a <filename>.ui</filename> file in &kdevelop;.</para></listitem>
+</itemizedlist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="terminal-emulation"><guilabel>Terminal Emulation</guilabel></term>
+<listitem>
+<para>
+You choose here which terminal you want to be integrated within KDevelop.
+</para>
+<itemizedlist>
+  <listitem><para>
+  Use &kde; setting
+  </para><para>This uses &kde; setting as set in &kcontrol; in <guilabel>&kde; component</guilabel> <guilabel>Component Chooser</guilabel> tab which sets the default terminal emulator used by all &kde; applications that need a terminal.</para></listitem>
+  <listitem><para>
+  Other
+  </para><para>Choose some other terminal different from the default one.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</varlistentry>
+
 </variablelist>
 
 </sect2> <!-- setup-main -->
@@ -294,7 +343,7 @@ As already said in the <link linkend="uimodes-survey">Available User Interface M
 </itemizedlist>
 
 <para>
-To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menus. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand tree. This will display the following settings dialog to the right.</para>
+To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure &kdevelop;..</guimenuitem> </menuchoice> from the menus. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand tree. This will display the following settings dialog to the right.</para>
 
 <screenshot>
   <mediaobject>
@@ -589,7 +638,7 @@ The reformat source feature is currently available for C, C++, and &Java; only. 
 </para></note>
 
 <para>
-To set up a specific format style, select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Source Formatter</guilabel> in the left hand tree. This will display a series of three settings dialog tabs to the right, namely a <link linkend="setup-format-general">General Formatting Setup</link>, a <link linkend="setup-format-indent">Indentation Style Setup</link>, and a <link linkend="setup-format-other">Other Formatting Setup</link>.
+To set up a specific format style, select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure &kdevelop;..</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Source Formatter</guilabel> in the left hand tree. This will display a series of three settings dialog tabs to the right, namely a <link linkend="setup-format-general">General Formatting Setup</link>, a <link linkend="setup-format-indent">Indentation Style Setup</link>, and a <link linkend="setup-format-other">Other Formatting Setup</link>.
 </para>
 
 <tip><para>
@@ -923,7 +972,7 @@ split a long line apart. For C/C++ code this can be controlled here.</para>
 <title>Setting Up the Code Snippets Tool</title>
 
 <para>
-When editing in &kdevelop; you can store often used parts of code as <link linkend="editing-snippets">Code Snippets</link>. To configure the capabilities of the code snippets part select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Code Snippets</guilabel> in the left hand tree. This will show the following dialog in the right hand side.
+When editing in &kdevelop; you can store often used parts of code as <link linkend="editing-snippets">Code Snippets</link>. To configure the capabilities of the code snippets part select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure &kdevelop;..</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Code Snippets</guilabel> in the left hand tree. This will show the following dialog in the right hand side.
 </para>
 
 <screenshot>
@@ -1014,7 +1063,7 @@ system.
 
 <para>The behaviour of the <guilabel>File Selector</guilabel> can be highly
 configured. Select <menuchoice> <guimenu>Settings</guimenu>
-<guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the
+<guimenuitem>Configure &kdevelop;..</guimenuitem> </menuchoice> from the
 menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up,
 where you have to select <guilabel>File Selector</guilabel> in the left hand
 tree. This will show the following dialog in the right hand side.</para>
@@ -1256,7 +1305,7 @@ If &kdevelop; was automatically restarted by the &kde; session manager the chang
 </para></note>
 
 <para>
-You may set up contents and behaviour of the various parts of this documentation window if you select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Documentation</guilabel> in the left hand window.
+You may set up contents and behaviour of the various parts of this documentation window if you select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure &kdevelop;..</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Documentation</guilabel> in the left hand window.
 </para>
 
 <para>
