@@ -322,28 +322,34 @@ You choose here which terminal you want to be integrated within KDevelop.
   <primary>switch UI modes</primary></indexterm>
 
 <para>
-As already said in the <link linkend="uimodes-survey">Available User Interface Modes</link> chapter there are four different ways the &kdevelop; work area may be set up, namely:
+As already said in the <link linkend="uimodes-survey">Available User Interface Modes</link> chapter there are five different ways the &kdevelop; work area may be set up, namely:
 </para>
 <itemizedlist>
   <listitem><para>
   <link linkend="ideal-desc">Simplified IDEAl window mode</link>
-  </para></listitem>
+  </para><para>This is a simplified version of the IDEA user interface. It is designed to be simple and clean. It also does not uses docked toolviews.</para></listitem>
   <listitem><para>
   <link linkend="ideal-desc">IDEAl window mode</link>
-  </para></listitem>
+  </para><para>This is a clone of the IDEA user interface, similar to the Tabbed pages mode and is default.</para></listitem>
   <listitem><para>
-  <link linkend="mdi-desc">Child Frame window mode</link>
-  </para></listitem>
+  <link linkend="mdi-desc">Childframe window mode</link>
+  </para><para>All tool views are initially docked to the mainframe.
+Editor and browser views will live like toplevel windows within a view area of the mainframe.
+A typical example of this user interface mode is MS Visual Studio 6.0.</para></listitem>
   <listitem><para>
-  <link linkend="tabbed-desc">Tabbed Pages mode</link>
-  </para></listitem>
+  <link linkend="tabbed-desc">Tabbed pages mode</link>
+  </para><para>All tool views are initially docked to the mainframe.
+Editor and browser views will be stacked in a tab window.
+A typical example of this user interface mode is KDEStudio, our friend C++-IDE in the world of KDE.</para></listitem>
   <listitem><para>
   <link linkend="toplevel-desc">Toplevel window mode</link>
-  </para></listitem>
+  </para><para>All editor, browser and tool views will be toplevel windows (directly on desktop).
+The main widget contains the menu, toolbars and statusbar only.
+A typical example of this user interface mode is Borland Delphi 6.0.</para></listitem>
 </itemizedlist>
 
 <para>
-To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure &kdevelop;..</guimenuitem> </menuchoice> from the menus. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand tree. This will display the following settings dialog to the right.</para>
+To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure &kdevelop;...</guimenuitem> </menuchoice> from the menus. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand tree. This will display the following settings dialog to the right.</para>
 
 <screenshot>
   <mediaobject>
@@ -500,7 +506,19 @@ The active toolview window must be shown fixed (non-overlap mode), sharing the w
 
 <sect2 id="setup-templates">
 <title>File Templates</title>
-<para></para>
+<!--TODO fill--><para></para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="configure-file-templates.png" format="PNG"/>
+    </imageobject>
+<textobject><phrase>Configure File Templates</phrase></textobject>
+    <caption><para>
+    Configure File Templates
+    </para></caption>
+  </mediaobject>
+</screenshot>
 </sect2> <!-- setup-templates -->
 
 <sect2 id="setup-editor">
@@ -522,7 +540,7 @@ The active toolview window must be shown fixed (non-overlap mode), sharing the w
 </screenshot>
 
 <para>
-To select a new editor, click on the arrow on the drop down list field. Depending on the editor parts interfaces your &kde; version has compiled in you will be provided with a list of editors you may select from (see the <link linkend="setup-editor-kparts">Important</link> note below for this). Click on the editor of your liking and click <guilabel>OK</guilabel>. Currently there are tree possibilities:
+To select a new editor, click on the arrow on the drop down list field. Depending on the editor parts interfaces your &kde; version has compiled in you will be provided with a list of editors you may select from (see the <link linkend="setup-editor-kparts">Important</link> note below for this). Click on the editor of your liking and click <guilabel>OK</guilabel>. Currently there are two possibilities:
 </para>
 
 <variablelist>
@@ -532,22 +550,7 @@ To select a new editor, click on the arrow on the drop down list field. Dependin
   This is the &kde; standard <application>Kate</application> editor part.
   </para></listitem>
   </varlistentry>
- <!-- obsolete <varlistentry>
-  <term><guilabel>Embedded Vim Component</guilabel></term>
-  <listitem>
-    <para>
-    This provides the look and feel of the base &Linux; <application>vi</application> editor.
-    </para>
-    <note><itemizedlist>
-      <listitem><para>
-      You need to have a suitable <application>Vim</application> application installed. Have a look at the <ulink url="http://www.freehackers.org/kvim/">KVim</ulink> website for more information.
-      </para></listitem>
-      <listitem><para>
-      Furthermore you need to configure the KParts Vim component in the <guilabel>&kde; Control Center</guilabel> (<menuchoice><guimenuitem>KDE Components</guimenuitem><guimenuitem>Vim Component Configuration</guimenuitem></menuchoice>) before you can use it.
-      </para></listitem>
-    </itemizedlist></note>
-  </listitem>
-  </varlistentry>-->
+
   <varlistentry>
   <term><guilabel>Qt Designer Based Text Editor</guilabel></term>
   <listitem><para>
@@ -567,6 +570,28 @@ Changing the editor will not effect already open files. There are two possibilit
 <important id="setup-editor-kparts"><para>
 KDevelop lets you use editor interfaces which have registered with &kde; and that provide a KatePart interface. If you miss one one of the selections shown above check your &kde; installation if the corresponding KPart was correctly installed.
 </para></important>
+
+<para>What to do if the file has been changed externally:</para>
+<variablelist>
+  <varlistentry>
+  <term><guilabel>Do nothing</guilabel></term>
+  <listitem><para>
+ The file will be marked as externally changed and the user will be asked to verify any attempt to overwrite it.
+  </para></listitem>
+  </varlistentry>
+  <varlistentry>
+  <term><guilabel>Alert the user</guilabel></term>
+  <listitem><para>
+  A dialog will alert the user that a file has changed and offer the user to reload the file.
+  </para></listitem>
+  </varlistentry>
+  <varlistentry>
+  <term><guilabel>Automatically reload the file if safe, alert the user if not</guilabel></term>
+  <listitem><para>
+  Any files that are not modified in memory are reloaded and an alert is shown for any conflicts.
+  </para></listitem>
+  </varlistentry>
+</variablelist>
 </sect2> <!-- setup-editor -->
 
 <sect2 id="setup-abbrev">
