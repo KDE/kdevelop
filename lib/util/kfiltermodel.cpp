@@ -207,7 +207,7 @@ void KFilterModel::setFilter(const QString &expression)
 }
 
 /**
- * Matches an index in the model. The default implementation checks whether the item contains
+ * Matches an index in the model. The default implementation checks whether the item starts with
  * the string set by setFilter().
  *
  * @param index The index to match
@@ -217,7 +217,7 @@ bool KFilterModel::matches(const QModelIndex &index) const
 {
     Q_ASSERT(index.isValid());
 
-    return d->sourceModel->data(index).toString().contains(d->filterStr);
+    return d->sourceModel->data(index).toString().startsWith(d->filterStr);
 }
 
 QString KFilterModel::filter() const
