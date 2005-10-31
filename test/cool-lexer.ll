@@ -2,6 +2,7 @@
 %{
 #include "cool.h"
 #include <QVector>
+#include <kdebug.h>
 
 extern std::size_t _M_token_begin, _M_token_end;
 extern char *_G_contents;
@@ -19,11 +20,13 @@ extern QVector<int> _G_tokenLocations;
 #define YY_USER_INIT \
   _M_token_begin = _M_token_end = 0; \
   _G_current_offset = 0; \
-  _G_tokenLocations.clear();
+  _G_tokenLocations.clear(); \
+  _G_tokenLocations.append(0);
 
 #define YY_USER_ACTION \
   _M_token_begin = _M_token_end; \
-  _M_token_end += yyleng;
+  _M_token_end += yyleng; \
+  if (yytext[0] == 10) _G_tokenLocations.append(_M_token_begin);
 %}
 
 %x IN_STRING
@@ -33,8 +36,6 @@ extern QVector<int> _G_tokenLocations;
 
 [ \t\r]+  /* skip */ ;
 "--".*      /* skip */ ;
-
-"\n" _G_tokenLocations.append(yyleng);
 
 "@" return cool::Token_AT;
 "case" return cool::Token_CASE;

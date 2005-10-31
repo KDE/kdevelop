@@ -30,7 +30,7 @@ namespace KTextEditor {
 class EditModelBuilder : public cool_default_visitor
 {
   public:
-    EditModelBuilder(KTextEditor::SmartRange* m_topRange);
+    EditModelBuilder(KTextEditor::SmartRange* m_topRange, const cool::token_stream_type& token_stream);
     virtual ~EditModelBuilder();
 
     virtual void visit_node(cool_ast_node *node);
@@ -55,10 +55,11 @@ class EditModelBuilder : public cool_default_visitor
 
   private:
     KTextEditor::SmartRange* newRange(std::size_t start_token, std::size_t end_token);
-    KTextEditor::Cursor tokenToPosition(std::size_t token);
+    KTextEditor::Cursor tokenToPosition(std::size_t token, bool end = false);
 
     KTextEditor::SmartRange* m_topRange;
     KTextEditor::SmartRange* m_currentRange;
+    const cool::token_stream_type& m_tokenStream;
 };
 
 #endif

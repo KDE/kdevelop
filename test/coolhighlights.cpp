@@ -27,8 +27,7 @@ Attribute * CoolHighlights::classHighlight( )
   static Attribute* a = 0L;
   if (!a) {
     a = new Attribute();
-    a->setFontBold();
-    a->setForeground(Qt::blue);
+    a->setBackground(Qt::yellow);
   }
   return a;
 }

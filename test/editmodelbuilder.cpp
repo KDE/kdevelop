@@ -30,9 +30,10 @@ using namespace KTextEditor;
 
 QVector<int> _G_tokenLocations;
 
-EditModelBuilder::EditModelBuilder(KTextEditor::SmartRange* topRange)
+EditModelBuilder::EditModelBuilder(KTextEditor::SmartRange* topRange, const cool::token_stream_type& token_stream)
   : m_topRange(topRange)
   , m_currentRange(topRange)
+  , m_tokenStream(token_stream)
 {
 }
 
@@ -44,7 +45,8 @@ void EditModelBuilder::visit_node( cool_ast_node * node )
 {
   cool_default_visitor::visit_node( node );
 
-  //kdDebug() << k_funcinfo << tokenToPosition(node->start_token) << " " << tokenToPosition(node->end_token) << endl;
+  if (node)
+    kdDebug() << k_funcinfo << node->start_token << " translates to " << tokenToPosition(node->start_token) << " " << tokenToPosition(node->end_token) << endl;
 }
 
 void EditModelBuilder::visit_class( class_ast * ast )
@@ -59,17 +61,22 @@ void EditModelBuilder::visit_class( class_ast * ast )
 
 SmartRange * EditModelBuilder::newRange( std::size_t start_token, std::size_t end_token )
 {
-  return dynamic_cast<SmartInterface*>(m_topRange->document())->newSmartRange(tokenToPosition(start_token), tokenToPosition(end_token), m_topRange);
+  return dynamic_cast<SmartInterface*>(m_topRange->document())->newSmartRange(tokenToPosition(start_token), tokenToPosition(end_token, true), m_topRange);
 }
 
-Cursor EditModelBuilder::tokenToPosition( std::size_t token )
+Cursor EditModelBuilder::tokenToPosition( std::size_t token, bool end )
 {
-  if (token == 0)
+  const kdev_pg_token_stream::token_type& actualToken = m_tokenStream.token(token);
+
+  int len = end ? actualToken.begin : actualToken.end;
+
+  if (len == 0)
     return Cursor();
 
-  for (int i = 0; i < _G_tokenLocations.count(); ++i)
-    if (token > _G_tokenLocations[i])
-        return Cursor(i, token - _G_tokenLocations[i]);
+  int i = 0;
+  for (; i < _G_tokenLocations.count() - 1; ++i)
+    if (len > _G_tokenLocations[i] && len < _G_tokenLocations[i+1])
+        return Cursor(i, len - _G_tokenLocations[i]);
 
-  return Cursor::invalid();
+  return Cursor(i, len - _G_tokenLocations.last());
 }

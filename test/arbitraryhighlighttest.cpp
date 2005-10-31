@@ -132,7 +132,7 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
   program_ast *ast = 0;
   if (parser.parse_program(&ast))
     {
-      EditModelBuilder builder(range);
+      EditModelBuilder builder(range, token_stream);
       builder.visit_node(ast);
     }
   else
