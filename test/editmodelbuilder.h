@@ -25,6 +25,7 @@
 
 namespace KTextEditor {
   class SmartRange;
+  class SmartInterface;
 }
 
 class EditModelBuilder : public cool_default_visitor
@@ -46,14 +47,16 @@ class EditModelBuilder : public cool_default_visitor
     virtual void visit_let_declaration(let_declaration_ast *ast);
     virtual void visit_let_expression(let_expression_ast *ast);
     virtual void visit_multiplicative_expression(multiplicative_expression_ast *ast);
-    virtual void visit_postfix_expression(postfix_expression_ast *ast);
+    virtual void visit_postfix_expression(postfix_expression_ast *ast);*/
     virtual void visit_primary_expression(primary_expression_ast *ast);
-    virtual void visit_program(program_ast *ast);
+    /*virtual void visit_program(program_ast *ast);
     virtual void visit_relational_expression(relational_expression_ast *ast);
     virtual void visit_unary_expression(unary_expression_ast *ast);
     virtual void visit_while_expression(while_expression_ast *ast);*/
 
   private:
+    KTextEditor::SmartInterface* smart() const;
+
     KTextEditor::SmartRange* newRange(std::size_t start_token, std::size_t end_token);
     KTextEditor::Cursor tokenToPosition(std::size_t token, bool end = false);
 

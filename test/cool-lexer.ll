@@ -26,7 +26,7 @@ extern QVector<int> _G_tokenLocations;
 #define YY_USER_ACTION \
   _M_token_begin = _M_token_end; \
   _M_token_end += yyleng; \
-  if (yytext[0] == 10) _G_tokenLocations.append(_M_token_begin);
+  if (yytext[0] == 10) { _G_tokenLocations.append(_M_token_begin); kdDebug() << "Newline at " << _M_token_begin << endl; }
 %}
 
 %x IN_STRING

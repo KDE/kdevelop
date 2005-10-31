@@ -59,16 +59,26 @@ void EditModelBuilder::visit_class( class_ast * ast )
   m_currentRange = m_currentRange->parentRange();
 }
 
+void EditModelBuilder::visit_primary_expression( primary_expression_ast * ast )
+{
+  cool_default_visitor::visit_primary_expression(ast);
+
+  if (ast->variable) {
+    SmartRange* variable = smart()->newSmartRange(tokenToPosition(ast->variable), tokenToPosition(ast->variable, true), m_currentRange);
+    variable->setAttribute(CoolHighlights::variableHighlight());
+  }
+}
+
 SmartRange * EditModelBuilder::newRange( std::size_t start_token, std::size_t end_token )
 {
-  return dynamic_cast<SmartInterface*>(m_topRange->document())->newSmartRange(tokenToPosition(start_token), tokenToPosition(end_token, true), m_topRange);
+  return smart()->newSmartRange(tokenToPosition(start_token), tokenToPosition(end_token, true), m_topRange);
 }
 
 Cursor EditModelBuilder::tokenToPosition( std::size_t token, bool end )
 {
   const kdev_pg_token_stream::token_type& actualToken = m_tokenStream.token(token);
 
-  int len = end ? actualToken.begin : actualToken.end;
+  int len = (end ? actualToken.begin : actualToken.end) - 1;
 
   if (len == 0)
     return Cursor();
@@ -79,4 +89,9 @@ Cursor EditModelBuilder::tokenToPosition( std::size_t token, bool end )
         return Cursor(i, len - _G_tokenLocations[i]);
 
   return Cursor(i, len - _G_tokenLocations.last());
+}
+
+SmartInterface * EditModelBuilder::smart( ) const
+{
+  return dynamic_cast<SmartInterface*>(m_topRange->document());
 }

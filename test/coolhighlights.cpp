@@ -32,3 +32,13 @@ Attribute * CoolHighlights::classHighlight( )
   return a;
 }
 
+KTextEditor::Attribute * CoolHighlights::variableHighlight( )
+{
+  static Attribute* a = 0L;
+  if (!a) {
+    a = new Attribute();
+    a->setBackground(Qt::green);
+  }
+  return a;
+}
+

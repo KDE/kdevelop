@@ -130,17 +130,15 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
 
   // 2) parse
   program_ast *ast = 0;
-  if (parser.parse_program(&ast))
-    {
-      EditModelBuilder builder(range, token_stream);
-      builder.visit_node(ast);
-    }
-  else
-    {
-      std::cerr << "** ERROR expected a declaration: token position:" << _M_token_begin << std::endl;
-    }
+  if (parser.parse_program(&ast)) {
+    EditModelBuilder builder(range, token_stream);
+    builder.visit_node(ast);
 
-  outputRange(range, mostSpecificChild);
+  } else {
+    std::cerr << "** ERROR expected a declaration: token position:" << _M_token_begin << std::endl;
+  }
+
+  //outputRange(range, mostSpecificChild);
 }
 
 void ArbitraryHighlightTest::outputRange( KTextEditor::SmartRange * range, KTextEditor::SmartRange * mostSpecific )

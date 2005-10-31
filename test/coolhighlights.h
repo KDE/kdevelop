@@ -27,6 +27,7 @@ namespace KTextEditor
 namespace CoolHighlights
 {
 KTextEditor::Attribute* classHighlight();
+KTextEditor::Attribute* variableHighlight();
 }
 
 #endif
