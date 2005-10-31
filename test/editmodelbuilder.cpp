@@ -46,7 +46,7 @@ void EditModelBuilder::visit_node( cool_ast_node * node )
   cool_default_visitor::visit_node( node );
 
   if (node)
-    kdDebug() << k_funcinfo << node->start_token << " translates to " << tokenToPosition(node->start_token) << " " << tokenToPosition(node->end_token) << endl;
+    kdDebug() << k_funcinfo << node->start_token << ", " << node->start_token << " translates to " << tokenToPosition(node->start_token) << ", " << tokenToPosition(node->end_token) << endl;
 }
 
 void EditModelBuilder::visit_class( class_ast * ast )
@@ -78,7 +78,7 @@ Cursor EditModelBuilder::tokenToPosition( std::size_t token, bool end )
 {
   const kdev_pg_token_stream::token_type& actualToken = m_tokenStream.token(token);
 
-  int len = (end ? actualToken.begin : actualToken.end) - 1;
+  int len = end ? actualToken.begin : actualToken.end;
 
   if (len == 0)
     return Cursor();

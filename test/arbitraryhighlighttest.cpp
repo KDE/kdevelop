@@ -63,8 +63,8 @@ char *_G_contents;
 std::size_t _M_token_begin, _M_token_end;
 std::size_t _G_current_offset;
 
-static void tokenize(cool &m);
 int yylex();
+void yyrestart(FILE *input_file);
 
 static void tokenize(cool &m)
 {
@@ -92,23 +92,7 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
   /*SmartRange* currentRange = mostSpecificChild;
   currentRange->deleteChildRanges();
 
-  Cursor current = currentRange->start();
-  QStringList text;
-
-  Range textNeeded = *currentRange;
-  if (range != currentRange) {
-    if (textNeeded.start() >= textNeeded.end() - Cursor(0,2)) {
-      outputRange(range, mostSpecificChild);
-      return;
-    }
-
-    textNeeded.start() += Cursor(0,1);
-    textNeeded.end() -= Cursor(0,1);
-
-    current += Cursor(0,1);
-  }
-
-  text = currentRange->document()->textLines(textNeeded);*/
+  text = currentRange->document()->textLines(currentRange);*/
 
   // Nuke current children -- to be replaced
   range->deleteChildRanges();
@@ -126,6 +110,7 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
   parser.set_memory_pool(&memory_pool);
 
   // 1) tokenize
+  yyrestart(0);
   tokenize(parser);
 
   // 2) parse
@@ -135,7 +120,8 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
     builder.visit_node(ast);
 
   } else {
-    std::cerr << "** ERROR expected a declaration: token position:" << _M_token_begin << std::endl;
+    kdDebug() << "** ERROR expected a declaration: token position:" << _M_token_begin << endl;
+    kdDebug() << QString(documentContents) << endl;
   }
 
   //outputRange(range, mostSpecificChild);
@@ -160,7 +146,7 @@ void ArbitraryHighlightTest::slotCreateTopRange( )
   smart()->addHighlightToDocument(m_topRange, true);
   m_topRange->setInsertBehaviour(SmartRange::ExpandRight);
   connect(m_topRange->notifier(), SIGNAL(contentsChanged(KTextEditor::SmartRange*, KTextEditor::SmartRange*)), SLOT(slotRangeChanged(KTextEditor::SmartRange*, KTextEditor::SmartRange*)));
-  connect(m_topRange->notifier(), SIGNAL(rangeDeleted(KTextEditor::SmartRange*)), SLOT(slotRangeDeleted(KTextEditor::SmartRange*)));
+  connect(m_topRange->notifier(), SIGNAL(deleted(KTextEditor::SmartRange*)), SLOT(slotRangeDeleted(KTextEditor::SmartRange*)));
 
   slotRangeChanged(m_topRange, m_topRange);
 }
