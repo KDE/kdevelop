@@ -1,5 +1,6 @@
-SOURCES += main.cpp ../../../lib/util/kfiltermodel.cpp
-INCLUDEPATH += ../../../lib/util
+SOURCES += main.cpp ../../../lib/util/kfiltermodel.cpp \
+           ../../../lib/interfaces/kdevitemmodel.cpp
+INCLUDEPATH += ../../../lib/util ../../../lib/interfaces
 
 #LIBS += -lkdevelop
 
