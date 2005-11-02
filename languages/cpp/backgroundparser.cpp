@@ -122,6 +122,10 @@ void BackgroundParser::parseComplete( Job *job )
     KDevCodeModel *cm = m_cppSupport->codeModel();
     FileModelItem file = parseJob->fileModelItem();
 
+    // Hmm, should this return null under any condition?
+    if (!file)
+        return;
+
     // This of course can be made more efficient and it should
     // be broken out into it's own class/method, but something quick
     // for testing now
