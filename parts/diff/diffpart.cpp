@@ -85,10 +85,9 @@ static KParts::ReadWritePart* partForURL(const KURL &url, KDevDocumentController
 {
   if ( !pc )
     return 0;
-  Q3PtrListIterator<KParts::Part> it(*(pc->parts()));
-  for ( ; it.current(); ++it)
+  foreach (KParts::Part* part, pc->parts())
   {
-    KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(it.current());
+    KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(part);
 // TODO    if ( rw_part && dynamic_cast<KTextEditor::EditInterface*>(it.current()) && urlIsEqual(url, rw_part->url()) )
 // TODO      return rw_part;
   }
