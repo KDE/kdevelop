@@ -62,9 +62,9 @@ KTextEditor::SmartInterface * ArbitraryHighlightTest::smart( ) const
 char *_G_contents;
 std::size_t _M_token_begin, _M_token_end;
 std::size_t _G_current_offset;
+extern QVector<int> _G_newLineLocations;
 
 int yylex();
-void yyrestart(FILE *input_file);
 
 static void tokenize(cool &m)
 {
@@ -109,8 +109,14 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
   parser.set_token_stream(&token_stream);
   parser.set_memory_pool(&memory_pool);
 
+  // Initialise lexer globals
+  _M_token_begin = _M_token_end = 0;
+  _G_current_offset = 0;
+  _G_newLineLocations.clear();
+  _G_newLineLocations.append(0);
+
   // 1) tokenize
-  yyrestart(0);
+  _G_current_offset = 0;
   tokenize(parser);
 
   // 2) parse
@@ -121,7 +127,6 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
 
   } else {
     kdDebug() << "** ERROR expected a declaration: token position:" << _M_token_begin << endl;
-    kdDebug() << QString(documentContents) << endl;
   }
 
   //outputRange(range, mostSpecificChild);

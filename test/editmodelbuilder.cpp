@@ -28,7 +28,7 @@
 
 using namespace KTextEditor;
 
-QVector<int> _G_tokenLocations;
+QVector<int> _G_newLineLocations;
 
 EditModelBuilder::EditModelBuilder(KTextEditor::SmartRange* topRange, const cool::token_stream_type& token_stream)
   : m_topRange(topRange)
@@ -45,8 +45,8 @@ void EditModelBuilder::visit_node( cool_ast_node * node )
 {
   cool_default_visitor::visit_node( node );
 
-  if (node)
-    kdDebug() << k_funcinfo << node->start_token << ", " << node->start_token << " translates to " << tokenToPosition(node->start_token) << ", " << tokenToPosition(node->end_token) << endl;
+//  if (node)
+    //kdDebug() << k_funcinfo << node->start_token << ", " << node->start_token << " translates to " << tokenToPosition(node->start_token) << ", " << tokenToPosition(node->end_token) << endl;
 }
 
 void EditModelBuilder::visit_class( class_ast * ast )
@@ -84,11 +84,11 @@ Cursor EditModelBuilder::tokenToPosition( std::size_t token, bool end )
     return Cursor();
 
   int i = 0;
-  for (; i < _G_tokenLocations.count() - 1; ++i)
-    if (len > _G_tokenLocations[i] && len < _G_tokenLocations[i+1])
-        return Cursor(i, len - _G_tokenLocations[i]);
+  for (; i < _G_newLineLocations.count() - 1; ++i)
+    if (len > _G_newLineLocations[i] && len < _G_newLineLocations[i+1])
+        return Cursor(i, len - _G_newLineLocations[i]);
 
-  return Cursor(i, len - _G_tokenLocations.last());
+  return Cursor(i, len - _G_newLineLocations.last());
 }
 
 SmartInterface * EditModelBuilder::smart( ) const
