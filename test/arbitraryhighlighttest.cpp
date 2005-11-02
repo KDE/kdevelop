@@ -121,7 +121,9 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
   // 2) parse
   program_ast *ast = 0;
   if (parser.parse_program(&ast)) {
-    EditModelBuilder builder(range, token_stream);
+    static bool switchEachTime = false;
+    EditModelBuilder builder(range, token_stream, switchEachTime);
+    switchEachTime = !switchEachTime;
     builder.visit_node(ast);
 
   } else {

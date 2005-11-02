@@ -30,10 +30,12 @@ using namespace KTextEditor;
 
 QVector<int> _G_newLineLocations;
 
-EditModelBuilder::EditModelBuilder(KTextEditor::SmartRange* topRange, const cool::token_stream_type& token_stream)
+EditModelBuilder::EditModelBuilder(KTextEditor::SmartRange* topRange, const cool::token_stream_type& token_stream, bool monochrome)
   : m_topRange(topRange)
   , m_currentRange(topRange)
   , m_tokenStream(token_stream)
+  , m_depth(0)
+  , m_monochrome(monochrome)
 {
 }
 
@@ -43,30 +45,82 @@ EditModelBuilder::~EditModelBuilder()
 
 void EditModelBuilder::visit_node( cool_ast_node * node )
 {
+  if (node && m_monochrome) {
+    m_currentRange = newRange(node->start_token, node->end_token);
+    m_currentRange->setAttribute(CoolHighlights::depthHighlight(m_depth++));
+  }
+
   cool_default_visitor::visit_node( node );
 
-//  if (node)
+  if (node && m_monochrome) {
+    m_currentRange = m_currentRange->parentRange();
+    --m_depth;
     //kdDebug() << k_funcinfo << node->start_token << ", " << node->start_token << " translates to " << tokenToPosition(node->start_token) << ", " << tokenToPosition(node->end_token) << endl;
+  }
 }
 
 void EditModelBuilder::visit_class( class_ast * ast )
 {
-  m_currentRange = newRange(ast->start_token, ast->end_token);
-  m_currentRange->setAttribute(CoolHighlights::classHighlight());
+  if (!m_monochrome) {
+    m_currentRange = newRange(ast->start_token, ast->end_token);
+    m_currentRange->setAttribute(CoolHighlights::classHighlight());
+  }
 
   cool_default_visitor::visit_class(ast);
 
-  m_currentRange = m_currentRange->parentRange();
+  if (!m_monochrome)
+    m_currentRange = m_currentRange->parentRange();
+}
+
+void EditModelBuilder::visit_block_expression( block_expression_ast * ast )
+{
+  if (!m_monochrome) {
+    m_currentRange = newRange(ast->start_token, ast->end_token);
+    m_currentRange->setAttribute(CoolHighlights::nextHighlight());
+  }
+
+  cool_default_visitor::visit_block_expression(ast);
+
+  if (!m_monochrome)
+    m_currentRange = m_currentRange->parentRange();
+}
+
+void EditModelBuilder::visit_expression( expression_ast * ast )
+{
+  //m_currentRange = newRange(ast->start_token, ast->end_token);
+  //m_currentRange->setAttribute(CoolHighlights::nextHighlight());
+
+  cool_default_visitor::visit_expression(ast);
+
+  //m_currentRange = m_currentRange->parentRange();
 }
 
 void EditModelBuilder::visit_feature( feature_ast * ast )
 {
-  m_currentRange = newRange(ast->start_token, ast->end_token);
-  m_currentRange->setAttribute(CoolHighlights::methodHighlight());
+  if (!m_monochrome) {
+    m_currentRange = newRange(ast->start_token, ast->end_token);
+    m_currentRange->setAttribute(CoolHighlights::methodHighlight());
+  }
 
   cool_default_visitor::visit_feature(ast);
 
-  m_currentRange = m_currentRange->parentRange();
+  if (!m_monochrome)
+    m_currentRange = m_currentRange->parentRange();
+}
+
+void EditModelBuilder::visit_formal( formal_ast * ast )
+{
+  if (!m_monochrome) {
+    m_currentRange = newRange(ast->start_token, ast->end_token, true, false);
+    m_currentRange->setAttribute(CoolHighlights::variableDefinitionHighlight());
+  }
+
+  newRange(ast->name)->setAttribute(CoolHighlights::variableHighlight());
+
+  cool_default_visitor::visit_formal(ast);
+
+  if (!m_monochrome)
+    m_currentRange = m_currentRange->parentRange();
 }
 
 void EditModelBuilder::visit_primary_expression( primary_expression_ast * ast )
@@ -74,14 +128,24 @@ void EditModelBuilder::visit_primary_expression( primary_expression_ast * ast )
   cool_default_visitor::visit_primary_expression(ast);
 
   if (ast->variable) {
-    SmartRange* variable = smart()->newSmartRange(tokenToPosition(ast->variable), tokenToPosition(ast->variable, true), m_currentRange);
+    SmartRange* variable = newRange(ast->variable);
     variable->setAttribute(CoolHighlights::variableHighlight());
   }
 }
 
-SmartRange * EditModelBuilder::newRange( std::size_t start_token, std::size_t end_token )
+void EditModelBuilder::visit_relational_expression( relational_expression_ast * ast )
 {
-  return smart()->newSmartRange(tokenToPosition(start_token), tokenToPosition(end_token, true), m_currentRange);
+  //m_currentRange = newRange(ast->start_token, ast->end_token);
+  //m_currentRange->setAttribute(CoolHighlights::nextHighlight());
+
+  cool_default_visitor::visit_relational_expression(ast);
+
+  //m_currentRange = m_currentRange->parentRange();
+}
+
+SmartRange * EditModelBuilder::newRange( std::size_t start_token, std::size_t end_token, bool includeStartToken, bool includeEndToken )
+{
+  return smart()->newSmartRange(tokenToPosition(start_token, !includeStartToken), tokenToPosition(end_token, includeEndToken), m_currentRange);
 }
 
 Cursor EditModelBuilder::tokenToPosition( std::size_t token, bool end )
@@ -104,4 +168,9 @@ Cursor EditModelBuilder::tokenToPosition( std::size_t token, bool end )
 SmartInterface * EditModelBuilder::smart( ) const
 {
   return dynamic_cast<SmartInterface*>(m_topRange->document());
+}
+
+KTextEditor::SmartRange * EditModelBuilder::newRange( std::size_t token )
+{
+  return smart()->newSmartRange(tokenToPosition(token), tokenToPosition(token, true), m_currentRange);
 }

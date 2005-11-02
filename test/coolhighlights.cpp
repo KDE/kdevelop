@@ -47,7 +47,40 @@ KTextEditor::Attribute * CoolHighlights::methodHighlight( )
   static Attribute* a = 0L;
   if (!a) {
     a = new Attribute();
-    a->setBackground(QColor(Qt::blue).light());
+    a->setBackground(QColor(Qt::blue).light(175));
   }
   return a;
+}
+
+KTextEditor::Attribute * CoolHighlights::variableDefinitionHighlight( )
+{
+  static Attribute* a = 0L;
+  if (!a) {
+    a = new Attribute();
+    a->setBackground(QColor(Qt::green).light(175));
+  }
+  return a;
+}
+
+KTextEditor::Attribute * CoolHighlights::nextHighlight( )
+{
+  static Attribute* a = 0L;
+  if (!a) {
+    a = new Attribute();
+    a->setBackground(QColor(Qt::red).light(175));
+  }
+  return a;
+}
+
+KTextEditor::Attribute * CoolHighlights::depthHighlight( int depth )
+{
+  static QList<Attribute*> a;
+  if (a.count() < depth + 1) {
+    for (int i = a.count(); i < depth + 1; ++i) {
+      Attribute* b = new Attribute();
+      b->setBackground(QColor(Qt::white).dark(100 + (depth * 5)));
+      a << b;
+    }
+  }
+  return a[depth];
 }

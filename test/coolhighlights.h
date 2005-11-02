@@ -29,6 +29,9 @@ namespace CoolHighlights
 KTextEditor::Attribute* classHighlight();
 KTextEditor::Attribute* variableHighlight();
 KTextEditor::Attribute* methodHighlight();
+KTextEditor::Attribute* variableDefinitionHighlight();
+KTextEditor::Attribute* nextHighlight();
+KTextEditor::Attribute* depthHighlight(int depth);
 }
 
 #endif

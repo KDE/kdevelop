@@ -27,6 +27,7 @@
 #include <ktexteditor/modificationinterface.h>
 #include <ktexteditor/editor.h>
 #include <ktexteditor/editorchooser.h>
+#include <ktexteditor/highlightinginterface.h>
 
 #include <kio/netaccess.h>
 
@@ -114,6 +115,10 @@ KWrite::KWrite (KTextEditor::Document *doc)
 
     docList.append(doc);
   }
+
+  // Turn off katepart's highlighting, we want to see the arbitrary highlighting
+  if (KTextEditor::HighlightingInterface* iface = qobject_cast<KTextEditor::HighlightingInterface*>(doc))
+    iface->setHlMode(0);
 
   new ArbitraryHighlightTest(doc);
 

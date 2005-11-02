@@ -31,38 +31,48 @@ namespace KTextEditor {
 class EditModelBuilder : public cool_default_visitor
 {
   public:
-    EditModelBuilder(KTextEditor::SmartRange* m_topRange, const cool::token_stream_type& token_stream);
+    EditModelBuilder(KTextEditor::SmartRange* m_topRange, const cool::token_stream_type& token_stream, bool monochrome = false);
     virtual ~EditModelBuilder();
 
     virtual void visit_node(cool_ast_node *node);
-    /*virtual void visit_additive_expression(additive_expression_ast *ast);
+
+    //virtual void visit_additive_expression(additive_expression_ast *ast);
     virtual void visit_block_expression(block_expression_ast *ast);
-    virtual void visit_case_condition(case_condition_ast *ast);
+    /*virtual void visit_case_condition(case_condition_ast *ast);
     virtual void visit_case_expression(case_expression_ast *ast);*/
+
     virtual void visit_class(class_ast *ast);
-    /*virtual void visit_expression(expression_ast *ast);*/
+    virtual void visit_expression(expression_ast *ast);
     virtual void visit_feature(feature_ast *ast);
-    /*virtual void visit_formal(formal_ast *ast);
-    virtual void visit_if_expression(if_expression_ast *ast);
+    virtual void visit_formal(formal_ast *ast);
+
+    /*virtual void visit_if_expression(if_expression_ast *ast);
     virtual void visit_let_declaration(let_declaration_ast *ast);
     virtual void visit_let_expression(let_expression_ast *ast);
     virtual void visit_multiplicative_expression(multiplicative_expression_ast *ast);
     virtual void visit_postfix_expression(postfix_expression_ast *ast);*/
+
     virtual void visit_primary_expression(primary_expression_ast *ast);
-    /*virtual void visit_program(program_ast *ast);
+
+    //virtual void visit_program(program_ast *ast);
+
     virtual void visit_relational_expression(relational_expression_ast *ast);
-    virtual void visit_unary_expression(unary_expression_ast *ast);
+
+    /*virtual void visit_unary_expression(unary_expression_ast *ast);
     virtual void visit_while_expression(while_expression_ast *ast);*/
 
   private:
     KTextEditor::SmartInterface* smart() const;
 
-    KTextEditor::SmartRange* newRange(std::size_t start_token, std::size_t end_token);
+    KTextEditor::SmartRange* newRange(std::size_t start_token, std::size_t end_token, bool includeStartToken = true, bool includeEndToken = true);
+    KTextEditor::SmartRange* newRange(std::size_t token);
     KTextEditor::Cursor tokenToPosition(std::size_t token, bool end = false);
 
     KTextEditor::SmartRange* m_topRange;
     KTextEditor::SmartRange* m_currentRange;
     const cool::token_stream_type& m_tokenStream;
+    int m_depth;
+    bool m_monochrome;
 };
 
 #endif
