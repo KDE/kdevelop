@@ -59,7 +59,7 @@ KDevPluginInfo::KDevPluginInfo(const QString &pluginName)
     d->m_pluginName = pluginName;
 
     KService::Ptr offer = KService::serviceByDesktopName(pluginName);
-    if (offer != 0)
+    if (offer)
     {
         d->m_genericName = offer->genericName();
         d->m_icon = offer->icon();
