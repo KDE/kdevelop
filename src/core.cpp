@@ -42,7 +42,7 @@ Core::~Core()
 bool Core::queryClose()
 {
   // save the the project to open it automaticly on startup if needed
-  KConfig* config = kapp->config();
+  KConfig* config = KGlobal::config();
   config->setGroup("General Options");
   config->writePathEntry("Last Project",ProjectManager::getInstance()->projectFile().url());
 

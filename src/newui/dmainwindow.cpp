@@ -28,6 +28,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QEvent>
+#include <kglobal.h>
 
 #include "dtabwidget.h"
 #include "docksplitter.h"
@@ -45,7 +46,7 @@ DMainWindow::DMainWindow(QWidget *parent, const char *name)
 
 void DMainWindow::loadSettings()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("UI");
     m_openTabAfterCurrent = config->readBoolEntry("OpenNewTabAfterCurrent", true);
     m_showIconsOnTabs = config->readBoolEntry("ShowTabIcons", false);

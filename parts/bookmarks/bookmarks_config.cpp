@@ -11,6 +11,7 @@
 
 #include <kconfig.h>
 #include <kapplication.h>
+#include <kglobal.h>
 
 #include "bookmarks_config.h"
 
@@ -32,7 +33,7 @@ BookmarksConfig::~BookmarksConfig()
  */
 void BookmarksConfig::writeConfig()
 {
-	KConfig *config = kapp->config();   
+	KConfig *config = KGlobal::config();   
 	config->setGroup("Bookmarks");
 	
 	config->writeEntry("Context", _context );
@@ -49,7 +50,7 @@ void BookmarksConfig::writeConfig()
  */
 void BookmarksConfig::readConfig()
 {
-	KConfig *config = kapp->config();
+	KConfig *config = KGlobal::config();
 	config->setGroup("Bookmarks");
 	
 	_context = config->readPropertyEntry( "Context", 5 ).toInt();

@@ -34,7 +34,7 @@ void ToolsConfig::showEvent(QShowEvent *e)
 
   if (!_tree)
     {
-      QApplication::setOverrideCursor(Qt::waitCursor);
+      QApplication::setOverrideCursor(Qt::WaitCursor);
 
       QHBoxLayout *hbox = new QHBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
 

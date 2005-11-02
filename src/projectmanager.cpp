@@ -103,7 +103,7 @@ void ProjectManager::createActions( KActionCollection* ac )
                           ac, "project_open_recent");
   m_openRecentProjectAction->setToolTip(i18n("Open recent project"));
   m_openRecentProjectAction->setWhatsThis(i18n("<b>Open recent project</b><p>Opens recently opened project."));
-  m_openRecentProjectAction->loadEntries(kapp->config(), "RecentProjects");
+  m_openRecentProjectAction->loadEntries(KGlobal::config(), "RecentProjects");
 
   m_closeProjectAction =
     new KAction(i18n("C&lose Project"), "fileclose",0,
@@ -123,7 +123,7 @@ void ProjectManager::createActions( KActionCollection* ac )
 
 void ProjectManager::slotOpenProject()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("General Options");
     QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
 
@@ -156,7 +156,7 @@ void ProjectManager::slotProjectOptions()
   connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
   connect( w, SIGNAL(accepted()), this, SLOT(loadLocalParts()) );
 
-  KConfig *config = kapp->config();
+  KConfig *config = KGlobal::config();
   config->setGroup("Project Settings Dialog");
   int height = config->readNumEntry( "Height", 600 );
   int width = config->readNumEntry( "Width", 800 );
@@ -179,7 +179,7 @@ void ProjectManager::loadSettings()
 
 void ProjectManager::saveSettings()
 {
-  KConfig *config = kapp->config();
+  KConfig *config = KGlobal::config();
 
   if (projectLoaded())
   {
@@ -192,7 +192,7 @@ void ProjectManager::saveSettings()
 
 void ProjectManager::loadDefaultProject()
 {
-  KConfig *config = kapp->config();
+  KConfig *config = KGlobal::config();
   config->setGroup("General Options");
   QString project = config->readPathEntry("Last Project");
   bool readProject = config->readBoolEntry("Read Last Project On Startup", true);

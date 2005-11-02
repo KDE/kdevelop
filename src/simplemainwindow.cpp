@@ -39,6 +39,7 @@
 #include <dtabwidget.h>
 #include <profile.h>
 #include <profileengine.h>
+#include <kglobal.h>
 
 #include "api.h"
 #include "core.h"
@@ -193,7 +194,7 @@ void SimpleMainWindow::lowerView(QWidget * /*view*/)
 
 void SimpleMainWindow::loadSettings()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
 
     ProjectManager::getInstance()->loadSettings();
     applyMainWindowSettings(config, QLatin1String("SimpleMainWindow"));
@@ -201,7 +202,7 @@ void SimpleMainWindow::loadSettings()
 
 void SimpleMainWindow::saveSettings( )
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
 
     ProjectManager::getInstance()->saveSettings();
     saveMainWindowSettings(config, QLatin1String("SimpleMainWindow"));

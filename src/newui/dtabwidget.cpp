@@ -25,6 +25,7 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 #include <kapplication.h>
+#include <kglobal.h>
 
 DTabWidget::DTabWidget(QWidget *parent, const char *name)
     :KTabWidget(parent, name), m_closeButton(0)
@@ -55,7 +56,7 @@ DTabWidget::DTabWidget(QWidget *parent, const char *name)
 
 void DTabWidget::loadSettings()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("UI");
 //    m_tabBarShown = config->readBoolEntry("TabBarShown", true);
     m_tabBarShown = ! config->readNumEntry("TabWidgetVisibility", 0);

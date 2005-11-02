@@ -22,7 +22,7 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 
 #include <kdevdocumentcontroller.h>
@@ -264,7 +264,7 @@ void BookmarksWidget::popupMenu( Q3ListViewItem * item, const QPoint & p, int )
     {
         _selectedItem = static_cast<BookmarkItem *>(item);
 
-        KPopupMenu popup;
+        KMenu popup;
 
         if ( _selectedItem->isBookmark() )
         {

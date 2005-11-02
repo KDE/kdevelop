@@ -22,6 +22,7 @@
 #include <klocale.h>
 #include <kstdaccel.h>
 #include <kaction.h>
+#include <kglobal.h>
 
 #include "toplevel.h"
 #include "documentcontroller.h"
@@ -49,7 +50,7 @@ namespace KMdi {
 EditorProxy::EditorProxy()
   : QObject()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("UI");
     int mdimode = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
 

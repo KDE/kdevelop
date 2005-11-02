@@ -460,7 +460,7 @@ void KDevAppTemplate::Archive::setPermissions(const KArchiveFile *source, QStrin
 KDevAppTemplateModel::KDevAppTemplateModel(QObject *parent)
         : KDevItemModel(parent), folderIcon( SmallIcon( "folder" ) )
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("General Options");
 
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();

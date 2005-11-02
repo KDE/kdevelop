@@ -1921,7 +1921,7 @@ cat > conftest.$ac_ext <<EOF
 #endif
 #include <stdio.h>
 #include "confdefs.h"
-#include <kapp.h>
+#include <kapplication.h>
 
 int main() {
     printf("kde_htmldir=\\"%s\\"\n", KApplication::kde_htmldir().data());

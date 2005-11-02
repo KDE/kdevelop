@@ -20,6 +20,7 @@
 #include <kprocess.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
+#include <ktoolinvocation.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -113,7 +114,7 @@ void ToolsPart::updateMenu()
 void ToolsPart::slotToolActivated()
 {
   QString df = sender()->name();
-  kapp->startServiceByDesktopPath(df);
+  KToolInvocation::startServiceByDesktopPath(df);
 }
 
 
@@ -259,7 +260,7 @@ void ToolsPart::toolsMenuActivated()
               << "with cmdline " << cmdline
               << "and desktopfile " << isdesktopfile << endl;
     if (isdesktopfile)
-        kapp->startServiceByDesktopPath(cmdline);
+        KToolInvocation::startServiceByDesktopPath(cmdline);
     else
         startCommand(cmdline, captured, QString());
 }

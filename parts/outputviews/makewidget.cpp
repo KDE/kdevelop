@@ -746,7 +746,7 @@ Q3PopupMenu* MakeWidget::createPopupMenu( const QPoint& pos )
 void MakeWidget::toggleLineWrapping()
 {
     m_bLineWrapping = !m_bLineWrapping;
-    KConfig *pConfig = kapp->config();
+    KConfig *pConfig = KGlobal::config();
     pConfig->setGroup( "MakeOutputView" );
     pConfig->writeEntry( "LineWrapping", m_bLineWrapping );
     pConfig->sync();
@@ -794,7 +794,7 @@ void MakeWidget::slotFullCompilerOutput()
 void MakeWidget::setCompilerOutputLevel( EOutputLevel level )
 {
     m_compilerOutputLevel = level;
-    KConfig *pConfig = kapp->config();
+    KConfig *pConfig = KGlobal::config();
     pConfig->setGroup( "MakeOutputView" );
     pConfig->writeEntry( "CompilerOutputLevel", ( int ) level );
     pConfig->sync();
@@ -804,7 +804,7 @@ void MakeWidget::setCompilerOutputLevel( EOutputLevel level )
 void MakeWidget::toggleShowDirNavigMessages()
 {
     DirectoryItem::setShowDirectoryMessages( !DirectoryItem::getShowDirectoryMessages() );
-    KConfig *pConfig = kapp->config();
+    KConfig *pConfig = KGlobal::config();
     pConfig->setGroup( "MakeOutputView" );
     pConfig->writeEntry( "ShowDirNavigMsg", DirectoryItem::getShowDirectoryMessages() );
     pConfig->sync();
@@ -813,7 +813,7 @@ void MakeWidget::toggleShowDirNavigMessages()
 
 void MakeWidget::updateSettingsFromConfig()
 {
-    KConfig * pConfig = kapp->config();
+    KConfig * pConfig = KGlobal::config();
     pConfig->setGroup( "General Options" );
     setFont( pConfig->readFontEntry( "Application Font" ) );
     pConfig->setGroup( "MakeOutputView" );

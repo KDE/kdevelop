@@ -20,6 +20,7 @@
 #include <kdevgenericfactory.h>
 #include <kdevplugininfo.h>
 #include <kapplication.h>
+#include <kglobal.h>
 
 #include "kdevproject.h"
 #include "kdevcore.h"
@@ -93,7 +94,7 @@ void AppOutputViewPart::startAppCommand(const QString &directory, const QString 
     QString cmd;
 
     if (inTerminal) {
-        cmd = Settings::terminalEmulatorName( *kapp->config() );
+        cmd = Settings::terminalEmulatorName( *KGlobal::config() );
         if ( cmd == "konsole" && !directory.isNull() ) {  // isn't setting the working directory below enough?
           // If a directory was specified, use it
           cmd += " --workdir " + directory;

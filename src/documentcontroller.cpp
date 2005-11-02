@@ -47,6 +47,7 @@
 #include <ktexteditor/editor.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/modificationinterface.h>
+#include <kglobal.h>
 
 #include "api.h"
 #include "core.h"
@@ -658,7 +659,7 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
         m_openNextAsText = true;
     }
 
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup( "General" );
 
     QStringList textTypesList = config->readListEntry( "TextTypes" );
@@ -717,7 +718,7 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
             m_openNextAsText = false;
 
             m_openRecentAction->addURL( url );
-            m_openRecentAction->saveEntries( kapp->config(),
+            m_openRecentAction->saveEntries( KGlobal::config(),
                                              "RecentDocuments" );
 
             return ;
@@ -777,7 +778,7 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
             }
 
             m_openRecentAction->addURL( url );
-            m_openRecentAction->saveEntries( kapp->config(),
+            m_openRecentAction->saveEntries( KGlobal::config(),
                                              "RecentDocuments" );
         }
     }
@@ -797,7 +798,7 @@ void DocumentController::editDocumentInternal( const KURL & inputUrl,
             {
                 if ( dlg.always_open_as_text->isChecked() )
                 {
-                    KConfig * config = kapp->config();
+                    KConfig * config = KGlobal::config();
                     config->setGroup( "General" );
                     QStringList textTypesList =
                         config->readListEntry( "TextTypes" );
@@ -1210,7 +1211,7 @@ void DocumentController::setupActions()
         KStdAction::openRecent( this, SLOT( slotOpenRecent( const KURL& ) ),
                                 ac, "file_open_recent" );
     m_openRecentAction->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( m_openRecentAction->text() ) ).arg( i18n( "Opens recently opened file." ) ) );
-    m_openRecentAction->loadEntries( kapp->config(), "RecentDocuments" );
+    m_openRecentAction->loadEntries( KGlobal::config(), "RecentDocuments" );
 
     m_saveAllDocumentsAction =
         new KAction( i18n( "Save Al&l" ), 0, this,
@@ -1374,9 +1375,9 @@ KTextEditor::Document *DocumentController::createEditorPart( bool activate )
 {
     if ( !m_editorFactory )
     {
-        kapp->config() ->setGroup( "Editor" );
+        KGlobal::config() ->setGroup( "Editor" );
         QString preferred =
-            kapp->config() ->readPathEntry( "EmbeddedKTextEditor" );
+            KGlobal::config() ->readPathEntry( "EmbeddedKTextEditor" );
 
         m_editorFactory = findPartFactory( "text/plain",
                                            "KTextEditor/Document", preferred );
@@ -1470,7 +1471,7 @@ bool DocumentController::isDirty( KURL const & url )
 
 bool DocumentController::reactToDirty( KURL const & url, unsigned char reason )
 {
-    KConfig * config = kapp->config();
+    KConfig * config = KGlobal::config();
     config->setGroup( "Editor" );
     QString dirtyAction = config->readEntry( "DirtyAction" );
 

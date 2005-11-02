@@ -22,7 +22,7 @@
 #include <kparts/part.h>
 #include <ktexteditor/selectioninterface.h>
 #include <kaction.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <ktabwidget.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>
@@ -320,7 +320,7 @@ void GrepViewWidget::popupMenu(Q3ListBoxItem*, const QPoint& p)
 {
     if(m_curOutput->isRunning()) return;
 
-    KPopupMenu rmbMenu;
+    KMenu rmbMenu;
 
     if(KAction *findAction = m_part->actionCollection()->action("edit_grep"))
     {

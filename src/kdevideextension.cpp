@@ -35,6 +35,7 @@
 #include <kdevplugin.h>
 #include <kdevmakefrontend.h>
 #include <kdevplugincontroller.h>
+#include <kglobal.h>
 
 #include "api.h"
 #include "settingswidget.h"
@@ -51,7 +52,7 @@ void KDevIDEExtension::init()
 
 void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     KVBox *vbox = dlg->addVBoxPage(i18n("General"), i18n("General"), BarIcon("kdevelop", KIcon::SizeMedium) );
     gsw = new SettingsWidget(vbox, "general settings widget");
 
@@ -75,7 +76,7 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
 
 void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase *dlg)
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
 
     config->setGroup("General Options");
     config->writeEntry("DesignerApp", gsw->designerButtonGroup->selectedId());

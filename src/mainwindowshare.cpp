@@ -50,6 +50,7 @@
 
 
 #include <config.h>
+#include <kglobal.h>
 
 #include "documentcontroller.h"
 #include "projectmanager.h"
@@ -301,7 +302,7 @@ void MainWindowShare::slotSettings()
 
     ShellExtension::getInstance()->createGlobalSettingsPage(&dlg);
 
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
 
     config->setGroup("Global Settings Dialog");
     int height = config->readNumEntry( "Height", 600 );
