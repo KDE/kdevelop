@@ -263,11 +263,10 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const Q3ValueL
     }
   }
 
-    Q3PtrListIterator<KParts::Part> it( *DocumentController::getInstance()->parts() );
-       for ( ; it.current(); ++it )
+       foreach (KParts::Part* part, DocumentController::getInstance()->parts())
        {
 
-              KParts::ReadOnlyPart* pReadOnlyPart = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+              KParts::ReadOnlyPart* pReadOnlyPart = dynamic_cast<KParts::ReadOnlyPart*>(part);
               if (!pReadOnlyPart)
                      continue;
 

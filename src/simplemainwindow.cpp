@@ -348,8 +348,7 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
 
     //Find the document on whose tab the user clicked
     m_currentTabURL = QString();
-    Q3PtrListIterator<KParts::Part> it(*DocumentController::getInstance()->parts());
-    while (KParts::Part* part = it.current())
+    foreach (KParts::Part* part, DocumentController::getInstance()->parts())
     {
         QWidget *top_widget = EditorProxy::getInstance()->topWidgetForPart(part);
         if (top_widget == w)
@@ -359,7 +358,7 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
                 m_currentTabURL = ro_part->url();
                 tabMenu.insertItem(i18n("Close"), 0);
 
-                if (DocumentController::getInstance()->parts()->count() > 1)
+                if (DocumentController::getInstance()->parts().count() > 1)
                     tabMenu.insertItem(i18n("Close All Others"), 4);
 
                 if (qobject_cast<HTMLDocumentationPart*>(ro_part))
@@ -376,7 +375,6 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
             }
             break;
         }
-        ++it;
     }
 
     connect(&tabMenu, SIGNAL(activated(int)), this, SLOT(tabContextActivated(int)));
@@ -544,9 +542,7 @@ void SimpleMainWindow::tabWidgetChanged( QWidget *tabWidget )
 
 void SimpleMainWindow::closeTab(QWidget *w)
 {
-    const Q3PtrList<KParts::Part> *partlist = DocumentController::getInstance()->parts();
-    Q3PtrListIterator<KParts::Part> it(*partlist);
-    while (KParts::Part* part = it.current())
+    foreach (KParts::Part* part, DocumentController::getInstance()->parts())
     {
         QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(part);
         if (widget && widget == w)
@@ -554,7 +550,6 @@ void SimpleMainWindow::closeTab(QWidget *w)
             DocumentController::getInstance()->closePart(part);
             return;
         }
-        ++it;
     }
 }
 

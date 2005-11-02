@@ -139,13 +139,12 @@ void DocumentController::showPart( KParts::Part* part,
         return ; // to avoid later crash
     }
 
-    Q3PtrListIterator<KParts::Part> it( *parts() );
-    for ( ; it.current(); ++it )
+    foreach (KParts::Part* p, parts())
     {
-        if ( it.current() == part )
+        if ( p == part )
         {
             // part already embedded
-            activatePart( it.current() );
+            activatePart( p );
             return ;
         }
     }
@@ -158,10 +157,9 @@ void DocumentController::showPart( KParts::Part* part,
 
 KParts::ReadOnlyPart *DocumentController::partForURL( const KURL &url ) const
 {
-    Q3PtrListIterator<KParts::Part> it( *parts() );
-    for ( ; it.current(); ++it )
+    foreach (KParts::Part* part, parts())
     {
-        KParts::ReadOnlyPart *ro_part = readOnly( it.current() );
+        KParts::ReadOnlyPart *ro_part = readOnly( part );
         if ( ro_part && url == ro_part->url() )
             return ro_part;
     }
@@ -195,12 +193,11 @@ KDevDocumentType DocumentController::documentTypeForURL( const KURL & url ) cons
 
 KParts::Part * DocumentController::partForWidget( const QWidget * widget ) const
 {
-    Q3PtrListIterator<KParts::Part> it( *parts() );
-    for ( ; it.current(); ++it )
+    foreach (KParts::Part* part, parts())
     {
-        if ( it.current() ->widget() == widget )
+        if ( part->widget() == widget )
         {
-            return * it;
+            return part;
         }
     }
     return 0;
@@ -209,10 +206,9 @@ KParts::Part * DocumentController::partForWidget( const QWidget * widget ) const
 KURL::List DocumentController::openURLs( ) const
 {
     KURL::List list;
-    Q3PtrListIterator<KParts::Part> it( *parts() );
-    for ( ; it.current(); ++it )
+    foreach (KParts::Part* part, parts())
     {
-        if ( KParts::ReadOnlyPart * ro_part = readOnly( it.current() ) )
+        if ( KParts::ReadOnlyPart * ro_part = readOnly( part ) )
         {
             list << ro_part->url();
         }
@@ -1037,9 +1033,7 @@ void DocumentController::slotSwitchTo()
 {
     QMap<QString, KParts::ReadOnlyPart*> parts_map;
     QStringList part_list;
-    Q3PtrList<KParts::Part> pl = *parts();
-    KParts::Part *part;
-    for ( part = pl.first();part;part = pl.next() )
+    foreach (KParts::Part* part, parts())
     {
         kdDebug( 9000 ) << "Part..." << endl;
         if ( part->inherits( "KParts::ReadOnlyPart" ) )
@@ -1111,12 +1105,11 @@ void DocumentController::updateMenuItems()
     bool hasWriteParts = false;
     bool hasReadOnlyParts = false;
 
-    Q3PtrListIterator<KParts::Part> it( *parts() );
-    for ( ; it.current(); ++it )
+    foreach (KParts::Part* part, parts())
     {
-        if ( it.current() ->inherits( "KParts::ReadWritePart" ) )
+        if ( part->inherits( "KParts::ReadWritePart" ) )
             hasWriteParts = true;
-        if ( it.current() ->inherits( "KParts::ReadOnlyPart" ) )
+        if ( part->inherits( "KParts::ReadOnlyPart" ) )
             hasReadOnlyParts = true;
     }
 
@@ -1137,15 +1130,13 @@ void DocumentController::slotDocumentDirty( KTextEditor::Document * d,
 
     KTextEditor::Document * doc = 0;
 
-    Q3PtrListIterator<KParts::Part> it( *parts() );
-    while ( it.current() )
+    foreach (KParts::Part* part, parts())
     {
-        if ( ( void* ) it.current() == ( void* ) d )
+        if ( ( void* ) part == ( void* ) d )
         {
-            doc = dynamic_cast<KTextEditor::Document*>( it.current() );
+            doc = dynamic_cast<KTextEditor::Document*>( part );
             break;
         }
-        ++it;
     }
 
     if ( !doc )
@@ -1447,15 +1438,13 @@ KURL::List DocumentController::modifiedDocuments()
 {
     KURL::List modDocuments;
 
-    Q3PtrListIterator<KParts::Part> it( *parts() );
-    while ( it.current() )
+    foreach (KParts::Part* part, parts())
     {
-        KParts::ReadWritePart * rw_part = readWrite( it.current() );
+        KParts::ReadWritePart * rw_part = readWrite( part );
         if ( rw_part && rw_part->isModified() )
         {
             modDocuments << rw_part->url();
         }
-        ++it;
     }
     return modDocuments;
 }
@@ -1598,16 +1587,13 @@ bool DocumentController::closeDocumentsDialog( KURL::List const & ignoreList )
     if ( !saveDocumentsDialog( ignoreList ) )
         return false;
 
-    Q3PtrList<KParts::Part> partList( *parts() );
-    Q3PtrListIterator<KParts::Part> it( partList );
-    while ( KParts::Part * part = it.current() )
+    foreach (KParts::Part* part, parts())
     {
         KParts::ReadOnlyPart * ro_part = readOnly( part );
         if ( ro_part && !ignoreList.contains( ro_part->url() ) || !ro_part )
         {
             closePart( part );
         }
-        ++it;
     }
     return true;
 }
