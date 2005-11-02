@@ -404,20 +404,14 @@ void MainWindowShare::slotKeyBindings()
   {
   // this is needed for when we have multiple embedded kateparts and change one of them.
   // it also needs to be done to their views, as they too have actioncollections to update
-    if( const Q3PtrList<KParts::Part> * partlist = DocumentController::getInstance()->parts() )
+    foreach (KParts::Part* part, DocumentController::getInstance()->parts())
     {
-        Q3PtrListIterator<KParts::Part> it( *partlist );
-        while ( KParts::Part* part = it.current() )
+        if ( KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( part ) )
         {
-            if ( KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( part ) )
-            {
-                doc->reloadXML();
+            doc->reloadXML();
 
-                const QList<KDocument::View *> list = doc->views();
-                foreach(KDocument::View *view, list)
-                    view->reloadXML();
-            }
-            ++it;
+            foreach(KDocument::View *view, doc->views())
+                view->reloadXML();
         }
     }
   }
