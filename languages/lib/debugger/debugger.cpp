@@ -70,10 +70,9 @@ void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool 
 
 void Debugger::clearExecutionPoint()
 {
-    Q3PtrListIterator<KParts::Part> it(*m_partController->parts());
-    for ( ; it.current(); ++it)
+    foreach  (KParts::Part* part, m_partController->parts())
     {
-        MarkInterface *iface = dynamic_cast<MarkInterface*>(it.current());
+        MarkInterface *iface = dynamic_cast<MarkInterface*>(part);
         if (!iface)
             continue;
 
