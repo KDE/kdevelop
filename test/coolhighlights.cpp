@@ -27,7 +27,7 @@ Attribute * CoolHighlights::classHighlight( )
   static Attribute* a = 0L;
   if (!a) {
     a = new Attribute();
-    a->setBackground(Qt::yellow);
+    a->setBackground(QColor(Qt::yellow).light(175));
   }
   return a;
 }
@@ -37,8 +37,17 @@ KTextEditor::Attribute * CoolHighlights::variableHighlight( )
   static Attribute* a = 0L;
   if (!a) {
     a = new Attribute();
-    a->setBackground(Qt::green);
+    a->setBackground(QColor(Qt::green).light());
   }
   return a;
 }
 
+KTextEditor::Attribute * CoolHighlights::methodHighlight( )
+{
+  static Attribute* a = 0L;
+  if (!a) {
+    a = new Attribute();
+    a->setBackground(QColor(Qt::blue).light());
+  }
+  return a;
+}

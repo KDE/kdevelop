@@ -157,8 +157,6 @@ KWrite::KWrite (KTextEditor::Document *doc)
 
   updateStatus ();
   show ();
-
-  //doc->setText("{ test { test { test { test { test } test } test } test } test } test } blah");
 }
 
 KWrite::~KWrite()

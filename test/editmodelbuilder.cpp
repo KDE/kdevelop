@@ -59,6 +59,16 @@ void EditModelBuilder::visit_class( class_ast * ast )
   m_currentRange = m_currentRange->parentRange();
 }
 
+void EditModelBuilder::visit_feature( feature_ast * ast )
+{
+  m_currentRange = newRange(ast->start_token, ast->end_token);
+  m_currentRange->setAttribute(CoolHighlights::methodHighlight());
+
+  cool_default_visitor::visit_feature(ast);
+
+  m_currentRange = m_currentRange->parentRange();
+}
+
 void EditModelBuilder::visit_primary_expression( primary_expression_ast * ast )
 {
   cool_default_visitor::visit_primary_expression(ast);
@@ -71,21 +81,21 @@ void EditModelBuilder::visit_primary_expression( primary_expression_ast * ast )
 
 SmartRange * EditModelBuilder::newRange( std::size_t start_token, std::size_t end_token )
 {
-  return smart()->newSmartRange(tokenToPosition(start_token), tokenToPosition(end_token, true), m_topRange);
+  return smart()->newSmartRange(tokenToPosition(start_token), tokenToPosition(end_token, true), m_currentRange);
 }
 
 Cursor EditModelBuilder::tokenToPosition( std::size_t token, bool end )
 {
   const kdev_pg_token_stream::token_type& actualToken = m_tokenStream.token(token);
 
-  int len = end ? actualToken.begin : actualToken.end;
+  int len = end ? actualToken.end : actualToken.begin;
 
   if (len == 0)
     return Cursor();
 
   int i = 0;
   for (; i < _G_newLineLocations.count() - 1; ++i)
-    if (len > _G_newLineLocations[i] && len < _G_newLineLocations[i+1])
+    if (len >= _G_newLineLocations[i] && len <= _G_newLineLocations[i+1])
         return Cursor(i, len - _G_newLineLocations[i]);
 
   return Cursor(i, len - _G_newLineLocations.last());

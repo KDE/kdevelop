@@ -116,7 +116,6 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
   _G_newLineLocations.append(0);
 
   // 1) tokenize
-  _G_current_offset = 0;
   tokenize(parser);
 
   // 2) parse

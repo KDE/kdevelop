@@ -40,9 +40,9 @@ class EditModelBuilder : public cool_default_visitor
     virtual void visit_case_condition(case_condition_ast *ast);
     virtual void visit_case_expression(case_expression_ast *ast);*/
     virtual void visit_class(class_ast *ast);
-    /*virtual void visit_expression(expression_ast *ast);
+    /*virtual void visit_expression(expression_ast *ast);*/
     virtual void visit_feature(feature_ast *ast);
-    virtual void visit_formal(formal_ast *ast);
+    /*virtual void visit_formal(formal_ast *ast);
     virtual void visit_if_expression(if_expression_ast *ast);
     virtual void visit_let_declaration(let_declaration_ast *ast);
     virtual void visit_let_expression(let_expression_ast *ast);
