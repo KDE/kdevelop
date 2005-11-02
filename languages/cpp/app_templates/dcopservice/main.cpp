@@ -20,7 +20,7 @@ static KCmdLineOptions options[] =
 
 int main (int argc, char *argv[])
 {
-	KLocale::setMainCatalog("kdelibs");
+	KLocale::setMainCatalogue("kdelibs");
 	KAboutData aboutdata("%{APPNAMELC}", I18N_NOOP("KDE"),
 				version, description,
 				KAboutData::License_GPL, "(C) %{YEAR}, %{AUTHOR}");

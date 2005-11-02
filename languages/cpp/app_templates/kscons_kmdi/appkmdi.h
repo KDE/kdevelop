@@ -6,7 +6,7 @@
 #include <qvaluelist.h>
 
 #include <kapplication.h>
-#include <k3mdimainfrm.h>
+#include <kmdimainfrm.h>
 #include <kurl.h>
 
 class KToggleAction;

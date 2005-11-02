@@ -193,7 +193,7 @@ extern "C"
 {
     void* init_lib%{APPNAMELC}part()
     {
-	KGlobal::locale()->insertCatalog("%{APPNAMELC}");
+	KGlobal::locale()->insertCatalogue("%{APPNAMELC}");
         return new %{APPNAME}PartFactory;
     }
 };

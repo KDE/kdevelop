@@ -867,7 +867,7 @@ by selecting the "Global Functions" folder.
 11    app.dcopClient()->registerAs(app.name(), false);
 12 
 13    // see if we are starting with session management
-14    if (app.isSessionRestored())
+14    if (app.isRestored())
 15        RESTORE(KScribble)
 16    else
 17    {

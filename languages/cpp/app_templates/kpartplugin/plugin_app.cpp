@@ -99,7 +99,7 @@ extern "C"
 {
   void* init_lib%{APPNAMELC}plugin()
   {
-    KGlobal::locale()->insertCatalog("%{APPNAMELC}");
+    KGlobal::locale()->insertCatalogue("%{APPNAMELC}");
     return new %{APPNAME}Factory;
   }
 }

@@ -64,9 +64,9 @@ extern "C"
 {
     KPanelApplet* init( QWidget *parent, const QString& configFile)
     {
-        KGlobal::locale()->insertCatalog("%{APPNAMELC}");
-        return new %{APPNAME}(configFile, Plasma::Normal,
-                             Plasma::About | Plasma::Help | Plasma::Preferences,
+        KGlobal::locale()->insertCatalogue("%{APPNAMELC}");
+        return new %{APPNAME}(configFile, KPanelApplet::Normal,
+                             KPanelApplet::About | KPanelApplet::Help | KPanelApplet::Preferences,
                              parent, "%{APPNAMELC}");
     }
 }

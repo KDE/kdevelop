@@ -5,7 +5,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <k3mdichildview.h>
+#include <kmdichildview.h>
 #include <kdebug.h>
 #include <klibloader.h>
 #include <kmessagebox.h>

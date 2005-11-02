@@ -25,7 +25,7 @@ K_EXPORT_COMPONENT_FACTORY( libkbear%{APPNAMELC}importfilter, %{APPNAME}ImportFi
 %{APPNAME}ImportFilterPlugin::%{APPNAME}ImportFilterPlugin(QObject *parent, const char *name, const QStringList& )
     : SiteImportFilterPluginIface( parent, name ), m_hasError( false )
 {
-    KGlobal::locale()->insertCatalog("kbear");
+    KGlobal::locale()->insertCatalogue("kbear");
     m_domDocument.setContent( QString("<%1 %2=\"%3\"/>").arg( TAG_GROUP ).arg( ATT_LABEL ).arg(i18n("%{APPNAME} import")) );
 }
 

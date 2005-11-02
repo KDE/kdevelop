@@ -18,7 +18,7 @@ extern "C"
 {
   void* init_lib%{APPNAMELC}plugin()
   {
-    KGlobal::locale()->insertCatalog("kate%{APPNAMELC}");
+    KGlobal::locale()->insertCatalogue("kate%{APPNAMELC}");
     return new KatePluginFactory;
   }
 }

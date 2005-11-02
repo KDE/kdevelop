@@ -4,8 +4,8 @@
 #define _%{APPNAMEUC}KMDIVIEW_H
 
 #include <kparts/part.h>
-#include <k3mdichildview.h>
-#include <k3mdichildfrm.h>
+#include <kmdichildview.h>
+#include <kmdichildfrm.h>
 
 /**
  * This class serves as the %{APPNAMELC}kmdi view.

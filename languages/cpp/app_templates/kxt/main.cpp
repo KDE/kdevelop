@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     KApplication app;
 
     // see if we are starting with session management
-    if (app.isSessionRestored())
+    if (app.isRestored())
     {
         RESTORE(%{APPNAMELC});
     }

@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     app.dcopClient()->registerAs(app.name(), false);
 
     // see if we are starting with session management
-    if (app.isSessionRestored())
+    if (app.isRestored())
     {
         RESTORE(%{APPNAME});
     }

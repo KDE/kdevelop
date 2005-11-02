@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     KApplication app;
     %{APPNAME} *mainWin = 0;
 
-    if (app.isSessionRestored())
+    if (app.isRestored())
     {
         RESTORE(%{APPNAME});
     }
