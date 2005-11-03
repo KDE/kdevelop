@@ -2,8 +2,42 @@
 #include <kfiltermodel.h>
 #include <kdevitemmodel.h>
 
+Q_DECLARE_METATYPE(QModelIndex)
+
+class QTreeExpander: public QObject
+{
+    Q_OBJECT
+public:
+    QTreeExpander(QTreeView *parent)
+        : QObject(parent)
+    {
+        Q_ASSERT(parent);
+        connect(parent->model(), SIGNAL(modelReset()), SLOT(expandAll()));
+        view = parent;
+        expandAll();
+    }
+public slots:
+    void expandAll()
+    {
+        QMetaObject::invokeMethod(this, "expand", Qt::QueuedConnection, Q_ARG(QModelIndex, QModelIndex()));
+    }
+
+    void expand(const QModelIndex &index)
+    {
+        for (int i = 0; i < view->model()->rowCount(index); ++i) {
+            QModelIndex idx = view->model()->index(i, 0, index);
+            view->expand(idx);
+            expand(idx);
+        }
+    }
+private:
+    QTreeView *view;
+};
+
 int main(int argc, char *argv[])
 {
+    qRegisterMetaType<QModelIndex>("QModelIndex");
+
     QApplication app(argc, argv);
 
 #if 0
@@ -19,11 +53,11 @@ int main(int argc, char *argv[])
 #else
     QTreeView view1;
 
-    KDevItemCollection *c = new KDevItemCollection("parent1");
-    c->add(new KDevItemCollection("child1"));
-    KDevItemCollection *c2 = new KDevItemCollection("child2");
+    KDevItemCollection *c = new KDevItemCollection("parent1 (hans)");
+    c->add(new KDevItemCollection("child1 (horst)"));
+    KDevItemCollection *c2 = new KDevItemCollection("child2 (zack)");
     c->add(c2);
-    c2->add(new KDevItemCollection("child21"));
+    c2->add(new KDevItemCollection("child21 (harry)"));
 
     KDevItemModel model;
     model.appendItem(c);
@@ -48,6 +82,10 @@ int main(int argc, char *argv[])
 
     widget.show();
 
+    new QTreeExpander(&view1);
+    new QTreeExpander(&view2);
+
     return app.exec();
 }
 
+#include "main.moc"
