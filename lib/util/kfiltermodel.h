@@ -45,8 +45,10 @@ public:
     QAbstractItemModel *model() const;
     QString filter() const;
 
+    enum FilterMode { FilterAuto, FilterAll, FilterIncremental };
+
 public slots:
-    void setFilter(const QString &expression);
+    void setFilter(const QString &expression, FilterMode mode = FilterAuto);
 
 protected:
     virtual bool matches(const QModelIndex &index) const;

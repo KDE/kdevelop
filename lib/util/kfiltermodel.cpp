@@ -26,11 +26,14 @@ public:
         : q(qq), sourceModel(source), topLevelRowCount(0) {}
 
     void doFiltering();
+    void doIncrementalFiltering();
     int nextSiblingIdx(int idx, int count = 1) const;
     int addItems(int level, const QModelIndex &parent);
     void modelDestroyed();
     void modelChanged();
+    int parentIndex(int index) const;
     QModelIndex childIdx(const QModelIndex &index) const;
+    void recalcSiblingIdx(int &idx);
 
     KFilterModel *q;
     QAbstractItemModel *sourceModel;
@@ -52,6 +55,18 @@ QModelIndex KFilterModelPrivate::childIdx(const QModelIndex &index) const
     if (index.column() == 0)
         return idx;
     return sourceModel->index(idx.row(), index.column(), sourceModel->parent(idx));
+}
+
+/* return index of parent or -1 if toplevel */
+/* TODO - linear search. Optimize by storing the parent index in the FilterIdx? */
+int KFilterModelPrivate::parentIndex(int index) const
+{
+    int level = filteredIdx.at(index).level;
+    if (level == 0)
+        return -1;
+
+    while (filteredIdx.at(--index).level >= level) { /* nada */ };
+    return index;
 }
 
 void KFilterModelPrivate::modelDestroyed()
@@ -117,6 +132,45 @@ void KFilterModelPrivate::doFiltering()
 {
     filteredIdx.clear();
     topLevelRowCount = addItems(0, QModelIndex());
+    q->reset();
+}
+
+void KFilterModelPrivate::recalcSiblingIdx(int &idx)
+{
+    int sibIdx = -1;
+    const int fcount = filteredIdx.count();
+    while (idx < fcount) {
+        filteredIdx[idx].siblingIdx = ++sibIdx;
+        int level = filteredIdx.at(idx).level;
+        ++idx;
+        int nextLevel = filteredIdx.value(idx).level;
+        if (nextLevel != level) {
+            if (nextLevel > level)
+                recalcSiblingIdx(idx);
+            if (filteredIdx.value(idx).level < level)
+                return;
+        }
+    }
+    topLevelRowCount = sibIdx + 1;
+}
+
+void KFilterModelPrivate::doIncrementalFiltering()
+{
+    QVector<FilterIdx> newIdxs;
+    for (int i = filteredIdx.count() - 1; i >= 0; --i) {
+        FilterIdx idx = filteredIdx.at(i);
+        bool hit = q->matches(idx.index);
+        if (!hit && !idx.childCount) {
+            int parentIdx = parentIndex(i);
+            if (parentIdx != -1)
+                --(filteredIdx[parentIdx].childCount);
+        } else {
+            newIdxs.prepend(idx);
+        }
+    }
+    filteredIdx = newIdxs;
+    int sibIdx = 0;
+    recalcSiblingIdx(sibIdx);
     q->reset();
 }
 
@@ -190,20 +244,31 @@ QVariant KFilterModel::data(const QModelIndex &index, int role) const
 
 QModelIndex KFilterModel::parent(const QModelIndex &child) const
 {
-    int idx = child.internalId();
-    int level = d->filteredIdx.at(idx).level;
-    if (level == 0)
+    int idx = d->parentIndex(child.internalId());
+    if (idx == -1)
         return QModelIndex();
-
-    while (d->filteredIdx.at(--idx).level >= level);
     return createIndex(d->filteredIdx.at(idx).siblingIdx, 0, idx);
 }
 
-void KFilterModel::setFilter(const QString &expression)
+void KFilterModel::setFilter(const QString &expression, FilterMode mode)
 {
+    QString oldFilter = d->filterStr;
     d->filterStr = expression;
 
-    d->doFiltering();
+    switch (mode) {
+    case FilterAuto:
+        if (expression.startsWith(oldFilter))
+            d->doIncrementalFiltering();
+        else
+            d->doFiltering();
+        break;
+    case FilterAll:
+        d->doFiltering();
+        break;
+    case FilterIncremental:
+        d->doIncrementalFiltering();
+        break;
+    }
 }
 
 /**
