@@ -15,6 +15,7 @@
 #include <qvbox.h>
 #include <qwhatsthis.h>
 #include <qpopupmenu.h>
+#include <qtooltip.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -83,6 +84,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     
     statusBarIndicator = new QLabel(" ", mainWindow()->statusBar());
     statusBarIndicator->setFixedWidth(15);
+    statusBarIndicator->setAlignment(Qt::AlignCenter);
     mainWindow()->statusBar()->addWidget(statusBarIndicator, 0, true);
     statusBarIndicator->show();
 
@@ -989,22 +991,25 @@ void DebuggerPart::slotRefreshBPState( const Breakpoint& BP)
 
 void DebuggerPart::slotStatus(const QString &msg, int state)
 {
-    QString stateIndicator;
+    QString stateIndicator, stateIndicatorFull;
 
     if (state & s_dbgNotStarted)
     {
         stateIndicator = " ";
+        stateIndicatorFull = "Debugger not started";
         mainWindow()->lowerView(variableWidget);
     }
     else if (state & s_appBusy)
     {
         stateIndicator = "A";
+        stateIndicatorFull = "Application is running";
         debugger()->clearExecutionPoint();
         stateChanged( QString("active") );
     }
     else if (state & s_programExited)
     {
         stateIndicator = "E";
+        stateIndicatorFull = "Application has exited";
         stateChanged( QString("stopped") );
         KActionCollection *ac = actionCollection();
         ac->action("debug_run")->setText( i18n("To start something","Start") );
@@ -1015,6 +1020,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     else
     {
         stateIndicator = "P";
+        stateIndicatorFull = "Application is paused";
         stateChanged( QString("paused") );
         // On the first stop, show the variables view.
         // We do it on first stop, and not at debugger start, because
@@ -1056,8 +1062,10 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     kdDebug(9012) << "   " << msg << endl;
 
     statusBarIndicator->setText(stateIndicator);
+    QToolTip::add(statusBarIndicator, stateIndicatorFull);
     if (!msg.isEmpty())
         mainWindow()->statusBar()->message(msg, 3000);
+    
 
     previousDebuggerState_ = state;
 }
