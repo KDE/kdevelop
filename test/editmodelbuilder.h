@@ -23,6 +23,8 @@
 
 #include <ktexteditor/cursor.h>
 
+#include <QHash>
+
 namespace KTextEditor {
   class SmartRange;
   class SmartInterface;
@@ -31,26 +33,26 @@ namespace KTextEditor {
 class EditModelBuilder : public cool_default_visitor
 {
   public:
-    EditModelBuilder(KTextEditor::SmartRange* m_topRange, const cool::token_stream_type& token_stream, bool monochrome = false);
+    EditModelBuilder(KTextEditor::SmartRange* m_topRange, const cool::token_stream_type& token_stream, QHash<KTextEditor::SmartRange*, int>& recoveryPoints, const KTextEditor::Cursor& offset, bool monochrome = false);
     virtual ~EditModelBuilder();
 
     virtual void visit_node(cool_ast_node *node);
 
     //virtual void visit_additive_expression(additive_expression_ast *ast);
     virtual void visit_block_expression(block_expression_ast *ast);
-    /*virtual void visit_case_condition(case_condition_ast *ast);
-    virtual void visit_case_expression(case_expression_ast *ast);*/
+    virtual void visit_case_condition(case_condition_ast *ast);
+    virtual void visit_case_expression(case_expression_ast *ast);
 
     virtual void visit_class(class_ast *ast);
     virtual void visit_expression(expression_ast *ast);
     virtual void visit_feature(feature_ast *ast);
     virtual void visit_formal(formal_ast *ast);
 
-    /*virtual void visit_if_expression(if_expression_ast *ast);
+    virtual void visit_if_expression(if_expression_ast *ast);
     virtual void visit_let_declaration(let_declaration_ast *ast);
     virtual void visit_let_expression(let_expression_ast *ast);
     virtual void visit_multiplicative_expression(multiplicative_expression_ast *ast);
-    virtual void visit_postfix_expression(postfix_expression_ast *ast);*/
+    virtual void visit_postfix_expression(postfix_expression_ast *ast);
 
     virtual void visit_primary_expression(primary_expression_ast *ast);
 
@@ -68,11 +70,15 @@ class EditModelBuilder : public cool_default_visitor
     KTextEditor::SmartRange* newRange(std::size_t token);
     KTextEditor::Cursor tokenToPosition(std::size_t token, bool end = false);
 
+    void debugOutput(KTextEditor::SmartRange* range, int depth = 0);
+
     KTextEditor::SmartRange* m_topRange;
     KTextEditor::SmartRange* m_currentRange;
     const cool::token_stream_type& m_tokenStream;
     int m_depth;
     bool m_monochrome;
+    QHash<KTextEditor::SmartRange*, int>& m_recoveryPoints;
+    KTextEditor::Cursor m_offset;
 };
 
 #endif

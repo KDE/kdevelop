@@ -20,6 +20,9 @@
 #define ARBITRARYHIGHLIGHTTEST_H
 
 #include <QObject>
+#include <QHash>
+
+#include "cool.h"
 
 namespace KTextEditor {
   class Document;
@@ -51,7 +54,10 @@ class ArbitraryHighlightTest : public QObject
   private:
     void outputRange(KTextEditor::SmartRange* range, KTextEditor::SmartRange * mostSpecific);
 
+    bool parseAST(cool& parser, cool_ast_node** node, int type);
+
     KTextEditor::SmartRange* m_topRange;
+    QHash<KTextEditor::SmartRange*, int> m_recoveryPoints;
 };
 
 #endif

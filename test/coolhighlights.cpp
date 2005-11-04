@@ -84,3 +84,32 @@ KTextEditor::Attribute * CoolHighlights::depthHighlight( int depth )
   }
   return a[depth];
 }
+
+KTextEditor::Attribute * CoolHighlights::typeHighlight( )
+{
+  static Attribute* a = 0L;
+  if (!a) {
+    a = new Attribute();
+    a->setForeground(Qt::magenta);
+    a->setFontBold();
+
+    Attribute* b = new Attribute();
+    b->setForeground(Qt::white);
+    b->setBackground(Qt::magenta);
+    a->setDynamicAttribute(Attribute::ActivateMouseIn, b);
+
+    a->setEffects(Attribute::EffectFadeIn);
+  }
+  return a;
+}
+
+KTextEditor::Attribute * CoolHighlights::nameHighlight( )
+{
+  static Attribute* a = 0L;
+  if (!a) {
+    a = new Attribute();
+    a->setForeground(QColor(Qt::blue).dark());
+    a->setFontBold();
+  }
+  return a;
+}

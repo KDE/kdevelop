@@ -30,6 +30,8 @@ KTextEditor::Attribute* classHighlight();
 KTextEditor::Attribute* variableHighlight();
 KTextEditor::Attribute* methodHighlight();
 KTextEditor::Attribute* variableDefinitionHighlight();
+KTextEditor::Attribute* nameHighlight();
+KTextEditor::Attribute* typeHighlight();
 KTextEditor::Attribute* nextHighlight();
 KTextEditor::Attribute* depthHighlight(int depth);
 }

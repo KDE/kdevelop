@@ -25,7 +25,6 @@
 
 #include <QTimer>
 
-#include "cool.h"
 #include "editmodelbuilder.h"
 
 using namespace KTextEditor;
@@ -34,7 +33,8 @@ ArbitraryHighlightTest::ArbitraryHighlightTest(Document* parent)
   : QObject(parent)
   , m_topRange(0L)
 {
-  QTimer::singleShot(0, this, SLOT(slotCreateTopRange()));
+  //QTimer::singleShot(0, this, SLOT(slotCreateTopRange()));
+  connect(parent, SIGNAL(completed()), SLOT(slotCreateTopRange()));
 }
 
 ArbitraryHighlightTest::~ArbitraryHighlightTest()
@@ -89,10 +89,63 @@ static void tokenize(cool &m)
 
 void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mostSpecificChild)
 {
-  /*SmartRange* currentRange = mostSpecificChild;
-  currentRange->deleteChildRanges();
+  //static bool switchEachTime = false;
 
-  text = currentRange->document()->textLines(currentRange);*/
+  kdDebug() << k_funcinfo << *range << " mostSpecific " << *mostSpecificChild << endl;
+
+  // Initialise lexer globals
+  _M_token_begin = _M_token_end = 0;
+  _G_current_offset = 0;
+  _G_newLineLocations.clear();
+  _G_newLineLocations.append(0);
+
+  // Incremental parser... hmmm
+  SmartRange* recoveryPoint = mostSpecificChild;
+
+#if 0
+  forever {
+    // Only necessary if not every AST node is valid for recovery
+    while (recoveryPoint && !m_recoveryPoints.contains(recoveryPoint))
+      recoveryPoint = recoveryPoint->parentRange();
+
+    if (!recoveryPoint)
+      break;
+
+    // We've decided on a recovery point to try
+    kdDebug() << "Trying to incrementally parse range " << *recoveryPoint << endl;
+
+    // Nuke current children -- to be replaced
+    recoveryPoint->deleteChildRanges();
+
+    // Get text
+    QByteArray documentContents = recoveryPoint->document()->text(*recoveryPoint).toLatin1();
+    _G_contents = documentContents.data();
+
+    cool::token_stream_type token_stream;
+    cool::memory_pool_type memory_pool;
+
+    // 0) setup
+    cool parser;
+    parser.set_token_stream(&token_stream);
+    parser.set_memory_pool(&memory_pool);
+
+    // 1) tokenize
+    tokenize(parser);
+
+    cool_ast_node* node = 0L;
+
+    if (parseAST(parser, &node, m_recoveryPoints[recoveryPoint])) {
+      EditModelBuilder builder(range, token_stream, m_recoveryPoints, recoveryPoint->start(), true);
+      //switchEachTime = !switchEachTime;
+      builder.visit_node(node);
+      kdDebug() << "Succeeded partially parsing " << *recoveryPoint << endl;
+      return;
+    }
+
+    m_recoveryPoints.remove(recoveryPoint);
+    recoveryPoint = recoveryPoint->parentRange();
+  }
+#endif
 
   // Nuke current children -- to be replaced
   range->deleteChildRanges();
@@ -109,21 +162,14 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
   parser.set_token_stream(&token_stream);
   parser.set_memory_pool(&memory_pool);
 
-  // Initialise lexer globals
-  _M_token_begin = _M_token_end = 0;
-  _G_current_offset = 0;
-  _G_newLineLocations.clear();
-  _G_newLineLocations.append(0);
-
   // 1) tokenize
   tokenize(parser);
 
   // 2) parse
   program_ast *ast = 0;
   if (parser.parse_program(&ast)) {
-    static bool switchEachTime = false;
-    EditModelBuilder builder(range, token_stream, switchEachTime);
-    switchEachTime = !switchEachTime;
+    EditModelBuilder builder(range, token_stream, m_recoveryPoints, Cursor(0,0), true);
+    //switchEachTime = !switchEachTime;
     builder.visit_node(ast);
 
   } else {
@@ -131,6 +177,68 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
   }
 
   //outputRange(range, mostSpecificChild);
+}
+
+bool ArbitraryHighlightTest::parseAST(cool& parser, cool_ast_node** node, int type)
+{
+  switch (type) {
+    case cool_ast_node::Kind_additive_expression:
+      return parser.parse_additive_expression(reinterpret_cast<additive_expression_ast**>(node));
+
+    case cool_ast_node::Kind_block_expression:
+      return parser.parse_block_expression(reinterpret_cast<block_expression_ast**>(node));
+
+    case cool_ast_node::Kind_case_condition:
+      return parser.parse_case_condition(reinterpret_cast<case_condition_ast**>(node));
+
+    case cool_ast_node::Kind_case_expression:
+      return parser.parse_case_expression(reinterpret_cast<case_expression_ast**>(node));
+
+    case cool_ast_node::Kind_class:
+      return parser.parse_class(reinterpret_cast<class_ast**>(node));
+
+    case cool_ast_node::Kind_expression:
+      return parser.parse_expression(reinterpret_cast<expression_ast**>(node));
+
+    case cool_ast_node::Kind_feature:
+      return parser.parse_feature(reinterpret_cast<feature_ast**>(node));
+
+    case cool_ast_node::Kind_formal:
+      return parser.parse_formal(reinterpret_cast<formal_ast**>(node));
+
+    case cool_ast_node::Kind_if_expression:
+      return parser.parse_if_expression(reinterpret_cast<if_expression_ast**>(node));
+
+    case cool_ast_node::Kind_let_declaration:
+      return parser.parse_let_declaration(reinterpret_cast<let_declaration_ast**>(node));
+
+    case cool_ast_node::Kind_let_expression:
+      return parser.parse_let_expression(reinterpret_cast<let_expression_ast**>(node));
+
+    case cool_ast_node::Kind_multiplicative_expression:
+      return parser.parse_multiplicative_expression(reinterpret_cast<multiplicative_expression_ast**>(node));
+
+    case cool_ast_node::Kind_postfix_expression:
+      return parser.parse_postfix_expression(reinterpret_cast<postfix_expression_ast**>(node));
+
+    case cool_ast_node::Kind_primary_expression:
+      return parser.parse_primary_expression(reinterpret_cast<primary_expression_ast**>(node));
+
+    case cool_ast_node::Kind_program:
+      return parser.parse_program(reinterpret_cast<program_ast**>(node));
+
+    case cool_ast_node::Kind_relational_expression:
+      return parser.parse_relational_expression(reinterpret_cast<relational_expression_ast**>(node));
+
+    case cool_ast_node::Kind_unary_expression:
+      return parser.parse_unary_expression(reinterpret_cast<unary_expression_ast**>(node));
+
+    case cool_ast_node::Kind_while_expression:
+      return parser.parse_while_expression(reinterpret_cast<while_expression_ast**>(node));
+
+    default:
+      return false;
+  }
 }
 
 void ArbitraryHighlightTest::outputRange( KTextEditor::SmartRange * range, KTextEditor::SmartRange * mostSpecific )
@@ -148,6 +256,11 @@ void ArbitraryHighlightTest::slotRangeDeleted( KTextEditor::SmartRange * )
 
 void ArbitraryHighlightTest::slotCreateTopRange( )
 {
+  if (m_topRange) {
+    smart()->removeHighlightFromDocument(m_topRange);
+    delete m_topRange;
+  }
+
   m_topRange = smart()->newSmartRange(static_cast<Document*>(parent())->documentRange());
   smart()->addHighlightToDocument(m_topRange, true);
   m_topRange->setInsertBehaviour(SmartRange::ExpandRight);
