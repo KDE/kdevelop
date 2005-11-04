@@ -135,7 +135,7 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
     cool_ast_node* node = 0L;
 
     if (parseAST(parser, &node, m_recoveryPoints[recoveryPoint])) {
-      EditModelBuilder builder(range, token_stream, m_recoveryPoints, recoveryPoint->start(), true);
+      EditModelBuilder builder(recoveryPoint, token_stream, m_recoveryPoints, recoveryPoint->start(), true);
       //switchEachTime = !switchEachTime;
       builder.visit_node(node);
       kdDebug() << "Succeeded partially parsing " << *recoveryPoint << endl;
