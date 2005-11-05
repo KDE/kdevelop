@@ -1259,18 +1259,6 @@ void PartController::slotActivePartChanged( KParts::Part *part )
     updateMenuItems();
 
     QTimer::singleShot( 100, this, SLOT(slotWaitForFactoryHack()) );
-
-    if ( MultiBuffer *multiBuffer = 
-         dynamic_cast<MultiBuffer*>(
-            EditorProxy::getInstance()->topWidgetForPart( part ) ) 
-       )
-    {
-        KURL url = dynamic_cast<KParts::ReadOnlyPart*>( part )->url();
-        multiBuffer->activePartChanged( url );
-        // Really unfortunate, but the mainWindow relies upon this
-        // to set the tab's icon
-        emit documentChangedState( url, documentState( url ) );
-    }
 }
 
 void PartController::slotSwitchTo()
@@ -1681,12 +1669,25 @@ void PartController::slotWaitForFactoryHack( )
 		if ( !activePart()->factory() )
 		{
 			QTimer::singleShot( 100, this, SLOT(slotWaitForFactoryHack()) );
+    		return;
 		}
 		else
 		{
 			EditorProxy::getInstance()->installPopup( activePart() );
 		}
 	}
+
+    if ( MultiBuffer *multiBuffer = 
+         dynamic_cast<MultiBuffer*>(
+            EditorProxy::getInstance()->topWidgetForPart( activePart() ) ) 
+       )
+    {
+        KURL url = dynamic_cast<KParts::ReadOnlyPart*>( activePart() )->url();
+        multiBuffer->activePartChanged( url );
+        // Really unfortunate, but the mainWindow relies upon this
+        // to set the tab's icon
+        emit documentChangedState( url, documentState( url ) );
+    }
 }
 
 KParts::ReadOnlyPart *PartController::qtDesignerPart()
