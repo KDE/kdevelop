@@ -73,6 +73,7 @@ Comment[de]=Ein einfaches "Hello World"-Programm in Haskell wurde in %{dest} ers
 Comment[el]=Ένα απλό πρόγραμμα 'Γεια σου κόσμε' σε Haskell δημιουργήθηκε στο %{dest}
 Comment[es]=Un sencillo programa «Hola mundo» en Haskell ha sido creado en %{dest}
 Comment[et]=Lihtne "Tere, maailm" programm Haskellis loodi asukohta %{dest}
+Comment[fr]=Un programme « Hello World » simple en Haskell a été créé dans %{dest}
 Comment[it]=È stato creato un semplice programma di "Hello World" in Haskell in %{dest}
 Comment[nl]=Een eenvoudig Hello World-programma in Haskel is aangemaakt in  %{dest}
 Comment[pl]=Prosty program "Witaj świecie" w Haskellu został utworzony w %{dest}

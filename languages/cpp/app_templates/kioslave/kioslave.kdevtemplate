@@ -25,6 +25,7 @@ Comment[el]=Δημιουργεί ένα πλαίσιο για έναν υπηρ�
 Comment[es]=Genera una infraestructura para un esclavo de E/S
 Comment[et]=IO-mooduli raamistiku loomine
 Comment[eu]=IO morroi baterako lan-marko bat sortzen du
+Comment[fr]=Génère une infrastructure pour un module d'entrée / sortie
 Comment[hu]=Létrehoz egy kiindulási keretprogramot KIOslave készítéséhez
 Comment[it]=Genera un'infrastruttura per uno slave di I/O
 Comment[nl]=Genereert een framework voor een IO-slave

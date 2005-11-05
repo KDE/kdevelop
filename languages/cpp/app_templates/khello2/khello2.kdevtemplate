@@ -188,6 +188,7 @@ Comment[el]=Μια απλή εφαρμογή KDE βασισμένη στο σχ�
 Comment[es]=Una sencilla aplicación para KDE basada en el diseñador ha sido creada en %{dest}
 Comment[et]=Lihtne KDE rakendus Disaineri põhjal loodi asukohta %{dest}
 Comment[eu]=Designer-en oinarritutako KDE aplikazio simple bat sortu da hemen: %{dest}
+Comment[fr]=Une application KDE simple basée sur Designer a été créée dans %{dest}
 Comment[hu]=Létrejött egy egyszerű, Qt Designer-alapú KDE-s alkalmazás itt: %{dest}
 Comment[it]=È stata creata una semplice applicazione KDE basata su designer
 Comment[nl]=Een eenvoudige Designer-gebaseerde KDE-toepassing is aangemaakt in %{dest}

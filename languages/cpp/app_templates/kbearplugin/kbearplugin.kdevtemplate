@@ -33,6 +33,7 @@ Comment[el]=Δημιουργεί ένα απλό πρόσθετο του KBear �
 Comment[es]=Genera un sencillo plugin para KBear con una página de configuración y una ventana de salida.
 Comment[et]=Lihtsa KBeari plugina loomine koos seadistustedialoogi ja väljundvidinaga.
 Comment[eu]=Konfigurazio orridun eta irteera trepetadun KBear plugin sinple bat sortzen du.
+Comment[fr]=Génère un module KBear simple avec une page de configuration et un élément graphique de sortie.
 Comment[hu]=Létrehoz egy egyszerű KBear-bővítőmodult beállítólappal és kimeneti grafikus elemmel.
 Comment[it]=Genera un semplice plugin per KBear con pagina di configurazione e un elemento grafico di output.
 Comment[nl]=Genereert een eenvoudige KBear-plugin met een config page en een output widget.
