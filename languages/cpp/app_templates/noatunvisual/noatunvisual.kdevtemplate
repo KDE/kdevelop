@@ -38,6 +38,7 @@ Comment[nl]=Genereert een visualisatieplugin voor Noatun met behulp van SDL
 Comment[pl]=Generuje wtyczkę wizualizacji do Noatun. Używany jest SDL.
 Comment[pt]=Gera um 'plugin' de visualização para o Noatun, que usa o SDL
 Comment[pt_BR]=Gera um 'plugin' de visualização para o Noatun, que usa o SDL
+Comment[ru]=Создание модуля визуализации на основе SDL
 Comment[sr]=Прави визуелизациони прикључак за Noatun користећи SDL
 Comment[sr@Latn]=Pravi vizuelizacioni priključak za Noatun koristeći SDL
 Comment[sv]=Skapar ett Noatun-insticksprogram för visningar som använder SDL

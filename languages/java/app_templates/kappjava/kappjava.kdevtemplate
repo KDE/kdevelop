@@ -38,6 +38,7 @@ Comment[nl]=Genereert een eenvoudige Java KDE-toepassing met een toplevel window
 Comment[pl]=Generuje prosty program KDE w Javie posiadający okno, menu i paski narzędzi.
 Comment[pt]=Gera uma aplicação para KDE simples em Java, com uma janela de topo, menus e barras de ferramentas.
 Comment[pt_BR]=Gera uma aplicação para KDE simples em Java, com uma janela de topo, menus e barras de ferramentas.
+Comment[ru]=Создание простого приложения Java KDE с окном верхнего уровня, меню и панелями инструментов.
 Comment[sr]=Прави једноставан Java KDE програм са једним прозором највишег нивоа, менијима и тракама са алатом.
 Comment[sr@Latn]=Pravi jednostavan Java KDE program sa jednim prozorom najvišeg nivoa, menijima i trakama sa alatom.
 Comment[sv]=Skapar ett enkelt Java KDE-program med ett toppnivåfönster, menyer och verktygsrader.

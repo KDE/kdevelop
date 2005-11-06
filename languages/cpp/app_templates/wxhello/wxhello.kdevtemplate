@@ -35,6 +35,7 @@ Comment[nl]=Genereert een eenvoudige wxWidget Hello-toepassing.
 Comment[pl]=Generuje prosty program Witaj wykorzystujący wxWidgets
 Comment[pt]=Gera uma aplicação simples de Olá Mundo do wxWidgets.
 Comment[pt_BR]=Gera uma aplicação simples de Olá Mundo do wxWidgets.
+Comment[ru]=Создание простого приложения wxWidgets.
 Comment[sr]=Прави једноставан „Здраво“ wxWidgets програм.
 Comment[sr@Latn]=Pravi jednostavan „Zdravo“ wxWidgets program.
 Comment[sv]=Skapar ett enkelt Hello-program för wxWidgets.

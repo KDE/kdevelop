@@ -37,6 +37,7 @@ Comment[nl]=Genereert een eenvoudig ncurses-gebaseerd Hello World-programma in C
 Comment[pl]=Generuje prosty program 'Witaj świecie' używający ncurses i języka C++.
 Comment[pt]=Gera um programa simples Olá Mundo em C++, baseado no 'ncurses'
 Comment[pt_BR]=Gera um programa simples Olá Mundo em C++, baseado no 'ncurses'
+Comment[ru]=Создание простого приложения Hello world на ncurses/C++
 Comment[sl]=Ustvari preprost program Hello world na osnovi ncurses v C++
 Comment[sr]=Прави једноставан „Здраво свете“ програм на основу ncurses, у C++-у
 Comment[sr@Latn]=Pravi jednostavan „Zdravo svete“ program na osnovu ncurses, u C++-u

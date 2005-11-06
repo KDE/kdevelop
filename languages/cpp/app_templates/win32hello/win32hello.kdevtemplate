@@ -36,6 +36,7 @@ Comment[nl]=Genereert een shellproject voor crosscompilerende Win32-projecten.
 Comment[pl]=Generuje powłokę do kompilacji projektów dla Win32.
 Comment[pt]=Gera um projecto para poder compilar projectos em Win32.
 Comment[pt_BR]=Gera um projecto para poder compilar projectos em Win32.
+Comment[ru]=Создание сценария для кросс-компиляции проектов Win32.
 Comment[sr]=Прави пројекат за прекопревођење Win32 пројеката.
 Comment[sr@Latn]=Pravi projekat za prekoprevođenje Win32 projekata.
 Comment[sv]=Skapar ett skalprojekt för korskompilering av Win32-projekt.

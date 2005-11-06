@@ -38,6 +38,7 @@ Comment[nl]=Genereert een eenvoudige GNOME-- toepassing. Gnomemm, Gtkmm >= 1.2.8
 Comment[pl]=Generuje prosty program dla środowiska GNOME--. Gnomemm i Gtkmm w wersji >= 1.2.8 i < 1.3.0 powinny być zainstalowane. Do edycji pliku glade konieczny jest program glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[pt]=Gera uma aplicação simples em GNOME--. Deverão estar instalados o Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0. Para editar o ficheiro do Glade,, é necessário o glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[pt_BR]=Gera uma aplicação simples em GNOME--. Deverão estar instalados o Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0. Para editar o ficheiro do Glade,, é necessário o glade-- (http://home.wtal.de/petig/Gtk/).
+Comment[ru]=Создание простого приложения GNOME. Требуются Gnomemm, Gtkmm >= 1.2.8 и < 1.3.0. Для редактирования файла glade нужна соответствующая программа (http://home.wtal.de/petig/Gtk/).
 Comment[sr]=Прави једноставан GNOME-- програм. Gnomemm, Gtkmm >= 1.2.8 и < 1.3.0 требало би да су инсталирани. Да бисте уређивали glade фајл, неопходан је glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[sr@Latn]=Pravi jednostavan GNOME-- program. Gnomemm, Gtkmm >= 1.2.8 i < 1.3.0 trebalo bi da su instalirani. Da biste uređivali glade fajl, neophodan je glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[sv]=Skapar ett enkelt GNOME-- program. Gnomemm, Gtkmm >= 1.2.8 och < 1.3.0 måste vara installerat. För att redigera glade-filer krävs glade-- (http://home.wtal.de/petig/Gtk/).
