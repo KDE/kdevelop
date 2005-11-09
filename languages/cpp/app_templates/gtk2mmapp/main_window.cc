@@ -7,9 +7,6 @@
 #include "config.h"
 #include "main_window.hh"
 
-#include <gtk--/main.h>
-
-gint main_window::quit(GdkEventAny *ev)
-{
-    Gtk::Main::quit();
+bool main_window::quit(GdkEventAny *ev)
+{  return 0;
 }
