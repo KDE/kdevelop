@@ -13,7 +13,7 @@
 #  define _MAIN_WINDOW_HH
 class main_window : public main_window_glade
 {
-protected:
-        virtual gint quit(GdkEventAny *ev);
+
+        bool quit(GdkEventAny *ev);
 };
 #endif

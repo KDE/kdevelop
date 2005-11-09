@@ -14,7 +14,6 @@ AM_PROG_LIBTOOL
 
 AC_LANG_CPLUSPLUS
 
-AM_PATH_GTKMM(1.2.8,,
-	AC_MSG_ERROR(Cannot find a matching GTK-- library: Please install version 1.2.8 or newer))
+PKG_CHECK_MODULES([GTKMM], [gtkmm-2.4 >= 2.8.0])
 
 AC_OUTPUT(Makefile src/Makefile )
