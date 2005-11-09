@@ -353,7 +353,7 @@ AddressBreakpoint::~AddressBreakpoint()
 
 QString AddressBreakpoint::dbgSetCommand() const
 {
-    return QString("break ")+m_breakAddress;    // gdb command - not translatable
+    return QString("break *")+m_breakAddress;    // gdb command - not translatable
 }
 
 /***************************************************************************/
