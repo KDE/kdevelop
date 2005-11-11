@@ -732,16 +732,22 @@ void CustomProjectPart::updateTargetMenu()
     } else {
        kdDebug(9025) << "Trying to load a makefile... " << endl;
 
+       m_makefileVars.clear();
        m_parsedMakefiles.clear();
        m_makefilesToParse.clear();
        m_makefilesToParse.push("Makefile");
        m_makefilesToParse.push("makefile");
+       putEnvVarsInVarMap();
        while (!m_makefilesToParse.isEmpty())
           parseMakefile(m_makefilesToParse.pop());
 
-        m_targets.sort();
-        m_targetsObjectFiles.sort();
-        m_targetsOtherFiles.sort();
+       //free the memory again
+       m_makefileVars.clear();
+       m_parsedMakefiles.clear();
+
+       m_targets.sort();
+       m_targetsObjectFiles.sort();
+       m_targetsOtherFiles.sort();
 
     }
 
@@ -762,13 +768,21 @@ void CustomProjectPart::updateTargetMenu()
         m_targetOtherFilesMenu->insertItem(*it, id++);
 }
 
+void CustomProjectPart::putEnvVarsInVarMap()
+{
+    DomUtil::PairList envvars =
+        DomUtil::readPairListEntry(*projectDom(), "/kdevcustomproject/make/environments/" + currentMakeEnvironment(), "envvar", "name", "value");
+
+    for (DomUtil::PairList::ConstIterator it = envvars.begin(); it != envvars.end(); ++it)
+       m_makefileVars[(*it).first] = (*it).second;  //is qouting here required as in makeEnvironment() ??
+}
+
 void CustomProjectPart::parseMakefile(const QString& filename)
 {
    if (m_parsedMakefiles.contains(filename))
       return;
 
    m_parsedMakefiles.insert(filename, 1);
-
 
    QString absFilename=filename;
    if (!filename.startsWith("/"))
@@ -781,11 +795,25 @@ void CustomProjectPart::parseMakefile(const QString& filename)
    }
    QRegExp re("^([^($%.#][^)\\s]+) *:.*$");
    re.setMinimal(true);
+   
+   QRegExp variablesRe("\\$\\(\\s*([^\\)\\s]+)\\s*\\)");
+   QRegExp assignmentRe("^\\s*(\\S+)\\s*[:\\?]?=\\s*(\\S+)\\s*$");
 
    QRegExp includedMakefilesRe("^include\\s+(\\S+)");
    QString str = "";
    while (!f.atEnd()) {
       f.readLine(str, 200);
+
+      // Replace any variables in the current line
+      int offset = -1;
+      while ((offset = variablesRe.search(str, offset + 1)) != -1)
+      {
+         QString variableName=variablesRe.cap(1).simplifyWhiteSpace();
+         if (m_makefileVars.contains(variableName))
+         {
+            str.replace(variablesRe.cap(0), m_makefileVars[variableName]);
+         }
+      }
 
       // Read all continuation lines
       // kdDebug(9025) << "Trying: " << str.simplifyWhiteSpace() << endl;
@@ -793,8 +821,12 @@ void CustomProjectPart::parseMakefile(const QString& filename)
       //    str.remove(str.length()-1, 1);
       //    str += stream.readLine();
       //}
-
-      if (includedMakefilesRe.search(str) != -1)
+      // Find any variables
+      if (assignmentRe.search(str) != -1)
+      {
+         m_makefileVars[assignmentRe.cap(1).simplifyWhiteSpace()] = assignmentRe.cap(2).simplifyWhiteSpace();
+      }
+      else if (includedMakefilesRe.search(str) != -1)
       {
          QString includedMakefile=includedMakefilesRe.cap(1).simplifyWhiteSpace();
          /*special optimization for makefiles generated with the new cmake makefile generator:
