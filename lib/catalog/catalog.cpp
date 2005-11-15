@@ -32,6 +32,10 @@
 
 #include <config.h>
 
+#if DB_VERSION_MAJOR != 4
+#error "BDB Version 4 required."
+#endif
+
 struct _Catalog_Private
 {
     QString dbName;
@@ -196,8 +200,15 @@ void  Catalog::setEnabled( bool isEnabled )
 	    kdDebug() << "set_cachesize: " << db_strerror(ret) << endl;
 	}
 
-        if ((ret = dbp->open(
-	    dbp, NULL, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
+        if ((ret = 
+#if DB_VERSION_MINOR >= 1
+	     dbp->open(dbp, NULL, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)
+#else
+	     dbp->open(dbp, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)
+#endif
+		== 0))
+	{
+
 	    kdDebug() << "db_open: " << db_strerror(ret) << endl;
 	    dbp->close( dbp, 0 );
 	    return;
@@ -257,8 +268,14 @@ void  Catalog::setEnabled( bool isEnabled )
 	kdDebug() << "set_cachesize: " << db_strerror(ret) << endl;
     }
 
-    if ((ret = d->dbp->open(
-	d->dbp, NULL, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
+    if ((ret =
+#if DB_VERSION_MINOR >= 1
+	 d->dbp->open(d->dbp, NULL, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)
+#else
+	 d->dbp->open(d->dbp, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)
+#endif
+	 != 0))
+    {
 	kdDebug() << "db_open: " << db_strerror(ret) << endl;
 	close();
 	return;
