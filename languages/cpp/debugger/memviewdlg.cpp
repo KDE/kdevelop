@@ -129,6 +129,7 @@ namespace GDBDebugger
     : QWidget(parent, name), 
       // New memory view can be created only when debugger is active,
       // so don't set s_appNotStarted here.
+      khexedit2_real_widget(0),
       amount_(0), data_(0),
       debuggerState_(0)
     {
@@ -221,7 +222,11 @@ namespace GDBDebugger
                 "<h1>Not available</h1>"
                 "<p>Could not open the khexedit2 library. "
                 "Make sure that the KHexEdit package (part of kdeutils) is installed. "
-                "Specifically, library libkbyteseditwidget.so is requied.");
+                "Specifically, check for the following files:"
+                "<ul><li>libkhexeditcommon.so.0.0.0\n"
+                "<li>libkbyteseditwidget.so\n"
+                "<li>kbyteseditwidget.desktop\n"
+                "</ul>");
         }
 
     }
