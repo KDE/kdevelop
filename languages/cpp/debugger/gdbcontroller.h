@@ -169,9 +169,15 @@ private:
     int               currentFrame_;
     int               viewedThread_;
 
-    int               gdbSizeofBuf_;          // size of the output buffer
-    int               gdbOutputLen_;          // amount of data in the output buffer
-    char*             gdbOutput_;             // buffer for the output from kprocess
+    // The output from gdb that was not parsed yet
+    QCString          gdbOutput_;
+    // The output from gdb that arrived where we was
+    // parsing the previous output. To avoid messing
+    // things up, it's not directly added to
+    // gdbOutput_ but stored for future use.
+    // VP: It's not clear why the previous code was doing
+    // this, and holdingZone_ won't be processed until
+    // next output arrives, so probably should be just removed.
     QCString          holdingZone_;
 
     QPtrList<DbgCommand> cmdList_;

@@ -133,8 +133,6 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
         varTree_(varTree),
         currentFrame_(0),
         viewedThread_(-1),
-        gdbOutputLen_(0),
-        gdbOutput_(new char[2048]),
         holdingZone_(),
         currentCmd_(0),
         currentMemoryCallback_(0),
@@ -151,8 +149,6 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
         config_gdbPath_(),
         config_outputRadix_(10)
 {
-    gdbSizeofBuf_ = sizeof(gdbOutput_);
-
     configure();
     cmdList_.setAutoDelete(true);
 
@@ -169,7 +165,6 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
 // shutdown.
 GDBController::~GDBController()
 {
-    delete[] gdbOutput_;
     debug_controllerExists = false;
 }
 
@@ -1571,7 +1566,7 @@ void GDBController::slotStopDebugger()
     // If we don't clear this, then after restart, we'll be trying to search
     // for the end marker of the command issued in previous gdb session,
     // and never succeed. 
-    gdbOutputLen_ = 0;
+    gdbOutput_ = "";
 
     state_ = s_dbgNotStarted | s_appNotStarted | s_silent;
     emit dbgStatus (i18n("Debugger stopped"), state_);
@@ -2157,52 +2152,22 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
         kdDebug(9012) << "Already parsing" << endl;
         return;
     }
-
+    
     while (true)
     {
-        // Allocate some buffer space, if adding to this buffer will exceed it
-        if (gdbOutputLen_+(int)holdingZone_.length()+1 > gdbSizeofBuf_)
-        {
-            gdbSizeofBuf_ = gdbOutputLen_+2*(holdingZone_.length()+1);
-            char *newBuf = new char[gdbSizeofBuf_];
-            if (gdbOutputLen_)
-                memcpy(newBuf, gdbOutput_, gdbOutputLen_+1);
-            delete[] gdbOutput_;
-            gdbOutput_ = newBuf;
-        }
-
-        // Copy the data from the holding zone into the buffer the parsers will
-        // process from, and make it into a c-string so we can use the string fns
-//        kdDebug(9012)   << "Adding holdingZone_ (" << holdingZone_.length()   << ")" << endl
-//                        << holdingZone_ << endl;
-
-        qstrcpy(gdbOutput_+gdbOutputLen_, holdingZone_);
-        gdbOutputLen_ += holdingZone_.length();
-        *(gdbOutput_+gdbOutputLen_) = 0;
+        gdbOutput_ += holdingZone_;
         holdingZone_ = "";
 
-//        kdDebug(9012)   << "Output to parse (" << gdbOutputLen_   << ")" << endl
-//                        << gdbOutput_ << endl << "*************" << endl;
-
         parsing = true;
-        char *nowAt = parse(gdbOutput_);
+        const char *nowAt = parse(const_cast<char*>((const char*)gdbOutput_));
         parsing = false;
 
         if (nowAt)
         {
-//            kdDebug(9012)   << "*** " << nowAt-gdbOutput_ << " bytes have been parsed " << endl;
-            Q_ASSERT(nowAt <= gdbOutput_+gdbOutputLen_+1);
-            gdbOutputLen_ = strlen(nowAt);
+            unsigned parsed_size = nowAt - (const char*)gdbOutput_;
+            gdbOutput_.remove(0, parsed_size);
 
-            // Bytes that wern't parsed need to be moved to the head of the buffer
-            if (gdbOutputLen_)
-                memmove(gdbOutput_, nowAt, gdbOutputLen_);     // Overlapping data
-            else
-                *gdbOutput_ = 0;
         }
-
-//        kdDebug(9012)   << "Output remaining (" << gdbOutputLen_  << ")" << endl
-//                        << gdbOutput_ << endl << "*************" << endl;
 
         if (!nowAt && !holdingZone_.length())
             break;
