@@ -3371,12 +3371,22 @@ AC_DEFUN([KDE_ENABLE_HIDDEN_VISIBILITY],
                    visibility support. Disabling -fvisibility=hidden])
 
       kde_stdc_visibility_patched=no ])
+
     AC_LANG_RESTORE
 
     kde_have_gcc_visibility=no
     KDE_CHECK_COMPILER_FLAG(fvisibility=hidden, 
     [
       kde_have_gcc_visibility=yes
+      dnl the whole toolchain is just a mess, gcc is just too buggy
+      dnl to handle STL with visibility enabled. Lets reconsider 
+      dnl when gcc 4.2 is out or when things get fixed in the compiler.
+      dnl Contact mueller@kde.org for details.
+      AC_ARG_ENABLE(gcc-hidden-visibility,
+        AC_HELP_STRING([--enable-gcc-hidden-visibility],[toolchain hidden visibility [default=no]]),
+          [kde_have_gcc_visibility=$enableval],
+          [kde_have_gcc_visibility=no])
+
       AC_CACHE_CHECK([if Qt is patched for -fvisibility], kde_cv_val_qt_gcc_visibility_patched,
         [
           AC_LANG_SAVE
@@ -3400,7 +3410,7 @@ AC_DEFUN([KDE_ENABLE_HIDDEN_VISIBILITY],
         ]
       )
 
-      if test x$kde_stdc_visibility_patched = "xyes" && test x$kde_cv_val_qt_gcc_visibility_patched = "xyes"; then
+      if test x$kde_have_gcc_visibility = "xyes" && test x$kde_stdc_visibility_patched = "xyes" && test x$kde_cv_val_qt_gcc_visibility_patched = "xyes"; then
         CXXFLAGS="$CXXFLAGS -fvisibility=hidden"
         KDE_CHECK_VISIBILITY_GCC_BUG
         HAVE_GCC_VISIBILITY=1
