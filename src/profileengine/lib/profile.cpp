@@ -139,7 +139,13 @@ QStringList &Profile::listByType(List type)
         case ExplicitDisable:
             return m_explicitDisable;
     }
-//FIXME: What to return here?
+
+    // This is ugly, but at least it returns something (and compiles).
+
+    static QStringList empty;
+    empty.clear();
+
+    return empty;
 }
 
 bool Profile::hasInEntryList(EntryList &list, QString value)
