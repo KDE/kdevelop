@@ -99,6 +99,15 @@ public:
     return &*it;
   }
 
+  template <typename _InputIterator>
+  static fast_string const *get (_InputIterator __first, _InputIterator __last)
+  {
+    assert ((__last - __first) < 512);
+    char buffer[512], *cp = buffer;
+    std::copy (__first, __last, cp);
+    return get (buffer, __last - __first);
+  }
+
   static fast_string const *get (std::string const &__s)
   { return get (__s.c_str (), __s.size ()); }
 };
@@ -532,7 +541,7 @@ public:
         else if (std::isalpha (*__first) || *__first == '_')
           {
             _InputIterator name_end = skip_identifier (__first, __last);
-            fast_string const *name = symbol::get (std::string (__first, name_end));
+            fast_string const *name = symbol::get (__first, name_end);
             __first = name_end; // advance
 
             // search for the paste token
@@ -555,7 +564,7 @@ public:
             pp_macro *macro = env.resolve (name);
             if (! macro || macro->hidden || hide_next)
               {
-                hide_next = (name == symbol::get ("defined"));
+                hide_next = (name == symbol::get ("defined", 7));
                 std::copy (name->begin (), name->end (), __result);
                 continue;
               }
@@ -754,10 +763,7 @@ public:
         __first = skip_blanks (++__first, __last); // skip '('
         _InputIterator arg_end = skip_identifier (__first, __last);
         if (__first != arg_end)
-          {
-            std::string arg_id (__first, arg_end);
-            macro.formals.push_back (symbol::get (arg_id));
-          }
+          macro.formals.push_back (symbol::get (__first, arg_end));
 
         __first = skip_blanks (arg_end, __last);
 
@@ -774,10 +780,7 @@ public:
 
             arg_end = skip_identifier (__first, __last);
             if (__first != arg_end)
-              {
-                std::string arg_id (__first, arg_end);
-                macro.formals.push_back (symbol::get (arg_id));
-              }
+              macro.formals.push_back (symbol::get (__first, arg_end));
 
             __first = skip_blanks (arg_end, __last);
 
@@ -850,7 +853,7 @@ public:
             __first = skip_white_spaces (__first, __last);
 
             _InputIterator end_id = skip_identifier (__first, __last);
-            fast_string const *directive (symbol::get (std::string (__first, end_id)));
+            fast_string const *directive (symbol::get (__first, end_id));
 
             __first = skip_line (end_id, __last);
             (void) handle_directive (directive, end_id, __first, __result);
@@ -1515,10 +1518,10 @@ private:
           if (std::isalpha (ch) || ch == '_')
             {
               _InputIterator end = skip_identifier (__first, __last);
-              token_name = symbol::get (std::string (__first, end));
+              token_name = symbol::get (__first, end);
               __first = end;
 
-              if (token_name == symbol::get ("defined"))
+              if (token_name == symbol::get ("defined", 7))
                 *kind = TOKEN_DEFINED;
               else
                 *kind = TOKEN_IDENTIFIER;
@@ -1601,11 +1604,4 @@ int main (int /*argc*/, char *argv[])
 
   return EXIT_SUCCESS;
 }
-
-/*
-
-3457
-2500
-
-*/
 
