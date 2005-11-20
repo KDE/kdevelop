@@ -831,7 +831,6 @@ public:
 
   _InputIterator skip (_InputIterator __first, _InputIterator __last)
   {
-    pp_skip_comment_or_divop skip_comment_or_divop;
     pp_skip_string_literal skip_string_literal;
     pp_skip_char_literal skip_char_literal;
 
@@ -984,7 +983,7 @@ private:
 
       case '(':
         __first = eval_constant_expression(__first, __last, result);
-        peek_token (__first, __last, &token);
+        next_token (__first, __last, &token);
 
         if (token != ')') {
           std::cerr << "** WARNING expected ``)'' = " << token << std::endl;
@@ -1413,12 +1412,6 @@ private:
     TOKEN_OR_OR,
     TOKEN_AND_AND,
   };
-
-  inline _InputIterator peek_token (_InputIterator __first, _InputIterator __last, int *kind)
-  {
-    (void) next_token (__first, __last, kind);
-    return __first;
-  }
 
   _InputIterator next_token (_InputIterator __first, _InputIterator __last, int *kind)
   {
