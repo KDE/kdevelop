@@ -31,23 +31,85 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-inline std::string const *compile_id (std::string const &id)
+#include "../rxx_allocator.h"
+
+template <typename _CharT>
+class mini_string
 {
-  using namespace std;
+  typedef std::char_traits<_CharT> traits_type;
+  typedef std::size_t size_type;
 
-  static set<string> string_set;
+  _CharT const *_M_begin;
+  std::size_t _M_size;
 
-  set<string>::iterator it = string_set.find (id);
-  if (it == string_set.end ())
-    it = string_set.insert (id).first;
+public:
+  inline mini_string ():
+    _M_begin (0), _M_size(0) {}
 
-  return &*it;
-}
+  explicit mini_string (std::string const &__s):
+    _M_begin (__s.c_str ()), _M_size (__s.size ()) {}
+
+  inline mini_string (_CharT const *__begin, std::size_t __size):
+    _M_begin (__begin), _M_size (__size) {}
+
+  inline _CharT const *begin () const { return _M_begin; }
+  inline _CharT const *end () const { return _M_begin + _M_size; }
+
+  inline int size () const { return _M_size; }
+
+  inline int compare (mini_string const &__other) const
+  {
+    size_type const __size = this->size();
+    size_type const __osize = __other.size();
+    size_type const __len = std::min (__size,  __osize);
+
+    int __r = traits_type::compare (_M_begin, __other._M_begin, __len);
+    if (!__r)
+      __r =  __size - __osize;
+
+    return __r;
+  }
+
+  inline bool operator < (mini_string const &__other) const
+  { return compare (__other) < 0; }
+};
+
+typedef mini_string<char> fast_string;
+
+class symbol
+{
+  static rxx_allocator<char> allocator;
+  static std::set<fast_string> string_set;
+
+public:
+  static fast_string const *get (char const *__data, std::size_t __size)
+  {
+    using namespace std;
+
+    set<fast_string>::iterator it = string_set.find (fast_string (__data, __size));
+    if (it == string_set.end ())
+      {
+        char *where = allocator.allocate (__size + 1);
+        memcpy(where, __data, __size);
+        where[__size] = '\0';
+        fast_string str (where, __size);
+        it = string_set.insert (str).first;
+      }
+
+    return &*it;
+  }
+
+  static fast_string const *get (std::string const &__s)
+  { return get (__s.c_str (), __s.size ()); }
+};
+
+rxx_allocator<char> symbol::allocator;
+std::set<fast_string> symbol::string_set;
 
 struct pp_macro
 {
   std::string definition;
-  std::vector<std::string const *> formals;
+  std::vector<fast_string const *> formals;
 
   union
   {
@@ -65,15 +127,15 @@ struct pp_macro
     state (0) {}
 };
 
-struct pp_environment: private std::map<std::string const *, pp_macro>
+struct pp_environment: private std::map<fast_string const *, pp_macro>
 {
-  inline bool bind (std::string const *__name, pp_macro const &__macro)
+  inline bool bind (fast_string const *__name, pp_macro const &__macro)
   { return insert (std::make_pair (__name, __macro)).second; }
 
-  inline void unbind (std::string const *__name)
+  inline void unbind (fast_string const *__name)
   { erase (__name); }
 
-  inline pp_macro *resolve (std::string const *__name)
+  inline pp_macro *resolve (fast_string const *__name)
   {
     iterator it = find (__name);
     return it != end () ? &(*it).second : 0;
@@ -383,7 +445,7 @@ class pp_macro_expander
   pp_skip_comment_or_divop skip_comment_or_divop;
   pp_skip_blanks skip_blanks;
 
-  std::string const *resolve_formal (std::string const *__name)
+  std::string const *resolve_formal (fast_string const *__name)
   {
     assert (__name != 0);
 
@@ -392,10 +454,10 @@ class pp_macro_expander
 
     assert (frame->expanding_macro != 0);
 
-    std::vector<std::string const *> const formals = frame->expanding_macro->formals;
+    std::vector<fast_string const *> const formals = frame->expanding_macro->formals;
     for (std::size_t index = 0; index < formals.size(); ++index)
       {
-        std::string const *formal = formals[index];
+        fast_string const *formal = formals[index];
 
         if (formal != __name)
           continue;
@@ -470,7 +532,7 @@ public:
         else if (std::isalpha (*__first) || *__first == '_')
           {
             _InputIterator name_end = skip_identifier (__first, __last);
-            std::string const *name = compile_id (std::string (__first, name_end));
+            fast_string const *name = symbol::get (std::string (__first, name_end));
             __first = name_end; // advance
 
             // search for the paste token
@@ -493,7 +555,7 @@ public:
             pp_macro *macro = env.resolve (name);
             if (! macro || macro->hidden || hide_next)
               {
-                hide_next = (name == compile_id ("defined"));
+                hide_next = (name == symbol::get ("defined"));
                 std::copy (name->begin (), name->end (), __result);
                 continue;
               }
@@ -677,6 +739,7 @@ public:
   _InputIterator handle_define (_InputIterator __first, _InputIterator __last)
   {
     pp_macro macro;
+    macro.definition.reserve (255);
 
     __first = skip_blanks (__first, __last);
     _InputIterator end_macro_name = skip_identifier (__first, __last);
@@ -693,7 +756,7 @@ public:
         if (__first != arg_end)
           {
             std::string arg_id (__first, arg_end);
-            macro.formals.push_back (compile_id (arg_id));
+            macro.formals.push_back (symbol::get (arg_id));
           }
 
         __first = skip_blanks (arg_end, __last);
@@ -713,7 +776,7 @@ public:
             if (__first != arg_end)
               {
                 std::string arg_id (__first, arg_end);
-                macro.formals.push_back (compile_id (arg_id));
+                macro.formals.push_back (symbol::get (arg_id));
               }
 
             __first = skip_blanks (arg_end, __last);
@@ -744,7 +807,7 @@ public:
         macro.definition += *__first++;
       }
 
-    env.bind (compile_id (macro_name), macro);
+    env.bind (symbol::get (macro_name), macro);
 
     return __first;
   }
@@ -787,7 +850,7 @@ public:
             __first = skip_white_spaces (__first, __last);
 
             _InputIterator end_id = skip_identifier (__first, __last);
-            std::string const *directive (compile_id (std::string (__first, end_id)));
+            fast_string const *directive (symbol::get (std::string (__first, end_id)));
 
             __first = skip_line (end_id, __last);
             (void) handle_directive (directive, end_id, __first, __result);
@@ -801,29 +864,39 @@ private:
   int _M_true_test[MAX_LEVEL];
   int iflevel;
 
+  static fast_string const *pp_define;
+  static fast_string const *pp_include;
+  static fast_string const *pp_elif;
+  static fast_string const *pp_else;
+  static fast_string const *pp_endif;
+  static fast_string const *pp_if;
+  static fast_string const *pp_ifdef;
+  static fast_string const *pp_ifndef;
+  static fast_string const *pp_undef;
+
   template <typename _OutputIterator>
-  _InputIterator handle_directive(std::string const *d,
+  _InputIterator handle_directive(fast_string const *d,
           _InputIterator __first, _InputIterator __last, _OutputIterator __result)
   {
     __first = skip_blanks (__first, __last);
 
-    if (d == compile_id ("define") && !skipping ())
+    if (d == pp_define && !skipping ())
       __first = handle_define (__first, __last);
-    else if (d == compile_id ("include") && !skipping ())
+    else if (d == pp_include && !skipping ())
       return handle_include (__first, __last, __result);
-    else if (d == compile_id ("elif"))
+    else if (d == pp_elif)
       return handle_elif (__first, __last);
-    else if (d == compile_id ("else"))
+    else if (d == pp_else)
       return handle_else (__first, __last);
-    else if (d == compile_id ("endif"))
+    else if (d == pp_endif)
       return handle_endif (__first, __last);
-    else if (d == compile_id ("if"))
+    else if (d == pp_if)
       return handle_if (__first, __last);
-    else if (d == compile_id ("ifdef"))
+    else if (d == pp_ifdef)
       return handle_ifdef (false, __first, __last);
-    else if (d == compile_id ("ifndef"))
+    else if (d == pp_ifndef)
       return handle_ifdef (true, __first, __last);
-    else if (d == compile_id ("undef") && !skipping ())
+    else if (d == pp_undef && !skipping ())
       return handle_undef(__first, __last);
 
     return __first;
@@ -1272,7 +1345,7 @@ private:
         std::string macro_name (__first, macro_name_end);
         __first = macro_name_end;
 
-        bool value = env.resolve (compile_id (macro_name)) != 0;
+        bool value = env.resolve (symbol::get (macro_name)) != 0;
 
         if (check_undefined)
           value = !value;
@@ -1293,14 +1366,14 @@ private:
     std::string macro_name (__first, macro_name_end);
     __first = macro_name_end;
 
-    env.unbind (compile_id (macro_name));
+    env.unbind (symbol::get (macro_name));
     return __first;
   }
 
   union
   {
     long token_value;
-    std::string const *token_name;
+    fast_string const *token_name;
   };
 
   char peek_char (_InputIterator __first, _InputIterator __last)
@@ -1442,10 +1515,10 @@ private:
           if (std::isalpha (ch) || ch == '_')
             {
               _InputIterator end = skip_identifier (__first, __last);
-              token_name = compile_id (std::string (__first, end));
+              token_name = symbol::get (std::string (__first, end));
               __first = end;
 
-              if (token_name == compile_id ("defined"))
+              if (token_name == symbol::get ("defined"))
                 *kind = TOKEN_DEFINED;
               else
                 *kind = TOKEN_IDENTIFIER;
@@ -1465,6 +1538,33 @@ private:
     return __first;
   }
 };
+
+template <typename _OutputIterator>
+fast_string const *pp<_OutputIterator>::pp_define = symbol::get ("define");
+
+template <typename _OutputIterator>
+fast_string const *pp<_OutputIterator>::pp_include = symbol::get ("include");
+
+template <typename _OutputIterator>
+fast_string const *pp<_OutputIterator>::pp_elif = symbol::get ("elif");
+
+template <typename _OutputIterator>
+fast_string const *pp<_OutputIterator>::pp_else = symbol::get ("else");
+
+template <typename _OutputIterator>
+fast_string const *pp<_OutputIterator>::pp_endif = symbol::get ("endif");
+
+template <typename _OutputIterator>
+fast_string const *pp<_OutputIterator>::pp_if = symbol::get ("if");
+
+template <typename _OutputIterator>
+fast_string const *pp<_OutputIterator>::pp_ifdef = symbol::get ("ifdef");
+
+template <typename _OutputIterator>
+fast_string const *pp<_OutputIterator>::pp_ifndef = symbol::get ("ifndef");
+
+template <typename _OutputIterator>
+fast_string const *pp<_OutputIterator>::pp_undef = symbol::get ("undef");
 
 struct null_output_iterator
 {
@@ -1501,3 +1601,11 @@ int main (int /*argc*/, char *argv[])
 
   return EXIT_SUCCESS;
 }
+
+/*
+
+3457
+2500
+
+*/
+

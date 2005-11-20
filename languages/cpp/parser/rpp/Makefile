@@ -1,6 +1,6 @@
 
 all:
-	$(CXX) -O3 -o pp pp.cpp && strip pp
+	$(CXX) -O3 -I.. $(CXXFLAGS) -o pp pp.cpp && strip pp
 
 clean:
 	rm -f pp
