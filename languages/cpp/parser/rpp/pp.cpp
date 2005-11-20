@@ -1600,7 +1600,11 @@ int main (int /*argc*/, char *argv[])
 
   null_output_iterator null_out;
   preprocess.file ("pp-configuration", null_out); // ### put your macros here!
-  preprocess.file (filename, std::ostream_iterator<char> (std::cout));
+
+  std::string result;
+  result.reserve (20 * 1024); // 20 K
+  preprocess.file (filename, std::back_inserter (result));
+  std::cout << result;
 
   return EXIT_SUCCESS;
 }
