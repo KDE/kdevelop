@@ -108,7 +108,7 @@ public:
     return get (buffer, __last - __first);
   }
 
-  static fast_string const *get (std::string const &__s)
+  static fast_string const *get(std::string const &__s)
   { return get (__s.c_str (), __s.size ()); }
 };
 
@@ -687,6 +687,20 @@ public:
     iflevel = 0;
     _M_skipping[iflevel] = 0;
     _M_true_test[iflevel] = 0;
+
+#if 0
+    include_paths
+      .push_back("/usr/include");
+
+    include_paths
+      .push_back("/usr/lib/gcc/" GCC_MACHINE "/" GCC_VERSION "/include");
+
+    include_paths
+      .push_back("/usr/include/c++/" GCC_VERSION);
+
+    include_paths
+      .push_back("/usr/include/c++/" GCC_VERSION "/" GCC_MACHINE);
+#endif
 
     include_paths
       .push_back(".");
@@ -1344,11 +1358,10 @@ private:
   {
     if (test_if_level())
       {
-        _InputIterator macro_name_end = skip_identifier (__first, __last);
-        std::string macro_name (__first, macro_name_end);
-        __first = macro_name_end;
-
-        bool value = env.resolve (symbol::get (macro_name)) != 0;
+        _InputIterator end_macro_name = skip_identifier (__first, __last);
+        std::string macro_name (__first, end_macro_name);
+        bool value = env.resolve (symbol::get (__first, end_macro_name)) != 0;
+        __first = end_macro_name;
 
         if (check_undefined)
           value = !value;
@@ -1363,13 +1376,12 @@ private:
   _InputIterator handle_undef(_InputIterator __first, _InputIterator __last)
   {
     __first = skip_white_spaces (__first, __last);
-    _InputIterator macro_name_end = skip_identifier (__first, __last);
-    assert (macro_name_end != __first);
+    _InputIterator end_macro_name = skip_identifier (__first, __last);
+    assert (end_macro_name != __first);
 
-    std::string macro_name (__first, macro_name_end);
-    __first = macro_name_end;
+    env.unbind (symbol::get (__first, end_macro_name));
+    __first = end_macro_name;
 
-    env.unbind (symbol::get (macro_name));
     return __first;
   }
 
@@ -1543,31 +1555,31 @@ private:
 };
 
 template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_define = symbol::get ("define");
+fast_string const *pp<_OutputIterator>::pp_define = symbol::get ("define", 6);
 
 template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_include = symbol::get ("include");
+fast_string const *pp<_OutputIterator>::pp_include = symbol::get ("include", 7);
 
 template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_elif = symbol::get ("elif");
+fast_string const *pp<_OutputIterator>::pp_elif = symbol::get ("elif", 4);
 
 template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_else = symbol::get ("else");
+fast_string const *pp<_OutputIterator>::pp_else = symbol::get ("else", 4);
 
 template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_endif = symbol::get ("endif");
+fast_string const *pp<_OutputIterator>::pp_endif = symbol::get ("endif", 5);
 
 template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_if = symbol::get ("if");
+fast_string const *pp<_OutputIterator>::pp_if = symbol::get ("if", 2);
 
 template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_ifdef = symbol::get ("ifdef");
+fast_string const *pp<_OutputIterator>::pp_ifdef = symbol::get ("ifdef", 5);
 
 template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_ifndef = symbol::get ("ifndef");
+fast_string const *pp<_OutputIterator>::pp_ifndef = symbol::get ("ifndef", 6);
 
 template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_undef = symbol::get ("undef");
+fast_string const *pp<_OutputIterator>::pp_undef = symbol::get ("undef", 5);
 
 struct null_output_iterator
 {
