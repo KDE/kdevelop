@@ -14,6 +14,10 @@ KO
 #define A(a,b) a + b
 #define C(a,b) A(b,a)
 
-C(1,2)
+#define comp(a,b) #a #b
+#define str(a) #a
+
+C(1,2) comp(me, you) str(kdevelop is cool)
+
 
 

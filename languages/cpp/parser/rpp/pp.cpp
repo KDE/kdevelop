@@ -381,6 +381,7 @@ class pp_macro_expander
   pp_skip_char_literal skip_char_literal;
   pp_skip_argument skip_argument;
   pp_skip_comment_or_divop skip_comment_or_divop;
+  pp_skip_blanks skip_blanks;
 
   std::string const *resolve_formal (std::string const *__name)
   {
@@ -414,11 +415,23 @@ public:
   template <typename _InputIterator, typename _OutputIterator>
   _InputIterator operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result)
   {
+    __first = skip_blanks (__first, __last);
+
     while (__first != __last)
       {
         if (!frame && *__first == '#')
           {
             return __first;
+          }
+        else if (*__first == '#')
+          {
+            __first = skip_blanks (++__first, __last);
+
+            _InputIterator end_id = skip_identifier (__first, __last);
+            *__result++ = '\"';
+            this->operator () (__first, end_id, __result);
+            *__result++ = '\"';
+            __first = end_id;
           }
         else if (*__first == '/')
           {
@@ -438,6 +451,16 @@ public:
             std::copy (__first, next_pos, __result);
             __first = next_pos;
           }
+        else if (*__first != '\n' && std::isspace (*__first))
+          {
+            for (; __first != __last; ++__first)
+              {
+                if (*__first == '\n' || !std::isspace (*__first))
+                  break;
+              }
+
+            *__result = ' ';
+          }
         else if (std::isdigit (*__first))
           {
             _InputIterator next_pos = skip_number (__first, __last);
@@ -449,6 +472,15 @@ public:
             _InputIterator name_end = skip_identifier (__first, __last);
             std::string const *name = compile_id (std::string (__first, name_end));
             __first = name_end; // advance
+
+            // search for the paste token
+            _InputIterator next = skip_blanks (__first, __last);
+            if (next != __last && *next == '#')
+              {
+                ++next;
+                if (next != __last && *next == '#')
+                  __first = skip_blanks(++next, __last);
+              }
 
             if (std::string const *actual = resolve_formal (name))
               {
@@ -644,7 +676,6 @@ public:
 
   _InputIterator handle_define (_InputIterator __first, _InputIterator __last)
   {
-    pp_skip_blanks skip_blanks;
     pp_macro macro;
 
     __first = skip_blanks (__first, __last);
