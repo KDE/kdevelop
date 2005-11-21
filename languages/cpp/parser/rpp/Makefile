@@ -1,8 +1,15 @@
 
-CXXFLAGS = -DGCC_MACHINE="\"`g++ -dumpmachine`\"" -DGCC_VERSION="\"`g++ -dumpversion`\""
+CXXFLAGS = -I..  -g -DGCC_MACHINE="\"`g++ -dumpmachine`\"" -DGCC_VERSION="\"`g++ -dumpversion`\""
 
-all:
-	$(CXX) -O3 -I.. $(CXXFLAGS) -o pp main.cpp && strip pp
+OBJS = main.o
+
+all: pp
+
+pp: $(OBJS)
+	$(CXX) -o$@ $(OBJS) # && strip $@
 
 clean:
-	rm -f pp
+	rm -f pp $(OBJS) *~
+
+main.cpp: pp.h pp-environment.h  pp-macro.h    pp-string.h  preprocessor.h \
+	pp-fwd.h          pp-macro-expander.h  pp-scanner.h  pp-symbol.h

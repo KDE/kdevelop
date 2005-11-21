@@ -18,7 +18,23 @@
   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "pp.cpp"
+#include "pp.h"
+
+struct null_output_iterator
+{
+  typedef std::random_access_iterator_tag iterator_category;
+  typedef char value_type;
+  typedef char &reference;
+  typedef char *pointer;
+  typedef std::ptrdiff_t difference_type;
+  char ch;
+
+  null_output_iterator(): ch(0) {}
+
+  char &operator * () { return ch; }
+  null_output_iterator &operator ++ () { return *this; }
+  null_output_iterator &operator ++ (int) { return *this; }
+};
 
 int main (int /*argc*/, char *argv[])
 {
@@ -59,4 +75,5 @@ int main (int /*argc*/, char *argv[])
 
   return EXIT_SUCCESS;
 }
+
 

@@ -18,429 +18,8 @@
   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <set>
-#include <map>
-#include <vector>
-#include <string>
-#include <iterator>
-#include <iostream>
-#include <fstream>
-
-#include <fcntl.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-
-#include "../rxx_allocator.h"
-
-template <typename _CharT>
-class mini_string
-{
-  typedef std::char_traits<_CharT> traits_type;
-  typedef std::size_t size_type;
-
-  _CharT const *_M_begin;
-  std::size_t _M_size;
-
-public:
-  inline mini_string ():
-    _M_begin (0), _M_size(0) {}
-
-  explicit mini_string (std::string const &__s):
-    _M_begin (__s.c_str ()), _M_size (__s.size ()) {}
-
-  inline mini_string (_CharT const *__begin, std::size_t __size):
-    _M_begin (__begin), _M_size (__size) {}
-
-  inline _CharT const *begin () const { return _M_begin; }
-  inline _CharT const *end () const { return _M_begin + _M_size; }
-
-  inline int size () const { return _M_size; }
-
-  inline int compare (mini_string const &__other) const
-  {
-    size_type const __size = this->size();
-    size_type const __osize = __other.size();
-    size_type const __len = std::min (__size,  __osize);
-
-    int __r = traits_type::compare (_M_begin, __other._M_begin, __len);
-    if (!__r)
-      __r =  __size - __osize;
-
-    return __r;
-  }
-
-  inline bool operator == (mini_string const &__other) const
-  { return compare (__other) == 0; }
-
-  inline bool operator != (mini_string const &__other) const
-  { return compare (__other) != 0; }
-
-  inline bool operator < (mini_string const &__other) const
-  { return compare (__other) < 0; }
-};
-
-typedef mini_string<char> fast_string;
-
-class symbol
-{
-  static rxx_allocator<char> allocator;
-  static std::set<fast_string> string_set;
-
-public:
-  static fast_string const *get (char const *__data, std::size_t __size)
-  {
-    using namespace std;
-
-    set<fast_string>::iterator it = string_set.find (fast_string (__data, __size));
-    if (it == string_set.end ())
-      {
-        char *where = allocator.allocate (__size + 1);
-        memcpy(where, __data, __size);
-        where[__size] = '\0';
-        fast_string str (where, __size);
-        it = string_set.insert (str).first;
-      }
-
-    return &*it;
-  }
-
-  inline static bool used (fast_string const *__s)
-  {
-    return string_set.find (*__s) != string_set.end ();
-  }
-
-  template <typename _InputIterator>
-  static fast_string const *get (_InputIterator __first, _InputIterator __last)
-  {
-    assert ((__last - __first) < 512);
-    char buffer[512], *cp = buffer;
-    std::copy (__first, __last, cp);
-    return get (buffer, __last - __first);
-  }
-
-  static fast_string const *get(std::string const &__s)
-  { return get (__s.c_str (), __s.size ()); }
-};
-
-rxx_allocator<char> symbol::allocator;
-std::set<fast_string> symbol::string_set;
-
-struct pp_macro
-{
-  std::string definition;
-  std::vector<fast_string const *> formals;
-
-  union
-  {
-    int unsigned state;
-
-    struct
-    {
-      int unsigned hidden: 1;
-      int unsigned function_like: 1;
-      int unsigned variadics: 1;
-    };
-  };
-
-  inline pp_macro():
-    state (0) {}
-};
-
-struct pp_environment: private std::map<fast_string const *, pp_macro>
-{
-  inline bool bind (fast_string const *__name, pp_macro const &__macro)
-  { return insert (std::make_pair (__name, __macro)).second; }
-
-  inline void unbind (fast_string const *__name)
-  { erase (__name); }
-
-  inline pp_macro *resolve (fast_string const *__name)
-  {
-    iterator it = find (__name);
-    return it != end () ? &(*it).second : 0;
-  }
-};
-
-struct pp_skip_white_spaces
-{
-  template <typename _InputIterator>
-  _InputIterator operator () (_InputIterator __first, _InputIterator __last)
-  {
-    for (; __first != __last; ++__first)
-      {
-        if (! std::isspace (*__first))
-          break;
-      }
-
-    return __first;
-  }
-};
-
-struct pp_skip_blanks
-{
-  template <typename _InputIterator>
-  _InputIterator operator () (_InputIterator __first, _InputIterator __last)
-  {
-    for (; __first != __last; ++__first)
-      {
-        if (*__first == '\\')
-          {
-            ++__first;
-            if (__first == __last)
-              break;
-          }
-        else if (*__first == '\n' || !std::isspace (*__first))
-          break;
-      }
-
-    return __first;
-  }
-};
-
-struct pp_skip_line
-{
-  template <typename _InputIterator>
-  _InputIterator operator () (_InputIterator __first, _InputIterator __last)
-  {
-    while (__first != __last && *__first != '\n')
-      {
-        bool skip = (*__first++ == '\\');
-
-        if (skip && __first != __last)
-          ++__first;
-      }
-
-    return __first;
-  }
-};
-
-struct pp_skip_comment_or_divop
-{
-  template <typename _InputIterator>
-  _InputIterator operator () (_InputIterator __first, _InputIterator __last)
-  {
-    enum {
-      MAYBE_BEGIN,
-      BEGIN,
-      MAYBE_END,
-      END,
-      IN_COMMENT,
-      IN_CXX_COMMENT
-    } state (MAYBE_BEGIN);
-
-    for (; __first != __last; ++__first)
-      {
-        switch (state)
-          {
-            default:
-              assert (0);
-              break;
-
-            case MAYBE_BEGIN:
-              if (*__first != '/')
-                return __first;
-
-              state = BEGIN;
-              break;
-
-            case BEGIN:
-              if (*__first == '*')
-                state = IN_COMMENT;
-              else if (*__first == '/')
-                state = IN_CXX_COMMENT;
-              else
-                return __first;
-              break;
-
-            case IN_COMMENT:
-              if (*__first == '*')
-                state = MAYBE_END;
-              break;
-
-            case IN_CXX_COMMENT:
-              if (*__first == '\n')
-                state = END;
-              break;
-
-            case MAYBE_END:
-              if (*__first == '/')
-                state = END;
-              else if (*__first != '*')
-                state = IN_COMMENT;
-              break;
-
-            case END:
-              return __first;
-          }
-      }
-
-    return __first;
-  }
-};
-
-struct pp_skip_identifier
-{
-  template <typename _InputIterator>
-  _InputIterator operator () (_InputIterator __first, _InputIterator __last)
-  {
-    for (; __first != __last; ++__first)
-      {
-        if (! std::isalnum (*__first) && *__first != '_')
-          break;
-      }
-
-    return __first;
-  }
-};
-
-struct pp_skip_number
-{
-  template <typename _InputIterator>
-  _InputIterator operator () (_InputIterator __first, _InputIterator __last)
-  {
-    for (; __first != __last; ++__first)
-      {
-        if (! std::isalnum (*__first) && *__first != '.')
-          break;
-      }
-
-    return __first;
-  }
-};
-
-struct pp_skip_string_literal
-{
-  template <typename _InputIterator>
-  _InputIterator operator () (_InputIterator __first, _InputIterator __last)
-  {
-    enum {
-      BEGIN,
-      IN_STRING,
-      QUOTE,
-      END
-    } state (BEGIN);
-
-    for (; __first != __last; ++__first)
-      {
-        switch (state)
-          {
-            default:
-              assert (0);
-              break;
-
-            case BEGIN:
-              if (*__first != '\"')
-                return __first;
-              state = IN_STRING;
-              break;
-
-            case IN_STRING:
-              assert (*__first != '\n');
-
-              if (*__first == '\"')
-                state = END;
-              else if (*__first == '\\')
-                state = QUOTE;
-              break;
-
-            case QUOTE:
-              state = IN_STRING;
-              break;
-
-            case END:
-              return __first;
-          }
-      }
-
-    return __first;
-  }
-};
-
-struct pp_skip_char_literal
-{
-  template <typename _InputIterator>
-  _InputIterator operator () (_InputIterator __first, _InputIterator __last)
-  {
-    enum {
-      BEGIN,
-      IN_STRING,
-      QUOTE,
-      END
-    } state (BEGIN);
-
-    for (; state != END && __first != __last; ++__first)
-      {
-        switch (state)
-          {
-            default:
-              assert (0);
-              break;
-
-            case BEGIN:
-              if (*__first != '\'')
-                return __first;
-              state = IN_STRING;
-              break;
-
-            case IN_STRING:
-              assert (*__first != '\n');
-
-              if (*__first == '\'')
-                state = END;
-              else if (*__first == '\\')
-                state = QUOTE;
-              break;
-
-            case QUOTE:
-              state = IN_STRING;
-              break;
-          }
-      }
-
-    return __first;
-  }
-};
-
-struct pp_skip_argument
-{
-  pp_skip_white_spaces skip_white_spaces;
-  pp_skip_identifier skip_number;
-  pp_skip_identifier skip_identifier;
-  pp_skip_string_literal skip_string_literal;
-  pp_skip_char_literal skip_char_literal;
-  pp_skip_comment_or_divop skip_comment_or_divop;
-
-  template <typename _InputIterator>
-  _InputIterator operator () (_InputIterator __first, _InputIterator __last)
-  {
-    int depth = 0;
-
-    while (__first != __last)
-      {
-        if (!depth && (*__first == ')' || *__first == ','))
-          break;
-        else if (*__first == '(')
-          ++depth, ++__first;
-        else if (*__first == ')')
-          --depth, ++__first;
-        else if (*__first == '\"')
-          __first = skip_string_literal (__first, __last);
-        else if (*__first == '\'')
-          __first = skip_char_literal (__first, __last);
-        else if (*__first == '/')
-          __first = skip_comment_or_divop (__first, __last);
-        else if (std::isalpha (*__first) || *__first == '_')
-          __first = skip_identifier (__first, __last);
-        else if (std::isdigit (*__first))
-          __first = skip_number (__first, __last);
-        else
-          ++__first;
-      }
-
-    return __first;
-  }
-};
+#ifndef PP_MACRO_EXPANDER_H
+#define PP_MACRO_EXPANDER_H
 
 struct pp_frame
 {
@@ -465,7 +44,7 @@ class pp_macro_expander
   pp_skip_comment_or_divop skip_comment_or_divop;
   pp_skip_blanks skip_blanks;
 
-  std::string const *resolve_formal (fast_string const *__name)
+  std::string const *resolve_formal (pp_fast_string const *__name)
   {
     assert (__name != 0);
 
@@ -474,10 +53,10 @@ class pp_macro_expander
 
     assert (frame->expanding_macro != 0);
 
-    std::vector<fast_string const *> const formals = frame->expanding_macro->formals;
+    std::vector<pp_fast_string const *> const formals = frame->expanding_macro->formals;
     for (std::size_t index = 0; index < formals.size(); ++index)
       {
-        fast_string const *formal = formals[index];
+        pp_fast_string const *formal = formals[index];
 
         if (*formal != *__name)
           continue;
@@ -572,7 +151,7 @@ public:
             char name_buffer[512], *cp = name_buffer;
             std::copy (name_begin, name_end, cp);
 
-            fast_string fast_name (name_buffer, name_size);
+            pp_fast_string fast_name (name_buffer, name_size);
 
             if (std::string const *actual = resolve_formal (&fast_name))
               {
@@ -582,18 +161,18 @@ public:
 
             static bool hide_next = false;
 
-            if (!symbol::used (&fast_name))
+            if (!pp_symbol::used (&fast_name))
               {
-                hide_next = (fast_name == *symbol::get ("defined", 7));
+                hide_next = (fast_name == *pp_symbol::get ("defined", 7));
                 std::copy (name_begin, name_end, __result);
                 continue;
               }
 
-            fast_string const *name = symbol::get (name_buffer, name_size);
+            pp_fast_string const *name = pp_symbol::get (name_buffer, name_size);
             pp_macro *macro = env.resolve (name);
             if (! macro || macro->hidden || hide_next)
               {
-                hide_next = (name == symbol::get ("defined", 7));
+                hide_next = (name == pp_symbol::get ("defined", 7));
                 std::copy (name_begin, name_end, __result);
                 continue;
               }
@@ -716,6 +295,20 @@ public:
     iflevel = 0;
     _M_skipping[iflevel] = 0;
     _M_true_test[iflevel] = 0;
+
+    if (_S_initialized)
+      return;
+
+    pp_define = pp_symbol::get ("define", 6);
+    pp_include = pp_symbol::get ("include", 7);
+    pp_elif = pp_symbol::get ("elif", 4);
+    pp_else = pp_symbol::get ("else", 4);
+    pp_endif = pp_symbol::get ("endif", 5);
+    pp_if = pp_symbol::get ("if", 2);
+    pp_ifdef = pp_symbol::get ("ifdef", 5);
+    pp_ifndef = pp_symbol::get ("ifndef", 6);
+    pp_undef = pp_symbol::get ("undef", 5);
+    _S_initialized = true;
   }
 
   inline std::back_insert_iterator<std::vector<std::string> > include_paths_inserter ()
@@ -807,7 +400,7 @@ public:
         __first = skip_blanks (++__first, __last); // skip '('
         _InputIterator arg_end = skip_identifier (__first, __last);
         if (__first != arg_end)
-          macro.formals.push_back (symbol::get (__first, arg_end));
+          macro.formals.push_back (pp_symbol::get (__first, arg_end));
 
         __first = skip_blanks (arg_end, __last);
 
@@ -824,7 +417,7 @@ public:
 
             arg_end = skip_identifier (__first, __last);
             if (__first != arg_end)
-              macro.formals.push_back (symbol::get (__first, arg_end));
+              macro.formals.push_back (pp_symbol::get (__first, arg_end));
 
             __first = skip_blanks (arg_end, __last);
 
@@ -857,7 +450,7 @@ public:
         macro.definition += *__first++;
       }
 
-    env.bind (symbol::get (macro_name), macro);
+    env.bind (pp_symbol::get (macro_name), macro);
 
     return __first;
   }
@@ -898,7 +491,7 @@ public:
             __first = skip_blanks (++__first, __last);
 
             _InputIterator end_id = skip_identifier (__first, __last);
-            fast_string const *directive (symbol::get (__first, end_id));
+            pp_fast_string const *directive (pp_symbol::get (__first, end_id));
 
             end_id = skip_blanks (end_id, __last);
             __first = skip_line (end_id, __last);
@@ -914,18 +507,19 @@ private:
   int _M_true_test[MAX_LEVEL];
   int iflevel;
 
-  static fast_string const *pp_define;
-  static fast_string const *pp_include;
-  static fast_string const *pp_elif;
-  static fast_string const *pp_else;
-  static fast_string const *pp_endif;
-  static fast_string const *pp_if;
-  static fast_string const *pp_ifdef;
-  static fast_string const *pp_ifndef;
-  static fast_string const *pp_undef;
+  static bool _S_initialized;
+  static pp_fast_string const *pp_define;
+  static pp_fast_string const *pp_include;
+  static pp_fast_string const *pp_elif;
+  static pp_fast_string const *pp_else;
+  static pp_fast_string const *pp_endif;
+  static pp_fast_string const *pp_if;
+  static pp_fast_string const *pp_ifdef;
+  static pp_fast_string const *pp_ifndef;
+  static pp_fast_string const *pp_undef;
 
   template <typename _OutputIterator>
-  _InputIterator handle_directive(fast_string const *d,
+  _InputIterator handle_directive(pp_fast_string const *d,
           _InputIterator __first, _InputIterator __last, _OutputIterator __result)
   {
     __first = skip_blanks (__first, __last);
@@ -1388,7 +982,7 @@ private:
       {
         _InputIterator end_macro_name = skip_identifier (__first, __last);
         std::string macro_name (__first, end_macro_name);
-        bool value = env.resolve (symbol::get (__first, end_macro_name)) != 0;
+        bool value = env.resolve (pp_symbol::get (__first, end_macro_name)) != 0;
         __first = end_macro_name;
 
         if (check_undefined)
@@ -1407,7 +1001,7 @@ private:
     _InputIterator end_macro_name = skip_identifier (__first, __last);
     assert (end_macro_name != __first);
 
-    env.unbind (symbol::get (__first, end_macro_name));
+    env.unbind (pp_symbol::get (__first, end_macro_name));
     __first = end_macro_name;
 
     return __first;
@@ -1416,7 +1010,7 @@ private:
   union
   {
     long token_value;
-    fast_string const *token_name;
+    pp_fast_string const *token_name;
   };
 
   char peek_char (_InputIterator __first, _InputIterator __last)
@@ -1553,10 +1147,10 @@ private:
           if (std::isalpha (ch) || ch == '_')
             {
               _InputIterator end = skip_identifier (__first, __last);
-              token_name = symbol::get (__first, end);
+              token_name = pp_symbol::get (__first, end);
               __first = end;
 
-              if (token_name == symbol::get ("defined", 7))
+              if (token_name == pp_symbol::get ("defined", 7))
                 *kind = TOKEN_DEFINED;
               else
                 *kind = TOKEN_IDENTIFIER;
@@ -1577,46 +1171,34 @@ private:
   }
 };
 
-template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_define = symbol::get ("define", 6);
+template <typename _InputIterator>
+bool pp<_InputIterator>::_S_initialized = false;
 
-template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_include = symbol::get ("include", 7);
+template <typename _InputIterator>
+pp_fast_string const *pp<_InputIterator>::pp_define;
 
-template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_elif = symbol::get ("elif", 4);
+template <typename _InputIterator>
+pp_fast_string const *pp<_InputIterator>::pp_include;
 
-template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_else = symbol::get ("else", 4);
+template <typename _InputIterator>
+pp_fast_string const *pp<_InputIterator>::pp_elif;
 
-template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_endif = symbol::get ("endif", 5);
+template <typename _InputIterator>
+pp_fast_string const *pp<_InputIterator>::pp_else;
 
-template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_if = symbol::get ("if", 2);
+template <typename _InputIterator>
+pp_fast_string const *pp<_InputIterator>::pp_endif;
 
-template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_ifdef = symbol::get ("ifdef", 5);
+template <typename _InputIterator>
+pp_fast_string const *pp<_InputIterator>::pp_if;
 
-template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_ifndef = symbol::get ("ifndef", 6);
+template <typename _InputIterator>
+pp_fast_string const *pp<_InputIterator>::pp_ifdef;
 
-template <typename _OutputIterator>
-fast_string const *pp<_OutputIterator>::pp_undef = symbol::get ("undef", 5);
+template <typename _InputIterator>
+pp_fast_string const *pp<_InputIterator>::pp_ifndef;
 
-struct null_output_iterator
-{
-  typedef std::random_access_iterator_tag iterator_category;
-  typedef char value_type;
-  typedef char &reference;
-  typedef char *pointer;
-  typedef std::ptrdiff_t difference_type;
-  char ch;
+template <typename _InputIterator>
+pp_fast_string const *pp<_InputIterator>::pp_undef;
 
-  null_output_iterator(): ch(0) {}
-
-  char &operator * () { return ch; }
-  null_output_iterator &operator ++ () { return *this; }
-  null_output_iterator &operator ++ (int) { return *this; }
-};
-
+#endif // PP_MACRO_EXPANDER_H

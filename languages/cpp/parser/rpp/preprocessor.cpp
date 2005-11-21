@@ -19,12 +19,10 @@
 */
 
 #include "preprocessor.h"
+#include "pp.h"
 
 #include <QtCore/QtCore>
-
 #include <string>
-
-#include "pp.cpp"
 
 class PreprocessorPrivate
 {
@@ -39,8 +37,6 @@ public:
             proc.push_include_path(path.toStdString());
     }
 };
-
-
 
 Preprocessor::Preprocessor()
 {
