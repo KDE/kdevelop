@@ -1,2 +1,2 @@
 SOURCES += $$RXXPATH/rpp/preprocessor.cpp
-INCLUDEPATH += $$RXXATH/rpp
+INCLUDEPATH += $$RXXPATH/rpp
