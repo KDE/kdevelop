@@ -195,6 +195,16 @@ KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
     KDevPlugin * pl = KParts::ComponentFactory
         ::createInstanceFromService<KDevPlugin>( service, API::getInstance(), 0,
                                                  argumentsFromService( service ), &err );
+    if (!pl)
+    {
+        KMessageBox::error(
+            0, 
+            i18n("<b>Could not load plugin</b><br>"
+                 "Plugin %1 could not be loaded<br>"
+                 "Library loader error: %2").arg(service->name()).
+            arg(KLibLoader::self()->lastErrorMessage()),
+            i18n("Could not load plugin"));
+    }
 //    kdDebug() << "ERR: " << err << endl;
     return pl;
 }
