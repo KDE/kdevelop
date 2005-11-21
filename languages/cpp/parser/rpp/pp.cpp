@@ -972,7 +972,6 @@ private:
         break;
 
       case TOKEN_IDENTIFIER:
-        // std::cerr << "** WARING unexpected identifier ``" << *token_name << "''" << std::endl;
         *result = 0;
         break;
 
@@ -985,9 +984,9 @@ private:
         __first = eval_constant_expression(__first, __last, result);
         next_token (__first, __last, &token);
 
-        if (token != ')') {
+        if (token != ')')
           std::cerr << "** WARNING expected ``)'' = " << token << std::endl;
-        }else
+        else
           __first = next_token(__first, __last, &token);
         break;
 
@@ -1434,6 +1433,7 @@ private:
               __first = skip_comment_or_divop (__first, __last);
               return next_token (__first, __last, kind);
             }
+          ++__first;
           *kind = '/';
           break;
 
