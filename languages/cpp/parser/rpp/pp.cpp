@@ -716,44 +716,25 @@ public:
     iflevel = 0;
     _M_skipping[iflevel] = 0;
     _M_true_test[iflevel] = 0;
-
-#if 0
-    include_paths
-      .push_back("/usr/include");
-
-    include_paths
-      .push_back("/usr/lib/gcc/" GCC_MACHINE "/" GCC_VERSION "/include");
-
-    include_paths
-      .push_back("/usr/include/c++/" GCC_VERSION);
-
-    include_paths
-      .push_back("/usr/include/c++/" GCC_VERSION "/" GCC_MACHINE);
-#endif
-
-    include_paths
-      .push_back(".");
   }
 
-  std::back_insert_iterator<std::vector<std::string> > include_paths_inserter ()
-  {
-    return std::back_inserter (include_paths);
-  }
+  inline std::back_insert_iterator<std::vector<std::string> > include_paths_inserter ()
+  { return std::back_inserter (include_paths); }
 
-  std::vector<std::string>::iterator include_paths_begin ()
-  {
-    return include_paths.begin ();
-  }
+  inline std::vector<std::string>::iterator include_paths_begin ()
+  { return include_paths.begin (); }
 
-  std::vector<std::string>::iterator include_paths_end ()
-  {
-    return include_paths.end ();
-  }
+  inline std::vector<std::string>::iterator include_paths_end ()
+  { return include_paths.end (); }
 
-  void push_include_path (std::string const &__path)
-  {
-    include_paths.push_back (__path);
-  }
+  inline std::vector<std::string>::const_iterator include_paths_begin () const
+  { return include_paths.begin (); }
+
+  inline std::vector<std::string>::const_iterator include_paths_end () const
+  { return include_paths.end (); }
+
+  inline void push_include_path (std::string const &__path)
+  { include_paths.push_back (__path); }
 
   template <typename _OutputIterator>
   void file (std::string const &filename, _OutputIterator __result)

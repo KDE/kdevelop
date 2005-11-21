@@ -22,6 +22,9 @@
 
 int main (int /*argc*/, char *argv[])
 {
+  bool no_stdinc = true;
+  bool no_stdincpp = true;
+
   char const *filename = *++argv;
   if (!filename)
     {
@@ -32,6 +35,19 @@ int main (int /*argc*/, char *argv[])
   pp_environment env;
 
   pp<> preprocess(env);
+  if (! no_stdinc)
+    {
+      preprocess.push_include_path ("/usr/include");
+      preprocess.push_include_path ("/usr/lib/gcc/" GCC_MACHINE "/" GCC_VERSION "/include");
+    }
+
+  if (! no_stdincpp)
+    {
+      preprocess.push_include_path ("/usr/include/c++/" GCC_VERSION);
+      preprocess.push_include_path ("/usr/include/c++/" GCC_VERSION "/" GCC_MACHINE);
+    }
+
+  preprocess.push_include_path (".");
 
   null_output_iterator null_out;
   preprocess.file ("pp-configuration", null_out); // ### put your macros here!
