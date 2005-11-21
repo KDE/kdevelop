@@ -70,6 +70,12 @@ public:
     return __r;
   }
 
+  inline bool operator == (mini_string const &__other) const
+  { return compare (__other) == 0; }
+
+  inline bool operator != (mini_string const &__other) const
+  { return compare (__other) != 0; }
+
   inline bool operator < (mini_string const &__other) const
   { return compare (__other) < 0; }
 };
@@ -97,6 +103,11 @@ public:
       }
 
     return &*it;
+  }
+
+  inline static bool used (fast_string const *__s)
+  {
+    return string_set.find (*__s) != string_set.end ();
   }
 
   template <typename _InputIterator>
@@ -468,7 +479,7 @@ class pp_macro_expander
       {
         fast_string const *formal = formals[index];
 
-        if (formal != __name)
+        if (*formal != *__name)
           continue;
         else if (frame->actuals && index < frame->actuals->size())
           return &(*frame->actuals)[index];
@@ -542,8 +553,8 @@ public:
           }
         else if (std::isalpha (*__first) || *__first == '_')
           {
+            _InputIterator name_begin = __first;
             _InputIterator name_end = skip_identifier (__first, __last);
-            fast_string const *name = symbol::get (__first, name_end);
             __first = name_end; // advance
 
             // search for the paste token
@@ -555,7 +566,15 @@ public:
                   __first = skip_blanks(++next, __last);
               }
 
-            if (std::string const *actual = resolve_formal (name))
+            std::size_t name_size = name_end - name_begin;
+            assert (name_size < 512);
+
+            char name_buffer[512], *cp = name_buffer;
+            std::copy (name_begin, name_end, cp);
+
+            fast_string fast_name (name_buffer, name_size);
+
+            if (std::string const *actual = resolve_formal (&fast_name))
               {
                 std::copy (actual->begin (), actual->end (), __result);
                 continue;
@@ -563,11 +582,19 @@ public:
 
             static bool hide_next = false;
 
+            if (!symbol::used (&fast_name))
+              {
+                hide_next = (fast_name == *symbol::get ("defined", 7));
+                std::copy (name_begin, name_end, __result);
+                continue;
+              }
+
+            fast_string const *name = symbol::get (name_buffer, name_size);
             pp_macro *macro = env.resolve (name);
             if (! macro || macro->hidden || hide_next)
               {
                 hide_next = (name == symbol::get ("defined", 7));
-                std::copy (name->begin (), name->end (), __result);
+                std::copy (name_begin, name_end, __result);
                 continue;
               }
 
