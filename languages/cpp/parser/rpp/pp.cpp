@@ -1594,27 +1594,3 @@ struct null_output_iterator
   null_output_iterator &operator ++ (int) { return *this; }
 };
 
-int main (int /*argc*/, char *argv[])
-{
-  char const *filename = *++argv;
-  if (!filename)
-    {
-      std::cerr << "usage: pp file.cpp" << std::endl;
-      return EXIT_FAILURE;
-    }
-
-  pp_environment env;
-
-  pp<> preprocess(env);
-
-  null_output_iterator null_out;
-  preprocess.file ("pp-configuration", null_out); // ### put your macros here!
-
-  std::string result;
-  result.reserve (20 * 1024); // 20 K
-  preprocess.file (filename, std::back_inserter (result));
-  std::cout << result;
-
-  return EXIT_SUCCESS;
-}
-
