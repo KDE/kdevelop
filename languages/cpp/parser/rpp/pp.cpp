@@ -507,7 +507,9 @@ public:
         else if (*__first == '/')
           {
             _InputIterator next_pos = skip_comment_or_divop (__first, __last);
+#if 0 // skip comments for now
             std::copy (__first, next_pos, __result);
+#endif
             __first = next_pos;
           }
         else if (*__first == '\"')
@@ -704,7 +706,27 @@ public:
 
     include_paths
       .push_back(".");
- }
+  }
+
+  std::back_insert_iterator<std::vector<std::string> > include_paths_inserter ()
+  {
+    return std::back_inserter (include_paths);
+  }
+
+  std::vector<std::string>::iterator include_paths_begin ()
+  {
+    return include_paths.begin ();
+  }
+
+  std::vector<std::string>::iterator include_paths_end ()
+  {
+    return include_paths.end ();
+  }
+
+  void push_include_path (std::string const &__path)
+  {
+    include_paths.push_back (__path);
+  }
 
   template <typename _OutputIterator>
   void file (std::string const &filename, _OutputIterator __result)
