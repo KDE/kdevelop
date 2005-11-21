@@ -20,13 +20,11 @@
 
 #include "preprocessor.h"
 
-#include <qstring.h>
+#include <QtCore/QtCore>
 
 #include <string>
 
 #include "pp.cpp"
-
-#include <QtCore/QtCore>
 
 class PreprocessorPrivate
 {
