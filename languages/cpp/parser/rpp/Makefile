@@ -17,7 +17,7 @@ OBJS = main.o
 all: pp
 
 pp: $(OBJS)
-	$(CXX) -o$@ $(OBJS) # && strip $@
+	$(CXX) -o$@ $(OBJS) && strip $@
 
 clean:
 	rm -f pp $(OBJS) *~
