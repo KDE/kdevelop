@@ -817,6 +817,9 @@ public:
         if (*__first == '\\')
           {
             __first = skip_blanks (++__first, __last);
+            if (__first != __last && *__first == '\n')
+              __first = skip_blanks (++__first, __last);
+
             macro.definition += ' ';
             continue;
           }
@@ -862,13 +865,14 @@ public:
         if (__first != __last)
           {
             assert (*__first == '#');
-            ++__first; // skip '#'
-            __first = skip_white_spaces (__first, __last);
+            __first = skip_blanks (++__first, __last);
 
             _InputIterator end_id = skip_identifier (__first, __last);
             fast_string const *directive (symbol::get (__first, end_id));
 
+            end_id = skip_blanks (end_id, __last);
             __first = skip_line (end_id, __last);
+
             (void) handle_directive (directive, end_id, __first, __result);
           }
       }
