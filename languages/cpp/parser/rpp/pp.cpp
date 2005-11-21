@@ -1301,13 +1301,9 @@ private:
     return __first;
   }
 
-  _InputIterator eval_expression (_InputIterator __first, _InputIterator __last, long *result)
+  inline _InputIterator eval_expression (_InputIterator __first, _InputIterator __last, long *result)
   {
-    __first = skip_blanks (__first, __last);
-    std::string o (__first, __last);
-    __first = eval_constant_expression (__first, __last, result);
-    // std::cerr << "eval expr:" << o << " ==> " << *result << std::endl;
-    return __first;
+    return __first = eval_constant_expression (skip_blanks (__first, __last), __last, result);
   }
 
   _InputIterator handle_if (_InputIterator __first, _InputIterator __last)
