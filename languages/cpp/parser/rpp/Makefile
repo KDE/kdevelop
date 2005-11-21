@@ -1,4 +1,15 @@
 
+HEADERS = pp-engine-bits.h  \
+	pp-engine.h  \
+	pp-environment.h  \
+	pp-fwd.h  \
+	pp.h  \
+	pp-macro-expander.h  \
+	pp-macro.h  \
+	pp-scanner.h  \
+	pp-string.h  \
+	pp-symbol.h
+
 CXXFLAGS = -I..  -g -DGCC_MACHINE="\"`g++ -dumpmachine`\"" -DGCC_VERSION="\"`g++ -dumpversion`\""
 
 OBJS = main.o
@@ -11,5 +22,5 @@ pp: $(OBJS)
 clean:
 	rm -f pp $(OBJS) *~
 
-main.cpp: pp.h pp-environment.h  pp-macro.h    pp-string.h  preprocessor.h \
-	pp-fwd.h          pp-macro-expander.h  pp-scanner.h  pp-symbol.h
+
+main.o: main.cpp $(HEADERS)

@@ -43,5 +43,7 @@
 #include "pp-environment.h"
 #include "pp-scanner.h"
 #include "pp-macro-expander.h"
+#include "pp-engine.h"
+#include "pp-engine-bits.h"
 
 #endif // PP_H
