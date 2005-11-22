@@ -19,16 +19,15 @@
 */
 
 #include "pp.h"
+#include <iterator>
 
-struct null_output_iterator
+template <typename _CharT>
+class null_output_iterator
+  : public std::iterator<std::output_iterator_tag, _CharT, std::ptrdiff_t, _CharT const*, _CharT const &>
 {
-  typedef std::random_access_iterator_tag iterator_category;
-  typedef char value_type;
-  typedef char &reference;
-  typedef char *pointer;
-  typedef std::ptrdiff_t difference_type;
   char ch;
 
+public:
   null_output_iterator(): ch(0) {}
 
   char &operator * () { return ch; }
@@ -38,7 +37,7 @@ struct null_output_iterator
 
 int main (int /*argc*/, char *argv[])
 {
-  bool no_stdinc = true;;
+  bool no_stdinc = true;
   bool no_stdincpp = true;
 
   char const *filename = *++argv;
@@ -65,7 +64,7 @@ int main (int /*argc*/, char *argv[])
 
   preprocess.push_include_path (".");
 
-  null_output_iterator null_out;
+  null_output_iterator<char> null_out;
   preprocess.file ("pp-configuration", null_out); // ### put your macros here!
 
   std::string result;
