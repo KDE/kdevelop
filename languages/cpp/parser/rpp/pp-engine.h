@@ -94,7 +94,7 @@ public:
   void operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result);
 
 private:
-  FILE *find_include_file(std::string const &filename) const;
+  FILE *find_include_file(std::string const &filename, std::string *filepath) const;
 
   inline int skipping() const;
   bool test_if_level();

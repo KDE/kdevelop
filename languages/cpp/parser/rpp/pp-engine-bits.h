@@ -83,8 +83,8 @@ _InputIterator pp::handle_include(_InputIterator __first, _InputIterator __last,
 
   std::string filename(__first, end_name);
 
-
-  FILE *fp = find_include_file (filename);
+  std::string filepath;
+  FILE *fp = find_include_file (filename, &filepath);
   if (fp != 0)
     {
 #ifdef QT_MOC
@@ -96,7 +96,18 @@ _InputIterator pp::handle_include(_InputIterator __first, _InputIterator __last,
       std::copy (moc_msg.begin (), moc_msg.end (), __result);
 #endif
 
+      std::string const *back = ! include_paths.empty () ?  &include_paths.back () : 0;
+      include_paths.resize (include_paths.size () + 1);
+      include_paths.back().assign (filepath, 0, filepath.rfind ('/'));
+      bool ignore_path = back ? *back == include_paths .back () : false;
+
+      if (ignore_path)
+        include_paths.pop_back ();
+
       file (fp, __result);
+
+      if (! ignore_path)
+        include_paths.pop_back ();
 
 #ifdef QT_MOC
       moc_msg = "#moc_include_end 1\n";
@@ -168,9 +179,9 @@ _InputIterator pp::handle_directive(pp_fast_string const *d,
   return __first;
 }
 
-FILE *pp::find_include_file(std::string const &filename) const
+FILE *pp::find_include_file(std::string const &filename, std::string *filepath) const
 {
-  assert (! filename.empty());
+  assert (! filename.empty() && filepath);
 
   if (filename[0] == '/')
     return fopen (filename.c_str(), "r");
@@ -178,7 +189,9 @@ FILE *pp::find_include_file(std::string const &filename) const
   for (std::vector<std::string>::const_reverse_iterator it = include_paths.rbegin ();
       it != include_paths.rend (); ++it)
     {
-      std::string path = *it;
+      std::string &path = *filepath;
+
+      path = *it;
       path += '/';
       path += filename;
 
