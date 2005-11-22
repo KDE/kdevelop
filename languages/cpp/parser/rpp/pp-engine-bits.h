@@ -70,9 +70,27 @@ template <typename _InputIterator>
       }
 
     std::string filename(__first, end_name);
+
+
     int fd = find_include_file (filename);
     if (fd != -1)
-      file (fd, __result);
+      {
+#ifdef QT_MOC
+        std::string moc_msg;
+        moc_msg += "#moc_include_begin ";
+        moc_msg += "\"";
+        moc_msg += filename;
+        moc_msg += "\"\n";
+        std::copy (moc_msg.begin (), moc_msg.end (), __result);
+#endif
+
+        file (fd, __result);
+
+#ifdef QT_MOC
+        moc_msg = "#moc_include_end 1\n";
+        std::copy (moc_msg.begin (), moc_msg.end (), __result);
+#endif
+      }
 
     return __first;
   }

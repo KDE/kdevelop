@@ -28,6 +28,7 @@
 #include <iterator>
 #include <iostream>
 #include <fstream>
+#include <cassert>
 
 #include <fcntl.h>
 #include <sys/mman.h>
