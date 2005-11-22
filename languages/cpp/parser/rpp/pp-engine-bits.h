@@ -301,9 +301,18 @@ _InputIterator pp<_InputIterator>::skip (_InputIterator __first, _InputIterator 
   pp_skip_string_literal skip_string_literal;
   pp_skip_char_literal skip_char_literal;
 
-  while (__first != __last && *__first != '#' && *__first != '\n')
+  while (__first != __last && *__first != '\n')
     {
-      if (*__first == '/')
+      if (*__first == '#')
+        {
+          _InputIterator begin = __first;
+          ++__first;
+          if (__first == __last || *__first != '#')
+            return begin;
+
+          ++__first;
+        }
+      else if (*__first == '/')
         __first = skip_comment_or_divop (__first, __last);
       else if (*__first == '"')
         __first = skip_string_literal (__first, __last);
