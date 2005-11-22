@@ -164,8 +164,8 @@ public:
                   __first = skip_blanks(++next, __last);
               }
 
-            std::size_t name_size = name_end - name_begin;
-            assert (name_size < 512);
+            std::ptrdiff_t name_size = std::distance (name_begin, name_end);
+            assert (name_size >= 0 && name_size < 512);
 
             char name_buffer[512], *cp = name_buffer;
             std::copy (name_begin, name_end, cp);

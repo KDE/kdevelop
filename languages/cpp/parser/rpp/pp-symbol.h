@@ -63,10 +63,12 @@ public:
   template <typename _InputIterator>
   static pp_fast_string const *get (_InputIterator __first, _InputIterator __last)
   {
-    assert ((__last - __first) < 512);
+    std::ptrdiff_t __size = std::distance (__first, __last);
+    assert (__size >= 0 && __size < 512);
+
     char buffer[512], *cp = buffer;
     std::copy (__first, __last, cp);
-    return get (buffer, __last - __first);
+    return get (buffer, __size);
   }
 
   static pp_fast_string const *get(std::string const &__s)

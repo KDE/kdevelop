@@ -21,160 +21,154 @@
 #ifndef PP_ENGINE_BITS_H
 #define PP_ENGINE_BITS_H
 
-template <typename _InputIterator>
-  template <typename _OutputIterator>
-  void pp<_InputIterator>::file (std::string const &filename, _OutputIterator __result)
-  {
-    FILE *fp = fopen (filename.c_str(), "r");
-    if (fp != 0)
+template <typename _OutputIterator>
+void pp::file (std::string const &filename, _OutputIterator __result)
+{
+  FILE *fp = fopen (filename.c_str(), "r");
+  if (fp != 0)
+    file (fp, __result);
+  else
+    std::cerr << "** WARNING file ``" << filename << " not found!" << std::endl;
+}
+
+template <typename _OutputIterator>
+void pp::file (FILE *fp, _OutputIterator __result)
+{
+   assert (fp != 0);
+
+  struct stat st;
+  fstat(fileno (fp), &st);
+  std::size_t size = st.st_size;
+
+  char *buffer = 0;
+#ifdef HAVE_MMAP
+  buffer = (char *) ::mmap(0, size, PROT_READ, MAP_SHARED, fileno (fp), 0);
+  fclose (fp);
+
+  if (!buffer || buffer == (char*) -1)
+    return;
+
+#else
+  buffer = new char [size + 1];
+  fread (buffer, 1, size, fp);
+  buffer[size] = '\0';
+  fclose (fp);
+#endif
+
+  this->operator () (buffer, buffer + size, __result);
+
+#ifdef HAVE_MMAP
+  ::munmap(buffer, size);
+#else
+  delete[] buffer;
+#endif
+}
+
+template <typename _InputIterator, typename _OutputIterator>
+_InputIterator pp::handle_include(_InputIterator __first, _InputIterator __last,
+      _OutputIterator __result)
+{
+  assert (*__first == '<' || *__first == '"');
+  int quote = (*__first == '"') ? '"' : '>';
+  ++__first;
+
+  _InputIterator end_name = __first;
+  for (; end_name != __last; ++end_name)
+    {
+      assert (*end_name != '\n');
+
+      if (*end_name == quote)
+        break;
+    }
+
+  std::string filename(__first, end_name);
+
+
+  FILE *fp = find_include_file (filename);
+  if (fp != 0)
+    {
+#ifdef QT_MOC
+      std::string moc_msg;
+      moc_msg += "#moc_include_begin ";
+      moc_msg += "\"";
+      moc_msg += filename;
+      moc_msg += "\"\n";
+      std::copy (moc_msg.begin (), moc_msg.end (), __result);
+#endif
+
       file (fp, __result);
-    else
-      std::cerr << "** WARNING file ``" << filename << " not found!" << std::endl;
-  }
-
-template <typename _InputIterator>
-  template <typename _OutputIterator>
-  void pp<_InputIterator>::file (FILE *fp, _OutputIterator __result)
-  {
-    assert (fp != 0);
-
-    struct stat st;
-    fstat(fileno (fp), &st);
-    std::size_t size = st.st_size;
-
-    char *buffer = 0;
-#ifdef HAVE_MMAP
-    buffer = (char *) ::mmap(0, size, PROT_READ, MAP_SHARED, fileno (fp), 0);
-    fclose (fp);
-
-    if (!buffer || buffer == (char*) -1)
-      return;
-
-#else
-    buffer = new char [size + 1];
-    fread (buffer, 1, size, fp);
-    buffer[size] = '\0';
-    fclose (fp);
-#endif
-
-    this->operator () (buffer, buffer + size, __result);
-
-#ifdef HAVE_MMAP
-    ::munmap(buffer, size);
-#else
-    delete[] buffer;
-#endif
-  }
-
-template <typename _InputIterator>
-  template <typename _OutputIterator>
-  _InputIterator pp<_InputIterator>::handle_include(_InputIterator __first, _InputIterator __last,
-        _OutputIterator __result)
-  {
-    assert (*__first == '<' || *__first == '"');
-    int quote = (*__first == '"') ? '"' : '>';
-    ++__first;
-
-    _InputIterator end_name = __first;
-    for (; end_name != __last; ++end_name)
-      {
-        assert (*end_name != '\n');
-
-        if (*end_name == quote)
-          break;
-      }
-
-    std::string filename(__first, end_name);
-
-
-    FILE *fp = find_include_file (filename);
-    if (fp != 0)
-      {
-#ifdef QT_MOC
-        std::string moc_msg;
-        moc_msg += "#moc_include_begin ";
-        moc_msg += "\"";
-        moc_msg += filename;
-        moc_msg += "\"\n";
-        std::copy (moc_msg.begin (), moc_msg.end (), __result);
-#endif
-
-        file (fp, __result);
 
 #ifdef QT_MOC
-        moc_msg = "#moc_include_end 1\n";
-        std::copy (moc_msg.begin (), moc_msg.end (), __result);
+      moc_msg = "#moc_include_end 1\n";
+      std::copy (moc_msg.begin (), moc_msg.end (), __result);
 #endif
-      }
+    }
 
-    return __first;
-  }
+  return __first;
+}
 
-template <typename _InputIterator>
-  template <typename _OutputIterator>
-  void pp<_InputIterator>::operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result)
-  {
-    while (true)
-      {
-        __first = skip_white_spaces (__first, __last);
-        if (__first == __last)
-          break;
-        else if (*__first == '#')
-          {
-            assert (*__first == '#');
-            __first = skip_blanks (++__first, __last);
+template <typename _InputIterator, typename _OutputIterator>
+void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result)
+{
+  while (true)
+    {
+      __first = skip_white_spaces (__first, __last);
+      if (__first == __last)
+        break;
+      else if (*__first == '#')
+        {
+          assert (*__first == '#');
+          __first = skip_blanks (++__first, __last);
 
-            _InputIterator end_id = skip_identifier (__first, __last);
-            pp_fast_string const *directive (pp_symbol::get (__first, end_id));
+          _InputIterator end_id = skip_identifier (__first, __last);
+          pp_fast_string const *directive (pp_symbol::get (__first, end_id));
 
-            end_id = skip_blanks (end_id, __last);
-            __first = skip (end_id, __last);
+          end_id = skip_blanks (end_id, __last);
+          __first = skip (end_id, __last);
 
-            (void) handle_directive (directive, end_id, __first, __result);
-          }
-        else if (*__first == '\n')
-          {
-            // ### compress the line
-            *__result++ = *__first++;
-          }
-        else if (skipping ())
-          __first = skip (__first, __last);
-        else
-          __first = expand (__first, __last, __result);
-      }
-  }
+          (void) handle_directive (directive, end_id, __first, __result);
+        }
+      else if (*__first == '\n')
+        {
+          // ### compress the line
+          *__result++ = *__first++;
+        }
+      else if (skipping ())
+        __first = skip (__first, __last);
+      else
+        __first = expand (__first, __last, __result);
+    }
+}
 
-template <typename _InputIterator>
-  template <typename _OutputIterator>
-  _InputIterator pp<_InputIterator>::handle_directive(pp_fast_string const *d,
-          _InputIterator __first, _InputIterator __last, _OutputIterator __result)
-  {
-    __first = skip_blanks (__first, __last);
+template <typename _InputIterator, typename _OutputIterator>
+_InputIterator pp::handle_directive(pp_fast_string const *d,
+        _InputIterator __first, _InputIterator __last, _OutputIterator __result)
+{
+  __first = skip_blanks (__first, __last);
 
-    if (d == pp_define && !skipping ())
-      __first = handle_define (__first, __last);
-    else if (d == pp_include && !skipping ())
-      return handle_include (__first, __last, __result);
-    else if (d == pp_elif)
-      return handle_elif (__first, __last);
-    else if (d == pp_else)
-      return handle_else (__first, __last);
-    else if (d == pp_endif)
-      return handle_endif (__first, __last);
-    else if (d == pp_if)
-      return handle_if (__first, __last);
-    else if (d == pp_ifdef)
-      return handle_ifdef (false, __first, __last);
-    else if (d == pp_ifndef)
-      return handle_ifdef (true, __first, __last);
-    else if (d == pp_undef && !skipping ())
-      return handle_undef(__first, __last);
+  if (d == pp_define && !skipping ())
+    __first = handle_define (__first, __last);
+  else if (d == pp_include && !skipping ())
+    return handle_include (__first, __last, __result);
+  else if (d == pp_elif)
+    return handle_elif (__first, __last);
+  else if (d == pp_else)
+    return handle_else (__first, __last);
+  else if (d == pp_endif)
+    return handle_endif (__first, __last);
+  else if (d == pp_if)
+    return handle_if (__first, __last);
+  else if (d == pp_ifdef)
+    return handle_ifdef (false, __first, __last);
+  else if (d == pp_ifndef)
+    return handle_ifdef (true, __first, __last);
+  else if (d == pp_undef && !skipping ())
+    return handle_undef(__first, __last);
 
-    return __first;
-  }
+  return __first;
+}
 
-template <typename _InputIterator>
-FILE *pp<_InputIterator>::find_include_file(std::string const &filename) const
+FILE *pp::find_include_file(std::string const &filename) const
 {
   assert (! filename.empty());
 
@@ -189,34 +183,19 @@ FILE *pp<_InputIterator>::find_include_file(std::string const &filename) const
       path += filename;
 
       FILE *fp = fopen (path.c_str(), "r");
-      if (fp != 0) {
-#if 0
-        static std::set<std::string> opened; // ### remove me
-        if (opened.find (filename) != opened.end())
-          {
-            fclose (fp);
-            return -1;
-          }
-
-        opened.insert (filename);
-#endif
+      if (fp != 0)
         return fp;
-      }
     }
 
   return 0;
 }
 
-template <typename _InputIterator>
-pp<_InputIterator>::pp (pp_environment &__env):
+pp::pp (pp_environment &__env):
   env (__env), expand (env)
 {
   iflevel = 0;
   _M_skipping[iflevel] = 0;
   _M_true_test[iflevel] = 0;
-
-  if (_S_initialized)
-    return;
 
   pp_define = pp_symbol::get ("define", 6);
   pp_include = pp_symbol::get ("include", 7);
@@ -227,35 +206,28 @@ pp<_InputIterator>::pp (pp_environment &__env):
   pp_ifdef = pp_symbol::get ("ifdef", 5);
   pp_ifndef = pp_symbol::get ("ifndef", 6);
   pp_undef = pp_symbol::get ("undef", 5);
-  _S_initialized = true;
 }
 
-template <typename _InputIterator>
-inline std::back_insert_iterator<std::vector<std::string> > pp<_InputIterator>::include_paths_inserter ()
+inline std::back_insert_iterator<std::vector<std::string> > pp::include_paths_inserter ()
 { return std::back_inserter (include_paths); }
 
-template <typename _InputIterator>
-inline std::vector<std::string>::iterator pp<_InputIterator>::include_paths_begin ()
+inline std::vector<std::string>::iterator pp::include_paths_begin ()
 { return include_paths.begin (); }
 
-template <typename _InputIterator>
-inline std::vector<std::string>::iterator pp<_InputIterator>::include_paths_end ()
+inline std::vector<std::string>::iterator pp::include_paths_end ()
 { return include_paths.end (); }
 
-template <typename _InputIterator>
-inline std::vector<std::string>::const_iterator pp<_InputIterator>::include_paths_begin () const
+inline std::vector<std::string>::const_iterator pp::include_paths_begin () const
 { return include_paths.begin (); }
 
-template <typename _InputIterator>
-inline std::vector<std::string>::const_iterator pp<_InputIterator>::include_paths_end () const
+inline std::vector<std::string>::const_iterator pp::include_paths_end () const
 { return include_paths.end (); }
 
-template <typename _InputIterator>
-inline void pp<_InputIterator>::push_include_path (std::string const &__path)
+inline void pp::push_include_path (std::string const &__path)
 { include_paths.push_back (__path); }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::handle_define (_InputIterator __first, _InputIterator __last)
+_InputIterator pp::handle_define (_InputIterator __first, _InputIterator __last)
 {
   pp_macro macro;
   macro.definition.reserve (255);
@@ -329,7 +301,7 @@ _InputIterator pp<_InputIterator>::handle_define (_InputIterator __first, _Input
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::skip (_InputIterator __first, _InputIterator __last)
+_InputIterator pp::skip (_InputIterator __first, _InputIterator __last)
 {
   pp_skip_string_literal skip_string_literal;
   pp_skip_char_literal skip_char_literal;
@@ -356,8 +328,7 @@ _InputIterator pp<_InputIterator>::skip (_InputIterator __first, _InputIterator 
   return __first;
 }
 
-template <typename _InputIterator>
-bool pp<_InputIterator>::test_if_level()
+bool pp::test_if_level()
 {
   bool result = !_M_skipping[iflevel++];
   _M_skipping[iflevel] = _M_skipping[iflevel - 1];
@@ -365,12 +336,11 @@ bool pp<_InputIterator>::test_if_level()
   return result;
 }
 
-template <typename _InputIterator>
-inline int pp<_InputIterator>::skipping() const
+inline int pp::skipping() const
 { return _M_skipping[iflevel]; }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::eval_primary(_InputIterator __first, _InputIterator __last, long *result)
+_InputIterator pp::eval_primary(_InputIterator __first, _InputIterator __last, long *result)
 {
   bool expect_paren = false;
   int token;
@@ -439,7 +409,7 @@ _InputIterator pp<_InputIterator>::eval_primary(_InputIterator __first, _InputIt
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::eval_multiplicative(_InputIterator __first, _InputIterator __last, long *result)
+_InputIterator pp::eval_multiplicative(_InputIterator __first, _InputIterator __last, long *result)
 {
   __first = eval_primary(__first, __last, result);
 
@@ -480,7 +450,7 @@ _InputIterator pp<_InputIterator>::eval_multiplicative(_InputIterator __first, _
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::eval_additive(_InputIterator __first, _InputIterator __last, long *result)
+_InputIterator pp::eval_additive(_InputIterator __first, _InputIterator __last, long *result)
 {
   __first = eval_multiplicative(__first, __last, result);
 
@@ -503,7 +473,7 @@ _InputIterator pp<_InputIterator>::eval_additive(_InputIterator __first, _InputI
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::eval_shift(_InputIterator __first, _InputIterator __last, long *result)
+_InputIterator pp::eval_shift(_InputIterator __first, _InputIterator __last, long *result)
 {
   __first = eval_additive(__first, __last, result);
 
@@ -526,7 +496,7 @@ _InputIterator pp<_InputIterator>::eval_shift(_InputIterator __first, _InputIter
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::eval_relational(_InputIterator __first, _InputIterator __last, long *result)
+_InputIterator pp::eval_relational(_InputIterator __first, _InputIterator __last, long *result)
 {
   __first = eval_shift(__first, __last, result);
 
@@ -570,7 +540,7 @@ _InputIterator pp<_InputIterator>::eval_relational(_InputIterator __first, _Inpu
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::eval_equality(_InputIterator __first, _InputIterator __last, long *result)
+_InputIterator pp::eval_equality(_InputIterator __first, _InputIterator __last, long *result)
 {
   __first = eval_relational(__first, __last, result);
 
@@ -593,7 +563,7 @@ _InputIterator pp<_InputIterator>::eval_equality(_InputIterator __first, _InputI
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::eval_and(_InputIterator __first, _InputIterator __last, long *result)
+_InputIterator pp::eval_and(_InputIterator __first, _InputIterator __last, long *result)
 {
   __first = eval_equality(__first, __last, result);
 
@@ -612,7 +582,7 @@ _InputIterator pp<_InputIterator>::eval_and(_InputIterator __first, _InputIterat
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::eval_xor(_InputIterator __first, _InputIterator __last, long *result)
+_InputIterator pp::eval_xor(_InputIterator __first, _InputIterator __last, long *result)
 {
   __first = eval_and(__first, __last, result);
 
@@ -631,7 +601,7 @@ _InputIterator pp<_InputIterator>::eval_xor(_InputIterator __first, _InputIterat
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::eval_or(_InputIterator __first, _InputIterator __last, long *result)
+_InputIterator pp::eval_or(_InputIterator __first, _InputIterator __last, long *result)
 {
   __first = eval_xor(__first, __last, result);
 
@@ -650,7 +620,7 @@ _InputIterator pp<_InputIterator>::eval_or(_InputIterator __first, _InputIterato
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::eval_logical_and(_InputIterator __first, _InputIterator __last, long *result)
+_InputIterator pp::eval_logical_and(_InputIterator __first, _InputIterator __last, long *result)
 {
   __first = eval_or(__first, __last, result);
 
@@ -669,7 +639,7 @@ _InputIterator pp<_InputIterator>::eval_logical_and(_InputIterator __first, _Inp
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::eval_logical_or(_InputIterator __first, _InputIterator __last, long *result)
+_InputIterator pp::eval_logical_or(_InputIterator __first, _InputIterator __last, long *result)
 {
   __first = eval_logical_and (__first, __last, result);
 
@@ -688,7 +658,7 @@ _InputIterator pp<_InputIterator>::eval_logical_or(_InputIterator __first, _Inpu
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::eval_constant_expression(_InputIterator __first, _InputIterator __last, long *result)
+_InputIterator pp::eval_constant_expression(_InputIterator __first, _InputIterator __last, long *result)
 {
   __first = eval_logical_or(__first, __last, result);
 
@@ -720,13 +690,13 @@ _InputIterator pp<_InputIterator>::eval_constant_expression(_InputIterator __fir
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::eval_expression (_InputIterator __first, _InputIterator __last, long *result)
+_InputIterator pp::eval_expression (_InputIterator __first, _InputIterator __last, long *result)
 {
   return __first = eval_constant_expression (skip_blanks (__first, __last), __last, result);
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::handle_if (_InputIterator __first, _InputIterator __last)
+_InputIterator pp::handle_if (_InputIterator __first, _InputIterator __last)
 {
   if (test_if_level())
     {
@@ -745,7 +715,7 @@ _InputIterator pp<_InputIterator>::handle_if (_InputIterator __first, _InputIter
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::handle_else (_InputIterator __first, _InputIterator /*__last*/)
+_InputIterator pp::handle_else (_InputIterator __first, _InputIterator /*__last*/)
 {
   if (iflevel == 0 && !skipping ())
     {
@@ -764,7 +734,7 @@ _InputIterator pp<_InputIterator>::handle_else (_InputIterator __first, _InputIt
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::handle_elif (_InputIterator __first, _InputIterator __last)
+_InputIterator pp::handle_elif (_InputIterator __first, _InputIterator __last)
 {
   assert(iflevel > 0);
 
@@ -788,7 +758,7 @@ _InputIterator pp<_InputIterator>::handle_elif (_InputIterator __first, _InputIt
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::handle_endif (_InputIterator __first, _InputIterator /*__last*/)
+_InputIterator pp::handle_endif (_InputIterator __first, _InputIterator /*__last*/)
 {
   if (iflevel == 0 && !skipping())
     {
@@ -806,7 +776,7 @@ _InputIterator pp<_InputIterator>::handle_endif (_InputIterator __first, _InputI
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::handle_ifdef (bool check_undefined, _InputIterator __first, _InputIterator __last)
+_InputIterator pp::handle_ifdef (bool check_undefined, _InputIterator __first, _InputIterator __last)
 {
   if (test_if_level())
     {
@@ -826,7 +796,7 @@ _InputIterator pp<_InputIterator>::handle_ifdef (bool check_undefined, _InputIte
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::handle_undef(_InputIterator __first, _InputIterator __last)
+_InputIterator pp::handle_undef(_InputIterator __first, _InputIterator __last)
 {
   __first = skip_white_spaces (__first, __last);
   _InputIterator end_macro_name = skip_identifier (__first, __last);
@@ -839,7 +809,7 @@ _InputIterator pp<_InputIterator>::handle_undef(_InputIterator __first, _InputIt
 }
 
 template <typename _InputIterator>
-char pp<_InputIterator>::peek_char (_InputIterator __first, _InputIterator __last)
+char pp::peek_char (_InputIterator __first, _InputIterator __last)
 {
   if (__first == __last)
     return 0;
@@ -848,7 +818,7 @@ char pp<_InputIterator>::peek_char (_InputIterator __first, _InputIterator __las
 }
 
 template <typename _InputIterator>
-_InputIterator pp<_InputIterator>::next_token (_InputIterator __first, _InputIterator __last, int *kind)
+_InputIterator pp::next_token (_InputIterator __first, _InputIterator __last, int *kind)
 {
   __first = skip_blanks (__first, __last);
 
@@ -981,35 +951,5 @@ _InputIterator pp<_InputIterator>::next_token (_InputIterator __first, _InputIte
 
   return __first;
 }
-
-template <typename _InputIterator>
-bool pp<_InputIterator>::_S_initialized = false;
-
-template <typename _InputIterator>
-pp_fast_string const *pp<_InputIterator>::pp_define;
-
-template <typename _InputIterator>
-pp_fast_string const *pp<_InputIterator>::pp_include;
-
-template <typename _InputIterator>
-pp_fast_string const *pp<_InputIterator>::pp_elif;
-
-template <typename _InputIterator>
-pp_fast_string const *pp<_InputIterator>::pp_else;
-
-template <typename _InputIterator>
-pp_fast_string const *pp<_InputIterator>::pp_endif;
-
-template <typename _InputIterator>
-pp_fast_string const *pp<_InputIterator>::pp_if;
-
-template <typename _InputIterator>
-pp_fast_string const *pp<_InputIterator>::pp_ifdef;
-
-template <typename _InputIterator>
-pp_fast_string const *pp<_InputIterator>::pp_ifndef;
-
-template <typename _InputIterator>
-pp_fast_string const *pp<_InputIterator>::pp_undef;
 
 #endif // PP_ENGINE_BITS_H
