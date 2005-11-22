@@ -28,7 +28,6 @@ class pp
   pp_macro_expander expand;
   pp_skip_white_spaces skip_white_spaces;
   pp_skip_identifier skip_identifier;
-  pp_skip_line skip_line;
   pp_skip_comment_or_divop skip_comment_or_divop;
   pp_skip_blanks skip_blanks;
   pp_skip_number skip_number;

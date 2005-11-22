@@ -69,6 +69,21 @@ class pp_macro_expander
     return 0;
   }
 
+  template <typename _InputIterator>
+  inline bool comment_p (_InputIterator __first, _InputIterator __last) const
+  {
+    if (__first == __last)
+      return false;
+
+    if (*__first != '/')
+      return false;
+
+    if (++__first == __last)
+      return false;
+
+    return (*__first == '/' || *__first == '*');
+  }
+
 public:
   pp_macro_expander (pp_environment &__env, pp_frame *__frame = 0):
     env (__env), frame (__frame) {}
@@ -80,9 +95,13 @@ public:
 
     while (__first != __last)
       {
-        if (!frame && *__first == '#')
+        if (*__first == '\n')
           {
-            return __first;
+            *__result++ = *__first;
+
+            __first = skip_white_spaces (++__first, __last);
+            if (__first != __last && *__first == '#')
+              break;
           }
         else if (*__first == '#')
           {
@@ -93,14 +112,6 @@ public:
             this->operator () (__first, end_id, __result);
             *__result++ = '\"';
             __first = end_id;
-          }
-        else if (*__first == '/')
-          {
-            _InputIterator next_pos = skip_comment_or_divop (__first, __last);
-#if 0 // skip comments for now
-            std::copy (__first, next_pos, __result);
-#endif
-            __first = next_pos;
           }
         else if (*__first == '\"')
           {
@@ -114,7 +125,15 @@ public:
             std::copy (__first, next_pos, __result);
             __first = next_pos;
           }
-        else if (*__first != '\n' && std::isspace (*__first))
+        else if (comment_p (__first, __last))
+          {
+            _InputIterator next_pos = skip_comment_or_divop (__first, __last);
+#if 0 // skip comments for now
+            std::copy (__first, next_pos, __result);
+#endif
+            __first = next_pos;
+          }
+        else if (std::isspace (*__first))
           {
             for (; __first != __last; ++__first)
               {
@@ -179,8 +198,10 @@ public:
 
             if (! macro->function_like)
               {
-                std::string const &definition = macro->definition;
-                std::copy (definition.begin (), definition.end (), __result);
+                pp_macro_expander expand_macro (env);
+                macro->hidden = true;
+                expand_macro (macro->definition.begin (), macro->definition.end (), __result);
+                macro->hidden = false;
                 continue;
               }
 

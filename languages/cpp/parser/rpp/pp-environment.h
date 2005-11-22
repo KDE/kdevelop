@@ -23,7 +23,14 @@
 
 class pp_environment: private std::map<pp_fast_string const *, pp_macro>
 {
+  typedef std::map<pp_fast_string const *, pp_macro>base_type;
+
 public:
+  using base_type::begin;
+  using base_type::end;
+  using base_type::iterator;
+  using base_type::const_iterator;
+
   inline bool bind (pp_fast_string const *__name, pp_macro const &__macro)
   { return insert (std::make_pair (__name, __macro)).second; }
 

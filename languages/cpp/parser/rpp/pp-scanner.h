@@ -57,23 +57,6 @@ struct pp_skip_blanks
   }
 };
 
-struct pp_skip_line
-{
-  template <typename _InputIterator>
-  _InputIterator operator () (_InputIterator __first, _InputIterator __last)
-  {
-    while (__first != __last && *__first != '\n')
-      {
-        bool skip = (*__first++ == '\\');
-
-        if (skip && __first != __last)
-          ++__first;
-      }
-
-    return __first;
-  }
-};
-
 struct pp_skip_comment_or_divop
 {
   template <typename _InputIterator>
@@ -119,7 +102,7 @@ struct pp_skip_comment_or_divop
 
             case IN_CXX_COMMENT:
               if (*__first == '\n')
-                state = END;
+                return __first;
               break;
 
             case MAYBE_END:

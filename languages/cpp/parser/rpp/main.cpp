@@ -38,7 +38,7 @@ struct null_output_iterator
 
 int main (int /*argc*/, char *argv[])
 {
-  bool no_stdinc = true;
+  bool no_stdinc = true;;
   bool no_stdincpp = true;
 
   char const *filename = *++argv;
@@ -72,6 +72,14 @@ int main (int /*argc*/, char *argv[])
   result.reserve (20 * 1024); // 20 K
   preprocess.file (filename, std::back_inserter (result));
   std::cout << result;
+
+#if 0
+  std::cerr << "============================= MACROS" << std::endl;
+  for (pp_environment::iterator it = env.begin (); it != env.end (); ++it)
+    {
+      std::cerr << "#define " << (*it).first->begin () << " " << (*it).second.definition << std::endl;
+    }
+#endif
 
   return EXIT_SUCCESS;
 }

@@ -81,14 +81,12 @@ template <typename _InputIterator>
   template <typename _OutputIterator>
   void pp<_InputIterator>::operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result)
   {
-    while (__first != __last)
+    while (true)
       {
-        if (skipping ())
-          __first = skip (__first, __last);
-        else
-          __first = expand (__first, __last, __result);
-
-        if (__first != __last)
+        __first = skip_white_spaces (__first, __last);
+        if (__first == __last)
+          break;
+        else if (*__first == '#')
           {
             assert (*__first == '#');
             __first = skip_blanks (++__first, __last);
@@ -97,10 +95,19 @@ template <typename _InputIterator>
             pp_fast_string const *directive (pp_symbol::get (__first, end_id));
 
             end_id = skip_blanks (end_id, __last);
-            __first = skip_line (end_id, __last);
+            __first = skip (end_id, __last);
 
             (void) handle_directive (directive, end_id, __first, __result);
           }
+        else if (*__first == '\n')
+          {
+            // ### compress the line
+            *__result++ = *__first++;
+          }
+        else if (skipping ())
+          __first = skip (__first, __last);
+        else
+          __first = expand (__first, __last, __result);
       }
   }
 
@@ -150,6 +157,7 @@ int pp<_InputIterator>::find_include_file(std::string const &filename) const
 
       int fd = ::open (path.c_str(), O_RDONLY, S_IRUSR);
       if (fd != -1) {
+#if 0
         static std::set<std::string> opened; // ### remove me
         if (opened.find (filename) != opened.end())
           {
@@ -158,6 +166,7 @@ int pp<_InputIterator>::find_include_file(std::string const &filename) const
           }
 
         opened.insert (filename);
+#endif
         return fd;
       }
     }
@@ -292,7 +301,7 @@ _InputIterator pp<_InputIterator>::skip (_InputIterator __first, _InputIterator 
   pp_skip_string_literal skip_string_literal;
   pp_skip_char_literal skip_char_literal;
 
-  while (__first != __last && *__first != '#')
+  while (__first != __last && *__first != '#' && *__first != '\n')
     {
       if (*__first == '/')
         __first = skip_comment_or_divop (__first, __last);
@@ -300,6 +309,13 @@ _InputIterator pp<_InputIterator>::skip (_InputIterator __first, _InputIterator 
         __first = skip_string_literal (__first, __last);
       else if (*__first == '\'')
         __first = skip_char_literal (__first, __last);
+      else if (*__first == '\\')
+        {
+          __first = skip_blanks (++__first, __last);
+
+          if (__first != __last && *__first == '\n')
+            ++__first;
+        }
       else
         ++__first;
     }
