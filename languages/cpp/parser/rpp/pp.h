@@ -27,7 +27,6 @@
 #include <string>
 #include <iterator>
 #include <iostream>
-#include <fstream>
 #include <cassert>
 #include <cctype>
 
