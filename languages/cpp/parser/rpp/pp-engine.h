@@ -89,13 +89,13 @@ public:
   void file (std::string const &filename, _OutputIterator __result);
 
   template <typename _OutputIterator>
-  void file (int fd, _OutputIterator __result);
+  void file (FILE *fp, _OutputIterator __result);
 
   template <typename _OutputIterator>
   void operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result);
 
 private:
-  int find_include_file(std::string const &filename) const;
+  FILE *find_include_file(std::string const &filename) const;
 
   inline int skipping() const;
   bool test_if_level();

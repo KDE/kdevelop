@@ -25,30 +25,45 @@ template <typename _InputIterator>
   template <typename _OutputIterator>
   void pp<_InputIterator>::file (std::string const &filename, _OutputIterator __result)
   {
-    int fd = ::open (filename.c_str(), O_RDONLY, S_IRUSR);
-    if (fd != -1)
-      file (fd, __result);
+    FILE *fp = fopen (filename.c_str(), "r");
+    if (fp != 0)
+      file (fp, __result);
     else
       std::cerr << "** WARNING file ``" << filename << " not found!" << std::endl;
   }
 
 template <typename _InputIterator>
   template <typename _OutputIterator>
-  void pp<_InputIterator>::file (int fd, _OutputIterator __result)
+  void pp<_InputIterator>::file (FILE *fp, _OutputIterator __result)
   {
-    assert (fd != -1);
+    assert (fp != 0);
 
     struct stat st;
-    fstat(fd, &st);
+    fstat(fileno (fp), &st);
     std::size_t size = st.st_size;
-    char *buffer = (char *) ::mmap(0, size, PROT_READ, MAP_SHARED, fd, 0);
-    close (fd);
+
+    char *buffer = 0;
+#ifdef HAVE_MMAP
+    buffer = (char *) ::mmap(0, size, PROT_READ, MAP_SHARED, fileno (fp), 0);
+    fclose (fp);
 
     if (!buffer || buffer == (char*) -1)
       return;
 
+#else
+    buffer = new char [size + 1];
+    fread (buffer, 1, size, fp);
+    buffer[size] = '\0';
+    fclose (fp);
+#endif
+
     this->operator () (buffer, buffer + size, __result);
+
+#ifdef HAVE_MMAP
     ::munmap(buffer, size);
+#else
+    delete[] buffer;
+#endif
   }
 
 template <typename _InputIterator>
@@ -72,8 +87,8 @@ template <typename _InputIterator>
     std::string filename(__first, end_name);
 
 
-    int fd = find_include_file (filename);
-    if (fd != -1)
+    FILE *fp = find_include_file (filename);
+    if (fp != 0)
       {
 #ifdef QT_MOC
         std::string moc_msg;
@@ -84,7 +99,7 @@ template <typename _InputIterator>
         std::copy (moc_msg.begin (), moc_msg.end (), __result);
 #endif
 
-        file (fd, __result);
+        file (fp, __result);
 
 #ifdef QT_MOC
         moc_msg = "#moc_include_end 1\n";
@@ -159,12 +174,12 @@ template <typename _InputIterator>
   }
 
 template <typename _InputIterator>
-int pp<_InputIterator>::find_include_file(std::string const &filename) const
+FILE *pp<_InputIterator>::find_include_file(std::string const &filename) const
 {
   assert (! filename.empty());
 
   if (filename[0] == '/')
-    return  ::open (filename.c_str(), O_RDONLY, S_IRUSR);
+    return fopen (filename.c_str(), "r");
 
   for (std::vector<std::string>::const_reverse_iterator it = include_paths.rbegin ();
       it != include_paths.rend (); ++it)
@@ -173,23 +188,23 @@ int pp<_InputIterator>::find_include_file(std::string const &filename) const
       path += '/';
       path += filename;
 
-      int fd = ::open (path.c_str(), O_RDONLY, S_IRUSR);
-      if (fd != -1) {
+      FILE *fp = fopen (path.c_str(), "r");
+      if (fp != 0) {
 #if 0
         static std::set<std::string> opened; // ### remove me
         if (opened.find (filename) != opened.end())
           {
-            close (fd);
+            fclose (fp);
             return -1;
           }
 
         opened.insert (filename);
 #endif
-        return fd;
+        return fp;
       }
     }
 
-  return -1;
+  return 0;
 }
 
 template <typename _InputIterator>
@@ -941,7 +956,7 @@ _InputIterator pp<_InputIterator>::next_token (_InputIterator __first, _InputIte
         return __first;
 
       default:
-        if (std::isalpha (ch) || ch == '_')
+        if (pp_isalpha (ch) || ch == '_')
           {
             _InputIterator end = skip_identifier (__first, __last);
             token_name = pp_symbol::get (__first, end);
@@ -952,7 +967,7 @@ _InputIterator pp<_InputIterator>::next_token (_InputIterator __first, _InputIte
             else
               *kind = TOKEN_IDENTIFIER;
           }
-        else if (std::isdigit (ch))
+        else if (pp_isdigit (ch))
           {
             _InputIterator end = skip_number (__first, __last);
             token_value = strtol (std::string (__first, __last).c_str (), 0, 0);

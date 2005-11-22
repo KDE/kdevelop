@@ -133,23 +133,23 @@ public:
 #endif
             __first = next_pos;
           }
-        else if (std::isspace (*__first))
+        else if (pp_isspace (*__first))
           {
             for (; __first != __last; ++__first)
               {
-                if (*__first == '\n' || !std::isspace (*__first))
+                if (*__first == '\n' || !pp_isspace (*__first))
                   break;
               }
 
             *__result = ' ';
           }
-        else if (std::isdigit (*__first))
+        else if (pp_isdigit (*__first))
           {
             _InputIterator next_pos = skip_number (__first, __last);
             std::copy (__first, next_pos, __result);
             __first = next_pos;
           }
-        else if (std::isalpha (*__first) || *__first == '_')
+        else if (pp_isalpha (*__first) || *__first == '_')
           {
             _InputIterator name_begin = __first;
             _InputIterator name_end = skip_identifier (__first, __last);

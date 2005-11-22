@@ -18,39 +18,21 @@
   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef PP_H
-#define PP_H
+#ifndef PP_CCTYPE_H
+#define PP_CCTYPE_H
 
-#include <set>
-#include <map>
-#include <vector>
-#include <string>
-#include <iterator>
-#include <iostream>
-#include <fstream>
-#include <cassert>
 #include <cctype>
 
-#include <fcntl.h>
+inline bool pp_isalpha (int ch)
+{ return std::isalpha ((unsigned char) ch); }
 
-#ifdef HAVE_MMAP
-#  include <sys/mman.h>
-#endif
+inline bool pp_isalnum (int ch)
+{ return std::isalnum ((unsigned char) ch); }
 
-#include <sys/stat.h>
-#include <sys/types.h>
+inline bool pp_isdigit (int ch)
+{ return std::isdigit ((unsigned char) ch); }
 
-#include "rxx_allocator.h"
+inline bool pp_isspace (int ch)
+{ return std::isspace ((unsigned char) ch); }
 
-#include "pp-fwd.h"
-#include "pp-cctype.h"
-#include "pp-string.h"
-#include "pp-symbol.h"
-#include "pp-macro.h"
-#include "pp-environment.h"
-#include "pp-scanner.h"
-#include "pp-macro-expander.h"
-#include "pp-engine.h"
-#include "pp-engine-bits.h"
-
-#endif // PP_H
+#endif // PP_CCTYPE_H

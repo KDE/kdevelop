@@ -28,7 +28,7 @@ struct pp_skip_white_spaces
   {
     for (; __first != __last; ++__first)
       {
-        if (! std::isspace (*__first))
+        if (! pp_isspace (*__first))
           break;
       }
 
@@ -49,7 +49,7 @@ struct pp_skip_blanks
             if (__first == __last)
               break;
           }
-        else if (*__first == '\n' || !std::isspace (*__first))
+        else if (*__first == '\n' || !pp_isspace (*__first))
           break;
       }
 
@@ -128,7 +128,7 @@ struct pp_skip_identifier
   {
     for (; __first != __last; ++__first)
       {
-        if (! std::isalnum (*__first) && *__first != '_')
+        if (! pp_isalnum (*__first) && *__first != '_')
           break;
       }
 
@@ -143,7 +143,7 @@ struct pp_skip_number
   {
     for (; __first != __last; ++__first)
       {
-        if (! std::isalnum (*__first) && *__first != '.')
+        if (! pp_isalnum (*__first) && *__first != '.')
           break;
       }
 
@@ -272,9 +272,9 @@ struct pp_skip_argument
           __first = skip_char_literal (__first, __last);
         else if (*__first == '/')
           __first = skip_comment_or_divop (__first, __last);
-        else if (std::isalpha (*__first) || *__first == '_')
+        else if (pp_isalpha (*__first) || *__first == '_')
           __first = skip_identifier (__first, __last);
-        else if (std::isdigit (*__first))
+        else if (pp_isdigit (*__first))
           __first = skip_number (__first, __last);
         else
           ++__first;
