@@ -57,7 +57,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
 #warning "NameCompiler::visitUnqualifiedName() -- implement me"
 #endif
 
-      tmp_name += QLatin1String("operator ");
+      tmp_name += QLatin1String("operator");
 
       if (op_id->op && op_id->op->op)
         tmp_name +=  decode_operator(op_id->op->op);
