@@ -31,7 +31,7 @@ public:
     pp_environment env;
     QStringList includePaths;
 
-    void initPP(pp<> &proc)
+    void initPP(pp &proc)
     {
         foreach(QString path, includePaths)
             proc.push_include_path(path.toStdString());
@@ -50,17 +50,18 @@ Preprocessor::~Preprocessor()
 
 void Preprocessor::processFile(const QString &fileName)
 {
-    pp<> proc(d->env);
+    pp proc(d->env);
     d->initPP(proc);
 
     d->result.reserve(d->result.size() + 20 * 1024);
 
+    d->result += "# 1 \"" + fileName.toLatin1() + "\"\n"; // ### REMOVE ME
     proc.file(fileName.toLocal8Bit().constData(), std::back_inserter(d->result));
 }
 
 void Preprocessor::processString(const QByteArray &str)
 {
-    pp<> proc(d->env);
+    pp proc(d->env);
     d->initPP(proc);
 
     proc(str.begin(), str.end(), std::back_inserter(d->result));
@@ -74,6 +75,19 @@ QByteArray Preprocessor::result() const
 void Preprocessor::addIncludePaths(const QStringList &includePaths)
 {
     d->includePaths += includePaths;
+}
+
+QStringList Preprocessor::macroNames() const
+{
+    QStringList macros;
+
+    std::map<pp_fast_string const *, pp_macro>::const_iterator it = d->env.begin();
+    while (it != d->env.end()) {
+        macros += QString::fromLatin1((*it).first->begin(), (*it).first->size());
+        ++it;
+    }
+
+    return macros;
 }
 
 /*

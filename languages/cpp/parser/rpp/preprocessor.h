@@ -41,6 +41,8 @@ public:
 
     QByteArray result() const;
 
+    QStringList macroNames() const;
+
 private:
     Q_DISABLE_COPY(Preprocessor)
     PreprocessorPrivate *d;
