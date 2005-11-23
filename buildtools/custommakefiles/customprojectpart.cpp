@@ -641,6 +641,17 @@ void CustomProjectPart::slotCompileFile()
 
     QString buildDir = sourceDir;
     QString target = baseName + ".o";
+
+    //if there is no Makefile in the directory of the source file
+    //try to build it from the main build dir
+    //this works e.g. for non-recursive cmake Makefiles, Alex
+    if ((QFile::exists(sourceDir+"/Makefile") == false)
+        && (QFile::exists(sourceDir+"/makefile") == false))
+    {
+       buildDir=buildDirectory();
+    }
+
+
     kdDebug(9020) << "builddir " << buildDir << ", target " << target << endl;
 
     startMakeCommand(buildDir, target);
