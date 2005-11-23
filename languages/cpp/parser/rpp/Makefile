@@ -10,7 +10,7 @@ HEADERS = pp-engine-bits.h  \
 	pp-string.h  \
 	pp-symbol.h
 
-CXXFLAGS = -I..  -O3 -DGCC_MACHINE="\"`g++ -dumpmachine`\"" -DGCC_VERSION="\"`g++ -dumpversion`\""
+CXXFLAGS = -I..  -O3 -DHAVE_MMAP=1 -DGCC_MACHINE="\"`g++ -dumpmachine`\"" -DGCC_VERSION="\"`g++ -dumpversion`\""
 
 OBJS = main.o
 

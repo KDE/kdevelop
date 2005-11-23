@@ -67,6 +67,7 @@ class pp
   pp_fast_string const *pp_ifdef;
   pp_fast_string const *pp_ifndef;
   pp_fast_string const *pp_undef;
+  pp_fast_string const *pp_defined;
 
 public:
   pp (pp_environment &__env);
@@ -175,3 +176,5 @@ private:
 };
 
 #endif // PP_ENGINE_H
+
+// kate: indent-width 2;

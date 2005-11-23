@@ -72,7 +72,10 @@ int main (int /*argc*/, char *argv[])
   preprocess.file (filename, std::back_inserter (result));
   std::cout << result;
 
+  std::cout << "allocated #" << pp_symbol::count () << " symbols!" << std::endl;
+  std::cout << "allocated #" << std::distance (env.begin (), env.end ()) << " macros!" << std::endl;
+
   return EXIT_SUCCESS;
 }
 
-
+// kate: indent-width 2;

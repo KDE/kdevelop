@@ -34,6 +34,7 @@ class pp_macro_expander
 {
   pp_environment &env;
   pp_frame *frame;
+  pp_fast_string const *pp_defined;
 
   pp_skip_white_spaces skip_white_spaces;
   pp_skip_number skip_number;
@@ -86,7 +87,10 @@ class pp_macro_expander
 
 public:
   pp_macro_expander (pp_environment &__env, pp_frame *__frame = 0):
-    env (__env), frame (__frame) {}
+    env (__env), frame (__frame)
+  {
+    pp_defined = pp_symbol::get ("defined", 7);
+  }
 
   template <typename _InputIterator, typename _OutputIterator>
   _InputIterator operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result)
@@ -180,9 +184,9 @@ public:
 
             static bool hide_next = false;
 
-            if (!pp_symbol::used (&fast_name))
+            if (! pp_symbol::used (&fast_name))
               {
-                hide_next = (fast_name == *pp_symbol::get ("defined", 7));
+                hide_next = (fast_name == *pp_defined);
                 std::copy (name_begin, name_end, __result);
                 continue;
               }
@@ -191,7 +195,7 @@ public:
             pp_macro *macro = env.resolve (name);
             if (! macro || macro->hidden || hide_next)
               {
-                hide_next = (name == pp_symbol::get ("defined", 7));
+                hide_next = (fast_name == *pp_defined);
                 std::copy (name_begin, name_end, __result);
                 continue;
               }
@@ -266,3 +270,5 @@ public:
 };
 
 #endif // PP_MACRO_EXPANDER_H
+
+// kate: indent-width 2;

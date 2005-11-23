@@ -26,3 +26,5 @@ template <typename _CharT> class pp_string;
 typedef pp_string<char> pp_fast_string;
 
 #endif // PP_FWD_H
+
+// kate: indent-width 2;

@@ -36,6 +36,9 @@ class pp_symbol
   }
 
 public:
+  static std::size_t count ()
+  { return string_set_instance ().size (); }
+
   static pp_fast_string const *get (char const *__data, std::size_t __size)
   {
     std::set<pp_fast_string> &string_set = string_set_instance ();
@@ -76,3 +79,5 @@ public:
 };
 
 #endif // PP_SYMBOL_H
+
+// kate: indent-width 2;

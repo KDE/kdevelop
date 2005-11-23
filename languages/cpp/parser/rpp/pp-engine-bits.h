@@ -219,6 +219,7 @@ pp::pp (pp_environment &__env):
   pp_ifdef = pp_symbol::get ("ifdef", 5);
   pp_ifndef = pp_symbol::get ("ifndef", 6);
   pp_undef = pp_symbol::get ("undef", 5);
+  pp_defined = pp_symbol::get ("defined", 7);
 }
 
 inline std::back_insert_iterator<std::vector<std::string> > pp::include_paths_inserter ()
@@ -945,7 +946,7 @@ _InputIterator pp::next_token (_InputIterator __first, _InputIterator __last, in
             token_name = pp_symbol::get (__first, end);
             __first = end;
 
-            if (token_name == pp_symbol::get ("defined", 7))
+            if (token_name == pp_defined)
               *kind = TOKEN_DEFINED;
             else
               *kind = TOKEN_IDENTIFIER;
@@ -966,3 +967,5 @@ _InputIterator pp::next_token (_InputIterator __first, _InputIterator __last, in
 }
 
 #endif // PP_ENGINE_BITS_H
+
+// kate: indent-width 2;

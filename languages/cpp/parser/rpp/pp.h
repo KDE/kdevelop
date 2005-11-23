@@ -53,3 +53,5 @@
 #include "pp-engine-bits.h"
 
 #endif // PP_H
+
+// kate: indent-width 2;

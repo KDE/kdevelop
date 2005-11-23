@@ -69,3 +69,5 @@ public:
 };
 
 #endif // PP_STRING_H
+
+// kate: indent-width 2;

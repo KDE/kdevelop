@@ -43,3 +43,5 @@ struct pp_macro
 };
 
 #endif // PP_MACRO_H
+
+// kate: indent-width 2;

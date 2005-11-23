@@ -36,3 +36,5 @@ inline bool pp_isspace (int ch)
 { return std::isspace ((unsigned char) ch); }
 
 #endif // PP_CCTYPE_H
+
+// kate: indent-width 2;
