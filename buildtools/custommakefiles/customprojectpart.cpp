@@ -1,4 +1,5 @@
 /***************************************************************************
+/***************************************************************************
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
@@ -797,7 +798,7 @@ void CustomProjectPart::parseMakefile(const QString& filename)
    re.setMinimal(true);
    
    QRegExp variablesRe("\\$\\(\\s*([^\\)\\s]+)\\s*\\)");
-   QRegExp assignmentRe("^\\s*(\\S+)\\s*[:\\?]?=\\s*(\\S+)\\s*$");
+   QRegExp assignmentRe("^\\s*(\\S+)\\s*[:\\?]?=\\s*(\\S+)\\s*(#.*)?$");
 
    QRegExp includedMakefilesRe("^include\\s+(\\S+)");
    QString str = "";
@@ -829,11 +830,7 @@ void CustomProjectPart::parseMakefile(const QString& filename)
       else if (includedMakefilesRe.search(str) != -1)
       {
          QString includedMakefile=includedMakefilesRe.cap(1).simplifyWhiteSpace();
-         /*special optimization for makefiles generated with the new cmake makefile generator:
-          it creates a tiny makefile for each object and a tiny dependency file for each object,
-          these dependency files can be skipped here, Alex */
-         if (!includedMakefile.endsWith(".depends.make"))
-            m_makefilesToParse.push(includedMakefile);
+         m_makefilesToParse.push(includedMakefile);
       }
       else if (re.search(str) != -1)
       {
