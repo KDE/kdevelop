@@ -1,5 +1,4 @@
 /***************************************************************************
-/***************************************************************************
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
@@ -188,17 +187,17 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
     m_contextRemoveFiles.clear();
 
     if( fcontext->urls().size() == 1 )
-    {
-        QString contextFileName = URLUtil::canonicalPath(fcontext->urls().first().fileName());
-        bool inProject = project()->isProjectFile(contextFileName);
-        QString popupstr = QFileInfo(contextFileName).fileName();
-        if (contextFileName.startsWith(projectDirectory()+ "/"))
-            contextFileName.remove(0, projectDirectory().length()+1);
+   {
+      QString canContextFileName =URLUtil::canonicalPath(fcontext->urls().first().path());
+      QString relContextFileName =URLUtil::extractPathNameRelative(URLUtil::canonicalPath(project()->projectDirectory()), canContextFileName);
+      QString popupstr =fcontext->urls().first().fileName();
+    
+        bool inProject = project()->isProjectFile(canContextFileName);
 
         popup->insertSeparator();
         if (inProject)
         {
-	    m_contextRemoveFiles << contextFileName;
+	    m_contextRemoveFiles << relContextFileName;
             int id = popup->insertItem( i18n("Remove %1 From Project").arg(popupstr),
                                this, SLOT(slotRemoveFromProject()) );
             popup->setWhatsThis(id, i18n("<b>Remove from project</b><p>Removes current file from the list of files in project. "
@@ -206,7 +205,7 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
         }
         else
         {
-	    m_contextAddFiles << contextFileName;
+	    m_contextAddFiles << relContextFileName;
             int id = popup->insertItem( i18n("Add %1 to Project").arg(popupstr),
                                this, SLOT(slotAddToProject()) );
             popup->setWhatsThis(id, i18n("<b>Add to project</b><p>Adds current file to the list of files in project. "
@@ -220,14 +219,12 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
 	{
 	    if ((*it).isLocalFile())
 	    {
-	    	QString path(URLUtil::canonicalPath((*it).path()));
-		QString relPath( path );
-                if (relPath.startsWith(projectDirectory()+ "/"))
-                    relPath.remove(0, projectDirectory().length()+1);
-		if (project()->isProjectFile(path))
-		    m_contextRemoveFiles << relPath;
-		else
-		    m_contextAddFiles << relPath;
+	    	QString canPath(URLUtil::canonicalPath((*it).path()));
+         QString relPath =URLUtil::extractPathNameRelative(URLUtil::canonicalPath(project()->projectDirectory()), canPath);
+         if (project()->isProjectFile(canPath))
+            m_contextRemoveFiles << relPath;
+         else
+            m_contextAddFiles << relPath;
 	    }
 	}
 
@@ -506,8 +503,8 @@ void CustomProjectPart::addFiles ( const QStringList& fileList )
 	QStringList::ConstIterator it;
 
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
-	{
-		m_sourceFiles.append ( *it );
+   {
+      m_sourceFiles.append (*it);
 	}
 	
 	saveProject();
