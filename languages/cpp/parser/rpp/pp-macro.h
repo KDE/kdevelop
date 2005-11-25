@@ -23,7 +23,7 @@
 
 struct pp_macro
 {
-  std::string definition;
+  pp_fast_string const *definition;
   std::vector<pp_fast_string const *> formals;
 
   union

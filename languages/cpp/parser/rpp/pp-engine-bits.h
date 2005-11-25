@@ -244,7 +244,7 @@ template <typename _InputIterator>
 _InputIterator pp::handle_define (_InputIterator __first, _InputIterator __last)
 {
   pp_macro macro;
-  macro.definition.reserve (255);
+  std::string definition;
 
   __first = skip_blanks (__first, __last);
   _InputIterator end_macro_name = skip_identifier (__first, __last);
@@ -302,13 +302,14 @@ _InputIterator pp::handle_define (_InputIterator __first, _InputIterator __last)
           if (__first != __last && *__first == '\n')
             __first = skip_blanks (++__first, __last);
 
-          macro.definition += ' ';
+          definition += ' ';
           continue;
         }
 
-      macro.definition += *__first++;
+      definition += *__first++;
     }
 
+  macro.definition = pp_symbol::get (definition);
   env.bind (macro_name, macro);
 
   return __first;

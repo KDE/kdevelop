@@ -204,7 +204,7 @@ public:
               {
                 pp_macro_expander expand_macro (env);
                 macro->hidden = true;
-                expand_macro (macro->definition.begin (), macro->definition.end (), __result);
+                expand_macro (macro->definition->begin (), macro->definition->end (), __result);
                 macro->hidden = false;
                 continue;
               }
@@ -260,7 +260,7 @@ public:
               pp_frame frame (macro, &actuals);
               pp_macro_expander expand_macro (env, &frame);
               macro->hidden = true;
-              expand_macro (macro->definition.begin (), macro->definition.end (), __result);
+              expand_macro (macro->definition->begin (), macro->definition->end (), __result);
               macro->hidden = false;
           }
         else
