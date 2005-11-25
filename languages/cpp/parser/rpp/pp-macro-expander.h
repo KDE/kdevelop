@@ -230,6 +230,7 @@ public:
               {
                 std::string actual (arg_it, arg_end);
                 actuals.resize (actuals.size() + 1);
+                actuals.back ().reserve (255);
                 expand_actual (actual.begin (), actual.end(), std::back_inserter (actuals.back()));
                 arg_it = arg_end;
               }
@@ -241,6 +242,7 @@ public:
                 arg_end = skip_argument (arg_it, __last);
                 std::string actual (arg_it, arg_end);
                 actuals.resize (actuals.size() + 1);
+                actuals.back ().reserve (255);
                 expand_actual (actual.begin (), actual.end(), std::back_inserter (actuals.back()));
                 arg_it = arg_end;
               }

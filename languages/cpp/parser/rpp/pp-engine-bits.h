@@ -248,7 +248,7 @@ _InputIterator pp::handle_define (_InputIterator __first, _InputIterator __last)
 
   __first = skip_blanks (__first, __last);
   _InputIterator end_macro_name = skip_identifier (__first, __last);
-  std::string macro_name (__first, end_macro_name);
+  pp_fast_string const *macro_name = pp_symbol::get (__first, end_macro_name);
   __first = end_macro_name;
 
   if (__first != __last && *__first == '(')
@@ -309,7 +309,7 @@ _InputIterator pp::handle_define (_InputIterator __first, _InputIterator __last)
       macro.definition += *__first++;
     }
 
-  env.bind (pp_symbol::get (macro_name), macro);
+  env.bind (macro_name, macro);
 
   return __first;
 }
@@ -716,6 +716,7 @@ _InputIterator pp::handle_if (_InputIterator __first, _InputIterator __last)
     {
       pp_macro_expander expand_condition (env);
       std::string condition;
+      condition.reserve (255);
       expand_condition (__first, __last, std::back_inserter (condition));
 
       long result = 0;
@@ -795,8 +796,8 @@ _InputIterator pp::handle_ifdef (bool check_undefined, _InputIterator __first, _
   if (test_if_level())
     {
       _InputIterator end_macro_name = skip_identifier (__first, __last);
-      std::string macro_name (__first, end_macro_name);
-      bool value = env.resolve (pp_symbol::get (__first, end_macro_name)) != 0;
+      pp_fast_string const *macro_name = pp_symbol::get (__first, end_macro_name);
+      bool value = env.resolve (macro_name) != 0;
       __first = end_macro_name;
 
       if (check_undefined)
