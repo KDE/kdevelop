@@ -265,7 +265,7 @@ _InputIterator pp::handle_define (_InputIterator __first, _InputIterator __last)
 
       if (*__first == '.')
         {
-          std::cerr << "** WARNING variadics not supported" << std::endl;
+          macro.variadics = true;
           while (*__first == '.')
             ++__first;
         }
@@ -282,7 +282,7 @@ _InputIterator pp::handle_define (_InputIterator __first, _InputIterator __last)
 
           if (*__first == '.')
             {
-              std::cerr << "** WARNING variadics not supported" << std::endl;
+              macro.variadics = true;
               while (*__first == '.')
                 ++__first;
             }

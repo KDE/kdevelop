@@ -225,7 +225,7 @@ public:
 
             pp_macro_expander expand_actual (env, frame);
 
-            _InputIterator arg_end = skip_argument (arg_it, __last);
+            _InputIterator arg_end = skip_argument_variadics (actuals, macro, arg_it, __last);
             if (arg_it != arg_end)
               {
                 std::string actual (arg_it, arg_end);
@@ -239,7 +239,7 @@ public:
               {
                 ++arg_it; // skip ','
 
-                arg_end = skip_argument (arg_it, __last);
+                arg_end = skip_argument_variadics (actuals, macro, arg_it, __last);
                 std::string actual (arg_it, arg_end);
                 actuals.resize (actuals.size() + 1);
                 actuals.back ().reserve (255);
@@ -268,6 +268,21 @@ public:
       }
 
     return __first;
+  }
+
+  template <typename _InputIterator>
+  _InputIterator skip_argument_variadics (std::vector<std::string> const &__actuals, pp_macro *__macro,
+                                          _InputIterator __first, _InputIterator __last)
+  {
+    _InputIterator arg_end = skip_argument (__first, __last);
+
+    while (__macro->variadics && __first != arg_end && arg_end != __last && *arg_end == ','
+        && (__actuals.size () + 1) == __macro->formals.size ())
+      {
+        arg_end = skip_argument (++arg_end, __last);
+      }
+
+    return arg_end;
   }
 };
 
