@@ -65,7 +65,7 @@ void pp::file (FILE *fp, _OutputIterator __result)
 }
 
 template <typename _InputIterator, typename _OutputIterator>
-_InputIterator pp::handle_include(_InputIterator __first, _InputIterator __last,
+_InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last,
       _OutputIterator __result)
 {
   assert (*__first == '<' || *__first == '"');
@@ -96,13 +96,11 @@ _InputIterator pp::handle_include(_InputIterator __first, _InputIterator __last,
       std::copy (moc_msg.begin (), moc_msg.end (), __result);
 #endif
 
-      std::string const *back = ! include_paths.empty () ?  &include_paths.back () : 0;
-      include_paths.resize (include_paths.size () + 1);
-      include_paths.back().assign (filepath, 0, filepath.rfind ('/'));
-      bool ignore_path = back ? *back == include_paths .back () : false;
+      std::string path (filepath, 0, filepath.rfind ('/'));
+      bool ignore_path = (! include_paths.empty () && path == include_paths.back ());
 
-      if (ignore_path)
-        include_paths.pop_back ();
+      if (! ignore_path)
+        include_paths.push_back (path);
 
       file (fp, __result);
 
