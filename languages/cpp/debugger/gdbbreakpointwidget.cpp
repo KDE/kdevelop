@@ -632,30 +632,65 @@ void GDBBreakpointWidget::slotParseGDBBreakpointSet(char *str, int BPKey)
         int id = atoi(startNo);
         if (id)
         {
-            /** rgruber:
-             * We set the needDisable flag if the breakpoint has been added and should be 
-             * disabled at the same time. This can happen if you open a project which has 
-             * a disabled breakpoint. Because setActive() resets some flags to false, we 
-             * reenable them before emit publishBPState() and set them back after comming back.
-             * This can only happen right after the breakpoint has been set. At any later time
-             * bp->dbgId() will already have an id set.
-             */
-            bool needDisable = (bp->dbgId() == -1 && bp->changedEnable() && !bp->isEnabled());
             bp->setActive(m_activeFlag, id);
             bp->setHardwareBP(hardware);
-            if (needDisable) {
-				kdDebug(9012) << "Added breakpoint will be disabled! resetting flags..." << endl;
-                bp->setEnabled(true);
-                bp->setEnabled(false);
+            btr->setRow();
+
+            /* We've only set the breakpoint, but it might also be disabled, or 
+               have condition. This could happen if breakpoints are loaded
+               from project file. In that case, set the condition or disabled 
+               state, too.
+
+               The previous 'setActive' has helpfully cleared all 'changed' 
+               flags, so we need to change each value twice -- first to some
+               meaningless value and then back to the right one, otherwise,
+               gdb controller will think the value is not changed and won't
+               do anything.               
+            */
+            if (!bp->isEnabled() || !bp->conditional().isEmpty())
+            {
+                if (!bp->isEnabled())
+                {
+                    bp->setEnabled(true);
+                    bp->setEnabled(false);
+                }
+                if (!bp->conditional().isEmpty())
+                {
+                    QString c = bp->conditional();
+                    bp->setConditional("");
+                    bp->setConditional(c);
+                }
+
                 bp->setPending(true);
                 bp->setActionModify(true);
-            }
-            emit publishBPState(*bp);
-            if (needDisable) {
+                emit publishBPState(*bp);                
+
+                /** This is ugly hack to prevent condition and disable state
+                    from being send to gdb twice.
+
+                    When starting program, KDevelop sents this sequence:
+                       - break whatever.cpp:XXX
+                       - run
+
+                    The program runs for some time and them stops in loading
+                    first first shared library (typically libc). KDevelop
+                    make gdb stop on shared library loads to emulate pending
+                    breakpoints.
+
+                    When parsing 'break' response, we emit publishBPState.
+                    Right after that "stopped on shared library load" string is
+                    parsed, and KDevelop sends to gdb all currently pending
+                    breakpoints, including the one we've just sent. After that,
+                    breakpoint list arrives from gdb, and we clear the pending
+                    flag, but the commands are already sent twice.
+
+                    For now, just immediately clear the pending flag. In future, 
+                    we need to put "run" command on hold until all breakpoints 
+                    are sent to gdb.
+                */
                 bp->setPending(false);
-                bp->setActionModify(false);
+                bp->setActionModify(false);                
             }
-            btr->setRow();
         }
     }
 }
@@ -730,7 +765,7 @@ void GDBBreakpointWidget::slotRemoveAllBreakpoints()
 void GDBBreakpointWidget::slotRowDoubleClicked(int row, int col, int btn, const QPoint &)
 {
     if ( btn == Qt::LeftButton )
-	{
+    {
 //    kdDebug(9012) << "in slotRowSelected row=" << row << endl;
         BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
         if (btr)
