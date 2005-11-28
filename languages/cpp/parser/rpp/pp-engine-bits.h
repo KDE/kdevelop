@@ -21,6 +21,48 @@
 #ifndef PP_ENGINE_BITS_H
 #define PP_ENGINE_BITS_H
 
+template <typename _InputIterator>
+bool pp::find_header_protection (_InputIterator __first, _InputIterator __last, std::string *__prot)
+{
+  while (__first != __last)
+    {
+      if (std::isspace (*__first))
+        ++__first;
+      else if (_PP_internal::comment_p (__first, __last))
+        __first = skip_comment_or_divop (__first, __last);
+      else if (*__first == '#')
+        {
+          __first = skip_blanks (++__first, __last);
+
+          if (__first != __last && *__first == 'i')
+            {
+              _InputIterator __begin = __first;
+              __first = skip_identifier (__begin, __last);
+
+              std::string __directive (__begin, __first);
+
+              if (__directive == "ifndef")
+                {
+                  __first = skip_blanks (__first, __last);
+                  __begin = __first;
+                  __first = skip_identifier (__first, __last);
+
+                  if (__begin != __first && __first != __last)
+                    {
+                      __prot->assign (__begin, __first);
+                      return true;
+                    }
+                }
+            }
+          break;
+        }
+      else
+        break;
+    }
+
+    return false;
+}
+
 template <typename _OutputIterator>
 void pp::file (std::string const &filename, _OutputIterator __result)
 {
@@ -119,6 +161,13 @@ _InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last
 template <typename _InputIterator, typename _OutputIterator>
 void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result)
 {
+  std::string __prot;
+  if (find_header_protection (__first, __last, &__prot) && env.resolve (pp_symbol::get (__prot)) != 0)
+    {
+      // std::cerr << "** WARNING found header protection:" << __prot << std::endl;
+      return;
+    }
+
   while (true)
     {
       __first = skip_white_spaces (__first, __last);
@@ -193,8 +242,7 @@ FILE *pp::find_include_file(std::string const &filename, std::string *filepath) 
       path += '/';
       path += filename;
 
-      FILE *fp = fopen (path.c_str(), "r");
-      if (fp != 0)
+      if (FILE *fp = fopen (path.c_str(), "r"))
         return fp;
     }
 

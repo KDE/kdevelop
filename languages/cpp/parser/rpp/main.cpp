@@ -24,10 +24,8 @@
 class null_output_iterator
   : public std::iterator<std::output_iterator_tag, void, void, void, void>
 {
-  char ch;
-
 public:
-  null_output_iterator(): ch(0) {}
+  null_output_iterator() {}
 
   template <typename _Tp>
   null_output_iterator &operator=(_Tp const &__value)

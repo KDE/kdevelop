@@ -101,6 +101,9 @@ private:
   bool test_if_level();
 
   template <typename _InputIterator>
+  bool find_header_protection (_InputIterator __first, _InputIterator __last, std::string *__prot);
+  
+  template <typename _InputIterator>
   _InputIterator skip (_InputIterator __first, _InputIterator __last);
 
   template <typename _InputIterator>

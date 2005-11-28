@@ -18,41 +18,27 @@
   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef PP_H
-#define PP_H
+#ifndef PP_INTERNAL_H
+#define PP_INTERNAL_H
 
-#include <set>
-#include <map>
-#include <vector>
-#include <string>
-#include <iterator>
-#include <iostream>
-#include <cassert>
-#include <cctype>
+namespace _PP_internal
+{
 
-#include <fcntl.h>
+  template <typename _InputIterator>
+  inline bool comment_p (_InputIterator __first, _InputIterator __last) /*const*/
+  {
+    if (__first == __last)
+      return false;
 
-#ifdef HAVE_MMAP
-#  include <sys/mman.h>
-#endif
+    if (*__first != '/')
+      return false;
 
-#include <sys/stat.h>
-#include <sys/types.h>
+    if (++__first == __last)
+      return false;
 
-#include "rxx_allocator.h"
+    return (*__first == '/' || *__first == '*');
+  }
 
-#include "pp-fwd.h"
-#include "pp-cctype.h"
-#include "pp-string.h"
-#include "pp-symbol.h"
-#include "pp-macro.h"
-#include "pp-environment.h"
-#include "pp-internal.h"
-#include "pp-scanner.h"
-#include "pp-macro-expander.h"
-#include "pp-engine.h"
-#include "pp-engine-bits.h"
+} // _PP_internal
 
-#endif // PP_H
-
-// kate: indent-width 2;
+#endif // PP_INTERNAL_H
