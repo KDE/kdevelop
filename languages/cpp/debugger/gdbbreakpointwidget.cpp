@@ -394,8 +394,14 @@ void GDBBreakpointWidget::removeBreakpoint(BreakpointTableRow* btr)
         return;
 
     // Pending but the debugger hasn't started processing this bp so
-    // we can just remove it.
+    // we can just remove it.   
     Breakpoint* bp = btr->breakpoint();
+    // VP, 2005/11/28: This condition is suspect. First, isDbgProcessing
+    // is never set to true anywhere, all calls to setDbgProcessing are
+    // commented out for a long time.
+    // Second, bp->isPending() should never be true, since after changing
+    // a breakpoint current code immediately stops debugger and sents
+    // breakpoint changes there.
     if (bp->isPending() && !bp->isDbgProcessing())
     {
         bp->setActionDie();
@@ -575,7 +581,17 @@ void GDBBreakpointWidget::slotParseGDBBrkptList(char *str)
         {
             Breakpoint* bp = btr->breakpoint();
             if (!(bp->isActive(m_activeFlag)))
-                removeBreakpoint(btr);
+            {
+                // Breakpoint no longer exists. Just need to
+                // remove table row. This is implicitly remove
+                // Breakpoint object.
+                
+                // This Die/emit is only necessary so that breakpoints
+                // markers in source window are removed.
+                bp->setActionDie();
+                emit publishBPState(*bp);
+                m_table->removeRow(btr->row());
+            }
         }
     }
 }
@@ -702,14 +718,11 @@ void GDBBreakpointWidget::slotRemoveBreakpoint()
 
 void GDBBreakpointWidget::slotRemoveAllBreakpoints()
 {
-  while (m_table->numRows() > 0)
-  {
     for ( int row = m_table->numRows()-1; row>=0; row-- )
     {
         BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
         removeBreakpoint(btr);
     }
-  }
 }
 
 /***************************************************************************/
