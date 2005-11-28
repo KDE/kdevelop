@@ -577,8 +577,6 @@ void DebuggerPart::setupController()
 
 
     // gdbBreakpointWidget -> controller
-    connect( gdbBreakpointWidget,   SIGNAL(clearAllBreakpoints()),
-             controller,            SLOT(slotClearAllBreakpoints()));
     connect( gdbBreakpointWidget,   SIGNAL(publishBPState(const Breakpoint&)),
              controller,            SLOT(slotBPState(const Breakpoint &)));
 

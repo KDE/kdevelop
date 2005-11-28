@@ -1866,36 +1866,6 @@ void GDBController::slotBPState( const Breakpoint& BP )
 
 // **************************************************************************
 
-void GDBController::slotClearAllBreakpoints()
-{
-    // Are we in a position to do anything to this breakpoint?
-    if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    bool restart = false;
-    if (stateIsOn(s_appBusy))
-    {
-        if (!config_forceBPSet_)
-            return;
-
-        // When forcing breakpoints to be set/unset, interrupt a running app
-        // and change the state.
-        pauseApp();
-        restart = true;
-    }
-
-    queueCmd(new GDBCommand("delete", NOTRUNCMD, NOTINFOCMD));
-    // Note: this is NOT an info command, because gdb doesn't explictly tell
-    // us that the breakpoint has been deleted, so if we don't have it the
-    // BP list doesn't get updated.
-    queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
-
-    if (restart)
-        queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
-}
-
-// **************************************************************************
-
 void GDBController::slotDisassemble(const QString &start, const QString &end)
 {
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))

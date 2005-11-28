@@ -87,7 +87,6 @@ signals:
     void publishBPState(const Breakpoint& brkpt);
     void refreshBPState(const Breakpoint& brkpt);
     void gotoSourcePosition(const QString &fileName, int lineNum);
-    void clearAllBreakpoints();
 
 private:
     BreakpointTableRow* find(Breakpoint *bp);

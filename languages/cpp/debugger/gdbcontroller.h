@@ -110,7 +110,6 @@ public slots:
 
     void slotBreakInto();
     void slotBPState( const Breakpoint& );
-    void slotClearAllBreakpoints();
 
     void slotDisassemble(const QString &start, const QString &end);
     void slotMemoryDump(MemoryCallback* callback,
