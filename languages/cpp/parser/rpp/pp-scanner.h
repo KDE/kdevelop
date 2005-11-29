@@ -45,8 +45,12 @@ struct pp_skip_blanks
       {
         if (*__first == '\\')
           {
-            ++__first;
-            if (__first == __last)
+            _InputIterator __begin = __first;
+            ++__begin;
+
+            if (__begin != __last && *__begin == '\n')
+              ++__first;
+            else
               break;
           }
         else if (*__first == '\n' || !pp_isspace (*__first))

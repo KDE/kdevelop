@@ -161,12 +161,14 @@ _InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last
 template <typename _InputIterator, typename _OutputIterator>
 void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result)
 {
+#if 0
   std::string __prot;
   if (find_header_protection (__first, __last, &__prot) && env.resolve (pp_symbol::get (__prot)) != 0)
     {
       // std::cerr << "** WARNING found header protection:" << __prot << std::endl;
       return;
     }
+#endif
 
   while (true)
     {
@@ -344,12 +346,15 @@ _InputIterator pp::handle_define (_InputIterator __first, _InputIterator __last)
     {
       if (*__first == '\\')
         {
-          __first = skip_blanks (++__first, __last);
-          if (__first != __last && *__first == '\n')
-            __first = skip_blanks (++__first, __last);
+          _InputIterator __begin = __first;
+          __begin = skip_blanks (++__begin, __last);
 
-          definition += ' ';
-          continue;
+          if (__begin != __last && *__begin == '\n')
+            {
+              __first = skip_blanks (++__begin, __last);
+              definition += ' ';
+              continue;
+            }
         }
 
       definition += *__first++;

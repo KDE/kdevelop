@@ -11,6 +11,8 @@ OK
 KO
 #endif
 
+#undef A
+
 #define A(a,b) a + b
 #define C(a,b) A(b,a)
 
