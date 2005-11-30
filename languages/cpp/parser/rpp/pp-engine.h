@@ -25,7 +25,6 @@ class pp
 {
   pp_environment &env;
   pp_macro_expander expand;
-  pp_skip_white_spaces skip_white_spaces;
   pp_skip_identifier skip_identifier;
   pp_skip_comment_or_divop skip_comment_or_divop;
   pp_skip_blanks skip_blanks;

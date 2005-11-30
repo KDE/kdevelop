@@ -36,7 +36,6 @@ class pp_macro_expander
   pp_frame *frame;
   pp_fast_string const *pp_defined;
 
-  pp_skip_white_spaces skip_white_spaces;
   pp_skip_number skip_number;
   pp_skip_identifier skip_identifier;
   pp_skip_string_literal skip_string_literal;
@@ -88,7 +87,7 @@ public:
           {
             *__result++ = *__first;
 
-            __first = skip_white_spaces (++__first, __last);
+            __first = skip_blanks (++__first, __last);
             if (__first != __last && *__first == '#')
               break;
           }
@@ -195,7 +194,7 @@ public:
               }
 
             // function like macro
-            _InputIterator arg_it = skip_white_spaces (__first, __last);
+            _InputIterator arg_it = __first;
 
             if (arg_it == __last || *arg_it  != '(')
               {

@@ -21,21 +21,6 @@
 #ifndef PP_SCANNER_H
 #define PP_SCANNER_H
 
-struct pp_skip_white_spaces
-{
-  template <typename _InputIterator>
-  _InputIterator operator () (_InputIterator __first, _InputIterator __last)
-  {
-    for (; __first != __last; ++__first)
-      {
-        if (! pp_isspace (*__first))
-          break;
-      }
-
-    return __first;
-  }
-};
-
 struct pp_skip_blanks
 {
   template <typename _InputIterator>
@@ -250,7 +235,6 @@ struct pp_skip_char_literal
 
 struct pp_skip_argument
 {
-  pp_skip_white_spaces skip_white_spaces;
   pp_skip_identifier skip_number;
   pp_skip_identifier skip_identifier;
   pp_skip_string_literal skip_string_literal;

@@ -179,7 +179,8 @@ void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIter
 
   while (true)
     {
-      __first = skip_white_spaces (__first, __last);
+      __first = skip_blanks (__first, __last);
+
       if (__first == __last)
         break;
       else if (*__first == '#')
@@ -897,7 +898,7 @@ _InputIterator pp::handle_ifdef (bool check_undefined, _InputIterator __first, _
 template <typename _InputIterator>
 _InputIterator pp::handle_undef(_InputIterator __first, _InputIterator __last)
 {
-  __first = skip_white_spaces (__first, __last);
+  __first = skip_blanks (__first, __last);
   _InputIterator end_macro_name = skip_identifier (__first, __last);
   assert (end_macro_name != __first);
 
