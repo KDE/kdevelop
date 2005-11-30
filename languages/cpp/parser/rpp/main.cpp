@@ -19,46 +19,6 @@
 */
 
 #include "pp.h"
-#include <iterator>
-
-class null_output_iterator
-  : public std::iterator<std::output_iterator_tag, void, void, void, void>
-{
-public:
-  null_output_iterator() {}
-
-  template <typename _Tp>
-  null_output_iterator &operator=(_Tp const &__value)
-  { return *this; }
-
-  inline null_output_iterator &operator * () { return *this; }
-  inline null_output_iterator &operator ++ () { return *this; }
-  inline null_output_iterator operator ++ (int) { return *this; }
-};
-
-template <typename _Container>
-class pp_output_iterator
-  : public std::iterator<std::output_iterator_tag, void, void, void, void>
-{
-  std::string &_M_result;
-
-public:
-  explicit pp_output_iterator(std::string &__result):
-    _M_result (__result) {}
-
-  inline pp_output_iterator &operator=(typename _Container::const_reference __value)
-  {
-    if (_M_result.capacity () == _M_result.size ())
-      _M_result.reserve (_M_result.capacity () << 2);
-
-    _M_result.push_back(__value);
-    return *this;
-  }
-
-  inline pp_output_iterator &operator * () { return *this; }
-  inline pp_output_iterator &operator ++ () { return *this; }
-  inline pp_output_iterator operator ++ (int) { return *this; }
-};
 
 int main (int /*argc*/, char *argv[])
 {
@@ -89,7 +49,7 @@ int main (int /*argc*/, char *argv[])
 
   preprocess.push_include_path (".");
 
-  preprocess.file ("pp-configuration", null_output_iterator ()); // ### put your macros here!
+  preprocess.file ("pp-configuration", pp_null_output_iterator ()); // ### put your macros here!
 
   std::string result;
   result.reserve (20 * 1024); // 20K

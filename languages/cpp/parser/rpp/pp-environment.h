@@ -25,38 +25,6 @@
 #  include <tr1/unordered_map>
 #endif
 
-namespace _PP_internal
-{
-
-struct _Compare_string: public std::binary_function<bool, pp_fast_string const *, pp_fast_string const *>
-{
-  inline bool operator () (pp_fast_string const *__lhs, pp_fast_string const *__rhs) const
-  { return *__lhs < *__rhs; }
-};
-
-struct _Equal_to_string: public std::binary_function<bool, pp_fast_string const *, pp_fast_string const *>
-{
-  inline bool operator () (pp_fast_string const *__lhs, pp_fast_string const *__rhs) const
-  { return *__lhs == *__rhs; }
-};
-
-struct _Hash_string: public std::unary_function<std::size_t, pp_fast_string const *>
-{
-  inline std::size_t operator () (pp_fast_string const *__s) const
-  {
-    char const *__ptr = __s->begin ();
-    int __size = __s->size ();
-    std::size_t __h = 0;
-
-    while (--__size >= 0)
-      __h = (__h << 5) - __h + *__ptr++;
-
-    return __h;
-  }
-};
-
-} // namespace _PP_internal
-
 class pp_environment
 #ifdef HAVE_TR1
   : private std::tr1::unordered_map<pp_fast_string const *, pp_macro, _PP_internal::_Hash_string, _PP_internal::_Equal_to_string>
