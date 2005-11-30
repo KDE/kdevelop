@@ -37,7 +37,7 @@ int main(int argc, char **argv)
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
 
-    KApplication app(argc, argv);
+    KApplication app;
     ProfileEditor editor;
     editor.show();
     app.setMainWidget(&editor);

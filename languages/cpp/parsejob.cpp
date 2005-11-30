@@ -34,7 +34,7 @@
 #include "parser/parser.h"
 #include "parser/control.h"
 #include "parser/dumptree.h"
-#include "parser/preprocessor.h"
+#include "parser/rpp/preprocessor.h"
 
 #include "parsejob.h"
 

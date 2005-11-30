@@ -396,9 +396,9 @@ void MainWindowShare::slotNewToolbarConfig()
 void MainWindowShare::slotKeyBindings()
 {
   KKeyDialog dlg( false, m_pMainWnd );
-  Q3PtrList<KXMLGUIClient> clients = m_pMainWnd->guiFactory()->clients();
-  for( Q3PtrListIterator<KXMLGUIClient> it( clients );
-       it.current(); ++it ) {
+  QList<KXMLGUIClient*> clients = m_pMainWnd->guiFactory()->clients();
+  QList<KXMLGUIClient*>::iterator it, itEnd = clients.end();
+  for( it = clients.begin(); it != itEnd; ++it ) {
     dlg.insert( (*it)->actionCollection() );
   }
   if ( dlg.configure() == KKeyDialog::Accepted )

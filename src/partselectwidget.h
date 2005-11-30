@@ -17,6 +17,7 @@
 #include <qstringlist.h>
 
 class Q3ListView;
+class Q3ListViewItem;
 class QComboView;
 class KURLLabel;
 class QLabel;
