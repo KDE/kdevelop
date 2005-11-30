@@ -543,8 +543,8 @@ inline void Lexer::readWhiteSpaces( bool skipNewLine )
 inline void Lexer::readLineComment()
 {
     while( !currentChar().isNull() && currentChar() != '\n' ){
-	if( m_reportMessages && currentChar() == '@' && m_source.mid(currentPosition()+1, 4).lower() == "todo" ){
-	    nextChar( 5 );
+        if( m_reportMessages && m_source.mid(currentPosition(), 4).lower() == "todo" ){
+	    nextChar( 4 );
 	    QString msg;
 	    int line = m_currentLine;
 	    int col = m_currentColumn;
@@ -587,8 +587,8 @@ inline void Lexer::readMultiLineComment()
         if( currentChar() == '*' && peekChar() == '/' ){
             nextChar( 2 );
             return;
-	} else if( m_reportMessages && currentChar() == '@' && m_source.mid(currentPosition()+1, 4).lower() == "todo" ){
-	    nextChar( 5 );
+	} else if( m_reportMessages && m_source.mid(currentPosition(), 4).lower() == "todo" ){
+	    nextChar( 4 );
 	    QString msg;
 	    int line = m_currentLine;
 	    int col = m_currentColumn;
