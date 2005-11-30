@@ -151,6 +151,12 @@ pp::PP_DIRECTIVE_TYPE pp::find_directive (char const *__directive, std::size_t _
   return PP_UNKNOWN_DIRECTIVE;
 }
 
+inline bool pp::file_exists (std::string const &__filename) const
+{
+  struct stat __st;
+  return lstat (__filename.c_str (), &__st) == 0;
+}
+
 FILE *pp::find_include_file(std::string const &__filename, std::string *__filepath, INCLUDE_POLICY __include_policy) const
 {
   assert (! __filename.empty() && __filepath);
@@ -176,8 +182,8 @@ FILE *pp::find_include_file(std::string const &__filename, std::string *__filepa
 
           __path += __filename;
 
-          if (FILE *fp = fopen (__path.c_str (), "r"))
-            return fp;
+          if (file_exists (__path))
+            return fopen (__path.c_str (), "r");
         }
     }
 
@@ -192,20 +198,20 @@ FILE *pp::find_include_file(std::string const &__filename, std::string *__filepa
 
       __path += __filename;
 
-      if (FILE *fp = fopen (__path.c_str(), "r"))
-        return fp;
+      if (file_exists (__path))
+        return fopen (__path.c_str(), "r");
     }
 
   return 0;
 }
 
 template <typename _InputIterator, typename _OutputIterator>
-_InputIterator pp::handle_directive(pp_fast_string const *d,
+_InputIterator pp::handle_directive(char const *__directive, std::size_t __size,
         _InputIterator __first, _InputIterator __last, _OutputIterator __result)
 {
   __first = skip_blanks (__first, __last);
 
-  switch (find_directive (d->begin (), d->size ()))
+  switch (find_directive (__directive, __size))
     {
       case PP_DEFINE:
         if (! skipping ())
@@ -309,14 +315,18 @@ _InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last
 template <typename _InputIterator, typename _OutputIterator>
 void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result)
 {
-#if 0
+#if 1
   std::string __prot;
-  if (find_header_protection (__first, __last, &__prot) && env.resolve (pp_symbol::get (__prot)) != 0)
+  __prot.reserve (255);
+
+  if (find_header_protection (__first, __last, &__prot) && env.resolve (pp_symbol::get (__prot.c_str (), __prot.size ())) != 0)
     {
       // std::cerr << "** WARNING found header protection:" << __prot << std::endl;
       return;
     }
 #endif
+
+  char __buffer[512];
 
   while (true)
     {
@@ -330,12 +340,17 @@ void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIter
           __first = skip_blanks (++__first, __last);
 
           _InputIterator end_id = skip_identifier (__first, __last);
-          pp_fast_string const *directive (pp_symbol::get (__first, end_id));
+          std::size_t __size = end_id - __first;
+
+          assert (__size < 512);
+          char *__cp = __buffer;
+          std::copy (__first, end_id, __cp);
+          __cp[__size] = '\0';
 
           end_id = skip_blanks (end_id, __last);
           __first = skip (end_id, __last);
 
-          (void) handle_directive (directive, end_id, __first, __result);
+          (void) handle_directive (__buffer, __size, end_id, __first, __result);
         }
       else if (*__first == '\n')
         {
@@ -523,7 +538,7 @@ _InputIterator pp::eval_primary(_InputIterator __first, _InputIterator __last, l
           break;
         }
 
-      *result = env.resolve (token_name) != 0;
+      *result = env.resolve (token_text->c_str (), token_text->size ()) != 0;
 
       next_token (__first, __last, &token); // skip '('
 
@@ -1085,10 +1100,12 @@ _InputIterator pp::next_token (_InputIterator __first, _InputIterator __last, in
         if (pp_isalpha (ch) || ch == '_')
           {
             _InputIterator end = skip_identifier (__first, __last);
-            token_name = pp_symbol::get (__first, end);
+            _M_current_text.assign (__first, end);
+
+            token_text = &_M_current_text;
             __first = end;
 
-            if (token_name == pp_defined)
+            if (*token_text == "defined")
               *kind = TOKEN_DEFINED;
             else
               *kind = TOKEN_IDENTIFIER;

@@ -31,6 +31,7 @@ class pp
   pp_skip_number skip_number;
   std::vector<std::string> include_paths;
   std::string _M_current_file;
+  std::string _M_current_text;
 
   enum { MAX_LEVEL = 512 };
   int _M_skipping[MAX_LEVEL];
@@ -40,7 +41,7 @@ class pp
   union
   {
     long token_value;
-    pp_fast_string const *token_name;
+    std::string *token_text;
   };
 
   enum INCLUDE_POLICY
@@ -106,6 +107,7 @@ public:
   void operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result);
 
 private:
+  inline bool file_exists (std::string const &__filename) const;
   FILE *find_include_file(std::string const &__filename, std::string *__filepath, INCLUDE_POLICY __include_policy) const;
 
   inline int skipping() const;
@@ -156,7 +158,7 @@ private:
   _InputIterator eval_constant_expression(_InputIterator __first, _InputIterator __last, long *result);
 
   template <typename _InputIterator, typename _OutputIterator>
-  _InputIterator handle_directive(pp_fast_string const *d,
+  _InputIterator handle_directive(char const *__directive, std::size_t __size,
           _InputIterator __first, _InputIterator __last, _OutputIterator __result);
 
   template <typename _InputIterator, typename _OutputIterator>

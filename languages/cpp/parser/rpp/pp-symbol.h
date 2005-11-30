@@ -29,49 +29,37 @@ class pp_symbol
     return __allocator;
   }
 
-  static std::set<pp_fast_string> &string_set_instance ()
-  {
-    static std::set<pp_fast_string> __string_set;
-    return __string_set;
-  }
-
 public:
-  static std::size_t count ()
-  { return string_set_instance ().size (); }
+  static int &N()
+  {
+    static int __N;
+    return __N;
+  }
 
   static pp_fast_string const *get (char const *__data, std::size_t __size)
   {
-    std::set<pp_fast_string> &string_set = string_set_instance ();
+    ++N();
+    char *data = allocator_instance ().allocate (__size + 1);
+    memcpy(data, __data, __size);
+    data[__size] = '\0';
 
-    std::set<pp_fast_string>::iterator it = string_set.find (pp_fast_string (__data, __size));
-    if (it == string_set.end ())
-      {
-        char *where = allocator_instance ().allocate (__size + 1);
-        memcpy(where, __data, __size);
-        where[__size] = '\0';
-        pp_fast_string str (where, __size);
-        it = string_set.insert (str).first;
-      }
-
-    return &*it;
-  }
-
-  inline static bool used (pp_fast_string const *__s)
-  {
-    std::set<pp_fast_string> const &string_set = string_set_instance ();
-
-    return string_set.find (*__s) != string_set.end ();
+    char *where = allocator_instance ().allocate (sizeof (pp_fast_string));
+    return new (where) pp_fast_string (data, __size);
   }
 
   template <typename _InputIterator>
   static pp_fast_string const *get (_InputIterator __first, _InputIterator __last)
   {
+    ++N();
     std::ptrdiff_t __size = std::distance (__first, __last);
     assert (__size >= 0 && __size < 512);
 
-    char buffer[512], *cp = buffer;
-    std::copy (__first, __last, cp);
-    return get (buffer, __size);
+    char *data = allocator_instance ().allocate (__size + 1);
+    std::copy (__first, __last, data);
+    data[__size] = '\0';
+
+    char *where = allocator_instance ().allocate (sizeof (pp_fast_string));
+    return new (where) pp_fast_string (data, __size);
   }
 
   static pp_fast_string const *get(std::string const &__s)

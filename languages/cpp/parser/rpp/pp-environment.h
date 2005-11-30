@@ -21,9 +21,54 @@
 #ifndef PP_ENVIRONMENT_H
 #define PP_ENVIRONMENT_H
 
-class pp_environment: private std::map<pp_fast_string const *, pp_macro>
+#ifdef HAVE_TR1
+#  include <tr1/unordered_map>
+#endif
+
+namespace _PP_internal
 {
-  typedef std::map<pp_fast_string const *, pp_macro>base_type;
+
+struct _Compare_string: public std::binary_function<bool, pp_fast_string const *, pp_fast_string const *>
+{
+  inline bool operator () (pp_fast_string const *__lhs, pp_fast_string const *__rhs) const
+  { return *__lhs < *__rhs; }
+};
+
+struct _Equal_to_string: public std::binary_function<bool, pp_fast_string const *, pp_fast_string const *>
+{
+  inline bool operator () (pp_fast_string const *__lhs, pp_fast_string const *__rhs) const
+  { return *__lhs == *__rhs; }
+};
+
+struct _Hash_string: public std::unary_function<std::size_t, pp_fast_string const *>
+{
+  inline std::size_t operator () (pp_fast_string const *__s) const
+  {
+    char const *__ptr = __s->begin ();
+    int __size = __s->size ();
+    std::size_t __h = 0;
+
+    while (--__size >= 0)
+      __h = (__h << 5) - __h + *__ptr++;
+
+    return __h;
+  }
+};
+
+} // namespace _PP_internal
+
+class pp_environment
+#ifdef HAVE_TR1
+  : private std::tr1::unordered_map<pp_fast_string const *, pp_macro, _PP_internal::_Hash_string, _PP_internal::_Equal_to_string>
+#else
+  : private std::map<pp_fast_string const *, pp_macro, _PP_internal::_Compare_string>
+#endif
+{
+#ifdef HAVE_TR1
+  typedef std::tr1::unordered_map<pp_fast_string const *, pp_macro, _PP_internal::_Hash_string, _PP_internal::_Equal_to_string> base_type;
+#else
+  typedef std::map<pp_fast_string const *, pp_macro, _PP_internal::_Compare_string> base_type;
+#endif
 
 public:
   using base_type::begin;
@@ -41,6 +86,12 @@ public:
   {
     iterator it = find (__name);
     return it != end () ? &(*it).second : 0;
+  }
+
+  inline pp_macro *resolve (char const *__data, std::size_t __size)
+  {
+    pp_fast_string __tmp (__data, __size);
+    return resolve (&__tmp);
   }
 };
 

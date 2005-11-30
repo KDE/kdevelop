@@ -34,7 +34,6 @@ class pp_macro_expander
 {
   pp_environment &env;
   pp_frame *frame;
-  pp_fast_string const *pp_defined;
 
   pp_skip_number skip_number;
   pp_skip_identifier skip_identifier;
@@ -71,10 +70,7 @@ class pp_macro_expander
 
 public:
   pp_macro_expander (pp_environment &__env, pp_frame *__frame = 0):
-    env (__env), frame (__frame)
-  {
-    pp_defined = pp_symbol::get ("defined", 7);
-  }
+    env (__env), frame (__frame) {}
 
   template <typename _InputIterator, typename _OutputIterator>
   _InputIterator operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result)
@@ -157,6 +153,7 @@ public:
 
             char name_buffer[512], *cp = name_buffer;
             std::copy (name_begin, name_end, cp);
+            name_buffer[name_end - name_begin] = '\0';
 
             pp_fast_string fast_name (name_buffer, name_size);
 
@@ -168,18 +165,10 @@ public:
 
             static bool hide_next = false;
 
-            if (! pp_symbol::used (&fast_name))
-              {
-                hide_next = (fast_name == *pp_defined);
-                std::copy (name_begin, name_end, __result);
-                continue;
-              }
-
-            pp_fast_string const *name = pp_symbol::get (name_buffer, name_size);
-            pp_macro *macro = env.resolve (name);
+            pp_macro *macro = env.resolve (name_buffer, name_size);
             if (! macro || macro->hidden || hide_next)
               {
-                hide_next = (fast_name == *pp_defined);
+                hide_next = !strcmp (name_buffer, "defined");
                 std::copy (name_begin, name_end, __result);
                 continue;
               }
@@ -198,7 +187,7 @@ public:
 
             if (arg_it == __last || *arg_it  != '(')
               {
-                std::copy (name->begin (), name->end (), __result);
+                std::copy (name_begin, name_end, __result);
                 __first = name_end;
                 continue;
               }
