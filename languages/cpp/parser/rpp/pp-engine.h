@@ -31,6 +31,7 @@ class pp
   pp_skip_blanks skip_blanks;
   pp_skip_number skip_number;
   std::vector<std::string> include_paths;
+  std::string _M_current_file;
 
   enum { MAX_LEVEL = 512 };
   int _M_skipping[MAX_LEVEL];
@@ -95,14 +96,20 @@ public:
   void operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result);
 
 private:
-  FILE *find_include_file(std::string const &filename, std::string *filepath) const;
+  enum INCLUDE_POLICY
+  {
+    INCLUDE_GLOBAL,
+    INCLUDE_LOCAL
+  };
+
+  FILE *find_include_file(std::string const &__filename, std::string *__filepath, INCLUDE_POLICY __include_policy) const;
 
   inline int skipping() const;
   bool test_if_level();
 
   template <typename _InputIterator>
   bool find_header_protection (_InputIterator __first, _InputIterator __last, std::string *__prot);
-  
+
   template <typename _InputIterator>
   _InputIterator skip (_InputIterator __first, _InputIterator __last);
 

@@ -23,17 +23,17 @@
 
 #include <cctype>
 
-inline bool pp_isalpha (int ch)
-{ return std::isalpha ((unsigned char) ch); }
+inline bool pp_isalpha (int __ch)
+{ return std::isalpha ((unsigned char) __ch); }
 
-inline bool pp_isalnum (int ch)
-{ return std::isalnum ((unsigned char) ch); }
+inline bool pp_isalnum (int __ch)
+{ return std::isalnum ((unsigned char) __ch); }
 
-inline bool pp_isdigit (int ch)
-{ return std::isdigit ((unsigned char) ch); }
+inline bool pp_isdigit (int __ch)
+{ return std::isdigit ((unsigned char) __ch); }
 
-inline bool pp_isspace (int ch)
-{ return std::isspace ((unsigned char) ch); }
+inline bool pp_isspace (int __ch)
+{ return std::isspace ((unsigned char) __ch); }
 
 #endif // PP_CCTYPE_H
 

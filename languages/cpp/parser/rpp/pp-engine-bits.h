@@ -123,35 +123,42 @@ _InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last
         break;
     }
 
-  std::string filename(__first, end_name);
+  std::string filename (__first, end_name);
 
   std::string filepath;
-  FILE *fp = find_include_file (filename, &filepath);
+  FILE *fp = find_include_file (filename, &filepath, quote == '<' ? INCLUDE_GLOBAL : INCLUDE_LOCAL);
   if (fp != 0)
     {
+      std::string old_file = _M_current_file;
+      _M_current_file = filepath;
+
+      std::string __msg;
+
 #ifdef QT_MOC
-      std::string moc_msg;
-      moc_msg += "#moc_include_begin ";
-      moc_msg += "\"";
-      moc_msg += filename;
-      moc_msg += "\"\n";
-      std::copy (moc_msg.begin (), moc_msg.end (), __result);
+      __msg += "#moc_include_begin ";
+      __msg += "\"";
+      __msg += filename;
+      __msg += "\"\n";
+      std::copy (__msg.begin (), __msg.end (), __result);
 #endif
 
-      std::string path (filepath, 0, filepath.rfind ('/'));
-      bool ignore_path = (! include_paths.empty () && path == include_paths.back ());
-
-      if (! ignore_path)
-        include_paths.push_back (path);
+      __msg += "# 1 \"";        // ### fix the line number
+      __msg += _M_current_file;
+      __msg += "\"\n";
+      std::copy (__msg.begin (), __msg.end (), __result);
 
       file (fp, __result);
 
-      if (! ignore_path)
-        include_paths.pop_back ();
+      _M_current_file = old_file;
+
+      __msg += "# 1 \"";       // ### fix the line number
+      __msg += _M_current_file;
+      __msg += "\"\n";
+      std::copy (__msg.begin (), __msg.end (), __result);
 
 #ifdef QT_MOC
-      moc_msg = "#moc_include_end 1\n";
-      std::copy (moc_msg.begin (), moc_msg.end (), __result);
+      __msg = "#moc_include_end 1\n";
+      std::copy (__msg.begin (), __msg.end (), __result);
 #endif
     }
 
@@ -228,23 +235,48 @@ _InputIterator pp::handle_directive(pp_fast_string const *d,
   return __first;
 }
 
-FILE *pp::find_include_file(std::string const &filename, std::string *filepath) const
+FILE *pp::find_include_file(std::string const &__filename, std::string *__filepath, INCLUDE_POLICY __include_policy) const
 {
-  assert (! filename.empty() && filepath);
+  assert (! __filename.empty() && __filepath);
 
-  if (filename[0] == '/')
-    return fopen (filename.c_str(), "r");
-
-  for (std::vector<std::string>::const_reverse_iterator it = include_paths.rbegin ();
-      it != include_paths.rend (); ++it)
+  if (__filename[0] == '/')
     {
-      std::string &path = *filepath;
+      *__filepath = __filename;
 
-      path = *it;
-      path += '/';
-      path += filename;
+      return fopen (__filename.c_str(), "r");
+    }
 
-      if (FILE *fp = fopen (path.c_str(), "r"))
+  if (__include_policy == INCLUDE_LOCAL && !_M_current_file.empty ())
+    {
+      std::size_t __index = _M_current_file.rfind ('/');
+      if (__index != -1)
+        {
+          std::string &__path = *__filepath;
+
+          __path.assign (_M_current_file, __index, std::string::npos);
+
+          if (! __path.empty () && __path[__path.size () - 1] != '/')
+            __path += '/';
+
+          __path += __filename;
+
+          if (FILE *fp = fopen (__path.c_str (), "r"))
+            return fp;
+        }
+    }
+
+  for (std::vector<std::string>::const_iterator it = include_paths.begin ();
+      it != include_paths.end (); ++it)
+    {
+      std::string &__path = *__filepath;
+
+      __path = *it;
+      if (! __path.empty () && __path[__path.size () - 1] != '/')
+        __path += '/';
+
+      __path += __filename;
+
+      if (FILE *fp = fopen (__path.c_str(), "r"))
         return fp;
     }
 
