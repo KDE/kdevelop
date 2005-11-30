@@ -21,6 +21,49 @@
 #ifndef PP_ENGINE_BITS_H
 #define PP_ENGINE_BITS_H
 
+template <typename _OutputIterator>
+void pp::file (std::string const &filename, _OutputIterator __result)
+{
+  FILE *fp = fopen (filename.c_str(), "r");
+  if (fp != 0)
+    file (fp, __result);
+  else
+    std::cerr << "** WARNING file ``" << filename << " not found!" << std::endl;
+}
+
+template <typename _OutputIterator>
+void pp::file (FILE *fp, _OutputIterator __result)
+{
+   assert (fp != 0);
+
+  struct stat st;
+  fstat(fileno (fp), &st);
+  std::size_t size = st.st_size;
+
+  char *buffer = 0;
+#ifdef HAVE_MMAP
+  buffer = (char *) ::mmap(0, size, PROT_READ, MAP_SHARED, fileno (fp), 0);
+  fclose (fp);
+
+  if (!buffer || buffer == (char*) -1)
+    return;
+
+#else
+  buffer = new char [size + 1];
+  fread (buffer, 1, size, fp);
+  buffer[size] = '\0';
+  fclose (fp);
+#endif
+
+  this->operator () (buffer, buffer + size, __result);
+
+#ifdef HAVE_MMAP
+  ::munmap(buffer, size);
+#else
+  delete[] buffer;
+#endif
+}
+
 template <typename _InputIterator>
 bool pp::find_header_protection (_InputIterator __first, _InputIterator __last, std::string *__prot)
 {
@@ -63,47 +106,145 @@ bool pp::find_header_protection (_InputIterator __first, _InputIterator __last, 
     return false;
 }
 
-template <typename _OutputIterator>
-void pp::file (std::string const &filename, _OutputIterator __result)
+pp::PP_DIRECTIVE_TYPE pp::find_directive (char const *__directive, std::size_t __size) const
 {
-  FILE *fp = fopen (filename.c_str(), "r");
-  if (fp != 0)
-    file (fp, __result);
-  else
-    std::cerr << "** WARNING file ``" << filename << " not found!" << std::endl;
+  switch (__size)
+    {
+      case 2:
+        if (__directive[0] == 'i'
+            && __directive[1] == 'f')
+          return PP_IF;
+        break;
+
+      case 4:
+        if (__directive[0] == 'e' && !strcmp (__directive, "elif"))
+          return PP_ELIF;
+        else if (__directive[0] == 'e' && !strcmp (__directive, "else"))
+          return PP_ELSE;
+        break;
+
+      case 5:
+        if (__directive[0] == 'i' && !strcmp (__directive, "ifdef"))
+          return PP_IFDEF;
+        else if (__directive[0] == 'u' && !strcmp (__directive, "undef"))
+          return PP_UNDEF;
+        else if (__directive[0] == 'e' && !strcmp (__directive, "endif"))
+          return PP_ENDIF;
+        break;
+
+      case 6:
+        if (__directive[0] == 'i' && !strcmp (__directive, "ifndef"))
+          return PP_IFNDEF;
+        else if (__directive[0] == 'd' && !strcmp (__directive, "define"))
+          return PP_DEFINE;
+        break;
+
+      case 7:
+        if (__directive[0] == 'i' && !strcmp (__directive, "include"))
+          return PP_INCLUDE;
+        break;
+
+      default:
+        break;
+    }
+
+  return PP_UNKNOWN_DIRECTIVE;
 }
 
-template <typename _OutputIterator>
-void pp::file (FILE *fp, _OutputIterator __result)
+FILE *pp::find_include_file(std::string const &__filename, std::string *__filepath, INCLUDE_POLICY __include_policy) const
 {
-   assert (fp != 0);
+  assert (! __filename.empty() && __filepath);
 
-  struct stat st;
-  fstat(fileno (fp), &st);
-  std::size_t size = st.st_size;
+  if (__filename[0] == '/')
+    {
+      *__filepath = __filename;
 
-  char *buffer = 0;
-#ifdef HAVE_MMAP
-  buffer = (char *) ::mmap(0, size, PROT_READ, MAP_SHARED, fileno (fp), 0);
-  fclose (fp);
+      return fopen (__filename.c_str(), "r");
+    }
 
-  if (!buffer || buffer == (char*) -1)
-    return;
+  if (__include_policy == INCLUDE_LOCAL && !_M_current_file.empty ())
+    {
+      std::size_t __index = _M_current_file.rfind ('/');
+      if (__index != -1)
+        {
+          std::string &__path = *__filepath;
 
-#else
-  buffer = new char [size + 1];
-  fread (buffer, 1, size, fp);
-  buffer[size] = '\0';
-  fclose (fp);
-#endif
+          __path.assign (_M_current_file, __index, std::string::npos);
 
-  this->operator () (buffer, buffer + size, __result);
+          if (! __path.empty () && __path[__path.size () - 1] != '/')
+            __path += '/';
 
-#ifdef HAVE_MMAP
-  ::munmap(buffer, size);
-#else
-  delete[] buffer;
-#endif
+          __path += __filename;
+
+          if (FILE *fp = fopen (__path.c_str (), "r"))
+            return fp;
+        }
+    }
+
+  for (std::vector<std::string>::const_iterator it = include_paths.begin ();
+      it != include_paths.end (); ++it)
+    {
+      std::string &__path = *__filepath;
+
+      __path = *it;
+      if (! __path.empty () && __path[__path.size () - 1] != '/')
+        __path += '/';
+
+      __path += __filename;
+
+      if (FILE *fp = fopen (__path.c_str(), "r"))
+        return fp;
+    }
+
+  return 0;
+}
+
+template <typename _InputIterator, typename _OutputIterator>
+_InputIterator pp::handle_directive(pp_fast_string const *d,
+        _InputIterator __first, _InputIterator __last, _OutputIterator __result)
+{
+  __first = skip_blanks (__first, __last);
+
+  switch (find_directive (d->begin (), d->size ()))
+    {
+      case PP_DEFINE:
+        if (! skipping ())
+          return handle_define (__first, __last);
+        break;
+
+      case PP_INCLUDE:
+        if (! skipping ())
+          return handle_include (__first, __last, __result);
+        break;
+
+      case PP_UNDEF:
+        if (! skipping ())
+          return handle_undef(__first, __last);
+        break;
+
+      case PP_ELIF:
+        return handle_elif (__first, __last);
+
+      case PP_ELSE:
+        return handle_else (__first, __last);
+
+      case PP_ENDIF:
+        return handle_endif (__first, __last);
+
+      case PP_IF:
+        return handle_if (__first, __last);
+
+      case PP_IFDEF:
+        return handle_ifdef (false, __first, __last);
+
+      case PP_IFNDEF:
+        return handle_ifdef (true, __first, __last);
+
+      default:
+        break;
+    }
+
+  return __first;
 }
 
 template <typename _InputIterator, typename _OutputIterator>
@@ -208,82 +349,6 @@ void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIter
     }
 }
 
-template <typename _InputIterator, typename _OutputIterator>
-_InputIterator pp::handle_directive(pp_fast_string const *d,
-        _InputIterator __first, _InputIterator __last, _OutputIterator __result)
-{
-  __first = skip_blanks (__first, __last);
-
-  if (d == pp_define && !skipping ())
-    __first = handle_define (__first, __last);
-  else if (d == pp_include && !skipping ())
-    return handle_include (__first, __last, __result);
-  else if (d == pp_elif)
-    return handle_elif (__first, __last);
-  else if (d == pp_else)
-    return handle_else (__first, __last);
-  else if (d == pp_endif)
-    return handle_endif (__first, __last);
-  else if (d == pp_if)
-    return handle_if (__first, __last);
-  else if (d == pp_ifdef)
-    return handle_ifdef (false, __first, __last);
-  else if (d == pp_ifndef)
-    return handle_ifdef (true, __first, __last);
-  else if (d == pp_undef && !skipping ())
-    return handle_undef(__first, __last);
-
-  return __first;
-}
-
-FILE *pp::find_include_file(std::string const &__filename, std::string *__filepath, INCLUDE_POLICY __include_policy) const
-{
-  assert (! __filename.empty() && __filepath);
-
-  if (__filename[0] == '/')
-    {
-      *__filepath = __filename;
-
-      return fopen (__filename.c_str(), "r");
-    }
-
-  if (__include_policy == INCLUDE_LOCAL && !_M_current_file.empty ())
-    {
-      std::size_t __index = _M_current_file.rfind ('/');
-      if (__index != -1)
-        {
-          std::string &__path = *__filepath;
-
-          __path.assign (_M_current_file, __index, std::string::npos);
-
-          if (! __path.empty () && __path[__path.size () - 1] != '/')
-            __path += '/';
-
-          __path += __filename;
-
-          if (FILE *fp = fopen (__path.c_str (), "r"))
-            return fp;
-        }
-    }
-
-  for (std::vector<std::string>::const_iterator it = include_paths.begin ();
-      it != include_paths.end (); ++it)
-    {
-      std::string &__path = *__filepath;
-
-      __path = *it;
-      if (! __path.empty () && __path[__path.size () - 1] != '/')
-        __path += '/';
-
-      __path += __filename;
-
-      if (FILE *fp = fopen (__path.c_str(), "r"))
-        return fp;
-    }
-
-  return 0;
-}
-
 pp::pp (pp_environment &__env):
   env (__env), expand (env)
 {
@@ -291,15 +356,6 @@ pp::pp (pp_environment &__env):
   _M_skipping[iflevel] = 0;
   _M_true_test[iflevel] = 0;
 
-  pp_define = pp_symbol::get ("define", 6);
-  pp_include = pp_symbol::get ("include", 7);
-  pp_elif = pp_symbol::get ("elif", 4);
-  pp_else = pp_symbol::get ("else", 4);
-  pp_endif = pp_symbol::get ("endif", 5);
-  pp_if = pp_symbol::get ("if", 2);
-  pp_ifdef = pp_symbol::get ("ifdef", 5);
-  pp_ifndef = pp_symbol::get ("ifndef", 6);
-  pp_undef = pp_symbol::get ("undef", 5);
   pp_defined = pp_symbol::get ("defined", 7);
 }
 
@@ -802,7 +858,7 @@ _InputIterator pp::handle_if (_InputIterator __first, _InputIterator __last)
       pp_macro_expander expand_condition (env);
       std::string condition;
       condition.reserve (255);
-      expand_condition (__first, __last, std::back_inserter (condition));
+      expand_condition (skip_blanks (__first, __last), __last, std::back_inserter (condition));
 
       long result = 0;
       eval_expression(condition.c_str (), condition.c_str () + condition.size (), &result);

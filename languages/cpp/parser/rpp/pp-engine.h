@@ -43,6 +43,12 @@ class pp
     pp_fast_string const *token_name;
   };
 
+  enum INCLUDE_POLICY
+  {
+    INCLUDE_GLOBAL,
+    INCLUDE_LOCAL
+  };
+
   enum TOKEN_TYPE
   {
     TOKEN_NUMBER = 1000,
@@ -58,15 +64,20 @@ class pp
     TOKEN_AND_AND,
   };
 
-  pp_fast_string const *pp_define;
-  pp_fast_string const *pp_include;
-  pp_fast_string const *pp_elif;
-  pp_fast_string const *pp_else;
-  pp_fast_string const *pp_endif;
-  pp_fast_string const *pp_if;
-  pp_fast_string const *pp_ifdef;
-  pp_fast_string const *pp_ifndef;
-  pp_fast_string const *pp_undef;
+  enum PP_DIRECTIVE_TYPE
+  {
+    PP_UNKNOWN_DIRECTIVE,
+    PP_DEFINE,
+    PP_INCLUDE,
+    PP_ELIF,
+    PP_ELSE,
+    PP_ENDIF,
+    PP_IF,
+    PP_IFDEF,
+    PP_IFNDEF,
+    PP_UNDEF
+  };
+
   pp_fast_string const *pp_defined;
 
 public:
@@ -95,16 +106,12 @@ public:
   void operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result);
 
 private:
-  enum INCLUDE_POLICY
-  {
-    INCLUDE_GLOBAL,
-    INCLUDE_LOCAL
-  };
-
   FILE *find_include_file(std::string const &__filename, std::string *__filepath, INCLUDE_POLICY __include_policy) const;
 
   inline int skipping() const;
   bool test_if_level();
+
+  PP_DIRECTIVE_TYPE find_directive (char const *__directive, std::size_t __size) const;
 
   template <typename _InputIterator>
   bool find_header_protection (_InputIterator __first, _InputIterator __last, std::string *__prot);
