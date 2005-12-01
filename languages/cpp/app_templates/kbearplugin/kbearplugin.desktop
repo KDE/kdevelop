@@ -7,7 +7,5 @@ X-KDE-Library=libkbear%{APPNAMELC}
 Name=KBear%{APPNAME}
 Name[sv]=KBear %{APPNAME}
 Name[ta]=கெபியர்%{APPNAME}
-Name[xx]=xxKBear%{APPNAME}xx
 Comment=%{APPNAME}
 Comment[pt]=%{APPNAME$}
-Comment[xx]=xx%{APPNAME}xx

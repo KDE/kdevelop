@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=%{APPNAME}
-Name[xx]=xx%{APPNAME}xx
 Exec=%{APPNAMELC}
 Icon=%{APPNAMELC}
 Type=Application
@@ -35,5 +34,4 @@ Comment[ta]=ஒரு சாதாரண கெடிஇ பயன்பாட�
 Comment[tg]=Гузориши оддиKDE 
 Comment[tr]=Basit bir KDE Uygulaması
 Comment[uk]=Проста програма KDE
-Comment[xx]=xxA simple KDE Applicationxx
 Comment[zh_CN]=一个简单的 KDE 应用程序

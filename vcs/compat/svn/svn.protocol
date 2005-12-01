@@ -30,6 +30,5 @@ Description[sr]=IOSlave за Subversion
 Description[sr@Latn]=IOSlave za Subversion
 Description[sv]=Subversion I/O-slav
 Description[uk]=Підлеглий В/В Subversion
-Description[xx]=xxSubversion ioslavexx
 maxInstances=5
 class=:internet

@@ -21,7 +21,6 @@ Comment[sr]=Инсталира Docbook документационе шаблон
 Comment[sr@Latn]=Instalira Docbook dokumentacione šablone.
 Comment[sv]= Installera Docbook-dokumentationsmallar.
 Comment[tr]=Docbook belgelendirme şablonlarını yükle.
-Comment[xx]=xx Install Docbook documentation templates.xx
 Comment[zh_CN]=安装 Docbook 文档模板。
 Default=true
 

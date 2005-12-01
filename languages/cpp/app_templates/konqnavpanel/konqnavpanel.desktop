@@ -23,10 +23,8 @@ Comment[sr]=Кonqueror-ов прикључак за навигациони па�
 Comment[sr@Latn]=Konqueror-ov priključak za navigacioni panel po imenu $NAME$
 Comment[sv]=Ett insticksprogram i Konquerors navigeringspanel som heter $NAME$
 Comment[tr]=$NAME$ adında bir konqueror gezinme paneli eklentisi
-Comment[xx]=xxA konqueror navigation panel plugin  called $NAME$xx
 Comment[zh_CN]=一个称作 $NAME$ 的 konqueror 导航面板插件
 Name=%{APPNAMELC}
-Name[xx]=xx%{APPNAMELC}xx
 
 Open=false
 X-KDE-KonqSidebarModule=konqsidebar_%{APPNAMELC}

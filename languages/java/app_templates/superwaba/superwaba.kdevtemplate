@@ -1,7 +1,6 @@
 # KDE Config File
 [General]
 Name=SuperWaba
-Name[xx]=xxSuperWabaxx
 Icon=superwaba.png
 Category=Java
 Comment=A simple template for building SuperWaba Java based apps on WinCE and PalmOS.  More information can be found at http://www.superwaba.org
@@ -22,7 +21,6 @@ Comment[sr]=Једноставан шаблон за градњу SuperWaba пр
 Comment[sr@Latn]=Jednostavan šablon za gradnju SuperWaba programa na osnovu Java-e, za WinCE i PalmOS.  Više informacija na http://www.superwaba.org
 Comment[sv]=En enkel mall för att bygga SuperWaba Java-baserade program på WinCE och PalmOS. Mer information hittas på http://www.superwaba.org.
 Comment[tr]=WinCE ve PalmOS üstünde SuperWaba tabanlı Java uygulamarı yapmak için basit bir şablon. Daha fazla bilgi http://www.superwaba.org/ adresinde bulunabilir.
-Comment[xx]=xxA simple template for building SuperWaba Java based apps on WinCE and PalmOS.  More information can be found at http://www.superwaba.orgxx
 Comment[zh_CN]=在 WinCE 和 PalmOS 上构建基于 SuperWaba Java 应用程序的简单模板。更多信息可以在 http://www.superwaba.org 找到
 FileTemplates=java
 ShowFilesAfterGeneration=%{dest}/%{APPNAME}.java
@@ -48,7 +46,6 @@ Comment[pt_BR]=A localização de base do seu Java
 Comment[sr]=Путања до вашег корена Java-е
 Comment[sr@Latn]=Putanja do vašeg korena Java-e
 Comment[sv]=Sökväg till Java-rotkatalog
-Comment[xx]=xxPath to your java rootxx
 Comment[zh_CN]=您的 Java 根路径
 Default=/usr/lib/java
 ValueType=QString
@@ -75,7 +72,6 @@ Comment[sr]=Путања до вашег корена SuperWaba-е
 Comment[sr@Latn]=Putanja do vašeg korena SuperWaba-e
 Comment[sv]=Sökväg till SuperWaba-rotkatalog
 Comment[tr]=SuperWaba kök dizininizin yolu
-Comment[xx]=xxPath to your SuperWaba rootxx
 Comment[zh_CN]=您的 SuperWaba 根路径
 Default=/usr/lib
 ValueType=QString
@@ -127,7 +123,6 @@ Comment[sr]=Ваш програм је спреман за градњу. Уре�
 Comment[sr@Latn]=Vaš program je spreman za gradnju. Uredite ciljeve spravljača da biste prilagodili fajl.
 Comment[sv]=Programmet är inställt att byggas. Redigera byggmålen för att anpassa filen.
 Comment[tr]=Uygulamanız derlenmeye hazır. Dosyayı özelleştirmek için make hedeflerini düzenleyin.
-Comment[xx]=xxYour application is setup to build. Edit the make targets to customize the file.xx
 Comment[zh_CN]=您的应用程序已设置为构建。编辑 make 目标可自定义文件。
 Archive=superwaba.tar.gz
 

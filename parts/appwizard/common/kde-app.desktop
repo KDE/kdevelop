@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=%{APPNAME}
-Name[xx]=xx%{APPNAME}xx
 Exec=%{APPNAMELC} %i %m -caption "%c"
 Icon=%{APPNAMELC}
 Type=Application
@@ -38,6 +37,5 @@ Comment[ta]=கெடி கெபார்ட்  பயன்பாடு
 Comment[tg]=Ба кор андохтани KPart барои KDE
 Comment[tr]=Bir KDE KPart Uygulaması
 Comment[uk]=Програма KPart для KDE
-Comment[xx]=xxA KDE KPart Applicationxx
 Comment[zh_CN]=一个 KDE KPart 应用程序
 Terminal=false

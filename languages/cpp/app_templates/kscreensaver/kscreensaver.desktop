@@ -6,7 +6,6 @@ Type=Application
 Actions=Setup;InWindow;Root
 X-KDE-Category=Miscellaneous
 Name=%{APPNAME}
-Name[xx]=xx%{APPNAME}xx
 
 [Desktop Action Setup]
 Exec=%{APPNAMELC}.kss -setup
@@ -36,7 +35,6 @@ Name[sr@Latn]=Postavljanje...
 Name[sv]=Inställning...
 Name[tr]=Kurulum...
 Name[uk]=Налаштувати...
-Name[xx]=xxSetup...xx
 Name[zh_CN]=设置...
 Icon=kscreensaver
 
@@ -68,7 +66,6 @@ Name[sr@Latn]=Prikaži u navedenom prozoru
 Name[sv]=Visa i angivet fönster
 Name[tr]=Belirtilen Pencerede Göster
 Name[uk]=Відобразити у вказаному вікні
-Name[xx]=xxDisplay in Specified Windowxx
 Name[zh_CN]=在指定窗口中显示
 NoDisplay=true
 
@@ -100,6 +97,5 @@ Name[sr@Latn]=Prikaži u korenom prozoru
 Name[sv]=Visa i rotfönster
 Name[tr]=Kök Pencerede Göster
 Name[uk]=Відобразити в кореневому вікні
-Name[xx]=xxDisplay in Root Windowxx
 Name[zh_CN]=在根窗口中显示
 NoDisplay=true

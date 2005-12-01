@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=%{APPNAME}
-Name[xx]=xx%{APPNAME}xx
 Exec=%{APPNAMELC}
 Icon=%{APPNAMELC}
 Type=Application
@@ -33,5 +32,4 @@ Comment[ta]=சாதாரண wxசாளரங்கள் பயன்பா�
 Comment[tg]=Гузориши оддии wxWidgets
 Comment[tr]=Basit bir Merhaba wmWidgets Uygulaması
 Comment[uk]=Проста програма wxWidgets
-Comment[xx]=xxA simple wxWidgets Applicationxx
 Comment[zh_CN]=一个简单的 wxWidgets 应用程序

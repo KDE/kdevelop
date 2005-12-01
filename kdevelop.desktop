@@ -27,7 +27,6 @@ Name[sr]=KDevelop: Вишејезички
 Name[sr@Latn]=KDevelop: Višejezički
 Name[sv]=KDevelop: Flera språk
 Name[tr]=KDevelop: Çokludil
-Name[xx]=xxKDevelop: Multilanguagexx
 Name[zh_CN]=KDevelop：多语言
 GenericName=IDE
 GenericName[da]=Integreret udviklingsmiljø
@@ -36,7 +35,6 @@ GenericName[ru]=Интегрировання среда разработки
 GenericName[sv]=Utvecklingsmiljö
 GenericName[tr]=Bütünleşik Geliştirme Ortamı
 GenericName[uk]=Інтегроване проектувальне середовище (IDE)
-GenericName[xx]=xxIDExx
 X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
 

@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=%{APPNAME}
-Name[xx]=xx%{APPNAME}xx
 Exec=%{APPNAMELC}
 X-DCOP-ServiceType=Unique
 X-KDE-StartupNotify=false
@@ -35,6 +34,5 @@ Comment[ta]=டிகாப்சேவைக்கான மாதரி உர
 Comment[tg]=Қолиб барои хидмадгори DCOP
 Comment[tr]=dcop hizmetleri için şablon
 Comment[uk]=Шаблон для служб dcop
-Comment[xx]=xxTemplate for dcop servicesxx
 Comment[zh_CN]=dcop 服务模板
 
