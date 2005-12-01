@@ -42,6 +42,8 @@ enum GDBCmd
   FRAME           = 'F',
   FILE_START      = 'f',
 
+  WHATIS          = 'H',
+
   INITIALISE      = 'I',
   IDLE            = 'i',
 
@@ -51,6 +53,8 @@ enum GDBCmd
   LIBRARIES       = 'l',
 
   MEMDUMP         = 'M',
+
+  WAIT            = '0',
 
   TRACING_PRINTF  = 'P',
 
@@ -65,17 +69,13 @@ enum GDBCmd
 
   USERCMD         = 'U',
 
+  SETVALUE        = 'V',
+
   SETWATCH        = 'W',
   UNSETWATCH      = 'w',
 
-  DETACH          = 'z',
-
-  WAIT            = '0',
-
-  WHATIS          = 'H',
-
-  SETVALUE        = 'V'
-  
+  DETACH          = 'z'
+ 
 };
 
 #define RUNCMD      (true)
