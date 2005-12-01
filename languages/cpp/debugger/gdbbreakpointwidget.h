@@ -19,9 +19,11 @@
 #include <qhbox.h>
 #include <qpopupmenu.h>
 #include <qtable.h>
+#include <qguardedptr.h>
 
 class QDomElement;
 class QToolButton;
+class QLabel;
 class KURL;
 
 /***************************************************************************/
@@ -82,6 +84,7 @@ private slots:
     void slotContextMenuSelect( int item );
     void slotEditRow(int row, int col, const QPoint & mousePos);
     void slotNewValue(int row, int col);
+    void editTracing(QTableItem* item);
 
 signals:
     void publishBPState(const Breakpoint& brkpt);
@@ -109,13 +112,20 @@ private:
 
 class BreakpointTableRow;
 
-/** Custom table cell class that add "..." button for editing the action. */
-class BreakpointActionCell : public QObject, public QTableItem
+/** Custom table cell class for cells that require complex editing.
+    When current, the cell shows a "..." on the right. When clicked,
+    the 'edit' signal is emitted that can be be used to pop-up
+    a dialog box. 
+
+    When editing is done, the receiver of 'edit' should change the
+    value in the table, and then call the 'updateValue' method.    
+ */
+class ComplexEditCell : public QObject, public QTableItem
 {
     Q_OBJECT
 public:
 
-    BreakpointActionCell(BreakpointTableRow* row, QTable* table);
+    ComplexEditCell(BreakpointTableRow* row, QTable* table);
 
     /** Called by Qt when the current cell should become editable.
         In our case, when the item becomes current. Creates a widget
@@ -125,14 +135,19 @@ public:
     */
     QWidget* createEditor() const;    
 
+    void updateValue();
+
 private slots:
 
     /** Called when the "..." button is clicked. */
     void slotEdit();
 
+signals:
+    void edit(QTableItem*);
+
 private:
-    mutable QWidget* editor_;
     BreakpointTableRow* row_;
+    mutable QGuardedPtr<QLabel> label_;
 };
 
 

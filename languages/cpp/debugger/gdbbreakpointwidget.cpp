@@ -137,8 +137,10 @@ void BreakpointTableRow::appendEmptyRow()
     QCheckTableItem* cti = new QCheckTableItem( table(), "");
     table()->setItem(row, Enable, cti);
 
-    BreakpointActionCell* act = new BreakpointActionCell( this, table() );
+    ComplexEditCell* act = new ComplexEditCell( this, table() );
     table()->setItem(row, Tracing, act);
+    QObject::connect(act, SIGNAL(edit(QTableItem*)), 
+                     table()->parent(), SLOT(editTracing(QTableItem*)));
 }
 
 /***************************************************************************/
@@ -797,7 +799,6 @@ void GDBBreakpointWidget::slotContextMenuShow( int row, int /*col*/, const QPoin
             m_ctxMenu->changeItem( BW_ITEM_Disable, i18n("Enable") );
         }
 
-        //m_ctxMenu->popup( mapToGlobal( mousePos ) );
         m_ctxMenu->popup( mousePos );
     }
 }
@@ -985,6 +986,37 @@ void GDBBreakpointWidget::slotEditBreakpoint()
     m_table->editCell(m_table->currentRow(), Location, false);
 }
 
+
+void GDBBreakpointWidget::editTracing(QTableItem* item)
+{
+    BreakpointTableRow* btr = (BreakpointTableRow *)
+        m_table->item(item->row(), Control);
+
+    DebuggerTracingDialog* d = new DebuggerTracingDialog(
+        btr->breakpoint(), m_table, "");
+
+    int r = d->exec();
+
+    // Note: change cell text here and explicitly call slotNewValue here.
+    // We want this signal to be emitted when we close the tracing dialog
+    // and not when we select some other cell, as happens in Qt by default.
+    if (r == QDialog::Accepted)
+    {
+        if (d->enable->isChecked()) {
+            item->setText("Enabled");
+        }
+        else 
+        {
+            item->setText("Disabled");
+        }
+        slotNewValue(item->row(), item->col());
+        static_cast<ComplexEditCell*>(item)->updateValue();
+    }
+
+    delete d;
+}
+
+
 /***************************************************************************/
 
 void GDBBreakpointWidget::savePartialProjectSession(QDomElement* el)
@@ -1146,36 +1178,38 @@ void GDBBreakpointWidget::focusInEvent( QFocusEvent */* e*/ )
     m_table->setFocus();
 }
 
-BreakpointActionCell::
-BreakpointActionCell(BreakpointTableRow* row, QTable* table)
+ComplexEditCell::
+ComplexEditCell(BreakpointTableRow* row, QTable* table)
 : QTableItem(table, QTableItem::WhenCurrent), row_(row) 
 {
     if (row_->breakpoint()->tracingEnabled())
         setText("Enabled");
+    else
+        setText("Disabled");
 }
 
 
-QWidget* BreakpointActionCell::createEditor() const
+QWidget* ComplexEditCell::createEditor() const
 {
     QHBox* box = new QHBox( table()->viewport() );
     box->setPaletteBackgroundColor(
                table()->palette().active().highlight());
 
-    QLabel* l = new QLabel(text(), box, "label");
-    l->setBackgroundMode(Qt::PaletteHighlight);
+    label_ = new QLabel(text(), box, "label");
+    label_->setBackgroundMode(Qt::PaletteHighlight);
     // Sorry for hardcode, but '2' is already hardcoded in
     // Qt source, in QTableItem::paint. Since I don't want the 
     // text to jump 2 pixels to the right when editor is activated, 
     // need to set the same indent for label.
-    l->setIndent(2);
-    QPalette p = l->palette();
+    label_->setIndent(2);
+    QPalette p = label_->palette();
 
     p.setColor(QPalette::Active, QColorGroup::Foreground, 
                table()->palette().active().highlightedText());
     p.setColor(QPalette::Inactive, QColorGroup::Foreground, 
                table()->palette().active().highlightedText());
 
-    l->setPalette(p);
+    label_->setPalette(p);
     
     QPushButton* b = new QPushButton("...", box);
     // This is exactly what is done in QDesigner source in the
@@ -1186,40 +1220,20 @@ QWidget* BreakpointActionCell::createEditor() const
 
     connect(b, SIGNAL(clicked()), this, SLOT(slotEdit()));
 
-    editor_ = box;
-
     return box;
 }
 
-void BreakpointActionCell::slotEdit()
+void ComplexEditCell::updateValue()
 {
-    QLabel* le = (QLabel*)( 
-        ((QHBox*)editor_)->child("label") );
-
-
-    DebuggerTracingDialog* d = new DebuggerTracingDialog(
-        row_->breakpoint(), table(), "");
-
-    int r = d->exec();
-
-    // Note: change cell text here and explicitly call slotNewValue here.
-    // We want this signal to be emitted when we close the tracing dialog
-    // and not when we select some other cell, as happens in Qt by default.
-    if (r == QDialog::Accepted)
+    if (!label_.isNull())
     {
-        if (d->enable->isChecked()) {
-            le->setText("Enabled");
-            setText("Enabled");
-        }
-        else 
-        {
-            le->setText("");
-            setText("");
-        }
-        ((GDBBreakpointWidget*)(table()->parent()))->slotNewValue(row(), col());
+        label_->setText(table()->text(row(), col()));
     }
+}
 
-    delete d;
+void ComplexEditCell::slotEdit()
+{
+    emit edit(this);
 }
 
 
