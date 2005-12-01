@@ -5,7 +5,7 @@
 ## The include_xxxx variables are controlled by configure.in.in
 ##
 
-SUBDIRS = lib fake cpp
+SUBDIRS = lib fake cpp php
 
 DOXYGEN_EMPTY = YES
 include ../Doxyfile.am
