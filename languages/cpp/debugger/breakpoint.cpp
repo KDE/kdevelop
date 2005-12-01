@@ -61,7 +61,7 @@ Breakpoint::Breakpoint(bool temporary, bool enabled)
       key_(BPKey_++),
       active_(-1),
       ignoreCount_(0),
-      condition_()
+      condition_("")
 {
 }
 

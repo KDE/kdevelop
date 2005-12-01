@@ -533,7 +533,16 @@ void GDBBreakpointWidget::slotParseGDBBrkptList(char *str)
             //         breakpoint already hit 1 time"
             int hits = 0;
             int ignore = 0;
-            QString condition;
+
+            // Note: we need "" here, because if current value of condition is ""
+            // and we assign QString::null, then 
+            // Breakpoints::setConditional will think the value is modified,
+            // and will soon try to send QString::null as condition to gdb, and 
+            // emitting "condition N (null)" is not exactly right.
+            // Really, setting Breakpoint::setConditional here should not
+            // set 'conditional modified' flag inside breakpoint, but that's
+            // change for future.
+            QString condition("");
             while (str && (str = strchr(str, '\n')))
             {
                 str++;
@@ -864,8 +873,9 @@ void GDBBreakpointWidget::slotEditRow(int row, int col, const QPoint &)
 
 void GDBBreakpointWidget::slotNewValue(int row, int col)
 {
-//    kdDebug(9012) << "in slotNewValue row=" << row << endl;
     BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
+
+    QString new_value = m_table->text(row, col);
 
     if (btr)
     {
@@ -889,15 +899,13 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
 
         case Location:
         {
-            if (bp->location() != m_table->text(btr->row(), Location))
+            if (bp->location() != new_value)
             {
-//                kdDebug(9012) << "Old location [" << bp->location() << "]" << endl;
-//                kdDebug(9012) << "New location [" << m_table->text(btr->row(), Location) << "]" << endl;
                 bp->setActionDie();
                 emit publishBPState(*bp);
                 bp->setPending(true);
                 bp->setActionAdd(true);
-                bp->setLocation(m_table->text(btr->row(), Location));
+                bp->setLocation(new_value);
                 changed = true;
             }
             break;
@@ -905,11 +913,9 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
 
         case Condition:
         {
-            if (bp->conditional() != m_table->text(btr->row(), Condition))
+            if (bp->conditional() != new_value)
             {
-//                kdDebug(9012) << "Old condition [" << bp->conditional() << "]" << endl;
-//                kdDebug(9012) << "New condition [" << m_table->text(btr->row(), Condition) << "]" << endl;
-                bp->setConditional(m_table->text(btr->row(), Condition));
+                bp->setConditional(new_value);
                 bp->setPending(true);
                 bp->setActionModify(true);
                 changed = true;
@@ -919,11 +925,9 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
 
         case IgnoreCount:
         {
-            if (bp->ignoreCount() != m_table->text(btr->row(), IgnoreCount).toInt())
+            if (bp->ignoreCount() != new_value.toInt())
             {
-//                kdDebug(9012) << "Old ignoreCount [" << bp->ignoreCount() << "]" << endl;
-//                kdDebug(9012) << "New ignoreCount [" << m_table->text(btr->row(), IgnoreCount) << "]" << endl;
-                bp->setIgnoreCount(m_table->text(btr->row(), IgnoreCount).toInt());
+                bp->setIgnoreCount(new_value.toInt());
                 bp->setPending(true);
                 bp->setActionModify(true);
                 changed = true;
