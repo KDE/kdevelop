@@ -137,7 +137,7 @@ void BreakpointTableRow::appendEmptyRow()
     QCheckTableItem* cti = new QCheckTableItem( table(), "");
     table()->setItem(row, Enable, cti);
 
-    ComplexEditCell* act = new ComplexEditCell( this, table() );
+    ComplexEditCell* act = new ComplexEditCell(table());
     table()->setItem(row, Tracing, act);
     QObject::connect(act, SIGNAL(edit(QTableItem*)), 
                      table()->parent(), SLOT(editTracing(QTableItem*)));
@@ -162,6 +162,13 @@ void BreakpointTableRow::setRow()
 
         QString displayType = m_breakpoint->displayType();
         table()->setText(row(), Location, m_breakpoint->location());
+
+               
+        QTableItem* ce = table()->item( row(), Tracing );
+        ce->setText(breakpoint()->tracingEnabled() ? "Enabled" : "Disabled");
+        // In case there's editor open in this cell, update it too.
+        static_cast<ComplexEditCell*>(ce)->updateValue();
+
 
         if (m_breakpoint->isTemporary())
             displayType = i18n(" temporary");
@@ -957,6 +964,12 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
 
         if (changed)
         {
+            // This is not needed for most changes, since we've
+            // just read a value from table cell to breakpoint, and 
+            // setRow will write back the same value to the cell.
+            // It's only really needed for tracing column changes,
+            // where tracing config dialog directly changes breakpoint,
+            // so we need to send those changes to the table.
             btr->setRow();
             emit publishBPState(*bp);
         }
@@ -1006,15 +1019,10 @@ void GDBBreakpointWidget::editTracing(QTableItem* item)
     // and not when we select some other cell, as happens in Qt by default.
     if (r == QDialog::Accepted)
     {
-        if (d->enable->isChecked()) {
-            item->setText("Enabled");
-        }
-        else 
-        {
-            item->setText("Disabled");
-        }
+        // The dialog has modified "btr->breakpoint()" already.
+        // Calling 'slotNewValue' will flush the changes back
+        // to the table.
         slotNewValue(item->row(), item->col());
-        static_cast<ComplexEditCell*>(item)->updateValue();
     }
 
     delete d;
@@ -1076,6 +1084,13 @@ void GDBBreakpointWidget::savePartialProjectSession(QDomElement* el)
 
 void GDBBreakpointWidget::restorePartialProjectSession(const QDomElement* el)
 {
+    /** Eventually, would be best to make each breakpoint type handle loading/
+        saving it's data. The only problem is that on load, we need to allocate
+        with new different objects, depending on type, and that requires some 
+        kind of global registry. Gotta find out if a solution for that exists in 
+        KDE (Boost.Serialization is too much dependency, and rolling my own is
+        boring).
+    */
     QDomElement breakpointListEl = el->namedItem("breakpointList").toElement();
     if (!breakpointListEl.isNull())
     {
@@ -1183,13 +1198,9 @@ void GDBBreakpointWidget::focusInEvent( QFocusEvent */* e*/ )
 }
 
 ComplexEditCell::
-ComplexEditCell(BreakpointTableRow* row, QTable* table)
-: QTableItem(table, QTableItem::WhenCurrent), row_(row) 
+ComplexEditCell(QTable* table)
+: QTableItem(table, QTableItem::WhenCurrent)
 {
-    if (row_->breakpoint()->tracingEnabled())
-        setText("Enabled");
-    else
-        setText("Disabled");
 }
 
 

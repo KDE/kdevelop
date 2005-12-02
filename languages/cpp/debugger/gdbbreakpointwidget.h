@@ -125,7 +125,7 @@ class ComplexEditCell : public QObject, public QTableItem
     Q_OBJECT
 public:
 
-    ComplexEditCell(BreakpointTableRow* row, QTable* table);
+    ComplexEditCell(QTable* table);
 
     /** Called by Qt when the current cell should become editable.
         In our case, when the item becomes current. Creates a widget
@@ -146,7 +146,6 @@ signals:
     void edit(QTableItem*);
 
 private:
-    BreakpointTableRow* row_;
     mutable QGuardedPtr<QLabel> label_;
 };
 
