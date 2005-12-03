@@ -1158,12 +1158,14 @@ void GDBBreakpointWidget::restorePartialProjectSession(const QDomElement* el)
                     bp->setTracedExpressions(l);
                 }
 
-
-                // Add the bp if we don't already have it.
-                if (!find(bp))
-                    addBreakpoint(bp);
-                else
-                    delete bp;
+                // Now add the breakpoint. Don't try to check if 
+                // breakpoint already exists.
+                // It's easy to check that breakpoint on the same
+                // line already exists, but it might have different condition,
+                // and checking conditions for equality is too complex thing.
+                // And anyway, it's will be suprising of realoading a project
+                // changes the set of breakpoints.
+                addBreakpoint(bp);
             }
         }
     }
