@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KDevQMakeEditor
+Name[sv]=KDevelop Qmake-editor
 Comment=Imports and edits qmake projects
 Comment[da]=Importerer og redigere qmake-projekter
 Comment[de]=Importiert und bearbeitet qmake-Projekte
@@ -18,6 +19,7 @@ Comment[pt_BR]=Importa e edita projectos qmake.
 Comment[ru]=Импорт и редактирование проектов qmake
 Comment[sr]=Увози и уређује qmake пројекте
 Comment[sr@Latn]=Uvozi i uređuje qmake projekte
+Comment[sv]=Importerar och redigerar Qmake-projekt
 Comment[tr]=qmake projelerini aktarır ve düzenler
 Comment[zh_CN]=导入并编辑 qmake 工程
 Icon=gear

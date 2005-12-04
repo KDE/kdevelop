@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KDevSecurity
+Name[sv]=KDevelop säkerhet
 GenericName=Security Checker
 GenericName[da]=Sikkerhedstjekker
 GenericName[de]=Security-Überprüfung
@@ -18,6 +19,7 @@ GenericName[pt_BR]=Verificação de Segurança
 GenericName[ru]=Проверка безопасности
 GenericName[sr]=Провера безбедности
 GenericName[sr@Latn]=Provera bezbednosti
+GenericName[sv]=Säkerhetskontroll
 GenericName[tr]=Güvenlik Denetimcisi
 GenericName[zh_CN]=安全性检查器
 Comment=Code security checker
@@ -37,6 +39,7 @@ Comment[pt_BR]=Verificação da segurança do código
 Comment[ru]=Проверка безопасности кода
 Comment[sr]=Провера безбедности кода
 Comment[sr@Latn]=Provera bezbednosti koda
+Comment[sv]=Kodsäkerhetskontroll
 Comment[tr]=Kod Güvenlik Denetimcisi
 Comment[zh_CN]=代码安全性检查器
 Icon=kdevelop

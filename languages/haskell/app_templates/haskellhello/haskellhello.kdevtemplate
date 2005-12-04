@@ -81,4 +81,5 @@ Comment[pt]=Foi criado um programa simples 'olá mundo' em Haskell em %{dest}
 Comment[pt_BR]=Foi criado um programa simples 'olá mundo' em Haskell em %{dest}
 Comment[sr]=Једноставан „Здраво свете“ у Haskell-у направљен је у %{dest}
 Comment[sr@Latn]=Jednostavan „Zdravo svete“ u Haskell-u napravljen je u %{dest}
+Comment[sv]=Ett enkelt 'Hello World'-program i Haskell skapades i %{dest}
 Comment[zh_CN]=在 %{dest} 创建了一个简单的 Haskell 语言“Hello world”程序

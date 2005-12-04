@@ -39,6 +39,7 @@ Comment[pt_BR]=Gera a plataforma para um serviço de DCOP do KDE e a biblioteca 
 Comment[ru]=Создание инфраструктуры DCOP и библиотеку-клиент.
 Comment[sr]=Прави једноставан радни оквир за KDE DCOP сервис и приступну библиотеку клијента.
 Comment[sr@Latn]=Pravi jednostavan radni okvir za KDE DCOP servis i pristupnu biblioteku klijenta.
+Comment[sv]=Skapar ett ramverk för en KDE DCOP-tjänst och klientåtkomstbibliotek.
 Comment[tr]=Bir KDE DCOP hizmeti ve istemci erişim kütüphanesi için bir çatı yaratır.
 Comment[zh_CN]=生成一个 KDE DCOP 服务和客户访问库的框架。
 FileTemplates=rb,ShellStyle

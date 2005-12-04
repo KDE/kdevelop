@@ -137,5 +137,6 @@ Comment[pt_BR]=Foi criado um programa Olá Mundo em %{dest}
 Comment[ru]=Простое приложение Hello World, созданное в %{dest}
 Comment[sr]=„Здраво свете“ је направљен у %{dest}
 Comment[sr@Latn]=„Zdravo svete“ je napravljen u %{dest}
+Comment[sv]=Ett Hello World-program skapades i %{dest}
 Comment[tr]=Bir Merhaba Dünya programı %{dest} içinde yaratıldı.
 Comment[zh_CN]=在 %{dest} 中创建了一个 Hello world 程序
