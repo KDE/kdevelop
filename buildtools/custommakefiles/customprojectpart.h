@@ -86,6 +86,7 @@ private:
     void startMakeCommand(const QString &dir, const QString &target);
     void parseMakefile(const QString& file);
     QString makeEnvironment() const;
+    void putEnvVarsInVarMap();
 
     QString m_projectDirectory;
     QString m_projectName;
@@ -108,6 +109,7 @@ private:
     bool m_lastCompilationFailed;
     QMap<QString, int> m_parsedMakefiles;
     QValueStack<QString> m_makefilesToParse;
+    QMap<QString, QString> m_makefileVars;
 };
 
 #endif

@@ -187,17 +187,17 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
     m_contextRemoveFiles.clear();
 
     if( fcontext->urls().size() == 1 )
-    {
-        QString contextFileName = URLUtil::canonicalPath(fcontext->urls().first().fileName());
-        bool inProject = project()->isProjectFile(contextFileName);
-        QString popupstr = QFileInfo(contextFileName).fileName();
-        if (contextFileName.startsWith(projectDirectory()+ "/"))
-            contextFileName.remove(0, projectDirectory().length()+1);
+   {
+      QString canContextFileName =URLUtil::canonicalPath(fcontext->urls().first().path());
+      QString relContextFileName =URLUtil::extractPathNameRelative(URLUtil::canonicalPath(project()->projectDirectory()), canContextFileName);
+      QString popupstr =fcontext->urls().first().fileName();
+    
+        bool inProject = project()->isProjectFile(canContextFileName);
 
         popup->insertSeparator();
         if (inProject)
         {
-	    m_contextRemoveFiles << contextFileName;
+	    m_contextRemoveFiles << relContextFileName;
             int id = popup->insertItem( i18n("Remove %1 From Project").arg(popupstr),
                                this, SLOT(slotRemoveFromProject()) );
             popup->setWhatsThis(id, i18n("<b>Remove from project</b><p>Removes current file from the list of files in project. "
@@ -205,7 +205,7 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
         }
         else
         {
-	    m_contextAddFiles << contextFileName;
+	    m_contextAddFiles << relContextFileName;
             int id = popup->insertItem( i18n("Add %1 to Project").arg(popupstr),
                                this, SLOT(slotAddToProject()) );
             popup->setWhatsThis(id, i18n("<b>Add to project</b><p>Adds current file to the list of files in project. "
@@ -219,14 +219,12 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
 	{
 	    if ((*it).isLocalFile())
 	    {
-	    	QString path(URLUtil::canonicalPath((*it).path()));
-		QString relPath( path );
-                if (relPath.startsWith(projectDirectory()+ "/"))
-                    relPath.remove(0, projectDirectory().length()+1);
-		if (project()->isProjectFile(path))
-		    m_contextRemoveFiles << relPath;
-		else
-		    m_contextAddFiles << relPath;
+	    	QString canPath(URLUtil::canonicalPath((*it).path()));
+         QString relPath =URLUtil::extractPathNameRelative(URLUtil::canonicalPath(project()->projectDirectory()), canPath);
+         if (project()->isProjectFile(canPath))
+            m_contextRemoveFiles << relPath;
+         else
+            m_contextAddFiles << relPath;
 	    }
 	}
 
@@ -505,7 +503,7 @@ void CustomProjectPart::addFiles ( const QStringList& fileList )
 	QStringList::ConstIterator it;
 
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
-	{
+   {
 		m_sourceFiles.append ( *it );
 	}
 	
@@ -640,6 +638,17 @@ void CustomProjectPart::slotCompileFile()
 
     QString buildDir = sourceDir;
     QString target = baseName + ".o";
+
+    //if there is no Makefile in the directory of the source file
+    //try to build it from the main build dir
+    //this works e.g. for non-recursive cmake Makefiles, Alex
+    if ((QFile::exists(sourceDir+"/Makefile") == false)
+        && (QFile::exists(sourceDir+"/makefile") == false))
+    {
+       buildDir=buildDirectory();
+    }
+
+
     kdDebug(9020) << "builddir " << buildDir << ", target " << target << endl;
 
     startMakeCommand(buildDir, target);
@@ -732,16 +741,22 @@ void CustomProjectPart::updateTargetMenu()
     } else {
        kdDebug(9025) << "Trying to load a makefile... " << endl;
 
+       m_makefileVars.clear();
        m_parsedMakefiles.clear();
        m_makefilesToParse.clear();
        m_makefilesToParse.push("Makefile");
        m_makefilesToParse.push("makefile");
+       putEnvVarsInVarMap();
        while (!m_makefilesToParse.isEmpty())
           parseMakefile(m_makefilesToParse.pop());
 
-        m_targets.sort();
-        m_targetsObjectFiles.sort();
-        m_targetsOtherFiles.sort();
+       //free the memory again
+       m_makefileVars.clear();
+       m_parsedMakefiles.clear();
+
+       m_targets.sort();
+       m_targetsObjectFiles.sort();
+       m_targetsOtherFiles.sort();
 
     }
 
@@ -762,13 +777,21 @@ void CustomProjectPart::updateTargetMenu()
         m_targetOtherFilesMenu->insertItem(*it, id++);
 }
 
+void CustomProjectPart::putEnvVarsInVarMap()
+{
+    DomUtil::PairList envvars =
+        DomUtil::readPairListEntry(*projectDom(), "/kdevcustomproject/make/environments/" + currentMakeEnvironment(), "envvar", "name", "value");
+
+    for (DomUtil::PairList::ConstIterator it = envvars.begin(); it != envvars.end(); ++it)
+       m_makefileVars[(*it).first] = (*it).second;  //is qouting here required as in makeEnvironment() ??
+}
+
 void CustomProjectPart::parseMakefile(const QString& filename)
 {
    if (m_parsedMakefiles.contains(filename))
       return;
 
    m_parsedMakefiles.insert(filename, 1);
-
 
    QString absFilename=filename;
    if (!filename.startsWith("/"))
@@ -781,11 +804,25 @@ void CustomProjectPart::parseMakefile(const QString& filename)
    }
    QRegExp re("^([^($%.#][^)\\s]+) *:.*$");
    re.setMinimal(true);
+   
+   QRegExp variablesRe("\\$\\(\\s*([^\\)\\s]+)\\s*\\)");
+   QRegExp assignmentRe("^\\s*(\\S+)\\s*[:\\?]?=\\s*(\\S+)\\s*(#.*)?$");
 
    QRegExp includedMakefilesRe("^include\\s+(\\S+)");
    QString str = "";
    while (!f.atEnd()) {
       f.readLine(str, 200);
+
+      // Replace any variables in the current line
+      int offset = -1;
+      while ((offset = variablesRe.search(str, offset + 1)) != -1)
+      {
+         QString variableName=variablesRe.cap(1).simplifyWhiteSpace();
+         if (m_makefileVars.contains(variableName))
+         {
+            str.replace(variablesRe.cap(0), m_makefileVars[variableName]);
+         }
+      }
 
       // Read all continuation lines
       // kdDebug(9025) << "Trying: " << str.simplifyWhiteSpace() << endl;
@@ -793,15 +830,15 @@ void CustomProjectPart::parseMakefile(const QString& filename)
       //    str.remove(str.length()-1, 1);
       //    str += stream.readLine();
       //}
-
-      if (includedMakefilesRe.search(str) != -1)
+      // Find any variables
+      if (assignmentRe.search(str) != -1)
+      {
+         m_makefileVars[assignmentRe.cap(1).simplifyWhiteSpace()] = assignmentRe.cap(2).simplifyWhiteSpace();
+      }
+      else if (includedMakefilesRe.search(str) != -1)
       {
          QString includedMakefile=includedMakefilesRe.cap(1).simplifyWhiteSpace();
-         /*special optimization for makefiles generated with the new cmake makefile generator:
-          it creates a tiny makefile for each object and a tiny dependency file for each object,
-          these dependency files can be skipped here, Alex */
-         if (!includedMakefile.endsWith(".depends.make"))
-            m_makefilesToParse.push(includedMakefile);
+         m_makefilesToParse.push(includedMakefile);
       }
       else if (re.search(str) != -1)
       {
