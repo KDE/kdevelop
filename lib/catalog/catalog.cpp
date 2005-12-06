@@ -206,7 +206,7 @@ void  Catalog::setEnabled( bool isEnabled )
 #else
 	     dbp->open(dbp, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)
 #endif
-		== 0))
+		!= 0))
 	{
 
 	    kdDebug() << "db_open: " << db_strerror(ret) << endl;
