@@ -563,8 +563,9 @@ VarFrameRoot* VariableTree::demand_frame_root(int frameNo, int threadNo)
         frame->setFrameName("Locals");
         // Make sure "Locals" item is always the top item, before
         // "watch" and "recent experessions" items.
-       this->takeItem(frame);
-       this->insertItem(frame);
+        this->takeItem(frame);
+        this->insertItem(frame);
+        frame->setOpen(true);
     }
     return frame;
 }
@@ -581,8 +582,7 @@ void VariableTree::slotLocalsReady(const char* data)
     setUpdatesEnabled(false);
 
     VarFrameRoot *frame = demand_frame_root(currentFrame_, currentThread_);
-    frame->setLocals(data);
-    frame->setOpen(true);
+    frame->setLocals(data);    
     
     // If we're regetting locals for the frame 0, it surely means
     // the application was just paused. Otherwise, 
