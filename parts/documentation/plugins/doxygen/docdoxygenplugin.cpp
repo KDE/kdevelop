@@ -66,7 +66,7 @@ K_EXPORT_COMPONENT_FACTORY( libdocdoxygenplugin, DocDoxygenPluginFactory(data) )
 DocDoxygenPlugin::DocDoxygenPlugin(QObject* parent, const char* name, const QStringList)
     :DocumentationPlugin(DocDoxygenPluginFactory::instance()->config(), parent, name)
 {
-    setCapabilities(Index | FullTextSearch | ProjectDocumentation);
+    setCapabilities(Index | FullTextSearch | ProjectDocumentation | CustomDocumentationTitles );
     autoSetup();
 }
 
