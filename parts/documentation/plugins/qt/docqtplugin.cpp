@@ -63,7 +63,7 @@ K_EXPORT_COMPONENT_FACTORY( libdocqtplugin, DocQtPluginFactory(data) )
 DocQtPlugin::DocQtPlugin(QObject* parent, const char* name, const QStringList)
     :DocumentationPlugin(DocQtPluginFactory::instance()->config(), parent, name)
 {
-    setCapabilities(Index | FullTextSearch);
+   setCapabilities(Index | FullTextSearch | CustomDocumentationTitles );
     autoSetup();
 }
 
