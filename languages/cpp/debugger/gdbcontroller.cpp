@@ -1973,8 +1973,15 @@ void GDBController::slotProduceBacktrace(int threadNo)
 
 void GDBController::slotProduceVariablesInfo()
 {
-    queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
-    queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));    
+    if (stateIsOn(s_viewLocals)) {
+        queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
+        queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));    
+    } 
+/*
+    else {
+        kdDebug(9012) << "s_viewLocals = No locals needed!" << endl;
+    }
+*/
 }
 
 // **************************************************************************

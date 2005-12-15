@@ -1201,10 +1201,22 @@ void VarFrameRoot::setLocals(const char *locals)
 // state. This
 void VarFrameRoot::setOpen(bool open)
 {
+    bool stateChanged = ( isOpen() != open );
     QListViewItem::setOpen(open);
+
+    VariableTree *parent = (VariableTree*)listView();
+    if (parent && stateChanged) {
+        //everytime the open-state changed we need to tell the controller
+        emit parent->setLocalViewState(open);
+    }
 
     if (!open)
         return;
+
+    if (parent && stateChanged) {
+        //if the open-state changed to OPEN we need to reget the locals 
+        emit parent->produceVariablesInfo();
+    }
 
     if (!params_.isNull())
         GDBParser::getGDBParser()->parseCompositeValue(this, params_.data());
