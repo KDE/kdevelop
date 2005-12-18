@@ -34,44 +34,46 @@ class AutoMakeItem;
 class AutoMakeImporter : public KDevProjectEditor
 {
 public:
-    AutoMakeImporter( QObject* parent = 0, const char* name = 0,
-                      const QStringList& args = QStringList() );
-
-    virtual ~AutoMakeImporter();
-
-    virtual KDevProject* project() const;
-    virtual KDevProjectEditor* editor() const;
-
-    virtual Features features() const { return KDevProjectEditor::All; }
-    virtual bool addFolder( KDevProjectFolderItem* /*folder */,
-                            KDevProject* /*parent*/ ) { return false; }
-    virtual bool addFolder( KDevProjectFolderItem*,
-                            KDevProjectFolderItem* ) { return false; }
-    virtual bool addTarget( KDevProjectTargetItem* /*target*/,
-                            KDevProjectFolderItem* /*parent*/ ) { return false; }
-    virtual bool addFile( KDevProjectFileItem*,
-                          KDevProjectFolderItem* ) { return false; }
-    virtual bool addFile( KDevProjectFileItem*,
-                          KDevProjectTargetItem* ) { return false; }
-    virtual bool removeFolder( KDevProjectFolderItem*,
-                               KDevProjectFolderItem* ) { return false; }
-    virtual bool removeTarget( KDevProjectTargetItem*,
-                               KDevProjectFolderItem* ) { return false; }
-    virtual bool removeFile( KDevProjectFileItem*,
-                             KDevProjectFolderItem* ) { return false; }
-    virtual bool removeFile( KDevProjectFileItem*,
-                             KDevProjectTargetItem* ) { return false; }
-
-    virtual QList<KDevProjectFolderItem*> parse( KDevProjectFolderItem* dom );
-    virtual KDevProjectItem* import( KDevProjectModel* model,
-                                     const QString& fileName );
-    virtual QString findMakefile( KDevProjectFolderItem* dom ) const;
-    virtual QStringList findMakefiles( KDevProjectFolderItem* dom ) const;
-
-
+	AutoMakeImporter( QObject* parent = 0, const char* name = 0,
+	                  const QStringList& args = QStringList() );
+	
+	virtual ~AutoMakeImporter();
+	
+	virtual KDevProject* project() const;
+	virtual KDevProjectEditor* editor() const;
+	
+	virtual Features features() const { return KDevProjectEditor::All; }
+	virtual bool addFolder( KDevProjectFolderItem* /*folder */,
+	                        KDevProject* /*parent*/ ) { return false; }
+	virtual bool addFolder( KDevProjectFolderItem*,
+	                        KDevProjectFolderItem* ) { return false; }
+	virtual bool addTarget( KDevProjectTargetItem* /*target*/,
+	                        KDevProjectFolderItem* /*parent*/ ) { return false; }
+	virtual bool addFile( KDevProjectFileItem*,
+	                      KDevProjectFolderItem* ) { return false; }
+	virtual bool addFile( KDevProjectFileItem*,
+	                      KDevProjectTargetItem* ) { return false; }
+	virtual bool removeFolder( KDevProjectFolderItem*,
+	                           KDevProjectFolderItem* ) { return false; }
+	virtual bool removeTarget( KDevProjectTargetItem*,
+	                           KDevProjectFolderItem* ) { return false; }
+	virtual bool removeFile( KDevProjectFileItem*,
+	                         KDevProjectFolderItem* ) { return false; }
+	virtual bool removeFile( KDevProjectFileItem*,
+	                         KDevProjectTargetItem* ) { return false; }
+	
+	virtual QList<KDevProjectFolderItem*> parse( KDevProjectFolderItem* dom );
+	virtual KDevProjectItem* import( KDevProjectModel* model,
+	                                 const QString& fileName );
+	virtual QString findMakefile( KDevProjectFolderItem* dom ) const;
+	virtual QStringList findMakefiles( KDevProjectFolderItem* dom ) const;
+	
+	
 private:
-    KDevProject* m_project;
-    AutoMakeItem* m_rootItem;
+	KDevProject* m_project;
+	AutoMakeItem* m_rootItem;
 };
 
 #endif
+// kate: indent-mode csands; space-indent off; tab-width 4; auto-insert-doxygen on;
+

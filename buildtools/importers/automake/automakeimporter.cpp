@@ -31,54 +31,56 @@ K_EXPORT_COMPONENT_FACTORY( libkdevautomakeimporter,
 
 AutoMakeImporter::AutoMakeImporter( QObject* parent, const char* name,
                                     const QStringList& )
-    : KDevProjectEditor( parent )
-    , m_rootItem(0L)
+: KDevProjectEditor( parent )
+, m_rootItem(0L)
 {
-    setObjectName( QString::fromUtf8( name ) );
-    m_project = qobject_cast<KDevProject*>( parent );
-    Q_ASSERT( m_project );
+	setObjectName( QString::fromUtf8( name ) );
+	m_project = qobject_cast<KDevProject*>( parent );
+	Q_ASSERT( m_project );
 }
 
 AutoMakeImporter::~AutoMakeImporter()
 {
-    delete m_rootItem;
+	delete m_rootItem;
 }
 
 KDevProject* AutoMakeImporter::project() const
 {
-    return m_project;
+	return m_project;
 }
 
 KDevProjectEditor* AutoMakeImporter::editor() const
 {
-    return const_cast<AutoMakeImporter*>( this );
+	return const_cast<AutoMakeImporter*>( this );
 }
 
 QList<KDevProjectFolderItem*> AutoMakeImporter::parse( KDevProjectFolderItem* dom )
 {
-    Q_UNUSED( dom );
-    return QList<KDevProjectFolderItem*>();
+	Q_UNUSED( dom );
+	return QList<KDevProjectFolderItem*>();
 }
 
 KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
                                            const QString& fileName )
 {
-    Q_UNUSED( model );
-    m_rootItem = new AutoMakeItem( fileName, 0 );
-    return m_rootItem;
-
+	Q_UNUSED( model );
+	m_rootItem = new AutoMakeItem( fileName, 0 );
+	return m_rootItem;	
 }
 
 QString AutoMakeImporter::findMakefile( KDevProjectFolderItem* dom ) const
 {
-    Q_UNUSED( dom );
-    return QString();
+	Q_UNUSED( dom );
+	return QString();
 }
 
 QStringList AutoMakeImporter::findMakefiles( KDevProjectFolderItem* dom ) const
 {
-    Q_UNUSED( dom );
-    return QStringList();
+	Q_UNUSED( dom );
+	return QStringList();
 }
+
 #include "automakeimporter.h"
+// kate: indent-mode csands; space-indent off; tab-width 4; auto-insert-doxygen on;
+
 

@@ -52,21 +52,6 @@ public:
 	static int parseFile(const QString& fileName, ProjectAST **ast);
 	static int parseFile(KURL fileName, ProjectAST **ast);
 	
-/*    template<class Op>
-    static void walkAST(Op &op, const ProjectAST *ast)
-    {
-//         op(ast);
-        for (QValueList<QMake::AST*>::const_iterator it = ast->statements.constBegin();
-                it != ast->statements.constEnd(); ++it)
-        {
-            const AST *child = *it;
-            if (child->nodeType() == AST::ProjectAST)
-                walkAST<Op>(op, static_cast<const QMake::ProjectAST*>(child));
-            else
-                op(child);
-        }
-    }
-*/
 };
 
 }

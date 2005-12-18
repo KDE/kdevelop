@@ -64,3 +64,4 @@ AutoMakeTargetItem::~AutoMakeTargetItem()
 }
 
 #include "automakeprojectmodel.h"
+// kate: indent-mode csands; space-indent off; tab-width 4; auto-insert-doxygen on;

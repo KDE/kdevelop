@@ -243,7 +243,6 @@ public:
 	NewLineAST(): AST(AST::NewLineAST) {}
 	
 	virtual void writeBack(QString &buffer);
-
 };
 
 
