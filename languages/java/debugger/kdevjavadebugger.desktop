@@ -64,6 +64,7 @@ GenericName[sv]=Gränssnitt för Java-avlusare
 GenericName[ta]=ஜாவா டிபக்கர் முன்நிறுத்த
 GenericName[tg]=Созгузорандаи интегралёбии Java 
 GenericName[tr]=Java Hata Ayıklayıcı Önucu
+GenericName[uk]=Інтерфейс зневадника для Java
 GenericName[zh_CN]=Java 调试器前端
 Icon=
 ServiceTypes=KDevelop/Part
