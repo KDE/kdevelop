@@ -51,39 +51,43 @@ public:
     KDevPluginInfo::rawGenericName as KAboutData::programName KDevPluginInfo::licenseType as KAboutData::licenseType. Other parameters are ignored.*/
     operator KAboutData*() const;
 
-    /**@return A name of a plugin (always untranslated).*/
+    /** @return A name of a plugin (always untranslated). */
     QString pluginName() const;
-    /**@return A generic name of a plugin (translated). Use this in GUI. Information is taken from .desktop file.*/
+    /** @return A generic name of a plugin (translated). Use this in GUI. Information is taken from .desktop file. */
     QString genericName() const;
-    /**@return An icon name of a plugin. Information is taken from .desktop file.*/
+    /** @return An icon name of a plugin. Information is taken from .desktop file. */
     QString icon() const;
-    /**@return A description of a plugin. Information is taken from .desktop file.*/
+    /** @return A description of a plugin. Information is taken from .desktop file. */
     QString description() const;
-    /**@return A version of a plugin. Information is taken from .desktop file.*/
+    /** @return A version of a plugin. Information is taken from .desktop file. */
     QString version() const;
-    /**@return A license type of a plugin. Information is taken from .desktop file.*/
+    /** @return A license type of a plugin. Information is taken from .desktop file. */
     int licenseType() const;
-    /**@return A license text for known license types (GPL, LGPL, BSD, Artistic, QPL).*/
+    /** @return A license text for known license types (GPL, LGPL, BSD, Artistic, QPL). */
     QString license() const;
-    /**@return A copyright statement of a plugin. Information is taken from .desktop file.*/
+    /** @return A copyright statement of a plugin. Information is taken from .desktop file. */
     QString copyrightStatement() const;
-    /**@return A home page of a plugin. Information is taken from .desktop file.*/
+    /** @return A home page of a plugin. Information is taken from .desktop file. */
     QString homePageAddress() const;
-    /**@return A email address for bugs of a plugin. Information is taken from .desktop file.*/
+    /** @return A email address for bugs of a plugin. Information is taken from .desktop file. */
     QString bugsEmailAddress() const;
 
-    /**@param name The name of a property.
-    @return Any property value which exists in .desktop file.*/
+    /**
+     * @param name The name of a property.
+     * @return Any property value which exists in .desktop file.
+     */
     QVariant property(const QString &name) const;
-    /**@param name The name of a property.
-    @return Any property value which exists in .desktop file.*/
+    /** 
+     * @param name The name of a property.
+     * @return Any property value which exists in .desktop file.
+     */
     QVariant operator [] (const QString &name) const;
-    /**@return A list of property names set in .desktop file.*/
+    /** @return A list of property names set in .desktop file. */
     QStringList propertyNames() const;
 
-    /**@return A list of plugin authors.*/
+    /** @return A list of plugin authors.*/
     const QList<KAboutPerson> authors() const;
-    /**@return A list of other plugin contributors.*/
+    /** @return A list of other plugin contributors.*/
     const QList<KAboutPerson> credits() const;
 
     /**Adds an author to the list of authors.

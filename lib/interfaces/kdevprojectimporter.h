@@ -63,19 +63,19 @@ public:
      */
     virtual KDevProjectItem *import(KDevProjectModel *model, const QString &fileName) = 0;
 
-    /** @return The makefile associated to the item model @p dom.
-        @note The makefile list must contains absolute file names
+    /** @return The Makefile associated to the item model @p dom.
+        @note The Makefile list must contain absolute file names
 
-        For instance, for the <b>Automake</b> project you can return
+        For instance, in <b>Automake</b> projects you can use something like:
 
         @code
-        dom->name() + "/Makefile.am";
+        return dom->name() + "/Makefile.am";
         @endcode
       */
     virtual QString findMakefile(KDevProjectFolderItem *dom) const = 0;
 
-    /** @return The list of the makefiles from the item model @p dom.
-        @note The makefile list must contains absolute file names */
+    /** @return The list of the Makefiles from the item model @p dom.
+        @note The Makefile list must contains absolute file names */
     virtual QStringList findMakefiles(KDevProjectFolderItem *dom) const = 0;
 
 signals:

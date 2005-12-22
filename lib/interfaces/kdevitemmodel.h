@@ -45,9 +45,16 @@ public:
   virtual KDevItemGroup *group() const { return 0; }
   virtual KDevItemCollection *collection() const { return 0; }
 
+  /** Get the name of the item */
   virtual QString name() const = 0;
+
+  /** Get the icon for the item */
   virtual QIcon icon() const = 0;
+
+  /** Get the tooltip for this item */
   virtual QString toolTip() const = 0;
+
+  /** Get the what's this help for this item */
   virtual QString whatsThis() const = 0;
 
   virtual bool operator<(const KDevItem &other) const
@@ -78,6 +85,10 @@ public:
   virtual KDevItem *itemAt(int index) const = 0;
 };
 
+/**
+ * Implements the KDevItemGroup interface and provides the KDevItemModel
+ * with access to the group of items.
+ */
 class KDevItemCollection: public KDevItemGroup
 {
 public:
@@ -125,6 +136,13 @@ private:
   QList<KDevItem *> m_items;
 };
 
+/**
+ * The generic KDevelop Model.
+ *
+ * If you need a model anywhere in KDevelop, then your model can inherit
+ * from KDevItemModel and you can store your items in classes derived from 
+ * KDevItem to get some nice features.
+ */
 class KDevItemModel: public QAbstractItemModel
 {
   Q_OBJECT

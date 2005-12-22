@@ -29,6 +29,13 @@ class KDevProjectFolderItem;
 class KDevProjectFileItem;
 class KDevProjectTargetItem;
 
+/**
+ * Interface that allows a developer to implement the three basic types of
+ * items you would see in a project
+ * \li Folder
+ * \li Build Target
+ * \li File
+ */
 class KDevProjectItem: public KDevItemCollection
 {
 public:
@@ -46,6 +53,10 @@ public:
   QList<KDevProjectFileItem*> fileList() const;
 };
 
+/**
+ * Implementation of the KDevProjectItem interface that is specific to a 
+ * folder
+ */
 class KDevProjectFolderItem: public KDevProjectItem
 {
 public:
@@ -55,6 +66,7 @@ public:
   virtual KDevProjectFolderItem *folder() const
   { return const_cast<KDevProjectFolderItem*>(this); }
 
+  /** Get the QDir representation of this folder */
   QDir directory() const { return m_directory; }
   virtual QIcon icon() const;
 
@@ -62,6 +74,10 @@ private:
   QDir m_directory;
 };
 
+/**
+ * Implementation of the KDevProjectItem interface that is specific to a
+ * build target
+ */
 class KDevProjectTargetItem: public KDevProjectItem
 {
 public:
@@ -72,12 +88,17 @@ public:
   { return const_cast<KDevProjectTargetItem*>(this); }
 };
 
+/**
+ * Implementation of the KDevProjectItem interface that is specific to a
+ * file
+ */
 class KDevProjectFileItem: public KDevProjectItem
 {
 public:
   KDevProjectFileItem(const QFileInfo &fileInfo, KDevItemGroup *parent = 0)
     : KDevProjectItem(fileInfo.fileName(), parent), m_fileInfo(fileInfo) {}
 
+  /** Get the QFileInfo representation of this item */
   QFileInfo fileInfo() const { return m_fileInfo; }
 
   virtual KDevProjectFileItem *file() const
