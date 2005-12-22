@@ -64,7 +64,7 @@ KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
                                            const QString& fileName )
 {
 	Q_UNUSED( model );
-	m_rootItem = new AutoMakeItem( fileName, 0 );
+	m_rootItem = new AutoMakeDirItem( fileName, 0 );
 	return m_rootItem;	
 }
 

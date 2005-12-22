@@ -23,34 +23,6 @@
 #include <QIcon>
 #include "kdevprojectmodel.h"
 
-class AutoMakeItem : public KDevProjectItem
-{
-public:
-    AutoMakeItem( const QString& name,  KDevItemGroup* parent = 0 );
-    virtual ~AutoMakeItem();
-
-    virtual KDevProjectItem* itemAt( int index ) const;
-    virtual KDevProjectFolderItem* folder() const { return 0; }
-    virtual KDevProjectTargetItem* target() const { return 0; }
-    virtual KDevProjectFileItem* file() const { return 0; }
-
-    virtual QList<KDevProjectFolderItem*> folderList() const
-    {
-        return QList<KDevProjectFolderItem*>();
-    }
-
-    virtual QList<KDevProjectTargetItem*> targetList() const
-    {
-        return QList<KDevProjectTargetItem*>();
-    }
-
-    virtual QList<KDevProjectFileItem*> fileList() const
-    {
-        return QList<KDevProjectFileItem*>();
-    }
-
-};
-
 class AutoMakeDirItem : public KDevProjectFolderItem
 {
 public:

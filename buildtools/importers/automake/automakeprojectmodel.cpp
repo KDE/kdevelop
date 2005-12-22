@@ -20,21 +20,6 @@
 
 #include "automakeprojectmodel.h"
 
-AutoMakeItem::AutoMakeItem( const QString& name, KDevItemGroup* parent )
-    : KDevProjectItem( name, parent )
-{
-}
-
-AutoMakeItem::~AutoMakeItem()
-{
-}
-
-KDevProjectItem* AutoMakeItem::itemAt( int index ) const
-{
-    return dynamic_cast<KDevProjectItem*>( KDevItemCollection::itemAt( index ) );
-}
-
-
 AutoMakeDirItem::AutoMakeDirItem( const QString& name, KDevItemGroup* parent )
     : KDevProjectFolderItem( name, parent )
 {

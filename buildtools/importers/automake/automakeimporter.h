@@ -71,7 +71,7 @@ public:
 	
 private:
 	KDevProject* m_project;
-	AutoMakeItem* m_rootItem;
+	KDevProjectItem* m_rootItem;
 };
 
 #endif
