@@ -41,7 +41,7 @@ AutoMakeImporter::AutoMakeImporter( QObject* parent, const char* name,
 
 AutoMakeImporter::~AutoMakeImporter()
 {
-	delete m_rootItem;
+	//delete m_rootItem;
 }
 
 KDevProject* AutoMakeImporter::project() const
