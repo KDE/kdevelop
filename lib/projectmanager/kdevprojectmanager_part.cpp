@@ -209,10 +209,11 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
   if (m_workspace)
     m_projectModel->removeItem(m_workspace);
 
-  if (0 != (m_workspace = defaultImporter()->import(projectModel(), projectDirectory())->folder()))
-    {
+  m_workspace = defaultImporter()->import(projectModel(), projectDirectory())->folder();
+  if ( m_workspace != 0)
+  {
       m_projectModel->appendItem(m_workspace);
-    }
+  }
 
   Q_ASSERT(m_workspace != 0);
 
