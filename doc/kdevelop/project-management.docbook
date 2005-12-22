@@ -627,13 +627,6 @@ When you &RMB; click on a <emphasis>subproject</emphasis> in the overall view wi
 <indexterm zone="autoconf"><primary><filename>Makefile.in</filename></primary></indexterm>
 <indexterm zone="autoconf"><primary><filename>config.h.in</filename></primary></indexterm>
 
-<figure id="flow-configure" float="1">
-<title>Effect of the Configure Script</title>
-<mediaobject>
-<imageobject><imagedata fileref="configure.png"/></imageobject>
-</mediaobject>
-</figure>
-
 <para>
 <filename>Makefile.in</filename> into <filename>Makefile</filename>
 </para>
