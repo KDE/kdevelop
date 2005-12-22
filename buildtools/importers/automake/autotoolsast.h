@@ -23,8 +23,8 @@
 #ifndef AUTOTOOLSAST_H
 #define AUTOTOOLSAST_H
 
-#include <qlist.h>
-#include <qstringlist.h>
+#include <QList>
+#include <QStringList>
 
 /**
 @file autotools.h

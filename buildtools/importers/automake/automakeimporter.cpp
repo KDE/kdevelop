@@ -20,11 +20,15 @@
 
 #include "automakeimporter.h"
 
+#include <QList>
+
 #include <kgenericfactory.h>
 #include "kdevproject.h"
 #include "kdevprojectmodel.h"
 
 #include "automakeprojectmodel.h"
+#include "autotoolsast.h"
+#include "autotoolsdriver.h"
 
 K_EXPORT_COMPONENT_FACTORY( libkdevautomakeimporter,
                             KGenericFactory<AutoMakeImporter>( "kdevautomakeimporter" ) )
@@ -65,7 +69,101 @@ KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
 {
 	Q_UNUSED( model );
 	m_rootItem = new AutoMakeDirItem( fileName, 0 );
-	return m_rootItem;	
+	AutoTools::ProjectAST* ast;
+	int ret = -1;
+	QString filePath = fileName + "/Makefile.am.in";
+	if ( QFile::exists( filePath ) )
+		ret = AutoTools::Driver::parseFile( filePath, &ast );
+	else
+	{
+		filePath = fileName + "/Makefile.am";
+		if ( QFile::exists( filePath ) )
+			ret = AutoTools::Driver::parseFile( filePath, &ast );
+		else
+		{
+			filePath = fileName + "/Makefile.in";
+			if ( QFile::exists( filePath ) )
+				ret = AutoTools::Driver::parseFile( filePath, &ast );
+			else
+				kdDebug(9020) << k_funcinfo << "no appropriate file to parse in "
+				              << fileName << endl;
+		}
+	}
+	
+    if ( ret != 0 )
+	    return m_rootItem;
+
+	
+    kdDebug(9020) << k_funcinfo << filePath << " was parsed correctly. Adding information" << endl;
+    Q_ASSERT( ast != 0 );
+	
+	if ( ast && ast->hasChildren() )
+	{
+		QList<AutoTools::AST*> astChildList = ast->children();
+		QList<AutoTools::AST*>::const_iterator it, itEnd = astChildList.constEnd();
+		for ( it = astChildList.constBegin(); it != itEnd; ++it )
+		{
+			if ( (*it)->nodeType() == AutoTools::AST::AssignmentAST )
+			{
+				AutoTools::AssignmentAST* assignment = static_cast<AutoTools::AssignmentAST*>( (*it) );
+				if ( assignment->scopedID == "SUBDIRS"  )
+				{
+					kdDebug(9020) << k_funcinfo << "subdirs is " << assignment->values << endl;
+					foreach( const QString& s, assignment->values )
+					{
+						QString dir = fileName + "/" + s;
+						new AutoMakeDirItem( dir, m_rootItem );
+					}
+				}
+			}
+		}
+	}
+		
+	/* old code
+    d->projects[filePath] = ast;
+    d->folderToFileMap[folder] = filePath;
+	
+    if ( recursive && ast && ast->hasChildren() )
+    {
+        QValueList<AutoTools::AST*> astChildList = ast->children();
+        QValueList<AutoTools::AST*>::iterator it(astChildList.begin()), clEnd(astChildList.end());
+        for ( ; it != clEnd; ++it )
+        {
+            if ( (*it)->nodeType() == AutoTools::AST::AssignmentAST )
+            {
+                AutoTools::AssignmentAST* assignment = static_cast<AutoTools::AssignmentAST*>( (*it) );
+                if ( assignment->scopedID == "SUBDIRS"  )
+                {
+                    QString list = assignment->values.join( QString::null );
+                    list.simplifyWhiteSpace();
+                    kdDebug(9020) << k_funcinfo << "subdirs is " << list << endl;
+                    QStringList subdirList = QStringList::split( " ",  list );
+                    QStringList::iterator vit = subdirList.begin();
+                    for ( ; vit != subdirList.end(); ++vit )
+                    {
+                        QString realDir = ( *vit );
+                        if ( realDir.startsWith( "\\" ) )
+                            realDir.remove( 0, 1 );
+
+                        realDir = realDir.stripWhiteSpace();
+                        if ( realDir != "." && realDir != ".." && !realDir.isEmpty() )
+                        {
+                            if ( isVariable( realDir ) )
+                            {
+                                kdDebug(9020) << k_funcinfo << "'" << realDir << "' is a variable" << endl;
+                                realDir = resolveVariable( realDir, ast );
+                            }
+
+                            kdDebug(9020) << k_funcinfo << "Beginning parsing of '" << realDir << "'" << endl;
+                            parse( folder + '/' + realDir, recursive );
+                        }
+                    }
+                }
+            }
+        }
+    }
+	*/
+	return m_rootItem;
 }
 
 QString AutoMakeImporter::findMakefile( KDevProjectFolderItem* dom ) const
