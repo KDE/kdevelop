@@ -177,7 +177,7 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
             spValues[i18n("Split Horizontal")] = Qt::SplitHCursor;
             spValues[i18n("Pointing Hand")] = Qt::PointingHandCursor;
             spValues[i18n("Forbidden")] = Qt::ForbiddenCursor;
-            spValues[i18n("What's this")] = Qt::WhatsThisCursor;
+            spValues[i18n("What's This?")] = Qt::WhatsThisCursor;
             Machine *mach = new Machine(new PCursorEdit(property, spValues));
             return mach;
         }
