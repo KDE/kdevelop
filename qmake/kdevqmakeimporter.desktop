@@ -1,11 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=KDevQMakeEditor
-Name[sv]=KDevelop Qmake-editor
+Name[x-test]=xxKDevQMakeEditorxx
 Comment=Imports and edits qmake projects
-Comment[da]=Importerer og redigere qmake-projekter
-Comment[sl]=Uvozi in uredi projekte qmake
-Comment[sv]=Importerar och redigerar Qmake-projekt
+Comment[x-test]=xxImports and edits qmake projectsxx
 Icon=gear
 X-KDevelop-Version=4
 ServiceTypes=KDevelop/ProjectImporter
