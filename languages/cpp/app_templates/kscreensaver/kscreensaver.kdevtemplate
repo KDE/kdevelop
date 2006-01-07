@@ -1,28 +1,11 @@
 # KDE Config File
 [General]
 Name=KDE Screen Saver
-Name[br]=Damanter skramm KDE
-Name[da]=KDE pauseskærm
-Name[de]=KDE-Bildschirmschoner
-Name[et]=KDE ekraanisäästja
-Name[fr]=Écran de veille KDE
-Name[ga]=Spárálaí Scáileáin KDE
-Name[hu]=KDE-s képernyővédő
-Name[it]=Salva schermo di KDE
-Name[sv]=KDE-skärmsläckare
-Name[tr]=KDE Ekran Koruyucusu
-Name[zh_CN]= KDE 屏幕保护程序
+Name[x-test]=xxKDE Screen Saverxx
 Icon=kscreensaver.png
 Category=C++/KDE 3.x
 Comment=Generates a framework for a KDE screensaver.
-Comment[da]=Genererer et skelet for en KDE-pauseskærm.
-Comment[de]=Erstellt das Gerüst für einen KDE-Bildschirmschoner.
-Comment[et]=KDE ekraanisäästja raamistiku loomine.
-Comment[hu]=Létrehoz egy alap KDE-s képernyővédőt.
-Comment[it]=Genera un'infrastruttura per un salvaschermo di KDE.
-Comment[sv]=Skapar ett ramverk för en KDE-skärmsläckare
-Comment[tr]=Bir KDE ekran koruyucusu için bir çatı oluşturulur.
-Comment[zh_CN]=生成 KDE 屏幕保护程序框架。
+Comment[x-test]=xxGenerates a framework for a KDE screensaver.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kscreensaver.tar.gz
@@ -133,12 +116,4 @@ Dest=%{dest}/src/%{APPNAMELC}ui.ui
 [MSG]
 Type=message
 Comment=A screensaver application was created in %{dest}
-Comment[da]=Et pauseskærmsprogram blev oprettet i %{dest}
-Comment[de]=Ein Bildschirmschoner wurde in %{dest} erstellt.
-Comment[et]=Ekraanisäästja rakendus loodi asukohta %{dest}
-Comment[fr]=Un écran de veille a été créé dans %{dest}
-Comment[hu]=Létrejött egy alap képernyővédő program itt: %{dest}
-Comment[it]=È stata creata un'applicazione salvaschermo in %{dest}
-Comment[sv]=Ett skärmsläckarprogram skapades i %{dest}
-Comment[tr]=Bir ekran koruyucusu uygulaması %{dest} içinde yaratıldı.
-Comment[zh_CN]=在 %{dest} 中创建了屏幕保护应用程序
+Comment[x-test]=xxA screensaver application was created in %{dest}xx

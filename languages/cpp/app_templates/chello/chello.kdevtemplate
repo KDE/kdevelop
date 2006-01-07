@@ -1,27 +1,11 @@
 # KDE Config File
 [General]
 Name=Simple Hello world program
-Name[da]=Simpelt Goddag verden program
-Name[de]=Ein einfaches Hello-world-Programm
-Name[et]=Lihtne "Tere, maailm" programm
-Name[fr]=Simple programme « Hello world »
-Name[hu]=Egyszerű Hello world program
-Name[it]=Semplice programma di "Hello world"
-Name[sv]=Enkelt Hello world-program
-Name[tr]=Basit Merhaba dünya programı
-Name[zh_CN]=简单的 Hello world 程序
+Name[x-test]=xxSimple Hello world programxx
 Icon=chello.png
 Category=C
 Comment=Generates a simple Hello world program in C
-Comment[da]=Genererer et simpelt Goddag verden program i C
-Comment[de]=Erstellt ein einfaches Hello-world-Programm in C
-Comment[et]=Lihtsa "Tere, maailm" programmi loomine C-s
-Comment[fr]=Génère un simple programme « Hello world » en C
-Comment[hu]=Létrehoz egy egyszerű Hello world programot C nyelven
-Comment[it]=Genera un semplice programma di "Hello world" in C
-Comment[sv]=Skapar ett enkelt Hello world-program i C
-Comment[tr]=C'de basit bir Merhaba Dünya programı yaratır.
-Comment[zh_CN]=生成 C 语言的 Hello world 程序
+Comment[x-test]=xxGenerates a simple Hello world program in Cxx
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.c
 Archive=chello.tar.gz
@@ -31,15 +15,7 @@ Type = value
 ValueType=QString
 Value= OPT_LIBS
 Comment= Optional libraries to link to.
-Comment[da]= Mulige biblioteker at linke til.
-Comment[de]= Optionale Bibliotheken, die eingebunden werden sollen.
-Comment[et]=Täiendavad lingitavad teegid.
-Comment[fr]=Bibliothèques optionnelles à lier.
-Comment[hu]=Linkelési programkönyvtárak (opcionális).
-Comment[it]= librerie opzionali da collegare.
-Comment[sv]= Valfria bibliotek att länka till.
-Comment[tr]=Bağlanılacak isteğe bağlı kütüphaneler.
-Comment[zh_CN]=可选的链接库。
+Comment[x-test]=xx Optional libraries to link to.xx
 Default= -lm
 
 [INCLUDES]
@@ -47,14 +23,7 @@ Type = value
 ValueType=QString
 Value= OPT_INCS
 Comment= Optional include path.
-Comment[da]= Mulig include-sti.
-Comment[de]= Optionaler Include-Pfad.
-Comment[et]=Täiendavate päisefailide asukoht.
-Comment[hu]=Include fájlok könyvtárai (opcionális).
-Comment[it]= percorso opzionale di inclusione.
-Comment[sv]= Valfri sökväg till deklarationsfiler.
-Comment[tr]=İsteğe bağlı include yolu.
-Comment[zh_CN]=可选的包含路径。
+Comment[x-test]=xx Optional include path.xx
 Default= -I/usr/include
 
 [CFLAGS]
@@ -62,28 +31,13 @@ Type = value
 ValueType=QString
 Value= CFLAGS
 Comment= Optional CFLAGS to define in the makefile.
-Comment[da]= Mulige CFLAGS at definere i makefile.
-Comment[de]= Optionale CFLAGS, die in makefile definiert werden.
-Comment[et]=Täiendavad Makefile'is defineeritavad CFLAGS'id.
-Comment[hu]=A Makefile-hoz definiálható CFLAGS információ (opcionális).
-Comment[it]= CFLAGS opzionale da definire nel makefile.
-Comment[sv]= Valfria CFLAGS att definiera i byggfilen.
-Comment[tr]=Makefile'da tanımlanacak isteğe bağlı CFLAGS değerleri
-Comment[zh_CN]=在 Makefile 中定义的可选 CFLAGS。
+Comment[x-test]=xx Optional CFLAGS to define in the makefile.xx
 Default=
 
 [MGS]
 Type=message
 Comment=A simple C project was created in %{dest}.
-Comment[da]=Et simpelt C projekt blev oprette i %{dest}.
-Comment[de]=Ein einfaches C-Project wurde in %{dest} erstellt.
-Comment[et]=Lihtne C-projekt loodi asukohta %{dest}.
-Comment[fr]=Un projet C simple a été créé dans %{dest}
-Comment[hu]=Létrejött egy egyszerű C-projekt itt: %{dest}.
-Comment[it]=È stato creato un semplice progetto C in %{dest}.
-Comment[sv]=Ett enkelt C-projekt skapades i %{dest}.
-Comment[tr]=Basit bir C projesi %{dest} içinde oluşturuldu.
-Comment[zh_CN]=在 %{dest} 中创建了简单的 C 工程。
+Comment[x-test]=xxA simple C project was created in %{dest}.xx
 Archive=chello.tar.gz
 
 [INCADMIN]

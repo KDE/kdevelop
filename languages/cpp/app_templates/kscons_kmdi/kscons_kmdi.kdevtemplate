@@ -1,21 +1,11 @@
 # KDE Config File
 [General]
 Name=Scons-based KMDI application
-Name[da]=Scons-baseret KMDI-program
-Name[de]=scons-basierte KMDI-Anwendung
-Name[et]=KMDI rakendus Sconsi põhjal
-Name[sv]=Scons-baserat KMDI-program
-Name[tr]=Scons tabanlı KMDI uygulaması
-Name[zh_CN]=基于 Scons 的 KMDI 应用程序
+Name[x-test]=xxScons-based KMDI applicationxx
 Category=C++/KDE 3.x
 Icon=kscons_kmdi.png
 Comment=Generates a complex KMDI application. Scons scripts are provided for compiling and installing the application.
-Comment[da]=Genererer et komplekst KDE-program. Der sørges for scons-scripter til at kompilere og installere programmet.
-Comment[de]=Erstellt eine aufwändige KMDI-Anwendung. Scons-Skripte für das Kompileren und Installieren der Anwendung werden zur Verfügung gestellt.
-Comment[et]=Keerulise KMDI rakenduse loomine. Luuakse ka Sconsi skriptid rakenduse kompileerimiseks ja paigaldamiseks.
-Comment[sv]=Skapar ett komplext KMDI-program. Scons-skript tillhandahålls för att kompilera och installera programmet.
-Comment[tr]=Karmaşık bir KMDI uygulaması yaratır. Uygulamayı derlemek ve kurmak için scons betikleri sağlanmıştır.
-Comment[zh_CN]=生成一个复杂的 KMDI 应用程序。此时会提供 Scons 脚本以供编译并安装应用程序。
+Comment[x-test]=xxGenerates a complex KMDI application. Scons scripts are provided for compiling and installing the application.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/QUICKSTART
 Archive=kscons_kmdi.tar.gz
@@ -199,9 +189,4 @@ Dest=%{dest}/src/%{APPNAMELC}_part.rc
 [MSG]
 Type=message
 Comment=A KDE application with scons scripts was created in %{dest}
-Comment[da]=Et KDE program med scons-scripter blev oprette i %{dest}
-Comment[de]=Eine KDE-Anwendung mit scons-Skripten wurde in %{dest} erstellt.
-Comment[et]=KDE rakendus Sconsi skriptidega loodi asukohta %{dest}
-Comment[sv]=Ett KDE-program med Scons-skript skapades i %{dest}
-Comment[tr]=Scons betikleri olan bir KDE uygulaması %{dest} içinde yaratıldı.
-Comment[zh_CN]=在 %{dest} 中创建了带 scons 脚本的 KDE 应用程序
+Comment[x-test]=xxA KDE application with scons scripts was created in %{dest}xx

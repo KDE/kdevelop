@@ -1,26 +1,11 @@
 # KDE Config File
 [General]
 Name=Noatun UI plugin
-Name[de]=Noatun UI-Plugin
-Name[et]=Noatuni kasutajaliidese plugin
-Name[fr]=Module d'interface utilisateur pour Noatun
-Name[hu]=Noatun UI-modul
-Name[it]=Plugin UI di noatun
-Name[sv]=Noatun-insticksprogram för användargränssnitt
-Name[tr]=Noatun Arayüz eklentisi
-Name[zh_CN]=Noatun 界面插件
+Name[x-test]=xxNoatun UI pluginxx
 Icon=noatunui.png
 Category=C++/KDE 3.x/Noatun
 Comment=Generates a simple user interface plugin for noatun.
-Comment[da]=Genererer en simpel brugergrænseflade-plugin  for noatun.
-Comment[de]=Erstellt ein einfaches Oberflächen-Plugin für noatun
-Comment[et]=Noatuni lihtsa kasutajaliidese plugina loomine.
-Comment[fr]=Génère un simple module d'interface utilisateur pour Noatun.
-Comment[hu]=Létrehoz egy egyszerű felületbővítő modult a Noatun programhoz.
-Comment[it]=Genera un semplice plugin di interfaccia per noatun.
-Comment[sv]=Skapar ett enkelt insticksprogram för användargränssnitt till Noatun.
-Comment[tr]=Noatun için basit bir kullanıcı arayüzü eklentisi yaratır.
-Comment[zh_CN]=生成 noatun 的简单用户界面插件。
+Comment[x-test]=xxGenerates a simple user interface plugin for noatun.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}_impl.cpp
 Archive=noatunui.tar.gz
@@ -129,12 +114,4 @@ Dest=%{dest}/src/%{APPNAMELC}.plugin
 [MSG]
 Type=message
 Comment=A Noatun UI plugin was created in %{dest}
-Comment[da]=Et Noatun UI-plugin blev oprettet i %{dest}
-Comment[de]=Ein Oberflächen-Plugin für Noatun wurde in %{dest} erstellt.
-Comment[et]=Noatuni kasutajaliidese plugin loodi asukohta %{dest}
-Comment[fr]=Un module d'interface utilisateur pour Noatun a été créé dans %{dest}
-Comment[hu]=Létrejött egy Noatun UI-modul itt: %{dest}
-Comment[it]=È stato creato un plugin UI per noatun in %{dest}
-Comment[sv]=Ett Noatun-insticksprogram för användargränssnitt skapades i %{dest}
-Comment[tr]=Bir Noatun Arayüz eklentisi %{dest} içinde yaratıldı.
-Comment[zh_CN]=在 %{dest} 中创建了一个 Noatun 界面插件
+Comment[x-test]=xxA Noatun UI plugin was created in %{dest}xx

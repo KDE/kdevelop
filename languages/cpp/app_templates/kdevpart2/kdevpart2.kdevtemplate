@@ -1,24 +1,10 @@
 # KDE Config File
 [General]
 Name=KDevelop Plugin (Standalone build)
-Name[da]=KDevelop plugin (Alenestående)
-Name[de]=KDevelop-Plugin (Unabhängige Erstellung)
-Name[et]=KDevelopi plugin (autonoomne)
-Name[hu]=KDevelop-bővítőmodul (önálló)
-Name[it]=Plugin di KDevelop (compilazione indipendente)
-Name[sv]=KDevelop-insticksprogram (att bygga fristående)
-Name[tr]=KDevelop Eklentisi (Kendi başına çalışabilen)
-Name[zh_CN]=KDevelop 插件(独立编译)
+Name[x-test]=xxKDevelop Plugin (Standalone build)xx
 Category=C++/KDE 3.x/KDevelop/
 Comment=This generates a KPart for KDevelop, to be built outside of the KDevelop source tree.
-Comment[da]=Dette genererer en KPart for KDevelop, til at bygges udenfor  KDevelop's kildetræ.
-Comment[de]=Hiermit wird eine Komponente (KPart) für KDevelop generiert, die außerhalb des Quelltextbaumes von KDevelop erstellt wird.
-Comment[et]=KDevelopi KPart'i loomine, mida saab ehitada väljaspool KDevelopi lähtekoodipuud.
-Comment[hu]=Létrehoz egy KDevelop-bővítőmodult, mely a KDevelopos forráskönyvtáron kívül fordítható le.
-Comment[it]=Genera un KPart per KDevelop, da compilare al di fuori dell'albero sorgente di KDevelop.
-Comment[sv]=Detta skapar ett KDevelop-delprogram, att bygga utanför KDevelops källkodsträd.
-Comment[tr]=Bu, KDevelop için, KDevelop kaynak ağacının dışında yapılacak, bir KPart yaratır.
-Comment[zh_CN]=这将生成一个 KDevelop 的 KPart，可以在 KDevelop 源代码树之外编译。
+Comment[x-test]=xxThis generates a KPart for KDevelop, to be built outside of the KDevelop source tree.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}_part.cpp
 Archive=kdevpart2.tar.gz
@@ -28,14 +14,7 @@ Type = value
 ValueType=QString
 Value= SCOPE
 Comment= The scope of a plugin (Global, Project, Core)
-Comment[da]= Et plugins omfang (Globalt, Projekt, Kerne)
-Comment[de]= Gültigkeitsbereich eines Plugins (Global, Projekt, Kern)
-Comment[et]=Plugina skoop (globaalne, projekt, tuum)
-Comment[hu]=A modul hatóköre (globális, projektszintű, alap)
-Comment[it]=Il contesto di un plugin (Globale, Progetto, Core)
-Comment[sv]= Insticksprogrammets omfattning (Global, Projekt, Kärna)
-Comment[tr]=Bir eklentinin alanı (Genel, Proje, İç)
-Comment[zh_CN]=插件的范围(全局、工程、核心)
+Comment[x-test]=xx The scope of a plugin (Global, Project, Core)xx
 Default= Global
 
 [PROPS]
@@ -43,15 +22,7 @@ Type = value
 ValueType=QString
 Value= PROPS
 Comment= The list of supported KDevelop properties
-Comment[da]= Listen af understøttede KDevelop-egenskaber
-Comment[de]= Die Liste der unterstützten KDevelop-Eigenschaften
-Comment[et]= KDevelopi toetatud omaduste nimekiri
-Comment[fr]= La liste des propriétés KDevelop prises en charge
-Comment[hu]=A támogatott KDevelop-tulajdonságok
-Comment[it]=Lista delle proprietà supportate da KDevelop
-Comment[sv]= Listan med egenskaper i KDevelop som stöds
-Comment[tr]=Desteklenen KDevelop özellikleri
-Comment[zh_CN]=列出支持的 KDevelop 属性
+Comment[x-test]=xx The list of supported KDevelop propertiesxx
 Default=
 
 [ADMIN]
@@ -168,12 +139,4 @@ Dest=%{dest}/src/README.dox
 [MSG]
 Type=message
 Comment=A KDevelop plugin was created in %{dest}
-Comment[da]=Et KDevelop plugin blev oprettet i %{dest}
-Comment[de]=Ein KDevelop-Plugin wurde in %{dest} erstellt.
-Comment[et]=KDevelopi plugin loodi asukohta %{dest}
-Comment[fr]=Un module KDevelop a été créé dans %{dest}
-Comment[hu]=Létrejött egy KDevelop-bővítőmodul itt: %{dest}
-Comment[it]=È stato creato un plugin per KDevelop in %{dest}
-Comment[sv]=Ett insticksprogram för KDevelop skapades i %{dest}
-Comment[tr]=Bir KDevelop eklentisi %{dest} içinde yaratıldı.
-Comment[zh_CN]=在 %{dest} 中创建了 KDevelop 插件
+Comment[x-test]=xxA KDevelop plugin was created in %{dest}xx

@@ -1,27 +1,11 @@
 # KDE Config File
 [General]
 Name=KOffice Part
-Name[br]=Perzh KOffice
-Name[da]=KOffice part
-Name[de]=KOffice-Komponente
-Name[et]=KOffice'i komponent
-Name[fr]=Composant KOffice
-Name[hu]=KOffice-objektum
-Name[it]=Part di KOffice
-Name[sv]=Koffice-delprogram
-Name[tr]=KOffice Bileşeni
-Name[zh_CN]=KOffice 部件
+Name[x-test]=xxKOffice Partxx
 Icon=kopart.png
 Category=C++/KDE 3.x/KOffice
 Comment=Generates a framework for a full KOffice Application.
-Comment[da]=Genererer et skelet for et fuldstændigt KOffice-program.
-Comment[de]=Erstellt ein Grundgerüst für eine vollwertige KOffice-Anwendung
-Comment[et]=KOffice'i rakenduse raamistiku loomine.
-Comment[hu]=Létrehoz egy kiindulási keretprogramot teljes KOffice-alkalmazás készítéséhez.
-Comment[it]=Genera un'infrastruttura per un'applicazione completa di KOffice.
-Comment[sv]=Skapar ett ramverk för ett fullständigt Koffice-program.
-Comment[tr]=Tam bir KOffice Uygulaması için bir çatı yaratır.
-Comment[zh_CN]=生成一个全功能的 KOffice 应用程序框架。
+Comment[x-test]=xxGenerates a framework for a full KOffice Application.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}_part.cpp
 Archive=kopart.tar.gz
@@ -166,12 +150,4 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A KOffice part was created in %{dest}
-Comment[da]=En KOffice part blev oprettet i %{dest}
-Comment[de]=Eine KOffice-Komponente wurde in %{dest} erstellt.
-Comment[et]=KOffice'i komponent loodi asukohta %{dest}
-Comment[fr]=Un composant KOffice a été créé dans %{dest}
-Comment[hu]=Létrejött egy KOffice-objektum itt: %{dest}
-Comment[it]=È stata creata una part di KOffice in %{dest}
-Comment[sv]=Ett Koffice-delprogram skapades i %{dest}
-Comment[tr]=Bir KOffice bileşeni %{dest} içinde yaratıldı.
-Comment[zh_CN]=在 %{dest} 中创建了一个 KOffice 部件
+Comment[x-test]=xxA KOffice part was created in %{dest}xx

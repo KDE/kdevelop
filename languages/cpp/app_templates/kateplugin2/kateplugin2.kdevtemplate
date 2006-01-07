@@ -1,26 +1,11 @@
 # KDE Config File
 [General]
 Name=Kate plugin with config page
-Name[da]=Kate plugin med indstillingsside
-Name[de]=Kate-Plugin mit Einstellungsseite
-Name[et]=Kate plugin seadistustedialoogiga
-Name[fr]=Module Kate avec page de configuration
-Name[hu]=Kate-bővítőmodul beállítólappal
-Name[it]=Plugin per Kate con pagina di configurazione
-Name[sv]=Kate-insticksprogram med inställningssida
-Name[tr]=Ayar sayfası olan bir Kate eklentisi
-Name[zh_CN]=带配置页的 Kate 插件
+Name[x-test]=xxKate plugin with config pagexx
 Icon=kateplugin2.png
 Category=C++/KDE 3.x/Kate
 Comment=Generates a plugin with config page for Kate the text editor.
-Comment[da]=Generere et plugin med indstillingsside for teksteditoren Kate.
-Comment[de]=Erstellt ein Plugin mit Konfigurationsseite für den Texteditor Kate.
-Comment[et]=Seadistustedialoogiga plugina loomine tekstiredaktorile Kate.
-Comment[hu]=Létrehoz egy bővítőmodult beállítólappal a Kate szövegszerkesztőhöz.
-Comment[it]=Genera un plugin con pagina di configurazione per l'editor di testo Kate.
-Comment[sv]=Skapar ett insticksprogram för texteditorn Kate med en inställningssida.
-Comment[tr]=Kate metin düzenleyicisi için ayar sayfası olan bir eklenti yaratır.
-Comment[zh_CN]=生成带配置页的 Kate 文本编辑器插件。
+Comment[x-test]=xxGenerates a plugin with config page for Kate the text editor.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
 Archive=kateplugin2.tar.gz
@@ -142,11 +127,4 @@ Process=false
 [MSG]
 Type=message
 Comment=A plugin for Kate with a config page was created in %{dest}
-Comment[da]=Et plugin for Kate med en indstillingsside blev oprettet i %{dest}
-Comment[de]=Ein Plugin für Kate mit Konfigurationsseite wurde in %{dest} erstellt.
-Comment[et]=Seadistustedialoogiga Kate plugin loodi asukohta %{dest}
-Comment[hu]=Létrejött egy Kate-bővítőmodul (beállítólappal) itt: %{dest}
-Comment[it]=È stato creato un plugin per Kate con pagina di configurazione in %{dest}
-Comment[sv]=Ett insticksprogram för Kate med en inställningssida skapades i %{dest}
-Comment[tr]=Kate için ayar sayfası olan bir eklenti %{dest} içinde yaratıldı.
-Comment[zh_CN]=在 %{dest} 中创建了一个带配置页的 Kate 插件
+Comment[x-test]=xxA plugin for Kate with a config page was created in %{dest}xx

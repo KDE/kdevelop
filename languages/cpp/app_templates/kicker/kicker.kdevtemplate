@@ -1,26 +1,11 @@
 # KDE Config File
 [General]
 Name=Kicker Applet
-Name[da]=Kicker-applet
-Name[de]=Kicker-Miniprogramm
-Name[et]=Kickeri aplett
-Name[fr]=Applet Kicker
-Name[hu]=Panel-kisalkalmazás
-Name[it]=Applet di kicker
-Name[sv]=Miniprogram för Kicker
-Name[tr]=Kicker Küçük Uygulaması
-Name[zh_CN]=Kicker 小程序
+Name[x-test]=xxKicker Appletxx
 Icon=kicker.png
 Category=C++/KDE 3.x
 Comment=Generates a framework for an applet that embeds into the KDE panel
-Comment[da]=Genererer et skelet for en applet der indlejres i KDE's panel
-Comment[de]=Erstellt das Grundgerüst für ein Miniprogramm, das in die KDE-Kontrollleiste eingebettet wird.
-Comment[et]=Apleti raamistiku loomine, mida saab põimida KDE paneelile
-Comment[hu]=Létrehoz egy keretprogramot KDE-s panel-kisalkalmazás készítéséhez
-Comment[it]=Genera un'infrastruttura per un'applet che si integra nel pannello di KDE
-Comment[sv]=Skapar ett ramverk för ett miniprogram som inbäddas i KDE:s panel
-Comment[tr]=KDE paneline gömülen bir küçük uygulama için bir çatı oluşturur.
-Comment[zh_CN]=生成一个可嵌入 KDE 面板的小程序框架
+Comment[x-test]=xxGenerates a framework for an applet that embeds into the KDE panelxx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kicker.tar.gz
@@ -124,12 +109,4 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A Kicker Applet was created in %{dest}
-Comment[da]=En Kicker applet blev oprettet i %{dest}
-Comment[de]=Ein Miniprogramm für Kicker wurde in %{dest} erstellt.
-Comment[et]=Kickeri aplett loodi asukohta %{dest}
-Comment[fr]=Une applet Kicker a été créée dans %{dest}
-Comment[hu]=Létrejött egy panel-kisalkalmazás itt: %{dest}
-Comment[it]=È stata creata un'applet per kicker in %{dest}
-Comment[sv]=Ett miniprogram för Kicker skapades i %{dest}
-Comment[tr]=Bir Kicker küçük uygulaması %{dest} içinde yaratıldı.
-Comment[zh_CN]=在 %{dest} 中创建了一个 Kicker 小程序
+Comment[x-test]=xxA Kicker Applet was created in %{dest}xx

@@ -4,6 +4,7 @@ Type=Service
 Exec=blubb
 Comment=C/C++ Language Support
 Name=KDevCppSupport
+Name[x-test]=xxKDevCppSupportxx
 GenericName=C/C++ Support
 ServiceTypes=KDevelop/LanguageSupport
 Icon=source_cpp

@@ -1,9 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=%{APPNAME}
-Name[xx]=xx%{APPNAME}xx
+Name[x-test]=xx%{APPNAME}xx
 Comment=
-Comment[xx]=xxxx
+Comment[x-test]=xxxx
 Exec=%{APPNAMELC}
 Icon=%{APPNAMELC}-logo
 Terminal=false

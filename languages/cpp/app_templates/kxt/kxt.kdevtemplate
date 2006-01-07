@@ -1,27 +1,11 @@
 # KDE Config File
 [General]
 Name=KConfig XT application
-Name[da]=KConfig XT program
-Name[de]=KConfig XT Anwendung
-Name[et]=KConfig XT rakendus
-Name[fr]=Application KConfig XT
-Name[hu]=KConfig XT-alapú alkalmazás
-Name[it]=Applicazione KConfig XT
-Name[sv]=KConfig XT-program
-Name[tr]=KConfig XT uygulaması
-Name[zh_CN]=KConfig XT 应用程序
+Name[x-test]=xxKConfig XT applicationxx
 Category=C++/KDE 3.x
 Icon=kxt.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
-Comment[da]=Genererer et simpelt KDE-program med en kontrol og en indstillingsdialog
-Comment[de]=Erstellt eine einfache KDE-Anwendung mit einem Widget und einem Einstellungsdialog.
-Comment[en_GB]=Generates a simple KDE application with one widget and a configuration dialogue
-Comment[et]=Lihtsa KDE rakenduse loomine ühe vidina ja seadistustedialoogiga.
-Comment[hu]=Létrehoz egy egyszerű KDE-alkalmazást egy grafikus elemmel és egy beállítóablakkal
-Comment[it]=Genera una semplice applicazione KDE con un elemento grafico e una finestra di configurazione
-Comment[sv]=Skapar ett enkelt KDE-program med en grafisk komponent och en inställningsdialogruta
-Comment[tr]=Bir parçacığı ve ayar penceresi olan basit bir KDE uygulaması yaratır.
-Comment[zh_CN]=生成带一个部件和一个配置对话框的简单 KDE 应用程序
+Comment[x-test]=xxGenerates a simple KDE application with one widget and a configuration dialogxx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kxt.tar.gz
@@ -200,12 +184,4 @@ Dest=%{dest}/configure.in.in
 [MSG]
 Type=message
 Comment=A KConfig XT application was created in %{dest}
-Comment[da]=Et KConfig XT-program blev oprettet i %{dest}
-Comment[de]=Eine KConfig-XT-Anwendung wurde in %{dest} erstellt
-Comment[et]=A KConfig XT rakendus loodi asukohta %{dest}
-Comment[fr]=Une application KConfig XT a été créée dans %{dest}
-Comment[hu]=Létrejött egy KConfig XT-alapú alkalmazás itt: %{dest}
-Comment[it]=È stata creata un'applicazione KConfig XT in %{dest}
-Comment[sv]=Ett KConfig XT-program skapades i %{dest}
-Comment[tr]=Bir KConfig XT uygulaması %{dest} içinde yaratıldı.
-Comment[zh_CN]=在 %{dest} 中创建了 KConfig XT 应用程序
+Comment[x-test]=xxA KConfig XT application was created in %{dest}xx

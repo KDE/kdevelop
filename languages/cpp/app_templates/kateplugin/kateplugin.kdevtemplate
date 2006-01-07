@@ -1,27 +1,11 @@
 # KDE Config File
 [General]
 Name=Kate plugin
-Name[br]=Lugent Kate
-Name[de]=Kate-Plugin
-Name[fr]=Module Kate
-Name[ga]=Breiseán Kate
-Name[hu]=Kate-bővítőmodul
-Name[it]=Plugin per Kate
-Name[sv]=Kate-insticksprogram
-Name[tr]=Kate eklentisi
-Name[zh_CN]=Kate 插件
+Name[x-test]=xxKate pluginxx
 Icon=kateplugin.png
 Category=C++/KDE 3.x/Kate
 Comment=Generates a plugin for Kate the text editor.
-Comment[da]=Genererer et plugin for teksteditoren kate
-Comment[de]=Erstellt ein Plugin für den Texteditor Kate
-Comment[et]=Plugina loomine tekstiredaktorile Kate.
-Comment[fr]=Génère un module pou l'éditeur de texte Kate.
-Comment[hu]=Létrehoz egy bővítőmodult a Kate szövegszerkesztőhöz.
-Comment[it]=Genera un plugin per l'editor di testo Kate.
-Comment[sv]=Skapar ett insticksprogram för texteditorn Kate.
-Comment[tr]=Kate metin düzenleyicisi için bir eklenti yaratır.
-Comment[zh_CN]=生成 Kate 文本编辑器的插件。
+Comment[x-test]=xxGenerates a plugin for Kate the text editor.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
 Archive=kateplugin.tar.gz
@@ -143,12 +127,4 @@ Process=false
 [MSG]
 Type=message
 Comment=A plugin for Kate was created at %{dest}
-Comment[da]=Et plugin for Kate blev oprettet på %{dest}
-Comment[de]=Ein Plugin für Kate wurde in %{dest} erstellt.
-Comment[et]=Kate plugin loodi asukohta %{dest}
-Comment[fr]=Un module pour Kate a été créé dans %{dest}
-Comment[hu]=Létrejött egy Kate-bővítőmodul itt: %{dest}
-Comment[it]=È stato creato un plugin per Kate in %{dest}
-Comment[sv]=Ett insticksprogram för Kate skapades i %{dest}
-Comment[tr]=Kate için bir eklenti %{dest} içinde yaratıldı.
-Comment[zh_CN]=在 %{dest} 中创建了一个 Kate 的插件
+Comment[x-test]=xxA plugin for Kate was created at %{dest}xx

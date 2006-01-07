@@ -1,29 +1,11 @@
 # KDE Config File
 [General]
 Name=Opie Application
-Name[da]=Opie-program
-Name[de]=Opie-Anwendung
-Name[et]=Opie rakendus
-Name[fr]=Application Opie
-Name[ga]=Feidhmchlár Opie
-Name[hu]=Opie-alkalmazás
-Name[it]=Applicazione Opie
-Name[ru]=Приложение opie
-Name[sv]=Opie-program
-Name[tr]=Opie Uygulaması
-Name[zh_CN]=Opie 应用程序
+Name[x-test]=xxOpie Applicationxx
 Icon=qmakeapp.png
 Category=C++/Embedded/Opie
 Comment=Generate an Opie application.
-Comment[da]=Generér et Opie-program.
-Comment[de]=Erstellt eine Opie-Anwendung
-Comment[et]=Opie rakenduse loomine.
-Comment[fr]=Génèrer une application Opie.
-Comment[hu]=Létrehoz egy Opie-alkalmazást.
-Comment[it]=Genera un'applicazione Opie.
-Comment[sv]=Skapa ett Opie-program.
-Comment[tr]=Bir Opie uygulaması yarat
-Comment[zh_CN]=生成一个 Opie 应用程序。
+Comment[x-test]=xxGenerate an Opie application.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opieapp.tar.gz
@@ -80,12 +62,4 @@ Dest=%{dest}/apps/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=An opie application was created in %{dest}
-Comment[da]=Et opie-program blev oprettet i %{dest}
-Comment[de]=Eine Opie-Anwendung wurde in %{dest} erstellt.
-Comment[et]=Opie rakendus loodi asukohta %{dest}
-Comment[fr]=Une application Opie a été créée dans %{dest}
-Comment[hu]=Létrejött egy Opie-alkalmazás itt: %{dest}
-Comment[it]=È stata creata un'applicazione Opie in %{dest}
-Comment[sv]=Ett Opie-program skapades i %{dest}
-Comment[tr]=Bir opie uygulaması %{dest} içinde yaratıldı.
-Comment[zh_CN]=在 %{dest} 中创建了一个 opie 应用程序
+Comment[x-test]=xxAn opie application was created in %{dest}xx

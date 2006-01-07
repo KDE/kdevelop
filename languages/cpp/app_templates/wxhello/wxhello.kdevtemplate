@@ -1,22 +1,10 @@
 # KDE Config File
 [General]
 Name=Simple Hello wxWidgets Application
-Name[da]=Simpelt Goddag wxWidgets program
-Name[de]=Einfache wxWidgets-Anwendung
-Name[et]=Lihtne wxWidgets'i tervitusrakendus
-Name[hu]=wxWidgets-alapú Hello world program
-Name[it]=Semplice applicazione wxWidgets di "Hello"
-Name[sv]=Enkelt Hello-program för wxWidgets
-Name[tr]=Basit Merhaba wxWidgets Uygulaması
+Name[x-test]=xxSimple Hello wxWidgets Applicationxx
 Category=C++/wxWidgets
 Comment=Generates a simple wxWidgets Hello application.
-Comment[da]=Genererer et simpelt wxWidgets Goddag-program.
-Comment[de]=Erstellt eine einfache wxWidgets-Anwendung
-Comment[et]=Lihtsa wxWidgets'i tervitusrakenduse loomine.
-Comment[hu]=Létrehoz egy egyszerű wxWidgets-alkalmazást.
-Comment[it]=Genera una semplice applicazione wxWidgets di "Hello".
-Comment[sv]=Skapar ett enkelt Hello-program för wxWidgets.
-Comment[tr]=Basit bir wxWidgets Merhaba uygulaması yaratır.
+Comment[x-test]=xxGenerates a simple wxWidgets Hello application.xx
 FileTemplates=h,CStyle,cpp,CStyle
 Icon=wxhello.png
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -123,10 +111,4 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=Simple hello wxWidgets application was created in %{dest}
-Comment[da]=Simpelt Goddag wxWidgets program blev oprettet i %{dest}
-Comment[de]=Eine einfache wxWidgets-Anwendung wurde in %{dest} erstellt.
-Comment[et]=Lihtne wxWidgets'i tervitusrakendus loodi asukohta %{dest}
-Comment[hu]=Létrejött egy egyszerű wxWidgets-alkalmazás itt: %{dest}
-Comment[it]=È stata creata una semplice applicazione wxWidgets di "hello" in %{dest}
-Comment[sv]=Ett enkelt Hello-program för wxWidgets.skapades i %{dest}
-Comment[tr]=Basit merhaba wxWidgets uygulaması %{dest} içinde yaratıldı.
+Comment[x-test]=xxSimple hello wxWidgets application was created in %{dest}xx

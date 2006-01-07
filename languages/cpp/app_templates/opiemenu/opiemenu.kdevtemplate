@@ -1,29 +1,11 @@
 # KDE Config File
 [General]
 Name=Opie Menu Applet
-Name[da]=Opie menu-applet
-Name[de]=Opie Menü-Miniprogramm (Applet)
-Name[et]=Opie menüüaplett
-Name[fr]=Applet de menu Opie
-Name[ga]=Feidhmchláirín Roghchláir Opie
-Name[hu]=Opie-s menü-kisalkalmazás
-Name[it]=Applet di menu Opie
-Name[ru]=Аплет меню Opie
-Name[sv]=Opie-menyminiprogram
-Name[tr]=Opie Menü Küçük Uygulaması
-Name[zh_CN]=Opie 菜单小程序
+Name[x-test]=xxOpie Menu Appletxx
 Icon=qmakeapp.png
 Category=C++/Embedded/Opie
 Comment=Generate an Opie menu applet.
-Comment[da]=Generér en Opie menu-applet.
-Comment[de]=Erstellt ein Opie Menü-Miniprogramm (Applet)
-Comment[et]=Opie menüüapleti loomine.
-Comment[fr]=Génère une applet de menu Opie.
-Comment[hu]=Létrehoz egy Opie-s menü-kisalkalmazást.
-Comment[it]=Genera un'applet di menu Opie.
-Comment[sv]=Skapa ett Opie-menyminiprogram.
-Comment[tr]=Bir Opie menü küçük uygulaması yarat
-Comment[zh_CN]=生成一个 Opie 菜单小程序。
+Comment[x-test]=xxGenerate an Opie menu applet.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opiemenu.tar.gz
@@ -66,13 +48,5 @@ Dest=%{dest}/%{APPNAMELC}.h
 [MSG]
 Type=message
 Comment=An opie menu applet was created in %{dest}
-Comment[da]=En opie menu-applet blev oprettet i %{dest}
-Comment[de]=Ein Opie Menü-Miniprogramm (Applet) wurde in %{dest} erstellt.
-Comment[et]=Opie menüüaplett loodi asukohta %{dest}
-Comment[fr]=Une applet de menu Opie a été créée dans %{dest}
-Comment[hu]=Létrejött egy Opie-s menü-kisalkalmazás itt: %{dest}
-Comment[it]=È stata creata un'applet di menu Opie in %{dest}
-Comment[sv]=Ett Opie-menyprogram skapades i %{dest}
-Comment[tr]=Bir opie menü küçük uygulaması %{dest} içinde yaratıldı.
-Comment[zh_CN]=在 %{dest} 中创建了一个 opie 菜单小程序
+Comment[x-test]=xxAn opie menu applet was created in %{dest}xx
 

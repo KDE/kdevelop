@@ -1,26 +1,11 @@
 # KDE Config File
 [General]
 Name=KDE DCOP Service
-Name[br]=Servij DCOP KDE
-Name[da]=KDE DCOP-service
-Name[de]=KDE DCOP-Dienst
-Name[et]=KDE DCOP-teenus
-Name[fr]=Service DCOP KDE
-Name[ga]=Seirbhís DCOP KDE
-Name[hu]=KDE DCOP-szolgáltatás
-Name[it]=Servizio DCOP di KDE
-Name[sv]=KDE:s DCOP-tjänst
-Name[tr]=KDE DCOP Hizmeti
-Name[zh_CN]=KDE DCOP 服务
+Name[x-test]=xxKDE DCOP Servicexx
 Icon=kdcop.png
 Category=C++/KDE 3.x
 Comment=Generates a framework for a KDE DCOP service and client access library.
-Comment[da]=Genererer et skelet for en KDE dcop-tjeneste og klientadgangsbibliotek.
-Comment[de]=Erstellt das Grundgerüst für einen KDE DCOP-Dienst und eine Bibliothek für den Client-Zugriff.
-Comment[et]=KDE DCOP-teenuse raamistiku ja kliendi ligipääsu teegi loomine.
-Comment[sv]=Skapar ett ramverk för en KDE DCOP-tjänst och klientåtkomstbibliotek.
-Comment[tr]=Bir KDE DCOP hizmeti ve istemci erişim kütüphanesi için bir çatı yaratır.
-Comment[zh_CN]=生成一个 KDE DCOP 服务和客户访问库的框架。
+Comment[x-test]=xxGenerates a framework for a KDE DCOP service and client access library.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=dcopservice.tar.gz
@@ -129,12 +114,4 @@ Dest=%{dest}/src/main.cpp
 [MSG]
 Type=message
 Comment=A KDE DCOP Service was created in %{dest}
-Comment[da]=En KDE DCOP tjeneste blev oprettet i %{dest}
-Comment[de]=Ein KDE DCOP-Dienst wurde in %{dest} erstellt.
-Comment[et]=KDE DCOP-teenus loodi asukohta %{dest}
-Comment[fr]=Un service DCOP KDE a été créé dans %{dest}
-Comment[hu]=Létrejött egy KDE DCOP-szolgáltatás itt: %{dest}
-Comment[it]=È stato creato un servizio DCOP di KDE in %{dest}
-Comment[sv]=En KDE DCOP-tjänst skapades i %{dest}
-Comment[tr]=Bir KDE DCOP Hizmeti %{dest} içinde yaratılmıştır.
-Comment[zh_CN]=在 %{dest} 中创建了一个 KDE DCOP 服务
+Comment[x-test]=xxA KDE DCOP Service was created in %{dest}xx

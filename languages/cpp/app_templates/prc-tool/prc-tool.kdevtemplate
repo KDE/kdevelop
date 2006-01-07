@@ -1,26 +1,11 @@
 # KDE Config File
 [General]
 Name=Hello world program
-Name[da]=Goddag verden program
-Name[de]=Hello-world-Programm
-Name[et]="Tere,maailm" programm
-Name[fr]=Programme « Hello world »
-Name[it]=Programma di "Hello world"
-Name[sv]=Hello world-program
-Name[tr]=Merhaba Dünya Programı
-Name[zh_CN]=Hello world 程序
+Name[x-test]=xxHello world programxx
 Icon= # got none
 Category=C/PalmOS
 Comment=Generates a template for palm application
-Comment[da]=Genererer en skabelon for et palm-program
-Comment[de]=Erstellt das Gerüst für eine Palm-Anwendung
-Comment[et]=Palmi rakenduse malli loomine.
-Comment[fr]=Génère un modèle d'application Palm
-Comment[hu]=Létrehoz egy Palm-os alkalmazássablont
-Comment[it]=Genera un modello per un'applicazione palm
-Comment[sv]=Skapar en mall för ett Palm-program
-Comment[tr]=Bir avuçiçi uygulaması için bir şablon yaratır
-Comment[zh_CN]=生成一个 Palm 应用程序的模板
+Comment[x-test]=xxGenerates a template for palm applicationxx
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAME}.c
 Archive=prc-tool.tar.gz
@@ -68,12 +53,4 @@ Dest=%{dest}/callback.h
 [MSG]
 Type=message
 Comment=A palm application was created in %{dest}
-Comment[da]=Et palm-program blev oprettet i %{dest}
-Comment[de]=Eine Palm-Anwendung wurde in %{dest} erstellt.
-Comment[et]=Palmi rakendus loodi asukohta %{dest}
-Comment[fr]=Une application Palm a été créée dans %{dest}
-Comment[hu]=Létrejött egy Palmos alkalmazássablon itt: %{dest}
-Comment[it]=È stata creata un'applicazione palm in %{dest}
-Comment[sv]=Ett Palm-program skapades i %{dest}
-Comment[tr]=Bir avuçiçi uygulaması %{dest} içinde yaratıldı
-Comment[zh_CN]=在 %{dest} 中创建了一个 Palme 应用程序
+Comment[x-test]=xxA palm application was created in %{dest}xx

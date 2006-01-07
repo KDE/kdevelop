@@ -1,24 +1,11 @@
 # KDE Config File
 [General]
 Name=Simple Win32 Hello World
-Name[da]=Simpelt Win32 Goddag verden
-Name[de]=Einfaches Win32 Hello-World-Programm
-Name[et]=Lihtne Win32 "Tere, maailm"
-Name[fr]=Simple « Hello world » Win32
-Name[hu]=Win32-alapú Hello world program
-Name[it]=Semplice "Hello World" Win32
-Name[sv]=Enkelt Win32 Hello World
-Name[tr]=Basit Win32 Merhaba Dünya
+Name[x-test]=xxSimple Win32 Hello Worldxx
 Icon=win32hello.png
 Category=C++/Win32
 Comment=Generates a shell project for crosscompiling Win32 projects.
-Comment[da]=Genererer et skalprojekt for krydskompilering af Win32-projekter.
-Comment[de]=Erstellt ein Shell-Projekt für die Crosskompilierung von Win32-Projekten.
-Comment[et]=Shelliprojekti loomine Win32 projektide kompileerimiseks.
-Comment[hu]=Létrehoz egy konzolos projektet Win32-projektek keresztfordításához.
-Comment[it]=Genera un progetto di shell per progetti Win32 multi compilanti.
-Comment[sv]=Skapar ett skalprojekt för korskompilering av Win32-projekt.
-Comment[tr]=Win32 projelerini karşıderlemek için bir kabul projesi yarat.
+Comment[x-test]=xxGenerates a shell project for crosscompiling Win32 projects.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=src/%{APPNAMELC}.cpp
 Archive=win32hello.tar.gz
@@ -69,11 +56,5 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=For this project to compile and run you need both Wine and MinGW installed.
-Comment[da]=For at dette projekt skal kompilere og køre har du brug for at have både Wine og MinGW installeret.
-Comment[de]=Um dieses Projekt zu kompilieren und auszuführen, muss sowohl Wine als auch MinGW installiert sein.
-Comment[et]=Selle projekti kompileerimiseks ja käivitamiseks peab olema paigaldatud nii Wine kui MinGW.
-Comment[hu]=A projekt lefordításához és futtatásához szükség van a Wine és a MinGW telepítésére.
-Comment[it]=Per compilare ed eseguire questo progetto dei avere sia Wine che MinGW installati.
-Comment[sv]=För att projektet ska kompileras och köras behöver du ha installerat både Wine och MinGW.
-Comment[tr]=Bu projenin derlenmesi için Wine ve MinGW'nin kurulu olması lazım.
+Comment[x-test]=xxFor this project to compile and run you need both Wine and MinGW installed.xx
 

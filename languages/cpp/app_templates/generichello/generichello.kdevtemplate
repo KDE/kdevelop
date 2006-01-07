@@ -1,26 +1,11 @@
 # KDE Config File
 [General]
 Name=C++ program (shell script build system)
-Name[da]=C++ program (skalscript byggesystem)
-Name[de]=C++-Programm (Shell-Skript basiertes Erstellungssystem)
-Name[et]=C++ programm (shelliskripti ehitussüsteem)
-Name[hu]=C++-program (parancssoros fordítási szkripttel)
-Name[it]=Programma C++ (sistema di compilazione con script di shell)
-Name[sv]=C++ program (skalskript byggsystem)
-Name[tr]=C++ programı (kabuk betiği kurulum sistemi)
-Name[zh_CN]=C++ 程序(Shell 脚本创建系统)
+Name[x-test]=xxC++ program (shell script build system)xx
 Icon=cpphello.png
 Category=C++/Generic
 Comment=Generates a simple Hello world program in C++
-Comment[da]=Genererer et simpelt Goddag verden program in C++
-Comment[de]=Erstellt ein einfaches Hello-World-Programm in C++
-Comment[et]=Lihtsa "Tere, maailm" programmi loomine C++-s
-Comment[fr]=Génère un simple programme « Hello world » en C++
-Comment[hu]=Létrehoz egy egyszerű Hello world programot C++-ban
-Comment[it]=Genera un semplice programma di "Hello world" in C++
-Comment[sv]=Skapar ett enkelt Hello world-program i C++
-Comment[tr]=C++'da basit bir Merhaba Dünya programı yaratır.
-Comment[zh_CN]=生成 C++ 的 Hello world 程序
+Comment[x-test]=xxGenerates a simple Hello world program in C++xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=generichello.tar.gz
