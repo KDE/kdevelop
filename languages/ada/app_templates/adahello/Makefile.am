@@ -7,7 +7,7 @@ templatedir = ${appwizarddatadir}/templates
 appwizarddatadir = ${kde_datadir}/kdevappwizard
 adahello.tar.gz:
 	$(TAR) -cf adahello.tar -C $(srcdir) ${dataFiles}
-	$(GZIP) -f9 adahello.tar
+	gzip -f9 adahello.tar
 
 archivedir = ${appwizarddatadir}
 archive_DATA = adahello.tar.gz adahello.png
