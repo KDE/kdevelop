@@ -230,6 +230,7 @@ void GrepViewWidget::searchActivated()
 	{
 		command += "| grep -v \"SCCS/\" ";
 		command += "| grep -v \"CVS/\" ";
+		command += "| grep -v \"\\.svn/\" ";
 	}
 
 	// quote spaces in filenames going to xargs
