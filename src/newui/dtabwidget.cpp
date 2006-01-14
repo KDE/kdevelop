@@ -28,8 +28,9 @@
 #include <kglobal.h>
 
 DTabWidget::DTabWidget(QWidget *parent, const char *name)
-    :KTabWidget(parent, name), m_closeButton(0)
+    :KTabWidget(parent), m_closeButton(0)
 {
+    setObjectName( name );
     setFocusPolicy(Qt::NoFocus);
     setMargin(0);
 

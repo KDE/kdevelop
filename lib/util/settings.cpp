@@ -17,17 +17,17 @@
 QString Settings::terminalEmulatorName( KConfig & config )
 {
 	config.setGroup("TerminalEmulator");
-	bool useKDESetting = config.readEntry( "UseKDESetting", true ).toBool();
+	bool useKDESetting = config.readEntry( "UseKDESetting", true );
 	QString terminal;
 		
 	if ( useKDESetting )
 	{
 		KConfigGroup confGroup( KGlobal::config(), QLatin1String("General") );
-		terminal = confGroup.readEntry("TerminalApplication", "konsole");
+		terminal = confGroup.readEntry( QLatin1String("TerminalApplication"), QString("konsole"));
 	}
 	else
 	{
-		terminal = config.readEntry( "TerminalApplication", "konsole");
+		terminal = config.readEntry( QLatin1String("TerminalApplication"), QString("konsole"));
 	}
 	return terminal;
 }
