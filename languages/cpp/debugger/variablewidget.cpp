@@ -625,10 +625,13 @@ void VariableTree::slotCurrentFrame(int frameNo, int threadNo)
     // will be repopulated if needed.
     if (frame->needLocals() || justPaused_) 
     {
-        setActiveFlag();
-        // This will eventually call back to slotParametersReady and 
-        // slotLocalsReady
-        emit produceVariablesInfo();
+        if (frame->isOpen())
+        {
+            setActiveFlag();
+          // This will eventually call back to slotParametersReady and 
+          // slotLocalsReady
+            emit produceVariablesInfo();
+        }
 
         if (justPaused_)
         {
@@ -1201,23 +1204,18 @@ void VarFrameRoot::setLocals(const char *locals)
 // state. This
 void VarFrameRoot::setOpen(bool open)
 {
-    bool stateChanged = ( isOpen() != open );
+    bool frameOpened = ( isOpen()==false && open==true );
     QListViewItem::setOpen(open);
 
     VariableTree *parent = (VariableTree*)listView();
-    if (parent && stateChanged) {
-        //everytime the open-state changed we need to tell the controller
-        emit parent->setLocalViewState(open);
-    }
-
-    if (!open)
-        return;
-
-    if (parent && stateChanged) {
-        //if the open-state changed to OPEN we need to reget the locals 
+    if (parent && frameOpened) {
+        parent->setActiveFlag();
         emit parent->produceVariablesInfo();
     }
-
+/*
+    if (!open)
+        return;
+*/
     if (!params_.isNull())
         GDBParser::getGDBParser()->parseCompositeValue(this, params_.data());
     if (!locals_.isNull())

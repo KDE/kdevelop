@@ -48,7 +48,7 @@ enum DBGStateFlags
   s_waitForWrite      = 8,
   s_programExited     = 16,
   s_silent            = 32,
-  s_viewLocals        = 64,
+//  removed s_viewLocals        = 64,
   s_viewBT            = 128,
   s_viewBP            = 256,
   s_attached          = 512,
@@ -121,7 +121,6 @@ public slots:
     virtual void slotExpandUserItem(ValueCallback* callback,
                                     const QString &expression)             = 0;
     virtual void slotSelectFrame(int frame, int thread, bool needFrames)    = 0;
-    virtual void slotSetLocalViewState(bool onOff)                          = 0;
 
     // jw - for optional additional commands and initialization
     virtual void slotVarItemConstructed(VarItem */*item*/) {}

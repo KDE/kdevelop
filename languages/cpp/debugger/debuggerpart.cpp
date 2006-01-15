@@ -554,8 +554,6 @@ void DebuggerPart::setupController()
              controller,            SLOT(slotExpandItem(TrimmableItem*)));
     connect( variableTree,          SIGNAL(expandUserItem(ValueCallback*, const QString&)),
              controller,            SLOT(slotExpandUserItem(ValueCallback*, const QString&)));
-    connect( variableTree,          SIGNAL(setLocalViewState(bool)),
-             controller,            SLOT(slotSetLocalViewState(bool)));
     connect( variableTree,          SIGNAL(varItemConstructed(VarItem*)),
              controller,            SLOT(slotVarItemConstructed(VarItem*)));     // jw
     connect( variableTree,          SIGNAL(produceVariablesInfo()),

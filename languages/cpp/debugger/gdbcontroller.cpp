@@ -429,7 +429,7 @@ void GDBController::actOnProgramPause(const QString &msg)
 // all other commands are disabled.
 void GDBController::programNoApp(const QString &msg, bool msgBox)
 {
-    state_ = (s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown)));
+    state_ = (s_appNotStarted|s_programExited|s_shuttingDown);
     destroyCmds();
 
     // We're always at frame zero when the program stops
@@ -1588,11 +1588,8 @@ void GDBController::slotCoreFile(const QString &coreFile)
     // command
     queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
 
-    if (stateIsOn(s_viewLocals))
-    {
-        queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
-        queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
-    }
+    queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
+    queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
 }
 
 // **************************************************************************
@@ -1610,11 +1607,8 @@ void GDBController::slotAttachTo(int pid)
     // command
     queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
 
-    if (stateIsOn(s_viewLocals))
-    {
-        queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
-        queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
-    }
+    queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
+    queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
 }
 
 // **************************************************************************
@@ -1973,10 +1967,8 @@ void GDBController::slotProduceBacktrace(int threadNo)
 
 void GDBController::slotProduceVariablesInfo()
 {
-    if (stateIsOn(s_viewLocals)) {
-        queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
-        queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));    
-    } 
+    queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
+    queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));    
 }
 
 // **************************************************************************
@@ -2090,20 +2082,6 @@ void GDBController::slotExpandUserItem(ValueCallback* callback,
 
 // **************************************************************************
 
-// The user will only get locals if one of the branches to the local tree
-// is open. This speeds up stepping through code a great deal.
-void GDBController::slotSetLocalViewState(bool onOff)
-{
-    if (onOff)
-        setStateOn(s_viewLocals);
-    else
-        setStateOff(s_viewLocals);
-
-    kdDebug(9012) << (onOff ? "<Locals ON>": "<Locals OFF>") << endl;
-}
-
-// **************************************************************************
-
 // Data from gdb gets processed here.
 void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 {
@@ -2205,7 +2183,7 @@ void GDBController::slotDbgProcessExited(KProcess* process)
         emit debuggerAbnormalExit();
 
     destroyCmds();
-    state_ = s_dbgNotStarted|s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown));
+    state_ = (s_dbgNotStarted|s_appNotStarted|s_programExited|s_shuttingDown);
     emit dbgStatus (i18n("Process exited"), state_);
 
     emit gdbStdout("(gdb) Process exited\n");

@@ -121,7 +121,6 @@ public slots:
     void slotExpandUserItem(ValueCallback* callback, 
                             const QString &expression);
     void slotSelectFrame(int frameNo, int threadNo, bool needFrames);
-    void slotSetLocalViewState(bool onOff);
     void slotProduceBacktrace(int threadNo);
     /** Produces information about local variables of the current frame
         by means of emitting localsReady and parametersReady signals. */
