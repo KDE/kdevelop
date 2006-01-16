@@ -172,14 +172,14 @@ bool LanguageInterfaceImpl::supports( Support s ) const
 QStringList LanguageInterfaceImpl::fileFilterList() const
 {
     QStringList f;
-    f << "C++ Files (*.cpp *.C *.cxx *.c++ *.c *.h *.H *.hpp *.hxx)";
+    f << "C++ Files (*.cpp *.C *.cxx *.c++ *.ocl *.c *.h *.H *.hpp *.hxx)";
     return f;
 
 }
 QStringList LanguageInterfaceImpl::fileExtensionList() const
 {
     QStringList f;
-    f << "cpp" << "C" << "cxx" << "c++" << "c" <<"h" << "H" << "hpp" << "hxx";
+    f << "cpp" << "ocl" << "C" << "cxx" << "c++" << "c" <<"h" << "H" << "hpp" << "hxx";
     return f;
 }
 

@@ -1,3 +1,7 @@
+2006-01-16  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+* Added .ocl extension for Onboard Control Language sources used for
+  C files in some satellites
+
 2005-08-17  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 * The $SHELL environment variable is set to 'irb' for ruby projects.
 * Added a project option to customise the ruby shell

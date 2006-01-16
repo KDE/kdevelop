@@ -2828,6 +2828,7 @@ void Config::check()
     filePatternList.append("*.cc"); 
     filePatternList.append("*.cxx");
     filePatternList.append("*.cpp");
+    filePatternList.append("*.ocl");
     filePatternList.append("*.c++");
     filePatternList.append("*.java");
     filePatternList.append("*.ii");
@@ -3535,7 +3536,7 @@ void Config::create()
                     "FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp \n"
                     "and *.h) to filter out the source-files in the directories. If left \n"
                     "blank the following patterns are tested: \n"
-		    "*.c *.cc *.cxx *.cpp *.c++ *.java *.ii *.ixx *.ipp *.i++ *.inl *.h *.hh *.hxx \n"
+		    "*.c *.cc *.cxx *.cpp *.c++ *.ocl *.java *.ii *.ixx *.ipp *.i++ *.inl *.h *.hh *.hxx \n"
 		    "*.hpp *.h++ *.idl *.odl *.cs *.php *.php3 *.inc *.m *.mm\n"
                  );
   cb = addBool(

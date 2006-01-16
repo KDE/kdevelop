@@ -275,7 +275,7 @@ GroupItem::GroupItem(QListView *lv, GroupType type, const QString &text, const Q
 
 GroupItem::GroupType GroupItem::groupTypeForExtension(const QString &ext)
 {
-    if (ext == "cpp" || ext == "cc" || ext == "c" || ext == "C" || ext == "c++" || ext == "cxx")
+    if (ext == "cpp" || ext == "cc" || ext == "c" || ext == "C" || ext == "c++" || ext == "cxx" || ext == "ocl")
         return Sources;
     else if (ext == "hpp" || ext == "h" || ext == "hxx" || ext == "hh" || ext == "h++" || ext == "H")
         return Headers;
@@ -345,7 +345,7 @@ void GroupItem::groupTypeMeanings(GroupItem::GroupType type, QString& title, QSt
 
         default: // just give back source files, et all
             title = i18n("Source Files");
-            ext = "*.cpp *.cc *.c *.hpp *.h *.ui";
+            ext = "*.cpp *.cc *.ocl *.c *.hpp *.h *.ui";
     }
 }
 
