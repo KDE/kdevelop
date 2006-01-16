@@ -361,9 +361,10 @@ void RubySupportPart::parse(const QString &fileName)
 			}
 		  }
 		} else {
-          if ( !lastClass->hasFunction(symbolre.cap(1)) ) { 
-		    QStringList scope( lastClass->name() );
-			if (attr == "attr_accessor" || attr == "attr_reader") {
+ 		    QStringList scope( lastClass->name() );
+			if (	!lastClass->hasFunction(symbolre.cap(1))
+					&& (attr == "attr_accessor" || attr == "attr_reader") ) 
+			{
               FunctionDefinitionDom method = codeModel()->create<FunctionDefinitionModel>();
               method->setName(symbolre.cap(1));
               kdDebug() << "Add method: " << method->name() << endl;
@@ -374,7 +375,9 @@ void RubySupportPart::parse(const QString &fileName)
               lastClass->addFunctionDefinition( method );
 			}
 			
-			if (attr == "attr_accessor" || attr == "attr_writer") {
+            if (	!lastClass->hasFunction(symbolre.cap(1) + "=")
+					&& (attr == "attr_accessor" || attr == "attr_writer") ) 
+			{
               FunctionDefinitionDom method = codeModel()->create<FunctionDefinitionModel>();
               method->setName(symbolre.cap(1) + "=");
               kdDebug() << "Add method: " << method->name() << endl;
@@ -386,7 +389,6 @@ void RubySupportPart::parse(const QString &fileName)
 			}
 			
             pos  += symbolre.matchedLength();
-		  }
         }
 	  }	  
    } else if (variablere.search(line) != -1 && lastClass != 0) {
