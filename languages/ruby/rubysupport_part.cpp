@@ -178,7 +178,7 @@ void RubySupportPart::parse(const QString &fileName)
   QTextStream stream(&f);
 
   QRegExp classre("^\\s*(class|module)\\s+([A-Z][A-Za-z0-9_]+)\\s*(<\\s*([A-Z][A-Za-z0-9_:]+))?$");
-  QRegExp methodre("^\\s*def\\s+([A-Z][A-Za-z0-9_:]+\\.)?([A-Za-z0-9_]+[!?=]?|\\[\\]=?|\\*\\*||\\-|[!~+*/%&|><^]|>>|<<||<=>|<=|>=|==|===|!=|=~|!~).*$");
+  QRegExp methodre("^\\s*def\\s+(([A-Z][A-Za-z0-9_:]+|self)\\.)?([A-Za-z0-9_]+[!?=]?|\\[\\]=?|\\*\\*||\\-|[!~+*/%&|><^]|>>|<<||<=>|<=|>=|==|===|!=|=~|!~).*$");
   QRegExp accessre("^\\s*(private|protected|public)\\s*((:([A-Za-z0-9_]+[!?=]?|\\[\\]=?|\\*\\*||\\-|[!~+*/%&|><^]|>>|<<||<=>|<=|>=|==|===|!=|=~|!~),?\\s*)*)$");
   QRegExp attr_accessorre("^\\s*(attr_accessor|attr_reader|attr_writer)\\s*((:([A-Za-z0-9_]+),?\\s*)*)$");
   QRegExp symbolre(":([^,]+),?");
@@ -223,17 +223,17 @@ void RubySupportPart::parse(const QString &fileName)
 	  lastAccess = CodeModelItem::Public;
     } else if (methodre.search(line) != -1) {
       FunctionDom methodDecl;
-      if ( lastClass != 0 && lastClass->hasFunction( methodre.cap(2) ) ) {
-        FunctionList methods = lastClass->functionByName( methodre.cap(2) );
+      if ( lastClass != 0 && lastClass->hasFunction( methodre.cap(3) ) ) {
+        FunctionList methods = lastClass->functionByName( methodre.cap(3) );
 	    methodDecl = methods[0];
 	  } else {
         methodDecl = codeModel()->create<FunctionModel>();
         methodDecl->setFileName( fileName );
         methodDecl->setStartPosition( lineNo, 0 );
-        methodDecl->setName(methodre.cap(2));
+        methodDecl->setName(methodre.cap(3));
 	  }
       FunctionDefinitionDom method = codeModel()->create<FunctionDefinitionModel>();
-      method->setName(methodre.cap(2));
+      method->setName(methodre.cap(3));
       kdDebug() << "Add method: " << method->name() << endl;
       method->setFileName( fileName );
       method->setStartPosition( lineNo, 0 );
