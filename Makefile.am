@@ -37,6 +37,7 @@ messages:
 	dirs=`cat dirs` ;\
 	find $$dirs -maxdepth 1 -name "*.cpp" -print > files ;\
 	find $$dirs -maxdepth 1 -name "*.cc" -print >> files ;\
+	find $$dirs -maxdepth 1 -name "*.h" -print >> files ;\
 	$(EXTRACTRC) `find $$dirs -maxdepth 1 -name "*.rc"` > rc.cpp	;\
 	$(EXTRACTRC) `find $$dirs -maxdepth 1 -name "*.ui"` >> rc.cpp    ;\
 	$(XGETTEXT) rc.cpp `cat files` -o $(podir)/kdevelop.pot
