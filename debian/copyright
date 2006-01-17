@@ -1,9 +1,0 @@
-This package was debianized by Bernd Gehrmann <bernd@physik.hu-berlin.de>,
-and is now maintained by Norman Jordan <njordan@debian.org>.
-Package configuration is based on those for the KDE packages.
-
-Copyright:
-
-KDevelop is released under the terms of the GNU GPL.
-
-See /usr/share/common-licenses/GPL for the full license.
