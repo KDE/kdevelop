@@ -802,8 +802,8 @@ void CustomProjectPart::parseMakefile(const QString& filename)
       kdDebug(9025) << "could not open " << absFilename<<endl;
       return;
    }
-   QRegExp re("^([^($%.#][^)\\s]+) *:.*$");
-   re.setMinimal(true);
+   QRegExp targetRe("^ *([^\\t$.#]\\S+) *:.*$");
+   targetRe.setMinimal(true);
    
    QRegExp variablesRe("\\$\\(\\s*([^\\)\\s]+)\\s*\\)");
    QRegExp assignmentRe("^\\s*(\\S+)\\s*[:\\?]?=\\s*(\\S+)\\s*(#.*)?$");
@@ -840,9 +840,9 @@ void CustomProjectPart::parseMakefile(const QString& filename)
          QString includedMakefile=includedMakefilesRe.cap(1).simplifyWhiteSpace();
          m_makefilesToParse.push(includedMakefile);
       }
-      else if (re.search(str) != -1)
+      else if (targetRe.search(str) != -1)
       {
-         QString tmpTarget=re.cap(1).simplifyWhiteSpace();
+         QString tmpTarget=targetRe.cap(1).simplifyWhiteSpace();
          if (tmpTarget.endsWith(".o"))
          {
             if (m_targetsObjectFiles.find(tmpTarget)==m_targetsObjectFiles.end())
