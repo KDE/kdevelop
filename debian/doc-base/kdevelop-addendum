@@ -1,9 +1,0 @@
-Document: kdevelop-addendum
-Title: The KDE 2 Developer's Guide
-Author: Kurt Granroth, Simon Hausmann, David Sweet, Torben Weis, Bernd Wuebben, Ralf Nolden
-Abstract: The KDE 2 information guide to development, I/O slaves and KOM/OpenParts 
-Section: Apps/Programming
-
-Format: HTML
-Index: /usr/share/doc/kde/HTML/en/kdevelop/addendum/index.html
-Files: /usr/share/doc/kde/HTML/en/kdevelop/addendum/*.html

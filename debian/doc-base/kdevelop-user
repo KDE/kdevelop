@@ -1,9 +1,0 @@
-Document: kdevelop-user
-Title: The User Manual for KDevelop
-Author: Ralf Nolden
-Abstract: This is the user manual for the KDevelop IDE.
-Section: Apps/Programming
-
-Format: HTML
-Index: /usr/share/doc/kde/HTML/en/kdevelop/index.html
-Files: /usr/share/doc/kde/HTML/en/kdevelop/index*.html
