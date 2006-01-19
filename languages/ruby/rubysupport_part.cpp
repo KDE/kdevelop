@@ -460,14 +460,25 @@ void RubySupportPart::slotRun ()
     if ( partController()->saveAllFiles() == false )
         return;
     QFileInfo program(mainProgram());
-    QString cmd = QString("%1 -K%2 -C%3 -I%4 %5 %6")
-                      .arg(interpreter())
-                      .arg(characterCoding())
-                      .arg(program.dirPath())
-                      .arg(program.dirPath())
-                      .arg(program.fileName())
-                      .arg(programArgs());
-    startApplication(cmd);
+    if (mainProgram().endsWith("script/server")) {
+         QString cmd;
+         QFileInfo server(project()->projectDirectory() + "/script/server");
+         if (! server.exists()) {
+             cmd += "rails " + project()->projectDirectory() + "; ";
+         }
+        // Starting WEBrick for a Rails app
+        cmd += "cd " + project()->projectDirectory() + "; script/server";
+        startApplication(cmd);
+    } else {
+        QString cmd = QString("%1 -K%2 -C%3 -I%4 %5 %6")
+                          .arg(interpreter())
+                          .arg(characterCoding())
+                          .arg(program.dirPath())
+                          .arg(program.dirPath())
+                          .arg(program.fileName())
+                          .arg(programArgs());
+        startApplication(cmd);
+    }
 }
 
 QString RubySupportPart::interpreter() {
