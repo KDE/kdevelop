@@ -22,14 +22,18 @@
 #include <kprocess.h>
 #include <kstdguiitem.h>
 #include <kdeversion.h>
+#include <klistview.h>
+#include <klistviewsearchline.h>
+#include <kmessagebox.h>
 
 #include <qframe.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlistbox.h>
+
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
+#include <qheader.h>
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -48,31 +52,34 @@ namespace GDBDebugger
 Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
     : KDialog(parent, name, true),      // modal
       psProc_(0),
-      pids_(new QListBox(this)),
-      heading_(new QLabel(" ", this)),
+      pids_(new KListView(this)),
       pidLines_(QString())
 {
     setCaption(i18n("Attach to Process"));
 
+    pids_->addColumn("PID");
+    pids_->addColumn("TTY");
+    pids_->addColumn("STAT");
+    pids_->addColumn("COMMAND");
+    pids_->addColumn("TIME");
+
+
     QBoxLayout *topLayout = new QVBoxLayout(this, 5);
 
-    heading_->setFont(KGlobalSettings::fixedFont());
-    heading_->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    heading_->setMaximumHeight(heading_->sizeHint().height());
-//    heading_->setMinimumSize(heading_->sizeHint());
-    topLayout->addWidget(heading_, 5);
+    KListViewSearchLineWidget* sl = new KListViewSearchLineWidget(pids_, this);
+    topLayout->addWidget(sl);
 
-    topLayout->addWidget(pids_, 5);
+    topLayout->addWidget(pids_);
     pids_->setFont(KGlobalSettings::fixedFont());
 
-    KButtonBox *buttonbox = new KButtonBox(this, Qt::Horizontal, 5);
+    KButtonBox *buttonbox = new KButtonBox(this, Qt::Horizontal);
 #if KDE_IS_VERSION( 3, 2, 90 )
-    QPushButton *ok       = buttonbox->addButton(KStdGuiItem::ok());
     buttonbox->addStretch();
+    QPushButton *ok       = buttonbox->addButton(KStdGuiItem::ok());
     QPushButton *cancel   = buttonbox->addButton(KStdGuiItem::cancel());
 #else
-    QPushButton *ok       = buttonbox->addButton(i18n("OK"));
     buttonbox->addStretch();
+    QPushButton *ok       = buttonbox->addButton(i18n("OK"));
     QPushButton *cancel   = buttonbox->addButton(i18n("Cancel"));
 #endif
     buttonbox->layout();
@@ -126,13 +133,7 @@ Dbg_PS_Dialog::~Dbg_PS_Dialog()
 
 int Dbg_PS_Dialog::pidSelected()
 {
-	QString pidText = pids_->text(pids_->currentItem());
-	QRegExp re( "^ *[\\d]+" );
-	if ( re.search( pidText ) > -1 )
-	{
-		return re.cap( 0 ).toInt();
-	}
-	return 0;
+	return pids_->currentItem()->text(0).toInt();
 }
 
 /***************************************************************************/
@@ -153,13 +154,32 @@ void Dbg_PS_Dialog::slotProcessExited()
 
     int start = pidLines_.find('\n', 0);  // Skip the first line (header line)
     int pos;
-    if (start != -1)
-        heading_->setText(pidLines_.left(start));
-    while ( (pos = pidLines_.find('\n', start)) != -1) {
+
+    static QRegExp ps_output_line("^\\s*(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(.+)");
+    while ( (pos = pidLines_.find('\n', start)) != -1) {        
+
         QString item = pidLines_.mid(start, pos-start);
-        if (!item.isEmpty()) {
-            if (item.find(pidCmd_) == -1)
-                pids_->insertItem(item);
+        if (!item.isEmpty() && item.find(pidCmd_) == -1)
+        {
+            if(ps_output_line.search(item) == -1)
+            {
+                KMessageBox::error(
+                    this, 
+                    // FIXME: probably should XML-escape 'item' before passing it
+                    // to 'arg'.
+                    i18n("<b>Could not parse output from the <tt>ps</tt> command!</b>"
+                         "<p>The following line could not be parsed:"
+                         "<b><tt>%1</tt>").arg(item),
+                    i18n("Internal error"));
+                break;
+            }
+            
+            new QListViewItem(pids_, 
+                              ps_output_line.cap(1),
+                              ps_output_line.cap(2),
+                              ps_output_line.cap(3),
+                              ps_output_line.cap(4),
+                              ps_output_line.cap(5));
         }
 
         start = pos+1;

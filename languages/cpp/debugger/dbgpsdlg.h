@@ -20,7 +20,7 @@
 
 class QListBox;
 class KProcess;
-class QLabel;
+class KListView;
 
 namespace GDBDebugger
 {
@@ -43,8 +43,7 @@ private slots:
 
 private:
     KProcess* psProc_;
-    QListBox* pids_;
-    QLabel*   heading_;
+    KListView* pids_;
     QString   pidLines_;
     QString   pidCmd_;
 };
