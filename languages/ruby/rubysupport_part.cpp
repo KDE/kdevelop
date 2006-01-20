@@ -466,9 +466,11 @@ void RubySupportPart::slotRun ()
          if (! server.exists()) {
              cmd += "rails " + project()->projectDirectory() + "; ";
          }
-        // Starting WEBrick for a Rails app
-        cmd += "cd " + project()->projectDirectory() + "; script/server";
-        startApplication(cmd);
+        // Starting WEBrick for a Rails app. Translate a SIGTERM signal sent by KDevelop
+        // to a SIGINT expected by WEBrick (ie control&c) to terminate it.
+        cmd += "script/server& \n trap \"kill -s SIGINT $!\" SIGTERM \n wait \n exit 0";
+        if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
+            appFrontend->startAppCommand(project()->projectDirectory(), cmd, false);
     } else {
         QString cmd = QString("%1 -K%2 -C%3 -I%4 %5 %6")
                           .arg(interpreter())
