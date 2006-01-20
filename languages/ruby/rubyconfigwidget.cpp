@@ -14,6 +14,9 @@ RubyConfigWidget::RubyConfigWidget(QDomDocument &projectDom, QWidget* parent, co
 : RubyConfigWidgetBase(parent,name), dom (projectDom) {
     kdDebug (9019) << "Creating RubyConfigWidget" << endl;
     interpreterEdit->setText(DomUtil::readEntry(dom, "/kdevrubysupport/run/interpreter"));
+    if (interpreterEdit->text().isEmpty()) {
+        interpreterEdit->setText("ruby");
+    }
     shellEdit->setText(DomUtil::readEntry(dom, "/kdevrubysupport/run/shell"));
     if (shellEdit->text().isEmpty()) {
         shellEdit->setText("irb");
