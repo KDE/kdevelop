@@ -880,7 +880,7 @@ VarItem::VarItem(TrimmableItem *parent, const QString &varName, DataType dataTyp
     //   - detect initial value of format_
     //   - remove the format specifier from the string.
 
-    static QRegExp explicit_format("^\s*/(.)\s*(.*)");
+    static QRegExp explicit_format("^\\s*/(.)\\s*(.*)");
     if (explicit_format.search(name_) == 0)
     {
         setFormatFromGdbModifier(explicit_format.cap(1)[0].latin1());
