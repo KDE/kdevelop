@@ -676,6 +676,16 @@ void VariableTree::keyPressEvent(QKeyEvent* e)
             item->setFormatFromGdbModifier(text[0].latin1());
             emit expandItem(item);
         }
+
+        if (e->key() == Qt::Key_Delete)
+        {
+            QListViewItem* root = findRoot(item);
+
+            if (dynamic_cast<WatchRoot*>(root) || root == recentExpressions_) 
+            {
+                delete item;
+            }
+        }
     }        
 }
 
