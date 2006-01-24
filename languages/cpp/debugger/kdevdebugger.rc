@@ -67,7 +67,6 @@
     <Action name="debug_memview"/>
   </enable>
   <disable>
-    <Action name="debug_pause"/>
     <Action name="debug_core"/>
     <Action name="debug_attach"/>
   </disable>

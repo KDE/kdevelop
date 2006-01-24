@@ -137,15 +137,17 @@ void GDBOutputWidget::slotDbgStatus(const QString &, int statusFlag)
         m_userGDBCmdEditor->setEnabled(false);
         return;
     }
+    else
+    {
+        m_Interrupt->setEnabled(true);
+    }
 
     if (statusFlag & s_appBusy)
     {
-        m_Interrupt->setEnabled(true);
         m_userGDBCmdEditor->setEnabled(false);
     }
     else
     {
-        m_Interrupt->setEnabled(false);
         m_userGDBCmdEditor->setEnabled(true);
     }
 }

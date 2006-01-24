@@ -382,7 +382,7 @@ void GDBController::pauseApp()
             delete cmdList_.take(i);
     }
 
-    if (dbgProcess_ && stateIsOn(s_appBusy))
+    if (dbgProcess_)
         dbgProcess_->kill(SIGINT);
 }
 
