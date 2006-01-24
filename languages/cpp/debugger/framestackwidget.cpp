@@ -208,9 +208,9 @@ QString FramestackWidget::getFrameName(int frameNo, int threadNo)
     {
         QString frameStr = frame->text(0);
         const char *frameData = frameStr.latin1();
-        if (char *paramStart = strchr(frameData, '('))
+        if (const char *paramStart = strchr(frameData, '('))
         {
-            char *fnstart = paramStart-2;
+            const char *fnstart = paramStart-2;
             while (fnstart > frameData)
             {
                 if (isspace(*fnstart))
