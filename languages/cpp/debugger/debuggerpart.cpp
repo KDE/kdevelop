@@ -73,7 +73,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( data ) )
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & ) :
     KDevPlugin( &data, parent, name ? name : "DebuggerPart" ),
     controller(0), previousDebuggerState_(s_dbgNotStarted), 
-    justRestarted_(false)
+    justRestarted_(false), needRebuild_(true), justOpened_(true)
 {
     setObjId("DebuggerInterface");
     setInstance(DebuggerFactory::instance());
@@ -332,6 +332,9 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
              appFrontend(), SLOT(insertStdoutLine(const QString&)) );
     connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
              appFrontend(), SLOT(insertStderrLine(const QString&)) );
+
+    connect(partController(), SIGNAL(savedFile(const KURL &)),
+            this, SLOT(slotFileSaved()));
 
     setupController();
     QTimer::singleShot(0, this, SLOT(setupDcop()));
@@ -804,6 +807,11 @@ void DebuggerPart::slotDebuggerAbnormalExit()
     // problem.
 }
 
+void DebuggerPart::slotFileSaved()
+{
+    needRebuild_ = true;
+}
+
 void DebuggerPart::projectClosed()
 {
     slotStopDebugger();
@@ -811,7 +819,110 @@ void DebuggerPart::projectClosed()
 
 void DebuggerPart::slotRun()
 {
-    if( controller->stateIsOn( s_dbgNotStarted ) )
+    if( controller->stateIsOn( s_dbgNotStarted ) ||
+        controller->stateIsOn( s_appNotStarted ) )
+    {
+        // We're either starting gdb for the first time,
+        // or starting the application under gdb. In both
+        // cases, might need to rebuild the application.
+
+        // Note that this logic somewhat duplicates the
+        // isDirty method present in a number of project plugins.
+        // But there, it's a private method we can't conveniently
+        // access. Besides, the custom makefiles project manager won't 
+        // care about a file unless it's explicitly added, so it can
+        // miss dependencies.
+
+        needRebuild_ |= haveModifiedFiles();
+
+        bool rebuild = false;
+        if (needRebuild_ && project())
+        {
+            bool rebuild = false;
+            if (justOpened_)
+            {
+                // Always rebuild the project after opening. User likely
+                // don't remember if he modified anything, so can't say
+                // anything definitive.
+                rebuild = true;
+                justOpened_ = false;
+            }
+            else
+            {
+                // We don't add "Don't ask again" checkbox to the
+                // message because it's not clear if one cooked
+                // decision will be right for all cases when we're starting
+                // debugging with modified code, and because it's not clear
+                // how user can reset this "don't ask again" setting.
+                int r = KMessageBox::questionYesNo(
+                    0, 
+                    "<b>" + i18n("Rebuild the project?") + "</b>" +
+                    i18n("<p>Some files in the project were modified, so you "
+                        "might want to rebuild the project. "
+                        "<p>Answering \"Yes\" will save all modified files, rebuild the project and start the debugger. "
+                        "<p>Answering \"No\" will start the debugger with the old binary."),
+                    i18n("Rebuild the project?"));
+                if (r == KMessageBox::Yes)
+                {
+                    rebuild = true;
+                }                
+                else
+                {
+                    // If the user said don't rebuild, try to avoid
+                    // asking the same question again. 
+                    // Note that this only affects 'were any files changed'
+                    // check, if a file is changed but not saved we'll
+                    // still ask the user again. That's bad, but I don't know
+                    // a better solution -- it's hard to check that 
+                    // the file has the same content as it had when the user
+                    // last answered 'no, don't rebuild'.
+                    needRebuild_ = false;
+                }
+            }
+
+            if (rebuild)
+            {                 
+                disconnect(SIGNAL(buildProject()));
+                // The KDevProject has no method to build the project,
+                // so try connecting to a slot has is present to all
+                // existing project managers.
+                // Note: this assumes that 'slotBuild' will save
+                // modified files.
+                
+                if (connect(this, SIGNAL(buildProject()),
+                            project(), SLOT(slotBuild())))
+                {
+                    connect(project(), SIGNAL(projectCompiled()), 
+                            this, SLOT(slotRun_part2()));
+                    
+                    emit buildProject();
+                    rebuild = true;
+                }
+            }
+        }
+        if (!rebuild)
+        {
+            slotRun_part2();
+        }
+        return;
+    }
+    else
+    {
+        // When continuing the program, don't try to rebuild -- user
+        // has explicitly asked to "continue".
+        mainWindow()->statusBar()->message(i18n("Continuing program"), 1000);
+    }
+    controller->slotRun();
+}
+
+void DebuggerPart::slotRun_part2()
+{        
+    needRebuild_ = false;
+
+    disconnect(project(), SIGNAL(projectCompiled()), 
+               this, SLOT(slotRun_part2()));
+
+    if (controller->stateIsOn( s_dbgNotStarted ))
     {
         mainWindow()->statusBar()->message(i18n("Debugging program"), 1000);
         mainWindow()->raiseView(gdbOutputWidget);
@@ -833,12 +944,10 @@ void DebuggerPart::slotRun()
 
         appFrontend()->clearView();
     }
-    else
-    {
-        mainWindow()->statusBar()->message(i18n("Continuing program"), 1000);
-    }
+
     controller->slotRun();
 }
+
 
 void DebuggerPart::slotRestart()
 {
@@ -1108,6 +1217,22 @@ void DebuggerPart::restorePartialProjectSession(const QDomElement* el)
 void DebuggerPart::savePartialProjectSession(QDomElement* el)
 {
     gdbBreakpointWidget->savePartialProjectSession(el);
+}
+
+bool DebuggerPart::haveModifiedFiles()
+{
+    bool have_modified = false;
+    KURL::List const& filelist = partController()->openURLs();
+	KURL::List::ConstIterator it = filelist.begin();
+	while ( it != filelist.end() )
+	{
+        if (partController()->documentState(*it) != Clean)
+            have_modified = true;
+
+        ++it;
+    }
+
+    return have_modified;
 }
 
 }

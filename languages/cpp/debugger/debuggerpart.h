@@ -69,6 +69,12 @@ private slots:
     void slotActivePartChanged(KParts::Part*);
 
     void slotRun();
+    // Called to finish run operation in the case when we're
+    // starting the debugger. Called either directly from
+    // slotRun, if no rebuilding of project is needed, or
+    // indirectly from project()->projectCompiled() after project
+    // is rebuilt.
+    void slotRun_part2();
     void slotRestart();
     void slotExamineCore();
     void slotAttachProcess();
@@ -97,6 +103,10 @@ private slots:
 
     void slotDebuggerAbnormalExit();
 
+    // Called when some file in the project was saved.
+    // Sets 'needRebuild_' to true.
+    void slotFileSaved();
+
 private:
     KDevAppFrontend *appFrontend();
     KDevDebugger *debugger();
@@ -104,6 +114,7 @@ private:
     bool attachProcess(int pid);
     bool startDebugger();
     void setupController();
+    bool haveModifiedFiles();
 
     QGuardedPtr<VariableWidget> variableWidget;
     QGuardedPtr<GDBBreakpointWidget> gdbBreakpointWidget;
@@ -126,6 +137,21 @@ private:
     // Currently used to auto-show variables view
     // on the first pause.
     bool justRestarted_;
+
+    // Flag that specifies in project rebuild is necessary
+    // before running the debugger. Set to 'true' in constructor
+    // because we have no idea if project is 'dirty' or not
+    // when it's opened, and then set to 'true' each time a file is
+    // modified.    
+    bool needRebuild_;
+    // Flag that's true if the project was just opened. Used to distinguish
+    // 'just openeded project, don't know if it's up to date' and
+    // 'some files were modified' cases, when presenting 'rebuild project'
+    // dialog to the user.
+    bool justOpened_;
+
+signals:
+    void buildProject();
 };
 
 }
