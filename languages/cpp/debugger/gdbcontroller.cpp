@@ -429,7 +429,7 @@ void GDBController::actOnProgramPause(const QString &msg)
 // all other commands are disabled.
 void GDBController::programNoApp(const QString &msg, bool msgBox)
 {
-    state_ = (s_appNotStarted|s_programExited|s_shuttingDown);
+    state_ = (s_appNotStarted|s_programExited|(state_&s_shuttingDown));
     destroyCmds();
 
     // We're always at frame zero when the program stops
