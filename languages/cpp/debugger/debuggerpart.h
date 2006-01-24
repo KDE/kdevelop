@@ -107,6 +107,8 @@ private slots:
     // Sets 'needRebuild_' to true.
     void slotFileSaved();
 
+    void slotProjectCompiled();
+
 private:
     KDevAppFrontend *appFrontend();
     KDevDebugger *debugger();

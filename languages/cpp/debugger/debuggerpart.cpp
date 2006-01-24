@@ -336,6 +336,10 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     connect(partController(), SIGNAL(savedFile(const KURL &)),
             this, SLOT(slotFileSaved()));
 
+    if (project())
+        connect(project(), SIGNAL(projectCompiled()),
+                this, SLOT(slotProjectCompiled()));
+
     setupController();
     QTimer::singleShot(0, this, SLOT(setupDcop()));
 }
@@ -810,6 +814,11 @@ void DebuggerPart::slotDebuggerAbnormalExit()
 void DebuggerPart::slotFileSaved()
 {
     needRebuild_ = true;
+}
+
+void DebuggerPart::slotProjectCompiled()
+{
+    needRebuild_ = false;
 }
 
 void DebuggerPart::projectClosed()
