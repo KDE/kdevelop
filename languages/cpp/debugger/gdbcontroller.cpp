@@ -1706,7 +1706,7 @@ void GDBController::slotRun()
 }
 
 
-void GDBController::slotRestart()
+void GDBController::slotKill()
 {
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
@@ -1716,7 +1716,9 @@ void GDBController::slotRestart()
         pauseApp();
     }
 
-    queueCmd(new GDBCommand("run", RUNCMD, NOTINFOCMD, 0));        
+    queueCmd(new GDBCommand("kill", NOTRUNCMD, NOTINFOCMD, 0));
+
+    setStateOn(s_appNotStarted);
 }
 
 // **************************************************************************

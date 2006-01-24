@@ -951,11 +951,18 @@ void DebuggerPart::slotRun_part2()
 
 void DebuggerPart::slotRestart()
 {
-    // We could have directly connect KAction to controller->slotRestart()
-    // but controller is created after actions, and I did not want to 
-    // create unconnected action and connect it later, as it would make
-    // it harder to understand the code.
-    controller->slotRestart();
+    // We implement restart as kill + slotRun, as opposed as plain "run"
+    // command because kill + slotRun allows any special logic in slotRun
+    // to apply for restart.
+    //
+    // That includes:
+    // - checking for out-of-date project
+    // - special setup for remote debugging.
+    //
+    // Had we used plain 'run' command, restart for remote debugging simply
+    // would not work.
+    controller->slotKill();
+    slotRun();
 }
 
 void DebuggerPart::slotExamineCore()

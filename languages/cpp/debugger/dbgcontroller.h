@@ -99,7 +99,8 @@ public slots:
     virtual void slotStopDebugger()                                         = 0;
 
     virtual void slotRun()                                                  = 0;
-    virtual void slotRestart()                                              = 0;
+    // Kills the application but does not stop the debugger itself.
+    virtual void slotKill()                                                 = 0;
     virtual void slotRunUntil(const QString &fileName, int lineNum)         = 0;
     virtual void slotJumpTo(const QString &fileName, int lineNum)           = 0;
     virtual void slotStepInto()                                             = 0;
