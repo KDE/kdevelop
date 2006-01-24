@@ -122,9 +122,6 @@ public slots:
     void slotAddWatchVariable(const QString& watchVar);
     void slotEvaluateExpression(const QString& expression);
 
-    //rgr
-    void slotToggleRadix(QListViewItem *item);
-
     void slotDbgStatus(const QString &status, int statusFlag);
     void slotParametersReady(const char* data);
     void slotLocalsReady(const char* data);
@@ -139,6 +136,9 @@ private: // helper functions
         the specified frameNo/threadNo combination.
     */    
     VarFrameRoot* demand_frame_root(int frameNo, int threadNo);
+
+private: // QWidget overrides
+    void keyPressEvent(QKeyEvent* e);
 
 private:
     int activeFlag_;
@@ -221,6 +221,8 @@ private:
 class VarItem : public TrimmableItem
 {
 public:
+    enum format_t { natural, hexadecimal, decimal, character, binary };   
+
     VarItem( TrimmableItem *parent, const QString &varName, DataType dataType );
 
     virtual ~VarItem();
@@ -244,6 +246,10 @@ public:
     // Returns the text to be displayed as tooltip (the value)
     QString tipText() const;
 
+    format_t format() const;
+    void setFormat(format_t f);
+    void setFormatFromGdbModifier(char c);
+
 private:
 
     // Handle types that require special dispay, such as
@@ -262,6 +268,8 @@ private:
 
     // the non-cast type of the variable
     QCString originalValueType_;
+
+    format_t format_;
 };
 
 /***************************************************************************/

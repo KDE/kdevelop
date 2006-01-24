@@ -220,7 +220,6 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
 
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              SLOT(slotContextMenu(KListView*, QListViewItem*)) );
-    connect( this, SIGNAL(toggleRadix(QListViewItem*)), SLOT(slotToggleRadix(QListViewItem*)) );
     connect( this, SIGNAL(itemRenamed( QListViewItem*, int, const QString&)),
              this, SLOT(slotItemRenamed( QListViewItem*, int, const QString&)));
 }
@@ -243,11 +242,46 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
     if (item->parent())
     {
         KPopupMenu popup(this);
-        popup.insertTitle(item->text(VarNameCol));
+        KPopupMenu format(this);
+
         int idRemember = -2;
         int idRemove = -2;
         int idReevaluate = -2;        
         int idWatch = -2;
+        
+        int idNatural = -2;
+        int idHex = -2;
+        int idDecimal = -2;
+        int idCharacter = -2;
+        int idBinary = -2;
+
+        if (VarItem* var = dynamic_cast<VarItem*>(item)) 
+        {
+            popup.insertTitle(item->text(VarNameCol));
+            
+
+            format.setCheckable(true);
+            idNatural = format.insertItem(i18n("Natural"), 0, 0,
+                                          Qt::Key_N,
+                                          (int)VarItem::natural);
+            idHex = format.insertItem(i18n("Hexadecimal"), 0, 0,
+                                      Qt::Key_X,
+                                          (int)VarItem::hexadecimal);
+            idDecimal = format.insertItem(i18n("Decimal"), 0, 0,
+                                          Qt::Key_D,
+                                          (int)VarItem::decimal);
+            idCharacter = format.insertItem(i18n("Character"), 0, 0,
+                                            Qt::Key_C,
+                                          (int)VarItem::character);
+            idBinary = format.insertItem(i18n("Binary"), 0, 0,
+                                         Qt::Key_T,
+                                          (int)VarItem::binary);
+
+            format.setItemChecked((int)(var->format()), true);
+
+            popup.insertItem(i18n("Format"), &format);
+        }
+        
 
         QListViewItem* root = findRoot(item);
 
@@ -272,12 +306,23 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         }
 
         int idToggleWatch = popup.insertItem( i18n("Toggle Watchpoint") );
-        int idToggleRadix = popup.insertItem( i18n("Toggle Hex/Decimal") );
         int	idCopyToClipboard = popup.insertItem( 
             SmallIcon("editcopy"), i18n("Copy to Clipboard") );
         int res = popup.exec(QCursor::pos());
 
-        if (res == idRemember)
+        
+        if (res == idNatural || res == idHex || res == idDecimal
+            || res == idCharacter || res == idBinary)
+        {
+            // Change format.
+            VarItem* var_item = static_cast<VarItem*>(item);
+
+            var_item->setFormat(static_cast<VarItem::format_t>(res));
+
+            emit expandItem(var_item);            
+
+        }
+        else if (res == idRemember)
         {
             if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
             {
@@ -295,8 +340,6 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         } 
         else if (res == idRemove)
             delete item;
-        else if (res == idToggleRadix)
-            emit toggleRadix(item);
         else if (res == idCopyToClipboard)
         {
             QClipboard *qb = KApplication::clipboard();
@@ -485,48 +528,6 @@ void VariableTree::maybeTip(const QPoint &p)
     }
 }
 
-/* rgruber:
- * this it the slot which is connected to the toggleRadix() signal
- * it removes the given watch variable an replaces it by another
- * watch that includes a format modifier
- */
-void VariableTree::slotToggleRadix(QListViewItem * item)
-{
-  if (item==NULL)  //no item->nothing to do
-    return;
-
-  VarItem *pOldItem = dynamic_cast<VarItem*>(item);
-  VarItem *pNewItem = NULL;
-
-  QString strName = pOldItem->text(VarNameCol);
-
-  QString strTmp = strName.left(3).lower();
-  if (iOutRadix == 10) {
-      if (strTmp == "/d ")   //is there a wrong format modifier...
-          strName = "/x "+strName.right(strName.length()-3);  //...replace the modifier
-      else if (strTmp == "/x ")
-          strName = strName.right(strName.length()-3);  //stripe the modifier
-      else
-          strName = QString("/x ")+strName;  //add the hex-formater
-  } else
-  if (iOutRadix == 16) {
-      if (strTmp == "/x ")   //is there a wrong format modifier...
-          strName = "/d "+strName.right(strName.length()-3);  //...replace the modifier
-      else if (strTmp == "/d ")   //is there a format modifier?
-          strName = strName.right(strName.length()-3);  //stripe the modifier
-      else
-          strName = QString("/d ")+strName;  //add the dec-formater
-  }
-
-  pNewItem = new VarItem((TrimmableItem *) item->parent(), strName, typeUnknown);
-  emit expandItem(pNewItem);
-
-  pNewItem->moveItem(pOldItem);  //move the new item up right under the old one
-
-  delete item;  //remove the old one so that is seam as if it was replaced by the new item
-  pOldItem=NULL;
-}
-
 void VariableTree::slotDbgStatus(const QString&, int statusFlag)
 {
     if (statusFlag & s_appNotStarted)
@@ -660,6 +661,22 @@ VariableTree::slotItemRenamed(QListViewItem* item, int col, const QString& text)
             emit expandItem(v);
         }
     }
+}
+
+
+void VariableTree::keyPressEvent(QKeyEvent* e)
+{
+    if (VarItem* item = dynamic_cast<VarItem*>(currentItem()))
+    {
+        QString text = e->text();
+
+        if (text == "n" || text == "x" || text == "d" || text == "c" 
+            || text == "t")
+        {
+            item->setFormatFromGdbModifier(text[0].latin1());
+            emit expandItem(item);
+        }
+    }        
 }
 
 // **************************************************************************
@@ -842,9 +859,26 @@ VarItem::VarItem(TrimmableItem *parent, const QString &varName, DataType dataTyp
       name_(varName),
       cache_(QCString()),
       dataType_(dataType),
-      highlight_(false)
+      highlight_(false),
+      format_(natural)
 {
-    setText(VarNameCol, varName);
+    // User might have entered format together with expression: like
+    //   /x i1+i2
+    // If we do nothing, it will be impossible to watch the variable in
+    // different format, as we'll just add extra format specifier.
+    // So:
+    //   - detect initial value of format_
+    //   - remove the format specifier from the string.
+
+    static QRegExp explicit_format("^\s*/(.)\s*(.*)");
+    if (explicit_format.search(name_) == 0)
+    {
+        setFormatFromGdbModifier(explicit_format.cap(1)[0].latin1());
+        name_ = explicit_format.cap(2);
+    }
+
+
+    setText(VarNameCol, name_);
     // Allow to change variable name by editing.
     setRenameEnabled(ValueCol, true);
 
@@ -888,9 +922,36 @@ QString VarItem::gdbExpression() const
 
     if (isOpen() && dataType_ == typePointer)
         // We're currently showing pointed-to value        
-        return "*" + vPath;
-    else
-        return vPath;
+        vPath = "*" + vPath;
+
+
+    char* modifier = 0;
+    switch(format_)
+    {
+    case natural:
+        break;
+
+    case hexadecimal:
+        modifier = "/x";
+        break;
+
+    case decimal:
+        modifier = "/d";
+        break;
+
+    case character:
+        modifier = "/c";
+        break;
+        
+    case binary:
+        modifier = "/t";
+        break;
+    }
+
+    if (modifier)
+        vPath = QString(modifier) + " " + vPath;
+
+    return vPath;
 }
 
 // **************************************************************************
@@ -1098,6 +1159,36 @@ DataType VarItem::getDataType() const
 {
     return dataType_;
 }
+
+VarItem::format_t VarItem::format() const
+{
+    return format_;
+}
+
+void VarItem::setFormat(format_t f)
+{
+    format_ = f;
+}
+
+void VarItem::setFormatFromGdbModifier(char c)
+{
+    switch(c)
+    {
+    case 'n': // Not quite gdb modifier, but used in our UI.
+        format_ = natural; break;
+    case 'x':
+        format_ = hexadecimal; break;
+    case 'd':
+        format_ = decimal; break;
+    case 'c':
+        format_ = character; break;
+    case 't':
+        format_ = binary; break;
+    default:
+        break;
+    }
+}
+
 
 // **************************************************************************
 
