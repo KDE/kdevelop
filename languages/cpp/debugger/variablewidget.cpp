@@ -261,21 +261,22 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
             
 
             format.setCheckable(true);
-            idNatural = format.insertItem(i18n("Natural"), 0, 0,
-                                          Qt::Key_N,
+            idNatural = format.insertItem(i18n("Natural"), 
                                           (int)VarItem::natural);
-            idHex = format.insertItem(i18n("Hexadecimal"), 0, 0,
-                                      Qt::Key_X,
-                                          (int)VarItem::hexadecimal);
-            idDecimal = format.insertItem(i18n("Decimal"), 0, 0,
-                                          Qt::Key_D,
+            format.setAccel(Qt::Key_N, idNatural);
+            idHex = format.insertItem(i18n("Hexadecimal"), 
+                                      (int)VarItem::hexadecimal);
+            format.setAccel(Qt::Key_X, idHex);
+            idDecimal = format.insertItem(i18n("Decimal"), 
                                           (int)VarItem::decimal);
-            idCharacter = format.insertItem(i18n("Character"), 0, 0,
-                                            Qt::Key_C,
+            format.setAccel(Qt::Key_D, idDecimal);
+            idCharacter = format.insertItem(i18n("Character"),
                                           (int)VarItem::character);
-            idBinary = format.insertItem(i18n("Binary"), 0, 0,
-                                         Qt::Key_T,
-                                          (int)VarItem::binary);
+            format.setAccel(Qt::Key_C, idCharacter);
+            idBinary = format.insertItem(i18n("Binary"), 
+                                         (int)VarItem::binary);
+            format.setAccel(Qt::Key_T, idBinary);
+
 
             format.setItemChecked((int)(var->format()), true);
 
@@ -294,6 +295,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         if (dynamic_cast<WatchRoot*>(root)) {
             idRemove = popup.insertItem( 
                 SmallIcon("editdelete"), i18n("Remove Watch Variable") );
+            popup.setAccel(Qt::Key_Delete, idRemove);
         } else if (root != recentExpressions_) {
             idWatch = popup.insertItem(
                 i18n("Watch Variable"));
@@ -303,6 +305,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
                 SmallIcon("reload"), i18n("Reevaluate Expression") );
             idRemove = popup.insertItem( 
                 SmallIcon("editdelete"), i18n("Remove Expression") );
+            popup.setAccel(Qt::Key_Delete, idRemove);
         }
 
         int idToggleWatch = popup.insertItem( i18n("Toggle Watchpoint") );
