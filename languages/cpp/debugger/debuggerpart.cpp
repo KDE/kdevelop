@@ -847,7 +847,6 @@ void DebuggerPart::slotRun()
         bool rebuild = false;
         if (needRebuild_ && project())
         {
-            bool rebuild = false;
             if (justOpened_)
             {
                 // Always rebuild the project after opening. User likely
