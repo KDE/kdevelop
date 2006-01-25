@@ -782,6 +782,9 @@ void GDBController::parseLine(char* buf)
         return;
     }
 
+    if (strstr(buf, "has changed; re-reading symbols"))
+        return;
+
     // Any other line that falls out when we are busy is a stop. We
     // might blank a previous message or display this message
     if (stateIsOn(s_appBusy))
