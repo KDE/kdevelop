@@ -270,6 +270,12 @@ private:
     QCString originalValueType_;
 
     format_t format_;
+
+    // If 'this' has pointer type, points to child
+    // corresponding to deferences value.
+    // Can be 0 if this item was never opened.
+    VarItem* pointedTo_;
+    bool pointedToDirty_;
 };
 
 /***************************************************************************/

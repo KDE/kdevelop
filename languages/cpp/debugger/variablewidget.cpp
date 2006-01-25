@@ -820,7 +820,10 @@ void TrimmableItem::trim()
                 if (item->isActive())
                     item->trim();      // recurse
                 else
+                {
+                    kdDebug(9012) << "Killing " << child->text(0) << "\n";
                     delete item;
+                }
             }
         }
         child = nextChild;
@@ -873,7 +876,8 @@ VarItem::VarItem(TrimmableItem *parent, const QString &varName, DataType dataTyp
       cache_(QCString()),
       dataType_(dataType),
       highlight_(false),
-      format_(natural)
+      format_(natural),
+      pointedTo_(0)
 {
     // User might have entered format together with expression: like
     //   /x i1+i2
@@ -931,12 +935,19 @@ QString VarItem::gdbExpression() const
                 vPath = itemName.replace(QRegExp("^static "), "") 
                     + "." + vPath;
         }
+
+        // If parent is 'p' and current item is '*p', we don't need
+        // to qualify "*p" with "p.".
+        for(;;)
+        {
+            const VarItem* parent = 
+                dynamic_cast<const VarItem*>(item->parent());
+            if (parent && parent->pointedTo_ == item)
+                item = parent;
+            else
+                break;
+        }
     }
-
-    if (isOpen() && dataType_ == typePointer)
-        // We're currently showing pointed-to value        
-        vPath = "*" + vPath;
-
 
     char* modifier = 0;
     switch(format_)
@@ -969,16 +980,28 @@ QString VarItem::gdbExpression() const
 
 // **************************************************************************
 
+
+// FIXME: we have two method to set VarItem: this one
+// and updateValue below. That's bad, must have just one.
 void VarItem::setText(int column, const QString &data)
 {
     QString strData=data;
 
-    if (!isActive() && isOpen() && dataType_ == typePointer) {
-        waitingForData();
-        ((VariableTree*)listView())->expandItem(this);
+    setActive();
+    // FIXME: the above is copy-pasted from updateValue. See comment
+    // before the current method.
+    if (pointedTo_)
+    {
+        pointedTo_->setActive();
+        if (isOpen())
+        {
+            waitingForData();
+            emit ((VariableTree*)listView())->expandItem(pointedTo_);
+        }
+        else
+            pointedToDirty_ = true;
     }
 
-    setActive();
     if (column == ValueCol) {
         QString oldValue(text(column));
         if (!oldValue.isEmpty())                   // Don't highlight new items
@@ -1042,6 +1065,22 @@ void VarItem::updateValue(char *buf)
 
     GDBParser::getGDBParser()->parseValue(this, r.data());
     setActive();
+
+    if (pointedTo_)
+    {
+        pointedTo_->setActive();
+
+        // We don't fetch pointed-to data unless the item is open.
+        // On the other hand, we also don't delete pointedTo_ when
+        // this is closed, to avoid unnecessary "whatis" gdb queries.
+        if (isOpen()) 
+        {
+            waitingForData();
+            emit ((VariableTree*)listView())->expandItem(pointedTo_);
+        }
+        else
+            pointedToDirty_ = true;
+    }
 }
 
 // **************************************************************************
@@ -1092,7 +1131,19 @@ void VarItem::setOpen(bool open)
             handleSpecialTypes();
             trim();
         } else {
-            if (dataType_ == typePointer || dataType_ == typeReference) {
+            if (dataType_ == typePointer)
+            {
+                if (!pointedTo_)
+                {
+                    pointedTo_ = new VarItem(this, "*" + name_, typeUnknown);
+                    pointedTo_->setRenameEnabled(0, 1);
+                    pointedToDirty_ = true;
+                }
+                
+                if (pointedToDirty_)
+                    emit ((VariableTree*)listView())->expandItem(pointedTo_);
+            }
+            else if (dataType_ == typeReference) {
                 waitingForData();
                 emit ((VariableTree*)listView())->expandItem(this);
             }
@@ -1100,7 +1151,7 @@ void VarItem::setOpen(bool open)
     } else {
         // Closing item. For pointer/references, it means we switch from
         // display the pointer-to value to displaying the pointer itself.
-        if (dataType_ == typePointer || dataType_ == typeReference) {
+        if (dataType_ == typeReference) {
             waitingForData();
             emit ((VariableTree*)listView())->expandItem(this);
         }
