@@ -425,6 +425,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   if (!name.isNull()) dialog.setName(name);
   if (filetype) dialog.setCurrent(filetype);
 
+  dialog.setInitialSize(QSize(500, 200));
   int dialogResult = dialog.exec();
 
   if (dialogResult == KDialogBase::Rejected) {
