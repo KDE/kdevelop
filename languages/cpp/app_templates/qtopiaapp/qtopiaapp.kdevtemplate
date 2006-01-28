@@ -4,7 +4,6 @@ Name=Qtopia Application
 Name[x-test]=xxQtopia Applicationxx
 Icon=qmakeapp.png
 Category=C++/Embedded
-Category[fr]=C++/Environnement embarqué
 Comment=Generate a TMake/Qt based application for Qtopia 1.x
 Comment[x-test]=xxGenerate a TMake/Qt based application for Qtopia 1.xxx
 FileTemplates=h,CStyle,cpp,CStyle
