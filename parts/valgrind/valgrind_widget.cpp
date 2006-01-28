@@ -166,7 +166,7 @@ void ValgrindWidget::executed( Q3ListViewItem* lvi )
   }
   if ( vli ) {
     // display the file
-    _part->documentController()->editDocument( KURL( vli->fileName() ), vli->line() - 1 );
+    _part->documentController()->editDocument( KUrl( vli->fileName() ), vli->line() - 1 );
     _part->mainWindow()->statusBar()->message( vli->message(), 10000 );
     _part->mainWindow()->lowerView( this );
   }

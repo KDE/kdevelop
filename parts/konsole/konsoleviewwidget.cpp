@@ -104,10 +104,10 @@ void KonsoleViewWidget::activePartChanged(KParts::Part *activatedPart)
     kdDebug(9035) << k_funcinfo "Changing dir to " << dir << endl;
     if (dir.isEmpty())
         return;
-    setDirectory( KURL(dir) );
+    setDirectory( KUrl(dir) );
 }
 
-void KonsoleViewWidget::setDirectory(const KURL &dirUrl)
+void KonsoleViewWidget::setDirectory(const KUrl &dirUrl)
 {
     kdDebug(9035) << k_funcinfo << "part is " << (long)part << endl;
 

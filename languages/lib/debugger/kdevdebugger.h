@@ -52,7 +52,7 @@ public:
    * This is used by the debugger to mark the location where the
    * the debugger has stopped.
    */
-  virtual void gotoExecutionPoint(const KURL &url, int lineNum=0) = 0;
+  virtual void gotoExecutionPoint(const KUrl &url, int lineNum=0) = 0;
 
   /**
    * Clear the execution point. Usefull if debugging has ended.

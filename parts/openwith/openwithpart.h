@@ -26,7 +26,7 @@ private:
   void populateMenu(QMenu *popup);
 
 private:
-  KURL m_url;
+  KUrl m_url;
 };
 
 #endif

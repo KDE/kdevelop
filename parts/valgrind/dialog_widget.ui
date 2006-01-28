@@ -27,7 +27,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="KURLRequester" row="0" column="1">
+                <widget class="KUrlRequester" row="0" column="1">
                     <property name="name">
                         <cstring>executableEdit</cstring>
                     </property>
@@ -174,7 +174,7 @@
                                             <cstring>valParamEdit</cstring>
                                         </property>
                                     </widget>
-                                    <widget class="KURLRequester" row="0" column="1">
+                                    <widget class="KUrlRequester" row="0" column="1">
                                         <property name="name">
                                             <cstring>valExecutableEdit</cstring>
                                         </property>
@@ -248,7 +248,7 @@
                                             <cstring>ctParamEdit</cstring>
                                         </property>
                                     </widget>
-                                    <widget class="KURLRequester" row="0" column="1">
+                                    <widget class="KUrlRequester" row="0" column="1">
                                         <property name="name">
                                             <cstring>ctExecutableEdit</cstring>
                                         </property>
@@ -287,7 +287,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="KURLRequester" row="0" column="1">
+                            <widget class="KUrlRequester" row="0" column="1">
                                 <property name="name">
                                     <cstring>kcExecutableEdit</cstring>
                                 </property>

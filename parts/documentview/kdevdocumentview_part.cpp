@@ -74,23 +74,23 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
 
     connect( m_documentView, SIGNAL( pressed( QModelIndex ) ),
              this, SLOT( pressed( QModelIndex ) ) );
-    connect( documentController(), SIGNAL( documentActivated( const KURL & ) ),
-             this, SLOT( activated( const KURL & ) ) );
-    connect( documentController(), SIGNAL( documentSaved( const KURL & ) ),
-             this, SLOT( saved( const KURL & ) ) );
-    connect( documentController(), SIGNAL( documentLoaded( const KURL & ) ),
-             this, SLOT( loaded( const KURL & ) ) );
-    connect( documentController(), SIGNAL( documentClosed( const KURL & ) ),
-             this, SLOT( closed( const KURL & ) ) );
+    connect( documentController(), SIGNAL( documentActivated( const KUrl & ) ),
+             this, SLOT( activated( const KUrl & ) ) );
+    connect( documentController(), SIGNAL( documentSaved( const KUrl & ) ),
+             this, SLOT( saved( const KUrl & ) ) );
+    connect( documentController(), SIGNAL( documentLoaded( const KUrl & ) ),
+             this, SLOT( loaded( const KUrl & ) ) );
+    connect( documentController(), SIGNAL( documentClosed( const KUrl & ) ),
+             this, SLOT( closed( const KUrl & ) ) );
     connect( documentController(),
-             SIGNAL( documentExternallyModified( const KURL & ) ),
-             this, SLOT( externallyModified( const KURL & ) ) );
+             SIGNAL( documentExternallyModified( const KUrl & ) ),
+             this, SLOT( externallyModified( const KUrl & ) ) );
     connect( documentController(),
-             SIGNAL( documentURLChanged( const KURL &, const KURL & ) ),
-             this, SLOT( URLChanged( const KURL &, const KURL & ) ) );
+             SIGNAL( documentURLChanged( const KUrl &, const KUrl & ) ),
+             this, SLOT( URLChanged( const KUrl &, const KUrl & ) ) );
     connect( documentController(),
-             SIGNAL( documentStateChanged( const KURL &, DocumentState ) ),
-             this, SLOT( stateChanged( const KURL &, DocumentState ) ) );
+             SIGNAL( documentStateChanged( const KUrl &, DocumentState ) ),
+             this, SLOT( stateChanged( const KUrl &, DocumentState ) ) );
 
     setXMLFile( "kdevdocumentview.rc" );
 }
@@ -107,17 +107,17 @@ KDevDocumentViewPart::~KDevDocumentViewPart()
 void KDevDocumentViewPart::import( RefreshPolicy /*policy*/ )
 {}
 
-void KDevDocumentViewPart::activated( const KURL & url )
+void KDevDocumentViewPart::activated( const KUrl & url )
 {
     m_documentView->setCurrentIndex( m_url2index[ url.path() ] );
 }
 
-void KDevDocumentViewPart::saved( const KURL & /*url*/ )
+void KDevDocumentViewPart::saved( const KUrl & /*url*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::loaded( const KURL &url )
+void KDevDocumentViewPart::loaded( const KUrl &url )
 {
     QString mimeType = KMimeType::findByURL( url ) ->comment();
     KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( mimeType );
@@ -138,7 +138,7 @@ void KDevDocumentViewPart::loaded( const KURL &url )
     }
 }
 
-void KDevDocumentViewPart::closed( const KURL & url )
+void KDevDocumentViewPart::closed( const KUrl & url )
 {
     kdDebug() << k_funcinfo << endl;
     QModelIndex fileIndex = m_url2index[ url.path() ];
@@ -161,18 +161,18 @@ void KDevDocumentViewPart::closed( const KURL & url )
     m_documentModel->removeItem( mimeItem );
 }
 
-void KDevDocumentViewPart::externallyModified( const KURL & /*url*/ )
+void KDevDocumentViewPart::externallyModified( const KUrl & /*url*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::URLChanged( const KURL & /*oldurl*/,
-                                       const KURL & /*newurl*/ )
+void KDevDocumentViewPart::URLChanged( const KUrl & /*oldurl*/,
+                                       const KUrl & /*newurl*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::stateChanged( const KURL & url,
+void KDevDocumentViewPart::stateChanged( const KUrl & url,
         DocumentState state )
 {
     KDevDocumentItem * documentItem =

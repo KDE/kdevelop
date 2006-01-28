@@ -205,7 +205,7 @@
           </widget>
          </item>
          <item>
-          <widget class="KURLRequester" name="dest_edit" >
+          <widget class="KUrlRequester" name="dest_edit" >
            <property name="sizePolicy" >
             <sizepolicy>
              <hsizetype>5</hsizetype>
@@ -526,7 +526,7 @@
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
-   <class>KURLRequester</class>
+   <class>KUrlRequester</class>
    <extends>QWidget</extends>
    <header>kurlrequester.h</header>
    <container>1</container>

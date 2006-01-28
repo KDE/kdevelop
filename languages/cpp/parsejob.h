@@ -35,7 +35,7 @@ class ParseJob : public ThreadWeaver::Job
 {
     Q_OBJECT
 public:
-    ParseJob( const KURL &url, Control *control, pool *memoryPool,
+    ParseJob( const KUrl &url, Control *control, pool *memoryPool,
               QObject* parent );
     virtual ~ParseJob();
 
@@ -44,7 +44,7 @@ public:
         m_contents = contents;
     }
 
-    KURL document() const;
+    KUrl document() const;
     TranslationUnitAST *translationUnit() const;
     FileModelItem fileModelItem() const;
 
@@ -52,7 +52,7 @@ protected:
     virtual void run();
 
 private:
-    KURL m_document;
+    KUrl m_document;
     Control *m_control;
     pool *m_memoryPool;
     QByteArray m_contents;

@@ -50,19 +50,19 @@ bool Context::hasType( int aType ) const
 class EditorContext::Private
 {
 public:
-    Private( const KURL &url, int line, int col, const QString &linestr,
+    Private( const KUrl &url, int line, int col, const QString &linestr,
         const QString &wordstr )
         : m_url(url), m_line(line), m_col(col),
           m_linestr(linestr), m_wordstr(wordstr)
     {
     }
 
-    KURL m_url;
+    KUrl m_url;
     int m_line, m_col;
     QString m_linestr, m_wordstr;
 };
 
-EditorContext::EditorContext( const KURL &url, int line, int col,
+EditorContext::EditorContext( const KUrl &url, int line, int col,
     const QString &linestr, const QString &wordstr )
     : Context(), d( new Private(url, line, col, linestr, wordstr) )
 {
@@ -79,7 +79,7 @@ int EditorContext::type() const
     return Context::EditorContext;
 }
 
-const KURL &EditorContext::url() const
+const KUrl &EditorContext::url() const
 {
     return d->m_url;
 }
@@ -111,7 +111,7 @@ QString EditorContext::currentWord() const
 class FileContext::Private
 {
 public:
-    Private( const KURL::List &someURLs ) : m_urls(someURLs)
+    Private( const KUrl::List &someURLs ) : m_urls(someURLs)
     {
         if (m_urls.count() == 0)
         {
@@ -129,14 +129,14 @@ public:
     {
     }
 
-    KURL::List m_urls;
+    KUrl::List m_urls;
     /// \FIXME the following data members should be removed, but first other
     // parts should be modified to comply with this change.
     QString m_fileName;
     bool m_isDirectory;
 };
 
-FileContext::FileContext( const KURL::List &someURLs )
+FileContext::FileContext( const KUrl::List &someURLs )
     : Context(), d( new Private(someURLs) )
 {
 }
@@ -152,7 +152,7 @@ int FileContext::type() const
     return Context::FileContext;
 }
 
-const KURL::List &FileContext::urls() const
+const KUrl::List &FileContext::urls() const
 {
     return d->m_urls;
 }

@@ -12,6 +12,9 @@
             <height>489</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>Form2</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -25,6 +28,9 @@
             </property>
             <property name="text">
                 <string>Lo&amp;ad last project on startup</string>
+            </property>
+            <property name="accel">
+                <string>Alt+A</string>
             </property>
         </widget>
         <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
@@ -45,6 +51,9 @@
             <property name="text">
                 <string>Line &amp;wrapping</string>
             </property>
+            <property name="accel">
+                <string>Alt+W</string>
+            </property>
         </widget>
         <widget class="QCheckBox" row="9" column="1">
             <property name="name">
@@ -52,6 +61,9 @@
             </property>
             <property name="text">
                 <string>Directory &amp;navigation messages</string>
+            </property>
+            <property name="accel">
+                <string>Alt+N</string>
             </property>
         </widget>
         <widget class="QLayoutWidget" row="6" column="1">
@@ -201,6 +213,9 @@
                     <property name="text">
                         <string>Use KDe&amp;velop's embedded designer</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+V</string>
+                    </property>
                     <property name="whatsThis" stdset="0">
                         <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to integrate the UI designer into KDevelop.</string>
                     </property>
@@ -212,6 +227,9 @@
                     <property name="text">
                         <string>Run KDevelop's &amp;designer as a separate application</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+D</string>
+                    </property>
                     <property name="whatsThis" stdset="0">
                         <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to run KDevelop's UI designer as a separate program.</string>
                     </property>
@@ -222,6 +240,9 @@
                     </property>
                     <property name="text">
                         <string>Run Qt Desi&amp;gner</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+G</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Check this button if you wish to use Qt Designer rather than KDevelop's integrated designer.</string>
@@ -287,6 +308,9 @@
                     <property name="text">
                         <string>&amp;Other:</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+O</string>
+                    </property>
                 </widget>
                 <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
                     <property name="name">
@@ -294,6 +318,9 @@
                     </property>
                     <property name="text">
                         <string>Use &amp;KDE setting</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+K</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -370,7 +397,7 @@
                         <cstring>projectsURL</cstring>
                     </property>
                 </widget>
-                <widget class="KURLRequester">
+                <widget class="KUrlRequester">
                     <property name="name">
                         <cstring>projectsURL</cstring>
                     </property>

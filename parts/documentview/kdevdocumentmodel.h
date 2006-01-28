@@ -26,7 +26,7 @@
 #include <kurl.h>
 #include <kiconloader.h>
 
-class KURL;
+class KUrl;
 class KDevDocumentItem;
 class KDevMimeTypeItem;
 class KDevFileItem;
@@ -90,13 +90,13 @@ public:
     }
 
     QList<KDevFileItem*> fileList() const;
-    KDevFileItem* file( const KURL &url ) const;
+    KDevFileItem* file( const KUrl &url ) const;
 };
 
 class KDevFileItem: public KDevDocumentItem
 {
 public:
-    KDevFileItem( const KURL &url, KDevItemGroup *parent = 0 );
+    KDevFileItem( const KUrl &url, KDevItemGroup *parent = 0 );
     virtual ~KDevFileItem();
 
     virtual KDevFileItem *fileItem() const
@@ -104,18 +104,18 @@ public:
         return const_cast<KDevFileItem*>( this );
     }
 
-    const KURL &URL() const
+    const KUrl &URL() const
     {
         return m_url;
     }
 
-    void setURL( const KURL &url )
+    void setURL( const KUrl &url )
     {
         m_url = url;
     }
 
 private:
-    KURL m_url;
+    KUrl m_url;
 };
 
 class KDevDocumentModel: public KDevItemModel

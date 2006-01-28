@@ -98,8 +98,8 @@ void SimpleMainWindow::init()
     connect(Core::getInstance(), SIGNAL(coreInitialized()), this, SLOT(slotCoreInitialized()));
     connect(Core::getInstance(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
     connect(DocumentController::getInstance(),
-            SIGNAL(documentURLChanged( const KURL &, const KURL & )),
-            this, SLOT(slotDocumentURLChanged( const KURL &, const KURL & )));
+            SIGNAL(documentURLChanged( const KUrl &, const KUrl & )),
+            this, SLOT(slotDocumentURLChanged( const KUrl &, const KUrl & )));
     connect(DocumentController::getInstance(),
             SIGNAL(activePartChanged(KParts::Part*)),
             this, SLOT(activePartChanged(KParts::Part*)));
@@ -107,8 +107,8 @@ void SimpleMainWindow::init()
             this, SLOT(tabWidgetChanged(QWidget*)));
 
     connect(DocumentController::getInstance(),
-            SIGNAL(documentStateChanged(const KURL &, DocumentState)),
-            this, SLOT(documentStateChanged(const KURL&, DocumentState)));
+            SIGNAL(documentStateChanged(const KUrl &, DocumentState)),
+            this, SLOT(documentStateChanged(const KUrl&, DocumentState)));
 
     loadSettings();
 }
@@ -289,14 +289,14 @@ void SimpleMainWindow::projectOpened()
     setCaption(QString());
 }
 
-void SimpleMainWindow::slotDocumentURLChanged( const KURL &oldURL, const KURL &newURL )
+void SimpleMainWindow::slotDocumentURLChanged( const KUrl &oldURL, const KUrl &newURL )
 {
     if (QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(
         DocumentController::getInstance()->partForURL(newURL)))
         widget->setCaption(newURL.fileName());
 }
 
-void SimpleMainWindow::documentStateChanged(const KURL &url, DocumentState state)
+void SimpleMainWindow::documentStateChanged(const KUrl &url, DocumentState state)
 {
     QWidget * widget = EditorProxy::getInstance()->topWidgetForPart(
         DocumentController::getInstance()->partForURL(url));
@@ -369,7 +369,7 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
                 }
 
                 //Create the file context
-                KURL::List list;
+                KUrl::List list;
                 list << m_currentTabURL;
                 FileContext context( list );
                 Core::getInstance()->fillContextMenu(&tabMenu, &context);
@@ -477,10 +477,10 @@ void SimpleMainWindow::fillWindowMenu()
 
     int temp = 0;
 
-    QMap<QString, KURL> map;
+    QMap<QString, KUrl> map;
     QStringList string_list;
-    KURL::List list = DocumentController::getInstance()->openURLs();
-    KURL::List::Iterator itt = list.begin();
+    KUrl::List list = DocumentController::getInstance()->openURLs();
+    KUrl::List::Iterator itt = list.begin();
     while (itt != list.end())
     {
         map[(*itt).fileName()] = *itt;
@@ -497,7 +497,7 @@ void SimpleMainWindow::fillWindowMenu()
     int i = 0;
 
     if (list.count() > 0)
-        m_windowList << qMakePair(m_windowMenu->insertSeparator(), KURL());
+        m_windowList << qMakePair(m_windowMenu->insertSeparator(), KUrl());
 
     while (itt != list.end())
     {

@@ -53,7 +53,7 @@ QList<KDevFileItem*> KDevMimeTypeItem::fileList() const
     return lst;
 }
 
-KDevFileItem* KDevMimeTypeItem::file( const KURL &url ) const
+KDevFileItem* KDevMimeTypeItem::file( const KUrl &url ) const
 {
     foreach( KDevFileItem * item, fileList() )
     {
@@ -64,7 +64,7 @@ KDevFileItem* KDevMimeTypeItem::file( const KURL &url ) const
     return 0;
 }
 
-KDevFileItem::KDevFileItem( const KURL &url, KDevItemGroup *parent )
+KDevFileItem::KDevFileItem( const KUrl &url, KDevItemGroup *parent )
         : KDevDocumentItem( url.fileName(), parent ),
         m_url( url )
 {}

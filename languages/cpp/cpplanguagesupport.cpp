@@ -50,10 +50,10 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
 
     m_backgroundParser = new BackgroundParser( this );
 
-    connect( documentController(), SIGNAL( documentLoaded( const KURL & ) ),
-             this, SLOT( documentLoaded( const KURL & ) ) );
-    connect( documentController(), SIGNAL( documentClosed( const KURL & ) ),
-             this, SLOT( documentClosed( const KURL & ) ) );
+    connect( documentController(), SIGNAL( documentLoaded( const KUrl & ) ),
+             this, SLOT( documentLoaded( const KUrl & ) ) );
+    connect( documentController(), SIGNAL( documentClosed( const KUrl & ) ),
+             this, SLOT( documentClosed( const KUrl & ) ) );
 }
 
 CppLanguageSupport::~CppLanguageSupport()
@@ -70,19 +70,19 @@ QStringList CppLanguageSupport::mimeTypes() const
     return m_mimetypes;
 }
 
-void CppLanguageSupport::documentLoaded( const KURL &url )
+void CppLanguageSupport::documentLoaded( const KUrl &url )
 {
     if ( isCppLanguageDocument( url ) )
         m_backgroundParser->addDocument( url );
 }
 
-void CppLanguageSupport::documentClosed( const KURL &url )
+void CppLanguageSupport::documentClosed( const KUrl &url )
 {
     if ( isCppLanguageDocument( url ) )
         m_backgroundParser->removeDocument( url );
 }
 
-bool CppLanguageSupport::isCppLanguageDocument( const KURL &url )
+bool CppLanguageSupport::isCppLanguageDocument( const KUrl &url )
 {
     KMimeType::Ptr mimetype = KMimeType::findByURL( url );
     foreach ( QString mime, m_mimetypes )

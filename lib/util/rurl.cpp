@@ -232,29 +232,29 @@ Name Name::relativeName( const QString &base, const QString &url )
 
 //class URL
 
-URL::URL( KURL base, KURL url, Type type )
+URL::URL( KUrl base, KUrl url, Type type )
     :Name(Name::relativeName(base.path(), url.path()).rurl(), type), m_base(base)
 {
 }
 
-URL::URL( KURL base, QString url, bool isUrlRelative, Type type )
+URL::URL( KUrl base, QString url, bool isUrlRelative, Type type )
     :Name(isUrlRelative ? url : Name::relativeName(base.path(), url).rurl(), type), m_base(base)
 {
 }
 
-void URL::setBase( const KURL & base )
+void URL::setBase( const KUrl & base )
 {
     m_base = base;
 }
 
 void URL::setBase( const QString & base )
 {
-    KURL url;
+    KUrl url;
     url.setPath(base);
     m_base = url;
 }
 
-KURL URL::base( ) const
+KUrl URL::base( ) const
 {
     return m_base;
 }
@@ -264,9 +264,9 @@ QString URL::basePath( ) const
     return m_base.path(1);
 }
 
-KURL URL::url( ) const
+KUrl URL::url( ) const
 {
-    KURL url = m_base;
+    KUrl url = m_base;
     url.addPath(rurl());
     url.cleanPath();
     return url;
@@ -274,7 +274,7 @@ KURL URL::url( ) const
 
 QString URL::urlPath( ) const
 {
-    KURL url = m_base;
+    KUrl url = m_base;
     url.addPath(rurl());
     int mod = 0;
     if (type() == File)
@@ -287,23 +287,23 @@ QString URL::urlPath( ) const
 
 QString URL::urlDirectory( ) const
 {
-    KURL url = m_base;
+    KUrl url = m_base;
     url.addPath(rurl());
     url.cleanPath();
     return url.directory(false, false);
 }
 
-URL URL::relativeTo( KURL base )
+URL URL::relativeTo( KUrl base )
 {
     return URL(base, url(), type());
 }
 
-URL URL::relativeURL( KURL base, KURL url )
+URL URL::relativeURL( KUrl base, KUrl url )
 {
     return URL(base, url);
 }
 
-URL URL::relativeURL( KURL base, QString url, bool isUrlRelative )
+URL URL::relativeURL( KUrl base, QString url, bool isUrlRelative )
 {
     return URL(base, url, isUrlRelative);
 }
@@ -322,12 +322,12 @@ bool Relative::URL::operator !=( const URL & url )
 
 // Directory class
 
-Directory::Directory( KURL base, KURL url )
+Directory::Directory( KUrl base, KUrl url )
     :URL(base, url, Name::Directory)
 {
 }
 
-Directory::Directory( KURL base, QString url, bool isRelativeUrl )
+Directory::Directory( KUrl base, QString url, bool isRelativeUrl )
     :URL(base, url, isRelativeUrl, Name::Directory)
 {
 }
@@ -346,12 +346,12 @@ void Directory::setRURL( QString rurl, Type type )
 
 //File class
 
-File::File( KURL base, KURL url )
+File::File( KUrl base, KUrl url )
     :URL(base, url, Name::File)
 {
 }
 
-File::File( KURL base, QString url, bool isRelativeUrl )
+File::File( KUrl base, QString url, bool isRelativeUrl )
     :URL(base, url, isRelativeUrl, Name::File)
 {
 }

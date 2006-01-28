@@ -69,7 +69,7 @@ KDevClassViewPart::KDevClassViewPart(QObject *parent, const char *name, const QS
   //connect(editor, SIGNAL(textChanged(QString)), filterModel, SLOT(setFilter(QString)));
   //m_classView->setModel(filterModel);
 
-  connect(m_classView, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
+  connect(m_classView, SIGNAL(activateURL(KUrl)), this, SLOT(openURL(KUrl)));
 
   mainWindow()->embedSelectView(m_classView, i18n("Classes"), i18n("Classes"));
 

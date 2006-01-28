@@ -318,7 +318,7 @@ void GDBBreakpointWidget::reset()
 
 // When a file is loaded then we need to tell the editor (display window)
 // which lines contain a breakpoint.
-void GDBBreakpointWidget::slotRefreshBP(const KURL &filename)
+void GDBBreakpointWidget::slotRefreshBP(const KUrl &filename)
 {
     for ( int row = 0; row < m_table->numRows(); row++ )
     {

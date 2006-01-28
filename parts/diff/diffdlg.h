@@ -27,7 +27,7 @@ public:
 
 public slots:
     /** The URL has to point to a diff file */
-    void openURL( const KURL& url );
+    void openURL( const KUrl& url );
     /** Pass a diff file in here */
     void setDiff( const QString& diff );
     /** clears the difference viewer */

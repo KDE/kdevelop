@@ -19,11 +19,11 @@ class KToolBarPopupAction;
 class KParts::ReadOnlyPart;
 
 struct DocumentationHistoryEntry {
-    KURL url;
+    KUrl url;
     int id;
 
     DocumentationHistoryEntry() {}
-    DocumentationHistoryEntry( const KURL& u ): url( u )
+    DocumentationHistoryEntry( const KUrl& u ): url( u )
     {
         id = abs( QTime::currentTime().msecsTo( QTime() ) );    // nasty, but should provide a reasonably unique number
     }
@@ -56,14 +56,14 @@ public:
 
     void setContext(const QString &context);
     QString context() const;
-    virtual bool openURL(const KURL &url);
+    virtual bool openURL(const KUrl &url);
     static QString resolveEnvVarsInURL(const QString& url);
 
     void setOptions(int options) { m_options = options; }
 
 signals:
 /*    void fileNameChanged(KParts::ReadOnlyPart *part);*/
-    void documentURLChanged( const KURL &oldURL, const KURL &newURL );
+    void documentURLChanged( const KUrl &oldURL, const KUrl &newURL );
 
 protected slots:
 
@@ -71,13 +71,13 @@ protected slots:
     void slotCompleted();
     void slotCancelled(const QString &errMsg);
 
-    void openURLRequest(const KURL &url);
+    void openURLRequest(const KUrl &url);
     void popup( const QString & url, const QPoint & p );
 
     void slotReload();
     void slotStop();
     virtual void slotDuplicate() = 0;
-    virtual void slotOpenInNewWindow(const KURL &url) = 0;
+    virtual void slotOpenInNewWindow(const KUrl &url) = 0;
     void slotPrint();
     void slotCopy();
     void slotSelectionChanged();

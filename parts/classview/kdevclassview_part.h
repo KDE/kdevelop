@@ -28,7 +28,7 @@
 class KDevClassView;
 class KDevCodeModel;
 class QTimer;
-class KURL;
+class KUrl;
 
 /*
  Please read the README.dox file for more info about this part

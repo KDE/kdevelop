@@ -23,7 +23,7 @@
 #include <q3valuelist.h>
 
 class QWidget;
-class KURL;
+class KUrl;
 class KDevPlugin;
 
 /**
@@ -63,7 +63,7 @@ private:
   /** Restores the part of the project session that concerns to the documents (files). */
   void recreateDocs(QDomElement& el);
   /** recreates views and their properties of a certain document. */
-  void recreateViews(KURL& url, QDomElement docEl, bool activate);
+  void recreateViews(KUrl& url, QDomElement docEl, bool activate);
   /** setup a valid XML file. */
   void initXMLTree();
 
@@ -75,7 +75,7 @@ private:
   struct DocumentData
   {
 	  DocumentData() : line(0) {}
-	  KURL url;
+	  KUrl url;
 	  int line;
 	  QString type;
       bool activate;

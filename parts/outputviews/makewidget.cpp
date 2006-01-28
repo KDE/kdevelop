@@ -213,8 +213,8 @@ MakeWidget::MakeWidget( MakeViewPart *part )
     connect( horizontalScrollBar(), SIGNAL( sliderReleased() ),
              this, SLOT( horizScrollingOff() ) );
 
-    connect( m_part->documentController(), SIGNAL( documentLoaded( const KURL& ) ),
-             this, SLOT( slotDocumentOpened( const KURL& ) ) );
+    connect( m_part->documentController(), SIGNAL( documentLoaded( const KUrl& ) ),
+             this, SLOT( slotDocumentOpened( const KUrl& ) ) );
 }
 
 MakeWidget::~MakeWidget()
@@ -447,7 +447,7 @@ void MakeWidget::specialCheck( const QString& file, QString& fName ) const
     QRegExp rx( "cd \\'(.*)\\'.*" );
     if ( rx.search( firstLine ) != -1 )
     {
-        KURL url( rx.cap( 1 ) + QLatin1String( "/" ) + file );
+        KUrl url( rx.cap( 1 ) + QLatin1String( "/" ) + file );
         if ( url.isValid() )
         {
             kdDebug( 9004 ) << "MakeWidget::specialCheck thinks that url is: " << url.url()
@@ -515,7 +515,7 @@ void MakeWidget::searchItem( int parag )
     {
         // open the file
         kdDebug( 9004 ) << "Opening file: " << guessFileName( item->fileName, parag ) << endl;
-        m_part->documentController() ->editDocument( KURL( guessFileName( item->fileName, parag ) ), item->cursor().line(), item->cursor().column() );
+        m_part->documentController() ->editDocument( KUrl( guessFileName( item->fileName, parag ) ), item->cursor().line(), item->cursor().column() );
 
         m_part->mainWindow() ->statusBar() ->message( item->m_error, 10000 );
         m_part->mainWindow() ->lowerView( this );
@@ -669,7 +669,7 @@ void MakeWidget::insertItem( MakeItem* new_item )
     }
 }
 
-void MakeWidget::slotDocumentOpened( const KURL & filename )
+void MakeWidget::slotDocumentOpened( const KUrl & filename )
 {
     KParts::Part* part = m_part->documentController()->partForURL( filename );
     KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>( part );
@@ -874,7 +874,7 @@ bool MakeWidget::scanErrorBackward( int parag )
 
 void MakeWidget::checkIfDocumentLoaded( ErrorItem * e )
 {
-    if (KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>( m_part->documentController()->partForURL( KURL( guessFileName( e->fileName, m_paragraphs + 1 ) ) )) )
+    if (KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>( m_part->documentController()->partForURL( KUrl( guessFileName( e->fileName, m_paragraphs + 1 ) ) )) )
         e->setDocument(doc);
 }
 

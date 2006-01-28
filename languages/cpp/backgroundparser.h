@@ -55,8 +55,8 @@ public:
     virtual ~BackgroundParser();
 
 public slots:
-    void addDocument( const KURL &url );
-    void removeDocument( const KURL &url );
+    void addDocument( const KUrl &url );
+    void removeDocument( const KUrl &url );
     void parseDocuments();
     void parseComplete( Job* );
     void documentChanged( KTextEditor::Document* document );
@@ -65,12 +65,12 @@ private:
     CppLanguageSupport *m_cppSupport;
 
     // A list of known documents, and whether they are due to be parsed or not
-    QMap<KURL, bool> m_documents;
+    QMap<KUrl, bool> m_documents;
     QTimer *m_timer;
 
     Control *m_control;
     pool *m_memoryPool;
-    QMap<KURL, TranslationUnitAST*> m_url2unit;
+    QMap<KUrl, TranslationUnitAST*> m_url2unit;
 };
 
 #endif

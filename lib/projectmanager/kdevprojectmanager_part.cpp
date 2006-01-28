@@ -126,7 +126,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
   m_projectOverview->setWhatsThis(i18n("Project Overview"));
   vbox->add(m_projectOverview);
 
-  connect(m_projectOverview, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
+  connect(m_projectOverview, SIGNAL(activateURL(KUrl)), this, SLOT(openURL(KUrl)));
 
 
 
@@ -142,7 +142,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
   m_projectDetails->setWhatsThis(i18n("Project Details"));
   vbox->add(m_projectDetails);
 
-  connect(m_projectDetails, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
+  connect(m_projectDetails, SIGNAL(activateURL(KUrl)), this, SLOT(openURL(KUrl)));
 
   connect(m_projectOverview->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
           m_projectDetails, SLOT(setRootIndex(QModelIndex)));
@@ -167,7 +167,7 @@ KDevProjectManagerPart::~KDevProjectManagerPart()
     }
 }
 
-void KDevProjectManagerPart::openURL(const KURL &url)
+void KDevProjectManagerPart::openURL(const KUrl &url)
 {
   documentController()->editDocument(url);
 }

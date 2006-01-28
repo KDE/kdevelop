@@ -40,7 +40,7 @@ void DiffDlg::setDiff( const QString& diff )
   diffWidget->setDiff( diff );
 }
 
-void DiffDlg::openURL( const KURL& url )
+void DiffDlg::openURL( const KUrl& url )
 {
   diffWidget->openURL( url );
 }

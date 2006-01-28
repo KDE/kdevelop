@@ -94,64 +94,64 @@ public:
     base should be an url to the directory or location, not a file.
     The check is not performed. url should be the usual url. Only the
     path of this url is taken into account when evaluating relative path.*/
-    URL(KURL base, KURL url, Type type = Auto);
+    URL(KUrl base, KUrl url, Type type = Auto);
     /**Creates RURL object with given base and relative or full url (according to
     the isUrlRelative value).*/
-    URL(KURL base, QString url, bool isUrlRelative, Type type = Auto);
+    URL(KUrl base, QString url, bool isUrlRelative, Type type = Auto);
 
     /**Sets a new base for a RURL.*/
-    void setBase(const KURL &base);
+    void setBase(const KUrl &base);
     /**Sets a new base for a RURL. Base is is considered to be a
-    directory and converted to KURL using KURL::setPath().*/
+    directory and converted to KUrl using KUrl::setPath().*/
     void setBase(const QString &base);
     /**Returns RURL base.*/
-    KURL base() const;
-    /**Returns a path of a base KURL (using KURL::path()). Trailing slash is guaranteed.*/
+    KUrl base() const;
+    /**Returns a path of a base KUrl (using KUrl::path()). Trailing slash is guaranteed.*/
     QString basePath() const;
 
     /**Returns a complete url to the RURL location. This is basically base + rurl.
     This also resolves ".." components in path.
-    Directories always have trailing slash in KURL
+    Directories always have trailing slash in KUrl
     (this means that if url() == "file:/test/dir/" then
-    url() != KURL("/test/dir") and
-    url() == KURL("/test/dir/").*/
-    KURL url() const;
+    url() != KUrl("/test/dir") and
+    url() == KUrl("/test/dir/").*/
+    KUrl url() const;
     /**Returns a path of a complete url to the location. The url is basically base + rurl.
-    This method only returns a path part of the KURL (using KURL::path()).
+    This method only returns a path part of the KUrl (using KUrl::path()).
     Trailing slash is guaranteed for directories and no trailing slash - for files.
     This also resolves ".." components in path.*/
     QString urlPath() const;
     /**Returns a directory of a complete url to the location. The url is constructed as base + rurl.
     Returns the same as urlPath() for directories.
-    This method uses KURL::directory to determine the directory.
+    This method uses KUrl::directory to determine the directory.
     Trailing slash is guaranteed.
     This also resolves ".." components in path.*/
     QString urlDirectory() const;
 
     /**Returns a new URL that is relative to given base. Relative part is taken from
     current URL object.*/
-    URL relativeTo(KURL base);
+    URL relativeTo(KUrl base);
 
     /**Returns a new relative URL constructed from base and given url.*/
-    static URL relativeURL(KURL base, KURL url);
+    static URL relativeURL(KUrl base, KUrl url);
     /**Returns a new relative URL constructed from base and given url. url parameter
     is either relative or full (depends on isUrlRelative value).*/
-    static URL relativeURL(KURL base, QString url, bool isUrlRelative);
+    static URL relativeURL(KUrl base, QString url, bool isUrlRelative);
 
     bool operator == (const URL &url);
     bool operator != (const URL &url);
 
 private:
-    KURL m_base;
+    KUrl m_base;
 };
 
 /**Relative directory name.*/
 class Directory: public URL{
 public:
-    /**Works as URL::URL(KURL, KURL), only implies Name::Directory mode.*/
-    Directory(KURL base, KURL url);
-    /**Works as URL::URL(KURL, QString, bool), only implies Name::Directory mode.*/
-    Directory(KURL base, QString url, bool isRelativeUrl);
+    /**Works as URL::URL(KUrl, KUrl), only implies Name::Directory mode.*/
+    Directory(KUrl base, KUrl url);
+    /**Works as URL::URL(KUrl, QString, bool), only implies Name::Directory mode.*/
+    Directory(KUrl base, QString url, bool isRelativeUrl);
 
     /**Works as URL::setRURL(QString), only implies Name::Directory mode.*/
     void setRURL(QString rurl);
@@ -164,10 +164,10 @@ private:
 /**Relative file name.*/
 class File: public URL{
 public:
-    /**Works as URL::URL(KURL, KURL), only implies Name::File mode.*/
-    File(KURL base, KURL url);
-    /**Works as URL::URL(KURL, KURL), only implies Name::File mode.*/
-    File(KURL base, QString url, bool isRelativeUrl);
+    /**Works as URL::URL(KUrl, KUrl), only implies Name::File mode.*/
+    File(KUrl base, KUrl url);
+    /**Works as URL::URL(KUrl, KUrl), only implies Name::File mode.*/
+    File(KUrl base, QString url, bool isRelativeUrl);
 
     /**Works as URL::setRURL(QString), only implies Name::File mode.*/
     void setRURL(QString rurl);

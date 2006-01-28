@@ -57,7 +57,7 @@ namespace GDBDebugger
 {
 
 MemoryViewDialog::MemoryViewDialog(QWidget *parent, const char *name)
-    : KDialog(parent, name, true),      // modal
+    : KDialog(parent, QString(name), 0, Qt::Dialog),      // modal
       start_(new KLineEdit(this)),
       end_(new KLineEdit(this)),
       output_(new Q3MultiLineEdit(this))

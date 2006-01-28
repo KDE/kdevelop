@@ -217,7 +217,7 @@ QSize DbgButton::sizeHint() const
 // **************************************************************************
 
 DbgDocker::DbgDocker(QWidget* parent, DbgToolBar* toolBar, const QPixmap& pixmap) :
-    KSystemTray(parent, "DbgDocker"),
+    KSystemTray(parent),
     toolBar_(toolBar)
 {
     setPixmap(pixmap);

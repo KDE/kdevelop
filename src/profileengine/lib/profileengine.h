@@ -56,7 +56,7 @@ public:
         resourceList += profile->resources(m_filter);
     }
 
-    KURL::List resourceList;
+    KUrl::List resourceList;
     QString m_filter;
 };
 
@@ -110,7 +110,7 @@ public:
     @param profileName A name of a profile to find resources in.
     @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
     for name filters syntax.*/
-    KURL::List resources(const QString &profileName, const QString &nameFilter);
+    KUrl::List resources(const QString &profileName, const QString &nameFilter);
 
     /**@return The list of URLs to the resources (files) with given @p extension.
     This list is obtained by a recursive search that process given profile
@@ -118,13 +118,13 @@ public:
     @param profileName A name of a profile to find resources in.
     @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
     for name filters syntax.*/
-    KURL::List resourcesRecursive(const QString &profileName, const QString &nameFilter);
+    KUrl::List resourcesRecursive(const QString &profileName, const QString &nameFilter);
 
     /**Adds a resource for the profile. Resource will be copied to the user profile directory
     (like $HOME/.kde/share/apps/kdevelop/profiles/...).
     @param profileName A name of the profile.
     @param url The url to a file to copy as a profile resource.*/
-    void addResource(const QString &profileName, const KURL &url);
+    void addResource(const QString &profileName, const KUrl &url);
 
     /**Gets the difference between @p profile1 and @p profile2.
     Difference is calculated as two lists of plugins to be unloaded and loaded
@@ -257,7 +257,7 @@ public:
 protected:
     void processDir(const QString &dir, const QString &currPath, QMap<QString, Profile*> &passedPaths, Profile *root);
 
-    KURL::List resources(Profile *profile, const QString &nameFilter);
+    KUrl::List resources(Profile *profile, const QString &nameFilter);
 
     /**Gets a complete listing of available profiles and looks for a profile.
     @param listing Profiles listing will be saved here.

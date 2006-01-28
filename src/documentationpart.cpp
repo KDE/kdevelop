@@ -13,7 +13,7 @@ void HTMLDocumentationPart::slotDuplicate( )
     DocumentController::getInstance()->showDocument(url(), true);
 }
 
-void HTMLDocumentationPart::slotOpenInNewWindow( const KURL & url )
+void HTMLDocumentationPart::slotOpenInNewWindow( const KUrl & url )
 {
     DocumentController::getInstance()->showDocument(url, true);
 }

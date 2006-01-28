@@ -53,7 +53,7 @@ QString URLUtil::directory(const QString & name) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QString URLUtil::relativePath(const KURL & parent, const KURL & child, uint slashPolicy) {
+QString URLUtil::relativePath(const KUrl & parent, const KUrl & child, uint slashPolicy) {
   bool slashPrefix = slashPolicy & SLASH_PREFIX;
   bool slashSuffix = slashPolicy & SLASH_SUFFIX;
   if (parent.equals(child,true))
@@ -68,7 +68,7 @@ QString URLUtil::relativePath(const KURL & parent, const KURL & child, uint slas
 ///////////////////////////////////////////////////////////////////////////////
 
 QString URLUtil::relativePath(const QString & parent, const QString & child, uint slashPolicy) {
-  return relativePath(KURL(parent), KURL(child), slashPolicy);
+  return relativePath(KUrl(parent), KUrl(child), slashPolicy);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,13 +81,13 @@ QString URLUtil::upDir(const QString & path, bool slashSuffix) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-KURL URLUtil::mergeURL(const KURL & source, const KURL & dest, const KURL & child) {
+KUrl URLUtil::mergeURL(const KUrl & source, const KUrl & dest, const KUrl & child) {
 
   // if already a child of source, then fine
   if (source.isParentOf(child) || source.equals(child,true)) return child;
 
   // if not a child of dest, return blank URL (error)
-  if (!dest.isParentOf(child) && !dest.equals(child,true)) return KURL();
+  if (!dest.isParentOf(child) && !dest.equals(child,true)) return KUrl();
 
   // if child is same as dest, return source
   if (dest.equals(child,true)) return source;
@@ -96,7 +96,7 @@ KURL URLUtil::mergeURL(const KURL & source, const KURL & dest, const KURL & chil
   QString childUrlStr = child.url(-1);
   QString destStemStr = dest.url(1);
   QString sourceStemStr = source.url(1);
-  return KURL(sourceStemStr.append( childUrlStr.mid( destStemStr.length() ) ) );
+  return KUrl(sourceStemStr.append( childUrlStr.mid( destStemStr.length() ) ) );
 
 }
 
@@ -110,7 +110,7 @@ QString URLUtil::getExtension(const QString & path) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QString URLUtil::extractPathNameRelative(const KURL &baseDirUrl, const KURL &url )
+QString URLUtil::extractPathNameRelative(const KUrl &baseDirUrl, const KUrl &url )
 {
   QString absBase = extractPathNameAbsolute( baseDirUrl ),
     absRef = extractPathNameAbsolute( url );
@@ -127,12 +127,12 @@ QString URLUtil::extractPathNameRelative(const KURL &baseDirUrl, const KURL &url
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QString URLUtil::extractPathNameRelative(const QString &basePath, const KURL &url )
+QString URLUtil::extractPathNameRelative(const QString &basePath, const KUrl &url )
 {
 #if (KDE_VERSION_MINOR!=0) || (KDE_VERSION_MAJOR!=3)
-  KURL baseDirUrl = KURL::fromPathOrURL( basePath );
+  KUrl baseDirUrl = KUrl::fromPathOrURL( basePath );
 #else
-  KURL baseDirUrl = KdevKURL::fromPathOrURL( basePath );
+  KUrl baseDirUrl = KdevKUrl::fromPathOrURL( basePath );
 #endif
   return extractPathNameRelative( baseDirUrl, url );
 }
@@ -142,18 +142,18 @@ QString URLUtil::extractPathNameRelative(const QString &basePath, const KURL &ur
 QString URLUtil::extractPathNameRelative(const QString &basePath, const QString &absFilePath )
 {
 #if (KDE_VERSION_MINOR!=0) || (KDE_VERSION_MAJOR!=3)
-  KURL baseDirUrl = KURL::fromPathOrURL( basePath ),
-       fileUrl = KURL::fromPathOrURL( absFilePath );
+  KUrl baseDirUrl = KUrl::fromPathOrURL( basePath ),
+       fileUrl = KUrl::fromPathOrURL( absFilePath );
 #else
-  KURL baseDirUrl = KdevKURL::fromPathOrURL( basePath ),
-       fileUrl = KdevKURL::fromPathOrURL( absFilePath );
+  KUrl baseDirUrl = KdevKUrl::fromPathOrURL( basePath ),
+       fileUrl = KdevKUrl::fromPathOrURL( absFilePath );
 #endif
   return extractPathNameRelative( baseDirUrl, fileUrl );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QString URLUtil::extractPathNameAbsolute( const KURL &url )
+QString URLUtil::extractPathNameAbsolute( const KUrl &url )
 {
   if (isDirectory( url ))
     return url.path( +1 ); // with trailing "/" if none is present
@@ -172,7 +172,7 @@ QString URLUtil::extractPathNameAbsolute( const KURL &url )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool URLUtil::isDirectory( const KURL &url )
+bool URLUtil::isDirectory( const KUrl &url )
 {
   return isDirectory( url.path() );
 }
@@ -186,7 +186,7 @@ bool URLUtil::isDirectory( const QString &absFilePath )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void URLUtil::dump( const KURL::List &urls, const QString &aMessage )
+void URLUtil::dump( const KUrl::List &urls, const QString &aMessage )
 {
   if (!aMessage.isNull())
   {
@@ -196,14 +196,14 @@ void URLUtil::dump( const KURL::List &urls, const QString &aMessage )
 
   for (int i = 0; i<urls.count(); ++i)
   {
-    KURL url = urls[ i ];
+    KUrl url = urls[ i ];
 //    kdDebug(9000) << " * Element = "  << url.path() << endl;
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QStringList URLUtil::toRelativePaths( const QString &baseDir, const KURL::List &urls)
+QStringList URLUtil::toRelativePaths( const QString &baseDir, const KUrl::List &urls)
 {
   QStringList paths;
 

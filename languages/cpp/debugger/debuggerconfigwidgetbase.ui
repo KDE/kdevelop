@@ -102,7 +102,7 @@
                 <string>Arguments that are given to the application when it is debugged.</string>
             </property>
         </widget>
-        <widget class="KURLRequester" row="1" column="1" rowspan="1" colspan="2">
+        <widget class="KUrlRequester" row="1" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>debuggingShell_edit</cstring>
             </property>
@@ -113,7 +113,7 @@
                 <string>If you want gdb to be executed by a special shell or tool insert it here.</string>
             </property>
         </widget>
-        <widget class="KURLRequester" row="2" column="1" rowspan="1" colspan="2">
+        <widget class="KUrlRequester" row="2" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>gdbPath_edit</cstring>
             </property>
@@ -279,7 +279,7 @@ Otherwise leave it unchecked.</string>
                                 <string></string>
                             </property>
                         </widget>
-                        <widget class="KURLRequester" row="2" column="1">
+                        <widget class="KUrlRequester" row="2" column="1">
                             <property name="name">
                                 <cstring>runGdbScript_edit</cstring>
                             </property>
@@ -294,7 +294,7 @@ This script is intended for the actual commands needed to connect to a remotely 
 	continue	[optional] run debugging to the first breakpoint.</string>
                             </property>
                         </widget>
-                        <widget class="KURLRequester" row="1" column="1">
+                        <widget class="KUrlRequester" row="1" column="1">
                             <property name="name">
                                 <cstring>runShellScript_edit</cstring>
                             </property>
@@ -334,7 +334,7 @@ or if your executable contains the gdb stub
                                 <cstring>configGdbScript_edit</cstring>
                             </property>
                         </widget>
-                        <widget class="KURLRequester" row="0" column="1">
+                        <widget class="KUrlRequester" row="0" column="1">
                             <property name="name">
                                 <cstring>configGdbScript_edit</cstring>
                             </property>

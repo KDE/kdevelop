@@ -23,7 +23,7 @@
 #include "kdevtreeview.h"
 
 class KDevDocumentViewPart;
-class KURL;
+class KUrl;
 
 class KDevDocumentView: public KDevTreeView
 {
@@ -35,7 +35,7 @@ public:
     KDevDocumentViewPart *part() const;
 
 signals:
-    void activateURL( const KURL &url );
+    void activateURL( const KUrl &url );
 
 protected slots:
     void currentChanged( const QModelIndex & current,

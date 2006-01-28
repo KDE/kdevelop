@@ -76,7 +76,7 @@ public:
     * @param url        The file the debugger has stopped at.
     * @param lineNum    The line number to display. Note: We may not know it.
     */
-    void gotoExecutionPoint(const KURL &url, int lineNum=-1);
+    void gotoExecutionPoint(const KUrl &url, int lineNum=-1);
 
     /**
     * Remove the executution point being displayed.

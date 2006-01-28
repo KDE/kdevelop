@@ -38,7 +38,7 @@
 
 #include "parsejob.h"
 
-ParseJob::ParseJob( const KURL &url, Control *control,
+ParseJob::ParseJob( const KUrl &url, Control *control,
                     pool *memoryPool, QObject* parent )
         : ThreadWeaver::Job( parent ),
         m_document( url ),
@@ -51,7 +51,7 @@ ParseJob::ParseJob( const KURL &url, Control *control,
 ParseJob::~ParseJob()
 {}
 
-KURL ParseJob::document() const
+KUrl ParseJob::document() const
 {
     return m_document;
 }

@@ -207,6 +207,7 @@ DTabWidget *DMainWindow::createTab()
 
 bool DMainWindow::eventFilter(QObject *obj, QEvent *ev)
 {
+    return false;
     QWidget *w = (QWidget*)obj;
 
     if (!m_widgets.contains(w))

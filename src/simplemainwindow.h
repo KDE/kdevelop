@@ -73,9 +73,9 @@ private slots:
     void gotoLastWindow();
     void slotCoreInitialized();
     void projectOpened();
-    void slotDocumentURLChanged( const KURL &oldURL, const KURL &newURL );
+    void slotDocumentURLChanged( const KUrl &oldURL, const KUrl &newURL );
     void activePartChanged(KParts::Part *part);
-    void documentStateChanged(const KURL &url, DocumentState state);
+    void documentStateChanged(const KUrl &url, DocumentState state);
     void tabContextActivated(int);
     void configureToolbars();
     void slotNewToolbarConfig();
@@ -93,11 +93,11 @@ private:
 
     MainWindowShare *m_mainWindowShare;
 
-    KURL m_currentTabURL;
+    KUrl m_currentTabURL;
     QMap<QWidget*, DDockWindow::Position> m_docks;
     KAction *m_raiseEditor;
     KMenu *m_windowMenu;
-    typedef QPair<int, KURL> WinInfo;
+    typedef QPair<int, KUrl> WinInfo;
     QList<WinInfo> m_windowList;
 };
 

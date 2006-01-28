@@ -44,11 +44,11 @@ public:
     virtual QString unformatClassName( const QString& name ) const { return name; }
 
 private slots:
-    void documentLoaded( const KURL &url );
-    void documentClosed( const KURL &url );
+    void documentLoaded( const KUrl &url );
+    void documentClosed( const KUrl &url );
 
 private:
-    bool isCppLanguageDocument( const KURL &url );
+    bool isCppLanguageDocument( const KUrl &url );
 
 private:
     int m_features;

@@ -50,7 +50,7 @@ public:
 	 */
 	static int parseFile(const char *fileName, ProjectAST **ast);
 	static int parseFile(const QString& fileName, ProjectAST **ast);
-	static int parseFile(KURL fileName, ProjectAST **ast);
+	static int parseFile(KUrl fileName, ProjectAST **ast);
 	
 };
 

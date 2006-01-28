@@ -29,7 +29,7 @@ class KDevProjectImporter;
 class KDevProjectBuilder;
 class KDevProjectModel;
 class QTimer;
-class KURL;
+class KUrl;
 
 /*
  Please read the README.dox file for more info about this part
@@ -91,7 +91,7 @@ signals:
     void aboutToRemoveProjectItem(KDevProjectItem *dom);
 
 public slots:
-    void openURL(const KURL &url);
+    void openURL(const KUrl &url);
     void updateDetails(KDevProjectItem *item);
 
 private slots:

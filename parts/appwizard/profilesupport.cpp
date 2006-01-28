@@ -28,9 +28,9 @@
 
 ProfileSupport::ProfileSupport(KDevPlugin *parent)
 {
-    KURL::List resources = parent->pluginController()->profileResourcesRecursive("*.appwizard");
+    KUrl::List resources = parent->pluginController()->profileResourcesRecursive("*.appwizard");
 
-    for (KURL::List::const_iterator it = resources.constBegin(); it != resources.constEnd(); ++it)
+    for (KUrl::List::const_iterator it = resources.constBegin(); it != resources.constEnd(); ++it)
     {
         KConfig config((*it).path());
         config.setGroup("General");

@@ -19,7 +19,7 @@
 class Q3ListView;
 class Q3ListViewItem;
 class QComboView;
-class KURLLabel;
+class KUrlLabel;
 class QLabel;
 
 /**
@@ -56,7 +56,7 @@ private:
     Q3ListView * _pluginList;
 //    QComboView *_pluginProfile;
     QLabel * _pluginDescription;
-    KURLLabel * _urlLabel;
+    KUrlLabel * _urlLabel;
 
 //    QString _profile;
 };

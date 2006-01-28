@@ -39,7 +39,7 @@ void OpenWithPart::fillContextMenu(QMenu *popup, const Context *context)
 {
   kdDebug(9000) << "context: " << context->type() << endl;
 
-  m_url = KURL();
+  m_url = KUrl();
 
   if (context->hasType(Context::FileContext))
     {
@@ -77,7 +77,7 @@ void OpenWithPart::openWithService()
 {
   if (KService::Ptr ptr = KService::serviceByDesktopPath(sender()->name()))
     {
-      KURL::List list;
+      KUrl::List list;
       list << m_url;
 
       KRun::run(*ptr, list);
@@ -86,7 +86,7 @@ void OpenWithPart::openWithService()
 
 void OpenWithPart::openWithDialog()
 {
-  KURL::List list;
+  KUrl::List list;
   list << m_url;
   KRun::displayOpenWithDialog(list);
 }

@@ -36,7 +36,7 @@ namespace
 class CheckURL : public QTreeWidgetItem
 {
 public:
-	CheckURL( QTreeWidget * lv, KURL const & url )
+	CheckURL( QTreeWidget * lv, KUrl const & url )
 		: QTreeWidgetItem( lv),
 		_url( url )
 	{
@@ -44,7 +44,7 @@ public:
             setFlags(flags() | Qt::ItemIsUserCheckable);
         }
 
-	KURL const & url() const { return _url; }
+	KUrl const & url() const { return _url; }
 
         bool isOn() const
         { return checkState(0) == Qt::Checked; }
@@ -53,13 +53,13 @@ public:
         { setCheckState(0, b ? Qt::Checked : Qt::Unchecked); }
 
 private:
-    KURL _url;
+    KUrl _url;
 };
 
 }
 
 
-KSaveSelectDialog::KSaveSelectDialog( KURL::List const & filelist, KURL::List const & ignorelist, QWidget * parent ) :
+KSaveSelectDialog::KSaveSelectDialog( KUrl::List const & filelist, KUrl::List const & ignorelist, QWidget * parent ) :
   KDialogBase( parent, "SaveAllDialog", true, i18n("Save Modified Files?"),
 	       Ok | User1 | Close )
 {
@@ -78,7 +78,7 @@ KSaveSelectDialog::KSaveSelectDialog( KURL::List const & filelist, KURL::List co
 	setButtonTip( User1, i18n("Lose all modifications") );
 	setButtonTip( Close, i18n("Cancels the action") );
 
-	KURL::List::ConstIterator it = filelist.begin();
+	KUrl::List::ConstIterator it = filelist.begin();
 	while ( it != filelist.end() )
 	{
 		if ( !ignorelist.contains( *it ) )
@@ -117,9 +117,9 @@ void KSaveSelectDialog::cancel( )
 	QDialog::reject();
 }
 
-KURL::List KSaveSelectDialog::filesToSave( )
+KUrl::List KSaveSelectDialog::filesToSave( )
 {
-    KURL::List filelist;
+    KUrl::List filelist;
 
     for (int i=0; i<_listview->topLevelItemCount(); ++i) {
         CheckURL * item = static_cast<CheckURL*>( _listview->topLevelItem(i) );
@@ -130,9 +130,9 @@ KURL::List KSaveSelectDialog::filesToSave( )
     return filelist;
 }
 
-KURL::List KSaveSelectDialog::filesNotToSave( )
+KUrl::List KSaveSelectDialog::filesNotToSave( )
 {
-    KURL::List filelist;
+    KUrl::List filelist;
 
     for (int i=0; i<_listview->topLevelItemCount(); ++i) {
         CheckURL * item = static_cast<CheckURL*>( _listview->topLevelItem(i) );

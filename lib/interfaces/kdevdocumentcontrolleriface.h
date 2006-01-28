@@ -45,13 +45,13 @@ k_dcop:
   void reloadAllDocuments();
 
   bool closeAllDocuments();
-  uint documentState( const KURL &url );
+  uint documentState( const KUrl &url );
 
 private slots:
 
-  void forwardLoadedDocument(const KURL &url);
-  void forwardSavedDocument(const KURL &url);
-  void forwardClosedDocument(const KURL &url);
+  void forwardLoadedDocument(const KUrl &url);
+  void forwardSavedDocument(const KUrl &url);
+  void forwardClosedDocument(const KUrl &url);
 
 private:
 

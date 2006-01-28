@@ -38,11 +38,11 @@ class KSaveSelectDialog : public KDialogBase
 	Q_OBJECT
 	
 public:
-	KSaveSelectDialog( KURL::List const & filelist, KURL::List const & ignorelist, QWidget * parent );
+	KSaveSelectDialog( KUrl::List const & filelist, KUrl::List const & ignorelist, QWidget * parent );
 	virtual ~KSaveSelectDialog();
 	
-	KURL::List filesToSave();
-	KURL::List filesNotToSave();
+	KUrl::List filesToSave();
+	KUrl::List filesNotToSave();
 	
 private slots:
 	void saveNone();

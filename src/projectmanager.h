@@ -10,7 +10,7 @@
 #include <kxmlguiclient.h>
 #include <kservice.h>
 
-class KURL;
+class KUrl;
 class KAction;
 class KSelectAction;
 class KService;
@@ -23,7 +23,7 @@ class KDevPlugin;
 class ProjectInfo
 {
 public:
-  KURL         m_projectURL;
+  KUrl         m_projectURL;
   QDomDocument m_document;
   QString      m_profileName;
   QString      m_projectPlugin, m_language, m_activeLanguage, m_vcsPlugin;
@@ -54,15 +54,15 @@ public:
 
   bool projectLoaded() const;
 
-  KURL projectFile() const;
+  KUrl projectFile() const;
 
   void createActions( KActionCollection* ac );
 
   ProjectSession* projectSession() const;
 
 public slots:
-  bool loadProject( const KURL& url);
-  bool loadKDevelop2Project( const KURL& url);
+  bool loadProject( const KUrl& url);
+  bool loadKDevelop2Project( const KUrl& url);
   bool closeProject( bool exiting = false );
 
 private slots:

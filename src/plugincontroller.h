@@ -58,8 +58,8 @@ public:
 
   ProfileEngine &engine() { return m_engine; }
 
-  virtual KURL::List profileResources(const QString &nameFilter);
-  virtual KURL::List profileResourcesRecursive(const QString &nameFilter);
+  virtual KUrl::List profileResources(const QString &nameFilter);
+  virtual KUrl::List profileResourcesRecursive(const QString &nameFilter);
 
   //returns the name of an old profile that was unloaded
   QString changeProfile(const QString &newProfile);

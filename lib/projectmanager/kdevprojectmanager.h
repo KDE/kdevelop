@@ -28,7 +28,7 @@ class KDevProjectFolderItem;
 class KDevProjectFileItem;
 class KDevProjectTargetItem;
 class KDevProjectItem;
-class KURL;
+class KUrl;
 
 class KDevProjectManager: public KDevTreeView
 {
@@ -47,7 +47,7 @@ public:
   virtual void reset();
 
 signals:
-  void activateURL(const KURL &url);
+  void activateURL(const KUrl &url);
   void currentChanged(KDevProjectItem *item);
 
 protected slots:

@@ -19,7 +19,7 @@ public:
 protected slots:
 
     virtual void slotDuplicate();
-    virtual void slotOpenInNewWindow(const KURL &url);
+    virtual void slotOpenInNewWindow(const KUrl &url);
 };
 
 #endif

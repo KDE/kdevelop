@@ -61,11 +61,11 @@ public:
   virtual QString unformatClassName(const QString &name) const;
 
 private slots:
-    void documentLoaded( const KURL &url );
-    void documentClosed( const KURL &url );
+    void documentLoaded( const KUrl &url );
+    void documentClosed( const KUrl &url );
 
 private:
-    bool isPHPLanguageDocument( const KURL &url );
+    bool isPHPLanguageDocument( const KUrl &url );
 
 private:
     int m_features;

@@ -91,7 +91,7 @@ public:
     @return The list of URLs to the profile resources (files) with given @p extension.
     @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
     for name filters syntax.*/
-    virtual KURL::List profileResources(const QString &nameFilter);
+    virtual KUrl::List profileResources(const QString &nameFilter);
 
     /**Reimplement this function only if your shell supports plugin profiles.
     @return The list of URLs to the resources (files) with given @p extension.
@@ -99,7 +99,7 @@ public:
     and all it's subprofiles.
     @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
     for name filters syntax.*/
-    virtual KURL::List profileResourcesRecursive(const QString &nameFilter);
+    virtual KUrl::List profileResourcesRecursive(const QString &nameFilter);
 
 signals:
     /**Emitted when a plugin profile was changed (reloaded, other profile opened, etc.).

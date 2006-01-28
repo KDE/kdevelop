@@ -138,7 +138,7 @@ public:
     @param col The column number where the cursor is.
     @param linestr The content of the line where the cursor is.
     @param wordstr The current word under the cursor.*/
-    EditorContext(const KURL &url, int line, int col,
+    EditorContext(const KUrl &url, int line, int col,
         const QString &linestr, const QString &wordstr);
 
     /**Destructor.*/
@@ -147,7 +147,7 @@ public:
     virtual int type() const;
 
     /**@return The url for the file which this context was invoked for.*/
-    const KURL &url() const;
+    const KUrl &url() const;
 
     /**@return The line number for the cursor position.*/
     int line() const;
@@ -211,9 +211,9 @@ Context allows multiple selections of files.
 class FileContext : public Context
 {
 public:
-    /**Builds the file context using a @ref KURL::List
+    /**Builds the file context using a @ref KUrl::List
     @param someURLs The list of selected files URLs.*/
-    FileContext(const KURL::List &someURLs);
+    FileContext(const KUrl::List &someURLs);
 
     /**Destructor.*/
     virtual ~FileContext();
@@ -221,7 +221,7 @@ public:
     virtual int type() const;
 
     /**@return A reference to the selected of URLs.*/
-    const KURL::List &urls() const;
+    const KUrl::List &urls() const;
 
 private:
     class Private;

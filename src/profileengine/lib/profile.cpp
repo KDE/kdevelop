@@ -158,7 +158,7 @@ bool Profile::remove()
 {
     QStringList dirs = KGlobal::dirs()->findDirs("data", "kdevelop/profiles" + dirName());
     if ((dirs.count() == 1) && dirs[0].startsWith(QDir::homeDirPath()))
-        return KIO::NetAccess::del(KURL::fromPathOrURL(dirs[0]), 0);
+        return KIO::NetAccess::del(KUrl::fromPathOrURL(dirs[0]), 0);
     return false;
 }
 
@@ -168,7 +168,7 @@ void Profile::detachFromParent()
         m_parent->removeChildProfile(this);
 }
 
-KURL::List Profile::resources(const QString &nameFilter)
+KUrl::List Profile::resources(const QString &nameFilter)
 {
     QStringList resources;
     QStringList resourceDirs = KGlobal::dirs()->resourceDirs("data");
@@ -183,11 +183,11 @@ KURL::List Profile::resources(const QString &nameFilter)
             resources.append(infoList.at(i).absFilePath());
     }
 
-    return KURL::List(resources);
+    return KUrl::List(resources);
 }
 
-void Profile::addResource(const KURL &url)
+void Profile::addResource(const KUrl &url)
 {
     QString saveLocation = KGlobal::dirs()->saveLocation("data", "kdevelop/profiles"+dirName(), true);
-    KIO::NetAccess::file_copy(url, KURL::fromPathOrURL(saveLocation), -1, true);
+    KIO::NetAccess::file_copy(url, KUrl::fromPathOrURL(saveLocation), -1, true);
 }

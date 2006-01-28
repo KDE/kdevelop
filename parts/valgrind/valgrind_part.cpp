@@ -114,9 +114,9 @@ void ValgrindPart::getActiveFiles()
   if ( project() ) {
     QStringList projectFiles = project()->allFiles();
     QString projectDirectory = project()->projectDirectory();
-    KURL url;
+    KUrl url;
     for ( QStringList::Iterator it = projectFiles.begin(); it != projectFiles.end(); ++it ) {
-      KURL url( projectDirectory + "/" + (*it) );
+      KUrl url( projectDirectory + "/" + (*it) );
       url.cleanPath( true );
       activeFiles += url.path();
       kdDebug() << "set project file: " << url.path().latin1() << endl;
@@ -182,7 +182,7 @@ void ValgrindPart::slotExecCalltree()
   dlg->setCtParams( _lastCtParams );
   kcInfo.runKc = true;
   kcInfo.kcPath = dlg->kcExecutable();
-//  kcInfo.kcWorkDir = KURL(dlg->executableName()).directory();
+//  kcInfo.kcWorkDir = KUrl(dlg->executableName()).directory();
   if ( dlg->exec() == QDialog::Accepted ) {
     runValgrind( dlg->executableName(), dlg->parameters(), dlg->ctExecutable(), dlg->ctParams() );
   }
@@ -224,7 +224,7 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
 
   getActiveFiles();
 
-//  proc->setWorkingDirectory(KURL(exec).directory());
+//  proc->setWorkingDirectory(KUrl(exec).directory());
   proc->clearArguments();
   *proc << valExec << /*"--tool=memcheck" << */valParams << exec << params;
   proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );

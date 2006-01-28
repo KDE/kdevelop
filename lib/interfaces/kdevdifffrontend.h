@@ -67,12 +67,12 @@ public:
 
     /**Displays a patch file.
     @param url An url of the patch file.*/
-    virtual void openURL( const KURL &url ) = 0;
+    virtual void openURL( const KUrl &url ) = 0;
 
     /**Displays the difference between the two files.
     @param url1 First file to compare.
     @param url2 Second file to compare.*/
-    virtual void showDiff( const KURL &url1, const KURL &url2 ) = 0;
+    virtual void showDiff( const KUrl &url1, const KUrl &url2 ) = 0;
 
 };
 

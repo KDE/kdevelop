@@ -88,12 +88,12 @@ public:
     @param url The URL of the document to open.
     @param lineNum The line number to place the cursor at, if applicable.
     @param col The column number to place the cursor at, if applicable.*/
-    virtual void editDocument( const KURL &url, int lineNum = -1, int col = -1 ) = 0;
+    virtual void editDocument( const KUrl &url, int lineNum = -1, int col = -1 ) = 0;
 
     /**Shows a HTML document in the documentation viewer.
     @param url The URL of the document to view.
     @param newWin If true, the new window will be created instead of using current.*/
-    virtual void showDocument( const KURL &url, bool newWin = false ) = 0;
+    virtual void showDocument( const KUrl &url, bool newWin = false ) = 0;
 
     /**Embeds a part into the main area of the mainwindow.
     @param part The part to embed.
@@ -104,30 +104,30 @@ public:
     /**Finds the embedded part corresponding to a given URL.
     @param url The URL of the document.
     @return The corresponding part, 0 if not found.*/
-    virtual KParts::ReadOnlyPart *partForURL( const KURL & url ) const = 0;
+    virtual KParts::ReadOnlyPart *partForURL( const KUrl & url ) const = 0;
 
     /**Finds the embedded KTextEditor document corresponding to a given URL.
     @param url The URL of the document.
     @return The corresponding document, 0 if not found or DocumentType
     is Invalid.*/
-    virtual KTextEditor::Document* textPartForURL( const KURL & url )  const = 0;
+    virtual KTextEditor::Document* textPartForURL( const KUrl & url )  const = 0;
 
     /**Finds the embedded Qt Designer part corresponding to a given URL.
     @param url The URL of the document.
     @return The corresponding designer part, 0 if not found or DocumentType
     is Invalid.*/
-//     virtual void* designerPartForURL( const KURL & url ) const = 0;
+//     virtual void* designerPartForURL( const KUrl & url ) const = 0;
 
     /**Finds the embedded HTML document part corresponding to a given URL.
     @param url The URL of the document.
     @return The corresponding HTML document part, 0 if not found or DocumentType
     is Invalid.*/
-    virtual KDevHTMLPart* htmlPartForURL( const KURL & url ) const = 0;
+    virtual KDevHTMLPart* htmlPartForURL( const KUrl & url ) const = 0;
 
     /**Finds the document type corresponding to a given URL.
     @param url The URL of the document.
     @return The corresponding DocumentType, DocumentType::Invalid if not found.*/
-    virtual KDevDocumentType documentTypeForURL( const KURL & url ) const = 0;
+    virtual KDevDocumentType documentTypeForURL( const KUrl & url ) const = 0;
 
     /**Finds the embedded part corresponding to a given main widget
     @param widget The parts main widget.
@@ -135,7 +135,7 @@ public:
     virtual KParts::Part *partForWidget( const QWidget *widget ) const = 0;
 
     /**@return The list of open documents*/
-    virtual KURL::List openURLs() const = 0;
+    virtual KUrl::List openURLs() const = 0;
 
     /**Saves all open documents.
      @return false if it was cancelled by the user, true otherwise */
@@ -144,33 +144,33 @@ public:
     /**Saves a list of documents.
     @param list The list of URLs to save.
     @return false if it was cancelled by the user, true otherwise */
-    virtual bool saveDocuments( const KURL::List &list ) = 0;
+    virtual bool saveDocuments( const KUrl::List &list ) = 0;
 
     /**Reloads all open documents.*/
     virtual void reloadAllDocuments() = 0;
 
     /**Reloads a document.
     * @param url The URL to reload.*/
-    virtual void reloadDocument( const KURL & url ) = 0;
+    virtual void reloadDocument( const KUrl & url ) = 0;
 
     /**Reloads a list of documents.
     * @param list The list of URLs to reload.*/
-    virtual void reloadDocuments( const KURL::List &list ) = 0;
+    virtual void reloadDocuments( const KUrl::List &list ) = 0;
 
     /**Closes a document.
     * @param url The URL to close.*/
-    virtual bool closeDocument( const KURL &url ) = 0;
+    virtual bool closeDocument( const KUrl &url ) = 0;
 
     /**Closes all open documents.*/
     virtual bool closeAllDocuments() = 0;
 
     /**Closes a list of documents.
     @param list The list of URLs to close.*/
-    virtual bool closeDocuments( const KURL::List &list ) = 0;
+    virtual bool closeDocuments( const KUrl::List &list ) = 0;
 
     /**Closes all other open documents.
     @param list The  URL of the document not to close.*/
-    virtual bool closeAllOthers( const KURL &url ) = 0;
+    virtual bool closeAllOthers( const KUrl &url ) = 0;
 
     /**Closes this part (closes the window/tab for this part).
     @param part The part to close.
@@ -184,11 +184,11 @@ public:
     /**Checks the state of a document.
     @param url The URL to check.
     @return The DocumentState enum corresponding to the document state.*/
-    virtual DocumentState documentState( KURL const & url ) = 0;
+    virtual DocumentState documentState( KUrl const & url ) = 0;
 
     /**Refers to the document currently active or focused.
     @return The URL of the active document.*/
-    virtual KURL activeDocument() const = 0;
+    virtual KUrl activeDocument() const = 0;
 
     /**Refers to the document currently active or focused.
     @return The corresponding DocumentType, DocumentType::Invalid if not found.*/
@@ -197,27 +197,27 @@ public:
 signals:
 
     /**Emitted when the document is given focus or activated.*/
-    void documentActivated( const KURL & );
+    void documentActivated( const KUrl & );
 
     /**Emitted when a document has been saved.*/
-    void documentSaved( const KURL & );
+    void documentSaved( const KUrl & );
 
     /**Emitted when a document has been loaded.*/
-    void documentLoaded( const KURL & );
+    void documentLoaded( const KUrl & );
 
     /**Emitted when a document has been closed.*/
-    void documentClosed( const KURL & );
+    void documentClosed( const KUrl & );
 
     /**Emitted when a document has been modified outside of KDevelop.*/
-    void documentExternallyModified( const KURL & );
+    void documentExternallyModified( const KUrl & );
 
     /**This is typically emitted when an editorpart does "save as"
     which will change the document's URL from 'old' to 'new'*/
-    void documentURLChanged( const KURL &oldURL, const KURL &newURL );
+    void documentURLChanged( const KUrl &oldURL, const KUrl &newURL );
 
     /**This is emitted when the document changes, either internally
     or on disc.*/
-    void documentStateChanged( const KURL &, DocumentState );
+    void documentStateChanged( const KUrl &, DocumentState );
 
 };
 

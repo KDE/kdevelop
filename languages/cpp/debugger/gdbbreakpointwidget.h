@@ -24,7 +24,7 @@
 
 class QDomElement;
 class QToolButton;
-class KURL;
+class KUrl;
 
 /***************************************************************************/
 /***************************************************************************/
@@ -64,7 +64,7 @@ public slots:
     void slotParseGDBBrkptList(char *str);
     void slotParseGDBBreakpointSet(char *str, int BPKey);
 
-    void slotRefreshBP(const KURL &filename);
+    void slotRefreshBP(const KUrl &filename);
     
 protected:
     enum BW_ITEMS { BW_ITEM_Show, BW_ITEM_Edit, BW_ITEM_Disable, BW_ITEM_Delete };

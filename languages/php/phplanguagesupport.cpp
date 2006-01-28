@@ -45,10 +45,10 @@ PHPLanguageSupport::PHPLanguageSupport(QObject *parent, const char *name, const 
    QString types = QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
    m_mimetypes = types.split( "," );
 
-   connect( documentController(), SIGNAL( documentLoaded( const KURL & ) ),
-            this, SLOT( documentLoaded( const KURL & ) ) );
-   connect( documentController(), SIGNAL( documentClosed( const KURL & ) ),
-            this, SLOT( documentClosed( const KURL & ) ) );
+   connect( documentController(), SIGNAL( documentLoaded( const KUrl & ) ),
+            this, SLOT( documentLoaded( const KUrl & ) ) );
+   connect( documentController(), SIGNAL( documentClosed( const KUrl & ) ),
+            this, SLOT( documentClosed( const KUrl & ) ) );
 }
 
 PHPLanguageSupport::~PHPLanguageSupport()
@@ -85,7 +85,7 @@ QString PHPLanguageSupport::unformatClassName(const QString &name) const
   return name;
 }
 
-void PHPLanguageSupport::documentLoaded( const KURL &url )
+void PHPLanguageSupport::documentLoaded( const KUrl &url )
 {
 /*
     if ( isPHPLanguageDocument( url ) )
@@ -93,7 +93,7 @@ void PHPLanguageSupport::documentLoaded( const KURL &url )
 */
 }
 
-void PHPLanguageSupport::documentClosed( const KURL &url )
+void PHPLanguageSupport::documentClosed( const KUrl &url )
 {
 /*
     if ( isPHPLanguageDocument( url ) )
@@ -101,7 +101,7 @@ void PHPLanguageSupport::documentClosed( const KURL &url )
 */
 }
 
-bool PHPLanguageSupport::isPHPLanguageDocument( const KURL &url )
+bool PHPLanguageSupport::isPHPLanguageDocument( const KUrl &url )
 {
     KMimeType::Ptr mimetype = KMimeType::findByURL( url );
     foreach ( QString mime, m_mimetypes )

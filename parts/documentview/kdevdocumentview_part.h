@@ -26,7 +26,7 @@
 #include <kdevplugin.h>
 #include <kdevdocumentcontroller.h>
 
-class KURL;
+class KUrl;
 class QModelIndex;
 class KDevDocumentView;
 class KDevDocumentModel;
@@ -54,13 +54,13 @@ signals:
     void refresh();
 
 private slots:
-    void activated( const KURL &url );
-    void saved( const KURL &url );
-    void loaded( const KURL &url );
-    void closed( const KURL &url );
-    void externallyModified( const KURL &url );
-    void URLChanged( const KURL &oldurl, const KURL &newurl );
-    void stateChanged( const KURL &url, DocumentState state );
+    void activated( const KUrl &url );
+    void saved( const KUrl &url );
+    void loaded( const KUrl &url );
+    void closed( const KUrl &url );
+    void externallyModified( const KUrl &url );
+    void URLChanged( const KUrl &oldurl, const KUrl &newurl );
+    void stateChanged( const KUrl &url, DocumentState state );
     void pressed( const QModelIndex & index );
 
 private:

@@ -174,29 +174,29 @@ void ProfileEngine::getProfileWithListing(ProfileListing &listing, Profile **pro
     }
 }
 
-KURL::List ProfileEngine::resources(const QString &profileName, const QString &nameFilter)
+KUrl::List ProfileEngine::resources(const QString &profileName, const QString &nameFilter)
 {
     ProfileListing listing;
     Profile *profile = 0;
     getProfileWithListing(listing, &profile, profileName);
 
     if (!profile)
-        return KURL::List();
+        return KUrl::List();
 
     return resources(profile, nameFilter);
 }
 
-KURL::List ProfileEngine::resources(Profile *profile, const QString &nameFilter)
+KUrl::List ProfileEngine::resources(Profile *profile, const QString &nameFilter)
 {
     return profile->resources(nameFilter);
 }
 
-KURL::List ProfileEngine::resourcesRecursive(const QString &profileName, const QString &nameFilter)
+KUrl::List ProfileEngine::resourcesRecursive(const QString &profileName, const QString &nameFilter)
 {
     ProfileListing listing;
     Profile *profile = 0;
     getProfileWithListing(listing, &profile, profileName);
-    KURL::List resources = profile->resources(nameFilter);
+    KUrl::List resources = profile->resources(nameFilter);
 
     ProfileListingEx listingEx(nameFilter);
     walkProfiles<ProfileListingEx>(listingEx, profile);
@@ -249,7 +249,7 @@ Profile *ProfileEngine::findProfile(const QString & profileName)
     return profile;
 }
 
-void ProfileEngine::addResource(const QString &profileName, const KURL &url)
+void ProfileEngine::addResource(const QString &profileName, const KUrl &url)
 {
     ProfileListing listing;
     Profile *profile = 0;

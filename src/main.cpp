@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
       ProjectManager::getInstance()->loadDefaultProject();
       openProject = true;
   } else if( args->count() > 0 ){
-      KURL url = args->url( 0 );
+      KUrl url = args->url( 0 );
       QString ext = QFileInfo( url.fileName() ).extension();
       if( ext == "kdevelop" ){
       ProjectManager::getInstance()->loadProject( url );
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
 
   if( !openProject ){
       for( int a=0; a<args->count(); ++a ){
-          DocumentController::getInstance()->editDocument( KURL(args->url(a)) );
+          DocumentController::getInstance()->editDocument( KUrl(args->url(a)) );
       }
   }
 

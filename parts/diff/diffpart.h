@@ -29,9 +29,9 @@ public:
     DiffPart(QObject *parent, const char *name, const QStringList &);
     virtual ~DiffPart();
 
-    void openURL( const KURL& url );
+    void openURL( const KUrl& url );
     void showDiff( const QString& diff );
-    void showDiff( const KURL &, const KURL & ) { /** @todo */ }
+    void showDiff( const KUrl &, const KUrl & ) { /** @todo */ }
 
 public slots:
     void slotExecDiff();
@@ -46,7 +46,7 @@ private slots:
 
 private:
     QPointer<DiffWidget> diffWidget;
-    KURL popupFile;
+    KUrl popupFile;
     KProcess* proc;
     QByteArray buffer;
     QString resultBuffer;

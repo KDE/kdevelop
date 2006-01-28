@@ -50,7 +50,7 @@ namespace GDBDebugger
 // about why it's doing it.
 
 Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
-    : KDialog(parent, name, true),      // modal
+    : KDialog(parent, QString(name), 0, Qt::Dialog),      // modal
       psProc_(0),
       pids_(new Q3ListBox(this)),
       heading_(new QLabel(" ", this)),

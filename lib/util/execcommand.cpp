@@ -20,7 +20,7 @@
 #include "execcommand.h"
 
 #include <kprocess.h>
-#include <kprogress.h>
+#include <kprogressdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -56,7 +56,7 @@ ExecCommand::ExecCommand( const QString& executable, const QStringList& args,
     deleteLater();
 
   } else {
-    progressDlg = new KProgressDialog( 0, 0, i18n("Command running..."),
+    progressDlg = new KProgressDialog( 0, i18n("Command running..."),
                       i18n("Please wait until the \"%1\" command finishes.").arg( executable ), false );
     connect( progressDlg, SIGNAL(cancelClicked()),
              this, SLOT(cancelClicked()) );

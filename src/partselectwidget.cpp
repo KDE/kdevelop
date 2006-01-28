@@ -136,7 +136,7 @@ void PartSelectWidget::init()
     _pluginDescription = new QLabel( groupBox2 );
     _pluginDescription->setAlignment( int( Qt::TextWordWrap | Qt::AlignVCenter ) );
 
-    _urlLabel = new KURLLabel( groupBox2 );
+    _urlLabel = new KUrlLabel( groupBox2 );
 
     groupBox2Layout->addWidget( _pluginDescription );
     groupBox2Layout->addWidget( _urlLabel );

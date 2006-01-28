@@ -122,7 +122,7 @@ void KDevProjectManager::slotActivated(const QModelIndex &index)
 
   if (item && item->file())
     {
-      KURL url;
+      KUrl url;
       url.setPath(item->file()->fileInfo().absoluteFilePath());
       emit activateURL(url);
     }

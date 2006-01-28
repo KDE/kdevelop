@@ -61,7 +61,7 @@ QString ProjectInfo::sessionFile() const
 QString ProjectManager::projectDirectory( const QString& path, bool absolute ) {
     if(absolute)
         return path;
-    KURL url(ProjectManager::getInstance()->projectFile(), path);
+    KUrl url(ProjectManager::getInstance()->projectFile(), path);
     url.cleanPath();
     return url.path(-1);
 }
@@ -99,7 +99,7 @@ void ProjectManager::createActions( KActionCollection* ac )
 
   m_openRecentProjectAction =
     new KRecentFilesAction(i18n("Open &Recent Project"), 0,
-                          this, SLOT(loadProject(const KURL &)),
+                          this, SLOT(loadProject(const KUrl &)),
                           ac, "project_open_recent");
   m_openRecentProjectAction->setToolTip(i18n("Open recent project"));
   m_openRecentProjectAction->setWhatsThis(i18n("<b>Open recent project</b><p>Opens recently opened project."));
@@ -127,7 +127,7 @@ void ProjectManager::slotOpenProject()
     config->setGroup("General Options");
     QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
 
-  KURL url = KFileDialog::getOpenURL(defaultProjectsDir,
+  KUrl url = KFileDialog::getOpenURL(defaultProjectsDir,
         i18n("*.kdevelop|KDevelop 3 Project Files\n"
              "*.kdevprj|KDevelop 2 Project Files"),
         TopLevel::getInstance()->main(), i18n("Open Project") );
@@ -198,11 +198,11 @@ void ProjectManager::loadDefaultProject()
   bool readProject = config->readBoolEntry("Read Last Project On Startup", true);
   if (!project.isEmpty() && readProject)
   {
-      loadProject(KURL(project));
+      loadProject(KUrl(project));
   }
 }
 
-bool ProjectManager::loadProject(const KURL &url)
+bool ProjectManager::loadProject(const KUrl &url)
 {
   if (!url.isValid())
     return false;
@@ -616,10 +616,10 @@ void ProjectManager::loadLocalParts()
     PluginController::getInstance()->loadGlobalPlugins( m_info->m_ignoreParts );
 }
 
-KURL ProjectManager::projectFile() const
+KUrl ProjectManager::projectFile() const
 {
   if (!m_info)
-    return KURL();
+    return KUrl();
   return m_info->m_projectURL;
 }
 
@@ -633,7 +633,7 @@ ProjectSession* ProjectManager::projectSession() const
   return m_pProjectSession;
 }
 
-bool ProjectManager::loadKDevelop2Project( const KURL & url )
+bool ProjectManager::loadKDevelop2Project( const KUrl & url )
 {
     if( !url.isValid() || !url.isLocalFile() ){
         KMessageBox::sorry(0, i18n("Invalid URL."));
@@ -654,7 +654,7 @@ bool ProjectManager::loadKDevelop2Project( const KURL & url )
     proc.start( KProcess::Block );
 
     QString projectFile = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kdevelop";
-    return loadProject( KURL(projectFile) );
+    return loadProject( KUrl(projectFile) );
 }
 
 QString ProjectManager::profileByAttributes(const QString &language, const QStringList &keywords)

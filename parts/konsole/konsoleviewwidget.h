@@ -38,7 +38,7 @@ public:
     virtual ~KonsoleViewWidget();
 
 public slots:
-    void setDirectory(const KURL &dirUrl);
+    void setDirectory(const KUrl &dirUrl);
 
 private slots:
     void activePartChanged(KParts::Part *activatedPart);

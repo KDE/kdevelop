@@ -295,12 +295,12 @@ void PluginController::unloadPlugin( const QString & plugin )
 	unloadPlugins( pluginList );
 }
 
-KURL::List PluginController::profileResources(const QString &nameFilter)
+KUrl::List PluginController::profileResources(const QString &nameFilter)
 {
     return m_engine.resources(currentProfile(), nameFilter);
 }
 
-KURL::List PluginController::profileResourcesRecursive(const QString &nameFilter)
+KUrl::List PluginController::profileResourcesRecursive(const QString &nameFilter)
 {
     return m_engine.resourcesRecursive(currentProfile(), nameFilter);
 }

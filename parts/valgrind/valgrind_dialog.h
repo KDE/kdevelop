@@ -4,7 +4,7 @@
 
 #include <kdialogbase.h>
 
-class KURLRequester;
+class KUrlRequester;
 class DialogWidget;
 
 /**

@@ -113,7 +113,7 @@ void GeneralInfoWidget::slotProjectDirectoryComboChanged() {
         project_directory_edit->setText(ProjectManager::projectDirectory(text,false));
     else if(!isProjectDirectoryAbsolute() && text[0] == '/')
     {
-        project_directory_edit->setText(KURL(ProjectManager::getInstance()->projectFile(), text).url());
+        project_directory_edit->setText(KUrl(ProjectManager::getInstance()->projectFile(), text).url());
     }
 }
 

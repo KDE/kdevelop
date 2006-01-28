@@ -34,7 +34,7 @@ class MakeViewPart;
 class MakeItem;
 class KProcess;
 class ProcessLineMaker;
-class KURL;
+class KUrl;
 
 namespace KTextEditor { class Document; }
 
@@ -78,7 +78,7 @@ private slots:
     void slotEnteredDirectory( EnteringDirectoryItem* );
     void slotExitedDirectory( ExitingDirectoryItem* );
     void insertItem( MakeItem* );
-    void slotDocumentOpened(const KURL& filename);
+    void slotDocumentOpened(const KUrl& filename);
     void slotDocumentAboutToClose(KTextEditor::Document* doc);
 
 private:

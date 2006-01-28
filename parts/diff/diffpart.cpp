@@ -65,7 +65,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
            this, SLOT(contextMenu(QMenu *, const Context *)) );
 }
 
-static bool urlIsEqual(const KURL &a, const KURL &b)
+static bool urlIsEqual(const KUrl &a, const KUrl &b)
 {
   if (a.isLocalFile() && b.isLocalFile())
   {
@@ -81,7 +81,7 @@ static bool urlIsEqual(const KURL &a, const KURL &b)
   return a == b;
 }
 
-static KParts::ReadWritePart* partForURL(const KURL &url, KDevDocumentController* pc)
+static KParts::ReadWritePart* partForURL(const KUrl &url, KDevDocumentController* pc)
 {
   if ( !pc )
     return 0;
@@ -205,7 +205,7 @@ void DiffPart::wroteStdin( KProcess* p )
   p->closeStdin();
 }
 
-void DiffPart::openURL( const KURL& url )
+void DiffPart::openURL( const KUrl& url )
 {
   diffWidget->slotClear();
   diffWidget->openURL( url );
@@ -235,7 +235,7 @@ void DiffPart::showDiff( const QString& diff )
 
 void DiffPart::slotExecDiff()
 {
-  KURL url = KFileDialog::getOpenURL( QString(), QString(), 0, i18n("Please Select Patch File") );
+  KUrl url = KFileDialog::getOpenURL( QString(), QString(), 0, i18n("Please Select Patch File") );
 
   if ( url.isEmpty() )
     return;

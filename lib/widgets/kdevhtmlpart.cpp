@@ -25,8 +25,8 @@ KDevHTMLPart::KDevHTMLPart()
 {
   setXMLFile(locate("data", "kdevelop/kdevhtml_partui.rc"), true);
 
-  connect(browserExtension(), SIGNAL(openURLRequestDelayed(const KURL &,const KParts::URLArgs &)),
-          this, SLOT(openURLRequest(const KURL &)) );
+  connect(browserExtension(), SIGNAL(openURLRequestDelayed(const KUrl &,const KParts::URLArgs &)),
+          this, SLOT(openURLRequest(const KUrl &)) );
 
   connect(this, SIGNAL(started(KIO::Job *)), this, SLOT(slotStarted(KIO::Job* )));
   connect(this, SIGNAL(completed()), this, SLOT(slotCompleted()));
@@ -138,20 +138,20 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
 
   if (r == idNewWindow)
   {
-    KURL kurl;
-    if (!KURL(url).path().startsWith("/"))
+    KUrl kurl;
+    if (!KUrl(url).path().startsWith("/"))
     {
         kdDebug() << "processing relative url: " << url << endl;
         if (url.startsWith("#"))
         {
-            kurl = KURL(KDevHTMLPart::url());
+            kurl = KUrl(KDevHTMLPart::url());
             kurl.setRef(url.mid(1));
         }
         else
-            kurl = KURL(KDevHTMLPart::url().upURL().url(true)+url);
+            kurl = KUrl(KDevHTMLPart::url().upURL().url(true)+url);
     }
     else
-        kurl = KURL(url);
+        kurl = KUrl(url);
 
     if (kurl.isValid())
         slotOpenInNewWindow(kurl);
@@ -319,11 +319,11 @@ QString KDevHTMLPart::resolveEnvVarsInURL(const QString& url)
   return path;
 }
 
-bool KDevHTMLPart::openURL(const KURL &url)
+bool KDevHTMLPart::openURL(const KUrl &url)
 {
   QString path = resolveEnvVarsInURL(url.url());
-  KURL newUrl(path);
-  KURL oldUrl = KDevHTMLPart::url();
+  KUrl newUrl(path);
+  KUrl oldUrl = KDevHTMLPart::url();
 
   bool retval = KHTMLPart::openURL(newUrl);
   if ( retval )
@@ -346,7 +346,7 @@ QLinkedList<DocumentationHistoryEntry>::Iterator KDevHTMLPart::lastElement()
     return --m_history.end();
 }
 
-void KDevHTMLPart::openURLRequest(const KURL &url)
+void KDevHTMLPart::openURLRequest(const KUrl &url)
 {
     openURL( url );
 }

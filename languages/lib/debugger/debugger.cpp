@@ -29,7 +29,7 @@ Debugger::~Debugger()
 
 void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool enabled, bool pending)
 {
-    KParts::Part *part = m_partController->partForURL(KURL(fileName));
+    KParts::Part *part = m_partController->partForURL(KUrl(fileName));
     if( !part )
         return;
 
@@ -83,7 +83,7 @@ void Debugger::clearExecutionPoint()
 }
 
 
-void Debugger::gotoExecutionPoint(const KURL &url, int lineNum)
+void Debugger::gotoExecutionPoint(const KUrl &url, int lineNum)
 {
     clearExecutionPoint();
 

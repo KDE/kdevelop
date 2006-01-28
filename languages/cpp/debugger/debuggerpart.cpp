@@ -304,8 +304,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *, const QStringList & )
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 
-    connect( documentController(), SIGNAL(loadedFile(const KURL &)),
-             gdbBreakpointWidget, SLOT(slotRefreshBP(const KURL &)) );
+    connect( documentController(), SIGNAL(loadedFile(const KUrl &)),
+             gdbBreakpointWidget, SLOT(slotRefreshBP(const KUrl &)) );
     connect( debugger(), SIGNAL(toggledBreakpoint(const QString &, int)),
              gdbBreakpointWidget, SLOT(slotToggleBreakpoint(const QString &, int)) );
     connect( debugger(), SIGNAL(editedBreakpoint(const QString &, int)),
@@ -1030,7 +1030,7 @@ void DebuggerPart::slotShowStep(const QString &fileName, int lineNum)
     if ( ! fileName.isEmpty() )
     {
         // Debugger counts lines from 1
-        debugger()->gotoExecutionPoint(KURL( fileName ), lineNum-1);
+        debugger()->gotoExecutionPoint(KUrl( fileName ), lineNum-1);
     }
 }
 
@@ -1038,7 +1038,7 @@ void DebuggerPart::slotShowStep(const QString &fileName, int lineNum)
 void DebuggerPart::slotGotoSource(const QString &fileName, int lineNum)
 {
     if ( ! fileName.isEmpty() )
-        documentController()->editDocument(KURL( fileName ), lineNum);
+        documentController()->editDocument(KUrl( fileName ), lineNum);
 }
 
 

@@ -18,7 +18,7 @@
 
 class QWidget;
 class QPainter;
-class KURL;
+class KUrl;
 class PartExplorerForm;
 
 class PartExplorerPlugin : public KDevPlugin

@@ -29,7 +29,7 @@ class KDevCodeNamespaceItem;
 class KDevCodeClassItem;
 class KDevCodeFunctionItem;
 class KDevCodeVariableItem;
-class KURL;
+class KUrl;
 
 class KDevClassView: public KDevTreeView
 {
@@ -48,7 +48,7 @@ public:
   KDevCodeVariableItem *currentVariableItem() const;
 
 signals:
-  void activateURL(const KURL &url);
+  void activateURL(const KUrl &url);
 
 protected slots:
   void slotActivated(const QModelIndex &index);

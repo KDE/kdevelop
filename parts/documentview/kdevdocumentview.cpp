@@ -84,7 +84,7 @@ void KDevDocumentView::popupContextMenu( const QPoint &pos )
         {
             QModelIndexList indexes = selectedIndexes();
             KMenu menu( this );
-            KURL::List list;
+            KUrl::List list;
             list << fileItem->URL();
             FileContext context( list );
             part() ->core() ->fillContextMenu( &menu, &context );

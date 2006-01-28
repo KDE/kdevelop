@@ -65,7 +65,7 @@ BackgroundParser::~BackgroundParser()
     delete m_memoryPool;
 }
 
-void BackgroundParser::addDocument( const KURL &url )
+void BackgroundParser::addDocument( const KUrl &url )
 {
     if ( !m_documents.contains( url ) )
     {
@@ -80,7 +80,7 @@ void BackgroundParser::addDocument( const KURL &url )
     }
 }
 
-void BackgroundParser::removeDocument( const KURL &url )
+void BackgroundParser::removeDocument( const KUrl &url )
 {
     m_documents.remove( url );
 }
@@ -88,10 +88,10 @@ void BackgroundParser::removeDocument( const KURL &url )
 void BackgroundParser::parseDocuments()
 {
     QList< Job* > jobs;
-    for ( QMap<KURL, bool>::Iterator it = m_documents.begin();
+    for ( QMap<KUrl, bool>::Iterator it = m_documents.begin();
             it != m_documents.end(); ++it )
     {
-        KURL url = it.key();
+        KUrl url = it.key();
         bool &p = it.value();
         if ( p )
         {

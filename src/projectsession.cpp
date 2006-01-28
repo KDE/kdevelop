@@ -146,7 +146,7 @@ void ProjectSession::recreateDocs(QDomElement& el)
     // read the document name and type
     QString docName = docEl.attribute( "URL", "");
     if (!docName.isEmpty() /* && URL::exists(docName)*/) {
-      KURL url(docName);
+      KUrl url(docName);
       // create the views of this document, the first view creation will also create the document
       kdDebug() << k_funcinfo << "Doc to be activated? " << (nDoc == nNrOfDocs - 1) << endl;
          recreateViews(url, docEl, (nDoc == nNrOfDocs - 1));
@@ -163,7 +163,7 @@ void ProjectSession::recreateDocs(QDomElement& el)
 }
 
 //---------------------------------------------------------------------------
-void ProjectSession::recreateViews(KURL& url, QDomElement docEl, bool activate)
+void ProjectSession::recreateViews(KUrl& url, QDomElement docEl, bool activate)
 {
   // read information about the views
   int nNrOfViews = docEl.attribute( "NumberOfViews", "0").toInt();
