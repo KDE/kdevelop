@@ -19,10 +19,15 @@
 */
 
 #include "preprocessor.h"
+
+#include <string>
+
+// register callback for include hooks
+static void includeFileHook(const std::string &, const std::string &, FILE *);
+#define PP_HOOK_ON_FILE_INCLUDED(A, B, C) includeFileHook(A, B, C)
 #include "pp.h"
 
 #include <QtCore/QtCore>
-#include <string>
 
 class PreprocessorPrivate
 {
@@ -38,9 +43,17 @@ public:
     }
 };
 
+QHash<QString, QStringList> includedFiles;
+
+void includeFileHook(const std::string &fileName, const std::string &filePath, FILE *)
+{
+    includedFiles[QString::fromStdString(fileName)].append(QString::fromStdString(filePath));
+}
+
 Preprocessor::Preprocessor()
 {
     d = new PreprocessorPrivate;
+    includedFiles.clear();
 }
 
 Preprocessor::~Preprocessor()
@@ -81,13 +94,40 @@ QStringList Preprocessor::macroNames() const
 {
     QStringList macros;
 
-    std::map<pp_fast_string const *, pp_macro>::const_iterator it = d->env.begin();
+    pp_environment::base_type::const_iterator it = d->env.begin();
     while (it != d->env.end()) {
         macros += QString::fromLatin1((*it).first->begin(), (*it).first->size());
         ++it;
     }
 
     return macros;
+}
+
+QList<Preprocessor::MacroItem> Preprocessor::macros() const
+{
+    QList<MacroItem> items;
+
+    pp_environment::base_type::const_iterator it = d->env.begin();
+    while (it != d->env.end()) {
+        MacroItem item;
+        item.name = QString::fromLatin1((*it).first->begin(), (*it).first->size());
+        item.definition = QString::fromLatin1((*it).second.definition->begin(),
+                                              (*it).second.definition->size());
+        for (size_t i = 0; i < (*it).second.formals.size(); ++i) {
+            item.parameters += QString::fromLatin1((*it).second.formals[i]->begin(),
+                    (*it).second.formals[i]->size());
+        }
+        item.isFunctionLike = (*it).second.function_like;
+
+#ifdef PP_WITH_MACRO_POSITION
+        item.fileName = QString::fromLatin1((*it).second.file->begin(), (*it).second.file->size());
+#endif
+        items += item;
+
+        ++it;
+    }
+
+    return items;
 }
 
 /*
