@@ -32,13 +32,14 @@ class pp_environment
   : private std::map<pp_fast_string const *, pp_macro, _PP_internal::_Compare_string>
 #endif
 {
+
+public:
 #ifdef HAVE_TR1
   typedef std::tr1::unordered_map<pp_fast_string const *, pp_macro, _PP_internal::_Hash_string, _PP_internal::_Equal_to_string> base_type;
 #else
   typedef std::map<pp_fast_string const *, pp_macro, _PP_internal::_Compare_string> base_type;
 #endif
 
-public:
   using base_type::begin;
   using base_type::end;
   using base_type::iterator;

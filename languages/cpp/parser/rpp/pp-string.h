@@ -43,7 +43,7 @@ public:
   inline _CharT const *begin () const { return _M_begin; }
   inline _CharT const *end () const { return _M_begin + _M_size; }
 
-  inline int size () const { return _M_size; }
+  inline int size () const { return (int) _M_size; }
 
   inline int compare (pp_string const &__other) const
   {
@@ -53,7 +53,7 @@ public:
 
     int __r = traits_type::compare (_M_begin, __other._M_begin, __len);
     if (!__r)
-      __r =  __size - __osize;
+        __r =  (int) (__size - __osize);
 
     return __r;
   }

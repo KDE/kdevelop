@@ -21,10 +21,48 @@
 #ifndef PP_ENGINE_BITS_H
 #define PP_ENGINE_BITS_H
 
+#if (_MSC_VER >= 1400)
+#  define FILENO _fileno
+#else
+#  define FILENO fileno
+#endif
+
+#if defined (PP_OS_WIN)
+#  define PATH_SEPARATOR '\\'
+#else
+#  define PATH_SEPARATOR '/'
+#endif
+
+inline std::string pp::fix_file_path(std::string const &filename) const
+{
+#if defined (PP_OS_WIN)
+    std::string s = filename;
+    for (std::string::iterator it = s.begin(); it != s.end(); ++it) {
+        if (*it == '/')
+            *it = '\\';
+    }
+    return s;
+#else
+    return filename;
+#endif
+}
+
+inline bool pp::is_absolute(std::string const &filename) const
+{
+#if defined(PP_OS_WIN)
+  return filename.length() >= 3
+      && filename.at(1) == ':'
+      && (filename.at(2) == '\\' || filename.at(2) == '/');
+#else
+  return filename.length() >= 1
+          && filename.at(0) == '/';
+#endif
+}
+
 template <typename _OutputIterator>
 void pp::file (std::string const &filename, _OutputIterator __result)
 {
-  FILE *fp = fopen (filename.c_str(), "r");
+  FILE *fp = fopen (filename.c_str(), "rb");
   if (fp != 0)
     file (fp, __result);
   else
@@ -36,32 +74,30 @@ void pp::file (FILE *fp, _OutputIterator __result)
 {
    assert (fp != 0);
 
+#if defined (HAVE_MMAP)
   struct stat st;
-  fstat(fileno (fp), &st);
+  fstat(FILENO (fp), &st);
   std::size_t size = st.st_size;
-
   char *buffer = 0;
-#ifdef HAVE_MMAP
-  buffer = (char *) ::mmap(0, size, PROT_READ, MAP_SHARED, fileno (fp), 0);
+  buffer = (char *) ::mmap(0, size, PROT_READ, MAP_SHARED, FILENO (fp), 0);
   fclose (fp);
-
   if (!buffer || buffer == (char*) -1)
     return;
-
-#else
-  buffer = new char [size + 1];
-  fread (buffer, 1, size, fp);
-  buffer[size] = '\0';
-  fclose (fp);
-#endif
-
   this->operator () (buffer, buffer + size, __result);
-
-#ifdef HAVE_MMAP
   ::munmap(buffer, size);
 #else
-  delete[] buffer;
+  std::string buffer;
+  while (!feof(fp)) {
+      char tmp[1024];
+      int read = (int) fread (tmp, sizeof(char), 1023, fp);
+      tmp[read] = '\0';
+      buffer += tmp;
+  }
+  fclose (fp);
+  this->operator () (buffer.c_str(), buffer.c_str() + buffer.size(), __result);
 #endif
+
+
 }
 
 template <typename _InputIterator>
@@ -69,7 +105,7 @@ bool pp::find_header_protection (_InputIterator __first, _InputIterator __last, 
 {
   while (__first != __last)
     {
-      if (std::isspace (*__first))
+      if (pp_isspace (*__first))
         ++__first;
       else if (_PP_internal::comment_p (__first, __last))
         __first = skip_comment_or_divop (__first, __last);
@@ -106,7 +142,7 @@ bool pp::find_header_protection (_InputIterator __first, _InputIterator __last, 
     return false;
 }
 
-pp::PP_DIRECTIVE_TYPE pp::find_directive (char const *__directive, std::size_t __size) const
+inline pp::PP_DIRECTIVE_TYPE pp::find_directive (char const *__directive, std::size_t __size) const
 {
   switch (__size)
     {
@@ -154,14 +190,20 @@ pp::PP_DIRECTIVE_TYPE pp::find_directive (char const *__directive, std::size_t _
 inline bool pp::file_exists (std::string const &__filename) const
 {
   struct stat __st;
+#if defined(_MSC_VER)
+  return stat(__filename.c_str (), &__st) == 0;
+#else
   return lstat (__filename.c_str (), &__st) == 0;
+#endif
 }
 
-FILE *pp::find_include_file(std::string const &__filename, std::string *__filepath, INCLUDE_POLICY __include_policy) const
+inline FILE *pp::find_include_file(std::string const &__input_filename, std::string *__filepath, INCLUDE_POLICY __include_policy) const
 {
-  assert (! __filename.empty() && __filepath);
+  assert (! __input_filename.empty() && __filepath);
 
-  if (__filename[0] == '/')
+  std::string __filename = fix_file_path(__input_filename);
+
+  if (is_absolute(__filename))
     {
       *__filepath = __filename;
 
@@ -170,15 +212,16 @@ FILE *pp::find_include_file(std::string const &__filename, std::string *__filepa
 
   if (__include_policy == INCLUDE_LOCAL && !_M_current_file.empty ())
     {
-      std::size_t __index = _M_current_file.rfind ('/');
-      if (__index != -1)
+      std::string::size_type __index = _M_current_file.rfind (PATH_SEPARATOR);
+
+      if (__index != std::string::npos)
         {
           std::string &__path = *__filepath;
 
           __path.assign (_M_current_file, __index, std::string::npos);
 
-          if (! __path.empty () && __path[__path.size () - 1] != '/')
-            __path += '/';
+          if (! __path.empty () && __path[__path.size () - 1] != PATH_SEPARATOR)
+            __path += PATH_SEPARATOR;
 
           __path += __filename;
 
@@ -193,8 +236,8 @@ FILE *pp::find_include_file(std::string const &__filename, std::string *__filepa
       std::string &__path = *__filepath;
 
       __path = *it;
-      if (! __path.empty () && __path[__path.size () - 1] != '/')
-        __path += '/';
+      if (! __path.empty () && __path[__path.size () - 1] != PATH_SEPARATOR)
+        __path += PATH_SEPARATOR;
 
       __path += __filename;
 
@@ -274,6 +317,9 @@ _InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last
 
   std::string filepath;
   FILE *fp = find_include_file (filename, &filepath, quote == '<' ? INCLUDE_GLOBAL : INCLUDE_LOCAL);
+#if defined (PP_HOOK_ON_FILE_INCLUDED)
+      PP_HOOK_ON_FILE_INCLUDED (_M_current_file, fp ? filepath : filename, fp);
+#endif
   if (fp != 0)
     {
       std::string old_file = _M_current_file;
@@ -281,7 +327,7 @@ _InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last
 
       std::string __msg;
 
-#ifdef QT_MOC
+#if defined (QT_MOC)
       __msg += "#moc_include_begin ";
       __msg += "\"";
       __msg += filename;
@@ -303,7 +349,7 @@ _InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last
       __msg += "\"\n";
       std::copy (__msg.begin (), __msg.end (), __result);
 
-#ifdef QT_MOC
+#if defined (QT_MOC)
       __msg = "#moc_include_end 1\n";
       std::copy (__msg.begin (), __msg.end (), __result);
 #endif
@@ -364,7 +410,7 @@ void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIter
     }
 }
 
-pp::pp (pp_environment &__env):
+inline pp::pp (pp_environment &__env):
   env (__env), expand (env)
 {
   iflevel = 0;
@@ -396,6 +442,9 @@ template <typename _InputIterator>
 _InputIterator pp::handle_define (_InputIterator __first, _InputIterator __last)
 {
   pp_macro macro;
+#if defined (PP_WITH_MACRO_POSITION)
+  macro.file = pp_symbol::get (_M_current_file);
+#endif
   std::string definition;
 
   __first = skip_blanks (__first, __last);
@@ -498,7 +547,7 @@ _InputIterator pp::skip (_InputIterator __first, _InputIterator __last)
   return __first;
 }
 
-bool pp::test_if_level()
+inline bool pp::test_if_level()
 {
   bool result = !_M_skipping[iflevel++];
   _M_skipping[iflevel] = _M_skipping[iflevel - 1];

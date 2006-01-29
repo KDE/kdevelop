@@ -108,10 +108,14 @@ public:
 
 private:
   inline bool file_exists (std::string const &__filename) const;
-  FILE *find_include_file(std::string const &__filename, std::string *__filepath, INCLUDE_POLICY __include_policy) const;
+  FILE *find_include_file (std::string const &__filename, std::string *__filepath,
+                           INCLUDE_POLICY __include_policy) const;
 
   inline int skipping() const;
   bool test_if_level();
+
+  inline std::string fix_file_path (std::string const &filename) const;
+  inline bool is_absolute (std::string const &filename) const;
 
   PP_DIRECTIVE_TYPE find_directive (char const *__directive, std::size_t __size) const;
 

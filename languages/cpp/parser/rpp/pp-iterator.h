@@ -30,7 +30,7 @@ public:
   pp_null_output_iterator() {}
 
   template <typename _Tp>
-  pp_null_output_iterator &operator=(_Tp const &__value)
+  pp_null_output_iterator &operator=(_Tp const &)
   { return *this; }
 
   inline pp_null_output_iterator &operator * () { return *this; }
@@ -48,12 +48,12 @@ public:
   explicit pp_output_iterator(std::string &__result):
     _M_result (__result) {}
 
-  inline pp_output_iterator &operator=(typename _Container::const_reference __value)
+  inline pp_output_iterator &operator=(typename _Container::const_reference __v)
   {
     if (_M_result.capacity () == _M_result.size ())
       _M_result.reserve (_M_result.capacity () << 2);
 
-    _M_result.push_back(__value);
+    _M_result.push_back(__v);
     return *this;
   }
 

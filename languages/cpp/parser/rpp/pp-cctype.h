@@ -24,16 +24,16 @@
 #include <cctype>
 
 inline bool pp_isalpha (int __ch)
-{ return std::isalpha ((unsigned char) __ch); }
+{ return std::isalpha ((unsigned char) __ch) != 0; }
 
 inline bool pp_isalnum (int __ch)
-{ return std::isalnum ((unsigned char) __ch); }
+{ return std::isalnum ((unsigned char) __ch) != 0; }
 
 inline bool pp_isdigit (int __ch)
-{ return std::isdigit ((unsigned char) __ch); }
+{ return std::isdigit ((unsigned char) __ch) != 0; }
 
 inline bool pp_isspace (int __ch)
-{ return std::isspace ((unsigned char) __ch); }
+{ return std::isspace ((unsigned char) __ch) != 0; }
 
 #endif // PP_CCTYPE_H
 

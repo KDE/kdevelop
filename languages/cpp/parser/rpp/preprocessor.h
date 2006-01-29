@@ -22,10 +22,10 @@
 #define PREPROCESSOR_H
 
 #include <QtCore/qglobal.h>
+#include <QtCore/qstring.h>
+#include <QtCore/qstringlist.h>
 
 class QByteArray;
-class QString;
-class QStringList;
 class PreprocessorPrivate;
 
 class Preprocessor
@@ -42,6 +42,18 @@ public:
     QByteArray result() const;
 
     QStringList macroNames() const;
+
+    struct MacroItem
+    {
+        QString name;
+        QStringList parameters;
+        QString definition;
+        bool isFunctionLike;
+#ifdef PP_WITH_MACRO_POSITION
+        QString fileName;
+#endif
+    };
+    QList<MacroItem> macros() const;
 
 private:
     Q_DISABLE_COPY(Preprocessor)

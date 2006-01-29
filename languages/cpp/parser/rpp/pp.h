@@ -21,6 +21,11 @@
 #ifndef PP_H
 #define PP_H
 
+#if defined(_WIN64) || defined(WIN64) || defined(__WIN64__) \
+    || defined(_WIN32) || defined(WIN32) || defined(__WIN32__)
+#  define PP_OS_WIN
+#endif
+
 #include <set>
 #include <map>
 #include <vector>

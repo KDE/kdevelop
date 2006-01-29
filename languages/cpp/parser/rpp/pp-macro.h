@@ -24,6 +24,9 @@
 struct pp_macro
 {
   pp_fast_string const *definition;
+#if defined (PP_WITH_MACRO_POSITION)
+  pp_fast_string const *file;
+#endif
   std::vector<pp_fast_string const *> formals;
 
   union
@@ -39,7 +42,11 @@ struct pp_macro
   };
 
   inline pp_macro():
-    state (0) {}
+#if defined (PP_WITH_MACRO_POSITION)
+    file (0),
+#endif
+    state (0)
+    {}
 };
 
 #endif // PP_MACRO_H
