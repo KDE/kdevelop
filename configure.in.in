@@ -6,6 +6,7 @@ KDE_NEED_FLEX
 KDEV_CHECK_DOCBASE
 #KDEV_CHECK_SCRIPTING
 #KDEV_CHECK_JAVA
+#KDEV_CHECK_CSHARP
 #KDEV_CHECK_SVN
 #KDEV_CHECK_QEDITOR
 KDEV_CHECK_COMPAT
@@ -43,6 +44,9 @@ AM_CONDITIONAL(include_haskell, test "$haskell" = "yes")
 
 AC_ARG_ENABLE(java, AC_HELP_STRING([--disable-java], [disable programming language support for Java]), [java=${enableval}], [java=yes])
 AM_CONDITIONAL(include_java, test "$java" = "yes")
+
+AC_ARG_ENABLE(csharp, AC_HELP_STRING([--disable-csharp], [disable programming language support for C#]), [csharp=${enableval}], [csharp=yes])
+AM_CONDITIONAL(include_csharp, test "$csharp" = "yes")
 
 AC_ARG_ENABLE(pascal, AC_HELP_STRING([--disable-pascal], [disable programming language support for Pascal]), [pascal=${enableval}], [pascal=yes])
 AM_CONDITIONAL(include_pascal, test "$pascal" = "yes")

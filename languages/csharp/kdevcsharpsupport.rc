@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevCSharpSupport" version="1">
+<MenuBar>
+  <Menu name="build" >
+    <Action name="build_exec" />
+    <Action name="build_runinterpreter" />
+    <Action name="build_execstring" />
+  </Menu> 
+ <Menu name="help">
+  <Action name="help_csharpdocfunction"/>
+  <Action name="help_csharpdocfaq"/>
+ </Menu>
+</MenuBar>
+</kpartgui>

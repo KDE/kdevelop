@@ -1,0 +1,9 @@
+[Protocol]
+exec=kio_csharpdoc
+protocol=csharpdoc
+input=none
+output=filesystem
+reading=true
+listing=Name
+determineMimetypeFromExtension=false
+Icon=help
