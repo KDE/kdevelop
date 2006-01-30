@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Python Qt application
+Name[ca]=Aplicació per a Qt en Python
 Name[da]=Python Qt program
 Name[de]=Python Qt-Anwendung
 Name[el]=Εφαρμογή Python Qt
@@ -24,6 +25,7 @@ Name[zh_CN]=Python Qt 应用程序
 Icon=pyqt.png
 Category=Python
 Comment=This generates an application framework using Python and Qt
+Comment[ca]=Genera una infraestructura d'aplicació usant Python i Qt
 Comment[da]=Dette genererer et programskelet ved brug af  Python og Qt
 Comment[de]=Hiermit wird ein Anwendungsgerüst unter Verwendung von Python und Qt erstellt
 Comment[el]=Αυτό δημιουργεί ένα πλαίσιο εφαρμογής χρησιμοποιώντας τις Python και Qt
@@ -120,6 +122,7 @@ Dest=%{dest}/filesave.pyxpm
 [MSG]
 Type=message
 Comment=A Python Qt application was created in %{dest}
+Comment[ca]=Una aplicació per a Qt en Python ha estat creada en %{dest}
 Comment[da]=Et Python Qt program blev oprettet i %{dest}
 Comment[de]=Eine Python Qt-Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή Python Qt δημιουργήθηκε στο %{dest}

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=The Documentation plugin offers browsing and searching in local and online documentation with support for multiple documentation systems.
+Comment[ca]=El connector de documentació ofereix navegació i recerca en documentació local i en línia amb suport per a múltiples sistemes de documentació.
 Comment[da]=Dokumentations-plugin tilbyder visning og søgning i lokal og online dokumentation med understøttelse af flere dokumentations-systemer.
 Comment[de]=Die Dokumentations-Komponente bietet eine Browsefunktion und Unterstützung für die Suche in mehreren Hilfedokumenten und Dokumentationssystemen.
 Comment[el]=Το πρόσθετο τεκμηρίωσης προσφέρει περιήγηση και αναζήτηση σε τοπική και απομακρυσμένη τεκμηρίωση για πολλαπλά συστήματα τεκμηρίωσης.

@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple DCOP server
+Name[ca]=Simple servidor DCOP
 Name[da]=Simpel DCOP-server
 Name[de]=Einfacher DCOP-Server
 Name[el]=Απλός εξυπηρετητής DCOP
@@ -24,6 +25,7 @@ Name[zh_CN]=简单的 DCOP 服务器
 Icon=kdedcop.png
 Category=C++/KDE
 Comment=Generates a basic KDE DCOP server. This is an ideal starting point for a DCOP server that does not require a GUI interface.
+Comment[ca]=Genera un servidor bàsic DCOP per al KDE. Aquest és un idoni punt de partida per a un servidor DCOP que no requereixi d'una IGU.
 Comment[da]=Genererer en basal KDE DCOP-server. Dette er et ideelt startpunkt for en DCOP-server der ikke kræver en GUI-grænseflade.
 Comment[de]=Erstellt einen einfachen KDE DCOP-Server. Dies ist ein idealer Ausgangspunkt für einen DCOP-Server, der keine Benutzeroberfläche erfordert.
 Comment[el]=Δημιουργεί ένα βασικό εξυπηρετητή KDE DCOP. Αυτό είναι ένα ιδανικό σημείο αρχής για έναν εξυπηρετητή DCOP ο οποίος δε χρειάζεται ένα γραφικό περιβάλλον.
@@ -178,6 +180,7 @@ Dest=%{dest}/src/main.cpp
 [MSG]
 Type=message
 Comment=A simple DCOP server was created in %{dest}
+Comment[ca]=Un simple servidor DCOP ha estat creat en %{dest}
 Comment[da]=En simpel DCOP-server blev oprettet i %{dest}
 Comment[de]=Ein einfacher DCOP-Server wurde in %{dest} erstellt.
 Comment[el]=Ένας απλός εξυπηρετητής DCOP δημιουργήθηκε στο %{dest}

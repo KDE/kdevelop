@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple Hello world program
+Name[ca]=Simple programa Hello world
 Name[da]=Simpelt Goddag verden program
 Name[de]=Ein einfaches Hello-world-Programm
 Name[el]=Απλό πρόγραμμα Γεια σου Κόσμε
@@ -23,6 +24,7 @@ Name[zh_CN]=简单的 Hello world 程序
 Icon=chello.png
 Category=C
 Comment=Generates a simple Hello world program in C
+Comment[ca]=Genera un simple programa de Hello world en C
 Comment[da]=Genererer et simpelt Goddag verden program i C
 Comment[de]=Erstellt ein einfaches Hello-world-Programm in C
 Comment[el]=Δημιουργεί ένα απλό πρόγραμμα Γεια σου Κόσμε σε C
@@ -52,6 +54,7 @@ Type = value
 ValueType=QString
 Value= OPT_LIBS
 Comment= Optional libraries to link to.
+Comment[ca]= Biblioteques opcionals per enllaçar.
 Comment[da]= Mulige biblioteker at linke til.
 Comment[de]= Optionale Bibliotheken, die eingebunden werden sollen.
 Comment[el]= Προαιρετικές βιβλιοθήκες για σύνδεση με αυτές.
@@ -78,6 +81,7 @@ Type = value
 ValueType=QString
 Value= OPT_INCS
 Comment= Optional include path.
+Comment[ca]= Ruta opcional per a incloure.
 Comment[da]= Mulig include-sti.
 Comment[de]= Optionaler Include-Pfad.
 Comment[el]= Προαιρετική διαδρομή ενσωμάτωσης.
@@ -103,6 +107,7 @@ Type = value
 ValueType=QString
 Value= CFLAGS
 Comment= Optional CFLAGS to define in the makefile.
+Comment[ca]= CFLAGS opcionals per a definir en el fitxer de make.
 Comment[da]= Mulige CFLAGS at definere i makefile.
 Comment[de]= Optionale CFLAGS, die in makefile definiert werden.
 Comment[el]= Προαιρετικές CFLAGS για ορισμό μέσα στο makefile.
@@ -127,6 +132,7 @@ Default=
 [MGS]
 Type=message
 Comment=A simple C project was created in %{dest}.
+Comment[ca]=A simple projecte en C ha estat creat en %{dest}.
 Comment[da]=Et simpelt C projekt blev oprette i %{dest}.
 Comment[de]=Ein einfaches C-Project wurde in %{dest} erstellt.
 Comment[el]=Ένα απλό έργο C δημιουργήθηκε στο %{dest}.

@@ -2,6 +2,7 @@
 [General]
 Name=KDE Screen Saver
 Name[br]=Damanter skramm KDE
+Name[ca]=Salvapantalles per al KDE
 Name[da]=KDE pauseskærm
 Name[de]=KDE-Bildschirmschoner
 Name[el]=Προφύλαξη οθόνης του KDE
@@ -26,6 +27,7 @@ Name[zh_CN]= KDE 屏幕保护程序
 Icon=kscreensaver.png
 Category=C++/KDE
 Comment=Generates a framework for a KDE screensaver.
+Comment[ca]=Genera una infraestructura per a un salvapantalles de KDE.
 Comment[da]=Genererer et skelet for en KDE-pauseskærm.
 Comment[de]=Erstellt das Gerüst für einen KDE-Bildschirmschoner.
 Comment[el]=Δημιουργεί ένα πλαίσιο για μια προφύλαξη οθόνης του KDE.
@@ -156,6 +158,7 @@ Dest=%{dest}/src/%{APPNAMELC}ui.ui
 [MSG]
 Type=message
 Comment=A screensaver application was created in %{dest}
+Comment[ca]=Una aplicació de salvapantalles ha estat creada en %{dest}
 Comment[da]=Et pauseskærmsprogram blev oprettet i %{dest}
 Comment[de]=Ein Bildschirmschoner wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή προφύλαξης οθόνης δημιουργήθηκε στο %{dest}

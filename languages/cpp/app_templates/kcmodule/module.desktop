@@ -14,7 +14,7 @@ X-KDE-ParentApp=kcontrol
 [Desktop Entry]
 Encoding=UTF-8
 Comment=%{APPNAME} - a kcontrol module
-Comment[ca]=%{APPNAME} - un mòdul de kcontrol
+Comment[ca]=%{APPNAME} - un mòdul per a kcontrol
 Comment[da]=%{APPNAME} - et kcontrol-modul
 Comment[de]=%{APPNAME} - ein KControl-Modul
 Comment[el]=%{APPNAME} - ένα άρθρωμα kcontrol
@@ -43,6 +43,7 @@ Comment[zh_CN]=%{APPNAME} - 一个 KDE 控制中心模块
 Keywords=%{APPNAME},%{APPNAMELC}
 Name=The %{APPNAME} Applet
 Name[br]=An arloadig %{APPNAME}
+Name[ca]=L'applet %{APPNAME}
 Name[da]=%{APPNAME}-appletten
 Name[de]=Das Miniprogramm %{APPNAME}
 Name[el]=Το εφαρμογίδιο %{APPNAME}

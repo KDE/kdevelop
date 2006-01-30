@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple SQL Project
+Name[ca]=Simple projecte en SQL
 Name[da]=Simpelt SQL-projekt
 Name[de]=Einfaches SQL-Projekt
 Name[el]=Απλό έργο SQL
@@ -23,6 +24,7 @@ Name[tr]=Basit SQL Projesi
 Name[zh_CN]=简单的 SQL 工程
 Category=Database
 Comment=Generates a simple SQL project.
+Comment[ca]=Genera un simple projecte en SQL
 Comment[da]=Genererer et simpelt SQL projekt.
 Comment[de]=Erstellt ein einfaches SQL-Projekt.
 Comment[el]=Δημιουργεί ένα απλό έργο SQL.
@@ -60,6 +62,7 @@ Dest=%{dest}/%{APPNAMELC}.sql
 [MSG]
 Type=install
 Comment=A simple SQL project was created in %{dest}
+Comment[ca]=Un simple projecte en SQL ha estat creat en %{dest}
 Comment[da]=Et simpelt SQL projekt blev oprettet i %{dest}
 Comment[de]=Ein einfaches SQL-Projekt wurde in %{dest} erstellt.
 Comment[el]=Ένα απλό έργο SQL δημιουργήθηκε στο %{dest}

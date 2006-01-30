@@ -15,6 +15,7 @@ GenericName[sr@Latn]=VCS menadžer
 GenericName[sv]=VCS-hantering
 GenericName[tg]=РоҳбариVCS
 Comment=Version Control System Manager
+Comment[ca]=Gestor per al sistema de control de versions
 Comment[da]=Versionskontrolsystem-håndtering
 Comment[de]=Verwaltung für VCS
 Comment[el]=Διαχειριστής συστήματος ελέγχου εκδόσεων

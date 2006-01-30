@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Opie Today Plugin
+Name[ca]=Connector de tasques pendents per a Opie
 Name[da]=Opie Today-plugin
 Name[de]=Opie Today-Plugin
 Name[el]=Πρόσθετο Σήμερα του Opie
@@ -23,6 +24,7 @@ Name[zh_CN]=Opie 今日插件
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie today plugin.
+Comment[ca]=Genera un connector de tasques pendents per a Opie.
 Comment[da]=Generér et Opie today-plugin.
 Comment[de]=Erstellt ein Opie Today-Plugin
 Comment[el]=Δημιουργία ενός πρόσθετου Σήμερα του Opie.
@@ -103,6 +105,7 @@ Dest=%{dest}/%{APPNAMELC}impl.h
 [MSG]
 Type=message
 Comment=An opie today plugin was created in %{dest}
+Comment[ca]=Un connector de tasques pendents per a Opie ha estat creat en %{dest}
 Comment[da]=Et opie today-plugin blev oprettet i %{dest}
 Comment[de]=Ein Opie Today-Plugin wurde in %{dest} erstellt.
 Comment[el]=Ένα πρόσθετο Σήμερα του opie δημιουργήθηκε στο %{dest}

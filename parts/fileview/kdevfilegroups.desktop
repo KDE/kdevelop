@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Allows for grouping of project files according to filename patterns.
+Comment[ca]=Permet l'agrupació de fitxers del projecte d'acord als patrons dels noms de fitxer.
 Comment[da]=Tillader gruppering af projektfiler efter filnavnemønstre.
 Comment[de]=Erlaubt die Gruppierung von Projektdateien nach Dateimustern.
 Comment[el]=Επιτρέπει την ομαδοποίηση των αρχείων του έργου σύμφωνα με διάφορα μοτίβα.

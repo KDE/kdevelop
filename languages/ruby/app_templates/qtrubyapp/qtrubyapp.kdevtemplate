@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=QtRuby Application
+Name[ca]=Aplicació en QtRuby
 Name[da]=QtRuby-program
 Name[de]=QtRuby-Anwendung
 Name[el]=Εφαρμογή QtRuby
@@ -25,6 +26,7 @@ Icon=qtrubyapp.png
 Category=Ruby/Qt
 Category[fr]=Ruby/Qt
 Comment=Generate a QtRuby based application (crossplatform compatible)
+Comment[ca]=Genera una aplicació basada en QtRuby (multi plataforma)
 Comment[da]=Genererer et QtRuby baseret program (krydsplatform kompatibelt)
 Comment[de]=Erstelle eine auf QtRuby basierende Anwendung (Crossplattform kompatibel)
 Comment[el]=Δημιουργία μιας εφαρμογής βασισμένης σε QtRuby (συμβατή με πολλαπλές πλατφόρμες)
@@ -90,6 +92,7 @@ Dest=%{dest}/%{APPNAMELC}.kdevelop.filelist
 [MSG]
 Type=message
 Comment=A QtRuby based application was created in %{dest}
+Comment[ca]=Una aplicació basada en QtRuby ha estat creada en %{dest}
 Comment[da]=Et QtRuby baseret program blev oprettet i %{dest}
 Comment[de]=Eine auf QtRuby basierende Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή βασισμένη σε QtRuby δημιουργήθηκε στο %{dest}

@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Application framework
+Name[ca]=Infraestructura d'aplicacions
 Name[da]=Programskelet
 Name[de]=Anwendungsgrundgerüst
 Name[el]=Πλαίσιο εφαρμογής
@@ -24,6 +25,7 @@ Name[zh_CN]=应用程序框架
 Icon=kapp.png
 Category=Ruby/KDE
 Comment=Generates a simple Korundum application with one toplevel window, menus and toolbars. A DCOP interface is also provided, so that your application can provide a scripting interface
+Comment[ca]=Genera una simple aplicació Korundum amb una finestra principal, menús i barres d'eines. També es proveeix la interfície DCOP, de manera que la vostra aplicació podrà proveir d'una interfície per a scripts
 Comment[da]=Generere et simpelt Korundum program med et vindue på topniveau, menuer og værktøjslinjer. Der sørges også for en DCOP-grænseflade, så dit program kan give en script-grænseflade
 Comment[de]=Erstellt eine einfache Korundum-Anwendung mit einem Toplevel-Fenster, Menüs und Werkzeugleisten. Dazu kommt eine DCOP-Schnittstelle, so dass Ihre Anwendung eine Schnittstelle für Skripte anbieten kann.
 Comment[el]=Δημιουργεί μια απλή εφαρμογή Korundum με ένα ανώτερο παράθυρο, μενού και γραμμές εργαλείων. Προσφέρεται επίσης μια διασύνδεση DCOP, έτσι ώστε η εφαρμογή σας να προσφέρει ένα περιβάλλον γραφής σεναρίων
@@ -192,6 +194,7 @@ Dest=%{dest}/src/README
 [MSG]
 Type=message
 Comment=A Korundum Application was created at %{dest}
+Comment[ca]=Una aplicació Korundum ha estat creada a %{dest}
 Comment[da]=Et Korundum program blev oprettet i %{dest}
 Comment[de]=Eine Korundum-Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή Korundum δημιουργήθηκε στο %{dest}

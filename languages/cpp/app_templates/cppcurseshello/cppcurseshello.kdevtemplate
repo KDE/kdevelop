@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple ncurses Hello world program
+Name[ca]=Simple programa de Hello world per a ncurses
 Name[da]=Simpelt ncurses Goddag verden program
 Name[de]=Einfaches ncurses Hello-World-Programm
 Name[el]=Απλό ncurses πρόγραμμα Γεια σου κόσμε
@@ -23,6 +24,7 @@ Name[zh_CN]=简单的 ncurses Hello world 程序
 Icon=
 Category=C++
 Comment=Generates a simple ncurses based Hello world program in C++
+Comment[ca]=Genera un simple programa de Hello world en C++ i basat en ncurses
 Comment[da]=Genererer et simpelt ncurses baseret Goddag verden program in C++
 Comment[de]=Erstellt ein einfaches ncurses basiertes Hello-World-Programm in C++
 Comment[el]=Δημιουργεί ένα απλό βασισμένο σε ncurses πρόγραμμα Γεια σου κόσμε σε C++
@@ -93,6 +95,7 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A simple hello world program using ncurses was created in %{dest}
+Comment[ca]=Un simple programa de hello world usant ncurses ha estat creat en %{dest}
 Comment[da]=Et simpelt Goddag verden program ved brug af ncurses blev oprettet i %{dest}
 Comment[de]=Ein einfaches Hello-World-Programm unter Verwendung von ncurses wurde in %{dest} erstellt.
 Comment[el]=Ένα απλό πρόγραμμα Γεια σου Κόσμε χρησιμοποιώντας το ncurses δημιουργήθηκε στο %{dest}

@@ -4,6 +4,7 @@ Name=KDevMakeBuilder
 Name[da]=KDevelop MakeBuilder
 Name[sv]=KDevelop MakeBuilder
 Comment=KDevelop Automake Importer
+Comment[ca]=Importador de Automake per a KDevelop
 Comment[da]=KDevelop Automake importør
 Comment[de]=Automake-Import für KDevelop
 Comment[el]=Εισαγωγέας Automake του KDevelop

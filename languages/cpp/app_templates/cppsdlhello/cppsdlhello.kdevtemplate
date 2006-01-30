@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple SDL program
+Name[ca]=Simple programa per a SDL
 Name[da]=Simpelt SDL-program
 Name[de]=Einfaches SDL-Programm
 Name[el]=Απλό πρόγραμμα SDL
@@ -25,6 +26,7 @@ Name[zh_CN]=简单的 SDL 程序
 Icon=cppsdl.png
 Category=C++
 Comment=Generates a simple SDL program in C++
+Comment[ca]=Genera un simple programa en SDL en C++
 Comment[da]=Genererer et simpelt SDL program i C++
 Comment[de]=Erstellt ein einfaches SDL-Programm in C++
 Comment[el]=Δημιουργεί ένα απλό πρόγραμμα SDL σε C++
@@ -101,6 +103,7 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A simple SDL program was created in %{dest}
+Comment[ca]=Un simple programa en SDL ha estat creat en %{dest}
 Comment[da]=Et simpelt SDL-program blev oprettet i %{dest}
 Comment[de]=Ein einfaches SDL-Programm wurde in %{dest} erstellt.
 Comment[el]=Ένα απλό πρόγραμμα SDL δημιουργήθηκε στο %{dest}

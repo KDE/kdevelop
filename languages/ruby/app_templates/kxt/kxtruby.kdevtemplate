@@ -2,6 +2,7 @@
 [General]
 
 Name=KConfig XT application
+Name[ca]=Aplicació KConfig XT
 Name[da]=KConfig XT program
 Name[de]=KConfigXT-Anwendung
 Name[el]=Εφαρμογή KConfig XT
@@ -25,6 +26,7 @@ Name[zh_CN]=KConfig XT 应用程序
 Category=Ruby/KDE
 Icon=previewruby.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
+Comment[ca]=Genera una simple aplicació per al KDE amb un estri i un diàleg de configuració.
 Comment[da]=Genererer et simpelt KDE-program med en kontrol og en indstillingsdialog
 Comment[de]=Erstellt eine einfache KDE-Anwendung mit einem Widget und einem Einstellungsdialog.
 Comment[el]=Δημιουργεί μια απλή εφαρμογή KDE με ένα γραφικό συστατικό, ένα διάλογο ρύθμισης
@@ -205,6 +207,7 @@ Dest=%{dest}/src/settings.kcfgc
 [MSG]
 Type=message
 Comment=A Korundum KConfig XT Application was created at %{dest}
+Comment[ca]=Una aplicació Korundum amb KConfig XT ha estat creada a %{dest}
 Comment[da]=Et Korundum KConfig XT program blev oprettet i %{dest}
 Comment[de]=Eine Korundum KConfig-XT-Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή Korundum KConfig XT δημιουργήθηκε στο %{dest}

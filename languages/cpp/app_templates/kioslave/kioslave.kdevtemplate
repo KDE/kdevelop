@@ -2,6 +2,7 @@
 [General]
 Name=KIO slave
 Name[br]=Sklav KIO
+Name[ca]=Esclau KIO
 Name[da]=KIO-slave
 Name[de]=Ein-/Ausgabemodul
 Name[el]=Υπηρέτης KIO
@@ -18,6 +19,7 @@ Name[sv]=I/O-slav
 Icon=kioslave.png
 Category=C++/KDE
 Comment=Generates a framework for an IO slave
+Comment[ca]=Genera una infraestructura per a un esclau IO
 Comment[da]=Genererer et skelet for en IO-slave
 Comment[de]=Erstellt das Grundgerüst für ein Ein-/Ausgabemodul.
 Comment[el]=Δημιουργεί ένα πλαίσιο για έναν υπηρέτη IO
@@ -138,6 +140,7 @@ Dest=%{dest}/src/%{APPNAMELC}.protocol
 [MSG]
 Type=message
 Comment=A KIO slave was created in %{dest}
+Comment[ca]=Un esclau KIO ha estat creat en %{dest}
 Comment[da]=En KIO-slave blev oprettet i %{dest}
 Comment[de]=Ein Ein-/Ausgabemodul wurde in %{dest} erstellt.
 Comment[el]=Ένας υπηρέτης KIO δημιουργήθηκε στο %{dest}

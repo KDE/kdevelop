@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple Bash Shell Script
+Name[ca]=Simple script de l'intèrpret de comandaments Bash
 Name[da]=Simpelt Bash skalscript
 Name[de]=Ein einfaches Shell-Skript für Bash
 Name[el]=Απλό σενάριο κελύφους Bash
@@ -23,6 +24,7 @@ Name[zh_CN]=简单的 Bash Shell 脚本
 Category=Shell
 Category[fr]=Interpr�teur BASH
 Comment=This generates a simplistic 'Hello world' program in Bash shell
+Comment[ca]=Genera un simple programa de 'Hello world' en l'intèrpret de comandaments Bash
 Comment[da]=Dette genererer et simplistisk 'Goddag verden' program i en Bash skal
 Comment[de]=Generiert ein einfaches "Hello world" Programm für die Bash-Shell
 Comment[el]=Αυτό δημιουργεί ένα απλό πρόγραμμα 'Γεια σου κόσμε' στο κέλυφος Bash
@@ -59,6 +61,7 @@ Dest=%{dest}/%{APPNAMELC}.sh
 [MSG]
 Type=message
 Comment=A simple bash shell script project was created in %{dest}
+Comment[ca]=Un simple script de l'intèrpret de comandaments Bash ha estat creat en %{dest}
 Comment[da]=Et simpelt bash skalscript-projekt blev oprettet i %{dest}
 Comment[de]=Ein einfaches Shell-Skript-Projekt für Bash wurde in %{dest} erstellt
 Comment[el]=Ένα απλό σενάριο κελύφους bash δημιουργήθηκε στο %{dest}

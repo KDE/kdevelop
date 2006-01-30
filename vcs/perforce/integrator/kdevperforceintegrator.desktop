@@ -5,6 +5,7 @@ Name=KDevPerforceIntegrator
 Name[da]=KDevelop Perforce-integration
 Name[sv]=KDevelop Perforce-integration
 Comment=Perforce Project Integration Facility
+Comment[ca]=Facilitat per a la integració amb projectes Perforce
 Comment[da]=Perforce projektintegration
 Comment[de]=Perforce-Projektintegration
 Comment[el]=Λειτουργία ενσωμάτωσης Perforce στο έργο

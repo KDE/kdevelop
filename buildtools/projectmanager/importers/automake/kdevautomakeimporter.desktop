@@ -6,6 +6,7 @@ Name[pl]=KDevImportAutomake
 Name[sv]=KDevelop Automake-import
 Name[tr]=KDevAutoMakeImporter
 Comment=KDevelop Automake Importer
+Comment[ca]=Importador de Automake per a KDevelop
 Comment[da]=KDevelop Automake importør
 Comment[de]=Automake-Import für KDevelop
 Comment[el]=Εισαγωγέας Automake του KDevelop

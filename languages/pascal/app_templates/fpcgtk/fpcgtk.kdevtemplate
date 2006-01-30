@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=GTK+ application
+Name[ca]=Aplicació GTK+
 Name[da]=GTK+ program
 Name[de]=GTK+-Anwendung
 Name[el]=Εφαρμογή GTK+
@@ -23,6 +24,7 @@ Name[tr]=GTK+ Uygulaması
 Name[zh_CN]=GTK+ 应用程序
 Category=Pascal/Free Pascal
 Comment=Generates a GTK+ based GUI application in Pascal
+Comment[ca]=Genera una aplicació IGU en Pascal basada en GTK+
 Comment[da]=Genereree et GTK+ baseret GUI program i Pascal
 Comment[de]=Erstellt eine auf GTK+ basierende GUI-Anwendung in Pascal
 Comment[el]=Δημιουργεί μια γραφική εφαρμογή βασισμένη στο GTK+ σε Pascal
@@ -67,6 +69,7 @@ Dest=%{dest}/src/%{APPNAMELC}.pp
 [MSG]
 Type=message
 Comment=A GTK+ application written in pascal was created in %{dest}
+Comment[ca]=Una aplicació GTK+ escrita en Pascal ha estat creada en %{dest}
 Comment[da]=Et GTK+ program skrevet i pascal blev oprettet i %{dest}
 Comment[de]=Eine in Pascal geschriebene GTK+-Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή GTK+ γραμμένη σε pascal δημιουργήθηκε στο %{dest}

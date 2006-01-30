@@ -3,6 +3,7 @@
 Encoding=UTF-8
 MimeType=application/x-%{APPNAMELC}
 Comment= A really awesome KOffice application
+Comment[ca]=Una aplicació de KOffice realment interesant
 Comment[da]=Et helt fantastisk KOffice program
 Comment[de]=Eine wirklich großartige KOffice-Anwendung
 Comment[el]= Μια πραγματικά όμορφη εφαρμογή KOffice

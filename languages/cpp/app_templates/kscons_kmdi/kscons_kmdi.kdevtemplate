@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Scons-based KMDI application
+Name[ca]=Aplicació per a KMDI basada en Scons
 Name[da]=Scons-baseret KMDI-program
 Name[de]=scons-basierte KMDI-Anwendung
 Name[el]=Μια εφαρμογή KMDI βασισμένης στο Scons
@@ -22,6 +23,7 @@ Name[zh_CN]=基于 Scons 的 KMDI 应用程序
 Category=C++/KDE
 Icon=kscons_kmdi.png
 Comment=Generates a complex KMDI application. Scons scripts are provided for compiling and installing the application.
+Comment[ca]=Genera una complexa aplicació per a KMDI. Els scripts en Scons són proveits per a compilar i instal·lar l'aplicació.
 Comment[da]=Genererer et komplekst KDE-program. Der sørges for scons-scripter til at kompilere og installere programmet.
 Comment[de]=Erstellt eine aufwändige KMDI-Anwendung. Scons-Skripte für das Kompileren und Installieren der Anwendung werden zur Verfügung gestellt.
 Comment[el]=Δημιουργεί μια πολύπλοκη εφαρμογή KMDI. Προσφέρονται σενάρια Scons για τη μεταγλώττιση και εγκατάσταση της εφαρμογής.
@@ -223,6 +225,7 @@ Dest=%{dest}/src/%{APPNAMELC}_part.rc
 [MSG]
 Type=message
 Comment=A KDE application with scons scripts was created in %{dest}
+Comment[ca]=Una aplicació per al KDE amb scripts en Scons ha estat creada e n %{dest}
 Comment[da]=Et KDE program med scons-scripter blev oprette i %{dest}
 Comment[de]=Eine KDE-Anwendung mit scons-Skripten wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή KDE με σενάρια scons δημιουργήθηκε στο %{dest}

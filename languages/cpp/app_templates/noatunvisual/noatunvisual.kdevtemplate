@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Noatun visualization plugin
+Name[ca]=Connector de visualització per a Noatun
 Name[da]=Noatun visualiserings-plugin
 Name[de]=Noatun Visualisierungs-Plugin
 Name[el]=Οπτικό πρόσθετο Noatun
@@ -23,6 +24,7 @@ Name[zh_CN]=Noatun 可视化插件
 Icon=noatunvisual.png
 Category=C++/KDE
 Comment=Generates a visualization plugin for noatun using SDL
+Comment[ca]=Genera un connector de visualització per a Noatun usant SDL
 Comment[da]=Generere et visualiserings-plugin for noatun ved brug af SDL
 Comment[de]=Erstellt ein Visualisierungs-Plugin für noatun unter Verwendung von SDL.
 Comment[el]=Δημιουργεί ένα οπτικό πρόσθετο για το noatun χρησιμοποιώντας το SDL
@@ -156,6 +158,7 @@ Dest=%{dest}/src/%{APPNAMELC}.plugin
 [MSG]
 Type=message
 Comment=A Noatun visualization plugin was created in %{dest}
+Comment[ca]=Un connector de visualització per a Noatun ha estat creat en %{dest}
 Comment[da]=Et Noatun visualiserings-plugin blev oprettet i %{dest}
 Comment[de]=Ein Noatun Visualisierungs-Plugin für Noatun wurde in %{dest} erstellt.
 Comment[el]=Ένα οπτικό πρόσθετο Noatun δημιουργήθηκε στο %{dest}

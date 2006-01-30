@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Control Center module
+Name[ca]=Mòdul per al Centre de control
 Name[da]=Kontrolcenter-modul
 Name[de]=Kontrollzentrum-Modul
 Name[el]=Άρθρωμα κέντρου ελέγχου
@@ -25,6 +26,7 @@ Name[zh_CN]=控制中心模块
 Icon=kcmodule.png
 Category=C++/KDE
 Comment=Generates a framework for a module which can be embedded into the KDE Control Center.
+Comment[ca]=Genera una infraestructura per a un mòdul que es pugui encastar al Centre de control de KDE.
 Comment[da]=Genererer et skelet for et modul som kan indlejres i KDE's kontrolcenter.
 Comment[de]=Erstellt das Gerüst für ein Modul, das in das KDE Kontrollzentrum integriert werden kann.
 Comment[el]=Δημιουργεί ένα πλαίσιο για ένα άρθρωμα το οποίο μπορεί να ενσωματωθεί το κέντρο ελέγχου του KDE.
@@ -147,6 +149,7 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A control center module was created in %{dest}
+Comment[ca]=A mòdul per al centre de control ha estat creat en %{dest}
 Comment[da]=Et kontrolcenter-modul blev oprettet i %{dest}
 Comment[de]=Ein Kontrollzentrum-Modul wurde in %{dest} erstellt.
 Comment[el]=Ένα άρθρωμα κέντρου ελέγχου δημιουργήθηκε στο %{dest}

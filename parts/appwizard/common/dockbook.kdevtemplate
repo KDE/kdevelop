@@ -3,6 +3,7 @@ Type = value
 ValueType=bool
 Value=INSTALL_DOCS
 Comment= Install Docbook documentation templates.
+Comment[ca]= Instal·la plantilles de documentació en Docbook.
 Comment[da]= Installerer Docbook dokumentationsskabeloner.
 Comment[de]= Installiere Docbook-Vorlagen für Dokumentation
 Comment[el]= Εγκατάσταση προτύπων τεκμηρίωσης Docbook.

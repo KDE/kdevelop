@@ -2,6 +2,7 @@
 [General]
 Name=Linux Kernel module
 Name[br]=Mollad ar galon Linux
+Name[ca]=Mòdul del nucli Linux
 Name[da]=Linux kernemodul
 Name[de]=Linux Kernelmodul
 Name[el]=Άρθρωμα πυρήνα Linux
@@ -23,6 +24,7 @@ Name[zh_CN]=Linux 内核模块
 Icon=
 Category=C
 Comment=Generates a template for a Linux kernel module.
+Comment[ca]=Genera una plantilla per a un mòdul del nucli Linux.
 Comment[da]=Genererer en skabelon for en Linux kernemodul.
 Comment[de]=Erstellt eine Vorlage für ein Linux Kernelmodul.
 Comment[el]=Δημιουργεί ένα πρότυπο για ένα άρθρωμα του πυρήνα του Linux.

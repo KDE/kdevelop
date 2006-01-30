@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Shared library
+Name[ca]=Biblioteca compartida
 Name[da]=Delt bibliotek
 Name[de]=Shared Library
 Name[el]=Κοινόχρηστη βιβλιοθήκη
@@ -21,6 +22,7 @@ Name[tr]=Paylaşılan Kütüphane
 Name[zh_CN]=共享库
 Category=Pascal/Free Pascal
 Comment=Generates a shared library in Pascal
+Comment[ca]=Genera una biblioteca compartida en Pascal
 Comment[da]=Genererer et delt bibliotek i Pascal
 Comment[de]=Erstellt eine Shared Library in Pascal
 Comment[el]=Δημιουργία μιας κοινόχρηστης βιβλιοθήκης σε Pascal
@@ -66,6 +68,7 @@ Dest=%{dest}/src/%{APPNAMELC}.pp
 [MSG]
 Type=message
 Comment=A shared library project written in pascal was created in %{dest}
+Comment[ca]=Una biblioteca compartida escrita en Pascal ha estat creada en %{dest}
 Comment[da]=Et delt biblioteksprojekt skrevet i pascal blev oprettet i %{dest}
 Comment[de]=Ein Projekt für eine in Pascal geschriebene Shared Library wurde in %{dest} erstellt.
 Comment[el]=Ένα έργο κοινόχρηστης βιβλιοθήκης γραμμένο σε pascal δημιουργήθηκε στο %{dest}

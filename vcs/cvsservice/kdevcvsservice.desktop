@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=CVS Integration using Cervisia's cvsservice. http://www.kde.org/apps/cervisia/
+Comment[ca]=Integració amb el CVS emprant el cvsservice de Cervisia. http://www.kde.org/apps/cervisia/
 Comment[da]=CVS Integration ved brug af Cervisias cvsservice. http://www.kde.org/apps/cervisia/
 Comment[de]=CVS-Integration mit Hilfe von Cervisias cvsservice. http://www.kde.org/apps/cervisia/
 Comment[el]=Ενσωμάτωση CVS χρησιμοποιώντας τη cvsservice του Cervisia. http://www.kde.org/apps/cervisia/

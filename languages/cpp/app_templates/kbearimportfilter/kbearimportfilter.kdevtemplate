@@ -2,6 +2,7 @@
 [General]
 Name=KBear Import Filter
 Name[br]=Sil enporzh KBear
+Name[ca]=Filtre d'importació per a KBear
 Name[da]=KBear importfilter
 Name[de]=Import-Filter für KBear
 Name[el]=Φίλτρο εισαγωγής KBear
@@ -26,6 +27,7 @@ Name[zh_CN]=KBear 导入过滤器
 Category=C++/KDE
 Icon=kbearimportfilter.png
 Comment=Generates a simple KBear import filter.
+Comment[ca]=Genera un simple filtre d'importació per a KBear.
 Comment[da]=Genererer et simpelt KBear importfilter.
 Comment[de]=Erstellt einen einfachen KBear Importfilter.
 Comment[el]=Δημιουργεί ένα απλό φίλτρο εισαγωγής KBear.
@@ -110,6 +112,7 @@ Dest=%{dest}/src/kbear%{APPNAMELC}importfilter.desktop
 [MSG]
 Type=message
 Comment=An import filter for KBear was created in %{dest}
+Comment[ca]=Un filtre d'importació per a KBear ha estat creat en %{dest}
 Comment[da]=Et importfilter for KBear blev oprettet i %{dest}
 Comment[de]=Ein Importfilter für KBear wurde in %{dest} erstellt.
 Comment[el]=Ένα φίλτρο εισαγωγής για το KBear δημιουργήθηκε στο %{dest}

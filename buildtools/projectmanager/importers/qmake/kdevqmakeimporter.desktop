@@ -3,6 +3,7 @@ Type=Service
 Name=KDevQMakeEditor
 Name[sv]=KDevelop Qmake-editor
 Comment=Imports and edits qmake projects
+Comment[ca]=Importa i edita els projectes de qmake
 Comment[da]=Importerer og redigere qmake-projekter
 Comment[de]=Importiert und bearbeitet qmake-Projekte
 Comment[el]=Εισαγωγή και επεξεργασία έργων qmake

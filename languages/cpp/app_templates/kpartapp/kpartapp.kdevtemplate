@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Application framework (KParts)
+Name[ca]=Infraestructura d'aplicació (KParts)
 Name[da]=Programskelet (KParts)
 Name[de]=Anwendungsgerüst (KParts)
 Name[el]=Πλαίσιο εφαρμογής (KParts)
@@ -22,6 +23,7 @@ Name[zh_CN]=应用程序框架(KParts)
 Icon=kpartapp.png
 Category=C++/KDE
 Comment=Generates a complex KDE application with a KParts shell and a KPart component.
+Comment[ca]=Genera una complexa aplicació per al KDE amb un intèrpret de comandaments KParts i un component KPart.
 Comment[da]=Genererer et komplekst KDE-program med en KParts-skal og en KPart-komponent.
 Comment[de]=Erstellt eine aufwändige KDE-Anwendung mit einer Shell für KParts und einer KPart-Komponente.
 Comment[el]=Δημιουργεί μια πολύπλοκη εφαρμογή KDE με ένα κέλυφος KParts και ένα συστατικό KPart.
@@ -187,6 +189,7 @@ Dest=%{dest}/src/%{APPNAMELC}_shell.rc
 [MSG]
 Type=message
 Comment=A complex KDE application using KParts was created in %{dest}
+Comment[ca]=Una complexa aplicació per al KDE usant KParts ha estat creada en %{dest}
 Comment[da]=Et komplekst KDE-program ved brug af KParts blev oprettet i %{dest}
 Comment[de]=Eine aufwändige KDE-Anwendung, die KParts verwendet, wurde in %{dest} erstellt.
 Comment[el]=Μια πολύπλοκη εφαρμογή KDE που χρησιμοποιεί το KParts δημιουργήθηκε στο %{dest}

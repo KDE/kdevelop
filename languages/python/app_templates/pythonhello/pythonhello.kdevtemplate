@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple Python script
+Name[ca]=Simple script en Python
 Name[da]=Simpelt Python script
 Name[de]=Einfaches Python-Skript
 Name[el]=Απλό σενάριο Python
@@ -23,6 +24,7 @@ Name[zh_CN]=简单的 Python 脚本
 Icon=pythonhello.png
 Category=Python
 Comment=This generates a simplistic "Hello world" program in Python
+Comment[ca]=Genera un simple programa de "Hello world" en Python
 Comment[da]=Dette genererer et simplistisk "Goddag verden" program i Python
 Comment[de]=Hiermit wird ein einfaches "Hello world"-Programm in Python erstellt
 Comment[el]=Αυτό δημιουργεί ένα απλό πρόγραμμα "Γεια σου κόσμε" σε Python
@@ -59,6 +61,7 @@ Dest=%{dest}/%{APPNAMELC}.py
 [MSG]
 Type=message
 Comment=A simple python script was created in %{dest}
+Comment[ca]=Un simple script en Python ha estat creat en %{dest}
 Comment[da]=Et simpelt python script blev oprettet i %{dest}
 Comment[de]=Ein einfaches python-Skript wurde in %{dest} erstellt
 Comment[el]=Ένα απλό σενάριο python δημιουργήθηκε στο %{dest}

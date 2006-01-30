@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=QMake based KDE template
+Name[ca]=Plantilla per al KDE basada en QMake
 Name[da]=QMake baseret KDE-skabelon
 Name[de]=QMake-basierte KDE-Vorlage
 Name[el]=Πρότυπο KDE βασισμένο στο QMake
@@ -23,6 +24,7 @@ Name[zh_CN]=基于 QMake 的 KDE 模板
 Icon=kmake.png
 Category=C++/QMake project
 Comment=Generates a simple KDE application using QMake based project manager
+Comment[ca]=Genera una simple aplicació per al KDE usant un gestor de projectes basat en QMake
 Comment[da]=Genererer et simpelt KDE program ved brug af QMake baseret projekthåndtering
 Comment[de]=Erstellt eine einfache KDE-Anwendung unter Verwendung der QMake-Projektverwaltung
 Comment[el]=Δημιουργεί μια απλή εφαρμογή KDE χρησιμοποιώντας το διαχειριστή έργου βασισμένο στο QMake
@@ -100,6 +102,7 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A Qmake based KDE application was created in %{dest}
+Comment[ca]=Una aplicació per al KDE basada en QMake ha estat creada en %{dest}
 Comment[da]=Et Qmake baseret KDE program blev oprettet i %{dest}
 Comment[de]=Eine auf Qmake basierende KDE-Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή KDE βασισμένη στο Qmake δημιουργήθηκε στο %{dest}

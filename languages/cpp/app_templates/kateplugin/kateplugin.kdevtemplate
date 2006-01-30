@@ -2,6 +2,7 @@
 [General]
 Name=Kate plugin
 Name[br]=Lugent Kate
+Name[ca]=Connector per a Kate
 Name[de]=Kate-Plugin
 Name[el]=Πρόσθετο Kate
 Name[es]=Plugin para Kate
@@ -24,6 +25,7 @@ Name[zh_CN]=Kate 插件
 Icon=kateplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for Kate the text editor.
+Comment[ca]=Genera un connector per a l'editor de text Kate.
 Comment[da]=Genererer et plugin for teksteditoren kate
 Comment[de]=Erstellt ein Plugin für den Texteditor Kate
 Comment[el]=Δημιουργεί ένα πρόσθετο για το Kate τον επεξεργαστή κειμένου.
@@ -164,6 +166,7 @@ Process=false
 [MSG]
 Type=message
 Comment=A plugin for Kate was created at %{dest}
+Comment[ca]=Un connector per a Kate ha estat creat a %{dest}
 Comment[da]=Et plugin for Kate blev oprettet på %{dest}
 Comment[de]=Ein Plugin für Kate wurde in %{dest} erstellt.
 Comment[el]=Ένα πρόσθετο για το Kate δημιουργήθηκε στο %{dest}

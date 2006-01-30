@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple Hello World Program
+Name[ca]=Simple programa de Hello World
 Name[da]=Simpelt Goddag verden program
 Name[de]=Einfaches Hello-World-Programm
 Name[el]=Απλό πρόγραμμα Γεια σου Κόσμε
@@ -22,6 +23,7 @@ Name[zh_CN]=简单的 Hello World 程序
 Icon=haskellhello.png
 Category=Haskell
 Comment=This generates a simple 'Hello World' program in Haskell
+Comment[ca]=Genera un simple programa de 'Hello World' en Haskell
 Comment[da]=Dette genererer et simpelt 'Goddag verden' program i Haskell
 Comment[de]=Erstellt ein einfaches "Hello World"-Programm in Haskell
 Comment[el]=Αυτό δημιουργεί ένα απλό πρόγραμμα 'Γεια σου κόσμε' σε Haskell
@@ -66,6 +68,7 @@ Dest=%{dest}/src/%{APPNAMELC}.hs
 [MSG]
 Type=message
 Comment=A simple 'hello world' program in Haskell was created in %{dest}
+Comment[ca]=Un simple programa de 'hello world' en Haskell ha estat creat en %{dest}
 Comment[da]=Et simpelt 'goddag verden' program i Haskell blev oprettet i %{dest}
 Comment[de]=Ein einfaches "Hello World"-Programm in Haskell wurde in %{dest} erstellt
 Comment[el]=Ένα απλό πρόγραμμα 'Γεια σου κόσμε' σε Haskell δημιουργήθηκε στο %{dest}

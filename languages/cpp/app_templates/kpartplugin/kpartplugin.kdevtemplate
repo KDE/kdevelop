@@ -2,6 +2,7 @@
 [General]
 Name=KHTMLPart plugin
 Name[br]=Lugent KHTMLPart
+Name[ca]=Connector per a KHTMLPart
 Name[de]=KHTMLPart-Plugin
 Name[el]=Πρόσθετο KHTMLPart
 Name[es]=Plugin para KHTMLPart
@@ -23,6 +24,7 @@ Name[zh_CN]=KHTMLPart 插件
 Icon=kpartplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for the KHTML part.
+Comment[ca]=Genera un connector per a la part KHTML.
 Comment[da]=Genererer et plugin for KHTML parten.
 Comment[de]=Erstellt ein Plugin für die Komponente KHTML
 Comment[el]=Δημιουργεί ένα πρόσθετο για το τμήμα KHTML.
@@ -156,6 +158,7 @@ Process=false
 [MSG]
 Type=message
 Comment=A KHTMLPart plugin was created in %{dest}
+Comment[ca]=Un connector per a KHTMLPart ha estat creat en %{dest}
 Comment[da]=Et KHTMLPart plugin bleb oprettet i %{dest}
 Comment[de]=Ein Plugin für die Komponente KHTML wurde in %{dest} erstellt.
 Comment[el]=Ένα πρόσθετο τμήμα KHTML δημιουργήθηκε στο %{dest}

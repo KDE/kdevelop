@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Application framework
+Name[ca]=Infraestructura d'aplicacions
 Name[da]=Programskelet
 Name[de]=Anwendungsgrundgerüst
 Name[el]=Πλαίσιο εφαρμογής
@@ -24,6 +25,7 @@ Name[zh_CN]=应用程序框架
 Icon=kappjava.png
 Category=Java/KDE
 Comment=Generates a simple Java KDE application with one toplevel window, menus and  toolbars.
+Comment[ca]=Genera una simple aplicació per al KDE en Java amb una finestra principal, menús i barres d'eines.
 Comment[da]=Genererer et simpelt Java KDE program med et vindue på topniveau, menuer og værktøjslinjer.
 Comment[de]=Erstellt eine einfache Java KDE-Anwendung mit einem Toplevel-Fenster, Menüs und Werkzeugleisten.
 Comment[el]=Δημιουργεί μια απλή εφαρμογή Java του KDE με ένα ανώτερο παράθυρο, μενού, και γραμμές εργαλείων.

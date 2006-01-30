@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Opie Menu Applet
+Name[ca]=Applet de menú per a Opie
 Name[da]=Opie menu-applet
 Name[de]=Opie Menü-Miniprogramm (Applet)
 Name[el]=Εφαρμογίδιο μενού Opie
@@ -24,6 +25,7 @@ Name[zh_CN]=Opie 菜单小程序
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie menu applet.
+Comment[ca]=Genera un applet de menú per a Opie.
 Comment[da]=Generér en Opie menu-applet.
 Comment[de]=Erstellt ein Opie Menü-Miniprogramm (Applet)
 Comment[el]=Δημιουργία ενός εφαρμογίδιου μενού Opie.
@@ -84,6 +86,7 @@ Dest=%{dest}/%{APPNAMELC}.h
 [MSG]
 Type=message
 Comment=An opie menu applet was created in %{dest}
+Comment[ca]=Un applet de menú per a Opie ha estat creat en %{dest}
 Comment[da]=En opie menu-applet blev oprettet i %{dest}
 Comment[de]=Ein Opie Menü-Miniprogramm (Applet) wurde in %{dest} erstellt.
 Comment[el]=Ένα εφαρμογίδιο μενού opie δημιουργήθηκε στο %{dest}

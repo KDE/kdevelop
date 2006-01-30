@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=DCOP Service
+Name[ca]=Servei DCOP
 Name[de]=DCOP-Dienst
 Name[el]=Υπηρεσία DCOP
 Name[es]=Servicio DCOP
@@ -23,6 +24,7 @@ Name[zh_CN]=DCOP 服务
 Icon=kdcop.png
 Category=Ruby/KDE
 Comment=Generates a framework for a KDE DCOP service and client access library.
+Comment[ca]=Genera una infraestructura per a un servei DCOP de KDE i la biblioteca d'accés del client.
 Comment[da]=Genererer et skelet for en KDE dcop-tjeneste og klientadgangsbibliotek.
 Comment[de]=Erstellt das Grundgerüst für einen KDE DCOP-Dienst und eine Bibliothek für den Client-Zugriff.
 Comment[el]=Δημιουργεί ένα πλαίσιο για μια υπηρεσία KDE DCOP και μια βιβλιοθήκη πρόσβασης πελάτη.
@@ -150,6 +152,7 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A KDE DCOP Service was created in %{dest}
+Comment[ca]=Un servei DCOP de KDE ha estat creada en %{dest}
 Comment[da]=En KDE DCOP tjeneste blev oprettet i %{dest}
 Comment[de]=Ein KDE DCOP-Dienst wurde in %{dest} erstellt.
 Comment[el]=Μια υπηρεσία KDE DCOP δημιουργήθηκε στο %{dest}

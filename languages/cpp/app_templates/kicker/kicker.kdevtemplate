@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Kicker Applet
+Name[ca]=Applet per a Kicker
 Name[da]=Kicker-applet
 Name[de]=Kicker-Miniprogramm
 Name[el]=Εφαρμογίδιο Kicker
@@ -23,6 +24,7 @@ Name[zh_CN]=Kicker 小程序
 Icon=kicker.png
 Category=C++/KDE
 Comment=Generates a framework for an applet that embeds into the KDE panel
+Comment[ca]=Genera una infraestructura per a un applet encastat en el plafó de KDE
 Comment[da]=Genererer et skelet for en applet der indlejres i KDE's panel
 Comment[de]=Erstellt das Grundgerüst für ein Miniprogramm, das in die KDE-Kontrollleiste eingebettet wird.
 Comment[el]=Δημιουργεί ένα πλαίσιο για ένα εφαρμογίδιο που ενσωματώνεται στον πίνακα του KDE
@@ -144,6 +146,7 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A Kicker Applet was created in %{dest}
+Comment[ca]=Un applet per a Kicker Applet ha estat creat en %{dest}
 Comment[da]=En Kicker applet blev oprettet i %{dest}
 Comment[de]=Ein Miniprogramm für Kicker wurde in %{dest} erstellt.
 Comment[el]=Ένα εφαρμογίδιο Kicker δημιουργήθηκε στο %{dest}

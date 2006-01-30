@@ -5,6 +5,7 @@ Name=KDevSubversionIntegrator
 Name[da]=KDevelop Subversion-integration
 Name[sv]=KDevelop Subversion-integration
 Comment=Subversion Project Integration Facility
+Comment[ca]=Facilitat per a la integració amb Subversion
 Comment[da]=Subversion projektintegration
 Comment[de]=Cervisia-Projektintegration
 Comment[el]=Λειτουργία ενσωμάτωσης Subversion στο έργο

@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/ProjectBuilder
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Project Builder
+Name[ca]=Constructor de projecte per a KDevelop
 Name[da]=KDevelop Projektbygger
 Name[de]=Projekterstellung für KDevelop
 Name[el]=Κατασκευαστής έργου του KDevelop

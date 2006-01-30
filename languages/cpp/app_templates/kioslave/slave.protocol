@@ -8,6 +8,7 @@ defaultMimetype=text/plain
 Icon=remote
 Description=A kioslave for %{APPNAMELC}
 Description[br]=Ur c'hioslave evit %{APPNAMELC}
+Description[ca]=Un kioslave per a %{APPNAMELC}
 Description[da]=En kioslave til %{APPNAMELC}
 Description[de]=Ein Ein-/Ausgabemodul für %{APPNAMELC}
 Description[el]=Ένα υπηρέτης kio για %{APPNAMELC}

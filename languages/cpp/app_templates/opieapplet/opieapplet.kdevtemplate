@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Opie Applet
+Name[ca]=Applet per a Opie
 Name[da]=Opie-applet
 Name[de]=Opie-Miniprogramm (Applet)
 Name[el]=Εφαρμογίδιο Opie
@@ -25,6 +26,7 @@ Name[zh_CN]=Opie 小程序
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie applet.
+Comment[ca]=Genera un applet per a Opie.
 Comment[da]=Generér en Opie-applet.
 Comment[de]=Erstellt ein Opie-Miniprogramm (Applet).
 Comment[el]=Δημιουργία ενός εφαρμογίδιου Opie.
@@ -86,6 +88,7 @@ Dest=%{dest}/%{APPNAMELC}.h
 [MSG]
 Type=message
 Comment=An opie applet was created in %{dest}
+Comment[ca]=Una applet per a Opie ha estat creat en %{dest}
 Comment[da]=En opie-applet blev oprettet i %{dest}
 Comment[de]=Ein Opie-Miniprogramm (Applet) wurde in %{dest} erstellt.
 Comment[el]=Ένα εφαρμογίδιο opie δημιουργήθηκε στο %{dest}

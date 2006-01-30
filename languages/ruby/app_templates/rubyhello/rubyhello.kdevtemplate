@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple Ruby script
+Name[ca]=Simple script en Ruby
 Name[da]=Simpelt Ruby script
 Name[de]=Einfaches Ruby-Skript
 Name[el]=Απλό σενάριο Ruby
@@ -24,6 +25,7 @@ Name[tr]=Basit Ruby Betiği
 Name[zh_CN]=简单的 Ruyb 脚本
 Category=Ruby
 Comment=This generates a simplistic 'Hello world' program in Ruby
+Comment[ca]=Genera un simple programa de 'Hello world' en Ruby
 Comment[da]=Dette genererer et simplistisk 'Goddag verden' program i Ruby
 Comment[de]=Hiermit wird ein einfaches "Hello world"'-Programm in Ruby erstellt
 Comment[el]=Αυτό δημιουργεί ένα απλό πρόγραμμα 'Γεια σου κόσμε' σε Ruby
@@ -60,6 +62,7 @@ Dest=%{dest}/%{APPNAMELC}.rb
 [MSG]
 Type=message
 Comment=A simple ruby script was created in %{dest}
+Comment[ca]=Un simple script en Ruby ha estat creat en %{dest}
 Comment[da]=Et simpelt ruby script blev oprettet i %{dest}
 Comment[de]=Ein einfaches ruby-Skript wurde in %{dest} erstellt.
 Comment[el]=Ένα απλό σενάριο ruby δημιουργήθηκε στο %{dest}

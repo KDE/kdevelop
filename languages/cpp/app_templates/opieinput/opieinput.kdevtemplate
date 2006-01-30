@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Opie Input
+Name[ca]=Entrada per a Opie
 Name[da]=Opie-input
 Name[de]=Opie Eingabe
 Name[el]=Μέθοδος εισαγωγής Opie
@@ -24,6 +25,7 @@ Name[zh_CN]=Opie 输入法
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie input method plugin.
+Comment[ca]=Genera un connector de mètode d'entrada per a Opie.
 Comment[da]=Generér en Opie input-metode-plugin.
 Comment[de]=Erstellt ein Eingabemethode-Plugin für Opie
 Comment[el]=Δημιουργία ενός πρόσθετου μεθόδου εισαγωγής.
@@ -85,6 +87,7 @@ Dest=%{dest}/%{APPNAMELC}.h
 [MSG]
 Type=message
 Comment=An opie input method plugin was created in %{dest}
+Comment[ca]=Un connector de mètode d'entrada per a Opie ha estat creat en %{dest}
 Comment[da]=At opie input-metode-plugin blev oprettet i %{dest}
 Comment[de]=Ein Eingabemethode-Plugin für Opie wurde in %{dest} erstellt.
 Comment[el]=Ένα πρόσθετο μεθόδου εισαγωγής opie δημιουργήθηκε στο %{dest}

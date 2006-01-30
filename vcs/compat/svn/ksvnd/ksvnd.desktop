@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KDED Subversion Module
 Name[br]=Mollad Subversion KDED
+Name[ca]=Mòdul de Subversion per a KDED
 Name[da]=KDED Subversion-modul
 Name[de]=KDED Subversion-Komponente
 Name[el]=Άρθρωμα KDED Subversion

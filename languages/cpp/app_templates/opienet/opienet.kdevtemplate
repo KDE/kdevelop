@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Opie Networksettings
+Name[ca]=Connector de preferències de xarxa per a Opie
 Name[da]=Opie netværksopsætning
 Name[de]=Opie Netzwerkeinstellungen
 Name[el]=Ρυθμίσεις δικτύου Opie
@@ -23,6 +24,7 @@ Name[zh_CN]=Opie 网络设置
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie network config plugin.
+Comment[ca]=Genera un connector de preferències de xarxa per a Opie.
 Comment[da]=Generér en Opie netværks-config-plugin.
 Comment[de]=Erstelle ein Opie-Netzwerkeinstellungen-Plugin
 Comment[el]=Δημιουργία ενός πρόσθετου ρύθμισης δικτύου Opie.
@@ -93,6 +95,7 @@ Dest=%{dest}/%{APPNAMELC}iface.h
 [MSG]
 Type=message
 Comment=An opie network settings plugin was created in %{dest}
+Comment[ca]=Un connector de preferències de xarxa per a Opie ha estat creat en %{dest}
 Comment[da]=En opie netværksopsætning-plugin blev oprettet i %{dest}
 Comment[de]=Ein Opie-Netzwerkeinstellungen-Plugin wurde in %{dest} erstellt.
 Comment[el]=Ένα πρόσθετο ρύθμισης δυκτίου του opie δημιουργήθηκε στο %{dest}

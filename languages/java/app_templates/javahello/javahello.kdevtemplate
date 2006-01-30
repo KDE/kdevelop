@@ -2,6 +2,7 @@
 [General]
 Name=Application
 Name[br]=Arload
+Name[ca]=Aplicació
 Name[cy]=Cymhwysiad
 Name[da]=Program
 Name[de]=Anwendung
@@ -29,6 +30,7 @@ Icon=qmakeapp.png
 Category=Java/Ant project
 Category[fr]=Java/Ant
 Comment=Generate a Java application
+Comment[ca]=Genera una aplicació Java
 Comment[da]=Generér et Java-program
 Comment[de]=Erstellt eine Java-Anwendung
 Comment[el]=Δημιουργία μιας εφαρμογής Java
@@ -76,6 +78,7 @@ Dest=%{dest}/build.xml
 [msg]
 Type=message
 Comment=A JAVA application was created in %{dest}
+Comment[ca]=Una aplicació JAVA ha estat creada en %{dest}
 Comment[da]=Et JAVA-program blev oprettet i %{dest}
 Comment[de]=Eine JAVA-Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή JAVA δημιουργήθηκε στο %{dest}

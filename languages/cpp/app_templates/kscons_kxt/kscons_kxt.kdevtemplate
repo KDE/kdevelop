@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Scons-based KDE application
+Name[ca]=Una aplicació per al KDE basada en Scons
 Name[da]=Scons-baseret KDE program
 Name[de]=Scons-basierte KDE-Anwendung
 Name[el]=Μια εφαρμογή KMDI βασισμένης στο Scons
@@ -23,6 +24,7 @@ Name[zh_CN]=基于 Scons 的 KDE 应用程序
 Category=C++/KDE
 Icon=kscons_kxt.png
 Comment=Generates a simple KDE application with one widget, a configuration dialog and a dcop interface. Scons scripts are provided for compiling and installing the application.
+Comment[ca]=Genera una simple aplicació per al KDE amb un estri, un diàleg de configuració i una interfície dcop. Els scripts en Scons són proveits per a compilar i instal·lar l'aplicació.
 Comment[da]=Genererer et simpelt KDE program med en kontrol, en indstillingsdialog og en dcop-grænseflade. Der sørges for scons-scripter til at kompilere og installere programmet.
 Comment[de]=Erstellt eine einfache KDE-Anwendung mit einem Widget, einem Einstellungsdialog und einer DCOP-Schnittstelle. Scons-Skripte für das Kompileren und Installieren der Anwendung werden zur Verfügung gestellt.
 Comment[el]=Δημιουργεί μια απλή εφαρμογή KDE με ένα γραφικό συστατικό, ένα διάλογο ρύθμισης και μια διασύνδεση dcop. Προσφέρονται σενάρια Scons για τη μεταγλώττιση και εγκατάσταση της εφαρμογής.
@@ -207,6 +209,7 @@ Dest=%{dest}/po/messages.sh
 [MSG]
 Type=message
 Comment=A KDE application with scons scripts was created in %{dest}
+Comment[ca]=Una aplicació per al KDE amb scripts en Scons ha estat creada e n %{dest}
 Comment[da]=Et KDE program med scons-scripter blev oprette i %{dest}
 Comment[de]=Eine KDE-Anwendung mit scons-Skripten wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή KDE με σενάρια scons δημιουργήθηκε στο %{dest}

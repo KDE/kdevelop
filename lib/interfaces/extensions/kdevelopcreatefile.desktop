@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/CreateFile
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Create File Interface
+Name[ca]=Interfície de creació de fitxers per a KDevelop
 Name[da]=KDevelop opret filgrænseflade
 Name[de]=KDevelop-Schnittstelle zum Anlegen von Dateien
 Name[el]=Διασύνδεση δημιουργίας αρχείου KDevelop

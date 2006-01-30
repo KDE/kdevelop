@@ -7,6 +7,7 @@ Name[sv]=DocPDB-insticksmodul
 Name[ta]=DocQt  சொருகு
 Exec=blubb
 Comment=Documentation plugin for Palmdoc format
+Comment[ca]=Connector de documentació per al format Palmdoc
 Comment[da]=Dokumentations-plugin for Palmdoc-format
 Comment[de]=Komponente für das Palmdoc-Dokumentationsformat
 Comment[el]=Πρόσθετο τεκμηρίωσης για τη μορφή Palmdoc

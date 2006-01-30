@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple Hello wxWidgets Application
+Name[ca]=Simple aplicació de Hello per a wxWidgets
 Name[da]=Simpelt Goddag wxWidgets program
 Name[de]=Einfache wxWidgets-Anwendung
 Name[el]=Απλή εφαρμογή Γεια σου wxWidgets
@@ -21,6 +22,7 @@ Name[tr]=Basit Merhaba wxWidgets Uygulaması
 Name[zh_CN]=一个简单的 wxWidgets 应用程序
 Category=C++/wxWidgets
 Comment=Generates a simple wxWidgets Hello application.
+Comment[ca]=Genera una simple aplicació de Hello per a wxWidgets.
 Comment[da]=Genererer et simpelt wxWidgets Goddag-program.
 Comment[de]=Erstellt eine einfache wxWidgets-Anwendung
 Comment[el]=Δημιουργεί μια απλή εφαρμογή Γεια σου wxWidgets.
@@ -146,6 +148,7 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=Simple hello wxWidgets application was created in %{dest}
+Comment[ca]=Simple aplicació de Hello per a wxWidgets ha estat creada en %{dest}
 Comment[da]=Simpelt Goddag wxWidgets program blev oprettet i %{dest}
 Comment[de]=Eine einfache wxWidgets-Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μια απλή εφαρμογή Γεια σου wxWidgets δημιουργήθηκε στο %{dest}

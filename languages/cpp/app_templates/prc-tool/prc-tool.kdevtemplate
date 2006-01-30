@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Hello world program
+Name[ca]=Programa Hello world
 Name[da]=Goddag verden program
 Name[de]=Hello-world-Programm
 Name[el]=Πρόγραμμα Γεια σου Κόσμε
@@ -22,6 +23,7 @@ Name[zh_CN]=Hello world 程序
 Icon= # got none
 Category=C/PalmOS
 Comment=Generates a template for palm application
+Comment[ca]=Genera una plantilla d'aplicació per a Palm
 Comment[da]=Genererer en skabelon for et palm-program
 Comment[de]=Erstellt das Gerüst für eine Palm-Anwendung
 Comment[el]=Δημιουργία ενός προτύπου εφαρμογής για palm
@@ -88,6 +90,7 @@ Dest=%{dest}/callback.h
 [MSG]
 Type=message
 Comment=A palm application was created in %{dest}
+Comment[ca]=Una aplicació per a Palm ha estat creada en %{dest}
 Comment[da]=Et palm-program blev oprettet i %{dest}
 Comment[de]=Eine Palm-Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή palm δημιουργήθηκε στο %{dest}

@@ -2,6 +2,7 @@
 [General]
 Name=KDE DCOP Service
 Name[br]=Servij DCOP KDE
+Name[ca]=Servei DCOP per al KDE
 Name[da]=KDE DCOP-service
 Name[de]=KDE DCOP-Dienst
 Name[el]=Υπηρεσία KDE DCOP
@@ -27,6 +28,7 @@ Name[zh_CN]=KDE DCOP 服务
 Icon=kdcop.png
 Category=C++/KDE
 Comment=Generates a framework for a KDE DCOP service and client access library.
+Comment[ca]=Genera una infraestructura per a un servei DCOP de KDE i la biblioteca d'accés del client.
 Comment[da]=Genererer et skelet for en KDE dcop-tjeneste og klientadgangsbibliotek.
 Comment[de]=Erstellt das Grundgerüst für einen KDE DCOP-Dienst und eine Bibliothek für den Client-Zugriff.
 Comment[el]=Δημιουργεί ένα πλαίσιο για μια υπηρεσία KDE DCOP και μια βιβλιοθήκη πρόσβασης πελάτη.
@@ -154,6 +156,7 @@ Dest=%{dest}/src/main.cpp
 [MSG]
 Type=message
 Comment=A KDE DCOP Service was created in %{dest}
+Comment[ca]=Un servei DCOP de KDE ha estat creada en %{dest}
 Comment[da]=En KDE DCOP tjeneste blev oprettet i %{dest}
 Comment[de]=Ein KDE DCOP-Dienst wurde in %{dest} erstellt.
 Comment[el]=Μια υπηρεσία KDE DCOP δημιουργήθηκε στο %{dest}

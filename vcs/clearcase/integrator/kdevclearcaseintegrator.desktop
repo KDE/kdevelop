@@ -5,6 +5,7 @@ Name=KDevClearcaseIntegrator
 Name[da]=KDevelop Clearcase-integration
 Name[sv]=KDevelop Clearcase-integration
 Comment=Clearcase Project Integration Facility
+Comment[ca]=Faciliat per a la integració amb projectes Clearcase
 Comment[da]=Clearcase projektintegration
 Comment[de]=Clearcase-Integration
 Comment[el]=Λειτουργία ενσωμάτωσης Clearcase στο έργο

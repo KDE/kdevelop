@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple Python/Tkinter script
+Name[ca]=Simple script en Python/Tkinter
 Name[da]=Simpelt Python/Tkinter script
 Name[de]=Einfaches Python/Tkinter-Skript
 Name[el]=Απλό σενάριο Python/Tkinter
@@ -23,6 +24,7 @@ Name[zh_CN]=简单的 Python/Tkinter 脚本
 Icon=pytk.png
 Category=Python
 Comment=This generates a simplistic "Hello world" program in Python/Tkinter
+Comment[ca]=Genera un simple programa de "Hello world" en Python/Tkinter
 Comment[da]=Dette genererer et simplistisk "Goddag verden" program i Python/Tkinter
 Comment[de]=Hiermit wird ein einfaches "Hello world"-Programm in Python/Tkinter erstellt
 Comment[el]=Αυτό δημιουργεί ένα απλό πρόγραμμα "Γεια σου κόσμε" σε Python/Tkinter
@@ -59,6 +61,7 @@ Dest=%{dest}/%{APPNAMELC}.py
 [MSG]
 Type=message
 Comment=A simple Python/Tkinter script was created in %{dest}
+Comment[ca]=Un simple script en Python/Tkinter ha estat creat en %{dest}
 Comment[da]=Et simpelt Python/Tkinter script blev oprettet i %{dest}
 Comment[de]=Ein einfaches Python/Tkinter-Skript wurde in %{dest} erstellt.
 Comment[el]=Ένα απλό σενάριο Python/Tkinter δημιουργήθηκε στο %{dest}

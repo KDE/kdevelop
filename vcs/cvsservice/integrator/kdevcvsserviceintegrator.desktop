@@ -5,6 +5,7 @@ Name=KDevCVSIntegrator
 Name[da]=KDevelop CVS-integration
 Name[sv]=KDevelop CVS-integration
 Comment=CVS Service Project Integration Facility
+Comment[ca]=Facilitat d'integració amb projectes que usin CVS
 Comment[da]=CVS service projektintegration
 Comment[de]=CVS-Dienst Projektintegration
 Comment[el]=Λειτουργία ενσωμάτωσης υπηρεσίας CVS στο έργο
