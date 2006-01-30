@@ -3,8 +3,8 @@
 <title>QtRuby and Korundum</title>
 <base href="http://developer.kde.org/language-bindings/ruby/index.html"/>
 <tocsect1 name="Download" url="http://rubyforge.org/projects/korundum/"></tocsect1>
-<tocsect2 name="Qt Tutorial #1" url="http://developer.kde.org/language-bindings/ruby/tutorial/tutorial.html"></tocsect2>
-<tocsect3 name="Qt Tutorial #2" url="http://developer.kde.org/language-bindings/ruby/tutorial2/tutorial2.html"></tocsect3>
-<tocsect4 name="Qt Designer Tutorial" url="http://developer.kde.org/language-bindings/ruby/colortooltutorial/designer-manual-3.html"></tocsect4>
-<tocsect5 name="KDE 3.0 Tutorial" url="http://developer.kde.org/language-bindings/ruby/kde3tutorial/index.html"></tocsect5>
+<tocsect1 name="Qt Tutorial #1" url="http://developer.kde.org/language-bindings/ruby/tutorial/tutorial.html"></tocsect1>
+<tocsect1 name="Qt Tutorial #2" url="http://developer.kde.org/language-bindings/ruby/tutorial2/tutorial2.html"></tocsect1>
+<tocsect1 name="Qt Designer Tutorial" url="http://developer.kde.org/language-bindings/ruby/colortooltutorial/designer-manual-3.html"></tocsect1>
+<tocsect1 name="KDE 3.0 Tutorial" url="http://developer.kde.org/language-bindings/ruby/kde3tutorial/index.html"></tocsect1>
 </kdeveloptoc>

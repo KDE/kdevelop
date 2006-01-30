@@ -1,3 +1,8 @@
+2006-01-30  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+* Added file templates for Rails projects; rhtml, rxml, css and js
+* Fixed documentation links for QtRuby/Korundum, added some
+  links for Rails
+
 2006-01-19  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 * Added a Rails project template
 * Use the Run menu option to start WEBrick. If the Rails project doesn't

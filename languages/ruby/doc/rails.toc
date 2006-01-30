@@ -1,0 +1,8 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>Rails</title>
+<base href="http://www.rubyonrails.org/"/>
+<tocsect1 name="Rails API Reference" url="http://api.rubyonrails.com/"></tocsect1>
+<tocsect1 name="Wiki" url="http://wiki.rubyonrails.org/"></tocsect1>
+<tocsect1 name="Bug tracker" url="http://dev.rubyonrails.org/"></tocsect1>
+</kdeveloptoc>

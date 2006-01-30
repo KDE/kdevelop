@@ -422,6 +422,8 @@ void AppWizardDialog::licenseChanged()
 				commentStyle = KDevFile::AdaStyle;
 			} else if (style == "ShellStyle") {
 				commentStyle = KDevFile::BashStyle;
+			} else if (style == "XMLStyle") {
+				commentStyle = KDevFile::XMLStyle;
 			}
 
 			QString text;
