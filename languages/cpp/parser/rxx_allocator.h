@@ -67,9 +67,7 @@ public:
 	_M_current_block = _M_storage[_M_block_index] = reinterpret_cast<char*>
 	  (new char[_S_block_size]);
 
-#if defined(RXX_ALLOCATOR_INIT_0) // ### make it a policy
 	::memset(_M_current_block, 0, _S_block_size);
-#endif
 	_M_current_index = 0;
       }
 
