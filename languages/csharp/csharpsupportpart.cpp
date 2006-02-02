@@ -126,7 +126,7 @@ void CSharpSupportPart::maybeParse(const QString fileName)
     QFileInfo fi(fileName);
     QString path = fi.filePath();
     QString extension = fi.extension();
-    if (extension == "pl" || extension == "pm") {
+    if (extension == "cs") {
         kdDebug(9016) << "maybe " << fileName << endl;
         removeWithReference(fileName);
         // m_parser->parse(fileName);
