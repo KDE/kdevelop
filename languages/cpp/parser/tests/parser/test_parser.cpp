@@ -1,4 +1,4 @@
-#include "QtTest/QtTest"
+#include <QtTest/QtTest>
 #include "parser.h"
 #include "control.h"
 #include "dumptree.h"
@@ -37,18 +37,18 @@ private slots:
     QByteArray clazz("struct A { int i; A() : i(5) { } virtual void test() = 0; };");
     pool mem_pool;
     TranslationUnitAST* ast = parse(clazz, &mem_pool);
-    VERIFY(ast != 0);
-    VERIFY(ast->declarations != 0);
+    QVERIFY(ast != 0);
+    QVERIFY(ast->declarations != 0);
   }
 
   void testParseMethod()
   {
     QByteArray method("void A::test() {  }");
-    VERIFY(!control.skipFunctionBody());
+    QVERIFY(!control.skipFunctionBody());
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
-    VERIFY(ast != 0);
-    VERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
+    QVERIFY(ast != 0);
+    QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
   }
 
   void testMethodArgs()
@@ -56,12 +56,12 @@ private slots:
     QByteArray method("int A::test(int primitive, B* pointer) { return primitive; }");
     pool mem_pool;
     Parser parser(&control);
-    TranslationUnitAST* ast = parser.parse(method.constData(), 
+    TranslationUnitAST* ast = parser.parse(method.constData(),
 					   method.size() + 1, &mem_pool);
     // return type
     SimpleTypeSpecifierAST* retType = static_cast<SimpleTypeSpecifierAST*>
       (getAST(ast, AST::Kind_SimpleTypeSpecifier));
-    COMPARE((TOKEN_KIND)parser.token_stream.kind(retType->start_token),
+    QCOMPARE((TOKEN_KIND)parser.token_stream.kind(retType->start_token),
 	    Token_int);
 
     // first param
@@ -69,29 +69,29 @@ private slots:
       (getAST(ast, AST::Kind_ParameterDeclaration));
     SimpleTypeSpecifierAST* paramType = static_cast<SimpleTypeSpecifierAST*>
       (getAST(param, AST::Kind_SimpleTypeSpecifier));
-    COMPARE((TOKEN_KIND)parser.token_stream.kind(paramType->start_token),
+    QCOMPARE((TOKEN_KIND)parser.token_stream.kind(paramType->start_token),
 	    Token_int);
     UnqualifiedNameAST* argName  = static_cast<UnqualifiedNameAST*>
       (getAST(param, AST::Kind_UnqualifiedName));
-    COMPARE(parser.token_stream.symbol(argName->id)->as_string(), 
+    QCOMPARE(parser.token_stream.symbol(argName->id)->as_string(),
 	    QString("primitive"));
-    
+
     // second param
     param = static_cast<ParameterDeclarationAST*>
       (getAST(ast, AST::Kind_ParameterDeclaration, 1));
     UnqualifiedNameAST* argType = static_cast<UnqualifiedNameAST*>
       (getAST(param, AST::Kind_UnqualifiedName));
-    COMPARE(parser.token_stream.symbol(argType->id)->as_string(), 
+    QCOMPARE(parser.token_stream.symbol(argType->id)->as_string(),
 	    QString("B"));
 
     // pointer operator
-    VERIFY(hasKind(param, AST::Kind_PtrOperator));
+    QVERIFY(hasKind(param, AST::Kind_PtrOperator));
 
     argName = static_cast<UnqualifiedNameAST*>
       (getAST(param, AST::Kind_UnqualifiedName, 1));
-    COMPARE(parser.token_stream.symbol(argName->id)->as_string(), 
+    QCOMPARE(parser.token_stream.symbol(argName->id)->as_string(),
 	    QString("pointer"));
-    
+
   }
 
   void testForStatements()
@@ -100,41 +100,41 @@ private slots:
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
 
-    VERIFY(ast != 0);
-    VERIFY(hasKind(ast, AST::Kind_ForStatement));
-    VERIFY(hasKind(ast, AST::Kind_Condition));
-    VERIFY(hasKind(ast, AST::Kind_IncrDecrExpression));
-    VERIFY(hasKind(ast, AST::Kind_SimpleDeclaration));
+    QVERIFY(ast != 0);
+    QVERIFY(hasKind(ast, AST::Kind_ForStatement));
+    QVERIFY(hasKind(ast, AST::Kind_Condition));
+    QVERIFY(hasKind(ast, AST::Kind_IncrDecrExpression));
+    QVERIFY(hasKind(ast, AST::Kind_SimpleDeclaration));
 
     QByteArray emptyFor("void A::t() { for (;;) { } }");
     ast = parse(emptyFor, &mem_pool);
-    VERIFY(ast != 0);
-    VERIFY(hasKind(ast, AST::Kind_ForStatement));
-    VERIFY(!hasKind(ast, AST::Kind_Condition));
-    VERIFY(!hasKind(ast, AST::Kind_SimpleDeclaration));
+    QVERIFY(ast != 0);
+    QVERIFY(hasKind(ast, AST::Kind_ForStatement));
+    QVERIFY(!hasKind(ast, AST::Kind_Condition));
+    QVERIFY(!hasKind(ast, AST::Kind_SimpleDeclaration));
   }
-  
+
   void testIfStatements()
   {
     QByteArray method("void A::t() { if (1 < 2) { } }");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
-    VERIFY(hasKind(ast, AST::Kind_Condition));
-    VERIFY(hasKind(ast, AST::Kind_BinaryExpression));
+    QVERIFY(hasKind(ast, AST::Kind_Condition));
+    QVERIFY(hasKind(ast, AST::Kind_BinaryExpression));
   }
 
   void testParseFile()
   {
      QFile file("test_parser.cpp");
-     VERIFY(file.open(QFile::ReadOnly));
+     QVERIFY(file.open(QFile::ReadOnly));
      QByteArray contents = file.readAll();
      file.close();
      pool mem_pool;
-     Parser parser(&control);     
-     TranslationUnitAST* ast = parser.parse(contents.constData(), 
+     Parser parser(&control);
+     TranslationUnitAST* ast = parser.parse(contents.constData(),
 					    contents.size(), &mem_pool);
-     VERIFY(ast != 0);
-     VERIFY(ast->declarations != 0);
+     QVERIFY(ast != 0);
+     QVERIFY(ast->declarations != 0);
    }
 
 private:
@@ -145,7 +145,7 @@ private:
     return  parser.parse(unit.constData(), unit.size() + 1, mem_pool);
   }
 
-  
+
 
 };
 
@@ -193,5 +193,7 @@ AST* getAST(AST* ast, AST::NODE_KIND kind, int num)
   return visitor.ast;
 }
 
-QTTEST_MAIN(TestParser)
+
 #include "test_parser.moc"
+
+QTEST_MAIN(TestParser)
