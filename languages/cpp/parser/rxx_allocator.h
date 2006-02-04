@@ -83,7 +83,7 @@ public:
 
   size_type max_size() const { return size_type(-1) / sizeof(_Tp); }
 
-  void contruct(pointer __p, const_reference __val) { new (__p) _Tp(__val); }
+  void construct(pointer __p, const_reference __val) { new (__p) _Tp(__val); }
   void destruct(pointer __p) { __p->~_Tp(); }
 
 private:
