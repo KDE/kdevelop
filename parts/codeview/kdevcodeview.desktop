@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=This plugin displays a graphical view of the codemodel produced by the language part.
+Name=KDevCodeView
+GenericName=Code View
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevcodeview
+X-KDevelop-Version=4
+X-KDevelop-Scope=Project
+X-KDevelop-Properties=CodeNavigation

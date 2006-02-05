@@ -1,7 +1,7 @@
 /*
- * KDevelop C++ Background Parser
+ * This file is part of KDevelop
  *
- * Copyright (c) 2005 Adam Treat <treat@kde.org>
+ * Copyright (c) 2006 Adam Treat <treat@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -23,8 +23,10 @@
 #define KDEVBACKGROUNDPARSER_H
 
 #include <QObject>
+
 #include <kurl.h>
 #include <QMap>
+#include <QMutex>
 
 namespace ThreadWeaver
 {
@@ -38,10 +40,10 @@ class Document;
 }
 
 class QTimer;
-class Preprocessor;
-class Control;
-class Parser;
+
 class pool;
+class Parser;
+class Preprocessor;
 class TranslationUnitAST;
 class CppLanguageSupport;
 
@@ -55,6 +57,8 @@ public:
     virtual ~BackgroundParser();
 
 public slots:
+    void suspend();
+    void resume();
     void addDocument( const KUrl &url );
     void removeDocument( const KUrl &url );
     void parseDocuments();
@@ -63,14 +67,14 @@ public slots:
 
 private:
     CppLanguageSupport *m_cppSupport;
+    pool *m_memoryPool;
+    QTimer *m_timer;
+    bool m_suspend;
 
     // A list of known documents, and whether they are due to be parsed or not
     QMap<KUrl, bool> m_documents;
-    QTimer *m_timer;
-
-    Control *m_control;
-    pool *m_memoryPool;
-    QMap<KUrl, TranslationUnitAST*> m_url2unit;
+    QMap<KUrl, TranslationUnitAST* > m_url2unit;
+    mutable QMutex m_mutex;
 };
 
 #endif

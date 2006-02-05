@@ -1,7 +1,7 @@
 /*
- * KDevelop C++ Parse Job
+ * This file is part of KDevelop
  *
- * Copyright (c) 2005 Adam Treat <treat@kde.org>
+ * Copyright (c) 2006 Adam Treat <treat@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -18,6 +18,8 @@
  * Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "parsejob.h"
 
 #include <cassert>
 #include <fcntl.h>
@@ -36,13 +38,11 @@
 #include "parser/dumptree.h"
 #include "parser/rpp/preprocessor.h"
 
-#include "parsejob.h"
-
-ParseJob::ParseJob( const KUrl &url, Control *control,
-                    pool *memoryPool, QObject* parent )
+ParseJob::ParseJob( const KUrl &url,
+                    pool *memoryPool,
+                    QObject* parent )
         : ThreadWeaver::Job( parent ),
         m_document( url ),
-        m_control( control ),
         m_memoryPool( memoryPool )
 {
     m_contents = QByteArray();
@@ -62,10 +62,16 @@ TranslationUnitAST *ParseJob::translationUnit() const
     return m_translationUnit;
 }
 
-FileModelItem ParseJob::fileModelItem() const
+NamespaceModelItem ParseJob::namespaceModelItem() const
 {
     Q_ASSERT ( isFinished () );
-    return m_fileModelItem;
+    return m_namespaceModelItem;
+}
+
+CodeModel *ParseJob::codeModel() const
+{
+    Q_ASSERT ( isFinished () );
+    return m_namespaceModelItem->model();
 }
 
 void ParseJob::run()
@@ -101,26 +107,36 @@ void ParseJob::run()
     << " size: " << size
     << endl;
 
-//     Preprocessor preprocessor;
-    Parser parser( m_control );
-//     QByteArray preprocessed = preprocessor.run( contents );
-//     std::size_t pre_size = preprocessed.length() + 1;
-//
-//     m_translationUnit = parser.parse( preprocessed, pre_size, m_memoryPool );
-    m_translationUnit = parser.parse( contents, size, m_memoryPool );
+    Preprocessor preprocessor;
+    QStringList includes;
+    //     if ( true )
+    //     {
+    //         includes.append ("/usr/include");
+    //         includes.append ("/usr/lib/gcc/i586-suse-linux/4.0.2/include");
+    //         includes.append ("/usr/include/c++/4.0.2");
+    //         includes.append ("/usr/include/c++/4.0.2/i586-suse-linux");
+    //     }
+    includes.append ( "." );
+    preprocessor.addIncludePaths( includes );
 
-    CodeModel model;
-    Binder binder( &model, &parser.token_stream );
-    m_fileModelItem = binder.run( m_translationUnit );
+    preprocessor.processString( contents );
+    QByteArray preprocessed = preprocessor.result();
+    std::size_t pre_size = preprocessed.length() + 1;
 
-//     DumpTree dumpTree;
-//     dumpTree.dump( m_translationUnit );
+    Parser parser( new Control() );
+    m_translationUnit = parser.parse( preprocessed, pre_size, m_memoryPool );
+
+    CodeModel *codeModel = new CodeModel;
+    Binder binder( codeModel, &parser.token_stream, &parser.lexer );
+    m_namespaceModelItem = binder.run( m_document, m_translationUnit );
+
+    //     DumpTree dumpTree;
+    //     dumpTree.dump( m_translationUnit );
 
     if ( readFromDisk )
         munmap( contents, size );
 
-    m_control = 0;
-    m_memoryPool =0;
+    m_memoryPool = 0;
 }
 
 #include "parsejob.moc"

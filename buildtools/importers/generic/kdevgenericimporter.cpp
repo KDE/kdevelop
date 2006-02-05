@@ -118,20 +118,20 @@ QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *
 
 KDevProjectItem *KDevGenericImporter::import(KDevProjectModel *model, const QString &fileName)
 {
-    kdDebug(9000) << "ROBE: ========================================= import filename: " << fileName << endl;
+//     kdDebug(9000) << "ROBE: ========================================= import filename: " << fileName << endl;
 
     QFileInfo fileInfo(fileName);
     if (fileInfo.isDir()) {
         KDevProjectFolderItem *folder = new KDevProjectFolderItem(fileInfo.absFilePath());
-        kdDebug(9000) << "ROBE: create a directory ================================== " << fileInfo.absFilePath() << endl;
+//         kdDebug(9000) << "ROBE: create a directory ================================== " << fileInfo.absFilePath() << endl;
         return folder;
     } else if (fileInfo.isFile()) {
-        kdDebug(9000) << "ROBE: create a file ================================== " << fileInfo.absFilePath() << endl;
+//         kdDebug(9000) << "ROBE: create a file ================================== " << fileInfo.absFilePath() << endl;
 
         KDevProjectFileItem *file = new KDevProjectFileItem(fileInfo.absFilePath());
         return file;
     } else {
-        kdDebug(9000) << "ROBE: skip ================================== " << fileInfo.absFilePath() << endl;
+//         kdDebug(9000) << "ROBE: skip ================================== " << fileInfo.absFilePath() << endl;
     }
 
     return 0;

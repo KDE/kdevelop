@@ -1,7 +1,7 @@
 /*
- * KDevelop C++ Background Parser
+ * This file is part of KDevelop
  *
- * Copyright (c) 2005 Adam Treat <treat@kde.org>
+ * Copyright (c) 2006 Adam Treat <treat@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -21,37 +21,31 @@
 
 #include "backgroundparser.h"
 
-#include <QList>
-#include <QTimer>
-
-#include <kdebug.h>
-
-#include <ktexteditor/document.h>
-
 #include "kdevcodemodel.h"
+#include "kdevcodeaggregate.h"
 #include "kdevdocumentcontroller.h"
 
-#include <ThreadWeaver.h>
 #include "parsejob.h"
-
-#include "parser/control.h"
 #include "parser/dumptree.h"
-#include "parser/codemodel.h"
 #include "parser/memorypool.h"
-
+#include "parser/codemodel.h"
 #include "cpplanguagesupport.h"
-#include <kdevdocumentcontroller.h>
 
-#include "backgroundparser.h"
+#include <QList>
+#include <QTimer>
+#include <QMutexLocker>
+
+#include <kdebug.h>
+#include <ktexteditor/document.h>
+
+#include <ThreadWeaver.h>
 
 BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
         : QObject( cppSupport ),
-        m_cppSupport( cppSupport )
+        m_cppSupport( cppSupport ),
+        m_suspend( false )
 {
-    //Probably need more than one control object
-    m_control = new Control();
-
-    m_memoryPool = new pool();
+    m_memoryPool = new pool;
     m_timer = new QTimer( this );
     m_timer->setSingleShot( true );
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
@@ -60,8 +54,7 @@ BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
 
 BackgroundParser::~BackgroundParser()
 {
-    Weaver::instance()->finish();
-    delete m_control;
+    Weaver::instance() ->finish();
     delete m_memoryPool;
 }
 
@@ -95,8 +88,7 @@ void BackgroundParser::parseDocuments()
         bool &p = it.value();
         if ( p )
         {
-            ParseJob * parse = new ParseJob( url, m_control,
-                                             m_memoryPool, this );
+            ParseJob * parse = new ParseJob( url, m_memoryPool, this );
             p = false;
 
             if ( url == m_cppSupport->documentController() ->activeDocument() )
@@ -111,101 +103,37 @@ void BackgroundParser::parseDocuments()
             jobs.append( parse );
         }
     }
-    Weaver::instance()->enqueue( jobs );
+    Weaver::instance() ->enqueue( jobs );
 }
 
 void BackgroundParser::parseComplete( Job *job )
 {
+    QMutexLocker locker( &m_mutex );
     ParseJob * parseJob = dynamic_cast<ParseJob*>( job );
-    m_url2unit[ parseJob->document() ] = parseJob->translationUnit();
 
-    KDevCodeModel *cm = m_cppSupport->codeModel();
-    FileModelItem file = parseJob->fileModelItem();
-
-    // Hmm, should this return null under any condition?
-    if (!file)
-        return;
-
-    // This of course can be made more efficient and it should
-    // be broken out into it's own class/method, but something quick
-    // for testing now
-    foreach ( NamespaceModelItem _namespace, file->namespaces() )
-    {
-        KDevCodeNamespaceItem *n =
-            new KDevCodeNamespaceItem( _namespace->name() );
-        cm->appendItem( n );
-
-        foreach ( ClassModelItem _class, _namespace->classes() )
-        {
-            KDevCodeClassItem *c =
-                new KDevCodeClassItem( _class->name() );
-            cm->appendItem( c, n );
-
-            foreach ( FunctionModelItem _function, _class->functions() )
-            {
-                KDevCodeFunctionItem *f =
-                    new KDevCodeFunctionItem( _function->name() );
-                cm->appendItem( f, c );
-            }
-            foreach ( VariableModelItem _variable, _class->variables() )
-            {
-                KDevCodeVariableItem *v =
-                    new KDevCodeVariableItem( _variable->name() );
-                cm->appendItem( v, c );
-            }
-        }
-        foreach ( FunctionModelItem _function, _namespace->functions() )
-        {
-            KDevCodeFunctionItem *f =
-                new KDevCodeFunctionItem( _function->name() );
-            cm->appendItem( f, n );
-        }
-        foreach ( VariableModelItem _variable, _namespace->variables() )
-        {
-            KDevCodeVariableItem *v =
-                new KDevCodeVariableItem( _variable->name() );
-            cm->appendItem( v, n );
-        }
-    }
-    foreach ( ClassModelItem _class, file->classes() )
-    {
-        KDevCodeClassItem *c =
-            new KDevCodeClassItem( _class->name() );
-        cm->appendItem( c );
-
-        foreach ( FunctionModelItem _function, _class->functions() )
-        {
-            KDevCodeFunctionItem *f =
-                new KDevCodeFunctionItem( _function->name() );
-            cm->appendItem( f, c );
-        }
-        foreach ( VariableModelItem _variable, _class->variables() )
-        {
-            KDevCodeVariableItem *v =
-                new KDevCodeVariableItem( _variable->name() );
-            cm->appendItem( v, c );
-        }
-    }
-    foreach ( FunctionModelItem _function, file->functions() )
-    {
-        KDevCodeFunctionItem *f =
-            new KDevCodeFunctionItem( _function->name() );
-        cm->appendItem( f );
-    }
-    foreach ( VariableModelItem _variable, file->variables() )
-    {
-        KDevCodeVariableItem *v =
-            new KDevCodeVariableItem( _variable->name() );
-        cm->appendItem( v );
-    }
+    m_cppSupport->codeProxy() ->insertModel( parseJob->document(),
+            parseJob->codeModel() );
+    m_url2unit.insert( parseJob->document(), parseJob->translationUnit() );
 }
 
 void BackgroundParser::documentChanged( KTextEditor::Document * document )
 {
     Q_ASSERT( m_documents.contains( document->url() ) );
     m_documents.insert( document->url(), true );
-    if ( !m_timer->isActive() )
+    if ( !m_timer->isActive() && !m_suspend )
         m_timer->start( 500 );
+}
+
+void BackgroundParser::suspend()
+{
+    m_suspend = true;
+    m_timer->stop();
+}
+
+void BackgroundParser::resume()
+{
+    m_suspend = false;
+    m_timer->start( 500 );
 }
 
 #include "backgroundparser.moc"

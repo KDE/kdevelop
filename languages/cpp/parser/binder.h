@@ -27,16 +27,21 @@
 
 #include <QtCore/QSet>
 
+#include <kurl.h>
+
+class Lexer;
 class TokenStream;
 struct NameSymbol;
 
 class Binder: protected DefaultVisitor
 {
 public:
-  Binder(CodeModel *model, TokenStream *token_stream);
+  Binder(CodeModel *model,
+         TokenStream *token_stream,
+         Lexer *lexer);
   virtual ~Binder();
 
-  FileModelItem run(AST *node);
+  NamespaceModelItem run(const KUrl &url, AST *node);
 
 protected:
   virtual void visitAccessSpecifier(AccessSpecifierAST *);
@@ -75,13 +80,18 @@ private:
   void applyStorageSpecifiers(const ListNode<std::size_t> *storage_specifiers, MemberModelItem item);
   void applyFunctionSpecifiers(const ListNode<std::size_t> *it, FunctionModelItem item);
 
+  void setPositionAt(_CodeModelItem *item, AST *ast);
+
 private:
   CodeModel *_M_model;
   TokenStream *_M_token_stream;
+  Lexer *_M_lexer;
+  QString _M_currentFile;
 
   CodeModel::AccessPolicy _M_current_access;
   FileModelItem _M_current_file;
   NamespaceModelItem _M_current_namespace;
+  NamespaceModelItem _M_global_namespace;
   ClassModelItem _M_current_class;
   FunctionDefinitionModelItem _M_current_function;
   TemplateModelItem _M_current_template;

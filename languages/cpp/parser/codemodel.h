@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2002-2005 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2006 Adam Treat <treat@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,13 +20,19 @@
 #ifndef CODEMODEL_H
 #define CODEMODEL_H
 
+#include "kdevcodemodel.h"
+
+#include "codedisplay.h"
 #include "codemodel_fwd.h"
 
+#include <QtCore/QTime>
 #include <QtCore/QHash>
 #include <QtCore/QList>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QVector>
+
+#include <kurl.h>
 
 #define DECLARE_MODEL_NODE(k) \
     enum { __node_kind = Kind_##k }; \
@@ -40,7 +47,7 @@ _Target model_static_cast(_Source item)
   return ptr;
 }
 
-class CodeModel
+class CodeModel : public KDevCodeModel
 {
 public:
   enum AccessPolicy
@@ -65,7 +72,7 @@ public:
   };
 
 public:
-  CodeModel();
+  CodeModel( QObject *parent = 0 );
   virtual ~CodeModel();
 
   template <class _Target> _Target create()
@@ -73,26 +80,21 @@ public:
     typedef typename _Target::Type _Target_type;
 
     _Target result = _Target_type::create(this);
-    result->setCreationId(_M_creation_id++);
     return result;
   }
 
-  FileList files() const;
   NamespaceModelItem globalNamespace() const;
+  KDevItemCollection *root() const;
 
-  void addFile(FileModelItem item);
-  void removeFile(FileModelItem item);
-  FileModelItem findFile(const QString &name) const;
-  QHash<QString, FileModelItem> fileMap() const;
+  void addCodeItem(CodeModelItem item);
+  void removeCodeItem(CodeModelItem item);
 
   CodeModelItem findItem(const QStringList &qualifiedName, CodeModelItem scope) const;
 
   void wipeout();
 
 private:
-  QHash<QString, FileModelItem> _M_files;
   NamespaceModelItem _M_globalNamespace;
-  std::size_t _M_creation_id;
 
 private:
   CodeModel(const CodeModel &other);
@@ -128,34 +130,57 @@ private:
     uint m_indirections : 6;
 };
 
-class _CodeModelItem: public KDevShared
+class _CodeModelItem: public KDevCodeItem
 {
 public:
   enum Kind
   {
     /* These are bit-flags resembling inheritance */
     Kind_Scope = 0x1,
-    Kind_Namespace = 0x2 | Kind_Scope,
+    Kind_Namespace = 0x2 /*| Kind_Scope*/,
     Kind_Member = 0x4,
-    Kind_Function = 0x8 | Kind_Member,
+    Kind_Function = 0x8 /*| Kind_Member*/,
     KindMask = 0xf,
 
     /* These are for classes that are not inherited from */
-    FirstKind = 0x8,
+    FirstKind = 0x10,
     Kind_Argument = 1 << FirstKind,
-    Kind_Class = 2 << FirstKind | Kind_Scope,
-    Kind_Enum = 3 << FirstKind,
-    Kind_Enumerator = 4 << FirstKind,
-    Kind_File = 5 << FirstKind | Kind_Namespace,
-    Kind_FunctionDefinition = 6 << FirstKind | Kind_Function,
-    Kind_Template = 7 << FirstKind,
-    Kind_TemplateParameter = 8 << FirstKind,
-    Kind_TypeAlias = 9 << FirstKind,
-    Kind_Variable = 10 << FirstKind | Kind_Member
+    Kind_Class = 2 << FirstKind /*| Kind_Scope*/,
+    Kind_Enum = 4 << FirstKind,
+    Kind_Enumerator = 8 << FirstKind,
+    Kind_File = 16 << FirstKind /*| Kind_Namespace*/,
+    Kind_FunctionDefinition = 32 << FirstKind /*| Kind_Function*/,
+    Kind_Template = 64 << FirstKind,
+    Kind_TemplateParameter = 128 << FirstKind,
+    Kind_TypeAlias = 256 << FirstKind,
+    Kind_Variable = 512 << FirstKind /*| Kind_Member*/
   };
 
 public:
   virtual ~_CodeModelItem();
+
+  virtual _CodeModelItem *itemAt(int index) const;
+
+  ///TODO These functions should be cached upon initialization
+  QString display() const
+  {
+    return CodeDisplay::display( const_cast<const _CodeModelItem*>( this ) );
+  }
+
+  QIcon decoration() const
+  {
+    return CodeDisplay::decoration( const_cast<const _CodeModelItem*>( this ) );
+  }
+
+  QString toolTip() const
+  {
+    return CodeDisplay::toolTip( const_cast<const _CodeModelItem*>( this ) );
+  }
+
+  QString whatsThis() const
+  {
+    return CodeDisplay::whatsThis( const_cast<const _CodeModelItem*>( this ) );
+  }
 
   int kind() const;
 
@@ -170,16 +195,13 @@ public:
   QString fileName() const;
   void setFileName(const QString &fileName);
 
-  FileModelItem file() const;
-
   void getStartPosition(int *line, int *column);
   void setStartPosition(int line, int column);
 
   void getEndPosition(int *line, int *column);
   void setEndPosition(int line, int column);
 
-  inline std::size_t creationId() const { return _M_creation_id; }
-  inline void setCreationId(std::size_t creation_id) { _M_creation_id = creation_id; }
+  QTime timestamp() const { return QTime(); }
 
   inline CodeModel *model() const { return _M_model; }
 
@@ -196,7 +218,6 @@ private:
   int _M_startColumn;
   int _M_endLine;
   int _M_endColumn;
-  std::size_t _M_creation_id;
   QString _M_name;
   QString _M_fileName;
   QStringList _M_scope;
@@ -457,6 +478,9 @@ public:
   CodeModel::FunctionType functionType() const;
   void setFunctionType(CodeModel::FunctionType functionType);
 
+  bool isConstructor() const;
+  bool isDestructor() const;
+
   bool isVirtual() const;
   void setVirtual(bool isVirtual);
 
@@ -469,7 +493,7 @@ public:
   bool isAbstract() const;
   void setAbstract(bool isAbstract);
 
-  bool isSimilar(FunctionModelItem other) const;
+  bool isSimilar(KDevCodeItem *other, bool strict = true) const;
 
 protected:
   _FunctionModelItem(CodeModel *model, int kind = __node_kind)
@@ -479,6 +503,8 @@ protected:
   {}
 
 private:
+  mutable bool _M_constructor;
+  mutable bool _M_destructor;
   ArgumentList _M_arguments;
   CodeModel::FunctionType _M_functionType;
   union

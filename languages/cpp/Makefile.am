@@ -13,7 +13,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/lib/interfaces \
 
 kde_module_LTLIBRARIES = libkdevcpplanguagesupport.la
 libkdevcpplanguagesupport_la_SOURCES = cpplanguagesupport.cpp \
-	cppsupportfactory.cpp backgroundparser.cpp parsejob.cpp
+	cppsupportfactory.cpp backgroundparser.cpp parsejob.cpp codedelegate.cpp codeproxy.cpp
 libkdevcpplanguagesupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 libkdevcpplanguagesupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la parser/libkdevcppparser.la
 
@@ -25,5 +25,5 @@ service_DATA = kdevcppsupport.desktop
 #rcdir = $(kde_datadir)/kdevelop/cpp
 #rc_DATA = kdevcppsupport.rc
 
-noinst_HEADERS = backgroundparser.h parsejob.h
+noinst_HEADERS = backgroundparser.h parsejob.h codeproxy.h
 

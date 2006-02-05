@@ -1,0 +1,33 @@
+Coding style for the code view part:
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+
+namespace foospace
+{
+class Bar
+{
+public:
+    int foo();
+private:
+    int m_foo;
+}
+;
+int Bar::foo()
+{
+    switch (x)
+    {
+    case 1:
+        break;
+    default:
+        break;
+    }
+    if (isBar)
+    {
+        bar();
+        return m_foo + 1;
+    }
+    else
+        return 0;
+}
+}
+

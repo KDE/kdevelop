@@ -28,12 +28,6 @@ KDevCore *API::core() const
 }
 
 
-KDevCodeModel *API::codeModel() const
-{
-  return m_classStore;
-}
-
-
 API *API::getInstance()
 {
   if (!s_instance)
@@ -45,14 +39,11 @@ API *API::getInstance()
 API::API()
   : KDevApi()
 {
-  m_classStore = new KDevCodeModel();
 }
 
 
 API::~API()
 {
-  delete( m_classStore );
-  m_classStore = 0;
 }
 
 KDevPluginController * API::pluginController() const

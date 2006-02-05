@@ -2,7 +2,7 @@
  * KDevelop C++ Language Support
  *
  * Copyright (c) 2005 Matt Rogers <mattr@kde.org>
- * Copyright (c) 2005 Adam Treat <treat@kde.org>
+ * Copyright (c) 2006 Adam Treat <treat@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -30,39 +30,60 @@
 #include "cppsupportfactory.h"
 #include "cpplanguagesupport.h"
 
+#include "parser/codemodel.h"
+#include "codeproxy.h"
+#include "codedelegate.h"
+
+#include <kdebug.h>
+
 CppLanguageSupport::CppLanguageSupport( QObject* parent,
                                         const char* name,
                                         const QStringList& /*args*/ )
     : KDevLanguageSupport( CppLanguageSupportFactory::info(), parent )
 {
     setObjectName( name );
-    m_features = KDevLanguageSupport::Classes |
-                 KDevLanguageSupport::Structs |
-                 KDevLanguageSupport::Functions |
-                 KDevLanguageSupport::Variables |
-                 KDevLanguageSupport::Namespaces |
-                 KDevLanguageSupport::Signals |
-                 KDevLanguageSupport::Slots |
-                 KDevLanguageSupport::Declarations;
 
-    QString types = QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
+    QString types =
+        QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
     m_mimetypes = types.split( "," );
 
+    m_codeProxy = new CodeProxy( this );
+    m_codeDelegate = new CodeDelegate( this );
     m_backgroundParser = new BackgroundParser( this );
 
     connect( documentController(), SIGNAL( documentLoaded( const KUrl & ) ),
              this, SLOT( documentLoaded( const KUrl & ) ) );
     connect( documentController(), SIGNAL( documentClosed( const KUrl & ) ),
              this, SLOT( documentClosed( const KUrl & ) ) );
+    connect( documentController(), SIGNAL( documentActivated( const KUrl & ) ),
+             this, SLOT( documentActivated( const KUrl & ) ) );
 }
 
 CppLanguageSupport::~CppLanguageSupport()
 {
 }
 
-int CppLanguageSupport::features() const
+KDevCodeModel *CppLanguageSupport::codeModel( const KUrl &url ) const
 {
-    return m_features;
+    if ( url.isValid() )
+        return m_codeProxy->codeModel( url );
+    else
+        return m_codeProxy->codeModel( documentController() ->activeDocument() );
+}
+
+KDevCodeProxy *CppLanguageSupport::codeProxy() const
+{
+    return m_codeProxy;
+}
+
+KDevCodeDelegate *CppLanguageSupport::codeDelegate() const
+{
+    return m_codeDelegate;
+}
+
+KDevCodeRepository *CppLanguageSupport::codeRepository() const
+{
+    return 0;
 }
 
 QStringList CppLanguageSupport::mimeTypes() const
@@ -72,23 +93,19 @@ QStringList CppLanguageSupport::mimeTypes() const
 
 void CppLanguageSupport::documentLoaded( const KUrl &url )
 {
-    if ( isCppLanguageDocument( url ) )
+    if ( supportsDocument( url ) )
         m_backgroundParser->addDocument( url );
 }
 
 void CppLanguageSupport::documentClosed( const KUrl &url )
 {
-    if ( isCppLanguageDocument( url ) )
+    if ( supportsDocument( url ) )
         m_backgroundParser->removeDocument( url );
 }
 
-bool CppLanguageSupport::isCppLanguageDocument( const KUrl &url )
+void CppLanguageSupport::documentActivated( const KUrl &url )
 {
-    KMimeType::Ptr mimetype = KMimeType::findByURL( url );
-    foreach ( QString mime, m_mimetypes )
-        if ( mimetype->is( mime ) )
-            return true;
-    return false;
+    Q_UNUSED( url );
 }
 
 #include "cpplanguagesupport.moc"

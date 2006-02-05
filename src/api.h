@@ -15,7 +15,6 @@ public:
   virtual KDevDocumentController *documentController() const;
   virtual KDevPluginController *pluginController() const;
   virtual KDevCore *core() const;
-  virtual KDevCodeModel *codeModel() const;
 
   static API *getInstance();
 
@@ -28,9 +27,6 @@ protected:
 private:
 
   static API *s_instance;
-
-  KDevCodeModel *m_classStore;
-
 
 };
 

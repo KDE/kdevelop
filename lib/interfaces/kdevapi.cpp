@@ -19,8 +19,6 @@
 */
 #include "kdevapi.h"
 
-#include "kdevcoderepository.h"
-
 ///////////////////////////////////////////////////////////////////////////////
 // class KDevApi::Private
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,14 +27,12 @@ class KDevApi::Private
 {
 public:
     Private()
-        : m_projectDom(0), m_project(0), m_languageSupport(0),
-        m_codeRepository(0)
+        : m_projectDom(0), m_project(0), m_languageSupport(0)
     {}
-    
+
     QDomDocument *m_projectDom;
     KDevProject  *m_project;
     KDevLanguageSupport *m_languageSupport;
-    KDevCodeRepository* m_codeRepository;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -46,12 +42,10 @@ public:
 KDevApi::KDevApi()
 {
     d = new KDevApi::Private;
-    d->m_codeRepository = new KDevCodeRepository();
 }
 
 KDevApi::~KDevApi()
 {
-    delete d->m_codeRepository;
     delete d;
 }
 
@@ -83,11 +77,6 @@ QDomDocument *KDevApi::projectDom() const
 void KDevApi::setProjectDom(QDomDocument *dom)
 {
     d->m_projectDom = dom;
-}
-
-KDevCodeRepository *KDevApi::codeRepository() const
-{
-    return d->m_codeRepository;
 }
 
 #include "kdevapi.moc"

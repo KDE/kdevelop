@@ -167,9 +167,10 @@ public:
 
   bool block_errors(bool block);
 
-private:
+// private:
   Control *control;
   Lexer lexer;
+private:
   int _M_problem_count;
   int _M_max_problem_count;
   pool *_M_pool;

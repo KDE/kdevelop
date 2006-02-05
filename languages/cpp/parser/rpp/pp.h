@@ -44,7 +44,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "rxx_allocator.h"
+#include "../rxx_allocator.h"
 
 #include "pp-fwd.h"
 #include "pp-cctype.h"

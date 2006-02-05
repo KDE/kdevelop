@@ -22,17 +22,25 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include <kdebug.h>
-
 #include "kdevlanguagesupport.h"
 
-KDevLanguageSupport::KDevLanguageSupport(const KDevPluginInfo *info, QObject *parent)
+KDevLanguageSupport::KDevLanguageSupport(const KDevPluginInfo *info,
+                                         QObject *parent)
     : KDevPlugin(info, parent)
 {
 }
 
 KDevLanguageSupport::~KDevLanguageSupport()
 {
+}
+
+bool KDevLanguageSupport::supportsDocument( const KUrl &url )
+{
+    KMimeType::Ptr mimetype = KMimeType::findByURL( url );
+    foreach ( QString mime, mimeTypes() )
+        if ( mimetype->is( mime ) )
+            return true;
+    return false;
 }
 
 #include "kdevlanguagesupport.moc"

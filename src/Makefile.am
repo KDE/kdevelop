@@ -21,7 +21,8 @@ libkdevshell_la_SOURCES = api.cpp core.cpp documentationpart.cpp \
 	splashscreen.cpp statusbar.cpp toplevel.cpp generalinfowidgetbase.ui \
 	mimewarningdialog.ui shellextension.cpp simplemainwindow.cpp documentcontroller.cpp
 
-bin_PROGRAMS = kdevelop kdevassistant
+bin_PROGRAMS = kdevelop \
+#    kdevassistant
 
 kdevelop_SOURCES = main.cpp kdevideextension.cpp settingswidget.ui
 

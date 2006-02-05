@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2002-2005 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2006 Adam Treat <treat@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,10 +20,11 @@
 #include "codemodel.h"
 
 // ---------------------------------------------------------------------------
-CodeModel::CodeModel()
-  : _M_creation_id(0)
+CodeModel::CodeModel( QObject *parent )
+  : KDevCodeModel( parent )
 {
   _M_globalNamespace = create<NamespaceModelItem>();
+  _M_globalNamespace->setName(QString::null);
 }
 
 CodeModel::~CodeModel()
@@ -31,13 +33,6 @@ CodeModel::~CodeModel()
 
 void CodeModel::wipeout()
 {
-  _M_globalNamespace = create<NamespaceModelItem>();
-  _M_files.clear();
-}
-
-FileList CodeModel::files() const
-{
-  return _M_files.values();
 }
 
 NamespaceModelItem CodeModel::globalNamespace() const
@@ -45,28 +40,21 @@ NamespaceModelItem CodeModel::globalNamespace() const
   return _M_globalNamespace;
 }
 
-void CodeModel::addFile(FileModelItem item)
+KDevItemCollection *CodeModel::root() const
 {
-  _M_creation_id = 0; // reset the creation id
-  _M_files.insert(item->name(), item);
+  return _M_globalNamespace;
 }
 
-void CodeModel::removeFile(FileModelItem item)
+void CodeModel::addCodeItem(CodeModelItem item)
 {
-  QHash<QString, FileModelItem>::Iterator it = _M_files.find(item->name());
-
-  if (it != _M_files.end() && it.value() == item)
-    _M_files.erase(it);
+  beginAppendItem(item);
+  endAppendItem();
 }
 
-FileModelItem CodeModel::findFile(const QString &name) const
+void CodeModel::removeCodeItem(CodeModelItem item)
 {
-  return _M_files.value(name);
-}
-
-QHash<QString, FileModelItem> CodeModel::fileMap() const
-{
-  return _M_files;
+    beginRemoveItem(item);
+    endRemoveItem();
 }
 
 CodeModelItem CodeModel::findItem(const QStringList &qualifiedName, CodeModelItem scope) const
@@ -98,7 +86,6 @@ CodeModelItem CodeModel::findItem(const QStringList &qualifiedName, CodeModelIte
   return scope;
 }
 
-
 QString TypeInfo::toString() const
 {
   QString tmp;
@@ -122,18 +109,23 @@ bool TypeInfo::operator==(const TypeInfo &other)
 
 // ---------------------------------------------------------------------------
 _CodeModelItem::_CodeModelItem(CodeModel *model, int kind)
-  : _M_model(model),
+  : KDevCodeItem( QString::null, 0 ),
+    _M_model(model),
     _M_kind(kind),
-    _M_startLine(0),
-    _M_startColumn(0),
-    _M_endLine(0),
-    _M_endColumn(0),
-    _M_creation_id(0)
+    _M_startLine(-1),
+    _M_startColumn(-1),
+    _M_endLine(-1),
+    _M_endColumn(-1)
 {
 }
 
 _CodeModelItem::~_CodeModelItem()
 {
+}
+
+_CodeModelItem *_CodeModelItem::itemAt(int index) const
+{
+  return static_cast<_CodeModelItem*>(KDevItemCollection::itemAt(index));
 }
 
 CodeModelItem _CodeModelItem::toItem() const
@@ -189,11 +181,6 @@ QString _CodeModelItem::fileName() const
 void _CodeModelItem::setFileName(const QString &fileName)
 {
   _M_fileName = fileName;
-}
-
-FileModelItem _CodeModelItem::file() const
-{
-  return model()->findFile(fileName());
 }
 
 void _CodeModelItem::getStartPosition(int *line, int *column)
@@ -263,7 +250,7 @@ FunctionModelItem _ScopeModelItem::declaredFunction(FunctionModelItem item)
 
   foreach (FunctionModelItem fun, function_list)
     {
-      if (fun->isSimilar(item))
+      if (fun->isSimilar(model_static_cast<CodeModelItem>(item),false))
         return fun;
     }
 
@@ -302,45 +289,74 @@ EnumList _ScopeModelItem::enums() const
 
 void _ScopeModelItem::addClass(ClassModelItem item)
 {
-  _M_classes.insert(item->name(), item);
+  if (_M_classes.contains(item->name()))
+    removeClass(_M_classes[item->name()]);
+  model()->beginAppendItem(item, this);
+  _M_classes.insertMulti(item->name(), item);
+  model()->endAppendItem();
 }
 
 void _ScopeModelItem::addFunction(FunctionModelItem item)
 {
+  foreach( _FunctionModelItem *i,
+           _M_functions.values(item->name()) )
+    if ( i->isSimilar( model_static_cast<CodeModelItem>(item) ) )
+      removeFunction(i);
+  model()->beginAppendItem(item, this);
   _M_functions.insert(item->name(), item);
+  model()->endAppendItem();
 }
 
 void _ScopeModelItem::addFunctionDefinition(FunctionDefinitionModelItem item)
 {
+  foreach( _FunctionDefinitionModelItem *i,
+           _M_functionDefinitions.values(item->name()) )
+    if ( i->isSimilar( model_static_cast<CodeModelItem>(item) ) )
+      removeFunctionDefinition(i);
+  model()->beginAppendItem(item, this);
   _M_functionDefinitions.insert(item->name(), item);
+  model()->endAppendItem();
 }
 
 void _ScopeModelItem::addVariable(VariableModelItem item)
 {
-  _M_variables.insert(item->name(), item);
+  if (_M_variables.contains(item->name()))
+    removeVariable(_M_variables[item->name()]);
+  model()->beginAppendItem(item, this);
+  _M_variables.insertMulti(item->name(), item);
+  model()->endAppendItem();
 }
 
 void _ScopeModelItem::addTypeAlias(TypeAliasModelItem item)
 {
-  _M_typeAliases.insert(item->name(), item);
+  if (_M_typeAliases.contains(item->name()))
+    removeTypeAlias(_M_typeAliases[item->name()]);
+  model()->beginAppendItem(item, this);
+  _M_typeAliases.insertMulti(item->name(), item);
+  model()->endAppendItem();
 }
 
 void _ScopeModelItem::addEnum(EnumModelItem item)
 {
-  _M_enums.insert(item->name(), item);
+  if (_M_enums.contains(item->name()))
+    removeEnum(_M_enums[item->name()]);
+  model()->beginAppendItem(item, this);
+  _M_enums.insertMulti(item->name(), item);
+  model()->endAppendItem();
 }
 
 void _ScopeModelItem::addTemplate(TemplateModelItem item)
 {
+  model()->beginAppendItem(item, this);
   _M_templates.insert(item->name(), item);
+  model()->endAppendItem();
 }
 
 void _ScopeModelItem::removeClass(ClassModelItem item)
 {
-  QHash<QString, ClassModelItem>::Iterator it = _M_classes.find(item->name());
-
-  if (it != _M_classes.end() && it.value() == item)
-    _M_classes.erase(it);
+  model()->beginRemoveItem(item);
+  _M_classes.remove(item->name());
+  model()->endRemoveItem();
 }
 
 void _ScopeModelItem::removeFunction(FunctionModelItem item)
@@ -355,7 +371,9 @@ void _ScopeModelItem::removeFunction(FunctionModelItem item)
 
   if (it != _M_functions.end() && it.value() == item)
     {
+      model()->beginRemoveItem(item);
       _M_functions.erase(it);
+      model()->endRemoveItem();
     }
 }
 
@@ -371,32 +389,31 @@ void _ScopeModelItem::removeFunctionDefinition(FunctionDefinitionModelItem item)
 
   if (it != _M_functionDefinitions.end() && it.value() == item)
     {
+      model()->beginRemoveItem(item);
       _M_functionDefinitions.erase(it);
+      model()->endRemoveItem();
     }
 }
 
 void _ScopeModelItem::removeVariable(VariableModelItem item)
 {
-  QHash<QString, VariableModelItem>::Iterator it = _M_variables.find(item->name());
-
-  if (it != _M_variables.end() && it.value() == item)
-    _M_variables.erase(it);
+  model()->beginRemoveItem(item);
+  _M_variables.remove(item->name());
+  model()->endRemoveItem();
 }
 
 void _ScopeModelItem::removeTypeAlias(TypeAliasModelItem item)
 {
-  QHash<QString, TypeAliasModelItem>::Iterator it = _M_typeAliases.find(item->name());
-
-  if (it != _M_typeAliases.end() && it.value() == item)
-    _M_typeAliases.erase(it);
+  model()->beginRemoveItem(item);
+  _M_typeAliases.remove(item->name());
+  model()->endRemoveItem();
 }
 
 void _ScopeModelItem::removeEnum(EnumModelItem item)
 {
-  QHash<QString, EnumModelItem>::Iterator it = _M_enums.find(item->name());
-
-  if (it != _M_enums.end() && it.value() == item)
-    _M_enums.erase(it);
+  model()->beginRemoveItem(item);
+  _M_enums.remove(item->name());
+  model()->endRemoveItem();
 }
 
 void _ScopeModelItem::removeTemplate(TemplateModelItem item)
@@ -412,7 +429,9 @@ void _ScopeModelItem::removeTemplate(TemplateModelItem item)
 
   if (it != _M_templates.end() && it.value() == item)
     {
+      model()->beginRemoveItem(item);
       _M_templates.erase(it);
+      model()->endRemoveItem();
     }
 }
 
@@ -458,14 +477,17 @@ NamespaceList _NamespaceModelItem::namespaces() const
 }
 void _NamespaceModelItem::addNamespace(NamespaceModelItem item)
 {
-  _M_namespaces.insert(item->name(), item);
+  if (_M_namespaces.contains(item->name()))
+    removeNamespace(_M_namespaces[item->name()]);
+  model()->beginAppendItem(item, this);
+  _M_namespaces.insertMulti(item->name(), item);
+  model()->endAppendItem();
 }
 void _NamespaceModelItem::removeNamespace(NamespaceModelItem item)
 {
-  QHash<QString, NamespaceModelItem>::Iterator it = _M_namespaces.find(item->name());
-
-  if (it != _M_namespaces.end() && it.value() == item)
-    _M_namespaces.erase(it);
+  model()->beginRemoveItem(item);
+  _M_namespaces.remove(item->name());
+  model()->endRemoveItem();
 }
 
 NamespaceModelItem _NamespaceModelItem::findNamespace(const QString &name) const
@@ -495,15 +517,17 @@ void _ArgumentModelItem::setDefaultValue(bool defaultValue)
 }
 
 // ---------------------------------------------------------------------------
-bool _FunctionModelItem::isSimilar(FunctionModelItem other) const
+bool _FunctionModelItem::isSimilar(KDevCodeItem *other, bool strict ) const
 {
-  if (name() != other->name())
+  if (!_MemberModelItem::isSimilar(other,strict))
     return false;
 
-  if (isConstant() != other->isConstant())
+  FunctionModelItem func = dynamic_cast<_FunctionModelItem*>(other);
+
+  if (isConstant() != func->isConstant())
     return false;
 
-  if (arguments().count() != other->arguments().count())
+  if (arguments().count() != func->arguments().count())
     return false;
 
   for (int i=0; i<arguments().count(); ++i)
@@ -525,12 +549,16 @@ ArgumentList _FunctionModelItem::arguments() const
 
 void _FunctionModelItem::addArgument(ArgumentModelItem item)
 {
+  model()->beginAppendItem(item, this);
   _M_arguments.append(item);
+  model()->endAppendItem();
 }
 
 void _FunctionModelItem::removeArgument(ArgumentModelItem item)
 {
+  model()->beginRemoveItem(item);
   _M_arguments.removeAt(_M_arguments.indexOf(item));
+  model()->endRemoveItem();
 }
 
 CodeModel::FunctionType _FunctionModelItem::functionType() const
@@ -541,6 +569,18 @@ CodeModel::FunctionType _FunctionModelItem::functionType() const
 void _FunctionModelItem::setFunctionType(CodeModel::FunctionType functionType)
 {
   _M_functionType = functionType;
+}
+
+bool _FunctionModelItem::isConstructor() const
+{
+  ///TODO cache this information upon initialization
+  return scope().last() == name();
+}
+
+bool _FunctionModelItem::isDestructor() const
+{
+  ///TODO cache this information upon initialization
+  return name().startsWith('~');
 }
 
 bool _FunctionModelItem::isVirtual() const
@@ -612,12 +652,16 @@ EnumeratorList _EnumModelItem::enumerators() const
 
 void _EnumModelItem::addEnumerator(EnumeratorModelItem item)
 {
+  model()->beginAppendItem(item, this);
   _M_enumerators.append(item);
+  model()->endAppendItem();
 }
 
 void _EnumModelItem::removeEnumerator(EnumeratorModelItem item)
 {
+  model()->beginRemoveItem(item);
   _M_enumerators.removeAt(_M_enumerators.indexOf(item));
+  model()->endRemoveItem();
 }
 
 // ---------------------------------------------------------------------------
@@ -660,12 +704,16 @@ TemplateParameterList _TemplateModelItem::parameters() const
 
 void _TemplateModelItem::addParameter(TemplateParameterModelItem item)
 {
+  model()->beginAppendItem(item, this);
   _M_parameters.append(item);
+  model()->endAppendItem();
 }
 
 void _TemplateModelItem::removeParameter(TemplateParameterModelItem item)
 {
+  model()->beginRemoveItem(item);
   _M_parameters.removeAt(_M_parameters.indexOf(item));
+  model()->endRemoveItem();
 }
 
 CodeModelItem _TemplateModelItem::declaration() const

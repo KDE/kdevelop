@@ -2,21 +2,10 @@
 # interfaces in kdevelop/lib/interfaces which are in turn derived
 # from KPart.
 
-#### TODO    appwizard
-
-SUBDIRS = fullscreen \
+SUBDIRS = \
     documentview \
-    outputviews \
+    codeview \
     konsole \
-    diff \
-    classview \
-    openwith \
-#    guibuilder \
-    valgrind \
-    partexplorer \
-    quickopen \
-    tipofday \
-    appwizard
 
 # SUBDIRS = \
 #     abbrev \

@@ -23,8 +23,11 @@
 
 KDevItemModel::KDevItemModel(QObject *parent)
   : QAbstractItemModel(parent),
-    m_collection(QString::fromUtf8("<root>"), 0),
-    m_sortingEnabled(true)
+  m_collection( 0L )
+{
+}
+
+KDevItemModel::~KDevItemModel()
 {
 }
 
@@ -35,21 +38,12 @@ void KDevItemModel::appendItem(KDevItem *item, KDevItemCollection *collection)
   if (!collection)
     collection = root();
 
-  if (collection->parent())
-    parent = indexOf(collection);
+  parent = indexOf(collection);
+  int row = collection->itemCount();
 
-  beginInsertRows(parent, collection->itemCount(), collection->itemCount());
+  beginInsertRows(parent, row, row);
   collection->add(item);
   endInsertRows();
-}
-
-KDevItemModel::~KDevItemModel()
-{
-}
-
-void KDevItemModel::refresh()
-{
-  emit reset();
 }
 
 void KDevItemModel::removeItem(KDevItem *item)
@@ -89,7 +83,9 @@ KDevItem *KDevItemModel::item(const QModelIndex &index) const
 
 KDevItemCollection *KDevItemModel::root() const
 {
-  return const_cast<KDevItemCollection*>(&m_collection);
+  if (!m_collection)
+    m_collection = new KDevItemCollection( QString::fromUtf8("<root>"), 0 );
+  return const_cast<KDevItemCollection*>(m_collection);
 }
 
 QModelIndex KDevItemModel::index(int row, int column, const QModelIndex &parent) const
@@ -109,8 +105,10 @@ QModelIndex KDevItemModel::parent(const QModelIndex &index) const
 {
   if (KDevItem *kdev_item = item(index))
     {
-      if (kdev_item->parent() && kdev_item->parent()->parent())
-        return createIndex(positionOf(kdev_item->parent()), 0, kdev_item->parent());
+      if (kdev_item->parent())
+        if (kdev_item->parent()->parent())
+          return createIndex(positionOf(kdev_item->parent()), 0,
+                             kdev_item->parent());
     }
 
   return QModelIndex();
@@ -161,43 +159,9 @@ bool KDevItemModel::setData(const QModelIndex &index, const QVariant &value, int
   return false;
 }
 
-void KDevItemModel::sort(int column, Qt::SortOrder order)
+void KDevItemModel::refresh()
 {
-  Q_UNUSED(column);
-  if (!m_sortingEnabled)
-    return;
-  sortItems(&m_collection, order);
-  emit layoutChanged();
-}
-
-void KDevItemModel::sortItems(KDevItem *rootItem, Qt::SortOrder order)
-{
-  KDevItemCollection *collection = dynamic_cast<KDevItemCollection*>( rootItem );
-  if (!collection)
-    return;
-
-  // store the original order of indexes
-  QVector< QPair<KDevItem*, int> > sorting(collection->items().count());
-  for (int i = 0; i < sorting.count(); ++i)
-  {
-    sorting[i].first = collection->items().at(i);
-    sorting[i].second = i;
-  }
-
-  // do the sorting
-  LessThan compare = (order == Qt::AscendingOrder ? &itemLessThan : &itemGreaterThan);
-  qSort(sorting.begin(), sorting.end(), compare);
-
-  // update the persistent indexes for the top level
-  for (int r = 0; r < sorting.count(); ++r)
-  {
-    KDevItem *item = sorting.at(r).first;
-    sortItems(item, order);
-    collection->replace(r, item);
-    QModelIndex from = createIndex(sorting.at(r).second, 0, item);
-    QModelIndex to = createIndex(r, 0, item);
-    changePersistentIndex(from, to);
-  }
+  emit reset();
 }
 
 #include "kdevitemmodel.moc"

@@ -27,10 +27,8 @@ class QDomDocument;
 class KDevCore;
 class KDevProject;
 class KDevLanguageSupport;
-class KDevCodeModel;
 class KDevDocumentController;
 class KDevMainWindow;
-class KDevCodeRepository;
 class KDevPlugin;
 class KDevPluginController;
 
@@ -67,9 +65,6 @@ public:
     basic functionalities for inter-parts communications / cooperation.*/
     virtual KDevCore *core() const = 0;
 
-    /**@return A reference to the memory symbol store.*/
-    virtual KDevCodeModel *codeModel() const = 0;
-
     /**@return A reference to the DOM tree that represents the project file or 0 if no project is loaded.*/
     QDomDocument *projectDom() const;
 
@@ -91,9 +86,6 @@ public:
     language (languages support component).
     @param languageSupport The language support plugin.*/
     void setLanguageSupport(KDevLanguageSupport *languageSupport);
-
-    /**@return A reference to the code repository (accessor to persistant symbol stores).*/
-    KDevCodeRepository *codeRepository() const;
 
 private:
     class Private;

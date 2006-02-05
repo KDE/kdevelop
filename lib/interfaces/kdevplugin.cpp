@@ -86,11 +86,6 @@ KDevProject *KDevPlugin::project() const
     return m_api->project();
 }
 
-KDevCodeModel *KDevPlugin::codeModel() const
-{
-    return m_api->codeModel();
-}
-
 QDomDocument *KDevPlugin::projectDom() const
 {
     return m_api->projectDom();
@@ -119,11 +114,6 @@ void KDevPlugin::restorePartialProjectSession(const QDomElement* /*el*/)
 void KDevPlugin::savePartialProjectSession(QDomElement* /*el*/)
 {
     // there's still nothing to do in the base class
-}
-
-KDevCodeRepository * KDevPlugin::codeRepository() const
-{
-    return m_api->codeRepository();
 }
 
 KDevPlugin * KDevPlugin::extension_internal(const QString &serviceType, const QString &constraint)

@@ -60,6 +60,7 @@ typedef KDevSharedPtr<_MemberModelItem> MemberModelItem;
 
 typedef QList<ArgumentModelItem> ArgumentList;
 typedef QList<ClassModelItem> ClassList;
+typedef QList<CodeModelItem> CodeList;
 typedef QList<CodeModelItem> ItemList;
 typedef QList<EnumModelItem> EnumList;
 typedef QList<EnumeratorModelItem> EnumeratorList;

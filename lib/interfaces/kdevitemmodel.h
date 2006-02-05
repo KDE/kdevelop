@@ -24,14 +24,14 @@
 #include <QtGui/QIcon>
 #include <QtCore/QPair>
 
+#include "kdevsharedptr.h"
+
 class KDevItem;
 class KDevItemGroup;
 class KDevItemCollection;
 class KDevItemModel;
 
-typedef bool(*LessThan) (const QPair<KDevItem*, int>&, const QPair<KDevItem*, int>&);
-
-class KDevItem
+class KDevItem : public KDevShared
 {
 public:
   KDevItem(KDevItemGroup *parent)
@@ -56,16 +56,6 @@ public:
 
   /** Get the what's this help for this item */
   virtual QString whatsThis() const = 0;
-
-  virtual bool operator<(const KDevItem &other) const
-  {
-    return name() < other.name();
-  }
-
-  virtual bool operator>(const KDevItem &other) const
-  {
-    return name() > other.name();
-  }
 
 private:
   KDevItemGroup *m_parent;
@@ -95,7 +85,7 @@ public:
   explicit KDevItemCollection(const QString &name, KDevItemGroup *parent = 0)
     : KDevItemGroup(parent), m_name(name) {}
 
-  virtual ~KDevItemCollection() { clear(); }
+  virtual ~KDevItemCollection() {}
 
   virtual KDevItemCollection *collection() const { return const_cast<KDevItemCollection*>(this); }
 
@@ -109,9 +99,9 @@ public:
   virtual int indexOf(KDevItem *item) const { return m_items.indexOf(item); }
   virtual KDevItem *itemAt(int index) const { return m_items.at(index); }
 
-  void clear() { qDeleteAll(m_items); m_items.clear(); }
+  virtual void clear() { m_items.clear(); }
 
-  void add(KDevItem *item)
+  virtual void add(KDevItem *item)
   {
     Q_ASSERT(item != 0);
     Q_ASSERT(item->parent() == this || item->parent() == 0);
@@ -122,7 +112,12 @@ public:
     m_items.append(item);
   }
 
-  void remove(int index) { m_items.removeAt(index); }
+  virtual void remove(int index)
+  {
+    Q_ASSERT(index >= 0 );
+    Q_ASSERT(index < m_items.count());
+    m_items.removeAt(index);
+  }
 
   virtual void replace(int index, KDevItem *item)
   {
@@ -146,12 +141,11 @@ private:
 class KDevItemModel: public QAbstractItemModel
 {
   Q_OBJECT
-  Q_PROPERTY(bool sortingEnabled READ isSortingEnabled WRITE setSortingEnabled)
 public:
   explicit KDevItemModel(QObject *parent = 0);
   virtual ~KDevItemModel();
 
-  KDevItemCollection *root() const;
+  virtual KDevItemCollection *root() const;
 
   void appendItem(KDevItem *item, KDevItemCollection *collection = 0);
   void removeItem(KDevItem *item);
@@ -168,32 +162,14 @@ public:
   virtual KDevItem *item(const QModelIndex &index) const;
   virtual QModelIndex indexOf(KDevItem *item) const;
 
-  bool isSortingEnabled() const { return m_sortingEnabled; }
-  virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
-
 public slots:
   void refresh();
-  void setSortingEnabled( bool sortingEnabled ) { m_sortingEnabled = sortingEnabled; }
 
 protected:
   int positionOf(KDevItem *item) const;
-  virtual void sortItems( KDevItem *rootItem, Qt::SortOrder order = Qt::AscendingOrder );
-
-  static bool itemLessThan(const QPair<KDevItem*, int> &left,
-                           const QPair<KDevItem*, int> &right)
-  {
-    return * (left.first) < *(right.first);
-  }
-
-  static bool itemGreaterThan(const QPair<KDevItem*, int> &left,
-                              const QPair<KDevItem*, int> &right)
-  {
-    return * (left.first) > *(right.first);
-  }
 
 private:
-  KDevItemCollection m_collection;
-  bool m_sortingEnabled;
+  mutable KDevItemCollection *m_collection;
 };
 
 #endif // KDEVITEMMODEL_H

@@ -28,9 +28,12 @@
 
 #include <qdebug.h>
 
-Binder::Binder(CodeModel *model, TokenStream *token_stream)
+Binder::Binder(CodeModel *model,
+               TokenStream *token_stream,
+               Lexer *lexer)
   : _M_model(model),
     _M_token_stream(token_stream),
+    _M_lexer(lexer),
     type_cc(token_stream),
     name_cc(token_stream),
     decl_cc(token_stream)
@@ -50,18 +53,13 @@ Binder::~Binder()
 {
 }
 
-FileModelItem Binder::run(AST *node)
+NamespaceModelItem Binder::run( const KUrl &url, AST *node)
 {
-  FileModelItem old = _M_current_file;
+  _M_currentFile = url.url();
+  _M_global_namespace = model()->globalNamespace();
   _M_current_access = CodeModel::Public;
-
-  _M_current_file = model()->create<FileModelItem>();
   visit(node);
-  FileModelItem result = _M_current_file;
-
-  _M_current_file = old; // restore
-
-  return result;
+  return _M_global_namespace;
 }
 
 ScopeModelItem Binder::currentScope()
@@ -71,7 +69,7 @@ ScopeModelItem Binder::currentScope()
   else if (_M_current_namespace)
     return model_static_cast<ScopeModelItem>(_M_current_namespace);
 
-  return model_static_cast<ScopeModelItem>(_M_current_file);
+  return model_static_cast<ScopeModelItem>(_M_global_namespace);
 }
 
 CodeModel::AccessPolicy Binder::changeCurrentAccess(CodeModel::AccessPolicy accessPolicy)
@@ -141,7 +139,8 @@ CodeModel::ClassType Binder::decode_class_type(std::size_t index) const
       case Token_union:
         return CodeModel::Union;
       default:
-        std::cerr << "** WARNING unrecognized class type" << std::endl;
+//         std::cerr << "** WARNING unrecognized class type" << std::endl;
+        break;
     }
     return CodeModel::Class;
 }
@@ -200,7 +199,7 @@ void Binder::visitSimpleDeclaration(SimpleDeclarationAST *node)
 #if defined(__GNUC__)
 #warning "Binder::visitSimpleDeclaration() -- implement me"
 #endif
-              std::cerr << "** WARNING skip sub declarators or anonymous symbol" << std::endl;
+//               std::cerr << "** WARNING skip sub declarators or anonymous symbol" << std::endl;
             }
           else
             {
@@ -223,8 +222,8 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
   if (! symbolScope)
     {
       name_cc.run(id);
-      std::cerr << "** WARNING scope not found for symbol:"
-                << qPrintable(name_cc.name()) << std::endl;
+//           std::cerr << "** WARNING scope not found for symbol:"
+//         << qPrintable(name_cc.name()) << std::endl;
       return;
     }
 
@@ -237,6 +236,9 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
       FunctionModelItem fun = model()->create<FunctionModelItem>();
       fun->setAccessPolicy(_M_current_access);
       fun->setName(name_cc.name());
+
+      setPositionAt( fun, id->unqualified_name );
+
       fun->setAbstract(init_declarator->initializer != 0);
       fun->setConstant(declarator->fun_cv != 0);
       applyStorageSpecifiers(node->storage_specifiers, model_static_cast<MemberModelItem>(fun));
@@ -274,6 +276,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
       applyStorageSpecifiers(node->storage_specifiers, model_static_cast<MemberModelItem>(var));
 
       var->setScope(symbolScope->qualifiedName());
+      setPositionAt( var, id->unqualified_name );
       symbolScope->addVariable(var);
     }
 }
@@ -293,10 +296,10 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
   if (! functionScope)
     {
       name_cc.run(declarator->id);
-      std::cerr << "** WARNING scope not found for function definition:"
-                << qPrintable(name_cc.name()) << std::endl
-                << "\tdefinition *ignored*"
-                << std::endl;
+//       std::cerr << "** WARNING scope not found for function definition:"
+//                 << qPrintable(name_cc.name()) << std::endl
+//                 << "\tdefinition *ignored*"
+//                 << std::endl;
       return;
     }
 
@@ -305,7 +308,7 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
   Q_ASSERT(! decl_cc.id().isEmpty());
 
   FunctionDefinitionModelItem
-    old = changeCurrentFunction(_M_model->create<FunctionDefinitionModelItem>());
+    old = changeCurrentFunction(model()->create<FunctionDefinitionModelItem>());
   _M_current_function->setScope(functionScope->qualifiedName());
 
   Q_ASSERT(declarator->id->unqualified_name != 0);
@@ -331,6 +334,7 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
       _M_current_function->addArgument(arg);
     }
 
+  setPositionAt( _M_current_function, declarator->id->unqualified_name );
   functionScope->addFunctionDefinition(_M_current_function);
 
   FunctionModelItem prototype = model_static_cast<FunctionModelItem>(_M_current_function);
@@ -338,7 +342,7 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
   // try to find a function declaration for this definition..
   if (! functionScope->declaredFunction(prototype))
     {
-      functionScope->addFunction(prototype);
+      //functionScope->addFunction(prototype);
     }
 
   changeCurrentFunction(old);
@@ -354,7 +358,7 @@ void Binder::visitTemplateDeclaration(TemplateDeclarationAST * /* node */)
 
 #if 0 // ### skip the template declarations
   TemplateModelItem
-    old = changeCurrentTemplate(_M_model->create<TemplateModelItem>());
+    old = changeCurrentTemplate(model()->create<TemplateModelItem>());
   DefaultVisitor::visitTemplateDeclaration(node);
   changeCurrentTemplate(old);
 #endif
@@ -370,8 +374,7 @@ void Binder::visitNamespace(NamespaceAST *node)
   bool anonymous = (node->namespace_name == 0);
 
   ScopeModelItem scope = currentScope();
-
-  NamespaceModelItem old;
+  NamespaceModelItem old /*= changeCurrentNamespace(_M_global_namespace)*/;
   if (! anonymous)
     {
       QString name = decode_symbol(node->namespace_name)->as_string();
@@ -379,11 +382,11 @@ void Binder::visitNamespace(NamespaceAST *node)
       QStringList qualified_name = scope->qualifiedName();
       qualified_name += name;
       NamespaceModelItem ns =
-        model_safe_cast<NamespaceModelItem>(_M_model->findItem(qualified_name,
-                                                                  _M_current_file->toItem()));
-      if (!ns)
+        model_safe_cast<NamespaceModelItem>(model()->findItem(qualified_name,
+          _M_global_namespace->toItem()));
+      if (!ns || ns == _M_global_namespace )
         {
-          ns = _M_model->create<NamespaceModelItem>();
+          ns = model()->create<NamespaceModelItem>();
           ns->setName(name);
           ns->setScope(scope->qualifiedName());
         }
@@ -403,7 +406,11 @@ void Binder::visitNamespace(NamespaceAST *node)
 
       if (NamespaceModelItem ns = model_static_cast<NamespaceModelItem>(scope))
         {
-          ns->addNamespace(_M_current_namespace);
+          if ( ns != _M_current_namespace )
+          {
+            setPositionAt( _M_current_namespace, node );
+            ns->addNamespace(_M_current_namespace);
+          }
         }
 
       changeCurrentNamespace(old);
@@ -425,7 +432,7 @@ void Binder::visitClassSpecifier(ClassSpecifierAST *node)
 
   ScopeModelItem scope = currentScope();
 
-  ClassModelItem old = changeCurrentClass(_M_model->create<ClassModelItem>());
+  ClassModelItem old = changeCurrentClass(model()->create<ClassModelItem>());
   _M_current_class->setName(class_cc.name());
   _M_current_class->setBaseClasses(class_cc.baseClasses());
   _M_current_class->setClassType(decode_class_type(node->class_key));
@@ -433,6 +440,7 @@ void Binder::visitClassSpecifier(ClassSpecifierAST *node)
   CodeModel::AccessPolicy oldAccessPolicy = changeCurrentAccess(decode_access_policy(node->class_key));
 
   _M_current_class->setScope(scope->qualifiedName());
+  setPositionAt( _M_current_class, node->name->unqualified_name );
   scope->addClass(_M_current_class);
 
   name_cc.run(node->name->unqualified_name);
@@ -475,7 +483,7 @@ void Binder::visitEnumSpecifier(EnumSpecifierAST *node)
   _M_current_enum->setName(name);
   _M_current_enum->setScope(enumScope->qualifiedName());
   _M_qualified_types.insert(_M_current_enum->qualifiedName().join("."));
-
+  setPositionAt( _M_current_enum, node->name );
   enumScope->addEnum(_M_current_enum);
 
   DefaultVisitor::visitEnumSpecifier(node);
@@ -498,6 +506,7 @@ void Binder::visitEnumerator(EnumeratorAST *node)
                                     end_token.position - start_token.position).trimmed());
     }
 
+  setPositionAt( _M_current_enum, node );
   _M_current_enum->addEnumerator(e);
 }
 
@@ -601,10 +610,33 @@ TypeInfo Binder::qualifyType(const TypeInfo &type, const QStringList &context) c
       }
     }
 
-  std::cerr << "** WARNING unable to qualify type: "
-            << "'" << qPrintable(type.toString()) << "'" << std::endl;
+//   std::cerr << "** WARNING unable to qualify type: "
+//             << "'" << qPrintable(type.toString()) << "'" << std::endl;
   return type;
 }
 
+void Binder::setPositionAt(_CodeModelItem *item, AST *ast)
+{
+  // This doesn't work very well since we're retrieving positions
+  // from the preprocessed source... not the original source file :(
+  // HELLLLPP ROBERTO!!
+  QString fileName;
+  int startLine, startColumn;
+  int endLine, endColumn;
+
+  const Token &start_token =
+    _M_token_stream->token(ast->start_token);
+  const Token &end_token =
+    _M_token_stream->token(ast->end_token);
+
+  _M_lexer->positionAt(start_token.position,
+                       &startLine, &startColumn, &fileName);
+  _M_lexer->positionAt(end_token.position,
+                       &endLine, &endColumn, &fileName);
+
+  item->setFileName(!fileName.isEmpty() ? fileName : _M_currentFile);
+  item->setStartPosition(startLine, startColumn);
+  item->setEndPosition(endLine, endColumn);
+}
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

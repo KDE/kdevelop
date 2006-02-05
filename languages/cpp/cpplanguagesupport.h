@@ -24,6 +24,10 @@
 
 #include <kdevlanguagesupport.h>
 
+class CodeModel;
+class CodeProxy;
+class CodeDelegate;
+class CodeAggregate;
 class BackgroundParser;
 
 class CppLanguageSupport : public KDevLanguageSupport
@@ -35,24 +39,21 @@ public:
     virtual ~CppLanguageSupport();
 
     //KDevLanguageSupport implementation
-    virtual int features() const;
+    virtual KDevCodeModel *codeModel( const KUrl &url = KUrl() ) const;
+    virtual KDevCodeProxy *codeProxy() const;
+    virtual KDevCodeDelegate *codeDelegate() const;
+    virtual KDevCodeRepository *codeRepository() const;
     virtual QStringList mimeTypes() const;
-
-    virtual QString formatTag( const Tag& /*tag*/ ) const { return QString(); }
-    virtual QString formatModelItem( const KDevCodeItem* /*item*/, bool ) const { return QString(); }
-    virtual QString formatClassName( const QString& name ) const { return name; }
-    virtual QString unformatClassName( const QString& name ) const { return name; }
 
 private slots:
     void documentLoaded( const KUrl &url );
     void documentClosed( const KUrl &url );
+    void documentActivated( const KUrl &url );
 
 private:
-    bool isCppLanguageDocument( const KUrl &url );
-
-private:
-    int m_features;
     QStringList m_mimetypes;
+    CodeProxy *m_codeProxy;
+    CodeDelegate *m_codeDelegate;
     BackgroundParser *m_backgroundParser;
 };
 

@@ -1,7 +1,7 @@
 /*
- * KDevelop C++ Parse Job
+ * This file is part of KDevelop
  *
- * Copyright (c) 2005 Adam Treat <treat@kde.org>
+ * Copyright (c) 2006 Adam Treat <treat@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -27,15 +27,17 @@
 
 #include "parser/codemodel.h"
 
-class Control;
-class QByteArray;
+class pool;
 class TranslationUnitAST;
+
+class QByteArray;
 
 class ParseJob : public ThreadWeaver::Job
 {
     Q_OBJECT
 public:
-    ParseJob( const KUrl &url, Control *control, pool *memoryPool,
+    ParseJob( const KUrl &url,
+              pool *memoryPool,
               QObject* parent );
     virtual ~ParseJob();
 
@@ -46,18 +48,18 @@ public:
 
     KUrl document() const;
     TranslationUnitAST *translationUnit() const;
-    FileModelItem fileModelItem() const;
+    CodeModel *codeModel() const;
+    NamespaceModelItem namespaceModelItem() const;
 
 protected:
     virtual void run();
 
 private:
     KUrl m_document;
-    Control *m_control;
     pool *m_memoryPool;
     QByteArray m_contents;
     TranslationUnitAST *m_translationUnit;
-    FileModelItem m_fileModelItem;
+    NamespaceModelItem m_namespaceModelItem;
 };
 
 #endif

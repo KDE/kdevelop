@@ -99,10 +99,10 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
     if (!constraint_add.isEmpty())
         constraint += " and ( " + constraint_add + " ) ";
 
-//BEGIN debug
-    kdDebug(9000) << k_funcinfo << "Query for Profile:" << endl
-              << constraint << endl << endl;
-//END debug
+// //BEGIN debug
+//     kdDebug(9000) << "Query for Profile:" << endl
+//               << constraint << endl << endl;
+// //END debug
 
     KTrader::OfferList list = KTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
     QStringList names;

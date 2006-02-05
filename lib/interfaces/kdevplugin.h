@@ -36,8 +36,6 @@ class KDevVersionControl;
 class KDevLanguageSupport;
 class KDevDocumentController;
 class KDevMainWindow;
-class KDevCodeRepository;
-class KDevCodeModel;
 class KDevPluginInfo;
 class QDomElement;
 
@@ -146,9 +144,6 @@ public:
     /**@return A reference to the language support component or 0 if no support available.*/
     KDevLanguageSupport *languageSupport() const;
 
-    /**@return A reference to the memory symbol store.*/
-    KDevCodeModel *codeModel() const;
-
     /**@return A reference to the DOM tree that represents the project file or 0 if no project is loaded.*/
     QDomDocument *projectDom() const;
 
@@ -157,9 +152,6 @@ public:
 
     /**@return A reference to the plugin controller which is used to manipulate loaded plugin.*/
     virtual KDevPluginController *pluginController() const;
-
-    /**@return A reference to the code repository (accessor to persistant symbol stores).*/
-    KDevCodeRepository* codeRepository() const;
 
     /**Queries for the plugin which supports given service type (such plugins are called extensions in KDevelop).
     All already loaded plugins will be queried and the <b>first loaded one</b> to support

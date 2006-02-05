@@ -422,7 +422,7 @@ void DocumentController::activatePart( KParts::Part *part )
     if ( w2 != widget )
         w2->setFocus();
 
-    emit documentActivated( activeDocument() );
+/*    emit documentActivated( activeDocument() );*/
 }
 
 DocumentState DocumentController::documentState( KUrl const & url )
