@@ -114,7 +114,7 @@ void BookmarksPart::partAdded( KParts::Part * part )
 
             // connect to this editor
             KTextEditor::Document * doc = static_cast<KTextEditor::Document*>( ro_part );
-            connect( doc, SIGNAL( marksChanged() ), this, SLOT( marksEvent() ) );
+            connect( doc, SIGNAL( marksChanged(KTextEditor::Document*) ), this, SLOT( marksEvent() ) );
 
             // workaround for a katepart oddity where it drops all bookmarks on 'reload'
             connect( doc, SIGNAL( completed() ), this, SLOT( reload() ) );

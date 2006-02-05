@@ -59,12 +59,11 @@ void KDevStatusBar::activePartChanged(KParts::Part *part)
     {
         _view = qobject_cast<KTextEditor::View *>(part->widget());
         if (_view) {
-            connect( _view, SIGNAL( viewStatusMsg( const QString & ) ), // harryF: ### TODO
-                    this, SLOT( setStatus( const QString & ) ) );
+            connect( _view, SIGNAL( viewModeChanged(KTextEditor::View*) ), SLOT( statusChanged() ) );
             _status->show();
 
-            connect(_view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), this, SLOT(cursorPositionChanged()));
-            cursorPositionChanged();
+            connect(_view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), SLOT(statusChanged()));
+            statusChanged();
         }
         else
         {
@@ -74,23 +73,12 @@ void KDevStatusBar::activePartChanged(KParts::Part *part)
     }
 }
 
-void KDevStatusBar::cursorPositionChanged()
+void KDevStatusBar::statusChanged()
 {
     if (_view) {
         KTextEditor::Cursor cursor = _view->cursorPosition();
-        setCursorPosition(cursor.line(), cursor.column());
+        _status->setText(i18n(" Line: %1 Col: %2 ").arg(cursor.line() + 1).arg(cursor.column()) + _view->viewMode());
     }
-}
-
-void KDevStatusBar::setStatus(const QString &str)
-{
-    _status->setText(str);
-}
-
-
-void KDevStatusBar::setCursorPosition(int line, int col)
-{
-    _status->setText(i18n(" Line: %1 Col: %2 ").arg(line+1).arg(col));
 }
 
 void KDevStatusBar::addWidget ( QWidget *widget, int stretch, bool permanent)

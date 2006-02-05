@@ -39,7 +39,7 @@ void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool 
 
     // Temporarily disconnect so we don't get confused by receiving extra
     // marksChanged signals
-    disconnect( part, SIGNAL(marksChanged()), this, SLOT(marksChanged()) );
+    disconnect( part, SIGNAL(marksChanged(KTextEditor::Document*)), this, SLOT(marksChanged()) );
     iface->removeMark( lineNum, Breakpoint | ActiveBreakpoint | ReachedBreakpoint | DisabledBreakpoint );
 
     BPItem bpItem(fileName, lineNum);
@@ -64,7 +64,7 @@ void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool 
         BPList.append(BPItem(fileName, lineNum));
     }
 
-    connect( part, SIGNAL(marksChanged()), this, SLOT(marksChanged()) );
+    connect( part, SIGNAL(marksChanged(KTextEditor::Document*)), this, SLOT(marksChanged()) );
 }
 
 
@@ -174,7 +174,7 @@ void Debugger::partAdded( KParts::Part* part )
     iface->setMarkPixmap((MarkInterface::MarkTypes)ExecutionPoint, *executionPointPixmap());
     iface->setMarksUserChangable( Bookmark | Breakpoint );
 
-    connect( part, SIGNAL(marksChanged()), this, SLOT(marksChanged()) );
+    connect( part, SIGNAL(marksChanged(KTextEditor::Document*)), this, SLOT(marksChanged()) );
 }
 
 #include "debugger.moc"

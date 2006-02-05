@@ -33,10 +33,8 @@ public:
     void addWidget ( QWidget *widget, int stretch = 0, bool permanent = FALSE );
 
 private slots:
-    void cursorPositionChanged();
+    void statusChanged();
     void activePartChanged(KParts::Part *part);
-    void setStatus(const QString &str);
-    void setCursorPosition(int line, int col);
 
 private:
     QLabel *_status;
