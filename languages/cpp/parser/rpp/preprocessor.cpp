@@ -38,8 +38,10 @@ public:
 
     void initPP(pp &proc)
     {
-        foreach(QString path, includePaths)
-            proc.push_include_path(path.toStdString());
+        foreach(QString path, includePaths) {
+            const QByteArray asc = path.toAscii();
+            proc.push_include_path(std::string(asc.constData(), asc.length()));
+        }
     }
 };
 
@@ -47,7 +49,7 @@ QHash<QString, QStringList> includedFiles;
 
 void includeFileHook(const std::string &fileName, const std::string &filePath, FILE *)
 {
-    includedFiles[QString::fromStdString(fileName)].append(QString::fromStdString(filePath));
+    includedFiles[QString::fromAscii(fileName.data(), int(fileName.size()))].append(QString::fromAscii(filePath.data(), int(filePath.size())));
 }
 
 Preprocessor::Preprocessor()
