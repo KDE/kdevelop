@@ -19,7 +19,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kdevcodeaggregate.h"
+#include "kdevcodeaggregate_p.h"
 
 KDevCodeAggregate::KDevCodeAggregate( QObject *parent )
         : QAbstractProxyModel( parent ),
@@ -385,6 +385,6 @@ bool KDevCodeAggregate::normalizeItem( KDevCodeItem *item )
     return !isDuplicate;
 }
 
-#include "kdevcodeaggregate.moc"
+#include "kdevcodeaggregate_p.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
