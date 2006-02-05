@@ -53,13 +53,12 @@ Binder::~Binder()
 {
 }
 
-NamespaceModelItem Binder::run( const KUrl &url, AST *node)
+void Binder::run( const KUrl &url, AST *node)
 {
   _M_currentFile = url.url();
   _M_global_namespace = model()->globalNamespace();
   _M_current_access = CodeModel::Public;
   visit(node);
-  return _M_global_namespace;
 }
 
 ScopeModelItem Binder::currentScope()

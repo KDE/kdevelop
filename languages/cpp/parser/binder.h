@@ -41,7 +41,7 @@ public:
          Lexer *lexer);
   virtual ~Binder();
 
-  NamespaceModelItem run(const KUrl &url, AST *node);
+  void run(const KUrl &url, AST *node);
 
 protected:
   virtual void visitAccessSpecifier(AccessSpecifierAST *);

@@ -49,7 +49,6 @@ public:
     KUrl document() const;
     TranslationUnitAST *translationUnit() const;
     CodeModel *codeModel() const;
-    NamespaceModelItem namespaceModelItem() const;
 
 protected:
     virtual void run();
@@ -59,7 +58,7 @@ private:
     pool *m_memoryPool;
     QByteArray m_contents;
     TranslationUnitAST *m_translationUnit;
-    NamespaceModelItem m_namespaceModelItem;
+    CodeModel *m_model;
 };
 
 #endif

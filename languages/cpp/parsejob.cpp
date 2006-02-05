@@ -43,7 +43,9 @@ ParseJob::ParseJob( const KUrl &url,
                     QObject* parent )
         : ThreadWeaver::Job( parent ),
         m_document( url ),
-        m_memoryPool( memoryPool )
+        m_memoryPool( memoryPool ),
+        m_translationUnit( 0 ),
+        m_model( 0 )
 {
     m_contents = QByteArray();
 }
@@ -58,20 +60,14 @@ KUrl ParseJob::document() const
 
 TranslationUnitAST *ParseJob::translationUnit() const
 {
-    Q_ASSERT ( isFinished () );
+    Q_ASSERT ( isFinished () && m_translationUnit );
     return m_translationUnit;
-}
-
-NamespaceModelItem ParseJob::namespaceModelItem() const
-{
-    Q_ASSERT ( isFinished () );
-    return m_namespaceModelItem;
 }
 
 CodeModel *ParseJob::codeModel() const
 {
-    Q_ASSERT ( isFinished () );
-    return m_namespaceModelItem->model();
+    Q_ASSERT ( isFinished () && m_model );
+    return m_model;
 }
 
 void ParseJob::run()
@@ -126,9 +122,9 @@ void ParseJob::run()
     Parser parser( new Control() );
     m_translationUnit = parser.parse( preprocessed, pre_size, m_memoryPool );
 
-    CodeModel *codeModel = new CodeModel;
-    Binder binder( codeModel, &parser.token_stream, &parser.lexer );
-    m_namespaceModelItem = binder.run( m_document, m_translationUnit );
+    m_model = new CodeModel;
+    Binder binder( m_model, &parser.token_stream, &parser.lexer );
+    binder.run( m_document, m_translationUnit );
 
     //     DumpTree dumpTree;
     //     dumpTree.dump( m_translationUnit );
