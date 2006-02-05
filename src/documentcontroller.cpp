@@ -50,7 +50,6 @@
 
 #include "api.h"
 #include "core.h"
-#include "urlutil.h"
 #include "toplevel.h"
 #include "editorproxy.h"
 #include "kdevproject.h"
@@ -637,8 +636,7 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
     url.cleanPath( true );
     if ( url.isLocalFile() )
     {
-        QString path = url.path();
-        path = URLUtil::canonicalPath( path );
+        QString path = QFileInfo( url.path() ).canonicalFilePath();
         if ( !path.isEmpty() )
             url.setPath( path );
     }

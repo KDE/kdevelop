@@ -30,7 +30,6 @@
 #include <kdevcore.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevmainwindow.h>
-#include <urlutil.h>
 
 #include <kaction.h>
 #include <kiconloader.h>
@@ -272,7 +271,7 @@ QString KDevProjectManagerPart::runArguments() const
 QString KDevProjectManagerPart::activeDirectory() const // ### do we really need it?
 {
   if (KDevProjectFolderItem *folder = m_projectOverview->currentFolderItem())
-    return URLUtil::relativePath(projectDirectory(), folder->name());
+    return KUrl::relativePath(projectDirectory(), folder->name());
 
   return QString();
 }

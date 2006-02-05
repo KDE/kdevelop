@@ -25,7 +25,6 @@
 #include <kdebug.h>
 
 #include "kdevproject.h"
-#include <urlutil.h>
 #include <qfileinfo.h>
 #include <qtimer.h>
 #include "kdevprojectiface.h"
@@ -105,9 +104,9 @@ void KDevProject::slotBuildFileMap()
     for( QStringList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it )
     {
 	QFileInfo fileInfo( projectDirectory() + "/" + *it );
-	d->m_absToRel[ URLUtil::canonicalPath(fileInfo.absFilePath()) ] = *it;
+	d->m_absToRel[ fileInfo.canonicalFilePath() ] = *it;
 	
-        if ( URLUtil::canonicalPath( fileInfo.absFilePath() ) != fileInfo.absFilePath() )
+        if ( fileInfo.canonicalFilePath() != fileInfo.absFilePath() )
         {
             d->m_symlinkList << *it;
         }
@@ -131,9 +130,9 @@ void KDevProject::slotAddFilesToFileMap( const QStringList & fileList )
 	while( it != fileList.end() )
 	{
 		QFileInfo fileInfo( projectDirectory() + "/" + *it );
-		d->m_absToRel[ URLUtil::canonicalPath(fileInfo.absFilePath()) ] = *it;
+		d->m_absToRel[ fileInfo.canonicalFilePath() ] = *it;
 		
-		if ( URLUtil::canonicalPath( fileInfo.absFilePath() ) != fileInfo.absFilePath() )
+    	if ( fileInfo.canonicalFilePath() != fileInfo.absFilePath() )
 		{
 			d->m_symlinkList << *it;
 		}
@@ -148,7 +147,7 @@ void KDevProject::slotRemoveFilesFromFileMap( const QStringList & fileList )
 	while( it != fileList.end() )
 	{
 		QFileInfo fileInfo( projectDirectory() + "/" + *it );
-		d->m_absToRel.remove( URLUtil::canonicalPath(fileInfo.absFilePath()) );
+    	d->m_absToRel.remove( fileInfo.canonicalFilePath() );
 		
 		d->m_symlinkList.remove( *it );
 

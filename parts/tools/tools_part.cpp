@@ -27,7 +27,6 @@
 #include "kdevdocumentcontroller.h"
 #include "kdevappfrontend.h"
 #include "kdevplugininfo.h"
-#include "urlutil.h"
 #include "configwidgetproxy.h"
 
 #include "toolsconfig.h"
@@ -234,7 +233,7 @@ void ToolsPart::contextMenu(Q3PopupMenu *popup, const Context *context)
     config->setGroup("External Tools");
     QStringList filecontextList = config->readListEntry("File Context");
 
-    if (URLUtil::isDirectory(m_contextFileName)) {
+    if (QDir(m_contextFileName).exists()) {
         QStringList l = config->readListEntry("Dir Context");
         QStringList::ConstIterator it;
         for (it = l.begin(); it != l.end(); ++it)

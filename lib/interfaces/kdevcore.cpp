@@ -24,7 +24,7 @@
 #include "kdevcoreiface.h"
 #include "kdevcore.h"
 
-#include "urlutil.h"
+#include <QDir>
 
 ///////////////////////////////////////////////////////////////////////////////
 // class Context
@@ -121,7 +121,7 @@ public:
         else
         {
             m_fileName = m_urls[0].path();
-            m_isDirectory = URLUtil::isDirectory( m_urls[0] );
+            m_isDirectory = QDir( m_fileName ).exists();
         }
     }
     Private( const QString &fileName, bool isDirectory )

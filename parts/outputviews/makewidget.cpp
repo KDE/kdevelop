@@ -17,7 +17,6 @@
 #include "processlinemaker.h"
 #include "makeviewpart.h"
 #include "makeitem.h"
-#include "urlutil.h"
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -496,7 +495,7 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
     while ( it != projectFiles.end() )
     {
         QString file = m_part->project() ->projectDirectory() + "/" + *it;
-        if ( name == URLUtil::canonicalPath( file ) )
+        if ( name == QFileInfo( file ).canonicalFilePath() )
         {
             kdDebug( 9004 ) << "Found file in project - " << file << " == " << name << endl;
             return file;
