@@ -63,7 +63,7 @@ void KDevStatusBar::activePartChanged(KParts::Part *part)
                     this, SLOT( setStatus( const QString & ) ) );
             _status->show();
 
-            connect(_view, SIGNAL(cursorPositionChanged(View*)), this, SLOT(cursorPositionChanged()));
+            connect(_view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), this, SLOT(cursorPositionChanged()));
             cursorPositionChanged();
         }
         else

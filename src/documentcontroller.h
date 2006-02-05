@@ -10,6 +10,8 @@
 
 #include <kurl.h>
 
+#include <ktexteditor/modificationinterface.h>
+
 namespace KParts
 {
 class Part;
@@ -23,10 +25,7 @@ namespace KTextEditor
 {
 class Document;
 class Editor;
-class ModificationInterface;
 }
-
-typedef int ModifiedOnDiskReason;
 
 class QTabWidget;
 class KAction;
@@ -129,7 +128,7 @@ private slots:
 
     void slotDocumentDirty( KTextEditor::Document * doc,
                             bool isModified,
-                            ModifiedOnDiskReason reason );
+                            KTextEditor::ModificationInterface::ModifiedOnDiskReason reason );
     void slotNewStatus( KTextEditor::Document * doc );
     void slotNewDesignerStatus( const QString &formName, int status );
 

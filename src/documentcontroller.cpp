@@ -46,7 +46,6 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
 #include <ktexteditor/document.h>
-#include <ktexteditor/modificationinterface.h>
 #include <kglobal.h>
 
 #include "api.h"
@@ -1125,7 +1124,7 @@ void DocumentController::updateMenuItems()
 
 void DocumentController::slotDocumentDirty( KTextEditor::Document * d,
         bool isModified,
-        ModifiedOnDiskReason reason )
+        KTextEditor::ModificationInterface::ModifiedOnDiskReason reason )
 {
     kdDebug( 9000 ) << k_funcinfo << endl;
 
@@ -1423,10 +1422,10 @@ void DocumentController::integratePart( KParts::Part *part, const KUrl &url,
     if ( qobject_cast<KTextEditor::ModificationInterface*>( part ) )
         connect( part, SIGNAL( modifiedOnDisk( KTextEditor::Document*,
                                                bool,
-                                               ModifiedOnDiskReason ) ),
+                                               KTextEditor::ModificationInterface::ModifiedOnDiskReason ) ),
                  this, SLOT( slotDocumentDirty( KTextEditor::Document*,
                                                 bool,
-                                                ModifiedOnDiskReason ) ) );
+                                                KTextEditor::ModificationInterface::ModifiedOnDiskReason ) ) );
 
     // let's get notified when a document has been changed
     connect( part, SIGNAL( completed() ), this, SLOT( slotUploadFinished() ) );
