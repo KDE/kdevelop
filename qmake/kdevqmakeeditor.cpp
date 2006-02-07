@@ -104,7 +104,7 @@ KDevProjectEditor * KDevQMakeEditor::editor() const
 
 ProjectItemDom KDevQMakeEditor::import(ProjectModel *model, const QString &fileName)
 {
-    kdDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo << endl;
     QFileInfo fileInfo(fileName);
     
     ProjectItemDom item;
@@ -134,14 +134,14 @@ ProjectItemDom KDevQMakeEditor::import(ProjectModel *model, const QString &fileN
 
 ProjectFolderList KDevQMakeEditor::parse(ProjectFolderDom dom)
 {    
-    kdDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo << endl;
     ProjectFolderList folderList;
     if (!dom)
         return folderList;
     
-    kdDebug() << 1 << endl;
+    kDebug() << 1 << endl;
     QMakeFolderDom qmakeDom = QMakeFolderModel::from(dom);
-    kdDebug() << 2 << " folder is: " << qmakeDom->name() << ", ast is: " << qmakeDom->ast << endl;
+    kDebug() << 2 << " folder is: " << qmakeDom->name() << ", ast is: " << qmakeDom->ast << endl;
     
     //-------------
     //adding scopes and function scopes
@@ -152,23 +152,23 @@ ProjectFolderList KDevQMakeEditor::parse(ProjectFolderDom dom)
             newFolderDom(folderList, dom, *it);
     }
     //-------------
-    kdDebug() << 3 << endl;
+    kDebug() << 3 << endl;
     
     QDir d(dom->name());
     if (d.exists())
     {
-    kdDebug() << 4 << endl;
+    kDebug() << 4 << endl;
         const QFileInfoList *subdirs = d.entryInfoList(QDir::Dirs);
         for (QFileInfoList::const_iterator it = subdirs->constBegin(); 
             it != subdirs->constEnd(); ++it)
         {
-    kdDebug() << 5 << endl;
+    kDebug() << 5 << endl;
             QFileInfo *info = *it;
             if (info->isDir() && (info->fileName() != ".") && (info->fileName() != "..") )
             {
-    kdDebug() << 6 << " info: " << info->fileName() << endl;
+    kDebug() << 6 << " info: " << info->fileName() << endl;
                 newFolderDom(folderList, dom, 0, info);
-    kdDebug() << 7 << endl;
+    kDebug() << 7 << endl;
             }
         }
     }

@@ -37,14 +37,14 @@ QMake::ProjectAST *buildProjectAST(const QString &projectDir)
     QMake::ProjectAST *ast = 0;
         
     QDir d(projectDir);
-    QFileInfo f(d.absFilePath(d.dirName() + ".pro"));
-    QString projectFileName = f.absFilePath();
-    kdDebug() << "projectFileName: " << projectFileName << endl;
+    QFileInfo f(d.absoluteFilePath(d.dirName() + ".pro"));
+    QString projectFileName = f.absoluteFilePath();
+    kDebug() << "projectFileName: " << projectFileName << endl;
     if (!f.exists())    //try to locate .pro file which name differs from the name of a dir
     {
         QStringList proFiles = d.entryList("*.pro");
         if (proFiles.count() > 0)
-            projectFileName = d.absFilePath(proFiles.first());
+            projectFileName = d.absoluteFilePath(proFiles.first());
         else
         {
             ast = new ProjectAST(ProjectAST::Empty);
@@ -53,7 +53,7 @@ QMake::ProjectAST *buildProjectAST(const QString &projectDir)
     }
     
     QMake::Driver::parseFile(projectFileName, &ast);
-    kdDebug() << "parsed ast: " << ast << endl;
+    kDebug() << "parsed ast: " << ast << endl;
     return ast;
 }
 
@@ -67,7 +67,7 @@ void newFolderDom(ProjectFolderList &folderList,
     {
         //scope, function scope, etc.
         projectAST = (QMake::ProjectAST*)(ast);
-        kdDebug() << "    not a subproject: " << projectAST->scopedID << endl;
+        kDebug() << "    not a subproject: " << projectAST->scopedID << endl;
         
         if (projectAST->isScope())
         {
@@ -88,7 +88,7 @@ void newFolderDom(ProjectFolderList &folderList,
     else
     {
         folder->setName(info->fileName());
-        projectAST = buildProjectAST(info->absFilePath());
+        projectAST = buildProjectAST(info->absoluteFilePath());
         
         if (projectAST->isEmpty())
             folder->setAttribute("Icon", "folder_grey");    
