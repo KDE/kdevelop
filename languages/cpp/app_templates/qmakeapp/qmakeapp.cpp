@@ -152,7 +152,7 @@ void %{APPNAME}::choose()
 void %{APPNAME}::load( const QString &fileName )
 {
     QFile f( fileName );
-    if ( !f.open( IO_ReadOnly ) )
+    if ( !f.open( QIODevice::ReadOnly ) )
 	return;
 
     QTextStream ts( &f );
@@ -172,7 +172,7 @@ void %{APPNAME}::save()
 
     QString text = e->text();
     QFile f( filename );
-    if ( !f.open( IO_WriteOnly ) ) {
+    if ( !f.open( QIODevice::WriteOnly ) ) {
 	statusBar()->message( tr("Could not write to %1").arg(filename),
 			      2000 );
 	return;

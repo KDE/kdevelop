@@ -80,7 +80,7 @@ void AppOutputWidget::slotRowSelected(QListWidgetItem* row)
 
 void AppOutputWidget::insertStdoutLine(const QString &line)
 {
-  kdDebug(9004) << k_funcinfo << line << endl;
+  kDebug(9004) << k_funcinfo << line << endl;
   strList.append(QString("o-")+line);
   ProcessWidget::insertStdoutLine(line);
 }
@@ -88,7 +88,7 @@ void AppOutputWidget::insertStdoutLine(const QString &line)
 
 void AppOutputWidget::insertStderrLine(const QString &line)
 {
-  kdDebug(9004) << k_funcinfo << line << endl;
+  kDebug(9004) << k_funcinfo << line << endl;
   strList.append(QString("e-")+line);
   ProcessWidget::insertStderrLine(line);
 }

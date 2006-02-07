@@ -91,7 +91,7 @@ KDevPluginInfo::KDevPluginInfo(const QString &pluginName)
         d->m_data = new KAboutData(d->m_pluginName.ascii(), d->m_rawGenericName.ascii(), "1", 0, d->m_licenseType);
     }
     else
-	kdDebug() << "Unable to load information for plugin: " << pluginName
+	kDebug() << "Unable to load information for plugin: " << pluginName
 	    << ". Check if " << pluginName << ".desktop exists." << endl;
 }
 

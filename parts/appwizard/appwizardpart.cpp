@@ -67,7 +67,7 @@ AppWizardPart::~AppWizardPart()
 
 void AppWizardPart::slotNewProject()
 {
-    kdDebug(9010) << "new project" << endl;
+    kDebug(9010) << "new project" << endl;
     AppWizardDialog dlg(this, 0, "app wizard");
     dlg.templates_listview->setFocus();
     dlg.exec();

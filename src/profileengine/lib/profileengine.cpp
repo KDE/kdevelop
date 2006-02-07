@@ -47,7 +47,7 @@ ProfileEngine::~ProfileEngine()
 
 void ProfileEngine::processDir(const QString &dir, const QString &currPath, QMap<QString, Profile*> &passedPaths, Profile *root)
 {
-//     kdDebug() << "processDir: " << dir << " " << currPath << endl;
+//     kDebug() << "processDir: " << dir << " " << currPath << endl;
 
     QDir qDir(dir);
     QStringList entryList = qDir.entryList(QDir::Dirs);
@@ -100,7 +100,7 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
         constraint += " and ( " + constraint_add + " ) ";
 
 // //BEGIN debug
-//     kdDebug(9000) << "Query for Profile:" << endl
+//     kDebug(9000) << "Query for Profile:" << endl
 //               << constraint << endl << endl;
 // //END debug
 
@@ -134,12 +134,12 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
     }
 
 /*//BEGIN debug
-    kdDebug() << "=============" << endl
+    kDebug() << "=============" << endl
         << "    =============" << endl
         << "        =============   Plugins for Profile:" << endl;
     for (KTrader::OfferList::const_iterator it = list.begin(); it != list.end(); ++it)
-        kdDebug() << "        " << (*it)->name() << endl;
-    kdDebug() << endl << endl;
+        kDebug() << "        " << (*it)->name() << endl;
+    kDebug() << endl << endl;
 //END debug*/
 
     return list;
@@ -220,21 +220,21 @@ void ProfileEngine::diffProfiles(OfferType offerType, const QString &profile1,
         it != offers2.constEnd(); ++it)
         offers2List[(*it)->desktopEntryName()] = *it;
 
-//    kdDebug() << "OLD PROFILE: " << offers1List << endl;
-//    kdDebug() << "NEW PROFILE: " << offers2List << endl;
+//    kDebug() << "OLD PROFILE: " << offers1List << endl;
+//    kDebug() << "NEW PROFILE: " << offers2List << endl;
 
     for (QStringList::const_iterator it = offers1List.constBegin();
         it != offers1List.constEnd(); ++it)
     {
-//         kdDebug() << "checking: " << *it << endl;
+//         kDebug() << "checking: " << *it << endl;
         if (offers2List.contains(*it))
         {
-//             kdDebug() << "    keep" << endl;
+//             kDebug() << "    keep" << endl;
             offers2.remove(offers2List[*it]);
         }
         else
         {
-//             kdDebug() << "    unload" << endl;
+//             kDebug() << "    unload" << endl;
             unload.append(*it);
         }
     }

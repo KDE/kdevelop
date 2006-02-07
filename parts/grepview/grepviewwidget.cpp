@@ -58,7 +58,7 @@ private:
 
 GrepListBoxItem::GrepListBoxItem(const QString &fileName, const QString &lineNumber, const QString &text, bool showFilename)
         : ProcessListBoxItem( QString(), Normal),
-        fileName(fileName), lineNumber(lineNumber), text(text.stripWhiteSpace()),
+        fileName(fileName), lineNumber(lineNumber), text(text.trimmed()),
         show(showFilename)
 {}
 
@@ -312,7 +312,7 @@ void GrepViewProcessWidget::insertStdoutLine(const QString &line)
 
 void GrepViewWidget::projectChanged(KDevProject *project)
 {
-    QString dir = project? project->projectDirectory() : QDir::homeDirPath();
+    QString dir = project? project->projectDirectory() : QDir::homePath();
     grepdlg->setDirectory(dir);
 }
 

@@ -19,6 +19,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
+#include <QTextDocument>
 
 MakeItem::MakeItem()
 {
@@ -64,7 +65,7 @@ QString MakeItem::icon()
 
 QString MakeItem::text( EOutputLevel )
 {
-	return Q3StyleSheet::escape( m_text );
+	return Qt::escape( m_text );
 }
 
 QString MakeItem::formattedText( EOutputLevel level, bool bright_bg )
@@ -107,8 +108,8 @@ bool ErrorItem::append( const QString& text )
 		return false;
 	m_text += text;
 	m_error += text;
-	m_error = m_error.simplifyWhiteSpace();
-	m_text = m_text.simplifyWhiteSpace();
+	m_error = m_error.simplified();
+	m_text = m_text.simplified();
 	return true;
 }
 
@@ -143,7 +144,7 @@ ExitStatusItem::ExitStatusItem( bool normalExit, int exitStatus )
 	: m_normalExit( normalExit )
 	, m_exitStatus( exitStatus )
 {
-//	kdDebug() << "ExitStatusItem: normalExit=" << normalExit << "; exitStatus=" << exitStatus << endl;
+//	kDebug() << "ExitStatusItem: normalExit=" << normalExit << "; exitStatus=" << exitStatus << endl;
 	m_text = i18n("*** Compilation aborted ***");
 	if ( m_normalExit )
 		if (m_exitStatus )

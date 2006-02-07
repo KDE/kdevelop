@@ -188,7 +188,7 @@
                         <string>Only project files in this dir and its subdirs will be considered.</string>
                     </property>
                 </widget>
-                <widget class="KURLRequester">
+                <widget class="KUrlRequester">
                     <property name="name">
                         <cstring>path_urlreq</cstring>
                     </property>

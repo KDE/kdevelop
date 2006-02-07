@@ -85,7 +85,7 @@ KDevAppTemplate::KDevAppTemplate( KConfig* config, const QString& rootDir, KDevA
         if( config->readEntry("Type").lower() == "include" )
         {
             QString include( m_config->readEntry( "File" ) );
-            // kdDebug(9010) << "Adding: " << include << endl;
+            // kDebug(9010) << "Adding: " << include << endl;
             QHash<QString,QString> hash;
             hash["kdevelop"] = rootDir;
             expandMacros( include, hash );
@@ -93,7 +93,7 @@ KDevAppTemplate::KDevAppTemplate( KConfig* config, const QString& rootDir, KDevA
             {
                 KConfig tmpCfg( include );
                 tmpCfg.copyTo( "", m_config);
-                // kdDebug(9010) << "Merging: " << tmpCfg.name() << endl;
+                // kDebug(9010) << "Merging: " << tmpCfg.name() << endl;
             }
         }
     }
@@ -190,15 +190,15 @@ void KDevAppTemplate::addDir( Dir& dir )
 
 void KDevAppTemplate::addFile( File file )
 {
-    kdDebug(9010) << "Adding file: " << file.dest << endl;
+    kDebug(9010) << "Adding file: " << file.dest << endl;
     m_fileList.append( file );
     foreach( File f, m_fileList )
-        kdDebug(9010) << f.source << "/" << f.dest << endl;
+        kDebug(9010) << f.source << "/" << f.dest << endl;
 }
 
 void KDevAppTemplate::expandLists()
 {
-    kdDebug(9010) << "KDevAppTemplate::expandLists()" << endl;
+    kDebug(9010) << "KDevAppTemplate::expandLists()" << endl;
 
     QList<File>::iterator fit( m_fileList.begin() );
     for( ; fit != m_fileList.end(); ++fit )
@@ -215,9 +215,9 @@ void KDevAppTemplate::expandLists()
 
 void KDevAppTemplate::File::expand( QHash<QString, QString> hash )
 {
-    //kdDebug(9010) << "File::expand1" << endl;
+    //kDebug(9010) << "File::expand1" << endl;
     expandMacros( source, hash );
-    //kdDebug(9010) << "File::expand2" << endl;
+    //kDebug(9010) << "File::expand2" << endl;
     expandMacros( dest, hash );
 }
 
@@ -251,7 +251,7 @@ bool KDevAppTemplate::unpackTemplateArchive()
     }
     else
     {
-        kdDebug(9010) << "After KTar::open fail" << endl;
+        kDebug(9010) << "After KTar::open fail" << endl;
         KMessageBox::sorry(0/**@todo*/, i18n("The template %1 cannot be opened.").arg( archiveName ) );
         templateArchive.close();
         return false;
@@ -284,7 +284,7 @@ bool KDevAppTemplate::installProject( QWidget* parentWidget )
     // Create dirs
     foreach( Dir dir, m_dirList )
     {
-        kdDebug( 9000 ) << "Process dir " << dir.dir  << endl;
+        kDebug( 9000 ) << "Process dir " << dir.dir  << endl;
         if( m_subMap[dir.option] != "false" )
         {
             if( !KIO::NetAccess::mkdir( dir.dir, parentWidget ) )
@@ -301,7 +301,7 @@ bool KDevAppTemplate::installProject( QWidget* parentWidget )
     foreach( Archive arch, m_archList )
         if( m_subMap[arch.option] != "false" )
         {
-            kdDebug( 9010 ) << "unpacking archive " << arch.source << endl;
+            kDebug( 9010 ) << "unpacking archive " << arch.source << endl;
             KTar archive( arch.source, "application/x-gzip" );
             if( archive.open( QIODevice::ReadOnly ) )
             {
@@ -319,7 +319,7 @@ bool KDevAppTemplate::installProject( QWidget* parentWidget )
     // Copy files & Process
     foreach( File file, m_fileList )
     {
-        kdDebug( 9010 ) << "Process file " << file.source << endl;
+        kDebug( 9010 ) << "Process file " << file.source << endl;
         if( m_subMap[file.option] != "false" )
         {
             if( !file.copy(this) )
@@ -335,7 +335,7 @@ bool KDevAppTemplate::installProject( QWidget* parentWidget )
 
 bool KDevAppTemplate::File::copy( KDevAppTemplate* templ )
 {
-    kdDebug( 9010 ) << "Copy: " << source << " to " << dest << endl;
+    kDebug( 9010 ) << "Copy: " << source << " to " << dest << endl;
 
     if( !process )  // Do a simple copy operation
         return KIO::NetAccess::copy( source, dest, 0 );
@@ -367,8 +367,8 @@ bool KDevAppTemplate::File::copy( KDevAppTemplate* templ )
 
 void KDevAppTemplate::File::setPermissions() const
 {
-    kdDebug(9010) << "KDevAppTemplate::File::setPermissions()" << endl;
-    kdDebug(9010) << "  dest: " << dest << endl;
+    kDebug(9010) << "KDevAppTemplate::File::setPermissions()" << endl;
+    kDebug(9010) << "  dest: " << dest << endl;
 
     KIO::UDSEntry sourceentry;
     KUrl sourceurl = KUrl::fromPathOrURL(source);
@@ -378,14 +378,14 @@ void KDevAppTemplate::File::setPermissions() const
         int sourcemode = sourceit.permissions();
         if( sourcemode & 00100 )
         {
-            kdDebug(9010) << "source is executable" << endl;
+            kDebug(9010) << "source is executable" << endl;
             KIO::UDSEntry entry;
             KUrl kurl = KUrl::fromPathOrURL(dest);
             if( KIO::NetAccess::stat(kurl, entry, 0) )
             {
                 KFileItem it(entry, kurl);
                 int mode = it.permissions();
-                kdDebug(9010) << "stat shows permissions: " << mode << endl;
+                kDebug(9010) << "stat shows permissions: " << mode << endl;
                 KIO::chmod(KUrl::fromPathOrURL(dest), mode | 00100 );
             }
         }
@@ -396,9 +396,9 @@ void KDevAppTemplate::Archive::unpack( const KArchiveDirectory *dir )
 {
 /*
     KIO::NetAccess::mkdir( dest , this );
-    kdDebug(9010) << "Dir : " << dir->name() << " at " << dest << endl;
+    kDebug(9010) << "Dir : " << dir->name() << " at " << dest << endl;
     QStringList entries = dir->entries();
-    kdDebug(9010) << "Entries : " << entries.join(",") << endl;
+    kDebug(9010) << "Entries : " << entries.join(",") << endl;
 
     KTempDir tdir;
 
@@ -424,7 +424,7 @@ void KDevAppTemplate::Archive::unpack( const KArchiveDirectory *dir )
                 file->copyTo(tdir.name());
                 // assume that an archive does not contain XML files
                 // ( where should we currently get that info from? )
-                if ( !copyFile( QDir::cleanDirPath(tdir.name()+"/"+file->name()), dest + "/" + file->name(), false, process ) )
+                if ( !copyFile( QDir::cleanPath(tdir.name()+"/"+file->name()), dest + "/" + file->name(), false, process ) )
                 {
                     KMessageBox::sorry(this, i18n("The file %1 cannot be created.").arg( dest) );
                     return;
@@ -439,19 +439,19 @@ void KDevAppTemplate::Archive::unpack( const KArchiveDirectory *dir )
 /*
 void KDevAppTemplate::Archive::setPermissions(const KArchiveFile *source, QString dest)
 {
-    kdDebug(9010) << "KDevAppTemplate::Archive::setPermissions(const KArchiveFile *source, QString dest)" << endl;
-    kdDebug(9010) << "  dest: " << dest << endl;
+    kDebug(9010) << "KDevAppTemplate::Archive::setPermissions(const KArchiveFile *source, QString dest)" << endl;
+    kDebug(9010) << "  dest: " << dest << endl;
 
     if( source->permissions() & 00100 )
     {
-        kdDebug(9010) << "source is executable" << endl;
+        kDebug(9010) << "source is executable" << endl;
         KIO::UDSEntry entry;
         KUrl kurl = KUrl::fromPathOrURL(dest);
         if( KIO::NetAccess::stat(kurl, entry, 0) )
         {
             KFileItem it(entry, kurl);
             int mode = it.permissions();
-            kdDebug(9010) << "stat shows permissions: " << mode << endl;
+            kDebug(9010) << "stat shows permissions: " << mode << endl;
             KIO::chmod(KUrl::fromPathOrURL(dest), mode | 00100 );
         }
     }
@@ -466,11 +466,11 @@ KDevAppTemplateModel::KDevAppTemplateModel(QObject *parent)
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
     QStringList templateNames = dirs->findAllResources("apptemplates", QString::null, false, true);
 
-    kdDebug(9010) << "Templates: " << endl;
+    kDebug(9010) << "Templates: " << endl;
     foreach( QString templateName, templateNames )
     {
         QString templateFile = KGlobal::dirs()->findResource("apptemplates", templateName);
-        kdDebug(9010) << templateName << " in " << templateFile << endl;
+        kDebug(9010) << templateName << " in " << templateFile << endl;
         KConfig* templateConfig = new KConfig( templateFile );
         templateConfig->setGroup("General");
 

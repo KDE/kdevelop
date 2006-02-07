@@ -151,7 +151,7 @@ executed.&lt;/p&gt;</string>
                 </widget>
             </hbox>
         </widget>
-        <widget class="KURLRequester" row="2" column="1">
+        <widget class="KUrlRequester" row="2" column="1">
             <property name="name">
                 <cstring>execEdit</cstring>
             </property>

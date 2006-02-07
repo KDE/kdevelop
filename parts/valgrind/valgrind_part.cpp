@@ -119,7 +119,7 @@ void ValgrindPart::getActiveFiles()
       KUrl url( projectDirectory + "/" + (*it) );
       url.cleanPath( true );
       activeFiles += url.path();
-      kdDebug() << "set project file: " << url.path().latin1() << endl;
+      kDebug() << "set project file: " << url.path().latin1() << endl;
     }
   }
 }
@@ -237,7 +237,7 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
 
 void ValgrindPart::receivedStdout( KProcess*, char* /* msg */, int /* len */ )
 {
-  //kdDebug() << "got StdOut: " <<QString::fromLocal8Bit( msg, len ) << endl;
+  //kDebug() << "got StdOut: " <<QString::fromLocal8Bit( msg, len ) << endl;
 }
 
 void ValgrindPart::receivedStderr( KProcess*, char* msg, int len )
@@ -250,7 +250,7 @@ void ValgrindPart::receivedString( const QString& str )
   QString rmsg = lastPiece + str;
   QStringList lines = QStringList::split( "\n", rmsg );
 
-//  kdDebug() << "got: " << QString::fromLocal8Bit( msg, len ) << endl;
+//  kDebug() << "got: " << QString::fromLocal8Bit( msg, len ) << endl;
 
   if ( !rmsg.endsWith( "\n" ) ) {
     // the last message is trucated, we'll receive

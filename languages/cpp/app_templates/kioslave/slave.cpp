@@ -29,24 +29,24 @@ using namespace KIO;
 kio_%{APPNAMELC}Protocol::kio_%{APPNAMELC}Protocol(const QCString &pool_socket, const QCString &app_socket)
     : SlaveBase("kio_%{APPNAMELC}", pool_socket, app_socket)
 {
-    kdDebug() << "kio_%{APPNAMELC}Protocol::kio_%{APPNAMELC}Protocol()" << endl;
+    kDebug() << "kio_%{APPNAMELC}Protocol::kio_%{APPNAMELC}Protocol()" << endl;
 }
 
 
 kio_%{APPNAMELC}Protocol::~kio_%{APPNAMELC}Protocol()
 {
-    kdDebug() << "kio_%{APPNAMELC}Protocol::~kio_%{APPNAMELC}Protocol()" << endl;
+    kDebug() << "kio_%{APPNAMELC}Protocol::~kio_%{APPNAMELC}Protocol()" << endl;
 }
 
 
 void kio_%{APPNAMELC}Protocol::get(const KURL& url )
 {
-    kdDebug() << "kio_%{APPNAMELC}::get(const KURL& url)" << endl ;
+    kDebug() << "kio_%{APPNAMELC}::get(const KURL& url)" << endl ;
     
-    kdDebug() << "Seconds: " << url.query() << endl;
+    kDebug() << "Seconds: " << url.query() << endl;
     QString remoteServer = url.host();
     int remotePort = url.port();
-    kdDebug() << "myURL: " << url.prettyURL() << endl;
+    kDebug() << "myURL: " << url.prettyURL() << endl;
     
     infoMessage(i18n("Looking for %1...").arg( remoteServer ) );
     // Send the mimeType as soon as it is known
@@ -72,17 +72,17 @@ extern "C"
     {
         KInstance instance( "kio_%{APPNAMELC}" );
         
-        kdDebug(7101) << "*** Starting kio_%{APPNAMELC} " << endl;
+        kDebug(7101) << "*** Starting kio_%{APPNAMELC} " << endl;
         
         if (argc != 4) {
-            kdDebug(7101) << "Usage: kio_%{APPNAMELC}  protocol domain-socket1 domain-socket2" << endl;
+            kDebug(7101) << "Usage: kio_%{APPNAMELC}  protocol domain-socket1 domain-socket2" << endl;
             exit(-1);
         }
         
         kio_%{APPNAMELC}Protocol slave(argv[2], argv[3]);
         slave.dispatchLoop();
         
-        kdDebug(7101) << "*** kio_%{APPNAMELC} Done" << endl;
+        kDebug(7101) << "*** kio_%{APPNAMELC} Done" << endl;
         return 0;
     }
 } 

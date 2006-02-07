@@ -151,7 +151,7 @@ void PartExplorerForm::slotSearchRequested()
     QString serviceType = m_base->typeCombo->lineEdit()->text();
     QString constraints = m_base->constraintsText->text();
 
-    kdDebug(9000) << "===> PartExplorerForm::slotSearchRequested(): " <<
+    kDebug(9000) << "===> PartExplorerForm::slotSearchRequested(): " <<
         " serviceType = " << serviceType << ", constraints = " << constraints << endl;
 
     // Query for requested services
@@ -208,7 +208,7 @@ void PartExplorerForm::fillServiceList( const KTrader::OfferList &services )
 
             QString dProperty = " *** Found property < %1, %2, %3 >";
             dProperty = dProperty.arg( propertyName ).arg( propertyType ).arg( propertyValue );
-            kdDebug( 9000 ) << dProperty << endl;
+            kDebug( 9000 ) << dProperty << endl;
 
             new PartExplorer::PropertyItem( serviceItem, propertyName, propertyType, propertyValue );
         }

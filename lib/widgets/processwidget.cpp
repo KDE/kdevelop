@@ -78,7 +78,7 @@ void ProcessWidget::startJob(const QString &dir, const QString &command)
     addItem(new ProcessListBoxItem(command, ProcessListBoxItem::Diagnostic));
     childproc->clearArguments();
     if (!dir.isNull()) {
-        kdDebug(9000) << "Changing to dir " << dir << endl;
+        kDebug(9000) << "Changing to dir " << dir << endl;
         QDir::setCurrent(dir);
     }
 
@@ -111,7 +111,7 @@ void ProcessWidget::slotProcessExited(KProcess *)
 
 void ProcessWidget::insertStdoutLine(const QString &line)
 {
-    addItem(new ProcessListBoxItem(line.stripWhiteSpace(),
+    addItem(new ProcessListBoxItem(line.trimmed(),
                                       ProcessListBoxItem::Normal));
     maybeScrollToBottom();
 }
@@ -119,7 +119,7 @@ void ProcessWidget::insertStdoutLine(const QString &line)
 
 void ProcessWidget::insertStderrLine(const QString &line)
 {
-    addItem(new ProcessListBoxItem(line.stripWhiteSpace(),
+    addItem(new ProcessListBoxItem(line.trimmed(),
                                       ProcessListBoxItem::Error));
     maybeScrollToBottom();
 }

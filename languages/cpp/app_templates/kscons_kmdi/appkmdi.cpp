@@ -195,7 +195,7 @@ void %{APPNAMELC}kmdi::openURL(const KURL & url)
 
 void %{APPNAMELC}kmdi::currentChanged( KMdiChildView *current )
 {
-	//kdWarning()<<"current view changed"<<endl;
+	//kWarning()<<"current view changed"<<endl;
 	if (!current)
 	{
 		m_manager->setActivePart(NULL);
@@ -219,7 +219,7 @@ void %{APPNAMELC}kmdi::slotFileClose()
 
 bool %{APPNAMELC}kmdi::requestClose(KMdiChildView* v)
 {
-	//    kdWarning()<<"closing view"<<v<<endl;
+	//    kWarning()<<"closing view"<<v<<endl;
 	//    if (view == NULL)
 	//	return;
 
@@ -370,7 +370,7 @@ bool %{APPNAMELC}kmdi::queryClose()
 	// check if we can close all documents
 	for (it = m_views.begin(); it != m_views.end(); ++it)
 	{
-		// kdWarning()<<"searching for the part"<<endl;
+		// kWarning()<<"searching for the part"<<endl;
 		%{APPNAMELC}kmdiView *view = *it;
 		if (!view->part()->queryClose())
 		{

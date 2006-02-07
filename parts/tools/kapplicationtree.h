@@ -26,7 +26,7 @@
 #include <QLabel>
 #include <QResizeEvent>
 
-class KURLRequester;
+class KUrlRequester;
 
 class QWidget;
 class QCheckBox;

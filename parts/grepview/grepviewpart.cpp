@@ -85,14 +85,14 @@ void GrepViewPart::stopButtonClicked(KDevPlugin* which)
 {
     if ( which != 0 && which != this )
         return;
-    kdDebug(9001) << "GrepViewPart::stopButtonClicked()" << endl;
+    kDebug(9001) << "GrepViewPart::stopButtonClicked()" << endl;
     m_widget->killJob( SIGHUP );
 }
 
 
 void GrepViewPart::projectOpened()
 {
-    kdDebug(9001) << "GrepViewPart::projectOpened()" << endl;
+    kDebug(9001) << "GrepViewPart::projectOpened()" << endl;
     m_widget->projectChanged(project());
 }
 
@@ -105,7 +105,7 @@ void GrepViewPart::projectClosed()
 
 void GrepViewPart::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
-    kdDebug(9001) << "context in grepview" << endl;
+    kDebug(9001) << "context in grepview" << endl;
     if (!context->hasType( Context::EditorContext ))
         return;
 

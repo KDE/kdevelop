@@ -96,7 +96,7 @@ void KDevAppTreeListItem::init(const QPixmap& pixmap, bool parse, bool dir, cons
     path = _path; // relative path
     exec = _exec;
     dEntry = _dEntry;
-    exec.simplifyWhiteSpace();
+    exec.simplified();
     exec.truncate(exec.find(' '));
 }
 
@@ -196,7 +196,7 @@ void KDevApplicationTree::addDesktopGroup( QString relPath, KDevAppTreeListItem 
       }
       else
       {
-         kdWarning(250) << "KServiceGroup: Unexpected object in list!" << endl;
+         kWarning(250) << "KServiceGroup: Unexpected object in list!" << endl;
          continue;
       }
 

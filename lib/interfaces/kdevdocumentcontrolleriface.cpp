@@ -57,19 +57,19 @@ void KDevDocumentControllerIface::reloadAllDocuments()
 
 void KDevDocumentControllerIface::forwardLoadedDocument(const KUrl &url)
 {
-  kdDebug(9000) << "dcop emitting loadedDocument " << url << endl;
+  kDebug(9000) << "dcop emitting loadedDocument " << url << endl;
   emitDCOPSignal("projectOpened()", QByteArray());
 }
 
 void KDevDocumentControllerIface::forwardSavedDocument(const KUrl &url)
 {
-  kdDebug(9000) << "dcop emitting savedDocument " << url << endl;
+  kDebug(9000) << "dcop emitting savedDocument " << url << endl;
   emitDCOPSignal("projectClosed()", QByteArray());
 }
 
 void KDevDocumentControllerIface::forwardClosedDocument(const KUrl &url)
 {
-  kdDebug(9000) << "dcop emitting closedDocument " << url << endl;
+  kDebug(9000) << "dcop emitting closedDocument " << url << endl;
   emitDCOPSignal("projectClosed()", QByteArray());
 }
 

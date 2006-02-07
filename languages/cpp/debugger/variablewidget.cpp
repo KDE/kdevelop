@@ -371,7 +371,7 @@ void VariableTree::slotContextMenu(KListView *, Q3ListViewItem *item)
 
 void VariableTree::slotAddWatchVariable(const QString &watchVar)
 {
-    kdDebug(9012) << "Add watch variable: " << watchVar << endl;
+    kDebug(9012) << "Add watch variable: " << watchVar << endl;
     VarItem *varItem = new VarItem(findWatch(), watchVar, typeUnknown);
     emit expandItem(varItem);
 }
@@ -493,7 +493,7 @@ Q3ListViewItem *VariableTree::lastChild() const
 
 void VariableTree::maybeTip(const QPoint &p)
 {
-    kdDebug(9012) << "ToolTip::maybeTip()" << endl;
+    kDebug(9012) << "ToolTip::maybeTip()" << endl;
 
     /* FIXME port
 
@@ -866,7 +866,7 @@ VarItem::VarItem(TrimmableItem *parent, const QString &varName, DataType dataTyp
     // Allow to change variable name by editing.
     setRenameEnabled(ValueCol, true);
 
-    kdDebug(9012) << " ### VarItem::VarItem *CONSTR*" << endl;
+    kDebug(9012) << " ### VarItem::VarItem *CONSTR*" << endl;
     emit ((VariableTree*)listView())->varItemConstructed(this);
 }
 
@@ -992,14 +992,14 @@ void VarItem::updateValue(char *buf)
 
 void VarItem::updateType(char *buf)
 {
-    kdDebug(9012) << " ### VarItem::updateType " << buf << endl;
+    kDebug(9012) << " ### VarItem::updateType " << buf << endl;
 
     QString str(buf);
     int eq = str.find('=');
     if (eq < 0)
         return;
     str.replace(QRegExp("[\n\r]"),"");
-    str = str.mid(eq + 1, 0xffff).stripWhiteSpace();
+    str = str.mid(eq + 1, 0xffff).trimmed();
 
     originalValueType_ = str.latin1();
 

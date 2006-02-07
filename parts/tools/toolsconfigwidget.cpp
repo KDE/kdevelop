@@ -176,7 +176,7 @@ void ToolsConfigWidget::toolsmenuaddClicked()
     while (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();
-        entry->cmdline = dlg.getApp().stripWhiteSpace();
+        entry->cmdline = dlg.getApp().trimmed();
         entry->isdesktopfile = false;
         entry->captured = dlg.capturedBox->isChecked();
         if ( entry->isEmpty() )
@@ -203,7 +203,7 @@ void ToolsConfigWidget::filecontextaddClicked()
     while (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();
-        entry->cmdline = dlg.getApp().stripWhiteSpace();
+        entry->cmdline = dlg.getApp().trimmed();
         entry->isdesktopfile = false;
         entry->captured = dlg.capturedBox->isChecked();
         if ( entry->isEmpty() )
@@ -231,7 +231,7 @@ void ToolsConfigWidget::dircontextaddClicked()
     if (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();
-        entry->cmdline = dlg.getApp().stripWhiteSpace();
+        entry->cmdline = dlg.getApp().trimmed();
         entry->isdesktopfile = false;
         entry->captured = dlg.capturedBox->isChecked();
         if ( entry->isEmpty() )

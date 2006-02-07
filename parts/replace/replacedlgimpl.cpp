@@ -55,7 +55,7 @@ ReplaceDlgImpl::ReplaceDlgImpl(QWidget* parent, const char* name, bool modal, Qt
         strings_regexp_radio->disconnect( regexp_button );
     }
 
-    path_urlreq->completionObject()->setMode(KURLCompletion::DirCompletion);
+    path_urlreq->completionObject()->setMode(KUrlCompletion::DirCompletion);
     path_urlreq->setMode( KFile::Directory | KFile::LocalOnly );
 
     expression_varning_label->hide();
@@ -101,7 +101,7 @@ void ReplaceDlgImpl::showRegExpEditor()
 
 void ReplaceDlgImpl::validateFind( const QString & )
 {
-    //kdDebug(0) << "ReplaceWidget::validateFind()" << endl;
+    //kDebug(0) << "ReplaceWidget::validateFind()" << endl;
 
     bool x = find_combo->currentText().isEmpty() && ! strings_regexp_radio->isOn();
     find_button->setEnabled( !x );
@@ -109,7 +109,7 @@ void ReplaceDlgImpl::validateFind( const QString & )
 
 void ReplaceDlgImpl::validateExpression( const QString & )
 {
-    //kdDebug(0) << "ReplaceWidget::validateExpression()" << endl;
+    //kDebug(0) << "ReplaceWidget::validateExpression()" << endl;
 
     QString pattern = regexp_combo->currentText();
     QRegExp re( pattern );

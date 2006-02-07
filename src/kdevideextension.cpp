@@ -66,7 +66,7 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
     gsw->dirNavigMsgCheckBox->setChecked(config->readBoolEntry("ShowDirNavigMsg",false));
     gsw->compileOutputCombo->setCurrentItem(config->readNumEntry("CompilerOutputLevel",2));
     config->setGroup("General Options");
-    gsw->projectsURL->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
+    gsw->projectsURL->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homePath()+"/"));
     gsw->designerButtonGroup->setButton( config->readNumEntry( "DesignerApp", 0 ) );
 
     config->setGroup("TerminalEmulator");
@@ -96,7 +96,7 @@ void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase *dlg)
 
     config->setGroup("TerminalEmulator");
     config->writeEntry("UseKDESetting", gsw->useKDETerminal->isChecked() );
-    config->writeEntry("TerminalApplication", gsw->terminalEdit->text().stripWhiteSpace() );
+    config->writeEntry("TerminalApplication", gsw->terminalEdit->text().trimmed() );
 }
 
 QString KDevIDEExtension::xmlFile()

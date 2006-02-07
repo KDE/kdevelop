@@ -801,7 +801,7 @@ void DebuggerPart::slotExamineCore()
 {
     mainWindow()->statusBar()->message(i18n("Choose a core file to examine..."), 1000);
 
-    QString dirName = project()? project()->projectDirectory() : QDir::homeDirPath();
+    QString dirName = project()? project()->projectDirectory() : QDir::homePath();
     QString coreFile = KFileDialog::getOpenFileName(dirName);
     if (coreFile.isNull())
         return;
@@ -1014,8 +1014,8 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     }
 
     // And now? :-)
-    kdDebug(9012) << "Debugger state: " << stateIndicator << ": " << endl;
-    kdDebug(9012) << "   " << msg << endl;
+    kDebug(9012) << "Debugger state: " << stateIndicator << ": " << endl;
+    kDebug(9012) << "   " << msg << endl;
 
     statusBarIndicator->setText(stateIndicator);
     if (!msg.isEmpty())

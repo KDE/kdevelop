@@ -38,7 +38,7 @@ private:
     
     KAction *action;
     
-    QGuardedPtr<%{APPNAME}Widget> m_widget;
+    QPointer<%{APPNAME}Widget> m_widget;
     ConfigWidgetProxy *m_configProxy;
 };
 

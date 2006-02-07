@@ -255,7 +255,7 @@ void ToolsPart::toolsMenuActivated()
     QString cmdline = config->readPathEntry("CommandLine");
     bool isdesktopfile = config->readBoolEntry("DesktopFile");
     bool captured = config->readBoolEntry("Captured");
-    kdDebug() << "activating " << menutext
+    kDebug() << "activating " << menutext
               << "with cmdline " << cmdline
               << "and desktopfile " << isdesktopfile << endl;
     if (isdesktopfile)
@@ -273,7 +273,7 @@ void ToolsPart::fileContextActivated(int id)
     config->setGroup("File Context " + menutext);
     QString cmdline = config->readPathEntry("CommandLine");
     bool captured = config->readBoolEntry("Captured");
-    kdDebug() << "activating " << menutext
+    kDebug() << "activating " << menutext
               << " with cmdline " << cmdline
               << " on file " << m_contextFileName << endl;
     startCommand(cmdline, captured, m_contextFileName);
@@ -288,7 +288,7 @@ void ToolsPart::dirContextActivated(int id)
     config->setGroup("Dir Context " + menutext);
     QString cmdline = config->readPathEntry("CommandLine");
     bool captured = config->readBoolEntry("Captured");
-    kdDebug() << "activating " << menutext
+    kDebug() << "activating " << menutext
               << "with cmdline " << cmdline
               << " on directory " << m_contextFileName << endl;
     startCommand(cmdline, captured, m_contextFileName);

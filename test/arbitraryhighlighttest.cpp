@@ -91,7 +91,7 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
 {
   //static bool switchEachTime = false;
 
-  kdDebug() << k_funcinfo << *range << " mostSpecific " << *mostSpecificChild << endl;
+  kDebug() << k_funcinfo << *range << " mostSpecific " << *mostSpecificChild << endl;
 
   // Initialise lexer globals
   _M_token_begin = _M_token_end = 0;
@@ -112,7 +112,7 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
       break;
 
     // We've decided on a recovery point to try
-    kdDebug() << "Trying to incrementally parse range " << *recoveryPoint << endl;
+    kDebug() << "Trying to incrementally parse range " << *recoveryPoint << endl;
 
     // Nuke current children -- to be replaced
     recoveryPoint->deleteChildRanges();
@@ -138,7 +138,7 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
       EditModelBuilder builder(recoveryPoint, token_stream, m_recoveryPoints, recoveryPoint->start(), true);
       //switchEachTime = !switchEachTime;
       builder.visit_node(node);
-      kdDebug() << "Succeeded partially parsing " << *recoveryPoint << endl;
+      kDebug() << "Succeeded partially parsing " << *recoveryPoint << endl;
       return;
     }
 
@@ -173,7 +173,7 @@ void ArbitraryHighlightTest::slotRangeChanged(SmartRange* range, SmartRange* mos
     builder.visit_node(ast);
 
   } else {
-    kdDebug() << "** ERROR expected a declaration: token position:" << _M_token_begin << endl;
+    kDebug() << "** ERROR expected a declaration: token position:" << _M_token_begin << endl;
   }
 
   //outputRange(range, mostSpecificChild);
@@ -243,7 +243,7 @@ bool ArbitraryHighlightTest::parseAST(cool& parser, cool_ast_node** node, int ty
 
 void ArbitraryHighlightTest::outputRange( KTextEditor::SmartRange * range, KTextEditor::SmartRange * mostSpecific )
 {
-  kdDebug() << (mostSpecific == range ? "==> " : "       ") << QString(range->depth(), ' ') << *range << endl;
+  kDebug() << (mostSpecific == range ? "==> " : "       ") << QString(range->depth(), ' ') << *range << endl;
   foreach (SmartRange* child, range->childRanges())
     outputRange(child, mostSpecific);
 }

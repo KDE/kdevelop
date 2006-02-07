@@ -58,7 +58,7 @@ void EditModelBuilder::visit_node( cool_ast_node * node )
   if (node && m_monochrome) {
     m_currentRange = m_currentRange->parentRange();
     --m_depth;
-    //kdDebug() << k_funcinfo << node->start_token << ", " << node->start_token << " translates to " << tokenToPosition(node->start_token) << ", " << tokenToPosition(node->end_token) << endl;
+    //kDebug() << k_funcinfo << node->start_token << ", " << node->start_token << " translates to " << tokenToPosition(node->start_token) << ", " << tokenToPosition(node->end_token) << endl;
   }
 }
 
@@ -128,7 +128,7 @@ void EditModelBuilder::visit_feature( feature_ast * ast )
   SmartRange* type = newRange(ast->type);
   type->setAttribute(CoolHighlights::typeHighlight());
 
-  kdDebug() << k_funcinfo << name->text() << " type " << type->text() << endl;
+  kDebug() << k_funcinfo << name->text() << " type " << type->text() << endl;
 
   //debugOutput(m_currentRange);
 
@@ -239,7 +239,7 @@ KTextEditor::SmartRange * EditModelBuilder::newRange( std::size_t token )
 
 void EditModelBuilder::debugOutput( KTextEditor::SmartRange * range, int depth )
 {
-  kdDebug() << QString(depth, QChar('\\')) << range << " " << *range << " attrib " << range->attribute() << endl;
+  kDebug() << QString(depth, QChar('\\')) << range << " " << *range << " attrib " << range->attribute() << endl;
   foreach (SmartRange* child, range->childRanges())
     debugOutput(child, depth+1);
 }

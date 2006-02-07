@@ -20,7 +20,7 @@
  */
 #include "kdevcodeproxy.h"
 
-#include "kdevcodeaggregate.h"
+#include "kdevcodeaggregate_p.h"
 
 KDevCodeProxy::KDevCodeProxy( QObject* parent )
         : QSortFilterProxyModel( parent )

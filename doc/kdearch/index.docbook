@@ -355,7 +355,7 @@ A drag object for URLs.
 </para>
 </formalpara></listitem>
 
-<listitem><formalpara><title><ulink url="kdeapi:kdeui/KColorDrag">KColorDrag</ulink></title>
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/K3ColorDrag">K3ColorDrag</ulink></title>
 <para>
 A drag object for colors.
 </para>
@@ -381,7 +381,7 @@ Generic auto-completion of strings.
 </para>
 </formalpara></listitem>
 
-<listitem><formalpara><title><ulink url="kdeapi:kio/KURLCompletion">KURLCompletion</ulink></title>
+<listitem><formalpara><title><ulink url="kdeapi:kio/KUrlCompletion">KUrlCompletion</ulink></title>
 <para>
 Auto-completion of URLs.
 </para>
@@ -449,13 +449,13 @@ A button for selecting colors.
 </para>
 </formalpara></listitem>
 
-<listitem><formalpara><title><ulink url="kdeapi:kdeui/KURLCombo">KURLCombo</ulink></title>
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KUrlCombo">KUrlCombo</ulink></title>
 <para>
 A combo box for selecting file names and URLs.
 </para>
 </formalpara></listitem>
 
-<listitem><formalpara><title><ulink url="kdeapi:kfile/KURLRequester">KURLRequester</ulink></title>
+<listitem><formalpara><title><ulink url="kdeapi:kfile/KUrlRequester">KUrlRequester</ulink></title>
 <para>
 A line edit for selecting file names and URLs.
 </para>
@@ -548,7 +548,7 @@ A simple dialog for entering text.
 </para>
 </formalpara></listitem>
 
-<listitem><formalpara><title><ulink url="kdeapi:kfile/KURLRequesterDlg">KURLRequesterDlg</ulink></title>
+<listitem><formalpara><title><ulink url="kdeapi:kfile/KUrlRequesterDlg">KUrlRequesterDlg</ulink></title>
 <para>
 A simple dialog for entering URLs.
 </para>
@@ -742,7 +742,7 @@ y' according to
 
 <para>
 The 3x3 matrix in this equation can be set with QPainter::setWorldMatrix() and
-is of type <ulink url="kdeapi:qt/QWMatrix">QWMatrix</ulink>.
+is of type <ulink url="kdeapi:qt/QMatrix">QMatrix</ulink>.
 Normally, this is the identity matrix, i.e. m11 and m22 are one, and the
 other parameters are zero. There are basically three different groups of
 transformations:
@@ -755,7 +755,7 @@ transformations:
 <para>
 These move all points of an object by a fixed amount in
 some direction. A translation matrix can be obtained by calling
-method m.translate(dx, dy) for a QWMatrix. This corresponds to the
+method m.translate(dx, dy) for a QMatrix. This corresponds to the
 matrix
 </para>
 </formalpara>
@@ -771,7 +771,7 @@ matrix
 <para>
 These stretch or shrink the coordinates of an object, making
 it bigger or smaller without distorting it. A scaling transformation
-can be applied to a QWMatrix by calling m.scale(sx, sy). This corresponds
+can be applied to a QMatrix by calling m.scale(sx, sy). This corresponds
 to the matrix
 </para>
 </formalpara>
@@ -1814,7 +1814,7 @@ class. In order to show the manual of your application, just use
 </para>
 
 <programlisting>
-kapp->invokeHelp()
+KToolInvocation::invokeHelp()
 </programlisting>
 
 <para>
@@ -2092,7 +2092,7 @@ name. As additional properties, it contains two lines:
 started. The value <literal>Unique</literal> says that the service must not be
 started more than once. This means, if you try to start this service (e.g. via 
 <ulink url="kdeapi:kdecore/KApplication.html#startServiceByName">
-KApplication::startServiceByName()</ulink>, KDE looks whether it is already 
+KToolInvocation::startServiceByName()</ulink>, KDE looks whether it is already 
 registered with DCOP and uses the running service. If it is not registered yet, 
 KDE will start it up and wait until is registered. Thus, you can immediately 
 send DCOP calls to the service. In such a case, the service should be implemented
@@ -2143,13 +2143,13 @@ DCOPClient *client = kapp->dcopClient();
 client->attach();
 if (!client->isApplicationRegistered("kio_uiserver")) {
     QString error;
-    if (KApplication::startServiceByName("kio_uiserver", QStringList(), &amp;error))
+    if (KToolInvocation::startServiceByName("kio_uiserver", QStringList(), &amp;error))
         cout &lt;&lt; "Starting kioserver failed with message " &lt;&lt; error &lt;&lt; endl;
 }
 ...
 QByteArray data, replyData;
 QCString replyType;
-QDataStream arg(data, IO_WriteOnly);
+QDataStream arg(data, QIODevice::WriteOnly);
 arg &lt;&lt; true;
 if (!client->call("kio_uiserver", "UIServer", "setListMode(bool)", 
                   data, replyType, replyData))
@@ -2165,10 +2165,10 @@ instead, because it is much simpler and less error prone.
 
 <para>
 In the example given here, the service was started "by name", i.e. the
-first argument to <function>KApplication::startServiceByName()</function> is
+first argument to <function>KToolInvocation::startServiceByName()</function> is
 the name is appearing in the <literal>Name</literal> line of the desktop
 file. An alternative is to use
-<function>KApplication::startServiceByDesktopName()</function>, which takes
+<function>KToolInvocation::startServiceByDesktopName()</function>, which takes
 the file name of its desktop file as argument, i.e. in this case
 <literal>"kio_uiserver.desktop"</literal>.
 </para>
@@ -2514,7 +2514,7 @@ and returns the associated icon.
 
 <programlisting>
 KURL url("ftp://ftp.kde.org/pub/incoming/wibble.c");
-QString icon = KMimeType::iconForURL(url);
+QString icon = KMimeType::iconNameForURL(url);
 </programlisting>
 
 <para>
@@ -3119,7 +3119,7 @@ extern "C" { int kdemain(int argc, char **argv); }
 
 int kdemain(int argc, char **argv)
 {
-    KLocale::setMainCatalogue("kdelibs");
+    KLocale::setMainCatalog("kdelibs");
     KInstance instance("kio_ftp");
     (void) KGlobal::locale();
 

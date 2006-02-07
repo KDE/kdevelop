@@ -329,7 +329,7 @@ void GDBController::executeCmd()
     if (currentCmd_->isARunCmd())
     {
         setStateOn(s_appBusy);
-        kdDebug(9012) << "App is busy" << endl;
+        kDebug(9012) << "App is busy" << endl;
         setStateOff(s_appNotStarted|s_programExited|s_silent);
     }
 
@@ -399,7 +399,7 @@ void GDBController::actOnProgramPause(const QString &msg)
     // We're only stopping if we were running, of course.
     if (stateIsOn(s_appBusy))
     {
-        kdDebug(9012) << "App is paused" << endl;
+        kDebug(9012) << "App is paused" << endl;
         setStateOff(s_appBusy);
         if (stateIsOn(s_silent))
             return;
@@ -477,7 +477,7 @@ void GDBController::parseLine(char* buf)
     {
         if ((strncmp(buf, "Program exited", 14) == 0))
         {
-            kdDebug(9012) << "Parsed (exit) <" << QString(buf) << ">" << endl;
+            kDebug(9012) << "Parsed (exit) <" << QString(buf) << ">" << endl;
             programNoApp(QString(buf), false);
             programHasExited_ = true;   /// \FIXME - a nasty switch
             return;
@@ -520,7 +520,7 @@ void GDBController::parseLine(char* buf)
         }
 
         // All "Program" strings cause a refresh of the program state
-//        kdDebug(9012) << "Unparsed (START_Prog)<" << QString(buf) << ">" << endl;
+//        kDebug(9012) << "Unparsed (START_Prog)<" << QString(buf) << ">" << endl;
         actOnProgramPause(QString(buf));
         return;
     }
@@ -551,11 +551,11 @@ void GDBController::parseLine(char* buf)
                                             NOTINFOCMD, BPLIST));
                     queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
                 }
-//                kdDebug(9012) << "Parsed (START_cann)<" << buf << ">" << endl;
+//                kDebug(9012) << "Parsed (START_cann)<" << buf << ">" << endl;
                 return;
             }
 
-//            kdDebug(9012) << "Ignore (START_cann)<" << buf << ">" << endl;
+//            kDebug(9012) << "Ignore (START_cann)<" << buf << ">" << endl;
             //        actOnProgramPause(QString());
             return;
         }
@@ -569,7 +569,7 @@ void GDBController::parseLine(char* buf)
             return;
         }
 
-//        kdDebug(9012) << "Unparsed (START_cann)<" << buf << ">" << endl;
+//        kDebug(9012) << "Unparsed (START_cann)<" << buf << ">" << endl;
         actOnProgramPause(QString(buf));
         return;
     }
@@ -604,7 +604,7 @@ void GDBController::parseLine(char* buf)
         queueCmd(new GDBCommand("info breakpoints",
                                         NOTRUNCMD, NOTINFOCMD, BPLIST));
 
-//        kdDebug(9012) << "Parsed (START_Watc)<" << buf << ">" << endl;
+//        kDebug(9012) << "Parsed (START_Watc)<" << buf << ">" << endl;
         return;
     }
 
@@ -644,7 +644,7 @@ void GDBController::parseLine(char* buf)
                                     NOTRUNCMD, NOTINFOCMD, BPLIST));
         }
 
-//        kdDebug(9012) << "Parsed (BP) <" << buf << ">" << endl;
+//        kDebug(9012) << "Parsed (BP) <" << buf << ">" << endl;
         return;
     }
 
@@ -652,12 +652,12 @@ void GDBController::parseLine(char* buf)
     {
         if (strncmp(buf, "Temporarily disabling shared library breakpoints:", 49) == 0)
         {
-            kdDebug(9012) << "Parsed (START_Temp)<" << buf << ">" << endl;
+            kDebug(9012) << "Parsed (START_Temp)<" << buf << ">" << endl;
             return;
         }
 
         actOnProgramPause(QString(buf));
-        kdDebug(9012) << "Unparsed (START_Temp)<" << buf << ">" << endl;
+        kDebug(9012) << "Unparsed (START_Temp)<" << buf << ">" << endl;
         return;
     }
 
@@ -671,13 +671,13 @@ void GDBController::parseLine(char* buf)
             // "continue" otherwise the program will just keep going
             // on a "step" type command, in this situation and that's
             // REALLY wrong.
-            kdDebug(9012) << "Parsed (sh.lib) <" << buf << ">" << endl;
+            kDebug(9012) << "Parsed (sh.lib) <" << buf << ">" << endl;
             if (currentCmd_ && (currentCmd_->rawDbgCommand() == "run" ||
                                 currentCmd_->rawDbgCommand() == "continue"))
             {
                 setStateOn(s_silent);     // be quiet, children!!
                 setStateOff(s_appBusy);   // and stop that fiddling.
-                kdDebug(9012) << "App is paused (quietly)" << endl;
+                kDebug(9012) << "App is paused (quietly)" << endl;
                 emit acceptPendingBPs();  // now go clean your rooms!
                 queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
             }
@@ -690,7 +690,7 @@ void GDBController::parseLine(char* buf)
         // A stop line means we've stopped. We're not really expecting one
         // of these unless it's a library event so just call actOnPause
         actOnProgramPause(QString(buf));
-        kdDebug(9012) << "Unparsed (START_Stop)<" << buf << ">" << endl;
+        kDebug(9012) << "Unparsed (START_Stop)<" << buf << ">" << endl;
         return;
     }
 
@@ -707,7 +707,7 @@ void GDBController::parseLine(char* buf)
 
     if (strncmp(buf, "Core", 4) == 0)
     {
-        kdDebug(9012) << "Parsed (Core)<" << buf << ">" << endl;
+        kDebug(9012) << "Parsed (Core)<" << buf << ">" << endl;
         actOnProgramPause(buf);
         if (!badCore_.isEmpty() &&
                         strncmp(buf, "Core was generated by", 21) == 0)
@@ -746,7 +746,7 @@ void GDBController::parseLine(char* buf)
     // message will arrive immediately after this and overwrite it.
     if (isdigit(*buf))
     {
-//        kdDebug(9012) << "Parsed (digit)<" << buf << ">" << endl;
+//        kDebug(9012) << "Parsed (digit)<" << buf << ">" << endl;
         parseProgramLocation(buf);
         //    actOnProgramPause(QString(buf));
         return;
@@ -764,7 +764,7 @@ void GDBController::parseLine(char* buf)
         strncmp(buf, "No executable file specified.", 29)==0)
     {
         programNoApp(QString(buf), true);
-        kdDebug(9012) << "Bad file <"  << buf << ">" << endl;
+        kDebug(9012) << "Bad file <"  << buf << ">" << endl;
         return;
     }
 
@@ -774,18 +774,18 @@ void GDBController::parseLine(char* buf)
     {
         if ((strncmp(buf, "No ", 3)==0) && strstr(buf, "not meaningful"))
         {
-            kdDebug(9012) << "Parsed (not meaningful)<" << buf <<  ">" << endl;
+            kDebug(9012) << "Parsed (not meaningful)<" << buf <<  ">" << endl;
             actOnProgramPause(QString(buf));
             return;
         }
 
-        kdDebug(9012) << "Unparsed (default - busy)<" << buf << ">" << endl;
+        kDebug(9012) << "Unparsed (default - busy)<" << buf << ">" << endl;
         actOnProgramPause(QString());
         return;
     }
 
     // All other lines are ignored
-    kdDebug(9012) << "Unparsed (default - not busy)<" << buf << ">" << endl;
+    kDebug(9012) << "Unparsed (default - not busy)<" << buf << ">" << endl;
     return;
 }
 
@@ -801,7 +801,7 @@ void GDBController::parseProgramLocation(char *buf)
         // It's a silent stop. This means that the queue will have a "continue"
         // in it somewhere. The only action needed is to reset the state so
         // that queue'd items can be sent to gdb
-        kdDebug(9012) << "App is paused <" << buf << ">" << endl;
+        kDebug(9012) << "App is paused <" << buf << ">" << endl;
         setStateOff(s_appBusy);
         return;
     }
@@ -921,7 +921,7 @@ void GDBController::parseWhatis(char *buf)
 //      strstr(buf, "No such file or directory."))
 //  {
 //    programNoApp(QString(buf), true);
-//    kdDebug(9012) << "Bad file start <" << buf << ">" << endl;
+//    kDebug(9012) << "Bad file start <" << buf << ">" << endl;
 //  }
 //}
 
@@ -973,7 +973,7 @@ void GDBController::parseLocals(char type, char *buf)
 char *GDBController::parseCmdBlock(char *buf)
 {
     Q_ASSERT(*buf == (char)BLOCK_START);
-//    kdDebug(9012) << "parseCmdBlock=<" << buf << ">" << endl;
+//    kDebug(9012) << "parseCmdBlock=<" << buf << ">" << endl;
 
     char *end = 0;
     switch (*(buf+1))
@@ -1082,7 +1082,7 @@ char *GDBController::parseOther(char *buf)
 {
     // Could be the start of a block that isn't terminated yet
     Q_ASSERT (*buf != (char)BLOCK_START);
-//    kdDebug(9012) << "parseOther=<" << buf << ">" << endl;
+//    kDebug(9012) << "parseOther=<" << buf << ">" << endl;
 
     char *end = buf;
     while (*end)
@@ -1386,12 +1386,12 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
 
 void GDBController::slotStopDebugger()
 {
-    kdDebug(9012) << "GDBController::slotStopDebugger() called" << endl;
+    kDebug(9012) << "GDBController::slotStopDebugger() called" << endl;
     if (stateIsOn(s_shuttingDown) || !dbgProcess_)
         return;
 
     setStateOn(s_shuttingDown|s_silent);
-    kdDebug(9012) << "GDBController::slotStopDebugger() executing" << endl;
+    kDebug(9012) << "GDBController::slotStopDebugger() executing" << endl;
     destroyCmds();
 
     QTime start;
@@ -1401,7 +1401,7 @@ void GDBController::slotStopDebugger()
     // command line so we can stop it.
     if (stateIsOn(s_appBusy))
     {
-        kdDebug(9012) << "gdb busy on shutdown - stopping gdb (SIGINT)" << endl;
+        kDebug(9012) << "gdb busy on shutdown - stopping gdb (SIGINT)" << endl;
         dbgProcess_->kill(SIGINT);
         start = QTime::currentTime();
         while (-1)
@@ -1417,11 +1417,11 @@ void GDBController::slotStopDebugger()
     // the app running.
     if (stateIsOn(s_attached))
     {
-        kdDebug(9012) << "App is busy" << endl;
+        kDebug(9012) << "App is busy" << endl;
         setStateOn(s_appBusy);
         const char *detach="detach\n";
         if (!dbgProcess_->writeStdin(detach, strlen(detach)))
-            kdDebug(9012) << "failed to write 'detach' to gdb" << endl;
+            kDebug(9012) << "failed to write 'detach' to gdb" << endl;
         emit gdbStdout("(gdb) detach");
         start = QTime::currentTime();
         while (-1)
@@ -1434,11 +1434,11 @@ void GDBController::slotStopDebugger()
     }
 
     // Now try to stop gdb running.
-    kdDebug(9012) << "App is busy" << endl;
+    kDebug(9012) << "App is busy" << endl;
     setStateOn(s_appBusy);
     const char *quit="quit\n";
     if (!dbgProcess_->writeStdin(quit, strlen(quit)))
-        kdDebug(9012) << "failed to write 'quit' to gdb" << endl;
+        kDebug(9012) << "failed to write 'quit' to gdb" << endl;
 
     emit gdbStdout("(gdb) quit");
     start = QTime::currentTime();
@@ -1453,7 +1453,7 @@ void GDBController::slotStopDebugger()
     // We cannot wait forever.
     if (!stateIsOn(s_programExited))
     {
-        kdDebug(9012) << "gdb not shutdown - killing" << endl;
+        kDebug(9012) << "gdb not shutdown - killing" << endl;
         dbgProcess_->kill(SIGKILL);
     }
 
@@ -1926,17 +1926,17 @@ void GDBController::slotExpandItem(TrimmableItem *genericItem)
     VarFrameRoot *frameRoot;
     if ((frameRoot = dynamic_cast<VarFrameRoot*>(genericItem)))
     {
-        kdDebug(9012) << " ### GDBController::slotExpandItem: varframeroot expanded." << endl;
+        kDebug(9012) << " ### GDBController::slotExpandItem: varframeroot expanded." << endl;
         if (frameRoot->requestedValueTypes())
         {
-            kdDebug(9012) << " ### GDBController::slotExpandItem: requestedValueTypes == true" << endl;
+            kDebug(9012) << " ### GDBController::slotExpandItem: requestedValueTypes == true" << endl;
             // this was already done.
             return;
         }
         // iterate over children (i.e. the variables)
         QListViewItem *item = frameRoot->firstChild();
 
-        kdDebug(9012) << " ### GDBController::slotExpandItem: firstChild = " << (void*)item;
+        kDebug(9012) << " ### GDBController::slotExpandItem: firstChild = " << (void*)item;
 
         while (item)
         {
@@ -1983,7 +1983,7 @@ void GDBController::slotSetLocalViewState(bool onOff)
     else
         setStateOff(s_viewLocals);
 
-    kdDebug(9012) << (onOff ? "<Locals ON>": "<Locals OFF>") << endl;
+    kDebug(9012) << (onOff ? "<Locals ON>": "<Locals OFF>") << endl;
 }
 
 // **************************************************************************
@@ -1994,7 +1994,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
     static bool parsing = false;
 
     QString msg(QByteArray(buf, buflen+1));
-//    kdDebug(9012) << "msg=<" << msg << ">" << endl;
+//    kDebug(9012) << "msg=<" << msg << ">" << endl;
     msg.replace( QRegExp("\032."), "" );
     emit gdbStdout(msg.toLatin1());
 
@@ -2005,7 +2005,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
     // Already parsing? then get out quick.
     if (parsing)
     {
-        kdDebug(9012) << "Already parsing" << endl;
+        kDebug(9012) << "Already parsing" << endl;
         return;
     }
 
@@ -2024,7 +2024,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 
         // Copy the data from the holding zone into the buffer the parsers will
         // process from, and make it into a c-string so we can use the string fns
-//        kdDebug(9012)   << "Adding holdingZone_ (" << holdingZone_.length()   << ")" << endl
+//        kDebug(9012)   << "Adding holdingZone_ (" << holdingZone_.length()   << ")" << endl
 //                        << holdingZone_ << endl;
 
         qstrcpy(gdbOutput_+gdbOutputLen_, holdingZone_);
@@ -2032,7 +2032,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
         *(gdbOutput_+gdbOutputLen_) = 0;
         holdingZone_ = "";
 
-//        kdDebug(9012)   << "Output to parse (" << gdbOutputLen_   << ")" << endl
+//        kDebug(9012)   << "Output to parse (" << gdbOutputLen_   << ")" << endl
 //                        << gdbOutput_ << endl << "*************" << endl;
 
         parsing = true;
@@ -2041,7 +2041,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 
         if (nowAt)
         {
-//            kdDebug(9012)   << "*** " << nowAt-gdbOutput_ << " bytes have been parsed " << endl;
+//            kDebug(9012)   << "*** " << nowAt-gdbOutput_ << " bytes have been parsed " << endl;
             Q_ASSERT(nowAt <= gdbOutput_+gdbOutputLen_+1);
             gdbOutputLen_ = strlen(nowAt);
 
@@ -2052,7 +2052,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
                 *gdbOutput_ = 0;
         }
 
-//        kdDebug(9012)   << "Output remaining (" << gdbOutputLen_  << ")" << endl
+//        kDebug(9012)   << "Output remaining (" << gdbOutputLen_  << ")" << endl
 //                        << gdbOutput_ << endl << "*************" << endl;
 
         if (!nowAt && !holdingZone_.length())
@@ -2068,7 +2068,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
 {
     // At the moment, just drop a message out and redirect
-    kdDebug(9012) << "STDERR: " << QString::fromLatin1(buf, buflen+1) << endl;
+    kDebug(9012) << "STDERR: " << QString::fromLatin1(buf, buflen+1) << endl;
     slotDbgStdout(proc, buf, buflen);
 
     //  QString bufData(buf, buflen+1);
@@ -2129,7 +2129,7 @@ void GDBController::slotDbgProcessExited(KProcess* process)
 
 void GDBController::slotUserGDBCmd(const QString& cmd)
 {
-    kdDebug(9012) << "Requested user cmd: " << cmd << endl;
+    kDebug(9012) << "Requested user cmd: " << cmd << endl;
     if (cmd.startsWith("step") || cmd.startsWith("c"))
     {
         queueCmd(new GDBCommand(cmd.latin1(), RUNCMD, NOTINFOCMD, 0));
@@ -2185,7 +2185,7 @@ void GDBController::slotUserGDBCmd(const QString& cmd)
         return;
     }
 
-    kdDebug(9012) << "Parsing directly to gdb: " << cmd << endl;
+    kDebug(9012) << "Parsing directly to gdb: " << cmd << endl;
     queueCmd(new GDBCommand(cmd.latin1(), NOTRUNCMD, INFOCMD, USERCMD));
 }
 

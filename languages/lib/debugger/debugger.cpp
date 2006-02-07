@@ -46,7 +46,7 @@ void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool 
     Q3ValueList<BPItem>::Iterator it = BPList.find(bpItem);
     if (it != BPList.end())
     {
-//        kdDebug(9012) << "Removing BP=" << fileName << ":" << lineNum << endl;
+//        kDebug(9012) << "Removing BP=" << fileName << ":" << lineNum << endl;
         BPList.remove(it);
     }
 
@@ -60,7 +60,7 @@ void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool 
         if( !enabled )
             markType |= DisabledBreakpoint;
         iface->addMark( lineNum, markType );
-//        kdDebug(9012) << "Appending BP=" << fileName << ":" << lineNum << endl;
+//        kDebug(9012) << "Appending BP=" << fileName << ":" << lineNum << endl;
         BPList.append(BPItem(fileName, lineNum));
     }
 

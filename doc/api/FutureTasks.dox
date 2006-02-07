@@ -53,7 +53,7 @@
   - Build tools Parts
     - Show .po files in project management
     - Custom actions for groups, targets and files for project managers:
-      - any menu item should be a KAction plugged into KPopupMenu, also we need to define shortcuts for any such action,
+      - any menu item should be a KAction plugged into KMenu, also we need to define shortcuts for any such action,
         also we should make sure those actions are properly executed from a shortcut.
     - AutoProjectPart
       - Should be able to DND files from other targets / file list / konq to add to targets

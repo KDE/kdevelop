@@ -239,7 +239,7 @@ void PartSelectWidget::saveProjectConfig()
     DomUtil::writeListEntry(m_projectDom, "/general/ignoreparts", "part", ignoreparts);
 //    if (_profile != PluginController::getInstance()->currentProfile())
 //        DomUtil::writeEntry(m_projectDom, "/general/profile", _profile);
-//    kdDebug(9000) << "xml:" << m_projectDom.toString() << endl;
+//    kDebug(9000) << "xml:" << m_projectDom.toString() << endl;
 }
 
 
@@ -270,7 +270,7 @@ public:
 
 void PartSelectWidget::setAsDefault( )
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 
 	QString profile = DomUtil::readEntry(m_projectDom, "general/profile", PluginController::getInstance()->currentProfile());
 

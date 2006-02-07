@@ -144,7 +144,7 @@ void DMainWindow::removeWidget(QWidget *widget)
                 {
                     if (m_activeTabWidget->currentPage())
                     {
-                        kdDebug() << "trying best!" << endl;
+                        kDebug() << "trying best!" << endl;
                         m_activeTabWidget->currentPage()->setFocus();
                     }
                 }
@@ -175,21 +175,21 @@ DTabWidget *DMainWindow::splitVertical()
 void DMainWindow::invalidateActiveTabWidget()
 {
 /*    QWidget *focused = m_central->focusWidget();
-    kdDebug() << "invalidate: " << focused << endl;
+    kDebug() << "invalidate: " << focused << endl;
     if (focused == 0)
         return;
     if (!m_widgets.contains(focused))
     {
-        kdDebug() << "    focused is not in m_widgets" << endl;
+        kDebug() << "    focused is not in m_widgets" << endl;
         return;
     }
     if (m_widgetTabs.contains(focused))
     {
-        kdDebug() << "    focused is in m_widgets and m_widgetTabs" << endl;
+        kDebug() << "    focused is in m_widgets and m_widgetTabs" << endl;
         DTabWidget *tab = m_widgetTabs[focused];
         if (tab->indexOf(focused) >= 0)
             m_activeTabWidget = tab;
-        kdDebug() << "    tab: " << tab << endl;
+        kDebug() << "    tab: " << tab << endl;
     }*/
 }
 
@@ -228,7 +228,7 @@ bool DMainWindow::eventFilter(QObject *obj, QEvent *ev)
     }
     else if (ev->type() == QEvent::WindowTitleChange)
     {
-        kdDebug() << "caption change" << endl;
+        kDebug() << "caption change" << endl;
     }
 
     return KParts::MainWindow::eventFilter(obj, ev);

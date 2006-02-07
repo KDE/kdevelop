@@ -195,7 +195,7 @@ KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
     KDevPlugin * pl = KParts::ComponentFactory
         ::createInstanceFromService<KDevPlugin>( service, API::getInstance(), 0,
                                                  argumentsFromService( service ), &err );
-//    kdDebug() << "ERR: " << err << endl;
+//    kDebug() << "ERR: " << err << endl;
     return pl;
 }
 
@@ -244,7 +244,7 @@ void PluginController::removePart(KXMLGUIClient *part)
 
 void PluginController::removeAndForgetPart(const QString &name, KDevPlugin *part)
 {
-    kdDebug() << "removing: " << name << endl;
+    kDebug() << "removing: " << name << endl;
     m_parts.remove(name);
     removePart(part);
 }
@@ -307,7 +307,7 @@ KUrl::List PluginController::profileResourcesRecursive(const QString &nameFilter
 
 QString PluginController::changeProfile(const QString &newProfile)
 {
-    kdDebug() << "CHANGING PROFILE: from " << currentProfile() << " to " << newProfile << endl;
+    kDebug() << "CHANGING PROFILE: from " << currentProfile() << " to " << newProfile << endl;
     QStringList unload;
     KTrader::OfferList coreLoad;
     KTrader::OfferList globalLoad;

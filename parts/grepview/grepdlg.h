@@ -22,7 +22,7 @@
 
 
 class KConfig;
-class KURLRequester;
+class KUrlRequester;
 class QPushButton;
 class GrepViewPart;
 
@@ -72,7 +72,7 @@ private:
     QLineEdit *template_edit;
     QComboBox *pattern_combo, *files_combo;
     KComboBox * dir_combo;
-    KURLRequester * url_requester;
+    KUrlRequester * url_requester;
 
     QCheckBox *recursive_box;
     QCheckBox *ignore_scm_box;

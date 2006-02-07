@@ -364,9 +364,9 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     nextLayout->addWidget(bNext);
     nextLayout->addWidget(bNexti);
 
-//     int w = QMAX(bRun->sizeHint().width(), bFinish->sizeHint().width());
-//     w = QMAX(w, bInterrupt->sizeHint().width());
-//     w = QMAX(w, bView->sizeHint().width());
+//     int w = qMax(bRun->sizeHint().width(), bFinish->sizeHint().width());
+//     w = qMax(w, bInterrupt->sizeHint().width());
+//     w = qMax(w, bView->sizeHint().width());
 
     // they should have the same height, so don't be too fussy
 //     int h = bFinish->sizeHint().height();

@@ -89,7 +89,7 @@ bool DirectoryStatusMessageFilter::matchEnterDir( const QString& line, QString& 
     // 0X00BB is RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
     static QRegExp dirChange(QString::fromLatin1(".*: (.+) (`|") + QChar(0x00BB) + QString::fromLatin1(")(.*)('|") + QChar(0x00AB) + QString::fromLatin1(")(.*)"));
 	static QRegExp enEnter(QString::fromLatin1(".*: Entering directory"));
-    kdDebug(9004) << "Directory filter line " << line << endl;
+    kDebug(9004) << "Directory filter line " << line << endl;
 
 	// avoid QRegExp if possible. This regex performs VERY badly with large inputs,
 	// and the input required is very short if these strings match.

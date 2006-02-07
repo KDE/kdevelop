@@ -7,6 +7,6 @@ Prefs::Prefs()
 	: Prefs_base()
 {
 // debugging :
-//	kdWarning()<<"creating a pref dialog"<<endl;
+//	kWarning()<<"creating a pref dialog"<<endl;
 }
 

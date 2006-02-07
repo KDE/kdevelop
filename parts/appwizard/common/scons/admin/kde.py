@@ -831,7 +831,7 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 			if lenv['_CONFIGURE'] or lenv['HELP']:
 				env.Exit(0)
 
-		## To use kdDebug(intvalue)<<"some trace"<<endl; you need to define -DDEBUG
+		## To use kDebug(intvalue)<<"some trace"<<endl; you need to define -DDEBUG
 		## it is done in admin/generic.py automatically when you do scons configure debug=1
 
 	# Attach the functions to the environment so that sconscripts can use them

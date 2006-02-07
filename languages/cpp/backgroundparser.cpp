@@ -22,7 +22,7 @@
 #include "backgroundparser.h"
 
 #include "kdevcodemodel.h"
-#include "kdevcodeaggregate.h"
+#include "kdevcodeaggregate_p.h"
 #include "kdevdocumentcontroller.h"
 
 #include "parsejob.h"

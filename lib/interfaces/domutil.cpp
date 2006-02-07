@@ -183,7 +183,7 @@ void DomUtil::writeMapEntry(QDomDocument &doc, const QString &path, const QMap<Q
     QMap<QString,QString>::ConstIterator it;
     for (it = map.begin(); it != map.end(); ++it)
     {
-        kdDebug( 9010 ) << "writing " << basePath << ";" << it.key() << ";" << it.value() << endl;
+        kDebug( 9010 ) << "writing " << basePath << ";" << it.key() << ";" << it.value() << endl;
 	if( ! it.key().isEmpty() )
             writeEntry(doc, basePath + it.key(), it.value() );
     }
@@ -195,7 +195,7 @@ void DomUtil::writeHashEntry(QDomDocument &doc, const QString &path, const QHash
     QHash<QString,QString>::ConstIterator it;
     for (it = hash.begin(); it != hash.end(); ++it)
     {
-        kdDebug( 9010 ) << "writing " << basePath << ";" << it.key() << ";" << it.value() << endl;
+        kDebug( 9010 ) << "writing " << basePath << ";" << it.key() << ";" << it.value() << endl;
 	if( ! it.key().isEmpty() )
             writeEntry(doc, basePath + it.key(), it.value() );
     }
@@ -252,7 +252,7 @@ DomPath DomUtil::resolvPathStringExt(const QString pathstring)
     {
       QStringList pathElemParts = QStringList::split('|',pathParts[i],TRUE);
       DomPathElement dompathelem;
-      dompathelem.tagName = pathElemParts[0].simplifyWhiteSpace();
+      dompathelem.tagName = pathElemParts[0].simplified();
       if (pathElemParts.count()>1)
       {
         // handle attributes
@@ -263,8 +263,8 @@ DomPath DomUtil::resolvPathStringExt(const QString pathstring)
           if (attribSet.count()<2)
             continue;
           DomAttribute domattribute;
-          domattribute.name = attribSet[0].simplifyWhiteSpace();
-          domattribute.value = attribSet[1].simplifyWhiteSpace();
+          domattribute.name = attribSet[0].simplified();
+          domattribute.value = attribSet[1].simplified();
           dompathelem.attribute.append(domattribute);
         }
       }

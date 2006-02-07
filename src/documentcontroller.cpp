@@ -100,7 +100,7 @@ void DocumentController::showDocument( const KUrl &url, bool newWin )
     // possibly could env vars
     QString fixedPath = HTMLDocumentationPart::resolveEnvVarsInURL( url.url() );
     KUrl docUrl( fixedPath );
-    kdDebug( 9000 ) << "SHOW: " << docUrl.url() << endl;
+    kDebug( 9000 ) << "SHOW: " << docUrl.url() << endl;
 
     if ( docUrl.isLocalFile()
             && KMimeType::findByURL( docUrl ) ->name() != "text/html" )
@@ -233,11 +233,11 @@ bool DocumentController::saveDocument( const KUrl & url, bool force )
         {
             return true;
         }
-        kdDebug( 9000 ) << "Forced save" << endl;
+        kDebug( 9000 ) << "Forced save" << endl;
         break;
 
     case Modified:
-        kdDebug( 9000 ) << "Normal save" << endl;
+        kDebug( 9000 ) << "Normal save" << endl;
         break;
 
     case Dirty:
@@ -251,7 +251,7 @@ bool DocumentController::saveDocument( const KUrl & url, bool force )
                            i18n( "Document Externally Modified" ) );
             if ( code == KMessageBox::Yes )
             {
-                kdDebug( 9000 ) << "Dirty save!!" << endl;
+                kDebug( 9000 ) << "Dirty save!!" << endl;
             }
             else if ( code == KMessageBox::No )
             {
@@ -519,7 +519,7 @@ void DocumentController::openEmptyTextDocument()
             // We're being lazy about creating the view, but kmdi _needs_ a
             // widget to create a tab for it, so use a QWidgetStack subclass
             // instead
-            kdDebug() << k_lineinfo << "Creating Editor wrapper..." << endl;
+            kDebug() << k_lineinfo << "Creating Editor wrapper..." << endl;
             widget = new EditorWrapper( document, true,
                                         TopLevel::getInstance() ->main() );
         }
@@ -542,7 +542,7 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
         int lineNum, int col,
         bool activate )
 {
-    kdDebug( 9000 ) << k_funcinfo
+    kDebug( 9000 ) << k_funcinfo
     << inputUrl.prettyURL()
     << " linenum " << lineNum
     << " activate? " << activate << endl;
@@ -574,7 +574,7 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
                 KUrl dir( API::getInstance() ->project() ->projectDirectory() );
                 KUrl relURL = KUrl( dir, url.url() );
 
-                kdDebug( 9000 ) << k_funcinfo
+                kDebug( 9000 ) << k_funcinfo
                 << "Looking for file in project dir: "
                 << API::getInstance() ->project() ->projectDirectory()
                 << " url " << url.url()
@@ -590,7 +590,7 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
                 {
                     KUrl b( API::getInstance() ->project() ->buildDirectory() );
                     KUrl relURL = KUrl( b, url.url() );
-                    kdDebug( 9000 ) << k_funcinfo
+                    kDebug( 9000 ) << k_funcinfo
                     << "Looking for file in build dir: "
                     << API::getInstance() ->project() ->buildDirectory()
                     << " url " << url.url()
@@ -625,7 +625,7 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
                         || !KIO::NetAccess::exists( url, false, 0 ) ) )
         {
             // Not found - prompt the user to find it?
-            kdDebug( 9000 ) << "cannot find URL: " << url.url() << endl;
+            kDebug( 9000 ) << "cannot find URL: " << url.url() << endl;
             return ;
         }
     }
@@ -643,7 +643,7 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
 
     KMimeType::Ptr mimeType = KMimeType::findByURL( url );
 
-    kdDebug( 9000 ) << "mimeType = " << mimeType->name() << endl;
+    kDebug( 9000 ) << "mimeType = " << mimeType->name() << endl;
 
     // is the URL pointing to a directory?
     if ( mimeType->is( "inode/directory" ) )
@@ -698,7 +698,7 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
                 // We're being lazy about creating the view,
                 // but kmdi _needs_ a widget to
                 // create a tab for it, so use a QWidgetStack subclass instead
-                kdDebug() << k_lineinfo << "Creating Editor wrapper..." << endl;
+                kDebug() << k_lineinfo << "Creating Editor wrapper..." << endl;
                 KTextEditor::Document* doc =
                     qobject_cast<KTextEditor::Document*>( editorPart );
                 widget = new EditorWrapper( doc,
@@ -748,7 +748,7 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
         }
     }
 
-    kdDebug( 9000 ) << "factory = " << factory << endl;
+    kDebug( 9000 ) << "factory = " << factory << endl;
 
     if ( factory )
     {
@@ -811,7 +811,7 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
 
 void DocumentController::slotSave()
 {
-    kdDebug( 9000 ) << k_funcinfo << endl;
+    kDebug( 9000 ) << k_funcinfo << endl;
 
     if ( KParts::ReadWritePart * part = activeReadWrite() )
     {
@@ -821,7 +821,7 @@ void DocumentController::slotSave()
 
 void DocumentController::slotReload()
 {
-    kdDebug( 9000 ) << k_funcinfo << endl;
+    kDebug( 9000 ) << k_funcinfo << endl;
 
     if ( KParts::ReadWritePart * part = activeReadWrite() )
     {
@@ -849,7 +849,7 @@ void DocumentController::slotCloseOtherWindows()
 
 void DocumentController::slotActivePartChanged( KParts::Part *part )
 {
-    kdDebug( 9000 ) << k_funcinfo << endl;
+    kDebug( 9000 ) << k_funcinfo << endl;
     updateMenuItems();
     QTimer::singleShot( 100, this, SLOT( slotWaitForFactoryHack() ) );
     emit documentActivated( activeDocument() );
@@ -857,7 +857,7 @@ void DocumentController::slotActivePartChanged( KParts::Part *part )
 
 void DocumentController::slotWaitForFactoryHack( )
 {
-    //kdDebug(9000) << k_funcinfo << endl;
+    //kDebug(9000) << k_funcinfo << endl;
 
     if ( !activePart() )
         return ;
@@ -1033,14 +1033,14 @@ void DocumentController::slotSwitchTo()
     QStringList part_list;
     foreach (KParts::Part* part, parts())
     {
-        kdDebug( 9000 ) << "Part..." << endl;
+        kDebug( 9000 ) << "Part..." << endl;
         if ( part->inherits( "KParts::ReadOnlyPart" ) )
         {
             KParts::ReadOnlyPart * ro_part = readOnly( part );
             QString name = ro_part->url().fileName();
             part_list.append( name );
             parts_map[ name ] = ro_part;
-            kdDebug( 9000 ) << "Found part for URL "
+            kDebug( 9000 ) << "Found part for URL "
             << ro_part->url().prettyURL() << endl;
         }
     }
@@ -1067,7 +1067,7 @@ void DocumentController::slotSwitchTo()
 
 void DocumentController::slotPartAdded( KParts::Part * part )
 {
-    kdDebug( 9000 ) << k_funcinfo << endl;
+    kDebug( 9000 ) << k_funcinfo << endl;
 
     if ( KParts::ReadOnlyPart * ro_part = readOnly( part ) )
     {
@@ -1079,7 +1079,7 @@ void DocumentController::slotPartAdded( KParts::Part * part )
 
 void DocumentController::slotPartRemoved( KParts::Part * part )
 {
-    kdDebug( 9000 ) << k_funcinfo << endl;
+    kDebug( 9000 ) << k_funcinfo << endl;
 
     m_partURLMap.remove( readOnly( part ) );
 
@@ -1124,7 +1124,7 @@ void DocumentController::slotDocumentDirty( KTextEditor::Document * d,
         bool isModified,
         KTextEditor::ModificationInterface::ModifiedOnDiskReason reason )
 {
-    kdDebug( 9000 ) << k_funcinfo << endl;
+    kDebug( 9000 ) << k_funcinfo << endl;
 
     KTextEditor::Document * doc = 0;
 
@@ -1142,7 +1142,7 @@ void DocumentController::slotDocumentDirty( KTextEditor::Document * d,
     KUrl url = storedURLForPart( doc );
     if ( url.isEmpty() )
     {
-        kdDebug( 9000 ) << "Warning!! the stored url is empty. Bailing out!"
+        kDebug( 9000 ) << "Warning!! the stored url is empty. Bailing out!"
         << endl;
     }
 
@@ -1170,9 +1170,9 @@ void DocumentController::slotDocumentDirty( KTextEditor::Document * d,
         emit documentStateChanged( url, Clean );
     }
 
-    kdDebug( 9000 ) << doc->url().url() << endl;
-    kdDebug( 9000 ) << isModified << endl;
-    kdDebug( 9000 ) << reason << endl;
+    kDebug( 9000 ) << doc->url().url() << endl;
+    kDebug( 9000 ) << isModified << endl;
+    kDebug( 9000 ) << reason << endl;
 }
 
 
@@ -1184,8 +1184,8 @@ void DocumentController::slotNewStatus( KTextEditor::Document * doc )
 void DocumentController::slotNewDesignerStatus( const QString &formName,
         int status )
 {
-    kdDebug( 9000 ) << k_funcinfo << endl;
-    kdDebug( 9000 ) << " formName: " << formName
+    kDebug( 9000 ) << k_funcinfo << endl;
+    kDebug( 9000 ) << " formName: " << formName
     << ", status: " << status << endl;
     emit documentStateChanged( KUrl::fromPathOrURL( formName ),
                                DocumentState( status ) );
@@ -1400,7 +1400,7 @@ void DocumentController::integratePart( KParts::Part *part, const KUrl &url,
     if ( !widget )
     {
         /// @todo error handling
-        kdDebug( 9000 ) << "no widget for this part!!" << endl;
+        kDebug( 9000 ) << "no widget for this part!!" << endl;
         return ; // to avoid later crash
     }
 
@@ -1482,7 +1482,7 @@ bool DocumentController::reactToDirty( KUrl const & url, unsigned char reason )
     }
     else
     {
-        kdDebug( 9000 ) << k_funcinfo
+        kDebug( 9000 ) << k_funcinfo
         << " Warning. Not a ReadWritePart." << endl;
         return false;
     }
@@ -1539,7 +1539,7 @@ void DocumentController::updatePartURL( KParts::ReadOnlyPart * ro_part )
 {
     if ( ro_part->url().isEmpty() )
     {
-        kdDebug( 9000 ) << "updatePartURL() called with empty URL for part: "
+        kDebug( 9000 ) << "updatePartURL() called with empty URL for part: "
         << ro_part << endl;
         return ;
     }

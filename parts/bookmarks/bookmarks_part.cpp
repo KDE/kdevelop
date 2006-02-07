@@ -100,7 +100,7 @@ BookmarksPart::~BookmarksPart()
 
 void BookmarksPart::partAdded( KParts::Part * part )
 {
-    //kdDebug(0) << "BookmarksPart::partAdded()" << endl;
+    //kDebug(0) << "BookmarksPart::partAdded()" << endl;
 
     if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( part ) )
     {
@@ -124,7 +124,7 @@ void BookmarksPart::partAdded( KParts::Part * part )
 
 void BookmarksPart::reload()
 {
-    //kdDebug(0) << "BookmarksPart::reload()" << endl;
+    //kDebug(0) << "BookmarksPart::reload()" << endl;
 
     QObject * senderobj = const_cast<QObject*>( sender() );
     if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( senderobj ) )
@@ -138,7 +138,7 @@ void BookmarksPart::reload()
 
 void BookmarksPart::marksEvent()
 {
-    //kdDebug(0) << "BookmarksPart::marksEvent()" << endl;
+    //kDebug(0) << "BookmarksPart::marksEvent()" << endl;
 
     if ( ! _settingMarks )
     {
@@ -155,7 +155,7 @@ void BookmarksPart::marksEvent()
 
 void BookmarksPart::marksChanged()
 {
-    //kdDebug(0) << "BookmarksPart::marksChanged()" << endl;
+    //kDebug(0) << "BookmarksPart::marksChanged()" << endl;
 
     Q3ValueListIterator<KParts::ReadOnlyPart*> it = _dirtyParts.begin();
     while ( it != _dirtyParts.end() )
@@ -183,7 +183,7 @@ void BookmarksPart::marksChanged()
 
 void BookmarksPart::restorePartialProjectSession( const QDomElement * el )
 {
-    //kdDebug(0) << "BookmarksPart::restorePartialProjectSession()" << endl;
+    //kDebug(0) << "BookmarksPart::restorePartialProjectSession()" << endl;
 
     if ( ! el ) return;
 
@@ -228,7 +228,7 @@ void BookmarksPart::restorePartialProjectSession( const QDomElement * el )
 
 void BookmarksPart::savePartialProjectSession( QDomElement * el )
 {
-    //kdDebug(0) << "BookmarksPart::savePartialProjectSession()" << endl;
+    //kDebug(0) << "BookmarksPart::savePartialProjectSession()" << endl;
 
     if ( ! el ) return;
 
@@ -263,7 +263,7 @@ void BookmarksPart::savePartialProjectSession( QDomElement * el )
 
 void BookmarksPart::removeAllBookmarksForURL( KURL const & url )
 {
-    //kdDebug(0) << "BookmarksPart::removeAllBookmarksForURL()" << endl;
+    //kDebug(0) << "BookmarksPart::removeAllBookmarksForURL()" << endl;
 
     _editorMap.remove( url.path() );
 
@@ -273,7 +273,7 @@ void BookmarksPart::removeAllBookmarksForURL( KURL const & url )
 
 void BookmarksPart::removeBookmarkForURL( KURL const & url, int line )
 {
-    //kdDebug(0) << "BookmarksPart::removeBookmarkForURL()" << endl;
+    //kDebug(0) << "BookmarksPart::removeBookmarkForURL()" << endl;
 
     if ( EditorData * data = _editorMap.find( url.path() ) )
     {
@@ -394,7 +394,7 @@ bool BookmarksPart::clearBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 
 EditorData * BookmarksPart::storeBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 {
-    //kdDebug(0) << "BookmarksPart::storeBookmarksForURL()" << endl;
+    //kDebug(0) << "BookmarksPart::storeBookmarksForURL()" << endl;
 
     if ( KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface *>( ro_part ) )
     {
@@ -487,7 +487,7 @@ bool BookmarksPart::partIsSane( KParts::ReadOnlyPart * ro_part )
 
 void BookmarksPart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )
 {
-    kdDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo << endl;
 
     if ( pagenumber == BOOKMARKSETTINGSPAGE )
     {
@@ -500,7 +500,7 @@ void BookmarksPart::insertConfigWidget( const KDialogBase * dlg, QWidget * page,
 
 QStringList BookmarksPart::getContextFromStream( QTextStream & istream, unsigned int line, unsigned int context )
 {
-    kdDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo << endl;
 
     int startline = context > line ? 0 : line - context;
     int endline = line + context;
@@ -538,7 +538,7 @@ QStringList BookmarksPart::getContext( KURL const & url, unsigned int line, unsi
     // if the file is open - get the line from the editor buffer
     if ( KTextEditor::EditInterface * ei = dynamic_cast<KTextEditor::EditInterface*>( partForURL( url ) ) )
     {
-        kdDebug() << "the file is open - get the line from the editor buffer" << endl;
+        kDebug() << "the file is open - get the line from the editor buffer" << endl;
 
         QString ibuffer = ei->text();
         QTextStream istream( &ibuffer, QIODevice::ReadOnly );
@@ -546,7 +546,7 @@ QStringList BookmarksPart::getContext( KURL const & url, unsigned int line, unsi
     }
     else if ( url.isLocalFile() ) // else the file is not open - get the line from the file on disk
     {
-        kdDebug() << "the file is not open - get the line from the file on disk" << endl;
+        kDebug() << "the file is not open - get the line from the file on disk" << endl;
 
         QFile file( url.path() );
         QString buffer;

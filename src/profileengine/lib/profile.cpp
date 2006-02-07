@@ -157,7 +157,7 @@ bool Profile::hasInEntryList(EntryList &list, QString value)
 bool Profile::remove()
 {
     QStringList dirs = KGlobal::dirs()->findDirs("data", "kdevelop/profiles" + dirName());
-    if ((dirs.count() == 1) && dirs[0].startsWith(QDir::homeDirPath()))
+    if ((dirs.count() == 1) && dirs[0].startsWith(QDir::homePath()))
         return KIO::NetAccess::del(KUrl::fromPathOrURL(dirs[0]), 0);
     return false;
 }
@@ -180,7 +180,7 @@ KUrl::List Profile::resources(const QString &nameFilter)
         QDir d(dir);
         const QFileInfoList infoList = d.entryInfoList(nameFilter, QDir::Files);
         for (int i = 0; i < infoList.count(); ++i)
-            resources.append(infoList.at(i).absFilePath());
+            resources.append(infoList.at(i).absoluteFilePath());
     }
 
     return KUrl::List(resources);

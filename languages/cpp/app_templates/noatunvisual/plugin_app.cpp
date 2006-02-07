@@ -12,7 +12,7 @@ extern "C"
 {
     Plugin *create_plugin()
     {
-	KGlobal::locale()->insertCatalogue("%{APPNAMELC}");
+	KGlobal::locale()->insertCatalog("%{APPNAMELC}");
         return new %{APPNAME}Scope();
     }
 }

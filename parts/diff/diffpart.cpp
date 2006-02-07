@@ -195,7 +195,7 @@ void DiffPart::receivedStdout( KProcess* /* p */, char* buf, int buflen )
 
 void DiffPart::receivedStderr( KProcess* /* p */, char* buf, int buflen )
 {
-  kdDebug(9033) << "received Stderr: " << QString::fromLocal8Bit( buf, buflen ) << endl;
+  kDebug(9033) << "received Stderr: " << QString::fromLocal8Bit( buf, buflen ) << endl;
   resultErr += QString::fromLocal8Bit( buf, buflen );
 }
 

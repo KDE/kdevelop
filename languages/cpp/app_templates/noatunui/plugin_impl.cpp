@@ -16,7 +16,7 @@
 #include <qobjectlist.h>
 #include <qobjectdict.h>
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstatusbar.h>
 #include <kglobal.h>
 #include <klocale.h>

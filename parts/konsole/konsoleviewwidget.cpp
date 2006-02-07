@@ -51,7 +51,7 @@ void KonsoleViewWidget::showEvent(QShowEvent *event)
 
 void KonsoleViewWidget::activate()
 {
-    kdDebug(9035) << k_funcinfo << endl;
+    kDebug(9035) << k_funcinfo << endl;
 
     static bool initialized = false;
 
@@ -87,12 +87,12 @@ void KonsoleViewWidget::activate()
 
 void KonsoleViewWidget::activePartChanged(KParts::Part *activatedPart)
 {
-    kdDebug(9035) << k_funcinfo << endl;
+    kDebug(9035) << k_funcinfo << endl;
     KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(activatedPart);
 
     if (ro_part && !ro_part->url().isLocalFile())
     {
-        kdDebug(9035) << k_funcinfo << "part is null or not local" << endl;
+        kDebug(9035) << k_funcinfo << "part is null or not local" << endl;
         return;
     }
     QString dir;
@@ -101,7 +101,7 @@ void KonsoleViewWidget::activePartChanged(KParts::Part *activatedPart)
     else if (owner->project())
         dir = owner->project()->projectDirectory();
 
-    kdDebug(9035) << k_funcinfo "Changing dir to " << dir << endl;
+    kDebug(9035) << k_funcinfo "Changing dir to " << dir << endl;
     if (dir.isEmpty())
         return;
     setDirectory( KUrl(dir) );
@@ -109,12 +109,12 @@ void KonsoleViewWidget::activePartChanged(KParts::Part *activatedPart)
 
 void KonsoleViewWidget::setDirectory(const KUrl &dirUrl)
 {
-    kdDebug(9035) << k_funcinfo << "part is " << (long)part << endl;
+    kDebug(9035) << k_funcinfo << "part is " << (long)part << endl;
 
     if (part && dirUrl != part->url())
     {
-        kdDebug(9035) << k_funcinfo << "Changing dirUrl.path() == " << dirUrl.path() << endl;
-        kdDebug(9035) << k_funcinfo << "Changing part->url.path() == " << part->url().path() << endl;
+        kDebug(9035) << k_funcinfo << "Changing dirUrl.path() == " << dirUrl.path() << endl;
+        kDebug(9035) << k_funcinfo << "Changing part->url.path() == " << part->url().path() << endl;
 
         part->openURL( dirUrl );
     }

@@ -111,7 +111,7 @@ void AppOutputViewPart::startAppCommand(const QString &directory, const QString 
 
     if ( directory.isNull() )
       // use the user's home directory
-      m_widget->startJob(QDir::homeDirPath(), cmd);
+      m_widget->startJob(QDir::homePath(), cmd);
     else
       // use the supplied directory
       m_widget->startJob(directory, cmd);

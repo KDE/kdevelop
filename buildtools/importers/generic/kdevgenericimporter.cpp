@@ -101,10 +101,10 @@ QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *
         QFileInfo fileInfo = entries.at(i);
 
         if (!isValid(fileInfo)) {
-            //kdDebug(9000) << "skip:" << fileInfo.absFilePath() << endl;
+            //kDebug(9000) << "skip:" << fileInfo.absoluteFilePath() << endl;
         } else if (fileInfo.isDir() && fileInfo.fileName() != QLatin1String(".")
                    && fileInfo.fileName() != QLatin1String("..")) {
-            KDevProjectFolderItem *folder = new KDevProjectFolderItem(fileInfo.absFilePath());
+            KDevProjectFolderItem *folder = new KDevProjectFolderItem(fileInfo.absoluteFilePath());
             item->add(folder);
             folder_list.append(folder);
         } else if (fileInfo.isFile()) {
@@ -118,20 +118,20 @@ QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *
 
 KDevProjectItem *KDevGenericImporter::import(KDevProjectModel *model, const QString &fileName)
 {
-//     kdDebug(9000) << "ROBE: ========================================= import filename: " << fileName << endl;
+//     kDebug(9000) << "ROBE: ========================================= import filename: " << fileName << endl;
 
     QFileInfo fileInfo(fileName);
     if (fileInfo.isDir()) {
-        KDevProjectFolderItem *folder = new KDevProjectFolderItem(fileInfo.absFilePath());
-//         kdDebug(9000) << "ROBE: create a directory ================================== " << fileInfo.absFilePath() << endl;
+        KDevProjectFolderItem *folder = new KDevProjectFolderItem(fileInfo.absoluteFilePath());
+//         kDebug(9000) << "ROBE: create a directory ================================== " << fileInfo.absoluteFilePath() << endl;
         return folder;
     } else if (fileInfo.isFile()) {
-//         kdDebug(9000) << "ROBE: create a file ================================== " << fileInfo.absFilePath() << endl;
+//         kDebug(9000) << "ROBE: create a file ================================== " << fileInfo.absoluteFilePath() << endl;
 
-        KDevProjectFileItem *file = new KDevProjectFileItem(fileInfo.absFilePath());
+        KDevProjectFileItem *file = new KDevProjectFileItem(fileInfo.absoluteFilePath());
         return file;
     } else {
-//         kdDebug(9000) << "ROBE: skip ================================== " << fileInfo.absFilePath() << endl;
+//         kDebug(9000) << "ROBE: skip ================================== " << fileInfo.absoluteFilePath() << endl;
     }
 
     return 0;

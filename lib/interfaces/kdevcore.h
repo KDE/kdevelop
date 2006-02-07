@@ -66,7 +66,7 @@ the ability to add own items into the menu. For example, VCS plugin could
 add "commit" and "update" menu items to the context menu of a file.
 
 <b>How to use context from a plugin:</b>
--# Create a popup menu in context menu event handler: @code KPopupMenu menu(this); @endcode
+-# Create a popup menu in context menu event handler: @code KMenu menu(this); @endcode
 -# Create a context: @code MyContext context(param). @endcode
 -# Fill a context menu: @code core()->fillContextMenu(&menu, &context); @endcode
 -# Show the popup menu: @code menu.exec(event->globalPos()); @endcode

@@ -108,7 +108,7 @@ void EditorProxy::installPopup( KParts::Part * part )
     QMenu *popup = view->contextMenu();
 
     if (!popup) {
-        kdWarning() << k_funcinfo << "Popup not found!" << endl;
+        kWarning() << k_funcinfo << "Popup not found!" << endl;
         return;
     }
 
@@ -187,9 +187,9 @@ void EditorProxy::popupAboutToShow()
     {
       QMenuItem *item = popup->findItem(id);
           popup->removeItemAt(index);
-//      kdDebug(9000) << "removed id " << id << " at index " << index << endl;
+//      kDebug(9000) << "removed id " << id << " at index " << index << endl;
     } else {
-//        kdDebug(9000) << "leaving id " << id << endl;
+//        kDebug(9000) << "leaving id " << id << endl;
     }
   }
 /*  // why twice !?!?
@@ -232,7 +232,7 @@ void EditorProxy::popupAboutToShow()
     cursorIface->cursorPositionReal(&line, &col);
     linestr = editIface->textLine(line);
     if( wordstr.isEmpty() && !hasMultilineSelection ) {
-      int startPos = QMAX(QMIN((int)col, (int)linestr.length()-1), 0);
+      int startPos = qMax(qMin((int)col, (int)linestr.length()-1), 0);
       int endPos = startPos;
       while (startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' ) )
           startPos--;
@@ -241,7 +241,7 @@ void EditorProxy::popupAboutToShow()
       wordstr = (startPos==endPos)?
           QString() : linestr.mid(startPos+1, endPos-startPos-1);
     }
-    kdDebug(9000) << "Word:" << wordstr << ":" << endl;
+    kDebug(9000) << "Word:" << wordstr << ":" << endl;
     EditorContext context(ro_part->url(), line, col, linestr, wordstr);
     Core::getInstance()->fillContextMenu(popup, &context);
   } else {
@@ -268,7 +268,7 @@ void EditorProxy::popupAboutToShow()
 void EditorProxy::showPopup( )
 {
 #if 0
-    kdDebug(9000) << k_funcinfo << endl;
+    kDebug(9000) << k_funcinfo << endl;
 
     if ( KParts::Part * part = DocumentController::getInstance()->activePart() )
     {
@@ -307,7 +307,7 @@ EditorWrapper::EditorWrapper(KTextEditor::Document* editor, bool activate, QWidg
 
 EditorWrapper::~EditorWrapper()
 {
-  kdDebug() << k_funcinfo << this << endl;
+  kDebug() << k_funcinfo << this << endl;
   EditorProxy::getInstance()->deregisterEditor(this);
 }
 

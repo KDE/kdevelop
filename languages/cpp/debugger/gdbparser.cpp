@@ -234,7 +234,7 @@ Q3CString GDBParser::undecorateValue(DataType type, const Q3CString& s)
 
     Q3CString value(start, end - start + 1);
   
-    return value.stripWhiteSpace();
+    return value.trimmed();
 }
 
 

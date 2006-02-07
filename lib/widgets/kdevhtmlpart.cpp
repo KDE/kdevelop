@@ -141,7 +141,7 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
     KUrl kurl;
     if (!KUrl(url).path().startsWith("/"))
     {
-        kdDebug() << "processing relative url: " << url << endl;
+        kDebug() << "processing relative url: " << url << endl;
         if (url.startsWith("#"))
         {
             kurl = KUrl(KDevHTMLPart::url());
@@ -273,7 +273,7 @@ QString KDevHTMLPart::resolveEnvVarsInURL(const QString& url)
       if (fs)
       {
          QTextStream ts(fs, QIODevice::ReadOnly);
-         result = ts.read().stripWhiteSpace();
+         result = ts.read().trimmed();
          pclose(fs);
       }
       path.replace( nDollarPos, nEndPos-nDollarPos, result );
@@ -460,12 +460,12 @@ void KDevHTMLPart::slotForwardAboutToShow()
 
 void KDevHTMLPart::slotPopupActivated( int id )
 {
-    kdDebug(9000) << "id: " << id << endl;
+    kDebug(9000) << "id: " << id << endl;
 
     QLinkedList<DocumentationHistoryEntry>::Iterator it = m_history.begin();
     while( it != m_history.end() )
     {
-        kdDebug(9000) << "(*it).id: " << (*it).id << endl;
+        kDebug(9000) << "(*it).id: " << (*it).id << endl;
         if ( (*it).id == id )
         {
             m_Current = it;

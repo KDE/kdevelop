@@ -139,14 +139,14 @@ QString URLUtil::extractPathNameRelative(const QString &basePath, const KUrl &ur
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QString URLUtil::extractPathNameRelative(const QString &basePath, const QString &absFilePath )
+QString URLUtil::extractPathNameRelative(const QString &basePath, const QString &absoluteFilePath )
 {
 #if (KDE_VERSION_MINOR!=0) || (KDE_VERSION_MAJOR!=3)
   KUrl baseDirUrl = KUrl::fromPathOrURL( basePath ),
-       fileUrl = KUrl::fromPathOrURL( absFilePath );
+       fileUrl = KUrl::fromPathOrURL( absoluteFilePath );
 #else
   KUrl baseDirUrl = KdevKUrl::fromPathOrURL( basePath ),
-       fileUrl = KdevKUrl::fromPathOrURL( absFilePath );
+       fileUrl = KdevKUrl::fromPathOrURL( absoluteFilePath );
 #endif
   return extractPathNameRelative( baseDirUrl, fileUrl );
 }
@@ -179,9 +179,9 @@ bool URLUtil::isDirectory( const KUrl &url )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool URLUtil::isDirectory( const QString &absFilePath )
+bool URLUtil::isDirectory( const QString &absoluteFilePath )
 {
-  return QDir( absFilePath ).exists();
+  return QDir( absoluteFilePath ).exists();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -190,14 +190,14 @@ void URLUtil::dump( const KUrl::List &urls, const QString &aMessage )
 {
   if (!aMessage.isNull())
   {
-    kdDebug(9000) << aMessage << endl;
+    kDebug(9000) << aMessage << endl;
   }
-  kdDebug(9000) << " List has " << urls.count() << " elements." << endl;
+  kDebug(9000) << " List has " << urls.count() << " elements." << endl;
 
   for (int i = 0; i<urls.count(); ++i)
   {
     KUrl url = urls[ i ];
-//    kdDebug(9000) << " * Element = "  << url.path() << endl;
+//    kDebug(9000) << " * Element = "  << url.path() << endl;
   }
 }
 

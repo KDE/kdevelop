@@ -28,7 +28,7 @@ public:
     void reinitialize();
 
  private:
-   QGuardedPtr<%{APPNAME}Widget> m_widget;
+   QPointer<%{APPNAME}Widget> m_widget;
 };
 
 #endif

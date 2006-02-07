@@ -82,7 +82,7 @@ bool %{APPNAME}Part::openFile()
 {
     // m_file is always local so we can use QFile on it
     QFile file(m_file);
-    if (file.open(IO_ReadOnly) == false)
+    if (file.open(QIODevice::ReadOnly) == false)
         return false;
 
     // our example widget is text-based, so we use QTextStream instead
@@ -111,7 +111,7 @@ bool %{APPNAME}Part::saveFile()
 
     // m_file is always local, so we use QFile
     QFile file(m_file);
-    if (file.open(IO_WriteOnly) == false)
+    if (file.open(QIODevice::WriteOnly) == false)
         return false;
 
     // use QTextStream to dump the text to the file
@@ -193,7 +193,7 @@ extern "C"
 {
     void* init_lib%{APPNAMELC}part()
     {
-	KGlobal::locale()->insertCatalogue("%{APPNAMELC}");
+	KGlobal::locale()->insertCatalog("%{APPNAMELC}");
         return new %{APPNAME}PartFactory;
     }
 };

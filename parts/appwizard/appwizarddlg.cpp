@@ -85,7 +85,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *appwizardpart, QWidget *parent, 
       m_currentTemplate(0),
       m_profileSupport(new ProfileSupport(appwizardpart))
 {
-    kdDebug(9000) << "  ** AppWizardDialog::AppWizardDialog()" << endl;
+    kDebug(9000) << "  ** AppWizardDialog::AppWizardDialog()" << endl;
 
     setupUi(this);
 
@@ -137,7 +137,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *appwizardpart, QWidget *parent, 
 
     KConfig *config = KGlobal::config();
     config->setGroup("General Options");
-    QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
+    QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homePath()+"/");
 
     QString author, email;
     AppWizardUtil::guessAuthorAndEmail(&author, &email);
@@ -324,7 +324,7 @@ void AppWizardDialog::accept()
     }
     //END
 
-    kdDebug(9010) << "expandLists" << endl;
+    kDebug(9010) << "expandLists" << endl;
     /* Crashes:
     m_currentTemplate->expandLists();
     */
@@ -350,9 +350,9 @@ void AppWizardDialog::accept()
         (*dirIt).dir = KMacroExpander::expandMacros((*dirIt).dir , m_currentTemplate->subMap());
     }
 
-    kdDebug(9010) << "setSubMapXML" << endl;
+    kDebug(9010) << "setSubMapXML" << endl;
     m_currentTemplate->setSubMapXML();
-    kdDebug(9010) << "installProject" << endl;
+    kDebug(9010) << "installProject" << endl;
     m_currentTemplate->installProject( this );
 
     // if dir still does not exist
@@ -383,14 +383,14 @@ void AppWizardDialog::accept()
         VCSDialog *vcs = m_integratorDialogs[id];
         if (vcs)
         {
-            kdDebug(9010) << "vcs integrator dialog is ready" << endl;
+            kDebug(9010) << "vcs integrator dialog is ready" << endl;
             vcs->accept();
         }
         else
-            kdDebug(9010) << "no vcs integrator dialog" << endl;
+            kDebug(9010) << "no vcs integrator dialog" << endl;
     }
     else
-        kdDebug(9010) << "vcs integrator wasn't selected" << endl;
+        kDebug(9010) << "vcs integrator wasn't selected" << endl;
     */
     Q3Wizard::accept();
 }
@@ -419,7 +419,7 @@ void AppWizardDialog::templatesTreeViewActivated(const QModelIndex& index)
 {
     clearTemplateSelection();
 
-    kdDebug(9010) << "templatesTreeViewActivated" << endl;
+    kDebug(9010) << "templatesTreeViewActivated" << endl;
     const KDevAppTemplateModel *appModel = qobject_cast<const KDevAppTemplateModel*>( index.model() );
     KDevAppItem *item = reinterpret_cast<KDevAppItem*>( appModel->item( index ) );
     if( !item )
@@ -432,7 +432,7 @@ void AppWizardDialog::templatesTreeViewActivated(const QModelIndex& index)
     if (!m_currentTemplate->iconName().isEmpty())
     {
         QString fn( m_currentTemplate->basePath() + '/' + m_currentTemplate->iconName() );
-        //kdDebug(9010) << "Loading icon: " << fn << endl;
+        //kDebug(9010) << "Loading icon: " << fn << endl;
         QPixmap pm;
         pm.load( fn );
         icon_label->setPixmap( pm );
@@ -478,10 +478,10 @@ void AppWizardDialog::destButtonClicked(const QString& dir)
 
     KConfig *config = KGlobal::config();
     config->setGroup("General Options");
-    QDir defPrjDir( config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()) );
+    QDir defPrjDir( config->readPathEntry("DefaultProjectsDir", QDir::homePath()) );
     QDir newDir(dir);
 
-    kdDebug(9010) << "DevPrjDir == newdir?: " << defPrjDir.absPath() << " == " << newDir.absPath() << endl;
+    kDebug(9010) << "DevPrjDir == newdir?: " << defPrjDir.absPath() << " == " << newDir.absPath() << endl;
     if( defPrjDir == newDir )
         return;
 
@@ -605,7 +605,7 @@ void AppWizardDialog::openAfterGeneration()
 
 void AppWizardDialog::pageChanged()
 {
-    kdDebug(9010) << "AppWizardDialog::pageChanged()" << endl;
+    kDebug(9010) << "AppWizardDialog::pageChanged()" << endl;
     projectLocationChanged();   // Why?
 
 /*
@@ -626,7 +626,7 @@ void AppWizardDialog::loadLicenses()
     foreach( QString fileName, licNames )
     {
         QString licPath( dirs->findResource( "licenses", fileName ) );
-        kdDebug(9010) << "Loading license file: " << licPath << endl;
+        kDebug(9010) << "Loading license file: " << licPath << endl;
         QString licName = licPath.mid( licPath.findRev('/') + 1 );
         KDevLicense* lic = new KDevLicense( licName, licPath );
         m_licenses.insert( licName, lic );
@@ -665,13 +665,13 @@ void AppWizardDialog::showTemplates(bool /*all*/)
         for (; dit.current(); ++dit)
         {
             //checking whether all children are not visible
-            kdDebug(9010) << "check: " << dit.current()->text(0) << endl;
+            kDebug(9010) << "check: " << dit.current()->text(0) << endl;
             bool visible = false;
             Q3ListViewItemIterator it(dit.current());
             while ( it.current() ) {
                 if ((it.current()->childCount() == 0) && it.current()->isVisible())
                 {
-                    kdDebug(9010) << "  visible: " << it.current()->text(0) << endl;
+                    kDebug(9010) << "  visible: " << it.current()->text(0) << endl;
                     visible = true;
                     break;
                 }
@@ -835,7 +835,7 @@ bool AppWizardDialog::checkAndHideItems(Q3ListViewItem *item)
         hide = hide && checkAndHideItems(child);
         child = child->nextSibling();
     }
-    kdDebug(9010) << "check_: " << item->text(0) << " hide: " <<  hide << endl;
+    kDebug(9010) << "check_: " << item->text(0) << " hide: " <<  hide << endl;
     if (hide)
     {
         item->setVisible(false);

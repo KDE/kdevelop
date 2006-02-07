@@ -30,7 +30,7 @@ static const KDevPluginInfo data("kdev%{APPNAMELC}");
 
 	m_build = new KAction( i18n("&Run"), "exec",Key_F9,this, SLOT(slotRun()),actionCollection(), "build_execute" );
 
-	kdDebug() << "Creating %{APPNAMELC} Part" << endl;
+	kDebug() << "Creating %{APPNAMELC} Part" << endl;
 
 	connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
 		this, SLOT(projectConfigWidget(KDialogBase*)) );
@@ -72,7 +72,7 @@ void %{APPNAME}Part::projectConfigWidget(KDialogBase *dlg)
 }
 void %{APPNAME}Part::projectOpened()
 {
-	kdDebug(9014) << "projectOpened()" << endl;
+	kDebug(9014) << "projectOpened()" << endl;
 
 	connect( project(), SIGNAL(addedFilesToProject(const QStringList &)),
 		this, SLOT(addedFilesToProject(const QStringList &)) );
@@ -93,19 +93,19 @@ void %{APPNAME}Part::savedFile(const KURL &fileName)
 
 	if (project()->allFiles().contains(fileName.path().mid ( project()->projectDirectory().length() + 1 )))
 	{
-		kdDebug(9014) << "parse file " << fileName.path() << endl;
+		kDebug(9014) << "parse file " << fileName.path() << endl;
 		emit addedSourceInfo( fileName.path() );
 	}
 }
 void %{APPNAME}Part::addedFilesToProject(const QStringList &fileList)
 {
-	kdDebug(9014) << "addedFilesToProject()" << endl;
+	kDebug(9014) << "addedFilesToProject()" << endl;
 
 	QStringList::ConstIterator it;
 
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
-		kdDebug(9014) << "maybe parse " << project()->projectDirectory() + "/" + ( *it ) << endl;
+		kDebug(9014) << "maybe parse " << project()->projectDirectory() + "/" + ( *it ) << endl;
 	}
 
 	emit updatedSourceInfo();
@@ -121,7 +121,7 @@ void %{APPNAME}Part::removedFilesFromProject(const QStringList &fileList)
 		QString fileName = project()->projectDirectory() + "/" + ( *it );
 		if( codeModel()->hasFile(fileName) )
 		{
-			kdDebug(9014) << "removed " << fileName << endl;
+			kDebug(9014) << "removed " << fileName << endl;
 			emit aboutToRemoveSourceInfo( fileName );
 			codeModel()->removeFile( codeModel()->fileByName(fileName) );
 		}
@@ -130,7 +130,7 @@ void %{APPNAME}Part::removedFilesFromProject(const QStringList &fileList)
 }
 void %{APPNAME}Part::parse()
 {
-	kdDebug(9014) << "initialParse()" << endl;
+	kDebug(9014) << "initialParse()" << endl;
 
 	if (project())
 	{
@@ -138,17 +138,17 @@ void %{APPNAME}Part::parse()
 		QStringList files = project()->allFiles();
 		for (QStringList::Iterator it = files.begin(); it != files.end() ;++it)
 		{
-			kdDebug(9014) << "maybe parse " << project()->projectDirectory() + "/" + (*it) << endl;
+			kDebug(9014) << "maybe parse " << project()->projectDirectory() + "/" + (*it) << endl;
 		}
 		emit updatedSourceInfo();
 		kapp->restoreOverrideCursor();
 	} else {
-		kdDebug(9014) << "No project" << endl;
+		kDebug(9014) << "No project" << endl;
 	}
 }
 void %{APPNAME}Part::slotActivePartChanged(KParts::Part *part)
 {
-	kdDebug() << "Changeing active part..." << endl;
+	kDebug() << "Changeing active part..." << endl;
 }
 
 #include "%{APPNAMELC}_part.moc"

@@ -46,7 +46,7 @@ void %{APPNAME}View::updateReadWrite( bool /*readwrite*/ )
 
 void %{APPNAME}View::cut()
 {
-    kdDebug(31000) << "%{APPNAME}View::cut(): CUT called" << endl;
+    kDebug(31000) << "%{APPNAME}View::cut(): CUT called" << endl;
 }
 
 #include "%{APPNAMELC}_view.moc"

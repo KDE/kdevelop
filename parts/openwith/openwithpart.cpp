@@ -37,7 +37,7 @@ OpenWithPart::~OpenWithPart()
 
 void OpenWithPart::fillContextMenu(QMenu *popup, const Context *context)
 {
-  kdDebug(9000) << "context: " << context->type() << endl;
+  kDebug(9000) << "context: " << context->type() << endl;
 
   m_url = KUrl();
 

@@ -85,7 +85,7 @@ KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
 			if ( QFile::exists( filePath ) )
 				ret = AutoTools::Driver::parseFile( filePath, &ast );
 			else
-				kdDebug(9020) << k_funcinfo << "no appropriate file to parse in "
+				kDebug(9020) << k_funcinfo << "no appropriate file to parse in "
 				              << fileName << endl;
 		}
 	}
@@ -94,7 +94,7 @@ KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
 	    return m_rootItem;
 
 	
-    kdDebug(9020) << k_funcinfo << filePath << " was parsed correctly. Adding information" << endl;
+    kDebug(9020) << k_funcinfo << filePath << " was parsed correctly. Adding information" << endl;
     Q_ASSERT( ast != 0 );
 	
 	if ( ast && ast->hasChildren() )
@@ -108,7 +108,7 @@ KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
 				AutoTools::AssignmentAST* assignment = static_cast<AutoTools::AssignmentAST*>( (*it) );
 				if ( assignment->scopedID == "SUBDIRS"  )
 				{
-					kdDebug(9020) << k_funcinfo << "subdirs is " << assignment->values << endl;
+					kDebug(9020) << k_funcinfo << "subdirs is " << assignment->values << endl;
 					foreach( const QString& s, assignment->values )
 					{
 						QString dir = fileName + "/" + s;
@@ -135,8 +135,8 @@ KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
                 if ( assignment->scopedID == "SUBDIRS"  )
                 {
                     QString list = assignment->values.join( QString::null );
-                    list.simplifyWhiteSpace();
-                    kdDebug(9020) << k_funcinfo << "subdirs is " << list << endl;
+                    list.simplified();
+                    kDebug(9020) << k_funcinfo << "subdirs is " << list << endl;
                     QStringList subdirList = QStringList::split( " ",  list );
                     QStringList::iterator vit = subdirList.begin();
                     for ( ; vit != subdirList.end(); ++vit )
@@ -145,16 +145,16 @@ KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
                         if ( realDir.startsWith( "\\" ) )
                             realDir.remove( 0, 1 );
 
-                        realDir = realDir.stripWhiteSpace();
+                        realDir = realDir.trimmed();
                         if ( realDir != "." && realDir != ".." && !realDir.isEmpty() )
                         {
                             if ( isVariable( realDir ) )
                             {
-                                kdDebug(9020) << k_funcinfo << "'" << realDir << "' is a variable" << endl;
+                                kDebug(9020) << k_funcinfo << "'" << realDir << "' is a variable" << endl;
                                 realDir = resolveVariable( realDir, ast );
                             }
 
-                            kdDebug(9020) << k_funcinfo << "Beginning parsing of '" << realDir << "'" << endl;
+                            kDebug(9020) << k_funcinfo << "Beginning parsing of '" << realDir << "'" << endl;
                             parse( folder + '/' + realDir, recursive );
                         }
                     }

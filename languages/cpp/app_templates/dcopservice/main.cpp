@@ -20,7 +20,7 @@ static KCmdLineOptions options[] =
 
 int main (int argc, char *argv[])
 {
-	KLocale::setMainCatalogue("kdelibs");
+	KLocale::setMainCatalog("kdelibs");
 	KAboutData aboutdata("%{APPNAMELC}", I18N_NOOP("KDE"),
 				version, description,
 				KAboutData::License_GPL, "(C) %{YEAR}, %{AUTHOR}");
@@ -32,16 +32,16 @@ int main (int argc, char *argv[])
 
 	if (!KUniqueApplication::start())
 	{
-		kdDebug() << "%{APPNAMELC} is already running!" << endl;
+		kDebug() << "%{APPNAMELC} is already running!" << endl;
 		return (0);
 	}
 
 	KUniqueApplication app;
-	kdDebug() << "starting %{APPNAMELC} " << endl;
+	kDebug() << "starting %{APPNAMELC} " << endl;
 	// This app is started automatically, no need for session management
 	app.disableSessionManagement();
 	%{APPNAME} *service = new %{APPNAME};
-	kdDebug() << "starting %{APPNAMELC} " << endl;
+	kDebug() << "starting %{APPNAMELC} " << endl;
 	return app.exec();
 
 }

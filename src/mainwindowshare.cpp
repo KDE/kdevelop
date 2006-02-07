@@ -91,7 +91,7 @@ void MainWindowShare::init()
 
 void MainWindowShare::slotActionStatusText( const QString &text )
 {
-//    kdDebug(9000) << "MainWindowShare::slotActionStatusText() - " << text << endl;
+//    kDebug(9000) << "MainWindowShare::slotActionStatusText() - " << text << endl;
 
     if ( ! m_pMainWnd ) return;
 
@@ -323,7 +323,7 @@ void MainWindowShare::slotSettings()
 
 void MainWindowShare::slotConfigureEditors()
 {
-    kdDebug(9000) << " *** MainWindowShare::slotConfigureEditors()" << endl;
+    kDebug(9000) << " *** MainWindowShare::slotConfigureEditors()" << endl;
 
     KDevDocumentController * documentController = API::getInstance()->documentController();
     KParts::Part * part = documentController->activePart();
@@ -332,7 +332,7 @@ void MainWindowShare::slotConfigureEditors()
     KTextEditor::Editor *editor = doc ? doc->editor() : 0;
     if (!editor)
     {
-        kdDebug(9000) << "*** No KTextEditor::ConfigInterface for part!" << endl;
+        kDebug(9000) << "*** No KTextEditor::ConfigInterface for part!" << endl;
         return;
     }
 
@@ -346,7 +346,7 @@ void MainWindowShare::slotConfigureEditors()
 
 void MainWindowShare::slotGUICreated( KParts::Part * part )
 {
-//    kdDebug(9000) << "MainWindowShare::slotGUICreated()" << endl;
+//    kDebug(9000) << "MainWindowShare::slotGUICreated()" << endl;
 
     if ( !part ) return;
 
@@ -364,20 +364,20 @@ void MainWindowShare::slotGUICreated( KParts::Part * part )
     KAction * action = part->action("set_confdlg"); // name from katepartui.rc
     if ( action )
     {
-        kdDebug(9000) << " *** found \"set_confdlg\" action - unplugging" << endl;
+        kDebug(9000) << " *** found \"set_confdlg\" action - unplugging" << endl;
         action->unplugAll();
     }
 
     if ( KAction * action = part->action("file_save") )
     {
-        kdDebug(9000) << " *** found \"file_save\" action - disconnecting" << endl;
+        kDebug(9000) << " *** found \"file_save\" action - disconnecting" << endl;
         disconnect( action, SIGNAL(activated()), 0, 0 );
         connect( action, SIGNAL(activated()), DocumentController::getInstance(), SLOT(slotSave()) );
     }
 
     if ( KAction * action = part->action("file_reload") )
     {
-        kdDebug(9000) << " *** found \"file_reload\" action - disconnecting" << endl;
+        kDebug(9000) << " *** found \"file_reload\" action - disconnecting" << endl;
         disconnect( action, SIGNAL(activated()), 0, 0 );
         connect( action, SIGNAL(activated()), DocumentController::getInstance(), SLOT(slotReload()) );
     }

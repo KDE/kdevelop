@@ -78,7 +78,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
           }
         else
           {
-            kdDebug(9000) << "error:" << error << endl;
+            kDebug(9000) << "error:" << error << endl;
           }
       }
   }
@@ -98,7 +98,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
           }
         else
           {
-            kdDebug(9000) << "error:" << error << endl;
+            kDebug(9000) << "error:" << error << endl;
           }
       }
   }
@@ -317,7 +317,7 @@ KDevProjectImporter *KDevProjectManagerPart::defaultImporter() const
   if (m_importers.contains(kind))
     return m_importers[kind];
 
-  kdDebug(9000) << "error: no default importer!" << endl;
+  kDebug(9000) << "error: no default importer!" << endl;
   return 0;
 }
 
@@ -330,13 +330,13 @@ KDevProjectBuilder *KDevProjectManagerPart::defaultBuilder() const
   if (m_builders.contains(kind))
     return m_builders[kind];
 
-  kdDebug(9000) << "error: no default builder!" << endl;
+  kDebug(9000) << "error: no default builder!" << endl;
   return 0;
 }
 
 void KDevProjectManagerPart::addFiles(const QStringList &fileList)
 {
-  kdDebug(9000) << "KDevProjectManagerPart::addFiles:" << fileList << endl;
+  kDebug(9000) << "KDevProjectManagerPart::addFiles:" << fileList << endl;
 
   //m_updateProjectTimer->stop();
   //m_updateProjectTimer->start(0, true);
@@ -344,14 +344,14 @@ void KDevProjectManagerPart::addFiles(const QStringList &fileList)
 
 void KDevProjectManagerPart::addFile(const QString &fileName)
 {
-  kdDebug(9000) << "KDevProjectManagerPart::addFile:" << fileName << endl;
+  kDebug(9000) << "KDevProjectManagerPart::addFile:" << fileName << endl;
 
   addFiles(QStringList() << fileName);
 }
 
 void KDevProjectManagerPart::removeFiles(const QStringList &fileList)
 {
-  kdDebug(9000) << "KDevProjectManagerPart::removeFiles" << fileList << endl;
+  kDebug(9000) << "KDevProjectManagerPart::removeFiles" << fileList << endl;
 
   //m_updateProjectTimer->stop();
   //m_updateProjectTimer->start(0, true);
@@ -359,7 +359,7 @@ void KDevProjectManagerPart::removeFiles(const QStringList &fileList)
 
 void KDevProjectManagerPart::removeFile(const QString &fileName)
 {
-  kdDebug(9000) << "KDevProjectManagerPart::removeFile" << fileName << endl;
+  kDebug(9000) << "KDevProjectManagerPart::removeFile" << fileName << endl;
 
   removeFiles(QStringList() << fileName);
 }

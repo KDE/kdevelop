@@ -46,7 +46,7 @@ ValgrindItem::ValgrindItem( const QString& message ): _pid(-1)
   
   for ( QStringList::ConstIterator it = lines.begin(); it != lines.end(); ++it ) {
     if ( valRe.search( *it ) < 0 ) {
-      kdDebug() << "ValgrindItem: got unrecognizable line '" << *it << "'" << endl;
+      kDebug() << "ValgrindItem: got unrecognizable line '" << *it << "'" << endl;
       continue; // not of interest
     }
     if ( _pid == -1 )
@@ -62,7 +62,7 @@ ValgrindItem::ValgrindItem( const QString& message ): _pid(-1)
     }
   }
 //  static int i = 0;
-//  kdDebug() << "got: " << ++i << ": " << _message << endl << message << endl;
+//  kDebug() << "got: " << ++i << ": " << _message << endl << message << endl;
 }
 
 

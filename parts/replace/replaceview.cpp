@@ -93,7 +93,7 @@ void ReplaceView::showReplacementsForFile( QTextStream & stream, QString const &
                 _latestfile = new ReplaceItem( this, _latestfile, file );
                 firstline = false;
             }
-            latestitem = new ReplaceItem( _latestfile, latestitem, file, s.stripWhiteSpace(), line );
+            latestitem = new ReplaceItem( _latestfile, latestitem, file, s.trimmed(), line );
             _latestfile->insertItem( latestitem );
         }
         line++;
@@ -108,7 +108,7 @@ void ReplaceView::setReplacementData( QRegExp const & re, QString const & replac
 
 void ReplaceView::slotMousePressed(int btn, Q3ListViewItem* i, const QPoint& pos, int col)
 {
-    kdDebug(0) << "ReplaceView::slotMousePressed()" << endl;
+    kDebug(0) << "ReplaceView::slotMousePressed()" << endl;
 
     if ( ReplaceItem * item = dynamic_cast<ReplaceItem*>( i ) )
     {
@@ -126,13 +126,13 @@ void ReplaceView::slotMousePressed(int btn, Q3ListViewItem* i, const QPoint& pos
 
 void ReplaceView::slotClicked( Q3ListViewItem * item )
 {
-    kdDebug(0) << "ReplaceView::slotClicked()" << endl;
+    kDebug(0) << "ReplaceView::slotClicked()" << endl;
 
     if ( ReplaceItem * ri = dynamic_cast<ReplaceItem*>( item ) )
     {
         if ( ri->lineClicked() )
         {
-            kdDebug(0) << "emitting editDocument" << endl;
+            kDebug(0) << "emitting editDocument" << endl;
             emit editDocument( ri->file(), ri->line() );
         }
     }

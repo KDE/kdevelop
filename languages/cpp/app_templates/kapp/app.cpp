@@ -173,7 +173,7 @@ void %{APPNAME}::fileOpen()
     // button is clicked
 /*
     // this brings up the generic open dialog
-    KURL url = KURLRequesterDlg::getURL(QString::null, this, i18n("Open Location") );
+    KURL url = KUrlRequesterDlg::getURL(QString::null, this, i18n("Open Location") );
 */
     // standard filedialog
     KURL url = KFileDialog::getOpenURL(QString::null, QString::null, this, i18n("Open Location"));

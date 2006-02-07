@@ -173,7 +173,7 @@ void SimpleMainWindow::raiseView(QWidget *view)
     //by its wrapper helps here
     if (view->parent() && view->parent()->isA("EditorWrapper"))
     {
-//         kdDebug() << "parent is editor wrapper: " <<
+//         kDebug() << "parent is editor wrapper: " <<
 //             static_cast<EditorWrapper*>(view->parent()) << endl;
         view = (QWidget*)view->parent();
     }
@@ -442,7 +442,7 @@ void SimpleMainWindow::setupWindowMenu()
 
     if (!m_windowMenu)
     {
-        kdDebug(9000) << "Couldn't find the XMLGUI window menu. Creating new." << endl;
+        kDebug(9000) << "Couldn't find the XMLGUI window menu. Creating new." << endl;
 
         m_windowMenu = new KMenu(main());
         menuBar()->insertItem(i18n("&Window"), m_windowMenu);
@@ -559,12 +559,12 @@ void SimpleMainWindow::activePartChanged(KParts::Part *part)
     if (!part)
         return;
     QWidget *w = part->widget();
-    kdDebug() << "active part widget is : " << w << endl;
+    kDebug() << "active part widget is : " << w << endl;
     if (!m_widgets.contains(w))
         return;
     if (m_widgetTabs[w] != 0)
     {
-        kdDebug() << " setting m_activeTabWidget " << endl;
+        kDebug() << " setting m_activeTabWidget " << endl;
         m_activeTabWidget = m_widgetTabs[w];
     }
 }

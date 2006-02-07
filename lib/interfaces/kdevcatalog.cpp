@@ -182,7 +182,7 @@ void  KDevCatalog::addIndex( const QByteArray& name )
     int ret;
 
     if ((ret = db_create(&dbp, 0, 0)) != 0) {
-      kdDebug() << "db_create: " << db_strerror(ret) << endl;
+      kDebug() << "db_create: " << db_strerror(ret) << endl;
       return /*false*/;
     }
 
@@ -196,12 +196,12 @@ void  KDevCatalog::addIndex( const QByteArray& name )
     QString indexName = fileInfo.dirPath(true) + "/" + fileInfo.baseName() + "." + QString(name) + ".idx";
 
     if( (ret = dbp->set_cachesize( dbp, 0, 2 * 1024 * 1024, 0 )) != 0 ){
-      kdDebug() << "set_cachesize: " << db_strerror(ret) << endl;
+      kDebug() << "set_cachesize: " << db_strerror(ret) << endl;
     }
 
     if ((ret = dbp->open(
 			 dbp, 0, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
-      kdDebug() << "db_open: " << db_strerror(ret) << endl;
+      kDebug() << "db_open: " << db_strerror(ret) << endl;
       dbp->close( dbp, 0 );
       return;
     }
@@ -246,7 +246,7 @@ void  KDevCatalog::open( const QString& dbName )
   int ret;
 
   if ((ret = db_create(&d->dbp, 0, 0)) != 0) {
-    kdDebug() << "db_create: " << db_strerror(ret) << endl;
+    kDebug() << "db_create: " << db_strerror(ret) << endl;
     return /*false*/;
   }
 
@@ -257,12 +257,12 @@ void  KDevCatalog::open( const QString& dbName )
   }
 
   if( (ret = d->dbp->set_cachesize( d->dbp, 0, 2 * 1024 * 1024, 0 )) != 0 ){
-    kdDebug() << "set_cachesize: " << db_strerror(ret) << endl;
+    kDebug() << "set_cachesize: " << db_strerror(ret) << endl;
   }
 
   if ((ret = d->dbp->open(
 			  d->dbp, 0, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
-    kdDebug() << "db_open: " << db_strerror(ret) << endl;
+    kDebug() << "db_open: " << db_strerror(ret) << endl;
     close();
     return;
   }
@@ -399,7 +399,7 @@ QList<Tag>  KDevCatalog::query( const QList<QueryArgument>& args )
 
       rtn = cursor->c_get( cursor, &key, &data, DB_SET );
       if( rtn == DB_NOTFOUND ){
-	// kdDebug() << "!!! not found !!!" << endl;
+	// kDebug() << "!!! not found !!!" << endl;
 	rtn = 0;
       }
       Q_ASSERT( rtn == 0 );

@@ -127,8 +127,8 @@ namespace URLUtil
   QString extractPathNameRelative(const KUrl &baseDirUrl, const KUrl &url );
   /**Same as above. @p basePath is QString.*/
   QString extractPathNameRelative(const QString &basePath, const KUrl &url );
-  /**Same as above. Both @p basePath and @p absFilePath are QStrings.*/
-  QString extractPathNameRelative(const QString &basePath, const QString &absFilePath );
+  /**Same as above. Both @p basePath and @p absoluteFilePath are QStrings.*/
+  QString extractPathNameRelative(const QString &basePath, const QString &absoluteFilePath );
 
   /**
   * @param url The url to extract the absolute path from.
@@ -150,10 +150,10 @@ namespace URLUtil
   */
   bool isDirectory( const KUrl &url );
   /**
-  * @param absFilePath The absolute path.
+  * @param absoluteFilePath The absolute path.
   * @return true if @p url is a directory, false otherwise.
   */
-  bool isDirectory( const QString &absFilePath );
+  bool isDirectory( const QString &absoluteFilePath );
 
   /**
   * Dumps the list of KUrl @p urls on standard output, eventually printing @p aMessage if it

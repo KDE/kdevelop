@@ -120,7 +120,7 @@ void ValgrindDialog::setValParams( const QString& params )
   myParams = myParams.replace( QRegExp( leakCheckParam ), "" );
   myParams = myParams.replace( QRegExp( reachableParam ), "" );
   myParams = myParams.replace( QRegExp( childrenParam ), "" );
-  myParams = myParams.stripWhiteSpace();
+  myParams = myParams.trimmed();
   w->valParamEdit->setText( myParams );
 }
 
@@ -162,7 +162,7 @@ void ValgrindDialog::setCtParams( const QString& params )
   w->init();
 
   myParams = myParams.replace( QRegExp( childrenParam ), "" );
-  myParams = myParams.stripWhiteSpace();
+  myParams = myParams.trimmed();
   w->ctParamEdit->setText( myParams );
 }
 

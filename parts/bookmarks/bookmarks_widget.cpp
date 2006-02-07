@@ -27,6 +27,7 @@
 
 #include <kdevdocumentcontroller.h>
 #include <kdevcore.h>
+#include <QTextDocument>
 
 
 #include "bookmarks_part.h"
@@ -67,7 +68,7 @@ public:
     {}
 
     BookmarkItem( Q3ListViewItem * parent, KURL const & url, QPair<int,QString> mark )
-            : Q3ListViewItem( parent, QString::number( mark.first +1 ).rightJustify( 5 ) ),
+            : Q3ListViewItem( parent, QString::number( mark.first +1 ).rightJustified( 5 ) ),
             _url( url ), _line( mark.first ), _isBookmark( true )
     {
         BookmarksWidget * lv = static_cast<BookmarksWidget*>( listView() );
@@ -109,7 +110,7 @@ public:
             QString code = "<qt><table><tr><td><pre>";
             for ( uint i = 0; i < list.count(); i++)
             {
-                QString temp = Q3StyleSheet::escape( list[i] );
+                QString temp = Qt::escape( list[i] );
 
                 if ( i == (list.count() / 2) )  // count() is always odd
                 {
@@ -163,7 +164,7 @@ BookmarksWidget::~BookmarksWidget()
 
 void BookmarksWidget::maybeTip(const QPoint &p)
 {
-//  kdDebug(0) << "ToolTip::maybeTip()" << endl;
+//  kDebug(0) << "ToolTip::maybeTip()" << endl;
 
     if ( ! _part->config()->toolTip() ) return;
 
@@ -178,7 +179,7 @@ void BookmarksWidget::maybeTip(const QPoint &p)
 
 void BookmarksWidget::update( Q3Dict<EditorData> const & map )
 {
-//  kdDebug(0) << "BookmarksWidget::update()" << endl;
+//  kDebug(0) << "BookmarksWidget::update()" << endl;
 
     Q3ListView::clear();
 
@@ -195,7 +196,7 @@ void BookmarksWidget::update( Q3Dict<EditorData> const & map )
 
 void BookmarksWidget::updateURL( EditorData * data )
 {
-//  kdDebug(0) << "BookmarksWidget::updateURL()" << endl;
+//  kDebug(0) << "BookmarksWidget::updateURL()" << endl;
 
     // remove the node that contains 'data'
     removeURL( data->url );
@@ -206,7 +207,7 @@ void BookmarksWidget::updateURL( EditorData * data )
 
 void BookmarksWidget::createURL( EditorData * data )
 {
-//  kdDebug(0) << "BookmarksWidget::createURL()" << endl;
+//  kDebug(0) << "BookmarksWidget::createURL()" << endl;
 
     if ( data )
     {
@@ -226,7 +227,7 @@ void BookmarksWidget::createURL( EditorData * data )
 
 bool BookmarksWidget::removeURL( KURL const & url )
 {
-//  kdDebug(0) << "BookmarksWidget::removeURL()" << endl;
+//  kDebug(0) << "BookmarksWidget::removeURL()" << endl;
 
     Q3ListViewItem * item = firstChild();
     while ( item )
@@ -244,7 +245,7 @@ bool BookmarksWidget::removeURL( KURL const & url )
 
 void BookmarksWidget::doEmitRemoveBookMark()
 {
-//  kdDebug(0) << "BookmarksWidget::doEmitRemoveBookMark()" << endl;
+//  kDebug(0) << "BookmarksWidget::doEmitRemoveBookMark()" << endl;
 
     if ( _selectedItem->isBookmark() )
     {
@@ -258,7 +259,7 @@ void BookmarksWidget::doEmitRemoveBookMark()
 
 void BookmarksWidget::popupMenu( Q3ListViewItem * item, const QPoint & p, int )
 {
-//  kdDebug(0) << "BookmarksWidget::contextMenuRequested()" << endl;
+//  kDebug(0) << "BookmarksWidget::contextMenuRequested()" << endl;
 
     if ( item )
     {
@@ -291,7 +292,7 @@ void BookmarksWidget::popupMenu( Q3ListViewItem * item, const QPoint & p, int )
 
 void BookmarksWidget::itemClicked( Q3ListViewItem * clickedItem )
 {
-//  kdDebug(0) << "BookmarksWidget::itemClicked()" << endl;
+//  kDebug(0) << "BookmarksWidget::itemClicked()" << endl;
 
     if ( ! clickedItem )
         return;

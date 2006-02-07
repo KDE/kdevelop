@@ -32,10 +32,10 @@ FullScreenPart::FullScreenPart(QObject *parent, const char *name, const QStringL
 {
   setInstance(FullScreenFactory::instance());
 //  const KAboutData &abdata1 = *(info());
-//  kdDebug() << abdata1.appName() << endl;
+//  kDebug() << abdata1.appName() << endl;
   const KDevPluginInfo &_info = *info();
   const KAboutData *abdata = _info;
-  kdDebug() << abdata->appName() << endl;
+  kDebug() << abdata->appName() << endl;
   setXMLFile("kdevpart_fullscreen.rc");
 
   m_bFullScreen = false;

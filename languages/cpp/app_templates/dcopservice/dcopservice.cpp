@@ -6,13 +6,13 @@
 
 %{APPNAME}::%{APPNAME}() : DCOPObject("serviceInterface")
 {
-	kdDebug() << "Starting new service... " << endl;
+	kDebug() << "Starting new service... " << endl;
 	m_List = QStringList();
 }
 
 %{APPNAME}::~%{APPNAME}()
 {
-	kdDebug() << "Going away... " << endl;
+	kDebug() << "Going away... " << endl;
 }
 
 QString %{APPNAME}::string(int idx)
@@ -27,7 +27,7 @@ QStringList %{APPNAME}::list()
 
 void %{APPNAME}::add(QString arg)
 {
-	kdDebug() << "Adding " << arg << " to the list" << endl;
+	kDebug() << "Adding " << arg << " to the list" << endl;
 	m_List << arg;
 }
 

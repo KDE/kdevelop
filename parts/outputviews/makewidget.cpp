@@ -449,7 +449,7 @@ void MakeWidget::specialCheck( const QString& file, QString& fName ) const
         KUrl url( rx.cap( 1 ) + QLatin1String( "/" ) + file );
         if ( url.isValid() )
         {
-            kdDebug( 9004 ) << "MakeWidget::specialCheck thinks that url is: " << url.url()
+            kDebug( 9004 ) << "MakeWidget::specialCheck thinks that url is: " << url.url()
             << " origin: " << file << endl;
             fName = url.url();
         }
@@ -485,7 +485,7 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
             specialCheck( fName, name );
     }
 
-    kdDebug( 9004 ) << "Opening file: " << name << endl;
+    kDebug( 9004 ) << "Opening file: " << name << endl;
 
     // GNU make resolves symlinks. if "name" is a real path to a file the
     // project know by symlink path, we need to return the symlink path
@@ -497,7 +497,7 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
         QString file = m_part->project() ->projectDirectory() + "/" + *it;
         if ( name == QFileInfo( file ).canonicalFilePath() )
         {
-            kdDebug( 9004 ) << "Found file in project - " << file << " == " << name << endl;
+            kDebug( 9004 ) << "Found file in project - " << file << " == " << name << endl;
             return file;
         }
         ++it;
@@ -513,7 +513,7 @@ void MakeWidget::searchItem( int parag )
     if ( item )
     {
         // open the file
-        kdDebug( 9004 ) << "Opening file: " << guessFileName( item->fileName, parag ) << endl;
+        kDebug( 9004 ) << "Opening file: " << guessFileName( item->fileName, parag ) << endl;
         m_part->documentController() ->editDocument( KUrl( guessFileName( item->fileName, parag ) ), item->cursor().line(), item->cursor().column() );
 
         m_part->mainWindow() ->statusBar() ->message( item->m_error, 10000 );
@@ -532,7 +532,7 @@ void MakeWidget::insertStderrLine( const QString& line )
 {
     if ( !appendToLastLine( line ) )
     {
-        kdDebug() << "inserting stderr line: " << line << endl;
+        kDebug() << "inserting stderr line: " << line << endl;
         m_errorFilter.processLine( line );
     }
 }
@@ -580,7 +580,7 @@ void MakeWidget::slotProcessExited( KProcess * )
 
 void MakeWidget::slotEnteredDirectory( EnteringDirectoryItem* item )
 {
-    //  kdDebug(9004) << "Entering dir: " << item->directory << endl;
+    //  kDebug(9004) << "Entering dir: " << item->directory << endl;
     QString * dir = new QString( item->directory );
     dirstack.push( dir );
     insertItem( item );
@@ -589,15 +589,15 @@ void MakeWidget::slotEnteredDirectory( EnteringDirectoryItem* item )
 void MakeWidget::slotExitedDirectory( ExitingDirectoryItem* item )
 {
     QString eDir = item->directory;
-    //  kdDebug(9004) << "Leaving dir: " << eDir << endl;
+    //  kDebug(9004) << "Leaving dir: " << eDir << endl;
     QString *dir = dirstack.pop();
     if ( !dir )
     {
-        kdWarning( 9004 ) << "Left more directories than entered: " << eDir;
+        kWarning( 9004 ) << "Left more directories than entered: " << eDir;
     }
     else if ( dir->compare( eDir ) != 0 )
     {
-        kdWarning( 9004 ) << "Expected directory: \"" << *dir << "\" but got \"" << eDir << "\"" << endl;
+        kWarning( 9004 ) << "Expected directory: \"" << *dir << "\" but got \"" << eDir << "\"" << endl;
     }
     insertItem( item );
     delete dir;
@@ -675,7 +675,7 @@ void MakeWidget::slotDocumentOpened( const KUrl & filename )
 
     if ( !doc )
     {
-        kdWarning() << k_funcinfo << "Couldn't find the document that was just opened." << endl;
+        kWarning() << k_funcinfo << "Couldn't find the document that was just opened." << endl;
         return;
     }
 

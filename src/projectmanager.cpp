@@ -125,7 +125,7 @@ void ProjectManager::slotOpenProject()
 {
     KConfig *config = KGlobal::config();
     config->setGroup("General Options");
-    QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
+    QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homePath()+"/");
 
   KUrl url = KFileDialog::getOpenURL(defaultProjectsDir,
         i18n("*.kdevelop|KDevelop 3 Project Files\n"
@@ -323,7 +323,7 @@ void ProjectManager::slotLoadProject( )
         // first restore the project session stored in a .kdevses file
         if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() ))
         {
-            kdWarning() << i18n("error during restoring of the KDevelop session !") << endl;
+            kWarning() << i18n("error during restoring of the KDevelop session !") << endl;
         }
     }
 
@@ -535,7 +535,7 @@ bool ProjectManager::loadProjectPart()
   QString path = DomUtil::readEntry(dom,"/general/projectdirectory", ".");
   bool absolute = DomUtil::readBoolEntry(dom,"/general/absoluteprojectpath",false);
   QString projectDir = projectDirectory( path, absolute );
-  kdDebug(9000) << "projectDir: " << projectDir << "  projectName: " << m_info->m_projectURL.fileName() << endl;
+  kDebug(9000) << "projectDir: " << projectDir << "  projectName: " << m_info->m_projectURL.fileName() << endl;
 
   projectPart->openProject(projectDir, m_info->m_projectURL.fileName());
 
@@ -556,11 +556,11 @@ void ProjectManager::unloadProjectPart()
 
 bool ProjectManager::loadLanguageSupport(const QString& lang)
 {
-  kdDebug(9000) << "Looking for language support for " << lang << endl;
+  kDebug(9000) << "Looking for language support for " << lang << endl;
 
   if (lang == m_info->m_activeLanguage)
   {
-    kdDebug(9000) << "Language support already loaded" << endl;
+    kDebug(9000) << "Language support already loaded" << endl;
     return true;
   }
 
@@ -592,7 +592,7 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
   API::getInstance()->setLanguageSupport( langSupport );
   PluginController::getInstance()->integratePart( langSupport );
   m_info->m_activeLanguage = lang;
-  kdDebug(9000) << "Language support for " << lang << " successfully loaded." << endl;
+  kDebug(9000) << "Language support for " << lang << " successfully loaded." << endl;
   return true;
 }
 
@@ -600,7 +600,7 @@ void ProjectManager::unloadLanguageSupport()
 {
   KDevLanguageSupport *langSupport = API::getInstance()->languageSupport();
   if( !langSupport ) return;
-  kdDebug(9000) << "Language support for " << langSupport->name() << " unloading..." << endl;
+  kDebug(9000) << "Language support for " << langSupport->name() << " unloading..." << endl;
   PluginController::getInstance()->removePart( langSupport );
   delete langSupport;
   API::getInstance()->setLanguageSupport(0);
@@ -681,7 +681,7 @@ QString ProjectManager::profileByAttributes(const QString &language, const QStri
     if (config.hasKey("Profiles"))
     {
         profiles = config.readListEntry("Profiles");
-        kdDebug() << "IDX: " << idx << "    PROFILE: " << profiles[idx] << endl;
+        kDebug() << "IDX: " << idx << "    PROFILE: " << profiles[idx] << endl;
         return profiles[idx];
     }
     return "KDevelop";

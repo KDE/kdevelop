@@ -33,7 +33,7 @@ QString %{APPNAME}::text() const
 }
 
 
-QIconSet %{APPNAME}::icon() const
+QIcon %{APPNAME}::icon() const
 {
     QPixmap pix;
     QImage img = Resource::loadImage( "Tux" );

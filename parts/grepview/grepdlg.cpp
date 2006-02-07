@@ -139,10 +139,10 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     dir_combo = new KComboBox( true, this );
     dir_combo->insertStringList(config->readPathListEntry("LastSearchPaths"));
     dir_combo->setInsertionPolicy(QComboBox::NoInsert);
-    dir_combo->setEditText(QDir::homeDirPath());
+    dir_combo->setEditText(QDir::homePath());
 
-    url_requester = new KURLRequester( dir_combo, this );
-    url_requester->completionObject()->setMode(KURLCompletion::DirCompletion);
+    url_requester = new KUrlRequester( dir_combo, this );
+    url_requester->completionObject()->setMode(KUrlCompletion::DirCompletion);
     url_requester->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
     dir_label->setBuddy( url_requester );

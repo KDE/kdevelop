@@ -20,7 +20,7 @@ public:
     virtual int position() const;
     
     virtual QString name ( ) const;
-    virtual QIconSet icon ( ) const;
+    virtual QIcon icon ( ) const;
     virtual QString text ( ) const;
     /* virtual QString tr( const char* ) const;
     virtual QString tr( const char*, const char* ) const;

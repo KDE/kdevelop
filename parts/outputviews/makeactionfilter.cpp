@@ -97,17 +97,17 @@ ActionItem* MakeActionFilter::matchLine( const QString& line )
 
 	while ( !format->action.isNull() )
 	{
-//		kdDebug(9004) << "Testing filter: " << format->action << ": " << format->tool << endl;
+//		kDebug(9004) << "Testing filter: " << format->action << ": " << format->tool << endl;
 		QRegExp& regExp = format->expression;
 		if ( regExp.search( line ) != -1 )
 		{
                    ActionItem *actionItem = new ActionItem( format->action, regExp.cap( format->fileGroup ), format->tool, line );
-	     	   kdDebug( 9004 ) << "Found: " << actionItem->m_action << " " << actionItem->m_file << "(" << actionItem->m_tool << ")" << endl;
+	     	   kDebug( 9004 ) << "Found: " << actionItem->m_action << " " << actionItem->m_file << "(" << actionItem->m_tool << ")" << endl;
 		   return actionItem;
 		}
 #ifdef DEBUG
 		if ( t.elapsed() > 100 )
-			kdDebug(9004) << "MakeActionFilter::processLine: SLOW regexp matching: " << t.elapsed() << " ms \n";
+			kDebug(9004) << "MakeActionFilter::processLine: SLOW regexp matching: " << t.elapsed() << " ms \n";
 #endif
 		format = &aFormats[++i];
 	}
@@ -253,28 +253,28 @@ void MakeActionFilter::test()
 		ActionItem* actionItem = matchLine( (*it).line );
 		if ( actionItem == NULL )
 		{
-			kdError( 9004 ) << "MakeActionFilter::test(): match failed (no match):" << endl;
-			kdError( 9004 ) << (*it).line << endl;
+			kError( 9004 ) << "MakeActionFilter::test(): match failed (no match):" << endl;
+			kError( 9004 ) << (*it).line << endl;
 		}
 		else if ( actionItem->m_action != (*it).action )
 		{
-			kdError( 9004 ) << "MakeActionFilter::test(): match failed (expected action "
+			kError( 9004 ) << "MakeActionFilter::test(): match failed (expected action "
 			                << (*it).action << ", got " << actionItem->m_action << endl;
-			kdError( 9004 ) << (*it).line << endl;
+			kError( 9004 ) << (*it).line << endl;
 		}
 		else if ( actionItem->m_tool != (*it).tool )
 		{
-			kdError( 9004 ) << "MakeActionFilter::test(): match failed (expected tool "
+			kError( 9004 ) << "MakeActionFilter::test(): match failed (expected tool "
 			                << (*it).tool << ", got " << actionItem->m_tool << endl;
-			kdError( 9004 ) << (*it).line << endl;
+			kError( 9004 ) << (*it).line << endl;
 		}
 		else if ( actionItem->m_file != (*it).file )
 		{
-			kdError( 9004 ) << "MakeActionFilter::test(): match failed (expected file "
+			kError( 9004 ) << "MakeActionFilter::test(): match failed (expected file "
 			                << (*it).file << ", got " << actionItem->m_file << endl;
-			kdError( 9004 ) << (*it).line << endl;
+			kError( 9004 ) << (*it).line << endl;
 		} else
-		kdDebug( 9004 ) << "Test passed, " << actionItem->m_action << " " << actionItem->m_file << " (" << actionItem->m_tool << ") found." << endl;
+		kDebug( 9004 ) << "Test passed, " << actionItem->m_action << " " << actionItem->m_file << " (" << actionItem->m_tool << ") found." << endl;
 		if ( actionItem != NULL )
 			delete actionItem;
 	}

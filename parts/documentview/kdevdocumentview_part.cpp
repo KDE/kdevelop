@@ -116,7 +116,7 @@ void KDevDocumentViewPart::activated( const KUrl & url )
 
 void KDevDocumentViewPart::saved( const KUrl & /*url*/ )
 {
-    kdDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo << endl;
 }
 
 void KDevDocumentViewPart::loaded( const KUrl &url )
@@ -141,7 +141,7 @@ void KDevDocumentViewPart::loaded( const KUrl &url )
 
 void KDevDocumentViewPart::closed( const KUrl & url )
 {
-    kdDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo << endl;
     QModelIndex fileIndex = m_url2index[ url.path() ];
     KDevDocumentItem *fileItem = m_documentModel->item( fileIndex );
     if ( !fileItem )
@@ -164,13 +164,13 @@ void KDevDocumentViewPart::closed( const KUrl & url )
 
 void KDevDocumentViewPart::externallyModified( const KUrl & /*url*/ )
 {
-    kdDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo << endl;
 }
 
 void KDevDocumentViewPart::URLChanged( const KUrl & /*oldurl*/,
                                        const KUrl & /*newurl*/ )
 {
-    kdDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo << endl;
 }
 
 void KDevDocumentViewPart::stateChanged( const KUrl & url,

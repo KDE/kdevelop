@@ -20,13 +20,13 @@ extern "C"
 
     %{APPNAME} *kss_create( WId id )
     {
-        KGlobal::locale()->insertCatalogue("%{APPNAMELC}");
+        KGlobal::locale()->insertCatalog("%{APPNAMELC}");
         return new %{APPNAME}( id );
     }
 
     QDialog *kss_setup()
     {
-        KGlobal::locale()->insertCatalogue("%{APPNAMELC}");
+        KGlobal::locale()->insertCatalog("%{APPNAMELC}");
         return new %{APPNAME}Setup();
     }
 }

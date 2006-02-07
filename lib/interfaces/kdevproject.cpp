@@ -96,7 +96,7 @@ void KDevProject::buildFileMap()
 
 void KDevProject::slotBuildFileMap()
 {
-    kdDebug(9000) << k_funcinfo << endl;
+    kDebug(9000) << k_funcinfo << endl;
 
     d->m_absToRel.clear();
     d->m_symlinkList.clear();
@@ -106,7 +106,7 @@ void KDevProject::slotBuildFileMap()
 	QFileInfo fileInfo( projectDirectory() + "/" + *it );
 	d->m_absToRel[ fileInfo.canonicalFilePath() ] = *it;
 	
-        if ( fileInfo.canonicalFilePath() != fileInfo.absFilePath() )
+        if ( fileInfo.canonicalFilePath() != fileInfo.absoluteFilePath() )
         {
             d->m_symlinkList << *it;
         }
@@ -132,7 +132,7 @@ void KDevProject::slotAddFilesToFileMap( const QStringList & fileList )
 		QFileInfo fileInfo( projectDirectory() + "/" + *it );
 		d->m_absToRel[ fileInfo.canonicalFilePath() ] = *it;
 		
-    	if ( fileInfo.canonicalFilePath() != fileInfo.absFilePath() )
+    	if ( fileInfo.canonicalFilePath() != fileInfo.absoluteFilePath() )
 		{
 			d->m_symlinkList << *it;
 		}

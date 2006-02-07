@@ -38,14 +38,14 @@ KDevCoreIface::~KDevCoreIface()
 
 void KDevCoreIface::forwardProjectOpened()
 {
-    kdDebug(9000) << "dcop emitting project opened" << endl;
+    kDebug(9000) << "dcop emitting project opened" << endl;
     emitDCOPSignal("projectOpened()", QByteArray());
 }
 
 
 void KDevCoreIface::forwardProjectClosed()
 {
-    kdDebug(9000) << "dcop emitting project closed" << endl;
+    kDebug(9000) << "dcop emitting project closed" << endl;
     emitDCOPSignal("projectClosed()", QByteArray());
 }
 
