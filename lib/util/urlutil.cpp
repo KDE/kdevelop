@@ -240,7 +240,6 @@ QString URLUtil::relativePathToFile( const QString & dirUrl, const QString & fil
   {
     i >= dir.count() ? currDir = "" : currDir = dir[i];
     i >= file.count() ? currFile = "" : currFile = file[i];
-    qWarning("i = %d, currDir = %s, currFile = %s", i, currDir.latin1(), currFile.latin1());
     if (currDir.isEmpty() && currFile.isEmpty())
       break;
     else if (currDir.isEmpty())
