@@ -447,7 +447,7 @@ void DebugOptimTab::setReleaseOptions()
 
 void DebugOptimTab::setDebugOptions()
 {
-    QStringList sl = QStringList::split(",", "-g,-!gd,-gl,-gh,-gc,-!pg,-!Ou,-!Or");
+    QStringList sl = QStringList::split(",", "-g,-gl,-gh,-gc");
     readFlags(&sl);
     m_default->setChecked(true);
     m_default2->setChecked(true);
