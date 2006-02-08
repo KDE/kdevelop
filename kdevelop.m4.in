@@ -673,7 +673,7 @@ AC_DEFUN([KDEV_CHECK_SVN],
                     SVN_SUBDIR=
     dnl		AC_MSG_ERROR([Subversion headers are required. Try --with-svn-include.])
             fi
-            SVN_LIBS="/usr/local/lib /usr/lib"
+            SVN_LIBS="/usr/local/lib$kdelibsuff /usr/lib$kdelibsuff"
             AC_ARG_WITH(svn-lib,
                             [[  --with-svn-lib=DIR  Use the given path to the subversion libraries.]],
                             [
