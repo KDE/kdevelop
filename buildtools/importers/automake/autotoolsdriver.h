@@ -30,7 +30,7 @@ namespace AutoTools {
 
 /**
 @file autotoolsdriver.h
-Driver for a qmake parser.
+Driver for a automake parser.
 */
 
 class ProjectAST;

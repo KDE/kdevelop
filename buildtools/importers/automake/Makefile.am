@@ -11,7 +11,7 @@ lib_LTLIBRARIES = \
     libkdevautomakeimporter.la
 
 libkdevautomakeimporter_la_SOURCES = autotoolsast.cpp autotoolsdriver.cpp \
-    automakeprojectmodel.cpp autotools_yacc.cpp automakeimporter.cpp
+	automakeprojectmodel.cpp autotools_yacc.cpp automakeimporter.cpp makefileinterface.cpp
 
 kde_services_DATA =  kdevautomakeimporter.desktop
 
@@ -30,3 +30,4 @@ parser:
 
 EXTRA_DIST = autotools.yy autotools.ll
 
+noinst_HEADERS = makefileinterface.h

@@ -21,14 +21,15 @@
 #ifndef AUTOMAKEIMPORTER_H
 #define AUTOMAKEIMPORTER_H
 
-#include <QtCore/QList>
-#include <QtCore/QString>
+#include <QList>
+#include <QString>
 #include "kdevprojecteditor.h"
 
 class QObject;
 class KDevProject;
 class KDevProjectItem;
 class AutoMakeItem;
+class MakefileInterface;
 
 
 class AutoMakeImporter : public KDevProjectEditor
@@ -72,6 +73,8 @@ public:
 private:
 	KDevProject* m_project;
 	KDevProjectItem* m_rootItem;
+	
+	MakefileInterface* m_interface;
 };
 
 #endif

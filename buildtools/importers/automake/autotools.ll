@@ -60,11 +60,11 @@ ws                {delim}+
 letter            [A-Za-z]
 digit             [0-9]
 id_simple         ({digit}|{letter}|\!|-|_|\*|\$|@)({letter}|{digit}|\||\!|-|_|\*|\$|\(|\.|\+|\-|\)|\/)*
-id_list           [^\n]*\\{ws}*
+id_list           [^\n#]*\\{ws}*
 id_args           [^\n]*\)
 number            {digit}+
 comment           #.*
-comment_cont      {ws}*#.*\n
+comment_cont      {ws}#.*\n
 id_list_single    [^\n]*
 cont              \\{ws}*\n
 keywords          (if|else|endif|include)
@@ -108,6 +108,11 @@ rule              [\t]+[^\n]*
 	yylval.value = yytext;
 	BEGIN(list);
 	return (LIST_COMMENT); 
+    }
+
+<list>{comment} {
+	yylval.value = yytext;
+	return LIST_COMMENT;
     }
 
 <list>{id_list_single} {

@@ -27,8 +27,8 @@
 #include "kdevprojectmodel.h"
 
 #include "automakeprojectmodel.h"
-#include "autotoolsast.h"
-#include "autotoolsdriver.h"
+#include "makefileinterface.h"
+
 
 K_EXPORT_COMPONENT_FACTORY( libkdevautomakeimporter,
                             KGenericFactory<AutoMakeImporter>( "kdevautomakeimporter" ) )
@@ -41,6 +41,7 @@ AutoMakeImporter::AutoMakeImporter( QObject* parent, const char* name,
 	setObjectName( QString::fromUtf8( name ) );
 	m_project = qobject_cast<KDevProject*>( parent );
 	Q_ASSERT( m_project );
+	m_interface = new MakefileInterface( this );
 }
 
 AutoMakeImporter::~AutoMakeImporter()
@@ -69,100 +70,7 @@ KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
 {
 	Q_UNUSED( model );
 	m_rootItem = new AutoMakeDirItem( fileName, 0 );
-	AutoTools::ProjectAST* ast;
-	int ret = -1;
-	QString filePath = fileName + "/Makefile.am.in";
-	if ( QFile::exists( filePath ) )
-		ret = AutoTools::Driver::parseFile( filePath, &ast );
-	else
-	{
-		filePath = fileName + "/Makefile.am";
-		if ( QFile::exists( filePath ) )
-			ret = AutoTools::Driver::parseFile( filePath, &ast );
-		else
-		{
-			filePath = fileName + "/Makefile.in";
-			if ( QFile::exists( filePath ) )
-				ret = AutoTools::Driver::parseFile( filePath, &ast );
-			else
-				kDebug(9020) << k_funcinfo << "no appropriate file to parse in "
-				              << fileName << endl;
-		}
-	}
-	
-    if ( ret != 0 )
-	    return m_rootItem;
-
-	
-    kDebug(9020) << k_funcinfo << filePath << " was parsed correctly. Adding information" << endl;
-    Q_ASSERT( ast != 0 );
-	
-	if ( ast && ast->hasChildren() )
-	{
-		QList<AutoTools::AST*> astChildList = ast->children();
-		QList<AutoTools::AST*>::const_iterator it, itEnd = astChildList.constEnd();
-		for ( it = astChildList.constBegin(); it != itEnd; ++it )
-		{
-			if ( (*it)->nodeType() == AutoTools::AST::AssignmentAST )
-			{
-				AutoTools::AssignmentAST* assignment = static_cast<AutoTools::AssignmentAST*>( (*it) );
-				if ( assignment->scopedID == "SUBDIRS"  )
-				{
-					kDebug(9020) << k_funcinfo << "subdirs is " << assignment->values << endl;
-					foreach( const QString& s, assignment->values )
-					{
-						QString dir = fileName + "/" + s;
-						new AutoMakeDirItem( dir, m_rootItem );
-					}
-				}
-			}
-		}
-	}
-		
-	/* old code
-    d->projects[filePath] = ast;
-    d->folderToFileMap[folder] = filePath;
-	
-    if ( recursive && ast && ast->hasChildren() )
-    {
-        QValueList<AutoTools::AST*> astChildList = ast->children();
-        QValueList<AutoTools::AST*>::iterator it(astChildList.begin()), clEnd(astChildList.end());
-        for ( ; it != clEnd; ++it )
-        {
-            if ( (*it)->nodeType() == AutoTools::AST::AssignmentAST )
-            {
-                AutoTools::AssignmentAST* assignment = static_cast<AutoTools::AssignmentAST*>( (*it) );
-                if ( assignment->scopedID == "SUBDIRS"  )
-                {
-                    QString list = assignment->values.join( QString::null );
-                    list.simplified();
-                    kDebug(9020) << k_funcinfo << "subdirs is " << list << endl;
-                    QStringList subdirList = QStringList::split( " ",  list );
-                    QStringList::iterator vit = subdirList.begin();
-                    for ( ; vit != subdirList.end(); ++vit )
-                    {
-                        QString realDir = ( *vit );
-                        if ( realDir.startsWith( "\\" ) )
-                            realDir.remove( 0, 1 );
-
-                        realDir = realDir.trimmed();
-                        if ( realDir != "." && realDir != ".." && !realDir.isEmpty() )
-                        {
-                            if ( isVariable( realDir ) )
-                            {
-                                kDebug(9020) << k_funcinfo << "'" << realDir << "' is a variable" << endl;
-                                realDir = resolveVariable( realDir, ast );
-                            }
-
-                            kDebug(9020) << k_funcinfo << "Beginning parsing of '" << realDir << "'" << endl;
-                            parse( folder + '/' + realDir, recursive );
-                        }
-                    }
-                }
-            }
-        }
-    }
-	*/
+	bool parsedCorrectly = m_interface->parse( fileName );
 	return m_rootItem;
 }
 

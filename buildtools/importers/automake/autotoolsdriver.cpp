@@ -29,7 +29,7 @@
 
 extern FILE *yyin, *yyout;
 extern int yyparse();
-//extern int yydebug;
+extern int yydebug;
 extern QStack<AutoTools::ProjectAST *> projects;
 
 namespace AutoTools {

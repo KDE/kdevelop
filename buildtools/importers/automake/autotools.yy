@@ -106,7 +106,7 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 %debug
 */
 %}
-
+%debug
 %token ID_SIMPLE
 %token ID_LIST
 %token LBRACE
@@ -267,7 +267,8 @@ scoped_identifier : ID_SIMPLE scoped_identifier
 
 multiline_values : multiline_values line_body
 {
-	$<values>$.append($<value>2);
+	QStringList list = $<value>2.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+	$<values>$ = $<values>$ + list; //.append($<value>2);
 }
 |   { $<values>$.clear(); }
     ;
