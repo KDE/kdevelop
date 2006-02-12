@@ -134,7 +134,7 @@ void ReplaceWidget::clear()
 
 void ReplaceWidget::editDocument( QString const & file, int line )
 {
-    m_part->documentController()->editDocument( KURL( file ), line );
+    m_part->documentController()->editDocument( KUrl( file ), line );
 }
 
 void ReplaceWidget::stopButtonClicked( KDevPlugin * which )

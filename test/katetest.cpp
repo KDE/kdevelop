@@ -186,7 +186,7 @@ void KWrite::setupActions()
   KStdAction::openNew( this, SLOT(slotNew()), actionCollection(), "file_new" )->setWhatsThis(i18n("Use this command to create a new document"));
   KStdAction::open( this, SLOT( slotOpen() ), actionCollection(), "file_open" )->setWhatsThis(i18n("Use this command to open an existing document for editing"));
 
-  m_recentFiles = KStdAction::openRecent(this, SLOT(slotOpen(const KURL&)),
+  m_recentFiles = KStdAction::openRecent(this, SLOT(slotOpen(const KUrl&)),
                                          actionCollection());
   m_recentFiles->setWhatsThis(i18n("This lists files which you have opened recently, and allows you to easily open them again."));
 
@@ -252,7 +252,7 @@ void KWrite::setupStatusBar()
 }
 
 // load on url
-void KWrite::loadURL(const KURL &url)
+void KWrite::loadURL(const KUrl &url)
 {
   m_view->document()->openURL(url);
 }
@@ -289,7 +289,7 @@ void KWrite::slotNew()
   if (m_view->document()->isModified() || !m_view->document()->url().isEmpty())
     new KWrite();
   else
-    m_view->document()->openURL(KURL());
+    m_view->document()->openURL(KUrl());
 }
 
 void KWrite::slotOpen()
@@ -303,7 +303,7 @@ void KWrite::slotOpen()
   }
 }
 
-void KWrite::slotOpen( const KURL& url )
+void KWrite::slotOpen( const KUrl& url )
 {
   if (url.isEmpty()) return;
 

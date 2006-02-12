@@ -2384,7 +2384,7 @@ contents of a local file. For remote files, there is a further possibility:
 </para>
 
 <programlisting>
-KURL url("http://developer.kde.org/favicon.ico");
+KUrl url("http://developer.kde.org/favicon.ico");
 QString type = KIO::NetAccess::mimetype(url);
 if (type == KMimeType::defaultMimeType())
     cout &lt;&lt; "Could not find out type" &lt;&lt; endl;
@@ -2407,7 +2407,7 @@ explicitly start the KIO job and connect to some of its signals:
 <programlisting>
 void FooClass::findType()
 {
-    KURL url("http://developer.kde.org/favicon.ico");
+    KUrl url("http://developer.kde.org/favicon.ico");
     KIO::MimetypeJob *job = KIO::mimetype(url);
     connect( job, SIGNAL(result(KIO::Job*)),
              this, SLOT(mimeResult(KIO::Job*)) );
@@ -2513,7 +2513,7 @@ and returns the associated icon.
 </para>
 
 <programlisting>
-KURL url("ftp://ftp.kde.org/pub/incoming/wibble.c");
+KUrl url("ftp://ftp.kde.org/pub/incoming/wibble.c");
 QString icon = KMimeType::iconNameForURL(url);
 </programlisting>
 
@@ -2523,7 +2523,7 @@ user's preferred program associated with this type.
 </para>
 
 <programlisting>
-KURL url("http://dot.kde.org");
+KUrl url("http://dot.kde.org");
 new KRun(url);
 </programlisting>
 
@@ -2602,7 +2602,7 @@ deletes itself. Thus, a typical use case will look like this:
 <programlisting>
 void FooClass::makeDirectory()
 {
-    SimpleJob *job = KIO::mkdir(KURL("file:/home/bernd/kiodir"));
+    SimpleJob *job = KIO::mkdir(KUrl("file:/home/bernd/kiodir"));
     connect( job, SIGNAL(result(KIO::Job*)), 
              this, SLOT(mkdirResult(KIO::Job*)) );
 }
@@ -2627,39 +2627,39 @@ Here is an overview over the possible functions:
 
 <variablelist>
 
-<varlistentry><term>KIO::mkdir(const KURL &amp;url, int permission)</term>
+<varlistentry><term>KIO::mkdir(const KUrl &amp;url, int permission)</term>
 <listitem><para>
 Creates a directory, optionally with certain permissions.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::rmdir(const KURL &amp;url)</term>
+<varlistentry><term>KIO::rmdir(const KUrl &amp;url)</term>
 <listitem><para>
 Removes a directory.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::chmod(const KURL &amp;url, int permissions)</term>
+<varlistentry><term>KIO::chmod(const KUrl &amp;url, int permissions)</term>
 <listitem><para>
 Changes the permissions of a file.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::rename(const KURL &amp;src, const KURL &amp;dest, 
+<varlistentry><term>KIO::rename(const KUrl &amp;src, const KUrl &amp;dest, 
                                 bool overwrite)</term>
 <listitem><para>
 Renames a file.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::symlink(const QString &amp;target, const KURL &amp;dest, 
+<varlistentry><term>KIO::symlink(const QString &amp;target, const KUrl &amp;dest, 
                                  bool overwrite, bool showProgressInfo)</term>
 <listitem><para>
 Creates a symbolic link.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::stat(const KURL &amp;url, bool showProgressInfo)</term>
+<varlistentry><term>KIO::stat(const KUrl &amp;url, bool showProgressInfo)</term>
 <listitem><para>
 Finds out certain information about the file, such as size, modification 
 time and permissions. The information can be obtained from 
@@ -2667,78 +2667,78 @@ KIO::StatJob::statResult() after the job has finished.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::get(const KURL &amp;url, bool reload, bool showProgressInfo)</term>
+<varlistentry><term>KIO::get(const KUrl &amp;url, bool reload, bool showProgressInfo)</term>
 <listitem><para>
 Transfers data from a URL.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::put(const KURL &amp;url, int permissions, bool overwrite, 
+<varlistentry><term>KIO::put(const KUrl &amp;url, int permissions, bool overwrite, 
                              bool resume, bool showProgressInfo)</term>
 <listitem><para>
 Transfers data to a URL.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::http_post(const KURL &amp;url, const QByteArray &amp;data, 
+<varlistentry><term>KIO::http_post(const KUrl &amp;url, const QByteArray &amp;data, 
                                     bool showProgressInfo)</term>
 <listitem><para>Posts data. Special for HTTP.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::mimetype(const KURL &amp;url, bool showProgressInfo)</term>
+<varlistentry><term>KIO::mimetype(const KUrl &amp;url, bool showProgressInfo)</term>
 <listitem><para>
 Tries to find the MIME type of the URL. The type can be obtained from 
 KIO::MimetypeJob::mimetype() after the job has finished.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::file_copy(const KURL &amp;src, const KURL &amp;dest, int permissions,
+<varlistentry><term>KIO::file_copy(const KUrl &amp;src, const KUrl &amp;dest, int permissions,
                                    bool overwrite, bool resume, bool showProgressInfo)</term>
 <listitem><para>
 Copies a single file.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::file_move(const KURL &amp;src, const KURL &amp;dest, int permissions,
+<varlistentry><term>KIO::file_move(const KUrl &amp;src, const KUrl &amp;dest, int permissions,
                                    bool overwrite, bool resume, bool showProgressInfo)</term>
 <listitem><para>
 Renames or moves a single file.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::file_delete(const KURL &amp;url, bool showProgressInfo)</term>
+<varlistentry><term>KIO::file_delete(const KUrl &amp;url, bool showProgressInfo)</term>
 <listitem><para>
 Deletes a single file.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::listDir(const KURL &amp;url, bool showProgressInfo)</term>
+<varlistentry><term>KIO::listDir(const KUrl &amp;url, bool showProgressInfo)</term>
 <listitem><para>
 Lists the contents of a directory. Each time some new entries are known, the
 signal KIO::ListJob::entries() is emitted.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::listRecursive(const KURL &amp;url, bool showProgressInfo)</term>
+<varlistentry><term>KIO::listRecursive(const KUrl &amp;url, bool showProgressInfo)</term>
 <listitem><para>
 Similar to the listDir() function, but this one is recursive.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::copy(const KURL &amp;src, const KURL &amp;dest, bool showProgressInfo)</term>
+<varlistentry><term>KIO::copy(const KUrl &amp;src, const KUrl &amp;dest, bool showProgressInfo)</term>
 <listitem><para>
 Copies a file or directory. Directories are copied recursively.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::move(const KURL &amp;src, const KURL &amp;dest, bool showProgressInfo)</term>
+<varlistentry><term>KIO::move(const KUrl &amp;src, const KUrl &amp;dest, bool showProgressInfo)</term>
 <listitem><para>
 Moves or renames a file or directory.
 </para></listitem>
 </varlistentry>
 
-<varlistentry><term>KIO::del(const KURL &amp;src, bool shred, bool showProgressInfo)</term>
+<varlistentry><term>KIO::del(const KUrl &amp;src, bool shred, bool showProgressInfo)</term>
 <listitem><para>
 Deletes a file or directory.
 </para></listitem>
@@ -2864,7 +2864,7 @@ KIO::NetAccess. For example, in order to copy a file, use
 </para>
 
 <programlisting>
-KURL source, target;
+KUrl source, target;
 source = ...;
 target = ...
 KIO::NetAccess::copy(source, target);
@@ -2890,7 +2890,7 @@ files regardless of their location is the following code snippet:
 </para>
 
 <programlisting>
-KURL url;
+KUrl url;
 url = ...;
 QString tempFile;
 if (KIO::NetAccess::download(url, tempFile) {
@@ -2920,7 +2920,7 @@ cache, you can use:
 <programlisting>
 void FooClass::reloadPage()
 {
-    KURL url("http://www.kdevelop.org/index.html");
+    KUrl url("http://www.kdevelop.org/index.html");
     KIO::TransferJob *job = KIO::get(url, true, false);
     job->addMetaData("cache", "reload");
     ...
@@ -2940,7 +2940,7 @@ is the following:
 <programlisting>
 void FooClass::printModifiedDate()
 {
-    KURL url("http://developer.kde.org/documentation/kde2arch/index.html");
+    KUrl url("http://developer.kde.org/documentation/kde2arch/index.html");
     KIO::TransferJob *job = KIO::get(url, true, false);
     connect( job, SIGNAL(result(KIO::Job*)),
              this, SLOT(transferResult(KIO::Job*)) );
@@ -3003,7 +3003,7 @@ follows:
 </para>
 
 <programlisting>
-KURL url("http://developer.kde.org/documentation/kde2arch/index.html");
+KUrl url("http://developer.kde.org/documentation/kde2arch/index.html");
 KIO::TransferJob *job = KIO::get(url, true, false);
 KIO::Scheduler::scheduleJob(job);
 </programlisting>
@@ -3019,13 +3019,13 @@ be easily achieved by using the KIO::Scheduler:
 </para>
 
 <programlisting>
-KURL baseUrl("imap://bernd@albert.physik.hu-berlin.de");
+KUrl baseUrl("imap://bernd@albert.physik.hu-berlin.de");
 KIO::Slave *slave = KIO::Scheduler::getConnectedSlave(baseUrl);
 
-KIO::TransferJob *job1 = KIO::get(KURL(baseUrl, "/INBOX;UID=79374"));
+KIO::TransferJob *job1 = KIO::get(KUrl(baseUrl, "/INBOX;UID=79374"));
 KIO::Scheduler::assignJobToSlave(slave, job1);
 
-KIO::TransferJob *job2 = KIO::get(KURL(baseUrl, "/INBOX;UID=86793"));
+KIO::TransferJob *job2 = KIO::get(KUrl(baseUrl, "/INBOX;UID=86793"));
 KIO::Scheduler::assignJobToSlave(slave, job2);
 
 ...
@@ -3153,22 +3153,22 @@ functions:
 <variablelist>
 
 <varlistentry><term>reading - Reads data from a URL</term>
-<listitem><para>void get(const KURL &amp;url)</para></listitem></varlistentry>
+<listitem><para>void get(const KUrl &amp;url)</para></listitem></varlistentry>
 
 <varlistentry><term>writing - Writes data to a URL and create the file if it does not exist yet.</term>
-<listitem><para>void put(const KURL &amp;url, int permissions, bool overwrite, bool resume)</para></listitem></varlistentry>
+<listitem><para>void put(const KUrl &amp;url, int permissions, bool overwrite, bool resume)</para></listitem></varlistentry>
 
 <varlistentry><term>moving - Renames a file.</term>
-<listitem><para>void rename(const KURL &amp;src, const KURL &amp;dest, bool overwrite)</para></listitem></varlistentry>
+<listitem><para>void rename(const KUrl &amp;src, const KUrl &amp;dest, bool overwrite)</para></listitem></varlistentry>
 
 <varlistentry><term>deleting - Deletes a file or directory.</term>
-<listitem><para>void del(const KURL &amp;url, bool isFile)</para></listitem></varlistentry>
+<listitem><para>void del(const KUrl &amp;url, bool isFile)</para></listitem></varlistentry>
 
 <varlistentry><term>listing - Lists the contents of a directory.</term>
-<listitem><para>void listDir(const KURL &amp;url)</para></listitem></varlistentry>
+<listitem><para>void listDir(const KUrl &amp;url)</para></listitem></varlistentry>
 
 <varlistentry><term>makedir - Creates a directory.</term>
-<listitem><para>void mkdir(const KURL &amp;url, int permissions)</para></listitem></varlistentry>
+<listitem><para>void mkdir(const KUrl &amp;url, int permissions)</para></listitem></varlistentry>
 
 </variablelist>
 
@@ -3181,19 +3181,19 @@ or not (i.e. the default implementation returns an error).
 <variablelist>
 
 <varlistentry><term>Delivers information about a file, similar to the C function stat().</term>
-<listitem><para>void stat(const KURL &amp;url)</para></listitem></varlistentry>
+<listitem><para>void stat(const KUrl &amp;url)</para></listitem></varlistentry>
 
 <varlistentry><term>Changes the access permissions of a file.</term>
-<listitem><para>void chmod(const KURL &amp;url, int permissions)</para></listitem></varlistentry>
+<listitem><para>void chmod(const KUrl &amp;url, int permissions)</para></listitem></varlistentry>
 
 <varlistentry><term>Determines the MIME type of a file.</term>
-<listitem><para>void mimetype(const KURL &amp;url)</para></listitem></varlistentry>
+<listitem><para>void mimetype(const KUrl &amp;url)</para></listitem></varlistentry>
 
 <varlistentry><term>Copies a file.</term>
-<listitem><para>copy(const KURL &amp;url, const KURL &amp;dest, int permissions, bool overwrite)</para></listitem></varlistentry>
+<listitem><para>copy(const KUrl &amp;url, const KUrl &amp;dest, int permissions, bool overwrite)</para></listitem></varlistentry>
 
 <varlistentry><term>Creates a symbolic link.</term>
-<listitem><para>void symlink(const QString &amp;target, const KURL &amp;dest, bool overwrite)</para></listitem></varlistentry>
+<listitem><para>void symlink(const QString &amp;target, const KUrl &amp;dest, bool overwrite)</para></listitem></varlistentry>
 
 </variablelist>
 

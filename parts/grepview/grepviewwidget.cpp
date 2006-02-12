@@ -272,7 +272,7 @@ void GrepViewWidget::slotExecuted(Q3ListBoxItem* item)
         return;
 
     GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);
-    m_part->documentController()->editDocument( KURL( gi->filename() ), gi->linenumber()-1 );
+    m_part->documentController()->editDocument( KUrl( gi->filename() ), gi->linenumber()-1 );
 }
 
 

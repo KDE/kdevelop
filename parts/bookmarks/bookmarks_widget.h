@@ -36,14 +36,14 @@ public:
 
 	void update( Q3Dict<EditorData> const & );
 	void updateURL( EditorData * );
-	bool removeURL( KURL const & );
+	bool removeURL( KUrl const & );
 	
 	BookmarksConfig * config();
-	QStringList getContext( KURL const &, unsigned int );
+	QStringList getContext( KUrl const &, unsigned int );
 
 signals:
-	void removeAllBookmarksForURL( const KURL & );
-	void removeBookmarkForURL( const KURL &, int );
+	void removeAllBookmarksForURL( const KUrl & );
+	void removeBookmarkForURL( const KUrl &, int );
 
 protected:
 	void maybeTip( QPoint const & );

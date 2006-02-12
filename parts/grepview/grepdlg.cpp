@@ -319,7 +319,7 @@ void GrepDialog::slotSynchDirectory( )
     KParts::ReadOnlyPart * part = dynamic_cast<KParts::ReadOnlyPart*>( m_part->documentController()->activePart() );
     if ( part )
     {
-        KURL url = part->url();
+        KUrl url = part->url();
         if ( url.isLocalFile() )
         {
             dir_combo->setEditText( url.upURL().path( +1 ) );

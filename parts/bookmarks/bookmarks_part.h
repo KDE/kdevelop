@@ -33,7 +33,7 @@ class ConfigWidgetProxy;
 
 struct EditorData
 {
-	KURL url;
+	KUrl url;
 	Q3ValueList< QPair<int,QString> > marks;
 };
 
@@ -55,7 +55,7 @@ public:
 	
 	BookmarksConfig * config();
 
-	QStringList getContext( KURL const & url, unsigned int line, unsigned int context );
+	QStringList getContext( KUrl const & url, unsigned int line, unsigned int context );
 	
 private slots:
 	// connected to partcontroller
@@ -71,8 +71,8 @@ private slots:
 	void reload();
 
 	// connected to BookmarksWidget
-	void removeAllBookmarksForURL( const KURL & );
-	void removeBookmarkForURL( const KURL &, int );
+	void removeAllBookmarksForURL( const KUrl & );
+	void removeBookmarkForURL( const KUrl &, int );
 
 	void insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int );
 	
@@ -85,12 +85,12 @@ private:
 	void storeBookmarksForAllURLs();
 
 	void updateContextStringForURL( KParts::ReadOnlyPart * );
-	void updateContextStringForURL( KURL const & url );
+	void updateContextStringForURL( KUrl const & url );
 	void updateContextStringForAll();
 
 	QStringList getContextFromStream( QTextStream & istream, unsigned int line, unsigned int context );
 	
-	KParts::ReadOnlyPart * partForURL( KURL const & url );
+	KParts::ReadOnlyPart * partForURL( KUrl const & url );
 	bool partIsSane( KParts::ReadOnlyPart * );
 
 	QPointer<BookmarksWidget> _widget;

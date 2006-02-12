@@ -73,10 +73,10 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
     connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
         this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
-    connect( _widget, SIGNAL( removeAllBookmarksForURL( const KURL & ) ),
-        this, SLOT( removeAllBookmarksForURL( const KURL & ) ) );
-    connect( _widget, SIGNAL( removeBookmarkForURL( const KURL &, int ) ),
-        this, SLOT( removeBookmarkForURL( const KURL &, int ) ) );
+    connect( _widget, SIGNAL( removeAllBookmarksForURL( const KUrl & ) ),
+        this, SLOT( removeAllBookmarksForURL( const KUrl & ) ) );
+    connect( _widget, SIGNAL( removeBookmarkForURL( const KUrl &, int ) ),
+        this, SLOT( removeBookmarkForURL( const KUrl &, int ) ) );
 
     connect( _marksChangeTimer, SIGNAL( timeout() ), this, SLOT( marksChanged() ) );
 
@@ -261,7 +261,7 @@ void BookmarksPart::savePartialProjectSession( QDomElement * el )
     }
 }
 
-void BookmarksPart::removeAllBookmarksForURL( KURL const & url )
+void BookmarksPart::removeAllBookmarksForURL( KUrl const & url )
 {
     //kDebug(0) << "BookmarksPart::removeAllBookmarksForURL()" << endl;
 
@@ -271,7 +271,7 @@ void BookmarksPart::removeAllBookmarksForURL( KURL const & url )
     _widget->removeURL( url );
 }
 
-void BookmarksPart::removeBookmarkForURL( KURL const & url, int line )
+void BookmarksPart::removeBookmarkForURL( KUrl const & url, int line )
 {
     //kDebug(0) << "BookmarksPart::removeBookmarkForURL()" << endl;
 
@@ -319,7 +319,7 @@ void BookmarksPart::updateContextStringForURL( KParts::ReadOnlyPart * ro_part )
     }
 }
 
-void BookmarksPart::updateContextStringForURL( KURL const & url )
+void BookmarksPart::updateContextStringForURL( KUrl const & url )
 {
     updateContextStringForURL( partForURL( url ) );
 }
@@ -463,7 +463,7 @@ void BookmarksPart::storeBookmarksForAllURLs()
 }
 
 // reimplemented from PartController::partForURL to avoid linking
-KParts::ReadOnlyPart * BookmarksPart::partForURL( KURL const & url )
+KParts::ReadOnlyPart * BookmarksPart::partForURL( KUrl const & url )
 {
     Q3PtrListIterator<KParts::Part> it( *documentController()->parts() );
     while( it.current() )
@@ -533,7 +533,7 @@ QStringList BookmarksPart::getContextFromStream( QTextStream & istream, unsigned
     return list;
 }
 
-QStringList BookmarksPart::getContext( KURL const & url, unsigned int line, unsigned int context )
+QStringList BookmarksPart::getContext( KUrl const & url, unsigned int line, unsigned int context )
 {
     // if the file is open - get the line from the editor buffer
     if ( KTextEditor::EditInterface * ei = dynamic_cast<KTextEditor::EditInterface*>( partForURL( url ) ) )

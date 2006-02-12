@@ -62,12 +62,12 @@ static const char* const bookmark_xpm[]={
 class BookmarkItem : public Q3ListViewItem
 {
 public:
-    BookmarkItem( Q3ListView * parent, KURL const & url )
+    BookmarkItem( Q3ListView * parent, KUrl const & url )
             : Q3ListViewItem( parent, url.fileName() ),
             _url( url ), _line( -1 ), _isBookmark( false )
     {}
 
-    BookmarkItem( Q3ListViewItem * parent, KURL const & url, QPair<int,QString> mark )
+    BookmarkItem( Q3ListViewItem * parent, KUrl const & url, QPair<int,QString> mark )
             : Q3ListViewItem( parent, QString::number( mark.first +1 ).rightJustified( 5 ) ),
             _url( url ), _line( mark.first ), _isBookmark( true )
     {
@@ -91,7 +91,7 @@ public:
         setText( 0, text( 0 ) + "  " + mark.second );
     }
 
-    KURL url()
+    KUrl url()
     {
         return _url;
     }
@@ -134,7 +134,7 @@ public:
     }
 
 private:
-    KURL _url;
+    KUrl _url;
     int _line;
     bool _isBookmark;
     QString _code;
@@ -225,7 +225,7 @@ void BookmarksWidget::createURL( EditorData * data )
     }
 }
 
-bool BookmarksWidget::removeURL( KURL const & url )
+bool BookmarksWidget::removeURL( KUrl const & url )
 {
 //  kDebug(0) << "BookmarksWidget::removeURL()" << endl;
 
@@ -307,7 +307,7 @@ BookmarksConfig * BookmarksWidget::config( )
     return _part->config();
 }
 
-QStringList BookmarksWidget::getContext( KURL const & url, unsigned int line )
+QStringList BookmarksWidget::getContext( KUrl const & url, unsigned int line )
 {
     return _part->getContext( url, line, config()->context() );
 }
