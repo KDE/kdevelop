@@ -564,7 +564,7 @@ VarFrameRoot* VariableTree::demand_frame_root(int frameNo, int threadNo)
     if (!frame)
     {
         frame = new VarFrameRoot(this, frameNo, threadNo);
-        frame->setFrameName("Locals");
+        frame->setFrameName(i18n("Locals"));
         // Make sure "Locals" item is always the top item, before
         // "watch" and "recent experessions" items.
         this->takeItem(frame);
