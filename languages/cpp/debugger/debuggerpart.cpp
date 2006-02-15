@@ -26,6 +26,7 @@
 #include <kdevgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kdialogbase.h>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
 #include <kparts/part.h>

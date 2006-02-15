@@ -41,7 +41,7 @@ struct KDevPluginInfo::Private {
     QString m_icon;
 
     QString m_version;
-    int m_licenseType;
+    KAboutData::LicenseKey m_licenseType;
     QString m_copyrightStatement;
     QString m_homePageAddress;
     QString m_bugsEmailAddress;
@@ -130,7 +130,7 @@ QString KDevPluginInfo::version() const
     return d->m_version;
 }
 
-int KDevPluginInfo::licenseType() const
+KAboutData::LicenseKey KDevPluginInfo::licenseType() const
 {
     return d->m_licenseType;
 }

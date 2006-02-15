@@ -62,7 +62,7 @@ public:
     /** @return A version of a plugin. Information is taken from .desktop file. */
     QString version() const;
     /** @return A license type of a plugin. Information is taken from .desktop file. */
-    int licenseType() const;
+    KAboutData::LicenseKey licenseType() const;
     /** @return A license text for known license types (GPL, LGPL, BSD, Artistic, QPL). */
     QString license() const;
     /** @return A copyright statement of a plugin. Information is taken from .desktop file. */

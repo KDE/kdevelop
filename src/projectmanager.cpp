@@ -16,6 +16,8 @@ class QDomDocument;
 #include <klocale.h>
 #include <kservice.h>
 #include <ktrader.h>
+#include <ktoolbar.h>
+#include <kdialogbase.h>
 #include <kfiledialog.h>
 #include <kmainwindow.h>
 #include <kparts/componentfactory.h>

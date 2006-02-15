@@ -30,6 +30,7 @@
 #include <kstatusbar.h>
 #include <kparts/mainwindow.h>
 #include <kdialogbase.h>
+#include <ktoolbar.h>
 #include <kconfig.h>
 #include <kkeydialog.h>
 #include <kmenubar.h>
