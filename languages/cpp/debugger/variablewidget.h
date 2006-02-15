@@ -137,6 +137,11 @@ private: // helper functions
     */    
     VarFrameRoot* demand_frame_root(int frameNo, int threadNo);
 
+    /** Copies the value (second column) of the specified item to
+        the clipboard.
+    */
+    void copyToClipboard(QListViewItem*);
+
 private: // QWidget overrides
     void keyPressEvent(QKeyEvent* e);
 

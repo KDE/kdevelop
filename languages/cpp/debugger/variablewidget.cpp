@@ -310,7 +310,9 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
 
         int idToggleWatch = popup.insertItem( i18n("Toggle Watchpoint") );
         int	idCopyToClipboard = popup.insertItem( 
-            SmallIcon("editcopy"), i18n("Copy to Clipboard") );
+            SmallIcon("editcopy"), i18n("Copy Value") );
+        popup.setAccel(Qt::CTRL + Qt::Key_C, idCopyToClipboard);
+
         int res = popup.exec(QCursor::pos());
 
         
@@ -345,15 +347,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
             delete item;
         else if (res == idCopyToClipboard)
         {
-            QClipboard *qb = KApplication::clipboard();
-            QString text = "{ \"" + item->text( 0 ) + "\", " + // name
-                            "\"" + item->text( 1 ) + "\" }";  // value
-
-#if KDE_VERSION > 305
-            qb->setText( text, QClipboard::Clipboard );
-#else
-            qb->setText( text );
-#endif
+            copyToClipboard(item);
         }
         else if (res == idToggleWatch)
         {
@@ -692,8 +686,27 @@ void VariableTree::keyPressEvent(QKeyEvent* e)
                 delete item;
             }
         }
+
+        if (e->key() == Qt::Key_C && e->state() == Qt::ControlButton)
+        {
+            copyToClipboard(item);
+        }
     }        
 }
+
+
+void VariableTree::copyToClipboard(QListViewItem* item)
+{
+    QClipboard *qb = KApplication::clipboard();
+    QString text = item->text( 1 );
+
+#if KDE_VERSION > 305
+    qb->setText( text, QClipboard::Clipboard );
+#else
+    qb->setText( text );
+#endif
+}
+
 
 // **************************************************************************
 // **************************************************************************
