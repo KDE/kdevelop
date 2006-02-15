@@ -294,6 +294,11 @@ public:
 
     void setOpen(bool open);
 
+    // Marks the frame as dirty, that is as having
+    // out of date values. As soon as we try to open
+    // this item, it will fetch new data.
+    void setDirty();
+
     void setFrameName(const QString &frameName)
                 { setText(VarNameCol, frameName); setText(ValueCol, ""); }
 

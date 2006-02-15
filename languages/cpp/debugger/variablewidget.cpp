@@ -569,6 +569,7 @@ VarFrameRoot* VariableTree::demand_frame_root(int frameNo, int threadNo)
         // "watch" and "recent experessions" items.
         this->takeItem(frame);
         this->insertItem(frame);
+        frame->setDirty();
         frame->setOpen(true);
     }
     return frame;
@@ -629,6 +630,8 @@ void VariableTree::slotCurrentFrame(int frameNo, int threadNo)
     // will be repopulated if needed.
     if (frame->needLocals() || justPaused_) 
     {
+        frame->setDirty();
+
         if (frame->isOpen())
         {
             setActiveFlag();
@@ -1348,9 +1351,10 @@ void VarFrameRoot::setLocals(const char *locals)
     if (!isExpandable() && noLocals)
         setText( ValueCol, locals );
 
-    needLocals_ = false;
     if (isOpen())
         setOpen(true);
+
+    needLocals_ = false;
 }
 
 // **************************************************************************
@@ -1363,21 +1367,21 @@ void VarFrameRoot::setOpen(bool open)
     QListViewItem::setOpen(open);
 
     VariableTree *parent = (VariableTree*)listView();
-    if (parent && frameOpened) {
+    // If we don't have locals already, 
+    if (parent && frameOpened && needLocals_) {
         parent->setActiveFlag();
         emit parent->produceVariablesInfo();
     }
-/*
-    if (!open)
-        return;
-*/
-    if (!params_.isNull())
-        GDBParser::getGDBParser()->parseCompositeValue(this, params_.data());
-    if (!locals_.isNull())
-        GDBParser::getGDBParser()->parseCompositeValue(this, locals_.data());
-
-    locals_ = QCString();
-    params_ = QCString();
+    else
+    {
+        if (!params_.isNull())
+            GDBParser::getGDBParser()->parseCompositeValue(this, params_.data());
+        if (!locals_.isNull())
+            GDBParser::getGDBParser()->parseCompositeValue(this, locals_.data());
+        
+        locals_ = QCString();
+        params_ = QCString();
+    }
 }
 
 // **************************************************************************
@@ -1385,6 +1389,11 @@ void VarFrameRoot::setOpen(bool open)
 bool VarFrameRoot::matchDetails(int frameNo, int threadNo)
 {
     return frameNo == frameNo_ && threadNo == threadNo_;
+}
+
+void VarFrameRoot::setDirty()
+{
+    needLocals_ = true;
 }
 
 // **************************************************************************
