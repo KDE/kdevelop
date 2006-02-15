@@ -174,7 +174,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("&Start"), "dbgrun", Key_F9,
                          this, SLOT(slotRun()),
                          actionCollection(), "debug_run");
-    action->setToolTip( i18n("Start in debugger") );
+    action->setToolTip( i18n("Start in debugger (F9)") );
     action->setWhatsThis( i18n("<b>Start in debugger</b><p>"
                                "Starts the debugger with the project's main "
                                "executable. You may set some breakpoints "
@@ -221,7 +221,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("Step &Over"), "dbgnext", Key_F10,
                          this, SLOT(slotStepOver()),
                          actionCollection(), "debug_stepover");
-    action->setToolTip( i18n("Step over the next line") );
+    action->setToolTip( i18n("Step over the next line (F10)") );
     action->setWhatsThis( i18n("<b>Step over</b><p>"
                                "Executes one line of source in the current source file. "
                                "If the source line is a call to a function the whole "
@@ -239,7 +239,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("Step &Into"), "dbgstep", Key_F11,
                          this, SLOT(slotStepInto()),
                          actionCollection(), "debug_stepinto");
-    action->setToolTip( i18n("Step into the next statement") );
+    action->setToolTip( i18n("Step into the next statement (F11)") );
     action->setWhatsThis( i18n("<b>Step into</b><p>"
                                "Executes exactly one line of source. If the source line "
                                "is a call to a function then execution will stop after "
@@ -256,7 +256,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("Step O&ut"), "dbgstepout", Key_F12,
                          this, SLOT(slotStepOut()),
                          actionCollection(), "debug_stepout");
-    action->setToolTip( i18n("Steps out of the current function") );
+    action->setToolTip( i18n("Steps out of the current function (F12)") );
     action->setWhatsThis( i18n("<b>Step out</b><p>"
                                "Executes the application until the currently executing "
                                "function is completed. The debugger will then display "
