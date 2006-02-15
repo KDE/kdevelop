@@ -2,15 +2,15 @@ INCLUDES = $(all_includes)
 
 noinst_LTLIBRARIES = libkdevinterfaces.la
 
-libkdevinterfaces_la_SOURCES = kdevapi.cpp		kdevlanguagesupport.cpp \
-		kdevplugininfo.cpp 	kdevappfrontend.cpp	kdevmainwindow.cpp	 kdevprojectbuilder.cpp \
-			kdevcatalog.cpp		kdevmakefrontend.cpp	 kdevproject.cpp 	kdevcodemodel.cpp	kdevdocumentcontroller.cpp	 \
-		kdevprojecteditor.cpp 	kdevcoderepository.cpp	kdevdocumentcontrolleriface.cpp \
-		kdevprojectiface.cpp 	kdevcore.cpp		kdevpcsimporter.cpp	 kdevprojectimporter.cpp \
-			kdevcoreiface.cpp	kdevplugincontroller.cpp kdevprojectmodel.cpp 	kdevdifffrontend.cpp	kdevplugin.cpp		 tag.cpp \
-			domutil.cpp 		kdevitemmodel.cpp	 urlutil.cpp 	kdevdocumentcontrolleriface.skel \
-		kdevcoreiface.skel kdevprojectiface.skel 	filetemplate.cpp kdevcodedelegate.cpp \
-		kdevcodeproxy.cpp kdevcodeaggregate.cpp
+libkdevinterfaces_la_SOURCES = kdevapi.cpp kdevlanguagesupport.cpp \
+	kdevplugininfo.cpp kdevappfrontend.cpp kdevmainwindow.cpp kdevprojectbuilder.cpp \
+	kdevcatalog.cpp kdevmakefrontend.cpp kdevproject.cpp kdevcodemodel.cpp \
+	kdevdocumentcontroller.cpp kdevprojecteditor.cpp kdevcoderepository.cpp \
+	kdevdocumentcontrolleriface.cpp kdevprojectiface.cpp kdevcore.cpp kdevpcsimporter.cpp \
+	kdevprojectimporter.cpp kdevcoreiface.cpp kdevplugincontroller.cpp kdevprojectmodel.cpp \
+	kdevdifffrontend.cpp kdevplugin.cpp tag.cpp domutil.cpp kdevitemmodel.cpp \
+	kdevdocumentcontrolleriface.skel kdevcoreiface.skel kdevprojectiface.skel filetemplate.cpp \
+	kdevcodedelegate.cpp kdevcodeproxy.cpp kdevcodeaggregate.cpp
 
 libkdevinterfaces_la_LDFLAGS = -no-undefined $(DB3LDFLAGS) $(all_libraries)
 libkdevinterfaces_la_LIBADD = -l$(DB3LIB) $(LIB_KDEUI) $(LIB_KHTML) \
