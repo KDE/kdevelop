@@ -1,3 +1,5 @@
+SUBDIRS = . tests
+
 INCLUDES = \
 	-I$(top_srcdir)/lib/projectmanager/interfaces \
 	-I$(top_srcdir)/lib/interfaces \
