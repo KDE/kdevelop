@@ -5,7 +5,7 @@
 ## The include_xxxx variables are controlled by configure.in.in
 ##
 
-SUBDIRS = parser app_templates debugger
+SUBDIRS = parser app_templates
 
 AM_CPPFLAGS = -I$(top_srcdir)/lib/interfaces \
 	-I$(top_srcdir)/lib/weaver \
