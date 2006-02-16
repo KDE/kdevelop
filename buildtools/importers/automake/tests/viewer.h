@@ -20,27 +20,28 @@
 #ifndef VIEWER_H
 #define VIEWER_H
 
-#include <qvaluestack.h>
+#include <QStack>
 
 #include "viewerbase.h"
 
 namespace AutoTools { class ProjectAST; }
 
-class QListViewItem;
+class Q3ListViewItem;
 
-class Viewer: public ViewerBase {
+class Viewer: public QWidget, private Ui::ViewerBase
+{
 Q_OBJECT
 public:
-    Viewer(QWidget *parent = 0, const char *name = 0);
-    void processAST(AutoTools::ProjectAST *projectAST, QListViewItem *globAfter = 0);
+    Viewer(QWidget *parent = 0);
+    void processAST(AutoTools::ProjectAST *projectAST, Q3ListViewItem *globAfter = 0);
 public slots:
     virtual void tabWidget2_selected(const QString&);
-    virtual void files_currentChanged(QListBoxItem*);
-    virtual void choose_clicked();
-    virtual void addAll_clicked();
+    virtual void on_files_currentChanged(Q3ListBoxItem*);
+    virtual void on_choose_clicked();
+    virtual void on_addAll_clicked();
 private:
     AutoTools::ProjectAST *projectAST;
-    QValueStack<QListViewItem *> parentProject;
+    QStack<Q3ListViewItem *> parentProject;
 };
 
 #endif

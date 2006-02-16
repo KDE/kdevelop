@@ -199,9 +199,9 @@
     </connection>
     <connection>
         <sender>files</sender>
-        <signal>currentChanged(QListBoxItem*)</signal>
+        <signal>currentChanged(Q3ListBoxItem*)</signal>
         <receiver>ViewerBase</receiver>
-        <slot>files_currentChanged(QListBoxItem*)</slot>
+        <slot>files_currentChanged(Q3ListBoxItem*)</slot>
     </connection>
     <connection>
         <sender>tabWidget2</sender>
@@ -213,7 +213,7 @@
 <slots>
     <slot>addAll_clicked()</slot>
     <slot>choose_clicked()</slot>
-    <slot>files_currentChanged(QListBoxItem*)</slot>
+    <slot>files_currentChanged(Q3ListBoxItem*)</slot>
     <slot>tabWidget2_selected(const QString&amp;)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
