@@ -70,8 +70,20 @@ KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
 {
 	Q_UNUSED( model );
 	m_rootItem = new AutoMakeDirItem( fileName, 0 );
+	m_interface->setProjectRoot( fileName );
 	bool parsedCorrectly = m_interface->parse( fileName );
+	
+	if ( parsedCorrectly )
+	{
+		QStringList topLevelSubdirs = m_interface->topSubDirs();
+		foreach ( QString dir, topLevelSubdirs )
+		{
+			//createProjectItems( dir, m_rootItem );
+			m_rootItem->add( new KDevProjectFolderItem( dir ) );
+		}
+	}
 	return m_rootItem;
+	
 }
 
 QString AutoMakeImporter::findMakefile( KDevProjectFolderItem* dom ) const
@@ -86,7 +98,18 @@ QStringList AutoMakeImporter::findMakefiles( KDevProjectFolderItem* dom ) const
 	return QStringList();
 }
 
+void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* rootItem )
+{
+	//first look for the subdirs
+	//recursively descend into any other subdirs. when finished look for targets.
+	//for each target, add the files for the target to the target
+	QStringList subdirs = m_interface->subdirsFor( folder );
+	if ( subdirs.isEmpty() )
+		return;
+	
+}
+
 #include "automakeimporter.h"
-// kate: indent-mode csands; space-indent off; tab-width 4; auto-insert-doxygen on;
+// kate: indent-mode cstyle; space-indent off; tab-width 4; auto-insert-doxygen on;
 
 

@@ -62,8 +62,9 @@ MakefileInterface::~MakefileInterface()
     delete d;
 }
 
-bool MakefileInterface::parse( const QDir& dir, int recursive )
+bool MakefileInterface::parse( const QDir& dir, ParserRecursion recursive )
 {
+    kDebug(9020) << k_funcinfo << "directory to parse is: " << dir.absolutePath() << endl; 
     int ret = -1;
     AutoTools::ProjectAST* ast;
 
@@ -76,15 +77,23 @@ bool MakefileInterface::parse( const QDir& dir, int recursive )
         {
             using namespace AutoTools;
             ret = Driver::parseFile( parsingFile.absoluteFilePath(), &ast );
-            if ( ret != -1 )
+            if ( ret == 0 )
                 break;
         }
     }
 
-    if ( recursive == NonRecursive || !ast || ( ast && !ast->hasChildren() ) )
-        return ( ret != -1 );
+    if ( !ast || ret != 0 )
+    {
+        kWarning(9020) << k_funcinfo << "parsing " << dir.absolutePath()
+                << "not successful! Fix your Makefile!" << endl;
+        return false;
+    }
 
     d->projects[parsingFile] = ast;
+
+    if ( recursive == NonRecursive || ( ast && !ast->hasChildren() ) )
+        return ( ret != -1 );
+
 
     QList<AST*> childList = ast->children();
     QList<AST*>::const_iterator cit, citEnd = childList.constEnd();
@@ -136,7 +145,7 @@ void MakefileInterface::setProjectRoot( const QDir& dir )
 
 QStringList MakefileInterface::topSubDirs() const
 {
-    return QStringList();
+    return subdirsFor( d->topLevelParseDir );
 }
 
 bool MakefileInterface::isVariable( const QString& item ) const
@@ -173,7 +182,7 @@ QString MakefileInterface::resolveVariable( const QString& variable, AutoTools::
     return variable;
 }
 
-QStringList MakefileInterface::subdirsFor( const QDir& folder )
+QStringList MakefileInterface::subdirsFor( const QDir& folder ) const
 {
     ProjectAST* ast = 0;
     QList<QFileInfo> projectFileInfoList = d->projects.keys();
@@ -219,5 +228,5 @@ QStringList MakefileInterface::subdirsFor( const QDir& folder )
 }
 
 #include "makefileinterface.moc"
-// kate: space-indent on; indent-width 4; auto-insert-doxygen on; replace-tabs on;
+// kate: space-indent on; indent-width 4; auto-insert-doxygen on; replace-tabs on; indent-mode cstyle;
 

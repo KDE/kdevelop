@@ -154,6 +154,7 @@ noinst_HEADERS = foo.h #regognize me
 @fixme 1 shift/reduce conflict in "line_body" rule
 */
 
+
 #include <qstack.h>
 #include "autotoolsast.h"
 
@@ -192,7 +193,7 @@ typedef struct Result {
 
 
 void yyerror(const char *str) {
-    //printf("bison error: %s\n", str);
+    qWarning("bison error: %s\n", str);
 }
 
 int yylex();
@@ -257,7 +258,7 @@ typedef int YYSTYPE;
 
 
 /* Line 219 of yacc.c.  */
-#line 261 "autotools_yacc.cpp"
+#line 262 "autotools_yacc.cpp"
 
 #if ! defined (YYSIZE_T) && defined (__SIZE_TYPE__)
 # define YYSIZE_T __SIZE_TYPE__
@@ -488,10 +489,10 @@ static const yysigned_char yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const unsigned short int yyrline[] =
 {
-       0,   141,   141,   141,   148,   174,   177,   181,   185,   189,
-     193,   197,   201,   205,   209,   215,   223,   229,   238,   244,
-     253,   263,   265,   268,   273,   276,   277,   278,   279,   282,
-     291,   299,   308,   308,   311,   319
+       0,   142,   142,   142,   149,   175,   178,   182,   186,   190,
+     194,   198,   202,   206,   210,   216,   224,   230,   239,   245,
+     254,   264,   266,   269,   274,   277,   278,   279,   280,   283,
+     292,   300,   309,   309,   312,   320
 };
 #endif
 
@@ -1278,7 +1279,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 141 "autotools.yy"
+#line 142 "autotools.yy"
     {
 	ProjectAST *projectAST = new ProjectAST();
 	projects.push(projectAST);
@@ -1286,7 +1287,7 @@ yyreduce:
     break;
 
   case 4:
-#line 149 "autotools.yy"
+#line 150 "autotools.yy"
     {
 	projects.top()->addChildAST((yyvsp[0].node));
 
@@ -1315,70 +1316,70 @@ yyreduce:
     break;
 
   case 6:
-#line 178 "autotools.yy"
+#line 179 "autotools.yy"
     {
 	(yyval.node) = (yyvsp[0].node);
 ;}
     break;
 
   case 7:
-#line 182 "autotools.yy"
+#line 183 "autotools.yy"
     {
 	(yyval.node) = (yyvsp[0].node);
 ;}
     break;
 
   case 8:
-#line 186 "autotools.yy"
+#line 187 "autotools.yy"
     {
 	(yyval.node) = (yyvsp[0].node);
 ;}
     break;
 
   case 9:
-#line 190 "autotools.yy"
+#line 191 "autotools.yy"
     {
 	(yyval.node) = (yyvsp[0].node);
 ;}
     break;
 
   case 10:
-#line 194 "autotools.yy"
+#line 195 "autotools.yy"
     {
 	(yyval.node) = (yyvsp[0].node);
 ;}
     break;
 
   case 11:
-#line 198 "autotools.yy"
+#line 199 "autotools.yy"
     {
 	(yyval.node) = (yyvsp[0].node);
 ;}
     break;
 
   case 12:
-#line 202 "autotools.yy"
+#line 203 "autotools.yy"
     {
 	(yyval.node) = (yyvsp[0].node);
 ;}
     break;
 
   case 13:
-#line 206 "autotools.yy"
+#line 207 "autotools.yy"
     {
 	(yyval.node) = (yyvsp[0].node);
 ;}
     break;
 
   case 14:
-#line 210 "autotools.yy"
+#line 211 "autotools.yy"
     {
 	(yyval.node) = new NewLineAST();
 ;}
     break;
 
   case 15:
-#line 216 "autotools.yy"
+#line 217 "autotools.yy"
     {
 	ConditionAST* projectAST = new ConditionAST();
 	projectAST->type = "if";
@@ -1388,7 +1389,7 @@ yyreduce:
     break;
 
   case 16:
-#line 224 "autotools.yy"
+#line 225 "autotools.yy"
     {
 	ConditionAST* past = new ConditionAST();
 	past->type= "endif";
@@ -1397,7 +1398,7 @@ yyreduce:
     break;
 
   case 17:
-#line 230 "autotools.yy"
+#line 231 "autotools.yy"
     {
 	ConditionAST* past = new ConditionAST();
 	past->type= "endif";
@@ -1407,7 +1408,7 @@ yyreduce:
     break;
 
   case 18:
-#line 239 "autotools.yy"
+#line 240 "autotools.yy"
     {
 	ConditionAST* past = new ConditionAST();
 	past->type = "else";
@@ -1416,7 +1417,7 @@ yyreduce:
     break;
 
   case 19:
-#line 245 "autotools.yy"
+#line 246 "autotools.yy"
     {
 	ConditionAST* past = new ConditionAST();
 	past->type = "else";
@@ -1426,7 +1427,7 @@ yyreduce:
     break;
 
   case 20:
-#line 254 "autotools.yy"
+#line 255 "autotools.yy"
     {
 	AssignmentAST *node = new AssignmentAST();
 	node->scopedID = (yyvsp[-2].value);
@@ -1437,12 +1438,12 @@ yyreduce:
     break;
 
   case 21:
-#line 264 "autotools.yy"
+#line 265 "autotools.yy"
     { (yyval.value) = (yyvsp[-1].value) + (yyvsp[0].value); ;}
     break;
 
   case 23:
-#line 269 "autotools.yy"
+#line 270 "autotools.yy"
     {
 	QStringList list = (yyvsp[0].value).split(QRegExp("\\s+"), QString::SkipEmptyParts);
 	(yyval.values) = (yyval.values) + list; //.append($<value>2);
@@ -1450,27 +1451,27 @@ yyreduce:
     break;
 
   case 24:
-#line 273 "autotools.yy"
+#line 274 "autotools.yy"
     { (yyval.values).clear(); ;}
     break;
 
   case 25:
-#line 276 "autotools.yy"
+#line 277 "autotools.yy"
     { (yyval.value) = (yyvsp[-1].value) + " \\\n"; ;}
     break;
 
   case 26:
-#line 277 "autotools.yy"
+#line 278 "autotools.yy"
     { (yyval.value) = (yyvsp[-1].value) + "\n"; ;}
     break;
 
   case 27:
-#line 278 "autotools.yy"
+#line 279 "autotools.yy"
     { (yyval.value) = "\\\n"; ;}
     break;
 
   case 29:
-#line 283 "autotools.yy"
+#line 284 "autotools.yy"
     {
 	AutomakeTargetAST *node = new AutomakeTargetAST();
 	node->target = (yyvsp[-2].value);
@@ -1480,7 +1481,7 @@ yyreduce:
     break;
 
   case 30:
-#line 292 "autotools.yy"
+#line 293 "autotools.yy"
     {
 	ProjectAST* node = new ProjectAST(ProjectAST::Rule);
 	node->scopedID = (yyvsp[0].value);
@@ -1489,7 +1490,7 @@ yyreduce:
     break;
 
   case 31:
-#line 300 "autotools.yy"
+#line 301 "autotools.yy"
     {
 	AssignmentAST *node = new AssignmentAST();
 	node->scopedID = (yyvsp[-1].value);
@@ -1499,7 +1500,7 @@ yyreduce:
     break;
 
   case 34:
-#line 312 "autotools.yy"
+#line 313 "autotools.yy"
     {
 	CommentAST *node = new CommentAST();
 	node->comment = (yyvsp[-1].value) + "\n";
@@ -1512,7 +1513,7 @@ yyreduce:
     }
 
 /* Line 1126 of yacc.c.  */
-#line 1516 "autotools_yacc.cpp"
+#line 1517 "autotools_yacc.cpp"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1780,7 +1781,7 @@ yyreturn:
 }
 
 
-#line 321 "autotools.yy"
+#line 322 "autotools.yy"
 
 
 #include "autotools_lex.cpp"

@@ -30,6 +30,7 @@ class KDevProject;
 class KDevProjectItem;
 class AutoMakeItem;
 class MakefileInterface;
+class QDir;
 
 
 class AutoMakeImporter : public KDevProjectEditor
@@ -69,6 +70,7 @@ public:
 	virtual QString findMakefile( KDevProjectFolderItem* dom ) const;
 	virtual QStringList findMakefiles( KDevProjectFolderItem* dom ) const;
 	
+	void createProjectItems( const QDir&, KDevProjectItem* );
 	
 private:
 	KDevProject* m_project;
@@ -78,5 +80,5 @@ private:
 };
 
 #endif
-// kate: indent-mode csands; space-indent off; tab-width 4; auto-insert-doxygen on;
+// kate: indent-mode cstyle; space-indent off; tab-width 4; auto-insert-doxygen on;
 

@@ -43,15 +43,15 @@ class MakefileInterface : public QObject
 {
     Q_OBJECT
 public:
-    enum { Recursive, NonRecursive };
+    enum ParserRecursion{ Recursive, NonRecursive };
     MakefileInterface( QObject* parent );
     ~MakefileInterface();
 
-    bool parse( const QDir& dir, int recursive = Recursive );
+    bool parse( const QDir& dir, ParserRecursion recursive = Recursive );
 
     void setProjectRoot( const QDir& dir );
     QStringList topSubDirs() const;
-    QStringList subdirsFor( const QDir& dir );
+    QStringList subdirsFor( const QDir& dir ) const;
 
 private:
     bool isVariable( const QString& item ) const;

@@ -9,7 +9,7 @@ INCLUDES = \
     
 METASOURCES = AUTO
 noinst_LTLIBRARIES = libkdevautomakeparser.la
-lib_LTLIBRARIES = libkdevautomakeimporter.la
+kde_module_LTLIBRARIES = libkdevautomakeimporter.la
 
 libkdevautomakeparser_la_SOURCES = autotoolsast.cpp autotoolsdriver.cpp autotools_yacc.cpp
 libkdevautomakeparser_la_LDFLAGS = $(all_libraries) $(LIB_KIO)

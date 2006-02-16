@@ -35,6 +35,7 @@ noinst_HEADERS = foo.h #regognize me
 @fixme 1 shift/reduce conflict in "line_body" rule
 */
 
+
 #include <qstack.h>
 #include "autotoolsast.h"
 
@@ -73,7 +74,7 @@ typedef struct Result {
 
 
 void yyerror(const char *str) {
-    //printf("bison error: %s\n", str);
+    qWarning("bison error: %s\n", str);
 }
 
 int yylex();
