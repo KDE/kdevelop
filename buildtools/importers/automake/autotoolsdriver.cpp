@@ -36,7 +36,7 @@ namespace AutoTools {
 
 int Driver::parseFile(const char *fileName, ProjectAST **ast)
 {
-	//yydebug = 1;
+	yydebug = 1;
 	yyin = fopen(fileName, "r");
 	if (yyin == 0)
 	{

@@ -50,7 +50,7 @@ To debug this lexer, put the line below into the next flex file section.
 */
 %}
 %option noyywrap
-
+%option debug
 %x list
 %x funcargs
 %x conditional
@@ -68,7 +68,7 @@ comment_cont      {ws}#.*\n
 id_list_single    [^\n]*
 cont              \\{ws}*\n
 keywords          (if|else|endif|include)
-rule              [\t]+[^\n]*
+rule              {ws}+[^\n]*
 
 %%
 

@@ -1,11 +1,11 @@
 SUBDIRS = . tests
 
 INCLUDES = \
-	-I$(top_srcdir)/lib/projectmanager/interfaces \
-	-I$(top_srcdir)/lib/interfaces \
-	-I$(top_srcdir)/lib/project \
-	-I$(top_srcdir)/lib/util \
-	$(all_includes)
+    -I$(top_srcdir)/lib/projectmanager/interfaces \
+    -I$(top_srcdir)/lib/interfaces \
+    -I$(top_srcdir)/lib/project \
+    -I$(top_srcdir)/lib/util \
+    $(all_includes)
     
 METASOURCES = AUTO
 noinst_LTLIBRARIES = libkdevautomakeparser.la

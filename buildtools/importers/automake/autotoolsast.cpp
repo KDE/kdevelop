@@ -83,7 +83,7 @@ void ProjectAST::addChildAST(AST *node)
 
 void AssignmentAST::writeBack(QString &buffer)
 {
-	buffer += indentation() + scopedID + " " + op + values.join("");
+	buffer += indentation() + scopedID + " " + op + " " + values.join(" ");
 }
 
 void AutomakeTargetAST::writeBack( QString& buffer )
