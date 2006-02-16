@@ -138,7 +138,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 /**
@@ -221,7 +221,7 @@ int depth = 0;
 
 /*
 To debug this parser, put the line below into the next bison file section.
-Don't forget to uncomment "yydebug = 1" line in autotoolsdriver.cpp.
+Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 %debug
 */
 

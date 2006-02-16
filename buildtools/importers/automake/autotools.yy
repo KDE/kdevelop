@@ -102,7 +102,7 @@ int depth = 0;
 
 /*
 To debug this parser, put the line below into the next bison file section.
-Don't forget to uncomment "yydebug = 1" line in autotoolsdriver.cpp.
+Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 %debug
 */
 %}
