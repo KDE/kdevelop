@@ -1,3 +1,7 @@
+2006-02-17  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+* Removed the 'Type' column from the Ruby debugger as the C++
+  debugger no longer has one
+
 2006-01-30  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 * Added a minimal C# language project type based on the perl one.
 

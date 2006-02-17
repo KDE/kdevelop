@@ -46,8 +46,7 @@ class Breakpoint;
 
 enum { 
 	VAR_NAME_COLUMN	= 0, 
-	VALUE_COLUMN	= 1, 
-	VAR_TYPE_COLUMN	= 2
+	VALUE_COLUMN	= 1
 };
 
 enum DataType { 
@@ -216,8 +215,6 @@ public:
 	
     DataType dataType() const;
 	void setDataType(DataType dataType);
-
-    QString typeFromValue(const QString& value);
 
     void setOpen(bool open);
     void setText (int column, const QString& text);
