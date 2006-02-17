@@ -17,3 +17,4 @@ archivedir = ${appwizarddatadir}
 archive_DATA = $(templateName).tar.gz ${templateName}.png
 
 CLEANFILES = *.tar.gz
+
