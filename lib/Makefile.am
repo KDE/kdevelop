@@ -13,12 +13,7 @@ libkdevelop_la_LIBADD = $(top_builddir)/lib/util/libkdevutil.la \
 libkdevelop_la_SOURCES = dummy.cpp
 
 
-SUBDIRS = \
-    weaver \
-    util \
-    interfaces \
-    widgets \
-    projectmanager
+SUBDIRS = weaver util interfaces widgets projectmanager debugger
 
 DOXYGEN_EMPTY = YES
 include ../Doxyfile.am

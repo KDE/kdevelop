@@ -9,4 +9,4 @@ langincludedir_HEADERS = debugger.h kdevdebugger.h
 DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevinterfaces kdevutil
 DOXYGEN_PROJECTNAME = KDevelop Debugger Support Library
 DOXYGEN_DOCDIRPREFIX = kdevlang
-include ../../../Doxyfile.am
+include ../../Doxyfile.am
