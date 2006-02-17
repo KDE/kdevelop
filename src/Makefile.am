@@ -37,7 +37,7 @@ rc_DATA = kdevelopui.rc eventsrc
 kdevelopdatadir = $(kde_confdir)
 kdevelopdata_DATA = kdeveloprc kdevassistantrc
 
-SUBDIRS = profiles profileengine newui kconf_update
+SUBDIRS = profiles profileengine newui 
 kdevassistant_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kdevassistant_SOURCES = main_assistant.cpp kdevassistantextension.cpp
 kdevassistant_LDADD = libkdevshell.la
