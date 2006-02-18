@@ -78,8 +78,9 @@ KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
 		QStringList topLevelSubdirs = m_interface->topSubDirs();
 		foreach ( QString dir, topLevelSubdirs )
 		{
-			//createProjectItems( dir, m_rootItem );
-			m_rootItem->add( new KDevProjectFolderItem( dir ) );
+			QString fullPath = m_interface->projectRoot();
+			fullPath = fullPath + QDir::separator() + dir;
+			createProjectItems( fullPath, m_rootItem );
 		}
 	}
 	return m_rootItem;
@@ -103,10 +104,19 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
 	//first look for the subdirs
 	//recursively descend into any other subdirs. when finished look for targets.
 	//for each target, add the files for the target to the target
+	KDevProjectFolderItem *folderItem = new KDevProjectFolderItem( folder, rootItem );
+	rootItem->add( folderItem );
+	
 	QStringList subdirs = m_interface->subdirsFor( folder );
 	if ( subdirs.isEmpty() )
 		return;
 	
+	foreach( QString dir, subdirs )
+	{
+		QString fullPath = folder.absolutePath();
+		fullPath = fullPath + QDir::separator() + dir;
+		createProjectItems( fullPath, folderItem );
+	}
 }
 
 #include "automakeimporter.h"

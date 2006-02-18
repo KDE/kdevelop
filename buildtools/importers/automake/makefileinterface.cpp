@@ -77,15 +77,15 @@ bool MakefileInterface::parse( const QDir& dir, ParserRecursion recursive )
         {
             using namespace AutoTools;
             ret = Driver::parseFile( parsingFile.absoluteFilePath(), &ast );
-            if ( ret == 0 )
+            if ( ret != -1 )
                 break;
         }
     }
 
-    if ( !ast || ret != 0 )
+    if ( !ast || ret == -1 )
     {
         kWarning(9020) << k_funcinfo << "parsing " << dir.absolutePath()
-                << "not successful! Fix your Makefile!" << endl;
+                << " not successful! Fix your Makefile!" << endl;
         return false;
     }
 
@@ -143,6 +143,11 @@ void MakefileInterface::setProjectRoot( const QDir& dir )
     d->topLevelParseDir = dir;
 }
 
+QString MakefileInterface::projectRoot() const
+{
+    return d->topLevelParseDir.absolutePath();
+}
+
 QStringList MakefileInterface::topSubDirs() const
 {
     return subdirsFor( d->topLevelParseDir );
@@ -185,15 +190,17 @@ QString MakefileInterface::resolveVariable( const QString& variable, AutoTools::
 QStringList MakefileInterface::subdirsFor( const QDir& folder ) const
 {
     ProjectAST* ast = 0;
-    QList<QFileInfo> projectFileInfoList = d->projects.keys();
-    QList<QFileInfo>::const_iterator it, itEnd = projectFileInfoList.constEnd();
-    for ( it = projectFileInfoList.constBegin(); it != itEnd; ++it )
+    QFileInfo parsingFile;
+    QStringList::const_iterator it, itEnd = d->filesToParse.constEnd();
+    for ( it = d->filesToParse.constBegin(); it != itEnd; ++it )
     {
-        if ( (*it).dir() == folder )
-        {
-            ast = d->projects.value( (*it), 0 );
+        parsingFile.setFile( folder, (*it) );
+        if ( parsingFile.exists() )
+            ast = d->projects[parsingFile];
+
+        if ( ast != 0 )
             break;
-        }
+
     }
 
     if ( !ast )

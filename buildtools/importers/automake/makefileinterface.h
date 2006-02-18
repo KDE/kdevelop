@@ -49,6 +49,7 @@ public:
 
     bool parse( const QDir& dir, ParserRecursion recursive = Recursive );
 
+    QString projectRoot() const;
     void setProjectRoot( const QDir& dir );
     QStringList topSubDirs() const;
     QStringList subdirsFor( const QDir& dir ) const;
