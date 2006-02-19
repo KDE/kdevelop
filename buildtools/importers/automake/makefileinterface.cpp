@@ -37,6 +37,58 @@ uint qHash( const QFileInfo& key )
 	return qHash( key.absolutePath() );
 }
 
+namespace AutoTools
+{
+    TargetType convertToType( const QString& type )
+    {
+        if ( type == "PROGRAMS" )
+            return Program;
+        else if ( type == "LIBRARIES" )
+            return Library;
+        else if ( type == "LTLIBRARIES" )
+            return LibtoolLibrary;
+        else if ( type == "LISP" )
+            return Lisp;
+        else if ( type == "PYTHON" )
+            return Python;
+        else if ( type == "JAVA" )
+            return Java;
+        else if ( type == "SCRIPTS" )
+            return Scripts;
+        else if ( type == "DATA" )
+            return Data;
+        else if ( type == "HEADERS" )
+            return Headers;
+        else if ( type == "MANS" )
+            return ManPages;
+        else if ( type == "TEXINFOS" )
+            return Texinfo;
+        else
+            return Unknown;
+    }
+
+    InstallLocation convertToLocation( const QString& location )
+    {
+        if ( location == "bin" )
+            return Bin;
+        else if ( location == "lib" )
+            return Lib;
+        else if ( location == "libexec" )
+            return Libexec;
+        else if ( location == "noinst" )
+            return None;
+        else if ( location == "check" )
+            return Check;
+        else if ( location == "info" )
+            return Info;
+        else if ( location.contains( "^man" ) )
+            return Man;
+        else
+            return None;
+    }
+}
+
+
 using namespace AutoTools;
 
 class MakefileInterface::Private
@@ -157,7 +209,7 @@ AutoTools::ProjectAST* MakefileInterface::astForFolder( const QDir& folder ) con
     return ast;
 }
 
-bool MakefileInterface::isVariable( const QString& item ) const
+bool MakefileInterface::isVariable( const QString& item )
 {
     if ( item.contains( QRegExp( "(\\$\\([a-zA-Z0-9_-]*\\)|@[a-zA-Z0-9_-]*@)" ) ) )
         return true;
@@ -215,6 +267,38 @@ QList<TargetInfo> MakefileInterface::targetsForFolder( const QDir& folder ) cons
         kWarning(9020) << k_funcinfo << "Unable to get AST for "
                 << folder.absolutePath() << endl;
         return targetList;
+    }
+    
+    QList<AST*> childList = ast->children();
+    QList<AST*>::const_iterator cit, citEnd = childList.constEnd();
+    for ( cit = childList.constBegin(); cit != citEnd; ++cit )
+    {
+        if ( (*cit)->nodeType() == AST::AssignmentAST  )
+        {
+            AssignmentAST* assignment = static_cast<AssignmentAST*>( (*cit) );
+            if (  assignment->scopedID.contains( AutoTools::targetPrimaries ) )
+            {
+                foreach( QString target, assignment->values )
+                {
+                    if ( target == "#" || target == "\\"  )
+                        continue;
+
+                    QStringList targetSplit = assignment->scopedID.split( '_' );
+                    QString location = targetSplit.takeFirst();
+                    QString primary = targetSplit.takeFirst();
+                    kDebug( 9020 ) << k_funcinfo << "primary: " << primary
+                                   << "location: " << location << endl;
+                    if ( primary == "HEADERS" )
+                        continue;
+
+                    TargetInfo info;
+                    info.type = AutoTools::convertToType( primary );
+                    info.location = AutoTools::convertToLocation( location );
+                    info.name = target;
+                    targetList.append( info );
+                }
+            }
+        }
     }
 
     return targetList;

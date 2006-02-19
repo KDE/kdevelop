@@ -117,6 +117,10 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
 		fullPath = fullPath + QDir::separator() + dir;
 		createProjectItems( fullPath, folderItem );
 	}
+
+    QList<TargetInfo> targets = m_interface->targetsForFolder( folder );
+    foreach( TargetInfo target, targets )
+        folderItem->add( new KDevProjectTargetItem( target.name, folderItem ) );
 }
 
 #include "automakeimporter.h"

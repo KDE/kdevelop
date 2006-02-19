@@ -22,6 +22,7 @@
 #define MAKEFILEINTERFACE_H
 
 #include <QObject>
+#include <QRegExp>
 
 class QFileInfo;
 class QDir;
@@ -30,8 +31,14 @@ namespace AutoTools
 {
     class ProjectAST;
     enum TargetType { Program, Library, LibtoolLibrary, Lisp, Python, Java,
-                      Scripts, Data, Headers, ManPages, Texinfo };
+                      Scripts, Data, Headers, ManPages, Texinfo, Unknown };
     enum InstallLocation { Bin, Libexec, Lib, None, Check, Info, Man };
+
+    const QRegExp targetPrimaries = QRegExp( "_(PROGRAMS|LIBRARIES|LISP|PYTHON|JAVA|SCRIPTS|DATA|HEADERS|MANS|TEXINFOS|LTLIBRARIES)" );
+
+    TargetType convertToType( const QString& );
+    InstallLocation convertToLocation( const QString& );
+
 };
 
 template <typename T> class QList;
@@ -62,12 +69,15 @@ public:
     enum ParserRecursion { Recursive, NonRecursive };
     enum TargetType { Program, Library, LibtoolLibrary, Lisp, Python, Java,
                       Scripts, Data, Headers, ManPages, Texinfo };
-    enum InstallLocations { Bin, Libexec, Lib, None, Check, Info, Man };
+    enum InstallLocations { Bin, Libexec, Lib, None, Check, Info, Man, Extra };
 
     MakefileInterface( QObject* parent );
     ~MakefileInterface();
 
     static QString canonicalize( const QString& target );
+    static bool isVariable( const QString& item );
+
+    QString resolveVariable( const QString& variable, AutoTools::ProjectAST* ast ) const;
 
     bool parse( const QDir& dir, ParserRecursion recursive = Recursive );
 
@@ -81,8 +91,7 @@ public:
 private:
     QStringList subdirsFor( AutoTools::ProjectAST* ) const;
     AutoTools::ProjectAST* astForFolder( const QDir& dir ) const;
-    bool isVariable( const QString& item ) const;
-    QString resolveVariable( const QString& variable, AutoTools::ProjectAST* ast ) const;
+    
 
 private:
     class Private;
