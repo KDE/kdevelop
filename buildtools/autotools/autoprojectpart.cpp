@@ -635,8 +635,9 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
         cmdline = MAKE_COMMAND;
     if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/make/abortonerror"))
         cmdline += " -k";
+    bool runmultiple = DomUtil::readBoolEntry(dom, "/kdevautoproject/make/runmultiplejobs");
     int jobs = DomUtil::readIntEntry(dom, "/kdevautoproject/make/numberofjobs");
-    if (jobs != 0)
+    if (runmultiple && jobs != 0)
     {
         cmdline += " -j";
         cmdline += QString::number(jobs);
