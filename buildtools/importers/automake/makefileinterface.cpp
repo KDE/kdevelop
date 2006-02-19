@@ -62,6 +62,24 @@ MakefileInterface::~MakefileInterface()
     delete d;
 }
 
+QString MakefileInterface::canonicalize( const QString& target )
+{
+    QString result;
+    for ( int i = 0; i < target.length();  ++i )
+    {
+        QChar addition = target.at( i );
+        if ( !addition.isLetterOrNumber() && addition != '@' && addition != '_' )
+            addition = QChar( '_' );
+
+        result += addition;
+    }
+
+    kDebug(9020) << k_funcinfo << "'" << target << "' has been normalized to '"
+                   << result << "'" << endl;
+
+    return result;
+}
+
 bool MakefileInterface::parse( const QDir& dir, ParserRecursion recursive )
 {
     kDebug(9020) << k_funcinfo << "directory to parse is: " << dir.absolutePath() << endl; 
@@ -95,44 +113,11 @@ bool MakefileInterface::parse( const QDir& dir, ParserRecursion recursive )
         return ( ret != -1 );
 
 
-    QList<AST*> childList = ast->children();
-    QList<AST*>::const_iterator cit, citEnd = childList.constEnd();
-    for ( cit = childList.constBegin(); cit != citEnd; ++cit )
+    QStringList subdirs = subdirsFor( dir );
+    foreach( QString sd, subdirs )
     {
-        if ( (*cit)->nodeType() == AST::AssignmentAST )
-        {
-            AssignmentAST* assignment = static_cast<AssignmentAST*>( (*cit) );
-            if ( assignment->scopedID == "SUBDIRS"  )
-            {
-                QStringList subdirList = assignment->values;
-                subdirList.remove(".");
-                subdirList.remove("..");
-                subdirList.removeAll("\\");
-                subdirList.removeAll("#");
-                kDebug(9020) << k_funcinfo << "subdirs is '" 
-                              << assignment->values << "'" << endl;
-                QStringList::const_iterator vit = subdirList.constBegin();
-                for ( ; vit != subdirList.constEnd(); ++vit )
-                {
-                    QString realDir = ( *vit );
-                    if ( realDir.startsWith( "\\" ) )
-                    realDir.remove( 0, 1 );
-
-                    realDir = realDir.trimmed();
-                    if ( !realDir.isEmpty() )
-                    {
-                        if ( isVariable( realDir ) )
-                        {
-                            kDebug(9020) << k_funcinfo << "'" << realDir << "' is a variable" << endl;
-                            realDir = resolveVariable( realDir, ast );
-                        }
-
-                    kDebug(9020) << k_funcinfo << "Beginning parsing of '" << realDir << "'" << endl;
-                    parse( dir.absolutePath() + '/' + realDir, recursive );
-                    }
-                }
-            }
-        }
+        kDebug(9020) << k_funcinfo << "Beginning parsing of '" << sd << "'" << endl;
+        parse( dir.absolutePath() + '/' + sd, recursive );
     }
 
     return (ret != -1);
@@ -153,41 +138,7 @@ QStringList MakefileInterface::topSubDirs() const
     return subdirsFor( d->topLevelParseDir );
 }
 
-bool MakefileInterface::isVariable( const QString& item ) const
-{
-    if ( item.contains( QRegExp( "(\\$\\([a-zA-Z0-9_-]*\\)|@[a-zA-Z0-9_-]*@)" ) ) )
-        return true;
-    else
-        return false;
-}
-
-QString MakefileInterface::resolveVariable( const QString& variable, AutoTools::ProjectAST* ast )
-{
-    if ( !ast )
-        return variable;
-
-    kDebug(9020) << k_funcinfo << "attempting to resolve '" << variable << "'"<< endl;
-    QList<AST*> childList = ast->children();
-    QList<AST*>::iterator it( childList.begin() ), clEnd( childList.end() );
-
-    for ( ; it != clEnd; ++it )
-    {
-        if ( ( *it )->nodeType() == AST::AssignmentAST )
-        {
-            AssignmentAST* assignment = static_cast<AssignmentAST*>( ( *it ) );
-            if ( variable.find( assignment->scopedID ) != -1 )
-            {
-                kDebug(9020) << k_funcinfo << "Resolving variable '" << variable << "' to '"
-                              << assignment->values.join( QString::null ).trimmed() << "'" << endl;
-                return assignment->values.join( QString::null ).trimmed();
-            }
-        }
-    }
-
-    return variable;
-}
-
-QStringList MakefileInterface::subdirsFor( const QDir& folder ) const
+AutoTools::ProjectAST* MakefileInterface::astForFolder( const QDir& folder ) const
 {
     ProjectAST* ast = 0;
     QFileInfo parsingFile;
@@ -203,13 +154,74 @@ QStringList MakefileInterface::subdirsFor( const QDir& folder ) const
 
     }
 
+    return ast;
+}
+
+bool MakefileInterface::isVariable( const QString& item ) const
+{
+    if ( item.contains( QRegExp( "(\\$\\([a-zA-Z0-9_-]*\\)|@[a-zA-Z0-9_-]*@)" ) ) )
+        return true;
+    else
+        return false;
+}
+
+QString MakefileInterface::resolveVariable( const QString& variable, AutoTools::ProjectAST* ast ) const
+{
+    if ( !ast )
+        return variable;
+
+    kDebug(9020) << k_funcinfo << "attempting to resolve '" << variable << "'"<< endl;
+    QList<AST*> childList = ast->children();
+    QList<AST*>::iterator it( childList.begin() ), clEnd( childList.end() );
+
+    for ( ; it != clEnd; ++it )
+    {
+        if ( ( *it )->nodeType() == AST::AssignmentAST )
+        {
+            AssignmentAST* assignment = static_cast<AssignmentAST*>( ( *it ) );
+            if ( variable.find( assignment->scopedID ) != -1 )
+            {
+                QString resolution = assignment->values.join( " " ).trimmed();
+                kDebug(9020) << k_funcinfo << "Resolving variable '" << variable << "' to '"
+                              << resolution << "'" << endl;
+                return resolution;
+            }
+        }
+    }
+
+    return variable;
+}
+
+QStringList MakefileInterface::subdirsFor( const QDir& folder ) const
+{
+    AutoTools::ProjectAST* ast = astForFolder( folder );
     if ( !ast )
     {
-        kDebug(9020) << k_funcinfo << "Couldn't find AST for " 
-                      << folder.absolutePath() << endl;
+        kWarning(9020) << k_funcinfo << "Couldn't find AST for " 
+                << folder.absolutePath() << endl;
         return QStringList();
     }
 
+    return subdirsFor( ast );
+}
+
+QList<TargetInfo> MakefileInterface::targetsForFolder( const QDir& folder ) const
+{
+    QList<TargetInfo> targetList;
+    AutoTools::ProjectAST* ast = astForFolder( folder );
+
+    if ( !ast )
+    {
+        kWarning(9020) << k_funcinfo << "Unable to get AST for "
+                << folder.absolutePath() << endl;
+        return targetList;
+    }
+
+    return targetList;
+}
+
+QStringList MakefileInterface::subdirsFor( AutoTools::ProjectAST* ast ) const
+{
     QList<AST*> childList = ast->children();
     QList<AST*>::const_iterator cit, citEnd = childList.constEnd();
     for ( cit = childList.constBegin(); cit != citEnd; ++cit )
@@ -224,8 +236,30 @@ QStringList MakefileInterface::subdirsFor( const QDir& folder ) const
                 subdirList.remove("..");
                 subdirList.removeAll("\\");
                 subdirList.removeAll("#");
+
+                QStringList::const_iterator vit = subdirList.constBegin();
+                for ( ; vit != subdirList.constEnd(); ++vit )
+                {
+                    QString dirFromList = ( *vit );
+                    QString realDir = dirFromList;
+                    if ( realDir.startsWith( "\\" ) )
+                        realDir.remove( 0, 1 );
+
+                    realDir = realDir.trimmed();
+                    if ( !realDir.isEmpty() )
+                    {
+                        if ( isVariable( realDir ) )
+                        {
+                            kDebug(9020) << k_funcinfo << "'" << realDir << "' is a variable" << endl;
+                            realDir = resolveVariable( realDir, ast );
+                        }
+
+                        subdirList.replace( subdirList.indexOf( dirFromList ),
+                                            realDir );
+                    }
+                }
                 kDebug(9020) << k_funcinfo << "subdirs is '" 
-                              << assignment->values << "'" << endl;
+                        << assignment->values << "'" << endl;
                 return subdirList;
             }
         }
