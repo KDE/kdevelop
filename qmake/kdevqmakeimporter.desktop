@@ -3,6 +3,7 @@ Type=Service
 Name=KDevQMakeEditor
 Name[x-test]=xxKDevQMakeEditorxx
 Comment=Imports and edits qmake projects
+Comment[fr]=Importe et modifie des projets qmake
 Comment[x-test]=xxImports and edits qmake projectsxx
 Icon=gear
 X-KDevelop-Version=4
