@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MakeOptionsWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>467</width>
-            <height>330</height>
+            <width>507</width>
+            <height>366</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,18 +19,26 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLabel" row="2" column="0">
+        <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="6">
             <property name="name">
-                <cstring>makebin_label</cstring>
+                <cstring>abort_box</cstring>
             </property>
             <property name="text">
-                <string>Name of make &amp;executable:</string>
+                <string>&amp;Abort on first error</string>
             </property>
-            <property name="buddy" stdset="0">
-                <cstring>makebin_edit</cstring>
+            <property name="accel">
+                <string>Alt+A</string>
             </property>
         </widget>
-        <widget class="QGroupBox" row="4" column="0" rowspan="1" colspan="2">
+        <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="6">
+            <property name="name">
+                <cstring>dontact_box</cstring>
+            </property>
+            <property name="text">
+                <string>Onl&amp;y display commands without actually executing them</string>
+            </property>
+        </widget>
+        <widget class="QGroupBox" row="6" column="0" rowspan="1" colspan="6">
             <property name="name">
                 <cstring>env_var_group</cstring>
             </property>
@@ -38,130 +46,146 @@
                 <string>Environment &amp;Variables</string>
             </property>
         </widget>
-        <widget class="QLineEdit" row="2" column="1">
+        <widget class="QLabel" row="5" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>makebin_label</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Name of make executable:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>makebin_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="5" column="3" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>makebin_edit</cstring>
             </property>
         </widget>
-        <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+        <widget class="QSpinBox" row="4" column="4">
             <property name="name">
-                <cstring>abort_box</cstring>
+                <cstring>jobs_box</cstring>
             </property>
-            <property name="text">
-                <string>&amp;Abort on first error</string>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="maxValue">
+                <number>30</number>
+            </property>
+            <property name="minValue">
+                <number>1</number>
             </property>
         </widget>
-        <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
+        <widget class="QLabel" row="4" column="1" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>dontact_box</cstring>
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
             </property>
             <property name="text">
-                <string>Only di&amp;splay commands without actually executing them</string>
+                <string>Num&amp;ber of jobs to run simultaneously:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>jobs_box</cstring>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
+        <spacer row="4" column="5">
             <property name="name">
-                <cstring>layout4</cstring>
+                <cstring>spacer33</cstring>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>jobs_label</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Number of simultaneous &amp;jobs:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>jobs_box</cstring>
-                    </property>
-                </widget>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>jobs_box</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="maxValue">
-                        <number>30</number>
-                    </property>
-                    <property name="minValue">
-                        <number>1</number>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Fixed</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>prio_label</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Make priority:</string>
-                    </property>
-                </widget>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>prio_box</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="maxValue">
-                        <number>19</number>
-                    </property>
-                    <property name="minValue">
-                        <number>-20</number>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>50</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </hbox>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>121</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="4" column="0">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="6">
+            <property name="name">
+                <cstring>runMultiJobs</cstring>
+            </property>
+            <property name="text">
+                <string>Run more than one &amp;job at a time</string>
+            </property>
+            <property name="accel">
+                <string>Alt+J</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>prio_label</cstring>
+            </property>
+            <property name="text">
+                <string>Make priority:</string>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="2" column="2">
+            <property name="name">
+                <cstring>prio_box</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="maxValue">
+                <number>19</number>
+            </property>
+            <property name="minValue">
+                <number>-20</number>
+            </property>
         </widget>
     </grid>
 </widget>
+<connections>
+    <connection>
+        <sender>runMultiJobs</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>textLabel1</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>runMultiJobs</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>jobs_box</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
 <tabstops>
     <tabstop>abort_box</tabstop>
     <tabstop>dontact_box</tabstop>

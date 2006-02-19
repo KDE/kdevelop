@@ -38,6 +38,7 @@ MakeOptionsWidget::MakeOptionsWidget(QDomDocument &dom, const QString &configGro
 
     abort_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/make/abortonerror", true ));
     jobs_box->setValue(DomUtil::readIntEntry(dom, configGroup + "/make/numberofjobs"));
+    runMultiJobs->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/make/runmultiplejobs"));
     dontact_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/make/dontact"));
     makebin_edit->setText(DomUtil::readEntry(dom, configGroup + "/make/makebin"));
     prio_box->setValue(DomUtil::readIntEntry(dom, configGroup + "/make/prio"));
@@ -51,6 +52,7 @@ MakeOptionsWidget::~MakeOptionsWidget()
 void MakeOptionsWidget::accept()
 {
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/make/abortonerror", abort_box->isChecked());
+    DomUtil::writeBoolEntry(m_dom, m_configGroup + "/make/runmultiplejobs", runMultiJobs->isChecked());
     DomUtil::writeIntEntry(m_dom, m_configGroup + "/make/numberofjobs", jobs_box->value());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/make/dontact", dontact_box->isChecked());
     DomUtil::writeEntry(m_dom, m_configGroup + "/make/makebin", makebin_edit->text());
