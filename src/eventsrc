@@ -5,14 +5,18 @@ Comment[x-test]=xxKDevelopxx
 
 [ProcessSuccess]
 Name=Process successful
+Name[fr]=Processus réussi
 Name[x-test]=xxProcess successfulxx
 Comment=Process finished successfully
+Comment[fr]=Le processus s'est terminé avec succès
 Comment[x-test]=xxProcess finished successfullyxx
 default_presentation=0
 
 [ProcessError]
 Name=Process error
+Name[fr]=Erreur du processus
 Name[x-test]=xxProcess errorxx
 Comment=Process finished with errors
+Comment[fr]=Le processus s'est terminé avec des erreurs
 Comment[x-test]=xxProcess finished with errorsxx
 default_presentation=0

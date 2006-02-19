@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Linux Kernel module
+Name[fr]=Module du noyau Linux
 Name[x-test]=xxLinux Kernel modulexx
 Icon=
 Category=C
 Comment=Generates a template for a Linux kernel module.
+Comment[fr]=Génère un modèle de module pour le noyau Linux.
 Comment[x-test]=xxGenerates a template for a Linux kernel module.xx
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}-driver.c

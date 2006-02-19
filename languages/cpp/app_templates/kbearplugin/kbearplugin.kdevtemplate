@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=KBear Plugin
+Name[fr]=Module KBear
 Name[x-test]=xxKBear Pluginxx
 Category=C++/KDE 3.x/KBear
 Icon=kbearplugin.png
 Comment=Generates a simple KBear plugin with a config page and an output widget.
+Comment[fr]=Génère un module KBear simple avec une page de configuration et un élément graphique de sortie.
 Comment[x-test]=xxGenerates a simple KBear plugin with a config page and an output widget.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/kbear%{APPNAMELC}plugin.cpp
@@ -112,4 +114,5 @@ Process=false
 [MSG]
 Type=message
 Comment=A plugin for KBear was created in %{dest}
+Comment[fr]=Un module pour KBear a été créé dans %{dest}
 Comment[x-test]=xxA plugin for KBear was created in %{dest}xx

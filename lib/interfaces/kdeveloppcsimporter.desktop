@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/PCSImporter
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop PCS Importer
+Name[fr]=Importateur PCS de KDevelop
 Name[x-test]=xxKDevelop PCS Importerxx
 
 [PropertyDef::X-KDevelop-PCSImporter]

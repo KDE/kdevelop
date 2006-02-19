@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/DiffFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=Diff Frontend Interface
+Name[fr]=Interface du programme « Diff »
 Name[x-test]=xxDiff Frontend Interfacexx
 
 # versioning - prevent DLL hell

@@ -7,4 +7,5 @@ reading=true
 defaultMimetype=text/plain
 Icon=remote
 Description=A kioslave for %{APPNAMELC}
+Description[fr]=Un module d'entrée / sortie pour %{APPNAMELC}
 Description[x-test]=xxA kioslave for %{APPNAMELC}xx

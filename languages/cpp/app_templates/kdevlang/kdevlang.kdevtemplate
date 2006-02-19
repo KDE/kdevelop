@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=KDevelop Language Support Plugin (Standalone build)
+Name[fr]=Module de gestion de langage de KDevelop (autonome)
 Name[x-test]=xxKDevelop Language Support Plugin (Standalone build)xx
 Category=C++/KDE 3.x/KDevelop/
 Comment=This generates a language support plugin for KDevelop, to be built outside of the KDevelop source tree.
+Comment[fr]=Ceci génère un module de gestion de langage pour KDevelop, à construire en dehors de l'arborescence des sources de KDevelop.
 Comment[x-test]=xxThis generates a language support plugin for KDevelop, to be built outside of the KDevelop source tree.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}_part.cpp
@@ -76,4 +78,5 @@ Dest=%{dest}/src/README.dox
 [MSG]
 Type=message
 Comment=A language plugin for KDevelop for standalone build was created in %{dest}
+Comment[fr]=Un module de langage pour KDevelop à construction autonome a été créé dans %{dest}
 Comment[x-test]=xxA language plugin for KDevelop for standalone build was created in %{dest}xx

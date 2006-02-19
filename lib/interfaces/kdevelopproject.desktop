@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/Project
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Project Interface
+Name[fr]=Interface de projet de KDevelop
 Name[x-test]=xxKDevelop Project Interfacexx
 
 # versioning - prevent DLL hell

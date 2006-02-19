@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Scons-based KMDI application
+Name[fr]=Application KMDI basée sur Scons
 Name[x-test]=xxScons-based KMDI applicationxx
 Category=C++/KDE 3.x
 Icon=kscons_kmdi.png
 Comment=Generates a complex KMDI application. Scons scripts are provided for compiling and installing the application.
+Comment[fr]=Génère une application KMDI évoluée. Des scripts Scons sont fournis pour la compilation et l'installation de l'application.
 Comment[x-test]=xxGenerates a complex KMDI application. Scons scripts are provided for compiling and installing the application.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/QUICKSTART
@@ -189,4 +191,5 @@ Dest=%{dest}/src/%{APPNAMELC}_part.rc
 [MSG]
 Type=message
 Comment=A KDE application with scons scripts was created in %{dest}
+Comment[fr]=Une application KDE utilisant des scripts Scons a été créée dans %{dest}
 Comment[x-test]=xxA KDE application with scons scripts was created in %{dest}xx

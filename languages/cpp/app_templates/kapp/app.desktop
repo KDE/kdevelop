@@ -7,5 +7,6 @@ Icon=%{APPNAMELC}
 Type=Application
 DocPath=%{APPNAMELC}/%{APPNAMELC}.html
 Comment=A KDE KPart Application
+Comment[fr]=Une application KPart pour KDE.
 Comment[x-test]=xxA KDE KPart Applicationxx
 Terminal=false

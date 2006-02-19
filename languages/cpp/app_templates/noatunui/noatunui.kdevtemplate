@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Noatun UI plugin
+Name[fr]=Module d'interface utilisateur pour Noatun
 Name[x-test]=xxNoatun UI pluginxx
 Icon=noatunui.png
 Category=C++/KDE 3.x/Noatun
 Comment=Generates a simple user interface plugin for noatun.
+Comment[fr]=Génère un simple module d'interface utilisateur pour Noatun.
 Comment[x-test]=xxGenerates a simple user interface plugin for noatun.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}_impl.cpp
@@ -114,4 +116,5 @@ Dest=%{dest}/src/%{APPNAMELC}.plugin
 [MSG]
 Type=message
 Comment=A Noatun UI plugin was created in %{dest}
+Comment[fr]=Un module d'interface utilisateur pour Noatun a été créé dans %{dest}
 Comment[x-test]=xxA Noatun UI plugin was created in %{dest}xx

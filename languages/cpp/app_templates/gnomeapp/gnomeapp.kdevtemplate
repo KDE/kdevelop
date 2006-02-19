@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=GNOME 1 Application framework
+Name[fr]=Infrastructure d'application GNOME 1
 Name[x-test]=xxGNOME 1 Application frameworkxx
 Icon=gnomeapp.png
 Category=C/GNOME
 Comment=Generates a simple GNOME application with one toplevel window, menus and toolbars.
+Comment[fr]=Génère une application GNOME simple, avec une fenêtre, des menus et des barres d'outils.
 Comment[x-test]=xxGenerates a simple GNOME application with one toplevel window, menus and toolbars.xx
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/src/main.c
@@ -105,5 +107,6 @@ Dest=%{dest}/src/main.c
 [MSG]
 Type=message
 Comment=A GNOME application framework was created in %{dest}
+Comment[fr]=Une infrastructure d'application GNOME a été créée dans %{dest}.
 Comment[x-test]=xxA GNOME application framework was created in %{dest}xx
 

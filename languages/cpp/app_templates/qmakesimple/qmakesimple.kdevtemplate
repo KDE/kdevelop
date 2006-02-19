@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=Hello world program
+Name[fr]=Programme « Hello world »
 Name[x-test]=xxHello world programxx
 Icon=qmakesimple.png
 Category=C++/QMake project
 Category[fr]=C++/QMake
 Comment=Generates a simple Hello world program in C++ using QMake based project manager
+Comment[fr]=Génère un simple programme « Hello World » en C++ en utilisant un gestionnaire de projet basé sur QMake
 Comment[x-test]=xxGenerates a simple Hello world program in C++ using QMake based project managerxx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -39,4 +41,5 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A Qmake based hello world program was created in %{dest}
+Comment[fr]=Un programme « Hello World » basé sur Qmake a été créé dans %{dest}
 Comment[x-test]=xxA Qmake based hello world program was created in %{dest}xx

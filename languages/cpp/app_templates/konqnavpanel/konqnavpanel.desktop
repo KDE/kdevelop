@@ -4,6 +4,7 @@ Type=Link
 URL=
 Icon=wizard
 Comment=A konqueror navigation panel plugin  called $NAME$
+Comment[fr]=Un module externe pour le panneau de navigation de Konqueror nommé $NAME$
 Comment[x-test]=xxA konqueror navigation panel plugin  called $NAME$xx
 Name=%{APPNAMELC}
 Name[x-test]=xx%{APPNAMELC}xx

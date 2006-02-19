@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Simple Hello world program
+Name[fr]=Simple programme « Hello world »
 Name[x-test]=xxSimple Hello world programxx
 Icon=chello.png
 Category=C
 Comment=Generates a simple Hello world program in C
+Comment[fr]=Génère un simple programme « Hello world » en C
 Comment[x-test]=xxGenerates a simple Hello world program in Cxx
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.c
@@ -15,6 +17,7 @@ Type = value
 ValueType=QString
 Value= OPT_LIBS
 Comment= Optional libraries to link to.
+Comment[fr]=Bibliothèques optionnelles à lier.
 Comment[x-test]=xx Optional libraries to link to.xx
 Default= -lm
 
@@ -23,6 +26,7 @@ Type = value
 ValueType=QString
 Value= OPT_INCS
 Comment= Optional include path.
+Comment[fr]= Chemin d'inclusions optionnelles
 Comment[x-test]=xx Optional include path.xx
 Default= -I/usr/include
 
@@ -31,12 +35,14 @@ Type = value
 ValueType=QString
 Value= CFLAGS
 Comment= Optional CFLAGS to define in the makefile.
+Comment[fr]= CFLAGS optionnels à définir dans le Makefile.
 Comment[x-test]=xx Optional CFLAGS to define in the makefile.xx
 Default=
 
 [MGS]
 Type=message
 Comment=A simple C project was created in %{dest}.
+Comment[fr]=Un projet C simple a été créé dans %{dest}
 Comment[x-test]=xxA simple C project was created in %{dest}.xx
 Archive=chello.tar.gz
 

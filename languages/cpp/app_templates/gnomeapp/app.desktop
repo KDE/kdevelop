@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=%{APPNAME}
 Name[x-test]=xx%{APPNAME}xx
 Comment=
-Comment[x-test]=xxxx
 Exec=%{APPNAMELC}
 Icon=%{APPNAMELC}-logo
 Terminal=false

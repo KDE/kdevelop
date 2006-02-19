@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/ProjectBuilder
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Project Builder
+Name[fr]=Créateur de projet pour KDevelop
 Name[x-test]=xxKDevelop Project Builderxx
 
 [PropertyDef::X-KDevelop-ProjectBuilder]

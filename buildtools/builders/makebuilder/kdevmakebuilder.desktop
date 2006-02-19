@@ -3,6 +3,7 @@ Type=Service
 Name=KDevMakeBuilder
 Name[x-test]=xxKDevMakeBuilderxx
 Comment=KDevelop Automake Importer
+Comment[fr]=Importation d'Automake pour KDevelop
 Comment[x-test]=xxKDevelop Automake Importerxx
 Icon=gear
 ServiceTypes=KDevelop/ProjectBuilder

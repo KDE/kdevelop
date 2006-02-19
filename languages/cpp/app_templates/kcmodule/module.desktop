@@ -14,10 +14,12 @@ X-KDE-ParentApp=kcontrol
 [Desktop Entry]
 Encoding=UTF-8
 Comment=%{APPNAME} - a kcontrol module
+Comment[fr]=%{APPNAME} - un module du centre de configuration de KDE
 Comment[x-test]=xx%{APPNAME} - a kcontrol modulexx
 Keywords=%{APPNAME},%{APPNAMELC}
 Keywords[x-test]=xx%{APPNAME},%{APPNAMELC}xx
 Name=The %{APPNAME} Applet
+Name[fr]=L'applet %{APPNAME}
 Name[x-test]=xxThe %{APPNAME} Appletxx
 
 

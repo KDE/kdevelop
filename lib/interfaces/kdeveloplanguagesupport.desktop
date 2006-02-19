@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/LanguageSupport
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Language Support Interface
+Name[fr]=Interface de la gestion de langages de KDevelop
 Name[x-test]=xxKDevelop Language Support Interfacexx
 
 # versioning - prevent DLL hell

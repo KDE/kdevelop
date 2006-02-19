@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=C++ program (shell script build system)
+Name[fr]=Programme C++ (système de construction en script shell)
 Name[x-test]=xxC++ program (shell script build system)xx
 Icon=cpphello.png
 Category=C++/Generic
 Comment=Generates a simple Hello world program in C++
+Comment[fr]=Génère un simple programme « Hello world » en C++
 Comment[x-test]=xxGenerates a simple Hello world program in C++xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/Plugin
 Name=KDevelop Plugin
+Name[fr]=Module externe de KDevelop
 Name[x-test]=xxKDevelop Pluginxx
 
 # versioning - prevent DLL hell

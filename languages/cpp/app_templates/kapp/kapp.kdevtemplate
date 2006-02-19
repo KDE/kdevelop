@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Application framework
+Name[fr]=Infrastructure d'application
 Name[x-test]=xxApplication frameworkxx
 Icon=kapp.png
 Category=C++/KDE 3.x
 Comment=Generates a simple KDE application with one toplevel window, menus and toolbars. A DCOP interface is also provided, so that your application can provide a scripting interface
+Comment[fr]=Génère une application KDE simple, avec une fenêtre, des menus et des barres d'outils. Une interface DCOP est également fournie, afin que votre application puisse fournir une interface de scriptage.
 Comment[x-test]=xxGenerates a simple KDE application with one toplevel window, menus and toolbars. A DCOP interface is also provided, so that your application can provide a scripting interfacexx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}view.cpp,%{dest}/src/README
@@ -167,4 +169,5 @@ Dest=%{dest}/src/README
 [MSG]
 Type=message
 Comment=A KDE Application was created at %{dest}
+Comment[fr]=Une application KDE a été créée dans %{dest}
 Comment[x-test]=xxA KDE Application was created at %{dest}xx

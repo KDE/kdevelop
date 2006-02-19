@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=KDE Screen Saver
+Name[fr]=Écran de veille KDE
 Name[x-test]=xxKDE Screen Saverxx
 Icon=kscreensaver.png
 Category=C++/KDE 3.x
 Comment=Generates a framework for a KDE screensaver.
+Comment[fr]=Génère une infrastructure pour un écran de veille KDE
 Comment[x-test]=xxGenerates a framework for a KDE screensaver.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -116,4 +118,5 @@ Dest=%{dest}/src/%{APPNAMELC}ui.ui
 [MSG]
 Type=message
 Comment=A screensaver application was created in %{dest}
+Comment[fr]=Un écran de veille a été créé dans %{dest}
 Comment[x-test]=xxA screensaver application was created in %{dest}xx

@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Opie Networksettings
+Name[fr]=Paramètres réseau Opie
 Name[x-test]=xxOpie Networksettingsxx
 Icon=qmakeapp.png
 Category=C++/Embedded/Opie
 Comment=Generate an Opie network config plugin.
+Comment[fr]=Génère un module de configuration réseau pour Opie.
 Comment[x-test]=xxGenerate an Opie network config plugin.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
@@ -58,5 +60,6 @@ Dest=%{dest}/%{APPNAMELC}iface.h
 [MSG]
 Type=message
 Comment=An opie network settings plugin was created in %{dest}
+Comment[fr]=Un module de configuration réseau pour Opie a été créé dans %{dest}
 Comment[x-test]=xxAn opie network settings plugin was created in %{dest}xx
 

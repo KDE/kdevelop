@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=A panel applet called $NAME$
+Comment[fr]=Un applet pour le tableau de bord nommé $NAME$
 Comment[x-test]=xxA panel applet called $NAME$xx
 Name=%{APPNAMELC}
 Name[x-test]=xx%{APPNAMELC}xx

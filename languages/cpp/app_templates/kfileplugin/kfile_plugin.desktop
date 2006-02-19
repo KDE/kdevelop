@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=%{APPNAME} Info
+Name[fr]=Informations sur %{APPNAME}
 Name[x-test]=xx%{APPNAME} Infoxx
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_%{APPNAMELC}

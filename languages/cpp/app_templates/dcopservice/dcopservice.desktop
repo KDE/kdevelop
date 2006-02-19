@@ -6,5 +6,6 @@ Exec=%{APPNAMELC}
 X-DCOP-ServiceType=Unique
 X-KDE-StartupNotify=false
 Comment=Template for dcop services
+Comment[fr]=Un modèle pour les services DCOP.
 Comment[x-test]=xxTemplate for dcop servicesxx
 

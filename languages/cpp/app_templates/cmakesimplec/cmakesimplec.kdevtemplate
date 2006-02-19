@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Hello world program
+Name[fr]=Programme « Hello world »
 Name[x-test]=xxHello world programxx
 Icon=cmakesimplec.png
 Category=C/CMake based projects
 Comment=Generates a simple Hello world program in C using the CMake build tool instead of the automake/autoconf/libtool combination. It requires cmake 2.1 (available from cmake cvs) or the upcoming cmake 2.2 release.
+Comment[fr]=Génère un programme « Hello World » simple en C en utilisant l'outil de construction CMake, à la place de la combinaison automake / autoconf / libtool. Requiert cmake 2.1 (disponible depuis le CVS de CMake) ou le futur cmake 2.2.
 Comment[x-test]=xxGenerates a simple Hello world program in C using the CMake build tool instead of the automake/autoconf/libtool combination. It requires cmake 2.1 (available from cmake cvs) or the upcoming cmake 2.2 release.xx
 #FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/main.c
@@ -29,4 +31,5 @@ Directory=%{dest}
 [MSG]
 Type=message
 Comment=A CMake based hello world program was created in %{dest}
+Comment[fr]=Un programme « Hello World » basé sur CMake a été créé dans %{dest}
 Comment[x-test]=xxA CMake based hello world program was created in %{dest}xx

@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Simple DCOP server
+Name[fr]=Serveur DCOP simple
 Name[x-test]=xxSimple DCOP serverxx
 Icon=kdedcop.png
 Category=C++/KDE 3.x
 Comment=Generates a basic KDE DCOP server. This is an ideal starting point for a DCOP server that does not require a GUI interface.
+Comment[fr]=Génère un serveur DCOP KDE basique. Il s'agit d'un bon point de départ pour un serveur DCOP qui ne requiert pas d'interface graphique.
 Comment[x-test]=xxGenerates a basic KDE DCOP server. This is an ideal starting point for a DCOP server that does not require a GUI interface.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/main.cpp
@@ -141,4 +143,5 @@ Dest=%{dest}/src/main.cpp
 [MSG]
 Type=message
 Comment=A simple DCOP server was created in %{dest}
+Comment[fr]=Un serveur DCOP simple a été créé dans %{dest}
 Comment[x-test]=xxA simple DCOP server was created in %{dest}xx

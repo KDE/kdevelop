@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=QMake based KDE template
+Name[fr]=Modèle KDE basé sur QMake
 Name[x-test]=xxQMake based KDE templatexx
 Icon=kmake.png
 Category=C++/QMake project
 Comment=Generates a simple KDE application using QMake based project manager
+Comment[fr]=Génère une application KDE simple utilisant un gestionnaire de projet basé sur QMake
 Comment[x-test]=xxGenerates a simple KDE application using QMake based project managerxx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -65,4 +67,5 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A Qmake based KDE application was created in %{dest}
+Comment[fr]=Une application KDE basée sur QMake a été créée dans %{dest}
 Comment[x-test]=xxA Qmake based KDE application was created in %{dest}xx

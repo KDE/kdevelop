@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Kicker Applet
+Name[fr]=Applet Kicker
 Name[x-test]=xxKicker Appletxx
 Icon=kicker.png
 Category=C++/KDE 3.x
 Comment=Generates a framework for an applet that embeds into the KDE panel
+Comment[fr]=Génère une infrastructure pour une applet à intégrer dans le tableau de bord de KDE
 Comment[x-test]=xxGenerates a framework for an applet that embeds into the KDE panelxx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -109,4 +111,5 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A Kicker Applet was created in %{dest}
+Comment[fr]=Une applet Kicker a été créée dans %{dest}
 Comment[x-test]=xxA Kicker Applet was created in %{dest}xx

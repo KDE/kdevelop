@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Qtopia Application
+Name[fr]=Application Qtopia
 Name[x-test]=xxQtopia Applicationxx
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate a TMake/Qt based application for Qtopia 1.x
+Comment[fr]=Génère une application basée sur TMake / Qt pour Qtopia 1.x
 Comment[x-test]=xxGenerate a TMake/Qt based application for Qtopia 1.xxx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
@@ -67,4 +69,5 @@ Dest=%{dest}/main.cpp
 [MSG]
 Type=message
 Comment=A Qtopia application was created in %{dest}
+Comment[fr]=Une application Qtopia a été créée dans %{dest}
 Comment[x-test]=xxA Qtopia application was created in %{dest}xx

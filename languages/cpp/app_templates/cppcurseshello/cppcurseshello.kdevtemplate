@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Simple ncurses Hello world program
+Name[fr]=Simple programme « Hello world » en ncurses
 Name[x-test]=xxSimple ncurses Hello world programxx
 Icon=
 Category=C++
 Comment=Generates a simple ncurses based Hello world program in C++
+Comment[fr]=Génère un simple programme « Hello world » basé sur ncurses en C++
 Comment[x-test]=xxGenerates a simple ncurses based Hello world program in C++xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -56,4 +58,5 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A simple hello world program using ncurses was created in %{dest}
+Comment[fr]=Un simple programme « Hello world » utilisant ncurses a été créé dans %{dest}.
 Comment[x-test]=xxA simple hello world program using ncurses was created in %{dest}xx

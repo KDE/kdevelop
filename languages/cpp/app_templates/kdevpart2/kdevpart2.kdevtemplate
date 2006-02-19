@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=KDevelop Plugin (Standalone build)
+Name[fr]=Module de KDevelop (autonome)
 Name[x-test]=xxKDevelop Plugin (Standalone build)xx
 Category=C++/KDE 3.x/KDevelop/
 Comment=This generates a KPart for KDevelop, to be built outside of the KDevelop source tree.
+Comment[fr]=Ceci génère un composant pour KDevelop, qui sera construit en dehors de l'arborescence des sources de KDevelop.
 Comment[x-test]=xxThis generates a KPart for KDevelop, to be built outside of the KDevelop source tree.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}_part.cpp
@@ -14,6 +16,7 @@ Type = value
 ValueType=QString
 Value= SCOPE
 Comment= The scope of a plugin (Global, Project, Core)
+Comment[fr]= La portée d'un module (globale, projet, cœur)
 Comment[x-test]=xx The scope of a plugin (Global, Project, Core)xx
 Default= Global
 
@@ -22,6 +25,7 @@ Type = value
 ValueType=QString
 Value= PROPS
 Comment= The list of supported KDevelop properties
+Comment[fr]= La liste des propriétés KDevelop prises en charge
 Comment[x-test]=xx The list of supported KDevelop propertiesxx
 Default=
 
@@ -139,4 +143,5 @@ Dest=%{dest}/src/README.dox
 [MSG]
 Type=message
 Comment=A KDevelop plugin was created in %{dest}
+Comment[fr]=Un module KDevelop a été créé dans %{dest}
 Comment[x-test]=xxA KDevelop plugin was created in %{dest}xx

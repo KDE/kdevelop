@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Kate plugin with config page
+Name[fr]=Module Kate avec page de configuration
 Name[x-test]=xxKate plugin with config pagexx
 Icon=kateplugin2.png
 Category=C++/KDE 3.x/Kate
 Comment=Generates a plugin with config page for Kate the text editor.
+Comment[fr]=Génère un module pour l'éditeur de texte Kate, incluant une page de configuration
 Comment[x-test]=xxGenerates a plugin with config page for Kate the text editor.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
@@ -127,4 +129,5 @@ Process=false
 [MSG]
 Type=message
 Comment=A plugin for Kate with a config page was created in %{dest}
+Comment[fr]=Un module pour Kate incluant une page de configuration a été créé dans %{dest}
 Comment[x-test]=xxA plugin for Kate with a config page was created in %{dest}xx

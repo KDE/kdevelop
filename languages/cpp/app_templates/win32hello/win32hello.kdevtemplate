@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Simple Win32 Hello World
+Name[fr]=Simple « Hello world » Win32
 Name[x-test]=xxSimple Win32 Hello Worldxx
 Icon=win32hello.png
 Category=C++/Win32
 Comment=Generates a shell project for crosscompiling Win32 projects.
+Comment[fr]=Génère un projet shell pour la compilation croisée de projets Win32.
 Comment[x-test]=xxGenerates a shell project for crosscompiling Win32 projects.xx
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=src/%{APPNAMELC}.cpp
@@ -56,5 +58,6 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=For this project to compile and run you need both Wine and MinGW installed.
+Comment[fr]=Pour pouvoir compiler et exécuter ce projet, vous devez installer Wine et MinGW.
 Comment[x-test]=xxFor this project to compile and run you need both Wine and MinGW installed.xx
 

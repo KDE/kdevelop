@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/AppFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=App Frontend Interface
+Name[fr]=Interface graphique pour application
 Name[x-test]=xxApp Frontend Interfacexx
 
 # versioning - prevent DLL hell

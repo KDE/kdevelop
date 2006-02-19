@@ -3,6 +3,7 @@
 Encoding=UTF-8
 MimeType=application/x-%{APPNAMELC}
 Comment= A really awesome KOffice application
+Comment[fr]=Une application pour KOffice vraiment superbe
 Comment[x-test]=xx A really awesome KOffice applicationxx
 Type=MimeType
 #You need to change the mime type below to match what your application will handle...

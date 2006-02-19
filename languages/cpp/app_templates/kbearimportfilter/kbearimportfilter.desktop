@@ -4,5 +4,6 @@ Type=Service
 ServiceTypes=KBear/SiteImportFilter
 X-KDE-Library=libkbear%{APPNAMELC}importfilter
 Name=%{APPNAME} Import Filter
+Name[fr]=Filtre d'importation de %{APPNAME}
 Name[x-test]=xx%{APPNAME} Import Filterxx
 X-KBear-ImportFile=sitemanager

@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/CompilerOptions
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Compiler Options Dialog Interface
+Name[fr]=Interface de la boîte de dialogue d'options du compilateur de KDevelop
 Name[x-test]=xxKDevelop Compiler Options Dialog Interfacexx
 
 [PropertyDef::X-KDevelop-Language]
