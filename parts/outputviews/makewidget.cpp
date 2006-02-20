@@ -162,17 +162,13 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 {
 	updateSettingsFromConfig();
 
-/*	if ( m_compilerOutputLevel == eFull )
-	{
-		setTextFormat( Qt::LogText );
-	}
-	else
-	{*/
-		setTextFormat( Qt::RichText );
-//	}
+	setTextFormat( Qt::RichText );
 	
 	if ( m_bLineWrapping )
 		setWordWrap(WidgetWidth);
+	else
+		setWordWrap(NoWrap);
+
 	setWrapPolicy(Anywhere);
 	setReadOnly(true);
 	setMimeSourceFactory(new QMimeSourceFactory);
