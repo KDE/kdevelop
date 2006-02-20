@@ -259,9 +259,9 @@ bool ToolsConfigWidget::eventFilter(QObject *o, QEvent *e)
         return true;
     } else if (e->type() == QEvent::Drop) {
         QDropEvent *de = static_cast<QDropEvent*>(e);
-        KURL::List fileList;
+        KUrl::List fileList;
         if (KURLDrag::decode(de, fileList)) {
-            KURL::List::ConstIterator it;
+            KUrl::List::ConstIterator it;
             for (it = fileList.begin(); it != fileList.end(); ++it) {
                 if ((*it).isLocalFile() && KDesktopFile::isDesktopFile((*it).path())) {
                     KDesktopFile df((*it).path());
