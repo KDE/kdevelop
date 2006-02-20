@@ -123,7 +123,7 @@ void ProcessWidget::slotProcessExited(KProcess *)
 
 void ProcessWidget::insertStdoutLine(const QString &line)
 {
-    insertItem(new ProcessListBoxItem(line.stripWhiteSpace(),
+    insertItem(new ProcessListBoxItem(line,
                                       ProcessListBoxItem::Normal));
     maybeScrollToBottom();
 }
@@ -131,7 +131,7 @@ void ProcessWidget::insertStdoutLine(const QString &line)
 
 void ProcessWidget::insertStderrLine(const QString &line)
 {
-    insertItem(new ProcessListBoxItem(line.stripWhiteSpace(),
+    insertItem(new ProcessListBoxItem(line,
                                       ProcessListBoxItem::Error));
     maybeScrollToBottom();
 }
