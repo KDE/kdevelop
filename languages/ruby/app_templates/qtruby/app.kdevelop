@@ -21,9 +21,6 @@
 		<general>
 			<activedir/>
 		</general>
-		<run>
-			<mainprogram>./%{APPNAMELC}.rb</mainprogram>
-		</run>
 	</kdevcustomproject>
 	<kdevfileview>
 		<tree>
@@ -80,6 +77,7 @@
 	</kdevfilecreate>
 	<kdevrubysupport>
 		<run>
+			<mainprogram>./%{APPNAMELC}.rb</mainprogram>
 			<interpreter>ruby</interpreter>
 			<terminal>false</terminal>
 		</run>

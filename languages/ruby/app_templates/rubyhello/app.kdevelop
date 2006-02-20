@@ -21,6 +21,7 @@
 		<activedir>src</activedir>
 		<includepatterns>*.rb</includepatterns>
 		<excludepatterns>*~</excludepatterns>
+
   </general>
  </kdevscriptproject>
  <kdevfileview>
@@ -81,4 +82,12 @@
 			<type ext="rb"/>
     </useglobaltypes>
   </kdevfilecreate>
+        <kdevrubysupport>
+                <run>
+                        <mainprogram>./%{APPNAMELC}.rb</mainprogram>
+                        <interpreter>ruby</interpreter>
+                        <terminal>false</terminal>
+                </run>
+        </kdevrubysupport>
+
 </kdevelop>

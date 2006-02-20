@@ -15,9 +15,6 @@
 		<general>
 			<activedir/>
 		</general>
-		<run>
-			<mainprogram>./main.rb</mainprogram>
-		</run>
 	</kdevcustomproject>
   <kdevfileview>
     <groups>
@@ -80,6 +77,7 @@
 		<run>
 			<interpreter>ruby</interpreter>
 			<terminal>false</terminal>
+			<mainprogram>./main.rb</mainprogram>
 		</run>
 	</kdevrubysupport>
 </kdevelop>
