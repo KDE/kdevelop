@@ -85,6 +85,19 @@ void RubySupportPart::projectOpened()
   	this, SLOT(addedFilesToProject(const QStringList &)) );
   connect( project(), SIGNAL(removedFilesFromProject(const QStringList &)),
   	this, SLOT(removedFilesFromProject(const QStringList &)) );
+
+  QFileInfo program(mainProgram());
+
+  // If it's a Rails project, create the project files if they're missing
+  if (mainProgram().endsWith("script/server")) {
+    QString cmd;
+    QFileInfo server(project()->projectDirectory() + "/script/server");
+    if (! server.exists()) {
+      cmd += "rails " + project()->projectDirectory();
+      if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
+        appFrontend->startAppCommand(project()->projectDirectory(), cmd, false);
+    }
+  }
   
   // We want to parse only after all components have been
   // properly initialized
@@ -463,9 +476,7 @@ void RubySupportPart::slotRun ()
     if (mainProgram().endsWith("script/server")) {
          QString cmd;
          QFileInfo server(project()->projectDirectory() + "/script/server");
-         if (! server.exists()) {
-             cmd += "rails " + project()->projectDirectory() + "; ";
-         }
+
         // Starting WEBrick for a Rails app. Translate a SIGTERM signal sent by KDevelop
         // to a SIGINT expected by WEBrick (ie control&c) to terminate it.
         cmd += "script/server& \n trap \"kill -s SIGINT $!\" SIGTERM \n wait \n exit 0";
