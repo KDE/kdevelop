@@ -815,7 +815,8 @@ void MakeWidget::updateSettingsFromConfig()
 {
 	KConfig *pConfig = kapp->config();
 	pConfig->setGroup("General Options");
-	setFont(pConfig->readFontEntry("Application Font"));
+	QFont outputFont = pConfig->readFontEntry("OutputViewFont");
+	setFont(outputFont);
 	pConfig->setGroup("MakeOutputView");
 	m_bLineWrapping = pConfig->readBoolEntry("LineWrapping", true);
 	m_compilerOutputLevel = (EOutputLevel) pConfig->readNumEntry("CompilerOutputLevel", (int) eShort);
