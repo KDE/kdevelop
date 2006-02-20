@@ -1,5 +1,5 @@
 templatedir = $(kde_datadir)/kdevfilecreate/file-templates
-template_DATA = rb
+template_DATA = rb rhtml
 
 
 

@@ -1,3 +1,21 @@
+2006-02-17  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+* Removed the 'Type' column from the Ruby debugger as the C++
+  debugger no longer has one
+
+2006-01-30  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+* Added a minimal C# language project type based on the perl one.
+
+2006-01-30  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+* Added file templates for Rails projects; rhtml, rxml, css and js
+* Fixed documentation links for QtRuby/Korundum, added some
+  links for Rails
+
+2006-01-19  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+* Added a Rails project template
+* Use the Run menu option to start WEBrick. If the Rails project doesn't
+  exist it will be created.
+* The script/console runs in the Terminal instead of irb
+
 2005-08-17  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 * The $SHELL environment variable is set to 'irb' for ruby projects.
 * Added a project option to customise the ruby shell

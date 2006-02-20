@@ -1,0 +1,19 @@
+# KDE Config File
+[General]
+Name=Ruby On Rails
+Icon=rails.png
+Category=Ruby
+Comment=This generates a Ruby On Rails project
+FileTemplates=rb,ShellStyle,rhtml,XMLStyle,rxml,ShellStyle,css,CPPStyle,js,CPPStyle
+ShowFilesAfterGeneration=%{dest}/script/server
+Archive=rails.tar.gz
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[MSG]
+Type=message
+Comment=A Ruby On Rails project created in %{dest}

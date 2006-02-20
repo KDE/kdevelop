@@ -18,15 +18,24 @@
  </general>
  <kdevscriptproject>
   <general>
-		<activedir>src</activedir>
 		<includepatterns>*.rb</includepatterns>
+		<includepatterns>*.rhtml</includepatterns>
+		<includepatterns>*.rxml</includepatterns>
+		<includepatterns>*.css</includepatterns>
+		<includepatterns>*.js</includepatterns>
 		<excludepatterns>*~</excludepatterns>
-
   </general>
  </kdevscriptproject>
  <kdevfileview>
 	 <groups>
 	   <group pattern="*.rb" name="Scripts" />
+	   <group pattern="*.css" name="StyleSheets" />
+	   <group pattern="*.js" name="JavaScripts" />
+	   <group pattern="*.rhtml" name="Views" />
+	   <group pattern="*.rxml" name="BuilderTemplates" />
+	   <group pattern="*.yml" name="Config" />
+	   <group pattern="*.gif,*.jpg,*.png,*.ico" name="Images" />
+	   <group pattern="*.html,*.cgi,*.fcgi,*.txt" name="Public" />
 	 </groups>
  </kdevfileview>											 
  <kdevdoctreeview>
@@ -80,14 +89,18 @@
   <kdevfilecreate>
     <useglobaltypes>
 			<type ext="rb"/>
+			<type ext="rhtml"/>
+			<type ext="rxml"/>
+			<type ext="css"/>
+			<type ext="js"/>
     </useglobaltypes>
   </kdevfilecreate>
-        <kdevrubysupport>
-                <run>
-                        <mainprogram>./%{APPNAMELC}.rb</mainprogram>
-                        <interpreter>ruby</interpreter>
-                        <terminal>false</terminal>
-                </run>
-        </kdevrubysupport>
-
+	<kdevrubysupport>
+		<run>
+			<interpreter>ruby</interpreter>
+			<shell>%{dest}/script/console</shell>
+			<terminal>false</terminal>
+			<mainprogram>script/server</mainprogram>
+		</run>
+	</kdevrubysupport>
 </kdevelop>

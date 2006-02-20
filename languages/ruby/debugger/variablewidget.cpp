@@ -144,7 +144,6 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
 
     addColumn(i18n("Variable"), 100 );
     addColumn(i18n("Value"), 100 );
-    addColumn(i18n("Type"), 100 );
 
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              SLOT(slotContextMenu(KListView*, QListViewItem*)) );
@@ -205,8 +204,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         } else if (res == idCopyToClipboard) {
             QClipboard *qb = KApplication::clipboard();
             QString text = "{ \"" + item->text( VAR_NAME_COLUMN ) + "\", " +
-                            "\"" + item->text( VALUE_COLUMN ) + "\", " +
-                            "\"" + item->text( VAR_TYPE_COLUMN ) + "\" }";
+                            "\"" + item->text( VALUE_COLUMN ) + "\" }";
 
 #if KDE_VERSION > 305
             qb->setText( text, QClipboard::Clipboard );
@@ -637,7 +635,6 @@ void VarItem::setText(int column, const QString &data)
 	setActivationId();
 	
     if (column == VALUE_COLUMN) {
-		QListViewItem::setText(VAR_TYPE_COLUMN, typeFromValue(data));
 		highlight_ = (!text(VALUE_COLUMN).isEmpty() && text(VALUE_COLUMN) != data);
     }
 
@@ -651,41 +648,6 @@ void VarItem::expandValue(char *buf)
 {
     LazyFetchItem::stopWaitingForData();
     RDBParser::parseExpandedVariable(this, buf);
-}
-
-// **************************************************************************
-
-QString VarItem::typeFromValue(const QString& value)
-{
-	QRegExp ref_re("^#<(([^:]|::)+):");
-	
-	if (ref_re.search(value) != -1) {
-		return QString(ref_re.cap(1));
-	} else if (QRegExp("^(/|%r)").search(value) != -1) {
-		return QString("Regexp");
-	} else if (QRegExp("^[\"'%<]").search(value) != -1) {
-		return QString("String");
-	} else if (QRegExp("^(\\[)|(String \\(length \\d+\\))").search(value) != -1) {
-		return QString("String");
-	} else if (QRegExp("^(\\[)|(Array \\(\\d+ element\\(s\\)\\))").search(value) != -1) {
-		return QString("Array");
-	} else if (QRegExp("^(\\{)|(Hash \\(\\d+ element\\(s\\)\\))").search(value) != -1) {
-		return QString("Hash");
-	} else if (QRegExp("^:").search(value) != -1) {
-		return QString("Symbol");
-	} else if (QRegExp("\\.\\.").search(value) != -1) {
-		return QString("Range");
-	} else if (value == "true" || value == "false") {
-		return QString("Boolean");
-	} else if (  QRegExp("^[-+]?[0-9_]+").exactMatch(value)
-				|| QRegExp("^[-+]?(0x|0|0b|\\?)[\\da-f]*$").search(value) != -1 ) 
-	{
-		return QString("Integer");
-	} else if (QRegExp("[0-9._]+(e[-+0-9]+)?").exactMatch(value)) {
-		return QString("Float");
-	} else {
-    	return QString("");
-	}
 }
 
 // **************************************************************************
