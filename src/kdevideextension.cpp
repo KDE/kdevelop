@@ -23,6 +23,8 @@
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
+#include <qcombobox.h>
+#include <qlineedit.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -30,7 +32,7 @@
 #include <kiconloader.h>
 #include <kurlrequester.h>
 #include <kapplication.h>
-#include <kfontcombo.h>
+#include <kfontrequester.h>
 
 #include <kdevplugin.h>
 #include <kdevmakefrontend.h>
@@ -59,7 +61,7 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
 
     config->setGroup("General Options");
     gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
-    gsw->outputViewFontCombo->setCurrentFont( config->readFontEntry( "OutputViewFont" ).family() );
+    gsw->outputFont->setFont( config->readFontEntry( "OutputViewFont" ) );
     config->setGroup("MakeOutputView");
     gsw->lineWrappingCheckBox->setChecked(config->readBoolEntry("LineWrapping",true));
     gsw->dirNavigMsgCheckBox->setChecked(config->readBoolEntry("ShowDirNavigMsg",false));
@@ -81,7 +83,7 @@ void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase *dlg)
     config->writeEntry("DesignerApp", gsw->designerButtonGroup->selectedId());
     config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
     config->writePathEntry("DefaultProjectsDir", gsw->projectsURL->url());
-    config->writeEntry("OutputViewFont", gsw->outputViewFontCombo->currentFont());
+    config->writeEntry("OutputViewFont", gsw->outputFont->font());
     config->setGroup("MakeOutputView");
     config->writeEntry("LineWrapping",gsw->lineWrappingCheckBox->isChecked());
     config->writeEntry("ShowDirNavigMsg",gsw->dirNavigMsgCheckBox->isChecked());

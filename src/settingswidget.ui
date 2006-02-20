@@ -12,6 +12,9 @@
             <height>489</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>Form2</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -19,12 +22,15 @@
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QCheckBox" row="2" column="1">
+        <widget class="QCheckBox" row="1" column="1">
             <property name="name">
                 <cstring>lastProjectCheckbox</cstring>
             </property>
             <property name="text">
                 <string>Lo&amp;ad last project on startup</string>
+            </property>
+            <property name="accel">
+                <string>Alt+A</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Check this if you want KDevelop to load the last opened project on startup</string>
@@ -44,7 +50,7 @@
                 <set>WordBreak|AlignVCenter</set>
             </property>
         </widget>
-        <widget class="QCheckBox" row="8" column="1">
+        <widget class="QCheckBox" row="6" column="1">
             <property name="name">
                 <cstring>lineWrappingCheckBox</cstring>
             </property>
@@ -58,7 +64,7 @@
                 <string>By default, KDevelop will wrap long lines around in the Messages Output View window so that valuable information will not be easily overlooked. In some cases this will clutter long message lists. Remove the checkbox mark if you do not want the lines wrap around.</string>
             </property>
         </widget>
-        <widget class="QCheckBox" row="9" column="1">
+        <widget class="QCheckBox" row="7" column="1">
             <property name="name">
                 <cstring>dirNavigMsgCheckBox</cstring>
             </property>
@@ -72,50 +78,7 @@
                 <string>The make tool usually will display messages like “Entering directory”, or “Leaving directory” when it switches the directories it currently works in. As this clutters the messages list in the Messages Output View window, KDevelop suppresses those messages by default. Mark the checkbox if you want to protocol which directories make worked in.</string>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="6" column="1">
-            <property name="name">
-                <cstring>layout9</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>buttonLabel</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>4</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Window &amp;font:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>outputViewFontCombo</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="KFontCombo">
-                    <property name="name">
-                        <cstring>outputViewFontCombo</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Select a font suitable for the Messages Output View window</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>To select a font suitable for the Messages Output View window click the Window Font button showing the currently selected font (it says “Luxi Sans” in the above illustration). The KDE standard Select Font dialog will pop up from which you may select the font to be used.</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QLayoutWidget" row="7" column="1">
+        <widget class="QLayoutWidget" row="5" column="1">
             <property name="name">
                 <cstring>layout10</cstring>
             </property>
@@ -173,7 +136,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QLabel" row="10" column="0" rowspan="1" colspan="2">
+        <widget class="QLabel" row="8" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>textLabel5</cstring>
             </property>
@@ -184,7 +147,7 @@
                 <set>AlignTop</set>
             </property>
         </widget>
-        <spacer row="6" column="0" rowspan="4" colspan="1">
+        <spacer row="4" column="0" rowspan="4" colspan="1">
             <property name="name">
                 <cstring>spacer13_2</cstring>
             </property>
@@ -201,7 +164,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QButtonGroup" row="12" column="1">
+        <widget class="QButtonGroup" row="9" column="1">
             <property name="name">
                 <cstring>designerButtonGroup</cstring>
             </property>
@@ -226,7 +189,7 @@
                         <cstring>embeddedDesignerRadioButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Use KDe&amp;velop's embedded designer</string>
+                        <string>&amp;Use KDevelop's embedded designer</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Start KDevelop own designer embedded within KDevelop</string>
@@ -265,7 +228,7 @@
                 </widget>
             </grid>
         </widget>
-        <spacer row="12" column="0">
+        <spacer row="9" column="0">
             <property name="name">
                 <cstring>spacer13_2_2</cstring>
             </property>
@@ -282,7 +245,7 @@
                 </size>
             </property>
         </spacer>
-        <spacer row="15" column="0">
+        <spacer row="11" column="0">
             <property name="name">
                 <cstring>spacer13_2_2_2</cstring>
             </property>
@@ -299,7 +262,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QButtonGroup" row="15" column="1">
+        <widget class="QButtonGroup" row="11" column="1">
             <property name="name">
                 <cstring>terminalButtonGroup</cstring>
             </property>
@@ -357,7 +320,7 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QLabel" row="13" column="0" rowspan="1" colspan="2">
+        <widget class="QLabel" row="10" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>textLabel5_2</cstring>
             </property>
@@ -368,7 +331,7 @@
                 <set>AlignTop</set>
             </property>
         </widget>
-        <spacer row="16" column="1">
+        <spacer row="12" column="1">
             <property name="name">
                 <cstring>spacer23</cstring>
             </property>
@@ -385,7 +348,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QLabel" row="4" column="0" rowspan="1" colspan="2">
+        <widget class="QLabel" row="3" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>textLabel2_2</cstring>
             </property>
@@ -399,7 +362,7 @@
                 <set>WordBreak|AlignBottom|AlignLeft</set>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="3" column="1">
+        <widget class="QLayoutWidget" row="2" column="1">
             <property name="name">
                 <cstring>layout5</cstring>
             </property>
@@ -434,7 +397,7 @@
                 </widget>
             </hbox>
         </widget>
-        <spacer row="2" column="0" rowspan="2" colspan="1">
+        <spacer row="1" column="0" rowspan="2" colspan="1">
             <property name="name">
                 <cstring>spacer13</cstring>
             </property>
@@ -451,16 +414,50 @@
                 </size>
             </property>
         </spacer>
+        <widget class="QLayoutWidget" row="4" column="1">
+            <property name="name">
+                <cstring>layout4</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>buttonLabel</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>4</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Window &amp;font:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>outputFont</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="KFontRequester">
+                    <property name="name">
+                        <cstring>outputFont</cstring>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kfontcombo.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kfontrequester.h</includehint>
 </includehints>
 </UI>
