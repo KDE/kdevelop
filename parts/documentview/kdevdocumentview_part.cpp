@@ -36,7 +36,6 @@
 #include <kparts/componentfactory.h>
 
 #include <kdevapi.h>
-#include <urlutil.h>
 #include <kdevcore.h>
 #include <kdevplugininfo.h>
 #include <kdevmainwindow.h>
