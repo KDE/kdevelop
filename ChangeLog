@@ -1,9 +1,11 @@
+2006-02-21  Richard Dale  <rdale@foton.es>
+* Add the pid to the filename of the Unix domain socket used by the ruby
+  debugger so that more than one instance of KDevelop can be run on a
+    machine.
+  
 2006-02-17  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 * Removed the 'Type' column from the Ruby debugger as the C++
   debugger no longer has one
-
-2006-01-30  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
-* Added a minimal C# language project type based on the perl one.
 
 2006-01-30  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 * Added file templates for Rails projects; rhtml, rxml, css and js
