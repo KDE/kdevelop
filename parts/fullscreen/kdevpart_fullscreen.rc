@@ -1,12 +1,12 @@
 <!DOCTYPE kpartgui>
 <kpartplugin name="fullscreen" library="libfullscreenplugin" version="3">
 <MenuBar>
-  <Menu name="view">
-    <Text>&amp;View</Text>
-    <Action name="fullscreen"/>
+	<Menu name="settings">
+    <Text>&amp;Settings</Text>
+	<Action name="fullscreen" group="show_merge"/>
  </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar">
-  <Action name="fullscreen" group="zoom_operations"/>
+	<Action name="fullscreen" group="screenmode_operations"/>
 </ToolBar>
 </kpartplugin>

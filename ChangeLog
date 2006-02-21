@@ -1,3 +1,9 @@
+2006-02-21  Richard Dale  <rdale@foton.es>
+* The Full Screen mode menu option is under the Settings menu in both
+  Kate and Konqueror, and they arguably have it in the wrong place.
+  But it's probably better to make KDevelop consistent with other KDE
+  apps even if they're slighty wrong. So move the menu under settings
+
 2006-02-17  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 * Removed the 'Type' column from the Ruby debugger as the C++
   debugger no longer has one

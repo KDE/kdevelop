@@ -137,6 +137,7 @@
   <DefineGroup name="edit_operations"/>
   <DefineGroup name="find_operations"/>
   <DefineGroup name="view_operations"/>
+  <DefineGroup name="screenmode_operations"/>
   <DefineGroup name="zoom_operations"/>
   <Merge/>
   <Action name="help_whats_this"/>
