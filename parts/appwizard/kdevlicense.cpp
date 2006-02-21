@@ -83,6 +83,7 @@ QString KDevLicense::assemble( KDevFile::CommentingStyle commentingStyle, const 
 	switch( commentingStyle )
 	{
 		case KDevFile::CPPStyle:
+		case KDevFile::CStyle:
 			return str;
 			
 		case KDevFile::PascalStyle:
@@ -101,6 +102,13 @@ QString KDevLicense::assemble( KDevFile::CommentingStyle commentingStyle, const 
 			str.replace(QRegExp("\\*|/"), "#");
 			str.replace(QRegExp("\n ##"), "\n##");
 			str.replace(QRegExp("\n #"), "\n# ");
+			return str;
+
+		case KDevFile::XMLStyle:
+			str.replace(QRegExp("/\\*"), "<!--");
+			str.replace(QRegExp("\n \\*"), "\n<!--");
+			str.replace(QRegExp("\\*/?\n"), "-->\n");
+			str.replace(QRegExp("\\*"), "_");
 			return str;
 	}
 

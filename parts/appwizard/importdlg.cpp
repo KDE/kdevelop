@@ -230,7 +230,7 @@ void ImportDialog::dirChanged()
     }
 
     // C++?
-    if (dirHasFiles(dir, "*.cpp,*.c++,*.cxx,*.C,*.cc")) {
+    if (dirHasFiles(dir, "*.cpp,*.c++,*.cxx,*.C,*.cc,*.ocl")) {
         setProjectType("cpp");
         return;
     }
