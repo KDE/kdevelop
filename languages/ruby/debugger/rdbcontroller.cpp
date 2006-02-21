@@ -89,7 +89,7 @@ int debug_controllerExists = false;
 
 // At the moment a Unix domain socket is used. It might be better to
 // change to tcp/ip and listen on a port instead
-const char * RDBController::unixSocketPath_ = "/tmp/.rubydebugger";
+QCString RDBController::unixSocketPath_;
 
 
 RDBController::RDBController(VariableTree *varTree, FramestackWidget *frameStack, QDomDocument &projectDom)
@@ -114,6 +114,7 @@ RDBController::RDBController(VariableTree *varTree, FramestackWidget *frameStack
         config_dbgTerminal_(false)
 {
     struct sockaddr_un	sockaddr;
+	unixSocketPath_.sprintf("/tmp/.rubydebugger%d", getpid());
 	QFileInfo			unixSocket(unixSocketPath_);
 	
     stdoutSizeofBuf_ = sizeof(stdoutOutput_);
@@ -151,6 +152,11 @@ RDBController::~RDBController()
     delete[] stdoutOutput_;
     delete[] rdbOutput_;
     debug_controllerExists = false;
+
+	QFileInfo unixSocket(unixSocketPath_);
+	if (unixSocket.exists()) {
+		unlink(unixSocketPath_);
+	}
 }
 
 // **************************************************************************

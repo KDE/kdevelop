@@ -1,4 +1,9 @@
 2006-02-21  Richard Dale  <rdale@foton.es>
+* Add the pid to the filename of the Unix domain socket used by the ruby
+  debugger so that more than one instance of KDevelop can be run on a 
+  machine.
+  
+2006-02-21  Richard Dale  <rdale@foton.es>
 * The Full Screen mode menu option is under the Settings menu in both
   Kate and Konqueror, and they arguably have it in the wrong place.
   But it's probably better to make KDevelop consistent with other KDE

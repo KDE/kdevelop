@@ -157,7 +157,7 @@ private:
 	
 	int               masterSocket_;         // The socket to accept connections
 	QSocketNotifier*  acceptNotifier_;
-    static const char * unixSocketPath_;     // The name of the Unix Domain socket
+    static QCString   unixSocketPath_;       // The name of the Unix Domain socket
 	int               socket_;               // The socket to read and write to the debuggee
 	QSocketNotifier*  socketNotifier_;
 
