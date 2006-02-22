@@ -1,6 +1,8 @@
 <?xml version = '1.0'?>
 <kdevelop>
   <kdevfilecreate>
+    <sidetab active="no">
+    </sidetab>
     <filetypes>
       <type ext="" name="Blank File" create="template">
         <descr>A new blank file.</descr>
@@ -11,6 +13,18 @@
       <type ext="rb" name="Ruby" create="template" icon="template_source">
         <descr>A new empty Ruby source file.</descr>
       </type>
+	  <type ext="rhtml" name="RHTML" create="template" icon="template_source">
+		  <descr>A new empty rhtml source file.</descr>
+	  </type>
+	  <type ext="rxml" name="RXML" create="template" icon="template_source">
+		  <descr>A new empty rxml builder template source file.</descr>
+	  </type>
+	  <type ext="css" name="CSS" create="template" icon="template_source">
+		  <descr>A new empty cascading style sheet source file.</descr>
+	  </type>
+	  <type ext="js" name="JS" create="template" icon="template_source">
+		  <descr>A new empty JavaScript source file.</descr>
+	  </type>
       <type ext="ui" name="Qt Designer" create="no" icon="widget_doc">
         <descr>
         </descr>
