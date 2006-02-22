@@ -1,6 +1,8 @@
 <?xml version = '1.0'?>
 <kdevelop>
   <kdevfilecreate>
+    <sidetab active="no">
+    </sidetab>
     <filetypes>
       <type ext="" name="Blank File" create="template">
         <descr>A new blank file.</descr>
