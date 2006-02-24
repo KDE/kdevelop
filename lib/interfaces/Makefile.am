@@ -23,7 +23,7 @@ kdevelopinclude_HEADERS = kdevdocumentcontroller.h kdevapi.h \
 	kdevcore.h kdevprojectbuilder.h kdevcoreiface.h kdevprojecteditor.h \
 	kdevcreatefile.h kdevproject.h kdevdifffrontend.h domutil.h kdevgenericfactory.h \
 	kdevprojectimporter.h kdevlanguagesupport.h kdevprojectmodel.h kdevmainwindow.h tag.h \
-	kdevmakefrontend.h kdevitemmodel.h urlutil.h filetemplate.h kdevcodedelegate.h \
+	kdevmakefrontend.h kdevitemmodel.h filetemplate.h kdevcodedelegate.h \
 	kdevcodeproxy.h
 
 servicetypedir = $(kde_servicetypesdir)
