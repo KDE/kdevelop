@@ -17,4 +17,5 @@ DOXYGEN_DOCDIRPREFIX = kdev
 include ../../Doxyfile.am
 
 noinst_HEADERS = settings.h
-libkdevutil_la_LIBADD = $(LIB_KDECORE)
+libkdevutil_la_LIBADD = $(LIB_KDECORE) 
+libkdevutil_la_LDFLAGS = $(all_libraries) -no-undefined
