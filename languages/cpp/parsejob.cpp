@@ -97,7 +97,7 @@ void ParseJob::run()
         close( fd );
     }
 
-    kDebug() << "===-- PARSING --===> "
+    kDebug(9007) << "===-- PARSING --===> "
     << m_document.fileName()
     << " <== readFromDisk: " << readFromDisk
     << " size: " << size
