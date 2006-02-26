@@ -65,7 +65,7 @@ private:
     void parseLocals          (char type, char *buf);
     void parseRequestedData   (char *buf);
     void parseWhatis          (char *buf);
-    void parseLine            (char *buf);
+    void parseLine            (const char *buf);
     void parseFrameSelected   (char *buf);
     void parseMemoryDump      (char *buf);
 

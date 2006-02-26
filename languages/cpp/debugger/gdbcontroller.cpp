@@ -463,7 +463,7 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
 // **************************************************************************
 
 // Any data that isn't "wrapped", arrives here.
-void GDBController::parseLine(char* buf)
+void GDBController::parseLine(const char* buf)
 {
     Q_ASSERT(*buf != (char)BLOCK_START);
 
@@ -629,7 +629,7 @@ void GDBController::parseLine(char* buf)
         const Breakpoint* traced = 0;
         if (strncmp(buf, "Brea", 4) == 0)
         {
-            char* ptr = buf + strlen("Breakpoint ");
+            const char* ptr = buf + strlen("Breakpoint ");
             int id = atoi(ptr);
 
             if (tracedBreakpoints_.contains(id))
@@ -761,7 +761,7 @@ void GDBController::parseLine(char* buf)
     if (isdigit(*buf))
     {
 //        kdDebug(9012) << "Parsed (digit)<" << buf << ">" << endl;
-        parseProgramLocation(buf);
+        parseProgramLocation((char*)buf);
         //    actOnProgramPause(QString(buf));
         return;
     }
@@ -1240,8 +1240,8 @@ char *GDBController::parseOther(char *buf)
                 *end = ' ';
             else
             {
-                *end = 0;        // make a null terminated c-string
-                parseLine(buf);
+                QCString b(buf, end - buf + 1);
+                parseLine(b);
                 return end;
             }
         }
