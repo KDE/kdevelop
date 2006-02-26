@@ -108,14 +108,15 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
 	rootItem->add( folderItem );
 	
 	QStringList subdirs = m_interface->subdirsFor( folder );
-	if ( subdirs.isEmpty() )
-		return;
 	
-	foreach( QString dir, subdirs )
+	if ( !subdirs.isEmpty() )
 	{
-		QString fullPath = folder.absolutePath();
-		fullPath = fullPath + QDir::separator() + dir;
-		createProjectItems( fullPath, folderItem );
+		foreach( QString dir, subdirs )
+		{
+			QString fullPath = folder.absolutePath();
+			fullPath = fullPath + QDir::separator() + dir;
+			createProjectItems( fullPath, folderItem );
+		}
 	}
 
     QList<TargetInfo> targets = m_interface->targetsForFolder( folder );

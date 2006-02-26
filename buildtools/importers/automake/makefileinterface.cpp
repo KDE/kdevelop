@@ -83,6 +83,8 @@ namespace AutoTools
             return Info;
         else if ( location.contains( "^man" ) )
             return Man;
+        else if ( location == "kde_module" )
+            return Lib;
         else
             return None;
     }
@@ -259,6 +261,8 @@ QStringList MakefileInterface::subdirsFor( const QDir& folder ) const
 
 QList<TargetInfo> MakefileInterface::targetsForFolder( const QDir& folder ) const
 {
+    kDebug(9020) << k_funcinfo << folder.absolutePath() << endl;
+
     QList<TargetInfo> targetList;
     AutoTools::ProjectAST* ast = astForFolder( folder );
 
@@ -268,7 +272,7 @@ QList<TargetInfo> MakefileInterface::targetsForFolder( const QDir& folder ) cons
                 << folder.absolutePath() << endl;
         return targetList;
     }
-    
+
     QList<AST*> childList = ast->children();
     QList<AST*>::const_iterator cit, citEnd = childList.constEnd();
     for ( cit = childList.constBegin(); cit != citEnd; ++cit )
@@ -284,10 +288,11 @@ QList<TargetInfo> MakefileInterface::targetsForFolder( const QDir& folder ) cons
                         continue;
 
                     QStringList targetSplit = assignment->scopedID.split( '_' );
-                    QString location = targetSplit.takeFirst();
-                    QString primary = targetSplit.takeFirst();
+                    QString primary = targetSplit.takeLast();
+                    QString location = targetSplit.join( "_" );
+
                     kDebug( 9020 ) << k_funcinfo << "primary: " << primary
-                                   << "location: " << location << endl;
+                                   << " location: " << location << endl;
                     if ( primary == "HEADERS" )
                         continue;
 
