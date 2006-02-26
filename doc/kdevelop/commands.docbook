@@ -241,8 +241,10 @@ and re-open the current one.
 <sect2 id="menu-edit">
 <title>The <guimenu>Edit</guimenu> Menu</title>
 
+<note><para>
 Most of the following commands operate on the current file, 
 also simply called "document".
+</para></note>
 
 <variablelist>
 
