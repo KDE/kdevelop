@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Kicker Applet
+Name[br]=Arloadig Kicker
 Name[ca]=Applet per a Kicker
 Name[da]=Kicker-applet
 Name[de]=Kicker-Miniprogramm

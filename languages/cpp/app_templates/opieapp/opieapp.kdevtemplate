@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Opie Application
+Name[br]=Meziant Opie
 Name[ca]=Aplicació per a Opie
 Name[da]=Opie-program
 Name[de]=Opie-Anwendung

@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Opie Networksettings
+Name[br]=Kefluniadur rouedad Opie
 Name[ca]=Connector de preferències de xarxa per a Opie
 Name[da]=Opie netværksopsætning
 Name[de]=Opie Netzwerkeinstellungen

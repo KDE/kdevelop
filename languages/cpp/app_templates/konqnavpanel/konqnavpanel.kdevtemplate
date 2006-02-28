@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Konqueror Navigation Panel Plugin
+Name[br]=Lugent panell furchal Konqueror
 Name[ca]=Un connector per al plafó de navegació de Konqueror
 Name[da]=Konqueror navigationspanel plugin
 Name[de]=Plugin für den Navigationsbereich von Konqueror
