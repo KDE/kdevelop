@@ -100,6 +100,7 @@ Comment[es]=Una aplicación basada en QtRuby ha sido creada en %{dest}
 Comment[et]=Rakendus QtRuby põhjal loodi asukohta %{dest}
 Comment[eu]=QtRuby lengoaian oinarritutako aplikazioa sortu da hemen: %{dest}
 Comment[fr]=Une application basée sur QtRuby a été créée dans %{dest}
+Comment[ga]=Cruthaíodh feidhmchlár bunaithe ar QtRuby i %{dest}
 Comment[hu]=Létrejött egy QtRuby-alapú alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione basata su QtRuby in %{dest}
 Comment[nl]=Een QtRuby-toepassing is aangemaakt in %{dest}

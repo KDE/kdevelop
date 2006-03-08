@@ -174,6 +174,7 @@ Comment[es]=Un plugin para Kate ha sido creado en %{dest}
 Comment[et]=Kate plugin loodi asukohta %{dest}
 Comment[eu]=Kate plugin bat sortu da hemen: %{dest}
 Comment[fr]=Un module pour Kate a été créé dans %{dest}
+Comment[ga]=Cruthaíodh breiseán Kate ag %{dest}
 Comment[hu]=Létrejött egy Kate-bővítőmodul itt: %{dest}
 Comment[it]=È stato creato un plugin per Kate in %{dest}
 Comment[nl]=Een plugin voor Kate is aangemaakt in  %{dest}

@@ -70,6 +70,7 @@ Comment[es]=Un sencillo proyecto en PHP ha sido creado en %{dest}.
 Comment[et]=Lihtne PHP projekt loodi asukohta %{dest}.
 Comment[eu]=PHP-n idatzitako programa sinple bat sortu da hemen: %{dest}.
 Comment[fr]=Un projet PHP simple a été créé dans %{dest}
+Comment[ga]=Cruthaíodh tionscadal simplí PHP i %{dest}
 Comment[hu]=Létrejött egy egyszerű PHP-alapú projekt itt: %{dest}.
 Comment[it]=È stato creato un semplice progetto PHP in %{dest}.
 Comment[nl]=Een eenvoudig PHP-project is aangemaakt in %{dest}.

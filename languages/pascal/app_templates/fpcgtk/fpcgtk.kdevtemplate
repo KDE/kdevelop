@@ -77,6 +77,7 @@ Comment[es]=Una aplicación GTK+ escrita en Pascal ha sido creada en %{dest}
 Comment[et]=GTK+ rakendus Pascalis loodi asukohta %{dest}
 Comment[eu]=Pascal-en idatzitako GTK+ aplikazio bat sortu da hemen: %{dest}
 Comment[fr]=Une application GTK+ écrite en Pascal a été créée dans %{dest}
+Comment[ga]=Cruthaíodh feidhmchlár GTK+, scríofa i pascal, i %{dest}
 Comment[hu]=Létrejött egy egyszerű, Pascal nyelvű, GTK+-alapú alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione GTK+ scritta in Pascal in %{dest}
 Comment[nl]=Een GTK+-toepassing geschreven in Pascal is aangemaakt in %{dest}

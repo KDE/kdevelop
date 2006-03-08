@@ -70,6 +70,7 @@ Comment[es]=Un sencillo guión en Ruby ha sido creado en %{dest}
 Comment[et]=Lihtne Ruby skript loodi asukohta %{dest}
 Comment[eu]=Ruby script sinple bat sortu da hemen: %{dest}
 Comment[fr]=Un script Ruby simple a été créé dans %{dest}
+Comment[ga]=Cruthaíodh script shimplí ruby i %{dest}
 Comment[hu]=Létrejött egy egyszerű Ruby-szkript itt: %{dest}
 Comment[it]=È stato creato un semplice script ruby in %{dest}
 Comment[nl]=Een eenvoudig Ruby-script is aangemaakt in %{dest}

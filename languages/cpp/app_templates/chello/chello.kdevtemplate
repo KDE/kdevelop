@@ -140,6 +140,7 @@ Comment[es]=Un sencillo proyecto de C ha sido creado en %{dest}.
 Comment[et]=Lihtne C-projekt loodi asukohta %{dest}.
 Comment[eu]=C proiektu sinple bat sortu da hemen: %{dest}.
 Comment[fr]=Un projet C simple a été créé dans %{dest}
+Comment[ga]=Cruthaíodh tionscadal simplí C i %{dest}
 Comment[hu]=Létrejött egy egyszerű C-projekt itt: %{dest}.
 Comment[it]=È stato creato un semplice progetto C in %{dest}.
 Comment[nl]=Een eenvoudig C-project is aangemaakt in %{dest}.

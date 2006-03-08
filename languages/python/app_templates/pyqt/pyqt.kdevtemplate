@@ -130,6 +130,7 @@ Comment[es]=Una aplicación Qt en Python ha sido creada en %{dest}
 Comment[et]=Pythoni Qt rakendus loodi asukohta %{dest}
 Comment[eu]=Python eta Qt darabiltzan aplikazio bat sortu da hemen: %{dest}
 Comment[fr]=Une application Qt Python a été créée dans %{dest}
+Comment[ga]=Cruthaíodh feidhmchlár Python Qt i %{dest}
 Comment[hu]=Létrejött egy Python/Qt-alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione Qt Python in %{dest}
 Comment[nl]=Een Python Qt-toepassing is aangemaakt in %{dest}

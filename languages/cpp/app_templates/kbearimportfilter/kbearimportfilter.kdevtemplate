@@ -120,6 +120,7 @@ Comment[es]=Un filtro de importación para KBear ha sido creado en %{dest}
 Comment[et]=KBeari impordifilter loodi asukohta %{dest}
 Comment[eu]=KBear-en inportazio iragazki sinple bat sortu da hemen: %{dest}
 Comment[fr]=Un filtre d'importation pour KBear a été créé dans %{dest}
+Comment[ga]=Cruthaíodh scagaire iompórtála KBear i %{dest}
 Comment[hu]=Létrejött egy KBear-importszűrő itt: %{dest}
 Comment[it]=È stato creato un filtro di importazione per KBear in %{dest}
 Comment[nl]=Een importfilter voor KBear is aangemaakt in %{dest}

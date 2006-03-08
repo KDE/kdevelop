@@ -69,6 +69,7 @@ Comment[es]=Un sencillo proyecto de guión de intérprete de comandos ha sido cr
 Comment[et]=Lihtne bash'i shelliskript loodi asukohta %{dest}
 Comment[eu]=Bash shell-erako proiektu sinple bat sortu da hemen:%{dest}
 Comment[fr]=Un script Bash simple a été créé dans %{dest}
+Comment[ga]=Cruthaíodh tionscadal simplí bash i %{dest}
 Comment[hu]=Létrejött egy egyszerű Bash-szkript (projekt) itt: %{dest}
 Comment[it]=È stato creato un semplice progetto di script shell in Bash in %{dest}
 Comment[nl]=Een eenvoudig Bash-shellscript is aangemaakt in %{dest}

@@ -215,6 +215,7 @@ Comment[es]=Una aplicación Korundum con KConfig XT ha sido creada en %{dest}
 Comment[et]=Korundumi KConfig XT rakendus loodi asukohta %{dest}
 Comment[eu]=Korundum KConfig XT aplikazio bat sortu da hemen: %{dest}
 Comment[fr]=Une application KConfig XT Korundum a été créée dans %{dest}
+Comment[ga]=Cruthaíodh Feidhmchlár Korundum KConfig XT ag %{dest}
 Comment[hu]=Létrejött egy Korundum-alapú KConfig XT-s alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione Korundum KConfig XT in %{dest}
 Comment[nl]=Een Korundum KConfig XT-toepassing is aangemaakt in %{dest}

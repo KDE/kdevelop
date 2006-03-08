@@ -164,6 +164,7 @@ Comment[es]=Un servicio DCOP de KDE ha sido creado en %{dest}
 Comment[et]=KDE DCOP-teenus loodi asukohta %{dest}
 Comment[eu]=KDE-ren DCOP zerbitzu bat sortu da hemen: %{dest}
 Comment[fr]=Un service DCOP KDE a été créé dans %{dest}
+Comment[ga]=Cruthaíodh Seirbhís DCOP KDE i %{dest}
 Comment[hu]=Létrejött egy KDE DCOP-szolgáltatás itt: %{dest}
 Comment[it]=È stato creato un servizio DCOP di KDE in %{dest}
 Comment[nl]=Een DCOP-service is aangemaakt in  %{dest}

@@ -166,6 +166,7 @@ Comment[es]=Una aplicación salvapantallas ha sido creada en %{dest}
 Comment[et]=Ekraanisäästja rakendus loodi asukohta %{dest}
 Comment[eu]=Pantaila-babesle baten aplikazioa sortu da hemen: %{dest}
 Comment[fr]=Un écran de veille a été créé dans %{dest}
+Comment[ga]=Cruthaíodh spárálaí scáileáin i %{dest}
 Comment[hu]=Létrejött egy alap képernyővédő program itt: %{dest}
 Comment[it]=È stata creata un'applicazione salvaschermo in %{dest}
 Comment[nl]=Een schermbeveiligingstoepassing is aangemaakt in %{dest}

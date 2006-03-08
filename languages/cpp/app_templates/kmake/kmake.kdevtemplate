@@ -110,6 +110,7 @@ Comment[es]=Una aplicación para KDE basada en QMake ha sido creada en %{dest}
 Comment[et]=KDE rakendus QMake'i põhjal loodi asukohta %{dest}
 Comment[eu]=Qmake-en oinarritutako KDE aplikazio bat sortu da hemen: %{dest}
 Comment[fr]=Une application KDE basée sur QMake a été créée dans %{dest}
+Comment[ga]=Cruthaíodh feidhmchlár KDE bunaithe ar Qmake i %{dest}
 Comment[hu]=Létrejött egy Qmake-alapú KDE-s alkalmazás itt: %{dest}
 Comment[it]=È stata creata una semplice applicazione KDE basata su Qmake in %{dest}
 Comment[nl]=Een Qmake-gebaseerde KDE-toepassing is aangemaakt in %{dest}

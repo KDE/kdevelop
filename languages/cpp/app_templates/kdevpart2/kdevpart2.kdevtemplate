@@ -222,6 +222,7 @@ Comment[es]=Un plugin para KDevelop ha sido creado en %{dest}
 Comment[et]=KDevelopi plugin loodi asukohta %{dest}
 Comment[eu]=KDevelop plugin bat sortu da hemen: %{dest}
 Comment[fr]=Un module KDevelop a été créé dans %{dest}
+Comment[ga]=Cruthaíodh breiseán KDevelop i %{dest}
 Comment[hu]=Létrejött egy KDevelop-bővítőmodul itt: %{dest}
 Comment[it]=È stato creato un plugin per KDevelop in %{dest}
 Comment[nl]=Er is een KDevelop-plugin aangemaakt in %{dest}

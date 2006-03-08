@@ -94,6 +94,7 @@ Comment[es]=Un applet de menú para Opie ha sido creado en %{dest}
 Comment[et]=Opie menüüaplett loodi asukohta %{dest}
 Comment[eu]= Opie-ren menu applet bat sortu da hemen: %{dest}
 Comment[fr]=Une applet de menu Opie a été créée dans %{dest}
+Comment[ga]=Cruthaíodh feidhmchláirín roghchláir opie i %{dest}
 Comment[hu]=Létrejött egy Opie-s menü-kisalkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applet di menu Opie in %{dest}
 Comment[nl]=Een Opie-menuapplet is aangemaakt in  %{dest}

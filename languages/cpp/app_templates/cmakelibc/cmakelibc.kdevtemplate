@@ -98,6 +98,7 @@ Comment[es]=Una plantilla de biblioteca compartida basada en CMake ha sido cread
 Comment[et]=Jagatud teegi mall CMake'i põhjal loodi asukohta %{dest}
 Comment[eu]=CMake-en oinarritutako liburutegi partekatu baten txantiloia sortu da hemen: %{dest}
 Comment[fr]=Un modèle de bibliothèque partagée basée sur CMake a été créé dans %{dest}
+Comment[ga]=Cruthaíodh teimpléad comhleabharlainne bunaithe ar CMake i %{dest}
 Comment[hu]=Létrejött egy CMake-alapú osztott programkönyvtár-sablon itt: %{dest}
 Comment[it]=È stato creato un modello di librerie condivise basate su CMake in %{dest}
 Comment[nl]=Een op Cmake gebaseerde bibliotheeksjabloon is aangemaakt in  %{dest}

@@ -113,6 +113,7 @@ Comment[es]=Una aplicación basada en Qt/Qmake ha sido creada en %{dest}
 Comment[et]=Rakendus QMkae'i põhjal loodi asukohta %{dest}
 Comment[eu]=Qt/Qmake aplikazio bat sortu da hemen: %{dest}
 Comment[fr]=Une application basée sur Qt / Qmake a été créée dans %{dest}
+Comment[ga]=Cruthaíodh feidhmchlár bunaithe ar Qt/Qmake i %{dest}
 Comment[hu]=Létrejött egy Qt/Qmake-alapú alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione basata su Qt/Qmake in %{dest}
 Comment[nl]=Een Qt/Qmake-gebaseerde toepassing is aangemaakt in  %{dest}
