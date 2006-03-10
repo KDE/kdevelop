@@ -1,0 +1,34 @@
+## Makefile.am for %{APPNAMELC}
+
+bin_PROGRAMS = %{APPNAMELC}
+
+%{APPNAMELC}_SOURCES = \
+	%{LANGUAGE}.cpp \
+	%{LANGUAGE}_lexer.ll \
+	decoder.cpp \
+	main.cpp
+
+noinst_HEADERS = \
+	%{LANGUAGE}.h \
+	decoder.h
+
+noinst_DATA = \
+	%{LANGUAGE}.g
+
+# set the include path found by configure
+INCLUDES= \
+	-I$(top_srcdir)/include \
+	$(all_includes)
+
+# the library search path.
+%{APPNAMELC}_LDADD =
+
+%{APPNAMELC}_LDFLAGS = \
+	$(all_libraries)
+
+%{LANGUAGE}.h: %{LANGUAGE}.cpp
+
+%{LANGUAGE}.cpp: parser
+
+parser: %{LANGUAGE}.g
+	kdev-pg --output=%{LANGUAGE} $(top_srcdir)/src/%{LANGUAGE}.g

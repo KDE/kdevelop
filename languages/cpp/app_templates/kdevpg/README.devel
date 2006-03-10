@@ -1,0 +1,74 @@
+Hello, dear developer.
+
+This is a project containing everything you need to write a parser.
+Nearly everything can be done with parsers, from having an easy way to write
+a calculator to producing a full-fledged C++ compiler, it's all possible.
+This project has set up Flex for lexical analysis (see 'info flex' for further
+documentation, or go to 'info:flex' if you're using Konqueror)
+and kdevelop-pg, the KDevelop parser generator, for parsing.
+
+kdevelop-pg is not bundled with KDevelop so you need to get it seperately
+from KDE's Subversion server. The following commands should be sufficient
+to get kdevelop-pg working:
+
+$ mkdir kdevelop-pg && cd kdevelop-pg
+$ svn co svn://anonsvn.kde.org/home/kde/branches/work/kdevelop-pg .
+$ make -f Makefile.cvs
+$ ./configure
+$ make
+$ sudo make install
+
+The downloaded kdevelop-pg directory also contains a few example parsers
+that you can look into. To get everything to run, you'll also need bison
+(for compiling kdevelop-pg) and flex (for generating this project's lexer).
+
+
+Unfortunately there is no real documentation for kdevelop-pg yet, so for the
+moment the best source for learning how to kdevelop-pg is the thesis about
+how to write a Java parser with it, currently available at
+http://stud4.tuwien.ac.at/~e0127236/thesis/jpetso-javaparser-current.pdf
+(which is actually a nice introduction for writing parsers).
+Hopefully http://www.kdevelop.org will provide proper documentation in the
+forseeable future.
+
+Just try things out, look at the generated sources, or whatever -
+it's quite straightforward after you have grokked how to do it.
+
+The files in here are essentially split up into three categories:
+
+- The parser:
+    Essentially consists of %{LANGUAGE}.g and %{LANGUAGE}_lexer.ll.
+    The kdev-pg command takes %{LANGUAGE}.g and generates the "%{LANGUAGE}"
+    parser class, the structs inside the abstract syntax tree (ast) and the
+    default visitor class that you can derive in order to post-process the
+    gained data. (All of this is inside the %{LANGUAGE}.h and %{LANGUAGE}.cpp
+    files which will appear in the builddir - by default in debug/src.)
+    The parser is pure standard C++, totally portable, in principle it has
+    little to do with Qt or KDevelop besides its original purpose which is to
+    enable developers to write language parsers for KDevelop.
+    You can use it just as well in any non-Qt project too.
+
+- The framework:
+    A simple command-line program that takes a file and feeds it to the parser.
+    If you want to incorporate the parser into another project, you will want
+    to drop main.cpp and call the parser from within your own framework.
+    decoder.[h,cpp] is a handy utility that makes it easier to extract the
+    tokens' string or number values.
+
+- Includes from kdevelop-pg (in top_src):
+    These are the files that the generated parser needs to work.
+    They mostly deal with memory and token management.
+
+
+Note that when building the project, you will only see kdevelop-pg output
+(the conflict warnings) if you select short or full compiler output in the
+Messages window. Very short compiler output suppresses the warnings.
+
+If you want to generate the parser sources manually (say, in case you only
+want to inspect the conflict warnings, maybe in an external Konsole) you can
+descend into $(top_builddir)/src (for example, projectdir/debug/src) and
+execute 'make parser'. That invokes just kdevelop-pg for generating
+%{LANGUAGE}.h and %{LANGUAGE}.cpp.
+
+
+Ok, that should be enough to get you started. Have fun!
