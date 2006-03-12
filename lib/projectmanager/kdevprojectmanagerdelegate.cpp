@@ -55,4 +55,6 @@ void KDevProjectManagerDelegate::paint(QPainter *painter, const QStyleOptionView
   QItemDelegate::paint(painter, opt, index);
 }
 
+#include "kdevprojectmanagerdelegate.moc"
+
 // kate: space-indent on; indent-width 2; replace-tabs on;

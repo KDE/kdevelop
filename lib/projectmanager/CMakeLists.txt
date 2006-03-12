@@ -1,0 +1,31 @@
+kde4_header()
+
+include_directories(${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib
+    ${KDE4_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+
+
+########### next target ###############
+
+set(kdevprojectmanager_PART_SRCS
+    kdevprojectmanager_part.cpp
+    kdevprojectmanager.cpp
+    kdevprojectfilter.cpp
+    kdevprojectmanagerdelegate.cpp
+    importprojectjob.cpp
+    importsourcefile_job.cpp
+)
+
+kde4_automoc(${kdevprojectmanager_PART_SRCS})
+kde4_add_plugin(kdevprojectmanager ${kdevprojectmanager_PART_SRCS})
+target_link_libraries(kdevprojectmanager ${QT_AND_KDECORE_LIBS} kdevinterfaces ThreadWeaver kdevutil kdevwidgets)
+kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevprojectmanager)
+install_targets(${PLUGIN_INSTALL_DIR} kdevprojectmanager)
+
+
+########### install files ###############
+
+install_files(${SERVICES_INSTALL_DIR} FILES kdevprojectmanager.desktop)
+install_files(${DATA_INSTALL_DIR}/kdevprojectmanager FILES kdevprojectmanager.rc)
+
+
+kde4_footer()

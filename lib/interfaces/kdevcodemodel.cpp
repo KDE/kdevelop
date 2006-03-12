@@ -118,4 +118,6 @@ KDevCodeItem *KDevCodeModel::item( const QModelIndex &index ) const
     return reinterpret_cast<KDevCodeItem*>( KDevItemModel::item( index ) );
 }
 
+#include "kdevcodemodel.moc"
+
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

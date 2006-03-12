@@ -88,7 +88,7 @@ KDevPluginInfo::KDevPluginInfo(const QString &pluginName)
         else
             d->m_licenseType = KAboutData::License_Unknown;
 
-        d->m_data = new KAboutData(d->m_pluginName.ascii(), d->m_rawGenericName.ascii(), "1", 0, d->m_licenseType);
+        d->m_data = new KAboutData(d->m_pluginName.toAscii(), d->m_rawGenericName.toAscii(), "1", 0, d->m_licenseType);
     }
     else
 	kDebug() << "Unable to load information for plugin: " << pluginName

@@ -71,5 +71,7 @@ void ImportProjectJob::slotResult(KIO::Job *job)
         processList();
 }
 
+#include "importprojectjob.moc"
+
 // kate: space-indent on; indent-width 2; replace-tabs on;
 

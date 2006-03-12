@@ -1,29 +1,25 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces )
+kde4_header()
 
-SET(lang_debugger_LIB_SRCS
-kdevdebugger.cpp
-debugger.cpp
+include_directories(${CMAKE_SOURCE_DIR}/lib/interfaces ${KDE4_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+
+
+########### next target ###############
+
+set(kdevlang_debugger_LIB_SRCS
+    kdevdebugger.cpp
+    debugger.cpp
 )
 
-KDE_AUTOMOC(${lang_debugger_LIB_SRCS})
+kde4_automoc(${kdevlang_debugger_LIB_SRCS})
+kde4_add_library(kdevlang_debugger SHARED ${kdevlang_debugger_LIB_SRCS})
+target_link_libraries(kdevlang_debugger ${QT_AND_KDECORE_LIBS} kparts)
+set_target_properties(kdevlang_debugger PROPERTIES VERSION 4.2.0 SOVERSION 4)
+install_targets(/lib kdevlang_debugger)
 
-ADD_LIBRARY(lang_debugger SHARED ${lang_debugger_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(lang_debugger ${QT_AND_KDECORE_LIBS} kdeui kparts ktexteditor)
+########### install files ###############
 
-INSTALL_TARGETS(/lib lang_debugger)
+install_files(/include/kdevelop/languages/debugger FILES)
 
-#original Makefile.am contents follow:
 
-#INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)
-#METASOURCES = AUTO
-#lib_LTLIBRARIES = liblang_debugger.la
-#liblang_debugger_la_LDFLAGS = $(all_libraries)
-#liblang_debugger_la_SOURCES = kdevdebugger.cpp debugger.cpp
-#langincludedirdir = $(includedir)/kdevelop/languages/debugger
-#langincludedir_HEADERS = debugger.h kdevdebugger.h
-#
-#DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevinterfaces kdevutil
-#DOXYGEN_PROJECTNAME = KDevelop Debugger Support Library
-#DOXYGEN_DOCDIRPREFIX = kdevlang
-#include ../../../Doxyfile.am
+kde4_footer()
