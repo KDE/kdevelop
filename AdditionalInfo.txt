@@ -1,0 +1,12 @@
+.h.in-Files
+
+.in.in-Files
+configure.in.in
+languages/cpp/app_templates/kxt/src-configure.in.in
+languages/cpp/app_templates/kdevpart2/kdevpart-configure.in.in
+languages/cpp/app_templates/kbearimportfilter/kbearimportfilter-configure.in.in
+languages/cpp/app_templates/kdevlang/kdevlang-configure.in.in
+languages/cpp/app_templates/kbearplugin/kbearplugin-configure.in.in
+languages/cpp/app_templates/noatunvisual/noatunvisual-configure.in.in
+languages/cpp/app_templates/kofficepart/kde-configure.in.in
+parts/appwizard/common/kde-configure.in.in
