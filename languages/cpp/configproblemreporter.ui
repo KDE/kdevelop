@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ConfigureProblemReporter</class>
 <widget class="QWidget">
     <property name="name">
@@ -15,6 +15,9 @@
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
         </property>
         <widget class="QGroupBox">
             <property name="name">
@@ -114,16 +117,16 @@
 </widget>
 <connections>
     <connection>
-        <sender>delaySlider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>ConfigureProblemReporter</receiver>
-        <slot>setDelayLabel(int)</slot>
-    </connection>
-    <connection>
         <sender>bgParserCheckbox</sender>
         <signal>toggled(bool)</signal>
         <receiver>ConfigureProblemReporter</receiver>
         <slot>bgParserCheckbox_toggled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>delaySlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ConfigureProblemReporter</receiver>
+        <slot>setDelayLabel(int)</slot>
     </connection>
 </connections>
 <tabstops>
