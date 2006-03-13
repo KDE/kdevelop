@@ -31,6 +31,8 @@ Shell uses extensions to perform application dependent actions.
 */
 class ShellExtension {
 public:
+    virtual ~ShellExtension() {}
+
     /**Returns an instance of a shell. Subclasses must create an instance of a shell
     by themselves. For example they could provide static init() method like:
     @code

@@ -23,7 +23,7 @@
 
 #include "profileeditorbase.h"
 
-class KListViewItem;
+class K3ListViewItem;
 
 class ProfileEditor: public ProfileEditorBase {
     Q_OBJECT
@@ -59,9 +59,9 @@ protected:
 private:
     ProfileEngine engine;
 
-    KListViewItem *allCore;
-    KListViewItem *allGlobal;
-    KListViewItem *allProject;
+    K3ListViewItem *allCore;
+    K3ListViewItem *allGlobal;
+    K3ListViewItem *allProject;
 };
 
 #endif

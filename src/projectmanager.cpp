@@ -33,6 +33,8 @@ class QDomDocument;
 #include <kstatusbar.h>
 #include <kiconloader.h>
 #include <kvbox.h>
+#include <ktoolbar.h>
+#include <kdialogbase.h>
 
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"

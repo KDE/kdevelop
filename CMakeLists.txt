@@ -31,12 +31,13 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY
 
 
 add_subdirectory(lib) 
+add_subdirectory(mimetypes) 
+add_subdirectory(pics) 
+add_subdirectory(src)
+
 #add_subdirectory(parts) 
 #add_subdirectory(buildtools) 
-#add_subdirectory(src) 
-#add_subdirectory(pics) 
 #add_subdirectory(doc) 
-#add_subdirectory(mimetypes) 
 #add_subdirectory(languages) 
 
 

@@ -28,7 +28,7 @@
 #include <kdebug.h>
 #include <kpushbutton.h>
 #include <klistbox.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -40,17 +40,17 @@
 
 #include "addprofilewidget.h"
 
-class ProfileItem: public KListViewItem {
+class ProfileItem: public K3ListViewItem {
 public:
-    ProfileItem(KListView *parent, Profile *profile)
-        :KListViewItem(parent), m_profile(profile)
+    ProfileItem(K3ListView *parent, Profile *profile)
+        :K3ListViewItem(parent), m_profile(profile)
     {
         setText(0, profile->genericName());
         setText(1, profile->description());
     }
 
-    ProfileItem(KListViewItem *parent, Profile *profile)
-        : KListViewItem(parent), m_profile(profile)
+    ProfileItem(K3ListViewItem *parent, Profile *profile)
+        : K3ListViewItem(parent), m_profile(profile)
     {
         setText(0, profile->genericName());
         setText(1, profile->description());
@@ -62,10 +62,10 @@ private:
     Profile *m_profile;
 };
 
-class EDListItem: public KListViewItem{
+class EDListItem: public K3ListViewItem{
 public:
-    EDListItem(KListView *parent, const QString &text, bool derived)
-        : KListViewItem(parent, text), m_derived(derived)
+    EDListItem(K3ListView *parent, const QString &text, bool derived)
+        : K3ListViewItem(parent, text), m_derived(derived)
     {
     }
 
@@ -76,7 +76,7 @@ public:
         QColorGroup cgNew = cg;
         if (m_derived)
             cgNew.setColor(QColorGroup::Text, KGlobalSettings::inactiveTextColor());
-        KListViewItem::paintCell(p, cgNew, column, width, alignment);
+        K3ListViewItem::paintCell(p, cgNew, column, width, alignment);
     }
 
 private:
@@ -136,22 +136,22 @@ void ProfileEditor::refreshAvailableList()
 {
     //filling a list of available plugins
     allList->clear();
-    allCore = new KListViewItem(allList, i18n("Core"));
+    allCore = new K3ListViewItem(allList, i18n("Core"));
     allCore->setOpen(true);
-    allGlobal = new KListViewItem(allList, i18n("Global"));
+    allGlobal = new K3ListViewItem(allList, i18n("Global"));
     allGlobal->setOpen(true);
-    allProject = new KListViewItem(allList, i18n("Project"));
+    allProject = new K3ListViewItem(allList, i18n("Project"));
     allProject->setOpen(true);
 
     KTrader::OfferList olist = engine.allOffers(ProfileEngine::Core);
     for (KTrader::OfferList::iterator it = olist.begin(); it != olist.end(); ++it)
-        new KListViewItem(allCore, (*it)->desktopEntryName(), (*it)->genericName());
+        new K3ListViewItem(allCore, (*it)->desktopEntryName(), (*it)->genericName());
     olist = engine.allOffers(ProfileEngine::Global);
     for (KTrader::OfferList::iterator it = olist.begin(); it != olist.end(); ++it)
-        new KListViewItem(allGlobal, (*it)->desktopEntryName(), (*it)->genericName());
+        new K3ListViewItem(allGlobal, (*it)->desktopEntryName(), (*it)->genericName());
     olist = engine.allOffers(ProfileEngine::Project);
     for (KTrader::OfferList::iterator it = olist.begin(); it != olist.end(); ++it)
-        new KListViewItem(allProject, (*it)->desktopEntryName(), (*it)->genericName());
+        new K3ListViewItem(allProject, (*it)->desktopEntryName(), (*it)->genericName());
 }
 
 void ProfileEditor::profileExecuted(Q3ListViewItem *item)
@@ -200,29 +200,29 @@ void ProfileEditor::fillPluginsList(Profile *profile)
 {
     pluginsView->clear();
 
-    KListViewItem *core = new KListViewItem(pluginsView, i18n("Core Plugins"));
+    K3ListViewItem *core = new K3ListViewItem(pluginsView, i18n("Core Plugins"));
     core->setOpen(true);
-    KListViewItem *global = new KListViewItem(pluginsView, i18n("Global Plugins"));
+    K3ListViewItem *global = new K3ListViewItem(pluginsView, i18n("Global Plugins"));
     global->setOpen(true);
-    KListViewItem *project = new KListViewItem(pluginsView, i18n("Project Plugins"));
+    K3ListViewItem *project = new K3ListViewItem(pluginsView, i18n("Project Plugins"));
     project->setOpen(true);
 
     KTrader::OfferList coreOffers = engine.offers(profile->name(), ProfileEngine::Core);
     for (KTrader::OfferList::const_iterator it = coreOffers.constBegin();
             it != coreOffers.constEnd(); ++it)
-        new KListViewItem(core, (*it)->desktopEntryName(), (*it)->genericName(),
+        new K3ListViewItem(core, (*it)->desktopEntryName(), (*it)->genericName(),
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
 
     KTrader::OfferList globalOffers = engine.offers(profile->name(), ProfileEngine::Global);
     for (KTrader::OfferList::const_iterator it = globalOffers.constBegin();
             it != globalOffers.constEnd(); ++it)
-        new KListViewItem(global, (*it)->desktopEntryName(), (*it)->genericName(),
+        new K3ListViewItem(global, (*it)->desktopEntryName(), (*it)->genericName(),
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
 
     KTrader::OfferList projectOffers = engine.offers(profile->name(), ProfileEngine::Project);
     for (KTrader::OfferList::const_iterator it = projectOffers.constBegin();
             it != projectOffers.constEnd(); ++it)
-        new KListViewItem(project, (*it)->desktopEntryName(), (*it)->genericName(),
+        new K3ListViewItem(project, (*it)->desktopEntryName(), (*it)->genericName(),
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
 }
 
@@ -247,7 +247,7 @@ void ProfileEditor::addProfile()
             prof->genericNameEdit->text(),
             prof->descriptionEdit->text());
         profilesList->currentItem()->setOpen(true);
-        new ProfileItem(static_cast<KListViewItem*>(profilesList->currentItem()), profile);
+        new ProfileItem(static_cast<K3ListViewItem*>(profilesList->currentItem()), profile);
     }
 }
 

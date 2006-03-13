@@ -40,6 +40,7 @@
 #include <kmenu.h>
 #include <kiconloader.h>
 #include <kxmlguifactory.h>
+#include <ktoolbar.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>

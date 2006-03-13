@@ -1,0 +1,40 @@
+kde4_header()
+
+include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util
+    ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/src/profileengine/lib ${KDE4_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+
+
+########### next target ###############
+
+set(profileeditor_STAT_SRCS
+    profileeditor.cpp
+)
+
+kde4_automoc(${profileeditor_STAT_SRCS})
+
+set(profileeditor_UI
+    profileeditorbase.ui
+    addprofilewidget.ui
+)
+
+kde4_add_ui3_files(profileeditor_STAT_SRCS ${profileeditor_UI})
+kde4_add_library(profileeditor STATIC ${profileeditor_STAT_SRCS})
+
+
+########### next target ###############
+
+set(kdevprofileeditor_SRCS
+    main.cpp
+)
+
+kde4_automoc(${kdevprofileeditor_SRCS})
+kde4_add_executable(kdevprofileeditor ${kdevprofileeditor_SRCS})
+target_link_libraries(kdevprofileeditor ${QT_AND_KDECORE_LIBS} profileengine profileeditor kdeui kio)
+install_targets(/bin kdevprofileeditor)
+
+
+########### install files ###############
+
+
+kde4_footer()
