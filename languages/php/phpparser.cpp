@@ -40,7 +40,6 @@ using namespace std;
 PHPParser::PHPParser(PHPSupportPart *part){
   m_part = part;
   m_close = false;
-  m_parse = false;
 }
 
 PHPParser::~PHPParser(){
@@ -116,15 +115,13 @@ void PHPParser::reparseFile( const QString& fileName )
 }
 
 void PHPParser::run() {
-   kdDebug(9018) << "run thread " << getpid() << endl;
+   kdDebug(9018) << "run thread " << QThread::currentThread() << endl;
    QMap<QString, PHPFile *>::Iterator it;
 
    while ( !m_close ) {
-      m_parse = false;
       m_canParse.wait();
-      m_parse = true;
 
-      if ( m_close )
+     if ( m_close )
          break;
 
       it = m_files.begin();
@@ -133,37 +130,28 @@ void PHPParser::run() {
          PHPFile * file = it.data();
          if (!m_close) {
             if ( file->isModified() ) {
-//               m_mutex.lock();
-               KApplication::sendEvent( m_part, new FileParseEvent(  Event_StartParse, file->fileName() ));
-               KApplication::sendPostedEvents();
                file->Analyse();
-               KApplication::sendEvent( m_part, new FileParseEvent( Event_EndParse, file->fileName() ));
-               KApplication::sendPostedEvents();
-//               m_mutex.unlock();
                it = m_files.begin();
             } else {
               ++it;
             }
             file = 0;
-         } else { 
+         } else {
             it = m_files.end();
          }
       }
-
    }
 }
 
 void PHPParser::close()
 {
-   kdDebug(9018) << "closing thread " << getpid() << endl;
-   while (m_parse)
-      QThread::usleep(500);
-
+   kdDebug(9018) << "closing thread" << endl;
    m_close = true;
    m_canParse.wakeAll();
-   while (running())
-      QThread::usleep(500);
-   kdDebug(9018) << "closed thread " << getpid() << endl;
+
+   while (running()) {
+      kapp->processEvents();
+   }
 }
 
 void PHPParser::startParse() {

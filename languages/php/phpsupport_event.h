@@ -31,8 +31,19 @@
 
 enum
 {
-    Event_StartParse =  QEvent::User + 1000,
-    Event_EndParse =    QEvent::User + 1001
+   Event_AddFile =  QEvent::User + 1000,
+   Event_StartParse,
+   Event_EndParse,
+   Event_AddClass,
+   Event_SetClass,
+   Event_CloseClass,
+   Event_AddFunction,
+   Event_SetFunction,
+   Event_CloseFunction,
+   Event_AddVariable,
+   Event_SetVariable,
+   Event_AddTodo,
+   Event_AddFixme
 };
 
 class FileParseEvent: public QCustomEvent
@@ -41,6 +52,36 @@ public:
    FileParseEvent(long event, const QString& fileName )
    : QCustomEvent(event), m_fileName( fileName )
    {
+      m_name = "";
+      m_arguments = "";
+      m_position = 0;
+      m_global = FALSE;
+   }
+
+   FileParseEvent(long event, const QString& fileName, int position )
+   : QCustomEvent(event), m_fileName( fileName ), m_position( position )
+   {
+      m_name = "";
+      m_arguments = "";
+      m_global = FALSE;
+   }
+
+   FileParseEvent(long event, const QString& fileName, const QString& name, const QString& arguments )
+   : QCustomEvent(event), m_fileName( fileName ), m_name( name ), m_arguments( arguments )
+   {
+      m_position = 0;
+      m_global = FALSE;
+   }
+
+   FileParseEvent(long event, const QString& fileName, const QString& name, const QString& arguments, int position )
+   : QCustomEvent(event), m_fileName( fileName ), m_name( name ), m_arguments( arguments ), m_position( position )
+   {
+      m_global = FALSE;
+   }
+
+   FileParseEvent(long event, const QString& fileName, const QString& name, const QString& arguments, int position, bool global )
+   : QCustomEvent(event), m_fileName( fileName ), m_name( name ), m_arguments( arguments ), m_position( position ), m_global( global )
+   {
    }
 
    ~FileParseEvent()
@@ -48,14 +89,22 @@ public:
    }
 
     QString fileName() const { return m_fileName; }
+    QString name() const { return m_name; }
+    QString arguments() const { return m_arguments; }
+    int posititon() const { return m_position; }
+    bool global() const { return m_global; }
 
 private:
     QString m_fileName;
+    QString m_name;
+    QString m_arguments;
+    QString m_accesstype;
+    int m_position;
+    bool m_global;
 
 private:
     FileParseEvent( const FileParseEvent& source );
     void operator = ( const FileParseEvent& source );
 };
-
 
 #endif // __phpsupport_events_h
