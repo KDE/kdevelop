@@ -6,7 +6,7 @@ Name[sv]=Ruby on Rails
 Icon=rails.png
 Category=Ruby
 Comment=This generates a Ruby On Rails project
-Comment[da]=Dette genererer et simpelt Ruby on Rails projekt.
+Comment[da]=Dette genererer et Ruby On Rails projekt
 Comment[de]=Erstellt ein einfaches Ruby-On-Rails-Projekt
 Comment[el]=Δημιουργεί ένα απλό έργο Ruby On Rails.
 Comment[es]=Genera un proyecto Ruby On Rails
@@ -34,7 +34,7 @@ Dest=%{dest}/%{APPNAMELC}.kdevelop
 [MSG]
 Type=message
 Comment=A Ruby On Rails project created in %{dest}
-Comment[da]=Et simpelt Ruby on Rails projekt blev oprette i %{dest}.
+Comment[da]=Et Ruby On Rails projekt oprettet i %{dest}
 Comment[de]=Ein einfaches Ruby-On-Rails-Project wurde in %{dest} erstellt.
 Comment[el]=Ένα έργο Ruby On Rails δημιουργήθηκε στο %{dest}.
 Comment[es]=Un proyecto de Ruby On Rails ha sido creado en %{dest}.
