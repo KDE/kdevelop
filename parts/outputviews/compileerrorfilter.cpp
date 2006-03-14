@@ -54,6 +54,12 @@ CompileErrorFilter::ErrorFormat* CompileErrorFilter::errorFormats()
 		ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 ),
 		// Jade
 		ErrorFormat( "[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)", 1, 2, 3 ),
+		// ifort
+		ErrorFormat( "fortcom: Error: (.*), line ([0-9]+):(.*)", 1, 2, 3, "intel" ),
+		// PGI
+		ErrorFormat( "PGF9(.*)-(.*)-(.*)-(.*) \\((.*): ([0-9]+)\\)", 5, 6, 4, "pgi" ),
+		// PGI (2)
+		ErrorFormat( "PGF9(.*)-(.*)-(.*)-Symbol, (.*) \\((.*)\\)", 5, 5, 4, "pgi" ),
 
 		ErrorFormat( 0, 0, 0, 0 ) // this one last
 	};
