@@ -34,11 +34,11 @@ add_subdirectory(lib)
 add_subdirectory(mimetypes) 
 add_subdirectory(pics) 
 add_subdirectory(src)
+add_subdirectory(languages) 
 
 #add_subdirectory(parts) 
 #add_subdirectory(buildtools) 
 #add_subdirectory(doc) 
-#add_subdirectory(languages) 
 
 
 
