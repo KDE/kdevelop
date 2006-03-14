@@ -359,5 +359,6 @@ void BackgroundParser::run()
 
     kdDebug(9013) << "!!!!!!!!!!!!!!!!!! BG PARSER DESTROYED !!!!!!!!!!!!" << endl;
 
-    QThread::exit();
+    //commented to fix #83352
+    //QThread::exit();
 }
