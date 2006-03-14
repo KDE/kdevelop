@@ -23,6 +23,14 @@
 #include <cstdlib>
 #include <memory>
 
+/**The allocator which uses fixed size blocks for allocation of its elements.
+Block size is currently 64k, allocated space is not reclaimed,
+if the size of the element being allocated extends the amount of free
+memory in the block then a new block is allocated.
+
+The allocator supports standard c++ library interface but does not
+make use of allocation hints.
+*/
 template <class _Tp> class rxx_allocator {
 public:
   typedef _Tp value_type;
@@ -37,10 +45,11 @@ public:
   static const size_type _S_block_size = 1 << 16; // 64K
 
   rxx_allocator() {
-    _M_block_index = max_block_count;
-    _M_current_index = 0;
-    _M_storage = 0;
-    _M_current_block = 0;
+    init();
+  }
+
+  rxx_allocator(const rxx_allocator &/*__o*/) {
+    init();
   }
 
   ~rxx_allocator() {
@@ -53,6 +62,10 @@ public:
   pointer address(reference __val) { return &__val; }
   const_pointer address(const_reference __val) const { return &__val; }
 
+  /**Allocates @p __n elements continuosly in the pool. Warning! no
+  check is done to check if the size of those @p __n elements
+  fit into the block. You should assure you do not allocate more
+  than the size of a block.*/
   pointer allocate(size_type __n, const void* = 0) {
     const size_type bytes = __n * sizeof(_Tp);
 
@@ -79,17 +92,26 @@ public:
     return p;
   }
 
-  void deallocate(pointer __p, size_type __n) {}
+  /**Deallocate does nothing in this implementation.*/
+  void deallocate(pointer /*__p*/, size_type /*__n*/) {}
 
   size_type max_size() const { return size_type(-1) / sizeof(_Tp); }
 
   void construct(pointer __p, const_reference __val) { new (__p) _Tp(__val); }
-  void destruct(pointer __p) { __p->~_Tp(); }
+  void destroy(pointer __p) { __p->~_Tp(); }
 
 private:
   template <class _Tp1> struct rebind {
     typedef rxx_allocator<_Tp1> other;
   };
+
+  void init()
+  {
+    _M_block_index = max_block_count;
+    _M_current_index = 0;
+    _M_storage = 0;
+    _M_current_block = 0;
+  }
 
   template <class _Tp1> rxx_allocator(const rxx_allocator<_Tp1> &__o) {}
 

@@ -22,11 +22,13 @@
 #include "rxx_allocator.h"
 #include <cstring>
 
+/**Memory pool for chars.*/
 class pool
 {
   rxx_allocator<char> __alloc;
 
 public:
+  /**Allocates the @p size bytes in the pool.*/
   inline void *allocate(std::size_t __size);
 };
 

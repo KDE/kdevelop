@@ -19,6 +19,9 @@
 #ifndef TOKENS_H
 #define TOKENS_H
 
+/**@file Token kinds.*/
+
+/**Token kinds.*/
 enum TOKEN_KIND
 {
     Token_EOF = 0,
@@ -129,6 +132,7 @@ enum TOKEN_KIND
     TOKEN_KIND_COUNT
 };
 
+/**@return human-readable name of the token.*/
 char const *token_name(int token);
 
 #endif

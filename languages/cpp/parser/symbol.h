@@ -25,6 +25,11 @@
 #include <QtCore/QHash>
 #include <QtCore/QPair>
 
+/**@file symbol.h Symbol table for the parser.*/
+
+/**
+Symbol in the parser symbol table.
+*/
 struct NameSymbol
 {
   const char *data;
@@ -35,6 +40,7 @@ struct NameSymbol
     return QString::fromUtf8(data, count);
   }
 
+  /**Required to put NameSymbol's into a QHash.*/
   inline bool operator == (const NameSymbol &other) const
   {
     return count == other.count
@@ -52,6 +58,10 @@ private:
   friend class NameTable;
 };
 
+
+/**
+@brief Required to put NameSymbol's into a QHash.
+@see qHash(const QPair<const char*, std::size_t> &r) method for the reference.*/
 inline uint qHash(const NameSymbol &r)
 {
   uint hash_value = 0;
@@ -62,6 +72,18 @@ inline uint qHash(const NameSymbol &r)
   return hash_value;
 }
 
+
+/**
+Required to put pairs of char* and std::size_t into a QHash.
+
+Hash function is: hash = hash*31 + key[i].@n
+It looks like a Bernstein's hash function with a different factor.
+@n Original Bernstein's function is: hash = hash*33 + key[i].
+@n Factor of 31 makes this function return reliably unique values
+for english words with 6 symbols length.
+
+@n More information can be found at @a http://burtleburtle.net/bob/hash/doobs.html.
+*/
 inline uint qHash(const QPair<const char*, std::size_t> &r)
 {
   uint hash_value = 0;
@@ -72,6 +94,7 @@ inline uint qHash(const QPair<const char*, std::size_t> &r)
   return hash_value;
 }
 
+/**Symbol table for the parser.*/
 class NameTable
 {
 public:
@@ -93,8 +116,8 @@ public:
     NameSymbol *name = _M_storage.value(key);
     if (!name)
       {
-	name = new NameSymbol(str, len);
-	_M_storage.insert(key, name);
+        name = new NameSymbol(str, len);
+        _M_storage.insert(key, name);
       }
 
     return name;

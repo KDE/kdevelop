@@ -31,14 +31,20 @@ class Problem;
 
 typedef void (Lexer::*scan_fun_ptr)();
 
+/**Token.*/
 class Token
 {
 public:
+  ///kind of the token @see TOKEN_KIND enum reference.
   int kind;
+  ///position in the c++ source buffer.
   std::size_t position;
+  ///size of the token text in the c++ source buffer.
   std::size_t size;
+  ///pointer to the text in the c++ source buffer (not valid when buffer is destroyed).
   char const *text;
 
+  ///@todo adymo: find out what @p right_brace is
   union
   {
     const NameSymbol *symbol;
@@ -89,6 +95,13 @@ private:
   friend class Lexer;
 };
 
+/**Stream of tokens found by lexer.
+Internally works like an array of @ref Token continuosly allocated.
+All tokens are destructed when this stream is deleted.
+
+The stream has a "cursor" which is simply an integer which defines
+the offset (index) of the token currently "observed" from the beginning of
+the stream.*/
 class TokenStream
 {
 private:
@@ -96,6 +109,7 @@ private:
   void operator = (const TokenStream &);
 
 public:
+  /**Creates a token stream with the default size of 1024 tokens.*/
   inline TokenStream(std::size_t size = 1024)
      : tokens(0),
        index(0),
@@ -107,15 +121,20 @@ public:
   inline ~TokenStream()
   { ::free(tokens); }
 
+  /**@return the size of the token stream.*/
   inline std::size_t size() const
   { return token_count; }
 
+  /**@return the "cursor" - the offset (index) of the token
+  currently "observed" from the beginning of the stream.*/
   inline std::size_t cursor() const
   { return index; }
 
+  /**Sets the cursor to the position @p i.*/
   inline void rewind(int i)
   { index = i; }
 
+  /**Resizes the token stream.*/
   void resize(std::size_t size)
   {
     Q_ASSERT(size > 0);
@@ -123,27 +142,39 @@ public:
     token_count = size;
   }
 
+  /**Updates the cursor position to point to the next token and returns
+  the cursor.*/
   inline std::size_t nextToken()
   { return index++; }
 
+  /**@return the kind of the next (LA) token in the stream.*/
   inline int lookAhead(std::size_t i = 0) const
   { return tokens[index + i].kind; }
 
+  /**@return the kind of the current token in the stream.*/
   inline int kind(std::size_t i) const
   { return tokens[i].kind; }
 
+  /**@return the position of the current token in the c++ source buffer.*/
   inline std::size_t position(std::size_t i) const
   { return tokens[i].position; }
 
+  /**@return the name symbol of the current token.*/
   inline const NameSymbol *symbol(std::size_t i) const
   { return tokens[i].extra.symbol; }
 
+  /**@return the position of the matching right brace in the
+  c++ source buffer.
+  @todo this doesn't seem to work as the lexer does not provide this
+  information at the moment.*/
   inline std::size_t matchingBrace(std::size_t i) const
   { return tokens[i].extra.right_brace; }
 
+  /**@return the token at position @p index.*/
   inline Token &operator[](int index)
   { return tokens[index]; }
 
+  /**@return the token at position @p index.*/
   inline const Token &token(int index) const
   { return tokens[index]; }
 
@@ -156,6 +187,7 @@ private:
   friend class Lexer;
 };
 
+/**C++ Lexer.*/
 class Lexer
 {
 public:
@@ -164,8 +196,10 @@ public:
 	LocationTable &line_table,
 	Control *control);
 
+  /**Finds tokens in the @p contents buffer and fills the @ref token_stream.*/
   void tokenize(const char *contents, std::size_t size);
 
+  /**The stream of tokens.*/
   TokenStream &token_stream;
   LocationTable &location_table;
   LocationTable &line_table;
@@ -174,6 +208,7 @@ public:
                   QString *filename) const;
 
 private:
+  /**Fills the scan table with method pointers.*/
   void initialize_scan_table();
   void scan_newline();
   void scan_white_spaces();
@@ -240,6 +275,7 @@ private:
   const unsigned char *end_buffer;
   std::size_t index;
 
+  ///scan table contains pointers to the methods to scan for various token types
   static scan_fun_ptr s_scan_table[];
   static scan_fun_ptr s_scan_keyword_table[];
   static bool s_initialized;

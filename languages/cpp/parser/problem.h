@@ -23,6 +23,12 @@
 #include <QtCore/QSharedDataPointer>
 #include <QtCore/QString>
 
+/**Parsing problem.
+
+Currently parser problem is either a lexer or parser error. The maximum amount of problems
+allowed is controlled by the @ref Parser::_M_max_problem_count private
+variable (currently set to 5).
+*/
 class Problem
 {
 public:
@@ -30,16 +36,24 @@ public:
   Problem(const Problem &other);
   Problem &operator = (const Problem &other);
 
+  /**@return the problem message.*/
   QString message() const;
+  /**Sets the message of a problem.*/
   void setMessage(const QString &message);
 
+  /**@return the filename where the problem occurs.*/
   QString fileName() const;
+  /**Sets the problem's filename.*/
   void setFileName(const QString &fileName);
 
+  /**@return the line where the problem occurs.*/
   int line() const;
+  /**Sets the problem's line.*/
   void setLine(int line);
 
+  /**@return the column where the problem occurs.*/
   int column() const;
+  /**Sets the problem's column.*/
   void setColumn(int column);
 
 private:

@@ -28,18 +28,38 @@ class FileSymbol;
 class TokenStream;
 class Control;
 
+/**
+The Parser.
+LL(k) parser for c++ code.
+*/
 class Parser
 {
 public:
   Parser(Control *control);
   ~Parser();
 
+  /**Parses the @p contents of the buffer of given @p size using the
+  memory pool @p p to store tokens found.
+
+  Calls lexer to tokenize all contents buffer, skips the first token
+  (because the lexer provides Token_EOF as the first token,
+  creates and fills the AST and returns translation unit or 0
+  if nothing was parsed.
+
+  @sa pool for more information about the memory pool used.*/
   TranslationUnitAST *parse(const char *contents, std::size_t size, pool *p);
+  /**@return the problem count.*/
   int problemCount() const { return _M_problem_count; }
 
 private:
+  /**Convenience method to report problems. Constructs the problem
+  using the information about the current line and column in the buffer
+  that is being parsed. Then stores the problem in the control object.*/
   void reportError(const QString& msg);
+  /**Reports a syntax error about unexpected token. The token
+  reported is LA (look-ahead) from the stream.*/
   void syntaxError();
+  /**Reports a syntax error about required token when LA is wrong.*/
   void tokenRequiredError(int expected);
 
 public:
