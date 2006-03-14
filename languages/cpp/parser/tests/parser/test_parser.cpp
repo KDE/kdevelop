@@ -32,6 +32,74 @@ private slots:
   {
   }
 
+  void testSymbolTable()
+  {
+    NameTable table;
+    table.findOrInsert("Ideal::MainWindow", sizeof("Ideal::MainWindow"));
+    table.findOrInsert("QMainWindow", sizeof("QMainWindow"));
+    table.findOrInsert("KMainWindow", sizeof("KMainWindow"));
+    QCOMPARE(table.count(), size_t(3));
+    const NameSymbol *s = table.findOrInsert("QMainWindow", sizeof("QMainWindow"));
+    QCOMPARE(QString(s->data), QString("QMainWindow"));
+    QCOMPARE(table.count(), size_t(3));
+  }
+
+  void testControlContexts()
+  {
+    Control control;
+    const NameSymbol *n1 = control.findOrInsertName("a", 1);
+    int *type1 = new int(1); // don't care much about types
+    control.declare(n1, (Type*)type1);
+
+    control.pushContext();
+    int *type2 = new int(2);
+    const NameSymbol *n2 = control.findOrInsertName("b", 1);
+    control.declare(n2, (Type*)type2);
+
+    QCOMPARE(control.lookupType(n1), (Type*)type1);
+    QCOMPARE(control.lookupType(n2), (Type*)type2);
+
+    control.popContext();
+    QCOMPARE(control.lookupType(n1), (Type*)type1);
+    QCOMPARE(control.lookupType(n2), (Type*)0);
+  }
+
+  void testProblems()
+  {
+    Problem p;
+    p.setColumn(1);
+    p.setLine(1);
+    p.setFileName("foo.cpp");
+    p.setMessage("The Problem");
+    Control c;
+    c.reportProblem(p);
+    QCOMPARE(p.message(), c.problem(0).message());
+  }
+
+  void testTokenTable()
+  {
+    QCOMPARE(token_name(Token_EOF), "eof");
+    QCOMPARE(token_name('a'), "a");
+    QCOMPARE(token_name(Token_delete), "delete");
+  }
+
+  void testLexer()
+  {
+    QByteArray code("#include <foo.h>");
+    TokenStream token_stream;
+    LocationTable location_table;
+    LocationTable line_table;
+    Control control;
+
+    Lexer lexer(token_stream, location_table, line_table, &control);
+    lexer.tokenize(code, code.size()+1);
+    QCOMPARE(control.problem(0).message(), QString("expected end of line"));
+
+    QByteArray code2("class Foo { int foo() {} }; ");
+    lexer.tokenize(code2, code2.size()+1);
+    QCOMPARE(control.problemCount(), 1);    //we still have the old problem in the list
+  }
+
   void testParser()
   {
     QByteArray clazz("struct A { int i; A() : i(5) { } virtual void test() = 0; };");
@@ -39,6 +107,15 @@ private slots:
     TranslationUnitAST* ast = parse(clazz, &mem_pool);
     QVERIFY(ast != 0);
     QVERIFY(ast->declarations != 0);
+  }
+
+  void testParserFail()
+  {
+    QByteArray stuff("foo bar !!! nothing that really looks like valid c++ code");
+    pool mem_pool;
+    TranslationUnitAST *ast = parse(stuff, &mem_pool);
+    QVERIFY(ast->declarations == 0);
+    QCOMPARE(control.problemCount(), 5);
   }
 
   void testParseMethod()

@@ -1,5 +1,6 @@
 #include <QtTest/QtTest>
 #include <limits.h>
+#include <vector>
 
 #include "memorypool.h"
 
@@ -38,7 +39,7 @@ private slots:
         int *p2 = alloc.allocate(1);
         alloc.construct(p2, 11);
         QCOMPARE(*p2, 11);
-        alloc.destruct(p);
+        alloc.destroy(p);
         //nothing happens here (???)
         QCOMPARE(*p2, 11);
     }
@@ -53,7 +54,7 @@ private slots:
         alloc.construct(p, PoolObject());
         //now we have the object there
         QCOMPARE(p->foo, 3);
-        alloc.destruct(p);
+        alloc.destroy(p);
         //destructor was called, the "foo" field is zeroed again
         QCOMPARE(p->foo, 0);
     }
@@ -92,6 +93,23 @@ private slots:
         //new block will not start immediatelly after the old one (???)
         QVERIFY((p + lastOne + 3) != p2);
         QCOMPARE(p2[0], 11);
+    }
+
+    void testStdlibCompliance()
+    {
+        std::vector<int, rxx_allocator<int> > v;
+        v.push_back(5);
+        v.push_back(55);
+        v.push_back(555);
+        QCOMPARE(v[0], 5);
+        QCOMPARE(v[1], 55);
+        QCOMPARE(v[2], 555);
+        v.pop_back();
+        QCOMPARE(v[0], 5);
+        QCOMPARE(v[1], 55);
+        QCOMPARE(v.size(), size_t(2));
+        v.push_back(10);
+        QCOMPARE(v[2], 10);
     }
 
 };
