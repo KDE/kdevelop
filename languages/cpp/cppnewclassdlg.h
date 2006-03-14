@@ -160,6 +160,7 @@ protected:
 	virtual void selectall_button_clicked();
 	virtual void gtk_box_stateChanged( int val );
 	virtual void qobject_box_stateChanged( int val );
+	virtual void headeronly_box_stateChanged(int val);
 
 	void reloadAdvancedInheritance( bool clean = false );
 	void parseClass( QString clName, QString inheritance );
@@ -262,6 +263,7 @@ private:
 		bool objc;
 		bool qobject;
 		bool gtk;
+		bool headeronly;
 		QStringList namespaces;
 		QString namespaceBeg, namespaceEnd;
 		QString argsH;

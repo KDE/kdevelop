@@ -1355,7 +1355,7 @@ bool CppNewClassDialog::ClassGenerator::validateInput()
 		return false;
 	}
 	implementation = dlg.implementation_edit->text().simplifyWhiteSpace();
-	if ( implementation.isEmpty() )
+	if ( (!headeronly) &&  implementation.isEmpty() )
 	{
 		KMessageBox::error( &dlg, i18n( "You must enter a name for the implementation file." ) );
 		return false;
@@ -1395,7 +1395,7 @@ bool CppNewClassDialog::ClassGenerator::generate()
 
 	common_text();
 
-	gen_implementation();
+	if(!headeronly) gen_implementation();
 
 	gen_interface();
 
@@ -1414,6 +1414,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
 	objc = dlg.objc_box->isChecked();
 	qobject = dlg.qobject_box->isChecked();
 	gtk = dlg.gtk_box->isChecked();
+	headeronly = dlg.headeronly_box->isChecked();
 
 	if ( ( dlg.baseclasses_view->childCount() == 0 ) && childClass )
 		new QListViewItem( dlg.baseclasses_view, "QWidget", "public" );
@@ -2022,7 +2023,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 	classIntf.replace( QRegExp( "\\$PRIVATESLOTS\\$" ), QString( "private slots:\n" ) + advH_private_slots );
 	classIntf.replace( QRegExp( "\\$NAMESPACEEND\\$" ), namespaceEnd );
 
-	if ( !templateStr.isEmpty() )
+	if ( !templateStr.isEmpty() && (!headeronly) )
 		classIntf.replace( QRegExp( "#endif" ), "#include \"" + dlg.implementation_edit->text() + "\"\n\n#endif" );
 
 	if ( dlg.gen_config->reformat_box->isChecked() )
@@ -2045,7 +2046,8 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 	QStringList fileList;
 
 	fileList.append ( project->activeDirectory() + "/" + header );
-	fileList.append ( project->activeDirectory() + "/" + implementation );
+	
+    if (!headeronly) fileList.append ( project->activeDirectory() + "/" + implementation );
 
 	project->addFiles ( fileList );
 }
@@ -2187,5 +2189,11 @@ bool CppNewClassDialog::isDestructor( QString className, const FunctionDom &meth
 		return true;
 	return false;
 }
+
+void CppNewClassDialog::headeronly_box_stateChanged(int val)
+{
+    implementation_edit->setEnabled(!val);
+}
+
 
 #include "cppnewclassdlg.moc"

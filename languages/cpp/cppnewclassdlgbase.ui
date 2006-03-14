@@ -144,6 +144,14 @@ you select the classname, but you can
 still edit it afterwards.</string>
                                 </property>
                             </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>headeronly_box</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Create only header</string>
+                                </property>
+                            </widget>
                         </vbox>
                     </widget>
                     <widget class="QGroupBox" row="0" column="0" rowspan="1" colspan="2">
@@ -1184,6 +1192,12 @@ Namespace1::Namespace2::...::NamespaceN</string>
         <receiver>CppNewClassDlgBase</receiver>
         <slot>classNamespaceChanged(const QString&amp;)</slot>
     </connection>
+    <connection>
+        <sender>headeronly_box</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>CppNewClassDlgBase</receiver>
+        <slot>headeronly_box_stateChanged(int)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>classname_edit</tabstop>
@@ -1266,6 +1280,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
     <slot access="protected">baseIncludeChanged( const QString &amp; )</slot>
     <slot access="protected">scopeboxActivated( int )</slot>
     <slot access="protected">classNamespaceChanged( const QString &amp; )</slot>
+    <slot access="protected">headeronly_box_stateChanged(int val)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
