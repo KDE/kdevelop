@@ -1903,7 +1903,8 @@ void TrollProjectWidget::slotAddFiles()
       case AddFilesDialog::Relative:
       {
         // Form relative path to current subproject folder
-        QStringList files(URLUtil::relativePathToFile(cleanSubprojectDir , files[i]));
+        QString theFile = files[i];
+        QStringList files(URLUtil::relativePathToFile(cleanSubprojectDir , theFile));
         addFiles(files, true);
       }
       break;
