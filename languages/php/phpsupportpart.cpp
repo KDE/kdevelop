@@ -448,6 +448,8 @@ void PHPSupportPart::slotParseFiles()
 {
    kdDebug(9018) << "slotParseFiles()" << endl;
 
+   kapp->lock();
+
    if ( _jd->it != _jd->files.end() )
    {
       _jd->progressBar->setProgress( _jd->progressBar->progress() + 1 );
@@ -481,6 +483,8 @@ void PHPSupportPart::slotParseFiles()
       delete _jd;
       _jd = 0;
    }
+
+   kapp->unlock();
 }
 
 void PHPSupportPart::addedFilesToProject(const QStringList &fileList)
@@ -559,12 +563,12 @@ KMimeType::List PHPSupportPart::mimeTypes( )
 
 void PHPSupportPart::customEvent( QCustomEvent* ev )
 {
-//   kdDebug(9018) << "phpSupportPart::customEvent(" << ev->type() << ") " << endl;
+//   kdDebug(9018) << "phpSupportPart::customEvent(" << ev->type() << ") " << QThread::currentThread() << endl;
 
    if ( ev->type() < Event_AddFile || ev->type() > Event_AddFixme )
       return;
 
-  // kapp->lock();
+   kapp->lock();
 
    FileParseEvent* event = (FileParseEvent*) ev;
    NamespaceDom ns = codeModel()->globalNamespace();
@@ -582,7 +586,7 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
       break;
 
       case Event_StartParse:
-         kdDebug(9018) << "StartParse " << event->fileName() << endl;
+//         kdDebug(9018) << "StartParse " << event->fileName() << endl;
          LastClass = NULL;
          LastMethod = NULL;
          LastVariable = NULL;
@@ -596,7 +600,7 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
 
       case Event_AddClass:
       {
-         kdDebug(9018) << "AddClass " << event->name() << endl;
+//         kdDebug(9018) << "AddClass " << event->name() << endl;
          ClassDom nClass = codeModel()->create<ClassModel>();
          nClass->setFileName( event->fileName() );
          nClass->setName( event->name() );
@@ -613,7 +617,7 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
 
       case Event_CloseClass:
          if ( LastClass != NULL ) {
-            kdDebug(9018) << "CloseClass " << LastClass->name() << endl;
+//            kdDebug(9018) << "CloseClass " << LastClass->name() << endl;
             LastClass->setEndPosition( event->posititon(), 0 );
             LastClass = NULL;
             LastMethod = NULL;
@@ -623,7 +627,7 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
 
       case Event_AddFunction:
       {
-         kdDebug(9018) << "AddFunction " << event->name() << endl;
+//         kdDebug(9018) << "AddFunction " << event->name() << endl;
          FunctionDom nMethod = codeModel()->create<FunctionModel>();
          nMethod->setFileName( event->fileName() );
          nMethod->setName( event->name() );
@@ -645,7 +649,7 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
 
       case Event_SetFunction:
          if ( LastMethod != NULL ) {
-            kdDebug(9018) << "SetFunction " << LastMethod->name() << " " << event->name() << endl;
+//            kdDebug(9018) << "SetFunction " << LastMethod->name() << " " << event->name() << endl;
             if ( event->name() == "static" )
                LastMethod->setStatic(true);
             else if ( event->name() == "abstract" )
@@ -668,7 +672,7 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
 
       case Event_CloseFunction:
          if ( LastMethod != NULL ) {
-            kdDebug(9018) << "CloseFunction " << LastMethod->name() << endl;
+//            kdDebug(9018) << "CloseFunction " << LastMethod->name() << endl;
             LastMethod->setEndPosition( event->posititon(), 0 );
             LastMethod = NULL;
             LastVariable = NULL;
@@ -688,7 +692,7 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
             nVariable->setType( event->arguments() );
 
          if ( LastClass != NULL && ( LastMethod == NULL || event->global() == TRUE ) ) {
-               kdDebug(9018) << "AddVariable To Class " << LastClass->name() << " " << nVariable->name() << endl;
+//               kdDebug(9018) << "AddVariable To Class " << LastClass->name() << " " << nVariable->name() << endl;
             LastClass->addVariable(nVariable);
          } else {
             if ( LastMethod != NULL ) {
@@ -703,7 +707,7 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
 
       case Event_SetVariable:
          if ( LastVariable != NULL ) {
-            kdDebug(9018) << "SetVariable " << LastVariable->name() << " " << event->arguments() << endl;
+//            kdDebug(9018) << "SetVariable " << LastVariable->name() << " " << event->arguments() << endl;
             if ( event->arguments() == "static" )
                LastVariable->setStatic(true);
             else if ( event->arguments() == "private" )
@@ -724,12 +728,14 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
       break;
 
       case Event_EndParse:
-         kdDebug(9018) << "EndParse " << event->fileName() << endl;
+//         kdDebug(9018) << "EndParse " << event->fileName() << endl;
          emit addedSourceInfo( event->fileName() );
       break;
 
    }
-//   kapp->unlock();
+
+   kapp->unlock();
+   kapp->processEvents();
 }
 
 PHPErrorView *PHPSupportPart::ErrorView( ) {

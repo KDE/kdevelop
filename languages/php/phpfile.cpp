@@ -18,7 +18,6 @@
 
 #include <kapplication.h>
 #include <qstring.h>
-#include <qstringlist.h>
 #include <qfileinfo.h>
 #include <qregexp.h>
 
@@ -26,7 +25,6 @@
 #include <kprocess.h>
 #include <kdebug.h>
 
-#include <kdevproject.h>
 #include <kdevpartcontroller.h>
 
 #include "phphtmlview.h"
@@ -120,13 +118,15 @@ void PHPFile::setModified(bool value) {
 
 void PHPFile::Analyse() {
 
-   KApplication::postEvent( m_part, new FileParseEvent( Event_StartParse, this->fileName() ) );
+   postEvent( new FileParseEvent( Event_StartParse, this->fileName() ) );
 
    inClass = FALSE;
    inMethod = FALSE;
+/*
    m_contents = readFromEditor();
 
    if (m_contents.isEmpty())
+*/
       m_contents = readFromDisk();
 
    ParseSource();
@@ -134,7 +134,7 @@ void PHPFile::Analyse() {
    PHPCheck();
    modified = false;
 
-   KApplication::postEvent( m_part, new FileParseEvent( Event_EndParse, this->fileName() ) );
+   postEvent( new FileParseEvent( Event_EndParse, this->fileName() ) );
 }
 
 bool PHPFile::ParseClass(QString line, int lineNo) {
@@ -424,7 +424,7 @@ void PHPFile::ParseSource() {
                   QString abso = URLUtil::canonicalPath(*it + "/" + list[3]);
                   if (!abso.isNull()) { 
                      QString rel = URLUtil::relativePathToFile (m_part->project()->projectDirectory(), abso);
-                     KApplication::postEvent( m_part, new FileParseEvent( Event_AddFile, abso ) );
+                     postEvent( new FileParseEvent( Event_AddFile, abso ) );
                   }
                }
             }
@@ -577,8 +577,7 @@ QValueList<ClassDom> PHPFile::classByName(QString classname) {
 
 void PHPFile::postEvent(FileParseEvent *event) {
    KApplication::postEvent( m_part, event );
-   while (kapp->hasPendingEvents())
-     usleep(10);
+   usleep(100);
 }
 
 bool PHPFile::AddClass(QString name, QString extends, int start) {
