@@ -1292,7 +1292,7 @@ QStringList AutoProjectPart::distFiles() const
     QString projectDir = projectDirectory();
     QDir dir(projectDir);
     QDir admin(projectDir +"/admin");
-    QStringList files = dir.entryList( "Makefile.cvs Makefile.am configure* INSTALL README NEWS TODO ChangeLog COPYING AUTHORS stamp-h.in acinclude.m4 config.h.in Makefile.in");
+    QStringList files = dir.entryList( "Makefile.cvs Makefile.am configure* INSTALL README NEWS TODO ChangeLog COPYING AUTHORS stamp-h.in acinclude.m4 config.h.in Makefile.in install-sh config.sub config.guess mkinstalldirs missing ltmain.sh depcomp");
     QStringList adminFiles = admin.entryList(QDir::Files);
     QStringList::Iterator idx = adminFiles.begin();
     for( ; idx != adminFiles.end(); ++idx)
