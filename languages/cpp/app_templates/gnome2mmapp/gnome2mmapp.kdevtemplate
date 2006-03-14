@@ -34,6 +34,7 @@ Comment[es]=Genera una sencilla aplicación GNOME--. Debe tener instalados Gnome
 Comment[et]=Lihtsa GNOME-- rakenduse loomine. Paigaldatud peavad olema Gnomemm, Gtkmm >= 1.2.8 ja < 1.3.0. Glade-faili redigeerimiseks on vajalik glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[eu]=GNOME-- applicazio sinple bat sortzen du. Gnomemm, Gtkmm >= 1.2.8 and < 1.3.0 instalatu behar dira. Glade fitxategia editatzeko glade-- (http://home.wtal.de/petig/Gtk/) behar da.
 Comment[fr]=Génère une application GNOME-- simple. Gnomemm et Gtkmm >= 1.2.8 et < 1.3.0 doivent être installés. Pour éditer le fichier glade, glade-- (http://home.wtal.de/petig/Gtk/) est requis.
+Comment[ga]=Cruthaíonn sé seo feidhmchlár simplí GNOME--. Ba chóir Gnomemm, Gtkmm >= 1.2.8 agus < 1.3.0 a bheith suiteáilte. Chun comhad glade a chur in eagar, tá glade-- (http://home.wtal.de/petig/Gtk/) de dhíth ort.
 Comment[hu]=Létrehoz egy egyszerű GNOME--os -alkalmazást. A Gnomemm, a Gtkmm (>= 1.2.8 és < 1.3.0) szükséges hozzá. Glade-fájl szerkesztéséhez a glade-- (http://home.wtal.de/petig/Gtk/) is szükséges.
 Comment[it]=Genera una semplice applicazione GNOME. Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0 dovrebbero essere installati. Si richiede glade per modificare i file di glade -- (http://home.wtal.de/petig/Gtk/).
 Comment[nl]=Genereert een eenvoudige GNOME-- toepassing. Gnomemm, Gtkmm >= 1.2.8 en < 1.3.0 dienen te zijn geïnstalleerd. Voor het bewerken van glade file is glade-- (http://home.wtal.de/petig/Gtk/) nodig.
