@@ -142,7 +142,7 @@ private:
 };
 
 BookmarksWidget::BookmarksWidget(BookmarksPart *part)
-        : KListView(0, "bookmarks widget"), QToolTip( viewport() ),
+        : K3ListView(0, "bookmarks widget"), QToolTip( viewport() ),
         _part( part )
 
 {

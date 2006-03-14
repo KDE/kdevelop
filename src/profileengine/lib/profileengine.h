@@ -208,17 +208,17 @@ public:
         }
     };
 
-    class ProfileItem: public KListViewItem {
+    class ProfileItem: public K3ListViewItem {
     public:
-        ProfileItem(KListView *parent, Profile *profile)
-            :KListViewItem(parent), m_profile(profile)
+        ProfileItem(K3ListView *parent, Profile *profile)
+            :K3ListViewItem(parent), m_profile(profile)
         {
             setText(0, profile->genericName());
             setText(1, profile->description());
         }
 
-        ProfileItem(KListViewItem *parent, Profile *profile)
-            : KListViewItem(parent), m_profile(profile)
+        ProfileItem(K3ListViewItem *parent, Profile *profile)
+            : K3ListViewItem(parent), m_profile(profile)
         {
             setText(0, profile->genericName());
             setText(1, profile->description());

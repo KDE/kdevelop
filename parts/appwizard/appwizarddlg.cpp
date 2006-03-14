@@ -41,8 +41,8 @@
 #include <QHBoxLayout>
 #include <QDate>
 
-#include <klistview.h>
-#include <kiconview.h>
+#include <k3listview.h>
+#include <k3iconview.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kglobal.h>
@@ -700,7 +700,7 @@ void AppWizardDialog::addFavourite(Q3ListViewItem* item, QString favouriteName)
 
     if(!info->favourite)
     {
-        info->favourite = new KIconViewItem(favourites_iconview,
+        info->favourite = new K3IconViewItem(favourites_iconview,
                                             ((favouriteName=="")?info->name:favouriteName),
                                             DesktopIcon("kdevelop"));
 

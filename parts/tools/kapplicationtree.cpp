@@ -55,7 +55,7 @@
 #include <dcopclient.h>
 #include <kmimetype.h>
 #include <kservicegroup.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <ksycoca.h>
 #include <kdebug.h>
 
@@ -68,7 +68,7 @@ template class Q3PtrList<QString>;
 
 // ----------------------------------------------------------------------
 
-KDevAppTreeListItem::KDevAppTreeListItem( KListView* parent, const QString & name,
+KDevAppTreeListItem::KDevAppTreeListItem( K3ListView* parent, const QString & name,
                                     const QPixmap& pixmap, bool parse, bool dir, const QString& p, const QString& c, const QString& dE )
     : Q3ListViewItem( parent, name )
 {
@@ -135,7 +135,7 @@ bool KDevAppTreeListItem::isDirectory()
 // ----------------------------------------------------------------------
 
 KDevApplicationTree::KDevApplicationTree( QWidget *parent, const char* name )
-    : KListView( parent, name ), currentitem(0)
+    : K3ListView( parent, name ), currentitem(0)
 {
     addColumn( i18n("Known Applications") );
     setRootIsDecorated( true );
@@ -252,7 +252,7 @@ void KDevApplicationTree::slotSelectionChanged(Q3ListViewItem* i)
 void KDevApplicationTree::resizeEvent( QResizeEvent * e)
 {
     setColumnWidth(0, width()-QApplication::style().pixelMetric(QStyle::PM_ScrollBarExtent));
-    KListView::resizeEvent(e);
+    K3ListView::resizeEvent(e);
 }
 
 

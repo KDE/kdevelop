@@ -27,7 +27,7 @@ ReplaceItem * ReplaceView::firstChild() const
 }
 
 
-ReplaceView::ReplaceView( QWidget * parent ) : KListView( parent ), _latestfile( 0 )
+ReplaceView::ReplaceView( QWidget * parent ) : K3ListView( parent ), _latestfile( 0 )
 {
     setSorting( -1 );
     addColumn( "" );

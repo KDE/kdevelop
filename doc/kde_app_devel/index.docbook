@@ -1123,10 +1123,10 @@ The KDE libraries were invented to make designing applications for the K Desktop
 and capable of more functionality than what Qt alone is offering. The kdeui library offers: 
 <orderedlist>
 <listitem><para>
-KListView: a more powerful version of <classname>QListView</classname>
+K3ListView: a more powerful version of <classname>QListView</classname>
 </para></listitem>
 <listitem><para>
-KIconView: a graphical viewer of icon files
+K3IconView: a graphical viewer of icon files
 </para></listitem>
 </orderedlist>
 </para>

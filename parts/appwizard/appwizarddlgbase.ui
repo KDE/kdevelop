@@ -86,7 +86,7 @@
          <number>6</number>
         </property>
         <item row="0" column="0" >
-         <widget class="KIconView" name="favourites_iconview" >
+         <widget class="K3IconView" name="favourites_iconview" >
           <property name="arrangement" >
            <enum>Q3IconView::LeftToRight</enum>
           </property>
@@ -498,14 +498,14 @@
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
-   <class>KListView</class>
+   <class>K3ListView</class>
    <extends>Q3ListView</extends>
    <header>klistview.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
-   <class>KIconView</class>
+   <class>K3IconView</class>
    <extends>Q3IconView</extends>
    <header>kiconview.h</header>
    <container>0</container>

@@ -20,7 +20,7 @@
 #define __KDevApplicationTree_h__
 
 #include <kurl.h>
-#include <klistview.h>
+#include <k3listview.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QLabel>
@@ -54,7 +54,7 @@ protected:
     void init(const QPixmap& pixmap, bool parse, bool dir, const QString& _path, const QString& _exec, const QString& _dEntry);
 
 public:
-    KDevAppTreeListItem( KListView* parent, const QString & name, const QPixmap& pixmap,
+    KDevAppTreeListItem( K3ListView* parent, const QString & name, const QPixmap& pixmap,
                       bool parse, bool dir, const QString& p, const QString& c, const QString& dE );
     KDevAppTreeListItem( Q3ListViewItem* parent, const QString & name, const QPixmap& pixmap,
                       bool parse, bool dir, const QString& p, const QString& c, const QString& dE );
@@ -75,7 +75,7 @@ protected:
 /**
  * @internal
  */
-class KDevApplicationTree : public KListView
+class KDevApplicationTree : public K3ListView
 {
     Q_OBJECT
 public:

@@ -12,7 +12,7 @@
 #ifndef __REPLACEVIEW_H__
 #define __REPLACEVIEW_H__
 
-#include <klistview.h>
+#include <k3listview.h>
 
 #include <qstring.h>
 #include <qregexp.h>
@@ -23,7 +23,7 @@ class QTextStream;
 class QWidget;
 class ReplaceItem;
 
-class ReplaceView : public KListView
+class ReplaceView : public K3ListView
 {
     Q_OBJECT
 

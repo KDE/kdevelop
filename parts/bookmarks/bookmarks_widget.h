@@ -18,7 +18,7 @@
 //#include <qlistview.h>
 #include <qtooltip.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 
 #include "bookmarks_part.h"
 
@@ -26,7 +26,7 @@ class BookmarksPart;
 class BookmarkItem;
 class BookmarksConfig;
 
-class BookmarksWidget : public KListView, public QToolTip
+class BookmarksWidget : public K3ListView, public QToolTip
 {
 	Q_OBJECT
 

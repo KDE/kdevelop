@@ -16,7 +16,7 @@
 #include <qlabel.h>
 #include <qevent.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
@@ -32,12 +32,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 namespace PartExplorer{
 
-class PropertyItem : public KListViewItem
+class PropertyItem : public K3ListViewItem
 {
 public:
-    PropertyItem( KListViewItem *parent, const QString &propertyName,
+    PropertyItem( K3ListViewItem *parent, const QString &propertyName,
         const QString &propertyType, const QString &propertyValue )
-        : KListViewItem( parent )
+        : K3ListViewItem( parent )
     {
         setText( 0, propertyName );
         setText( 1, propertyType );
@@ -58,11 +58,11 @@ public:
 
 class ResultList;
 
-class ResultsList : public KListView
+class ResultsList : public K3ListView
 {
 public:
     ResultsList( QWidget *parent )
-        : KListView( parent )
+        : K3ListView( parent )
     {
         this->setShowToolTips( false );
     }
@@ -71,7 +71,7 @@ public:
 
     void clear()
     {
-        KListView::clear();
+        K3ListView::clear();
     }
 protected:
     bool event(QEvent *ev)
@@ -86,7 +86,7 @@ protected:
             }
         }
 
-        return KListView::event(ev);
+        return K3ListView::event(ev);
     }
 };
 
@@ -184,13 +184,13 @@ void PartExplorerForm::fillServiceList( const KTrader::OfferList &services )
 
     this->m_resultsList->setRootIsDecorated( true );
 
-    KListViewItem *rootItem = 0;
+    K3ListViewItem *rootItem = 0;
 
     KTrader::OfferList::ConstIterator it = services.begin();
     for ( ; it != services.end(); ++it )
     {
         KService::Ptr service = (*it);
-        KListViewItem *serviceItem = new KListViewItem( this->m_resultsList, rootItem, service->name() );
+        K3ListViewItem *serviceItem = new K3ListViewItem( this->m_resultsList, rootItem, service->name() );
 
         QStringList propertyNames = service->propertyNames();
         for ( QStringList::const_iterator it = propertyNames.begin(); it != propertyNames.end(); ++it )

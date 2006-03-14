@@ -10,7 +10,7 @@
 #include "valgrinditem.h"
 
 class ValgrindPart;
-class KListView;
+class K3ListView;
 class Q3ListViewItem;
 class Q3PopupMenu;
 
@@ -30,13 +30,13 @@ signals:
   
 private slots:
   void executed( Q3ListViewItem* item );
-  void slotContextMenu( KListView* l, Q3ListViewItem* i, const QPoint& p );
+  void slotContextMenu( K3ListView* l, Q3ListViewItem* i, const QPoint& p );
   void expandAll();
   void collapseAll();
   void aboutToShowPopup();
     
 private:
-  KListView* lv;
+  K3ListView* lv;
   int msgNumber;
   ValgrindPart* _part;
   Q3PopupMenu* popup;

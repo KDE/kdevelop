@@ -8,7 +8,7 @@
 #include <klibloader.h>
 #include <kurl.h>
 #include <kdebug.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 #include <kstatusbar.h>
 
@@ -93,7 +93,7 @@ ValgrindWidget::ValgrindWidget( ValgrindPart *part )
  : QWidget(0, "valgrind widget"), _part( part )
 {
   QVBoxLayout* vbl = new QVBoxLayout( this );
-  lv = new KListView( this );
+  lv = new K3ListView( this );
   lv->addColumn( i18n( "No." ) );
   lv->addColumn( i18n( "Thread" ) );
   lv->addColumn( i18n( "Message" ) );
@@ -112,8 +112,8 @@ ValgrindWidget::ValgrindWidget( ValgrindPart *part )
            this, SLOT(aboutToShowPopup()) );
   connect( lv, SIGNAL(executed(Q3ListViewItem*)),
            this, SLOT(executed(Q3ListViewItem*)) );
-  connect( lv, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
-           this, SLOT(slotContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
+  connect( lv, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
+           this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)) );
 }
 
 
@@ -197,7 +197,7 @@ void ValgrindWidget::aboutToShowPopup()
   popup->setItemEnabled( 3, en );
 }
 
-void ValgrindWidget::slotContextMenu( KListView* l, Q3ListViewItem* /*i*/, const QPoint& p )
+void ValgrindWidget::slotContextMenu( K3ListView* l, Q3ListViewItem* /*i*/, const QPoint& p )
 {
   if ( l != lv )
     return;

@@ -175,7 +175,7 @@ File and URL handling - decoding of URLs, temporary files etc.
 
 <itemizedlist>
 
-<listitem><formalpara><title><ulink url="kdeapi:kdecore/KURL">KURL</ulink></title>
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KUrl">KUrl</ulink></title>
 <para>
 Represents and parses URLs.
 </para>
@@ -401,25 +401,25 @@ Widgets - widget classes for list views, rules, color selection etc.
 
 <itemizedlist>
 
-<listitem><formalpara><title><ulink url="kdeapi:kdeui/KListView">KListView</ulink></title>
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/K3ListView">K3ListView</ulink></title>
 <para>
 A variant of <classname>QListView</classname> that honors KDE's system-wide settings.
 </para>
 </formalpara></listitem>
 
-<listitem><formalpara><title><ulink url="kdeapi:kdeui/KListView">KListBox</ulink></title>
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/K3ListView">KListBox</ulink></title>
 <para>
 A variant of <classname>QListBox</classname> that honors KDE's system-wide settings.
 </para>
 </formalpara></listitem>
 
-<listitem><formalpara><title><ulink url="kdeapi:kdeui/KListView">KIconView</ulink></title>
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/K3ListView">K3IconView</ulink></title>
 <para>
 A variant of <classname>QIconView</classname> that honors KDE's system-wide settings.
 </para>
 </formalpara></listitem>
 
-<listitem><formalpara><title><ulink url="kdeapi:kdeui/KListView">KLineEdit</ulink></title>
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/K3ListView">KLineEdit</ulink></title>
 <para>
 A variant of <classname>QLineEdit</classname> with completion support.
 </para>
@@ -2490,7 +2490,7 @@ In order to run an application service with some URLs, use
 </para>
 
 <programlisting>
-KURL::List urlList;
+KUrl::List urlList;
 urlList &lt;&lt; "http://www.ietf.org/rfc/rfc1341.txt?number=1341";
 urlList &lt;&lt; "http://www.ietf.org/rfc/rfc2046.txt?number=2046";
 KRun::run(offer.service(), urlList);

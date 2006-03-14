@@ -28,8 +28,8 @@ class ProfileSupport;
 #include <QLinkedList>
 #include <QStringList>
 
-#include <klistview.h>
-#include <kiconview.h>
+#include <k3listview.h>
+#include <k3iconview.h>
 
 #include "appwizarddlgbase.h"
 #include "kdevlicense.h"

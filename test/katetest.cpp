@@ -296,7 +296,7 @@ void KWrite::slotOpen()
 {
 	KEncodingFileDialog::Result r=KEncodingFileDialog::getOpenURLsAndEncoding(m_view->document()->encoding(), m_view->document()->url().url(),QString::null,this,i18n("Open File"));
 
-  for (KURL::List::Iterator i=r.URLs.begin(); i != r.URLs.end(); ++i)
+  for (KUrl::List::Iterator i=r.URLs.begin(); i != r.URLs.end(); ++i)
   {
     encoding = r.encoding;
     slotOpen ( *i );
@@ -375,7 +375,7 @@ void KWrite::editToolbars()
 
 void KWrite::dragEnterEvent( QDragEnterEvent *event )
 {
-  event->accept(KURL::List::canDecode(event->mimeData()));
+  event->accept(KUrl::List::canDecode(event->mimeData()));
 }
 
 void KWrite::dropEvent( QDropEvent *event )
@@ -385,12 +385,12 @@ void KWrite::dropEvent( QDropEvent *event )
 
 void KWrite::slotDropEvent( QDropEvent *event )
 {
-  const KURL::List textlist = KURL::List::fromMimeData(event->mimeData());
+  const KUrl::List textlist = KUrl::List::fromMimeData(event->mimeData());
 
   if (textlist.isEmpty())
     return;
 
-  for (KURL::List::ConstIterator i=textlist.begin(); i != textlist.end(); ++i)
+  for (KUrl::List::ConstIterator i=textlist.begin(); i != textlist.end(); ++i)
     slotOpen (*i);
 }
 
