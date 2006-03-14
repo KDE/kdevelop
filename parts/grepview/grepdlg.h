@@ -48,6 +48,8 @@ public:
     QString directoryString() const
 	{ return dir_combo->currentText(); }
 	
+	bool regexpFlag() const
+		{ return regexp_box->isChecked(); }
 	bool recursiveFlag() const
 		{ return recursive_box->isChecked(); }
 	bool ignoreSCMDirsFlag() const
@@ -74,6 +76,7 @@ private:
     KComboBox * dir_combo;
     KURLRequester * url_requester;
 
+    QCheckBox *regexp_box;
     QCheckBox *recursive_box;
     QCheckBox *ignore_scm_box;
     QCheckBox *case_sens_box;

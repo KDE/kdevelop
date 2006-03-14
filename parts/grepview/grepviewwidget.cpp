@@ -158,7 +158,7 @@ void GrepViewWidget::showDialog()
 // @todo - put this somewhere common - or just use Qt if possible
 static QString escape(const QString &str)
 {
-	QString escaped("[]{}()\\^$?.+-*");
+	QString escaped("[]{}()\\^$?.+-*|");
 	QString res;
 
 	for (uint i=0; i < str.length(); ++i)
@@ -213,9 +213,10 @@ void GrepViewWidget::searchActivated()
 
 	m_lastPattern = grepdlg->patternString();
 	QString pattern = grepdlg->templateString();
-	//    pattern.replace(QRegExp("%s"), grepdlg->patternString());
-	pattern.replace(QRegExp("%s"), escape( grepdlg->patternString() ) );
-	pattern.replace(QRegExp("'"), "'\\''");
+	if (grepdlg->regexpFlag())
+	    pattern.replace(QRegExp("%s"), grepdlg->patternString());
+        else
+	    pattern.replace(QRegExp("%s"), escape( grepdlg->patternString() ) );
 
 	QString filepattern = "find ";
 	filepattern += KShellProcess::quote(grepdlg->directoryString());

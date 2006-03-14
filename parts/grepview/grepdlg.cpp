@@ -153,6 +153,11 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     QBoxLayout *dir_checks_layout = new QHBoxLayout(4);
     layout->addLayout(dir_checks_layout, 4, 1);
 	
+    regexp_box = new QCheckBox(i18n("Regular &Expression"), this);
+    regexp_box->setChecked(true);
+    dir_checks_layout->addSpacing(10);
+    dir_checks_layout->addWidget(regexp_box);
+
     recursive_box = new QCheckBox(i18n("&Recursive"), this);
     recursive_box->setChecked(config->readBoolEntry("recursive", true));
     dir_checks_layout->addSpacing(10);
