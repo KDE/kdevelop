@@ -399,7 +399,8 @@ void BackgroundParser::run()
 	
 	kdDebug( 9007 ) << "!!!!!!!!!!!!!!!!!! BG PARSER DESTROYED !!!!!!!!!!!!" << endl;
 	
-	QThread::exit();
+//	adymo: commented to fix #88091
+//	QThread::exit();
 }
 
 //kate: indent-mode csands; tab-width 4; space-indent off;
