@@ -14,19 +14,29 @@ To use clearcase functions, you need to:
   -# Clearcase functions appear in the popup menu for an open file just
     like cvs or perforce.
   -# Functions supported so far are: checkout, checkin, uncheckout, diff,
-    mkelem, and rmname (not rmelem).
+    mkelem, rmname (not rmelem), lshistory, and lsco (list checkouts).
   -# For mkelem or rmname, you need to make sure that current directory
     is checked out or the operation will fail.
-  -# No support for snapshot views yet. I haven't worked with them.
+  -# For lshistory, the history is printed to the Messages window.
+  -# For lsco, the checkouts are listed recursively from the directory
+     containing the selected file.
+  -# Snapshot views should work.
   -# To checkout a directory, select directory in file selector part and use
     popup-menu.
+  -# The Clearcase popup-menu will appear for any file, even if it is not in
+    a VOB.  Attempts to perform Clearcase operations on these files will not
+    succeed, and the output can be viewed in the Messages window.
 
 \authors <a href="mailto:ajay_guleria AT yahoo dot com">Ajay Guleria</a>
+\authors <a href="mailto:pnoffke AT bigpond dot com">Patrick Noffke</a>
+\authors <a href="mailto:phil AT hetroy dot org">Philippe Hétroy</a>
 
-\feature Integrates Clearcase configuration management system into KDevelop.
+\feature Integrates Clearcase configuration management system into KDevelop and displays VCS file information
+\feature Detects the clearcase environment and activates menus
 \feature Provided a dialog for checkout and checkin comments.
-\feature If selected file is not a clearcase file, "ClearCase" menu does not appear
-    in the popup. A filename must start with /view or /vobs to qualify as a
-    clearcase filename.
+
+
+\todo Update the tree view when a VCS action is done (checkout, checkin...)
+\todo Add a clearcase logging window
 
 */

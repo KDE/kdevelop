@@ -30,7 +30,12 @@
 #include "execcommand.h"
 #include "domutil.h"
 #include "kdevmainwindow.h"
+#include "kdevproject.h"
 #include "kdevplugininfo.h"
+
+#include "clearcasefileinfoprovider.h"
+#include "clearcasemanipulator.h"
+
 
 static const KDevPluginInfo data("kdevclearcase");
 
@@ -39,36 +44,44 @@ K_EXPORT_COMPONENT_FACTORY( libkdevclearcase, ClearcaseFactory( data ) )
 
 ClearcasePart::ClearcasePart( QObject *parent, const char *name, const QStringList & )
         : KDevVersionControl( &data, parent, name ? name : "ClearcasePart" ),
-        default_checkin(""),default_checkout(""),default_uncheckout("-rm"),
-        default_create("-ci"),default_remove("-f"),default_diff("-pred -diff")
+          default_checkin(""),
+          default_checkout(""),
+          default_uncheckout("-rm"),
+          default_create("-ci"),
+          default_remove("-f"),
+          default_lshistory(""),
+          default_diff("-pred -diff"),
+          default_lscheckout("-recurse")
 {
+
+    // check if project directory is valid and cache it
+    isValidCCDirectory_ = ClearcaseManipulator::isCCRepository( project()->projectDirectory() );
+
+    fileInfoProvider_ = new ClearcaseFileinfoProvider(this);
+
     setInstance(ClearcaseFactory::instance());
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
-
 }
 
 ClearcasePart::~ClearcasePart()
 {}
 
 
+
+bool ClearcasePart::isValidDirectory(const QString &dirPath) const {
+    return isValidCCDirectory_;
+}
+
+
 void ClearcasePart::contextMenu(QPopupMenu *popup, const Context *context)
 {
+
     if (context->hasType( Context::FileContext )) {
         const FileContext *fcontext = static_cast<const FileContext*>(context);
-        popupfile = fcontext->urls().first().path();
+        popupfile_ = fcontext->urls().first().path();
 
-        // check if this file belongs to a clearcase directory
-        // i.e. is the file /view/<view_name/vobs/... format?
-       QString s1 = popupfile.section('/', 1, 1);
-       QString s2 = popupfile.section('/', 2, 2);
-       QString s3 = popupfile.section('/', 3, 3);
-       if(s1 == "view" && s3 == "vobs" || s1 == "vobs")
-         viewname = s2;
-       else
-         return;
-
-        QFileInfo fi(popupfile);
+        QFileInfo fi(popupfile_);
         popup->insertSeparator();
 
         KPopupMenu *sub = new KPopupMenu(popup);
@@ -86,24 +99,31 @@ void ClearcasePart::contextMenu(QPopupMenu *popup, const Context *context)
         sub->insertItem( i18n("Remove Element"),
                          this, SLOT(slotRemove()) );
         sub->insertSeparator();
+        sub->insertItem( i18n("History"),
+                         this, SLOT(slotListHistory()) );
+        sub->insertSeparator();
         sub->insertItem( i18n("Diff"),
                          this, SLOT(slotDiff()) );
 
+        sub->insertSeparator();
+        sub->insertItem( i18n("List Checkouts"),
+                         this, SLOT(slotListCheckouts()) );
+
         popup->insertItem(i18n("Clearcase"), sub);
+
+	if (!project() || !isValidDirectory( project()->projectDirectory() )) {
+	    sub->setEnabled( false );
+	}
     }
 }
+
 
 void ClearcasePart::slotCheckin()
 {
     QString dir, name;
-    QFileInfo fi(popupfile);
-    if (fi.isDir()) {
-        dir = fi.absFilePath();
-        name = ".";
-    } else {
-        dir = fi.dirPath();
-        name = fi.fileName();
-    }
+    QFileInfo fi(popupfile_);
+    dir = fi.dirPath();
+    name = fi.fileName();
 
     CcaseCommentDlg dlg(FALSE);
     if (dlg.exec() == QDialog::Rejected)
@@ -112,9 +132,9 @@ void ClearcasePart::slotCheckin()
     QDomDocument &dom = *this->projectDom();
     QString message = DomUtil::readEntry(dom,"/kdevclearcase/checkin_options",default_checkin);
     if(dlg.logMessage().isEmpty())
-      message += "-nc ";
+        message += "-nc ";
     else
-      message += "-c \"" + dlg.logMessage() + "\"";
+        message += "-c \"" + dlg.logMessage() + "\"";
 
     QString command("cd ");
     command += KShellProcess::quote(dir);
@@ -132,14 +152,9 @@ void ClearcasePart::slotCheckin()
 void ClearcasePart::slotCheckout()
 {
     QString dir, name;
-    QFileInfo fi(popupfile);
-    if (fi.isDir()) {
-        dir = fi.absFilePath();
-        name = ".";
-    } else {
-        dir = fi.dirPath();
-        name = fi.fileName();
-    }
+    QFileInfo fi(popupfile_);
+    dir = fi.dirPath();
+    name = fi.fileName();
 
     CcaseCommentDlg dlg(TRUE);
     if (dlg.exec() == QDialog::Rejected)
@@ -148,11 +163,11 @@ void ClearcasePart::slotCheckout()
     QDomDocument &dom = *this->projectDom();
     QString message = DomUtil::readEntry(dom,"/kdevclearcase/checkout_options",default_checkout);
     if(!dlg.isReserved())
-      message += "-unres ";
+       message += "-unres ";
     if(dlg.logMessage().isEmpty())
-      message += "-nc ";
+       message += "-nc ";
     else
-      message += "-c \"" + dlg.logMessage() + "\"";
+       message += "-c \"" + dlg.logMessage() + "\"";
 
     QString command("cd ");
     command += KShellProcess::quote(dir);
@@ -163,20 +178,17 @@ void ClearcasePart::slotCheckout()
 
     if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
         makeFrontend->queueCommand(dir, command);
+
+    emit finishedFetching(dir);
 }
 
 
 void ClearcasePart::slotUncheckout()
 {
     QString dir, name;
-    QFileInfo fi(popupfile);
-    if (fi.isDir()) {
-        dir = fi.absFilePath();
-        name = ".";
-    } else {
-        dir = fi.dirPath();
-        name = fi.fileName();
-    }
+    QFileInfo fi(popupfile_);
+    dir = fi.dirPath();
+    name = fi.fileName();
 
     QDomDocument &dom = *this->projectDom();
 
@@ -189,11 +201,13 @@ void ClearcasePart::slotUncheckout()
 
     if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
         makeFrontend->queueCommand(dir, command);
+
+    emit finishedFetching(dir);
 }
 
 void ClearcasePart::slotCreate()
 {
-    QFileInfo fi(popupfile);
+    QFileInfo fi(popupfile_);
     QString dir = fi.dirPath();
     QString name = fi.fileName();
 
@@ -216,12 +230,14 @@ void ClearcasePart::slotCreate()
 
     if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
         makeFrontend->queueCommand(dir, command);
+
+    emit finishedFetching(dir);
 }
 
 
 void ClearcasePart::slotRemove()
 {
-    QFileInfo fi(popupfile);
+    QFileInfo fi(popupfile_);
     QString dir = fi.dirPath();
     QString name = fi.fileName();
 
@@ -241,12 +257,35 @@ void ClearcasePart::slotRemove()
 
     if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
         makeFrontend->queueCommand(dir, command);
+
+    emit finishedFetching(dir);
 }
 
+void ClearcasePart::slotListHistory()
+{
+    QFileInfo fi(popupfile_);
+    QString dir = fi.dirPath();
+    QString name = fi.fileName();
+    QStringList args;
+    QStringList env;
+    QString str;
+
+    QDomDocument &dom = *this->projectDom();
+
+    QString command("cd ");
+    command += KShellProcess::quote(dir);
+    command += " && cleartool lshistory ";
+    command += DomUtil::readEntry(dom, "/kdevclearcase/lshistory_options", default_lshistory);
+    command += " ";
+    command += KShellProcess::quote(name);
+
+    if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand(dir, command);
+}
 
 void ClearcasePart::slotDiff()
 {
-    QFileInfo fi(popupfile);
+    QFileInfo fi(popupfile_);
     QString dir = fi.dirPath();
     QString name = fi.fileName();
     QStringList args;
@@ -261,12 +300,14 @@ void ClearcasePart::slotDiff()
         QStringList list = QStringList::split(' ',str);
         for(QStringList::Iterator it = list.begin(); it != list.end(); ++it) args << *it;
     }
+
     args << name;
 
     ExecCommand* cmv = new ExecCommand( "cleartool", args, dir, env, this );
     connect( cmv, SIGNAL(finished( const QString&, const QString& )),
              this, SLOT(slotDiffFinished( const QString&, const QString& )) );
 }
+
 
 void ClearcasePart::slotDiffFinished( const QString& diff, const QString& err )
 {
@@ -295,5 +336,28 @@ void ClearcasePart::slotDiffFinished( const QString& diff, const QString& err )
     if (KDevDiffFrontend *diffFrontend = extension<KDevDiffFrontend>("KDevelop/DiffFrontend"))
         diffFrontend->showDiff( diff );
 }
+
+void ClearcasePart::slotListCheckouts()
+{
+    QString dir;
+    QFileInfo fi(popupfile_);
+    if (fi.isDir()) {
+        dir = fi.absFilePath();
+    } else {
+        dir = fi.dirPath();
+    }
+
+    QDomDocument &dom = *this->projectDom();
+
+    QString command("cd ");
+    command += KShellProcess::quote(dir);
+    command += " && cleartool lsco ";
+    command += DomUtil::readEntry(dom, "/kdevclearcase/lscheckout_options", default_lscheckout);
+
+    if (KDevMakeFrontend *makeFrontend = extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
+        makeFrontend->queueCommand(dir, command);
+
+}
+
 
 #include "clearcasepart.moc"

@@ -7,7 +7,8 @@ kde_module_LTLIBRARIES = libkdevclearcase.la
 libkdevclearcase_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevclearcase_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/interfaces/extensions/libkdevextensions.la
 
-libkdevclearcase_la_SOURCES = clearcasepart.cpp commentdlg.cpp
+libkdevclearcase_la_SOURCES = clearcasepart.cpp commentdlg.cpp \
+	clearcasefileinfoprovider.cpp clearcasemanipulator.cpp
 
 METASOURCES = AUTO
 

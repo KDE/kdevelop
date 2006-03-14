@@ -29,13 +29,14 @@ public:
     const QString default_uncheckout;
     const QString default_create;
     const QString default_remove;
+    const QString default_lshistory;
+    const QString default_lscheckout;
     const QString default_diff;
-//    const QString default_log;
-    
+
     virtual void createNewProject(const QString& dir) {}
     virtual bool fetchFromRepository() { return true; }
-    virtual KDevVCSFileInfoProvider *fileInfoProvider() const { return 0; }
-    virtual bool isValidDirectory(const QString &dirPath) const { return true; }
+    virtual KDevVCSFileInfoProvider *fileInfoProvider() const { return fileInfoProvider_; }
+    virtual bool isValidDirectory(const QString &dirPath) const;
 
 private slots:
     void contextMenu(QPopupMenu *popup, const Context *context);
@@ -46,14 +47,19 @@ private slots:
 
     void slotCreate();
     void slotRemove();
-//    void slotLog();
-
     void slotDiff();
     void slotDiffFinished( const QString& diff, const QString& err );
+    void slotListHistory();
+    void slotListCheckouts();
+
 
 private:
-    QString popupfile;
+
+    bool isValidCCDirectory_;
+    QString popupfile_;
     QString viewname;
+
+    KDevVCSFileInfoProvider *fileInfoProvider_;
 };
 
 #endif
