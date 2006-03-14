@@ -31,6 +31,7 @@
 #include "filterdlg.h"
 #include "kdevpartcontroller.h"
 #include "kdevmainwindow.h"
+#include "kdevproject.h"
 
 AppOutputWidget::AppOutputWidget(AppOutputViewPart* part)
     : ProcessWidget(0, "app output widget")
@@ -59,6 +60,8 @@ void AppOutputWidget::slotRowSelected(QListBoxItem* row)
 {
 	static QRegExp assertMatch("ASSERT: \\\"([^\\\"]+)\\\" in ([^\\( ]+) \\(([\\d]+)\\)");
 	static QRegExp lineInfoMatch("\\[([^:]+):([\\d]+)\\]");
+	static QRegExp rubyErrorMatch("([^:\\s]+\\.rb):([\\d]+):?.*$");
+
 	if (row) {
 		if (assertMatch.exactMatch(row->text())) {
 			m_part->partController()->editDocument(KURL( assertMatch.cap(2) ), assertMatch.cap(3).toInt() - 1);
@@ -67,6 +70,16 @@ void AppOutputWidget::slotRowSelected(QListBoxItem* row)
 
 		} else if (lineInfoMatch.search(row->text()) != -1) {
 			m_part->partController()->editDocument(KURL( lineInfoMatch.cap(1) ), lineInfoMatch.cap(2).toInt() - 1);
+			m_part->mainWindow()->statusBar()->message(row->text(), 10000);
+			m_part->mainWindow()->lowerView(this);
+		} else if (rubyErrorMatch.search(row->text()) != -1) {
+			QString file;
+			if (rubyErrorMatch.cap(1).startsWith("/")) {
+				file = rubyErrorMatch.cap(1);
+			} else {
+				file = m_part->project()->projectDirectory() + "/" + rubyErrorMatch.cap(1);
+			}
+			m_part->partController()->editDocument(KURL(rubyErrorMatch.cap(1)), rubyErrorMatch.cap(2).toInt() - 1);
 			m_part->mainWindow()->statusBar()->message(row->text(), 10000);
 			m_part->mainWindow()->lowerView(this);
 		}
