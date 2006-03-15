@@ -513,7 +513,9 @@ void DocumentationPlugin::loadCatalogConfiguration(KListView *configurationView)
             && namedCatalogs[it.key()]->isProjectDocumentationItem())
             continue;
         
-        ConfigurationItem *item = new ConfigurationItem(configurationView, this, it.key(), it.data(),
+	config->setGroup("Locations");
+        ConfigurationItem *item = new ConfigurationItem(configurationView, this, it.key(),
+	    config->readPathEntry(it.key()),
             hasCapability(Index), hasCapability(FullTextSearch));
         config->setGroup("TOC Settings");
         item->setContents(config->readBoolEntry(item->title(), true));
