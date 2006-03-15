@@ -1,3 +1,7 @@
+2006-03-15  Richard Dale  <rdale@foton.es>
+* Added a 'sync terminal' option to the configuration settings to 
+  disable the 'cd' commands in the konsole by default.
+
 2006-02-21  Richard Dale  <rdale@foton.es>
 * Disable the new file sidetab by default
 

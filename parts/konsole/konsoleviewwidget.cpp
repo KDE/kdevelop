@@ -17,6 +17,8 @@
 #include <klibloader.h>
 #include <kurl.h>
 #include <kdebug.h>
+#include <kapplication.h>
+#include <kconfig.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -102,8 +104,13 @@ void KonsoleViewWidget::setDirectory(const KURL &dirUrl)
     {
         kdDebug(9035) << k_funcinfo << "Changing dirUrl.path() == " << dirUrl.path() << endl;
         kdDebug(9035) << k_funcinfo << "Changing part->url.path() == " << part->url().path() << endl;
+        KConfig* config = kapp->config();
+        
+        kdDebug(9035) << k_funcinfo << "SyncTerminalEmulator: " << config->readBoolEntry("SyncTerminalEmulator") << endl;
 
-        part->openURL( dirUrl );
+        if (config->readBoolEntry("SyncTerminalEmulator")) {
+            part->openURL( dirUrl );
+        }
     }
 }
 

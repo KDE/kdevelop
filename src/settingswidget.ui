@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>492</width>
-            <height>489</height>
+            <height>502</height>
         </rect>
     </property>
     <property name="caption">
@@ -70,6 +70,9 @@
             </property>
             <property name="text">
                 <string>Directory &amp;navigation messages</string>
+            </property>
+            <property name="accel">
+                <string>Alt+N</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Check this if you want to know what directory make is in</string>
@@ -191,6 +194,9 @@
                     <property name="text">
                         <string>&amp;Use KDevelop's embedded designer</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+U</string>
+                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Start KDevelop own designer embedded within KDevelop</string>
                     </property>
@@ -205,6 +211,9 @@
                     <property name="text">
                         <string>Run KDevelop's &amp;designer as a separate application</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+D</string>
+                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Start KDevelop own designer externally</string>
                     </property>
@@ -217,7 +226,10 @@
                         <cstring>qtDesignerRadioButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Run Qt Desi&amp;gner</string>
+                        <string>Run &amp;Qt Designer</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+Q</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Use Qt Designer externally</string>
@@ -272,53 +284,100 @@
             <property name="title">
                 <string></string>
             </property>
-            <grid>
+            <widget class="QRadioButton">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>useOtherTerminal</cstring>
                 </property>
-                <property name="margin">
-                    <number>0</number>
+                <property name="geometry">
+                    <rect>
+                        <x>0</x>
+                        <y>20</y>
+                        <width>64</width>
+                        <height>20</height>
+                    </rect>
                 </property>
-                <widget class="QRadioButton" row="1" column="0">
-                    <property name="name">
-                        <cstring>useOtherTerminal</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Other:</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Set a different terminal than the KDE default one</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Choose some other terminal different from the default one.</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>useKDETerminal</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Use &amp;KDE setting</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Use the terminal as set in KControl</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>If checked, KDevelop will use the default terminal as set in KControl in KDE components, Component Chooser.</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="1" column="1">
-                    <property name="name">
-                        <cstring>terminalEdit</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-            </grid>
+                <property name="text">
+                    <string>&amp;Other:</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+O</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Set a different terminal than the KDE default one</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>Choose some other terminal different from the default one.</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>useKDETerminal</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>0</x>
+                        <y>0</y>
+                        <width>462</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Use &amp;KDE setting</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+K</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Use the terminal as set in KControl</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>If checked, KDevelop will use the default terminal as set in KControl in KDE components, Component Chooser.</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>syncTerminalEmulator</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>0</x>
+                        <y>50</y>
+                        <width>464</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>S&amp;ync terminal emulator with active document</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+Y</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Check this if you want the konsole to change directory to the one containing the active document</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>You can make the konsole change to the directory containing the active document by checking this option</string>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>terminalEdit</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>70</x>
+                        <y>20</y>
+                        <width>392</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
         </widget>
         <widget class="QLabel" row="10" column="0" rowspan="1" colspan="2">
             <property name="name">
