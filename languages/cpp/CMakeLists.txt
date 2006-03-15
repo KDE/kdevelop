@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory(parser) 
-#add_subdirectory(app_templates) 
+add_subdirectory(parser)
+add_subdirectory(app_templates) 
 
 include_directories(${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/weaver
     ${KDE4_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
