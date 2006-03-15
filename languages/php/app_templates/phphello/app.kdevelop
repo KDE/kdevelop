@@ -70,7 +70,7 @@
 	<codeHelp>
 	   <codeCompletion>true</codeCompletion>
 	   <codeHinting>true</codeHinting>
-	   <realtimeParsing>false</realtimeParsing>
+	   <realtimeParsing>true</realtimeParsing>
 	  </codeHelp>
 </kdevphpsupport>
   <kdevfilecreate>

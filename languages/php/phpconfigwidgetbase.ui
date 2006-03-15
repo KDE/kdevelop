@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PHPConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,102 +8,156 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>593</width>
-            <height>298</height>
+            <width>545</width>
+            <height>510</height>
         </rect>
     </property>
-    <grid>
+    <property name="caption">
+        <string>PHP Options</string>
+    </property>
+    <hbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QTabWidget" row="0" column="0">
+        <widget class="QTabWidget">
             <property name="name">
                 <cstring>TabWidget1</cstring>
             </property>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Invocation</string>
+                    <string>Genera&amp;l</string>
                 </attribute>
-                <grid>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLabel" row="0" column="0">
+                    <widget class="QButtonGroup">
                         <property name="name">
-                            <cstring>select_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Please select how KDevelop should execute your scripts.</string>
-                        </property>
-                    </widget>
-                    <widget class="QButtonGroup" row="1" column="0" rowspan="2" colspan="1">
-                        <property name="name">
-                            <cstring>ButtonGroup3</cstring>
+                            <cstring>ButtonGroup1_2</cstring>
                         </property>
                         <property name="title">
-                            <string>Invocation Mode</string>
+                            <string>&amp;Startup</string>
                         </property>
-                        <grid>
+                        <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QRadioButton" row="0" column="0">
+                            <widget class="QRadioButton">
                                 <property name="name">
-                                    <cstring>callPHPDirectly_radio</cstring>
+                                    <cstring>useCurrentFile_radio</cstring>
                                 </property>
-                                <property name="enabled">
+                                <property name="text">
+                                    <string>Use current file in editor</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                                <property name="checked">
                                     <bool>true</bool>
                                 </property>
-                                <property name="text">
-                                    <string>Calling the &amp;PHP interpreter directly</string>
-                                </property>
                             </widget>
-                            <widget class="QRadioButton" row="2" column="0">
+                            <widget class="QRadioButton">
                                 <property name="name">
-                                    <cstring>callWebserver_radio</cstring>
+                                    <cstring>useDefaultFile_radio</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Using an &amp;existing webserver (local or remote)</string>
+                                    <string>Use &amp;this file as default:</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+T</string>
                                 </property>
                             </widget>
-                            <widget class="QLabel" row="1" column="0">
+                            <widget class="QLineEdit">
                                 <property name="name">
-                                    <cstring>TextLabel1</cstring>
+                                    <cstring>useDefaultFile_edit</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&lt;font size="+1"&gt;The php executable is called directly. Ideal for developers who want to develop terminal or graphical applications in PHP. 
-You need a correctly installed php cgi version.&lt;/font&gt;</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>WordBreak|AlignVCenter|AlignLeft</set>
-                                </property>
-                                <property name="hAlign" stdset="0">
-                                </property>
-                                <property name="vAlign" stdset="0">
+                                    <string></string>
                                 </property>
                             </widget>
-                            <widget class="QLabel" row="3" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel1_4</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&lt;font size="+1"&gt;Uses an existing webserver. The pages are previewed in 
-the internal web browser. Please make sure that the webserver was compiled with PHP support.&lt;/font&gt;</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>WordBreak|AlignVCenter|AlignLeft</set>
-                                </property>
-                                <property name="hAlign" stdset="0">
-                                </property>
-                            </widget>
-                        </grid>
+                        </hbox>
                     </widget>
-                    <spacer row="1" column="1">
+                    <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>Spacer5</cstring>
+                            <cstring>GroupBox13</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Code Help</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>codeCompletion_checkbox</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Enable code completion</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+E</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>codeHinting_checkbox</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Enable code &amp;hinting</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+H</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>GroupBox14</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Parser</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel1_3_3_2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>PHP &amp;include path:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>include_path</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>include_path_edit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>realtimeParsing_checkbox</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Ena&amp;ble realtime parser</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+B</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>Spacer11_2</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Vertical</enum>
@@ -114,11 +168,11 @@ the internal web browser. Please make sure that the webserver was compiled with 
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>20</height>
+                                <height>170</height>
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QLabel" row="2" column="1">
+                    <widget class="QLabel">
                         <property name="name">
                             <cstring>PixmapLabel1</cstring>
                         </property>
@@ -137,7 +191,113 @@ the internal web browser. Please make sure that the webserver was compiled with 
                             <bool>false</bool>
                         </property>
                     </widget>
-                </grid>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>In&amp;vocation</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>select_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Please select how KDevelop should execute your scripts.</string>
+                        </property>
+                    </widget>
+                    <widget class="QButtonGroup">
+                        <property name="name">
+                            <cstring>ButtonGroup3</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Invocation Mode</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>callPHPDirectly_radio</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="text">
+                                    <string>Ca&amp;lling the PHP interpreter directly</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+L</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel1</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;font size="+1"&gt;The php executable is called directly. Ideal for developers who want to develop terminal or graphical applications in PHP. 
+You need a correctly installed php cgi version.&lt;/font&gt;</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignVCenter|AlignLeft</set>
+                                </property>
+                                <property name="hAlign" stdset="0">
+                                </property>
+                                <property name="vAlign" stdset="0">
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>callWebserver_radio</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Using an &amp;existing webserver (local or remote)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+E</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel1_4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;font size="+1"&gt;Uses an existing webserver. The pages are previewed in 
+the internal web browser. Please make sure that the webserver was compiled with PHP support.&lt;/font&gt;</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignVCenter|AlignLeft</set>
+                                </property>
+                                <property name="hAlign" stdset="0">
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer18</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>21</width>
+                                <height>171</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -155,7 +315,7 @@ the internal web browser. Please make sure that the webserver was compiled with 
                             <cstring>TextLabel1_2</cstring>
                         </property>
                         <property name="text">
-                            <string>Project &amp;root URL on webserver:</string>
+                            <string>Pro&amp;ject root URL on webserver:</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>weburl_edit</cstring>
@@ -165,46 +325,6 @@ the internal web browser. Please make sure that the webserver was compiled with 
                         <property name="name">
                             <cstring>weburl_edit</cstring>
                         </property>
-                    </widget>
-                    <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>ButtonGroup1</cstring>
-                        </property>
-                        <property name="title">
-                            <string>&amp;File</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QRadioButton" row="1" column="0">
-                                <property name="name">
-                                    <cstring>useDefaultFile_radio</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Use this file as default:</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="1" column="1">
-                                <property name="name">
-                                    <cstring>useDefaultFile_edit</cstring>
-                                </property>
-                                <property name="text">
-                                    <string></string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="0" column="0">
-                                <property name="name">
-                                    <cstring>useCurrentFile_radio</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Use current file in editor</string>
-                                </property>
-                            </widget>
-                        </grid>
                     </widget>
                     <spacer row="2" column="1">
                         <property name="name">
@@ -232,27 +352,141 @@ the internal web browser. Please make sure that the webserver was compiled with 
                 <attribute name="title">
                     <string>&amp;Shell</string>
                 </attribute>
-                <grid>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLayoutWidget" row="0" column="0">
+                    <widget class="QLabel">
                         <property name="name">
-                            <cstring>Layout5</cstring>
+                            <cstring>TextLabel1_3_2</cstring>
                         </property>
-                        <grid>
+                        <property name="text">
+                            <string>PHP &amp;executable:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>exe_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout7</cstring>
+                        </property>
+                        <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <widget class="QLineEdit" row="1" column="0">
+                            <widget class="QLineEdit">
                                 <property name="name">
                                     <cstring>exe_edit</cstring>
                                 </property>
                             </widget>
-                            <widget class="QToolButton" row="5" column="1">
+                            <widget class="QToolButton">
+                                <property name="name">
+                                    <cstring>exe_button</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>22</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="focusPolicy">
+                                    <enum>TabFocus</enum>
+                                </property>
+                                <property name="text">
+                                    <string>...</string>
+                                </property>
+                            </widget>
+                            <widget class="QToolButton">
+                                <property name="name">
+                                    <cstring>about_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>About</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel2</cstring>
+                        </property>
+                        <property name="backgroundMode">
+                            <enum>PaletteBackground</enum>
+                        </property>
+                        <property name="text">
+                            <string>PHP &amp;Ini File:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>ini_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout8</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>ini_edit</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QToolButton">
+                                <property name="name">
+                                    <cstring>phpini_button</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>20</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="focusPolicy">
+                                    <enum>TabFocus</enum>
+                                </property>
+                                <property name="text">
+                                    <string>...</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>zend_checkbox</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Load &amp;Zend extension:</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+Z</string>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout9</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>zend_edit</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                            <widget class="QToolButton">
                                 <property name="name">
                                     <cstring>zend_button</cstring>
                                 </property>
@@ -272,97 +506,9 @@ the internal web browser. Please make sure that the webserver was compiled with 
                                     <string>...</string>
                                 </property>
                             </widget>
-                            <widget class="QToolButton" row="1" column="2">
-                                <property name="name">
-                                    <cstring>about_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>About</string>
-                                </property>
-                            </widget>
-                            <widget class="QToolButton" row="1" column="1">
-                                <property name="name">
-                                    <cstring>exe_button</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>22</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="focusPolicy">
-                                    <enum>TabFocus</enum>
-                                </property>
-                                <property name="text">
-                                    <string>...</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="4" column="0">
-                                <property name="name">
-                                    <cstring>zend_checkbox</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Load &amp;Zend extension:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="5" column="0">
-                                <property name="name">
-                                    <cstring>zend_edit</cstring>
-                                </property>
-                                <property name="enabled">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="2" column="0">
-                                <property name="name">
-                                    <cstring>phpini_checkbox</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Use 'php.ini' file in this directory:</string>
-                                </property>
-                            </widget>
-                            <widget class="QToolButton" row="3" column="1">
-                                <property name="name">
-                                    <cstring>phpini_button</cstring>
-                                </property>
-                                <property name="enabled">
-                                    <bool>false</bool>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>20</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="focusPolicy">
-                                    <enum>TabFocus</enum>
-                                </property>
-                                <property name="text">
-                                    <string>...</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel1_3_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>PHP &amp;executable:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>exe_edit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="3" column="0">
-                                <property name="name">
-                                    <cstring>phpini_edit</cstring>
-                                </property>
-                                <property name="enabled">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                        </grid>
+                        </hbox>
                     </widget>
-                    <spacer row="1" column="0">
+                    <spacer>
                         <property name="name">
                             <cstring>Spacer11</cstring>
                         </property>
@@ -375,18 +521,18 @@ the internal web browser. Please make sure that the webserver was compiled with 
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>20</height>
+                                <height>343</height>
                             </size>
                         </property>
                     </spacer>
-                </grid>
+                </vbox>
             </widget>
         </widget>
-    </grid>
+    </hbox>
 </widget>
 <images>
     <image name="image0">
-        <data format="XPM.GZ" length="18703">789ced5bd9722a39127dbf5fe1e87ceb9850b3144bc5c43c181bef0bc6bb27e62129307803e3dd4cccbfcf91942aab0a0a30f6ede9896e6774f43d566939ca4599aaf26fbf2e9d3576977efdedc7e3133f5d454b518f1f967e6d3fdfddbdfff35ffff8f78f5ff285dc523958ca87b9a5c22f7ffbf1cbc1d352b4b437e87734a06500ca991f8db92b3810bc11e3aac125c1558b69cde06a8c47822379fec0e1bc1daf68713e97b7cfe73406ca497b4b7020f83dc676bc9ac1552d065f385c30cf53497024ed865f21a7c5e0e31887e6f9407020ed7b0e176dfbaec161c18d7f1163d3ce8f8223c13987a5ff99c6c57c3157cc9bf64dc181e037870336cf9bfd2a86c5aaf43f151c05e6792a5a1ce4ca4699d4d038c80739797e4b70609f67165cad144dbb993fe0a02af36d3b5cb2e3ed3b2ce3af088ea47dc3e252ae6cfb9f082e555a66be3387ab065341701846061f695c2a9472767e0e1c96f15f626cdbdb824bd2be27b81d06a6bd6c71396fc7575587d9b42b19bf5cb298ee0cc6fa2c3fee090e65fc5b8785ffb3c3b27f1dc16de17f6371396ff9aa63c1c25fad386cd74bb518dbf5161d96f51e0996fd520587a53d8cb16dcf0b6e0bbf28c6a69d8d3d94b15fb29fab1697f3c28f1c167e6d87ab162bc1a25f55121cda76751263db5e73d8f255cb82455fea30c676fd4d87855f2ec6b6bd6171252f7c9e1c6e59bed7824bd2de74d8b6b3d15719fb25faae386cf9d0abe0b6e5c3cf31b6f67c6471252ffc470ecbfa0f1cb6ebe77dc14e9f1fd83ebf2758f4476f0e0b1fb33f956245f4a1ca0ecb7a76053bfb7a7758fceb52b0b39f3787653daebfec2f751db6f3ab1d8babb2bf3c8a71db3c7f6e70ab22fe80b3c6e2b6eccfabc332df6a8ced7aae2dae8a3ed58d60a72f8ab19d6f5d706831e71d8e4a065f695cc5fa24fe5c3a2cf6fb20b824f67aebb0f075fd9d3ff51c96f6bb18dbf5ac0a6edbf9e9de60ac47c6af3b2cfa1c0a76f674eab0e8a7efb0f02b581c3afbea3a2cebd98eb17dfe4e7049f663a07118a0bf7d3ec6b25e165c8a4c7f7529d8f1bd10ecf8e5636cf91bfb08a350ec8bd71c167d93c3327e47b0f0535b0edbf115c7d88e7f6531cbfac8ac9f0376f1bc2d58ec43b51c96f922c12cfd9f0477da964fcfe256c16236f6c811b3c48f487047ece1c56159efbdc3325ed5e256b96df22936cfb730bee8bf2eb82ceb7d7658d63b7458c66b0a6619ef557047f08ec39db2e96ff6bfd576cfab07c16e7d9518db7caf6c715490f10e05bbf59f386cc767c3372a4505e1ffe8b08cdf172cfdc9b5cbfe73c361195f0976eb37fa89da68b7e385823ba2bf77876dbb5a8fb1e57b6a715bf8d0b1c332bec977da25f73cb52c6ecb7a55c561e1bb1263bbdea16096f6f318dbfe261f6a775cbb3a132cfcf836c676bcbac397b6ddc4bf4eb9e3f4b12eb86cdb95990f9ddd7afa8259fa9b7870697e343e78fa73c95f9cff1cf233392b520c6941229136a403b98474213d7505b93672a36e217790be1aa02ffdbf70363c5bea5e0dd5837a544ff84fcb03e419f222ac1d67c7f855bda97735822cab9a5a812c03af620fea9aff1f9333b86aa66b6a5d6dc4b269383f43bf5be0b80daddea81db5abf6d4be6a787220d254879023c379451d434e8c8cb0273d68ff9bb87f9d33f4aab99eaa33756ee40cff7e00cf0b58e99ecaa9bc2a408a2a3052cc9442428e8cd48475c948d970ffb2debfc2d9b07d5015617b061d0fc174073c35c7aa615858484211c75f732f91b202ee576af07b7336963c34767c66f4aab9ee6175c197984ee36fb95be6e6473327fe7d381bbe0fea895ad482b746ea8622c3753653ad7b5f3eb7378efb913aa6364877204497aaff7339836f14c763b0c50ab45ee75b7391bad4f3e48aae17b208cbfd886ec0f896eee8161aafff1cce86efb361fc8218dc3011e9336b2d529f06744f43230ff4484fd8b1af587c41add03358bf405ee7e73d1f67f0dd02537dc2b68d763fefb3457aa3771ad1722c03bafa02e758e35403ef175a81bcce17d9e6e10cc66d307e01ef1dc37791f505b44a758ff11ae2c1fa82638d3107ef0ddaa42dda867fcf3cc96671361aee98dc49eb77f1885c85ffee789c77d5f982fe9cc57b8ff6a94107f0ef19516d3a6762e44f3a3feee1ccfddafaaad4a4438ff3111dc7e7ef37b156053aa1533aa353f5b62867643c5d9317ef4dc8933e2b3a821d789ccfa9f9456f9ec09b2268fb942e20ed45381bc6dd0c0da74fda49e2f72ac28e4f29e771dea13c15523d92de3d7b8609d100b942818a14508936b23c3b8b3332fa2b305e55937cb888936a4865aa644893aa60d4f54eb380d653112c6495e8d1a42b26d867359ee362c60c4f888ad1045b81b699a9c42dda9ecc7a326730be06e7dd0c8b463ce20851f26892709b3b7c4975758ee29944df3a820d3e3873d7efcd3df4b8e26bbee15bbe333d8a58779f079973a0070df99e8718371ad377a872cce0bc46dbf372368caf51d166f94d95ca9873798694c0e41e5e1b6a4fa02a3fccec31029f3a558c5d7439e9ff13851ff941bde0cc4b6bdbea7a0dcf3ccfc3197efc6a6af829b142ade35498c5c0b080f694b67144b0adb97a2cf335ecb64079e8b935578f5decd3f8491ff213fc5a8f37c63acd19e7f12af84e63acbdb98218311f832ebf18fb3b9d9301ec03b54b8e5f6123f33dbf4c01f2a5dca478c66f58c17b3a2b1de37ca7de21f9699c79044fea7abc9671265ad9e596df62ed0f117b35d5a3056646b896c84745d37cc72bc8c9fd9d7bb433e0ff4122fedbf6dea43c163b5de477b49f4ee38c1c44df4a35a730b611cc8b47f09a77be55152754e7d514ef1daef39ab7c21adfa8331e5a410e3a000f9fc1809e789d57bddf35d4b937430bf69ff0146ea9b63ea5c604b10cad1bea359bb3ba35f770d3188333bffa19156ff210d6aef3810816d6804eeb94b04bdee26de4201fbfd9420ee6dd87f18e1fd30de766328221fe351113a2788e3cf6a49de8b38bb371c22903fbde43eb5b166745bcaf965573564ec80de4f31ff31d8241d5bbd7aad25b2affd09c3dbd20e697bd1e012aae7ac23206887be7b07aef37c676e339a8c07789f31e63f268e2c96a357de0fb7482735fd5c079ba968bd8e74ac21677f835e54b2137e0771f4f1c80811fc18689ca3980f75efbbe8b1d5821bffff25864d695e92379fe42b7c8052671c649c9da629e3338df80f3d12cced44dcd56a77c9233eca98113e4e3894d0a3f7a184ee431d067f755c2379fe01d7e0d9643c468a672d9f42ab2f4ac35fd96b46e9f332c7b059ca75b76ba261cd13b6c39b11eacefd48fc6886991876a88430daf47c08788bbbeb7f7e1ad7ece7340fd141f54e338037ddb3e9ac2595bf771869e0fe7e19c8c60383d1aa91ee9db8165ba4fc4f9865af77be8b31ba79017aff80411cccf790ec76a3064db9cc865f9143b3d71c5887b27daa33338d7e6e05c84dd1ef9b163c27aaac8b713dee8eb5122d887958e555cc8d3fb899c6767ecf42d2213f4e2282f232bc9a876e1697a47d716e63c16c1f4599a580fa236b5d8b7ba47759e60709f8c6094b47c1bc1c2441cafd36a22825511f592394e1bb549c63dd30ccecbb339a7e325bc6a353e45f42d7783cf53d5c403eaa58d0483f54404eb25ac223716c1462682051f73307152cb5d5e4bc5b831ce99b63d52c73338ebba78905acfc8e609dc448dfcc4b7c97c04d9e8b61f6d58bf09f023581511cccfa91a3a8225731ef87fce4883de702e37d50627b3b0366c3ffb36d1c6b08b0cceab73706efa1915fc48bfb959879ca28ab8872f6e2656d345eebc9dd88583640433359a5f331e9a08e66730abdc3733600e9c11c8f17ccf21576164de5dd9fa8a73199cefc079650a63ed7d7d3fe7834fe550551841dd98aa2eb4efb2421ee965cec8430ffd08a66b343f5fe1818e6009566b6e06730b909e610dbb9a9f7a671cf2059edb9fcc1915c6f2744d9b9af0716cde89821d78a0636e22ce5f78bfbda45e2282ada772c808116c12b7c973d450bbe427dc0fa5bdb9eb5719a91a435b772d7384f17711d912f00bb2e6d0f4f0635e9488c1fa56cbb7fc91896083b966d027fdb3b94b9a6699360bf32c7b8cf3409d4cd13432e3d9eb817ecfe8419de1440acca9e29f442df8a47f93af6f997ccbdf4c47b00c1921d6ed5019b5d454c65acbfacc5027d99c8da64f8ca627b14edf6ae5702ef63ce9d039fc51dfcc35918f5695cd54ebe6ce4e4b9b1f10ebfc91756e71efda91eb0cf8159c5712f6b2e5cdb0a5e700db47eccd9d39b9a6e938944a32a1e571cef0e911584fd6b48e607e46d5c3faca09d137b62373035b144e7b54e1c3b8bd9fca1d744d15b7e25f157d0f96a8da86f0efe40c3df4699a5c601adf421cb137e8723a6713bd4f26b34e67c6a8097b5490ef4402b38af137e9f61b8b8f27d29a09fc768cd6e29b84ff17b8e93de1eef2e778abc24fd6ae6923c92fe3ae77d57875dabec7eba5ebe9317301a9e2a4f26a696465dd05df6ae5684fd7cd9c1bbfd7cfb8d37f33ba4eb2d699b1bf9e357accacdf1616788b7f8b14a88b85ded76ac6daae8f27bda3cce04cc2dab7f0546d4f25c4a3afbead4c0a3214e4237e05d3cbae1da6ec9bb6ea03c3b837ce6dcafb2a9fb5e59dca8c918f95bfe59df98704a81efac90c66468e352ef6bd4d299bf1d4f79264fc3a3eb910c1d61311ec81aadfedcde3112c7507334b60773a07317e9cf9e67dfa3b77752bdfe11de9ca9987387dafb0f75aae50e3ceca813ecf79a8ce657c080d55677ec6baba834d5b2bd99ff685c5cc6f2bfae6bcd6da2e32215374d2a369ef3a1693a2beb9f6e6789a7c673d4142f8705934fc3efe86ea739c8d8d5f5b6d532df5cefbbb392ff6d55ca82d9aec8dee32bfcdfe666ace6fa5faea3db6f2820a173c33bf5f42f34e8aad45f3f12c0d7f86b3e1dde3e73f126ff31ea700bec726eaadd1f3bc5f7f7ee6db47e4e2b7e2dd2772fbffbf601e0adb33d873cedc551cd346d6b9f455ce46dba4eab19dfbcc7f3ef7d0b1458ec58857817e93cb396a7ff6ebde05bf65eeabd5d8d24fe2373ee14f616fbf70d45c6bd0ed069da2cabe00e3339c486f8b7cbfbef837eb46e36f1ef371ee8bf20f9323508df6e884f6698b0ec0f78c0e681ff32efcd5fa57ff36013e5e57afc6cbeddf0f58ee35f39705e3eb9f570a9aa95aa11b44a60d5aa14d6a404e699b9e55f92bdfe87f07e758e703c4b73755a657e13ebe034799ef3c4d1b99bfb7014bcd537fa17c275feb6ee2bf17f35d7e6fb1eff27f0ee70477e89d2e2d7bf7171453c4fd748cdc9aafd0ed17d977c08af4174cfdefe1fa7338fbec61f57dd5d37f3ba57740ef0157ac8cf1753f0a6daf78f2f27bfebee6f7e6fc4796bf38ff39e497fffcfdc77f01607f0253</data>
+        <data format="PNG" length="5423">89504e470d0a1a0a0000000d4948445200000078000000400806000000d14db312000014f649444154789ced9d6d881dd779c77f2a13742edcc24c58c34c90e04e59c18e90c077b1a0bb8e215ec7506d2ca8d649c12b8762af1b48e5b6d0bcd158fe90daca9758fdd2a8812676a08ea50f469b82aa75c0ce2a607bafa9c4bd02891d8144e78217664097cc015fb8c778e0f6c399fbb2ba3377df575bd77f58b4ab997b66cef99f97ff799ee73c77dfd2d2125fe0f38b3f79d02ff00576165f10fc3987f1a05f60a358beb9bfdd796b21d2fffcd27d377d2601504affa9921600adcedf0a40adba07004320babf17f4330c281802913eecf0d14ff76d473d760b7b96e00e914280280884808200cfd3ffd74f8c4af4bf2dd5214da05a6ae0bebe4fa4f7a57f264a979148e2a453a682a457b610600941b062b685109a78612184d8d3a4ef1982976fee6f8ba226d32a16281f03ab2806ee6b35557744c64d856c82fa44a19298962aa0540bd5212651b4125611753f046af55f09e80ed0b9d2eb0ca18a8118d1d76a4258042ba22d8a26c2286015cd3d45f8be07a9a297fdfd6dd3d2849ab626d4143d52a5529ac4468bb0a1909f28e286229431aa090a3dca004d625fd9835d631d18dadd7ba56bea5b99d72c211045075134b1f6c008df7582bba49a60db1605419754a914b15484518b7a28095662e2865a3d5d1a2979bb3af7dcdf5dd4aadf7b842b4856af0956d1c4b45d2ce1307e6cdfae13bd2b0477a65fd3123876414fbd2941715311ae684297ef8648d9590f7940646e04fdc4abeebf82982ed97d845ba6adc92eba8c97776754ef28c11d621d4760164114b532958d1641a4f0ef84049142293d4285c1d6c91cb2dec2363d23bff4bedf95fe496244a200d9d50ec22860d91ef688cba313851d257a47085ebeb9bf2d2c7046b4daeca8d92ea92b522b5883558265cb48c0b14dcac7dccccbea13c5d28d0025d52ecd0afd844b50318208a5e2ee0ce5d81eb6edf1e8635fde11a2b795e00eb166110ae956226c48828f157e3d4636f574b5ada4f62381d3cf4d12dc59228c02307a0dac9462eac9698215c1fce51a62532a6c2be83c504122a1194012a33ed36d621ff4700f94b79de86d696abd6755980fa9ae41200c23fc7a4b8fd644576fc7880548c01c3111a2c50ba75f40350737c0ee011765783bf812c3d0791f01860da60d8944347d542ba41ed4a80735829572fbf0e8d4b609b22d37b95e6725a2a0898d4285bf12134629b1db3d0de74001ce8845184599e40a21281f9be4c2e5e0018bb6be77334c3027104589ba570555c7f717a9dfa91144d36daf54def2166bd355ed8c5a0c6d1694b12288f488ed2ae0dd6cc8041c5b107dec675e764b368e691236e2cded91770429d98689e94ca19a11dcabd2523e4b575f27743de2e6a9f65684d8a628a8d6f6b73142045a15072b2d8295540defa84a1d0efb218babd7b309f6c60e133414aac91edc7669cb9928da88e214341c54b884efd7083e0e881a73eda74ffcd9a648deb037a97aaddd6e25210071b345f56e8c7f57f6c87d401006584558aa648b46cff3083b5bb23d89745b85c0b4cb38eed388a2896c442cfcf62cbffae5efdb9b2975439454afb5db2d620062c9ea513b0c6bec4dd78bdc3d6c02c2148822f8b7f3a6688ffac7714af090497ac8d2b22d7d63cda52bb5099836eed139027f917065918577cf13c5617be6f8dc86d6e57513fc61a5d556498c1002d950040dd55d6b8722015114cc3ee95128167ab6e375a295768e288c09ea2141a4d7fcfe4652803b6211ae04482907cad002ab8cc2c173adcc670044f76282ba36912aa5566fa51298faaa8b77c8d9741d946a110412bf1ea29a6af8562dd11dd13d3a8d1016feadb758fae002a80878a9bd5e92d745f08795565b36638480a8a108a3f5afb52a81a9475c94f239f72fe7b1526bd6baf025813d62e2d82ee56393cc1e9fc48f140beff8f877c3de884ec03d6022ef658f5e9528beffc3ef673e5b1404a669e2d80e9e57e6f4b7c75149994beff854ae07bd8e2404b327ca5cb8f806972e5fda503d3acf70473da68e4d32736292cab590c58f02dd9172db514122700f4d0050bbfe3a8b7f5800e0f0d1efafebd96b52d42117404a4528d7f3a9d5700f5a5cba789eabef5dddd807ef837dc066e6c434a79e9963e2d824177e5bedda7a4dcba256c9269884753f5b1405d35f9fe2f9ef7c8f716f92d7df5e4225e09a7ab8bd75f12d2a1f55b6540fef88c7ccc919661e9fa67647e1df0e878c66854a044e4a72e50fe759f8dd3ca6e5b65ffcbba7d71cc5434556f55abb2d65a81de22a2577831042dba17d3fa7f137806825e2df7ef1064f4c3f8192554effcda4de6818e098f9026b23504dc5fc7f2ef0d4f413c48d2a332726514d855b7200f0ef6ebd1efe2d9fb3af9ce5e51f9f62e2287863ce1a1a452f87aef738e53f9f05e0c2c573fce6e2876b0aaf5c82976fee6f878db0eb3cdf0cb92469448610f877834d14900dd5547c73f69bc42b55a6bfe621841658b51bb56d7b06c08bfff8225e09ec1193926be1dfae211b9b69886cf8b7ebbcf8f773940fadf6836743a194c43d3a4df991694093fce1fb7f1c4a72ee641b4a8952ba32a1dabc69c0322d6423208aa2cceba55209cb5c2d7c948a091b520ba6bc9e9dc00f7efc037e73e18adefec830536041c78429063e2f9b32d3ead541b412e1dfaae28d39b8b6c9c23b97b26f34c01bf310fdb6ef44d1522d64a71e39a8dfad33fff639a69e7a8985f7fc75d9c8bdf22c41bd8a6c44cc5f3ec7a38f9dcdbd3793e06a6d7f5b369653f52736ac1a3b500978a326b55a25b30c210497e6af60994e379eaa1f41dd67feedb778e3cd37323fefdff2a9551639757296c577e733efb16d9bea7f2fa112d155cb5d248adab525cebc7286fadd7a661da230c239e8619902ff56f6f4fcf85727b874e10aa1ccea2c0aff5695f3ff9eaf4116de5d64faa9d388a21808181840a2edfde5474e71f577e7a87c54e1ca3bffd3fec6f16c434826c1b10cbb8db1d5fdabed585cbd9e3d3d7b473c44d1e2d57f5decba0fa1e7e4770f389c79f9e778632e3ff8d1cb99652c7db0c8dc77e608ead9d3b377c4239482f3bfce5e9f674e4cf1eacbaff2ec5f3f9b5b07b3584018f93a62f2b129966e49de787b69d54cd1a9c7f81197b7fee30a2ffec3b3ccbf3d3ff079d990d46e54714cafb743190295289c431394ee4e50bf5b61e19d0b7ce3f899cc7b07d6e0e59bfbdba194a844abb74d4637016924e2108135f5d8144a69754ea2b425416941a79a8adaad80d77eb9c8d4f15398a6995946106aabdad2b56ae675ef908b944a478a3457ffc8a662e1dd2ae6434e6ea39aa68935a2475650cfe9a8a31ed1bdd4c7ab06ebb1f05e8db77e5be3f9e74ee7b655abe9774375d70301b8a39300f8b79772d7e20182e3a64435d3b8e26e84e126908030046651b07c7739f3166fcc236c740cee833f4268f29502e7809359866a2ae230ce1558eea847d868653f03700f58a8669cbd0c19603ee4600a81bf92af23cc871ced64c9a80306984541b0126365698114526ecc39a312700e96114513d594d46e644fff03044bd54a0bd8bacfc53205b21912ad64378c7dd0a51ec4c30be9543a69655eb64c8b200ab2c592019e378eef47b9264ed775f0fdecce619a26ce884d4108fcda907b6c9bb0d11a3ad715d622cf101b5c0ef55aec8da5a3f84ef62c393882a5ec7bd0e6495689dedff9b55aa6815f14058e6db3dcb1486521d1424c0808f23a896313d483cc67d823366ec9cb77111a6099f9f6ebf2c36554524008a8dec871628c7928554049993bcd2bc0342de228cc757698238326d4f5c01cd1010c71237bf91820783bbd2db663e5369e37eaa192825e7f87348c6b6b1b73de76c61b73893ece26df1b73f53ad827e0fad133c26437cee4c4240a315c604d4c1237d710a309b8ae493da8675f3774b449dc6c6dc84aa880c29fa681168d30f39e4143c75a327d9de8b8ef8220bb612626cac4728d0e9580e739d4aee55ba8bca3932c7db4987dcdf3f4c987ac6724bdb34d79e2c93de076efc933d47863a9c01a026180572ab0f0ce42e6f5d28112aeebe95960c348c5670e6f3b73ba30e98c0e41f556b6c03a3c368e6c66afaba085a86d9b782578fdd7af67dee31df1987cb8cce2fbd91dc02db93d81757ff9806b3b0477abd98608436b04530882153f5760d907dda15b1ba5a0fcb08b6a862cbc974df0f8b1718270d37276280609de26a7bd280e175825b74410a40d9bf47eb45b0d4c5370fab9492e5c7c9d7abd9e59c6ec33b3a8441245d93ddf3b3a897f6788c03a64e2dfcc9e61cc624f60d5aed5b20d35a98e08a238b71edea8c3a99365cefef46cae529ffefa0c7e7d8ba14446f6a707aa2e0c812266ab02ebf0a843e0fbf902eb80cbd55a84288adee90543e08e14f00ed94c3eec70e9edf39c7d25db0ce78d9538f3e3335cb97c25737a32474cdc92cbfcbbd5dc9a38230516739c07e587bdaec0cad511631e5000a57ab66443cf5eee010bef90c3e192e0cc8f5e60e177d9a377e6e40c143da4f4371cc32680d6277a0099c56c3bc1409156d1a4e31edc0a4a072d2a57b3b716f6888d655acc9e2c40e2ae7a1325437cbfc2d37f759edaf51ce78101affcf36b00b95b1c6fd4ebda1c72059600ff4ef6da3a5eee09aceacd6c234af96819f780cde9e7c657bd1b498b308af06b6ff1e277f267a0d26889d967bec7c2d5609387e5840ea207ac916c3bc1e0082e5a40a04785b1c95521155879c2a4be52677cfcf0c0d395ea1d6319869f9d7d056774922bef06f8b773c4cf2117a9188ccc8034caa4e3e5ca0bf1e909ac20a71e172e5e60fef2a0e95135d78efd1242f0da4f5fa376471fbadb4c04aa528ae0b61698ee81ec78efcc112c843e67ab2701938d2eff1df75dae0f3861a887251706bcf29357983a3ec7f937abcc7deb30954ab6f37d9505eb3e74b65f41ddcf75ffd9076d4c21081b51aec0ea76c80dc2b66d5efdc96b449fb8f8b7d7e7411a802190514014d5c180f2b1a9ccdb0644d678f9d37d8e69039d73b01bac40a24d7324addcedc766501a2df15ff3ffc5d4f139cefd62290da8cf7f8677d423b893637c48c03b64e3dfcc56dfa228700f78a9c05ada56dbc0e35f9be0576f5c214e5c163fd824b9e8a11706da3ce98d4db0216f9233e21036027d1aced8d8285668fbae7fb336d4d7ba2e18503e5266e65b339c7a668ea51b316ffc62318dc17208ead922ce1c317147c759a8ac21b02ee7ef6d3b026b3b8208445130f1489953cfcce17a532cbcbb4cb022377f3eca10445140ed869e9e271e9bc9bf35eb3fc78feddb1736dc76d808d0e7e83ba1a6eb202cb5efd62ad9aad1344da69e9cca5d734cd3c4322d1d68572e63da2e415df1da2fab44916e1495683bb71016337f39dd3d36031d13a95e8ff282dc85a10fc87963eee0e75b8a9993b3c40a5cf2455869b4c4d4c4a43e9c3e50be4014059669e1963cbc7219128ba55ac8e29b4bba3537bd49d11f5caecd43a2f08e4cf0c2b71fcd8dcdca5dda1ddbd59e25d5d932adf38dd2f8a8f91cf1327d7c8ad7cefd06ff6ef6ba063a1b4e742f66feaa246c2ce91053a3d728c280eaad80a79f1ce7f40f7f3e20ca84018bef87a8245bbc2860b11232fed829c6274e0dbc3f0afc2066f288cdf2ed6c057dfabba7993e3e4794b386b79476dc841f4b5e7f3b444abf17c2945bf3b52184c0afcd53bf5b0143307d626ee8fdb9048f973fdd1737dd76508f11c4e9d85d7baaee09acec9e5f7e6482c5eb01172e567404c3fde823ab13163bd0db0d900dc5f9379772d7d86101e6c280ca8d80caf5ec8368aaa9987daa8c5251aea106c3e2dcaf97b448bbbf8cfe0e67f49dacdca21149089368c5a7f2c10500a69f7a9ea74f1c1e1a5939f4914f3c56d877a5994ed5499caec743a6ea34c81df2a30fdd832ed13dedeaca2460bd8d30ec84c03aca18dae042e07a0e4b1f650b2c1d7c60e707afefc0111e610864a3cee23b67bb53f3ccf139e0d3a19f5bd316fd8de35fd967998e9e2209a1bb1e0fa2bbfdb85dcd3dc2e9945c2d30f6dc01b01e8400d74e63c932608e98148a56e6fabb23ef6308a48c58b8fc2aaa2929953c9e7feed5751d615997b3c12b7958a6b6946892259924a7de9f5c07fa888910167163eb96b21d43c7076d0c71231e1bef66cddb6908611245010bbf3d839211a592c7dc777fb6eedc1eeb1a47baa7786dbfae03f256afc9b02a4f94996ff9999c9844cacd5b6e76039d734e30cc065d463677fa4d74270bfcab5cfdc37950aa4bee131b48f3b0ee66ee901cac08c246d04d15a430e9accba2a8edbbb51c0f4df9e1327193f51d5a7b5048c02b992815e51a5184e910463b77905c1802a514b56b17a85dd7db4defc804cf3ff7ea86b3f26ca8990f1ffd74dfe1a35fe1f757453b58f1811682160a0b9234a34e5130f7dc1cb10cb93fadd0f4f169162bd991077b09a6251086c94bfff4d2c03551145845975a23dcfe4e9a26438da280eafbe7b5191298fe8be79939797a53e91c369d65e7c34aab1dac045d6f06145089895b72f03c3be3e541de532ce59cc0df33487702e3475c4c2b7b8cd66a0161941f83b571e86cb652460437e7bba3d61cb1997de67b3cfb4cbe21632d6c298dd2f2cdfded200a74caa2142ab1864664ee7efaa24d60d792a9e9594f2945706791daf5f96ec872f9916966bff5b75b4eabb42d79b23eacb4da511410f7f9911516ab2d607b3575c283409aca5129c28f6bf8372e75a7e352c963fac4f35b1ab5fdd8d64468bf7fff8fed70c55fd5fbbf20ba0f9db09a4411063582db0b44517a085c08664e9e66f2abb3db9ac772db5319566bfbdbb10c091b51dffa0c50407589feff42762fe92a89423642e27b3eb2e11346da13668fb81c7ef8712626a637b4fd592f762c19e9f24d4d74d488564ddd1a5964c3ff7dc27b7159803e38df94c4f70264c32796cbdd88156bc465e2d834e38f4cef68e6d95d4927fc61a5d596322696418678e9271b062d647b99f4be7735e8a60f963286cf02e2868f52fa0c722b6961152d1cbb8c579ec22b79bb92287c5713827747b594b49a618e525d8bf00e768bf861b25f75d35b2815c22721ad449fc2e82431174260991ea5431e874727773d29f8034be95faded6fb79a21b229899b2a5daffb49eb34ac3e52a90608dfcdfd56fa5e492707740b54846cb52089f47743a47a432502ab68615a2e8e6de396769fd47e3cd0ef6ce860f9e6feb6528ab819239b125448abf34d2899c823fffeebeb415fa7ea3f2edb39cda8527f709212f899ea799112a5ad4f86c0b49c34a3bb875574762da3fb5ad81304df8f0ee12da50957890215f748df0e37dd7d65a8fee3a95d02d36b694e67f1250142870a092128145dec11878230f70ca1f7634f9afcb5f8d8077c39fd49494fa0a5746a7cad4655977c80d67ddf91001916a99cce213aa7eb8d3410c110140c01c24a63ac867d8bca70a7fb83c49e24380bbd462dd0999a1f0cf62e9959f8e2bb0b3fe7f882e0cf39fe17a14b594f9ff48c020000000049454e44ae426082</data>
     </image>
 </images>
 <connections>
@@ -404,16 +550,19 @@ the internal web browser. Please make sure that the webserver was compiled with 
     </connection>
 </connections>
 <tabstops>
+    <tabstop>TabWidget1</tabstop>
+    <tabstop>useCurrentFile_radio</tabstop>
+    <tabstop>useDefaultFile_edit</tabstop>
+    <tabstop>codeCompletion_checkbox</tabstop>
+    <tabstop>codeHinting_checkbox</tabstop>
+    <tabstop>include_path_edit</tabstop>
+    <tabstop>realtimeParsing_checkbox</tabstop>
     <tabstop>callPHPDirectly_radio</tabstop>
     <tabstop>callWebserver_radio</tabstop>
-    <tabstop>TabWidget1</tabstop>
     <tabstop>weburl_edit</tabstop>
-    <tabstop>useDefaultFile_radio</tabstop>
-    <tabstop>useDefaultFile_edit</tabstop>
     <tabstop>exe_edit</tabstop>
     <tabstop>exe_button</tabstop>
-    <tabstop>phpini_checkbox</tabstop>
-    <tabstop>phpini_edit</tabstop>
+    <tabstop>ini_edit</tabstop>
     <tabstop>phpini_button</tabstop>
     <tabstop>zend_checkbox</tabstop>
     <tabstop>zend_edit</tabstop>

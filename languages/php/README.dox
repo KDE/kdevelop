@@ -1,56 +1,32 @@
 /** \class PHPSupportPart
 This is PHP language support plugin.
 
-Put a more detailed description of your part in these lines. It can span
-over several lines. You can even use some html commands in these lines like:
-<code>This is code</code>, html links <a href="http://somelocation">link text</a>,
-and images.
+Support for the <a href="http://www.php.net">PHP Language</a>, you can
+develop php script for web or php script for shell.
+
+It's support checking of your script with problems report and also parse
+all include files from your script.
 
 \authors <a href="mailto:smeier AT kdevelop.org">Sandy Meier</a>
+\authors <a href="mailto:n.escuder AT intra-links.com">Escuder Nicolas</a>
 
 \maintainer <a href="mailto:smeier AT kdevelop.org">Sandy Meier</a>
-\maintainer <a href="mailto:2nd maintainer AT provider.com">2nd maintainer full name</a>
-...
-\maintainer <a href="mailto:nth maintainer AT provider.com">nth maintainer full name</a>
+\maintainer <a href="mailto:n.escuder AT intra-links.com">Escuder Nicolas</a>
 
 \feature PHP language support
 \feature Consult \ref LangSupportStatus for a up to date features/status of this programming language support part.
 
 \bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=php+support&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">php support component at Bugzilla database</a>
-\bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
-..
-\bug Describe a the nth bug that you know of, but probably hasn't been reported yet.
 
-\requirement Describe a the 1st requirement of your part.
-\requirement Describe a the 2nd requirement of your part.
-...
-\requirement Describe a the nth requirement of your part.
+\requirement PHP Cli Version or WebServer with php
 
-\todo integrated preview (webserver support and execution with php.exe),including error message parser
-\todo syntax check with php.exe
 \todo extended classtools (new class,new function...) based on filetemplates
 \todo debugger and profiler support dbg (http://dd.cron.ru/dbg)
-\todo codecompletion (key words, functions (mysql_*), and current project)
 \todo html form support (dialogs for generating html code, tables...)
 \todo support for phpdoc
 \todo documentation viewer for php (maybe plugins for the current docviewer) (tf)
 \todo integrated filemanager with ftp client (maybe a konqueror part)
 \todo code template factory (contains useful php code snippet like array_display,trace,validator)
-\todo new 'character' based parser, the current is 'line' based
-
-\faq <b>First frequenly asked question about your part ?</b> Answer.
-\faq <b>Second frequenly asked question about your part ?</b> Answer.
-...
-\faq <b>Last frequenly asked question about your part ?</b> Answer.
-
-\note First note text.
-\note Second note text.
-...
-\note Last note text.
-
-\warning First warning text.
-\warning Second warning text.
-...
-\warning Last warning text.
+\todo new functions list from php 5 documentation
 
 */

@@ -21,20 +21,20 @@
 #include <kdevhtmlpart.h>
 
 /**
-  *@author 
+  *@author
   */
 class PHPSupportPart;
-  
+
 class PHPHTMLView : public KDevHTMLPart  {
 Q_OBJECT
-public: 
-	PHPHTMLView(PHPSupportPart *part);
-	~PHPHTMLView();
-protected slots:
+public:
+   PHPHTMLView(PHPSupportPart *part);
+   ~PHPHTMLView();
 
+protected slots:
     virtual void slotDuplicate();
     virtual void slotOpenInNewWindow(const KURL &url);
-    
+
 private:
     PHPSupportPart *m_part;
 };
