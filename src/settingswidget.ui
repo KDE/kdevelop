@@ -359,7 +359,7 @@
                     <string>Check this if you want the konsole to change directory to the one containing the active document</string>
                 </property>
                 <property name="whatsThis" stdset="0">
-                    <string>You can make the konsole change to the directory containing the active document by checking this option</string>
+                    <string>If this is checked, the built in Konsole will &lt;code&gt;cd&lt;/code&gt; to the directory of the active document when started and whenever the active document changes, if the document is a local file.</string>
                 </property>
             </widget>
             <widget class="QLineEdit">
