@@ -20,6 +20,10 @@
 #ifndef _PHPSUPPORTPART_H_
 #define _PHPSUPPORTPART_H_
 
+#include <qdir.h>
+#include <qfile.h>
+#include <qprogressbar.h>
+
 #include <kdialogbase.h>
 #include "kdevlanguagesupport.h"
 #include <kio/job.h>
@@ -76,6 +80,9 @@ private slots:
 
    // Internal
    void initialParse();
+   void slotParseFiles();
+   bool parseProject();
+
    void slotActivePartChanged(KParts::Part *part);
    void slotTextChanged();
    /* the configuration was written, mostly after a config dialog call
@@ -97,6 +104,28 @@ private:
    PHPCodeCompletion* m_codeCompletion;
    PHPParser* m_parser;
    KTextEditor::EditInterface *m_editInterface;
+
+   struct JobData
+   {
+      QDir dir;
+      QGuardedPtr<QProgressBar> progressBar;
+      QStringList::Iterator it;
+      QStringList files;
+      QMap< QString, QPair<uint, uint> > pcs;
+      QDataStream stream;
+      QFile file;
+
+      ~JobData()
+      {
+         delete progressBar;
+      }
+   };
+
+   JobData * _jd;
+
+   ClassDom LastClass;
+   FunctionDom LastMethod;
+   VariableDom LastVariable;
 };
 
 typedef KDevGenericFactory<PHPSupportPart> PHPSupportFactory;

@@ -30,6 +30,7 @@
 #include <qtimer.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
+#include <qthread.h>
 
 #include <kaction.h>
 #include <kapplication.h>
@@ -133,27 +134,42 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
 
 PHPSupportPart::~PHPSupportPart()
 {
-   if (m_parser) {
-      m_parser->terminate() ;
+   LastClass = NULL;
+   LastMethod = NULL;
+   LastVariable = NULL;
+
+   if ( m_parser ) {
+      m_parser->close() ;
       delete( m_parser );
+      m_parser = NULL;
    }
 
-   if (m_phpErrorView) {
+   if ( m_phpErrorView ) {
       mainWindow()->removeView( m_phpErrorView );
       delete( m_phpErrorView );
-      m_phpErrorView = 0;
+      m_phpErrorView = NULL;
    }
 
-   delete( m_codeCompletion );
-   delete( configData );
+   kdDebug(9018) << "remove codeCompletition" << endl;
+   if ( m_codeCompletion )
+      delete( m_codeCompletion );
+
+   kdDebug(9018) << "remove configData" << endl;
+   if ( configData )
+      delete( configData );
 
    if ( m_htmlView ) {
+      kdDebug(9018) << "remove htmlView" << endl;
       mainWindow()->removeView( m_htmlView->view() );
       delete( m_htmlView );
-      m_htmlView = 0;
+      m_htmlView = NULL;
    }
 
-   delete( phpExeProc );
+   kdDebug(9018) << "remove phpExec" << endl;
+   if ( phpExeProc )
+      delete( phpExeProc );
+
+   kdDebug(9018) << "finish" << endl;
 }
 
 void PHPSupportPart::slotActivePartChanged(KParts::Part *part) {
@@ -375,13 +391,27 @@ void PHPSupportPart::projectOpened()
 
     // We want to parse only after all components have been
     // properly initialized
-    QTimer::singleShot(0, this, SLOT(initialParse()));
+    QTimer::singleShot(500, this, SLOT( initialParse() ) );
 }
 
+void PHPSupportPart::initialParse( )
+{
+        // For debugging
+        if ( !project( ) )
+        {
+                // messagebox ?
+                kdDebug( 9018 ) << "No project" << endl;
+                return ;
+        }
+
+        parseProject( );
+        return ;
+}
 
 void PHPSupportPart::projectClosed()
 {
    kdDebug(9018) << "projectClosed()" << endl;
+
    if (m_parser) {
       m_parser->close() ;
       delete( m_parser );
@@ -389,36 +419,72 @@ void PHPSupportPart::projectClosed()
    }
 }
 
-void PHPSupportPart::initialParse()
+bool PHPSupportPart::parseProject()
 {
-   kdDebug(9018) << "initialParse()" << endl;
+   kdDebug(9018) << "parseProject()" << endl;
+   mainWindow() ->statusBar() ->message( i18n( "Updating..." ) );
 
-   if (project()) {
-      kapp->setOverrideCursor(waitCursor);
-      QStringList files = project()->allFiles();
-      int n = 0;
-      QProgressBar *bar = new QProgressBar(files.count(), mainWindow()->statusBar());
-      bar->setMinimumWidth(120);
-      bar->setCenterIndicator(true);
-      mainWindow()->statusBar()->addWidget(bar);
-      bar->show();
-      for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it ) {
-         QFileInfo fileInfo( project()->projectDirectory(), *it );
-         bar->setProgress(n);
-         kapp->processEvents();
-         if (m_parser)
-            m_parser->addFile( fileInfo.filePath() );
-         ++n;
+   kapp->setOverrideCursor( waitCursor );
+
+   _jd = new JobData;
+
+   _jd->files = project()->allFiles();
+
+   QProgressBar* bar = new QProgressBar( _jd->files.count( ), mainWindow( ) ->statusBar( ) );
+   bar->setMinimumWidth( 120 );
+   bar->setCenterIndicator( true );
+   mainWindow()->statusBar()->addWidget( bar );
+   bar->show();
+
+   _jd->progressBar = bar;
+   _jd->it = _jd->files.begin();
+   _jd->dir.setPath( project()->projectDirectory() );
+
+   QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
+   return TRUE;
+}
+
+void PHPSupportPart::slotParseFiles()
+{
+   kdDebug(9018) << "slotParseFiles()" << endl;
+
+   kapp->lock();
+
+   if ( _jd->it != _jd->files.end() )
+   {
+      _jd->progressBar->setProgress( _jd->progressBar->progress() + 1 );
+
+      QFileInfo fileInfo( _jd->dir, *( _jd->it ) );
+
+      if ( fileInfo.exists() && fileInfo.isFile() && fileInfo.isReadable() )
+      {
+         QString absFilePath = URLUtil::canonicalPath( fileInfo.absFilePath() );
+
+//         if ( isValidSource( absFilePath ) )
+         {
+            if (m_parser)
+               m_parser->addFile( absFilePath );
+         }
+
+         ++( _jd->it );
       }
-      mainWindow()->statusBar()->removeWidget(bar);
-      delete bar;
-      emit updatedSourceInfo();
-      kapp->restoreOverrideCursor();
-   } else {
-      kdDebug(9018) << "No project" << endl;
+      QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
    }
-   if (m_parser)
-      m_parser->startParse();
+   else // finished or interrupted
+   {
+      kapp->restoreOverrideCursor();
+      mainWindow()->statusBar()->removeWidget( _jd->progressBar );
+      mainWindow()->statusBar()->message( i18n( "Done" ), 2000 );
+
+      emit updatedSourceInfo();
+      if (m_parser)
+         m_parser->startParse();
+
+      delete _jd;
+      _jd = 0;
+   }
+
+   kapp->unlock();
 }
 
 void PHPSupportPart::addedFilesToProject(const QStringList &fileList)
@@ -497,24 +563,179 @@ KMimeType::List PHPSupportPart::mimeTypes( )
 
 void PHPSupportPart::customEvent( QCustomEvent* ev )
 {
-   kdDebug(9018) << "phpSupportPart::customEvent(" << ev->type() << ")" << endl;
+//   kdDebug(9018) << "phpSupportPart::customEvent(" << ev->type() << ") " << QThread::currentThread() << endl;
 
-   if ( ev->type() == int(Event_StartParse) ) {
-      FileParseEvent* event = (FileParseEvent*) ev;
-      kdDebug(9018) << " removedSourceInfo(" << event->fileName() << ")" << endl;
-      if (codeModel()->hasFile( event->fileName() )) {
-         emit aboutToRemoveSourceInfo( event->fileName() );
-         codeModel()->removeFile( codeModel()->fileByName( event->fileName() ) );
-         emit removedSourceInfo( event->fileName() );
+   if ( ev->type() < Event_AddFile || ev->type() > Event_AddFixme )
+      return;
+
+   kapp->lock();
+
+   FileParseEvent* event = (FileParseEvent*) ev;
+   NamespaceDom ns = codeModel()->globalNamespace();
+   FileDom m_file = codeModel()->fileByName( event->fileName() );
+
+   if (!m_file) {
+      m_file = codeModel()->create<FileModel>();
+      m_file->setName( event->fileName() );
+      codeModel()->addFile( m_file );
+   }
+
+   switch (int(ev->type())) {
+      case Event_AddFile:
+         m_parser->addFile( event->fileName() );
+      break;
+
+      case Event_StartParse:
+//         kdDebug(9018) << "StartParse " << event->fileName() << endl;
+         LastClass = NULL;
+         LastMethod = NULL;
+         LastVariable = NULL;
+         if ( codeModel()->hasFile( event->fileName() ) ) {
+            emit aboutToRemoveSourceInfo( event->fileName() );
+            codeModel()->removeFile( codeModel()->fileByName( event->fileName() ) );
+            emit removedSourceInfo( event->fileName() );
+         }
+         ErrorView()->removeAllProblems( event->fileName() );
+      break;
+
+      case Event_AddClass:
+      {
+//         kdDebug(9018) << "AddClass " << event->name() << endl;
+         ClassDom nClass = codeModel()->create<ClassModel>();
+         nClass->setFileName( event->fileName() );
+         nClass->setName( event->name() );
+         nClass->setStartPosition( event->posititon(), 0);
+
+         m_file->addClass( nClass );
+         if ( event->arguments().isEmpty() != TRUE )
+            nClass->addBaseClass( event->arguments() );
+
+         ns->addClass( nClass );
+         LastClass = nClass;
       }
+      break;
+
+      case Event_CloseClass:
+         if ( LastClass != NULL ) {
+//            kdDebug(9018) << "CloseClass " << LastClass->name() << endl;
+            LastClass->setEndPosition( event->posititon(), 0 );
+            LastClass = NULL;
+            LastMethod = NULL;
+            LastVariable = NULL;
+         }
+      break;
+
+      case Event_AddFunction:
+      {
+//         kdDebug(9018) << "AddFunction " << event->name() << endl;
+         FunctionDom nMethod = codeModel()->create<FunctionModel>();
+         nMethod->setFileName( event->fileName() );
+         nMethod->setName( event->name() );
+         nMethod->setStartPosition( event->posititon(), 0 );
+
+         ArgumentDom nArgument;
+         nArgument = codeModel()->create<ArgumentModel>();
+         nArgument->setType(event->arguments().stripWhiteSpace().local8Bit());
+         nMethod->addArgument( nArgument );
+
+         if (LastClass != NULL) {
+            LastClass->addFunction(nMethod);
+         } else {
+            ns->addFunction(nMethod);
+         }
+         LastMethod = nMethod;
+      }
+      break;
+
+      case Event_SetFunction:
+         if ( LastMethod != NULL ) {
+//            kdDebug(9018) << "SetFunction " << LastMethod->name() << " " << event->name() << endl;
+            if ( event->name() == "static" )
+               LastMethod->setStatic(true);
+            else if ( event->name() == "abstract" )
+               LastMethod->setAbstract(true);
+            else if ( event->name() == "private" )
+               LastMethod->setAccess(FunctionModel::Private);
+            else if ( event->name() == "public" )
+               LastMethod->setAccess(FunctionModel::Public);
+            else if ( event->name() == "protected" )
+               LastMethod->setAccess(FunctionModel::Protected);
+            else if ( event->name() == "result" ) {
+               QString ret = "";
+               if (event->arguments().lower() == "$this") {
+                  ret = LastClass->name();
+               }
+               LastMethod->setResultType(ret);
+            }
+         }
+      break;
+
+      case Event_CloseFunction:
+         if ( LastMethod != NULL ) {
+//            kdDebug(9018) << "CloseFunction " << LastMethod->name() << endl;
+            LastMethod->setEndPosition( event->posititon(), 0 );
+            LastMethod = NULL;
+            LastVariable = NULL;
+         }
+      break;
+
+      case Event_AddVariable:
+      {
+         VariableDom nVariable = codeModel()->create<VariableModel>();
+
+         nVariable->setFileName( event->fileName() );
+         nVariable->setName( event->name() );
+         nVariable->setStartPosition( event->posititon(), 0 );
+         nVariable->setAccess(VariableModel::Public);
+
+         if ( event->arguments().isEmpty() != TRUE )
+            nVariable->setType( event->arguments() );
+
+         if ( LastClass != NULL && ( LastMethod == NULL || event->global() == TRUE ) ) {
+//               kdDebug(9018) << "AddVariable To Class " << LastClass->name() << " " << nVariable->name() << endl;
+            LastClass->addVariable(nVariable);
+         } else {
+            if ( LastMethod != NULL ) {
+               kdDebug(9018) << "AddVariable " << LastMethod->name() << " " << nVariable->name() << endl;
+            } else {
+               ns->addVariable(nVariable);
+            }
+         }
+         LastVariable = nVariable;
+      }
+      break;
+
+      case Event_SetVariable:
+         if ( LastVariable != NULL ) {
+//            kdDebug(9018) << "SetVariable " << LastVariable->name() << " " << event->arguments() << endl;
+            if ( event->arguments() == "static" )
+               LastVariable->setStatic(true);
+            else if ( event->arguments() == "private" )
+               LastVariable->setAccess(FunctionModel::Private);
+            else if ( event->arguments() == "public" )
+               LastVariable->setAccess(FunctionModel::Public);
+            else if ( event->arguments() == "protected" )
+               LastVariable->setAccess(FunctionModel::Protected);
+         }
+      break;
+
+      case Event_AddTodo:
+         ErrorView()->reportProblem(Todo, event->fileName(), event->posititon(), event->arguments());
+      break;
+
+      case Event_AddFixme:
+         ErrorView()->reportProblem(Fixme, event->fileName(), event->posititon(), event->arguments());
+      break;
+
+      case Event_EndParse:
+//         kdDebug(9018) << "EndParse " << event->fileName() << endl;
+         emit addedSourceInfo( event->fileName() );
+      break;
+
    }
 
-   if ( ev->type() == int(Event_EndParse) ) {
-      FileParseEvent* event = (FileParseEvent*) ev;
-      kdDebug(9018) << " addedSourceInfo(" << event->fileName() << ")" << endl;
-      emit addedSourceInfo( event->fileName() );
-   }
-
+   kapp->unlock();
+   kapp->processEvents();
 }
 
 PHPErrorView *PHPSupportPart::ErrorView( ) {

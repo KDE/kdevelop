@@ -18,7 +18,6 @@
 
 #include <kapplication.h>
 #include <qstring.h>
-#include <qstringlist.h>
 #include <qfileinfo.h>
 #include <qregexp.h>
 
@@ -26,7 +25,6 @@
 #include <kprocess.h>
 #include <kdebug.h>
 
-#include <kdevproject.h>
 #include <kdevpartcontroller.h>
 
 #include "phphtmlview.h"
@@ -39,16 +37,11 @@ using namespace std;
 PHPFile::PHPFile(PHPSupportPart *phpSupport, const QString& fileName)
 {
    m_fileinfo = new QFileInfo(fileName);
-   m_phpSupport = phpSupport;
-   m_model = m_phpSupport->codeModel();
-   m_errorview = m_phpSupport->ErrorView();
-   m_parser = m_phpSupport->Parser();
+   m_part = phpSupport;
    modified = true;
+   inClass = FALSE;
+   inMethod = FALSE;
 
-   nClass = NULL;
-   nMethod = NULL;
-   ns = NULL;
-   m_file = NULL;
    /*
    phpCheckProc = new KShellProcess("/bin/sh");
    connect(phpCheckProc, SIGNAL(receivedStdout (KProcess*, char*, int)), this, SLOT(slotReceivedPHPCheckStdout (KProcess*, char*, int)));
@@ -78,7 +71,8 @@ QStringList PHPFile::readFromEditor()
 {
    QStringList contents;
 
-   QPtrList<KParts::Part> parts( *m_phpSupport->partController()->parts() );
+   kapp->lock();
+   QPtrList<KParts::Part> parts( *m_part->partController()->parts() );
    QPtrListIterator<KParts::Part> it( parts );
    while( it.current() ){
       KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( it.current() );
@@ -91,6 +85,8 @@ QStringList PHPFile::readFromEditor()
       contents = QStringList::split("\n", editIface->text().ascii(), true);
       break;
    }
+   kapp->unlock();
+
    return contents;
 }
 
@@ -121,25 +117,24 @@ void PHPFile::setModified(bool value) {
 }
 
 void PHPFile::Analyse() {
+
+   postEvent( new FileParseEvent( Event_StartParse, this->fileName() ) );
+
+   inClass = FALSE;
+   inMethod = FALSE;
+/*
    m_contents = readFromEditor();
 
    if (m_contents.isEmpty())
+*/
       m_contents = readFromDisk();
 
-   m_errorview->removeAllProblems( this->fileName() );
-
-   ns = m_model->globalNamespace();
-   m_file = m_model->fileByName( this->fileName() );
-   if (!m_file) {
-      m_file = m_model->create<FileModel>();
-      m_file->setName( this->fileName() );
-      m_model->addFile( m_file );
-   }
-
    ParseSource();
-   PHPCheck();
 
+   PHPCheck();
    modified = false;
+
+   postEvent( new FileParseEvent( Event_EndParse, this->fileName() ) );
 }
 
 bool PHPFile::ParseClass(QString line, int lineNo) {
@@ -154,10 +149,9 @@ bool PHPFile::ParseClass(QString line, int lineNo) {
          return FALSE;
 
 /// @fixme Activate when it exists in ClassModel
-/*
-      if (Class.cap(1).lower() == "abstract")
-         nClass->isAbstract(true);
-*/
+//      if (Class.cap(1).lower() == "abstract")
+//         SetClass("abstract");
+
       return TRUE;
    }
 
@@ -168,33 +162,34 @@ bool PHPFile::ParseFunction(QString line, int lineNo) {
    if (line.find("function", 0, FALSE) == -1)
       return FALSE;
 
-   QRegExp function("^[ \t]*(final|abstract|)[ \t]*(public|private|protected|)[ \t]*(static|)[ \t]*function[ \t&]*([_a-zA-Z\x7f-\xff][_a-zA-Z0-9\x7f-\xff]*)[ \t]*\\(([_a-zA-Z\x7f-\xff]*[_$, &'\\\"0-9A-Za-z\x7f-\xff\t-=]*)\\).*$");
+   QRegExp function("^[ \t]*(final|abstract|static|)[ \t]*(public|private|protected|)[ \t]*(static|)[ \t]*function[ \t&]*([_a-zA-Z\x7f-\xff][_a-zA-Z0-9\x7f-\xff]*)[ \t]*\\(([_a-zA-Z\x7f-\xff]*[_$, &'\\\"0-9A-Za-z\x7f-\xff\t-=]*)\\).*$");
    function.setCaseSensitive(FALSE);
 
    if (function.search(line) != -1) {
       if (AddFunction(function.cap(4), function.cap(5), lineNo) == FALSE)
          return FALSE;
 
-      if (function.cap(3).lower() == "static")
-         nMethod->setStatic(true);
+      if (function.cap(3).lower() == "static" || function.cap(1).lower() == "static")
+         SetFunction("static");
 
-      if (function.cap(1).lower() == "abstract")
-         nMethod->setAbstract(true);
+      if (function.cap(1).lower() == "abstract") {
+         SetFunction("abstract");
+         CloseFunction( lineNo );
+         return FALSE;
+      }
 
 /// @fixme Activate when it exists in FunctionModel
-/*
-      if (function.cap(1).lower() == "final")
-         nMethod->isFinal(true);
-*/
+//      if (function.cap(1).lower() == "final")
+//         SetFunction("final");
 
       if (function.cap(2).lower() == "private")
-         nMethod->setAccess(FunctionModel::Private);
+         SetFunction("private");
 
       if (function.cap(2).lower() == "public" || function.cap(2).isEmpty())
-         nMethod->setAccess(FunctionModel::Public);
+         SetFunction("public");
 
       if (function.cap(2).lower() == "protected")
-         nMethod->setAccess(FunctionModel::Protected);
+         SetFunction("protected");
 
       return TRUE;
    }
@@ -210,25 +205,20 @@ bool PHPFile::ParseVariable(QString line, int lineNo) {
    variable.setCaseSensitive(FALSE);
 
    if (variable.search(line) != -1) {
-      bool inClass = FALSE;
-
-      if (nClass != NULL && nMethod == NULL)
-         inClass = TRUE;
-
-      if (AddVariable(variable.cap(2), "", lineNo, inClass) == FALSE)
+      if (AddVariable(variable.cap(2), "", lineNo) == FALSE)
          return FALSE;
 
       if (variable.cap(1).lower() == "private")
-         nVariable->setAccess(FunctionModel::Private);
+         SetVariable( "private" );
 
       if (variable.cap(1).lower() == "public" || variable.cap(1).lower() == "var")
-         nVariable->setAccess(FunctionModel::Public);
+         SetVariable( "public" );
 
       if (variable.cap(1).lower() == "protected")
-         nVariable->setAccess(FunctionModel::Protected);
+         SetVariable( "protected" );
 
       if (variable.cap(1).lower() == "static")
-         nVariable->setStatic(true);
+         SetVariable( "static" );
 
       return TRUE;
    }
@@ -276,6 +266,7 @@ bool PHPFile::ParseThisMember(QString line, int lineNo) {
          return TRUE;
       }
    }
+
    return FALSE;
 }
 
@@ -290,14 +281,14 @@ bool PHPFile::ParseMember(QString line, int lineNo) {
 
    createmember.setPattern("\\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*=[ \t]*([0-9]*)[ \t]*;");
    if (createmember.search(line) != -1) {
-      if (AddVariable(createmember.cap(1), "integer", lineNo, FALSE) == FALSE)
+      if (AddVariable(createmember.cap(1), "integer", lineNo) == FALSE)
          return FALSE;
       return TRUE;
    }
 
    createmember.setPattern("\\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*=[ \t]*[\"']+(.*)[\"']+[ \t]*;");
    if (createmember.search(line) != -1) {
-      if (AddVariable(createmember.cap(1), "string", lineNo, FALSE) == FALSE)
+      if (AddVariable(createmember.cap(1), "string", lineNo) == FALSE)
          return FALSE;
       return TRUE;
    }
@@ -305,7 +296,7 @@ bool PHPFile::ParseMember(QString line, int lineNo) {
    if (line.find("true", 0, FALSE) != -1 || line.find("false", 0, FALSE) != -1) {
       createmember.setPattern("\\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*=[ \t]*(true|false)[ \t]*;");
       if (createmember.search(line) != -1) {
-         if (AddVariable(createmember.cap(1), "boolean", lineNo, FALSE) == FALSE)
+         if (AddVariable(createmember.cap(1), "boolean", lineNo) == FALSE)
             return FALSE;
          return TRUE;
       }
@@ -314,7 +305,7 @@ bool PHPFile::ParseMember(QString line, int lineNo) {
    if (line.find("new", 0, FALSE) != -1) {
       createmember.setPattern("\\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*=[ \t&]*new[ \t]+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)");
       if (createmember.search(line) != -1) {
-         if (AddVariable(createmember.cap(1), createmember.cap(2), lineNo, FALSE) == FALSE)
+         if (AddVariable(createmember.cap(1), createmember.cap(2), lineNo) == FALSE)
             return FALSE;
          return TRUE;
       }
@@ -323,7 +314,7 @@ bool PHPFile::ParseMember(QString line, int lineNo) {
    if (line.find("array", 0, FALSE) != -1) {
       createmember.setPattern("\\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*=[ \t&]*(new|)[ \t&]*(array)[ \t]*[\\(;]+");
       if (createmember.search(line) != -1) {
-         if (AddVariable(createmember.cap(1), "array", lineNo, FALSE) == FALSE)
+         if (AddVariable(createmember.cap(1), "array", lineNo) == FALSE)
             return FALSE;
          return TRUE;
       }
@@ -370,10 +361,7 @@ bool PHPFile::ParseReturn(QString line, int lineNo) {
          kdDebug(9018) << "ParseReturn value" << " " << rettype.latin1() << endl;
    }
 
-   if (rettype.lower() == "$this")
-      rettype = nClass->name();
-
-   nMethod->setResultType(rettype);
+   SetFunction("result", rettype);
    return TRUE;
 }
 
@@ -385,7 +373,7 @@ bool PHPFile::ParseTodo(QString line, int lineNo) {
    todo.setCaseSensitive(FALSE);
 
    if (todo.search(line) != -1) {
-      m_errorview->reportProblem(Todo, this->fileName(), lineNo, todo.cap(2));
+      AddTodo( todo.cap(2), lineNo );
       return TRUE;
    }
 
@@ -400,7 +388,7 @@ bool PHPFile::ParseFixme(QString line, int lineNo) {
    fixme.setCaseSensitive(FALSE);
 
    if (fixme.search(line) != -1) {
-      m_errorview->reportProblem(Fixme, this->fileName(), lineNo, fixme.cap(2));
+      AddFixme( fixme.cap(2), lineNo );
       return TRUE;
    }
 
@@ -426,7 +414,7 @@ void PHPFile::ParseSource() {
          if (line.find("include", 0, FALSE) != -1 || line.find("require", 0, FALSE) != -1)  {
             if (includere.search(line) != -1) {
                QStringList include_path;
-               include_path = include_path.split(":", m_phpSupport->getIncludePath());
+               include_path = include_path.split(":", m_part->getIncludePath());
                include_path.append(URLUtil::directory(fileName()) + "/");
                include_path.append("");
 
@@ -435,53 +423,47 @@ void PHPFile::ParseSource() {
                for ( QStringList::Iterator it = include_path.begin(); it != include_path.end(); ++it ) {
                   QString abso = URLUtil::canonicalPath(*it + "/" + list[3]);
                   if (!abso.isNull()) { 
-                     QString rel = URLUtil::relativePathToFile (m_phpSupport->project()->projectDirectory(), abso);
-                     m_parser->addFile( abso );
+                     QString rel = URLUtil::relativePathToFile (m_part->project()->projectDirectory(), abso);
+                     postEvent( new FileParseEvent( Event_AddFile, abso ) );
                   }
                }
             }
          }
 
 
-         if (nMethod != NULL) {
+         if ( inMethod == TRUE ) {
             bracketFuncOpen += line.contains("{");
             bracketFuncClose += line.contains("}");
             if (bracketFuncOpen == bracketFuncClose && bracketFuncOpen != 0 && bracketFuncClose != 0) {
-               nMethod->setEndPosition(lineNo, 0);
-               nMethod = NULL;
+               CloseFunction( lineNo );
             }
          }
 
-         if (nMethod == NULL) {
+         if ( inMethod == FALSE ) {
             bracketOpen += line.contains("{");
             bracketClose += line.contains("}");
-            if (bracketOpen == bracketClose && bracketOpen != 0 && bracketClose != 0 && nClass != NULL) {
-               nClass->setEndPosition(lineNo, 0);
-               nClass = NULL;
+            if (bracketOpen == bracketClose && bracketOpen != 0 && bracketClose != 0 && inClass == TRUE) {
+               CloseClass( lineNo );
             }
          }
 
-         if (nClass == NULL) {
+         if ( inClass == FALSE ) {
             if (ParseClass(line, lineNo) == TRUE) {
                bracketOpen = line.contains("{");
                bracketClose = line.contains("}");
             }
          }
 
-         if (nClass != NULL) {
+         if ( inClass ==  TRUE ) {
             ParseThisMember(line, lineNo);
          }
 
          if (ParseFunction(line, lineNo) == TRUE) {
-            if (nMethod->isAbstract() == TRUE) {
-               nMethod = NULL;
-            } else {
-               bracketFuncOpen = line.contains("{");
-               bracketFuncClose = line.contains("}");
-            }
+            bracketFuncOpen = line.contains("{");
+            bracketFuncClose = line.contains("}");
          }
 
-         if (nMethod != NULL)
+         if ( inMethod == TRUE )
             ParseReturn(line, lineNo);
 
          ParseVariable(line, lineNo);
@@ -549,21 +531,21 @@ void PHPFile::ParseStdout(QString phpOutput) {
    QStringList::Iterator it;
    for ( it = list.begin(); it != list.end(); ++it ) {
       if (generalFatalError.search(*it) >= 0) {
-         m_errorview->reportProblem(Error, parseError.cap(5), parseError.cap(8).toInt(), parseError.cap(3));
+//         m_errorview->reportProblem(Error, parseError.cap(5), parseError.cap(8).toInt(), parseError.cap(3));
       }
       if(parseError.search(*it) >= 0){
-         m_errorview->reportProblem(ErrorParse, parseError.cap(5), parseError.cap(8).toInt(), parseError.cap(3));
+//         m_errorview->reportProblem(ErrorParse, parseError.cap(5), parseError.cap(8).toInt(), parseError.cap(3));
       }
       if(undefFunctionError.search(*it) >= 0){
-         m_errorview->reportProblem(ErrorNoSuchFunction, parseError.cap(5), parseError.cap(8).toInt(), parseError.cap(3));
+//         m_errorview->reportProblem(ErrorNoSuchFunction, parseError.cap(5), parseError.cap(8).toInt(), parseError.cap(3));
       }
       if (warning.search(*it) >= 0){
-         m_errorview->reportProblem(ErrorNoSuchFunction, parseError.cap(6), parseError.cap(8).toInt(), parseError.cap(4));
+//         m_errorview->reportProblem(ErrorNoSuchFunction, parseError.cap(6), parseError.cap(8).toInt(), parseError.cap(4));
       }
    }
 
 }
-
+/*
 ClassDom PHPFile::classByName(QString filename, QString classname) {
    QValueList<ClassDom> CList;
    QString abso = URLUtil::canonicalPath(filename);
@@ -591,61 +573,66 @@ QValueList<ClassDom> PHPFile::classByName(QString classname) {
    }
    return CList;
 }
+*/
 
+void PHPFile::postEvent(FileParseEvent *event) {
+   KApplication::postEvent( m_part, event );
+   usleep(100);
+}
 
 bool PHPFile::AddClass(QString name, QString extends, int start) {
-   nClass = m_model->create<ClassModel>();
-   nClass->setFileName( this->fileName() );
-   nClass->setName(name);
-   nClass->setStartPosition(start, 0);
+   postEvent( new FileParseEvent( Event_AddClass, this->fileName(), name, extends, start ) );
+   inClass = TRUE;
+   return TRUE;
+}
 
-   m_file->addClass( nClass );
-   if (extends.isEmpty() != TRUE)
-      nClass->addBaseClass(extends);
+bool PHPFile::SetClass(QString arguments) {
+   postEvent( new FileParseEvent( Event_SetClass, this->fileName(), "", arguments ) );
+   return TRUE;
+}
 
-   ns->addClass( nClass );
+bool PHPFile::CloseClass(int end) {
+   postEvent( new FileParseEvent( Event_CloseClass, this->fileName(), end ) );
+   inClass = FALSE;
    return TRUE;
 }
 
 bool PHPFile::AddFunction(QString name, QString arguments, int start) {
-   nMethod = m_model->create<FunctionModel>();
-   nMethod->setFileName( this->fileName() );
-   nMethod->setName(name);
-   nMethod->setStartPosition( start, 0 );
-
-   ArgumentDom nArgument;
-   nArgument = m_model->create<ArgumentModel>();
-   nArgument->setType(arguments.stripWhiteSpace().local8Bit());
-   nMethod->addArgument( nArgument );
-
-   if (nClass != NULL) {
-      nClass->addFunction(nMethod);
-   } else {
-      ns->addFunction(nMethod);
-   }
-
+   postEvent( new FileParseEvent( Event_AddFunction, this->fileName(), name, arguments, start ) );
+   inMethod = TRUE;
    return TRUE;
 }
 
-bool PHPFile::AddVariable(QString name, QString type, int start, bool ClassVar) {
-   nVariable = m_model->create<VariableModel>();
+bool PHPFile::SetFunction(QString name, QString arguments) {
+   postEvent( new FileParseEvent( Event_SetFunction, this->fileName(), name, arguments ) );
+   return TRUE;
+}
 
-   nVariable->setFileName( this->fileName() );
-   nVariable->setName( name );
-   nVariable->setStartPosition( start, 0 );
-   nVariable->setAccess(VariableModel::Public);
+bool PHPFile::CloseFunction(int end) {
+   postEvent( new FileParseEvent( Event_CloseFunction, this->fileName(), end ) );
+   inMethod = FALSE;
+   return TRUE;
+}
 
-   if (type.isEmpty() != TRUE)
-      nVariable->setType( type );
+bool PHPFile::AddVariable(QString name, QString type, int position, bool classvar) {
+   postEvent( new FileParseEvent( Event_AddVariable, this->fileName(), name, type, position, classvar ) );
+   return TRUE;
+}
 
-   if (nClass != NULL && ClassVar == TRUE) {
-      nClass->addVariable(nVariable);
-   } else {
-      if (nMethod != NULL) {
-         kdDebug(9018) << "AddVariable " << nMethod->name() << " " << nVariable->name() << endl;
-      } else
-         ns->addVariable(nVariable);
-   }
+bool PHPFile::SetVariable(QString arguments) {
+   postEvent( new FileParseEvent( Event_SetVariable, this->fileName(), "", arguments ) );
+   return TRUE;
+}
+
+bool PHPFile::AddTodo(QString arguments, int position) {
+   postEvent( new FileParseEvent( Event_AddTodo, this->fileName(), "", arguments, position ) );
+   inClass = TRUE;
+   return TRUE;
+}
+
+bool PHPFile::AddFixme(QString arguments, int position) {
+   postEvent( new FileParseEvent( Event_AddFixme, this->fileName(), "", arguments, position ) );
+   inClass = TRUE;
    return TRUE;
 }
 

@@ -24,6 +24,7 @@
 #include <qstringlist.h>
 #include <qfileinfo.h>
 #include <qregexp.h>
+#include <qthread.h>
 
 #include <urlutil.h>
 #include <kprocess.h>
@@ -39,6 +40,7 @@
 #include "phpsupportpart.h"
 #include "phperrorview.h"
 #include "phpparser.h"
+#include "phpsupport_event.h"
 
 /**
 @author Escuder Nicolas
@@ -57,10 +59,10 @@ public:
    QString fileName();
    void Analyse();
    void ParseStdout(QString phpOutput);
-
+/*
    ClassDom classByName(QString filename, QString classname);
    QValueList<ClassDom> classByName(QString classname);
-
+*/
 
 /*
 private slots:
@@ -73,13 +75,8 @@ private:
    QStringList readFromDisk();
 
    bool ParseClass(QString line, int lineNo);
-   bool AddClass(QString name, QString extends, int start);
-
    bool ParseFunction(QString line, int lineNo);
-   bool AddFunction(QString name, QString arguments, int start);
-
    bool ParseVariable(QString line, int lineNo);
-   bool AddVariable(QString name, QString type, int start, bool classVar);
 
    bool ParseThisMember(QString line, int lineNo);
    bool ParseMember(QString line, int lineNo);
@@ -90,17 +87,28 @@ private:
    void ParseSource();
    void PHPCheck();
 
-   bool modified;
-   PHPSupportPart *m_phpSupport;
-   CodeModel *m_model;
-   PHPErrorView* m_errorview;
-   PHPParser *m_parser;
+   void postEvent(FileParseEvent *event);
 
-   FileDom m_file;
-   NamespaceDom ns;
-   ClassDom nClass;
-   FunctionDom nMethod;
-   VariableDom nVariable;
+   bool AddClass(QString name, QString extends, int start);
+   bool SetClass(QString arguments);
+   bool CloseClass(int end);
+
+   bool AddFunction(QString name, QString arguments, int start);
+   bool SetFunction(QString name, QString arguments = "");
+   bool CloseFunction(int end);
+
+   bool AddVariable(QString name, QString type, int position, bool classvar = FALSE);
+   bool SetVariable(QString arguments);
+
+   bool AddTodo(QString arguments, int position);
+   bool AddFixme(QString arguments, int position);
+
+   PHPSupportPart *m_part;
+
+   bool modified;
+
+   bool inClass;
+   bool inMethod;
 
    QFileInfo* m_fileinfo;
    QStringList m_contents;

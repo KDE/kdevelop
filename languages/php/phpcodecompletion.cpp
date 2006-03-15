@@ -151,6 +151,7 @@ void PHPCodeCompletion::cursorPositionChanged(){
       if (pos1 > pos2 && pos1 != -1 && pos3 < pos1) {
          QString line = lineStr.mid(pos2 + 1, pos1 - pos2 - 1).stripWhiteSpace();
          checkForArgHint(line, col);
+         kdDebug(9018) << "end checkForArgHint" << endl;
       }
 
    }
@@ -163,24 +164,33 @@ void PHPCodeCompletion::cursorPositionChanged(){
       int pos = lineStr.findRev(QRegExp("[ \\t=;\\$\\.\\(\\)]"), col - 1);
       QString line = lineStr.mid(pos + 1, col - pos).stripWhiteSpace();
 
-      if (checkForVariable(line, col))
+      if (checkForVariable(line, col)) {
+kdDebug(9018) << "end checkForVariable" << endl;
          return;
-
-      if (checkForStaticFunction(line, col))
+      }
+      if (checkForStaticFunction(line, col)) {
+kdDebug(9018) << "end checkForStaticFunction" << endl;
          return;
+      }
 
-      if(checkForGlobalFunction(line, col))
+      if(checkForGlobalFunction(line, col)) {
+kdDebug(9018) << "end checkForGlobalFunction" << endl;
          return;
-
+      }
 
       pos = lineStr.stripWhiteSpace().findRev(QRegExp("[ \\t=;\\$\\.\\(\\)]"), col - 1);
       line = lineStr.mid(pos + 1, col - pos);
 
-      if (checkForNew(line, col))
+      if (checkForNew(line, col)) {
+kdDebug(9018) << "end checkForNew" << endl;
          return;
+      }
 
-      if (checkForExtends(line, col))
+      if (checkForExtends(line, col)) {
+kdDebug(9018) << "end checkForExtends" << endl;
          return;
+      }
+kdDebug(9018) << "end checkFor" << endl;
   }
 }
 

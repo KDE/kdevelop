@@ -66,7 +66,6 @@ private:
    QMutex m_mutex;
    QWaitCondition m_canParse;
    bool m_close;
-   bool m_parse;
    QMap<QString, PHPFile*> m_files;
 };
 
