@@ -32,6 +32,7 @@
 #include <dcopclient.h>
 #include <qtimer.h>
 #include <kstringhandler.h>
+#include <kdockwidget.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -1117,7 +1118,25 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     {
         stateIndicator = " ";
         stateIndicatorFull = "Debugger not started";
-        mainWindow()->lowerView(variableWidget);
+
+        // If the view is undocked, don't hide it. User has explicitly
+        // undocked it and moved into a convenient position. Don't
+        // force him to undock the widget and move it again next 
+        // time the debugger starts.
+        bool undocked = false;
+
+        if (KDockWidget* dockWidget = 
+            static_cast<KDockWidget*>(
+                variableWidget->parentWidget()->qt_cast("KDockWidget")))
+        {
+            if (dockWidget->currentDockPosition() == KDockWidget::DockDesktop)
+                undocked = true;
+        }
+
+        if (!undocked)
+        {
+            mainWindow()->lowerView(variableWidget);
+        }
     }
     else if (state & s_appBusy)
     {
