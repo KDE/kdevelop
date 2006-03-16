@@ -105,6 +105,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
 
   m_widget = new QWidget(0);
   QVBoxLayout *vbox = new QVBoxLayout(m_widget);
+  vbox->setMargin(0);
 
 #if 0
   QLineEdit *editor = new QLineEdit(m_widget);
