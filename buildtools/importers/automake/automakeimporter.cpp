@@ -35,13 +35,12 @@ K_EXPORT_COMPONENT_FACTORY( libkdevautomakeimporter,
 
 AutoMakeImporter::AutoMakeImporter( QObject* parent, const char* name,
                                     const QStringList& )
-: KDevProjectEditor( parent )
-, m_rootItem(0L)
+: KDevProjectEditor( parent ), m_rootItem(0L)
 {
-	setObjectName( QString::fromUtf8( name ) );
-	m_project = qobject_cast<KDevProject*>( parent );
-	Q_ASSERT( m_project );
-	m_interface = new MakefileInterface( this );
+    setObjectName( QString::fromUtf8( name ) );
+    m_project = qobject_cast<KDevProject*>( parent );
+    Q_ASSERT( m_project );
+    m_interface = new MakefileInterface( this );
 }
 
 AutoMakeImporter::~AutoMakeImporter()
@@ -51,80 +50,83 @@ AutoMakeImporter::~AutoMakeImporter()
 
 KDevProject* AutoMakeImporter::project() const
 {
-	return m_project;
+    return m_project;
 }
 
 KDevProjectEditor* AutoMakeImporter::editor() const
 {
-	return const_cast<AutoMakeImporter*>( this );
+    return const_cast<AutoMakeImporter*>( this );
 }
 
 QList<KDevProjectFolderItem*> AutoMakeImporter::parse( KDevProjectFolderItem* dom )
 {
-	Q_UNUSED( dom );
-	return QList<KDevProjectFolderItem*>();
+    Q_UNUSED( dom );
+    return QList<KDevProjectFolderItem*>();
 }
 
 KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
                                            const QString& fileName )
 {
-	Q_UNUSED( model );
-	m_rootItem = new AutoMakeDirItem( fileName, 0 );
-	m_interface->setProjectRoot( fileName );
-	bool parsedCorrectly = m_interface->parse( fileName );
-	
-	if ( parsedCorrectly )
-	{
-		QStringList topLevelSubdirs = m_interface->topSubDirs();
-		foreach ( QString dir, topLevelSubdirs )
-		{
-			QString fullPath = m_interface->projectRoot();
-			fullPath = fullPath + QDir::separator() + dir;
-			createProjectItems( fullPath, m_rootItem );
-		}
-	}
-	return m_rootItem;
+    Q_UNUSED( model );
+    m_rootItem = new AutoMakeDirItem( fileName, 0 );
+    m_interface->setProjectRoot( fileName );
+    bool parsedCorrectly = m_interface->parse( fileName );
+
+    if ( parsedCorrectly )
+    {
+        QStringList topLevelSubdirs = m_interface->topSubDirs();
+        foreach ( QString dir, topLevelSubdirs )
+        {
+            QString fullPath = m_interface->projectRoot();
+            fullPath = fullPath + QDir::separator() + dir;
+            createProjectItems( fullPath, m_rootItem );
+        }
+    }
+    return m_rootItem;
 	
 }
 
 QString AutoMakeImporter::findMakefile( KDevProjectFolderItem* dom ) const
 {
-	Q_UNUSED( dom );
-	return QString();
+    Q_UNUSED( dom );
+    return QString();
 }
 
 QStringList AutoMakeImporter::findMakefiles( KDevProjectFolderItem* dom ) const
 {
-	Q_UNUSED( dom );
-	return QStringList();
+    Q_UNUSED( dom );
+    return QStringList();
 }
 
 void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* rootItem )
 {
-	//first look for the subdirs
-	//recursively descend into any other subdirs. when finished look for targets.
-	//for each target, add the files for the target to the target
-	KDevProjectFolderItem *folderItem = new KDevProjectFolderItem( folder, rootItem );
-	rootItem->add( folderItem );
-	
-	QStringList subdirs = m_interface->subdirsFor( folder );
-	
-	if ( !subdirs.isEmpty() )
-	{
-		foreach( QString dir, subdirs )
-		{
-			QString fullPath = folder.absolutePath();
-			fullPath = fullPath + QDir::separator() + dir;
-			createProjectItems( fullPath, folderItem );
-		}
-	}
+    //first look for the subdirs
+    //recursively descend into any other subdirs. when finished look for targets.
+    //for each target, add the files for the target to the target
+    KDevProjectFolderItem *folderItem = new KDevProjectFolderItem( folder, rootItem );
+    rootItem->add( folderItem );
+
+    QStringList subdirs = m_interface->subdirsFor( folder );
+
+    if ( !subdirs.isEmpty() )
+    {
+        foreach( QString dir, subdirs )
+        {
+            QString fullPath = folder.absolutePath();
+            fullPath = fullPath + QDir::separator() + dir;
+            createProjectItems( fullPath, folderItem );
+        }
+    }
 
     QList<TargetInfo> targets = m_interface->targetsForFolder( folder );
     foreach( TargetInfo target, targets )
+    {
+        KDevProjectTargetItem* targetItem = new KDevProjectTargetItem( target.name, folderItem );
         folderItem->add( new KDevProjectTargetItem( target.name, folderItem ) );
+    }
 }
 
 #include "automakeimporter.h"
-// kate: indent-mode cstyle; space-indent off; tab-width 4; auto-insert-doxygen on;
+// kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;
 
 
