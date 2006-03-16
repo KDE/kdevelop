@@ -96,7 +96,9 @@ QModelIndex KDevItemModel::index(int row, int column, const QModelIndex &parent)
 
   Q_ASSERT(parent_item != 0);
   Q_ASSERT(parent_item->group() != 0);
-  Q_ASSERT(row < parent_item->group()->itemCount());
+  //Q_ASSERT(row < parent_item->group()->itemCount());
+  if ( row == 0 && parent_item->group()->itemCount() == 0 )
+    return QModelIndex();
 
   return createIndex(row, column, parent_item->group()->itemAt(row));
 }
