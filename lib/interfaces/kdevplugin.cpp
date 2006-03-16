@@ -60,8 +60,6 @@ KDevPlugin::KDevPlugin(const KDevPluginInfo *info, QObject *parent)
     assert(parent->inherits( "KDevApi" ));
     m_api = static_cast<KDevApi *>( parent );
 
-    actionCollection()->setHighlightingEnabled( true );
-
     d->info = info;
     KGlobal::iconLoader()->addAppDir("kdevelop");
 }

@@ -34,7 +34,13 @@
 
 struct KDevPluginInfo::Private {
     QString m_pluginName;
+    // Duplicated because otherwise the temporary QByteArray is deleted and 
+    // invalid memory is accessed in KAboutData
+    QByteArray m_pluginNameAscii;
     QString m_rawGenericName;
+    // Duplicated because otherwise the temporary QByteArray is deleted and 
+    // invalid memory is accessed in KAboutData
+    QByteArray m_rawGenericNameAscii;
 
     QString m_genericName;
     QString m_description;
@@ -57,6 +63,7 @@ KDevPluginInfo::KDevPluginInfo(const QString &pluginName)
     :d(new Private())
 {
     d->m_pluginName = pluginName;
+    d->m_pluginNameAscii = pluginName.toAscii();
 
     KService::Ptr offer = KService::serviceByDesktopName(pluginName);
     if (offer)
@@ -66,6 +73,7 @@ KDevPluginInfo::KDevPluginInfo(const QString &pluginName)
         d->m_description = offer->comment();
 
         d->m_rawGenericName = offer->untranslatedGenericName();
+        d->m_rawGenericNameAscii = d->m_rawGenericName.toAscii();
 
         d->m_version = offer->property("X-KDevelop-Plugin-Version").toString();
         d->m_homePageAddress = offer->property("X-KDevelop-Plugin-Homepage").toString();
@@ -88,7 +96,7 @@ KDevPluginInfo::KDevPluginInfo(const QString &pluginName)
         else
             d->m_licenseType = KAboutData::License_Unknown;
 
-        d->m_data = new KAboutData(d->m_pluginName.toAscii(), d->m_rawGenericName.toAscii(), "1", 0, d->m_licenseType);
+        d->m_data = new KAboutData(d->m_pluginNameAscii, d->m_rawGenericNameAscii, "1", 0, d->m_licenseType);
     }
     else
 	kDebug() << "Unable to load information for plugin: " << pluginName
