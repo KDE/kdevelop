@@ -19,207 +19,211 @@
  ***************************************************************************/
 #include "ddockwindow.h"
 
-#include <qtoolbutton.h>
-#include <qlayout.h>
-#include <qstyle.h>
-#include <q3widgetstack.h>
-#include <qimage.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+#include <QStackedWidget>
 #include <QBoxLayout>
-#include <qdebug.h>
+#include <QToolBar>
+#include <QResizeEvent>
 
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kconfig.h>
-#include <kcombobox.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kapplication.h>
+#include <kaction.h>
+#include <kmainwindow.h>
 
-#include "buttonbar.h"
-#include "button.h"
-
-DDockWindow::DDockWindow(QWidget *parent, Position position)
-    :Q3DockWindow(Q3DockWindow::InDock, parent), m_position(position), m_expanded(false),
-    m_toggledButton(0)
+DDockWidget::DDockWidget(Qt::DockWidgetArea area, KMainWindow* mainWindow)
+    : QDockWidget(mainWindow)
+    , m_selectedAction(0)
+    , m_expanded(false)
+    , m_area(area)
 {
-    setMovingEnabled(false);
-    setResizeEnabled(true);
+    setFeatures(NoDockWidgetFeatures);
 
-    Ideal::Place place = Ideal::Left;
-    switch (position) {
-        case DDockWindow::Bottom:
-            m_name = "BottomToolWindow";
-            place = Ideal::Bottom;
-            m_internalLayout = new QVBoxLayout(boxLayout(), 0);
-            m_internalLayout->setDirection(QBoxLayout::BottomToTop);
+    QWidget* container = new QWidget(this);
+    setWidget(container);
+
+    QBoxLayout* layout = new QBoxLayout(QBoxLayout::LeftToRight, container);
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    switch (area) {
+        default:
+        case Qt::TopDockWidgetArea:
+            setObjectName("TopToolWindow");
+            layout->setDirection(QBoxLayout::BottomToTop);
             break;
-        case DDockWindow::Left:
-            m_name = "LeftToolWindow";
-            place = Ideal::Left;
-            m_internalLayout = new QHBoxLayout(boxLayout(), 0);
-            m_internalLayout->setDirection(QBoxLayout::LeftToRight);
+        case Qt::LeftDockWidgetArea:
+            setObjectName("LeftToolWindow");
+            layout->setDirection(QBoxLayout::RightToLeft);
             break;
-        case DDockWindow::Right:
-            m_name = "RightToolWindow";
-            place = Ideal::Right;
-            m_internalLayout = new QHBoxLayout(boxLayout(), 0);
-            m_internalLayout->setDirection(QBoxLayout::RightToLeft);
+        case Qt::RightDockWidgetArea:
+            setObjectName("RightToolWindow");
+            layout->setDirection(QBoxLayout::LeftToRight);
+            break;
+        case Qt::BottomDockWidgetArea:
+            setObjectName("BottomToolWindow");
+            layout->setDirection(QBoxLayout::TopToBottom);
             break;
     }
 
-    KConfig *config = KGlobal::config();
+    m_widgetStack = new QStackedWidget(container);
+    QSizePolicy wsp = m_widgetStack->sizePolicy();
+
+    m_selectionBar = new QToolBar(container);
+    QSizePolicy ssp = m_selectionBar->sizePolicy();
+
+    switch (area) {
+        case Qt::LeftDockWidgetArea:
+        case Qt::RightDockWidgetArea:
+            m_selectionBar->setOrientation(Qt::Vertical);
+            wsp.setHorizontalPolicy(QSizePolicy::MinimumExpanding);
+            ssp.setHorizontalPolicy(QSizePolicy::Fixed);
+            break;
+
+        default:
+            wsp.setVerticalPolicy(QSizePolicy::MinimumExpanding);
+            ssp.setVerticalPolicy(QSizePolicy::Fixed);
+            break;
+    }
+
+    m_widgetStack->setSizePolicy(wsp);
+    m_selectionBar->setSizePolicy(ssp);
+
+    /*KConfig *config = KGlobal::config();
     config->setGroup("UI");
-    int mode = config->readNumEntry("MDIStyle", 3);
-    Ideal::ButtonMode buttonMode = Ideal::Text;
+    int mode = config->readEntry("MDIStyle", 3);
+    m_selectionBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
     if (mode == 0)
-        buttonMode = Ideal::Icons;
+        m_selectionBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
     else if (mode == 1)
-        buttonMode = Ideal::Text;
+        m_selectionBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
     else if (mode == 3)
-        buttonMode = Ideal::IconsAndText;
+        m_selectionBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);*/
 
-    m_bar = new Ideal::ButtonBar(place, buttonMode, this);
-    m_internalLayout->addWidget(m_bar);
+    m_selectionBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
-    m_widgetStack = new QStackedWidget(this);
-    m_internalLayout->addWidget(m_widgetStack);
+    layout->addWidget(m_widgetStack);
+    layout->addWidget(m_selectionBar);
+
+    m_selectActionGroup = new QActionGroup(this);
+    m_selectActionGroup->setExclusive(false);
+
+    mainWindow->addDockWidget(area, this);
 
     setExpanded(m_expanded);
 
     loadSettings();
+
+    connect(m_selectActionGroup, SIGNAL(triggered(QAction*)), SLOT(selectWidget(QAction*)));
 }
 
-DDockWindow::~DDockWindow()
+DDockWidget::~DDockWidget()
 {
     saveSettings();
 }
 
-void DDockWindow::setExpanded(bool v)
+void DDockWidget::setExpanded(bool v)
 {
     //write dock width to the config file
     KConfig *config = KGlobal::config();
-    QString group = QString("%1").arg(m_name);
+    QString group = QString("%1").arg(objectName());
     config->setGroup(group);
 
+    bool isBottom = (m_area == Qt::BottomDockWidgetArea);
+
     if (m_expanded)
-        config->writeEntry("ViewWidth", m_position == DDockWindow::Bottom ? height() : width() );
+        config->writeEntry("ViewWidth", isBottom ? height() : width() );
 
     m_widgetStack->setVisible(v);
     m_expanded = v;
 
-    m_internalLayout->invalidate();
     if (!m_expanded)
-        if (m_position == DDockWindow::Bottom)
-            setFixedExtentHeight(m_internalLayout->sizeHint().height());
+    {
+        widget()->setMinimumSize(m_selectionBar->minimumSize());
+        if (isBottom)
+            resize(width(), layout()->minimumSize().height());
         else
-            setFixedExtentWidth(m_internalLayout->sizeHint().width());
+            resize(layout()->minimumSize().width(), height());
+    }
     else
     {
         //restore widget size from the config
         int size = 0;
-        if (m_position == DDockWindow::Bottom)
+        if (isBottom)
         {
-            size = config->readNumEntry("ViewWidth", m_internalLayout->sizeHint().height());
-            setFixedExtentHeight(size);
+            size = config->readEntry("ViewWidth", layout()->minimumSize().height());
+            resize(width(), size);
         }
         else
         {
-            size = config->readNumEntry("ViewWidth", m_internalLayout->sizeHint().width());
-            setFixedExtentWidth(size);
+            size = config->readEntry("ViewWidth", layout()->minimumSize().width());
+            resize(size, height());
         }
     }
-
-    layout()->invalidate();
-
-    /***** Qt 3 to 4 porting hack (harryF) *****/
-    QWidget *topMost = this->window();
-    if (topMost && topMost->layout()) {
-        topMost->layout()->invalidate();
-        topMost->layout()->activate();
-    }
 }
 
-void DDockWindow::loadSettings()
+void DDockWidget::loadSettings()
 {
 }
 
-void DDockWindow::saveSettings()
+void DDockWidget::saveSettings()
 {
     KConfig *config = KGlobal::config();
-    QString group = QString("%1").arg(m_name);
+    QString group = QString("%1").arg(objectName());
     int invisibleWidth = 0;
     config->setGroup(group);
     if (config->hasKey("ViewWidth"))
-        invisibleWidth = config->readNumEntry("ViewWidth");
+        invisibleWidth = config->readEntry("ViewWidth", 0);
     config->deleteEntry("ViewWidth");
     config->deleteEntry("ViewLastWidget");
-    if (m_toggledButton && m_expanded)
+    if (m_selectedAction && m_expanded)
     {
-        config->writeEntry("ViewWidth", m_position == DDockWindow::Bottom ? height() : width());
-        config->writeEntry("ViewLastWidget", m_toggledButton->realText());
+        config->writeEntry("ViewWidth", (m_area == Qt::BottomDockWidgetArea) ? height() : width());
+        config->writeEntry("ViewLastWidget", m_selectedAction->text());
     }
     else if (invisibleWidth != 0)
         config->writeEntry("ViewWidth", invisibleWidth);
 }
 
-QWidget *DDockWindow::currentWidget() const
+QWidget *DDockWidget::currentWidget() const
 {
     return m_widgetStack->currentWidget();
 }
 
-void DDockWindow::addWidget(const QString &title, QWidget *widget)
+void DDockWidget::addWidget(const QString &title, QWidget *widget)
 {
-    QPixmap *pm = const_cast<QPixmap*>(widget->icon());
-    Ideal::Button *button;
-    if (pm != 0)
-    {
-        //force 16pt for now
-        if (pm->height() > 16)
-        {
-            QImage img = pm->convertToImage();
-            img = img.smoothScale(16, 16);
-            pm->convertFromImage(img);
-        }
-        button = new Ideal::Button(m_bar, title, *pm);
-    }
-    else
-        button = new Ideal::Button(m_bar, title);
-    m_widgets[button] = widget;
-    m_buttons[widget] = button;
-    m_bar->addButton(button);
+    KAction* action = new KAction(widget->windowIcon(), title, mainWindow()->actionCollection(), QString("dock_select_%1").arg(title).toLatin1().constData());
+    action->setActionGroup(m_selectActionGroup);
+    action->setCheckable(true);
+    m_widgets[action] = widget;
+    m_actions[widget] = action;
+    m_selectionBar->addAction(action);
 
     m_widgetStack->addWidget(widget);
-    connect(button, SIGNAL(clicked()), this, SLOT(selectWidget()));
 
     //if the widget was selected last time the dock is deleted
     //we need to show it
     KConfig *config = KGlobal::config();
-    QString group = QString("%1").arg(m_name);
+    QString group = QString("%1").arg(objectName());
     config->setGroup(group);
     if (config->readEntry("ViewLastWidget") == title)
     {
         kDebug() << k_funcinfo << " : activating last widget " << title << endl;
-        button->setOn(true);
-        selectWidget(button);
+        action->setChecked(true);
+        selectWidget(action);
     }
 }
 
-void DDockWindow::raiseWidget(QWidget *widget)
+void DDockWidget::raiseWidget(QWidget *widget)
 {
     kDebug() << k_funcinfo << endl;
-    Ideal::Button *button = m_buttons[widget];
-    if ((button != 0) && (!button->isOn()))
-    {
-        button->setOn(true);
-        selectWidget(button);
-    }
+    KAction* action = m_actions[widget];
+    if (action && (!action->isChecked()))
+        action->trigger();
 }
 
-void DDockWindow::removeWidget(QWidget *widget)
+void DDockWidget::removeWidget(QWidget *widget)
 {
     kDebug() << k_funcinfo << endl;
     if (m_widgetStack->indexOf(widget) == -1)
@@ -229,67 +233,86 @@ void DDockWindow::removeWidget(QWidget *widget)
     if (m_widgetStack->currentWidget() == widget)
         changeVisibility = true;
 
-    Ideal::Button *button = m_buttons[widget];
-    if (button)
-        m_bar->removeButton(button);
-    m_widgets.remove(button);
-    m_buttons.remove(widget);
+    KAction* action = m_actions.take(widget);
+    m_widgets.remove(action);
+    delete action;
+    m_selectedAction = 0;
+
     m_widgetStack->removeWidget(widget);
 
     if (changeVisibility)
     {
-        m_toggledButton = 0;
+        m_selectedAction = 0;
         setExpanded(false);
     }
 }
 
-void DDockWindow::selectWidget(Ideal::Button *button)
+void DDockWidget::selectWidget(QAction* qaction)
 {
-    kDebug() << k_funcinfo << endl;
-    if (m_toggledButton == button)
+    KAction* action = qobject_cast<KAction*>(qaction);
+    if (!action)
+      return;
+
+    if (m_selectedAction == action)
     {
         setExpanded(!m_expanded);
         return;
     }
 
-    if (m_toggledButton)
-        m_toggledButton->setOn(false);
-    m_toggledButton = button;
+    setSelectedAction(action);
+
     setExpanded(true);
-    m_widgetStack->setCurrentWidget(m_widgets[button]);
+
+    m_widgetStack->setCurrentWidget(m_widgets[action]);
 }
 
-void DDockWindow::selectWidget()
+void DDockWidget::hideWidget(QWidget *widget)
 {
-    selectWidget((Ideal::Button*)sender());
-}
-
-void DDockWindow::hideWidget(QWidget *widget)
-{
-    Ideal::Button *button = m_buttons[widget];
-    if (button != 0)
+    KAction* action = m_actions[widget];
+    if (action)
     {
-        button->setOn(false);
-        button->hide();
+        action->setChecked(false);
+        action->setVisible(false);
     }
     widget->hide();
-    if (button == m_toggledButton)
+    if (action == m_selectedAction)
         setExpanded(false);
 }
 
-void DDockWindow::showWidget(QWidget *widget)
+void DDockWidget::showWidget(QWidget *widget)
 {
-    Ideal::Button *button = m_buttons[widget];
-    if (button != 0)
-        button->show();
+    if (KAction* action = m_actions[widget])
+        action->setVisible(true);
+
     widget->show();
 }
 
-void DDockWindow::setMovingEnabled(bool b)
+KMainWindow * DDockWidget::mainWindow( ) const
 {
-    //some operations on KMainWindow cause moving to be enabled
-    //but we always don't want DDockWindow instances to be movable
-    Q3DockWindow::setMovingEnabled(false);
+    return static_cast<KMainWindow*>(const_cast<QObject*>(parent()));
+}
+
+void DDockWidget::setSelectedAction( KAction * action )
+{
+    if (m_selectedAction) {
+        m_selectedAction->blockSignals(true);
+        m_selectedAction->setChecked(false);
+        m_selectedAction->blockSignals(false);
+    }
+
+    m_selectedAction = action;
+
+    /*if (m_selectedAction) {
+        m_selectedAction->blockSignals(true);
+        static_cast<QToolButton*>(m_selectionBar->widgetForAction(m_selectedAction))->setDown(true);
+        m_selectedAction->blockSignals(false);
+    }*/
+}
+
+void DDockWidget::resizeEvent( QResizeEvent * event )
+{
+  kDebug() << k_funcinfo << event->oldSize() << " new " << event->size() << endl;
+  QDockWidget::resizeEvent(event);
 }
 
 #include "ddockwindow.moc"

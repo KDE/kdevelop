@@ -714,7 +714,7 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
 
             m_openNextAsText = false;
 
-            m_openRecentAction->addURL( url );
+            m_openRecentAction->addUrl( url );
             m_openRecentAction->saveEntries( KGlobal::config(),
                                              "RecentDocuments" );
 
@@ -774,7 +774,7 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
                 integratePart( part, url );
             }
 
-            m_openRecentAction->addURL( url );
+            m_openRecentAction->addUrl( url );
             m_openRecentAction->saveEntries( KGlobal::config(),
                                              "RecentDocuments" );
         }

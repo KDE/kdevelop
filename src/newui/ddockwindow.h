@@ -20,33 +20,28 @@
 #ifndef DDOCKWINDOW_H
 #define DDOCKWINDOW_H
 
-#include "q3mainwindow.h"
 #include <QMap>
 #include <QList>
 #include <QStackedWidget>
+#include <QDockWidget>
 
-class QBoxLayout;
-class QToolButton;
 class QStackedWidget;
-class KComboBox;
+class QToolBar;
+class QActionGroup;
+class KAction;
+class KMainWindow;
 
-namespace Ideal {
-    class Button;
-    class ButtonBar;
-}
-
-class DDockWindow : public Q3DockWindow {
+class DDockWidget : public QDockWidget {
     Q_OBJECT
 public:
-    enum Position { Bottom, Left, Right };
+    DDockWidget(Qt::DockWidgetArea area, KMainWindow* mainWindow);
+    virtual ~DDockWidget();
 
-    DDockWindow(QWidget *parent, Position position);
-    virtual ~DDockWindow();
+    KMainWindow* mainWindow() const;
 
     inline void expand() { setExpanded(true); }
     inline void collapse() { setExpanded(false); }
     bool isExpanded() const { return m_expanded; }
-    Position position() const { return m_position; }
 
     void addWidget(const QString &title, QWidget *widget);
     void raiseWidget(QWidget *widget);
@@ -58,30 +53,29 @@ public:
 
     QWidget *currentWidget() const;
 
-    void setMovingEnabled(bool b);
-
 private slots:
-    void selectWidget();
-    void selectWidget(Ideal::Button *button);
+    void selectWidget(QAction* action);
 
 protected:
     virtual void loadSettings();
     virtual void saveSettings();
     virtual void setExpanded(bool v);
-
-    Ideal::ButtonBar *m_bar;
-    QStackedWidget *m_widgetStack;
-
-    QMap<Ideal::Button*, QWidget*> m_widgets;
-    QMap<QWidget*, Ideal::Button*> m_buttons;
+    virtual void resizeEvent(QResizeEvent* event);
 
 private:
-    Position m_position;
-    bool m_expanded;
-    QString m_name;
+    void setSelectedAction(KAction* action);
 
-    Ideal::Button *m_toggledButton;
-    QBoxLayout *m_internalLayout;
+    QStackedWidget* m_widgetStack;
+    QToolBar* m_selectionBar;
+
+    QActionGroup* m_selectActionGroup;
+    QMap<KAction*, QWidget*> m_widgets;
+    QMap<QWidget*, KAction*> m_actions;
+
+    KAction* m_selectedAction;
+
+    bool m_expanded;
+    Qt::DockWidgetArea m_area;
 };
 
 #endif

@@ -94,7 +94,7 @@ private:
     MainWindowShare *m_mainWindowShare;
 
     KUrl m_currentTabURL;
-    QMap<QWidget*, DDockWindow::Position> m_docks;
+    QMap<QWidget*, Qt::DockWidgetArea> m_docks;
     KAction *m_raiseEditor;
     KMenu *m_windowMenu;
     typedef QPair<int, KUrl> WinInfo;

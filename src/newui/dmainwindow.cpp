@@ -48,8 +48,8 @@ void DMainWindow::loadSettings()
 {
     KConfig *config = KGlobal::config();
     config->setGroup("UI");
-    m_openTabAfterCurrent = config->readBoolEntry("OpenNewTabAfterCurrent", true);
-    m_showIconsOnTabs = config->readBoolEntry("ShowTabIcons", false);
+    m_openTabAfterCurrent = config->readEntry("OpenNewTabAfterCurrent", true);
+    m_showIconsOnTabs = config->readEntry("ShowTabIcons", false);
 }
 
 DMainWindow::~DMainWindow()
@@ -58,24 +58,21 @@ DMainWindow::~DMainWindow()
         removeWidget(*it);*/
 }
 
-DDockWindow *DMainWindow::toolWindow(DDockWindow::Position position) const
+DDockWidget *DMainWindow::toolWindow(Qt::DockWidgetArea area) const
 {
-    switch (position) {
-        case DDockWindow::Bottom: return m_bottomDock;
-        case DDockWindow::Left: return m_leftDock;
-        case DDockWindow::Right: return m_rightDock;
+    switch (area) {
+        case Qt::BottomDockWidgetArea: return m_bottomDock;
+        case Qt::LeftDockWidgetArea: return m_leftDock;
+        case Qt::RightDockWidgetArea: return m_rightDock;
     }
     return 0;
 }
 
 void DMainWindow::createToolWindows()
 {
-    m_bottomDock = new DDockWindow(this, DDockWindow::Bottom);
-    moveDockWindow(m_bottomDock, Qt::DockBottom);
-    m_leftDock = new DDockWindow(this, DDockWindow::Left);
-    moveDockWindow(m_leftDock, Qt::DockLeft);
-    m_rightDock = new DDockWindow(this, DDockWindow::Right);
-    moveDockWindow(m_rightDock, Qt::DockRight);
+    m_bottomDock = new DDockWidget(Qt::BottomDockWidgetArea, this);
+    m_leftDock = new DDockWidget(Qt::LeftDockWidgetArea, this);
+    m_rightDock = new DDockWidget(Qt::RightDockWidgetArea, this);
 }
 
 void DMainWindow::addWidget(QWidget *widget, const QString &title)

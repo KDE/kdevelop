@@ -86,9 +86,6 @@ void MainWindowShare::init()
 {
   connect(Core::getInstance(), SIGNAL(contextMenu(QMenu *, const Context *)),
           this, SLOT(contextMenu(QMenu *, const Context *)));
-
-  connect( m_pMainWnd->actionCollection(), SIGNAL( actionStatusText( const QString & ) ),
-        this, SLOT( slotActionStatusText( const QString & ) ) );
 }
 
 void MainWindowShare::slotActionStatusText( const QString &text )

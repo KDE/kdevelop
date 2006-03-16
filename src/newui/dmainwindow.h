@@ -37,7 +37,7 @@ public:
     virtual ~DMainWindow();
 
     /**@return The tool window in given @p position.*/
-    DDockWindow *toolWindow(DDockWindow::Position position) const;
+    DDockWidget *toolWindow(Qt::DockWidgetArea area) const;
 
     /**Adds a tabbed widget into the active (focused) tab widget.
     If @p widget is null then only tab is created.*/
@@ -71,9 +71,9 @@ protected:
     virtual void createToolWindows();
     virtual DTabWidget *createTab();
 
-    DDockWindow *m_leftDock;
-    DDockWindow *m_rightDock;
-    DDockWindow *m_bottomDock;
+    DDockWidget *m_leftDock;
+    DDockWidget *m_rightDock;
+    DDockWidget *m_bottomDock;
 
     Ideal::DockSplitter *m_central;
     DTabWidget *m_activeTabWidget;

@@ -226,9 +226,6 @@ void PluginController::integratePart(KXMLGUIClient *part)
     if ( ! part ) return;
 
     TopLevel::getInstance()->main()->guiFactory()->addClient(part);
-
-    connect( part->actionCollection(), SIGNAL( actionStatusText( const QString & ) ),
-        TopLevel::getInstance()->main()->actionCollection(), SIGNAL( actionStatusText( const QString & ) ) );
 }
 
 void PluginController::integrateAndRememberPart(const QString &name, KDevPlugin *part)

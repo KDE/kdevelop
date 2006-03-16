@@ -70,7 +70,6 @@ private slots:
   void slotProjectOptions();
 
   void slotLoadProject();
-  void slotRestoreToolbars();
 
   void loadLocalParts();
 

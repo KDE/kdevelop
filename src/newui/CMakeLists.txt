@@ -9,8 +9,6 @@ include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces $
 
 set(d_LIB_SRCS
     dmainwindow.cpp
-    buttonbar.cpp
-    button.cpp
     ddockwindow.cpp
     docksplitter.cpp
     dtabwidget.cpp
@@ -25,7 +23,7 @@ install_targets(/lib d)
 
 ########### install files ###############
 
-install_files(/include/kdevelop/shell FILES dmainwindow.h ddockwindow.h buttonbar.h button.h comdefs.h docksplitter.h dtabwidget.h)
+install_files(/include/kdevelop/shell FILES dmainwindow.h ddockwindow.h comdefs.h docksplitter.h dtabwidget.h)
 
 
 kde4_footer()

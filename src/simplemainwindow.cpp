@@ -67,7 +67,6 @@ SimpleMainWindow::~ SimpleMainWindow( )
 
 void SimpleMainWindow::init()
 {
-    actionCollection()->setHighlightingEnabled( true );
     setStandardToolBarMenuEnabled( true );
     setXMLFile(ShellExtension::getInstance()->xmlFile());
 
@@ -124,21 +123,21 @@ void SimpleMainWindow::embedPartView(QWidget *view, const QString &title, const 
 
 void SimpleMainWindow::embedSelectView(QWidget *view, const QString &title, const QString &/*toolTip*/)
 {
-    toolWindow(DDockWindow::Left)->addWidget(title, view);
-    m_docks[view] = DDockWindow::Left;
+    toolWindow(Qt::LeftDockWidgetArea)->addWidget(title, view);
+    m_docks[view] = Qt::LeftDockWidgetArea;
 }
 
 void SimpleMainWindow::embedOutputView(QWidget *view, const QString &title, const QString &/*toolTip*/)
 {
-    toolWindow(DDockWindow::Bottom)->addWidget(title, view);
-    m_docks[view] = DDockWindow::Bottom;
-    toolWindow(DDockWindow::Bottom)->show();
+    toolWindow(Qt::BottomDockWidgetArea)->addWidget(title, view);
+    m_docks[view] = Qt::BottomDockWidgetArea;
+    toolWindow(Qt::BottomDockWidgetArea)->show();
 }
 
 void SimpleMainWindow::embedSelectViewRight(QWidget *view, const QString &title, const QString &/*toolTip*/)
 {
-    toolWindow(DDockWindow::Right)->addWidget(title, view);
-    m_docks[view] = DDockWindow::Right;
+    toolWindow(Qt::RightDockWidgetArea)->addWidget(title, view);
+    m_docks[view] = Qt::RightDockWidgetArea;
 }
 
 void SimpleMainWindow::removeView(QWidget *view)
@@ -156,7 +155,7 @@ void SimpleMainWindow::removeView(QWidget *view)
 
 void SimpleMainWindow::setViewAvailable(QWidget *pView, bool bEnabled)
 {
-    DDockWindow *dock;
+    DDockWidget *dock;
     if (m_docks.contains(pView))
         dock = toolWindow(m_docks[pView]);
     else
@@ -180,7 +179,7 @@ void SimpleMainWindow::raiseView(QWidget *view)
 
     if (m_docks.contains(view))
     {
-        DDockWindow *dock = toolWindow(m_docks[view]);
+        DDockWidget *dock = toolWindow(m_docks[view]);
         dock->raiseWidget(view);
     }
     else if (m_widgets.contains(view) && m_widgetTabs.contains(view))
@@ -335,7 +334,7 @@ void SimpleMainWindow::documentStateChanged(const KUrl &url, DocumentState state
 
 void SimpleMainWindow::closeTab()
 {
-    actionCollection()->action("file_close")->activate();
+    actionCollection()->action("file_close")->trigger();
 }
 
 void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
