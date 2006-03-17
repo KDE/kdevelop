@@ -442,7 +442,11 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
     // different pipes to communicate with gdb and to get application
     // output, so "exited" message from gdb might have arrived before
     // last application output. Get this last bit.
-    tty_->readRemaining();
+
+    // Note: this method can be called when we open an invalid 
+    // core file. In that case, tty_ won't be set.
+    if (tty_)
+        tty_->readRemaining();
 
     // Tty is no longer usable, delete it. Without this, QSocketNotifier
     // will continiously bomd STTY with signals, so we need to either disable
