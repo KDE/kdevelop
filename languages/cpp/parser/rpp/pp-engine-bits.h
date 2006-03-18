@@ -96,8 +96,6 @@ void pp::file (FILE *fp, _OutputIterator __result)
   fclose (fp);
   this->operator () (buffer.c_str(), buffer.c_str() + buffer.size(), __result);
 #endif
-
-
 }
 
 template <typename _InputIterator>
@@ -373,10 +371,12 @@ void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIter
 #endif
 
   char __buffer[512];
+  lines = 0;
 
   while (true)
     {
       __first = skip_blanks (__first, __last);
+      lines += skip_blanks.lines;
 
       if (__first == __last)
         break;
@@ -384,8 +384,10 @@ void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIter
         {
           assert (*__first == '#');
           __first = skip_blanks (++__first, __last);
+          lines += skip_blanks.lines;
 
           _InputIterator end_id = skip_identifier (__first, __last);
+          lines += skip_identifier.lines;
           std::size_t __size = end_id - __first;
 
           assert (__size < 512);
@@ -402,6 +404,7 @@ void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIter
         {
           // ### compress the line
           *__result++ = *__first++;
+          ++lines;
         }
       else if (skipping ())
         __first = skip (__first, __last);
