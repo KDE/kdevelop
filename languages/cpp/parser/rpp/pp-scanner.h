@@ -23,10 +23,14 @@
 
 struct pp_skip_blanks
 {
+  int lines;
+
   template <typename _InputIterator>
   _InputIterator operator () (_InputIterator __first, _InputIterator __last)
   {
-    for (; __first != __last; ++__first)
+    lines = 0;
+    
+    for (; __first != __last; (*__first != '\n' ?: ++lines), ++__first)
       {
         if (*__first == '\\')
           {
@@ -34,7 +38,7 @@ struct pp_skip_blanks
             ++__begin;
 
             if (__begin != __last && *__begin == '\n')
-              ++__first;
+                ++__first;
             else
               break;
           }
@@ -48,6 +52,8 @@ struct pp_skip_blanks
 
 struct pp_skip_comment_or_divop
 {
+  int lines;
+  
   template <typename _InputIterator>
   _InputIterator operator () (_InputIterator __first, _InputIterator __last)
   {
@@ -60,7 +66,9 @@ struct pp_skip_comment_or_divop
       IN_CXX_COMMENT
     } state (MAYBE_BEGIN);
 
-    for (; __first != __last; ++__first)
+    lines = 0;
+    
+    for (; __first != __last; (*__first != '\n' ?: ++lines), ++__first)
       {
         switch (state)
           {
@@ -112,10 +120,14 @@ struct pp_skip_comment_or_divop
 
 struct pp_skip_identifier
 {
+  int lines;
+
   template <typename _InputIterator>
   _InputIterator operator () (_InputIterator __first, _InputIterator __last)
   {
-    for (; __first != __last; ++__first)
+    lines = 0;
+    
+    for (; __first != __last; (*__first != '\n' ?: ++lines), ++__first)
       {
         if (! pp_isalnum (*__first) && *__first != '_')
           break;
@@ -127,10 +139,14 @@ struct pp_skip_identifier
 
 struct pp_skip_number
 {
+  int lines;
+
   template <typename _InputIterator>
   _InputIterator operator () (_InputIterator __first, _InputIterator __last)
   {
-    for (; __first != __last; ++__first)
+    lines = 0;
+
+    for (; __first != __last; (*__first != '\n' ?: ++lines), ++__first)
       {
         if (! pp_isalnum (*__first) && *__first != '.')
           break;
@@ -142,6 +158,8 @@ struct pp_skip_number
 
 struct pp_skip_string_literal
 {
+  int lines;
+
   template <typename _InputIterator>
   _InputIterator operator () (_InputIterator __first, _InputIterator __last)
   {
@@ -152,7 +170,9 @@ struct pp_skip_string_literal
       END
     } state (BEGIN);
 
-    for (; __first != __last; ++__first)
+    lines = 0;
+
+    for (; __first != __last; (*__first != '\n' ?: ++lines), ++__first)
       {
         switch (state)
           {
@@ -190,6 +210,8 @@ struct pp_skip_string_literal
 
 struct pp_skip_char_literal
 {
+  int lines;
+
   template <typename _InputIterator>
   _InputIterator operator () (_InputIterator __first, _InputIterator __last)
   {
@@ -200,7 +222,9 @@ struct pp_skip_char_literal
       END
     } state (BEGIN);
 
-    for (; state != END && __first != __last; ++__first)
+    lines = 0;
+
+    for (; state != END && __first != __last; (*__first != '\n' ?: ++lines), ++__first)
       {
         switch (state)
           {
@@ -240,11 +264,13 @@ struct pp_skip_argument
   pp_skip_string_literal skip_string_literal;
   pp_skip_char_literal skip_char_literal;
   pp_skip_comment_or_divop skip_comment_or_divop;
+  int lines;
 
   template <typename _InputIterator>
   _InputIterator operator () (_InputIterator __first, _InputIterator __last)
   {
     int depth = 0;
+    lines = 0;
 
     while (__first != __last)
       {
@@ -255,15 +281,35 @@ struct pp_skip_argument
         else if (*__first == ')')
           --depth, ++__first;
         else if (*__first == '\"')
-          __first = skip_string_literal (__first, __last);
+          {
+            __first = skip_string_literal (__first, __last);
+            lines += skip_string_literal.lines;
+          }
         else if (*__first == '\'')
-          __first = skip_char_literal (__first, __last);
+          {
+            __first = skip_char_literal (__first, __last);
+            lines += skip_char_literal.lines;
+          }
         else if (*__first == '/')
-          __first = skip_comment_or_divop (__first, __last);
+          {
+            __first = skip_comment_or_divop (__first, __last);
+            lines += skip_comment_or_divop.lines;
+          }
         else if (pp_isalpha (*__first) || *__first == '_')
-          __first = skip_identifier (__first, __last);
+          {
+            __first = skip_identifier (__first, __last);
+            lines += skip_identifier.lines;
+          }
         else if (pp_isdigit (*__first))
-          __first = skip_number (__first, __last);
+          {
+            __first = skip_number (__first, __last);
+            lines += skip_number.lines;
+          }
+        else if (*__first == '\n')
+          {
+            ++__first;
+            ++lines;
+          }
         else
           ++__first;
       }
