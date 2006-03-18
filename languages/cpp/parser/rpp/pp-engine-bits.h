@@ -324,6 +324,10 @@ _InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last
       _M_current_file = filepath;
 
       std::string __msg;
+      __msg.reserve(256);
+
+      char __line_descr[16];
+      snprintf(__line_descr, 16, "%d", lines);
 
 #if defined (QT_MOC)
       __msg += "#moc_include_begin ";
@@ -333,7 +337,9 @@ _InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last
       std::copy (__msg.begin (), __msg.end (), __result);
 #endif
 
-      __msg += "# 1 \"";        // ### fix the line number
+      __msg += "# ";
+      __msg += __line_descr;
+      __msg += " ";
       __msg += _M_current_file;
       __msg += "\"\n";
       std::copy (__msg.begin (), __msg.end (), __result);
