@@ -4,6 +4,7 @@
 #include "dumptree.h"
 #include "tokens.h"
 
+#include "testconfig.h"
 
 #include <QByteArray>
 #include <QDataStream>
@@ -202,7 +203,7 @@ private slots:
 
   void testParseFile()
   {
-     QFile file("test_parser.cpp");
+     QFile file(TEST_FILE);
      QVERIFY(file.open(QFile::ReadOnly));
      QByteArray contents = file.readAll();
      file.close();
