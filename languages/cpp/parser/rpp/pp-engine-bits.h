@@ -107,28 +107,43 @@ void pp::file (FILE *fp, _OutputIterator __result)
 template <typename _InputIterator>
 bool pp::find_header_protection (_InputIterator __first, _InputIterator __last, std::string *__prot)
 {
+  int was = lines;
+  
   while (__first != __last)
     {
       if (pp_isspace (*__first))
-        ++__first;
+        {
+          if (*__first == '\n')
+            ++lines;
+            
+          ++__first;
+        }
       else if (_PP_internal::comment_p (__first, __last))
-        __first = skip_comment_or_divop (__first, __last);
+        {
+          __first = skip_comment_or_divop (__first, __last);
+          lines += skip_comment_or_divop.lines;
+        }
       else if (*__first == '#')
         {
           __first = skip_blanks (++__first, __last);
+          lines += skip_blanks.lines;
 
           if (__first != __last && *__first == 'i')
             {
               _InputIterator __begin = __first;
               __first = skip_identifier (__begin, __last);
+              lines += skip_identifier.lines;
 
               std::string __directive (__begin, __first);
 
               if (__directive == "ifndef")
                 {
                   __first = skip_blanks (__first, __last);
+                  lines += skip_blanks.lines;
+                  
                   __begin = __first;
                   __first = skip_identifier (__first, __last);
+                  lines += skip_identifier.lines;
 
                   if (__begin != __first && __first != __last)
                     {
@@ -143,7 +158,8 @@ bool pp::find_header_protection (_InputIterator __first, _InputIterator __last, 
         break;
     }
 
-    return false;
+ lines = was;
+ return false;
 }
 
 inline pp::PP_DIRECTIVE_TYPE pp::find_directive (char const *__directive, std::size_t __size) const
@@ -383,8 +399,8 @@ void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIter
     }
 #endif
 
+  lines = 1;
   char __buffer[512];
-  lines = 0;
 
   while (true)
     {

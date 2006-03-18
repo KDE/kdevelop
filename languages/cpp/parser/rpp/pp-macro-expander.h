@@ -124,8 +124,13 @@ public:
         else if (_PP_internal::comment_p (__first, __last))
           {
             _InputIterator next_pos = skip_comment_or_divop (__first, __last);
-            lines += skip_comment_or_divop.lines;
+            int n = skip_comment_or_divop.lines;
+            lines += n;
             __first = next_pos;
+            
+            // ### compress
+            while (n--)
+              *__result++ = '\n';
           }
         else if (pp_isspace (*__first))
           {
