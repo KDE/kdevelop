@@ -120,4 +120,6 @@ KDevMimeTypeItem* KDevDocumentModel::mimeType( const QString& mimeType ) const
     return 0;
 }
 
+#include "kdevdocumentmodel.moc"
+
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

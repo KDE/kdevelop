@@ -50,4 +50,6 @@ void KDevDocumentSelection::select( const QItemSelection & selection,
     QItemSelectionModel::select( selection, command );
 }
 
+#include "kdevdocumentselection.moc"
+
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
