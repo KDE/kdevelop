@@ -64,7 +64,13 @@ void pp::file (std::string const &filename, _OutputIterator __result)
 {
   FILE *fp = fopen (filename.c_str(), "rb");
   if (fp != 0)
-    file (fp, __result);
+    {
+      std::string was = _M_current_file;
+      _M_current_file = filename;
+      output_line (_M_current_file, 1, __result);
+      file (fp, __result);
+      _M_current_file = was;
+    }
   else
     std::cerr << "** WARNING file ``" << filename << " not found!" << std::endl;
 }
@@ -294,6 +300,29 @@ _InputIterator pp::handle_directive(char const *__directive, std::size_t __size,
   return __first;
 }
 
+template <typename _OutputIterator>
+void pp::output_line(const std::string &__filename, int __line, _OutputIterator __result)
+{
+  const char __internal[] = "<internal>";
+  std::string __msg;  
+
+  __msg += "# ";
+
+  char __line_descr[16];
+  int n = snprintf (__line_descr, 16, "%d", __line);
+  __msg += __line_descr;
+  
+  __msg += " \"";
+
+  if (__filename.empty ())
+    __msg += "<internal>";
+  else
+    __msg += __filename;
+  
+  __msg += "\"\n";
+  std::copy (__msg.begin (), __msg.end (), __result);
+}
+
 template <typename _InputIterator, typename _OutputIterator>
 _InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last,
       _OutputIterator __result)
@@ -322,41 +351,19 @@ _InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last
     {
       std::string old_file = _M_current_file;
       _M_current_file = filepath;
+      int __saved_lines = lines;
 
-      std::string __msg;
-      __msg.reserve(256);
-
-      char __line_descr[16];
-      snprintf(__line_descr, 16, "%d", lines);
-
-#if defined (QT_MOC)
-      __msg += "#moc_include_begin ";
-      __msg += "\"";
-      __msg += filename;
-      __msg += "\"\n";
-      std::copy (__msg.begin (), __msg.end (), __result);
-#endif
-
-      __msg += "# ";
-      __msg += __line_descr;
-      __msg += " ";
-      __msg += _M_current_file;
-      __msg += "\"\n";
-      std::copy (__msg.begin (), __msg.end (), __result);
+      lines = 1;
+      output_line (_M_current_file, 1, __result);
 
       file (fp, __result);
 
+      // restore the file name and the line position
       _M_current_file = old_file;
+      lines = __saved_lines;
 
-      __msg += "# 1 \"";       // ### fix the line number
-      __msg += _M_current_file;
-      __msg += "\"\n";
-      std::copy (__msg.begin (), __msg.end (), __result);
-
-#if defined (QT_MOC)
-      __msg = "#moc_include_end 1\n";
-      std::copy (__msg.begin (), __msg.end (), __result);
-#endif
+      // sync the buffer
+      output_line (_M_current_file, lines, __result);
     }
 
   return __first;
@@ -415,7 +422,11 @@ void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIter
       else if (skipping ())
         __first = skip (__first, __last);
       else
-        __first = expand (__first, __last, __result);
+        {
+          __first = expand (__first, __last, __result);
+          lines += expand.lines;
+          // ### sync the lines
+        }
     }
 }
 

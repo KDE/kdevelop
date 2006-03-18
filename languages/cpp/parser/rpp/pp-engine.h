@@ -107,6 +107,9 @@ public:
   template <typename _InputIterator, typename _OutputIterator>
   void operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result);
 
+  template <typename _OutputIterator>
+  void output_line(const std::string &__filename, int __line, _OutputIterator __result);
+
 private:
   inline bool file_exists (std::string const &__filename) const;
   FILE *find_include_file (std::string const &__filename, std::string *__filepath,

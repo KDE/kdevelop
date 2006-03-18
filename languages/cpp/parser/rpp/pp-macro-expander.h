@@ -31,7 +31,7 @@ struct pp_frame
 };
 
 class pp_macro_expander
-{
+{  
   pp_environment &env;
   pp_frame *frame;
 
@@ -68,6 +68,9 @@ class pp_macro_expander
     return 0;
   }
 
+public: // attributes
+  int lines;
+
 public:
   pp_macro_expander (pp_environment &__env, pp_frame *__frame = 0):
     env (__env), frame (__frame) {}
@@ -76,45 +79,52 @@ public:
   _InputIterator operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result)
   {
     __first = skip_blanks (__first, __last);
+    lines = skip_blanks.lines;
 
     while (__first != __last)
       {
         if (*__first == '\n')
           {
             *__result++ = *__first;
+            ++lines;
 
             __first = skip_blanks (++__first, __last);
+            lines += skip_blanks.lines;
+            
             if (__first != __last && *__first == '#')
               break;
           }
         else if (*__first == '#')
           {
             __first = skip_blanks (++__first, __last);
+            lines += skip_blanks.lines;
 
             _InputIterator end_id = skip_identifier (__first, __last);
             *__result++ = '\"';
+            int was = lines;
             this->operator () (__first, end_id, __result);
+            lines += was;
             *__result++ = '\"';
             __first = end_id;
           }
         else if (*__first == '\"')
           {
             _InputIterator next_pos = skip_string_literal (__first, __last);
+            lines += skip_string_literal.lines;
             std::copy (__first, next_pos, __result);
             __first = next_pos;
           }
         else if (*__first == '\'')
           {
             _InputIterator next_pos = skip_char_literal (__first, __last);
+            lines += skip_char_literal.lines;
             std::copy (__first, next_pos, __result);
             __first = next_pos;
           }
         else if (_PP_internal::comment_p (__first, __last))
           {
             _InputIterator next_pos = skip_comment_or_divop (__first, __last);
-#if 0 // skip comments for now
-            std::copy (__first, next_pos, __result);
-#endif
+            lines += skip_comment_or_divop.lines;
             __first = next_pos;
           }
         else if (pp_isspace (*__first))
@@ -130,6 +140,7 @@ public:
         else if (pp_isdigit (*__first))
           {
             _InputIterator next_pos = skip_number (__first, __last);
+            lines += skip_number.lines;
             std::copy (__first, next_pos, __result);
             __first = next_pos;
           }
