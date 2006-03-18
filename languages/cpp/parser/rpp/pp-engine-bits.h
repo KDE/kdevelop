@@ -528,17 +528,30 @@ _InputIterator pp::skip (_InputIterator __first, _InputIterator __last)
   while (__first != __last && *__first != '\n')
     {
       if (*__first == '/')
-        __first = skip_comment_or_divop (__first, __last);
+        {
+          __first = skip_comment_or_divop (__first, __last);
+          lines += skip_comment_or_divop.lines;
+        }
       else if (*__first == '"')
-        __first = skip_string_literal (__first, __last);
+        {
+          __first = skip_string_literal (__first, __last);
+          lines += skip_string_literal.lines;
+        }
       else if (*__first == '\'')
-        __first = skip_char_literal (__first, __last);
+        {
+          __first = skip_char_literal (__first, __last);
+          lines += skip_char_literal.lines;
+        }
       else if (*__first == '\\')
         {
           __first = skip_blanks (++__first, __last);
+          lines += skip_blanks.lines;
 
           if (__first != __last && *__first == '\n')
-            ++__first;
+            {
+              ++__first;
+              ++lines;
+            }
         }
       else
         ++__first;

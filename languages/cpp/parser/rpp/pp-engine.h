@@ -37,6 +37,7 @@ class pp
   int _M_skipping[MAX_LEVEL];
   int _M_true_test[MAX_LEVEL];
   int iflevel;
+  int lines;
 
   union
   {
