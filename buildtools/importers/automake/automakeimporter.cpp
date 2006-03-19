@@ -83,7 +83,7 @@ KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
         }
     }
     return m_rootItem;
-	
+
 }
 
 QString AutoMakeImporter::findMakefile( KDevProjectFolderItem* dom ) const
@@ -121,8 +121,14 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
     QList<TargetInfo> targets = m_interface->targetsForFolder( folder );
     foreach( TargetInfo target, targets )
     {
-        KDevProjectTargetItem* targetItem = new KDevProjectTargetItem( target.name, folderItem );
-        folderItem->add( new KDevProjectTargetItem( target.name, folderItem ) );
+        AutoMakeTargetItem* targetItem = new AutoMakeTargetItem( target, folderItem );
+        folderItem->add( targetItem );
+        QList<QFileInfo> targetFiles = m_interface->filesForTarget( target );
+        foreach( QFileInfo fi, targetFiles )
+        {
+            //kDebug() << k_funcinfo << fi.absoluteFilePath() << endl;
+            targetItem->add( new KDevProjectFileItem( fi, targetItem ) );
+        }
     }
 }
 

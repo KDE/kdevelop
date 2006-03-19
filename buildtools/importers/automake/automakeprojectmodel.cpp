@@ -39,9 +39,10 @@ AutoMakeFileItem::~AutoMakeFileItem()
 {
 }
 
-AutoMakeTargetItem::AutoMakeTargetItem( const QString& name, KDevItemGroup* parent )
-    : KDevProjectTargetItem( name, parent )
+AutoMakeTargetItem::AutoMakeTargetItem( const TargetInfo& target, KDevItemGroup* parent )
+    : KDevProjectTargetItem( target.name, parent )
 {
+    m_target = target;
 }
 
 AutoMakeTargetItem::~AutoMakeTargetItem()
@@ -49,4 +50,4 @@ AutoMakeTargetItem::~AutoMakeTargetItem()
 }
 
 #include "automakeprojectmodel.h"
-// kate: indent-mode csands; space-indent off; tab-width 4; auto-insert-doxygen on;
+// kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;

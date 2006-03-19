@@ -23,9 +23,9 @@
 
 #include <QObject>
 #include <QRegExp>
+#include <QDir>
 
 class QFileInfo;
-class QDir;
 
 namespace AutoTools
 {
@@ -51,13 +51,12 @@ typedef QList<AutoTools::ProjectAST*> ASTList;
 
 uint qHash( const QFileInfo& key );
 
-
-
 struct TargetInfo
 {
     AutoTools::TargetType type;
     AutoTools::InstallLocation location;
     QString name;
+    QDir folder;
 };
 
 
@@ -87,11 +86,12 @@ public:
     QStringList subdirsFor( const QDir& dir ) const;
 
     QList<TargetInfo> targetsForFolder( const QDir& dir ) const;
+    QList<QFileInfo> filesForTarget( const TargetInfo& ) const;
 
 private:
     QStringList subdirsFor( AutoTools::ProjectAST* ) const;
     AutoTools::ProjectAST* astForFolder( const QDir& dir ) const;
-    
+    QStringList valuesForId( const QString&, AutoTools::ProjectAST* ) const;
 
 private:
     class Private;

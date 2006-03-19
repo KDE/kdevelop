@@ -136,7 +136,7 @@ QString MakefileInterface::canonicalize( const QString& target )
 
 bool MakefileInterface::parse( const QDir& dir, ParserRecursion recursive )
 {
-    kDebug(9020) << k_funcinfo << "directory to parse is: " << dir.absolutePath() << endl; 
+    kDebug(9020) << k_funcinfo << "directory to parse is: " << dir.absolutePath() << endl;
     int ret = -1;
     AutoTools::ProjectAST* ast;
 
@@ -251,7 +251,7 @@ QStringList MakefileInterface::subdirsFor( const QDir& folder ) const
     AutoTools::ProjectAST* ast = astForFolder( folder );
     if ( !ast )
     {
-        kWarning(9020) << k_funcinfo << "Couldn't find AST for " 
+        kWarning(9020) << k_funcinfo << "Couldn't find AST for "
                 << folder.absolutePath() << endl;
         return QStringList();
     }
@@ -300,6 +300,8 @@ QList<TargetInfo> MakefileInterface::targetsForFolder( const QDir& folder ) cons
                     info.type = AutoTools::convertToType( primary );
                     info.location = AutoTools::convertToLocation( location );
                     info.name = target;
+                    info.folder = folder;
+
                     targetList.append( info );
                 }
             }
@@ -347,7 +349,7 @@ QStringList MakefileInterface::subdirsFor( AutoTools::ProjectAST* ast ) const
                                             realDir );
                     }
                 }
-                kDebug(9020) << k_funcinfo << "subdirs is '" 
+                kDebug(9020) << k_funcinfo << "subdirs is '"
                         << assignment->values << "'" << endl;
                 return subdirList;
             }
@@ -357,6 +359,98 @@ QStringList MakefileInterface::subdirsFor( AutoTools::ProjectAST* ast ) const
     return QStringList();
 }
 
+QList<QFileInfo> MakefileInterface::filesForTarget( const TargetInfo& target ) const
+{
+    QList<QFileInfo> fileInfoList;
+    QString targetId;
+    AutoTools::ProjectAST* ast = astForFolder( target.folder );
+    if ( !ast )
+        return QList<QFileInfo>();
+
+    if ( isVariable( target.name ) )
+        targetId = resolveVariable( target.name, ast );
+    else
+        targetId = canonicalize( target.name );
+
+
+    switch ( target.type )
+    {
+    case Program:
+    case Library:
+    case LibtoolLibrary:
+        targetId += QLatin1String( "_SOURCES" );
+        break;
+    case Lisp:
+        targetId += QLatin1String( "_LISP" );
+        break;
+    case Texinfo:
+        targetId += QLatin1String( "_TEXINFOS" );
+        break;
+    case Scripts:
+        targetId += QLatin1String( "_SCRIPTS" );
+        break;
+    case Java:
+        targetId += QLatin1String( "_JAVA" );
+        break;
+    case Python:
+        targetId += QLatin1String( "_PYTHON" );
+        break;
+    case Data:
+        targetId += QLatin1String( "_DATA" );
+        break;
+    case Headers:
+        targetId += QLatin1String( "_HEADERS" );
+        break;
+    case ManPages:
+        targetId += QLatin1String( "_MANS" );
+        break;
+    default:
+        break;
+    };
+
+
+    QStringList valuesList = valuesForId( targetId, ast );
+    foreach( QString value, valuesList )
+    {
+        if ( value == QLatin1String( "\\" ) )
+            continue;
+
+        QFileInfo fi( target.folder, value );
+        fileInfoList.append( fi );
+    }
+
+    return fileInfoList;
+}
+
+QStringList MakefileInterface::valuesForId( const QString& id, AutoTools::ProjectAST* ast ) const
+{
+    kDebug(9020) << k_funcinfo << "looking for '" << id << "'" << endl;
+
+    QStringList valuesList;
+    QList<AST*> childList = ast->children();
+    QList<AST*>::const_iterator cit, citEnd = childList.constEnd();
+    for ( cit = childList.constBegin(); cit != citEnd; ++cit )
+    {
+        if ( (*cit)->nodeType() == AST::AssignmentAST )
+        {
+            AssignmentAST* assignment = static_cast<AssignmentAST*>( (*cit) );
+            if ( assignment->scopedID == id  )
+            {
+                kDebug(9020) << k_funcinfo << "found " << id << endl;
+                QStringList valuesList = assignment->values;
+                valuesList.removeAll( QLatin1String( "\\" ) );
+
+                kDebug(9020) << k_funcinfo << "providing list '"
+                        << assignment->values << "' for id" << id << endl;
+                return valuesList;
+            }
+        }
+    }
+
+    return valuesList;
+
+}
 #include "makefileinterface.moc"
+
 // kate: space-indent on; indent-width 4; auto-insert-doxygen on; replace-tabs on; indent-mode cstyle;
 

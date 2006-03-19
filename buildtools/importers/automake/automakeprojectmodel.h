@@ -22,6 +22,8 @@
 #include <QList>
 #include <QIcon>
 #include "kdevprojectmodel.h"
+#include "makefileinterface.h"
+
 
 class AutoMakeDirItem : public KDevProjectFolderItem
 {
@@ -53,7 +55,7 @@ public:
 class AutoMakeTargetItem : public KDevProjectTargetItem
 {
 public:
-    AutoMakeTargetItem( const QString& name, KDevItemGroup* parent = 0 );
+    AutoMakeTargetItem( const TargetInfo& target, KDevItemGroup* parent = 0 );
     virtual ~AutoMakeTargetItem();
 
     virtual KDevProjectTargetItem* target() const
@@ -63,12 +65,9 @@ public:
 
 
 private:
-    QString m_prefix;
-    QString m_target;
-    QList<AutoMakeFileItem*> m_fileList;
-
+    TargetInfo m_target;
 };
 
 #endif // AUTOMAKEPROJECTMODEL_H
-// kate: indent-mode csands; space-indent off; tab-width 4; auto-insert-doxygen on;
+// kate: indent-mode csands; space-indent on; indent-width 4; replace-tabs on;
 
