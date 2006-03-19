@@ -57,6 +57,7 @@ struct TargetInfo
     AutoTools::InstallLocation location;
     QString name;
     QDir folder;
+    QString display;
 };
 
 

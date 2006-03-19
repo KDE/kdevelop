@@ -119,17 +119,41 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
     }
 
     QList<TargetInfo> targets = m_interface->targetsForFolder( folder );
+    KDevProjectTargetItem* dotDesktopTarget = 0;
+    KDevProjectTargetItem* xmlGuiTarget = 0;
     foreach( TargetInfo target, targets )
     {
-        AutoMakeTargetItem* targetItem = new AutoMakeTargetItem( target, folderItem );
-        folderItem->add( targetItem );
-        QList<QFileInfo> targetFiles = m_interface->filesForTarget( target );
-        foreach( QFileInfo fi, targetFiles )
+        if ( target.type == AutoTools::Data && target.name.contains( ".desktop" ) )
         {
-            //kDebug() << k_funcinfo << fi.absoluteFilePath() << endl;
-            targetItem->add( new KDevProjectFileItem( fi, targetItem ) );
+            if ( dotDesktopTarget == 0 )
+                dotDesktopTarget = new KDevProjectTargetItem( i18n( "freedesktop.org Desktop Entry Files" ),
+                                                              folderItem  );
+
+            if ( dotDesktopTarget )
+                dotDesktopTarget->add( new AutoMakeFileItem( target.name, dotDesktopTarget ) );
+        }
+        else if ( target.type == AutoTools::Data && target.name.contains( ".rc" ) )
+        {
+            if ( xmlGuiTarget == 0 )
+                xmlGuiTarget = new KDevProjectTargetItem( i18n( "KDE XMLGUI Definitions" ),
+                                                          folderItem );
+            if ( xmlGuiTarget )
+                xmlGuiTarget->add( new AutoMakeFileItem( target.name, xmlGuiTarget ) );
+        }
+        else
+        {
+            AutoMakeTargetItem* targetItem = new AutoMakeTargetItem( target, folderItem );
+            folderItem->add( targetItem );
+            QList<QFileInfo> targetFiles = m_interface->filesForTarget( target );
+            foreach( QFileInfo fi, targetFiles )
+                targetItem->add( new KDevProjectFileItem( fi, targetItem ) );
         }
     }
+    if ( dotDesktopTarget )
+        folderItem->add( dotDesktopTarget );
+    if ( xmlGuiTarget )
+        folderItem->add( xmlGuiTarget );
+
 }
 
 #include "automakeimporter.h"

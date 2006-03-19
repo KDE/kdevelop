@@ -40,7 +40,7 @@ AutoMakeFileItem::~AutoMakeFileItem()
 }
 
 AutoMakeTargetItem::AutoMakeTargetItem( const TargetInfo& target, KDevItemGroup* parent )
-    : KDevProjectTargetItem( target.name, parent )
+    : KDevProjectTargetItem( !target.display.isEmpty() ? target.display : target.name, parent )
 {
     m_target = target;
 }
