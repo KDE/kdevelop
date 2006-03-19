@@ -19,7 +19,8 @@ link_directories(${KDE4_LIB_DIR})
 
 include(MacroAdditionalCleanFiles)
 include(MacroAddFileDependencies)
-include (ConfigureChecks.cmake)
+include(ConfigureChecks.cmake)
+include(KDevelopMacros)
 
 include_directories(${KDE4_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -35,9 +36,9 @@ add_subdirectory(mimetypes)
 add_subdirectory(pics) 
 add_subdirectory(src)
 add_subdirectory(languages) 
+add_subdirectory(parts) 
+add_subdirectory(buildtools) 
 
-#add_subdirectory(parts) 
-#add_subdirectory(buildtools) 
 #add_subdirectory(doc) 
 
 

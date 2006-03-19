@@ -22,6 +22,8 @@
 
 #include <q3vbox.h>
 
+#define MAKE_COMMAND "make"
+
 K_EXPORT_COMPONENT_FACTORY(libkdevmakebuilder, KGenericFactory<KDevMakeBuilder>("kdevmakebuilder"))
 
 
@@ -220,3 +222,4 @@ QString KDevMakeBuilder::makeEnvironment() const
     return env;
 }
 
+#include "kdevmakebuilder.moc"
