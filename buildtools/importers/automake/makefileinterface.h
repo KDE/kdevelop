@@ -32,7 +32,7 @@ namespace AutoTools
     class ProjectAST;
     enum TargetType { Program, Library, LibtoolLibrary, Lisp, Python, Java,
                       Scripts, Data, Headers, ManPages, Texinfo, Unknown };
-    enum InstallLocation { Bin, Libexec, Lib, None, Check, Info, Man };
+    enum InstallLocation { Bin, Libexec, Lib, None, Check, Info, Man, Custom };
 
     const QRegExp targetPrimaries = QRegExp( "_(PROGRAMS|LIBRARIES|LISP|PYTHON|JAVA|SCRIPTS|DATA|HEADERS|MANS|TEXINFOS|LTLIBRARIES)" );
 

@@ -85,8 +85,10 @@ namespace AutoTools
             return Man;
         else if ( location == "kde_module" )
             return Lib;
-        else
+        else if ( location == "EXTRA" )
             return None;
+        else
+            return Custom;
     }
 }
 
@@ -293,8 +295,6 @@ QList<TargetInfo> MakefileInterface::targetsForFolder( const QDir& folder ) cons
 
                     kDebug( 9020 ) << k_funcinfo << "primary: " << primary
                                    << " location: " << location << endl;
-                    if ( primary == "HEADERS" )
-                        continue;
 
                     TargetInfo info;
                     info.type = AutoTools::convertToType( primary );

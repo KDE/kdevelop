@@ -121,38 +121,59 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
     QList<TargetInfo> targets = m_interface->targetsForFolder( folder );
     KDevProjectTargetItem* dotDesktopTarget = 0;
     KDevProjectTargetItem* xmlGuiTarget = 0;
+    KDevProjectTargetItem* notInstalledHeaders = 0;
+    KDevProjectTargetItem* installedHeaders = 0;
+
     foreach( TargetInfo target, targets )
     {
-        if ( target.type == AutoTools::Data && target.name.contains( ".desktop" ) )
+        switch( target.type )
         {
-            if ( dotDesktopTarget == 0 )
-                dotDesktopTarget = new KDevProjectTargetItem( i18n( "freedesktop.org Desktop Entry Files" ),
-                                                              folderItem  );
-
-            if ( dotDesktopTarget )
+        case AutoTools::Data:
+            if ( target.name.contains( ".desktop" ) )
+            {
+                if ( dotDesktopTarget == 0 )
+                    dotDesktopTarget = new KDevProjectTargetItem( i18n( "freedesktop.org Desktop Entry Files" ),
+                                                                folderItem  );
                 dotDesktopTarget->add( new AutoMakeFileItem( target.name, dotDesktopTarget ) );
-        }
-        else if ( target.type == AutoTools::Data && target.name.contains( ".rc" ) )
-        {
-            if ( xmlGuiTarget == 0 )
-                xmlGuiTarget = new KDevProjectTargetItem( i18n( "KDE XMLGUI Definitions" ),
-                                                          folderItem );
-            if ( xmlGuiTarget )
+            }
+            else if ( target.name.contains( ".rc" ) )
+            {
+                if ( xmlGuiTarget == 0 )
+                    xmlGuiTarget = new KDevProjectTargetItem( i18n( "KDE XMLGUI Definitions" ),
+                                                            folderItem );
                 xmlGuiTarget->add( new AutoMakeFileItem( target.name, xmlGuiTarget ) );
-        }
-        else
-        {
-            AutoMakeTargetItem* targetItem = new AutoMakeTargetItem( target, folderItem );
-            folderItem->add( targetItem );
-            QList<QFileInfo> targetFiles = m_interface->filesForTarget( target );
-            foreach( QFileInfo fi, targetFiles )
-                targetItem->add( new KDevProjectFileItem( fi, targetItem ) );
-        }
+            }
+            break;
+        case AutoTools::Headers:
+            if ( target.location != None )
+            {
+                if ( installedHeaders == 0 )
+                    installedHeaders = new KDevProjectTargetItem( i18n( "Installed headers" ) );
+                installedHeaders->add( new AutoMakeFileItem( target.name, installedHeaders ) );
+            }
+            break;
+            case AutoTools::Program:
+            case AutoTools::Library:
+            case AutoTools::LibtoolLibrary:
+            default:
+                AutoMakeTargetItem* targetItem = new AutoMakeTargetItem( target, folderItem );
+                folderItem->add( targetItem );
+                QList<QFileInfo> targetFiles = m_interface->filesForTarget( target );
+                foreach( QFileInfo fi, targetFiles )
+                    targetItem->add( new KDevProjectFileItem( fi, targetItem ) );
+            break;
+        };
     }
     if ( dotDesktopTarget )
         folderItem->add( dotDesktopTarget );
     if ( xmlGuiTarget )
         folderItem->add( xmlGuiTarget );
+    if ( installedHeaders )
+        folderItem->add( installedHeaders );
+    if ( notInstalledHeaders )
+        folderItem->add( notInstalledHeaders );
+
+
 
 }
 
