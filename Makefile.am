@@ -1,4 +1,4 @@
-SUBDIRS = lib parts buildtools src pics doc mimetypes languages 
+SUBDIRS = lib plugins buildtools src pics doc mimetypes languages 
 
 
 EXTRA_DIST = AUTHORS COPYING COPYING.LIB NEWS ChangeLog INSTALL README TODO HACKING HACKING.language admin configure.in.bot
