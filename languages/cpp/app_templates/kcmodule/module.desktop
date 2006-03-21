@@ -14,6 +14,7 @@ X-KDE-ParentApp=kcontrol
 [Desktop Entry]
 Encoding=UTF-8
 Comment=%{APPNAME} - a kcontrol module
+Comment[br]=%{APPNAME} - ur mollad kcontrol
 Comment[ca]=%{APPNAME} - un mòdul per a kcontrol
 Comment[da]=%{APPNAME} - et kcontrol-modul
 Comment[de]=%{APPNAME} - ein KControl-Modul
