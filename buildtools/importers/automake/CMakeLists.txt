@@ -31,7 +31,7 @@ set(kdevautomakeimporter_PART_SRCS
 
 kde4_automoc(${kdevautomakeimporter_PART_SRCS})
 kde4_add_plugin(kdevautomakeimporter ${kdevautomakeimporter_PART_SRCS})
-target_link_libraries(kdevautomakeimporter ${QT_AND_KDECORE_LIBS} kdevautomakeparser kdevinterfaces)
+target_link_libraries(kdevautomakeimporter ${KDE4_KDECORE_LIBS} kdevautomakeparser kdevinterfaces)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevautomakeimporter)
 install_targets(${PLUGIN_INSTALL_DIR} kdevautomakeimporter)
 

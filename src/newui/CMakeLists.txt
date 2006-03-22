@@ -16,7 +16,7 @@ set(d_LIB_SRCS
 
 kde4_automoc(${d_LIB_SRCS})
 kde4_add_library(d SHARED ${d_LIB_SRCS})
-target_link_libraries(d ${QT_AND_KDECORE_LIBS} kparts)
+target_link_libraries(d ${KDE4_KDECORE_LIBS} kparts)
 set_target_properties(d PROPERTIES VERSION 4.2.0 SOVERSION 4)
 install_targets(/lib d)
 

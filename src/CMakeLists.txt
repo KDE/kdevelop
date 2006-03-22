@@ -39,7 +39,7 @@ set(kdevshell_UI
 kde4_automoc(${kdevshell_LIB_SRCS})
 kde4_add_ui3_files(kdevshell_LIB_SRCS ${kdevshell_UI})
 kde4_add_library(kdevshell SHARED ${kdevshell_LIB_SRCS})
-target_link_libraries(kdevshell ${QT_AND_KDECORE_LIBS} profileengine kdevinterfaces kdevutil kdevwidgets d khtml ktexteditor)
+target_link_libraries(kdevshell ${KDE4_KDECORE_LIBS} profileengine kdevinterfaces kdevutil kdevwidgets d khtml ktexteditor)
 set_target_properties(kdevshell PROPERTIES VERSION 4.2.0 SOVERSION 4)
 install_targets(/lib kdevshell)
 
@@ -58,7 +58,7 @@ set(kdevelop_UI
 kde4_automoc(${kdevelop_SRCS})
 kde4_add_ui3_files(kdevelop_SRCS ${kdevelop_UI})
 kde4_add_executable(kdevelop ${kdevelop_SRCS})
-target_link_libraries(kdevelop ${QT_AND_KDECORE_LIBS} kdevshell)
+target_link_libraries(kdevelop ${KDE4_KDECORE_LIBS} kdevshell)
 install_targets(/bin kdevelop)
 
 
@@ -71,7 +71,7 @@ set(kdevassistant_SRCS
 
 #kde4_automoc(${kdevassistant_SRCS})
 #kde4_add_executable(kdevassistant ${kdevelop_SRCS})
-#target_link_libraries(kdevassistant ${QT_AND_KDECORE_LIBS} kdevshell)
+#target_link_libraries(kdevassistant ${KDE4_KDECORE_LIBS} kdevshell)
 #install_targets(/bin kdevassistant)
 
 

@@ -14,7 +14,7 @@ set(profileengine_LIB_SRCS
 
 kde4_automoc(${profileengine_LIB_SRCS})
 kde4_add_library(profileengine SHARED ${profileengine_LIB_SRCS})
-target_link_libraries(profileengine ${QT_AND_KDECORE_LIBS} kio)
+target_link_libraries(profileengine ${KDE4_KDECORE_LIBS} kio)
 set_target_properties(profileengine PROPERTIES VERSION 4.2.0 SOVERSION 4)
 install_targets(/lib profileengine)
 

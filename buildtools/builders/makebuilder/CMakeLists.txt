@@ -12,7 +12,7 @@ set(kdevmakebuilder_LIB_SRCS
 
 kde4_automoc(${kdevmakebuilder_LIB_SRCS})
 kde4_add_plugin(kdevmakebuilder ${kdevmakebuilder_LIB_SRCS})
-target_link_libraries(kdevmakebuilder ${QT_AND_KDECORE_LIBS} kdevelop)
+target_link_libraries(kdevmakebuilder ${KDE4_KDECORE_LIBS} kdevelop)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevmakebuilder)
 install_targets(${PLUGIN_INSTALL_DIR} kdevmakebuilder)
 

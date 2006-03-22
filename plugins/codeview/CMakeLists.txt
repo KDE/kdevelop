@@ -13,7 +13,7 @@ set(kdevcodeview_PART_SRCS
 
 kde4_automoc(${kdevcodeview_PART_SRCS})
 kde4_add_plugin(kdevcodeview ${kdevcodeview_PART_SRCS})
-target_link_libraries(kdevcodeview ${QT_AND_KDECORE_LIBS} kdevinterfaces kdevutil khtml)
+target_link_libraries(kdevcodeview ${KDE4_KDECORE_LIBS} kdevinterfaces kdevutil khtml)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevcodeview)
 install_targets(${PLUGIN_INSTALL_DIR} kdevcodeview)
 

@@ -14,7 +14,7 @@ set(kdevwidgets_LIB_SRCS
 
 kde4_automoc(${kdevwidgets_LIB_SRCS})
 kde4_add_library(kdevwidgets SHARED ${kdevwidgets_LIB_SRCS})
-target_link_libraries(kdevwidgets ${QT_AND_KDECORE_LIBS} kdeui khtml)
+target_link_libraries(kdevwidgets ${KDE4_KDECORE_LIBS} kdeui khtml)
 set_target_properties(kdevwidgets PROPERTIES VERSION 4.2.0 SOVERSION 4)
 install_targets(/lib kdevwidgets)
 
