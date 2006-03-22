@@ -62,7 +62,7 @@ void ConfigWidgetProxy::slotConfigWidget( KDialogBase * dlg )
 	TitleMap::Iterator it = _globalTitleMap.begin();
 	while ( it != _globalTitleMap.end() )
 	{
-		_pageMap.insert( dlg->addVBoxPage( it.data().first, it.data().first, BarIcon( it.data().second, KIcon::SizeMedium ) ), it.key() );
+		_pageMap.insert( dlg->addVBoxPage( it.data().first, it.data().first, BarIcon( it.data().second, K3Icon::SizeMedium ) ), it.key() );
 		++it;
 	}
 
@@ -75,7 +75,7 @@ void ConfigWidgetProxy::slotProjectConfigWidget( KDialogBase * dlg )
 	TitleMap::Iterator it = _projectTitleMap.begin();
 	while ( it != _projectTitleMap.end() )
 	{
-		_pageMap.insert( dlg->addVBoxPage( it.data().first, it.data().first, BarIcon( it.data().second, KIcon::SizeMedium ) ), it.key() );
+		_pageMap.insert( dlg->addVBoxPage( it.data().first, it.data().first, BarIcon( it.data().second, K3Icon::SizeMedium ) ), it.key() );
 		++it;
 	}
 

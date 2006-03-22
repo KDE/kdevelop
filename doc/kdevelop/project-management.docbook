@@ -494,7 +494,7 @@ When you &RMB; click on a <emphasis>file name</emphasis> in the detail view the 
     The <guimenuitem>CVS</guimenuitem> item offers a variety of CVS operations on the file.
     </para></listitem>
     <listitem><para>
-    The <guimenuitem>Open With</guimenuitem> item allows you to open the file with a variety of editors or with any application at all (&eg; you can open the icon file in our example with <application>KIcon</application>).
+    The <guimenuitem>Open With</guimenuitem> item allows you to open the file with a variety of editors or with any application at all (&eg; you can open the icon file in our example with <application>K3Icon</application>).
     </para></listitem>
     <listitem><para>
     The <guimenuitem>Perforce</guimenuitem> item is used for similar operations as in CVS using the commercial <quote><application>Perforce</application></quote> version control system.

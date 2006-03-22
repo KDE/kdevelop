@@ -139,7 +139,7 @@ void KDevMakeBuilder::projectConfigWidget(KDialogBase *dlg)
 #warning "port me"
 
 #if 0
-    KVBox *vbox = dlg->addVBoxPage(i18n("Make Options"), i18n("Make Options"), BarIcon( "make", KIcon::SizeMedium ));
+    KVBox *vbox = dlg->addVBoxPage(i18n("Make Options"), i18n("Make Options"), BarIcon( "make", K3Icon::SizeMedium ));
     MakeOptionsWidget *widget = new MakeOptionsWidget(*project()->projectDom(), builder, vbox);
     connect(dlg, SIGNAL(okClicked()), widget, SLOT(accept()));
 #endif

@@ -53,7 +53,7 @@ void KDevIDEExtension::init()
 void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
 {
     KConfig* config = KGlobal::config();
-    KVBox *vbox = dlg->addVBoxPage(i18n("General"), i18n("General"), BarIcon("kdevelop", KIcon::SizeMedium) );
+    KVBox *vbox = dlg->addVBoxPage(i18n("General"), i18n("General"), BarIcon("kdevelop", K3Icon::SizeMedium) );
     gsw = new SettingsWidget(vbox, "general settings widget");
 
     gsw->projectsURL->setMode((int)KFile::Directory);
