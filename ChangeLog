@@ -1,5 +1,10 @@
+2006-03-25 Jens Dagerbo <jens.dagerbo@swipnet.se>
+* Added support for multiple tags files for Ctags2 plugin, enabling
+  it to optionally cover external libraries in addition to the active
+  project. Work based on patch by Etay Meiri.
+
 2006-03-15  Richard Dale  <rdale@foton.es>
-* Added a 'sync terminal' option to the configuration settings to 
+* Added a 'sync terminal' option to the configuration settings to
   disable the 'cd' commands in the konsole by default.
 
 2006-02-21  Richard Dale  <rdale@foton.es>
@@ -7,9 +12,9 @@
 
 2006-02-21  Richard Dale  <rdale@foton.es>
 * Add the pid to the filename of the Unix domain socket used by the ruby
-  debugger so that more than one instance of KDevelop can be run on a 
+  debugger so that more than one instance of KDevelop can be run on a
   machine.
-  
+
 2006-02-21  Richard Dale  <rdale@foton.es>
 * The Full Screen mode menu option is under the Settings menu in both
   Kate and Konqueror, and they arguably have it in the wrong place.
@@ -45,7 +50,7 @@
   .irbrc file to prevent syntax errors when konsole changes directory
 
 2005-06-28  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
-  * Fixed bug in 'run main program' project option where the .ui file was out of 
+  * Fixed bug in 'run main program' project option where the .ui file was out of
     sync with the code
   * Add a 'show constants in debugger' project option. This is needed because there
     are so many constants in the qtruby/korundum classes that it slows the debugger
@@ -65,7 +70,7 @@
 2005-05-26 Tobias Erbsland <te@profzone.ch>
  * Added new class QtBuildConfig. This class stores the configuration
    about the used Qt library. Is Qt used, which major version and
-   where the Qt library path (QTDIR) for this project is. 
+   where the Qt library path (QTDIR) for this project is.
    In a later step, it's possible to use different qt installations
    for each project. E.g. you develop on a KDE4.x programm under KDE3.x.
  * Added a new tab in the C++ options dialog (CCConfigWidget).
@@ -73,7 +78,7 @@
  * New class wizard:
    - Qt checkboxes are disabled (hide them?) on non-qt projects.
    - Different code is generated for Qt3.x and Qt4.x projects.
-   - Includes of classes that starting with "Q" bypasses the 
+   - Includes of classes that starting with "Q" bypasses the
      normal template settings. In Qt3.x the include file has always
      a lowercase include name with a ".h" suffix, and Qt4.x has
      a mixed case include name without any suffix.
@@ -82,7 +87,7 @@
 2005-05-26 Tobias Erbsland <te@profzone.ch>
  * Added new class QtBuildConfig. This class stores the configuration
    about the used Qt library. Is Qt used, which major version and
-   where the Qt library path (QTDIR) for this project is. 
+   where the Qt library path (QTDIR) for this project is.
    In a later step, it's possible to use different qt installations
    for each project. E.g. you develop on a KDE4.x programm under KDE3.x.
  * Added a new tab in the C++ options dialog (CCConfigWidget).
@@ -90,7 +95,7 @@
  * New class wizard:
    - Qt checkboxes are disabled (hide them?) on non-qt projects.
    - Different code is generated for Qt3.x and Qt4.x projects.
-   - Includes of classes that starting with "Q" bypasses the 
+   - Includes of classes that starting with "Q" bypasses the
      normal template settings. In Qt3.x the include file has always
      a lowercase include name with a ".h" suffix, and Qt4.x has
      a mixed case include name without any suffix.
@@ -160,14 +165,14 @@
 
 2005-01-20 Jens Dagerbo <jens.dagerbo@swipnet.se>
  * Further cleanup of plugin handling in PluginController/ProjectManager.
- * Removed the last traces of in-project language switching. 
- 
+ * Removed the last traces of in-project language switching.
+
 2005-01-09 Jens Dagerbo <jens.dagerbo@swipnet.se>
  * Finished the new CTags frontend.
 
 2005-01-08 Jens Dagerbo <jens.dagerbo@swipnet.se>
  * Made it possible to finally remove Code Completion databases via the GUI
- * Cleaned up the context menu mess (at least it's optional now, and the code 
+ * Cleaned up the context menu mess (at least it's optional now, and the code
  is cleaner).
 
 2005-01-03 Robert Gruber <rgruber@users.sourceforge.net>
@@ -176,7 +181,7 @@
 2004-12-19 Alexander Dymo <adymo@kdevelop.org>
  * Made it possible to add custom build commands (like make install-exec)
    for the subproject context menu in automake manager.
- 
+
 2004-12-17 Alexander Dymo <adymo@kdevelop.org>
  * Advanced subclassing option in C++ New Class Wizard can be used
    for classes in the persistant class store. This means that if
@@ -207,7 +212,7 @@
 2004-11-22 Alexander Dymo <adymo@kdevelop.org>
  * Implemented simple VCS integrators for Clearcase, Perforce and Subversion.
  * Reenabled subversion support plugin.
- * Imported svn kioslave from kdesdk HEAD into a compat library therefore svn 
+ * Imported svn kioslave from kdesdk HEAD into a compat library therefore svn
    will work on KDE<3.3.90 too.
 
 2004-11-21 Alexander Dymo <adymo@kdevelop.org>
@@ -230,8 +235,8 @@
  * A configuration option was added to enable/disable the debugger floating toolbar.
  * The debugger backend is written in pure ruby using the code from the 'debug.rb',
    source included with the ruby distribution. It is started via KProcess which handles
-   redirection of stdout and stderr. The idea came from the way Laurent Julliard 
-   implemented the FreeRIDE ruby debugger - it uses Distributed Ruby (like DCOP) 
+   redirection of stdout and stderr. The idea came from the way Laurent Julliard
+   implemented the FreeRIDE ruby debugger - it uses Distributed Ruby (like DCOP)
    for messaging. DRuby is ruby-specific and couldn't be used though.
  * The debugger communicates with the backend via a Unix domain socket;
    commands are sent, and the replies are parsed in KDevelop in much the same way
@@ -241,7 +246,7 @@
  * KDevelop interfaces cleanup and enchancements. Interfaces are now smaller, additional, not so important
    interfaces are available through extension mechanism (see KDevPlugin::extension() methods).
    Also added a lot of API documentation.
-   
+
 2004-10-30 Robert Gruber <rgruber@users.sourceforge.net>
  * Implemented "grouping of snippets" feature for SnippetPart
 
@@ -264,17 +269,17 @@
 
 2004-10-27  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 
- * Implemented ruby class '@@' and '@' instance variables in the class browser. 
+ * Implemented ruby class '@@' and '@' instance variables in the class browser.
 
  * Ruby doesn't have declarations for class or instance variables, and so a variable is 'declared'
-   when it is first  assigned to. So the first assignment encountered in the ruby source is used, 
+   when it is first  assigned to. So the first assignment encountered in the ruby source is used,
    unless the variable is set in the iniitaiize() method when that is considered as the 'first'.
 
  * The type of the variable is inferred from the type of the thing on the rhs of the assignment to it.
 
 2004-10-27  Amilcar Lucas <amilcar@kdevelop.org>
- Exclude non API classes from the doxygen API documentation. 
- Please use the "doxygen doxyfile" command to test it. 
+ Exclude non API classes from the doxygen API documentation.
+ Please use the "doxygen doxyfile" command to test it.
 
 2004-10-27 Alexander Dymo <adymo@kdevelop.org>
     The first step in creating RubyQt/Korundum RAD environment -
@@ -294,7 +299,7 @@
  * Added icons for Ruby configure and run options. The Run button now starts the main program
    with the ruby '-C' option to switch to the main program's directory.
  * Added missing scope attribute to the class parser methods
- 
+
 
 2004-10-23  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 
@@ -305,7 +310,7 @@
     * KDevelop documentation viewer and KDevAssistant:
       - implemented font configuration options;
       - disabled loading of KHTML plugins.
-      
+
 2004-10-21 Alexander Dymo <adymo@kdevelop.org>
     * KDevelop Platform:
       - implemented profiles library and editor engine;
@@ -320,14 +325,14 @@
  * Both classes and modules are shown in the class browser
  * Class or 'singleton' methods supported and appear as 'static' methods
  * Access types of 'public', 'protected' and 'private' supported
- * attr_accessor, attr_reader and attr_writer method definitions supported. For attr_accessor or 
+ * attr_accessor, attr_reader and attr_writer method definitions supported. For attr_accessor or
    attr_writer a 'foo=' method is shown.
  * Operator methods are shown in the class browser too
 
 2004-10-13 Alexander Neundorf <neundorf@kde.org>
     *buildtools/custommakefiles/:
     -add two submenus "Object Files" and "Other Files" to the "Build Targets" menu
-    -add new tag <filelistdirectory> so that the filelist file can be 
+    -add new tag <filelistdirectory> so that the filelist file can be
      located outside the source directory. This is currently only written
      by the cmake kdevelop3 project file generator
 
@@ -341,7 +346,7 @@
 2004-06-17 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Added optional automatic reload on external file modification. This is only available with katepart.
     * Added CopyTo plugin. A small utility to do network transparent file copying using KIO.
-    * Disabled VCS repository creation in the appwizard (doesn't work and the implementation broke the 
+    * Disabled VCS repository creation in the appwizard (doesn't work and the implementation broke the
       plugin handling) and import (to be reimplemented using KTrader).
     * Added the simple basics of Plugin Profiles. Will finish this the coming days.
 
@@ -350,7 +355,7 @@
     * Implemented a dialog to run profiler (calltree + kcachegrind).
 
 2004-06-05 Jens Dagerbo <jens.dagerbo@swipnet.se>
-    * Fixed several ToolView related issues. Among other things, they should now 
+    * Fixed several ToolView related issues. Among other things, they should now
       automatically restore their last position after a restart.
 
 2004-05-31 Alexander Dymo <cloudtemple@mksat.net>
@@ -384,7 +389,7 @@
 2004-05-04 Alexander Dymo <cloudtemple@mksat.net>
     * Doxygen documentation plugin (toc and index) is implemented.
       This means that kdevassistant can browse KDE API docs and has table of contents and index!
-      kdevassistant (and kdevelop itself) is now the first documentation browser where you can 
+      kdevassistant (and kdevelop itself) is now the first documentation browser where you can
       look for Qt and KDE classes at the same time (using one index).
 
 2004-04-30 Sascha Cunz <scunz@ng-projekt.de>
@@ -397,10 +402,10 @@
 2004-04-22 Alexander Dymo <cloudtemple@mksat.net>
     * Added brand new "Look in documentation" function that puts the term under the cursor into the
       documentation index tab and looks up for this term in the index.
-    * Added "Search in Documentation" and "Look in Documentation" menu items into the "Help" menu 
+    * Added "Search in Documentation" and "Look in Documentation" menu items into the "Help" menu
       with shortcuts <Ctrl+Alt+S> and <Ctrl+Alt+I> respectively.
     * Implemented "Goto manpage" and added "Goto infopage" function in the "Help" and editor context menus.
-    * Improved "Add bookmark" function - it now recognizes embedded html part and sets the bookmark title 
+    * Improved "Add bookmark" function - it now recognizes embedded html part and sets the bookmark title
       to the title of an opened document.
     * Use also a default KDE shortcut for popup menu to open editor context menu.
 
@@ -418,7 +423,7 @@
     * Added Thomas Nagy's KConfig XT based apptemplate.
 
 2004-04-14 Jens Dagerbo <jens.dagerbo@swipnet.se>
-    * Rewrote and documented the KDevPartController interface to reduce the duplication of a lot of common but 
+    * Rewrote and documented the KDevPartController interface to reduce the duplication of a lot of common but
       trivial code all over the codebase.
     * Moved the documentation history out of the PartController and into the docviewer part.
     * Moved source navigation history into the PartController and disabled the HistoryPart.
@@ -501,7 +506,7 @@
 
 2004-01-21 Andras Mantia <amantia@kde.org>
     * Fix clear all breakpoints functionality
-    
+
 2004-01-21 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Added ConfigWidgetProxy class to lib/util and initially implemented demand loading of config pages for DocTreeViewPart.
 
@@ -522,7 +527,7 @@
    * now save the docking state to another section of kdeveloprc (to let people (who tried KMdi alpha versions) escape a vicious cycle)
 
 2003-11-16 Mario Scalas <marioscalas@agilemovement.it>
-    * Version control color feedback for the file view (currently implemented 
+    * Version control color feedback for the file view (currently implemented
       by vcs/cvsservice plugin only).
 
 2003-11-13 Amilcar Lucas <amilcar@kdevelop.org>
