@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Jens Dagerbo                                    *
+ *   Copyright (C) 2006 by Jens Dagerbo                                    *
  *   jens.dagerbo@swipnet.se                                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
