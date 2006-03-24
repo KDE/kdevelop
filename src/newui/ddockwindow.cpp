@@ -193,7 +193,7 @@ QWidget *DDockWidget::currentWidget() const
 
 void DDockWidget::addWidget(const QString &title, QWidget *widget)
 {
-    KAction* action = new KAction(widget->windowIcon(), title, mainWindow()->actionCollection(), QString("dock_select_%1").arg(title).toLatin1().constData());
+    KAction* action = new KAction(title, widget->windowIcon(), 0, 0, 0, mainWindow()->actionCollection(), QString("dock_select_%1").arg(title).toLatin1().constData());
     action->setActionGroup(m_selectActionGroup);
     action->setCheckable(true);
     m_widgets[action] = widget;

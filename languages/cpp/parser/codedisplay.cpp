@@ -171,7 +171,7 @@ QString CodeDisplay::whatsThis( const _CodeModelItem *item )
 QIcon CodeDisplay::loadIcon( const QString & name )
 {
     return QIcon( UserIcon( name,
-                            KIcon::DefaultState,
+                            K3Icon::DefaultState,
                             CppLanguageSupportFactory::instance() ) );
 }
 

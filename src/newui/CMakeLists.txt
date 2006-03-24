@@ -7,23 +7,23 @@ include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces $
 
 ########### next target ###############
 
-set(d_LIB_SRCS
+set(newui_LIB_SRCS
     dmainwindow.cpp
     ddockwindow.cpp
     docksplitter.cpp
     dtabwidget.cpp
 )
 
-kde4_automoc(${d_LIB_SRCS})
-kde4_add_library(d SHARED ${d_LIB_SRCS})
-target_link_libraries(d ${KDE4_KDECORE_LIBS} kparts)
-set_target_properties(d PROPERTIES VERSION 4.2.0 SOVERSION 4)
-install_targets(/lib d)
+kde4_automoc(${newui_LIB_SRCS})
+kde4_add_library(newui SHARED ${newui_LIB_SRCS})
+target_link_libraries(newui ${KDE4_KDECORE_LIBS} kparts)
+set_target_properties(newui PROPERTIES VERSION 4.2.0 SOVERSION 4)
+install_targets(/lib newui)
 
 
 ########### install files ###############
 
-install_files(/include/kdevelop/shell FILES dmainwindow.h ddockwindow.h comdefs.h docksplitter.h dtabwidget.h)
+install_files(/include/kdevelop/shell FILES dmainwindow.h ddockwindow.h docksplitter.h dtabwidget.h)
 
 
 kde4_footer()
