@@ -1,0 +1,157 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>CTags2CreateTagFileBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>CTags2CreateTagFileBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>373</width>
+            <height>198</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Create new tags file</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>Name:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>displayName</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_3</cstring>
+            </property>
+            <property name="text">
+                <string>Target tags file path:</string>
+            </property>
+        </widget>
+        <widget class="KURLRequester">
+            <property name="name">
+                <cstring>newTagFilePath</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel2_2</cstring>
+            </property>
+            <property name="text">
+                <string>Directory to tag:</string>
+            </property>
+        </widget>
+        <widget class="KURLRequester">
+            <property name="name">
+                <cstring>dirToTag</cstring>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout6</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>81</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>createTagFileButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Create</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>cancelButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>C&amp;ancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>cancelButton</sender>
+        <signal>clicked()</signal>
+        <receiver>CTags2CreateTagFileBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>createTagFileButton</sender>
+        <signal>clicked()</signal>
+        <receiver>CTags2CreateTagFileBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>displayName</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CTags2CreateTagFileBase</receiver>
+        <slot>validate()</slot>
+    </connection>
+    <connection>
+        <sender>newTagFilePath</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CTags2CreateTagFileBase</receiver>
+        <slot>validate()</slot>
+    </connection>
+    <connection>
+        <sender>dirToTag</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CTags2CreateTagFileBase</receiver>
+        <slot>validate()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>createTagFile()</slot>
+    <slot>validate()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>

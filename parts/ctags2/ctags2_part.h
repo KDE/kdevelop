@@ -37,6 +37,7 @@ public:
 
 	int getFileLineFromPattern( KURL const & url, QString const & pattern);
 	bool createTagsFile();
+	bool createTagsFile(const QString& tagFile, const QString& dir);
 
 private slots:
 	void slotLookupDeclaration();

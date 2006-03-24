@@ -38,9 +38,9 @@ public:
 	 *    Method to set the tag database filename
 	 * @param file the tag database filename
 	 */
-	static void setTagsFile( const QString & file );
+	static void setTagFiles(const QStringList& tagFiles);
 	
-	static QString getTagsFile();
+	static QStringList getTagFiles();
 	
 	/**
 	 *    Method to check if the tag database contains a specific tag
@@ -58,7 +58,15 @@ public:
 	static TagList getMatches( const QString & tagpart, bool partial, const QStringList & types = QStringList() );	
 
 private:
-	static QCString _tagsfile;
+	static Tags::TagList Tags::getMatches(const char* tagFile, 
+								   const QString & tagpart, 
+								   bool partial,
+								   const QStringList & types );
+	static unsigned int Tags::numberOfMatches(const char* tagFile, 
+									   const QString & tagpart, 
+									   bool partial );
+	static bool Tags::hasTag(const char* tagFile, const QString & tag );
+	static QStringList _tagFiles;
 };
 
 #endif

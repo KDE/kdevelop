@@ -12,9 +12,29 @@
 #ifndef CTAGS2_SETTINGSWIDGET_H
 #define CTAGS2_SETTINGSWIDGET_H
 
+#include <qlistview.h>
+
 #include "ctags2_settingswidgetbase.h"
 
 class CTags2Part;
+
+class TagsItem : public QCheckListItem
+{
+public:
+	TagsItem( QListView * parent, QString name, QString tagsfilePath, bool active )
+		: QCheckListItem( parent, name, QCheckListItem::CheckBox ), m_name( name ), m_tagsfilePath( tagsfilePath )
+	{
+		setOn( active );
+	}
+	QString name() { return m_name; }
+	QString tagsfilePath() { return m_tagsfilePath; }
+
+private:
+	QString m_name;
+	QString m_tagsfilePath;
+};
+
+
 
 class CTags2SettingsWidget : public CTags2SettingsWidgetBase
 {
@@ -29,7 +49,10 @@ signals:
 
 public slots:
 	void slotAccept();
-	
+	void createNewTagSlot();
+	void addNewTagFile();
+	void removeTagFile();
+
 protected:
 
 protected slots:
@@ -37,9 +60,8 @@ protected slots:
 private:
 	void loadSettings();
 	void storeSettings();
-	
-	CTags2Part * m_part;
 
+	CTags2Part * m_part;
 };
 
 #endif

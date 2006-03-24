@@ -7,7 +7,8 @@ libkdevctags2_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevctags2_la_SOURCES = ctags2_part.cpp readtags.c ctags2_widgetbase.ui \
 	ctags2_widget.cpp tags.cpp ctagskinds.cpp ctags2_settingswidgetbase.ui \
-	ctags2_settingswidget.cpp
+	ctags2_settingswidget.cpp ctags2_selecttagfilebase.ui ctags2_selecttagfile.cpp \
+	ctags2_createtagfilebase.ui ctags2_createtagfile.cpp
 
 METASOURCES = AUTO
 

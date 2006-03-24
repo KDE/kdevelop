@@ -63,12 +63,15 @@ CTags2Part::CTags2Part(QObject *parent, const char *name, const QStringList& )
 	setXMLFile("kdevpart_ctags2.rc");
 
 	QDomDocument & dom = *projectDom();
-	QString tagsfile = DomUtil::readEntry( dom, "/ctagspart/customTagfilePath" );
-	if ( tagsfile.isEmpty() ) 
+	QString customTagFile = DomUtil::readEntry( dom, "/ctagspart/customTagfilePath" );
+	if ( customTagFile.isEmpty() )
 	{
-		tagsfile =  project()->projectDirectory() + "/tags";
+		customTagFile =  project()->projectDirectory() + "/tags";
 	}
-	Tags::setTagsFile( tagsfile );
+	QStringList tagFiles = DomUtil::readListEntry(dom, "/ctagspart/activeTagsFiles", "file");
+	tagFiles.push_front(customTagFile);
+
+	Tags::setTagFiles(tagFiles);
 
 	m_widget = new CTags2Widget(this);
 
@@ -111,13 +114,23 @@ void CTags2Part::insertConfigWidget( const KDialogBase * dlg, QWidget * page, un
 	}
 }
 
-void CTags2Part::updateTagsfileName( const QString & name )
+void CTags2Part::updateTagsfileName( const QString & )
 {
-	Tags::setTagsFile( name.isEmpty() ? project()->projectDirectory() + "/tags" : name );
 	m_widget->updateDBDateLabel();
 }
 
+// wrapper for creating a tag file for the current project
 bool CTags2Part::createTagsFile()
+{
+	// check if user specified a custom tag file name
+	QDomDocument & dom = *projectDom();
+	QString tagsFileCustom = DomUtil::readEntry( dom, "/ctagspart/customTagfilePath" ).stripWhiteSpace();
+
+	return createTagsFile(tagsFileCustom, project()->projectDirectory());
+}
+
+// creates a new tag file with the specified name for the specified source directory
+bool CTags2Part::createTagsFile(const QString& tagFile, const QString& dir)
 {
 /*
 	KProcess proc;
@@ -127,27 +140,28 @@ bool CTags2Part::createTagsFile()
 	proc << "-R" << "--c++-types=+px" << "--excmd=pattern" << "--exclude=Makefile";
 
 	bool success = proc.start(KProcess::Block);
-	
-	return success;	
+
+	return success;
 */
+
+	// get name of the ctags binary
 	KConfig * config = kapp->config();
 	config->setGroup( "CTAGS" );
 	QString ctagsBinary = config->readEntry( "ctags binary", "ctags" ).stripWhiteSpace();
-	if ( ctagsBinary.isEmpty() ) 
+	if ( ctagsBinary.isEmpty() )
 		ctagsBinary = "ctags";
 
+	// set a default argument list
 	QString argsDefault = "-R --c++-types=+px --excmd=pattern --exclude=Makefile --exclude=.";
-	
+
 	QDomDocument & dom = *projectDom();
 	QString argsCustom = DomUtil::readEntry( dom, "/ctagspart/customArguments" ).stripWhiteSpace();
-	QString tagsfileCustom = DomUtil::readEntry( dom, "/ctagspart/customTagfilePath" ).stripWhiteSpace();
-	
-	QString commandline = ctagsBinary + " " + 
-		( argsCustom.isEmpty() ? argsDefault : argsCustom ) + 
-		( tagsfileCustom.isEmpty() ? "" : " -f " + tagsfileCustom );
-	
+	QString commandline = ctagsBinary + " " + ( argsCustom.isEmpty() ? argsDefault : argsCustom ) + ( tagFile.isEmpty() ? "" : " -f " + tagFile );
+	commandline += " ";
+	commandline += dir;
+
 	if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
-		appFrontend->startAppCommand( project()->projectDirectory(), commandline, false);
+		appFrontend->startAppCommand(dir, commandline, false);
 
 	return true;
 }
@@ -156,7 +170,7 @@ void CTags2Part::contextMenu(QPopupMenu *popup, const Context *context)
 {
 	if (!context->hasType( Context::EditorContext ))
 		return;
-	
+
 	const EditorContext *econtext = static_cast<const EditorContext*>(context);
 	QString ident = econtext->currentWord();
 	if (ident.isEmpty())
@@ -167,20 +181,20 @@ void CTags2Part::contextMenu(QPopupMenu *popup, const Context *context)
 	bool showDeclaration = config->readBoolEntry( "ShowDeclaration", true );
 	bool showDefinition = config->readBoolEntry( "ShowDefinition", true );
 	bool showLookup = config->readBoolEntry( "ShowLookup", true );
-		
+
 	if ( Tags::hasTag( ident ) && ( showDefinition || showDeclaration || showLookup  ) )
 	{
 		m_contextString = ident;
 	    QString squeezed = KStringHandler::csqueeze(ident, 30);
 
 		popup->insertSeparator();
-		
+
 		if ( showDeclaration )
 			popup->insertItem( i18n("CTags - Go to Declaration: %1").arg(squeezed), this, SLOT(slotGotoDeclaration()) );
-			
+
 		if ( showDefinition )
 			popup->insertItem( i18n("CTags - Go to Definition: %1").arg(squeezed), this, SLOT(slotGotoDefinition()) );
-			
+
 		if ( showLookup )
 			popup->insertItem( i18n("CTags - Lookup: %1").arg(squeezed), this, SLOT(slotGotoTag()) );
 	}
@@ -202,22 +216,30 @@ void CTags2Part::slotGotoTag( )
 void CTags2Part::gotoTagForTypes( QStringList const & types )
 {
 	Tags::TagList list = Tags::getMatches( m_contextString, false, types );
-	
+
 	if ( list.count() < 1 ) return;
-	
+
 	KConfig * config = kapp->config();
 	config->setGroup("CTAGS");
 	bool jumpToFirst = config->readBoolEntry( "JumpToFirst", false );
-	
+
 	if ( list.count() == 1 || jumpToFirst )
 	{
 		Tags::TagEntry tag = list.first();
 		KURL url;
-		url.setPath( project()->projectDirectory() + "/" + tag.file );
+		QString fileWithTagInside;
+		// assume relative path to project directory if path does not start with slash
+		if (tag.file[0] != '/') {
+			fileWithTagInside = project()->projectDirectory() + "/" + tag.file;
+		}
+		else {
+			fileWithTagInside = tag.file;
+		}
+		url.setPath(fileWithTagInside);
 		partController()->editDocument( url, getFileLineFromPattern( url, tag.pattern ) );
 		m_widget->displayHitsAndClear( list );
 	}
-	else 
+	else
 	{
 		showHits( list );
 	}
@@ -245,7 +267,7 @@ int CTags2Part::getFileLineFromStream( QTextStream & istream, QString const & pa
 	// ctags interestingly escapes "/", but apparently nothing else. lets revert that
 	QString unescaped = pattern;
 	unescaped.replace( "\\/", "/" );
-	
+
 	// most of the time, the ctags pattern has the form /^foo$/
 	// but this isn't true for some macro definitions
 	// where the form is only /^foo/
@@ -264,7 +286,7 @@ int CTags2Part::getFileLineFromStream( QTextStream & istream, QString const & pa
 		escaped = QRegExp::escape( reduced );
 		re_string = QString( "^" + escaped );
 	}
-	
+
 	QRegExp re( re_string );
 
 	int n = 0;
@@ -344,10 +366,10 @@ QString CTags2Part::currentWord( )
 {
 	KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>( partController()->activePart() );
 	if ( !ro_part || !ro_part->widget() ) return QString::null;
-	
+
 	KTextEditor::ViewCursorInterface * cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( ro_part->widget() );
 	KTextEditor::EditInterface * editIface = dynamic_cast<KTextEditor::EditInterface*>( ro_part );
-	
+
 	QString wordstr, linestr;
 	if( cursorIface && editIface )
 	{
@@ -361,7 +383,7 @@ QString CTags2Part::currentWord( )
 			startPos--;
 		while (endPos < (int)linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
 			endPos++;
-			
+
 		return ( ( startPos == endPos ) ? QString::null : linestr.mid( startPos+1, endPos-startPos-1 ) );
 	}
 	return QString::null;
@@ -369,4 +391,4 @@ QString CTags2Part::currentWord( )
 
 #include "ctags2_part.moc"
 
-// kate: space-indent off; indent-width 4; tab-width 4; show-tabs on;
+// kate: space-indent off; indent-width 4; tab-width 4; show-tabs off;

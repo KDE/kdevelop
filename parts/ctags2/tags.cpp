@@ -18,7 +18,7 @@ namespace ctags
 
 #include "tags.h"
 
-QCString Tags::_tagsfile;
+QStringList Tags::_tagFiles;
 
 Tags::TagEntry::TagEntry() {}
 
@@ -27,60 +27,98 @@ Tags::TagEntry::TagEntry( const QString & tag, const QString & type, const QStri
 {}
 
 
-bool Tags::hasTag( const QString & tag )
+bool Tags::hasTag(const QString & tag )
+{
+	QStringList::iterator it;
+	for (it = _tagFiles.begin(); it != _tagFiles.end() ; it++) {
+		if (hasTag((*it).ascii(), tag))
+			return true;
+	}
+
+	return false;
+}
+
+bool Tags::hasTag(const char* tagFile, const QString & tag )
 {
 	ctags::tagFileInfo info;
-	ctags::tagFile * file = ctags::tagsOpen( _tagsfile, &info );
+	ctags::tagFile * file = ctags::tagsOpen(tagFile, &info );
 	ctags::tagEntry entry;
-	
-	bool found = ( ctags::tagsFind( file, &entry, tag.ascii(), TAG_FULLMATCH | TAG_OBSERVECASE ) == ctags::TagSuccess ); 
-	
+
+	bool found = ( ctags::tagsFind( file, &entry, tag.ascii(), TAG_FULLMATCH | TAG_OBSERVECASE ) == ctags::TagSuccess );
+
 	ctags::tagsClose( file );
-	
+
 	return found;
 }
 
 unsigned int Tags::numberOfMatches( const QString & tagpart, bool partial )
 {
 	unsigned int n = 0;
-	
+	QStringList::iterator it;
+	for (it = _tagFiles.begin(); it != _tagFiles.end(); it++)
+	{
+		n += numberOfMatches( (*it).ascii(), tagpart, partial );
+	}
+
+	return n;
+}
+
+unsigned int Tags::numberOfMatches(const char* tagFile, const QString & tagpart, bool partial )
+{
+	unsigned int n = 0;
+
 	if ( tagpart.isEmpty() ) return 0;
-	
+
 	ctags::tagFileInfo info;
-	ctags::tagFile * file = ctags::tagsOpen( _tagsfile, &info );
+	ctags::tagFile * file = ctags::tagsOpen( tagFile, &info );
 	ctags::tagEntry entry;
 
-	if ( ctags::tagsFind( file, &entry, tagpart.ascii(), TAG_OBSERVECASE | (partial ? TAG_PARTIALMATCH : TAG_FULLMATCH) ) == ctags::TagSuccess ) 
+	if ( ctags::tagsFind( file, &entry, tagpart.ascii(), TAG_OBSERVECASE | (partial ? TAG_PARTIALMATCH : TAG_FULLMATCH) ) == ctags::TagSuccess )
 	{
-		do 
+		do
 		{
 			n++;
 		}
 		while ( ctags::tagsFindNext( file, &entry ) == ctags::TagSuccess );
 	}
-	
+
 	ctags::tagsClose( file );
-	
+
 	return n;
 }
+
 
 Tags::TagList Tags::getMatches( const QString & tagpart, bool partial, const QStringList & types )
 {
 	Tags::TagList list;
-	
+
+	// build a compound tag list from all the configured tag files
+	QStringList::iterator it;
+	for ( it = _tagFiles.begin(); it != _tagFiles.end(); it++ )
+	{
+		list += getMatches((*it).ascii(), tagpart, partial, types);
+	}
+
+	return list;
+}
+
+Tags::TagList Tags::getMatches(const char* tagFile, const QString & tagpart, bool partial, const QStringList & types )
+{
+	Tags::TagList list;
+
 	if ( tagpart.isEmpty() ) return list;
-		
+
 	ctags::tagFileInfo info;
-	ctags::tagFile * file = ctags::tagsOpen( _tagsfile, &info );
+	ctags::tagFile * file = ctags::tagsOpen(tagFile, &info );
 	ctags::tagEntry entry;
 
-	if ( ctags::tagsFind( file, &entry, tagpart.ascii(), TAG_OBSERVECASE | (partial ? TAG_PARTIALMATCH : TAG_FULLMATCH) ) == ctags::TagSuccess ) 
+	if ( ctags::tagsFind( file, &entry, tagpart.ascii(), TAG_OBSERVECASE | (partial ? TAG_PARTIALMATCH : TAG_FULLMATCH) ) == ctags::TagSuccess )
 	{
-		do 
+		do
 		{
 			QString type( CTagsKinds::findKind( entry.kind, QString( entry.file ).section( '.', -1 ) ) );
 			QString file( entry.file );
-			
+
 			if ( type.isEmpty() && file.endsWith( "Makefile" ) )
 			{
 				type = "macro";
@@ -92,20 +130,20 @@ Tags::TagList Tags::getMatches( const QString & tagpart, bool partial, const QSt
 		}
 		while ( ctags::tagsFindNext( file, &entry ) == ctags::TagSuccess );
 	}
-	
+
 	ctags::tagsClose( file );
-	
+
 	return list;
 }
 
-void Tags::setTagsFile( const QString & file )
+void Tags::setTagFiles(const QStringList& tagFiles )
 {
-	_tagsfile = file.ascii();
+	_tagFiles = tagFiles;
 }
 
-QString Tags::getTagsFile( )
+QStringList Tags::getTagFiles( )
 {
-	return QString( _tagsfile );
+	return _tagFiles;
 }
 
 unsigned int Tags::numberOfPartialMatches( const QString & tagpart )

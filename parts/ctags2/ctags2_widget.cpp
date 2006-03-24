@@ -107,7 +107,16 @@ void CTags2Widget::itemExecuted( QListViewItem * item )
 	TagItem * tagItem = static_cast<TagItem*>( item );
 
 	KURL url;
-	url.setPath( _part->project()->projectDirectory() + "/" + tagItem->file );
+	QString fileWithTagInside;
+	// assume relative path to project directory if path does not start with slash
+	if (tagItem->file[0] != '/') {
+		fileWithTagInside = _part->project()->projectDirectory() + "/" + tagItem->file;
+	}
+	else {
+		fileWithTagInside = tagItem->file;
+	}
+
+	url.setPath(fileWithTagInside);
 
 	_part->partController()->editDocument( url, _part->getFileLineFromPattern( url, tagItem->pattern ) );
 }
@@ -125,7 +134,8 @@ void CTags2Widget::regeneratebutton_clicked()
 
 void CTags2Widget::updateDBDateLabel( )
 {
-	QFileInfo tagsdb( Tags::getTagsFile() );
+	QStringList tagFiles = Tags::getTagFiles();
+	QFileInfo tagsdb(tagFiles[0]);
 	if ( tagsdb.exists() )
 	{
 		datetime_label->setText( tagsdb.created().date().toString( Qt::ISODate ) );
@@ -151,7 +161,7 @@ void CTags2Widget::goToNext( )
 		{
 			// found the current, take the next
 			item->setSelected( false );
-			if ( item = item->nextSibling() )
+			if ( (item = item->nextSibling()) != NULL )
 			{
 				item->setSelected( true );
 				output_view->repaint( true );
@@ -167,7 +177,7 @@ void CTags2Widget::goToNext( )
 	}
 	
 	// use the first
-	if ( item = output_view->firstChild() )
+	if ( (item = output_view->firstChild()) != NULL )
 	{
 		item->setSelected( true );
 		itemExecuted( item );
