@@ -63,13 +63,13 @@ void AStylePart::beautifySource()
     return;
 
     bool has_selection = false;
-    
+
   KTextEditor::SelectionInterface *sel_iface
       = dynamic_cast<KTextEditor::SelectionInterface*>(partController()->activePart());
   if (sel_iface && sel_iface->hasSelection())
     has_selection = true;
 
-  //if there is a selection, we only format it.  
+  //if there is a selection, we only format it.
   ASStringIterator is(has_selection ? sel_iface->selection() : iface->text());
   KDevFormatter formatter;
 
@@ -83,21 +83,22 @@ void AStylePart::beautifySource()
 
   uint col = 0;
   uint line = 0;
-	
+
   if(has_selection) //there was a selection, so only change the part of the text related to it
   {
-    //remove the final newline character
-    output.setLength(output.length()-1);
-    
+    //remove the final newline character, unless it should be there
+    if ( !sel_iface->selection().endsWith( "\n" ) )
+      output.setLength(output.length()-1);
+
     sel_iface->removeSelectedText();
-    cursorPos( partController()->activePart(), &col, &line );	    
+    cursorPos( partController()->activePart(), &col, &line );
     iface->insertText( col, line, output);
-    
+
     return;
   }
 
-  cursorPos( partController()->activePart(), &col, &line );	  
-  
+  cursorPos( partController()->activePart(), &col, &line );
+
   iface->setText( output );
 
   setCursorPos( partController()->activePart(), col, line );
@@ -149,17 +150,17 @@ QString AStylePart::formatSource( const QString text, AStyleWidget * widget )
 {
 	ASStringIterator is(text);
 	KDevFormatter * formatter = ( widget ? new KDevFormatter( widget ) : new KDevFormatter );
-	
+
 	formatter->init(&is);
-	
+
 	QString output;
 	QTextStream os(&output, IO_WriteOnly);
-	
+
 	while ( formatter->hasMoreLines() )
 		os << QString::fromUtf8( formatter->nextLine().c_str() ) << endl;
-		
+
 	delete formatter;
-	
+
 	return output;
 }
 
