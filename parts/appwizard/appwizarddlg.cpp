@@ -83,7 +83,7 @@
 #include "propeditor/propertyeditor.h"
 
 AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const char *name)
-    : AppWizardDialogBase(parent, name,true), m_pCurrentAppInfo(0), 
+    : AppWizardDialogBase(parent, name,true), m_pCurrentAppInfo(0),
 	m_profileSupport(new ProfileSupport(part))
 {
 	kdDebug( 9000 ) << "  ** AppWizardDialog::AppWizardDialog()" << endl;
@@ -201,7 +201,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 				value.cast( variantType );  // fix this in kdelibs...
 				if( !name.isEmpty() && !label.isEmpty() )
 					info->propValues->addProperty( new PropertyLib::Property( (int)variantType, name, label, value ) );
-				
+
 			}
 			else if( type == "install" ) // copy dir
 			{
@@ -312,10 +312,10 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     }
 
 	connect( license_combo, SIGNAL(activated(int)), this, SLOT(licenseChanged()) );
-	
+
 	m_custom_options_layout = new QHBoxLayout( custom_options );
 	m_custom_options_layout->setAutoAdd(true);
-	
+
 	showTemplates(false);
 }
 
@@ -480,7 +480,7 @@ void AppWizardDialog::accept()
 	PropertyLib::PropertyList::Iterator idx = m_pCurrentAppInfo->propValues->begin();
 	for( ; idx != m_pCurrentAppInfo->propValues->end(); ++idx)
 		m_pCurrentAppInfo->subMap.insert( idx.data()->name(), idx.data()->value().toString() );
-	
+
 	m_pCurrentAppInfo->subMap.insert("src", archDir.name() );
 	m_pCurrentAppInfo->subMap.insert("dest", finalLoc_label->text() );
 	m_pCurrentAppInfo->subMap.insert("APPNAME", appname_edit->text() );
@@ -492,7 +492,7 @@ void AppWizardDialog::accept()
 	m_pCurrentAppInfo->subMap.insert("VERSION", version_edit->text());
 	m_pCurrentAppInfo->subMap.insert( "I18N", "i18n" );
 	m_pCurrentAppInfo->subMap.insert("YEAR", QString::number( QDate::currentDate().year() ) );
-	
+
 	// This isn't too pretty, but we have several templates that use KAboutData::License_${LICENSE}
 	// and unsurprisingly, KAboutData doesn't cover every imaginable case.
 	// These are the licenses known to KDE-3.2 KAboutData, KDevelop doesn't have all of these as prepared options today
@@ -524,8 +524,8 @@ void AppWizardDialog::accept()
 	QString tempProjectDomSource = "<!DOCTYPE kdevelop><kdevelop><general><author>%1</author><email>%2</email><version>%3</version></general></kdevelop>";
 	tempProjectDomSource = tempProjectDomSource.arg( author_edit->text() ).arg( email_edit->text() ).arg( version_edit->text() );
 	QDomDocument tempProjectDom;
-	tempProjectDom.setContent( tempProjectDomSource ); 
-	
+	tempProjectDom.setContent( tempProjectDomSource );
+
     QValueList<AppWizardFileTemplate>::Iterator it;
     for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
         KTempFile *tempFile = new KTempFile();
@@ -703,9 +703,9 @@ bool AppWizardDialog::copyFile( const installFile& file )
 		copyFile( file.source, file.dest, file.isXML, file.process );
 }
 
-#include <sys/types.h> 
-#include <sys/stat.h> 
-#include <unistd.h> 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 bool AppWizardDialog::copyFile( const QString &source, const QString &dest, bool isXML, bool process )
 {
@@ -823,7 +823,7 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
 		// Populate new custom options form
 		m_customOptions = new PropertyLib::PropertyEditor( custom_options );
 		m_customOptions->populateProperties(info->propValues);
-		
+
 
         // Create new file template pages
         QStringList l = QStringList::split(",", info->fileTemplates);
@@ -960,7 +960,7 @@ void AppWizardDialog::openAfterGeneration()
 	if( !file.open( IO_ReadOnly ) )
 		return;
 	QDomDocument projectDOM;
-	
+
 	int errorLine, errorCol;
 	QString errorMsg;
 	bool success = projectDOM.setContent( &file, &errorMsg, &errorLine, &errorCol);
@@ -984,13 +984,15 @@ void AppWizardDialog::openAfterGeneration()
 		DomUtil::writeEntry(projectDOM, "/general/versioncontrol", service->property("X-KDevelop-VCSPlugin").toString());
 	}
 
-	
+
 	KConfig * config = kapp->config();
 	config->setGroup("IgnorePerDefault");
-	QStringList ignoreparts = config->readListEntry( "KDevelop" );
-	DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", ignoreparts );
-	
-	
+	QStringList globalIgnoreparts = config->readListEntry( "KDevelop" );
+	QStringList projectIgnoreparts = DomUtil::readListEntry( projectDOM, "/general/ignoreparts", "part" );
+	projectIgnoreparts += globalIgnoreparts;
+	DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", projectIgnoreparts );
+
+
 //FIXME PROFILES!!!!!!!!
 //BEGIN Plugin Profile
 
@@ -1266,13 +1268,13 @@ void AppWizardDialog::showTemplates(bool all)
 	else
 	{
 		QPtrListIterator<ApplicationInfo> ait(m_appsInfo);
-		for (; ait.current(); ++ait) 
+		for (; ait.current(); ++ait)
 		{
 			ait.current()->item->setVisible(m_profileSupport->isInTemplateList(ait.current()->templateName));
 		}
-		
+
 		QDictIterator<QListViewItem> dit(m_categoryMap);
-		for (; dit.current(); ++dit) 
+		for (; dit.current(); ++dit)
 		{
 			//checking whether all children are not visible
 			kdDebug(9010) << "check: " << dit.current()->text(0) << endl;
