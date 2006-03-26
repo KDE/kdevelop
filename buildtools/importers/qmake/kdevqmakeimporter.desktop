@@ -9,4 +9,4 @@ Icon=gear
 X-KDevelop-Version=4
 ServiceTypes=KDevelop/ProjectImporter
 X-KDevelop-ProjectImporter=
-X-KDE-Library=libqmakeimporter
+X-KDE-Library=qmakeimporter

@@ -24,7 +24,7 @@
 
 #define MAKE_COMMAND "make"
 
-K_EXPORT_COMPONENT_FACTORY(libkdevmakebuilder, KGenericFactory<KDevMakeBuilder>("kdevmakebuilder"))
+K_EXPORT_COMPONENT_FACTORY(kdevmakebuilder, KGenericFactory<KDevMakeBuilder>("kdevmakebuilder"))
 
 
 const QString &KDevMakeBuilder::builder =

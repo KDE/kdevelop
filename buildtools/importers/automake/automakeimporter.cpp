@@ -30,7 +30,7 @@
 #include "makefileinterface.h"
 
 
-K_EXPORT_COMPONENT_FACTORY( libkdevautomakeimporter,
+K_EXPORT_COMPONENT_FACTORY( kdevautomakeimporter,
                             KGenericFactory<AutoMakeImporter>( "kdevautomakeimporter" ) )
 
 AutoMakeImporter::AutoMakeImporter( QObject* parent, const char* name,

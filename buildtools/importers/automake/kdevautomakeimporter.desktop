@@ -7,6 +7,6 @@ Comment[fr]=Importation d'Automake pour KDevelop
 Comment[x-test]=xxKDevelop Automake Importerxx
 Icon=gear
 ServiceTypes=KDevelop/ProjectImporter
-X-KDE-Library=libkdevautomakeimporter
+X-KDE-Library=kdevautomakeimporter
 X-KDevelop-ProjectImporter=
 X-KDevelop-Version=3

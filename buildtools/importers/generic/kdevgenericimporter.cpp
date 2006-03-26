@@ -31,7 +31,7 @@
 #include <qfileinfo.h>
 #include <qregexp.h>
 
-K_EXPORT_COMPONENT_FACTORY(libkdevgenericimporter, KGenericFactory<KDevGenericImporter>("kdevgenericimporter"))
+K_EXPORT_COMPONENT_FACTORY(kdevgenericimporter, KGenericFactory<KDevGenericImporter>("kdevgenericimporter"))
 
 KDevGenericImporter::KDevGenericImporter(QObject *parent, const char *name, const QStringList &)
     : KDevProjectEditor(parent)

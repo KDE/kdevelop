@@ -4,6 +4,6 @@ Name=KDevGenericImporter
 Comment=KDevelop Generic Importer
 Icon=gear
 ServiceTypes=KDevelop/ProjectImporter
-X-KDE-Library=libkdevgenericimporter
+X-KDE-Library=kdevgenericimporter
 X-KDevelop-ProjectImporter=
 X-KDevelop-Version=3

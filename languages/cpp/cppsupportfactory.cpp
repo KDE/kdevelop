@@ -24,7 +24,7 @@
 #include <kdevplugininfo.h>
 #include "cppsupportfactory.h"
 
-K_EXPORT_COMPONENT_FACTORY(libkdevcpplanguagesupport, CppLanguageSupportFactory)
+K_EXPORT_COMPONENT_FACTORY(kdevcpplanguagesupport, CppLanguageSupportFactory)
 
 static const KDevPluginInfo data("kdevcppsupport");
 
