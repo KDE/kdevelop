@@ -44,7 +44,7 @@
 
 typedef KDevGenericFactory<KDevDocumentViewPart> KDevDocumentViewFactory;
 static const KDevPluginInfo data( "kdevdocumentview" );
-K_EXPORT_COMPONENT_FACTORY( libkdevdocumentview,
+K_EXPORT_COMPONENT_FACTORY( kdevdocumentview,
                             KDevDocumentViewFactory( data ) );
 
 KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
