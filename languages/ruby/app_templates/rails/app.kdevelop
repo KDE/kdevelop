@@ -21,6 +21,7 @@
 		<includepatterns>*.rb</includepatterns>
 		<includepatterns>*.rhtml</includepatterns>
 		<includepatterns>*.rxml</includepatterns>
+		<includepatterns>*.rjs</includepatterns>
 		<includepatterns>*.css</includepatterns>
 		<includepatterns>*.js</includepatterns>
 		<excludepatterns>*~</excludepatterns>
@@ -33,6 +34,7 @@
 	   <group pattern="*.js" name="JavaScripts" />
 	   <group pattern="*.rhtml" name="Views" />
 	   <group pattern="*.rxml" name="BuilderTemplates" />
+	   <group pattern="*.rjs" name="Ruby JavaScript" />
 	   <group pattern="*.yml" name="Config" />
 	   <group pattern="*.gif,*.jpg,*.png,*.ico" name="Images" />
 	   <group pattern="*.html,*.cgi,*.fcgi,*.txt" name="Public" />
@@ -91,6 +93,7 @@
 			<type ext="rb"/>
 			<type ext="rhtml"/>
 			<type ext="rxml"/>
+			<type ext="rjs"/>
 			<type ext="css"/>
 			<type ext="js"/>
     </useglobaltypes>

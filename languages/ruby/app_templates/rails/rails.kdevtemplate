@@ -4,7 +4,7 @@ Name=Ruby On Rails
 Icon=rails.png
 Category=Ruby
 Comment=This generates a Ruby On Rails project
-FileTemplates=rb,ShellStyle,rhtml,XMLStyle,rxml,ShellStyle,css,CPPStyle,js,CPPStyle
+FileTemplates=rb,ShellStyle,rhtml,XMLStyle,rxml,ShellStyle,rjs,ShellStyle,css,CPPStyle,js,CPPStyle
 ShowFilesAfterGeneration=%{dest}/script/server
 Archive=rails.tar.gz
 

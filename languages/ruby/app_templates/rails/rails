@@ -1,7 +1,0 @@
-# KDE Config File
-[General]
-Name=Ruby On Rails
-Category=Ruby
-Comment=This generates a Rails project in Ruby
-FileTemplates=rb,ShellStyle
-ShowFilesAfterGeneration=script/server
