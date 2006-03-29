@@ -166,17 +166,6 @@ void SimpleMainWindow::setViewAvailable(QWidget *pView, bool bEnabled)
 
 void SimpleMainWindow::raiseView(QWidget *view)
 {
-    //adymo: a workaround to make editor wrappers work:
-    //editor view is passed to this function but the ui library knows only
-    //of its parent which is an editor wrapper, simply replacing the view
-    //by its wrapper helps here
-    if (view->parent() && view->parent()->isA("EditorWrapper"))
-    {
-//         kDebug() << "parent is editor wrapper: " <<
-//             static_cast<EditorWrapper*>(view->parent()) << endl;
-        view = (QWidget*)view->parent();
-    }
-
     if (m_docks.contains(view))
     {
         DDockWidget *dock = toolWindow(m_docks[view]);

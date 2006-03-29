@@ -10,36 +10,6 @@
 
 #include <q3widgetstack.h>
 
-/**
-Editor proxy for delayed loading of editor parts.
-*/
-class EditorWrapper : public Q3WidgetStack
-{
-  Q_OBJECT
-
-public:
-  EditorWrapper(KTextEditor::Document* editor, bool activate, QWidget* parent, const char* name = 0L);
-  virtual ~EditorWrapper();
-
-  KTextEditor::Document* document() const;
-
-  void setLine(int line);
-  void setCol(int col);
-
-public slots:
-  virtual void show();
-
-protected:
-  virtual void focusInEvent(QFocusEvent *ev);
-
-private:
-  QPointer<KTextEditor::Document> m_doc;
-  QPointer<KTextEditor::View> m_view;
-  int m_line;
-  int m_col;
-  bool m_first;
-};
-
 class EditorProxy : public QObject
 {
   Q_OBJECT
@@ -52,13 +22,8 @@ public:
 
   void installPopup(KParts::Part *part);
 
-  void registerEditor(EditorWrapper* wrapper);
-  void deregisterEditor(EditorWrapper* wrapper);
-
   QWidget * widgetForPart( KParts::Part * part );
   QWidget * topWidgetForPart( KParts::Part * part );
-
-  bool isDelayedViewCapable();
 
 private slots:
 
@@ -73,10 +38,6 @@ private:
 
   QVector<int> m_popupIds;
 
-  // This list is used to save line/col information for not yet activated editor views.
-  QList<EditorWrapper *> m_editorParts;
-
-  bool m_delayedViewCreationCompatibleUI;
 };
 
 

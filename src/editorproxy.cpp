@@ -54,8 +54,6 @@ EditorProxy::EditorProxy()
     config->setGroup("UI");
     int mdimode = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
 
-    m_delayedViewCreationCompatibleUI = (mdimode == KMdi::IDEAlMode || mdimode == KMdi::TabPageMode);
-
     KAction *ac = new KAction( i18n("Show Context Menu"), 0, this,
         SLOT(showPopup()), TopLevel::getInstance()->main()->actionCollection(), "show_popup" );
     KShortcut cut ;/*= KStdAccel::shortcut(KStdAccel::PopupMenuContext);*/
@@ -81,22 +79,9 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
   if ( lineNum < 0 )
     return;
 
-  View *view = qobject_cast<View *>(part->widget());
+  KTextEditor::View *view = qobject_cast<View *>(part->widget());
   if (view)
     view->setCursorPosition(Cursor(lineNum, col == -1 ? 0 : col));
-  else {
-    // Save the position for a rainy day (or when the view gets activated and wants its position)
-    foreach(EditorWrapper *wrapper, m_editorParts) {
-        if (wrapper->document() == part) {
-            wrapper->setLine(lineNum);
-            wrapper->setCol(col);
-            return;
-        }
-    }
-
-    // Shouldn't hit this?
-    Q_ASSERT(false);
-  }
 }
 
 void EditorProxy::installPopup( KParts::Part * part )
@@ -112,54 +97,20 @@ void EditorProxy::installPopup( KParts::Part * part )
         return;
     }
 
-    KAction * action = 0;
-
-#if 0 //### harryF
-    //If there is a tab for this file, we don't need to plug the closing menu entries here
-    NewMainWindow *mw = dynamic_cast<NewMainWindow *>(TopLevel::getInstance());
-    if (mw) {
-        switch (mw->getTabWidgetVisibility())
-        {
-            case KMdi::AlwaysShowTabs:
-                break;
-            case KMdi::ShowWhenMoreThanOneTab:
-                if(DocumentController::getInstance()->parts()->count() > 1)
-                    break;
-            case KMdi::NeverShowTabs:
-                // I'm not sure if this is papering over a bug in xmlgui or not, but this test is
-                // needed in order to avoid multiple close actions in the popup menu in some cases
-                action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
-                if ( action && !action->isPlugged( popup ) )
-                {
-                    popup->insertSeparator( 0 );
-                    action->plug( popup, 0 );
-                }
-                action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
-                if ( action && !action->isPlugged( popup ) )
-                    action->plug( popup, 1 );
-                break;
-            default:
-                break;
-        }
-    }
-    else
-#endif
+    KConfig *config = KGlobal::config();
+    config->setGroup("UI");
+    bool m_tabBarShown = ! config->readNumEntry("TabWidgetVisibility", 0);
+    if (!m_tabBarShown)
     {
-        KConfig *config = KGlobal::config();
-        config->setGroup("UI");
-        bool m_tabBarShown = ! config->readNumEntry("TabWidgetVisibility", 0);
-        if (!m_tabBarShown)
+        KAction * action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
+        if ( action && !action->isPlugged( popup ) )
         {
-            action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
-            if ( action && !action->isPlugged( popup ) )
-            {
-                popup->insertSeparator( 0 );
-                action->plug( popup, 0 );
-            }
-            action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
-            if ( action && !action->isPlugged( popup ) )
-                action->plug( popup, 1 );
+            popup->insertSeparator( 0 );
+            action->plug( popup, 0 );
         }
+        action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
+        if ( action && !action->isPlugged( popup ) )
+            action->plug( popup, 1 );
     }
 
     view->setContextMenu( popup );
@@ -284,131 +235,18 @@ void EditorProxy::showPopup( )
 #endif // ####TODO
 }
 
-void EditorProxy::registerEditor(EditorWrapper* wrapper)
-{
-  m_editorParts.append(wrapper);
-}
-
-void EditorProxy::deregisterEditor(EditorWrapper* wrapper)
-{
-  m_editorParts.remove(wrapper);
-}
-
-EditorWrapper::EditorWrapper(KTextEditor::Document* editor, bool activate, QWidget* parent, const char* name)
-  : Q3WidgetStack(parent, name)
-  , m_doc(editor)
-  , m_view(0L)
-  , m_line(0)
-  , m_col(0)
-  , m_first(!activate && EditorProxy::getInstance()->isDelayedViewCapable())
-{
-  EditorProxy::getInstance()->registerEditor(this);
-}
-
-EditorWrapper::~EditorWrapper()
-{
-  kDebug() << k_funcinfo << this << endl;
-  EditorProxy::getInstance()->deregisterEditor(this);
-}
-
-KTextEditor::Document* EditorWrapper::document() const
-{
-  return m_doc;
-}
-
-void EditorWrapper::setLine(int line)
-{
-  m_line = line;
-}
-
-void EditorWrapper::setCol(int col)
-{
-  m_col = col;
-}
-
-void EditorWrapper::show()
-{
-  if ( !m_doc ) {
-    Q3WidgetStack::show();
-    return;
-  }
-
-  if (m_first) {
-    m_first = false;
-    Q3WidgetStack::show();
-    return;
-  }
-
-  if (m_doc->widget()) {
-    Q3WidgetStack::show();
-    return;
-  }
-
-  m_view = (KTextEditor::View *) m_doc->createView(this);
-
-  addWidget(m_view);
-
-  m_doc->setWidget(m_view);
-  // FIXME assumption check
-  // We're managing the view deletion by being its parent, don't let the part self-destruct
-  disconnect( m_view, SIGNAL( destroyed() ), m_doc, SLOT( slotWidgetDestroyed() ) );
-  //connect( m_view, SIGNAL( destroyed() ), this, SLOT( deleteLater() ) );
-
-  m_doc->insertChildClient(m_view);
-
-  DocumentController::getInstance()->integrateTextEditorPart(m_doc);
-
-  if (m_view) {
-    m_view->setCursorPosition(Cursor(m_line, m_col == -1 ? 0 : m_col));
-
-  } else {
-    // Shouldn't get here
-    Q_ASSERT(false);
-  }
-
-  Q3WidgetStack::show();
-}
-
 QWidget * EditorProxy::widgetForPart( KParts::Part * part )
 {
     if ( !part ) return 0;
-
-    if (part->widget())
-        return part->widget();
-
-        foreach (EditorWrapper *wrapper, m_editorParts) {
-            if (wrapper->document() == part)
-                return wrapper;
-        }
-
-    return 0L;
+    return part->widget();
 }
 
 QWidget * EditorProxy::topWidgetForPart( KParts::Part * part )
 {
     if ( !part ) return 0;
-
-        foreach (EditorWrapper *wrapper, m_editorParts) {
-            if (wrapper->document() == part)
-                return wrapper;
-        }
-
-    if (part->widget())
-        return part->widget();
-
-    return 0L;
+    return part->widget();
 }
 
-bool EditorProxy::isDelayedViewCapable( )
-{
-    return m_delayedViewCreationCompatibleUI;
-}
-
-void EditorWrapper::focusInEvent( QFocusEvent * ev )
-{
-    if (visibleWidget())
-        visibleWidget()->setFocus();
-}
 
 #include "editorproxy.moc"
 

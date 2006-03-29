@@ -510,22 +510,13 @@ void DocumentController::openEmptyTextDocument()
             m_presetEncoding = QString::null;
         }
 
-        //        editorpart->openURL( url );
-
-        QWidget* widget = document->widget();
-
-        if ( !widget )
+        if ( !document->widget() )
         {
-            // We're being lazy about creating the view, but kmdi _needs_ a
-            // widget to create a tab for it, so use a QWidgetStack subclass
-            // instead
-            kDebug() << k_lineinfo << "Creating Editor wrapper..." << endl;
-            widget = new EditorWrapper( document, true,
-                                        TopLevel::getInstance() ->main() );
+            document->createView( TopLevel::getInstance() ->main() );
         }
 
         addHistoryEntry();
-        integratePart( document, KUrl( i18n( "unnamed" ) ), widget,
+        integratePart( document, KUrl( i18n( "unnamed" ) ), document->widget(),
                        true, true );
 
         EditorProxy::getInstance() ->setLineNumber( document, 0, 0 );
@@ -691,23 +682,13 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
 
             editorPart->openURL( url );
 
-            QWidget* widget = editorPart->widget();
-
-            if ( !widget )
+            if ( !editorPart->widget() )
             {
-                // We're being lazy about creating the view,
-                // but kmdi _needs_ a widget to
-                // create a tab for it, so use a QWidgetStack subclass instead
-                kDebug() << k_lineinfo << "Creating Editor wrapper..." << endl;
-                KTextEditor::Document* doc =
-                    qobject_cast<KTextEditor::Document*>( editorPart );
-                widget = new EditorWrapper( doc,
-                                            activate,
-                                            TopLevel::getInstance() ->main() );
+                editorPart->createView( TopLevel::getInstance()->main() );
             }
 
             addHistoryEntry();
-            integratePart( editorPart, url, widget, true, activate );
+            integratePart( editorPart, url, editorPart->widget(), true, activate );
 
             EditorProxy::getInstance() ->setLineNumber( editorPart,
                     lineNum, col );
