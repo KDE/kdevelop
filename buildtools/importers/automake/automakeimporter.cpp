@@ -149,7 +149,8 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
             {
                 if ( installedHeaders == 0 )
                     installedHeaders = new KDevProjectTargetItem( i18n( "Installed headers" ) );
-                installedHeaders->add( new AutoMakeFileItem( target.name, installedHeaders ) );
+		QFileInfo headerInfo( target.folder, target.name );
+                installedHeaders->add( new AutoMakeFileItem( headerInfo, installedHeaders ) );
             }
             break;
             case AutoTools::Program:
