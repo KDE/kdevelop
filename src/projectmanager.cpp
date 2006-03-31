@@ -48,6 +48,7 @@ class QDomDocument;
 #include "generalinfowidget.h"
 #include "projectsession.h"
 #include "domutil.h"
+#include "settings.h"
 
 #include "projectmanager.h"
 
@@ -206,11 +207,11 @@ void ProjectManager::loadDefaultProject()
 bool ProjectManager::loadProject(const KURL &projectURL)
 {
   KURL url = projectURL;
-  
+
   if (!url.isValid())
     return false;
 
-  if (url.isLocalFile()) 
+  if (url.isLocalFile())
   {
     QDir dir(url.path());
     url.setPath(dir.canonicalPath());
@@ -272,10 +273,10 @@ void ProjectManager::slotLoadProject( )
 	kapp->restoreOverrideCursor();
     return;
   }
-  
+
   TopLevel::getInstance()->statusBar()->message( i18n("Changing plugin profile...") );
   m_oldProfileName = PluginController::getInstance()->changeProfile(m_info->m_profileName);
-  
+
   TopLevel::getInstance()->statusBar()->message( i18n("Loading project plugins...") );
   loadLocalParts();
 
@@ -457,7 +458,8 @@ void ProjectManager::getGeneralInfo()
 //  m_info->m_profileName = getAttribute(generalEl, "profile");
   QDomElement el = generalEl.namedItem("profile").toElement();
   if (el.isNull())
-      m_info->m_profileName = profileByAttributes(m_info->m_language, m_info->m_keywords);
+//      m_info->m_profileName = profileByAttributes(m_info->m_language, m_info->m_keywords);
+      m_info->m_profileName = Settings::profileByAttributes(m_info->m_language, m_info->m_keywords);
   else
       m_info->m_profileName = el.firstChild().toText().data();
 }
@@ -614,34 +616,34 @@ bool ProjectManager::loadKDevelop2Project( const KURL & url )
     return loadProject( KURL(projectFile) );
 }
 
-QString ProjectManager::profileByAttributes(const QString &language, const QStringList &keywords)
-{
-    KConfig config(locate("data", "kdevelop/profiles/projectprofiles"));
-    config.setGroup(language);
-    
-    QStringList profileKeywords = QStringList::split("/", "Empty");
-    if (config.hasKey("Keywords"))
-        profileKeywords = config.readListEntry("Keywords");
-    
-    int idx = 0;
-    for (QStringList::const_iterator it = profileKeywords.constBegin();
-        it != profileKeywords.constEnd(); ++it)
-    {
-        if (keywords.contains(*it))
-        {
-            idx = profileKeywords.findIndex(*it);
-            break;
-        }
-    }
-    
-    QStringList profiles;
-    if (config.hasKey("Profiles"))
-    {
-        profiles = config.readListEntry("Profiles");
-        kdDebug() << "IDX: " << idx << "    PROFILE: " << profiles[idx] << endl;
-        return profiles[idx];
-    }
-    return "KDevelop";
-}
+// QString ProjectManager::profileByAttributes(const QString &language, const QStringList &keywords)
+// {
+//     KConfig config(locate("data", "kdevelop/profiles/projectprofiles"));
+//     config.setGroup(language);
+//
+//     QStringList profileKeywords = QStringList::split("/", "Empty");
+//     if (config.hasKey("Keywords"))
+//         profileKeywords = config.readListEntry("Keywords");
+//
+//     int idx = 0;
+//     for (QStringList::const_iterator it = profileKeywords.constBegin();
+//         it != profileKeywords.constEnd(); ++it)
+//     {
+//         if (keywords.contains(*it))
+//         {
+//             idx = profileKeywords.findIndex(*it);
+//             break;
+//         }
+//     }
+//
+//     QStringList profiles;
+//     if (config.hasKey("Profiles"))
+//     {
+//         profiles = config.readListEntry("Profiles");
+//         kdDebug() << "IDX: " << idx << "    PROFILE: " << profiles[idx] << endl;
+//         return profiles[idx];
+//     }
+//     return "KDevelop";
+// }
 
 #include "projectmanager.moc"

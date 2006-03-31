@@ -19,6 +19,8 @@ class Settings
 {
 public:
 	static QString terminalEmulatorName( KConfig & config );
+	static QString profileByAttributes(const QString &language, const QStringList &keywords);
+
 };
 
 #endif

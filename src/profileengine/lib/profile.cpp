@@ -31,20 +31,20 @@ Profile::Profile(Profile *parent, const QString &name)
 {
     if (m_parent)
         m_parent->addChildProfile(this);
-    
+
     QString profileConfig = locate("data", "kdevelop/profiles" + dirName() + "/profile.config");
     KConfig config(profileConfig);
-    
+
     config.setGroup("Information");
     m_genericName = config.readEntry("GenericName");
     m_description = config.readEntry("Description");
-    
+
     config.setGroup("Properties");
     m_properties = config.readListEntry("List");
-    
+
     config.setGroup("Enable");
     m_explicitEnable = config.readListEntry("List");
-    
+
     config.setGroup("Disable");
     m_explicitDisable = config.readListEntry("List");
 }
@@ -85,20 +85,20 @@ void Profile::save()
 {
     QString profileConfig = locateLocal("data", "kdevelop/profiles" + dirName() + "/profile.config");
     KConfig config(profileConfig);
-    
+
     config.setGroup("Information");
     config.writeEntry("GenericName", m_genericName);
     config.writeEntry("Description", m_description);
-    
+
     config.setGroup("Properties");
     config.writeEntry("List", m_properties);
-    
+
     config.setGroup("Enable");
     config.writeEntry("List", m_explicitEnable);
-    
+
     config.setGroup("Disable");
     config.writeEntry("List", m_explicitDisable);
-    
+
     config.sync();
 }
 
@@ -127,6 +127,19 @@ void Profile::removeEntry(List type, const QString &value)
 {
     QStringList &list = listByType(type);
     list.remove(value);
+}
+
+void Profile::clearList( List type )
+{
+    switch (type)
+    {
+        case Properties:
+            m_properties.clear();
+        case ExplicitEnable:
+            m_explicitEnable.clear();
+        case ExplicitDisable:
+            m_explicitDisable.clear();
+    }
 }
 
 QStringList &Profile::listByType(List type)
@@ -172,7 +185,7 @@ KURL::List Profile::resources(const QString &nameFilter)
     {
         QString dir = *it;
         dir = dir + "kdevelop/profiles" + dirName();
-        
+
         QDir d(dir);
         const QFileInfoList *infoList = d.entryInfoList(nameFilter, QDir::Files);
         if (!infoList)
@@ -181,7 +194,7 @@ KURL::List Profile::resources(const QString &nameFilter)
              infoIt != infoList->constEnd(); ++ infoIt)
             resources.append((*infoIt)->absFilePath());
     }
-    
+
     return KURL::List(resources);
 }
 

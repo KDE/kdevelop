@@ -30,12 +30,12 @@
 ProfileEngine::ProfileEngine()
 {
     QStringList dirs = KGlobal::dirs()->findDirs("data", "kdevelop/profiles");
-    
+
     m_rootProfile = new Profile(0, "KDevelop");
-    
+
     QString currPath = "/";
     QMap<QString, Profile*> passedPaths;
-    
+
     for (QStringList::const_iterator it = dirs.constBegin(); it != dirs.constEnd(); ++it)
         processDir(*it, currPath, passedPaths, m_rootProfile);
 }
@@ -48,7 +48,7 @@ ProfileEngine::~ProfileEngine()
 void ProfileEngine::processDir(const QString &dir, const QString &currPath, QMap<QString, Profile*> &passedPaths, Profile *root)
 {
 //     kdDebug() << "processDir: " << dir << " " << currPath << endl;
-    
+
     QDir qDir(dir);
     QStringList entryList = qDir.entryList(QDir::Dirs);
     for (QStringList::const_iterator eit = entryList.constBegin(); eit != entryList.constEnd(); ++eit)
@@ -77,7 +77,7 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
 
     if (!profile)
         return KTrader::OfferList();
-    
+
     QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
     switch (offerType) {
         case Global:
@@ -98,19 +98,19 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
             arg((i++)==0?"":"or").arg((*it).name);
     if (!constraint_add.isEmpty())
         constraint += " and ( " + constraint_add + " ) ";
-    
+
 //BEGIN debug
-    kdDebug() << "=============" << endl
+    kdDebug(9000) << "=============" << endl
         << "    =============" << endl
         << "        =============   Query for Profile:" << endl
         << "        " << constraint << endl << endl << endl;
 //END debug
-    
+
     KTrader::OfferList list = KTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
     QStringList names;
 
+/* Wrong, this is not what we want to do.
     Profile::EntryList disableList = profile->list(Profile::ExplicitDisable);
-//     for (KTrader::OfferList::iterator it = list.begin(); it != list.end(); ++it)
     KTrader::OfferList::iterator it = list.begin();
     while (it != list.end())
     {
@@ -123,7 +123,7 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
         }
         ++it;
     }
-    
+*/
     Profile::EntryList enableList = profile->list(Profile::ExplicitEnable);
     for (Profile::EntryList::const_iterator it = enableList.begin(); it != enableList.end(); ++it)
     {
@@ -142,7 +142,7 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
     for (KTrader::OfferList::const_iterator it = list.begin(); it != list.end(); ++it)
         kdDebug() << "        " << (*it)->name() << endl;
     kdDebug() << endl << endl;
-//END debug*/ 
+//END debug*/
 
     return list;
 }
@@ -184,7 +184,7 @@ KURL::List ProfileEngine::resources(const QString &profileName, const QString &n
 
     if (!profile)
         return KURL::List();
-    
+
     return resources(profile, nameFilter);
 }
 
@@ -199,20 +199,20 @@ KURL::List ProfileEngine::resourcesRecursive(const QString &profileName, const Q
     Profile *profile = 0;
     getProfileWithListing(listing, &profile, profileName);
     KURL::List resources = profile->resources(nameFilter);
-    
+
     ProfileListingEx listingEx(nameFilter);
     walkProfiles<ProfileListingEx>(listingEx, profile);
-    
+
     resources += listingEx.resourceList;
     return resources;
 }
 
-void ProfileEngine::diffProfiles(OfferType offerType, const QString &profile1, 
+void ProfileEngine::diffProfiles(OfferType offerType, const QString &profile1,
     const QString &profile2, QStringList &unload, KTrader::OfferList &load)
 {
     KTrader::OfferList offers1 = offers(profile1, offerType);
     KTrader::OfferList offers2 = offers(profile2, offerType);
-    
+
     QStringList offers1List;
     for (KTrader::OfferList::const_iterator it = offers1.constBegin();
         it != offers1.constEnd(); ++it)
@@ -221,10 +221,10 @@ void ProfileEngine::diffProfiles(OfferType offerType, const QString &profile1,
     for (KTrader::OfferList::const_iterator it = offers2.constBegin();
         it != offers2.constEnd(); ++it)
         offers2List[(*it)->desktopEntryName()] = *it;
-    
+
 //    kdDebug() << "OLD PROFILE: " << offers1List << endl;
 //    kdDebug() << "NEW PROFILE: " << offers2List << endl;
-    
+
     for (QStringList::const_iterator it = offers1List.constBegin();
         it != offers1List.constEnd(); ++it)
     {
@@ -238,7 +238,7 @@ void ProfileEngine::diffProfiles(OfferType offerType, const QString &profile1,
         {
 //             kdDebug() << "    unload" << endl;
             unload.append(*it);
-        }        
+        }
     }
     load = offers2;
 }
@@ -259,6 +259,6 @@ void ProfileEngine::addResource(const QString &profileName, const KURL &url)
 
     if (!profile)
         return;
-    
+
     profile->addResource(url);
 }

@@ -66,6 +66,7 @@
 #include "kdevversioncontrol.h"
 #include "kdevmakefrontend.h"
 #include "kdevpartcontroller.h"
+#include "kdevplugincontroller.h"
 #include "kdevappfrontend.h"
 #include "kdevplugininfo.h"
 #include "kdevlicense.h"
@@ -76,6 +77,10 @@
 #include "misc.h"
 #include "profilesupport.h"
 #include "filetemplate.h"
+#include "settings.h"
+
+#include "profileengine.h"
+#include "profile.h"
 
 #include "propeditor/property.h"
 #include "propeditor/multiproperty.h"
@@ -984,43 +989,31 @@ void AppWizardDialog::openAfterGeneration()
 		DomUtil::writeEntry(projectDOM, "/general/versioncontrol", service->property("X-KDevelop-VCSPlugin").toString());
 	}
 
+	// figure out what plugins we should disable by default
+	QString profileName = DomUtil::readEntry( projectDOM, "general/profile" );
+	if ( profileName.isEmpty() )
+	{
+		QString language = DomUtil::readEntry( projectDOM, "general/primarylanguage" );
+		QStringList keywords = DomUtil::readListEntry( projectDOM, "general/keywords", "keyword" );
 
-	KConfig * config = kapp->config();
-	config->setGroup("IgnorePerDefault");
-	QStringList globalIgnoreparts = config->readListEntry( "KDevelop" );
+		profileName = Settings::profileByAttributes( language, keywords );
+	}
+
+	ProfileEngine & engine = m_part->pluginController()->engine();
+	Profile * profile = engine.findProfile( profileName );
+
+	QStringList disableList;
+	Profile::EntryList disableEntryList = profile->list( Profile::ExplicitDisable );
+	for ( Profile::EntryList::const_iterator it = disableEntryList.constBegin(); it != disableEntryList.constEnd(); ++it )
+	{
+		disableList << (*it).name;
+	}
+
 	QStringList projectIgnoreparts = DomUtil::readListEntry( projectDOM, "/general/ignoreparts", "part" );
-	projectIgnoreparts += globalIgnoreparts;
+	projectIgnoreparts += disableList;
 	DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", projectIgnoreparts );
 
-
-//FIXME PROFILES!!!!!!!!
-//BEGIN Plugin Profile
-
-/*	QString category = m_pCurrentAppInfo->category;
-	if ( category.left( 1 ) == "/" )
-	{
-		category = category.right( category.length() -1 );
-	}
-
-	QString profile = Profiles::getProfileForCategory( category );
-	QStringList loadList = Profiles::getPluginsForProfile( profile );
-
-	QStringList ignoreList;
-
-	KTrader::OfferList offers = KTrader::self()->query("KDevelop/Plugin", "[X-KDevelop-Scope] == 'Project'");
-	KTrader::OfferList::ConstIterator itt = offers.begin();
-	while( itt != offers.end() )
-	{
-		if ( !loadList.contains( (*itt)->name() ) )
-		{
-			ignoreList << (*itt)->name();
-		}
-		++itt;
-	}
-
-	DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", ignoreList );*/
-
-//END Plugin Profile
+	DomUtil::writeEntry( projectDOM, "/general/projectname", appname_edit->text() );
 
 	// write the dom back
 	if( !file.open( IO_WriteOnly ) )

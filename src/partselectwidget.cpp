@@ -43,15 +43,15 @@ public:
     {
         setText(0, profile->genericName());
     }
-    
+
     ProfileItem(QListViewItem *parent, Profile *profile)
         : QListViewItem(parent), m_profile(profile)
     {
         setText(0, profile->genericName());
     }
-    
+
     Profile *profile() const { return m_profile; }
-    
+
 private:
     Profile *m_profile;
 };
@@ -98,7 +98,7 @@ void PartSelectWidget::init()
     _profile = DomUtil::readEntry(m_projectDom, "general/profile", PluginController::getInstance()->currentProfile());
     fillProfilesList();
     _pluginProfile->setCurrentText(PluginController::getInstance()->engine().findProfile(_profile)->genericName());
-    
+
     connect(_pluginProfile, SIGNAL(activated(QListViewItem* )),
         this, SLOT(selectProfile(QListViewItem* )));
     groupBox0Layout->addWidget(_pluginProfile);
@@ -139,13 +139,13 @@ void PartSelectWidget::init()
     groupBox2Layout->addWidget( _urlLabel );
 
     layout->addWidget( groupBox2 );
-	
+
 	QHBox * hbox = new QHBox( this );
 	hbox->setSpacing( 6 );
 	hbox->setMargin( 6 );
 	QPushButton * setAsDefaultButton = new QPushButton( i18n("Set as Default"), hbox );
 	setAsDefaultButton->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	new QLabel( i18n("Set this plugin selection as the default"), hbox );
+	new QLabel( i18n("Set this plugin selection as the default for this profile"), hbox );
 	layout->addWidget( hbox );
 
     connect( _pluginList, SIGNAL( selectionChanged( QListViewItem * ) ), this, SLOT( itemSelected( QListViewItem * ) ) );
@@ -162,7 +162,7 @@ PartSelectWidget::~PartSelectWidget()
 void PartSelectWidget::readProjectConfig()
 {
 	QStringList ignoreparts = DomUtil::readListEntry(m_projectDom, "/general/ignoreparts", "part");
-	
+
 	KTrader::OfferList localOffers = PluginController::getInstance()->engine().offers(
 		PluginController::getInstance()->currentProfile(), ProfileEngine::Project);
 	KTrader::OfferList globalOffers = PluginController::getInstance()->engine().offers(
@@ -267,29 +267,36 @@ public:
 
 void PartSelectWidget::setAsDefault( )
 {
-	kdDebug() << k_funcinfo << endl;
-	
-	QString profile = DomUtil::readEntry(m_projectDom, "general/profile", PluginController::getInstance()->currentProfile());
-	
-	if ( profile.isEmpty() ) return;
-	
-	QStringList ignoreparts;
+	kdDebug(9000) << k_funcinfo << endl;
+
+// 	QString profile = DomUtil::readEntry(m_projectDom, "general/profile", PluginController::getInstance()->currentProfile());
+// 	if ( profile.isEmpty() ) return;
+
+	ProfileEngine & engine = PluginController::getInstance()->engine();
+	Profile * profile = engine.findProfile( PluginController::getInstance()->currentProfile() );
+
+	profile->clearList( Profile::ExplicitDisable );
+
 	QListViewItemIterator it( _pluginList );
 	while ( it.current() )
 	{
 		PluginItem * item = static_cast<PluginItem*>( it.current() );
 		if ( !item->isOn() )
 		{
-			ignoreparts.append( item->name() );
+			profile->addEntry( Profile::ExplicitDisable, item->name() );
+// 			ignoreparts.append( item->name() );
 		}
 		++it;
 	}
 
-	//@fixme: make this use ProfileEngine instead to store settings
+	profile->save();
+
+
+/*	//@fixme: make this use ProfileEngine instead to store settings
 	KConfig * config = kapp->config();
 	config->setGroup("IgnorePerDefault");
-//	config->writeEntry( profile, ignoreparts );	
-	config->writeEntry( "KDevelop", ignoreparts );	
+//	config->writeEntry( profile, ignoreparts );
+	config->writeEntry( "KDevelop", ignoreparts );*/
 }
 
 /*

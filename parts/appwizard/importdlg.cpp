@@ -39,6 +39,12 @@
 
 #include "kdevcore.h"
 #include "kdevversioncontrol.h"
+#include "kdevplugincontroller.h"
+
+#include "domutil.h"
+#include "settings.h"
+#include "profile.h"
+#include "profileengine.h"
 
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
@@ -65,7 +71,7 @@ ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *nam
         config.setGroup("General");
         QString type = config.readEntry("Comment");
         project_combo->insertItem(type);
-        
+
         if (config.hasGroup("Infrastructure"))
         {
             config.setGroup("Infrastructure");
@@ -116,12 +122,12 @@ void ImportDialog::accept()
             KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers."));
             return;
         }
-        
+
     if (infrastructureBox->isVisible() && infrastructureBox->isChecked())
         createProjectInfrastructure();
 
-    QString author = author_edit->text();
-    QString email = email_edit->text();
+//    QString author = author_edit->text();
+//    QString email = email_edit->text();
 
     QFileInfo finfo(importNames[project_combo->currentItem()]);
     QDir importdir(finfo.dir());
@@ -133,25 +139,72 @@ void ImportDialog::accept()
         return;
     }
 
+	// Read the DOM of the newly created project
+	QDomDocument projectDOM;
+
+	int errorLine, errorCol;
+	QString errorMsg;
+	bool success = projectDOM.setContent( &src, &errorMsg, &errorLine, &errorCol);
+	src.close();
+	if ( !success )
+	{
+		KMessageBox::sorry( 0, i18n("This is not a valid project file.\n"
+				"XML error in line %1, column %2:\n%3")
+				.arg(errorLine).arg(errorCol).arg(errorMsg));
+		return;
+	}
+
+	DomUtil::writeEntry( projectDOM, "/general/author", author_edit->text() );
+	DomUtil::writeEntry( projectDOM, "/general/email" , email_edit->text() );
+	DomUtil::writeEntry( projectDOM, "/general/projectname", name_edit->text() );
+
+	// figure out what plugins we should disable by default
+	QString profileName = DomUtil::readEntry( projectDOM, "general/profile" );
+	if ( profileName.isEmpty() )
+	{
+		QString language = DomUtil::readEntry( projectDOM, "general/primarylanguage" );
+		QStringList keywords = DomUtil::readListEntry( projectDOM, "general/keywords", "keyword" );
+
+		profileName = Settings::profileByAttributes( language, keywords );
+	}
+
+	ProfileEngine & engine = m_part->pluginController()->engine();
+	Profile * profile = engine.findProfile( profileName );
+
+	QStringList disableList;
+	Profile::EntryList disableEntryList = profile->list( Profile::ExplicitDisable );
+	for ( Profile::EntryList::const_iterator it = disableEntryList.constBegin(); it != disableEntryList.constEnd(); ++it )
+	{
+		disableList << (*it).name;
+	}
+
+	DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", disableList );
+
+
+	// write the dom back
     QFile dest(dir.filePath(projectName + ".kdevelop"));
     if (!dest.open(IO_WriteOnly)) {
         KMessageBox::sorry(this, i18n("Cannot write the project file."));
         return;
     }
+	QTextStream ts( &dest );
+	ts << projectDOM.toString(2);
+	dest.close();
 
-    QTextStream srcstream(&src);
-    QTextStream deststream(&dest);
 
-    while (!srcstream.atEnd()) {
-        QString line = srcstream.readLine();
-        line.replace(QRegExp("\\$APPNAMELC\\$"), projectName);
-        line.replace(QRegExp("\\$AUTHOR\\$"), author);
-        line.replace(QRegExp("\\$EMAIL\\$"), email);
-        deststream << line << endl;
-    }
-
-    dest.close();
-    src.close();
+//     QTextStream srcstream(&src);
+//     QTextStream deststream(&dest);
+//
+//     while (!srcstream.atEnd()) {
+//         QString line = srcstream.readLine();
+//         line.replace(QRegExp("\\$APPNAMELC\\$"), projectName);
+//         line.replace(QRegExp("\\$AUTHOR\\$"), author);
+//         line.replace(QRegExp("\\$EMAIL\\$"), email);
+//         deststream << line << endl;
+//     }
+//
+//     dest.close();
+//     src.close();
 
     m_part->core()->openProject(dir.filePath(projectName + ".kdevelop"));
 
@@ -369,7 +422,7 @@ void ImportDialog::scanAvailableVCS()
 	{
 		vcsCombo->insertItem( (*it)->genericName(), i++ );
 		++it;
-	}	
+	}
 }
 */
 /*
@@ -384,7 +437,7 @@ void ImportDialog::slotFinishedCheckout( QString destinationDir )
 /*
 void ImportDialog::slotFetchModulesFromRepository()
 {
-	
+
     KDevVersionControl *vcs = m_part->versionControlByName( vcsCombo->currentText() );
     if (!vcs)
         return;
@@ -398,7 +451,7 @@ void ImportDialog::slotFetchModulesFromRepository()
     //restore cursor if we can't fetch repository
     if ( !vcs->fetchFromRepository() )
         setCursor( KCursor::arrowCursor() );
-	
+
 }
 */
 void ImportDialog::projectTypeChanged( const QString &type )
@@ -421,14 +474,14 @@ void ImportDialog::createProjectInfrastructure( )
     InfrastructureCmd cmd = m_infrastructure[project_combo->currentText()];
     if (!cmd.isOn)
         return;
-    
+
     QDir dir (urlinput_edit->url());
     QStringList files = dir.entryList(cmd.existingPattern);
     if (!files.isEmpty()) {
         if (KMessageBox::questionYesNo(this, i18n("Project infrastrucure already exists in target directory.\nGenerate new project infrastructure and overwrite old?"), QString::null, i18n("Generate"), i18n("Do Not Generate")) == KMessageBox::No)
             return;
     }
-    
+
     QString command = "cd " + urlinput_edit->url() + " && " + cmd.command;
     kdDebug(9010) << "executing " << command.ascii() << endl;
     system(command.ascii());

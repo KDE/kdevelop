@@ -37,9 +37,9 @@ public:
         bool derived;
     };
     typedef QValueList<Entry> EntryList;
-    
+
     /**Lists which are held by a profile.*/
-    enum List { 
+    enum List {
         Properties        /**<X-KDevelop-Properties defined for this profile.*/,
         ExplicitEnable    /**<A list of explicitly enabled plugins (names).*/,
         ExplicitDisable   /**<A list of explicitly disabled plugins (names).*/
@@ -48,45 +48,46 @@ public:
     Profile(Profile *parent, const QString &name);
     Profile(Profile *parent, const QString &name, const QString &genericName, const QString &description);
     ~Profile();
-    
+
     QValueList<Profile*> children() const { return m_children; }
     Profile *parent() const { return m_parent; }
-    
+
     void save();
     bool remove();
-    
+
     QString name() const { return m_name; }
     QString genericName() const { return m_genericName; }
     QString description() const { return m_description; }
-    
+
     EntryList list(List type);
-    
+
     void addEntry(List type, const QString &value);
     void removeEntry(List type, const QString &value);
-    
+    void clearList(List type);
+
     bool hasInEntryList(EntryList &list, QString value);
-    
+
     KURL::List resources(const QString &nameFilter);
     void addResource(const KURL &url);
-    
+
     void detachFromParent();
-    
+
 protected:
     void addChildProfile(Profile *profile);
     void removeChildProfile(Profile *profile);
     QString dirName() const;
-    
+
     QStringList &listByType(List type);
 
 private:
     Profile *m_parent;
     QValueList<Profile*> m_children;
-    
+
     QString m_name;
-    
+
     QString m_genericName;
     QString m_description;
-    
+
     QStringList m_properties;
     QStringList m_explicitEnable;
     QStringList m_explicitDisable;
