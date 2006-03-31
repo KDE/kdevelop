@@ -19,6 +19,10 @@ private:
   QWidget *m_parentWidget;
 };
 
+class KAboutData;
+class KInstance;
+
+
 class KDevDesignerPartFactory : public KParts::Factory
 {
   Q_OBJECT

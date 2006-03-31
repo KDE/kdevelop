@@ -35,7 +35,7 @@ GuiBuilderPart::GuiBuilderPart(QObject *parent, const char *name, const QStringL
   m_designer->setPropertyEditor(QDesignerComponents::createPropertyEditor(m_designer, 0));
   Q_ASSERT(m_designer->propertyEditor() != 0);
 
-  (void) new QDesignerIntegration(m_designer, this);
+  (void) new qdesigner_internal::QDesignerIntegration(m_designer, this);
 
   mainWindow()->embedSelectView(m_designer->widgetBox(), i18n("Widget Box"), i18n("Widget Box"));
   mainWindow()->embedSelectViewRight(m_designer->propertyEditor(), i18n("Property Editor"), i18n("Property Editor"));

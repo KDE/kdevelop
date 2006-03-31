@@ -8,9 +8,10 @@ KInstance*  KDevDesignerPartFactory::s_instance = 0L;
 KAboutData* KDevDesignerPartFactory::s_about = 0L;
 
 KDevDesignerPart::KDevDesignerPart(QWidget *parentWidget, QObject *parent, const char *name, const QStringList &)
-  : KParts::ReadWritePart(parent, name),
+  : KParts::ReadWritePart(parent),
     m_parentWidget(parentWidget)
 {
+  setObjectName(name);
   setInstance(KDevDesignerPartFactory::instance());
 }
 
