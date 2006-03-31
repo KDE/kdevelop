@@ -22,7 +22,7 @@ include(MacroAddFileDependencies)
 include(ConfigureChecks.cmake)
 include(KDevelopMacros)
 
-include_directories(${KDE4_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${KDE4_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
 # create config.h
 include(ConfigureChecks.cmake)
