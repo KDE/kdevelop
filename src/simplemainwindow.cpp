@@ -35,7 +35,7 @@
 #include <ktexteditor/document.h>
 #include <kapplication.h>
 
-#include <ddockwindow.h>
+#include <ddockwidget.h>
 #include <dtabwidget.h>
 #include <profile.h>
 #include <profileengine.h>

@@ -22,7 +22,6 @@
 
 #include <QMap>
 #include <QList>
-#include <QStackedWidget>
 #include <QDockWidget>
 
 class QStackedWidget;

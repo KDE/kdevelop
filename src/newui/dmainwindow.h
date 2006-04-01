@@ -22,7 +22,7 @@
 
 #include <kparts/mainwindow.h>
 
-#include "ddockwindow.h"
+#include "ddockwidget.h"
 
 class DTabWidget;
 namespace Ideal {

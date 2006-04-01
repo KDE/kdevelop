@@ -19,16 +19,16 @@
  ***************************************************************************/
 #include "dmainwindow.h"
 
+#include <QPixmap>
+#include <QEvent>
+#include <QStackedWidget>
+#include <QTimer>
+
+#include <kglobal.h>
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kiconloader.h>
-
-#include <qtoolbutton.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QEvent>
-#include <kglobal.h>
 
 #include "dtabwidget.h"
 #include "docksplitter.h"

@@ -17,7 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.             *
  ***************************************************************************/
-#include "ddockwindow.h"
+#include "ddockwidget.h"
 
 #include <QStackedWidget>
 #include <QBoxLayout>
@@ -140,7 +140,7 @@ void DDockWidget::setExpanded(bool v)
 
     if (!m_expanded)
     {
-        widget()->setMinimumSize(m_selectionBar->minimumSize());
+        //widget()->setMinimumSize(m_selectionBar->minimumSize());
         if (isBottom)
             resize(width(), layout()->minimumSize().height());
         else
@@ -193,7 +193,10 @@ QWidget *DDockWidget::currentWidget() const
 
 void DDockWidget::addWidget(const QString &title, QWidget *widget)
 {
-    KAction* action = new KAction(title, widget->windowIcon(), 0, 0, 0, mainWindow()->actionCollection(), QString("dock_select_%1").arg(title).toLatin1().constData());
+    widget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+
+    KAction* action = new KAction(title, mainWindow()->actionCollection(), QString("dock_select_%1").arg(title).toLatin1().constData());
+    action->QAction::setIcon(widget->windowIcon());
     action->setActionGroup(m_selectActionGroup);
     action->setCheckable(true);
     m_widgets[action] = widget;
@@ -311,8 +314,8 @@ void DDockWidget::setSelectedAction( KAction * action )
 
 void DDockWidget::resizeEvent( QResizeEvent * event )
 {
-  kDebug() << k_funcinfo << event->oldSize() << " new " << event->size() << endl;
+  //kDebug() << k_funcinfo << event->oldSize() << " new " << event->size() << endl;
   QDockWidget::resizeEvent(event);
 }
 
-#include "ddockwindow.moc"
+#include "ddockwidget.moc"

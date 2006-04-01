@@ -9,7 +9,7 @@ include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces $
 
 set(newui_LIB_SRCS
     dmainwindow.cpp
-    ddockwindow.cpp
+    ddockwidget.cpp
     docksplitter.cpp
     dtabwidget.cpp
 )
@@ -23,7 +23,7 @@ install_targets(/lib newui)
 
 ########### install files ###############
 
-install_files(/include/kdevelop/shell FILES dmainwindow.h ddockwindow.h docksplitter.h dtabwidget.h)
+install_files(/include/kdevelop/shell FILES dmainwindow.h ddockwidget.h docksplitter.h dtabwidget.h)
 
 
 kde4_footer()
