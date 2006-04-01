@@ -1,16 +1,15 @@
 
 #include "kdevdesigner_part.h"
 
-#include "kdevplugininfo.h"
-#include "kdevgenericfactory.h"
+#include <kplugininfo.h>
+#include <kgenericfactory.h>
 
 #include <kinstance.h>
 #include <klocale.h>
 
-typedef KDevGenericFactory<KDevDesignerPart> KDevDesignerFactory;
-static const KDevPluginInfo data( "kdevdesignerpart" );
+typedef KGenericFactory<KDevDesignerPart> KDevDesignerFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevdesignerpart,
-                            KDevDesignerFactory( data ) );
+                            KDevDesignerFactory("kdevdesignerpart") );
 
 KDevDesignerPart::KDevDesignerPart(QWidget *parentWidget,
                                    const char* widgetName,

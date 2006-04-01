@@ -2,7 +2,6 @@
 #define KDEVDESIGNER_PART_H
 
 #include <kparts/part.h>
-#include <kparts/factory.h>
 
 class KDevDesignerPart: public KParts::ReadWritePart
 {
