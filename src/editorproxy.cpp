@@ -57,7 +57,7 @@ EditorProxy::EditorProxy()
     KAction *ac = new KAction( i18n("Show Context Menu"), 0, this,
         SLOT(showPopup()), TopLevel::getInstance()->main()->actionCollection(), "show_popup" );
     KShortcut cut ;/*= KStdAccel::shortcut(KStdAccel::PopupMenuContext);*/
-    cut.append(KKey(Qt::CTRL + Qt::Key_Return));
+    cut.append(Qt::CTRL + Qt::Key_Return);
     ac->setShortcut(cut);
 }
 
