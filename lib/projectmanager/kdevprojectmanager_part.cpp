@@ -72,7 +72,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
 
         int error = 0;
         if (KDevProjectImporter *i = KParts::ComponentFactory::createInstanceFromService<KDevProjectImporter>(ptr, this,
-            ptr->name().latin1(), QStringList(), &error))
+            ptr->name().toLatin1(), QStringList(), &error))
           {
             m_importers.insert(ptr->name(), i);
           }
@@ -92,7 +92,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
 
         int error = 0;
         if (KDevProjectBuilder *i = KParts::ComponentFactory::createInstanceFromService<KDevProjectBuilder>(ptr, this,
-            ptr->name().latin1(), QStringList(), &error))
+            ptr->name().toLatin1(), QStringList(), &error))
           {
             m_builders.insert(ptr->name(), i);
           }
