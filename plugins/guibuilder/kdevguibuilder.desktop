@@ -7,6 +7,6 @@ Name=KDevGuiBuilder
 GenericName=KDevelop GUI Builder
 icon=kdevelop
 ServiceTypes=KDevelop/Plugin
-X-KDE-Library=libkdevguibuilder
+X-KDE-Library=kdevguibuilder
 X-KDevelop-Version=4
 X-KDevelop-Scope=Global
