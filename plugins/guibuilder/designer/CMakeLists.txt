@@ -9,12 +9,12 @@ kdevdesigner_part.cpp
 
 KDE4_AUTOMOC(${kdevdesignerpart_PART_SRCS})
 
-KDE4_ADD_PLUGIN(kdevdesignerpart WITH_PREFIX ${kdevdesignerpart_PART_SRCS})
+KDE4_ADD_PLUGIN(kdevdesignerpart ${kdevdesignerpart_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevdesignerpart ${KDE4_KPARTS_LIBS} kdevinterfaces QtDesigner_debug QtDesignerComponents_debug)
 
 INSTALL_TARGETS(/lib/kde4 kdevdesignerpart )
-
+KDE4_INSTALL_LIBTOOL_FILE( ${PLUGIN_INSTALL_DIR} kdevdesignerpart )
 
 ########### install files ###############
 
