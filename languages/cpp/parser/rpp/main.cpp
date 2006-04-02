@@ -22,8 +22,8 @@
 
 int main (int /*argc*/, char *argv[])
 {
-  bool no_stdinc = true;
-  bool no_stdincpp = true;
+  bool no_stdinc = false;
+  bool no_stdincpp = false;
 
   char const *filename = *++argv;
   if (!filename)
