@@ -80,8 +80,6 @@ class pp
     PP_UNDEF
   };
 
-  pp_fast_string const *pp_defined;
-
 public:
   pp (pp_environment &__env);
 

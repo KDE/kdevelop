@@ -451,8 +451,6 @@ inline pp::pp (pp_environment &__env):
   iflevel = 0;
   _M_skipping[iflevel] = 0;
   _M_true_test[iflevel] = 0;
-
-  pp_defined = pp_symbol::get ("defined", 7);
 }
 
 inline std::back_insert_iterator<std::vector<std::string> > pp::include_paths_inserter ()
