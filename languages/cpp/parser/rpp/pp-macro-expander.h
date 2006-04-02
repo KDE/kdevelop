@@ -130,7 +130,7 @@ public:
             lines += n;
 
             while (n-- > 0)
-              *__result = '\n';
+              *__result++ = '\n';
           }
         else if (pp_isspace (*__first))
           {
