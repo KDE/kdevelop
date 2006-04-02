@@ -342,9 +342,10 @@ void AppWizardDialog::loadVcs()
 		KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
 		if (!factory) {
 			QString errorMessage = KLibLoader::self()->lastErrorMessage();
-			kdDebug(9010) << "There was an error loading the module " << service->name() << endl <<
+			// TODO messagebox?
+			kdWarning(9010) << "There was an error loading the module " << service->name() << endl <<
 			"The diagnostics is:" << endl << errorMessage << endl;
-			exit(1);
+			continue;
 		}
 		QStringList args;
 		QObject *obj = factory->create(0, service->name().latin1(),
