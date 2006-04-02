@@ -1,3 +1,7 @@
+/* a comment
+   here
+   here
+*/
 #define MY_COOL_MACRO \
   line1 \
   line2 \

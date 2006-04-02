@@ -31,7 +31,7 @@ struct pp_frame
 };
 
 class pp_macro_expander
-{  
+{
   pp_environment &env;
   pp_frame *frame;
 
@@ -70,14 +70,16 @@ class pp_macro_expander
 
 public: // attributes
   int lines;
+  int generated_lines;
 
 public:
   pp_macro_expander (pp_environment &__env, pp_frame *__frame = 0):
-    env (__env), frame (__frame) {}
+    env (__env), frame (__frame), lines (0), generated_lines (0) {}
 
   template <typename _InputIterator, typename _OutputIterator>
   _InputIterator operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result)
   {
+    generated_lines = 0;
     __first = skip_blanks (__first, __last);
     lines = skip_blanks.lines;
 
@@ -90,7 +92,7 @@ public:
 
             __first = skip_blanks (++__first, __last);
             lines += skip_blanks.lines;
-            
+
             if (__first != __last && *__first == '#')
               break;
           }
@@ -123,14 +125,8 @@ public:
           }
         else if (_PP_internal::comment_p (__first, __last))
           {
-            _InputIterator next_pos = skip_comment_or_divop (__first, __last);
-            int n = skip_comment_or_divop.lines;
-            lines += n;
-            __first = next_pos;
-            
-            // ### compress
-            while (n--)
-              *__result++ = '\n';
+            __first = skip_comment_or_divop (__first, __last);
+            lines += skip_comment_or_divop.lines;
           }
         else if (pp_isspace (*__first))
           {
@@ -179,7 +175,7 @@ public:
                 continue;
               }
 
-            static bool hide_next = false;
+            static bool hide_next = false; // ### remove me
 
             pp_macro *macro = env.resolve (name_buffer, name_size);
             if (! macro || macro->hidden || hide_next)
@@ -195,6 +191,7 @@ public:
                 macro->hidden = true;
                 expand_macro (macro->definition->begin (), macro->definition->end (), __result);
                 macro->hidden = false;
+                generated_lines += expand_macro.lines;
                 continue;
               }
 
@@ -251,6 +248,7 @@ public:
               macro->hidden = true;
               expand_macro (macro->definition->begin (), macro->definition->end (), __result);
               macro->hidden = false;
+              generated_lines += expand_macro.lines;
           }
         else
           *__result++ = *__first++;

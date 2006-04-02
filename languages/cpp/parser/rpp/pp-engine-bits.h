@@ -67,7 +67,6 @@ void pp::file (std::string const &filename, _OutputIterator __result)
     {
       std::string was = _M_current_file;
       _M_current_file = filename;
-      output_line (_M_current_file, 1, __result);
       file (fp, __result);
       _M_current_file = was;
     }
@@ -369,7 +368,7 @@ _InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last
       int __saved_lines = lines;
 
       lines = 1;
-      output_line (_M_current_file, 1, __result);
+      //output_line (_M_current_file, 1, __result);
 
       file (fp, __result);
 
@@ -391,7 +390,8 @@ void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIter
   std::string __prot;
   __prot.reserve (255);
 
-  if (find_header_protection (__first, __last, &__prot) && env.resolve (pp_symbol::get (__prot.c_str (), __prot.size ())) != 0)
+  if (find_header_protection (__first, __last, &__prot)
+      && env.resolve (pp_symbol::get (__prot.c_str (), __prot.size ())) != 0)
     {
       // std::cerr << "** DEBUG found header protection:" << __prot << std::endl;
       return;
@@ -426,7 +426,14 @@ void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIter
           end_id = skip_blanks (end_id, __last);
           __first = skip (end_id, __last);
 
+          int was = lines;
           (void) handle_directive (__buffer, __size, end_id, __first, __result);
+
+          if (lines != was)
+            {
+              lines = was;
+              output_line (_M_current_file, lines, __result);
+            }
         }
       else if (*__first == '\n')
         {
@@ -438,9 +445,12 @@ void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIter
         __first = skip (__first, __last);
       else
         {
+          output_line (_M_current_file, lines, __result);
           __first = expand (__first, __last, __result);
           lines += expand.lines;
-          // ### sync the lines
+
+          if (expand.generated_lines)
+            output_line (_M_current_file, lines, __result);
         }
     }
 }
