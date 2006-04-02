@@ -55,7 +55,7 @@
 #include "partcontroller.h"
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
-#include "partselectwidget.h"
+//#include "partselectwidget.h"
 #include "api.h"
 #include "core.h"
 #include "statusbar.h"
@@ -110,7 +110,7 @@ NewMainWindow::NewMainWindow(QWidget *parent, const char *name, KMdi::MdiMode md
     m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
 
 	KStdAction::configureToolbars( this, SLOT(configureToolbars()), actionCollection(), "set_configure_toolbars" );
-	
+
 	//@fixme why is this part of KDevMainWindow?
 //    previous_output_view = NULL;
 }
@@ -231,18 +231,18 @@ void NewMainWindow::tabContext(QWidget* widget,const QPoint & pos)
 		if ( top_widget && top_widget->parentWidget() == widget)
 		{
     		KParts::ReadOnlyPart * ro_part = 0;
-    		if ( MultiBuffer *multiBuffer = 
+    		if ( MultiBuffer *multiBuffer =
     		     dynamic_cast<MultiBuffer*>( top_widget ) )
     		{
         		if ( multiBuffer->numberOfBuffers() > 1 )
             		ro_part = dynamic_cast<KParts::ReadOnlyPart*>(multiBuffer->activeBuffer());
     		}
-    		
+
     		if( !ro_part )
     		{
         		ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
     		}
-    		
+
     		if( ro_part )
 			{
 				m_currentTabURL = ro_part->url();
@@ -722,10 +722,10 @@ void NewMainWindow::loadSettings() {
 void NewMainWindow::setCurrentDocumentCaption( const QString &caption )
 {
     // Make sure we are in an applicable MDI mode
-    if ( mdiMode() == KMdi::TabPageMode 
+    if ( mdiMode() == KMdi::TabPageMode
          || mdiMode() == KMdi::IDEAlMode )
     {
-        if ( KMdiChildView *view = 
+        if ( KMdiChildView *view =
             dynamic_cast<KMdiChildView *>( tabWidget()->currentPage() ) )
         {
             // Because setTabCaption() doesn't update the UI

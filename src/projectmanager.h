@@ -9,6 +9,7 @@
 
 #include <kxmlguiclient.h>
 #include <kservice.h>
+#include <kurl.h>
 
 class KAction;
 class KSelectAction;

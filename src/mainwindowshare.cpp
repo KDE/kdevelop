@@ -57,7 +57,7 @@
 #include "api.h"
 #include "kdevmakefrontend.h"
 #include "toplevel.h"
-#include "kdevplugincontroller.h"
+#include "plugincontroller.h"
 
 #include "kdevplugininfo.h"
 
@@ -181,7 +181,9 @@ void MainWindowShare::createActions()
   action->setToolTip( i18n("First accessed window") );
   action->setWhatsThis(i18n("<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key)."));
 
-  m_configureEditorAction = new KAction( i18n("Configure &Editor..."), 0, this, SLOT( slotConfigureEditors() ), m_pMainWnd->actionCollection(), "settings_configure_editors");
+  action = new KAction( i18n("Configure Plugins..."), SmallIconSet("configure"), 0, PluginController::getInstance(), SLOT(selectPlugins()), m_pMainWnd->actionCollection(), "settings_configure_plugins" );
+
+  m_configureEditorAction = new KAction( i18n("Configure &Editor..."), SmallIconSet("configure"), 0, this, SLOT( slotConfigureEditors() ), m_pMainWnd->actionCollection(), "settings_configure_editors");
   m_configureEditorAction->setToolTip( i18n("Configure editor settings") );
   m_configureEditorAction->setWhatsThis(i18n("<b>Configure editor</b><p>Opens editor configuration dialog."));
   m_configureEditorAction->setEnabled( false );

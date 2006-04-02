@@ -35,9 +35,10 @@
 #include "api.h"
 #include "toplevel.h"
 #include "projectmanager.h"
-#include "partselectwidget.h"
-
+//#include "partselectwidget.h"
+#include "domutil.h"
 #include "plugincontroller.h"
+#include "pluginselectdialog.h"
 
 #include "shellextension.h"
 
@@ -80,12 +81,12 @@ PluginController::PluginController()
 {
   connect( Core::getInstance(), SIGNAL(configWidget(KDialogBase*)),
            this, SLOT(slotConfigWidget(KDialogBase*)) );
-  
+
 /*  m_defaultProfile = QString::fromLatin1( "FullIDE" );
-  m_defaultProfilePath = kapp->dirs()->localkdedir() + "/" + 
-			 KStandardDirs::kde_default( "data" ) + 
+  m_defaultProfilePath = kapp->dirs()->localkdedir() + "/" +
+			 KStandardDirs::kde_default( "data" ) +
 			 QString::fromLatin1("/kdevelop/profiles/FullIDE");*/
-    
+
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     if( args->isSet("profile") ){
         m_profile = QString::fromLocal8Bit( args->getOption("profile") );
@@ -97,8 +98,8 @@ PluginController::PluginController()
 
 
 void PluginController::loadInitialPlugins()
-{    
-    loadCorePlugins();    
+{
+    loadCorePlugins();
     loadGlobalPlugins();
 }
 
@@ -139,7 +140,7 @@ void PluginController::loadPlugins( KTrader::OfferList offers, const QStringList
     emit loadingPlugin(i18n("Loading: %1").arg((*it)->genericName()));
 
     KDevPlugin *plugin = loadPlugin( *it );
-    if ( plugin ) 
+    if ( plugin )
     {
         m_parts.insert( name, plugin );
         integratePart( plugin );
@@ -164,7 +165,7 @@ void PluginController::unloadProjectPlugins( )
 	for (KTrader::OfferList::ConstIterator it = offers.begin(); it != offers.end(); ++it)
 	{
 		QString name = (*it)->desktopEntryName();
-	
+
 		if ( KDevPlugin * plugin = m_parts[ name ] )
 		{
 			removeAndForgetPart( name, plugin );
@@ -179,8 +180,9 @@ void PluginController::unloadPlugins( QStringList const & unloadParts )
 	while ( it != unloadParts.end() )
 	{
 		KDevPlugin* part = m_parts[ *it ];
-		if( part ) 
+		if( part )
 		{
+			kdDebug(9000) << " *** Removing: " << *it << endl;
 			removePart( part );
 			m_parts.remove( *it );
 			delete part;
@@ -198,7 +200,7 @@ KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
     if (!pl)
     {
         KMessageBox::error(
-            0, 
+            0,
             i18n("<b>Could not load plugin</b><br>"
                  "Plugin %1 could not be loaded<br>"
                  "Library loader error: %2").arg(service->name()).
@@ -212,7 +214,7 @@ KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
 QStringList PluginController::argumentsFromService( const KService::Ptr &service )
 {
 	QStringList args;
-	if ( !service ) 
+	if ( !service )
 		// service is a reference to a pointer, so a check whether it is 0 is still required
 		return args;
 	QVariant prop = service->property( "X-KDevelop-Args" );
@@ -221,15 +223,15 @@ QStringList PluginController::argumentsFromService( const KService::Ptr &service
 	return args;
 }
 
-void PluginController::slotConfigWidget( KDialogBase* dlg )
-{
-    //FIXME: adymo: i disabled this because plugin configuration should be project-wide
-    // in profile-enabled shell
-/*  QVBox *vbox = dlg->addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
-  PartSelectWidget *w = new PartSelectWidget(vbox, "part selection widget");
-  connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-  connect( w, SIGNAL(accepted()), this, SLOT(loadGlobalPlugins()) );*/
-}
+// void PluginController::slotConfigWidget( KDialogBase* dlg )
+// {
+//     //FIXME: adymo: i disabled this because plugin configuration should be project-wide
+//     // in profile-enabled shell
+// /*  QVBox *vbox = dlg->addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
+//   PartSelectWidget *w = new PartSelectWidget(vbox, "part selection widget");
+//   connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+//   connect( w, SIGNAL(accepted()), this, SLOT(loadGlobalPlugins()) );*/
+// }
 
 void PluginController::integratePart(KXMLGUIClient *part)
 {
@@ -289,19 +291,19 @@ KDevPlugin * PluginController::loadPlugin( const QString & serviceType, const QS
 
 	KTrader::OfferList::const_iterator it = offers.constBegin();
 	QString name = (*it)->desktopEntryName();
-	
+
 	KDevPlugin * plugin = 0;
 	if ( plugin = m_parts[ name ] )
 	{
 		return plugin;
 	}
-	
+
 	if ( plugin = loadPlugin( *it ) )
 	{
 		m_parts.insert( name, plugin );
 		integratePart( plugin );
 	}
-	
+
 	return plugin;
 }
 
@@ -333,12 +335,34 @@ QString PluginController::changeProfile(const QString &newProfile)
 
     QString oldProfile = m_profile;
     m_profile = newProfile;
-        
+
     unloadPlugins(unload);
     loadPlugins( coreLoad );
     loadPlugins( globalLoad );
-        
+
     return oldProfile;
+}
+
+void PluginController::selectPlugins( )
+{
+	kdDebug(9000) << k_funcinfo << endl;
+
+	PluginSelectDialog dlg;
+	if ( dlg.exec() == QDialog::Accepted )
+	{
+		QStringList unselectedPlugins = dlg.unselectedPluginNames();
+
+	kdDebug(9000) << unselectedPlugins << endl;
+
+		unloadPlugins( unselectedPlugins );
+		loadGlobalPlugins( unselectedPlugins );
+
+		if ( ProjectManager::getInstance()->projectLoaded() )
+		{
+			loadProjectPlugins( unselectedPlugins );
+			DomUtil::writeListEntry( *API::getInstance()->projectDom(), "/general/ignoreparts", "part", unselectedPlugins );
+		}
+	}
 }
 
 /*

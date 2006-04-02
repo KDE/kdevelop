@@ -100,10 +100,10 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
         constraint += " and ( " + constraint_add + " ) ";
 
 //BEGIN debug
-    kdDebug(9000) << "=============" << endl
+/*    kdDebug(9000) << "=============" << endl
         << "    =============" << endl
         << "        =============   Query for Profile:" << endl
-        << "        " << constraint << endl << endl << endl;
+        << "        " << constraint << endl << endl << endl;*/
 //END debug
 
     KTrader::OfferList list = KTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
