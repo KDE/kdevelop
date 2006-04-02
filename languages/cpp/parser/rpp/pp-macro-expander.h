@@ -126,7 +126,11 @@ public:
         else if (_PP_internal::comment_p (__first, __last))
           {
             __first = skip_comment_or_divop (__first, __last);
-            lines += skip_comment_or_divop.lines;
+            int n = skip_comment_or_divop.lines;
+            lines += n;
+
+            while (n-- > 0)
+              *__result = '\n';
           }
         else if (pp_isspace (*__first))
           {
