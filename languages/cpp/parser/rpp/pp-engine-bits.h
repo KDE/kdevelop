@@ -108,14 +108,14 @@ template <typename _InputIterator>
 bool pp::find_header_protection (_InputIterator __first, _InputIterator __last, std::string *__prot)
 {
   int was = lines;
-  
+
   while (__first != __last)
     {
       if (pp_isspace (*__first))
         {
           if (*__first == '\n')
             ++lines;
-            
+
           ++__first;
         }
       else if (_PP_internal::comment_p (__first, __last))
@@ -140,7 +140,7 @@ bool pp::find_header_protection (_InputIterator __first, _InputIterator __last, 
                 {
                   __first = skip_blanks (__first, __last);
                   lines += skip_blanks.lines;
-                  
+
                   __begin = __first;
                   __first = skip_identifier (__first, __last);
                   lines += skip_identifier.lines;
@@ -319,22 +319,21 @@ _InputIterator pp::handle_directive(char const *__directive, std::size_t __size,
 template <typename _OutputIterator>
 void pp::output_line(const std::string &__filename, int __line, _OutputIterator __result)
 {
-  const char __internal[] = "<internal>";
-  std::string __msg;  
+  std::string __msg;
 
   __msg += "# ";
 
   char __line_descr[16];
   int n = snprintf (__line_descr, 16, "%d", __line);
   __msg += __line_descr;
-  
+
   __msg += " \"";
 
   if (__filename.empty ())
     __msg += "<internal>";
   else
     __msg += __filename;
-  
+
   __msg += "\"\n";
   std::copy (__msg.begin (), __msg.end (), __result);
 }
@@ -388,13 +387,13 @@ _InputIterator pp::handle_include (_InputIterator __first, _InputIterator __last
 template <typename _InputIterator, typename _OutputIterator>
 void pp::operator () (_InputIterator __first, _InputIterator __last, _OutputIterator __result)
 {
-#if 1
+#ifndef PP_NO_SMART_HEADER_PROTECTION
   std::string __prot;
   __prot.reserve (255);
 
   if (find_header_protection (__first, __last, &__prot) && env.resolve (pp_symbol::get (__prot.c_str (), __prot.size ())) != 0)
     {
-      // std::cerr << "** WARNING found header protection:" << __prot << std::endl;
+      // std::cerr << "** DEBUG found header protection:" << __prot << std::endl;
       return;
     }
 #endif
