@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Valgrind is a tool that helps you find memory management problems in programs. http://developer.kde.org/~sewardj/
+Comment=Valgrind is a tool that helps you find memory management problems in programs. http://valgrind.org/
 Comment[ca]=Valgrind és una eina que us ajuda a trobar problemes en la gestió de la memòria en els programes. http://developer.kde.org/~sewardj/
 Comment[da]=Valgrind er et værktøj der hjælper dig med at finde hukommelseshåndteringsproblemer i programmer. http://developer.kde.org/~sewardj/
 Comment[de]=Valgrind ist ein Werkzeug zum Auffinden von Speicherverwaltungsproblemen in Anwendungen. http://developer.kde.org/~sewardj/
@@ -55,7 +55,7 @@ GenericName[sr]=Кориснички интерфејс за Valgrind
 GenericName[sr@Latn]=Korisnički interfejs za Valgrind
 GenericName[sv]=Valgrind-gränssnitt
 GenericName[ta]=Valgrind முன் பகுதி
-GenericName[tg]=Интерфейс дар Valgrind 
+GenericName[tg]=Интерфейс дар Valgrind
 GenericName[tr]=Valgrind Önucu
 GenericName[xx]=xxValgrind Frontendxx
 GenericName[zh_CN]=Valgrind 前端
