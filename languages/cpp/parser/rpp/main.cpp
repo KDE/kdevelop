@@ -38,13 +38,17 @@ int main (int /*argc*/, char *argv[])
   if (! no_stdinc)
     {
       preprocess.push_include_path ("/usr/include");
+#if defined (GCC_MACHINE) && defined (GCC_VERSION)
       preprocess.push_include_path ("/usr/lib/gcc/" GCC_MACHINE "/" GCC_VERSION "/include");
+#endif
     }
 
   if (! no_stdincpp)
     {
+#if defined (GCC_MACHINE) && defined (GCC_VERSION)
       preprocess.push_include_path ("/usr/include/c++/" GCC_VERSION);
       preprocess.push_include_path ("/usr/include/c++/" GCC_VERSION "/" GCC_MACHINE);
+#endif
     }
 
   preprocess.push_include_path (".");
