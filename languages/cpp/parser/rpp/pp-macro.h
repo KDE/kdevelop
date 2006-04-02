@@ -41,11 +41,14 @@ struct pp_macro
     };
   };
 
+  int lines;
+
   inline pp_macro():
 #if defined (PP_WITH_MACRO_POSITION)
     file (0),
 #endif
-    state (0)
+    state (0),
+    lines (0)
     {}
 };
 

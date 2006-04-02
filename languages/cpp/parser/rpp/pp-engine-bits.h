@@ -324,7 +324,7 @@ void pp::output_line(const std::string &__filename, int __line, _OutputIterator 
   __msg += "# ";
 
   char __line_descr[16];
-  int n = snprintf (__line_descr, 16, "%d", __line);
+  snprintf (__line_descr, 16, "%d", __line);
   __msg += __line_descr;
 
   __msg += " \"";
@@ -537,6 +537,7 @@ _InputIterator pp::handle_define (_InputIterator __first, _InputIterator __last)
 
           if (__begin != __last && *__begin == '\n')
             {
+              ++macro.lines;
               __first = skip_blanks (++__begin, __last);
               definition += ' ';
               continue;
