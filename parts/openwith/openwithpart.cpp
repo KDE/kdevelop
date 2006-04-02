@@ -15,12 +15,16 @@
 #include "kdevplugininfo.h"
 #include "urlutil.h"
 
+typedef KDevGenericFactory<OpenWithPart> OpenWithFactory;
+
 static const KDevPluginInfo data("kdevopenwith");
-K_EXPORT_COMPONENT_FACTORY(libkdevopenwith, KDevGenericFactory<OpenWithPart>(data))
+K_EXPORT_COMPONENT_FACTORY(libkdevopenwith, OpenWithFactory(data))
 
 OpenWithPart::OpenWithPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin(&data, parent, name ? name : "OpenWithPart")
 {
+  setInstance( OpenWithFactory::instance() );
+
   connect(core(), SIGNAL(contextMenu(QPopupMenu*,const Context *)),
 	  this, SLOT(fillContextMenu(QPopupMenu*,const Context *)));
 }

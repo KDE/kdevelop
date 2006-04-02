@@ -42,18 +42,20 @@ KDevPluginInfo data("kdevsecurity");
 K_EXPORT_COMPONENT_FACTORY( libkdevsecurity, SecurityFactory( data ) )
 
 SecurityPart::SecurityPart(QObject *parent, const char *name, const QStringList &/*args*/)
-    :KDevPlugin(&data, parent, name ? name : "SecurityPart"), 
+    :KDevPlugin(&data, parent, name ? name : "SecurityPart"),
     m_activeEditor(0), m_activeViewCursor(0)
-{    
+{
+    setInstance( SecurityFactory::instance() );
+
     m_widget = new SecurityWidget(this, "Security Widget");
     m_widget->setCaption(i18n("Security Widget"));
     m_widget->setIcon(info()->icon());
-    
+
     m_checker = new SecurityChecker(this);
-        
+
 //    connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
 //        this, SLOT(activePartChanged(KParts::Part*)));
-    
+
     mainWindow()->embedOutputView(m_widget, "Security Problems", i18n("Potential security problems") );
 }
 
@@ -71,11 +73,11 @@ void SecurityPart::activePartChanged(KParts::Part *part)
 {
     if (m_activeEditor)
     {
-        disconnect(m_activeEditor, 
-            SIGNAL(charactersInteractivelyInserted (int,int,const QString &)), 
+        disconnect(m_activeEditor,
+            SIGNAL(charactersInteractivelyInserted (int,int,const QString &)),
             m_checker, SLOT(refresh( int, int, const QString& )));
     }
-    
+
     kdDebug() << "SecurityPart::activePartChanged()" << endl;
 
     m_activeEditor = part;

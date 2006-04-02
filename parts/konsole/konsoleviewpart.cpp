@@ -24,12 +24,15 @@
 #include "konsoleviewwidget.h"
 
 
+typedef KDevGenericFactory<KonsoleViewPart> KonsoleViewFactory;
 static const KDevPluginInfo data("kdevkonsoleview");
-K_EXPORT_COMPONENT_FACTORY( libkdevkonsoleview, KDevGenericFactory<KonsoleViewPart>( data ) )
+K_EXPORT_COMPONENT_FACTORY(libkdevkonsoleview, KonsoleViewFactory(data))
 
 KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin(&data, parent, name ? name : "KonsoleViewPart")
 {
+    setInstance( KonsoleViewFactory::instance() );
+
     m_widget = new KonsoleViewWidget(this);
 
     QWhatsThis::add(m_widget, i18n("<b>Konsole</b><p>"
@@ -39,7 +42,7 @@ KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStrin
 
     m_widget->setIcon( SmallIcon("konsole") );
     m_widget->setCaption(i18n("Konsole"));
-    
+
     mainWindow()->embedOutputView(m_widget, i18n("Konsole"), i18n("Embedded console window"));
 }
 
