@@ -235,7 +235,7 @@ QString MakefileInterface::resolveVariable( const QString& variable, AutoTools::
         if ( ( *it )->nodeType() == AST::AssignmentAST )
         {
             AssignmentAST* assignment = static_cast<AssignmentAST*>( ( *it ) );
-            if ( variable.find( assignment->scopedID ) != -1 )
+            if ( variable.indexOf( assignment->scopedID ) != -1 )
             {
                 QString resolution = assignment->values.join( " " ).trimmed();
                 kDebug(9020) << k_funcinfo << "Resolving variable '" << variable << "' to '"
@@ -323,8 +323,8 @@ QStringList MakefileInterface::subdirsFor( AutoTools::ProjectAST* ast ) const
             if ( assignment->scopedID == "SUBDIRS"  )
             {
                 QStringList subdirList = assignment->values;
-                subdirList.remove(".");
-                subdirList.remove("..");
+                subdirList.removeAll(".");
+                subdirList.removeAll("..");
                 subdirList.removeAll("\\");
                 subdirList.removeAll("#");
 
