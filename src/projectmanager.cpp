@@ -153,11 +153,6 @@ void ProjectManager::slotProjectOptions()
     GeneralInfoWidget *g = new GeneralInfoWidget(*API::getInstance()->projectDom(), box, "general informations widget");
     connect (&dlg, SIGNAL(okClicked()), g, SLOT(accept()));
 
-//   QVBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
-//   PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
-//   connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-//   connect( w, SIGNAL(accepted()), this, SLOT(loadLocalParts()) );
-
   KConfig *config = kapp->config();
   config->setGroup("Project Settings Dialog");
   int height = config->readNumEntry( "Height", 600 );

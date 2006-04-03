@@ -79,9 +79,6 @@ PluginController *PluginController::getInstance()
 PluginController::PluginController()
   : KDevPluginController()
 {
-  connect( Core::getInstance(), SIGNAL(configWidget(KDialogBase*)),
-           this, SLOT(slotConfigWidget(KDialogBase*)) );
-
 /*  m_defaultProfile = QString::fromLatin1( "FullIDE" );
   m_defaultProfilePath = kapp->dirs()->localkdedir() + "/" +
 			 KStandardDirs::kde_default( "data" ) +
@@ -99,8 +96,16 @@ PluginController::PluginController()
 
 void PluginController::loadInitialPlugins()
 {
-    loadCorePlugins();
-    loadGlobalPlugins();
+	loadCorePlugins();
+
+	QStringList disableList;
+	Profile * profile = engine().findProfile( currentProfile() );
+	Profile::EntryList disableEntryList = profile->list( Profile::ExplicitDisable );
+	for ( Profile::EntryList::const_iterator it = disableEntryList.constBegin(); it != disableEntryList.constEnd(); ++it )
+	{
+		disableList << (*it).name;
+	}
+	loadGlobalPlugins( disableList );
 }
 
 
@@ -222,16 +227,6 @@ QStringList PluginController::argumentsFromService( const KService::Ptr &service
 		args = QStringList::split( " ", prop.toString() );
 	return args;
 }
-
-// void PluginController::slotConfigWidget( KDialogBase* dlg )
-// {
-//     //FIXME: adymo: i disabled this because plugin configuration should be project-wide
-//     // in profile-enabled shell
-// /*  QVBox *vbox = dlg->addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
-//   PartSelectWidget *w = new PartSelectWidget(vbox, "part selection widget");
-//   connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-//   connect( w, SIGNAL(accepted()), this, SLOT(loadGlobalPlugins()) );*/
-// }
 
 void PluginController::integratePart(KXMLGUIClient *part)
 {
