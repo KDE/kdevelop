@@ -48,19 +48,19 @@ class Document;
 /**Document state enum.*/
 enum DocumentState
 {
-    Clean,             /**<Document is not touched.*/
-    Modified,          /**<Document is modified inside a shell.*/
-    Dirty,             /**<Document is modified by an external process.*/
-    DirtyAndModified   /**<Document is modified inside a shell and at the same time by an external process.*/
+    Clean,             /**< Document is not touched.*/
+    Modified,          /**< Document is modified inside a shell.*/
+    Dirty,             /**< Document is modified by an external process.*/
+    DirtyAndModified   /**< Document is modified inside a shell and at the same time by an external process.*/
 };
 
 /**Document type enum.*/
 enum KDevDocumentType
 {
-    Invalid,           /**<Document is a text document.*/
-    TextDocument,      /**<Document is a text document.*/
-    DesignerDocument,  /**<Document is a designer document.*/
-    HTMLDocument       /**<Document is an html document.*/
+    Invalid,           /**< Document is a invalid document.*/
+    TextDocument,      /**< Document is a text document.*/
+    DesignerDocument,  /**< Document is a designer document.*/
+    HTMLDocument       /**< Document is an html document.*/
 };
 
 class KDevHTMLPart;
