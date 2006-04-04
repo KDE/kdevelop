@@ -147,7 +147,7 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
             }
             break;
         case AutoTools::Headers:
-            if ( target.location != None )
+            if ( target.location != AutoTools::None )
             {
                 if ( installedHeaders == 0 )
                     installedHeaders = new KDevProjectTargetItem( i18n( "Installed headers" ) );
