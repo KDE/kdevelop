@@ -134,6 +134,7 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
                 if ( dotDesktopTarget == 0 )
                     dotDesktopTarget = new KDevProjectTargetItem( i18n( "freedesktop.org Desktop Entry Files" ),
                                                                 folderItem  );
+                QFileInfo desktopInfo( target.folder, target.name );
                 dotDesktopTarget->add( new AutoMakeFileItem( target.name, dotDesktopTarget ) );
             }
             else if ( target.name.contains( ".rc" ) )
@@ -141,7 +142,8 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
                 if ( xmlGuiTarget == 0 )
                     xmlGuiTarget = new KDevProjectTargetItem( i18n( "KDE XMLGUI Definitions" ),
                                                             folderItem );
-                xmlGuiTarget->add( new AutoMakeFileItem( target.name, xmlGuiTarget ) );
+                QFileInfo rcInfo( target.folder, target.name );
+                xmlGuiTarget->add( new AutoMakeFileItem( rcInfo, xmlGuiTarget ) );
             }
             break;
         case AutoTools::Headers:
@@ -149,7 +151,7 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
             {
                 if ( installedHeaders == 0 )
                     installedHeaders = new KDevProjectTargetItem( i18n( "Installed headers" ) );
-		QFileInfo headerInfo( target.folder, target.name );
+                QFileInfo headerInfo( target.folder, target.name );
                 installedHeaders->add( new AutoMakeFileItem( headerInfo, installedHeaders ) );
             }
             break;
