@@ -806,7 +806,6 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 	{
 		urlPath = url.path();
 	}
-	
 	// get the path of the currently active document
 	QFileInfo fi( urlPath );
 	QString path = fi.filePath();
@@ -817,6 +816,11 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 	// extract the base path (full path without '.' and extension)
 	QString base = path.left( path.length() - ext.length() - 1 );
 	kdDebug( 9007 ) << "base: " << base << ", ext: " << ext << endl;
+	// just the filename without the extension
+	QString fileNameWoExt = fi.fileName();
+	if ( !ext.isEmpty() )
+		fileNameWoExt.replace( "." + ext, "" );
+	QString possibleExts;
 	// depending on the current extension assemble a list of
 	// candidate files to look for
 	QStringList candidates;
@@ -826,6 +830,8 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 		QString headerpath = path;
 		headerpath.replace( "_impl.h", ".h" );
 		candidates << headerpath;
+		fileNameWoExt.replace( "_impl", "" );
+		possibleExts = "h";
 	}
 	// if file is a header file search for implementation file
 	else if ( QStringList::split( ',', "h,H,hh,hxx,hpp,tlh" ).contains( ext ) )
@@ -841,6 +847,7 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 		candidates << ( base + ".M" );
 		candidates << ( base + ".inl" );
 		candidates << ( base + "_impl.h" );
+		possibleExts = "c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h";
 	}
 	// if file is an implementation file, search for header file
 	else if ( QStringList::split( ',', "c,cc,cpp,c++,cxx,C,m,mm,M,inl" ).contains( ext ) )
@@ -851,16 +858,41 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 		candidates << ( base + ".hxx" );
 		candidates << ( base + ".hpp" );
 		candidates << ( base + ".tlh" );
+		possibleExts = "h,H,hh,hxx,hpp,tlh";
 	}
-	// search for files from the assembled candidate lists, return the first
-	// candidate file that actually exists or QString::null if nothing is found.
-	QStringList::ConstIterator it;
-	for ( it = candidates.begin(); it != candidates.end(); ++it )
+        // search for files from the assembled candidate lists, return the first
+        // candidate file that actually exists or QString::null if nothing is found.
+        QStringList::ConstIterator it;
+        for ( it = candidates.begin(); it != candidates.end(); ++it )
+        {
+                kdDebug( 9007 ) << "Trying " << ( *it ) << endl;
+                if ( QFileInfo( *it ).exists() )
+                {
+			kdDebug() << "using: " << *it << endl;
+                        return * it;
+                }
+        }
+	kdDebug( 9007 ) << "Now searching in project files." << endl;
+	// Our last resort: search the project file list for matching files
+	QStringList::iterator fileIt;
+	QFileInfo candidateFileWoExt;
+	QString candidateFileWoExtString;
+	QStringList possibleExtsList = QStringList::split( ',', possibleExts );
+	for ( fileIt = m_projectFileList.begin(); fileIt != m_projectFileList.end(); ++fileIt )
 	{
-		kdDebug( 9007 ) << "Trying " << ( *it ) << endl;
-		if ( QFileInfo( *it ).exists() )
+		candidateFileWoExt.setFile(*fileIt);
+		kdDebug( 9007 ) << "candidate file: " << *fileIt << endl;
+		if( !candidateFileWoExt.extension().isEmpty() )
+			candidateFileWoExtString = candidateFileWoExt.fileName().replace( "." + candidateFileWoExt.extension(), "" );
+		if ( candidateFileWoExtString == fileNameWoExt ) 
 		{
-			return * it;
+			if ( possibleExtsList.contains( candidateFileWoExt.extension() ) || candidateFileWoExt.extension().isEmpty() )
+			{
+				kdDebug( 9007 ) << "checking if " << *fileIt << " exists" << endl;
+				if ( QFileInfo( *fileIt ).exists() )
+					kdDebug() << "using: " << *fileIt << endl;
+					return *fileIt;
+			}
 		}
 	}
 	return QString::null;
