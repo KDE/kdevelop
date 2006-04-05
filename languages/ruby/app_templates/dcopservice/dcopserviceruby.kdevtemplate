@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=DCOP Service
+Name[br]=Servij DCOP
 Name[ca]=Servei DCOP
 Name[de]=DCOP-Dienst
 Name[el]=Υπηρεσία DCOP
