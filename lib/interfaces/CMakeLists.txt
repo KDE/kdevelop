@@ -36,6 +36,7 @@ set(kdevinterfaces_LIB_SRCS
     kdevcodedelegate.cpp
     kdevcodeproxy.cpp
     kdevcodeaggregate.cpp
+    kdevreadwritepart.cpp
 )
 
 kde4_automoc(${kdevinterfaces_LIB_SRCS})
@@ -87,6 +88,7 @@ install_files(/include/kdevelop/interfaces FILES
     filetemplate.h
     kdevcodedelegate.h
     kdevcodeproxy.h
+    kdevreadwritepart.h
 )
 
 install_files(${SERVICETYPES_INSTALL_DIR} FILES 

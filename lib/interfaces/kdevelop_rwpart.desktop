@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=ServiceType
-X-KDE-ServiceType=KDevelop/ReadWrite
+X-KDE-ServiceType=KDevelop/ReadWritePart
 Name=KDevelop ReadWrite Part
 
 # versioning - prevent DLL hell
