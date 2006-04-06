@@ -32,23 +32,19 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY
 
 
 
-add_subdirectory(lib) 
-add_subdirectory(mimetypes) 
-add_subdirectory(pics) 
+add_subdirectory(lib)
+add_subdirectory(mimetypes)
+add_subdirectory(pics)
 add_subdirectory(src)
-add_subdirectory(languages) 
-add_subdirectory(plugins) 
-add_subdirectory(buildtools) 
-
-#add_subdirectory(doc) 
+add_subdirectory(languages)
+add_subdirectory(plugins)
+add_subdirectory(buildtools)
+add_subdirectory(xdg)
+#add_subdirectory(doc)
 
 
 
 ########### install files ###############
-
-install_files(${XDG_APPS_DIR} FILES kdevelop.desktop kdevassistant.desktop)
-install_files(${XDG_DIRECTORY_DIR} FILES kde-development-kdevelop.directory)
-install_files(${MIME_INSTALL_DIR}/application FILES x-kdevelop.desktop)
 
 install_files(/bin FILES kdevprj2kdevelop)
 
