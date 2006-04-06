@@ -81,13 +81,13 @@ QDesignerFormEditorInterface *GuiBuilderPart::designer() const
 
 bool GuiBuilderPart::openFile()
 {
-  QFormBuilder builder;
-  QFile uiFile( m_file );
-  if ( !uiFile.open( QFile::ReadOnly ) )
-    return false;
-
-  QWidget* formWidget = builder.load( &uiFile, 0 );
-  setWidget( formWidget );
+  QFile uiFile(m_file);
+  QDesignerFormWindowManagerInterface* manager = designer()->formWindowManager();
+  QDesignerFormWindowInterface* widget = manager->createFormWindow();
+  widget->setFileName(m_file);
+  widget->setContents(&uiFile);
+  manager->setActiveFormWindow(widget);
+  setWidget( widget );
   return true;
 }
 
