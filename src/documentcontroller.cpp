@@ -57,6 +57,7 @@
 #include "documentationpart.h"
 #include "mimewarningdialog.h"
 #include "kdevlanguagesupport.h"
+#include "kdevreadwritepart.h"
 
 #include "documentcontroller.h"
 
@@ -739,6 +740,10 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
                                                     0, 0, 0, className.toLatin1() ) );
         if ( part )
         {
+            KDevReadWritePart* kdevPart = qobject_cast<KDevReadWritePart*>( part );
+            if ( kdevPart )
+                kdevPart->setApiInstance( API::getInstance() );
+
             part->openURL( url );
             addHistoryEntry();
 
