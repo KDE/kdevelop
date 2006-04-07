@@ -60,7 +60,8 @@ void KDevShellWidget::activate( )
 	TerminalInterface* ti = static_cast<TerminalInterface*>( m_konsolePart->qt_cast( "TerminalInterface" ) );
 	if( !ti ) return;
 
-	ti->startProgram( m_shellName, m_shellArguments );
+	if ( !m_shellName.isEmpty() )
+		ti->startProgram( m_shellName, m_shellArguments );
 
 	m_isRunning = true;
 
