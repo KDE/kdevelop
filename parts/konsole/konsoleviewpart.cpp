@@ -20,6 +20,7 @@
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
 #include "kdevplugininfo.h"
+#include "kdevshellwidget.h"
 
 #include "konsoleviewwidget.h"
 
@@ -33,7 +34,7 @@ KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStrin
 {
     setInstance( KonsoleViewFactory::instance() );
 
-    m_widget = new KonsoleViewWidget(this);
+    m_widget = new KDevShellWidget( 0, "konsole widget" );
 
     QWhatsThis::add(m_widget, i18n("<b>Konsole</b><p>"
         "This window contains an embedded konsole window. It will try to follow you when "
@@ -42,6 +43,9 @@ KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStrin
 
     m_widget->setIcon( SmallIcon("konsole") );
     m_widget->setCaption(i18n("Konsole"));
+
+    m_widget->activate();
+    m_widget->setAutoReactivateOnClose( true );
 
     mainWindow()->embedOutputView(m_widget, i18n("Konsole"), i18n("Embedded console window"));
 }

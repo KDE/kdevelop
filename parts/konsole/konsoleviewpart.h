@@ -17,8 +17,7 @@
 #include "kdevplugin.h"
 
 
-class KonsoleViewWidget;
-
+class KDevShellWidget;
 
 class KonsoleViewPart : public KDevPlugin
 {
@@ -28,7 +27,7 @@ public:
     virtual ~KonsoleViewPart();
 
 private:
-    QGuardedPtr<KonsoleViewWidget> m_widget;
+    QGuardedPtr<KDevShellWidget> m_widget;
 };
 
 #endif

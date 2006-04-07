@@ -4,9 +4,10 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_include
 
 kde_module_LTLIBRARIES = libkdevkonsoleview.la
 libkdevkonsoleview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevkonsoleview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
+libkdevkonsoleview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
+	$(top_builddir)/lib/util/libkdevutil.la
 
-libkdevkonsoleview_la_SOURCES = konsoleviewpart.cpp konsoleviewwidget.cpp
+libkdevkonsoleview_la_SOURCES = konsoleviewpart.cpp
 
 METASOURCES = AUTO
 
