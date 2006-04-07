@@ -79,7 +79,6 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
     config->setGroup("TerminalEmulator");
     gsw->terminalButtonGroup->setButton( config->readNumEntry( "UseKDESetting", 0 ) );
     gsw->terminalEdit->setText( config->readEntry( "TerminalApplication", QString::fromLatin1("konsole") ) );
-    gsw->syncTerminalEmulator->setChecked(config->readBoolEntry("SyncTerminalEmulator"));
 
 }
 
@@ -113,7 +112,6 @@ void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase *dlg)
     config->setGroup("TerminalEmulator");
     config->writeEntry("UseKDESetting", gsw->useKDETerminal->isChecked() );
     config->writeEntry("TerminalApplication", gsw->terminalEdit->text().stripWhiteSpace() );
-    config->writeEntry("SyncTerminalEmulator",gsw->syncTerminalEmulator->isChecked());
 }
 
 QString KDevIDEExtension::xmlFile()

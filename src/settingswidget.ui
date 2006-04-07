@@ -55,7 +55,7 @@
                 <cstring>lineWrappingCheckBox</cstring>
             </property>
             <property name="text">
-                <string>Line &amp;wrapping</string>
+                <string>Line wrappin&amp;g</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>By default, KDevelop will wrap long lines around in the Messages Output View window</string>
@@ -335,31 +335,6 @@
                 </property>
                 <property name="whatsThis" stdset="0">
                     <string>If checked, KDevelop will use the default terminal as set in KControl in KDE components, Component Chooser.</string>
-                </property>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>syncTerminalEmulator</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>0</x>
-                        <y>50</y>
-                        <width>464</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>S&amp;ync terminal emulator with active document</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+Y</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Check this if you want the konsole to change directory to the one containing the active document</string>
-                </property>
-                <property name="whatsThis" stdset="0">
-                    <string>If this is checked, the built in Konsole will &lt;code&gt;cd&lt;/code&gt; to the directory of the active document when started and whenever the active document changes, if the document is a local file.</string>
                 </property>
             </widget>
             <widget class="QLineEdit">
