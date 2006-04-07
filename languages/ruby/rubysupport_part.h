@@ -6,11 +6,14 @@
 #ifndef __KDEVPART_RUBYSUPPORT_H__
 #define __KDEVPART_RUBYSUPPORT_H__
 
+#include <qguardedptr.h>
+
 #include "kdevlanguagesupport.h"
 
 class KDialogBase;
 class QPopupMenu;
 class Context;
+class KDevShellWidget;
 
 class RubySupportPart : public KDevLanguageSupport
 {
@@ -22,7 +25,7 @@ public:
   virtual ~RubySupportPart();
 
   virtual KDevDesignerIntegration *designer(KInterfaceDesigner::DesignerType type);
-  
+
 protected:
     virtual Features features();
     virtual KMimeType::List mimeTypes();
@@ -52,11 +55,11 @@ private:
     void parse(const QString &fileName);
 
     QMap<KInterfaceDesigner::DesignerType, KDevDesignerIntegration*> m_designers;
-    
+
     QString m_contextFileName;
-    QCString m_savedShell;
     QCString m_shell;
 
+    QGuardedPtr<KDevShellWidget> m_shellWidget;
 };
 
 

@@ -34,9 +34,6 @@ RubyConfigWidget::RubyConfigWidget(QDomDocument &projectDom, QWidget* parent, co
 void RubyConfigWidget::accept() {
     DomUtil::writeEntry(dom, "/kdevrubysupport/run/interpreter", interpreterEdit->text());
     DomUtil::writeEntry(dom, "/kdevrubysupport/run/shell", shellEdit->text());
-    if (!shellEdit->text().isEmpty()) {
-        putenv(qstrdup(QCString().sprintf("SHELL=%s", shellEdit->text().latin1()).data()));
-    }
     DomUtil::writeEntry(dom, "/kdevrubysupport/run/mainprogram", mainProgramEdit->text());
     DomUtil::writeEntry(dom, "/kdevrubysupport/run/programargs", programArgsEdit->text());
     DomUtil::writeIntEntry(dom, "/kdevrubysupport/run/runmainprogram", runRadioBox->selectedId());

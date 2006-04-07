@@ -12,11 +12,13 @@
 #include "kdevproject.h"
 #include "kdevappfrontend.h"
 #include "kdevplugininfo.h"
+#include "kdevshellwidget.h"
 
 #include <qwhatsthis.h>
 #include <qtimer.h>
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
+#include <qregexp.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -27,7 +29,7 @@
 #include <kparts/part.h>
 #include <kdialogbase.h>
 #include <kapplication.h>
-#include <qregexp.h>
+#include <klibloader.h>
 
 typedef KDevGenericFactory<RubySupportPart> RubySupportFactory;
 static const KDevPluginInfo data("kdevrubysupport");
@@ -49,6 +51,12 @@ RubySupportPart::RubySupportPart(QObject *parent, const char *name, const QStrin
 
   kdDebug() << "Creating RubySupportPart" << endl;
 
+  m_shellWidget = new KDevShellWidget( 0, "irb console");
+  m_shellWidget->setIcon( SmallIcon("ruby_config.png", KIcon::SizeMedium, KIcon::DefaultState, RubySupportPart::instance()));
+  m_shellWidget->setCaption(i18n("Ruby Shell"));
+  mainWindow()->embedOutputView( m_shellWidget, i18n("Ruby Shell"), i18n("Ruby Shell"));
+  mainWindow()->raiseView( m_shellWidget );
+
   connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
   connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
   connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
@@ -60,11 +68,15 @@ RubySupportPart::RubySupportPart(QObject *parent, const char *name, const QStrin
 }
 
 
-RubySupportPart::~RubySupportPart() {
+RubySupportPart::~RubySupportPart()
+{
+    if ( m_shellWidget )
+        mainWindow()->removeView( m_shellWidget );
+    delete m_shellWidget;
 }
 
 
-void RubySupportPart::projectConfigWidget(KDialogBase *dlg) 
+void RubySupportPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox = dlg->addVBoxPage(i18n("Ruby"), i18n("Ruby"), BarIcon("ruby_config.png", KIcon::SizeMedium, KIcon::DefaultState, RubySupportPart::instance()));
     RubyConfigWidget *w = new RubyConfigWidget(*projectDom(), (QWidget *)vbox, "ruby config widget");
@@ -75,11 +87,11 @@ void RubySupportPart::projectOpened()
 {
   kdDebug() << "projectOpened()" << endl;
 
-  // Save the $SHELL environment variable in order to restore it
-  // on project close, and switch to using irb in the terminal
-  m_savedShell.sprintf("SHELL=%s", getenv("SHELL"));
-  m_shell.sprintf("SHELL=%s", shell().latin1());
-  putenv(qstrdup(m_shell.data()));
+  QStrList l;
+  l.append( "irb" ) ;
+  m_shellWidget->setShell( shell().latin1(), l );
+  m_shellWidget->activate();
+  m_shellWidget->setAutoReactivateOnClose( true );
 
   connect( project(), SIGNAL(addedFilesToProject(const QStringList &)),
   	this, SLOT(addedFilesToProject(const QStringList &)) );
@@ -98,7 +110,7 @@ void RubySupportPart::projectOpened()
         appFrontend->startAppCommand(project()->projectDirectory(), cmd, false);
     }
   }
-  
+
   // We want to parse only after all components have been
   // properly initialized
   QTimer::singleShot(0, this, SLOT(initialParse()));
@@ -201,7 +213,7 @@ void RubySupportPart::parse(const QString &fileName)
   QRegExp begin_commentre("^*=begin");
   QRegExp end_commentre("^*=end");
   QRegExp variablere("(@@?[A-Za-z0-9_]+)\\s*=\\s*((?:([A-Za-z0-9_:.]+)\\.new)|[\\[\"'%:/\\?\\{]|%r|<<|true|false|^\\?|0[0-7]+|[-+]?0b[01]+|[-+]?0x[1-9a-fA-F]+|[-+]?[0-9_\\.e]+|nil)?");
- 
+
   FileDom m_file = codeModel()->create<FileModel>();
   m_file->setName(fileName);
 
@@ -232,7 +244,7 @@ void RubySupportPart::parse(const QString &fileName)
         kdDebug() << "Add parent " << parent << endl;
         lastClass->addBaseClass( parent );
       }
-	  
+
 	  lastAccess = CodeModelItem::Public;
     } else if (methodre.search(line) != -1) {
       FunctionDom methodDecl;
@@ -260,9 +272,9 @@ void RubySupportPart::parse(const QString &fileName)
 	    // A ruby class/singleton method of the form <classname>.<methodname>
 	  	methodDecl->setStatic( true );
 	  }
-      
+
 	  lastMethod = method;
-	  
+
       if (lastClass != 0) {
 		QStringList scope( lastClass->name() );
 		method->setScope( scope );
@@ -287,13 +299,13 @@ void RubySupportPart::parse(const QString &fileName)
 	  } else if (accessre.cap(1) == "private") {
 	    currentAccess = CodeModelItem::Private;
 	  }
-	  
+
 	  if (accessre.cap(2) == "") {
 	  	lastAccess = currentAccess;
 	  } else {
 		QString symbolList( accessre.cap(2) );
         int pos = 0;
-		
+
         while ( pos >= 0 ) {
           pos = symbolre.search( symbolList, pos );
 		  if (pos == -1) {
@@ -314,11 +326,11 @@ void RubySupportPart::parse(const QString &fileName)
             pos += symbolre.matchedLength();
           }
         }
-	  }	  
+	  }
     } else if (slot_signalre.search(line) != -1 && lastClass != 0) {
       QString memberList( slot_signalre.cap(2) );
       int pos = 0;
-		
+
       while ( pos >= 0 ) {
         pos = memberre.search( memberList, pos );
 		if (pos == -1) {
@@ -344,7 +356,7 @@ void RubySupportPart::parse(const QString &fileName)
           method->setName(memberre.cap(2));
           method->setFileName( fileName );
           method->setStartPosition( lineNo, 0 );
-			 
+
 		  if (slot_signalre.cap(1) == "slots" || slot_signalre.cap(1) == "k_dcop") {
 		    method->setSlot( true );
 		  } else {
@@ -360,7 +372,7 @@ void RubySupportPart::parse(const QString &fileName)
 	  QString attr( attr_accessorre.cap(1) );
 	  QString symbolList( attr_accessorre.cap(2) );
       int pos = 0;
-		
+
       while ( pos >= 0 ) {
         pos = symbolre.search( symbolList, pos );
 		if (pos == -1) {
@@ -376,7 +388,7 @@ void RubySupportPart::parse(const QString &fileName)
 		} else {
  		    QStringList scope( lastClass->name() );
 			if (	!lastClass->hasFunction(symbolre.cap(1))
-					&& (attr == "attr_accessor" || attr == "attr_reader") ) 
+					&& (attr == "attr_accessor" || attr == "attr_reader") )
 			{
               FunctionDefinitionDom method = codeModel()->create<FunctionDefinitionModel>();
               method->setName(symbolre.cap(1));
@@ -387,9 +399,9 @@ void RubySupportPart::parse(const QString &fileName)
               lastClass->addFunction( model_cast<FunctionDom>(method) );
               lastClass->addFunctionDefinition( method );
 			}
-			
+
             if (	!lastClass->hasFunction(symbolre.cap(1) + "=")
-					&& (attr == "attr_accessor" || attr == "attr_writer") ) 
+					&& (attr == "attr_accessor" || attr == "attr_writer") )
 			{
               FunctionDefinitionDom method = codeModel()->create<FunctionDefinitionModel>();
               method->setName(symbolre.cap(1) + "=");
@@ -400,10 +412,10 @@ void RubySupportPart::parse(const QString &fileName)
               lastClass->addFunction( model_cast<FunctionDom>(method) );
               lastClass->addFunctionDefinition( method );
 			}
-			
+
             pos  += symbolre.matchedLength();
         }
-	  }	  
+	  }
    } else if (variablere.search(line) != -1 && lastClass != 0) {
      VariableDom attr;
      if ( lastClass->hasVariable( variablere.cap(1) ) ) {
@@ -419,14 +431,14 @@ void RubySupportPart::parse(const QString &fileName)
 	   }
        lastClass->addVariable( attr );
 	 }
-	 
+
 	 // Give priority to any variable initialized in the constructor
 	 // Otherwise, take the first one found in the source file
 	 if (lastMethod != 0 && lastMethod->name() == "initialize") {
        attr->setFileName( fileName );
        attr->setStartPosition( lineNo, 0 );
 	 }
-	 
+
 	 if (QRegExp("^(/|%r)").search(variablere.cap(2)) != -1) {
        attr->setType( "Regexp" );
 	 } else if (QRegExp("^[\"'%<]").search(variablere.cap(2)) != -1) {
@@ -442,7 +454,7 @@ void RubySupportPart::parse(const QString &fileName)
 	 } else if (variablere.cap(2) == "true" || variablere.cap(2) == "false") {
        attr->setType( "Boolean" );
 	 } else if (  QRegExp("^[-+]?[0-9_]+").exactMatch(variablere.cap(2))
-	              || QRegExp("^[-+]?(0x|0|0b|\\?)").search(variablere.cap(2)) != -1 ) 
+	              || QRegExp("^[-+]?(0x|0|0b|\\?)").search(variablere.cap(2)) != -1 )
 	 {
        attr->setType( "Integer" );
 	 } else if (QRegExp("[0-9._]+(e[-+0-9]+)?").exactMatch(variablere.cap(2))) {
@@ -509,7 +521,7 @@ QString RubySupportPart::shell() {
 QString RubySupportPart::mainProgram() {
 	QString prog;
 	int runMainProgram = DomUtil::readIntEntry(*projectDom(), "/kdevrubysupport/run/runmainprogram");
-	
+
 	if (runMainProgram == 0) {
     	prog = project()->projectDirectory() + "/" + DomUtil::readEntry(*projectDom(), "/kdevrubysupport/run/mainprogram");
 	} else {
@@ -518,7 +530,7 @@ QString RubySupportPart::mainProgram() {
 			prog = ro_part->url().path();
 		}
 	}
-	
+
     return prog;
 }
 
@@ -530,7 +542,7 @@ QString RubySupportPart::programArgs() {
 QString RubySupportPart::characterCoding() {
     int coding = DomUtil::readIntEntry(*projectDom(), "/kdevrubysupport/run/charactercoding");
 	QString code("A");
-	
+
 	switch (coding) {
 	case 0:
 		code = "A";
@@ -589,10 +601,6 @@ KDevDesignerIntegration *RubySupportPart::designer(KInterfaceDesigner::DesignerT
 
 void RubySupportPart::projectClosed( )
 {
-	if (!m_savedShell.isNull()) {
-        putenv(qstrdup(m_savedShell.data()));
-    }
-
     for (QMap<KInterfaceDesigner::DesignerType, KDevDesignerIntegration*>::const_iterator it =  m_designers.begin();
         it != m_designers.end(); ++it)
     {
