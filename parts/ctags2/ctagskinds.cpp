@@ -61,6 +61,7 @@ static CTagsKindMapping kindMappingC[] = {
     { 'e', I18N_NOOP("enumerator")          },
     { 'f', I18N_NOOP("function")            },
     { 'g', I18N_NOOP("enumeration")         },
+    { 'l', I18N_NOOP("local variable")      },
     { 'm', I18N_NOOP("member")              },
     { 'n', I18N_NOOP("namespace")           },
     { 'p', I18N_NOOP("prototype")           },

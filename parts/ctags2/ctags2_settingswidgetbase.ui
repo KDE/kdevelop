@@ -61,7 +61,7 @@
                                     <cstring>showDefinitionBox</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Show "Go To Definition"</string>
+                                    <string>Show "Go To &amp;Definition"</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>If checked, an option to go directly to the matching tag definition will be shown. If more than one match, all matches will be shown in the main ctags result view.</string>
@@ -98,6 +98,9 @@
                                 <property name="text">
                                     <string>When more than one hit, go directl&amp;y to the first</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+Y</string>
+                                </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>If more than one hit was produced from an attempt to find an exact match, go to the first match in the list. Note: the &lt;i&gt;Go To Next Match&lt;/i&gt; shortcut can be used to step between the matches.</string>
                                 </property>
@@ -108,6 +111,9 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Use custom tagfile generation arguments</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>The default arguments should be fine, but if needed a custom generation arguments string can be used.</string>
@@ -293,6 +299,12 @@
         <signal>clicked()</signal>
         <receiver>CTags2SettingsWidgetBase</receiver>
         <slot>createNewTagSlot()</slot>
+    </connection>
+    <connection>
+        <sender>checkBox5</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>tagfileCustomEdit</receiver>
+        <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
 <slots>
