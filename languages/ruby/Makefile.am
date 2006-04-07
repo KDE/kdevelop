@@ -10,7 +10,7 @@ SUBDIRS = app_templates file_templates doc debugger
 kde_module_LTLIBRARIES = libkdevrubysupport.la
 libkdevrubysupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevrubysupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
-	$(top_builddir)/languages/lib/designer_integration/libdesignerintegration.la
+	$(top_builddir)/languages/lib/designer_integration/libdesignerintegration.la $(top_builddir)/lib/util/libkdevutil.la
 
 libkdevrubysupport_la_SOURCES = rubysupport_part.cpp rubyconfigwidgetbase.ui \
 		rubyconfigwidget.cpp qtdesignerrubyintegration.cpp rubyimplementationwidget.cpp

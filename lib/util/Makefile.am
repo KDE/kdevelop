@@ -3,7 +3,8 @@ INCLUDES = -I$(top_srcdir)/lib/compat  -I$(top_srcdir)/lib/interfaces  -I$(top_s
 noinst_LTLIBRARIES = libkdevutil.la
 
 libkdevutil_la_SOURCES = domutil.cpp execcommand.cpp filetemplate.cpp \
-		urlutil.cpp configwidgetproxy.cpp rurl.cpp kscriptactionmanager.cpp settings.cpp
+			urlutil.cpp configwidgetproxy.cpp rurl.cpp kscriptactionmanager.cpp settings.cpp \
+	kdevshellwidget.cpp
 
 METASOURCES = AUTO
 
@@ -16,4 +17,4 @@ DOXYGEN_PROJECTNAME = KDevelop Utility Library
 DOXYGEN_DOCDIRPREFIX = kdev
 include ../../Doxyfile.am
 
-noinst_HEADERS = settings.h
+noinst_HEADERS = settings.h kdevshellwidget.h
