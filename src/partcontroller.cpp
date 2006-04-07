@@ -909,6 +909,7 @@ bool PartController::closePart(KParts::Part *part)
         }
         else if ( !ro_part->closeURL() )
             return false;
+	TopLevel::getInstance()->removeView( w );
     }
     else if ( !ro_part->closeURL() )
         return false;
