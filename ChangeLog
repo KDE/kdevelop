@@ -1,3 +1,7 @@
+2006-04-07 Jens Dagerbo <jens.dagerbo@swipnet.se>
+* Added KDevShellWidget - a thin wrapper around konsolepart, aimed at
+  executing shell type applications.
+
 2006-03-25 Jens Dagerbo <jens.dagerbo@swipnet.se>
 * Added support for multiple tags files for Ctags2 plugin, enabling
   it to optionally cover external libraries in addition to the active
