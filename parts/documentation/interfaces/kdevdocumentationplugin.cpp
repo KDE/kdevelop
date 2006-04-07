@@ -354,7 +354,7 @@ void DocumentationPlugin::cacheIndex(DocumentationCatalogItem *item)
 
 bool DocumentationPlugin::loadCachedIndex(IndexBox *index, DocumentationCatalogItem *item)
 {
-    QString cacheName = locateLocal("data", QString("kdevdocumentation/index/cache_") + item->text(0));
+    QString cacheName = locateLocal("data", QString("kdevdocumentation/index/cache_") + item->cacheVersion() + item->text(0));
     QFile cacheFile(cacheName);
     if (!cacheFile.open(IO_ReadOnly))
         return false;

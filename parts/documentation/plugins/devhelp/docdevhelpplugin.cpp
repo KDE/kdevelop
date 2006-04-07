@@ -51,7 +51,19 @@ public:
     {
     }
     QString devHelpFile() const { return m_devHelpFile; }
+
+    virtual QString cacheVersion() const {
+        unsigned int checksum=0;
+        for(int a=0;a<m_devHelpFile.length(); a++) {
+            checksum += (a+1) * (int)m_devHelpFile[a];
+        }
+        QString str;
+        QTextOStream( &str ) << checksum;
+        return str;
+    }
     
+protected:
+
 private:
     QString m_devHelpFile;
 };

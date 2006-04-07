@@ -78,6 +78,8 @@ public:
     virtual bool isProjectDocumentationItem() const { return m_isProjectDocumentationItem; }
     virtual void setProjectDocumentationItem(bool b) { m_isProjectDocumentationItem = b; }
 
+    virtual QString cacheVersion() const { return ""; } /// should return a short string that identifies the version of the catalog
+    
 protected:
     virtual void activate();
 
