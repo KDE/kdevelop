@@ -476,9 +476,6 @@ QString CppSupportPart::findHeader( const QStringList &list, const QString &head
 	for ( it = list.begin(); it != list.end(); ++it )
 	{
 		QString s = *it;
-		int pos = s.findRev( '.' );
-		if ( pos != -1 )
-			s = s.left( pos ) + ".h";
 		if (s == header)
 		    return s;
 		if ( ( s.right( header.length() ) == header ) && ( s[s.length() - header.length() - 1] == '/' ) )
