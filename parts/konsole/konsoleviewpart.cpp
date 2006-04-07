@@ -22,8 +22,6 @@
 #include "kdevplugininfo.h"
 #include "kdevshellwidget.h"
 
-#include "konsoleviewwidget.h"
-
 
 typedef KDevGenericFactory<KonsoleViewPart> KonsoleViewFactory;
 static const KDevPluginInfo data("kdevkonsoleview");
