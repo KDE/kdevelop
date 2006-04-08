@@ -88,7 +88,7 @@ void RubySupportPart::projectOpened()
   kdDebug() << "projectOpened()" << endl;
 
   QStrList l;
-  l.append( "irb" ) ;
+  l.append( shell().latin1() ) ;
   m_shellWidget->setShell( shell().latin1(), l );
   m_shellWidget->activate();
   m_shellWidget->setAutoReactivateOnClose( true );
