@@ -148,7 +148,7 @@ void ProjectviewPart::restorePartialProjectSession(const QDomElement * el)
             if (!fileEl.isNull())
             {
                 bool ok;
-                int line;
+                int line = -1;
                 QString attr = fileEl.attribute("line");
                 if (! attr.isNull()) 
                 {
@@ -156,7 +156,7 @@ void ProjectviewPart::restorePartialProjectSession(const QDomElement * el)
                     if (!ok)
                         line = -1;
                 }
-                int col;
+                int col = -1;
                 attr = fileEl.attribute("col");
                 if (! attr.isNull())
                 {
