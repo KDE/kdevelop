@@ -1531,8 +1531,8 @@ void CppNewClassDialog::ClassGenerator::common_text()
 
 				/*    if ((*adv_h).isEmpty())
 				            *adv_h += "\n\n";*/
-
-				*adv_h += QString( "    using " ) + curr->parent() ->parent() ->text( 0 ) + "::" + curr->item() ->name() + ";\n";
+				if ( adv_h )
+					*adv_h += QString( "    using " ) + curr->parent() ->parent() ->text( 0 ) + "::" + curr->item() ->name() + ";\n";
 			}
 		}
 		else if ( ( curr_m = dynamic_cast<PListViewItem<FunctionDom>* >( ita.current() ) ) )

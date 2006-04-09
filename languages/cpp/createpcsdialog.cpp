@@ -256,8 +256,10 @@ void CreatePCSDialog::slotSelected( const QString & )
 		connect( m_settings, SIGNAL( enabled( int ) ), this, SLOT( setNextPageEnabled( int ) ) );
 
 		if ( m_settings )
+		{
 			setHelpEnabled( m_settings, false );
-		m_settings->show();
+			m_settings->show();
+		}
 	}
 	else if ( currentPage() == finalPage )
 	{

@@ -451,7 +451,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
 
   QString fullPath = selectedURL.path();
   // add appropriate extension, if not already there
-  if (!ext.isNull() & ext!="" & !fullPath.endsWith("." + ext)) fullPath+="." + ext;
+  if ( !ext.isEmpty() && !fullPath.endsWith("." + ext)) fullPath+="." + ext;
 
   QString filename = URLUtil::filename(fullPath);
   kdDebug(9034) << "full path = " << fullPath << endl;

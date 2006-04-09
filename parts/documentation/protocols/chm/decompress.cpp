@@ -181,7 +181,7 @@ int LZXinit(int window) {
 	LZX(window_size) = wndsize;
 
 	/* initialise static tables */
-	for (i=0, j=0; i <= 50; i += 2)
+	for (i=0, j=0; i <= 49; i += 2)
 	{
 		extra_bits[i] = extra_bits[i+1] = j; /* 0,0,0,0,1,1,2,2,3,3... */
 		if ((i != 0) && (j < 17)) j++; /* 0,0,1,2,3,4...15,16,17,17,17,17... */

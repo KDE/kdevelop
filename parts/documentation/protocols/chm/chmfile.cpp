@@ -44,7 +44,7 @@ uint Chm::getName(QFile& f, QString& name) const
     name = QString::fromUtf8(buf, len);
     if (name.startsWith("/"))
         name = name.lower();
-    delete buf;
+    delete [] buf;
     return len + 1;
 }
 

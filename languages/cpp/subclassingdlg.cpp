@@ -297,7 +297,7 @@ bool SubclassingDlg::loadBuffer(QString &buffer, const QString& filename)
 	dataFile.readBlock(temp,dataFile.size());
 	temp[dataFile.size()]='\0';
 	buffer = temp;
-	delete temp;
+	delete [] temp;
 	dataFile.close();
 	return true;
 }
