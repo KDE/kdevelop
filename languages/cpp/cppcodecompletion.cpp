@@ -1461,7 +1461,9 @@ SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, i
 		}
 	}
 
-	computeContext( ctx, ast->functionBody(), line, col );
+	
+	if ( ast )
+		computeContext( ctx, ast->functionBody(), line, col );
 	return ctx;
 }
 

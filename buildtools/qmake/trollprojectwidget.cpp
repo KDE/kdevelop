@@ -1592,6 +1592,7 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QStri
       break;
     case GroupItem::Forms:
       titem->owner->forms.append(filename);
+      break;
     case GroupItem::IDLs:
       titem->owner->idls.append(filename);
       break;
@@ -1671,6 +1672,7 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype, 
       break;
     case GroupItem::Images:
       m_shownSubproject->images.append(filename);
+      break;
     case GroupItem::Distfiles:
       m_shownSubproject->distfiles.append(filename);
       break;
