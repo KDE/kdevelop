@@ -79,7 +79,7 @@ bool ProjectSession::restoreFromFile( const QString & sessionFileName, const Q3V
     if (!ok) {
       KMessageBox::sorry(0L,
                          i18n("The file %1 does not contain valid XML.\n"
-                         "The loading of the session failed.").arg(sessionFileName));
+                         "The loading of the session failed.", sessionFileName));
       initXMLTree(); // because it was now broken after failed setContent()
       return false;
     }
@@ -91,8 +91,8 @@ bool ProjectSession::restoreFromFile( const QString & sessionFileName, const Q3V
   // Check for proper document type.
   if (domdoc.doctype().name() != "KDevPrjSession") {
     KMessageBox::sorry(0L,
-    i18n("The file %1 does not contain a valid KDevelop project session ('KDevPrjSession').\n").arg(sessionFileName)
-    + i18n("The document type seems to be: '%1'.").arg(domdoc.doctype().name()));
+    i18n("The file %1 does not contain a valid KDevelop project session ('KDevPrjSession').\n", sessionFileName)
+    + i18n("The document type seems to be: '%1'.", domdoc.doctype().name()));
     return false;
   }
 

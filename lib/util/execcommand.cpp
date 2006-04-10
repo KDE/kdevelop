@@ -49,7 +49,7 @@ ExecCommand::ExecCommand( const QString& executable, const QStringList& args,
   bool ok = proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
 
   if ( !ok ) {
-    KMessageBox::error( 0, i18n("Could not invoke \"%1\". Please make sure it is installed correctly").arg( executable ),
+    KMessageBox::error( 0, i18n("Could not invoke \"%1\". Please make sure it is installed correctly", executable ),
                         i18n("Error Invoking Command") );
 
     emit finished( QString(), QString() );
@@ -57,7 +57,7 @@ ExecCommand::ExecCommand( const QString& executable, const QStringList& args,
 
   } else {
     progressDlg = new KProgressDialog( 0, i18n("Command running..."),
-                      i18n("Please wait until the \"%1\" command finishes.").arg( executable ), false );
+                      i18n("Please wait until the \"%1\" command finishes.", executable ), false );
     connect( progressDlg, SIGNAL(cancelClicked()),
              this, SLOT(cancelClicked()) );
   }

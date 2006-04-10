@@ -349,7 +349,7 @@ bool ProjectManager::loadProjectFile()
   QString path;
   if (!KIO::NetAccess::download(m_info->m_projectURL, path, 0)) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
-        i18n("Could not read project file: %1").arg(m_info->m_projectURL.prettyURL()));
+        i18n("Could not read project file: %1", m_info->m_projectURL.prettyURL()));
     return false;
   }
 
@@ -357,7 +357,7 @@ bool ProjectManager::loadProjectFile()
   if (!fin.open(QIODevice::ReadOnly))
   {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
-        i18n("Could not read project file: %1").arg(m_info->m_projectURL.prettyURL()));
+        i18n("Could not read project file: %1", m_info->m_projectURL.prettyURL()));
     return false;
   }
 
@@ -367,8 +367,8 @@ bool ProjectManager::loadProjectFile()
   {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
         i18n("This is not a valid project file.\n"
-             "XML error in line %1, column %2:\n%3")
-             .arg(errorLine).arg(errorCol).arg(errorMsg));
+             "XML error in line %1, column %2:\n%3",
+              errorLine, errorCol, errorMsg));
     fin.close();
     KIO::NetAccess::removeTempFile(path);
     return false;
@@ -469,8 +469,8 @@ bool ProjectManager::loadProjectPart()
   }
   if (!projectService) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
-        i18n("No project management plugin %1 found.")
-            .arg(m_info->m_projectPlugin));
+        i18n("No project management plugin %1 found.",
+             m_info->m_projectPlugin));
     return false;
   }
 
@@ -479,8 +479,8 @@ bool ProjectManager::loadProjectPart()
                                                   PluginController::argumentsFromService( projectService ) );
   if ( !projectPart ) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
-        i18n("Could not create project management plugin %1.")
-            .arg(m_info->m_projectPlugin));
+        i18n("Could not create project management plugin %1.",
+             m_info->m_projectPlugin));
     return false;
   }
 
@@ -525,8 +525,8 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
 
   if (languageSupportOffers.isEmpty()) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
-        i18n("No language plugin for %1 found.")
-            .arg(lang));
+        i18n("No language plugin for %1 found.",
+             lang));
     return false;
   }
 
@@ -539,8 +539,8 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
 
   if ( !langSupport ) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
-        i18n("Could not create language plugin for %1.")
-            .arg(lang));
+        i18n("Could not create language plugin for %1.",
+             lang));
     return false;
   }
 

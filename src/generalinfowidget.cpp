@@ -82,13 +82,13 @@ void GeneralInfoWidget::slotProjectDirectoryChanged( const QString& text ) {
     else if(isProjectDirectoryAbsolute() && text[0] != '/')
     {
        setProjectDirectoryError(
-           i18n("'%1' is not an absolute path.").arg(
+           i18n("'%1' is not an absolute path.", 
                project_directory_edit->text()));
     }
     else if(!isProjectDirectoryAbsolute() && text[0] == '/')
     {
        setProjectDirectoryError(
-           i18n("'%1' is not a relative path.").arg(
+           i18n("'%1' is not a relative path.", 
                project_directory_edit->text()));
     }
     else
@@ -96,11 +96,11 @@ void GeneralInfoWidget::slotProjectDirectoryChanged( const QString& text ) {
         QFileInfo info(projectDirectory());
         if(!info.exists())
            setProjectDirectoryError(
-               i18n("'%1' does not exist.").arg(
+               i18n("'%1' does not exist.", 
                    project_directory_edit->text()));
         else if(!info.isDir())
            setProjectDirectoryError(
-               i18n("'%1' is not a directory.").arg(
+               i18n("'%1' is not a directory.", 
                    project_directory_edit->text()));
         else
            setProjectDirectorySuccess();
@@ -126,10 +126,10 @@ void GeneralInfoWidget::setProjectDirectorySuccess() {
     project_directory_diagnostic_icon->setPixmap(SmallIcon("ok"));
     if(isProjectDirectoryAbsolute())
         project_directory_diagnostic_label->setText(
-            i18n("'%1' is a valid project directory.").arg(projectDirectory()));
+            i18n("'%1' is a valid project directory.", projectDirectory()));
     else
         project_directory_diagnostic_label->setText(
-            i18n("'%1' is a valid project directory.").arg(projectDirectory()));
+            i18n("'%1' is a valid project directory.", projectDirectory()));
 }
 
 QString makeRelativePath(const QString& fromPath, const QString& toPath)

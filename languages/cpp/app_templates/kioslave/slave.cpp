@@ -48,7 +48,7 @@ void kio_%{APPNAMELC}Protocol::get(const KURL& url )
     int remotePort = url.port();
     kDebug() << "myURL: " << url.prettyURL() << endl;
     
-    infoMessage(i18n("Looking for %1...").arg( remoteServer ) );
+    infoMessage(i18n("Looking for %1...", remoteServer ) );
     // Send the mimeType as soon as it is known
     mimeType("text/plain");
     // Send the data

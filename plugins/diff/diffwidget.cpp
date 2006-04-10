@@ -74,7 +74,7 @@ Q3PopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
   int i = 0;
 
   for ( QStringList::Iterator it = extPartsTranslated.begin(); it != extPartsTranslated.end(); ++it ) {
-    popup->insertItem( i18n( "Show in %1" ).arg( *it ), i + POPUP_BASE, i );
+    popup->insertItem( i18n( "Show in %1", *it ), i + POPUP_BASE, i );
     i++;
   }
   if ( !extPartsTranslated.isEmpty() )

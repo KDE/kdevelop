@@ -33,7 +33,7 @@ void %{APPNAMELC}View::settingsChanged()
 	sillyLabel->setPaletteForegroundColor( Settings::col_foreground() );
 
 	// i18n : internationalization
-	sillyLabel->setText( i18n("This project is %1 days old").arg(Settings::val_time()) );
+	sillyLabel->setText( i18n("This project is %1 days old", Settings::val_time()) );
 	emit signalChangeStatusbar( i18n("Settings changed") );
 }
 

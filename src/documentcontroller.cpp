@@ -248,7 +248,7 @@ bool DocumentController::saveDocument( const KUrl & url, bool force )
                            TopLevel::getInstance() ->main(),
                            i18n( "The file \"%1\" is modified on disk.\n\nAre "
                                  "you sure you want to overwrite it? (External "
-                                 "changes will be lost.)" ).arg( url.path() ),
+                                 "changes will be lost.)", url.path() ),
                            i18n( "Document Externally Modified" ) );
             if ( code == KMessageBox::Yes )
             {
@@ -309,7 +309,7 @@ void DocumentController::reloadDocument( const KUrl & url )
                                             i18n( "The file \"%1\" is modified "
                                                   "in memory. Are you sure you "
                                                   "want to reload it? (Local "
-                                                  "changes will be lost.)" ).arg( url.path() ),
+                                                  "changes will be lost.)", url.path() ),
                                             i18n( "Document is Modified" ) ) == KMessageBox::Yes )
             {
                 part->setModified( false );
@@ -1479,7 +1479,7 @@ bool DocumentController::reactToDirty( KUrl const & url, unsigned char reason )
                             i18n( "Conflict: The file \"%1\" has changed on "
                                   "disk while being modified in memory.\n\n"
                                   "You should investigate before saving to make"
-                                  "sure you are not losing data." ).arg( url.path() ),
+                                  "sure you are not losing data.", url.path() ),
                             i18n( "Conflict" ) );
         return false;
     }
@@ -1490,7 +1490,7 @@ bool DocumentController::reactToDirty( KUrl const & url, unsigned char reason )
                             i18n( "Warning: The file \"%1\" has been deleted on"
                                   "disk.\n\n"
                                   "If this was not your intention, make sure to"
-                                  "save this file now." ).arg( url.path() ),
+                                  "save this file now.", url.path() ),
                             i18n( "Document Deleted" ) );
         return false;
     }
@@ -1499,7 +1499,7 @@ bool DocumentController::reactToDirty( KUrl const & url, unsigned char reason )
     {
         if ( KMessageBox::warningYesNo( TopLevel::getInstance() ->main(),
                                         i18n( "The file \"%1\" has changed on"
-                                              "disk.\n\nDo you want to reload it?" ).arg( url.path() ),
+                                              "disk.\n\nDo you want to reload it?", url.path() ),
                                         i18n( "Document Changed" ) ) == KMessageBox::No )
         {
             return false;

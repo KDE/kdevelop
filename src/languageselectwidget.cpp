@@ -112,7 +112,7 @@ void LanguageSelectWidget::readProjectConfig()
 
     QStringList languages = DomUtil::readListEntry(m_projectDom, "/general/secondaryLanguages", "language");
     QString language = DomUtil::readEntry(m_projectDom, "/general/primarylanguage");
-    _currentLanguage->setText(i18n("Primary language is '%1'. Please select additional languages the project might contain.").arg(language));
+    _currentLanguage->setText(i18n("Primary language is '%1'. Please select additional languages the project might contain.", language));
 
     for (KTrader::OfferList::ConstIterator it = languageSupportOffers.begin(); it != languageSupportOffers.end(); ++it)
     {

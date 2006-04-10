@@ -138,15 +138,15 @@ void KDevProjectManager::popupContextMenu(const QPoint &pos)
 
       if (KDevProjectFolderItem *folder = item->folder())
         {
-          menu.addTitle(i18n("Folder: %1").arg(folder->directory().dirName()));
+          menu.addTitle(i18n("Folder: %1", folder->directory().dirName()));
         }
       else if (KDevProjectFileItem *file = item->file())
         {
-          menu.addTitle(i18n("File: %1").arg(file->fileInfo().fileName()));
+          menu.addTitle(i18n("File: %1", file->fileInfo().fileName()));
         }
       else if (KDevProjectTargetItem *target = item->target())
         {
-          menu.addTitle(i18n("Target: %1").arg(target->name()));
+          menu.addTitle(i18n("Target: %1", target->name()));
         }
 
       ProjectItemContext context(item);

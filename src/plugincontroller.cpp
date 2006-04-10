@@ -135,7 +135,7 @@ void PluginController::loadPlugins( KTrader::OfferList offers, const QStringList
     if( m_parts.value(name) != 0 || ignorePlugins.contains(name) )
       continue;
 
-    emit loadingPlugin(i18n("Loading: %1").arg((*it)->genericName()));
+    emit loadingPlugin(i18n("Loading: %1", (*it)->genericName()));
 
     KDevPlugin *plugin = loadPlugin( *it );
     if ( plugin )

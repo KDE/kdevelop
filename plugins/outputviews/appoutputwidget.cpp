@@ -66,7 +66,7 @@ void AppOutputWidget::slotRowSelected(QListWidgetItem* row)
       if (assertMatch.exactMatch(row->text()))
         {
           m_part->documentController()->editDocument(KUrl( assertMatch.cap(2) ), assertMatch.cap(3).toInt() - 1);
-          m_part->mainWindow()->statusBar()->message(i18n("Assertion failed: %1").arg(assertMatch.cap(1)), 10000);
+          m_part->mainWindow()->statusBar()->message(i18n("Assertion failed: %1", assertMatch.cap(1)), 10000);
           m_part->mainWindow()->lowerView(this);
         }
       else if (lineInfoMatch.search(row->text()) != -1)

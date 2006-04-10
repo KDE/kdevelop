@@ -114,7 +114,7 @@ void GrepViewPart::contextMenu(Q3PopupMenu *popup, const Context *context)
     if (!ident.isEmpty()) {
         m_popupstr = ident;
         QString squeezed = KStringHandler::csqueeze(ident, 30);
-        int id = popup->insertItem( i18n("Grep: %1").arg(squeezed),
+        int id = popup->insertItem( i18n("Grep: %1", squeezed),
                            this, SLOT(slotContextGrep()) );
         popup->setWhatsThis(id, i18n("<b>Grep</b><p>Opens the find in files dialog "
                                "and sets the pattern to the text under the cursor."));

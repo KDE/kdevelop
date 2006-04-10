@@ -458,7 +458,7 @@ void AppWizardDialog::templatesTreeViewActivated(const QModelIndex& index)
         edit = new QTextEdit(this);
         edit->setFont(KGlobalSettings::fixedFont());
         fileTemplate->edit = edit;
-        addPage(edit, i18n("Template for .%1 Files").arg(fileTemplate->suffix));
+        addPage(edit, i18n("Template for .%1 Files", fileTemplate->suffix));
         m_fileTemplates.append(fileTemplate);
     }
 
@@ -485,7 +485,7 @@ void AppWizardDialog::destButtonClicked(const QString& dir)
     if( defPrjDir == newDir )
         return;
 
-    if( KMessageBox::questionYesNo(this, i18n("Set default project location to: %1?").arg( newDir.absPath() ),
+    if( KMessageBox::questionYesNo(this, i18n("Set default project location to: %1?", newDir.absPath() ),
                                    i18n("New Project"), i18n("Set"), i18n("Do Not Set")) != KMessageBox::Yes )
         return;
 
@@ -503,7 +503,7 @@ void AppWizardDialog::projectLocationChanged()
     if (!qd.exists() || appname_edit->displayText().isEmpty()||fi.exists())
     {
         if (!fi.exists() || appname_edit->displayText().isEmpty())
-            finalLoc_label->setText(finalLoc_label->text() + i18n("invalid location", " (invalid)"));
+            finalLoc_label->setText(finalLoc_label->text() + i18nc("invalid location", " (invalid)"));
         else
             finalLoc_label->setText(finalLoc_label->text() + i18n(" (dir/file already exist)"));
         m_pathIsValid = false;
@@ -529,8 +529,8 @@ void AppWizardDialog::openAfterGeneration()
     if ( !success )
     {
         KMessageBox::sorry( 0, i18n("This is not a valid project file.\n"
-                "XML error in line %1, column %2:\n%3")
-                .arg(errorLine).arg(errorCol).arg(errorMsg));
+                "XML error in line %1, column %2:\n%3",
+                 errorLine, errorCol, errorMsg));
         return;
     }
 

@@ -77,7 +77,7 @@ void KDevStatusBar::statusChanged()
 {
     if (_view) {
         KTextEditor::Cursor cursor = _view->cursorPosition();
-        _status->setText(i18n(" Line: %1 Col: %2 ").arg(cursor.line() + 1).arg(cursor.column()) + _view->viewMode());
+        _status->setText(i18n(" Line: %1 Col: %2 ", cursor.line() + 1, cursor.column()) + _view->viewMode());
     }
 }
 

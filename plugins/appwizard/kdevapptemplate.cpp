@@ -252,7 +252,7 @@ bool KDevAppTemplate::unpackTemplateArchive()
     else
     {
         kDebug(9010) << "After KTar::open fail" << endl;
-        KMessageBox::sorry(0/**@todo*/, i18n("The template %1 cannot be opened.").arg( archiveName ) );
+        KMessageBox::sorry(0/**@todo*/, i18n("The template %1 cannot be opened.", archiveName ) );
         templateArchive.close();
         return false;
     }
@@ -290,8 +290,8 @@ bool KDevAppTemplate::installProject( QWidget* parentWidget )
             if( !KIO::NetAccess::mkdir( dir.dir, parentWidget ) )
             {
                 KMessageBox::sorry(parentWidget, i18n(
-                                   "The directory %1 cannot be created.").
-                                   arg( dir.dir ) );
+                                   "The directory %1 cannot be created.", 
+                                    dir.dir ) );
                 return false;
             }
         }
@@ -309,7 +309,7 @@ bool KDevAppTemplate::installProject( QWidget* parentWidget )
             }
             else
             {
-                KMessageBox::sorry(parentWidget, i18n("The archive %1 cannot be opened.").arg(arch.source) );
+                KMessageBox::sorry(parentWidget, i18n("The archive %1 cannot be opened.", arch.source) );
                 archive.close();
                 return false;
             }
@@ -324,7 +324,7 @@ bool KDevAppTemplate::installProject( QWidget* parentWidget )
         {
             if( !file.copy(this) )
             {
-                KMessageBox::sorry(parentWidget, i18n("The file %1 cannot be created.").arg(file.dest) );
+                KMessageBox::sorry(parentWidget, i18n("The file %1 cannot be created.", file.dest) );
                 return false;
             }
             file.setPermissions();
@@ -426,7 +426,7 @@ void KDevAppTemplate::Archive::unpack( const KArchiveDirectory *dir )
                 // ( where should we currently get that info from? )
                 if ( !copyFile( QDir::cleanPath(tdir.name()+"/"+file->name()), dest + "/" + file->name(), false, process ) )
                 {
-                    KMessageBox::sorry(this, i18n("The file %1 cannot be created.").arg( dest) );
+                    KMessageBox::sorry(this, i18n("The file %1 cannot be created.", dest) );
                     return;
                 }
                 setPermissions(file, dest + "/" + file->name());

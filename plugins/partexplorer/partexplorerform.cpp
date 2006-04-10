@@ -46,8 +46,8 @@ public:
 
     QString tipText() const
     {
-        QString tip = i18n("Name: %1 | Type: %2 | Value: %3");
-        return tip.arg( text(0) ).arg( text(1) ).arg( text(2) );
+        return i18n("Name: %1 | Type: %2 | Value: %3",
+                    text(0), text(1), text(2) );
     }
 };
 

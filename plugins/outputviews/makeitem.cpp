@@ -148,7 +148,7 @@ ExitStatusItem::ExitStatusItem( bool normalExit, int exitStatus )
 	m_text = i18n("*** Compilation aborted ***");
 	if ( m_normalExit )
 		if (m_exitStatus )
-			m_text = i18n("*** Exited with status: %1 ***").arg( m_exitStatus );
+			m_text = i18n("*** Exited with status: %1 ***", m_exitStatus );
         	else
 			m_text = i18n("*** Success ***");
 }
@@ -163,14 +163,14 @@ bool DirectoryItem::m_showDirectoryMessages = true;
 QString EnteringDirectoryItem::text( EOutputLevel outputLevel )
 {
 	if ( outputLevel < eFull )
-		return i18n("Entering directory %1").arg( directory );
+		return i18n("Entering directory %1", directory );
 	return m_text;
 }
 
 QString ExitingDirectoryItem::text( EOutputLevel outputLevel )
 {
 	if ( outputLevel < eFull )
-		return i18n("Leaving directory %1").arg( directory );
+		return i18n("Leaving directory %1", directory );
 	return m_text;
 }
 

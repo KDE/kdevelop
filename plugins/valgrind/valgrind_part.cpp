@@ -94,7 +94,7 @@ void ValgrindPart::loadOutput()
 
   QFile f( fName );
   if ( !f.open( QIODevice::ReadOnly ) ) {
-    KMessageBox::sorry( 0, i18n("Could not open valgrind output: %1").arg(fName) );
+    KMessageBox::sorry( 0, i18n("Could not open valgrind output: %1", fName) );
     return;
   }
 
