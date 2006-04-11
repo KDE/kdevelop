@@ -36,7 +36,7 @@ public:
     virtual ~KDevCodeView();
 
     KDevCodeViewPart *part() const;
-    KDevCodeProxy *KDevCodeView::codeProxy() const;
+    KDevCodeProxy *codeProxy() const;
 
 private slots:
     void documentActivated( const KUrl &url );
