@@ -77,7 +77,7 @@ void SplashScreen::drawContents(QPainter* painter)
     // Draw version number
     QRect r = rect();
     r.setRect(r.x() + 5, r.y() + 5, r.width() - 10, r.height() - 10);
-    painter->drawText(r, Qt::AlignRight, i18n("Version %1", VERSION ));
+    painter->drawText(r, Qt::AlignRight, i18n("Version %1", QString(VERSION) ));
 
     // Draw message at given position, limited to 43 chars
     // If message is too long, string is truncated
