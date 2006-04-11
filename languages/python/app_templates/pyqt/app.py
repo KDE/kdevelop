@@ -132,7 +132,7 @@ class %{APPNAME}(QMainWindow):
         ed.show()
 
     def slotOpenFile(self):
-        fileName = str(QFileDialog.getOpenFileName(None, None, self))
+        fileName = str(QFileDialog.getOpenFileName("", "", self))
         print fileName
         if not fileName=="":
             self.load(fileName)
