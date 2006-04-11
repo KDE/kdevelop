@@ -53,6 +53,12 @@ public:
 
     Type type() const { return m_type; }
 
+    void setType(Type t) { 
+        if(t != m_type) {
+            m_type = t;
+            init();
+        }
+    }
 private:
     void init();
 

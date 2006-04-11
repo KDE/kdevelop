@@ -43,6 +43,8 @@ public:
     virtual QStringList fullTextSearchLocations();
     
     virtual void autoSetupPlugin();
+protected:
+    QString getSpecialData(const QString& name, KURL url);
 };
 
 #endif

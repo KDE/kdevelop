@@ -18,6 +18,7 @@
 #include <qbitarray.h>
 #include <qfile.h>
 #include <qregexp.h>
+#include <stack>
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -74,13 +75,35 @@ ChmProtocol::~ChmProtocol()
 /* ---------------------------------------------------------------------------------- */
 void ChmProtocol::get( const KURL& url )
 {
+    /** When :catalog is appended to the end, a plain-text representation of the catalog
+      * is given out where each entry consists of four lines, an integer representing the parent
+      * of the node, an integer representing a node's ID, the Title of the Node, and it's hyperlink.
+      * When :contents is appended, all contained htm- and html-files will be printed, each in a line.
+      */
     kdDebug() << "kio_chm::get(const KURL& url) " << url.path() << endl;
 
-    QString path;
-    if ( !checkNewFile( url.path(), path ) ) {
-        error( KIO::ERR_DOES_NOT_EXIST, url.prettyURL() );
-        return;
+    bool catalog = false;
+    bool contents = false;
+    QString bigpath = url.path();
+
+    if(bigpath.endsWith(":catalog")) {
+        catalog = true;
+        int len = QString(":catalog").length();
+        bigpath.remove(bigpath.length() - len, len);   ///strip :catalog from the end
     }
+    
+    if(bigpath.endsWith(":contents")) {
+        contents = true;
+        int len = QString(":contents").length();
+        bigpath.remove(bigpath.length() - len, len);   ///strip :catalog from the end
+    }
+    
+    QString path;
+    if ( !checkNewFile( bigpath, path ) ) {
+            error( KIO::ERR_DOES_NOT_EXIST, url.prettyURL() );
+            return;
+    }
+    
 
     if (m_dirMap.find(path) == m_dirMap.end()) {
         error( KIO::ERR_DOES_NOT_EXIST, url.prettyURL() );
@@ -101,6 +124,25 @@ void ChmProtocol::get( const KURL& url )
     QString tmpstr = QString("");
     bool m_bIndex = 0;
 
+    
+    if(contents) {
+        QString output;
+        KURL u = url;
+        
+        ChmDirectoryMap::Iterator it;
+        for ( it = m_dirMap.begin(); it != m_dirMap.end(); ++it) {
+            u.setPath(bigpath);
+            u.addPath(it.key());
+            output += u.prettyURL() + "\n";
+        }
+        
+        data(output.local8Bit());
+        processedSize(output.length());
+        finished();
+        return;
+    }
+    
+    
     //try get some page to display, if the chm missing index
     ChmDirectoryMap::Iterator it;
     for ( it = m_dirMap.begin(); it != m_dirMap.end(); ++it) {
@@ -115,7 +157,9 @@ void ChmProtocol::get( const KURL& url )
     }
     m_strIndex.remove(0,1);
     
-    if (path == "/") {
+    
+    if (path == "/" || catalog) {
+        bool htmlOutput = !catalog;
         int offset = m_dirMap["/@contents"].offset;
         int length = m_dirMap["/@contents"].length;
         theData.setRawData(&m_contents[offset], length);
@@ -132,11 +176,32 @@ void ChmProtocol::get( const KURL& url )
         localParam.setMinimal(true);
 
         QRegExp mergeParam("<param name=\"Merge\" value=\"(.*)\">", false);
-        localParam.setMinimal(true);
+        mergeParam.setMinimal(true);
 
+        std::stack<int> parents;
+        int counter = 1;
+        int current = 0;
         int old = 0, pos = 0;
+        parents.push(0);
         while ((pos = s.find(object, pos)) != -1) {
-            output += s.mid(old, pos - old);
+            if(htmlOutput) output += s.mid(old, pos - old);
+            if(catalog) {
+                QRegExp ex("<UL>|</UL>", false);    ex.setMinimal(true);
+                QString ms = s.mid(old, pos - old);
+                int pos = 0;
+                while( (pos = ms.find(ex, pos)) != -1) {
+                    if(ms.mid(pos, 4) == "<UL>") {
+                        parents.push(current);
+                    } else{
+                        if(parents.empty()){
+                        }else{
+                            current = parents.top();
+                            parents.pop();
+                        }
+                    }
+                    pos++;
+                }
+            }
             pos += object.matchedLength();
             old = pos;
             QString obj = object.cap(1);
@@ -148,17 +213,27 @@ void ChmProtocol::get( const KURL& url )
                     //output += "<a href=\"" + local + "\">" + name + "</a>";
                     //added by lucida lucida@users.sf.net
                     if (local != "" && local != "/") {
-                        output += "<a target=\"browse\" href=\"" + url.url() + local + "\">" + name + "</a>";
+                        if(!catalog) {
+                            output += "<a target=\"browse\" href=\"" + url.url() + local + "\">" + name + "</a>";
+                        }else{
+                            current = counter;
+                            ++counter;
+                            KURL u = url;
+                            u.setPath(bigpath + local);
+                            QString str;
+                            output += str.sprintf("%i\n%i\n", parents.top(), current);
+                            output += name + "\n" + u.prettyURL() + "\n";
+                        }
                         m_bIndex = 1;
                         if (firstPage == "") firstPage = url.url()+QString::fromLocal8Bit(local.latin1());
                     }
                     else 
-                        output += name;
+                        if(htmlOutput) output += name;
                 } else {
-                    output += name;
+                    if(htmlOutput) output += name;
                 }
             }
-            if (obj.find(mergeParam) != -1) {
+            if (obj.find(mergeParam) != -1 && htmlOutput) {
                 QString link = mergeParam.cap(1);
                 QString href = link.left(link.find("::"));
                 QString path = m_chmFile.left(m_chmFile.findRev("/") + 1);
@@ -168,7 +243,7 @@ void ChmProtocol::get( const KURL& url )
                 if (firstPage == "") firstPage = url.url()+QString::fromLocal8Bit(local.latin1());
             }
         }
-        output += s.mid(old);
+        if(htmlOutput) output += s.mid(old);
 
         //set left pane
         //added by lucida, lucida@users.sf.net
@@ -197,8 +272,13 @@ void ChmProtocol::get( const KURL& url )
         //added by lucida lucida@users.sf.net
         *t << QString::fromLocal8Bit(output.latin1()) << endl;
 
-        data(framestr.local8Bit());
-        processedSize(framestr.length());
+        if(catalog) {
+            data(output.local8Bit());
+            processedSize(output.length());
+        }else{
+            data(framestr.local8Bit());
+            processedSize(framestr.length());
+        }
     } else {
         int offset = m_dirMap[path].offset;
         int length = m_dirMap[path].length;
