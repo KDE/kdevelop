@@ -55,7 +55,7 @@ public:
     void setMode( KDevCodeProxy::Mode mode = Normalize );
     void setFilterDocument( const KUrl &url = KUrl() );
 
-    QMap<QString, int> KDevCodeProxy::kindFilterList() const;
+    QMap<QString, int> kindFilterList() const;
 
     /** Language parts should inherit this class, publish the kind filter list,
         implement this method and filter accordingly. The default value does
