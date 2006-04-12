@@ -40,7 +40,7 @@ kde4_automoc(${kdevshell_LIB_SRCS})
 kde4_add_ui3_files(kdevshell_LIB_SRCS ${kdevshell_UI})
 kde4_add_library(kdevshell SHARED ${kdevshell_LIB_SRCS})
 target_link_libraries(kdevshell ${KDE4_KDECORE_LIBS} kdeui profileengine kdevinterfaces kdevutil kdevwidgets newui khtml ktexteditor)
-set_target_properties(kdevshell PROPERTIES VERSION 4.2.0 SOVERSION 4)
+set_target_properties(kdevshell PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install_targets(/lib kdevshell)
 
 
