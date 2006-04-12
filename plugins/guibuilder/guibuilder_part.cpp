@@ -29,6 +29,11 @@ GuiBuilderPart::~GuiBuilderPart()
 {
   mainWindow()->removeView( m_designer->widgetBox() );
   mainWindow()->removeView( m_designer->propertyEditor() );
+  QDesignerFormWindowManagerInterface* manager = 0;
+  manager = m_designer->formWindowManager();
+  QDesignerFormWindowInterface* window = manager->activeFormWindow();
+  manager->removeFormWindow( window );
+  delete window;
   delete m_designer;
   m_designer = 0;
 }
