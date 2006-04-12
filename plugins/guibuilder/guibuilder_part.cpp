@@ -3,12 +3,14 @@
 
 #include <QObject>
 #include <QFile>
+#include <QTextStream>
 #include <QtDesigner/QtDesigner>
 #include <QtDesigner/QDesignerComponents>
 
 #include <kaboutdata.h>
 #include <kmainwindow.h>
 #include <kparts/genericfactory.h>
+#include <ksavefile.h>
 #include <kdevmainwindow.h>
 
 #include "internals/qdesigner_integration_p.h"
@@ -90,8 +92,26 @@ bool GuiBuilderPart::openFile()
 
 bool GuiBuilderPart::saveFile()
 {
-  return false;
+    KSaveFile uiFile( m_file );
+    //FIXME: find a way to return an error. KSaveFile
+    //doesn't use the KIO error codes
+    if ( uiFile.status() )
+        return false;
+
+    QTextStream* stream = uiFile.textStream();
+
+    QDesignerFormWindowManagerInterface* manager = 0;
+    manager = m_designer->formWindowManager();
+    QDesignerFormWindowInterface* window = manager->activeFormWindow();
+    QByteArray windowXml = window->contents().toUtf8();
+    *stream << windowXml;
+
+    if ( !uiFile.close() )
+        return false;
+
+    window->setDirty(false);
+    return true;
 }
 
 #include "guibuilder_part.moc"
-//kate: space-indent on; indent-width 2; replace-tabs on; indent-mode cstyle;
+//kate: space-indent on; indent-width 4; replace-tabs on; indent-mode cstyle;
