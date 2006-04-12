@@ -1,13 +1,9 @@
 project(kdevelop)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
-set(CMAKE_VERBOSE_MAKEFILE OFF)
-set(CMAKE_COLOR_MAKEFILE ON)
-
-enable_testing()
-include(CTest)
 
 find_package(KDE4 REQUIRED)
+include(KDE4Defaults)
 find_package(Perl REQUIRED)
 find_package(BerkeleyDB REQUIRED)
 if (APPLE)
