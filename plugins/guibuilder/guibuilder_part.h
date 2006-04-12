@@ -6,6 +6,7 @@
 #include <kdevreadwritepart.h>
 
 class QDesignerFormEditorInterface;
+class QDesignerFormWindowInterface;
 class KAboutData;
 
 class GuiBuilderPart: public KDevReadWritePart
@@ -28,6 +29,7 @@ public:
 
 private:
   QDesignerFormEditorInterface *m_designer;
+  QDesignerFormWindowInterface *m_window;
 };
 
 #endif // GUIBUILDER_PART_H

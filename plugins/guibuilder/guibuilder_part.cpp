@@ -25,16 +25,14 @@ GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget, const char* widgetName,
 {
   setObjectName(QString::fromUtf8(name));
   QDesignerComponents::initializeResources();
+  m_designer = 0;
+  m_window = 0;
 }
 
 GuiBuilderPart::~GuiBuilderPart()
 {
   mainWindow()->removeView( m_designer->widgetBox() );
   mainWindow()->removeView( m_designer->propertyEditor() );
-  QDesignerFormWindowManagerInterface* manager = 0;
-  manager = m_designer->formWindowManager();
-  QDesignerFormWindowInterface* window = manager->activeFormWindow();
-  manager->removeFormWindow( window );
 }
 
  KAboutData* GuiBuilderPart::createAboutData()
@@ -87,6 +85,8 @@ bool GuiBuilderPart::openFile()
   widget->setContents(&uiFile);
   manager->setActiveFormWindow(widget);
   setWidget( widget );
+  m_window = widget;
+  connect(m_window, SIGNAL(changed()), this, SLOT(setModified()));
   return true;
 }
 
@@ -99,17 +99,14 @@ bool GuiBuilderPart::saveFile()
         return false;
 
     QTextStream* stream = uiFile.textStream();
-
-    QDesignerFormWindowManagerInterface* manager = 0;
-    manager = m_designer->formWindowManager();
-    QDesignerFormWindowInterface* window = manager->activeFormWindow();
-    QByteArray windowXml = window->contents().toUtf8();
+    QByteArray windowXml = m_window->contents().toUtf8();
     *stream << windowXml;
 
     if ( !uiFile.close() )
         return false;
 
-    window->setDirty(false);
+    m_window->setDirty(false);
+    setModified(false);
     return true;
 }
 
