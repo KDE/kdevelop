@@ -33,9 +33,6 @@ GuiBuilderPart::~GuiBuilderPart()
   manager = m_designer->formWindowManager();
   QDesignerFormWindowInterface* window = manager->activeFormWindow();
   manager->removeFormWindow( window );
-  delete window;
-  delete m_designer;
-  m_designer = 0;
 }
 
  KAboutData* GuiBuilderPart::createAboutData()
