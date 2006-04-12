@@ -21,10 +21,7 @@ GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget, const char* widgetName,
                                const QStringList &args)
   : KDevReadWritePart(parent)
 {
-  kDebug() << k_funcinfo << "creating part" << endl;
-
   setObjectName(QString::fromUtf8(name));
-
   QDesignerComponents::initializeResources();
 }
 
@@ -51,8 +48,6 @@ GuiBuilderPart::~GuiBuilderPart()
 
 void GuiBuilderPart::setApiInstance( KDevApi* api )
 {
-  kDebug() << k_funcinfo << "embedding views after getting api" << endl;
-
   KDevReadWritePart::setApiInstance( api );
 
   m_designer = QDesignerComponents::createFormEditor(this);
