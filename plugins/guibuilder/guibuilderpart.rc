@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="guibuilder" version="1">
+<MenuBar>
+    <Menu name="file" noMerge="1"><text>&amp;File</text>
+        <Action name="save" merge="save_merge"/>
+    </Menu>
+</MenuBar>
+</kpartgui>
+
+<!-- kate: space-indent on; indent-width 4; replace-tabs on; -->

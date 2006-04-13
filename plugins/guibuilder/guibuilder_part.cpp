@@ -11,8 +11,9 @@
 #include <kmainwindow.h>
 #include <kparts/genericfactory.h>
 #include <ksavefile.h>
-#include <kdevmainwindow.h>
+#include <kstdaction.h>
 
+#include <kdevmainwindow.h>
 #include "internals/qdesigner_integration_p.h"
 
 typedef KParts::GenericFactory<GuiBuilderPart> GuiBuilderPartFactory;
@@ -51,6 +52,7 @@ GuiBuilderPart::~GuiBuilderPart()
 void GuiBuilderPart::setApiInstance( KDevApi* api )
 {
   KDevReadWritePart::setApiInstance( api );
+  setXMLFile( "guibuilderpart.rc" );
 
   m_designer = QDesignerComponents::createFormEditor(this);
   m_designer->setTopLevel(mainWindow()->main());
@@ -69,6 +71,8 @@ void GuiBuilderPart::setApiInstance( KDevApi* api )
 
   mainWindow()->embedSelectView(m_designer->widgetBox(), i18n("Widget Box"), i18n("Widget Box"));
   mainWindow()->embedSelectViewRight(m_designer->propertyEditor(), i18n("Property Editor"), i18n("Property Editor"));
+
+  KStdAction::save( this, SLOT( save() ), actionCollection(), "save" );
 }
 
 QDesignerFormEditorInterface *GuiBuilderPart::designer() const

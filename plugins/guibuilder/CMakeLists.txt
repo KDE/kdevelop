@@ -21,7 +21,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kdevguibuilder )
 ########### install files ###############
 
 INSTALL_FILES( /share/services FILES  kdevguibuilder.desktop )
-
+INSTALL_FILES( ${DATA_INSTALL_DIR}/kdevelop FILES guibuilderpart.rc )
 
 
 #original Makefile.am contents follow:
