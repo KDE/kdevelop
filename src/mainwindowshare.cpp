@@ -394,7 +394,7 @@ void MainWindowShare::slotNewToolbarConfig()
 
 void MainWindowShare::slotKeyBindings()
 {
-  KKeyDialog dlg( KKeyChooser::AllActions, KKeyChooser::LetterShortcutsAllowed, m_pMainWnd );
+  KKeyDialog dlg( KKeyChooser::AllActions, KKeyChooser::LetterShortcutsDisallowed, m_pMainWnd );
   QList<KXMLGUIClient*> clients = m_pMainWnd->guiFactory()->clients();
   QList<KXMLGUIClient*>::iterator it, itEnd = clients.end();
   for( it = clients.begin(); it != itEnd; ++it ) {
