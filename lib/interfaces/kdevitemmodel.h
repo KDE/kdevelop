@@ -39,10 +39,31 @@ public:
 
   virtual ~KDevItem() {}
 
+  /**
+   * Retrieve this item's parent.
+   * @return the parent of this item.
+   */
   KDevItemGroup *parent() const { return m_parent; }
+
+  /**
+   * Set the parent of this item. The new parent is specified by
+   * @p parent
+   */
   void setParent(KDevItemGroup *parent) { m_parent = parent; }
 
+  /**
+   * Retrieve the group this item belongs to. If a null pointer
+   * is returned, then this item does not have a group.
+   * @return the group this item is a member of.
+   */
   virtual KDevItemGroup *group() const { return 0; }
+
+  /**
+   * Retrieve the collection this item belongs to. If a null pointer
+   * is returned, then this item is not part of a collection.
+   * @return the collection this item belongs to
+   * @todo describe the difference between a collection and a group
+   */
   virtual KDevItemCollection *collection() const { return 0; }
 
   /** Get the name of the item */
@@ -61,6 +82,9 @@ private:
   KDevItemGroup *m_parent;
 };
 
+/**
+ * The KDevItemGroup class holds a group of KDevItems.
+ */
 class KDevItemGroup: public KDevItem
 {
 public:
@@ -70,8 +94,26 @@ public:
   virtual KDevItemGroup *group() const
   { return const_cast<KDevItemGroup*>(this); }
 
+  /**
+   * Get the number of items in this group
+   */
   virtual int itemCount() const = 0;
+
+  /**
+   * Get the index of the item described by @p item
+   * 
+   * Subclasses that implement KDevItemGroup should return -1 if the item is
+   * not in this item group.
+   */
   virtual int indexOf(KDevItem *item) const = 0;
+
+  /**
+   * Get the item at the index specified by @p index
+   * 
+   * If there is no item at the specified index, the returned value will be
+   * zero.
+   * @return the item specified by @p index
+   */
   virtual KDevItem *itemAt(int index) const = 0;
 };
 
@@ -89,18 +131,39 @@ public:
 
   virtual KDevItemCollection *collection() const { return const_cast<KDevItemCollection*>(this); }
 
+  /** @copydoc KDevItem::name() */
   virtual QString name() const { return m_name; }
+
+  /** @copydoc KDevItem::icon() */
   virtual QIcon icon() const { return QIcon(); }
+
+  /** @copydoc KDevItem::toolTip() */
   virtual QString toolTip() const { return QString(); }
+
+  /** @copydoc KDevItem::whatsThis() */
   virtual QString whatsThis() const { return QString(); }
+
+  /** Get the list of items in this collection */
   virtual const QList<KDevItem *> &items() const { return m_items; };
 
+  /** @copydoc KDevItemGroup::itemCount */
   virtual int itemCount() const { return m_items.count(); }
+
+  /** @copydoc KDevItemGroup::indexOf */
   virtual int indexOf(KDevItem *item) const { return m_items.indexOf(item); }
+
+  /** @copydoc KDevItemGroup::itemAt */
   virtual KDevItem *itemAt(int index) const { return m_items.at(index); }
 
+  /** Remove all items from the collection */
   virtual void clear() { m_items.clear(); }
 
+  /**
+   * Adds a KDevItem specified by @p item to the collection.
+   * 
+   * The collection will become the parent of this item. Items that are added
+   * should not already have a parent.
+   */
   virtual void add(KDevItem *item)
   {
     Q_ASSERT(item != 0);
@@ -112,6 +175,12 @@ public:
     m_items.append(item);
   }
 
+  /**
+   * Removes a KDevItem from the collection.
+   *
+   * The item at the index position @p index is removed from the collection.
+   * @p index must be a valid index position.
+   */
   virtual void remove(int index)
   {
     Q_ASSERT(index >= 0 );
@@ -119,6 +188,12 @@ public:
     m_items.removeAt(index);
   }
 
+  /**
+   * Replace an existing item in the collection with a different item.
+   * 
+   * The item at the index position @p index is replaced with @p item. The
+   * index specifed by @p index must be a valid index position.
+   */
   virtual void replace(int index, KDevItem *item)
   {
     Q_ASSERT(index >= 0);
@@ -174,4 +249,4 @@ private:
 
 #endif // KDEVITEMMODEL_H
 
-// kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on
+// kate: space-indent on; indent-width 2; indent-mode cstyle; replace-tabs on; auto-insert-doxygen on;
