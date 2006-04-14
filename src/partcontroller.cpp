@@ -43,6 +43,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/encodinginterface.h>
 
 #include "toplevel.h"
 #include "api.h"
@@ -423,21 +424,16 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
         {
             if ( !m_presetEncoding.isNull() )
             {
-                KParts::BrowserExtension * extension =
-                    KParts::BrowserExtension::childObject( editorpart );
-                if ( extension )
+                if ( KTextEditor::EncodingInterface * ei = dynamic_cast<KTextEditor::EncodingInterface*>( editorpart ) )
                 {
-                    KParts::URLArgs args;
-                    args.serviceType = QString( "text/plain;" ) + m_presetEncoding;
-                    extension->setURLArgs(args);
+                    ei->setEncoding( m_presetEncoding );
                 }
                 m_presetEncoding = QString::null;
             }
 
             addHistoryEntry();
 
-            QWidget * widget =
-                EditorProxy::getInstance()->topWidgetForPart( editorpart );
+            QWidget * widget = EditorProxy::getInstance()->topWidgetForPart( editorpart );
 
             integratePart(editorpart, url, widget, true, activate, addToCurrentBuffer);
             EditorProxy::getInstance()->setLineNumber(editorpart, lineNum, col);
