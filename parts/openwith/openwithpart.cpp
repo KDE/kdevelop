@@ -51,7 +51,6 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
 	popup->setWhatsThis(id, i18n("<b>Open As</b><p>Lists all encodings that can be used to open the selected file."));
 
 	QStringList encodings;
-	encodings << i18n("KDE Default");
 	encodings += KGlobal::charsets()->descriptiveEncodingNames();
 
 	int i = 0;
@@ -70,7 +69,6 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
 	KTrader::OfferList offers = KTrader::self()->query(mimeType, "Type == 'Application'");
 	if (offers.count() > 0)
 	{
-
 		KTrader::OfferList::Iterator it;
 		for (it = offers.begin(); it != offers.end(); ++it)
 		{
@@ -111,9 +109,9 @@ void OpenWithPart::openAsEncoding( int id )
 {
 	QStringList encodings = KGlobal::charsets()->descriptiveEncodingNames();
 	QString encoding;
-	if ( id <= encodings.count() && id > 0 )
+	if ( id <= encodings.count() && id >= 0 )
 	{
-		encoding = KGlobal::charsets()->encodingForName( encodings[id-1] );
+		encoding = KGlobal::charsets()->encodingForName( encodings[ id ] );
 	}
 
 	KURL::List::iterator it = m_urls.begin();
