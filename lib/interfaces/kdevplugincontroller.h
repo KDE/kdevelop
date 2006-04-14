@@ -102,7 +102,7 @@ public:
     virtual KURL::List profileResourcesRecursive(const QString &nameFilter);
 
     /** @return The current Profile Engine  */
-    virtual ProfileEngine &KDevPluginController::engine() = 0;
+    virtual ProfileEngine &engine() = 0;
 
 signals:
     /**Emitted when a plugin profile was changed (reloaded, other profile opened, etc.).

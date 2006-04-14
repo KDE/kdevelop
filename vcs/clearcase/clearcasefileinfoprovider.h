@@ -36,7 +36,7 @@ public:
 
 private:
 
-    QStringList ClearcaseFileinfoProvider::registeredEntryList() const;
+    QStringList registeredEntryList() const;
 
 
 private:

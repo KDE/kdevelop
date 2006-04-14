@@ -37,19 +37,19 @@ public:
     {
         return m_splitEnable;
     }
-    void CppSplitHeaderSourceConfig::setSplitEnable( bool b );
+    void setSplitEnable( bool b );
 
     bool autoSync() const
     {
         return m_splitSync;
     }
-    void CppSplitHeaderSourceConfig::setAutoSync( bool b );
+    void setAutoSync( bool b );
 
     QString orientation() const
     {
         return m_splitOrientation;
     }
-    void CppSplitHeaderSourceConfig::setOrientation( const QString &o );
+    void setOrientation( const QString &o );
 
 public slots:
     void store();

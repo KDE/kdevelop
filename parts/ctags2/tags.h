@@ -58,14 +58,14 @@ public:
 	static TagList getMatches( const QString & tagpart, bool partial, const QStringList & types = QStringList() );	
 
 private:
-	static Tags::TagList Tags::getMatches(const char* tagFile, 
+	static Tags::TagList getMatches(const char* tagFile, 
 								   const QString & tagpart, 
 								   bool partial,
 								   const QStringList & types );
-	static unsigned int Tags::numberOfMatches(const char* tagFile, 
+	static unsigned int numberOfMatches(const char* tagFile, 
 									   const QString & tagpart, 
 									   bool partial );
-	static bool Tags::hasTag(const char* tagFile, const QString & tag );
+	static bool hasTag(const char* tagFile, const QString & tag );
 	static QStringList _tagFiles;
 };
 
