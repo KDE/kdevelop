@@ -36,8 +36,7 @@ private:
 
   static EditorProxy *s_instance;
 
-  QVector<int> m_popupIds;
-
+  //QVector<int> m_popupIds;
 };
 
 

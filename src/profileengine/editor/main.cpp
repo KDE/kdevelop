@@ -40,7 +40,6 @@ int main(int argc, char **argv)
     KApplication app;
     ProfileEditor editor;
     editor.show();
-    app.setMainWidget(&editor);
 
     return app.exec();
 }

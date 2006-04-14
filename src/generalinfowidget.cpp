@@ -42,9 +42,9 @@ GeneralInfoWidget::~GeneralInfoWidget() {}
 
 void GeneralInfoWidget::readConfig() {
     if(DomUtil::readBoolEntry(m_projectDom,"/general/absoluteprojectpath",false))
-        this->project_directory_combo->setCurrentItem(0);
+        this->project_directory_combo->setCurrentIndex(0);
     else
-        this->project_directory_combo->setCurrentItem(1);
+        this->project_directory_combo->setCurrentIndex(1);
     this->project_directory_edit->setText(DomUtil::readEntry(m_projectDom,"/general/projectdirectory","."));
     this->author_edit->setText(DomUtil::readEntry(m_projectDom,"/general/author"));
     this->email_edit->setText(DomUtil::readEntry(m_projectDom,"/general/email"));
@@ -67,7 +67,7 @@ void GeneralInfoWidget::accept() {
 }
 
 bool GeneralInfoWidget::isProjectDirectoryAbsolute() {
-    return project_directory_combo->currentItem() == 0;
+    return project_directory_combo->currentIndex() == 0;
 }
 
 QString GeneralInfoWidget::projectDirectory() {
@@ -137,8 +137,8 @@ QString makeRelativePath(const QString& fromPath, const QString& toPath)
     if ( fromPath == toPath )
         return ".";
 
-    QStringList fromDirs = QStringList::split( '/', fromPath );
-    QStringList toDirs   = QStringList::split( '/', toPath );
+    QStringList fromDirs = fromPath.split( '/' );
+    QStringList toDirs   = toPath.split( '/' );
     QStringList::iterator fromIt = fromDirs.begin();
     QStringList::iterator toIt   = toDirs.begin();
 

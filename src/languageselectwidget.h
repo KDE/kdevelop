@@ -25,7 +25,7 @@ class LanguageSelectWidget : public QWidget
 
 public:
     /* for selection of project parts */
-    LanguageSelectWidget( QDomDocument &projectDom, QWidget *parent=0, const char *name=0 );
+    LanguageSelectWidget( QDomDocument &projectDom, QWidget *parent=0 );
     ~LanguageSelectWidget();
 
 public slots:

@@ -52,10 +52,10 @@ EditorProxy::EditorProxy()
 {
     KConfig *config = KGlobal::config();
     config->setGroup("UI");
-    int mdimode = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
+    //int mdimode = config->readEntry("MDIMode", KMdi::IDEAlMode);
 
-    KAction *ac = new KAction( i18n("Show Context Menu"), 0, this,
-        SLOT(showPopup()), TopLevel::getInstance()->main()->actionCollection(), "show_popup" );
+    KAction *ac = new KAction( i18n("Show Context Menu"), TopLevel::getInstance()->main()->actionCollection(), "show_popup" );
+    connect(ac, SIGNAL(triggered(bool)), SLOT(showPopup()));
     KShortcut cut ;/*= KStdAccel::shortcut(KStdAccel::PopupMenuContext);*/
     cut.append(Qt::CTRL + Qt::Key_Return);
     ac->setShortcut(cut);
@@ -99,28 +99,23 @@ void EditorProxy::installPopup( KParts::Part * part )
 
     KConfig *config = KGlobal::config();
     config->setGroup("UI");
-    bool m_tabBarShown = ! config->readNumEntry("TabWidgetVisibility", 0);
+    bool m_tabBarShown = ! config->readEntry("TabWidgetVisibility", 0);
     if (!m_tabBarShown)
     {
         KAction * action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
         if ( action && !action->isPlugged( popup ) )
         {
-            popup->insertSeparator( 0 );
-            action->plug( popup, 0 );
+            popup->insertSeparator( popup->actions().count() ? popup->actions().first() : 0L );
+            popup->insertAction( popup->actions().count() ? popup->actions().first() : 0L, action );
         }
         action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
-        if ( action && !action->isPlugged( popup ) )
-            action->plug( popup, 1 );
+        if ( action && !popup->actions().contains( action ) )
+            popup->insertAction( popup->actions().count() > 1 ? popup->actions()[1] : 0L, action );
     }
 
     view->setContextMenu( popup );
 
     connect(popup, SIGNAL(aboutToShow()), this, SLOT(popupAboutToShow()));
-
-    // ugly hack: mark the "original" items
-    m_popupIds.resize(popup->count());
-    for (uint index=0; index < popup->count(); ++index)
-        m_popupIds[index] = popup->idAt(index);
 }
 
 void EditorProxy::popupAboutToShow()

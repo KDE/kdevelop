@@ -29,7 +29,7 @@
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kiconloader.h>
+#include <kicon.h>
 #include <kedittoolbar.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -172,7 +172,7 @@ void SimpleMainWindow::raiseView(QWidget *view)
         dock->raiseWidget(view);
     }
     else if (m_widgets.contains(view) && m_widgetTabs.contains(view))
-        m_widgetTabs[view]->showPage(view);
+        m_widgetTabs[view]->setCurrentIndex(m_widgetTabs[view]->indexOf(view));
 }
 
 void SimpleMainWindow::lowerView(QWidget * /*view*/)
@@ -212,16 +212,19 @@ void SimpleMainWindow::createFramework()
 
 void SimpleMainWindow::createActions()
 {
-    m_raiseEditor = new KAction(i18n("Raise &Editor"), Qt::ALT+Qt::Key_C,
-        this, SLOT(raiseEditor()), actionCollection(), "raise_editor");
+    m_raiseEditor = new KAction(i18n("Raise &Editor"), actionCollection(), "raise_editor");
+    m_raiseEditor->setShortcut(Qt::ALT+Qt::Key_C);
     m_raiseEditor->setToolTip(i18n("Raise editor"));
     m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
+    connect(m_raiseEditor, SIGNAL(triggered(bool)), SLOT(raiseEditor()));
 
-    new KAction(i18n("Split &Horizontal"), Qt::CTRL+Qt::SHIFT+Qt::Key_T,
-        this, SLOT(slotSplitHorizontal()), actionCollection(), "split_h");
+    KAction* splitHoriz = new KAction(i18n("Split &Horizontal"), actionCollection(), "split_h");
+    splitHoriz->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_T);
+    connect(splitHoriz, SIGNAL(triggered(bool)), SLOT(slotSplitHorizontal()));
 
-    new KAction(i18n("Split &Vertical"), Qt::CTRL+Qt::SHIFT+Qt::Key_L,
-        this, SLOT(slotSplitVertical()), actionCollection(), "split_v");
+    KAction* splitVert = new KAction(i18n("Split &Vertical"), actionCollection(), "split_v");
+    splitVert->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_L);
+    connect(splitVert, SIGNAL(triggered(bool)), SLOT(slotSplitVertical()));
 
     KStdAction::configureToolbars(this, SLOT(configureToolbars()),
         actionCollection(), "set_configure_toolbars");
@@ -243,18 +246,18 @@ void SimpleMainWindow::raiseEditor()
 
 void SimpleMainWindow::gotoNextWindow()
 {
-    if ((m_activeTabWidget->currentPageIndex() + 1) < m_activeTabWidget->count())
-        m_activeTabWidget->setCurrentPage(m_activeTabWidget->currentPageIndex() + 1);
+    if ((m_activeTabWidget->currentIndex() + 1) < m_activeTabWidget->count())
+        m_activeTabWidget->setCurrentIndex(m_activeTabWidget->currentIndex() + 1);
     else
-        m_activeTabWidget->setCurrentPage(0);
+        m_activeTabWidget->setCurrentIndex(0);
 }
 
 void SimpleMainWindow::gotoPreviousWindow()
 {
-    if ((m_activeTabWidget->currentPageIndex() - 1) >= 0)
-        m_activeTabWidget->setCurrentPage(m_activeTabWidget->currentPageIndex() - 1);
+    if ((m_activeTabWidget->currentIndex() - 1) >= 0)
+        m_activeTabWidget->setCurrentIndex(m_activeTabWidget->currentIndex() - 1);
     else
-        m_activeTabWidget->setCurrentPage(m_activeTabWidget->count() - 1);
+        m_activeTabWidget->setCurrentIndex(m_activeTabWidget->count() - 1);
 }
 
 void SimpleMainWindow::gotoFirstWindow()
@@ -281,7 +284,7 @@ void SimpleMainWindow::slotDocumentURLChanged( const KUrl &oldURL, const KUrl &n
 {
     if (QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(
         DocumentController::getInstance()->partForURL(newURL)))
-        widget->setCaption(newURL.fileName());
+        widget->setWindowTitle(newURL.fileName());
 }
 
 void SimpleMainWindow::documentStateChanged(const KUrl &url, DocumentState state)
@@ -290,32 +293,24 @@ void SimpleMainWindow::documentStateChanged(const KUrl &url, DocumentState state
         DocumentController::getInstance()->partForURL(url));
     if (widget)
     {
-        //calculate the icon size if showTabIcons is false
-        //this is necessary to avoid tab resizing by setIcon() call
-        int isize = 16;
-        if (m_activeTabWidget && !m_showIconsOnTabs)
-        {
-            isize = m_activeTabWidget->fontMetrics().height() - 1;
-            isize = isize > 16 ? 16 : isize;
-        }
         switch (state)
         {
             // we should probably restore the original icon instead of just using "kdevelop",
             // but I have never seen any other icon in use so this should do for now
             case Clean:
                 if (m_showIconsOnTabs)
-                    widget->setIcon(SmallIcon("kdevelop", isize));
+                    widget->setWindowIcon(KIcon("kdevelop"));
                 else
-                    widget->setIcon(QPixmap());
+                    widget->setWindowIcon(QPixmap());
                 break;
             case Modified:
-                widget->setIcon(SmallIcon("filesave", isize));
+                widget->setWindowIcon(KIcon("filesave"));
                 break;
             case Dirty:
-                widget->setIcon(SmallIcon("revert", isize));
+                widget->setWindowIcon(KIcon("revert"));
                 break;
             case DirtyAndModified:
-                widget->setIcon(SmallIcon("stop", isize));
+                widget->setWindowIcon(KIcon("stop"));
                 break;
         }
     }

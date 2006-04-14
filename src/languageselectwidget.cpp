@@ -52,8 +52,8 @@ private:
 
 
 LanguageSelectWidget::LanguageSelectWidget(QDomDocument &projectDom,
-                                   QWidget *parent, const char *name)
-    : QWidget(parent, name), m_projectDom(projectDom)
+                                   QWidget *parent)
+    : QWidget(parent), m_projectDom(projectDom)
 {
     init();
 }
