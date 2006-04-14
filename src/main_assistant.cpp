@@ -99,12 +99,12 @@ int main(int argc, char *argv[])
   QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
            splash, SLOT(showMessage(const QString &)));
 
-  if (splash) splash->message( i18n( "Loading Settings" ) );
+  if (splash) splash->showMessage( i18n( "Loading Settings" ) );
   TopLevel::getInstance()->loadSettings();
 
   PluginController::getInstance()->loadInitialPlugins();
 
-  if (splash) splash->message( i18n( "Starting GUI" ) );
+  if (splash) splash->showMessage( i18n( "Starting GUI" ) );
 
 #if 0
 //BEGIN a workaround on kmdi bug - we do not allow mainwindow to be shown until now

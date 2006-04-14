@@ -268,7 +268,7 @@ void MainWindowShare::slotStopPopupActivated( int id )
 
 void MainWindowShare::slotStopMenuAboutToShow()
 {
-  QMenu* popup = m_stopProcesses->popupMenu();
+  QMenu* popup = m_stopProcesses->menu();
   popup->clear();
 
   int i = 0;
@@ -304,8 +304,8 @@ void MainWindowShare::slotSettings()
     KConfig* config = KGlobal::config();
 
     config->setGroup("Global Settings Dialog");
-    int height = config->readNumEntry( "Height", 600 );
-    int width = config->readNumEntry( "Width", 800 );
+    int height = config->readEntry( "Height", 600 );
+    int width = config->readEntry( "Width", 800 );
 
     dlg.resize( width, height );
 
@@ -430,8 +430,8 @@ void MainWindowShare::contextMenu(QMenu* popup, const Context *)
   if ( m_pMainWnd->menuBar()->isVisible() )
     return;
 
-  int id = popup->insertItem( i18n("Show &Menubar"), m_pMainWnd->menuBar(), SLOT(show()) );
-  popup->setWhatsThis(id, i18n("<b>Show menubar</b><p>Lets you switch the menubar on/off."));
+  QAction* action = popup->addAction( i18n("Show &Menubar"), m_pMainWnd->menuBar(), SLOT(show()) );
+  action->setWhatsThis(i18n("<b>Show menubar</b><p>Lets you switch the menubar on/off."));
 }
 
 void MainWindowShare::slotActivePartChanged( KParts::Part * part )

@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 
   Core::getInstance()->doEmitCoreInitialized();
 
-  if (splash) splash->message( i18n( "Starting GUI" ) );
+  if (splash) splash->showMessage( i18n( "Starting GUI" ) );
 
   TopLevel::getInstance()->main()->show();
 
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
       openProject = true;
   } else if( args->count() > 0 ){
       KUrl url = args->url( 0 );
-      QString ext = QFileInfo( url.fileName() ).extension();
+      QString ext = QFileInfo( url.fileName() ).suffix();
       if( ext == "kdevelop" ){
       ProjectManager::getInstance()->loadProject( url );
       openProject = true;
