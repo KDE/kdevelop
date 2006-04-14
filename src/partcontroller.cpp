@@ -1243,8 +1243,14 @@ void PartController::slotCloseOtherWindows()
 
 void PartController::slotOpenFile()
 {
-	KEncodingFileDialog::Result result = KEncodingFileDialog::getOpenURLsAndEncoding(QString::null, QString::null,
-		QString::null, TopLevel::getInstance()->main(), QString::null);
+	QString DefaultEncoding;
+	if ( QDomDocument * projectDom = API::getInstance()->projectDom() )
+	{
+		DefaultEncoding = DomUtil::readEntry( *projectDom, "/general/defaultencoding", QString::null );
+	}
+
+	KEncodingFileDialog::Result result = KEncodingFileDialog::getOpenURLsAndEncoding( DefaultEncoding, QString::null,
+		QString::null, TopLevel::getInstance()->main(), QString::null );
 
 	for ( KURL::List::Iterator it = result.URLs.begin(); it != result.URLs.end(); ++it )
 	{

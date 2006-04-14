@@ -85,7 +85,11 @@ void GeneralInfoWidget::writeConfig() {
     DomUtil::writeEntry(m_projectDom,"/general/version",version_edit->text());
     DomUtil::writeEntry(m_projectDom,"/general/description",description_edit->text());
 
-	const QString DefaultEncoding = KGlobal::charsets()->encodingForName( encoding_combo->currentText() );
+	QString DefaultEncoding = QString::null;
+	if ( encoding_combo->currentItem() > 0 )
+	{
+		DefaultEncoding = KGlobal::charsets()->encodingForName( encoding_combo->currentText() );
+	}
 	DomUtil::writeEntry( m_projectDom, "/general/defaultencoding", DefaultEncoding );
 }
 
