@@ -25,14 +25,12 @@
 
 QIcon KDevProjectFolderItem::icon() const
 {
-    return KMimeType::pixmapForURL(KUrl::fromPathOrURL(directory().absolutePath()), 0, 
-K3Icon::Small);
+    return KIO::pixmapForURL(KUrl::fromPathOrURL(directory().absolutePath()), 0, K3Icon::Small);
 }
 
 QIcon KDevProjectFileItem::icon() const
 {
-    return KMimeType::pixmapForURL(KUrl::fromPathOrURL(fileInfo().absoluteFilePath()), 0, 
-K3Icon::Small);
+    return KIO::pixmapForURL(KUrl::fromPathOrURL(fileInfo().absoluteFilePath()), 0, K3Icon::Small);
 }
 
 QList<KDevProjectFolderItem*> KDevProjectItem::folderList() const
