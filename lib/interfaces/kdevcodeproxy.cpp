@@ -109,6 +109,11 @@ void KDevCodeProxy::forceClear()
     clear();
 }
 
+KDevCodeProxy::Mode KDevCodeProxy::mode( ) const
+{
+    return codeAggregate() ->mode();
+}
+
 #include "kdevcodeproxy.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

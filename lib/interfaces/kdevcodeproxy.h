@@ -31,6 +31,14 @@ typedef QList<KDevCodeModel*> CodeModelList;
 
 class KDevCodeAggregate;
 
+/**
+ * \short A model which assembles multiple CodeModel%s into a global model and filters them as requested.
+ *
+ * This proxy is used to combine together the results of parsing multiple source
+ * files into one coherent model.  It allows you to add a KDevCodeModel for each
+ * url that the project encompasses.  These models are then joined together in
+ * the manner specified by mode(), and filtered if requested.
+ */
 class KDevCodeProxy : public QSortFilterProxyModel
 {
     Q_OBJECT
@@ -52,6 +60,7 @@ public:
                       KDevCodeModel *model );
     void deleteModel( const KUrl &url );
 
+    KDevCodeProxy::Mode mode() const;
     void setMode( KDevCodeProxy::Mode mode = Normalize );
     void setFilterDocument( const KUrl &url = KUrl() );
 

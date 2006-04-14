@@ -38,6 +38,7 @@ public:
                       KDevCodeModel *model );
     void deleteModel( const KUrl &url );
 
+    KDevCodeProxy::Mode mode() const;
     void setMode( KDevCodeProxy::Mode mode = KDevCodeProxy::Normalize );
     void setFilterDocument( const KUrl &url = KUrl() );
 

@@ -59,6 +59,11 @@ void KDevCodeAggregate::deleteModel( const KUrl &url )
     model->deleteLater();
 }
 
+KDevCodeProxy::Mode KDevCodeAggregate::mode( ) const
+{
+    return m_mode;
+}
+
 void KDevCodeAggregate::setMode( KDevCodeProxy::Mode mode )
 {
     m_mode = mode;
