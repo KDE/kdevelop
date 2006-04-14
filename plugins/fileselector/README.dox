@@ -1,0 +1,13 @@
+/** \class FileSelectorPart
+Powerful network transparent file browser utility
+
+\authors <a href="mailto:anders.lund AT lund.tdcadsl.dk">Anders Lund</a> Copyright (C) 2001
+
+\maintainer <a href="mailto:jowenn AT kde.org">Joseph Wenninger</a> Copyright (C) 2001
+\maintainer <a href="mailto:cullmann AT kde.org">Christoph Cullmann</a> Copyright (C) 2001
+\maintainer <a href="mailto:roberto AT kdevelop.org">Roberto Raggi</a> Copyright (C) 2003
+\maintainer <a href="mailto:cloudtemple AT mksat.net">Alexander Dymo</a> Copyright (C) 2003
+
+\feature Powerful network transparent file browser utility
+
+*/
