@@ -10,7 +10,7 @@
 #include <klocale.h>
 #include <kglobalsettings.h>
 
-SplashScreen::SplashScreen(const QPixmap& pixmap, WFlags f) : QSplashScreen(pixmap, f)
+KDevSplashScreen::KDevSplashScreen(const QPixmap& pixmap, WFlags f) : QSplashScreen(pixmap, f)
 {
 	QTimer *timer = new QTimer( this );
 	QObject::connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
@@ -21,19 +21,19 @@ SplashScreen::SplashScreen(const QPixmap& pixmap, WFlags f) : QSplashScreen(pixm
 }
 
 
-SplashScreen::~SplashScreen()
+KDevSplashScreen::~KDevSplashScreen()
 {
 }
 
 
-void SplashScreen::animate()
+void KDevSplashScreen::animate()
 {
 	state = ((state + 1) % (2*progress_bar_size-1));
 	repaint();
 }
 
 
-void SplashScreen::message( const QString &str, int flags, const QColor &color)
+void KDevSplashScreen::message( const QString &str, int flags, const QColor &color)
 {
 	QSplashScreen::message(str,flags,color);
 	animate();
@@ -41,7 +41,7 @@ void SplashScreen::message( const QString &str, int flags, const QColor &color)
 }
 
 
-void SplashScreen::drawContents (QPainter* painter)
+void KDevSplashScreen::drawContents (QPainter* painter)
 {
 	int position;
 	QColor base_color (201,229,165); // Base green color

@@ -83,13 +83,13 @@ int main(int argc, char *argv[])
 
   KDevAssistantExtension::init();
 
-  SplashScreen *splash = 0;
+  KDevSplashScreen *splash = 0;
   QString splashFile = locate("data", "kdevelop/pics/kdevassistant-splash.png");
   if (!splashFile.isEmpty())
   {
     QPixmap pm;
     pm.load(splashFile);
-    splash = new SplashScreen( pm );
+    splash = new KDevSplashScreen( pm );
   }
   if (splash) splash->show();
 

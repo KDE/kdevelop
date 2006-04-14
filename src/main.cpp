@@ -85,26 +85,26 @@ int main(int argc, char *argv[])
 
   KDevIDEExtension::init();
 
-  SplashScreen *splash = 0;
+  KDevSplashScreen *splash = 0;
   QString splashFile = locate("appdata", "pics/kdevelop-splash.png");
   if (!splashFile.isEmpty())
   {
     QPixmap pm;
     pm.load(splashFile);
-    splash = new SplashScreen( pm );
+    splash = new KDevSplashScreen( pm );
   }
-  
+
   app.processEvents();
 
   if (splash) splash->message( i18n( "Loading Settings" ) );
   TopLevel::getInstance()->loadSettings();
 
-  QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)), 
+  QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
     splash, SLOT(message(const QString &)));
   if (splash) splash->show();
-  
+
   PluginController::getInstance()->loadInitialPlugins();
-  
+
   Core::getInstance()->doEmitCoreInitialized();
 
   if (splash) splash->message( i18n( "Starting GUI" ) );
@@ -139,8 +139,8 @@ int main(int argc, char *argv[])
 	  PartController::getInstance()->editDocument( KURL(args->url(a)) );
       }
   }
-  
+
   kapp->dcopClient()->registerAs("kdevelop");
-  
+
   return app.exec();
 }

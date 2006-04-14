@@ -11,13 +11,13 @@ class QPixmap;
 /**
 Splash screen.
 */
-class SplashScreen : public QSplashScreen
+class KDevSplashScreen : public QSplashScreen
 {
 Q_OBJECT
 
 public:
-	SplashScreen(const QPixmap& pixmap, WFlags f = 0);
-	virtual ~SplashScreen();
+	KDevSplashScreen(const QPixmap& pixmap, WFlags f = 0);
+	virtual ~KDevSplashScreen();
 
 protected:
 	void drawContents (QPainter * painter);
@@ -31,7 +31,7 @@ private:
 	int state;
 	int progress_bar_size;
 	QString m_string;
-		
+
 };
 
 #endif
