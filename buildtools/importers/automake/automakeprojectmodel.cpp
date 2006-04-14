@@ -20,7 +20,7 @@
 
 #include "automakeprojectmodel.h"
 
-AutoMakeDirItem::AutoMakeDirItem( const QString& name, KDevItemGroup* parent )
+AutoMakeDirItem::AutoMakeDirItem( const QDir& name, KDevItemGroup* parent )
     : KDevProjectFolderItem( name, parent )
 {
 }

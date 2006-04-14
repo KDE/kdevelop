@@ -103,7 +103,7 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
     //first look for the subdirs
     //recursively descend into any other subdirs. when finished look for targets.
     //for each target, add the files for the target to the target
-    KDevProjectFolderItem *folderItem = new KDevProjectFolderItem( folder, rootItem );
+    AutoMakeDirItem* folderItem = new AutoMakeDirItem( folder, rootItem );
     rootItem->add( folderItem );
 
     QStringList subdirs = m_interface->subdirsFor( folder );
@@ -163,7 +163,7 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
                 folderItem->add( targetItem );
                 QList<QFileInfo> targetFiles = m_interface->filesForTarget( target );
                 foreach( QFileInfo fi, targetFiles )
-                    targetItem->add( new KDevProjectFileItem( fi, targetItem ) );
+                    targetItem->add( new AutoMakeFileItem( fi, targetItem ) );
             break;
         };
     }
@@ -175,9 +175,6 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
         folderItem->add( installedHeaders );
     if ( notInstalledHeaders )
         folderItem->add( notInstalledHeaders );
-
-
-
 }
 
 #include "automakeimporter.h"

@@ -24,17 +24,21 @@
 #include "kdevprojectmodel.h"
 #include "makefileinterface.h"
 
+namespace AutoTools { class ProjectAST; }
 
 class AutoMakeDirItem : public KDevProjectFolderItem
 {
 public:
-    AutoMakeDirItem( const QString& name, KDevItemGroup* parent = 0 );
+    AutoMakeDirItem( const QDir& dir, KDevItemGroup* parent = 0 );
     virtual ~AutoMakeDirItem();
 
     virtual KDevProjectFolderItem* folder() const
     {
         return const_cast<AutoMakeDirItem*>( this );
     }
+
+    void parseInfoFromAst( AutoTools::ProjectAST* ) {}
+
 };
 
 class AutoMakeFileItem : public KDevProjectFileItem
@@ -47,9 +51,6 @@ public:
     {
         return const_cast<AutoMakeFileItem*>( this );
     }
-
-    virtual QIcon icon() const { return QIcon(); }
-
 };
 
 class AutoMakeTargetItem : public KDevProjectTargetItem
@@ -62,6 +63,8 @@ public:
     {
         return const_cast<AutoMakeTargetItem*>( this );
     }
+
+    void parseInfoFromAst( AutoTools::ProjectAST* ) {}
 
 
 private:
