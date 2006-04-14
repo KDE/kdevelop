@@ -9,6 +9,7 @@
 #include <qlabel.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+#include <qdom.h>
 
 #include <kmimetype.h>
 #include <kservice.h>
@@ -55,12 +56,15 @@
 #include "kdevproject.h"
 #include "urlutil.h"
 #include "mimewarningdialog.h"
+#include "domutil.h"
 
 #include "designer.h"
 #include "kdevlanguagesupport.h"
 
 #include "multibuffer.h"
 #include "partcontroller.h"
+
+class QDomDocument;
 
 PartController *PartController::s_instance = 0;
 
@@ -432,6 +436,12 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
             createEditorPart( activate, addToCurrentBuffer, url );
         if ( editorpart )
         {
+            if ( m_presetEncoding.isNull() && API::getInstance()->projectDom() )
+            {
+                QDomDocument * projectDom = API::getInstance()->projectDom();
+                m_presetEncoding = DomUtil::readEntry( *projectDom, "/general/defaultencoding", QString::null );
+            }
+
             if ( !m_presetEncoding.isNull() )
             {
                 if ( KTextEditor::EncodingInterface * ei = dynamic_cast<KTextEditor::EncodingInterface*>( editorpart ) )

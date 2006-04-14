@@ -18,6 +18,7 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kcharsets.h>
 
 #include "generalinfowidget.h"
 #include "generalinfowidget.moc"
@@ -50,6 +51,29 @@ void GeneralInfoWidget::readConfig() {
     this->email_edit->setText(DomUtil::readEntry(m_projectDom,"/general/email"));
     this->version_edit->setText(DomUtil::readEntry(m_projectDom,"/general/version"));
     this->description_edit->setText(DomUtil::readEntry(m_projectDom,"/general/description"));
+
+	QStringList encodings;
+	encodings << i18n("Use global editor settings");
+	encodings += KGlobal::charsets()->descriptiveEncodingNames();
+	QStringList::const_iterator it = encodings.constBegin();
+	while ( it != encodings.constEnd() )
+	{
+		encoding_combo->insertItem( *it );
+		++it;
+	}
+	encoding_combo->setCurrentItem( 0 );
+
+//	const QString DefaultEncoding = KGlobal::charsets()->encodingForName( DomUtil::readEntry( m_projectDom, "/general/defaultencoding", QString::null ) );
+	const QString DefaultEncoding = DomUtil::readEntry( m_projectDom, "/general/defaultencoding", QString::null );
+	for ( int i = 0; i < encoding_combo->count(); i++ )
+	{
+		if ( KGlobal::charsets()->encodingForName( encoding_combo->text( i ) ) == DefaultEncoding )
+		{
+			encoding_combo->setCurrentItem( i );
+			break;
+		}
+	}
+
 }
 
 void GeneralInfoWidget::writeConfig() {
@@ -60,6 +84,9 @@ void GeneralInfoWidget::writeConfig() {
     DomUtil::writeEntry(m_projectDom,"/general/email",email_edit->text());
     DomUtil::writeEntry(m_projectDom,"/general/version",version_edit->text());
     DomUtil::writeEntry(m_projectDom,"/general/description",description_edit->text());
+
+	const QString DefaultEncoding = KGlobal::charsets()->encodingForName( encoding_combo->currentText() );
+	DomUtil::writeEntry( m_projectDom, "/general/defaultencoding", DefaultEncoding );
 }
 
 void GeneralInfoWidget::accept() {
