@@ -25,8 +25,9 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kinstance.h>
-#include "ktexteditor/viewcursorinterface.h"
-#include "ktexteditor/document.h"
+#include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/document.h>
+#include <ktexteditor/encodinginterface.h>
 
 #include "api.h"
 #include "partcontroller.h"
@@ -116,7 +117,7 @@ bool ProjectSession::restoreFromFile( const QString & sessionFileName, const QVa
 		}
 		++it;
 	}
-  
+
 	QTimer::singleShot( 0, this, SLOT(loadDocument()) );
 
   return true;
@@ -166,7 +167,7 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl, bool activate)
 {
   // read information about the views
   int nNrOfViews = docEl.attribute( "NumberOfViews", "0").toInt();
-  
+
   // we should restore every view, but right now we only support a single view per document
   // so use this simple method for now
 
@@ -178,11 +179,12 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl, bool activate)
 		dd.line = viewEl.attribute("line", "0").toInt();
 		dd.url = url;
 		dd.activate = activate;
-		
+		dd.encoding = viewEl.attribute( "Encoding" );
+
 		_docDataList << dd;
-	}  
-  
-/*  
+	}
+
+/*
   // loop over all views of this document
   int nView = 0;
 
@@ -263,25 +265,25 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueLi
   }
 
 	QPtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
-	for ( ; it.current(); ++it ) 
+	for ( ; it.current(); ++it )
 	{
-	
+
 		KParts::ReadOnlyPart* pReadOnlyPart = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
 		if (!pReadOnlyPart)
-			continue; 
-	
+			continue;
+
 		QString url = pReadOnlyPart->url().url();
-	
+
 		docIdStr.setNum(nDocs);
 		QDomElement docEl = domdoc.createElement("Doc" + docIdStr);
 		docEl.setAttribute( "URL", url);
 		docsAndViewsEl.appendChild( docEl);
 		nDocs++;
 		docEl.setAttribute( "NumberOfViews", 1);
-		
+
 		QDomElement viewEl = domdoc.createElement( "View0");
 		docEl.appendChild( viewEl);
-		
+
 		if ( dynamic_cast<HTMLDocumentationPart*>(pReadOnlyPart) )
 		{
 			viewEl.setAttribute("Type", "Documentation");
@@ -295,13 +297,21 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueLi
 				iface->cursorPosition(&line, &col);
 				viewEl.setAttribute( "line", line );
 			}
+			if ( KTextEditor::EncodingInterface * ei = dynamic_cast<KTextEditor::EncodingInterface*>( pReadOnlyPart ) )
+			{
+				QString encoding = ei->encoding();
+				if ( !encoding.isNull() )
+				{
+					viewEl.setAttribute( "Encoding", encoding );
+				}
+			}
 		}
 		else
 		{
 			viewEl.setAttribute("Type", "Other");
 		}
 	}
-  
+
 /*
   QPtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
   for ( ; it.current(); ++it ) {
@@ -386,12 +396,12 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueLi
 		KDevPlugin* pPlugin = (*itt);
 		QString pluginName = pPlugin->instance()->instanceName();
 		QDomElement pluginEl = domdoc.createElement(pluginName);
-		
+
 		// now plugin, save what you have!
 		pPlugin->savePartialProjectSession(&pluginEl);
-		
+
 		// if the plugin wrote anything, accept itt for the session, otherwise forget itt
-		if (pluginEl.hasChildNodes() || pluginEl.hasAttributes()) 
+		if (pluginEl.hasChildNodes() || pluginEl.hasAttributes())
 		{
 			pluginListEl.appendChild(pluginEl);
 		}
@@ -418,6 +428,7 @@ void ProjectSession::loadDocument( )
 		DocumentData & dd = _docDataList.first();
 		if ( dd.type == "Source" )
 		{
+			PartController::getInstance()->setEncoding( dd.encoding );
 			PartController::getInstance()->editDocumentInternal( dd.url, dd.line, -1, dd.activate );
 		}
 		else if ( dd.type == "Documentation" )
@@ -429,9 +440,9 @@ void ProjectSession::loadDocument( )
 		{
 			// FIXME needs to be deferred if !activate ?
 			PartController::getInstance()->editDocument( dd.url );
-		}		
+		}
 		_docDataList.pop_front();
-		
+
 		loadDocument();
 		//QTimer::singleShot( 0, this, SLOT(loadDocument()) );
 	}
