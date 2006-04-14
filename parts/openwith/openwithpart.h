@@ -14,11 +14,11 @@ class OpenWithPart : public KDevPlugin
   Q_OBJECT
 
 public:
-   
+
   OpenWithPart(QObject *parent, const char *name, const QStringList &);
   ~OpenWithPart();
 
- 
+
 private slots:
 
   void fillContextMenu(QPopupMenu *popup, const Context *context);
@@ -29,7 +29,7 @@ private slots:
 
 private:
 
-  KURL m_url;
+  KURL::List m_urls;
 };
 
 #endif
