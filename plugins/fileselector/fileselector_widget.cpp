@@ -327,8 +327,7 @@ void KDevFileSelector::slotFilterChange( const QString & nf )
         dir->clearFilter();
         filter->lineEdit()->setText( QString::null );
         QToolTip::add
-            ( btnFilter,
-                    QString( i18n("Apply last filter (\"%1\")") ).arg( lastFilter ) );
+            ( btnFilter, i18n( "Apply last filter (\"%1\")", lastFilter ) );
     }
     else
     {
