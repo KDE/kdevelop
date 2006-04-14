@@ -195,7 +195,7 @@ public:
     void setAttribute( const QByteArray& name, const QVariant& value )
     {
 	if( name == "id" )
-	    data->id = value.toCString();
+	    data->id = value.toByteArray();
 	else if( name == "kind" )
 	    data->kind = value.toInt();
 	else if( name == "name" )

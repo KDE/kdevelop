@@ -59,8 +59,8 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
     setInstance( KDevDocumentViewFactory::instance() );
 
     m_documentView = new KDevDocumentView( this, 0 );
-    m_documentView->setIcon( SmallIcon( "kmultiple" ) );
-    m_documentView->setCaption( i18n( "Documents" ) );
+    m_documentView->setWindowIcon( SmallIcon( "kmultiple" ) );
+    m_documentView->setWindowTitle( i18n( "Documents" ) );
 
     m_documentView->setModel( m_documentModel );
     KDevDocumentViewDelegate *delegate =

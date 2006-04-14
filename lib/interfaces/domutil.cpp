@@ -27,7 +27,7 @@ void DomUtil::makeEmpty( QDomElement& e )
 
 QDomElement DomUtil::elementByPath(const QDomDocument &doc, const QString &path)
 {
-    QStringList l = QStringList::split('/', path);
+    QStringList l = path.split('/', QString::SkipEmptyParts);
 
     QDomElement el;
 	if(&doc) el = doc.documentElement();
@@ -156,7 +156,7 @@ QDomElement DomUtil::namedChildElement( QDomElement& el, const QString& name )
 
 QDomElement DomUtil::createElementByPath(QDomDocument &doc, const QString &path)
 {
-    QStringList l = QStringList::split('/', path);
+    QStringList l = path.split('/', QString::KeepEmptyParts);
 
     QDomElement el;
       if(&doc) el =  doc.documentElement();
@@ -246,20 +246,20 @@ DomPath DomUtil::resolvPathStringExt(const QString pathstring)
 {
     // parse path
     int i;
-    QStringList pathParts = QStringList::split('/',pathstring);
+    QStringList pathParts = pathstring.split('/', QString::KeepEmptyParts);
     DomPath dompath;
     for (i=0; i<pathParts.count(); i++)
     {
-      QStringList pathElemParts = QStringList::split('|',pathParts[i],TRUE);
+      QStringList pathElemParts = pathParts[i].split('|');
       DomPathElement dompathelem;
       dompathelem.tagName = pathElemParts[0].simplified();
       if (pathElemParts.count()>1)
       {
         // handle attributes
-        QStringList attrParts = QStringList::split(';',pathElemParts[1]);
+        QStringList attrParts = pathElemParts[1].split(';', QString::KeepEmptyParts);
         for (int j=0; j<attrParts.count(); j++)
         {
-          QStringList attribSet = QStringList::split('=',attrParts[j]);
+          QStringList attribSet = attrParts[j].split('=', QString::KeepEmptyParts);
           if (attribSet.count()<2)
             continue;
           DomAttribute domattribute;

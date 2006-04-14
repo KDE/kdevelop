@@ -50,7 +50,7 @@ QString FileTemplate::readFile(KDevPlugin *part, const QString &fileName)
     if (!f.open(QIODevice::ReadOnly))
         return QString();
     QTextStream stream(&f);
-    QString str = stream.read();
+    QString str = stream.readAll();
 
     return makeSubstitutions( dom, str );
 }
@@ -85,7 +85,7 @@ bool FileTemplate::copy(KDevPlugin *part, const QString &name,
 
     QFileInfo fi(f);
     QString module = fi.baseName();
-    QString basefilename = fi.baseName(true);
+    QString basefilename = fi.completeBaseName();
     text.replace(QRegExp("\\$MODULE\\$"),module);
     text.replace(QRegExp("\\$FILENAME\\$"),basefilename);
 

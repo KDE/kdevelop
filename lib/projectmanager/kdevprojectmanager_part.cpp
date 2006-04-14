@@ -124,7 +124,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
   m_projectOverview->setModel(overviewModel);
   m_projectOverview->setItemDelegate(delegate);
   m_projectOverview->setWhatsThis(i18n("Project Overview"));
-  vbox->add(m_projectOverview);
+  vbox->addWidget(m_projectOverview);
 
   connect(m_projectOverview, SIGNAL(activateURL(KUrl)), this, SLOT(openURL(KUrl)));
 

@@ -193,7 +193,7 @@ void  KDevCatalog::addIndex( const QByteArray& name )
     }
 
     QFileInfo fileInfo( d->dbName );
-    QString indexName = fileInfo.dirPath(true) + "/" + fileInfo.baseName() + "." + QString(name) + ".idx";
+    QString indexName = QString("%1/%2.%3.idx").arg(fileInfo.absolutePath()).arg(fileInfo.baseName()).arg(QString(name));
 
     if( (ret = dbp->set_cachesize( dbp, 0, 2 * 1024 * 1024, 0 )) != 0 ){
       kDebug() << "set_cachesize: " << db_strerror(ret) << endl;
@@ -220,8 +220,8 @@ void  KDevCatalog::close()
 
   QMap<QByteArray, DB*>::Iterator it = d->indexList.begin();
   while( it != d->indexList.end() ){
-    if( it.data() ){
-      it.data()->close( it.data(), 0 );
+    if( it.value() ){
+      it.value()->close( it.value(), 0 );
     }
     ++it;
   }
@@ -261,7 +261,7 @@ void  KDevCatalog::open( const QString& dbName )
   }
 
   if ((ret = d->dbp->open(
-			  d->dbp, 0, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
+			  d->dbp, 0, d->dbName.toLocal8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
     kDebug() << "db_open: " << db_strerror(ret) << endl;
     close();
     return;
@@ -302,7 +302,7 @@ void  KDevCatalog::addItem( Tag& tag )
     QMap<QByteArray, DB*>::Iterator it = d->indexList.begin();
     while( it != d->indexList.end() ){
       if( tag.hasAttribute(it.key()) )
-	d->addItem( it.data(), tag.attribute(it.key()), id );
+	d->addItem( it.value(), tag.attribute(it.key()), id );
       ++it;
     }
   }
@@ -334,11 +334,10 @@ Tag  KDevCatalog::getItemById( const QByteArray& id )
   Tag tag;
 
   if( ret == 0 ){
-    QByteArray a;
-    a.setRawData( (const char*) data.data, data.size );
+    QByteArray a = QByteArray::fromRawData( (const char*) data.data, data.size );
     QDataStream stream( &a, QIODevice::ReadOnly );
     tag.load( stream );
-    a.resetRawData( (const char*) data.data, data.size );
+    a.clear();
   }
 
   return tag;
@@ -355,7 +354,7 @@ void  KDevCatalog::sync()
 
   QMap<QByteArray, DB*>::Iterator it = d->indexList.begin();
   while( it != d->indexList.end() ){
-    it.data()->sync( it.data(), 0 );
+    it.value()->sync( it.value(), 0 );
     ++it;
   }
 }
@@ -418,16 +417,12 @@ QList<Tag>  KDevCatalog::query( const QList<QueryArgument>& args )
   std::memset( &data, 0, sizeof(data) );
 
   while( join_curs->c_get(join_curs, &key, &data, 0) == 0 ) {
-
-    QByteArray a2;
-    {
-      a2.setRawData( (const char*) data.data, data.size );
-      QDataStream s( &a2, QIODevice::ReadOnly );
-      Tag tag;
-      tag.load( s );
-      a2.resetRawData( (const char*) data.data, data.size );
-      tags << tag;
-    }
+    QByteArray a2 = QByteArray::fromRawData( (const char*) data.data, data.size );
+    QDataStream s( &a2, QIODevice::ReadOnly );
+    Tag tag;
+    tag.load( s );
+    a2.clear();
+    tags << tag;
   }
 
   join_curs->c_close( join_curs );

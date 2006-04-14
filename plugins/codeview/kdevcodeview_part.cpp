@@ -69,8 +69,8 @@ KDevCodeViewPart::KDevCodeViewPart( QObject *parent,
     toolBar->setFrameShadow( QFrame::Raised );
 
     m_codeView = new KDevCodeView( this, window );
-    m_codeView->setIcon( SmallIcon( "view_tree" ) );
-    m_codeView->setCaption( i18n( "Code View" ) );
+    m_codeView->setWindowIcon( KIcon( "view_tree" ) );
+    m_codeView->setWindowTitle( i18n( "Code View" ) );
 
     QHBoxLayout *hbox = new QHBoxLayout( toolBar );
     hbox->setMargin( 2 );

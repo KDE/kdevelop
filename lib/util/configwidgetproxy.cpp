@@ -62,7 +62,7 @@ void ConfigWidgetProxy::slotConfigWidget( KDialogBase * dlg )
 	TitleMap::Iterator it = _globalTitleMap.begin();
 	while ( it != _globalTitleMap.end() )
 	{
-		_pageMap.insert( dlg->addVBoxPage( it.data().first, it.data().first, BarIcon( it.data().second, K3Icon::SizeMedium ) ), it.key() );
+		_pageMap.insert( dlg->addVBoxPage( it.value().first, it.value().first, BarIcon( it.value().second, K3Icon::SizeMedium ) ), it.key() );
 		++it;
 	}
 
@@ -75,7 +75,7 @@ void ConfigWidgetProxy::slotProjectConfigWidget( KDialogBase * dlg )
 	TitleMap::Iterator it = _projectTitleMap.begin();
 	while ( it != _projectTitleMap.end() )
 	{
-		_pageMap.insert( dlg->addVBoxPage( it.data().first, it.data().first, BarIcon( it.data().second, K3Icon::SizeMedium ) ), it.key() );
+		_pageMap.insert( dlg->addVBoxPage( it.value().first, it.value().first, BarIcon( it.value().second, K3Icon::SizeMedium ) ), it.key() );
 		++it;
 	}
 
@@ -95,8 +95,8 @@ void ConfigWidgetProxy::slotAboutToShowPage( QWidget * page )
 	PageMap::Iterator it = _pageMap.find( page );
 	if ( it != _pageMap.end() )
 	{
-		emit insertConfigWidget( static_cast<KDialogBase*>(const_cast<QObject*>(sender())), page, it.data() );
-		_pageMap.remove( it );
+		emit insertConfigWidget( static_cast<KDialogBase*>(const_cast<QObject*>(sender())), page, it.value() );
+		_pageMap.erase( it );
 	}
 }
 

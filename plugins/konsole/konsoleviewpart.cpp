@@ -12,7 +12,7 @@
 #include "konsoleviewpart.h"
 
 #include <kdevgenericfactory.h>
-#include <kiconloader.h>
+#include <kicon.h>
 #include <klocale.h>
 
 #include "kdevcore.h"
@@ -33,8 +33,8 @@ KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStrin
     m_widget->setWhatsThis(i18n("<b>Konsole</b><p>"
                                 "This window contains an embedded command line terminal."));
 
-    m_widget->setIcon( SmallIcon("konsole") );
-    m_widget->setCaption(i18n("Konsole"));
+    m_widget->setWindowIcon( KIcon("konsole") );
+    m_widget->setWindowTitle(i18n("Konsole"));
 
     mainWindow()->embedOutputView(m_widget, i18n("Konsole"), i18n("Embedded console window"));
 }

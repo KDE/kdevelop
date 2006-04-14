@@ -66,7 +66,7 @@ bool KDevGenericImporter::isValid(const QFileInfo &fileInfo) const
 
     bool ok = fileInfo.isDir();
     for (QStringList::ConstIterator it = includes.begin(); !ok && it != includes.end(); ++it) {
-        QRegExp rx(*it, true, true);
+        QRegExp rx(*it, Qt::CaseSensitive, QRegExp::Wildcard);
         if (rx.exactMatch(fileName)) {
             ok = true;
         }
@@ -76,7 +76,7 @@ bool KDevGenericImporter::isValid(const QFileInfo &fileInfo) const
         return false;
 
     for (QStringList::ConstIterator it = excludes.begin(); it != excludes.end(); ++it) {
-        QRegExp rx(*it, true, true);
+        QRegExp rx(*it, Qt::CaseSensitive, QRegExp::Wildcard);
         if (rx.exactMatch(fileName)) {
             return false;
         }
