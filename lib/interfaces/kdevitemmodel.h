@@ -66,6 +66,14 @@ public:
    */
   virtual KDevItemCollection *collection() const { return 0; }
 
+  /**
+   * Set the name of the item to the name specified by @p newName
+   *
+   * Implementations should ensure that the new name to be set is not an empty
+   * string
+   */
+  virtual void setName( const QString& newName ) = 0;
+
   /** Get the name of the item */
   virtual QString name() const = 0;
 
@@ -101,7 +109,7 @@ public:
 
   /**
    * Get the index of the item described by @p item
-   * 
+   *
    * Subclasses that implement KDevItemGroup should return -1 if the item is
    * not in this item group.
    */
@@ -109,7 +117,7 @@ public:
 
   /**
    * Get the item at the index specified by @p index
-   * 
+   *
    * If there is no item at the specified index, the returned value will be
    * zero.
    * @return the item specified by @p index
@@ -130,6 +138,13 @@ public:
   virtual ~KDevItemCollection() {}
 
   virtual KDevItemCollection *collection() const { return const_cast<KDevItemCollection*>(this); }
+
+  /** @copydoc KDevItem::setName( const QString& ) */
+  virtual void setName( const QString& newName  )
+  {
+    Q_ASSERT( !newName.isEmpty() );
+    m_name = newName;
+  }
 
   /** @copydoc KDevItem::name() */
   virtual QString name() const { return m_name; }
@@ -160,7 +175,7 @@ public:
 
   /**
    * Adds a KDevItem specified by @p item to the collection.
-   * 
+   *
    * The collection will become the parent of this item. Items that are added
    * should not already have a parent.
    */
@@ -190,7 +205,7 @@ public:
 
   /**
    * Replace an existing item in the collection with a different item.
-   * 
+   *
    * The item at the index position @p index is replaced with @p item. The
    * index specifed by @p index must be a valid index position.
    */
@@ -210,7 +225,7 @@ private:
  * The generic KDevelop Model.
  *
  * If you need a model anywhere in KDevelop, then your model can inherit
- * from KDevItemModel and you can store your items in classes derived from 
+ * from KDevItemModel and you can store your items in classes derived from
  * KDevItem to get some nice features.
  */
 class KDevItemModel: public QAbstractItemModel
