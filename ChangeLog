@@ -1,3 +1,13 @@
+2006-04-14 Jens Dagerbo <jens.dagerbo@swipnet.se>
+* Improved support for encodings
+  # KDevelop will now obey the selected encoding in the File Open dialog
+  # The OpenWith plugin now offers all available encodings in "Open As"
+  # The encoding for each open file is saved with the session, and will
+    be used to open that file the next time the project is loaded
+  # Default encoding can be set per project in the Project Options -
+    this will be the default when opening a file
+  # File Open encoding will default to the open project's default
+
 2006-04-07 Jens Dagerbo <jens.dagerbo@swipnet.se>
 * Added KDevShellWidget - a thin wrapper around konsolepart, aimed at
   executing shell type applications.
