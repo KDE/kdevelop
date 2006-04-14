@@ -257,6 +257,16 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 	// (Try this once before verifying the URL, we could be dealing with a file that no longer exists on disc)
 	if ( KParts::Part *existingPart = partForURL( url ) )
 	{
+		// if we've been asked to OpenAs an open file with a specific encoding, assume the user wants to change encoding
+		if ( !m_presetEncoding.isNull() )
+		{
+			if ( KTextEditor::EncodingInterface * ei = dynamic_cast<KTextEditor::EncodingInterface*>( existingPart ) )
+			{
+				ei->setEncoding( m_presetEncoding );
+			}
+			m_presetEncoding = QString::null;
+		}
+
 		addHistoryEntry();
 		activatePart( existingPart );
     	EditorProxy::getInstance()->setLineNumber( existingPart, lineNum, col );
