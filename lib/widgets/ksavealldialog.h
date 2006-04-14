@@ -33,7 +33,7 @@ Dialogs to save multiple files.
 /**
 Dialog to save selected files.
 */
-class KSaveSelectDialog : public KDialogBase
+class KSaveSelectDialog : public KDialog
 {
 	Q_OBJECT
 	
@@ -58,7 +58,7 @@ private:
 /**
 Dialog to save all files.
 */
-class KSaveAllDialog : public KDialogBase
+class KSaveAllDialog : public KDialog
 {
   Q_OBJECT
 

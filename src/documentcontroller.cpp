@@ -685,7 +685,8 @@ void DocumentController::editDocumentInternal( const KUrl & inputUrl,
 
             if ( !editorPart->widget() )
             {
-                editorPart->createView( TopLevel::getInstance()->main() );
+                // The tab widget does the reparenting
+                editorPart->createView(0L);
             }
 
             addHistoryEntry();

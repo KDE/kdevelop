@@ -64,8 +64,8 @@ DDockWidget *DMainWindow::toolWindow(Qt::DockWidgetArea area) const
         case Qt::BottomDockWidgetArea: return m_bottomDock;
         case Qt::LeftDockWidgetArea: return m_leftDock;
         case Qt::RightDockWidgetArea: return m_rightDock;
+        default: return 0;
     }
-    return 0;
 }
 
 void DMainWindow::createToolWindows()
@@ -91,11 +91,10 @@ void DMainWindow::addWidget(DTabWidget *tab, QWidget *widget, const QString &tit
 {
     int idx = -1;
     if (m_openTabAfterCurrent && (tab->count() > 0))
-        idx = tab->currentPageIndex() + 1;
+        idx = tab->currentIndex() + 1;
     if (m_showIconsOnTabs)
     {
-        const QPixmap *pixmap = widget->icon();
-        const QIcon &icons = (pixmap && (pixmap->size().height() <= 16)) ? *(pixmap) : SmallIcon("kdevelop");
+        const QIcon& icons = !widget->windowIcon().isNull() ? widget->windowIcon() : KIcon("kdevelop");
         tab->insertTab(widget, icons, title, idx);
     }
     else
@@ -103,7 +102,7 @@ void DMainWindow::addWidget(DTabWidget *tab, QWidget *widget, const QString &tit
     m_widgets.append(widget);
     m_widgetTabs[widget] = tab;
     widget->installEventFilter(this);
-    tab->showPage(widget);
+    tab->setCurrentIndex(tab->indexOf(widget));
 }
 
 void DMainWindow::removeWidget(QWidget *widget)
@@ -117,7 +116,6 @@ void DMainWindow::removeWidget(QWidget *widget)
         if (tab->indexOf(widget) >= 0)
         {
             tab->removePage(widget);
-            widget->reparent(0,QPoint(0,0),false);
             if (tab->count() == 0)
             {
                 if (tab->closeButton())
@@ -139,17 +137,17 @@ void DMainWindow::removeWidget(QWidget *widget)
                 //focus smth in m_activeTabWidget
                 if (m_activeTabWidget)
                 {
-                    if (m_activeTabWidget->currentPage())
+                    if (m_activeTabWidget->currentWidget())
                     {
                         kDebug() << "trying best!" << endl;
-                        m_activeTabWidget->currentPage()->setFocus();
+                        m_activeTabWidget->currentWidget()->setFocus();
                     }
                 }
             }
         }
     }
 
-    m_widgets.remove(widget);
+    m_widgets.removeAll(widget);
     m_widgetTabs.remove(widget);
 }
 
@@ -220,7 +218,7 @@ bool DMainWindow::eventFilter(QObject *obj, QEvent *ev)
         if (m_widgetTabs.contains(w))
         {
             DTabWidget *tab = m_widgetTabs[w];
-            tab->setTabIconSet(w, w->icon() ? (*(w->icon())) : QPixmap());
+            tab->setTabIcon(tab->indexOf(w), w->windowIcon());
         }
     }
     else if (ev->type() == QEvent::WindowTitleChange)

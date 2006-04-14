@@ -33,15 +33,18 @@ KDevHTMLPart::KDevHTMLPart()
   connect(this, SIGNAL(canceled(const QString &)), this, SLOT(slotCancelled(const QString &)));
 
   KActionCollection * actions = actionCollection();// new KActionCollection( this );
-  reloadAction = new KAction( i18n( "Reload" ), "reload", 0,
-    this, SLOT( slotReload() ), actions, "doc_reload" );
+  reloadAction = new KAction( KIcon("reload"), i18n( "Reload" ), actions, "doc_reload" );
   reloadAction->setWhatsThis(i18n("<b>Reload</b><p>Reloads the current document."));
-  stopAction = new KAction( i18n( "Stop" ), "stop", 0,
-    this, SLOT( slotStop() ), actions, "doc_stop" );
+  connect(reloadAction, SIGNAL(triggered(bool)), SLOT( slotReload() ));
+
+  stopAction = new KAction( KIcon("stop"), i18n( "Stop" ), actions, "doc_stop" );
   stopAction->setWhatsThis(i18n("<b>Stop</b><p>Stops the loading of current document."));
-  duplicateAction = new KAction( i18n( "Duplicate Tab" ), "window_new", 0,
-    this, SLOT( slotDuplicate() ), actions, "doc_dup" );
+  connect(stopAction, SIGNAL(triggered(bool)), SLOT( slotStop() ));
+
+  duplicateAction = new KAction( KIcon("window_new"), i18n( "Duplicate Tab" ), actions, "doc_dup" );
   duplicateAction->setWhatsThis(i18n("<b>Duplicate window</b><p>Opens current document in a new window."));
+  connect(duplicateAction, SIGNAL(triggered(bool)), SLOT( slotDuplicate() ));
+
   printAction = KStdAction::print(this, SLOT(slotPrint()), actions, "print_doc");
   copyAction = KStdAction::copy(this, SLOT(slotCopy()), actions, "copy_doc_selection");
 
@@ -50,28 +53,26 @@ KDevHTMLPart::KDevHTMLPart()
 
 //BEGIN documentation history stuff
 
-  m_backAction = new KToolBarPopupAction(i18n("Back"), "back", 0,
-    this, SLOT(slotBack()),
-    actions, "browser_back");
+  m_backAction = new KToolBarPopupAction(KIcon("back"), i18n("Back"), actions, "browser_back");
   m_backAction->setEnabled( false );
   m_backAction->setToolTip(i18n("Back"));
   m_backAction->setWhatsThis(i18n("<b>Back</b><p>Moves backwards one step in the <b>documentation</b> browsing history."));
+  connect(m_backAction, SIGNAL(triggered(bool)), SLOT(slotBack()));
 
-  connect(m_backAction->popupMenu(), SIGNAL(aboutToShow()),
+  connect(m_backAction->menu(), SIGNAL(aboutToShow()),
          this, SLOT(slotBackAboutToShow()));
-  connect(m_backAction->popupMenu(), SIGNAL(activated(int)),
+  connect(m_backAction->menu(), SIGNAL(activated(int)),
          this, SLOT(slotPopupActivated(int)));
 
-  m_forwardAction = new KToolBarPopupAction(i18n("Forward"), "forward", 0,
-    this, SLOT(slotForward()),
-    actions, "browser_forward");
+  m_forwardAction = new KToolBarPopupAction(KIcon("forward"), i18n("Forward"), actions, "browser_forward");
   m_forwardAction->setEnabled( false );
   m_forwardAction->setToolTip(i18n("Forward"));
   m_forwardAction->setWhatsThis(i18n("<b>Forward</b><p>Moves forward one step in the <b>documentation</b> browsing history."));
+  connect(m_forwardAction, SIGNAL(triggered(bool)), SLOT(slotForward()));
 
-  connect(m_forwardAction->popupMenu(), SIGNAL(aboutToShow()),
+  connect(m_forwardAction->menu(), SIGNAL(aboutToShow()),
          this, SLOT(slotForwardAboutToShow()));
-  connect(m_forwardAction->popupMenu(), SIGNAL(activated(int)),
+  connect(m_forwardAction->menu(), SIGNAL(activated(int)),
          this, SLOT(slotPopupActivated(int)));
 
   m_restoring = false;
@@ -97,42 +98,42 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
   QAction* idNewWindow = 0L;
   if (!url.isEmpty() && (m_options & CanOpenInNewWindow))
   {
-    idNewWindow = popup.addAction(QIcon(SmallIcon("window_new")),i18n("Open in New Tab"));
+    idNewWindow = popup.addAction(KIcon("window_new"),i18n("Open in New Tab"));
     idNewWindow->setWhatsThis(i18n("<b>Open in new window</b><p>Opens current link in a new window."));
     needSep = true;
   }
   if (m_options & CanDuplicate)
   {
-      duplicateAction->plug(&popup);
+      popup.addAction(duplicateAction);
       needSep = true;
   }
   if (needSep)
-      popup.insertSeparator();
+      popup.addSeparator();
 
-  m_backAction->plug( &popup );
-  m_forwardAction->plug( &popup );
-  reloadAction->plug(&popup);
-//  stopAction->plug(&popup);
-  popup.insertSeparator();
+  popup.addAction(m_backAction);
+  popup.addAction(m_forwardAction);
+  popup.addAction(reloadAction);
+//  popup->addAction(stopAction);
+  popup.addSeparator();
 
-  copyAction->plug( &popup );
-  popup.insertSeparator();
+  popup.addAction(copyAction);
+  popup.addSeparator();
 
-  printAction->plug(&popup);
-  popup.insertSeparator();
+  popup.addAction(printAction);
+  popup.addSeparator();
 
   KAction * incFontAction = this->action("incFontSizes");
   KAction * decFontAction = this->action("decFontSizes");
   if ( incFontAction && decFontAction )
   {
-    incFontAction->plug( &popup );
-    decFontAction->plug( &popup );
-    popup.insertSeparator();
+    popup.addAction(incFontAction);
+    popup.addAction(decFontAction);
+    popup.addSeparator();
   }
 
   KAction *ac = action("setEncoding");
   if (ac)
-    ac->plug(&popup);
+    popup.addAction(ac);
 
   QAction* r = popup.exec(p);
 
@@ -255,7 +256,7 @@ QString KDevHTMLPart::resolveEnvVarsInURL(const QString& url)
 {
   // check for environment variables and make necessary translations
   QString path = url;
-  int nDollarPos = path.find( '$' );
+  int nDollarPos = path.indexOf( '$' );
 
   // Note: the while loop below is a copy of code in kdecore/kconfigbase.cpp ;)
   while( nDollarPos != -1 && nDollarPos+1 < static_cast<int>(path.length())) {
@@ -273,7 +274,7 @@ QString KDevHTMLPart::resolveEnvVarsInURL(const QString& url)
       if (fs)
       {
          QTextStream ts(fs, QIODevice::ReadOnly);
-         result = ts.read().trimmed();
+         result = ts.readAll().trimmed();
          pclose(fs);
       }
       path.replace( nDollarPos, nEndPos-nDollarPos, result );
@@ -297,7 +298,7 @@ QString KDevHTMLPart::resolveEnvVarsInURL(const QString& url)
       }
       const char* pEnv = 0;
       if (!aVarName.isEmpty())
-           pEnv = getenv( aVarName.ascii() );
+           pEnv = getenv( aVarName.toAscii() );
       if( pEnv ) {
         // !!! Sergey A. Sukiyazov <corwin@micom.don.ru> !!!
         // A environment variables may contain values in 8bit
@@ -313,7 +314,7 @@ QString KDevHTMLPart::resolveEnvVarsInURL(const QString& url)
       path.remove( nDollarPos, 1 );
       nDollarPos++;
     }
-    nDollarPos = path.find( '$', nDollarPos );
+    nDollarPos = path.indexOf( '$', nDollarPos );
   }
 
   return path;
@@ -410,7 +411,7 @@ void KDevHTMLPart::slotForward()
 
 void KDevHTMLPart::slotBackAboutToShow()
 {
-    KMenu *popup = m_backAction->popupMenu();
+    QMenu *popup = m_backAction->menu();
     popup->clear();
 
     if ( m_Current == m_history.begin() ) return;
@@ -435,7 +436,7 @@ void KDevHTMLPart::slotBackAboutToShow()
 
 void KDevHTMLPart::slotForwardAboutToShow()
 {
-    KMenu *popup = m_forwardAction->popupMenu();
+    QMenu *popup = m_forwardAction->menu();
     popup->clear();
 
     if ( m_Current == lastElement() ) return;

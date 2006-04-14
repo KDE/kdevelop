@@ -60,10 +60,10 @@ private:
 
 
 KSaveSelectDialog::KSaveSelectDialog( KUrl::List const & filelist, KUrl::List const & ignorelist, QWidget * parent ) :
-  KDialogBase( parent, "SaveAllDialog", true, i18n("Save Modified Files?"),
-	       Ok | User1 | Close )
+  KDialog( parent, i18n("Save Modified Files?"), Ok | User1 | Close )
 {
-  KVBox *top = makeVBoxMainWidget();
+  KVBox *top = new KVBox(this);
+  setMainWidget(top);
 
   (void)new QLabel( i18n("The following files have been modified. Save them?"), top );
 
@@ -72,7 +72,7 @@ KSaveSelectDialog::KSaveSelectDialog( KUrl::List const & filelist, KUrl::List co
 	_listview->header()->hide();
 	_listview->header()->setResizeMode(0, QHeaderView::Stretch);
 
-	setButtonOK( KGuiItem(i18n("Save &Selected"), QString::null, i18n("Saves all selected files")) );
+	setButtonGuiItem( Ok, KGuiItem(i18n("Save &Selected"), QString::null, i18n("Saves all selected files")) );
 	setButtonText( User1, i18n("Save &None") );
 	setButtonText( Close, KStdGuiItem::cancel().text() );
 	setButtonTip( User1, i18n("Lose all modifications") );
@@ -146,19 +146,19 @@ KUrl::List KSaveSelectDialog::filesNotToSave( )
 
 
 KSaveAllDialog::KSaveAllDialog( const QStringList& filenames, QWidget* parent ) :
-  KDialogBase( parent, "SaveAllDialog", true, i18n("Save Modified Files?"),
-	       Ok | User1 | Close )
+  KDialog( parent, i18n("Save Modified Files?"), Ok | User1 | Close )
 {
   m_result = Cancel;
 
-  KVBox *top = makeVBoxMainWidget();
+  KVBox *top = new KVBox(this);
+  setMainWidget(top);
 
   (void)new QLabel( i18n("The following files have been modified. Save them?"), top );
   QListWidget* lb = new QListWidget( top );
   lb->setMinimumHeight( lb->fontMetrics().height() * 5 );
   lb->addItems( filenames );
 
-  setButtonOK( KGuiItem(i18n("Save &All"), QString::null, i18n("Saves all modified files")) );
+  setButtonGuiItem( Ok, KGuiItem(i18n("Save &All"), QString::null, i18n("Saves all modified files")) );
   setButtonText( User1, i18n("Save &None") );
   setButtonText( Close, KStdGuiItem::cancel().text() );
   setButtonTip( User1, i18n("Lose all modifications") );

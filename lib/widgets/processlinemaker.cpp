@@ -45,7 +45,7 @@ void ProcessLineMaker::slotReceivedStdout( const QString& s )
     
     stdoutbuf += s;
     int pos;
-    while ( (pos = stdoutbuf.find('\n')) != -1) {
+    while ( (pos = stdoutbuf.indexOf('\n')) != -1) {
         QString line = stdoutbuf.left(pos);
         emit receivedStdoutLine(line);
         stdoutbuf.remove(0, pos+1);
@@ -72,7 +72,7 @@ void ProcessLineMaker::slotReceivedStderr( const QString& s )
     
     stderrbuf += s;
     int pos;
-    while ( (pos = stderrbuf.find('\n')) != -1) {
+    while ( (pos = stderrbuf.indexOf('\n')) != -1) {
         QString line = stderrbuf.left(pos);
         emit receivedStderrLine(line);
         stderrbuf.remove(0, pos+1);

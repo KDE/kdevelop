@@ -33,7 +33,7 @@ class DockWidget;
 class DockSplitter: public QSplitter {
     Q_OBJECT
 public:
-    DockSplitter(Qt::Orientation orientation, QWidget *parent = 0, const char *name = 0);
+    DockSplitter(Qt::Orientation orientation, QWidget *parent = 0);
     ~DockSplitter();
 
     void addDock(int row, int col, QWidget *dock);

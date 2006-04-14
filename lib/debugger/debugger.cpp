@@ -43,11 +43,11 @@ void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool 
     iface->removeMark( lineNum, Breakpoint | ActiveBreakpoint | ReachedBreakpoint | DisabledBreakpoint );
 
     BPItem bpItem(fileName, lineNum);
-    Q3ValueList<BPItem>::Iterator it = BPList.find(bpItem);
-    if (it != BPList.end())
+    int i = BPList.indexOf(bpItem);
+    if (i != -1)
     {
 //        kDebug(9012) << "Removing BP=" << fileName << ":" << lineNum << endl;
-        BPList.remove(it);
+        BPList.removeAt(i);
     }
 
     // An id of -1 means this breakpoint should be hidden from the user.

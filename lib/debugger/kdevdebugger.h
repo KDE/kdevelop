@@ -37,7 +37,7 @@ class KDevDebugger : public QObject
     
 public:
     
-  KDevDebugger(QObject *parent=0, const char *name=0);
+  KDevDebugger(QObject *parent=0);
   ~KDevDebugger();
 
   /**

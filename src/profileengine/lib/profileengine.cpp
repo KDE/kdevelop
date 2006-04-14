@@ -116,7 +116,7 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
         names.append(name);
         if (profile->hasInEntryList(disableList, name))
         {
-            it = list.remove(it);
+            it = list.erase(it);
             continue;
         }
         ++it;
@@ -230,7 +230,7 @@ void ProfileEngine::diffProfiles(OfferType offerType, const QString &profile1,
         if (offers2List.contains(*it))
         {
 //             kDebug() << "    keep" << endl;
-            offers2.remove(offers2List[*it]);
+            offers2.removeAll(offers2List[*it]);
         }
         else
         {

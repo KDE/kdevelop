@@ -21,8 +21,8 @@
 //Added by qt3to4:
 #include <QPixmap>
 
-KDevDebugger::KDevDebugger(QObject *parent, const char *name)
-  : QObject(parent, name)
+KDevDebugger::KDevDebugger(QObject *parent)
+  : QObject(parent)
 {
 }
 

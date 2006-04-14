@@ -23,8 +23,8 @@
 
 namespace Ideal {
 
-DockSplitter::DockSplitter(Qt::Orientation orientation, QWidget *parent, const char *name)
-    :QSplitter(parent, name), m_orientation(orientation)
+DockSplitter::DockSplitter(Qt::Orientation orientation, QWidget *parent)
+    :QSplitter(parent), m_orientation(orientation)
 {
     switch (m_orientation)
     {
@@ -64,7 +64,6 @@ void DockSplitter::addDock(int row, int col, QWidget *dock)
         createSplitters(row);
     QSplitter *splitter = m_splitters.at(row);
 
-    dock->reparent(splitter, QPoint(0,0), true);
     if (col < m_docks.at(row).count()-1)
         shiftWidgets(splitter, row, col+1);
 }
@@ -102,7 +101,6 @@ void DockSplitter::removeDock(int row, int col, bool alsoDelete)
     }
     else
     {
-        w->reparent(0, QPoint(0,0), false);
         w->hide();
     }
 

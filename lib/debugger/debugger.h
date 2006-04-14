@@ -118,7 +118,7 @@ private:
 
     static Debugger *s_instance;
     KDevDocumentController *m_partController;
-    Q3ValueList<BPItem> BPList;
+    QList<BPItem> BPList;
 };
 
 #endif
