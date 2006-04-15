@@ -232,6 +232,7 @@ void GrepViewWidget::searchActivated()
 		command += "| grep -v \"SCCS/\" ";
 		command += "| grep -v \"CVS/\" ";
 		command += "| grep -v \"\\.svn/\" ";
+		command += "| grep -v \"_darcs/\" ";
 	}
 
 	// quote spaces in filenames going to xargs
