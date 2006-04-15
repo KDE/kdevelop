@@ -169,7 +169,9 @@ void SimpleMainWindow::raiseView(QWidget *view)
     //editor view is passed to this function but the ui library knows only
     //of its parent which is an editor wrapper, simply replacing the view
     //by its wrapper helps here
-    if (view->parent() && view->parent()->isA("EditorWrapper"))
+    if (view->parent())
+        kdDebug() << view->parent()->className() << endl;
+    if (view->parent() && (view->parent()->isA("EditorWrapper") || view->parent()->isA("MultiBuffer")))
     {
 //         kdDebug() << "parent is editor wrapper: " << 
 //             static_cast<EditorWrapper*>(view->parent()) << endl;
