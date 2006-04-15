@@ -540,6 +540,7 @@ void AppWizardDialog::accept()
 		QFile f;
 		f.open(IO_WriteOnly, tempFile->handle());
 		QTextStream temps(&f);
+		temps.setEncoding(QTextStream::UnicodeUTF8);
 		temps << templateText;
 		f.flush();
 		QString templateName( QString( "%1_TEMPLATE" ).arg( (*it).suffix ).upper() );
@@ -726,7 +727,9 @@ bool AppWizardDialog::copyFile( const QString &source, const QString &dest, bool
 		if( inputFile.open( IO_ReadOnly ) && outputFile.open(IO_WriteOnly) )
 		{
 			QTextStream input( &inputFile );
+			input.setEncoding(QTextStream::UnicodeUTF8);
 			QTextStream output( &outputFile );
+			output.setEncoding(QTextStream::UnicodeUTF8);
 			while( !input.atEnd() )
 				output << KMacroExpander::expandMacros(input.readLine(), subMap) << "\n";
 			// Preserve file mode...
@@ -1019,6 +1022,7 @@ void AppWizardDialog::openAfterGeneration()
 	if( !file.open( IO_WriteOnly ) )
 		return;
 	QTextStream ts( &file );
+	ts.setEncoding(QTextStream::UnicodeUTF8);
 	ts << projectDOM.toString(2);
 	file.close();
 

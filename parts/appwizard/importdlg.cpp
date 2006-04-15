@@ -188,6 +188,7 @@ void ImportDialog::accept()
         return;
     }
 	QTextStream ts( &dest );
+	ts.setEncoding(QTextStream::UnicodeUTF8);
 	ts << projectDOM.toString(2);
 	dest.close();
 
