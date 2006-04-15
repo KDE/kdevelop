@@ -39,16 +39,16 @@ public:
     virtual ~CppLanguageSupport();
 
     //KDevLanguageSupport implementation
-    virtual KDevCodeModel *codeModel( const KUrl &url = KUrl() ) const;
+    virtual KDevCodeModel *codeModel( const KUrl& url ) const;
     virtual KDevCodeProxy *codeProxy() const;
     virtual KDevCodeDelegate *codeDelegate() const;
     virtual KDevCodeRepository *codeRepository() const;
     virtual QStringList mimeTypes() const;
 
 private slots:
-    void documentLoaded( const KUrl &url );
-    void documentClosed( const KUrl &url );
-    void documentActivated( const KUrl &url );
+    void documentLoaded( KDevDocument* file );
+    void documentClosed( KDevDocument* file );
+    void documentActivated( KDevDocument* file );
 
 private:
     QStringList m_mimetypes;

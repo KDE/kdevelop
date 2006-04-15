@@ -78,7 +78,7 @@ private slots:
     void slotEnteredDirectory( EnteringDirectoryItem* );
     void slotExitedDirectory( ExitingDirectoryItem* );
     void insertItem( MakeItem* );
-    void slotDocumentOpened(const KUrl& filename);
+    void slotDocumentOpened(KDevDocument* document);
     void slotDocumentAboutToClose(KTextEditor::Document* doc);
 
 private:

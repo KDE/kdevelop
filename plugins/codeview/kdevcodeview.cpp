@@ -26,7 +26,7 @@
 
 #include <kmenu.h>
 #include <kdebug.h>
-#include <kurl.h>
+#include <kfile.h>
 #include <klocale.h>
 
 #include <kdevapi.h>
@@ -52,8 +52,8 @@ KDevCodeView::KDevCodeView( KDevCodeViewPart *part, QWidget *parent )
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ),
              this, SLOT( popupContextMenu( QPoint ) ) );
     connect( m_part ->documentController(),
-             SIGNAL( documentActivated( const KUrl & ) ),
-             this, SLOT( documentActivated( const KUrl & ) ) );
+             SIGNAL( documentActivated( KDevDocument* ) ),
+             this, SLOT( documentActivated( KDevDocument* ) ) );
 }
 
 KDevCodeView::~KDevCodeView()
@@ -69,24 +69,21 @@ KDevCodeProxy *KDevCodeView::codeProxy() const
     return qobject_cast<KDevCodeProxy*>( model() );
 }
 
-void KDevCodeView::documentActivated( const KUrl &url )
+void KDevCodeView::documentActivated( KDevDocument* file )
 {
     if ( m_trackCurrent &&
-            part() ->languageSupport() ->supportsDocument( url ) )
-        codeProxy() ->setFilterDocument( url );
+            part() ->languageSupport() ->supportsDocument( file ) )
+        codeProxy() ->setFilterDocument( file->url() );
 }
 
 void KDevCodeView::activated( const QModelIndex &index )
 {
     if ( KDevCodeItem * item = codeProxy() ->proxyToItem( index ) )
     {
-        int line = 0;
-        int column = 0;
         KUrl document( item->fileName() );
-        item->getStartPosition( &line, &column );
         if ( document.isValid() )
             part() ->documentController() ->editDocument( document,
-                    line, column );
+                    item->startPosition() );
     }
 }
 
@@ -94,7 +91,7 @@ void KDevCodeView::modeCurrent()
 {
     m_trackCurrent = true;
     codeProxy() ->setFilterDocument(
-        part() ->documentController() ->activeDocument() );
+        part() ->documentController() ->activeDocumentUrl() );
 }
 
 void KDevCodeView::modeNormalize()

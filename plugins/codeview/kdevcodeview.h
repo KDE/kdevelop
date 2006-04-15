@@ -27,6 +27,7 @@
 class KUrl;
 class KDevCodeProxy;
 class KDevCodeViewPart;
+class KDevDocument;
 
 class KDevCodeView: public KDevTreeView
 {
@@ -39,7 +40,7 @@ public:
     KDevCodeProxy *codeProxy() const;
 
 private slots:
-    void documentActivated( const KUrl &url );
+    void documentActivated( KDevDocument* file );
     void activated( const QModelIndex &index );
     void modeCurrent();
     void modeNormalize();

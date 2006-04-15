@@ -39,6 +39,8 @@
 #include <kdevcodedelegate.h>
 #include <kdevcoderepository.h>
 
+class KDevDocument;
+
 /**
 @file kdevlanguagesupport.h
 Interface to programming language specific features.
@@ -95,8 +97,8 @@ public:
     should be configurable in the languagesupport dialog.*/
     virtual QStringList mimeTypes() const = 0;
 
-    /**@return Whether the given url is supported by the language part.*/
-    virtual bool supportsDocument( const KUrl &url );
+    /**@return Whether the given file is supported by the language part.*/
+    virtual bool supportsDocument( KDevDocument* file );
 };
 
 #endif

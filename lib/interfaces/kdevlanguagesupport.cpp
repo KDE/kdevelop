@@ -24,6 +24,8 @@
 */
 #include "kdevlanguagesupport.h"
 
+#include <kdevdocument.h>
+
 KDevLanguageSupport::KDevLanguageSupport(const KDevPluginInfo *info,
                                          QObject *parent)
     : KDevPlugin(info, parent)
@@ -34,9 +36,9 @@ KDevLanguageSupport::~KDevLanguageSupport()
 {
 }
 
-bool KDevLanguageSupport::supportsDocument( const KUrl &url )
+bool KDevLanguageSupport::supportsDocument( KDevDocument* file )
 {
-    KMimeType::Ptr mimetype = KMimeType::findByURL( url );
+    KMimeType::Ptr mimetype = KMimeType::findByURL( file->url() );
     foreach ( QString mime, mimeTypes() )
         if ( mimetype->is( mime ) )
             return true;

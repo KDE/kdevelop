@@ -24,6 +24,7 @@
 #define KDEVCODEMODEL_H
 
 #include <kdevitemmodel.h>
+#include <ktexteditor/cursor.h>
 
 #include <QHash>
 #include <QTime>
@@ -76,15 +77,13 @@ public:
                       + "." + display() );
     }
 
-    virtual void getStartPosition( int *line, int *column )
+    virtual KTextEditor::Cursor startPosition() const
     {
-        *line = -1;
-        *column = -1;
+        return KTextEditor::Cursor::invalid();
     }
-    virtual void getEndPosition( int *line, int *column )
+    virtual KTextEditor::Cursor endPosition() const
     {
-        *line = -1;
-        *column = -1;
+        return KTextEditor::Cursor::invalid();
     }
 
     virtual QString fileName() const

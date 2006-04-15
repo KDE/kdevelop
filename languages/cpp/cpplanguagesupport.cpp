@@ -51,12 +51,12 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
     m_codeDelegate = new CodeDelegate( this );
     m_backgroundParser = new BackgroundParser( this );
 
-    connect( documentController(), SIGNAL( documentLoaded( const KUrl & ) ),
-             this, SLOT( documentLoaded( const KUrl & ) ) );
-    connect( documentController(), SIGNAL( documentClosed( const KUrl & ) ),
-             this, SLOT( documentClosed( const KUrl & ) ) );
-    connect( documentController(), SIGNAL( documentActivated( const KUrl & ) ),
-             this, SLOT( documentActivated( const KUrl & ) ) );
+    connect( documentController(), SIGNAL( documentLoaded(KDevDocument*) ),
+             this, SLOT( documentLoaded(KDevDocument*) ) );
+    connect( documentController(), SIGNAL( documentClosed(KDevDocument*) ),
+             this, SLOT( documentClosed(KDevDocument*) ) );
+    connect( documentController(), SIGNAL( documentActivated(KDevDocument*) ),
+             this, SLOT( documentActivated(KDevDocument*) ) );
 }
 
 CppLanguageSupport::~CppLanguageSupport()
@@ -68,7 +68,7 @@ KDevCodeModel *CppLanguageSupport::codeModel( const KUrl &url ) const
     if ( url.isValid() )
         return m_codeProxy->codeModel( url );
     else
-        return m_codeProxy->codeModel( documentController() ->activeDocument() );
+        return m_codeProxy->codeModel( documentController() ->activeDocumentUrl() );
 }
 
 KDevCodeProxy *CppLanguageSupport::codeProxy() const
@@ -91,21 +91,21 @@ QStringList CppLanguageSupport::mimeTypes() const
     return m_mimetypes;
 }
 
-void CppLanguageSupport::documentLoaded( const KUrl &url )
+void CppLanguageSupport::documentLoaded( KDevDocument* file )
 {
-    if ( supportsDocument( url ) )
-        m_backgroundParser->addDocument( url );
+    if ( supportsDocument( file ) )
+        m_backgroundParser->addDocument( file->url(), file );
 }
 
-void CppLanguageSupport::documentClosed( const KUrl &url )
+void CppLanguageSupport::documentClosed( KDevDocument* file )
 {
-    if ( supportsDocument( url ) )
-        m_backgroundParser->removeDocument( url );
+    if ( supportsDocument( file ) )
+        m_backgroundParser->removeDocumentFile( file );
 }
 
-void CppLanguageSupport::documentActivated( const KUrl &url )
+void CppLanguageSupport::documentActivated( KDevDocument* file )
 {
-    Q_UNUSED( url );
+    Q_UNUSED( file );
 }
 
 #include "cpplanguagesupport.moc"

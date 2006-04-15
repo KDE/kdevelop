@@ -58,19 +58,21 @@ BackgroundParser::~BackgroundParser()
     delete m_memoryPool;
 }
 
-void BackgroundParser::addDocument( const KUrl &url )
+void BackgroundParser::addDocument( const KUrl &url, KDevDocument* document )
 {
     if ( !m_documents.contains( url ) )
     {
         m_documents.insert( url, true );
 
-        if ( KTextEditor::Document * doc =
-                    m_cppSupport->documentController() ->textPartForURL( url ) )
-            connect( doc, SIGNAL( textChanged( KTextEditor::Document* ) ),
-                     SLOT( documentChanged( KTextEditor::Document* ) ) );
-
         parseDocuments();
+
+    } else {
+        m_openDocuments.insert(url, document);
     }
+
+    if (document && document->textDocument())
+        connect( document->textDocument(), SIGNAL( textChanged( KTextEditor::Document* ) ),
+            SLOT( documentChanged( KTextEditor::Document* ) ) );
 }
 
 void BackgroundParser::removeDocument( const KUrl &url )
@@ -91,12 +93,12 @@ void BackgroundParser::parseDocuments()
             ParseJob * parse = new ParseJob( url, m_memoryPool, this );
             p = false;
 
-            if ( url == m_cppSupport->documentController() ->activeDocument() )
+            if ( url == m_cppSupport->documentController() ->activeDocumentUrl() )
             {
-                KTextEditor::Document * doc =
-                    m_cppSupport->documentController() ->textPartForURL( url );
+                KDevDocument* document = m_cppSupport->documentController() ->documentForUrl( url );
+                Q_ASSERT(document->textDocument());
 
-                parse->setContents( doc->text().toAscii() );
+                parse->setContents( document->textDocument()->text().toAscii() );
             }
             connect( parse, SIGNAL( done( Job* ) ),
                      this, SLOT( parseComplete( Job* ) ) );
@@ -109,7 +111,11 @@ void BackgroundParser::parseDocuments()
 void BackgroundParser::parseComplete( Job *job )
 {
     QMutexLocker locker( &m_mutex );
-    ParseJob * parseJob = dynamic_cast<ParseJob*>( job );
+    ParseJob * parseJob = qobject_cast<ParseJob*>( job );
+
+    if (!parseJob->wasSuccessful())
+        // TODO get it to the UI?
+        return;
 
     m_cppSupport->codeProxy() ->insertModel( parseJob->document(),
             parseJob->codeModel() );
@@ -134,6 +140,11 @@ void BackgroundParser::resume()
 {
     m_suspend = false;
     m_timer->start( 500 );
+}
+
+void BackgroundParser::removeDocumentFile( KDevDocument * document )
+{
+    m_openDocuments.remove(document->url());
 }
 
 #include "backgroundparser.moc"

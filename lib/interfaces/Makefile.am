@@ -10,7 +10,7 @@ libkdevinterfaces_la_SOURCES = kdevapi.cpp kdevlanguagesupport.cpp \
 	kdevprojectimporter.cpp kdevcoreiface.cpp kdevplugincontroller.cpp kdevprojectmodel.cpp \
 	kdevdifffrontend.cpp kdevplugin.cpp tag.cpp domutil.cpp kdevitemmodel.cpp \
 	kdevdocumentcontrolleriface.skel kdevcoreiface.skel kdevprojectiface.skel filetemplate.cpp \
-	kdevcodedelegate.cpp kdevcodeproxy.cpp kdevcodeaggregate.cpp
+	kdevcodedelegate.cpp kdevcodeproxy.cpp kdevcodeaggregate.cpp kdevfile.cpp
 
 libkdevinterfaces_la_LDFLAGS = -no-undefined $(DB3LDFLAGS) $(all_libraries)
 libkdevinterfaces_la_LIBADD = -l$(DB3LIB) $(LIB_KDEUI) $(LIB_KHTML) \
@@ -42,4 +42,5 @@ DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kpar
 DOXYGEN_PROJECTNAME = KDevelop Interfaces Library
 DOXYGEN_DOCDIRPREFIX = kdev
 include ../../Doxyfile.am
-noinst_HEADERS = kdevprojectiface.h kdevsharedptr.h kdevcodeaggregate_p.h
+noinst_HEADERS = kdevprojectiface.h kdevsharedptr.h kdevcodeaggregate_p.h \
+	kdevfile.h

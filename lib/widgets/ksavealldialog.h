@@ -20,11 +20,13 @@
 #ifndef SAVEALLDIALOG_H
 #define SAVEALLDIALOG_H
 
-#include <qstringlist.h>
-#include <kdialogbase.h>
-#include <kurl.h>
+#include <QStringList>
+
+#include <kdialog.h>
 
 class QTreeWidget;
+class KDevDocument;
+
 /**
 @file ksavealldialog.h
 Dialogs to save multiple files.
@@ -38,11 +40,11 @@ class KSaveSelectDialog : public KDialog
 	Q_OBJECT
 	
 public:
-	KSaveSelectDialog( KUrl::List const & filelist, KUrl::List const & ignorelist, QWidget * parent );
+	KSaveSelectDialog( const QList<KDevDocument*>& filelist, const QList<KDevDocument*>& ignorelist, QWidget * parent );
 	virtual ~KSaveSelectDialog();
 	
-	KUrl::List filesToSave();
-	KUrl::List filesNotToSave();
+	QList<KDevDocument*> filesToSave();
+	QList<KDevDocument*> filesNotToSave();
 	
 private slots:
 	void saveNone();
@@ -51,7 +53,6 @@ private slots:
 	
 private:
 	QTreeWidget * _listview;
-
 };
 
 

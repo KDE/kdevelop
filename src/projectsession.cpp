@@ -415,12 +415,12 @@ void ProjectSession::loadDocument( )
               DocumentData & dd = _docDataList.first();
               if ( dd.type == "Source" )
               {
-            DocumentController::getInstance()->editDocumentInternal( dd.url, dd.line, -1, dd.activate );
+                  DocumentController::getInstance()->editDocumentInternal( dd.url, KTextEditor::Cursor(dd.line, -1), dd.activate );
               }
               else if ( dd.type == "Documentation" )
               {
                      // FIXME needs to be deferred if !activate ?
-                  DocumentController::getInstance()->showDocument( dd.url, true );
+                  DocumentController::getInstance()->showDocumentation( dd.url, true );
               }
               else
               {

@@ -50,6 +50,9 @@ public:
     TranslationUnitAST *translationUnit() const;
     CodeModel *codeModel() const;
 
+    bool wasSuccessful() const;
+    const QString& errorMessage() const;
+
 protected:
     virtual void run();
 
@@ -59,6 +62,7 @@ private:
     QByteArray m_contents;
     TranslationUnitAST *m_translationUnit;
     CodeModel *m_model;
+    QString m_errorMessage;
 };
 
 #endif

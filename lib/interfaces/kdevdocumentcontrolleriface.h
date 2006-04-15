@@ -24,6 +24,7 @@
 #include <kurl.h>
 
 class KDevDocumentController;
+class KDevDocument;
 
 class KDevDocumentControllerIface : public QObject, public DCOPObject
 {
@@ -49,9 +50,9 @@ k_dcop:
 
 private slots:
 
-  void forwardLoadedDocument(const KUrl &url);
-  void forwardSavedDocument(const KUrl &url);
-  void forwardClosedDocument(const KUrl &url);
+  void forwardLoadedDocument(KDevDocument* document);
+  void forwardSavedDocument(KDevDocument* document);
+  void forwardClosedDocument(KDevDocument* document);
 
 private:
 

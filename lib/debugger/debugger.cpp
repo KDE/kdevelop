@@ -29,7 +29,7 @@ Debugger::~Debugger()
 
 void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool enabled, bool pending)
 {
-    KParts::Part *part = m_partController->partForURL(KUrl(fileName));
+    KParts::Part *part = m_partController->partForUrl(KUrl(fileName));
     if( !part )
         return;
 
@@ -87,9 +87,9 @@ void Debugger::gotoExecutionPoint(const KUrl &url, int lineNum)
 {
     clearExecutionPoint();
 
-    m_partController->editDocument(url, lineNum);
+    m_partController->editDocument(url, KTextEditor::Cursor(lineNum, -1));
 
-    KParts::Part *part = m_partController->partForURL(url);
+    KParts::Part *part = m_partController->partForUrl(url);
     if( !part )
         return;
     MarkInterface *iface = dynamic_cast<MarkInterface*>(part);
@@ -108,7 +108,7 @@ void Debugger::marksChanged()
 
         if (iface)
         {
-            if( !m_partController->partForURL( doc->url() ) )
+            if( !m_partController->partForUrl( doc->url() ) )
                 return; // Probably means the document is being closed.
 
             Q3ValueList<BPItem> oldBPList = BPList;

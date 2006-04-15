@@ -21,7 +21,6 @@ KDevMainWindow *TopLevel::getInstance()
     mainWindow->setObjectName(QLatin1String("SimpleMainWindow"));
     s_instance = mainWindow;
     mainWindow->init();
-    kapp->setMainWidget(mainWindow);
   }
 
   return s_instance;

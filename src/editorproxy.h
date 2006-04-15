@@ -18,7 +18,7 @@ public:
 
   static EditorProxy *getInstance();
 
-  void setLineNumber(KParts::Part *part, int lineNum, int col);
+  void setCursorPosition(KParts::Part *part, const KTextEditor::Cursor& cursor);
 
   void installPopup(KParts::Part *part);
 

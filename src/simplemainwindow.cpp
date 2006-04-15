@@ -55,6 +55,7 @@
 
 SimpleMainWindow::SimpleMainWindow(QWidget* parent)
     :DMainWindow(parent)
+    , m_currentTabDocument(0L)
 {
     resize(800, 600); // starts kdevelop at 800x600 the first time
     m_mainWindowShare = new MainWindowShare(this);
@@ -97,8 +98,8 @@ void SimpleMainWindow::init()
     connect(Core::getInstance(), SIGNAL(coreInitialized()), this, SLOT(slotCoreInitialized()));
     connect(Core::getInstance(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
     connect(DocumentController::getInstance(),
-            SIGNAL(documentURLChanged( const KUrl &, const KUrl & )),
-            this, SLOT(slotDocumentURLChanged( const KUrl &, const KUrl & )));
+            SIGNAL(documentUrlChanged( KDevDocument*, const KUrl &, const KUrl & )),
+            this, SLOT(slotDocumentUrlChanged( KDevDocument*, const KUrl &, const KUrl & )));
     connect(DocumentController::getInstance(),
             SIGNAL(activePartChanged(KParts::Part*)),
             this, SLOT(activePartChanged(KParts::Part*)));
@@ -106,8 +107,8 @@ void SimpleMainWindow::init()
             this, SLOT(tabWidgetChanged(QWidget*)));
 
     connect(DocumentController::getInstance(),
-            SIGNAL(documentStateChanged(const KUrl &, DocumentState)),
-            this, SLOT(documentStateChanged(const KUrl&, DocumentState)));
+            SIGNAL(documentStateChanged(KDevDocument*, KDevDocument::DocumentState)),
+            this, SLOT(documentStateChanged(KDevDocument*, KDevDocument::DocumentState)));
 
     loadSettings();
 }
@@ -280,36 +281,35 @@ void SimpleMainWindow::projectOpened()
     setCaption(QString());
 }
 
-void SimpleMainWindow::slotDocumentURLChanged( const KUrl &oldURL, const KUrl &newURL )
+void SimpleMainWindow::slotDocumentUrlChanged( KDevDocument* document, const KUrl &oldURL, const KUrl &newURL )
 {
-    if (QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(
-        DocumentController::getInstance()->partForURL(newURL)))
+    Q_UNUSED(oldURL)
+    if (QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(document->part()))
         widget->setWindowTitle(newURL.fileName());
 }
 
-void SimpleMainWindow::documentStateChanged(const KUrl &url, DocumentState state)
+void SimpleMainWindow::documentStateChanged(KDevDocument* document, KDevDocument::DocumentState state)
 {
-    QWidget * widget = EditorProxy::getInstance()->topWidgetForPart(
-        DocumentController::getInstance()->partForURL(url));
+    QWidget * widget = EditorProxy::getInstance()->topWidgetForPart(document->part());
     if (widget)
     {
         switch (state)
         {
             // we should probably restore the original icon instead of just using "kdevelop",
             // but I have never seen any other icon in use so this should do for now
-            case Clean:
+            case KDevDocument::Clean:
                 if (m_showIconsOnTabs)
                     widget->setWindowIcon(KIcon("kdevelop"));
                 else
                     widget->setWindowIcon(QPixmap());
                 break;
-            case Modified:
+            case KDevDocument::Modified:
                 widget->setWindowIcon(KIcon("filesave"));
                 break;
-            case Dirty:
+            case KDevDocument::Dirty:
                 widget->setWindowIcon(KIcon("revert"));
                 break;
-            case DirtyAndModified:
+            case KDevDocument::DirtyAndModified:
                 widget->setWindowIcon(KIcon("stop"));
                 break;
         }
@@ -328,10 +328,10 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
         return;
 
     KMenu tabMenu;
-    tabMenu.addTitle(tabWidget->tabLabel(w));
+    tabMenu.addTitle(tabWidget->tabText(tabWidget->indexOf(w)));
 
     //Find the document on whose tab the user clicked
-    m_currentTabURL = QString();
+    m_currentTabDocument = 0L;
     foreach (KParts::Part* part, DocumentController::getInstance()->parts())
     {
         QWidget *top_widget = EditorProxy::getInstance()->topWidgetForPart(part);
@@ -339,7 +339,7 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
         {
             if (KParts::ReadOnlyPart *ro_part = qobject_cast<KParts::ReadOnlyPart*>(part))
             {
-                m_currentTabURL = ro_part->url();
+                m_currentTabDocument = DocumentController::getInstance()->documentForPart(ro_part);
                 tabMenu.insertItem(i18n("Close"), 0);
 
                 if (DocumentController::getInstance()->parts().count() > 1)
@@ -353,7 +353,7 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
 
                 //Create the file context
                 KUrl::List list;
-                list << m_currentTabURL;
+                list << m_currentTabDocument->url();
                 FileContext context( list );
                 Core::getInstance()->fillContextMenu(&tabMenu, &context);
             }
@@ -367,25 +367,25 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
 
 void SimpleMainWindow::tabContextActivated(int id)
 {
-    if(m_currentTabURL.isEmpty())
+    if(!m_currentTabDocument)
             return;
 
     switch(id)
     {
         case 0:
-            DocumentController::getInstance()->closeDocument(m_currentTabURL);
+            DocumentController::getInstance()->closeDocument(m_currentTabDocument);
             break;
         case 1:
-            DocumentController::getInstance()->saveDocument(m_currentTabURL);
+            DocumentController::getInstance()->saveDocument(m_currentTabDocument);
             break;
         case 2:
-            DocumentController::getInstance()->reloadDocument(m_currentTabURL);
+            DocumentController::getInstance()->reloadDocument(m_currentTabDocument);
             break;
         case 3:
-            DocumentController::getInstance()->showDocument(m_currentTabURL, true);
+            DocumentController::getInstance()->activateDocument(m_currentTabDocument);
             break;
         case 4:
-            DocumentController::getInstance()->closeAllOthers(m_currentTabURL);
+            DocumentController::getInstance()->closeAllOthers(m_currentTabDocument);
             break;
         default:
             break;
@@ -431,9 +431,9 @@ void SimpleMainWindow::setupWindowMenu()
         menuBar()->insertItem(i18n("&Window"), m_windowMenu);
     }
 
-    actionCollection()->action("file_close")->plug(m_windowMenu);
-    actionCollection()->action("file_close_all")->plug(m_windowMenu);
-    actionCollection()->action("file_closeother")->plug(m_windowMenu);
+    m_windowMenu->addAction(actionCollection()->action("file_close"));
+    m_windowMenu->addAction(actionCollection()->action("file_close_all"));
+    m_windowMenu->addAction(actionCollection()->action("file_closeother"));
 
     QObject::connect(m_windowMenu, SIGNAL(activated(int)), this, SLOT(openURL(int)));
     QObject::connect(m_windowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()));
@@ -443,8 +443,8 @@ void SimpleMainWindow::openURL(int w)
 {
     foreach(WinInfo pair, m_windowList) {
         if (pair.first == w) {
-            if (!pair.second.isEmpty()) {
-                DocumentController::getInstance()->editDocument(pair.second);
+            if (pair.second) {
+                pair.second->activate();
                 return;
             }
         }
@@ -458,36 +458,28 @@ void SimpleMainWindow::fillWindowMenu()
         m_windowMenu->removeItem(pair.first);
     }
 
-    int temp = 0;
-
-    QMap<QString, KUrl> map;
+    QMap<QString, KDevDocument*> map;
     QStringList string_list;
-    KUrl::List list = DocumentController::getInstance()->openURLs();
-    KUrl::List::Iterator itt = list.begin();
-    while (itt != list.end())
+    foreach (KDevDocument* file, DocumentController::getInstance()->openDocuments())
     {
-        map[(*itt).fileName()] = *itt;
-        string_list.append((*itt).fileName());
-        ++itt;
+        map[file->url().fileName()] = file;
+        string_list.append(file->url().fileName());
     }
     string_list.sort();
 
-    list.clear();
+    QList<KDevDocument*> list;
     for(uint i = 0; i != string_list.size(); ++i)
         list.append(map[string_list[i]]);
 
-    itt = list.begin();
-    int i = 0;
-
     if (list.count() > 0)
-        m_windowList << qMakePair(m_windowMenu->insertSeparator(), KUrl());
+        m_windowList << qMakePair(m_windowMenu->insertSeparator(), static_cast<KDevDocument*>(0L));
 
-    while (itt != list.end())
+    int i = 0;
+    foreach (KDevDocument* file, list)
     {
-        temp = m_windowMenu->insertItem( i < 10 ? QString("&%1 %2").arg(i).arg((*itt).fileName()) : (*itt).fileName() );
-        m_windowList << qMakePair(temp, *itt);
+        int temp = m_windowMenu->insertItem( i < 10 ? QString("&%1 %2").arg(i).arg(file->url().fileName()) : file->url().fileName() );
+        m_windowList << qMakePair(temp, file);
         ++i;
-        ++itt;
     }
 }
 

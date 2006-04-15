@@ -54,20 +54,20 @@ signals:
     void refresh();
 
 private slots:
-    void activated( const KUrl &url );
-    void saved( const KUrl &url );
-    void loaded( const KUrl &url );
-    void closed( const KUrl &url );
-    void externallyModified( const KUrl &url );
-    void URLChanged( const KUrl &oldurl, const KUrl &newurl );
-    void stateChanged( const KUrl &url, DocumentState state );
+    void activated( KDevDocument* document );
+    void saved( KDevDocument* document );
+    void loaded( KDevDocument* document );
+    void closed( KDevDocument* document );
+    void externallyModified( KDevDocument* document );
+    void urlChanged( KDevDocument* document, const KUrl &oldurl, const KUrl &newurl );
+    void stateChanged( KDevDocument* document, KDevDocument::DocumentState state );
     void pressed( const QModelIndex & index );
 
 private:
     KDevDocumentModel *m_documentModel;
     KDevDocumentItem *m_documentItem;
     QPointer<KDevDocumentView> m_documentView;
-    QHash< QString, QModelIndex > m_url2index;
+    QHash< KDevDocument*, QModelIndex > m_doc2index;
 };
 
 #endif

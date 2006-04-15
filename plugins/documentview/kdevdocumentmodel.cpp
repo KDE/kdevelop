@@ -22,7 +22,7 @@
 
 KDevDocumentItem::KDevDocumentItem( const QString &name, KDevItemGroup *parent )
         : KDevItemCollection( name, parent ),
-        m_documentState( Clean )
+        m_documentState( KDevDocument::Clean )
 {}
 
 KDevDocumentItem::~KDevDocumentItem()

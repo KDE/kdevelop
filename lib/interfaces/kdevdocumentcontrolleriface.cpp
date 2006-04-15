@@ -22,13 +22,14 @@
 
 #include "kdevdocumentcontrolleriface.h"
 #include "kdevdocumentcontroller.h"
+#include "kdevdocument.h"
 
 KDevDocumentControllerIface::KDevDocumentControllerIface(KDevDocumentController *pc)
   : QObject(pc), DCOPObject("KDevDocumentController"), m_controller(pc)
 {
-  connect(pc, SIGNAL(documentLoaded(const KUrl &)), this, SLOT(forwardLoadedDocument(const KUrl &)));
-  connect(pc, SIGNAL(documentSaved(const KUrl &)), this, SLOT(forwardSavedDocument(const KUrl &)));
-  connect(pc, SIGNAL(documentClosed(const KUrl &)), this, SLOT(forwardClosedDocument(const KUrl &)));
+  connect(pc, SIGNAL(documentLoaded(KDevDocument*)), SLOT(forwardLoadedDocument(KDevDocument*)));
+  connect(pc, SIGNAL(documentSaved(KDevDocument*)), SLOT(forwardSavedDocument(KDevDocument*)));
+  connect(pc, SIGNAL(documentClosed(KDevDocument*)), SLOT(forwardClosedDocument(KDevDocument*)));
 }
 
 KDevDocumentControllerIface::~KDevDocumentControllerIface()
@@ -37,12 +38,12 @@ KDevDocumentControllerIface::~KDevDocumentControllerIface()
 
 void KDevDocumentControllerIface::editDocument(const QString &url, int lineNum)
 {
-  m_controller->editDocument(KUrl(url), lineNum);
+  m_controller->editDocument(KUrl(url), KTextEditor::Cursor(lineNum, -1));
 }
 
 void KDevDocumentControllerIface::showDocument(const QString &url, bool newWin)
 {
-  m_controller->showDocument(KUrl(url), newWin);
+  m_controller->showDocumentation(KUrl(url), newWin);
 }
 
 void KDevDocumentControllerIface::saveAllDocuments()
@@ -55,21 +56,21 @@ void KDevDocumentControllerIface::reloadAllDocuments()
   m_controller->reloadAllDocuments();
 }
 
-void KDevDocumentControllerIface::forwardLoadedDocument(const KUrl &url)
+void KDevDocumentControllerIface::forwardLoadedDocument(KDevDocument* document)
 {
-  kDebug(9000) << "dcop emitting loadedDocument " << url << endl;
+  kDebug(9000) << "dcop emitting loadedDocument " << document->url() << endl;
   emitDCOPSignal("projectOpened()", QByteArray());
 }
 
-void KDevDocumentControllerIface::forwardSavedDocument(const KUrl &url)
+void KDevDocumentControllerIface::forwardSavedDocument(KDevDocument* document)
 {
-  kDebug(9000) << "dcop emitting savedDocument " << url << endl;
+  kDebug(9000) << "dcop emitting savedDocument " << document->url() << endl;
   emitDCOPSignal("projectClosed()", QByteArray());
 }
 
-void KDevDocumentControllerIface::forwardClosedDocument(const KUrl &url)
+void KDevDocumentControllerIface::forwardClosedDocument(KDevDocument* document)
 {
-  kDebug(9000) << "dcop emitting closedDocument " << url << endl;
+  kDebug(9000) << "dcop emitting closedDocument " << document->url() << endl;
   emitDCOPSignal("projectClosed()", QByteArray());
 }
 
@@ -80,7 +81,9 @@ bool KDevDocumentControllerIface::closeAllDocuments( )
 
 uint KDevDocumentControllerIface::documentState( const KUrl & url )
 {
-  return (uint) m_controller->documentState(url);
+  if (KDevDocument* file = m_controller->documentForUrl(KUrl(url)))
+    return (uint)file->state();
+  return 0;
 }
 
 #include "kdevdocumentcontrolleriface.moc"

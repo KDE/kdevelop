@@ -398,7 +398,7 @@ void KDevFileSelector::btnFilterClick()
 
 void KDevFileSelector::autoSync()
 {
-    kdDebug()<<"KDevFileSelector::autoSync()"<<endl;
+    kDebug()<<"KDevFileSelector::autoSync()"<<endl;
     // if visible, sync
     if ( isVisible() )
     {
@@ -421,7 +421,7 @@ void KDevFileSelector::autoSync( KParts::Part *part )
 	return;
 
     // as above, but using document url.
-    kdDebug()<<"KDevFileSelector::autoSync( KTextEditor::Document )"<<endl;
+    kDebug()<<"KDevFileSelector::autoSync( KTextEditor::Document )"<<endl;
     KUrl u ( doc->url() );
     if ( u.isEmpty() )
     {
@@ -441,7 +441,7 @@ void KDevFileSelector::autoSync( KParts::Part *part )
 /// \FIXME crash on shutdown
 void KDevFileSelector::setActiveDocumentDir()
 {
-    //kdDebug()<<"KDevFileSelector::setActiveDocumentDir()"<<endl;
+    //kDebug()<<"KDevFileSelector::setActiveDocumentDir()"<<endl;
     KUrl u = activeDocumentUrl();
     if (!u.isEmpty())
         setDir( u.upURL() );
@@ -468,7 +468,7 @@ void KDevFileSelector::showEvent( QShowEvent * )
     // sync if we should
     if ( autoSyncEvents & GotVisible )
     {
-        kdDebug()<<"syncing fs on show"<<endl;
+        kDebug()<<"syncing fs on show"<<endl;
         setActiveDocumentDir();
         waitingUrl = QString::null;
     }

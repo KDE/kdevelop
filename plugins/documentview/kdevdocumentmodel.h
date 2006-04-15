@@ -24,7 +24,7 @@
 #include <kdevdocumentcontroller.h>
 
 #include <kurl.h>
-#include <kiconloader.h>
+#include <kicon.h>
 
 class KUrl;
 class KDevDocumentItem;
@@ -51,31 +51,31 @@ public:
     {
         switch ( m_documentState )
         {
-        case Clean:
+        case KDevDocument::Clean:
             return QIcon();
-        case Modified:
-            return QIcon( SmallIcon( "filesave" ) );
-        case Dirty:
-            return QIcon( SmallIcon( "revert" ) );
-        case DirtyAndModified:
-            return QIcon( SmallIcon( "stop" ) );
+        case KDevDocument::Modified:
+            return KIcon( "filesave" );
+        case KDevDocument::Dirty:
+            return KIcon( "revert" );
+        case KDevDocument::DirtyAndModified:
+            return KIcon( "stop" );
         default:
             return QIcon();
         }
     }
 
-    DocumentState documentState() const
+    KDevDocument::DocumentState documentState() const
     {
         return m_documentState;
     }
 
-    void setDocumentState( DocumentState state )
+    void setDocumentState( KDevDocument::DocumentState state )
     {
         m_documentState = state;
     }
 
 private:
-    DocumentState m_documentState;
+    KDevDocument::DocumentState m_documentState;
 };
 
 class KDevMimeTypeItem: public KDevDocumentItem

@@ -46,6 +46,7 @@ class Parser;
 class Preprocessor;
 class TranslationUnitAST;
 class CppLanguageSupport;
+class KDevDocument;
 
 using namespace ThreadWeaver;
 
@@ -59,7 +60,8 @@ public:
 public slots:
     void suspend();
     void resume();
-    void addDocument( const KUrl &url );
+    void addDocument( const KUrl &url, KDevDocument* document = 0L );
+    void removeDocumentFile( KDevDocument* document );
     void removeDocument( const KUrl &url );
     void parseDocuments();
     void parseComplete( Job* );
@@ -73,6 +75,9 @@ private:
 
     // A list of known documents, and whether they are due to be parsed or not
     QMap<KUrl, bool> m_documents;
+    // A list of open documents
+    QMap<KUrl, KDevDocument*> m_openDocuments;
+    // The translation unit for each document
     QMap<KUrl, TranslationUnitAST* > m_url2unit;
     mutable QMutex m_mutex;
 };

@@ -10,12 +10,12 @@ HTMLDocumentationPart::HTMLDocumentationPart()
 
 void HTMLDocumentationPart::slotDuplicate( )
 {
-    DocumentController::getInstance()->showDocument(url(), true);
+    DocumentController::getInstance()->showDocumentation(url(), true);
 }
 
 void HTMLDocumentationPart::slotOpenInNewWindow( const KUrl & url )
 {
-    DocumentController::getInstance()->showDocument(url, true);
+    DocumentController::getInstance()->showDocumentation(url, true);
 }
 
 #include "documentationpart.moc"

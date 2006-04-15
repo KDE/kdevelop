@@ -16,6 +16,7 @@
 #include <kconfig.h>
 
 #include <kdevmainwindow.h>
+#include <kdevdocumentcontroller.h>
 
 
 #include "kdevhtmlpart.h"

@@ -25,6 +25,31 @@ KDevDocumentController::KDevDocumentController(QWidget *parent)
     new KDevDocumentControllerIface(this);
 }
 
+KUrl KDevDocumentController::activeDocumentUrl( ) const
+{
+    if (activeDocument())
+        return activeDocument()->url();
+
+    return KUrl();
+}
+
+KParts::Part * KDevDocumentController::partForUrl( const KUrl & url ) const
+{
+    if (KDevDocument* file = documentForUrl(url))
+        return file->part();
+
+    return 0L;
+}
+
+KDevDocument * KDevDocumentController::documentForUrl( const KUrl & url ) const
+{
+    foreach (KDevDocument* document, openDocuments())
+        if (document->url() == url)
+            return document;
+
+    return 0L;
+}
+
 #include "kdevdocumentcontroller.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

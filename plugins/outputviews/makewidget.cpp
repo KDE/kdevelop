@@ -212,8 +212,8 @@ MakeWidget::MakeWidget( MakeViewPart *part )
     connect( horizontalScrollBar(), SIGNAL( sliderReleased() ),
              this, SLOT( horizScrollingOff() ) );
 
-    connect( m_part->documentController(), SIGNAL( documentLoaded( const KUrl& ) ),
-             this, SLOT( slotDocumentOpened( const KUrl& ) ) );
+    connect( m_part->documentController(), SIGNAL( documentLoaded(KDevDocument*) ),
+             this, SLOT( slotDocumentOpened(KDevDocument*) ) );
 }
 
 MakeWidget::~MakeWidget()
@@ -668,10 +668,9 @@ void MakeWidget::insertItem( MakeItem* new_item )
     }
 }
 
-void MakeWidget::slotDocumentOpened( const KUrl & filename )
+void MakeWidget::slotDocumentOpened(KDevDocument* document)
 {
-    KParts::Part* part = m_part->documentController()->partForURL( filename );
-    KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>( part );
+    KTextEditor::Document* doc = document->textDocument();
 
     if ( !doc )
     {

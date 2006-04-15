@@ -29,6 +29,7 @@
 #include <QByteArray>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <kdevdocumentcontroller.h>
 
@@ -66,12 +67,16 @@ TranslationUnitAST *ParseJob::translationUnit() const
 
 CodeModel *ParseJob::codeModel() const
 {
+    kDebug() << k_funcinfo << this << " Request model." << endl;
+
     Q_ASSERT ( isFinished () && m_model );
     return m_model;
 }
 
 void ParseJob::run()
 {
+    kDebug() << k_funcinfo << this << " Running..." << m_document << endl;
+
     bool readFromDisk = m_contents.isNull();
     char *contents;
     std::size_t size;
@@ -83,14 +88,17 @@ void ParseJob::run()
     }
     else
     {
-        const char* fileName = m_document.fileName().toLatin1();
+        QByteArray path = m_document.path().toLatin1();
         struct stat st;
-        stat( fileName, &st );
+        stat( path.constData(), &st );
         size = st.st_size + 1;
 
-        int fd = open( fileName, O_RDONLY );
-        if ( fd == -1 )
+        int fd = open( path.constData(), O_RDONLY );
+        if ( fd == -1 ) {
+            m_errorMessage = i18n("Could not open file '%1'", m_document.path());
+            kWarning(9007) << k_funcinfo << "Could not open file " << path.constData() << endl;
             return ;
+        }
 
         contents = ( char * ) mmap( 0, size, PROT_READ, MAP_SHARED, fd, 0 );
         assert( contents != ( void* ) - 1 );
@@ -133,6 +141,16 @@ void ParseJob::run()
         munmap( contents, size );
 
     m_memoryPool = 0;
+}
+
+bool ParseJob::wasSuccessful( ) const
+{
+    return m_model;
+}
+
+const QString & ParseJob::errorMessage( ) const
+{
+    return m_errorMessage;
 }
 
 #include "parsejob.moc"

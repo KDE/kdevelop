@@ -71,17 +71,22 @@ EditorProxy *EditorProxy::getInstance()
 }
 
 
-void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
+void EditorProxy::setCursorPosition(KParts::Part *part, const KTextEditor::Cursor& cursor)
 {
-  if (!part || !part->inherits("KTextEditor::Document"))
+  if ( cursor.line() < 0 )
     return;
 
-  if ( lineNum < 0 )
+  if (!qobject_cast<KTextEditor::Document*>(part))
     return;
 
   KTextEditor::View *view = qobject_cast<View *>(part->widget());
+
+  Cursor c = cursor;
+  if (c.column() == 1)
+    c.setColumn(0);
+
   if (view)
-    view->setCursorPosition(Cursor(lineNum, col == -1 ? 0 : col));
+    view->setCursorPosition(c);
 }
 
 void EditorProxy::installPopup( KParts::Part * part )

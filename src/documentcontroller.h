@@ -7,6 +7,7 @@
 #include <qwidget.h>
 #include <qpointer.h>
 #include <qdatetime.h>
+#include <QHash>
 
 #include <kurl.h>
 
@@ -33,6 +34,7 @@ class KToolBarPopupAction;
 class KRecentFilesAction;
 class HTMLDocumentationPart;
 class KDirWatch;
+class KDevHTMLPart;
 
 /**
 Implementation for the KDevDocumentController Interface
@@ -46,43 +48,48 @@ public:
 
     //BEGIN KDevDocumentController
     void setEncoding( const QString &encoding );
-    void editDocument( const KUrl &inputUrl, int lineNum = -1,
-                       int col = -1 );
+    KDevDocument* editDocument( const KUrl &inputUrl, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid() );
 
-    void showDocument( const KUrl &url, bool newWin = false );
-    void showPart( KParts::Part* part, const QString& name,
+    KDevDocument* showDocumentation( const KUrl& url, bool newWin = false );
+    KDevDocument* showPart( KParts::Part* part, const QString& name,
                    const QString& shortDescription );
 
-    KParts::ReadOnlyPart *partForURL( const KUrl &url ) const;
-    KTextEditor::Document* textPartForURL( const KUrl & url ) const;
-    /*    void* designerPartForURL( const KUrl & url ) const;*/
-    KDevHTMLPart* htmlPartForURL( const KUrl & url ) const;
-    KDevDocumentType documentTypeForURL( const KUrl & url ) const;
+    KDevDocument* documentForPart( KParts::Part* part ) const;
 
-    KParts::Part * partForWidget( const QWidget * widget ) const;
+    KParts::Part* partForWidget( const QWidget * widget ) const;
 
-    KUrl::List openURLs() const;
+    QList<KDevDocument*> openDocuments() const;
 
     bool saveAllDocuments();
-    bool saveDocument( const KUrl & url, bool force = false );
-    bool saveDocuments( const KUrl::List & list );
+    bool saveDocument( KDevDocument* document, bool force = false );
+    bool saveDocuments( const QList<KDevDocument*> & list );
 
     void reloadAllDocuments();
-    void reloadDocument( const KUrl & url );
-    void reloadDocuments( const KUrl::List & list );
+    void reloadDocument( KDevDocument* document );
+    void reloadDocuments( const QList<KDevDocument*> & list );
 
     bool closeAllDocuments();
-    bool closeDocument( const KUrl & );
-    bool closeDocuments( const KUrl::List & list );
-    bool closeAllOthers( const KUrl & );
+    bool closeDocument( KDevDocument* document );
+    bool closeDocuments( const QList<KDevDocument*> & list );
+    bool closeAllOthers( KDevDocument* document );
 
     bool closePart( KParts::Part * part );
+
+    void activateDocument( KDevDocument* document );
     void activatePart( KParts::Part * part );
 
-    DocumentState documentState( KUrl const & );
-    KUrl activeDocument() const;
-    KDevDocumentType activeDocumentType() const;
+    KDevDocument::DocumentState documentState( KDevDocument* document ) const;
+    KDevDocument* activeDocument() const;
     //END KDevDocumentController
+
+    //BEGIN PartManager overrides
+    virtual void addPart (KParts::Part *part, bool setActive=true);
+    virtual void removePart (KParts::Part *part);
+    virtual void replacePart (KParts::Part *oldPart, KParts::Part *newPart, bool setActive=true);
+    virtual void setActivePart (KParts::Part *part, QWidget *widget=0L);
+    //END
+
+    KDevHTMLPart* htmlPartForURL( KDevDocument* document ) const;
 
     static void createInstance( QWidget *parent );
     static DocumentController *getInstance();
@@ -90,8 +97,7 @@ public:
     bool querySaveDocuments();
     void openEmptyTextDocument();
     void integrateTextEditorPart( KTextEditor::Document* doc );
-    void editDocumentInternal( const KUrl &inputUrl, int lineNum = -1,
-                               int col = -1, bool activate = true );
+    KDevDocument* editDocumentInternal( const KUrl &inputUrl, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid(), bool activate = true );
 
 public slots:
     void slotSave();
@@ -99,7 +105,7 @@ public slots:
     void slotCloseWindow();
     void slotCloseAllWindows();
     void slotCloseOtherWindows();
-    void slotActivePartChanged( KParts::Part* part );
+    void slotHTMLDocumentURLChanged( const KUrl& oldUrl, const KUrl& newUrl );
 
 private slots:
     void slotWaitForFactoryHack();
@@ -119,9 +125,6 @@ private slots:
 
     void slotSwitchTo();
 
-    void slotPartAdded( KParts::Part* );
-    void slotPartRemoved( KParts::Part* );
-
     void slotUploadFinished();
 
     void updateMenuItems();
@@ -134,10 +137,10 @@ private slots:
 
 private:
     void setupActions();
-    void doEmitState( KUrl const & );
+    void doEmitState( KDevDocument* document);
 
-    KUrl findURLInProject( const KUrl& url );
-    KParts::Part* findOpenDocument( const KUrl& url );
+    KUrl findUrlInProject( const KUrl& url ) const;
+    KParts::Part* findOpenDocument( const KUrl& url ) const;
     KParts::Factory *findPartFactory( const QString &mimeType,
                                       const QString &partType,
                                       const QString &preferredName
@@ -145,29 +148,27 @@ private:
 
     KTextEditor::Document *createEditorPart( bool activate );
 
-    void integratePart( KParts::Part *part, const KUrl &url,
+    KDevDocument* integratePart( KParts::Part *part,
                         QWidget* widget = 0,
-                        bool isTextEditor = false,
                         bool activate = true );
 
-    KUrl::List modifiedDocuments();
-    void clearModified( KUrl::List const & filelist );
+    QList<KDevDocument*> modifiedDocuments() const;
+    void clearModified( QList<KDevDocument*> const & filelist );
 
-    bool isDirty( KUrl const & url );
-    bool reactToDirty( KUrl const & url, unsigned char reason );
+    bool isDirty( KDevDocument* document ) const;
+    bool reactToDirty( KDevDocument* document, unsigned char reason );
 
-    KUrl storedURLForPart( KParts::ReadOnlyPart * );
-    void updatePartURL( KParts::ReadOnlyPart * );
-    bool partURLHasChanged( KParts::ReadOnlyPart * );
+    KUrl storedUrlForDocument( KDevDocument* ) const;
+    void updateDocumentUrl( KDevDocument* );
+    bool documentUrlHasChanged( KDevDocument* );
 
-    bool saveDocumentsDialog( KUrl::List const & ignoreList );
-    bool closeDocumentsDialog( KUrl::List const & ignoreList );
+    bool saveDocumentsDialog( QList<KDevDocument*> const & ignoreList = QList<KDevDocument*>() );
+    bool closeDocumentsDialog( QList<KDevDocument*> const & ignoreList = QList<KDevDocument*>() );
 
     KParts::ReadOnlyPart* activeReadOnly() const;
     KParts::ReadWritePart* activeReadWrite() const;
     KParts::ReadOnlyPart* readOnly( KParts::Part *part ) const;
     KParts::ReadWritePart* readWrite( KParts::Part *part ) const;
-    KParts::ReadWritePart* readWriteForURL( const KUrl& url ) const;
 
     static DocumentController *s_instance;
 
@@ -185,10 +186,12 @@ private:
 
     bool m_openNextAsText;
 
-    QList<KParts::ReadWritePart*> m_dirtyDocuments;
+    QList<KDevDocument*> m_dirtyDocuments;
+
+    QHash<KParts::ReadOnlyPart*, KDevDocument*> m_partHash;
 
     // used to note when a URL changes (a document changes url)
-    QMap< KParts::ReadOnlyPart*, KUrl > m_partURLMap;
+    QHash< KDevDocument*, KUrl > m_documentUrls;
 
     QPointer<KParts::Factory> m_editorFactory;
 
@@ -196,11 +199,10 @@ private:
     {
         HistoryEntry()
         {}
-        HistoryEntry( const KUrl & url, int line, int col );
+        HistoryEntry( const KUrl & u, const KTextEditor::Cursor& cursor );
 
         KUrl url;
-        int line;
-        int col;
+        KTextEditor::Cursor cursor;
         int id;
     };
 

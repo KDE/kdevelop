@@ -54,8 +54,6 @@ void DMainWindow::loadSettings()
 
 DMainWindow::~DMainWindow()
 {
-/*    for (QValueList<QWidget*>::iterator it = m_widgets.begin(); it != m_widgets.end(); ++it)
-        removeWidget(*it);*/
 }
 
 DDockWidget *DMainWindow::toolWindow(Qt::DockWidgetArea area) const
