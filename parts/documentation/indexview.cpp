@@ -42,7 +42,7 @@ IndexView::IndexView(DocumentationWidget *parent, const char *name)
      :QWidget(parent, name), m_widget(parent)
 {
     QVBoxLayout *l = new QVBoxLayout(this, 0, 0);
-    
+
     QHBoxLayout *hl = new QHBoxLayout(this, 0, 0);
     m_edit = new KLineEdit(this);
     hl->addWidget(new QLabel(m_edit, i18n("&Look for:"), this));
@@ -51,13 +51,13 @@ IndexView::IndexView(DocumentationWidget *parent, const char *name)
 
     m_index = new IndexBox(this);
     l->addWidget(m_index);
-       
-    connect(m_index, SIGNAL(doubleClicked(QListBoxItem* )), this, SLOT(searchInIndex(QListBoxItem* )));
+
+    connect(m_index, SIGNAL(executed(QListBoxItem* )), this, SLOT(searchInIndex(QListBoxItem* )));
     connect(m_index, SIGNAL(mouseButtonPressed(int, QListBoxItem*, const QPoint& )),
         this, SLOT(itemMouseButtonPressed(int, QListBoxItem*, const QPoint& )));
     connect(m_edit, SIGNAL(returnPressed()), this, SLOT(searchInIndex()));
     connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(showIndex(const QString&)));
-    
+
     m_edit->installEventFilter(this);
 }
 
@@ -77,7 +77,7 @@ void IndexView::searchInIndex(QListBoxItem *item)
     IndexItem *indexItem = dynamic_cast<IndexItem*>(item);
     if (!indexItem)
         return;
-    
+
     IndexItem::List urls = indexItem->urls();
     if (urls.count() == 1)
         m_widget->part()->partController()->showDocument(urls.first().second);
@@ -140,7 +140,7 @@ bool IndexView::eventFilter(QObject *watched, QEvent *e)
         } else if (ke->key() == Key_Down)
         {
             int i = m_index->currentItem();
-            if ( ++i < int(m_index->count()) ) 
+            if ( ++i < int(m_index->count()) )
             {
                 m_index->setCurrentItem(i);
                 m_edit->blockSignals(true);
@@ -157,7 +157,7 @@ bool IndexView::eventFilter(QObject *watched, QEvent *e)
         }
     }
 
-    return QWidget::eventFilter(watched, e);    
+    return QWidget::eventFilter(watched, e);
 }
 
 void IndexView::itemMouseButtonPressed(int button, QListBoxItem *item, const QPoint &pos)
@@ -167,7 +167,7 @@ void IndexView::itemMouseButtonPressed(int button, QListBoxItem *item, const QPo
     IndexItem *docItem = dynamic_cast<IndexItem*>(item);
     if (!docItem)
         return;
-    
+
     DocUtils::docItemPopup(m_widget->part(), docItem, pos, false, true);
 }
 

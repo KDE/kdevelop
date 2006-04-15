@@ -287,6 +287,8 @@ void SearchView::analyseSearchResults()
         former->setText(1, title);
         former->setURL(KURL(url));
     }
+
+    executed( m_view->firstChild() );
 }
 
 void SearchView::executed(QListViewItem *item)
