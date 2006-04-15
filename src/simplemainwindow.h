@@ -43,7 +43,7 @@ public:
     virtual void embedSelectView(QWidget *view, const QString &title, const QString &toolTip);
     virtual void embedOutputView(QWidget *view, const QString &title, const QString &toolTip);
     virtual void embedSelectViewRight(QWidget* view, const QString& title, const QString &toolTip);
-    
+
     virtual void removeView(QWidget *view);
     virtual void setViewAvailable(QWidget *pView, bool bEnabled);
     virtual void raiseView(QWidget *view);
@@ -52,20 +52,20 @@ public:
     virtual void loadSettings();
     virtual void saveSettings();
     virtual void setCurrentDocumentCaption( const QString &caption );
-    
+
     virtual KMainWindow *main();
-    
+
     void init();
 
 protected:
     virtual bool queryClose();
     virtual bool queryExit();
-    
+
 protected slots:
     virtual void closeTab();
     virtual void closeTab(QWidget *w);
     virtual void tabContext(QWidget *w, const QPoint &p);
-    
+
 private slots:
     void gotoNextWindow();
     void gotoPreviousWindow();
@@ -84,14 +84,15 @@ private slots:
     void fillWindowMenu();
     void slotSplitVertical();
     void slotSplitHorizontal();
+    void createGUI(KParts::Part *part);
 
 private:
     void createFramework();
     void createActions();
     void setupWindowMenu();
-    
+
     MainWindowShare *m_mainWindowShare;
-    
+
     KURL m_currentTabURL;
     QMap<QWidget*, DDockWindow::Position> m_docks;
     KAction *m_raiseEditor;

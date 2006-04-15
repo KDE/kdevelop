@@ -69,26 +69,26 @@ void SimpleMainWindow::init()
     actionCollection()->setHighlightingEnabled( true );
     setStandardToolBarMenuEnabled( true );
     setXMLFile(ShellExtension::getInstance()->xmlFile());
-    
+
     createFramework();
     createActions();
     new KDevStatusBar(this);
 
     createGUI(0);
-    
+
     m_mainWindowShare->init();
     setupWindowMenu();
     menuBar()->setEnabled( false );
 
     //FIXME: this checks only for global offers which is not quite correct because
     //a profile can offer core plugins and no global plugins.
-    if ( PluginController::getInstance()->engine().allOffers(ProfileEngine::Global).isEmpty() ) 
+    if ( PluginController::getInstance()->engine().allOffers(ProfileEngine::Global).isEmpty() )
     {
         KMessageBox::sorry( this, i18n("Unable to find plugins, KDevelop will not work"
             " properly.\nPlease make sure "
             "that KDevelop is installed in your KDE directory; otherwise, you have "
             "to add KDevelop's installation "
-            "path to the environment variable KDEDIRS and run kbuildsycoca. Restart " 
+            "path to the environment variable KDEDIRS and run kbuildsycoca. Restart "
             "KDevelop afterwards.\n"
             "Example for BASH users:\nexport KDEDIRS=/path/to/kdevelop:$KDEDIRS && kbuildsycoca"),
             i18n("Could Not Find Plugins") );
@@ -101,7 +101,7 @@ void SimpleMainWindow::init()
     connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
         this, SLOT(activePartChanged(KParts::Part*)));
 
-    connect(PartController::getInstance(), 
+    connect(PartController::getInstance(),
         SIGNAL(documentChangedState(const KURL &, DocumentState)),
         this, SLOT(documentChangedState(const KURL&, DocumentState)));
 
@@ -173,11 +173,11 @@ void SimpleMainWindow::raiseView(QWidget *view)
         kdDebug() << view->parent()->className() << endl;
     if (view->parent() && (view->parent()->isA("EditorWrapper") || view->parent()->isA("MultiBuffer")))
     {
-//         kdDebug() << "parent is editor wrapper: " << 
+//         kdDebug() << "parent is editor wrapper: " <<
 //             static_cast<EditorWrapper*>(view->parent()) << endl;
         view = (QWidget*)view->parent();
     }
-    
+
     if (m_docks.contains(view))
     {
         DDockWindow *dock = toolWindow(m_docks[view]);
@@ -220,7 +220,7 @@ void SimpleMainWindow::createFramework()
 {
     PartController::createInstance( this );
 
-    connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), 
+    connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
         this, SLOT(createGUI(KParts::Part*)));
 }
 
@@ -230,16 +230,16 @@ void SimpleMainWindow::createActions()
         this, SLOT(raiseEditor()), actionCollection(), "raise_editor");
     m_raiseEditor->setToolTip(i18n("Raise editor"));
     m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
-    
+
     new KAction(i18n("Split &Horizontal"), CTRL+SHIFT+Key_T,
         this, SLOT(slotSplitHorizontal()), actionCollection(), "split_h");
 
     new KAction(i18n("Split &Vertical"), CTRL+SHIFT+Key_L,
         this, SLOT(slotSplitVertical()), actionCollection(), "split_v");
-    
-    KStdAction::configureToolbars(this, SLOT(configureToolbars()), 
+
+    KStdAction::configureToolbars(this, SLOT(configureToolbars()),
         actionCollection(), "set_configure_toolbars");
-    
+
     m_mainWindowShare->createActions();
 
     connect(m_mainWindowShare, SIGNAL(gotoNextWindow()), this, SLOT(gotoNextWindow()));
@@ -283,7 +283,7 @@ void SimpleMainWindow::gotoLastWindow()
 
 void SimpleMainWindow::slotCoreInitialized()
 {
-    menuBar()->setEnabled(true);    
+    menuBar()->setEnabled(true);
 }
 
 void SimpleMainWindow::projectOpened()
@@ -346,7 +346,7 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
     DTabWidget *tabWidget = static_cast<DTabWidget*>(const_cast<QObject*>(sender()));
     if (!tabWidget)
         return;
-    
+
     KPopupMenu tabMenu;
     tabMenu.insertTitle(tabWidget->tabLabel(w));
 
@@ -512,7 +512,7 @@ void SimpleMainWindow::fillWindowMenu()
 
     if (list.count() > 0)
         m_windowList << qMakePair(m_windowMenu->insertSeparator(), KURL());
-    
+
     while (itt != list.end())
     {
         temp = m_windowMenu->insertItem( i < 10 ? QString("&%1 %2").arg(i).arg((*itt).fileName()) : (*itt).fileName() );
@@ -526,7 +526,7 @@ void SimpleMainWindow::slotSplitVertical()
 {
     DTabWidget *tab = splitVertical();
     PartController::getInstance()->openTextDocument();
-    
+
     //FIXME: adymo: we can't put another kate view into the tab just added - weird crashes :(
     //more: kdevelop part controller doesn't handle such situation - it assumes the part to
     //have only one widget
@@ -577,6 +577,14 @@ void SimpleMainWindow::activePartChanged(KParts::Part *part)
         kdDebug() << " setting m_activeTabWidget " << endl;
         m_activeTabWidget = m_widgetTabs[w];
     }
+}
+
+void SimpleMainWindow::createGUI(KParts::Part *part) {
+    if ( !part )
+        setCaption( QString::null );
+    DMainWindow::createGUI(part);
+
+    m_mainWindowShare->slotGUICreated( part );
 }
 
 #include "simplemainwindow.moc"
