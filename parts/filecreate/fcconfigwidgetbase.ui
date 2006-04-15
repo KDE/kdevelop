@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>FCConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -31,7 +31,7 @@
                     <cstring>tab1</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Project Types</string>
+                    <string>Pro&amp;ject Types</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -50,7 +50,7 @@
                             <cstring>edittype_button</cstring>
                         </property>
                         <property name="text">
-                            <string>&amp;Edit Type...</string>
+                            <string>Edit T&amp;ype...</string>
                         </property>
                     </widget>
                     <widget class="QPushButton" row="1" column="1">
@@ -130,14 +130,6 @@
                             <enum>AllColumns</enum>
                         </property>
                     </widget>
-                    <widget class="QCheckBox" row="10" column="1">
-                        <property name="name">
-                            <cstring>sidetab_checkbox</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Use s&amp;ide tab</string>
-                        </property>
-                    </widget>
                     <spacer row="9" column="1">
                         <property name="name">
                             <cstring>spacer2</cstring>
@@ -210,7 +202,7 @@
                             <cstring>edit_type_content_button</cstring>
                         </property>
                         <property name="text">
-                            <string>Edit Temp&amp;late</string>
+                            <string>Ed&amp;it Template</string>
                         </property>
                     </widget>
                 </grid>
@@ -316,7 +308,7 @@
                     <cstring>tab3</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Project &amp;Templates</string>
+                    <string>Proje&amp;ct Templates</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -509,7 +501,6 @@
     <tabstop>edit_type_content_button</tabstop>
     <tabstop>moveup_button</tabstop>
     <tabstop>movedown_button</tabstop>
-    <tabstop>sidetab_checkbox</tabstop>
     <tabstop>fc_tabs</tabstop>
     <tabstop>fcglobal_view</tabstop>
     <tabstop>copyToProject_button</tabstop>

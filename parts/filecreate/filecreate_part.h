@@ -62,33 +62,6 @@ public:
                      QString subtype = QString::null);
 
   /**
-   * Show file creation friendly side tab, yes or no
-   */
-  void setShowSideTab(bool on);
-
-  /**
-   * Selects a docked widget.
-   */
-  void selectWidget(int widgetNumber);
-
-  /**
-   * Returns the current type chooser as a TypeChooser* type.
-   */
-  TypeChooser * typeChooserWidget() const {
-    return (m_selectedWidget>=0 && m_selectedWidget<m_numWidgets) ?
-                              m_availableWidgets[m_selectedWidget] : NULL;
-  }
-
-  /**
-   * Returns the current type chooser as a QWidget* type.
-   */
-  QWidget * typeChooserWidgetAsQWidget() const {
-    TypeChooser * tc = typeChooserWidget();
-    return tc ? dynamic_cast<QWidget*>(tc) : NULL;
-  }
-
-
-  /**
    * Finds the file type object for a given extension and optionally subtype.
    * You can omit the subtype and specify the extension as ext-subtype if you wish.
    */
@@ -116,7 +89,7 @@ public slots:
    * Called when a new file is required - for example, from the "New.." menu action.
    */
   void slotNewFile();
-  
+
   /**
    * Called from KToolBarPopupMenu to request a new file action
    * @param pFileType is acutally a pointer to FileType
@@ -147,43 +120,17 @@ private:
   void addFileType(const QString & filename);
 
   /**
-   * The number (index to m_availableWidgets) of the widget currently in use, or -1 if none
-   */
-  int m_selectedWidget;
-
-  /**
    * List of file types from which the user can choose
    */
   QPtrList<FileType> m_filetypes;
-
-  /**
-   * List of available chooser widgets
-   */
-  TypeChooser * m_availableWidgets[2];
-
-  /**
-   * Number of chooser widgets
-   */
-  int m_numWidgets;
-
-  /**
-   * Set the current widget. Argument of null sets no widget.
-   */
-  bool setWidget(TypeChooser * widget);
-
-  /**
-   * Refreshes the widget in use - i.e. updates list of filetypes in the widget.
-   */
-  void refresh();
 
   /**
    * The file type selected by the new file dialog, if appropriate.
    */
   const FileType * m_filedialogFiletype;
 
-  bool m_useSideTab;
   ConfigWidgetProxy * _configProxy;
-  
+
   KPopupMenu* m_newPopupMenu;
   QPtrList<KPopupMenu>* m_subPopups;
 };

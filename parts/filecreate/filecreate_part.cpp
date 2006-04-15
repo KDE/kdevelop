@@ -59,18 +59,19 @@ K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( data ) )
 using namespace FileCreate;
 
 FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringList & )
-    : KDevCreateFile(&data, parent, name ? name : "FileCreatePart"), m_selectedWidget(-1), m_useSideTab(true), m_subPopups(0)
+//    : KDevCreateFile(&data, parent, name ? name : "FileCreatePart"), m_selectedWidget(-1), m_useSideTab(true), m_subPopups(0)
+    : KDevCreateFile(&data, parent, name ? name : "FileCreatePart"), m_subPopups(0)
 {
   setInstance(FileCreateFactory::instance());
   setXMLFile("kdevpart_filecreate.rc");
 
   connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
   connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
-  
+
 	_configProxy = new ConfigWidgetProxy( core() );
 	_configProxy->createProjectConfigPage( i18n("File Templates"), PROJECTSETTINGSPAGE, info()->icon() );
 	_configProxy->createGlobalConfigPage( i18n("File Templates"), GLOBALSETTINGSPAGE, info()->icon() );
-	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
+	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
 
@@ -79,37 +80,15 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   newAction->setToolTip( i18n("Create a new file") );
   m_newPopupMenu = newAction->popupMenu();
   connect(m_newPopupMenu, SIGNAL(aboutToShow()), this, SLOT(slotAboutToShowNewPopupMenu()));
-  
-//  m_filetypes.setAutoDelete(true);
 
-  m_availableWidgets[0] = new FriendlyWidget(this);
-  m_availableWidgets[1] = new ListWidget(this);
-  m_numWidgets = 2;
-
-  /// @todo provide a way of choosing your preferred widget without
-  /// having to change the source, as this is not considered 'user-friendly'
-  /// these days, I'm led to believe.
-  selectWidget(1);
-  
   QTimer::singleShot( 0, this, SLOT(slotGlobalInitialize()) );
 }
 
 
 FileCreatePart::~FileCreatePart()
 {
-/*
-  for(int c=0;c<m_numWidgets;c++){
-    if (TypeChooser* chooser = m_availableWidgets[c]) {
-
-       if( QWidget* as_widget = dynamic_cast<QWidget*>(chooser) )
-           mainWindow()->removeView( as_widget );
-
-       delete chooser;
-    }
-  }
-*/  
   delete _configProxy;
-  
+
   m_newPopupMenu->clear();
   delete m_subPopups;
 }
@@ -117,7 +96,7 @@ FileCreatePart::~FileCreatePart()
 void FileCreatePart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )
 {
 	kdDebug() << k_funcinfo << endl;
-	
+
 	switch( pagenumber )
 	{
 		case PROJECTSETTINGSPAGE:
@@ -126,7 +105,7 @@ void FileCreatePart::insertConfigWidget( const KDialogBase * dlg, QWidget * page
 			connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
 		}
 		break;
-		
+
 		case GLOBALSETTINGSPAGE:
 		{
 			FCConfigWidget *w = new FCConfigWidget( this, true, page, "filecreate config widget" );
@@ -134,43 +113,6 @@ void FileCreatePart::insertConfigWidget( const KDialogBase * dlg, QWidget * page
 		}
 		break;
 	}
-}
-
-void FileCreatePart::selectWidget(int widgetNumber) {
-  if (m_selectedWidget==widgetNumber) return;
-  if (widgetNumber<-1 || widgetNumber>=m_numWidgets) return;
-  if (setWidget(widgetNumber==-1 ? NULL : m_availableWidgets[widgetNumber]))
-    m_selectedWidget = widgetNumber;
-}
-
-
-bool FileCreatePart::setWidget(TypeChooser * widg) {
-
-  QWidget *as_widget = widg ? dynamic_cast<QWidget*>(widg) : NULL;
-
-  // remove the existing widget
-  TypeChooser *tc = typeChooserWidget();
-  if (tc) {
-    disconnect( tc->signaller(), SIGNAL(filetypeSelected(const FileType *)), this, SLOT(slotFiletypeSelected(const FileType *)) );
-    QWidget *as_widget2 = dynamic_cast<QWidget*>(tc);
-    if (as_widget2) {
-        kdDebug(9034) << "filecreate_part: Removing as_widget2" << endl;
-      mainWindow()->removeView(as_widget2);
-    } else
-      kdWarning(9034) << "WARNING: could not cast to as_widget2" << endl;
-
-  }
-
-  if (widg && as_widget) {
-    connect( widg->signaller(), SIGNAL(filetypeSelected(const FileType *)), this, SLOT(slotFiletypeSelected(const FileType *)) );
-    mainWindow()->embedSelectView(as_widget, i18n("New File"), i18n("File creation"));
-  }
-
-  return true;
-}
-
-void FileCreatePart::refresh() {
-  if (typeChooserWidget()) typeChooserWidget()->refresh();
 }
 
 void FileCreatePart::slotAboutToShowNewPopupMenu()
@@ -256,7 +198,6 @@ void FileCreatePart::addFileType(const QString & filename) {
 
 void FileCreatePart::slotProjectClosed() {
   m_filetypes.clear();
-  refresh();
   QTimer::singleShot( 0, this, SLOT(slotGlobalInitialize()) );
 }
 
@@ -269,8 +210,6 @@ void FileCreatePart::slotFiletypeSelected(const FileType * filetype) {
 
   if (project())
     openCreatedFile(createdFile);
-
-//  mainWindow()->lowerView( typeChooserWidgetAsQWidget() );
 }
 
 void FileCreatePart::openCreatedFile(const KDevCreateFile::CreatedFile & createdFile) {
@@ -285,7 +224,6 @@ int FileCreatePart::readTypes(const QDomDocument & dom, QPtrList<FileType> &m_fi
   QDomElement fileTypes = DomUtil::elementByPath(dom,"/kdevfilecreate/filetypes");
   if (!fileTypes.isNull()) {
     for(QDomNode node = fileTypes.firstChild();!node.isNull();node=node.nextSibling()) {
-//      kapp->processEvents();
 
       if (node.isElement() && node.nodeName()=="type") {
         QDomElement element = node.toElement();
@@ -305,7 +243,6 @@ int FileCreatePart::readTypes(const QDomDocument & dom, QPtrList<FileType> &m_fi
         if (node.hasChildNodes()) {
           for(QDomNode subnode = node.firstChild();!subnode.isNull();subnode=subnode.nextSibling()) {
             kdDebug(9034) << "subnode: " << subnode.nodeName().latin1() << endl;
-//            kapp->processEvents();
             if (subnode.isElement() && subnode.nodeName()=="subtype") {
               QDomElement subelement = subnode.toElement();
               FileType * subtype = new FileType;
@@ -385,7 +322,7 @@ FileType * FileCreatePart::getEnabledType(const QString & ex, const QString subt
 KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString dir, QString name, QString subtype)
 {
   KDevCreateFile::CreatedFile result;
-  
+
   KURL projectURL;
   if ( !project() )
   {
@@ -481,19 +418,15 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
     url.setPath(fullPath);
     partController()->editDocument(url);
   }
-  
+
   QString fileName = URLUtil::filename(fullPath);
   kdDebug(9034) << "file name = " << filename << endl;
-  
+
   result.filename = fileName;
   result.dir = URLUtil::directory(fullPath);
   result.status = KDevCreateFile::CreatedFile::STATUS_OK;
 
   return result;
-}
-
-void FileCreatePart::setShowSideTab(bool on) {
-  selectWidget(on ? 1 : -1 );
 }
 
 void FileCreatePart::slotNoteFiletype(const FileType * filetype) {
@@ -504,8 +437,7 @@ void FileCreatePart::slotNoteFiletype(const FileType * filetype) {
 void FileCreatePart::slotInitialize( )
 {
   m_filetypes.clear();
-  refresh();
-  
+
   //read global configuration
   slotGlobalInitialize();
 
@@ -514,8 +446,6 @@ void FileCreatePart::slotInitialize( )
     DomUtil::elementByPath(*projectDom(),"/kdevfilecreate/useglobaltypes");
   for(QDomNode node = useGlobalTypes.firstChild();
       !node.isNull();node=node.nextSibling()) {
-
-//    kapp->processEvents();
 
     if (node.isElement() && node.nodeName()=="type") {
       QDomElement element = node.toElement();
@@ -567,11 +497,6 @@ void FileCreatePart::slotInitialize( )
       addFileType( "h" );
     }*/
   }
-
-  setShowSideTab(m_useSideTab);
-
-  // refresh view
-  refresh();
 }
 
 void FileCreatePart::slotGlobalInitialize( )
@@ -583,21 +508,9 @@ void FileCreatePart::slotGlobalInitialize( )
   if (!globalXMLFile.isNull() &&
       DomUtil::openDOMFile(globalDom,globalXMLFile)) {
     kdDebug(9034) << "Reading global template info..." << endl;
-//    kapp->processEvents();
     readTypes(globalDom, m_filetypes, false);
 
-    // use side tab or not?
-    /// @todo this is a very Bad Way to do this. Must remember to move this setting to user's kdeveloprc config file
-    QDomElement useSideTab = DomUtil::elementByPath(globalDom,"/kdevfilecreate/sidetab");
-    if (!useSideTab.isNull() && useSideTab.attribute("active")=="no") {
-        m_useSideTab = false;
-
-		setShowSideTab(m_useSideTab); // not the cleanest thing to do.. but c'mon, look at the rest of this code.. ;)
-    }
   }
-  
-  // refresh view
-  refresh();
 }
 
 #include "filecreate_part.moc"

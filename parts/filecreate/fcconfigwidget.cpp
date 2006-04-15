@@ -53,21 +53,18 @@ FCConfigWidget::FCConfigWidget(FileCreatePart * part, bool global, QWidget *pare
         fc_tabs->setTabEnabled(tab3, false);
         delete tab2;
         delete tab3;
-        sidetab_checkbox->setChecked(m_part->m_useSideTab);
     }
     else
     {
         loadGlobalConfig(fcglobal_view, true);
         loadProjectConfig(fc_view);
         loadProjectTemplates(fctemplates_view);
-        sidetab_checkbox->setEnabled(false);
         templatesDir_label->setText(i18n("Project templates in ") + m_part->project()->projectDirectory() + "/templates");
     }
 
     m_globalfiletypes.setAutoDelete(true);
     m_projectfiletypes.setAutoDelete(true);
     m_projectfiletemplates.setAutoDelete(true);
-//    connect( fctemplates_view, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int ) ), this, SLOT( edittemplate_button_clicked() ) );
 }
 
 FCConfigWidget::~FCConfigWidget()
@@ -77,8 +74,6 @@ FCConfigWidget::~FCConfigWidget()
 void FCConfigWidget::accept()
 {
     if (m_global) {
-        m_part->m_useSideTab = sidetab_checkbox->isChecked();
-        m_part->setShowSideTab(m_part->m_useSideTab);
         saveGlobalConfig();
     }
     else
@@ -178,9 +173,6 @@ void FCConfigWidget::saveGlobalConfig()
     globalDom.appendChild(element);
     QDomElement  apPart  = globalDom.createElement("kdevfilecreate");
     element.appendChild(apPart);
-    QDomElement useST = globalDom.createElement("sidetab");
-    useST.setAttribute("active", m_part->m_useSideTab ? "yes" : "no" );
-    apPart.appendChild(useST);
     QDomElement fileTypes = globalDom.createElement( "filetypes" );
     apPart.appendChild( fileTypes );
 
@@ -258,26 +250,6 @@ void FCConfigWidget::saveProjectConfig()
 
     // project template files
 
-    //check for removed templates
-/*    QDir templDir( m_part->project()->projectDirectory() + "/templates/" );
-    templDir.setFilter( QDir::Files );
-    const QFileInfoList * list = templDir.entryInfoList();
-    if( list )
-    {
-        QFileInfoListIterator it( *list );
-        QFileInfo *fi;
-        while ( (fi = it.current()) != 0 )
-        {
-            if ( ( !(fctemplates_view->findItem(fi->fileName(), 0)) ) &&
-                ( !(fc_view->findItem(fi->fileName(), 0)) ) )
-            {
-                KURL removedTemplate;
-                removedTemplate.setPath(m_part->project()->projectDirectory() + "/templates/" + fi->fileName());
-                KIO::NetAccess::del(removedTemplate);
-            }
-            ++it;
-        }
-    }*/
     //check for new templates and those with location changed
     QListViewItemIterator it2(fctemplates_view);
     while (it2.current())
