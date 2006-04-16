@@ -74,7 +74,7 @@ const char *filepatterns[] = {
     "*.pl",
     "*.pp,*.pas",
     "*.py",
-    "*.rb",
+    "*.rb,*.rhtml",
     "*",
     0
 };
