@@ -195,6 +195,7 @@ DTabWidget *DMainWindow::createTab()
     connect(tab, SIGNAL(closeRequest(QWidget*)), this, SLOT(closeTab(QWidget*)));
     connect(tab, SIGNAL(contextMenu(QWidget*,const QPoint &)),
         this, SLOT(tabContext(QWidget*,const QPoint &)));
+    connect(tab, SIGNAL(currentChanged(QWidget*)), this, SIGNAL(widgetChanged(QWidget*)));
     return tab;
 }
 
@@ -206,11 +207,6 @@ bool DMainWindow::eventFilter(QObject *obj, QEvent *ev)
     if (!m_widgets.contains(w))
         return KParts::MainWindow::eventFilter(obj, ev);
 
-    if ((m_currentWidget != w) && (ev->type() == QEvent::Show))
-    {
-        m_currentWidget = w;
-        emit widgetChanged(w);
-    }
     else if (ev->type() == QEvent::WindowIconChange)
     {
         if (m_widgetTabs.contains(w))

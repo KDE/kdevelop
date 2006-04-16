@@ -167,6 +167,9 @@ void SimpleMainWindow::setViewAvailable(QWidget *pView, bool bEnabled)
 
 void SimpleMainWindow::raiseView(QWidget *view)
 {
+    // Avoid recursive active part setting
+    blockSignals(true);
+
     if (m_docks.contains(view))
     {
         DDockWidget *dock = toolWindow(m_docks[view]);
@@ -174,6 +177,8 @@ void SimpleMainWindow::raiseView(QWidget *view)
     }
     else if (m_widgets.contains(view) && m_widgetTabs.contains(view))
         m_widgetTabs[view]->setCurrentIndex(m_widgetTabs[view]->indexOf(view));
+
+    blockSignals(false);
 }
 
 void SimpleMainWindow::lowerView(QWidget * /*view*/)
@@ -511,9 +516,8 @@ void SimpleMainWindow::slotSplitHorizontal()
 
 void SimpleMainWindow::tabWidgetChanged( QWidget *tabWidget )
 {
-    if ( KParts::Part *part =
-            DocumentController::getInstance()->partForWidget( tabWidget ) )
-    DocumentController::getInstance()->activatePart( part );
+    if ( KParts::Part *part = DocumentController::getInstance()->partForWidget( tabWidget ) )
+        DocumentController::getInstance()->activatePart( part );
 }
 
 void SimpleMainWindow::closeTab(QWidget *w)

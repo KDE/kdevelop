@@ -352,6 +352,8 @@ void DocumentController::activatePart( KParts::Part *part )
     if ( !part )
         return ;
 
+    setActivePart( part );
+
     QWidget * widget = EditorProxy::getInstance() ->widgetForPart( part );
     if ( widget )
     {
@@ -359,14 +361,6 @@ void DocumentController::activatePart( KParts::Part *part )
         widget->show();
         widget->setFocus();
     }
-
-    setActivePart( part );
-
-    QWidget* w2 = EditorProxy::getInstance() ->widgetForPart( part );
-    if ( w2 != widget )
-        w2->setFocus();
-
-/*    emit documentActivated( activeDocument() );*/
 }
 
 KDevDocument::DocumentState DocumentController::documentState( KDevDocument* document ) const
@@ -772,10 +766,13 @@ void DocumentController::setActivePart(KParts::Part *part, QWidget *widget)
 {
     KDevDocumentController::setActivePart(part, widget);
 
-    kDebug( 9000 ) << k_funcinfo << endl;
+    kDebug( 9000 ) << k_funcinfo << activePart() << " " << activeDocument() << endl;
+
     updateMenuItems();
     QTimer::singleShot( 100, this, SLOT( slotWaitForFactoryHack() ) );
-    emit documentActivated( activeDocument() );
+
+    if (activeDocument())
+        emit documentActivated( activeDocument() );
 }
 
 void DocumentController::slotWaitForFactoryHack( )
