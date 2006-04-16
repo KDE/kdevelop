@@ -2,6 +2,7 @@
 #include "guibuilder_part.h"
 
 #include <QObject>
+#include <QAction>
 #include <QFile>
 #include <QTextStream>
 #include <QtDesigner/QtDesigner>
@@ -72,12 +73,22 @@ void GuiBuilderPart::setApiInstance( KDevApi* api )
   mainWindow()->embedSelectView(m_designer->widgetBox(), i18n("Widget Box"), i18n("Widget Box"));
   mainWindow()->embedSelectViewRight(m_designer->propertyEditor(), i18n("Property Editor"), i18n("Property Editor"));
 
-  KStdAction::save( this, SLOT( save() ), actionCollection(), "save" );
+  setupActions();
 }
 
 QDesignerFormEditorInterface *GuiBuilderPart::designer() const
 {
   return m_designer;
+}
+
+void GuiBuilderPart::setupActions()
+{
+    KStdAction::save( this, SLOT( save() ), actionCollection(), "save" );
+    QDesignerFormWindowManagerInterface* manager = designer()->formWindowManager();
+
+    QAction* designerAction = 0;
+    designerAction = manager->actionAdjustSize();
+    wrapDesignerAction( designerAction, actionCollection(), "adjust_size" );
 }
 
 bool GuiBuilderPart::openFile()
@@ -112,6 +123,13 @@ bool GuiBuilderPart::saveFile()
     m_window->setDirty(false);
     setModified(false);
     return true;
+}
+
+void GuiBuilderPart::wrapDesignerAction( QAction* dAction,
+                                         KActionCollection* parent,
+                                         const char* name )
+{
+
 }
 
 #include "guibuilder_part.moc"

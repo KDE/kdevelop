@@ -5,6 +5,7 @@
 
 #include <kdevreadwritepart.h>
 
+class QAction;
 class QDesignerFormEditorInterface;
 class QDesignerFormWindowInterface;
 class KAboutData;
@@ -21,11 +22,17 @@ public:
 
   static KAboutData* createAboutData();
 
+  void setupActions();
+
   virtual bool openFile();
   virtual bool saveFile();
 
   QDesignerFormEditorInterface *designer() const;
 
+private:
+  //wrap the actions provided by QDesignerFormWindowManagerInterface in
+  //KActions
+  void wrapDesignerAction( QAction*, KActionCollection*, const char* );
 
 private:
   QDesignerFormEditorInterface *m_designer;
