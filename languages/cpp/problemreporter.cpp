@@ -94,20 +94,20 @@ m_markIface( 0 )
 	                           "<tt>//@todo my todo</tt><br>"
 	                           "<tt>//TODO: my todo</tt><br>"
 	                           "<tt>//FIXME fix this</tt>"));
-	
+
 	m_canParseFile = true;
-	
+
 	m_gridLayout = new QGridLayout(this,2,3);
-	
+
 	m_errorList = new KListView(this);
 	m_fixmeList = new KListView(this);
 	m_todoList = new KListView(this);
 	m_filteredList = new KListView(this);
 	m_currentList = new KListView(this);
-	
+
 	m_filteredList->addColumn( i18n("Level") );
 	m_currentList->addColumn( i18n("Level") );
-	
+
     //addColumn( i18n("Level") );
 	InitListView(m_errorList);
 	InitListView(m_fixmeList);
@@ -115,14 +115,14 @@ m_markIface( 0 )
 	InitListView(m_filteredList);
 	InitListView(m_currentList);
 	m_currentList->removeColumn(1);
-	
+
 	m_widgetStack = new QWidgetStack(this);
 	m_widgetStack->addWidget(m_currentList,0);
 	m_widgetStack->addWidget(m_errorList,1);
 	m_widgetStack->addWidget(m_fixmeList,2);
 	m_widgetStack->addWidget(m_todoList,3);
 	m_widgetStack->addWidget(m_filteredList,4);
-	
+
 	m_tabBar = new QTabBar(this);
 	m_tabBar->insertTab(new QTab(i18n("Current")),0);
 	m_tabBar->insertTab(new QTab(i18n("Errors")),1);
@@ -131,18 +131,18 @@ m_markIface( 0 )
 	m_tabBar->insertTab(new QTab(i18n("Filtered")),4);
 	m_tabBar->setTabEnabled(0,false);
 	m_tabBar->setTabEnabled(4,false);
-	
+
 	m_timer = new QTimer( this );
-	
+
 	m_filterEdit = new QLineEdit(this);
-	
+
 	QLabel* m_filterLabel = new QLabel(i18n("Lookup:"),this);
-	
+
 	m_gridLayout->addWidget(m_tabBar,0,0);
 	m_gridLayout->addMultiCellWidget(m_widgetStack,1,1,0,2);
 	m_gridLayout->addWidget(m_filterLabel,0,1,Qt::AlignRight);
 	m_gridLayout->addWidget(m_filterEdit,0,2,Qt::AlignLeft);
-	
+
 	connect( m_filterEdit, SIGNAL(returnPressed()),
 	         this, SLOT(slotFilter()) );
 	connect( m_filterEdit, SIGNAL(textChanged( const QString & )),
@@ -155,16 +155,16 @@ m_markIface( 0 )
 	         this, SLOT(slotPartAdded(KParts::Part*)) );
 	connect( part->partController(), SIGNAL(partRemoved(KParts::Part*)),
 	         this, SLOT(slotPartRemoved(KParts::Part*)) );
-	
+
 	connect( part, SIGNAL(fileParsed(const QString&)), this, SLOT(slotFileParsed(const QString&)) );
-	
+
 	connect( m_timer, SIGNAL(timeout()), this, SLOT(reparse()) );
-	
+
 	connect( part->partController(), SIGNAL(closedFile(const KURL&)),
 	         this, SLOT(closedFile(const KURL&)) );
-	
+
 	configure();
-	
+
 	slotActivePartChanged( part->partController()->activePart() );
 }
 
@@ -172,16 +172,16 @@ void ProblemReporter::slotFilter()
 {
 	if(!m_tabBar->isTabEnabled(4))
 		m_tabBar->setTabEnabled(4,true);
-	
+
 	m_tabBar->tab(4)->setText(i18n("Filtered: %1").arg( m_filterEdit->text() ));
 	m_tabBar->setCurrentTab(4);
-	
+
 	m_filteredList->clear();
-	
+
 	filterList(m_errorList,i18n("Error"));
 	filterList(m_fixmeList,i18n("Fixme"));
 	filterList(m_todoList,i18n("Todo"));
-	
+
 }
 
 void ProblemReporter::filterList(KListView* listview, const QString& level)
@@ -192,7 +192,7 @@ void ProblemReporter::filterList(KListView* listview, const QString& level)
 		if ( it.current()->text(3).contains(m_filterEdit->text(),false))
 		{
 			new KListViewItem(m_filteredList,level,
-			                  it.current()->text(0), it.current()->text(1), 
+			                  it.current()->text(0), it.current()->text(1),
 			                  it.current()->text(2), it.current()->text(3));
 		}
 		++it;
@@ -211,13 +211,13 @@ void ProblemReporter::InitListView(KListView* listview)
 	listview->addColumn( i18n("Column") );
 	listview->addColumn( i18n("Problem") );
 	listview->setAllColumnsShowFocus( TRUE );
-	
+
 	connect( listview, SIGNAL(executed(QListViewItem*)),
 	         this, SLOT(slotSelected(QListViewItem*)) );
-	
+
 	connect( listview, SIGNAL(returnPressed(QListViewItem*)),
 	         this, SLOT(slotSelected(QListViewItem* )) );
-	
+
 }
 
 ProblemReporter::~ProblemReporter()
@@ -226,45 +226,44 @@ ProblemReporter::~ProblemReporter()
 
 void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 {
-	if( !part )
-	{
-		m_tabBar->setTabEnabled(0,false);
-		return;
-	}
-	
+	m_fileName = QString::null;
+
+	m_tabBar->setTabEnabled(0,false);
+
 	m_timer->stop();
-	
+
 	if( m_document )
 		disconnect( m_document, 0, this, 0 );
-	
+
 	m_document = dynamic_cast<KTextEditor::Document*>( part );
 	m_markIface = 0;
-	
+
 	if( !m_document )
 	{
-		m_tabBar->setTabEnabled(0,false);
 		return;
 	}
-	
+
 	m_fileName = m_document->url().path();
-	
+
 	initCurrentList();
-	
+
 	if( !m_cppSupport->isValidSource(m_fileName) )
 		return;
-	
+
 	connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 	m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
-	
+
 	if( !m_cppSupport->backgroundParser() )
 		return;
-	
+
+	m_tabBar->setTabEnabled(0,true);
+
 	m_cppSupport->backgroundParser()->lock();
 	bool needReparse = false;
 	if( !m_cppSupport->backgroundParser()->translationUnit(m_fileName) )
 		needReparse = true;
 	m_cppSupport->backgroundParser()->unlock();
-	
+
 	if( needReparse )
 		reparse();
 }
@@ -278,7 +277,7 @@ void ProblemReporter::slotTextChanged()
 {
 	if( !m_active )
 		return;
-	
+
 	m_timer->changeInterval( m_delay );
 }
 
@@ -288,7 +287,7 @@ void ProblemReporter::removeAllItems( QListView* listview, const QString& filena
 	while( current ){
 		QListViewItem* i = current;
 		current = current->nextSibling();
-		
+
 		if( i->text(0) == filename )
 			delete( i );
 	}
@@ -298,13 +297,13 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 {
 	QString relFileName = filename;
 	relFileName.remove(m_cppSupport->project()->projectDirectory());
-	
+
 	kdDebug(9008) << "ProblemReporter::removeAllProblems()" << relFileName << endl;
-	
+
 	removeAllItems(m_errorList,relFileName);
 	removeAllItems(m_fixmeList,relFileName);
 	removeAllItems(m_todoList,relFileName);
-	
+
 	if( m_document && m_markIface )
 	{
 		QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
@@ -320,12 +319,12 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 void ProblemReporter::reparse()
 {
 	m_timer->stop();
-	
+
 	if( !m_cppSupport->isValid() )
 		return;
-	
+
 	m_currentList->clear();
-	
+
 	if( m_canParseFile )
 	{
 		m_cppSupport->backgroundParser()->addFile( m_fileName );
@@ -337,16 +336,16 @@ void ProblemReporter::reparse()
 void ProblemReporter::initCurrentList()
 {
 	m_tabBar->setTabEnabled(0,true);
-	
+
 	QString relFileName = m_fileName;
 	relFileName.remove(m_cppSupport->project()->projectDirectory());
-	
+
 	m_currentList->clear();
-	
+
 	updateCurrentWith(m_errorList, i18n("Error"),relFileName);
 	updateCurrentWith(m_fixmeList,i18n("Fixme"),relFileName);
 	updateCurrentWith(m_todoList,i18n("Todo"),relFileName);
-	
+
 	m_tabBar->setCurrentTab(0);
 }
 
@@ -357,7 +356,7 @@ void ProblemReporter::updateCurrentWith(QListView* listview, const QString& leve
 	{
 		if( it.current()->text(0) == filename)
 			new QListViewItem(m_currentList,level,it.current()->text(1),it.current()->text(2),it.current()->text(3));
-		
+
 		++it;
 	}
 }
@@ -370,8 +369,8 @@ void ProblemReporter::slotSelected( QListViewItem* item )
 		is_filtered = true;
 	else if(item->listView() == m_currentList)
 		is_current = true;
-	
-	
+
+
 	KURL url( is_current ? m_fileName : m_cppSupport->project()->projectDirectory() + item->text(0 + is_filtered) );
 	int line = item->text( 1 + is_filtered).toInt();
     // int column = item->text( 3 ).toInt();
@@ -384,15 +383,15 @@ void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
 	int markType = levelToMarkType( p.level() );
 	if( markType != -1 && m_document && m_markIface && m_fileName == fileName )
 		m_markIface->addMark( p.line(), markType );
-	
+
 	QString msg = p.text();
 	msg = msg.replace( QRegExp("\n"), "" );
-	
+
 	QString relFileName = fileName;
 	relFileName.remove(m_cppSupport->project()->projectDirectory());
-	
+
 	KListView* list;
-	
+
 	switch( p.level() )
 	{
 	case Problem::Level_Error:
@@ -410,7 +409,7 @@ void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
 	default:
 		list = NULL;
 	}
-	
+
 	if(list)
 	{
 		new ProblemItem( list,
@@ -419,7 +418,7 @@ void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
 		                 QString::number( p.column() + 1 ),
 		                 msg );
 	}
-	
+
 	if(fileName == m_fileName)
 	{
 		new QListViewItem(m_currentList,levelToString(p.level()),
@@ -440,7 +439,7 @@ void ProblemReporter::configure()
 
 void ProblemReporter::configWidget( KDialogBase* dlg )
 {
-	QVBox *vbox = dlg->addVBoxPage(i18n("C++ Parsing"), i18n("C++ Parsing"), 
+	QVBox *vbox = dlg->addVBoxPage(i18n("C++ Parsing"), i18n("C++ Parsing"),
 	                               BarIcon( "source_cpp", KIcon::SizeMedium) );
 	ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );
 	w->setPart( m_cppSupport );
@@ -451,10 +450,10 @@ void ProblemReporter::configWidget( KDialogBase* dlg )
 void ProblemReporter::slotPartAdded( KParts::Part* part )
 {
 	KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( part );
-	
+
 	if( !iface )
 		return;
-	
+
 	iface->setPixmap( KTextEditor::MarkInterface::markType07, SmallIcon("stop") );
 }
 
