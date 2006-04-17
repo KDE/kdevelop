@@ -1,0 +1,84 @@
+/*
+  Copyright 2006 Hamish Rodda <rodda@kde.org>
+
+  Permission to use, copy, modify, distribute, and sell this software and its
+  documentation for any purpose is hereby granted without fee, provided that
+  the above copyright notice appear in all copies and that both that
+  copyright notice and this permission notice appear in supporting
+  documentation.
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+  KDEVELOP TEAM BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+  AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+#include "pp-stream.h"
+
+Stream::Stream()
+{
+}
+
+Stream::Stream( const QByteArray & array, QIODevice::OpenMode openMode )
+  : QTextStream(array, openMode)
+{
+}
+
+Stream::Stream( QByteArray * array, QIODevice::OpenMode openMode )
+  : QTextStream(array, openMode)
+{
+}
+
+Stream::Stream( QString * string, QIODevice::OpenMode openMode )
+  : QTextStream(string, openMode)
+{
+}
+
+Stream::Stream( FILE * fileHandle, QIODevice::OpenMode openMode )
+  : QTextStream(fileHandle, openMode)
+{
+}
+
+Stream::Stream( QIODevice * device )
+  : QTextStream(device)
+{
+  operator>>(c);
+}
+
+Stream & Stream::operator ++( )
+{
+  operator>>(c);
+  return *this;
+}
+
+Stream& Stream::operator--()
+{
+  seek(pos() - 2);
+  operator>>(c);
+  return *this;
+}
+
+void Stream::rewind(qint64 offset)
+{
+  seek(pos() - offset - 1);
+  operator>>(c);
+}
+
+bool Stream::atEnd() const
+{
+  return c.isNull();
+}
+
+QChar Stream::peek() const
+{
+  Stream* s = const_cast<Stream*>(this);
+  ++(*s);
+  QChar ret = s->current();
+  s->rewind();
+  return ret;
+}
