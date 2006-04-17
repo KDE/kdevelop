@@ -21,43 +21,38 @@
 
 #include "pp-scanner.h"
 
-void pp_skip::rewind(QTextStream& stream, qint64 offset) const
-{
-  stream.seek(stream.pos() - offset);
-}
-
 int pp_skip::linesSkipped() const
 {
   return m_lines;
 }
 
-void pp_skip_blanks::operator()(QTextStream& input, QTextStream& output)
+void pp_skip_blanks::operator()(Stream& input, Stream& output)
 {
   m_lines = 0;
 
-  QChar c;
   while (!input.atEnd()) {
-    input >> c;
-
-    if (c == '\\') {
-      input >> c;
-      if (c != '\n') {
-        return rewind(input, 2);
+    if (input == '\\') {
+      ++input;
+      if (input != '\n') {
+        --input;
+        return;
 
       } else {
+        ++input;
         ++m_lines;
         continue;
       }
     }
 
-    if (c == '\n' || !c.isSpace())
-      return rewind(input);
+    if (input == '\n' || !input.current().isSpace())
+      return;
 
-    output << c;
+    output << input;
+    ++input;
   }
 }
 
-void pp_skip_comment_or_divop::operator()(QTextStream& input, QTextStream& output)
+void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output)
 {
   enum {
     MAYBE_BEGIN,
@@ -70,83 +65,81 @@ void pp_skip_comment_or_divop::operator()(QTextStream& input, QTextStream& outpu
 
   m_lines = 0;
 
-  QChar c;
   while (!input.atEnd()) {
-    input >> c;
-
     switch (state) {
       case MAYBE_BEGIN:
-        if (c != '/')
-          return rewind(input);
+        if (input != '/')
+          return;
 
         state = BEGIN;
         break;
 
       case BEGIN:
-        if (c == '*')
+        if (input == '*')
           state = IN_COMMENT;
-        else if (c == '/')
+        else if (input == '/')
           state = IN_CXX_COMMENT;
         else
-          return rewind(input);
+          return;
         break;
 
       case IN_COMMENT:
-        if (c == '*')
+        if (input == '*')
           state = MAYBE_END;
         break;
 
       case IN_CXX_COMMENT:
-        if (c == '\n')
-          return rewind(input);
+        if (input == '\n')
+          return;
         break;
 
       case MAYBE_END:
-        if (c == '/')
+        if (input == '/')
           state = END;
-        else if (c != '*')
+        else if (input != '*')
           state = IN_COMMENT;
         break;
 
       case END:
-        return rewind(input);
+        return;
     }
 
-    output << c;
+    output << input;
+    ++input;
   }
 }
 
-void pp_skip_identifier::operator()(QTextStream& input, QTextStream& output);
+QString pp_skip_identifier::operator()(Stream& input)
 {
   m_lines = 0;
 
-  QChar c;
+  QString identifier;
+
   while (!input.atEnd()) {
-    input >> c;
+    if (!input.current().isLetterOrNumber() && input != '_')
+        break;
 
-    if (!c.isLetterOrNumber() && c != '_')
-        return rewind(input);
-
-    output << c;
+    identifier.append(input);
+    ++input;
   }
+
+  return identifier;
 }
 
-void pp_skip_number::operator()(QTextStream& input, QTextStream& output);
+void pp_skip_number::operator()(Stream& input, Stream& output)
 {
   m_lines = 0;
 
-  QChar c;
   while (!input.atEnd()) {
-    input >> c;
+    if (!input.current().isLetterOrNumber() && input != '_')
+        return;
 
-    if (!c.isLetterOrNumber() && c != '_')
-        return rewind(input);
-
-    output << c;
+    output << input;
+    ++input;
   }
 }
 
-void pp_skip_string_literal::operator()(QTextStream& input, QTextStream& output);
+void pp_skip_string_literal::operator()(Stream& input, Stream& output)
 {
   enum {
     BEGIN,
@@ -157,23 +150,20 @@ void pp_skip_string_literal::operator()(QTextStream& input, QTextStream& output)
 
   m_lines = 0;
 
-  QChar c;
   while (!input.atEnd()) {
-    input >> c;
-
     switch (state) {
       case BEGIN:
-        if (c != '\"')
-          return rewind(input);
+        if (input != '\"')
+          return;
         state = IN_STRING;
         break;
 
       case IN_STRING:
-        Q_ASSERT(c != '\n');
+        Q_ASSERT(input != '\n');
 
-        if (c == '\"')
+        if (input == '\"')
           state = END;
-        else if (c == '\\')
+        else if (input == '\\')
           state = QUOTE;
         break;
 
@@ -182,14 +172,14 @@ void pp_skip_string_literal::operator()(QTextStream& input, QTextStream& output)
         break;
 
       case END:
-        return rewind(input);
+        return;
     }
 
-    output << c;
+    output << input;
   }
 }
 
-void pp_skip_char_literal::operator()(QTextStream& input, QTextStream& output);
+void pp_skip_char_literal::operator()(Stream& input, Stream& output)
 {
   enum {
     BEGIN,
@@ -201,86 +191,91 @@ void pp_skip_char_literal::operator()(QTextStream& input, QTextStream& output);
   m_lines = 0;
 
   while (!input.atEnd()) {
-    input >> c;
+    if (state == END)
+      break;
 
     switch (state) {
       case BEGIN:
-        if (c != '\'')
-          return rewind(input);
+        if (input != '\'')
+          return;
         state = IN_STRING;
         break;
 
       case IN_STRING:
-        Q_ASSERT(c != '\n');
+        Q_ASSERT(input != '\n');
 
-        if (c == '\'')
+        if (input == '\'')
           state = END;
-        else if (c == '\\')
+        else if (input == '\\')
           state = QUOTE;
         break;
 
       case QUOTE:
         state = IN_STRING;
         break;
+
+      default:
+        Q_ASSERT(0);
+        break;
     }
 
-    output << c;
+    output << input;
+    ++input;
   }
 }
 
-void pp_skip_argument::operator()(QTextStream& input, QTextStream& output);
+void pp_skip_argument::operator()(Stream& input, Stream& output)
 {
   int depth = 0;
   m_lines = 0;
 
   while (!input.atEnd()) {
-    input >> c;
+    if (!depth && (input == ')' || input == ',')) {
+      return;
 
-    if (!depth && (c == ')' || c == ',')) {
-      return rewind(input);
-
-    } else if (c == '(') {
+    } else if (input == '(') {
       ++depth;
 
-    } else if (c == ')') {
+    } else if (input == ')') {
       --depth;
 
-    } else if (c == '\"') {
-      rewind(input);
+    } else if (input == '\"') {
+      input.rewind();
       skip_string_literal(input, output);
-      lines += skip_string_literal.lines();
+      m_lines += skip_string_literal.linesSkipped();
       continue;
 
-    } else if (c == '\'') {
-      rewind(input);
-      __first = skip_char_literal (input, output);
-      lines += skip_char_literal.lines;
+    } else if (input == '\'') {
+      input.rewind();
+      skip_char_literal (input, output);
+      m_lines += skip_char_literal.linesSkipped();
       continue;
 
-    } else if (c == '/') {
-      rewind(input);
-      __first = skip_comment_or_divop (input, output);
-      lines += skip_comment_or_divop.lines;
+    } else if (input == '/') {
+      input.rewind();
+      skip_comment_or_divop (input, output);
+      m_lines += skip_comment_or_divop.linesSkipped();
       continue;
 
-    } else if (c.isLetter() || c == '_') {
-      rewind(input);
-      __first = skip_identifier(input, output);
-      lines += skip_identifier.lines;
+    } else if (input.current().isLetter() || input == '_') {
+      input.rewind();
+      output << skip_identifier(input);
+      m_lines += skip_identifier.linesSkipped();
       continue;
 
-    } else if (c.isNumber()) {
-      rewind(input);
-      __first = skip_number(input, output);
-      lines += skip_number.lines;
+    } else if (input.current().isNumber()) {
+      input.rewind();
+      output << skip_number(input);
+      m_lines += skip_number.linesSkipped();
       continue;
 
-    } else if (c == '\n') {
-      ++lines;
+    } else if (input == '\n') {
+      ++m_lines;
     }
 
-    output << c;
+    output << input;
+    ++input;
   }
 
-  return rewind(input);
+  return;
 }

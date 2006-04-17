@@ -47,17 +47,11 @@
 #include "../rxx_allocator.h"
 
 #include "pp-fwd.h"
-#include "pp-cctype.h"
-#include "pp-string.h"
-#include "pp-symbol.h"
 #include "pp-internal.h"
-#include "pp-iterator.h"
 #include "pp-macro.h"
-#include "pp-environment.h"
 #include "pp-scanner.h"
 #include "pp-macro-expander.h"
 #include "pp-engine.h"
-#include "pp-engine-bits.h"
 
 #endif // PP_H
 

@@ -22,62 +22,59 @@
 #ifndef PP_SCANNER_H
 #define PP_SCANNER_H
 
-#include <QtGlobal>
+#include <QString>
+
+#include "pp-stream.h"
 
 class pp_skip
 {
 public:
-  virtual void operator()(QTextStream& input, QTextStream& output) = 0;
-
   int linesSkipped() const;
-
-  /// Move back \a offset chars in the stream
-  void rewind(QTextStream& stream, qint64 offset = 1) const;
 
 protected:
   int m_lines;
-}
+};
 
 class pp_skip_blanks : public pp_skip
 {
 public:
-  virtual void operator()(QTextStream& input, QTextStream& output);
+  void operator()(Stream& input, Stream& output);
 };
 
 class pp_skip_comment_or_divop : public pp_skip
 {
 public:
-  virtual void operator()(QTextStream& input, QTextStream& output);
+  void operator()(Stream& input, Stream& output);
 };
 
 class pp_skip_identifier : public pp_skip
 {
 public:
-  virtual void operator()(QTextStream& input, QTextStream& output);
+  QString operator()(Stream& input);
 };
 
 class pp_skip_number : public pp_skip
 {
 public:
-  virtual void operator()(QTextStream& input, QTextStream& output);
+  void operator()(Stream& input, Stream& output);
 };
 
 class pp_skip_string_literal : public pp_skip
 {
 public:
-  virtual void operator()(QTextStream& input, QTextStream& output);
+  void operator()(Stream& input, Stream& output);
 };
 
 class pp_skip_char_literal : public pp_skip
 {
 public:
-  virtual void operator()(QTextStream& input, QTextStream& output);
+  void operator()(Stream& input, Stream& output);
 };
 
 class pp_skip_argument : public pp_skip
 {
 public:
-  virtual void operator()(QTextStream& input, QTextStream& output);
+  void operator()(Stream& input, Stream& output);
 
 private:
   pp_skip_identifier skip_number;

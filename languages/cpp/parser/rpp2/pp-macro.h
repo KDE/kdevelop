@@ -22,6 +22,7 @@
 #define PP_MACRO_H
 
 #include <QVector>
+#include <QStringList>
 
 class pp_macro
 {
@@ -32,7 +33,7 @@ public:
 #if defined (PP_WITH_MACRO_POSITION)
   QString file;
 #endif
-  QVector<QString> formals;
+  QStringList formals;
 
   union
   {

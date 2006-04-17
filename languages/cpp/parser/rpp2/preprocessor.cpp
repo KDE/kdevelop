@@ -1,5 +1,6 @@
 /*
   Copyright 2005 Harald Fernengel <harry@kdevelop.org>
+  Copyright 2006 Hamish Rodda <rodda@kde.org>
 
   Permission to use, copy, modify, distribute, and sell this software and its
   documentation for any purpose is hereby granted without fee, provided that
@@ -20,29 +21,20 @@
 
 #include "preprocessor.h"
 
-#include <string>
+#include <QFile>
 
-// register callback for include hooks
-static void includeFileHook(const std::string &, const std::string &, FILE *);
-#define PP_HOOK_ON_FILE_INCLUDED(A, B, C) includeFileHook(A, B, C)
+#include <kurl.h>
+#include <kdebug.h>
+
 #include "pp.h"
-
-#include <QtCore/QtCore>
+#include "pp-stream.h"
 
 class PreprocessorPrivate
 {
 public:
-    QByteArray result;
-    pp_environment env;
+    QString result;
+    QHash<QString, pp_macro*> env;
     QStringList includePaths;
-
-    void initPP(pp &proc)
-    {
-        foreach(QString path, includePaths) {
-            const QByteArray asc = path.toAscii();
-            proc.push_include_path(std::string(asc.constData(), asc.length()));
-        }
-    }
 };
 
 QHash<QString, QStringList> includedFiles;
@@ -60,31 +52,29 @@ Preprocessor::Preprocessor()
 
 Preprocessor::~Preprocessor()
 {
+    qDeleteAll(d->env);
     delete d;
 }
 
-void Preprocessor::processFile(const QString &fileName)
+QString Preprocessor::processFile(const QString& fileName)
 {
-    pp proc(d->env);
-    d->initPP(proc);
+    pp proc(this, d->env);
 
-    d->result.reserve(d->result.size() + 20 * 1024);
-
-    d->result += "# 1 \"" + fileName.toLatin1() + "\"\n"; // ### REMOVE ME
-    proc.file(fileName.toLocal8Bit().constData(), std::back_inserter(d->result));
+    return proc.processFile(fileName);
 }
 
-void Preprocessor::processString(const QByteArray &str)
+QString Preprocessor::processString(const QByteArray &bytearray)
 {
-    pp proc(d->env);
-    d->initPP(proc);
+    pp proc(this, d->env);
 
-    proc(str.begin(), str.end(), std::back_inserter(d->result));
-}
+    QString result;
 
-QByteArray Preprocessor::result() const
-{
-    return d->result;
+    Stream bs(const_cast<QByteArray*>(&bytearray), QIODevice::ReadOnly);
+    Stream rs(&result);
+
+    proc(bs, rs);
+
+    return result;
 }
 
 void Preprocessor::addIncludePaths(const QStringList &includePaths)
@@ -94,59 +84,54 @@ void Preprocessor::addIncludePaths(const QStringList &includePaths)
 
 QStringList Preprocessor::macroNames() const
 {
-    QStringList macros;
-
-    pp_environment::base_type::const_iterator it = d->env.begin();
-    while (it != d->env.end()) {
-        macros += QString::fromLatin1((*it).first->begin(), (*it).first->size());
-        ++it;
-    }
-
-    return macros;
+    return d->env.keys();
 }
 
 QList<Preprocessor::MacroItem> Preprocessor::macros() const
 {
     QList<MacroItem> items;
 
-    pp_environment::base_type::const_iterator it = d->env.begin();
-    while (it != d->env.end()) {
+    QHashIterator<QString, pp_macro*> it = d->env;
+    while (it.hasNext()) {
+        it.next();
+
         MacroItem item;
-        item.name = QString::fromLatin1((*it).first->begin(), (*it).first->size());
-        item.definition = QString::fromLatin1((*it).second.definition->begin(),
-                                              (*it).second.definition->size());
-        for (size_t i = 0; i < (*it).second.formals.size(); ++i) {
-            item.parameters += QString::fromLatin1((*it).second.formals[i]->begin(),
-                    (*it).second.formals[i]->size());
-        }
-        item.isFunctionLike = (*it).second.function_like;
+        item.name = it.key();
+        item.definition = it.value()->definition;
+        item.parameters = it.value()->formals;
+        item.isFunctionLike = it.value()->function_like;
 
 #ifdef PP_WITH_MACRO_POSITION
-        item.fileName = QString::fromLatin1((*it).second.file->begin(), (*it).second.file->size());
+        item.fileName = it.value()->file;
 #endif
         items += item;
-
-        ++it;
     }
 
     return items;
 }
 
-/*
-int main()
+Stream * Preprocessor::sourceNeeded( QString & fileName, IncludeType type )
 {
-    Preprocessor pp;
+  if (!QFile::exists(fileName)) {
+    foreach (const QString& includePath, d->includePaths) {
+      fileName = KUrl(KUrl::fromPath(includePath), fileName).path();
+      if (QFile::exists(fileName))
+        goto found;
+    }
 
-    QStringList paths;
-    paths << "/usr/include";
-    pp.addIncludePaths(paths);
+    return 0L;
+  }
 
-    pp.processFile("pp-configuration");
-    pp.processFile("/usr/include/stdio.h");
+  found:
+  QFile* f = new QFile(fileName);
+  if (!f->open(QIODevice::ReadOnly)) {
+    kWarning() << k_funcinfo << "Could not open successfully stat-ed file " << fileName << endl;
+    delete f;
+    return 0L;
+  }
 
-    qDebug() << pp.result();
+  // Hrm, hazardous?
+  f->deleteLater();
 
-    return 0;
+  return new Stream(f);
 }
-*/
-

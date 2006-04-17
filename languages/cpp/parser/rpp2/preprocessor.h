@@ -1,5 +1,6 @@
 /*
   Copyright 2005 Harald Fernengel <harry@kdevelop.org>
+  Copyright 2006 Hamish Rodda <rodda@kde.org>
 
   Permission to use, copy, modify, distribute, and sell this software and its
   documentation for any purpose is hereby granted without fee, provided that
@@ -27,19 +28,42 @@
 
 class QByteArray;
 class PreprocessorPrivate;
+class Stream;
 
 class Preprocessor
 {
 public:
-    Preprocessor();
-    ~Preprocessor();
+    enum IncludeType {
+      /// An include specified as being local (eg. "file.h")
+      IncludeLocal,
+      /// An include specified as being global (eg. &lt;file.h&gt;)
+      IncludeGlobal
+    };
 
-    void processFile(const QString &fileName);
-    void processString(const QByteArray &str);
+    Preprocessor();
+    virtual ~Preprocessor();
+
+    QString processFile(const QString &fileName);
+    QString processString(const QByteArray &str);
 
     void addIncludePaths(const QStringList &includePaths);
 
-    QByteArray result() const;
+    /**
+     * This function is called by the preprocessor whenever
+     * it encounters an include directive.
+     *
+     * This class is permitted to modify \a fileName%; this
+     * value will be used when marking the file in the preprocessed
+     * output.
+     *
+     * \param fileName name of the source file to include
+     * \param type the way that the file was requested
+     *
+     * \return a Stream with the appropriate contents to allow
+     * the file to be #included.  Ownership of the Stream is yielded to 
+     * class pp at this point.
+     */
+    virtual Stream* sourceNeeded(QString& fileName, IncludeType type);
 
     QStringList macroNames() const;
 

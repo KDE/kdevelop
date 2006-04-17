@@ -20,6 +20,10 @@
 
 #include "pp.h"
 
+#include <kdebug.h>
+
+#include "preprocessor.h"
+
 int main (int /*argc*/, char *argv[])
 {
   bool no_stdinc = false;
@@ -32,34 +36,36 @@ int main (int /*argc*/, char *argv[])
       return EXIT_FAILURE;
     }
 
-  pp_environment env;
+  QHash<QString, pp_macro*> env;
+  Preprocessor p;
 
-  pp preprocess(env);
+  QStringList ip;
+
+  pp preprocess(&p, env);
   if (! no_stdinc)
     {
-      preprocess.push_include_path ("/usr/include");
+      ip << "/usr/include";
 #if defined (GCC_MACHINE) && defined (GCC_VERSION)
-      preprocess.push_include_path ("/usr/lib/gcc/" GCC_MACHINE "/" GCC_VERSION "/include");
+      ip << "/usr/lib/gcc/" GCC_MACHINE "/" GCC_VERSION "/include";
 #endif
     }
 
   if (! no_stdincpp)
     {
 #if defined (GCC_MACHINE) && defined (GCC_VERSION)
-      preprocess.push_include_path ("/usr/include/c++/" GCC_VERSION);
-      preprocess.push_include_path ("/usr/include/c++/" GCC_VERSION "/" GCC_MACHINE);
+      ip << "/usr/include/c++/" GCC_VERSION;
+      ip << "/usr/include/c++/" GCC_VERSION "/" GCC_MACHINE;
 #endif
     }
 
-  preprocess.push_include_path (".");
+  ip << ".";
 
-  preprocess.file ("pp-configuration", pp_null_output_iterator ()); // ### put your macros here!
+  p.addIncludePaths(ip);
 
-  std::string result;
-  result.reserve (20 * 1024); // 20K
+  preprocess.processFile("pp-configuration"); // ### put your macros here!
 
-  preprocess.file (filename, pp_output_iterator<std::string> (result));
-  std::cout << result;
+  QString result = preprocess.processFile(filename);
+  kDebug() << result << endl;
 
   // std::cout << "allocated #" << pp_symbol::count () << " symbols!" << std::endl;
   // std::cout << "allocated #" << std::distance (env.begin (), env.end ()) << " macros!" << std::endl;
