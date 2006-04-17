@@ -668,11 +668,11 @@ KTextEditor::SmartRange * Binder::newRange( AST * ast, bool includeStartToken, b
       const Token &end_token = _M_token_stream->token(ast->end_token);
       QString fileName;
       KTextEditor::Cursor start = tokenToPosition(start_token, fileName, !includeStartToken);
-      kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
+      //kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
       KTextEditor::Cursor end = tokenToPosition(end_token, fileName, includeEndToken);
-      kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
+      //kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
       KTextEditor::SmartRange* ret = smart->newSmartRange(start, end, _M_highlight);
-      kDebug() << k_funcinfo << *ret << endl;
+      //kDebug() << k_funcinfo << *ret << endl;
       return ret;
     }
 
@@ -685,11 +685,11 @@ KTextEditor::SmartRange * Binder::newRange( const Token & token )
     if (KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(_M_highlight->document())) {
       QString fileName;
       KTextEditor::Cursor start = tokenToPosition(token, fileName);
-      kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
+      //kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
       KTextEditor::Cursor end = tokenToPosition(token, fileName);
-      kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
+      //kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
       KTextEditor::SmartRange* ret = smart->newSmartRange(start, end, _M_highlight);
-      kDebug() << k_funcinfo << *ret << endl;
+      //kDebug() << k_funcinfo << *ret << endl;
       return ret;
     }
 
