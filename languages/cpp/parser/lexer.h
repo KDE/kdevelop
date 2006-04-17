@@ -52,6 +52,14 @@ public:
   } extra;
 };
 
+/**
+ * A class which holds an array of input buffer offsets
+ * for use in translating from a line number to an input
+ * buffer position.
+ *
+ * A line number may not necessarily represent the input
+ * buffer line numbers; it depends on how the class is used.
+ */
 class LocationTable
 {
 private:
@@ -82,14 +90,20 @@ public:
     line_count = size;
   }
 
+  /**
+   * Returns the \a line and \a column of the given \a offset in this table.
+   */
   void positionAt(std::size_t offset, int *line, int *column) const;
 
   inline std::size_t &operator[](int index)
   { return lines[index]; }
 
 private:
+  /// An array of input buffer offsets
   std::size_t *lines;
+  /// The size of the allocated array
   std::size_t line_count;
+  /// The index to the next index in the lines array
   std::size_t current_line;
 
   friend class Lexer;
@@ -191,6 +205,13 @@ private:
 class Lexer
 {
 public:
+  /**
+   * Constructor.
+   *
+   * \param token_stream Provides a stream of tokens to the lexer.
+   * \param location_table a table which will be filled with non-preprocessed line -> offset values
+   * \param line_table a table which will be filled with (non-preproccessed line which contains a preprocessor line) -> offset values
+   */
   Lexer(TokenStream &token_stream,
 	LocationTable &location_table,
 	LocationTable &line_table,
@@ -204,6 +225,11 @@ public:
   LocationTable &location_table;
   LocationTable &line_table;
 
+  /**
+   * Return the position (\a line%, \a column%) of the \a offset in \a filename
+   *
+   * \note the line starts from 0.
+   */
   void positionAt(std::size_t offset, int *line, int *column,
                   QString *filename) const;
 

@@ -42,6 +42,8 @@ class KDevDocumentController;
  * The advantages are:
  * - an easier key for use in maps and the like
  * - a value which does not change when the filename changes
+ * - clearer distinction in the code between an open document and a url
+ *   (which may or may not be open)
  */
 class KDevDocument : public QObject
 {

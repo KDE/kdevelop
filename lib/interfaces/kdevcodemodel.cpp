@@ -24,6 +24,8 @@
 
 #include <QMutexLocker>
 
+#include <ktexteditor/smartrange.h>
+
 KDevCodeItem::KDevCodeItem( const QString &name, KDevItemGroup *parent )
         : KDevItemCollection( name, parent )
 {}
@@ -116,6 +118,22 @@ void KDevCodeModel::endRemoveItem()
 KDevCodeItem *KDevCodeModel::item( const QModelIndex &index ) const
 {
     return reinterpret_cast<KDevCodeItem*>( KDevItemModel::item( index ) );
+}
+
+const QList< KTextEditor::SmartRange * > & KDevCodeItem::references( ) const
+{
+    return m_references;
+}
+
+void KDevCodeItem::addReference( KTextEditor::SmartRange * range )
+{
+    m_references.append(range);
+    range->setWatcher(this);
+}
+
+void KDevCodeItem::deleted( KTextEditor::SmartRange * range )
+{
+    m_references.remove(range);
 }
 
 #include "kdevcodemodel.moc"

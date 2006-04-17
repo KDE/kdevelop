@@ -36,6 +36,9 @@
 #include <QMutexLocker>
 
 #include <kdebug.h>
+
+#include <ktexteditor/smartrange.h>
+#include <ktexteditor/smartinterface.h>
 #include <ktexteditor/document.h>
 
 #include <ThreadWeaver.h>
@@ -60,14 +63,15 @@ BackgroundParser::~BackgroundParser()
 
 void BackgroundParser::addDocument( const KUrl &url, KDevDocument* document )
 {
+    if (document)
+        m_openDocuments.insert(url, document);
+
     if ( !m_documents.contains( url ) )
     {
         m_documents.insert( url, true );
 
         parseDocuments();
 
-    } else {
-        m_openDocuments.insert(url, document);
     }
 
     if (document && document->textDocument())
@@ -78,6 +82,8 @@ void BackgroundParser::addDocument( const KUrl &url, KDevDocument* document )
 void BackgroundParser::removeDocument( const KUrl &url )
 {
     m_documents.remove( url );
+    if (m_openDocuments.contains(url))
+        m_openDocuments.remove(url);
 }
 
 void BackgroundParser::parseDocuments()
@@ -90,7 +96,31 @@ void BackgroundParser::parseDocuments()
         bool &p = it.value();
         if ( p )
         {
-            ParseJob * parse = new ParseJob( url, m_memoryPool, this );
+            ParseJob * parse = 0L;
+            KDevDocument* document = m_openDocuments[url];
+
+            if (document)
+            {
+                KTextEditor::SmartRange* highlight = 0L;
+                if (KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(document->textDocument()))
+                {
+                    if (smart->documentHighlights().count())
+                    {
+                        highlight = smart->documentHighlights().first();
+                        highlight->deleteChildRanges();
+
+                    } else {
+                        highlight = smart->newSmartRange(document->textDocument()->documentRange(), 0L, KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
+                        smart->addHighlightToDocument(highlight);
+                    }
+                }
+
+                parse = new ParseJob( document, m_memoryPool, this, highlight );
+
+            } else {
+                parse = new ParseJob( url, m_memoryPool, this );
+            }
+
             p = false;
 
             if ( url == m_cppSupport->documentController() ->activeDocumentUrl() )

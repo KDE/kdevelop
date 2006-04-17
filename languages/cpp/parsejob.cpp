@@ -43,12 +43,24 @@ ParseJob::ParseJob( const KUrl &url,
                     pool *memoryPool,
                     QObject* parent )
         : ThreadWeaver::Job( parent ),
+        m_openDocument( 0 ),
         m_document( url ),
         m_memoryPool( memoryPool ),
         m_translationUnit( 0 ),
-        m_model( 0 )
+        m_model( 0 ),
+        m_highlight( 0 )
 {
-    m_contents = QByteArray();
+}
+
+ParseJob::ParseJob( KDevDocument * document, pool * memoryPool, QObject * parent, KTextEditor::SmartRange* highlight )
+        : ThreadWeaver::Job( parent ),
+        m_openDocument( document ),
+        m_document( document->url() ),
+        m_memoryPool( memoryPool ),
+        m_translationUnit( 0 ),
+        m_model( 0 ),
+        m_highlight( highlight )
+{
 }
 
 ParseJob::~ParseJob()
@@ -67,16 +79,12 @@ TranslationUnitAST *ParseJob::translationUnit() const
 
 CodeModel *ParseJob::codeModel() const
 {
-    kDebug() << k_funcinfo << this << " Request model." << endl;
-
     Q_ASSERT ( isFinished () && m_model );
     return m_model;
 }
 
 void ParseJob::run()
 {
-    kDebug() << k_funcinfo << this << " Running..." << m_document << endl;
-
     bool readFromDisk = m_contents.isNull();
     char *contents;
     std::size_t size;
@@ -96,7 +104,7 @@ void ParseJob::run()
         int fd = open( path.constData(), O_RDONLY );
         if ( fd == -1 ) {
             m_errorMessage = i18n("Could not open file '%1'", m_document.path());
-            kWarning(9007) << k_funcinfo << "Could not open file " << path.constData() << endl;
+            kWarning(9007) << k_funcinfo << "Could not open file " << m_document << " (path " << m_document.path() << ")" << endl;
             return ;
         }
 
@@ -131,7 +139,7 @@ void ParseJob::run()
     m_translationUnit = parser.parse( preprocessed, pre_size, m_memoryPool );
 
     m_model = new CodeModel;
-    Binder binder( m_model, &parser.token_stream, &parser.lexer );
+    Binder binder( m_model, &parser.token_stream, &parser.lexer, m_highlight );
     binder.run( m_document, m_translationUnit );
 
     //     DumpTree dumpTree;

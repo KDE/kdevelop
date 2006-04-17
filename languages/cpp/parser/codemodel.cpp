@@ -183,28 +183,26 @@ void _CodeModelItem::setFileName(const QString &fileName)
   _M_fileName = fileName;
 }
 
-void _CodeModelItem::getStartPosition(int *line, int *column)
+KTextEditor::Cursor _CodeModelItem::startPosition() const
 {
-  *line = _M_startLine;
-  *column = _M_startColumn;
+  return KTextEditor::Cursor(_M_startLine, _M_startColumn);
 }
 
-void _CodeModelItem::setStartPosition(int line, int column)
+void _CodeModelItem::setStartPosition(const KTextEditor::Cursor& cursor)
 {
-  _M_startLine = line;
-  _M_startColumn = column;
+  _M_startLine = cursor.line();
+  _M_startColumn = cursor.column();
 }
 
-void _CodeModelItem::getEndPosition(int *line, int *column)
+KTextEditor::Cursor _CodeModelItem::endPosition() const
 {
-  *line = _M_endLine;
-  *column = _M_endColumn;
+  return KTextEditor::Cursor(_M_endLine, _M_endColumn);
 }
 
-void _CodeModelItem::setEndPosition(int line, int column)
+void _CodeModelItem::setEndPosition(const KTextEditor::Cursor& cursor)
 {
-  _M_endLine = line;
-  _M_endColumn = column;
+  _M_endLine = cursor.line();
+  _M_endColumn = cursor.column();
 }
 
 // ---------------------------------------------------------------------------

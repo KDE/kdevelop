@@ -24,21 +24,27 @@
 #include "type_compiler.h"
 #include "name_compiler.h"
 #include "declarator_compiler.h"
+#include "lexer.h"
 
 #include <QtCore/QSet>
 
 #include <kurl.h>
 
+#include <ktexteditor/cursor.h>
+
 class Lexer;
 class TokenStream;
 struct NameSymbol;
+
+namespace KTextEditor { class SmartRange; }
 
 class Binder: protected DefaultVisitor
 {
 public:
   Binder(CodeModel *model,
          TokenStream *token_stream,
-         Lexer *lexer);
+         Lexer *lexer,
+         KTextEditor::SmartRange* highlight);
   virtual ~Binder();
 
   void run(const KUrl &url, AST *node);
@@ -81,11 +87,15 @@ private:
   void applyFunctionSpecifiers(const ListNode<std::size_t> *it, FunctionModelItem item);
 
   void setPositionAt(_CodeModelItem *item, AST *ast);
+  KTextEditor::Cursor tokenToPosition(const Token& token, QString& fileName, bool end = false) const;
+  KTextEditor::SmartRange* newRange(AST *ast, bool includeStartToken = true, bool includeEndToken = true);
+  KTextEditor::SmartRange* newRange(const Token& token);
 
 private:
   CodeModel *_M_model;
   TokenStream *_M_token_stream;
   Lexer *_M_lexer;
+  KTextEditor::SmartRange* _M_highlight;
   QString _M_currentFile;
 
   CodeModel::AccessPolicy _M_current_access;

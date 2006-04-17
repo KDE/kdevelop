@@ -29,8 +29,11 @@
 
 class pool;
 class TranslationUnitAST;
+class KDevDocument;
 
 class QByteArray;
+
+namespace KTextEditor { class SmartRange; }
 
 class ParseJob : public ThreadWeaver::Job
 {
@@ -39,6 +42,12 @@ public:
     ParseJob( const KUrl &url,
               pool *memoryPool,
               QObject* parent );
+
+    ParseJob( KDevDocument* document,
+              pool *memoryPool,
+              QObject* parent,
+              KTextEditor::SmartRange* highlight );
+
     virtual ~ParseJob();
 
     void setContents( const QByteArray &contents )
@@ -49,6 +58,7 @@ public:
     KUrl document() const;
     TranslationUnitAST *translationUnit() const;
     CodeModel *codeModel() const;
+    KTextEditor::SmartRange* highlight() const;
 
     bool wasSuccessful() const;
     const QString& errorMessage() const;
@@ -57,12 +67,14 @@ protected:
     virtual void run();
 
 private:
+    KDevDocument* m_openDocument;
     KUrl m_document;
     pool *m_memoryPool;
     QByteArray m_contents;
     TranslationUnitAST *m_translationUnit;
     CodeModel *m_model;
     QString m_errorMessage;
+    KTextEditor::SmartRange* m_highlight;
 };
 
 #endif

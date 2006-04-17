@@ -17,7 +17,6 @@
 */
 
 #include "binder.h"
-#include "lexer.h"
 #include "symbol.h"
 #include "codemodel_finder.h"
 #include "class_compiler.h"
@@ -28,12 +27,18 @@
 
 #include <qdebug.h>
 
+#include <ktexteditor/smartrange.h>
+#include <ktexteditor/smartinterface.h>
+#include <ktexteditor/document.h>
+
 Binder::Binder(CodeModel *model,
                TokenStream *token_stream,
-               Lexer *lexer)
+               Lexer *lexer,
+               KTextEditor::SmartRange* highlight)
   : _M_model(model),
     _M_token_stream(token_stream),
     _M_lexer(lexer),
+    _M_highlight(highlight),
     type_cc(token_stream),
     name_cc(token_stream),
     decl_cc(token_stream)
@@ -442,6 +447,10 @@ void Binder::visitClassSpecifier(ClassSpecifierAST *node)
   setPositionAt( _M_current_class, node->name->unqualified_name );
   scope->addClass(_M_current_class);
 
+  // Highlight class name
+  if (KTextEditor::SmartRange* range = newRange(node->name))
+    _M_current_class->addReference(range);
+
   name_cc.run(node->name->unqualified_name);
   _M_context.append(name_cc.name());
   visitNodes(this, node->member_specs);
@@ -633,9 +642,58 @@ void Binder::setPositionAt(_CodeModelItem *item, AST *ast)
   _M_lexer->positionAt(end_token.position,
                        &endLine, &endColumn, &fileName);
 
-  item->setFileName(!fileName.isEmpty() ? fileName : _M_currentFile);
-  item->setStartPosition(startLine, startColumn);
-  item->setEndPosition(endLine, endColumn);
+  item->setFileName(fileName.isEmpty() ? _M_currentFile : fileName);
+  item->setStartPosition(KTextEditor::Cursor(startLine, startColumn));
+  item->setEndPosition(KTextEditor::Cursor(endLine, endColumn));
+}
+
+KTextEditor::Cursor Binder::tokenToPosition(const Token& token, QString& fileName, bool end) const
+{
+  int line, column;
+
+  _M_lexer->positionAt(end ? token.position + token.size : token.position,
+                       &line, &column, &fileName);
+
+  if (fileName.isEmpty())
+    fileName = _M_currentFile;
+
+  return KTextEditor::Cursor(line, column);
+}
+
+KTextEditor::SmartRange * Binder::newRange( AST * ast, bool includeStartToken, bool includeEndToken )
+{
+  if (_M_highlight)
+    if (KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(_M_highlight->document())) {
+      const Token &start_token = _M_token_stream->token(ast->start_token);
+      const Token &end_token = _M_token_stream->token(ast->end_token);
+      QString fileName;
+      KTextEditor::Cursor start = tokenToPosition(start_token, fileName, !includeStartToken);
+      kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
+      KTextEditor::Cursor end = tokenToPosition(end_token, fileName, includeEndToken);
+      kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
+      KTextEditor::SmartRange* ret = smart->newSmartRange(start, end, _M_highlight);
+      kDebug() << k_funcinfo << *ret << endl;
+      return ret;
+    }
+
+  return 0L;
+}
+
+KTextEditor::SmartRange * Binder::newRange( const Token & token )
+{
+  if (_M_highlight)
+    if (KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(_M_highlight->document())) {
+      QString fileName;
+      KTextEditor::Cursor start = tokenToPosition(token, fileName);
+      kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
+      KTextEditor::Cursor end = tokenToPosition(token, fileName);
+      kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
+      KTextEditor::SmartRange* ret = smart->newSmartRange(start, end, _M_highlight);
+      kDebug() << k_funcinfo << *ret << endl;
+      return ret;
+    }
+
+  return 0L;
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

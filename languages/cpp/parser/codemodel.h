@@ -34,6 +34,8 @@
 
 #include <kurl.h>
 
+#include <ktexteditor/cursor.h>
+
 #define DECLARE_MODEL_NODE(k) \
     enum { __node_kind = Kind_##k }; \
     typedef KDevSharedPtr<k##ModelItem> Pointer;
@@ -195,11 +197,11 @@ public:
   QString fileName() const;
   void setFileName(const QString &fileName);
 
-  void getStartPosition(int *line, int *column);
-  void setStartPosition(int line, int column);
+  KTextEditor::Cursor startPosition() const;
+  void setStartPosition(const KTextEditor::Cursor& cursor);
 
-  void getEndPosition(int *line, int *column);
-  void setEndPosition(int line, int column);
+  KTextEditor::Cursor endPosition() const;
+  void setEndPosition(const KTextEditor::Cursor& cursor);
 
   QTime timestamp() const { return QTime(); }
 

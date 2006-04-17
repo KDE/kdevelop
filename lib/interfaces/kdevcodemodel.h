@@ -25,6 +25,7 @@
 
 #include <kdevitemmodel.h>
 #include <ktexteditor/cursor.h>
+#include <ktexteditor/rangefeedback.h>
 
 #include <QHash>
 #include <QTime>
@@ -33,7 +34,9 @@
 class KDevCodeItem;
 class KDevCodeModel;
 
-class KDevCodeItem: public KDevItemCollection
+namespace KTextEditor { class SmartRange; }
+
+class KDevCodeItem: public KDevItemCollection, public KTextEditor::SmartRangeWatcher
 {
 public:
     KDevCodeItem( const QString &name, KDevItemGroup *parent = 0 );
@@ -99,6 +102,16 @@ public:
     {
         return 0L;
     }
+
+    const QList<KTextEditor::SmartRange*>& references() const;
+
+    void addReference(KTextEditor::SmartRange* range);
+
+    /// Override to detect deleted ranges
+    virtual void deleted(KTextEditor::SmartRange* range);
+
+private:
+    QList<KTextEditor::SmartRange*> m_references;
 };
 
 class KDevCodeModel: public KDevItemModel

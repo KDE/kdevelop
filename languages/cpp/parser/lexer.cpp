@@ -22,6 +22,8 @@
 
 #include <cctype>
 
+#include <kdebug.h>
+
 scan_fun_ptr Lexer::s_scan_keyword_table[] = {
   &Lexer::scanKeyword0, &Lexer::scanKeyword0,
   &Lexer::scanKeyword2, &Lexer::scanKeyword3,
@@ -50,16 +52,32 @@ void Lexer::positionAt(std::size_t offset, int *line, int *column,
 		       QString *filename) const
 {
   int ppline, ppcolumn;
+  // Retrieve the line of the first preprocessor statement before this offset
   line_table.positionAt(offset, &ppline, &ppcolumn);
 
   int base_line = 1;
+  // Extract the actual line number and filename from the preprocessor statement
   extract_line(line_table[ppline-1], &base_line, filename);
 
   int line2, column2;
+  // Retrieve the line (and column) of the preprocessor statement above
   location_table.positionAt(line_table[ppline-1], &line2, &column2);
 
+  // Retrieve the line and column of the offset in the non-preprocessed source
   location_table.positionAt(offset, line, column);
-  *line = base_line + *line - line2  - 1;
+
+  /*
+    NPPL == non-preprocessed line
+    NPPL =
+      actual line of the first preceeding preprocessor statement +
+      ( NPPL of the token - (NPPL of the first preceeding preprocessor statement + 1 to account for the preprocessor statement)
+      - 1 to start from line 0 )
+  */
+  kDebug() << k_funcinfo << offset << ": line " << (base_line + *line - line2  - 1) << ", column " << *column << " == " << base_line << " + " << *line << " - " << line2 << " - 1" << endl;
+  *line = base_line + *line - line2  - 2;
+
+  if (*filename == "<internal>")
+    filename->clear();
 }
 
 void Lexer::tokenize(const char *contents, std::size_t size)
@@ -171,13 +189,13 @@ void Lexer::scan_preprocessor()
 
 void Lexer::extract_line(int offset, int *line, QString *filename) const
 {
+  const unsigned char *cursor = begin_buffer + offset;
+
   if (*cursor != '#')
     {
       // nothing to do
       return;
     }
-
-  const unsigned char *cursor = begin_buffer + offset;
 
   ++cursor; // skip '#'
   if (std::isspace(*cursor) && std::isdigit(*(cursor + 1)))
@@ -226,7 +244,7 @@ void Lexer::extract_line(int offset, int *line, QString *filename) const
 
       *filename = buffer;
       *line = line_number;
-      // printf("filename: %s line: %d\n", buffer, line);
+      //kDebug() << k_funcinfo << "filename: " << buffer << " line: " << line << endl;
       return;
     }
 
@@ -801,13 +819,16 @@ void LocationTable::positionAt(std::size_t offset,
 			       int *line, int *column) const
 {
   int first = 0;
+  // len is assigned the position 1 past the current set position
   int len = current_line;
   int half;
   int middle;
 
   while (len > 0)
     {
+      // Half of the way through the array
       half = len >> 1;
+      // The starting point
       middle = first;
 
       middle += half;
