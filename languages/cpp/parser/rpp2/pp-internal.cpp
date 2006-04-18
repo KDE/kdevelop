@@ -21,18 +21,26 @@
 
 #include "pp-internal.h"
 
+
+
+class DevNullDevice : public QIODevice
+{
+protected:
+  virtual qint64 readData ( char *, qint64 ) { return 0; }
+  virtual qint64 writeData ( const char *, qint64 maxSize ) { return maxSize; }
+};
+
 bool PPInternal::isComment(Stream& input)
 {
-  QChar c1, c2;
-  qint64 pos = input.pos();
-  input >> c1 >> c2;
-  input.seek(pos);
+  QChar c1 = input;
+  QChar c2 = input.peek();
 
   return c1 == '/' && (c2 == '/' || c2 == '*');
 }
 
 Stream& PPInternal::devnull()
 {
-  static Stream null;
+  static DevNullDevice devnull;
+  static Stream null(&devnull);
   return null;
 }

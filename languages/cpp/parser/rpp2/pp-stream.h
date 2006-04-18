@@ -40,10 +40,14 @@ class Stream : public QTextStream
 
     bool atEnd() const;
 
+    qint64 pos() const;
+
     QChar peek() const;
 
     /// Move back \a offset chars in the stream
     void rewind(qint64 offset = 1);
+
+    void seek(qint64 offset);
 
     inline const QChar& current() const { return c; }
     inline operator const QChar&() const { return c; }
@@ -54,6 +58,8 @@ class Stream : public QTextStream
     Q_DISABLE_COPY(Stream)
 
     QChar c;
+    bool m_atEnd;
+    qint64 m_pos;
 };
 
 #endif

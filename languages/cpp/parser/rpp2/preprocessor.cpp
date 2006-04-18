@@ -112,6 +112,7 @@ QList<Preprocessor::MacroItem> Preprocessor::macros() const
 
 Stream * Preprocessor::sourceNeeded( QString & fileName, IncludeType type )
 {
+  Q_UNUSED(type)
   if (!QFile::exists(fileName)) {
     foreach (const QString& includePath, d->includePaths) {
       fileName = KUrl(KUrl::fromPath(includePath), fileName).path();

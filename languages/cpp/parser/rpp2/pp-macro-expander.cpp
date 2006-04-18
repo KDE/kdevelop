@@ -140,9 +140,12 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         if (!input.atEnd() && input == '#')
           skip_blanks(++input, PPInternal::devnull());
-      }
+        else
+          input.seek(blankStart);
 
-      input.seek(blankStart);
+      } else {
+        input.seek(blankStart);
+      }
 
       Q_ASSERT(name.length() >= 0 && name.length() < 512);
 

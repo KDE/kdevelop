@@ -20,39 +20,69 @@
 
 #include "pp-stream.h"
 
+#include <kdebug.h>
+
 Stream::Stream()
+  : m_atEnd(false)
+  , m_pos(0)
 {
 }
 
 Stream::Stream( const QByteArray & array, QIODevice::OpenMode openMode )
   : QTextStream(array, openMode)
+  , m_atEnd(false)
+  , m_pos(0)
 {
+  operator>>(c);
 }
 
 Stream::Stream( QByteArray * array, QIODevice::OpenMode openMode )
   : QTextStream(array, openMode)
+  , m_atEnd(false)
+  , m_pos(0)
 {
+  operator>>(c);
 }
 
 Stream::Stream( QString * string, QIODevice::OpenMode openMode )
   : QTextStream(string, openMode)
+  , m_atEnd(false)
+  , m_pos(0)
 {
+  operator>>(c);
 }
 
 Stream::Stream( FILE * fileHandle, QIODevice::OpenMode openMode )
   : QTextStream(fileHandle, openMode)
+  , m_atEnd(false)
+  , m_pos(0)
 {
+  operator>>(c);
 }
 
 Stream::Stream( QIODevice * device )
   : QTextStream(device)
+  , m_atEnd(false)
+  , m_pos(0)
 {
   operator>>(c);
 }
 
 Stream & Stream::operator ++( )
 {
-  operator>>(c);
+  //kDebug() << "Read char '" << c << "', status " << status() << endl;
+  if (m_atEnd)
+    return *this;
+
+  if (QTextStream::atEnd()) {
+    m_atEnd = true;
+    ++m_pos;
+    c = QChar();
+
+  } else {
+    operator>>(c);
+    ++m_pos;
+  }
   return *this;
 }
 
@@ -60,18 +90,19 @@ Stream& Stream::operator--()
 {
   seek(pos() - 2);
   operator>>(c);
+  --m_pos;
   return *this;
 }
 
 void Stream::rewind(qint64 offset)
 {
-  seek(pos() - offset - 1);
-  operator>>(c);
+  //kDebug() << "Read char '" << c << "', status " << status() << endl;
+  seek(pos() - offset);
 }
 
 bool Stream::atEnd() const
 {
-  return c.isNull();
+  return m_atEnd;
 }
 
 QChar Stream::peek() const
@@ -81,4 +112,22 @@ QChar Stream::peek() const
   QChar ret = s->current();
   s->rewind();
   return ret;
+}
+
+qint64 Stream::pos( ) const
+{
+  return m_pos;
+}
+
+void Stream::seek(qint64 offset)
+{
+  if (QTextStream::seek(offset)) {
+    m_pos = offset;
+    if (QTextStream::atEnd()) {
+      m_atEnd = true;
+    } else {
+      operator>>(c);
+      m_atEnd = false;
+    }
+  }
 }

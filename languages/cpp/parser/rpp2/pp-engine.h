@@ -48,6 +48,8 @@ class pp
   int _M_true_test[MAX_LEVEL];
   int iflevel;
   int lines;
+  int nextToken;
+  bool haveNextToken;
 
   long token_value;
   QString token_text;
@@ -146,6 +148,8 @@ private:
   void handle_undef(Stream& input);
 
   int next_token (Stream& input);
+  int next_token_accept (Stream& input);
+  void accept_token();
 };
 
 #endif // PP_ENGINE_H

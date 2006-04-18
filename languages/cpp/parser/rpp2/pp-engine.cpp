@@ -33,6 +33,8 @@ pp::pp(Preprocessor* preprocessor, QHash<QString, pp_macro*>& environment)
   , expand(environment)
   , m_preprocessor(preprocessor)
   , lines(0)
+  , nextToken(0)
+  , haveNextToken(false)
 {
   iflevel = 0;
   _M_skipping[iflevel] = 0;
@@ -247,14 +249,14 @@ void pp::operator () (Stream& input, Stream& output)
 
   forever
   {
-    skip_blanks(input, output);
+    skip_blanks(input, skipping() ? PPInternal::devnull() : output);
     lines += skip_blanks.linesSkipped();
 
     if (input.atEnd()) {
       break;
 
     } else if (input == '#') {
-      skip_blanks(++input, output);
+      skip_blanks(++input, PPInternal::devnull());
       lines += skip_blanks.linesSkipped();
 
       QString directive = skip_identifier(input);
@@ -284,10 +286,11 @@ void pp::operator () (Stream& input, Stream& output)
       // ### compress the line
       // Is that really necessary? seems like it would just make the lookup slower later
       output << input;
+      ++input;
       ++lines;
 
     } else if (skipping ()) {
-      skip (input, output);
+      skip (input, PPInternal::devnull());
 
     } else {
       output << createLineMark(m_files.top(), lines);
@@ -374,6 +377,7 @@ void pp::handle_define (Stream& input)
     }
 
     definition += input;
+    ++input;
   }
 
   macro->definition = definition;
@@ -410,12 +414,14 @@ void pp::skip (Stream& input, Stream& output)
 
       if (!input.atEnd() && input == '\n')
       {
+        output << input;
         ++input;
         ++lines;
       }
     }
     else
     {
+      output << input;
       ++input;
     }
   }
@@ -436,7 +442,7 @@ inline int pp::skipping() const
 long pp::eval_primary(Stream& input)
 {
   bool expect_paren = false;
-  int token = next_token(input);
+  int token = next_token_accept(input);
   long result = 0;
 
   switch (token) {
@@ -444,12 +450,12 @@ long pp::eval_primary(Stream& input)
       return token_value;
 
     case TOKEN_DEFINED:
-      token = next_token(input);
+      token = next_token_accept(input);
 
       if (token == '(')
       {
         expect_paren = true;
-        token = next_token(input);
+        token = next_token_accept(input);
       }
 
       if (token != TOKEN_IDENTIFIER)
@@ -462,14 +468,13 @@ long pp::eval_primary(Stream& input)
 
       token = next_token(input); // skip '('
 
-      if (expect_paren)
-      {
-        qint64 pos = input.pos();
+      if (expect_paren) {
         token = next_token(input);
+
         if (token != ')')
           kWarning() << k_funcinfo << "expected ``)''" << endl;
         else
-          input.seek(pos);
+          accept_token();
       }
       break;
 
@@ -486,7 +491,8 @@ long pp::eval_primary(Stream& input)
       if (token != ')')
         kWarning() << k_funcinfo << "expected ``)'' = " << token << endl;
       else
-        token = next_token(input);
+        accept_token();
+
       break;
 
     default:
@@ -502,8 +508,9 @@ long pp::eval_multiplicative(Stream& input)
 
   int token = next_token(input);
 
-  while (token == '*' || token == '/' || token == '%')
-  {
+  while (token == '*' || token == '/' || token == '%') {
+    accept_token();
+
     long value = eval_primary(input);
 
     if (token == '*') {
@@ -540,8 +547,9 @@ long pp::eval_additive(Stream& input)
 
   int token = next_token(input);
 
-  while (token == '+' || token == '-')
-  {
+  while (token == '+' || token == '-') {
+    accept_token();
+
     long value = eval_multiplicative(input);
 
     if (token == '+')
@@ -563,8 +571,9 @@ long pp::eval_shift(Stream& input)
   int token;
   token = next_token(input);
 
-  while (token == TOKEN_LT_LT || token == TOKEN_GT_GT)
-  {
+  while (token == TOKEN_LT_LT || token == TOKEN_GT_GT) {
+    accept_token();
+
     long value = eval_additive(input);
 
     if (token == TOKEN_LT_LT)
@@ -590,6 +599,7 @@ long pp::eval_relational(Stream& input)
       || token == TOKEN_LT_EQ
       || token == TOKEN_GT_EQ)
   {
+    accept_token();
     long value = eval_shift(input);
 
     switch (token)
@@ -628,8 +638,8 @@ long pp::eval_equality(Stream& input)
 
   int token = next_token(input);
 
-  while (token == TOKEN_EQ_EQ || token == TOKEN_NOT_EQ)
-  {
+  while (token == TOKEN_EQ_EQ || token == TOKEN_NOT_EQ) {
+    accept_token();
     long value = eval_relational(input);
 
     if (token == TOKEN_EQ_EQ)
@@ -650,8 +660,8 @@ long pp::eval_and(Stream& input)
 
   int token = next_token(input);
 
-  while (token == '&')
-  {
+  while (token == '&') {
+    accept_token();
     long value = eval_equality(input);
     result = result & value;
     token = next_token(input);
@@ -668,8 +678,8 @@ long pp::eval_xor(Stream& input)
   int token;
   token = next_token(input);
 
-  while (token == '^')
-  {
+  while (token == '^') {
+    accept_token();
     long value = eval_and(input);
     result = result ^ value;
     token = next_token(input);
@@ -685,8 +695,8 @@ long pp::eval_or(Stream& input)
 
   int token = next_token(input);
 
-  while (token == '|')
-  {
+  while (token == '|') {
+    accept_token();
     long value = eval_xor(input);
     result = result | value;
     token = next_token(input);
@@ -702,8 +712,8 @@ long pp::eval_logical_and(Stream& input)
 
   int token = next_token(input);
 
-  while (token == TOKEN_AND_AND)
-  {
+  while (token == TOKEN_AND_AND) {
+    accept_token();
     long value = eval_or(input);
     result = result && value;
     token = next_token(input);
@@ -719,8 +729,8 @@ long pp::eval_logical_or(Stream& input)
 
   int token = next_token(input);
 
-  while (token == TOKEN_OR_OR)
-  {
+  while (token == TOKEN_OR_OR) {
+    accept_token();
     long value = eval_logical_and(input);
     result = result || value;
     token = next_token(input);
@@ -738,10 +748,11 @@ long pp::eval_constant_expression(Stream& input)
 
   if (token == '?')
   {
+    accept_token();
     long left_value = eval_constant_expression(input);
     skip_blanks(input, PPInternal::devnull());
 
-    token = next_token(input);
+    token = next_token_accept(input);
     if (token == ':')
     {
       long right_value = eval_constant_expression(input);
@@ -868,6 +879,9 @@ void pp::handle_undef(Stream& input)
 
 int pp::next_token (Stream& input)
 {
+  if (haveNextToken)
+    return nextToken;
+
   skip_blanks(input, PPInternal::devnull());
 
   if (input.atEnd())
@@ -878,7 +892,7 @@ int pp::next_token (Stream& input)
   char ch = input.current().toLatin1();
   char ch2 = input.peek().toLatin1();
 
-  int result = 0;
+  int nextToken = 0;
 
   switch (ch) {
     case '/':
@@ -888,7 +902,7 @@ int pp::next_token (Stream& input)
         return next_token(input);
       }
       ++input;
-      result = '/';
+      nextToken = '/';
       break;
 
     case '<':
@@ -896,15 +910,15 @@ int pp::next_token (Stream& input)
       if (ch2 == '<')
       {
         ++input;
-        result = TOKEN_LT_LT;
+        nextToken = TOKEN_LT_LT;
       }
       else if (ch2 == '=')
       {
         ++input;
-        result = TOKEN_LT_EQ;
+        nextToken = TOKEN_LT_EQ;
       }
       else
-        result = '<';
+        nextToken = '<';
 
       break;
 
@@ -913,15 +927,15 @@ int pp::next_token (Stream& input)
       if (ch2 == '>')
       {
         ++input;
-        result = TOKEN_GT_GT;
+        nextToken = TOKEN_GT_GT;
       }
       else if (ch2 == '=')
       {
         ++input;
-        result = TOKEN_GT_EQ;
+        nextToken = TOKEN_GT_EQ;
       }
       else
-        result = '>';
+        nextToken = '>';
 
       break;
 
@@ -930,10 +944,10 @@ int pp::next_token (Stream& input)
       if (ch2 == '=')
       {
         ++input;
-        result = TOKEN_NOT_EQ;
+        nextToken = TOKEN_NOT_EQ;
       }
       else
-        result = '!';
+        nextToken = '!';
 
       break;
 
@@ -942,22 +956,22 @@ int pp::next_token (Stream& input)
       if (ch2 == '=')
       {
         ++input;
-        result = TOKEN_EQ_EQ;
+        nextToken = TOKEN_EQ_EQ;
       }
       else
-        result = '=';
+        nextToken = '=';
 
-      return result;
+      return nextToken;
 
     case '|':
       ++input;
       if (ch2 == '|')
       {
         ++input;
-        result = TOKEN_OR_OR;
+        nextToken = TOKEN_OR_OR;
       }
       else
-        result = '|';
+        nextToken = '|';
 
       break;
 
@@ -966,10 +980,10 @@ int pp::next_token (Stream& input)
       if (ch2 == '&')
       {
         ++input;
-        result = TOKEN_AND_AND;
+        nextToken = TOKEN_AND_AND;
       }
       else
-        result = '&';
+        nextToken = '&';
 
       break;
 
@@ -979,9 +993,9 @@ int pp::next_token (Stream& input)
         token_text = skip_identifier (input);
 
         if (token_text == "defined")
-          result = TOKEN_DEFINED;
+          nextToken = TOKEN_DEFINED;
         else
-          result = TOKEN_IDENTIFIER;
+          nextToken = TOKEN_IDENTIFIER;
       }
       else if (QChar(ch).isNumber())
       {
@@ -992,16 +1006,30 @@ int pp::next_token (Stream& input)
         }
         token_value = number.toLong();
 
-        result = TOKEN_NUMBER;
+        nextToken = TOKEN_NUMBER;
       }
       else
       {
-        result = input.current().toLatin1();
+        nextToken = input.current().toLatin1();
         ++input;
       }
   }
 
+  haveNextToken = true;
+  return nextToken;
+}
+
+int pp::next_token_accept (Stream& input)
+{
+  int result = next_token(input);
+  accept_token();
   return result;
+}
+
+void pp::accept_token()
+{
+  haveNextToken = false;
+  nextToken = 0;
 }
 
 // kate: indent-width 2;
