@@ -7,6 +7,7 @@
 #include <QTextStream>
 #include <QtDesigner/QtDesigner>
 #include <QtDesigner/QDesignerComponents>
+#include <QWorkspace>
 
 #include <kaboutdata.h>
 #include <kaction.h>
@@ -139,7 +140,10 @@ bool GuiBuilderPart::openFile()
   widget->setFileName(m_file);
   widget->setContents(&uiFile);
   manager->setActiveFormWindow(widget);
-  setWidget( widget );
+  QWorkspace * qw= new QWorkspace(dynamic_cast<QWidget*>(this));
+  qw->setScrollBarsEnabled(true);
+  setWidget( qw );
+  qw->addWindow(widget);
   m_window = widget;
   connect(m_window, SIGNAL(changed()), this, SLOT(setModified()));
   return true;
