@@ -9,6 +9,7 @@
 #include <QtDesigner/QDesignerComponents>
 
 #include <kaboutdata.h>
+#include <kaction.h>
 #include <kmainwindow.h>
 #include <kparts/genericfactory.h>
 #include <ksavefile.h>
@@ -83,12 +84,51 @@ QDesignerFormEditorInterface *GuiBuilderPart::designer() const
 
 void GuiBuilderPart::setupActions()
 {
-    KStdAction::save( this, SLOT( save() ), actionCollection(), "save" );
+    KStdAction::save( this, SLOT( save() ), actionCollection(), "designer_save" );
     QDesignerFormWindowManagerInterface* manager = designer()->formWindowManager();
 
     QAction* designerAction = 0;
     designerAction = manager->actionAdjustSize();
     wrapDesignerAction( designerAction, actionCollection(), "adjust_size" );
+
+    designerAction = manager->actionBreakLayout();
+    wrapDesignerAction( designerAction, actionCollection(), "break_layout" );
+
+    designerAction = manager->actionCut();
+    KStdAction::cut( designerAction, SIGNAL( triggered( bool  ) ),
+                     actionCollection(), "designer_cut" );
+
+    designerAction = manager->actionCopy();
+    KStdAction::copy( designerAction, SIGNAL( triggered( bool ) ),
+                      actionCollection(), "designer_copy" );
+
+    designerAction = manager->actionPaste();
+    KStdAction::paste( designerAction, SIGNAL( triggered( bool ) ),
+                       actionCollection(), "designer_paste" );
+
+    designerAction = manager->actionDelete();
+    wrapDesignerAction( designerAction, actionCollection(), "designer_delete" );
+
+    designerAction = manager->actionGridLayout();
+    wrapDesignerAction( designerAction, actionCollection(), "layout_grid" );
+
+    designerAction = manager->actionHorizontalLayout();
+    wrapDesignerAction( designerAction, actionCollection(), "layout_horiz" );
+
+    designerAction = manager->actionVerticalLayout();
+    wrapDesignerAction( designerAction, actionCollection(), "layout_vertical" );
+
+    designerAction = manager->actionUndo();
+    KStdAction::undo( designerAction, SIGNAL( triggered( bool ) ),
+                      actionCollection(), "designer_undo" );
+
+    designerAction = manager->actionRedo();
+    KStdAction::redo( designerAction, SIGNAL( triggered( bool ) ),
+                      actionCollection(), "designer_redo" );
+
+    designerAction = manager->actionSelectAll();
+    KStdAction::selectAll( designerAction, SIGNAL( triggered( bool ) ),
+                           actionCollection(), "designer_select_all" );
 }
 
 bool GuiBuilderPart::openFile()
@@ -129,7 +169,22 @@ void GuiBuilderPart::wrapDesignerAction( QAction* dAction,
                                          KActionCollection* parent,
                                          const char* name )
 {
-
+    KAction* a = new KAction( KIcon( dAction->icon() ), dAction->text(),
+                              parent, name );
+    a->setActionGroup( dAction->actionGroup() );
+    a->setCheckable( dAction->isCheckable() );
+    a->setChecked( dAction->isChecked() );
+    a->setEnabled( dAction->isEnabled() );
+    a->setData( dAction->data() );
+    a->setFont( dAction->font() );
+    a->setIconText( dAction->iconText() );
+    a->setSeparator( dAction->isSeparator() );
+    a->setShortcut( dAction->shortcut() );
+    a->setShortcutContext( dAction->shortcutContext() );
+    a->setStatusTip( dAction->statusTip() );
+    a->setText( dAction->text() );
+    a->setToolTip( dAction->toolTip() );
+    a->setWhatsThis( dAction->whatsThis() );
 }
 
 #include "guibuilder_part.moc"

@@ -1,10 +1,31 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="guibuilder" version="1">
+<gui name="guibuilder" version="3">
 <MenuBar>
-    <Menu name="file" noMerge="1"><text>&amp;File</text>
-        <Action name="save" merge="save_merge"/>
+    <Menu name="file"><text>&amp;File</text>
+        <Action name="designer_save" merge="save_merge"/>
+    </Menu>
+    <Menu name="edit"><text>&amp;Edit</text>
+        <Action name="designer_cut"/>
+        <Action name="designer_copy"/>
+        <Action name="designer_paste"/>
+    </Menu>
+    <Menu name="layout"><text>&amp;Layout</text>
+        <Action name="layout_horiz"/>
+        <Action name="layout_vertical"/>
+        <Action name="layout_grid"/>
+        <Action name="break_layout"/>
+        <Separator/>
+        <Action name="adjust_size"/>
     </Menu>
 </MenuBar>
-</kpartgui>
+<ToolBar name="layout">
+    <Action name="layout_horiz"/>
+    <Action name="layout_vertical"/>
+    <Action name="layout_grid"/>
+    <Action name="break_layout"/>
+    <Separator/>
+    <Action name="adjust_size"/>
+</ToolBar>
+</gui>
 
 <!-- kate: space-indent on; indent-width 4; replace-tabs on; -->
