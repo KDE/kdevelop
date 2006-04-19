@@ -411,6 +411,7 @@ void pp::skip (Stream& input, Stream& output)
     }
     else if (input == '\\')
     {
+      output << input;
       skip_blanks (++input, output);
       lines += skip_blanks.linesSkipped();
 
