@@ -366,14 +366,19 @@ void pp::handle_define (Stream& input)
   {
     if (input == '\\')
     {
+      qint64 pos = input.pos();
       skip_blanks (++input, PPInternal::devnull());
 
-      if (input.atEnd() && input == '\n')
+      if (!input.atEnd() && input == '\n')
       {
         ++macro->lines;
         skip_blanks(++input, PPInternal::devnull());
         definition += ' ';
         continue;
+
+      } else {
+        // Whoops, rewind :)
+        input.seek(pos);
       }
     }
 
@@ -895,7 +900,7 @@ int pp::next_token (Stream& input)
   char ch = input.current().toLatin1();
   char ch2 = input.peek().toLatin1();
 
-  int nextToken = 0;
+  nextToken = 0;
 
   switch (ch) {
     case '/':
@@ -964,7 +969,7 @@ int pp::next_token (Stream& input)
       else
         nextToken = '=';
 
-      return nextToken;
+      break;
 
     case '|':
       ++input;
@@ -1017,6 +1022,8 @@ int pp::next_token (Stream& input)
         ++input;
       }
   }
+
+  //kDebug() << "Next token '" << ch << ch2 << "' " << nextToken << " txt " << token_text << " val " << token_value << endl;
 
   haveNextToken = true;
   return nextToken;
