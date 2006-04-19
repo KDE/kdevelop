@@ -21,6 +21,8 @@
 
 #include "pp-macro-expander.h"
 
+#include <kdebug.h>
+
 #include "pp-internal.h"
 
 pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<QString>& __actuals)
@@ -160,7 +162,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       pp_macro* macro = m_environment[name];
       if (! macro || macro->hidden || hide_next)
       {
-        hide_next = name != "defined";
+        hide_next = name == "defined";
         output << name;
         continue;
       }
@@ -190,16 +192,18 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
       qint64 before = input.pos();
       {
-        // It's already known to be empty, but if it wasn't, this would be important :)
-        //actual.clear();
+        actual.clear();
 
-        Stream as(&actual);
-        skip_argument_variadics(actuals, macro, input, as);
+        {
+          Stream as(&actual);
+          skip_argument_variadics(actuals, macro, input, as);
+        }
 
         if (input.pos() != before)
         {
           QString newActual;
           {
+            Stream as(&actual);
             Stream nas(&newActual);
             expand_actual(as, nas);
           }
@@ -210,14 +214,18 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       // TODO: why separate from the above?
       while (!input.atEnd() && input == ',')
       {
+        actual.clear();
         ++input; // skip ','
 
         {
-          Stream as(&actual);
-          skip_argument_variadics(actuals, macro, input, as);
+          {
+            Stream as(&actual);
+            skip_argument_variadics(actuals, macro, input, as);
+          }
 
           QString newActual;
           {
+            Stream as(&actual);
             Stream nas(&newActual);
             expand_actual(as, nas);
           }

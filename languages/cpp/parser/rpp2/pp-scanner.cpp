@@ -235,36 +235,33 @@ void pp_skip_argument::operator()(Stream& input, Stream& output)
 
     } else if (input == '(') {
       ++depth;
+      ++input;
 
     } else if (input == ')') {
       --depth;
+      ++input;
 
     } else if (input == '\"') {
-      input.rewind();
       skip_string_literal(input, output);
       m_lines += skip_string_literal.linesSkipped();
       continue;
 
     } else if (input == '\'') {
-      input.rewind();
       skip_char_literal (input, output);
       m_lines += skip_char_literal.linesSkipped();
       continue;
 
     } else if (input == '/') {
-      input.rewind();
       skip_comment_or_divop (input, output);
       m_lines += skip_comment_or_divop.linesSkipped();
       continue;
 
     } else if (input.current().isLetter() || input == '_') {
-      input.rewind();
       output << skip_identifier(input);
       m_lines += skip_identifier.linesSkipped();
       continue;
 
     } else if (input.current().isNumber()) {
-      input.rewind();
       output << skip_number(input);
       m_lines += skip_number.linesSkipped();
       continue;

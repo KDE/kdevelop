@@ -104,7 +104,7 @@ QList<Preprocessor::MacroItem> Preprocessor::macros() const
 #ifdef PP_WITH_MACRO_POSITION
         item.fileName = it.value()->file;
 #endif
-        items += item;
+        items << item;
     }
 
     return items;

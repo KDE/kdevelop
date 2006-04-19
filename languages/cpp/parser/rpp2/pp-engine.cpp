@@ -232,7 +232,8 @@ void pp::handle_include(Stream& input, Stream& output)
 
     // restore the file name and the line position and
     // sync the buffer
-    output << createLineMark(m_files.pop(), m_includeLineNumbers.pop());
+    m_files.pop();
+    output << createLineMark(m_files.top(), m_includeLineNumbers.pop());
   }
 }
 
@@ -381,6 +382,7 @@ void pp::handle_define (Stream& input)
   }
 
   macro->definition = definition;
+
   m_environment.insert(macro_name, macro);
 }
 

@@ -70,7 +70,6 @@ Stream::Stream( QIODevice * device )
 
 Stream & Stream::operator ++( )
 {
-  //kDebug() << "Read char '" << c << "', status " << status() << endl;
   if (m_atEnd)
     return *this;
 
@@ -96,7 +95,6 @@ Stream& Stream::operator--()
 
 void Stream::rewind(qint64 offset)
 {
-  //kDebug() << "Read char '" << c << "', status " << status() << endl;
   seek(pos() - offset);
 }
 

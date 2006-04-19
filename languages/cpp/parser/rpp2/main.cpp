@@ -67,8 +67,8 @@ int main (int /*argc*/, char *argv[])
   QString result = preprocess.processFile(filename);
   kDebug() << result << endl;
 
-  // std::cout << "allocated #" << pp_symbol::count () << " symbols!" << std::endl;
-  // std::cout << "allocated #" << std::distance (env.begin (), env.end ()) << " macros!" << std::endl;
+  /*foreach (const Preprocessor::MacroItem& macro, p.macros())
+    kDebug() << "Macro '" << macro.name << "' param (" << macro.parameters << ") def (" << macro.definition << ") isFnLike (" << macro.isFunctionLike << ") filename (" << macro.fileName << ")" << endl;*/
 
   return EXIT_SUCCESS;
 }
