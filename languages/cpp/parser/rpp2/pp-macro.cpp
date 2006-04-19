@@ -23,5 +23,8 @@
 
 pp_macro::pp_macro( )
   : lines(0)
+  , hidden(false)
+  , function_like(false)
+  , variadics(false)
 {
 }

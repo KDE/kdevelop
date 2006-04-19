@@ -35,19 +35,11 @@ public:
 #endif
   QStringList formals;
 
-  union
-  {
-    int unsigned state;
-
-    struct
-    {
-      int unsigned hidden: 1;
-      int unsigned function_like: 1;
-      int unsigned variadics: 1;
-    };
-  };
-
   int lines;
+
+  bool hidden: 1;
+  bool function_like: 1;
+  bool variadics: 1;
 };
 
 #endif // PP_MACRO_H

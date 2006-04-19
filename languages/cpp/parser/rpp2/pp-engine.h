@@ -133,7 +133,8 @@ private:
 
   void handle_include(Stream& input, Stream& output);
 
-  void handle_define(Stream& input);
+  // Output: the needed number of blank lines
+  void handle_define(Stream& input, Stream& output);
 
   void handle_if(Stream& input);
 

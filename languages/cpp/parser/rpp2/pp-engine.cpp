@@ -164,7 +164,7 @@ void pp::handle_directive(const QString& directive, Stream& input, Stream& outpu
   {
     case PP_DEFINE:
       if (! skipping ())
-        return handle_define(input);
+        return handle_define(input, output);
       break;
 
     case PP_INCLUDE:
@@ -305,7 +305,7 @@ void pp::operator () (Stream& input, Stream& output)
 }
 
 
-void pp::handle_define (Stream& input)
+void pp::handle_define (Stream& input, Stream& output)
 {
   pp_macro* macro = new pp_macro();
 #if defined (PP_WITH_MACRO_POSITION)
@@ -362,6 +362,9 @@ void pp::handle_define (Stream& input)
 
   skip_blanks (input, PPInternal::devnull());
 
+  // The blank line for "#define"
+  output << '\n';
+
   while (!input.atEnd() && input != '\n')
   {
     if (input == '\\')
@@ -371,6 +374,9 @@ void pp::handle_define (Stream& input)
 
       if (!input.atEnd() && input == '\n')
       {
+        // Subsequent blank lines
+        output << '\n';
+
         ++macro->lines;
         skip_blanks(++input, PPInternal::devnull());
         definition += ' ';
