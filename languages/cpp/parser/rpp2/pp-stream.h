@@ -28,7 +28,7 @@
  *
  * @author Hamish Rodda<rodda@kde.org>
  */
-class Stream : public QTextStream
+class Stream : private QTextStream
 {
   public:
     Stream();
@@ -37,6 +37,9 @@ class Stream : public QTextStream
     Stream( QString * string, QIODevice::OpenMode openMode = QIODevice::ReadWrite );
     Stream( QByteArray * array, QIODevice::OpenMode openMode = QIODevice::ReadWrite );
     Stream( const QByteArray & array, QIODevice::OpenMode openMode = QIODevice::ReadOnly );
+    ~Stream();
+
+    bool isNull() const;
 
     bool atEnd() const;
 
@@ -47,19 +50,37 @@ class Stream : public QTextStream
     /// Move back \a offset chars in the stream
     void rewind(qint64 offset = 1);
 
+    /// \warning the input and output lines are not updated when calling this function.
+    ///          if you're seek()ing over a line boundary, you'll need to fix the line
+    ///          numbers.
     void seek(qint64 offset);
+
+    /// Start from the beginning again
+    void reset();
 
     inline const QChar& current() const { return c; }
     inline operator const QChar&() const { return c; }
     Stream& operator++();
     Stream& operator--();
 
+    int inputLineNumber() const;
+
+    int outputLineNumber() const;
+    void setOutputLineNumber(int line);
+    void mark(const QString& filename, int inputLineNumber);
+
+    Stream & operator<< ( QChar c );
+    Stream & operator<< ( const QString & string );
+
   private:
     Q_DISABLE_COPY(Stream)
 
     QChar c;
     bool m_atEnd;
+    bool m_isNull;
     qint64 m_pos;
+    int m_inputLine, m_outputLine;
+    QString output;
 };
 
 #endif

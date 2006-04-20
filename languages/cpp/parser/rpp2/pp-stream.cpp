@@ -22,56 +22,96 @@
 
 #include <kdebug.h>
 
+class DevNullDevice : public QIODevice
+{
+protected:
+  virtual qint64 readData ( char *, qint64 ) { return 0; }
+  virtual qint64 writeData ( const char *, qint64 maxSize ) { return maxSize; }
+};
+
 Stream::Stream()
-  : m_atEnd(false)
+  : QTextStream(new DevNullDevice)
+  , m_atEnd(false)
+  , m_isNull(true)
   , m_pos(0)
+  , m_inputLine(0)
+  , m_outputLine(0)
 {
 }
 
 Stream::Stream( const QByteArray & array, QIODevice::OpenMode openMode )
   : QTextStream(array, openMode)
   , m_atEnd(false)
+  , m_isNull(false)
   , m_pos(0)
+  , m_inputLine(0)
+  , m_outputLine(0)
 {
   operator>>(c);
+  //kDebug() << "'" << c << "' " << c.cell() << endl;
 }
 
 Stream::Stream( QByteArray * array, QIODevice::OpenMode openMode )
   : QTextStream(array, openMode)
   , m_atEnd(false)
+  , m_isNull(false)
   , m_pos(0)
+  , m_inputLine(0)
+  , m_outputLine(0)
 {
   operator>>(c);
+  //kDebug() << "'" << c << "' " << c.cell() << endl;
 }
 
 Stream::Stream( QString * string, QIODevice::OpenMode openMode )
   : QTextStream(string, openMode)
   , m_atEnd(false)
+  , m_isNull(false)
   , m_pos(0)
+  , m_inputLine(0)
+  , m_outputLine(0)
 {
   operator>>(c);
+  //kDebug() << "'" << c << "' " << c.cell() << endl;
 }
 
 Stream::Stream( FILE * fileHandle, QIODevice::OpenMode openMode )
   : QTextStream(fileHandle, openMode)
   , m_atEnd(false)
+  , m_isNull(false)
   , m_pos(0)
+  , m_inputLine(0)
+  , m_outputLine(0)
 {
   operator>>(c);
+  //kDebug() << "'" << c << "' " << c.cell() << endl;
 }
 
 Stream::Stream( QIODevice * device )
   : QTextStream(device)
   , m_atEnd(false)
+  , m_isNull(false)
   , m_pos(0)
+  , m_inputLine(0)
+  , m_outputLine(0)
 {
   operator>>(c);
+  //kDebug() << "'" << c << "' " << c.cell() << endl;
+}
+
+Stream::~Stream()
+{
+  if (isNull())
+    delete device();
 }
 
 Stream & Stream::operator ++( )
 {
   if (m_atEnd)
     return *this;
+
+  if (c == '\n')
+     ++m_inputLine;
 
   if (QTextStream::atEnd()) {
     m_atEnd = true;
@@ -80,6 +120,7 @@ Stream & Stream::operator ++( )
 
   } else {
     operator>>(c);
+    //kDebug() << "'" << c << "' " << c.cell() << endl;
     ++m_pos;
   }
   return *this;
@@ -106,9 +147,11 @@ bool Stream::atEnd() const
 QChar Stream::peek() const
 {
   Stream* s = const_cast<Stream*>(this);
+  int inputLine = m_inputLine;
   ++(*s);
   QChar ret = s->current();
   s->rewind();
+  inputLine = m_inputLine;
   return ret;
 }
 
@@ -128,4 +171,63 @@ void Stream::seek(qint64 offset)
       m_atEnd = false;
     }
   }
+}
+
+Stream& Stream::operator<< ( QChar c )
+{
+  if (!isNull()) {
+    if (c == '\n') {
+      ++m_outputLine;
+      output.clear();
+    } else {
+      output += c;
+    }
+    QTextStream::operator<<(c);
+  }
+  return *this;
+}
+
+Stream& Stream::operator<< ( const QString & string )
+{
+  if (!isNull()) {
+    m_outputLine += string.count('\n');
+    output += c;
+    QTextStream::operator<<(string);
+  }
+  return *this;
+}
+
+int Stream::outputLineNumber() const
+{
+  return m_outputLine;
+}
+
+bool Stream::isNull() const
+{
+  return m_isNull;
+}
+
+int Stream::inputLineNumber() const
+{
+  return m_inputLine;
+}
+
+void Stream::setOutputLineNumber(int line)
+{
+  m_outputLine = line;
+}
+
+void Stream::mark(const QString& filename, int inputLineNumber)
+{
+  QTextStream::operator<<(QString("# %1 \"%2\"\n").arg(inputLineNumber).arg(filename.isEmpty() ? QString("<internal>") : filename));
+  setOutputLineNumber(inputLineNumber);
+}
+
+void Stream::reset( )
+{
+  QTextStream::seek(0);
+  m_inputLine = m_outputLine = m_pos = 0;
+  output.clear();
+  m_atEnd = false;
+  operator>>(c);
 }

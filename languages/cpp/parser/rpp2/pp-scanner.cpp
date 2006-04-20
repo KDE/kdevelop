@@ -176,6 +176,7 @@ void pp_skip_string_literal::operator()(Stream& input, Stream& output)
     }
 
     output << input;
+    ++input;
   }
 }
 

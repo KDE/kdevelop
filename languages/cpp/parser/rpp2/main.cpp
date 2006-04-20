@@ -65,7 +65,9 @@ int main (int /*argc*/, char *argv[])
   preprocess.processFile("pp-configuration"); // ### put your macros here!
 
   QString result = preprocess.processFile(filename);
-  kDebug() << result << endl;
+  QStringList resultLines = result.split('\n');
+  for (int i = 0; i < resultLines.count(); ++i)
+    kDebug() << i << ": " << resultLines[i] << endl;
 
   /*foreach (const Preprocessor::MacroItem& macro, p.macros())
     kDebug() << "Macro '" << macro.name << "' param (" << macro.parameters << ") def (" << macro.definition << ") isFnLike (" << macro.isFunctionLike << ") filename (" << macro.fileName << ")" << endl;*/

@@ -46,9 +46,10 @@ public:
 
   QString resolve_formal(const QString& name);
 
-  int linesSkipped() const;
   int generatedLines() const;
 
+  /// Expands text with the known macros. Continues until it finds a new text line
+  /// beginning with #, at which point control is returned.
   void operator()(Stream& input, Stream& output);
 
   void skip_argument_variadics (const QList<QString>& __actuals, pp_macro *__macro,
@@ -66,7 +67,6 @@ private:
   pp_skip_comment_or_divop skip_comment_or_divop;
   pp_skip_blanks skip_blanks;
 
-  int m_lines;
   int m_generatedLines;
 };
 

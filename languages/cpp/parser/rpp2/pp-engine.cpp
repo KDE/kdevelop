@@ -32,7 +32,6 @@ pp::pp(Preprocessor* preprocessor, QHash<QString, pp_macro*>& environment)
   : m_environment(environment)
   , expand(environment)
   , m_preprocessor(preprocessor)
-  , lines(0)
   , nextToken(0)
   , haveNextToken(false)
 {
@@ -81,44 +80,33 @@ QString pp::processFile(QIODevice* device)
 
 QString pp::find_header_protection(Stream& input)
 {
-  int was = lines;
-  qint64 inputOffset = input.pos();
-
   while (!input.atEnd())
   {
     if (input.current().isSpace())
     {
-      if (input == '\n')
-        ++lines;
-
       ++input;
     }
     else if (PPInternal::isComment(input))
     {
       skip_comment_or_divop (input, PPInternal::devnull());
-      lines += skip_comment_or_divop.linesSkipped();
     }
     else if (input == '#')
     {
       skip_blanks (++input, PPInternal::devnull());
-      lines += skip_blanks.linesSkipped();
 
       if (!input.atEnd() && input == 'i')
       {
         QString directive = skip_identifier(input);
-        lines += skip_identifier.linesSkipped();
 
         if (directive == "ifndef")
         {
           skip_blanks (input, PPInternal::devnull());
-          lines += skip_blanks.linesSkipped();
 
           QString define = skip_identifier(input);
-          lines += skip_identifier.linesSkipped();
 
           if (!define.isEmpty() && !input.atEnd())
           {
-            input.seek(inputOffset);
+            input.reset();
             return define;
           }
         }
@@ -130,8 +118,7 @@ QString pp::find_header_protection(Stream& input)
     }
   }
 
-  lines = was;
-  input.seek(inputOffset);
+  input.reset();
   return QString();
 }
 
@@ -164,7 +151,7 @@ void pp::handle_directive(const QString& directive, Stream& input, Stream& outpu
   {
     case PP_DEFINE:
       if (! skipping ())
-        return handle_define(input, output);
+        return handle_define(input);
       break;
 
     case PP_INCLUDE:
@@ -200,11 +187,6 @@ void pp::handle_directive(const QString& directive, Stream& input, Stream& outpu
   }
 }
 
-QString pp::createLineMark(const QString& filename, int line)
-{
-  return QString("# %1 \"%2\"\n").arg(line).arg(filename.isEmpty() ? QString("<internal>") : filename);
-}
-
 void pp::handle_include(Stream& input, Stream& output)
 {
   Q_ASSERT(input == '<' || input == '"');
@@ -223,17 +205,13 @@ void pp::handle_include(Stream& input, Stream& output)
   Stream* include = m_preprocessor->sourceNeeded(includeName, quote == '"' ? Preprocessor::IncludeLocal : Preprocessor::IncludeGlobal);
   if (include && !include->atEnd()) {
     m_files.push(includeName);
-    m_includeLineNumbers.push(lines);
 
-    lines = 0;
-    output << createLineMark(includeName, 0);
+    output.mark(includeName, 0);
 
     operator()(*include, output);
 
-    // restore the file name and the line position and
-    // sync the buffer
-    m_files.pop();
-    output << createLineMark(m_files.top(), m_includeLineNumbers.pop());
+    // restore the file name and sync the buffer
+    output.mark(m_files.pop(), input.inputLineNumber());
   }
 }
 
@@ -250,18 +228,20 @@ void pp::operator () (Stream& input, Stream& output)
 
   forever
   {
-    skip_blanks(input, skipping() ? PPInternal::devnull() : output);
-    lines += skip_blanks.linesSkipped();
+    if (skipping()) {
+      skip_blanks(input, PPInternal::devnull());
+
+    } else {
+      skip_blanks(input, output);
+    }
 
     if (input.atEnd()) {
       break;
 
     } else if (input == '#') {
       skip_blanks(++input, PPInternal::devnull());
-      lines += skip_blanks.linesSkipped();
 
       QString directive = skip_identifier(input);
-      lines += skip_identifier.linesSkipped();
 
       Q_ASSERT(directive.length() < 512);
 
@@ -273,39 +253,31 @@ void pp::operator () (Stream& input, Stream& output)
         skip (input, ss);
       }
 
-      int was = lines;
       Stream ss(&skipped);
       handle_directive(directive, ss, output);
 
-      if (lines != was)
-      {
-        lines = was;
-        output << createLineMark(m_files.top(), lines);
-      }
-
     } else if (input == '\n') {
-      // ### compress the line
-      // Is that really necessary? seems like it would just make the lookup slower later
+      checkMarkNeeded(input, output);
       output << input;
       ++input;
-      ++lines;
 
     } else if (skipping ()) {
       skip (input, PPInternal::devnull());
 
     } else {
-      output << createLineMark(m_files.top(), lines);
+      checkMarkNeeded(input, output);
       expand (input, output);
-      lines += expand.linesSkipped();
-
-      if (expand.generatedLines())
-        output << createLineMark(m_files.top(), lines);
     }
   }
 }
 
+void pp::checkMarkNeeded(Stream& input, Stream& output)
+{
+  if (input.inputLineNumber() != output.outputLineNumber() && !output.isNull())
+    output.mark(m_files.top(), input.inputLineNumber());
+}
 
-void pp::handle_define (Stream& input, Stream& output)
+void pp::handle_define (Stream& input)
 {
   pp_macro* macro = new pp_macro();
 #if defined (PP_WITH_MACRO_POSITION)
@@ -362,9 +334,6 @@ void pp::handle_define (Stream& input, Stream& output)
 
   skip_blanks (input, PPInternal::devnull());
 
-  // The blank line for "#define"
-  output << '\n';
-
   while (!input.atEnd() && input != '\n')
   {
     if (input == '\\')
@@ -374,9 +343,6 @@ void pp::handle_define (Stream& input, Stream& output)
 
       if (!input.atEnd() && input == '\n')
       {
-        // Subsequent blank lines
-        output << '\n';
-
         ++macro->lines;
         skip_blanks(++input, PPInternal::devnull());
         definition += ' ';
@@ -408,29 +374,24 @@ void pp::skip (Stream& input, Stream& output)
     if (input == '/')
     {
       skip_comment_or_divop (input, output);
-      lines += skip_comment_or_divop.linesSkipped();
     }
     else if (input == '"')
     {
       skip_string_literal (input, output);
-      lines += skip_string_literal.linesSkipped();
     }
     else if (input == '\'')
     {
       skip_char_literal (input, output);
-      lines += skip_char_literal.linesSkipped();
     }
     else if (input == '\\')
     {
       output << input;
       skip_blanks (++input, output);
-      lines += skip_blanks.linesSkipped();
 
       if (!input.atEnd() && input == '\n')
       {
         output << input;
         ++input;
-        ++lines;
       }
     }
     else
@@ -885,6 +846,7 @@ void pp::handle_ifdef (bool check_undefined, Stream& input)
 void pp::handle_undef(Stream& input)
 {
   skip_blanks (input, PPInternal::devnull());
+
   QString macro_name = skip_identifier(input);
   Q_ASSERT(!macro_name.isEmpty());
 

@@ -57,7 +57,6 @@ QString pp_macro_expander::resolve_formal(const QString& name)
 pp_macro_expander::pp_macro_expander(QHash<QString, pp_macro*>& environment, pp_frame* frame)
   : m_environment(environment)
   , m_frame(frame)
-  , m_lines(0)
   , m_generatedLines(0)
 {
 }
@@ -67,17 +66,13 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
   m_generatedLines = 0;
   skip_blanks(input, output);
 
-  m_lines = skip_blanks.linesSkipped();
-
   while (!input.atEnd())
   {
     if (input == '\n')
     {
       output << input;
-      ++m_lines;
 
       skip_blanks(++input, output);
-      m_lines += skip_blanks.linesSkipped();
 
       if (!input.atEnd() && input == '#')
         break;
@@ -85,35 +80,26 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
     else if (input == '#')
     {
       skip_blanks(++input, output);
-      m_lines += skip_blanks.linesSkipped();
 
       QString identifier = skip_identifier(input);
       output << '\"';
-      int was = m_lines;
 
       Stream is(&identifier);
       operator()(is, output);
 
-      m_lines += was;
       output << '\"';
     }
     else if (input == '\"')
     {
       skip_string_literal(input, output);
-      m_lines += skip_string_literal.linesSkipped();
     }
     else if (input == '\'')
     {
       skip_char_literal(input, output);
-      m_lines += skip_char_literal.linesSkipped();
     }
     else if (PPInternal::isComment(input))
     {
       skip_comment_or_divop(input, output);
-      int n = skip_comment_or_divop.linesSkipped();
-      m_lines += n;
-
-      output << QString(n, '\n');
     }
     else if (input.current().isSpace())
     {
@@ -128,7 +114,6 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
     else if (input.current().isNumber())
     {
       skip_number (input, output);
-      m_lines += skip_number.linesSkipped();
     }
     else if (input.current().isLetter() || input == '_')
     {
@@ -174,7 +159,9 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         Stream ms(&macro->definition, QIODevice::ReadOnly);
         expand_macro(ms, output);
         macro->hidden = false;
-        m_generatedLines += expand_macro.linesSkipped();
+
+        // FIXME must tag after this if needed
+        m_generatedLines += expand_macro.generatedLines();
         continue;
       }
 
@@ -248,7 +235,9 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       Stream ms(&macro->definition, QIODevice::ReadOnly);
       expand_macro(ms, output);
       macro->hidden = false;
-      m_generatedLines += expand_macro.linesSkipped();
+
+      // FIXME must tag after this if needed
+      m_generatedLines += expand_macro.generatedLines();
 
     } else {
       output << input;
@@ -275,11 +264,6 @@ void pp_macro_expander::skip_argument_variadics (const QList<QString>& __actuals
 int pp_macro_expander::generatedLines( ) const
 {
   return m_generatedLines;
-}
-
-int pp_macro_expander::linesSkipped( ) const
-{
-  return m_lines;
 }
 
 // kate: indent-width 2;

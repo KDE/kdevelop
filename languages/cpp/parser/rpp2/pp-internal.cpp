@@ -21,15 +21,6 @@
 
 #include "pp-internal.h"
 
-
-
-class DevNullDevice : public QIODevice
-{
-protected:
-  virtual qint64 readData ( char *, qint64 ) { return 0; }
-  virtual qint64 writeData ( const char *, qint64 maxSize ) { return maxSize; }
-};
-
 bool PPInternal::isComment(Stream& input)
 {
   QChar c1 = input;
@@ -40,7 +31,6 @@ bool PPInternal::isComment(Stream& input)
 
 Stream& PPInternal::devnull()
 {
-  static DevNullDevice devnull;
-  static Stream null(&devnull);
+  static Stream null;
   return null;
 }

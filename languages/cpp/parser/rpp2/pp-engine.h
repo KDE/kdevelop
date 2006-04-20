@@ -40,14 +40,12 @@ class pp
   pp_skip_blanks skip_blanks;
   pp_skip_number skip_number;
   QStack<QString> m_files;
-  QStack<int> m_includeLineNumbers;
   Preprocessor* m_preprocessor;
 
   enum { MAX_LEVEL = 512 };
   int _M_skipping[MAX_LEVEL];
   int _M_true_test[MAX_LEVEL];
   int iflevel;
-  int lines;
   int nextToken;
   bool haveNextToken;
 
@@ -93,10 +91,10 @@ public:
 
   void operator () (Stream& input, Stream& output);
 
-  QString createLineMark(const QString& filename, int line);
+  void checkMarkNeeded(Stream& input, Stream& output);
 
 private:
-  inline int skipping() const;
+  int skipping() const;
   bool test_if_level();
 
   PP_DIRECTIVE_TYPE find_directive (const QString& directive) const;
@@ -133,8 +131,7 @@ private:
 
   void handle_include(Stream& input, Stream& output);
 
-  // Output: the needed number of blank lines
-  void handle_define(Stream& input, Stream& output);
+  void handle_define(Stream& input);
 
   void handle_if(Stream& input);
 
