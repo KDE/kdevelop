@@ -64,13 +64,27 @@ QString pp::processFile(const QString& filename)
 
 QString pp::processFile(QIODevice* device)
 {
-   Q_ASSERT(device);
+  Q_ASSERT(device);
 
   QString result;
   m_files.push("<internal>");
 
   {
     Stream is(device);
+    Stream rs(&result);
+    operator () (is, rs);
+  }
+
+  return result;
+}
+
+QString pp::processFile(const QByteArray& input)
+{
+  QString result;
+  m_files.push("<internal>");
+
+  {
+    Stream is(input);
     Stream rs(&result);
     operator () (is, rs);
   }

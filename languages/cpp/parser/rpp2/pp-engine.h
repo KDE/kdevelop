@@ -88,6 +88,7 @@ public:
 
   QString processFile(const QString& filename);
   QString processFile(QIODevice* input);
+  QString processFile(const QByteArray& input);
 
   void operator () (Stream& input, Stream& output);
 

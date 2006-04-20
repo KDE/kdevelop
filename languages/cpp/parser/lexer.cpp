@@ -70,11 +70,10 @@ void Lexer::positionAt(std::size_t offset, int *line, int *column,
     NPPL == non-preprocessed line
     NPPL =
       actual line of the first preceeding preprocessor statement +
-      ( NPPL of the token - (NPPL of the first preceeding preprocessor statement + 1 to account for the preprocessor statement)
-      - 1 to start from line 0 )
+      NPPL of the token - (NPPL of the first preceeding preprocessor statement + 1 to account for the preprocessor statement)
   */
   //kDebug() << k_funcinfo << offset << ": line " << (base_line + *line - line2  - 1) << ", column " << *column << " == " << base_line << " + " << *line << " - " << line2 << " - 1" << endl;
-  *line = base_line + *line - line2  - 2;
+  *line = base_line + *line - line2  - 1;
 
   if (*filename == "<internal>")
     filename->clear();

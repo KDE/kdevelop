@@ -67,14 +67,7 @@ QString Preprocessor::processString(const QByteArray &bytearray)
 {
     pp proc(this, d->env);
 
-    QString result;
-
-    Stream bs(const_cast<QByteArray*>(&bytearray), QIODevice::ReadOnly);
-    Stream rs(&result);
-
-    proc(bs, rs);
-
-    return result;
+    return proc.processFile(bytearray);
 }
 
 void Preprocessor::addIncludePaths(const QStringList &includePaths)

@@ -37,7 +37,7 @@
 #include "parser/parser.h"
 #include "parser/control.h"
 #include "parser/dumptree.h"
-#include "parser/rpp/preprocessor.h"
+#include "parser/rpp2/preprocessor.h"
 
 ParseJob::ParseJob( const KUrl &url,
                     pool *memoryPool,
@@ -131,12 +131,11 @@ void ParseJob::run()
     includes.append ( "." );
     preprocessor.addIncludePaths( includes );
 
-    preprocessor.processString( contents );
-    QByteArray preprocessed = preprocessor.result();
-    std::size_t pre_size = preprocessed.length() + 1;
+    QString ppd = preprocessor.processString( contents );
+    QByteArray preprocessed = ppd.toUtf8();
 
     Parser parser( new Control() );
-    m_translationUnit = parser.parse( preprocessed, pre_size, m_memoryPool );
+    m_translationUnit = parser.parse( preprocessed, preprocessed.length() + 1, m_memoryPool );
 
     m_model = new CodeModel;
     Binder binder( m_model, &parser.token_stream, &parser.lexer, m_highlight );

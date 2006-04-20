@@ -62,9 +62,9 @@ int main (int /*argc*/, char *argv[])
 
   p.addIncludePaths(ip);
 
-  preprocess.processFile("pp-configuration"); // ### put your macros here!
+  preprocess.processFile(QString("pp-configuration")); // ### put your macros here!
 
-  QString result = preprocess.processFile(filename);
+  QString result = preprocess.processFile(QString(filename));
   QStringList resultLines = result.split('\n');
   for (int i = 0; i < resultLines.count(); ++i)
     kDebug() << i << ": " << resultLines[i] << endl;
