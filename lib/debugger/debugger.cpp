@@ -172,7 +172,7 @@ void Debugger::partAdded( KParts::Part* part )
     iface->setMarkPixmap((MarkInterface::MarkTypes)ReachedBreakpoint, *reachedBreakpointPixmap());
     iface->setMarkPixmap((MarkInterface::MarkTypes)DisabledBreakpoint, *disabledBreakpointPixmap());
     iface->setMarkPixmap((MarkInterface::MarkTypes)ExecutionPoint, *executionPointPixmap());
-    iface->setMarksUserChangable( Bookmark | Breakpoint );
+    iface->setEditableMarks( Bookmark | Breakpoint );
 
     connect( part, SIGNAL(marksChanged(KTextEditor::Document*)), this, SLOT(marksChanged()) );
 }
