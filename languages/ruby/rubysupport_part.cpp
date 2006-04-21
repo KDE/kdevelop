@@ -202,7 +202,7 @@ void RubySupportPart::parse(const QString &fileName)
     return;
   QTextStream stream(&f);
 
-  QRegExp classre("^\\s*(class|module)\\s+([A-Z][A-Za-z0-9_]+)\\s*(<\\s*([A-Z][A-Za-z0-9_:]+))?$");
+	QRegExp classre("^\\s*(class|module)\\s+([A-Z][A-Za-z0-9_]+::)*([A-Z][A-Za-z0-9_]+)\\s*(<\\s*([A-Z][A-Za-z0-9_:]+))?$");
   QRegExp methodre("^\\s*def\\s+(([A-Z][A-Za-z0-9_:]+|self)\\.)?([A-Za-z0-9_]+[!?=]?|\\[\\]=?|\\*\\*||\\-|[!~+*/%&|><^]|>>|<<||<=>|<=|>=|==|===|!=|=~|!~).*$");
   QRegExp accessre("^\\s*(private|protected|public)\\s*((:([A-Za-z0-9_]+[!?=]?|\\[\\]=?|\\*\\*||\\-|[!~+*/%&|><^]|>>|<<||<=>|<=|>=|==|===|!=|=~|!~),?\\s*)*)$");
   QRegExp attr_accessorre("^\\s*(attr_accessor|attr_reader|attr_writer)\\s*((:([A-Za-z0-9_]+),?\\s*)*)$");
@@ -228,17 +228,17 @@ void RubySupportPart::parse(const QString &fileName)
     rawline = stream.readLine();
     line = rawline.stripWhiteSpace().local8Bit();
     if (classre.search(line) != -1) {
-      if (m_file->hasClass(classre.cap(2))) {
-        lastClass = m_file->classByName( classre.cap(2) )[ 0 ];
+      if (m_file->hasClass(classre.cap(3))) {
+        lastClass = m_file->classByName( classre.cap(3) )[ 0 ];
 	  } else {
         lastClass = codeModel()->create<ClassModel>();
-        lastClass->setName(classre.cap(2));
+        lastClass->setName(classre.cap(3));
         lastClass->setFileName( fileName );
         lastClass->setStartPosition( lineNo, 0 );
         m_file->addClass( lastClass );
 	  }
 
-      QString parent = classre.cap(4);
+      QString parent = classre.cap(5);
       if (!parent.isEmpty())
       {
         kdDebug() << "Add parent " << parent << endl;
