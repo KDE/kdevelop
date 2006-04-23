@@ -4,7 +4,7 @@ add_subdirectory(tests)
 
 include_directories(${CMAKE_SOURCE_DIR}/lib/projectmanager/interfaces 
     ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/project ${CMAKE_SOURCE_DIR}/lib/util
-    ${KDE4_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+    ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
 
 add_definitions(-fPIC)
