@@ -1,0 +1,28 @@
+# this is just a basic CMakeLists.txt
+# for more information see the cmake man page
+
+# add definitions, compiler switches, etc.
+ADD_DEFINITIONS(${QT_DEFINITIONS} -Wall -O2 -g)
+
+# add the Qt include dir to the include path
+INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR})
+
+# list all source files in a variable
+SET(%{APPNAMELC}_SRCS main.cpp %{APPNAMELC}.cpp)
+
+# specify the headers which have to be processed by moc
+# and collect the results in the variable given above
+QT_WRAP_CPP (%{APPNAMELC} %{APPNAMELC}_SRCS %{APPNAMELC}.h)
+
+# create tan executable from the list of source files
+ADD_EXECUTABLE(%{APPNAMELC} ${%{APPNAMELC}_SRCS})
+
+# link the application to the Qt libs
+TARGET_LINK_LIBRARIES(%{APPNAMELC} ${QT_LIBRARIES} )
+
+# create an install rule for the executable
+INSTALL(TARGETS %{APPNAMELC} DESTINATION bin )
+
+# if you need to install more things, take a look at the install() command
+# in the cmake man page
+

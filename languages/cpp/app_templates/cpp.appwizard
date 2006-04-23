@@ -1,2 +1,2 @@
 [General]
-List=opiemenu,win32hello,cppcurseshello,gtk2mmapp,opienet,wxhello,cpphello,opietoday,clanlib,cppsdlhello,qmakeapp,qt4makeapp,cmakelibcpp,opieapp,qmakesimple,cmakesimple,generichello,opieapplet,qtopiaapp,gnome2mmapp,opieinput,win32gui,kdevpg
+List=opiemenu,win32hello,cppcurseshello,gtk2mmapp,opienet,wxhello,cpphello,opietoday,clanlib,cppsdlhello,qmakeapp,qt4makeapp,cmakelibcpp,opieapp,qmakesimple,cmakesimple,generichello,opieapplet,qtopiaapp,gnome2mmapp,opieinput,win32gui,kdevpg,cmakeqt3app

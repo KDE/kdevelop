@@ -1,0 +1,62 @@
+# KDE Config File
+[General]
+Name=Qt3 Application
+Icon=cmakeqt3app.png
+Category=C++/CMake based projects
+Comment=Generate a CMake based Qt3 application
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
+Archive=cmakeqt3app.tar.gz
+
+[FILE1]
+Type=install
+Source=%{src}/CMakeLists.txt
+Dest=%{dest}/CMakeLists.txt
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE2]
+Type=install
+Source=%{src}/CMakeLists.txt.src
+Dest=%{dest}/src/CMakeLists.txt
+
+[FILE3]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/src/main.cpp
+
+[FILE4]
+Type=install
+Source=%{src}/cmakeqt3app.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+
+[FILE5]
+Type=install
+Source=%{src}/cmakeqt3app.h
+Dest=%{dest}/src/%{APPNAMELC}.h
+
+[FILE6]
+Type=install
+Source=%{src}/fileopen.xpm
+Dest=%{dest}/src/fileopen.xpm
+
+[FILE7]
+Type=install
+Source=%{src}/filesave.xpm
+Dest=%{dest}/src/filesave.xpm
+
+[FILE8]
+Type=install
+Source=%{src}/fileprint.xpm
+Dest=%{dest}/src/fileprint.xpm
+
+[CMAKE]
+Type=finishcmd
+Command=cmake ./ -GKDevelop3
+Directory=%{dest}
+
+[MSG]
+Type=message
+Comment=A CMake based Qt3 application was created in %{dest}

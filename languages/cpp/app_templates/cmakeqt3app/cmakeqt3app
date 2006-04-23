@@ -1,0 +1,8 @@
+# QMake application
+[General]
+Name=Qt3 Application
+Icon=cmakeqt3app.png
+Category=C++/CMake based projects
+Comment=Generate a CMake based Qt3 application
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp
