@@ -286,31 +286,6 @@
             </property>
             <widget class="QRadioButton">
                 <property name="name">
-                    <cstring>useOtherTerminal</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>0</x>
-                        <y>20</y>
-                        <width>64</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>&amp;Other:</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+O</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Set a different terminal than the KDE default one</string>
-                </property>
-                <property name="whatsThis" stdset="0">
-                    <string>Choose some other terminal different from the default one.</string>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
                     <cstring>useKDETerminal</cstring>
                 </property>
                 <property name="geometry">
@@ -351,6 +326,31 @@
                         <width>392</width>
                         <height>21</height>
                     </rect>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>useOtherTerminal</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>0</x>
+                        <y>20</y>
+                        <width>64</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&amp;Other:</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+O</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Set a different terminal than the KDE default one</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>Choose some other terminal different from the default one.</string>
                 </property>
             </widget>
         </widget>
@@ -487,6 +487,14 @@
         </widget>
     </grid>
 </widget>
+<connections>
+    <connection>
+        <sender>useOtherTerminal</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>terminalEdit</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>
