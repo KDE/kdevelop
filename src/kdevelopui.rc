@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="26" name="kdevelop" >
+<kpartgui version="27" name="kdevelop" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
@@ -43,6 +43,7 @@
     <DefineGroup name="history_operations"/>
     <Action name="history_back"/>
     <Action name="history_forward"/>
+    <Action name="goto_last_edit_pos"/>
     <Separator/>
     <Action name="file_switchto"/>
     <Action name="raise_editor"/>
@@ -131,6 +132,7 @@
   <text>Main Toolbar</text>
   <Action name="project_open" />
   <DefineGroup name="project_operations"/>
+  <Action name="goto_last_edit_pos"/>
   <Action name="history_back"/>
   <Action name="history_forward"/>
   <DefineGroup name="file_operations"/>

@@ -184,6 +184,7 @@ private:
 
   KToolBarPopupAction* m_backAction;
   KToolBarPopupAction* m_forwardAction;
+  KAction * m_gotoLastEditPosAction;
   
   bool m_openNextAsText;
   

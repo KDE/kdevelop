@@ -114,54 +114,40 @@ void PartController::setupActions()
 {
   KActionCollection *ac = TopLevel::getInstance()->main()->actionCollection();
 
-  KAction* newAction = KStdAction::open(this, SLOT(slotOpenFile()),
-    ac, "file_open");
+  KAction* newAction = KStdAction::open(this, SLOT(slotOpenFile()), ac, "file_open");
   newAction->setToolTip( i18n("Open file") );
   newAction->setWhatsThis( i18n("<b>Open file</b><p>Opens an existing file without adding it to the project.</p>") );
 
-  m_openRecentAction = KStdAction::openRecent( this, SLOT(slotOpenRecent(const KURL&) ),
-    ac, "file_open_recent" );
+  m_openRecentAction = KStdAction::openRecent( this, SLOT(slotOpenRecent(const KURL&) ), ac, "file_open_recent" );
   m_openRecentAction->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(m_openRecentAction->text())).arg(i18n("Opens recently opened file.")));
   m_openRecentAction->loadEntries( kapp->config(), "RecentFiles" );
 
-  m_saveAllFilesAction = new KAction(i18n("Save Al&l"), 0,
-    this, SLOT(slotSaveAllFiles()),
-    ac, "file_save_all");
+  m_saveAllFilesAction = new KAction(i18n("Save Al&l"), 0, this, SLOT(slotSaveAllFiles()), ac, "file_save_all");
   m_saveAllFilesAction->setToolTip( i18n("Save all modified files") );
   m_saveAllFilesAction->setWhatsThis(i18n("<b>Save all</b><p>Saves all modified files."));
   m_saveAllFilesAction->setEnabled(false);
 
-  m_revertAllFilesAction = new KAction(i18n("Rever&t All"), 0,
-    this, SLOT(slotRevertAllFiles()),
-    ac, "file_revert_all");
+  m_revertAllFilesAction = new KAction(i18n("Rever&t All"), 0, this, SLOT(slotRevertAllFiles()), ac, "file_revert_all");
   m_revertAllFilesAction->setToolTip(i18n("Revert all changes"));
   m_revertAllFilesAction->setWhatsThis(i18n("<b>Revert all</b><p>Reverts all changes in opened files. Prompts to save changes so the reversion can be canceled for each modified file."));
   m_revertAllFilesAction->setEnabled(false);
 
-  m_closeWindowAction = KStdAction::close(
-    this, SLOT(slotCloseWindow()),
-    ac, "file_close");
+  m_closeWindowAction = KStdAction::close(this, SLOT(slotCloseWindow()), ac, "file_close");
   m_closeWindowAction->setToolTip( i18n("Close current file") );
   m_closeWindowAction->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(m_closeWindowAction->text())).arg(i18n("Closes current file.")));
   m_closeWindowAction->setEnabled(false);
 
-  m_closeAllWindowsAction = new KAction(i18n("Close All"), 0,
-    this, SLOT(slotCloseAllWindows()),
-    ac, "file_close_all");
+  m_closeAllWindowsAction = new KAction(i18n("Close All"), 0, this, SLOT(slotCloseAllWindows()), ac, "file_close_all");
   m_closeAllWindowsAction->setToolTip( i18n("Close all files") );
   m_closeAllWindowsAction->setWhatsThis(i18n("<b>Close all</b><p>Close all opened files."));
   m_closeAllWindowsAction->setEnabled(false);
 
-  m_closeOtherWindowsAction = new KAction(i18n("Close All Others"), 0,
-    this, SLOT(slotCloseOtherWindows()),
-    ac, "file_closeother");
+  m_closeOtherWindowsAction = new KAction(i18n("Close All Others"), 0, this, SLOT(slotCloseOtherWindows()), ac, "file_closeother");
   m_closeOtherWindowsAction->setToolTip( i18n("Close other files") );
   m_closeOtherWindowsAction->setWhatsThis(i18n("<b>Close all others</b><p>Close all opened files except current."));
   m_closeOtherWindowsAction->setEnabled(false);
 
-  m_switchToAction = new KAction(i18n("Switch To..."), KShortcut("CTRL+/"),
-    this, SLOT(slotSwitchTo()),
-    ac, "file_switchto");
+  m_switchToAction = new KAction(i18n("Switch To..."), KShortcut("CTRL+/"), this, SLOT(slotSwitchTo()), ac, "file_switchto");
   m_switchToAction->setToolTip(i18n("Switch to"));
   m_switchToAction->setWhatsThis(i18n("<b>Switch to</b><p>Prompts to enter the name of previously opened file to switch to."));
 
@@ -181,7 +167,10 @@ void PartController::setupActions()
   connect(m_forwardAction->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(slotForwardAboutToShow()));
   connect(m_forwardAction->popupMenu(), SIGNAL(activated(int)), this, SLOT(slotForwardPopupActivated(int)));
 
-  new KAction( i18n("Goto Last Edit Position"), 0, 0, this, SLOT(gotoLastEditPos()), ac, "goto_last_edit_pos" );
+  m_gotoLastEditPosAction = new KAction( i18n("Goto Last Edit Position"), "bottom", 0, this, SLOT(gotoLastEditPos()), ac, "goto_last_edit_pos" );
+  m_gotoLastEditPosAction->setEnabled( false );
+  m_gotoLastEditPosAction->setToolTip( i18n("Goto Last Edit Position") );
+  m_gotoLastEditPosAction->setWhatsThis( i18n("<b>Goto Last Edit Position</b><p>Open the last edited file and position cursor at the point of edit") );
 }
 
 void PartController::setEncoding(const QString &encoding)
@@ -1756,6 +1745,8 @@ void PartController::textChanged()
 	{
 		if ( KTextEditor::ViewCursorInterface * vci = dynamic_cast<KTextEditor::ViewCursorInterface*>( doc->widget() ) )
 		{
+			m_gotoLastEditPosAction->setEnabled( true );
+
 			m_lastEditPos.url = doc->url();
 			vci->cursorPosition( &m_lastEditPos.pos.first, &m_lastEditPos.pos.second );
 		}
