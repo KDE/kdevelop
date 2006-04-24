@@ -181,6 +181,7 @@ void PartController::setupActions()
   connect(m_forwardAction->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(slotForwardAboutToShow()));
   connect(m_forwardAction->popupMenu(), SIGNAL(activated(int)), this, SLOT(slotForwardPopupActivated(int)));
 
+  new KAction( i18n("Goto Last Edit Position"), 0, 0, this, SLOT(gotoLastEditPos()), ac, "goto_last_edit_pos" );
 }
 
 void PartController::setEncoding(const QString &encoding)
@@ -715,18 +716,12 @@ void PartController::integrateTextEditorPart(KTextEditor::Document* doc)
   // the debugger to intercept all new KTextEditor::View creations, which is
   // not possible.
 
-  QWidget* widget = 0;
-  KTextEditor::View* view = 0;
-  if (KTextEditor::Editor* edit = dynamic_cast<KTextEditor::Editor*>(doc))
-  {
-    widget = edit->widget();
-  }
-  if (widget)
-  {
-    view = dynamic_cast<KTextEditor::View*>(widget);
-  }
 
-  if (view)
+  if ( !doc ) return;
+
+  connect( doc, SIGNAL(textChanged()), this, SLOT(textChanged()) );
+
+  if ( KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( doc->widget() ) )
   {
     KActionCollection* c = view->actionCollection();
     // Be extra carefull, in case the part either don't provide those
@@ -1753,6 +1748,23 @@ KTextEditor::Editor *PartController::openTextDocument( bool activate )
 
         EditorProxy::getInstance()->setLineNumber(editorpart, 0, 0);
     }
+}
+
+void PartController::textChanged()
+{
+	if ( KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( activePart() ) )
+	{
+		if ( KTextEditor::ViewCursorInterface * vci = dynamic_cast<KTextEditor::ViewCursorInterface*>( doc->widget() ) )
+		{
+			m_lastEditPos.url = doc->url();
+			vci->cursorPosition( &m_lastEditPos.pos.first, &m_lastEditPos.pos.second );
+		}
+	}
+}
+
+void PartController::gotoLastEditPos()
+{
+	editDocument( m_lastEditPos.url, m_lastEditPos.pos.first, m_lastEditPos.pos.second );
 }
 
 #include "partcontroller.moc"

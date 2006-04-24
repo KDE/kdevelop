@@ -9,6 +9,7 @@
 #include <kurl.h>
 #include <qmap.h>
 #include <qguardedptr.h>
+#include <qpair.h>
 
 namespace KParts
 {
@@ -141,6 +142,8 @@ private slots:
   void slotDocumentDirty( Kate::Document * doc, bool isModified, unsigned char reason );
   void slotNewStatus();
   void slotNewDesignerStatus(const QString &formName, int status);
+  void textChanged();
+  void gotoLastEditPos();
 
 private:
   KURL findURLInProject(const KURL& url);
@@ -207,7 +210,17 @@ private:
 		
 	QValueList<HistoryEntry> m_backHistory;
 	QValueList<HistoryEntry> m_forwardHistory;
-	bool m_isJumping;  
+	bool m_isJumping;
+
+	struct LastEditPos
+	{
+		KURL url;
+		QPair<unsigned int,unsigned int> pos;
+
+		LastEditPos() : pos( -1, -1) {}
+	};
+
+	LastEditPos m_lastEditPos;
 };
 
 
