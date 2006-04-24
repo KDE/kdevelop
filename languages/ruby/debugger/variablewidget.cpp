@@ -616,7 +616,7 @@ QString VarItem::fullName() const
 	vPath.replace(QRegExp("^self\\.@"), "@");
 	
 	// Use instance_variable_get() to access any '@var's in the middle of a path	
-	QRegExp re_instance_var("\\.(@[^.]+)");
+	QRegExp re_instance_var("\\.(@[^\\[.]+)");
 	int pos = re_instance_var.search(vPath);	
 	while (pos != -1) {	
 		vPath.replace(	pos, 
