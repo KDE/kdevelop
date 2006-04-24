@@ -18,6 +18,7 @@
 #include <klocale.h>
 
 #include "kdevcore.h"
+#include "kdevproject.h"
 #include "kdevmainwindow.h"
 #include "kdevplugininfo.h"
 #include "kdevshellwidget.h"
@@ -46,6 +47,8 @@ KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStrin
     m_widget->setAutoReactivateOnClose( true );
 
     mainWindow()->embedOutputView(m_widget, i18n("Konsole"), i18n("Embedded console window"));
+
+    connect(core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
 }
 
 
@@ -54,6 +57,12 @@ KonsoleViewPart::~KonsoleViewPart()
     if ( m_widget )
         mainWindow()->removeView( m_widget );
     delete m_widget;
+}
+
+void KonsoleViewPart::projectOpened()
+{
+	QString cd_projectdir = QString("cd ") + project()->projectDirectory() + "\n";
+	m_widget->sendInput( cd_projectdir );	
 }
 
 

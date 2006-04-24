@@ -26,6 +26,9 @@ public:
     KonsoleViewPart(QObject *parent, const char *name, const QStringList &);
     virtual ~KonsoleViewPart();
 
+private slots:
+    void projectOpened();
+
 private:
     QGuardedPtr<KDevShellWidget> m_widget;
 };
