@@ -104,7 +104,10 @@ void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output)
         return;
     }
 
-    output << input;
+    if (input == '\n')
+      output << '\n';
+    else
+      output << ' ';
     ++input;
   }
 }
