@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <q3whatsthis.h>
+
 #include <q3vbox.h>
 #include <qtimer.h>
 #include <qtextstream.h>
@@ -58,7 +58,7 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 
     _marksChangeTimer = new QTimer( this );
 
-    Q3WhatsThis::add(_widget, i18n("<b>Bookmarks</b><p>"
+    _widget->setWhatsThis( i18n("<b>Bookmarks</b><p>"
             "The bookmark viewer shows all the source bookmarks in the project."));
 
     mainWindow()->embedSelectView(_widget, i18n("Bookmarks"), i18n("Source bookmarks"));

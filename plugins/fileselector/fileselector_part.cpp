@@ -1,6 +1,6 @@
 #include "fileselector_part.h"
 
-#include <q3whatsthis.h>
+
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qslider.h>
@@ -49,7 +49,7 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const char*, const QStringLi
     m_filetree->setWindowTitle( i18n("File Selector") );
     m_filetree->setWindowIcon( KIcon(info()->icon()) );
     mainWindow()->embedSelectView( m_filetree, i18n("File Selector"), i18n("File selector") );
-    Q3WhatsThis::add(m_filetree, i18n("<b>File selector</b><p>This file selector lists directory contents and provides some file management functions."));
+    m_filetree->setWhatsThis( i18n("<b>File selector</b><p>This file selector lists directory contents and provides some file management functions."));
 
     m_filetree->readConfig( instance()->config(), "fileselector" );
 }

@@ -143,7 +143,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *appwizardpart, QWidget *parent, 
     AppWizardUtil::guessAuthorAndEmail(&author, &email);
     author_edit->setText(author);
     email_edit->setText(email);
-    QToolTip::add( dest_edit->button(), i18n("Choose projects directory") );
+    dest_edit->button()->setToolTip( i18n("Choose projects directory") );
     dest_edit->setURL(defaultProjectsDir);
     dest_edit->setMode(KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly);
 

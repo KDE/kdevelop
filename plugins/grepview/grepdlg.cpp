@@ -15,7 +15,7 @@
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <q3hbox.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 #include <qstringlist.h>
 //Added by qt3to4:
@@ -150,7 +150,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     dir_layout->addWidget( url_requester, 10 );
 
     synch_button = new QPushButton(".", this );
-    QToolTip::add( synch_button, i18n("Set directory to that of the current file") );
+    synch_button->setToolTip( i18n("Set directory to that of the current file") );
     dir_layout->addWidget( synch_button );
 
     QBoxLayout *dir_checks_layout = new QHBoxLayout(4);
@@ -187,7 +187,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
 
     resize(sizeHint());
 
-    Q3WhatsThis::add(pattern_combo,
+    pattern_combo->setWhatsThis(
             i18n("<qt>Enter the regular expression you want to search for here.<p>"
              "Possible meta characters are:"
                          "<ul>"
@@ -211,10 +211,10 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
              "Furthermore, backreferences to bracketed subexpressions are "
              "available via the notation \\<i>n</i>.</qt>"
              ));
-    Q3WhatsThis::add(files_combo,
+    files_combo->setWhatsThis(
             i18n("Enter the file name pattern of the files to search here. "
              "You may give several patterns separated by commas"));
-    Q3WhatsThis::add(template_edit,
+    template_edit->setWhatsThis(
             i18n("You can choose a template for the pattern from the combo box "
              "and edit it here. The string %s in the template is replaced "
              "by the pattern input field, resulting in the regular expression "

@@ -13,7 +13,7 @@
 
 #include <q3popupmenu.h>
 #include <q3vbox.h>
-#include <q3whatsthis.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
@@ -49,7 +49,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
     m_widget = new GrepViewWidget(this);
     m_widget->setIcon(SmallIcon("grep"));
     m_widget->setCaption(i18n("Grep Output"));
-    Q3WhatsThis::add(m_widget, i18n("<b>Find in files</b><p>"
+    m_widget->setWhatsThis( i18n("<b>Find in files</b><p>"
                                    "This window contains the output of a grep "
                                    "command. Clicking on an item in the list "
                                    "will automatically open the corresponding "

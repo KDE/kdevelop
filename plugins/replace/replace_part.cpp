@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <q3whatsthis.h>
+
 
 #include <kaction.h>
 #include <kiconloader.h>

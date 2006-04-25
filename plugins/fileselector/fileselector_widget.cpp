@@ -37,7 +37,7 @@
 #include <qlabel.h>
 #include <q3strlist.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+#include <Q3WhatsThis>
 #include <qapplication.h>
 #include <q3listbox.h>
 #include <qscrollbar.h>
