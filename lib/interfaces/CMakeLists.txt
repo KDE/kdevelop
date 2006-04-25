@@ -59,7 +59,8 @@ install_targets(/lib kdevinterfaces)
 ########### install files ###############
 
 install_files(/include/kdevelop/interfaces FILES 
-    kdevdocumentcontroller.h
+    kdevdocument.h
+	kdevdocumentcontroller.h
     kdevapi.h
     kdevdocumentcontrolleriface.h
     kdevappfrontend.h
