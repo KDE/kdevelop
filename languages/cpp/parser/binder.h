@@ -90,6 +90,7 @@ private:
   KTextEditor::Cursor tokenToPosition(const Token& token, QString& fileName, bool end = false) const;
   KTextEditor::SmartRange* newRange(AST *ast, bool includeStartToken = true, bool includeEndToken = true);
   KTextEditor::SmartRange* newRange(const Token& token);
+  KTextEditor::SmartRange* newRange(std::size_t token);
 
 private:
   CodeModel *_M_model;

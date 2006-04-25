@@ -16,6 +16,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     parsejob.cpp
     codedelegate.cpp
     codeproxy.cpp
+    cpphighlighting.cpp
 )
 
 kde4_automoc(${kdevcpplanguagesupport_PART_SRCS})

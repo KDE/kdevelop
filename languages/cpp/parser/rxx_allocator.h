@@ -100,10 +100,11 @@ public:
   void construct(pointer __p, const_reference __val) { new (__p) _Tp(__val); }
   void destroy(pointer __p) { __p->~_Tp(); }
 
-private:
   template <class _Tp1> struct rebind {
     typedef rxx_allocator<_Tp1> other;
   };
+
+private:
 
   void init()
   {

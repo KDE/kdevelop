@@ -572,7 +572,7 @@ void _FunctionModelItem::setFunctionType(CodeModel::FunctionType functionType)
 bool _FunctionModelItem::isConstructor() const
 {
   ///TODO cache this information upon initialization
-  return scope().last() == name();
+  return scope().isEmpty() ? false : scope().last() == name();
 }
 
 bool _FunctionModelItem::isDestructor() const

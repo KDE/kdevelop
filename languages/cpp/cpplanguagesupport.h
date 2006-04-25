@@ -29,6 +29,7 @@ class CodeProxy;
 class CodeDelegate;
 class CodeAggregate;
 class BackgroundParser;
+class CppHighlighting;
 
 class CppLanguageSupport : public KDevLanguageSupport
 {
@@ -45,6 +46,8 @@ public:
     virtual KDevCodeRepository *codeRepository() const;
     virtual QStringList mimeTypes() const;
 
+    CppHighlighting* codeHighlighting() const;
+
 private slots:
     void documentLoaded( KDevDocument* file );
     void documentClosed( KDevDocument* file );
@@ -55,6 +58,7 @@ private:
     CodeProxy *m_codeProxy;
     CodeDelegate *m_codeDelegate;
     BackgroundParser *m_backgroundParser;
+    CppHighlighting *m_highlights;
 };
 
 #endif

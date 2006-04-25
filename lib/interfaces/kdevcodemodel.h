@@ -107,11 +107,19 @@ public:
 
     void addReference(KTextEditor::SmartRange* range);
 
+    KTextEditor::SmartRange* declaration() const;
+    void setDeclaration(KTextEditor::SmartRange* range);
+
+    KTextEditor::SmartRange* definition() const;
+    void setDefinition(KTextEditor::SmartRange* range);
+
     /// Override to detect deleted ranges
     virtual void deleted(KTextEditor::SmartRange* range);
 
 private:
     QList<KTextEditor::SmartRange*> m_references;
+    KTextEditor::SmartRange* m_declaration;
+    KTextEditor::SmartRange* m_definition;
 };
 
 class KDevCodeModel: public KDevItemModel

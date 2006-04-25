@@ -28,10 +28,16 @@
 
 KDevCodeItem::KDevCodeItem( const QString &name, KDevItemGroup *parent )
         : KDevItemCollection( name, parent )
+        , m_declaration(0L)
+        , m_definition(0L)
 {}
 
 KDevCodeItem::~KDevCodeItem()
-{}
+{
+    qDeleteAll(m_references);
+    delete m_declaration;
+    delete m_definition;
+}
 
 KDevCodeItem *KDevCodeItem::itemAt( int index ) const
 {
@@ -128,12 +134,34 @@ const QList< KTextEditor::SmartRange * > & KDevCodeItem::references( ) const
 void KDevCodeItem::addReference( KTextEditor::SmartRange * range )
 {
     m_references.append(range);
-    range->setWatcher(this);
+    range->addWatcher(this);
 }
 
 void KDevCodeItem::deleted( KTextEditor::SmartRange * range )
 {
-    m_references.remove(range);
+    m_references.removeAll(range);
+}
+
+KTextEditor::SmartRange * KDevCodeItem::declaration( ) const
+{
+    return m_declaration;
+}
+
+void KDevCodeItem::setDeclaration( KTextEditor::SmartRange * range )
+{
+    m_declaration = range;
+    range->addWatcher(this);
+}
+
+KTextEditor::SmartRange * KDevCodeItem::definition( ) const
+{
+    return m_definition;
+}
+
+void KDevCodeItem::setDefinition( KTextEditor::SmartRange * range )
+{
+    m_definition = range;
+    range->addWatcher(this);
 }
 
 #include "kdevcodemodel.moc"

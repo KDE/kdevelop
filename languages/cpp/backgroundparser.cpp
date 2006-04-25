@@ -30,6 +30,7 @@
 #include "parser/memorypool.h"
 #include "parser/codemodel.h"
 #include "cpplanguagesupport.h"
+#include "cpphighlighting.h"
 
 #include <QList>
 #include <QTimer>
@@ -42,6 +43,7 @@
 #include <ktexteditor/document.h>
 
 #include <ThreadWeaver.h>
+#include <JobCollection.h>
 
 BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
         : QObject( cppSupport ),
@@ -88,7 +90,7 @@ void BackgroundParser::removeDocument( const KUrl &url )
 
 void BackgroundParser::parseDocuments()
 {
-    QList< Job* > jobs;
+    JobCollection* collection = new JobCollection(this);
     for ( QMap<KUrl, bool>::Iterator it = m_documents.begin();
             it != m_documents.end(); ++it )
     {
@@ -111,7 +113,7 @@ void BackgroundParser::parseDocuments()
 
                     } else {
                         highlight = smart->newSmartRange(document->textDocument()->documentRange(), 0L, KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
-                        smart->addHighlightToDocument(highlight);
+                        smart->addHighlightToDocument(highlight, true);
                     }
                 }
 
@@ -132,24 +134,33 @@ void BackgroundParser::parseDocuments()
             }
             connect( parse, SIGNAL( done( Job* ) ),
                      this, SLOT( parseComplete( Job* ) ) );
-            jobs.append( parse );
+
+            collection->addJob( parse );
         }
     }
-    Weaver::instance() ->enqueue( jobs );
+    Weaver::instance() ->enqueue( collection );
 }
 
 void BackgroundParser::parseComplete( Job *job )
 {
     QMutexLocker locker( &m_mutex );
-    ParseJob * parseJob = qobject_cast<ParseJob*>( job );
 
-    if (!parseJob->wasSuccessful())
-        // TODO get it to the UI?
-        return;
+    if (JobCollection* collection = qobject_cast<JobCollection*>( job ))
+        return collection->deleteLater();
 
-    m_cppSupport->codeProxy() ->insertModel( parseJob->document(),
-            parseJob->codeModel() );
-    m_url2unit.insert( parseJob->document(), parseJob->translationUnit() );
+    if (ParseJob * parseJob = qobject_cast<ParseJob*>( job )) {
+        if (!parseJob->wasSuccessful())
+            // TODO get it to the UI?
+            return;
+
+        m_cppSupport->codeHighlighting()->highlightModel(parseJob->codeModel());
+
+        m_cppSupport->codeProxy() ->insertModel( parseJob->document(),
+                parseJob->codeModel() );
+        m_url2unit.insert( parseJob->document(), parseJob->translationUnit() );
+
+        parseJob->deleteLater();
+    }
 }
 
 void BackgroundParser::documentChanged( KTextEditor::Document * document )

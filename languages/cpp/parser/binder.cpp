@@ -326,6 +326,10 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
   _M_current_function->setAccessPolicy(_M_current_access);
   _M_current_function->setConstant(declarator->fun_cv != 0);
 
+  // Mark function definition
+  if (KTextEditor::SmartRange* range = newRange(node->init_declarator))
+    _M_current_function->setDefinition(range);
+
   applyFunctionSpecifiers(node->function_specifiers,
                           model_static_cast<FunctionModelItem>(_M_current_function));
 
@@ -401,6 +405,10 @@ void Binder::visitNamespace(NamespaceAST *node)
 
   DefaultVisitor::visitNamespace(node);
 
+  // Mark namespace name
+  if (KTextEditor::SmartRange* range = newRange(node->namespace_name))
+    _M_current_namespace->addReference(range);
+
   if (! anonymous)
     {
       Q_ASSERT(scope->kind() == _CodeModelItem::Kind_Namespace
@@ -448,7 +456,7 @@ void Binder::visitClassSpecifier(ClassSpecifierAST *node)
   scope->addClass(_M_current_class);
 
   // Highlight class name
-  if (KTextEditor::SmartRange* range = newRange(node->name))
+  if (KTextEditor::SmartRange* range = newRange(node->name, true, false))
     _M_current_class->addReference(range);
 
   name_cc.run(node->name->unqualified_name);
@@ -694,6 +702,11 @@ KTextEditor::SmartRange * Binder::newRange( const Token & token )
     }
 
   return 0L;
+}
+
+KTextEditor::SmartRange * Binder::newRange( std::size_t token )
+{
+  return newRange(_M_token_stream->token(token));
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

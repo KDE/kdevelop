@@ -29,6 +29,7 @@
 #include "backgroundparser.h"
 #include "cppsupportfactory.h"
 #include "cpplanguagesupport.h"
+#include "cpphighlighting.h"
 
 #include "parser/codemodel.h"
 #include "codeproxy.h"
@@ -50,6 +51,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
     m_codeProxy = new CodeProxy( this );
     m_codeDelegate = new CodeDelegate( this );
     m_backgroundParser = new BackgroundParser( this );
+    m_highlights = new CppHighlighting( this );
 
     connect( documentController(), SIGNAL( documentLoaded(KDevDocument*) ),
              this, SLOT( documentLoaded(KDevDocument*) ) );
@@ -106,6 +108,11 @@ void CppLanguageSupport::documentClosed( KDevDocument* file )
 void CppLanguageSupport::documentActivated( KDevDocument* file )
 {
     Q_UNUSED( file );
+}
+
+CppHighlighting * CppLanguageSupport::codeHighlighting( ) const
+{
+    return m_highlights;
 }
 
 #include "cpplanguagesupport.moc"
