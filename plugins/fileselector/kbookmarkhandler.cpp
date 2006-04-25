@@ -22,8 +22,6 @@
 #include <stdlib.h>
 
 #include <qtextstream.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kxmlguiclient.h>
 #include <kbookmarkimporter.h>
@@ -70,7 +68,7 @@ QString KBookmarkHandler::currentURL() const
 
 
 void KBookmarkHandler::slotNewBookmark( const QString& text,
-                                            const Q3CString& url,
+                                            const QByteArray& url,
                                             const QString& additionalInfo )
 {
     Q_UNUSED( text );
