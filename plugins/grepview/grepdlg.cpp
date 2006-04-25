@@ -92,7 +92,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     config->setGroup("GrepDialog");
 
     QGridLayout *layout = new QGridLayout(this, 6, 2, 10, 4);
-    layout->addRowSpacing(4, 10);
+    layout->addItem( new QSpacerItem( 0, 10), 4, 0 );
     layout->setRowStretch(4, 0);
     layout->setColStretch(0, 0);
     layout->setColStretch(1, 20);

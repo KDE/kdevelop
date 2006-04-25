@@ -271,12 +271,14 @@ KDevPlugin * PluginController::loadPlugin( const QString & serviceType, const QS
 	QString name = (*it)->desktopEntryName();
 
 	KDevPlugin * plugin = 0;
-	if ( plugin = m_parts.value(name) )
+	plugin = m_parts.value(name);
+	if ( plugin )
 	{
 		return plugin;
 	}
 
-	if ( plugin = loadPlugin( *it ) )
+	plugin = loadPlugin( *it );
+	if ( plugin )
 	{
 		m_parts.insert( name, plugin );
 		integratePart( plugin );
