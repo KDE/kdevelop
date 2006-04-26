@@ -1,3 +1,12 @@
+2006-04-26 Jens Dagerbo <jens.dagerbo@swipnet.se>
+* Made the ClassView restore it's state after a refresh. It will no 
+  longer close up after each successful build.
+
+2006-04-24 Jens Dagerbo <jens.dagerbo@swipnet.se>
+* Added "Goto Last Edit Position" action. A regular menu/toolbar/shortcut 
+  action to open the file and position the cursor at the point of the 
+  last edit.
+
 2006-04-14 Jens Dagerbo <jens.dagerbo@swipnet.se>
 * Improved support for encodings
   # KDevelop will now obey the selected encoding in the File Open dialog
@@ -80,23 +89,6 @@
   * Added ruby_{run,config} icons, the .png files are used by kdevelop,
     the .psd files can be used by artists when icons need to be changed
     Thanks Zoran Karavla for the artwork!
-
-2005-05-26 Tobias Erbsland <te@profzone.ch>
- * Added new class QtBuildConfig. This class stores the configuration
-   about the used Qt library. Is Qt used, which major version and
-   where the Qt library path (QTDIR) for this project is.
-   In a later step, it's possible to use different qt installations
-   for each project. E.g. you develop on a KDE4.x programm under KDE3.x.
- * Added a new tab in the C++ options dialog (CCConfigWidget).
-   The user can edit the configuration QtBuildConfig in this tab.
- * New class wizard:
-   - Qt checkboxes are disabled (hide them?) on non-qt projects.
-   - Different code is generated for Qt3.x and Qt4.x projects.
-   - Includes of classes that starting with "Q" bypasses the
-     normal template settings. In Qt3.x the include file has always
-     a lowercase include name with a ".h" suffix, and Qt4.x has
-     a mixed case include name without any suffix.
-   - Added the email address to the author's name if it exists.
 
 2005-05-26 Tobias Erbsland <te@profzone.ch>
  * Added new class QtBuildConfig. This class stores the configuration
