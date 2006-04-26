@@ -43,6 +43,7 @@
 #include <qheader.h>
 #include <qdir.h>
 #include <qstylesheet.h>
+#include <qstringlist.h>
 
 // namespace ?!?
 
@@ -120,10 +121,46 @@ void ClassViewWidget::clear( )
     m_projectItem = 0;
 }
 
+void restoreOpenNodes( QStringList & list, QListViewItem * item )
+{
+	if ( item && !list.isEmpty() )
+	{
+		if ( item->text( 0 ) == list.first() )
+		{
+ 			item->setOpen( true );
+			list.pop_front();
+			restoreOpenNodes( list, item->firstChild() );
+		}
+		else
+		{	
+			restoreOpenNodes( list, item->nextSibling() );
+		}
+	}
+}
+
+void storeOpenNodes( QValueList<QStringList> & openNodes, QStringList const & list, QListViewItem * item )
+{
+	if ( item )
+	{
+		if ( item->isOpen() )
+		{
+			QStringList mylist( list );
+			mylist << item->text( 0 );
+			openNodes << mylist;
+			storeOpenNodes( openNodes, mylist, item->firstChild() );
+		}
+		storeOpenNodes( openNodes, list, item->nextSibling() );
+	}
+}
+
 void ClassViewWidget::refresh()
 {
     if( !m_part->project() )
 	return;
+
+    QValueList<QStringList> openNodes;
+    storeOpenNodes( openNodes, QStringList(), firstChild() );
+    int scrollbarPos = verticalScrollBar()->value();
 
     clear();
     m_projectItem = new FolderBrowserItem( this, this, m_part->project()->projectName() );
@@ -136,6 +173,14 @@ void ClassViewWidget::refresh()
 	insertFile( (*it)->name() );
 	++it;
     }
+
+    QValueList<QStringList>::iterator itt = openNodes.begin();
+    while ( itt != openNodes.end() )
+    {
+        restoreOpenNodes ( *itt, firstChild() );
+        ++itt;
+    }
+    verticalScrollBar()->setValue( scrollbarPos );
 
     blockSignals( false );
 }
