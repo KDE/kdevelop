@@ -134,7 +134,7 @@ const QList< KTextEditor::SmartRange * > & KDevCodeItem::references( ) const
 void KDevCodeItem::addReference( KTextEditor::SmartRange * range )
 {
     m_references.append(range);
-    range->addWatcher(this);
+    range->setWatcher(this);
 }
 
 void KDevCodeItem::deleted( KTextEditor::SmartRange * range )
@@ -150,7 +150,7 @@ KTextEditor::SmartRange * KDevCodeItem::declaration( ) const
 void KDevCodeItem::setDeclaration( KTextEditor::SmartRange * range )
 {
     m_declaration = range;
-    range->addWatcher(this);
+    range->setWatcher(this);
 }
 
 KTextEditor::SmartRange * KDevCodeItem::definition( ) const
@@ -161,7 +161,7 @@ KTextEditor::SmartRange * KDevCodeItem::definition( ) const
 void KDevCodeItem::setDefinition( KTextEditor::SmartRange * range )
 {
     m_definition = range;
-    range->addWatcher(this);
+    range->setWatcher(this);
 }
 
 #include "kdevcodemodel.moc"
