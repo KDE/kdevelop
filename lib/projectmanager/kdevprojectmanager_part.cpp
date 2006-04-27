@@ -218,7 +218,7 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
   Q_ASSERT(m_workspace != 0);
 
   ImportProjectJob *job = ImportProjectJob::importProjectJob(m_workspace, defaultImporter());
-  connect(job, SIGNAL(result(KIO::Job*)), this, SIGNAL(refresh()));
+  connect(job, SIGNAL(result(KJob*)), this, SIGNAL(refresh()));
   job->start();
 
   QStringList newFileList = allFiles();

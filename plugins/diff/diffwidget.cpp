@@ -308,7 +308,7 @@ void DiffWidget::openURL( const KUrl& url )
 
   connect( job, SIGNAL(data( KIO::Job *, const QByteArray & )),
            this, SLOT(slotAppend( KIO::Job*, const QByteArray& )) );
-  connect( job, SIGNAL(result( KIO::Job * )),
+  connect( job, SIGNAL(result( KJob * )),
            this, SLOT(slotFinished()) );
 }
 

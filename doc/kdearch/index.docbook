@@ -2409,14 +2409,14 @@ void FooClass::findType()
 {
     KUrl url("http://developer.kde.org/favicon.ico");
     KIO::MimetypeJob *job = KIO::mimetype(url);
-    connect( job, SIGNAL(result(KIO::Job*)),
-             this, SLOT(mimeResult(KIO::Job*)) );
+    connect( job, SIGNAL(result(KJob*)),
+             this, SLOT(mimeResult(KJob*)) );
 }
 
-void FooClass::mimeResult(KIO::Job *job)
+void FooClass::mimeResult(KJob *job)
 {
     if (job->error())
-        job->showErrorDialog();
+	static_cast&lt;KIO::Job*&gt;(job)->showErrorDialog();
     else
         cout &lt;&lt; "MIME type: " &lt;&lt; ((KIO::MimetypeJob *)job)->mimetype() &lt;&lt; endl;
 }
