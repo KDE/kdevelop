@@ -66,7 +66,7 @@ void ConfigWidgetProxy::slotConfigWidget( KDialogBase * dlg )
 		++it;
 	}
 
-	connect( dlg, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT( slotAboutToShowPage(QWidget*)) );
+	connect( dlg, SIGNAL(currentPageChanged(QWidget*)), this, SLOT( slotAboutToShowPage(QWidget*)) );
 	connect( dlg, SIGNAL(destroyed()), this, SLOT(slotConfigWidgetDestroyed()) );
 }
 
