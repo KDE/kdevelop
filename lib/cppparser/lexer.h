@@ -173,7 +173,7 @@ public:
     void setPosition( int position );
 
     QString text() const;
-    
+
 private:
     int m_type;
     int m_position;
@@ -323,7 +323,7 @@ inline Token::Token()
     : m_type( -1 ),
       m_position( 0 ),
       m_length( 0 ),
-      m_text( NULL )
+      m_text( 0 )
 {
 }
 
@@ -399,12 +399,11 @@ inline int Token::position() const
 
 inline QString Token::text() const
 {
-	if (m_text!=NULL) {
-		return m_text->mid(m_position, m_length);
-	} else {
-		return QString::null;
-	}
-
+    if (m_text!=0) {
+        return m_text->mid(m_position, m_length);
+    } else {
+        return QString::null;
+    }
 }
 
 inline void Token::setStartPosition( int line, int column )
