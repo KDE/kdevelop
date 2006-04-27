@@ -149,7 +149,7 @@ class Token
 {
 public:
     Token();
-    Token( int type, int position, int length, const QString& text );
+    Token( int type, int position, int length, const QString* text );
     Token( const Token& source );
 
     Token& operator = ( const Token& source );
@@ -182,7 +182,7 @@ private:
     int m_startColumn;
     int m_endLine;
     int m_endColumn;
-    QString m_text;
+    const QString* m_text;
 
     friend class Lexer;
     friend class Parser;
@@ -323,11 +323,11 @@ inline Token::Token()
     : m_type( -1 ),
       m_position( 0 ),
       m_length( 0 ),
-      m_text( 0 )
+      m_text( NULL )
 {
 }
 
-inline Token::Token( int type, int position, int length, const QString& text )
+inline Token::Token( int type, int position, int length, const QString* text )
     : m_type( type ),
       m_position( position ),
       m_length( length ),
@@ -399,7 +399,12 @@ inline int Token::position() const
 
 inline QString Token::text() const
 {
-    return m_text.mid(m_position, m_length);
+	if (m_text!=NULL) {
+		return m_text->mid(m_position, m_length);
+	} else {
+		return QString::null;
+	}
+
 }
 
 inline void Token::setStartPosition( int line, int column )

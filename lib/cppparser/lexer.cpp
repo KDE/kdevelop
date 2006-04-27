@@ -46,7 +46,7 @@ inline void qthread_yield()
 
 #endif
 
-#define CREATE_TOKEN(type, start, len) Token( (type), (start), (len), m_source )
+#define CREATE_TOKEN(type, start, len) Token( (type), (start), (len), &m_source )
 #define ADD_TOKEN(tk) m_tokens.insert( m_size++, new Token(tk) );
 
 using namespace std;
@@ -354,6 +354,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
             QString textToInsert;
 
             m_endPtr = currentPosition() + m.body().length();
+
             while( currentChar() ){
 
                 readWhiteSpaces();
@@ -390,6 +391,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
                     textToInsert.append( str + QString::fromLatin1(" ") );
                 }
             }
+
 
 #if defined( KDEVELOP_BGPARSER )
 	    qthread_yield();
