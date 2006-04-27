@@ -122,7 +122,7 @@ AM_CONDITIONAL(include_vba, test "$with_vba" = "yes")
 AC_PATH_PROG(DOT_FOUND, dot, no)
 AC_CHECK_PROG(gmake_prog, gmake, gmake, make)
 AC_CHECK_PROGS(TAR, gnutar gtar tar, [AM_MISSING_PROG(tar)])
-AC_CHECK_PROGS(GZIP, gzip, [AM_MISSING_PROG(gzip)])
+AC_CHECK_PROG(GZIP_COMMAND, gzip, gzip)
 AC_DEFINE_UNQUOTED(MAKE_COMMAND, "$gmake_prog", [GNU make command])
 
 CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS"
