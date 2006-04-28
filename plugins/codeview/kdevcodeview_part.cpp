@@ -55,6 +55,8 @@ KDevCodeViewPart::KDevCodeViewPart( QObject *parent,
 
     setInstance( KDevCodeViewFactory::instance() );
 
+    if (!languageSupport())
+        return;
     KDevCodeProxy * model = languageSupport() ->codeProxy();
     if ( !model )
         return ;
