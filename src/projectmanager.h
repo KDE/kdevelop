@@ -4,7 +4,6 @@
 
 #include <qstring.h>
 #include <qobject.h>
-#include <q3dict.h>
 
 
 #include <kxmlguiclient.h>

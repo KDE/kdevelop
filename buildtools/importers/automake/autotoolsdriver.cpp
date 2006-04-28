@@ -51,7 +51,7 @@ int Driver::parseFile(const char *fileName, ProjectAST **ast)
 
 int Driver::parseFile(const QString& fileName, ProjectAST **ast)
 {
-	return parseFile(fileName.ascii(), ast);
+    return parseFile(fileName.toAscii().constData(), ast);
 }
 
 int Driver::parseFile(KUrl fileName, ProjectAST **ast)

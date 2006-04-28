@@ -19,9 +19,7 @@
  ***************************************************************************/
 #include "kdevideextension.h"
 
-#include <q3vbox.h>
 #include <qcheckbox.h>
-#include <q3buttongroup.h>
 #include <qradiobutton.h>
 
 #include <klocale.h>
@@ -59,22 +57,22 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
     gsw->projectsURL->setMode((int)KFile::Directory);
 
     config->setGroup("General Options");
-    gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
-    gsw->outputViewFontCombo->setCurrentFont( config->readFontEntry( "OutputViewFont" ).family() );
+    gsw->lastProjectCheckbox->setChecked(config->readEntry("Read Last Project On Startup",true));
+    gsw->outputViewFontCombo->setCurrentFont( config->readEntry( "OutputViewFont", QFont() ).family() );
     config->setGroup("MakeOutputView");
-    gsw->lineWrappingCheckBox->setChecked(config->readBoolEntry("LineWrapping",true));
-    gsw->dirNavigMsgCheckBox->setChecked(config->readBoolEntry("ShowDirNavigMsg",false));
-    gsw->compileOutputCombo->setCurrentItem(config->readNumEntry("CompilerOutputLevel",2));
+    gsw->lineWrappingCheckBox->setChecked(config->readEntry("LineWrapping",true));
+    gsw->dirNavigMsgCheckBox->setChecked(config->readEntry("ShowDirNavigMsg",false));
+    gsw->compileOutputCombo->setCurrentIndex(config->readEntry("CompilerOutputLevel",2));
     config->setGroup("General Options");
-    gsw->projectsURL->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homePath()+"/"));
-    gsw->designerButtonGroup->setButton( config->readNumEntry( "DesignerApp", 0 ) );
+    gsw->projectsURL->setURL(config->readEntry("DefaultProjectsDir", QDir::homePath()+"/"));
+    gsw->designerButtonGroup->setButton( config->readEntry( "DesignerApp", 0 ) );
 
     config->setGroup("TerminalEmulator");
-    gsw->terminalButtonGroup->setButton( config->readNumEntry( "UseKDESetting", 0 ) );
+    gsw->terminalButtonGroup->setButton( config->readEntry( "UseKDESetting", 0 ) );
     gsw->terminalEdit->setText( config->readEntry( QLatin1String("TerminalApplication"), QString("konsole") ) );
 }
 
-void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase *dlg)
+void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase* /*dlg*/)
 {
     KConfig* config = KGlobal::config();
 
@@ -87,7 +85,7 @@ void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase *dlg)
     config->writeEntry("LineWrapping",gsw->lineWrappingCheckBox->isChecked());
     config->writeEntry("ShowDirNavigMsg",gsw->dirNavigMsgCheckBox->isChecked());
     //current item id must be in sync with the enum!
-    config->writeEntry("CompilerOutputLevel",gsw->compileOutputCombo->currentItem());
+    config->writeEntry("CompilerOutputLevel",gsw->compileOutputCombo->currentIndex());
     config->sync();
     if( KDevPlugin *makeExt = API::getInstance()->pluginController()->extension("KDevelop/MakeFrontend"))
     {
