@@ -156,12 +156,16 @@ QDomElement DomUtil::namedChildElement( QDomElement& el, const QString& name )
 
 QDomElement DomUtil::createElementByPath(QDomDocument &doc, const QString &path)
 {
-    QStringList l = path.split('/', QString::KeepEmptyParts);
+    QStringList l = path.split('/', QString::SkipEmptyParts);
 
     QDomElement el;
-      if(&doc) el =  doc.documentElement();
-    QStringList::ConstIterator it;
-    for (it = l.begin(); it != l.end(); ++it)
+    el =  doc.documentElement();
+    QStringList::ConstIterator it = l.begin();
+    if (el.isNull() && it != l.end()) {
+        el = doc.createElement(*it);
+        ++it;
+    }
+    for (; it != l.end(); ++it)
         el = DomUtil::namedChildElement( el, *it );
         
     while (!el.firstChild().isNull())
