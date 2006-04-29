@@ -2,13 +2,14 @@
 #define __DOCUMENTATIONPART_H__
 
 #include <kdevhtmlpart.h>
+#include "shellexport.h"
 
 /**
 HTML documentation part.
 
 Implements shell-dependent "duplicate" and "open in new window" actions of KDevHTMLPart.
 */
-class HTMLDocumentationPart : public KDevHTMLPart
+class KDEVSHELL_EXPORT HTMLDocumentationPart : public KDevHTMLPart
 {
   Q_OBJECT
 

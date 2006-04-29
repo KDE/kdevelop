@@ -15,6 +15,7 @@
 #include <qdialog.h>
 #include <qdom.h>
 #include <qstringlist.h>
+#include "shellexport.h"
 
 class Q3ListView;
 class Q3ListViewItem;
@@ -25,7 +26,7 @@ class QLabel;
 /**
 Plugin selection widget.
 */
-class PartSelectWidget : public QWidget
+class KDEVSHELL_EXPORT PartSelectWidget : public QWidget
 {
     Q_OBJECT
 

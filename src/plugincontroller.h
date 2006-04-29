@@ -8,6 +8,7 @@
 #include <kdevplugincontroller.h>
 
 #include <profileengine.h>
+#include "shellexport.h"
 
 class KXMLGUIClient;
 class KService;
@@ -19,7 +20,7 @@ class ProjectInfo;
 Plugin controller implementation.
 Loads and unloads plugins.
 */
-class PluginController : public KDevPluginController
+class KDEVSHELL_EXPORT PluginController : public KDevPluginController
 {
   Q_OBJECT
 

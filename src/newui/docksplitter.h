@@ -22,6 +22,7 @@
 
 #include <qsplitter.h>
 #include <qlist.h>
+#include "dexport.h"
 
 namespace Ideal {
 
@@ -30,7 +31,7 @@ class DockWidget;
 /**
 @short Splitter for docks
 */
-class DockSplitter: public QSplitter {
+class DUI_EXPORT DockSplitter: public QSplitter {
     Q_OBJECT
 public:
     DockSplitter(Qt::Orientation orientation, QWidget *parent = 0);

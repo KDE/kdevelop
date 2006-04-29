@@ -4,7 +4,7 @@
     <author>The KDevelop Authors</author>
     <email>kdevelop-devel@kdevelop.org</email>
     <version>$VERSION$</version>
-    <projectmanagement>KDevKDEAutoProject</projectmanagement>
+    <projectmanagement>KDevCustomProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
       <keyword>Qt</keyword>
@@ -21,6 +21,7 @@
       <part>kdevvalgrind</part>
     </ignoreparts>
     <versioncontrol>kdevsubversion</versioncontrol>
+    <defaultencoding/>
   </general>
   <kdevfileview>
     <groups>
@@ -195,7 +196,19 @@
       <inlineGet>true</inlineGet>
       <inlineSet>true</inlineSet>
     </creategettersetter>
-    <references/>
+    <references>
+      <pcs>Qt 4</pcs>
+    </references>
+    <qt>
+      <used>true</used>
+      <version>4</version>
+      <root>/home/qt/4.1</root>
+    </qt>
+    <splitheadersource>
+      <enabled>false</enabled>
+      <synchronize>true</synchronize>
+      <orientation>Vertical</orientation>
+    </splitheadersource>
   </kdevcppsupport>
   <kdevdocumentation>
     <projectdoc>
@@ -204,4 +217,37 @@
       <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
+  <kdevcustomproject>
+    <run>
+      <directoryradio>build</directoryradio>
+      <customdirectory>/</customdirectory>
+      <mainprogram>src/kdevelop</mainprogram>
+      <programargs/>
+      <terminal>false</terminal>
+      <autocompile>true</autocompile>
+      <envvars/>
+    </run>
+    <build>
+      <buildtool>make</buildtool>
+      <builddir>/home/kde/trunk/build/KDE/kdevelop</builddir>
+    </build>
+    <make>
+      <abortonerror>false</abortonerror>
+      <numberofjobs>1</numberofjobs>
+      <prio>0</prio>
+      <dontact>false</dontact>
+      <makebin>makeobj</makebin>
+      <defaulttarget/>
+      <makeoptions/>
+      <selectedenvironment>default</selectedenvironment>
+      <environments>
+        <default/>
+      </environments>
+    </make>
+  </kdevcustomproject>
+  <ctagspart>
+    <customArguments/>
+    <customTagfilePath>/home/kde/trunk/KDE/kdevelop/tags</customTagfilePath>
+    <activeTagsFiles/>
+  </ctagspart>
 </kdevelop>

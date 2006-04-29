@@ -3,7 +3,7 @@ kde4_header()
 add_subdirectory(rpp2) 
 add_subdirectory(tests) 
 
-include_directories(${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_definitions(-fPIC)
 

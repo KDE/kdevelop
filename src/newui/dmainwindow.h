@@ -23,6 +23,7 @@
 #include <kparts/mainwindow.h>
 
 #include "ddockwidget.h"
+#include "dexport.h"
 
 class DTabWidget;
 namespace Ideal {
@@ -30,7 +31,7 @@ namespace Ideal {
 }
 
 /**Main window which provides simplified IDEA mode.*/
-class DMainWindow: public KParts::MainWindow {
+class DUI_EXPORT DMainWindow: public KParts::MainWindow {
     Q_OBJECT
 public:
     DMainWindow(QWidget *parent = 0, const char *name = 0);

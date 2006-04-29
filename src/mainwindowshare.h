@@ -20,6 +20,7 @@
 #include <qobject.h>
 #include <qlist.h>
 #include <qmenu.h>
+#include "shellexport.h"
 
 class KAction;
 class KToggleAction;
@@ -29,7 +30,7 @@ namespace KParts {
 /**
 Shared main window functionality.
 */
-class MainWindowShare : public QObject
+class KDEVSHELL_EXPORT MainWindowShare : public QObject
 {
   Q_OBJECT
 public:

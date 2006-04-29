@@ -21,6 +21,7 @@
 #include <qdom.h>
 #include <q3dict.h>
 #include <q3valuelist.h>
+#include "shellexport.h"
 
 class QWidget;
 class KUrl;
@@ -32,7 +33,7 @@ class KDevPlugin;
  * Session stuff that is not related to a certain project doesn't belong to here;
  * it must be saved in a program session which likely is "kdeveloprc".
  **/
-class ProjectSession : public QObject
+class KDEVSHELL_EXPORT ProjectSession : public QObject
 {
   Q_OBJECT
 // methods

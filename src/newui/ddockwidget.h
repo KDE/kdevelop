@@ -23,6 +23,7 @@
 #include <QMap>
 #include <QList>
 #include <QDockWidget>
+#include "dexport.h"
 
 class QStackedWidget;
 class QToolBar;
@@ -30,7 +31,7 @@ class QActionGroup;
 class KAction;
 class KMainWindow;
 
-class DDockWidget : public QDockWidget {
+class DUI_EXPORT DDockWidget : public QDockWidget {
     Q_OBJECT
 public:
     DDockWidget(Qt::DockWidgetArea area, KMainWindow* mainWindow);

@@ -21,6 +21,7 @@
 #define SHELLEXTENSION_H
 
 #include <qstring.h>
+#include "shellexport.h"
 
 class KDialogBase;
 
@@ -29,7 +30,7 @@ Shell extension.
 Provides application-dependent and shell-independent functionality.
 Shell uses extensions to perform application dependent actions.
 */
-class ShellExtension {
+class KDEVSHELL_EXPORT ShellExtension {
 public:
     virtual ~ShellExtension() {}
 

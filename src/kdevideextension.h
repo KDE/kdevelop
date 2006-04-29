@@ -21,10 +21,11 @@
 #define KDEVIDEEXTENSION_H
 
 #include <shellextension.h>
+#include "shellexport.h"
 
 class SettingsWidget;
 
-class KDevIDEExtension : public ShellExtension {
+class KDEVSHELL_EXPORT KDevIDEExtension : public ShellExtension {
 public:
     static void init();
 

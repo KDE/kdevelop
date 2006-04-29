@@ -21,15 +21,15 @@
 
 #include <kurl.h>
 #include <qstringlist.h>
-//Added by qt3to4:
 #include <Q3ValueList>
+#include "kdevexport.h"
 
 /**
 @short KDevelop profile
 
 A class which represents a profile for KDevelop platform stored on disk.
 */
-class Profile {
+class KDEVPROFILES_EXPORT Profile {
 public:
     /**An entry in the lists that store profile information*/
     struct Entry {

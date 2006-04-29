@@ -9,8 +9,10 @@
 #include <kdeversion.h>
 
 #include <q3widgetstack.h>
+#include "shellexport.h"
 
-class EditorProxy : public QObject
+
+class KDEVSHELL_EXPORT EditorProxy : public QObject
 {
   Q_OBJECT
 

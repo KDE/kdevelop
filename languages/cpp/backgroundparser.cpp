@@ -42,8 +42,8 @@
 #include <ktexteditor/smartinterface.h>
 #include <ktexteditor/document.h>
 
-#include <ThreadWeaver.h>
-#include <JobCollection.h>
+#include <weaver/ThreadWeaver.h>
+#include <weaver/JobCollection.h>
 
 BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
         : QObject( cppSupport ),

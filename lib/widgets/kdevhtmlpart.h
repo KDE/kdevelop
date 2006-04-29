@@ -4,10 +4,10 @@
 #include <stdlib.h>
 
 #include <qdatetime.h>
-//Added by qt3to4:
 #include <QLinkedList>
 
 #include <khtml_part.h>
+#include "kdevexport.h"
 
 /**
 @file kdevhtmlpart.h
@@ -45,7 +45,7 @@ Represents customized BrowserViewGUI mode of KHTMLPart. Provides also actions fo
 .
 It has it's own popup menu and font/zoom settings.
 */
-class KDevHTMLPart : public KHTMLPart
+class KDEVWIDGETS_EXPORT KDevHTMLPart : public KHTMLPart
 {
     Q_OBJECT
 

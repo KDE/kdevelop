@@ -24,6 +24,7 @@
 #include <kdevplugin.h>
 #include <kdevmainwindow.h>
 #include <kdevdocumentcontroller.h>
+#include "shellexport.h"
 
 class KAction;
 class KMenu;
@@ -33,7 +34,7 @@ namespace KParts {
     class ReadOnlyPart;
 }
 
-class SimpleMainWindow: public DMainWindow, public KDevMainWindow
+class KDEVSHELL_EXPORT SimpleMainWindow: public DMainWindow, public KDevMainWindow
 {
     Q_OBJECT
 public:

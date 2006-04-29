@@ -21,10 +21,11 @@
 #define DTABWIDGET_H
 
 #include <ktabwidget.h>
+#include "dexport.h"
 
 class QToolButton;
 
-class DTabWidget: public KTabWidget {
+class DUI_EXPORT DTabWidget: public KTabWidget {
     Q_OBJECT
 public:
     DTabWidget(QWidget *parent=0, const char *name=0);

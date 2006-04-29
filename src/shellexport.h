@@ -1,5 +1,5 @@
 /*
-   This file is part of the KDevelop platform
+   This file is part of KDevelop
    Copyright (c) 2006 Matt Rogers <mattr@kde.org>
    Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVEXPORT_H
-#define KDEVEXPORT_H
+#ifndef SHELLEXPORT_H
+#define SHELLEXPORT_H
 
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
@@ -36,12 +36,7 @@
 */
 
 /* export statements for unix */
-#define KDEVINTERFACES_EXPORT KDE_EXPORT
-#define KDEVPROJECTMANAGER_EXPORT KDE_EXPORT
-#define KDEVUTIL_EXPORT KDE_EXPORT
-#define KDEVWIDGETS_EXPORT KDE_EXPORT
-#define KDEVWEAVER_EXPORT KDE_EXPORT
-#define KDEVPROFILES_EXPORT KDE_EXPORT
+#define KDEVSHELL_EXPORT KDE_EXPORT
 
-#endif /* KDEVEXPORT_H*/
+#endif /* SHELLEXPORT_H*/
 

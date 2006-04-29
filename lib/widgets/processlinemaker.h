@@ -21,6 +21,7 @@
 #define _PROCESSLINEMAKER_H_
 
 #include <qobject.h>
+#include "kdevexport.h"
 
 /**
 @file processlinemaker.h
@@ -32,7 +33,7 @@ class KProcess;
 /**
 Convenience class to catch output of KProcess.
 */
-class ProcessLineMaker : public QObject
+class KDEVWIDGETS_EXPORT ProcessLineMaker : public QObject
 {
 Q_OBJECT
 

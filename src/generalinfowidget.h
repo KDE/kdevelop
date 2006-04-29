@@ -15,13 +15,14 @@
 #include <qdom.h>
 
 #include "generalinfowidgetbase.h"
+#include "shellexport.h"
 
 class QDomDocument;
 
 /**
 General project information widget.
 */
-class GeneralInfoWidget : public GeneralInfoWidgetBase {
+class KDEVSHELL_EXPORT GeneralInfoWidget : public GeneralInfoWidgetBase {
     Q_OBJECT
 
 public:

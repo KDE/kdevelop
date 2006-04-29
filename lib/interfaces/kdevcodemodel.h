@@ -123,7 +123,7 @@ private:
     KTextEditor::SmartRange* m_definition;
 };
 
-class KDevCodeModel: public KDevItemModel
+class KDEVINTERFACES_EXPORT KDevCodeModel: public KDevItemModel
 {
     Q_OBJECT
 public:

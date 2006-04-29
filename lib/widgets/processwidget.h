@@ -22,6 +22,7 @@
 
 #include <QtGui/QListWidget>
 #include <kprocess.h>
+#include "kdevexport.h"
 
 /**
 @file processwidget.h
@@ -33,7 +34,7 @@ class ProcessLineMaker;
 /**
 Listbox item for process widgets.
 */
-class ProcessListBoxItem : public QListWidgetItem
+class KDEVWIDGETS_EXPORT ProcessListBoxItem : public QListWidgetItem
 {
 public:
     enum Type { Diagnostic, Normal, Error };
@@ -49,7 +50,7 @@ private:
  * This class is designed to share code between the
  * grep and application output widgets.
  */
-class ProcessWidget : public QListWidget
+class KDEVWIDGETS_EXPORT ProcessWidget : public QListWidget
 {
     Q_OBJECT
 

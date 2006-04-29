@@ -23,7 +23,7 @@ install_targets(/lib newui)
 
 ########### install files ###############
 
-install_files(/include/kdevelop/shell FILES dmainwindow.h ddockwidget.h docksplitter.h dtabwidget.h)
+install_files(/include/kdevelop/shell FILES dmainwindow.h ddockwidget.h docksplitter.h dtabwidget.h dexport.h)
 
 
 kde4_footer()

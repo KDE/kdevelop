@@ -8,6 +8,7 @@
 
 #include <kxmlguiclient.h>
 #include <kservice.h>
+#include "shellexport.h"
 
 class KUrl;
 class KAction;
@@ -35,7 +36,7 @@ public:
 Project manager.
 Loads and unloads projects.
 */
-class ProjectManager : public QObject, public KXMLGUIClient
+class KDEVSHELL_EXPORT ProjectManager : public QObject, public KXMLGUIClient
 {
   Q_OBJECT
 

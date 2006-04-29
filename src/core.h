@@ -2,11 +2,9 @@
 #define _CORE_H_
 
 #include <qregexp.h>
-
 #include <kparts/partmanager.h>
-
-
 #include "kdevcore.h"
+#include "shellexport.h"
 
 namespace MainWindowUtils{
 
@@ -16,7 +14,7 @@ QString beautifyToolTip(const QString& text);
 /**
 Core implementation.
 */
-class Core : public KDevCore
+class KDEVSHELL_EXPORT Core : public KDevCore
 {
   Q_OBJECT
 

@@ -12,6 +12,7 @@
 #include <kurl.h>
 
 #include <ktexteditor/modificationinterface.h>
+#include "shellexport.h"
 
 namespace KParts
 {
@@ -39,7 +40,7 @@ class KDevHTMLPart;
 /**
 Implementation for the KDevDocumentController Interface
 */
-class DocumentController : public KDevDocumentController
+class KDEVSHELL_EXPORT DocumentController : public KDevDocumentController
 {
     Q_OBJECT
 public:

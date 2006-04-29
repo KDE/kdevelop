@@ -14,6 +14,7 @@
 
 #include <kstatusbar.h>
 #include <qmap.h>
+#include "shellexport.h"
 
 class QLabel;
 
@@ -23,7 +24,7 @@ namespace KParts { class Part; }
 /**
 Status bar.
 */
-class KDevStatusBar : public KStatusBar
+class KDEVSHELL_EXPORT KDevStatusBar : public KStatusBar
 {
     Q_OBJECT
 

@@ -21,8 +21,10 @@
 #define KDEVASSISTANTEXTENSION_H
 
 #include "shellextension.h"
+#include "shellexport.h"
 
-class KDevAssistantExtension : public ShellExtension {
+
+class KDEVSHELL_EXPORT KDevAssistantExtension : public ShellExtension {
 public:
     static void init();
 

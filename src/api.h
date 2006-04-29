@@ -3,11 +3,12 @@
 
 
 #include "kdevapi.h"
+#include "shellexport.h"
 
 /**
 API implementation.
 */
-class API : public KDevApi
+class KDEVSHELL_EXPORT API : public KDevApi
 {
 public:
 

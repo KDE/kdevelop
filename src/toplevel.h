@@ -4,14 +4,14 @@
 #include <kdemacros.h>
 
 #include "kdevmainwindow.h"
-
+#include "shellexport.h"
 
 /**\brief This class handles the single object of type KDevMainWindow.
 
 It is completely static (all methods and attributes).
 */
 
-class TopLevel
+class KDEVSHELL_EXPORT TopLevel
 {
 public:
 

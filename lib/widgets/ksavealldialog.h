@@ -23,6 +23,7 @@
 #include <QStringList>
 
 #include <kdialog.h>
+#include "kdevexport.h"
 
 class QTreeWidget;
 class KDevDocument;
@@ -35,7 +36,7 @@ Dialogs to save multiple files.
 /**
 Dialog to save selected files.
 */
-class KSaveSelectDialog : public KDialog
+class KDEVWIDGETS_EXPORT KSaveSelectDialog : public KDialog
 {
 	Q_OBJECT
 	
