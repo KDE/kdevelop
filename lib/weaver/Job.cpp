@@ -14,10 +14,12 @@
    $Id: Job.cpp 20 2005-08-08 21:02:51Z mirko $
 */
 
+#include <QSet>
 #include <QMutex>
 #include <QObject>
+#include <QMultiMap>
+#include <QMetaObject>
 #include <QWaitCondition>
-
 #include <DebuggingAids.h>
 #include <Thread.h>
 
@@ -25,7 +27,7 @@
 
 namespace ThreadWeaver {
 
-    typedef QMultiMap<Job*, Job*> JobMultiMap;
+    class JobMultiMap : public QMultiMap<Job*, Job*> {};
     Q_GLOBAL_STATIC(JobMultiMap, g_sm_dep)
 
     QMutex *Job::sm_mutex;
@@ -48,7 +50,7 @@ namespace ThreadWeaver {
         resolveDependencies();
     }
 
-    QMultiMap<Job*, Job*> *Job::sm_dep()
+    JobMultiMap* Job::sm_dep()
     {
         return g_sm_dep();
     }
@@ -147,8 +149,41 @@ namespace ThreadWeaver {
         }
     }
 
+    QList<Job*> Job::getDependencies() const
+    {
+        QList<Job*> result;
+        QMutexLocker l(sm_mutex);
+        JobMultiMap::const_iterator it;
+        for ( it = sm_dep()->begin(); it != sm_dep()->end(); ++it )
+        {
+            if ( it.key() == this )
+            {
+                result.append( it.value() );
+            }
+        }
+        return result;
+    }
+
     void Job::aboutToBeQueued ( WeaverInterface* )
     {
+    }
+
+    void Job::DumpJobDependencies()
+    {
+        QMutexLocker l(sm_mutex);
+
+        debug ( 0, "Job Dependencies (left depends on right side):\n" );
+        for ( JobMultiMap::const_iterator it = sm_dep()->begin(); it != sm_dep()->end(); ++it )
+        {
+            debug( 0, "  : %p (%s%s) <-- %p (%s%s)\n",
+                   it.key(),
+                   it.key()->objectName().isEmpty() ? "" : qPrintable ( it.key()->objectName() + tr ( " of type " ) ),
+                   it.key()->metaObject()->className(),
+                   it.value(),
+                   it.value()->objectName().isEmpty() ? "" : qPrintable ( it.value()->objectName() + tr ( " of type " ) ),
+                   it.value()->metaObject()->className() );
+        }
+        debug ( 0, "-----------------\n" );
     }
 
 }

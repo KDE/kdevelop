@@ -51,7 +51,6 @@ namespace ThreadWeaver {
         void setState( StateId );
         void registerObserver ( WeaverObserver* );
         virtual void enqueue (Job*);
-	virtual void enqueue (const QList<Job*>& jobs);
         virtual bool dequeue (Job*);
         virtual void dequeue ();
 	virtual void finish();

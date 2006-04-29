@@ -28,7 +28,7 @@ namespace ThreadWeaver {
     class SuspendingState : public State
     {
     public:
-	SuspendingState( WeaverImpl *weaver)
+	explicit SuspendingState( WeaverImpl *weaver)
 	    : State (weaver, Suspending)
 	    {
 	    }

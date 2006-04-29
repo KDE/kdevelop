@@ -28,7 +28,7 @@ namespace ThreadWeaver {
     class DestructedState : public State
     {
     public:
-	DestructedState( WeaverImpl *weaver)
+	explicit DestructedState( WeaverImpl *weaver)
 	    : State (weaver, Destructed)
 	    {
 	    }

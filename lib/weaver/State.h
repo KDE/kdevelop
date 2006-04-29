@@ -60,7 +60,7 @@ namespace ThreadWeaver {
     {
     public:
         /** Default constructor. */
-        State( WeaverImpl *weaver,  const StateId id = InConstruction );
+        explicit State( WeaverImpl *weaver,  const StateId id = InConstruction );
 
 	/** Destructor. */
         virtual ~State();

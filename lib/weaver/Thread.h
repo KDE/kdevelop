@@ -40,7 +40,7 @@ namespace ThreadWeaver {
 
             @param parent the parent WeaverImpl
         */
-        Thread(WeaverImpl *parent=0);
+        explicit Thread(WeaverImpl *parent=0);
 
 	/** The destructor. */
         ~Thread();

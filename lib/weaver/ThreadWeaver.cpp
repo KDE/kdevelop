@@ -61,7 +61,7 @@ namespace ThreadWeaver {
       are finished. This way every individual operation will be executed as
       soon as it becomes possible. Connect to the final jobs done() signal to
       be notified when all parts of the whole operations have been
-      executed. If necessary (if there is more than one fina object), create a
+      executed. If necessary (if there is more than one final object), create a
       dummy job object that depends on all of them to have one central end
       point of execution.</li> </ul>
 
@@ -151,7 +151,8 @@ namespace ThreadWeaver {
       <p>Another very important issue is application processing
       flow. Especially GUI applications to not follow the traditional
       imperative programming pattern. Execution flow is more network-like,
-      with chunks of code that depend on others. Tools to represent those
+      with chunks of code that depend on others to finish processing before
+      they can touch their data. Tools to represent those
       networks to set up your applications order of execution are rare, and
       usually leave it to the developers to code the execution order of the
       instructions. This solutions are usually not flexible and do not adapt
@@ -204,7 +205,7 @@ namespace ThreadWeaver {
 
       <p>WeaverObservers are used to receive more informative events about the
       thread states and job execution. They can be used to provide progress or
-      debugging information or to implement GUIs on the thread
+      debugging information or to implement GUIs to show the thread
       activity. Observers can be attached to Weavers and will disconnect
       automatically when they are deleted.</p>
 
@@ -291,11 +292,6 @@ namespace ThreadWeaver {
     void Weaver::enqueue (Job* j)
     {
         m_weaverinterface->enqueue ( j );
-    }
-
-    void Weaver::enqueue (const QList<Job*>& jobs)
-    {
-        m_weaverinterface->enqueue ( jobs );
     }
 
     bool Weaver::dequeue (Job* j)

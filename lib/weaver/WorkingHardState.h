@@ -26,7 +26,7 @@ namespace ThreadWeaver {
     class WorkingHardState : public State
     {
     public:
-	WorkingHardState( WeaverImpl *weaver)
+	explicit WorkingHardState( WeaverImpl *weaver)
 	    : State (weaver, WorkingHard)
 	    {
 	    }

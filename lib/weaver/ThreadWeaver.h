@@ -24,6 +24,7 @@
 #include <State.h>
 #include <DebuggingAids.h>
 #include "WeaverInterface.h"
+#include "kdevexport.h"
 
 namespace ThreadWeaver {
 
@@ -46,7 +47,7 @@ namespace ThreadWeaver {
         (application developers). To separate those two different API parts,
         Weaver only provides the interface supposed to be used by developers
         of multithreaded applications. */
-    class Weaver : public WeaverInterface
+    class KDEVWEAVER_EXPORT Weaver : public WeaverInterface
     {
         Q_OBJECT
     public:
@@ -58,7 +59,8 @@ namespace ThreadWeaver {
         virtual ~Weaver ();
 	const State& state() const;
         void registerObserver ( WeaverObserver* );
-	/** Return the global Weaver instance.
+
+        /** Return the global Weaver instance.
 	    In some cases, a global Weaver object per application is
 	    sufficient for the applications purpose. If this is the case,
 	    query instance() to a pointer to a global instance.
@@ -67,7 +69,6 @@ namespace ThreadWeaver {
 	*/
 	static ThreadWeaver::Weaver* instance();
         virtual void enqueue (Job*);
-	virtual void enqueue (const QList<Job*>& jobs);
         virtual bool dequeue (Job*);
         virtual void dequeue ();
 	virtual void finish();

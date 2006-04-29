@@ -39,7 +39,6 @@ namespace ThreadWeaver {
 
     void WorkingHardState::resume()
     {
-
     }
 
     Job* WorkingHardState::applyForWork ( Thread *th,  Job* )

@@ -36,7 +36,7 @@ namespace ThreadWeaver {
     class WeaverInterface : public QObject {
         Q_OBJECT
     public:
-        WeaverInterface ( QObject* parent = 0 );
+        explicit WeaverInterface ( QObject* parent = 0 );
         virtual ~WeaverInterface() {}
         /** Return the state of the weaver object. */
         virtual const State& state() const = 0;
@@ -60,15 +60,6 @@ namespace ThreadWeaver {
             all threads are busy.
         */
         virtual void enqueue ( Job* ) = 0;
-        /** Enqueue all jobs in the given list.
-	    This is an atomic operation, no jobs will start
-	    before all jobs in the list are enqueued.
-	    If you need a couple of jobs done and want to receive the
-	    finished () signal afterwards, use this method to queue
-	    them. Otherwise, when enqueueing your jobs
-	    individually, there is a chance that you receive more than
-	    one finished signal. */
-        virtual void enqueue (const QList<Job*>& jobs) = 0;
         /** Remove a job from the queue.
             If the job was queued but not started so far, it is simple
             removed from the queue. For now, it is unsupported to

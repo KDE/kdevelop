@@ -16,8 +16,8 @@
 #ifndef THREADWEAVER_JOB_H
 #define THREADWEAVER_JOB_H
 
+#include <QList>
 #include <QObject>
-#include <QMultiMap>
 #include "kdevexport.h"
 
 class QMutex;
@@ -28,6 +28,7 @@ namespace ThreadWeaver {
     class Thread;
     class WeaverInterface;
     class JobRunHelper;
+    class JobMultiMap;
 
     /** A Job is a simple abstraction of an action that is to be
         executed in a thread context.
@@ -52,7 +53,7 @@ namespace ThreadWeaver {
 
             @param parent the parent QObject
         */
-        Job ( QObject* parent = 0 );
+        explicit Job ( QObject* parent = 0 );
 
 	/** Destructor. */
         virtual ~Job();
@@ -118,10 +119,13 @@ namespace ThreadWeaver {
         */
         bool removeDependency (Job *dep);
 
+        /** Retrieve a list of dependencies of this job. */
+        QList<Job*> getDependencies() const;
+
         /** Query whether the job has an unresolved dependency.
             In case it does, it will not be processed by a thread trying to
             request a job. */
-        bool hasUnresolvedDependencies();
+        virtual bool hasUnresolvedDependencies();
 
     signals:
 	/** This signal is emitted when this job is being processed by a
@@ -129,6 +133,7 @@ namespace ThreadWeaver {
 	void started ( Job* );
 	/** This signal is emitted when the job has been finished. */
 	void done ( Job* );
+
     protected:
         friend class JobRunHelper;
 
@@ -164,13 +169,17 @@ namespace ThreadWeaver {
 	    may only be executed after A has been finished, an entry will be
 	    added with key A and value B. When A is finished, the entry will
 	    be removed. */
-        static QMultiMap<Job*, Job*> *sm_dep();
+        static JobMultiMap* sm_dep();
+//         static QMultiMap<Job*, Job*> *sm_dep();
 	static QMutex *sm_mutex;
     private:
 	QMutex *m_mutex;
 	/** m_finished is set to true when the Job has been executed. */
         bool m_finished;
 
+    public:
+        /** This method should be useful for debugging purposes. */
+        static void DumpJobDependencies();
     };
 
 }

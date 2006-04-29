@@ -42,7 +42,7 @@ namespace ThreadWeaver {
     {
         Q_OBJECT
     public:
-        WeaverObserver ( QObject *parent = 0 );
+        explicit WeaverObserver ( QObject *parent = 0 );
         virtual ~WeaverObserver();
     signals:
         void threadStarted ( Thread* );

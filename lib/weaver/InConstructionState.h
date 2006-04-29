@@ -28,7 +28,7 @@ namespace ThreadWeaver {
     class InConstructionState : public State
     {
     public:
-	InConstructionState( WeaverImpl *weaver)
+	explicit InConstructionState( WeaverImpl *weaver)
 	    : State (weaver, InConstruction)
 	    {
 	    }

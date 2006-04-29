@@ -27,7 +27,7 @@ namespace ThreadWeaver {
     class ShuttingDownState : public State
     {
     public:
-	ShuttingDownState( WeaverImpl *weaver)
+	explicit ShuttingDownState( WeaverImpl *weaver)
 	    : State (weaver, ShuttingDown)
 	    {
 	    }
