@@ -21,6 +21,7 @@
 
 #include <qobject.h>
 #include <qlist.h>
+#include "kdevexport.h"
 
 /**
 @file kdevcoderepository.h
@@ -45,7 +46,7 @@ never or rarely changes. System libraries are perfect examples of such code.
 Symbols from code contained in project files are better stored in memory
 symbol store like @ref CodeModel.
 */
-class KDevCodeRepository : public QObject
+class KDEVINTERFACES_EXPORT KDevCodeRepository : public QObject
 {
     Q_OBJECT
 public:

@@ -21,8 +21,9 @@ Boston, MA 02110-1301, USA.
 #define KDEVCODEDELEGATE_H
 
 #include <QtGui/QItemDelegate>
+#include "kdevexport.h"
 
-class KDevCodeDelegate: public QItemDelegate
+class KDEVINTERFACES_EXPORT KDevCodeDelegate: public QItemDelegate
 {
     Q_OBJECT
 public:

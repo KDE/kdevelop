@@ -60,7 +60,7 @@ Language support plugin is a good place for:
 (pretty ormatted name).
 .
 */
-class KDevLanguageSupport: public KDevPlugin
+class KDEVINTERFACES_EXPORT KDevLanguageSupport: public KDevPlugin
 {
     Q_OBJECT
 

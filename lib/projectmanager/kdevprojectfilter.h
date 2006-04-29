@@ -25,7 +25,7 @@
 
 class KDevProjectModel;
 
-class KDevProjectOverviewFilter: public KFilterModel
+class KDEVPROJECTMANAGER_EXPORT KDevProjectOverviewFilter: public KFilterModel
 {
   Q_OBJECT
 public:
@@ -36,7 +36,7 @@ protected:
   virtual bool matches(const QModelIndex &index) const;
 };
 
-class KDevProjectDetailsFilter: public KFilterModel
+class KDEVPROJECTMANAGER_EXPORT KDevProjectDetailsFilter: public KFilterModel
 {
   Q_OBJECT
 public:

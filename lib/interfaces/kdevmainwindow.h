@@ -23,7 +23,7 @@
 #define KDEV_MAINWINDOW_H
 
 #include <qstring.h>
-
+#include "kdevexport.h"
 class QWidget;
 class KStatusBar;
 class KMainWindow;
@@ -37,7 +37,7 @@ KDevelop main window interface.
 KDevelop main window interface.
 Provides methods to control the main window of an application.
 */
-class KDevMainWindow
+class KDEVINTERFACES_EXPORT KDevMainWindow
 {
 public:
 

@@ -35,10 +35,10 @@ The interface to the application core and context menu classes.
 
 #include <qstringlist.h>
 #include <qobject.h>
-//Added by qt3to4:
 #include <QMenu>
 
 #include <kurl.h>
+#include "kdevexport.h"
 
 class KDialogBase;
 class KDevPlugin;
@@ -98,7 +98,7 @@ else if context->hasType(MyContext))
 ...
 @endcode
 */
-class Context
+class KDEVINTERFACES_EXPORT Context
 {
 public:
     /**Pre-defined context types. More may be added so it is possible to add custom
@@ -129,7 +129,7 @@ protected:
 };
 
 /**A context for the popup menu in the editor.*/
-class EditorContext: public Context
+class KDEVINTERFACES_EXPORT EditorContext: public Context
 {
 public:
     /**Builds a context for an editor part.
@@ -175,7 +175,7 @@ private:
 /**
 A context for the popup menu in the documentation browser widget.
 */
-class DocumentationContext: public Context
+class KDEVINTERFACES_EXPORT DocumentationContext: public Context
 {
 public:
 
@@ -208,7 +208,7 @@ private:
 A context for the popup menu in file views and other parts that show files.
 Context allows multiple selections of files.
 */
-class FileContext : public Context
+class KDEVINTERFACES_EXPORT FileContext : public Context
 {
 public:
     /**Builds the file context using a @ref KUrl::List
@@ -234,7 +234,7 @@ private:
 /**
 A context for the popup menu in class views.
 */
-class CodeItemContext: public Context
+class KDEVINTERFACES_EXPORT CodeItemContext: public Context
 {
 public:
     /**Builds the context.
@@ -261,7 +261,7 @@ private:
 /**
 A context for the popup menu in project views.
 */
-class ProjectItemContext : public Context
+class KDEVINTERFACES_EXPORT ProjectItemContext : public Context
 {
 public:
     /**Builds the context.
@@ -298,7 +298,7 @@ It defines:
 - etc.
 .
 */
-class KDevCore: public QObject
+class KDEVINTERFACES_EXPORT KDevCore: public QObject
 {
     Q_OBJECT
 public:

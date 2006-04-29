@@ -21,13 +21,14 @@
 #define KDEVTREEVIEW_H
 
 #include <QtGui/QTreeView>
+#include "kdevexport.h"
 
 class KDevItem;
 class KDevItemGroup;
 class KDevItemCollection;
 class KDevItemModel;
 
-class KDevTreeView: public QTreeView
+class KDEVUTIL_EXPORT KDevTreeView: public QTreeView
 {
   Q_OBJECT
 public:

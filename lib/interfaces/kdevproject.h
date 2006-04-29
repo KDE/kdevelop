@@ -52,7 +52,7 @@ Plugins implementing the KDevProject interfaces are used to manage projects.
 Project can be considered as a way of grouping files (in text editors) or
 as a way of providing support for a build system (like it is done in KDevelop IDE buildtools).
 */
-class KDevProject: public KDevPlugin
+class KDEVINTERFACES_EXPORT KDevProject: public KDevPlugin
 {
     Q_OBJECT
 public:

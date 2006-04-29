@@ -23,6 +23,7 @@
 #include <QObject>
 
 #include <kurl.h>
+#include "kdevexport.h"
 
 namespace KParts
 {
@@ -45,7 +46,7 @@ class KDevDocumentController;
  * - clearer distinction in the code between an open document and a url
  *   (which may or may not be open)
  */
-class KDevDocument : public QObject
+class KDEVINTERFACES_EXPORT KDevDocument : public QObject
 {
   Q_OBJECT
 

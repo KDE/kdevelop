@@ -50,7 +50,7 @@ if (mf) {
 @endcode
 @sa KDevPlugin::extension method documentation.
 */
-class KDevMakeFrontend : public KDevPlugin
+class KDEVINTERFACES_EXPORT KDevMakeFrontend : public KDevPlugin
 {
     Q_OBJECT
 

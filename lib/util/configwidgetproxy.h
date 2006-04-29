@@ -23,6 +23,7 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qmap.h>
+#include "kdevexport.h"
 
 class KDevCore;
 class KDialogBase;
@@ -68,7 +69,7 @@ void MyPart::insertConfigWidget( QObject const * dlg, QWidget * page, unsigned i
 Note that this replaces the functionality of typical KDevCore::configWidget() and
 KDevCore::projectConfigWidget() slots.
 */
-class ConfigWidgetProxy : public QObject
+class KDEVUTIL_EXPORT ConfigWidgetProxy : public QObject
 {
 Q_OBJECT
 

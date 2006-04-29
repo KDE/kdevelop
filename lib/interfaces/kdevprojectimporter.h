@@ -21,6 +21,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
+#include "kdevexport.h"
 
 class KDevProjectEditor;
 class KDevProjectModel;
@@ -39,7 +40,7 @@ class KDialogBase;
 KDevProjectImporter is the class you want to implement for integrating
 a project manager in KDevelop.
 */
-class KDevProjectImporter: public QObject
+class KDEVINTERFACES_EXPORT KDevProjectImporter: public QObject
 {
     Q_OBJECT
 public:

@@ -30,7 +30,7 @@ class KDevProjectTargetItem;
 class KDevProjectItem;
 class KUrl;
 
-class KDevProjectManager: public KDevTreeView
+class KDEVPROJECTMANAGER_EXPORT KDevProjectManager: public KDevTreeView
 {
   Q_OBJECT
 public:

@@ -22,6 +22,7 @@
 
 #include <QString>
 #include <QHash>
+#include "kdevexport.h"
 
 class KDevPlugin;
 class QDomDocument;
@@ -34,7 +35,7 @@ FileTemplate class with utility methods to work with file templates.
 /**
 Utilities to work with file templates in the current project.
 */
-class FileTemplate
+class KDEVINTERFACES_EXPORT FileTemplate
 {
 public:
 

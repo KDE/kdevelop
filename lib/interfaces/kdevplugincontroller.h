@@ -24,6 +24,7 @@
 
 #include <kurl.h>
 #include <ktrader.h>
+#include "kdevexport.h"
 
 /**
 @file kdevplugincontroller.h
@@ -36,7 +37,7 @@ class KDevPlugin;
 The base class for KDevelop plugin controller.
 Plugin controller is responsible for quering, loading and unloading available plugins.
 */
-class KDevPluginController: public QObject
+class KDEVINTERFACES_EXPORT KDevPluginController: public QObject
 {
     Q_OBJECT
 public:

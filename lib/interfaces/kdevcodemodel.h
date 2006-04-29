@@ -23,20 +23,21 @@
 #ifndef KDEVCODEMODEL_H
 #define KDEVCODEMODEL_H
 
-#include <kdevitemmodel.h>
+#include "kdevitemmodel.h"
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/rangefeedback.h>
 
 #include <QHash>
 #include <QTime>
 #include <QMutex>
+#include "kdevexport.h"
 
 class KDevCodeItem;
 class KDevCodeModel;
 
 namespace KTextEditor { class SmartRange; }
 
-class KDevCodeItem: public KDevItemCollection, public KTextEditor::SmartRangeWatcher
+class KDEVINTERFACES_EXPORT KDevCodeItem: public KDevItemCollection, public KTextEditor::SmartRangeWatcher
 {
 public:
     KDevCodeItem( const QString &name, KDevItemGroup *parent = 0 );

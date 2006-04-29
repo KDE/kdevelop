@@ -22,10 +22,11 @@
 
 #include <qabstractitemmodel.h>
 #include <qvector.h>
+#include "kdevexport.h"
 
 class KFilterModelPrivate;
 
-class KFilterModel: public QAbstractItemModel
+class KDEVUTIL_EXPORT KFilterModel: public QAbstractItemModel
 {
     Q_OBJECT
     friend class KFilterModelPrivate;

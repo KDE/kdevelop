@@ -21,6 +21,7 @@
 #define KDEVREADWRITEPART_H_
 
 #include <kparts/part.h>
+#include "kdevexport.h"
 
 class KDevApi;
 class KDevMainWindow;
@@ -34,7 +35,7 @@ class QDomDocument;
 class Extension;
 
 
-class KDevReadWritePart : public KParts::ReadWritePart
+class KDEVINTERFACES_EXPORT KDevReadWritePart : public KParts::ReadWritePart
 {
 public:
     KDevReadWritePart( QObject* parent = 0 );

@@ -21,8 +21,9 @@
 #define IMPORTSOURCEFILE_JOB_H
 
 #include <weaver/Job.h>
+#include "kdevexport.h"
 
-class ImportSourceFileJob: public ThreadWeaver::Job
+class KDEVPROJECTMANAGER_EXPORT ImportSourceFileJob: public ThreadWeaver::Job
 {
   Q_OBJECT
 public:

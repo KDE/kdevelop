@@ -24,7 +24,7 @@
 /**
 @author Roberto Raggi
 */
-class KDevProjectEditor: public KDevProjectImporter
+class KDEVINTERFACES_EXPORT KDevProjectEditor: public KDevProjectImporter
 {
     Q_OBJECT
 public:

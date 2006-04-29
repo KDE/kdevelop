@@ -25,13 +25,14 @@
 #include <QtCore/QPair>
 
 #include "kdevsharedptr.h"
+#include "kdevexport.h"
 
 class KDevItem;
 class KDevItemGroup;
 class KDevItemCollection;
 class KDevItemModel;
 
-class KDevItem : public KDevShared
+class KDEVINTERFACES_EXPORT KDevItem : public KDevShared
 {
 public:
   KDevItem(KDevItemGroup *parent)
@@ -93,7 +94,7 @@ private:
 /**
  * The KDevItemGroup class holds a group of KDevItems.
  */
-class KDevItemGroup: public KDevItem
+class KDEVINTERFACES_EXPORT KDevItemGroup: public KDevItem
 {
 public:
   KDevItemGroup(KDevItemGroup *parent)
@@ -129,7 +130,7 @@ public:
  * Implements the KDevItemGroup interface and provides the KDevItemModel
  * with access to the group of items.
  */
-class KDevItemCollection: public KDevItemGroup
+class KDEVINTERFACES_EXPORT KDevItemCollection: public KDevItemGroup
 {
 public:
   explicit KDevItemCollection(const QString &name, KDevItemGroup *parent = 0)
@@ -228,7 +229,7 @@ private:
  * from KDevItemModel and you can store your items in classes derived from
  * KDevItem to get some nice features.
  */
-class KDevItemModel: public QAbstractItemModel
+class KDEVINTERFACES_EXPORT KDevItemModel: public QAbstractItemModel
 {
   Q_OBJECT
 public:

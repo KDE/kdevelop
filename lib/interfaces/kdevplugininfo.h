@@ -20,11 +20,10 @@
 #define KDEVPLUGININFO_H
 
 #include <qvariant.h>
-//Added by qt3to4:
 #include <QList>
 
 #include <kaboutdata.h>
-
+#include "kdevexport.h"
 /**
 @file kdevplugininfo.h
 KDevelop plugin information container class.
@@ -38,7 +37,7 @@ must be added manually using KDevPluginInfo::addAuthor and KDevPluginInfo::addCr
 methods.
 @sa KDevPlugin class documentation for more information about .desktop files.
 */
-class KDevPluginInfo
+class KDEVINTERFACES_EXPORT KDevPluginInfo
 {
 public:
     /**Constructor.

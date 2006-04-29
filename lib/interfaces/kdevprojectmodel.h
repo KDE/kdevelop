@@ -36,7 +36,7 @@ class KDevProjectTargetItem;
  * \li Build Target
  * \li File
  */
-class KDevProjectItem: public KDevItemCollection
+class KDEVINTERFACES_EXPORT KDevProjectItem: public KDevItemCollection
 {
 public:
   KDevProjectItem(const QString &name, KDevItemGroup *parent = 0)
@@ -57,7 +57,7 @@ public:
  * Implementation of the KDevProjectItem interface that is specific to a 
  * folder
  */
-class KDevProjectFolderItem: public KDevProjectItem
+class KDEVINTERFACES_EXPORT KDevProjectFolderItem: public KDevProjectItem
 {
 public:
   KDevProjectFolderItem(const QDir &dir, KDevItemGroup *parent = 0)
@@ -78,7 +78,7 @@ private:
  * Implementation of the KDevProjectItem interface that is specific to a
  * build target
  */
-class KDevProjectTargetItem: public KDevProjectItem
+class KDEVINTERFACES_EXPORT KDevProjectTargetItem: public KDevProjectItem
 {
 public:
   KDevProjectTargetItem(const QString &name, KDevItemGroup *parent = 0)
@@ -92,7 +92,7 @@ public:
  * Implementation of the KDevProjectItem interface that is specific to a
  * file
  */
-class KDevProjectFileItem: public KDevProjectItem
+class KDEVINTERFACES_EXPORT KDevProjectFileItem: public KDevProjectItem
 {
 public:
   KDevProjectFileItem(const QFileInfo &fileInfo, KDevItemGroup *parent = 0)
@@ -110,7 +110,7 @@ private:
   QFileInfo m_fileInfo;
 };
 
-class KDevProjectModel: public KDevItemModel
+class KDEVINTERFACES_EXPORT KDevProjectModel: public KDevItemModel
 {
   Q_OBJECT
 public:

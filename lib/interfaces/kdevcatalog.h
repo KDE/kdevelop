@@ -26,6 +26,7 @@
 #include <QByteArray>
 
 #include "tag.h"
+#include "kdevexport.h"
 
 /**
    @file catalog.h
@@ -40,7 +41,7 @@
    Persistant symbol store is useful to keep information about code that
    never or rarely changes. System libraries are perfect examples of such code.
 */
-class KDevCatalog
+class KDEVINTERFACES_EXPORT KDevCatalog
 {
  public:
   typedef QPair<QByteArray, QVariant> QueryArgument;

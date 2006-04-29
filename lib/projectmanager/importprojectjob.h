@@ -21,10 +21,11 @@
 
 #include <kio/job.h>
 #include <kdevprojectmodel.h>
+#include "kdevexport.h"
 
 class KDevProjectImporter;
 
-class ImportProjectJob: public KIO::Job
+class KDEVPROJECTMANAGER_EXPORT ImportProjectJob: public KIO::Job
 {
     Q_OBJECT
 protected:

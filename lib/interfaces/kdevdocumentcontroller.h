@@ -55,7 +55,7 @@ class KDevDocument;
  * The document controller enables parts to be embedded into the IDE, and control of them.
  * Such parts are usually editors, GUI designers, etc.
 */
-class KDevDocumentController: public KParts::PartManager
+class KDEVINTERFACES_EXPORT KDevDocumentController: public KParts::PartManager
 {
     Q_OBJECT
 

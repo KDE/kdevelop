@@ -28,7 +28,7 @@
 
 #include <qstringlist.h>
 #include <kdevplugin.h>
-
+#include "kdevexport.h"
 /**
 @file kdevappfrontend.h
 Application frontend interface.
@@ -54,7 +54,7 @@ if (apf) {
 @endcode
 @sa KDevPlugin::extension method documentation.
 */
-class KDevAppFrontend : public KDevPlugin
+class KDEVINTERFACES_EXPORT KDevAppFrontend : public KDevPlugin
 {
     Q_OBJECT
 

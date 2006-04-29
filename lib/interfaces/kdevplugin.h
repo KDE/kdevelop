@@ -23,6 +23,7 @@
 #include <qobject.h>
 #include <kxmlguiclient.h>
 #include "kdevapi.h"
+#include "kdevexport.h"
 
 /** @todo remove this include when kdelibs development settled down.
  #include <Q3ValueList> is needed to use KTrader::OfferList as of current kdelibs4_snapshot
@@ -108,7 +109,7 @@ and writing factories for plugins.
 @sa KDevCore class documentation for an information about features which are available to plugins
 from shell applications.
 */
-class KDevPlugin: public QObject, public KXMLGUIClient
+class KDEVINTERFACES_EXPORT KDevPlugin: public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 

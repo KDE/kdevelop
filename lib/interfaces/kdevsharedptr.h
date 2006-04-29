@@ -18,7 +18,7 @@
 #ifndef KDevSharedPTR_H
 #define KDevSharedPTR_H
 
-// #include "kdelibs_export.h"
+#include "kdevexport.h"
 
 /**
  * Reference counting for shared objects.  If you derive your object
@@ -37,7 +37,7 @@
  *
  * @author Waldo Bastian <bastian@kde.org>
  */
-class /*KDECORE_EXPORT*/ KDevShared {
+class KDEVINTERFACES_EXPORT KDevShared {
 public:
    /**
     * Standard constructor.  This will initialize the reference count

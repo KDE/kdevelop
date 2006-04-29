@@ -21,7 +21,7 @@
 #define KDEVAPI_H
 
 #include <qobject.h>
-
+#include "kdevexport.h"
 class QStringList;
 class QDomDocument;
 class KDevCore;
@@ -42,7 +42,7 @@ The interface to KDevelop's core components.
 Needs to be implemented in a shell. Developers do not need to use this
 class because @ref KDevPlugin already provides API convenience methods.
 */
-class KDevApi: public QObject
+class KDEVINTERFACES_EXPORT KDevApi: public QObject
 {
     Q_OBJECT
 public:

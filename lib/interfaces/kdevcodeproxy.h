@@ -39,7 +39,7 @@ class KDevCodeAggregate;
  * url that the project encompasses.  These models are then joined together in
  * the manner specified by mode(), and filtered if requested.
  */
-class KDevCodeProxy : public QSortFilterProxyModel
+class KDEVINTERFACES_EXPORT KDevCodeProxy : public QSortFilterProxyModel
 {
     Q_OBJECT
 

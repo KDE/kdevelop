@@ -62,7 +62,7 @@ objects are used for plugin and for plugin factory. This is possible because @re
 class has an operator to cast @ref KDevPluginInfo to @ref KAboutData.
 */
 template <class T, class ParentType = QObject>
-class KDevGenericFactory: public KGenericFactory<T, ParentType>
+class KDEVINTERFACES_EXPORT KDevGenericFactory: public KGenericFactory<T, ParentType>
 {
 public:
     /**Constructor.

@@ -20,7 +20,7 @@
 #define KDEVPROJECTBUILDER_H
 
 #include <qobject.h>
-
+#include "kdevexport.h"
 class KDevProject;
 class KDevProjectItem;
 
@@ -31,7 +31,7 @@ class KDevProjectItem;
 
 Describes a <b>Project Builder</b> to KDevelop's Project Manager.
 */
-class KDevProjectBuilder: public QObject
+class KDEVINTERFACES_EXPORT KDevProjectBuilder: public QObject
 {
     Q_OBJECT
 public:

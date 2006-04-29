@@ -45,7 +45,7 @@ if (df) {
 @endcode
 @sa KDevPlugin::extension method documentation.
 */
-class KDevDiffFrontend : public KDevPlugin
+class KDEVINTERFACES_EXPORT KDevDiffFrontend : public KDevPlugin
 {
   Q_OBJECT
 public:

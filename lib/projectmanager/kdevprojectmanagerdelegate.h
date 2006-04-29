@@ -21,8 +21,9 @@
 #define KDEVPROJECTMANAGERDELEGATE_H
 
 #include <QtGui/QItemDelegate>
+#include "kdevexport.h"
 
-class KDevProjectManagerDelegate: public QItemDelegate
+class KDEVPROJECTMANAGER_EXPORT KDevProjectManagerDelegate: public QItemDelegate
 {
   Q_OBJECT
 public:
