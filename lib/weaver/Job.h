@@ -18,6 +18,7 @@
 
 #include <QObject>
 #include <QMultiMap>
+#include "kdevexport.h"
 
 class QMutex;
 class QWaitCondition;
@@ -43,7 +44,7 @@ namespace ThreadWeaver {
 
     */
 
-    class Job : public QObject
+    class KDEVWEAVER_EXPORT Job : public QObject
     {
         Q_OBJECT
     public:
