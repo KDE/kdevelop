@@ -46,6 +46,9 @@ public:
     virtual bool removeTarget(ProjectTargetDom target, ProjectFolderDom parent);
     virtual Features features() const;
 
+    QList<KDevProjectTargetItem*> KDevQMakeEditor::targets() const;
+    FileItemList KDevQMakeEditor::filesForTarget(KDevProjectTargetItem *) const;
+
     virtual KDevProject *project() const { return m_project; }
    
     virtual KDevProjectEditor *editor() const;
