@@ -83,7 +83,7 @@ install_files(/include/kdevelop/shell FILES
     partselectwidget.h plugincontroller.h projectmanager.h 
     projectsession.h shellextension.h splashscreen.h statusbar.h
     toplevel.h generalinfowidgetbase.h mimewarningdialog.h settingswidget.h
-    simplemainwindow.h documentcontroller.h)
+    simplemainwindow.h documentcontroller.h shellexport.h)
 
 install_files(${CONFIG_INSTALL_DIR} FILES kdeveloprc kdevassistantrc)
 install_files(${DATA_INSTALL_DIR}/kdevelop FILES kdevelopui.rc eventsrc)
