@@ -40,6 +40,27 @@ pp::pp(Preprocessor* preprocessor, QHash<QString, pp_macro*>& environment)
   _M_true_test[iflevel] = 0;
 }
 
+QList<pp::ErrorMessage> pp::errorMessages () const
+{
+  return _M_error_messages;
+}
+
+void pp::clearErrorMessages ()
+{
+  _M_error_messages.clear ();
+}
+
+void pp::reportError (const QString &fileName, int line, int column, const QString &message)
+{
+  ErrorMessage msg;
+  msg.setFileName (fileName);
+  msg.setLine (line);
+  msg.setColumn (column);
+  msg.setMessage (message);
+
+  _M_error_messages.append (msg);
+}
+
 QString pp::processFile(const QString& filename)
 {
   QFile file(filename);
