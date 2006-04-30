@@ -26,8 +26,8 @@
 #include <kurl.h>
 #include <kdebug.h>
 
-#include "pp.h"
 #include "pp-stream.h"
+#include "pp-engine.h"
 
 class PreprocessorPrivate
 {
@@ -38,11 +38,6 @@ public:
 };
 
 QHash<QString, QStringList> includedFiles;
-
-void includeFileHook(const std::string &fileName, const std::string &filePath, FILE *)
-{
-    includedFiles[QString::fromAscii(fileName.data(), int(fileName.size()))].append(QString::fromAscii(filePath.data(), int(filePath.size())));
-}
 
 Preprocessor::Preprocessor()
 {

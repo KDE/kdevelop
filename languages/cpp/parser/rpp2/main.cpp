@@ -18,7 +18,7 @@
   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "pp.h"
+#include "pp-engine.h"
 
 #include <kdebug.h>
 
@@ -32,7 +32,7 @@ int main (int /*argc*/, char *argv[])
   char const *filename = *++argv;
   if (!filename)
     {
-      std::cerr << "usage: pp file.cpp" << std::endl;
+      kDebug() << "usage: pp file.cpp" << endl;
       return EXIT_FAILURE;
     }
 
