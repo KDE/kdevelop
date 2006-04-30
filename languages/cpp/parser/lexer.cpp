@@ -227,8 +227,8 @@ void Lexer::extract_line(int offset, int *line, QString *filename) const
       ++cursor;
 
       cp = buffer;
-      do { *cp++ = *cursor++; } // ### FIXME unsafe!
-      while (*cursor && *cursor != '"');
+      while (*cursor && *cursor != '"')
+      { *cp++ = *cursor++; } // ### FIXME unsafe!
       *cp = '\0';
 
       if (*cursor != '"')
