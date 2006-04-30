@@ -38,7 +38,7 @@ protected:
   virtual void visitTypedef (TypedefAST *);
   virtual void visitFunctionDefinition (FunctionDefinitionAST *);
   virtual void visitSimpleDeclaration (SimpleDeclarationAST *);
-  virtual void visitName(NameAST *);
+  virtual void visitName (NameAST *);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;
