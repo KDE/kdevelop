@@ -21,15 +21,8 @@
 
 #include "pp-scanner.h"
 
-int pp_skip::linesSkipped() const
-{
-  return m_lines;
-}
-
 void pp_skip_blanks::operator()(Stream& input, Stream& output)
 {
-  m_lines = 0;
-
   while (!input.atEnd()) {
     if (input == '\\') {
       ++input;
@@ -39,7 +32,6 @@ void pp_skip_blanks::operator()(Stream& input, Stream& output)
 
       } else {
         ++input;
-        ++m_lines;
         continue;
       }
     }
@@ -52,7 +44,7 @@ void pp_skip_blanks::operator()(Stream& input, Stream& output)
   }
 }
 
-void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output)
+void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output, bool outputText)
 {
   enum {
     MAYBE_BEGIN,
@@ -62,8 +54,6 @@ void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output)
     IN_COMMENT,
     IN_CXX_COMMENT
   } state (MAYBE_BEGIN);
-
-  m_lines = 0;
 
   while (!input.atEnd()) {
     switch (state) {
@@ -104,7 +94,9 @@ void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output)
         return;
     }
 
-    if (input == '\n')
+    if (outputText)
+      output << input;
+    else if (input == '\n')
       output << '\n';
     else
       output << ' ';
@@ -114,8 +106,6 @@ void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output)
 
 QString pp_skip_identifier::operator()(Stream& input)
 {
-  m_lines = 0;
-
   QString identifier;
 
   while (!input.atEnd()) {
@@ -131,8 +121,6 @@ QString pp_skip_identifier::operator()(Stream& input)
 
 void pp_skip_number::operator()(Stream& input, Stream& output)
 {
-  m_lines = 0;
-
   while (!input.atEnd()) {
     if (!input.current().isLetterOrNumber() && input != '_')
         return;
@@ -150,8 +138,6 @@ void pp_skip_string_literal::operator()(Stream& input, Stream& output)
     QUOTE,
     END
   } state (BEGIN);
-
-  m_lines = 0;
 
   while (!input.atEnd()) {
     switch (state) {
@@ -192,8 +178,6 @@ void pp_skip_char_literal::operator()(Stream& input, Stream& output)
     END
   } state (BEGIN);
 
-  m_lines = 0;
-
   while (!input.atEnd()) {
     if (state == END)
       break;
@@ -231,7 +215,6 @@ void pp_skip_char_literal::operator()(Stream& input, Stream& output)
 void pp_skip_argument::operator()(Stream& input, Stream& output)
 {
   int depth = 0;
-  m_lines = 0;
 
   while (!input.atEnd()) {
     if (!depth && (input == ')' || input == ',')) {
@@ -247,31 +230,24 @@ void pp_skip_argument::operator()(Stream& input, Stream& output)
 
     } else if (input == '\"') {
       skip_string_literal(input, output);
-      m_lines += skip_string_literal.linesSkipped();
       continue;
 
     } else if (input == '\'') {
       skip_char_literal (input, output);
-      m_lines += skip_char_literal.linesSkipped();
       continue;
 
     } else if (input == '/') {
       skip_comment_or_divop (input, output);
-      m_lines += skip_comment_or_divop.linesSkipped();
       continue;
 
     } else if (input.current().isLetter() || input == '_') {
       output << skip_identifier(input);
-      m_lines += skip_identifier.linesSkipped();
       continue;
 
     } else if (input.current().isNumber()) {
       output << skip_number(input);
-      m_lines += skip_number.linesSkipped();
       continue;
 
-    } else if (input == '\n') {
-      ++m_lines;
     }
 
     output << input;

@@ -30,6 +30,8 @@
 #include "pp-stream.h"
 #include "pp-scanner.h"
 
+class pp;
+
 class pp_frame
 {
 public:
@@ -42,7 +44,7 @@ public:
 class pp_macro_expander
 {
 public:
-  pp_macro_expander(QHash<QString, pp_macro*>& environment, pp_frame* frame = 0);
+  pp_macro_expander(pp* engine, pp_frame* frame = 0);
 
   QString resolve_formal(const QString& name);
 
@@ -56,7 +58,7 @@ public:
                                 Stream& input, Stream& output);
 
 private:
-  QHash<QString, pp_macro*>& m_environment;
+  pp* m_engine;
   pp_frame* m_frame;
 
   pp_skip_number skip_number;

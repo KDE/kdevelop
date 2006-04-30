@@ -72,7 +72,8 @@ Stream::Stream( QString * string, QIODevice::OpenMode openMode )
   , m_outputLine(0)
 {
   operator>>(c);
-  //kDebug() << "'" << c << "' " << c.cell() << endl;
+  //if (!string->isEmpty())
+    //kDebug() << "'" << c << "' " << c.cell() << endl;
 }
 
 Stream::Stream( FILE * fileHandle, QIODevice::OpenMode openMode )

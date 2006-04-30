@@ -26,52 +26,50 @@
 
 #include "pp-stream.h"
 
-class pp_skip
-{
-public:
-  int linesSkipped() const;
-
-protected:
-  int m_lines;
-};
-
-class pp_skip_blanks : public pp_skip
+class pp_skip_blanks
 {
 public:
   void operator()(Stream& input, Stream& output);
 };
 
-class pp_skip_comment_or_divop : public pp_skip
+class pp_skip_comment_or_divop
 {
 public:
-  void operator()(Stream& input, Stream& output);
+  /**
+   * This scanner can either output equivalent blank space,
+   * or the actual text (the default).
+   */
+  void operator()(Stream& input, Stream& output, bool outputText = false);
+
+private:
+  bool m_outputText;
 };
 
-class pp_skip_identifier : public pp_skip
+class pp_skip_identifier
 {
 public:
   QString operator()(Stream& input);
 };
 
-class pp_skip_number : public pp_skip
+class pp_skip_number
 {
 public:
   void operator()(Stream& input, Stream& output);
 };
 
-class pp_skip_string_literal : public pp_skip
+class pp_skip_string_literal
 {
 public:
   void operator()(Stream& input, Stream& output);
 };
 
-class pp_skip_char_literal : public pp_skip
+class pp_skip_char_literal
 {
 public:
   void operator()(Stream& input, Stream& output);
 };
 
-class pp_skip_argument : public pp_skip
+class pp_skip_argument
 {
 public:
   void operator()(Stream& input, Stream& output);

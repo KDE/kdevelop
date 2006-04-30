@@ -24,6 +24,7 @@
 #include <kdebug.h>
 
 #include "pp-internal.h"
+#include "pp-engine.h"
 
 pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<QString>& __actuals)
   : expandingMacro(__expandingMacro)
@@ -54,8 +55,8 @@ QString pp_macro_expander::resolve_formal(const QString& name)
   return QString();
 }
 
-pp_macro_expander::pp_macro_expander(QHash<QString, pp_macro*>& environment, pp_frame* frame)
-  : m_environment(environment)
+pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame)
+  : m_engine(engine)
   , m_frame(frame)
   , m_generatedLines(0)
 {
@@ -142,19 +143,17 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         continue;
       }
 
-      static bool hide_next = false; // ### remove me
-
-      pp_macro* macro = m_environment[name];
-      if (! macro || macro->hidden || hide_next)
+      pp_macro* macro = m_engine->environment()[name];
+      if (! macro || macro->hidden || m_engine->hideNextMacro())
       {
-        hide_next = name == "defined";
+        m_engine->setHideNextMacro(name == "defined");
         output << name;
         continue;
       }
 
       if (!macro->function_like)
       {
-        pp_macro_expander expand_macro(m_environment);
+        pp_macro_expander expand_macro(m_engine);
         macro->hidden = true;
         Stream ms(&macro->definition, QIODevice::ReadOnly);
         expand_macro(ms, output);
@@ -175,7 +174,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       QList<QString> actuals;
       ++input; // skip '('
 
-      pp_macro_expander expand_actual(m_environment, m_frame);
+      pp_macro_expander expand_actual(m_engine, m_frame);
 
       qint64 before = input.pos();
       {
@@ -230,7 +229,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 #endif
 
       pp_frame frame(macro, actuals);
-      pp_macro_expander expand_macro(m_environment, &frame);
+      pp_macro_expander expand_macro(m_engine, &frame);
       macro->hidden = true;
       Stream ms(&macro->definition, QIODevice::ReadOnly);
       expand_macro(ms, output);

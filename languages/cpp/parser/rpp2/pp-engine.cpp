@@ -30,10 +30,11 @@
 
 pp::pp(Preprocessor* preprocessor, QHash<QString, pp_macro*>& environment)
   : m_environment(environment)
-  , expand(environment)
+  , expand(this)
   , m_preprocessor(preprocessor)
   , nextToken(0)
   , haveNextToken(false)
+  , hideNext(false)
 {
   iflevel = 0;
   _M_skipping[iflevel] = 0;
@@ -399,7 +400,7 @@ void pp::handle_define (Stream& input)
 }
 
 
-void pp::skip (Stream& input, Stream& output)
+void pp::skip (Stream& input, Stream& output, bool outputText)
 {
   pp_skip_string_literal skip_string_literal;
   pp_skip_char_literal skip_char_literal;
@@ -408,7 +409,7 @@ void pp::skip (Stream& input, Stream& output)
   {
     if (input == '/')
     {
-      skip_comment_or_divop (input, output);
+      skip_comment_or_divop (input, output, outputText);
     }
     else if (input == '"')
     {
@@ -791,7 +792,7 @@ void pp::handle_if (Stream& input)
 {
   if (test_if_level())
   {
-    pp_macro_expander expand_condition(m_environment);
+    pp_macro_expander expand_condition(this);
     skip_blanks(input, PPInternal::devnull());
     QString condition;
     {
@@ -909,7 +910,7 @@ int pp::next_token (Stream& input)
     case '/':
       if (ch2 == '/' || ch2 == '*')
       {
-        skip_comment_or_divop(input, PPInternal::devnull());
+        skip_comment_or_divop(input, PPInternal::devnull(), false);
         return next_token(input);
       }
       ++input;
@@ -1043,6 +1044,21 @@ void pp::accept_token()
 {
   haveNextToken = false;
   nextToken = 0;
+}
+
+bool pp::hideNextMacro( ) const
+{
+  return hideNext;
+}
+
+void pp::setHideNextMacro( bool h )
+{
+  hideNext = h;
+}
+
+QHash< QString, pp_macro * > & pp::environment( )
+{
+  return m_environment;
 }
 
 // kate: indent-width 2;

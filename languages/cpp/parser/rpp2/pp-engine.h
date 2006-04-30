@@ -75,6 +75,7 @@ class pp
   int iflevel;
   int nextToken;
   bool haveNextToken;
+  bool hideNext;
 
   long token_value;
   QString token_text;
@@ -126,6 +127,11 @@ public:
 
   void checkMarkNeeded(Stream& input, Stream& output);
 
+  bool hideNextMacro() const;
+  void setHideNextMacro(bool hideNext);
+
+  QHash<QString, pp_macro*>& environment();
+
 private:
   int skipping() const;
   bool test_if_level();
@@ -134,7 +140,7 @@ private:
 
   QString find_header_protection(Stream& input);
 
-  void skip(Stream& input, Stream& output);
+  void skip(Stream& input, Stream& output, bool outputText = true);
 
   long eval_primary(Stream& input);
 
