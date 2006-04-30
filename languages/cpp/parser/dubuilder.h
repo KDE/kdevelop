@@ -31,6 +31,7 @@ public:
 
 protected:
   virtual void visitNamespace (NamespaceAST *);
+  virtual void visitClassSpecifier (ClassSpecifierAST *);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;
@@ -38,10 +39,17 @@ protected:
     return was;
   }
 
+  inline bool inClass (bool f) {
+    bool was = in_class;
+    in_class = f;
+    return was;
+  }
+
 private:
   union {
     struct {
       uint in_namespace: 1;
+      uint in_class: 1;
     };
 
     uint _M_flags;

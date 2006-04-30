@@ -39,5 +39,12 @@ void DUBuilder::visitNamespace (NamespaceAST *node)
   inNamespace (was);
 }
 
+void DUBuilder::visitClassSpecifier (ClassSpecifierAST *node)
+{
+  bool was = inClass (true);
+  DefaultVisitor::visitClassSpecifier (node);
+  inClass (was);
+}
+
 // kate: indent-width 2;
 
