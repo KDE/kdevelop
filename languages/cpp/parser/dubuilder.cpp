@@ -17,8 +17,10 @@
 */
 
 #include "dubuilder.h"
+#include "lexer.h"
 
-DUBuilder::DUBuilder ():
+DUBuilder::DUBuilder (TokenStream *token_stream):
+  _M_token_stream (token_stream),
   _M_flags (0)
 {
 }
@@ -65,6 +67,17 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   bool was = inFunctionDefinition (node);
   DefaultVisitor::visitFunctionDefinition (node);
   inFunctionDefinition (was);
+}
+
+void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
+{
+  // ### implement me
+  DefaultVisitor::visitSimpleDeclaration (node);
+}
+
+void DUBuilder::visitName (NameAST *node)
+{
+  // ### implement me
 }
 
 // kate: indent-width 2;

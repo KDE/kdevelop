@@ -21,10 +21,12 @@
 
 #include "default_visitor.h"
 
+class TokenStream;
+
 class DUBuilder: protected DefaultVisitor
 {
 public:
-  DUBuilder ();
+  DUBuilder (TokenStream *token_stream);
   virtual ~DUBuilder ();
 
   void operator () (AST *node);
@@ -35,6 +37,8 @@ protected:
   virtual void visitTemplateDeclaration (TemplateDeclarationAST *);
   virtual void visitTypedef (TypedefAST *);
   virtual void visitFunctionDefinition (FunctionDefinitionAST *);
+  virtual void visitSimpleDeclaration (SimpleDeclarationAST *);
+  virtual void visitName(NameAST *);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;
@@ -67,6 +71,8 @@ protected:
   }
 
 private:
+  TokenStream *_M_token_stream;
+
   union {
     struct {
       uint in_namespace: 1;
