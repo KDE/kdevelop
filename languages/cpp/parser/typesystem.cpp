@@ -24,6 +24,11 @@ uint qHash (const IntegralType &t)
   return qHash (t.name ());
 }
 
+uint qHash (const PointerType &t)
+{
+  return qHash (t.baseType ());
+}
+
 TypeEnvironment::TypeEnvironment ()
 {
 }
@@ -36,4 +41,9 @@ const QString *TypeEnvironment::intern (const QString &name)
 const IntegralType *TypeEnvironment::integralType (const QString *name)
 {
   return &*_M_integral_type_table.insert (IntegralType (name));
+}
+
+const PointerType *TypeEnvironment::pointerType (const AbstractType *baseType)
+{
+  return &*_M_pointer_type_table.insert (PointerType (baseType));
 }

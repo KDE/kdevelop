@@ -24,7 +24,7 @@
 
 class AbstractType;
 class IntegralType;
-
+class PointerType;
 
 class TypeVisitor
 {
@@ -35,6 +35,9 @@ public:
   virtual void postVisit (const AbstractType *) {}
 
   virtual void visit (const IntegralType *) {}
+
+  virtual bool visit (const PointerType *) { return true; }
+  virtual void endVisit (const PointerType *) {}
 };
 
 
@@ -52,7 +55,7 @@ public:
     v->postVisit (this);
   }
 
-  static void acceptType (AbstractType *type, TypeVisitor *v)
+  static void acceptType (const AbstractType *type, TypeVisitor *v)
   {
     if (! type)
       return;
@@ -70,7 +73,8 @@ public:
   IntegralType (const QString *name):
     _M_name (name) {}
 
-  inline const QString *name () const { return _M_name; }
+  inline const QString *name () const
+  { return _M_name; }
 
   inline bool operator == (const IntegralType &__other) const
   { return _M_name == __other._M_name; }
@@ -78,6 +82,7 @@ public:
   inline bool operator != (const IntegralType &__other) const
   { return _M_name != __other._M_name; }
 
+protected:
   virtual void accept0 (TypeVisitor *v) const
   { v->visit (this); }
 
@@ -85,11 +90,40 @@ private:
   const QString *_M_name;
 };
 
+class PointerType: public AbstractType
+{
+public:
+  PointerType (const AbstractType *baseType):
+    _M_baseType (baseType) {}
+
+  inline const AbstractType *baseType () const
+  { return _M_baseType; }
+
+  inline bool operator == (const PointerType &__other) const
+  { return _M_baseType == __other._M_baseType; }
+
+  inline bool operator != (const PointerType &__other) const
+  { return _M_baseType != __other._M_baseType; }
+
+protected:
+  virtual void accept0 (TypeVisitor *v) const
+  {
+    if (v->visit (this))
+      acceptType (baseType (), v);
+
+    v->endVisit (this);
+  }
+
+private:
+  const AbstractType *_M_baseType;
+};
+
 class TypeEnvironment
 {
 public:
   typedef QSet<QString> NameTable;
   typedef QSet<IntegralType> IntegralTypeTable;
+  typedef QSet<PointerType> PointerTypeTable;
 
 public:
   TypeEnvironment ();
@@ -97,13 +131,15 @@ public:
   const QString *intern (const QString &name);
 
   const IntegralType *integralType (const QString *name);
+  const PointerType *pointerType (const AbstractType *baseType);
 
 private:
   NameTable _M_name_table;
   IntegralTypeTable _M_integral_type_table;
+  PointerTypeTable _M_pointer_type_table;
 };
 
 uint qHash (const IntegralType &t);
-
+uint qHash (const PointerType &t);
 
 #endif // TYPESYSTEM_H
