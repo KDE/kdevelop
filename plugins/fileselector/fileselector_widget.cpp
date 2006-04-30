@@ -363,7 +363,7 @@ void KDevFileSelector::cmbPathReturnPressed( const QString& u )
     urls.prepend( u );
     cmbPath->setURLs( urls, KUrlComboBox::RemoveBottom );
     dir->setFocus();
-    dir->setURL( KUrl(u), true );
+    dir->setURL( KUrl::fromPathOrURL(u), true );
 }
 
 void KDevFileSelector::dirUrlEntered( const KUrl& u )
