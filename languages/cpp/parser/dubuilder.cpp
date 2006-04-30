@@ -60,5 +60,12 @@ void DUBuilder::visitTypedef (TypedefAST *node)
   inTypedef (was);
 }
 
+void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
+{
+  bool was = inFunctionDefinition (node);
+  DefaultVisitor::visitFunctionDefinition (node);
+  inFunctionDefinition (was);
+}
+
 // kate: indent-width 2;
 
