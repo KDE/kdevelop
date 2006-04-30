@@ -177,12 +177,12 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
         folderItem->add( notInstalledHeaders );
 }
 
-QList<KDevProjectTargetItem*> AutomakeImporter::targets() const
+QList<KDevProjectTargetItem*> AutoMakeImporter::targets() const
 {
     return QList<KDevProjectTargetItem*>();
 }
 
-FileItemList AutomakeImporter::filesForTarget( KDevProjectTargetItem* target ) const
+FileItemList AutoMakeImporter::filesForTarget( KDevProjectTargetItem* target ) const
 {
     return FileItemList();
 }
