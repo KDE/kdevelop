@@ -886,7 +886,7 @@ void pp::handle_undef(Stream& input)
   QString macro_name = skip_identifier(input);
   Q_ASSERT(!macro_name.isEmpty());
 
-  m_environment.remove(macro_name);
+  delete m_environment.take(macro_name);
 }
 
 int pp::next_token (Stream& input)

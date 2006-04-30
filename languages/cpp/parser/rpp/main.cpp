@@ -72,6 +72,7 @@ int main (int /*argc*/, char *argv[])
   /*foreach (const Preprocessor::MacroItem& macro, p.macros())
     kDebug() << "Macro '" << macro.name << "' param (" << macro.parameters << ") def (" << macro.definition << ") isFnLike (" << macro.isFunctionLike << ") filename (" << macro.fileName << ")" << endl;*/
 
+  qDeleteAll(env);
   return EXIT_SUCCESS;
 }
 
