@@ -28,9 +28,7 @@ public:
   QWidget * topWidgetForPart( KParts::Part * part );
 
 private slots:
-
-  void popupAboutToShow();
-  void showPopup();
+  void popupAboutToShow(KTextEditor::View* view, QMenu* menu);
 
 private:
 

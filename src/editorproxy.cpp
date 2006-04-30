@@ -53,12 +53,6 @@ EditorProxy::EditorProxy()
     KConfig *config = KGlobal::config();
     config->setGroup("UI");
     //int mdimode = config->readEntry("MDIMode", KMdi::IDEAlMode);
-
-    KAction *ac = new KAction( i18n("Show Context Menu"), TopLevel::getInstance()->main()->actionCollection(), "show_popup" );
-    connect(ac, SIGNAL(triggered(bool)), SLOT(showPopup()));
-    KShortcut cut ;/*= KStdAccel::shortcut(KStdAccel::PopupMenuContext);*/
-    cut.append(Qt::CTRL + Qt::Key_Return);
-    ac->setShortcut(cut);
 }
 
 
@@ -98,8 +92,12 @@ void EditorProxy::installPopup( KParts::Part * part )
     QMenu *popup = view->contextMenu();
 
     if (!popup) {
-        kWarning() << k_funcinfo << "Popup not found!" << endl;
-        return;
+        popup = view->defaultContextMenu();
+        if (!popup) {
+            kWarning() << k_funcinfo << "Popup not found!" << endl;
+            return;
+        }
+        view->setContextMenu(popup);
     }
 
     KConfig *config = KGlobal::config();
@@ -118,121 +116,69 @@ void EditorProxy::installPopup( KParts::Part * part )
             popup->insertAction( popup->actions().count() > 1 ? popup->actions()[1] : 0L, action );
     }
 
-    view->setContextMenu( popup );
-
-    connect(popup, SIGNAL(aboutToShow()), this, SLOT(popupAboutToShow()));
+    connect(view, SIGNAL(contextMenuAboutToShow(KTextEditor::View*, QMenu*)), this, SLOT(popupAboutToShow(KTextEditor::View*, QMenu*)));
 }
 
-void EditorProxy::popupAboutToShow()
+void EditorProxy::popupAboutToShow(KTextEditor::View* view, QMenu* menu)
 {
-#if 0 /// ### Qt4-porting
-  QMenu *popup = qobject_cast<QMenu *>(sender());
-  if (!popup)
+    Q_ASSERT(view && menu);
+    
+    /*foreach (QAction* action, menu->actions())
+        menu->removeAction(action);
+    
+    view->defaultContextMenu(menu);*/
+    
     return;
-
-  // ugly hack: remove all but the "original" items
-  for (int index=popup->count()-1; index >= 0; --index)
-  {
-    int id = popup->idAt(index);
-    if (m_popupIds.contains(id) == 0)
+    
+    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(DocumentController::getInstance()->activePart());
+    if (!ro_part)
+        return;
+    
+    // fill the menu in the editor context
+    if (!ro_part->widget())
+        return;
+    
+    QString wordstr, linestr;
+    bool hasMultilineSelection = false;
+    if( view->selection() )
     {
-      QMenuItem *item = popup->findItem(id);
-          popup->removeItemAt(index);
-//      kDebug(9000) << "removed id " << id << " at index " << index << endl;
-    } else {
-//        kDebug(9000) << "leaving id " << id << endl;
-    }
-  }
-/*  // why twice !?!?
-  // ugly hack: mark the "original" items
-  m_popupIds.resize(popup->count());
-  for (uint index=0; index < popup->count(); ++index)
-    m_popupIds[index] = popup->idAt(index);
-*/
-
-  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(DocumentController::getInstance()->activePart());
-  if (!ro_part)
-    return;
-/*  // I disagree.. the EditorContext shouldn't emit the filecontext event
-  // fill the menu in the file context
-  FileContext context(ro_part->url().path(), false);
-  Core::getInstance()->fillContextMenu(popup, &context);
-*/
-  // fill the menu in the editor context
-  if (!ro_part->widget())
-    return;
-
-  SelectionInterface *selectIface = dynamic_cast<SelectionInterface*>(ro_part);
-  ViewCursorInterface *cursorIface = dynamic_cast<ViewCursorInterface*>(ro_part->widget());
-  EditInterface *editIface = dynamic_cast<EditInterface*>(ro_part);
-
-  QString wordstr, linestr;
-  bool hasMultilineSelection = false;
-  if( selectIface && selectIface->hasSelection() )
-  {
-    hasMultilineSelection = ( selectIface->selection().contains('\n') != 0 );
-    if ( !hasMultilineSelection )
-    {
-      wordstr = selectIface->selection();
-    }
-  }
-  if( cursorIface && editIface )
-  {
-    uint line, col;
-    line = col = 0;
-    cursorIface->cursorPositionReal(&line, &col);
-    linestr = editIface->textLine(line);
-    if( wordstr.isEmpty() && !hasMultilineSelection ) {
-      int startPos = qMax(qMin((int)col, (int)linestr.length()-1), 0);
-      int endPos = startPos;
-      while (startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' ) )
-          startPos--;
-      while (endPos < (int)linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
-          endPos++;
-      wordstr = (startPos==endPos)?
-          QString() : linestr.mid(startPos+1, endPos-startPos-1);
-    }
-    kDebug(9000) << "Word:" << wordstr << ":" << endl;
-    EditorContext context(ro_part->url(), line, col, linestr, wordstr);
-    Core::getInstance()->fillContextMenu(popup, &context);
-  } else {
-    Core::getInstance()->fillContextMenu(popup, 0);
-  }
-
-  // Remove redundant separators (any that are first, last, or doubled)
-  bool lastWasSeparator = true;
-  for( uint i = 0; i < popup->count(); ) {
-    int id = popup->idAt( i );
-    if( lastWasSeparator && popup->findItem( id )->isSeparator() ) {
-      popup->removeItem( id );
-      // Since we removed an item, don't increment i
-    } else {
-      lastWasSeparator = false;
-      i++;
-    }
-  }
-  if( lastWasSeparator && popup->count() > 0 )
-    popup->removeItem( popup->idAt( popup->count() - 1 ) );
-#endif
-}
-
-void EditorProxy::showPopup( )
-{
-#if 0
-    kDebug(9000) << k_funcinfo << endl;
-
-    if ( KParts::Part * part = DocumentController::getInstance()->activePart() )
-    {
-        ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>( part->widget() );
-        if ( iface )
+        Range selection = view->selectionRange();
+        hasMultilineSelection = selection.start().line() == selection.end().line();
+        if ( !hasMultilineSelection )
         {
-            KTextEditor::View * view = static_cast<KTextEditor::View*>( part->widget() );
-            Q3PopupMenu * popup = static_cast<Q3PopupMenu*>( view->factory()->container("ktexteditor_popup", view ) );
-
-            popup->exec( view->mapToGlobal( iface->cursorCoordinates() ) );
+            wordstr = view->selectionText();
         }
     }
-#endif // ####TODO
+
+    Cursor pos = view->cursorPosition();
+    linestr = view->document()->line(pos.line());
+
+    if( wordstr.isEmpty() && !hasMultilineSelection ) {
+        int startPos = qMax(qMin(pos.column(), linestr.length() - 1), 0);
+        int endPos = startPos;
+        while (startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' ) )
+            startPos--;
+        while (endPos < linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
+            endPos++;
+        wordstr = (startPos==endPos)?
+            QString() : linestr.mid(startPos+1, endPos-startPos-1);
+    }
+    kDebug(9000) << "Word:" << wordstr << ":" << endl;
+    EditorContext context(ro_part->url(), pos, linestr, wordstr);
+    Core::getInstance()->fillContextMenu(menu, &context);
+
+    // Remove redundant separators (any that are first, last, or doubled)
+    bool lastWasSeparator = true;
+    foreach (QAction* action, menu->actions()) {
+        if( lastWasSeparator && action->isSeparator() ) {
+            menu->removeAction( action );
+        } else {
+            lastWasSeparator = action->isSeparator();
+        }
+    }
+
+    if ( lastWasSeparator && menu->actions().count() )
+        menu->removeAction( menu->actions().last() );
 }
 
 QWidget * EditorProxy::widgetForPart( KParts::Part * part )

@@ -50,21 +50,21 @@ bool Context::hasType( int aType ) const
 class EditorContext::Private
 {
 public:
-    Private( const KUrl &url, int line, int col, const QString &linestr,
+    Private( const KUrl &url, const KTextEditor::Cursor& position, const QString &linestr,
         const QString &wordstr )
-        : m_url(url), m_line(line), m_col(col),
+        : m_url(url), m_position(position),
           m_linestr(linestr), m_wordstr(wordstr)
     {
     }
 
     KUrl m_url;
-    int m_line, m_col;
+    KTextEditor::Cursor m_position;
     QString m_linestr, m_wordstr;
 };
 
-EditorContext::EditorContext( const KUrl &url, int line, int col,
+EditorContext::EditorContext( const KUrl &url, const KTextEditor::Cursor& position,
     const QString &linestr, const QString &wordstr )
-    : Context(), d( new Private(url, line, col, linestr, wordstr) )
+    : Context(), d( new Private(url, position, linestr, wordstr) )
 {
 }
 
@@ -84,14 +84,9 @@ const KUrl &EditorContext::url() const
     return d->m_url;
 }
 
-int EditorContext::line() const
+const KTextEditor::Cursor& EditorContext::position() const
 {
-    return d->m_line;
-}
-
-int EditorContext::col() const
-{
-    return d->m_col;
+    return d->m_position;
 }
 
 QString EditorContext::currentLine() const

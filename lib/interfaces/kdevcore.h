@@ -7,7 +7,7 @@
    Copyright (C) 2002-2003 Roberto Raggi <roberto@kdevelop.org>
    Copyright (C) 2003 Mario Scalas <mario.scalas@libero.it>
    Copyright (C) 2003 Harald Fernengel <harry@kdevelop.org>
-   Copyright (C) 2003 Hamish Rodda <rodda@kde.org>
+   Copyright (C) 2003,2006 Hamish Rodda <rodda@kde.org>
    Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
 
    This library is free software; you can redistribute it and/or
@@ -39,6 +39,8 @@ The interface to the application core and context menu classes.
 
 #include <kurl.h>
 #include "kdevexport.h"
+
+#include <ktexteditor/cursor.h>
 
 class KDialogBase;
 class KDevPlugin;
@@ -138,7 +140,7 @@ public:
     @param col The column number where the cursor is.
     @param linestr The content of the line where the cursor is.
     @param wordstr The current word under the cursor.*/
-    EditorContext(const KUrl &url, int line, int col,
+    EditorContext(const KUrl &url, const KTextEditor::Cursor& position,
         const QString &linestr, const QString &wordstr);
 
     /**Destructor.*/
@@ -149,11 +151,8 @@ public:
     /**@return The url for the file which this context was invoked for.*/
     const KUrl &url() const;
 
-    /**@return The line number for the cursor position.*/
-    int line() const;
-
-    /**@return The column number for the cursor position.*/
-    int col() const;
+    /**@return The cursor position.*/
+    const KTextEditor::Cursor& position() const;
 
     /**@return A QString with the content of the line which this context was
     invoked for.*/
