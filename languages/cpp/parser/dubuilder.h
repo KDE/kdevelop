@@ -33,6 +33,7 @@ protected:
   virtual void visitNamespace (NamespaceAST *);
   virtual void visitClassSpecifier (ClassSpecifierAST *);
   virtual void visitTemplateDeclaration (TemplateDeclarationAST *);
+  virtual void visitTypedef (TypedefAST *);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;
@@ -52,12 +53,19 @@ protected:
     return was;
   }
 
+  inline bool inTypedef (bool f) {
+    bool was = in_typedef;
+    in_typedef = f;
+    return was;
+  }
+
 private:
   union {
     struct {
       uint in_namespace: 1;
       uint in_class: 1;
       uint in_template_declaration: 1;
+      uint in_typedef: 1;
     };
 
     uint _M_flags;

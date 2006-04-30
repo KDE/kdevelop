@@ -53,5 +53,12 @@ void DUBuilder::visitTemplateDeclaration (TemplateDeclarationAST *node)
   inTemplateDeclaration (was);
 }
 
+void DUBuilder::visitTypedef (TypedefAST *node)
+{
+  bool was = inTypedef (node);
+  DefaultVisitor::visitTypedef (node);
+  inTypedef (was);
+}
+
 // kate: indent-width 2;
 
