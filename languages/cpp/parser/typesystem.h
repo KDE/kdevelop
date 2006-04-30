@@ -21,10 +21,14 @@
 
 #include <QSet>
 #include <QString>
+#include <QVector>
 
 class AbstractType;
 class IntegralType;
 class PointerType;
+class FunctionType;
+
+
 
 class TypeVisitor
 {
@@ -38,6 +42,9 @@ public:
 
   virtual bool visit (const PointerType *) { return true; }
   virtual void endVisit (const PointerType *) {}
+
+  virtual bool visit (const FunctionType *) { return true; }
+  virtual void endVisit (const FunctionType *) {}
 };
 
 
@@ -109,7 +116,7 @@ protected:
   virtual void accept0 (TypeVisitor *v) const
   {
     if (v->visit (this))
-      acceptType (baseType (), v);
+      acceptType (_M_baseType, v);
 
     v->endVisit (this);
   }
@@ -118,12 +125,51 @@ private:
   const AbstractType *_M_baseType;
 };
 
+class FunctionType: public AbstractType
+{
+public:
+  FunctionType (const AbstractType *returnType, const QVector<const AbstractType *> &arguments):
+    _M_returnType (returnType),
+    _M_arguments (arguments) {}
+
+  inline const AbstractType *returnType () const
+  { return _M_returnType; }
+
+  inline QVector<const AbstractType *> arguments () const
+  { return _M_arguments; }
+
+  inline bool operator == (const FunctionType &__other) const
+  { return _M_returnType == __other._M_returnType && _M_arguments == __other._M_arguments; }
+
+  inline bool operator != (const FunctionType &__other) const
+  { return _M_returnType != __other._M_returnType || _M_arguments != __other._M_arguments; }
+
+protected:
+  virtual void accept0 (TypeVisitor *v) const
+  {
+    if (v->visit (this))
+      {
+        acceptType (_M_returnType, v);
+
+        for (int i = 0; i < _M_arguments.count (); ++i)
+          acceptType (_M_arguments.at (i), v);
+      }
+
+    v->endVisit (this);
+  }
+
+private:
+  const AbstractType *_M_returnType;
+  QVector<const AbstractType *> _M_arguments;
+};
+
 class TypeEnvironment
 {
 public:
   typedef QSet<QString> NameTable;
   typedef QSet<IntegralType> IntegralTypeTable;
   typedef QSet<PointerType> PointerTypeTable;
+  typedef QSet<FunctionType> FunctionTypeTable;
 
 public:
   TypeEnvironment ();
@@ -133,13 +179,20 @@ public:
   const IntegralType *integralType (const QString *name);
   const PointerType *pointerType (const AbstractType *baseType);
 
+  const FunctionType *functionType (const AbstractType *returnType, const QVector<const AbstractType *> &arguments);
+  const FunctionType *functionType (const AbstractType *returnType);
+  const FunctionType *functionType (const AbstractType *returnType, const AbstractType *arg_1);
+  const FunctionType *functionType (const AbstractType *returnType, const AbstractType *arg_1, const AbstractType *arg_2);
+
 private:
   NameTable _M_name_table;
   IntegralTypeTable _M_integral_type_table;
   PointerTypeTable _M_pointer_type_table;
+  FunctionTypeTable _M_function_type_table;
 };
 
 uint qHash (const IntegralType &t);
 uint qHash (const PointerType &t);
+uint qHash (const FunctionType &t);
 
 #endif // TYPESYSTEM_H
