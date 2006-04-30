@@ -26,7 +26,7 @@
 /**
  * Stream designed for character-at-a-time processing
  *
- * @author Hamish Rodda<rodda@kde.org>
+ * @author Hamish Rodda <rodda@kde.org>
  */
 class Stream : private QTextStream
 {
@@ -80,7 +80,7 @@ class Stream : private QTextStream
     bool m_isNull;
     qint64 m_pos;
     int m_inputLine, m_outputLine;
-    QString output;
+    //QString output;
 };
 
 #endif

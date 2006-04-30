@@ -48,8 +48,6 @@ public:
 
   QString resolve_formal(const QString& name);
 
-  int generatedLines() const;
-
   /// Expands text with the known macros. Continues until it finds a new text line
   /// beginning with #, at which point control is returned.
   void operator()(Stream& input, Stream& output);
@@ -68,8 +66,6 @@ private:
   pp_skip_argument skip_argument;
   pp_skip_comment_or_divop skip_comment_or_divop;
   pp_skip_blanks skip_blanks;
-
-  int m_generatedLines;
 };
 
 #endif // PP_MACRO_EXPANDER_H

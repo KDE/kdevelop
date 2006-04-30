@@ -58,13 +58,11 @@ QString pp_macro_expander::resolve_formal(const QString& name)
 pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame)
   : m_engine(engine)
   , m_frame(frame)
-  , m_generatedLines(0)
 {
 }
 
 void pp_macro_expander::operator()(Stream& input, Stream& output)
 {
-  m_generatedLines = 0;
   skip_blanks(input, output);
 
   while (!input.atEnd())
@@ -158,9 +156,6 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         Stream ms(&macro->definition, QIODevice::ReadOnly);
         expand_macro(ms, output);
         macro->hidden = false;
-
-        // FIXME must tag after this if needed
-        m_generatedLines += expand_macro.generatedLines();
         continue;
       }
 
@@ -235,9 +230,6 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       expand_macro(ms, output);
       macro->hidden = false;
 
-      // FIXME must tag after this if needed
-      m_generatedLines += expand_macro.generatedLines();
-
     } else {
       output << input;
       ++input;
@@ -258,11 +250,6 @@ void pp_macro_expander::skip_argument_variadics (const QList<QString>& __actuals
             && !input.atEnd()
             && input == '.'
             && (__actuals.size() + 1) == __macro->formals.size());
-}
-
-int pp_macro_expander::generatedLines( ) const
-{
-  return m_generatedLines;
 }
 
 // kate: indent-width 2;

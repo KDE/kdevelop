@@ -21,7 +21,6 @@
 #ifndef PP_MACRO_H
 #define PP_MACRO_H
 
-#include <QVector>
 #include <QStringList>
 
 class pp_macro

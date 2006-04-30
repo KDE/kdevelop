@@ -179,9 +179,9 @@ Stream& Stream::operator<< ( QChar c )
   if (!isNull()) {
     if (c == '\n') {
       ++m_outputLine;
-      output.clear();
+      //output.clear();
     } else {
-      output += c;
+      //output += c;
     }
     QTextStream::operator<<(c);
   }
@@ -192,7 +192,7 @@ Stream& Stream::operator<< ( const QString & string )
 {
   if (!isNull()) {
     m_outputLine += string.count('\n');
-    output += c;
+    //output += c;
     QTextStream::operator<<(string);
   }
   return *this;
@@ -228,7 +228,7 @@ void Stream::reset( )
 {
   QTextStream::seek(0);
   m_inputLine = m_outputLine = m_pos = 0;
-  output.clear();
+  //output.clear();
   m_atEnd = false;
   operator>>(c);
 }
