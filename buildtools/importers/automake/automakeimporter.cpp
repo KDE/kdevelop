@@ -177,6 +177,16 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
         folderItem->add( notInstalledHeaders );
 }
 
+QList<KDevProjectTargetItem*> AutomakeImporter::targets() const
+{
+    return QList<KDevProjectTargetItem*>();
+}
+
+FileItemList AutomakeImporter::filesForTarget( KDevProjectTargetItem* target ) const
+{
+    return FileItemList();
+}
+
 #include "automakeimporter.h"
 // kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;
 

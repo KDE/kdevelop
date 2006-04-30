@@ -205,4 +205,14 @@ bool KDevGenericImporter::removeFile(KDevProjectFileItem *// file
     return false;
 }
 
+QList<KDevProjectTargetItem*> KDevGenericImporter::targets() const
+{
+    return QList<KDevProjectTargetItem*>();
+}
+
+FileItemList KDevGenericImporter::filesForTarget(KDevProjectTargetItem *) const
+{
+    return FileItemList();
+}
+
 #include "kdevgenericimporter.moc"

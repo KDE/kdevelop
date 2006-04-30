@@ -63,6 +63,10 @@ public:
 	                         KDevProjectFolderItem* ) { return false; }
 	virtual bool removeFile( KDevProjectFileItem*,
 	                         KDevProjectTargetItem* ) { return false; }
+
+    QList<KDevProjectTargetItem*> targets() const;
+    virtual FileItemList filesForTarget( KDevProjectTargetItem* target ) const;
+
 	
 	virtual QList<KDevProjectFolderItem*> parse( KDevProjectFolderItem* dom );
 	virtual KDevProjectItem* import( KDevProjectModel* model,

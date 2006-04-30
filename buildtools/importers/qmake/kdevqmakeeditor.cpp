@@ -186,4 +186,14 @@ QStringList KDevQMakeEditor::findMakefiles(ProjectFolderDom /*dom*/) const
     return "";
 }
 
+QList<KDevProjectTargetItem*> KDevQMakeEditor::targets() const
+{
+    return QList<KDevProjectTargetItem*>();
+}
+
+FileItemList KDevQMakeEditor::filesForTarget(KDevProjectTargetItem *) const
+{
+    return FileItemList();
+}
+
 #include "kdevqmakeeditor.moc"

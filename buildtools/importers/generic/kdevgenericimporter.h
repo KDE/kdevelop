@@ -48,6 +48,9 @@ public:
     virtual bool removeFile(KDevProjectFileItem *file, KDevProjectFolderItem *parent);
     virtual bool removeFile(KDevProjectFileItem *file, KDevProjectTargetItem *parent);
 
+    virtual QList<KDevProjectTargetItem*> targets() const;
+    virtual FileItemList filesForTarget(KDevProjectTargetItem*) const;
+
 //
 // KDevProjectImporter interface
 //

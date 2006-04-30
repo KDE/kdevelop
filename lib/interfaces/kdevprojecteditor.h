@@ -21,6 +21,9 @@
 
 #include "kdevprojectimporter.h"
 
+typedef QList<KDevProjectFileItem*> FileItemList;
+
+
 /**
 @author Roberto Raggi
 */
@@ -30,11 +33,11 @@ class KDEVINTERFACES_EXPORT KDevProjectEditor: public KDevProjectImporter
 public:
     enum Features
     {
-        Folders = 0x01,
-        Targets = 0x02,
-        Files   = 0x04,
+        Folders = 0x01, ///< Folders are supported by the project
+        Targets = 0x02, ///< Targets are supported by the project
+        Files   = 0x04, ///< Files are supported by the project
 
-        None = 0x00,
+        None = 0x00,    ///< This project supports nothing
         All = Folders | Targets | Files
     };
 
@@ -115,6 +118,27 @@ public:
      * from the folder it is in
      */
     virtual bool removeFile(KDevProjectFileItem *file, KDevProjectTargetItem *parent) = 0;
+
+    /**
+     * Get a list of all the targets in this project
+     *
+     * The list returned by this function should be checked to verify it is not
+     * empty before using it
+     *
+     * @return The list of targets for this project
+     */
+    virtual QList<KDevProjectTargetItem*> targets() const = 0;
+
+    /**
+     * Get a list of all the files for a target
+     *
+     * The list returned by this function should be checked to verify it is not
+     * empty before using it.
+     *
+     * @return The list of files in the target
+     */
+    virtual FileItemList filesForTarget( KDevProjectTargetItem* target ) const = 0;
+
 };
 
 #endif
