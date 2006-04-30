@@ -28,6 +28,26 @@ public:
   virtual ~DUBuilder ();
 
   void operator () (AST *node);
+
+protected:
+  virtual void visitNamespace (NamespaceAST *);
+
+  inline bool inNamespace (bool f) {
+    bool was = in_namespace;
+    in_namespace = f;
+    return was;
+  }
+
+private:
+  union {
+    struct {
+      uint in_namespace: 1;
+    };
+
+    uint _M_flags;
+  };
 };
 
 #endif // DUBUILDER_H
+
+// kate: indent-width 2;

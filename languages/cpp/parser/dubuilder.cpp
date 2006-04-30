@@ -18,7 +18,8 @@
 
 #include "dubuilder.h"
 
-DUBuilder::DUBuilder ()
+DUBuilder::DUBuilder ():
+  _M_flags (0)
 {
 }
 
@@ -30,3 +31,13 @@ void DUBuilder::operator () (AST *node)
 {
   visit (node);
 }
+
+void DUBuilder::visitNamespace (NamespaceAST *node)
+{
+  bool was = inNamespace (true);
+  DefaultVisitor::visitNamespace (node);
+  inNamespace (was);
+}
+
+// kate: indent-width 2;
+
