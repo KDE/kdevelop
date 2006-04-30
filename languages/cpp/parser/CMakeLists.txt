@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory(rpp2) 
-add_subdirectory(tests) 
+add_subdirectory(rpp2)
+add_subdirectory(tests)
 
 include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -30,6 +30,7 @@ set(kdevcppparser_STAT_SRCS
     tokens.cpp
     problem.cpp
     codedisplay.cpp
+    dubuilder.cpp
 )
 
 kde4_automoc(${kdevcppparser_STAT_SRCS})
