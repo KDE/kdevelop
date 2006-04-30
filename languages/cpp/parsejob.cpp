@@ -37,7 +37,7 @@
 #include "parser/parser.h"
 #include "parser/control.h"
 #include "parser/dumptree.h"
-#include "parser/rpp2/preprocessor.h"
+#include "parser/rpp/preprocessor.h"
 
 ParseJob::ParseJob( const KUrl &url,
                     pool *memoryPool,
@@ -158,6 +158,11 @@ bool ParseJob::wasSuccessful( ) const
 const QString & ParseJob::errorMessage( ) const
 {
     return m_errorMessage;
+}
+
+KTextEditor::SmartRange * ParseJob::highlight( ) const
+{
+    return m_highlight;
 }
 
 #include "parsejob.moc"
