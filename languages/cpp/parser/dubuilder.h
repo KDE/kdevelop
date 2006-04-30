@@ -32,6 +32,7 @@ public:
 protected:
   virtual void visitNamespace (NamespaceAST *);
   virtual void visitClassSpecifier (ClassSpecifierAST *);
+  virtual void visitTemplateDeclaration (TemplateDeclarationAST *);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;
@@ -45,11 +46,18 @@ protected:
     return was;
   }
 
+  inline bool inTemplateDeclaration (bool f) {
+    bool was = in_template_declaration;
+    in_template_declaration = f;
+    return was;
+  }
+
 private:
   union {
     struct {
       uint in_namespace: 1;
       uint in_class: 1;
+      uint in_template_declaration: 1;
     };
 
     uint _M_flags;
