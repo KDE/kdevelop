@@ -26,6 +26,7 @@
 class AbstractType;
 class IntegralType;
 class PointerType;
+class ReferenceType;
 class FunctionType;
 
 
@@ -43,11 +44,12 @@ public:
   virtual bool visit (const PointerType *) { return true; }
   virtual void endVisit (const PointerType *) {}
 
+  virtual bool visit (const ReferenceType *) { return true; }
+  virtual void endVisit (const ReferenceType *) {}
+
   virtual bool visit (const FunctionType *) { return true; }
   virtual void endVisit (const FunctionType *) {}
 };
-
-
 
 class AbstractType
 {
@@ -125,6 +127,34 @@ private:
   const AbstractType *_M_baseType;
 };
 
+class ReferenceType: public AbstractType
+{
+public:
+  ReferenceType (const AbstractType *baseType):
+    _M_baseType (baseType) {}
+
+  inline const AbstractType *baseType () const
+  { return _M_baseType; }
+
+  inline bool operator == (const ReferenceType &__other) const
+  { return _M_baseType == __other._M_baseType; }
+
+  inline bool operator != (const ReferenceType &__other) const
+  { return _M_baseType != __other._M_baseType; }
+
+protected:
+  virtual void accept0 (TypeVisitor *v) const
+  {
+    if (v->visit (this))
+      acceptType (_M_baseType, v);
+
+    v->endVisit (this);
+  }
+
+private:
+  const AbstractType *_M_baseType;
+};
+
 class FunctionType: public AbstractType
 {
 public:
@@ -169,6 +199,7 @@ public:
   typedef QSet<QString> NameTable;
   typedef QSet<IntegralType> IntegralTypeTable;
   typedef QSet<PointerType> PointerTypeTable;
+  typedef QSet<ReferenceType> ReferenceTypeTable;
   typedef QSet<FunctionType> FunctionTypeTable;
 
 public:
@@ -178,21 +209,30 @@ public:
 
   const IntegralType *integralType (const QString *name);
   const PointerType *pointerType (const AbstractType *baseType);
+  const ReferenceType *referenceType (const AbstractType *baseType);
 
   const FunctionType *functionType (const AbstractType *returnType, const QVector<const AbstractType *> &arguments);
   const FunctionType *functionType (const AbstractType *returnType);
   const FunctionType *functionType (const AbstractType *returnType, const AbstractType *arg_1);
-  const FunctionType *functionType (const AbstractType *returnType, const AbstractType *arg_1, const AbstractType *arg_2);
+  const FunctionType *functionType (const AbstractType *returnType, const AbstractType *arg_1,
+                                    const AbstractType *arg_2);
+  const FunctionType *functionType (const AbstractType *returnType, const AbstractType *arg_1,
+                                    const AbstractType *arg_2, const AbstractType *arg_3);
+  const FunctionType *functionType (const AbstractType *returnType, const AbstractType *arg_1,
+                                    const AbstractType *arg_2, const AbstractType *arg_3,
+                                    const AbstractType *arg_4);
 
 private:
   NameTable _M_name_table;
   IntegralTypeTable _M_integral_type_table;
   PointerTypeTable _M_pointer_type_table;
+  ReferenceTypeTable _M_reference_type_table;
   FunctionTypeTable _M_function_type_table;
 };
 
 uint qHash (const IntegralType &t);
 uint qHash (const PointerType &t);
+uint qHash (const ReferenceType &t);
 uint qHash (const FunctionType &t);
 
 #endif // TYPESYSTEM_H

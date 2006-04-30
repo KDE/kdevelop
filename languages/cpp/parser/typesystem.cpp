@@ -29,6 +29,11 @@ uint qHash (const PointerType &t)
   return qHash (t.baseType ());
 }
 
+uint qHash (const ReferenceType &t)
+{
+  return qHash (t.baseType ());
+}
+
 uint qHash (const FunctionType &t)
 {
   QVector<const AbstractType *> arguments (t.arguments ());
@@ -59,6 +64,11 @@ const PointerType *TypeEnvironment::pointerType (const AbstractType *baseType)
   return &*_M_pointer_type_table.insert (PointerType (baseType));
 }
 
+const ReferenceType *TypeEnvironment::referenceType (const AbstractType *baseType)
+{
+  return &*_M_reference_type_table.insert (ReferenceType (baseType));
+}
+
 const FunctionType *TypeEnvironment::functionType (const AbstractType *returnType,
     const QVector<const AbstractType *> &arguments)
 {
@@ -87,3 +97,24 @@ const FunctionType *TypeEnvironment::functionType (const AbstractType *returnTyp
   return &*_M_function_type_table.insert (FunctionType (returnType, arguments));
 }
 
+const FunctionType *TypeEnvironment::functionType (const AbstractType *returnType, const AbstractType *arg_1,
+    const AbstractType *arg_2, const AbstractType *arg_3)
+{
+  QVector<const AbstractType *> arguments (3);
+  arguments[0] = arg_1;
+  arguments[1] = arg_2;
+  arguments[2] = arg_3;
+  return &*_M_function_type_table.insert (FunctionType (returnType, arguments));
+}
+
+const FunctionType *TypeEnvironment::functionType (const AbstractType *returnType, const AbstractType *arg_1,
+    const AbstractType *arg_2, const AbstractType *arg_3,
+    const AbstractType *arg_4)
+{
+  QVector<const AbstractType *> arguments (4);
+  arguments[0] = arg_1;
+  arguments[1] = arg_2;
+  arguments[2] = arg_3;
+  arguments[3] = arg_4;
+  return &*_M_function_type_table.insert (FunctionType (returnType, arguments));
+}
