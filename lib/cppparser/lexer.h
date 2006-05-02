@@ -147,15 +147,15 @@ struct LexerData;
 
 class Token
 {
-public:
-    Token();
-    Token( int type, int position, int length, const QString* text );
+    Token(const QString &);
+    Token( int type, int position, int length, const QString& text );
     Token( const Token& source );
 
     Token& operator = ( const Token& source );
     bool operator == ( const Token& token ) const;
     operator int () const;
 
+public:
     bool isNull() const;
 
     int type() const;
@@ -182,7 +182,7 @@ private:
     int m_startColumn;
     int m_endLine;
     int m_endColumn;
-    const QString* m_text;
+    const QString & m_text;
 
     friend class Lexer;
     friend class Parser;
@@ -319,15 +319,15 @@ private:
 };
 
 
-inline Token::Token()
+inline Token::Token(const QString & text)
     : m_type( -1 ),
       m_position( 0 ),
       m_length( 0 ),
-      m_text( 0 )
+      m_text( text )
 {
 }
 
-inline Token::Token( int type, int position, int length, const QString* text )
+inline Token::Token( int type, int position, int length, const QString& text )
     : m_type( type ),
       m_position( position ),
       m_length( length ),
@@ -356,7 +356,7 @@ inline Token& Token::operator = ( const Token& source )
     m_startColumn = source.m_startColumn;
     m_endLine = source.m_endLine;
     m_endColumn = source.m_endColumn;
-    m_text = source.m_text;
+//    m_text = source.m_text;
     return( *this );
 }
 
@@ -399,18 +399,14 @@ inline int Token::position() const
 
 inline QString Token::text() const
 {
-    if (m_text!=0) {
-        return m_text->mid(m_position, m_length);
-    } else {
-        return QString::null;
-    }
+    return m_text.mid(m_position, m_length);
 }
 
 inline void Token::setStartPosition( int line, int column )
 {
     m_startLine = line;
     m_startColumn = column;
-}
+} 
 
 inline void Token::setEndPosition( int line, int column )
 {

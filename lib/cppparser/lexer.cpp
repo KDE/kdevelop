@@ -46,7 +46,7 @@ inline void qthread_yield()
 
 #endif
 
-#define CREATE_TOKEN(type, start, len) Token( (type), (start), (len), &m_source )
+#define CREATE_TOKEN(type, start, len) Token( (type), (start), (len), m_source )
 #define ADD_TOKEN(tk) m_tokens.insert( m_size++, new Token(tk) );
 
 using namespace std;
@@ -232,7 +232,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
         int ppe = preprocessorEnabled();
 	setPreprocessorEnabled( false );
 	while( currentChar() && currentChar() != '\n' ){
-            Token tok;
+            Token tok(m_source);
             nextToken( tok, true );
         }
         m_startLine = true;
@@ -354,12 +354,11 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
             QString textToInsert;
 
             m_endPtr = currentPosition() + m.body().length();
-
             while( currentChar() ){
 
                 readWhiteSpaces();
 
-                Token tok;
+                Token tok(m_source);
                 nextToken( tok );
 
                 bool stringify = !m_inPreproc && tok == '#';
@@ -391,7 +390,6 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
                     textToInsert.append( str + QString::fromLatin1(" ") );
                 }
             }
-
 
 #if defined( KDEVELOP_BGPARSER )
 	    qthread_yield();
@@ -482,7 +480,7 @@ void Lexer::tokenize()
     m_size = 0;
 
     for( ;; ) {
-	Token tk;
+	Token tk(m_source);
 	nextToken( tk );
 
         if( tk.type() != -1 )
@@ -516,7 +514,7 @@ void Lexer::skip( int l, int r )
     int count = 0;
 
     while( !eof() ){
-	Token tk;
+	Token tk(m_source);
 	nextToken( tk );
 
 	if( (int)tk == l )
@@ -547,7 +545,7 @@ QString Lexer::readArgument()
 	if( ch.isNull() || (!count && (ch == ',' || ch == ')')) )
 	    break;
 
-	Token tk;
+	Token tk(m_source);
 	nextToken( tk );
 
 	if( tk == '(' ){
@@ -602,7 +600,7 @@ void Lexer::handleDirective( const QString& directive )
 
     // skip line
     while( currentChar() && currentChar() != '\n' ){
-        Token tk;
+        Token tk(m_source);
         nextToken( tk, true );
     }
 
@@ -682,7 +680,7 @@ void Lexer::processDefine( Macro& m )
 	    body += " ";
 	} else {
 
-	    Token tk;
+	    Token tk(m_source);
 	    nextToken( tk, true );
 
 	    if( tk.type() != -1 ){
@@ -836,7 +834,7 @@ int Lexer::macroPrimary()
 
     default:
 	{
-	    Token tk;
+	    Token tk(m_source);
 	    nextToken( tk, false );
 	    switch( tk.type() ){
 	    case Token_identifier:
