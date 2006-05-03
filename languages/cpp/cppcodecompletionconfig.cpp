@@ -35,7 +35,7 @@ void CppCodeCompletionConfig::init( )
 	m_includeTypes = DomUtil::readBoolEntry( *m_dom, defaultPath + "/includeTypes", true );
 	m_includeEnums = DomUtil::readBoolEntry( *m_dom, defaultPath + "/includeEnums", true );
 	m_includeTypedefs = DomUtil::readBoolEntry( *m_dom, defaultPath + "/includeTypedefs", false );
-	m_automaticCodeCompletion = DomUtil::readBoolEntry( *m_dom, defaultPath + "/automaticCodeCompletion", true );
+	m_automaticCodeCompletion = DomUtil::readBoolEntry( *m_dom, defaultPath + "/automaticCodeCompletion", false );
 	m_automaticArgumentsHint = DomUtil::readBoolEntry( *m_dom, defaultPath + "/automaticArgumentsHint", true );
 	m_automaticHeaderCompletion = DomUtil::readBoolEntry( *m_dom, defaultPath + "/automaticHeaderCompletion", true );
 	m_codeCompletionDelay = DomUtil::readIntEntry( *m_dom, defaultPath + "/codeCompletionDelay", 250 );
