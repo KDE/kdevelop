@@ -150,7 +150,7 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
             kurl.setRef(url.mid(1));
         }
         else
-            kurl = KUrl(KDevHTMLPart::url().upURL().url(true)+url);
+            kurl = KUrl(KDevHTMLPart::url().upURL().url(KUrl::RemoveTrailingSlash)+url);
     }
     else
         kurl = KUrl(url);

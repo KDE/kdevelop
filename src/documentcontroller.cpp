@@ -557,7 +557,7 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
     // We now have a url that exists ;)
 
     // clean it and resolve possible symlink
-    url.cleanPath( true );
+    url.cleanPath( KUrl::SimplifyDirSeparators );
     if ( url.isLocalFile() )
     {
         QString path = QFileInfo( url.path() ).canonicalFilePath();

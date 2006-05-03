@@ -56,7 +56,7 @@ class QDomDocument;
 
 QString ProjectInfo::sessionFile() const
 {
-    QString sf = m_projectURL.path(-1);
+    QString sf = m_projectURL.path(KUrl::RemoveTrailingSlash);
     sf.truncate(sf.length() - 8); // without ".kdevelop"
     sf += "kdevses"; // suffix for a KDevelop session file
     return sf;
@@ -67,7 +67,7 @@ QString ProjectManager::projectDirectory( const QString& path, bool absolute ) {
         return path;
     KUrl url(ProjectManager::getInstance()->projectFile(), path);
     url.cleanPath();
-    return url.path(-1);
+    return url.path(KUrl::RemoveTrailingSlash);
 }
 
 ProjectManager *ProjectManager::s_instance = 0;
