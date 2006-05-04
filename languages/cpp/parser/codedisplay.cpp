@@ -101,7 +101,7 @@ QString CodeDisplay::toolTip( const _CodeModelItem *item )
         {
             QStringList signature;
             const _FunctionModelItem * function =
-                dynamic_cast<const _FunctionModelItem *>( item );
+                static_cast<const _FunctionModelItem *>( item );
             switch ( function->accessPolicy() )
             {
             case CodeModel::Public:
