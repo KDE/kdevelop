@@ -49,7 +49,10 @@ public:
 
   void run(const KUrl &url, AST *node);
 
+  virtual void visit(AST *node);
+
 protected:
+  virtual void visitDeclarator(DeclaratorAST *);
   virtual void visitAccessSpecifier(AccessSpecifierAST *);
   virtual void visitClassSpecifier(ClassSpecifierAST *);
   virtual void visitEnumSpecifier(EnumSpecifierAST *);
@@ -88,7 +91,7 @@ private:
 
   void setPositionAt(_CodeModelItem *item, AST *ast);
   KTextEditor::Cursor tokenToPosition(const Token& token, QString& fileName, bool end = false) const;
-  KTextEditor::SmartRange* newRange(AST *ast, bool includeStartToken = true, bool includeEndToken = true);
+  KTextEditor::SmartRange* newRange(AST *ast);
   KTextEditor::SmartRange* newRange(const Token& token);
   KTextEditor::SmartRange* newRange(std::size_t token);
 
@@ -107,6 +110,8 @@ private:
   FunctionDefinitionModelItem _M_current_function;
   TemplateModelItem _M_current_template;
   EnumModelItem _M_current_enum;
+
+  //QStack<KDevCodeItem*> _M_current_item;
 
   QStringList _M_context;
   QSet<QString> _M_qualified_types;

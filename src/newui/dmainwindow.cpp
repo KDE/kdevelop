@@ -23,6 +23,7 @@
 #include <QEvent>
 #include <QStackedWidget>
 #include <QTimer>
+#include <QToolButton>
 
 #include <kglobal.h>
 #include <kdebug.h>

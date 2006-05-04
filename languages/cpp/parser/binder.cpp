@@ -327,8 +327,10 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
   _M_current_function->setConstant(declarator->fun_cv != 0);
 
   // Mark function definition
-  if (KTextEditor::SmartRange* range = newRange(node->init_declarator))
+  if (KTextEditor::SmartRange* range = newRange(node)) {
+    //kDebug() << k_funcinfo << "Function " << _M_current_function->name() << " position " << *range << endl;
     _M_current_function->setDefinition(range);
+  }
 
   applyFunctionSpecifiers(node->function_specifiers,
                           model_static_cast<FunctionModelItem>(_M_current_function));
@@ -406,8 +408,8 @@ void Binder::visitNamespace(NamespaceAST *node)
   DefaultVisitor::visitNamespace(node);
 
   // Mark namespace name
-  if (KTextEditor::SmartRange* range = newRange(node->namespace_name))
-    _M_current_namespace->addReference(range);
+  /*if (KTextEditor::SmartRange* range = newRange(node->namespace_name))
+    _M_current_namespace->addReference(range);*/
 
   if (! anonymous)
     {
@@ -456,7 +458,10 @@ void Binder::visitClassSpecifier(ClassSpecifierAST *node)
   scope->addClass(_M_current_class);
 
   // Highlight class name
-  if (KTextEditor::SmartRange* range = newRange(node->name, true, false))
+  if (KTextEditor::SmartRange* range = newRange(node))
+    _M_current_class->setDeclaration(range);
+
+  if (KTextEditor::SmartRange* range = newRange(node->name))
     _M_current_class->addReference(range);
 
   name_cc.run(node->name->unqualified_name);
@@ -633,9 +638,6 @@ TypeInfo Binder::qualifyType(const TypeInfo &type, const QStringList &context) c
 
 void Binder::setPositionAt(_CodeModelItem *item, AST *ast)
 {
-  // This doesn't work very well since we're retrieving positions
-  // from the preprocessed source... not the original source file :(
-  // HELLLLPP ROBERTO!!
   QString fileName;
   int startLine, startColumn;
   int endLine, endColumn;
@@ -668,16 +670,16 @@ KTextEditor::Cursor Binder::tokenToPosition(const Token& token, QString& fileNam
   return KTextEditor::Cursor(line, column);
 }
 
-KTextEditor::SmartRange * Binder::newRange( AST * ast, bool includeStartToken, bool includeEndToken )
+KTextEditor::SmartRange * Binder::newRange( AST * ast )
 {
   if (_M_highlight)
     if (KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(_M_highlight->document())) {
       const Token &start_token = _M_token_stream->token(ast->start_token);
-      const Token &end_token = _M_token_stream->token(ast->end_token);
+      const Token &end_token = _M_token_stream->token(ast->end_token - 1);
       QString fileName;
-      KTextEditor::Cursor start = tokenToPosition(start_token, fileName, !includeStartToken);
+      KTextEditor::Cursor start = tokenToPosition(start_token, fileName, false);
       //kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
-      KTextEditor::Cursor end = tokenToPosition(end_token, fileName, includeEndToken);
+      KTextEditor::Cursor end = tokenToPosition(end_token, fileName, true);
       //kDebug() << k_funcinfo << fileName << " c/w " << _M_currentFile << endl;
       KTextEditor::SmartRange* ret = smart->newSmartRange(start, end, _M_highlight);
       //kDebug() << k_funcinfo << *ret << endl;
@@ -707,6 +709,47 @@ KTextEditor::SmartRange * Binder::newRange( const Token & token )
 KTextEditor::SmartRange * Binder::newRange( std::size_t token )
 {
   return newRange(_M_token_stream->token(token));
+}
+
+void Binder::visit( AST * node )
+{
+  /*KTextEditor::SmartRange* thisLevel = _M_highlight;
+
+  if (node)
+    if (KTextEditor::SmartRange* range = newRange(node, false, false))
+      _M_highlight = range;*/
+
+  /*if (node && _M_highlight)
+    if (KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(_M_highlight->document())) {
+      const Token &start_token = _M_token_stream->token(node->start_token);
+      const Token &end_token = _M_token_stream->token(node->end_token - 1);
+      QString fileName;
+      KTextEditor::Cursor start = tokenToPosition(start_token, fileName, false);
+      KTextEditor::Cursor end = tokenToPosition(end_token, fileName, true);
+      QString text = _M_highlight->document()->text(KTextEditor::Range(start, end));
+      kDebug() << k_funcinfo << node << text << endl;
+    }*/
+
+  DefaultVisitor::visit(node);
+
+
+  //_M_highlight = thisLevel;
+}
+
+void Binder::visitDeclarator( DeclaratorAST * node )
+{
+  if (node && _M_highlight)
+    if (KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(_M_highlight->document())) {
+      const Token &start_token = _M_token_stream->token(node->start_token);
+      const Token &end_token = _M_token_stream->token(node->end_token - 1);
+      QString fileName;
+      KTextEditor::Cursor start = tokenToPosition(start_token, fileName, false);
+      KTextEditor::Cursor end = tokenToPosition(end_token, fileName, true);
+      QString text = _M_highlight->document()->text(KTextEditor::Range(start, end));
+      kDebug() << k_funcinfo << node << text << endl;
+    }
+
+  DefaultVisitor::visitDeclarator(node);
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

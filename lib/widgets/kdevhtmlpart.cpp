@@ -14,6 +14,7 @@
 #include <khtmlview.h>
 #include <khtml_settings.h>
 #include <kconfig.h>
+#include <ktoolbarpopupaction.h>
 
 #include <kdevmainwindow.h>
 #include <kdevdocumentcontroller.h>
@@ -150,7 +151,7 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
             kurl.setRef(url.mid(1));
         }
         else
-            kurl = KUrl(KDevHTMLPart::url().upURL().url(KUrl::RemoveTrailingSlash)+url);
+            kurl = KUrl(KDevHTMLPart::url().upURL().url(KUrl::AddTrailingSlash)+url);
     }
     else
         kurl = KUrl(url);

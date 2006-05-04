@@ -34,6 +34,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <kapplication.h>
+#include <kactioncollection.h>
 
 #include <ddockwidget.h>
 #include <dtabwidget.h>

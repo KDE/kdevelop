@@ -41,6 +41,8 @@
 #include <kiconloader.h>
 #include <kxmlguifactory.h>
 #include <ktoolbar.h>
+#include <ktoolbarpopupaction.h>
+#include <ktoggleaction.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>

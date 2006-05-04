@@ -72,6 +72,8 @@
 #include <kdialog.h>
 #include <kio/netaccess.h>
 #include <kmenu.h>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
 
 #include <kdebug.h>
 //END Includes

@@ -26,7 +26,7 @@
 #include <QHash>
 #include <QModelIndex>
 
-namespace KTextEditor { class Attribute; }
+namespace KTextEditor { class Attribute; class SmartRange; }
 
 class CodeModel;
 
@@ -54,15 +54,27 @@ class CppHighlighting : public QObject
       MemberType
     };
 
+    enum Contexts {
+      Definition,
+      Declaration,
+      Reference
+    };
+
     CppHighlighting(QObject* parent);
     virtual ~CppHighlighting();
 
     void highlightModel(CodeModel* model, const QModelIndex& parent = QModelIndex()) const;
 
-    KTextEditor::Attribute* attributeForType(Types type) const;
+    void highlightTree(KTextEditor::SmartRange* topRange) const;
+
+    KTextEditor::Attribute* attributeForType(Types type, Contexts context) const;
 
   private:
-    mutable QHash<Types, KTextEditor::Attribute*> m_attributes;
+    mutable QHash<Types, KTextEditor::Attribute*> m_definitionAttributes;
+    mutable QHash<Types, KTextEditor::Attribute*> m_declarationAttributes;
+    mutable QHash<Types, KTextEditor::Attribute*> m_referenceAttributes;
+
+    mutable QList<KTextEditor::Attribute*> m_depthAttributes;
 };
 
 #endif

@@ -42,13 +42,13 @@ Profile::Profile(Profile *parent, const QString &name)
     m_description = config.readEntry("Description");
 
     config.setGroup("Properties");
-    m_properties = config.readListEntry("List");
+    m_properties = config.readEntry("List", QStringList());
 
     config.setGroup("Enable");
-    m_explicitEnable = config.readListEntry("List");
+    m_explicitEnable = config.readEntry("List", QStringList());
 
     config.setGroup("Disable");
-    m_explicitDisable = config.readListEntry("List");
+    m_explicitDisable = config.readEntry("List", QStringList());
 }
 
 Profile::Profile(Profile *parent, const QString &name, const QString &genericName, const QString &description)
@@ -128,7 +128,7 @@ void Profile::addEntry(List type, const QString &value)
 void Profile::removeEntry(List type, const QString &value)
 {
     QStringList &list = listByType(type);
-    list.remove(value);
+    list.removeAll(value);
 }
 
 QStringList &Profile::listByType(List type)

@@ -24,6 +24,8 @@
 #include "kdevcodemodel.h"
 #include "kdevcodeaggregate_p.h"
 #include "kdevdocumentcontroller.h"
+#include "kdevcore.h"
+#include "kdevproject.h"
 
 #include "parsejob.h"
 #include "parser/dumptree.h"
@@ -35,6 +37,7 @@
 #include <QList>
 #include <QTimer>
 #include <QMutexLocker>
+#include <QFile>
 
 #include <kdebug.h>
 
@@ -55,6 +58,8 @@ BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
     m_timer->setSingleShot( true );
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
     m_timer->start( 500 );
+
+    connect( m_cppSupport->core(), SIGNAL(projectOpened()), SLOT(projectOpened()) );
 }
 
 BackgroundParser::~BackgroundParser()
@@ -154,6 +159,7 @@ void BackgroundParser::parseComplete( Job *job )
             return;
 
         m_cppSupport->codeHighlighting()->highlightModel(parseJob->codeModel());
+        //m_cppSupport->codeHighlighting()->highlightTree(parseJob->highlight());
 
         m_cppSupport->codeProxy() ->insertModel( parseJob->document(),
                 parseJob->codeModel() );
@@ -186,6 +192,25 @@ void BackgroundParser::resume()
 void BackgroundParser::removeDocumentFile( KDevDocument * document )
 {
     m_openDocuments.remove(document->url());
+}
+
+void BackgroundParser::projectOpened( )
+{
+    // FIXME all quite temporary hacks until new project api available
+
+    /*connect(m_cppSupport->project(), SIGNAL(addedFilesToProject(const QStringList&)), SLOT(filesAddedToProject(const QStringList&)));
+    void removedFilesFromProject(const QStringList& fileList);
+    void changedFilesInProject(const QStringList& fileList);*/
+
+    foreach (QString file, m_cppSupport->project()->allFiles()) {
+        file = m_cppSupport->project()->relativeProjectFile(file);
+        if (QFile::exists(file)) {
+            kDebug() << "Found file " << file << endl;
+            addDocument(KUrl::fromPath(file));
+        } else {
+            kDebug() << "Missed file " << file << endl;
+        }
+    }
 }
 
 #include "backgroundparser.moc"

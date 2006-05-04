@@ -35,6 +35,7 @@ class QDomDocument;
 #include <kvbox.h>
 #include <ktoolbar.h>
 #include <kdialogbase.h>
+#include <krecentfilesaction.h>
 
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"

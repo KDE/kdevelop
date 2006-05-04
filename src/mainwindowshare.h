@@ -24,6 +24,7 @@
 
 class KAction;
 class KToggleAction;
+class KToolBarPopupAction;
 namespace KParts {
   class MainWindow;
 }

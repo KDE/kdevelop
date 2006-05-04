@@ -35,6 +35,10 @@
 #include <kxmlguifactory.h>
 #include <ksqueezedtextlabel.h>
 #include <kencodingfiledialog.h>
+#include <krecentfilesaction.h>
+#include <ktoolbarpopupaction.h>
+#include <kstdaction.h>
+#include <kseparatoraction.h>
 
 #include <kio/netaccess.h>
 
@@ -1147,7 +1151,7 @@ void DocumentController::setupActions()
                                           "the name of previously opened file "
                                           "to switch to." ) );
 
-    new KActionSeparator( ac, "dummy_separator" );
+    new KSeparatorAction( ac, "dummy_separator" );
 
     m_backAction = new KToolBarPopupAction( i18n( "Back" ), "back", 0, this,
                                             SLOT( slotBack() ), ac,

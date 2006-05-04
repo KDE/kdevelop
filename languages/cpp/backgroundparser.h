@@ -66,6 +66,7 @@ public slots:
     void parseDocuments();
     void parseComplete( Job* );
     void documentChanged( KTextEditor::Document* document );
+    void projectOpened();
 
 private:
     CppLanguageSupport *m_cppSupport;
