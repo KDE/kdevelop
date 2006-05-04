@@ -46,12 +46,10 @@ KTextEditor::Attribute * CppHighlighting::attributeForType( Types type, Contexts
   KTextEditor::Attribute* a = 0L;
   switch (context) {
     case Definition:
-      return 0L;
       a = m_definitionAttributes[type];
       break;
 
     case Declaration:
-      return 0L;
       a = m_declarationAttributes[type];
       break;
 
@@ -87,13 +85,10 @@ KTextEditor::Attribute * CppHighlighting::attributeForType( Types type, Contexts
         break;
 
       case ClassType: {
-        KTextEditor::Attribute* d = new KTextEditor::Attribute();
-        d->setBackground(Qt::blue);
-        //d->setForeground(Qt::white);
-        d->setTextOutline(QPen(Qt::white));
-        a->setDynamicAttribute(Attribute::ActivateMouseIn, d, true);
-        a->setEffects(Attribute::EffectFadeIn | Attribute::EffectFadeOut);
-        //a->setBackground(QColor(Qt::yellow).light(175));
+        KTextEditor::Attribute* e = new KTextEditor::Attribute();
+        e->setForeground(Qt::green);
+        a->setDynamicAttribute(Attribute::ActivateCaretIn, e, true);
+        //a->setEffects(Attribute::EffectFadeIn | Attribute::EffectFadeOut);
         break;
       }
 
@@ -127,17 +122,20 @@ KTextEditor::Attribute * CppHighlighting::attributeForType( Types type, Contexts
 
     switch (context) {
       case Definition:
-        return 0L;
         a->setFontBold();
         break;
 
       case Declaration:
-        return 0L;
-        //a = m_declarationAttributes[type];
+        a = m_declarationAttributes[type];
         break;
 
       case Reference:
         a->setFontUnderline(true);
+
+        KTextEditor::Attribute* d = new KTextEditor::Attribute();
+        d->setBackground(QColor(Qt::blue).light(190));
+        d->setEffects(Attribute::EffectFadeIn | Attribute::EffectFadeOut);
+        a->setDynamicAttribute(Attribute::ActivateMouseIn, d, true);
         break;
     }
   }
@@ -187,11 +185,11 @@ void CppHighlighting::highlightModel(CodeModel* model, const QModelIndex & paren
       type = MemberType;
 
     foreach (KTextEditor::SmartRange* sr, c->references())
-      sr->setAttribute(attributeForType(FunctionType, Reference));
+      sr->setAttribute(attributeForType(type, Reference));
     if (c->definition())
-      c->definition()->setAttribute(attributeForType(FunctionType, Definition));
+      c->definition()->setAttribute(attributeForType(type, Definition));
     if (c->declaration())
-      c->declaration()->setAttribute(attributeForType(FunctionType, Declaration));
+      c->declaration()->setAttribute(attributeForType(type, Declaration));
 
     highlightModel(model, index);
   }
