@@ -66,6 +66,9 @@ public slots:
     virtual void setOrientation( Qt::Orientation );
     void activePartChanged( const KURL &url );
 
+protected:
+    virtual void focusInEvent( QFocusEvent *ev );
+
 private:
     KParts::Part* createPart( const KURL &url );
 

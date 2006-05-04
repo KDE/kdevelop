@@ -259,6 +259,15 @@ void MultiBuffer::activePartChanged( const KURL &url )
     TopLevel::getInstance() ->setCurrentDocumentCaption( url.fileName() );
 }
 
+void MultiBuffer::focusInEvent( QFocusEvent *ev )
+{
+    KParts::Part *active = activeBuffer();
+    if (active && active->widget())
+	active->widget()->setFocus();
+    QSplitter::focusInEvent(ev);
+}
+
+
 #include "multibuffer.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
