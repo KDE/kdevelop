@@ -40,6 +40,7 @@ private:
   //KActions
   KAction* wrapDesignerAction( QAction*, KActionCollection*, const char* );
   void updateDesignerAction( KAction*, QAction* );
+
 private Q_SLOTS:
   void updateDesignerActions();
 
