@@ -2,13 +2,19 @@
 #define GUIBUILDER_PART_H
 
 #include <QObject>
-
+#include <QHash>
 #include <kdevreadwritepart.h>
 
 class QAction;
 class QDesignerFormEditorInterface;
 class QDesignerFormWindowInterface;
 class KAboutData;
+class KAction;
+
+template<class T> class QList;
+
+typedef QHash<KAction*, QAction*> DesignerActionHash;
+
 
 class GuiBuilderPart: public KDevReadWritePart
 {
@@ -32,11 +38,17 @@ public:
 private:
   //wrap the actions provided by QDesignerFormWindowManagerInterface in
   //KActions
-  void wrapDesignerAction( QAction*, KActionCollection*, const char* );
+  KAction* wrapDesignerAction( QAction*, KActionCollection*, const char* );
+  void updateDesignerAction( KAction*, QAction* );
+private Q_SLOTS:
+  void updateDesignerActions();
+
 
 private:
   QDesignerFormEditorInterface *m_designer;
   QDesignerFormWindowInterface *m_window;
+  DesignerActionHash m_designerActions;
+
 };
 
 #endif // GUIBUILDER_PART_H

@@ -89,47 +89,54 @@ void GuiBuilderPart::setupActions()
     QDesignerFormWindowManagerInterface* manager = designer()->formWindowManager();
 
     QAction* designerAction = 0;
+    KAction* designerKAction = 0;
     designerAction = manager->actionAdjustSize();
-    wrapDesignerAction( designerAction, actionCollection(), "adjust_size" );
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "adjust_size" );
 
     designerAction = manager->actionBreakLayout();
-    wrapDesignerAction( designerAction, actionCollection(), "break_layout" );
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "break_layout" );
 
     designerAction = manager->actionCut();
-    KStdAction::cut( designerAction, SIGNAL( triggered( bool  ) ),
-                     actionCollection(), "designer_cut" );
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "designer_cut" );
 
     designerAction = manager->actionCopy();
-    KStdAction::copy( designerAction, SIGNAL( triggered( bool ) ),
-                      actionCollection(), "designer_copy" );
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "designer_copy" );
 
     designerAction = manager->actionPaste();
-    KStdAction::paste( designerAction, SIGNAL( triggered( bool ) ),
-                       actionCollection(), "designer_paste" );
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "designer_paste" );
 
     designerAction = manager->actionDelete();
-    wrapDesignerAction( designerAction, actionCollection(), "designer_delete" );
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "designer_delete" );
 
     designerAction = manager->actionGridLayout();
-    wrapDesignerAction( designerAction, actionCollection(), "layout_grid" );
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "layout_grid" );
 
     designerAction = manager->actionHorizontalLayout();
-    wrapDesignerAction( designerAction, actionCollection(), "layout_horiz" );
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "layout_horiz" );
 
     designerAction = manager->actionVerticalLayout();
-    wrapDesignerAction( designerAction, actionCollection(), "layout_vertical" );
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "layout_vertical" );
 
     designerAction = manager->actionUndo();
-    KStdAction::undo( designerAction, SIGNAL( triggered( bool ) ),
-                      actionCollection(), "designer_undo" );
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "designer_undo" );
 
     designerAction = manager->actionRedo();
-    KStdAction::redo( designerAction, SIGNAL( triggered( bool ) ),
-                      actionCollection(), "designer_redo" );
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "designer_redo" );
 
     designerAction = manager->actionSelectAll();
-    KStdAction::selectAll( designerAction, SIGNAL( triggered( bool ) ),
-                           actionCollection(), "designer_select_all" );
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "designer_select_all" );
 }
 
 bool GuiBuilderPart::openFile()
@@ -146,6 +153,9 @@ bool GuiBuilderPart::openFile()
   qw->addWindow(widget);
   m_window = widget;
   connect(m_window, SIGNAL(changed()), this, SLOT(setModified()));
+  connect( m_window, SIGNAL( selectionChanged() ), this, SLOT( updateDesignerActions() ) );
+  connect( m_window, SIGNAL( toolChanged( int ) ), this, SLOT( updateDesignerActions() ) );
+
   return true;
 }
 
@@ -169,12 +179,21 @@ bool GuiBuilderPart::saveFile()
     return true;
 }
 
-void GuiBuilderPart::wrapDesignerAction( QAction* dAction,
+KAction* GuiBuilderPart::wrapDesignerAction( QAction* dAction,
                                          KActionCollection* parent,
                                          const char* name )
 {
     KAction* a = new KAction( KIcon( dAction->icon() ), dAction->text(),
                               parent, name );
+    connect( a, SIGNAL( triggered() ), dAction, SIGNAL( triggered() ) );
+
+    m_designerActions[a] = dAction;
+    updateDesignerAction( a, dAction );
+    return a;
+}
+
+void GuiBuilderPart::updateDesignerAction( KAction* a, QAction* dAction )
+{
     a->setActionGroup( dAction->actionGroup() );
     a->setCheckable( dAction->isCheckable() );
     a->setChecked( dAction->isChecked() );
@@ -189,6 +208,15 @@ void GuiBuilderPart::wrapDesignerAction( QAction* dAction,
     a->setText( dAction->text() );
     a->setToolTip( dAction->toolTip() );
     a->setWhatsThis( dAction->whatsThis() );
+}
+
+void GuiBuilderPart::updateDesignerActions()
+{
+    DesignerActionHash::ConstIterator it, itEnd = m_designerActions.constEnd();
+    for ( it = m_designerActions.constBegin(); it != itEnd; ++it )
+    {
+        updateDesignerAction( it.key(), it.value() );
+    }
 }
 
 #include "guibuilder_part.moc"
