@@ -140,7 +140,7 @@ bool MakefileInterface::parse( const QDir& dir, ParserRecursion recursive )
 {
     kDebug(9020) << k_funcinfo << "directory to parse is: " << dir.absolutePath() << endl;
     int ret = -1;
-    AutoTools::ProjectAST* ast;
+    AutoTools::ProjectAST* ast = 0L;
 
     QFileInfo parsingFile;
     QStringList::const_iterator it, itEnd = d->filesToParse.constEnd();
