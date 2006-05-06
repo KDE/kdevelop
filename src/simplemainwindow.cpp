@@ -401,9 +401,10 @@ void SimpleMainWindow::tabContextActivated(int id)
 void SimpleMainWindow::configureToolbars()
 {
     saveMainWindowSettings(KGlobal::config(), QLatin1String("SimpleMainWindow"));
-    KEditToolbar dlg(factory());
-    connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
-    dlg.exec();
+    KEditToolbar* dlg = new KEditToolbar(factory());
+    connect(dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
+    connect(dlg, SIGNAL(finished(int)), dlg, SLOT(deleteLater()));
+    dlg->show();
 }
 
 void SimpleMainWindow::slotNewToolbarConfig()

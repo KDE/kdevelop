@@ -21,7 +21,6 @@
 
 #include "cpphighlighting.h"
 
-#include <ktexteditor/attribute.h>
 #include <ktexteditor/smartrange.h>
 
 #include "parser/codemodel.h"
@@ -35,15 +34,11 @@ CppHighlighting::CppHighlighting( QObject * parent )
 
 CppHighlighting::~ CppHighlighting( )
 {
-  qDeleteAll(m_definitionAttributes);
-  qDeleteAll(m_declarationAttributes);
-  qDeleteAll(m_referenceAttributes);
-  qDeleteAll(m_depthAttributes);
 }
 
-KTextEditor::Attribute * CppHighlighting::attributeForType( Types type, Contexts context ) const
+KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Contexts context ) const
 {
-  KTextEditor::Attribute* a = 0L;
+  KTextEditor::Attribute::Ptr a;
   switch (context) {
     case Definition:
       a = m_definitionAttributes[type];
@@ -59,7 +54,7 @@ KTextEditor::Attribute * CppHighlighting::attributeForType( Types type, Contexts
   }
 
   if (!a) {
-    a = new KTextEditor::Attribute();
+    a = KTextEditor::Attribute::Ptr(new KTextEditor::Attribute());
     a->setBackgroundFillWhitespace(true);
     switch (context) {
       case Definition:
@@ -85,9 +80,9 @@ KTextEditor::Attribute * CppHighlighting::attributeForType( Types type, Contexts
         break;
 
       case ClassType: {
-        KTextEditor::Attribute* e = new KTextEditor::Attribute();
+        KTextEditor::Attribute::Ptr e(new KTextEditor::Attribute());
         e->setForeground(Qt::green);
-        a->setDynamicAttribute(Attribute::ActivateCaretIn, e, true);
+        a->setDynamicAttribute(Attribute::ActivateCaretIn, e);
         //a->setEffects(Attribute::EffectFadeIn | Attribute::EffectFadeOut);
         break;
       }
@@ -132,10 +127,10 @@ KTextEditor::Attribute * CppHighlighting::attributeForType( Types type, Contexts
       case Reference:
         a->setFontUnderline(true);
 
-        KTextEditor::Attribute* d = new KTextEditor::Attribute();
+        KTextEditor::Attribute::Ptr d(new KTextEditor::Attribute());
         d->setBackground(QColor(Qt::blue).light(190));
         d->setEffects(Attribute::EffectFadeIn | Attribute::EffectFadeOut);
-        a->setDynamicAttribute(Attribute::ActivateMouseIn, d, true);
+        a->setDynamicAttribute(Attribute::ActivateMouseIn, d);
         break;
     }
   }
@@ -199,7 +194,7 @@ void CppHighlighting::highlightTree( KTextEditor::SmartRange * range ) const
 {
   int depth = range->depth();
   while (depth >= m_depthAttributes.count()) {
-    KTextEditor::Attribute* a = new KTextEditor::Attribute();
+    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute());
     a->setBackground(QColor(Qt::white).dark(100 + (m_depthAttributes.count() * 25)));
     if (depth % 2)
       a->setOutline(Qt::red);

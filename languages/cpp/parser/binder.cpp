@@ -504,7 +504,8 @@ void Binder::visitEnumSpecifier(EnumSpecifierAST *node)
   _M_current_enum->setName(name);
   _M_current_enum->setScope(enumScope->qualifiedName());
   _M_qualified_types.insert(_M_current_enum->qualifiedName().join("."));
-  setPositionAt( _M_current_enum, node->name );
+  if (node->name)
+    setPositionAt( _M_current_enum, node->name );
   enumScope->addEnum(_M_current_enum);
 
   DefaultVisitor::visitEnumSpecifier(node);
