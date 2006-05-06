@@ -24,10 +24,9 @@
 static const KDevPluginInfo data("kdevkonsoleview");
 K_EXPORT_COMPONENT_FACTORY( kdevkonsoleview, KDevGenericFactory<KonsoleViewPart>( data ) )
 
-KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStringList &)
+KonsoleViewPart::KonsoleViewPart(QObject *parent, const QStringList &)
   : KDevPlugin(&data, parent)
 {
-    setObjectName(QString::fromUtf8(name));
     m_widget = new KonsoleViewWidget(this);
 
     m_widget->setWhatsThis(i18n("<b>Konsole</b><p>"

@@ -38,12 +38,9 @@
 #include <kdebug.h>
 
 CppLanguageSupport::CppLanguageSupport( QObject* parent,
-                                        const char* name,
                                         const QStringList& /*args*/ )
     : KDevLanguageSupport( CppLanguageSupportFactory::info(), parent )
 {
-    setObjectName( name );
-
     QString types =
         QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
     m_mimetypes = types.split( "," );

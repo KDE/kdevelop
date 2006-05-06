@@ -672,9 +672,7 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
     if ( factory )
     {
         // create the object of the desired class
-        KParts::ReadOnlyPart * part = readOnly( factory->createPart(
-                                                    TopLevel::getInstance() ->main(),
-                                                    0, 0, 0, className.toLatin1() ) );
+        KParts::ReadOnlyPart * part = readOnly( factory->createPart( TopLevel::getInstance() ->main(), 0L, className.toLatin1() ) );
         if ( part )
         {
             KDevReadWritePart* kdevPart = qobject_cast<KDevReadWritePart*>( part );
@@ -1278,7 +1276,7 @@ KTextEditor::Document *DocumentController::createEditorPart( bool activate )
     KTextEditor::Document *doc =
         qobject_cast<KTextEditor::Document *>( m_editorFactory->createPart(
                                                    TopLevel::getInstance() ->main(),
-                                                   0, 0, 0, "KParts::ReadWritePart" ) );
+                                                   0, "KParts::ReadWritePart" ) );
     return doc;
 }
 

@@ -22,12 +22,11 @@
 typedef KParts::GenericFactory<GuiBuilderPart> GuiBuilderPartFactory;
 K_EXPORT_COMPONENT_FACTORY(kdevguibuilder, GuiBuilderPartFactory)
 
-GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget, const char* widgetName,
-                               QObject *parent, const char *name,
+GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
+                               QObject *parent,
                                const QStringList &args)
   : KDevReadWritePart(parent)
 {
-  setObjectName(QString::fromUtf8(name));
   QDesignerComponents::initializeResources();
   m_designer = 0;
   m_window = 0;

@@ -15,7 +15,7 @@ class FileSelectorPart : public KDevPlugin
 {
     Q_OBJECT
 public:
-    FileSelectorPart(QObject *parent, const char*, const QStringList&);
+    FileSelectorPart(QObject *parent, const QStringList&);
     virtual ~FileSelectorPart();
 
 public slots:

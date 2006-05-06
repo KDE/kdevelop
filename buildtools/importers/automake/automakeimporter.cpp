@@ -33,11 +33,10 @@
 K_EXPORT_COMPONENT_FACTORY( kdevautomakeimporter,
                             KGenericFactory<AutoMakeImporter>( "kdevautomakeimporter" ) )
 
-AutoMakeImporter::AutoMakeImporter( QObject* parent, const char* name,
+AutoMakeImporter::AutoMakeImporter( QObject* parent,
                                     const QStringList& )
 : KDevProjectEditor( parent ), m_rootItem(0L)
 {
-    setObjectName( QString::fromUtf8( name ) );
     m_project = qobject_cast<KDevProject*>( parent );
     Q_ASSERT( m_project );
     m_interface = new MakefileInterface( this );

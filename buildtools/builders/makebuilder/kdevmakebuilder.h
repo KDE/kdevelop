@@ -33,7 +33,7 @@ class KDevMakeBuilder: public KDevProjectBuilder
 {
     Q_OBJECT
 public:
-    KDevMakeBuilder(QObject *parent = 0, const char *name = 0, const QStringList &args = QStringList());
+    KDevMakeBuilder(QObject *parent = 0, const QStringList &args = QStringList());
     virtual ~KDevMakeBuilder();
 
     virtual KDevProject *project() const;

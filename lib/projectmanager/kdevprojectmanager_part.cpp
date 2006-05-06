@@ -52,11 +52,9 @@ typedef KDevGenericFactory<KDevProjectManagerPart> KDevProjectManagerFactory;
 static const KDevPluginInfo data("kdevprojectmanager");
 K_EXPORT_COMPONENT_FACTORY(kdevprojectmanager, KDevProjectManagerFactory(data));
 
-KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name, const QStringList&)
+KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringList&)
     : KDevProject(&data, parent)
 {
-  setObjectName(QString::fromUtf8(name));
-
   m_workspace = 0;
   m_projectModel = new KDevProjectModel(this);
   m_dirty = false;
@@ -72,7 +70,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
 
         int error = 0;
         if (KDevProjectImporter *i = KParts::ComponentFactory::createInstanceFromService<KDevProjectImporter>(ptr, this,
-            ptr->name().toLatin1(), QStringList(), &error))
+            QStringList(), &error))
           {
             m_importers.insert(ptr->name(), i);
           }
@@ -92,7 +90,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
 
         int error = 0;
         if (KDevProjectBuilder *i = KParts::ComponentFactory::createInstanceFromService<KDevProjectBuilder>(ptr, this,
-            ptr->name().toLatin1(), QStringList(), &error))
+            QStringList(), &error))
           {
             m_builders.insert(ptr->name(), i);
           }

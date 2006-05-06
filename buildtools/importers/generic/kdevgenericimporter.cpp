@@ -33,11 +33,9 @@
 
 K_EXPORT_COMPONENT_FACTORY(kdevgenericimporter, KGenericFactory<KDevGenericImporter>("kdevgenericimporter"))
 
-KDevGenericImporter::KDevGenericImporter(QObject *parent, const char *name, const QStringList &)
+KDevGenericImporter::KDevGenericImporter(QObject *parent, const QStringList &)
     : KDevProjectEditor(parent)
 {
-    setObjectName(QString::fromUtf8(name));
-
     m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
 

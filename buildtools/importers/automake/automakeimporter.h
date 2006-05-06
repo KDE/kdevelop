@@ -36,8 +36,7 @@ class QDir;
 class AutoMakeImporter : public KDevProjectEditor
 {
 public:
-	AutoMakeImporter( QObject* parent = 0, const char* name = 0,
-	                  const QStringList& args = QStringList() );
+	AutoMakeImporter( QObject* parent = 0, const QStringList& args = QStringList() );
 	
 	virtual ~AutoMakeImporter();
 	

@@ -20,8 +20,7 @@ class GuiBuilderPart: public KDevReadWritePart
 {
   Q_OBJECT
 public:
-  GuiBuilderPart(QWidget* parentWidget, const char* widgetName,
-                 QObject *parent, const char *name, const QStringList &args);
+  GuiBuilderPart(QWidget* parentWidget, QObject *parent, const QStringList &args);
   virtual ~GuiBuilderPart();
 
   virtual void setApiInstance( KDevApi* api );

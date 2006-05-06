@@ -476,7 +476,7 @@ bool ProjectManager::loadProjectPart()
   }
 
   KDevProject *projectPart = KParts::ComponentFactory
-    ::createInstanceFromService< KDevProject >( projectService, API::getInstance(), 0,
+    ::createInstanceFromService< KDevProject >( projectService, API::getInstance(),
                                                   PluginController::argumentsFromService( projectService ) );
   if ( !projectPart ) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
@@ -535,7 +535,6 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
   KDevLanguageSupport *langSupport = KParts::ComponentFactory
       ::createInstanceFromService<KDevLanguageSupport>( languageSupportService,
                                                         API::getInstance(),
-                                                        0,
                                                         PluginController::argumentsFromService(  languageSupportService ) );
 
   if ( !langSupport ) {

@@ -193,7 +193,7 @@ KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
 {
     int err = 0;
     KDevPlugin * pl = KParts::ComponentFactory
-        ::createInstanceFromService<KDevPlugin>( service, API::getInstance(), service->name().toAscii().constData(),
+        ::createInstanceFromService<KDevPlugin>( service, API::getInstance(),
                                                  argumentsFromService( service ), &err );
 //    kDebug() << "ERR: " << err << endl;
     return pl;

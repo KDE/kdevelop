@@ -48,12 +48,9 @@ K_EXPORT_COMPONENT_FACTORY( kdevdocumentview,
                             KDevDocumentViewFactory( data ) );
 
 KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
-        const char *name,
         const QStringList& )
         : KDevPlugin( &data, parent )
 {
-    setObjectName( QString::fromUtf8( name ) );
-
     m_documentModel = new KDevDocumentModel( this );
 
     setInstance( KDevDocumentViewFactory::instance() );

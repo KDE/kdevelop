@@ -33,7 +33,7 @@ typedef KDevGenericFactory<FileSelectorPart> FileSelectorFactory;
 static const KDevPluginInfo data("kdevfileselector");
 K_EXPORT_COMPONENT_FACTORY( kdevfileselector, FileSelectorFactory( data ) )
 
-FileSelectorPart::FileSelectorPart(QObject *parent, const char*, const QStringList&)
+FileSelectorPart::FileSelectorPart(QObject *parent, const QStringList&)
     : KDevPlugin(&data, parent)
 {
     setInstance(FileSelectorFactory::instance());

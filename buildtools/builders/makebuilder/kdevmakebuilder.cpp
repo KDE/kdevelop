@@ -46,11 +46,9 @@ const QString &KDevMakeBuilder::dontAct =
 const QString &KDevMakeBuilder::environment =
     KGlobal::staticQString("/kdevprojectmanager/builder/make/envvars");
 
-KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const char *name, const QStringList &)
+KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const QStringList &)
     : KDevProjectBuilder(parent)
 {
-    setObjectName(QString::fromUtf8(name));
-
     m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
 

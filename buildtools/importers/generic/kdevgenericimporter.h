@@ -28,7 +28,7 @@ class KDevGenericImporter: public KDevProjectEditor
 {
     Q_OBJECT
 public:
-    KDevGenericImporter(QObject *parent = 0, const char *name = 0,
+    KDevGenericImporter(QObject *parent = 0,
                         const QStringList &args = QStringList());
     virtual ~KDevGenericImporter();
 

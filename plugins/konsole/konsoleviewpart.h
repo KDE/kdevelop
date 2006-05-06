@@ -24,7 +24,7 @@ class KonsoleViewPart : public KDevPlugin
 {
     Q_OBJECT
 public:
-    KonsoleViewPart(QObject *parent, const char *name, const QStringList &);
+    KonsoleViewPart(QObject *parent, const QStringList &);
     virtual ~KonsoleViewPart();
 
 private:

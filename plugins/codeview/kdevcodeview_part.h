@@ -43,8 +43,7 @@ public:
     };
 
 public:
-    KDevCodeViewPart( QObject *parent, const char *name,
-                      const QStringList & );
+    KDevCodeViewPart( QObject *parent, const QStringList & );
     virtual ~KDevCodeViewPart();
 
     void import( RefreshPolicy policy = Refresh );

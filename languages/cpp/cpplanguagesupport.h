@@ -35,8 +35,7 @@ class CppLanguageSupport : public KDevLanguageSupport
 {
 Q_OBJECT
 public:
-    CppLanguageSupport( QObject* parent, const char* name = 0,
-                        const QStringList& args = QStringList() );
+    CppLanguageSupport( QObject* parent, const QStringList& args = QStringList() );
     virtual ~CppLanguageSupport();
 
     //KDevLanguageSupport implementation

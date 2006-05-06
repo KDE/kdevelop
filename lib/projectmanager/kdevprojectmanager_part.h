@@ -46,7 +46,7 @@ public:
     };
 
 public:
-    KDevProjectManagerPart(QObject *parent, const char *name, const QStringList &);
+    KDevProjectManagerPart(QObject *parent, const QStringList &);
     virtual ~KDevProjectManagerPart();
 
     inline KDevProjectModel *projectModel() const

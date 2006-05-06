@@ -23,7 +23,7 @@
 #include "kdevhtmlpart.h"
 
 KDevHTMLPart::KDevHTMLPart()
-  : KHTMLPart(0L, 0L, 0L, "KDevHTMLPart", DefaultGUI )
+  : KHTMLPart(static_cast<QWidget*>(0L), 0L, DefaultGUI )
 {
   setXMLFile(locate("data", "kdevelop/kdevhtml_partui.rc"), true);
 

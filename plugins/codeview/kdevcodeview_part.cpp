@@ -47,12 +47,9 @@ K_EXPORT_COMPONENT_FACTORY( kdevcodeview,
                             KDevCodeViewFactory( data ) );
 
 KDevCodeViewPart::KDevCodeViewPart( QObject *parent,
-                                    const char *name,
                                     const QStringList& )
         : KDevPlugin( &data, parent )
 {
-    setObjectName( QString::fromUtf8( name ) );
-
     setInstance( KDevCodeViewFactory::instance() );
 
     if (!languageSupport())

@@ -44,8 +44,7 @@ public:
     };
 
 public:
-    KDevDocumentViewPart( QObject *parent, const char *name,
-                          const QStringList & );
+    KDevDocumentViewPart( QObject *parent, const QStringList & );
     virtual ~KDevDocumentViewPart();
 
     void import( RefreshPolicy policy = Refresh );
