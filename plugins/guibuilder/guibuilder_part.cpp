@@ -125,6 +125,14 @@ void GuiBuilderPart::setupActions()
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
                                           "layout_vertical" );
 
+    designerAction = manager->actionSplitHorizontal();
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "layout_split_horiz" );
+
+    designerAction = manager->actionSplitVertical();
+    designerKAction = wrapDesignerAction( designerAction, actionCollection(),
+                                          "layout_split_vert" );
+
     designerAction = manager->actionUndo();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
                                           "designer_undo" );
@@ -184,6 +192,8 @@ KAction* GuiBuilderPart::wrapDesignerAction( QAction* dAction,
 {
     KAction* a = new KAction( KIcon( dAction->icon() ), dAction->text(),
                               parent, name );
+    a->setShortcut( dAction->shortcut() );
+    a->setShortcutContext( dAction->shortcutContext() );
     connect( a, SIGNAL( triggered() ), dAction, SIGNAL( triggered() ) );
 
     m_designerActions[a] = dAction;
@@ -201,8 +211,6 @@ void GuiBuilderPart::updateDesignerAction( KAction* a, QAction* dAction )
     a->setFont( dAction->font() );
     a->setIconText( dAction->iconText() );
     a->setSeparator( dAction->isSeparator() );
-    a->setShortcut( dAction->shortcut() );
-    a->setShortcutContext( dAction->shortcutContext() );
     a->setStatusTip( dAction->statusTip() );
     a->setText( dAction->text() );
     a->setToolTip( dAction->toolTip() );

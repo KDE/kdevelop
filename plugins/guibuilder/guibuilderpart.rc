@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui name="guibuilder" version="3">
+<gui name="guibuilder" version="4">
 <MenuBar>
     <Menu name="file"><text>&amp;File</text>
         <Action name="designer_save" merge="save_merge"/>
@@ -9,9 +9,11 @@
         <Action name="designer_copy"/>
         <Action name="designer_paste"/>
     </Menu>
-    <Menu name="layout"><text>&amp;Layout</text>
+    <Menu name="layout"><text>F&amp;orm</text>
         <Action name="layout_horiz"/>
         <Action name="layout_vertical"/>
+        <Action name="layout_split_horiz"/>
+        <Action name="layout_split_vert"/>
         <Action name="layout_grid"/>
         <Action name="break_layout"/>
         <Separator/>
@@ -21,6 +23,8 @@
 <ToolBar name="layout">
     <Action name="layout_horiz"/>
     <Action name="layout_vertical"/>
+    <Action name="layout_split_horiz"/>
+    <Action name="layout_split_vert"/>
     <Action name="layout_grid"/>
     <Action name="break_layout"/>
     <Separator/>
