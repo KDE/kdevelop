@@ -13,6 +13,7 @@
 #include <kaction.h>
 #include <kmainwindow.h>
 #include <kparts/genericfactory.h>
+#include <kparts/partmanager.h>
 #include <ksavefile.h>
 #include <kstdaction.h>
 
@@ -84,7 +85,7 @@ QDesignerFormEditorInterface *GuiBuilderPart::designer() const
 
 void GuiBuilderPart::setupActions()
 {
-    KStdAction::save( this, SLOT( save() ), actionCollection(), "designer_save" );
+    KStdAction::save( this, SLOT( save() ), actionCollection(), "file_save" );
     QDesignerFormWindowManagerInterface* manager = designer()->formWindowManager();
 
     QAction* designerAction = 0;
@@ -96,6 +97,7 @@ void GuiBuilderPart::setupActions()
     designerAction = manager->actionBreakLayout();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
                                           "break_layout" );
+    designerKAction->setShortcut( Qt::CTRL + Qt::Key_B );
 
     designerAction = manager->actionCut();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
@@ -116,30 +118,37 @@ void GuiBuilderPart::setupActions()
     designerAction = manager->actionGridLayout();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
                                           "layout_grid" );
+    designerKAction->setShortcut( Qt::CTRL + Qt::Key_G );
 
     designerAction = manager->actionHorizontalLayout();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
                                           "layout_horiz" );
+    designerKAction->setShortcut( Qt::CTRL + Qt::Key_H );
 
     designerAction = manager->actionVerticalLayout();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
                                           "layout_vertical" );
+    designerKAction->setShortcut( Qt::CTRL + Qt::Key_V );
 
     designerAction = manager->actionSplitHorizontal();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
                                           "layout_split_horiz" );
+    designerKAction->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_H );
 
     designerAction = manager->actionSplitVertical();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
                                           "layout_split_vert" );
+    designerKAction->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_V );
 
     designerAction = manager->actionUndo();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
                                           "designer_undo" );
+    designerKAction->setIcon( KIcon( "edit_undo" ) );
 
     designerAction = manager->actionRedo();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
                                           "designer_redo" );
+    designerKAction->setIcon( KIcon( "edit_redo" ) );
 
     designerAction = manager->actionSelectAll();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
@@ -159,6 +168,8 @@ bool GuiBuilderPart::openFile()
   setWidget( qw );
   qw->addWindow(widget);
   m_window = widget;
+  m_window->installEventFilter( this ); //be able to catch the close event
+
   connect(m_window, SIGNAL(changed()), this, SLOT(setModified()));
   connect( m_window, SIGNAL( selectionChanged() ), this, SLOT( updateDesignerActions() ) );
   connect( m_window, SIGNAL( toolChanged( int ) ), this, SLOT( updateDesignerActions() ) );
@@ -184,6 +195,16 @@ bool GuiBuilderPart::saveFile()
     m_window->setDirty(false);
     setModified(false);
     return true;
+}
+
+bool GuiBuilderPart::eventFilter( QObject* obj, QEvent* event )
+{
+    if ( event->type() == QEvent::Close && obj == m_window )
+    {
+        //we need to close the part
+        manager()->removePart( this );
+    }
+    return false;
 }
 
 KAction* GuiBuilderPart::wrapDesignerAction( QAction* dAction,

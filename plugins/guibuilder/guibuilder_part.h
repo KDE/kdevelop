@@ -34,6 +34,9 @@ public:
 
   QDesignerFormEditorInterface *designer() const;
 
+protected:
+  bool eventFilter(QObject*, QEvent*);
+
 private:
   //wrap the actions provided by QDesignerFormWindowManagerInterface in
   //KActions

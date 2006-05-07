@@ -1,13 +1,15 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui name="guibuilder" version="4">
+<gui name="guibuilder" version="5">
 <MenuBar>
     <Menu name="file"><text>&amp;File</text>
-        <Action name="designer_save" merge="save_merge"/>
+        <Action name="file_save" group="save_merge"/>
     </Menu>
     <Menu name="edit"><text>&amp;Edit</text>
-        <Action name="designer_cut"/>
-        <Action name="designer_copy"/>
-        <Action name="designer_paste"/>
+        <Action name="designer_undo" group="edit_undo_merge"/>
+        <Action name="designer_redo" group="edit_undo_merge"/>
+        <Action name="designer_cut" group="edit_paste_merge"/>
+        <Action name="designer_copy" group="edit_paste_merge"/>
+        <Action name="designer_paste" group="edit_paste_merge"/>
     </Menu>
     <Menu name="layout"><text>F&amp;orm</text>
         <Action name="layout_horiz"/>
@@ -20,7 +22,15 @@
         <Action name="adjust_size"/>
     </Menu>
 </MenuBar>
-<ToolBar name="layout">
+<ToolBar name="mainToolBar"><text>Main Toolbar</text>
+    <Action name="file_save" group="file_operations"/>
+    <Action name="designer_undo" group="edit_operations"/>
+    <Action name="designer_redo" group="edit_operations"/>
+    <Action name="designer_cut" group="edit_operations"/>
+    <Action name="designer_copy" group="edit_operations"/>
+    <Action name="designer_paste" group="edit_operations"/>
+</ToolBar>
+<ToolBar name="designerToolbar" noMerge="1"><text>Designer Layout Toolbar</text>
     <Action name="layout_horiz"/>
     <Action name="layout_vertical"/>
     <Action name="layout_split_horiz"/>
