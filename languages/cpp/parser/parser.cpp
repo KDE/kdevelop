@@ -1150,7 +1150,7 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
     }
 
   {
-    bool isVector = true;
+    bool isVector = false;
 
     while (token_stream.lookAhead() == '[')
       {
