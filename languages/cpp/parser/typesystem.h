@@ -28,7 +28,8 @@ class IntegralType;
 class PointerType;
 class ReferenceType;
 class FunctionType;
-
+class StructureType;
+class ArrayType;
 
 
 class TypeVisitor
@@ -49,6 +50,12 @@ public:
 
   virtual bool visit (const FunctionType *) { return true; }
   virtual void endVisit (const FunctionType *) {}
+
+  virtual bool visit (const StructureType *) { return true; }
+  virtual void endVisit (const StructureType *) {}
+
+  virtual bool visit (const ArrayType *) { return true; }
+  virtual void endVisit (const ArrayType *) {}
 };
 
 class AbstractType
@@ -165,7 +172,7 @@ public:
   inline const AbstractType *returnType () const
   { return _M_returnType; }
 
-  inline QVector<const AbstractType *> arguments () const
+  inline const QVector<const AbstractType *>& arguments () const
   { return _M_arguments; }
 
   inline bool operator == (const FunctionType &__other) const
@@ -191,6 +198,49 @@ protected:
 private:
   const AbstractType *_M_returnType;
   QVector<const AbstractType *> _M_arguments;
+};
+
+class StructureType : public AbstractType
+{
+public:
+  StructureType (const QVector<const AbstractType *> &elements):
+    _M_elements (elements) {}
+
+  inline const QVector<const AbstractType *>& elements () const
+  { return _M_elements; }
+
+  inline bool operator == (const StructureType &__other) const
+  { return _M_elements == __other._M_elements; }
+
+  inline bool operator != (const StructureType &__other) const
+  { return _M_elements != __other._M_elements; }
+
+private:
+  QVector<const AbstractType *> _M_elements;
+};
+
+class ArrayType : public AbstractType
+{
+public:
+  ArrayType (const QVector<int> &dimensions, const AbstractType* elementType):
+    _M_dimensions (dimensions),
+    _M_elementType (elementType) {}
+
+  inline const QVector<int>& dimensions () const
+  { return _M_dimensions; }
+
+  inline const AbstractType *elementType () const
+  { return _M_elementType; }
+
+  inline bool operator == (const ArrayType &__other) const
+  { return _M_elementType == __other._M_elementType && _M_dimensions == __other._M_dimensions; }
+
+  inline bool operator != (const ArrayType &__other) const
+  { return _M_elementType != __other._M_elementType || _M_dimensions != __other._M_dimensions; }
+
+private:
+  QVector<int> _M_dimensions;
+  const AbstractType* _M_elementType;
 };
 
 class TypeEnvironment
