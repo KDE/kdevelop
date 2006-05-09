@@ -48,6 +48,13 @@ void DMainWindow::loadSettings()
     m_showIconsOnTabs = config->readBoolEntry("ShowTabIcons", false);
 }
 
+void DMainWindow::saveSettings()
+{
+    m_leftDock->saveSettings();
+    m_rightDock->saveSettings();
+    m_bottomDock->saveSettings();
+}
+
 DMainWindow::~DMainWindow()
 {
 /*    for (QValueList<QWidget*>::iterator it = m_widgets.begin(); it != m_widgets.end(); ++it)

@@ -47,6 +47,8 @@ public:
     /**Removes widget. Does not delete it.*/
     virtual void removeWidget(QWidget *widget);
     
+    virtual void saveSettings();
+    
 public slots:
     DTabWidget *splitHorizontal();
     DTabWidget *splitVertical();

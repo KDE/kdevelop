@@ -57,13 +57,14 @@ public:
     
     virtual void setMovingEnabled(bool b);
 
+    virtual void saveSettings();
+
 private slots:
     void selectWidget();
     void selectWidget(Ideal::Button *button);
 
 protected:
     virtual void loadSettings();
-    virtual void saveSettings();
     
     Ideal::ButtonBar *m_bar;
     QWidgetStack *m_widgetStack;

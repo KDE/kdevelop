@@ -206,6 +206,8 @@ void SimpleMainWindow::saveSettings( )
 
     ProjectManager::getInstance()->saveSettings();
     saveMainWindowSettings(config, "SimpleMainWindow");
+    
+    DMainWindow::saveSettings();
 }
 
 void SimpleMainWindow::setCurrentDocumentCaption( const QString &caption )

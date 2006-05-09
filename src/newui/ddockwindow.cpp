@@ -89,7 +89,8 @@ DDockWindow::DDockWindow(QWidget *parent, Position position)
 
 DDockWindow::~DDockWindow()
 {
-    saveSettings();
+//done in DMainWindow now
+//    saveSettings();
 }
 
 void DDockWindow::setVisible(bool v)
