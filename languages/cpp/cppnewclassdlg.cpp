@@ -246,7 +246,7 @@ void CppNewClassDialog::classNameChanged( const QString &text )
 		default:
 			;
 		}
-		header = header.replace( QRegExp( "(template *<.*> *)?(class *)?" ), "" );
+		header = header.replace( QRegExp( "(template *<.*> *)?(class +)?" ), "" );
 		header_edit->setText( header );
 	}
 	if ( !implementationModified )
@@ -267,7 +267,7 @@ void CppNewClassDialog::classNameChanged( const QString &text )
 		default:
 			;
 		}
-		implementation = implementation.replace( QRegExp( "(template *<.*> *)?(class *)?" ), "" );
+		implementation = implementation.replace( QRegExp( "(template *<.*> *)?(class +)?" ), "" );
 		implementation_edit->setText( implementation );
 	}
 }
