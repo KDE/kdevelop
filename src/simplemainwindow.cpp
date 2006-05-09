@@ -602,8 +602,6 @@ void SimpleMainWindow::openDocumentsAfterSplit(DTabWidget *tab)
 		    kdDebug() << inTab << endl;
 		    kdDebug() << inTab->parent() << ": " << inTab->parent()->className() <<  endl;
 		    DTabWidget *oldTab = m_widgetTabs[inTab];
-		    if (!oldTab)
-			kdDebug() << "OOOOOOOOOOOOOOOO" << endl;
 		    QString title = oldTab->tabLabel(inTab);
 		    removeWidget(inTab);
 		    addWidget(tab, inTab, title);
