@@ -96,6 +96,8 @@ void SimpleMainWindow::init()
 
     connect(Core::getInstance(), SIGNAL(coreInitialized()), this, SLOT(slotCoreInitialized()));
     connect(Core::getInstance(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
+    connect(Core::getInstance(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+	this, SLOT(contextMenu(QPopupMenu *, const Context *)));
     connect(PartController::getInstance(), SIGNAL(partURLChanged(KParts::ReadOnlyPart *)),
         this, SLOT(slotPartURLChanged(KParts::ReadOnlyPart * )));
     connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
@@ -106,6 +108,25 @@ void SimpleMainWindow::init()
         this, SLOT(documentChangedState(const KURL&, DocumentState)));
 
     loadSettings();
+}
+
+void SimpleMainWindow::contextMenu(QPopupMenu *popupMenu, const Context *context)
+{
+    int cont = context->type();
+    m_splitURLs.clear();
+    if (cont == Context::EditorContext)
+    {
+	m_splitURLs.append(static_cast<const EditorContext*>(context)->url());
+	m_splitHor->plug(popupMenu);
+	m_splitVer->plug(popupMenu);
+	popupMenu->insertSeparator();
+    }
+    else if (cont == Context::FileContext)
+    {
+	m_splitURLs = static_cast<const FileContext*>(context)->urls();
+	m_splitHor->plug(popupMenu);
+	m_splitVer->plug(popupMenu);
+    }
 }
 
 void SimpleMainWindow::embedPartView(QWidget *view, const QString &title, const QString &/*toolTip*/)
@@ -233,10 +254,10 @@ void SimpleMainWindow::createActions()
     m_raiseEditor->setToolTip(i18n("Raise editor"));
     m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
 
-    new KAction(i18n("Split &Horizontal"), CTRL+SHIFT+Key_T,
+    m_splitHor = new KAction(i18n("Split &Horizontal"), CTRL+SHIFT+Key_T,
         this, SLOT(slotSplitHorizontal()), actionCollection(), "split_h");
 
-    new KAction(i18n("Split &Vertical"), CTRL+SHIFT+Key_L,
+    m_splitVer = new KAction(i18n("Split &Vertical"), CTRL+SHIFT+Key_L,
         this, SLOT(slotSplitVertical()), actionCollection(), "split_v");
 
     KStdAction::configureToolbars(this, SLOT(configureToolbars()),
@@ -526,8 +547,11 @@ void SimpleMainWindow::fillWindowMenu()
 
 void SimpleMainWindow::slotSplitVertical()
 {
+    if (PartController::getInstance()->openURLs().count() <= 1)
+	return;
     DTabWidget *tab = splitVertical();
-    PartController::getInstance()->openTextDocument();
+    openDocumentsAfterSplit(tab);
+//    PartController::getInstance()->openTextDocument();
 
     //FIXME: adymo: we can't put another kate view into the tab just added - weird crashes :(
     //more: kdevelop part controller doesn't handle such situation - it assumes the part to
@@ -546,8 +570,47 @@ void SimpleMainWindow::slotSplitVertical()
 
 void SimpleMainWindow::slotSplitHorizontal()
 {
+    if (PartController::getInstance()->openURLs().count() <= 1)
+	return;
     DTabWidget *tab = splitHorizontal();
-    PartController::getInstance()->openTextDocument();
+    openDocumentsAfterSplit(tab);
+}
+
+void SimpleMainWindow::openDocumentsAfterSplit(DTabWidget *tab)
+{
+    if (m_splitURLs.count() > 0)
+    {
+	for (KURL::List::const_iterator it = m_splitURLs.begin(); it != m_splitURLs.end(); ++it)
+	{
+	    KParts::ReadOnlyPart *part = PartController::getInstance()->partForURL(*it);
+	    if (!part)
+		PartController::getInstance()->editDocument(*it);
+	    else
+	    {
+		QWidget *inTab = 0;
+		if (part->widget() && part->widget()->parent() && part->widget()->parent()->isA("EditorProxy"))
+		    inTab = (QWidget*)part->widget()->parent();
+		else if (part->widget() && part->widget()->parent() && part->widget()->parent()->isA("MultiBuffer")
+		    && part->widget()->parent()->parent() && part->widget()->parent()->parent()->isA("EditorProxy"))
+		    inTab = (QWidget*)part->widget()->parent()->parent();
+		else if (part->widget() && part->widget()->parent() && part->widget()->parent()->isA("MultiBuffer"))
+		    inTab = (QWidget*)part->widget()->parent();
+		else 
+		    inTab = part->widget();
+		if (inTab)
+		{
+		    kdDebug() << inTab << endl;
+		    kdDebug() << inTab->parent() << ": " << inTab->parent()->className() <<  endl;
+		    DTabWidget *oldTab = m_widgetTabs[inTab];
+		    if (!oldTab)
+			kdDebug() << "OOOOOOOOOOOOOOOO" << endl;
+		    QString title = oldTab->tabLabel(inTab);
+		    removeWidget(inTab);
+		    addWidget(tab, inTab, title);
+		}
+	    }
+	}
+    }
 }
 
 void SimpleMainWindow::closeTab(QWidget *w)

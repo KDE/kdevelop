@@ -28,6 +28,7 @@
 class KAction;
 class QPopupMenu;
 class MainWindowShare;
+class Context;
 
 namespace KParts {
     class ReadOnlyPart;
@@ -65,6 +66,7 @@ protected slots:
     virtual void closeTab();
     virtual void closeTab(QWidget *w);
     virtual void tabContext(QWidget *w, const QPoint &p);
+    void contextMenu(QPopupMenu *popupMenu, const Context *context);
 
 private slots:
     void gotoNextWindow();
@@ -90,14 +92,19 @@ private:
     void createFramework();
     void createActions();
     void setupWindowMenu();
+    void openDocumentsAfterSplit(DTabWidget *tab);
 
     MainWindowShare *m_mainWindowShare;
 
     KURL m_currentTabURL;
     QMap<QWidget*, DDockWindow::Position> m_docks;
     KAction *m_raiseEditor;
+    KAction *m_splitHor;
+    KAction *m_splitVer;
     QPopupMenu *m_windowMenu;
     QValueList<QPair<int, KURL> > m_windowList;
+    
+    KURL::List m_splitURLs;
 };
 
 #endif
