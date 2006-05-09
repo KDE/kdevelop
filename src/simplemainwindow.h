@@ -94,6 +94,7 @@ private:
     void setupWindowMenu();
     void openDocumentsAfterSplit(DTabWidget *tab);
     QWidget *widgetForURL(KURL url);
+    QWidget *widgetInTab(QWidget *w);
 
     MainWindowShare *m_mainWindowShare;
 

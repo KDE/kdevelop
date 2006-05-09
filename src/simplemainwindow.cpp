@@ -613,16 +613,21 @@ void SimpleMainWindow::openDocumentsAfterSplit(DTabWidget *tab)
 QWidget *SimpleMainWindow::widgetForURL(KURL url)
 {
     KParts::ReadOnlyPart *part = PartController::getInstance()->partForURL(url);
+    return widgetInTab(part->widget());    
+}
+
+QWidget *SimpleMainWindow::widgetInTab(QWidget *w)
+{
     QWidget *inTab = 0;
-    if (part->widget() && part->widget()->parent() && part->widget()->parent()->isA("EditorProxy"))
-        inTab = (QWidget*)part->widget()->parent();
-    else if (part->widget() && part->widget()->parent() && part->widget()->parent()->isA("MultiBuffer")
-        && part->widget()->parent()->parent() && part->widget()->parent()->parent()->isA("EditorProxy"))
-        inTab = (QWidget*)part->widget()->parent()->parent();
-    else if (part->widget() && part->widget()->parent() && part->widget()->parent()->isA("MultiBuffer"))
-        inTab = (QWidget*)part->widget()->parent();
+    if (w && w->parent() && w->parent()->isA("EditorProxy"))
+        inTab = (QWidget*)w->parent();
+    else if (w && w->parent() && w->parent()->isA("MultiBuffer")
+        && w->parent()->parent() && w->parent()->parent()->isA("EditorProxy"))
+        inTab = (QWidget*)w->parent()->parent();
+    else if (w && w->parent() && w->parent()->isA("MultiBuffer"))
+        inTab = (QWidget*)w->parent();
     else 
-        inTab = part->widget();
+        inTab = w;
     return inTab;
 }
 
@@ -648,12 +653,11 @@ void SimpleMainWindow::activePartChanged(KParts::Part *part)
         return;
     QWidget *w = part->widget();
     kdDebug() << "active part widget is : " << w << endl;
-    if (!m_widgets.contains(w))
-        return;
-    if (m_widgetTabs[w] != 0)
+    QWidget *inTab = widgetInTab(w);
+    if (m_widgetTabs[inTab] != 0)
     {
         kdDebug() << " setting m_activeTabWidget " << endl;
-        m_activeTabWidget = m_widgetTabs[w];
+        m_activeTabWidget = m_widgetTabs[inTab];
     }
 }
 
