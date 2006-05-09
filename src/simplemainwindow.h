@@ -93,6 +93,7 @@ private:
     void createActions();
     void setupWindowMenu();
     void openDocumentsAfterSplit(DTabWidget *tab);
+    QWidget *widgetForURL(KURL url);
 
     MainWindowShare *m_mainWindowShare;
 
@@ -101,6 +102,10 @@ private:
     KAction *m_raiseEditor;
     KAction *m_splitHor;
     KAction *m_splitVer;
+    KAction *m_splitHor1;
+    KAction *m_splitVer1;
+    KAction *m_splitHor2;
+    KAction *m_splitVer2;
     QPopupMenu *m_windowMenu;
     QValueList<QPair<int, KURL> > m_windowList;
     

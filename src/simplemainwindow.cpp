@@ -116,16 +116,24 @@ void SimpleMainWindow::contextMenu(QPopupMenu *popupMenu, const Context *context
     m_splitURLs.clear();
     if (cont == Context::EditorContext)
     {
-	m_splitURLs.append(static_cast<const EditorContext*>(context)->url());
-	m_splitHor->plug(popupMenu);
-	m_splitVer->plug(popupMenu);
-	popupMenu->insertSeparator();
+	KURL url = static_cast<const EditorContext*>(context)->url();
+	QWidget *w = widgetForURL(url);
+	if (w && m_widgetTabs[w] && m_widgetTabs[w]->count() > 1)
+	{
+	    m_splitURLs.append(url);
+	    m_splitHor1->plug(popupMenu);
+	    m_splitVer1->plug(popupMenu);
+	    popupMenu->insertSeparator();
+	}
     }
     else if (cont == Context::FileContext)
     {
-	m_splitURLs = static_cast<const FileContext*>(context)->urls();
-	m_splitHor->plug(popupMenu);
-	m_splitVer->plug(popupMenu);
+	if (PartController::getInstance()->openURLs().count() > 0)
+	{
+	    m_splitURLs = static_cast<const FileContext*>(context)->urls();
+	    m_splitHor2->plug(popupMenu);
+	    m_splitVer2->plug(popupMenu);
+	}
     }
 }
 
@@ -259,6 +267,18 @@ void SimpleMainWindow::createActions()
 
     m_splitVer = new KAction(i18n("Split &Vertical"), CTRL+SHIFT+Key_L,
         this, SLOT(slotSplitVertical()), actionCollection(), "split_v");
+
+    m_splitHor1 = new KAction(i18n("Split &Horizontal"), 0,
+        this, SLOT(slotSplitHorizontal()), actionCollection(), "split_h1");
+
+    m_splitVer1 = new KAction(i18n("Split &Vertical"), 0,
+        this, SLOT(slotSplitVertical()), actionCollection(), "split_v1");
+
+    m_splitHor2 = new KAction(i18n("Split &Horizontal and Open"), 0,
+        this, SLOT(slotSplitHorizontal()), actionCollection(), "split_h2");
+
+    m_splitVer2 = new KAction(i18n("Split &Vertical and Open"), 0,
+        this, SLOT(slotSplitVertical()), actionCollection(), "split_v2");
 
     KStdAction::configureToolbars(this, SLOT(configureToolbars()),
         actionCollection(), "set_configure_toolbars");
@@ -553,16 +573,14 @@ void SimpleMainWindow::fillWindowMenu()
 
 void SimpleMainWindow::slotSplitVertical()
 {
-    if (PartController::getInstance()->openURLs().count() <= 1)
-	return;
     DTabWidget *tab = splitVertical();
     openDocumentsAfterSplit(tab);
 }
 
 void SimpleMainWindow::slotSplitHorizontal()
 {
-    if (PartController::getInstance()->openURLs().count() <= 1)
-	return;
+//    if (PartController::getInstance()->openURLs().count() <= 1)
+//	return;
     DTabWidget *tab = splitHorizontal();
     openDocumentsAfterSplit(tab);
 }
@@ -578,16 +596,7 @@ void SimpleMainWindow::openDocumentsAfterSplit(DTabWidget *tab)
 		PartController::getInstance()->editDocument(*it);
 	    else
 	    {
-		QWidget *inTab = 0;
-		if (part->widget() && part->widget()->parent() && part->widget()->parent()->isA("EditorProxy"))
-		    inTab = (QWidget*)part->widget()->parent();
-		else if (part->widget() && part->widget()->parent() && part->widget()->parent()->isA("MultiBuffer")
-		    && part->widget()->parent()->parent() && part->widget()->parent()->parent()->isA("EditorProxy"))
-		    inTab = (QWidget*)part->widget()->parent()->parent();
-		else if (part->widget() && part->widget()->parent() && part->widget()->parent()->isA("MultiBuffer"))
-		    inTab = (QWidget*)part->widget()->parent();
-		else 
-		    inTab = part->widget();
+		QWidget *inTab = widgetForURL(*it);
 		if (inTab)
 		{
 		    DTabWidget *oldTab = m_widgetTabs[inTab];
@@ -597,7 +606,24 @@ void SimpleMainWindow::openDocumentsAfterSplit(DTabWidget *tab)
 		}
 	    }
 	}
+	m_splitURLs.clear();
     }
+}
+
+QWidget *SimpleMainWindow::widgetForURL(KURL url)
+{
+    KParts::ReadOnlyPart *part = PartController::getInstance()->partForURL(url);
+    QWidget *inTab = 0;
+    if (part->widget() && part->widget()->parent() && part->widget()->parent()->isA("EditorProxy"))
+        inTab = (QWidget*)part->widget()->parent();
+    else if (part->widget() && part->widget()->parent() && part->widget()->parent()->isA("MultiBuffer")
+        && part->widget()->parent()->parent() && part->widget()->parent()->parent()->isA("EditorProxy"))
+        inTab = (QWidget*)part->widget()->parent()->parent();
+    else if (part->widget() && part->widget()->parent() && part->widget()->parent()->isA("MultiBuffer"))
+        inTab = (QWidget*)part->widget()->parent();
+    else 
+        inTab = part->widget();
+    return inTab;
 }
 
 void SimpleMainWindow::closeTab(QWidget *w)
