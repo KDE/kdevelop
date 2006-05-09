@@ -361,7 +361,13 @@ void SimpleMainWindow::documentChangedState(const KURL &url, DocumentState state
 
 void SimpleMainWindow::closeTab()
 {
-    actionCollection()->action("file_close")->activate();
+//    actionCollection()->action("file_close")->activate();
+    if (sender()->isA("QToolButton") && sender()->parent()->isA("DTabWidget"))
+    {
+	DTabWidget *tab = (DTabWidget*)sender()->parent();
+	if (tab && tab->currentPage())
+	    closeTab(tab->currentPage());
+    }
 }
 
 void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
@@ -551,21 +557,6 @@ void SimpleMainWindow::slotSplitVertical()
 	return;
     DTabWidget *tab = splitVertical();
     openDocumentsAfterSplit(tab);
-//    PartController::getInstance()->openTextDocument();
-
-    //FIXME: adymo: we can't put another kate view into the tab just added - weird crashes :(
-    //more: kdevelop part controller doesn't handle such situation - it assumes the part to
-    //have only one widget
-/*    KParts::Part *activePart = PartController::getInstance()->activePart();
-    if (!activePart)
-        return;
-    KTextEditor::Document *activeDoc = dynamic_cast<KTextEditor::Document *>(activePart);
-    if (!activeDoc)
-        return;
-
-    QWidget *view = activeDoc->createView(0);
-    addWidget(tab, view, "");
-    view->show();*/
 }
 
 void SimpleMainWindow::slotSplitHorizontal()
@@ -599,8 +590,6 @@ void SimpleMainWindow::openDocumentsAfterSplit(DTabWidget *tab)
 		    inTab = part->widget();
 		if (inTab)
 		{
-		    kdDebug() << inTab << endl;
-		    kdDebug() << inTab->parent() << ": " << inTab->parent()->className() <<  endl;
 		    DTabWidget *oldTab = m_widgetTabs[inTab];
 		    QString title = oldTab->tabLabel(inTab);
 		    removeWidget(inTab);
