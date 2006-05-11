@@ -338,7 +338,7 @@ void KDevCodeAggregate::normalizeModels()
         for ( ; child != children.end(); ++child )
         {
             KDevCodeItem* childItem =
-                dynamic_cast<KDevCodeItem*>( *child );
+                static_cast<KDevCodeItem*>( *child );
             if ( normalizeItem( childItem ) )
             {
                 normalizeRoot.insert( rowCount, childItem );
