@@ -20,7 +20,7 @@
 #include "modelcreator.h"
 
 #include <qfileinfo.h>
-#include <qdir.h>
+#include <QDir>
 
 #include <kdebug.h>
 
