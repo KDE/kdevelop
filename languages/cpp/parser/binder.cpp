@@ -749,8 +749,8 @@ void Binder::visitDeclarator( DeclaratorAST * node )
       QString text = _M_highlight->document()->text(KTextEditor::Range(start, end));
       kDebug() << k_funcinfo << node << text << endl;
     }
-
-  DefaultVisitor::visitDeclarator(node);
+    if (node)
+      DefaultVisitor::visitDeclarator(node);
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
