@@ -11,9 +11,9 @@
 
 
 #include <q3vbox.h>
-#include <qtimer.h>
+#include <QTimer>
 #include <qtextstream.h>
-#include <qfile.h>
+#include <QFile>
 //Added by qt3to4:
 #include <Q3PtrList>
 

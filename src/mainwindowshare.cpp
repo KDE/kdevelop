@@ -15,12 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <q3vbox.h>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
-#include <qdir.h>
-#include <qregexp.h>
+#include <QDir>
+#include <QRegExp>
 
 #include <kaction.h>
 #include <kaboutdata.h>

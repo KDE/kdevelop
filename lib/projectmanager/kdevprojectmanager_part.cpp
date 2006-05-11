@@ -41,10 +41,10 @@
 #include <kparts/componentfactory.h>
 
 #include <QtGui/QVBoxLayout>
-#include <qdir.h>
+#include <QDir>
 #include <qfileinfo.h>
-#include <qtimer.h>
-#include <qlineedit.h>
+#include <QTimer>
+#include <QLineEdit>
 
 #include <kdevplugininfo.h>
 

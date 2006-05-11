@@ -12,7 +12,7 @@
 #ifndef OutputFilter_h
 #define OutputFilter_h
 
-#include <qstring.h>
+#include <QString>
 
 class OutputFilter
 {

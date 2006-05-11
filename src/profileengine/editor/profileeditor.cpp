@@ -18,8 +18,8 @@
  ***************************************************************************/
 #include "profileeditor.h"
 
-#include <qlayout.h>
-#include <qlineedit.h>
+#include <QLayout>
+#include <QLineEdit>
 #include <q3textedit.h>
 #include <qpalette.h>
 //Added by qt3to4:

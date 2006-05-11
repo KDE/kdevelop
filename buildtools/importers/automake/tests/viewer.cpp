@@ -19,12 +19,12 @@
  ***************************************************************************/
 #include "viewer.h"
 
-#include <qdir.h>
-#include <qlineedit.h>
+#include <QDir>
+#include <QLineEdit>
 #include <q3listbox.h>
 #include <q3filedialog.h>
 #include <q3textedit.h>
-#include <qfile.h>
+#include <QFile>
 #include <qtextstream.h>
 #include <q3listview.h>
 #include <qtabwidget.h>

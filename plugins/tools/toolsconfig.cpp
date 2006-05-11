@@ -1,10 +1,10 @@
 #include "toolsconfig.h"
 
 #include <qapplication.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <q3listbox.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <q3header.h>
 //Added by qt3to4:
 #include <QShowEvent>

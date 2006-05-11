@@ -14,7 +14,7 @@
 
 #include "appoutputwidget.h"
 
-#include <qregexp.h>
+#include <QRegExp>
 #include <qmenu.h>
 
 #include <klocale.h>
@@ -24,7 +24,7 @@
 #include <kconfig.h>
 #include <q3buttongroup.h>
 #include <klineedit.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qradiobutton.h>
 #include <kglobal.h>
 

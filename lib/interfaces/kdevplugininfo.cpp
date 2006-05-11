@@ -18,7 +18,7 @@
 */
 #include "kdevplugininfo.h"
 
-#include <qvariant.h>
+#include <QVariant>
 //Added by qt3to4:
 #include <QList>
 

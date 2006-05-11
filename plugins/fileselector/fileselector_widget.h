@@ -22,7 +22,7 @@
 #ifndef FILESELECTOR_WIDGET_H
 #define FILESELECTOR_WIDGET_H
 
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <QShowEvent>
 #include <QFocusEvent>

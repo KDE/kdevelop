@@ -1,7 +1,7 @@
 #ifndef _CORE_H_
 #define _CORE_H_
 
-#include <qregexp.h>
+#include <QRegExp>
 #include <kparts/partmanager.h>
 #include "kdevcore.h"
 #include "shellexport.h"

@@ -9,15 +9,15 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qstring.h>
-#include <qvariant.h>
+#include <QString>
+#include <QVariant>
 #include <q3header.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <q3listview.h>
 #include <q3groupbox.h>
 #include <q3hbox.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 #include <kconfig.h>
 #include <kdebug.h>

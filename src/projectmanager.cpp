@@ -1,11 +1,11 @@
-#include <qfile.h>
+#include <QFile>
 #include <qfileinfo.h>
 #include <qdom.h>
 #include <qstringlist.h>
 #include <q3ptrlist.h>
 #include <q3vbox.h>
 #include <qsize.h>
-#include <qtimer.h>
+#include <QTimer>
 //Added by qt3to4:
 #include <QTextStream>
 

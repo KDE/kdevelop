@@ -28,7 +28,7 @@
 
 #include "kdevplugin.h"
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 
 #include <kurl.h>

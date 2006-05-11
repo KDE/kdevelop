@@ -1071,7 +1071,7 @@ EOF
 if test "$kde_qtver" = "2"; then
 cat >> conftest.$ac_ext <<EOF
 #include <qevent.h>
-#include <qstring.h>
+#include <QString>
 #include <qstyle.h>
 EOF
 
@@ -4205,7 +4205,7 @@ CXXFLAGS="$CXXFLAGS -I$qt_incdir $all_includes"
 AC_TRY_RUN(dnl
 [
 #include <qimageio.h>
-#include <qstring.h>
+#include <QString>
 int main() {
 		QString t = "hallo";
 		t.fill('t');

@@ -1,4 +1,4 @@
-#include <qfile.h>
+#include <QFile>
 #include <qclipboard.h>
 #include <qapplication.h>
 //Added by qt3to4:

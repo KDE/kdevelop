@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QLinkedList>
 
 #include <khtml_part.h>

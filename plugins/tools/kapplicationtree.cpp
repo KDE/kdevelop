@@ -21,16 +21,16 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <qfile.h>
-#include <qdir.h>
+#include <QFile>
+#include <QDir>
 #include <qdialog.h>
 #include <qpixmap.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
+#include <QLabel>
+#include <QLayout>
+#include <QPushButton>
 #include <qtoolbutton.h>
-#include <qcheckbox.h>
-#include <qtooltip.h>
+#include <QCheckBox>
+#include <QToolTip>
 #include <qstyle.h>
 //Added by qt3to4:
 #include <QResizeEvent>

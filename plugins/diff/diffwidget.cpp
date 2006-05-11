@@ -9,11 +9,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qlayout.h>
+#include <QLayout>
 #include <q3textedit.h>
 #include <q3popupmenu.h>
 #include <qcursor.h>
-#include <qfile.h>
+#include <QFile>
 //Added by qt3to4:
 #include <QContextMenuEvent>
 #include <QVBoxLayout>

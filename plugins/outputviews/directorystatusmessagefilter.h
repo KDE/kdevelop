@@ -12,7 +12,7 @@
 #ifndef DirectoryStatusMessageFilter_h
 #define DirectoryStatusMessageFilter_h
 
-#include <qobject.h>
+#include <QObject>
 #include "outputfilter.h"
 
 class EnteringDirectoryItem;

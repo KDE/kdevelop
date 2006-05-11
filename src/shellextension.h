@@ -20,7 +20,7 @@
 #ifndef SHELLEXTENSION_H
 #define SHELLEXTENSION_H
 
-#include <qstring.h>
+#include <QString>
 #include "shellexport.h"
 
 class KDialogBase;

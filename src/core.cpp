@@ -1,4 +1,4 @@
-#include <qtimer.h>
+#include <QTimer>
 #include <qmenu.h>
 
 #include <kapplication.h>

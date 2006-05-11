@@ -17,8 +17,8 @@
 
 #include <qdom.h>
 #include <q3ptrlist.h>
-#include <qfile.h>
-#include <qtimer.h>
+#include <QFile>
+#include <QTimer>
 #include <QTextStream>
 
 #include <kparts/part.h>

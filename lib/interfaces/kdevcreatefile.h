@@ -20,7 +20,7 @@
 #ifndef KDEVCREATEFILE_H
 #define KDEVCREATEFILE_H
 
-#include <qstring.h>
+#include <QString>
 
 #include <kdevplugin.h>
 

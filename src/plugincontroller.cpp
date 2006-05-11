@@ -1,4 +1,4 @@
-#include <qfile.h>
+#include <QFile>
 
 #include <kcmdlineargs.h>
 #include <kapplication.h>

@@ -29,7 +29,7 @@
 #include "domutil.h"
 
 #include <qstringlist.h>
-#include <qmap.h>
+#include <QMap>
 
 /**
 @file kdevproject.h

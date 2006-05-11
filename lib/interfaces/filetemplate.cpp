@@ -19,10 +19,10 @@
 
 #include "filetemplate.h"
 
-#include <qdatetime.h>
-#include <qfile.h>
+#include <QDateTime>
+#include <QFile>
 #include <qfileinfo.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <qtextstream.h>
 
 #include <kstandarddirs.h>

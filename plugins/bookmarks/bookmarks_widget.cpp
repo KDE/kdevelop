@@ -11,7 +11,7 @@
 
 #include <q3dict.h>
 #include <q3header.h>
-#include <qtooltip.h>
+#include <QToolTip>
 #include <qpair.h>
 #include <q3stylesheet.h>
 //Added by qt3to4:

@@ -21,7 +21,7 @@
 #include "processlinemaker.h"
 
 #include <kdeversion.h>
-#include <qdir.h>
+#include <QDir>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kprocess.h>

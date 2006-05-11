@@ -3,10 +3,10 @@
 
 #include "kdevdocumentcontroller.h"
 
-#include <qmap.h>
-#include <qwidget.h>
+#include <QMap>
+#include <QWidget>
 #include <qpointer.h>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QHash>
 
 #include <kurl.h>

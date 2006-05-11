@@ -13,8 +13,8 @@
 #define __KONSOLEVIEWWIDGET_H__
 
 
-#include <qwidget.h>
-#include <qstring.h>
+#include <QWidget>
+#include <QString>
 //Added by qt3to4:
 #include <QVBoxLayout>
 

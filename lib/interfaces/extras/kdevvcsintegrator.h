@@ -19,7 +19,7 @@
 #ifndef KDEVVCSINTEGRATOR_H
 #define KDEVVCSINTEGRATOR_H
 
-#include <qobject.h>
+#include <QObject>
 
 /**
 @file kdevvcsintegrator.h

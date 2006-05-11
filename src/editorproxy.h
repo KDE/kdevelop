@@ -2,7 +2,7 @@
 #define __EDITORPROXY_H__
 
 
-#include <qobject.h>
+#include <QObject>
 #include <qpointer.h>
 
 #include <kparts/part.h>

@@ -20,7 +20,7 @@
 #ifndef KDEVPLUGIN_H
 #define KDEVPLUGIN_H
 
-#include <qobject.h>
+#include <QObject>
 #include <kxmlguiclient.h>
 #include "kdevapi.h"
 #include "kdevexport.h"

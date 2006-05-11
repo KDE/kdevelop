@@ -35,9 +35,9 @@
 
 #include <qmessagebox.h>
 #include <qapplication.h>
-#include <qdir.h>
+#include <QDir>
 #include <qimage.h>
-#include <qtimer.h>
+#include <QTimer>
 #include <qfileinfo.h>
 #include <qclipboard.h>
 #include <q3popupmenu.h>

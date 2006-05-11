@@ -2,12 +2,12 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include <qmap.h>
-#include <qfile.h>
+#include <QMap>
+#include <QFile>
 #include <qdebug.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QLabel>
+#include <QLayout>
+#include <QCheckBox>
 #include <qradiobutton.h>
 
 #include <krun.h>

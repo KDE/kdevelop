@@ -19,7 +19,7 @@
 #ifndef KDEVPLUGININFO_H
 #define KDEVPLUGININFO_H
 
-#include <qvariant.h>
+#include <QVariant>
 #include <QList>
 
 #include <kaboutdata.h>

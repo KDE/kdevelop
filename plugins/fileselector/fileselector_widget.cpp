@@ -30,23 +30,23 @@
 #include <kdevmainwindow.h>
 #include <kdevdocumentcontroller.h>
 
-#include <qlayout.h>
+#include <QLayout>
 #include <qtoolbutton.h>
 #include <q3hbox.h>
 #include <q3vbox.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <q3strlist.h>
-#include <qtooltip.h>
+#include <QToolTip>
 #include <Q3WhatsThis>
 #include <qapplication.h>
 #include <q3listbox.h>
 #include <qscrollbar.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 #include <q3groupbox.h>
-#include <qcheckbox.h>
-#include <qregexp.h>
+#include <QCheckBox>
+#include <QRegExp>
 #include <q3dockarea.h>
-#include <qtimer.h>
+#include <QTimer>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QFocusEvent>

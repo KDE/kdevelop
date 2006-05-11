@@ -1,6 +1,6 @@
 #include "openwithpart.h"
 
-#include <qfile.h>
+#include <QFile>
 #include <qfileinfo.h>
 #include <qmenu.h>
 

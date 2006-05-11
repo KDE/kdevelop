@@ -9,10 +9,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <q3frame.h>
-#include <qdir.h>
+#include <QDir>
 //Added by qt3to4:
 #include <QVBoxLayout>
 

@@ -18,7 +18,7 @@
 */
 
 #include "tag.h"
-#include <qdatastream.h>
+#include <QDataStream>
 
 Tag::Tag()
 {

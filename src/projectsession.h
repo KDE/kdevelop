@@ -17,7 +17,7 @@
 #ifndef _PROJECTSESSION_H_
 #define _PROJECTSESSION_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <qdom.h>
 #include <q3dict.h>
 #include <q3valuelist.h>

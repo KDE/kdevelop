@@ -9,16 +9,16 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qstring.h>
-#include <qvariant.h>
+#include <QString>
+#include <QVariant>
 #include <q3header.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <q3listview.h>
 #include <q3groupbox.h>
 #include <q3hbox.h>
-#include <qregexp.h>
-#include <qpushbutton.h>
+#include <QRegExp>
+#include <QPushButton>
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <QVBoxLayout>

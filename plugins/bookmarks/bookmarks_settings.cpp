@@ -10,9 +10,9 @@
  ***************************************************************************/
 
 #include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qspinbox.h>
-#include <qlineedit.h>
+#include <QCheckBox>
+#include <QSpinBox>
+#include <QLineEdit>
 
 #include "bookmarks_part.h"
 #include "bookmarks_config.h"

@@ -12,7 +12,7 @@
 #ifndef _DIFFWIDGET_H_
 #define _DIFFWIDGET_H_
 
-#include <qwidget.h>
+#include <QWidget>
 #include <q3textedit.h>
 #include <qstringlist.h>
 //Added by qt3to4:

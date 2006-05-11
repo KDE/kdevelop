@@ -22,7 +22,7 @@
 #ifndef KDEV_MAINWINDOW_H
 #define KDEV_MAINWINDOW_H
 
-#include <qstring.h>
+#include <QString>
 #include "kdevexport.h"
 class QWidget;
 class KStatusBar;

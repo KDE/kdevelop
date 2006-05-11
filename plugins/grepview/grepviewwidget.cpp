@@ -9,9 +9,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qdir.h>
-#include <qlayout.h>
-#include <qregexp.h>
+#include <QDir>
+#include <QLayout>
+#include <QRegExp>
 #include <qpainter.h>
 #include <qtoolbutton.h>
 //Added by qt3to4:

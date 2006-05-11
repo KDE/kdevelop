@@ -2,7 +2,7 @@
 #define _VALGRINDITEM_H_
 
 #include <q3valuelist.h>
-#include <qstring.h>
+#include <QString>
 
 class ValgrindBacktraceItem
 {

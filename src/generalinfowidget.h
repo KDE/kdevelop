@@ -11,7 +11,7 @@
 #ifndef _GENERALINFOWIDGET_H_
 #define _GENERALINFOWIDGET_H_
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qdom.h>
 
 #include "generalinfowidgetbase.h"

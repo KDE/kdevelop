@@ -14,8 +14,8 @@
 
 #include <k3listview.h>
 
-#include <qstring.h>
-#include <qregexp.h>
+#include <QString>
+#include <QRegExp>
 //Added by qt3to4:
 #include <QTextStream>
 

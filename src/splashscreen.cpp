@@ -4,8 +4,8 @@
 
 #include <config.h>
 
-#include <qtimer.h>
-#include <qfont.h>
+#include <QTimer>
+#include <QFont>
 #include <qpixmap.h>
 #include <qpainter.h>
 

@@ -64,15 +64,15 @@
 
 #include <QStackedWidget>
 #include <qpainter.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <qcursor.h>
 #include <QMenu>
 #include <qpixmap.h>
-#include <qtimer.h>
+#include <QTimer>
 #include <q3dropsite.h>
 #include <q3dragobject.h>
 #include <qtextcodec.h>
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <QDragEnterEvent>
 #include <QVBoxLayout>

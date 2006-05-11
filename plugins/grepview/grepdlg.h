@@ -15,9 +15,9 @@
 #define IGNORE_SCM_DIRS
 
 #include <qdialog.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QCheckBox>
 #include <kcombobox.h>
 
 

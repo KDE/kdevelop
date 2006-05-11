@@ -31,18 +31,18 @@
 #include <klocale.h>
 #include <kstdguiitem.h>
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
+#include <QLayout>
+#include <QPushButton>
+#include <QLineEdit>
 #include <qradiobutton.h>
 #include <qstringlist.h>
 #include <q3ptrlist.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <qdialog.h>
-#include <qfile.h>
-#include <qdir.h>
+#include <QFile>
+#include <QDir>
 #include <qtextstream.h>
-#include <qdatastream.h>
+#include <QDataStream>
 //Added by qt3to4:
 #include <QVBoxLayout>
 #include <QFocusEvent>

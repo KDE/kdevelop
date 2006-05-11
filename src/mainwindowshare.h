@@ -17,7 +17,7 @@
 #ifndef __MAINWINDOWSHARE_H__
 #define __MAINWINDOWSHARE_H__
 
-#include <qobject.h>
+#include <QObject>
 #include <qlist.h>
 #include <qmenu.h>
 #include "shellexport.h"

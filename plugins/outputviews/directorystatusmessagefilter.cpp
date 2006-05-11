@@ -13,7 +13,7 @@
 #include "directorystatusmessagefilter.moc"
 #include "makeitem.h"
 
-#include <qregexp.h>
+#include <QRegExp>
 #include <kdebug.h>
 
 DirectoryStatusMessageFilter::DirectoryStatusMessageFilter( OutputFilter& next )

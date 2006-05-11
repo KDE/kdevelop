@@ -37,7 +37,7 @@
 #include <kiconloader.h>
 
 #include <qdom.h>
-#include <qmap.h>
+#include <QMap>
 
 #include <assert.h>
 

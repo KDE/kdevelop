@@ -13,7 +13,7 @@
 #define CommandContinuationFilter_h
 
 #include "outputfilter.h"
-#include <qstring.h>
+#include <QString>
 
 class CommandContinuationFilter : public OutputFilter
 {

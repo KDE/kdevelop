@@ -12,7 +12,7 @@
 #ifndef MakeItem_h
 #define MakeItem_h
 
-#include <qstring.h>
+#include <QString>
 
 namespace KTextEditor {
   class Cursor;

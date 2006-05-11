@@ -1,6 +1,6 @@
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qregexp.h>
+#include <QLayout>
+#include <QCheckBox>
+#include <QRegExp>
 #include <q3widgetstack.h>
 
 #include <kprocess.h>

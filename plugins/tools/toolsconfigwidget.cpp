@@ -11,10 +11,10 @@
 
 #include "toolsconfigwidget.h"
 
-#include <qcheckbox.h>
-#include <qlineedit.h>
+#include <QCheckBox>
+#include <QLineEdit>
 #include <q3listbox.h>
-#include <qtimer.h>
+#include <QTimer>
 //Added by qt3to4:
 #include <QDragMoveEvent>
 #include <QEvent>

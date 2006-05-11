@@ -17,10 +17,10 @@
    Boston, MA 02110-1301, USA.
 */
 #include "kdevcatalog.h"
-#include <qdir.h>
-#include <qfile.h>
+#include <QDir>
+#include <QFile>
 #include <qfileinfo.h>
-#include <qdatastream.h>
+#include <QDataStream>
 //Added by qt3to4:
 #include <QList>
 #include <QByteArray>

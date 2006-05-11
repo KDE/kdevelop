@@ -9,11 +9,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QToolTip>
+#include <QLayout>
+#include <QLabel>
 #include <qevent.h>
 
 #include <k3listview.h>

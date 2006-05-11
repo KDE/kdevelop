@@ -26,7 +26,7 @@ The interface to compiler options configuration.
 #ifndef _KDEVCOMPILEROPTIONS_H_
 #define _KDEVCOMPILEROPTIONS_H_
 
-#include <qobject.h>
+#include <QObject>
 
 /**
 The interface to compiler options configuration.

@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "kdevideextension.h"
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qradiobutton.h>
 
 #include <klocale.h>

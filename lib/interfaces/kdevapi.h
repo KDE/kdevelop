@@ -20,7 +20,7 @@
 #ifndef KDEVAPI_H
 #define KDEVAPI_H
 
-#include <qobject.h>
+#include <QObject>
 #include "kdevexport.h"
 class QStringList;
 class QDomDocument;

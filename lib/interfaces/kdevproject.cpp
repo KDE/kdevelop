@@ -26,7 +26,7 @@
 
 #include "kdevproject.h"
 #include <qfileinfo.h>
-#include <qtimer.h>
+#include <QTimer>
 #include "kdevprojectiface.h"
 #include "filetemplate.h"
 

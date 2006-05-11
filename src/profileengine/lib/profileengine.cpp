@@ -18,7 +18,7 @@
  ***************************************************************************/
 #include "profileengine.h"
 
-#include <qdir.h>
+#include <QDir>
 
 #include <kurl.h>
 #include <kdebug.h>

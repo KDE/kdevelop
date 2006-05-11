@@ -1,4 +1,4 @@
-#include <qlayout.h>
+#include <QLayout>
 #include <qpainter.h>
 #include <q3popupmenu.h>
 //Added by qt3to4:

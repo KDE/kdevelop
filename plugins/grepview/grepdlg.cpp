@@ -11,12 +11,12 @@
 
 #include "grepdlg.h"
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qregexp.h>
+#include <QLayout>
+#include <QPushButton>
+#include <QRegExp>
 #include <q3hbox.h>
 
-#include <qtooltip.h>
+#include <QToolTip>
 #include <qstringlist.h>
 //Added by qt3to4:
 #include <QHBoxLayout>
@@ -32,7 +32,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kdeversion.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <kcombobox.h>
 #include <kurlcompletion.h>
 #include <kurlrequester.h>

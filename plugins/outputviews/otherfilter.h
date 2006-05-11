@@ -14,7 +14,7 @@
 
 #include "outputfilter.h"
 
-#include <qobject.h>
+#include <QObject>
 
 class MakeItem;
 

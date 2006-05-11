@@ -19,7 +19,7 @@
 #ifndef KDEVPLUGINCONTROLLER_H
 #define KDEVPLUGINCONTROLLER_H
 
-#include <qobject.h>
+#include <QObject>
 #include <qlist.h>
 
 #include <kurl.h>

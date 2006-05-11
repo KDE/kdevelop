@@ -27,8 +27,8 @@
 
 #include <q3listbox.h>
 #include <qtoolbutton.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qevent.h>
 
 //Added by qt3to4:

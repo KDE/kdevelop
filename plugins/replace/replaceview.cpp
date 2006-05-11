@@ -11,9 +11,9 @@
 
 #include <q3header.h>
 #include <qtextstream.h>
-#include <qdir.h>
+#include <QDir>
 #include <qstringlist.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <qpalette.h>
 
 #include "replaceitem.h"

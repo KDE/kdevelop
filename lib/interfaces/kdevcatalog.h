@@ -22,7 +22,7 @@
 
 #include <qlist.h>
 #include <qpair.h>
-#include <qvariant.h>
+#include <QVariant>
 #include <QByteArray>
 
 #include "tag.h"

@@ -34,7 +34,7 @@ The interface to the application core and context menu classes.
 */
 
 #include <qstringlist.h>
-#include <qobject.h>
+#include <QObject>
 #include <QMenu>
 
 #include <kurl.h>

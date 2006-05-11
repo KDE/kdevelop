@@ -19,7 +19,7 @@
 #ifndef PROFILEENGINE_H
 #define PROFILEENGINE_H
 
-#include <qmap.h>
+#include <QMap>
 //Added by qt3to4:
 #include <Q3ValueList>
 

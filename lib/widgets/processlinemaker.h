@@ -20,7 +20,7 @@
 #ifndef _PROCESSLINEMAKER_H_
 #define _PROCESSLINEMAKER_H_
 
-#include <qobject.h>
+#include <QObject>
 #include "kdevexport.h"
 
 /**

@@ -1,6 +1,6 @@
 #include "valgrinditem.h"
 
-#include <qregexp.h>
+#include <QRegExp>
 #include <qstringlist.h>
 
 #include <kdebug.h>

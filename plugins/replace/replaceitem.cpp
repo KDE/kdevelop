@@ -12,7 +12,7 @@
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qpalette.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 #include "replaceitem.h"
 

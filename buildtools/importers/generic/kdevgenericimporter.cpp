@@ -26,10 +26,10 @@
 #include <kgenericfactory.h>
 #include <klocale.h>
 
-#include <qdir.h>
-#include <qfile.h>
+#include <QDir>
+#include <QFile>
 #include <qfileinfo.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 K_EXPORT_COMPONENT_FACTORY(kdevgenericimporter, KGenericFactory<KDevGenericImporter>("kdevgenericimporter"))
 

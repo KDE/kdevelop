@@ -20,7 +20,7 @@
 #ifndef KDEVPCSIMPORTER_H
 #define KDEVPCSIMPORTER_H
 
-#include <qobject.h>
+#include <QObject>
 #include <qstringlist.h>
 #include "kdevexport.h"
 

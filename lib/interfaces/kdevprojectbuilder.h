@@ -19,7 +19,7 @@
 #ifndef KDEVPROJECTBUILDER_H
 #define KDEVPROJECTBUILDER_H
 
-#include <qobject.h>
+#include <QObject>
 #include "kdevexport.h"
 class KDevProject;
 class KDevProjectItem;

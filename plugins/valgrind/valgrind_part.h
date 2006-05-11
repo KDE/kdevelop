@@ -6,7 +6,7 @@
 #define __KDEVPART_VALGRIND_H__
 
 #include <qpointer.h>
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 #include <kdevplugin.h>
 

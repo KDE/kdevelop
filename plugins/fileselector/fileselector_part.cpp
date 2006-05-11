@@ -1,8 +1,8 @@
 #include "fileselector_part.h"
 
 
-#include <qpushbutton.h>
-#include <qcheckbox.h>
+#include <QPushButton>
+#include <QCheckBox>
 #include <qslider.h>
 #include <q3vbox.h>
 

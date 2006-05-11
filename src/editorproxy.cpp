@@ -5,8 +5,8 @@
 #include <kparts/part.h>
 #undef protected
 
-#include <qwidget.h>
-#include <qtimer.h>
+#include <QWidget>
+#include <QTimer>
 
 #include <kdeversion.h>
 #include <kdebug.h>

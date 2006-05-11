@@ -20,7 +20,7 @@
 #ifndef _EXECCOMMAND_H_
 #define _EXECCOMMAND_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <qstringlist.h>
 #include "kdevexport.h"
 

@@ -8,12 +8,12 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <q3textedit.h>
-#include <qcombobox.h>
-#include <qlabel.h>
+#include <QComboBox>
+#include <QLabel>
 #include <qfileinfo.h>
-#include <qdir.h>
+#include <QDir>
 
 #include <kurl.h>
 #include <klocale.h>

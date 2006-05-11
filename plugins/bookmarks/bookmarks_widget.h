@@ -13,10 +13,10 @@
 #define __BOOKMARKS_WIDGET_H__
 
 
-#include <qwidget.h>
-#include <qstring.h>
+#include <QWidget>
+#include <QString>
 //#include <qlistview.h>
-#include <qtooltip.h>
+#include <QToolTip>
 
 #include <k3listview.h>
 

@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 #include "commandcontinuationfilter.h"
-#include <qregexp.h>
+#include <QRegExp>
 #include <kdebug.h>
 
 CommandContinuationFilter::CommandContinuationFilter( OutputFilter& next )

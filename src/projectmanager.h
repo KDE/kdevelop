@@ -2,8 +2,8 @@
 #define __PROJECTMANAGER_H__
 
 
-#include <qstring.h>
-#include <qobject.h>
+#include <QString>
+#include <QObject>
 
 
 #include <kxmlguiclient.h>

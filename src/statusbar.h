@@ -13,7 +13,7 @@
 #define _STATUSBAR_H_
 
 #include <kstatusbar.h>
-#include <qmap.h>
+#include <QMap>
 #include "shellexport.h"
 
 class QLabel;

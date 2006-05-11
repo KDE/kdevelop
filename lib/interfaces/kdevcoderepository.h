@@ -19,7 +19,7 @@
 #ifndef KDEVCODEREPOSITORY_H
 #define KDEVCODEREPOSITORY_H
 
-#include <qobject.h>
+#include <QObject>
 #include <qlist.h>
 #include "kdevexport.h"
 

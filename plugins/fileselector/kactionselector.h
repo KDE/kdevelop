@@ -19,7 +19,7 @@
 #ifndef _KACTION_SELECTOR_H_
 #define _KACTION_SELECTOR_H_
 
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>

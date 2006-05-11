@@ -20,9 +20,9 @@
 #ifndef _CONFIGWIDGETPROXY_H
 #define _CONFIGWIDGETPROXY_H
 
-#include <qobject.h>
-#include <qstring.h>
-#include <qmap.h>
+#include <QObject>
+#include <QString>
+#include <QMap>
 #include "kdevexport.h"
 
 class KDevCore;

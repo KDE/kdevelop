@@ -2,7 +2,7 @@
 #define __TOOLS_CONFIG_H__
 
 
-#include <qwidget.h>
+#include <QWidget>
 #include <q3ptrlist.h>
 #include <qpixmap.h>
 //Added by qt3to4:

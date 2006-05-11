@@ -13,7 +13,7 @@
 #define _MAKEWIDGET_H_
 
 #include <q3ptrstack.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <q3textedit.h>
 #include <q3valuevector.h>
 #include <q3intdict.h>

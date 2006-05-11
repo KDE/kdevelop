@@ -13,7 +13,7 @@
 #define _APPOUTPUTWIDGET_H_
 
 #include <qstringlist.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 #include "processwidget.h"
 

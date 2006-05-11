@@ -1,8 +1,8 @@
 #ifndef __VALGRIND_WIDGET_H__
 #define __VALGRIND_WIDGET_H__
 
-#include <qwidget.h>
-#include <qstring.h>
+#include <QWidget>
+#include <QString>
 #include <qstringlist.h>
 //Added by qt3to4:
 #include <Q3PopupMenu>

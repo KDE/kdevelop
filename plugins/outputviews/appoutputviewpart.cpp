@@ -11,7 +11,7 @@
 
 #include "appoutputviewpart.h"
 
-#include <qdir.h>
+#include <QDir>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>

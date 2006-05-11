@@ -21,7 +21,7 @@
 #define _KDEVDEBUGGER_H_
 
 
-#include <qobject.h>
+#include <QObject>
 #include <qpixmap.h>
 
 

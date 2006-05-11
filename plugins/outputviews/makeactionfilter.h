@@ -12,8 +12,8 @@
 #ifndef MakeActionFilter_h
 #define MakeActionFilter_h
 
-#include <qobject.h>
-#include <qregexp.h>
+#include <QObject>
+#include <QRegExp>
 #include <q3valuelist.h>
 #include "outputfilter.h"
 

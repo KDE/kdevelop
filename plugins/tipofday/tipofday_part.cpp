@@ -1,7 +1,7 @@
 #include "tipofday_part.h"
 
-#include <qcheckbox.h>
-#include <qpushbutton.h>
+#include <QCheckBox>
+#include <QPushButton>
 
 #include <kaboutdata.h>
 #include <kaction.h>

@@ -13,7 +13,7 @@
 #define _GREPVIEWWIDGET_H_
 
 #include "processwidget.h"
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <QHBoxLayout>
 

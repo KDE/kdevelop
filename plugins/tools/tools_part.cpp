@@ -1,9 +1,9 @@
 #include "tools_part.h"
 
-#include <qfile.h>
+#include <QFile>
 #include <q3popupmenu.h>
-#include <qregexp.h>
-#include <qtimer.h>
+#include <QRegExp>
+#include <QTimer>
 #include <q3vbox.h>
 #include <q3whatsthis.h>
 #include <Q3PtrList>

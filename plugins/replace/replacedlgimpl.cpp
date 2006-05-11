@@ -1,8 +1,8 @@
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qradiobutton.h>
-#include <qstring.h>
-#include <qregexp.h>
-#include <qlabel.h>
+#include <QString>
+#include <QRegExp>
+#include <QLabel>
 
 #include <ktrader.h>
 #include <kparts/componentfactory.h>

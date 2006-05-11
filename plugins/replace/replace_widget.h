@@ -14,8 +14,8 @@
 
 #include <ktexteditor/editinterface.h>
 
-#include <qwidget.h>
-#include <qstring.h>
+#include <QWidget>
+#include <QString>
 //Added by qt3to4:
 #include <QFocusEvent>
 

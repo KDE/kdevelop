@@ -19,7 +19,7 @@
 
 
 
-#include <qstring.h>
+#include <QString>
 #include <q3vbox.h>
 
 #include <kdebug.h>

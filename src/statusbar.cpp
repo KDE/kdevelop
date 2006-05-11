@@ -9,12 +9,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qlayout.h>
-#include <qlineedit.h>
+#include <QLayout>
+#include <QLineEdit>
 #include <qpainter.h>
-#include <qtimer.h>
+#include <QTimer>
 #include <qfontmetrics.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>
