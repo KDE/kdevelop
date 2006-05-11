@@ -153,16 +153,23 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
                 QFileInfo headerInfo( target.folder, target.name );
                 installedHeaders->add( new AutoMakeFileItem( headerInfo, installedHeaders ) );
             }
+            else
+            {
+                if ( notInstalledHeaders == 0 )
+                    notInstalledHeaders = new KDevProjectTargetItem( i18n( "Uninstalled headers" ) );
+                QFileInfo headerInfo( target.folder, target.name );
+                notInstalledHeaders->add( new AutoMakeFileItem( headerInfo, notInstalledHeaders ) );
+            }
             break;
-            case AutoTools::Program:
-            case AutoTools::Library:
-            case AutoTools::LibtoolLibrary:
-            default:
-                AutoMakeTargetItem* targetItem = new AutoMakeTargetItem( target, folderItem );
-                folderItem->add( targetItem );
-                QList<QFileInfo> targetFiles = m_interface->filesForTarget( target );
-                foreach( QFileInfo fi, targetFiles )
-                    targetItem->add( new AutoMakeFileItem( fi, targetItem ) );
+        case AutoTools::Program:
+        case AutoTools::Library:
+        case AutoTools::LibtoolLibrary:
+        default:
+            AutoMakeTargetItem* targetItem = new AutoMakeTargetItem( target, folderItem );
+            folderItem->add( targetItem );
+            QList<QFileInfo> targetFiles = m_interface->filesForTarget( target );
+            foreach( QFileInfo fi, targetFiles )
+                targetItem->add( new AutoMakeFileItem( fi, targetItem ) );
             break;
         };
     }
