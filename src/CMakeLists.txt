@@ -6,7 +6,7 @@ add_subdirectory(newui)
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets 
     ${CMAKE_SOURCE_DIR}/src/newui ${CMAKE_SOURCE_DIR}/src/profileengine/lib
-    ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+    )
 
 
 ########### next target ###############

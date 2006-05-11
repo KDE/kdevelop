@@ -2,7 +2,7 @@ kde4_header()
 
 include_directories(${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util 
     ${CMAKE_SOURCE_DIR}/buildtools/importers/automake
-    ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+    )
 
 if(KDE4_BUILD_TESTS)
 
