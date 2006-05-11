@@ -641,6 +641,9 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
          if (LastClass != NULL) {
             LastClass->addFunction(nMethod);
          } else {
+            FunctionDom nMethodOld = ns->functionByName( event->name() )[0];
+            if ( nMethodOld != NULL)
+               ns->removeFunction( nMethodOld );
             ns->addFunction(nMethod);
          }
          LastMethod = nMethod;
