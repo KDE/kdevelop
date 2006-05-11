@@ -115,10 +115,12 @@ bool parse_file(char const *filename)
       pbuf->pubseekpos(0,std::ios::in);
 
       // allocate memory to contain file data
-      _G_contents=new char[size];
+      _G_contents=new char[size+1];
 
       // get file data
       pbuf->sgetn(_G_contents, size);
+
+      _G_contents[size] = '\0';
 
       filestr.close();
     }
