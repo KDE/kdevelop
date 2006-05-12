@@ -50,7 +50,7 @@
 
 typedef KDevGenericFactory<KDevProjectManagerPart> KDevProjectManagerFactory;
 static const KDevPluginInfo data("kdevprojectmanager");
-K_EXPORT_COMPONENT_FACTORY(kdevprojectmanager, KDevProjectManagerFactory(data));
+K_EXPORT_COMPONENT_FACTORY(kdevprojectmanager, KDevProjectManagerFactory(data))
 
 KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringList&)
     : KDevProject(&data, parent)

@@ -44,7 +44,7 @@
 typedef KDevGenericFactory<KDevCodeViewPart> KDevCodeViewFactory;
 static const KDevPluginInfo data( "kdevcodeview" );
 K_EXPORT_COMPONENT_FACTORY( kdevcodeview,
-                            KDevCodeViewFactory( data ) );
+                            KDevCodeViewFactory( data ) )
 
 KDevCodeViewPart::KDevCodeViewPart( QObject *parent,
                                     const QStringList& )

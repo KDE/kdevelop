@@ -458,7 +458,7 @@ private:
       uint _M_isRegister: 1;
       uint _M_isExtern: 1;
       uint _M_isMutable: 1;
-    };
+    } _S_flags; 
     uint _M_flags;
   };
 

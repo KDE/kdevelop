@@ -80,7 +80,7 @@ private:
       uint in_template_declaration: 1;
       uint in_typedef: 1;
       uint in_function_definition: 1;
-    };
+    } _S_flags;
 
     uint _M_flags;
   };

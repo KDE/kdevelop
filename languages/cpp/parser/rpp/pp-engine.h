@@ -92,7 +92,7 @@ class pp
     TOKEN_EQ_EQ,
     TOKEN_NOT_EQ,
     TOKEN_OR_OR,
-    TOKEN_AND_AND,
+    TOKEN_AND_AND
   };
 
   enum PP_DIRECTIVE_TYPE

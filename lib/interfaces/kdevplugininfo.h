@@ -107,7 +107,7 @@ public:
         const char *emailAddress = 0, const char *webAddress = 0);
 
 private:
-    Q_DISABLE_COPY(KDevPluginInfo);
+    Q_DISABLE_COPY(KDevPluginInfo)
     /**Returns the untranslated generic name of a plugin as set in .desktop file.*/
     const char *rawGenericName() const;
 
