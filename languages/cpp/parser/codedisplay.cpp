@@ -41,7 +41,7 @@ QString CodeDisplay::display( const _CodeModelItem *item )
         {
             QStringList signature;
             const _FunctionModelItem *function =
-                dynamic_cast<const _FunctionModelItem *>( item );
+                static_cast<const _FunctionModelItem *>( item );
             signature.append( function->name() );
             signature.append( "(" );
 
