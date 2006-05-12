@@ -1,4 +1,3 @@
-kde4_header()
 
 project(weaver)
 
@@ -53,4 +52,3 @@ install_targets(/lib ThreadWeaver)
 
 macro_additional_clean_files(${CMAKE_CURRENT_BINARY_DIR}/Job_moc.cpp ${CMAKE_CURRENT_BINARY_DIR}/Thread_moc.cpp)
 
-kde4_footer()

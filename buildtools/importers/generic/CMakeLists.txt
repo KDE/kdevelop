@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util 
     )
@@ -22,4 +21,3 @@ install_targets(${PLUGIN_INSTALL_DIR} kdevgenericimporter)
 install_files(${SERVICES_INSTALL_DIR} FILES kdevgenericimporter.desktop)
 
 
-kde4_footer()

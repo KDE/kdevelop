@@ -1,4 +1,3 @@
-kde4_header()
 
 if(KDE4_BUILD_TESTS)
 
@@ -29,4 +28,3 @@ add_test(kdevelop-memorypooltest ${EXECUTABLE_OUTPUT_PATH}/pooltest)
 
 endif(KDE4_BUILD_TESTS)
 
-kde4_footer()

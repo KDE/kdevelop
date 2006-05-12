@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces )
 
@@ -26,4 +25,3 @@ install_targets(/lib kdevutil)
 install_files(/include/kdevelop/util FILES execcommand.h configwidgetproxy.h kfiltermodel.h kdevtreeview.h)
 
 
-kde4_footer()

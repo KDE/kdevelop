@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util 
     ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/src/profileengine/lib
@@ -26,4 +25,3 @@ install_targets(/lib newui)
 install_files(/include/kdevelop/shell FILES dmainwindow.h ddockwidget.h docksplitter.h dtabwidget.h dexport.h)
 
 
-kde4_footer()

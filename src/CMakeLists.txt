@@ -1,4 +1,3 @@
-kde4_header()
 
 add_subdirectory(profiles)
 add_subdirectory(profileengine) 
@@ -91,4 +90,3 @@ install_files(${DATA_INSTALL_DIR}/kdevelop/profiles FILES projectprofiles)
 install_files(${DATA_INSTALL_DIR}/kdevassistant FILES kdevassistantui.rc)
 
 
-kde4_footer()

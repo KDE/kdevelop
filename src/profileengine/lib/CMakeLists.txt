@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util
     ${CMAKE_SOURCE_DIR}/lib/widgets
@@ -24,4 +23,3 @@ install_targets(/lib profileengine)
 install_files(/include/kdevelop/shell/profileengine FILES profileengine.h profile.h)
 
 
-kde4_footer()

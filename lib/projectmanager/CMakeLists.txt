@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories(${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib
     )
@@ -28,4 +27,3 @@ install_files(${SERVICES_INSTALL_DIR} FILES kdevprojectmanager.desktop)
 install_files(${DATA_INSTALL_DIR}/kdevprojectmanager FILES kdevprojectmanager.rc)
 
 
-kde4_footer()

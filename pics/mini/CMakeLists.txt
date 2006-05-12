@@ -1,4 +1,3 @@
-kde4_header()
 
 ########### install files ###############
 
@@ -14,4 +13,3 @@ install_files(${DATA_INSTALL_DIR}/kdevcppsupport/pics FILES class.png enum.png f
     signal.png slot.png struct.png typedef.png union.png)
 
 
-kde4_footer()

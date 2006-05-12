@@ -1,4 +1,3 @@
-kde4_header()
 
 add_subdirectory(parser)
 add_subdirectory(app_templates) 
@@ -31,4 +30,3 @@ install_targets(${PLUGIN_INSTALL_DIR} kdevcpplanguagesupport)
 install_files(${SERVICES_INSTALL_DIR} FILES kdevcppsupport.desktop)
 
 
-kde4_footer()

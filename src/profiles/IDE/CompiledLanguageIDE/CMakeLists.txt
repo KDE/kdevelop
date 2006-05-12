@@ -1,4 +1,3 @@
-kde4_header()
 
 add_subdirectory(CandCppIDE) 
 add_subdirectory(JavaIDE) 
@@ -14,4 +13,3 @@ add_subdirectory(PascalIDE)
 install_files(${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE FILES profile.config)
 
 
-kde4_footer()

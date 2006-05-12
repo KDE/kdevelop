@@ -1,4 +1,3 @@
-kde4_header()
 
 add_subdirectory(tests) 
 
@@ -41,4 +40,3 @@ install_targets(${PLUGIN_INSTALL_DIR} kdevautomakeimporter)
 install_files(${SERVICES_INSTALL_DIR} FILES kdevautomakeimporter.desktop)
 
 
-kde4_footer()

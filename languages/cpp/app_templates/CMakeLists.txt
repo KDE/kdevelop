@@ -1,4 +1,3 @@
-kde4_header()
 
 
 set(apptemplate_DIRS
@@ -22,4 +21,3 @@ install_files(${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE/Cand
 install_files(${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE/CandCppIDE/CIDE FILES c.appwizard)
 
 
-kde4_footer()

@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories(${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util 
     ${CMAKE_SOURCE_DIR}/buildtools/importers/automake
@@ -50,4 +49,3 @@ add_test(kdevelop-automakeparsertest ${EXECUTABLE_OUTPUT_PATH}/testinterface)
 endif(KDE4_BUILD_TESTS)
 
 
-kde4_footer()

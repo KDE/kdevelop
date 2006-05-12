@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets
     )
@@ -26,4 +25,3 @@ install_targets(${PLUGIN_INSTALL_DIR} kdevdocumentview)
 install_files(${SERVICES_INSTALL_DIR} FILES kdevdocumentview.desktop)
 install_files(${DATA_INSTALL_DIR}/kdevdocumentview FILES kdevdocumentview.rc)
 
-kde4_footer()

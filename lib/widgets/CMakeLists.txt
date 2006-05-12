@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces )
 
@@ -25,4 +24,3 @@ install_files(${DATA_INSTALL_DIR}/kdevelop FILES kdevhtml_partui.rc)
 install_files(/include/kdevelop/widgets FILES kdevhtmlpart.h processlinemaker.h processwidget.h ksavealldialog.h)
 
 
-kde4_footer()

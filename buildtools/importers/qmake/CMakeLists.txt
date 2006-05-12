@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories(${CMAKE_SOURCE_DIR}/buildtools/lib/parsers/qmake 
     ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util 
@@ -25,4 +24,3 @@ install_targets(${PLUGIN_INSTALL_DIR} kdevqmakeimporter)
 install_files(${SERVICES_INSTALL_DIR} FILES kdevqmakeimporter.desktop)
 
 
-kde4_footer()

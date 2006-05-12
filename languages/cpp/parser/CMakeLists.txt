@@ -1,4 +1,3 @@
-kde4_header()
 
 add_subdirectory(rpp)
 add_subdirectory(tests)
@@ -40,4 +39,3 @@ kde4_add_library(kdevcppparser STATIC ${kdevcppparser_STAT_SRCS})
 
 ########### install files ###############
 
-kde4_footer()

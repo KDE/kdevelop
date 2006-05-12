@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces )
 
@@ -22,4 +21,3 @@ install_targets(/lib kdevlang_debugger)
 install_files(/include/kdevelop/languages/debugger FILES)
 
 
-kde4_footer()
