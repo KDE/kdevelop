@@ -18,9 +18,6 @@ KDE::CmdLineArgs.init(ARGV, about)
 KDE::CmdLineArgs.addCmdLineOptions(options)
 app = KDE::Application.new
 
-# register ourselves as a dcop client
-app.dcopClient().registerAs(app.name, false)
-
 # see if we are starting with session management
 if app.restored?
     RESTORE(%{APPNAMESC})
