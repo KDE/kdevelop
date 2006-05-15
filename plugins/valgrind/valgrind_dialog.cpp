@@ -1,7 +1,7 @@
 #include <QLayout>
 #include <QCheckBox>
 #include <QRegExp>
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 
 #include <kprocess.h>
 #include <klocale.h>
@@ -10,21 +10,23 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 
-#include "dialog_widget.h"
+#include "ui_valgrind_dialog.h"
 #include "valgrind_dialog.h"
 
 #include "valgrind_dialog.moc"
 
 
 ValgrindDialog::ValgrindDialog( Type type, QWidget* parent )
-  : KDialogBase( parent, "valgrind dialog", true, i18n("Valgrind Memory Check"), Ok|Cancel ),
-  m_type(type)
+  : KDialog( parent, i18n("Valgrind Memory Check"), Ok|Cancel )
+  , m_type(type)
 {
-  w = new DialogWidget( this );
+  w = new Ui::ValgrindDialog();
+  QWidget* top = new QWidget(this);
+  w->setupUi(top);
   w->valExecutableEdit->setURL( "valgrind" );
   w->executableEdit->setFocus();
-  w->stack->raiseWidget(m_type);
-  setMainWidget( w );
+  w->stack->setCurrentWidget(type == Memcheck ? w->memcheckWidget : w->callgrindWidget);
+  setMainWidget( top );
   connect( w->executableEdit->lineEdit(),  SIGNAL( textChanged( const QString &)), this, SLOT( valgrindTextChanged()));
   connect( w->valExecutableEdit->lineEdit(), SIGNAL( textChanged( const QString &)), this, SLOT( valgrindTextChanged()));
   connect( w->ctExecutableEdit->lineEdit(),  SIGNAL( textChanged( const QString &)), this, SLOT( valgrindTextChanged()));
@@ -115,11 +117,11 @@ void ValgrindDialog::setValParams( const QString& params )
     w->reachableBox->setChecked( true );
   if ( myParams.contains( childrenParam ) )
     w->childrenBox->setChecked( true );
-  w->init();
 
   myParams = myParams.replace( QRegExp( leakCheckParam ), "" );
   myParams = myParams.replace( QRegExp( reachableParam ), "" );
   myParams = myParams.replace( QRegExp( childrenParam ), "" );
+  myParams = myParams.replace( "--tool=memcheck ", "" );
   myParams = myParams.trimmed();
   w->valParamEdit->setText( myParams );
 }
@@ -159,7 +161,6 @@ void ValgrindDialog::setCtParams( const QString& params )
   QString myParams = params;
   if ( myParams.contains( childrenParam ) )
     w->ctChildrenBox->setChecked( true );
-  w->init();
 
   myParams = myParams.replace( QRegExp( childrenParam ), "" );
   myParams = myParams.trimmed();

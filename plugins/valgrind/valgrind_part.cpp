@@ -16,6 +16,7 @@
 #include "kdevmainwindow.h"
 #include "kdevproject.h"
 #include "kdevplugininfo.h"
+#include "kdevgenericfactory.h"
 
 #include "valgrind_widget.h"
 #include "valgrind_part.h"
@@ -24,12 +25,11 @@
 
 typedef KDevGenericFactory<ValgrindPart> ValgrindFactory;
 static const KDevPluginInfo data("kdevvalgrind");
-K_EXPORT_COMPONENT_FACTORY( libkdevvalgrind, ValgrindFactory( data ) )
+K_EXPORT_COMPONENT_FACTORY( kdevvalgrind, ValgrindFactory( data ) )
 
-ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList& )
+ValgrindPart::ValgrindPart( QObject *parent, const QStringList& )
   : KDevPlugin( &data, parent)
 {
-  setObjectName(QString::fromUtf8(name));
   setInstance( ValgrindFactory::instance() );
   setXMLFile( "kdevpart_valgrind.rc" );
 
@@ -59,15 +59,16 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
     "mismatched use of malloc/new/new [] vs free/delete/delete []<br>"
     "some abuses of the POSIX pthread API." ) );
 
-  KAction* action = new KAction( i18n("&Valgrind Memory Leak Check"), 0, this,
-           SLOT(slotExecValgrind()), actionCollection(), "tools_valgrind" );
+  KAction* action = new KAction( i18n("&Valgrind Memory Leak Check"), actionCollection(), "tools_valgrind" );
+  action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
   action->setToolTip(i18n("Valgrind memory leak check"));
   action->setWhatsThis(i18n("<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you find memory-management problems in your programs."));
+  connect(action, SIGNAL(triggered(bool)), SLOT(slotExecValgrind()));
 
-  action = new KAction( i18n("P&rofile with KCachegrind"), 0, this,
-           SLOT(slotExecCalltree()), actionCollection(), "tools_calltree" );
+  action = new KAction( i18n("P&rofile with KCachegrind"), actionCollection(), "tools_calltree" );
   action->setToolTip(i18n("Profile with KCachegrind"));
   action->setWhatsThis(i18n("<b>Profile with KCachegrind</b><p>Runs your program in calltree and then displays profiler information in KCachegrind."));
+  connect(action, SIGNAL(triggered(bool)), SLOT(slotExecCalltree()));
 
   mainWindow()->embedOutputView( m_widget, "Valgrind", i18n("Valgrind memory leak check") );
 }
@@ -117,7 +118,7 @@ void ValgrindPart::getActiveFiles()
     KUrl url;
     for ( QStringList::Iterator it = projectFiles.begin(); it != projectFiles.end(); ++it ) {
       KUrl url( projectDirectory + "/" + (*it) );
-      url.cleanPath( true );
+      url.cleanPath();
       activeFiles += url.path();
       kDebug() << "set project file: " << url.path().latin1() << endl;
     }

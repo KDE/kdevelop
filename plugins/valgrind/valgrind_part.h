@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2002 Harald Fernengel <harry@kdevelop.org>   
+ *  Copyright (C) 2002 Harald Fernengel <harry@kdevelop.org>
  */
 
 #ifndef __KDEVPART_VALGRIND_H__
@@ -17,10 +17,10 @@ class ValgrindPart : public KDevPlugin
 {
   Q_OBJECT
 
-public:   
-  ValgrindPart( QObject *parent, const char *name, const QStringList & );
+public:
+  ValgrindPart( QObject *parent, const QStringList & );
   ~ValgrindPart();
-  
+
   void runValgrind( const QString& exec, const QString& parameters, const QString& valExec, const QString& valParameters );
 
   void savePartialProjectSession( QDomElement* el );
@@ -36,7 +36,7 @@ private slots:
   void processExited( KProcess* );
   void loadOutput();
   void projectOpened();
-  
+
 private:
   void getActiveFiles();
   void appendMessage( const QString& message );
