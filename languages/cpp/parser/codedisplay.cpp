@@ -153,7 +153,7 @@ QString CodeDisplay::toolTip( const _CodeModelItem *item )
     case _CodeModelItem::Kind_Class:
         {
             const _ClassModelItem *_class =
-                dynamic_cast<const _ClassModelItem *>( item );
+                static_cast<const _ClassModelItem *>( item );
             QString bases = _class->baseClasses().join( ", " );
             return qualified + ( !bases.isEmpty() ? ": " + bases : QString::null );
         }
