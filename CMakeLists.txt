@@ -39,6 +39,5 @@ add_subdirectory(xdg)
 
 ########### install files ###############
 
-install_files(/bin FILES kdevprj2kdevelop)
-
+install(PROGRAMS kdevprj2kdevelop DESTINATION bin)
 
