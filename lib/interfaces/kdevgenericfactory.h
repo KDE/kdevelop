@@ -17,8 +17,14 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
+#ifndef KDEV_GENERIC_FACTORY_H
+#define KDEV_GENERIC_FACTORY_H
+
 #include <kgenericfactory.h>
 #include <kaboutdata.h>
+
+#include "kdevexport.h"
 
 /**
 @file kdevgenericfactory.h
@@ -39,7 +45,7 @@ Data should be a const static object. This way it complies with the requirements
 for data objecs of KDevGenericFactory constructor.
 
 <b>Important:</b><br>
-There is no need to create @ref KAboutData objects. It is more useful to create 
+There is no need to create @ref KAboutData objects. It is more useful to create
 a static const @ref KDevPluginInfo object which can be used also in the constructor
 of a plugin.
 
@@ -89,3 +95,4 @@ private:
 
 };
 
+#endif
