@@ -21,7 +21,8 @@
 
 DUBuilder::DUBuilder (TokenStream *token_stream):
   _M_token_stream (token_stream),
-  _M_flags (0)
+  in_namespace(false), in_class(false), in_template_declaration(false),
+  in_typedef(false), in_function_definition(false)
 {
 }
 

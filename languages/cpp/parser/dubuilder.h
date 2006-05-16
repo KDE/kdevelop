@@ -73,17 +73,11 @@ protected:
 private:
   TokenStream *_M_token_stream;
 
-  union {
-    struct {
-      uint in_namespace: 1;
-      uint in_class: 1;
-      uint in_template_declaration: 1;
-      uint in_typedef: 1;
-      uint in_function_definition: 1;
-    } _S_flags;
-
-    uint _M_flags;
-  };
+  bool in_namespace: 1;
+  bool in_class: 1;
+  bool in_template_declaration: 1;
+  bool in_typedef: 1;
+  bool in_function_definition: 1;
 };
 
 #endif // DUBUILDER_H

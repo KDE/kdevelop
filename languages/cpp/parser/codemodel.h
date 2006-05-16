@@ -440,28 +440,23 @@ protected:
   _MemberModelItem(CodeModel *model, int kind)
     : _CodeModelItem(model, kind),
       _M_accessPolicy(CodeModel::Public),
-      _M_flags(0)
+      _M_isConstant(0), _M_isVolatile(0),
+      _M_isStatic(0), _M_isAuto(0),
+      _M_isFriend(0), _M_isRegister(0),
+      _M_isExtern(0), _M_isMutable(0)
   {}
 
 private:
   TypeInfo _M_type;
   CodeModel::AccessPolicy _M_accessPolicy;
-  union
-  {
-    struct
-    {
-      uint _M_isConstant: 1;
-      uint _M_isVolatile: 1;
-      uint _M_isStatic: 1;
-      uint _M_isAuto: 1;
-      uint _M_isFriend: 1;
-      uint _M_isRegister: 1;
-      uint _M_isExtern: 1;
-      uint _M_isMutable: 1;
-    } _S_flags; 
-    uint _M_flags;
-  };
-
+  uint _M_isConstant: 1;
+  uint _M_isVolatile: 1;
+  uint _M_isStatic: 1;
+  uint _M_isAuto: 1;
+  uint _M_isFriend: 1;
+  uint _M_isRegister: 1;
+  uint _M_isExtern: 1;
+  uint _M_isMutable: 1;
 };
 
 class _FunctionModelItem: public _MemberModelItem
@@ -501,7 +496,8 @@ protected:
   _FunctionModelItem(CodeModel *model, int kind = __node_kind)
     : _MemberModelItem(model, kind),
       _M_functionType(CodeModel::Normal),
-      _M_flags(0)
+      _M_isVirtual(false), _M_isInline(false), _M_isAbstract(false),
+      _M_isExplicit(false)
   {}
 
 private:
@@ -509,17 +505,10 @@ private:
   mutable bool _M_destructor;
   ArgumentList _M_arguments;
   CodeModel::FunctionType _M_functionType;
-  union
-  {
-    struct
-    {
-      uint _M_isVirtual: 1;
-      uint _M_isInline: 1;
-      uint _M_isAbstract: 1;
-      uint _M_isExplicit: 1;
-    };
-    uint _M_flags;
-  };
+  bool _M_isVirtual: 1;
+  bool _M_isInline: 1;
+  bool _M_isAbstract: 1;
+  bool _M_isExplicit: 1;
 
 private:
   _FunctionModelItem(const _FunctionModelItem &other);
