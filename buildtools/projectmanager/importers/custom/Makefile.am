@@ -7,7 +7,7 @@ INCLUDES = \
     
 METASOURCES = AUTO
 
-lib_LTLIBRARIES = \
+kde_module_LTLIBRARIES = \
     libkdevcustomimporter.la
 
 noinst_HEADERS = \

@@ -1,7 +1,7 @@
 INCLUDES = -I$(top_srcdir)/buildtools/lib/parsers/qmake \
 	-I$(top_srcdir)/buildtools/projectmanager/interfaces -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 METASOURCES = AUTO
-lib_LTLIBRARIES = libqmakeimporter.la
+kde_module_LTLIBRARIES = libqmakeimporter.la
 libqmakeimporter_la_LDFLAGS = -module $(all_libraries) $(KDE_PLUGIN)
 noinst_HEADERS = kdevqmakeeditor.h qmakeprojectmodel.h modelcreator.h \
 	projectconfigurationdlg.h

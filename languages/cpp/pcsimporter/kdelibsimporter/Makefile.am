@@ -1,7 +1,7 @@
 INCLUDES = -I$(top_srcdir)/languages/lib/interfaces \
 	-I$(top_srcdir)/lib/interfaces $(all_includes)
 METASOURCES = AUTO
-lib_LTLIBRARIES =  libkdevkdelibsimporter.la
+kde_module_LTLIBRARIES =  libkdevkdelibsimporter.la
 
 noinst_HEADERS = kdevkdelibsimporter.h settingsdialog.h
 libkdevkdelibsimporter_la_SOURCES = kdevkdelibsimporter.cpp settingsdialogbase.ui settingsdialog.cpp

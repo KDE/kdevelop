@@ -5,7 +5,7 @@ INCLUDES = -I$(top_srcdir)/buildtools/lib/widgets \
     
 METASOURCES = AUTO
 
-lib_LTLIBRARIES = \
+kde_module_LTLIBRARIES = \
     libkdevmakebuilder.la
 
 noinst_HEADERS = \

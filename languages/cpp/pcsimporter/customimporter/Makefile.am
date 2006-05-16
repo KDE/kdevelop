@@ -1,7 +1,7 @@
 INCLUDES = -I$(top_srcdir)/languages/lib/interfaces \
 	-I$(top_srcdir)/lib/interfaces $(all_includes)
 METASOURCES = AUTO
-lib_LTLIBRARIES =  libkdevcustompcsimporter.la
+kde_module_LTLIBRARIES =  libkdevcustompcsimporter.la
 
 
 noinst_HEADERS =  kdevcustomimporter.h
