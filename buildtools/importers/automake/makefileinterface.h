@@ -39,7 +39,7 @@ namespace AutoTools
     TargetType convertToType( const QString& );
     InstallLocation convertToLocation( const QString& );
 
-};
+}
 
 template <typename T> class QList;
 template <typename T1, typename T2> class QMap;
