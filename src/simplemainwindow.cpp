@@ -97,7 +97,7 @@ void SimpleMainWindow::init()
     connect(Core::getInstance(), SIGNAL(coreInitialized()), this, SLOT(slotCoreInitialized()));
     connect(Core::getInstance(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
     connect(Core::getInstance(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-	this, SLOT(contextMenu(QPopupMenu *, const Context *)));
+        this, SLOT(contextMenu(QPopupMenu *, const Context *)));
     connect(PartController::getInstance(), SIGNAL(partURLChanged(KParts::ReadOnlyPart *)),
         this, SLOT(slotPartURLChanged(KParts::ReadOnlyPart * )));
     connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
@@ -116,24 +116,41 @@ void SimpleMainWindow::contextMenu(QPopupMenu *popupMenu, const Context *context
     m_splitURLs.clear();
     if (cont == Context::EditorContext)
     {
-	KURL url = static_cast<const EditorContext*>(context)->url();
-	QWidget *w = widgetForURL(url);
-	if (w && m_widgetTabs[w] && m_widgetTabs[w]->count() > 1)
-	{
-	    m_splitURLs.append(url);
-	    m_splitHor1->plug(popupMenu);
-	    m_splitVer1->plug(popupMenu);
-	    popupMenu->insertSeparator();
-	}
+        KURL url = static_cast<const EditorContext*>(context)->url();
+        QWidget *w = widgetForURL(url);
+        if (w && m_widgetTabs[w] && m_widgetTabs[w]->count() > 1)
+        {
+            m_splitURLs.append(url);
+            m_splitHor1->plug(popupMenu);
+            m_splitVer1->plug(popupMenu);
+            popupMenu->insertSeparator();
+        }
     }
     else if (cont == Context::FileContext)
     {
-	if (PartController::getInstance()->openURLs().count() > 0)
-	{
-	    m_splitURLs = static_cast<const FileContext*>(context)->urls();
-	    m_splitHor2->plug(popupMenu);
-	    m_splitVer2->plug(popupMenu);
-	}
+        if (PartController::getInstance()->openURLs().count() > 0)
+        {
+            m_splitURLs = static_cast<const FileContext*>(context)->urls();
+            bool isOpen = true;
+            for (KURL::List::const_iterator it = m_splitURLs.begin(); it != m_splitURLs.end(); ++it)
+            {
+                if (!PartController::getInstance()->openURLs().contains(*it))
+                {
+                    isOpen = false;
+                    break;
+                }
+            }
+            if (isOpen)
+            {
+                m_splitHor1->plug(popupMenu);
+                m_splitVer1->plug(popupMenu);
+            }
+            else
+            {
+                m_splitHor2->plug(popupMenu);
+                m_splitVer2->plug(popupMenu);
+            }
+        }
     }
 }
 
@@ -235,7 +252,7 @@ void SimpleMainWindow::saveSettings( )
 
     ProjectManager::getInstance()->saveSettings();
     saveMainWindowSettings(config, "SimpleMainWindow");
-    
+
     DMainWindow::saveSettings();
 }
 
@@ -384,9 +401,9 @@ void SimpleMainWindow::closeTab()
 //    actionCollection()->action("file_close")->activate();
     if (sender()->isA("QToolButton") && sender()->parent()->isA("DTabWidget"))
     {
-	DTabWidget *tab = (DTabWidget*)sender()->parent();
-	if (tab && tab->currentPage())
-	    closeTab(tab->currentPage());
+        DTabWidget *tab = (DTabWidget*)sender()->parent();
+        if (tab && tab->currentPage())
+            closeTab(tab->currentPage());
     }
 }
 
@@ -589,31 +606,31 @@ void SimpleMainWindow::openDocumentsAfterSplit(DTabWidget *tab)
 {
     if (m_splitURLs.count() > 0)
     {
-	for (KURL::List::const_iterator it = m_splitURLs.begin(); it != m_splitURLs.end(); ++it)
-	{
-	    KParts::ReadOnlyPart *part = PartController::getInstance()->partForURL(*it);
-	    if (!part)
-		PartController::getInstance()->editDocument(*it);
-	    else
-	    {
-		QWidget *inTab = widgetForURL(*it);
-		if (inTab)
-		{
-		    DTabWidget *oldTab = m_widgetTabs[inTab];
-		    QString title = oldTab->tabLabel(inTab);
-		    removeWidget(inTab);
-		    addWidget(tab, inTab, title);
-		}
-	    }
-	}
-	m_splitURLs.clear();
+        for (KURL::List::const_iterator it = m_splitURLs.begin(); it != m_splitURLs.end(); ++it)
+        {
+            KParts::ReadOnlyPart *part = PartController::getInstance()->partForURL(*it);
+            if (!part)
+                PartController::getInstance()->editDocument(*it);
+            else
+            {
+                QWidget *inTab = widgetForURL(*it);
+                if (inTab)
+                {
+                    DTabWidget *oldTab = m_widgetTabs[inTab];
+                    QString title = oldTab->tabLabel(inTab);
+                    removeWidget(inTab);
+                    addWidget(tab, inTab, title);
+                }
+            }
+        }
+        m_splitURLs.clear();
     }
 }
 
 QWidget *SimpleMainWindow::widgetForURL(KURL url)
 {
     KParts::ReadOnlyPart *part = PartController::getInstance()->partForURL(url);
-    return widgetInTab(part->widget());    
+    return widgetInTab(part->widget());
 }
 
 QWidget *SimpleMainWindow::widgetInTab(QWidget *w)
@@ -626,7 +643,7 @@ QWidget *SimpleMainWindow::widgetInTab(QWidget *w)
         inTab = (QWidget*)w->parent()->parent();
     else if (w && w->parent() && w->parent()->isA("MultiBuffer"))
         inTab = (QWidget*)w->parent();
-    else 
+    else
         inTab = w;
     return inTab;
 }

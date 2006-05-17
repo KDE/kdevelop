@@ -109,7 +109,7 @@ private:
     KAction *m_splitVer2;
     QPopupMenu *m_windowMenu;
     QValueList<QPair<int, KURL> > m_windowList;
-    
+
     KURL::List m_splitURLs;
 };
 
