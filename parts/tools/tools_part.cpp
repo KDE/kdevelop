@@ -64,6 +64,7 @@ ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
 
 ToolsPart::~ToolsPart()
 {
+	delete m_configProxy;
 }
 
 void ToolsPart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )

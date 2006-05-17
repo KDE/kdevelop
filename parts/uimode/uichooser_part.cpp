@@ -32,6 +32,7 @@ UIChooserPart::UIChooserPart(QObject *parent, const char *name, const QStringLis
 
 UIChooserPart::~UIChooserPart()
 {
+	delete _configProxy;
 }
 
 void UIChooserPart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )

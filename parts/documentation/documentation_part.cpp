@@ -117,6 +117,7 @@ DocumentationPart::~DocumentationPart()
         mainWindow()->removeView( m_widget );
     }
     delete m_widget;
+	delete m_configProxy;
 }
 
 void DocumentationPart::loadDocumentationPlugins()
