@@ -102,7 +102,7 @@ void AppOutputViewPart::startAppCommand(const QString &directory, const QString 
         cmd += " -e /bin/sh -c '";
         cmd += program;
         cmd += "; echo \"";
-        cmd += i18n("Press Enter to continue!");
+        cmd += i18n("Press Enter to continue");
         cmd += "\";read dummy'";
     } else
         cmd = program;
