@@ -32,9 +32,9 @@
 HierarchyDialog::HierarchyDialog( ClassViewPart *part )
     : QDialog(0, "hierarchy dialog", WDestructiveClose)
 {
-    class_combo = new KComboView(false, 150, this);
+    class_combo = new KComboView(true, 150, this);
 //    class_combo->setMinimumWidth(150);
-    namespace_combo = new KComboView(false, 150, this);
+    namespace_combo = new KComboView(true, 150, this);
 //    namespace_combo->setMinimumWidth(150);
 
     QPushButton *close_button = new KPushButton(KStdGuiItem::close(), this);
