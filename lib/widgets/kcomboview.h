@@ -33,11 +33,32 @@ KComboView - a combo with a QListView as a popup widget.
 KComboView provides text completion.
 @sa QComboView for a description.
 */
+
+
+///This can be used to insert own KCompletion-implementations
+class CustomCompleter : public KCompletion {
+    public:
+    virtual void addItem (const QString &item) {
+        KCompletion::addItem( item );
+    }
+    
+    virtual void removeItem (const QString &item) {
+        KCompletion::removeItem( item );
+    }
+    
+    virtual void clear() {
+        KCompletion::clear();
+    }
+};
+
+
 class KComboView: public QComboView
 {
     Q_OBJECT
 public:
-    KComboView( bool rw, int defaultWidth = 100, QWidget* parent=0, const char* name=0 );
+    ///The combo-view takes the ownership of the completer and deletes it on destruction
+    KComboView( bool rw, int defaultWidth = 100, QWidget* parent=0, const char* name=0, CustomCompleter* completer = new CustomCompleter() );
+    virtual ~KComboView();
 
     virtual void addItem(QListViewItem *it);
     virtual void removeItem(QListViewItem *it);
@@ -49,7 +70,7 @@ public:
 
     int defaultWidth();
 private:
-    KCompletion m_comp;
+    CustomCompleter* m_comp;
     int m_defaultWidth;
     QString m_defaultText;
 };
