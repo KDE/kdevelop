@@ -10,7 +10,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *  Library General Public License for more details.
- *
+//  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.LIB.  If not, write to
  *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -28,6 +28,10 @@
 #include <qmap.h>
 #include <qtooltip.h>
 #include <codemodel.h>
+#include <lib/widgets/fancyklistviewitem.h>
+#include <navigator.h>
+
+using namespace Widgets;
 
 class KDevProject;
 class ClassViewPart;
@@ -60,6 +64,11 @@ public:
 
     void clear();
 
+    bool selectItem(ItemDom item);
+    
+    inline TextPaintStyleStore& paintStyles() {
+        return m_paintStyles;
+    }
 signals:
     void removedNamespace(const QString &name);
 
@@ -103,15 +112,18 @@ private:
     friend class TypeAliasDomBrowserItem;
     friend class FunctionDomBrowserItem;
     friend class VariableDomBrowserItem;
+    TextPaintStyleStore m_paintStyles;
 };
 
-class ClassViewItem: public KListViewItem
+class ClassViewItem: public FancyKListViewItem
 {
+    private:
+    typedef FancyKListViewItem Base;
 public:
     ClassViewItem( QListView* parent, const QString& text=QString::null )
-    	: KListViewItem( parent, text ) {}
+        : Base( static_cast<ClassViewWidget*>( parent )->m_paintStyles, parent, text ) {}
     ClassViewItem( QListViewItem* parent, const QString& text=QString::null )
-    	: KListViewItem( parent, text ) {}
+    : Base( static_cast<ClassViewWidget*>( parent->listView() )->m_paintStyles, parent, text ) {}
     
     virtual const CodeModelItem* model() const { return 0; }
 
@@ -129,8 +141,12 @@ public:
     virtual void openDeclaration() {}
     virtual void openImplementation() {}
 
-    ClassViewWidget* listView() { return static_cast<ClassViewWidget*>( KListViewItem::listView() ); }
-    const ClassViewWidget* listView() const { return static_cast<ClassViewWidget*>( KListViewItem::listView() ); }
+    void select();
+    
+    virtual QString comment();
+    
+    ClassViewWidget* listView() { return static_cast<ClassViewWidget*>( QListViewItem::listView() ); }
+    const ClassViewWidget* listView() const { return static_cast<ClassViewWidget*>( QListViewItem::listView() ); }
 };
 
 class FolderBrowserItem: public ClassViewItem
@@ -152,6 +168,7 @@ public:
     void processTypeAlias( TypeAliasDom typeAlias, bool remove=false );
     void processFunction( FunctionDom fun, bool remove=false );
     void processVariable( VariableDom var, bool remove=false );
+    bool selectItem(ItemDom item);
 
 private:
     QMap<QString, FolderBrowserItem*> m_folders;
@@ -184,6 +201,8 @@ public:
     void processTypeAlias( TypeAliasDom typeAlias, bool remove=false );
     void processFunction( FunctionDom fun, bool remove=false );
     void processVariable( VariableDom var, bool remove=false );
+    bool selectItem( ItemDom item );
+    virtual QString comment();
 
     NamespaceDom dom() { return m_dom; }
 
@@ -217,7 +236,13 @@ public:
     void processTypeAlias( TypeAliasDom typeAlias, bool remove=false );
     void processFunction( FunctionDom fun, bool remove=false );
     void processVariable( VariableDom var, bool remove=false );
-
+    
+    virtual QString comment() {
+        if( !m_dom ) return "";
+        return m_dom->comment();
+    }
+    
+    bool selectItem(ItemDom item);
     ClassDom dom() { return m_dom; }
 
 private:
@@ -241,6 +266,11 @@ public:
 
     virtual bool hasDeclaration() const { return true; }
     virtual void openDeclaration();
+    
+    virtual QString comment() {
+        if( !m_dom ) return "";
+        return m_dom->comment();
+    }
 
     void setup();
     QString key( int, bool ) const;
@@ -267,6 +297,11 @@ public:
 
     virtual void openDeclaration();
     virtual void openImplementation();
+    
+    virtual QString comment() {
+        if( !m_dom ) return "";
+        return m_dom->comment();
+    }
 
     void setup();
     QString key( int, bool ) const;
@@ -290,6 +325,11 @@ public:
 
     virtual bool hasDeclaration() const { return true; }
     virtual bool hasImplementation() const { return false; }
+    
+    virtual QString comment() {
+        if( !m_dom ) return "";
+        return m_dom->comment();
+    }
 
     virtual void openDeclaration();
     virtual void openImplementation();
@@ -301,6 +341,40 @@ public:
 
 private:
     VariableDom m_dom;
+};
+
+struct FindOp2 ///a template would look nicer
+{
+    FindOp2( const FunctionDefinitionDom& dom ): m_dom( dom ) {}
+
+    bool operator() ( const FunctionDom& def ) const
+    {
+        if( m_dom->name() != def->name() )
+            return false;
+
+        if( m_dom->isConstant() != m_dom->isConstant() )
+            return false;
+
+        QString scope1 = QString("::") + m_dom->scope().join("::");
+        QString scope2 = QString("::") + def->scope().join("::");
+        if( !scope1.endsWith(scope2) )
+            return false;
+
+        const ArgumentList args = m_dom->argumentList();
+        const ArgumentList args2 = def->argumentList();
+        if( args.size() != args2.size() )
+            return false;
+
+        for( uint i=0; i<args.size(); ++i ){
+            if( args[i]->type() != args[i]->type() )
+                return false;
+        }
+
+        return true;
+    }
+
+    private:
+        const FunctionDefinitionDom& m_dom;
 };
 
 struct FindOp
@@ -326,7 +400,7 @@ struct FindOp
            return false;
 
        for( uint i=0; i<args.size(); ++i ){
-           if( args[i]->type() != args[i]->type() )
+           if( args[i]->type() != args2[i]->type() )
 	       return false;
        }
 

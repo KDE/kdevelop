@@ -30,6 +30,9 @@
 #include <kdevplugin.h>
 
 #include <codemodel.h>
+#include <lib/interfaces/extensions/codebrowserfrontend.h>
+
+using namespace Extensions;
 
 namespace KParts { class Part; }
 namespace KTextEditor
@@ -49,7 +52,7 @@ class KToolBarPopupAction;
 class NamespaceItem;
 class Navigator;
 
-class ClassViewPart : public KDevPlugin
+class ClassViewPart : public KDevCodeBrowserFrontend
 {
     Q_OBJECT
 public:
@@ -61,6 +64,12 @@ public:
     KListViewAction *m_functionsnav;
     Navigator *navigator;
 
+    inline ClassViewWidget* widget() {
+        return &( *m_widget );
+    }
+    
+    virtual bool jumpedToItem( ItemDom item );
+    
 private slots:
     void slotProjectOpened();
     void slotProjectClosed();

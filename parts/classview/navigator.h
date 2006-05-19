@@ -22,12 +22,17 @@
 
 #include <qobject.h>
 #include <codemodel.h>
+#include <qfont.h>
 
+class TextPaintStyleStore;
 class QTimer;
 class ClassViewPart;
 class QListViewItem;
 
 #define NAV_NODEFINITION "(no function)"
+
+class TextPaintItem;
+TextPaintItem highlightFunctionName( QString function, int type, TextPaintStyleStore& styles );
 
 class Navigator : public QObject
 {
@@ -44,6 +49,9 @@ public:
     QString fullFunctionDefinitionName(FunctionDefinitionDom fun);
     QString fullFunctionDeclarationName(FunctionDom fun);
 
+    template <class DomType>
+    TextPaintItem fullFunctionItem(DomType fun);
+    
 public slots:
     void selectFunctionNav(QListViewItem *item);
     void syncFunctionNav();
@@ -55,17 +63,8 @@ public slots:
     void addFile(const QString &file);
 
 protected:
-    FunctionDefinitionDom currentFunctionDefinition();
-    FunctionDefinitionDom functionDefinitionAt(int line, int column);
-    FunctionDefinitionDom functionDefinitionAt(NamespaceDom ns, int line, int column);
-    FunctionDefinitionDom functionDefinitionAt(ClassDom klass, int line, int column);
-    FunctionDefinitionDom functionDefinitionAt(FunctionDefinitionDom fun, int line, int column);
 
-    FunctionDom currentFunctionDeclaration();
-    FunctionDom functionDeclarationAt(int line, int column);
-    FunctionDom functionDeclarationAt(NamespaceDom ns, int line, int column);
-    FunctionDom functionDeclarationAt(ClassDom klass, int line, int column);
-    FunctionDom functionDeclarationAt(FunctionDom fun, int line, int column);
+    FunctionDom currentFunction();
 
 private:
     ClassViewPart *m_part;
@@ -76,6 +75,8 @@ private:
 
     QMap<QString, QListViewItem*> m_functionNavDefs;
     QMap<QString, QListViewItem*> m_functionNavDecls;
+    
+    TextPaintStyleStore m_styles;
 };
 
 #endif

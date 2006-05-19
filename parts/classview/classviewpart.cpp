@@ -57,12 +57,93 @@
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/clipboardinterface.h>
 
+
+class FunctionCompletion : public CustomCompleter {
+    public:
+        FunctionCompletion() {
+        };
+        typedef QMap<QString, QString> FuncMap;
+        FuncMap nameMap; /// real ->  short
+        FuncMap revNameMap; /// short -> real
+    
+        static const QString processName( QString function ) {
+            QString args;
+            QString fScope;
+            int cutpos;
+    
+            if((cutpos = function.find('(')) != -1) {
+                args = function.right( function.length() - cutpos );
+                function = function.left( cutpos );
+            } else {
+                return function;
+            }
+            if((cutpos = function.findRev(':')) != -1 || (cutpos = function.findRev('.')) != -1) {
+                fScope = function.left( cutpos + 1 );
+                function = function.right( function.length() - cutpos - 1);
+            }
+
+            return function;
+        }
+    
+        virtual void addItem ( const QString &item ) {
+            QString newItemName = item;
+            KCompletion::addItem(newItemName);
+            QString tx = processName( item );
+            tx += "  \"" + item + "\"";
+            nameMap[item] = tx;
+            revNameMap[tx] = item;
+            if(tx.length() == 0) {
+                kdDebug() << "function-name-extraction failed with \"" << item << "\"" << endl;
+            }else{
+                KCompletion::addItem( tx );
+                kdDebug() << "addding \"" << item << "\" as \"" << tx << "\"" << endl;
+            }
+            KCompletion::addItem( item );
+        }
+    
+        virtual void removeItem ( const QString &item ) {
+            FuncMap::iterator it = nameMap.find( item );
+            if( it != nameMap.end() ) {
+                KCompletion::removeItem( *it );
+                revNameMap.remove( *it );
+                nameMap.remove( it );
+            }
+        }
+    
+        virtual void clear() {
+            nameMap.clear();
+            revNameMap.clear();
+            KCompletion::clear();
+        }
+    
+        virtual void postProcessMatch ( QString *match ) const  {
+            FuncMap::const_iterator it = revNameMap.find( *match );
+            if( it != revNameMap.end() ) {
+                *match = *it;
+            }
+        };
+    
+        virtual void   postProcessMatches ( QStringList *matches ) const {
+            QStringList::iterator it = matches->begin();
+            
+            while( it != matches->end() ) {
+                postProcessMatch( &(*it) );
+                ++it;
+            }
+        }
+    
+        virtual void   postProcessMatches ( KCompletionMatches *matches ) const {
+        }
+};
+
+
 typedef KDevGenericFactory<ClassViewPart> ClassViewFactory;
 static const KDevPluginInfo data("kdevclassview");
 K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( data ) )
 
 ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringList& )
-    : KDevPlugin(&data, parent, name ? name : "ClassViewPart" ),
+    :/// KDevPlugin( &data, parent, name ? name : "ClassViewPart" ),
+    KDevCodeBrowserFrontend( &data, parent, name ? name : "ClassViewPart" ),
     m_activeDocument(0), m_activeView(0), m_activeSelection(0), m_activeEditor(0), m_activeViewCursor(0)
 {
     setInstance(ClassViewFactory::instance());
@@ -87,6 +168,10 @@ ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringLis
     connect( m_widget, SIGNAL(removedNamespace(const QString&)), this, SLOT(removeNamespace(const QString& )));
 }
 
+bool ClassViewPart::jumpedToItem( ItemDom item ) {
+    if(!m_widget) return false;
+    return m_widget->selectItem(item);
+}
 
 ClassViewPart::~ClassViewPart()
 {
@@ -109,7 +194,7 @@ void ClassViewPart::slotProjectClosed( )
 
 void ClassViewPart::setupActions( )
 {
-    m_functionsnav = new KListViewAction( new KComboView(true, 150, 0, "m_functionsnav_combo"), i18n("Functions Navigation"), 0, 0, 0, actionCollection(), "functionsnav_combo", true );
+    m_functionsnav = new KListViewAction( new KComboView(true, 150, 0, "m_functionsnav_combo", new FunctionCompletion() ), i18n("Functions Navigation"), 0, 0, 0, actionCollection(), "functionsnav_combo", true );
     connect(m_functionsnav->view(), SIGNAL(activated(QListViewItem*)), navigator, SLOT(selectFunctionNav(QListViewItem*)));
 //    m_functionsnav->view()->setEditable(false);
     connect(m_functionsnav->view(), SIGNAL(focusGranted()), navigator, SLOT(functionNavFocused()));

@@ -19,6 +19,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#include "lib/widgets/fancyqlistviewitem.h"
+
 #include "navigator.h"
 
 #include <qtimer.h>
@@ -34,8 +36,11 @@
 #include <kdevpartcontroller.h>
 #include <kdevlanguagesupport.h>
 #include <codemodel_utils.h>
-
 #include "classviewpart.h"
+
+//using namespace Widgets;
+
+//#define BOLDFONTSMALLER
 
 
 struct NavOp
@@ -59,19 +64,21 @@ private:
 
 
 
-class FunctionNavItem: public QListViewItem {
+class FunctionNavItem: public FancyQListViewItem {
+private:
+    typedef FancyQListViewItem Base;
 public:
     enum Type { Declaration, Definition };
 
-    FunctionNavItem(ClassViewPart *part, QListView *parent, QString name, Type type)
-        :QListViewItem(parent, name), m_part(part), m_type(type) {}
-    FunctionNavItem(ClassViewPart *part, QListViewItem *parent, QString name, Type type)
-        :QListViewItem(parent, name), m_part(part), m_type(type) {}
+    FunctionNavItem(TextPaintStyleStore& styles, ClassViewPart *part, QListView *parent, QString name, Type type)
+        :Base(styles, parent, name, ""), m_part(part), m_type(type) {}
+    FunctionNavItem(TextPaintStyleStore& styles, ClassViewPart *part, QListViewItem *parent, QString name, Type type)
+        :Base(styles, parent, name, ""), m_part(part), m_type(type) {}
     ~FunctionNavItem() {}
 
     virtual void setup()
     {
-        QListViewItem::setup();
+        Base::setup();
         setPixmap( 0, UserIcon("CVpublic_meth", KIcon::DefaultState, m_part->instance()) );
     }
     Type type() { return m_type; }
@@ -188,22 +195,22 @@ void Navigator::syncFunctionNav()
 {
     m_syncTimer->stop();
 
-    if (FunctionDefinitionDom fun = currentFunctionDefinition())
+    if (FunctionDom fun = currentFunction())
     {
-        if (m_functionNavDefs[fullFunctionDefinitionName(fun)])
-        {
-            m_part->m_functionsnav->view()->blockSignals(true);
-            m_part->m_functionsnav->view()->setCurrentActiveItem(m_functionNavDefs[fullFunctionDefinitionName(fun)]);
-            m_part->m_functionsnav->view()->blockSignals(false);
-        }
-    }
-    else if (FunctionDom fun = currentFunctionDeclaration())
-    {
+        if( !fun->isFunctionDefinition() ) {
         if (m_functionNavDecls[fullFunctionDeclarationName(fun)])
         {
             m_part->m_functionsnav->view()->blockSignals(true);
             m_part->m_functionsnav->view()->setCurrentActiveItem(m_functionNavDecls[fullFunctionDeclarationName(fun)]);
             m_part->m_functionsnav->view()->blockSignals(false);
+        }
+        } else {
+        if (m_functionNavDefs[fullFunctionDeclarationName(fun)])
+        {
+            m_part->m_functionsnav->view()->blockSignals(true);
+            m_part->m_functionsnav->view()->setCurrentActiveItem(m_functionNavDefs[fullFunctionDeclarationName(fun)]);
+            m_part->m_functionsnav->view()->blockSignals(false);
+        }
         }
     }
     else
@@ -226,18 +233,20 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
 
     QStringList toLeave;
 
-    FunctionList list1 = CodeModelUtils::allFunctions(file);
+    FunctionList list1 = CodeModelUtils::allFunctionsExhaustive(file);
     FunctionList::const_iterator flEnd = list1.end();
     for (FunctionList::const_iterator it = list1.begin(); it != flEnd; ++it)
     {
         QString fullName = fullFunctionDeclarationName(*it);
 
-        if (clear || !m_functionNavDecls[fullName])
+        if (clear || !m_functionNavDecls[fullName] && m_part->m_functionsnav->view()->listView())
         {
-            FunctionNavItem *item = new FunctionNavItem(m_part,
+            FunctionNavItem *item = new FunctionNavItem(m_styles, m_part,
                 m_part->m_functionsnav->view()->listView(), fullName,
                 FunctionNavItem::Declaration);
             m_functionNavDecls[fullName] = item;
+            item->setItem( 0, fullFunctionItem( *it ) );
+            
             m_part->m_functionsnav->view()->addItem(item);
         }
         toLeave << fullName;
@@ -261,16 +270,17 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
     }
 
     toLeave.clear();
-    FunctionDefinitionList list = CodeModelUtils::allFunctionDefinitionsDetailed(file).functionList;
+    FunctionDefinitionList list = CodeModelUtils::allFunctionDefinitionsExhaustive(file);
     for (FunctionDefinitionList::const_iterator it = list.begin(); it != list.end(); ++it)
     {
         QString fullName = fullFunctionDefinitionName(*it);
 
         if (clear || !m_functionNavDefs[fullName])
         {
-            FunctionNavItem *item = new FunctionNavItem(m_part,
+            FunctionNavItem *item = new FunctionNavItem(m_styles, m_part,
                 m_part->m_functionsnav->view()->listView(), fullName, FunctionNavItem::Definition);
             m_functionNavDefs[fullName] = item;
+            item->setItem( 0, fullFunctionItem( *it ) );
             m_part->m_functionsnav->view()->addItem(item);
         }
 
@@ -309,7 +319,7 @@ void Navigator::refresh()
 
 void Navigator::addFile(const QString & file)
 {
-    kdDebug(9003) << k_funcinfo << endl;
+    kdDebug(9003) << k_funcinfo << "file: " << file << endl;
     if (file == m_part->m_activeFileName)
     {
         kdDebug(9003) << k_funcinfo << "processing active file" << endl;
@@ -319,195 +329,75 @@ void Navigator::addFile(const QString & file)
 
 
 
-FunctionDefinitionDom Navigator::currentFunctionDefinition()
-{
-    if (!m_part->m_activeViewCursor)
-        return FunctionDefinitionDom();
 
-    unsigned int line, column;
-    m_part->m_activeViewCursor->cursorPositionReal(&line, &column);
-    return functionDefinitionAt(line, column);
-}
-
-FunctionDefinitionDom Navigator::functionDefinitionAt(int line, int column)
-{
-    if (!m_part->codeModel()->hasFile(m_part->m_activeFileName))
-        return FunctionDefinitionDom();
-
-    FileDom file = m_part->codeModel()->fileByName(m_part->m_activeFileName);
-    return functionDefinitionAt(model_cast<NamespaceDom>(file), line, column);
-}
-
-FunctionDefinitionDom Navigator::functionDefinitionAt(NamespaceDom ns, int line, int column)
-{
-    NamespaceList namespaceList = ns->namespaceList();
-    NamespaceList::iterator nslEnd = namespaceList.end();
-
-    for (NamespaceList::iterator it=namespaceList.begin(); it!=nslEnd; ++it)
-    {
-        if (FunctionDefinitionDom def = functionDefinitionAt(*it, line, column))
-            return def;
-    }
-
-    ClassList classList = ns->classList();
-    ClassList::iterator clEnd = classList.end();
-
-    for (ClassList::iterator it=classList.begin(); it!=clEnd; ++it)
-    {
-        if (FunctionDefinitionDom def = functionDefinitionAt(*it, line, column))
-            return def;
-    }
-
-    FunctionDefinitionList functionDefinitionList = ns->functionDefinitionList();
-    FunctionDefinitionList::iterator fdlEnd = functionDefinitionList.end();
-
-    for (FunctionDefinitionList::iterator it=functionDefinitionList.begin();
-        it!=fdlEnd; ++it )
-    {
-        if (FunctionDefinitionDom def = functionDefinitionAt(*it, line, column))
-            return def;
-    }
-
-    return FunctionDefinitionDom();
-}
-
-FunctionDefinitionDom Navigator::functionDefinitionAt(ClassDom klass, int line, int column)
-{
-    ClassList classList = klass->classList();
-    ClassList::iterator clEnd = classList.end();
-
-    for (ClassList::iterator it=classList.begin(); it!=clEnd; ++it)
-    {
-        if (FunctionDefinitionDom def = functionDefinitionAt(*it, line, column))
-            return def;
-    }
-
-    FunctionDefinitionList functionDefinitionList = klass->functionDefinitionList();
-    FunctionDefinitionList::iterator fdlEnd = functionDefinitionList.end();
-    for (FunctionDefinitionList::Iterator it=functionDefinitionList.begin();
-        it!=fdlEnd; ++it)
-    {
-        if (FunctionDefinitionDom def = functionDefinitionAt(*it, line, column))
-            return def;
-    }
-
-    return FunctionDefinitionDom();
-}
-
-FunctionDefinitionDom Navigator::functionDefinitionAt(FunctionDefinitionDom fun, int line, int // column
-                                                      )
-{
-    int startLine, startColumn;
-    int endLine, endColumn;
-
-    fun->getStartPosition(&startLine, &startColumn);
-    fun->getEndPosition(&endLine, &endColumn);
-
-    if (!(line >= startLine && line <= endLine))
-        return FunctionDefinitionDom();
-
-/*    if (line == startLine && column < startColumn)
-        return FunctionDefinitionDom();
-
-    if (line == endLine && column > endColumn)
-        return FunctionDefinitionDom();*/
-
-    return fun;
-}
-
-
-FunctionDom Navigator::currentFunctionDeclaration()
+FunctionDom Navigator::currentFunction()
 {
     if (!m_part->m_activeViewCursor)
         return FunctionDom();
 
     unsigned int line, column;
     m_part->m_activeViewCursor->cursorPositionReal(&line, &column);
-    return functionDeclarationAt(line, column);
+    CodeModelUtils::CodeModelHelper hlp( m_part->codeModel(), m_part->codeModel()->fileByName( m_part->m_activeFileName) );
+    return hlp.functionAt( line, column );
 }
 
-FunctionDom Navigator::functionDeclarationAt(int line, int column)
+
+///Some time this might be moved into the language-support-part, so each language
+///can highlight as it likes
+TextPaintItem highlightFunctionName(QString function, int type, TextPaintStyleStore& styles) {
+    TextPaintItem ret;
+    
+    if( !styles.hasStyle( type ) ) {
+        QFont font = styles.getStyle( 0 ).font;
+        
+        switch(type) {
+            case 1:
+            default:
+                font.setWeight( QFont::DemiBold );
+                ///since bold makes the font a little bigger, make it smaller again
+#ifdef BOLDFONTSMALLER
+                font.setPointSize( (font.pointSize() * 9) / 10 );
+#endif
+        }
+        
+        styles.addStyle( type, font );
+    }
+    
+    QString args;
+    QString fScope;
+    int cutpos;
+    
+    if((cutpos = function.find('(')) != -1) {
+        args = function.right( function.length() - cutpos );
+        function = function.left( cutpos );
+    } else {
+        ret.addItem( function );
+        return ret;
+    }
+    if((cutpos = function.findRev(':')) != -1 || (cutpos = function.findRev('.')) != -1) {
+        fScope = function.left( cutpos + 1 );
+        function = function.right( function.length() - cutpos - 1);
+    }
+    if( !fScope.isEmpty() ) ret.addItem(fScope);
+    ret.addItem( function, type );
+    if( !args.isEmpty() ) ret.addItem(args);
+    return ret;
+}
+
+
+template <class DomType>
+TextPaintItem Navigator::fullFunctionItem(DomType fun)
 {
-    if (!m_part->codeModel()->hasFile(m_part->m_activeFileName))
-        return FunctionDom();
-
-    FileDom file = m_part->codeModel()->fileByName(m_part->m_activeFileName);
-    return functionDeclarationAt(model_cast<NamespaceDom>(file), line, column);
+    
+    QStringList scope = fun->scope();
+    QString function = scope.join(".");
+    if (!function.isEmpty())
+        function += ".";
+    function += m_part->languageSupport()->formatModelItem(fun, true);
+    function = m_part->languageSupport()->formatClassName(function);
+    
+    return highlightFunctionName(function, 1, m_styles);
 }
-
-FunctionDom Navigator::functionDeclarationAt(NamespaceDom ns, int line, int column)
-{
-    NamespaceList namespaceList = ns->namespaceList();
-    NamespaceList::iterator nsEnd = namespaceList.end();
-    for (NamespaceList::iterator it=namespaceList.begin(); it!=nsEnd; ++it)
-    {
-        if (FunctionDom def = functionDeclarationAt(*it, line, column))
-            return def;
-    }
-
-    ClassList classList = ns->classList();
-    ClassList::iterator clEnd = classList.end();
-    for (ClassList::iterator it=classList.begin(); it!=clEnd; ++it)
-    {
-        if (FunctionDom def = functionDeclarationAt(*it, line, column))
-            return def;
-    }
-
-    FunctionList functionList = ns->functionList();
-    FunctionList::iterator flEnd = functionList.end();
-    for (FunctionList::iterator it=functionList.begin();
-        it!=flEnd; ++it )
-    {
-        if (FunctionDom def = functionDeclarationAt(*it, line, column))
-            return def;
-    }
-
-    return FunctionDom();
-}
-
-FunctionDom Navigator::functionDeclarationAt(ClassDom klass, int line, int column)
-{
-    ClassList classList = klass->classList();
-    ClassList::iterator clEnd = classList.end();
-    for (ClassList::iterator it=classList.begin(); it!=clEnd; ++it)
-    {
-        if (FunctionDom def = functionDeclarationAt(*it, line, column))
-            return def;
-    }
-
-    FunctionList functionList = klass->functionList();
-    FunctionList::iterator flEnd = functionList.end();
-    for (FunctionList::Iterator it=functionList.begin();
-        it!=flEnd; ++it)
-    {
-        if (FunctionDom def = functionDeclarationAt(*it, line, column))
-            return def;
-    }
-
-    return FunctionDom();
-}
-
-FunctionDom Navigator::functionDeclarationAt(FunctionDom fun, int line, int // column
-                                             )
-{
-    int startLine, startColumn;
-    int endLine, endColumn;
-
-    fun->getStartPosition(&startLine, &startColumn);
-    fun->getEndPosition(&endLine, &endColumn);
-
-    if (!(line >= startLine && line <= endLine))
-        return FunctionDom();
-
-/*    if (line == startLine && column < startColumn)
-        return FunctionDom();
-
-    if (line == endLine && column > endColumn)
-        return FunctionDom();*/
-
-    return fun;
-}
-
 
 QString Navigator::fullFunctionDefinitionName(FunctionDefinitionDom fun)
 {
