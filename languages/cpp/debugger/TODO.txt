@@ -1,0 +1,177 @@
+
+TODO:
+   
+   - P1:
+      - Don't diable step button while stepping.
+
+      - Should not issue -stack-num-frames with high limit, should
+        issue each time we request more frames.
+
+      - Pressing tab in memory range dialog modified the edited file. 
+
+      - Testing stepping into code for which gdb can't find the file or fullname.
+         Test stepping (or stepi) into undebuggable code.
+
+      - Test files without debug info
+
+   - Check core files usage.
+
+   - GDB controller should provide 'default MI error handler',
+     that can be used when needed by specific commands.
+
+   - Fix remote target dialog, which is confusing and requires
+     to specify tree scripts!
+
+   - Big projects
+
+       - Add support for other special types (STL)
+
+   - Breakpoints
+
+       - Status display column is just ugly
+     
+       - Handle "out of breakpoints" message.
+
+       - Check that changing breakpoint when program is running works sanely.
+         Need to either disable breakpoints widget when debugger is busy, or
+         stop debugger when we add new breakpoint.
+
+      - Implement gdb -> KDevelop breakpoint addition for all existing
+        breakpoint types.
+  
+      - Add shortcuts to context menu.
+
+      - For function breakpoints, the 'file' property of breakpoint from
+        gdb is not a fullname (gdb 6.4), so we don't find the file.
+
+      - For function breakpoints with gdb CVS, clicking on marker corresponding
+        to function breakpoint does not clear it, but adds a new one.
+
+      - "Immediately leave function" breakpoint type.
+
+
+   - Watchpoints redux:
+
+       - Fix status display for watchpoints
+
+       - Test loading of read watchpoints from session file.
+
+       - Change "toogle watchpoint" into checkbox.
+
+       - "Read watchpoint triggered" message disappears too soon.
+
+
+   - Fix up the mess with relative vs. full names of files for breakpoints.
+
+      
+   UI cleanup:
+
+       - The dialog box on watchpoint hit draws slowly initially.
+
+       - Cntrl-Enter for "add watch".
+
+       - Close all opened thread when opening other?
+
+       - The dialog box shown in MI errors is ugly. Often, it contains names 
+         of internal gdb functions, or no interest to outsiders.
+
+       - Should strip formatting when copying from gdb output window.        
+
+   Console command interaction:
+
+       - Handle "Program exited" messages from CLI "continue".
+
+
+   Code cleanup:
+
+       - Rename FileLine to Code.
+
+       - Kill raw char* manipulation.
+
+       - Fix hardcoded color in framestack widget
+
+       - Kill 'trimmableItem'.
+
+   Minor tweaks:
+
+       - Need some "scope" for error reporting. Say, we can try to set invalid
+         breakpoint condition from session file, on debugger startup. Need to
+         produce message like:
+        "Error detected when setting condition for breakpoint 1", 
+         not a pretty opaque error we get now.
+
+       - Highlight type changes in variable widget
+
+       - Highlight composite types changes?
+
+       - Test that modifying breakpoint while application is running works.        
+
+       - If remembered expresion includes dereferences pointer as a child,
+          that child is still updated as we step.        
+
+       - Error in 'finish' command (e.g. on the outer frame) hides the 
+         current line indicator.
+ 
+       - Should disable the 'finish' command on the outer frame.       
+
+   Optimizations:
+
+        - If we're in some function and looked at frame 0 and frame 1, and
+          then run "finish", we need to reuse VarFrameRoot for previous frame
+          1, which now became frame 0, no need to recreate it. Generally, need
+          to preserve open/closed state of all variables for all scopes.
+
+
+
+
+    
+
+BUGS/ISSUES found:
+
+   - "set edit off" breaks MI
+   - no stop reason for stop on shared library load
+   - using "interpreter mi -whatever" when already in MI
+     mode causes gdb to output two "^done" messages and
+     it confuses us.
+   - No support for "character" format in -data-evaluate-expression 
+     or -var-set-format
+   - Some of the -stack* command operate on current frame unless one is
+     specified, but -stack-list-arguments will print all frames.
+
+   - Output of -thread-list-ids uses the following syntax
+
+       {thread-id="1",thread-id="2"}
+
+     which is neither tuple nor list.
+
+   - Pending breakpoits broken in MI.
+
+
+   - Varobj broken:
+
+       - When entering new scope, we need to issue -stack-list-locals
+         to get names of new varaibles in that scope.
+
+   - When stopping inside undebuggable code (say, on watchpoint hit), 
+     -file-list-exec-source-file reports the last valid source file.
+
+   - It's not possible to find if intefiour is running or not.
+
+  
+   
+
+
+Advantages of MI
+
+
+- The information is easier to extract.
+
+     - For watchpoint, getting the old and new value of
+       watched expression for display is trivial. For CLI,
+       this is tricky and not done in current code.
+
+
+
+
+
+

@@ -14,8 +14,11 @@
  ***************************************************************************/
 
 #include "breakpoint.h"
+#include "gdbcontroller.h"
+#include "gdbcommand.h"
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <qfileinfo.h>
 #include <qfontmetrics.h>
@@ -48,11 +51,7 @@ Breakpoint::Breakpoint(bool temporary, bool enabled)
       s_dbgProcessing_(false),
       s_enabled_(enabled),
       s_temporary_(temporary),
-      s_changedCondition_(false),
-      s_changedIgnoreCount_(false),
-      s_changedEnable_(false),
       s_hardwareBP_(false),
-      s_changedTracing_(false),
       s_tracingEnabled_(false),
       s_traceFormatStringEnabled_(false),
 
@@ -69,6 +68,127 @@ Breakpoint::Breakpoint(bool temporary, bool enabled)
 
 Breakpoint::~Breakpoint()
 {
+}
+
+void Breakpoint::sendToGdb(GDBController* controller)
+{
+    // Need to issue 'modifyBreakpoint' when setting breakpoint is done
+    controller_ = controller;
+
+    // FIXME: should either make sure this widget is disabled
+    // when needed, or implement simular logic.
+    if (controller->stateIsOn(s_dbgNotStarted))
+    {
+        // Can't modify breakpoint now, will try again later.
+        setPending(true);
+        return;
+    }
+
+    setPending(false);
+
+    bool restart = false;
+    // FIXME: this will only catch command for which gdb 
+    // produces the "^running" marker.
+    // FIXME: this probably won't work if there are other
+    // run commands in the thread already.
+    if (controller->stateIsOn(s_appRunning))
+    {
+        kdDebug(9012) << "PAUSING APP\n";
+        controller->pauseApp();
+        restart = true;
+    }
+    
+    if (isActionAdd())
+    {
+        // This prevents us from sending breakpoint command to
+        // gdb for empty breakpoints, when user haven't even
+        // typed function name, or address, or variable.
+        //
+        // Check for isDbgProcessing makes sure we don't issue
+        // several -break-insert commands before getting
+        // output from the first one.
+        if (isValid() && !isDbgProcessing())
+        {
+            setBreakpoint(controller);
+        }
+    }
+    else
+    {
+        if (isActionClear())
+        {
+            clearBreakpoint(controller);
+        }
+        else
+        {
+            if (isActionModify())
+            {
+                modifyBreakpoint(controller); 
+            }
+        }
+    }
+
+    if (restart) {
+        kdDebug(9012) << "RESTARING APP\n";
+        controller->addCommand(new GDBCommand("-exec-continue"));
+    }
+}
+
+void Breakpoint::clearBreakpoint(GDBController* c)
+{
+    controller()->addCommand(
+        new GDBCommand(dbgRemoveCommand(), 
+                       this,
+                       &Breakpoint::handleDeleted)); 
+}
+
+void Breakpoint::applicationExited(GDBController*) 
+{
+}
+
+
+void Breakpoint::setBreakpoint(GDBController* controller)
+{
+    setDbgProcessing(true);
+
+    // Don't use handler mechanism yet, because the reply
+    // should contain internal id of breakpoint (not gdb id), so that we
+    // can match gdb id with the breakpoint instance we've set.
+            
+    // Note that at startup we issue several breakpoint commands, so can't
+    // just store last breakpoint. Need to stack of last breakpoint commands,
+    // but that for later.
+    //
+    // When this command is finished, slotParseGDBBreakpointSet
+    // will be called by the controller.
+    controller->addCommand(
+        new GDBCommand(dbgSetCommand(),                        
+                       this,
+                       &Breakpoint::handleSet));
+}
+
+
+void Breakpoint::modifyBreakpoint(GDBController* controller)
+{
+    controller->
+        addCommand(
+            new ModifyBreakpointCommand(QString("-break-condition %1 ") +
+                                        conditional(), this));
+    controller->
+        addCommand(
+            new ModifyBreakpointCommand(QString("-break-after %1 ") +
+                                        QString::number(ignoreCount()), this));
+
+    controller->
+        addCommand(
+            new ModifyBreakpointCommand(isEnabled() ? 
+                                        QString("-break-enable %1") 
+                                        : QString("-break-disable %1"), this));
+}
+
+void Breakpoint::removedInGdb()
+{
+    setActionDie();
+    emit modified(this);
 }
 
 
@@ -90,7 +210,7 @@ bool Breakpoint::match(const Breakpoint* breakpoint) const
 QString Breakpoint::dbgRemoveCommand() const
 {
     if (dbgId_>0)
-        return QString("delete %1").arg(dbgId_); // gdb command - not translatable
+        return QString("-break-delete %1").arg(dbgId_); // gdb command - not translatable
 
     return QString();
 }
@@ -105,10 +225,10 @@ void Breakpoint::reset()
     s_pending_            = true;
     s_actionAdd_          = true;     // waiting for the debugger to start
     s_actionClear_        = false;
-    s_changedCondition_   = !condition_.isEmpty();
-    s_changedIgnoreCount_ = (ignoreCount_>0);
-    s_changedEnable_      = !s_enabled_;
-    s_actionModify_       = s_changedCondition_ || s_changedIgnoreCount_ || s_changedEnable_;
+    // All breakpoint properties will be automatically sent to
+    // gdb when breakpoint is first added, no matter what value
+    // this field has.
+    s_actionModify_       = false;
     s_dbgProcessing_      = false;
     s_hardwareBP_         = false;
     hits_                 = 0;
@@ -131,12 +251,6 @@ void Breakpoint::setActive(int active, int id)
     s_actionClear_        = false;
     s_actionDie_          = false;
     s_dbgProcessing_      = false;
-
-    if (!s_actionModify_) {
-        s_changedCondition_   = false;
-        s_changedIgnoreCount_ = false;
-        s_changedEnable_      = false;
-    }
 }
 
 /***************************************************************************/
@@ -179,11 +293,6 @@ QString Breakpoint::traceRealFormatString() const
         {
             result += " at " + fb->location() + ": ";
         }
-        else if (const FunctionBreakpoint* fb
-                 = dynamic_cast<const FunctionBreakpoint*>(this))
-        {
-            result += " at " + location() + ": ";
-        }
         else
         {
             result += " " + QString::number(key()) + ": ";
@@ -207,80 +316,195 @@ QString Breakpoint::traceRealFormatString() const
     return result;
 }
 
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-
-FilePosBreakpoint::FilePosBreakpoint(const QString &fileName, int lineNum,
-                                     bool temporary, bool enabled)
-    : Breakpoint(temporary, enabled),
-      fileName_(fileName),
-      lineNo_(lineNum)
+void Breakpoint::handleSet(const GDBMI::ResultRecord& r)
 {
+    // Try to find gdb id. It's a bit harder that it should be,
+    // because field names differ depending on breakpoint type.
+
+    int id = -1;
+    
+    if (r.hasField("bkpt"))
+        id = r["bkpt"]["number"].literal().toInt();
+    else if (r.hasField("wpt"))
+        id = r["wpt"]["number"].literal().toInt();
+    else if (r.hasField("hw-rwpt"))
+        id = r["hw-rwpt"]["number"].literal().toInt();
+    // We don't have access watchpoints in UI yet, but
+    // for future.
+    else if (r.hasField("hw-awpt"))
+        id = r["hw-awpt"]["number"].literal().toInt();
+    
+    if (id == -1)
+    {
+        // If can't set because file not found yet,
+        // will need to try later.
+        setPending(true);
+    }
+    else
+    {
+        setActive(0 /* unused m_activeFlag */, id);
+    }
+    
+    // Need to do this so that if breakpoint is not set
+    // (because the file is not found)
+    // we unset isDbgProcessing flag, so that breakpoint can
+    // be set on next stop.
+    setDbgProcessing(false);
+
+    // Immediately call modifyBreakpoint to set all breakpoint
+    // properties, such as condition.
+    modifyBreakpoint(controller_);
+
+    emit modified(this);
+}
+
+void Breakpoint::handleDeleted(const GDBMI::ResultRecord& r)
+{
+    kdDebug(9012) << "inside handleDeleted\n";
+    setActionDie();
+    if (FilePosBreakpoint* fp = dynamic_cast<FilePosBreakpoint*>(this))
+    {
+        kdDebug(9012) << "handleDeleted, line is " << fp->lineNum() << "\n";
+    }
+    emit modified(this);
 }
 
 /***************************************************************************/
+/***************************************************************************/
+/***************************************************************************/
+
+FilePosBreakpoint::FilePosBreakpoint()
+: subtype_(filepos),
+  line_(-1)
+{}
+
+FilePosBreakpoint::FilePosBreakpoint(const QString &fileName, int lineNum,
+                                     bool temporary, bool enabled)
+    : Breakpoint(temporary, enabled)
+{
+    // Sets 'subtype'
+    setLocation(QString("%1:%2").arg(fileName).arg(lineNum));
+}
 
 FilePosBreakpoint::~FilePosBreakpoint()
 {
 }
 
-/***************************************************************************/
-
 QString FilePosBreakpoint::dbgSetCommand() const
 {
     QString cmdStr;
-    if (fileName_.isEmpty())
-        cmdStr = QString("break %1").arg(lineNo_);  // gdb command - not translatable
-    else {
-//        QFileInfo fi(fileName_);
-        cmdStr = QString("break %1:%2").arg(fileName_).arg(lineNo_); // gdb command
-    }
+    cmdStr = QString("-break-insert %1").arg(location_);
 
     if (isTemporary())
-        cmdStr = "t"+cmdStr;  // gdb command
+        cmdStr = cmdStr + " -t";
 
     return cmdStr;
 }
 
-/***************************************************************************/
-
 bool FilePosBreakpoint::match_data(const Breakpoint *xb) const
 {
     const FilePosBreakpoint* b = static_cast<const FilePosBreakpoint*>(xb);
-    
-    // member case
-    return  ( (fileName_ == b->fileName_) &&
-              (lineNo_ == b->lineNo_));
+
+    if (b)
+        return location_ == b->location_;
+    else
+        return false;
 }
 
-/***************************************************************************/
+QString FilePosBreakpoint::displayType() const
+{
+    return i18n("Code breakpoint", "Code"); 
+}
+
+bool FilePosBreakpoint::isValid() const
+{
+    return !location_.isEmpty();
+}
+
+bool FilePosBreakpoint::hasFileAndLine() const
+{
+    return line_ != -1;
+}
+
+QString FilePosBreakpoint::fileName() const
+{
+    return fileName_;
+}
+
+unsigned FilePosBreakpoint::lineNum() const
+{
+    return line_;
+}
+
+
 
 QString FilePosBreakpoint::location(bool compact) const
 {
-    if (compact)
-        return QFileInfo(fileName_).fileName()+":"+QString::number(lineNo_);
-
-    return fileName_+":"+QString::number(lineNo_);
+    if (subtype_ == filepos && hasFileAndLine() && compact)
+    {
+        return QFileInfo(fileName_).fileName()+":"+QString::number(line_);
+    }
+    else
+    {
+        return location_;
+    }
 }
 
 /***************************************************************************/
 
 void FilePosBreakpoint::setLocation(const QString& location)
 {
+    location_ = location;
+   
     QRegExp regExp1("(.*):(\\d+)$");
     regExp1.setMinimal(true);
     if ( regExp1.search(location, 0) >= 0 )
     {
+        subtype_ = filepos;
+
         QString t = regExp1.cap(1);
         QString dirPath = QFileInfo(t).dirPath();
         if ( dirPath == "." )
-            fileName_ = QFileInfo(fileName_).dirPath()+"/"+regExp1.cap(1);
+        {
+            QString existingDirPath = QFileInfo(fileName_).dirPath();
+            if (existingDirPath != ".")
+                fileName_ = existingDirPath+"/"+regExp1.cap(1);
+            else
+                fileName_ = regExp1.cap(1);
+        }
         else
             fileName_ = regExp1.cap(1);
 
-        lineNo_ = regExp1.cap(2).toInt();
+        line_ = regExp1.cap(2).toInt();
+
+        location_ = QString("%1:%2").arg(fileName_).arg(regExp1.cap(2));
     }
+    else
+    {
+        // Could be address as well, but it's treated absolutely
+        // the same everywhere.
+        subtype_ = function;
+    }
+}
+
+void FilePosBreakpoint::handleSet(const GDBMI::ResultRecord& r)
+{
+    // Below logic gets filename and line from gdb response, and
+    // allows us to show breakpoint marker even for function
+    // breakpoints. Unfortunately, 'fullname' field is available only in 
+    // post-6.4 versions of gdb and if we try to use 'file', then
+    // KDevelop won't be able to find that file to show the marker.
+    if (r.hasField("bkpt"))
+    {
+        const GDBMI::Value& v = r["bkpt"];
+        if (v.hasField("fullname") && v.hasField("line"))
+        {
+            fileName_ = v["fullname"].literal();
+            line_ = v["line"].literal().toInt();        
+        }
+    }
+
+    Breakpoint::handleSet(r);
 }
 
 /***************************************************************************/
@@ -289,8 +513,8 @@ void FilePosBreakpoint::setLocation(const QString& location)
 
 Watchpoint::Watchpoint(const QString& varName, bool temporary, bool enabled)
     : Breakpoint(temporary, enabled),
-      varName_(varName)
-{
+      varName_(varName)    
+{    
 }
 
 /***************************************************************************/
@@ -299,11 +523,58 @@ Watchpoint::~Watchpoint()
 {
 }
 
+void Watchpoint::setBreakpoint(GDBController* controller)
+{    
+    if (isEnabled())
+    {
+        setDbgProcessing(true);
+
+        controller->addCommand(
+            new GDBCommand(
+                QString("-data-evaluate-expression &%1").arg(varName_),
+                this,
+                &Watchpoint::handleAddressComputed));
+    }
+}
+
+void Watchpoint::handleAddressComputed(const GDBMI::ResultRecord& r)
+{
+    address_ = r["value"].literal().toULongLong(0, 16);
+    controller()->addCommand(
+        new GDBCommand(
+            QString("-break-watch *%1").arg(r["value"].literal()),
+            static_cast<Breakpoint*>(this),
+            &Watchpoint::handleSet));
+}
+
+void Watchpoint::applicationExited(GDBController* c)
+{
+    if (!c->stateIsOn(s_dbgNotStarted))
+    {
+        // Note: not using 'clearBreakpoint' as it will delete breakpoint
+        // completely.
+
+        controller()->addCommand(
+            new GDBCommand(dbgRemoveCommand()));
+        setDbgId(-1);
+        setEnabled(false);
+        setActionAdd(true);
+        address_ = static_cast<unsigned long long>(-1);
+        emit modified(this);
+    }
+}
+
+void Watchpoint::removedInGdb()
+{
+    // Do nothing. Watchpoints must be preserved
+    // even if they are gone in gdb.
+}
+
 /***************************************************************************/
 
 QString Watchpoint::dbgSetCommand() const
 {
-    return QString("watch ")+varName_;    // gdb command - not translatable
+    return QString("-break-watch ")+varName_;    // gdb command - not translatable
 }
 
 /***************************************************************************/
@@ -322,7 +593,7 @@ ReadWatchpoint::ReadWatchpoint(const QString& varName, bool temporary, bool enab
 
 QString ReadWatchpoint::dbgSetCommand() const
 {
-   return QString("rwatch ")+varName();
+   return QString("-break-watch -r ")+varName();
 }
 
 bool ReadWatchpoint::match_data(const Breakpoint* xb) const
@@ -330,71 +601,6 @@ bool ReadWatchpoint::match_data(const Breakpoint* xb) const
     const ReadWatchpoint* b = static_cast<const ReadWatchpoint*>(xb);
 
     return (varName() == b->varName());
-}
-
-
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-
-AddressBreakpoint::AddressBreakpoint(const QString& breakAddress, bool temporary, bool enabled)
-    : Breakpoint(temporary, enabled),
-      m_breakAddress(breakAddress)
-{
-}
-
-/***************************************************************************/
-
-AddressBreakpoint::~AddressBreakpoint()
-{
-}
-
-/***************************************************************************/
-
-QString AddressBreakpoint::dbgSetCommand() const
-{
-    return QString("break *")+m_breakAddress;    // gdb command - not translatable
-}
-
-/***************************************************************************/
-
-bool AddressBreakpoint::match_data(const Breakpoint* xb) const
-{
-    const AddressBreakpoint* b = static_cast<const AddressBreakpoint*>(xb);
-
-    return (m_breakAddress == b->m_breakAddress);
-}
-
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-
-FunctionBreakpoint::FunctionBreakpoint(const QString& functionName, bool temporary, bool enabled)
-    : Breakpoint(temporary, enabled),
-      m_functionName(functionName)
-{
-}
-
-/***************************************************************************/
-
-FunctionBreakpoint::~FunctionBreakpoint()
-{
-}
-
-/***************************************************************************/
-
-QString FunctionBreakpoint::dbgSetCommand() const
-{
-    return QString("break ")+m_functionName;    // gdb command - not translatable
-}
-
-/***************************************************************************/
-
-bool FunctionBreakpoint::match_data(const Breakpoint* xb) const
-{
-    const FunctionBreakpoint* b = static_cast<const FunctionBreakpoint*>(xb);
-
-    return (m_functionName == b->m_functionName);
 }
 
 /***************************************************************************/
@@ -504,3 +710,5 @@ bool FunctionBreakpoint::match_data(const Breakpoint* xb) const
 /***************************************************************************/
 
 }
+
+#include "breakpoint.moc"

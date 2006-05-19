@@ -19,6 +19,11 @@
 #include <qlistview.h>
 #include <qstringlist.h>
 
+#include "gdbcontroller.h"
+#include "mi/miparser.h"
+
+#include <vector>
+
 namespace GDBDebugger
 {
 
@@ -28,17 +33,23 @@ class FramestackWidget;
 class ThreadStackItem : public QListViewItem
 {
 public:
-    ThreadStackItem(FramestackWidget *parent, const QString &threadDesc);
+    ThreadStackItem(FramestackWidget *parent, 
+                    unsigned threadNo);
     virtual ~ThreadStackItem();
 
     void setOpen(bool open);
     QListViewItem *lastChild() const;
 
+    void paintCell(QPainter * p, const QColorGroup & cg, 
+                   int column, int width, int align );
+
     int threadNo()
     { return threadNo_; }
 
 private:
-  int threadNo_;
+    int threadNo_;
+    QString savedFunc_;
+    QString savedSource_;
 };
 
 /***************************************************************************/
@@ -48,12 +59,19 @@ private:
 class FrameStackItem : public QListViewItem
 {
 public:
-    FrameStackItem(FramestackWidget *parent, const QString &frameDesc);
-    FrameStackItem(ThreadStackItem *parent, const QString &frameDesc);
+    FrameStackItem(FramestackWidget *parent, 
+                   unsigned frameNo,
+                   const QString &name);
+    FrameStackItem(ThreadStackItem *parent, 
+                   unsigned frameNo,
+                   const QString &name);
     virtual ~FrameStackItem();
 
     void setOpen(bool open);
     QListViewItem *lastChild() const;
+
+    void paintCell(QPainter * p, const QColorGroup & cg, 
+                   int column, int width, int align );
 
     int frameNo()
     { return frameNo_; }
@@ -76,32 +94,62 @@ class FramestackWidget : public QListView
     Q_OBJECT
 
 public:
-    FramestackWidget( QWidget *parent=0, const char *name=0, WFlags f=0 );
+    FramestackWidget( GDBController* controller,
+                      QWidget *parent=0,                       
+                      const char *name=0, WFlags f=0 );
     virtual ~FramestackWidget();
 
     QListViewItem *lastChild() const;
-    void clear();
-
-    void parseGDBThreadList(char *str);
-    void parseGDBBacktraceList(char *str);
-
+   
     ThreadStackItem *findThread(int threadNo);
     FrameStackItem *findFrame(int frameNo, int threadNo);
-
-    QString getFrameName(int frameNo, int threadNo);
 
     int viewedThread()
     { return viewedThread_ ? viewedThread_->threadNo() : -1; }
 
-    void getBacktrace(int threadNo);
+protected:
+
+    void drawContentsOffset( QPainter * p, int ox, int oy,
+                             int cx, int cy, int cw, int ch );
+
+
+
+private:
+    /** Given gdb's 'frame' information, compute decent
+        textual representation for display.
+
+        The function is used both for frames and threads.
+    */
+    void formatFrame(const GDBMI::Value& frame,
+                     QString& func_column,
+                     QString& source_column);
+
+    /** Cause gdb to produce backtrace for the current thread. 
+
+        GDB reply will be route to parseArg and parseGDBBacktraceList,
+        and will show up under viewedThread_ (if there are threads), or
+        on top-level.
+    */
+    void getBacktrace(int min_frame = 0, int max_frame = frameChunk_);
+
+    /** Obtains backtrace for the specified thread without chaning the current
+        thread in gdb.
+
+        Switches viewedThread_ to the specified thread, switches gdb thread,
+        call getBacktrace(), and switches the current thread back.
+    */        
+    void getBacktraceForThread(int threadNo);
+    friend class ThreadStackItem;
+
+
+    void handleThreadList(const GDBMI::ResultRecord&);
+    void handleThread(const GDBMI::ResultRecord&);
+    void parseGDBBacktraceList(const GDBMI::ResultRecord&);
+    void handleStackDepth(const GDBMI::ResultRecord& r);
 
 public slots:
-    void slotSelectFrame(int frameNo, int threadNo);
+    void slotEvent(GDBController::event_t e);
     void slotSelectionChanged(QListViewItem *thisItem);
-
-signals:
-    void produceBacktrace(int threadNo);
-    void selectFrame(int frameNo, int threadNo, bool needFrames);
 
 #if QT_VERSION < 300
 private:
@@ -110,10 +158,23 @@ private:
 
 private:
 
+    void clear();
+
+private:
+
     ThreadStackItem *viewedThread_;
     int currentFrame_;
+    GDBController* controller_;
+    int lastFrameToShow;
+
+    // Data to pass from 'getBacktrace' to 'handleStackDepth'
+    int minFrame_;
+    int maxFrame_;
+    QMap<int, int> stackDepth_;
 
     friend class FrameStackItem;
+
+    static const int frameChunk_ = 30;
 };
 
 }

@@ -23,6 +23,7 @@ public:
 
 k_dcop:
     virtual ASYNC slotDebugExternalProcess() = 0;
+    virtual ASYNC slotDebugCommandLine(const QString& command) = 0;
 };
 
 #endif

@@ -28,25 +28,20 @@ namespace GDBDebugger
 class DbgCommand
 {
 public:
-    DbgCommand(const QCString& command, bool isRunCmd, bool isInfoCmd, char prompt);
+    DbgCommand(const QString& command, bool isInfoCmd, char prompt);
     virtual ~DbgCommand() {};
 
-    virtual QCString& cmdToSend()             { sent_ = true;  return cmdBuffer_; }
-    virtual int cmdLength()                   { return cmdBuffer_.length(); }
+    virtual QString cmdToSend()             { return cmdBuffer_; }
 
-    QCString rawDbgCommand() const            { return command_; }
-    bool isARunCmd() const                    { return isRunCmd_;}
+    QString rawDbgCommand() const            { return command_; }
     bool isAnInfoCmd() const                  { return isInfoCmd_; }
-    bool moreToSend() const                   { return !sent_; }
     bool expectReply() const                  { return waitForReply_; }
     bool typeMatch(char cmdType) const        { return (prompt_ == cmdType); }
 
 protected:
-    QCString cmdBuffer_;
-    QCString command_;
-    bool    isRunCmd_;
+    QString cmdBuffer_;
+    QString command_;
     bool    isInfoCmd_;
-    bool    sent_;
     bool    waitForReply_;
     char    prompt_;
 };

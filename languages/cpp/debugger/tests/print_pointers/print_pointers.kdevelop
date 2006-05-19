@@ -7,10 +7,10 @@
     <projectmanagement>KDevCustomProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <ignoreparts>
-      <part>kdevctags2</part>
+      <part>kdevsecurity</part>
       <part>kdevkonsoleview</part>
       <part>kdevreplace</part>
-      <part>kdevsecurity</part>
+      <part>kdevctags2</part>
       <part>kdevvalgrind</part>
     </ignoreparts>
     <projectdirectory>.</projectdirectory>
@@ -150,6 +150,11 @@
       <version>3</version>
       <root>/usr/share/qt3</root>
     </qt>
+    <splitheadersource>
+      <enabled>false</enabled>
+      <synchronize>true</synchronize>
+      <orientation>Vertical</orientation>
+    </splitheadersource>
   </kdevcppsupport>
   <kdevfileview>
     <groups>

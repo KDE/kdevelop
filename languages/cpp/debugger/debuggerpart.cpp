@@ -11,6 +11,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "debuggerpart.h"
+#include "label_with_double_click.h"
+
 #include <qdir.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
@@ -61,7 +64,9 @@
 #include <kdevplugininfo.h>
 #include <debugger.h>
 
-#include "debuggerpart.h"
+
+
+
 
 namespace GDBDebugger
 {
@@ -74,7 +79,8 @@ K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( data ) )
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & ) :
     KDevPlugin( &data, parent, name ? name : "DebuggerPart" ),
     controller(0), previousDebuggerState_(s_dbgNotStarted), 
-    justRestarted_(false), needRebuild_(true), justOpened_(true)
+    justRestarted_(false), needRebuild_(true), justOpened_(true),
+    running_(false)
 {
     setObjId("DebuggerInterface");
     setInstance(DebuggerFactory::instance());
@@ -83,17 +89,20 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 
     m_debugger = new Debugger( partController() );
     
-    statusBarIndicator = new QLabel(" ", mainWindow()->statusBar());
+    statusBarIndicator = new LabelWithDoubleClick(
+        " ", mainWindow()->statusBar());
     statusBarIndicator->setFixedWidth(15);
     statusBarIndicator->setAlignment(Qt::AlignCenter);
     mainWindow()->statusBar()->addWidget(statusBarIndicator, 0, true);
     statusBarIndicator->show();
 
     // Setup widgets and dbgcontroller
-    variableWidget = new VariableWidget( 0, "variablewidget");
-    mainWindow()->embedSelectView(variableWidget, i18n("Variables"), i18n("Debugger variable-view"));
 
-    gdbBreakpointWidget = new GDBBreakpointWidget( 0, "gdbBreakpointWidget" );
+    controller = new GDBController(*projectDom());
+
+
+    gdbBreakpointWidget = new GDBBreakpointWidget( controller,
+                                                   0, "gdbBreakpointWidget" );
     gdbBreakpointWidget->setCaption(i18n("Breakpoint List"));
     QWhatsThis::add
         (gdbBreakpointWidget, i18n("<b>Breakpoint list</b><p>"
@@ -105,7 +114,14 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     gdbBreakpointWidget->setIcon( SmallIcon("stop") );
     mainWindow()->embedOutputView(gdbBreakpointWidget, i18n("Breakpoints"), i18n("Debugger breakpoints"));
 
-    framestackWidget = new FramestackWidget( 0, "framestackWidget" );
+    variableWidget = new VariableWidget( controller, 
+                                         gdbBreakpointWidget,
+                                         0, "variablewidget");
+    mainWindow()->embedSelectView(variableWidget, i18n("Variables"), 
+                                  i18n("Debugger variable-view"));
+
+
+    framestackWidget = new FramestackWidget( controller, 0, "framestackWidget" );
     framestackWidget->setEnabled(false);
     framestackWidget->setCaption(i18n("Frame Stack"));
     QWhatsThis::add
@@ -149,8 +165,6 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                   i18n("GDB output"));
     mainWindow()->setViewAvailable(gdbOutputWidget, false);
 
-    VariableTree *variableTree = variableWidget->varTree();
-
     // gdbBreakpointWidget -> this
     connect( gdbBreakpointWidget, SIGNAL(refreshBPState(const Breakpoint&)),
              this,             SLOT(slotRefreshBPState(const Breakpoint&)));
@@ -160,7 +174,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
              this,             SLOT(slotGotoSource(const QString&, int)) );
 
 
-    viewerWidget = new ViewerWidget( 0, "view");
+    viewerWidget = new ViewerWidget( controller, 0, "view");
     mainWindow()->embedSelectView(viewerWidget, 
                                   i18n("Debug views"), 
                                   i18n("Special debugger views"));
@@ -334,6 +348,14 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
              appFrontend(), SLOT(insertStderrLine(const QString&)) );
 
+    // The output from tracepoints goes to "application" window, because
+    // we don't have any better alternative, and using yet another window
+    // is undesirable. Besides, this makes tracepoint look even more similar
+    // to printf debugging.
+    connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(const char*)),
+             procLineMaker,         SLOT(slotReceivedStdout(const char*)));
+
+
     connect(partController(), SIGNAL(savedFile(const KURL &)),
             this, SLOT(slotFileSaved()));
 
@@ -409,6 +431,11 @@ ASYNC DebuggerPart::slotDebugExternalProcess()
     }
 
     mainWindow()->main()->raise();
+}
+
+ASYNC DebuggerPart::slotDebugCommandLine(const QString& command)
+{
+    KMessageBox::information(0, "Asked to debug command line");
 }
 
 void DebuggerPart::slotCloseDrKonqi()
@@ -544,7 +571,7 @@ void DebuggerPart::contextEvaluate()
 
 void DebuggerPart::projectConfigWidget(KDialogBase *dlg)
 {
-	QVBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( info()->icon(), KIcon::SizeMedium) );
+    QVBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( info()->icon(), KIcon::SizeMedium) );
     DebuggerConfigWidget *w = new DebuggerConfigWidget(this, vbox, "debugger config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
     connect( dlg, SIGNAL(finished()), controller, SLOT(configure()) );
@@ -555,36 +582,9 @@ void DebuggerPart::setupController()
 {
     VariableTree *variableTree = variableWidget->varTree();
 
-    controller = new GDBController(variableTree, framestackWidget, *projectDom());
-
-    // variableTree -> controller
-    connect( variableTree,          SIGNAL(expandItem(TrimmableItem*)),
-             controller,            SLOT(slotExpandItem(TrimmableItem*)));
-    connect( variableTree,          SIGNAL(expandUserItem(ValueCallback*, const QString&)),
-             controller,            SLOT(slotExpandUserItem(ValueCallback*, const QString&)));
-    connect( variableTree,          SIGNAL(varItemConstructed(VarItem*)),
-             controller,            SLOT(slotVarItemConstructed(VarItem*)));     // jw
-    connect( variableTree,          SIGNAL(produceVariablesInfo()),
-             controller,            SLOT(slotProduceVariablesInfo()));
-    connect( variableTree,          SIGNAL(setValue(const QString&, 
-                                                    const QString&)),
-             controller,            SLOT(slotSetValue(const QString&, 
-                                                      const QString&)));
-
     // variableTree -> gdbBreakpointWidget
     connect( variableTree,          SIGNAL(toggleWatchpoint(const QString &)),
              gdbBreakpointWidget,   SLOT(slotToggleWatchpoint(const QString &)));
-
-    // framestackWidget -> controller
-    connect( framestackWidget,      SIGNAL(selectFrame(int,int,bool)),
-             controller,            SLOT(slotSelectFrame(int,int,bool)));
-    connect( framestackWidget,      SIGNAL(produceBacktrace(int)),
-             controller,            SLOT(slotProduceBacktrace(int)));
-
-
-    // gdbBreakpointWidget -> controller
-    connect( gdbBreakpointWidget,   SIGNAL(publishBPState(const Breakpoint&)),
-             controller,            SLOT(slotBPState(const Breakpoint &)));
 
     // disassembleWidget -> controller
     connect( disassembleWidget,     SIGNAL(disassemble(const QString&, const QString&)),
@@ -595,35 +595,9 @@ void DebuggerPart::setupController()
              controller,            SLOT(slotUserGDBCmd(const QString&)));
     connect( gdbOutputWidget,       SIGNAL(breakInto()),
              controller,            SLOT(slotBreakInto()));
-
-    // viewerWidget -> controller
-    connect( viewerWidget,          SIGNAL(getMemory(
-                                               MemoryCallback*, 
-                                               const QString&,
-                                               const QString&)),
-             controller,            SLOT(slotMemoryDump(
-                                             MemoryCallback*,
-                                             const QString&,
-                                             const QString&)));
-
-    connect( viewerWidget, SIGNAL(evaluateExpression(ValueCallback*, 
-                                  const QString&)),
-             controller, SLOT(slotExpandUserItem(ValueCallback*, 
-                              const QString&)));
-
-    connect( viewerWidget, SIGNAL(setValue(const QString&, const QString&)),
-             controller, SLOT(slotSetValue(const QString&, const QString&)));
-
-    
-    // controller -> gdbBreakpointWidget
-    connect( controller,            SIGNAL(acceptPendingBPs()),
-             gdbBreakpointWidget,   SLOT(slotSetPendingBPs()));
-    connect( controller,            SIGNAL(unableToSetBPNow(int)),
-             gdbBreakpointWidget,   SLOT(slotUnableToSetBPNow(int)));
-    connect( controller,            SIGNAL(rawGDBBreakpointList (char*)),
-             gdbBreakpointWidget,   SLOT(slotParseGDBBrkptList(char*)));
-    connect( controller,            SIGNAL(rawGDBBreakpointSet(char*, int)),
-             gdbBreakpointWidget,   SLOT(slotParseGDBBreakpointSet(char*, int)));
+  
+    connect( controller,            SIGNAL(breakpointHit(int)),
+             gdbBreakpointWidget,   SLOT(slotBreakpointHit(int)));
 
     // controller -> disassembleWidget
     connect( controller,            SIGNAL(showStepInSource(const QString&, int, const QString&)),
@@ -637,41 +611,36 @@ void DebuggerPart::setupController()
     connect( controller,            SIGNAL(showStepInSource(const QString&, int, const QString&)),
              this,                  SLOT(slotShowStep(const QString&, int)));
     connect( controller,            SIGNAL(debuggerAbnormalExit()),
-	     this,                  SLOT(slotDebuggerAbnormalExit()));
+         this,                  SLOT(slotDebuggerAbnormalExit()));
+
+    connect(controller, SIGNAL(event(GDBController::event_t)),
+            this,       SLOT(slotEvent(GDBController::event_t)));
 
     // controller -> procLineMaker
     connect( controller,            SIGNAL(ttyStdout(const char*)),
-             procLineMaker,         SLOT(slotReceivedStdout(const char*)));
-    // The output from tracepoints goes to "application" window, because
-    // we don't have any better alternative, and using yet another window
-    // is undesirable. Besides, this makes tracepoint look even more similar
-    // to printf debugging.
-    connect( controller,            SIGNAL(tracingOutput(const char*)),
              procLineMaker,         SLOT(slotReceivedStdout(const char*)));
     connect( controller,            SIGNAL(ttyStderr(const char*)),
              procLineMaker,         SLOT(slotReceivedStderr(const char*)));
 
     // controller -> gdbOutputWidget
-    connect( controller,            SIGNAL(gdbStdout(const char*)),
-             gdbOutputWidget,       SLOT(slotReceivedStdout(const char*)) );
+    connect( controller,            SIGNAL(gdbInternalCommandStdout(const char*)),
+             gdbOutputWidget,       SLOT(slotInternalCommandStdout(const char*)) );
+    connect( controller,            SIGNAL(gdbUserCommandStdout(const char*)),
+             gdbOutputWidget,       SLOT(slotUserCommandStdout(const char*)) );
+
     connect( controller,            SIGNAL(gdbStderr(const char*)),
              gdbOutputWidget,       SLOT(slotReceivedStderr(const char*)) );
     connect( controller,            SIGNAL(dbgStatus(const QString&, int)),
              gdbOutputWidget,       SLOT(slotDbgStatus(const QString&, int)));
 
-    // controller -> variableTree
-    connect( controller, SIGNAL(dbgStatus(const QString&, int)),
-             variableTree, SLOT(slotDbgStatus(const QString&, int)));
-    connect( controller, SIGNAL(parametersReady(const char*)),
-             variableTree, SLOT(slotParametersReady(const char*)));
-    connect( controller, SIGNAL(localsReady(const char*)),
-             variableTree, SLOT(slotLocalsReady(const char*)));
-    connect( controller, SIGNAL(currentFrame(int, int)),
-             variableTree, SLOT(slotCurrentFrame(int, int)));
-
     // controller -> viewerWidget
     connect( controller, SIGNAL(dbgStatus(const QString&, int)),
              viewerWidget, SLOT(slotDebuggerState(const QString&, int)));
+
+
+    connect(statusBarIndicator, SIGNAL(doubleClicked()),
+            controller, SLOT(explainDebuggerStatus()));
+
 }
 
 
@@ -710,45 +679,53 @@ bool DebuggerPart::startDebugger()
         }
     }
 
-    core()->running(this, true);
-
-    stateChanged( QString("active") );
-
-    KActionCollection *ac = actionCollection();
-    ac->action("debug_run")->setText( i18n("&Continue") );
-//    ac->action("debug_run")->setIcon( "dbgrun" );
-    ac->action("debug_run")->setToolTip( i18n("Continues the application execution") );
-    ac->action("debug_run")->setWhatsThis( i18n("Continue application execution\n\n"
-                                           "Continues the execution of your application in the "
-                                           "debugger. This only takes effect when the application "
-                                           "has been halted by the debugger (i.e. a breakpoint has "
-                                           "been activated or the interrupt was pressed).") );
-
-
-//    mainWindow()->setViewAvailable(variableWidget, true);
-    mainWindow()->setViewAvailable(framestackWidget, true);
-    mainWindow()->setViewAvailable(disassembleWidget, true);
-    mainWindow()->setViewAvailable(gdbOutputWidget, true);
-
-//     variableWidget->setEnabled(true);
-    framestackWidget->setEnabled(true);
-    disassembleWidget->setEnabled(true);
-
-    gdbOutputWidget->clear();
-    gdbOutputWidget->setEnabled(true);
-
-    if (DomUtil::readBoolEntry(*projectDom(), "/kdevdebugger/general/floatingtoolbar", false))
+    if (controller->start(shell, run_envvars, run_directory, 
+                          program, run_arguments))
     {
-        floatingToolBar = new DbgToolBar(this, mainWindow()->main());
-        floatingToolBar->show();
-    }
+        core()->running(this, true);
 
-    controller->slotStart(shell, run_envvars, run_directory, program, run_arguments);
-    return true;
+        stateChanged( QString("active") );
+        
+        KActionCollection *ac = actionCollection();
+        ac->action("debug_run")->setText( i18n("&Continue") );
+        
+        ac->action("debug_run")->setToolTip( 
+            i18n("Continues the application execution") );
+        ac->action("debug_run")->setWhatsThis( 
+            i18n("Continue application execution\n\n"
+                 "Continues the execution of your application in the "
+                 "debugger. This only takes effect when the application "
+                 "has been halted by the debugger (i.e. a breakpoint has "
+                 "been activated or the interrupt was pressed).") );
+        
+        mainWindow()->setViewAvailable(framestackWidget, true);
+        mainWindow()->setViewAvailable(disassembleWidget, true);
+        mainWindow()->setViewAvailable(gdbOutputWidget, true);
+        
+        framestackWidget->setEnabled(true);
+        disassembleWidget->setEnabled(true);
+
+        gdbOutputWidget->setEnabled(true);
+     
+
+        if (DomUtil::readBoolEntry(*projectDom(), "/kdevdebugger/general/floatingtoolbar", false))
+        {
+            floatingToolBar = new DbgToolBar(this, mainWindow()->main());
+            floatingToolBar->show();
+        }
+
+        running_ = true;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void DebuggerPart::slotStopDebugger()
 {
+    running_ = false;
     controller->slotStopDebugger();
     debugger()->clearExecutionPoint();
 
@@ -756,15 +733,15 @@ void DebuggerPart::slotStopDebugger()
     floatingToolBar = 0;
 
     gdbBreakpointWidget->reset();
-    framestackWidget->clear();
-    variableWidget->clear();
     disassembleWidget->clear();
+    gdbOutputWidget->clear();
     disassembleWidget->slotActivate(false);
 
 //     variableWidget->setEnabled(false);
     framestackWidget->setEnabled(false);
     disassembleWidget->setEnabled(false);
     gdbOutputWidget->setEnabled(false);
+    
 
 //    mainWindow()->setViewAvailable(variableWidget, false);
     mainWindow()->setViewAvailable(framestackWidget, false);
@@ -832,6 +809,16 @@ void DebuggerPart::slotRun()
     if( controller->stateIsOn( s_dbgNotStarted ) ||
         controller->stateIsOn( s_appNotStarted ) )
     {
+        if (running_ && controller->stateIsOn(s_dbgNotStarted))
+        {
+            // User has already run the debugger, but it's not running.
+            // Most likely, the debugger has crashed, and the debuggerpart
+            // was left in 'running' state so that the user can examine
+            // gdb output or something. But now, need to fully shut down
+            // previous debug session.
+            slotStopDebugger();
+        }
+
         // We're either starting gdb for the first time,
         // or starting the application under gdb. In both
         // cases, might need to rebuild the application.
@@ -863,14 +850,15 @@ void DebuggerPart::slotRun()
                 // decision will be right for all cases when we're starting
                 // debugging with modified code, and because it's not clear
                 // how user can reset this "don't ask again" setting.
-                int r = KMessageBox::questionYesNo(
+                int r = KMessageBox::questionYesNoCancel(
                     0, 
                     "<b>" + i18n("Rebuild the project?") + "</b>" +
-                    i18n("<p>Some files in the project were modified, so you "
-                        "might want to rebuild the project. "
-                        "<p>Answering \"Yes\" will save all modified files, rebuild the project and start the debugger. "
-                        "<p>Answering \"No\" will start the debugger with the old binary."),
+                    i18n("<p>The project is out of date. Rebuild it?"),
                     i18n("Rebuild the project?"));
+                if (r == KMessageBox::Cancel)
+                {
+                    return;
+                }
                 if (r == KMessageBox::Yes)
                 {
                     rebuild = true;
@@ -1095,20 +1083,22 @@ void DebuggerPart::slotMemoryView()
     viewerWidget->slotAddMemoryView();
 }
 
-
 void DebuggerPart::slotRefreshBPState( const Breakpoint& BP)
 {
-    if (BP.type() == BP_TYPE_FilePos)
+    if (BP.hasFileAndLine())
     {
         const FilePosBreakpoint& bp = dynamic_cast<const FilePosBreakpoint&>(BP);
+        kdDebug(9012) << "File breakpoint: " << bp.fileName() 
+                      << ":" << bp.lineNum() << "\n";
         if (bp.isActionDie())
+        {
             debugger()->setBreakpoint(bp.fileName(), bp.lineNum()-1, -1, true, false);
+        }
         else
             debugger()->setBreakpoint(bp.fileName(), bp.lineNum()-1,
                                   1/*bp->id()*/, bp.isEnabled(), bp.isPending() );
     }
 }
-
 
 void DebuggerPart::slotStatus(const QString &msg, int state)
 {
@@ -1118,6 +1108,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     {
         stateIndicator = " ";
         stateIndicatorFull = "Debugger not started";
+        stateChanged( QString("stopped") );
 
         // If the view is undocked, don't hide it. User has explicitly
         // undocked it and moved into a convenient position. Don't
@@ -1138,11 +1129,10 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
             mainWindow()->lowerView(variableWidget);
         }
     }
-    else if (state & s_appBusy)
+    else if (state & s_dbgBusy)
     {
-        stateIndicator = "A";
-        stateIndicatorFull = "Application is running";
-        debugger()->clearExecutionPoint();
+        stateIndicator = "R";
+        stateIndicatorFull = "Debugger is busy";
         stateChanged( QString("active") );
     }
     else if (state & s_programExited)
@@ -1150,11 +1140,6 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
         stateIndicator = "E";
         stateIndicatorFull = "Application has exited";
         stateChanged( QString("stopped") );
-        KActionCollection *ac = actionCollection();
-        ac->action("debug_run")->setText( i18n("To start something","Start") );
-        ac->action("debug_run")->setToolTip( i18n("Restart the program in the debugger") );
-        ac->action("debug_run")->setWhatsThis( i18n("Restart in debugger\n\n"
-                                           "Restarts the program in the debugger") );
     }
     else
     {
@@ -1174,9 +1159,22 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
         }
     }
 
+    if (state & s_appNotStarted)
+    {
+        KActionCollection *ac = actionCollection();
+        ac->action("debug_run")->setText( i18n("To start something","Start") );
+        ac->action("debug_run")->setToolTip( i18n("Restart the program in the debugger") );
+        ac->action("debug_run")->setWhatsThis( i18n("Restart in debugger\n\n"
+                                           "Restarts the program in the debugger") );
+    }
+
+
+    bool program_running = !(state & s_appNotStarted);
+    bool attached_or_core = (state & s_attached) || (state & s_core);
+
     // If program is started, enable the 'restart' comand.
     actionCollection()->action("debug_restart")->setEnabled(
-        !(state & s_programExited));
+        program_running && !attached_or_core);
 
 
     // As soon as debugger clears 's_appNotStarted' flag, we
@@ -1209,6 +1207,16 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     previousDebuggerState_ = state;
 }
 
+void DebuggerPart::slotEvent(GDBController::event_t e)
+{
+    if (e == GDBController::program_running ||
+        e == GDBController::program_exited ||
+        e == GDBController::debugger_exited)
+    {
+        debugger()->clearExecutionPoint();        
+    }
+}
+
 
 void DebuggerPart::slotShowStep(const QString &fileName, int lineNum)
 {
@@ -1216,6 +1224,10 @@ void DebuggerPart::slotShowStep(const QString &fileName, int lineNum)
     {
         // Debugger counts lines from 1
         debugger()->gotoExecutionPoint(KURL( fileName ), lineNum-1);
+    }
+    else
+    {
+        debugger()->clearExecutionPoint();
     }
 }
 
@@ -1246,20 +1258,22 @@ void DebuggerPart::slotActivePartChanged( KParts::Part* part )
 void DebuggerPart::restorePartialProjectSession(const QDomElement* el)
 {
     gdbBreakpointWidget->restorePartialProjectSession(el);
+    gdbOutputWidget->restorePartialProjectSession(el);
 }
 
 void DebuggerPart::savePartialProjectSession(QDomElement* el)
 {
     gdbBreakpointWidget->savePartialProjectSession(el);
+    gdbOutputWidget->savePartialProjectSession(el);
 }
 
 bool DebuggerPart::haveModifiedFiles()
 {
     bool have_modified = false;
     KURL::List const& filelist = partController()->openURLs();
-	KURL::List::ConstIterator it = filelist.begin();
-	while ( it != filelist.end() )
-	{
+    KURL::List::ConstIterator it = filelist.begin();
+    while ( it != filelist.end() )
+    {
         if (partController()->documentState(*it) != Clean)
             have_modified = true;
 

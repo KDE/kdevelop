@@ -66,8 +66,8 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
 
     QBoxLayout *topLayout = new QVBoxLayout(this, 5);
 
-    KListViewSearchLineWidget* sl = new KListViewSearchLineWidget(pids_, this);
-    topLayout->addWidget(sl);
+    searchLineWidget_ = new KListViewSearchLineWidget(pids_, this);
+    topLayout->addWidget(searchLineWidget_);
 
     topLayout->addWidget(pids_);
     pids_->setFont(KGlobalSettings::fixedFont());
@@ -115,11 +115,12 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
 
     connect( psProc_, SIGNAL(processExited(KProcess *)),                SLOT(slotProcessExited()) );
     connect( psProc_, SIGNAL(receivedStdout(KProcess *, char *, int)),  SLOT(slotReceivedOutput(KProcess *, char *, int)) );
-    psProc_->start(KProcess::NotifyOnExit, KProcess::Stdout);
 
     // Default display to 40 chars wide, default height is okay
     resize( ((KGlobalSettings::fixedFont()).pointSize())*40, height());
     topLayout->activate();
+
+    psProc_->start(KProcess::NotifyOnExit, KProcess::Stdout);
 }
 
 /***************************************************************************/
@@ -182,8 +183,16 @@ void Dbg_PS_Dialog::slotProcessExited()
                               ps_output_line.cap(5));
         }
 
-        start = pos+1;
+        start = pos+1;    
     }
+    // Need to set focus here too, as KListView will
+    // 'steal' it otherwise.
+    searchLineWidget_->searchLine()->setFocus();
+}
+
+void Dbg_PS_Dialog::focusIn(QFocusEvent*)
+{
+    searchLineWidget_->searchLine()->setFocus();
 }
 
 }

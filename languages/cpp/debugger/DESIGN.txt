@@ -1,0 +1,113 @@
+
+This document describes the design of KDevelop's debugger part. Not that it's
+work in progress, and sometimes describes desired design, not the actual
+one.
+
+== Components and lifecycle ==
+
+Debugger part consists of low-lever "controller" that handles talking
+with gdb and guess what state gdb is in, a number of view widgets, showing
+the state of the program, and a number of places where user can click to
+affect the program.
+
+What makes them all work together are "events" that controller sends
+to all interested parties. They are:
+
+   - Debugger exited. All view classes and actions become disabled and hidden
+   - Program exited. All view classes that can't be used without program
+       become disabled.
+   - Debugger is busy executing a command. All actions become disabled.
+   - Debugger is waiting for command. All actions becomes enabled.
+   - Program state changed. All views flush all cached data and 
+       reload the content.
+   - Current thread/stack frame changed. All views switch to showing that
+     thread/frame.
+
+The distinction between "program state change" and "thread/frame" changed is
+that the latter does not imply that any *data* changed, and so it's not
+necessary to clear already cached data for other threads. 
+
+== Command execution ==
+
+The controller has a queue of commands to send to gdb. A command typically
+has a callback (pair of QObject* and a member pointer) to be called when 
+command is done. 
+
+When the queue is non-empty, and debugger is not busy executing the previous
+command, the controller will send the command from the queue top to the gdb.
+The command being executed is remembed in the currentCmd_ member variable.
+Gdb will reply with a number of "out-of-band" responses, followed by one
+"done" or "error" response. 
+
+The "done"/"error" response, when using MI interface, is a tree-line structure
+that's parsed with into GDBMI::ResultRecord structure, that is then passed
+to callback assocaited with the current command. Say, for "get me value of
+expression" command, MI response includes textual "value" field that can be
+used by any part of GUI to show the value. After callback is called,
+controller deletes the current command and then tries to execute next one from
+the queue, if there's one.
+
+The commands related to running program (continue/step/etc) are handled in
+a bit special way. Instead of calling any callbacks, controller performs
+predefined set of steps:
+
+   - Decide what's the reason for stop, and maybe do something special
+
+        - For stop on shared lib load, just continue
+
+        - For stop on breakpoint, run the breakpoint commands if any.
+
+   - Set a flag that program state might have changed, and must be reloaded
+
+   - Since hitting tracepoint adds extra commands, including possibly
+     "continue", we don't start reloading widgets immediately, instead
+     we wait for all commands currently in queue to get executed.
+
+   - Once there are no commands in queue, and "reload_program_state" flag is
+     set, we raise the 'program_state_changed' event. All widgets react to
+     that by queueing commands for realoding their state.
+
+     
+
+
+
+
+
+
+
+
+
+
+
+Note that all commands are executed in the order they were queued, so if you
+add several commands at the same time, they are executed "automically". Each
+one sees the gdb state that the previous one has left it in.
+
+The MI protocol is stateful, that is there are things like current thread
+and current stack that affect the meaning of commands. Take care to never
+switch such "current" variables unless it's explicitly asked by the user.
+This means that if you have to switch thread/frame, always switch it back
+as the last command in a sequences.
+
+
+== Breakpoints handling ==
+
+Whenever a new breakpoint is added, or an existing breakpoint is modified,
+we immediately try to send the proper commands to gdb. Note that we
+don't try to check which properties of breakpoint were modified, we 
+just send all breakpoint data.
+
+This is not always possible, because debugger might be busy, or just
+not started yet. In this case, we set 'pending' flag for breakpoint. Each time
+the debugger becomes free, we try to send the pending breakpoint again.
+
+
+
+
+
+
+
+
+
+
+

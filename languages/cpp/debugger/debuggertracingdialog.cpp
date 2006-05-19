@@ -92,9 +92,7 @@ namespace GDBDebugger
         }
        
         if (ok)
-        {
-            bp_->resetChangedTracing();
-            
+        {        
             bp_->setTracingEnabled(enable->isOn());
             bp_->setTracedExpressions(expressions->items());
             bp_->setTraceFormatStringEnabled(enableCustomFormat->isOn());

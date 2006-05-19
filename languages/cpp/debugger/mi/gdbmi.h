@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2004 by Roberto Raggi                                   *
  *   roberto@kdevelop.org                                                  *
+ *   Copyright (C) 2005-2006 by Vladimir Prus                              *
+ *   ghost@cs.msu.su                                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -22,43 +24,121 @@
 
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qmap.h>
+
+#include <stdexcept>
 
 /**
 @author Roberto Raggi
+@author Vladimir Prus
 */
-class GDBMI
+namespace GDBMI
 {
-public:
-    inline static QString quote(const QString &text)
-    { return "\"" + text + "\""; }
+    /** Exception that is thrown when we're trying to invoke an
+        operation that is not supported by specific MI value. For
+        example, trying to index a string literal.
 
-    struct Value
+        Such errors are conceptually the same as assert, but in GUI
+        we can't use regular assert, and Q_ASSERT, which only prints
+        a message, is not suitable either. We need to break processing,
+        and the higher-level code can report "Internal parsing error",
+        or something.
+
+        Being glorified assert, this exception does not cary any
+        useful information.
+    */
+    class type_error : public std::logic_error
     {
-        virtual ~Value() {}
-
-        virtual QString toString() const { Q_ASSERT( 0 ); return QString::null; }
-
-        enum { StringLiteral, Tuple, List } kind;
+    public:
+        type_error();
     };
 
+    /** Base class for all MI values.
+        MI values are of three kinds:
+        - String literals
+        - Lists (indexed by integer)
+        - Tuple (set of named values, indexed by name)
+
+        The structure of response to a specific gdb command is fixed.
+        While any tuples in response may omit certain named fields, the
+        kind of each item never changes. That is, response to specific
+        command can't contains sometimes string and sometimes tuple in
+        specific position.
+
+        Because of that static structure, it's almost never needed to query
+        dynamic type of a MI value. Most often we know it's say, tuple, and
+        can subscripts it. 
+
+        So, the Value class has methods for accessing all kinds of values.
+        Attempting to call a method that is not applicable to specific value
+        will result in exception. The client code will almost never need to
+        cast from 'Value' to its derived classes.
+
+        Note also that all methods in this class are const and return 
+        const Value&. That's by design -- there's no need to modify gdb
+        responses in GUI.
+     */
+    struct Value
+    {
+        Value() {}
+    private: // Copy disabled to prevent slicing.
+        Value(const Value&);
+        Value& operator=(const Value&);
+
+    public:
+
+        virtual ~Value() {}
+
+        enum { StringLiteral, Tuple, List } kind;
+
+        /** If this value is a string literals, returns the string value.
+            Othewise, throws type_error.
+        */
+        virtual QString literal() const;
+
+        /** If the value is a string literal, converts it to int and
+            returns. If conversion fails, or the value cannot be
+            converted to int, throws type_error.
+        */
+        virtual int toInt(int base = 10) const;
+            
+        /** If this value is a tuple, returns true if the tuple
+            has a field named 'variable'. Otherwise,
+            throws type_error.
+        */
+        virtual bool hasField(const QString& variable) const;
+
+        /** If this value is a tuple, and contains named field 'variable',
+            returns it. Otherwise, throws 'type_error'.
+            This method is virtual, and derived in base class, so that
+            we can save on casting, when we know for sure that instance
+            is TupleValue, or ListValue.
+        */
+        virtual const Value& operator[](const QString& variable) const;
+
+        /** If this value is a list, returns true if the list is empty.
+            If this value is not a list, throws 'type_error'.
+        */
+        virtual bool empty() const;
+
+        /** If this value is a list, returns it's size.
+            Otherwise, throws 'type_error'.
+        */
+        virtual unsigned size() const;
+
+        /** If this value is a list, returns the element at
+            'index'. Otherwise, throws 'type_error'.
+        */
+        virtual const Value& operator[](unsigned index) const;
+    };
+
+    /** @internal
+        Internal class to represent name-value pair in tuples.
+    */
     struct Result
     {
-        inline Result() : value(0) {}
-        inline ~Result() { delete value; value = 0; }
-
-        inline QString toString() const
-        {
-            QString out;
-            if (!!variable) {
-                out += variable;
-                out += '=';
-            }
-
-            if (value)
-                out += value->toString();
-
-            return out;
-        }
+        Result() : value(0) {}
+        ~Result() { delete value; value = 0; }
 
         QString variable;
         Value *value;
@@ -66,67 +146,44 @@ public:
 
     struct StringLiteralValue : public Value
     {
-        inline StringLiteralValue(const QString &lit)
-            : literal(lit) { Value::kind = StringLiteral; }
+        StringLiteralValue(const QString &lit)
+            : literal_(lit) { Value::kind = StringLiteral; }
 
-        virtual QString toString() const { return literal; }
+    public: // Value overrides
 
-        QString literal;
+        QString literal() const;
+        int toInt(int base) const;
+     
+    private:
+        QString literal_;
     };
 
     struct TupleValue : public Value
     {
-        inline TupleValue() { Value::kind = Tuple; }
-        inline ~TupleValue()
-        {
-            for (QValueListIterator<Result*> it=results.begin(); it!=results.end(); ++it)
-                delete *it;
-        }
+        TupleValue() { Value::kind = Tuple; }
+        ~TupleValue();
 
-        virtual QString toString() const
-        {
-            QString out = "{";
+        bool hasField(const QString&) const;
+        const Value& operator[](const QString& variable) const;
 
-            QValueListConstIterator<Result*> it=results.begin();
-            while (it != results.end()) {
-                out += (*it)->toString();
-                ++it;
-
-                if (it != results.end())
-                    out += ", ";
-            }
-            out += "}";
-            return out;
-        }
 
         QValueList<Result*> results;
+        QMap<QString, GDBMI::Result*> results_by_name;
     };
 
     struct ListValue : public Value
     {
-        inline ListValue() { Value::kind = List; }
-        inline ~ListValue()
-        {
-            for (QValueListIterator<Result*> it=results.begin(); it!=results.end(); ++it)
-                delete *it;
-        }
+        ListValue() { Value::kind = List; }
+        ~ListValue();
 
-        virtual QString toString() const
-        {
-            QString out = "[";
-            QValueListConstIterator<Result*> it=results.begin();
-            while (it != results.end()) {
-                out += (*it)->toString();
-                ++it;
+        bool empty() const;
 
-                if (it != results.end())
-                    out += ", ";
-            }
-            out += "]";
-            return out;
-        }
+        unsigned size() const;
+
+        const Value& operator[](unsigned index) const;
 
         QValueList<Result*> results;
+
     };
 
     struct Record
@@ -137,35 +194,11 @@ public:
         enum { Prompt, Stream, Result } kind;
     };
 
-    struct ResultRecord : public Record
+    struct ResultRecord : public Record, public TupleValue
     {
-        inline ResultRecord() { Record::kind = Result; }
-        virtual ~ResultRecord()
-        {
-            for (QValueListIterator<GDBMI::Result*> it=results.begin(); it!=results.end(); ++it)
-                delete *it;
-        }
-
-        virtual QString toString() const
-        {
-            QString out;
-            out += "(";
-            out += reason;
-            out += ", (";
-            QValueListConstIterator<GDBMI::Result*> it=results.begin();
-            while (it != results.end()) {
-                out += (*it)->toString();
-                ++it;
-
-                if (it != results.end())
-                    out += ", ";
-            }
-            out += "))\n";
-            return out;
-        }
+        ResultRecord() { Record::kind = Result; }
 
         QString reason;
-        QValueList<GDBMI::Result*> results;
     };
 
     struct PromptRecord : public Record
@@ -179,17 +212,6 @@ public:
     struct StreamRecord : public Record
     {
         inline StreamRecord() : reason(0) { Record::kind = Stream; }
-
-        virtual QString toString() const
-        {
-            QString out;
-            out += "(";
-            out += reason;
-            out += ", (";
-            out += quote(message);
-            out += "))\n";
-            return out;
-        }
 
         char reason;
         QString message;

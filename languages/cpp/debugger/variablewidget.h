@@ -17,14 +17,21 @@
 #define _VARIABLEWIDGET_H_
 
 #include "gdbcontroller.h"
-#include "callbacks.h"
+#include "mi/gdbmi.h"
 
 #include <klistview.h>
 #include <kcombobox.h>
 #include <qwidget.h>
 #include <qtooltip.h>
+#include <qvaluevector.h>
+#include <qdatetime.h>
+#include <qguardedptr.h>
+#include <qmap.h>
+
+#include <vector>
 
 class KLineEdit;
+class KPopupMenu;
 
 namespace GDBDebugger
 {
@@ -35,7 +42,7 @@ class WatchRoot;
 class VarItem;
 class VariableTree;
 class DbgController;
-class ValueCallback;
+class GDBBreakpointWidget;
 
 enum { VarNameCol = 0, ValueCol = 1, VarTypeCol = 2};
 enum DataType { typeUnknown, typeValue, typePointer, typeReference,
@@ -47,8 +54,9 @@ class VariableWidget : public QWidget
     Q_OBJECT
 
 public:
-    VariableWidget( QWidget *parent=0, const char *name=0 );
-    void clear();
+    VariableWidget( GDBController* controller,
+                    GDBBreakpointWidget* breakpointWidget,
+                    QWidget *parent=0, const char *name=0 );
 
     VariableTree *varTree() const
     { return varTree_; }
@@ -77,65 +85,65 @@ private:
 class VariableTree : public KListView, public QToolTip
 {
     Q_OBJECT
-//rgruber: we need this to be able to emit expandItem() from within TrimmableItem
-friend class TrimmableItem;
-
 public:
-    VariableTree( VariableWidget *parent, const char *name=0 );
+    VariableTree(VariableWidget *parent, 
+                 GDBController*  controller,
+                 GDBBreakpointWidget* breakpointWidget,
+                 const char *name=0 );
     virtual ~VariableTree();
 
     QListViewItem *lastChild() const;
-
-    int activeFlag() const                { return activeFlag_; }
-    void setActiveFlag()                  { activeFlag_++; }
-    void setRadix(int r)                  { iOutRadix=r; }
 
     QListViewItem *findRoot(QListViewItem *item) const;
     VarFrameRoot *findFrame(int frameNo, int threadNo) const;
     WatchRoot *findWatch();
 
-    // Remove items that are not active
-    void trim();
-    void trimExcessFrames();
 
 	// (from QToolTip) Display a tooltip when the cursor is over an item
 	virtual void maybeTip(const QPoint &);
 
+    GDBController* controller() const { return controller_; }
+
 signals:
     void toggleWatchpoint(const QString &varName);
-    void expandItem(TrimmableItem *item);
-    void expandUserItem(ValueCallback* callback, const QString &request);
-    // Emitted when *this is interested in args and locals for the
-    // current frame.
-    void produceVariablesInfo();
-
-    // jw
-    void varItemConstructed(VarItem *item);
-
-    //rgr
-    void toggleRadix(QListViewItem *item);
-
-    // Emitted when we want to change value of 'expression'.
-    void setValue(const QString& expression, const QString& value);
 
 public slots:
     void slotAddWatchVariable(const QString& watchVar);
     void slotEvaluateExpression(const QString& expression);
 
-    void slotDbgStatus(const QString &status, int statusFlag);
-    void slotParametersReady(const char* data);
-    void slotLocalsReady(const char* data);
-    void slotCurrentFrame(int frameNo, int threadNo);
+    void slotEvent(GDBController::event_t);
     void slotItemRenamed(QListViewItem* item, int col, const QString& text);
 
 private slots:
     void slotContextMenu(KListView *, QListViewItem *item);
+    void slotVarobjNameChanged(const QString& from, const QString& to);
+
+private: // Callbacks for gdb commands;
+    void argumentsReady(const GDBMI::ResultRecord&);
+    void localsReady(const GDBMI::ResultRecord&);
+    void frameIdReady(const QValueVector<QString>&);
+    void handleVarUpdate(const GDBMI::ResultRecord&);
+    void handleEvaluateExpression(const QValueVector<QString>&);
+    void variablesFetchDone();
+    void fetchSpecialValuesDone();
+    
+    /** This is called when address of expression for which 
+        popup is created is known.
+
+        If there's no address (for rvalue), does nothing
+        (leaving "Data breakpoint" item disabled).
+        Otherwise, enabled that item, and check is we 
+        have data breakpoint for that address already.
+    */
+    void handleAddressComputed(const GDBMI::ResultRecord& r);
 
 private: // helper functions
     /** Get (if exists) and create (otherwise) frame root for
         the specified frameNo/threadNo combination.
     */    
     VarFrameRoot* demand_frame_root(int frameNo, int threadNo);
+
+    void updateCurrentFrame();
 
     /** Copies the value (second column) of the specified item to
         the clipboard.
@@ -146,15 +154,30 @@ private: // QWidget overrides
     void keyPressEvent(QKeyEvent* e);
 
 private:
+    GDBController*  controller_;
+    GDBBreakpointWidget* breakpointWidget_;
+
     int activeFlag_;
-    int currentThread_;
-    int currentFrame_;
     int iOutRadix;
     bool justPaused_;
-    //DbgController *controller;
 
     // Root of all recently printed expressions.
     TrimmableItem* recentExpressions_;
+    VarFrameRoot* currentFrameItem;
+
+    QTime fetch_time;
+    // Names of locals and arguments as reported by
+    // gdb.
+    std::vector<QString> locals_and_arguments;
+
+    QMap<QString, VarItem*> varobj2varitem;
+
+    // Name of expression to evaluate, need by
+    // handleEvaluateExpression.
+    QString evaluatedExpressionName_;
+
+    KPopupMenu* activePopup_;
+    static const int idToggleWatch = 10;
 
     friend class VarFrameRoot;
     friend class VarItem;
@@ -183,7 +206,7 @@ private:
     'trim' method is called, removing all variables which were not recieved
     from gdbr.    
  */
-class TrimmableItem : public KListViewItem, public ValueCallback
+class TrimmableItem : public KListViewItem
 {
 public:
     TrimmableItem(VariableTree *parent);
@@ -191,97 +214,176 @@ public:
 
     virtual ~TrimmableItem();
 
-    virtual void trim();
-    virtual QString getName() const         { return text(VarNameCol); }
-    virtual TrimmableItem *findMatch(const QString& match, DataType type) const;
     QListViewItem *lastChild() const;
-    int  rootActiveFlag() const;
-    void setActive()                        { activeFlag_ = rootActiveFlag(); }
-    bool isActive() const                   { return activeFlag_ == rootActiveFlag(); }
-    QString getValue() const                { return text(ValueCol); }
-    bool isTrimmable() const;
-    void waitingForData ()                  { waitingForData_ = true; }
-
-    virtual void updateValue(char */* buf */);
-    virtual DataType getDataType() const;
-
-    virtual void setCache(const QCString& value);
-    virtual QCString getCache();
-    virtual QString key( int column, bool ascending ) const;
 
 protected:
 
     void paintCell( QPainter *p, const QColorGroup &cg,
                     int column, int width, int align );
-
-private:
-    int activeFlag_;
-    bool waitingForData_;
 };
 
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
 
-class VarItem : public TrimmableItem
+class VarItem : public QObject,
+                public TrimmableItem
 {
+    Q_OBJECT
 public:
     enum format_t { natural, hexadecimal, decimal, character, binary };   
 
-    VarItem( TrimmableItem *parent, const QString &varName, DataType dataType );
+    /** Creates top-level variable item from the specified expression.
+        Optionally, alternative display name can be provided.
+    */
+    VarItem( TrimmableItem *parent, 
+             const QString& expression, 
+             const QString& displayName = QString::null);
+
+    VarItem( TrimmableItem *parent, const GDBMI::Value& varobj,
+             format_t format);
 
     virtual ~VarItem();
     
     /// Returns the gdb expression for *this.
-    QString gdbExpression() const;
-        
-    DataType getDataType() const;
+    QString gdbExpression() const;     
 
-    void updateValue(char *data);
+    void updateValue();
+    void updateSpecialRepresentation(const QString& s);
 
-    // jw
-    void updateType(char *data);
+    /** Creates a fresh gdbs "variable object", if needed.
+        Preconditions:
+          - frame id did not change
+          - this is a root variable
 
-    void setCache(const QCString& value);
-    QCString getCache();
+        If the current type of expression, or it's address, it different
+        from it was previously, creates new "variable object" and
+        fetches new value.
+
+        Otherwise, does nothing.
+    */
+    void recreateLocallyMaybe();
+
+    /** Tries to create new gdb variable object for this expression.
+        If successfull, updates all values. Otherwise, makes
+        itself disabled.
+    */
+    void recreate();
 
     void setOpen(bool open);
     void setText (int column, const QString& text);
+
+    /** sets enabled flag recursively */
+    void setEnabledRecursively(bool enable);
+
+    /** Recursively clears the varobjName_ field, making
+       *this completely disconnected from gdb.
+       Automatically makes *this and children disables,
+       since there's no possible interaction with unhooked
+       object.
+    */
+    void unhookFromGdb();
 
     // Returns the text to be displayed as tooltip (the value)
     QString tipText() const;
 
     format_t format() const;
     void setFormat(format_t f);
-    void setFormatFromGdbModifier(char c);
+    format_t formatFromGdbModifier(char c) const;
+
+    /** Clears highliting for this variable and 
+        all its children. */
+    void clearHighlight();
+
+    /** Sets new top-level textual value of this variable.
+    */
+    void setValue(const QString& new_value);
+
+signals:
+    /** Emitted whenever the name of varobj associated with *this changes:
+        - when we've created initial varobj
+        - when we've changed varobj name as part of 'recreate' method
+        - when *this is destroyed and no longer uses any varobj.
+
+        Either 'from' or 'to' can be empty string.
+    */
+    void varobjNameChange(const QString& from, const QString& to);
 
 private:
 
-    // Handle types that require special dispay, such as
-    // QString.
-    void handleSpecialTypes();
+    /** Creates new gdb "variable object". The controller_,
+        expression_ and format_ member variables should already
+        be set.
+     */
+    void createVarobj(bool handlesError = false);
+
+    /** Precondition: 'name' is a name of existing
+        gdb variable object.
+        Effects: 
+           - sets varobjName_ to 'name'
+           - sets format, if it's not default one
+           - gets initial value
+           - if item is open, gets children.
+    */
+    void setVarobjName(const QString& name);
+
+
+    /** Handle types that require special dispay, such as
+        QString. Return true if this is such a type.
+        The 'originalValueType_' is already initialized
+        by the time this method is called.
+    */
+    bool handleSpecialTypes();
     void paintCell( QPainter *p, const QColorGroup &cg,
                     int column, int width, int align );
+    void varobjCreated(const GDBMI::ResultRecord& r);
+    void valueDone(const GDBMI::ResultRecord& r);
+    void childrenDone(const GDBMI::ResultRecord& r);    
+    void handleCurrentAddress(const QValueVector<QString>& lines);
+    void handleType(const QValueVector<QString>& lines);
+
+    // Assuming 'expression_' is already set, returns the
+    // displayName to use when showing this to the user.
+    // This function exists because if we have item with
+    // gdb expression '$1' and displayName 'P4', we want the child
+    // to show up as *P4, not as '*$1', so we can't uncondionally
+    // use expression gdb reports to us.
+    QString displayName() const;
+
+    VariableTree* varTree() const;
+
+    QString varobjFormatName() const;
 
 private:
-    // The name of expression can potentially be edited, so
-    // we need to store the original name.
-    QString name_;
-    QCString  cache_;
-    DataType  dataType_;
-    bool      highlight_;
+    // The gdb expression for this varItem relatively to
+    // parent VarItem. 
+    QString expression_;
+    // The name initially shown to use. For example,
+    // expression can be '$1' while name will be 'p'.
+    QString displayName_;
 
-    // the non-cast type of the variable
-    QCString originalValueType_;
+    bool      highlight_;
+    GDBController* controller_;
+
+    QString varobjName_;
+
+    // the non-cast type of the variable    
+    QString originalValueType_;
+    bool oldSpecialRepresentationSet_;
+    QString oldSpecialRepresentation_;
 
     format_t format_;
 
-    // If 'this' has pointer type, points to child
-    // corresponding to deferences value.
-    // Can be 0 if this item was never opened.
-    VarItem* pointedTo_;
-    bool pointedToDirty_;
+    static int varobjIndex;
+
+    int numChildren_;
+    bool childrenFetched_;
+
+    QString currentAddress_;
+    QString lastObtainedAddress_;
 };
+
+
 
 /***************************************************************************/
 /***************************************************************************/
@@ -292,10 +394,6 @@ class VarFrameRoot : public TrimmableItem
 public:
     VarFrameRoot(VariableTree *parent, int frameNo, int threadNo);
     virtual ~VarFrameRoot();
-
-    // Sets parameter information as passed from gdb.
-    void setParams(const char *params);
-    void setLocals(const char *locals);
 
     void setOpen(bool open);
 
@@ -314,8 +412,15 @@ private:
     bool    needLocals_;
     int     frameNo_;
     int     threadNo_;
-    QCString params_;
-    QCString locals_;
+
+    // Frame base and code address of the current inner-most
+    // frame. Needed so that if we can know when 'frame N' no longer
+    // is the same as 'frame N' when this 'VarFrameRoot' was created.
+    unsigned long long currentFrameBase;
+    unsigned long long currentFrameCodeAddress;
+
+    friend class VariableTree;
+
 };
 
 /***************************************************************************/
@@ -327,8 +432,6 @@ class WatchRoot : public TrimmableItem
 public:
     WatchRoot(VariableTree *parent);
     virtual ~WatchRoot();
-
-    void requestWatchVars();
 };
 
 /***************************************************************************/

@@ -15,13 +15,17 @@
 
 #include "framestackwidget.h"
 #include "gdbparser.h"
+#include "gdbcommand.h"
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <qheader.h>
 #include <qlistbox.h>
 #include <qregexp.h>
 #include <qstrlist.h>
+#include <qpainter.h>
+
 
 #include <ctype.h>
 
@@ -33,15 +37,26 @@
 namespace GDBDebugger
 {
 
-FramestackWidget::FramestackWidget(QWidget *parent, const char *name, WFlags f)
+FramestackWidget::FramestackWidget(GDBController* controller,
+                                   QWidget *parent, 
+                                   const char *name, WFlags f)
         : QListView(parent, name, f),
-        viewedThread_(0)
+          viewedThread_(0),
+          controller_(controller)
 {
     setRootIsDecorated(true);
     setSorting(-1);
     setSelectionMode(Single);
-    addColumn(QString::null);
+    addColumn(QString::null); // Frame number
+    addColumn(QString::null); // function name/address
+    addColumn(QString::null); // source
     header()->hide();
+
+
+    // FIXME: maybe, all debugger components should derive from
+    // a base class that does this connect.
+    connect(controller, SIGNAL(event(GDBController::event_t)),
+            this,       SLOT(slotEvent(GDBController::event_t)));
 
     connect( this, SIGNAL(clicked(QListViewItem*)),
              this, SLOT(slotSelectionChanged(QListViewItem*)) );
@@ -72,6 +87,8 @@ void FramestackWidget::clear()
     viewedThread_     = 0;
 
     QListView::clear();
+
+    stackDepth_.clear();
 }
 
 /***************************************************************************/
@@ -81,110 +98,270 @@ void FramestackWidget::slotSelectionChanged(QListViewItem *thisItem)
     ThreadStackItem *thread = dynamic_cast<ThreadStackItem*> (thisItem);
     if (thread)
     {
-        slotSelectFrame(0, thread->threadNo());
+        controller_->selectFrame(0, thread->threadNo());
     }
     else
     {
         FrameStackItem *frame = dynamic_cast<FrameStackItem*> (thisItem);
         if (frame)
-            slotSelectFrame(frame->frameNo(), frame->threadNo());
+        {
+            controller_->
+                selectFrame(frame->frameNo(), frame->threadNo());
+
+            if (frame->text(0) == "...")
+            {                
+                getBacktrace(frame->frameNo(), frame->frameNo() + frameChunk_);
+            }
+        }
     }
 }
 
 /***************************************************************************/
 
-// someone (the vartree :-)) wants us to select this frame.
-void FramestackWidget::slotSelectFrame(int frameNo, int threadNo)
+void FramestackWidget::slotEvent(GDBController::event_t e)
 {
-    FrameStackItem *frame = 0;
-    if (threadNo != -1)
+    switch(e)
     {
+        case GDBController::program_state_changed: 
+
+            kdDebug(9012) << "Clearning framestack\n";
+            clear();
+
+            controller_->addCommand(
+                new GDBCommand("-thread-list-ids",
+                               this, &FramestackWidget::handleThreadList));
+
+            break;
+            
+
+         case GDBController::thread_or_frame_changed: 
+
+             if (viewedThread_)
+             {
+                 // For non-threaded programs frame switch is no-op
+                 // as far as framestack is concerned.
+                 // FIXME: but need to highlight the current frame.
+                 
+                 if (ThreadStackItem* item 
+                     = findThread(controller_->currentThread()))
+                 {
+                     viewedThread_ = item;
+
+                     if (!item->firstChild())
+                     {
+                         // No backtrace for this thread yet.
+                         getBacktrace();
+                     }
+                 }
+             }
+
+            break;
+
+        case GDBController::program_exited: 
+        case GDBController::debugger_exited: 
+        {
+            clear();
+        }        
+    }
+}
+
+void FramestackWidget::getBacktrace(int min_frame, int max_frame)
+{
+    if (stackDepth_.count(controller_->currentThread()) == 0)
+    {
+        minFrame_ = min_frame;
+        maxFrame_ = max_frame;
+
+        controller_->addCommand(
+            new GDBCommand("-stack-info-depth 10000",
+                           this, 
+                           &FramestackWidget::handleStackDepth));        
+    }
+    else
+    {
+        if (stackDepth_[controller_->currentThread()] < max_frame)
+        {
+            max_frame = stackDepth_[controller_->currentThread()];
+            lastFrameToShow = max_frame-1;
+        }
+        else
+        {
+            lastFrameToShow = max_frame-1;
+        }
+        controller_->addCommand(
+            new GDBCommand(QString("-stack-list-frames %1 %2")
+                           .arg(min_frame).arg(max_frame),
+                           this, &FramestackWidget::parseGDBBacktraceList));
+    }
+}
+
+void FramestackWidget::handleStackDepth(const GDBMI::ResultRecord& r)
+{
+    stackDepth_[controller_->currentThread()] = r["depth"].literal().toInt();
+
+    getBacktrace(minFrame_, maxFrame_);
+}
+
+void FramestackWidget::getBacktraceForThread(int threadNo)
+{
+    unsigned currentThread = controller_->currentThread();
+    if (viewedThread_)
+    {
+        // Switch to the target thread.
+        controller_->addCommand(
+            new GDBCommand(QString("-thread-select %1")
+                           .arg(threadNo).ascii()));
+
         viewedThread_ = findThread(threadNo);
-        if (!viewedThread_)
-        {
-            Q_ASSERT(!viewedThread_);
-            return;                 // fatal
-        }
     }
-
-    frame = findFrame(frameNo, threadNo);
-    if (frame)
-        setSelected(frame, true);
-
-    emit selectFrame(frameNo, threadNo, !(frame));
-}
-
-void FramestackWidget::getBacktrace(int threadNo)
-{
-    if (threadNo != -1)
-    {
-        viewedThread_ = findThread(threadNo);
-        if (!viewedThread_)
-        {
-            Q_ASSERT(!viewedThread_);
-            return;                 // fatal
-        }
-    }
-
-    emit produceBacktrace(threadNo);    
-}
-
-
-/***************************************************************************/
-
-void FramestackWidget::parseGDBThreadList(char *str)
-{
-    // on receipt of a thread list we must always clear the list.
-    clear();
-    while (char *end = strchr(str, '\n'))
-    {
-        // make it a string and skip non-thread list strings
-        *end = 0;
-        if (*str == '*' || *str == ' ')
-        {
-            QString threadDesc = QString(str);
-            ThreadStackItem* thread = new ThreadStackItem(this, str);
-            // The thread with a '*' is always the viewedthread
-            if (*str == '*')
-                viewedThread_ = thread;
-        }
-        str = end+1;
-    }
-}
-
-/***************************************************************************/
-
-void FramestackWidget::parseGDBBacktraceList(char *str)
-{
-    // #0  Test::Test (this=0x8073b20, parent=0x0, name=0x0) at test.cpp:224
-    // #1  0x804bba9 in main (argc=1, argv=0xbffff9c4) at main.cpp:24
-
-    // If we don't have a thread program then clear the list.
-    // We don't have to clear the list in a threaded programe because that's
-    // already been done in the parseGDBThreadList() method.
-    if (!viewedThread_)
-        clear();
-
-    if(!strlen(str))
-        return;
     
-    if (strncmp(str, "No stack.", 9) == 0)
+    getBacktrace();
+
+    if (viewedThread_)
+    {
+        // Switch back to the original thread.
+        controller_->addCommand(
+            new GDBCommand(QString("-thread-select %1")
+                           .arg(currentThread).ascii()));
+    }
+}
+
+void FramestackWidget::handleThreadList(const GDBMI::ResultRecord& r)
+{
+    // Gdb reply is: 
+    //  ^done,thread-ids={thread-id="3",thread-id="2",thread-id="1"},
+    // which syntactically is a tuple, but one has to access it
+    // by index anyway.
+    const GDBMI::TupleValue& ids = 
+        dynamic_cast<const GDBMI::TupleValue&>(r["thread-ids"]);
+
+    if (ids.results.size() > 1)
+    {
+        // Need to iterate over all threads to figure out where each one stands.
+        // Note that this sequence of command will be executed in strict
+        // sequences, so no other view can add its command in between and
+        // get state for a wrong thread.
+                        
+        // Really threaded program.
+        for(unsigned i = 0, e = ids.results.size(); i != e; ++i)
+        {
+            QString id = ids.results[i]->value->literal();
+
+            controller_->addCommand(
+                new GDBCommand(QString("-thread-select %1").arg(id).ascii(), 
+                               this, &FramestackWidget::handleThread));
+        }
+
+        controller_->addCommand(
+            new GDBCommand(QString("-thread-select %1")
+                           .arg(controller_->currentThread()).ascii()));
+    }
+
+    // Get backtrace for the current thread. We need to do this
+    // here, and not in event handler for program_state_changed, 
+    // viewedThread_ is initialized by 'handleThread' before
+    // backtrace handler is called.
+    getBacktrace();
+}
+
+void FramestackWidget::handleThread(const GDBMI::ResultRecord& r)
+{
+    QString id = r["new-thread-id"].literal();
+    int id_num = id.toInt();
+
+    QString name_column;
+    QString func_column;
+    QString args_column;
+    QString source_column;
+    
+    formatFrame(r["frame"], func_column, source_column);
+
+    ThreadStackItem* thread = new ThreadStackItem(this, id_num);
+    thread->setText(1, func_column);
+    thread->setText(2, source_column);
+
+    // The thread with a '*' is always the viewedthread
+
+    if (id_num == controller_->currentThread())
+    {
+        viewedThread_ = thread;
+        setSelected(viewedThread_, true);
+    }
+}
+
+
+void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
+{
+    if (!r.hasField("stack"))
         return;
 
-    while (char* end = strchr(str, '\n'))
+    const GDBMI::Value& frames = r["stack"];    
+
+    if (frames.empty())
+        return;
+
+    Q_ASSERT(dynamic_cast<const GDBMI::ListValue*>(&frames));
+
+    // Remove "..." item, if there's one.
+    QListViewItem* last;    
+    if (viewedThread_)
     {
-        // Don't bother with extra data
-        if (*str == '#')
+        last = viewedThread_->firstChild();
+        if (last)
+            while(last->nextSibling())
+                last = last->nextSibling();
+    }
+    else 
+    {
+        last = lastItem();
+    }
+    if (last && last->text(0) == "...")
+        delete last;
+    
+    bool has_more_frames = false;
+    for(unsigned i = 0, e = frames.size(); i != e; ++i)
+    {
+        const GDBMI::Value& frame = frames[i];
+      
+        // For now, just produce string simular to gdb
+        // console output. In future we might have a table,
+        // or something better.
+        QString frameDesc;
+
+        QString name_column;
+        QString func_column;
+        QString source_column;
+
+        QString level_s = frame["level"].literal();
+        int level = level_s.toInt();
+
+        if (level > lastFrameToShow)
         {
-            // make it a string
-            *end = 0;
-            QString frameDesc = QString(str);
-            if (viewedThread_)
-                new FrameStackItem(viewedThread_, frameDesc);
-            else
-                new FrameStackItem(this, frameDesc);
+            has_more_frames = true;
+            break;
         }
-        str = end+1;                          // next string
+
+        name_column = "#" + level_s;
+
+        formatFrame(frame, func_column, source_column);
+        
+        FrameStackItem* item;
+        if (viewedThread_)
+            item = new FrameStackItem(viewedThread_, level, name_column);
+        else
+            item = new FrameStackItem(this, level, name_column);
+
+        item->setText(1, func_column);
+        item->setText(2, source_column);        
+    }
+    if (has_more_frames)
+    {
+        QListViewItem* item;
+        if (viewedThread_)
+            item = new FrameStackItem(viewedThread_, lastFrameToShow+1, "...");
+        else
+            item = new FrameStackItem(this, lastFrameToShow+1, "...");
+        item->setText(1, "(click to get more frames)");
     }
 
     currentFrame_ = 0;
@@ -195,41 +372,11 @@ void FramestackWidget::parseGDBBacktraceList(char *str)
     else
     {
         if (FrameStackItem* frame = (FrameStackItem*) firstChild())
-            frame->setOpen(true);
-    }
-}
-
-/***************************************************************************/
-
-QString FramestackWidget::getFrameName(int frameNo, int threadNo)
-{
-    FrameStackItem *frame = findFrame(frameNo, threadNo);
-    if (frame)
-    {
-        QString frameStr = frame->text(0);
-        const char *frameData = frameStr.latin1();
-        if (const char *paramStart = strchr(frameData, '('))
         {
-            const char *fnstart = paramStart-2;
-            while (fnstart > frameData)
-            {
-                if (isspace(*fnstart))
-                    break;
-                fnstart--;
-            }
-            if (threadNo != -1)
-            {
-                QString frameName("T%1#%2 %3(...)");
-                return frameName.arg(threadNo).arg(frameNo)
-                       .arg(QCString(fnstart, paramStart-fnstart+1));
-            }
-
-            QString frameName("#%1 %2(...)");
-            return frameName.arg(frameNo).arg(
-                                QCString(fnstart, paramStart-fnstart+1));
+            frame->setOpen(true);
+            setSelected(frame, true);
         }
     }
-    return i18n("No stack");
 }
 
 // **************************************************************************
@@ -276,34 +423,75 @@ FrameStackItem *FramestackWidget::findFrame(int frameNo, int threadNo)
     return (FrameStackItem*)frameItem;
 }
 
+void FramestackWidget::formatFrame(const GDBMI::Value& frame,
+                                   QString& func_column,
+                                   QString& source_column)
+{
+    func_column = source_column = "";
+
+    if (frame.hasField("func"))
+    {
+        func_column += " " + frame["func"].literal();
+    }
+    else
+    {
+        func_column += " " + frame["address"].literal();
+    }
+
+
+    if (frame.hasField("file"))
+    {
+        source_column = frame["file"].literal();
+
+        if (frame.hasField("line"))
+        {
+            source_column += ":" + frame["line"].literal();
+        }
+    }
+    else if (frame.hasField("from"))
+    {
+        source_column = frame["from"].literal();
+    }
+}
+
+
+void FramestackWidget::drawContentsOffset( QPainter * p, int ox, int oy,
+                                           int cx, int cy, int cw, int ch )
+{
+    QListView::drawContentsOffset(p, ox, oy, cx, cy, cw, ch);
+
+    int s1_x = header()->sectionPos(1);
+    int s1_w = header()->sectionSize(1);
+
+    QRect section1(s1_x, contentsHeight(), s1_w, viewport()->height());
+
+    p->fillRect(section1, QColor("#e4f4fe"));
+}
+
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
 
-FrameStackItem::FrameStackItem(FramestackWidget *parent, const QString &frameDesc)
+FrameStackItem::FrameStackItem(FramestackWidget *parent, 
+                               unsigned frameNo,
+                               const QString &name)
         : QListViewItem(parent, parent->lastChild()),
-        frameNo_(-1),
+        frameNo_(frameNo),
         threadNo_(-1)
 {
-    setText(VarNameCol, frameDesc);
-    QRegExp num("[0-9]*");
-    int start;
-    if ((start=num.search(frameDesc,1))>=0)
-        frameNo_ = frameDesc.mid(start, num.matchedLength()).toInt();
+    setText(0, name);
 }
 
 // **************************************************************************
 
-FrameStackItem::FrameStackItem(ThreadStackItem *parent, const QString &frameDesc)
+FrameStackItem::FrameStackItem(ThreadStackItem *parent, 
+                               unsigned frameNo,
+                               const QString &name)
         : QListViewItem(parent, parent->lastChild()),
-        frameNo_(-1),
+        frameNo_(frameNo),
         threadNo_(parent->threadNo())
 {
-    setText(VarNameCol, frameDesc);
-    QRegExp num("[0-9]*");
-    int start;
-    if ((start=num.search(frameDesc,1))>=0)
-        frameNo_ = frameDesc.mid(start, num.matchedLength()).toInt();
+    setText(0, name);
 }
 
 // **************************************************************************
@@ -327,6 +515,7 @@ QListViewItem *FrameStackItem::lastChild() const
 
 void FrameStackItem::setOpen(bool open)
 {    
+#if 0
     if (open)
     {
         FramestackWidget* owner = (FramestackWidget*)listView();
@@ -336,7 +525,7 @@ void FrameStackItem::setOpen(bool open)
             ((FramestackWidget*)listView())->slotSelectFrame(0, threadNo());
         }
     }
-
+#endif
     QListViewItem::setOpen(open);
 }
 
@@ -344,16 +533,12 @@ void FrameStackItem::setOpen(bool open)
 // **************************************************************************
 // **************************************************************************
 
-ThreadStackItem::ThreadStackItem(FramestackWidget *parent, const QString &threadDesc)
-        : QListViewItem(parent, threadDesc),
-        threadNo_(-1)
+ThreadStackItem::ThreadStackItem(FramestackWidget *parent, unsigned threadNo)
+: QListViewItem(parent),
+  threadNo_(threadNo)
 {
-    setText(VarNameCol, threadDesc);
+    setText(0, i18n("Thread %1").arg(threadNo_));
     setExpandable(true);
-    QRegExp num("[0-9]*");
-    int start;
-    if ((start=num.search(threadDesc,2))>=0)
-        threadNo_ = threadDesc.mid(start, num.matchedLength()).toInt();
 }
 
 // **************************************************************************
@@ -380,10 +565,54 @@ void ThreadStackItem::setOpen(bool open)
     // If we're openining, and have no child yet, get backtrace from
     // gdb.
     if (open && !firstChild())
-        ((FramestackWidget*)listView())->getBacktrace(threadNo());
+    {
+        // Not that this will not switch to another thread (and won't show
+        // position in that other thread). This will only get the frames.
+
+        // Imagine you have 20 frames and you want to find one blocked on
+        // mutex. You don't want a new source file to be opened for each
+        // thread you open to find if that's the one you want to debug.        
+        ((FramestackWidget*)listView())->getBacktraceForThread(threadNo());
+    }
+
+    if (open)
+    {
+        savedFunc_ = text(1);
+        setText(1, "");
+        savedSource_ = text(2);
+        setText(2, "");
+    }
+    else
+    {
+        setText(1, savedFunc_);
+        setText(2, savedSource_);
+    }
 
     QListViewItem::setOpen(open);
 }
+
+void FrameStackItem::paintCell(QPainter * p, const QColorGroup & cg, 
+                               int column, int width, int align )
+{
+    QColorGroup cg2(cg);
+    if (column % 2)
+    {
+        cg2.setColor(QColorGroup::Base, QColor("#e4f4fe"));
+    }
+    QListViewItem::paintCell(p, cg2, column, width, align);
+}
+
+void ThreadStackItem::paintCell(QPainter * p, const QColorGroup & cg, 
+                               int column, int width, int align )
+{
+    QColorGroup cg2(cg);
+    if (column % 2)
+    {
+        cg2.setColor(QColorGroup::Base, QColor("#e4f4fe"));
+    }
+    QListViewItem::paintCell(p, cg2, column, width, align);
+}
+
 
 }
 

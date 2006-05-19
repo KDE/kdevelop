@@ -21,6 +21,7 @@
 class QListBox;
 class KProcess;
 class KListView;
+class KListViewSearchLineWidget;
 
 namespace GDBDebugger
 {
@@ -41,9 +42,13 @@ private slots:
     void slotReceivedOutput(KProcess *proc, char *buffer, int buflen);
     void slotProcessExited();
 
+protected:
+    void focusIn(QFocusEvent*);
+
 private:
     KProcess* psProc_;
     KListView* pids_;
+    KListViewSearchLineWidget* searchLineWidget_;
     QString   pidLines_;
     QString   pidCmd_;
 };

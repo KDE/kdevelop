@@ -15,6 +15,7 @@
 
 #include "memviewdlg.h"
 #include "gdbcontroller.h"
+#include "gdbcommand.h"
 
 #include <kbuttonbox.h>
 #include <klineedit.h>
@@ -125,8 +126,10 @@ namespace GDBDebugger
 
 
     
-    MemoryView::MemoryView(QWidget* parent, const char* name)
+    MemoryView::MemoryView(GDBController* controller,
+                           QWidget* parent, const char* name)
     : QWidget(parent, name), 
+      controller_(controller),
       // New memory view can be created only when debugger is active,
       // so don't set s_appNotStarted here.
       khexedit2_real_widget(0),
@@ -240,26 +243,58 @@ namespace GDBDebugger
         }
     }
 
-    void MemoryView::memoryContentAvailable(unsigned start, unsigned amount,
-                                            char* data)
+
+    void MemoryView::slotHideRangeDialog()
     {
-        start_ = start;
-        amount_ = amount;
+        rangeSelector_->hide();
+    }
+
+    void MemoryView::slotChangeMemoryRange()
+    {
+        controller_->addCommand(
+            new ExpressionValueCommand(
+                rangeSelector_->amountLineEdit->text(),
+                this, &MemoryView::sizeComputed));
+    }
+
+    void MemoryView::sizeComputed(const QString& size)
+    {
+        controller_->addCommand(
+            new 
+            GDBCommand(
+                QString("-data-read-memory %1 x 1 1 %2")
+                .arg(rangeSelector_->startAddressLineEdit->text())
+                .arg(size).ascii(),
+                this,
+                &MemoryView::memoryRead));
+    }
+
+    void MemoryView::memoryRead(const GDBMI::ResultRecord& r)
+    {
+        const GDBMI::Value& content = r["memory"][0]["data"];
+
+        start_ = rangeSelector_->startAddressLineEdit->text().toInt();
+        amount_ = content.size();
 
         startAsString_ = rangeSelector_->startAddressLineEdit->text();
         amountAsString_ = rangeSelector_->amountLineEdit->text();
 
         setCaption(QString("%1 (%2 bytes)")
-                   .arg(startAsString_).arg(amount));
+                   .arg(startAsString_).arg(amount_));
         emit captionChanged(caption());
 
         KHE::BytesEditInterface* bytesEditor
             = KHE::bytesEditInterface(khexedit2_widget);
 
         delete[] this->data_;
-        this->data_ = data;
+        this->data_ = new char[amount_];
+        for(unsigned i = 0; i < content.size(); ++i)
+        {
+            this->data_[i] = content[i].literal().toInt(0, 16);
+        }
+
                     
-        bytesEditor->setData( this->data_, amount );
+        bytesEditor->setData( this->data_, amount_ );
         bytesEditor->setReadOnly(false);
         // Overwrite data, not insert new
         bytesEditor->setOverwriteMode( true );
@@ -267,7 +302,7 @@ namespace GDBDebugger
         // inserting new data.
         bytesEditor->setOverwriteOnly( true );
                    
-        QVariant start_v(start);
+        QVariant start_v(start_);
         khexedit2_real_widget->setProperty("FirstLineOffset", start_v);
 
         //QVariant bsw(0);
@@ -282,57 +317,7 @@ namespace GDBDebugger
         //khexedit2_real_widget->setProperty("Coding", coding);
 
 
-        slotHideRangeDialog();            
-    }
-
-    void MemoryView::slotHideRangeDialog()
-    {
-        rangeSelector_->hide();
-    }
-
-    void MemoryView::slotChangeMemoryRange()
-    {
-        ValueCallback* cb = this;
-        emit evaluateExpression(cb, rangeSelector_->amountLineEdit->text());
-    }
-
-    void MemoryView::updateValue(char* data)
-    {
-        char* value = 0;
-
-        if (data || *data == '$')
-        {
-            char* p = strchr(data, '=');
-            if (p)
-            {
-                ++p;
-                while(*p && isspace(*p))
-                    ++p;
-
-                value = p;
-                while(*p && '0' <= *p && *p <= '9')
-                    ++p;
-                while(*p && isspace(*p))
-                    ++p;
-                if (*p != '\0')
-                    value = 0;                    
-            }
-        }
-
-        if (!value)
-        {
-            KMessageBox::error(
-                this, 
-                i18n(
-                    "<b>Bad memory amount</b>"
-                    "<p>The gdb debugger could not evaluate the amount "
-                    "expression you've given."),
-                i18n("Bad memory amount"));
-        }
-        else
-        {
-            emit getMemory(rangeSelector_->startAddressLineEdit->text(), value);
-        }
+        slotHideRangeDialog();                   
     }
 
     
@@ -381,7 +366,13 @@ namespace GDBDebugger
             // not textual startAsString_ and amountAsString_,
             // because program position might have changes and expressions
             // are no longer valid.
-            emit getMemory(QString::number(start_), QString::number(amount_));
+            controller_->addCommand(
+                new 
+                GDBCommand(
+                    QString("-data-read-memory %1 x 1 1 %2")
+                    .arg(start_).arg(amount_).ascii(),
+                    this,
+                    &MemoryView::memoryRead));
         }
 
         if (result == idClose)
@@ -407,8 +398,11 @@ namespace GDBDebugger
     }
 
 
-    ViewerWidget::ViewerWidget(QWidget* parent, 
-                               const char* name) : QWidget(parent, name) 
+    ViewerWidget::ViewerWidget(GDBController* controller,
+                               QWidget* parent, 
+                               const char* name) 
+    : QWidget(parent, name),
+      controller_(controller)
     {
         setIcon(SmallIcon("math_brace"));
         
@@ -416,22 +410,6 @@ namespace GDBDebugger
         
         toolBox_ = new QToolBox(this);
         l->addWidget(toolBox_);
-    }
-
-    void ViewerWidget::slotGetMemory(
-        const QString& start, const QString& amount)
-    {
-        const QObject* obj = sender();
-        // The signal should come from MemoryView widget.
-        const MemoryView* mv = dynamic_cast<const MemoryView*>(obj);
-        Q_ASSERT(mv);
-        if (mv)
-        {
-            // 'sender()' returns 'const', but eventually we
-            // need to modify the widget...
-            MemoryView* mv2 = const_cast<MemoryView*>(mv);
-            emit getMemory(mv2, start, amount);
-        }
     }
 
     void ViewerWidget::slotAddMemoryView()
@@ -449,21 +427,13 @@ namespace GDBDebugger
 
         setViewShown(true);
 
-        MemoryView* widget = new MemoryView(this);
+        MemoryView* widget = new MemoryView(controller_, this);
         toolBox_->addItem(widget, widget->caption());
         toolBox_->setCurrentItem(widget);
         memoryViews_.push_back(widget);
 
         connect(widget, SIGNAL(captionChanged(const QString&)),
                 this, SLOT(slotChildCaptionChanged(const QString&)));
-
-        connect(widget, SIGNAL(getMemory(const QString&, const QString&)),
-                this, SLOT(slotGetMemory(const QString&, const QString&)));
-
-        connect(widget, SIGNAL(evaluateExpression(ValueCallback*, 
-                                                  const QString&)),
-                this,   SIGNAL(evaluateExpression(ValueCallback*, 
-                                                  const QString&)));
 
         connect(widget, SIGNAL(setValue(const QString&, const QString&)),
                 this,   SIGNAL(setValue(const QString&, const QString&)));

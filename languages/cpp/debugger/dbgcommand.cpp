@@ -24,11 +24,9 @@ namespace GDBDebugger
 {
 
 
-DbgCommand::DbgCommand(const QCString& command, bool isRunCmd, bool isInfoCmd, char prompt) :
+DbgCommand::DbgCommand(const QString& command, bool isInfoCmd, char prompt) :
   command_(command),
-  isRunCmd_(isRunCmd),
   isInfoCmd_(isInfoCmd),
-  sent_(false),
   waitForReply_(prompt != 0),
   prompt_(prompt)
 {

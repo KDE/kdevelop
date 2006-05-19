@@ -59,106 +59,6 @@ GDBParser::~GDBParser()
 {
 }
 
-// **************************************************************************
-
-void GDBParser::parseValue(TrimmableItem *item, const char *buf)
-{
-    static const char *unknown = "?";
-
-    Q_ASSERT(item);
-    Q_ASSERT(buf);
-
-    if (!*buf)
-    {
-        buf = (char*)unknown;    
-    }
-    else 
-    {
-        QString varName;
-        DataType dataType = determineType(buf);
-        QCString value = getValue(&buf);
-        setItem(item, varName, dataType, value, true);
-    }
-}
-
-void GDBParser::parseCompositeValue(TrimmableItem* parent, const char* buf)
-{
-    Q_ASSERT(parent);
-    Q_ASSERT(buf);
-
-    // Determine type and undecorate the value here, as opposed as
-    // peeking at parent->getDataType().
-    // This approach is more robust, as for reference to array
-    // the parent->getDataType() will be typeReference, but this
-    // method will be called with array value.
-    DataType dataType = determineType(buf);
-
-    QCString raw = undecorateValue(dataType, buf);
-    buf = raw.data();
-
-    // Arrays are just sequences of values, there are no names,
-    // so we need special processing.
-    if (dataType == typeArray)
-    {
-        parseArray(parent, buf);
-        return;
-    }
-
-    // Iterate over all items.
-    while (*buf) {
-        buf = skipNextTokenStart(buf);
-        if (!buf)
-            break;
-        
-        DataType dataType = determineType(buf);
-
-        // A field of composite should have a name, unless it's array.
-        // But arrays are already handled above.
-        Q_ASSERT(dataType == typeName);
-        if (dataType == typeName) {
-
-            QString varName = getName(&buf);
-            // Figure out real type of value.
-            dataType = determineType(buf);
-
-            QCString value = getValue(&buf);
-            setItem(parent, varName, dataType, value, false);
-            
-        }
-        else
-        {
-            // Assert failed, preventing infinite loop is the
-            // only thing we can do.
-            break;
-        }
-    }        
-}
-
-// **************************************************************************
-
-void GDBParser::parseArray(TrimmableItem *parent, const char *buf)
-{
-    QString elementRoot = parent->getName() + "[%1]";
-    int idx = 0;
-    while (*buf) {
-            buf = skipNextTokenStart(buf);
-            if (!*buf)
-                return;
-
-            DataType dataType = determineType(buf);
-            QCString value = getValue(&buf);
-            QString varName = elementRoot.arg(idx);
-            setItem(parent, varName, dataType, value, false);
-
-            int pos = value.find(" <repeats", 0);
-            if (pos > -1) {
-                if (int i = atoi(value.data()+pos+10))
-                    idx += (i-1);
-            }
-
-            idx++;
-    }
-}
 
 // **************************************************************************
 
@@ -176,19 +76,21 @@ QString GDBParser::getName(const char **buf)
 
 // **************************************************************************
 
-QCString GDBParser::getValue(const char **buf)
+QString GDBParser::getValue(const char **buf)
 {
+    const char* orig = *buf;
     const char *start = skipNextTokenStart(*buf);
     *buf = skipTokenValue(start);
 
-    QCString value(start, *buf - start + 1);
+    QString value(QCString(start, *buf - start + 1).data());
     return value;
 }
 
-QCString GDBParser::undecorateValue(DataType type, const QCString& s)
+QString GDBParser::undecorateValue(DataType type, const QString& s)
 {
-    const char* start = s.data();
-    const char* end = s.data() + s.length();
+    QCString l8 = s.local8Bit();
+    const char* start = l8;
+    const char* end = start + s.length();
 
     if (*start == '{')
     {
@@ -230,111 +132,36 @@ QCString GDBParser::undecorateValue(DataType type, const QCString& s)
         start = skipDelim(start, '(', ')');
     }
 
-    QCString value(start, end - start + 1);
+    QString value(QCString(start, end - start + 1).data());
+
+    value = value.stripWhiteSpace();
+
+    if (value[0] == '@')
+    {
+        // It's a reference, we need to show just the value.
+        if (int i = value.find(":"))
+        {
+            value = value.mid(i+2);
+        }
+        else
+        {
+            // Just reference, no value at all, remove all
+            value = "";
+        }
+    }
+
+    if (value.find("Cannot access memory") == 0)
+        value = "(inaccessible)";
   
     return value.stripWhiteSpace();
 }
 
-
-// ***************************************************************************
-
-TrimmableItem *GDBParser::getItem(TrimmableItem *parent, DataType dataType,
-                                  const QString &varName, bool requested)
+QString GDBParser::undecorateValue(const QString& s)
 {
-    if (requested)
-        return parent;
-
-    if (varName.isEmpty()) {
-        if (parent->getDataType() == typeReference)
-            return parent;
-
-        return 0;
-    }
-
-    return parent->findMatch(varName, dataType);
+    DataType dataType = determineType(s.local8Bit());
+    QString r = undecorateValue(dataType, s.local8Bit());
+    return r;
 }
-
-// **************************************************************************
-
-void GDBParser::setItem(TrimmableItem *parent, const QString &varName,
-                        DataType dataType, const QCString &value,
-                        bool requested)
-{
-    TrimmableItem *item = getItem(parent, dataType, varName, requested);
-    if (!item) {
-        if (varName.isEmpty())
-            return;
-
-        item = new VarItem(parent, varName, dataType);
-    }
-
-    switch (dataType) {
-    case typePointer:
-        item->setText(ValueCol, undecorateValue(dataType, value.data()));
-        item->setExpandable(varName != "_vptr.");
-        break;
-
-    case typeStruct:
-    case typeArray:
-        // Don't strip {} here, it will be done in parseCompositeValue
-        // if the value is expanded.
-        item->setCache(value);
-        // Explicitly reset the text. 
-        // When setting a value of composite, we reload the value
-        // and want it to be shown in exactly the same format as it 
-        // was before.
-        //
-        // For composites, that means that value column for the variable
-        // itself it empty. However, after setting a value is not empty,
-        // so we need explicit reset.
-        //
-        // Two other approaches would be:
-        // - show the full value, but most real classes won't fit in
-        //   the column anyway
-        // - show {...} to give user a hint that something is there,
-        //   but that looks ugly on the screen.
-        item->setText(ValueCol, "");
-        break;
-
-    case typeReference:
-        {
-            int pos;
-            if ((pos = value.find(':', 0)) != -1) {
-                QCString rhs((value.mid(pos+2, value.length()).data()));
-                
-                DataType dataType = determineType( rhs.data() );
-                QCString undecoratedValue = undecorateValue(dataType,
-                                                            value.left(pos));
-
-                if ( dataType == typeUnknown )
-                {
-                    // Typically, this means that reference is invalid
-                    // (e.g. not initialized) yet, and so there's no value.
-                    item->setText(ValueCol, undecoratedValue);
-                    item->setExpandable( false );
-                    break;
-                }
-                if ( dataType != typeValue) {
-                    item->setCache(rhs);
-                    item->setText(ValueCol, undecoratedValue);
-                    break;
-                }
-            }
-            item->setText(ValueCol, undecorateValue(dataType, value));
-            item->setExpandable(!value.isEmpty() && (value[0] == '@'));
-            break;
-        }
-
-    case typeValue:
-        item->setText(ValueCol, undecorateValue(dataType, value));
-        break;
-
-    default:
-        break;
-    }
-}
-
-// **************************************************************************
 
 // Given a value that starts with 0xNNNNNN determines if
 // it looks more like pointer, or a string value.

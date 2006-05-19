@@ -16,8 +16,12 @@
 #ifndef _DBGCONTROLLER_H_
 #define _DBGCONTROLLER_H_
 
+#include "mi/gdbmi.h"
+
 #include <qobject.h>
 #include <domutil.h>
+
+
 
 class KProcess;
 class QString;
@@ -30,8 +34,6 @@ class Breakpoint;
 class DbgCommand;
 class TrimmableItem;
 class VarItem;
-class MemoryCallback;
-class ValueCallback;
 
 
 /***************************************************************************/
@@ -44,19 +46,21 @@ enum DBGStateFlags
 {
   s_dbgNotStarted     = 1,
   s_appNotStarted     = 2,
-  s_appBusy           = 4,
   s_waitForWrite      = 8,
   s_programExited     = 16,
-  s_silent            = 32,
-//  removed s_viewLocals        = 64,
   s_viewBT            = 128,
   s_viewBP            = 256,
   s_attached          = 512,
   s_core              = 1024,
   s_waitTimer         = 2048,
+  // Set when 'slotStopDebugger' started executing, to avoid
+  // entering that function several times.
   s_shuttingDown      = 4096,
-  s_viewThreads       = 8192,
-  s_explicitBreakInto = (s_viewThreads << 1)
+  s_explicitBreakInto = (s_shuttingDown << 1),
+  s_dbgBusy           = (s_explicitBreakInto << 1),
+  s_appRunning        = (s_dbgBusy << 1),
+  s_lastDbgState      = (s_appRunning << 1)
+
 };
 /***************************************************************************/
 /***************************************************************************/
@@ -72,27 +76,9 @@ public:
 
     virtual bool stateIsOn( int state )                                     = 0;
 
-protected:
-    virtual void queueCmd(DbgCommand *cmd, bool executeNext)                = 0;
-    virtual char *parse(char *str)                                          = 0;
-
 public slots:
     virtual void configure()                                                = 0;
 
-    /**
-     * Start the debugger
-     * \param shell shell
-     * \param run_envvars List with the environment variables
-     * \param run_directory Directory from where the program should be run
-     * \param application Absolute path to application
-     * \param run_arguments Command line arguments to be passed to the application
-     */
-    virtual void slotStart(const QString& shell,
-                           const DomUtil::PairList& run_envvars,
-                           const QString& run_directory,
-                           const QString &application,
-                           const QString& run_arguments)                    = 0;
-    //virtual void slotStart(const QString& shell, const QString &application)= 0;
     virtual void slotCoreFile(const QString &coreFile)                      = 0;
     virtual void slotAttachTo(int pid)                                      = 0;
 
@@ -110,18 +96,10 @@ public slots:
     virtual void slotStepOutOff()                                           = 0;
 
     virtual void slotBreakInto()                                            = 0;
-    virtual void slotBPState(const Breakpoint&)                             = 0;
 
     virtual void slotDisassemble(const QString &start, const QString &end)  = 0;
-    virtual void slotMemoryDump(MemoryCallback* callback,
-                                const QString &start, const QString &amount)= 0;
     virtual void slotRegisters()                                            = 0;
     virtual void slotLibraries()                                            = 0;
-
-    virtual void slotExpandItem(TrimmableItem *parent)                     = 0;
-    virtual void slotExpandUserItem(ValueCallback* callback,
-                                    const QString &expression)             = 0;
-    virtual void slotSelectFrame(int frame, int thread, bool needFrames)    = 0;
 
     // jw - for optional additional commands and initialization
     virtual void slotVarItemConstructed(VarItem */*item*/) {}
@@ -134,15 +112,14 @@ protected slots:
 
 signals:
     void gotoSourcePosition   (const QString &fileName, int lineNum);
-    void rawGDBBreakpointList (char *buf);
-    void rawGDBBreakpointSet  (char *buf, int key);
     void rawGDBDisassemble    (char *buf);
     void rawGDBMemoryDump     (char *buf);
     void rawGDBRegisters      (char *buf);
     void rawGDBLibraries      (char *buf);
     void ttyStdout            (const char *output);
     void ttyStderr            (const char *output);
-    void gdbStdout            (const char *output);
+    void gdbInternalCommandStdout (const char *output);
+    void gdbUserCommandStdout (const char *output);
     void gdbStderr            (const char *output);
     void showStepInSource     (const QString &fileName, int lineNum, const QString &address);
     void dbgStatus            (const QString &status, int statusFlag);

@@ -1,4 +1,7 @@
 
+# We need exceptions since they are used to report all MI access errors.
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
 METASOURCES = AUTO
 INCLUDES = $(all_includes)
 

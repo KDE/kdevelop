@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2004 by Roberto Raggi                                   *
  *   roberto@kdevelop.org                                                  *
+ *   Copyright (C) 2005-2006 by Vladimir Prus                              *
+ *   ghost@cs.msu.su                                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -20,6 +22,8 @@
 #include "miparser.h"
 #include "tokens.h"
 #include <memory>
+
+using namespace GDBMI;
 
 #define MATCH(tok) \
   do { \
@@ -42,11 +46,11 @@ MIParser::~MIParser()
 {
 }
 
-GDBMI::Record *MIParser::parse(FileSymbol *file)
+Record *MIParser::parse(FileSymbol *file)
 {
     lex = 0;
 
-    GDBMI::Record *record = 0;
+    Record *record = 0;
 
     TokenStream *tokenStream = lexer.tokenize(file);
     if (!tokenStream)
@@ -67,7 +71,9 @@ GDBMI::Record *MIParser::parse(FileSymbol *file)
             parseResultRecord(record);
             break;
         case '*':
-            parseAsyncRecord(record);
+            // Same as result, only differs in start
+            // marker.
+            parseResultRecord(record);
             break;
         default:
             break;
@@ -76,7 +82,7 @@ GDBMI::Record *MIParser::parse(FileSymbol *file)
     return record;
 }
 
-bool MIParser::parsePrompt(GDBMI::Record *&record)
+bool MIParser::parsePrompt(Record *&record)
 {
     ADVANCE('(');
     MATCH(Token_identifier);
@@ -85,13 +91,13 @@ bool MIParser::parsePrompt(GDBMI::Record *&record)
     lex->nextToken();
     ADVANCE(')');
 
-    record = new GDBMI::PromptRecord;
+    record = new PromptRecord;
     return true;
 }
 
-bool MIParser::parseStreamRecord(GDBMI::Record *&record)
+bool MIParser::parseStreamRecord(Record *&record)
 {
-    std::auto_ptr<GDBMI::StreamRecord> stream(new GDBMI::StreamRecord);
+    std::auto_ptr<StreamRecord> stream(new StreamRecord);
 
     switch (lex->lookAhead()) {
         case '~':
@@ -100,10 +106,7 @@ bool MIParser::parseStreamRecord(GDBMI::Record *&record)
             stream->reason = lex->lookAhead();
             lex->nextToken();
             MATCH(Token_string_literal);
-            QString message = lex->currentTokenText();
-            message = message.mid(1, message.length()-2);
-            lex->nextToken();
-            stream->message = message;
+            stream->message = parseStringLiteral();
             record = stream.release();
         }
         return true;
@@ -115,43 +118,18 @@ bool MIParser::parseStreamRecord(GDBMI::Record *&record)
     return false;
 }
 
-bool MIParser::parseResultRecord(GDBMI::Record *&record)
+bool MIParser::parseResultRecord(Record *&record)
 {
-    ADVANCE('^');
+    if (lex->lookAhead() != '^' && lex->lookAhead() != '*')
+        return false;
+    lex->nextToken();
+
     MATCH(Token_identifier);
     QString reason = lex->currentTokenText();
     lex->nextToken();
 
-    if (reason == "done") {
-        return parseDoneResultRecord(record);
-    } else if (reason == "error") {
-        return parseErrorResultRecord(record);
-    }
-
-    return false;
-}
-
-bool MIParser::parseResultRecord(GDBMI::Record *&record)
-{
-    ADVANCE('^');
-    MATCH(Token_identifier);
-    QString reason = lex->currentTokenText();
-    lex->nextToken();
-
-    if (reason == "done") {
-        return parseDoneResultRecord(record);
-    } else if (reason == "error") {
-        return parseErrorResultRecord(record);
-    }
-
-    return false;
-}
-
-
-bool MIParser::parseErrorResultRecord(GDBMI::Record *&record)
-{
-    std::auto_ptr<GDBMI::ResultRecord> res(new GDBMI::ResultRecord);
-    res->reason = "error";
+    std::auto_ptr<ResultRecord> res(new ResultRecord);
+    res->reason = reason;
 
     if (lex->lookAhead() != ',') {
         record = res.release();
@@ -159,56 +137,21 @@ bool MIParser::parseErrorResultRecord(GDBMI::Record *&record)
     }
 
     lex->nextToken();
-
-    while (lex->lookAhead()) {
-        GDBMI::Result *result = 0;
-        if (!parseResult(result))
-            return false;
-
-        res->results.append(result);
-
-        if (lex->lookAhead() == ',')
-            lex->nextToken();
-    }
+    
+    if (!parseCSV(*res))
+        return false;
 
     record = res.release();
     return true;
 }
 
-bool MIParser::parseDoneResultRecord(GDBMI::Record *&record)
-{
-    std::auto_ptr<GDBMI::ResultRecord> res(new GDBMI::ResultRecord);
-    res->reason = "done";
-
-    if (lex->lookAhead() != ',') {
-        record = res.release();
-        return true;
-    }
-
-    lex->nextToken();
-
-    while (lex->lookAhead()) {
-        GDBMI::Result *result = 0;
-        if (!parseResult(result))
-            return false;
-
-        res->results.append(result);
-
-        if (lex->lookAhead() == ',')
-            lex->nextToken();
-    }
-
-    record = res.release();
-    return true;
-}
-
-bool MIParser::parseResult(GDBMI::Result *&result)
+bool MIParser::parseResult(Result *&result)
 {
     MATCH(Token_identifier);
     QString variable = lex->currentTokenText();
     lex->nextToken();
 
-    std::auto_ptr<GDBMI::Result> res(new GDBMI::Result);
+    std::auto_ptr<Result> res(new Result);
     res->variable = variable;
 
     if (lex->lookAhead() != '=')
@@ -216,7 +159,7 @@ bool MIParser::parseResult(GDBMI::Result *&result)
 
     lex->nextToken();
 
-    GDBMI::Value *value = 0;
+    Value *value = 0;
     if (!parseValue(value))
         return false;
 
@@ -226,16 +169,13 @@ bool MIParser::parseResult(GDBMI::Result *&result)
     return true;
 }
 
-bool MIParser::parseValue(GDBMI::Value *&value)
+bool MIParser::parseValue(Value *&value)
 {
     value = 0;
 
     switch (lex->lookAhead()) {
         case Token_string_literal: {
-            QString message = lex->currentTokenText();
-            message = message.mid(1, message.length()-2);
-            lex->nextToken();
-            value = new GDBMI::StringLiteralValue(message);
+            value = new StringLiteralValue(parseStringLiteral());
         }
         return true;
 
@@ -252,53 +192,43 @@ bool MIParser::parseValue(GDBMI::Value *&value)
     return false;
 }
 
-bool MIParser::parseTuple(GDBMI::Value *&value)
+bool MIParser::parseTuple(Value *&value)
 {
-    ADVANCE('{');
+    TupleValue* val;
+    
+    if (!parseCSV(&val, '{', '}'))
+        return false;
 
-    std::auto_ptr<GDBMI::TupleValue> tuple(new GDBMI::TupleValue());
-
-    int tok = lex->lookAhead();
-    while (tok && tok != '}') {
-        GDBMI::Result *result;
-        if (!parseResult(result))
-            return false;
-
-        tuple->results.append(result);
-
-        if (lex->lookAhead() == ',')
-            lex->nextToken();
-
-        tok = lex->lookAhead();
-    }
-
-    ADVANCE('}');
-
-    value = tuple.release();
-
+    value = val;
     return true;
 }
 
-bool MIParser::parseList(GDBMI::Value *&value)
+bool MIParser::parseList(Value *&value)
 {
     ADVANCE('[');
 
-    std::auto_ptr<GDBMI::ListValue> lst(new GDBMI::ListValue);
+    std::auto_ptr<ListValue> lst(new ListValue);
 
+    // Note: can't use parseCSV here because of nested
+    // "is this Value or Result" guessing. Too lazy to factor
+    // that out too using function pointers.
     int tok = lex->lookAhead();
     while (tok && tok != ']') {
-        GDBMI::Result *result = 0;
-        GDBMI::Value *val = 0;
+        Result *result = 0;
+        Value *val = 0;
 
-        if (tok == Token_identifier && !parseResult(result))
-            return false;
+        if (tok == Token_identifier)
+        {
+            if (!parseResult(result))
+                return false;
+        }
         else if (!parseValue(val))
             return false;
 
         Q_ASSERT(result || val);
 
         if (!result) {
-            result = new GDBMI::Result;
+            result = new Result;
             result->value = val;
         }
         lst->results.append(result);
@@ -313,5 +243,103 @@ bool MIParser::parseList(GDBMI::Value *&value)
     value = lst.release();
 
     return true;
+}
+
+bool MIParser::parseCSV(TupleValue** value,
+                        char start, char end)
+{
+    std::auto_ptr<TupleValue> tuple(new TupleValue);
+
+    if (!parseCSV(*tuple, start, end))
+        return false;
+ 
+    *value = tuple.get();
+    tuple.release();
+    return true;
+}
+
+bool MIParser::parseCSV(GDBMI::TupleValue& value,
+                        char start, char end)
+{
+   if (start)
+        ADVANCE(start);
+
+    int tok = lex->lookAhead();
+    while (tok) {
+        if (end && tok == end)
+            break;
+
+        Result *result;
+        if (!parseResult(result))
+            return false;
+
+        value.results.append(result);
+        value.results_by_name.insert(result->variable, result);      
+
+        if (lex->lookAhead() == ',')
+            lex->nextToken();
+
+        tok = lex->lookAhead();
+    }
+
+    if (end)
+        ADVANCE(end);
+
+    return true;
+}
+
+                        
+QString MIParser::parseStringLiteral()
+{
+    QCString message = lex->currentTokenText();
+
+    int length = message.length();
+    QString message2;
+    message2.setLength(length);
+    // The [1,length-1] range removes quotes without extra
+    // call to 'mid'
+    unsigned target_index = 0;
+    for(unsigned i = 1, e = length-1; i != e; ++i)
+    {
+        int translated = -1;
+        if (message[i] == '\\')
+        {
+            if (i+1 < length)
+            {
+                // TODO: implement all the other escapes, maybe
+                if (message[i+1] == 'n')
+                {
+                    translated = '\n';
+                }
+                else if (message[i+1] == '\\')
+                {
+                    translated = '\\';
+                }
+                else if (message[i+1] == '"')
+                {
+                    translated = '"';
+                }
+                else if (message[i+1] == 't')
+                {
+                    translated = '\t';
+                }
+
+            }
+        }
+
+        if (translated != -1)
+        {
+            message2[target_index++] = (char)translated;
+            ++i;
+        }
+        else
+        {
+            message2[target_index++] = message[i];
+        }        
+    }
+    message2.setLength(target_index);
+
+    lex->nextToken();
+    return message2;
 }
 

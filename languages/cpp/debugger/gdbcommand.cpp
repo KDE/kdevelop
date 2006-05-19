@@ -22,19 +22,40 @@ namespace GDBDebugger
 
 /***************************************************************************/
 
-QCString GDBCommand::idlePrompt_ = QCString().sprintf("\nset prompt %c%c\n", BLOCK_START, IDLE);
-
-/***************************************************************************/
-
-GDBCommand::GDBCommand(const QCString &setCommand, bool isRunCmd, bool isInfoCmd, char setPrompt)
-    : DbgCommand(setCommand, isRunCmd, isInfoCmd, setPrompt)
+GDBCommand::GDBCommand(const QString &setCommand, bool isInfoCmd, char setPrompt)
+: DbgCommand(setCommand, isInfoCmd, setPrompt),
+  handler_this(0)
 {
-    if (prompt_) {
-        cmdBuffer_ = QCString().sprintf("set prompt %c%c\n", BLOCK_START, prompt_) +
-            command_ +
-            idlePrompt_;
+}
+
+
+bool
+GDBCommand::invokeHandler(const GDBMI::ResultRecord& r)
+{
+    if (handler_this) {
+        (handler_this->*handler_method)(r);
+        return true;
+    }
+    else {
+        return false;
     }
 }
+
+void GDBCommand::newOutput(const QString& line)
+{
+    lines.push_back(line);
+}
+
+const QValueVector<QString>& GDBCommand::allStreamOutput() const
+{
+    return lines;
+}
+
+bool GDBCommand::handlesError() const
+{
+    return handlesError_;
+}
+
 
 /***************************************************************************/
 
@@ -42,57 +63,44 @@ GDBCommand::~GDBCommand()
 {
 }
 
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
 
-GDBItemCommand::GDBItemCommand( ValueCallback* callback,
-                                const QCString &command,
-                                bool isRunCmd,
-                                char prompt)
-    : GDBCommand(command, isRunCmd, true, prompt),
-      item_(callback)
+ModifyBreakpointCommand::ModifyBreakpointCommand(
+    const QString& command, const Breakpoint* bp)
+: GDBCommand(command.local8Bit(), false, false),
+  bp_(bp)
+{}
+
+QString
+ModifyBreakpointCommand::cmdToSend()
 {
+    if (bp_->dbgId() > 0)
+    {
+        QString s(rawDbgCommand());
+        s = s.arg(bp_->dbgId()) + "\n";
+        return s.local8Bit();
+    }
+    else
+    {
+        // The ID can be -1 either if breakpoint set command
+        // failed, or if breakpoint is somehow already deleted.
+        // In either case, should not do anything.
+        return "";
+    }
 }
 
-/***************************************************************************/
 
-GDBItemCommand::~GDBItemCommand()
+bool CliCommand::invokeHandler(const GDBMI::ResultRecord&)
 {
+    if (cli_handler_this) {
+        (cli_handler_this->*cli_handler_method)(allStreamOutput());
+        return true;
+    }
+    else {
+        return false;
+    }
+    
 }
 
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-
-//GDBReferenceCommand::GDBReferenceCommand(VarItem *item) :
-//  GDBItemCommand(item, "print "+item->fullName(), false,
-//                                                  DATAREQUEST)
-//{
-//}
-//
-///***************************************************************************/
-//
-//GDBReferenceCommand::~GDBReferenceCommand()
-//{
-//}
-//
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-
-GDBSetBreakpointCommand::GDBSetBreakpointCommand(const QCString &command, 
-                                                 const Breakpoint* bp)
-    : GDBCommand(command, false, false, SET_BREAKPT),
-      bp_(bp)
-{
-}
-
-/***************************************************************************/
-
-GDBSetBreakpointCommand::~GDBSetBreakpointCommand()
-{
-}
 
 /***************************************************************************/
 /***************************************************************************/

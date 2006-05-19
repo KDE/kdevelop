@@ -20,6 +20,10 @@
 #include <qpopupmenu.h>
 #include <qtable.h>
 #include <qguardedptr.h>
+#include <qvaluevector.h>
+
+#include "mi/gdbmi.h"
+#include "gdbcontroller.h"
 
 class QDomElement;
 class QToolButton;
@@ -35,19 +39,23 @@ namespace GDBDebugger
 class Breakpoint;
 class BreakpointTableRow;
 class GDBTable;
+class GDBController;
 
 class GDBBreakpointWidget : public QHBox
 {
     Q_OBJECT
 
 public:
-    GDBBreakpointWidget( QWidget* parent=0, const char* name=0 );
+    GDBBreakpointWidget( GDBController* controller,
+                         QWidget* parent=0, const char* name=0 );
     virtual ~GDBBreakpointWidget();
 
     void reset();
 
     void savePartialProjectSession(QDomElement* el);
     void restorePartialProjectSession(const QDomElement* el);
+
+    bool hasWatchpointForAddress(unsigned long long address) const;
 
 
 public slots:
@@ -58,16 +66,14 @@ public slots:
     // Connected to from the variable widget:
     void slotToggleWatchpoint(const QString &varName);
 
-    // Connected to from the dbgcontroller:
-    void slotSetPendingBPs();
-    void slotUnableToSetBPNow(int BPNo);
-    void slotParseGDBBrkptList(char *str);
-    void slotParseGDBBreakpointSet(char *str, int BPKey);
+    void slotBreakpointSet(Breakpoint*);
 
     void slotRefreshBP(const KURL &filename);
+
+    void slotBreakpointHit(int id);
+
     
 protected:
-    enum BW_ITEMS { BW_ITEM_Show, BW_ITEM_Edit, BW_ITEM_Disable, BW_ITEM_Delete };
     virtual void focusInEvent(QFocusEvent *e);
 
 
@@ -77,7 +83,6 @@ private slots:
     void slotRemoveAllBreakpoints();
     void slotEditBreakpoint(const QString &fileName, int lineNum);
     void slotEditBreakpoint();
-    void slotAddBreakpoint();
     void slotAddBlankBreakpoint(int idx);
     void slotRowDoubleClicked(int row, int col, int button, const QPoint & mousePos);
     void slotContextMenuShow( int row, int col, const QPoint &mousePos );
@@ -85,11 +90,19 @@ private slots:
     void slotEditRow(int row, int col, const QPoint & mousePos);
     void slotNewValue(int row, int col);
     void editTracing(QTableItem* item);
+    void slotBreakpointModified(Breakpoint*);
+
+    void slotEvent(GDBController::event_t);
+    void slotWatchpointHit(int id,
+                           const QString& oldValue,
+                           const QString& newValue);
 
 signals:
     void publishBPState(const Breakpoint& brkpt);
     void refreshBPState(const Breakpoint& brkpt);
     void gotoSourcePosition(const QString &fileName, int lineNum);
+    // Emitted when output from yet another passed tracepoint is available.
+    void tracingOutput(const char*);
 
 private:
     BreakpointTableRow* find(Breakpoint *bp);
@@ -100,13 +113,15 @@ private:
     BreakpointTableRow* addBreakpoint(Breakpoint *bp);
     void removeBreakpoint(BreakpointTableRow* btr);
 
-private:
-    GDBTable*       m_table;
+    void sendToGdb(Breakpoint &);
 
-    QToolButton*    m_add;
-    QToolButton*    m_delete;
-    QToolButton*    m_edit;
-    QToolButton*    m_removeAll;
+    void handleBreakpointList(const GDBMI::ResultRecord&);
+    void handleTracingPrintf(const QValueVector<QString>& s);
+
+private:
+    GDBController*  controller_;
+
+    GDBTable*       m_table;
     QPopupMenu*     m_ctxMenu;
 };
 

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>DebuggerConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -85,7 +85,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Directory where &amp;gdb resides (e.g. /usr/bin/):</string>
+                <string>Debugger executable:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>gdbPath_edit</cstring>
@@ -118,12 +118,10 @@
                 <cstring>gdbPath_edit</cstring>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Path to gdb</string>
+                <string>Gdb executable</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>If gdb is installed in a standard location, you don't have to insert anything here.
-If gdb is not reachable via $PATH or if you need a special gdb (e.g. for remote  debugging on a different architecture)  insert the path to the corresponding gdb here.
-Note that its name has to be gdb, so you might have to create a symlink named gdb which points to your specific gdb, e.g. arm-elf-gdb.</string>
+                <string>To run "gdb" binary from $PATH, leave this field empty. To run custom gdb, for example, for a different architecture, enter the executable name here. You can either run gdb from $PATH, but with a different name (say, "arm-gdb"), by typing the name here, or specify full path to the gdb executable.</string>
             </property>
         </widget>
         <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="3">

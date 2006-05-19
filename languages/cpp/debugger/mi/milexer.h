@@ -58,11 +58,7 @@ struct TokenStream
     inline QCString currentTokenText() const
     { return tokenText(-1); }
 
-    inline QCString tokenText(int index = 0) const
-    {
-        Token *t = index < 0 ? m_currentToken : m_firstToken + index;
-        return m_contents.mid(t->position, t->length);
-    }
+    QCString tokenText(int index = 0) const;
 
     inline int lineOffset(int line) const
     { return m_lines.at(line); }
@@ -129,6 +125,8 @@ private:
 
     QCString m_contents;
     int m_ptr;
+    // Cached 'm_contents.length()'
+    int m_length;
 
     QMemArray<int> m_lines;
     int m_line;

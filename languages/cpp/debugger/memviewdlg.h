@@ -16,7 +16,7 @@
 #ifndef _MEMVIEW_H_
 #define _MEMVIEW_H_
 
-#include "callbacks.h"
+#include "mi/gdbmi.h"
 
 #include <kdialog.h>
 
@@ -29,12 +29,14 @@ class QToolBox;
 namespace GDBDebugger
 {
     class MemoryView;
+    class GDBController;
 
     class ViewerWidget : public QWidget
     {
         Q_OBJECT
     public:
-        ViewerWidget(QWidget* parent, const char* name);
+        ViewerWidget(GDBController* controller,
+                     QWidget* parent, const char* name);
 
     public slots:
         /** Adds a new memory view to *this, initially showing
@@ -46,48 +48,39 @@ namespace GDBDebugger
         void slotDebuggerState(const QString&, int state);
 
     signals:
-        /** Emitted to get specified region of memory. */
-        void getMemory(MemoryCallback* callback, const QString& start,
-                       const QString& amount);
-        void evaluateExpression(ValueCallback*, const QString&);
         void setValue(const QString& expression, const QString& value);
 
         void setViewShown(bool shown);
 
 
     private slots:
-        /* Handles request to get memory from child MemoryView. */
-        void slotGetMemory(const QString& start, const QString& amount);
-
         void slotChildCaptionChanged(const QString& caption);
         void slotChildDestroyed(QObject* child);
      
     private: // Data
+        GDBController* controller_;
         QToolBox* toolBox_;
         QValueVector<MemoryView*> memoryViews_;
     };
 
-    class MemoryView : public QWidget,
-                       public MemoryCallback,
-                       public ValueCallback
+    class MemoryView : public QWidget
     {
         Q_OBJECT
     public:
-        MemoryView(QWidget* parent, const char* name = 0);
+        MemoryView(GDBController* controller, 
+                   QWidget* parent, const char* name = 0);
 
         void debuggerStateChanged(int state);
 
     signals:
-        void getMemory(const QString& start, const QString& amount);
-        void evaluateExpression(ValueCallback*, const QString&);
         void setValue(const QString& expression, const QString& value);
      
         void captionChanged(const QString& caption);
 
     private: // Callbacks
-        void memoryContentAvailable(unsigned start, unsigned amount,
-                                    char* data);
-        void updateValue(char* data);
+        void sizeComputed(const QString& value);
+
+        void memoryRead(const GDBMI::ResultRecord& r);
 
     private slots:
         void memoryEdited(int start, int end);
@@ -113,6 +106,7 @@ namespace GDBDebugger
         void initWidget();
 
     private:
+        GDBController* controller_;
         class MemoryRangeSelector* rangeSelector_;
         QWidget* khexedit2_widget;
         QWidget* khexedit2_real_widget;

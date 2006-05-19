@@ -24,30 +24,8 @@ namespace GDBDebugger
 class GDBParser
 {
 public:
-    /** Strips gdb decorations from value of a single variable
-        and sets text of 'item' appropriately.
-        For values of composite types also calls item->setCache.
-        Does not recurse into composite types and does not creates
-        child items of 'item' (that will be done in item->setOpen,
-        when that's method is called.
-
-        "Decorations" are {} around arrays and structures and value
-        type that is printed before value itself in some cases.
-    */
-    void parseValue(TrimmableItem *item, const char *buf);
-
-    /** Parses gdb-provided value 'buf' of a composite type
-        (struct/array), and assigns proper values to children
-        of 'parent'. As a special hack, the output from
-        "info locals" and "info args" can be passed to this
-        method, as the output looks like just value of some
-        imaginary 'struct local_variables'.
-        The value should contain all the decorations from gdb
-        (opening braces of arrays, and so on).
-    */
-    void parseCompositeValue(TrimmableItem* parent, const char* buf);
-
     DataType  determineType(const char *buf) const;
+    QString undecorateValue(const QString& s);
 
     const char *skipString(const char *buf) const;
     const char *skipQuotes(const char *buf, char quote) const;
@@ -57,9 +35,6 @@ public:
     static void destroy();
 
 private:
-    TrimmableItem *getItem(TrimmableItem *parent, DataType itemType,
-                           const QString &varName, bool requested);
-
     void parseArray(TrimmableItem *parent, const char *buf);
 
     const char *skipTokenEnd(const char *buf) const;
@@ -70,10 +45,8 @@ private:
     /** Assuming 'buf' points to a value, return a pointer
         to the position right after the value.
     */
-    QCString getValue(const char **buf);
-    QCString undecorateValue(DataType type, const QCString& s);
-    void setItem(TrimmableItem *parent, const QString &varName, DataType dataType,
-                 const QCString &value, bool requested);
+    QString getValue(const char **buf);
+    QString undecorateValue(DataType type, const QString& s);
 
 protected:
     GDBParser();

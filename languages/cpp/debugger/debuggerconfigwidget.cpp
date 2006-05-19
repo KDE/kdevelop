@@ -33,7 +33,7 @@ DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, 
     QFontMetrics fm(programArgs_edit->fontMetrics());
     programArgs_edit->setMinimumWidth(fm.width('X')*30);
 
-    gdbPath_edit->setMode(KFile::Directory);
+    gdbPath_edit->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
 
     programArgs_edit->setText(  DomUtil::readEntry(dom, "/kdevdebugger/general/programargs"));
     gdbPath_edit->setURL(      DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath"));

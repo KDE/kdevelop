@@ -416,7 +416,7 @@ void DbgToolBar::slotPrevFocus()
 // kdev button is highlighted.
 void DbgToolBar::slotDbgStatus(const QString&, int state)
 {
-    bool appIndicator = state & s_appBusy;
+    bool appIndicator = state & s_dbgBusy;
     if (appIndicator != appIsActive_) {
         setAppIndicator(appIndicator);
         appIsActive_ = appIndicator;

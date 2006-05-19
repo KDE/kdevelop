@@ -18,6 +18,7 @@
 #include "kdevplugin.h"
 #include "kdevcore.h"
 
+#include "gdbcontroller.h"
 #include "debuggerdcopinterface.h"
 
 namespace KParts { class Part; }
@@ -37,7 +38,7 @@ class GDBBreakpointWidget;
 class FramestackWidget;
 class DisassembleWidget;
 class Breakpoint;
-class DbgController;
+class GDBController;
 class DbgToolBar;
 class VariableWidget;
 class GDBOutputWidget;
@@ -55,6 +56,7 @@ public:
 
 k_dcop:
     virtual ASYNC slotDebugExternalProcess();
+    virtual ASYNC slotDebugCommandLine(const QString& command);
 
 private slots:
     void setupDcop();
@@ -91,6 +93,7 @@ private slots:
     void slotMemoryView();
 
     void slotRefreshBPState(const Breakpoint&);
+
     void slotStatus(const QString &msg, int state);
     void slotShowStep(const QString &fileName, int lineNum);
     void slotGotoSource(const QString &fileName, int lineNum);
@@ -109,6 +112,8 @@ private slots:
 
     void slotProjectCompiled();
 
+    void slotEvent(GDBController::event_t);
+
 private:
     KDevAppFrontend *appFrontend();
     KDevDebugger *debugger();
@@ -124,7 +129,7 @@ private:
     QGuardedPtr<DisassembleWidget> disassembleWidget;
     QGuardedPtr<GDBOutputWidget> gdbOutputWidget;
     QGuardedPtr<ViewerWidget> viewerWidget;
-    DbgController *controller;
+    GDBController *controller;
     QGuardedPtr<QLabel> statusBarIndicator;
     QGuardedPtr<DbgToolBar> floatingToolBar;
     ProcessLineMaker* procLineMaker;
@@ -151,6 +156,9 @@ private:
     // 'some files were modified' cases, when presenting 'rebuild project'
     // dialog to the user.
     bool justOpened_;
+
+    // Set by 'startDebugger' and cleared by 'slotStopDebugger'.
+    bool running_;
 
 signals:
     void buildProject();
