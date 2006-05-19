@@ -46,11 +46,14 @@ public slots:
   virtual void slotExecuted(QListBoxItem*);//itemList executed, returnPressed
   virtual void executed(QListBoxItem*);	//
   virtual void slotReturnPressed();			//buttonOk clicked, nameEdit returnPressed
+  virtual void slotTextChanged(const QString & text);
 
 protected:
-	FunctionDefinitionList *m_functionDefList;
-	QStringList *m_functionStrList;
-	FunctionDefinitionList *funcList;
+    void fillFunctions();
+    int spaces;
+    FunctionDefinitionList *m_functionDefList;
+    QStringList *m_functionStrList;
+    FunctionDefinitionList *funcList;
 	
 };
 

@@ -25,6 +25,7 @@
 #include <kcompletion.h>
 
 #include "quickopendialog.h"
+#include "quickopen_part.h"
 
 QuickOpenDialog::QuickOpenDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
     : QuickOpenDialogBase( parent, name, modal, fl ), m_part( part )
@@ -83,6 +84,11 @@ bool QuickOpenDialog::eventFilter( QObject * watched, QEvent * e )
     }
 
     return QWidget::eventFilter(watched, e);    
+}
+
+void QuickOpenDialog::selectClassViewItem(ItemDom item)
+{
+    m_part->selectItem( item );
 }
 
 #include "quickopendialog.moc"

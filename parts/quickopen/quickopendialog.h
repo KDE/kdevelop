@@ -21,6 +21,7 @@
 #ifndef QUICKOPENDIALOG_H
 #define QUICKOPENDIALOG_H
 
+#include<lib/interfaces/codemodel.h>
 #include "quickopenbase.h"
 
 class QuickOpenPart;
@@ -35,6 +36,8 @@ public:
   virtual ~QuickOpenDialog();
 
   virtual bool eventFilter(QObject *watched, QEvent *e);
+  
+  void selectClassViewItem(ItemDom item); 
   
 public slots:
   virtual void slotTextChanged(const QString&);

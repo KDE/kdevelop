@@ -23,6 +23,7 @@
 
 #include <qguardedptr.h>
 #include <kdevplugin.h>
+#include <codemodel.h>
 
 class KAction;
 
@@ -33,6 +34,8 @@ public:
     QuickOpenPart(QObject *parent, const char *name, const QStringList &);
     virtual ~QuickOpenPart();
 
+    void selectItem( ItemDom item );
+    
 private slots:
     void slotProjectOpened();
     void slotProjectClosed();

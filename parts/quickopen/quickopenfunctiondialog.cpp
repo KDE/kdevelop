@@ -37,8 +37,20 @@
 #include "quickopenfunctionchooseform.h"
 #include "quickopenfunctiondialog.h"
 
+
+void QuickOpenFunctionDialog::fillFunctions() {
+    m_functionStrList->clear();
+    for( FunctionDefinitionList::ConstIterator it = m_functionDefList->begin() ; it!=m_functionDefList->end(); ++it ){
+        const FunctionDefinitionModel *fmodel = (*it).data();
+        m_functionStrList->append( fmodel->name() );
+    }
+    m_completion->setItems( *m_functionStrList );
+    itemList->clear();
+    itemList->insertStringList( m_completion->items() );
+}
+
 QuickOpenFunctionDialog::QuickOpenFunctionDialog( QuickOpenPart *part, QWidget* parent, const char* name, bool modal, WFlags fl)
-: QuickOpenDialog(part, parent, name, modal, fl)
+: QuickOpenDialog(part, parent, name, modal, fl), spaces(0)
 {
         nameLabel->setText( i18n("Function &name:") );
         itemListLabel->setText( i18n("Function &list:") );
@@ -53,16 +65,12 @@ QuickOpenFunctionDialog::QuickOpenFunctionDialog( QuickOpenPart *part, QWidget* 
                 fileDom = *it;
                 *m_functionDefList += CodeModelUtils::allFunctionDefinitionsDetailed( fileDom ).functionList;
         }
-        for( FunctionDefinitionList::ConstIterator it = m_functionDefList->begin() ; it!=m_functionDefList->end(); ++it ){
-                const FunctionDefinitionModel *fmodel = (*it).data();
-                m_functionStrList->append( fmodel->name() );
-        }
         m_completion = new KCompletion();
         //m_functionStrList->sort();
         m_completion->setOrder( KCompletion::Sorted );
-        m_completion->setItems( *m_functionStrList );
+        
+        fillFunctions();
 
-        itemList->insertStringList( m_completion->items() );
         itemList->setCurrentItem( 0 );
 }
 
@@ -97,6 +105,7 @@ void QuickOpenFunctionDialog::gotoFile( QString name )
                 int startline, startcol;
                 fmodel->getStartPosition( &startline, &startcol );
                 m_part->partController()->editDocument( KURL( fileNameStr), startline, startcol );
+                selectClassViewItem( ItemDom(&(*fmodel)) );
 
         }else if( funcList->count() > 1 ){
                 QString fileStr;
@@ -106,9 +115,10 @@ void QuickOpenFunctionDialog::gotoFile( QString name )
                 for( FunctionDefinitionList::Iterator it = funcList->begin() ; it!=funcList->end() ; ++it ){
                         fmodel = (*it).data();
 
-                        fdlg.argBox->insertItem( m_part->languageSupport()->formatModelItem(fmodel) );
+                        fdlg.argBox->insertItem( m_part->languageSupport()->formatModelItem(fmodel) + 
+                                (fmodel->scope().isEmpty() ? "" : "   (in " + fmodel->scope().join("::") + ")"));
                         fileStr = KURL( fmodel->fileName() ).fileName();
-                        fdlg.fileBox->insertItem( fileStr );
+                        fdlg.fileBox->insertItem( fileStr);
                 }
                 if( fdlg.exec() ){
                         int id = fdlg.argBox->currentItem();
@@ -116,6 +126,7 @@ void QuickOpenFunctionDialog::gotoFile( QString name )
                                 FunctionDefinitionModel *model = (*funcList)[id].data();
                                 int line, col;
                                 model->getStartPosition( &line, &col );
+                                selectClassViewItem( ItemDom(&(*model)) );
                                 QString fileNameStr = model->fileName();
                                 m_part->partController()->editDocument( KURL(fileNameStr), line );
                         }
@@ -127,15 +138,71 @@ void QuickOpenFunctionDialog::gotoFile( QString name )
 
         accept();
 }
+
 void QuickOpenFunctionDialog::slotExecuted(QListBoxItem* item)
 {
         if( item ){
                 gotoFile( item->text() );
         }
 }
+
 void QuickOpenFunctionDialog::executed(QListBoxItem*)
 {
 }
+
+void QuickOpenFunctionDialog::slotTextChanged(const QString & text) {
+    QString txt = text;
+    //if(text.contains(':')/2 != 0) {
+        QStringList parts = QStringList::split("::", text);
+        if(text.endsWith("::") || parts.isEmpty()) {
+            txt = "";
+        }else{
+            txt = parts.back();
+            parts.pop_back();
+        }
+        
+        if(text.contains(':')/2 != spaces) {
+            if(text.contains(':')/2 < spaces) { ///reload all function-definitions
+                m_functionDefList->clear();
+                FileList fileList = m_part->codeModel()->fileList();
+                FileDom fileDom;
+                for( FileList::Iterator it = fileList.begin() ; it!=fileList.end() ; ++it ){
+                    fileDom = *it;
+                    *m_functionDefList += CodeModelUtils::allFunctionDefinitionsDetailed( fileDom ).functionList;
+                }
+            }
+            
+            if(!parts.isEmpty()) {
+                FunctionDefinitionList accepted;
+                FunctionDefinitionList::iterator it = m_functionDefList->begin();
+                while(it != m_functionDefList->end()) {
+                    QStringList scope = (*it)->scope();
+                    QStringList::iterator mit = parts.begin();
+                    QStringList::iterator sit = scope.begin();
+                    bool fail = false;
+                    while(mit != parts.end()) {
+                        while(sit != scope.end() && *sit != *mit) ++sit;
+                        if(sit == scope.end()) {
+                            fail = true;
+                            break;
+                        }
+                        ++mit;
+                    }
+                    if(!fail) accepted.append(*it);
+                    ++it;
+                }
+                *m_functionDefList = accepted;
+            }
+            
+            fillFunctions();
+            
+            spaces = text.contains(':')/2;
+        }
+    //}
+    
+    QuickOpenDialog::slotTextChanged(txt);
+}
+
 
 void QuickOpenFunctionDialog::slotReturnPressed()
 {

@@ -42,6 +42,8 @@
 #include <kdevcore.h>
 #include <kdevpartcontroller.h>
 #include <kdevproject.h>
+#include <lib/interfaces/extensions/codebrowserfrontend.h>
+
 
 typedef KDevGenericFactory<QuickOpenPart> QuickOpenFactory;
 static const KDevPluginInfo data("kdevquickopen");
@@ -145,5 +147,18 @@ QString QuickOpenPart::getWordInEditor()
     }
     return wordstr;
 }
+
+void QuickOpenPart::selectItem( ItemDom item )
+{
+    Extensions::KDevCodeBrowserFrontend* f = extension< Extensions::KDevCodeBrowserFrontend > ( "KDevelop/CodeBrowserFrontend" );
+    
+    if(f != 0) {
+        ItemDom itemDom( &(*item) );
+        f->jumpedToItem( itemDom );
+    } else {
+        kdDebug() << "could not find the proper extension\n";
+    }
+}
+
 
 #include "quickopen_part.moc"
