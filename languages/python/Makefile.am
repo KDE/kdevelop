@@ -22,7 +22,7 @@ kio_pydoc_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 METASOURCES = AUTO
 
 slavedir = $(kde_datadir)/kio_pydoc
-slave_DATA = kde_pydoc.py kde_inspect.py
+slave_DATA = kde_pydoc.py
 
 servicedir = $(kde_servicesdir)
 service_DATA = kdevpythonsupport.desktop pydoc.protocol
