@@ -98,8 +98,8 @@
 #include <domutil.h>
 #include <config.h>
 
-enum { KDEV_DB_VERSION = 6 };
-enum { KDEV_PCS_VERSION = 5 };
+enum { KDEV_DB_VERSION = 11 };
+enum { KDEV_PCS_VERSION = 8 };
 
 QStringList CppSupportPart::m_sourceMimeTypes = QStringList() << "text/x-csrc" << "text/x-c++src";
 QStringList CppSupportPart::m_headerMimeTypes = QStringList() << "text/x-chdr" << "text/x-c++hdr";
@@ -310,7 +310,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 			//QTimer::singleShot( 0, this, SLOT(recomputeCodeModel()) );
 		}
 		
-		emit fileParsed( fileName );
+		emitFileParsed( m_fileParsedEmitWaiting.processFile( fileName ) );
 	}
 }
 
@@ -428,6 +428,8 @@ void CppSupportPart::projectOpened( )
 	QDir::setCurrent( m_projectDirectory );
 	
 	m_timestamp.clear();
+	m_parseEmitWaiting.clear();
+	m_fileParsedEmitWaiting.clear();
 	
 	m_pCompletion = new CppCodeCompletion( this );
 	m_projectClosed = false;
@@ -465,6 +467,8 @@ void CppSupportPart::projectClosed( )
 	_jd = 0;
 	
 	delete m_pCompletion;
+	m_parseEmitWaiting.clear();
+	m_fileParsedEmitWaiting.clear();
 	m_pCompletion = 0;
 	m_projectClosed = true;
 }
@@ -530,14 +534,31 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 		kdDebug( 9007 ) << "======> code model has the file: " << m_activeFileName << " = " << codeModel() ->hasFile( m_activeFileName ) << endl;
 		
 		bool showContextMenuExplosion = false;
+		bool showContextTypeEvaluation = false;
 		KConfig *config = CppSupportFactory::instance() ->config();
 		if ( config )
 		{
 			config->setGroup( "General" );
 			showContextMenuExplosion = config->readBoolEntry( "ShowContextMenuExplosion", false );
+			config->setGroup( "General" );
+			showContextTypeEvaluation = config->readBoolEntry( "ShowContextTypeEvaluation", true );
 		}
 		
-		if ( showContextMenuExplosion && codeModel() ->hasFile( m_activeFileName ) )
+		
+		if( codeModel() ->hasFile( m_activeFileName ) ) {
+		
+		if( showContextTypeEvaluation && m_activeViewCursor != 0 ) {
+			if( codeCompletion() ) {
+				unsigned int curLine = 0, curCol = 0;
+				m_activeViewCursor->cursorPositionReal( &curLine, &curCol );
+			
+				codeCompletion()->contextEvaluationMenu( popup, context, curLine, curCol );
+				codeCompletion()->contextEvaluationClassViewMenu( popup, context, curLine, curCol );
+			}
+		}
+			
+			
+		if ( showContextMenuExplosion )
 		{
 			//kdDebug() << "CppSupportPart::contextMenu 1" << endl;
 			QString candidate;
@@ -626,6 +647,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 				
 			}
 		}
+		}
 
 		const EditorContext *econtext = static_cast<const EditorContext*>( context );
 		QString str = econtext->currentLine();
@@ -677,6 +699,18 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 }
 
 
+QStringList makeListUnique( const QStringList& rhs ) {
+	QMap<QString, bool> map;
+	QStringList ret;
+	for( QStringList::const_iterator it = rhs.begin(); it != rhs.end(); ++it ) {
+		if( map.find( *it ) == map.end() ) {
+			ret << *it;
+			map.insert( *it, true );
+		} 
+	}
+	return ret;
+}
+
 // Makes sure that header files come first
 QStringList CppSupportPart::reorder( const QStringList &list )
 {
@@ -694,7 +728,7 @@ QStringList CppSupportPart::reorder( const QStringList &list )
 			others << ( *it );
 	}
 	
-	return headers + others;
+	return makeListUnique( headers + others );
 }
 
 void CppSupportPart::addedFilesToProject( const QStringList &fileList )
@@ -1226,7 +1260,6 @@ void CppSupportPart::slotParseFiles()
 					}
 					else
 					{
-						kdDebug( 9007 ) << "newly parsing: " << absFilePath << endl;
 						m_driver->parseFile( absFilePath );
 					}
 					
@@ -1261,29 +1294,57 @@ void CppSupportPart::slotParseFiles()
 	}
 }
 
-void CppSupportPart::maybeParse( const QString& fileName )
+void CppSupportPart::maybeParse( const QString& fn )
 {
-	if ( !isValidSource( fileName ) )
+	if ( !isValidSource( fn ) )
 		return ;
 	
-	QFileInfo fileInfo( fileName );
-	QString path = URLUtil::canonicalPath( fileName );
-	QDateTime t = fileInfo.lastModified();
+	FileDom d = fileByName( fn );
 	
-	if ( !fileInfo.exists() )
-	{
-		removeWithReferences( path );
-		return ;
+	QStringList lst;
+	if( !d ) {
+		lst << fn;
+	}else{
+		lst = codeModel()->getGroupStrings( d->groupId() );
 	}
 	
-	QMap<QString, QDateTime>::Iterator it = m_timestamp.find( path );
-	if ( it != m_timestamp.end() && *it == t )
-	{
-		return ;
+	reorder( lst );
+	
+	bool reparse = false;
+	
+	for( QStringList::iterator it = lst.begin(); it != lst.end(); ++it ) {
+		QString& fileName = *it;
+		
+		QFileInfo fileInfo( fileName );
+		QString path = URLUtil::canonicalPath( fileName );
+		QDateTime t = fileInfo.lastModified();
+		
+		if ( !fileInfo.exists() )
+			continue ;
+		
+		QMap<QString, QDateTime>::Iterator it = m_timestamp.find( path );
+		if ( it != m_timestamp.end() && *it == t ) {
+			continue ;
+		}else{
+			reparse = true;
+			break;
+		}
 	}
 	
-	m_timestamp[ path ] = t;
-	m_driver->parseFile( path );
+	for( QStringList::iterator it = lst.begin(); it != lst.end(); ++it ) {
+		QString& fileName = *it;
+	
+		QFileInfo fileInfo( fileName );
+		QString path = URLUtil::canonicalPath( fileName );
+		
+		if ( !fileInfo.exists() ) {
+			removeWithReferences( path );
+			continue ;
+		}
+		
+		m_timestamp[ path ] = fileInfo.lastModified();
+		m_driver->parseFile( path );
+	}
 }
 
 void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
@@ -1868,6 +1929,46 @@ void CppSupportPart::gotoLine( int line )
 		m_activeViewCursor->setCursorPositionReal( line, 0 );
 }
 
+FileDom CppSupportPart::fileByName( const QString& name) {
+	return codeModel()->fileByName( name );
+}
+
+void CppSupportPart::parseFileAndDependencies( const QString & fileName ) {
+	if(! isValidSource( fileName ) ) return;
+	
+	FileDom d = fileByName( fileName );
+	
+	QStringList lst;
+	if( !d ) {
+		lst << fileName;
+	}else{
+		lst = codeModel()->getGroupStrings( d->groupId() );
+	}
+	 
+	lst = reorder(lst);
+	QString group = lst.join("\n");
+	kdDebug() << "reparsing dependencies of " << fileName << ":\n" << group << "\n";
+	
+	for(QStringList::iterator it = lst.begin(); it != lst.end(); ++it) {
+		if( isValidSource(*it) )
+			backgroundParser()->addFile(*it, false);
+	}
+	if( !lst.isEmpty() ) {
+		m_parseEmitWaiting.addGroup( lst );
+		m_fileParsedEmitWaiting.addGroup( lst );
+	}
+}
+
+void CppSupportPart::parseEmit( const QStringList& files ) {
+	
+	QStringList l = files;
+	
+	while(!l.isEmpty() ) {
+			emit addedSourceInfo( l.front() );
+		l.pop_front();
+	}
+}
+
 void CppSupportPart::recomputeCodeModel( const QString& fileName )
 {
 	if ( codeModel() ->hasFile( fileName ) )
@@ -1885,15 +1986,19 @@ void CppSupportPart::recomputeCodeModel( const QString& fileName )
 			StoreWalker walker( fileName, codeModel() );
 			walker.parseTranslationUnit( ast );
 			codeModel() ->addFile( walker.file() );
-			emit addedSourceInfo( fileName );
+			
+			parseEmit( m_parseEmitWaiting.processFile( fileName )  );
 		}
 	}
 	m_backgroundParser->unlock();
 }
 
-void CppSupportPart::emitFileParsed( )
+void CppSupportPart::emitFileParsed( QStringList l )
 {
-	emit fileParsed( m_activeFileName );
+	while( !l.isEmpty() ) {
+		emit fileParsed( l.front() );
+		l.pop_front();
+	}
 }
 
 bool CppSupportPart::isHeader( const QString& fileName ) const
@@ -1972,8 +2077,14 @@ FunctionDefinitionDom CppSupportPart::functionDefinitionAt( int line, int column
 	if ( !codeModel() ->hasFile( m_activeFileName ) )
 		return FunctionDefinitionDom();
 	
-	FileDom file = codeModel() ->fileByName( m_activeFileName );
-	return functionDefinitionAt( model_cast<NamespaceDom>( file ), line, column );
+	CodeModelUtils::CodeModelHelper h( codeModel(), codeModel()->fileByName( m_activeFileName ) );
+	
+	FunctionDom d = h.functionAt( line, column, CodeModelUtils::CodeModelHelper::Definition );
+	if( d ) {
+		FunctionDefinitionModel* m = dynamic_cast<FunctionDefinitionModel*>( d.data() );
+		if( m ) return FunctionDefinitionDom( m );
+	}
+	return FunctionDefinitionDom();
 }
 
 FunctionDefinitionDom CppSupportPart::currentFunctionDefinition( )
@@ -1984,76 +2095,6 @@ FunctionDefinitionDom CppSupportPart::currentFunctionDefinition( )
 	unsigned int line, column;
 	this->m_activeViewCursor->cursorPositionReal( &line, &column );
 	return functionDefinitionAt( line, column );
-}
-
-FunctionDefinitionDom CppSupportPart::functionDefinitionAt( NamespaceDom ns, int line, int column )
-{
-	NamespaceList namespaceList = ns->namespaceList();
-	for ( NamespaceList::Iterator it = namespaceList.begin();
-	      it != namespaceList.end(); ++it )
-	{
-		if ( FunctionDefinitionDom def = functionDefinitionAt( *it, line, column ) )
-			return def;
-	}
-	
-	ClassList classList = ns->classList();
-	for ( ClassList::Iterator it = classList.begin();
-	      it != classList.end(); ++it )
-	{
-		if ( FunctionDefinitionDom def = functionDefinitionAt( *it, line, column ) )
-			return def;
-	}
-	
-	FunctionDefinitionList functionDefinitionList = ns->functionDefinitionList();
-	for ( FunctionDefinitionList::Iterator it = functionDefinitionList.begin();
-	      it != functionDefinitionList.end(); ++it )
-	{
-		if ( FunctionDefinitionDom def = functionDefinitionAt( *it, line, column ) )
-			return def;
-	}
-	
-	return FunctionDefinitionDom();
-}
-
-FunctionDefinitionDom CppSupportPart::functionDefinitionAt( ClassDom klass, int line, int column )
-{
-	ClassList classList = klass->classList();
-	for ( ClassList::Iterator it = classList.begin();
-	      it != classList.end(); ++it )
-	{
-		if ( FunctionDefinitionDom def = functionDefinitionAt( *it, line, column ) )
-			return def;
-	}
-	
-	FunctionDefinitionList functionDefinitionList = klass->functionDefinitionList();
-	for ( FunctionDefinitionList::Iterator it = functionDefinitionList.begin();
-	      it != functionDefinitionList.end(); ++it )
-	{
-		if ( FunctionDefinitionDom def = functionDefinitionAt( *it, line, column ) )
-			return def;
-	}
-	
-	return FunctionDefinitionDom();
-}
-
-FunctionDefinitionDom CppSupportPart::functionDefinitionAt( FunctionDefinitionDom fun, int line, int column )
-{
-	int startLine, startColumn;
-	int endLine, endColumn;
-	
-	fun->getStartPosition( &startLine, &startColumn );
-	fun->getEndPosition( &endLine, &endColumn );
-	
-	if ( ! ( line >= startLine && line <= endLine ) )
-		return FunctionDefinitionDom();
-	
-	if ( line == startLine && column < startColumn )
-		return FunctionDefinitionDom();
-	
-	if ( line == endLine && column > endColumn )
-		return FunctionDefinitionDom();
-	
-	return fun;
 }
 
 void CppSupportPart::slotCursorPositionChanged()
@@ -2210,7 +2251,9 @@ ClassDom CppSupportPart::currentClass( ) const
 	unsigned int curLine, curCol;
 	m_activeViewCursor->cursorPosition( &curLine, &curCol );
 
-	return CodeModelUtils::findClassByPosition( file, curLine, curCol );
+	CodeModelUtils::CodeModelHelper h( codeModel(), file );
+	
+	return h.classAt( curLine, curCol );
 }
 
 VariableDom CppSupportPart::currentAttribute( ClassDom curClass ) const

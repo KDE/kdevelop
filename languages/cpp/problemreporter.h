@@ -21,6 +21,7 @@
 
 #include <klistview.h>
 #include <qguardedptr.h>
+#include <qdatetime.h>
 
 class CppSupportPart;
 class QTimer;
@@ -94,6 +95,7 @@ private:
 	QGuardedPtr<KTextEditor::Document> m_document;
 	KTextEditor::MarkInterface* m_markIface;
 	QTimer* m_timer;
+    QTime m_timeout;
 	QString m_fileName;
 	int m_active;
 	int m_delay;

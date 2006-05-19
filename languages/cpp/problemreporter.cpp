@@ -327,10 +327,22 @@ void ProblemReporter::reparse()
 
 	if( m_canParseFile )
 	{
-		m_cppSupport->backgroundParser()->addFile( m_fileName );
+		m_cppSupport->parseFileAndDependencies( m_fileName );
 		m_canParseFile = false;
 		kdDebug(9007) << "---> file added" << endl;
-	}
+    }else{
+        if(m_timeout.isNull()) {
+            m_timeout = QTime::currentTime();
+            kdDebug(9007) << "cannot parse, parser seems to be busy" << endl;
+        }
+        if(m_timeout.msecsTo(QTime::currentTime()) > 200) {
+            kdDebug(9007) << "parsing was reset" << endl;
+            m_timeout = QTime();
+            m_canParseFile = true;
+        }else{
+            m_timer->changeInterval( m_delay );
+        }
+    }
 }
 
 void ProblemReporter::initCurrentList()

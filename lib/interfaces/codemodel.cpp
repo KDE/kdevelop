@@ -20,13 +20,252 @@
 #include "codemodel.h"
 #include <kdebug.h>
 
+
 CodeModel::CodeModel()
 {
     wipeout();
+    m_currentGroupId = 1;   ///0 stands for invalid group
 }
 
 CodeModel::~ CodeModel( )
 {
+}
+
+
+int CodeModel::newGroupId() {
+    return (m_currentGroupId++) * 2;
+}
+
+inline bool isSingleGroup( const int group ) {
+    return (group % 2) == 0;
+}
+
+QStringList CodeModel::getGroupStrings(int gid) const {
+    QStringList ret;
+    for(QMap<QString, FileDom>::ConstIterator it = m_files.begin(); it != m_files.end(); ++it) {
+        if((*it)->groupId() == gid) ret.append( (*it)-> name() );
+    }
+    return ret;
+}
+
+
+FileList CodeModel::getGroup(int gid) const {
+    FileList ret;
+    for(QMap<QString, FileDom>::ConstIterator it = m_files.begin(); it != m_files.end(); ++it) {
+        if((*it)->groupId() == gid) ret.append(*it);
+    }
+    return ret;
+}
+
+FileList CodeModel::getGroup( const FileDom& dom) const {
+    return getGroup( dom->groupId() );
+}
+
+int CodeModel::mergeGroups( int g1, int g2) {
+    if( !g1 || !g2 ) return 0;
+    if( g1 == g2 ) return g1;
+    int ng = isSingleGroup( g1 ) ? g2 : g1;
+    if( isSingleGroup( ng ) )
+        ng = newGroupId() + 1;
+    
+    for( QMap<QString, FileDom>::iterator it = m_files.begin(); it != m_files.end(); ++it ) {
+        if( (*it)->groupId() == g2 || (*it)->groupId() == g1 ) (*it)->setGroupId( ng );
+    }
+    return ng;
+}
+
+template<class Type> static void dumpMap( std::ostream& file, QMap<QString, Type>& map ) {
+    typename QMap<QString, Type>::Iterator it = map.begin();
+    for( ; it != map.end(); ++it) {
+        typename Type::Iterator it2 = (*it).begin();
+        for( ; it2 != (*it).end(); ++it2) {
+            (*it2) -> dump( file, true );
+        }
+    }
+}
+
+template<class Type> static void dumpMapDirect( std::ostream& file, QMap<QString, Type>& map ) {
+    typename QMap<QString, Type>::Iterator it = map.begin();
+    for( ; it != map.end(); ++it) {
+        (*it) -> dump( file, true );
+    }
+}
+
+void CodeModelItem::dump( std::ostream& file, bool recurse, QString Info ) 
+{
+    ostringstream str( ostringstream::out );
+    
+    str << "name: " << name().ascii() << "\n";
+    str << "kind: " << m_kind << "  ";
+    
+    if( isFile() ) str << "isFile ";
+    if( isNamespace() ) str << "isNamespace ";
+    if( isClass() ) str << "isClass ";
+    if( isFunction() ) str << "isFunction ";
+    if( isFunctionDefinition() ) str << "isFunctionDefinition ";
+    if( isVariable() ) str << "isVariable ";
+    if( isArgument() ) str << "isArgument ";
+    if( isEnum() ) str << "isEnum ";
+    if( isEnumerator() ) str << "isEnumerator ";
+    if( isTypeAlias() ) str << "isTypeAlias ";
+    if( isCustom() ) str << "isCustom ";
+    str << "\n";
+    str << "File: " << fileName().ascii() << " ";
+    int line, col;
+    getStartPosition( &line, &col );
+    str << "s:(" << line << ", " << col << ") ";
+    getEndPosition( &line, &col );
+    str << "e:(" << line << ", " << col << ")\n";
+    
+    
+    Info.prepend( str.str().c_str() );
+    
+    file << Info.ascii() << "\n";
+    if(recurse) {} ///just to get rid of the warning
+}
+
+void ClassModel::dump( std::ostream& file, bool recurse, QString Info ) 
+{
+    ostringstream str( ostringstream::out );
+    
+    
+    str << "scope: " << m_scope.join("::").ascii() << "\n";
+    str << "bases: " << m_baseClassList.join(" ").ascii() << "\n";
+    
+    Info.prepend( str.str().c_str() );
+    
+    CodeModelItem::dump( file, false, Info );
+    
+    if( recurse ) {
+        dumpMap( file, m_classes );
+    }
+}
+
+void NamespaceModel::dump( std::ostream& file, bool recurse, QString Info ) 
+{
+    ostringstream str( ostringstream::out );
+
+    Info.prepend( str.str().c_str() );
+
+    ClassModel::dump( file, false, Info );
+
+    if( recurse ) {
+        dumpMapDirect( file, m_namespaces );
+    }
+}    
+
+void ArgumentModel::dump( std::ostream& file, bool recurse, QString Info ) 
+{
+    ostringstream str( ostringstream::out );
+
+    str << "type: " << m_type.ascii() << " default: " << m_defaultValue.ascii() << "\n";
+    
+    Info.prepend( str.str().c_str() );
+
+    CodeModelItem::dump( file, false, Info );
+    
+    if(recurse) {} ///just to get rid of the warning
+}
+
+void FunctionModel::dump( std::ostream& file, bool recurse, QString Info ) 
+{
+    ostringstream str( ostringstream::out );
+
+    str << "access: " << m_access;
+        
+    str << " scope: " << m_scope.join("::").ascii() << "\n";
+        
+    if(isAbstract()) str << "isAbstract ";
+    if(isConstant()) str << "isConstant ";
+    if(isFunction()) str << "isFunction ";
+    if(isInline()) str << "isInline ";
+    if(isSignal()) str << "isSignal ";
+    if(isSlot()) str << "isSlot ";
+    if(isStatic()) str << "isStatic ";
+    if(isVirtual()) str << "isVirtual ";
+        
+    str << "\n";
+    str << "result-type: " << resultType().ascii() << "\n";
+        
+    Info.prepend( str.str().c_str() );
+
+    CodeModelItem::dump( file, false, Info );
+
+    if(recurse) {
+        for( ArgumentList::iterator it = m_arguments.begin(); it != m_arguments.end(); ++it) {
+            (*it) -> dump( file, true );
+        }
+    }
+}
+
+void VariableModel::dump( std::ostream& file, bool recurse, QString Info ) 
+{
+    ostringstream str( ostringstream::out );
+
+    str << "access: " << m_access << "type: " << m_type.ascii() << "\n";
+    
+    if(isStatic()) str << "isStatic ";
+
+    str << "\n";
+
+    Info.prepend( str.str().c_str() );
+
+    CodeModelItem::dump( file, false, Info );
+    
+    if(recurse) {} ///just to get rid of the warning
+}
+
+void CodeModel::dump( std::ostream& file, QString Info ) {
+    ostringstream str(ostringstream::out);
+            
+    Info.prepend( str.str().c_str() );
+    
+    file << Info.ascii() << "\n";
+    
+    QMap<QString, FileDom>::iterator it = m_files.begin();
+    for(; it != m_files.end(); ++it) {
+        (*it) -> dump( file, true );
+    }
+}
+
+void EnumModel::dump( std::ostream& file, bool recurse, QString Info ) 
+{
+    ostringstream str( ostringstream::out );
+
+    str << "access: " << m_access << "\n";
+    
+    Info.prepend( str.str().c_str() );
+
+    CodeModelItem::dump( file, false, Info );
+    
+    if( recurse ) {
+        dumpMapDirect( file, m_enumerators );
+    }
+}
+
+void EnumeratorModel::dump( std::ostream& file, bool recurse, QString Info ) 
+{
+    ostringstream str( ostringstream::out );
+
+    str << "value: " << m_value.ascii() << "\n";
+    
+    Info.prepend( str.str().c_str() );
+
+    CodeModelItem::dump( file, false, Info );
+    
+    if(recurse) {} ///just to get rid of the warning
+}
+
+void TypeAliasModel::dump( std::ostream& file, bool recurse, QString Info ) {
+    ostringstream str( ostringstream::out );
+
+    str << "type: " << m_type.ascii() << "\n";
+    
+    Info.prepend( str.str().c_str() );
+
+    CodeModelItem::dump( file, false, Info );
+    
+    if(recurse) {} ///just to get rid of the warning
 }
 
 void CodeModel::wipeout()
@@ -322,7 +561,7 @@ void NamespaceModel::removeNamespace( NamespaceDom ns )
 
 // ------------------------------------------------------------------------
 FileModel::FileModel( CodeModel* model )
-    : NamespaceModel( model)
+    : NamespaceModel( model ), m_groupId( model->newGroupId() )
 {
 }
 
@@ -860,7 +1099,14 @@ void CodeModelItem::read( QDataStream & stream )
 	>> m_startLine
 	>> m_startColumn
 	>> m_endLine
-	>> m_endColumn;
+	>> m_endColumn
+        >> m_comment;
+    
+    if( isTemplateable() ) {
+        TemplateModelItem* t = (TemplateModelItem*)( this );
+        
+        t->read( stream );
+    }
 }
 
 void CodeModelItem::write( QDataStream & stream ) const
@@ -872,7 +1118,13 @@ void CodeModelItem::write( QDataStream & stream ) const
 	<< m_startLine
 	<< m_startColumn
 	<< m_endLine
-	<< m_endColumn;
+	<< m_endColumn
+        << m_comment;
+    
+    if( isTemplateable() ) {
+        TemplateModelItem* t = (TemplateModelItem*)( this );
+        t-> write( stream );
+    }
 }
 
 void ClassModel::read( QDataStream & stream )
@@ -997,11 +1249,13 @@ void NamespaceModel::write( QDataStream & stream ) const
 
 void FileModel::read( QDataStream & stream )
 {
+    stream >> m_groupId;
     NamespaceModel::read( stream );
 }
 
 void FileModel::write( QDataStream & stream ) const
 {
+    stream << m_groupId;
     NamespaceModel::write( stream );
 }
 
@@ -1208,3 +1462,12 @@ void TypeAliasModel::setType( const QString & type )
     m_type = type;
 }
 
+FileList FileModel::wholeGroup() {
+    if( isSingleGroup( m_groupId ) ) return ( FileList() << FileDom(this) );
+    return codeModel()->getGroup( m_groupId );
+}
+
+QStringList FileModel::wholeGroupStrings() const {
+    if( isSingleGroup( m_groupId ) ) return (QStringList() << name() );
+    return codeModel()->getGroupStrings( m_groupId );
+}

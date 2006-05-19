@@ -18,6 +18,11 @@
 
 #include <ktexteditor/codecompletioninterface.h>
 
+struct TypeProcessor {
+    virtual QString processType( const QString& type ) = 0;
+    virtual QString parentType() = 0;
+};
+
 class KDevCodeRepository;
 
 class CodeInformationRepository
@@ -28,7 +33,7 @@ public:
 
 	static QValueList<KTextEditor::CompletionEntry> toEntryList( const QValueList<Tag>& tags,
 	        CppCodeCompletion::CompletionMode mode = CppCodeCompletion::NormalCompletion );
-	static KTextEditor::CompletionEntry toEntry( Tag& tag, CppCodeCompletion::CompletionMode mode = CppCodeCompletion::NormalCompletion );
+	static KTextEditor::CompletionEntry toEntry( Tag& tag, CppCodeCompletion::CompletionMode mode = CppCodeCompletion::NormalCompletion, TypeProcessor* proc = 0 );
 	QValueList<KTextEditor::CompletionEntry> getEntriesInScope( const QStringList& scope, bool isInstance, bool recompute = false );
 
 	QValueList<Tag> query( const QValueList<Catalog::QueryArgument>& args );

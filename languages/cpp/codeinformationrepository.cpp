@@ -48,7 +48,7 @@ CodeInformationRepository::~CodeInformationRepository()
 
 QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: QueryArgument> & args )
 {
-	kdDebug( 9007 ) << "CodeInformationRepository::query()" << endl;
+//	kdDebug( 9007 ) << "CodeInformationRepository::query()" << endl;
 
 	QValueList<Tag> tags;
 
@@ -151,7 +151,7 @@ QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesIn
 
 QValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& className )
 {
-	kdDebug( 9007 ) << "CodeInformationRepository::getBaseClassList()" << endl;
+//	kdDebug( 9007 ) << "CodeInformationRepository::getBaseClassList()" << endl;
 
 	if ( className.isEmpty() )
 		return QValueList<Tag>();
@@ -199,7 +199,7 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QString & name,
 	return tags;
 }
 
-KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag, CppCodeCompletion::CompletionMode completionMode )
+KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag, CppCodeCompletion::CompletionMode completionMode, TypeProcessor* proc )
 {
 	KTextEditor::CompletionEntry entry;
 
@@ -218,7 +218,7 @@ KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag, CppC
 		entry.text = tag.name();
 		break;
 
-	case Tag::Kind_Namespace:
+        case Tag::Kind_Namespace:
 		entry.prefix = "namespace";
 		entry.text = tag.name();
 		break;
@@ -250,19 +250,24 @@ KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag, CppC
 			QString signature;
 			for ( uint i = 0; i < arguments.size(); ++i )
 			{
-				signature += arguments[ i ];
-				if ( completionMode == CppCodeCompletion::NormalCompletion ||
-					 completionMode == CppCodeCompletion::VirtualDeclCompletion )
-				{
-					QString argName = argumentNames[ i ];
-					if ( !argName.isEmpty() )
-						signature += QString::fromLatin1( " " ) + argName;
-				}
-
-				if ( i != ( arguments.size() - 1 ) )
-				{
-					signature += ", ";
-				}
+                            if( !proc )
+                                signature += arguments[ i ];
+                            else
+                                signature += proc->processType( arguments[ i ] );
+                            
+                            if ( completionMode == CppCodeCompletion::NormalCompletion ||
+                                        completionMode == CppCodeCompletion::VirtualDeclCompletion )
+                            {
+                                    QString argName = argumentNames[ i ];
+                                    if ( !argName.isEmpty() ) 
+                                        signature += QString::fromLatin1( " " ) + argName;
+                                    
+                            }
+                            
+                            if ( i != ( arguments.size() - 1 ) )
+                            {
+                                    signature += ", ";
+                            }
 			}
 
 			if ( signature.isEmpty() )
@@ -301,7 +306,9 @@ KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag, CppC
 	default:
 		;
 	}
-
+        
+        entry.comment = tag.comment();
+        
 	return entry;
 }
 

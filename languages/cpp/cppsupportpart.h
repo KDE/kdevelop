@@ -28,6 +28,7 @@
 #include <qdatetime.h>
 #include <qdir.h>
 #include <qprogressbar.h>
+#include <kdebug.h>
 
 class Context;
 class CppCodeCompletion;
@@ -83,6 +84,9 @@ public:
 		return isValid() ? static_cast<ProblemReporter *>( m_problemReporter ) : 0;
 	}
 
+    /** parses the file and all files that belong to it using the background-parser */
+    void parseFileAndDependencies( const QString& fileName );
+    
     BackgroundParser* backgroundParser() const
 	{
 		return m_backgroundParser;
@@ -126,9 +130,7 @@ public:
 
 	FunctionDefinitionDom currentFunctionDefinition();
 	FunctionDefinitionDom functionDefinitionAt( int line, int column );
-	FunctionDefinitionDom functionDefinitionAt( NamespaceDom ns, int line, int column );
-	FunctionDefinitionDom functionDefinitionAt( ClassDom klass, int line, int column );
-	FunctionDefinitionDom functionDefinitionAt( FunctionDefinitionDom fun, int line, int column );
+
 
 	KTextEditor::Document* findDocument( const KURL& url );
 	static KConfig *config();
@@ -163,6 +165,8 @@ public:
 
 	void createAccessMethods( ClassDom theClass, VariableDom theVariable );
 
+    ///returns a reference that allows editing the dependencies
+    
 signals:
 	void fileParsed( const QString& fileName );
 
@@ -193,6 +197,7 @@ private slots:
     void codeCompletionConfigStored();
     void splitHeaderSourceConfigStored();
 	void recomputeCodeModel( const QString& fileName );
+    void parseEmit( const QStringList& files );
 	void slotNewClass();
 	void slotSwitchHeader( bool scrollOnly = false );
 	void slotGotoIncludeFile();
@@ -203,7 +208,7 @@ private slots:
 	void slotFunctionHint();
 	void gotoLine( int line );
 	void gotoDeclarationLine( int line );
-	void emitFileParsed();
+    void emitFileParsed( QStringList l );
 	void slotParseFiles();
 	void slotCreateSubclass();
 	void slotCreateAccessMethods();
@@ -257,6 +262,7 @@ private:
 	/**
 	 * checks if a file has to be parsed
 	 */
+    FileDom fileByName( const QString& name);
 	void maybeParse( const QString& fileName );
 	void removeWithReferences( const QString& fileName );
 	void createIgnorePCSFile();
@@ -316,6 +322,74 @@ private:
 	VariableDom m_activeVariable;
 
 	QTimer* m_functionHintTimer;
+    
+    class ParseEmitWaiting {
+    private:
+        typedef QPair<QStringList, QStringList> Item; ///The files we are waiting fore, and the files we already got
+        typedef QValueList< Item > List;
+        List m_waiting;
+        
+        ///Just return all files that have been parsed
+        QStringList errorRecover( QString currentFile ) {
+            QStringList ret;
+            kdDebug( 9007 ) << "ParseEmitWaiting: error in the waiting-chain" << endl;
+            for( List::iterator it = m_waiting.begin(); it != m_waiting.end(); ++it) {
+                ret += (*it).second;
+            }
+            if( !currentFile.isEmpty() ) ret << currentFile;
+            return ret;
+        }
+        
+        QStringList harvestUntil( List::iterator targIt ) {
+            List::iterator it = m_waiting.begin();
+            QStringList ret;
+            while( it != targIt && it != m_waiting.end() ) {
+                ret += (*it).first;
+                it = m_waiting.erase( it );
+            }
+            return ret;
+        }
+        
+    public:
+        void addGroup( QStringList& files ) {
+            m_waiting << Item(files, QStringList());
+        }
+        void clear() {
+            m_waiting.clear();
+        }
+        
+        ///returns the parsed-messages that should be emitted
+        QStringList processFile( QString file ) {
+            QStringList ret;
+            for( List::iterator it = m_waiting.begin(); it != m_waiting.end(); ++it) {
+                if( (*it).first.find( file ) !=  (*it).first.end() ) {
+                    if( (*it).second.find( file ) == (*it).second.end() ) {
+                        (*it).second << file;
+                        if( (*it).second.count() == (*it).first.count() ) {
+                            if( it != m_waiting.begin() ) {
+                                kdDebug( 9007 ) << "ParseEmitWaiting: the chain has multiple groups waiting, they are flushed" << endl;
+                            }
+                            return harvestUntil( ++it );
+                        } else {
+                            ///The file was registered, now wait for the next
+                            return QStringList();
+                        }
+                    } else {
+                        ///The file has already been parsed
+                    kdDebug( 9007 ) << "ParseEmitWaiting: file has been parsed twice" << endl;
+                        return errorRecover( file );
+                    }
+                }
+            }
+            
+            kdDebug( 9007 ) << "ParseEmitWaiting: file \"" << file << "\" has no group waiting for it" << endl;
+            ret << file;
+            return ret;
+        }
+    };
+    
+    ParseEmitWaiting m_parseEmitWaiting;
+    ParseEmitWaiting m_fileParsedEmitWaiting;
 
 	static QStringList m_sourceMimeTypes;
 	static QStringList m_headerMimeTypes;

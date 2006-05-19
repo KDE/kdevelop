@@ -46,6 +46,7 @@ void TagCreator::parseDeclaration( DeclarationAST* ast )
 {
 	if( ast->nodeType() == NodeType_AccessDeclaration ||
 	    m_currentAccess.isEmpty() ||
+	    m_currentAccess.contains("private")	||	///In order to correctly evaluate templates, the private members are necessary too
 	    m_currentAccess.contains("public") ||
 	    m_currentAccess.contains("protected") ||
 	    m_currentAccess.contains("signals") )
@@ -84,6 +85,8 @@ void TagCreator::parseNamespace( NamespaceAST* ast )
 	tag.setFileName( m_fileName );
 	tag.setName( nsName );
 	tag.setScope( m_currentScope );
+	if( !ast->comment().isEmpty() )
+		tag.setComment( ast->comment() );
 	
 	int line, col;
 	ast->getStartPosition( &line, &col );
@@ -162,6 +165,9 @@ void TagCreator::parseTypedef( TypedefAST* ast )
 			}
 			
 			Tag tag;
+			if( !ast->comment().isEmpty() )
+				tag.setComment( ast->comment() );
+			
 			tag.setKind( Tag::Kind_Typedef );
 			tag.setFileName( m_fileName );
 			tag.setName( id );
@@ -185,14 +191,22 @@ void TagCreator::parseTypedef( TypedefAST* ast )
 
 void TagCreator::parseTemplateDeclaration( TemplateDeclarationAST* ast )
 {
-	if( ast->declaration() )
+	m_currentTemplateDeclarator.push( ast );
+	if ( ast->declaration() )
 		parseDeclaration( ast->declaration() );
 	
+	
+	
 	TreeParser::parseTemplateDeclaration( ast );
+	
+	m_currentTemplateDeclarator.pop();
 }
+
 
 void TagCreator::parseSimpleDeclaration( SimpleDeclarationAST* ast )
 {
+	CommentPusher push( *this, ast->comment() );
+	
 	TypeSpecifierAST* typeSpec = ast->typeSpec();
 	InitDeclaratorListAST* declarators = ast->initDeclaratorList();
 	
@@ -266,12 +280,17 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	QString scopeStr = scopeOfDeclarator( d );
 	
 	Tag tag;
+	if( !comment() )
+		tag.setComment( ast->comment() );
+	
 	CppFunction<Tag> tagBuilder( tag );
 	tag.setKind( Tag::Kind_Function );
 	
 	tag.setFileName( m_fileName );
 	tag.setName( id );
 	tag.setScope( QStringList::split( ".", scopeStr ) );
+	if( !ast->comment().isEmpty() )
+		tag.setComment( ast->comment() );
 	
 	int line, col;
 	ast->getStartPosition( &line, &col );
@@ -283,6 +302,7 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	tagBuilder.setType( typeOfDeclaration( typeSpec, d ) );
 	
 	parseFunctionArguments( tag, d );
+	checkTemplateDeclarator( tag );
 	
 	QString arguments = tag.attribute( "a" ).toStringList().join( "," );
 tag.setAttribute( "description", m_documentation->functionDescription( scopeStr.replace( QRegExp( "." ), ":" ), id, typeOfDeclaration( typeSpec, d ), arguments ) );
@@ -318,6 +338,41 @@ void TagCreator::parseLinkageBody( LinkageBodyAST* ast )
 	}
 }
 
+void TagCreator::checkTemplateDeclarator( Tag& tag ) {
+	if( !m_currentTemplateDeclarator.empty() && m_currentTemplateDeclarator.top() != 0) {
+		TemplateDeclarationAST* a = m_currentTemplateDeclarator.top();
+		
+		m_currentTemplateDeclarator.pop();
+		m_currentTemplateDeclarator.push(0);
+		
+		///the template-declarator belongs to exactly this declaration
+		takeTemplateParams( tag, a );
+	}
+}
+
+
+void TagCreator::takeTemplateParams( Tag& target, TemplateDeclarationAST* ast) {
+	TemplateParameterListAST* pl = ast->templateParameterList();
+	if( pl ) {
+		QPtrList<TemplateParameterAST> list = pl->templateParameterList();
+		
+		TemplateParameterAST* curr = list.first();
+		while( curr != 0 ) {
+			QString a, b;
+			if( curr->typeParameter() ) {
+				if( curr->typeParameter()->name() )
+					a = curr->typeParameter()->name()->text();
+				if( curr->typeParameter()->typeId() ) 
+					b =  curr->typeParameter()->typeId()->text();
+			}
+			
+			target.addTemplateParam( a, b );
+			curr = list.next();
+		}
+	}
+}
+
+
 void TagCreator::parseClassSpecifier( ClassSpecifierAST* ast )
 {
 	int startLine, startColumn;
@@ -350,6 +405,9 @@ void TagCreator::parseClassSpecifier( ClassSpecifierAST* ast )
 	}
 	
 	Tag tag;
+	if( !ast->comment().isEmpty() )
+		tag.setComment( ast->comment() );
+	
 	tag.setKind( Tag::Kind_Class );
 	
 	tag.setFileName( m_fileName );
@@ -362,6 +420,10 @@ void TagCreator::parseClassSpecifier( ClassSpecifierAST* ast )
 	
 	ast->getEndPosition( &line, &col );
 	tag.setEndPosition( line, col );
+	
+	
+	checkTemplateDeclarator( tag );
+	
 	
 	m_catalog->addItem( tag );
 	
@@ -383,6 +445,9 @@ void TagCreator::parseClassSpecifier( ClassSpecifierAST* ast )
 void TagCreator::parseEnumSpecifier( EnumSpecifierAST* ast )
 {
 	Tag tag;
+	if( !ast->comment().isEmpty() )
+		tag.setComment( ast->comment() );
+	
 	tag.setKind( Tag::Kind_Enum );
 	
 	tag.setFileName( m_fileName );
@@ -478,6 +543,8 @@ void TagCreator::parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, T
 	tag.setFileName( m_fileName );
 	tag.setName( id );
 	tag.setScope( QStringList::split( ".", scopeStr ) );
+	if( !comment().isEmpty() )
+		tag.setComment( comment() );
 	
 	int line, col;
 	decl->getStartPosition( &line, &col );
@@ -581,7 +648,8 @@ void TagCreator::parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storageS
 	tagBuilder.setSlot( m_inSlots );
 
 	parseFunctionArguments( tag, d );
-
+	checkTemplateDeclarator( tag );
+	
 	QString arguments = tag.attribute( "a" ).toStringList().join( "," );
 	QString scopeStr = m_currentScope.join( "::" );
 	tag.setAttribute( "description", m_documentation->functionDescription( scopeStr, id, type, arguments ) );
@@ -672,7 +740,8 @@ void TagCreator::parseBaseClause( const QString& className, BaseClauseAST * base
 		}
 		
 		if ( baseSpecifier->name() ->unqualifiedName() && baseSpecifier->name() ->unqualifiedName() ->name() )
-			baseName += baseSpecifier->name() ->unqualifiedName() ->name() ->text();
+			baseName += baseSpecifier->name() ->text(); ///I changed this because I need the template-information. I hope it has no bad side-effects.
+			//baseSpecifier->name() ->unqualifiedName() ->name() ->text();
 		
 		Tag tag;
 		CppBaseClass<Tag> tagBuilder( tag );

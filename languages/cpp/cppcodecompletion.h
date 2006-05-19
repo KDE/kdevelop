@@ -28,6 +28,8 @@
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/codecompletioninterface.h>
+#include <ktexteditor/texthintinterface.h>
+#include <ktexteditor/cursorinterface.h>
 
 #include <qobject.h>
 #include <qstringlist.h>
@@ -35,14 +37,67 @@
 #include <qguardedptr.h>
 #include <qregexp.h>
 
+
+class CodeCompletionEntry;
 class CodeInformationRepository;
 class SimpleContext;
+class SimpleType;
 class CppCodeCompletionData;
+class ConfigureSimpleTypes;
+class TypeDesc;
+struct PopupFillerHelpStruct;
+struct PopupClassViewFillerHelpStruct;
+
+
+struct DeclarationInfo {
+    class File {
+        QString m_file;
+    public:
+    File( const QString& file = "" ) : m_file( file ) {
+    }
+        
+        operator QString() const {
+            return m_file;
+        }
+    };
+    
+DeclarationInfo() : startLine(0), startCol(0), endLine(0), endCol(0) {
+}
+    
+    operator bool() {
+        return !name.isEmpty();
+    }
+    
+    QString locationToText() const {
+    return QString("line %1 col %2 - line %3 col %4\nfile: %5").arg(startLine).arg(startCol).arg(endLine).arg(endCol).arg(file);
+    }
+    
+    QString toText() const {
+        if( name.isEmpty() ) return "";
+        
+        QString ret;
+        ret = QString("name: " + name + "\n" ) + locationToText();
+        if( !comment.isEmpty() ) {
+            ret += "\n\"" + comment + "\"";
+        }
+        return ret;
+    }
+    
+    int startLine, startCol;
+    int endLine, endCol;
+    
+    File file;
+    QString name;
+    QString comment;
+};
+
 
 class CppCodeCompletion : public QObject
 {
 	Q_OBJECT
 public:
+    struct ExpressionInfo;
+    friend class SimpleType;
 	enum CompletionMode
 	{
 	    NormalCompletion,
@@ -56,7 +111,8 @@ public:
 		DotOp,
 		ArrowOp
 	};
-	
+    struct EvaluationResult;
+    
 public:
 	CppCodeCompletion( CppSupportPart* part );
 	virtual ~CppCodeCompletion();
@@ -70,13 +126,20 @@ public:
 		return m_completionMode;
 	}
 
-	int expressionAt( const QString& text, int index );
+    QString replaceCppComments( const QString& contents );
+    int expressionAt( const QString& text, int index );
 	QStringList splitExpression( const QString& text );
-	QStringList typeOf( const QString& name, const QStringList& scope, MemberAccessOp accessOp );
-	QStringList evaluateExpression( QString expr, SimpleContext* ctx );
+	
+	EvaluationResult evaluateExpression( ExpressionInfo expr, SimpleContext* ctx );
 
-	static QStringList typeName( const QString& name );
+    static SimpleType typeName( QString name );
 
+    EvaluationResult evaluateExpressionAt( int line, int column, ConfigureSimpleTypes& conf );
+    
+    void contextEvaluationMenu ( QPopupMenu *popup, const Context *context, int line, int col );
+    
+    void contextEvaluationClassViewMenu ( QPopupMenu *popup, const Context *context, int line, int col );
+    
 public slots:
 	/**
 	 * @param invokedOnDemand if true and there is exactly one matching entry
@@ -95,38 +158,58 @@ private slots:
 	void slotFileParsed( const QString& fileName );
 	void slotTimeout();
 	void computeFileEntryList();
-
+    bool isTypeExpression( const QString& expr );
+	void slotTextHint( int line, int col, QString &text );
+    void popupAction( int number );
+    void popupClassViewAction( int number );
 private:
+    void selectItem( ItemDom item );
+    void addTypePopups( QPopupMenu* parent, TypeDesc d, QString depthAdd, QString prefix = "" );
+    void addTypeClassPopups( QPopupMenu* parent, TypeDesc d, QString depthAdd, QString prefix = "" );
+    QValueList<QStringList> computeSignatureList( SimpleType function );
 	void integratePart( KParts::Part* part );
 	void setupCodeInformationRepository();
 	FunctionDefinitionAST* functionDefinition( AST* node );
 	void computeRecoveryPoints();
 
-	QStringList evaluateExpressionInternal( QStringList& exprList, const QStringList& scope, SimpleContext* ctx = 0 );
+    enum EvaluateExpressionOptions {
+        IncludeStandardExpressions = 1,
+        IncludeTypeExpression = 2,
+        CompletionOption = 4, ///Cut off the last word because it is incomplete
+	    SearchInFunctions = 8,
+        SearchInClasses = 16,
+        DefaultEvaluationOptions = 1 | 2 | 8 | 16,
+        DefaultCompletionOptions = 1 | 4 | 8 | 16
+    };
+    
+    bool mayBeTypeTail( int line, int column, QString& append, bool inFunction = false );
+    bool canBeTypePrefix( const QString& prefix, bool inFunction = false );
+    
+
+    ExpressionInfo findExpressionAt( int line, int col, int startLine, int startCol, bool inFunction = false );
+    SimpleContext* computeFunctionContext( FunctionDom f, int line, int col );
+    
+    EvaluationResult evaluateExpressionType( int line, int column, ConfigureSimpleTypes& conf, EvaluateExpressionOptions opt = DefaultCompletionOptions  );
+    SimpleType unTypeDef( SimpleType scope , QMap<QString, QString>& typedefs );
+    
 	bool correctAccessOp( QStringList ptrList, MemberAccessOp accessOp );
+    bool correctAccessOpAccurate( QStringList ptrList, MemberAccessOp accessOp );    
 
-	QStringList typeOf( const QValueList<Tag>& tags, MemberAccessOp accessOp );
-	QStringList typeOf( const QString& name, ClassDom klass, MemberAccessOp accessOp );
-	QStringList typeOf( const QString& name, NamespaceDom scope, MemberAccessOp accessOp );
-	QStringList typeOf( const QString& name, const FunctionList& methods, MemberAccessOp accessOp );
-
+    QString buildSignature( SimpleType currType );
+    SimpleType typeOf( QValueList<Tag>& tags, MemberAccessOp accessOp );
+    
 	/// @todo remove isInstance
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, SimpleContext* ctx, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QStringList& type, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, QValueList<Tag>& tags, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, ClassDom klass, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, NamespaceDom scope, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const FunctionList& methods, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const VariableList& attributes, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const ClassList& lst, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const NamespaceList& lst, bool isInstance );
+	void computeCompletionEntryList( QValueList<CodeCompletionEntry>& entryList, SimpleContext* ctx, bool isInstance );
+    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const QStringList& type, bool isInstance );
+    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, QValueList<Tag>& tags, bool isInstance );
+    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, ClassDom klass, bool isInstance );
+    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, NamespaceDom scope, bool isInstance );
+    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const FunctionList& methods, bool isInstance );
+    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const VariableList& attributes, bool isInstance );
+    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const ClassList& lst, bool isInstance );
+    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const NamespaceList& lst, bool isInstance );
 
-	void computeSignatureList( QStringList& signatureList, const QString& name, const QStringList& type );
-	void computeSignatureList( QStringList& signatureList, const QString& name, ClassDom klass );
-	void computeSignatureList( QStringList& signatureList, const QString& name, const FunctionList& methods );
-	void computeSignatureList( QStringList& signatureList, const QString& name, QValueList<Tag>& tags );
-
-	SimpleContext* computeContext( FunctionDefinitionAST* ast, int line, int col );
+	SimpleContext* computeContext( FunctionDefinitionAST* ast, int line, int col, int lineOffset, int colOffset );
 	void computeContext( SimpleContext*& ctx, StatementAST* ast, int line, int col );
 	void computeContext( SimpleContext*& ctx, StatementListAST* ast, int line, int col );
 	void computeContext( SimpleContext*& ctx, IfStatementAST* ast, int line, int col );
@@ -142,12 +225,16 @@ private:
 	bool inContextScope( AST* ast, int line, int col, bool checkStart = true, bool checkEnd = true );
 
 	QString getText( int startLine, int startColumn, int endLine, int endColumn, int omitLine = -1 );
-
-	ClassDom findContainer( const QString& name, NamespaceDom container = 0, bool includeImports = false );
-	QString findClass( const QString& className );
-
+	
+    
 private:
-	QGuardedPtr<CppSupportPart> m_pSupport;
+    friend class SimpleTypeCatalog;
+    friend class SimpleTypeCodeModel;
+    friend class SimpleTypeImpl;
+    friend class ExpressionEvaluation;
+    friend class PopupFillerHelpStruct;
+    friend class PopupClassViewFillerHelpStruct;
+    QGuardedPtr<CppSupportPart> m_pSupport;
 	QTimer* m_ccTimer;
 	QString m_activeFileName;
 	KTextEditor::ViewCursorInterface* m_activeCursor;
@@ -170,7 +257,12 @@ private:
 	QRegExp m_cppCodeCommentsRx;
 	QRegExp m_codeCompleteChRx;
 	QRegExp m_codeCompleteCh2Rx;
-	QValueList<KTextEditor::CompletionEntry> m_fileEntryList;
+    QValueList<KTextEditor::CompletionEntry> m_fileEntryList;
+    
+    typedef QMap<int, DeclarationInfo> PopupActions;
+    typedef QMap<int, ItemDom> PopupClassViewActions;
+    PopupActions m_popupActions;
+    PopupClassViewActions m_popupClassViewActions;
 };
 
 #endif 

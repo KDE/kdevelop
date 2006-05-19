@@ -20,7 +20,7 @@
 class StoreWalker: public TreeParser
 {
 public:
-	StoreWalker( const QString& fileName, CodeModel* store );
+    StoreWalker( const QString& fileName, CodeModel* store );
 	virtual ~StoreWalker();
 
 	FileDom file()
@@ -45,6 +45,8 @@ public:
 	virtual void parseLinkageBody( LinkageBodyAST* );
 	virtual void parseAccessDeclaration( AccessDeclarationAST* );
 
+    void takeTemplateParams( TemplateModelItem& target, TemplateDeclarationAST*);
+    
 	// type-specifier
 	virtual void parseTypeSpecifier( TypeSpecifierAST* );
 	virtual void parseClassSpecifier( ClassSpecifierAST* );
@@ -59,12 +61,44 @@ public:
 
 private:
 	NamespaceDom findOrInsertNamespace( NamespaceAST* ast, const QString& name );
-
 	QString typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST* declarator );
 	QStringList scopeOfName( NameAST* id, const QStringList& scope );
 	QStringList scopeOfDeclarator( DeclaratorAST* d, const QStringList& scope );
-
+    ClassDom classFromScope(const QStringList& scope);
+    void checkTemplateDeclarator( TemplateModelItem* item );
 private:
+    
+    class CommentPusher {
+        StoreWalker& m_ref;
+    public:
+        CommentPusher( StoreWalker& ref, QString comment ) : m_ref( ref ) {
+            m_ref.pushComment( comment );
+        }
+        ~CommentPusher() {
+            m_ref.popComment();
+        }
+    };
+    
+    QStringList m_comments;
+    
+    QString comment() {
+        if( m_comments.isEmpty() ) {
+            return "";
+        } else {
+            return m_comments.front();
+        }
+    }
+    
+public:
+    void pushComment( QString comm ) {
+        m_comments.push_front( comm );
+    }
+    
+    void popComment() {
+        m_comments.pop_front();
+    }
+private:
+    
 	FileDom m_file;
 	QString m_fileName;
 	QStringList m_currentScope;
@@ -78,6 +112,7 @@ private:
 	bool m_inTypedef;
 
 	DeclaratorAST* m_currentDeclarator;
+    QValueStack<TemplateDeclarationAST*> m_currentTemplateDeclarator;
 	QValueStack<NamespaceDom> m_currentNamespace;
 	QValueStack<ClassDom> m_currentClass;
 

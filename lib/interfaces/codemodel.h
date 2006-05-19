@@ -29,6 +29,14 @@ Code Model - a memory symbol store.
 #include <qmap.h>
 #include <qstringlist.h>
 #include <ksharedptr.h>
+#include <qvaluevector.h>
+
+#include <iostream>
+#include <ostream>
+#include <string>
+#include <sstream>
+
+using namespace std;
 
 class CodeModel;
 class CodeModelItem;
@@ -42,6 +50,7 @@ class ArgumentModel;
 class EnumModel;
 class EnumeratorModel;
 class TypeAliasModel;
+
 
 /**@class ItemDom
 Safe pointer to the @ref CodeModelItem.
@@ -293,7 +302,8 @@ public:
     
     Language support plugins usually save symbols from projects before the project is 
     closed to avoid reparsing when the project is opened next time.
-    @param stream Stream to read from.*/
+    @param stream Stream to read from.
+    @return whether the read succeeded(may fail when the store-format is deprecated).*/
     virtual void read( QDataStream& stream );
     /**Writes the model to a stream.
     Use this to restore the memory symbol store to a file.
@@ -302,6 +312,26 @@ public:
     closed to avoid reparsing when the project is opened next time.
     @param stream Stream to write to.*/
     virtual void write( QDataStream& stream ) const;
+    
+    /** this will dump the whole tree into dot-file-format so it can be inspected, not ready yet*/
+    virtual void dump( std::ostream& file, QString Info="" );
+    
+    /** Merges two groups, by changing the group-ids of the files.
+    Returns the id of the new group, or 0 on fail.
+    @param g1 first group
+    @param g2 second group */
+    int mergeGroups( int g1, int g2 );
+    
+    /** Returns all files within the given group 
+    it should be preferred calling FileModel::wholeGroup and 
+    FileModel::wholeGroupStrings because those return in constant
+    time if they are the only member of the group */
+    FileList getGroup( int gid ) const;
+    
+    FileList getGroup( const FileDom& file) const;
+    
+    /** Same as above, but returns the names instead of the objects */
+    virtual QStringList getGroupStrings( int gid ) const;
     
 private:
     /**Adds a namespace to the store.
@@ -318,10 +348,17 @@ private:
     QMap<QString, FileDom> m_files;
     NamespaceDom m_globalNamespace;
 
+    virtual int newGroupId();
+    ///the groups were introduced to represent dependencies between different files.
+    ///Files can have slaves that are owned by other files within the same group.
+    ///While parsing, whole groups should always be parsed/reparsed together.
+    int m_currentGroupId;   ///normally, each file has its own group.
+    
 private:
     CodeModel( const CodeModel& source );
     void operator = ( const CodeModel& source );
     friend class CodeModelItem;
+    friend class FileModel;
 };
 
 
@@ -372,6 +409,7 @@ protected:
     @param model Code model which stores this item.*/
     CodeModelItem( int kind, CodeModel* model );
 
+    
 public:
     /**Destructor.*/
     virtual ~CodeModelItem();
@@ -386,6 +424,14 @@ public:
     /**@return The name of the item.*/
     QString name() const;
 
+    QString comment() const {
+        return m_comment;
+    }
+    
+    void setComment( QString comment ) {
+        m_comment = comment;
+    }
+    
     /**Sets the name of the item.
     @param name The name.*/
     void setName( const QString& name );
@@ -448,6 +494,8 @@ public:
     virtual bool isTypeAlias() const { return false; }
     /**@return true if an item is a custom item.*/
     virtual bool isCustom() const { return false; }
+    
+    virtual bool isTemplateable() const { return false; }
 
     /**Reads an item from the stream.
     @param stream The stream to read from.*/
@@ -456,6 +504,8 @@ public:
     @param stream The stream to write to.*/
     virtual void write( QDataStream& stream ) const;
 
+    virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
+    
 protected:
 
     /**@return The code model for this item.*/
@@ -470,6 +520,7 @@ private:
     CodeModel* m_model;
     QString m_name;
     QString m_fileName;
+    QString m_comment; ///not stored yet
     int m_startLine, m_startColumn;
     int m_endLine, m_endColumn;
 
@@ -479,13 +530,69 @@ private:
 };
 
 
+
+class TemplateModelItem {
+    public:
+        typedef QPair< QString, QString > ParamPair;
+        typedef QValueVector< ParamPair > ParamMap; ///The first is the name, and the second the default-parameter, or "" if there is none.
+        
+        virtual const ParamMap& getTemplateParams() {
+            return m_params;
+        }
+        
+        virtual void addTemplateParam( QString name, QString def = "" ) {
+            m_params.push_back( ParamPair( name, def ) );
+        }
+        
+        virtual void clearTemplateParams() {
+            m_params.clear();
+        }
+        
+        ///returns -1 if the parameter does not exist
+        virtual int findTemplateParam( const QString& name ) const {
+            for( unsigned int a = 0; a< m_params.size(); a++) 
+                if( m_params[a].first == name ) return a;
+            return -1;
+       }
+        
+       const ParamPair getParam( int index ) const {
+           return m_params[index];
+       }
+       
+       virtual bool isTemplateable() const  { return true; }
+    
+       void write(  QDataStream & stream ) const {
+           stream << (int)m_params.size();
+           for( ParamMap::const_iterator it = m_params.begin(); it != m_params.end(); ++it ) {
+               stream << (*it).first;
+               stream << (*it).second;
+           }
+       }
+       
+       void read(  QDataStream & stream )  {
+           int count;
+           stream >> count;
+           for( int a = 0; a < count; a++ ) {
+               ParamPair tmp;
+               stream >> tmp.first;
+               stream >> tmp.second;
+               m_params.push_back( tmp );
+           }
+       }
+    
+    protected:
+        ParamMap m_params;
+};
+
+
+
 /**
 Class model.
 Represents a class in the code model.
 
 Instanses of this class should be created using @ref CodeModel::create method.
 */
-class ClassModel: public CodeModelItem
+class ClassModel: public CodeModelItem, public TemplateModelItem
 {
 protected:
     /**Constructor.
@@ -713,6 +820,8 @@ public:
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
+    virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
+    
 private:
     QStringList m_scope;
     QStringList m_baseClassList;
@@ -789,6 +898,8 @@ public:
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
+    virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
+    
 private:
     QMap<QString, NamespaceDom> m_namespaces;
 
@@ -797,6 +908,7 @@ private:
     void operator = ( const NamespaceModel& source );
     friend class CodeModel;
 };
+
 
 
 
@@ -821,10 +933,28 @@ public:
 
     virtual bool isFile() const { return true; }
 
-    virtual void read( QDataStream& stream );
+    virtual int groupId() const {
+        return m_groupId;
+    }
+    
+    virtual void setGroupId(int newId) {
+        m_groupId = newId;
+    }
+    
+    /** This function additionally does version-checking and
+        should be used instead of read when read should be called
+        from outside.
+    @return whether the read was successful */
+    
     virtual void write( QDataStream& stream ) const;
 
+    FileList wholeGroup() ;
+    
+    QStringList wholeGroupStrings() const;
+    
+    virtual void read( QDataStream& stream );
 private:
+    int m_groupId;
     FileModel( const FileModel& );
     void operator = ( const FileModel& );
     friend class CodeModel;
@@ -865,6 +995,8 @@ public:
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
+    virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
+    
 private:
     QString m_type;
     QString m_defaultValue;
@@ -889,7 +1021,7 @@ for a model of function definitions.
 
 Instanses of this class should be created using @ref CodeModel::create method.
 */
-class FunctionModel: public CodeModelItem
+class FunctionModel: public CodeModelItem, public TemplateModelItem
 {
 protected:
     /**Constructor.
@@ -990,6 +1122,8 @@ public:
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
+    virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
+    
 private:
     QStringList m_scope;
     int m_access;
@@ -1084,6 +1218,8 @@ public:
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
+    virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
+    
 private:
     int m_access;
     int m_static;
@@ -1137,6 +1273,9 @@ public:
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
+    ///The dump-function is not ready yet
+    virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
+    
 private:
     int m_access;
     QMap<QString, EnumeratorDom> m_enumerators;
@@ -1181,6 +1320,8 @@ public:
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
+    virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
+    
 private:
     QString m_value;
     
@@ -1217,6 +1358,9 @@ public:
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
+    
+    virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
+    
 private:
     QString m_type;
     

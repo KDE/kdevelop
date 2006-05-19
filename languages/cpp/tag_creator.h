@@ -15,6 +15,7 @@
 #include "tree_parser.h"
 
 #include <qstringlist.h>
+#include <qvaluestack.h>
 
 class Catalog;
 class Tag;
@@ -72,6 +73,39 @@ private:
 	QString typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST* declarator );
 
 private:
+    
+    void takeTemplateParams( Tag& target, TemplateDeclarationAST* ast );
+    void checkTemplateDeclarator( Tag& tag );
+    
+    class CommentPusher {
+        TagCreator& m_ref;
+    public:
+    CommentPusher( TagCreator& ref, QString comment ) : m_ref( ref ) {
+        m_ref.pushComment( comment );
+    }
+        ~CommentPusher() {
+            m_ref.popComment();
+        }
+    };
+    
+    QStringList m_comments;
+    
+    QString comment() {
+        if( m_comments.isEmpty() ) {
+            return "";
+        } else {
+            return m_comments.front();
+        }
+    }
+    
+    void pushComment( QString comm ) {
+        m_comments.push_front( comm );
+    }
+    
+    void popComment() {
+        m_comments.pop_front();
+    }
+    
 	Catalog* m_catalog;
 	QString m_fileName;
 	QStringList m_currentScope;
@@ -82,6 +116,8 @@ private:
 	bool m_inSignals;
 	int m_anon;
 
+    QValueStack<TemplateDeclarationAST*> m_currentTemplateDeclarator;
+    
 	static class DoxyDoc* m_documentation;
 
 private:

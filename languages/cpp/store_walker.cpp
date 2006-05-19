@@ -109,7 +109,8 @@ void StoreWalker::parseUsing( UsingAST* ast )
 void StoreWalker::parseUsingDirective( UsingDirectiveAST* ast )
 {
 	QString name = ast->name()->unqualifiedName()->text();
-	m_imports.back().push_back( name );
+	QString tx = ast->name()->text();
+	m_imports.back().push_back( ast->name()->text());
 }
 
 void StoreWalker::parseTypedef( TypedefAST* ast )
@@ -167,6 +168,7 @@ void StoreWalker::parseTypedef( TypedefAST* ast )
 			typeAlias->setFileName( m_fileName );
 			typeAlias->setName( id );
 			typeAlias->setType( type );
+			typeAlias->setComment( ast->comment() );
 			
 			int line, col;
 			initDecl->getStartPosition( &line, &col );
@@ -210,16 +212,22 @@ void StoreWalker::parseTypedef( TypedefAST* ast )
 
 void StoreWalker::parseTemplateDeclaration( TemplateDeclarationAST* ast )
 {
+	m_currentTemplateDeclarator.push( ast );
 	if ( ast->declaration() )
 		parseDeclaration( ast->declaration() );
 	
+	
+	
 	TreeParser::parseTemplateDeclaration( ast );
+	
+	m_currentTemplateDeclarator.pop();
 }
 
 void StoreWalker::parseSimpleDeclaration( SimpleDeclarationAST* ast )
 {
 	TypeSpecifierAST * typeSpec = ast->typeSpec();
 	InitDeclaratorListAST* declarators = ast->initDeclaratorList();
+	CommentPusher push( *this, ast->comment() );
 	
 	if ( typeSpec )
 		parseTypeSpecifier( typeSpec );
@@ -248,6 +256,10 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 		return ;
 	
 	DeclaratorAST* d = ast->initDeclarator() ->declarator();
+	
+	if( !d->comment().isEmpty() ) {
+	kdDebug() << "have comment: " << d->comment() << endl << endl;
+	}
 	
 	if ( !d->declaratorId() )
 		return ;
@@ -309,6 +321,10 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	method->setFileName( m_fileName );
 	method->setStartPosition( startLine, startColumn );
 	method->setEndPosition( endLine, endColumn );
+	if( !ast->comment().isEmpty() )
+		method->setComment( ast->comment() );
+	
+	checkTemplateDeclarator( & (*method) );
 	
 	if ( m_inSignals )
 		method->setSignal( true );
@@ -347,6 +363,41 @@ void StoreWalker::parseTypeSpecifier( TypeSpecifierAST* ast )
 	TreeParser::parseTypeSpecifier( ast );
 }
 
+void StoreWalker::takeTemplateParams( TemplateModelItem& target, TemplateDeclarationAST* ast) {
+	TemplateParameterListAST* pl = ast->templateParameterList();
+	if( pl ) {
+		QPtrList<TemplateParameterAST> list = pl->templateParameterList();
+		
+		TemplateParameterAST* curr = list.first();
+		while( curr != 0 ) {
+			QString a, b;
+			if( curr->typeParameter() && curr->typeParameter()->name() ) {
+				a = curr->typeParameter()->name()->text();
+				if( curr->typeParameter()->typeId() ) 
+					b =  curr->typeParameter()->typeId()->text();
+			}
+			
+			target.addTemplateParam( a, b );
+			CodeModelItem* cmi = dynamic_cast<CodeModelItem*>(&target);
+			QString nm = "0";
+			if(cmi) nm = cmi->name();
+		kdDebug() << "item " << nm << " taking template-parameters " << a << ", default=" << b << "\n";
+			curr = list.next();
+		}
+	}
+}
+
+void StoreWalker::checkTemplateDeclarator( TemplateModelItem* item ) {
+	if( !m_currentTemplateDeclarator.empty() && m_currentTemplateDeclarator.top() != 0) {
+		TemplateDeclarationAST* a = m_currentTemplateDeclarator.top();
+		
+		m_currentTemplateDeclarator.pop();
+		m_currentTemplateDeclarator.push(0);
+		
+		takeTemplateParams( *item, a );
+	}
+}
+
 void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 {
 	int startLine, startColumn;
@@ -382,20 +433,57 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 		className = ast->name() ->unqualifiedName() ->text().stripWhiteSpace();
 	}
 	
-	if ( !scopeOfName( ast->name(), QStringList() ).isEmpty() )
-	{
-		kdDebug( 9007 ) << "skip private class declarations" << endl;
-		return ;
-	}
-	
 	ClassDom klass = m_store->create<ClassModel>();
 	klass->setStartPosition( startLine, startColumn );
 	klass->setEndPosition( endLine, endColumn );
 	klass->setFileName( m_fileName );
-	
 	klass->setName( className );
+	klass->setComment( ast->comment() );
 	
-	klass->setScope( m_currentScope );
+	checkTemplateDeclarator( &(*klass) );
+	
+	bool embed = !scopeOfName( ast->name(), QStringList() ).isEmpty();
+	
+	QStringList oldScope;
+	
+	
+	if( embed ) {
+		ClassDom embedderClass = classFromScope( m_currentScope + scopeOfName( ast->name(), QStringList() ));
+		
+		if(!embedderClass && !m_imports.isEmpty() && !m_imports.back().isEmpty()) {
+			///try the same using one of the imports(performance-wise this is not good, but simple)
+			
+			QStringList::iterator it = m_imports.back().begin();
+			while(it != m_imports.back().end()) {
+				QStringList scp = QStringList::split("::", *it) + m_currentScope + scopeOfName( ast->name(), QStringList());
+				embedderClass = classFromScope( scp );
+				if(embedderClass) break;
+				++it;
+			}
+		}
+		
+		if(embedderClass) {
+			if(embedderClass->fileName() != klass->fileName()) {
+				///since we are creating a link between both files, put them into the same parsing-group
+				FileDom dm = embedderClass->file();
+				if( dm ) {
+					m_file->setGroupId( m_store->mergeGroups( dm->groupId(), m_file->groupId() ) );
+				}else{
+					kdDebug() << "file " << embedderClass->fileName() << " missing in store \n";
+				}
+			}
+				
+			oldScope = m_currentScope;
+			m_currentScope = embedderClass->scope();
+			m_currentScope.push_back( embedderClass->name() );
+			m_currentClass.push( embedderClass );
+			
+			//m_file->addClass( klass );//experiment
+		}else{
+			kdDebug( 9007 ) << "could not find embedding class " << QStringList(m_currentScope + scopeOfName( ast->name(), QStringList() )).join("::") << " for " << className << endl;
+			embed = false;
+		}
+	}
 	
 	if ( m_currentClass.top() )
 		m_currentClass.top() ->addClass( klass );
@@ -404,20 +492,29 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 	else
 		m_file->addClass( klass );
 	
+	klass->setScope( m_currentScope );
+	
+	
 	if ( ast->baseClause() )
 		parseBaseClause( ast->baseClause(), klass );
 	
 	m_currentScope.push_back( className );
 	m_currentClass.push( klass );
 	
-	m_imports.push_back( QStringList() );
+	//m_imports.push_back( QStringList() );
 	
 	TreeParser::parseClassSpecifier( ast );
 	
-	m_imports.pop_back();
+
+	//m_imports.pop_back();
 	m_currentClass.pop();
 	
 	m_currentScope.pop_back();
+	
+	if( embed ) {
+		m_currentScope = oldScope;
+		m_currentClass.pop();
+	}
 	
 	m_currentAccess = oldAccess;
 	m_inSlots = oldInSlots;
@@ -435,6 +532,7 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
 		attr->setFileName( m_fileName );
 		attr->setAccess( m_currentAccess );
 		attr->setType( "int" );
+		attr->setComment( (*it)->comment() );
 		attr->setStatic( true );
 		
 		int startLine, startColumn;
@@ -490,13 +588,15 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec,
 	
 	if ( !scopeOfDeclarator( d, QStringList() ).isEmpty() )
 	{
-		kdDebug( 9007 ) << "skip declaration" << endl;
+		kdDebug( 9007 ) << "skip declaration of " << QStringList(scopeOfDeclarator( d, QStringList() )).join("::") << "::" << id << endl;
 		return ;
 	}
 	
 	VariableDom attr = m_store->create<VariableModel>();
 	attr->setName( id );
 	attr->setFileName( m_fileName );
+	attr->setComment( comment() );
+	
 	
 	if ( m_currentClass.top() )
 		m_currentClass.top() ->addVariable( attr );
@@ -641,6 +741,7 @@ void StoreWalker::parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storage
 	FunctionDom method = m_store->create<FunctionModel>();
 	method->setName( id );
 	
+	method->setComment( comment() );
 	method->setFileName( m_fileName );
 	method->setStartPosition( startLine, startColumn );
 	method->setEndPosition( endLine, endColumn );
@@ -649,6 +750,9 @@ void StoreWalker::parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storage
 	method->setVirtual( isVirtual );
 	method->setAbstract( isPure );
 	parseFunctionArguments( d, method );
+	
+	checkTemplateDeclarator( & (*method) );
+		
 	
 	if ( m_inSignals )
 		method->setSignal( true );
@@ -760,6 +864,41 @@ QStringList StoreWalker::scopeOfName( NameAST* id, const QStringList& startScope
 	
 	return scope;
 }
+
+ClassDom StoreWalker::classFromScope(const QStringList& scope) {
+	FileList files = m_store->fileList();
+	if(scope.isEmpty())return ClassDom(0);
+	
+	for(FileList::iterator it = files.begin(); ; ++it) {
+		ClassModel* curr;
+		if(it != files.end())
+			curr = *it;
+		else
+			curr = &(*m_file);
+		
+		QStringList::const_iterator mit = scope.begin();
+		
+		while(curr->isNamespace() && mit != scope.end() && ((NamespaceModel*)curr)->hasNamespace( *mit )) {
+			curr = &(*( ((NamespaceModel*)curr)->namespaceByName( *mit ) ));
+			++mit;
+		}
+		
+		while((curr->isNamespace() || curr->isClass()) && mit != scope.end() && curr->hasClass( *mit )) {
+			ClassList cl = curr->classByName( *mit );
+			curr = &(**cl.begin() );
+			++mit;
+		}
+		
+		if(mit == scope.end()) {
+			return ClassDom( dynamic_cast<ClassModel*> (curr) );
+		}
+		
+		if(it == files.end())break;
+	}
+	
+	return ClassDom(0);
+}
+
 
 QStringList StoreWalker::scopeOfDeclarator( DeclaratorAST* d, const QStringList& startScope )
 {
