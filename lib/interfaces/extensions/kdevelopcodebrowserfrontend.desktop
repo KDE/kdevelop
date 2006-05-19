@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/CodeBrowserFrontend
+X-KDE-Derived=KDevelop/Plugin
+Name=Code Browser Frontend
+
+[PropertyDef::X-KDevelop-Version]
+Type=int
