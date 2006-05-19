@@ -30,7 +30,7 @@
 #include <kdevplugin.h>
 
 #include <codemodel.h>
-#include <lib/interfaces/extensions/codebrowserfrontend.h>
+#include <codebrowserfrontend.h>
 
 using namespace Extensions;
 

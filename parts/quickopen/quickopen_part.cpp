@@ -42,7 +42,7 @@
 #include <kdevcore.h>
 #include <kdevpartcontroller.h>
 #include <kdevproject.h>
-#include <lib/interfaces/extensions/codebrowserfrontend.h>
+#include <codebrowserfrontend.h>
 
 
 typedef KDevGenericFactory<QuickOpenPart> QuickOpenFactory;

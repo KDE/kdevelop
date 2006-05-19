@@ -57,9 +57,9 @@
 #include <kdevmainwindow.h>
 #include <kdevproject.h>
 #include <kdevcoderepository.h>
-#include <lib/interfaces/codemodel_utils.h>
-#include <lib/interfaces/codemodel.h>
-#include <lib/interfaces/extensions/codebrowserfrontend.h>
+#include <codemodel_utils.h>
+#include <codemodel.h>
+#include <codebrowserfrontend.h>
 
 
 ///This can be used to toggle the complete tracing of the resolution-functions, which costs a lot of performance
@@ -5207,7 +5207,7 @@ private:
 			return scope;
 		}
 	
-		dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->str() << "\" context: " << (int)ctx << endl;
+		dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->str() << "\" context: " << ctx << endl;
 		
 			
 		expr = expr.stripWhiteSpace();
@@ -5311,7 +5311,7 @@ private:
 		Debug d( "#evt#");
 		if( !safetyCounter || !d ) return SimpleType();
 		
-		dbg() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" << scope->str() << "\" context: " << (int)ctx << endl;
+		dbg() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" << scope->str() << "\" context: " << ctx << endl;
 		
 		if( exprList.isEmpty() )
 			return EvaluationResult( scope.type, scope.decl );

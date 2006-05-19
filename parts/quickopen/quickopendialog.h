@@ -21,7 +21,7 @@
 #ifndef QUICKOPENDIALOG_H
 #define QUICKOPENDIALOG_H
 
-#include<lib/interfaces/codemodel.h>
+#include <codemodel.h>
 #include "quickopenbase.h"
 
 class QuickOpenPart;

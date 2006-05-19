@@ -28,7 +28,7 @@
 #include <qmap.h>
 #include <qtooltip.h>
 #include <codemodel.h>
-#include <lib/widgets/fancyklistviewitem.h>
+#include <fancyklistviewitem.h>
 #include <navigator.h>
 
 using namespace Widgets;

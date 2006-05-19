@@ -1,4 +1,4 @@
-INCLUDES = -I$(top_srcdir)/lib/interfaces \
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/interfaces/extensions \
 	-I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevquickopen.la

@@ -23,6 +23,7 @@
 #include <qobject.h>
 #include <codemodel.h>
 #include <qfont.h>
+#include <fancyqlistviewitem.h>
 
 class TextPaintStyleStore;
 class QTimer;
