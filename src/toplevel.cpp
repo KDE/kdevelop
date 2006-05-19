@@ -24,7 +24,7 @@ KDevMainWindow *TopLevel::getInstance()
     KConfig *config = kapp->config();
 
     config->setGroup("UI");
-    if (config->readBoolEntry("UseSimpleMainWindow", false))
+    if (config->readBoolEntry("UseSimpleMainWindow", true))
     {
         SimpleMainWindow *mainWindow = new SimpleMainWindow(0, "SimpleMainWindow");
         s_instance = mainWindow;
