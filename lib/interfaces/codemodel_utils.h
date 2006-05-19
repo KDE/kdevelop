@@ -437,6 +437,19 @@ private:
 	const FunctionDom m_declaration;
 };
 
+template <class InputDomType>
+class PredAmOwner{
+    public:
+        PredAmOwner(const FileDom& file) : m_file(file){};
+        bool operator() (const InputDomType& def) const
+        {
+            return def->file() == m_file;
+        }
+	
+    private:
+        const FileDom m_file;
+};
+
 /**@return A list of all functions in the file.
 @param dom File Dom to look for functions in.*/
 FunctionList allFunctions(const FileDom &dom);
@@ -448,6 +461,24 @@ AllFunctions allFunctionsDetailed(const FileDom &dom);
 the information about a scope of each FunctionDefinitionDom found).
 @param dom File Dom to look for functions in.*/
 AllFunctionDefinitions allFunctionDefinitionsDetailed(const FileDom &dom);
+
+/**@return A list of all functions in the file.
+This version searches the file's whole group for
+functions that may have been inserted into the other file's
+structure.
+Unlike the methods above, this guarantees that all returned
+functions physically belong to that file.
+@param dom File Dom to look for functions in. */
+FunctionList allFunctionsExhaustive(FileDom &dom);
+
+/**@return A list of all function-definitions in the file.
+This version searches the file's whole group for
+functions that may have been inserted into the other file's
+structure.
+Unlike the methods above, this guarantees that all returned
+functions physically belong to that file.
+@param dom File Dom to look for functions in.  */
+FunctionDefinitionList allFunctionDefinitionsExhaustive(FileDom &dom);
 
 /**
  * Finds a class by its position in a file(position inside the part of the file, where the class is declared).
@@ -488,6 +519,42 @@ int findLastVariableLine( ClassDom aClass, CodeModelItem::Access access );
  * @author Jonas Jacobi <j.jacobi@gmx.de>
  */
 QString accessSpecifierToString( CodeModelItem::Access access );
+
+
+class CodeModelHelper {
+    private:
+        CodeModel* m_model;
+        FileList m_files;
+        QString m_fileName;
+    
+        FunctionDefinitionDom functionDefinitionAt(NamespaceDom ns, int line, int column);
+    
+        FunctionDefinitionDom functionDefinitionAt(ClassDom klass, int line, int column);
+    
+        FunctionDefinitionDom functionDefinitionAt(FunctionDefinitionDom fun, int line, int );
+
+        FunctionDom functionDeclarationAt(NamespaceDom ns, int line, int column);
+    
+        FunctionDom functionDeclarationAt(ClassDom klass, int line, int column);
+    
+        FunctionDom functionDeclarationAt(FunctionDom fun, int line, int column );
+
+    
+        ClassDom classAt(NamespaceDom ns, int line, int column);
+    
+        ClassDom classAt(ClassDom klass, int line, int column);
+    
+    public:
+        CodeModelHelper( CodeModel* model, FileDom file );
+        
+        enum FunctionTypes {
+            Declaration = 1,
+            Definition = 2
+        };
+        
+        FunctionDom functionAt( int line, int column, FunctionTypes types = (FunctionTypes)3 );
+        ClassDom classAt( int line, int column );
+};
 
 }
 

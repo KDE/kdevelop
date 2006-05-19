@@ -312,6 +312,30 @@ bool compareDeclarationToDefinition( const FunctionDom & dec, const FunctionDefi
 	return false;
 }
 
+
+
+
+FunctionList allFunctionsExhaustive(FileDom &dom) {
+    PredAmOwner<FunctionDom> ow( dom );
+    FunctionList ret;
+    
+    findFunctionDeclarations( ow, dom->wholeGroup(), ret );
+    
+    return ret;
+}
+
+
+FunctionDefinitionList allFunctionDefinitionsExhaustive(FileDom &dom) {
+    PredAmOwner<FunctionDefinitionDom> ow( dom );
+    FunctionDefinitionList ret;
+    
+    findFunctionDefinitions( ow, dom->wholeGroup(), ret );
+    
+    return ret;
+}
+
+
+
 ClassDom findClassByPosition( NamespaceModel* nameSpace, int line, int col )
 {
 	if (nameSpace == 0)
@@ -406,6 +430,253 @@ QString accessSpecifierToString( CodeModelItem::Access access )
 	case CodeModelItem::Private: return "private";
 	default: return "unknown";
   }
+}
+
+FunctionDefinitionDom CodeModelHelper::functionDefinitionAt(NamespaceDom ns, int line, int column)
+{
+    NamespaceList namespaceList = ns->namespaceList();
+    NamespaceList::iterator nslEnd = namespaceList.end();
+
+    for (NamespaceList::iterator it=namespaceList.begin(); it!=nslEnd; ++it)
+    {
+        if (FunctionDefinitionDom def = functionDefinitionAt(*it, line, column))
+            return def;
+    }
+
+    ClassList classList = ns->classList();
+    ClassList::iterator clEnd = classList.end();
+
+    for (ClassList::iterator it=classList.begin(); it!=clEnd; ++it)
+    {
+        if (FunctionDefinitionDom def = functionDefinitionAt(*it, line, column))
+            return def;
+    }
+
+    FunctionDefinitionList functionDefinitionList = ns->functionDefinitionList();
+    FunctionDefinitionList::iterator fdlEnd = functionDefinitionList.end();
+
+    for (FunctionDefinitionList::iterator it=functionDefinitionList.begin();
+            it!=fdlEnd; ++it )
+    {
+        if (FunctionDefinitionDom def = functionDefinitionAt(*it, line, column))
+            return def;
+    }
+
+    return FunctionDefinitionDom();
+}
+
+FunctionDefinitionDom CodeModelHelper::functionDefinitionAt(ClassDom klass, int line, int column)
+{
+    ClassList classList = klass->classList();
+    ClassList::iterator clEnd = classList.end();
+
+    for (ClassList::iterator it=classList.begin(); it!=clEnd; ++it)
+    {
+        if (FunctionDefinitionDom def = functionDefinitionAt(*it, line, column))
+            return def;
+    }
+
+    FunctionDefinitionList functionDefinitionList = klass->functionDefinitionList();
+    FunctionDefinitionList::iterator fdlEnd = functionDefinitionList.end();
+    for (FunctionDefinitionList::Iterator it=functionDefinitionList.begin();
+            it!=fdlEnd; ++it)
+    {
+        if (FunctionDefinitionDom def = functionDefinitionAt(*it, line, column))
+            return def;
+    }
+
+    return FunctionDefinitionDom();
+}
+
+FunctionDefinitionDom CodeModelHelper::functionDefinitionAt(FunctionDefinitionDom fun, int line, int // column
+                                            )
+{
+    int startLine, startColumn;
+    int endLine, endColumn;
+
+    fun->getStartPosition(&startLine, &startColumn);
+    fun->getEndPosition(&endLine, &endColumn);
+
+    if (!(line >= startLine && line <= endLine)  || fun->fileName() != m_fileName )
+        return FunctionDefinitionDom();
+
+    /*    
+    if (line == startLine && column < startColumn)
+    return FunctionDefinitionDom();
+
+    if (line == endLine && column > endColumn)
+    return FunctionDefinitionDom();*/
+
+    return fun;
+}
+
+
+
+FunctionDom CodeModelHelper::functionDeclarationAt(NamespaceDom ns, int line, int column)
+{
+    NamespaceList namespaceList = ns->namespaceList();
+    NamespaceList::iterator nsEnd = namespaceList.end();
+    for (NamespaceList::iterator it=namespaceList.begin(); it!=nsEnd; ++it)
+    {
+        if (FunctionDom def = functionDeclarationAt(*it, line, column))
+            return def;
+    }
+
+    ClassList classList = ns->classList();
+    ClassList::iterator clEnd = classList.end();
+    for (ClassList::iterator it=classList.begin(); it!=clEnd; ++it)
+    {
+        if (FunctionDom def = functionDeclarationAt(*it, line, column))
+            return def;
+    }
+
+    FunctionList functionList = ns->functionList();
+    FunctionList::iterator flEnd = functionList.end();
+    for (FunctionList::iterator it=functionList.begin();
+            it!=flEnd; ++it )
+    {
+        if (FunctionDom def = functionDeclarationAt(*it, line, column))
+            return def;
+    }
+
+    return FunctionDom();
+}
+
+FunctionDom CodeModelHelper::functionDeclarationAt(ClassDom klass, int line, int column)
+{
+    ClassList classList = klass->classList();
+    ClassList::iterator clEnd = classList.end();
+    for (ClassList::iterator it=classList.begin(); it!=clEnd; ++it)
+    {
+        if (FunctionDom def = functionDeclarationAt(*it, line, column))
+            return def;
+    }
+
+    FunctionList functionList = klass->functionList();
+    FunctionList::iterator flEnd = functionList.end();
+    for (FunctionList::Iterator it=functionList.begin();
+            it!=flEnd; ++it)
+    {
+        if (FunctionDom def = functionDeclarationAt(*it, line, column))
+            return def;
+    }
+
+    return FunctionDom();
+}
+
+FunctionDom CodeModelHelper::functionDeclarationAt(FunctionDom fun, int line, int // column
+                                    )
+{
+    int startLine, startColumn;
+    int endLine, endColumn;
+
+    fun->getStartPosition(&startLine, &startColumn);
+    fun->getEndPosition(&endLine, &endColumn);
+
+    if (!(line >= startLine && line <= endLine) || fun->fileName() != m_fileName )
+        return FunctionDom();
+
+
+    /*    if (line == startLine && column < startColumn)
+    return FunctionDom();
+
+    if (line == endLine && column > endColumn)
+    return FunctionDom();*/
+
+    return fun;
+}        
+
+
+
+
+ClassDom CodeModelHelper::classAt(NamespaceDom ns, int line, int column)
+{
+    NamespaceList namespaceList = ns->namespaceList();
+    NamespaceList::iterator nsEnd = namespaceList.end();
+    
+    for (NamespaceList::iterator it=namespaceList.begin(); it!=nsEnd; ++it)
+    {
+        if (ClassDom def = classAt(*it, line, column))
+            return def;
+    }
+
+    ClassList classList = ns->classList();
+    ClassList::iterator clEnd = classList.end();
+    for (ClassList::iterator it=classList.begin(); it!=clEnd; ++it)
+    {
+        if (ClassDom def = classAt(*it, line, column))
+            return def;
+    }
+
+    return ClassDom();
+}
+
+ClassDom CodeModelHelper::classAt(ClassDom klass, int line, int column)
+{
+    ClassList classList = klass->classList();
+    ClassList::iterator clEnd = classList.end();
+    for (ClassList::iterator it=classList.begin(); it!=clEnd; ++it)
+    {
+        if (ClassDom def = classAt(*it, line, column))
+            return def;
+    }
+
+    int startLine, startColumn;
+    int endLine, endColumn;
+
+    klass->getStartPosition(&startLine, &startColumn);
+    klass->getEndPosition(&endLine, &endColumn);
+
+    if (!(line >= startLine && line <= endLine)  || klass->fileName() != m_fileName )
+        return ClassDom();
+    
+    return klass;
+}
+
+
+CodeModelHelper::CodeModelHelper( CodeModel* model, FileDom file ) : m_model( model ) {
+    if( !file ) return;
+    m_files = file->wholeGroup();
+    m_fileName = file->name();
+}
+
+
+FunctionDom CodeModelHelper::functionAt( int line, int column, FunctionTypes types ) {
+    if( m_files.isEmpty() ) return FunctionDom();
+    
+    
+    FunctionDom ret;
+    FileList::iterator it = m_files.begin();
+    while( it != m_files.end() ) {
+        if( types & Declaration ) {
+            ret = functionDeclarationAt(model_cast<NamespaceDom>(*it), line, column);
+            if(ret) return ret;
+        }
+        if( types & Definition ) {
+            FunctionDefinitionDom r  = functionDefinitionAt(model_cast<NamespaceDom>(*it), line, column);
+            if(r) {
+                ret = model_cast<FunctionDom>( r );
+                return ret;
+            }
+        }
+        ++it;
+    }
+    
+    return ret;
+}
+
+ClassDom CodeModelHelper::classAt( int line, int column ) {
+    if( m_files.isEmpty() ) return ClassDom();
+    
+    ClassDom ret;
+    FileList::iterator it = m_files.begin();
+    while( it != m_files.end() ) {
+        ret = classAt( model_cast<NamespaceDom>(*it), line, column );
+        if(ret) return ret;
+        ++it;
+    }
+    
+    return ret;
 }
 
 }//end of namespace CodeModeUtils
