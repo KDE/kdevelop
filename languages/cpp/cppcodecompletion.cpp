@@ -5675,7 +5675,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 	ConfigureSimpleTypes conf;
 	
 	EvaluationResult type = evaluateExpressionAt( line, column, conf );
-	
+
 	if( !type && !type.sourceVariable ) return;
 	
 	QString name = type.resultType->fullTypeResolved();
@@ -7766,7 +7766,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< CodeCompletionEn
 CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, SimpleContext* ctx )
 {
 	safetyCounter.init();
-	
+
 	d->classNameList = typeNameList( m_pSupport->codeModel() );
 	
 	CppEvaluation::ExpressionEvaluation obj( this, expr, ctx, AllOperators );

@@ -316,6 +316,11 @@ Unit* BackgroundParser::findUnit( const QString& fileName )
 	return it != m_unitDict.end() ? *it : 0;
 }
 
+bool BackgroundParser::hasTranslationUnit( const QString& fileName ) {
+	QMap<QString, Unit*>::Iterator it = m_unitDict.find( fileName );
+	return it != m_unitDict.end();
+}
+
 TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName )
 {
 	Unit * u = findUnit( fileName );

@@ -1298,6 +1298,9 @@ void CppSupportPart::maybeParse( const QString& fn )
 	if ( !isValidSource( fn ) )
 		return ;
 	
+	parseFileAndDependencies( fn );
+	return;
+	
 	FileDom d = fileByName( fn );
 	
 	QStringList lst;
@@ -1967,7 +1970,7 @@ void CppSupportPart::parseEmit( const QStringList& files ) {
 	
 	while(!l.isEmpty() ) 
 	{
-		if ( codeModel() ->hasFile( l.front() ) )
+		if ( codeModel() ->hasFile( l.front() ) && m_backgroundParser->hasTranslationUnit( l.front() ) )
 		{
 			removeWithReferences( l.front() );
 		}

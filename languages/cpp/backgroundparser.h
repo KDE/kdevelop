@@ -79,6 +79,7 @@ public:
 	void removeFile( const QString& fileName );
 	void removeAllFiles();
 
+    bool hasTranslationUnit( const QString& fileName );
 	TranslationUnitAST* translationUnit( const QString& fileName );
 	QValueList<Problem> problems( const QString& fileName , bool readFromDisk = false, bool forceParse = false );
 	void updateParserConfiguration();
