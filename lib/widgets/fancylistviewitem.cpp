@@ -23,7 +23,7 @@
 #include <qapplication.h>
 #include <qnamespace.h>
 
-namespace Widgets {
+
 
 
 void FancyListViewItemTemplate::init(const QString& label1, const QString& label2) {
@@ -209,4 +209,4 @@ int FancyListViewItemTemplate::width(const QFontMetrics &fm, const QListView *lv
     return width;
 }
 
-}
+
