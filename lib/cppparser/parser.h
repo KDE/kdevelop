@@ -26,6 +26,8 @@
 #include <qstringlist.h>
 #include <qvaluelist.h>
 #include <qvaluestack.h>
+#include <set>
+#include <iostream>
 
 struct ParserPrivateData;
 
@@ -33,6 +35,226 @@ class Driver;
 class Lexer;
 class Token;
 struct Error;
+
+
+class CommentFormatter {
+    static inline bool isWhite( QChar c ) {
+        return c.isSpace();
+    }
+    
+    static void rStrip( QString str, QString& from ) {
+        if( str.isEmpty() ) return;
+        
+        int i = 0;
+        int ip = from.length();
+        int s = from.length();
+        
+        for( int a = s-1; a >= 0; a-- ) {
+            if( isWhite( from[a] ) ) {
+                continue;
+            } else {
+                if( from[a] == str[i] ) {
+                    i++;
+                    ip = a;
+                    if( i == (int)str.length() ) break;
+                } else {
+                    break;
+                }
+            }
+        }
+        
+        if( ip != (int)from.length() ) from = from.left( ip );
+    }
+        
+    static void strip( QString str, QString& from ) {
+        if( str.isEmpty() ) return;
+        
+        int i = 0;
+        int ip = 0;
+        int s = from.length();
+        
+        for( int a = 0; a < s; a++ ) {
+            if( isWhite( from[a] ) ) {
+                continue;
+            } else {
+                if( from[a] == str[i] ) {
+                    i++;
+                    ip = a+1;
+                    if( i == (int)str.length() ) break;
+                } else {
+                    break;
+                }
+            }
+        }
+        
+        if( ip ) from = from.mid( ip );
+    }
+    
+    public:
+    
+    static QString formatComment( QString comment ) {
+        QString ret;
+        int i = 0;
+        int s = comment.length();
+        while( i < s && comment[i] == '/' ) {
+            i++;
+        }
+        
+        if( i > 1 ) {
+            ret = comment.mid( i );
+        } else {
+            ///remove the star in each line
+            QStringList lines = QStringList::split( "\n", comment );
+            
+            if( lines.isEmpty() ) return ret;
+            
+            strip( "/**", lines.front() );
+            rStrip( "/**", lines.back() );
+            
+            QStringList::iterator it = lines.begin();
+            ++it;
+            QStringList::iterator eit = lines.end();
+            
+            if( it != lines.end() ) {
+                --eit; 
+                
+                for( ; it != eit; ++it ) {
+                    strip( "*", *it );
+                }
+                
+                if( lines.front().stripWhiteSpace().isEmpty() )
+                    lines.pop_front();
+            
+                if( lines.back().stripWhiteSpace().isEmpty() )
+                    lines.pop_back();
+            }
+            
+            ret = lines.join( "\n" );
+        }
+        
+        return ret;
+    }
+};
+
+class Comment {
+    QString m_text;
+    int m_line;
+    bool m_formatted;
+    
+    
+    void format() {
+        if( m_formatted ) return;
+        m_formatted = true;
+        m_text = CommentFormatter::formatComment( m_text );
+    }
+    
+    public:
+        Comment( QString text = "", int line = -1 ) : m_text( text ), m_line( line ), m_formatted(false) {
+        }
+        
+        Comment( int line ) : m_line( line ) {
+        }
+        
+        void operator += ( Comment rhs ) {
+            format();
+            rhs.format();
+            m_text += " " + rhs.m_text;
+        }
+        
+        operator bool() const {
+            return !m_text.isEmpty();
+        }
+        
+        operator QString() {
+            format();
+            return m_text;
+        }
+        
+        inline int line() const {
+            return m_line;
+        }
+        
+        bool operator < ( Comment& rhs ) const {
+            return m_line < rhs.m_line;
+        }
+        
+        bool isSame ( const Comment& rhs ) {
+            if( rhs.m_formatted ) format();
+            return m_text == rhs.m_text;
+        }
+        
+        struct cmp {
+            bool operator () ( const Comment& c1, const Comment& c2 ) const {
+                return c1.line() < c2.line();
+            }
+        };
+};
+
+
+class CommentStore {
+    private:
+        typedef std::set< Comment, Comment::cmp > CommentSet;
+        CommentSet m_comments;
+
+    public:
+        
+        ///Returns the comment nearest to "end"(inclusive), and returns & removes it
+        Comment getCommentInRange( int end, int start = 0 ) {
+            CommentSet::iterator it = m_comments.lower_bound(  end );
+            
+            
+            while( it != m_comments.begin() && (*it).line() > end ) {
+                --it;
+            }
+            
+            if( it != m_comments.end() && (*it).line() >= start && (*it).line() <= end ) {
+                Comment ret = *it;
+                m_comments.erase( it );
+                return ret;
+            } else {
+                return Comment();
+            }
+        }
+        
+        ///Returns and removes the comment in the line
+        Comment getComment( int line ) {
+            CommentSet::iterator it = m_comments.find( line );
+            if( it != m_comments.end() ) {
+                Comment ret = *it;
+                m_comments.erase( it );
+                return ret;
+            } else {
+                return Comment();
+            }
+        }
+        
+        void addComment( Comment comment ) {
+            
+            CommentSet::iterator it = m_comments.find( comment );
+            if( it != m_comments.end() ) {
+                if( comment.isSame( *it ) ) return;
+                Comment c = *it;
+                c += comment;
+                comment = c;
+                m_comments.erase( it );
+            }
+            
+            m_comments.insert( comment );
+        }
+        
+        ///Does not delete the comment
+        Comment latestComment() {
+            CommentSet::iterator it = m_comments.end(); 
+            if( it == m_comments.begin() ) return Comment();
+            --it;
+            return *it;
+        }
+        
+        void clear() {
+            m_comments.clear();
+        }
+};
+
 
 class Parser
 {
@@ -197,6 +419,13 @@ public /*rules*/ :
     bool parseObjcOpenBracketExpr( AST::Node& node ); 
     bool parseObjcCloseBracket( AST::Node& node );
   
+    void nextToken( bool skipComments = true );
+    
+    ///parses all comments until the end of the line
+    Comment comment();
+    void preparseLineComments( int line );
+    void processComment( int offset = 0 );
+    void clearComment( );
     
     bool skipUntil( int token );
     bool skipUntilDeclaration();
@@ -205,9 +434,18 @@ public /*rules*/ :
     QString toString( int start, int end, const QString& sep=" " ) const;
 
 private:
+    int currentLine();
+    CommentStore m_commentStore;
+    
+    template<class Type>
+    void eventuallyTakeComment( int startLn, int line, Type& ast );
+    template<class Type>
+    void eventuallyTakeComment( Type& ast );
+    
     ParserPrivateData* d;
     Driver* m_driver;
     Lexer* lex;
+    Comment m_currentComment;
     int m_problems;
     int m_maxProblems;
     bool objcp;

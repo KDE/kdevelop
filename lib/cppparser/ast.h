@@ -23,6 +23,7 @@
 #include <memory>
 #include <qstring.h>
 #include <qptrlist.h>
+#include <qstringlist.h>
 
 #if defined( Q_OS_WIN32 ) || defined( Q_CC_SUN )
 
@@ -211,7 +212,32 @@ struct Slice
         : position(0), length(0) {}
 };
 
-class AST
+
+class CommentAST {
+    QString m_comment;
+    public:
+        void setComment( const QString& comment ) {
+            m_comment = comment;
+        }
+        
+        void addComment( const QString& comment ) {
+            if( !m_comment.isEmpty() ) {
+                m_comment += "\n(" + comment + ")";
+            } else {
+                m_comment = comment;
+            }
+        }
+        
+        QString comment() const {
+            return m_comment;
+        }
+        
+        bool haveComment() const {
+            return !m_comment.isEmpty();
+        }
+};
+
+class AST : public CommentAST
 {
 public:
     typedef AUTO_PTR<AST> Node;
@@ -249,6 +275,7 @@ public:
 
     inline void setSlice( const QString &text, int position, int length ) 
     {
+        CommentAST a;
         m_slice.source = text;
         m_slice.position = position;
         m_slice.length = length;
@@ -567,7 +594,6 @@ private:
     AST::Node m_classKey;
     BaseClauseAST::Node m_baseClause;
     QPtrList<DeclarationAST> m_declarationList;
-
 private:
     ClassSpecifierAST( const ClassSpecifierAST& source );
     void operator = ( const ClassSpecifierAST& source );
