@@ -5664,45 +5664,9 @@ public:
 	}
 };
 
-void CppCodeCompletion::contextEvaluationMenu ( QPopupMenu *popup, const Context *context, int line, int column ) {
+void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int column ) {
 	kdDebug( 9007 ) << "CppCodeCompletion::contextEvaluationMenu()" << endl;
 	m_popupActions.clear();
-	
-	if ( !m_pSupport || !m_activeEditor )
-		return ;
-	
-	ConfigureSimpleTypes conf;
-	
-	EvaluationResult type = evaluateExpressionAt( line, column, conf );
-	
-	if( !type ) return;
-	
-	QString name = type.resultType->fullTypeResolved();
-	if( type.sourceVariable )
-		name += " " + type.sourceVariable.name;
-	if( type.resultType->asFunction() )
-		name = buildSignature(type.resultType );
-	
-	PopupFillerHelpStruct h(this);
-	PopupFiller<PopupFillerHelpStruct> filler( h, "<" );
-	
-	QPopupMenu * m = new QPopupMenu( popup );
-	int gid = popup->insertItem( i18n( "Navigate by \"%1\"" ).arg( cleanForMenu( name ) ), m );
-	popup->setWhatsThis( gid, i18n( "<b>Navigation</b><p>Provides a menu to navigate to positions of items that are involved in this expression" ) );
-	
-	if( type.sourceVariable && type.sourceVariable.name != "this" ) {
-		int id = m->insertItem( i18n("jump to variable-declaration \"%1\"").arg( type.sourceVariable.name ) , this, SLOT( popupAction( int ) ) );
-		
-		m_popupActions.insert( id, type.sourceVariable );
-	}
-	
-	filler.fill( m, type.resultType->desc() );
-}
-
-
-
-void CppCodeCompletion::contextEvaluationClassViewMenu ( QPopupMenu *popup, const Context *context, int line, int column ) {
-	kdDebug( 9007 ) << "CppCodeCompletion::contextEvaluationClassViewMenu()" << endl;
 	m_popupClassViewActions.clear();
 	
 	if ( !m_pSupport || !m_activeEditor )
@@ -5712,7 +5676,7 @@ void CppCodeCompletion::contextEvaluationClassViewMenu ( QPopupMenu *popup, cons
 	
 	EvaluationResult type = evaluateExpressionAt( line, column, conf );
 	
-	if( !type ) return;
+	if( !type && !type.sourceVariable ) return;
 	
 	QString name = type.resultType->fullTypeResolved();
 	if( type.sourceVariable )
@@ -5720,15 +5684,40 @@ void CppCodeCompletion::contextEvaluationClassViewMenu ( QPopupMenu *popup, cons
 	if( type.resultType->asFunction() )
 		name = buildSignature(type.resultType );
 	
-	QPopupMenu * m = new QPopupMenu( popup );
-	int gid = popup->insertItem( i18n( "Navigate Class-View by \"%1\"" ).arg( cleanForMenu( name ) ), m );
-	popup->setWhatsThis( gid, i18n( "<b>Navigation</b><p>Provides a menu to show involved items in the class-view " ) );
+	///Fill the jump-menu
+	{
+		PopupFillerHelpStruct h(this);
+		PopupFiller<PopupFillerHelpStruct> filler( h, "<" );
+		
+		QPopupMenu * m = new QPopupMenu( popup );
+		int gid = popup->insertItem( i18n( "Navigate by \"%1\"" ).arg( cleanForMenu( name ) ), m );
+		popup->setWhatsThis( gid, i18n( "<b>Navigation</b><p>Provides a menu to navigate to positions of items that are involved in this expression" ) );
+		
+		if( type.sourceVariable && type.sourceVariable.name != "this" ) {
+			int id = m->insertItem( i18n("jump to variable-declaration \"%1\"").arg( type.sourceVariable.name ) , this, SLOT( popupAction( int ) ) );
+			
+			m_popupActions.insert( id, type.sourceVariable );
+		}
+		
+		filler.fill( m, type.resultType->desc() );
+	}
+	if( !type ) return;
 	
-	PopupClassViewFillerHelpStruct h(this);
-	PopupFiller<PopupClassViewFillerHelpStruct> filler( h, "<" );
-	
-	filler.fill( m, type.resultType->desc() );
+	///Now fill the class-view-browsing-stuff
+	{
+		QPopupMenu * m = new QPopupMenu( popup );
+		int gid = popup->insertItem( i18n( "Navigate Class-View by \"%1\"" ).arg( cleanForMenu( name ) ), m );
+		popup->setWhatsThis( gid, i18n( "<b>Navigation</b><p>Provides a menu to show involved items in the class-view " ) );
+		
+		PopupClassViewFillerHelpStruct h(this);
+		PopupFiller<PopupClassViewFillerHelpStruct> filler( h, "<" );
+		
+		filler.fill( m, type.resultType->desc() );
+	}
 }
+
+
+
 
 
 void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {

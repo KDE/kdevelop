@@ -552,8 +552,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 				unsigned int curLine = 0, curCol = 0;
 				m_activeViewCursor->cursorPositionReal( &curLine, &curCol );
 			
-				codeCompletion()->contextEvaluationMenu( popup, context, curLine, curCol );
-				codeCompletion()->contextEvaluationClassViewMenu( popup, context, curLine, curCol );
+				codeCompletion()->contextEvaluationMenus( popup, context, curLine, curCol );
 			}
 		}
 			
@@ -1960,37 +1959,54 @@ void CppSupportPart::parseFileAndDependencies( const QString & fileName ) {
 }
 
 void CppSupportPart::parseEmit( const QStringList& files ) {
+	if( files.isEmpty() ) return;
+	
+	m_backgroundParser->lock();
 	
 	QStringList l = files;
 	
-	while(!l.isEmpty() ) {
-			emit addedSourceInfo( l.front() );
+	while(!l.isEmpty() ) 
+	{
+		if ( codeModel() ->hasFile( l.front() ) )
+		{
+			removeWithReferences( l.front() );
+		}
+		
 		l.pop_front();
 	}
+	
+	l = files;
+	
+	while(!l.isEmpty() ) {
+		QString fileName = l.front();
+		
+		if ( TranslationUnitAST * ast = m_backgroundParser->translationUnit( fileName ) )
+		{
+			
+			if ( true /*!hasErrors*/ )
+			{
+				StoreWalker walker( fileName, codeModel() );
+				walker.parseTranslationUnit( ast );
+				codeModel() ->addFile( walker.file() );
+			}
+		}
+		
+		l.pop_front();
+	}
+	
+	l = files;
+	
+	while(!l.isEmpty() ) {
+		emit addedSourceInfo( l.front() );
+		l.pop_front();
+	}
+	
+	m_backgroundParser->unlock();
 }
 
 void CppSupportPart::recomputeCodeModel( const QString& fileName )
 {
-	if ( codeModel() ->hasFile( fileName ) )
-	{
-		FileDom file = codeModel() ->fileByName( fileName );
-		removeWithReferences( fileName );
-	}
-	
-	m_backgroundParser->lock();
-	if ( TranslationUnitAST * ast = m_backgroundParser->translationUnit( fileName ) )
-	{
-		
-		if ( true /*!hasErrors*/ )
-		{
-			StoreWalker walker( fileName, codeModel() );
-			walker.parseTranslationUnit( ast );
-			codeModel() ->addFile( walker.file() );
-			
-			parseEmit( m_parseEmitWaiting.processFile( fileName )  );
-		}
-	}
-	m_backgroundParser->unlock();
+	parseEmit( m_parseEmitWaiting.processFile( fileName )  );
 }
 
 void CppSupportPart::emitFileParsed( QStringList l )

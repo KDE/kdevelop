@@ -136,9 +136,7 @@ public:
 
     EvaluationResult evaluateExpressionAt( int line, int column, ConfigureSimpleTypes& conf );
     
-    void contextEvaluationMenu ( QPopupMenu *popup, const Context *context, int line, int col );
-    
-    void contextEvaluationClassViewMenu ( QPopupMenu *popup, const Context *context, int line, int col );
+    void contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int col );
     
 public slots:
 	/**
