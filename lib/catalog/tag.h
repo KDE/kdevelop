@@ -26,6 +26,19 @@
 
 class QDataStream;
 
+union TagFlags
+{
+    unsigned long flags;
+    struct
+    {
+		unsigned long access:
+                        3;
+		unsigned long isVirtual:
+                        1;
+    }
+    data;
+} ;
+
 class Tag
 {
 public:
@@ -55,6 +68,10 @@ public:
     Tag();
     Tag( const Tag& source );
     ~Tag();
+    
+    operator bool() const {
+        return kind() != Kind_Unknown && kind() != 0;
+    }
 
     Tag& operator = ( const Tag& source );
     
@@ -114,7 +131,19 @@ public:
     {
         return data->name;
     }
+    
+    QString comment() const {
+        if( hasAttribute( "cmt" ) ) {
+            return attribute( "cmt" ).asString();
+        } else {
+            return "";
+        }
+    }
 
+    void setComment( const QString& comment ) {
+        setAttribute( "cmt", comment );
+    }
+    
     void setName( const QString& name )
     {
 	detach();
@@ -220,6 +249,18 @@ public:
 	    data->endColumn = value.toInt();
 	else
 	    data->attributes[ name ] = value;
+    }
+    
+    void addTemplateParam( const QString& param , const QString& def = "" ) {
+        QMap<QCString, QVariant>::iterator it = data->attributes.find( "tpl" );
+        if( it != data->attributes.end() && (*it).type() == QVariant::StringList ) {
+        }else{
+            it = data->attributes.insert( "tpl", QVariant( QStringList() ) );
+        }
+        
+        QStringList& l( (*it).asStringList() );
+        l << param;
+        l << def;
     }
     
     void load( QDataStream& stream );
