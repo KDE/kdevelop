@@ -1980,6 +1980,9 @@ void CppSupportPart::parseEmit( const QStringList& files ) {
 	
 	l = files;
 	
+	///Since even normal typing may create problems, these must not break the group, so group everything together afterwards
+	int currentGroup = 0;
+	
 	while(!l.isEmpty() ) {
 		QString fileName = l.front();
 		
@@ -1991,7 +1994,18 @@ void CppSupportPart::parseEmit( const QStringList& files ) {
 				StoreWalker walker( fileName, codeModel() );
 				walker.parseTranslationUnit( ast );
 				codeModel() ->addFile( walker.file() );
+				
+				///Merge the groups together so that files parsed together get into one group again
+				if( walker.file() ) {
+					if( !currentGroup ) {
+						currentGroup = walker.file()->groupId();
+					} else {
+						currentGroup = codeModel()->mergeGroups( currentGroup, walker.file()->groupId() );
+					}
+				}
 			}
+		} else {
+			kdDebug() << "failed to parse " << fileName << endl;
 		}
 		
 		l.pop_front();

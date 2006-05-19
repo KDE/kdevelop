@@ -1351,8 +1351,6 @@ public:
 	}
 };
 
-
-
 class CppCodeCompletion::EvaluationResult
 {
 public:
