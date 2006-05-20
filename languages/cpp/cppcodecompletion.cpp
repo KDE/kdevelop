@@ -3076,7 +3076,7 @@ protected:
 		}
 	};
 	
-	virtual MemberInfo findMember( TypeDesc name , MemberInfo::MemberType type = MemberInfo::Invalid ) ;
+	virtual MemberInfo findMember( TypeDesc name , MemberInfo::MemberType type = MemberInfo::AllTypes) ;
 };
 
 	
@@ -3668,7 +3668,7 @@ protected:
 	};
 	
 	
-	virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type = MemberInfo::Invalid );
+	virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type = MemberInfo::AllTypes);
 };
 
 
@@ -3929,7 +3929,7 @@ protected:
 	}
 		
 	
-	virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type =  MemberInfo::Invalid )
+	virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type =  MemberInfo::AllTypes)
 	{
 		MemberInfo mem;
 		mem.name = "";
