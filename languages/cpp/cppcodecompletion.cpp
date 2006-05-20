@@ -1774,12 +1774,12 @@ public:
 		m_desc.templateParams() = desc.templateParams();
 	}
 
-	SimpleTypeImpl( const QStringList& scope ) : m_scope(scope), m_resolutionCount(0), m_resolutionFlags(NoFlag) {
+	SimpleTypeImpl( const QStringList& scope ) :  m_resolutionCount(0), m_resolutionFlags(NoFlag), m_scope(scope) {
 		checkTemplateParams();
 		reg();
 	}
 	
-	SimpleTypeImpl( const TypeDesc& desc ) : m_desc(desc), m_resolutionCount(0), m_resolutionFlags(NoFlag) {
+	SimpleTypeImpl( const TypeDesc& desc ) :  m_resolutionCount(0), m_resolutionFlags(NoFlag), m_desc(desc) {
 		m_scope.push_back( m_desc.name() );
 		reg();
 	}
@@ -1990,7 +1990,7 @@ public:
 		TypeBuildInfo& operator =( const TypeBuildInfo& rhs ) {
 			return *this;
 		}
-		TypeBuildInfo( const TypeBuildInfo& rhs ) {
+		TypeBuildInfo( const TypeBuildInfo& rhs ) : KShared() {
 		}
 	};
 	
@@ -2006,7 +2006,8 @@ public:
 			Typedef = 4,
 			Template = 8,
 			NestedType = 16,
-			Namespace = 32
+			Namespace = 32,
+			Invalid = 0xffffffff
 		} memberType;
 		
 		MemberInfo() {
@@ -2434,7 +2435,7 @@ public:
 
 
 protected:
-	SimpleTypeImpl( SimpleTypeImpl* rhs ) : m_scope( rhs->m_scope ), m_pointerDepth( rhs-> m_pointerDepth), m_desc( rhs->m_desc ), m_parent( rhs->m_parent ), m_isGlobal( rhs->m_isGlobal ), m_resolutionCount( rhs->m_resolutionCount ), m_resolutionFlags( rhs->m_resolutionFlags ), m_trace( rhs->m_trace), m_masterProxy( rhs->m_masterProxy ) {
+	SimpleTypeImpl( SimpleTypeImpl* rhs ) : m_resolutionCount( rhs->m_resolutionCount ), m_pointerDepth( rhs-> m_pointerDepth), m_parent( rhs->m_parent ), m_isGlobal( rhs->m_isGlobal ), m_resolutionFlags( rhs->m_resolutionFlags ), m_trace( rhs->m_trace), m_masterProxy( rhs->m_masterProxy ), m_scope( rhs->m_scope), m_desc( rhs->m_desc )  {
 		reg();
 	}
 	
@@ -3000,12 +3001,12 @@ public:
 			TypeDesc::TemplateParams& templateParams = m_desc.templateParams();
 			
 			TemplateModelItem::ParamMap m =  ti->getTemplateParams();
-			for( int a = 0; a < m.size(); a++ ) {
+			for( uint a = 0; a < m.size(); a++ ) {
 				TemplateParamInfo::TemplateParam t;
 				t.number = a;
 				t.name = m[a].first;
 				t.def = m[a].second;
-				if( a != -1 && templateParams.count() > a )
+				if( templateParams.count() > a )
 					t.value = *templateParams[a];
 				ret.addParam( t );
 			}
@@ -3019,7 +3020,7 @@ public:
 			TemplateModelItem* ti = dynamic_cast<TemplateModelItem*> ( &( *m_item ) );
 			TypeDesc::TemplateParams& templateParams = m_desc.templateParams();
 			int pi = ti->findTemplateParam( name );
-			if( pi != -1 && templateParams.count() > pi ) {
+			if( pi != -1 && (int)templateParams.count() > pi ) {
 				return *templateParams[pi];
 			} else {
 				if( pi != -1 && !ti->getParam( pi ).second.isEmpty() ) { 
@@ -3075,7 +3076,7 @@ protected:
 		}
 	};
 	
-	virtual MemberInfo findMember( TypeDesc name , MemberInfo::MemberType type = 0xffffffff ) ;
+	virtual MemberInfo findMember( TypeDesc name , MemberInfo::MemberType type = MemberInfo::Invalid ) ;
 };
 
 	
@@ -3588,7 +3589,7 @@ public:
 				QStringList l = m_tag.attribute( "tpl" ).asStringList();
 				
 				TypeDesc::TemplateParams templateParams = m_desc.templateParams();
-				int pi = 0;
+				uint pi = 0;
 				QStringList::const_iterator it = l.begin();
 				while( it != l.end() ) {
 					TemplateParamInfo::TemplateParam curr;
@@ -3615,7 +3616,7 @@ public:
 			if( m_tag.hasAttribute( "tpl" ) ) {
 				QStringList l = m_tag.attribute( "tpl" ).asStringList();
 				///we need the index, so count the items through
-				int pi = 0;
+				uint pi = 0;
 				
 				QStringList::const_iterator it = l.begin();
 				while( it != l.end() && *it != name ) {
@@ -3667,7 +3668,7 @@ protected:
 	};
 	
 	
-	virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type = 0xffffffff );
+	virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type = MemberInfo::Invalid );
 };
 
 
@@ -3928,7 +3929,7 @@ protected:
 	}
 		
 	
-	virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type = 0xffffffff )
+	virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type =  MemberInfo::Invalid )
 	{
 		MemberInfo mem;
 		mem.name = "";
@@ -4360,13 +4361,13 @@ public:
 	
 	SimpleVariable( const SimpleVariable& source )
 			: name( source.name ), 
-			type( source.type ), 
-			ptrList( source.ptrList ),
 			comment(source.comment),
 			startLine(source.startLine),
 			startCol(source.startCol),
 			endLine(source.endLine),
-			endCol(source.endCol)
+			endCol(source.endCol),
+			type( source.type ),
+			ptrList( source.ptrList )
 	{}
 	~SimpleVariable()
 	{}
@@ -5167,7 +5168,7 @@ private:
 	OperatorSet& m_operators;
 	
 public:
-	ExpressionEvaluation( CppCodeCompletion* data, ExpressionInfo expr, SimpleContext* ctx = 0, OperatorSet& operators ) : m_data( data ), m_ctx( ctx ), m_expr( expr ), m_global(false), m_operators( operators ) {
+	ExpressionEvaluation( CppCodeCompletion* data, ExpressionInfo expr, OperatorSet& operators, SimpleContext* ctx = 0 ) : m_data( data ), m_ctx( ctx ), m_expr( expr ), m_global(false), m_operators( operators ) {
 		safetyCounter.init();
 		
 	kdDebug( 9007 ) << "Initializing evaluation of expression " << expr << endl;
@@ -5214,7 +5215,7 @@ private:
 		
 		///Find the rightmost operator with the lowest priority, for the first split.
 		QValueList<OperatorIdentification> idents;
-		for( int a = 0; a < expr.length(); ++a ) {
+		for( uint a = 0; a < expr.length(); ++a ) {
 			QString part = expr.mid( a );
 			OperatorIdentification ident = m_operators.identifyOperator( part );
 			if( ident ) {
@@ -5448,13 +5449,13 @@ EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column ,
 		QString curLine = m_activeEditor->textLine( line );
 		
 	///move column to the last letter of the pointed word
-		while( column+1 < curLine.length() && isValidIdentifierSign( curLine[column] ) && isValidIdentifierSign( curLine[column+1] ) ) {
+		while( column+1 < (int)curLine.length() && isValidIdentifierSign( curLine[column] ) && isValidIdentifierSign( curLine[column+1] ) ) {
 			column++;
 		}
 		
 	//if( column > 0 ) column--;
 		
-		if( column >= curLine.length() || curLine[ column ].isSpace() ) return EvaluationResult();
+		if( column >= (int)curLine.length() || curLine[ column ].isSpace() ) return EvaluationResult();
 			
 		QString expr = curLine.left( column +1 );
 		kdDebug( 9007 ) << "evaluating \"" << expr.stripWhiteSpace() << "\"" << endl;
@@ -5773,7 +5774,7 @@ bool CppCodeCompletion::isTypeExpression( const QString& expr ) {
 
 
 bool CppCodeCompletion::mayBeTypeTail( int line, int column, QString& append, bool inFunction ) {
-QString tail = clearComments( m_activeEditor->text( line, column+1, line+10 > m_activeEditor->numLines() ? m_activeEditor->numLines() : line + 10, 0 ) );
+QString tail = clearComments( m_activeEditor->text( line, column+1, line+10 > (int)(m_activeEditor->numLines() ? m_activeEditor->numLines() : line + 10), 0 ));
 		tail.replace("\n", " ");
 		SafetyCounter s ( 100 );
 		bool hadSpace = false;
@@ -7767,7 +7768,7 @@ CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpression( Expre
 
 	d->classNameList = typeNameList( m_pSupport->codeModel() );
 	
-	CppEvaluation::ExpressionEvaluation obj( this, expr, ctx, AllOperators );
+	CppEvaluation::ExpressionEvaluation obj( this, expr, AllOperators, ctx );
 	
 	CppCodeCompletion::EvaluationResult res;
 	res = obj.evaluate();
