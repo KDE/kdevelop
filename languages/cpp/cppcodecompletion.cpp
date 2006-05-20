@@ -2007,7 +2007,7 @@ public:
 			Template = 8,
 			NestedType = 16,
 			Namespace = 32,
-			Invalid = 0xffffffff
+			AllTypes = 0xffffffff
 		} memberType;
 		
 		MemberInfo() {
