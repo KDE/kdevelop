@@ -34,6 +34,7 @@
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <qheader.h>
+#include <qtimer.h>
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -86,41 +87,14 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
     topLayout->addWidget(buttonbox);
 
     connect(ok,     SIGNAL(clicked()),  SLOT(accept()));
-    connect(cancel, SIGNAL(clicked()),  SLOT(reject()));
-
-    psProc_ = new KShellProcess("/bin/sh");
-    #ifdef USE_SOLARIS
-    *psProc_ << "ps";
-    *psProc_ << "-opid";
-    *psProc_ << "-otty";
-    *psProc_ << "-os";
-    *psProc_ << "-otime";
-    *psProc_ << "-oargs";
-    pidCmd_ = "ps -opid -otty -os -otime -oargs";
-
-    if (getuid() == 0) {
-        *psProc_ << "-e";
-        pidCmd_ += " -e";
-    }
-    #else
-    *psProc_ << "ps";
-    *psProc_ << "x";
-    pidCmd_ = "ps x";
-
-    if (getuid() == 0) {
-        *psProc_ << "a";
-        pidCmd_ += " a";
-    }
-    #endif
-
-    connect( psProc_, SIGNAL(processExited(KProcess *)),                SLOT(slotProcessExited()) );
-    connect( psProc_, SIGNAL(receivedStdout(KProcess *, char *, int)),  SLOT(slotReceivedOutput(KProcess *, char *, int)) );
+    connect(cancel, SIGNAL(clicked()),  SLOT(reject()));  
 
     // Default display to 40 chars wide, default height is okay
     resize( ((KGlobalSettings::fixedFont()).pointSize())*40, height());
     topLayout->activate();
 
-    psProc_->start(KProcess::NotifyOnExit, KProcess::Stdout);
+    QTimer::singleShot(0, this, SLOT(slotInit()));
+
 }
 
 /***************************************************************************/
@@ -135,6 +109,40 @@ Dbg_PS_Dialog::~Dbg_PS_Dialog()
 int Dbg_PS_Dialog::pidSelected()
 {
 	return pids_->currentItem()->text(0).toInt();
+}
+
+/***************************************************************************/
+void Dbg_PS_Dialog::slotInit()
+{
+    psProc_ = new KShellProcess("/bin/sh");
+#ifdef USE_SOLARIS
+    *psProc_ << "ps";
+    *psProc_ << "-opid";
+    *psProc_ << "-otty";
+    *psProc_ << "-os";
+    *psProc_ << "-otime";
+    *psProc_ << "-oargs";
+    pidCmd_ = "ps -opid -otty -os -otime -oargs";
+
+    if (getuid() == 0) {
+        *psProc_ << "-e";
+        pidCmd_ += " -e";
+    }
+#else
+    *psProc_ << "ps";
+    *psProc_ << "x";
+    pidCmd_ = "ps x";
+
+    if (getuid() == 0) {
+        *psProc_ << "a";
+        pidCmd_ += " a";
+    }
+#endif
+
+    connect( psProc_, SIGNAL(processExited(KProcess *)),                SLOT(slotProcessExited()) );
+    connect( psProc_, SIGNAL(receivedStdout(KProcess *, char *, int)),  SLOT(slotReceivedOutput(KProcess *, char *, int)) );
+
+    psProc_->start(KProcess::NotifyOnExit, KProcess::Stdout);
 }
 
 /***************************************************************************/

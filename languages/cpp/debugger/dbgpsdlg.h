@@ -39,6 +39,7 @@ public:
     int pidSelected();
 
 private slots:
+    void slotInit();
     void slotReceivedOutput(KProcess *proc, char *buffer, int buflen);
     void slotProcessExited();
 
