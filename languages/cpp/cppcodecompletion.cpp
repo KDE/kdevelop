@@ -64,7 +64,7 @@
 
 ///This can be used to toggle the complete tracing of the resolution-functions, which costs a lot of performance
 //#define VERBOSE
-#define DISABLETOOLTIPS
+//#define DISABLETOOLTIPS
 
 /**
 -- TODO: The parser and code-models currently do not correctly collect all the data necessary to handle namespace-imports etc. precisely
@@ -1309,9 +1309,9 @@ private:
 public:
 	
 	enum Type {
-		NormalExpression,
-		TypeExpression,
-		InvalidExpression
+		InvalidExpression = 0,
+		NormalExpression = 1,
+		TypeExpression = 2
 	};
 	
 	Type t;
@@ -1334,23 +1334,39 @@ public:
 	}
 	
 	operator bool() {
-		return t != InvalidExpression;
+		return t != InvalidExpression && !m_expr.isEmpty();
 	}
 	
 	bool isTypeExpression() {
-		return t == TypeExpression;
+		return t == TypeExpression && !m_expr.isEmpty();
 	}
 	
 	bool canBeTypeExpression() {
-		return t & TypeExpression;
+		return t & TypeExpression && !m_expr.isEmpty();
 	}
 	
 	bool isNormalExpression() {
-		return t == NormalExpression;
+		return t == NormalExpression && !m_expr.isEmpty();
 	}
 	
 	bool canBeNormalExpression() {
-		return t & NormalExpression;
+		return t & NormalExpression && !m_expr.isEmpty();
+	}
+	
+	QString typeAsString() {
+		QString res ;
+		if( t & NormalExpression )
+			res += "NormalExpression, ";
+		if( t & TypeExpression )
+			res += "TypeExpression, ";
+		if( t == InvalidExpression )
+			res += "InvalidExpression, ";
+		if( !res.isEmpty() ) {
+			res = res.left( res.length() - 2 );
+		} else {
+			res = "Unknown";
+		}
+		return res;
 	}
 };
 
@@ -4743,11 +4759,15 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 	m_activeCursor = 0;
 	m_activeEditor = 0;
 	m_activeCompletion = 0;
+	m_activeHintInterface = 0;
 	m_ccTimer = new QTimer( this );
+	m_showStatusTextTimer = new QTimer( this );
+	
 	m_ccLine = 0;
 	m_ccColumn = 0;
 	connect( m_ccTimer, SIGNAL( timeout() ), this, SLOT( slotTimeout() ) );
-
+	connect( m_showStatusTextTimer, SIGNAL( timeout() ), this, SLOT( slotStatusTextTimeout() ) );
+	
 	computeFileEntryList();
 
 	CppSupportPart* cppSupport = m_pSupport;
@@ -4791,6 +4811,25 @@ CppCodeCompletion::~CppCodeCompletion( )
 {
 	delete m_repository;
 	delete d;
+}
+
+void CppCodeCompletion::addStatusText( QString text, int timeout ) {
+	m_statusTextList.append( QPair<int, QString>( timeout, text ) );
+	if( !m_showStatusTextTimer->isActive() ) {
+		slotStatusTextTimeout();
+	}
+}
+
+void CppCodeCompletion::clearStatusText() {
+	m_statusTextList.clear();
+	m_showStatusTextTimer->stop();
+}
+
+void CppCodeCompletion::slotStatusTextTimeout() {
+	if( m_statusTextList.isEmpty() || !m_pSupport ) return;
+	m_pSupport->mainWindow() ->statusBar() ->message( m_statusTextList.front().second, m_statusTextList.front().first );
+	m_showStatusTextTimer->start( m_statusTextList.front().first , true );
+	m_statusTextList.pop_front();
 }
 
 void CppCodeCompletion::slotTimeout()
@@ -4847,19 +4886,6 @@ void CppCodeCompletion::integratePart( KParts::Part* part )
 			         SLOT( slotArgHintHidden() ) );
 		}
 	}
-	
-		KTextEditor::TextHintInterface* hint = dynamic_cast<KTextEditor::TextHintInterface*>( part->widget() );
-		
-		if( hint ) 
-		{
-			///TODO: check some option
-#ifndef DISABLETOOLTIPS
-			hint->enableTextHints( 500 );
-			connect( part->widget(), SIGNAL( needTextHint(int, int, QString &) ), this, SLOT( slotTextHint(int, int, QString&) ) );
-#endif
-		} else {
-			kdDebug( 9007 ) << "editor has no text-hint-interface" << endl;
-		}
 }
 
 void CppCodeCompletion::slotPartAdded( KParts::Part *part )
@@ -4869,6 +4895,13 @@ void CppCodeCompletion::slotPartAdded( KParts::Part *part )
 
 void CppCodeCompletion::slotActivePartChanged( KParts::Part *part )
 {
+	if( m_activeHintInterface ) {
+		KParts::Part* oldPart = dynamic_cast<KParts::Part*>( m_activeHintInterface );
+		if( oldPart && oldPart->widget() )
+			disconnect(oldPart->widget() , SIGNAL( needTextHint(int, int, QString &) ), this, SLOT( slotTextHint(int, int, QString&) ) );
+		
+		m_activeHintInterface = 0;
+	}
 	if ( !part )
 		return ;
 
@@ -4904,6 +4937,21 @@ void CppCodeCompletion::slotActivePartChanged( KParts::Part *part )
 		return ;
 	}
 
+	m_activeHintInterface = dynamic_cast<KTextEditor::TextHintInterface*>( part->widget() );
+	
+	char* q = 0;
+	kdDebug() << q << endl;
+	
+	if( m_activeHintInterface ) 
+	{
+#ifndef DISABLETOOLTIPS
+		m_activeHintInterface->enableTextHints( 500 );
+		connect( part->widget(), SIGNAL( needTextHint(int, int, QString &) ), this, SLOT( slotTextHint(int, int, QString&) ) );
+#endif
+	} else {
+		kdDebug( 9007 ) << "editor has no text-hint-interface" << endl;
+	}
+	
 	kdDebug( 9007 ) << k_funcinfo << "-- end" << endl;
 }
 
@@ -5482,7 +5530,7 @@ bool isValidIdentifierSign( const QChar& c ) {
 
 
 ///Before calling this, a ConfigureSimpleTypes-object should be created, so that the ressources will be freed when that object is destroyed
-EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column , ConfigureSimpleTypes& conf ) {
+EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column , ConfigureSimpleTypes& conf, bool ifUnknownSetType ) {
 	kdDebug( 9007 ) << "CppCodeCompletion::evaluateExpressionAt( " << line << ", " << column << " )" << endl;
 	
 	if ( !m_pSupport || !m_activeEditor )
@@ -5505,7 +5553,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column ,
 		
 		if( curLine[column] == '-' || curLine[column] == ';' ) --column;
 		
-		EvaluationResult type = evaluateExpressionType( line, column + 1, conf, DefaultEvaluationOptions );
+	EvaluationResult type = evaluateExpressionType( line, column + 1, conf, ifUnknownSetType ? addFlag( DefaultEvaluationOptions, DefaultAsTypeExpression ) : DefaultEvaluationOptions );
 		
 		kdDebug( 9007 ) << "type: " << type.resultType->fullTypeResolved() << endl;
 		
@@ -5764,6 +5812,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 
 void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
 	kdDebug( 9007 ) << "CppCodeCompletion::slotTextHint()" << endl;
+	clearStatusText();
 	text = "";
 	if ( !m_pSupport || !m_activeEditor )
 		return ;
@@ -5771,6 +5820,8 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
 	ConfigureSimpleTypes conf( m_activeFileName );
 	
 	EvaluationResult type = evaluateExpressionAt( line, column, conf );
+	
+	if( type.expr.expr().stripWhiteSpace().isEmpty() ) return; ///Expression could not be found
 	
 	if( type.sourceVariable ) {
 		text += type.sourceVariable.toText() + "\n";
@@ -5800,8 +5851,29 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
 	}
 	
 	kdDebug( 9007 ) << "showing: \n" << text << endl;
+	const int timeout = 1300;
 		
-	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Type of %1 is %2" ).arg( type.expr.expr() ).arg( type.resultType->fullTypeResolved() ), 1500 );
+	if( type.resultType ) {
+		addStatusText( i18n( "Type of \"%1\" is \"%2\"" ).arg( type.expr.expr() ).arg( type.resultType->fullTypeResolved() ), timeout );
+		if( type.sourceVariable && !type.sourceVariable.comment.isEmpty() ) {
+		addStatusText( i18n( "Comment on variable %1: \"%1\"").arg( type.sourceVariable.name ).arg( type.sourceVariable.comment ) , 10000 );
+		}
+		if( !type.resultType->comment().isEmpty() ) {
+			addStatusText( i18n( "Comment on type %1: \"%1\"").arg( type.resultType->desc().name() ).arg( type.resultType->comment() ) , 10000 );
+		} 
+		if( type.resultType->comment().isEmpty() ) {
+			addStatusText( i18n( "Type %1 has no comment").arg( type.resultType->desc().name() ) , timeout );
+		}
+	} else {
+		if( type.resultType->desc() ) {
+			addStatusText( i18n( "Type of \"%1\" is unresolved, name: \"%2\"" ).arg( type.expr.expr() ).arg( type.resultType->desc().fullNameChain() ), 2*timeout );
+		} else {
+			addStatusText( i18n( "Type of \"%1\" could not be evaluated! Tried to evaluate expression as \"%2\"" ).arg( type.expr.expr() ).arg( type.expr.typeAsString() ), 2*timeout );
+		}
+	}
+	
+	
+	text = ""; ///Don't really use tooltips since those are not implemented in katepart, and don't work right in the qt-designer based part
 };
 
 ///not good..
@@ -6032,6 +6104,30 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 	return 0;
 }
 
+bool CppCodeCompletion::functionContains( FunctionDom f , int line, int col ) {
+	if( !f ) return false;
+	int sl, sc, el, ec;
+	f->getStartPosition( &sl, &sc );
+	f->getEndPosition( &el, &ec );
+	QString t = clearComments( getText(sl, sc, el, ec ) );
+	if( t.isEmpty() ) return false;
+	
+	int i = t.find('{');
+	if( i == -1 ) return false;
+	int lineCols = 0;
+	for( int a = 0; a < i; a++ ) {
+		if( t[a] == '\n' ) {
+			sl++;
+			lineCols = 0;
+		}else {
+			lineCols++;
+		}
+	}
+	
+	sc += lineCols;
+	
+	return (line > sl || (line == sl && col >= sc ) ) && (line < el || ( line == el && col < ec ) );
+}
 
 ///WArning: yet check how to preserve the ConfigureSimpleTypes..
 CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column, ConfigureSimpleTypes& conf, EvaluateExpressionOptions opt ) {
@@ -6087,11 +6183,12 @@ CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( i
 	
 	m_pSupport->backgroundParser() ->lock ();
 	
+	FunctionDom currentFunction = fileModel.functionAt( line, column );
 	
 	if( opt & SearchInFunctions ) {
-		FunctionDom currentFunction = fileModel.functionAt( line, column );
+		//currentFunction = fileModel.functionAt( line, column );
 		
-		if( currentFunction ) {
+		if( currentFunction && functionContains( currentFunction, line, column ) ) {
 			SimpleContext* ctx = computeFunctionContext( currentFunction, line, column );
 			
 			if( ctx ) {
@@ -6100,46 +6197,42 @@ CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( i
 				int startLine, endLine;
 				currentFunction->getStartPosition( &startLine, &endLine );
 				ExpressionInfo exp = findExpressionAt( line, column , startLine, endLine, true );
-				ret.expr = exp;
+				if( (opt & DefaultAsTypeExpression) && ( !exp.canBeNormalExpression() && !exp.canBeTypeExpression() ) && !exp.expr().isEmpty() ) exp.t = ExpressionInfo::TypeExpression;
 				
-				switch( exp.t ) {
-					case ExpressionInfo::TypeExpression:
+				
+				if( exp.canBeTypeExpression() ) {
 					{
 						if( ! (opt & IncludeTypeExpression) ) {
 							kdDebug( 9007 ) << "recognized a type-expression, but another expression-type is desired" << endl;
-							break;
+						} else {
+							ret.resultType = ctx->container()->locateType( exp.expr(), SimpleTypeImpl::TraceAliases );
 						}
-						ret.resultType = ctx->container()->locateType( exp.expr(), SimpleTypeImpl::TraceAliases );
 						
 					}
-					break;
-					case ExpressionInfo::NormalExpression:
+				}
+				if( exp.canBeNormalExpression() ) {
 					{
 						if( ! (opt & IncludeStandardExpressions) ) {
 							kdDebug( 9007 ) << "recognized a standard-expression, but another expression-type is desired" << endl;
-							break;
-						}
-						
-						///Remove the not completely typed last word while normal completion
-						if( !showArguments && (opt & CompletionOption) ) {
-							QString e = exp.expr();
-							int idx = e.length() - 1;
-							while ( e[ idx ].isLetterOrNumber() || e[ idx ] == '_' )
-								--idx;
-							
-							if ( idx != int( e.length() ) - 1 )
-							{
-								++idx;
-								word = e.mid( idx ).stripWhiteSpace();
-								exp.setExpr( e.left( idx ).stripWhiteSpace() );
+						} else {
+							///Remove the not completely typed last word while normal completion
+							if( !showArguments && (opt & CompletionOption) ) {
+								QString e = exp.expr();
+								int idx = e.length() - 1;
+								while ( e[ idx ].isLetterOrNumber() || e[ idx ] == '_' )
+									--idx;
+								
+								if ( idx != int( e.length() ) - 1 )
+								{
+									++idx;
+									word = e.mid( idx ).stripWhiteSpace();
+									exp.setExpr( e.left( idx ).stripWhiteSpace() );
+								}
 							}
+							
+							ret = evaluateExpression( exp, ctx );
 						}
-						
-						ret = evaluateExpression( exp, ctx );
 					}
-					break;
-				default:
-					kdDebug( 9007 ) << "could not recognize the expression" << endl;
 				}
 			} else {
 				kdDebug( 9007 ) << "could not compute context" << endl;
@@ -6151,7 +6244,7 @@ CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( i
 		}
 	}
 					
-	if( opt & SearchInClasses ) 
+	if( (opt & SearchInClasses ) && !ret && (!currentFunction || !functionContains( currentFunction, line, column ) ) )
 	{
 		ClassDom currentClass = fileModel.classAt( line, column );
 		int startLine = 0, startCol = 0;
@@ -6184,6 +6277,7 @@ CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( i
 			recoveryPoint->registerImports( global );
 		
 		ExpressionInfo exp = findExpressionAt( line, column , startLine, startCol );
+		exp.t = ExpressionInfo::TypeExpression;	///Outside of functions, we can only handle type-expressions
 		ret.expr = exp;
 		
 		if( exp && (exp.t & ExpressionInfo::TypeExpression) ) {

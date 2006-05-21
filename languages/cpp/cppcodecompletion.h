@@ -134,7 +134,7 @@ public:
 
     static SimpleType typeName( QString name );
 
-    EvaluationResult evaluateExpressionAt( int line, int column, ConfigureSimpleTypes& conf );
+    EvaluationResult evaluateExpressionAt( int line, int column, ConfigureSimpleTypes& conf, bool ifUnknownSetType = false );
     
     void contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int col );
     
@@ -154,13 +154,15 @@ private slots:
 	void slotCompletionBoxHidden();
 	void slotTextChanged();
 	void slotFileParsed( const QString& fileName );
-	void slotTimeout();
-	void computeFileEntryList();
+    void slotTimeout();
+    void slotStatusTextTimeout();
+    void computeFileEntryList();
     bool isTypeExpression( const QString& expr );
 	void slotTextHint( int line, int col, QString &text );
     void popupAction( int number );
     void popupClassViewAction( int number );
 private:
+    bool functionContains( FunctionDom f , int line, int col );
     void selectItem( ItemDom item );
     void addTypePopups( QPopupMenu* parent, TypeDesc d, QString depthAdd, QString prefix = "" );
     void addTypeClassPopups( QPopupMenu* parent, TypeDesc d, QString depthAdd, QString prefix = "" );
@@ -176,6 +178,7 @@ private:
         CompletionOption = 4, ///Cut off the last word because it is incomplete
 	    SearchInFunctions = 8,
         SearchInClasses = 16,
+        DefaultAsTypeExpression = 32, ///This makes the evaluation interpret any unidentified expression as a type-expression
         DefaultEvaluationOptions = 1 | 2 | 8 | 16,
         DefaultCompletionOptions = 1 | 4 | 8 | 16
     };
@@ -234,9 +237,16 @@ private:
     friend class PopupClassViewFillerHelpStruct;
     QGuardedPtr<CppSupportPart> m_pSupport;
 	QTimer* m_ccTimer;
+    QTimer* m_showStatusTextTimer;
+    QValueList<QPair<int, QString> > m_statusTextList;
+    
+    void addStatusText( QString text, int timeout );
+    void clearStatusText();
+    
 	QString m_activeFileName;
 	KTextEditor::ViewCursorInterface* m_activeCursor;
 	KTextEditor::EditInterface* m_activeEditor;
+    KTextEditor::TextHintInterface* m_activeHintInterface;
 	KTextEditor::CodeCompletionInterface* m_activeCompletion;
 
 	bool m_bArgHintShow;
