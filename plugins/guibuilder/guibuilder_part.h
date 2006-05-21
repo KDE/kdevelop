@@ -8,6 +8,8 @@
 class QAction;
 class QDesignerFormEditorInterface;
 class QDesignerFormWindowInterface;
+class QWorkspace;
+
 class KAboutData;
 class KAction;
 
@@ -50,6 +52,8 @@ private Q_SLOTS:
 private:
   QDesignerFormEditorInterface *m_designer;
   QDesignerFormWindowInterface *m_window;
+  QWorkspace* m_workspace;
+
   DesignerActionHash m_designerActions;
 
 };

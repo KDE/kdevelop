@@ -31,12 +31,20 @@ GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
   QDesignerComponents::initializeResources();
   m_designer = 0;
   m_window = 0;
+  m_workspace = 0;
+
+  m_workspace = new QWorkspace;
+  m_workspace->setScrollBarsEnabled(true);
+  setWidget( m_workspace );
+
 }
 
 GuiBuilderPart::~GuiBuilderPart()
 {
   mainWindow()->removeView( m_designer->widgetBox() );
   mainWindow()->removeView( m_designer->propertyEditor() );
+  delete m_workspace;
+
 }
 
  KAboutData* GuiBuilderPart::createAboutData()
@@ -163,14 +171,12 @@ bool GuiBuilderPart::openFile()
   widget->setFileName(m_file);
   widget->setContents(&uiFile);
   manager->setActiveFormWindow(widget);
-  QWorkspace * qw= new QWorkspace(dynamic_cast<QWidget*>(this));
-  qw->setScrollBarsEnabled(true);
-  setWidget( qw );
-  qw->addWindow(widget);
+  m_workspace->addWindow(widget);
   m_window = widget;
   m_window->installEventFilter( this ); //be able to catch the close event
 
-  connect(m_window, SIGNAL(changed()), this, SLOT(setModified()));
+  connect( m_window, SIGNAL( changed() ), this, SLOT(setModified()));
+  connect( m_window, SIGNAL( changed() ), this, SLOT( updateDesignerActions() ) );
   connect( m_window, SIGNAL( selectionChanged() ), this, SLOT( updateDesignerActions() ) );
   connect( m_window, SIGNAL( toolChanged( int ) ), this, SLOT( updateDesignerActions() ) );
 
@@ -201,8 +207,8 @@ bool GuiBuilderPart::eventFilter( QObject* obj, QEvent* event )
 {
     if ( event->type() == QEvent::Close && obj == m_window )
     {
-        //we need to close the part
-        manager()->removePart( this );
+        designer()->formWindowManager()->removeFormWindow( m_window );
+        widget()->deleteLater();
     }
     return false;
 }
