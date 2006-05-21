@@ -64,7 +64,7 @@ void UIChooserWidget::load()
     break;
   }
   
-  if (config->readBoolEntry("UseSimpleMainWindow", false))
+  if (config->readBoolEntry("UseSimpleMainWindow", true))
       modeSimple->setChecked(true);
   
 	int mdistyle = config->readNumEntry( "MDIStyle", 1 );
