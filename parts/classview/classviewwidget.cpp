@@ -1243,10 +1243,12 @@ void ClassViewWidget::maybeTip( QPoint const & p )
 			tooltip = QString( "[Type] " ) + titem->dom()->type() + " " + titem->dom()->name();
 		}
 	}
+        
+        const int maxCommentSize = 300;
 	
         if( !item->comment().isEmpty() ) {
             tooltip += "\n";
-            tooltip += item->comment();
+            tooltip += item->comment().length() > maxCommentSize ? item->comment().left( maxCommentSize ) + " [...]" : item->comment();
         }
         
 	kdDebug(0) << tooltip << endl;
