@@ -5270,7 +5270,7 @@ public:
 			m_global = true;
 		}
 		
-		m_expr = m_data->splitExpression( expr.expr() ).join("");
+		//m_expr = m_data->splitExpression( expr.expr() ).join("");
 	}
 	
 	CppCodeCompletion::EvaluationResult evaluate() {
@@ -6206,11 +6206,12 @@ CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( i
 							kdDebug( 9007 ) << "recognized a type-expression, but another expression-type is desired" << endl;
 						} else {
 							ret.resultType = ctx->container()->locateType( exp.expr(), SimpleTypeImpl::TraceAliases );
+							ret.expr = exp;
 						}
 						
 					}
 				}
-				if( exp.canBeNormalExpression() ) {
+				if( exp.canBeNormalExpression() && !ret.resultType ) {
 					{
 						if( ! (opt & IncludeStandardExpressions) ) {
 							kdDebug( 9007 ) << "recognized a standard-expression, but another expression-type is desired" << endl;
