@@ -300,7 +300,10 @@ void DocumentationPlugin::clearCatalog(DocumentationCatalogItem *item)
         it != namedCatalogs.end(); ++it)
     {
         if (it.data() == item)
+        {
             namedCatalogs.remove(it);
+            break;
+        }
     }
     //clear indexes for catalog
     QValueList<IndexItemProto *> idx = indexes[item];
