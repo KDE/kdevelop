@@ -625,6 +625,8 @@ public:
 };
 
 
+QString globalCurrentFile = "";
+
 class TypeDesc;
 class TypeDescShared;
 typedef KSharedPtr<TypeDescShared> TypeDescPointer;
@@ -1286,7 +1288,8 @@ bool SimpleType::m_unregistered = false;
 
 class ConfigureSimpleTypes {
 public:
-	ConfigureSimpleTypes() {
+	ConfigureSimpleTypes( QString currentFileName = "" ) {
+		globalCurrentFile = currentFileName;
 	}
 	
 	void setGlobalNamespace( TypePointer globalNamespace ) {
@@ -3301,6 +3304,40 @@ void SimpleType::destroyStore()
 	m_typeStore.clear();
 }
 
+///Until header-parsing is implemented, this tries to find the class that is most related to this item
+ClassDom pickMostRelated( ClassList lst, QString fn ) {
+	if( lst.isEmpty() ) return ClassDom();
+	if( fn.isEmpty() ) return lst.front();
+	
+	ClassDom best = lst.front();
+	int bestMatch = 0;
+	//kdDebug() << "searching most related to " << fn << endl;
+	
+	for( ClassList::iterator it = lst.begin(); it != lst.end(); ++it ) {
+		//kdDebug() << "comparing " << (*it)->fileName() << endl;
+		QString str = (*it)->fileName();
+		int len = str.length();
+		if( fn.length() < len ) len = fn.length();
+		
+		int matchLen = 0;
+		for( int a = 0; a < len; a++ ) {
+			if( str[a] == fn[a] ) 
+				matchLen++;
+			else
+				break;
+		}
+		
+		if( matchLen > bestMatch ) {
+			//kdDebug() << "picking " << str << endl;
+			bestMatch = matchLen;
+			best = *it;
+		}
+	}
+	
+	//kdDebug() << "picked " << best->fileName() << endl;
+	
+	return best;
+}
 
 SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , SimpleTypeImpl::MemberInfo::MemberType type ) 
 {
@@ -3351,10 +3388,16 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Simp
 		}
 	} else if ( klass->hasClass( name.name() ) && ( type & MemberInfo::NestedType ) ) {
 		ClassList l = klass->classByName( name.name() );
-		if( !l.isEmpty() )
-			ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>(l.front()), name, TypePointer( this ) ) );
-		ret.memberType = MemberInfo::NestedType;
-		ret.type = name;
+		
+		if( !l.isEmpty() ) {
+			ClassDom i = pickMostRelated( l, globalCurrentFile );
+			if( i ) {
+				ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( i ), name, TypePointer( this ) ) );
+				
+				ret.memberType = MemberInfo::NestedType;
+				ret.type = name;
+			}
+		}
 	} else if ( ns && ns->hasNamespace( name.name() )  && ( type & MemberInfo::Namespace ) ) {
 		ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( ns->namespaceByName( name.name() )), name, TypePointer( this ) ) );
 		ret.memberType = MemberInfo::Namespace;
@@ -5671,7 +5714,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 	if ( !m_pSupport || !m_activeEditor )
 		return ;
 	
-	ConfigureSimpleTypes conf;
+	ConfigureSimpleTypes conf( m_activeFileName );
 	
 	EvaluationResult type = evaluateExpressionAt( line, column, conf );
 
@@ -5725,7 +5768,7 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
 	if ( !m_pSupport || !m_activeEditor )
 		return ;
 	
-	ConfigureSimpleTypes conf;
+	ConfigureSimpleTypes conf( m_activeFileName );
 	
 	EvaluationResult type = evaluateExpressionAt( line, column, conf );
 	
@@ -5774,7 +5817,7 @@ bool CppCodeCompletion::isTypeExpression( const QString& expr ) {
 
 
 bool CppCodeCompletion::mayBeTypeTail( int line, int column, QString& append, bool inFunction ) {
-QString tail = clearComments( m_activeEditor->text( line, column+1, line+10 > (int)(m_activeEditor->numLines() ? m_activeEditor->numLines() : line + 10), 0 ));
+QString tail = clearComments( m_activeEditor->text( line, column+1, line+10 > (int)m_activeEditor->numLines() ? (int)m_activeEditor->numLines() : line + 10, 0 ));
 		tail.replace("\n", " ");
 		SafetyCounter s ( 100 );
 		bool hadSpace = false;
@@ -6266,7 +6309,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 	TypeSpecifierAST::Node recoveredTypeSpec;
 
 	SimpleContext* ctx = 0;
-	ConfigureSimpleTypes conf;
+	ConfigureSimpleTypes conf( m_activeFileName );
 	
 	m_pSupport->backgroundParser() ->lock ();
 	
