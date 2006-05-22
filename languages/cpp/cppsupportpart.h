@@ -196,7 +196,7 @@ private slots:
 	void setupCatalog();
     void codeCompletionConfigStored();
     void splitHeaderSourceConfigStored();
-	void recomputeCodeModel( const QString& fileName );
+    //	void recomputeCodeModel( const QString& fileName );
     void parseEmit( const QStringList& files );
 	void slotNewClass();
 	void slotSwitchHeader( bool scrollOnly = false );
@@ -277,7 +277,7 @@ private:
 	void setPcsVersion( int version );
 
 	void saveProjectSourceInfo();
-	static QStringList reorder( const QStringList& list );
+	QStringList reorder( const QStringList& list );
 	static QString findHeader( const QStringList&list, const QString& header );
 
 	CppCodeCompletion* m_pCompletion;
@@ -356,6 +356,16 @@ private:
         }
         void clear() {
             m_waiting.clear();
+        }
+        
+        ///files that were not requested must not be processed, since they maybe do not respect the group-relationships.
+        bool reject( QString file ) {
+            for( List::iterator it = m_waiting.begin(); it != m_waiting.end(); ++it) {
+                if( (*it).first.find( file ) !=  (*it).first.end() ) {
+                    return false;
+                }
+            }
+            return true;
         }
         
         ///returns the parsed-messages that should be emitted

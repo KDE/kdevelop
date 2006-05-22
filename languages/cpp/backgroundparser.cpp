@@ -89,7 +89,8 @@ public:
 			kapp->unlock();
 			//kdDebug(9007) << "-------> kapp unlocked" << endl;
 		}
-		else
+		
+		if( m_readFromDisk || contents == QString::null )
 		{
 			QFile f( fileName );
 			if ( f.open( IO_ReadOnly ) )

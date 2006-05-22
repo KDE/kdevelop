@@ -2840,11 +2840,11 @@ protected:
 	}
 	
 	virtual void invalidatePrimaryCache() {
-		if( !m_memberCache.isEmpty() ) dbg() << "\"" << Base::str() << "\" primary caches cleared" << endl;
+		//if( !m_memberCache.isEmpty() ) dbg() << "\"" << Base::str() << "\" primary caches cleared" << endl;
 		m_memberCache.clear();
 	}
 	virtual void invalidateSecondaryCache() {
-		if( !m_locateCache.isEmpty() ) dbg() << "\"" << Base::str() << "\" secondary caches cleared" << endl;
+		//if( !m_locateCache.isEmpty() ) dbg() << "\"" << Base::str() << "\" secondary caches cleared" << endl;
 		m_locateCache.clear();
 		m_basesCache.clear();
 	}
@@ -5720,7 +5720,7 @@ public:
 				QStringList argNames = d.resolved()->asFunction()->getArgumentNames();
 				if( !args.isEmpty() ) {
 					QPopupMenu * m = new QPopupMenu( parent );
-					int gid = parent->insertItem( i18n( "arguments-types" ), m );
+					int gid = parent->insertItem( i18n( "argument-types" ), m );
 					QStringList::iterator it2 = argNames.begin();
 					for( QValueList<TypeDesc>::iterator it = args.begin(); it != args.end(); ++it ) 
 					{
@@ -5859,10 +5859,10 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
 		addStatusText( i18n( "Comment on variable %1: \"%1\"").arg( type.sourceVariable.name ).arg( type.sourceVariable.comment ) , 10000 );
 		}
 		if( !type.resultType->comment().isEmpty() ) {
-			addStatusText( i18n( "Comment on type %1: \"%1\"").arg( type.resultType->desc().name() ).arg( type.resultType->comment() ) , 10000 );
+			addStatusText( i18n( "Comment on %1: \"%1\"").arg( type.resultType->desc().name() ).arg( type.resultType->comment() ) , 10000 );
 		} 
 		if( type.resultType->comment().isEmpty() ) {
-			addStatusText( i18n( "Type %1 has no comment").arg( type.resultType->desc().name() ) , timeout );
+			addStatusText( i18n( "%1 has no comment").arg( type.resultType->desc().name() ) , timeout );
 		}
 	} else {
 		if( type.resultType->desc() ) {

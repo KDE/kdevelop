@@ -306,11 +306,17 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 				
 				m_problemReporter->reportProblem( fileName, p );
 			}
-			recomputeCodeModel( fileName );
-			//QTimer::singleShot( 0, this, SLOT(recomputeCodeModel()) );
 		}
 		
-		emitFileParsed( m_fileParsedEmitWaiting.processFile( fileName ) );
+		if( !m_parseEmitWaiting.reject( fileName ) ) {
+		{
+			parseEmit( m_parseEmitWaiting.processFile( fileName )  );
+		}
+		
+			emitFileParsed( m_fileParsedEmitWaiting.processFile( fileName ) );
+		} else {
+			if( m_driver )m_driver->remove( fileName );
+		}
 	}
 }
 
@@ -720,6 +726,7 @@ QStringList CppSupportPart::reorder( const QStringList &list )
 	QStringList::ConstIterator it;
 	for ( it = list.begin(); it != list.end(); ++it )
 	{
+		if( !isValidSource( *it ) ) continue;
 		QString fileName = *it;
 		if ( headerExtensions.contains( QFileInfo( *it ).extension() ) )
 			headers << ( *it );
@@ -948,71 +955,29 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 	if ( codeModel() ->hasFile( m_activeFileName ) && codeModel()->hasFile( candidate ) &&
 	     m_activeViewCursor && attemptMatch )
 	{
+		QValueList<FileDom> candidates;
+		candidates << codeModel()->fileByName( candidate );
+		FileDom activeFile = codeModel() ->fileByName( m_activeFileName );
+		candidates += activeFile->wholeGroup();
+		
+		
 		unsigned int currentline, column;
 		m_activeViewCursor->cursorPosition( &currentline, &column );
 		
-		if ( isHeader( m_activeFileName ) )
-		{
-			// we're in the header file, let's find the current function declaration
-			FileDom header = codeModel() ->fileByName( m_activeFileName );
-			FunctionList functionList = CodeModelUtils::allFunctionsDetailed( header ).functionList;
-			
-			FunctionList::ConstIterator it_decl = functionList.begin();
-			while ( it_decl != functionList.end() )
-			{
-				int startline, column, endLine, endColumn;
-				( *it_decl ) ->getStartPosition( &startline, &column );
-				( *it_decl ) ->getEndPosition( &endLine, &endColumn );
-				if ( (int)currentline >= startline && (int)currentline <= endLine )
-				{
-					// found it. can we find a matching defintion?
-					FileDom source = codeModel() ->fileByName( candidate );
-					FunctionDefinitionList functionDefList = CodeModelUtils::allFunctionDefinitionsDetailed( source ).functionList;
-					for ( FunctionDefinitionList::ConstIterator it_def = functionDefList.begin();
-					      it_def != functionDefList.end(); ++it_def )
-					{
-						if ( CodeModelUtils::compareDeclarationToDefinition( *it_decl, *it_def ) )
-						{
-							// found the declaration, let's jump!
-							int line, column;
-							( *it_def ) ->getStartPosition( &line, &column );
-							KURL url;
-							url.setPath( candidate );
-							if ( scrollOnly )
-								partController() ->scrollToLineColumn( url, line );
-							else if ( !splitHeaderSourceConfig()->splitEnabled() )
-								partController() ->editDocument( url, line );
-							else
-								partController() ->splitCurrentDocument( url, line );
-							return ;
-						}
-					}
-					break;
-				}
-				++it_decl;
-			}
-		}
-		else if ( isSource( m_activeFileName ) )
-		{
-			// we're in the source file, let's find the current function definition
-			FileDom header = codeModel() ->fileByName( m_activeFileName );
-			FunctionDefinitionList functionDefList = CodeModelUtils::allFunctionDefinitionsDetailed( header ).functionList;
-			
-			FunctionDefinitionList::ConstIterator it_def = functionDefList.begin();
-			while ( it_def != functionDefList.end() )
-			{
-				int startline, column, endLine, endColumn;
-				( *it_def ) ->getStartPosition( &startline, &column );
-				( *it_def ) ->getEndPosition( &endLine, &endColumn );
-				if ( (int)currentline >= startline && (int)currentline <= endLine )
-				{
+		CodeModelUtils::CodeModelHelper h( codeModel(), activeFile );
+		FunctionDom d = h.functionAt( currentline, column );
+		
+		if( d ) {
+			if( d->isFunctionDefinition() ) {
+				///Find the declaration in one of the other files
+				for( QValueList<FileDom>::iterator it = candidates.begin(); it != candidates.end(); ++it ) {
+					FileDom source = *it;
 					// found it. can we find a matching declaration?
-					FileDom source = codeModel() ->fileByName( candidate );
 					FunctionList functionList = CodeModelUtils::allFunctionsDetailed( source ).functionList;
 					for ( FunctionList::ConstIterator it_decl = functionList.begin();
 					      it_decl != functionList.end(); ++it_decl )
 					{
-						if ( CodeModelUtils::compareDeclarationToDefinition( *it_decl, *it_def ) )
+						if ( CodeModelUtils::compareDeclarationToDefinition( *it_decl, (FunctionDefinitionModel*)(d.data()) ) )
 						{
 							// found the declaration, let's jump!
 							int line, column;
@@ -1028,10 +993,37 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 							return ;
 						}
 					}
-					break;
 				}
-				++it_def;
+			} else {
+				///Find the definition in one of the other files
+				for( QValueList<FileDom>::iterator it = candidates.begin(); it != candidates.end(); ++it ) {
+					FileDom source = *it;
+					FunctionDefinitionList functionDefList = CodeModelUtils::allFunctionDefinitionsDetailed( source ).functionList;
+					for ( FunctionDefinitionList::ConstIterator it_def = functionDefList.begin();
+					      it_def != functionDefList.end(); ++it_def )
+					{
+						if( *it_def == d ) continue;
+						
+						if ( CodeModelUtils::compareDeclarationToDefinition( d, *it_def ) )
+						{
+							// found the declaration, let's jump!
+							int line, column;
+							( *it_def ) ->getStartPosition( &line, &column );
+							KURL url;
+							url.setPath( candidate );
+							if ( scrollOnly )
+								partController() ->scrollToLineColumn( url, line );
+							else if ( !splitHeaderSourceConfig()->splitEnabled() )
+								partController() ->editDocument( url, line );
+							else
+								partController() ->splitCurrentDocument( url, line );
+							return ;
+						}
+					}
+				}
 			}
+		} else {
+			///No current function could be located, just open the other file
 		}
 	}
 	
@@ -1951,13 +1943,13 @@ void CppSupportPart::parseFileAndDependencies( const QString & fileName ) {
 	QString group = lst.join("\n");
 	kdDebug() << "reparsing dependencies of " << fileName << ":\n" << group << "\n";
 	
-	for(QStringList::iterator it = lst.begin(); it != lst.end(); ++it) {
-		if( isValidSource(*it) )
-			backgroundParser()->addFile(*it, false);
-	}
 	if( !lst.isEmpty() ) {
 		m_parseEmitWaiting.addGroup( lst );
 		m_fileParsedEmitWaiting.addGroup( lst );
+	}
+	
+	for(QStringList::iterator it = lst.begin(); it != lst.end(); ++it) {
+		backgroundParser()->addFile(*it, false);
 	}
 }
 
@@ -1970,12 +1962,12 @@ void CppSupportPart::parseEmit( const QStringList& files ) {
 	
 	while(!l.isEmpty() ) 
 	{
-		if ( codeModel() ->hasFile( l.front() ) && m_backgroundParser->hasTranslationUnit( l.front() ) )
+		if ( codeModel() ->hasFile( l.back() ) && m_backgroundParser->hasTranslationUnit( l.back() ) )
 		{
-			removeWithReferences( l.front() );
+			removeWithReferences( l.back() );
 		}
 		
-		l.pop_front();
+		l.pop_back();
 	}
 	
 	l = files;
@@ -2021,10 +2013,10 @@ void CppSupportPart::parseEmit( const QStringList& files ) {
 	m_backgroundParser->unlock();
 }
 
-void CppSupportPart::recomputeCodeModel( const QString& fileName )
-{
-	parseEmit( m_parseEmitWaiting.processFile( fileName )  );
-}
+/*void CppSupportPart::recomputeCodeModel( const QString& fileName )
+{*/
+	
+//}
 
 void CppSupportPart::emitFileParsed( QStringList l )
 {

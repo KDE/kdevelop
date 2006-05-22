@@ -52,7 +52,7 @@ class KToolBarPopupAction;
 class NamespaceItem;
 class Navigator;
 
-class ClassViewPart : public KDevCodeBrowserFrontend
+class ClassViewPart : public Extensions::KDevCodeBrowserFrontend
 {
     Q_OBJECT
 public:

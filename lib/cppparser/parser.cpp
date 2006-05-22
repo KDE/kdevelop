@@ -135,7 +135,7 @@ bool Parser::reportError( const Error& err )
 	lex->getTokenPosition( token, &line, &col );
 
 	QString s = lex->lookAhead(0).text();
-	s = s.left( 30 ).stripWhiteSpace();
+        s = s.left( 30 ).stripWhiteSpace();
 	if( s.isEmpty() )
 	    s = i18n( "<eof>" );
 

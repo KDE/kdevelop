@@ -28,6 +28,7 @@ StoreWalker::StoreWalker( const QString& fileName, CodeModel* store )
 StoreWalker::~StoreWalker()
 {}
 
+
 void StoreWalker::parseTranslationUnit( TranslationUnitAST* ast )
 {
 	m_file = m_store->create<FileModel>();
@@ -46,7 +47,7 @@ void StoreWalker::parseTranslationUnit( TranslationUnitAST* ast )
 	m_anon = 0;
 	m_imports.clear();
 	
-	m_imports << QStringList();
+	m_imports << QPair<QMap<QString, ClassDom>, QStringList>(QMap<QString, ClassDom>(), QStringList());
 	TreeParser::parseTranslationUnit( ast );
 	m_imports.pop_back();
 }
@@ -110,7 +111,7 @@ void StoreWalker::parseUsingDirective( UsingDirectiveAST* ast )
 {
 	QString name = ast->name()->unqualifiedName()->text();
 	QString tx = ast->name()->text();
-	m_imports.back().push_back( ast->name()->text());
+	m_imports.back().second.push_back( ast->name()->text() );
 }
 
 void StoreWalker::parseTypedef( TypedefAST* ast )
@@ -246,6 +247,20 @@ void StoreWalker::parseSimpleDeclaration( SimpleDeclarationAST* ast )
 	}
 }
 
+
+QStringList StoreWalker::findScope( const QStringList& scope ) {
+	ClassDom d = findClassFromScope( scope );
+	
+	if( d ) {
+		QStringList ret = d->scope();
+		ret << d->name();
+		return ret;
+	}
+	
+	return scope;
+}
+
+
 void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 {
 	TypeSpecifierAST * typeSpec = ast->typeSpec();
@@ -307,6 +322,11 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	QString id = d->declaratorId() ->unqualifiedName() ->text().stripWhiteSpace();
 	
 	QStringList scope = scopeOfDeclarator( d, m_currentScope );
+	ClassDom c = findClassFromScope( scope );
+	if( c ){
+		scope = c->scope();
+		scope << c->name();
+	}
 	
 	FunctionDefinitionDom method = m_store->create<FunctionDefinitionModel>();
 	method->setScope( scope );
@@ -332,7 +352,9 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	if ( m_inSlots )
 		method->setSlot( true );
 	
-	if ( m_currentClass.top() || ( method->name() == "main" && scope.isEmpty() ) )
+	if( c && c->isClass() )
+		method->setConstant( d->constant() != 0 );
+	else if ( m_currentClass.top() || ( method->name() == "main" && scope.isEmpty() ) )
 	{
 		method->setConstant( d->constant() != 0 );
 		method->setAccess( m_currentAccess );
@@ -448,19 +470,7 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 	
 	
 	if( embed ) {
-		ClassDom embedderClass = classFromScope( m_currentScope + scopeOfName( ast->name(), QStringList() ));
-		
-		if(!embedderClass && !m_imports.isEmpty() && !m_imports.back().isEmpty()) {
-			///try the same using one of the imports(performance-wise this is not good, but simple)
-			
-			QStringList::iterator it = m_imports.back().begin();
-			while(it != m_imports.back().end()) {
-				QStringList scp = QStringList::split("::", *it) + m_currentScope + scopeOfName( ast->name(), QStringList());
-				embedderClass = classFromScope( scp );
-				if(embedderClass) break;
-				++it;
-			}
-		}
+		ClassDom embedderClass = findClassFromScope( m_currentScope + scopeOfName( ast->name(), QStringList() ));
 		
 		if(embedderClass) {
 			if(embedderClass->fileName() != klass->fileName()) {
@@ -865,35 +875,63 @@ QStringList StoreWalker::scopeOfName( NameAST* id, const QStringList& startScope
 	return scope;
 }
 
+
+ClassDom StoreWalker::findClassFromScope( const QStringList& scope ) 
+{
+	QString scopeText = scope.join("::");
+	if( !m_imports.isEmpty() ) {
+		QMapIterator<QString, ClassDom> it = m_imports.back().first.find( scopeText );
+		if( it != m_imports.back().first.end() ) {
+			return *it;
+		}
+	}
+	
+	ClassDom c = classFromScope( scope );
+	if( c ) {
+		if( !m_imports.isEmpty() ) m_imports.back().first[ scopeText ] = c;
+		return c;
+	}
+	
+	if(!m_imports.isEmpty() && !m_imports.back().second.isEmpty()) {
+			///try the same using one of the imports(performance-wise this is not good, but simple)
+		
+		QStringList::iterator it = m_imports.back().second.begin();
+		while(it != m_imports.back().second.end()) {
+			QStringList scp = QStringList::split("::", *it) + m_currentScope + scope;
+			c = classFromScope( scp );
+			if( c ) {
+				if( !m_imports.isEmpty() ) m_imports.back().first[ scopeText ] = c;
+				return c;
+			}
+			++it;
+		}
+	}
+	return c;
+}
+
 ClassDom StoreWalker::classFromScope(const QStringList& scope) {
-	FileList files = m_store->fileList();
 	if(scope.isEmpty())return ClassDom(0);
 	
-	for(FileList::iterator it = files.begin(); ; ++it) {
-		ClassModel* curr;
-		if(it != files.end())
-			curr = *it;
-		else
-			curr = &(*m_file);
-		
-		QStringList::const_iterator mit = scope.begin();
-		
-		while(curr->isNamespace() && mit != scope.end() && ((NamespaceModel*)curr)->hasNamespace( *mit )) {
-			curr = &(*( ((NamespaceModel*)curr)->namespaceByName( *mit ) ));
-			++mit;
-		}
-		
-		while((curr->isNamespace() || curr->isClass()) && mit != scope.end() && curr->hasClass( *mit )) {
-			ClassList cl = curr->classByName( *mit );
-			curr = &(**cl.begin() );
-			++mit;
-		}
-		
-		if(mit == scope.end()) {
-			return ClassDom( dynamic_cast<ClassModel*> (curr) );
-		}
-		
-		if(it == files.end())break;
+	NamespaceDom glob = m_store->globalNamespace();
+	if( !glob ) return ClassDom();
+	
+	ClassModel* curr =  glob ;
+	
+	QStringList::const_iterator mit = scope.begin();
+	
+	while(curr->isNamespace() && mit != scope.end() && ((NamespaceModel*)curr)->hasNamespace( *mit )) {
+		curr = &(*( ((NamespaceModel*)curr)->namespaceByName( *mit ) ));
+		++mit;
+	}
+	
+	while((curr->isNamespace() || curr->isClass()) && mit != scope.end() && curr->hasClass( *mit )) {
+		ClassList cl = curr->classByName( *mit );
+		curr = &(**cl.begin() );
+		++mit;
+	}
+	
+	if(mit == scope.end()) {
+		return curr;
 	}
 	
 	return ClassDom(0);
