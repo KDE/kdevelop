@@ -294,9 +294,30 @@ AllFunctionDefinitions allFunctionDefinitionsDetailed( const FileDom & dom )
     return list;
 }
 
+
+bool resultTypesFit( const FunctionDom & dec, const FunctionDefinitionDom & def ) {
+    if( !def->resultType().contains("::") ) return dec->resultType() == def->resultType();
+    QStringList l1 = dec->scope() + QStringList::split("::", dec->resultType() );
+    QStringList l2 = QStringList::split("::", def->resultType() );
+    
+    if( l1.isEmpty() || l2.isEmpty() || l1.back() != l2.back() ) return false;
+    
+    while( !l1.isEmpty() && !l2.isEmpty() ) {
+        if( l1.back() == l2.back() ) {
+            l1.pop_back();
+            l2.pop_back();
+        } else {
+            l1.pop_back();
+        }
+    }
+    
+    if( l2.isEmpty() ) return true;
+}
+
+
 bool compareDeclarationToDefinition( const FunctionDom & dec, const FunctionDefinitionDom & def )
 {
-	if (dec->scope() == def->scope() && dec->name() == def->name() && dec->resultType() == def->resultType() && dec->isConstant() == def->isConstant())
+    if (dec->scope() == def->scope() && dec->name() == def->name() && resultTypesFit( dec, def ) && dec->isConstant() == def->isConstant())
 	{
 		const ArgumentList defList = def->argumentList(), decList = dec->argumentList();
 		if (defList.size() != decList.size())

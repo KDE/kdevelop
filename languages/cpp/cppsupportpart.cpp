@@ -952,11 +952,11 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 	}
 
 	// ok, both files exist. Do the codemodel have them?
-	if ( codeModel() ->hasFile( m_activeFileName ) && codeModel()->hasFile( candidate ) &&
+	if ( codeModel() ->hasFile( m_activeFileName ) &&
 	     m_activeViewCursor && attemptMatch )
 	{
 		QValueList<FileDom> candidates;
-		candidates << codeModel()->fileByName( candidate );
+		if( codeModel()->hasFile( candidate ) ) candidates << codeModel()->fileByName( candidate );
 		FileDom activeFile = codeModel() ->fileByName( m_activeFileName );
 		candidates += activeFile->wholeGroup();
 		
@@ -977,13 +977,14 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 					for ( FunctionList::ConstIterator it_decl = functionList.begin();
 					      it_decl != functionList.end(); ++it_decl )
 					{
+						if( (void*)&(*it_decl) == (void*)d.data() || (scrollOnly && (*it_decl)->fileName() == m_activeFileName ) ) continue;
 						if ( CodeModelUtils::compareDeclarationToDefinition( *it_decl, (FunctionDefinitionModel*)(d.data()) ) )
 						{
 							// found the declaration, let's jump!
 							int line, column;
 							( *it_decl ) ->getStartPosition( &line, &column );
 							KURL url;
-							url.setPath( candidate );
+							url.setPath( (*it_decl)->fileName() );
 							if ( scrollOnly )
 								partController() ->scrollToLineColumn( url, line );
 							else if ( !splitHeaderSourceConfig()->splitEnabled() )
@@ -1002,7 +1003,7 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 					for ( FunctionDefinitionList::ConstIterator it_def = functionDefList.begin();
 					      it_def != functionDefList.end(); ++it_def )
 					{
-						if( *it_def == d ) continue;
+						if( *it_def == d || (scrollOnly && (*it_def)->fileName() == m_activeFileName ) ) continue;
 						
 						if ( CodeModelUtils::compareDeclarationToDefinition( d, *it_def ) )
 						{
@@ -1010,7 +1011,7 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 							int line, column;
 							( *it_def ) ->getStartPosition( &line, &column );
 							KURL url;
-							url.setPath( candidate );
+							url.setPath( (*it_def)->fileName() );
 							if ( scrollOnly )
 								partController() ->scrollToLineColumn( url, line );
 							else if ( !splitHeaderSourceConfig()->splitEnabled() )
