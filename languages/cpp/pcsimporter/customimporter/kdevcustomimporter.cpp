@@ -39,7 +39,8 @@ QStringList KDevCustomImporter::fileList( const QString& path )
 	QDir dir( path );
 	if ( !dir.exists() )
 		return QStringList();
-	QStringList lst = dir.entryList( "*.h;*.H;*.hh;*.hxx;*.hpp;*.tlh" );
+// 	QStringList lst = dir.entryList( "*.h;*.H;*.hh;*.hxx;*.hpp;*.tlh" );
+	QStringList lst = dir.entryList( m_settings->filePattern() );
 	QStringList fileList;
 	for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
 	{

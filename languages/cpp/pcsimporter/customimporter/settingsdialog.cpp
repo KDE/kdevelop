@@ -40,9 +40,9 @@ SettingsDialog::SettingsDialog( QWidget* parent, const char* name, WFlags fl )
 	pCustomEditor = req->customEditor();
 	elb = new KEditListBox( i18n( "Directories to Parse" ), pCustomEditor, this );
 
-	grid->addMultiCellWidget( elb, 2, 2, 0, grid->numCols() );
+	grid->addMultiCellWidget( elb, 3, 3, 0, grid->numCols() );
 
-	connect( dbName_edit, SIGNAL( textChanged( const QString& ) ), this, SLOT( validate() ) );
+	//	connect( dbName_edit, SIGNAL( textChanged( const QString& ) ), this, SLOT( validate() ) );
 	connect( elb->addButton(), SIGNAL( clicked() ), this, SLOT( validate() ) );
 	connect( elb->removeButton(), SIGNAL( clicked() ), this, SLOT( validate() ) );
 	connect( elb, SIGNAL( added( const QString& ) ), this, SLOT( validateDirectory( const QString& ) ) );
@@ -53,12 +53,18 @@ SettingsDialog::~SettingsDialog()
 
 QString SettingsDialog::dbName( ) const
 {
-	return dbName_edit->text();
+	return QString();
+// 	return dbName_edit->text();
 }
 
 QStringList SettingsDialog::dirs( ) const
 {
 	return elb->items();
+}
+
+QString SettingsDialog::filePattern( ) const
+{
+	return pattern_edit->text();
 }
 
 bool SettingsDialog::recursive( ) const
@@ -68,7 +74,8 @@ bool SettingsDialog::recursive( ) const
 
 void SettingsDialog::validate()
 {
-	emit enabled( !dbName_edit->text().isEmpty() && elb->listBox() ->count() > 0 );
+// 	emit enabled( !dbName_edit->text().isEmpty() && elb->listBox() ->count() > 0 );
+ 	emit enabled( elb->listBox()->count() > 0 );
 }
 
 void SettingsDialog::validateDirectory( const QString & dir )
@@ -90,6 +97,7 @@ void SettingsDialog::validateDirectory( const QString & dir )
 
 #include "settingsdialog.moc" 
 //kate: indent-mode csands; tab-width 4; space-indent off;
+
 
 
 

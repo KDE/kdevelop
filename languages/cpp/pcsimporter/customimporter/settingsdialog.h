@@ -32,6 +32,7 @@ public:
   QString dbName() const;
   QStringList dirs() const;
   bool recursive() const;
+  QString filePattern() const;
 
 private slots:
   void validate();

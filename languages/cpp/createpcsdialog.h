@@ -40,11 +40,16 @@ protected slots:
 	virtual void reject();
 	virtual void accept();
 	void setNextPageEnabled( int );
+	
+	void parseNext();
 
 private:
 	CppSupportPart* m_part;
 	QWidget* m_settings;
 	class RppDriver;
+	
+	class PCSJobData;
+	PCSJobData * m_jobData;
 };
 
 #endif 

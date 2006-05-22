@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>SettingsDialogBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -12,33 +12,27 @@
             <height>340</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>SettingsDialogBase</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="KListBox" row="0" column="0" rowspan="1" colspan="2">
+        <widget class="QLabel" row="2" column="0">
             <property name="name">
-                <cstring>qtListBox</cstring>
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>Selected directory to parse:</string>
             </property>
         </widget>
-        <spacer row="1" column="0">
+        <widget class="KURLRequester" row="3" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>spacer2</cstring>
+                <cstring>qtUrl</cstring>
             </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>41</width>
-                    <height>21</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLayoutWidget" row="1" column="1">
+        </widget>
+        <widget class="QLayoutWidget" row="4" column="0">
             <property name="name">
                 <cstring>layout2</cstring>
             </property>
@@ -59,7 +53,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Configuration:</string>
+                        <string>Scope:</string>
                     </property>
                 </widget>
                 <widget class="KComboBox">
@@ -74,11 +68,46 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Select the Qt configuration to create a Code Completion database for. If you don't know what this option does, just go with the default.</string>
+                    </property>
                 </widget>
             </hbox>
         </widget>
+        <spacer row="4" column="1">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>150</width>
+                    <height>21</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="KListBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>qtListBox</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>textLabel1_2</cstring>
+            </property>
+            <property name="text">
+                <string>Found Qt include directories:</string>
+            </property>
+        </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>qtListBox</sender>
@@ -95,7 +124,10 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistbox.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>kcombobox.h</includehint>
+    <includehint>klistbox.h</includehint>
 </includehints>
 </UI>

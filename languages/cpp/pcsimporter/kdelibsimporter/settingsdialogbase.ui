@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>SettingsDialogBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,19 +9,49 @@
             <x>0</x>
             <y>0</y>
             <width>394</width>
-            <height>342</height>
+            <height>287</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>SettingsDialogBase</string>
     </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="KListBox" row="0" column="0" rowspan="1" colspan="3">
+        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>textLabel1_2</cstring>
+            </property>
+            <property name="text">
+                <string>Found KDE include directories:</string>
+            </property>
+        </widget>
+        <widget class="KListBox" row="1" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>kdeListBox</cstring>
             </property>
         </widget>
-        <widget class="QComboBox" row="1" column="2">
+        <widget class="QLabel" row="2" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>Directory to parse:</string>
+            </property>
+        </widget>
+        <widget class="KURLRequester" row="3" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>kdeUrl</cstring>
+            </property>
+            <property name="enabled">
+                <bool>true</bool>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If none of the directories KDevelop found is what you want,you can enter a directory of your choice here</string>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="4" column="1">
             <item>
                 <property name="text">
                     <string>KDE Libs Headers</string>
@@ -35,8 +65,14 @@
             <property name="name">
                 <cstring>cbParsingScope</cstring>
             </property>
+            <property name="toolTip" stdset="0">
+                <string></string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Decide if you want to restrict the Code Completion database to only the base kdelibs API or the entire KDE include structure</string>
+            </property>
         </widget>
-        <spacer row="1" column="0">
+        <spacer row="4" column="2">
             <property name="name">
                 <cstring>spacer1</cstring>
             </property>
@@ -53,16 +89,18 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QLabel" row="1" column="1">
+        <widget class="QLabel" row="4" column="0">
             <property name="name">
                 <cstring>textLabel1</cstring>
             </property>
             <property name="text">
-                <string>Parse:</string>
+                <string>Scope:</string>
             </property>
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>kdeListBox</sender>
@@ -80,5 +118,8 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistbox.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

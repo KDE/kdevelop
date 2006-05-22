@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>CreatePCSDialogBase</class>
 <widget class="QWizard">
     <property name="name">
@@ -17,10 +17,10 @@
     </property>
     <widget class="QWidget">
         <property name="name">
-            <cstring>page</cstring>
+            <cstring>importerPage</cstring>
         </property>
         <attribute name="title">
-            <string>Choose Library</string>
+            <string>Select importer</string>
         </attribute>
         <vbox>
             <property name="name">
@@ -52,8 +52,64 @@
             <cstring>settingsPage</cstring>
         </property>
         <attribute name="title">
-            <string>Library Settings</string>
+            <string>Select directory</string>
         </attribute>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>descriptionPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Describe database contents</string>
+        </attribute>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1</cstring>
+                </property>
+                <property name="text">
+                    <string>Filename:</string>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>filename_edit</cstring>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel2</cstring>
+                </property>
+                <property name="text">
+                    <string>Description:</string>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>description_edit</cstring>
+                </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>spacer2</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Vertical</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>20</width>
+                        <height>111</height>
+                    </size>
+                </property>
+            </spacer>
+        </vbox>
     </widget>
     <widget class="QWidget">
         <property name="name">
@@ -99,6 +155,8 @@
         </vbox>
     </widget>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>CreatePCSDialogBase</sender>

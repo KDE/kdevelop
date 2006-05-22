@@ -17,17 +17,6 @@
 #include <qregexp.h>
 #include <cstdlib>
 
-#if QT_VERSION < 0x030100 
-/* original source from qt-3.2.1/src/widgets/qlistbox.cpp
-QListBoxItem* QListBox::selectedItem() const
-{
-    if ( d->selectionMode != Single )
-	return 0;
-    if ( isSelected( currentItem() ) )
-	return  d->current;
-    return 0;
-}
-*/
 QListBoxItem* QListBox_selectedItem( QListBox* cpQListBox )
 {
 	if ( cpQListBox->selectionMode() != QListBox::Single )
@@ -36,7 +25,6 @@ QListBoxItem* QListBox_selectedItem( QListBox* cpQListBox )
 		return cpQListBox->item( cpQListBox->currentItem() );
 	return 0;
 }
-#endif
 
 SettingsDialog::SettingsDialog( QWidget* parent, const char* name, WFlags fl )
 		: SettingsDialogBase( parent, name, fl )
@@ -59,17 +47,10 @@ SettingsDialog::SettingsDialog( QWidget* parent, const char* name, WFlags fl )
 SettingsDialog::~SettingsDialog()
 {}
 
-/*$SPECIALIZATION$*/
-void SettingsDialog::slotSelectionChanged( QListBoxItem* // item
-                                         )
+void SettingsDialog::slotSelectionChanged( QListBoxItem* )
 {
-#if QT_VERSION < 0x030100
-	if ( !QListBox_selectedItem( qtListBox ) )
-	{
-#else
 	if ( !qtListBox->selectedItem() )
 	{
-#endif
 		emit enabled( false );
 		return ;
 	}

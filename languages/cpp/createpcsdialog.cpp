@@ -30,13 +30,19 @@
 #include <kapplication.h>
 #include <kinstance.h>
 #include <kstandarddirs.h>
+#include <klocale.h>
+#include <kstringhandler.h>
 
+#include <qeventloop.h>
 #include <qprogressbar.h>
 #include <qheader.h>
 #include <qlabel.h>
 #include <qprocess.h>
 #include <qregexp.h>
 #include <qlayout.h>
+#include <qlineedit.h>
+#include <qtimer.h>
+#include <qpushbutton.h>
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -185,9 +191,43 @@ private:
 	KDevPCSImporter* m_importer;
 };
 
-CreatePCSDialog::CreatePCSDialog( CppSupportPart* part, QWidget* parent, const char* name, bool modal, WFlags fl )
-		: CreatePCSDialogBase( parent, name, modal, fl ), m_part( part )
+class CreatePCSDialog::PCSJobData
 {
+public:
+	QString dbName;
+	Catalog * catalog;
+	RppDriver * driver;
+	QStringList list;
+	QStringList::iterator it;
+	int progress;
+
+	PCSJobData( const QString & dbName, QStringList const & fileList ) 
+		: dbName( dbName), list( fileList ), it( list.begin() ), progress( 0 )
+	{
+		catalog = new Catalog;
+		catalog->open( dbName );
+		catalog->addIndex( "kind" );
+		catalog->addIndex( "name" );
+		catalog->addIndex( "scope" );
+		catalog->addIndex( "fileName" );
+		
+		driver = new RppDriver( catalog );
+	}
+	
+	~PCSJobData()
+	{
+		delete driver;
+		delete catalog;
+	}
+};
+
+
+
+CreatePCSDialog::CreatePCSDialog( CppSupportPart* part, QWidget* parent, const char* name, bool modal, WFlags fl )
+	: CreatePCSDialogBase( parent, name, modal, fl ), m_part( part ), m_jobData( 0 )
+{
+	helpButton()->hide();
+	
 	m_settings = 0;
 	importerListView->header() ->hide();
 
@@ -206,7 +246,7 @@ CreatePCSDialog::CreatePCSDialog( CppSupportPart* part, QWidget* parent, const c
 		}
 	}
 
-	setNextEnabled( page, false );
+	setNextEnabled( importerPage, false );
 
 	QHBoxLayout* hbox = new QHBoxLayout( settingsPage );
 	hbox->setAutoAdd( true );
@@ -214,7 +254,7 @@ CreatePCSDialog::CreatePCSDialog( CppSupportPart* part, QWidget* parent, const c
 	if ( importerListView->firstChild() )
 	{
 		importerListView->setSelected( importerListView->firstChild(), true );
-		setNextEnabled( page, true );
+		setNextEnabled( importerPage, true );
 	}
 }
 
@@ -234,11 +274,19 @@ void CreatePCSDialog::next()
 
 void CreatePCSDialog::reject()
 {
+	m_part->removeCatalog( m_jobData->dbName );
+	
+	delete m_jobData;
+	m_jobData = 0;
+	
 	QWizard::reject();
 }
 
 void CreatePCSDialog::accept()
 {
+	delete m_jobData;
+	m_jobData = 0;
+	
 	QWizard::accept();
 }
 
@@ -261,6 +309,11 @@ void CreatePCSDialog::slotSelected( const QString & )
 			m_settings->show();
 		}
 	}
+	else if ( currentPage() == descriptionPage )
+	{
+		KDevPCSImporter* importer = static_cast<PCSListViewItem*>( importerListView->selectedItem() )->importer();
+		filename_edit->setText( importer->dbName() );
+	}
 	else if ( currentPage() == finalPage )
 	{
 		setBackEnabled( currentPage(), false );
@@ -270,16 +323,20 @@ void CreatePCSDialog::slotSelected( const QString & )
 		QStringList fileList = importer->fileList();
 		progressBar->setTotalSteps( fileList.size() );
 		progressBar->setPercentageVisible( true );
-		int n = 0;
+// 		int n = 0;
 
 		KStandardDirs *dirs = m_part->instance() ->dirs();
 
-		QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + "/" + importer->dbName() + ".db";
+// 		QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + "/" + importer->dbName() + ".db";
+		QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + "/" + filename_edit->text() + ".db";
 		kdDebug( 9007 ) << "================================> dbName = " << dbName << endl;
 
 		m_part->removeCatalog( dbName );
+		
+		m_jobData = new PCSJobData( dbName, fileList );
+		QTimer::singleShot( 0, this, SLOT(parseNext()) );
 
-		Catalog* c = new Catalog();
+/*		Catalog* c = new Catalog();
 		c->open( dbName );
 		c->addIndex( "kind" );
 		c->addIndex( "name" );
@@ -293,15 +350,48 @@ void CreatePCSDialog::slotSelected( const QString & )
 			progressBar->setProgress( ++n );
 			currentFile->setText( *it );
 			driver.parseFile( *it );
-			kapp->processEvents();
+			kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput | QEventLoop::ExcludeSocketNotifiers );
 		}
 
 		currentFile->setText( "" );
 		m_part->addCatalog( c );
 
-		setFinishEnabled( currentPage(), true );
+		setFinishEnabled( currentPage(), true );*/
 	}
 }
+
+void CreatePCSDialog::parseNext( )
+{
+	if ( ! m_jobData ) return;
+	
+	if ( m_jobData->it == m_jobData->list.end() ) 
+	{
+		if ( m_jobData->progress > 0 )
+		{
+			m_part->addCatalog( m_jobData->catalog );
+			m_jobData->catalog = 0;
+		}
+		currentFile->setText("");
+		cancelButton()->setEnabled( false );
+		
+		setFinishEnabled( currentPage(), true );
+		
+		delete m_jobData;
+		m_jobData = 0;
+		
+		return;
+	}
+	
+	progressBar->setProgress( ++(m_jobData->progress) );
+	currentFile->setText( KStringHandler::lsqueeze( *(m_jobData->it), 80 ) );
+	
+	m_jobData->driver->parseFile( *(m_jobData->it) );
+	
+	++(m_jobData->it);
+	
+	QTimer::singleShot( 0, this, SLOT(parseNext()) );	
+}
+
 
 void CreatePCSDialog::setNextPageEnabled( int enabled )
 {
@@ -314,3 +404,4 @@ void CreatePCSDialog::slotSelectionChanged( QListViewItem * item )
 }
 
 //kate: indent-mode csands; tab-width 4; space-indent off;
+
