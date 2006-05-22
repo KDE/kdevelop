@@ -185,8 +185,8 @@ void CCConfigWidget::slotRemovePCS()
 	QString question = i18n( "Are you sure you want to remove the \"%1\" database?" ).arg( db );
 
 	KStandardDirs *dirs = m_pPart->instance() ->dirs();
-	QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + "/" + db + ".db";
-
+	QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + db + ".db";
+	
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
 
 	if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( 0, question, i18n( "Remove Database" ), KStdGuiItem::del() ) )

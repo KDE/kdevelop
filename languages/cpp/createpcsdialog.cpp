@@ -33,7 +33,6 @@
 #include <klocale.h>
 #include <kstringhandler.h>
 
-#include <qeventloop.h>
 #include <qprogressbar.h>
 #include <qheader.h>
 #include <qlabel.h>
@@ -323,40 +322,16 @@ void CreatePCSDialog::slotSelected( const QString & )
 		QStringList fileList = importer->fileList();
 		progressBar->setTotalSteps( fileList.size() );
 		progressBar->setPercentageVisible( true );
-// 		int n = 0;
 
 		KStandardDirs *dirs = m_part->instance() ->dirs();
 
-// 		QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + "/" + importer->dbName() + ".db";
-		QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + "/" + filename_edit->text() + ".db";
+		QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + filename_edit->text() + ".db";
 		kdDebug( 9007 ) << "================================> dbName = " << dbName << endl;
 
 		m_part->removeCatalog( dbName );
 		
 		m_jobData = new PCSJobData( dbName, fileList );
 		QTimer::singleShot( 0, this, SLOT(parseNext()) );
-
-/*		Catalog* c = new Catalog();
-		c->open( dbName );
-		c->addIndex( "kind" );
-		c->addIndex( "name" );
-		c->addIndex( "scope" );
-		c->addIndex( "fileName" );
-
-		RppDriver driver( c );
-		for ( QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it )
-		{
-			//kdDebug(9007) << "==========> parsing: " << *it << endl;
-			progressBar->setProgress( ++n );
-			currentFile->setText( *it );
-			driver.parseFile( *it );
-			kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput | QEventLoop::ExcludeSocketNotifiers );
-		}
-
-		currentFile->setText( "" );
-		m_part->addCatalog( c );
-
-		setFinishEnabled( currentPage(), true );*/
 	}
 }
 
