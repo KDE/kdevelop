@@ -17,6 +17,10 @@ TODO:
 
       - Test files without debug info
 
+   - Incoming bug reports:
+
+
+
    - Check core files usage.
 
    - GDB controller should provide 'default MI error handler',

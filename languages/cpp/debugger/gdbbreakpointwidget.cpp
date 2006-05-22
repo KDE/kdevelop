@@ -487,7 +487,6 @@ void GDBBreakpointWidget::slotToggleBreakpoint(const QString &fileName, int line
     BreakpointTableRow* btr = find(fpBP);
     if (btr)
     {
-        delete fpBP;
         removeBreakpoint(btr);
     }
     else

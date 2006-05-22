@@ -1088,11 +1088,19 @@ void DebuggerPart::slotRefreshBPState( const Breakpoint& BP)
     if (BP.hasFileAndLine())
     {
         const FilePosBreakpoint& bp = dynamic_cast<const FilePosBreakpoint&>(BP);
-        kdDebug(9012) << "File breakpoint: " << bp.fileName() 
-                      << ":" << bp.lineNum() << "\n";
         if (bp.isActionDie())
         {
             debugger()->setBreakpoint(bp.fileName(), bp.lineNum()-1, -1, true, false);
+        }
+        else if (bp.isActionClear())
+        {
+            // Do nothing. This is always a result of breakpoint deletion,
+            // either via click on gutter, or via breakpoints window.
+            // We should not add marker for a breakpoint that's being deleted,
+            // because if user removes marker, and we re-add it here until
+            // we see 'actionDie' this can confuse the code.
+            // And no need to clear the marker, since we'll soon see 'actionDie'
+            // and clear it for good.
         }
         else
             debugger()->setBreakpoint(bp.fileName(), bp.lineNum()-1,
