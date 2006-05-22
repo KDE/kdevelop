@@ -30,7 +30,6 @@ public:
 public slots:
 	void accept( );
     void slotNewPCS();
-    void slotEnableSplit( bool b );
 
 protected slots:
 	void slotGetterSetterValuesChanged();
@@ -39,7 +38,6 @@ protected slots:
 private slots:
 	void catalogRegistered( Catalog* c );
 	void catalogUnregistered( Catalog* c );
-	void slotToogleQtUsed();
 
 private:
 	void initGeneralTab();

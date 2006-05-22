@@ -176,12 +176,6 @@ void CCConfigWidget::slotNewPCS( )
 	dlg.exec();
 }
 
-void CCConfigWidget::slotEnableSplit( bool b )
-{
-	m_splitSync->setEnabled( b );
-	m_splitOrientationBox->setEnabled( b );
-}
-
 void CCConfigWidget::slotRemovePCS()
 {
 	if ( !advancedOptions->selectedItem() )
@@ -372,9 +366,6 @@ void CCConfigWidget::initQtTab()
 	{
 		m_qtVersion3->setChecked( true );
 	}
-	
-	m_qtRoot->setURL( c->root() );
-	slotToogleQtUsed();
 }
 
 void CCConfigWidget::saveQtTab()
@@ -391,18 +382,8 @@ void CCConfigWidget::saveQtTab()
 		c->setVersion( 3 );
 	}
 	
-	c->setRoot( m_qtRoot->url() );
-	
 	c->store();
 }
-
-void CCConfigWidget::slotToogleQtUsed()
-{
-	bool enabled = m_qtUsed->isChecked();
-	m_qtVersionBox->setEnabled( enabled );
-	m_qtInstallationBox->setEnabled( enabled );
-}
-
 
 #include "ccconfigwidget.moc"
 

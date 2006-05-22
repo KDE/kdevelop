@@ -8,277 +8,27 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>545</width>
-            <height>470</height>
+            <width>759</width>
+            <height>648</height>
         </rect>
     </property>
     <property name="caption">
         <string>C++ Options</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QTabWidget">
+        <widget class="QTabWidget" row="0" column="0">
             <property name="name">
-                <cstring>codecompletion_tab</cstring>
+                <cstring>cpp_options</cstring>
             </property>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>fileTemplatesPage</cstring>
-                </property>
-                <attribute name="title">
-                    <string>&amp;General</string>
-                </attribute>
-                <vbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QGroupBox">
-                        <property name="name">
-                            <cstring>options</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>5</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="title">
-                            <string>Class Wizard Options</string>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>These are the suffixes used by the Class Wizard when creating new classes.&lt;br&gt;Should be in the format: ".suffix"</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLineEdit" row="0" column="1">
-                                <property name="name">
-                                    <cstring>interface_suffix</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="1" column="1">
-                                <property name="name">
-                                    <cstring>implementation_suffix</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Interface suffix:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>interface_suffix</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel4</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>I&amp;mplementation suffix:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>implementation_suffix</cstring>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QGroupBox">
-                        <property name="name">
-                            <cstring>groupBox21</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Context Menu</string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>m_switchShouldMatch</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Switch Header/Implementation matches current function</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Check to have the &lt;b&gt;Switch Header/Implementation&lt;/b&gt; feature attempt to match the function under the cursor with the matching declaration/definition.</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>m_showContextMenuExplosion</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Show Go To Declaration/Definition submenus</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Check to show two additional submenus in the editor context menu containing all the declarations and definitions for the current file and its matching header/implementation file.</string>
-                                </property>
-                            </widget>
-                        </vbox>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>spacer45</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>131</height>
-                            </size>
-                        </property>
-                    </spacer>
-                </vbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>m_pageQt</cstring>
-                </property>
-                <attribute name="title">
-                    <string>&amp;Qt</string>
-                </attribute>
-                <vbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>m_qtUsed</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Use Qt in this project</string>
-                        </property>
-                    </widget>
-                    <widget class="QButtonGroup">
-                        <property name="name">
-                            <cstring>m_qtVersionBox</cstring>
-                        </property>
-                        <property name="enabled">
-                            <bool>false</bool>
-                        </property>
-                        <property name="title">
-                            <string>Version</string>
-                        </property>
-                        <property name="exclusive">
-                            <bool>true</bool>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>Select which Qt version your project is using.</string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>m_qtVersion3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Qt 3.x</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Select this if your project is using Qt version 3.x.</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>m_qtVersion4</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Qt 4.x</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Select this if your project is using Qt version 4.x.</string>
-                                </property>
-                            </widget>
-                        </vbox>
-                    </widget>
-                    <widget class="QGroupBox">
-                        <property name="name">
-                            <cstring>m_qtInstallationBox</cstring>
-                        </property>
-                        <property name="enabled">
-                            <bool>false</bool>
-                        </property>
-                        <property name="title">
-                            <string>Installation</string>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>The path where your choosen Qt version is installed.</string>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>textLabel1_3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Qt root path:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>kURLRequester1</cstring>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>The path where your choosen Qt version is installed.</string>
-                                </property>
-                            </widget>
-                            <widget class="KURLRequester">
-                                <property name="name">
-                                    <cstring>m_qtRoot</cstring>
-                                </property>
-                                <property name="mode">
-                                    <number>2</number>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>The path where your choosen Qt version is installed.</string>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>spacer12_2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>130</height>
-                            </size>
-                        </property>
-                    </spacer>
-                </vbox>
-            </widget>
             <widget class="QWidget">
                 <property name="name">
                     <cstring>codeCompletionPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Code Comp&amp;letion</string>
+                    <string>&amp;Code Completion</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -316,7 +66,7 @@
                                             </sizepolicy>
                                         </property>
                                         <property name="text">
-                                            <string>Automatic c&amp;ode completion:</string>
+                                            <string>A&amp;utomatic code completion:</string>
                                         </property>
                                         <property name="checked">
                                             <bool>true</bool>
@@ -383,7 +133,7 @@
                                             <cstring>checkAutomaticArgumentsHint</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Automatic &amp;arguments hint:</string>
+                                            <string>Auto&amp;matic arguments hint:</string>
                                         </property>
                                         <property name="checked">
                                             <bool>true</bool>
@@ -442,7 +192,7 @@
                                     <cstring>m_includeEnums</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Include enums</string>
+                                    <string>&amp;Include enums</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -450,7 +200,7 @@
                                     <cstring>m_includeGlobalFunctions</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Include global functions</string>
+                                    <string>Inclu&amp;de global functions</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -458,7 +208,7 @@
                                     <cstring>m_includeTypedefs</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Include typedefs</string>
+                                    <string>Include t&amp;ypedefs</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -466,7 +216,7 @@
                                     <cstring>m_includeTypes</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Include types</string>
+                                    <string>I&amp;nclude types</string>
                                 </property>
                             </widget>
                         </vbox>
@@ -576,7 +326,157 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>TabPage</cstring>
+                    <cstring>classWizardPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Class W&amp;izard</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QGroupBox" row="2" column="0">
+                        <property name="name">
+                            <cstring>options</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="title">
+                            <string>Filename options</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>These are the suffixes used by the Class Wizard when creating new classes.&lt;br&gt;Should be in the format: ".suffix"</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>interface_suffix</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>implementation_suffix</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Interface suffix:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>interface_suffix</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>I&amp;mplementation suffix:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>implementation_suffix</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <spacer row="3" column="0">
+                        <property name="name">
+                            <cstring>spacer12_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>337</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QButtonGroup" row="1" column="0">
+                        <property name="name">
+                            <cstring>m_qtVersionBox</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="title">
+                            <string>Qt include syntax</string>
+                        </property>
+                        <property name="exclusive">
+                            <bool>true</bool>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Select which Qt version your project is using.</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>m_qtVersion3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Qt &amp;3 style (#include &lt;qwidget.h&gt;)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+3</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Select this if your project is using Qt version 3.x.</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>m_qtVersion4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Qt &amp;4 style (#include &lt;QWidget&gt;)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+4</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Select this if your project is using Qt version 4.x.</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QCheckBox" row="0" column="0">
+                        <property name="name">
+                            <cstring>m_qtUsed</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Enable &amp;Qt options</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+Q</string>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>accessorPage</cstring>
                 </property>
                 <attribute name="title">
                     <string>&amp;Accessors</string>
@@ -842,18 +742,21 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>TabPage</cstring>
+                    <cstring>navigationTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Split &amp;View</string>
+                    <string>&amp;Navigation</string>
                 </attribute>
                 <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLayoutWidget">
+                    <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>layout7</cstring>
+                            <cstring>groupBox12</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Header/Source split</string>
                         </property>
                         <vbox>
                             <property name="name">
@@ -864,8 +767,41 @@
                                     <cstring>m_splitEnable</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>E&amp;nable split of Header/Source files</string>
+                                    <string>Enable split of Header/So&amp;urce files</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check to have header and source appear always side by side</string>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout6</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>m_splitSync</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>Automatic S&amp;ynchronize</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+Y</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Check to have the source file scroll as you navigate the header and vice versa</string>
+                                        </property>
+                                    </widget>
+                                </vbox>
                             </widget>
                             <widget class="QButtonGroup">
                                 <property name="name">
@@ -892,7 +828,13 @@
                                             <cstring>m_splitVertical</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Ve&amp;rtical</string>
+                                            <string>&amp;Vertical</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+V</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
                                         </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Select this if your project is using Qt version 3.x.</string>
@@ -905,6 +847,9 @@
                                         <property name="text">
                                             <string>Hori&amp;zontal</string>
                                         </property>
+                                        <property name="accel">
+                                            <string>Alt+Z</string>
+                                        </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Select this if your project is using Qt version 4.x.</string>
                                         </property>
@@ -913,9 +858,12 @@
                             </widget>
                         </vbox>
                     </widget>
-                    <widget class="QLayoutWidget">
+                    <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>layout6</cstring>
+                            <cstring>groupBox21</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Context Menu</string>
                         </property>
                         <vbox>
                             <property name="name">
@@ -923,13 +871,27 @@
                             </property>
                             <widget class="QCheckBox">
                                 <property name="name">
-                                    <cstring>m_splitSync</cstring>
-                                </property>
-                                <property name="enabled">
-                                    <bool>false</bool>
+                                    <cstring>m_switchShouldMatch</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Automatic S&amp;ynchronize</string>
+                                    <string>Switch Header/Implementation &amp;matches current function</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check to have the &lt;b&gt;Switch Header/Implementation&lt;/b&gt; feature attempt to match the function under the cursor with the matching declaration/definition.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_showContextMenuExplosion</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Show Go To &amp;Declaration/Definition submenus</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check to show two additional submenus in the editor context menu containing all the declarations and definitions for the current file and its matching header/implementation file.</string>
                                 </property>
                             </widget>
                         </vbox>
@@ -947,14 +909,14 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>170</height>
+                                <height>140</height>
                             </size>
                         </property>
                     </spacer>
                 </vbox>
             </widget>
         </widget>
-    </vbox>
+    </grid>
 </widget>
 <customwidgets>
 </customwidgets>
@@ -1014,22 +976,32 @@
         <slot>slotRemovePCS()</slot>
     </connection>
     <connection>
-        <sender>m_qtUsed</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>CCConfigWidgetBase</receiver>
-        <slot>slotToogleQtUsed()</slot>
-    </connection>
-    <connection>
         <sender>m_splitEnable</sender>
         <signal>toggled(bool)</signal>
         <receiver>CCConfigWidgetBase</receiver>
         <slot>slotEnableSplit(bool)</slot>
     </connection>
+    <connection>
+        <sender>m_qtUsed</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_qtVersionBox</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_splitEnable</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_splitSync</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_splitEnable</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_splitOrientationBox</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
 </connections>
 <tabstops>
-    <tabstop>interface_suffix</tabstop>
-    <tabstop>implementation_suffix</tabstop>
-    <tabstop>codecompletion_tab</tabstop>
+    <tabstop>cpp_options</tabstop>
     <tabstop>checkAutomaticCodeCompletion</tabstop>
     <tabstop>inputCodeCompletion</tabstop>
     <tabstop>checkAutomaticArgumentsHint</tabstop>
@@ -1056,15 +1028,11 @@
     <slot>slotNewPCS()</slot>
     <slot access="protected">slotGetterSetterValuesChanged()</slot>
     <slot access="protected">slotRemovePCS()</slot>
-    <slot>slotToogleQtUsed()</slot>
     <slot access="protected">slotEnableSplit( bool )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
