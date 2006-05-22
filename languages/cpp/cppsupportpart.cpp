@@ -49,6 +49,7 @@
 #include "qtdesignercppintegration.h"
 #include "cppimplementationwidget.h"
 
+#include <qeventloop.h>
 #include <qheader.h>
 #include <qdir.h>
 #include <qdom.h>
@@ -324,7 +325,7 @@ void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
 {
 	QVBox * vbox = 0;
 	
-	vbox = dlg->addVBoxPage( i18n( "C++ Specific" ), i18n( "C++ Specific" ),
+	vbox = dlg->addVBoxPage( i18n( "C++ Support" ), i18n( "C++ Support" ),
 	                         BarIcon( info() ->icon(), KIcon::SizeMedium ) );
 	CCConfigWidget* w = new CCConfigWidget( this, vbox );
 	connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
@@ -1468,7 +1469,7 @@ void CppSupportPart::slotMakeMember()
 		if ( !implFile.isEmpty() )
 		{
 			partController() ->editDocument( KURL( implFile ) );
-			kapp->processEvents( 500 );
+			kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput | QEventLoop::ExcludeSocketNotifiers, 500 );
 		}
 		if ( atLine == -2 )
 			atLine = m_activeEditor->numLines() - 1;
