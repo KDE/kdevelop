@@ -4,7 +4,6 @@
 #include <kapplication.h>
 #include <klibloader.h>
 #include <kservice.h>
-#include <ktrader.h>
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <klocale.h>
@@ -47,8 +46,8 @@ namespace
   template <class ComponentType>
   ComponentType *loadDefaultPart( const QString &serviceType )
   {
-    KTrader::OfferList offers = KTrader::self()->query(serviceType, QString("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION));
-    KTrader::OfferList::ConstIterator serviceIt = offers.begin();
+     KService::List offers = KServiceTypeTrader::self()->query(serviceType, QString("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION));
+	 KService::List::ConstIterator serviceIt = offers.begin();
     for ( ; serviceIt != offers.end(); ++serviceIt ) {
       KService::Ptr service = *serviceIt;
 
@@ -109,25 +108,25 @@ PluginController::~PluginController()
 
 void PluginController::loadCorePlugins()
 {
-  KTrader::OfferList coreOffers = m_engine.offers(m_profile, ProfileEngine::Core);
+  KService::List coreOffers = m_engine.offers(m_profile, ProfileEngine::Core);
   loadPlugins( coreOffers );
 }
 
 void PluginController::loadGlobalPlugins( const QStringList & ignorePlugins )
 {
-  KTrader::OfferList globalOffers = m_engine.offers(m_profile, ProfileEngine::Global);
+  KService::List globalOffers = m_engine.offers(m_profile, ProfileEngine::Global);
   loadPlugins( globalOffers, ignorePlugins );
 }
 
 void PluginController::loadProjectPlugins( const QStringList & ignorePlugins )
 {
-	KTrader::OfferList projectOffers = m_engine.offers(m_profile, ProfileEngine::Project);
+  KService::List projectOffers = m_engine.offers(m_profile, ProfileEngine::Project);
 	loadPlugins( projectOffers, ignorePlugins );
 }
 
-void PluginController::loadPlugins( KTrader::OfferList offers, const QStringList & ignorePlugins )
+void PluginController::loadPlugins( KService::List offers, const QStringList & ignorePlugins )
 {
-  for (KTrader::OfferList::ConstIterator it = offers.begin(); it != offers.end(); ++it)
+  for (KService::List::ConstIterator it = offers.begin(); it != offers.end(); ++it)
   {
     QString name = (*it)->desktopEntryName();
 
@@ -160,8 +159,8 @@ void PluginController::unloadPlugins()
 
 void PluginController::unloadProjectPlugins( )
 {
-	KTrader::OfferList offers = m_engine.offers(m_profile, ProfileEngine::Project);
-	for (KTrader::OfferList::ConstIterator it = offers.begin(); it != offers.end(); ++it)
+	KService::List offers = m_engine.offers(m_profile, ProfileEngine::Project);
+	for (KService::List::ConstIterator it = offers.begin(); it != offers.end(); ++it)
 	{
 		QString name = (*it)->desktopEntryName();
 
@@ -253,8 +252,8 @@ const QList<KDevPlugin *> PluginController::loadedPlugins()
 
 KDevPlugin * PluginController::extension( const QString & serviceType, const QString & constraint )
 {
-    KTrader::OfferList offers = KDevPluginController::query(serviceType, constraint);
-    for (KTrader::OfferList::const_iterator it = offers.constBegin(); it != offers.constEnd(); ++it)
+	KService::List offers = KDevPluginController::query(serviceType, constraint);
+    for (KService::List::ConstIterator it = offers.constBegin(); it != offers.constEnd(); ++it)
     {
         KDevPlugin *ext = m_parts.value((*it)->desktopEntryName());
         if (ext) return ext;
@@ -264,10 +263,10 @@ KDevPlugin * PluginController::extension( const QString & serviceType, const QSt
 
 KDevPlugin * PluginController::loadPlugin( const QString & serviceType, const QString & constraint )
 {
-	KTrader::OfferList offers = KDevPluginController::query( serviceType, constraint );
+	KService::List offers = KDevPluginController::query( serviceType, constraint );
 	if ( !offers.size() == 1 ) return 0;
 
-	KTrader::OfferList::const_iterator it = offers.constBegin();
+	KService::List::const_iterator it = offers.constBegin();
 	QString name = (*it)->desktopEntryName();
 
 	KDevPlugin * plugin = 0;
@@ -308,8 +307,8 @@ QString PluginController::changeProfile(const QString &newProfile)
 {
     kDebug() << "CHANGING PROFILE: from " << currentProfile() << " to " << newProfile << endl;
     QStringList unload;
-    KTrader::OfferList coreLoad;
-    KTrader::OfferList globalLoad;
+	KService::List coreLoad;
+	KService::List globalLoad;
     m_engine.diffProfiles(ProfileEngine::Core, currentProfile(), newProfile, unload, coreLoad);
     m_engine.diffProfiles(ProfileEngine::Global, currentProfile(), newProfile, unload, globalLoad);
 

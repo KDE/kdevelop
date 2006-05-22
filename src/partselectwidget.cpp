@@ -28,7 +28,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kservice.h>
-#include <ktrader.h>
 #include <kurllabel.h>
 #include <kapplication.h>
 #include <ktoolinvocation.h>
@@ -166,13 +165,13 @@ void PartSelectWidget::readProjectConfig()
 {
 	QStringList ignoreparts = DomUtil::readListEntry(m_projectDom, "/general/ignoreparts", "part");
 
-	KTrader::OfferList localOffers = PluginController::getInstance()->engine().offers(
+	KService::List localOffers = PluginController::getInstance()->engine().offers(
 		PluginController::getInstance()->currentProfile(), ProfileEngine::Project);
-	KTrader::OfferList globalOffers = PluginController::getInstance()->engine().offers(
+	KService::List globalOffers = PluginController::getInstance()->engine().offers(
 		PluginController::getInstance()->currentProfile(), ProfileEngine::Global);
 
-	KTrader::OfferList offers = localOffers + globalOffers;
-	for (KTrader::OfferList::ConstIterator it = offers.begin(); it != offers.end(); ++it)
+	KService::List offers = localOffers + globalOffers;
+	for (KService::List::ConstIterator it = offers.begin(); it != offers.end(); ++it)
 	{
 		// parse out any existing url to make it clickable
 		QString Comment = (*it)->comment();

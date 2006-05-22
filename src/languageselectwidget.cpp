@@ -24,11 +24,10 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kservice.h>
-#include <ktrader.h>
 #include <kapplication.h>
 #include <kdevplugin.h>
 #include "domutil.h"
-
+#include <kservicetypetrader.h>
 #include "languageselectwidget.h"
 #include "plugincontroller.h"
 
@@ -105,8 +104,8 @@ LanguageSelectWidget::~LanguageSelectWidget()
 
 void LanguageSelectWidget::readProjectConfig()
 {
-    KTrader::OfferList languageSupportOffers =
-        KTrader::self()->query(QLatin1String("KDevelop/LanguageSupport"),
+	KService::List languageSupportOffers =
+        KServiceTypeTrader::self()->query(QLatin1String("KDevelop/LanguageSupport"),
                                QString::fromLatin1("[X-KDevelop-Version] == %1"
                                ).arg( KDEVELOP_PLUGIN_VERSION ));
 
@@ -114,7 +113,7 @@ void LanguageSelectWidget::readProjectConfig()
     QString language = DomUtil::readEntry(m_projectDom, "/general/primarylanguage");
     _currentLanguage->setText(i18n("Primary language is '%1'. Please select additional languages the project might contain.", language));
 
-    for (KTrader::OfferList::ConstIterator it = languageSupportOffers.begin(); it != languageSupportOffers.end(); ++it)
+    for (KService::List::ConstIterator it = languageSupportOffers.begin(); it != languageSupportOffers.end(); ++it)
     {
         QString la = (*it)->property("X-KDevelop-Language").toString();
         if (la == language)

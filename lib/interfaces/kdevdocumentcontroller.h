@@ -27,7 +27,6 @@
 #define KDEV_DOCUMENTCONTROLLER_H
 
 #include <kurl.h>
-#include <ktrader.h>
 #include <kparts/partmanager.h>
 #include <ktexteditor/cursor.h>
 

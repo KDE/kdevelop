@@ -365,7 +365,7 @@ void KDevFileSelector::cmbPathReturnPressed( const QString& u )
     urls.prepend( u );
     cmbPath->setURLs( urls, KUrlComboBox::RemoveBottom );
     dir->setFocus();
-    dir->setURL( KUrl::fromPathOrURL(u), true );
+    dir->setURL( KUrl::fromPathOrUrl(u), true );
 }
 
 void KDevFileSelector::dirUrlEntered( const KUrl& u )
@@ -446,7 +446,7 @@ void KDevFileSelector::setActiveDocumentDir()
     //kDebug()<<"KDevFileSelector::setActiveDocumentDir()"<<endl;
     KUrl u = activeDocumentUrl();
     if (!u.isEmpty())
-        setDir( u.upURL() );
+        setDir( u.upUrl() );
 }
 
 void KDevFileSelector::viewChanged()

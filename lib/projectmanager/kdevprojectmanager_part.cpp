@@ -30,12 +30,12 @@
 #include <kdevcore.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevmainwindow.h>
+#include <kservicetypetrader.h>
 
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
-#include <ktrader.h>
 #include <kaboutdata.h>
 
 #include <kparts/componentfactory.h>
@@ -62,9 +62,9 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringLis
   setInstance(KDevProjectManagerFactory::instance());
 
   { // load the importers
-    KTrader::OfferList lst = KTrader::self()->query("KDevelop/ProjectImporter");
+	KService::List lst = KServiceTypeTrader::self()->query("KDevelop/ProjectImporter");
 
-    for (KTrader::OfferList::Iterator it = lst.begin(); it != lst.end(); ++it)
+    for (KService::List::ConstIterator it = lst.begin(); it != lst.end(); ++it)
       {
         KService::Ptr ptr = *it;
 
@@ -82,9 +82,9 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringLis
   }
 
   { // load the builders
-    KTrader::OfferList lst = KTrader::self()->query("KDevelop/ProjectBuilder");
+     KService::List lst = KServiceTypeTrader::self()->query("KDevelop/ProjectBuilder");
 
-    for (KTrader::OfferList::Iterator it = lst.begin(); it != lst.end(); ++it)
+    for (KService::List::ConstIterator it = lst.begin(); it != lst.end(); ++it)
       {
         KService::Ptr ptr = *it;
 

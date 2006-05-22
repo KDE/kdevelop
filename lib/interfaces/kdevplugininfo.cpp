@@ -168,7 +168,7 @@ QString KDevPluginInfo::bugsEmailAddress() const
 
 QVariant KDevPluginInfo::property(const QString &name) const
 {
-    KTrader::OfferList offers = KDevPluginController::queryPlugins(QString("Name='%1'").arg(d->m_pluginName));
+	KService::List offers = KDevPluginController::queryPlugins(QString("Name='%1'").arg(d->m_pluginName));
     if (offers.count() == 1)
         return offers.first()->property(name);
     return QVariant();
@@ -181,7 +181,7 @@ QVariant KDevPluginInfo::operator [](const QString &name) const
 
 QStringList KDevPluginInfo::propertyNames( ) const
 {
-    KTrader::OfferList offers = KDevPluginController::queryPlugins(QString("Name='%1'").arg(d->m_pluginName));
+	KService::List offers = KDevPluginController::queryPlugins(QString("Name='%1'").arg(d->m_pluginName));
     if (offers.count() == 1)
         return offers.first()->propertyNames();
     return QStringList();

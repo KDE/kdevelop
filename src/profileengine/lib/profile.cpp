@@ -158,7 +158,7 @@ bool Profile::remove()
 {
     QStringList dirs = KGlobal::dirs()->findDirs("data", "kdevelop/profiles" + dirName());
     if ((dirs.count() == 1) && dirs[0].startsWith(QDir::homePath()))
-        return KIO::NetAccess::del(KUrl::fromPathOrURL(dirs[0]), 0);
+        return KIO::NetAccess::del(KUrl::fromPathOrUrl(dirs[0]), 0);
     return false;
 }
 
@@ -189,5 +189,5 @@ KUrl::List Profile::resources(const QString &nameFilter)
 void Profile::addResource(const KUrl &url)
 {
     QString saveLocation = KGlobal::dirs()->saveLocation("data", "kdevelop/profiles"+dirName(), true);
-    KIO::NetAccess::file_copy(url, KUrl::fromPathOrURL(saveLocation), -1, true);
+    KIO::NetAccess::file_copy(url, KUrl::fromPathOrUrl(saveLocation), -1, true);
 }

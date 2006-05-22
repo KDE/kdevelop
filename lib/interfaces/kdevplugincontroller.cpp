@@ -24,14 +24,14 @@ KDevPluginController::KDevPluginController()
 {
 }
 
-KTrader::OfferList KDevPluginController::query(const QString &serviceType,
+KService::List KDevPluginController::query(const QString &serviceType,
     const QString &constraint)
 {
-    return KTrader::self()->query(serviceType,
+    return KServiceTypeTrader::self()->query(serviceType,
         QString("%1 and [X-KDevelop-Version] == %2").arg(constraint).arg(KDEVELOP_PLUGIN_VERSION));
 }
 
-KTrader::OfferList KDevPluginController::queryPlugins(const QString &constraint)
+KService::List KDevPluginController::queryPlugins(const QString &constraint)
 {
     return query("KDevelop/Plugin", constraint);
 }

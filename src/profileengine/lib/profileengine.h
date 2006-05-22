@@ -22,8 +22,7 @@
 #include <QMap>
 //Added by qt3to4:
 #include <Q3ValueList>
-
-#include <ktrader.h>
+#include <kservicetypetrader.h>
 
 #include "profile.h"
 
@@ -102,9 +101,9 @@ public:
     };
 
     /**@return The list of plugin offers for given profile and type.*/
-    KTrader::OfferList offers(const QString &profileName, OfferType offerType);
+	KService::List offers(const QString &profileName, OfferType offerType);
     /**@return The list of all plugin offers for given type.*/
-    KTrader::OfferList allOffers(OfferType offerType);
+	KService::List allOffers(OfferType offerType);
 
     /**@return The list of URLs to the resources (files) with given @p extension.
     @param profileName A name of a profile to find resources in.
@@ -137,7 +136,7 @@ public:
     @note Resulting lists are not cleared. Pass only clean lists in the
     common case.*/
     void diffProfiles(OfferType offerType, const QString &profile1, const QString &profile2,
-        QStringList &unload, KTrader::OfferList &load);
+        QStringList &unload, KService::List &load);
 
     /**@return The root profile. Root profile is always named "KDevelop" and it
     defines an empty list of plugins. Applications built on KDevelop platform

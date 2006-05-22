@@ -69,14 +69,14 @@ void ProfileEngine::processDir(const QString &dir, const QString &currPath, QMap
     }
 }
 
-KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType offerType)
+KService::List ProfileEngine::offers(const QString &profileName, OfferType offerType)
 {
     ProfileListing listing;
     Profile *profile = 0;
     getProfileWithListing(listing, &profile, profileName);
 
     if (!profile)
-        return KTrader::OfferList();
+        return KService::List();
 
     QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
     switch (offerType) {
@@ -104,12 +104,12 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
 //               << constraint << endl << endl;
 // //END debug
 
-    KTrader::OfferList list = KTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
+	KService::List list = KServiceTypeTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
     QStringList names;
 
     Profile::EntryList disableList = profile->list(Profile::ExplicitDisable);
 //     for (KTrader::OfferList::iterator it = list.begin(); it != list.end(); ++it)
-    KTrader::OfferList::iterator it = list.begin();
+	KService::List::Iterator it = list.begin();
     while (it != list.end())
     {
         QString name = (*it)->desktopEntryName();
@@ -129,7 +129,7 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
             continue;
         QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
         constraint += QString::fromLatin1("and [Name] == '%1'").arg((*it).name);
-        KTrader::OfferList enable = KTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
+		KService::List enable = KServiceTypeTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
         list += enable;
     }
 
@@ -145,7 +145,7 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
     return list;
 }
 
-KTrader::OfferList ProfileEngine::allOffers(OfferType offerType)
+KService::List ProfileEngine::allOffers(OfferType offerType)
 {
     QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
     switch (offerType) {
@@ -159,7 +159,7 @@ KTrader::OfferList ProfileEngine::allOffers(OfferType offerType)
             constraint += QString::fromLatin1(" and [X-KDevelop-Scope] == 'Core'");
             break;
     }
-    return KTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
+    return KServiceTypeTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
 }
 
 void ProfileEngine::getProfileWithListing(ProfileListing &listing, Profile **profile,
@@ -206,17 +206,17 @@ KUrl::List ProfileEngine::resourcesRecursive(const QString &profileName, const Q
 }
 
 void ProfileEngine::diffProfiles(OfferType offerType, const QString &profile1,
-    const QString &profile2, QStringList &unload, KTrader::OfferList &load)
+    const QString &profile2, QStringList &unload, KService::List &load)
 {
-    KTrader::OfferList offers1 = offers(profile1, offerType);
-    KTrader::OfferList offers2 = offers(profile2, offerType);
+	KService::List offers1 = offers(profile1, offerType);
+	KService::List offers2 = offers(profile2, offerType);
 
     QStringList offers1List;
-    for (KTrader::OfferList::const_iterator it = offers1.constBegin();
+    for (KService::List::ConstIterator it = offers1.constBegin();
         it != offers1.constEnd(); ++it)
         offers1List.append((*it)->desktopEntryName());
     QMap<QString, KService::Ptr> offers2List;
-    for (KTrader::OfferList::const_iterator it = offers2.constBegin();
+    for (KService::List::ConstIterator it = offers2.constBegin();
         it != offers2.constEnd(); ++it)
         offers2List[(*it)->desktopEntryName()] = *it;
 

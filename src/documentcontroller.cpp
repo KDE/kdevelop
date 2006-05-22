@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-
+#include <kservicetypetrader.h>
 #include <QMap>
 #include <QFile>
 #include <qdebug.h>
@@ -15,7 +15,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
-#include <ktrader.h>
 #include <kservice.h>
 #include <kmimetype.h>
 #include <klineedit.h>
@@ -31,7 +30,6 @@
 #include <kcompletion.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kuserprofile.h>
 #include <kxmlguifactory.h>
 #include <ksqueezedtextlabel.h>
 #include <kencodingfiledialog.h>
@@ -472,7 +470,7 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
         bool activate )
 {
     kDebug( 9000 ) << k_funcinfo
-    << inputUrl.prettyURL()
+    << inputUrl.prettyUrl()
     << " cursor " << cursor
     << " activate? " << activate << endl;
 
@@ -497,7 +495,7 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
         // Try to find this file in the current project's list instead
         if ( API::getInstance() ->project() )
         {
-            if ( url.isRelativeURL( url.url() ) )
+            if ( url.isRelativeUrl( url.url() ) )
             {
                 KUrl dir( API::getInstance() ->project() ->projectDirectory() );
                 KUrl relURL = KUrl( dir, url.url() );
@@ -962,7 +960,7 @@ void DocumentController::slotSwitchTo()
             part_list.append( name );
             parts_map[ name ] = ro_part;
             kDebug( 9000 ) << "Found part for URL "
-            << ro_part->url().prettyURL() << endl;
+            << ro_part->url().prettyUrl() << endl;
         }
     }
 
@@ -1076,7 +1074,7 @@ void DocumentController::slotNewDesignerStatus( const QString &formName,
     kDebug( 9000 ) << k_funcinfo << endl;
     kDebug( 9000 ) << " formName: " << formName
     << ", status: " << status << endl;
-    KDevDocument* document = documentForUrl(KUrl::fromPathOrURL( formName ));
+    KDevDocument* document = documentForUrl(KUrl::fromPathOrUrl( formName ));
     if (document)
         emit documentStateChanged( document, KDevDocument::DocumentState( status ) );
 }
@@ -1228,7 +1226,7 @@ KParts::Factory *DocumentController::findPartFactory( const QString &mimeType,
         const QString &partType,
         const QString &preferredName )
 {
-    KTrader::OfferList offers = KTrader::self() ->query( mimeType,
+    KService::List offers = KServiceTypeTrader::self()->query( mimeType,
                                 QString( "'%1' in ServiceTypes" ).arg( partType ) );
 
     if ( offers.count() > 0 )
@@ -1237,7 +1235,7 @@ KParts::Factory *DocumentController::findPartFactory( const QString &mimeType,
         // if there is a preferred plugin we'll take it
         if ( !preferredName.isEmpty() )
         {
-            KTrader::OfferList::Iterator it;
+			KService::List::ConstIterator it;
             for ( it = offers.begin(); it != offers.end(); ++it )
             {
                 if ( ( *it ) ->desktopEntryName() == preferredName )

@@ -322,7 +322,7 @@ void GrepDialog::slotSynchDirectory( )
         KUrl url = part->url();
         if ( url.isLocalFile() )
         {
-            dir_combo->setEditText( url.upURL().path( +1 ) );
+            dir_combo->setEditText( url.upUrl().path( +1 ) );
         }
     }
 }

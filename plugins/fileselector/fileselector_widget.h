@@ -101,7 +101,7 @@ public:
 public slots:
     void slotFilterChange(const QString&);
     void setDir(KUrl);
-    void setDir( const QString& url ) { setDir( KUrl::fromPathOrURL( url ) ); };
+    void setDir( const QString& url ) { setDir( KUrl::fromPathOrUrl( url ) ); };
 
 private slots:
     void cmbPathActivated( const KUrl& u );

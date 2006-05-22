@@ -276,7 +276,7 @@ void DiffWidget::populateExtPart()
       tempFile->setAutoDelete( true );
         *(tempFile->textStream()) << rawDiff.local8Bit() << endl;
       tempFile->close();
-      ok = extPart->openURL( KUrl::fromPathOrURL( tempFile->name() ) );
+      ok = extPart->openURL( KUrl::fromPathOrUrl( tempFile->name() ) );
   }
   if ( !ok )
     setExtPartVisible( false );

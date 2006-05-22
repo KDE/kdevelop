@@ -371,7 +371,7 @@ void KDevAppTemplate::File::setPermissions() const
     kDebug(9010) << "  dest: " << dest << endl;
 
     KIO::UDSEntry sourceentry;
-    KUrl sourceurl = KUrl::fromPathOrURL(source);
+    KUrl sourceurl = KUrl::fromPathOrUrl(source);
     if( KIO::NetAccess::stat(sourceurl, sourceentry, 0) )
     {
         KFileItem sourceit(sourceentry, sourceurl);
@@ -380,13 +380,13 @@ void KDevAppTemplate::File::setPermissions() const
         {
             kDebug(9010) << "source is executable" << endl;
             KIO::UDSEntry entry;
-            KUrl kurl = KUrl::fromPathOrURL(dest);
+            KUrl kurl = KUrl::fromPathOrUrl(dest);
             if( KIO::NetAccess::stat(kurl, entry, 0) )
             {
                 KFileItem it(entry, kurl);
                 int mode = it.permissions();
                 kDebug(9010) << "stat shows permissions: " << mode << endl;
-                KIO::chmod(KUrl::fromPathOrURL(dest), mode | 00100 );
+                KIO::chmod(KUrl::fromPathOrUrl(dest), mode | 00100 );
             }
         }
     }
@@ -446,13 +446,13 @@ void KDevAppTemplate::Archive::setPermissions(const KArchiveFile *source, QStrin
     {
         kDebug(9010) << "source is executable" << endl;
         KIO::UDSEntry entry;
-        KUrl kurl = KUrl::fromPathOrURL(dest);
+        KUrl kurl = KUrl::fromPathOrUrl(dest);
         if( KIO::NetAccess::stat(kurl, entry, 0) )
         {
             KFileItem it(entry, kurl);
             int mode = it.permissions();
             kDebug(9010) << "stat shows permissions: " << mode << endl;
-            KIO::chmod(KUrl::fromPathOrURL(dest), mode | 00100 );
+            KIO::chmod(KUrl::fromPathOrUrl(dest), mode | 00100 );
         }
     }
 }

@@ -23,8 +23,8 @@
 #include <qlist.h>
 
 #include <kurl.h>
-#include <ktrader.h>
 #include "kdevexport.h"
+#include <kservicetypetrader.h>
 
 /**
 @file kdevplugincontroller.h
@@ -79,14 +79,14 @@ public:
     @param constraint A constraint for the service. Do not include plugin version number - it
     is done automatically.
     @return The list of plugin offers.*/
-    static KTrader::OfferList query(const QString &serviceType, const QString &constraint);
+    static KService::List query(const QString &serviceType, const QString &constraint);
 
     /**Queries KDevelop plugins. Works like
     KDevPluginController::query with serviceType set to "KDevelop/Plugin".
     @param constraint A constraint for the service. Do not include plugin version number - it
     is done automatically.
     @return The list of plugin offers.*/
-    static KTrader::OfferList queryPlugins(const QString &constraint);
+    static KService::List queryPlugins(const QString &constraint);
 
     /**Reimplement this function only if your shell supports plugin profiles.
     @return The list of URLs to the profile resources (files) with given @p extension.

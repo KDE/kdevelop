@@ -15,7 +15,6 @@ class QDomDocument;
 #include <kdebug.h>
 #include <klocale.h>
 #include <kservice.h>
-#include <ktrader.h>
 #include <ktoolbar.h>
 #include <kdialogbase.h>
 #include <kfiledialog.h>
@@ -350,7 +349,7 @@ bool ProjectManager::loadProjectFile()
   QString path;
   if (!KIO::NetAccess::download(m_info->m_projectURL, path, 0)) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
-        i18n("Could not read project file: %1", m_info->m_projectURL.prettyURL()));
+        i18n("Could not read project file: %1", m_info->m_projectURL.prettyUrl()));
     return false;
   }
 
@@ -358,7 +357,7 @@ bool ProjectManager::loadProjectFile()
   if (!fin.open(QIODevice::ReadOnly))
   {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
-        i18n("Could not read project file: %1", m_info->m_projectURL.prettyURL()));
+        i18n("Could not read project file: %1", m_info->m_projectURL.prettyUrl()));
     return false;
   }
 
@@ -520,8 +519,8 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
     return true;
   }
 
-  KTrader::OfferList languageSupportOffers =
-    KTrader::self()->query(QLatin1String("KDevelop/LanguageSupport"),
+  KService::List languageSupportOffers =
+    KServiceTypeTrader::self()->query(QLatin1String("KDevelop/LanguageSupport"),
                            QString::fromLatin1("[X-KDevelop-Language] == '%1' and [X-KDevelop-Version] == %2").arg(lang).arg(KDEVELOP_PLUGIN_VERSION));
 
   if (languageSupportOffers.isEmpty()) {

@@ -4,7 +4,7 @@
 #include <qhash.h>
 
 #include <kservice.h>
-
+#include <kservicetypetrader.h>
 #include <kdevplugincontroller.h>
 
 #include <profileengine.h>
@@ -74,7 +74,7 @@ protected:
 private slots:
   void slotConfigWidget( KDialogBase* );
   void loadCorePlugins();
-  void loadPlugins( KTrader::OfferList offers, const QStringList & ignorePlugins = QStringList() );
+  void loadPlugins( KService::List offers, const QStringList & ignorePlugins = QStringList() );
   void unloadPlugins();
 
 private:

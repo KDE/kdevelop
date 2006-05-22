@@ -124,7 +124,7 @@ public:
         }
         else
         {
-            return _url.prettyURL();
+            return _url.prettyUrl();
         }
     }
 
