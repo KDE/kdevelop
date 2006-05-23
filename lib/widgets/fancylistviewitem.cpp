@@ -22,7 +22,7 @@
 #include <qpixmap.h>
 #include <qapplication.h>
 #include <qnamespace.h>
-
+#include <kdeversion.h>
 
 
 
@@ -56,7 +56,7 @@ QString FancyListViewItemTemplate::text(int column) const {
     return (QString)m_items[column];
 }
 
-#ifdef ISKLISTVIEWITEM
+#if defined(ISKLISTVIEWITEM) && KDE_VERSION >= 340
 
 QColor FancyListViewItemTemplate::backgroundColor(int col) {
     return KListViewItem::backgroundColor(col);
