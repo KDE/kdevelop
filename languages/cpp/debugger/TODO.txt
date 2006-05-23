@@ -20,8 +20,6 @@ TODO:
 
    - Incoming bug reports:
 
-
-
    - Check core files usage.
 
    - GDB controller should provide 'default MI error handler',

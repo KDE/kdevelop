@@ -62,6 +62,7 @@ private:
     QSocketNotifier *err;
     QString ttySlave;
     int pid_;
+    bool external_;
 
     char pty_master[50];  // "/dev/ptyxx" | "/dev/ptmx"
     char tty_slave[50];   // "/dev/ttyxx" | "/dev/pts/########..."

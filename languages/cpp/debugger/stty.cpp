@@ -122,7 +122,8 @@ STTY::STTY(bool ext, const QString &termAppName)
       out(0),
       err(0),
       ttySlave(""),
-      pid_(0)
+      pid_(0),
+      external_(ext)
 {
     if (ext) {
         findExternalTTY(termAppName);
@@ -269,7 +270,8 @@ void STTY::OutReceived(int f)
 
 void STTY::readRemaining()
 {
-    OutReceived(fout);
+    if (!external_)
+        OutReceived(fout);
 }
 
 // **************************************************************************
