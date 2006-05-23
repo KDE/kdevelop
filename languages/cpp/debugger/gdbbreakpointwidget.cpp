@@ -236,9 +236,14 @@ controller_(controller)
     m_ctxMenu->insertItem( i18n("New breakpoint", "New"),
                                 newBreakpoint);
     m_ctxMenu->insertItem( i18n( "Show text" ),    BW_ITEM_Show );
-    m_ctxMenu->insertItem( i18n( "Edit" ),    BW_ITEM_Edit );
+    int edit_id = 
+        m_ctxMenu->insertItem( i18n( "Edit" ),    BW_ITEM_Edit );
+    m_ctxMenu->setAccel(Qt::Key_Enter, edit_id);
     m_ctxMenu->insertItem( i18n( "Disable" ), BW_ITEM_Disable );
-    m_ctxMenu->insertItem( i18n( "Delete" ),  BW_ITEM_Delete );
+    int del_id = 
+        m_ctxMenu->insertItem( SmallIcon("breakpoint_delete"),
+                               i18n( "Delete" ),  BW_ITEM_Delete );
+    m_ctxMenu->setAccel(Qt::Key_Delete, del_id);
     m_ctxMenu->insertSeparator();
     m_ctxMenu->insertItem( i18n( "Disable all"), BW_ITEM_DisableAll );
     m_ctxMenu->insertItem( i18n( "Enable all"), BW_ITEM_EnableAll );

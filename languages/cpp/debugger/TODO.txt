@@ -2,8 +2,6 @@
 TODO:
    
    - P1:
-      - QString is not updated.
-
       - Don't send  "-file-list-exec-source-file" if *stopped response
         does not have any file name.      
 
@@ -20,6 +18,8 @@ TODO:
          Test stepping (or stepi) into undebuggable code.
 
       - Test files without debug info
+
+      - Reconsider fixed font in variable widget
 
    - Incoming bug reports:
 
@@ -39,6 +39,10 @@ TODO:
 
    - Breakpoints
 
+       - Add shortcuts to context menu.
+
+       - Add icons
+
        - Status display column is just ugly
      
        - Handle "out of breakpoints" message.
@@ -50,7 +54,7 @@ TODO:
       - Implement gdb -> KDevelop breakpoint addition for all existing
         breakpoint types.
   
-      - Add shortcuts to context menu.
+
 
       - For function breakpoints, the 'file' property of breakpoint from
         gdb is not a fullname (gdb 6.4), so we don't find the file.
