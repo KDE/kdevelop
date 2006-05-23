@@ -187,6 +187,8 @@ private:
     */
     void raiseEvent(event_t e);
 
+    void announceWatchpointHit();
+
 public:
     bool stateIsOn(int state);
 

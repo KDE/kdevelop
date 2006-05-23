@@ -2,9 +2,6 @@
 TODO:
    
    - P1:
-      - Don't send  "-file-list-exec-source-file" if *stopped response
-        does not have any file name.      
-
       - Don't diable step button while stepping.
 
       - Fix moving breakpoints on editing files

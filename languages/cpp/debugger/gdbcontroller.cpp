@@ -565,13 +565,22 @@ void GDBController::reloadProgramState()
 
     // In gdb 6.3, the *stopped reply does not include full
     // name of the source file. Need to send extra command.
+    // Don't send it unless there was 'line' field in last *stopped response.
+    // The command has a bug that makes it always returns some file/line,
+    // even if we're not in one.
+    //
     // FIXME: For gdb 6.4, should not send extra commands. 
     // That's for later, so that I verify that this three-command
     // approach works fine.
-    queueCmd(new GDBCommand(
-                 "-file-list-exec-source-file",
-                 this,
-                 &GDBController::handleMiFileListExecSourceFile));
+    if (r.hasField("frame") && r["frame"].hasField("line"))
+        queueCmd(new GDBCommand(
+                     "-file-list-exec-source-file",
+                     this,
+                     &GDBController::handleMiFileListExecSourceFile));
+    else
+    {
+        announceWatchpointHit();
+    }
 
     emit dbgStatus ("", state_);
     
@@ -584,6 +593,7 @@ void GDBController::reloadProgramState()
     currentFrame_ = 0;
     
     raiseEvent(program_state_changed);
+    state_reload_needed = false;
 }
 
 
@@ -708,7 +718,14 @@ void GDBController::handleMiFileListExecSourceFile(const GDBMI::ResultRecord& r)
                      r["line"].literal().toInt(),
                      (*last_stop_result)["frame"]["addr"].literal());
 
-    QString last_stop_reason = (*last_stop_result)["reason"].literal();
+    announceWatchpointHit();
+ 
+    last_stop_result.reset();
+}
+
+void GDBController::announceWatchpointHit()
+{
+   QString last_stop_reason = (*last_stop_result)["reason"].literal();
     
     if (last_stop_reason == "watchpoint-trigger")
     {
@@ -721,9 +738,6 @@ void GDBController::handleMiFileListExecSourceFile(const GDBMI::ResultRecord& r)
     {
         emit dbgStatus ("Read watchpoint triggered", state_);        
     }
-
-    last_stop_result.reset();
-    state_reload_needed = false;
 }
 
 void GDBController::handleMiFrameSwitch(const GDBMI::ResultRecord& r)
