@@ -9,37 +9,31 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SETTINGSDIALOG_H
-#define SETTINGSDIALOG_H
+#ifndef KDEVQTIMPORTER_H
+#define KDEVQTIMPORTER_H
 
-#include "settingsdialogbase.h"
+#include <kdevpcsimporter.h>
+#include <qguardedptr.h>
 
-class SettingsDialog : public SettingsDialogBase
+class SettingsDialog;
+class KTempFile;
+
+class KDevQt4Importer : public KDevPCSImporter
 {
-  Q_OBJECT
-
+    Q_OBJECT
 public:
-  SettingsDialog(QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
-  ~SettingsDialog();
-  /*$PUBLIC_FUNCTIONS$*/
+    KDevQt4Importer( QObject* parent=0, const char* name=0, const QStringList& args=QStringList() );
+    virtual ~KDevQt4Importer();
 
-  bool isValidKDELibsDir( const QString& path ) const;
+    virtual QString dbName() const { return QString::fromLatin1("Qt4"); }
+    virtual QStringList fileList();
+    virtual QStringList includePaths();
 
-  QString kdeDir() const;
+    virtual QWidget* createSettingsPage( QWidget* parent, const char* name=0 );
 
-public slots:
-  /*$PUBLIC_SLOTS$*/
-  virtual void          slotSelectionChanged(QListBoxItem*);
-
-protected:
-  /*$PROTECTED_FUNCTIONS$*/
-
-protected slots:
-  /*$PROTECTED_SLOTS$*/
-	void addUrlButton_clicked();
-
+private:
+    QGuardedPtr<SettingsDialog> m_settings;
+    KTempFile *m_qtfile;
 };
 
 #endif
-
-

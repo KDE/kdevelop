@@ -32,7 +32,7 @@ QStringList KDevQtImporter::fileList()
 	if ( !m_settings )
 		return QStringList();
 
-	QDir dir( m_settings->qtDir() + "/include" );
+	QDir dir( m_settings->qtDir() );
 	QStringList lst = dir.entryList( "*.h" );
 	QStringList fileList;
 	for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
@@ -56,9 +56,9 @@ QStringList KDevQtImporter::includePaths()
 		return QStringList();
 
 	QStringList includePaths;
-	includePaths.push_back( m_settings->qtDir() + "/include" );
-	includePaths.push_back( m_settings->qtDir() + "/include/private" );
-	includePaths.push_back( m_settings->qtDir() + "/mkspecs/default" );
+	includePaths.push_back( m_settings->qtDir() );
+	includePaths.push_back( m_settings->qtDir() + "/private" );
+	includePaths.push_back( m_settings->qtDir() + "/default" );
 
 	/// @todo add mkspec
 	return includePaths;
