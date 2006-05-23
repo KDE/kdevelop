@@ -64,7 +64,7 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
     gsw->dirNavigMsgCheckBox->setChecked(config->readEntry("ShowDirNavigMsg",false));
     gsw->compileOutputCombo->setCurrentIndex(config->readEntry("CompilerOutputLevel",2));
     config->setGroup("General Options");
-    gsw->projectsURL->setURL(config->readEntry("DefaultProjectsDir", QDir::homePath()+"/"));
+    gsw->projectsURL->setUrl(config->readEntry("DefaultProjectsDir", QDir::homePath()+"/"));
     gsw->designerButtonGroup->setButton( config->readEntry( "DesignerApp", 0 ) );
 
     config->setGroup("TerminalEmulator");

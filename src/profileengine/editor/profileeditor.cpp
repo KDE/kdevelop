@@ -35,7 +35,7 @@
 #include <kdialogbase.h>
 #include <kglobalsettings.h>
 #include <kdeversion.h>
-
+#include <kservicetypetrader.h>
 #include <profile.h>
 
 #include "addprofilewidget.h"
@@ -117,9 +117,9 @@ void ProfileEditor::refresh()
 
 void ProfileEditor::refreshPropertyCombo()
 {
-    KTrader::OfferList list = KTrader::self()->query(QLatin1String("KDevelop/Plugin"));
+	KService::List list = KServiceTypeTrader::self()->query(QLatin1String("KDevelop/Plugin"));
     QStringList props;
-    for (KTrader::OfferList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
+    for (KService::List::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
     {
         QStringList currProps = (*it)->property("X-KDevelop-Properties").toStringList();
         for (QStringList::const_iterator p = currProps.constBegin();
@@ -143,14 +143,14 @@ void ProfileEditor::refreshAvailableList()
     allProject = new K3ListViewItem(allList, i18n("Project"));
     allProject->setOpen(true);
 
-    KTrader::OfferList olist = engine.allOffers(ProfileEngine::Core);
-    for (KTrader::OfferList::iterator it = olist.begin(); it != olist.end(); ++it)
+	KService::List olist = engine.allOffers(ProfileEngine::Core);
+    for (KService::List::iterator it = olist.begin(); it != olist.end(); ++it)
         new K3ListViewItem(allCore, (*it)->desktopEntryName(), (*it)->genericName());
     olist = engine.allOffers(ProfileEngine::Global);
-    for (KTrader::OfferList::iterator it = olist.begin(); it != olist.end(); ++it)
+    for (KService::List::iterator it = olist.begin(); it != olist.end(); ++it)
         new K3ListViewItem(allGlobal, (*it)->desktopEntryName(), (*it)->genericName());
     olist = engine.allOffers(ProfileEngine::Project);
-    for (KTrader::OfferList::iterator it = olist.begin(); it != olist.end(); ++it)
+    for (KService::List::iterator it = olist.begin(); it != olist.end(); ++it)
         new K3ListViewItem(allProject, (*it)->desktopEntryName(), (*it)->genericName());
 }
 
@@ -207,20 +207,20 @@ void ProfileEditor::fillPluginsList(Profile *profile)
     K3ListViewItem *project = new K3ListViewItem(pluginsView, i18n("Project Plugins"));
     project->setOpen(true);
 
-    KTrader::OfferList coreOffers = engine.offers(profile->name(), ProfileEngine::Core);
-    for (KTrader::OfferList::const_iterator it = coreOffers.constBegin();
+	KService::List coreOffers = engine.offers(profile->name(), ProfileEngine::Core);
+    for (KService::List::const_iterator it = coreOffers.constBegin();
             it != coreOffers.constEnd(); ++it)
         new K3ListViewItem(core, (*it)->desktopEntryName(), (*it)->genericName(),
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
 
-    KTrader::OfferList globalOffers = engine.offers(profile->name(), ProfileEngine::Global);
-    for (KTrader::OfferList::const_iterator it = globalOffers.constBegin();
+	KService::List globalOffers = engine.offers(profile->name(), ProfileEngine::Global);
+    for (KService::List::const_iterator it = globalOffers.constBegin();
             it != globalOffers.constEnd(); ++it)
         new K3ListViewItem(global, (*it)->desktopEntryName(), (*it)->genericName(),
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
 
-    KTrader::OfferList projectOffers = engine.offers(profile->name(), ProfileEngine::Project);
-    for (KTrader::OfferList::const_iterator it = projectOffers.constBegin();
+	KService::List projectOffers = engine.offers(profile->name(), ProfileEngine::Project);
+    for (KService::List::const_iterator it = projectOffers.constBegin();
             it != projectOffers.constEnd(); ++it)
         new K3ListViewItem(project, (*it)->desktopEntryName(), (*it)->genericName(),
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));

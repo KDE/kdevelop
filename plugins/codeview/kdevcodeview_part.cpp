@@ -30,7 +30,6 @@
 
 #include <kaction.h>
 #include <klocale.h>
-#include <ktrader.h>
 #include <kmimetype.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>

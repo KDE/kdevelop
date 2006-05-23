@@ -23,7 +23,7 @@ ValgrindDialog::ValgrindDialog( Type type, QWidget* parent )
   w = new Ui::ValgrindDialog();
   QWidget* top = new QWidget(this);
   w->setupUi(top);
-  w->valExecutableEdit->setURL( "valgrind" );
+  w->valExecutableEdit->setUrl(KUrl( "valgrind" ));
   w->executableEdit->setFocus();
   w->stack->setCurrentWidget(type == Memcheck ? w->memcheckWidget : w->callgrindWidget);
   setMainWidget( top );
@@ -54,7 +54,7 @@ QString ValgrindDialog::executableName() const
 
 void ValgrindDialog::setExecutable( const QString& url )
 {
-  w->executableEdit->setURL( url );
+  w->executableEdit->setUrl( url );
 }
 
 QString ValgrindDialog::valExecutable() const
@@ -82,9 +82,9 @@ void ValgrindDialog::setValExecutable( const QString& ve )
     KMessageBox::sorry( this, i18n( "Could not find valgrind in your $PATH. Please make "
                                     "sure it is installed properly." ),
                         i18n( "Valgrind Not Found" ) );
-    w->valExecutableEdit->setURL( "valgrind" );
+    w->valExecutableEdit->setUrl( KUrl("valgrind") );
   } else {
-    w->valExecutableEdit->setURL( vUrl );
+    w->valExecutableEdit->setUrl( vUrl );
   }
 }
 
@@ -141,9 +141,9 @@ void ValgrindDialog::setCtExecutable( const QString& ce )
     KMessageBox::sorry( this, i18n( "Could not find calltree in your $PATH. Please make "
                                     "sure it is installed properly." ),
                         i18n( "Calltree Not Found" ) );
-    w->ctExecutableEdit->setURL( "calltree" );
+    w->ctExecutableEdit->setUrl( KUrl("calltree") );
   } else {
-    w->ctExecutableEdit->setURL( vUrl );
+    w->ctExecutableEdit->setUrl( vUrl );
   }
 }
 
@@ -182,9 +182,9 @@ void ValgrindDialog::setKcExecutable( const QString& ke )
     KMessageBox::sorry( this, i18n( "Could not find kcachegrind in your $PATH. Please make "
                                     "sure it is installed properly." ),
                         i18n( "KCachegrind Not Found" ) );
-    w->kcExecutableEdit->setURL( "kcachegrind" );
+    w->kcExecutableEdit->setUrl( KUrl("kcachegrind" ));
   } else {
-    w->kcExecutableEdit->setURL( vUrl );
+    w->kcExecutableEdit->setUrl( vUrl );
   }
 }
 

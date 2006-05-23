@@ -709,7 +709,7 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
         {
             if ( dlg.open_with_kde->isChecked() )
             {
-                KRun::runURL( url, mimeType->name() );
+                KRun::runUrl( url, mimeType->name(),0L );
             }
             else
             {
