@@ -248,6 +248,12 @@ public:
     /// Returns the gdb expression for *this.
     QString gdbExpression() const;     
 
+    /** Returns true is this VarItem should be unconditionally
+        updated on each step, not matter what's the result of
+        -var-update command.
+    */
+    bool updateUnconditionally() const;
+
     void updateValue();
     void updateSpecialRepresentation(const QString& s);
 
@@ -378,9 +384,11 @@ private:
 
     int numChildren_;
     bool childrenFetched_;
-
+    
     QString currentAddress_;
     QString lastObtainedAddress_;
+
+    bool updateUnconditionally_;
 };
 
 

@@ -829,6 +829,8 @@ void VariableTree::handleVarUpdate(const GDBMI::ResultRecord& r)
 {
     const GDBMI::Value& changed = r["changelist"];
 
+    std::set<QString> names_to_update;
+
     for(unsigned i = 0; i < changed.size(); ++i)
     {
         const GDBMI::Value& c = changed[i];
@@ -837,9 +839,16 @@ void VariableTree::handleVarUpdate(const GDBMI::ResultRecord& r)
         if (c.hasField("in_scope") && c["in_scope"].literal() == "false")
             continue;
 
-        if (varobj2varitem.count(name))
+        names_to_update.insert(name);
+    }
+
+    QMap<QString, VarItem*>::iterator i, e;
+    for (i = varobj2varitem.begin(), e = varobj2varitem.end(); i != e; ++i)
+    {
+        if (names_to_update.count(i.key()) 
+            || i.data()->updateUnconditionally())
         {
-            varobj2varitem[name]->updateValue();
+            i.data()->updateValue();
         }
     }
 }
@@ -983,7 +992,6 @@ void VariableTree::handleAddressComputed(const GDBMI::ResultRecord& r)
     }
 }
 
-
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
@@ -1049,7 +1057,8 @@ VarItem::VarItem(TrimmableItem *parent,
       oldSpecialRepresentationSet_(false),
       format_(natural),
       numChildren_(0),
-      childrenFetched_(false)
+      childrenFetched_(false),
+      updateUnconditionally_(false)
 {
     connect(this, SIGNAL(varobjNameChange(const QString&, const QString&)),
             varTree(), 
@@ -1489,7 +1498,16 @@ void VarItem::clearHighlight()
 void VarItem::updateValue()
 {
     if (handleSpecialTypes())
-      return;
+    {
+        // 1. Gdb never includes structures in output from -var-update
+        // 2. Even if it did, the internal state of object can be
+        //    arbitrary complex and gdb can't detect if pretty-printed
+        //    value remains the same.
+        // So, we need to reload value on each step.
+        updateUnconditionally_ = true;
+        return;
+    }
+    updateUnconditionally_ = false;
 
     controller_->addCommand(
         new GDBCommand(
@@ -1785,6 +1803,11 @@ QString VarItem::tipText() const
         tip += "\n" + originalValueType_;
 
     return tip;
+}
+
+bool VarItem::updateUnconditionally() const
+{
+    return updateUnconditionally_;
 }
 
 

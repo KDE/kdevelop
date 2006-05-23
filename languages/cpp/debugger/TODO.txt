@@ -2,10 +2,14 @@
 TODO:
    
    - P1:
+      - QString is not updated.
+
       - Don't send  "-file-list-exec-source-file" if *stopped response
-        does not have any file name.
+        does not have any file name.      
 
       - Don't diable step button while stepping.
+
+      - Fix moving breakpoints on editing files
 
       - Should not issue -stack-num-frames with high limit, should
         issue each time we request more frames.

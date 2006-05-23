@@ -10,11 +10,12 @@ typedef int (*fp)(int);
 int g = 10;
 int g2 = 23;
 
-void func(const QString& xs)
+void func(QString& xs)
 {
    int ac = 10;	
    std::string s;
    g = 10;
+   xs = "foo";
    
 }
 
