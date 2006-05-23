@@ -273,6 +273,8 @@ void CreatePCSDialog::next()
 
 void CreatePCSDialog::reject()
 {
+	if ( ! m_jobData ) return;
+	
 	m_part->removeCatalog( m_jobData->dbName );
 	
 	delete m_jobData;
