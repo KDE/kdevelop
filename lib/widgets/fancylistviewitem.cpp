@@ -56,7 +56,7 @@ QString FancyListViewItemTemplate::text(int column) const {
     return (QString)m_items[column];
 }
 
-#if defined(ISKLISTVIEWITEM) && KDE_VERSION >= 340
+#if defined(ISKLISTVIEWITEM) && KDE_IS_VERSION(3,4,0)
 
 QColor FancyListViewItemTemplate::backgroundColor(int col) {
     return KListViewItem::backgroundColor(col);
