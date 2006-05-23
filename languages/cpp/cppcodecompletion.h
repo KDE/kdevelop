@@ -43,7 +43,7 @@ class CodeInformationRepository;
 class SimpleContext;
 class SimpleType;
 class CppCodeCompletionData;
-class ConfigureSimpleTypes;
+class SimpleTypeConfiguration;
 class TypeDesc;
 struct PopupFillerHelpStruct;
 struct PopupClassViewFillerHelpStruct;
@@ -134,7 +134,7 @@ public:
 
     static SimpleType typeName( QString name );
 
-    EvaluationResult evaluateExpressionAt( int line, int column, ConfigureSimpleTypes& conf, bool ifUnknownSetType = false );
+    EvaluationResult evaluateExpressionAt( int line, int column, SimpleTypeConfiguration& conf, bool ifUnknownSetType = false );
     
     void contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int col );
     
@@ -190,7 +190,7 @@ private:
     ExpressionInfo findExpressionAt( int line, int col, int startLine, int startCol, bool inFunction = false );
     SimpleContext* computeFunctionContext( FunctionDom f, int line, int col );
     
-    EvaluationResult evaluateExpressionType( int line, int column, ConfigureSimpleTypes& conf, EvaluateExpressionOptions opt = DefaultCompletionOptions  );
+    EvaluationResult evaluateExpressionType( int line, int column, SimpleTypeConfiguration& conf, EvaluateExpressionOptions opt = DefaultCompletionOptions  );
     SimpleType unTypeDef( SimpleType scope , QMap<QString, QString>& typedefs );
     
 	bool correctAccessOp( QStringList ptrList, MemberAccessOp accessOp );

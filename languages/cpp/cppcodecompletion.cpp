@@ -62,8 +62,9 @@
 #include <codebrowserfrontend.h>
 
 
-///This can be used to toggle the complete tracing of the resolution-functions, which costs a lot of performance
+///This can be used to toggle the complete tracing of the resolution-functions, which costs a lot of performance, but gives very nice and useful output
 //#define VERBOSE
+///This enables-disables the automatic processing of the expression under the mouse-cursor
 //#define DISABLETOOLTIPS
 
 /**
@@ -1253,7 +1254,7 @@ private:
 	static TypePointer m_globalNamespace; ///this is bad, but with the current parser we can't clearly determine the correct global-namespace for each class/file
 	static bool m_unregistered;
 	typedef std::set<SimpleTypeImpl*> TypeStore ;
-	static TypeStore m_typeStore; ///This is necessary because TypeDescs ind SimpleTypeImpls can have cross-references, and thereby make themselves unreleasable, so each SimpleTypeImpl is stored in this list and destroyed at once by ConfigureSimpleTypes( it breaks all references )
+	static TypeStore m_typeStore; ///This is necessary because TypeDescs ind SimpleTypeImpls can have cross-references, and thereby make themselves unreleasable, so each SimpleTypeImpl is stored in this list and destroyed at once by SimpleTypeConfiguration( it breaks all references )
 	
 	friend class SimpleTypeImpl;
 	
@@ -1285,9 +1286,9 @@ TypePointer SimpleType::m_globalNamespace;
 SimpleType::TypeStore  SimpleType::m_typeStore;
 bool SimpleType::m_unregistered = false;
 
-class ConfigureSimpleTypes {
+class SimpleTypeConfiguration {
 public:
-	ConfigureSimpleTypes( QString currentFileName = "" ) {
+	SimpleTypeConfiguration( QString currentFileName = "" ) {
 		globalCurrentFile = currentFileName;
 	}
 	
@@ -1295,7 +1296,7 @@ public:
 		SimpleType::setGlobalNamespace( globalNamespace );
 	}
 	
-	virtual ~ConfigureSimpleTypes() {
+	virtual ~SimpleTypeConfiguration() {
 		SimpleType::resetGlobalNamespace();
 		SimpleType::destroyStore();
 	}
@@ -2346,7 +2347,7 @@ public:
 		
 public:
 
-	/**TypeDescs and SimpleTypeImpls usually have a cross-reference, which creates a circular dependency so that they are never freed using KShared. This function breaks the loop, and also breaks all other possible dependency-loops. After this function was called, the type still contains its private information, but can not not be used to resolve anything anymore. This function is called automatically while the destruction of ConfigureSimpleTypes */
+	/**TypeDescs and SimpleTypeImpls usually have a cross-reference, which creates a circular dependency so that they are never freed using KShared. This function breaks the loop, and also breaks all other possible dependency-loops. After this function was called, the type still contains its private information, but can not not be used to resolve anything anymore. This function is called automatically while the destruction of SimpleTypeConfiguration */
 	virtual void breakReferences() {
 		m_parent = 0;
 		m_desc.resetResolved();
@@ -5528,8 +5529,8 @@ bool isValidIdentifierSign( const QChar& c ) {
 }
 
 
-///Before calling this, a ConfigureSimpleTypes-object should be created, so that the ressources will be freed when that object is destroyed
-EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column , ConfigureSimpleTypes& conf, bool ifUnknownSetType ) {
+///Before calling this, a SimpleTypeConfiguration-object should be created, so that the ressources will be freed when that object is destroyed
+EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column , SimpleTypeConfiguration& conf, bool ifUnknownSetType ) {
 	kdDebug( 9007 ) << "CppCodeCompletion::evaluateExpressionAt( " << line << ", " << column << " )" << endl;
 	
 	if ( !m_pSupport || !m_activeEditor )
@@ -5761,7 +5762,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 	if ( !m_pSupport || !m_activeEditor )
 		return ;
 	
-	ConfigureSimpleTypes conf( m_activeFileName );
+	SimpleTypeConfiguration conf( m_activeFileName );
 	
 	EvaluationResult type = evaluateExpressionAt( line, column, conf );
 
@@ -5816,7 +5817,7 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
 	if ( !m_pSupport || !m_activeEditor )
 		return ;
 	
-	ConfigureSimpleTypes conf( m_activeFileName );
+	SimpleTypeConfiguration conf( m_activeFileName );
 	
 	EvaluationResult type = evaluateExpressionAt( line, column, conf );
 	
@@ -6128,8 +6129,8 @@ bool CppCodeCompletion::functionContains( FunctionDom f , int line, int col ) {
 	return (line > sl || (line == sl && col >= sc ) ) && (line < el || ( line == el && col < ec ) );
 }
 
-///WArning: yet check how to preserve the ConfigureSimpleTypes..
-CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column, ConfigureSimpleTypes& conf, EvaluateExpressionOptions opt ) {
+///WArning: yet check how to preserve the SimpleTypeConfiguration..
+CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column, SimpleTypeConfiguration& conf, EvaluateExpressionOptions opt ) {
 	EvaluationResult ret;
 	
 	FileDom file = m_pSupport->codeModel()->fileByName( m_activeFileName );
@@ -6403,7 +6404,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 	TypeSpecifierAST::Node recoveredTypeSpec;
 
 	SimpleContext* ctx = 0;
-	ConfigureSimpleTypes conf( m_activeFileName );
+	SimpleTypeConfiguration conf( m_activeFileName );
 	
 	m_pSupport->backgroundParser() ->lock ();
 	

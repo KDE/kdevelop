@@ -273,12 +273,12 @@ void CreatePCSDialog::next()
 
 void CreatePCSDialog::reject()
 {
-	if ( ! m_jobData ) return;
-	
-	m_part->removeCatalog( m_jobData->dbName );
-	
-	delete m_jobData;
-	m_jobData = 0;
+	if ( m_jobData ) {
+		m_part->removeCatalog( m_jobData->dbName );
+		
+		delete m_jobData;
+		m_jobData = 0;
+	}
 	
 	QWizard::reject();
 }
