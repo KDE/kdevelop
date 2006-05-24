@@ -1,11 +1,13 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevRubySupport" version="1">
+<kpartgui name="KDevRubySupport" version="2">
 <MenuBar>
   <Menu name="build" >
     <Action name="build_execute" />
+    <Action name="build_launch_browser" />
   </Menu>
 </MenuBar>
 <ToolBar name="buildToolBar">
     <Action name="build_execute" group="build_operations" />
+	<Action name="build_launch_browser" group="build_operations" />
 </ToolBar>
 </kpartgui>

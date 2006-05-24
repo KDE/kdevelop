@@ -40,6 +40,7 @@ private slots:
     void slotRun();
     void slotCreateSubclass();
     void contextMenu(QPopupMenu *popup, const Context *context);
+    void slotBrowse();
 
     void initialParse();
 

@@ -49,6 +49,10 @@ RubySupportPart::RubySupportPart(QObject *parent, const char *name, const QStrin
   action->setWhatsThis(i18n("<b>Run</b><p>Starts an application."));
   action->setIcon("ruby_run.png");
 
+  action = new KAction( i18n("Launch Browser"), "network", 0, this, SLOT(slotBrowse()), actionCollection(), "build_launch_browser" );
+  action->setToolTip(i18n("Launch Browser"));
+  action->setWhatsThis(i18n("<b>Launch Browser</b><p>Opens a web browser pointing to the Ruby Rails server") );
+
   kdDebug() << "Creating RubySupportPart" << endl;
 
   m_shellWidget = new KDevShellWidget( 0, "irb console");
@@ -632,6 +636,11 @@ void RubySupportPart::slotCreateSubclass()
     QtDesignerRubyIntegration *des = dynamic_cast<QtDesignerRubyIntegration*>(designer(KInterfaceDesigner::QtDesigner));
     if (des)
         des->selectImplementation(m_contextFileName);
+}
+
+void RubySupportPart::slotBrowse()
+{
+    kapp->invokeBrowser("http://localhost:3000/");
 }
 
 #include "rubysupport_part.moc"
