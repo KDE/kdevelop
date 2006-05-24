@@ -5532,7 +5532,7 @@ bool isValidIdentifierSign( const QChar& c ) {
 
 
 ///Before calling this, a SimpleTypeConfiguration-object should be created, so that the ressources will be freed when that object is destroyed
-EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column , SimpleTypeConfiguration& conf ) {
+EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column , SimpleTypeConfiguration& conf, bool ifUnknownSetType ) {
 	kdDebug( 9007 ) << "CppCodeCompletion::evaluateExpressionAt( " << line << ", " << column << " )" << endl;
 	
 	if( line < 0 || line >= m_activeEditor->numLines()  ) return EvaluationResult();
