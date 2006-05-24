@@ -31,6 +31,8 @@
 #include <kpopupmenu.h>
 #include <kinputdialog.h>
 #include <klocale.h>
+#include <kapplication.h>
+#include <kconfig.h>
 
 #include "buttonbar.h"
 
@@ -56,11 +58,28 @@ Button::Button(ButtonBar *parent, const QString text, const QIconSet &icon,
         this, SLOT(assignAccel()), this);
     m_clearAccelAction = new KAction(i18n("Clear Accelerator"), 0,
         this, SLOT(clearAccel()), this);
+
+    KConfig *config = kapp->config();
+    config->setGroup("UI");
+    QString accel = config->readEntry(QString("button_%1").arg(text), "");
+    if (!accel.isEmpty())
+        setRealText(QString("&%1 %2").arg(accel).arg(m_realText));
 }
 
 Button::~Button()
 {
 //     m_buttonBar->removeButton(this);
+    QRegExp r("^&([0-9])\\s.*");
+    QRegExp r2("^&[0-9]\\s");
+    if (r.search(m_realText) > -1)
+    {
+        QString text = m_realText;
+        if (text.contains(r2))
+            text.remove(r2);
+        KConfig *config = kapp->config();
+        config->setGroup("UI");
+        config->writeEntry(QString("button_%1").arg(text), r.cap(1));
+    }
 }
 
 void Button::setDescription(const QString &description)
