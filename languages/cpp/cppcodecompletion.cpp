@@ -5532,8 +5532,11 @@ bool isValidIdentifierSign( const QChar& c ) {
 
 
 ///Before calling this, a SimpleTypeConfiguration-object should be created, so that the ressources will be freed when that object is destroyed
-EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column , SimpleTypeConfiguration& conf, bool ifUnknownSetType ) {
+EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column , SimpleTypeConfiguration& conf ) {
 	kdDebug( 9007 ) << "CppCodeCompletion::evaluateExpressionAt( " << line << ", " << column << " )" << endl;
+	
+	if( line < 0 || line >= m_activeEditor->numLines()  ) return EvaluationResult();
+	if( column < 0 || column >= m_activeEditor->lineLength( line ) ) return EvaluationResult();
 	
 	if ( !m_pSupport || !m_activeEditor )
 		return EvaluationResult();
@@ -5541,7 +5544,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column ,
 	{
 		QString curLine = m_activeEditor->textLine( line );
 		
-	///move column to the last letter of the pointed word
+		///move column to the last letter of the pointed word
 		while( column+1 < (int)curLine.length() && isValidIdentifierSign( curLine[column] ) && isValidIdentifierSign( curLine[column+1] ) ) {
 			column++;
 		}
@@ -5549,13 +5552,13 @@ EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column ,
 	//if( column > 0 ) column--;
 		
 		if( column >= (int)curLine.length() || curLine[ column ].isSpace() ) return EvaluationResult();
-			
+		
 		QString expr = curLine.left( column +1 );
 		kdDebug( 9007 ) << "evaluating \"" << expr.stripWhiteSpace() << "\"" << endl;
 		
 		if( curLine[column] == '-' || curLine[column] == ';' ) --column;
 		
-	EvaluationResult type = evaluateExpressionType( line, column + 1, conf, ifUnknownSetType ? addFlag( DefaultEvaluationOptions, DefaultAsTypeExpression ) : DefaultEvaluationOptions );
+		EvaluationResult type = evaluateExpressionType( line, column + 1, conf, ifUnknownSetType ? addFlag( DefaultEvaluationOptions, DefaultAsTypeExpression ) : DefaultEvaluationOptions );
 		
 		kdDebug( 9007 ) << "type: " << type.resultType->fullTypeResolved() << endl;
 		
