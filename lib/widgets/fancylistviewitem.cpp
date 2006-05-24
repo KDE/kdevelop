@@ -17,8 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-///This file is just a template, included from fancyqlistviewitem.cpp and fancyklistviewitem.cpp to define the specific classes
-
 #include <qpixmap.h>
 #include <qapplication.h>
 #include <qnamespace.h>
@@ -27,7 +25,7 @@
 #include "fancylistviewitem.h"
 
 
-void FancyListViewItem::init(const QString& label1, const QString& label2) {
+void FancyListViewItem::init(const QString& label1, const QString& /*label2*/) {
     if( !label1.isEmpty() ) {
         setText(0, label1);
     }

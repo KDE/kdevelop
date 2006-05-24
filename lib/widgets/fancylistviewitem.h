@@ -20,21 +20,11 @@
 #ifndef FANCYLISTVIEWITEM
 #define FANCYLISTVIEWITEM
 
-/**
-    When this header is included, a list-view-item based on KListViewItem is
-    with the name FancyKListViewItem is available.
-    If it is necessary to have the same based on QListViewItem,
-    the header fancyqlistviewitem.h can be used.
-*/
-
 #include <qvaluevector.h>
 #include <qpainter.h>
 #include <qfont.h>
 #include <qlistview.h>
 #include <klistview.h>
-
-namespace Widgets{
-};
 
 class TextPaintStyleStore {
     public:
@@ -85,8 +75,6 @@ class TextPaintStyleStore {
         Store m_styles;
 };
 
-
-
 class TextPaintItem {
     public:
         struct Item {
@@ -133,7 +121,6 @@ class TextPaintItem {
 ///does not support multiple column, a "column" represents a part of the real first column
 ///KListViewItem is only needed for the background-color
 
-///all this is ugly, but templates don't do, and this is still better than code-duplication :)
 class FancyListViewItem : public KListViewItem
 {
     public:
@@ -171,8 +158,5 @@ class FancyListViewItem : public KListViewItem
     protected:
         TextPaintStyleStore& m_styles;
 };
-
-/*}*/
-
 
 #endif
