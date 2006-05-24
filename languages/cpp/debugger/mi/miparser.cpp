@@ -293,7 +293,7 @@ QString MIParser::parseStringLiteral()
 {
     QCString message = lex->currentTokenText();
 
-    int length = message.length();
+    unsigned int length = message.length();
     QString message2;
     message2.setLength(length);
     // The [1,length-1] range removes quotes without extra

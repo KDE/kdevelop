@@ -133,7 +133,7 @@ void Breakpoint::sendToGdb(GDBController* controller)
     }
 }
 
-void Breakpoint::clearBreakpoint(GDBController* c)
+void Breakpoint::clearBreakpoint(GDBController* /*c*/)
 {
     controller()->addCommand(
         new GDBCommand(dbgRemoveCommand(), 
@@ -358,7 +358,7 @@ void Breakpoint::handleSet(const GDBMI::ResultRecord& r)
     emit modified(this);
 }
 
-void Breakpoint::handleDeleted(const GDBMI::ResultRecord& r)
+void Breakpoint::handleDeleted(const GDBMI::ResultRecord& /*r*/)
 {
     kdDebug(9012) << "inside handleDeleted\n";
     setActionDie();

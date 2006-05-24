@@ -161,7 +161,14 @@ void FramestackWidget::slotEvent(GDBController::event_t e)
         case GDBController::debugger_exited: 
         {
             clear();
+	    break;
         }        
+	case GDBController::debugger_busy:
+	case GDBController::debugger_ready:
+	case GDBController::shared_library_loaded:
+	case GDBController::program_running:
+	case GDBController::connected_to_program:
+	    break;
     }
 }
 

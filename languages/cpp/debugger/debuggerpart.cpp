@@ -433,7 +433,7 @@ ASYNC DebuggerPart::slotDebugExternalProcess()
     mainWindow()->main()->raise();
 }
 
-ASYNC DebuggerPart::slotDebugCommandLine(const QString& command)
+ASYNC DebuggerPart::slotDebugCommandLine(const QString& /*command*/)
 {
     KMessageBox::information(0, "Asked to debug command line");
 }

@@ -78,7 +78,6 @@ QString GDBParser::getName(const char **buf)
 
 QString GDBParser::getValue(const char **buf)
 {
-    const char* orig = *buf;
     const char *start = skipNextTokenStart(*buf);
     *buf = skipTokenValue(start);
 

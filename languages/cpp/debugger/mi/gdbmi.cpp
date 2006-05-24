@@ -33,7 +33,7 @@ QString Value::literal() const
     throw type_error();
 }
 
-int Value::toInt(int base) const
+int Value::toInt(int /*base*/) const
 {
     throw type_error();
 }
