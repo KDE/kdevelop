@@ -300,17 +300,6 @@ void ButtonBar::setAutoResize(bool b)
     m_autoResize = b;
 }
 
-void ButtonBar::assignAccel(Button *button, int num)
-{
-    QString text = button->realText();
-    QRegExp r("^&[0-9]\\s");
-    if (text.contains(r))
-        text.remove(r);
-    text = QString("&%1 %2").arg(num).arg(text);
-    kdDebug() << text << endl;
-    button->setRealText(text);
-}
-
 }
 
 #include "buttonbar.moc"

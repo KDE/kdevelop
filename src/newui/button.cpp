@@ -23,6 +23,7 @@
 #include <qtooltip.h>
 #include <qstyle.h>
 #include <qapplication.h>
+#include <qregexp.h>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -53,6 +54,8 @@ Button::Button(ButtonBar *parent, const QString text, const QIconSet &icon,
 
     m_assignAccelAction = new KAction(i18n("Assign Accelerator..."), 0,
         this, SLOT(assignAccel()), this);
+    m_clearAccelAction = new KAction(i18n("Clear Accelerator"), 0,
+        this, SLOT(clearAccel()), this);
 }
 
 Button::~Button()
@@ -276,6 +279,8 @@ void Button::contextMenuEvent(QContextMenuEvent *e)
     QPopupMenu menu;
 
     m_assignAccelAction->plug(&menu);
+    if (m_realText.contains(QRegExp("^&[0-9]\\s")))
+        m_clearAccelAction->plug(&menu);
     menu.exec(e->globalPos());
 }
 
@@ -284,7 +289,14 @@ void Button::assignAccel()
     bool ok;
     int num = KInputDialog::getInteger(i18n("Change Button Number"), i18n("New accelerator number:"), 1, 0, 10, 1, &ok, this);
     if (ok)
-        m_buttonBar->assignAccel(this, num);
+    {
+        QString text = m_realText;
+        QRegExp r("^&[0-9]\\s");
+        if (text.contains(r))
+            text.remove(r);
+        text = QString("&%1 %2").arg(num).arg(text);
+        setRealText(text);
+    }
 }
 
 void Button::setRealText(const QString &text)
@@ -292,6 +304,16 @@ void Button::setRealText(const QString &text)
     m_realText = text;
     setText(text);
 }
+
+void Button::clearAccel()
+{
+    QString text = m_realText;
+    QRegExp r("^&[0-9]\\s");
+    if (text.contains(r))
+        text.remove(r);
+    setRealText(text);
+}
+
 
 }
 

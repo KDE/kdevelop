@@ -73,6 +73,7 @@ protected:
 
 protected slots:
     void assignAccel();
+    void clearAccel();
 
 private:
     virtual ~Button();
@@ -93,6 +94,7 @@ private:
     QIconSet m_realIconSet;
 
     KAction *m_assignAccelAction;
+    KAction *m_clearAccelAction;
 
 friend class ButtonBar;
 };

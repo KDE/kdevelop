@@ -82,8 +82,6 @@ public:
     /**Restores the size of button bar buttons.*/
     virtual void unshrink();
 
-    void assignAccel(Button *button, int num);
-
 protected:
     virtual void resizeEvent ( QResizeEvent *ev );
 
