@@ -169,9 +169,11 @@ public:
 	
 } ;
 
+#ifndef NDEBUG
 template<>
 KDDebugState<kdbgstream>::KDDebugState() : m_stream ( kdDebug( 9007 ) ) {
 }
+#endif
 
 template<>
 KDDebugState<kndbgstream>::KDDebugState() {
