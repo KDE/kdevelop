@@ -17,23 +17,22 @@
    Boston, MA 02111-1307, USA.
 */
 
-///This file is just a template, included from fancyqlistviewitem.cpp and fancyklistviewitem.cpp to define the specific classes
 
 #include <qpixmap.h>
 #include <qapplication.h>
 #include <qnamespace.h>
 #include <kdeversion.h>
+#include "fancylistviewitem.h"
 
 
-
-void FancyListViewItemTemplate::init(const QString& label1, const QString& label2) {
+void FancyListViewItem::init(const QString& label1, const QString& label2) {
     if( !label1.isEmpty() ) {
         setText(0, label1);
     }
 }
 
 
-void FancyListViewItemTemplate::setItem(int column, TextPaintItem item) {
+void FancyListViewItem::setItem(int column, TextPaintItem item) {
     if( column >= int(m_items.size()) ) {
         m_items.append( item );
     }else{
@@ -42,7 +41,7 @@ void FancyListViewItemTemplate::setItem(int column, TextPaintItem item) {
 }
 
 
-void FancyListViewItemTemplate::setText ( int column, const QString & text ) {
+void FancyListViewItem::setText ( int column, const QString & text ) {
     if( column >= int(m_items.size()) ) {
         m_items.append( TextPaintItem(text) );
     }else{
@@ -51,20 +50,20 @@ void FancyListViewItemTemplate::setText ( int column, const QString & text ) {
 }
 
 
-QString FancyListViewItemTemplate::text(int column) const {
+QString FancyListViewItem::text(int column) const {
     if( m_items.isEmpty() ) return "";
     return (QString)m_items[column];
 }
 
 #if defined(ISKLISTVIEWITEM) && KDE_IS_VERSION(3,4,0)
 
-QColor FancyListViewItemTemplate::backgroundColor(int col) {
+QColor FancyListViewItem::backgroundColor(int col) {
     return KListViewItem::backgroundColor(col);
 }
 
 #else
 
-QColor FancyListViewItemTemplate::backgroundColor(int col) {
+QColor FancyListViewItem::backgroundColor(int col) {
     return QColor();
 }
 
@@ -74,7 +73,7 @@ QColor FancyListViewItemTemplate::backgroundColor(int col) {
 ///this is a modified version of the original QListViewItem::paintCell from the qt source
 ///multiline is not supported!
 
-void FancyListViewItemTemplate::paintCell( QPainter *painter, const QColorGroup &cg,
+void FancyListViewItem::paintCell( QPainter *painter, const QColorGroup &cg,
                                                 int column, int width, int align)
 {
     if(column < 0 || column >= int(m_items.size()) || m_items[column].items().isEmpty()) {
@@ -173,7 +172,7 @@ void FancyListViewItemTemplate::paintCell( QPainter *painter, const QColorGroup 
 }
 
 
-int FancyListViewItemTemplate::textWidth(const QFont& font, const QString& text) 
+int FancyListViewItem::textWidth(const QFont& font, const QString& text) 
 {
     QFontMetrics fm( font );
     if ( multiLinesEnabled() )
@@ -184,7 +183,7 @@ int FancyListViewItemTemplate::textWidth(const QFont& font, const QString& text)
 }
 
 
-int FancyListViewItemTemplate::width(const QFontMetrics &fm, const QListView *lv, int column)
+int FancyListViewItem::width(const QFontMetrics &fm, const QListView *lv, int column)
 {
     int width = 0;
     if (column >= 0 && column < (int)m_items.size() && !multiLinesEnabled()) {
