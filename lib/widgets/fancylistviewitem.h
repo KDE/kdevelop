@@ -130,22 +130,18 @@ class TextPaintItem {
         Chain m_chain;
 };
 
-#define FancyListViewItemTemplate FANCYLISTVIEWITEM_NEWNAME
-
 ///does not support multiple column, a "column" represents a part of the real first column
 ///KListViewItem is only needed for the background-color
 
 ///all this is ugly, but templates don't do, and this is still better than code-duplication :)
-class FancyListViewItemTemplate : public FANCYLISTVIEWITEM_BASE
+class FancyListViewItem : public KListViewItem
 {
-    private:
-        typedef FancyListViewItemTemplate Self;
     public:
-        FancyListViewItemTemplate(TextPaintStyleStore& styles, QListView *parent, const QString &label1, const QString &label2="") : FANCYLISTVIEWITEM_BASE(parent, label1, label2), m_styles(styles) {
+        FancyListViewItem(TextPaintStyleStore& styles, QListView *parent, const QString &label1, const QString &label2="") : KListViewItem(parent, label1, label2), m_styles(styles) {
             init(label1, label2);
         }
         
-        FancyListViewItemTemplate(TextPaintStyleStore& styles, QListViewItem *parent, const QString &label1, const QString &label2="") : FANCYLISTVIEWITEM_BASE(parent, label1, label2), m_styles(styles) {
+        FancyListViewItem(TextPaintStyleStore& styles, QListViewItem *parent, const QString &label1, const QString &label2="") : KListViewItem(parent, label1, label2), m_styles(styles) {
             init(label1, label2);
         }
         

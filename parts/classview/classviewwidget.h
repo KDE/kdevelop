@@ -28,7 +28,7 @@
 #include <qmap.h>
 #include <qtooltip.h>
 #include <codemodel.h>
-#include <fancyklistviewitem.h>
+#include <fancylistviewitem.h>
 #include <navigator.h>
 
 using namespace Widgets;
@@ -115,15 +115,14 @@ private:
     TextPaintStyleStore m_paintStyles;
 };
 
-class ClassViewItem: public FancyKListViewItem
+class ClassViewItem: public FancyListViewItem
 {
     private:
-    typedef FancyKListViewItem Base;
 public:
     ClassViewItem( QListView* parent, const QString& text=QString::null )
-        : Base( static_cast<ClassViewWidget*>( parent )->m_paintStyles, parent, text ) {}
+        : FancyListViewItem( static_cast<ClassViewWidget*>( parent )->m_paintStyles, parent, text ) {}
     ClassViewItem( QListViewItem* parent, const QString& text=QString::null )
-    : Base( static_cast<ClassViewWidget*>( parent->listView() )->m_paintStyles, parent, text ) {}
+    : FancyListViewItem( static_cast<ClassViewWidget*>( parent->listView() )->m_paintStyles, parent, text ) {}
     
     virtual const CodeModelItem* model() const { return 0; }
 

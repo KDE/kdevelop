@@ -150,7 +150,7 @@ protected:
     void	updateMask();
 
 private:
-    void	setUpListView();
+    virtual void setUpListView();
     void	setUpLineEdit();
     void	popDownListView();
     void	reIndex();

@@ -62,21 +62,20 @@ private:
 
 
 
-class FunctionNavItem: public FancyQListViewItem {
+class FunctionNavItem: public FancyListViewItem {
 private:
-    typedef FancyQListViewItem Base;
 public:
     enum Type { Declaration, Definition };
 
     FunctionNavItem(TextPaintStyleStore& styles, ClassViewPart *part, QListView *parent, QString name, Type type)
-        :Base(styles, parent, name, ""), m_part(part), m_type(type) {}
+        :FancyListViewItem(styles, parent, name, ""), m_part(part), m_type(type) {}
     FunctionNavItem(TextPaintStyleStore& styles, ClassViewPart *part, QListViewItem *parent, QString name, Type type)
-        :Base(styles, parent, name, ""), m_part(part), m_type(type) {}
+        :FancyListViewItem(styles, parent, name, ""), m_part(part), m_type(type) {}
     ~FunctionNavItem() {}
 
     virtual void setup()
     {
-        Base::setup();
+        FancyListViewItem::setup();
         setPixmap( 0, UserIcon("CVpublic_meth", KIcon::DefaultState, m_part->instance()) );
     }
     Type type() { return m_type; }

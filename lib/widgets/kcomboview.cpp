@@ -17,15 +17,16 @@
    Boston, MA 02111-1307, USA.
 */
 #include <klineedit.h>
-#include <qlistview.h>
+#include <klistview.h>
 #include <kcompletionbox.h>
+#include <qheader.h>
 #include <qmap.h>
 
 #include "kcomboview.h"
 
 
 KComboView::KComboView( bool rw, int defaultWidth, QWidget* parent, const char* name , CustomCompleter* comp)
-    :QComboView(rw, parent, name), m_defaultWidth(defaultWidth), m_comp( comp )
+    :QComboView(rw, parent, name),  m_comp( comp ), m_defaultWidth(defaultWidth)
 {
     if (rw)
     {
@@ -82,5 +83,19 @@ void KComboView::setDefaultText( const QString & text )
 {
     m_defaultText = text;
 }
+
+void KComboView::setUpListView()
+{
+    KListView *listView = new KListView( this, "in-combo" );
+    listView->setRootIsDecorated( false );
+    listView->setAllColumnsShowFocus(true);
+    listView->addColumn("");
+    listView->setResizeMode(QListView::LastColumn);
+
+    listView->header()->hide();
+
+    setListView(listView);
+}
+
 
 #include "kcomboview.moc"

@@ -70,6 +70,8 @@ public:
 
     int defaultWidth();
 private:
+    virtual void setUpListView();
+
     CustomCompleter* m_comp;
     int m_defaultWidth;
     QString m_defaultText;
