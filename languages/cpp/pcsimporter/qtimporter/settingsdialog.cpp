@@ -105,6 +105,10 @@ void SettingsDialog::addUrlButton_clicked( )
 	if ( isValidQtDir( qtUrl->url() ) )
 	{
 		qtListBox->insertItem( qtUrl->url() );
+		if ( QListBoxItem * item = qtListBox->findItem( qtUrl->url(), ExactMatch ) )
+		{
+			qtListBox->setSelected( item, true );
+		}
 		qtUrl->lineEdit()->clear();
 	}
 	else

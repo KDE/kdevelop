@@ -81,6 +81,10 @@ void SettingsDialog::addUrlButton_clicked()
 	if ( isValidKDELibsDir( kdeUrl->url() ) )
 	{
 		kdeListBox->insertItem( kdeUrl->url() );
+		if ( QListBoxItem * item = kdeListBox->findItem( kdeUrl->url(), ExactMatch ) )
+		{
+			kdeListBox->setSelected( item, true );
+		}
 		kdeUrl->lineEdit()->clear();
 	}
 	else

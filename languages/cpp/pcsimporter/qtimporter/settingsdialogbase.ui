@@ -122,7 +122,7 @@
 <connections>
     <connection>
         <sender>qtListBox</sender>
-        <signal>clicked(QListBoxItem*)</signal>
+        <signal>selectionChanged(QListBoxItem*)</signal>
         <receiver>SettingsDialogBase</receiver>
         <slot>slotSelectionChanged(QListBoxItem*)</slot>
     </connection>

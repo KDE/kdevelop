@@ -53,7 +53,11 @@ QStringList KDevQt4Importer::fileList()
        << "#include <QtGui/QtGui>\n"
        << "#include <QtNetwork/QtNetwork>\n"
        << "#include <QtXml/QtXml>\n"
-       << "#include <Qt3Compat/Qt3Compat>\n";
+       << "#include <Qt3Support/Qt3Support>\n"
+       << "#include <QtSql/QtSql>\n"
+       << "#include <QtTest/QtTest>\n"
+       << "#include <QtOpenGL/QtOpenGL>\n";
+
 
     KProcess proc;
     proc << "cpp" << "-nostdinc" << "-xc++";
