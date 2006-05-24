@@ -26,6 +26,10 @@
 
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kaction.h>
+#include <kpopupmenu.h>
+#include <kinputdialog.h>
+#include <klocale.h>
 
 #include "buttonbar.h"
 
@@ -44,8 +48,11 @@ Button::Button(ButtonBar *parent, const QString text, const QIconSet &icon,
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     resize(sizeHint());
     fixDimensions(Ideal::Bottom);
-    
+
     QToolTip::add(this, m_realText);
+
+    m_assignAccelAction = new KAction(i18n("Assign Accelerator..."), 0,
+        this, SLOT(assignAccel()), this);
 }
 
 Button::~Button()
@@ -95,9 +102,9 @@ void Button::drawButton(QPainter *p)
     QPixmap pm(sh.width(), sh.height());
     pm.fill(eraseColor());
     QPainter p2(&pm);
-    
+
     style().drawControl(QStyle::CE_PushButton,&p2,this, QRect(0,0,pm.width(),pm.height()), colorGroup(),flags);
-    
+
     style().drawControl(QStyle::CE_PushButtonLabel, &p2, this,
                         QRect(0,0,pm.width(),pm.height()),
                         colorGroup(), flags, QStyleOption());
@@ -198,7 +205,7 @@ QSize Button::sizeHint(const QString &text) const
             expandedTo(QApplication::globalStrut()));
 }
 
-void Ideal::Button::updateSize()
+void Button::updateSize()
 {
     switch (m_place)
     {
@@ -262,6 +269,28 @@ void Button::disableText()
 void Button::enableText()
 {
     setText(m_realText);
+}
+
+void Button::contextMenuEvent(QContextMenuEvent *e)
+{
+    QPopupMenu menu;
+
+    m_assignAccelAction->plug(&menu);
+    menu.exec(e->globalPos());
+}
+
+void Button::assignAccel()
+{
+    bool ok;
+    int num = KInputDialog::getInteger(i18n("Change Button Number"), i18n("New accelerator number:"), 1, 0, 10, 1, &ok, this);
+    if (ok)
+        m_buttonBar->assignAccel(this, num);
+}
+
+void Button::setRealText(const QString &text)
+{
+    m_realText = text;
+    setText(text);
 }
 
 }

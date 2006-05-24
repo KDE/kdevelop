@@ -28,6 +28,8 @@ class QToolButton;
 class QWidgetStack;
 class KComboBox;
 
+class DMainWindow;
+
 namespace Ideal {
     class Button;
     class ButtonBar;
@@ -37,27 +39,29 @@ class DDockWindow : public QDockWindow {
     Q_OBJECT
 public:
     enum Position { Bottom, Left, Right };
-    
-    DDockWindow(QWidget *parent, Position position);
+
+    DDockWindow(DMainWindow *parent, Position position);
     virtual ~DDockWindow();
-    
+
     virtual void setVisible(bool v);
     bool visible() const { return m_visible; }
     Position position() const { return m_position; }
-    
+
     virtual void addWidget(const QString &title, QWidget *widget);
     virtual void raiseWidget(QWidget *widget);
     /**Removes the widget from dock. Does not delete it.*/
     virtual void removeWidget(QWidget *widget);
-    
+
     virtual void hideWidget(QWidget *widget);
     virtual void showWidget(QWidget *widget);
-    
+
     virtual QWidget *currentWidget() const;
-    
+
     virtual void setMovingEnabled(bool b);
 
     virtual void saveSettings();
+
+    DMainWindow *mainWindow() const { return m_mainWindow; }
 
 private slots:
     void selectWidget();
@@ -65,17 +69,18 @@ private slots:
 
 protected:
     virtual void loadSettings();
-    
+
     Ideal::ButtonBar *m_bar;
     QWidgetStack *m_widgetStack;
-    
+
     QMap<Ideal::Button*, QWidget*> m_widgets;
     QMap<QWidget*, Ideal::Button*> m_buttons;
 
 private:
     Position m_position;
     bool m_visible;
-    QString m_name;    
+    QString m_name;
+    DMainWindow *m_mainWindow;
 
     Ideal::Button *m_toggledButton;
     QBoxLayout *m_internalLayout;

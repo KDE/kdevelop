@@ -35,10 +35,11 @@
 
 #include "buttonbar.h"
 #include "button.h"
+#include "dmainwindow.h"
 
-DDockWindow::DDockWindow(QWidget *parent, Position position)
+DDockWindow::DDockWindow(DMainWindow *parent, Position position)
     :QDockWindow(QDockWindow::InDock, parent), m_position(position), m_visible(false),
-    m_toggledButton(0)
+    m_mainWindow(parent), m_toggledButton(0)
 {
     setMovingEnabled(false);
     setResizeEnabled(true);
@@ -63,8 +64,8 @@ DDockWindow::DDockWindow(QWidget *parent, Position position)
             m_internalLayout = new QHBoxLayout(boxLayout(), 0);
             m_internalLayout->setDirection(QBoxLayout::RightToLeft);
             break;
-    }    
-    
+    }
+
     KConfig *config = kapp->config();
     config->setGroup("UI");
     int mode = config->readNumEntry("MDIStyle", 3);
@@ -75,15 +76,15 @@ DDockWindow::DDockWindow(QWidget *parent, Position position)
         buttonMode = Ideal::Text;
     else if (mode == 3)
         buttonMode = Ideal::IconsAndText;
-        
+
     m_bar = new Ideal::ButtonBar(place, buttonMode, this);
     m_internalLayout->addWidget(m_bar);
-    
+
     m_widgetStack = new QWidgetStack(this);
     m_internalLayout->addWidget(m_widgetStack);
 
     setVisible(m_visible);
-    
+
     loadSettings();
 }
 
@@ -99,19 +100,21 @@ void DDockWindow::setVisible(bool v)
     KConfig *config = kapp->config();
     QString group = QString("%1").arg(m_name);
     config->setGroup(group);
-    
+
     if (m_visible)
         config->writeEntry("ViewWidth", m_position == DDockWindow::Bottom ? height() : width() );
 
     v ? m_widgetStack->show() : m_widgetStack->hide();
     m_visible = v;
-    
+
     m_internalLayout->invalidate();
     if (!m_visible)
+    {
         if (m_position == DDockWindow::Bottom)
             setFixedExtentHeight(m_internalLayout->sizeHint().height());
         else
             setFixedExtentWidth(m_internalLayout->sizeHint().width());
+    }
     else
     {
         //restore widget size from the config
@@ -178,11 +181,11 @@ void DDockWindow::addWidget(const QString &title, QWidget *widget)
     m_widgets[button] = widget;
     m_buttons[widget] = button;
     m_bar->addButton(button);
-    
+
     m_widgetStack->addWidget(widget);
     connect(button, SIGNAL(clicked()), this, SLOT(selectWidget()));
-    
-    //if the widget was selected last time the dock is deleted 
+
+    //if the widget was selected last time the dock is deleted
     //we need to show it
     KConfig *config = kapp->config();
     QString group = QString("%1").arg(m_name);
@@ -211,18 +214,18 @@ void DDockWindow::removeWidget(QWidget *widget)
     kdDebug() << k_funcinfo << endl;
     if (m_widgetStack->id(widget) == -1)
         return; //not in dock
-    
+
     bool changeVisibility = false;
     if (m_widgetStack->visibleWidget() == widget)
         changeVisibility = true;
-    
+
     Ideal::Button *button = m_buttons[widget];
     if (button)
         m_bar->removeButton(button);
     m_widgets.remove(button);
     m_buttons.remove(widget);
     m_widgetStack->removeWidget(widget);
-    
+
     if (changeVisibility)
     {
         m_toggledButton = 0;

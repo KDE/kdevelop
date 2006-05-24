@@ -22,7 +22,9 @@
 #include <qlayout.h>
 
 #include <kdebug.h>
+#include <kconfig.h>
 #include <kstringhandler.h>
+#include <klocale.h>
 
 #include "button.h"
 
@@ -38,10 +40,10 @@ ButtonLayout::ButtonLayout(ButtonBar *parent, Direction d, int margin, int spaci
 QSize ButtonLayout::minimumSize() const
 {
     QSize size = QBoxLayout::minimumSize();
-    
+
     if (!m_buttonBar->autoResize())
         return size;
-    
+
     switch (m_buttonBar->place())
     {
         case Ideal::Left:
@@ -74,10 +76,10 @@ ButtonBar::ButtonBar(Place place, ButtonMode mode, QWidget *parent, const char *
             l = new ButtonLayout(this, QBoxLayout::LeftToRight, 0, 0);
             break;
     }
-    
+
     l->setResizeMode(QLayout::Minimum);
     setMode(mode);
-    
+
     l->insertStretch(-1);
 }
 
@@ -88,7 +90,7 @@ ButtonBar::~ButtonBar()
 void ButtonBar::addButton(Button *button)
 {
     int buttonCount = m_buttons.count();
-    
+
     button->setMode(m_mode);
     m_buttons.append(button);
     l->insertWidget(buttonCount, button);
@@ -165,14 +167,14 @@ void ButtonBar::resizeEvent(QResizeEvent *ev)
             oldDimension = ev->oldSize().width();
             break;
     }
-    
+
     if (preferredDimension > actualDimension)
         shrink(preferredDimension, actualDimension);
     else if (m_shrinked && (originalDimension() < actualDimension))
         unshrink();
     else if (m_shrinked && actualDimension > oldDimension)
         deshrink(preferredDimension, actualDimension);
-    
+
     QWidget::resizeEvent(ev);
 }
 
@@ -180,9 +182,9 @@ void ButtonBar::shrink(int preferredDimension, int actualDimension)
 {
     if (!preferredDimension)
         return;
-    
+
     m_shrinked = true;
-    
+
     uint textLength = 0;
     QValueList<uint> texts;
     uint maxLength = 0;
@@ -193,9 +195,9 @@ void ButtonBar::shrink(int preferredDimension, int actualDimension)
         texts.append(length);
         textLength += length;
     }
-    
+
     uint newPreferredLength = actualDimension * textLength / preferredDimension;
-        
+
     uint newMaxLength = maxLength;
     uint newTextLength;
     do {
@@ -221,9 +223,9 @@ void ButtonBar::deshrink(int preferredDimension, int actualDimension)
 {
     if (!preferredDimension)
         return;
-    
+
     m_shrinked = true;
-    
+
     uint textLength = 0;
     QValueList<uint> texts;
     uint maxLength = 0;
@@ -234,13 +236,13 @@ void ButtonBar::deshrink(int preferredDimension, int actualDimension)
         texts.append(length);
         textLength += length;
     }
-    
+
     uint newPreferredLength = actualDimension * textLength / preferredDimension;
-    
+
     if (newPreferredLength <= textLength)
         return;
-    
-    uint newTextLength;    
+
+    uint newTextLength;
     uint prevTextLength = 0;
     do {
         newTextLength = 0;
@@ -255,7 +257,7 @@ void ButtonBar::deshrink(int preferredDimension, int actualDimension)
             break;
         prevTextLength = newTextLength;
     } while (newTextLength < newPreferredLength);
-    
+
     int i = 0;
     for (ButtonList::iterator it = m_buttons.begin(); it != m_buttons.end(); ++it)
     {
@@ -284,7 +286,7 @@ int ButtonBar::originalDimension()
     for (ButtonList::const_iterator it = m_buttons.constBegin(); it != m_buttons.constEnd(); ++it)
     {
         size += (*it)->sizeHint((*it)->realText()).width();
-    }    
+    }
     return size;
 }
 
@@ -296,6 +298,17 @@ bool ButtonBar::autoResize() const
 void ButtonBar::setAutoResize(bool b)
 {
     m_autoResize = b;
+}
+
+void ButtonBar::assignAccel(Button *button, int num)
+{
+    QString text = button->realText();
+    QRegExp r("^&[0-9]\\s");
+    if (text.contains(r))
+        text.remove(r);
+    text = QString("&%1 %2").arg(num).arg(text);
+    kdDebug() << text << endl;
+    button->setRealText(text);
 }
 
 }
