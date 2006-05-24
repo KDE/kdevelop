@@ -446,7 +446,7 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
     if (currentCmd_)
     {
         const QValueVector<QString>& lines = currentCmd_->allStreamOutput();
-        for(int i = 0; i < lines.count(); ++i)
+        for(unsigned int i = 0; i < lines.count(); ++i)
         {
             if (lines[i].startsWith("Stopped due to shared library event"))
             {

@@ -511,7 +511,8 @@ void VariableTree::updateCurrentFrame()
 
 void VariableTree::slotAddWatchVariable(const QString &watchVar)
 {
-    VarItem *varItem = new VarItem(findWatch(), watchVar);
+    VarItem *varItem = 0;
+    varItem = new VarItem(findWatch(), watchVar);
 }
 
 void VariableTree::slotEvaluateExpression(const QString &expression)
@@ -1329,7 +1330,8 @@ void VarItem::childrenDone(const GDBMI::ResultRecord& r)
             else
             {
                 // Propagate format from parent.
-                VarItem* v = new VarItem(this, children[i], format_);
+                VarItem* v = 0;
+                v = new VarItem(this, children[i], format_);
             }
         }
     }
@@ -1695,7 +1697,7 @@ VarItem::format_t VarItem::formatFromGdbModifier(char c) const
     case 't':
         nf = binary; break;
     default:
-        break;
+        nf = natural; break;
     }
     return nf;
 }
@@ -1727,7 +1729,7 @@ QString VarItem::varobjFormatName() const
         return "binary";
         break;
     }
-    
+    return "<undefined>";    
 }
 
 
