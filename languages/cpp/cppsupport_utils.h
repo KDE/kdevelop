@@ -15,7 +15,7 @@
 #include <qmap.h>
 #include <qstringlist.h>
 
-class CodeModel;
+#include "codemodel.h"
 
 QStringList typeNameList( const CodeModel* model );
 QMap<QString, QString> typedefMap( const CodeModel* model );
