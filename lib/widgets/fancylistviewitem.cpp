@@ -17,11 +17,13 @@
    Boston, MA 02111-1307, USA.
 */
 
+///This file is just a template, included from fancyqlistviewitem.cpp and fancyklistviewitem.cpp to define the specific classes
 
 #include <qpixmap.h>
 #include <qapplication.h>
 #include <qnamespace.h>
 #include <kdeversion.h>
+
 #include "fancylistviewitem.h"
 
 
@@ -55,19 +57,15 @@ QString FancyListViewItem::text(int column) const {
     return (QString)m_items[column];
 }
 
-#if defined(ISKLISTVIEWITEM) && KDE_IS_VERSION(3,4,0)
 
 QColor FancyListViewItem::backgroundColor(int col) {
+
+#if KDE_IS_VERSION(3,4,0)
     return KListViewItem::backgroundColor(col);
-}
-
 #else
-
-QColor FancyListViewItem::backgroundColor(int col) {
-    return QColor();
-}
-
+    return KListViewItem::backgroundColor();
 #endif
+}
 
 
 ///this is a modified version of the original QListViewItem::paintCell from the qt source
