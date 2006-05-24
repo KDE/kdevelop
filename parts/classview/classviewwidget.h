@@ -31,8 +31,6 @@
 #include <fancylistviewitem.h>
 #include <navigator.h>
 
-using namespace Widgets;
-
 class KDevProject;
 class ClassViewPart;
 class ClassViewItem;
