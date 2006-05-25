@@ -57,6 +57,10 @@ SimpleMainWindow::SimpleMainWindow(QWidget* parent, const char *name)
 {
     resize(800, 600); // starts kdevelop at 800x600 the first time
     m_mainWindowShare = new MainWindowShare(this);
+
+    connect(m_bottomDock, SIGNAL(hidden()), this, SLOT(raiseEditor()));
+    connect(m_leftDock, SIGNAL(hidden()), this, SLOT(raiseEditor()));
+    connect(m_rightDock, SIGNAL(hidden()), this, SLOT(raiseEditor()));
 }
 
 SimpleMainWindow::~ SimpleMainWindow( )
@@ -322,6 +326,7 @@ void SimpleMainWindow::createActions()
 
 void SimpleMainWindow::raiseEditor()
 {
+    kdDebug() << "SimpleMainWindow::raiseEditor" << endl;
     KDevPartController *partcontroller = API::getInstance()->partController();
     if (partcontroller->activePart() && partcontroller->activePart()->widget())
         partcontroller->activePart()->widget()->setFocus();

@@ -114,6 +114,7 @@ void DDockWindow::setVisible(bool v)
             setFixedExtentHeight(m_internalLayout->sizeHint().height());
         else
             setFixedExtentWidth(m_internalLayout->sizeHint().width());
+        emit hidden();
     }
     else
     {
@@ -238,6 +239,7 @@ void DDockWindow::selectWidget(Ideal::Button *button)
     kdDebug() << k_funcinfo << endl;
     if (m_toggledButton == button)
     {
+        m_widgets[button]->setFocus();
         setVisible(!m_visible);
         return;
     }
@@ -247,6 +249,7 @@ void DDockWindow::selectWidget(Ideal::Button *button)
     m_toggledButton = button;
     setVisible(true);
     m_widgetStack->raiseWidget(m_widgets[button]);
+    m_widgets[button]->setFocus();
 }
 
 void DDockWindow::selectWidget()

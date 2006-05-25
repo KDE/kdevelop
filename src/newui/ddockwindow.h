@@ -65,6 +65,9 @@ public:
 
     virtual void selectLastWidget();
 
+signals:
+    void hidden();
+
 private slots:
     void selectWidget();
     void selectWidget(Ideal::Button *button);
