@@ -282,4 +282,14 @@ void DDockWindow::setMovingEnabled(bool b)
     QDockWindow::setMovingEnabled(false);
 }
 
+void DDockWindow::selectLastWidget()
+{
+    if (m_toggledButton)
+        m_toggledButton->animateClick();
+//         selectWidget(m_toggledButton);
+    else if (Ideal::Button *button = m_bar->firstButton())
+//         selectWidget(button);
+        button->animateClick();
+}
+
 #include "ddockwindow.moc"

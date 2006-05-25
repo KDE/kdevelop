@@ -300,6 +300,13 @@ void ButtonBar::setAutoResize(bool b)
     m_autoResize = b;
 }
 
+Button *ButtonBar::firstButton()
+{
+    if (!m_buttons.isEmpty())
+        return m_buttons.first();
+    return 0;
+}
+
 }
 
 #include "buttonbar.moc"

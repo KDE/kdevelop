@@ -89,6 +89,10 @@ private slots:
     void slotSplitVerticalBase();
     void slotSplitHorizontalBase();
     void createGUI(KParts::Part *part);
+    void raiseBottomDock();
+    void raiseLeftDock();
+    void raiseRightDock();
+    void raiseDock(DDockWindow *dock);
 
 private:
     void createFramework();
@@ -110,6 +114,9 @@ private:
     KAction *m_splitVer1;
     KAction *m_splitHor2;
     KAction *m_splitVer2;
+    KAction *m_raiseBottomDock;
+    KAction *m_raiseLeftDock;
+    KAction *m_raiseRightDock;
     QPopupMenu *m_windowMenu;
     QValueList<QPair<int, KURL> > m_windowList;
 

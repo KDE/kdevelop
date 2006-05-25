@@ -82,6 +82,8 @@ public:
     /**Restores the size of button bar buttons.*/
     virtual void unshrink();
 
+    Button *firstButton();
+
 protected:
     virtual void resizeEvent ( QResizeEvent *ev );
 

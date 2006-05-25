@@ -300,6 +300,15 @@ void SimpleMainWindow::createActions()
     m_splitVer2 = new KAction(i18n("Split &Vertical and Open"), 0,
         this, SLOT(slotSplitVertical()), actionCollection(), "split_v2");
 
+    m_raiseLeftDock = new KAction(i18n("Switch Left Dock"), CTRL+SHIFT+ALT+Key_L,
+        this, SLOT(raiseLeftDock()), actionCollection(), "switch_left_dock");
+
+    m_raiseRightDock = new KAction(i18n("Switch Right Dock"), CTRL+SHIFT+ALT+Key_R,
+        this, SLOT(raiseRightDock()), actionCollection(), "switch_right_dock");
+
+    m_raiseBottomDock = new KAction(i18n("Switch Bottom Dock"), CTRL+SHIFT+ALT+Key_B,
+        this, SLOT(raiseBottomDock()), actionCollection(), "switch_bottom_dock");
+
     KStdAction::configureToolbars(this, SLOT(configureToolbars()),
         actionCollection(), "set_configure_toolbars");
 
@@ -713,6 +722,26 @@ void SimpleMainWindow::createGUI(KParts::Part *part) {
     DMainWindow::createGUI(part);
 
     m_mainWindowShare->slotGUICreated( part );
+}
+
+void SimpleMainWindow::raiseBottomDock()
+{
+    raiseDock(m_bottomDock);
+}
+
+void SimpleMainWindow::raiseLeftDock()
+{
+    raiseDock(m_leftDock);
+}
+
+void SimpleMainWindow::raiseRightDock()
+{
+    raiseDock(m_rightDock);
+}
+
+void SimpleMainWindow::raiseDock(DDockWindow *dock)
+{
+    dock->selectLastWidget();
 }
 
 #include "simplemainwindow.moc"

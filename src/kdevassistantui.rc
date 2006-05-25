@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="5" name="kdevassistant" >
+<kpartgui version="7" name="kdevassistant" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
@@ -74,7 +74,7 @@
     <Action name="project_options"/>
     <Separator/>
     <Action name="project_close"/>
-  </Menu> 
+  </Menu>
   <Menu name="build">
     <text>Bu&amp;ild</text>
     <Merge/>
@@ -95,6 +95,13 @@
   </Menu> -->
   <Menu name="window">
     <text>&amp;Window</text>
+    <Action name="split_h"/>
+    <Action name="split_v"/>
+    <Separator/>
+    <Action name="switch_left_dock"/>
+    <Action name="switch_right_dock"/>
+    <Action name="switch_bottom_dock"/>
+    <Separator/>
     <DefineGroup name="window_operations"/>
     <Merge/>
   </Menu>

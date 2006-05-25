@@ -63,6 +63,8 @@ public:
 
     DMainWindow *mainWindow() const { return m_mainWindow; }
 
+    virtual void selectLastWidget();
+
 private slots:
     void selectWidget();
     void selectWidget(Ideal::Button *button);
