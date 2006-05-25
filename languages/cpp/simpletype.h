@@ -1,12 +1,5 @@
 
 /***************************************************************************
-   begin                : Sat Jul 21 2001
-   copyright            : (C) 2001 by Victor R�er
-   email                : victor_roeder@gmx.de
-   copyright            : (C) 2002,2003 by Roberto Raggi
-   email                : roberto@kdevelop.org
-   copyright            : (C) 2005 by Adam Treat
-   email                : manyoso@yahoo.com
    copyright            : (C) 2006 by David Nolden
    email                : david.nolden.kdevelop@art-master.de
 ***************************************************************************/

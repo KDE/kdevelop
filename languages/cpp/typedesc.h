@@ -1,11 +1,4 @@
 /***************************************************************************
-   begin                : Sat Jul 21 2001
-   copyright            : (C) 2001 by Victor R�er
-   email                : victor_roeder@gmx.de
-   copyright            : (C) 2002,2003 by Roberto Raggi
-   email                : roberto@kdevelop.org
-   copyright            : (C) 2005 by Adam Treat
-   email                : manyoso@yahoo.com
    copyright            : (C) 2006 by David Nolden
    email                : david.nolden.kdevelop@art-master.de
 ***************************************************************************/
@@ -34,7 +27,6 @@ class SimpleTypeImpl;
 typedef KSharedPtr<TypeDescShared> TypeDescPointer;
 typedef KSharedPtr<SimpleTypeImpl> TypePointer;
 
-///TODO: Das KShared muss weg (??? English, please)
 class TypeDesc {
 public:
  typedef QValueList<TypeDescPointer> TemplateParams;
@@ -125,17 +117,13 @@ public:
   m_cleanName = name;
  }
  
- /// The template-params may be changed in-place
- /// this list is local, but the params pointed by them not
+ /** The template-params may be changed in-place
+     this list is local, but the params pointed by them not(call makePrivate before changing) */
  TemplateParams& templateParams();
  
  const TemplateParams& templateParams() const;
- /*
- inline operator QString() const {
-  return name();
- }*/
  
- ///makes all template-params private so changing them will not affect any other TypeDesc-structures.
+ /**makes all references/pointers private, so everything about this structure may be changed without side-effects*/
  TypeDesc& makePrivate();
  
  operator bool () const {
@@ -159,7 +147,6 @@ public:
  ///Resets the resolved-pointers of this type, and all template-types
  void resetResolvedComplete();
  
- ///these might be changed in future to an own data-member
  void increaseFunctionDepth();
  
  void decreaseFunctionDepth();

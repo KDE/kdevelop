@@ -26,6 +26,7 @@
 
 #include <ktexteditor/codecompletioninterface.h>
 
+//this is just a little helper-class to allow custom sorting, it must stay binary compatible with KTextEditor::CompletionEntry!!
 class CodeCompletionEntry : public KTextEditor::CompletionEntry
 {
 public:

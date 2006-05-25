@@ -1,12 +1,5 @@
 
 /***************************************************************************
-   begin                : Sat Jul 21 2001
-   copyright            : (C) 2001 by Victor R�er
-   email                : victor_roeder@gmx.de
-   copyright            : (C) 2002,2003 by Roberto Raggi
-   email                : roberto@kdevelop.org
-   copyright            : (C) 2005 by Adam Treat
-   email                : manyoso@yahoo.com
    copyright            : (C) 2006 by David Nolden
    email                : david.nolden.kdevelop@art-master.de
 ***************************************************************************/
@@ -39,7 +32,6 @@ public:
  KDDebugState();
  
  KDDebugState( StreamType stream ) : m_stream( stream ) {
-  
  }
  
  void push( const QString & txt ) {
@@ -51,9 +43,8 @@ public:
  };
  
  StreamType& dbg() {
-  for( QStringList::iterator it = m_prefixStack.begin(); it != m_prefixStack.end() ; ++it ) {
+  for( QStringList::iterator it = m_prefixStack.begin(); it != m_prefixStack.end() ; ++it )
    m_stream << *it;
-  }
   
   return m_stream;
  }
@@ -61,8 +52,7 @@ public:
  int depth() {
   return m_prefixStack.size();
  }
- 
-} ;
+};
 
 #ifndef NDEBUG 
 template<>
@@ -72,7 +62,7 @@ template<>
 template<>
   KDDebugState<kndbgstream>::KDDebugState();
 
-#ifdef VERBOSE
+#if defined(VERBOSE) && !defined(NDEBUG)
 typedef KDDebugState<kdbgstream> DBGStreamType;
 #else
 typedef KDDebugState<kndbgstream> DBGStreamType;
@@ -105,14 +95,12 @@ public:
  operator bool() {
   bool r = depth() < completionMaxDepth;
   
-  if( !r ) {
+  if( !r )
    dbg() << "recursion is too deep";
-  }
   
   return r;
  }
 };
-
 
 DBGStreamType::KStreamType& dbg();
 
