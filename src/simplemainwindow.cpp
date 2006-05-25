@@ -140,6 +140,9 @@ void SimpleMainWindow::contextMenu(QPopupMenu *popupMenu, const Context *context
                     break;
                 }
             }
+            if (isOpen && PartController::getInstance()->openURLs().count() == 1)
+                return;
+            popupMenu->insertSeparator();
             if (isOpen)
             {
                 m_splitHor1->plug(popupMenu);
