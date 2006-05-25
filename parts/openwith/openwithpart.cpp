@@ -45,13 +45,14 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
 
 	popup->insertSeparator();
 
+	popup->insertItem( i18n("Open as UTF-8"), this, SLOT(openAsUtf8()) );
+
 	KPopupMenu * openAsPopup = new KPopupMenu( popup );
 
 	int id = popup->insertItem( i18n("Open As"), openAsPopup );
 	popup->setWhatsThis(id, i18n("<b>Open As</b><p>Lists all encodings that can be used to open the selected file."));
 
-	QStringList encodings;
-	encodings += KGlobal::charsets()->descriptiveEncodingNames();
+	QStringList encodings = KGlobal::charsets()->descriptiveEncodingNames();
 
 	int i = 0;
 	QStringList::const_iterator it = encodings.constBegin();
@@ -118,6 +119,17 @@ void OpenWithPart::openAsEncoding( int id )
 	while ( it != m_urls.end() )
 	{
 		partController()->setEncoding( encoding );
+		partController()->editDocument( *it );
+		++it;
+	}
+}
+
+void OpenWithPart::openAsUtf8( )
+{
+	KURL::List::iterator it = m_urls.begin();
+	while ( it != m_urls.end() )
+	{
+		partController()->setEncoding( "utf8" );
 		partController()->editDocument( *it );
 		++it;
 	}

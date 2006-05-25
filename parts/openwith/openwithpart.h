@@ -11,21 +11,22 @@ class Context;
 
 class OpenWithPart : public KDevPlugin
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
 
-  OpenWithPart(QObject *parent, const char *name, const QStringList &);
-  ~OpenWithPart();
+	OpenWithPart(QObject *parent, const char *name, const QStringList &);
+	~OpenWithPart();
 
 
 private slots:
 
-  void fillContextMenu(QPopupMenu *popup, const Context *context);
+	void fillContextMenu(QPopupMenu *popup, const Context *context);
 
-  void openWithService();
-  void openWithDialog();
-  void openAsEncoding(int id);
+	void openWithService();
+	void openWithDialog();
+	void openAsEncoding(int id);
+	void openAsUtf8();
 
 private:
 
