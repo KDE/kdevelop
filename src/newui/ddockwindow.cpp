@@ -150,7 +150,7 @@ void DDockWindow::saveSettings()
     if (m_toggledButton && m_visible)
     {
         config->writeEntry("ViewWidth", m_position == DDockWindow::Bottom ? height() : width());
-        config->writeEntry("ViewLastWidget", m_toggledButton->realText());
+        config->writeEntry("ViewLastWidget", m_toggledButton->realTextWithoutAccel());
     }
     else if (invisibleWidth != 0)
         config->writeEntry("ViewWidth", invisibleWidth);

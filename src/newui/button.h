@@ -61,6 +61,7 @@ public:
 
     /**Returns the real (i.e. not squeezed) text of a button.*/
     QString realText() const;
+    QString realTextWithoutAccel() const;
     void setRealText(const QString &text);
 
 protected:

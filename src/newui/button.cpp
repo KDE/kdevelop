@@ -309,10 +309,7 @@ void Button::assignAccel()
     int num = KInputDialog::getInteger(i18n("Change Button Number"), i18n("New accelerator number:"), 1, 0, 10, 1, &ok, this);
     if (ok)
     {
-        QString text = m_realText;
-        QRegExp r("^&[0-9]\\s");
-        if (text.contains(r))
-            text.remove(r);
+        QString text = realTextWithoutAccel();
         text = QString("&%1 %2").arg(num).arg(text);
         setRealText(text);
     }
@@ -326,13 +323,17 @@ void Button::setRealText(const QString &text)
 
 void Button::clearAccel()
 {
+    setRealText(realTextWithoutAccel());
+}
+
+QString Button::realTextWithoutAccel() const
+{
     QString text = m_realText;
     QRegExp r("^&[0-9]\\s");
     if (text.contains(r))
         text.remove(r);
-    setRealText(text);
+    return text;
 }
-
 
 }
 
