@@ -280,10 +280,10 @@ void SimpleMainWindow::createActions()
     m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
 
     m_splitHor = new KAction(i18n("Split &Horizontal"), CTRL+SHIFT+Key_T,
-        this, SLOT(slotSplitHorizontal()), actionCollection(), "split_h");
+        this, SLOT(slotSplitHorizontalBase()), actionCollection(), "split_h");
 
     m_splitVer = new KAction(i18n("Split &Vertical"), CTRL+SHIFT+Key_L,
-        this, SLOT(slotSplitVertical()), actionCollection(), "split_v");
+        this, SLOT(slotSplitVerticalBase()), actionCollection(), "split_v");
 
     m_splitHor1 = new KAction(i18n("Split &Horizontal"), 0,
         this, SLOT(slotSplitHorizontal()), actionCollection(), "split_h1");
@@ -596,10 +596,36 @@ void SimpleMainWindow::slotSplitVertical()
 
 void SimpleMainWindow::slotSplitHorizontal()
 {
-//    if (PartController::getInstance()->openURLs().count() <= 1)
-//	return;
     DTabWidget *tab = splitHorizontal();
     openDocumentsAfterSplit(tab);
+}
+
+void SimpleMainWindow::slotSplitVerticalBase()
+{
+    if (KParts::ReadOnlyPart *ro_part = activePartForSplitting())
+    {
+        m_splitURLs << ro_part->url();
+        slotSplitVertical();
+    }
+}
+
+KParts::ReadOnlyPart *SimpleMainWindow::activePartForSplitting()
+{
+    if (PartController::getInstance()->openURLs().count() < 2)
+        return 0;
+    m_splitURLs.clear();
+    KParts::ReadOnlyPart *ro_part =
+        dynamic_cast<KParts::ReadOnlyPart*>(PartController::getInstance()->activePart());
+    return ro_part;
+}
+
+void SimpleMainWindow::slotSplitHorizontalBase()
+{
+    if (KParts::ReadOnlyPart *ro_part = activePartForSplitting())
+    {
+        m_splitURLs << ro_part->url();
+        slotSplitHorizontal();
+    }
 }
 
 void SimpleMainWindow::openDocumentsAfterSplit(DTabWidget *tab)

@@ -86,6 +86,8 @@ private slots:
     void fillWindowMenu();
     void slotSplitVertical();
     void slotSplitHorizontal();
+    void slotSplitVerticalBase();
+    void slotSplitHorizontalBase();
     void createGUI(KParts::Part *part);
 
 private:
@@ -95,6 +97,7 @@ private:
     void openDocumentsAfterSplit(DTabWidget *tab);
     QWidget *widgetForURL(KURL url);
     QWidget *widgetInTab(QWidget *w);
+    KParts::ReadOnlyPart *activePartForSplitting();
 
     MainWindowShare *m_mainWindowShare;
 
