@@ -1,4 +1,3 @@
-
 /***************************************************************************
    copyright            : (C) 2006 by David Nolden
    email                : david.nolden.kdevelop@art-master.de

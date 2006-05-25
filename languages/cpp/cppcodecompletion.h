@@ -166,7 +166,7 @@ private:
     void selectItem( ItemDom item );
     void addTypePopups( QPopupMenu* parent, TypeDesc d, QString depthAdd, QString prefix = "" );
     void addTypeClassPopups( QPopupMenu* parent, TypeDesc d, QString depthAdd, QString prefix = "" );
-    QValueList<QStringList> computeSignatureList( SimpleType function );
+    QValueList<QStringList> computeSignatureList( EvaluationResult function );
 	void integratePart( KParts::Part* part );
 	void setupCodeInformationRepository();
 	FunctionDefinitionAST* functionDefinition( AST* node );

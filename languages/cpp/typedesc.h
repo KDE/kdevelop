@@ -43,6 +43,7 @@ private:
  
  void init( QString stri );
 public:
+	///clears the current template-parameters, and extracts those from the given string
  void takeTemplateParams( const QString& string );
  
  TypeDesc( const QString& name = "" );
@@ -64,9 +65,8 @@ public:
   return *this;
  }
   
- 
+	///this function must be remade
  bool isValidType() const ;
- 
  
  int depth() const;
  
@@ -87,11 +87,13 @@ public:
   return compare( rhs ) == 0;
  }
  
- 
  QString nameWithParams() const;
  
+	///returns the type including template-parameters and pointer-depth
  QString fullName( ) const;
  
+	/**returns the type include template-parameters, pointer-depth, and possible sub-types.
+	   Example "A::B": A is the type, and B is the subtype */
  QString fullNameChain( ) const ;
  
  int pointerDepth() const {
@@ -107,6 +109,7 @@ public:
    m_pointerDepth--;
  }
  
+	///returns a list include the full name of this type, and all subtypes
  QStringList fullNameList( ) const;
  
  QString name() const {
@@ -153,6 +156,7 @@ public:
  
  int functionDepth() const;
  
+	///instance-information consists of things like the pointer-depth and the decoration
  void takeInstanceInfo( const TypeDesc& rhs );
  
  void clearInstanceInfo();

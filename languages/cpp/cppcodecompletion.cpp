@@ -65,6 +65,10 @@
 #include <codemodel.h>
 #include <codebrowserfrontend.h>
 
+///This can be used to toggle the complete tracing of the resolution-functions, which costs a lot of performance, but gives very nice and useful output 
+//#define VERBOSE
+
+
 #include "codecompletionentry.h"
 #include "typedesc.h"
 #include "computerecoverypoints.h"
@@ -77,8 +81,6 @@
 
 extern CppCodeCompletion* cppCompetionInstance ;
 
-///This can be used to toggle the complete tracing of the resolution-functions, which costs a lot of performance, but gives very nice and useful output 
-//#define VERBOSE
 ///This enables-disables the automatic processing of the expression under the mouse-cursor 
 //#define DISABLETOOLTIPS
 
@@ -415,17 +417,17 @@ ClassDom pickMostRelated( ClassList lst, QString fn ) {
 	if( fn.isEmpty() ) return lst.front();
 	
 	ClassDom best = lst.front();
-	int bestMatch = 0;
+	uint bestMatch = 0;
 	//kdDebug() << "searching most related to " << fn << endl;
 	
 	for( ClassList::iterator it = lst.begin(); it != lst.end(); ++it ) {
 		//kdDebug() << "comparing " << (*it)->fileName() << endl;
 		QString str = (*it)->fileName();
-		int len = str.length();
+		uint len = str.length();
 		if( fn.length() < len ) len = fn.length();
 		
-		int matchLen = 0;
-		for( int a = 0; a < len; a++ ) {
+		uint matchLen = 0;
+		for( uint a = 0; a < len; a++ ) {
 			if( str[a] == fn[a] ) 
 				matchLen++;
 			else
@@ -520,11 +522,6 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Simp
 	return ret;
 }
 
-
-
-
-
-
 QString Operator::printTypeList( QValueList<EvaluationResult>& lst )
 {
 	QString ret;
@@ -567,7 +564,7 @@ public:
 StarOperator() : UnaryOperator( 15, "*", "star-operator", Operator::Right ) { ///Normally this should have a priority of 16, but that would need changes to the expression-parsing-loop
 }
 	
-	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) { 
+	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) { 
 		return param->applyOperator( SimpleTypeImpl::StarOp );
 	}
 };
@@ -579,7 +576,7 @@ public:
 AddressOperator() : UnaryOperator( 16, "&", "address-operator", Operator::Right ) {
 }
 	
-	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) { 
+	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) { 
 		return param->applyOperator( SimpleTypeImpl::AddrOp );
 	}
 };
@@ -665,7 +662,7 @@ public:
 NeutralParenOperator() : UnaryParenOperator( 16, "()", "neutral-paren-operator", Operator::Neutral ) {
 }
 	
-	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) {
+	virtual EvaluationResult unaryApply( EvaluationResult /*param*/, const QValueList<EvaluationResult>& innerParams ) {
 		if( innerParams.count() != 1 ) {
 			log( QString( "wrong count of inner parameters" ).arg( innerParams.count() ) );
 			return SimpleType();
@@ -1302,7 +1299,7 @@ int CppCodeCompletion::expressionAt( const QString& contents, int index )
 				}
 				else if ( count == 0 )
 				{
-					index;
+					//index;
 					last = T_PAREN;
 					break;
 				}
@@ -1495,7 +1492,10 @@ public:
 	CppCodeCompletion::EvaluationResult evaluate() {
 		CppCodeCompletion::EvaluationResult res;
 		res = evaluateExpressionInternal( m_expr.expr(), m_ctx->global(), m_ctx, m_ctx, m_expr.canBeTypeExpression() );
+		
+		CppCodeCompletion::ExpressionInfo ex = res.expr; ///backup and set the type which was chosen while the evaluation-process
 		res.expr = m_expr;
+		res.expr.t = ex.t;
 		
 		return res;
 	}
@@ -1618,39 +1618,42 @@ private:
 	}
 	
 	///This does the simplest work
-	EvaluationResult evaluateAtomicExpression( QStringList exprList, SimpleTypeImpl::TypeOfResult scope, SimpleContext * ctx  = 0, bool canBeTypeExpression = false ) {
+	EvaluationResult evaluateAtomicExpression( QStringList exprList, EvaluationResult scope, SimpleContext * ctx  = 0, bool canBeTypeExpression = false ) {
 		Debug d( "#evt#");
 		if( !safetyCounter || !d ) return SimpleType();
 		
 		dbg() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" << scope->str() << "\" context: " << ctx << endl;
 		
 		if( exprList.isEmpty() )
-			return EvaluationResult( scope.type, scope.decl );
+			return scope;
 		
 		QString currentExpr = exprList.front().stripWhiteSpace();
 		exprList.pop_front();
 		
-		CppCodeCompletion::MemberAccessOp accessOp = CppCodeCompletion::NoOp;
-		
-		SimpleTypeImpl::TypeOfResult searchIn = scope;
+		SimpleTypeImpl::TypeOfResult searchIn = scope.resultType;
 		if( ctx ) searchIn = ctx->container();
 		
 		QStringList split = splitType( currentExpr );
+		
+		if( scope.expr.t & CppCodeCompletion::ExpressionInfo::TypeExpression )
+			canBeTypeExpression = true;
 		
 		if ( !split.isEmpty() && (currentExpr.endsWith( "::" ) || split.size() > 1 || canBeTypeExpression ) )
 		{
 			currentExpr = split.front();
 			
-			SimpleTypeImpl::TypeOfResult type = searchIn->locateType( currentExpr );
+			SimpleType type = searchIn->locateType( currentExpr );
 			if ( type )
 			{
 				if( !split.isEmpty()) split.pop_front();
-				return evaluateAtomicExpression( split + exprList, type, 0, true );
+				EvaluationResult ret = evaluateAtomicExpression( split + exprList, type, 0, true );
+				ret.expr.t = CppCodeCompletion::ExpressionInfo::TypeExpression;
+				return ret;
 			} else {
 				dbg() << "\"" << scope->scope() << "\"could not locate " << currentExpr << endl;
 			}
 		}
-		
+			
 		if ( ctx )
 		{
 			// find the variable type in the current context
@@ -1659,7 +1662,7 @@ private:
 			if ( var.type ) {
 				SimpleTypeImpl::TypeOfResult t = ctx->container()->locateType( var.type );
 				t.decl = var.toDeclarationInfo( "current_file" );
-				EvaluationResult res = evaluateAtomicExpression(  exprList, t );
+				EvaluationResult res = evaluateAtomicExpression(  exprList, EvaluationResult( t.type, t.decl ) );
 				return res;
 			}
 			
@@ -1675,7 +1678,7 @@ private:
 				
 				type = current->typeOf( currentExpr );
 				if ( type || type->desc() )
-					return evaluateAtomicExpression( exprList, type );
+					return evaluateAtomicExpression( exprList, EvaluationResult( type.type, type.decl ) );
 				
 				if( !ready ) current = current->parent();
 			}
@@ -1683,14 +1686,14 @@ private:
 			if( !canBeTypeExpression && exprList.isEmpty() && !scope ) {
 				exprList << currentExpr;
 				///Try as a type again
-				return evaluateAtomicExpression( exprList, type, ctx, true );
+				return evaluateAtomicExpression( exprList, EvaluationResult( type.type, type.decl ), ctx, true );
 			} else {
 				return EvaluationResult();
 			}
 		}
 		
 		SimpleTypeImpl::TypeOfResult type = scope->typeOf( currentExpr );
-		return evaluateAtomicExpression( exprList, type );
+		return evaluateAtomicExpression( exprList, EvaluationResult( type.type, type.decl ) );
 	}
 };
 }
@@ -1726,7 +1729,6 @@ QStringList formatComment( const QString& comment, int maxCols = 120 ) {
 	for( QStringList::iterator it = lines.begin(); it != lines.end(); ++it ) {
 		QStringList words = QStringList::split( " ", *it );
 		while( !words.isEmpty() && s ) {
-			int cnt = words.count();
 			QString line = "? ";
 			int len = 0;
 			while( !words.isEmpty() && len < maxCols ) {
@@ -2027,10 +2029,6 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 	}
 }
 
-
-
-
-
 void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
 	kdDebug( 9007 ) << "CppCodeCompletion::slotTextHint()" << endl;
 	clearStatusText();
@@ -2093,7 +2091,6 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
 		}
 	}
 	
-	
 	text = ""; ///Don't really use tooltips since those are not implemented in katepart, and don't work right in the qt-designer based part
 };
 
@@ -2107,7 +2104,6 @@ bool CppCodeCompletion::isTypeExpression( const QString& expr ) {
 	QStringList lexpr = QStringList::split( " ", expr );
 	return lex.join( " " ) == lexpr.join( " " );
 }
-
 
 bool CppCodeCompletion::mayBeTypeTail( int line, int column, QString& append, bool inFunction ) {
 QString tail = clearComments( m_activeEditor->text( line, column+1, line+10 > (int)m_activeEditor->numLines() ? (int)m_activeEditor->numLines() : line + 10, 0 ));
@@ -2170,7 +2166,6 @@ bool tokenAt( const QString& text, const QString& token, int textPos ) {
 	return false;
 }
 
-
 bool CppCodeCompletion::canBeTypePrefix( const QString& prefix, bool inFunction ) {
 	
 	bool hadSpace = false;
@@ -2193,7 +2188,6 @@ bool CppCodeCompletion::canBeTypePrefix( const QString& prefix, bool inFunction 
 	
 	return true;
 }
-
 
 ///This function is just a litte hack und should be remade, it doesn't work for all cases
 CppCodeCompletion::ExpressionInfo CppCodeCompletion::findExpressionAt( int line, int column, int startLine, int startCol, bool inFunction )  {
@@ -2232,8 +2226,6 @@ CppCodeCompletion::ExpressionInfo CppCodeCompletion::findExpressionAt( int line,
 	
 	return ret;
 }
-	
-
 
 SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int line, int col ) {
 	if( !f ) return 0;
@@ -2545,7 +2537,6 @@ QString CppCodeCompletion::buildSignature( SimpleType currType )
 	return sig;
 }
 
-
 ///TODO: make this use findExpressionAt etc. (like the other expression-evaluation-stuff)
 void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 {
@@ -2617,7 +2608,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		showArguments = TRUE;
 	}
 	
-	SimpleType type;
+	EvaluationResult type;
 	SimpleType this_type;
 	QString expr, word;
 
@@ -3015,7 +3006,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		}
 		else if ( type )
 		{
-			computeCompletionEntryList( type, entryList, type.scope(), isInstance );
+			computeCompletionEntryList( type, entryList, type.resultType.scope(), isInstance );
 		}
 
 		QStringList trueMatches;
@@ -3100,7 +3091,12 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 }
 
 
-QValueList<QStringList> CppCodeCompletion::computeSignatureList( SimpleType type ) {
+QValueList<QStringList> CppCodeCompletion::computeSignatureList( EvaluationResult result ) {
+	SimpleType type = result;
+	
+	if( result.expr.t == ExpressionInfo::TypeExpression )
+		type = result->typeOf( result->desc().name() ); ///Compute the signature of the constructor
+	
 	QValueList<QStringList> retList;
 	SimpleTypeFunctionInterface* f = type->asFunction();
 	SimpleType currType = type;
@@ -4020,7 +4016,6 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< CodeCompletionEn
 	}
 	
 }
-
 
 
 CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, SimpleContext* ctx )

@@ -21,12 +21,20 @@
 
 namespace CompletionDebug {
 
+/**A helper-class for debugging, which can be used to prevent too deep recursion
+   and to format the output nicely with a prefix for each function that is entered */
 template <class StreamType>
 class KDDebugState {
 private:
  StreamType m_stream;
  QStringList m_prefixStack;
+ QString currPrefix;
  
+ void computePrefix() {
+	 currPrefix = "";
+	 for( QStringList::iterator it = m_prefixStack.begin(); it != m_prefixStack.end() ; ++it )
+		 currPrefix += *it;
+ }
 public:
  typedef StreamType KStreamType;
  KDDebugState();
@@ -35,22 +43,23 @@ public:
  }
  
  void push( const QString & txt ) {
-  m_prefixStack.push_back( txt );
+	 currPrefix += txt;
+	 m_prefixStack.push_back( txt );
  }
  
  void pop() {
-  m_prefixStack.pop_back();
+	 currPrefix.truncate( currPrefix.length() - m_prefixStack.back().length() );
+	 m_prefixStack.pop_back();
+	 computePrefix();
  };
  
  StreamType& dbg() {
-  for( QStringList::iterator it = m_prefixStack.begin(); it != m_prefixStack.end() ; ++it )
-   m_stream << *it;
-  
-  return m_stream;
+	 m_stream << currPrefix;
+	 return m_stream;
  }
  
  int depth() {
-  return m_prefixStack.size();
+	 return m_prefixStack.size();
  }
 };
 

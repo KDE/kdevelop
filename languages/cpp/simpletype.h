@@ -368,9 +368,9 @@ public:
   
 private:
   int m_resolutionCount;
-  
+  ResolutionFlags m_resolutionFlags;
   QValueList<TypeDesc> m_trace; ///pointer to the previous type in the trace-chain
-  
+	
   SimpleTypeImpl( const SimpleTypeImpl& /*rhs*/ ) : KShared() {
   }
   
@@ -378,7 +378,6 @@ private:
   return *this;
   }
 
-  ResolutionFlags m_resolutionFlags;
   
   void addResolutionFlag ( ResolutionFlags flag ) {
     m_resolutionFlags = (ResolutionFlags) (m_resolutionFlags | flag);
@@ -658,15 +657,12 @@ public:
     ///this completely evaluates everything
   QString fullTypeResolvedWithScope( int depth = 0 );
   
+private:
   QStringList m_scope;
-  QMap<QString, QString> m_localTypedefs;
-  int m_pointerDepth;
   TypePointer m_parent;
-  bool m_isGlobal;
-  
   
 protected:
-  SimpleTypeImpl( SimpleTypeImpl* rhs ) : m_resolutionCount( rhs->m_resolutionCount ), m_pointerDepth( rhs-> m_pointerDepth), m_parent( rhs->m_parent ), m_isGlobal( rhs->m_isGlobal ), m_resolutionFlags( rhs->m_resolutionFlags ), m_trace( rhs->m_trace), m_masterProxy( rhs->m_masterProxy ), m_scope( rhs->m_scope), m_desc( rhs->m_desc )  {
+SimpleTypeImpl( SimpleTypeImpl* rhs ) : m_masterProxy( rhs->m_masterProxy ), m_resolutionCount( rhs->m_resolutionCount ), m_resolutionFlags( rhs->m_resolutionFlags ), m_trace( rhs->m_trace ), m_scope( rhs->m_scope ), m_parent( rhs->m_parent ), m_desc( rhs->m_desc )  {
    reg();
   }
   
@@ -726,7 +722,7 @@ public:
   
 ///TODO: This function should locate the correct overloaded method in the chain, fitting the parameters
     ///should also moved into another class then
-  SimpleTypeImpl* match( const QValueList<SimpleType>& params ) {
+	SimpleTypeImpl* match( const QValueList<SimpleType>& /*params*/ ) {
         //      QValueList<TypeDesc> args = getArgumentTypes();
     return dynamic_cast<SimpleTypeImpl*>( this );
   }
