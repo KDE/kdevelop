@@ -59,7 +59,7 @@ public:
   friend class SimpleTypeImpl;
 
   SimpleType( const SimpleType& rhs ) {
-    *this = const_cast<SimpleType&>( rhs );///ugly but necessary
+    *this = rhs;
   }
   
   SimpleType( const QStringList& scope, Repository rep = Undefined ) : m_resolved(false) {
@@ -104,19 +104,9 @@ public:
     return *this;
   }
   
-  SimpleType& operator = ( const QStringList& rhs ) {
-    *this = SimpleType( rhs );
-    return *this;
-  }
-  
     /** Just compares the scope */
   bool operator == ( const SimpleType& rhs ) const {
     return scope() == rhs.scope();
-  }
-  
-  SimpleType& operator = ( const QString& rhs ) {
-    *this = splitType( rhs );
-    return *this;
   }
   
   void makePrivate();
