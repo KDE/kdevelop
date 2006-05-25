@@ -86,6 +86,7 @@ private:
     bool m_visible;
     QString m_name;
     DMainWindow *m_mainWindow;
+    bool m_doNotCloseActiveWidget;
 
     Ideal::Button *m_toggledButton;
     QBoxLayout *m_internalLayout;

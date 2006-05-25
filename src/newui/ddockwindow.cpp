@@ -39,7 +39,7 @@
 
 DDockWindow::DDockWindow(DMainWindow *parent, Position position)
     :QDockWindow(QDockWindow::InDock, parent), m_position(position), m_visible(false),
-    m_mainWindow(parent), m_toggledButton(0)
+    m_mainWindow(parent), m_toggledButton(0), m_doNotCloseActiveWidget(false)
 {
     setMovingEnabled(false);
     setResizeEnabled(true);
@@ -236,11 +236,19 @@ void DDockWindow::removeWidget(QWidget *widget)
 
 void DDockWindow::selectWidget(Ideal::Button *button)
 {
+    bool special = m_doNotCloseActiveWidget;
+    m_doNotCloseActiveWidget = false;
     kdDebug() << k_funcinfo << endl;
     if (m_toggledButton == button)
     {
         m_widgets[button]->setFocus();
-        setVisible(!m_visible);
+        if (special && m_visible)
+        {
+            //special processing for keyboard navigation events
+            m_toggledButton->setOn(true);
+        }
+        else
+            setVisible(!m_visible);
         return;
     }
 
@@ -287,11 +295,10 @@ void DDockWindow::setMovingEnabled(bool b)
 
 void DDockWindow::selectLastWidget()
 {
+    m_doNotCloseActiveWidget = true;
     if (m_toggledButton)
         m_toggledButton->animateClick();
-//         selectWidget(m_toggledButton);
     else if (Ideal::Button *button = m_bar->firstButton())
-//         selectWidget(button);
         button->animateClick();
 }
 
