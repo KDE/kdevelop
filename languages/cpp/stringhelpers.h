@@ -42,10 +42,7 @@ bool isTypeOpenParen( QChar c1 );
 
 bool isTypeCloseParen( QChar c1 );
 
-
 bool isLeftParen( QChar c1 );
-
-
 
 /*only from left to right
 searches a fitting closing sign ( a ')' for a '(', ']' for '['
@@ -64,27 +61,18 @@ QString templateParamFromString( int num, QString str );
 QStringList splitType( QString str ) ;
 
 class ParamIterator{
-private:
- QString m_source;
- QString m_parens;
- int m_cur;
- int m_curEnd;
- 
- int next() {
-  return findCommaOrEnd( m_source, m_cur,  m_parens[1] );
- }
 public:
-ParamIterator( QString parens, QString source ) : m_source( source ), m_parens( parens ), m_cur( 0 ), m_curEnd ( 0 ) {
- int begin = m_source.find(m_parens[0]);
- int end = m_source.findRev(m_parens[1]);
- 
- if(begin == -1 || end == -1 && end - begin > 1)
-  m_cur = m_source.length();
- else {
-  m_source = source.mid( begin+1, end - begin );
-  m_curEnd = next();
- }
-}
+  ParamIterator( QString parens, QString source ) : m_source( source ), m_parens( parens ), m_cur( 0 ), m_curEnd ( 0 ) {
+  int begin = m_source.find(m_parens[0]);
+  int end = m_source.findRev(m_parens[1]);
+  
+  if(begin == -1 || end == -1 && end - begin > 1)
+    m_cur = m_source.length();
+  else {
+    m_source = source.mid( begin+1, end - begin );
+    m_curEnd = next();
+  }
+  }
  
  ParamIterator& operator ++() {
   m_cur = m_curEnd + 1;
@@ -101,6 +89,17 @@ ParamIterator( QString parens, QString source ) : m_source( source ), m_parens( 
  operator bool() {
   return m_cur < (int)m_source.length();
  }
+
+private:
+  QString m_source;
+  QString m_parens;
+  int m_cur;
+  int m_curEnd;
+  
+  int next() {
+    return findCommaOrEnd( m_source, m_cur,  m_parens[1] );
+  }
+  
 };
 
 
