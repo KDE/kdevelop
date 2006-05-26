@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="29" name="kdevelop" >
+<kpartgui version="30" name="kdevelop" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
@@ -95,6 +95,9 @@
   </Menu>
   <Menu name="window">
     <text>&amp;Window</text>
+    <Action name="view_next_window"/>
+    <Action name="view_previous_window"/>
+    <Separator/>
     <Action name="split_h"/>
     <Action name="split_v"/>
     <Separator/>
