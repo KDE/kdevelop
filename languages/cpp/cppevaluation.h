@@ -28,13 +28,14 @@
 #include "simpletype.h"
 #include "declarationinfo.h"
 
+class SimpleContext;
 
 namespace CppEvaluation {
 
 template<class To, class From>
   extern QValueList<To> convertList( const QValueList<From>& from );
 
-
+extern QString nameFromType( SimpleType t );
 
 class Operator;
 
@@ -197,8 +198,6 @@ template <class OperatorType>
     }
   };
 
-QString nameFromType( SimpleType t );
-
 
 class UnaryOperator : public Operator{
 public:
@@ -318,6 +317,33 @@ public:
   }
   
   virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams );
+};
+
+//FIXME: Where is this used?? (Andras)
+class ExpressionEvaluation {
+private:
+  CppCodeCompletion* m_data;
+  SimpleContext* m_ctx;
+  ExpressionInfo m_expr;
+  bool m_global;
+  OperatorSet& m_operators;
+  
+public:
+  ExpressionEvaluation( CppCodeCompletion* data, ExpressionInfo expr, OperatorSet& operators, SimpleContext* ctx = 0 );
+  
+  EvaluationResult evaluate();
+  
+private:
+    /**
+    recursion-method:
+    1. Find the rightmost operator with the lowest priority, split the expression
+  
+    vector[ (*it)->position ]().
+    */
+  virtual EvaluationResult evaluateExpressionInternal( QString expr, EvaluationResult scope, SimpleContext * ctx, SimpleContext* innerCtx , bool canBeTypeExpression = false );
+  
+    ///This does the simplest work
+  EvaluationResult evaluateAtomicExpression( QStringList exprList, EvaluationResult scope, SimpleContext * ctx  = 0, bool canBeTypeExpression = false );
 };
 
 

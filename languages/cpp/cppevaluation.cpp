@@ -20,6 +20,11 @@
  ***************************************************************************/
 
 #include "cppevaluation.h"
+#include "simplecontext.h"
+#include "safetycounter.h"
+
+extern SafetyCounter safetyCounter;
+
 namespace CppEvaluation {
 
 OperatorSet AllOperators;
@@ -40,6 +45,22 @@ QValueList<To> convertList( const QValueList<From>& from ) {
   }
   return ret;
 }
+
+QString nameFromType( SimpleType t ) {
+  return t->fullTypeResolved();
+}
+
+
+QString Operator::printTypeList( QValueList<EvaluationResult>& lst )
+{
+  QString ret;
+  for( QValueList<EvaluationResult>::iterator it = lst.begin(); it != lst.end(); ++it ) {
+    ret += "\"" + (*it)->fullNameChain() + "\", ";
+  }
+  ret.truncate( ret.length() - 3 );
+  return ret;
+}
+
 
 OperatorIdentification UnaryOperator::identify( QString& str ) {
   OperatorIdentification ret;
@@ -163,6 +184,227 @@ EvaluationResult ParenOperator::unaryApply( EvaluationResult param, const QValue
     return innerParams[0];
   }
 }
+
+ExpressionEvaluation::ExpressionEvaluation( CppCodeCompletion* data, ExpressionInfo expr, OperatorSet& operators, SimpleContext* ctx ) : m_data( data ), m_ctx( ctx ), m_expr( expr ), m_global(false), m_operators( operators ) {
+  safetyCounter.init();
+  
+  kdDebug( 9007 ) << "Initializing evaluation of expression " << expr << endl;
+  
+  if ( expr.expr().startsWith( "::" ) )
+  {
+    expr.setExpr( expr.expr().mid( 2 ) );
+    m_global = true;
+  }
+  
+          //m_expr = m_data->splitExpression( expr.expr() ).join("");
+}
+
+
+EvaluationResult ExpressionEvaluation::evaluate() {
+  EvaluationResult res;
+  res = evaluateExpressionInternal( m_expr.expr(), m_ctx->global(), m_ctx, m_ctx, m_expr.canBeTypeExpression() );
+  
+  ExpressionInfo ex = res.expr; ///backup and set the type which was chosen while the evaluation-process
+  res.expr = m_expr;
+  res.expr.t = ex.t;
+  
+  return res;
+}
+
+EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr, EvaluationResult scope, SimpleContext * ctx, SimpleContext* innerCtx , bool canBeTypeExpression) {
+  Debug d( "#evl#" );
+  if( expr.isEmpty() || !safetyCounter ) {
+    scope.expr.t = ExpressionInfo::NormalExpression;
+    return scope;
+  }
+  
+  if( !scope->resolved() ) {
+  dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fullTypeStructure() << "\" is unresolved " << endl;
+    return EvaluationResult();
+  }
+  
+dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl;
+  
+  
+  expr = expr.stripWhiteSpace();
+  
+        ///Find the rightmost operator with the lowest priority, for the first split.
+  QValueList<OperatorIdentification> idents;
+  for( uint a = 0; a < expr.length(); ++a ) {
+    QString part = expr.mid( a );
+    OperatorIdentification ident = m_operators.identifyOperator( part );
+    if( ident ) {
+      dbg() << "identified \"" << ident.op->name() << "\" in string " << part << endl;
+      ident.start += a;
+      ident.end += a;
+      idents << ident;
+      a += ident.end;
+    } else {
+      if( isLeftParen( part[0] ) ) {
+        int jump = findClose( part, 0 );
+        if( jump != -1 )
+          a += jump;
+      }
+    }
+  }
+  
+  if( !idents.isEmpty() ) {
+    OperatorIdentification lowest;
+    
+    for( QValueList<OperatorIdentification>::iterator it = idents.begin(); it != idents.end(); ++it ) {
+      if( lowest ) {
+        if( lowest.op->priority() >= (*it).op->priority() )
+          lowest = *it;
+      } else {
+        lowest = *it;
+      }
+    }
+    
+    if( lowest ) {
+      QString leftSide = expr.left( lowest.start ).stripWhiteSpace();
+      QString rightSide = expr.right( expr.length() - lowest.end ).stripWhiteSpace();
+      
+      EvaluationResult left, right;
+      if( !leftSide.isEmpty() ) {
+        left = evaluateExpressionInternal( leftSide, scope, ctx, innerCtx );
+      } else {
+        left = scope;
+      }
+      
+      if( !left && (lowest.op->binding() & Operator::Left) ) {
+      dbg() << "problem while evaluating expression \"" << expr << "\", the operator \"" << lowest.op->name() << "\" has a binding to the left side, but no left side could be evaluated: \"" << leftSide << "\"" << endl;
+      }
+      
+      if( !rightSide.isEmpty() && (lowest.op->binding() & Operator::Right) )
+        right = evaluateExpressionInternal( rightSide, SimpleType(), ctx, innerCtx );
+      
+      if( !right && (lowest.op->binding() & Operator::Right) ) {
+      dbg() << "problem while evaluating expression \"" << expr << "\", the operator \"" << lowest.op->name() << "\" has a binding to the right side, but no right side could be evaluated: \"" << rightSide << "\"" << endl;
+      }
+      
+      QValueList<EvaluationResult> innerParams;
+      QValueList<EvaluationResult> params;
+      if( lowest.op->binding() & Operator::Left ) params << left;
+      if( lowest.op->binding() & Operator::Right ) params << right;
+      
+      for( QValueList<QString>::iterator it = lowest.innerParams.begin(); it != lowest.innerParams.end(); ++it ) {
+        dbg() << "evaluating inner parameter \"" << *it << "\"" << endl;
+        innerParams << evaluateExpressionInternal( (*it), SimpleType(), innerCtx, innerCtx );
+      }
+      
+      EvaluationResult applied = lowest.op->apply( params, innerParams );
+      if( !applied ) {
+      dbg() << "\"" << expr << "\": failed to apply the operator \"" << lowest.op->name() << "\"" << endl;
+      }
+      
+      if( ! (lowest.op->binding() & Operator::Left) &&  !leftSide.isEmpty() ) {
+                    ///When the operator has no binding to the left, the left side should be empty.
+      dbg() << "\"" << expr << "\": problem with the operator \"" << lowest.op->name() << ", it has no binding to the left side, but the left side is \""<< leftSide << "\"" << endl;
+      }
+      
+      if( ! (lowest.op->binding() & Operator::Right) && !rightSide.isEmpty() ) {
+                    ///When the operator has no binding to the right, we should continue evaluating the right side, using the left type as scope.
+        return evaluateExpressionInternal( rightSide, applied, 0, innerCtx );
+      }
+      
+      return applied;
+    } else {
+      dbg() << " could not find an operator in " << expr << endl;
+      QStringList lst; lst << expr;
+      return evaluateAtomicExpression( expr, scope, ctx );
+    }
+  }
+  
+        //dbg() << " could not evaluate " << expr << endl;
+  dbg() << "evaluating \"" << expr << "\" using the old evaluation-method" << endl;
+  QStringList lst = m_data->splitExpression( expr );
+  EvaluationResult res = evaluateAtomicExpression( lst, scope, ctx, canBeTypeExpression );
+  return res;
+}
+
+EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exprList, EvaluationResult scope, SimpleContext * ctx, bool canBeTypeExpression ) {
+  Debug d( "#evt#");
+  if( !safetyCounter || !d ) return SimpleType();
+  
+dbg() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl;
+  
+  if( exprList.isEmpty() )
+    return scope;
+  
+  QString currentExpr = exprList.front().stripWhiteSpace();
+  exprList.pop_front();
+  
+  TypePointer searchIn = scope->resolved();
+  if( !searchIn ) {
+    dbg() << "scope-type is not resolved" << endl;
+    return EvaluationResult();
+  }
+  
+  if( ctx )
+    searchIn = ctx->container().get();
+  
+  QStringList split = splitType( currentExpr );
+  
+  if( scope.expr.t & ExpressionInfo::TypeExpression )
+    canBeTypeExpression = true;
+  
+  if ( !split.isEmpty() && (currentExpr.endsWith( "::" ) || split.size() > 1 || canBeTypeExpression ) )
+  {
+    currentExpr = split.front();
+    
+    LocateResult type = searchIn->locateDecType( currentExpr );
+    if ( type )
+    {
+      if( !split.isEmpty() ) split.pop_front();
+      EvaluationResult ret = evaluateAtomicExpression( split + exprList, type, 0, true );
+      ret.expr.t = ExpressionInfo::TypeExpression;
+      return ret;
+    } else {
+      dbg() << "\"" << scope.resultType->fullNameChain() << "\"could not locate " << currentExpr << endl;
+    }
+  }
+  
+  if ( ctx )
+  {
+            // find the variable type in the current context
+    SimpleVariable var = ctx->findVariable( currentExpr );
+    
+    if ( var.type ) {
+      
+      EvaluationResult res = evaluateAtomicExpression(  exprList, EvaluationResult( ctx->container()->locateDecType( var.type ), var.toDeclarationInfo( "current_file" )) );
+      return res;
+    }
+    
+    SimpleType current = ctx->container();
+    
+    SimpleTypeImpl::TypeOfResult type;
+    
+    SafetyCounter s( 20 );
+    bool ready = false;
+    while( !ready && s )
+    {
+      if( !current ) ready = true;
+      
+      type = current->typeOf( currentExpr );
+      if ( type)
+        return evaluateAtomicExpression( exprList, EvaluationResult( type.type, type.decl ) );
+      
+      if( !ready ) current = current->parent();
+    }
+    
+    if( !canBeTypeExpression && exprList.isEmpty() && !scope ) {
+      exprList << currentExpr;
+                ///Try as a type again    
+      return evaluateAtomicExpression( exprList, scope, ctx, true );
+    } else {
+      return EvaluationResult();
+    }
+  }
+  
+  SimpleTypeImpl::TypeOfResult type = searchIn->typeOf( currentExpr );
+  return evaluateAtomicExpression( exprList, EvaluationResult( type.type, type.decl ) );
+}
+
 
 }
 

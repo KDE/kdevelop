@@ -79,6 +79,7 @@
 #include "simpletypecachebinder.h"
 #include "safetycounter.h"
 #include "cppevaluation.h"
+#include "simplecontext.h"
 
 extern CppCodeCompletion* cppCompetionInstance ;
 
@@ -95,19 +96,11 @@ extern CppCodeCompletion* cppCompetionInstance ;
 SafetyCounter safetyCounter;
 
 using namespace CompletionDebug;
-
-
-
 using namespace StringHelpers;
-
 using namespace BitHelpers;
-
-
+using namespace CppEvaluation;
 
 class SimpleTypeFunctionInterface;
-
-
-using namespace CppEvaluation;
 
 
 
@@ -222,77 +215,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Simp
 	return ret;
 }
 
-QString Operator::printTypeList( QValueList<EvaluationResult>& lst )
-{
-	QString ret;
-	for( QValueList<EvaluationResult>::iterator it = lst.begin(); it != lst.end(); ++it ) {
-		ret += "\"" + (*it)->fullNameChain() + "\", ";
-	}
-	ret.truncate( ret.length() - 3 );
-	return ret;
-}
 
-
-
-
-
-QString CppEvaluation::nameFromType( SimpleType t ) {
-	return t->fullTypeResolved();
-}
-
-
-
-class SimpleVariable
-{
-public:
-	SimpleVariable()
-	{
-		startLine = endLine = startCol = endCol = 0;
-	}
-	
-	SimpleVariable( const SimpleVariable& source )
-			: name( source.name ), 
-			comment(source.comment),
-			startLine(source.startLine),
-			startCol(source.startCol),
-			endLine(source.endLine),
-			endCol(source.endCol),
-			type( source.type ),
-			ptrList( source.ptrList )
-	{}
-	~SimpleVariable()
-	{}
-
-	SimpleVariable& operator = ( SimpleVariable& source )
-	{
-		name = source.name;
-		type = source.type;
-		ptrList = source.ptrList;
-		comment = source.comment;
-		startLine = source.startLine;
-		startCol = source.startCol;
-		endLine = source.endLine;
-		endCol = source.endCol;
-		return *this;
-	}
-
-	QString name;
-	QString comment;
-	int startLine, startCol;
-	int endLine, endCol;
-	TypeDesc type;
-	QStringList ptrList;
-	
-	DeclarationInfo toDeclarationInfo( QString activeFileName ) {
-		DeclarationInfo decl;
-		decl.name = name;
-		decl.file = activeFileName;
-		decl.comment = comment;
-		decl.startLine = startLine;decl.startCol = startCol;
-		decl.endLine = endLine; decl.endCol = endCol;
-		return decl;
-	}
-};
 
 
 
@@ -308,104 +231,6 @@ SimpleType getGlobal( SimpleType t ) {
 }
 
 
-class SimpleContext
-{
-public:
-	SimpleContext( SimpleType container = SimpleType(), SimpleContext* prev = 0 )
-		: m_prev( prev ), m_container( container )
-	{
-		(*m_container); ///Make the type physically create itself
-	}
-
-	virtual ~SimpleContext()
-	{
-		if ( m_prev )
-		{
-			delete( m_prev );
-			m_prev = 0;
-		}
-	}
-
-	SimpleContext* prev() const
-	{
-		return m_prev;
-	}
-
-	void attach( SimpleContext* ctx )
-	{
-		m_prev = ctx;
-	}
-
-	void detach()
-	{
-		m_prev = 0;
-	}
-
-	const QValueList<SimpleVariable>& vars() const
-	{
-		return m_vars;
-	}
-
-	void add( const SimpleVariable& v )
-	{
-		m_vars.append( v );
-	}
-	
-	void add( const QValueList<SimpleVariable>& vars )
-	{
-		m_vars += vars;
-	}
-	
-	void offset( int lineOffset, int colOffset ) {
-		for( QValueList<SimpleVariable>::iterator it = m_vars.begin(); it != m_vars.end(); ++it ) {
-			if( (*it).endLine != (*it).startLine || (*it).endCol != (*it).startCol) {
-				if( (*it).startLine == 0 ) {
-					(*it).startCol += colOffset;
-				}
-				if( (*it).endLine == 0 ) {
-					(*it).endCol += colOffset;
-				}
-				(*it).startLine += lineOffset;
-				(*it).endLine += lineOffset;
-			}
-		}
-	}
-
-	SimpleVariable findVariable( const QString& varname )
-	{
-		SimpleContext * ctx = this;
-		while ( ctx )
-		{
-			const QValueList<SimpleVariable>& vars = ctx->vars();
-			for ( int i = vars.count() - 1; i >= 0; --i )
-			{
-				SimpleVariable v = vars[ i ];
-				if ( v.name == varname )
-					return v;
-			}
-			ctx = ctx->prev();
-		}
-		return SimpleVariable();
-	}
-	
-	SimpleType global() {
-		return getGlobal( container() );
-	}
-	
-	SimpleType& container() {
-		return m_container;
-	}
-	
-	void setContainer( SimpleType cnt ) {
-		m_container = cnt;
-		(*m_container); ///make the type physically create itself
-	}
-
-private:
-	QValueList<SimpleVariable> m_vars;
-	SimpleContext* m_prev;
-	SimpleType m_container;
-};
 
 struct CppCodeCompletionData
 {
@@ -1017,248 +842,6 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
 	ADD_CURRENT();
 	return l;
 }
-
-namespace CppEvaluation {
-
-class ExpressionEvaluation {
-private:
-	CppCodeCompletion* m_data;
-	SimpleContext* m_ctx;
-	ExpressionInfo m_expr;
-	bool m_global;
-	OperatorSet& m_operators;
-	
-public:
-	ExpressionEvaluation( CppCodeCompletion* data, ExpressionInfo expr, OperatorSet& operators, SimpleContext* ctx = 0 ) : m_data( data ), m_ctx( ctx ), m_expr( expr ), m_global(false), m_operators( operators ) {
-		safetyCounter.init();
-		
-	kdDebug( 9007 ) << "Initializing evaluation of expression " << expr << endl;
-	
-		if ( expr.expr().startsWith( "::" ) )
-		{
-			expr.setExpr( expr.expr().mid( 2 ) );
-			m_global = true;
-		}
-		
-		//m_expr = m_data->splitExpression( expr.expr() ).join("");
-	}
-	
-	EvaluationResult evaluate() {
-		EvaluationResult res;
-		res = evaluateExpressionInternal( m_expr.expr(), m_ctx->global(), m_ctx, m_ctx, m_expr.canBeTypeExpression() );
-		
-		ExpressionInfo ex = res.expr; ///backup and set the type which was chosen while the evaluation-process
-		res.expr = m_expr;
-		res.expr.t = ex.t;
-		
-		return res;
-	}
-	
-private:
-	/**
-	recursion-method:
-	1. Find the rightmost operator with the lowest priority, split the expression
-	
-	vector[ (*it)->position ]().
-	*/
-	virtual EvaluationResult evaluateExpressionInternal( QString expr, EvaluationResult scope, SimpleContext * ctx, SimpleContext* innerCtx , bool canBeTypeExpression = false ) {
-		Debug d( "#evl#" );
-		if( expr.isEmpty() || !safetyCounter ) {
-			scope.expr.t = ExpressionInfo::NormalExpression;
-			return scope;
-		}
-
-		if( !scope->resolved() ) {
-			dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fullTypeStructure() << "\" is unresolved " << endl;
-			return EvaluationResult();
-		}
-		
-		dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl;
-		
-			
-		expr = expr.stripWhiteSpace();
-		
-		///Find the rightmost operator with the lowest priority, for the first split.
-		QValueList<OperatorIdentification> idents;
-		for( uint a = 0; a < expr.length(); ++a ) {
-			QString part = expr.mid( a );
-			OperatorIdentification ident = m_operators.identifyOperator( part );
-			if( ident ) {
-				dbg() << "identified \"" << ident.op->name() << "\" in string " << part << endl;
-				ident.start += a;
-				ident.end += a;
-				idents << ident;
-				a += ident.end;
-			} else {
-				if( isLeftParen( part[0] ) ) {
-					int jump = findClose( part, 0 );
-					if( jump != -1 )
-						a += jump;
-				}
-			}
-		}
-		
-		if( !idents.isEmpty() ) {
-			OperatorIdentification lowest;
-			
-			for( QValueList<OperatorIdentification>::iterator it = idents.begin(); it != idents.end(); ++it ) {
-				if( lowest ) { 
-					if( lowest.op->priority() >= (*it).op->priority() )
-						lowest = *it;
-				} else {
-					lowest = *it;
-				}
-			}
-			
-			if( lowest ) {
-				QString leftSide = expr.left( lowest.start ).stripWhiteSpace();
-				QString rightSide = expr.right( expr.length() - lowest.end ).stripWhiteSpace();
-				
-				EvaluationResult left, right;
-				if( !leftSide.isEmpty() ) {
-					left = evaluateExpressionInternal( leftSide, scope, ctx, innerCtx );
-				} else {
-					left = scope;
-				}
-				
-				if( !left && (lowest.op->binding() & Operator::Left) ) {
-					dbg() << "problem while evaluating expression \"" << expr << "\", the operator \"" << lowest.op->name() << "\" has a binding to the left side, but no left side could be evaluated: \"" << leftSide << "\"" << endl;
-				}
-				
-				if( !rightSide.isEmpty() && (lowest.op->binding() & Operator::Right) )
-					right = evaluateExpressionInternal( rightSide, SimpleType(), ctx, innerCtx );
-				
-				if( !right && (lowest.op->binding() & Operator::Right) ) {
-					dbg() << "problem while evaluating expression \"" << expr << "\", the operator \"" << lowest.op->name() << "\" has a binding to the right side, but no right side could be evaluated: \"" << rightSide << "\"" << endl;
-				}
-				
-				QValueList<EvaluationResult> innerParams;
-				QValueList<EvaluationResult> params;
-				if( lowest.op->binding() & Operator::Left ) params << left;
-				if( lowest.op->binding() & Operator::Right ) params << right;
-				
-				for( QValueList<QString>::iterator it = lowest.innerParams.begin(); it != lowest.innerParams.end(); ++it ) {
-					dbg() << "evaluating inner parameter \"" << *it << "\"" << endl;
-					innerParams << evaluateExpressionInternal( (*it), SimpleType(), innerCtx, innerCtx );
-				}
-				
-				EvaluationResult applied = lowest.op->apply( params, innerParams );
-				if( !applied ) {
-					dbg() << "\"" << expr << "\": failed to apply the operator \"" << lowest.op->name() << "\"" << endl;
-				}
-				
-				if( ! (lowest.op->binding() & Operator::Left) &&  !leftSide.isEmpty() ) {
-					///When the operator has no binding to the left, the left side should be empty.
-					dbg() << "\"" << expr << "\": problem with the operator \"" << lowest.op->name() << ", it has no binding to the left side, but the left side is \""<< leftSide << "\"" << endl;
-				}
-				
-				if( ! (lowest.op->binding() & Operator::Right) && !rightSide.isEmpty() ) {
-					///When the operator has no binding to the right, we should continue evaluating the right side, using the left type as scope.
-					return evaluateExpressionInternal( rightSide, applied, 0, innerCtx );
-				}
-				
-				return applied;
-			} else {
-				dbg() << " could not find an operator in " << expr << endl;
-				QStringList lst; lst << expr;
-				return evaluateAtomicExpression( expr, scope, ctx );
-			}
-		}
-		
-		//dbg() << " could not evaluate " << expr << endl;
-		dbg() << "evaluating \"" << expr << "\" using the old evaluation-method" << endl;
-		QStringList lst = m_data->splitExpression( expr );
-		EvaluationResult res = evaluateAtomicExpression( lst, scope, ctx, canBeTypeExpression );
-		return res;
-	}
-	
-	///This does the simplest work
-	EvaluationResult evaluateAtomicExpression( QStringList exprList, EvaluationResult scope, SimpleContext * ctx  = 0, bool canBeTypeExpression = false ) {
-		Debug d( "#evt#");
-		if( !safetyCounter || !d ) return SimpleType();
-		
-		dbg() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl;
-		
-		if( exprList.isEmpty() )
-			return scope;
-		
-		QString currentExpr = exprList.front().stripWhiteSpace();
-		exprList.pop_front();
-
-		TypePointer searchIn = scope->resolved();
-		if( !searchIn ) {
-			dbg() << "scope-type is not resolved" << endl;
-			return EvaluationResult();
-		}
-		
-		if( ctx )
-			searchIn = ctx->container().get();
-		
-		QStringList split = splitType( currentExpr );
-		
-		if( scope.expr.t & ExpressionInfo::TypeExpression )
-			canBeTypeExpression = true;
-		
-		if ( !split.isEmpty() && (currentExpr.endsWith( "::" ) || split.size() > 1 || canBeTypeExpression ) )
-		{
-			currentExpr = split.front();
-			
-			LocateResult type = searchIn->locateDecType( currentExpr );
-			if ( type )
-			{
-				if( !split.isEmpty() ) split.pop_front();
-				EvaluationResult ret = evaluateAtomicExpression( split + exprList, type, 0, true );
-				ret.expr.t = ExpressionInfo::TypeExpression;
-				return ret;
-			} else {
-				dbg() << "\"" << scope.resultType->fullNameChain() << "\"could not locate " << currentExpr << endl;
-			}
-		}
-			
-		if ( ctx )
-		{
-			// find the variable type in the current context
-			SimpleVariable var = ctx->findVariable( currentExpr );
-			
-			if ( var.type ) {
-				
-				EvaluationResult res = evaluateAtomicExpression(  exprList, EvaluationResult( ctx->container()->locateDecType( var.type ), var.toDeclarationInfo( "current_file" )) );
-				return res;
-			}
-			
-			SimpleType current = ctx->container();
-			
-			SimpleTypeImpl::TypeOfResult type;
-			
-			SafetyCounter s( 20 );
-			bool ready = false;
-			while( !ready && s )
-			{
-				if( !current ) ready = true;
-				
-				type = current->typeOf( currentExpr );
-				if ( type)
-					return evaluateAtomicExpression( exprList, EvaluationResult( type.type, type.decl ) );
-				
-				if( !ready ) current = current->parent();
-			}
-			
-			if( !canBeTypeExpression && exprList.isEmpty() && !scope ) {
-				exprList << currentExpr;
-				///Try as a type again
-				return evaluateAtomicExpression( exprList, scope, ctx, true );
-			} else {
-				return EvaluationResult();
-			}
-		}
-		
-		SimpleTypeImpl::TypeOfResult type = searchIn->typeOf( currentExpr );
-		return evaluateAtomicExpression( exprList, EvaluationResult( type.type, type.decl ) );
-	}
-};
-}
-
-                   
 
 bool CppCodeCompletion::correctAccessOpAccurate( QStringList ptrList, MemberAccessOp accessOp )
 {
@@ -2723,10 +2306,8 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName )
 	m_pSupport->backgroundParser() ->unlock();
 }
 
-
 void CppCodeCompletion::setupCodeInformationRepository( )
 {}
-
 
 /**
 This function takes a string from the point of view from within ctx,
@@ -3132,8 +2713,6 @@ QString CppCodeCompletion::getText( int startLine, int startColumn, int endLine,
 	return contents.join( "\n" );
 }
 
-
-
 void CppCodeCompletion::computeRecoveryPoints( )
 {
 	if ( m_blockForKeyword )
@@ -3149,7 +2728,6 @@ void CppCodeCompletion::computeRecoveryPoints( )
 	ComputeRecoveryPoints walker( d->recoveryPoints );
 	walker.parseTranslationUnit( unit );
 }
-
 
 void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList< CodeCompletionEntry > & entryList, const QStringList & type, bool isInstance )
 {
@@ -3234,7 +2812,6 @@ struct CompTypeProcessor : public TypeProcessor {
 			return type;
 	}
 };
-
 
 void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, QValueList< Tag > & tags, bool /*isInstance*/ )
 {
@@ -3584,7 +3161,6 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< CodeCompletionEn
 	
 }
 
-
 EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, SimpleContext* ctx )
 {
 	safetyCounter.init();
@@ -3600,7 +3176,6 @@ EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, Sim
 	
 	return res;
 }
-
 
 void CppCodeCompletion::computeFileEntryList( )
 {
