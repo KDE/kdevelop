@@ -111,6 +111,7 @@ ProjectviewPart::~ProjectviewPart()
 
 void ProjectviewPart::restorePartialProjectSession(const QDomElement * el)
 {
+    m_projectViews.clear(); // remove the global views
     if (!el)
     {
         return;
@@ -189,7 +190,6 @@ void ProjectviewPart::restorePartialProjectSession(const QDomElement * el)
     {
         m_defaultProjectView = "";
     }
-    adjustViewActions();
 }
 
 void ProjectviewPart::savePartialProjectSession(QDomElement * el)
@@ -356,7 +356,6 @@ void ProjectviewPart::contextMenu(QPopupMenu */*popup*/, const Context */*contex
 
 void ProjectviewPart::projectOpened()
 {
-    m_projectViews.clear(); // remove the global views
     adjustViewActions();
 }
 
