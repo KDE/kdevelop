@@ -144,10 +144,7 @@ public:
   virtual QString name() = 0;
   
 protected:
-  void log( const QString& msg ) {
-  dbg() << "\"" << name() << "\": " << msg << endl;
-  };
-  
+  void log( const QString& msg );
   QString printTypeList( QValueList<EvaluationResult>& lst );
 };
 
@@ -160,29 +157,13 @@ public:
   OperatorSet() {
   }
   
-  ~OperatorSet() {
-    for( QValueList< Operator* >::iterator it = m_operators.begin(); it != m_operators.end(); ++it ) {
-      delete *it;
-    }
-  }
+  ~OperatorSet();
   
   void registerOperator( Operator* op ) {
     m_operators << op;
   }
   
-  OperatorIdentification identifyOperator( const QString& str_ , Operator::BindingSide allowedBindings = (Operator::BindingSide) (Operator::Left | Operator::Right | Operator::Neutral) ) {
-    QString str = str_.stripWhiteSpace();
-    for( OperatorList::iterator it = m_operators.begin(); it != m_operators.end(); ++it ) {
-      if( ((*it)->binding() & allowedBindings) == (*it)->binding() ) {
-        if( OperatorIdentification ident = (*it)->identify( str ) ) {
-          return ident;
-        }
-      }
-    }
-    
-    return OperatorIdentification();
-  }
-  
+  OperatorIdentification identifyOperator( const QString& str_ , Operator::BindingSide allowedBindings = (Operator::BindingSide) (Operator::Left | Operator::Right | Operator::Neutral) );
   
 };
 extern OperatorSet AllOperators;

@@ -61,6 +61,28 @@ QString Operator::printTypeList( QValueList<EvaluationResult>& lst )
   return ret;
 }
 
+void Operator::log( const QString& msg ) {
+dbg() << "\"" << name() << "\": " << msg << endl;
+};
+
+OperatorSet::~OperatorSet() {
+  for( QValueList< Operator* >::iterator it = m_operators.begin(); it != m_operators.end(); ++it ) {
+    delete *it;
+  }
+}
+
+OperatorIdentification OperatorSet::identifyOperator( const QString& str_ , Operator::BindingSide allowedBindings) {
+  QString str = str_.stripWhiteSpace();
+  for( OperatorList::iterator it = m_operators.begin(); it != m_operators.end(); ++it ) {
+    if( ((*it)->binding() & allowedBindings) == (*it)->binding() ) {
+      if( OperatorIdentification ident = (*it)->identify( str ) ) {
+        return ident;
+      }
+    }
+  }
+  
+  return OperatorIdentification();
+}
 
 OperatorIdentification UnaryOperator::identify( QString& str ) {
   OperatorIdentification ret;
