@@ -242,14 +242,17 @@ void DDockWindow::selectWidget(Ideal::Button *button)
     kdDebug() << k_funcinfo << endl;
     if (m_toggledButton == button)
     {
-        m_widgets[button]->setFocus();
-        if (special && m_visible)
+        if (special && m_visible && (!isActive()))
         {
             //special processing for keyboard navigation events
             m_toggledButton->setOn(true);
+            m_widgets[button]->setFocus();
         }
         else
+        {
+            m_widgets[button]->setFocus();
             setVisible(!m_visible);
+        }
         return;
     }
 
@@ -305,14 +308,6 @@ void DDockWindow::selectLastWidget()
 
 bool DDockWindow::isActive()
 {
-    if (m_toggledButton)
-    {
-        kdDebug() << m_widgetStack->focusWidget() << endl;
-        kdDebug() << m_widgets[m_toggledButton] << endl;
-        kdDebug() << m_widgets[m_toggledButton]->focusWidget() << endl;
-        kdDebug() << qApp->focusWidget() << endl;
-    }
-//     return m_toggledButton && (focusWidget() == qApp->focusWidget());
     if (m_toggledButton)
     {
         QWidget *w = qApp->focusWidget();
