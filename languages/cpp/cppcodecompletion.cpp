@@ -80,6 +80,8 @@
 #include "safetycounter.h"
 #include "cppevaluation.h"
 #include "simplecontext.h"
+#include "simpletypefunction.h"
+
 
 
 ///This enables-disables the automatic processing of the expression under the mouse-cursor 
@@ -276,7 +278,7 @@ struct PopupClassViewFillerHelpStruct {
     
     if( d.resolved() && d.resolved()->hasNode() ) {
       if( !dom && d.resolved()->isNamespace() ) {
-        SimpleTypeUsedNamespace* ns = dynamic_cast<SimpleTypeUsedNamespace*>( d.resolved().data() );
+        SimpleTypeCachedNamespace* ns = dynamic_cast<SimpleTypeCachedNamespace*>( d.resolved().data() );
         if( ns ) {
           QValueList<SimpleType> slaves = ns->getSlaves();
           for( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
@@ -336,7 +338,7 @@ PopupFiller( HelpStruct s , QString dAdd, int maxCount = 100 ) : struk( s ), dep
     
     if( d.resolved() ) {
       if( d.resolved()->asFunction() ) {
-        LocateResult rt = d.resolved()->locateDecType( d.resolved()->asFunction()->getReturnType() );
+        SimpleTypeImpl::LocateResult rt = d.resolved()->locateDecType( d.resolved()->asFunction()->getReturnType() );
         if( rt ) {
           QPopupMenu * m = new QPopupMenu( parent );
           int gid = parent->insertItem( i18n( "return-type \"%1\"" ).arg( cleanForMenu( rt->fullNameChain() ) ), m );
@@ -351,7 +353,7 @@ PopupFiller( HelpStruct s , QString dAdd, int maxCount = 100 ) : struk( s ), dep
           QStringList::iterator it2 = argNames.begin();
           for( QValueList<TypeDesc>::iterator it = args.begin(); it != args.end(); ++it )
           {
-            LocateResult at = d.resolved()->locateDecType( *it );
+            SimpleTypeImpl::LocateResult at = d.resolved()->locateDecType( *it );
             QString name ="";
             if( it2 != argNames.end() ) {
               name = *it2;
@@ -365,8 +367,8 @@ PopupFiller( HelpStruct s , QString dAdd, int maxCount = 100 ) : struk( s ), dep
         }
         
       }
-      QValueList<LocateResult> bases = d.resolved()->getBases();
-      for( QValueList<LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
+      QValueList<SimpleTypeImpl::LocateResult> bases = d.resolved()->getBases();
+      for( QValueList<SimpleTypeImpl::LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
         QPopupMenu * m = new QPopupMenu( parent );
         int gid = parent->insertItem( i18n( "base-class \"%1\"" ).arg( cleanForMenu( (*it)->fullNameChain() ) ), m );
         fill( m, *it );
@@ -392,7 +394,7 @@ CompTypeProcessor( SimpleType scope )  : m_scope(scope) {
   
   virtual QString processType( const QString& type ) {
         ///TODO: Option: should arguments be processed? If no, just return "type"
-    LocateResult t = m_scope->locateDecType( type );
+    SimpleTypeImpl::LocateResult t = m_scope->locateDecType( type );
     if( t )
       return t->fullNameChain();
     else
@@ -1555,7 +1557,7 @@ QString CppCodeCompletion::buildSignature( TypePointer currType )
 	if( !f ) return "";
 	
 	QString ret;
-	LocateResult rtt = currType->locateDecType( f->getReturnType() );
+	SimpleTypeImpl::LocateResult rtt = currType->locateDecType( f->getReturnType() );
 	if( rtt->resolved() || rtt.resolutionCount() > 1 )
 		ret = rtt->fullNameChain();
 	else
@@ -2691,8 +2693,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 		args << Catalog::QueryArgument( "name", fullname );
 
 		
-		QValueList<LocateResult> parents = typeR->getBases();
-		for ( QValueList<LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it )
+		QValueList<SimpleTypeImpl::LocateResult> parents = typeR->getBases();
+		for ( QValueList<SimpleTypeImpl::LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it )
 		{
 			if( !(*it)->resolved() ) continue;
 			SimpleType tp = SimpleType( (*it)->resolved() );
@@ -2769,7 +2771,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		if((tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_Variable || tag.kind() == Tag::Kind_Typedef))
 		{
 			if( !prefix.isEmpty() ) {
-				LocateResult et =  type->locateDecType( prefix );
+				SimpleTypeImpl::LocateResult et =  type->locateDecType( prefix );
 				
 				if( et )
 					prefix = et->fullNameChain();
@@ -2796,8 +2798,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	if ( m_completionMode == NormalCompletion )
 		computeCompletionEntryList( type, entryList, klass->variableList(), isInstance );
 
-	QValueList<LocateResult> parents = type->getBases();
-	for ( QValueList<LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it )
+	QValueList<SimpleTypeImpl::LocateResult> parents = type->getBases();
+	for ( QValueList<SimpleTypeImpl::LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it )
 	{
 		if( !(*it)->resolved() ) continue;
 		
@@ -2911,7 +2913,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			entry.prefix = meth->resultType();
 		}else{
 			QString tt = meth->resultType();
-			LocateResult t = type->locateDecType( tt );
+			SimpleTypeImpl::LocateResult t = type->locateDecType( tt );
 			if( t ) {
 				entry.prefix = t->fullNameChain();
 			}
@@ -3010,7 +3012,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			entry.prefix = attr->type();
 		}else{
 			QString tt = attr->type();
-			LocateResult t = type->locateDecType( tt );
+			SimpleTypeImpl::LocateResult t = type->locateDecType( tt );
 			//SimpleType t = type->typeOf( attr->name() );
 			if( t ) 
 				entry.prefix = t->fullNameChain();

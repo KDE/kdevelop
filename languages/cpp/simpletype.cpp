@@ -13,8 +13,8 @@
  ***************************************************************************/
 
 #include "simpletype.h"
-#include "simpletypecachebinder.h"
 #include "safetycounter.h"
+#include "simpletypefunction.h"
 
 extern SafetyCounter safetyCounter;
 
@@ -24,41 +24,6 @@ SimpleType::TypeStore  SimpleType::m_destroyedStore;
 QString globalCurrentFile = "";
 CppCodeCompletion* cppCompetionInstance = 0;
 
-
-///Until header-parsing is implemented, this tries to find the class that is most related to this item
-ClassDom pickMostRelated( ClassList lst, QString fn ) {
-  if( lst.isEmpty() ) return ClassDom();
-  if( fn.isEmpty() ) return lst.front();
-  
-  ClassDom best = lst.front();
-  uint bestMatch = 0;
-    //kdDebug() << "searching most related to " << fn << endl;
-  
-  for( ClassList::iterator it = lst.begin(); it != lst.end(); ++it ) {
-        //kdDebug() << "comparing " << (*it)->fileName() << endl;
-    QString str = (*it)->fileName();
-    uint len = str.length();
-    if( fn.length() < len ) len = fn.length();
-    
-    uint matchLen = 0;
-    for( uint a = 0; a < len; a++ ) {
-      if( str[a] == fn[a] )
-        matchLen++;
-      else
-        break;
-    }
-    
-    if( matchLen > bestMatch ) {
-            //kdDebug() << "picking " << str << endl;
-      bestMatch = matchLen;
-      best = *it;
-    }
-  }
-  
-    //kdDebug() << "picked " << best->fileName() << endl;
-  
-  return best;
-}
 
 
 //SimpleType implementation
@@ -71,7 +36,7 @@ void SimpleType::resolve( Repository rep )  const {
     if( scope().isEmpty() ) {
      m_type = m_globalNamespace;
     } else {
-	    SimpleTypeImpl::LocateResult t = m_globalNamespace->locateDecType( scope().join("::") );
+	    SimpleTypeImpl::SimpleTypeImpl::LocateResult t = m_globalNamespace->locateDecType( scope().join("::") );
 	if( t && t->resolved() ) {
       m_type = t->resolved();
       return;
@@ -88,9 +53,9 @@ void SimpleType::resolve( Repository rep )  const {
   
   if( rep == Undefined || rep == CodeModel ) {
    if( !m_type ) {
-    cm = TypePointer( new SimpleTypeUsedCodeModel( scope() ) );
+     cm = TypePointer( new SimpleTypeCachedCodeModel( scope() ) );
    }else{
-    cm = TypePointer( new SimpleTypeUsedCodeModel( &(*m_type) ) );
+     cm = TypePointer( new SimpleTypeCachedCodeModel( &(*m_type) ) );
    }
    
    if( cm->hasNode() || rep == CodeModel ) {
@@ -112,9 +77,9 @@ void SimpleType::resolve( Repository rep )  const {
   if( rep == Undefined || rep == Catalog ) {
    
    if( !m_type ) {
-    cm = TypePointer( new SimpleTypeUsedCatalog( scope() ) );
+     cm = TypePointer( new SimpleTypeCachedCatalog( scope() ) );
    }else{
-    cm = TypePointer( new SimpleTypeUsedCatalog( &(*m_type) ) );
+     cm = TypePointer( new SimpleTypeCachedCatalog( &(*m_type) ) );
    }
    
    if( cm->hasNode() || rep == Catalog ) {
@@ -135,7 +100,7 @@ void SimpleType::resolve( Repository rep )  const {
   }
   
   if( rep == Both ) {
-   cm = new SimpleTypeUsedNamespace( scope() );
+    cm = new SimpleTypeCachedNamespace( scope() );
    m_type = cm;
    m_resolved = true;
    return;
@@ -145,7 +110,6 @@ void SimpleType::resolve( Repository rep )  const {
   dbg() << "could not resolve \"" << m_type->desc().fullNameChain() << "\"" << endl;
  }
 }
-
 
 void SimpleType::destroyStore()
 {
@@ -196,13 +160,12 @@ void SimpleType::init( const QStringList& scope , Repository rep ) {
 }
 
 SimpleType::SimpleType( ItemDom item ) : m_resolved(true) {
- m_type = TypePointer( new SimpleTypeUsedCodeModel( item ) );
+  m_type = TypePointer( new SimpleTypeCachedCodeModel( item ) );
 }
 /*
 SimpleType::SimpleType( Tag tag ) : m_resolved(true) {
  m_type = TypePointer( new SimpleTypeCatalog( tag ) );
 }*/
-
 
 //SimpleTypeImpl implementation
 
@@ -213,7 +176,7 @@ SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const QString& name, Member
  Debug d( "#to#" );
  if( !d ) {
   dbg() << "stopping typeOf-evaluation because the recursion-depth is too high" << endl;
-	 return TypeOfResult( LocateResult( TypeDesc( "CompletionError::too_much_recursion" ) ) );
+	 return TypeOfResult( SimpleTypeImpl::LocateResult( TypeDesc( "CompletionError::too_much_recursion" ) ) );
  }
  dbg() << "\"" << str() << "\"------------>: searching for type of member \"" << name << "\"" << endl;
  
@@ -228,15 +191,15 @@ SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const QString& name, Member
    TypePointer ret = mem.build();
    if( ret && ret->asFunction() ) {
      ///Search all bases and append all functions with the same name to it.
-    QValueList<LocateResult> bases = getBases();
-    for( QValueList<LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
+    QValueList<SimpleTypeImpl::LocateResult> bases = getBases();
+    for( QValueList<SimpleTypeImpl::LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
 	    if( (*it)->resolved() ) {
 		    TypeOfResult rt = (*it)->resolved()->typeOf( name );
 			if( rt->resolved() )
 				ret->asFunction()->appendNextFunction( SimpleType( rt->resolved() ) );
 	    }
     }
-	   return TypeOfResult( LocateResult( ret->desc() ) );
+	   return TypeOfResult( SimpleTypeImpl::LocateResult( ret->desc() ) );
    } else {
     dbg() << "error, using old function-type-evaluation" << endl;
 	   return TypeOfResult( locateDecType( mem.type ), mem.decl );
@@ -262,7 +225,6 @@ SimpleTypeFunctionInterface* SimpleTypeImpl::asFunction()
  return dynamic_cast<SimpleTypeFunctionInterface*> ( this );
 }
 
-
 QString SimpleTypeImpl::operatorToString( Operator op ) {
     switch( op ) {
     case NoOp:
@@ -282,24 +244,24 @@ QString SimpleTypeImpl::operatorToString( Operator op ) {
     };
 }
 
-LocateResult SimpleTypeImpl::getFunctionReturnType( QString functionName, QValueList<LocateResult> params) {
-    LocateResult t = typeOf( functionName, MemberInfo::Function ).type;
+SimpleTypeImpl::LocateResult SimpleTypeImpl::getFunctionReturnType( QString functionName, QValueList<SimpleTypeImpl::LocateResult> params) {
+    SimpleTypeImpl::LocateResult t = typeOf( functionName, MemberInfo::Function ).type;
 	if( t->resolved() && t->resolved()->asFunction() ) {
 		return t->resolved()->applyOperator( ParenOp, params );
     } else {
     	dbg() << "error : could not find function \"" << functionName << "\" in \"" << str() << "\"" << endl;
-      return LocateResult();
+      return SimpleTypeImpl::LocateResult();
     }
 }
 
-LocateResult SimpleTypeImpl::applyOperator( Operator op , QValueList<LocateResult> params ) {
+SimpleTypeImpl::LocateResult SimpleTypeImpl::applyOperator( Operator op , QValueList<SimpleTypeImpl::LocateResult> params ) {
     Debug d("#applyn#");
     if( !d || !safetyCounter )
-      return LocateResult();
+      return SimpleTypeImpl::LocateResult();
     
     dbg() << "applying operator " << operatorToString( op ) << " to \"" << desc().fullNameChain() << "\"" <<  endl;
-    LocateResult ret;
-	if( op == NoOp ) return LocateResult( desc() );
+    SimpleTypeImpl::LocateResult ret;
+	if( op == NoOp ) return SimpleTypeImpl::LocateResult( desc() );
     
     switch( op ) {
     case IndexOp:
@@ -325,10 +287,9 @@ LocateResult SimpleTypeImpl::applyOperator( Operator op , QValueList<LocateResul
       dbg() << "wrong operator\n";
     }
     
-	return LocateResult();
+	return SimpleTypeImpl::LocateResult();
 }
  
-
 TypeDesc SimpleTypeImpl::replaceTemplateParams( TypeDesc desc, TemplateParamInfo& paramInfo ) {
     Debug d("#repl#");
     if( !d ) 
@@ -383,7 +344,7 @@ TypeDesc SimpleTypeImpl::resolveTemplateParams( TypeDesc desc, LocateMode mode )
     return ret;
 }
 
-LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int dir ,  MemberInfo::MemberType typeMask ) {
+SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int dir ,  MemberInfo::MemberType typeMask ) {
     Debug d("#lo#");
     if( !name || !safetyCounter || !d ) {
 	    return desc();
@@ -406,7 +367,7 @@ LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int d
       return ret;
     }*/
     
-    LocateResult ret = name; ///In case the type cannot be located, this helps to find at least the best match
+    SimpleTypeImpl::LocateResult ret = name; ///In case the type cannot be located, this helps to find at least the best match
 	ret->setResolved( 0 );
     
 	TypeDesc first = name.firstType();
@@ -482,13 +443,13 @@ LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int d
         ///Ask bases but only on this level
     if( ! ( mode & ExcludeBases ) ) {
       
-      QValueList<LocateResult> bases = getBases();
+      QValueList<SimpleTypeImpl::LocateResult> bases = getBases();
       if( !bases.isEmpty() ) {
         TypeDesc nameInBase = resolveTemplateParams( name, LocateBase ); ///Resolve all template-params that are at least visible in the scope of the base-declaration
             
-        for( QValueList<LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
+        for( QValueList<SimpleTypeImpl::LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
 	        if( !(*it)->resolved() ) continue;
-	        LocateResult t = (*it)->resolved()->locateType( nameInBase, addFlag( addFlag( mode, ExcludeTemplates ), ExcludeParents ), dir ); ///The searched Type cannot directly be a template-param in the base-class, so ExcludeTemplates. It's forgotten early enough.
+	        SimpleTypeImpl::LocateResult t = (*it)->resolved()->locateType( nameInBase, addFlag( addFlag( mode, ExcludeTemplates ), ExcludeParents ), dir ); ///The searched Type cannot directly be a template-param in the base-class, so ExcludeTemplates. It's forgotten early enough.
 		if( t->resolved() )
             return t;
           else
@@ -500,7 +461,7 @@ LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int d
     
         ///Ask parentsc
     if( !scope().isEmpty() && dir != 1 && ! ( mode & ExcludeParents ) ) {
-    LocateResult rett = parent()->locateType( resolveTemplateParams( name, mode & ExcludeBases ? ExcludeBases : mode ), mode & ForgetModeUpwards ? Normal : mode );
+    SimpleTypeImpl::LocateResult rett = parent()->locateType( resolveTemplateParams( name, mode & ExcludeBases ? ExcludeBases : mode ), mode & ForgetModeUpwards ? Normal : mode );
 	if( rett->resolved() ) 
         return rett;
       else
@@ -511,11 +472,11 @@ LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int d
         ///Ask the bases and allow them to search in their parents.
     if( ! ( mode & ExcludeBases ) ) {
       TypeDesc baseName = resolveTemplateParams( name, LocateBase ); ///Resolve all template-params that are at least visible in the scope of the base-declaration
-      QValueList<LocateResult> bases = getBases();
+      QValueList<SimpleTypeImpl::LocateResult> bases = getBases();
       if( !bases.isEmpty() ) {
-        for( QValueList<LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
+        for( QValueList<SimpleTypeImpl::LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
 	        if( !(*it)->resolved() ) continue;
-	        LocateResult t = (*it)->resolved()->locateType( baseName, addFlag( mode, ExcludeTemplates ), dir ); ///The searched Type cannot directly be a template-param in the base-class, so ExcludeTemplates. It's forgotten early enough.
+	        SimpleTypeImpl::LocateResult t = (*it)->resolved()->locateType( baseName, addFlag( mode, ExcludeTemplates ), dir ); ///The searched Type cannot directly be a template-param in the base-class, so ExcludeTemplates. It's forgotten early enough.
 		if( t->resolved() )
             return t;
           else
@@ -530,7 +491,6 @@ LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int d
     return ret;
   };
   
-
 void SimpleTypeImpl::breakReferences() {
 	TypePointer p( this ); ///necessary so this type is not deleted in between
     m_parent = 0;
@@ -624,8 +584,8 @@ void SimpleTypeImpl::setScope( const QStringList& scope ) {
 }
 
 SimpleTypeImpl::TypeOfResult SimpleTypeImpl::searchBases ( const TypeDesc& name ) {
-    QValueList<LocateResult> parents = getBases();
-    for ( QValueList<LocateResult>::iterator it = parents.begin(); it != parents.end(); ++it )
+    QValueList<SimpleTypeImpl::LocateResult> parents = getBases();
+    for ( QValueList<SimpleTypeImpl::LocateResult>::iterator it = parents.begin(); it != parents.end(); ++it )
     {
 	    if( !(*it)->resolved() ) continue;
 	    TypeOfResult type = (*it)->resolved()->typeOf( name.name() );
@@ -635,113 +595,57 @@ SimpleTypeImpl::TypeOfResult SimpleTypeImpl::searchBases ( const TypeDesc& name 
     return TypeOfResult();
 }
 
-
-//SimpleTypeFunctionInterface implementation
-  
-QString SimpleTypeFunctionInterface::signature() 
-  {
-    QString sig = "( ";
-    SimpleTypeImpl* asType = dynamic_cast<SimpleTypeImpl*>( this );
-    
-    QStringList argDefaults = getArgumentDefaults();
-    QStringList argNames = getArgumentNames();
-    QValueList<TypeDesc> argTypes = getArgumentTypes();
-    QValueList<LocateResult> argRealTypes;
-    
-    if( asType ) {
-      for( QValueList<TypeDesc>::iterator it = argTypes.begin(); it != argTypes.end(); ++it ) {
-        argRealTypes << asType->locateDecType( *it );
-      }
-    }
-    
-    QStringList::iterator def = argDefaults.begin();
-    QStringList::iterator name = argNames.begin();
-	QValueList<LocateResult>::iterator realType = argRealTypes.begin();
-    
-    while( realType != argRealTypes.end() ) {
-      if( sig != "( " )
-        sig += ", ";
-      
-      sig += (*realType)->fullNameChain();
-      ++realType;
-      
-      if( name != argNames.end() ) {
-        if( !(*name).isEmpty() ) sig += " " + *name;
-        ++name;
-      }
-      
-      if( def != argDefaults.end() && !(*def).isEmpty() ) {
-        sig += " = " + *def;
-        ++def;
-      }
-    }
-    
-    sig += " )";
-    return sig;
+void SimpleTypeImpl::setSlaveParent( SimpleTypeImpl& slave ) {
+  if( ! m_masterProxy ) {
+    slave.setParent( this );
+  } else {
+    slave.setParent( m_masterProxy );
+  }
 }
 
-bool SimpleTypeFunctionInterface::containsUndefinedTemplateParam( TypeDesc& desc, SimpleTypeImpl::TemplateParamInfo& paramInfo ) 
-{
-  TypeDesc::TemplateParams& pm = desc.templateParams();
-  SimpleTypeImpl::TemplateParamInfo::TemplateParam t;
-  
-  if( pm.isEmpty() && paramInfo.getParam( t, desc.name() ) )
-    if( !t.value ) return true;
-  
-  if( desc.next() )
-    if( containsUndefinedTemplateParam( *desc.next(), paramInfo ) )
-      return true;
-  
-  for( TypeDesc::TemplateParams::iterator it = pm.begin(); it != pm.end(); ++it ) {
-    if( containsUndefinedTemplateParam( **it, paramInfo ) ) return true;
+void SimpleTypeImpl::parseParams( TypeDesc desc ) {
+  invalidateCache();
+  m_desc = desc;
+  m_desc.clearInstanceInfo();
+}
+
+void SimpleTypeImpl::takeTemplateParams( TypeDesc desc ) {
+  invalidateCache();
+  m_desc.templateParams() = desc.templateParams();
+}
+
+//SimpleTypeImpl::TemplateParamInfo implementation
+
+bool SimpleTypeImpl::TemplateParamInfo::getParam( TemplateParam& target, QString name ) const {
+  QMap<QString, TemplateParam>::const_iterator it = m_paramsByName.find( name );
+  if( it != m_paramsByName.end() ) {
+    target = *it;
+    return true;
   }
-  
   return false;
 }
-  
 
-void SimpleTypeFunctionInterface::resolveImplicitTypes( TypeDesc& argType, TypeDesc& gottenArgType, SimpleTypeImpl::TemplateParamInfo& paramInfo ) 
-{
-  if( argType.templateParams().isEmpty() ) {  ///Template-types may not be templates.
-    SimpleTypeImpl::TemplateParamInfo::TemplateParam p;
-    if( paramInfo.getParam( p, argType.name() ) && !p.value ) {
-      dbg() << "choosing \"" << gottenArgType.fullNameChain() << "\" as implicit template-parameter for \"" << argType.name() << "\"" << endl;
-      p.value = gottenArgType;
-      p.value.makePrivate();
-      for( int d = 0; d < argType.pointerDepth(); d++ )
-        p.value.decreasePointerDepth();
-      
-      paramInfo.addParam( p );
-    }
-  } else {
-    if( argType.name() == gottenArgType.name() )
-      resolveImplicitTypes( argType.templateParams(), gottenArgType.templateParams(), paramInfo );
+bool SimpleTypeImpl::TemplateParamInfo::getParam( TemplateParam& target, int number ) const {
+  QMap<int, TemplateParam>::const_iterator it = m_paramsByNumber.find( number );
+  if( it != m_paramsByNumber.end() ) {
+    target = *it;
+    return true;
   }
-}     
+  return false;
+}
 
-void SimpleTypeFunctionInterface::resolveImplicitTypes( TypeDesc::TemplateParams& argTypes, TypeDesc::TemplateParams& gottenArgTypes, SimpleTypeImpl::TemplateParamInfo& paramInfo ) 
-{
-  TypeDesc::TemplateParams::iterator it = argTypes.begin();
-  TypeDesc::TemplateParams::iterator it2 = gottenArgTypes.begin();
-  
-  while( it != argTypes.end() && it2 != gottenArgTypes.end() ) {
-    resolveImplicitTypes( **it, **it2, paramInfo );
-    ++it;
-    ++it2;
+void SimpleTypeImpl::TemplateParamInfo::removeParam( int number ) {
+  QMap<int, TemplateParam>::iterator it = m_paramsByNumber.find( number );
+  if( it != m_paramsByNumber.end() ) {
+    m_paramsByName.remove( (*it).name );
+    m_paramsByNumber.remove( it );
   }
-}   
+}
 
-void SimpleTypeFunctionInterface::resolveImplicitTypes( QValueList<TypeDesc>& argTypes, QValueList<TypeDesc>& gottenArgTypes, SimpleTypeImpl::TemplateParamInfo& paramInfo ) 
-{
-  QValueList<TypeDesc>::iterator it = argTypes.begin();
-  QValueList<TypeDesc>::iterator it2 = gottenArgTypes.begin();
-  
-  while( it != argTypes.end() && it2 != gottenArgTypes.end() ) {
-    resolveImplicitTypes( *it, *it2, paramInfo );
-    ++it;
-    ++it2;
-  }
-}   
+void SimpleTypeImpl::TemplateParamInfo::addParam( const TemplateParam& param ) {
+  m_paramsByNumber[param.number] = param;
+  m_paramsByName[param.name] = param;
+}
 
 
 //SimpleTypeCatalog implementation
@@ -866,14 +770,14 @@ DeclarationInfo SimpleTypeCatalog::getDeclarationInfo() {
   return ret;
 }
 
-QValueList<LocateResult> SimpleTypeCatalog::getBases() {
+QValueList<SimpleTypeImpl::LocateResult> SimpleTypeCatalog::getBases() {
   Debug d( "#getbases#" );
   if( !d ) {
   dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl;
-    return QValueList<LocateResult>();
+    return QValueList<SimpleTypeImpl::LocateResult>();
   }
   
-  QValueList<LocateResult> ret;
+  QValueList<SimpleTypeImpl::LocateResult> ret;
                 // try with parentsc
   QTime t;
   t.restart();
@@ -959,7 +863,7 @@ TypePointer SimpleTypeCatalog::CatalogBuildInfo::build() {
   if( !m_tag ) 
     return TypePointer();
   else {
-    TypePointer tp = new SimpleTypeUsedCatalog( m_tag );
+    TypePointer tp = new SimpleTypeCachedCatalog( m_tag );
     tp->parseParams( m_desc );
     if( m_parent ) tp->setParent( m_parent->bigContainer() );
     return tp;
@@ -967,239 +871,10 @@ TypePointer SimpleTypeCatalog::CatalogBuildInfo::build() {
   
 }
 
-//SimpleTypeCodeModel implementation
-
-SimpleTypeCodeModel::SimpleTypeCodeModel( ItemDom& item ) : m_item( item ) {
-  CodeModelItem* i = &(*item);
-  FunctionModel* m = dynamic_cast<FunctionModel*>( i );
-  ClassModel* c = dynamic_cast<ClassModel*>( i );
-  if( m ) {
-    QStringList l = m->scope(); 
-    l << m->name();
-    setScope( l );
-    return;
-  }
-  if( c ) {
-    QStringList l = c->scope(); 
-    l << c->name();
-    setScope( l );
-    return;
-  }
-  dbg() << "code-model-item has an unsupported type: " << i->name() << endl;
-}
-
-ItemDom SimpleTypeCodeModel::locateModelContainer( class CodeModel* m, TypeDesc t, ClassDom cnt)
-{
-  if( !cnt ) {
-    if( m->globalNamespace() ) {
-      cnt = model_cast<ClassDom>( m->globalNamespace() );
-    } else {
-      return ItemDom();
-    }
-  }
-  if( t ) {
-    if( cnt->hasClass( t.name() ) ) {
-      ClassList l = cnt->classByName( t.name() );
-      if( !l.isEmpty() ) {
-        if( t.next() )
-          return locateModelContainer( m, *t.next(), l.front() );
-        else
-          return model_cast<ItemDom>( l.front() );
-      }
-    }
-    NamespaceModel* ns = dynamic_cast<NamespaceModel*>(&(*cnt));
-    if( ns ) {
-      NamespaceDom n = ns->namespaceByName( t.name() );
-      if( t.next() )
-        return locateModelContainer( m, *t.next(), model_cast<ClassDom>( n ) );
-      else
-        return model_cast<ItemDom>( n );
-    }
-  }
-  
-  return ItemDom();
-}
-
-SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , SimpleTypeImpl::MemberInfo::MemberType type ) 
-{
-  MemberInfo ret;
-  ret.name = name.name();
-  ret.memberType = MemberInfo::NotFound;
-  if( !name || !m_item ) return ret;
-  
-  ClassModel* klass = dynamic_cast<ClassModel*> ( & (*m_item) );
-  if( !klass ) {
-  dbg() << "\"" << str() << "\": search for member " << name.name() << " unsuccessful because the own type is invalid" << endl;
-    return ret;
-  }
-  NamespaceModel* ns = dynamic_cast<NamespaceModel*>(klass);
-  
-  if( klass->hasVariable( name.name() )  && ( type & MemberInfo::Variable ) ) {
-    ret.memberType = MemberInfo::Variable;
-    VariableDom d = klass->variableByName( name.name() );
-    if( d ) {
-      ret.type = d->type();
-      ret.decl.name = d->name();
-      ret.decl.file = d->fileName();
-      ret.decl.comment = d->comment();
-      d->getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
-      d->getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
-    }
-  } else if( klass->hasFunction( name.name() )  && ( type & MemberInfo::Function ) ) {
-    ret.memberType = MemberInfo::Function;
-    FunctionList l = klass->functionByName( name.name() );
-    if( !l.isEmpty() && l.front() ) {
-      ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name , TypePointer(this) ) );
-      ret.type = l.front()->resultType();
-      ret.type.increaseFunctionDepth();
-    }
-  } else if( klass->hasFunctionDefinition( name.name() )  && ( type & MemberInfo::Function ) ) {
-    ret.memberType = MemberInfo::Function;
-    FunctionDefinitionList l = klass->functionDefinitionByName( name.name() );
-    if( !l.isEmpty() && l.front() ) {
-      ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name, TypePointer(this) ) );
-      ret.type = l.front()->resultType();
-      ret.type.increaseFunctionDepth();
-    }
-  } else if( klass->hasTypeAlias( name.name() ) && ( type & MemberInfo::Typedef ) ) {
-    ret.memberType = MemberInfo::Typedef;
-    TypeAliasList l = klass->typeAliasByName( name.name() );
-    if( !l.isEmpty() && l.front() ) {
-      ret.type = l.front()->type();
-    }
-  } else if ( klass->hasClass( name.name() ) && ( type & MemberInfo::NestedType ) ) {
-    ClassList l = klass->classByName( name.name() );
-    
-    if( !l.isEmpty() ) {
-      ClassDom i = pickMostRelated( l, globalCurrentFile );
-      if( i ) {
-        ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( i ), name, TypePointer( this ) ) );
-        
-        ret.memberType = MemberInfo::NestedType;
-        ret.type = name;
-      }
-    }
-  } else if ( ns && ns->hasNamespace( name.name() )  && ( type & MemberInfo::Namespace ) ) {
-    ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( ns->namespaceByName( name.name() )), name, TypePointer( this ) ) );
-    ret.memberType = MemberInfo::Namespace;
-    ret.type = name;
-  } else {
-    if( type & MemberInfo::Template ) {
-      TypeDesc s = findTemplateParam( name.name() );
-      if( s ) {
-        ret.memberType = MemberInfo::Template;
-        ret.type = s;
-      }
-    }
-  }
-    //if( !ret.type ) ret.memberType = MemberInfo::NotFound; //commented out because of constructurs
-  return ret;
-}
-
-bool SimpleTypeCodeModel::findItem() {
-  QString key = str();
-  m_item = locateModelContainer( cppCompetionInstance->m_pSupport->codeModel(), str() );
-  return (bool) m_item;
-}
-
-void SimpleTypeCodeModel::init() {
-  if( scope().isEmpty() ) {
-    m_item = cppCompetionInstance->m_pSupport->codeModel() ->globalNamespace();
-  }else{
-    findItem();
-  }
-}
-
-DeclarationInfo SimpleTypeCodeModel::getDeclarationInfo() {
-  DeclarationInfo ret;
-  ItemDom i = item();
-  ret.name = fullTypeResolved();
-  if( i ) {
-    ret.file = i->fileName();
-    i->getStartPosition( &ret.startLine, &ret.startCol );
-    i->getEndPosition( &ret.endLine, &ret.endCol );
-    ret.comment = i->comment();
-  }
-  return ret;
-}
-
-
-SimpleTypeImpl::TemplateParamInfo SimpleTypeCodeModel::getTemplateParamInfo() {
-  TemplateParamInfo ret;
-  
-  if(m_item) {
-    TemplateModelItem* ti = dynamic_cast<TemplateModelItem*> ( &( *m_item ) );
-    TypeDesc::TemplateParams& templateParams = m_desc.templateParams();
-    
-    TemplateModelItem::ParamMap m =  ti->getTemplateParams();
-    for( uint a = 0; a < m.size(); a++ ) {
-      TemplateParamInfo::TemplateParam t;
-      t.number = a;
-      t.name = m[a].first;
-      t.def = m[a].second;
-      if( templateParams.count() > a )
-        t.value = *templateParams[a];
-      ret.addParam( t );
-    }
-  }
-  
-  return ret;
-}
-
-const TypeDesc SimpleTypeCodeModel::findTemplateParam( const QString& name ) {
-  if(m_item) {
-    TemplateModelItem* ti = dynamic_cast<TemplateModelItem*> ( &( *m_item ) );
-    TypeDesc::TemplateParams& templateParams = m_desc.templateParams();
-    int pi = ti->findTemplateParam( name );
-    if( pi != -1 && (int)templateParams.count() > pi ) {
-      return *templateParams[pi];
-    } else {
-      if( pi != -1 && !ti->getParam( pi ).second.isEmpty() ) { 
-        QString def = ti->getParam( pi ).second;
-      dbg() << "\"" << str() << "\": using default-template-parameter \"" << def << "\" for " << name << endl;
-        return def;
-      } else if( pi != -1 ) {
-      dbg() << "\"" << str() << "\": template-type \"" << name << "\" has no pameter! " << endl;
-      }
-    }
-  }
-  return TypeDesc();
-};
-
-QValueList<LocateResult> SimpleTypeCodeModel::getBases() {
-  Debug d( "#getbases#" );
-  if( !d ) {
-  dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl;
-    return QValueList<LocateResult>();
-  }
-  
-  QValueList<LocateResult> ret;
-  
-  ClassModel* klass;
-  
-  if( !m_item || ( klass = dynamic_cast<ClassModel*>( &(*m_item) ) ) == 0 ) return ret;
-  
-  QStringList parents = klass->baseClassList();
-  for ( QStringList::Iterator it = parents.begin(); it != parents.end(); ++it )
-  {
-    ret << locateDecType( *it , LocateBase );
-  }
-  
-  return ret;
-}
-
-TypePointer SimpleTypeCodeModel::CodeModelBuildInfo::build() {
-  TypePointer tp = new SimpleTypeUsedCodeModel( m_item );
-  tp->parseParams( m_desc );
-  if( m_parent ) tp->setParent( m_parent->bigContainer() );
-  return tp;
-}
-
-
 //SimpleTypeNameSpace implementation
 
 TypePointer SimpleTypeNamespace::NamespaceBuildInfo::build() {
-  SimpleTypeNamespace* ns = new SimpleTypeUsedNamespace( m_fakeScope, m_realScope );
+  SimpleTypeNamespace* ns = new SimpleTypeCachedNamespace( m_fakeScope, m_realScope );
   for( QValueList<QStringList>::iterator it = m_imports.begin(); it != m_imports.end(); ++it )
     ns->addAliasMap( "", (*it).join("::") );
   return ns;
@@ -1277,7 +952,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::setupMemberInfo( TypeDesc& subNa
 
 QStringList SimpleTypeNamespace::locateNamespace( QString alias ) {
 dbg() << "\"" << str() << "\": locating namespace \"" << alias << "\"" << endl;
-  LocateResult res = locateDecType( alias, addFlag( ExcludeNestedTypes, ExcludeTemplates ), 0, MemberInfo::Namespace );
+  SimpleTypeImpl::LocateResult res = locateDecType( alias, addFlag( ExcludeNestedTypes, ExcludeTemplates ), 0, MemberInfo::Namespace );
 	if( !res->resolved() ) return QStringList();
 	if( isANamespace( res->resolved() ) ) {
 		return res->resolved()->scope();

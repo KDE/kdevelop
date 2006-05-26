@@ -67,7 +67,7 @@ public:
   EvaluationResult( const EvaluationResult& rhs ) : resultType( rhs.resultType), expr( rhs.expr ), sourceVariable( rhs.sourceVariable ) {
   }
   
-  SimpleTypeImpl::LocateResult resultType; ///The resulting type
+  SimpleTypeImpl::SimpleTypeImpl::LocateResult resultType; ///The resulting type
   
   ExpressionInfo expr; ///Information about the expression that was processed
   
@@ -79,7 +79,7 @@ public:
       resultType = rhs->desc();
   }
   
-EvaluationResult( LocateResult tp = TypeDesc(), DeclarationInfo var = DeclarationInfo() ): resultType( tp ), sourceVariable( var ) {
+EvaluationResult( SimpleTypeImpl::LocateResult tp = TypeDesc(), DeclarationInfo var = DeclarationInfo() ): resultType( tp ), sourceVariable( var ) {
 }
   
   operator TypeDesc () const {
@@ -99,7 +99,7 @@ EvaluationResult( LocateResult tp = TypeDesc(), DeclarationInfo var = Declaratio
     return &resultType.desc();
   }
   
-  operator LocateResult () {
+  operator SimpleTypeImpl::LocateResult () {
     return resultType;
   }
   

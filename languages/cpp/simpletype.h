@@ -135,13 +135,12 @@ public:
   }
   
   static void setGlobalNamespace( TypePointer tp ) {
-  m_globalNamespace = tp;
+    m_globalNamespace = tp;
   }
   
   static void resetGlobalNamespace() {
-  m_globalNamespace = 0;
+    m_globalNamespace = 0;
   }
-  
   
   ///Since many cross-references are possible, this function breaks them all so that all SimpleTypeImpls can free themselves.
   static void destroyStore();
@@ -165,11 +164,11 @@ private:
   }
   
   static void unregisterType( SimpleTypeImpl* tp ) {
-		  TypeStore::iterator it = m_typeStore.find( tp );
-		  if( it != m_typeStore.end() )
-		    m_typeStore.erase( it );
-		  else
-	     m_destroyedStore.erase( tp );
+    TypeStore::iterator it = m_typeStore.find( tp );
+    if( it != m_typeStore.end() )
+      m_typeStore.erase( it );
+    else
+    m_destroyedStore.erase( tp );
   }
 };
 
@@ -200,6 +199,20 @@ class SimpleTypeImpl : public KShared {
   };
 
 public:
+  SimpleTypeImpl( const QStringList& scope ) :  m_resolutionCount(0), m_resolutionFlags(NoFlag), m_scope(scope) {
+    checkTemplateParams();
+    reg();
+  }
+    
+  SimpleTypeImpl( const TypeDesc& desc ) :  m_resolutionCount(0), m_resolutionFlags(NoFlag), m_desc(desc) {
+    m_scope.push_back( m_desc.name() );
+    reg();
+  }
+    
+  SimpleTypeImpl( ) : m_resolutionCount(0), m_resolutionFlags(NoFlag)  {
+    reg();
+  };
+  
   typedef KSharedPtr<SimpleTypeImpl> TypePointer;
   void tracePrepend( const TypeDesc& t ) {
     m_trace.push_front( t );
@@ -216,48 +229,24 @@ public:
       TypeDesc def;
       TypeDesc value;
       int number;
-    TemplateParam() : number(0) {
-    }
-    };
-  private:
-    QMap<int, TemplateParam> m_paramsByNumber;
-    QMap<QString, TemplateParam> m_paramsByName;
-    
-  public:
+      TemplateParam() : number(0) {
+      }
+    };    
     
     TemplateParamInfo( ) {
     }
     
-    virtual bool getParam( TemplateParam& target, QString name ) const {
-      QMap<QString, TemplateParam>::const_iterator it = m_paramsByName.find( name );
-      if( it != m_paramsByName.end() ) {
-        target = *it;
-        return true;
-      }
-      return false;
-    }
+    bool getParam( TemplateParam& target, QString name ) const;
     
-    virtual bool getParam( TemplateParam& target, int number ) const {
-      QMap<int, TemplateParam>::const_iterator it = m_paramsByNumber.find( number );
-      if( it != m_paramsByNumber.end() ) {
-        target = *it;
-        return true;
-      }
-      return false;
-    }
+    bool getParam( TemplateParam& target, int number ) const;
     
-    virtual void removeParam( int number ) {
-      QMap<int, TemplateParam>::iterator it = m_paramsByNumber.find( number );
-      if( it != m_paramsByNumber.end() ) {
-        m_paramsByName.remove( (*it).name );
-        m_paramsByNumber.remove( it );
-      }
-    }
+    void removeParam( int number );
     
-    virtual void addParam( const TemplateParam& param ) {
-      m_paramsByNumber[param.number] = param;
-      m_paramsByName[param.name] = param;
-    }
+    void addParam( const TemplateParam& param );
+
+  private:
+    QMap<int, TemplateParam> m_paramsByNumber;
+    QMap<QString, TemplateParam> m_paramsByName;
   };
   
   int resolutionCount() {
@@ -277,7 +266,6 @@ public:
       NoOp
   };
   
-  typedef CppCodeCompletion::MemberAccessOp MemberAccessOp;
   static CppCodeCompletion* data;
   TypePointer m_masterProxy; ///If this is only a slave of a namespace-proxy, this holds the proxy.
   
@@ -302,13 +290,7 @@ public:
   
   
     ///Sets the parent of the given slave to either this class, or the proxy of this class
-  virtual void setSlaveParent( SimpleTypeImpl& slave ) {
-    if( ! m_masterProxy ) {
-      slave.setParent( this );
-    } else {
-      slave.setParent( m_masterProxy );
-    }
-  }
+  virtual void setSlaveParent( SimpleTypeImpl& slave );
   
   void setMasterProxy( TypePointer t ) {
     m_masterProxy = t;
@@ -323,31 +305,10 @@ public:
     return TemplateParamInfo();
   }
   
-  virtual void parseParams( TypeDesc desc ) {
-    invalidateCache();
-    m_desc = desc;
-	m_desc.clearInstanceInfo();
-  }
+  virtual void parseParams( TypeDesc desc );
   
-  virtual void takeTemplateParams( TypeDesc desc ) {
-    invalidateCache();
-    m_desc.templateParams() = desc.templateParams();
-  }
-  
-  SimpleTypeImpl( const QStringList& scope ) :  m_resolutionCount(0), m_resolutionFlags(NoFlag), m_scope(scope) {
-    checkTemplateParams();
-    reg();
-  }
+  virtual void takeTemplateParams( TypeDesc desc );
     
-  SimpleTypeImpl( const TypeDesc& desc ) :  m_resolutionCount(0), m_resolutionFlags(NoFlag), m_desc(desc) {
-    m_scope.push_back( m_desc.name() );
-    reg();
-  }
-    
-  SimpleTypeImpl( ) : m_resolutionCount(0), m_resolutionFlags(NoFlag)  {
-    reg();
-  };
-  
     ///Returns whether the type is really resolved( corresponds to an item in some model )
   virtual bool hasNode() const {
     return false;
@@ -734,8 +695,7 @@ public:
     return mem;
   };
   
-public:
-  
+
   /**TypeDescs and SimpleTypeImpls usually have a cross-reference, which creates a circular dependency so that they are never freed using KShared. This function breaks the loop, and also breaks all other possible dependency-loops. After this function was called, the type still contains its private information, but can not not be used to resolve anything anymore. This function is called automatically while the destruction of SimpleTypeConfiguration */ 
   virtual void breakReferences();
   
@@ -772,7 +732,7 @@ private:
   TypePointer m_parent;
   
 protected:
-SimpleTypeImpl( SimpleTypeImpl* rhs ) : m_masterProxy( rhs->m_masterProxy ), m_resolutionCount( rhs->m_resolutionCount ), m_resolutionFlags( rhs->m_resolutionFlags ), m_trace( rhs->m_trace ), m_scope( rhs->m_scope ), m_parent( rhs->m_parent ), m_desc( rhs->m_desc )  {
+  SimpleTypeImpl( SimpleTypeImpl* rhs ) : m_masterProxy( rhs->m_masterProxy ), m_resolutionCount( rhs->m_resolutionCount ), m_resolutionFlags( rhs->m_resolutionFlags ), m_trace( rhs->m_trace ), m_scope( rhs->m_scope ), m_parent( rhs->m_parent ), m_desc( rhs->m_desc )  {
    reg();
   }
   
@@ -786,363 +746,7 @@ SimpleTypeImpl( SimpleTypeImpl* rhs ) : m_masterProxy( rhs->m_masterProxy ), m_r
   TypeOfResult searchBases ( const TypeDesc& name );
 };
 
-///Interface that functions should implement
-class SimpleTypeFunctionInterface {
-    ///Since functions can be overloaded, many functions with the same name can exist. Other functions that belong to this one
-    ///should be appended to this.
-  SimpleType m_nextFunction;
-public:
-  
-  SimpleTypeFunctionInterface() {
-  }
-  
-  SimpleTypeFunctionInterface( SimpleTypeFunctionInterface* rhs ) {
-    m_nextFunction = rhs->m_nextFunction;
-  }
-  
-  void clearNextFunctions() {
-    m_nextFunction = SimpleType();
-  }
-  
-  void appendNextFunction( SimpleType func ) {
-    if( !func )return;
-    if( m_nextFunction && m_nextFunction->asFunction() ) {
-      m_nextFunction->asFunction()->appendNextFunction( func );
-    } else {
-      m_nextFunction = func;
-    }
-  }
-  
-  SimpleType nextFunction() {
-    return m_nextFunction;
-  }
-  
-    ///Returns the totally unresolved return-type
-  virtual TypeDesc getReturnType() = 0;
-  
-  virtual QValueList<TypeDesc> getArgumentTypes() = 0;
-  
-  virtual QStringList getArgumentDefaults() = 0;
-  
-  virtual QStringList getArgumentNames() = 0;
-  
-  virtual bool isConst() = 0;
-  
-  virtual QString signature();
-  
-///TODO: This function should locate the correct overloaded method in the chain, fitting the parameters
-    ///should also moved into another class then
-	SimpleTypeImpl* match( const QValueList<SimpleTypeImpl::LocateResult>& /*params*/ ) {
-        //      QValueList<TypeDesc> args = getArgumentTypes();
-    return dynamic_cast<SimpleTypeImpl*>( this );
-  }
-  
-protected:
-  
-  bool containsUndefinedTemplateParam( TypeDesc& desc, SimpleTypeImpl::TemplateParamInfo& paramInfo );
-  
-    ///Tries to match the types, filling implicit template-params into paramInfo
-  void resolveImplicitTypes( TypeDesc& argType, TypeDesc& gottenArgType, SimpleTypeImpl::TemplateParamInfo& paramInfo );
-  
-    ///Tries to match the types, filling implicit template-params into paramInfo
-  void resolveImplicitTypes( TypeDesc::TemplateParams& argTypes, TypeDesc::TemplateParams& gottenArgTypes, SimpleTypeImpl::TemplateParamInfo& paramInfo );
-  
-    ///Tries to match the types, filling implicit template-params into paramInfo
-  void resolveImplicitTypes( QValueList<TypeDesc>& argTypes, QValueList<TypeDesc>& gottenArgTypes, SimpleTypeImpl::TemplateParamInfo& paramInfo );
-};
 
-
-
-
-//typedef SimpleTypeCacheBinder<SimpleTypeImpl> SimpleTypeImpl;
-
-class SimpleTypeCodeModel;
-class SimpleTypeCatalog;
-class SimpleTypeNamespace;
-template <class Base> class SimpleTypeCacheBinder;
-
-typedef SimpleTypeCacheBinder<SimpleTypeCodeModel> SimpleTypeCachedCodeModel;
-typedef SimpleTypeCacheBinder<SimpleTypeCatalog> SimpleTypeCachedCatalog;
-typedef SimpleTypeCacheBinder<SimpleTypeNamespace> SimpleTypeCachedNamespace;
-
-typedef SimpleTypeCachedCodeModel SimpleTypeUsedCodeModel;
-typedef SimpleTypeCachedCatalog SimpleTypeUsedCatalog;
-typedef SimpleTypeCachedNamespace SimpleTypeUsedNamespace;
-
-class SimpleTypeCodeModel : public SimpleTypeImpl {
-private:
-  ItemDom m_item;
-  
-  bool findItem();
-  
-  void init();
-  
-protected:
-  SimpleTypeCodeModel() : SimpleTypeImpl() {
-  };
-  
-public:
-  
-  SimpleTypeCodeModel( SimpleTypeCodeModel* rhs ) : SimpleTypeImpl( rhs ), m_item( rhs->m_item) {
-  }
-    
-  SimpleTypeCodeModel( SimpleTypeImpl* rhs  ) : SimpleTypeImpl( rhs ) {
-    init();
-  }
-    
-  SimpleTypeCodeModel( const QStringList& scope ) : SimpleTypeImpl( scope ) {
-    init();
-  }
-  
-  virtual bool hasNode() const {
-    return (bool)m_item;
-  };
-  
-  virtual QString comment() const {
-    if( m_item ) {
-      return m_item->comment();
-    } else {
-      return "";
-    }
-  };
-  
-  virtual DeclarationInfo getDeclarationInfo();
-  
-  SimpleTypeCodeModel( ItemDom& item );
-  
-  virtual TypePointer clone() {
-    return new SimpleTypeCodeModel( this );
-  }
-  
-  virtual Repository rep() {
-    return CodeModel;
-  }
-  
-  virtual bool isNamespace() const {
-    if( m_item ) {
-      return m_item->isNamespace();
-    } else {
-      return false;
-    }
-  };
-  
-  inline ItemDom& item() {
-    return m_item;
-  }
-  
-  virtual TemplateParamInfo getTemplateParamInfo();
-  
-  virtual const TypeDesc findTemplateParam( const QString& name );
-  
-    /** In case of a class, returns all base-types */
-  virtual QValueList<LocateResult> getBases();
-  
-  ItemDom locateModelContainer( class CodeModel* m, TypeDesc t, ClassDom cnt = ClassDom() );
-  
-protected:
-  
-  struct CodeModelBuildInfo : public TypeBuildInfo {
-    ItemDom m_item;
-    TypeDesc m_desc;
-    TypePointer m_parent;
-  
-    CodeModelBuildInfo( ItemDom item, TypeDesc& desc, TypePointer parent ) : m_item( item ), m_desc( desc ), m_parent( parent ) {
-    }
-    
-    virtual TypePointer build();
-  };
-  
-  virtual MemberInfo findMember( TypeDesc name , MemberInfo::MemberType type = MemberInfo::AllTypes) ;
-};
-
-template <class Base=SimpleTypeImpl>
-class SimpleTypeFunction : public Base, public SimpleTypeFunctionInterface {
-private:
-public:
-SimpleTypeFunction() : Base() {
-}
-  
-SimpleTypeFunction( SimpleTypeFunction<Base>* rhs ) : Base( rhs ), SimpleTypeFunctionInterface( rhs ) {
-}
-  
-  template <class Type>
-    SimpleTypeFunction( Type t ) : Base( t ) {  
-    }
-  
-  virtual ~SimpleTypeFunction() {
-  };
-  
-  virtual SimpleTypeImpl::TypePointer clone() = 0;
-  
-  
-  virtual SimpleTypeImpl::MemberInfo findMember( TypeDesc name , SimpleTypeImpl::MemberInfo::MemberType type ) 
-  {
-    SimpleTypeImpl::MemberInfo ret;
-    if( type & SimpleTypeImpl::MemberInfo::Template ) {
-      TypeDesc s = Base::findTemplateParam( name.name() );
-      if( s ) {
-        ret.memberType = SimpleTypeImpl::MemberInfo::Template;
-        ret.type = s;
-      }
-    }
-    
-    return ret;
-  }
-  
-  
-public:
-  
-  typedef SimpleTypeImpl* SIP;
-	virtual SimpleTypeImpl::LocateResult applyOperator( typename Base::Operator op , QValueList<SimpleTypeImpl::LocateResult> params ) {
-    Debug d("#apply#");
-    if( !d )
-	    return SimpleTypeImpl::LocateResult();
-    
-    if( op == SimpleTypeImpl::ParenOp ) {
-            ///First, try to find an overloaded function matching the parameter-types.
-      SimpleTypeImpl* f = match( params );
-      if( f && f->asFunction() ) {
-        dbg() << "applying Operator " << this->operatorToString( op ) << " to \"" << f->desc().fullNameChain() << "\"" <<  endl;
-        
-        TypeDesc rt = f->asFunction()->getReturnType();
-        SimpleTypeImpl::TemplateParamInfo paramInfo = f->getTemplateParamInfo();
-        if( containsUndefinedTemplateParam( rt, paramInfo ) ) {
-                    /** This is the place where implicit template-function-instatiation takes place.
-                     *  Match the given param-types with the argument-types to resolve new template-params.
-                    */
-          QValueList<TypeDesc> args = getArgumentTypes();
-          QValueList<TypeDesc> paramDescs;
-	        for( QValueList<SimpleTypeImpl::LocateResult>::iterator it = params.begin(); it != params.end(); ++it )
-				paramDescs << (TypeDesc)(*it);
-          resolveImplicitTypes( args, paramDescs, paramInfo );
-                    ///paramInfo now contains the information for all implicit types
-        }
-        
-	      return this->parent()->locateDecType( f->replaceTemplateParams( rt, paramInfo ) );
-      } else {
-        dbg() << "failed to find a fitting overloaded method" << endl;
-      }
-    }
-    return Base::applyOperator( op, params );
-  }   
-};
-
-class SimpleTypeCodeModelFunction;
-typedef SimpleTypeCodeModelFunction SimpleTypeUsedCodeModelFunction;
-
-class SimpleTypeCodeModelFunction : public SimpleTypeFunction<SimpleTypeCodeModel> {
-private:
-  FunctionModel* asFunctionModel() {
-    if( ! &(*item() ) ) return 0;
-    return dynamic_cast<FunctionModel*>( &(*item() ) );
-  }
-public:
-SimpleTypeCodeModelFunction() : SimpleTypeFunction<SimpleTypeCodeModel>() {
-}
-  
-SimpleTypeCodeModelFunction( SimpleTypeCodeModelFunction* rhs ) : SimpleTypeFunction<SimpleTypeCodeModel> ( rhs ) {
-}
-  
-  virtual SimpleTypeImpl::TypePointer clone() {
-    return new SimpleTypeCodeModelFunction( this );
-  }   
-  
-SimpleTypeCodeModelFunction( ItemDom item ) : SimpleTypeFunction<SimpleTypeCodeModel>( item ) {
-}
-  
-  virtual TypeDesc getReturnType() {
-    if( item() ) {
-      if( FunctionModel* m = dynamic_cast<FunctionModel*>( &(*item() ) ) ) {
-        return m->resultType();
-      }
-    }
-    
-    return TypeDesc();
-  }
-  
-  virtual bool isConst() {
-    if( asFunctionModel() )
-      return asFunctionModel()->isConstant();
-    
-    return false;
-  }
-  
-  virtual QValueList<TypeDesc> getArgumentTypes() {
-    QValueList<TypeDesc> ret;
-    
-    if( item() ) {
-      if( FunctionModel* m = dynamic_cast<FunctionModel*>( &(*item() ) ) ) {
-        ArgumentList l = m->argumentList();
-        for( ArgumentList::iterator it = l.begin(); it != l.end(); ++it )
-          ret << TypeDesc( (*it)->type() );
-      }
-    }
-    
-    return ret;
-  }
-  
-  virtual QStringList getArgumentNames() {
-    QStringList ret;
-    
-    if( item() ) {
-      if( FunctionModel* m = dynamic_cast<FunctionModel*>( &(*item() ) ) ) {
-        ArgumentList l = m->argumentList();
-        for( ArgumentList::iterator it = l.begin(); it != l.end(); ++it )
-          ret << (*it)->name();
-      }
-    }
-    
-    return ret;
-  }
-  
-  virtual QStringList getArgumentDefaults() {
-    QStringList ret;
-    
-    if( item() ) {
-      if( FunctionModel* m = dynamic_cast<FunctionModel*>( &(*item() ) ) ) {
-        ArgumentList l = m->argumentList();
-        for( ArgumentList::iterator it = l.begin(); it != l.end(); ++it )
-          ret << (*it)->defaultValue();
-      }
-    }
-    
-    return ret;
-  }
-  
-struct CodeModelFunctionBuildInfo : public TypeBuildInfo {
-  FunctionList m_items;
-  TypeDesc m_desc;
-  TypePointer m_parent;
-CodeModelFunctionBuildInfo( FunctionList items, TypeDesc& desc, TypePointer parent ) : m_items( items ), m_desc( desc ), m_parent( parent ) {
-}
-CodeModelFunctionBuildInfo( FunctionDefinitionList items, TypeDesc& desc, TypePointer parent ) : m_desc( desc ), m_parent( parent ) {
-  
-  for( FunctionDefinitionList::iterator it = items.begin(); it != items.end(); ++it ) {
-    m_items << model_cast<FunctionDom>( *it );
-  }
-}
-  
-  virtual TypePointer build() {
-    QValueList<TypePointer> ret;
-    TypePointer last;
-    for( FunctionList::iterator it = m_items.begin(); it != m_items.end(); ++it ) {
-      TypePointer tp = new SimpleTypeUsedCodeModelFunction( model_cast<ItemDom>( *it ) );
-      tp->takeTemplateParams( m_desc );
-      tp->descForEdit().increaseFunctionDepth();
-      tp->setParent( m_parent->bigContainer() );
-      if( last && last->asFunction() ) last->asFunction()->appendNextFunction( SimpleType( tp) );
-      last = tp;
-      ret << tp;
-    }
-    
-    if( ret.isEmpty() ) {
-      dbg() << "error" << endl;
-      return TypePointer();
-    } else
-      return ret.front();
-  }
-};
-};
 
 /**
 The SimpleTypeCodeModel and SimpleTypeCatalog can represent namespaces too,
@@ -1347,95 +951,6 @@ protected:
   virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type = MemberInfo::AllTypes);
 };
 
-
-
-
-
-class SimpleTypeCatalogFunction;
-typedef SimpleTypeCatalogFunction SimpleTypeUsedCatalogFunction;
-
-class SimpleTypeCatalogFunction : public SimpleTypeFunction<SimpleTypeCatalog> {
-private:
-public:
-SimpleTypeCatalogFunction() : SimpleTypeFunction<SimpleTypeCatalog>() {
-}
-  
-SimpleTypeCatalogFunction( Tag tag ) : SimpleTypeFunction<SimpleTypeCatalog>( tag ) {
-}
-  
-SimpleTypeCatalogFunction( SimpleTypeCatalogFunction* rhs ) : SimpleTypeFunction<SimpleTypeCatalog>( rhs )  {
-}
-  
-  virtual SimpleTypeImpl::TypePointer clone() {
-    return new SimpleTypeCatalogFunction( this );
-  }   
-  
-struct CatalogFunctionBuildInfo : public TypeBuildInfo {
-  QValueList<Tag> m_tags;
-  TypeDesc m_desc;
-  TypePointer m_parent;
-CatalogFunctionBuildInfo( QValueList<Tag> tags, TypeDesc& desc, TypePointer parent ) : m_tags( tags ), m_desc( desc ), m_parent( parent ) {
-}
-  
-  virtual TypePointer build() {
-    QValueList<TypePointer> ret;
-    TypePointer last;
-    for( QValueList<Tag>::iterator it = m_tags.begin(); it != m_tags.end(); ++it ) {
-      TypePointer tp = new SimpleTypeUsedCatalogFunction( *it );
-      tp->takeTemplateParams( m_desc );
-      tp->descForEdit().increaseFunctionDepth();
-      if( m_parent ) tp->setParent( m_parent->bigContainer() );
-      if( last && last->asFunction() ) last->asFunction()->appendNextFunction( SimpleType( tp) );
-      last = tp;
-      ret << tp;
-    }
-    
-    if( ret.isEmpty() ) {
-      dbg() << "error" << endl;
-      return TypePointer();
-    }
-    return ret.front();
-  }
-};
-  
-  virtual TypeDesc getReturnType() {
-    if( tag() ) {
-      return tagType( tag() );
-    }
-    
-    return TypeDesc();
-  }
-  
-  virtual bool isConst () {
-    Tag t = tag();
-    CppFunction<Tag> tagInfo( t );
-    return tagInfo.isConst();
-  }
-  
-  
-  virtual QStringList getArgumentDefaults() {
-    return QStringList();
-  }
-  
-  virtual QStringList getArgumentNames() {
-    QStringList ret;
-    Tag t = tag();
-    CppFunction<Tag> tagInfo( t );
-    return tagInfo.argumentNames();
-  }
-  
-  virtual QValueList<TypeDesc> getArgumentTypes() {
-    QValueList<TypeDesc> ret;
-    Tag t = tag();
-    CppFunction<Tag> tagInfo( t );
-    QStringList arguments = tagInfo.arguments();
-    for( QStringList::iterator it = arguments.begin(); it != arguments.end(); ++it )
-      ret << TypeDesc( *it );
-    return ret;
-  }
-};
-
-typedef SimpleTypeImpl::LocateResult LocateResult;
 
 #endif 
 // kate: indent-mode csands; tab-width 4;

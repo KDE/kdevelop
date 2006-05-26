@@ -119,7 +119,7 @@ EvaluationResult ArrowOperator::unaryApply( EvaluationResult param, const QValue
     return param;
   } else {
     if( param->resolved() ) {
-      return param->resolved()->applyOperator( SimpleTypeImpl::ArrowOp , convertList<LocateResult, EvaluationResult>(innerParams) );
+      return param->resolved()->applyOperator( SimpleTypeImpl::ArrowOp , convertList<SimpleTypeImpl::LocateResult, EvaluationResult>(innerParams) );
     } else {
       kdDebug( 9007 ) << "failed to apply arrow-operator to unresolved type" << endl;
       return EvaluationResult();
@@ -185,7 +185,7 @@ EvaluationResult IndexOperator::unaryApply( EvaluationResult param, const QValue
     return param;
   } else {
     if( param->resolved() ) {
-      return param->resolved()->applyOperator( SimpleTypeImpl::IndexOp, convertList<LocateResult>( innerParams ) );
+      return param->resolved()->applyOperator( SimpleTypeImpl::IndexOp, convertList<SimpleTypeImpl::LocateResult>( innerParams ) );
     } else {
       kdDebug( 9007 ) << "failed to apply index-operator to unresolved type" << endl;
       return EvaluationResult();
@@ -196,7 +196,7 @@ EvaluationResult IndexOperator::unaryApply( EvaluationResult param, const QValue
 EvaluationResult ParenOperator::unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) {
   if( param ) {
     if( param->resolved() ) {
-      return param->resolved()->applyOperator( SimpleTypeImpl::ParenOp, convertList<LocateResult>(innerParams) );
+      return param->resolved()->applyOperator( SimpleTypeImpl::ParenOp, convertList<SimpleTypeImpl::LocateResult>(innerParams) );
     } else {
       kdDebug( 9007 ) << "failed to apply paren-operator to unresolved type" << endl;
       return EvaluationResult();
@@ -374,7 +374,7 @@ dbg() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" 
   {
     currentExpr = split.front();
     
-    LocateResult type = searchIn->locateDecType( currentExpr );
+    SimpleTypeImpl::LocateResult type = searchIn->locateDecType( currentExpr );
     if ( type )
     {
       if( !split.isEmpty() ) split.pop_front();

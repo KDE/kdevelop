@@ -30,29 +30,7 @@ typedef KSharedPtr<SimpleTypeImpl> TypePointer;
 class TypeDesc {
 public:
  typedef QValueList<TypeDescPointer> TemplateParams;
- static const char* functionMark;
-
-	///These flags have no internal use, they are set and read from the outside
-	enum Flags {
-		Standard = 0,
-		ResolutionTried = 1  ///means that the resolution was tried, and should not be retried.
-	};
-private:
- QString m_cleanName;
- int m_pointerDepth;
- int m_functionDepth;
- TemplateParams m_templateParams;
- TypeDescPointer m_nextType;
- TypePointer m_resolved;
- TypeDecoration m_dec;
- Flags m_flags;
-
- 
- void init( QString stri );
-public:
-	///clears the current template-parameters, and extracts those from the given string
- void takeTemplateParams( const QString& string );
- 
+  
  TypeDesc( const QString& name = "" );
  
  TypeDesc( const TypeDesc& rhs );
@@ -141,7 +119,10 @@ public:
  TemplateParams& templateParams();
  
  const TemplateParams& templateParams() const;
- 
+
+ ///clears the current template-parameters, and extracts those from the given string
+ void takeTemplateParams( const QString& string );
+  
  /**makes all references/pointers private, so everything about this structure may be changed without side-effects*/
  TypeDesc& makePrivate();
  
@@ -172,18 +153,41 @@ public:
  
  int functionDepth() const;
 
-	void setFlag( Flags flag ) {
-		m_flags = (Flags) (m_flags | flag);
-	}
-
-	bool hasFlag( Flags flag ) {
-		return (bool)( m_flags & flag );
-	}
+ static const char* functionMark;
+  
+    ///These flags have no internal use, they are set and read from the outside
+ enum Flags {
+    Standard = 0,
+      ResolutionTried = 1  ///means that the resolution was tried, and should not be retried.
+ };
+  
+  void setFlag( Flags flag ) {
+      m_flags = (Flags) (m_flags | flag);
+  }
+  
+  bool hasFlag( Flags flag ) {
+      return (bool)( m_flags & flag );
+  }
 	
 	///instance-information consists of things like the pointer-depth and the decoration
  void takeInstanceInfo( const TypeDesc& rhs );
  
  void clearInstanceInfo();
+
+  
+private:
+  QString m_cleanName;
+  int m_pointerDepth;
+  int m_functionDepth;
+  TemplateParams m_templateParams;
+  TypeDescPointer m_nextType;
+  TypePointer m_resolved;
+  TypeDecoration m_dec;
+  Flags m_flags;
+  
+  
+  void init( QString stri );
+  
 };
 
 class TypeDescShared : public TypeDesc, public KShared {
