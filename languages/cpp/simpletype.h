@@ -25,6 +25,8 @@
 #include "cpp_tags.h"
 #include "codemodel.h"
 
+#define NOBACKTRACE
+
 extern QString globalCurrentFile;
 
 using namespace CompletionDebug;
@@ -151,21 +153,22 @@ private:
   mutable TypePointer m_type;
   mutable bool m_resolved;
   static TypePointer m_globalNamespace; ///this is bad, but with the current parser we can't clearly determine the correct global-namespace for each class/file
-  static bool m_unregistered;
   typedef std::set<SimpleTypeImpl*> TypeStore ;
   static TypeStore m_typeStore; ///This is necessary because TypeDescs ind SimpleTypeImpls can have cross-references, and thereby make themselves unreleasable, so each SimpleTypeImpl is stored in this list and destroyed at once by SimpleTypeConfiguration( it breaks all references ) 
-  
-  
+  static TypeStore m_destroyedStore;
+
   static void registerType( SimpleTypeImpl* tp ) {
     if( !tp ) return;
     m_typeStore.insert( tp );
   }
   
   static void unregisterType( SimpleTypeImpl* tp ) {
-    m_typeStore.erase( tp );
-    m_unregistered = true;
+		  TypeStore::iterator it = m_typeStore.find( tp );
+		  if( it != m_typeStore.end() )
+		    m_typeStore.erase( it );
+		  else
+	     m_destroyedStore.erase( tp );
   }
-  
 };
 
 
@@ -196,7 +199,6 @@ class SimpleTypeImpl : public KShared {
 
 public:
   typedef KSharedPtr<SimpleTypeImpl> TypePointer;
-  
   void tracePrepend( const TypeDesc& t ) {
     m_trace.push_front( t );
   }
@@ -322,6 +324,7 @@ public:
   virtual void parseParams( TypeDesc desc ) {
     invalidateCache();
     m_desc = desc;
+	m_desc.clearInstanceInfo();
   }
   
   virtual void takeTemplateParams( TypeDesc desc ) {
@@ -384,8 +387,21 @@ private:
   void setResolutionCount( int val ) {
     m_resolutionCount = val;
   }
-  
+#ifndef NOBACKTRACE
+	QString create_bt;
+#endif
+	
+	inline QString createInfo() const {
+#ifndef NOBACKTRACE
+		return "\n"+create_bt+"\n";
+#endif
+		return "";
+	}
+	
   void reg() {
+#ifndef NOBACKTRACE
+	  create_bt = kdBacktrace();
+#endif
     SimpleType::registerType( this );
   }
   
@@ -442,10 +458,6 @@ public:
     m_desc.setPointerDepth(pc);
   }
   
-  SimpleType getFunctionReturnType( QString functionName, QValueList<SimpleType> params = QValueList<SimpleType>() );
-  
-    ///Tries to apply the operator and returns the new type. If it fails, it returns an invalid type.
-  virtual SimpleType applyOperator( Operator op , QValueList<SimpleType> params = QValueList<SimpleType>() );
   
     ///returns the scope(including own name) as string
   QString str() const {
@@ -469,20 +481,29 @@ public:
     return !m_desc.templateParams().isEmpty() || ( m_parent && m_parent->usingTemplates() );
   }
   
-    /** In case of a class, returns all base-types */
-  virtual QValueList<SimpleType> getBases() {
-    return QValueList<SimpleType>();
-  }
   
     ///An abstract class for building types lazily
   struct TypeBuildInfo : public KShared {
+    TypePointer buildCached() {
+	    if( m_cache)
+		    return m_cache;
+	    else {
+		    m_cache = build();
+		    return m_cache;
+	    }
+	}
+	  
     virtual TypePointer build() = 0;
+	  
     virtual ~TypeBuildInfo() {
     }
+	  
     TypeBuildInfo() {
     }
   private:
-    
+
+	TypePointer m_cache;
+	  
     TypeBuildInfo& operator =( const TypeBuildInfo& rhs ) {
       Q_UNUSED(rhs);
       return *this;
@@ -541,7 +562,7 @@ public:
       if( !m_build)
         return TypePointer();
       else {
-        TypePointer r = m_build->build();
+        TypePointer r = m_build->buildCached();
         m_build = 0;
         return r;
       }
@@ -577,33 +598,129 @@ public:
     ///replaces template-parameters from the given structure with their value-types
   TypeDesc replaceTemplateParams( TypeDesc desc, TemplateParamInfo& paramInfo );
   TypeDesc resolveTemplateParams( TypeDesc desc, LocateMode mode = Normal );
-  
+
+	class LocateResult {
+		TypeDesc m_desc;
+		int m_resolutionCount;
+		ResolutionFlags m_flags;
+	
+	public:
+		/*enum ResolutionFlags {
+			NoFlag = 0,
+			HadTypedef = 1,
+			HadTemplate = 2,
+			HadAlias = 3
+		};*/
+	public:
+
+		LocateResult( const TypeDesc& desc = TypeDesc() ) : m_desc( desc ), m_resolutionCount(0), m_flags( NoFlag) {
+		}
+
+		LocateResult& operator = ( const TypeDesc& rhs ) {
+			m_desc = rhs;
+			return *this;
+		}
+		
+		operator TypeDesc() const {
+			return m_desc;
+		}
+
+		TypeDesc& desc() {
+			return m_desc;
+		}
+
+		operator bool() const {
+			return (bool)m_desc;
+		}
+
+		bool operator >( const LocateResult& rhs ) const {
+			return m_resolutionCount > rhs.m_resolutionCount;
+		}
+
+		const TypeDesc* operator ->() const {
+			return &m_desc;
+		}
+
+		TypeDesc* operator ->() {
+			return &m_desc;
+		}
+
+		int resolutionCount() const {
+			return m_resolutionCount;
+		}
+
+		void increaseResolutionCount() {
+			m_resolutionCount++;
+		}
+
+		void addResolutionFlag( ResolutionFlags flag ) {
+			m_flags = addFlag(flag, m_flags);
+		}
+
+		bool hasResolutionFlag( ResolutionFlags flag ) const {
+			return (bool) ( m_flags & flag );
+		}
+	};
+	
     /**By default templates are included while the resolution, so when the type should be addressed from
     outside of the class, ExcludeTemplates should be set as LocateMode, since templates can not be directly accessed    from the outside.
     The resulting type's template-params may not be completely resolved, but can all be resolved locally by that type*/
-  
-  SimpleType locateType( TypeDesc name , LocateMode mode = Normal, int dir = 0 ,  MemberInfo::MemberType typeMask = bitInvert( addFlag( MemberInfo::Variable, MemberInfo::Function ) ) ) ;
+	LocateResult locateDecType( TypeDesc desc , LocateMode mode = Normal, int dir = 0 ,  MemberInfo::MemberType typeMask = bitInvert( addFlag( MemberInfo::Variable, MemberInfo::Function ) ) ) {
+		TypeDesc td = desc;
+		td.clearInstanceInfo();
+		LocateResult r = locateType( td, mode, dir, typeMask );
+		r->takeInstanceInfo( desc );
+		return r;
+	}
+	
+	//protected:
+
+  LocateResult locateType( TypeDesc name , LocateMode mode = Normal, int dir = 0 ,  MemberInfo::MemberType typeMask = bitInvert( addFlag( MemberInfo::Variable, MemberInfo::Function ) ) ) ;
+public:
+
+	LocateResult getFunctionReturnType( QString functionName, QValueList<LocateResult> params = QValueList<LocateResult>() );
+	
+    ///Tries to apply the operator and returns the new type. If it fails, it returns an invalid type.
+	virtual LocateResult applyOperator( Operator op , QValueList<LocateResult> params = QValueList<LocateResult>() );
+	
+	
+    /** In case of a class, returns all base-types */
+	virtual QValueList<LocateResult> getBases() {
+		return QValueList<LocateResult>();
+	}
+	
     ///This pair contains the found type, and additionally the member-information that helped finding the type
   struct TypeOfResult {
-    SimpleType type;
+    LocateResult type;
     DeclarationInfo decl;
     
-  TypeOfResult( SimpleType t = SimpleType(), DeclarationInfo d = DeclarationInfo() ) : type( t ), decl( d ) {
+  TypeOfResult( LocateResult t = LocateResult(), DeclarationInfo d = DeclarationInfo() ) : type( t ), decl( d ) {
   }
     
-    SimpleTypeImpl* operator -> () {
-      return &(*type);
+    TypeDesc* operator -> () {
+	    return &type.desc();
     }
     
-    operator SimpleType() {
+    operator TypeDesc() {
       return type;
     }
-    
+
+	  ///should be removed
+	operator SimpleType() {
+		if( type->resolved() ) {
+			return SimpleType( type->resolved() );
+		} else {
+			return SimpleType();
+		}
+	}
+
     operator bool() {
       return (bool)type;
     }
   };
-  
+
+public:
+	
   virtual TypeOfResult typeOf( const QString& name, MemberInfo::MemberType typ = addFlag( MemberInfo::Function, MemberInfo::Variable) );  
   
   
@@ -637,7 +754,7 @@ public:
   
     ///returns all information that is available constantly
   QString describe() const {
-    QString description =  m_desc.fullName() + " (" + m_scope.join( "::" ) + ")";
+	QString description =  m_desc.fullName() + " (" + m_scope.join( "::" ) + ")" + createInfo();
     return description;
   }
     
@@ -712,7 +829,7 @@ public:
   
 ///TODO: This function should locate the correct overloaded method in the chain, fitting the parameters
     ///should also moved into another class then
-	SimpleTypeImpl* match( const QValueList<SimpleType>& /*params*/ ) {
+	SimpleTypeImpl* match( const QValueList<SimpleTypeImpl::LocateResult>& /*params*/ ) {
         //      QValueList<TypeDesc> args = getArgumentTypes();
     return dynamic_cast<SimpleTypeImpl*>( this );
   }
@@ -815,7 +932,7 @@ public:
   virtual const TypeDesc findTemplateParam( const QString& name );
   
     /** In case of a class, returns all base-types */
-  virtual QValueList<SimpleType> getBases();
+  virtual QValueList<LocateResult> getBases();
   
   ItemDom locateModelContainer( class CodeModel* m, TypeDesc t, ClassDom cnt = ClassDom() );
   
@@ -873,10 +990,10 @@ SimpleTypeFunction( SimpleTypeFunction<Base>* rhs ) : Base( rhs ), SimpleTypeFun
 public:
   
   typedef SimpleTypeImpl* SIP;
-  virtual SimpleType applyOperator( typename Base::Operator op , QValueList<SimpleType> params ) {
+	virtual SimpleTypeImpl::LocateResult applyOperator( typename Base::Operator op , QValueList<SimpleTypeImpl::LocateResult> params ) {
     Debug d("#apply#");
     if( !d )
-      return SimpleType();
+	    return SimpleTypeImpl::LocateResult();
     
     if( op == SimpleTypeImpl::ParenOp ) {
             ///First, try to find an overloaded function matching the parameter-types.
@@ -892,13 +1009,13 @@ public:
                     */
           QValueList<TypeDesc> args = getArgumentTypes();
           QValueList<TypeDesc> paramDescs;
-          for( QValueList<SimpleType>::iterator it = params.begin(); it != params.end(); ++it )
-            paramDescs << (*it)->desc();
+	        for( QValueList<SimpleTypeImpl::LocateResult>::iterator it = params.begin(); it != params.end(); ++it )
+				paramDescs << (TypeDesc)(*it);
           resolveImplicitTypes( args, paramDescs, paramInfo );
                     ///paramInfo now contains the information for all implicit types
         }
         
-        return this->parent()->locateType( f->replaceTemplateParams( rt, paramInfo ) );
+	      return this->parent()->locateType( f->replaceTemplateParams( rt, paramInfo ) );
       } else {
         dbg() << "failed to find a fitting overloaded method" << endl;
       }
@@ -1110,8 +1227,8 @@ dbg() << "\"" << str() << "\": cloning namespace" << endl;
   m_activeSlaves = ns->m_activeSlaves;
 }
   
-  bool isANamespace( SimpleType& t ) {
-    return dynamic_cast<SimpleTypeNamespace*>(&(*t)) != 0;
+  bool isANamespace( SimpleTypeImpl* t ) {
+    return dynamic_cast<SimpleTypeNamespace*>(t) != 0;
   }
   
   
@@ -1203,7 +1320,7 @@ public:
     return (bool)m_tag;
   };
   
-  virtual QValueList<SimpleType> getBases();
+  virtual QValueList<LocateResult> getBases();
   
   virtual TemplateParamInfo getTemplateParamInfo();
   
@@ -1315,7 +1432,7 @@ CatalogFunctionBuildInfo( QValueList<Tag> tags, TypeDesc& desc, TypePointer pare
   }
 };
 
-
+typedef SimpleTypeImpl::LocateResult LocateResult;
 
 #endif 
 // kate: indent-mode csands; tab-width 4;

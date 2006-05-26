@@ -27,15 +27,15 @@ public:
 SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), secondaryActive( b->secondaryActive ),     primaryActive( b->primaryActive ), m_locateCache( b->m_locateCache ), m_memberCache( b->m_memberCache), m_basesCache( b->m_basesCache )  {
 }
   
-SimpleTypeCacheBinder() : Base(), secondaryActive( true ), primaryActive( true ) {
-}
+	SimpleTypeCacheBinder() : Base(), secondaryActive( true ), primaryActive( true ), m_haveBasesCache(false) {
+	}
   
   template<class InitType> 
-    SimpleTypeCacheBinder( InitType t ) : Base ( t ), secondaryActive( true ), primaryActive( true ) {
+	SimpleTypeCacheBinder( InitType t ) : Base ( t ), secondaryActive( true ), primaryActive( true ), m_haveBasesCache(false) {
     }
   
   template<class InitType1, class InitType2> 
-    SimpleTypeCacheBinder( InitType1 t, InitType2 t2 ) : Base ( t, t2 ), secondaryActive( true ), primaryActive( true ) {
+	SimpleTypeCacheBinder( InitType1 t, InitType2 t2 ) : Base ( t, t2 ), secondaryActive( true ), primaryActive( true ), m_haveBasesCache(false) {
     }
   
   using Base::LocateMode;
@@ -51,12 +51,12 @@ SimpleTypeCacheBinder() : Base(), secondaryActive( true ), primaryActive( true )
     
     
   LocateDesc( TypeDesc name, SimpleTypeImpl::LocateMode mode, int dir, SimpleTypeImpl::MemberInfo::MemberType typeMask )  : mname( name ), mmode( mode ) , mdir( dir ) , mtypeMask( typeMask ) {
-    fullName = mname.fullNameChain();
+    fullName = mname.fullTypeStructure();
   }
     
     int compare( const LocateDesc& rhs ) const {
-      QString a = fullName; //mname.fullNameChain();
-      QString b = rhs.fullName; //mname.fullNameChain();
+      QString a = fullName;
+      QString b = rhs.fullName;
       if( a != b ) {
         if( a < b )
           return -1;
@@ -146,12 +146,13 @@ SimpleTypeCacheBinder() : Base(), secondaryActive( true ), primaryActive( true )
   };
   
   
-  typedef QMap<LocateDesc, SimpleType> LocateMap;
+	typedef QMap<LocateDesc, SimpleTypeImpl::LocateResult> LocateMap;
   typedef QMap<MemberFindDesc, SimpleTypeImpl::MemberInfo > MemberMap;
 private:
   LocateMap m_locateCache;
   MemberMap m_memberCache;
-  QValueList<SimpleType> m_basesCache;
+	QValueList<SimpleTypeImpl::LocateResult> m_basesCache;
+	bool m_haveBasesCache;
 public:
   
   virtual SimpleTypeImpl::MemberInfo findMember( TypeDesc name , SimpleTypeImpl::MemberInfo::MemberType type )  {
@@ -173,7 +174,7 @@ public:
   }
   
   
-  virtual SimpleType locateType( TypeDesc name , SimpleTypeImpl::LocateMode mode, int dir,  SimpleTypeImpl::MemberInfo::MemberType typeMask )
+virtual SimpleTypeImpl::LocateResult locateType( TypeDesc name , SimpleTypeImpl::LocateMode mode, int dir,  SimpleTypeImpl::MemberInfo::MemberType typeMask )
   {
     if( !secondaryActive ) return  Base::locateType( name, mode, dir, typeMask );
     LocateDesc desc( name, mode, dir, typeMask );
@@ -185,7 +186,7 @@ public:
       dbg() << "\"" << Base::str() << "\" located \"" << name.fullNameChain() << "\" from the cache" << endl;
       return *it;
     } else {
-      SimpleType t = Base::locateType( name, mode, dir, typeMask );
+	  SimpleTypeImpl::LocateResult t = Base::locateType( name, mode, dir, typeMask );
       m_locateCache[ desc ] = t;
             /*typename LocateMap::iterator it = m_locateCache.find( desc );
             if( it == m_locateCache.end() ) dbg() << "\"" << Base::str() << "\"remap failed with \""<< name.fullNameChain() << "\"" << endl;*/
@@ -193,12 +194,15 @@ public:
     }
   }
   
-  virtual QValueList<SimpleType> getBases() {
-    if( !m_basesCache.isEmpty() ) {
+	virtual QValueList<SimpleTypeImpl::LocateResult> getBases() {
+    if( m_haveBasesCache ) {
       dbg() << "\"" << Base::str() << "\" took base-info from the cache" << endl;
       return m_basesCache;
-    } else
-      return Base::getBases();
+    } else {
+	    m_basesCache = Base::getBases();
+	    m_haveBasesCache = true;
+	    return m_basesCache;
+    }
   }
 protected:
   
@@ -213,7 +217,7 @@ protected:
   virtual void invalidateSecondaryCache() {
         //if( !m_locateCache.isEmpty() ) dbg() << "\"" << Base::str() << "\" secondary caches cleared" << endl;
     m_locateCache.clear();
-    m_basesCache.clear();
+	  m_haveBasesCache = false;
   }
   
   virtual void setSecondaryCacheActive( bool active ) {

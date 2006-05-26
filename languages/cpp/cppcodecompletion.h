@@ -47,6 +47,8 @@ class SimpleTypeConfiguration;
 class TypeDesc;
 struct PopupFillerHelpStruct;
 struct PopupClassViewFillerHelpStruct;
+class SimpleTypeImpl;
+typedef KSharedPtr<SimpleTypeImpl> TypePointer;
 
 
 struct DeclarationInfo {
@@ -196,7 +198,7 @@ private:
 	bool correctAccessOp( QStringList ptrList, MemberAccessOp accessOp );
     bool correctAccessOpAccurate( QStringList ptrList, MemberAccessOp accessOp );    
 
-    QString buildSignature( SimpleType currType );
+    QString buildSignature( TypePointer currType );
     SimpleType typeOf( QValueList<Tag>& tags, MemberAccessOp accessOp );
     
 	/// @todo remove isInstance

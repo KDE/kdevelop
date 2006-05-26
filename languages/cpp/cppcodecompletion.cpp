@@ -172,6 +172,7 @@ public:
 	}
 };
 
+
 class CppCodeCompletion::EvaluationResult
 {
 public:
@@ -184,21 +185,40 @@ public:
 	
 	EvaluationResult( const EvaluationResult& rhs ) : resultType( rhs.resultType), expr( rhs.expr ), sourceVariable( rhs.sourceVariable ) {
 	}
-	SimpleType resultType; ///The resulting type
+	LocateResult resultType; ///The resulting type
 	
 	ExpressionInfo expr; ///Information about the expression that was processed
 	
 	DeclarationInfo sourceVariable; ///If the type comes from a variable, this stores Information about it
-	
-	EvaluationResult( SimpleType tp = SimpleType(), DeclarationInfo var = DeclarationInfo() ): resultType( tp ), sourceVariable( var ) {
+
+	///should be removed
+	EvaluationResult( SimpleType rhs ) {
+		if( rhs.get() != 0 )
+			resultType = rhs->desc();
+	}
+
+	EvaluationResult( LocateResult tp = TypeDesc(), DeclarationInfo var = DeclarationInfo() ): resultType( tp ), sourceVariable( var ) {
 	}
 	
-	operator SimpleType () const {
+	operator TypeDesc () const {
+		return (TypeDesc)resultType;
+	}
+
+	///This must be removed
+	operator SimpleType() const {
+		if( resultType->resolved() ) {
+			return SimpleType( resultType->resolved() );
+		} else {
+			return SimpleType( new SimpleTypeImpl( (TypeDesc)resultType ) );
+		}
+	}
+	
+	TypeDesc* operator -> () {
+		return &resultType.desc();
+	}
+
+	operator LocateResult () {
 		return resultType;
-	}
-	
-	SimpleTypeImpl* operator -> () {
-		return &(*resultType);
 	}
 	
 	operator bool() const {
@@ -526,7 +546,7 @@ QString Operator::printTypeList( QValueList<EvaluationResult>& lst )
 {
 	QString ret;
 	for( QValueList<EvaluationResult>::iterator it = lst.begin(); it != lst.end(); ++it ) {
-		ret += "\"" + (*it)->fullType() + "\", ";
+		ret += "\"" + (*it)->fullNameChain() + "\", ";
 	}
 	ret.truncate( ret.length() - 3 );
 	return ret;
@@ -550,8 +570,18 @@ public:
 ArrowOperator() : UnaryOperator( 17, "->", "arrow-operator", Operator::Left ) {
 }
 	
-	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) { 
-		return param->applyOperator( SimpleTypeImpl::ArrowOp , convertList<SimpleType, EvaluationResult>(innerParams) );
+	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) {
+		if( param->pointerDepth() > 0 ) {
+			param->decreasePointerDepth();
+			return param;
+		} else {
+			if( param->resolved() ) {
+				return param->resolved()->applyOperator( SimpleTypeImpl::ArrowOp , convertList<LocateResult, EvaluationResult>(innerParams) );
+			} else {
+				kdDebug( 9007 ) << "failed to apply arrow-operator to unresolved type" << endl;
+				return EvaluationResult();
+			}
+		};
 	}
 };
 
@@ -565,7 +595,17 @@ StarOperator() : UnaryOperator( 15, "*", "star-operator", Operator::Right ) { //
 }
 	
 	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) { 
-		return param->applyOperator( SimpleTypeImpl::StarOp );
+		if( param->pointerDepth() > 0 ) {
+			param->decreasePointerDepth();
+			return param;
+		} else {
+			if( param->resolved() ) {
+				return param->resolved()->applyOperator( SimpleTypeImpl::StarOp );
+			} else {
+				kdDebug( 9007 ) << "failed to apply star-operator to unresolved type" << endl;
+				return EvaluationResult();
+			}
+		};
 	}
 };
 
@@ -576,8 +616,9 @@ public:
 AddressOperator() : UnaryOperator( 16, "&", "address-operator", Operator::Right ) {
 }
 	
-	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) { 
-		return param->applyOperator( SimpleTypeImpl::AddrOp );
+	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) {
+		param->setPointerDepth( param->pointerDepth() + 1 );
+		return param;
 	}
 };
 
@@ -628,7 +669,17 @@ IndexOperator() : UnaryParenOperator( 17, "[]", "index-operator", Operator::Left
 	}
 	
 	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) {
-		return param->applyOperator( SimpleTypeImpl::IndexOp, convertList<SimpleType>( innerParams ) );
+		if( param->pointerDepth() > 0 ) {
+			param->decreasePointerDepth();
+			return param;
+		} else {
+			if( param->resolved() ) {
+				return param->resolved()->applyOperator( SimpleTypeImpl::IndexOp, convertList<LocateResult>( innerParams ) );
+			} else {
+				kdDebug( 9007 ) << "failed to apply index-operator to unresolved type" << endl;
+				return EvaluationResult();
+			}
+		};
 	}
 };
 
@@ -646,7 +697,13 @@ ParenOperator() : UnaryParenOperator( 16, "()", "paren-operator", Operator::Left
 	
 	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) {
 		if( param ) {
-			return param->applyOperator( SimpleTypeImpl::ParenOp, convertList<SimpleType>(innerParams) );
+			if( param->resolved() ) {
+				return param->resolved()->applyOperator( SimpleTypeImpl::ParenOp, convertList<LocateResult>(innerParams) );
+			} else {
+				kdDebug( 9007 ) << "failed to apply paren-operator to unresolved type" << endl;
+				return EvaluationResult();
+			}
+			
 		} else {
 			return innerParams[0];
 		}
@@ -656,23 +713,6 @@ ParenOperator() : UnaryParenOperator( 16, "()", "paren-operator", Operator::Left
 RegisterOperator< ParenOperator > ParenReg( AllOperators );  ///This registers the operator to the list of all operators
 
 
-
-class NeutralParenOperator : public UnaryParenOperator {
-public:
-NeutralParenOperator() : UnaryParenOperator( 16, "()", "neutral-paren-operator", Operator::Neutral ) {
-}
-	
-	virtual EvaluationResult unaryApply( EvaluationResult /*param*/, const QValueList<EvaluationResult>& innerParams ) {
-		if( innerParams.count() != 1 ) {
-			log( QString( "wrong count of inner parameters" ).arg( innerParams.count() ) );
-			return SimpleType();
-		} else {
-			return innerParams[0];
-		}
-	}
-};
-
-RegisterOperator< NeutralParenOperator > NeutralParenReg( AllOperators );  ///This registers the operator to the list of all operators
 }
 
 
@@ -1622,16 +1662,22 @@ private:
 		Debug d( "#evt#");
 		if( !safetyCounter || !d ) return SimpleType();
 		
-		dbg() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" << scope->str() << "\" context: " << ctx << endl;
+		dbg() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl;
 		
 		if( exprList.isEmpty() )
 			return scope;
 		
 		QString currentExpr = exprList.front().stripWhiteSpace();
 		exprList.pop_front();
+
+		TypePointer searchIn = scope->resolved();
+		if( !searchIn ) {
+			dbg() << "scope-type is not resolved" << endl;
+			return EvaluationResult();
+		}
 		
-		SimpleTypeImpl::TypeOfResult searchIn = scope.resultType;
-		if( ctx ) searchIn = ctx->container();
+		if( ctx )
+			searchIn = ctx->container().get();
 		
 		QStringList split = splitType( currentExpr );
 		
@@ -1642,15 +1688,15 @@ private:
 		{
 			currentExpr = split.front();
 			
-			SimpleType type = searchIn->locateType( currentExpr );
+			LocateResult type = searchIn->locateDecType( currentExpr );
 			if ( type )
 			{
-				if( !split.isEmpty()) split.pop_front();
+				if( !split.isEmpty() ) split.pop_front();
 				EvaluationResult ret = evaluateAtomicExpression( split + exprList, type, 0, true );
 				ret.expr.t = CppCodeCompletion::ExpressionInfo::TypeExpression;
 				return ret;
 			} else {
-				dbg() << "\"" << scope->scope() << "\"could not locate " << currentExpr << endl;
+				dbg() << "\"" << scope.resultType->fullNameChain() << "\"could not locate " << currentExpr << endl;
 			}
 		}
 			
@@ -1660,9 +1706,8 @@ private:
 			SimpleVariable var = ctx->findVariable( currentExpr );
 			
 			if ( var.type ) {
-				SimpleTypeImpl::TypeOfResult t = ctx->container()->locateType( var.type );
-				t.decl = var.toDeclarationInfo( "current_file" );
-				EvaluationResult res = evaluateAtomicExpression(  exprList, EvaluationResult( t.type, t.decl ) );
+				
+				EvaluationResult res = evaluateAtomicExpression(  exprList, EvaluationResult( ctx->container()->locateDecType( var.type ), var.toDeclarationInfo( "current_file" )) );
 				return res;
 			}
 			
@@ -1677,7 +1722,7 @@ private:
 				if( !current ) ready = true;
 				
 				type = current->typeOf( currentExpr );
-				if ( type || type->desc() )
+				if ( type)
 					return evaluateAtomicExpression( exprList, EvaluationResult( type.type, type.decl ) );
 				
 				if( !ready ) current = current->parent();
@@ -1692,7 +1737,7 @@ private:
 			}
 		}
 		
-		SimpleTypeImpl::TypeOfResult type = scope->typeOf( currentExpr );
+		SimpleTypeImpl::TypeOfResult type = searchIn->typeOf( currentExpr );
 		return evaluateAtomicExpression( exprList, EvaluationResult( type.type, type.decl ) );
 	}
 };
@@ -1778,7 +1823,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column ,
 		
         EvaluationResult type = evaluateExpressionType( line, column + 1, conf, ifUnknownSetType ? addFlag( DefaultEvaluationOptions, DefaultAsTypeExpression ) : DefaultEvaluationOptions ); 
     
-		kdDebug( 9007 ) << "type: " << type.resultType->fullTypeResolved() << endl;
+		kdDebug( 9007 ) << "type: " << type->fullNameChain() << endl;
 		
 		return type;
 	}
@@ -1839,7 +1884,7 @@ struct PopupFillerHelpStruct {
 		if( d.resolved() && d.resolved()->hasNode() ) {
 			QString n = d.name();
 			if( d.resolved()->asFunction() )
-				n = receiver->buildSignature( SimpleType( &(*d.resolved()) ) );
+				n = receiver->buildSignature( d.resolved() );
 				                    
 			txt = prefix + i18n("jump to %1").arg( cleanForMenu( n ) );
 		} else {
@@ -1886,7 +1931,7 @@ struct PopupClassViewFillerHelpStruct {
 			if( dom ) {
 				QString n = d.name();
 				if( d.resolved()->asFunction() ) {
-					n = receiver->buildSignature( SimpleType( &(*d.resolved()) ) );
+					n = receiver->buildSignature( d.resolved() );
 				}
 				txt = prefix + i18n("show %1").arg( cleanForMenu( n ) );
 			} else {
@@ -1932,11 +1977,11 @@ public:
 		
 		if( d.resolved() ) {
 			if( d.resolved()->asFunction() ) {
-				SimpleType rt = d.resolved()->locateType( d.resolved()->asFunction()->getReturnType() );
-				if( rt || rt->desc() ) {
+				LocateResult rt = d.resolved()->locateDecType( d.resolved()->asFunction()->getReturnType() );
+				if( rt ) {
 					QPopupMenu * m = new QPopupMenu( parent );
-					int gid = parent->insertItem( i18n( "return-type \"%1\"" ).arg( cleanForMenu( rt->fullTypeResolved() ) ), m );
-					fill( m, rt->desc() );
+					int gid = parent->insertItem( i18n( "return-type \"%1\"" ).arg( cleanForMenu( rt->fullNameChain() ) ), m );
+					fill( m, (TypeDesc)rt );
 				}
 				
 				QValueList<TypeDesc> args = d.resolved()->asFunction()->getArgumentTypes();
@@ -1947,25 +1992,25 @@ public:
 					QStringList::iterator it2 = argNames.begin();
 					for( QValueList<TypeDesc>::iterator it = args.begin(); it != args.end(); ++it ) 
 					{
-						SimpleType at = d.resolved()->locateType( *it );
+						LocateResult at = d.resolved()->locateDecType( *it );
 						QString name ="";
 						if( it2 != argNames.end() ) {
 							name = *it2;
 							++it2;
 						}
 						QPopupMenu * mo = new QPopupMenu( m );
-						int gid = m->insertItem( i18n( "argument \"%1\"" ).arg( cleanForMenu( at->fullTypeResolved() + " " + name ) ), mo );
-						fill( mo, at->desc() );
+						int gid = m->insertItem( i18n( "argument \"%1\"" ).arg( cleanForMenu( at->fullNameChain() + " " + name ) ), mo );
+						fill( mo, at );
 						
 					}
 				}
 				
 			}
-			QValueList<SimpleType> bases = d.resolved()->getBases();
-			for( QValueList<SimpleType>::iterator it = bases.begin(); it != bases.end(); ++it ) {
+			QValueList<LocateResult> bases = d.resolved()->getBases();
+			for( QValueList<LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
 				QPopupMenu * m = new QPopupMenu( parent );
-				int gid = parent->insertItem( i18n( "base-class \"%1\"" ).arg( cleanForMenu( (*it)->fullTypeResolved() ) ), m );
-				fill( m, (*it)->desc() );
+				int gid = parent->insertItem( i18n( "base-class \"%1\"" ).arg( cleanForMenu( (*it)->fullNameChain() ) ), m );
+				fill( m, *it );
 			}
 			
 			if( d.resolved()->parent() && d.resolved()->parent()->desc() ) {
@@ -1989,13 +2034,13 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 	
 	EvaluationResult type = evaluateExpressionAt( line, column, conf );
 
-	if( !type && !type.sourceVariable ) return;
+	if( !type->resolved() && !type.sourceVariable ) return;
 	
-	QString name = type.resultType->fullTypeResolved();
+	QString name = type->fullNameChain();
 	if( type.sourceVariable )
 		name += " " + type.sourceVariable.name;
-	if( type.resultType->asFunction() )
-		name = buildSignature(type.resultType );
+	if( type.resultType->resolved() && type.resultType->resolved()->asFunction() )
+		name = buildSignature(type.resultType->resolved() );
 	
 	///Fill the jump-menu
 	{
@@ -2012,9 +2057,9 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 			m_popupActions.insert( id, type.sourceVariable );
 		}
 		
-		filler.fill( m, type.resultType->desc() );
+		filler.fill( m, (TypeDesc)type );
 	}
-	if( !type ) return;
+	if( !type->resolved() ) return;
 	
 	///Now fill the class-view-browsing-stuff
 	{
@@ -2025,11 +2070,12 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		PopupClassViewFillerHelpStruct h(this);
 		PopupFiller<PopupClassViewFillerHelpStruct> filler( h, "<" );
 		
-		filler.fill( m, type.resultType->desc() );
+		filler.fill( m, (TypeDesc)type );
 	}
 }
 
 void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
+	//  return;
 	kdDebug( 9007 ) << "CppCodeCompletion::slotTextHint()" << endl;
 	clearStatusText();
 	text = "";
@@ -2046,10 +2092,10 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
 		text += type.sourceVariable.toText() + "\n";
 	}
 	
-	if( type.resultType ) {
-		SimpleTypeFunctionInterface* f = type.resultType->asFunction();
+	if( type->resolved() ) {
+		/*SimpleTypeFunctionInterface* f = type->resolved()->asFunction();
 		if( f ) {
-			text += "function: \"" + buildSignature( type.resultType ) + "\"";
+			text += "function: \"" + buildSignature( type->resolved() ) + "\"";
 		} else {
 			QValueList<TypeDesc> trace = type.resultType->trace();
 			if( !trace.isEmpty() ) {
@@ -2064,28 +2110,28 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
 		DeclarationInfo i = type.resultType->getDeclarationInfo();
 		if( i ) text += "\n" + i.locationToText();
 		
-		if( !type.resultType->comment().isEmpty() ) text +=  "\n\n" + type.resultType->comment() + "";
+		if( !type.resultType->comment().isEmpty() ) text +=  "\n\n" + type.resultType->comment() + "";*/
 		
 	} else {
 	}
 	
 	kdDebug( 9007 ) << "showing: \n" << text << endl;
-	const int timeout = 1300;
+	const int timeout = 3000;
 		
-	if( type.resultType ) {
-		addStatusText( i18n( "Type of \"%1\" is \"%2\"" ).arg( type.expr.expr() ).arg( type.resultType->fullTypeResolved() ), timeout );
+	if( type->resolved() ) {
+		addStatusText( i18n( "Type of \"%1\" is \"%2\"" ).arg( type.expr.expr() ).arg( type->fullNameChain() ), timeout );
 		if( type.sourceVariable && !type.sourceVariable.comment.isEmpty() ) {
 		addStatusText( i18n( "Comment on variable %1: \"%1\"").arg( type.sourceVariable.name ).arg( type.sourceVariable.comment ) , 10000 );
 		}
-		if( !type.resultType->comment().isEmpty() ) {
-			addStatusText( i18n( "Comment on %1: \"%1\"").arg( type.resultType->desc().name() ).arg( type.resultType->comment() ) , 10000 );
+		if( !type->resolved()->comment().isEmpty() ) {
+			addStatusText( i18n( "Comment on %1: \"%1\"").arg( type->name() ).arg( type->resolved()->comment() ) , 10000 );
 		} 
-		if( type.resultType->comment().isEmpty() ) {
-			addStatusText( i18n( "%1 has no comment").arg( type.resultType->desc().name() ) , timeout );
+		if( type->resolved()->comment().isEmpty() ) {
+			addStatusText( i18n( "%1 has no comment").arg( type->name() ) , timeout );
 		}
 	} else {
-		if( type.resultType->desc() ) {
-			addStatusText( i18n( "Type of \"%1\" is unresolved, name: \"%2\"" ).arg( type.expr.expr() ).arg( type.resultType->desc().fullNameChain() ), 2*timeout );
+		if( type ) {
+			addStatusText( i18n( "Type of \"%1\" is unresolved, name: \"%2\"" ).arg( type.expr.expr() ).arg( type->fullNameChain() ), 2*timeout );
 		} else {
 			addStatusText( i18n( "Type of \"%1\" could not be evaluated! Tried to evaluate expression as \"%2\"" ).arg( type.expr.expr() ).arg( type.expr.typeAsString() ), 2*timeout );
 		}
@@ -2296,9 +2342,17 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 				TypeDesc td = ctx->container()->desc();
 				td.makePrivate();
 				td.resetResolved( );
-				SimpleType this_type = ctx->container()->locateType( td, SimpleTypeImpl::LocateBase );
-				this_type->setPointerDepth( 1 );
+				TypePointer tt = ctx->container()->locateDecType( td, SimpleTypeImpl::LocateBase )->resolved();
+				if( tt ) {
+					ctx->setContainer( SimpleType( tt ) );
+				} else {
+					kdDebug( 9007 ) << "could not resolve local this-type \"" << td.fullNameChain() << "\"" << endl;
+				}
+
+				SimpleType this_type = ctx->container();
 				
+				this_type->setPointerDepth( 1 );
+
 				SimpleVariable var;
 				var.type = this_type->desc();
 				var.name = "this";
@@ -2389,7 +2443,6 @@ CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( i
 		showArguments = true;
 	}
 	
-	SimpleType this_type;
 	QString word;
 	
 	
@@ -2418,13 +2471,13 @@ CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( i
 						if( ! (opt & IncludeTypeExpression) ) {
 							kdDebug( 9007 ) << "recognized a type-expression, but another expression-type is desired" << endl;
 						} else {
-							ret.resultType = ctx->container()->locateType( exp.expr(), SimpleTypeImpl::TraceAliases );
+							ret.resultType = ctx->container()->locateDecType( exp.expr(), SimpleTypeImpl::TraceAliases );
 							ret.expr = exp;
 						}
 						
 					}
 				}
-				if( exp.canBeNormalExpression() && !ret.resultType ) {
+				if( exp.canBeNormalExpression() && !ret.resultType->resolved() ) {
 					{
 						if( ! (opt & IncludeStandardExpressions) ) {
 							kdDebug( 9007 ) << "recognized a standard-expression, but another expression-type is desired" << endl;
@@ -2458,7 +2511,7 @@ CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( i
 		}
 	}
 					
-	if( (opt & SearchInClasses ) && !ret && (!currentFunction || !functionContains( currentFunction, line, column ) ) )
+	if( (opt & SearchInClasses ) && !ret->resolved() && (!currentFunction || !functionContains( currentFunction, line, column ) ) )
 	{
 		ClassDom currentClass = fileModel.classAt( line, column );
 		int startLine = 0, startCol = 0;
@@ -2496,7 +2549,7 @@ CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( i
 		
 		if( exp && (exp.t & ExpressionInfo::TypeExpression) ) {
 			kdDebug( 9007 ) << "locating \"" << exp.expr() << "\" in " << container->fullTypeResolvedWithScope() << endl;
-			ret.resultType = container->locateType( exp.expr(), SimpleTypeImpl::TraceAliases );
+			ret.resultType = container->locateDecType( exp.expr(), SimpleTypeImpl::TraceAliases );
 		} else {
 			if( exp ) {
 				kdDebug( 9007 ) << "wrong expression-type recognized" << endl;
@@ -2512,22 +2565,18 @@ CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( i
 }
 
 
-QString CppCodeCompletion::buildSignature( SimpleType currType ) 
+QString CppCodeCompletion::buildSignature( TypePointer currType ) 
 {
 	SimpleTypeFunctionInterface* f = currType->asFunction();
 	if( !f ) return "";
 	
 	QString ret;
-	SimpleType rtt = currType->locateType( f->getReturnType() );
-	if( rtt->desc() ) {
-		if( rtt ) {
-			ret = rtt->fullTypeResolvedWithScope();
-		} else {
-			ret = rtt->desc().fullNameChain();
-		}
-	} else {
+	LocateResult rtt = currType->locateDecType( f->getReturnType() );
+	if( rtt->resolved() || rtt.resolutionCount() > 1 )
+		ret = rtt->fullNameChain();
+	else
 		ret = f->getReturnType().fullNameChain();
-	}
+
 	
 	TypeDesc desc = currType->desc();
 	desc.decreaseFunctionDepth();
@@ -2798,13 +2847,21 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 						TypeDesc td = ctx->container()->desc();
 						td.makePrivate();
 						td.resetResolved( );
-						this_type = ctx->container()->locateType( td, SimpleTypeImpl::LocateBase );
+						TypePointer tt = ctx->container()->locateDecType( td, SimpleTypeImpl::LocateBase )->resolved();
+						if( tt ) {
+							ctx->setContainer( SimpleType( tt ) );
+						} else {
+							kdDebug( 9007 ) << "could not resolve local this-type \"" << td.fullNameChain() << "\"" << endl;
+						}
+						
+						SimpleType this_type = ctx->container();
+						
 						this_type->setPointerDepth( 1 );
 						
 						SimpleVariable var;
 						var.type = this_type->desc();
-						var.comment= this_type->comment();
 						var.name = "this";
+						var.comment = this_type->comment();
 						ctx->add( var );
 						ctx->setContainer( this_type );
 					} else {
@@ -2961,7 +3018,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		isInstance = false;
 	}
 
-	kdDebug( 9007 ) << "===========================> type is: " << type->fullTypeResolved() << endl;
+	kdDebug( 9007 ) << "===========================> type is: " << type->fullNameChain() << endl;
 	kdDebug( 9007 ) << "===========================> word is: " << word << endl;
 
 	if ( !showArguments )
@@ -2992,7 +3049,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 			computeCompletionEntryList( entryList, ctx, isInstance );
 			computeCompletionEntryList( this_type, entryList, this_type->scope(), isInstance );*/
 			
-		} else if ( type && expr.isEmpty() )
+		} else if ( type->resolved() && expr.isEmpty() )
 		{
 			computeCompletionEntryList( entryList, ctx, isInstance );
 			
@@ -3001,12 +3058,12 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 			if ( this_type.scope().size() )
 				computeCompletionEntryList( this_type, entryList, this_type.scope(), isInstance );
-				computeCompletionEntryList( type, entryList, type->scope(), isInstance );
-
+				computeCompletionEntryList( type, entryList,  type->resolved()->scope() , isInstance );
 		}
-		else if ( type )
+		else if ( type->resolved() )
 		{
-			computeCompletionEntryList( type, entryList, type.resultType.scope(), isInstance );
+			if( type->resolved() )
+				computeCompletionEntryList( type, entryList, type->resolved()->scope() , isInstance );
 		}
 
 		QStringList trueMatches;
@@ -3055,13 +3112,13 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 		signatureList = computeSignatureList( type );
 		
-		QString methodName = type->desc().name();
+		QString methodName = type->name();
 		
 		///Search for variables with ()-operator in the context
 		if( ctx ) {
 			SimpleVariable var = ctx->findVariable( methodName );
 			if( !var.name.isEmpty() ) {
-				signatureList += computeSignatureList( ctx->container()->locateType( var.type ) );
+				signatureList += computeSignatureList( ctx->container()->locateDecType( var.type ) );
 			}
 		}
 
@@ -3095,7 +3152,7 @@ QValueList<QStringList> CppCodeCompletion::computeSignatureList( EvaluationResul
 	SimpleType type = result;
 	
 	if( result.expr.t == ExpressionInfo::TypeExpression )
-		type = result->typeOf( result->desc().name() ); ///Compute the signature of the constructor
+		type = type->typeOf( result->name() ); ///Compute the signature of the constructor
 	
 	QValueList<QStringList> retList;
 	SimpleTypeFunctionInterface* f = type->asFunction();
@@ -3112,7 +3169,7 @@ QValueList<QStringList> CppCodeCompletion::computeSignatureList( EvaluationResul
 	
 	while( f ) {
 		QStringList lst;
-		QString sig = buildSignature( currType );
+		QString sig = buildSignature( currType.get() );
 		QString comment = currType->comment();
 		QStringList commentList;
 		if( !comment.isEmpty() ) {
@@ -3630,10 +3687,11 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 		args << Catalog::QueryArgument( "name", fullname );
 
 		
-		QValueList<SimpleType> parents = typeR->getBases();
-		for ( QValueList<SimpleType>::Iterator it = parents.begin(); it != parents.end(); ++it )
+		QValueList<LocateResult> parents = typeR->getBases();
+		for ( QValueList<LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it )
 		{
-			SimpleType tp = *it;
+			if( !(*it)->resolved() ) continue;
+			SimpleType tp = SimpleType( (*it)->resolved() );
 			if( tp ) computeCompletionEntryList( tp, entryList, tp.scope(), isInstance );
 		}
 	}
@@ -3650,13 +3708,11 @@ struct CompTypeProcessor : public TypeProcessor {
 		
 	virtual QString processType( const QString& type ) {
 		///TODO: Option: should arguments be processed? If no, just return "type"
-		TypeDecoration dec( type );
-		SimpleType t = m_scope->locateType( type );
-		if( t || t->desc() )
-			return dec.apply( t->fullTypeResolved() );
+		LocateResult t = m_scope->locateDecType( type );
+		if( t )
+			return t->fullNameChain();
 		else
 			return type;
-		
 	}
 };
 
@@ -3731,11 +3787,11 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		{
 			QString tt = tagType( tag );
 			if( !tt.isEmpty() ) {
-				TypeDecoration dec ( tt );
-				SimpleType et =  type->locateType( tt );
+				TypeDecoration dec ( tt ); 
+				LocateResult et =  type->locateDecType( tt );
 				
-				if( et || et->desc() ) {
-					prefix = et->fullTypeResolved();
+				if( et ) {
+					prefix = et->fullNameChain();
 				} else {
 					prefix = tt;
 				}
@@ -3762,16 +3818,18 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	if ( m_completionMode == NormalCompletion )
 		computeCompletionEntryList( type, entryList, klass->variableList(), isInstance );
 
-	QValueList<SimpleType> parents = type->getBases();
-	for ( QValueList<SimpleType>::Iterator it = parents.begin(); it != parents.end(); ++it )
+	QValueList<LocateResult> parents = type->getBases();
+	for ( QValueList<LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it )
 	{
-		SimpleTypeImpl* i = &(**it);
+		if( !(*it)->resolved() ) continue;
+		
+		SimpleTypeImpl* i = (*it)->resolved();;
 		SimpleTypeCodeModel* m = dynamic_cast<SimpleTypeCodeModel*> ( i );
 		if( m ) {
 			ItemDom item = m->item();
 			ClassModel* kl = dynamic_cast<ClassModel*> ( &( *item ) );
 			if( kl ) {
-				computeCompletionEntryList( *it, entryList, ClassDom ( kl ), isInstance );
+				computeCompletionEntryList( SimpleType( (*it)->resolved() ), entryList, ClassDom ( kl ), isInstance );
 			}
 		}
 	}
@@ -3875,12 +3933,9 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			entry.prefix = meth->resultType();
 		}else{
 			QString tt = meth->resultType();
-			TypeDecoration dec( tt );
-			SimpleType t = type->locateType( tt );
-			//SimpleType t = type->typeOf( meth->name() );
-			if( t || t->desc().length() != 0 ) {
-				//t = t->applyOperator( SimpleTypeImpl::ParenOp );
-				entry.prefix = dec.apply( t->fullTypeResolved() );
+			LocateResult t = type->locateDecType( tt );
+			if( t ) {
+				entry.prefix = t->fullNameChain();
 			}
 			else
 				entry.prefix = meth->resultType();
@@ -3977,11 +4032,10 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			entry.prefix = attr->type();
 		}else{
 			QString tt = attr->type();
-			TypeDecoration dec( tt );
-			SimpleType t = type->locateType( tt );
+			LocateResult t = type->locateDecType( tt );
 			//SimpleType t = type->typeOf( attr->name() );
-			if( t || t->desc().length() != 0 ) 
-				entry.prefix = dec.apply( t->fullTypeResolved() );
+			if( t ) 
+				entry.prefix = t->fullNameChain();
 			else
 				entry.prefix = attr->type();
 		}		
@@ -4029,7 +4083,7 @@ CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpression( Expre
 	CppCodeCompletion::EvaluationResult res;
 	res = obj.evaluate();
 	
-	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Type of %1 is %2" ).arg( expr.expr() ).arg( res->fullTypeResolved() ), 1000 );
+	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Type of %1 is %2" ).arg( expr.expr() ).arg( res->fullNameChain() ), 1000 );
 	
 	return res;
 }

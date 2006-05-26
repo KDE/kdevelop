@@ -55,6 +55,7 @@ TypeDesc& TypeDesc::operator = ( const TypeDesc& rhs ) {
  m_resolved = rhs.m_resolved;
  m_pointerDepth = rhs.m_pointerDepth;
  m_templateParams = rhs.m_templateParams;
+ m_flags = rhs.m_flags;
  return *this;
 }
 
@@ -159,6 +160,19 @@ QString TypeDesc::fullNameChain( ) const {
  return m_dec.apply( ret );
 }
 
+QString TypeDesc::fullTypeStructure() const {
+	QString ret = m_cleanName;
+	if( !m_templateParams.isEmpty() ) {
+		ret += "<";
+		for( TemplateParams::const_iterator it = m_templateParams.begin(); it != m_templateParams.end(); ++it ) {
+			ret += (*it)->fullTypeStructure();
+			ret += ", ";
+		}
+		ret.truncate( ret.length() - 2 );
+		ret += ">";
+	}
+	return ret;
+}
 
 
 QStringList TypeDesc::fullNameList( ) const {
@@ -202,7 +216,7 @@ void TypeDesc::append( TypeDescPointer type ) {
  }
 }
 
-TypePointer TypeDesc::resolved() {
+TypePointer TypeDesc::resolved() const {
  return m_resolved;
 }
 
@@ -279,6 +293,7 @@ void TypeDesc::init( QString stri ) {
  m_functionDepth = 0;
  m_nextType = 0;
  m_dec = "";
+ m_flags = Standard;
  
  if ( stri.isEmpty() )
   return;

@@ -31,6 +31,12 @@ class TypeDesc {
 public:
  typedef QValueList<TypeDescPointer> TemplateParams;
  static const char* functionMark;
+
+	///These flags have no internal use, they are set and read from the outside
+	enum Flags {
+		Standard = 0,
+		ResolutionTried = 1  ///means that the resolution was tried, and should not be retried.
+	};
 private:
  QString m_cleanName;
  int m_pointerDepth;
@@ -39,6 +45,7 @@ private:
  TypeDescPointer m_nextType;
  TypePointer m_resolved;
  TypeDecoration m_dec;
+ Flags m_flags;
 
  
  void init( QString stri );
@@ -64,6 +71,12 @@ public:
   init( rhs );
   return *this;
  }
+
+	TypeDesc firstType() const {
+		TypeDesc ret = *this;
+		ret.setNext( 0 );
+		return ret;
+	}
   
 	///this function must be remade
  bool isValidType() const ;
@@ -95,7 +108,10 @@ public:
 	/**returns the type include template-parameters, pointer-depth, and possible sub-types.
 	   Example "A::B": A is the type, and B is the subtype */
  QString fullNameChain( ) const ;
- 
+
+	///Returns the type-structure(full name-chain without any instance-info)
+ QString fullTypeStructure() const;
+	
  int pointerDepth() const {
   return m_pointerDepth;
  }
@@ -141,7 +157,7 @@ public:
  
  void append( TypeDescPointer type );
  
- TypePointer resolved();
+ TypePointer resolved() const ;
  
  void setResolved( TypePointer resolved );
  
@@ -155,7 +171,15 @@ public:
  void decreaseFunctionDepth();
  
  int functionDepth() const;
- 
+
+	void setFlag( Flags flag ) {
+		m_flags = (Flags) (m_flags | flag);
+	}
+
+	bool hasFlag( Flags flag ) {
+		return (bool)( m_flags & flag );
+	}
+	
 	///instance-information consists of things like the pointer-depth and the decoration
  void takeInstanceInfo( const TypeDesc& rhs );
  
