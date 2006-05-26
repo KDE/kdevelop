@@ -218,7 +218,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Simp
 			}
 		}
 	}
-	if( !ret.type ) ret.memberType = MemberInfo::NotFound;
+	//if( !ret.type ) ret.memberType = MemberInfo::NotFound; //commented out because of constructurs
 	return ret;
 }
 
@@ -1246,7 +1246,7 @@ private:
 			if( !canBeTypeExpression && exprList.isEmpty() && !scope ) {
 				exprList << currentExpr;
 				///Try as a type again
-				return evaluateAtomicExpression( exprList, EvaluationResult( type.type, type.decl ), ctx, true );
+				return evaluateAtomicExpression( exprList, scope, ctx, true );
 			} else {
 				return EvaluationResult();
 			}
@@ -2384,7 +2384,9 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 					}
 					
 					
-					type = evaluateExpression( expr, ctx );
+					ExpressionInfo exp( expr );
+					exp.t = (ExpressionInfo::Type) (ExpressionInfo::NormalExpression | ExpressionInfo::TypeExpression);
+					type = evaluateExpression( exp, ctx );
 				}
 			}
 			else
@@ -2519,7 +2521,9 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 					//kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
 				}
 
-				type = evaluateExpression( expr, ctx );
+				ExpressionInfo exp( expr );
+				exp.t = (ExpressionInfo::Type) (ExpressionInfo::NormalExpression | ExpressionInfo::TypeExpression);
+				type = evaluateExpression( exp, ctx );
 			}
 		}
 	}
@@ -2667,7 +2671,7 @@ QValueList<QStringList> CppCodeCompletion::computeSignatureList( EvaluationResul
 	SimpleType type = result;
 	
 	if( result.expr.t == ExpressionInfo::TypeExpression )
-		type = type->typeOf( result->name() ); ///Compute the signature of the constructor
+		type = type->typeOf( result->name(), SimpleTypeImpl::MemberInfo::Function ); ///Compute the signature of the constructor
 	
 	QValueList<QStringList> retList;
 	SimpleTypeFunctionInterface* f = type->asFunction();

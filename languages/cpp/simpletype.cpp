@@ -766,7 +766,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
   
 ///Check if it is a template-name
   
-  if( !ret.type) ret.memberType = MemberInfo::NotFound;
+	//if( !ret.type) ret.memberType = MemberInfo::NotFound; //constructor..
   return ret;
 }
 
