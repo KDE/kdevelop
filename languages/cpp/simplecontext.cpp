@@ -21,6 +21,18 @@
  ***************************************************************************/
 
 #include "simplecontext.h"
+#include "safetycounter.h"
+
+SimpleType getGlobal( SimpleType t ) {
+  SimpleType global = t;
+  SafetyCounter s( 50 );
+  while( !global.scope().isEmpty() && s ) {
+    if( !s ) { kdDebug( 9007 ) << "error" << endl; break; }
+    global = global->parent();
+  }
+  
+  return global;
+}
 
 void SimpleContext::offset( int lineOffset, int colOffset ) {
   for( QValueList<SimpleVariable>::iterator it = m_vars.begin(); it != m_vars.end(); ++it ) {

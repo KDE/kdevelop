@@ -81,7 +81,6 @@
 #include "cppevaluation.h"
 #include "simplecontext.h"
 
-extern CppCodeCompletion* cppCompetionInstance ;
 
 ///This enables-disables the automatic processing of the expression under the mouse-cursor 
 //#define DISABLETOOLTIPS
@@ -95,142 +94,311 @@ extern CppCodeCompletion* cppCompetionInstance ;
 
 SafetyCounter safetyCounter;
 
+//file global functions, must be before any "using namespace"
+QString cleanForMenu( QString txt ) {
+    //  return txt.replace( "&", "§" );
+  return txt.replace( "&", "$" );
+}
+
+QStringList formatComment( const QString& comment, int maxCols = 120 ) {
+  QStringList ret;
+  SafetyCounter s( 14 );  ///maximum of 14 lines
+  
+  QStringList lines = QStringList::split( "\n", comment );
+  for( QStringList::iterator it = lines.begin(); it != lines.end(); ++it ) {
+    QStringList words = QStringList::split( " ", *it );
+    while( !words.isEmpty() && s ) {
+      QString line = "? ";
+      int len = 0;
+      while( !words.isEmpty() && len < maxCols ) {
+        len += words.front().length();
+        line += words.front() + " ";
+        words.pop_front();
+      }
+      ret << line;
+    }
+  }
+  if( !s ) ret << "? comment has too many lines";
+  
+  return ret;
+}
+
+bool isValidIdentifierSign( const QChar& c ) {
+  if( c.isLetter() || c.isDigit() || c == '_' ) return true;
+  else return false;
+}
+
+bool operator < ( const CodeCompletionEntry& e1, const CodeCompletionEntry& e2 )
+{
+  return e1.text < e2.text;
+}
+
+template <class ItemType>
+static QValueList<ItemType> unique( const QValueList<ItemType>& entryList )
+{
+  
+  QValueList< ItemType > l;
+  QMap<QString, bool> map;
+  typename QValueList< ItemType >::ConstIterator it = entryList.begin();
+  while ( it != entryList.end() )
+  {
+    CodeCompletionEntry e = *it++;
+    QString key = ( e.type + " " +
+                    e.prefix + " " +
+                    e.text + " " +
+                    e.postfix + " " ).simplifyWhiteSpace().stripWhiteSpace();
+    if ( map.find( key ) == map.end() )
+    {
+      map[ key ] = TRUE;
+      l << e;
+    }
+  }
+  return l;
+}
+
+static QStringList unique( const QStringList& entryList )
+{
+  
+  QStringList l;
+  QMap<QString, bool> map;
+  QStringList::ConstIterator it = entryList.begin();
+  while ( it != entryList.end() )
+  {
+    QString e = *it++;
+    if ( map.find( e ) == map.end() )
+    {
+      map[ e ] = TRUE;
+      l << e;
+    }
+  }
+  return l;
+}
+
+static QStringList unique( const QValueList<QStringList>& entryList )
+{
+  
+  QStringList l;
+  QMap<QString, bool> map;
+  QValueList<QStringList>::ConstIterator it = entryList.begin();
+  while ( it != entryList.end() )
+  {
+    QStringList li = (*it++);
+    QString e = li.join( "\n" );
+    if ( map.find( e ) == map.end() )
+    {
+      map[ e ] = TRUE;
+      l += li;
+    }
+  }
+  
+  return l;
+}
+
+
+bool tokenAt( const QString& text, const QString& token, int textPos ) {
+  if( text.isEmpty() ) return false;
+  
+  int tokenPos = token.length() - 1;
+  if( tokenPos <= 0 || textPos <= 0 ) return false;
+  
+  while( text[textPos] == token[tokenPos] ) {
+    
+    --tokenPos;
+    --textPos;
+    
+    if( tokenPos == 0 || textPos == 0 ) {
+      if( tokenPos == 0 ) {
+        if( textPos >= 1 && text[textPos] == token[tokenPos] ) {
+          QChar c = text[ textPos-1];
+          return c.isSpace() || c == '{' || c == '}' || c == ';';
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
+  }
+  return false;
+}
+
 using namespace CompletionDebug;
 using namespace StringHelpers;
 using namespace BitHelpers;
 using namespace CppEvaluation;
-
-class SimpleTypeFunctionInterface;
-
+extern CppCodeCompletion* cppCompetionInstance ;
 
 
-///Until header-parsing is implemented, this tries to find the class that is most related to this item
-ClassDom pickMostRelated( ClassList lst, QString fn ) {
-	if( lst.isEmpty() ) return ClassDom();
-	if( fn.isEmpty() ) return lst.front();
-	
-	ClassDom best = lst.front();
-	uint bestMatch = 0;
-	//kdDebug() << "searching most related to " << fn << endl;
-	
-	for( ClassList::iterator it = lst.begin(); it != lst.end(); ++it ) {
-		//kdDebug() << "comparing " << (*it)->fileName() << endl;
-		QString str = (*it)->fileName();
-		uint len = str.length();
-		if( fn.length() < len ) len = fn.length();
-		
-		uint matchLen = 0;
-		for( uint a = 0; a < len; a++ ) {
-			if( str[a] == fn[a] ) 
-				matchLen++;
-			else
-				break;
-		}
-		
-		if( matchLen > bestMatch ) {
-			//kdDebug() << "picking " << str << endl;
-			bestMatch = matchLen;
-			best = *it;
-		}
-	}
-	
-	//kdDebug() << "picked " << best->fileName() << endl;
-	
-	return best;
+struct PopupFillerHelpStruct {
+  CppCodeCompletion* receiver;
+  PopupFillerHelpStruct( CppCodeCompletion* rec ) {
+    receiver = rec;
+  }
+  
+  void insertItem ( QPopupMenu* parent, TypeDesc d , QString prefix ) {
+    QString txt;
+    
+    if( d.resolved() && d.resolved()->isNamespace() ) return;
+    
+    if( d.resolved() && d.resolved()->hasNode() ) {
+      QString n = d.name();
+      if( d.resolved()->asFunction() )
+        n = receiver->buildSignature( d.resolved() );
+      
+      txt = prefix + i18n("jump to %1").arg( cleanForMenu( n ) );
+    } else {
+      txt = prefix + d.name() + i18n(" is unresolved");
+    }
+    
+    int id = parent->insertItem( txt, receiver, SLOT( popupAction( int ) ) );
+    
+    if( d.resolved() ) receiver->m_popupActions.insert( id, d.resolved()->getDeclarationInfo() );
+  }
+};
+
+
+struct PopupClassViewFillerHelpStruct {
+  CppCodeCompletion* receiver;
+  PopupClassViewFillerHelpStruct( CppCodeCompletion* rec ) {
+    receiver = rec;
+  }
+  
+  void insertItem ( QPopupMenu* parent, TypeDesc d , QString prefix ) {
+    QString txt;
+    
+    ItemDom dom;
+    
+    if( d.resolved() ) {
+      SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( d.resolved().data() );
+      if( cm ) dom = cm->item();
+    }
+    
+    
+    if( d.resolved() && d.resolved()->hasNode() ) {
+      if( !dom && d.resolved()->isNamespace() ) {
+        SimpleTypeUsedNamespace* ns = dynamic_cast<SimpleTypeUsedNamespace*>( d.resolved().data() );
+        if( ns ) {
+          QValueList<SimpleType> slaves = ns->getSlaves();
+          for( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
+            SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( (*it).get().data() );
+            if( cm ) dom = cm->item();
+          }
+        }
+      }
+      
+      
+      if( dom ) {
+        QString n = d.name();
+        if( d.resolved()->asFunction() ) {
+          n = receiver->buildSignature( d.resolved() );
+        }
+        txt = prefix + i18n("show %1").arg( cleanForMenu( n ) );
+      } else {
+        txt = prefix + d.name() + " not in code-model";
+      }
+    } else {
+      txt = prefix + d.name() + i18n(" is unresolved");
+    }
+    
+    int id = parent->insertItem( txt, receiver, SLOT( popupClassViewAction( int ) ) );
+    
+    if( dom ) receiver->m_popupClassViewActions.insert( id, dom );
+  }
+};
+
+
+template <class HelpStruct>
+class PopupFiller {
+  HelpStruct struk;
+  QString depthAdd;
+  SafetyCounter s;
+public:
+PopupFiller( HelpStruct s , QString dAdd, int maxCount = 100 ) : struk( s ), depthAdd( dAdd), s(maxCount) {
 }
+  
+  void fill( QPopupMenu* parent, TypeDesc d, QString prefix = "" ) {
+    if( !s ) {
+      kdDebug( 9007 ) << "safety-counter reached while filling the menu-structure, stopping" << endl;
+      return;
+    }
+    struk.insertItem( parent, d, prefix );
+    
+    TypeDesc::TemplateParams p = d.templateParams();
+    for( TypeDesc::TemplateParams::iterator it = p.begin(); it != p.end(); ++it ){
+      if( (*it)->resolved() ) {
+        QPopupMenu * m = new QPopupMenu( parent );
+        int gid = parent->insertItem( i18n( "template-param \"%1\"" ).arg( cleanForMenu( (*it)->resolved()->fullTypeResolved() ) ), m );
+        fill( m, **it );
+      } else {
+        fill( parent, **it, prefix + depthAdd );
+      }
+    }
+    
+    if( d.resolved() ) {
+      if( d.resolved()->asFunction() ) {
+        LocateResult rt = d.resolved()->locateDecType( d.resolved()->asFunction()->getReturnType() );
+        if( rt ) {
+          QPopupMenu * m = new QPopupMenu( parent );
+          int gid = parent->insertItem( i18n( "return-type \"%1\"" ).arg( cleanForMenu( rt->fullNameChain() ) ), m );
+          fill( m, (TypeDesc)rt );
+        }
+        
+        QValueList<TypeDesc> args = d.resolved()->asFunction()->getArgumentTypes();
+        QStringList argNames = d.resolved()->asFunction()->getArgumentNames();
+        if( !args.isEmpty() ) {
+          QPopupMenu * m = new QPopupMenu( parent );
+          int gid = parent->insertItem( i18n( "argument-types" ), m );
+          QStringList::iterator it2 = argNames.begin();
+          for( QValueList<TypeDesc>::iterator it = args.begin(); it != args.end(); ++it )
+          {
+            LocateResult at = d.resolved()->locateDecType( *it );
+            QString name ="";
+            if( it2 != argNames.end() ) {
+              name = *it2;
+              ++it2;
+            }
+            QPopupMenu * mo = new QPopupMenu( m );
+            int gid = m->insertItem( i18n( "argument \"%1\"" ).arg( cleanForMenu( at->fullNameChain() + " " + name ) ), mo );
+            fill( mo, at );
+            
+          }
+        }
+        
+      }
+      QValueList<LocateResult> bases = d.resolved()->getBases();
+      for( QValueList<LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
+        QPopupMenu * m = new QPopupMenu( parent );
+        int gid = parent->insertItem( i18n( "base-class \"%1\"" ).arg( cleanForMenu( (*it)->fullNameChain() ) ), m );
+        fill( m, *it );
+      }
+      
+      if( d.resolved()->parent() && d.resolved()->parent()->desc() ) {
+        QPopupMenu * m = new QPopupMenu( parent );
+        int gid = parent->insertItem( i18n( "nested in \"%1\"" ).arg( cleanForMenu( d.resolved()->parent()->fullTypeResolved() ) ), m );
+        fill( m, d.resolved()->parent()->desc() );
+      }
+    }
+  }
+};
 
-SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , SimpleTypeImpl::MemberInfo::MemberType type ) 
-{
-	MemberInfo ret;
-	ret.name = name.name();
-	ret.memberType = MemberInfo::NotFound;
-	if( !name || !m_item ) return ret;
-	
-	ClassModel* klass = dynamic_cast<ClassModel*> ( & (*m_item) );
-	if( !klass ) {
-	dbg() << "\"" << str() << "\": search for member " << name.name() << " unsuccessful because the own type is invalid" << endl;
-		return ret;
-	}
-	NamespaceModel* ns = dynamic_cast<NamespaceModel*>(klass);
-	
-	if( klass->hasVariable( name.name() )  && ( type & MemberInfo::Variable ) ) {
-		ret.memberType = MemberInfo::Variable;
-		VariableDom d = klass->variableByName( name.name() );
-		if( d ) {
-			ret.type = d->type();
-			ret.decl.name = d->name();
-			ret.decl.file = d->fileName();
-			ret.decl.comment = d->comment();
-			d->getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
-			d->getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
-		}
-	} else if( klass->hasFunction( name.name() )  && ( type & MemberInfo::Function ) ) {
-		ret.memberType = MemberInfo::Function;
-		FunctionList l = klass->functionByName( name.name() );
-		if( !l.isEmpty() && l.front() ) {
-			ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name , TypePointer(this) ) );
-			ret.type = l.front()->resultType();
-			ret.type.increaseFunctionDepth();
-		}
-	} else if( klass->hasFunctionDefinition( name.name() )  && ( type & MemberInfo::Function ) ) {
-		ret.memberType = MemberInfo::Function;
-		FunctionDefinitionList l = klass->functionDefinitionByName( name.name() );
-		if( !l.isEmpty() && l.front() ) {
-			ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name, TypePointer(this) ) );
-			ret.type = l.front()->resultType();
-			ret.type.increaseFunctionDepth();
-		}
-	} else if( klass->hasTypeAlias( name.name() ) && ( type & MemberInfo::Typedef ) ) {
-		ret.memberType = MemberInfo::Typedef;
-		TypeAliasList l = klass->typeAliasByName( name.name() );
-		if( !l.isEmpty() && l.front() ) {
-			ret.type = l.front()->type();
-		}
-	} else if ( klass->hasClass( name.name() ) && ( type & MemberInfo::NestedType ) ) {
-		ClassList l = klass->classByName( name.name() );
-		
-		if( !l.isEmpty() ) {
-			ClassDom i = pickMostRelated( l, globalCurrentFile );
-			if( i ) {
-				ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( i ), name, TypePointer( this ) ) );
-				
-				ret.memberType = MemberInfo::NestedType;
-				ret.type = name;
-			}
-		}
-	} else if ( ns && ns->hasNamespace( name.name() )  && ( type & MemberInfo::Namespace ) ) {
-		ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( ns->namespaceByName( name.name() )), name, TypePointer( this ) ) );
-		ret.memberType = MemberInfo::Namespace;
-		ret.type = name;
-	} else {
-		if( type & MemberInfo::Template ) {
-			TypeDesc s = findTemplateParam( name.name() );
-			if( s ) {
-				ret.memberType = MemberInfo::Template;
-				ret.type = s;
-			}
-		}
-	}
-	//if( !ret.type ) ret.memberType = MemberInfo::NotFound; //commented out because of constructurs
-	return ret;
+struct CompTypeProcessor : public TypeProcessor {
+  SimpleType m_scope;
+CompTypeProcessor( SimpleType scope )  : m_scope(scope) {
 }
-
-
-
-
-
-SimpleType getGlobal( SimpleType t ) {
-	SimpleType global = t;
-	SafetyCounter s( 50 );
-	while( !global.scope().isEmpty() && s ) {
-		if( !s ) { kdDebug( 9007 ) << "error" << endl; break; }
-		global = global->parent();
-	}
-	
-	return global;
-}
-
-
+  
+  virtual QString parentType() {
+    return m_scope->fullType();
+  }
+  
+  virtual QString processType( const QString& type ) {
+        ///TODO: Option: should arguments be processed? If no, just return "type"
+    LocateResult t = m_scope->locateDecType( type );
+    if( t )
+      return t->fullNameChain();
+    else
+      return type;
+  }
+};
 
 struct CppCodeCompletionData
 {
@@ -271,73 +439,6 @@ struct CppCodeCompletionData
 	}
 
 };
-
-bool operator < ( const CodeCompletionEntry& e1, const CodeCompletionEntry& e2 )
-{
-	return e1.text < e2.text;
-}
-
-template <class ItemType>
-static QValueList<ItemType> unique( const QValueList<ItemType>& entryList )
-{
-
-	QValueList< ItemType > l;
-	QMap<QString, bool> map;
-	typename QValueList< ItemType >::ConstIterator it = entryList.begin();
-	while ( it != entryList.end() )
-	{
-		CodeCompletionEntry e = *it++;
-		QString key = ( e.type + " " +
-		                e.prefix + " " +
-		                e.text + " " +
-		                e.postfix + " " ).simplifyWhiteSpace().stripWhiteSpace();
-		if ( map.find( key ) == map.end() )
-		{
-			map[ key ] = TRUE;
-			l << e;
-		}
-	}
-	return l;
-}
-
-static QStringList unique( const QStringList& entryList )
-{
-
-	QStringList l;
-	QMap<QString, bool> map;
-	QStringList::ConstIterator it = entryList.begin();
-	while ( it != entryList.end() )
-	{
-		QString e = *it++;
-		if ( map.find( e ) == map.end() )
-		{
-			map[ e ] = TRUE;
-			l << e;
-		}
-	}
-	return l;
-}
-
-static QStringList unique( const QValueList<QStringList>& entryList )
-{
-	
-	QStringList l;
-	QMap<QString, bool> map;
-	QValueList<QStringList>::ConstIterator it = entryList.begin();
-	while ( it != entryList.end() )
-	{
-		QStringList li = (*it++);
-		QString e = li.join( "\n" );
-		if ( map.find( e ) == map.end() )
-		{
-			map[ e ] = TRUE;
-			l += li;
-		}
-	}
-	
-	return l;
-}
-
 
 CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 		: d( new CppCodeCompletionData ),
@@ -863,36 +964,7 @@ bool CppCodeCompletion::correctAccessOp( QStringList ptrList, MemberAccessOp acc
 	return correctAccessOpAccurate( ptrList, accessOp );
 }
 
-
-QStringList formatComment( const QString& comment, int maxCols = 120 ) {
-	QStringList ret;
-	SafetyCounter s( 14 );	///maximum of 14 lines
-	
-	QStringList lines = QStringList::split( "\n", comment );
-	for( QStringList::iterator it = lines.begin(); it != lines.end(); ++it ) {
-		QStringList words = QStringList::split( " ", *it );
-		while( !words.isEmpty() && s ) {
-			QString line = "? ";
-			int len = 0;
-			while( !words.isEmpty() && len < maxCols ) {
-				len += words.front().length();
-				line += words.front() + " ";
-				words.pop_front();
-			}
-			ret << line;
-		}
-	}
-	if( !s ) ret << "? comment has too many lines";
-	
-	return ret;
-}
-
-bool isValidIdentifierSign( const QChar& c ) {
-	if( c.isLetter() || c.isDigit() || c == '_' ) return true;
-	else return false;
-}
-
-///Before calling this, a SimpleTypeConfiguration-object should be created, so that the ressources will be freed when that object is destroyed 
+///Before calling this, a SimpleTypeConfiguration-object should be created, so that the ressources will be freed when that object is destroyed
 EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column , SimpleTypeConfiguration& conf, bool ifUnknownSetType ) {
 	kdDebug( 9007 ) << "CppCodeCompletion::evaluateExpressionAt( " << line << ", " << column << " )" << endl;
 
@@ -961,164 +1033,6 @@ void CppCodeCompletion::popupClassViewAction( int number ) {
 		kdDebug( 9007 ) << "error" << endl;
 	}
 }
-
-QString cleanForMenu( QString txt ) {
-	//	return txt.replace( "&", "§" );
-	return txt.replace( "&", "$" );
-}
-
-
-struct PopupFillerHelpStruct {
-	CppCodeCompletion* receiver;
-	PopupFillerHelpStruct( CppCodeCompletion* rec ) {
-		receiver = rec;
-	}
-	
-	void insertItem ( QPopupMenu* parent, TypeDesc d , QString prefix ) {
-		QString txt;
-		
-		if( d.resolved() && d.resolved()->isNamespace() ) return;
-		
-		if( d.resolved() && d.resolved()->hasNode() ) {
-			QString n = d.name();
-			if( d.resolved()->asFunction() )
-				n = receiver->buildSignature( d.resolved() );
-				                    
-			txt = prefix + i18n("jump to %1").arg( cleanForMenu( n ) );
-		} else {
-			txt = prefix + d.name() + i18n(" is unresolved");
-		}
-		
-		int id = parent->insertItem( txt, receiver, SLOT( popupAction( int ) ) );
-		
-		if( d.resolved() ) receiver->m_popupActions.insert( id, d.resolved()->getDeclarationInfo() );
-	}
-};
-
-
-struct PopupClassViewFillerHelpStruct {
-	CppCodeCompletion* receiver;
-	PopupClassViewFillerHelpStruct( CppCodeCompletion* rec ) {
-		receiver = rec;
-	}
-	
-	void insertItem ( QPopupMenu* parent, TypeDesc d , QString prefix ) {
-		QString txt;
-		
-		ItemDom dom;
-		
-		if( d.resolved() ) {
-			SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( d.resolved().data() );
-			if( cm ) dom = cm->item();
-		}
-		
-		
-		if( d.resolved() && d.resolved()->hasNode() ) {
-			if( !dom && d.resolved()->isNamespace() ) {
-				SimpleTypeUsedNamespace* ns = dynamic_cast<SimpleTypeUsedNamespace*>( d.resolved().data() );
-				if( ns ) {
-					QValueList<SimpleType> slaves = ns->getSlaves();
-					for( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
-						SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( (*it).get().data() );
-						if( cm ) dom = cm->item();
-					}
-				}
-			}
-				
-			
-			if( dom ) {
-				QString n = d.name();
-				if( d.resolved()->asFunction() ) {
-					n = receiver->buildSignature( d.resolved() );
-				}
-				txt = prefix + i18n("show %1").arg( cleanForMenu( n ) );
-			} else {
-				txt = prefix + d.name() + " not in code-model";
-			}
-		} else {
-			txt = prefix + d.name() + i18n(" is unresolved");
-		}
-		
-		int id = parent->insertItem( txt, receiver, SLOT( popupClassViewAction( int ) ) );
-		
-		if( dom ) receiver->m_popupClassViewActions.insert( id, dom );
-	}
-};
-
-
-template <class HelpStruct>
-class PopupFiller {
-	HelpStruct struk;
-	QString depthAdd;
-	SafetyCounter s;
-public:
-	PopupFiller( HelpStruct s , QString dAdd, int maxCount = 100 ) : struk( s ), depthAdd( dAdd), s(maxCount) {
-	}
-	
-	void fill( QPopupMenu* parent, TypeDesc d, QString prefix = "" ) {
-		if( !s ) {
-			kdDebug( 9007 ) << "safety-counter reached while filling the menu-structure, stopping" << endl;
-			return;
-		}
-		struk.insertItem( parent, d, prefix );
-		
-		TypeDesc::TemplateParams p = d.templateParams();
-		for( TypeDesc::TemplateParams::iterator it = p.begin(); it != p.end(); ++it ){
-			if( (*it)->resolved() ) {
-				QPopupMenu * m = new QPopupMenu( parent );
-				int gid = parent->insertItem( i18n( "template-param \"%1\"" ).arg( cleanForMenu( (*it)->resolved()->fullTypeResolved() ) ), m );
-				fill( m, **it );
-			} else {
-				fill( parent, **it, prefix + depthAdd );
-			}
-		}
-		
-		if( d.resolved() ) {
-			if( d.resolved()->asFunction() ) {
-				LocateResult rt = d.resolved()->locateDecType( d.resolved()->asFunction()->getReturnType() );
-				if( rt ) {
-					QPopupMenu * m = new QPopupMenu( parent );
-					int gid = parent->insertItem( i18n( "return-type \"%1\"" ).arg( cleanForMenu( rt->fullNameChain() ) ), m );
-					fill( m, (TypeDesc)rt );
-				}
-				
-				QValueList<TypeDesc> args = d.resolved()->asFunction()->getArgumentTypes();
-				QStringList argNames = d.resolved()->asFunction()->getArgumentNames();
-				if( !args.isEmpty() ) {
-					QPopupMenu * m = new QPopupMenu( parent );
-					int gid = parent->insertItem( i18n( "argument-types" ), m );
-					QStringList::iterator it2 = argNames.begin();
-					for( QValueList<TypeDesc>::iterator it = args.begin(); it != args.end(); ++it ) 
-					{
-						LocateResult at = d.resolved()->locateDecType( *it );
-						QString name ="";
-						if( it2 != argNames.end() ) {
-							name = *it2;
-							++it2;
-						}
-						QPopupMenu * mo = new QPopupMenu( m );
-						int gid = m->insertItem( i18n( "argument \"%1\"" ).arg( cleanForMenu( at->fullNameChain() + " " + name ) ), mo );
-						fill( mo, at );
-						
-					}
-				}
-				
-			}
-			QValueList<LocateResult> bases = d.resolved()->getBases();
-			for( QValueList<LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
-				QPopupMenu * m = new QPopupMenu( parent );
-				int gid = parent->insertItem( i18n( "base-class \"%1\"" ).arg( cleanForMenu( (*it)->fullNameChain() ) ), m );
-				fill( m, *it );
-			}
-			
-			if( d.resolved()->parent() && d.resolved()->parent()->desc() ) {
-				QPopupMenu * m = new QPopupMenu( parent );
-				int gid = parent->insertItem( i18n( "nested in \"%1\"" ).arg( cleanForMenu( d.resolved()->parent()->fullTypeResolved() ) ), m );
-				fill( m, d.resolved()->parent()->desc() );
-			}
-		}
-	}
-};
 
 void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int column ) {
 	kdDebug( 9007 ) << "CppCodeCompletion::contextEvaluationMenu()" << endl;
@@ -1280,33 +1194,6 @@ QString tail = clearComments( m_activeEditor->text( line, column+1, line+10 > (i
 			}
 		}
 	
-	return false;
-}
-
-bool tokenAt( const QString& text, const QString& token, int textPos ) {
-	if( text.isEmpty() ) return false;
-	
-	int tokenPos = token.length() - 1;
-	if( tokenPos <= 0 || textPos <= 0 ) return false;
-	
-	while( text[textPos] == token[tokenPos] ) {
-		
-		--tokenPos;
-		--textPos;
-		
-		if( tokenPos == 0 || textPos == 0 ) {
-			if( tokenPos == 0 ) {
-				if( textPos >= 1 && text[textPos] == token[tokenPos] ) {
-					QChar c = text[ textPos-1];
-					return c.isSpace() || c == '{' || c == '}' || c == ';';
-				} else {
-					return false;
-				}
-			} else {
-				return false;
-			}
-		}
-	}
 	return false;
 }
 
@@ -2793,25 +2680,6 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 		}
 	}
 }
-
-struct CompTypeProcessor : public TypeProcessor {
-	SimpleType m_scope;
-	CompTypeProcessor( SimpleType scope )  : m_scope(scope) {
-	}
-	
-	virtual QString parentType() {
-		return m_scope->fullType();
-	}
-		
-	virtual QString processType( const QString& type ) {
-		///TODO: Option: should arguments be processed? If no, just return "type"
-		LocateResult t = m_scope->locateDecType( type );
-		if( t )
-			return t->fullNameChain();
-		else
-			return type;
-	}
-};
 
 void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, QValueList< Tag > & tags, bool /*isInstance*/ )
 {

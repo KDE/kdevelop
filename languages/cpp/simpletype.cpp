@@ -25,6 +25,42 @@ QString globalCurrentFile = "";
 CppCodeCompletion* cppCompetionInstance = 0;
 
 
+///Until header-parsing is implemented, this tries to find the class that is most related to this item
+ClassDom pickMostRelated( ClassList lst, QString fn ) {
+  if( lst.isEmpty() ) return ClassDom();
+  if( fn.isEmpty() ) return lst.front();
+  
+  ClassDom best = lst.front();
+  uint bestMatch = 0;
+    //kdDebug() << "searching most related to " << fn << endl;
+  
+  for( ClassList::iterator it = lst.begin(); it != lst.end(); ++it ) {
+        //kdDebug() << "comparing " << (*it)->fileName() << endl;
+    QString str = (*it)->fileName();
+    uint len = str.length();
+    if( fn.length() < len ) len = fn.length();
+    
+    uint matchLen = 0;
+    for( uint a = 0; a < len; a++ ) {
+      if( str[a] == fn[a] )
+        matchLen++;
+      else
+        break;
+    }
+    
+    if( matchLen > bestMatch ) {
+            //kdDebug() << "picking " << str << endl;
+      bestMatch = matchLen;
+      best = *it;
+    }
+  }
+  
+    //kdDebug() << "picked " << best->fileName() << endl;
+  
+  return best;
+}
+
+
 //SimpleType implementation
 
 void SimpleType::resolve( Repository rep )  const {
@@ -984,6 +1020,81 @@ ItemDom SimpleTypeCodeModel::locateModelContainer( class CodeModel* m, TypeDesc 
   return ItemDom();
 }
 
+SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , SimpleTypeImpl::MemberInfo::MemberType type ) 
+{
+  MemberInfo ret;
+  ret.name = name.name();
+  ret.memberType = MemberInfo::NotFound;
+  if( !name || !m_item ) return ret;
+  
+  ClassModel* klass = dynamic_cast<ClassModel*> ( & (*m_item) );
+  if( !klass ) {
+  dbg() << "\"" << str() << "\": search for member " << name.name() << " unsuccessful because the own type is invalid" << endl;
+    return ret;
+  }
+  NamespaceModel* ns = dynamic_cast<NamespaceModel*>(klass);
+  
+  if( klass->hasVariable( name.name() )  && ( type & MemberInfo::Variable ) ) {
+    ret.memberType = MemberInfo::Variable;
+    VariableDom d = klass->variableByName( name.name() );
+    if( d ) {
+      ret.type = d->type();
+      ret.decl.name = d->name();
+      ret.decl.file = d->fileName();
+      ret.decl.comment = d->comment();
+      d->getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
+      d->getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
+    }
+  } else if( klass->hasFunction( name.name() )  && ( type & MemberInfo::Function ) ) {
+    ret.memberType = MemberInfo::Function;
+    FunctionList l = klass->functionByName( name.name() );
+    if( !l.isEmpty() && l.front() ) {
+      ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name , TypePointer(this) ) );
+      ret.type = l.front()->resultType();
+      ret.type.increaseFunctionDepth();
+    }
+  } else if( klass->hasFunctionDefinition( name.name() )  && ( type & MemberInfo::Function ) ) {
+    ret.memberType = MemberInfo::Function;
+    FunctionDefinitionList l = klass->functionDefinitionByName( name.name() );
+    if( !l.isEmpty() && l.front() ) {
+      ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name, TypePointer(this) ) );
+      ret.type = l.front()->resultType();
+      ret.type.increaseFunctionDepth();
+    }
+  } else if( klass->hasTypeAlias( name.name() ) && ( type & MemberInfo::Typedef ) ) {
+    ret.memberType = MemberInfo::Typedef;
+    TypeAliasList l = klass->typeAliasByName( name.name() );
+    if( !l.isEmpty() && l.front() ) {
+      ret.type = l.front()->type();
+    }
+  } else if ( klass->hasClass( name.name() ) && ( type & MemberInfo::NestedType ) ) {
+    ClassList l = klass->classByName( name.name() );
+    
+    if( !l.isEmpty() ) {
+      ClassDom i = pickMostRelated( l, globalCurrentFile );
+      if( i ) {
+        ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( i ), name, TypePointer( this ) ) );
+        
+        ret.memberType = MemberInfo::NestedType;
+        ret.type = name;
+      }
+    }
+  } else if ( ns && ns->hasNamespace( name.name() )  && ( type & MemberInfo::Namespace ) ) {
+    ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( ns->namespaceByName( name.name() )), name, TypePointer( this ) ) );
+    ret.memberType = MemberInfo::Namespace;
+    ret.type = name;
+  } else {
+    if( type & MemberInfo::Template ) {
+      TypeDesc s = findTemplateParam( name.name() );
+      if( s ) {
+        ret.memberType = MemberInfo::Template;
+        ret.type = s;
+      }
+    }
+  }
+    //if( !ret.type ) ret.memberType = MemberInfo::NotFound; //commented out because of constructurs
+  return ret;
+}
 
 bool SimpleTypeCodeModel::findItem() {
   QString key = str();
