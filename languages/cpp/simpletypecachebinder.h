@@ -16,27 +16,25 @@
 #define __SIMPLETYPECACHEBINDER_H__
 
 
-#include "simpletype.h"
+#include "simpletypenamespace.h"
 
 template <class Base>
 class SimpleTypeCacheBinder : public Base {
-private:
-  bool secondaryActive, primaryActive;
 public:
   
-SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), secondaryActive( b->secondaryActive ),     primaryActive( b->primaryActive ), m_locateCache( b->m_locateCache ), m_memberCache( b->m_memberCache), m_basesCache( b->m_basesCache )  {
-}
-  
-	SimpleTypeCacheBinder() : Base(), secondaryActive( true ), primaryActive( true ), m_haveBasesCache(false) {
-	}
-  
-  template<class InitType> 
-	SimpleTypeCacheBinder( InitType t ) : Base ( t ), secondaryActive( true ), primaryActive( true ), m_haveBasesCache(false) {
+  SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), m_locateCache( b->m_locateCache ), m_memberCache( b->m_memberCache), m_basesCache( b->m_basesCache ), secondaryActive( b->secondaryActive ), primaryActive( b->primaryActive )  {
     }
-  
-  template<class InitType1, class InitType2> 
-	SimpleTypeCacheBinder( InitType1 t, InitType2 t2 ) : Base ( t, t2 ), secondaryActive( true ), primaryActive( true ), m_haveBasesCache(false) {
+    
+  SimpleTypeCacheBinder() : Base(), m_haveBasesCache(false), secondaryActive( true ), primaryActive( true ) {
     }
+
+  template<class InitType>
+    SimpleTypeCacheBinder( InitType t ) : Base ( t ), m_haveBasesCache(false) , secondaryActive( true ), primaryActive( true ){
+  }
+
+  template<class InitType1, class InitType2>
+    SimpleTypeCacheBinder( InitType1 t, InitType2 t2 ) : Base ( t, t2 ), m_haveBasesCache(false), secondaryActive( true ), primaryActive( true ) {
+  }
   
   using Base::LocateMode;
   
@@ -46,13 +44,13 @@ SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), secondaryAc
     SimpleTypeImpl::LocateMode mmode;
     int mdir;
     SimpleTypeImpl::MemberInfo::MemberType mtypeMask;
+    
     LocateDesc() {
     }
-    
-    
-  LocateDesc( TypeDesc name, SimpleTypeImpl::LocateMode mode, int dir, SimpleTypeImpl::MemberInfo::MemberType typeMask )  : mname( name ), mmode( mode ) , mdir( dir ) , mtypeMask( typeMask ) {
-    fullName = mname.fullTypeStructure();
-  }
+        
+    LocateDesc( TypeDesc name, SimpleTypeImpl::LocateMode mode, int dir, SimpleTypeImpl::MemberInfo::MemberType typeMask )  : mname( name ), mmode( mode ) , mdir( dir ) , mtypeMask( typeMask ) {
+      fullName = mname.fullTypeStructure();
+    }
     
     int compare( const LocateDesc& rhs ) const {
       QString a = fullName;
@@ -102,12 +100,14 @@ SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), secondaryAc
     TypeDesc m_desc;
     QString fullName;
     SimpleTypeImpl::MemberInfo::MemberType findType;
+    
     MemberFindDesc() {
     }
-  MemberFindDesc( TypeDesc d, SimpleTypeImpl::MemberInfo::MemberType ft ) : m_desc( d ), findType( ft ) {
-            //m_desc.makePrivate();
-    fullName = m_desc.fullNameChain();
-  }
+
+    MemberFindDesc( TypeDesc d, SimpleTypeImpl::MemberInfo::MemberType ft ) : m_desc( d ), findType( ft ) {
+              //m_desc.makePrivate();
+      fullName = m_desc.fullNameChain();
+    }
     
     int compare( const MemberFindDesc& rhs ) const {
       QString a = fullName; //m_desc.fullNameChain();
@@ -146,14 +146,8 @@ SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), secondaryAc
   };
   
   
-	typedef QMap<LocateDesc, SimpleTypeImpl::LocateResult> LocateMap;
+  typedef QMap<LocateDesc, SimpleTypeImpl::LocateResult> LocateMap;
   typedef QMap<MemberFindDesc, SimpleTypeImpl::MemberInfo > MemberMap;
-private:
-  LocateMap m_locateCache;
-  MemberMap m_memberCache;
-	QValueList<SimpleTypeImpl::LocateResult> m_basesCache;
-	bool m_haveBasesCache;
-public:
   
   virtual SimpleTypeImpl::MemberInfo findMember( TypeDesc name , SimpleTypeImpl::MemberInfo::MemberType type )  {
     if( !primaryActive ) return Base::findMember( name, type );
@@ -174,7 +168,7 @@ public:
   }
   
   
-virtual SimpleTypeImpl::LocateResult locateType( TypeDesc name , SimpleTypeImpl::LocateMode mode, int dir,  SimpleTypeImpl::MemberInfo::MemberType typeMask )
+  virtual SimpleTypeImpl::LocateResult locateType( TypeDesc name , SimpleTypeImpl::LocateMode mode, int dir,  SimpleTypeImpl::MemberInfo::MemberType typeMask )
   {
     if( !secondaryActive ) return  Base::locateType( name, mode, dir, typeMask );
     LocateDesc desc( name, mode, dir, typeMask );
@@ -204,6 +198,14 @@ virtual SimpleTypeImpl::LocateResult locateType( TypeDesc name , SimpleTypeImpl:
 	    return m_basesCache;
     }
   }
+
+private:
+  LocateMap m_locateCache;
+  MemberMap m_memberCache;
+  QValueList<SimpleTypeImpl::LocateResult> m_basesCache;
+  bool m_haveBasesCache;
+  bool secondaryActive, primaryActive;
+    
 protected:
   
   virtual typename Base::TypePointer clone() {
@@ -232,10 +234,12 @@ protected:
     invalidatePrimaryCache();
     invalidateSecondaryCache();
   };
-  
+
+
+  /*  
 private:
   
-    /*  typedef QMap<QString, TypePointer> AliasMap;
+    typedef QMap<QString, TypePointer> AliasMap;
     AliasMap m_aliasCache;
   
     bool haveCachedAlias( const QString& type ) {
@@ -265,6 +269,16 @@ private:
         m_aliasCache.clear();
     }   */
 };
+
+//typedef SimpleTypeCacheBinder<SimpleTypeImpl> SimpleTypeImpl;
+
+class SimpleTypeCodeModel;
+class SimpleTypeCatalog;
+class SimpleTypeNamespace;
+
+typedef SimpleTypeCacheBinder<SimpleTypeCodeModel> SimpleTypeCachedCodeModel;
+typedef SimpleTypeCacheBinder<SimpleTypeCatalog> SimpleTypeCachedCatalog;
+typedef SimpleTypeCacheBinder<SimpleTypeNamespace> SimpleTypeCachedNamespace;
 
 
 #endif

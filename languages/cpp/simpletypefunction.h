@@ -17,6 +17,7 @@
 
 #include "simpletype.h"
 #include "simpletypecachebinder.h"
+#include "simpletypecatalog.h"
 
 ///Interface that functions should implement
 class SimpleTypeFunctionInterface {
@@ -146,16 +147,13 @@ public:
   
 };
 
-//typedef SimpleTypeCacheBinder<SimpleTypeImpl> SimpleTypeImpl;
+/**
+The SimpleTypeCodeModel and SimpleTypeCatalog can represent namespaces too,
+but they only represent a REAL(physical) namespace and only within either the catalog
+or the code-model. This is a proxy-class that handles namespace-aliases, imports, and splits requests to both, the catalog, and the code-model.
+There can be multiple namespaces aliased to the same one
+*/
 
-class SimpleTypeCodeModel;
-class SimpleTypeCatalog;
-class SimpleTypeNamespace;
-template <class Base> class SimpleTypeCacheBinder;
-
-typedef SimpleTypeCacheBinder<SimpleTypeCodeModel> SimpleTypeCachedCodeModel;
-typedef SimpleTypeCacheBinder<SimpleTypeCatalog> SimpleTypeCachedCatalog;
-typedef SimpleTypeCacheBinder<SimpleTypeNamespace> SimpleTypeCachedNamespace;
 
 class SimpleTypeCodeModel : public SimpleTypeImpl {
 public:

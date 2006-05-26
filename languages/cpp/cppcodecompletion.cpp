@@ -95,6 +95,7 @@
 */
 
 SafetyCounter safetyCounter;
+CppCodeCompletion* cppCompletionInstance = 0;
 
 //file global functions, must be before any "using namespace"
 QString cleanForMenu( QString txt ) {
@@ -228,7 +229,6 @@ using namespace CompletionDebug;
 using namespace StringHelpers;
 using namespace BitHelpers;
 using namespace CppEvaluation;
-extern CppCodeCompletion* cppCompetionInstance ;
 
 
 struct PopupFillerHelpStruct {
@@ -454,7 +454,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 		m_codeCompleteCh2Rx("(->)|(\\:\\:)")
 
 {
-	cppCompetionInstance = this;
+	cppCompletionInstance = this;
 	m_cppCodeCommentsRx.setMinimal( true );
 		
 	m_pSupport = part;

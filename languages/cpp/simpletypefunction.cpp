@@ -14,7 +14,7 @@
 
 #include "simpletypefunction.h"
 
-extern CppCodeCompletion* cppCompetionInstance;
+extern CppCodeCompletion* cppCompletionInstance;
 
 //SimpleTypeFunctionInterface implementation
   
@@ -299,13 +299,13 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Simp
 
 bool SimpleTypeCodeModel::findItem() {
   QString key = str();
-  m_item = locateModelContainer( cppCompetionInstance->m_pSupport->codeModel(), str() );
+  m_item = locateModelContainer( cppCompletionInstance->m_pSupport->codeModel(), str() );
   return (bool) m_item;
 }
 
 void SimpleTypeCodeModel::init() {
   if( scope().isEmpty() ) {
-    m_item = cppCompetionInstance->m_pSupport->codeModel() ->globalNamespace();
+    m_item = cppCompletionInstance->m_pSupport->codeModel() ->globalNamespace();
   }else{
     findItem();
   }

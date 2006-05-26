@@ -29,7 +29,7 @@ libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp \
 						creategettersetterconfiguration.h creategettersetterdialog.cpp creategettersetterdialog.h \
 						creategettersetter.ui storeconverter.cpp qtbuildconfig.cpp cppsplitheadersourceconfig.cpp \
 			typedesc.cpp simpletype.cpp stringhelpers.cpp completiondebug.cpp cppevaluation.cpp \
-		simplecontext.cpp simpletypefunction.cpp
+		simplecontext.cpp simpletypefunction.cpp simpletypenamespace.cpp simpletypecatalog.cpp
 
 METASOURCES = AUTO
 
@@ -54,4 +54,5 @@ r___DEPENDENCIES = libkdevcppsupport.la
 r___LDADD = libkdevcppsupport.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
 noinst_HEADERS = cppimplementationwidget.h qtdesignercppintegration.h \
 	storeconverter.h cppsplitheadersourceconfig.h cppevaluation.h expressioninfo.h \
-	declarationinfo.h simplecontext.h simpletypefunction.h
+	declarationinfo.h simplecontext.h simpletypefunction.h simpletypenamespace.h \
+	simpletypecatalog.h

@@ -25,6 +25,7 @@
 #include <qvaluestack.h>
 
 #include "simpletype.h"
+#include "simpletypenamespace.h"
 #include "tree_parser.h"
 
 const QString hardCodedAliases = "std=_GLIBCXX_STD;";
