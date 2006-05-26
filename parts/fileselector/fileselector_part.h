@@ -18,10 +18,13 @@ public:
     FileSelectorPart(QObject *parent, const char *name, const QStringList &);
     virtual ~FileSelectorPart();
 
+    KAction *newFileAction() const { return m_newFileAction; }
+
 public slots:
 //  void showTip();
 //  void showOnStart();
 //  void refresh();
+    void newFile();
     void fileSelected(const KFileItem *file);
 
 private slots:
@@ -30,6 +33,7 @@ private slots:
 
 private:
     QGuardedPtr<KDevFileSelector> m_filetree;
+    KAction *m_newFileAction;
 };
 
 

@@ -23,6 +23,7 @@
 #include <kdevmainwindow.h>
 #include <kdevpartcontroller.h>
 #include <kdevplugininfo.h>
+#include <kdevcreatefile.h>
 
 #include <ktip.h>
 
@@ -51,6 +52,8 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStr
     QWhatsThis::add(m_filetree, i18n("<b>File selector</b><p>This file selector lists directory contents and provides some file management functions."));
 
     m_filetree->readConfig( instance()->config(), "fileselector" );
+
+    m_newFileAction = new KAction(i18n("New File..."), CTRL+ALT+SHIFT+Key_N, this, SLOT(newFile()), this);
 }
 
 FileSelectorPart::~FileSelectorPart()
@@ -82,6 +85,18 @@ void FileSelectorPart::slotConfigWidget( KDialogBase * dlg )
     KFSConfigPage* page = new KFSConfigPage( vbox, 0, m_filetree );
     connect( dlg, SIGNAL( okClicked( ) ), page, SLOT( apply( ) ) );
     // ### implement reload
+}
+
+void FileSelectorPart::newFile()
+{
+    KDevCreateFile *creator = extension<KDevCreateFile>("KDevelop/CreateFile");
+    if (creator)
+    {
+        KDevCreateFile::CreatedFile file = creator->createNewFile("",
+            m_filetree->dirOperator()->url().path());
+        if (file.status == KDevCreateFile::CreatedFile::STATUS_OK)
+            partController()->editDocument(KURL::fromPathOrURL(file.filename));
+    }
 }
 
 #include "fileselector_part.moc"

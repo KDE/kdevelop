@@ -812,6 +812,9 @@ void KDevDirOperator::activatedMenu( const KFileItem *fi, const QPoint & pos )
         return;
     KPopupMenu *popup = am->popupMenu();
 
+    popup->insertSeparator();
+    m_part->newFileAction()->plug(popup);
+
     if (fi)
     {
         FileContext context( KURL::List(fi->url()));

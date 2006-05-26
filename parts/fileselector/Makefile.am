@@ -1,6 +1,6 @@
 # Here resides the file selector part.
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/sourceinfo $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/sourceinfo $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevfileselector.la
 libkdevfileselector_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
