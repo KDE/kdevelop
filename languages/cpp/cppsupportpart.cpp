@@ -281,6 +281,7 @@ CppSupportPart::~CppSupportPart()
 	kdDebug( 9007 ) << k_funcinfo << endl;
 }
 
+
 void CppSupportPart::customEvent( QCustomEvent* ev )
 {
 	kdDebug( 9007 ) << "CppSupportPart::customEvent(" << ev->type() << ")" << endl;
@@ -310,10 +311,11 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 				m_problemReporter->reportProblem( fileName, p );
 			}
 		}
-		
-		if( !m_parseEmitWaiting.reject( fileName ) ) {
+
+		///reject project-files that do not respect grouping
+		if( ( !project() || project()->isProjectFile( fileName )) && !m_parseEmitWaiting.reject( fileName ) ) {
 		{
-		parseEmit( m_parseEmitWaiting.processFile( fileName, (hasErrors && !fromDisk) ? ParseEmitWaiting::HadErrors : ParseEmitWaiting::None ) );
+			parseEmit( m_parseEmitWaiting.processFile( fileName, (hasErrors && !fromDisk) ? ParseEmitWaiting::HadErrors : ParseEmitWaiting::None ) );
 		}
 		
 			emitFileParsed( m_fileParsedEmitWaiting.processFile( fileName ) );

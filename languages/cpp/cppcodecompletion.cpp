@@ -1551,14 +1551,19 @@ private:
 	
 	
 	
-	virtual CppCodeCompletion::EvaluationResult evaluateExpressionInternal( QString expr, SimpleType scope, SimpleContext * ctx, SimpleContext* innerCtx , bool canBeTypeExpression = false ) {
+	virtual CppCodeCompletion::EvaluationResult evaluateExpressionInternal( QString expr, EvaluationResult scope, SimpleContext * ctx, SimpleContext* innerCtx , bool canBeTypeExpression = false ) {
 		Debug d( "#evl#" );
-		if( !safetyCounter ) return SimpleType();
-		if( expr.isEmpty() ) {
+		if( expr.isEmpty() || !safetyCounter ) {
+			scope.expr.t = ExpressionInfo::NormalExpression;
 			return scope;
 		}
-	
-		dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->str() << "\" context: " << ctx << endl;
+
+		if( !scope->resolved() ) {
+			dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fullTypeStructure() << "\" is unresolved " << endl;
+			return EvaluationResult();
+		}
+		
+		dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl;
 		
 			
 		expr = expr.stripWhiteSpace();
@@ -2045,7 +2050,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 	///Fill the jump-menu
 	{
 		PopupFillerHelpStruct h(this);
-		PopupFiller<PopupFillerHelpStruct> filler( h, "<" );
+		PopupFiller<PopupFillerHelpStruct> filler( h, "" );
 		
 		QPopupMenu * m = new QPopupMenu( popup );
 		int gid = popup->insertItem( i18n( "Navigate by \"%1\"" ).arg( cleanForMenu( name ) ), m );
@@ -2068,7 +2073,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		popup->setWhatsThis( gid, i18n( "<b>Navigation</b><p>Provides a menu to show involved items in the class-view " ) );
 		
 		PopupClassViewFillerHelpStruct h(this);
-		PopupFiller<PopupClassViewFillerHelpStruct> filler( h, "<" );
+		PopupFiller<PopupClassViewFillerHelpStruct> filler( h, "" );
 		
 		filler.fill( m, (TypeDesc)type );
 	}
@@ -3725,7 +3730,6 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	CompTypeProcessor proc( type );
 	
 	QValueList<Tag>::Iterator it = tags.begin();
-	bool fullOutput = type->usingTemplates();
 	while ( it != tags.end() )
 	{
 		Tag & tag = *it;
@@ -3781,20 +3785,15 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		}
 		
 		
-		QString prefix;
+		QString prefix = tagType( tag );
 			
-		if( fullOutput && (tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_Variable || tag.kind() == Tag::Kind_Typedef)) 
+		if((tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_Variable || tag.kind() == Tag::Kind_Typedef))
 		{
-			QString tt = tagType( tag );
-			if( !tt.isEmpty() ) {
-				TypeDecoration dec ( tt ); 
-				LocateResult et =  type->locateDecType( tt );
+			if( !prefix.isEmpty() ) {
+				LocateResult et =  type->locateDecType( prefix );
 				
-				if( et ) {
+				if( et )
 					prefix = et->fullNameChain();
-				} else {
-					prefix = tt;
-				}
 			}
 		}
 		

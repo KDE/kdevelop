@@ -1015,7 +1015,7 @@ public:
                     ///paramInfo now contains the information for all implicit types
         }
         
-	      return this->parent()->locateType( f->replaceTemplateParams( rt, paramInfo ) );
+	      return this->parent()->locateDecType( f->replaceTemplateParams( rt, paramInfo ) );
       } else {
         dbg() << "failed to find a fitting overloaded method" << endl;
       }
