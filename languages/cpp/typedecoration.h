@@ -17,15 +17,7 @@
 
 
 class TypeDecoration {
- QString m_decoration_front, m_decoration_back;
- void init( QString str ) {
-  str = str.stripWhiteSpace();
-  m_decoration_front = "";
-  m_decoration_back = "";
   
-  if( str.startsWith( "const " ) ) m_decoration_front = "const ";
-  if( str.endsWith( "&" ) ) m_decoration_back = "&";
- }
 public:
  TypeDecoration( const QString& str = "" ) {
   init( str );
@@ -53,6 +45,18 @@ public:
   if( !m_decoration_front.contains( rhs.m_decoration_front) ) m_decoration_front += rhs.m_decoration_front;
   if( !m_decoration_back.contains( rhs.m_decoration_back) ) m_decoration_back += rhs.m_decoration_back;
  }
+
+private:  
+  void init( QString str ) {
+    str = str.stripWhiteSpace();
+    m_decoration_front = "";
+    m_decoration_back = "";
+    
+    if( str.startsWith( "const " ) ) m_decoration_front = "const ";
+    if( str.endsWith( "&" ) ) m_decoration_back = "&";
+  }
+  
+  QString m_decoration_front, m_decoration_back;
 };
 
 #endif
