@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#ifndef KDEVAPPFRONTEND_H
-#define KDEVAPPFRONTEND_H
+#ifndef CODEBROWSERRONTEND_H
+#define CODEBROWSERRONTEND_H
 
 
 #include <kdevplugin.h>
