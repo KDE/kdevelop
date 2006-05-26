@@ -978,9 +978,8 @@ EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column ,
 		QString curLine = m_activeEditor->textLine( line );
 		
 	///move column to the last letter of the pointed word
-		while( column+1 < (int)curLine.length() && isValidIdentifierSign( curLine[column] ) && isValidIdentifierSign( curLine[column+1] ) ) {
+		while( column+1 < (int)curLine.length() && isValidIdentifierSign( curLine[column] ) && isValidIdentifierSign( curLine[column+1] ) )
 			column++;
-		}
 		
 	//if( column > 0 ) column--;
 		
@@ -1227,7 +1226,7 @@ ExpressionInfo CppCodeCompletion::findExpressionAt( int line, int column, int st
 	QString contents = clearComments( getText( startLine, startCol, line, column ) );
 	
 	
-	int start_expr = expressionAt( contents, contents.length() - 1 );
+	int start_expr = expressionAt(  contents, contents.length() - 1 );
 	
 	if ( start_expr != int( contents.length() ) - 1 ) {
 		ret.setExpr( contents.mid( start_expr, contents.length() - start_expr ).stripWhiteSpace() );
@@ -1636,9 +1635,30 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 	if ( ch == "(" )
 	{
 		--nCol;
-		while ( nCol > 0 && strCurLine[ nCol ].isSpace() )
+		while ( nCol > 0 && strCurLine[ nCol-1 ].isSpace() )
 			--nCol;
 
+		///check whether it is a value-definition using constructor
+		int column = nCol;
+		bool s1=false, s2=false;
+		while( column > 0 && isValidIdentifierSign( strCurLine[column-1] ) ) {
+			column--;
+			s1 = true;
+		}
+
+		///skip white space
+		while ( column > 0 && strCurLine[ column-1 ].isSpace() ) {
+			--column;
+			s2 = true;
+		}
+
+		if( s1 && s2 && isValidIdentifierSign( strCurLine[column-1] ) ) {
+			///it is a constructor
+			nCol = column;
+		}
+
+
+		
 		showArguments = TRUE;
 	}
 	
