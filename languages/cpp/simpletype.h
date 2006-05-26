@@ -22,6 +22,8 @@
 #include "stringhelpers.h"
 #include "completiondebug.h"
 #include "typedesc.h"
+#include "declarationinfo.h"
+
 #include "cpp_tags.h"
 #include "codemodel.h"
 
@@ -726,6 +728,7 @@ public:
   
   virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type = (MemberInfo::MemberType)0xffffffff ) {
     Q_UNUSED(name);
+    Q_UNUSED(type);
     MemberInfo mem;
     mem.memberType = MemberInfo::NotFound;
     return mem;

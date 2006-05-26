@@ -21,6 +21,7 @@
 #define __CPPCODECOMPLETION_H__
 
 #include "cppsupportpart.h"
+#include "declarationinfo.h"
 
 #include <ast.h>
 #include <codemodel.h>
@@ -48,57 +49,20 @@ class TypeDesc;
 struct PopupFillerHelpStruct;
 struct PopupClassViewFillerHelpStruct;
 class SimpleTypeImpl;
+namespace CppEvaluation
+{
+  class EvaluationResult;
+}
+struct ExpressionInfo;
+
 typedef KSharedPtr<SimpleTypeImpl> TypePointer;
 
-
-struct DeclarationInfo {
-    class File {
-        QString m_file;
-    public:
-    File( const QString& file = "" ) : m_file( file ) {
-    }
-        
-        operator QString() const {
-            return m_file;
-        }
-    };
-    
-DeclarationInfo() : startLine(0), startCol(0), endLine(0), endCol(0) {
-}
-    
-    operator bool() {
-        return !name.isEmpty();
-    }
-    
-    QString locationToText() const {
-    return QString("line %1 col %2 - line %3 col %4\nfile: %5").arg(startLine).arg(startCol).arg(endLine).arg(endCol).arg(file);
-    }
-    
-    QString toText() const {
-        if( name.isEmpty() ) return "";
-        
-        QString ret;
-        ret = QString("name: " + name + "\n" ) + locationToText();
-        if( !comment.isEmpty() ) {
-            ret += "\n\"" + comment + "\"";
-        }
-        return ret;
-    }
-    
-    int startLine, startCol;
-    int endLine, endCol;
-    
-    File file;
-    QString name;
-    QString comment;
-};
 
 
 class CppCodeCompletion : public QObject
 {
 	Q_OBJECT
 public:
-    struct ExpressionInfo;
     friend class SimpleType;
 	enum CompletionMode
 	{
@@ -113,7 +77,6 @@ public:
 		DotOp,
 		ArrowOp
 	};
-    struct EvaluationResult;
     
 public:
 	CppCodeCompletion( CppSupportPart* part );
@@ -132,11 +95,11 @@ public:
     int expressionAt( const QString& text, int index );
 	QStringList splitExpression( const QString& text );
 	
-	EvaluationResult evaluateExpression( ExpressionInfo expr, SimpleContext* ctx );
+    CppEvaluation::EvaluationResult evaluateExpression( ExpressionInfo expr, SimpleContext* ctx );
 
     static SimpleType typeName( QString name );
 
-    EvaluationResult evaluateExpressionAt( int line, int column, SimpleTypeConfiguration& conf, bool ifUnknownSetType = false );
+    CppEvaluation::EvaluationResult evaluateExpressionAt( int line, int column, SimpleTypeConfiguration& conf, bool ifUnknownSetType = false );
     
     void contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int col );
     
@@ -168,7 +131,7 @@ private:
     void selectItem( ItemDom item );
     void addTypePopups( QPopupMenu* parent, TypeDesc d, QString depthAdd, QString prefix = "" );
     void addTypeClassPopups( QPopupMenu* parent, TypeDesc d, QString depthAdd, QString prefix = "" );
-    QValueList<QStringList> computeSignatureList( EvaluationResult function );
+  QValueList<QStringList> computeSignatureList( CppEvaluation::EvaluationResult function );
 	void integratePart( KParts::Part* part );
 	void setupCodeInformationRepository();
 	FunctionDefinitionAST* functionDefinition( AST* node );
@@ -192,7 +155,7 @@ private:
     ExpressionInfo findExpressionAt( int line, int col, int startLine, int startCol, bool inFunction = false );
     SimpleContext* computeFunctionContext( FunctionDom f, int line, int col );
     
-    EvaluationResult evaluateExpressionType( int line, int column, SimpleTypeConfiguration& conf, EvaluateExpressionOptions opt = DefaultCompletionOptions  );
+    CppEvaluation::EvaluationResult evaluateExpressionType( int line, int column, SimpleTypeConfiguration& conf, EvaluateExpressionOptions opt = DefaultCompletionOptions  );
     SimpleType unTypeDef( SimpleType scope , QMap<QString, QString>& typedefs );
     
 	bool correctAccessOp( QStringList ptrList, MemberAccessOp accessOp );

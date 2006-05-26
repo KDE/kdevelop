@@ -78,6 +78,7 @@
 #include "simpletype.h"
 #include "simpletypecachebinder.h"
 #include "safetycounter.h"
+#include "cppevaluation.h"
 
 extern CppCodeCompletion* cppCompetionInstance ;
 
@@ -93,9 +94,6 @@ extern CppCodeCompletion* cppCompetionInstance ;
 
 SafetyCounter safetyCounter;
 
-typedef CppCodeCompletion::EvaluationResult EvaluationResult;
-
-
 using namespace CompletionDebug;
 
 
@@ -104,325 +102,7 @@ using namespace StringHelpers;
 
 using namespace BitHelpers;
 
-struct CppCodeCompletion::ExpressionInfo {
-private:
-	QString m_expr;
-	
-public:
-	
-	enum Type {
-		InvalidExpression = 0,
-		NormalExpression = 1,
-		TypeExpression = 2
-	};
-	
-	Type t;
-	int start, end;
-	
-	QString expr() {
-		return m_expr;
-	}
-	
-	void setExpr( const QString& str ) {
-		m_expr = clearComments( str );
-	}
-	
-	ExpressionInfo( QString str ) : t(  NormalExpression ), start( 0 ), end( str.length() ) {
-		setExpr( str );
-		
-	}
-	
-	ExpressionInfo() : t( InvalidExpression ), start(0), end(0) {
-	}
-	
-	operator bool() {
-		return t != InvalidExpression && !m_expr.isEmpty();
-	}
-	
-	bool isTypeExpression() {
-		return t == TypeExpression && !m_expr.isEmpty();
-	}
-	
-	bool canBeTypeExpression() {
-		return t & TypeExpression && !m_expr.isEmpty();
-	}
-	
-	bool isNormalExpression() {
-		return t == NormalExpression && !m_expr.isEmpty();
-	}
-	
-	bool canBeNormalExpression() {
-		return t & NormalExpression && !m_expr.isEmpty();
-	}
-	
-	QString typeAsString() {
-		QString res ;
-		if( t & NormalExpression )
-			res += "NormalExpression, ";
-		if( t & TypeExpression )
-			res += "TypeExpression, ";
-		if( t == InvalidExpression )
-			res += "InvalidExpression, ";
-		if( !res.isEmpty() ) {
-			res = res.left( res.length() - 2 );
-		} else {
-			res = "Unknown";
-		}
-		return res;
-	}
-};
 
-
-class CppCodeCompletion::EvaluationResult
-{
-public:
-	EvaluationResult& operator = ( const EvaluationResult& rhs ) {
-		resultType = rhs.resultType;
-		sourceVariable = rhs.sourceVariable;
-		expr = rhs.expr;
-		return *this;
-	}
-	
-	EvaluationResult( const EvaluationResult& rhs ) : resultType( rhs.resultType), expr( rhs.expr ), sourceVariable( rhs.sourceVariable ) {
-	}
-	LocateResult resultType; ///The resulting type
-	
-	ExpressionInfo expr; ///Information about the expression that was processed
-	
-	DeclarationInfo sourceVariable; ///If the type comes from a variable, this stores Information about it
-
-	///should be removed
-	EvaluationResult( SimpleType rhs ) {
-		if( rhs.get() != 0 )
-			resultType = rhs->desc();
-	}
-
-	EvaluationResult( LocateResult tp = TypeDesc(), DeclarationInfo var = DeclarationInfo() ): resultType( tp ), sourceVariable( var ) {
-	}
-	
-	operator TypeDesc () const {
-		return (TypeDesc)resultType;
-	}
-
-	///This must be removed
-	operator SimpleType() const {
-		if( resultType->resolved() ) {
-			return SimpleType( resultType->resolved() );
-		} else {
-			return SimpleType( new SimpleTypeImpl( (TypeDesc)resultType ) );
-		}
-	}
-	
-	TypeDesc* operator -> () {
-		return &resultType.desc();
-	}
-
-	operator LocateResult () {
-		return resultType;
-	}
-	
-	operator bool() const {
-		return (bool)resultType;
-	}
-};
-
-namespace CppEvaluation {
-
-class Operator;
-
-
-struct OperatorIdentification {
-	QValueList<QString> innerParams; /** Inner parameters of the operator( for the vec["hello"] the "hello" ) */
-	int start, end; /** Range the operator occupies */
-	bool found;
-	Operator* op; ///Can be 0 !
-	
-OperatorIdentification() : start(0), end(0), found(false), op(0) {
-	}
-	
-	operator bool() {
-		return found;
-	}
-};
-
-
-class Operator {
-public:
-	enum BindingSide {
-		Neutral = 0,
-		Left = 1,
-		Right = 2
-	};
-	enum Type {
-		Unary = 1,
-		Binary = 2,
-		Ternary = 3
-	};
-	
-	virtual ~Operator() {
-	}
-	
-	virtual int priority() = 0;
-	
-	virtual Type type() = 0; 
-	virtual int paramCount() = 0;
-	
-	///"binding" means that the operator needs the evaluated type of the expression on that side
-	///The types of all bound sides will later be sent in the "params"-list of the apply-function
-	virtual BindingSide binding() = 0;	///The side to which the operator binds
-	
-	///When this returns true, the ident-structure must be filled correctly
-	virtual OperatorIdentification identify( QString& str ) = 0;
-	
-	///params 
-	virtual EvaluationResult apply( QValueList<EvaluationResult> params, QValueList<EvaluationResult> innerParams ) = 0;
-	
-	virtual QString name() = 0;
-	
-protected:
-	void log( const QString& msg ) {
-	dbg() << "\"" << name() << "\": " << msg << endl;
-	};
-	
-	QString printTypeList( QValueList<EvaluationResult>& lst );
-};
-
-
-class OperatorSet {
-private:
-	typedef QValueList< Operator* > OperatorList;
-	OperatorList m_operators;
-public:
-	OperatorSet() {
-	}
-	
-	~OperatorSet() {
-		for( QValueList< Operator* >::iterator it = m_operators.begin(); it != m_operators.end(); ++it ) {
-			delete *it;
-		}
-	}
-	
-	void registerOperator( Operator* op ) {
-		m_operators << op;
-	}
-	
-	OperatorIdentification identifyOperator( const QString& str_ , Operator::BindingSide allowedBindings = (Operator::BindingSide) (Operator::Left | Operator::Right | Operator::Neutral) ) {
-		QString str = str_.stripWhiteSpace();
-		for( OperatorList::iterator it = m_operators.begin(); it != m_operators.end(); ++it ) {
-			if( ((*it)->binding() & allowedBindings) == (*it)->binding() ) {
-				if( OperatorIdentification ident = (*it)->identify( str ) ) {
-					return ident;
-				}
-			}
-		}
-		
-		return OperatorIdentification();
-	}
-
-	
-} AllOperators;
-
-
-template <class OperatorType>
-class RegisterOperator {
-public:
-	RegisterOperator( OperatorSet& set ) {
-		set.registerOperator( new OperatorType() );
-	}
-	~RegisterOperator() {
-	}
-};
-
-QString nameFromType( SimpleType t );
-
-
-class UnaryOperator : public Operator{
-private:
-	int m_priority;
-	QString m_identString;
-	QString m_name;
-	Operator::BindingSide m_binding;
-protected:
-	
-	inline QString  identString() const {
-		return m_identString;
-	}
-	
-public:
-	UnaryOperator( int priority , QString identString, QString description, Operator::BindingSide binding ) : Operator(), m_priority( priority ), m_identString( identString ), m_name( description ), m_binding( binding )  {
-	}
-	
-	virtual int priority() {    return m_priority;    }
-	
-	virtual Operator::Type type() {   return Operator::Unary;   }
-	
-	virtual Operator::BindingSide binding() {   return m_binding;   }
-	
-	virtual int paramCount() {  return 1; }
-	
-	virtual OperatorIdentification identify( QString& str ) {
-		OperatorIdentification ret;
-		if( str.startsWith( m_identString ) ) {
-			ret.start = 0;
-			ret.end = m_identString.length();
-			ret.found = true;
-			ret.op = this;
-		}
-		return ret;
-	}
-	
-	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) = 0;
-	
-	virtual bool checkParams( const QValueList<EvaluationResult>& params ) {
-		return !params.isEmpty() && params[0];
-	}
-	
-	
-	virtual EvaluationResult apply( QValueList<EvaluationResult> params, QValueList<EvaluationResult> innerParams ) {
-		if( !checkParams( params ) ) {
-			log( QString("parameter-check failed: %1 params: ").arg( params.size() ) + printTypeList( params ) );
-				return EvaluationResult();
-		} else {
-			EvaluationResult t = unaryApply( params.front(), innerParams );
-			if( !t ) {
-				if( params.front() )
-					log( "could not apply \"" + name() + "\" to \"" + nameFromType( params.front() ) + "\"");
-				else
-					log( "operator \"" + name() + "\" applied on \"" + nameFromType( params.front() )  + "\": returning unresolved type \"" + nameFromType( t ) + "\"");
-			}
-			return t;
-		}
-	}
-	
-	virtual QString name() {
-		return m_name;
-	}
-};
-
-
-class NestedTypeOperator : public UnaryOperator {
-public:
-	NestedTypeOperator() : UnaryOperator( 18, "::", "nested-type-operator", Operator::Left ) {
-	}
-	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) { 
-		return param;
-	}
-};
-
-//RegisterOperator< NestedTypeOperator > NestedTypeReg( AllOperators );	///This registers the operator to the list of all operators
-
-class DotOperator : public UnaryOperator {
-public:
-	DotOperator() : UnaryOperator( 17, ".", "dot-operator", Operator::Left ) {
-	}
-	
-	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) { 
-		return param;
-	}
-};
-
-RegisterOperator< DotOperator > DotReg( AllOperators ); ///This registers the operator to the list of all operators
-}
 
 class SimpleTypeFunctionInterface;
 
@@ -553,167 +233,6 @@ QString Operator::printTypeList( QValueList<EvaluationResult>& lst )
 }
 
 
-template<class To, class From>
-QValueList<To> convertList( const QValueList<From>& from ) {
-	QValueList<To> ret;
-	for( typename QValueList<From>::const_iterator it = from.begin(); it != from.end(); ++it ) {
-		ret << (To)*it;
-	}
-	return ret;
-}
-
-namespace CppEvaluation {
-
-
-class ArrowOperator : public UnaryOperator{
-public:
-ArrowOperator() : UnaryOperator( 17, "->", "arrow-operator", Operator::Left ) {
-}
-	
-	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) {
-		if( param->pointerDepth() > 0 ) {
-			param->decreasePointerDepth();
-			return param;
-		} else {
-			if( param->resolved() ) {
-				return param->resolved()->applyOperator( SimpleTypeImpl::ArrowOp , convertList<LocateResult, EvaluationResult>(innerParams) );
-			} else {
-				kdDebug( 9007 ) << "failed to apply arrow-operator to unresolved type" << endl;
-				return EvaluationResult();
-			}
-		};
-	}
-};
-
-RegisterOperator< ArrowOperator > ArrowReg( AllOperators );  ///This registers the operator to the list of all operators
-
-
-
-class StarOperator : public UnaryOperator{
-public:
-StarOperator() : UnaryOperator( 15, "*", "star-operator", Operator::Right ) { ///Normally this should have a priority of 16, but that would need changes to the expression-parsing-loop
-}
-	
-	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) { 
-		if( param->pointerDepth() > 0 ) {
-			param->decreasePointerDepth();
-			return param;
-		} else {
-			if( param->resolved() ) {
-				return param->resolved()->applyOperator( SimpleTypeImpl::StarOp );
-			} else {
-				kdDebug( 9007 ) << "failed to apply star-operator to unresolved type" << endl;
-				return EvaluationResult();
-			}
-		};
-	}
-};
-
-RegisterOperator< StarOperator > StarReg( AllOperators );  ///This registers the operator to the list of all operators
-
-class AddressOperator : public UnaryOperator{
-public:
-AddressOperator() : UnaryOperator( 16, "&", "address-operator", Operator::Right ) {
-}
-	
-	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) {
-		param->setPointerDepth( param->pointerDepth() + 1 );
-		return param;
-	}
-};
-
-RegisterOperator< AddressOperator > AddressReg( AllOperators );  ///This registers the operator to the list of all operators
-
-
-class UnaryParenOperator : public UnaryOperator {
-public:
-	///Identstring should be both parens, for Example "[]" or "()"
-	UnaryParenOperator( int priority , QString identString, QString description, Operator::BindingSide binding ) : UnaryOperator( priority, identString, description, binding ) {
-}
-	
-	virtual OperatorIdentification identify( QString& str ) {
-		OperatorIdentification ret;
-		if( str.startsWith( QString( identString()[0] ) ) ) {
-			ret.start = 0;
-			ret.end = findClose( str, 0 );
-			if( ret.end == -1 ) {
-				ret.found = false;
-				ret.end = 0;
-			} else {
-				if( str[ret.end] == identString()[1] ) {
-					ret.found = true;
-					ret.end += 1;
-					ret.op = this;
-					
-					///Try to extract the parameter-strings.
-					ParamIterator it( identString(), str.mid( ret.start, ret.end - ret.start ) );
-					
-					while( it ) {
-						ret.innerParams << (*it).stripWhiteSpace();
-						
-						++it;
-					}
-					
-				} else {
-					ret.end = 0;
-				}
-			}
-		}
-		return ret;
-	}
-};
-
-class IndexOperator : public UnaryParenOperator {
-public:
-IndexOperator() : UnaryParenOperator( 17, "[]", "index-operator", Operator::Left ) {
-	}
-	
-	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) {
-		if( param->pointerDepth() > 0 ) {
-			param->decreasePointerDepth();
-			return param;
-		} else {
-			if( param->resolved() ) {
-				return param->resolved()->applyOperator( SimpleTypeImpl::IndexOp, convertList<LocateResult>( innerParams ) );
-			} else {
-				kdDebug( 9007 ) << "failed to apply index-operator to unresolved type" << endl;
-				return EvaluationResult();
-			}
-		};
-	}
-};
-
-RegisterOperator< IndexOperator > IndexReg( AllOperators );  ///This registers the operator to the list of all operators
-
-
-class ParenOperator : public UnaryParenOperator {
-public:
-ParenOperator() : UnaryParenOperator( 16, "()", "paren-operator", Operator::Left ) {
-}
-	
-	virtual bool checkParams( const QValueList<EvaluationResult>& params ) {
-		return !params.isEmpty();
-	}
-	
-	virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) {
-		if( param ) {
-			if( param->resolved() ) {
-				return param->resolved()->applyOperator( SimpleTypeImpl::ParenOp, convertList<LocateResult>(innerParams) );
-			} else {
-				kdDebug( 9007 ) << "failed to apply paren-operator to unresolved type" << endl;
-				return EvaluationResult();
-			}
-			
-		} else {
-			return innerParams[0];
-		}
-	}
-};
-
-RegisterOperator< ParenOperator > ParenReg( AllOperators );  ///This registers the operator to the list of all operators
-
-
-}
 
 
 
@@ -1499,11 +1018,6 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
 	return l;
 }
 
-
-
-
-typedef CppCodeCompletion::ExpressionInfo ExpressionInfo;
-
 namespace CppEvaluation {
 
 class ExpressionEvaluation {
@@ -1529,11 +1043,11 @@ public:
 		//m_expr = m_data->splitExpression( expr.expr() ).join("");
 	}
 	
-	CppCodeCompletion::EvaluationResult evaluate() {
-		CppCodeCompletion::EvaluationResult res;
+	EvaluationResult evaluate() {
+		EvaluationResult res;
 		res = evaluateExpressionInternal( m_expr.expr(), m_ctx->global(), m_ctx, m_ctx, m_expr.canBeTypeExpression() );
 		
-		CppCodeCompletion::ExpressionInfo ex = res.expr; ///backup and set the type which was chosen while the evaluation-process
+		ExpressionInfo ex = res.expr; ///backup and set the type which was chosen while the evaluation-process
 		res.expr = m_expr;
 		res.expr.t = ex.t;
 		
@@ -1547,11 +1061,7 @@ private:
 	
 	vector[ (*it)->position ]().
 	*/
-	typedef CppCodeCompletion::EvaluationResult EvaluationResult;
-	
-	
-	
-	virtual CppCodeCompletion::EvaluationResult evaluateExpressionInternal( QString expr, EvaluationResult scope, SimpleContext * ctx, SimpleContext* innerCtx , bool canBeTypeExpression = false ) {
+	virtual EvaluationResult evaluateExpressionInternal( QString expr, EvaluationResult scope, SimpleContext * ctx, SimpleContext* innerCtx , bool canBeTypeExpression = false ) {
 		Debug d( "#evl#" );
 		if( expr.isEmpty() || !safetyCounter ) {
 			scope.expr.t = ExpressionInfo::NormalExpression;
@@ -1686,7 +1196,7 @@ private:
 		
 		QStringList split = splitType( currentExpr );
 		
-		if( scope.expr.t & CppCodeCompletion::ExpressionInfo::TypeExpression )
+		if( scope.expr.t & ExpressionInfo::TypeExpression )
 			canBeTypeExpression = true;
 		
 		if ( !split.isEmpty() && (currentExpr.endsWith( "::" ) || split.size() > 1 || canBeTypeExpression ) )
@@ -1698,7 +1208,7 @@ private:
 			{
 				if( !split.isEmpty() ) split.pop_front();
 				EvaluationResult ret = evaluateAtomicExpression( split + exprList, type, 0, true );
-				ret.expr.t = CppCodeCompletion::ExpressionInfo::TypeExpression;
+				ret.expr.t = ExpressionInfo::TypeExpression;
 				return ret;
 			} else {
 				dbg() << "\"" << scope.resultType->fullNameChain() << "\"could not locate " << currentExpr << endl;
@@ -1803,7 +1313,7 @@ bool isValidIdentifierSign( const QChar& c ) {
 EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column , SimpleTypeConfiguration& conf, bool ifUnknownSetType ) {
 	kdDebug( 9007 ) << "CppCodeCompletion::evaluateExpressionAt( " << line << ", " << column << " )" << endl;
 
-    if( line < 0 || line >= m_activeEditor->numLines()  ) return EvaluationResult(); 
+    if( line < 0 || line >= (int)m_activeEditor->numLines()  ) return EvaluationResult();
     if( column < 0 || column >= m_activeEditor->lineLength( line ) ) return EvaluationResult(); 
   
 	if ( !m_pSupport || !m_activeEditor )
@@ -2241,7 +1751,7 @@ bool CppCodeCompletion::canBeTypePrefix( const QString& prefix, bool inFunction 
 }
 
 ///This function is just a litte hack und should be remade, it doesn't work for all cases
-CppCodeCompletion::ExpressionInfo CppCodeCompletion::findExpressionAt( int line, int column, int startLine, int startCol, bool inFunction )  {
+ExpressionInfo CppCodeCompletion::findExpressionAt( int line, int column, int startLine, int startCol, bool inFunction )  {
 	ExpressionInfo ret;
 	
 	QString contents = clearComments( getText( startLine, startCol, line, column ) );
@@ -2402,7 +1912,7 @@ bool CppCodeCompletion::functionContains( FunctionDom f , int line, int col ) {
 }
 
 ///Warning: yet check how to preserve the SimpleTypeConfiguration.. 
-CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column, SimpleTypeConfiguration& conf, EvaluateExpressionOptions opt ) { 
+EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column, SimpleTypeConfiguration& conf, EvaluateExpressionOptions opt ) {
 	EvaluationResult ret;
 	
 	FileDom file = m_pSupport->codeModel()->fileByName( m_activeFileName );
@@ -4071,7 +3581,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< CodeCompletionEn
 }
 
 
-CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, SimpleContext* ctx )
+EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, SimpleContext* ctx )
 {
 	safetyCounter.init();
 
@@ -4079,7 +3589,7 @@ CppCodeCompletion::EvaluationResult CppCodeCompletion::evaluateExpression( Expre
 	
 	CppEvaluation::ExpressionEvaluation obj( this, expr, AllOperators, ctx );
 	
-	CppCodeCompletion::EvaluationResult res;
+	EvaluationResult res;
 	res = obj.evaluate();
 	
 	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Type of %1 is %2" ).arg( expr.expr() ).arg( res->fullNameChain() ), 1000 );
