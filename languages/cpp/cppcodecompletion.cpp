@@ -2563,7 +2563,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 	
 	int nLine = line, nCol = column;
 
-	QString strCurLine = m_activeEditor->textLine( nLine );
+	QString strCurLine = clearComments( m_activeEditor->textLine( nLine ) );
 
 	QString ch = strCurLine.mid( nCol - 1, 1 );
 	QString ch2 = strCurLine.mid( nCol - 2, 2 );
@@ -2644,7 +2644,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		if ( currentFunction || recoveryPoint->kind == NodeType_FunctionDefinition )
 		{
 
-			QString textToReparse = getText( startLine, startColumn, line, showArguments ? nCol : column );
+			QString textToReparse = clearComments( getText( startLine, startColumn, line, showArguments ? nCol : column ) );
 			
  			kdDebug(9007) << "-------------> reparse text" << endl << textToReparse << endl
  			             << "--------------------------------------------" << endl;
