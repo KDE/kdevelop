@@ -307,6 +307,24 @@ Button *ButtonBar::firstButton()
     return 0;
 }
 
+Button *ButtonBar::nextTo(Button *button)
+{
+    ButtonList::iterator it = m_buttons.find(button);
+    it++;
+    if (it == m_buttons.end())
+        it = m_buttons.begin();
+    return *it;
+}
+
+Button *ButtonBar::prevTo(Button *button)
+{
+    ButtonList::iterator it = m_buttons.find(button);
+    if (it == m_buttons.begin())
+        return m_buttons.last();
+    it--;
+    return *it;
+}
+
 }
 
 #include "buttonbar.moc"

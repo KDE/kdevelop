@@ -83,6 +83,8 @@ public:
     virtual void unshrink();
 
     Button *firstButton();
+    Button *nextTo(Button *button);
+    Button *prevTo(Button *button);
 
 protected:
     virtual void resizeEvent ( QResizeEvent *ev );

@@ -64,6 +64,10 @@ public:
     DMainWindow *mainWindow() const { return m_mainWindow; }
 
     virtual void selectLastWidget();
+    virtual void selectNextWidget();
+    virtual void selectPrevWidget();
+
+    bool isActive();
 
 signals:
     void hidden();

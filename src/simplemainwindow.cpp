@@ -334,18 +334,36 @@ void SimpleMainWindow::raiseEditor()
 
 void SimpleMainWindow::gotoNextWindow()
 {
-    if ((m_activeTabWidget->currentPageIndex() + 1) < m_activeTabWidget->count())
-        m_activeTabWidget->setCurrentPage(m_activeTabWidget->currentPageIndex() + 1);
+    if (m_bottomDock->isActive())
+        m_bottomDock->selectNextWidget();
+    else if (m_rightDock->isActive())
+        m_rightDock->selectNextWidget();
+    else if (m_leftDock->isActive())
+        m_leftDock->selectNextWidget();
     else
-        m_activeTabWidget->setCurrentPage(0);
+    {
+        if ((m_activeTabWidget->currentPageIndex() + 1) < m_activeTabWidget->count())
+            m_activeTabWidget->setCurrentPage(m_activeTabWidget->currentPageIndex() + 1);
+        else
+            m_activeTabWidget->setCurrentPage(0);
+    }
 }
 
 void SimpleMainWindow::gotoPreviousWindow()
 {
-    if ((m_activeTabWidget->currentPageIndex() - 1) >= 0)
-        m_activeTabWidget->setCurrentPage(m_activeTabWidget->currentPageIndex() - 1);
+    if (m_bottomDock->isActive())
+        m_bottomDock->selectPrevWidget();
+    else if (m_rightDock->isActive())
+        m_rightDock->selectPrevWidget();
+    else if (m_leftDock->isActive())
+        m_leftDock->selectPrevWidget();
     else
-        m_activeTabWidget->setCurrentPage(m_activeTabWidget->count() - 1);
+    {
+        if ((m_activeTabWidget->currentPageIndex() - 1) >= 0)
+            m_activeTabWidget->setCurrentPage(m_activeTabWidget->currentPageIndex() - 1);
+        else
+            m_activeTabWidget->setCurrentPage(m_activeTabWidget->count() - 1);
+    }
 }
 
 void SimpleMainWindow::gotoFirstWindow()

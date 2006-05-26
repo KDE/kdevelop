@@ -302,4 +302,27 @@ void DDockWindow::selectLastWidget()
         button->animateClick();
 }
 
+bool DDockWindow::isActive()
+{
+    return m_toggledButton && m_widgets[m_toggledButton]->hasFocus();
+}
+
+void DDockWindow::selectNextWidget()
+{
+    if (!m_toggledButton)
+        return;
+    Ideal::Button *b = m_bar->nextTo(m_toggledButton);
+    if (b)
+        b->animateClick();
+}
+
+void DDockWindow::selectPrevWidget()
+{
+    if (!m_toggledButton)
+        return;
+    Ideal::Button *b = m_bar->prevTo(m_toggledButton);
+    if (b)
+        b->animateClick();
+}
+
 #include "ddockwindow.moc"
