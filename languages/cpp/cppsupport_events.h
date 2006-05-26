@@ -32,8 +32,8 @@ enum
 class FileParsedEvent: public QCustomEvent
 {
 public:
-	FileParsedEvent( const QString& fileName, const QValueList<Problem>& problems )
-			: QCustomEvent( Event_FileParsed ), m_fileName( deepCopy( fileName ) )
+	FileParsedEvent( const QString& fileName, const QValueList<Problem>& problems, bool fromDisk = false )
+		: QCustomEvent( Event_FileParsed ), m_fileName( deepCopy( fileName ) ), m_fromDisk( fromDisk )
 	{
 		// the members are deep copies
 		QValueListConstIterator<Problem> it = problems.begin();
@@ -54,9 +54,14 @@ public:
 		return m_problems;
 	}
 
+	bool fromDisk() {
+		return m_fromDisk;
+	}
+
 private:
 	QString m_fileName;
 	QValueList<Problem> m_problems;
+	bool m_fromDisk;
 
 private:
 	FileParsedEvent( const FileParsedEvent& source );

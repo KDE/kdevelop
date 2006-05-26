@@ -287,16 +287,18 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	
 	QTime t;
 	t.start();
+	bool fromDisk = false;
 	
 	if ( ev->type() == int( Event_FileParsed ) )
 	{
 		FileParsedEvent * event = ( FileParsedEvent* ) ev;
+		fromDisk = event->fromDisk();
 		QString fileName = event->fileName();
+		bool hasErrors = false;
 		if ( m_problemReporter )
 		{
 			m_problemReporter->removeAllProblems( fileName );
 			
-			bool hasErrors = false;
 			QValueList<Problem> problems = event->problems();
 			QValueList<Problem>::ConstIterator it = problems.begin();
 			while ( it != problems.end() )
@@ -311,7 +313,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 		
 		if( !m_parseEmitWaiting.reject( fileName ) ) {
 		{
-			parseEmit( m_parseEmitWaiting.processFile( fileName )  );
+		parseEmit( m_parseEmitWaiting.processFile( fileName, (hasErrors && !fromDisk) ? ParseEmitWaiting::HadErrors : ParseEmitWaiting::None ) );
 		}
 		
 			emitFileParsed( m_fileParsedEmitWaiting.processFile( fileName ) );
@@ -921,7 +923,7 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 	for ( fileIt = m_projectFileList.begin(); fileIt != m_projectFileList.end(); ++fileIt )
 	{
 		candidateFileWoExt.setFile(*fileIt);
-		kdDebug( 9007 ) << "candidate file: " << *fileIt << endl;
+		//kdDebug( 9007 ) << "candidate file: " << *fileIt << endl;
 		if( !candidateFileWoExt.extension().isEmpty() )
 			candidateFileWoExtString = candidateFileWoExt.fileName().replace( "." + candidateFileWoExt.extension(), "" );
 		if ( candidateFileWoExtString == fileNameWoExt ) 
@@ -1955,24 +1957,31 @@ void CppSupportPart::parseFileAndDependencies( const QString & fileName ) {
 	}
 }
 
-void CppSupportPart::parseEmit( const QStringList& files ) {
-	if( files.isEmpty() ) return;
+void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
+	if( files.res.isEmpty() ) return;
+	if( files.flag & ParseEmitWaiting::HadErrors ) {
+		kdDebug( 9007 ) << "not updating code-model because at least one file has errors" << endl;
+		return;
+	}
 	
 	m_backgroundParser->lock();
 	
-	QStringList l = files;
+	QStringList l = files.res;
+
+	QValueList<FileDom> fileBackups;
 	
 	while(!l.isEmpty() ) 
 	{
 		if ( codeModel() ->hasFile( l.back() ) && m_backgroundParser->hasTranslationUnit( l.back() ) )
 		{
+			fileBackups << codeModel()->fileByName( l.back() );
 			removeWithReferences( l.back() );
 		}
 		
 		l.pop_back();
 	}
 	
-	l = files;
+	l = files.res;
 	
 	///Since even normal typing may create problems, these must not break the group, so group everything together afterwards
 	int currentGroup = 0;
@@ -2005,7 +2014,7 @@ void CppSupportPart::parseEmit( const QStringList& files ) {
 		l.pop_front();
 	}
 	
-	l = files;
+	l = files.res;
 	
 	while(!l.isEmpty() ) {
 		emit addedSourceInfo( l.front() );

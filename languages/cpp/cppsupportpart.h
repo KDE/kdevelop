@@ -197,7 +197,6 @@ private slots:
     void codeCompletionConfigStored();
     void splitHeaderSourceConfigStored();
     //	void recomputeCodeModel( const QString& fileName );
-    void parseEmit( const QStringList& files );
 	void slotNewClass();
 	void slotSwitchHeader( bool scrollOnly = false );
 	void slotGotoIncludeFile();
@@ -324,8 +323,23 @@ private:
 	QTimer* m_functionHintTimer;
     
     class ParseEmitWaiting {
+    public:
+	    enum Flags {
+		    None = 0,
+			    HadErrors = 1
+	    };
     private:
-        typedef QPair<QStringList, QStringList> Item; ///The files we are waiting fore, and the files we already got
+	    struct Item {
+		    QStringList first;
+		    QStringList second;
+		    Flags flags;
+	    	Item() : flags(None) {
+		    }
+			Item( QStringList f, QStringList s, Flags fl = None ) : first( f ), second( s ), flags( fl )
+		    {
+		    }
+	    };
+	    //typedef QPair<QStringList, QStringList> Item; ///The files we are waiting fore, and the files we already got
         typedef QValueList< Item > List;
         List m_waiting;
         
@@ -351,8 +365,8 @@ private:
         }
         
     public:
-        void addGroup( QStringList& files ) {
-            m_waiting << Item(files, QStringList());
+        void addGroup( QStringList& files, Flags flag = None ) {
+            m_waiting << Item(files, QStringList(), flag);
         }
         void clear() {
             m_waiting.clear();
@@ -367,19 +381,33 @@ private:
             }
             return true;
         }
-        
+
+	    struct Processed {
+		    QStringList res;
+		    Flags flag;
+			Processed() : flag(None) {
+			}
+			Processed(const QStringList& l , Flags f = None ) : res( l ), flag( f ) {
+			}
+		    operator QStringList() {
+			    return res;
+		    }
+	    };
+	    
         ///returns the parsed-messages that should be emitted
-        QStringList processFile( QString file ) {
+		Processed processFile( QString file, Flags flag = None ) {
             QStringList ret;
             for( List::iterator it = m_waiting.begin(); it != m_waiting.end(); ++it) {
                 if( (*it).first.find( file ) !=  (*it).first.end() ) {
                     if( (*it).second.find( file ) == (*it).second.end() ) {
+	                    (*it).flags = (Flags) ((*it).flags | flag);
                         (*it).second << file;
                         if( (*it).second.count() == (*it).first.count() ) {
+	                        Flags f = (*it).flags;
                             if( it != m_waiting.begin() ) {
                                 kdDebug( 9007 ) << "ParseEmitWaiting: the chain has multiple groups waiting, they are flushed" << endl;
                             }
-                            return harvestUntil( ++it );
+	                        return Processed( harvestUntil( ++it ), f );
                         } else {
                             ///The file was registered, now wait for the next
                             return QStringList();
@@ -401,6 +429,10 @@ private:
     ParseEmitWaiting m_parseEmitWaiting;
     ParseEmitWaiting m_fileParsedEmitWaiting;
 
+private slots:
+	void parseEmit( ParseEmitWaiting::Processed files );
+private:
+	
 	static QStringList m_sourceMimeTypes;
 	static QStringList m_headerMimeTypes;
 

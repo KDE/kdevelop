@@ -118,16 +118,16 @@ public:
 
  virtual void parseNamespace( NamespaceAST* ast )
  {
-  //insertRecoveryPoint( ast );
-  m_currentScope.push_back( ast->namespaceName() ->text() );
+  	m_currentScope.push_back( ast->namespaceName() ->text() );
+	insertRecoveryPoint( ast );
+	 
+  	m_imports.push( m_imports.top() ); // dup
+	 //  m_imports.top().push_back( m_currentScope );
 
-  m_imports.push( m_imports.top() ); // dup
-  m_imports.top().push_back( m_currentScope );
+  	TreeParser::parseNamespace( ast );
 
-  TreeParser::parseNamespace( ast );
-
-  m_imports.pop();
-  m_currentScope.pop_back();
+  	m_imports.pop();
+  	m_currentScope.pop_back();
  }
 
  void parseTemplateDeclaration( TemplateDeclarationAST* ast )

@@ -301,7 +301,7 @@ Unit* BackgroundParser::parseFile( const QString& fileName, bool readFromDisk, b
 	if ( lock )
 		m_mutex.unlock();
 	
-	KApplication::postEvent( m_cppSupport, new FileParsedEvent( fileName, unit->problems ) );
+	KApplication::postEvent( m_cppSupport, new FileParsedEvent( fileName, unit->problems, readFromDisk ) );
 	
 	m_currentFile = QString::null;
 	
