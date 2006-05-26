@@ -24,6 +24,7 @@
 #include <qstyle.h>
 #include <qwidgetstack.h>
 #include <qimage.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -304,7 +305,29 @@ void DDockWindow::selectLastWidget()
 
 bool DDockWindow::isActive()
 {
-    return m_toggledButton && m_widgets[m_toggledButton]->hasFocus();
+    if (m_toggledButton)
+    {
+        kdDebug() << m_widgetStack->focusWidget() << endl;
+        kdDebug() << m_widgets[m_toggledButton] << endl;
+        kdDebug() << m_widgets[m_toggledButton]->focusWidget() << endl;
+        kdDebug() << qApp->focusWidget() << endl;
+    }
+//     return m_toggledButton && (focusWidget() == qApp->focusWidget());
+    if (m_toggledButton)
+    {
+        QWidget *w = qApp->focusWidget();
+        QWidget *toolWidget = m_widgets[m_toggledButton];
+        if (toolWidget == w)
+            return true;
+        else
+        {
+            do {
+                w = (QWidget*)w->parent();
+                if (w && (w == toolWidget)) return true;
+            } while (w);
+        }
+    }
+    return false;
 }
 
 void DDockWindow::selectNextWidget()

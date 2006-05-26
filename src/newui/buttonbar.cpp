@@ -310,19 +310,35 @@ Button *ButtonBar::firstButton()
 Button *ButtonBar::nextTo(Button *button)
 {
     ButtonList::iterator it = m_buttons.find(button);
-    it++;
-    if (it == m_buttons.end())
-        it = m_buttons.begin();
-    return *it;
+    Button *next = 0;
+    if ((*it) == m_buttons.last())
+        next = m_buttons.first();
+    else
+    {
+        it++;
+        next = *it;
+    }
+    if (next->isVisible())
+        return next;
+    else
+        return nextTo(next);
 }
 
 Button *ButtonBar::prevTo(Button *button)
 {
     ButtonList::iterator it = m_buttons.find(button);
+    Button *prev = 0;
     if (it == m_buttons.begin())
-        return m_buttons.last();
-    it--;
-    return *it;
+        prev = m_buttons.last();
+    else
+    {
+        it--;
+        prev = *it;
+    }
+    if (prev->isVisible())
+        return prev;
+    else
+        return prevTo(prev);
 }
 
 }
