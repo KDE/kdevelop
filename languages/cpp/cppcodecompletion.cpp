@@ -316,10 +316,11 @@ class PopupFiller {
 public:
 PopupFiller( HelpStruct s , QString dAdd, int maxCount = 100 ) : struk( s ), depthAdd( dAdd), s(maxCount) {
 }
-  
+
   void fill( QPopupMenu* parent, TypeDesc d, QString prefix = "" ) {
-    if( !s ) {
-      kdDebug( 9007 ) << "safety-counter reached while filling the menu-structure, stopping" << endl;
+	Debug dbg( "#fl# ", 10 );
+    if( !s || !dbg ) {
+	    //dbgMajor() << "safety-counter triggered while filling \"" << d.fullNameChain() << "\"" << endl;
       return;
     }
     struk.insertItem( parent, d, prefix );
@@ -335,7 +336,7 @@ PopupFiller( HelpStruct s , QString dAdd, int maxCount = 100 ) : struk( s ), dep
       }
     }
     
-    if( d.resolved() ) {
+	if( d.resolved() ) {
       if( d.resolved()->asFunction() ) {
         SimpleTypeImpl::LocateResult rt = d.resolved()->locateDecType( d.resolved()->asFunction()->getReturnType() );
         if( rt ) {

@@ -15,6 +15,7 @@
 
 //#define VERBOSE
 #define VERBOSEMAJOR
+#define DEPTHBACKTRACE
 
 #include <qstringlist.h>
 #include <kdebug.h>
@@ -86,8 +87,9 @@ template<>
  class LogDebug {
  private:
    DBGStreamType& m_state;
+   int m_max;
  public:
- LogDebug( const QString& prefix = "#", DBGStreamType& st = dbgState ) : m_state( st ) {
+ LogDebug( const QString& prefix = "#", int max = completionMaxDepth, DBGStreamType& st = dbgState ) : m_state( st ), m_max( max ) {
      m_state.push( prefix );
    };
    ~LogDebug() {
@@ -103,10 +105,14 @@ template<>
    }
  
    operator bool() {
-     bool r = depth() < completionMaxDepth;
+     bool r = depth() < m_max;
   
-     if( !r )
-       dbg() << "recursion is too deep";
+	if( !r ) {
+      dbg() << "recursion is too deep";
+#ifdef DEPTHBACKTRACE
+	   kdDebug( 9007 ) << kdBacktrace();
+#endif
+	}
   
      return r;
    }
@@ -116,8 +122,9 @@ template<>
 ///does not care about the logging, but still counts the depth
   class DepthDebug {
     DBGStreamType& m_state;
+	int m_max;
   public:
-    DepthDebug( const QString& prefix = "#", DBGStreamType& st = dbgState ) : m_state( st ) {
+  	DepthDebug( const QString& prefix = "#", int max = completionMaxDepth, DBGStreamType& st = dbgState ) : m_state( st ), m_max( max ) {
       Q_UNUSED( prefix );
     };
     
@@ -130,10 +137,14 @@ template<>
     }
     
     operator bool() {
-      bool r = depth() < completionMaxDepth;
+      bool r = depth() < m_max;
       
-      if( !r )
+	if( !r ) {
         kdDebug( 9007 ) << "recursion is too deep";
+#ifdef DEPTHBACKTRACE
+		kdDebug( 9007 ) << kdBacktrace();
+#endif
+	}
       
       return r;
     }
