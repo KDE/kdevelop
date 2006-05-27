@@ -51,7 +51,7 @@ public:
     LocateDesc( TypeDesc name, SimpleTypeImpl::LocateMode mode, int dir, SimpleTypeImpl::MemberInfo::MemberType typeMask )  : mname( name ), mmode( mode ) , mdir( dir ) , mtypeMask( typeMask ) {
       fullName = mname.fullTypeStructure();
     }
-    
+
     int compare( const LocateDesc& rhs ) const {
       QString a = fullName;
       QString b = rhs.fullName;
@@ -155,7 +155,7 @@ public:
     typename MemberMap::iterator it = m_memberCache.find( key );
     
     if( it != m_memberCache.end() ) {
-      dbg() << "\"" << Base::str() << "\" took member-info for \"" << name.fullNameChain() << "\" from the cache" << endl;
+	  ifVerbose( dbg() << "\"" << Base::str() << "\" took member-info for \"" << name.fullNameChain() << "\" from the cache" << endl );
       return m_memberCache[key];
     } else {
       SimpleTypeImpl::MemberInfo mem = Base::findMember( name, type );
@@ -177,7 +177,7 @@ public:
     
     if( it != m_locateCache.end() ) {
       Debug d("#lo#");
-      dbg() << "\"" << Base::str() << "\" located \"" << name.fullNameChain() << "\" from the cache" << endl;
+	  ifVerbose( dbg() << "\"" << Base::str() << "\" located \"" << name.fullNameChain() << "\" from the cache" << endl );
       return *it;
     } else {
 	  SimpleTypeImpl::LocateResult t = Base::locateType( name, mode, dir, typeMask );
@@ -190,7 +190,7 @@ public:
   
 	virtual QValueList<SimpleTypeImpl::LocateResult> getBases() {
     if( m_haveBasesCache ) {
-      dbg() << "\"" << Base::str() << "\" took base-info from the cache" << endl;
+      ifVerbose( dbg() << "\"" << Base::str() << "\" took base-info from the cache" << endl );
       return m_basesCache;
     } else {
 	    m_basesCache = Base::getBases();
@@ -275,10 +275,14 @@ private:
 class SimpleTypeCodeModel;
 class SimpleTypeCatalog;
 class SimpleTypeNamespace;
+class SimpleTypeCodeModelFunction;
+class SimpleTypeCatalogFunction;
 
 typedef SimpleTypeCacheBinder<SimpleTypeCodeModel> SimpleTypeCachedCodeModel;
 typedef SimpleTypeCacheBinder<SimpleTypeCatalog> SimpleTypeCachedCatalog;
 typedef SimpleTypeCacheBinder<SimpleTypeNamespace> SimpleTypeCachedNamespace;
+typedef SimpleTypeCacheBinder<SimpleTypeCodeModelFunction> SimpleTypeCachedCodeModelFunction;
+typedef SimpleTypeCacheBinder<SimpleTypeCatalogFunction> SimpleTypeCachedCatalogFunction;
 
 
 #endif

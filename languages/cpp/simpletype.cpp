@@ -38,12 +38,12 @@ void SimpleType::resolve( Repository rep )  const {
       m_type = t->resolved();
       return;
      } else {
-      dbg() << "\"" << scope().join("::") << "\": The type could not be located in the global scope while resolving it" << endl;
+       ifVerbose( dbg() << "\"" << scope().join("::") << "\": The type could not be located in the global scope while resolving it" << endl );
      }
     }
    }
   } else {
-   dbg() << "warning: no global namespace defined! " << endl;
+    ifVerbose( dbg() << "warning: no global namespace defined! " << endl );
   }
   
   TypePointer cm;
@@ -57,14 +57,14 @@ void SimpleType::resolve( Repository rep )  const {
    
    if( cm->hasNode() || rep == CodeModel ) {
     if( cm->hasNode() ) {
-     dbg() << "resolved \"" << str() << "\" from the code-model" << endl;
+     ifVerbose( dbg() << "resolved \"" << str() << "\" from the code-model" << endl );
      if( cm->isNamespace() &&rep != CodeModel ) {
-     dbg() << "\"" << str() << "\": is namespace, resolving proxy" << endl; 
+      ifVerbose( dbg() << "\"" << str() << "\": is namespace, resolving proxy" << endl );
       resolve( Both );
       return;
      }
     }else{
-     dbg() << "forced \"" << str() << "\" to be resolved from code-model" << endl;
+      ifVerbose( dbg() << "forced \"" << str() << "\" to be resolved from code-model" << endl );
     }
     m_type = cm;
     m_resolved = true;
@@ -81,14 +81,14 @@ void SimpleType::resolve( Repository rep )  const {
    
    if( cm->hasNode() || rep == Catalog ) {
     if( cm->hasNode() ) {
-     dbg() << "resolved \"" << str() << "\" from the catalog" << endl;
+     ifVerbose( dbg() << "resolved \"" << str() << "\" from the catalog" << endl );
      if( cm->isNamespace() && rep != Catalog ) {
-     dbg() << "\"" << str() << "\": is namespace, resolving proxy" << endl; 
+      ifVerbose( dbg() << "\"" << str() << "\": is namespace, resolving proxy" << endl );
       resolve( Both );
       return;
      }
     }else{
-     dbg() << "forced \"" << str() << "\" to be resolved from catalog" << endl;
+      ifVerbose( dbg() << "forced \"" << str() << "\" to be resolved from catalog" << endl );
     }
     m_type = cm;
     m_resolved = true;
@@ -104,7 +104,7 @@ void SimpleType::resolve( Repository rep )  const {
   }
   
   m_resolved = true;
-  dbg() << "could not resolve \"" << m_type->desc().fullNameChain() << "\"" << endl;
+  ifVerbose( dbg() << "could not resolve \"" << m_type->desc().fullNameChain() << "\"" << endl );
  }
 }
 
@@ -172,17 +172,17 @@ TODO: cache this too */
 SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const QString& name, MemberInfo::MemberType typ  ) {
  Debug d( "#to#" );
  if( !d ) {
-  dbg() << "stopping typeOf-evaluation because the recursion-depth is too high" << endl;
-	 return TypeOfResult( SimpleTypeImpl::LocateResult( TypeDesc( "CompletionError::too_much_recursion" ) ) );
+   ifVerbose( dbg() << "stopping typeOf-evaluation because the recursion-depth is too high" << endl );
+   return TypeOfResult( SimpleTypeImpl::LocateResult( TypeDesc( "CompletionError::too_much_recursion" ) ) );
  }
- dbg() << "\"" << str() << "\"------------>: searching for type of member \"" << name << "\"" << endl;
+ ifVerbose( dbg() << "\"" << str() << "\"------------>: searching for type of member \"" << name << "\"" << endl );
  
  TypeDesc td = resolveTemplateParams( name );
  
  MemberInfo mem = findMember( td, typ );
  
  if( mem ) {
- dbg() << "\"" << str() << "\": found member " << name << ", type: " << mem.type.fullNameChain() << endl;
+  ifVerbose( dbg() << "\"" << str() << "\": found member " << name << ", type: " << mem.type.fullNameChain() << endl );
   if( mem.memberType == MemberInfo::Function ) {
    ///For functions, find all functions with the same name, so that overloaded functions can be identified correctly
    TypePointer ret = mem.build();
@@ -198,22 +198,22 @@ SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const QString& name, Member
     }
 	   return TypeOfResult( SimpleTypeImpl::LocateResult( ret->desc() ) );
    } else {
-    dbg() << "error, using old function-type-evaluation" << endl;
-	   return TypeOfResult( locateDecType( mem.type ), mem.decl );
+    ifVerbose( dbg() << "error, using old function-type-evaluation" << endl );
+    return TypeOfResult( locateDecType( mem.type ), mem.decl );
    }
   } else if( mem.memberType == MemberInfo::Variable ) {
 	  return TypeOfResult( locateDecType( mem.type ), mem.decl );
   } else {
-  	dbg() << "while searching for the type of \"" << name << "\" in \"" << str() << "\": member has wrong type: \"" << mem.memberTypeToString() << "\"" << endl;
+    ifVerbose( dbg() << "while searching for the type of \"" << name << "\" in \"" << str() << "\": member has wrong type: \"" << mem.memberTypeToString() << "\"" << endl );
    	return TypeOfResult();
   }
  }
  
  TypeOfResult ret = searchBases( td );
  if( !ret )
-  dbg() << "\"" << str() << "\"------------>: failed to resolve the type of member \"" << name << "\"" << endl;
+  ifVerbose( dbg() << "\"" << str() << "\"------------>: failed to resolve the type of member \"" << name << "\"" << endl );
  else
-  dbg() << "\"" << str() << "\"------------>: successfully resolved the type of the member \"" << name << "\"" << endl;
+  ifVerbose( dbg() << "\"" << str() << "\"------------>: successfully resolved the type of the member \"" << name << "\"" << endl );
  return ret;
 } 
 
@@ -246,7 +246,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::getFunctionReturnType( QString func
 	if( t->resolved() && t->resolved()->asFunction() ) {
 		return t->resolved()->applyOperator( ParenOp, params );
     } else {
-    	dbg() << "error : could not find function \"" << functionName << "\" in \"" << str() << "\"" << endl;
+      ifVerbose( dbg() << "error : could not find function \"" << functionName << "\" in \"" << str() << "\"" << endl );
       return SimpleTypeImpl::LocateResult();
     }
 }
@@ -256,7 +256,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::applyOperator( Operator op , QValue
     if( !d || !safetyCounter )
       return SimpleTypeImpl::LocateResult();
     
-    dbg() << "applying operator " << operatorToString( op ) << " to \"" << desc().fullNameChain() << "\"" <<  endl;
+    ifVerbose( dbg() << "applying operator " << operatorToString( op ) << " to \"" << desc().fullNameChain() << "\"" <<  endl );
     SimpleTypeImpl::LocateResult ret;
 	if( op == NoOp ) return SimpleTypeImpl::LocateResult( desc() );
     
@@ -273,7 +273,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::applyOperator( Operator op , QValue
         if( ret->pointerDepth() ) {
           ret->setPointerDepth( ret->pointerDepth() - 1 );
         } else {
-        	dbg() << "\"" << str() << "\": " << " \"operator ->\" returns a type with the wrong pointer-depth" << endl;
+          ifVerbose( dbg() << "\"" << str() << "\": " << " \"operator ->\" returns a type with the wrong pointer-depth" << endl );
         }
         return ret;
       break;
@@ -281,7 +281,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::applyOperator( Operator op , QValue
                 /** Dereference one more because the type must be a pointer */
         return getFunctionReturnType( "operator ( )", params );
     default:
-      dbg() << "wrong operator\n";
+        ifVerbose( dbg() << "wrong operator\n" );
     }
     
 	return SimpleTypeImpl::LocateResult();
@@ -347,13 +347,17 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
 	    return desc();
     }
     if( !d ) {
-      dbg() << "stopping location because the recursion-depth is too high" << endl;
+      ifVerbose( dbg() << "stopping location because the recursion-depth is too high" << endl );
       return TypeDesc( "CompletionError::too_much_recursion" );
     }
-  dbg() << "\"" << desc().fullName() << "\": locating type \"" << name.fullNameChain() << "\"" << endl;
+    ifVerbose( dbg() << "\"" << desc().fullName() << "\": locating type \"" << name.fullNameChain() << "\"" << endl );
+	if( name.resolved() ) {
+        ifVerbose( dbg() << "\"" << desc().fullName() << "\": type \"" << describeWithParams() << "\" is already resolved, returning stored instance" << endl );
+		return name;
+	}
 	/*
     if( name.resolved() && name.length() == name.resolved()->desc().length() ) {
-    dbg() << "\"" << desc().fullName() << "\": type \"" << name.fullNameChain() << "\" is already resolved, returning stored instance" << endl;
+    ifVerbose( dbg() << "\"" << desc().fullName() << "\": type \"" << name.fullNameChain() << "\" is already resolved, returning stored instance" << endl;
       SimpleType ret = SimpleType( name.resolved() );
       
       if( ! (name == ret->desc()) ) {
@@ -365,20 +369,17 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
     }*/
     
     SimpleTypeImpl::LocateResult ret = name; ///In case the type cannot be located, this helps to find at least the best match
-	ret->setResolved( 0 );
     
-	TypeDesc first = name.firstType();
+	TypeDesc first = resolveTemplateParams( name.firstType(), mode );
+		
 	MemberInfo mem = findMember( first, typeMask );
-    
+	
     switch( mem.memberType ) {
     case MemberInfo::Namespace:
-            ///TODO: Namespaces can be on the code-model as well as global
       if( mode & ExcludeNamespaces ) break;
     case MemberInfo::NestedType:
       {
         if( mem.memberType == MemberInfo::NestedType && mode & ExcludeNestedTypes ) break;
-        
-        name = resolveTemplateParams( name, Normal );  ///param-names may be shadowed, so everything must be resolved now
         
         SimpleType sub;
         if( TypePointer t = mem.build() ) {
@@ -390,15 +391,15 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
 	        return TypeDesc("CompletionError::unknown");
         }
         
-        TypeDescPointer rest = name.next();
-        if( rest ) {
-          dbg() << "\"" << str() << "\": found nested type \"" << name.name() << "\", passing control to it\n";
-          ret = sub->locateType( *rest, addFlag( mode, ExcludeTemplates ), 1 ); ///since template-names cannot be referenced from outside, exclude them for the first cycle
-		  ret.increaseResolutionCount();
+	      TypeDesc rest;
+	      if( name.next() ) {
+            ifVerbose( dbg() << "\"" << str() << "\": found nested type \"" << name.name() << "\", passing control to it\n" );
+		    ret = sub->locateType( resolveTemplateParams( *name.next(), Normal ), addFlag( mode, ExcludeTemplates ), 1 ); ///since template-names cannot be referenced from outside, exclude them for the first cycle
+		    ret.increaseResolutionCount();
 		  if( ret->resolved() )
             return ret;
         } else {
-        	dbg() << "\"" << str() << "\": successfully located searched type \"" << name.fullNameChain() << "\"\n";
+            ifVerbose( dbg() << "\"" << str() << "\": successfully located searched type \"" << name.fullNameChain() << "\"\n" );
 	        ret->setResolved( sub.get() );
           	return ret;
         }
@@ -409,9 +410,9 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
     case MemberInfo::Template:
       {
         if( mem.memberType == MemberInfo::Template && (mode & ExcludeTemplates) ) break;
-      dbg() << "\"" << str() << "\": found "<< mem.memberTypeToString() << " \"" << name.name() << "\" -> \"" << mem.type.fullNameChain() << "\", recursing \n";
+        ifVerbose( dbg() << "\"" << str() << "\": found "<< mem.memberTypeToString() << " \"" << name.name() << "\" -> \"" << mem.type.fullNameChain() << "\", recursing \n" );
         if( name.hasTemplateParams() ) {
-        dbg() << "\"" << str() << "\":warning: \"" << name.fullName() << "\" is a " << mem.memberTypeToString() << ", but it has template-params itself! Not matching" << endl;
+          ifVerbose( dbg() << "\"" << str() << "\":warning: \"" << name.fullName() << "\" is a " << mem.memberTypeToString() << ", but it has template-params itself! Not matching" << endl );
         } else {
           if( mem.type.name() != name.name() ) {
 	          if( name.next() ) {
@@ -430,7 +431,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
 	          if( ret->resolved() )
 				return ret;
           } else {
-          	dbg() << "\"" << str() << "\"recursive typedef/template found: \"" << name.fullNameChain() << "\" -> \"" << mem.type.fullNameChain() << "\"" << endl;
+            ifVerbose( dbg() << "\"" << str() << "\"recursive typedef/template found: \"" << name.fullNameChain() << "\" -> \"" << mem.type.fullNameChain() << "\"" << endl );
           }
         }
         break;
@@ -484,7 +485,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
     }
     
         ///Give the type a desc, so the nearest point to the searched type is stored
-  	dbg() << "\"" << str() << "\": search for \"" << name.fullNameChain() << "\" FAILED" << endl;
+    ifVerbose( dbg() << "\"" << str() << "\": search for \"" << name.fullNameChain() << "\" FAILED" << endl);
     return ret;
   };
   
@@ -506,10 +507,10 @@ TypePointer SimpleTypeImpl::bigContainer() {
 
 SimpleType SimpleTypeImpl::parent() {
     if ( m_parent ) {
-            //dbg() << "\"" << str() << "\": returning parent" << endl;
+            //ifVerbose( dbg() << "\"" << str() << "\": returning parent" << endl;
       return SimpleType( m_parent );
     } else {
-    dbg() << "\"" << str() << "\": locating parent" << endl;
+      ifVerbose( dbg() << "\"" << str() << "\": locating parent" << endl );
       invalidateSecondaryCache();
       QStringList sc = scope();
       
@@ -519,7 +520,7 @@ SimpleType SimpleTypeImpl::parent() {
         m_parent = r.get();
         return r;
       } else {
-      dbg() << "\"" << str() << "\"warning: returning parent of global scope!" << endl;
+        ifVerbose( dbg() << "\"" << str() << "\"warning: returning parent of global scope!" << endl );
         return SimpleType( new SimpleTypeImpl("") );
       }
     }
@@ -539,6 +540,30 @@ TypeDesc& SimpleTypeImpl::descForEdit()  {
     return m_desc;
 }
 
+QString SimpleTypeImpl::describeWithParams() {
+  TemplateParamInfo pinfo = getTemplateParamInfo();
+  int num = 0;
+  TemplateParamInfo::TemplateParam param;
+  QString str = desc().name();
+  if( desc().hasTemplateParams() ) {
+    str += "< ";
+  
+    for( TypeDesc::TemplateParams::const_iterator it = desc().templateParams().begin(); it != desc().templateParams().end(); ++it ) {
+        if( pinfo.getParam( param, num ) && !param.name.isEmpty() )
+          str += param.name;
+        else
+          str += "[unknown name]";
+  
+        str += " = " + (*it)->fullNameChain() + ", ";
+        ++num;
+    }
+  
+    str.truncate( str.length() - 2 );
+    str += " >";
+  }
+  return str;
+}
+
 QString SimpleTypeImpl::fullTypeResolved( int depth ) {
     Debug d("#tre#");
     
@@ -547,7 +572,7 @@ QString SimpleTypeImpl::fullTypeResolved( int depth ) {
       if( depth > 10 ) return "KDevParseError::ToDeep";
       if( !safetyCounter ) return "KDevParseError::MaximumCountReached";
       
-      dbg() << "fully resolving type " << t.fullName() << endl;
+      ifVerbose( dbg() << "fully resolving type " << t.fullName() << endl );
       if( scope().size() != 0 ) {
         t = resolveTemplateParams( t, LocateBase ); 
       }
@@ -580,7 +605,7 @@ void SimpleTypeImpl::setScope( const QStringList& scope ) {
     m_scope = scope;
 }
 
-SimpleTypeImpl::TypeOfResult SimpleTypeImpl::searchBases ( const TypeDesc& name ) {
+SimpleTypeImpl::TypeOfResult SimpleTypeImpl::searchBases ( const TypeDesc& name /*option!!*/) {
     QValueList<SimpleTypeImpl::LocateResult> parents = getBases();
     for ( QValueList<SimpleTypeImpl::LocateResult>::iterator it = parents.begin(); it != parents.end(); ++it )
     {
@@ -643,6 +668,7 @@ void SimpleTypeImpl::TemplateParamInfo::addParam( const TemplateParam& param ) {
   m_paramsByNumber[param.number] = param;
   m_paramsByName[param.name] = param;
 }
+
 
 // kate: indent-mode csands; tab-width 4;
 

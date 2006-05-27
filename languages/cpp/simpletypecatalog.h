@@ -52,9 +52,7 @@ public:
     return m_tag.comment();
   };
   
-  virtual TypePointer clone() {
-    return new SimpleTypeCatalog( this );
-  }
+  virtual TypePointer clone();
   
   virtual Repository rep() const {
     return Catalog;

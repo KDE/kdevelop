@@ -121,7 +121,7 @@ public:
             ///First, try to find an overloaded function matching the parameter-types.
       SimpleTypeImpl* f = match( params );
       if( f && f->asFunction() ) {
-        dbg() << "applying Operator " << this->operatorToString( op ) << " to \"" << f->desc().fullNameChain() << "\"" <<  endl;
+        ifVerbose( dbg() << "applying Operator " << this->operatorToString( op ) << " to \"" << f->desc().fullNameChain() << "\"" <<  endl );
         
         TypeDesc rt = f->asFunction()->getReturnType();
         SimpleTypeImpl::TemplateParamInfo paramInfo = f->getTemplateParamInfo();
@@ -139,7 +139,7 @@ public:
         
         return this->parent()->locateDecType( f->replaceTemplateParams( rt, paramInfo ) );
       } else {
-        dbg() << "failed to find a fitting overloaded method" << endl;
+        ifVerbose( dbg() << "failed to find a fitting overloaded method" << endl );
       }
     }
     return Base::applyOperator( op, params );
@@ -186,7 +186,7 @@ public:
   SimpleTypeCodeModel( ItemDom& item );
   
   virtual TypePointer clone() {
-    return new SimpleTypeCodeModel( this );
+    return new SimpleTypeCachedCodeModel( this );
   }
   
   virtual Repository rep() {

@@ -66,7 +66,6 @@
 #include <codebrowserfrontend.h>
 
 ///This can be used to toggle the complete tracing of the resolution-functions, which costs a lot of performance, but gives very nice and useful output 
-//#define VERBOSE
 
 
 #include "codecompletionentry.h"

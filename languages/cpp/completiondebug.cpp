@@ -25,9 +25,18 @@ DBGStreamType::KStreamType& dbg() {
  return dbgState.dbg();
 }
 
-DBGStreamType::KStreamType& dbgMajor() {
- return dbgState.dbg();
+#ifndef NDEBUG
+kdbgstream dbgMajor() {
+ kdbgstream ret = kdDebug( 9007 );
+ dbgState.outputPrefix( ret );
+ return ret;
 }
+#else
+kndbgstream dbgMajor() {
+  return kndDebug();
+};
+
+#endif
 
 #ifndef NDEBUG 
 template<>

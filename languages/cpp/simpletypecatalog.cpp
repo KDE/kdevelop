@@ -18,7 +18,11 @@ extern CppCodeCompletion* cppCompletionInstance;
 
 //SimpleTypeCatalog implementation
 
-SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleTypeImpl::MemberInfo::MemberType type ) 
+TypePointer SimpleTypeCatalog::clone() {
+  return new SimpleTypeCachedCatalog( this );
+}
+
+SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleTypeImpl::MemberInfo::MemberType type )
 {
   MemberInfo ret;
   ret.name = name.name();
@@ -90,10 +94,10 @@ Tag SimpleTypeCatalog::findSubTag( const QString& name ) {
   
   QValueList<Tag> tags( cppCompletionInstance->m_repository->query( args ) );
   if( ! tags.isEmpty() ) {
-            //dbg() << "findTag: \"" << str() << "\": tag \"" << name << "\" found " << endl;
+            //ifVerbose( dbg() << "findTag: \"" << str() << "\": tag \"" << name << "\" found " << endl );
     return tags.front();
   }else {
-            //dbg() << "findTag: \"" << str() << "\": tag \"" << name << "\" not found " << endl;
+            //ifVerbose( dbg() << "findTag: \"" << str() << "\": tag \"" << name << "\" not found " << endl );
     return Tag();
   }
 }
@@ -140,7 +144,7 @@ DeclarationInfo SimpleTypeCatalog::getDeclarationInfo() {
 QValueList<SimpleTypeImpl::LocateResult> SimpleTypeCatalog::getBases() {
   Debug d( "#getbases#" );
   if( !d ) {
-  dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl;
+    ifVerbose( dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl );
     return QValueList<SimpleTypeImpl::LocateResult>();
   }
   
@@ -164,65 +168,65 @@ QValueList<SimpleTypeImpl::LocateResult> SimpleTypeCatalog::getBases() {
 }
 
 SimpleTypeImpl::TemplateParamInfo SimpleTypeCatalog::getTemplateParamInfo() {
-  TemplateParamInfo ret;
-  
-  if( m_tag ) {
-    if( m_tag.hasAttribute( "tpl" ) ) {
-      QStringList l = m_tag.attribute( "tpl" ).asStringList();
-      
-      TypeDesc::TemplateParams templateParams = m_desc.templateParams();
-      uint pi = 0;
-      QStringList::const_iterator it = l.begin();
-      while( it != l.end() ) {
-        TemplateParamInfo::TemplateParam curr;
-        curr.name = *it;
-        curr.number = pi;
-        ++pi;
-        ++it;
-        if( it != l.end() ) {
-          curr.def = *it;
-          ++it;
-        }
-        if( pi < templateParams.count() )
-          curr.value = *templateParams[pi];
-        ret.addParam( curr );
-      };
-    }
-  }
-  
-  return ret;
+	TemplateParamInfo ret;
+	
+	if( m_tag ) {
+		if( m_tag.hasAttribute( "tpl" ) ) {
+			QStringList l = m_tag.attribute( "tpl" ).asStringList();
+			
+			TypeDesc::TemplateParams templateParams = m_desc.templateParams();
+			uint pi = 0;
+			QStringList::const_iterator it = l.begin();
+			while( it != l.end() ) {
+				TemplateParamInfo::TemplateParam curr;
+				curr.name = *it;
+				curr.number = pi;
+				++pi;
+				++it;
+				if( it != l.end() ) {
+					curr.def = *it;
+					++it;
+				}
+				if( pi < templateParams.count() )
+					curr.value = *templateParams[pi];
+				ret.addParam( curr );
+			};
+		}
+	}
+	
+	return ret;
 }
 
 const TypeDesc SimpleTypeCatalog::findTemplateParam( const QString& name ) {
-  if( m_tag ) {
-    if( m_tag.hasAttribute( "tpl" ) ) {
-      QStringList l = m_tag.attribute( "tpl" ).asStringList();
+	if( m_tag ) {
+		if( m_tag.hasAttribute( "tpl" ) ) {
+			QStringList l = m_tag.attribute( "tpl" ).asStringList();
                 ///we need the index, so count the items through
-      uint pi = 0;
-      
-      QStringList::const_iterator it = l.begin();
-      while( it != l.end() && *it != name ) {
-        ++pi;
-        ++it;
-        if( it != l.end() ) ++it;
-      };
-      
-      TypeDesc::TemplateParams templateParams = m_desc.templateParams();
-      
-      if( it != l.end() &&  pi < templateParams.count() ) {
-        return *templateParams[pi];
-      } else {
-        if( it != l.end() && *it == name && !(*it).isEmpty()) {
-          ++it;
-          if( it != l.end() && !(*it).isEmpty() ) {
-            dbg() << "using default-template-type " << *it << " for " << name << endl;
-            return *it;     ///return default-parameter
-          }
-        }
-      }
-    }
-  }
-  return TypeDesc();
+			uint pi = 0;
+			
+			QStringList::const_iterator it = l.begin();
+			while( it != l.end() && *it != name ) {
+				++pi;
+				++it;
+				if( it != l.end() ) ++it;
+			};
+			
+			TypeDesc::TemplateParams templateParams = m_desc.templateParams();
+			
+			if( it != l.end() &&  pi < templateParams.count() ) {
+				return *templateParams[pi];
+			} else {
+				if( it != l.end() && *it == name && !(*it).isEmpty()) {
+					++it;
+					if( it != l.end() && !(*it).isEmpty() ) {
+                        ifVerbose( dbg() << "using default-template-type " << *it << " for " << name << endl );
+						return *it;     ///return default-parameter
+					}
+				}
+			}
+		}
+	}
+	return TypeDesc();
 };
 
 //SimpleTypeCatalog::CatalogBuildInfo implementation

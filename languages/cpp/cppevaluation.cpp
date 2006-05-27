@@ -62,7 +62,7 @@ QString Operator::printTypeList( QValueList<EvaluationResult>& lst )
 }
 
 void Operator::log( const QString& msg ) {
-dbg() << "\"" << name() << "\": " << msg << endl;
+  ifVerboseMajor( dbgMajor() << "\"" << name() << "\": " << msg << endl );
 };
 
 OperatorSet::~OperatorSet() {
@@ -121,7 +121,7 @@ EvaluationResult ArrowOperator::unaryApply( EvaluationResult param, const QValue
     if( param->resolved() ) {
       return param->resolved()->applyOperator( SimpleTypeImpl::ArrowOp , convertList<SimpleTypeImpl::LocateResult, EvaluationResult>(innerParams) );
     } else {
-      kdDebug( 9007 ) << "failed to apply arrow-operator to unresolved type" << endl;
+      ifVerboseMajor( dbgMajor() << "failed to apply arrow-operator to unresolved type" << endl );
       return EvaluationResult();
     }
   };
@@ -135,7 +135,7 @@ EvaluationResult StarOperator::unaryApply( EvaluationResult param, const QValueL
     if( param->resolved() ) {
       return param->resolved()->applyOperator( SimpleTypeImpl::StarOp );
     } else {
-      kdDebug( 9007 ) << "failed to apply star-operator to unresolved type" << endl;
+      ifVerboseMajor( dbgMajor() << "failed to apply star-operator to unresolved type" << endl );
       return EvaluationResult();
     }
   };
@@ -187,7 +187,7 @@ EvaluationResult IndexOperator::unaryApply( EvaluationResult param, const QValue
     if( param->resolved() ) {
       return param->resolved()->applyOperator( SimpleTypeImpl::IndexOp, convertList<SimpleTypeImpl::LocateResult>( innerParams ) );
     } else {
-      kdDebug( 9007 ) << "failed to apply index-operator to unresolved type" << endl;
+      ifVerboseMajor( dbgMajor() << "failed to apply index-operator to unresolved type" << endl );
       return EvaluationResult();
     }
   };
@@ -198,7 +198,7 @@ EvaluationResult ParenOperator::unaryApply( EvaluationResult param, const QValue
     if( param->resolved() ) {
       return param->resolved()->applyOperator( SimpleTypeImpl::ParenOp, convertList<SimpleTypeImpl::LocateResult>(innerParams) );
     } else {
-      kdDebug( 9007 ) << "failed to apply paren-operator to unresolved type" << endl;
+      ifVerboseMajor( dbgMajor() << "failed to apply paren-operator to unresolved type" << endl );
       return EvaluationResult();
     }
     
@@ -210,7 +210,7 @@ EvaluationResult ParenOperator::unaryApply( EvaluationResult param, const QValue
 ExpressionEvaluation::ExpressionEvaluation( CppCodeCompletion* data, ExpressionInfo expr, OperatorSet& operators, SimpleContext* ctx ) : m_data( data ), m_ctx( ctx ), m_expr( expr ), m_global(false), m_operators( operators ) {
   safetyCounter.init();
   
-  kdDebug( 9007 ) << "Initializing evaluation of expression " << expr << endl;
+  ifVerboseMajor( dbgMajor( ) << "Initializing evaluation of expression " << expr << endl );
   
   if ( expr.expr().startsWith( "::" ) )
   {
@@ -234,18 +234,18 @@ EvaluationResult ExpressionEvaluation::evaluate() {
 }
 
 EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr, EvaluationResult scope, SimpleContext * ctx, SimpleContext* innerCtx , bool canBeTypeExpression) {
-  Debug d( "#evl#" );
+  LogDebug d( "#evl#" );
   if( expr.isEmpty() || !safetyCounter ) {
     scope.expr.t = ExpressionInfo::NormalExpression;
     return scope;
   }
   
   if( !scope->resolved() ) {
-  dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fullTypeStructure() << "\" is unresolved " << endl;
+    ifVerboseMajor( dbgMajor() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fullTypeStructure() << "\" is unresolved " << endl );
     return EvaluationResult();
   }
   
-dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl;
+  ifVerboseMajor( dbgMajor() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl );
   
   
   expr = expr.stripWhiteSpace();
@@ -256,7 +256,7 @@ dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fu
     QString part = expr.mid( a );
     OperatorIdentification ident = m_operators.identifyOperator( part );
     if( ident ) {
-      dbg() << "identified \"" << ident.op->name() << "\" in string " << part << endl;
+      ifVerboseMajor( dbgMajor() << "identified \"" << ident.op->name() << "\" in string " << part << endl );
       ident.start += a;
       ident.end += a;
       idents << ident;
@@ -294,14 +294,14 @@ dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fu
       }
       
       if( !left && (lowest.op->binding() & Operator::Left) ) {
-      dbg() << "problem while evaluating expression \"" << expr << "\", the operator \"" << lowest.op->name() << "\" has a binding to the left side, but no left side could be evaluated: \"" << leftSide << "\"" << endl;
+        ifVerboseMajor( dbgMajor() << "problem while evaluating expression \"" << expr << "\", the operator \"" << lowest.op->name() << "\" has a binding to the left side, but no left side could be evaluated: \"" << leftSide << "\"" << endl );
       }
       
       if( !rightSide.isEmpty() && (lowest.op->binding() & Operator::Right) )
         right = evaluateExpressionInternal( rightSide, SimpleType(), ctx, innerCtx );
       
       if( !right && (lowest.op->binding() & Operator::Right) ) {
-      dbg() << "problem while evaluating expression \"" << expr << "\", the operator \"" << lowest.op->name() << "\" has a binding to the right side, but no right side could be evaluated: \"" << rightSide << "\"" << endl;
+        ifVerboseMajor( dbgMajor() << "problem while evaluating expression \"" << expr << "\", the operator \"" << lowest.op->name() << "\" has a binding to the right side, but no right side could be evaluated: \"" << rightSide << "\"" << endl );
       }
       
       QValueList<EvaluationResult> innerParams;
@@ -310,18 +310,18 @@ dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fu
       if( lowest.op->binding() & Operator::Right ) params << right;
       
       for( QValueList<QString>::iterator it = lowest.innerParams.begin(); it != lowest.innerParams.end(); ++it ) {
-        dbg() << "evaluating inner parameter \"" << *it << "\"" << endl;
+        ifVerboseMajor( dbgMajor() << "evaluating inner parameter \"" << *it << "\"" << endl );
         innerParams << evaluateExpressionInternal( (*it), SimpleType(), innerCtx, innerCtx );
       }
       
       EvaluationResult applied = lowest.op->apply( params, innerParams );
       if( !applied ) {
-      dbg() << "\"" << expr << "\": failed to apply the operator \"" << lowest.op->name() << "\"" << endl;
+        ifVerboseMajor( dbgMajor() << "\"" << expr << "\": failed to apply the operator \"" << lowest.op->name() << "\"" << endl );
       }
       
       if( ! (lowest.op->binding() & Operator::Left) &&  !leftSide.isEmpty() ) {
                     ///When the operator has no binding to the left, the left side should be empty.
-      dbg() << "\"" << expr << "\": problem with the operator \"" << lowest.op->name() << ", it has no binding to the left side, but the left side is \""<< leftSide << "\"" << endl;
+        ifVerboseMajor( dbgMajor() << "\"" << expr << "\": problem with the operator \"" << lowest.op->name() << ", it has no binding to the left side, but the left side is \""<< leftSide << "\"" << endl );
       }
       
       if( ! (lowest.op->binding() & Operator::Right) && !rightSide.isEmpty() ) {
@@ -331,24 +331,24 @@ dbg() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fu
       
       return applied;
     } else {
-      dbg() << " could not find an operator in " << expr << endl;
+      ifVerboseMajor( dbgMajor() << " could not find an operator in " << expr << endl );
       QStringList lst; lst << expr;
       return evaluateAtomicExpression( expr, scope, ctx );
     }
   }
   
-        //dbg() << " could not evaluate " << expr << endl;
-  dbg() << "evaluating \"" << expr << "\" using the old evaluation-method" << endl;
+        //dbgMajor() << " could not evaluate " << expr << endl;
+  ifVerboseMajor( dbgMajor() << "evaluating \"" << expr << "\" as atomic expression" << endl );
   QStringList lst = m_data->splitExpression( expr );
   EvaluationResult res = evaluateAtomicExpression( lst, scope, ctx, canBeTypeExpression );
   return res;
 }
 
 EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exprList, EvaluationResult scope, SimpleContext * ctx, bool canBeTypeExpression ) {
-  Debug d( "#evt#");
+  LogDebug d( "#evt#");
   if( !safetyCounter || !d ) return SimpleType();
   
-dbg() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl;
+  ifVerboseMajor( dbgMajor() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl );
   
   if( exprList.isEmpty() )
     return scope;
@@ -358,7 +358,7 @@ dbg() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" 
   
   TypePointer searchIn = scope->resolved();
   if( !searchIn ) {
-    dbg() << "scope-type is not resolved" << endl;
+    ifVerboseMajor( dbgMajor() << "scope-type is not resolved" << endl );
     return EvaluationResult();
   }
   
@@ -382,7 +382,7 @@ dbg() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" 
       ret.expr.t = ExpressionInfo::TypeExpression;
       return ret;
     } else {
-      dbg() << "\"" << scope.resultType->fullNameChain() << "\"could not locate " << currentExpr << endl;
+      ifVerboseMajor( dbgMajor() << "\"" << scope.resultType->fullNameChain() << "\"could not locate " << currentExpr << endl );
     }
   }
   

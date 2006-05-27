@@ -27,9 +27,7 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
       return dynamic_cast<SimpleTypeNamespace*>(t) != 0;
     }
     
-    virtual TypePointer clone() {
-      return new SimpleTypeNamespace( this );
-    }
+    virtual TypePointer clone();
     
     QValueList<SimpleType> getSlaves() {
       return m_activeSlaves;

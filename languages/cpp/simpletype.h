@@ -176,6 +176,7 @@ class SimpleTypeConfiguration {
 public:
   SimpleTypeConfiguration( QString currentFileName = "" ) {
     globalCurrentFile = currentFileName;
+	  dbgState.clearCounter();
   }
   
   void setGlobalNamespace( TypePointer globalNamespace ) {
@@ -631,6 +632,7 @@ public:
 		TypeDesc td = desc;
 		td.clearInstanceInfo();
 		LocateResult r = locateType( td, mode, dir, typeMask );
+		r.desc() = resolveTemplateParams( r.desc() );
 		r->takeInstanceInfo( desc );
 		return r;
 	}
@@ -713,6 +715,9 @@ public:
   QString fullType() const {
     return m_desc.fullName();
   }
+
+    ///Similar to fullTypeResolved, except that it also shows addition information about template-params
+  QString describeWithParams() ;
   
     ///returns all information that is available constantly
   QString describe() const {

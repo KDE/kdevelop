@@ -84,7 +84,7 @@ void SimpleTypeFunctionInterface::resolveImplicitTypes( TypeDesc& argType, TypeD
   if( argType.templateParams().isEmpty() ) {  ///Template-types may not be templates.
     SimpleTypeImpl::TemplateParamInfo::TemplateParam p;
     if( paramInfo.getParam( p, argType.name() ) && !p.value ) {
-      dbg() << "choosing \"" << gottenArgType.fullNameChain() << "\" as implicit template-parameter for \"" << argType.name() << "\"" << endl;
+      ifVerbose( dbg() << "choosing \"" << gottenArgType.fullNameChain() << "\" as implicit template-parameter for \"" << argType.name() << "\"" << endl );
       p.value = gottenArgType;
       p.value.makePrivate();
       for( int d = 0; d < argType.pointerDepth(); d++ )
@@ -150,7 +150,7 @@ SimpleTypeCodeModel::SimpleTypeCodeModel( ItemDom& item ) : m_item( item ) {
     setScope( l );
     return;
   }
-dbg() << "code-model-item has an unsupported type: " << i->name() << endl;
+  ifVerbose( dbg() << "code-model-item has an unsupported type: " << i->name() << endl );
 }
 
 ItemDom SimpleTypeCodeModel::locateModelContainer( class CodeModel* m, TypeDesc t, ClassDom cnt)
@@ -230,7 +230,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Simp
   
   ClassModel* klass = dynamic_cast<ClassModel*> ( & (*m_item) );
   if( !klass ) {
-  dbg() << "\"" << str() << "\": search for member " << name.name() << " unsuccessful because the own type is invalid" << endl;
+    ifVerbose( dbg() << "\"" << str() << "\": search for member " << name.name() << " unsuccessful because the own type is invalid" << endl );
     return ret;
   }
   NamespaceModel* ns = dynamic_cast<NamespaceModel*>(klass);
@@ -356,10 +356,10 @@ const TypeDesc SimpleTypeCodeModel::findTemplateParam( const QString& name ) {
     } else {
       if( pi != -1 && !ti->getParam( pi ).second.isEmpty() ) {
         QString def = ti->getParam( pi ).second;
-      dbg() << "\"" << str() << "\": using default-template-parameter \"" << def << "\" for " << name << endl;
+        ifVerbose( dbg() << "\"" << str() << "\": using default-template-parameter \"" << def << "\" for " << name << endl );
         return def;
       } else if( pi != -1 ) {
-      dbg() << "\"" << str() << "\": template-type \"" << name << "\" has no pameter! " << endl;
+        ifVerbose( dbg() << "\"" << str() << "\": template-type \"" << name << "\" has no pameter! " << endl );
       }
     }
   }
@@ -369,7 +369,7 @@ const TypeDesc SimpleTypeCodeModel::findTemplateParam( const QString& name ) {
 QValueList<SimpleTypeImpl::LocateResult> SimpleTypeCodeModel::getBases() {
   Debug d( "#getbases#" );
   if( !d ) {
-  dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl;
+    ifVerbose( dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl );
     return QValueList<SimpleTypeImpl::LocateResult>();
   }
   
@@ -480,7 +480,7 @@ TypePointer SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo::build() {
   }
   
   if( ret.isEmpty() ) {
-    dbg() << "error" << endl;
+    ifVerbose( dbg() << "error" << endl );
     return TypePointer();
   } else
     return ret.front();
@@ -534,7 +534,7 @@ TypePointer SimpleTypeCatalogFunction::CatalogFunctionBuildInfo::build() {
   }
   
   if( ret.isEmpty() ) {
-    dbg() << "error" << endl;
+    ifVerbose( dbg() << "error" << endl );
     return TypePointer();
   }
   return ret.front();
