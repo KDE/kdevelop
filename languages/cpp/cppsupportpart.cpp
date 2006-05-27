@@ -1270,15 +1270,13 @@ void CppSupportPart::slotParseFiles()
 
 						if( t.toTime_t() != _jd->pcs[ absFilePath ].first ) {
 							///The FileDom had to be created first, so the dependencies are known
-							//parseFileAndDependencies( file->name(), false );
+);
 							_jd->reparseList << file->name();
 						} else {
 							m_timestamp[ absFilePath ] = t;
 						}
 					} else {
 					  _jd->reparseList <<  absFilePath;
-						/*parseFileAndDependencies( absFilePath );
-						m_timestamp[ absFilePath ] = t;*/
 					}
 					
 				}
