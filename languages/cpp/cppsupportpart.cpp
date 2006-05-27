@@ -2280,11 +2280,11 @@ KDevDesignerIntegration * CppSupportPart::designer( KInterfaceDesigner::Designer
 
 
 void CppSupportPart::resetParserStoreTimer() {
-	m_deleteParserStoreTimer->start(3000); ///try to empty the store regularly
+  //	m_deleteParserStoreTimer->start(3000); ///try to empty the store regularly
 }
 
 void CppSupportPart::slotDeleteParserStore() {
-	m_backgroundParser->removeAllFiles();
+  //	m_backgroundParser->removeAllFiles();
 }
 
 
