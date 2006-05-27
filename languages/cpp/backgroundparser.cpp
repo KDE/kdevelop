@@ -38,7 +38,6 @@
 #include <qtextstream.h>
 #include <qprocess.h>
 
-
 class KDevSourceProvider: public SourceProvider
 {
 public:
@@ -119,8 +118,6 @@ private:
 	void operator = ( const KDevSourceProvider& source );
 };
 
-typedef std::string SafeString;
-
 class SynchronizedFileList
 {
 public:
@@ -139,7 +136,7 @@ public:
 		return m_fileList.count();
 	}
 	
-	QPair<SafeString, bool> front() const
+	QPair<QString, bool> front() const
 	{
 		QMutexLocker locker( &m_mutex );
 		return m_fileList.front();
@@ -153,9 +150,8 @@ public:
 	
 	void push_back( const QString& fileName, bool readFromDisk = false )
 	{
-	        SafeString s( fileName.ascii() );
 		QMutexLocker locker( &m_mutex );
-		m_fileList.append( qMakePair( s, readFromDisk ) );
+		m_fileList.append( qMakePair( fileName, readFromDisk ) ); /// \FIXME ROBE deepcopy?!
 	}
 	
 	void pop_front()
@@ -167,10 +163,10 @@ public:
 	bool contains( const QString& fileName ) const
 	{
 		QMutexLocker locker( &m_mutex );
-		QValueList< QPair<SafeString, bool> >::ConstIterator it = m_fileList.begin();
+		QValueList< QPair<QString, bool> >::ConstIterator it = m_fileList.begin();
 		while ( it != m_fileList.end() )
 		{
-			if ( ( *it ).first.compare( fileName.ascii() ) == 0 )
+			if ( ( *it ).first == fileName )
 				return true;
 			++it;
 		}
@@ -180,10 +176,10 @@ public:
 	void remove( const QString& fileName )
 	{
 		QMutexLocker locker( &m_mutex );
-		QValueList< QPair<SafeString, bool> >::Iterator it = m_fileList.begin();
+		QValueList< QPair<QString, bool> >::Iterator it = m_fileList.begin();
 		while ( it != m_fileList.end() )
 		{
-			if ( ( *it ).first.compare(fileName.ascii() ) == 0 )
+			if ( ( *it ).first == fileName )
 				m_fileList.remove( it );
 			++it;
 		}
@@ -191,7 +187,7 @@ public:
 	
 private:
 	mutable QMutex m_mutex;
-	QValueList< QPair<SafeString, bool> > m_fileList;
+	QValueList< QPair<QString, bool> > m_fileList;
 };
 
 BackgroundParser::BackgroundParser( CppSupportPart* part, QWaitCondition* consumed )
@@ -396,8 +392,8 @@ void BackgroundParser::run()
 		if ( m_close )
 			break;
 		
-		QPair<SafeString, bool> entry = m_fileList->front();
-		QString fileName = entry.first.c_str();
+		QPair<QString, bool> entry = m_fileList->front();
+		QString fileName = entry.first;
 		bool readFromDisk = entry.second;
 		m_currentFile = fileName;
 		

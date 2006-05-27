@@ -84,11 +84,9 @@ public:
 		return isValid() ? static_cast<ProblemReporter *>( m_problemReporter ) : 0;
 	}
 
-	int parseFilesAndDependencies( QStringList files );
-	
-    /** parses the file and all files that belong to it using the background-parser, returns count of queued files*/
-	int parseFileAndDependencies( const QString& fileName );
-
+    /** parses the file and all files that belong to it using the background-parser */
+    void parseFileAndDependencies( const QString& fileName );
+    
     BackgroundParser* backgroundParser() const
 	{
 		return m_backgroundParser;
@@ -211,7 +209,6 @@ private slots:
 	void gotoDeclarationLine( int line );
     void emitFileParsed( QStringList l );
 	void slotParseFiles();
-	void slotDeleteParserStore();
 	void slotCreateSubclass();
 	void slotCreateAccessMethods();
 
@@ -229,8 +226,6 @@ private slots:
 
 private:
 
-	void resetParserStoreTimer();
-	
 	/**
 	 * Get a linenumber in which a new method with a specific access specifier can be inserted.
 	 * If there isn't a "section" with access, such a "section" gets inserted and the resulting place is returned.
@@ -326,14 +321,12 @@ private:
 	VariableDom m_activeVariable;
 
 	QTimer* m_functionHintTimer;
-	QTimer* m_deleteParserStoreTimer;
     
     class ParseEmitWaiting {
     public:
 	    enum Flags {
 		    None = 0,
-			HadErrors = 1,
-			HadQueueProblem = 2
+			    HadErrors = 1
 	    };
     private:
 	    struct Item {
@@ -353,11 +346,10 @@ private:
         ///Just return all files that have been parsed
         QStringList errorRecover( QString currentFile ) {
             QStringList ret;
-            kdDebug( 9007 ) << "ParseEmitWaiting: error in the waiting-chain, grouping way be broken" << endl;
+            kdDebug( 9007 ) << "ParseEmitWaiting: error in the waiting-chain" << endl;
             for( List::iterator it = m_waiting.begin(); it != m_waiting.end(); ++it) {
                 ret += (*it).second;
             }
-	        m_waiting.clear();
             if( !currentFile.isEmpty() ) ret << currentFile;
             return ret;
         }
@@ -382,7 +374,6 @@ private:
         
         ///files that were not requested must not be processed, since they maybe do not respect the group-relationships.
         bool reject( QString file ) {
-	        return false;
             for( List::iterator it = m_waiting.begin(); it != m_waiting.end(); ++it) {
                 if( (*it).first.find( file ) !=  (*it).first.end() ) {
                     return false;
@@ -401,14 +392,6 @@ private:
 		    operator QStringList() {
 			    return res;
 		    }
-		    bool hadQueueProblem() const {
-			    
-			    return flag & HadQueueProblem;
-		    }
-		    
-		    void addFlag( Flags fl) {
-			    flag = (Flags) ( flag | fl );
-		    }
 	    };
 	    
         ///returns the parsed-messages that should be emitted
@@ -424,9 +407,7 @@ private:
                             if( it != m_waiting.begin() ) {
                                 kdDebug( 9007 ) << "ParseEmitWaiting: the chain has multiple groups waiting, they are flushed" << endl;
                             }
-	                        Processed p = Processed( harvestUntil( ++it ), f );
-	                        p.addFlag( HadQueueProblem );
-	                        return p;
+	                        return Processed( harvestUntil( ++it ), f );
                         } else {
                             ///The file was registered, now wait for the next
                             return QStringList();
@@ -445,7 +426,6 @@ private:
         }
     };
     
-    bool m_parseSilent;
     ParseEmitWaiting m_parseEmitWaiting;
     ParseEmitWaiting m_fileParsedEmitWaiting;
 
@@ -468,15 +448,10 @@ private:
 		QGuardedPtr<QProgressBar> progressBar;
 		QStringList::Iterator it;
 		QStringList files;
-		int backgroundCount;
-		int backgroundState;
-		QStringList reparseList;
 		QMap< QString, QPair<uint, uint> > pcs;
 		QDataStream stream;
 		QFile file;
 
-		QTime lastParse;
-		
 		~JobData()
 		{
 			delete progressBar;
