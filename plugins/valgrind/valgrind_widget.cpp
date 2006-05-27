@@ -52,7 +52,7 @@ public:
 
   int compare( Q3ListViewItem* i, int col, bool ascending ) const
   {
-    if ( !i || i->rtti() != VALLISTVIEWITEMRTTI )
+    if ( i->rtti() != VALLISTVIEWITEMRTTI )
       return Q3ListViewItem::compare( i, col, ascending );
     switch ( col ) {
       case 0 : return intCompare( ((ValListViewItem*)i)->_key, _key );
