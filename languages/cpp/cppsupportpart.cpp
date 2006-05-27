@@ -117,6 +117,7 @@ public:
 	void fileParsed( const QString& fileName )
 	{
 		//kdDebug(9007) << "-----> file " << fileName << " parsed!" << endl;
+		/*
 		TranslationUnitAST::Node ast = takeTranslationUnit( fileName );
 		
 		if ( cppSupport() ->problemReporter() )
@@ -143,14 +144,14 @@ public:
 		walker.parseTranslationUnit( ast.get() );
 		cppSupport() ->codeModel() ->addFile( walker.file() );
 		remove
-			( fileName );
+			( fileName );*/
 	}
 };
 
 CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QStringList &args )
 : KDevLanguageSupport( CppSupportFactory::info(), parent, name ? name : "KDevCppSupport" ),
 m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ),
-m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
+  m_activeViewCursor( 0 ), m_projectClosed( true ), m_parseSilent( false ), m_valid( false ), _jd(0)
 {
 	setInstance( CppSupportFactory::instance() );
 	
@@ -164,8 +165,11 @@ m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 	
 	m_driver = new CppDriver( this );
 	m_problemReporter = 0;
-	
+
+	m_deleteParserStoreTimer = new QTimer( this );
 	m_functionHintTimer = new QTimer( this );
+	connect( m_deleteParserStoreTimer, SIGNAL(timeout()), this, SLOT(slotDeleteParserStore()) );
+	resetParserStoreTimer();
 	//    connect( m_functionHintTimer, SIGNAL(timeout()), this, SLOT(slotFunctionHint()) );
 	
 	setXMLFile( "kdevcppsupport.rc" );
@@ -292,6 +296,13 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	
 	if ( ev->type() == int( Event_FileParsed ) )
 	{
+		resetParserStoreTimer();
+		
+		if( _jd ) {
+			_jd->backgroundState ++;
+			_jd->lastParse = QTime::currentTime();
+		}
+		
 		FileParsedEvent * event = ( FileParsedEvent* ) ev;
 		fromDisk = event->fromDisk();
 		QString fileName = event->fileName();
@@ -311,19 +322,17 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 				m_problemReporter->reportProblem( fileName, p );
 			}
 		}
-
-		///reject project-files that do not respect grouping
-		if( ( !project() || project()->isProjectFile( fileName )) && !m_parseEmitWaiting.reject( fileName ) ) {
-		{
+		
+		//		if( ( !project() || project()->isProjectFile( fileName )) && !m_parseEmitWaiting.reject( fileName ) ) {
 			parseEmit( m_parseEmitWaiting.processFile( fileName, (hasErrors && !fromDisk) ? ParseEmitWaiting::HadErrors : ParseEmitWaiting::None ) );
-		}
 		
 			emitFileParsed( m_fileParsedEmitWaiting.processFile( fileName ) );
-		} else {
-			if( m_driver )m_driver->remove( fileName );
-		}
+			/*		} else {
+			m_backgroundParser->removeFile( fileName );
+			}*/
 	}
 }
+
 
 void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
 {
@@ -1220,6 +1229,9 @@ bool CppSupportPart::parseProject( bool force )
 	_jd->progressBar = bar;
 	_jd->dir.setPath( m_projectDirectory );
 	_jd->it = _jd->files.begin();
+	_jd->reparseList = QStringList();
+
+        m_parseSilent = true;
 	
 	kdDebug( 9007 ) << "CppSupportPart::parseProject 5" << endl;
 	QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
@@ -1232,6 +1244,7 @@ void CppSupportPart::slotParseFiles()
 	// NOTE: The checking for m_projectClosed is actually (currently) not needed.
 	// When the project is closed, the language support plugin is destroyed
 	// and as a consequence, the timer job signal never arrives at this method
+
 
 	if ( !m_projectClosed && _jd->it != _jd->files.end() )
 	{
@@ -1248,46 +1261,77 @@ void CppSupportPart::slotParseFiles()
 				QDateTime t = fileInfo.lastModified();
 				if ( ! ( m_timestamp.contains( absFilePath ) && m_timestamp[ absFilePath ] == t ) )
 				{
-					if ( _jd->pcs.contains( absFilePath ) && t.toTime_t() == _jd->pcs[ absFilePath ].first )
+					if ( _jd->pcs.contains( absFilePath ) )
 					{
 						_jd->stream.device() ->at( _jd->pcs[ absFilePath ].second );
 						FileDom file = codeModel() ->create<FileModel>();
 						file->read( _jd->stream );
 						codeModel() ->addFile( file );
-					}
-					else
-					{
-						m_driver->parseFile( absFilePath );
+
+						if( t.toTime_t() != _jd->pcs[ absFilePath ].first ) {
+							///The FileDom had to be created first, so the dependencies are known
+							//parseFileAndDependencies( file->name(), false );
+							_jd->reparseList << file->name();
+						} else {
+							m_timestamp[ absFilePath ] = t;
+						}
+					} else {
+					  _jd->reparseList <<  absFilePath;
+						/*parseFileAndDependencies( absFilePath );
+						m_timestamp[ absFilePath ] = t;*/
 					}
 					
-					m_timestamp[ absFilePath ] = t;
 				}
 			}
 		}
-		
 		++( _jd->it );
 		QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
+		
+		if( _jd->it == _jd->files.end()) {
+			if( _jd->reparseList.isEmpty() ) {
+				_jd->backgroundCount = 0;
+			} else {
+				_jd->backgroundCount = parseFilesAndDependencies( _jd->reparseList );
+				_jd->progressBar->setProgress( 0 ); ///restart progress-bar for reparsing
+				_jd->progressBar->setTotalSteps( _jd->backgroundCount );
+			}
+			
+			_jd->backgroundState = 0;
+			_jd->lastParse = QTime::currentTime();
+			kapp->restoreOverrideCursor( );
+		}
 	}
 	else // finished or interrupted
 	{
-		kapp->restoreOverrideCursor( );
-		mainWindow( ) ->statusBar( ) ->removeWidget( _jd->progressBar );
-		
-		if ( !m_projectClosed )
-		{
-			kdDebug( 9007 ) << "updating sourceinfo" << endl;
-			emit updatedSourceInfo();
-			mainWindow( ) ->statusBar( ) ->message( i18n( "Done" ), 2000 );
-			QFile::remove
-				( project() ->projectDirectory() + "/" + project() ->projectName() + ".ignore_pcs" );
+		if( _jd->backgroundCount <= _jd->backgroundState || m_projectClosed ) {
+			mainWindow( ) ->statusBar( ) ->removeWidget( _jd->progressBar );
+			
+			if ( !m_projectClosed )
+			{
+				kdDebug( 9007 ) << "updating sourceinfo" << endl;
+				kapp->restoreOverrideCursor( );
+				emit updatedSourceInfo();
+				mainWindow( ) ->statusBar( ) ->message( i18n( "Done" ), 2000 );
+				QFile::remove
+					( project() ->projectDirectory() + "/" + project() ->projectName() + ".ignore_pcs" );
+			}
+			else
+			{
+				kdDebug( 9007 ) << "ABORT" << endl;
+			}
+			
+			delete _jd;
+			_jd = 0;
+			m_parseSilent = false;
+		} else {
+			_jd->progressBar->setProgress( _jd->backgroundState ); ///restart progress-bar for reparsing
+			if( _jd->lastParse.msecsTo(QTime::currentTime()) > 1000 ) {
+				_jd->backgroundCount = _jd->backgroundState = 0;   ///Stop waiting if there is no progress
+				QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
+			} else {
+				QTimer::singleShot( 10, this, SLOT( slotParseFiles() ) );
+			}
 		}
-		else
-		{
-			kdDebug( 9007 ) << "ABORT" << endl;
-		}
-		
-		delete _jd;
-		_jd = 0;
 	}
 }
 
@@ -1295,56 +1339,19 @@ void CppSupportPart::maybeParse( const QString& fn )
 {
 	if ( !isValidSource( fn ) )
 		return ;
+
+	QFileInfo fileInfo( fn );
+	QString path = URLUtil::canonicalPath( fn );
+	QDateTime t = fileInfo.lastModified();
+	
+	if ( !fileInfo.exists() )
+		return;
+	
+	QMap<QString, QDateTime>::Iterator it = m_timestamp.find( path );
+	if ( codeModel()->hasFile( fn ) && it != m_timestamp.end() && *it == t )
+		return;
 	
 	parseFileAndDependencies( fn );
-	return;
-	
-	FileDom d = fileByName( fn );
-	
-	QStringList lst;
-	if( !d ) {
-		lst << fn;
-	}else{
-		lst = codeModel()->getGroupStrings( d->groupId() );
-	}
-	
-	reorder( lst );
-	
-	bool reparse = false;
-	
-	for( QStringList::iterator it = lst.begin(); it != lst.end(); ++it ) {
-		QString& fileName = *it;
-		
-		QFileInfo fileInfo( fileName );
-		QString path = URLUtil::canonicalPath( fileName );
-		QDateTime t = fileInfo.lastModified();
-		
-		if ( !fileInfo.exists() )
-			continue ;
-		
-		QMap<QString, QDateTime>::Iterator it = m_timestamp.find( path );
-		if ( it != m_timestamp.end() && *it == t ) {
-			continue ;
-		}else{
-			reparse = true;
-			break;
-		}
-	}
-	
-	for( QStringList::iterator it = lst.begin(); it != lst.end(); ++it ) {
-		QString& fileName = *it;
-	
-		QFileInfo fileInfo( fileName );
-		QString path = URLUtil::canonicalPath( fileName );
-		
-		if ( !fileInfo.exists() ) {
-			removeWithReferences( path );
-			continue ;
-		}
-		
-		m_timestamp[ path ] = fileInfo.lastModified();
-		m_driver->parseFile( path );
-	}
 }
 
 void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
@@ -1933,97 +1940,157 @@ FileDom CppSupportPart::fileByName( const QString& name) {
 	return codeModel()->fileByName( name );
 }
 
-void CppSupportPart::parseFileAndDependencies( const QString & fileName ) {
-	if(! isValidSource( fileName ) ) return;
-	
-	FileDom d = fileByName( fileName );
-	
-	QStringList lst;
-	if( !d ) {
-		lst << fileName;
-	}else{
-		lst = codeModel()->getGroupStrings( d->groupId() );
+
+int CppSupportPart::parseFilesAndDependencies( QStringList files ) {
+
+	QMap<QString, int> fileGroups;
+	int nextGroup = 1;
+
+	for( QStringList::iterator it = files.begin(); it != files.end(); ++it ) {
+		FileDom d = fileByName( *it );
+
+		QStringList lst;
+		if( !d ) {
+			lst << *it;
+		}else{
+			lst = codeModel()->getGroupStrings( d->groupId() );
+		}
+		int cgroup = nextGroup;
+		nextGroup++;
+
+		if( fileGroups.find( *it ) != fileGroups.end() )
+			cgroup = fileGroups[*it];
+		
+		for( QStringList::iterator lit = lst.begin(); lit != lst.end(); ++lit )
+			fileGroups[*lit] = cgroup;
 	}
-	 
-	lst = reorder(lst);
-	QString group = lst.join("\n");
-	kdDebug() << "reparsing dependencies of " << fileName << ":\n" << group << "\n";
-	
-	if( !lst.isEmpty() ) {
-		m_parseEmitWaiting.addGroup( lst );
-		m_fileParsedEmitWaiting.addGroup( lst );
+
+	QValueVector<QStringList> groups;
+	groups.resize( nextGroup );
+
+	///put the groups together
+	for( QMap<QString, int>::iterator it = fileGroups.begin(); it != fileGroups.end(); ++it ) {
+		groups[*it] << it.key();
 	}
-	
-	for(QStringList::iterator it = lst.begin(); it != lst.end(); ++it) {
-		backgroundParser()->addFile(*it, false);
+
+	for( int a = 0; a < nextGroup; a++ ) {
+		QStringList group = reorder( groups[a] );
+		
+		
+		if( !group.isEmpty() ) {
+		        if( !m_parseSilent )
+			kdDebug() << "reparsing the following group: " << ":\n" << group.join("\n") << "\n\n";
+			m_parseEmitWaiting.addGroup( group );
+			m_fileParsedEmitWaiting.addGroup( group );
+		}
+		
+		for(QStringList::iterator it = group.begin(); it != group.end(); ++it)
+			backgroundParser()->addFile(*it);
 	}
+
+	return fileGroups.count();
+}
+	
+int CppSupportPart::parseFileAndDependencies( const QString & fileName ) {
+	if(! isValidSource( fileName ) ) return 0;
+	
+	kdDebug() << "reparsing dependencies of " << fileName << "\n";
+
+	return parseFilesAndDependencies( fileName );
 }
 
 void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 	if( files.res.isEmpty() ) return;
-	if( files.flag & ParseEmitWaiting::HadErrors ) {
-		kdDebug( 9007 ) << "not updating code-model because at least one file has errors" << endl;
-		return;
-	}
-	
-	m_backgroundParser->lock();
-	
-	QStringList l = files.res;
 
-	QValueList<FileDom> fileBackups;
-	
-	while(!l.isEmpty() ) 
-	{
-		if ( codeModel() ->hasFile( l.back() ) && m_backgroundParser->hasTranslationUnit( l.back() ) )
-		{
-			fileBackups << codeModel()->fileByName( l.back() );
-			removeWithReferences( l.back() );
+	bool modelHasFiles = true;
+	///update timestamps
+	for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it ) {
+		if( !codeModel()->hasFile( *it ) ) modelHasFiles = false;
+		QString& fileName = *it;
+		
+		QFileInfo fileInfo( fileName );
+		QString path = URLUtil::canonicalPath( fileName );
+		
+		if ( !fileInfo.exists() ) {
+			removeWithReferences( path );
+			continue ;
 		}
 		
-		l.pop_back();
+		m_timestamp[ path ] = fileInfo.lastModified();
 	}
 	
-	l = files.res;
-	
-	///Since even normal typing may create problems, these must not break the group, so group everything together afterwards
-	int currentGroup = 0;
-	
-	while(!l.isEmpty() ) {
-		QString fileName = l.front();
+	if( (files.flag & ParseEmitWaiting::HadErrors) && modelHasFiles && !m_parseSilent ) {
+		kdDebug( 9007 ) << "not updating code-model because at least one file has errors" << endl;
+		//		for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it )
+		  //			m_backgroundParser->removeFile( *it );
+	} else {
+		m_backgroundParser->lock();
 		
-		if ( TranslationUnitAST * ast = m_backgroundParser->translationUnit( fileName ) )
+		QStringList l = files.res;
+	
+		//QValueList<FileDom> fileBackups;
+		
+		while(!l.isEmpty() ) 
 		{
-			
-			if ( true /*!hasErrors*/ )
+			if ( codeModel() ->hasFile( l.back() ) && m_backgroundParser->hasTranslationUnit( l.back() ) )
 			{
-				StoreWalker walker( fileName, codeModel() );
-				walker.parseTranslationUnit( ast );
-				codeModel() ->addFile( walker.file() );
+				//fileBackups << codeModel()->fileByName( l.back() );
+				removeWithReferences( l.back() );
+			}
+			
+			l.pop_back();
+		}
+		
+		l = files.res;
+		
+		///Since even normal typing may create problems, these must not break the group, so group everything together afterwards
+		int currentGroup = 0;
+		
+		while(!l.isEmpty() ) {
+			QString fileName = l.front();
+			
+			if ( TranslationUnitAST * ast = m_backgroundParser->translationUnit( fileName ) )
+			{
 				
-				///Merge the groups together so that files parsed together get into one group again
-				if( walker.file() ) {
-					if( !currentGroup ) {
-						currentGroup = walker.file()->groupId();
-					} else {
-						currentGroup = codeModel()->mergeGroups( currentGroup, walker.file()->groupId() );
+				if ( true /*!hasErrors*/ )
+				{
+					StoreWalker walker( fileName, codeModel() );
+					walker.parseTranslationUnit( ast );
+					codeModel() ->addFile( walker.file() );
+					
+					///Merge the groups together so that files parsed together get into one group again
+					if( walker.file() ) {
+						if( !files.hadQueueProblem() ) {
+							if( !currentGroup ) {
+								currentGroup = walker.file()->groupId();
+							} else {
+								currentGroup = codeModel()->mergeGroups( currentGroup, walker.file()->groupId() );
+							}
+						}
 					}
 				}
+			} else {
+				kdDebug() << "failed to parse " << fileName << endl;
 			}
-		} else {
-			kdDebug() << "failed to parse " << fileName << endl;
+
+			l.pop_front();
 		}
 		
-		l.pop_front();
+		l = files.res;
+		
+		m_backgroundParser->unlock();
+		
+		if( m_parseSilent ) {
+			for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it )
+				m_backgroundParser->removeFile( *it );
+		} else {
+			QStringList l = files.res;
+			while(!l.isEmpty() ) {
+				emit addedSourceInfo( l.front() );
+				l.pop_front();
+			}
+		}
 	}
-	
-	l = files.res;
-	
-	while(!l.isEmpty() ) {
-		emit addedSourceInfo( l.front() );
-		l.pop_front();
-	}
-	
-	m_backgroundParser->unlock();
 }
 
 /*void CppSupportPart::recomputeCodeModel( const QString& fileName )
@@ -2033,6 +2100,7 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 
 void CppSupportPart::emitFileParsed( QStringList l )
 {
+  if( m_parseSilent ) return;
 	while( !l.isEmpty() ) {
 		emit fileParsed( l.front() );
 		l.pop_front();
@@ -2212,6 +2280,16 @@ KDevDesignerIntegration * CppSupportPart::designer( KInterfaceDesigner::Designer
 	}
 	return des;
 }
+
+
+void CppSupportPart::resetParserStoreTimer() {
+	m_deleteParserStoreTimer->start(3000); ///try to empty the store regularly
+}
+
+void CppSupportPart::slotDeleteParserStore() {
+	m_backgroundParser->removeAllFiles();
+}
+
 
 void CppSupportPart::slotCreateSubclass()
 {
