@@ -74,6 +74,7 @@ private slots:
     void slotProjectOpened();
     void slotProjectClosed();
     void graphicalClassView();
+		void refresh();
 
     void activePartChanged(KParts::Part*);
 

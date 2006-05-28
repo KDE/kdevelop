@@ -61,6 +61,7 @@
 class FunctionCompletion : public CustomCompleter {
     public:
         FunctionCompletion() {
+					setOrder( Insertion ); 
         };
         typedef QMap<QString, QString> FuncMap;
         FuncMap nameMap; /// real ->  short
@@ -181,7 +182,7 @@ ClassViewPart::~ClassViewPart()
 
 void ClassViewPart::slotProjectOpened( )
 {
-//    connect( languageSupport(), SIGNAL(updatedSourceInfo()), navigator, SLOT(refresh()) );
+    connect( languageSupport(), SIGNAL(updatedSourceInfo()), navigator, SLOT(refresh()) );
     connect( languageSupport(), SIGNAL(addedSourceInfo(const QString& )), navigator, SLOT(addFile(const QString& )));
     navigator->refresh();
 }
@@ -226,6 +227,11 @@ void ClassViewPart::graphicalClassView( )
     HierarchyDialog dia(this);
     dia.exec();
 }
+
+void ClassViewPart::refresh() {
+	if( navigator )
+			navigator->refresh();
+};
 
 void ClassViewPart::activePartChanged( KParts::Part * part)
 {
