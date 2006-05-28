@@ -114,8 +114,7 @@ void Navigator::selectFunctionNav(QListViewItem *item)
     {
         case FunctionNavItem::Definition: //jump to definition
         {
-            FileList files;
-            files.append(file);
+            FileList files = file->wholeGroup();
             FunctionDefinitionList deflist;
             CodeModelUtils::findFunctionDefinitions(NavOp(this, nav->text(0)), files, deflist);
             if (deflist.count() < 1)
@@ -131,8 +130,7 @@ void Navigator::selectFunctionNav(QListViewItem *item)
         }
         case FunctionNavItem::Declaration: //jump to declaration
         {
-            FileList files;
-            files.append(file);
+            FileList files = file->wholeGroup();
             FunctionList declist;
             CodeModelUtils::findFunctionDeclarations(NavOp(this, nav->text(0)), files, declist);
             if (declist.count() < 1)
