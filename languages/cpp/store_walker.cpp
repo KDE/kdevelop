@@ -533,6 +533,31 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 
 void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
 {
+	if( ast->name() ) {
+	TypeAliasDom typeAlias = m_store->create<TypeAliasModel>();
+	typeAlias->setFileName( m_fileName );
+	typeAlias->setName( ast->name()->text() );
+	typeAlias->setType( "int" );
+	typeAlias->setComment( ast->comment() );
+	
+	int line, col;
+	ast->getStartPosition( &line, &col );
+	typeAlias->setStartPosition( line, col );
+	
+	ast->getEndPosition( &line, &col );
+	typeAlias->setEndPosition( line, col );
+	
+	if ( m_currentClass.top() )
+		m_currentClass.top() ->addTypeAlias( typeAlias );
+	else if ( m_currentNamespace.top() )
+		m_currentNamespace.top() ->addTypeAlias( typeAlias );
+	else
+		m_file->addTypeAlias( typeAlias );
+	} else {
+		kdDebug() << "enum has no name" << endl;
+	}
+	
+	
 	QPtrList<EnumeratorAST> l = ast->enumeratorList();
 	QPtrListIterator<EnumeratorAST> it( l );
 	while ( it.current() )

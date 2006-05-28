@@ -53,6 +53,7 @@ public:
 
 	void removeAllProblems( const QString& filename );
 	void reportProblem( const QString& fileName, const Problem& p );
+	bool hasErrors(const QString& file);
 
 public slots:
 	void reparse();

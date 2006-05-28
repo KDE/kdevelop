@@ -286,6 +286,7 @@ void ProblemReporter::slotTextChanged()
 	if( !m_active )
 		return;
 
+	m_cppSupport->setTyping(true);
 	m_timer->changeInterval( m_delay );
 }
 
@@ -311,7 +312,7 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 	removeAllItems(m_errorList,relFileName);
 	removeAllItems(m_fixmeList,relFileName);
 	removeAllItems(m_todoList,relFileName);
-
+	
 	if( m_document && m_markIface )
 	{
 		QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
@@ -398,6 +399,18 @@ void ProblemReporter::slotSelected( QListViewItem* item )
     // int column = item->text( 3 ).toInt();
 	m_cppSupport->partController()->editDocument( url, line-1 );
 //    m_cppSupport->mainWindow()->lowerView( this );
+}
+
+bool ProblemReporter::hasErrors( const QString& fileName ) {
+	QListViewItem* current = m_errorList->firstChild();
+	while( current ){
+		QListViewItem* i = current;
+		current = current->nextSibling();
+		
+		if( i->text(0) == fileName )
+			return true;
+	}
+	return false;
 }
 
 void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )

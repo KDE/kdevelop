@@ -163,8 +163,8 @@ public:
 
 CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QStringList &args )
 : KDevLanguageSupport( CppSupportFactory::info(), parent, name ? name : "KDevCppSupport" ),
-m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ),
-  m_activeViewCursor( 0 ), m_projectClosed( true ), m_parseSilent( false ), m_valid( false ), _jd(0)
+	m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ),
+	m_activeViewCursor( 0 ), m_projectClosed( true ), m_parseSilent( false ), m_valid( false ), _jd(0), m_isTyping( false ), m_hadErrors( false )
 {
 	setInstance( CppSupportFactory::instance() );
 	
@@ -335,9 +335,9 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 				m_problemReporter->reportProblem( fileName, p );
 			}
 		}
-		
+
 		if( !project()->isProjectFile( fileName ) || !m_parseEmitWaiting.reject( fileName ) ) {
-			parseEmit( m_parseEmitWaiting.processFile( fileName, (hasErrors && !fromDisk) ? ParseEmitWaiting::HadErrors : ParseEmitWaiting::None ) );
+			parseEmit( m_parseEmitWaiting.processFile( fileName, ( !m_hadErrors && hasErrors && !fromDisk && m_isTyping && fileName == m_activeFileName ) ? ParseEmitWaiting::HadErrors : ParseEmitWaiting::None ) );
 		}
 		emitFileParsed( m_fileParsedEmitWaiting.processFile( fileName ) );
 	}
@@ -374,7 +374,9 @@ void CppSupportPart::activePartChanged( KParts::Part *part )
 	{
 		disconnect( m_activeView, SIGNAL( cursorPositionChanged() ), this, SLOT( slotCursorPositionChanged() ) );
 	}
-	
+
+	m_isTyping = false;
+	m_hadErrors = true;
 	m_activeDocument = dynamic_cast<KTextEditor::Document*>( part );
 	m_activeView = part ? dynamic_cast<KTextEditor::View*>( part->widget() ) : 0;
 	m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
@@ -418,6 +420,14 @@ void CppSupportPart::activePartChanged( KParts::Part *part )
 	
 	textHintIface->enableTextHints( 1000 );
 #endif
+}
+
+
+void CppSupportPart::setTyping( bool typing ) {
+	m_isTyping = typing;
+	if( m_problemReporter) {
+		m_hadErrors &= m_problemReporter->hasErrors(m_activeFileName);///m_hadErrors generally stores whether there was an error-free state of the file.
+	}
 }
 
 
@@ -771,7 +781,7 @@ void CppSupportPart::addedFilesToProject( const QStringList &fileList )
 		QString path = URLUtil::canonicalPath( m_projectDirectory + "/" + ( *it ) );
 		
 		maybeParse( path );
-		emit addedSourceInfo( path );
+		//emit addedSourceInfo( path );
 	}
 }
 
@@ -797,13 +807,19 @@ void CppSupportPart::changedFilesInProject( const QStringList & fileList )
 		QString path = URLUtil::canonicalPath( m_projectDirectory + "/" + *it );
 		
 		maybeParse( path );
-		emit addedSourceInfo( path );
+		//emit addedSourceInfo( path );
 	}
 }
 
-void CppSupportPart::savedFile( const KURL &fileName )
+void CppSupportPart::savedFile( const KURL &file )
 {
-	Q_UNUSED( fileName.path() );
+	if( file.path() == m_activeFileName ) {
+		m_isTyping = false;
+		m_hadErrors = false;
+		maybeParse( file.path() );
+	}
+	
+	Q_UNUSED( file.path() );
 
 #if 0  // not needed anymore
 
@@ -826,7 +842,6 @@ QString CppSupportPart::findSourceFile()
 	// extract the base path (full path without '.' and extension)
 	QString base = path.left( path.length() - ext.length() - 1 );
 	QStringList candidates;
-	
 	if ( QStringList::split( ',', "h,H,hh,hxx,hpp,tlh" ).contains( ext ) )
 	{
 		candidates << ( base + ".c" );
@@ -1991,6 +2006,10 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 			lst << *it;
 		}else{
 			lst = codeModel()->getGroupStrings( d->groupId() );
+			kdDebug() << "adding group of: " << *it << ":\n" << " which is " << lst.join("\n") << "\n\n";
+			if( lst.count() > 10 ) {
+				lst = codeModel()->getGroupStrings( d->groupId() );
+			}
 		}
 		int cgroup = nextGroup;
 		nextGroup++;
@@ -2012,6 +2031,7 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 
 	for( int a = 0; a < nextGroup; a++ ) {
 		QStringList group = reorder( groups[a] );
+
 		
 		kdDebug() << "reparsing the following group: " << ":\n" << group.join("\n") << "\n\n";
 		if( background ) {
@@ -2044,29 +2064,32 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 	if( files.res.isEmpty() ) return;
 
 	bool modelHasFiles = true;
-	///update timestamps
-	for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it ) {
-		if( !codeModel()->hasFile( *it ) ) modelHasFiles = false;
-		QString& fileName = *it;
-		
-		QFileInfo fileInfo( fileName );
-		QString path = URLUtil::canonicalPath( fileName );
-		
-		if ( !fileInfo.exists() ) {
-			removeWithReferences( path );
-			continue ;
-		}
-		
-		m_timestamp[ path ] = fileInfo.lastModified();
-	}
 	
-	if( m_parseSilent && !alwaysParseInBackground ) return;
 
 	if( (files.flag & ParseEmitWaiting::HadErrors) && modelHasFiles && !m_parseSilent ) {
 		kdDebug( 9007 ) << "not updating code-model because at least one file has errors" << endl;
 		//		for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it )
 		  //			m_backgroundParser->removeFile( *it );
 	} else {
+		///update timestamps
+		for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it ) {
+			if( !codeModel()->hasFile( *it ) ) modelHasFiles = false;
+			QString& fileName = *it;
+			
+			QFileInfo fileInfo( fileName );
+			QString path = URLUtil::canonicalPath( fileName );
+			
+			if ( !fileInfo.exists() ) {
+				removeWithReferences( path );
+				continue ;
+			}
+			
+			m_timestamp[ path ] = fileInfo.lastModified();
+		}
+		
+
+		if( m_parseSilent && !alwaysParseInBackground ) return;
+		
 		m_backgroundParser->lock();
 		
 		QStringList l = files.res;
@@ -2088,6 +2111,8 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 		
 		///Since even normal typing may create problems, these must not break the group, so group everything together afterwards
 		int currentGroup = 0;
+
+		QMap<QString, bool> wholeResult;
 		
 		while(!l.isEmpty() ) {
 			QString fileName = l.front();
@@ -2103,17 +2128,23 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 					StoreWalker walker( fileName, codeModel() );
 					walker.parseTranslationUnit( ast );
 					codeModel() ->addFile( walker.file() );
-					
-					///Merge the groups together so that files parsed together get into one group again
 					if( walker.file() ) {
-						if( !files.hadQueueProblem() ) {
-							if( !currentGroup ) {
-								currentGroup = walker.file()->groupId();
-							} else {
-								currentGroup = codeModel()->mergeGroups( currentGroup, walker.file()->groupId() );
-							}
-						}
+						QStringList grp = walker.file()->wholeGroupStrings();
+						for( QStringList::const_iterator it = grp.begin(); it != grp.end(); ++it )
+							wholeResult[*it] = true;
 					}
+					
+					/*
+						///Merge the groups together so that files parsed together get into one group again
+						if( walker.file() ) {
+							if( !files.hadQueueProblem() ) {
+								if( !currentGroup ) {
+									currentGroup = walker.file()->groupId();
+								} else {
+									currentGroup = codeModel()->mergeGroups( currentGroup, walker.file()->groupId() );
+								}
+							}
+						}*/
 				}
 			} else {
 				kdDebug() << "failed to parse " << fileName << endl;
@@ -2121,12 +2152,17 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 
 			l.pop_front();
 		}
+
+		///make the list unique
 		
-		l = files.res;
+		l.clear();
+		for( QMap<QString, bool>::const_iterator it = wholeResult.begin(); it != wholeResult.end(); ++it )
+			l << it.key();
 		
 		m_backgroundParser->unlock();
 		
 		if( m_parseSilent ) {
+			if( alwaysParseInBackground )
 			for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it )
 				m_backgroundParser->removeFile( *it );
 		} else {

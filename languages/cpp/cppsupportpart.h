@@ -147,6 +147,8 @@ public:
 
 	virtual KDevDesignerIntegration *designer( KInterfaceDesigner::DesignerType type );
 
+	void setTyping( bool typing );
+	
 	/**
 	 * Add a new method to a class.
 	 * @param aClass The class to which the method should be added.
@@ -314,6 +316,8 @@ private:
 	QMap<QString, QDateTime> m_timestamp;
 	bool m_valid;
 	bool m_parseSilent;
+	bool m_isTyping;
+	bool m_hadErrors; ///Whether there were already errors when the user started typing
 	
 	QPtrList<Catalog> m_catalogList;
 	Driver* m_driver;
@@ -349,17 +353,6 @@ private:
         typedef QValueList< Item > List;
         List m_waiting;
         
-        ///Just return all files that have been parsed
-        QStringList errorRecover( QString currentFile ) {
-            QStringList ret;
-            kdDebug( 9007 ) << "ParseEmitWaiting: error in the waiting-chain" << endl;
-            for( List::iterator it = m_waiting.begin(); it != m_waiting.end(); ++it) {
-                ret += (*it).second;
-            }
-            if( !currentFile.isEmpty() ) ret << currentFile;
-            m_waiting.clear();
-            return ret;
-        }
         
         QStringList harvestUntil( List::iterator targIt ) {
             List::iterator it = m_waiting.begin();
@@ -404,6 +397,21 @@ private:
 			    return flag & HadQueueProblem;
 		    }
 	    };
+
+
+    private:
+        ///Just return all files that have been parsed
+	    Processed errorRecover( QString currentFile ) {
+		    QStringList ret;
+	    kdDebug( 9007 ) << "ParseEmitWaiting: error in the waiting-chain" << endl;
+		    for( List::iterator it = m_waiting.begin(); it != m_waiting.end(); ++it) {
+			    ret += (*it).second;
+		    }
+		    if( !currentFile.isEmpty() ) ret << currentFile;
+		    m_waiting.clear();
+		    return Processed( ret, HadQueueProblem );
+	    }
+    public:
 	    
         ///returns the parsed-messages that should be emitted
 		Processed processFile( QString file, Flags flag = None ) {
@@ -417,6 +425,7 @@ private:
 	                        Flags f = (*it).flags;
                             if( it != m_waiting.begin() ) {
                                 kdDebug( 9007 ) << "ParseEmitWaiting: the chain has multiple groups waiting, they are flushed" << endl;
+	                            f = (Flags)(f | HadQueueProblem);
                             }
 	                        return Processed( harvestUntil( ++it ), f );
                         } else {
@@ -425,15 +434,15 @@ private:
                         }
                     } else {
                         ///The file has already been parsed
-                    kdDebug( 9007 ) << "ParseEmitWaiting: file has been parsed twice" << endl;
-                        return errorRecover( file );
+                    	kdDebug( 9007 ) << "ParseEmitWaiting: file has been parsed twice" << endl;
+	                    return errorRecover( file );
                     }
                 }
             }
             
             kdDebug( 9007 ) << "ParseEmitWaiting: file \"" << file << "\" has no group waiting for it" << endl;
             ret << file;
-            return ret;
+			return Processed( ret, HadQueueProblem );
         }
     };
     
