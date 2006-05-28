@@ -82,6 +82,8 @@
 #include "simpletypefunction.h"
 
 
+const bool disableVerboseForCompletionList = true;
+const bool disableVerboseForContextMenu = true;
 
 ///This enables-disables the automatic processing of the expression under the mouse-cursor 
 //#define DISABLETOOLTIPS
@@ -1042,7 +1044,21 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 	
 	if ( !m_pSupport || !m_activeEditor )
 		return ;
+
+	struct SetDbgState {
+		DBGStreamType& st;
+		bool oldState;
+		SetDbgState( DBGStreamType& targ, bool state ) : st( targ ) {
+			oldState = targ.state();
+			targ.setState( state );
+		}
+		~SetDbgState() {
+			st.setState( oldState );
+		}
+	};
 	
+	SetDbgState stt( dbgState, disableVerboseForContextMenu );
+
     SimpleTypeConfiguration conf( m_activeFileName );
 	
 	EvaluationResult type = evaluateExpressionAt( line, column, conf );
@@ -2210,9 +2226,7 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName )
 	if ( fileName != m_activeFileName || !m_pSupport || !m_activeEditor )
 		return ;
 
-	m_pSupport->backgroundParser() ->lock ();
-	computeRecoveryPoints();
-	m_pSupport->backgroundParser() ->unlock();
+	computeRecoveryPointsLocked();
 }
 
 void CppCodeCompletion::setupCodeInformationRepository( )
@@ -2622,6 +2636,12 @@ QString CppCodeCompletion::getText( int startLine, int startColumn, int endLine,
 	return contents.join( "\n" );
 }
 
+void CppCodeCompletion::computeRecoveryPointsLocked() {
+	m_pSupport->backgroundParser() ->lock ();
+	computeRecoveryPoints();
+	m_pSupport->backgroundParser() ->unlock();
+}
+
 void CppCodeCompletion::computeRecoveryPoints( )
 {
 	if ( m_blockForKeyword )
@@ -2640,6 +2660,8 @@ void CppCodeCompletion::computeRecoveryPoints( )
 
 void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList< CodeCompletionEntry > & entryList, const QStringList & type, bool isInstance )
 {
+	dbgState.setState( disableVerboseForCompletionList );
+	
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
 	CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
@@ -2701,6 +2723,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 			if( tp ) computeCompletionEntryList( tp, entryList, tp.scope(), isInstance );
 		}
 	}
+	dbgState.setState( true );
 }
 
 void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, QValueList< Tag > & tags, bool /*isInstance*/ )

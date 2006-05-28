@@ -15,7 +15,7 @@
 
 //#define VERBOSE
 #define VERBOSEMAJOR
-#define DEPTHBACKTRACE
+//#define DEPTHBACKTRACE
 
 #include <qstringlist.h>
 #include <kdebug.h>
@@ -27,12 +27,13 @@ template <class StreamType>
   StreamType m_stream;
   QStringList m_prefixStack;
 	int m_counter;
+	bool m_enabled;
 	  
   public:
   typedef StreamType KStreamType;
   KDDebugState();
  
-  KDDebugState( StreamType stream ) : m_stream( stream ), m_counter(0) {
+  KDDebugState( StreamType stream ) : m_stream( stream ), m_counter(0), m_enabled(true) {
   }
  
   void push( const QString & txt ) {
@@ -44,6 +45,7 @@ template <class StreamType>
   };
  
   StreamType& dbg() {
+    if( !m_enabled ) kndbgstream();
     m_stream << "(" << m_counter << ")";
     for( QStringList::iterator it = m_prefixStack.begin(); it != m_prefixStack.end() ; ++it )
       m_stream << *it;
@@ -52,6 +54,14 @@ template <class StreamType>
     return m_stream;
   }
 
+	void setState( bool enabled ) {
+		m_enabled = enabled;
+	}
+
+	  bool state() {
+		  return m_enabled;
+	  }
+	  
 #ifndef NDEBUG
   void outputPrefix( kdbgstream& target ) {
     target << "(" << m_counter << ")";

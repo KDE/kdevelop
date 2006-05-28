@@ -300,7 +300,7 @@ public:
   virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams );
 };
 
-//FIXME: Where is this used?? (Andras)
+//This is used in CppCodeCompletion::evaluateExpression(..)
 class ExpressionEvaluation {
 private:
   CppCodeCompletion* m_data;

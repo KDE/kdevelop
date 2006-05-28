@@ -136,7 +136,8 @@ private:
 	void setupCodeInformationRepository();
 	FunctionDefinitionAST* functionDefinition( AST* node );
 	void computeRecoveryPoints();
-
+	void computeRecoveryPointsLocked();
+	
     enum EvaluateExpressionOptions {
         IncludeStandardExpressions = 1,
         IncludeTypeExpression = 2,

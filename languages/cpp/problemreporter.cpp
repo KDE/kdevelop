@@ -133,6 +133,7 @@ m_markIface( 0 )
 	m_tabBar->setTabEnabled(4,false);
 
 	m_timer = new QTimer( this );
+	m_parseCheckTimeout = new QTimer( this );
 
 	m_filterEdit = new QLineEdit(this);
 
@@ -158,8 +159,9 @@ m_markIface( 0 )
 
 	connect( part, SIGNAL(fileParsed(const QString&)), this, SLOT(slotFileParsed(const QString&)) );
 
-	connect( m_timer, SIGNAL(timeout()), this, SLOT(reparse()) );
-
+    connect( m_timer, SIGNAL(timeout()), this, SLOT(reparse()) );
+    connect( m_parseCheckTimeout, SIGNAL(timeout()), this, SLOT(slotParseCheck()) );
+    
 	connect( part->partController(), SIGNAL(closedFile(const KURL&)),
 	         this, SLOT(closedFile(const KURL&)) );
 
@@ -258,12 +260,18 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 
 	m_tabBar->setTabEnabled(0,true);
 
+    m_parseCheckTimeout->start( 300 );
+}
+
+void ProblemReporter::slotParseCheck() {
+	m_parseCheckTimeout->stop();
 	m_cppSupport->backgroundParser()->lock();
 	bool needReparse = false;
+	//if( !m_cppSupport->backgroundParser()->hasTranslationUnit(m_fileName) ) ///with this, the background-parser is used, and it may crash.
 	if( !m_cppSupport->backgroundParser()->translationUnit(m_fileName) )
 		needReparse = true;
 	m_cppSupport->backgroundParser()->unlock();
-
+	
 	if( needReparse )
 		reparse();
 }
@@ -319,18 +327,20 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 void ProblemReporter::reparse()
 {
 	m_timer->stop();
+	if( m_fileName.isEmpty() ) return;
 
 	if( !m_cppSupport->isValid() )
 		return;
 
 	m_currentList->clear();
 
-	if( m_canParseFile )
-	{
-		m_cppSupport->parseFileAndDependencies( m_fileName );
-		m_canParseFile = false;
-		kdDebug(9007) << "---> file added" << endl;
-    }else{
+    /*if( m_canParseFile )
+    {*/
+      
+        m_cppSupport->parseFileAndDependencies( m_fileName );
+    //        m_canParseFile = false;
+        kdDebug(9007) << m_fileName << "---> file added to background-parser(by problem-reporter)" << endl;
+    /*}else{
         if(m_timeout.isNull()) {
             m_timeout = QTime::currentTime();
             kdDebug(9007) << "cannot parse, parser seems to be busy" << endl;
@@ -342,7 +352,7 @@ void ProblemReporter::reparse()
         }else{
             m_timer->changeInterval( m_delay );
         }
-    }
+    }*/
 }
 
 void ProblemReporter::initCurrentList()

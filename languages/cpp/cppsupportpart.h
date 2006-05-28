@@ -85,7 +85,8 @@ public:
 	}
 
     /** parses the file and all files that belong to it using the background-parser */
-    void parseFileAndDependencies( const QString& fileName );
+    int parseFileAndDependencies( const QString& fileName, bool background = true );
+	int parseFilesAndDependencies( QStringList files, bool background = true );
     
     BackgroundParser* backgroundParser() const
 	{
@@ -211,7 +212,8 @@ private slots:
 	void slotParseFiles();
 	void slotCreateSubclass();
 	void slotCreateAccessMethods();
-
+	void slotDeleteParserStore();
+	
 	void slotNeedTextHint( int, int, QString& );
 
 	/**
@@ -226,6 +228,7 @@ private slots:
 
 private:
 
+	void resetParserStoreTimer();
 	/**
 	 * Get a linenumber in which a new method with a specific access specifier can be inserted.
 	 * If there isn't a "section" with access, such a "section" gets inserted and the resulting place is returned.
@@ -262,7 +265,7 @@ private:
 	 * checks if a file has to be parsed
 	 */
     FileDom fileByName( const QString& name);
-	void maybeParse( const QString& fileName );
+	void maybeParse( const QString& fileName, bool background = true );
 	void removeWithReferences( const QString& fileName );
 	void createIgnorePCSFile();
 
@@ -310,7 +313,8 @@ private:
 
 	QMap<QString, QDateTime> m_timestamp;
 	bool m_valid;
-
+	bool m_parseSilent;
+	
 	QPtrList<Catalog> m_catalogList;
 	Driver* m_driver;
 	QString m_projectDirectory;
@@ -321,12 +325,14 @@ private:
 	VariableDom m_activeVariable;
 
 	QTimer* m_functionHintTimer;
+	QTimer* m_deleteParserStoreTimer;
     
     class ParseEmitWaiting {
     public:
 	    enum Flags {
 		    None = 0,
-			    HadErrors = 1
+			HadErrors = 1,
+			HadQueueProblem = 2
 	    };
     private:
 	    struct Item {
@@ -351,6 +357,7 @@ private:
                 ret += (*it).second;
             }
             if( !currentFile.isEmpty() ) ret << currentFile;
+            m_waiting.clear();
             return ret;
         }
         
@@ -391,6 +398,10 @@ private:
 			}
 		    operator QStringList() {
 			    return res;
+		    }
+
+		    bool hadQueueProblem() {
+			    return flag & HadQueueProblem;
 		    }
 	    };
 	    
@@ -448,9 +459,15 @@ private:
 		QGuardedPtr<QProgressBar> progressBar;
 		QStringList::Iterator it;
 		QStringList files;
+		int cycle;
+		int backgroundCount;
+		int lastBackgroundState;
+		int backgroundState;
+		QStringList reparseList;
 		QMap< QString, QPair<uint, uint> > pcs;
 		QDataStream stream;
 		QFile file;
+		QTime lastParse;
 
 		~JobData()
 		{

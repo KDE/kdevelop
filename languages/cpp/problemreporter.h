@@ -69,6 +69,7 @@ private slots:
 	void slotTabSelected( int tabindex );
 	void slotFilter();
 	void closedFile( const KURL &fileName );
+	void slotParseCheck();
 
 private:
 	QString levelToString( int level ) const;
@@ -95,7 +96,8 @@ private:
 	QGuardedPtr<KTextEditor::Document> m_document;
 	KTextEditor::MarkInterface* m_markIface;
 	QTimer* m_timer;
-    QTime m_timeout;
+	QTimer* m_parseCheckTimeout;
+	QTime m_timeout;
 	QString m_fileName;
 	int m_active;
 	int m_delay;
