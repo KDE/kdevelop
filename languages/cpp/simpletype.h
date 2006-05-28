@@ -179,9 +179,7 @@ public:
 	  dbgState.clearCounter();
   }
   
-  void setGlobalNamespace( TypePointer globalNamespace ) {
-    SimpleType::setGlobalNamespace( globalNamespace );
-  }
+void setGlobalNamespace( TypePointer globalNamespace );
   
   virtual ~SimpleTypeConfiguration() {
     SimpleType::resetGlobalNamespace();
@@ -436,6 +434,11 @@ public:
     ///sets the parent-type(type this one is nested in)
   void setParent( TypePointer parent ) {
     invalidateSecondaryCache();
+	  if( &(*parent) == this ) {
+		  kdDebug( 9007 ) << "setSlaveParent error\n" << kdBacktrace() << endl;
+		  return;
+	  }
+	  
     m_parent = parent;
   }
   

@@ -19,7 +19,7 @@ namespace CompletionDebug {
 
 DBGStreamType dbgState;
 
-const int completionMaxDepth = 50;
+const int completionMaxDepth = 20;
 
 DBGStreamType::KStreamType& dbg() {
  return dbgState.dbg();

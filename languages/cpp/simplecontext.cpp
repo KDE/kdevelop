@@ -29,7 +29,7 @@ SimpleType getGlobal( SimpleType t ) {
     if( !s ) { kdDebug( 9007 ) << "error" << endl; break; }
     global = global->parent();
   }
-  
+	if(  !global.scope().isEmpty() ) {kdDebug( 9007 ) << "ERROR WITH GLOBAL SCOPE" << endl; return SimpleType(); }
   return global;
 }
 

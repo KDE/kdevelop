@@ -669,6 +669,14 @@ void SimpleTypeImpl::TemplateParamInfo::addParam( const TemplateParam& param ) {
   m_paramsByName[param.name] = param;
 }
 
+void SimpleTypeConfiguration::setGlobalNamespace( TypePointer globalNamespace ) {
+	if( !globalNamespace->scope().isEmpty() ) {
+		kdDebug( 9007 ) << "error while setting global scope\n" << kdBacktrace() << endl;
+		SimpleType::setGlobalNamespace( new SimpleTypeImpl("") );
+	} else {
+		SimpleType::setGlobalNamespace( globalNamespace );
+	}
+}
 
 // kate: indent-mode csands; tab-width 4;
 

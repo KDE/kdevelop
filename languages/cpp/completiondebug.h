@@ -13,9 +13,10 @@
 #ifndef __COMPLETIONDEBUG_H__
 #define __COMPLETIONDEBUG_H__
 
-//#define VERBOSE
+#define VERBOSE
 #define VERBOSEMAJOR
 //#define DEPTHBACKTRACE
+#define NOFULLVERBOSE
 
 #include <qstringlist.h>
 #include <kdebug.h>
@@ -27,22 +28,33 @@ template <class StreamType>
   StreamType m_stream;
   QStringList m_prefixStack;
 	int m_counter;
+	int m_depth;
 	bool m_enabled;
 	  
   public:
   typedef StreamType KStreamType;
   KDDebugState();
  
-  KDDebugState( StreamType stream ) : m_stream( stream ), m_counter(0), m_enabled(true) {
+  KDDebugState( StreamType stream ) : m_stream( stream ), m_counter(0), m_depth(0), m_enabled(true) {
   }
  
   void push( const QString & txt ) {
-    m_prefixStack.push_back( txt );
+      m_prefixStack.push_back( txt );
+	  pushDepth();
   }
  
   void pop() {
-    m_prefixStack.pop_back();
+      m_prefixStack.pop_back();
+	  pushDepth();
   };
+
+  inline void pushDepth() {
+  	m_depth++;
+  }
+	
+  inline void popDepth() {
+  	m_depth--;
+  }
  
   StreamType& dbg() {
     if( !m_enabled ) kndbgstream();
@@ -50,8 +62,8 @@ template <class StreamType>
     for( QStringList::iterator it = m_prefixStack.begin(); it != m_prefixStack.end() ; ++it )
       m_stream << *it;
 
-	m_counter++;
-    return m_stream;
+	  m_counter++;
+	  return m_stream;
   }
 
 	void setState( bool enabled ) {
@@ -86,7 +98,7 @@ template<>
 #endif
 template<>
   KDDebugState<kndbgstream>::KDDebugState();
-#if defined(VERBOSE) && !defined(NDEBUG)
+#if defined(VERBOSE) && !defined(NDEBUG) && !defined(NOFULLVERBOSE)
  typedef KDDebugState<kdbgstream> DBGStreamType;
 #else
  typedef KDDebugState<kndbgstream> DBGStreamType;
@@ -136,7 +148,11 @@ template<>
   public:
   	DepthDebug( const QString& prefix = "#", int max = completionMaxDepth, DBGStreamType& st = dbgState ) : m_state( st ), m_max( max ) {
       Q_UNUSED( prefix );
+	  	dbgState.pushDepth();
     };
+	  ~DepthDebug() {
+		dbgState.popDepth();
+	  }
     
     kndbgstream dbg() {
       return kndDebug();
