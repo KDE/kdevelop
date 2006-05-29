@@ -465,6 +465,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 	m_activeEditor = 0;
 	m_activeCompletion = 0;
 	m_activeHintInterface = 0;
+	m_activeView = 0;
 	m_ccTimer = new QTimer( this );
 	m_showStatusTextTimer = new QTimer( this );
 	
@@ -600,10 +601,8 @@ void CppCodeCompletion::slotPartAdded( KParts::Part *part )
 
 void CppCodeCompletion::slotActivePartChanged( KParts::Part *part )
 {
-	if( m_activeHintInterface ) {
-		KParts::Part* oldPart = dynamic_cast<KParts::Part*>( m_activeHintInterface );
-		if( oldPart && oldPart->widget() )
-			disconnect(oldPart->widget() , SIGNAL( needTextHint(int, int, QString &) ), this, SLOT( slotTextHint(int, int, QString&) ) );
+	if( m_activeHintInterface && m_activeView ) {
+		disconnect(m_activeView , SIGNAL( needTextHint(int, int, QString &) ), this, SLOT( slotTextHint(int, int, QString&) ) );
 		
 		m_activeHintInterface = 0;
 	}
@@ -642,7 +641,10 @@ void CppCodeCompletion::slotActivePartChanged( KParts::Part *part )
 		return ;
 	}
 
-	m_activeHintInterface = dynamic_cast<KTextEditor::TextHintInterface*>( part->widget() );
+	m_activeView = part ? dynamic_cast<KTextEditor::View*>( part->widget() ) : 0;
+
+	if( m_activeView )
+		m_activeHintInterface = dynamic_cast<KTextEditor::TextHintInterface*>( m_activeView );
 	
 	char* q = 0;
 	kdDebug() << q << endl;
@@ -651,7 +653,7 @@ void CppCodeCompletion::slotActivePartChanged( KParts::Part *part )
 	{
 #ifndef DISABLETOOLTIPS
 		m_activeHintInterface->enableTextHints( 500 );
-		connect( part->widget(), SIGNAL( needTextHint(int, int, QString &) ), this, SLOT( slotTextHint(int, int, QString&) ) );
+		connect( m_activeView, SIGNAL( needTextHint(int, int, QString &) ), this, SLOT( slotTextHint(int, int, QString&) ) );
 #endif
 	} else {
 		kdDebug( 9007 ) << "editor has no text-hint-interface" << endl;
@@ -1106,6 +1108,14 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
 	//  return;
 	kdDebug( 9007 ) << "CppCodeCompletion::slotTextHint()" << endl;
+
+	if( m_lastHintTime.msecsTo( QTime::currentTime() ) < 300 ) {
+		kdDebug( 9007 ) << "slotNeedTextHint called too often";
+		return;
+	}
+	
+	m_lastHintTime = QTime::currentTime();
+	
 	clearStatusText();
 	text = "";
 	if ( !m_pSupport || !m_activeEditor )
@@ -1595,6 +1605,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 	if ( !m_pSupport || !m_activeCursor || !m_activeEditor || !m_activeCompletion )
 		return ;
+
 	
 	m_demandCompletion = invokedOnDemand;
 	
@@ -1610,6 +1621,23 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 	
 	unsigned int line, column;
 	m_activeCursor->cursorPositionReal( &line, &column );
+
+	///Check whether the cursor is within a comment
+	int surroundingStartLine = line - 10, surroundingEndLine = line + 10;
+	if( surroundingStartLine < 0 ) surroundingStartLine = 0;
+	if( surroundingEndLine > m_activeEditor->numLines()-1 ) surroundingEndLine = m_activeEditor->numLines() -1;
+	int surroundingEndCol = m_activeEditor->lineLength( surroundingEndLine );
+
+	QString pre = getText( surroundingStartLine, 0, line, column );
+	int pos = pre.length();
+	pre += getText( line, column, surroundingEndLine, surroundingEndCol );
+	QString cleared = clearComments( pre );
+	if( cleared[pos] != pre[pos] ) {
+		kdDebug( 9007 ) << "stopping completion because we're in a coment" << endl;
+		return;
+	}
+
+	
 
 	
 	int nLine = line, nCol = column;

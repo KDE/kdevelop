@@ -462,6 +462,7 @@ private:
 	friend class KDevCppSupportIface;
 	friend class CppDriver;
 
+
 	struct JobData
 	{
 		QDir dir;

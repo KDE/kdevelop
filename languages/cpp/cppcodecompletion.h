@@ -31,6 +31,7 @@
 #include <ktexteditor/codecompletioninterface.h>
 #include <ktexteditor/texthintinterface.h>
 #include <ktexteditor/cursorinterface.h>
+#include <ktexteditor/view.h>
 
 #include <qobject.h>
 #include <qstringlist.h>
@@ -214,7 +215,8 @@ private:
 	KTextEditor::EditInterface* m_activeEditor;
     KTextEditor::TextHintInterface* m_activeHintInterface;
 	KTextEditor::CodeCompletionInterface* m_activeCompletion;
-
+	KTextEditor::View* m_activeView;
+	
 	bool m_bArgHintShow;
 	bool m_bCompletionBoxShow;
 	bool m_blockForKeyword;
@@ -227,6 +229,8 @@ private:
 	CppCodeCompletionData* d;
 	CompletionMode m_completionMode;
 
+	QTime m_lastHintTime;
+	
 	QRegExp m_includeRx;
 	QRegExp m_cppCodeCommentsRx;
 	QRegExp m_codeCompleteChRx;
