@@ -272,10 +272,6 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	
 	DeclaratorAST* d = ast->initDeclarator() ->declarator();
 	
-	if( !d->comment().isEmpty() ) {
-	kdDebug() << "have comment: " << d->comment() << endl << endl;
-	}
-	
 	if ( !d->declaratorId() )
 		return ;
 	

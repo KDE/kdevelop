@@ -893,7 +893,7 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 		return QString::null;
 	// extract the base path (full path without '.' and extension)
 	QString base = path.left( path.length() - ext.length() - 1 );
-	kdDebug( 9007 ) << "base: " << base << ", ext: " << ext << endl;
+	//kdDebug( 9007 ) << "base: " << base << ", ext: " << ext << endl;
 	// just the filename without the extension
 	QString fileNameWoExt = fi.fileName();
 	if ( !ext.isEmpty() )
@@ -943,14 +943,14 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
         QStringList::ConstIterator it;
         for ( it = candidates.begin(); it != candidates.end(); ++it )
         {
-                kdDebug( 9007 ) << "Trying " << ( *it ) << endl;
+	        //kdDebug( 9007 ) << "Trying " << ( *it ) << endl;
                 if ( QFileInfo( *it ).exists() )
                 {
 			kdDebug() << "using: " << *it << endl;
                         return * it;
                 }
         }
-	kdDebug( 9007 ) << "Now searching in project files." << endl;
+	//kdDebug( 9007 ) << "Now searching in project files." << endl;
 	// Our last resort: search the project file list for matching files
 	QStringList::iterator fileIt;
 	QFileInfo candidateFileWoExt;
@@ -966,7 +966,7 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 		{
 			if ( possibleExtsList.contains( candidateFileWoExt.extension() ) || candidateFileWoExt.extension().isEmpty() )
 			{
-				kdDebug( 9007 ) << "checking if " << *fileIt << " exists" << endl;
+				//kdDebug( 9007 ) << "checking if " << *fileIt << " exists" << endl;
 				if ( QFileInfo( *fileIt ).exists() )
 					kdDebug() << "using: " << *fileIt << endl;
 					return *fileIt;
@@ -2064,7 +2064,8 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 	if( files.res.isEmpty() ) return;
 
 	bool modelHasFiles = true;
-	
+
+	int oldFileCount = codeModel()->fileList().count();
 
 	if( (files.flag & ParseEmitWaiting::HadErrors) && modelHasFiles && !m_parseSilent ) {
 		kdDebug( 9007 ) << "not updating code-model because at least one file has errors" << endl;
@@ -2180,6 +2181,7 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 				l.pop_front();
 			}
 		}
+		kdDebug( 9007 ) << "files in code-model after parseEmit: " << codeModel()->fileList().count() << " before: " << oldFileCount << endl;
 	}
 }
 

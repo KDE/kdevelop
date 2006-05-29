@@ -625,6 +625,8 @@ void TagCreator::parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storageS
 	Tag tag;
 	CppFunction<Tag> tagBuilder( tag );
 
+	if( !comment().isEmpty() )
+		tag.setComment( comment() );
 	tag.setKind( Tag::Kind_FunctionDeclaration );
 	tag.setFileName( m_fileName );
 	tag.setName( id );
