@@ -385,7 +385,13 @@ void CodeModel::removeNamespace( NamespaceDom target, NamespaceDom source )
 bool CodeModel::addFile( FileDom file )
 {
     if( file->name().isEmpty() )
-	return false;
+		return false;
+
+		if( m_files.find( file->name() ) != m_files.end() ) {
+			///the error-channel is set to 9007 because this problem appears with the cpp-support, so it is needed while debugging it
+			kdDebug(9007) << "file " << file->name() << " was added to code-model without removing it before! \n" << kdBacktrace() << endl;
+			removeFile( fileByName( file->name() ) );
+		}
 
     // update global namespace
     NamespaceList namespaceList = file->namespaceList();
