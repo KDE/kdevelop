@@ -2113,43 +2113,46 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 		int currentGroup = 0;
 
 		QMap<QString, bool> wholeResult;
+		QStringList missing;
 		
 		while(!l.isEmpty() ) {
 			QString fileName = l.front();
 			
 			if( !m_backgroundParser->hasTranslationUnit( fileName ) ) {
-			  kdDebug( 9007 ) << "ERROR: translation-unit is missing" << endl;
-			  continue;
-			}
-			if ( TranslationUnitAST * ast = m_backgroundParser->translationUnit( fileName ) )
-			{
-				if ( true /*!hasErrors*/ )
-				{
-					StoreWalker walker( fileName, codeModel() );
-					walker.parseTranslationUnit( ast );
-					codeModel() ->addFile( walker.file() );
-					if( walker.file() ) {
-						QStringList grp = walker.file()->wholeGroupStrings();
-						for( QStringList::const_iterator it = grp.begin(); it != grp.end(); ++it )
-							wholeResult[*it] = true;
-					}
-					
-					/*
-						///Merge the groups together so that files parsed together get into one group again
-						if( walker.file() ) {
-							if( !files.hadQueueProblem() ) {
-								if( !currentGroup ) {
-									currentGroup = walker.file()->groupId();
-								} else {
-									currentGroup = codeModel()->mergeGroups( currentGroup, walker.file()->groupId() );
-								}
-							}
-						}*/
-				}
+			  	kdDebug( 9007 ) << "error: translation-unit is missing" << endl;
+				missing << fileName;
 			} else {
-				kdDebug() << "failed to parse " << fileName << endl;
+				if ( TranslationUnitAST * ast = m_backgroundParser->translationUnit( fileName ) )
+				{
+					if ( true /*!hasErrors*/ )
+					{
+						StoreWalker walker( fileName, codeModel() );
+						walker.parseTranslationUnit( ast );
+						codeModel() ->addFile( walker.file() );
+						if( walker.file() ) {
+							QStringList grp = walker.file()->wholeGroupStrings();
+							for( QStringList::const_iterator it = grp.begin(); it != grp.end(); ++it )
+								wholeResult[*it] = true;
+						}
+						
+						/*
+							///Merge the groups together so that files parsed together get into one group again
+							if( walker.file() ) {
+								if( !files.hadQueueProblem() ) {
+									if( !currentGroup ) {
+										currentGroup = walker.file()->groupId();
+									} else {
+										currentGroup = codeModel()->mergeGroups( currentGroup, walker.file()->groupId() );
+									}
+								}
+							}*/
+					}
+				} else {
+					kdDebug() << "failed to parse " << fileName << endl;
+				}
 			}
 
+				
 			l.pop_front();
 		}
 
@@ -2160,6 +2163,11 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 			l << it.key();
 		
 		m_backgroundParser->unlock();
+
+		if( !missing.isEmpty() ) {
+			kdDebug( 9007 ) << "error: translation-units were missing: " << missing << "\nreparsing them" << endl;
+			parseFilesAndDependencies( missing );
+		}
 		
 		if( m_parseSilent ) {
 			if( alwaysParseInBackground )
