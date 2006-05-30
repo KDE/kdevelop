@@ -1,3 +1,2 @@
-if (BERKELEY_DB_FOUND)
-    set(HAVE_BDB 1)
-endif (BERKELEY_DB_FOUND)
+include(MacroBoolTo01)
+macro_bool_to_01(BERKELEY_DB_FOUND HAVE_BDB)
