@@ -24,7 +24,16 @@
                 <cstring>inToolview</cstring>
             </property>
             <property name="text">
-                <string>Displa&amp;y toolbar in toolview (note: change needs a restart)</string>
+                <string>Display toolbar in toolview (note: change needs a restart)</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Uncheck this if you want the toolbar together with all other toolbars. You can disable it then</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Uncheck this if you want the toolbar together with all other toolbars. You can disable it then</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -32,15 +41,38 @@
                 <cstring>onlyProject</cstring>
             </property>
             <property name="text">
-                <string>Only save project files in a view</string>
+                <string>Only save project files in a session</string>
             </property>
             <property name="accel">
                 <string></string>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Check this if you want to ignore files that are not part of the project</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Check this if you want to ignore files that are not part of the project</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>closeOpenFiles</cstring>
+            </property>
+            <property name="text">
+                <string>Close all open files before opening a session</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Check this if you want the currently open files closed before opening a session</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Check this if you want the currently open files closed before opening a session</string>
+            </property>
         </widget>
         <spacer>
             <property name="name">
-                <cstring>spacer10</cstring>
+                <cstring>spacer2</cstring>
             </property>
             <property name="orientation">
                 <enum>Vertical</enum>
@@ -51,7 +83,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>260</height>
+                    <height>61</height>
                 </size>
             </property>
         </spacer>

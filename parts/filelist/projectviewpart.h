@@ -161,6 +161,8 @@ private:
   QGuardedPtr<QWidget> m_widget;
   QGuardedPtr<ToolbarGUIBuilder> m_guibuilder;
   QWidget * m_toolbarWidget;
+  
+  bool m_restored;
 };
 
 

@@ -22,14 +22,16 @@
 
 struct FileInfo
 {
-  FileInfo() {url = KURL(); line = -1; col = -1;};
-  FileInfo(const KURL & _url, int _line=-1, int _col=-1) {url = _url; line = _line; col = _col;};
+  FileInfo() {url = KURL(); line = -1; col = -1; encoding = "";};
+  FileInfo(const KURL & _url, int _line = -1, int _col = -1, QString _encoding = "")
+     {url = _url; line = _line; col = _col; encoding = _encoding;};
     
   bool operator==(const FileInfo & f) const {return (f.url == url) /*&& (f.line == line) && (f.col ==col)*/;};
   
   KURL url;
   int line;
   int col;
+  QString encoding;
 };
 
 typedef QValueList<FileInfo> FileInfoList;

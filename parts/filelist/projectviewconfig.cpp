@@ -32,6 +32,7 @@ ProjectviewConfig::ProjectviewConfig(QWidget *parent, const char *name)
   config->setGroup("File List Plugin");
   inToolview->setChecked(config->readBoolEntry("ToolbarInToolview", true));
   onlyProject->setChecked(config->readBoolEntry("OnlyProjectFiles", false));
+  closeOpenFiles->setChecked(config->readBoolEntry("CloseOpenFiles", true));
 }
 
 void ProjectviewConfig::accept()
@@ -40,6 +41,7 @@ void ProjectviewConfig::accept()
   config->setGroup("File List Plugin");
   config->writeEntry("ToolbarInToolview", inToolview->isChecked());
   config->writeEntry("OnlyProjectFiles", onlyProject->isChecked());
+  config->writeEntry("CloseOpenFiles", closeOpenFiles->isChecked());
 }
 
 #include "projectviewconfig.moc"

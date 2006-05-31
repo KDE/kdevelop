@@ -44,6 +44,7 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/encodinginterface.h>
 #include <kparts/part.h>
 #include <kxmlguibuilder.h>
 #include <kdebug.h>
@@ -96,6 +97,7 @@ ProjectviewPart::ProjectviewPart(QObject *parent, const char *name, const QStrin
       m_guibuilder = new ToolbarGUIBuilder(m_toolbarWidget, mainWindow()->main()); 
       setClientBuilder(m_guibuilder);
     }
+    m_restored = false;
     QTimer::singleShot(0, this, SLOT(init()));
 }
 
@@ -112,6 +114,7 @@ ProjectviewPart::~ProjectviewPart()
 void ProjectviewPart::restorePartialProjectSession(const QDomElement * el)
 {
     m_projectViews.clear(); // remove the global views
+    m_restored = true;
     if (!el)
     {
         return;
@@ -165,14 +168,20 @@ void ProjectviewPart::restorePartialProjectSession(const QDomElement * el)
                     if (!ok)
                         col = -1;
                 }
+                QString encoding = "";
+                attr = fileEl.attribute("encoding");
+                if (! attr.isNull())
+                {
+                    encoding = attr;
+                }
                 QString urlStr = fileEl.attribute("url");
                 if (KURL::isRelativeURL(urlStr))
                 {
                     KURL url = m_projectBase;
                     url.addPath(urlStr);
-                    urlList.append(FileInfo(url, line, col));
+                    urlList.append(FileInfo(url, line, col, encoding));
                 } else
-                    urlList.append(FileInfo(KURL::fromPathOrURL(urlStr), line, col));
+                    urlList.append(FileInfo(KURL::fromPathOrURL(urlStr), line, col, encoding));
             }
         }
         m_projectViews.insert(viewEl.attribute("name"), urlList);
@@ -221,6 +230,7 @@ void ProjectviewPart::savePartialProjectSession(QDomElement * el)
                 urlEl.setAttribute("url", (*it2).url.url());
             urlEl.setAttribute("line", (*it2).line);
             urlEl.setAttribute("col", (*it2).col);
+            urlEl.setAttribute("encoding", (*it2).encoding);
             viewEl.appendChild(urlEl);
         }
     }
@@ -247,7 +257,7 @@ void ProjectviewPart::init()
   {
     m_toolbarWidget->reparent(m_widget, QPoint(0, 0), true);
     l->addWidget(m_toolbarWidget);
-    QWhatsThis::add(m_toolbarWidget, i18n("<b>Project View Toolbar</b><p>This allows to create and work with project views. A project view is a set of open documents.</p>"));
+    QWhatsThis::add(m_toolbarWidget, i18n("<b>View Session Toolbar</b><p>This allows to create and work with view sessions. A view session is a set of open documents.</p>"));
   }
   
   // create the listview 
@@ -255,6 +265,7 @@ void ProjectviewPart::init()
   fileListWidget->setCaption(i18n("File List"));
   QWhatsThis::add(fileListWidget, i18n("<b>File List</b><p>This is the list of opened files.</p>"));
   l->addWidget(fileListWidget);
+  m_widget->setFocusProxy(fileListWidget);
   
   mainWindow()->embedSelectView(m_widget, i18n("File List"), i18n("Open files"));
   
@@ -264,25 +275,25 @@ void ProjectviewPart::init()
 
 void ProjectviewPart::setupActions()
 {
-    m_openPrjViewAction = new KSelectAction(i18n("Open Project View..."), 0, actionCollection(), "projectviews_open");
+    m_openPrjViewAction = new KSelectAction(i18n("Open Session..."), 0, actionCollection(), "viewsession_open");
     
     connect(m_openPrjViewAction, SIGNAL(activated(const QString &)), this, SLOT(slotOpenProjectView(const QString &)));
     
-    m_openPrjViewAction->setToolTip(i18n("Open project view"));
+    m_openPrjViewAction->setToolTip(i18n("Open Session"));
     
-    m_savePrjViewAction = new KAction(i18n("Save Project View"), "filesave", 0, this, SLOT(slotSaveProjectView()), actionCollection(), "projectviews_save");
+    m_savePrjViewAction = new KAction(i18n("Save Session"), "filesave", 0, this, SLOT(slotSaveProjectView()), actionCollection(), "viewsession_save");
     
-    m_newPrjViewAction = new KAction(i18n("New Project View..."), "filenew", 0, this, SLOT(slotSaveAsProjectView()), actionCollection(), "projectviews_new");
+    m_newPrjViewAction = new KAction(i18n("New Session..."), "filenew", 0, this, SLOT(slotSaveAsProjectView()), actionCollection(), "viewsession_new");
     
-    m_deletePrjViewAction = new KSelectAction(i18n("Delete Project View"), "editdelete", 0, actionCollection(), "projectviews_delete");
+    m_deletePrjViewAction = new KSelectAction(i18n("Delete Session"), "editdelete", 0, actionCollection(), "viewsession_delete");
     
     connect(m_deletePrjViewAction, SIGNAL(activated(const QString &)), this, SLOT(slotDeleteProjectView(const QString &)));
     
-    m_deletePrjViewAction->setToolTip(i18n("Delete project view"));
+    m_deletePrjViewAction->setToolTip(i18n("Delete Session"));
     
-    m_deleteCurrentPrjViewAction = new KAction(i18n("Delete Project View"), "editdelete", 0, this, SLOT(slotDeleteProjectViewCurent()), actionCollection(), "projectviews_deletecurrent");
+    m_deleteCurrentPrjViewAction = new KAction(i18n("Delete Session"), "editdelete", 0, this, SLOT(slotDeleteProjectViewCurent()), actionCollection(), "viewsession_deletecurrent");
     
-    m_deleteCurrentPrjViewAction->setToolTip(i18n("Delete project view"));
+    m_deleteCurrentPrjViewAction->setToolTip(i18n("Delete Session"));
     
     adjustViewActions();
 }
@@ -356,7 +367,10 @@ void ProjectviewPart::contextMenu(QPopupMenu */*popup*/, const Context */*contex
 
 void ProjectviewPart::projectOpened()
 {
+    if ( !m_restored )
+        m_projectViews.clear(); // remove the global views
     adjustViewActions();
+    m_restored = false;
 }
 
 void ProjectviewPart::projectClosed()
@@ -371,6 +385,7 @@ void ProjectviewPart::slotOpenProjectView(const QString &view)
     KConfig * config = kapp->config();
     config->setGroup("File List Plugin");
     bool onlyProject = config->readBoolEntry("OnlyProjectFiles", false);
+    bool closeOpenFiles = config->readBoolEntry("CloseOpenFiles", true);
     
     m_currentProjectView = view;
     
@@ -378,21 +393,24 @@ void ProjectviewPart::slotOpenProjectView(const QString &view)
     {
         FileInfoList viewUrls = m_projectViews[view];
         
-        // we close everything that is not part of the project view
-        KURL::List urlsToClose = partController()->openURLs();
-        for (KURL::List::Iterator it = urlsToClose.begin(); it != urlsToClose.end(); ++it)
+        if (closeOpenFiles)
         {
-            // it is in the list of wanted files and do we want it at all
-            if ((viewUrls.contains(*it) > 0) && (!onlyProject || !project() ||  project()->isProjectFile((*it).path()) ))
+            // we close everything that is not part of the project view
+            KURL::List urlsToClose = partController()->openURLs();
+            for (KURL::List::Iterator it = urlsToClose.begin(); it != urlsToClose.end(); ++it)
             {
-                viewUrls.remove(*it); // don't open if it is open already
-                it = urlsToClose.remove(it);
-                --it;  //  do not skip one
+                // it is in the list of wanted files and do we want it at all
+                if ((viewUrls.contains(*it) > 0) && (!onlyProject || !project() ||  project()->isProjectFile((*it).path()) ))
+                {
+                    viewUrls.remove(*it); // don't open if it is open already
+                    it = urlsToClose.remove(it);
+                    --it;  //  do not skip one
+                }
             }
-        }
-        if (!urlsToClose.empty())
-        {
-            partController()->closeFiles(urlsToClose);
+            if (!urlsToClose.empty())
+            {
+                partController()->closeFiles(urlsToClose);
+            }
         }
         // we open what still needs to get opened
         FileInfoList::const_iterator viewIt;
@@ -400,6 +418,7 @@ void ProjectviewPart::slotOpenProjectView(const QString &view)
         {
             if (!onlyProject || !project() || project()->isProjectFile((*viewIt).url.path()))
             {
+                partController()->setEncoding( (*viewIt).encoding );
                 partController()->editDocument((*viewIt).url, (*viewIt).line, (*viewIt).col); 
             }
         }
@@ -465,14 +484,14 @@ void ProjectviewPart::slotSaveAsProjectView(bool askForName)
     if (askForName)
     {
         bool ok;
-        QString newProjectView = KInputDialog::getText(i18n("Save Project View As"), i18n("Enter the name of the view:"), "", &ok, mainWindow()->main());
+        QString newProjectView = KInputDialog::getText(i18n("Save View Session As"), i18n("Enter the name of the session:"), "", &ok, mainWindow()->main());
         if (!ok)
         {
             return;
         }
         newProjectView = newProjectView.remove("="); // we use this string in config files and = would confuse it
         if (m_projectViews.contains(newProjectView) > 0 &&
-            KMessageBox::warningContinueCancel(mainWindow()->main(), i18n("<qt>A project view named <b>%1</b> already exists.<br>Do you want to overwrite it?</qt>").arg(newProjectView), QString::null, i18n("Overwrite")) != KMessageBox::Continue)
+            KMessageBox::warningContinueCancel(mainWindow()->main(), i18n("<qt>A view session named <b>%1</b> already exists.<br>Do you want to overwrite it?</qt>").arg(newProjectView), QString::null, i18n("Overwrite")) != KMessageBox::Continue)
         {
             return;
         }
@@ -490,9 +509,19 @@ void ProjectviewPart::slotSaveAsProjectView(bool askForName)
         KTextEditor::ViewCursorInterface* cursorIf = dynamic_cast<KTextEditor::ViewCursorInterface*>(ro_part->widget());
         if (cursorIf)
         {
+            QString encoding;
+            if ( KTextEditor::EncodingInterface * ei = dynamic_cast<KTextEditor::EncodingInterface*>( ro_part ) )
+            {
+                QString temp = ei->encoding();
+                if ( !temp.isNull() )
+                {
+                    encoding = temp;
+                }
+            } 
+
             unsigned int line, col;
             cursorIf->cursorPositionReal(&line, &col);
-            viewUrls.append(FileInfo(*it, line, col));
+            viewUrls.append(FileInfo(*it, line, col, encoding));
         }
     }
     // add or overwrite the values
@@ -518,7 +547,10 @@ void ProjectviewPart::writeConfig()
     QStringList urls;
     for (FileInfoList::ConstIterator it2 = it.data().constBegin(); it2 != it.data().constEnd(); ++it2)
     {
-      urls.append((*it2).url.url());
+      if ((*it2).encoding.isEmpty())
+        urls.append((*it2).url.url());
+      else
+        urls.append((*it2).url.url() + ";" + (*it2).encoding);
     }
     config->writeEntry(it.key(), urls);
   }
@@ -538,7 +570,12 @@ void ProjectviewPart::readConfig()
     QStringList urls = QStringList::split(",", it.data());
     for (QStringList::Iterator it2 = urls.begin(); it2 != urls.end(); ++it2 )
     {
-      urlList.append(FileInfo(KURL::fromPathOrURL(*it2)));
+      // search the encoding. The entry can be like: fileURL;encoding
+      QStringList file = QStringList::split(";", *it2);
+      if (file.count() == 1)
+        urlList.append(FileInfo(KURL::fromPathOrURL(*it2)));
+      else
+        urlList.append(FileInfo(KURL::fromPathOrURL(file.first()), -1, -1, file.last()));
     }
     m_projectViews.insert(it.key(), urlList);
   }

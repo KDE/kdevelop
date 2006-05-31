@@ -1,24 +1,24 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="filelist" version="2">
+<kpartplugin name="filelist" version="3">
 <MenuBar>
-  <Menu name="project" >
-    <text>Project</text>
+  <Menu name="view" >
+    <text>View</text>
     <Separator/>
-    <Menu name="projectviews" >
-      <text>Project Views</text>
-      <Action name="projectviews_new" />
-      <Action name="projectviews_open" />
-      <Action name="projectviews_save" />
-      <Action name="projectviews_delete" />
+    <Menu name="viewsession" >
+      <text>View Sessions</text>
+      <Action name="viewsession_new" />
+      <Action name="viewsession_open" />
+      <Action name="viewsession_save" />
+      <Action name="viewsession_delete" />
     </Menu> 
     <Separator/>
   </Menu>
 </MenuBar>
-<ToolBar name="projectviews_toolbar" >
-  <text>Projectviews Toolbar</text>
-  <Action name="projectviews_new" />
-  <Action name="projectviews_open" />
-  <Action name="projectviews_save" />
-  <Action name="projectviews_deletecurrent" />
+<ToolBar name="viewsession_toolbar" >
+  <text>View Sessions Toolbar</text>
+  <Action name="viewsession_new" />
+  <Action name="viewsession_open" />
+  <Action name="viewsession_save" />
+  <Action name="viewsession_deletecurrent" />
 </ToolBar>
 </kpartplugin>
