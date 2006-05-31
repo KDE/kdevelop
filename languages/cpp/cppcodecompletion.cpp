@@ -101,7 +101,57 @@ CppCodeCompletion* cppCompletionInstance = 0;
 //file global functions, must be before any "using namespace"
 QString cleanForMenu( QString txt ) {
     //  return txt.replace( "&", "§" );
-  return txt.replace( "&", "$" );
+	return txt.replace( "&", "$" ).replace("	", "    " );
+}
+
+/** Multiple empty lines are reduced to one, too long lines wrapped over, and the beginnings of the lines are normalized
+*/
+QStringList maximumLength( const QStringList& in, int length ) {
+	QStringList ret;
+	int firstNonSpace = 50000;
+	for( QStringList::const_iterator it = in.begin(); it!= in.end(); ++it )
+		for( uint a = 0; a < (*it).length(); a++ )
+			if( !(*it)[a].isSpace() ) {
+				if( firstNonSpace > a)
+					firstNonSpace = a;
+				break;
+			}
+	if( firstNonSpace == 50000 ) return QStringList();
+
+	bool hadEmptyLine = false;
+	for( QStringList::const_iterator it = in.begin(); it!= in.end(); ++it ) {
+		if(  (*it).length() <= firstNonSpace ) {
+			if( !hadEmptyLine ) ret << " ";
+			hadEmptyLine = true;
+		} else {
+			hadEmptyLine = false;
+			QString str = (*it).mid( firstNonSpace );
+			while( !str.isEmpty() ) {
+				if( str.length() < length ) {
+					ret << str;
+					break;
+				} else {
+					ret << str.left( length ) + "\\";
+					str = str.mid( length );
+				}
+			}
+		}
+	}
+	return ret;
+}
+
+QStringList prepareTextForMenu( const QString& comment, int maxLines, int maxLength ) {
+	QStringList in = QStringList::split( "\n", comment );
+	QStringList out;
+	for( QStringList::iterator it = in.begin(); it!= in.end(); ++it ) {
+		out << cleanForMenu( *it );
+		if( out.count() >= maxLines ) {
+			out << "[...]";
+			break;
+		}
+	}
+	
+	return maximumLength( out, maxLength );
 }
 
 QStringList formatComment( const QString& comment, int maxCols = 120 ) {
@@ -281,11 +331,14 @@ struct PopupClassViewFillerHelpStruct {
       if( !dom && d.resolved()->isNamespace() ) {
         SimpleTypeCachedNamespace* ns = dynamic_cast<SimpleTypeCachedNamespace*>( d.resolved().data() );
         if( ns ) {
-          QValueList<SimpleType> slaves = ns->getSlaves();
-          for( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
-            SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( (*it).get().data() );
-            if( cm ) dom = cm->item();
-          }
+			QValueList<SimpleType> slaves = ns->getSlaves();
+			for( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
+				SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( (*it).get().data() );
+				if( cm ) {
+					dom = cm->item();
+					break;
+				}
+			}
         }
       }
       
@@ -381,6 +434,17 @@ PopupFiller( HelpStruct s , QString dAdd, int maxCount = 100 ) : struk( s ), dep
         int gid = parent->insertItem( i18n( "nested in \"%1\"" ).arg( cleanForMenu( d.resolved()->parent()->fullTypeResolved() ) ), m );
         fill( m, d.resolved()->parent()->desc() );
       }
+
+	  if( !d.resolved()->comment().isEmpty() ) {
+		  parent->insertSeparator();
+		  QPopupMenu * m = new QPopupMenu( parent );
+		  int gid = parent->insertItem( i18n( "comment on %1" ).arg( cleanForMenu( d.name() ) ), m );
+		  QStringList ls = prepareTextForMenu( d.resolved()->comment(), 15, 100 );
+		  for( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
+			m->insertItem( *it, 0, SLOT( popupClassViewAction( int ) ) );
+		  }
+		  
+	  }
     }
   }
 };
@@ -1058,6 +1122,8 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 			st.setState( oldState );
 		}
 	};
+
+	int cpos = 0;
 	
 	SetDbgState stt( dbgState, disableVerboseForContextMenu );
 
@@ -1079,7 +1145,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		PopupFiller<PopupFillerHelpStruct> filler( h, "" );
 		
 		QPopupMenu * m = new QPopupMenu( popup );
-		int gid = popup->insertItem( i18n( "Navigate by \"%1\"" ).arg( cleanForMenu( name ) ), m );
+		int gid = popup->insertItem( i18n( "Navigate by \"%1\"" ).arg( cleanForMenu( name ) ), m, 5, cpos++ );
 		popup->setWhatsThis( gid, i18n( "<b>Navigation</b><p>Provides a menu to navigate to positions of items that are involved in this expression" ) );
 		
 		if( type.sourceVariable && type.sourceVariable.name != "this" ) {
@@ -1090,25 +1156,28 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		
 		filler.fill( m, (TypeDesc)type );
 	}
-	if( !type->resolved() ) return;
-	
-	///Now fill the class-view-browsing-stuff
-	{
-		QPopupMenu * m = new QPopupMenu( popup );
-		int gid = popup->insertItem( i18n( "Navigate Class-View by \"%1\"" ).arg( cleanForMenu( name ) ), m );
-		popup->setWhatsThis( gid, i18n( "<b>Navigation</b><p>Provides a menu to show involved items in the class-view " ) );
-		
-		PopupClassViewFillerHelpStruct h(this);
-		PopupFiller<PopupClassViewFillerHelpStruct> filler( h, "" );
-		
-		filler.fill( m, (TypeDesc)type );
+	if( type->resolved() ) {
+		///Now fill the class-view-browsing-stuff
+		{
+			QPopupMenu * m = new QPopupMenu( popup );
+			int gid = popup->insertItem( i18n( "Navigate Class-View by \"%1\"" ).arg( cleanForMenu( name ) ), m, 6, cpos++ );
+			popup->setWhatsThis( gid, i18n( "<b>Navigation</b><p>Provides a menu to show involved items in the class-view " ) );
+			
+			PopupClassViewFillerHelpStruct h(this);
+			PopupFiller<PopupClassViewFillerHelpStruct> filler( h, "" );
+			
+			filler.fill( m, (TypeDesc)type );
+		}
 	}
+
+	popup->insertSeparator( cpos );
 }
 
 void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
 	//  return;
 	kdDebug( 9007 ) << "CppCodeCompletion::slotTextHint()" << endl;
-
+	clearStatusText();
+	
 	if( m_lastHintTime.msecsTo( QTime::currentTime() ) < 300 ) {
 		kdDebug( 9007 ) << "slotNeedTextHint called too often";
 		return;
@@ -1155,12 +1224,12 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
 	}
 	
 	kdDebug( 9007 ) << "showing: \n" << text << endl;
-	const int timeout = 3000;
+	const int timeout = 2000;
 		
 	if( type->resolved() ) {
 		addStatusText( i18n( "Type of \"%1\" is \"%2\"" ).arg( type.expr.expr() ).arg( type->fullNameChain() ), timeout );
 		if( type.sourceVariable && !type.sourceVariable.comment.isEmpty() ) {
-		addStatusText( i18n( "Comment on variable %1: \"%1\"").arg( type.sourceVariable.name ).arg( type.sourceVariable.comment ) , 10000 );
+			addStatusText( i18n( "Comment on variable %1: \"%1\"").arg( type.sourceVariable.name ).arg( type.sourceVariable.comment ) , 10000 );
 		}
 		if( !type->resolved()->comment().isEmpty() ) {
 			addStatusText( i18n( "Comment on %1: \"%1\"").arg( type->name() ).arg( type->resolved()->comment() ) , 10000 );
