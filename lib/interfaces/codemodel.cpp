@@ -1137,6 +1137,8 @@ void ClassModel::read( QDataStream & stream )
 {
     CodeModelItem::read( stream );
 
+		TemplateModelItem::read( stream );
+		
     stream >> m_scope >> m_baseClassList;
 
     int n;
@@ -1194,6 +1196,8 @@ void ClassModel::write( QDataStream & stream ) const
 {
     CodeModelItem::write( stream );
 
+		TemplateModelItem::write( stream );
+		
     stream << m_scope << m_baseClassList;
 
     const ClassList class_list = classList();
@@ -1282,6 +1286,7 @@ void ArgumentModel::write( QDataStream & stream ) const
 void FunctionModel::read( QDataStream & stream )
 {
     CodeModelItem::read( stream );
+		TemplateModelItem::read( stream );
 
     stream >> m_scope;
     stream >> d.flags;
@@ -1303,6 +1308,7 @@ void FunctionModel::read( QDataStream & stream )
 void FunctionModel::write( QDataStream & stream ) const
 {
     CodeModelItem::write( stream );
+		TemplateModelItem::write( stream );
 
     stream << m_scope;
     stream << d.flags;

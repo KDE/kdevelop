@@ -36,7 +36,7 @@
 #include <kdevplugininfo.h>
 
 enum { KDEV_DB_VERSION = 4 };
-enum { KDEV_PCS_VERSION = 3 };
+enum { KDEV_PCS_VERSION = 4 };
 
 typedef KDevGenericFactory<AdaSupportPart> AdaSupportPartFactory;
 

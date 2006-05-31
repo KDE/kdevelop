@@ -83,7 +83,7 @@
 #include <config.h>
 
 enum { KDEV_DB_VERSION = 5 };
-enum { KDEV_PCS_VERSION = 5 };
+enum { KDEV_PCS_VERSION = 6 };
 
 class JavaDriver: public KDevDriver
 {
