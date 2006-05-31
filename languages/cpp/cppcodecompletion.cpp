@@ -84,6 +84,7 @@
 
 const bool disableVerboseForCompletionList = true;
 const bool disableVerboseForContextMenu = true;
+const bool contextMenuEntriesAtTop = false;
 
 ///This enables-disables the automatic processing of the expression under the mouse-cursor 
 //#define DISABLETOOLTIPS
@@ -1145,7 +1146,12 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		PopupFiller<PopupFillerHelpStruct> filler( h, "" );
 		
 		QPopupMenu * m = new QPopupMenu( popup );
-		int gid = popup->insertItem( i18n( "Navigate by \"%1\"" ).arg( cleanForMenu( name ) ), m, 5, cpos++ );
+		int gid;
+		if( contextMenuEntriesAtTop )
+			gid = popup->insertItem( i18n( "Navigate by \"%1\"" ).arg( cleanForMenu( name ) ), m, 5, cpos++ );
+		else
+			gid = popup->insertItem( i18n( "Navigate by \"%1\"" ).arg( cleanForMenu( name ) ), m );
+		
 		popup->setWhatsThis( gid, i18n( "<b>Navigation</b><p>Provides a menu to navigate to positions of items that are involved in this expression" ) );
 		
 		if( type.sourceVariable && type.sourceVariable.name != "this" ) {
@@ -1160,7 +1166,12 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		///Now fill the class-view-browsing-stuff
 		{
 			QPopupMenu * m = new QPopupMenu( popup );
-			int gid = popup->insertItem( i18n( "Navigate Class-View by \"%1\"" ).arg( cleanForMenu( name ) ), m, 6, cpos++ );
+			int gid;
+			if( contextMenuEntriesAtTop )
+				gid = popup->insertItem( i18n( "Navigate Class-View by \"%1\"" ).arg( cleanForMenu( name ) ), m, 6, cpos++ );
+			else
+				gid = popup->insertItem( i18n( "Navigate Class-View by \"%1\"" ).arg( cleanForMenu( name ) ), m );
+
 			popup->setWhatsThis( gid, i18n( "<b>Navigation</b><p>Provides a menu to show involved items in the class-view " ) );
 			
 			PopupClassViewFillerHelpStruct h(this);
@@ -1170,7 +1181,8 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		}
 	}
 
-	popup->insertSeparator( cpos );
+	if( contextMenuEntriesAtTop )
+		popup->insertSeparator( cpos );
 }
 
 void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
