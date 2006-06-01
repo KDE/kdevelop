@@ -1,7 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
-  <!ENTITY kdevelop "<application>KDevelop</application>">
-  <!ENTITY kdevrelease "3.1.0">
+<!--   <!ENTITY kdevelop "<application>KDevelop</application>"> -->
+  <!ENTITY kdevelop "KDevelop">
+  <!ENTITY kdevrelease "3.3.91">
+
+  <!-- abbreviations used in the body text -->
   <!ENTITY apache "<application>Apache</application>">
   <!ENTITY API "<acronym>API</acronym>">
   <!ENTITY appwizard "Application Wizard">
@@ -25,6 +28,7 @@
   <!ENTITY promanag "Project Manager">
   <!ENTITY qte "<application>Qt/embedded</application>">
   <!ENTITY ssh "<application>ssh</application>">
+
   <!-- chapters in separate docbook files -->
   <!ENTITY survey-manual SYSTEM "survey-manual.docbook">
   <!ENTITY getting-started SYSTEM "getting-started.docbook">
@@ -43,6 +47,7 @@
   <!ENTITY scripts SYSTEM "scripts.docbook">
   <!ENTITY credits SYSTEM "credits.docbook">
   <!ENTITY kdevelop-scripting SYSTEM "kdevelop-scripting.docbook">
+
   <!-- appendices in separate docbook files -->
   <!ENTITY kdevelop-install SYSTEM "kdevelop-install.docbook">
   <!ENTITY nutshell SYSTEM "nutshell.docbook">
@@ -57,7 +62,6 @@
   <!ENTITY app-changelog SYSTEM "app-changelog.docbook">
   <!ENTITY app-bibliography SYSTEM "app-bibliography.docbook">
 
-  
   <!-- book related entities -->
   <!ENTITY kappname "&kdevelop;">
   <!ENTITY % addindex "INCLUDE">
@@ -74,7 +78,7 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2004-11-13</date>
+  <date>2006-06-01</date>
   <releaseinfo>&kdevrelease;</releaseinfo>
 
   <authorgroup>
@@ -128,7 +132,7 @@ Entries which require special treatment are marked with comments starting with '
     <holder>Volker Paul</holder>
   </copyright>
 
-  <!--ROLES_OF_TRANSLATORS-->
+  <!-- TRANS:ROLES_OF_TRANSLATORS -->
 
   <legalnotice>&FDLNotice;</legalnotice>
 

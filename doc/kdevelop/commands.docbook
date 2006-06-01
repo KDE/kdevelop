@@ -1,23 +1,25 @@
 <chapter id="commands">
 
-<!-- ToDo: Complete descriptions, e.g. from What's This.
-           Link to more detailed description, e.g. in plugin chapter.
-	 
+<!-- TODO
+- CAUTION: Check everything against actual KDevelp behaviour. Do not rely on tool tips etc.
+- Summarize menu entries, like in getting-started.
+- Complete descriptions, e.g. from What's This.
+- Link to more detailed description, e.g. in plugin chapter.	 
 -->
 
 <chapterinfo>
-<authorgroup>
-<author><firstname>Volker</firstname> <surname>Paul</surname></author>
-<!-- TRANS:ROLES_OF_TRANSLATORS -->
-</authorgroup>
-
-<date>2005-04-03</date>
+  <authorgroup>
+    <author><firstname>Volker</firstname> <surname>Paul</surname></author>
+    <!-- TRANS:ROLES_OF_TRANSLATORS -->
+  </authorgroup>
+  
+  <date>2005-04-03</date>
 </chapterinfo>
 
 <title>Command Reference</title>
 
-<note><para>The shortcut key combinations shown in this chapter are the 
-default ones. They can be changed.
+<note><para>
+    The shortcut key combinations shown in this chapter are the default ones. They can be changed.
 </para></note>
 
 

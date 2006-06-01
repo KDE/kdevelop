@@ -83,7 +83,7 @@ To create a new project in &kdevelop;, select <guimenuitem>New Project</guimenui
 <screenshot id="screenshot-newprojectwizard">
   <mediaobject>
     <imageobject>
-      <imagedata fileref="createnewproject.png" format="PNG"/>
+      <imagedata fileref="create-new-project.png" format="PNG"/>
     </imageobject>
     <caption><para>
     Initial dialog to set up a new project

@@ -2,38 +2,66 @@
 <title>Changes</title>
 <sect1 id="changes">
 <title>Changes to This Document</title>
-<para>
-<itemizedlist>
-<listitem><para>
-2003-01-03 &mdash; Started this Changelog
-</para></listitem>
-</itemizedlist>
-</para>
 
-<para>2005-05-02 Many changes by Volker Paul, including:
 <itemizedlist>
-<listitem><para>
-split into one file per chapter/appendix
-</para></listitem>
-<listitem><para>
-added command reference sorted by menu (descriptions not yet complete)
-</para></listitem>
-<listitem><para>
-AppWizard tutorial in getting-started.docbook
-</para></listitem>
-<listitem><para>
-Reorganized chapters, guided by Konqueror manual
-</para></listitem>
-<listitem><para>
-Moved installation, Unix development, "In a Nutshell" to the appendix
-</para></listitem>
-<listitem><para>
-Rewrote plugin appendix, incl. plugin list generator listplugins.sh
-</para></listitem>
+  <listitem>
+    <para>2003-01-03 Bernd Gehrmann, Caleb Tennis
+      <itemizedlist>
+        <listitem>
+          <para>initial manual layout</para>
+        </listitem>
+        <listitem>
+          <para>many chapter contents sketched</para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  </listitem>
+  
+  
+  <listitem>
+    <para>2004-08-01 Bernd Pol, Ian Wadham
+      <itemizedlist>
+        <listitem>
+          <para>manual slightly reorganized</para>
+        </listitem>
+        <listitem>
+          <para>some missing chapters written</para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  </listitem>
+  
+  <listitem>
+    <para>2005-05-02 Volker Paul &mdash; Many changes, including:
+      <itemizedlist>
+        <listitem>
+          <para>split into one file per chapter/appendix</para>
+        </listitem>
+        <listitem>
+          <para>added command reference sorted by menu (descriptions not yet complete)</para>
+        </listitem>
+        <listitem>
+          <para>AppWizard tutorial in getting-started.docbook</para>
+        </listitem>
+        <listitem>
+          <para>reorganized chapters, guided by Konqueror manual</para>
+        </listitem>
+        <listitem>
+          <para>moved installation, Unix development, <quote>In a Nutshell</quote> to the appendix</para>
+        </listitem>
+        <listitem>
+          <para>rewrote plugin appendix, incl. plugin list generator listplugins.sh</para>
+        </listitem>
+      </itemizedlist>
+    </para>
+    <para>Still far from complete, but a small step forward.</para>
+  </listitem>
+  
+  <listitem>
+    <para>2006-05-20 Bernd Pol &mdash; Filling in some more <quote>to be written</quote> holes:</para>
+  </listitem>
+  
 </itemizedlist>
-Still far from complete, but a small step forward.
-</para>
-
 
 </sect1> <!-- changes -->
 </appendix> <!-- app-changelog -->
