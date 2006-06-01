@@ -4,10 +4,6 @@
 
 INCLUDES = $(all_includes)
 
-if include_qextmdi
-QEXTMDI_SUBDIR=qextmdi
-endif
-
 if include_compat
 COMPAT_SUBDIR=compat
 LIB_KDEVCOMPAT=$(top_builddir)/lib/compat/libkdevcompat.la
