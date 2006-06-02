@@ -553,7 +553,7 @@ Just select this from the drop down box.</para>
 <para>Be aware that only <emphasis>most basic</emphasis> information will be shown in the <guilabel>Messages</guilabel> window this way.
 In case of errors during &eg; a build run you will most likely want to see more, if not all, of the message texts.
 They are not lost, however.
-Just click into the <guilabel>Messages</guilabel> window and select &eg; <quote>Full Compiler Output</quote> from the popup menu.</para>
+Just right click into the <guilabel>Messages</guilabel> window and select &eg; <quote>Full Compiler Output</quote> from the popup menu.</para>
 </caution>
 </sect2>
 
@@ -598,7 +598,18 @@ But finally the <guibutton>Cancel</guibutton> will make place to <guibutton>OK</
 Just press this button to proceed.</para>
 
 <note>
-<para>This usually should work out of the box. In some cases the <application>htdig</application> application &kdevelop; uses to perform its full text searches might not be properly set up. Refer to the <link linkend="setup-docu-textsearch">Setting Up Text Search Indexes</link> chapter for more help in this case.</para>
+<itemizedlist>
+<listitem>
+<para>This usually should work out of the box.
+In some cases the <application>htdig</application> application &kdevelop; uses to perform its full text searches might not be properly set up.
+Refer to the <link linkend="setup-docu-textsearch">Setting Up Text Search Indexes</link> chapter for more help in this case.</para>
+</listitem>
+<listitem>
+<para>To be able to look up &kde; and &Qt; specific API documentation, it is mandatory that the <emphasis>KDELibs Apidocs</emphasis> were present when &kdevelop; was installed.
+If you experience problems building the indexes or perform the  <link linkend="gettingstarted-edit-defs">identifier lookup examples</link> later in this chapter, make sure that this documentation exists and is accessible to &kdevelop;.
+See <link linkend="kdevelop-install">Installing KDevelop</link> fore more detail.</para>
+</listitem>
+</itemizedlist>
 </note>
 </sect2>
 </sect1>
@@ -627,7 +638,7 @@ Thereby we will have a short look at:</para>
 <sect2 id="gettingstarted-new-setup">
 <title>How to Create a New Project</title>
 
-<para>Let&apos;s create a rather simple <quote>Hello World</quote> &kde; project.
+<para>Let us create a rather simple <quote>Hello World</quote> &kde; project.
 Just follow these steps.</para>
 
 <procedure>
@@ -1040,9 +1051,9 @@ See the <link linkend="project-management">Building and Project Management</link
 <sect1 id="gettingstarted-edit">
 <title>Some Tips About Dealing With Documents</title>
 
-<para>In our example project did the &appwizard; leave the <filename>hello.cpp</filename> file open in an editor window in the &kdevelop; workspace area, so you can immediately start working.
+<para>In our example project the &appwizard; did leave the <filename>hello.cpp</filename> file open in an editor window, so you can immediately start working.
 Now, we may well assume your are knowledgeable about using an editor, so we do not need talk much about this here.
-But there are some handy &kdevelop; specifics about dealing with documents.
+But there are some handy &kdevelop; specifics about dealing with such tabbed editor windows and the documents you are working on.
 We will have a short look at some of them, namely:</para>
 
 <simplelist>
@@ -1071,31 +1082,33 @@ A menu similar to the following will pop up.</para>
 <para>Find the <guimenuitem>Switch header/implementation</guimenuitem> entry and select it. &kdevelop; will look up the corresponding header or implementation file and open it in another editor window.
 In our example, if you did right click into the <filename>hello.cpp</filename> source, the <filename>hello.h</filename> file will be displayed and the cursor positioned there.</para>
 
-<para>There is even more. If you do the right click inside a class implementation, &kdevelop; will position the cursor the corresponding declaration line in the header file.
-And vice versa, thus right clicking in a declaration line will bring you to the corresponding class implementation construct.</para>
+<para>There is even more. If you do right click inside the text of a class implementation, &kdevelop; will position the cursor on the corresponding declaration line in the header file.
+And vice versa, right clicking on a declaration line will bring you to the corresponding class implementation.</para>
 
-<para>If there exists already an editor window with the file to be switched to, &kdevelop; will of course activate this one and reposition the cursor there when necessary.</para>
+<para>If the editor window with the file to be switched to already exists, &kdevelop; will of course activate this one and reposition the cursor there if necessary.</para>
 </sect2>
 
 <sect2 id="gettingstarted-edit-defs">
 <title>How to Access Declarations and Definitions</title>
 
-<para>But what if you want to look up the declaration or definition of an identifier you found in the source you are just working on?
-Well, this is equally easily accomplished by right clicking on the identifier in question.</para>
-<para>There are some different cases to consider, however.</para>
+<para>But what if you are working on a source file and want to look up the declaration or definition of an identifier you just found there?
+Well, this is equally easily accomplished.
+Basically all you need to do is to right click on the identifier in question.</para>
+
+<para>There are two different cases to consider, however, namely:</para>
 <simplelist>
 <member><link linkend="gettingstarted-edit-defs-external">Accessing externally defined identifiers</link>, and</member>
-<member><link linkend="gettingstarted-edit-defs-project">dealing with project internal test occurrences</link>.</member>
+<member><link linkend="gettingstarted-edit-defs-project">dealing with project internal text items</link>.</member>
 </simplelist>
 
 <sect3 id="gettingstarted-edit-defs-external">
 <title>External Declarations and Definitions</title>
 
-<para>A most common case is that you want to look up an identifier which was defined externally to your project.
-In &kde; projects such identifiers are most likely documented in &kde; or &Qt; libraries.
-&kdevelop; can search the documentation it knows of for such terms.</para>
+<para>In a most common case you want to look up an identifier which was defined externally to your project.
+In &kde; projects such identifiers are most likely documented in various &kde; or &Qt; libraries.
+If &kde; and &kdevelop; were properly installed, &kdevelop; will be able to access such so-called API documentation and be able to search it for identifiers of this kind.</para>
 
-<para>Let&apos;s look at an example. In the <filename>hello.cpp</filename> editor window find the following lines.</para>
+<para>Let us look at an example. In the <filename>hello.cpp</filename> editor window find the following lines.</para>
 
 <programlisting>
 Hello::Hello()
@@ -1135,7 +1148,8 @@ Did you initialize the indexes as shown <link linkend="gettingstarted-configure-
 <sect3 id="gettingstarted-edit-defs-project">
 <title>Project Internal Declarations and Definitions</title>
 
-<para>Of course is it impossible to look up an identifier you defined in your current in such external documentation.
+<para>Such search facilities in external documentation have their limitations, however.
+Of course one cannot look up an identifier externally if it is only defined and used in the current project.
 But there is help.
 &kdevelop; can use indexes built by the <application>CTags</application> application to search the sources in your project.</para>
 
@@ -1193,7 +1207,7 @@ Just start typing the identifier name you are interested in into the <guilabel>L
 <formalpara>
 <title>Use a context menu in a source file</title>
 <para>This is handy while you are working on a certain source file.
-Let&apos;s assume you are studying the <filename>main.cpp</filename> file of our Hello example project.
+Assume you are studying the <filename>main.cpp</filename> file of our Hello example project.
 There you find the following line</para>
 </formalpara>
 <programlisting>
@@ -1338,7 +1352,7 @@ You can use the <guimenu>Window</guimenu> menu or right click on a tab to either
 Instead of searching and closing one editor window tab after another &kdevelop; provides a means to select the candidates from a list and close those, and only those, with one single mouse click.</para>
 </formalpara>
 
-<para>Let&apos;s illustrate this on a simple example.
+<para>Let us illustrate this on a simple example.
 In our Hello example project let us assume there were several files open to edit:
 <filename>hello.cpp</filename>, <filename>hello.h</filename>, <filename>helloui.rc</filename>, <filename>hello.desktop</filename>, and <filename>main.cpp</filename>.
 Now you want to close all of them except <filename>hello.cpp</filename> and <filename>hello.h</filename>.
@@ -1373,7 +1387,7 @@ Because this list of open files is alphabetically ordered you can more easily fi
 <title>How to Rearrange Edit Window Tabs</title>
 
 <para>Even if you have only the really necessary editor windows open you may usually want to have their tabs arranged in some logical way.
-&kdevelop; provides some common means to to so, in short:</para>
+&kdevelop; provides some common means to do so, in short:</para>
 
 <formalpara>
 <title>Basic Setup &mdash; Where to Position New Tabs</title>
@@ -1384,7 +1398,7 @@ This can be changed so that the new tab will open to the far right on the tab ba
 <para>You must change a basic user interface setting in &kdevelop; to enable this behavior.</para>
 <procedure>
 <step>
-<para>Select <menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>.</para>
+<para>Select <menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem></menuchoice></para>
 </step>
 <step>
 <para>In the left hand icon bar on the dialog popup click the <guilabel>User Interface</guilabel> icon.
@@ -1392,7 +1406,7 @@ The <guilabel>User Interface</guilabel> dialog page will be now shown.</para>
 </step>
 <step>
 <para>In the left bottom corner there find the section labeled <guilabel>Tabbed Browsing</guilabel>.
-Remove the check mark in in the <guilabel>Open new tab after current tab</guilabel> line.</para>
+Remove the check mark on the <guilabel>Open new tab after current tab</guilabel> line.</para>
 </step>
 <step>
 <para>Close &kdevelop; and restart it again.
@@ -1400,7 +1414,7 @@ Now the new editor window tabs will open at the far right end of the current tab
 </step>
 </procedure>
 
-<para>Unfortunately, this is setting cannot be changed on the fly during a development session.
+<para>Unfortunately, this setting cannot be changed on the fly during a development session.
 You must make up your mind which behavior you prefer in the long run and then stick to it, at least until the next start of &kdevelop;.</para>
 
 <formalpara>
@@ -1421,11 +1435,11 @@ You can now drag this tab, holding the middle mouse button down, until it did sk
 Although you may fast switch the tabbed windows, there are times where you want have several files open at once, &eg; for reference purposes or to keep complex tasks under better control.
 To accomplish this, &kdevelop; provides a way to split the workspace area into different, simultaneously visible sections which each can hold their own series of tabbed windows.</para>
 
-<para>There are two split commands which you can reach either through the <guimenu>Window</guimenu> menu or by right clicking either in a tabbed window or on the window tab itself.
+<para>There are two split commands which you can reach either through the <guimenu>Window</guimenu> menu or by right clicking either into a tabbed window or on the window tab itself.
 We will illustrate this splitting behavior again with our Hello example project.</para>
 
-<para>Assume, there are two source files open on the tab bar, <filename>hello.cpp</filename> and <filename>hello.h</filename>.
-Now, while working on the <filename>hello.cpp</filename> source. you often need to refer to the declarations in the <filename>hello.h</filename> headers file, so you want to keep both files open simultaneosly.</para>
+<para>Assume there are two source files open on the tab bar, <filename>hello.cpp</filename> and <filename>hello.h</filename>.
+Now, while working on the <filename>hello.cpp</filename> source, you often need to refer to the declarations in the <filename>hello.h</filename> headers file, so you want to keep both files open simultaneously.</para>
 
 <para>To get this done, just right click on the tab of, say, <filename>hello.h</filename>.
 The following menu will then pop up.</para>
@@ -1440,7 +1454,7 @@ The following menu will then pop up.</para>
 </screenshot>
 
 <para>Select the <guimenuitem>Split Horizontal</guimenuitem> entry.
-This will split the current workspace are in the middle and move the editor window with the <filename>hello.h</filename> file into the lower part.</para>
+This will split the current workspace area in the middle and move the editor window with the <filename>hello.h</filename> file into the lower part.</para>
 
 <screenshot>
 <mediaobject>
@@ -1457,15 +1471,15 @@ You can grab it with the mouse and adjust the heights of the editor windows acco
 <para>There are a few points to note, however.</para>
 <itemizedlist>
 <listitem>
-<para>The split workspace areas are fully functioning at their own.
+<para>The split workspace areas are fully functional at their own.
 This means, new tabbed windows will open in the workspace which contains the currently active editor window.
-And you can split any split sub area again to your wish, thus keeping as much windows open simultaneously as you need.</para>
+And you can split any sub-area again to your wish, thus keeping as much windows open simultaneously as you need.</para>
 </listitem>
 
 <listitem>
-<para>Any split will move the currently active editor window into the new wokspace sub-area, either downward or to the right.
+<para>Any split will move the currently active editor window into the new workspace sub-area, either downward or to the right.
 The other tabbed windows all remain where they were.
-You cannot directly move tabbed windows between split areas, instead you need to explicitely close the window in want workspace area and reopen it in another to regroup.</para>
+You cannot directly move tabbed windows between split areas, instead you need to explicitly close the window in one workspace area and reopen it in another to regroup.</para>
 </listitem>
 
 <listitem>
@@ -1562,3 +1576,5 @@ It is extremely difficult to change them later.
 </sect1>
 
 </chapter>
+
+<!-- ===================== START OF TAIL STUB ============================= -->
