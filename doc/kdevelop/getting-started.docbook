@@ -32,6 +32,7 @@ Thereby we will have a (cursory) look at:</para>
 <member><link linkend="gettingstarted-extend">How to add classes and other detail to your project.</link></member>
 <member><link linkend="gettingstarted-debug">What to do to debug the application.</link></member>
 <member><link linkend="gettingstarted-doc">Some basic tools to build program or user documentation.</link></member>
+<member><link linkend="gettingstarted-keys">Last but not least, keyboard shortcuts</link></member>
 </simplelist>
 
 <para>Before we start, one important concept should be made clear.</para>
@@ -46,6 +47,10 @@ That means in essence that &kdevelop; is no development tool by itself but rathe
 
 <para>Hence, we cannot teach you how to build software, but rather introduce you to some of the ways &kdevelop; was designed to ease such a software building process.
 If you want to learn more about what an Integrated Development Environment is meant for, you might want to have a look at the <link linkend="unixdev">Development on &UNIX;</link> historical overview and there especially at the <link linkend="unixdev-ide">Integrating Concepts and Tools</link> chapter.</para>
+
+<note>
+<para>The following discussions apply to the default case, where &kdevelop; starts up in the <guilabel>Simplified IDEAl Window Mode</guilabel>. If you already did switch to another user interface mode some items may not be there as described or will behave slightly different. If in doubt which user interface mode your &kdevelop; currently uses, check with the <menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> <guimenuitem>User Interface</guimenuitem></menuchoice> dialog.</para>
+</note>
 
 <sect1 id="gettingstarted-overview">
 <title>A Very First Look at &kdevelop;</title>
@@ -1156,7 +1161,7 @@ But there is help.
 <para>Before we can use this on our <application>Hello</application> example project, we must however first generate a suitable index.
 This is done by the <guilabel>CTags</guilabel> tool view at the bottom of the workspace area.</para>
 
-<para>When you click the <guibutton>CTags</guibutton> tab, a dialog window will open where you will find the following in the lower right corner.</para>
+<para>When you click the <guibutton>CTags</guibutton> tab, a dialog window will open where you will find the following key in the lower right corner.</para>
 
 <screenshot>
 <mediaobject>
@@ -1172,7 +1177,7 @@ Then the <guilabel>No CTags Database Found</guilabel> will be replaced by the cu
 Now you are ready to perform some identifier look ups in your project source.</para>
 
 <tip>
-<para>The date next to the <guilabel>Regenerate</guilabel> button is there to remind the developer of possibly too old indexes.
+<para>The date next to the <guilabel>Regenerate</guilabel> button is there to remind you of possibly too old indexes.
 Whenever you are obviously not able to look up some identifier in your project, consider regenerating the index.
 On large projects this might take considerable time, but you should make it a habit to regenerate the index regularly after extensive source file changes.</para>
 </tip>
@@ -1303,16 +1308,13 @@ In our example this should read <quote>*** 11 matches found ***</quote>.</para>
 If you initiate another global search, its results will display in another tabbed window in the <guilabel>Find in Files</guilabel> tool view window.</para>
 </listitem>
 </itemizedlist>
-
-<para>Experiment with these look up facilities.
-You will use them most often during actual application development.</para>
 </sect3>
 </sect2>
 
 <sect2 id="gettingstarted-edit-arrange">
 <title>Arranging Editor Windows</title>
 
-<para>When your work with large complex projects you will most likely often end up with quite a lot of editor windows on the tab bar.
+<para>When your work with large complex projects you will often end up with quite a lot of tabbed editor windows residing on the tab bar.
 This makes specific facilities to clean up, order and group all those editor tabs necessary.
 &kdevelop; provides several means for this.
 We will have a short look at some of them.</para>
@@ -1386,7 +1388,7 @@ Because this list of open files is alphabetically ordered you can more easily fi
 <sect3 id="gettingstarted-edit-arrange-tabs">
 <title>How to Rearrange Edit Window Tabs</title>
 
-<para>Even if you have only the really necessary editor windows open you may usually want to have their tabs arranged in some logical way.
+<para>Even if you have only the really necessary editor windows open you may still want to have their tabs arranged in some logical way.
 &kdevelop; provides some common means to do so, in short:</para>
 
 <formalpara>
@@ -1449,7 +1451,7 @@ The following menu will then pop up.</para>
 <imageobject>
 <imagedata fileref="split-workspace.png" format="PNG"/>
 </imageobject>
-<caption><para>How to split the current workspace area int two parts.</para></caption>
+<caption><para>How to split the current workspace area into two parts.</para></caption>
 </mediaobject>
 </screenshot>
 
@@ -1491,13 +1493,161 @@ It closes automatically, once the last tabbed window in it was closed.</para>
 
 <sect3 id="gettingstarted-edit-arrange-group">
 <title>Grouping Source Files Into Development Sessions</title>
-<para>(- to be written -)</para>
+
+<para>When your project grows larger, and the development tasks become more and more complex and force you to often switch between different, even distinct sets of files, it is about time to organize your development work into distinct sessions.
+The <guilabel>File List</guilabel> tool view of &kdevelop; allows you do to just this.</para>
+
+<para>On top of the <guilabel>File List</guilabel> tool view window there is a tool bar where you can create, save, select, and remove such sessions.
+Or alternatively use the <menuchoice><guimenu>View</guimenu> <guimenuitem>View Sessions</guimenuitem></menuchoice> sub-menu.</para>
+
+<para>We will illustrate this facility again with our Hello example project. Assume you always want to open the <filename>hello.cpp</filename>, <filename>hello.h</filename>, and <filename>main.cpp</filename> files all in one step, no matter what development task you just did perform in the project.
+To accomplish this, you first need to create a new development session named, say, <quote>sources</quote>.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="file-list-session-create.png" format="PNG"/>
+</imageobject>
+<caption><para>Use development sessions to remember groups of files.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>This is a multiple step approach as follows.</para>
+<procedure>
+<step>
+<para>Create a new session</para>
+<substeps>
+<step>
+<para>Click the <guiicon>New Session</guiicon> icon top left in the <guilabel>File List</guilabel> tool view window.</para>
+</step>
+<step>
+<para>A dialog will pop up.
+In the <guilabel>Enter the name of the session</guilabel> input field give your new session a name, &eg; <quote>sources</quote>.</para>
+</step>
+<step>
+<para>Close the dialog with <guibutton>OK</guibutton>.
+The new session will now be listed in the drop down box on the toolbar.</para>
+</step>
+</substeps>
+</step>
+<step>
+<para>This new session will initially be empty.
+You must populate it with the files you want it to group.</para>
+<substeps>
+<step>
+<para>Open all files you want to be grouped in this development session.
+In our example we decided to keep <filename>hello.cpp</filename>, <filename>hello.h</filename>, and <filename>main.cpp</filename> there as planned.</para>
+</step>
+<step>
+<para>Once your file list is complete, click the <guiicon>Save Session</guiicon> icon in the toolbar.
+Do not skip this step, &kdevelop; will forget the file list otherwise.</para>
+</step>
+</substeps>
+</step>
+</procedure>
+
+<para>That was it.
+Whenever you select the <guilabel>sources</guilabel> session from the <guilabel>Open Session</guilabel> drop down box, &kdevelop; will close all currently open editor windows and open the remembered ones (<filename>hello.cpp</filename>, <filename>hello.h</filename>, and <filename>main.cpp</filename> in our example) instead.</para>
+
+<para>You can define as many sessions as you wish in the context of your project.
+If you want to change the session&apos;s contents, just update the remembered file list with a <guiicon>Save Session</guiicon> click.
+And if you want get rid of any session, select it in the drop down box, then click the <guiicon>Delete Session</guiicon> icon in the toolbar right.</para>
+
+<para>There is even more. You can force &kdevelop; to open a given session by default when it loads the project.
+Just select the session in the drop down box on the <menuchoice><guimenu>Projects</guimenu> <guimenuitem>Project Options</guimenuitem> <guimenuitem>File List</guimenuitem></menuchoice> project options configuration page.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="file-list-session-default.png" format="PNG"/>
+</imageobject>
+<caption><para>Let &kdevelop; open a specific session when the project is loaded.</para></caption>
+</mediaobject>
+</screenshot>
 </sect3>
 </sect2>
 
 <sect2 id="gettingstarted-edit-problems">
 <title>Keeping an Eye on Common Problems</title>
-<para>(- to be written -)</para>
+
+<para>When you open an editor window containing a source file, &kdevelop; will parse its contents.
+This allows the built in <emphasis>problem reporter</emphasis> to scan the source text for some common errors it knows of.
+And it can alert the user of different places which have been marked for special treatment.</para>
+
+<para>Let us illustrate this facility with our Hello example project.</para>
+
+<itemizedlist>
+<listitem>
+<para>Open an editor window with the <filename>main.cpp</filename> source file.</para>
+</listitem>
+
+<listitem>
+<para>Make sure it still contains the following line somewhere towards the end:</para>
+<programlisting>
+        /// @todo do something with the command line args here
+</programlisting>
+<para>This was inserted by the &appwizard; when you created the Hello project in the <link linkend="gettingstarted-new">Starting a New Project</link> chapter above.</para>
+</listitem>
+
+<listitem>
+<para>Now open the <guilabel>Problems</guilabel> tool view in the bottom tabs row.
+If all went right, it will currently report this todo:</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="problem-report-todo.png"/>
+</imageobject>
+<caption><para>&kdevelop; is alerting a source code line with a todo mark.</para></caption>
+</mediaobject>
+</screenshot>
+</listitem>
+</itemizedlist>
+
+<para>The format of the <computeroutput>/// @todo</computeroutput> command is for special treatment by the <application>Doxygen</application> code documenter, which we will look at briefly in the <link linkend="gettingstarted-doc">Documentation</link> section below.
+It is not mandatory that you use this format, the more common <computeroutput>TODO</computeroutput> and <computeroutput>FIXME</computeroutput> comment marks will be recognized as well.</para>
+
+<para>If you &eg; insert the following <computeroutput>TODO</computeroutput> and <computeroutput>FIXME</computeroutput> comment lines in our <filename>hello.cpp</filename> example file</para>
+<programlisting>
+Hello::Hello()
+    : KMainWindow( 0, "Hello" )
+{
+    // set the shell's ui resource file
+    // TODO check the user interface
+    setXMLFile("helloui.rc");
+
+    // FIXME change to a better suited greeting
+    new QLabel( "Hello World", this, "hello label" );
+}
+</programlisting>
+<para>you will find them listed in the <guilabel>Problems</guilabel> tool view as well:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="problem-report-marks.png" format="PNG"/>
+</imageobject>
+<caption><para>The problem reporter listing lines which require attention.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>Note the other tabs in the <guilabel>Problem</guilabel> reporter tool view window, especially <guilabel>Fixme</guilabel>, and <guilabel>Todo</guilabel>.
+If you open them, you will find all <computeroutput>FIXME</computeroutput> and <computeroutput>TODO</computeroutput> marked lines, &kdevelop; has found so far in this session.
+For example the <computeroutput>TODO</computeroutput> alerts will currently look thus:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="problem-report-all-todos.png" format="PNG"/>
+</imageobject>
+<caption><para>The problem reporter has collected the <computeroutput>TODO</computeroutput> alerts.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>The <guilabel>Errors</guilabel> tab will however not list every coding error you make.
+This is the job of other tools in &eg; the build process.
+But you will find here alerts of some common programming mistakes which would likely go unnoticed otherwise and probably be catched with difficutulties during complex debugging session.</para>
+
+<para>You will find the &kdevelop; problem reporter facility a very valuable tool, so check the <guilabel>Problems</guilabel> tool view regularly in the development process.</para>
 </sect2>
 </sect1>
 
@@ -1575,6 +1725,10 @@ It is extremely difficult to change them later.
 <para>(- to be written -)</para>
 </sect1>
 
-</chapter>
+<sect1 id="gettingstarted-keys">
+<title>Last But Not Least, Keyboard Shortcuts</title>
 
-<!-- ===================== START OF TAIL STUB ============================= -->
+<para>(- to be written -)</para>
+</sect1>
+
+</chapter>
