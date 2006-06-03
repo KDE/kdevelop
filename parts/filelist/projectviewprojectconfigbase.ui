@@ -32,7 +32,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Open this view after project load:</string>
+                <string>Open this session after project load:</string>
             </property>
         </widget>
         <widget class="KComboBox" row="0" column="1">
@@ -48,7 +48,7 @@
                 </sizepolicy>
             </property>
             <property name="toolTip" stdset="0">
-                <string>select a project view</string>
+                <string>select a session</string>
             </property>
         </widget>
         <spacer row="0" column="2">
