@@ -31,10 +31,10 @@ CppCodeCompletionConfig::~CppCodeCompletionConfig()
 
 void CppCodeCompletionConfig::init( )
 {
-	m_includeGlobalFunctions = DomUtil::readBoolEntry( *m_dom, defaultPath + "/includeGlobalFunctions", true );
+/*	m_includeGlobalFunctions = DomUtil::readBoolEntry( *m_dom, defaultPath + "/includeGlobalFunctions", true );
 	m_includeTypes = DomUtil::readBoolEntry( *m_dom, defaultPath + "/includeTypes", true );
 	m_includeEnums = DomUtil::readBoolEntry( *m_dom, defaultPath + "/includeEnums", true );
-	m_includeTypedefs = DomUtil::readBoolEntry( *m_dom, defaultPath + "/includeTypedefs", false );
+	m_includeTypedefs = DomUtil::readBoolEntry( *m_dom, defaultPath + "/includeTypedefs", false );*/
 	m_automaticCodeCompletion = DomUtil::readBoolEntry( *m_dom, defaultPath + "/automaticCodeCompletion", false );
 	m_automaticArgumentsHint = DomUtil::readBoolEntry( *m_dom, defaultPath + "/automaticArgumentsHint", true );
 	m_automaticHeaderCompletion = DomUtil::readBoolEntry( *m_dom, defaultPath + "/automaticHeaderCompletion", true );
@@ -45,10 +45,10 @@ void CppCodeCompletionConfig::init( )
 
 void CppCodeCompletionConfig::store( )
 {
-	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/includeGlobalFunctions", m_includeGlobalFunctions );
+/*	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/includeGlobalFunctions", m_includeGlobalFunctions );
 	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/includeTypes", m_includeTypes );
 	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/includeEnums", m_includeEnums );
-	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/includeTypedefs", m_includeTypedefs );
+	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/includeTypedefs", m_includeTypedefs );*/
 	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/automaticCodeCompletion", m_automaticCodeCompletion );
 	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/automaticArgumentsHint", m_automaticArgumentsHint );
 	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/automaticHeaderCompletion", m_automaticHeaderCompletion );
@@ -59,20 +59,20 @@ void CppCodeCompletionConfig::store( )
 	emit stored();
 }
 
-void CppCodeCompletionConfig::setIncludeTypes( bool b )
-{
-	m_includeTypes = b;
-}
-
-void CppCodeCompletionConfig::setIncludeEnums( bool b )
-{
-	m_includeEnums = b;
-}
-
-void CppCodeCompletionConfig::setIncludeTypedefs( bool b )
-{
-	m_includeTypedefs = b;
-}
+// void CppCodeCompletionConfig::setIncludeTypes( bool b )
+// {
+// 	m_includeTypes = b;
+// }
+// 
+// void CppCodeCompletionConfig::setIncludeEnums( bool b )
+// {
+// 	m_includeEnums = b;
+// }
+// 
+// void CppCodeCompletionConfig::setIncludeTypedefs( bool b )
+// {
+// 	m_includeTypedefs = b;
+// }
 
 void CppCodeCompletionConfig::setAutomaticCodeCompletion( bool b )
 {
@@ -94,10 +94,10 @@ void CppCodeCompletionConfig::setArgumentsHintDelay( int delay )
 	m_argumentsHintDelay = delay;
 }
 
-void CppCodeCompletionConfig::setIncludeGlobalFunctions( bool b )
-{
-	m_includeGlobalFunctions = b;
-}
+// void CppCodeCompletionConfig::setIncludeGlobalFunctions( bool b )
+// {
+// 	m_includeGlobalFunctions = b;
+// }
 
 void CppCodeCompletionConfig::setHeaderCompletionDelay( int delay )
 {

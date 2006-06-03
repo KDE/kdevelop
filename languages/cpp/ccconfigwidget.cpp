@@ -129,10 +129,10 @@ void CCConfigWidget::initCodeCompletionTab( )
 	checkAutomaticCodeCompletion->setChecked( c->automaticCodeCompletion() );
 	checkAutomaticArgumentsHint->setChecked( c->automaticArgumentsHint() );
 
-	m_includeGlobalFunctions->setChecked( c->includeGlobalFunctions() );
-	m_includeTypes->setChecked( c->includeTypes() );
-	m_includeEnums->setChecked( c->includeEnums() );
-	m_includeTypedefs->setChecked( c->includeTypedefs() );
+// 	m_includeGlobalFunctions->setChecked( c->includeGlobalFunctions() );
+// 	m_includeTypes->setChecked( c->includeTypes() );
+// 	m_includeEnums->setChecked( c->includeEnums() );
+// 	m_includeTypedefs->setChecked( c->includeTypedefs() );
 
 	QValueList<Catalog*> catalogs = m_pPart->codeRepository() ->registeredCatalogs();
 	for ( QValueList<Catalog*>::Iterator it = catalogs.begin(); it != catalogs.end(); ++it )
@@ -156,10 +156,10 @@ void CCConfigWidget::saveCodeCompletionTab( )
 	c->setAutomaticCodeCompletion( checkAutomaticCodeCompletion->isChecked() );
 	c->setAutomaticArgumentsHint( checkAutomaticArgumentsHint->isChecked() );
 
-	c->setIncludeGlobalFunctions( m_includeGlobalFunctions->isChecked() );
-	c->setIncludeTypes( m_includeTypes->isChecked() );
-	c->setIncludeEnums( m_includeEnums->isChecked() );
-	c->setIncludeTypedefs( m_includeTypedefs->isChecked() );
+// 	c->setIncludeGlobalFunctions( m_includeGlobalFunctions->isChecked() );
+// 	c->setIncludeTypes( m_includeTypes->isChecked() );
+// 	c->setIncludeEnums( m_includeEnums->isChecked() );
+// 	c->setIncludeTypedefs( m_includeTypedefs->isChecked() );
 
 	for ( QMap<QCheckListItem*, Catalog*>::Iterator it = m_catalogs.begin(); it != m_catalogs.end(); ++it )
 	{

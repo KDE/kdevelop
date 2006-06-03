@@ -2189,9 +2189,11 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		{
 			computeCompletionEntryList( entryList, ctx, isInstance );
 			
-			if ( m_pSupport->codeCompletionConfig() ->includeGlobalFunctions() )
-				computeCompletionEntryList( type, entryList, QStringList(), false );
-
+// 			if ( m_pSupport->codeCompletionConfig() ->includeGlobalFunctions() )
+// 				computeCompletionEntryList( type, entryList, QStringList(), false );
+			
+			computeCompletionEntryList( type, entryList, QStringList(), false );
+			
 			if ( this_type.scope().size() )
 				computeCompletionEntryList( this_type, entryList, this_type.scope(), isInstance );
 				computeCompletionEntryList( type, entryList,  type->resolved()->scope() , isInstance );
@@ -2798,7 +2800,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 		tags = m_repository->query( args );
 		computeCompletionEntryList( typeR, entryList, tags, isInstance );
 
-		if ( !isInstance && cfg->includeEnums() )
+// 		if ( !isInstance && cfg->includeEnums() )
 		{
 			args.clear();
 			args << Catalog::QueryArgument( "kind", Tag::Kind_Enumerator )
@@ -2807,7 +2809,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 			computeCompletionEntryList( typeR, entryList, tags, isInstance );
 		}
 
-		if ( !isInstance && cfg->includeTypedefs() )
+// 		if ( !isInstance && cfg->includeTypedefs() )
 		{
 			args.clear();
 			args << Catalog::QueryArgument( "kind", Tag::Kind_Typedef )
@@ -2954,7 +2956,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	
 	CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
 
-	if ( cfg->includeGlobalFunctions() )
+// 	if ( cfg->includeGlobalFunctions() )
 	{
 		computeCompletionEntryList( type, entryList, scope->functionList(), isInstance );
 
@@ -2962,7 +2964,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			computeCompletionEntryList( type, entryList, scope->variableList(), isInstance );
 	}
 
-	if ( !isInstance && cfg->includeTypes() )
+// 	if ( !isInstance && cfg->includeTypes() )
+	if ( !isInstance )
 	{
 		computeCompletionEntryList( type, entryList, scope->classList(), isInstance );
 		computeCompletionEntryList( type, entryList, scope->namespaceList(), isInstance );
@@ -2988,7 +2991,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		entry.comment = klass->comment();
 		entryList << entry;
 
-		if ( cfg->includeTypes() )
+// 		if ( cfg->includeTypes() )
 		{
 			computeCompletionEntryList( type, entryList, klass->classList(), isInstance );
 		}

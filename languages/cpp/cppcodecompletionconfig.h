@@ -28,33 +28,33 @@ public:
 	CppCodeCompletionConfig( CppSupportPart* part, QDomDocument* dom );
 	virtual ~CppCodeCompletionConfig();
 
-	bool includeGlobalFunctions() const
-	{
-		return m_includeGlobalFunctions;
-	}
-
-	void setIncludeGlobalFunctions( bool b );
-
-	bool includeTypes() const
-	{
-		return m_includeTypes;
-	}
-
-	void setIncludeTypes( bool b );
-
-	bool includeEnums() const
-	{
-		return m_includeEnums;
-	}
-
-	void setIncludeEnums( bool b );
-
-	bool includeTypedefs() const
-	{
-		return m_includeTypedefs;
-	}
-
-	void setIncludeTypedefs( bool b );
+// 	bool includeGlobalFunctions() const
+// 	{
+// 		return m_includeGlobalFunctions;
+// 	}
+// 
+// 	void setIncludeGlobalFunctions( bool b );
+// 
+// 	bool includeTypes() const
+// 	{
+// 		return m_includeTypes;
+// 	}
+// 
+// 	void setIncludeTypes( bool b );
+// 
+// 	bool includeEnums() const
+// 	{
+// 		return m_includeEnums;
+// 	}
+// 
+// 	void setIncludeEnums( bool b );
+// 
+// 	bool includeTypedefs() const
+// 	{
+// 		return m_includeTypedefs;
+// 	}
+// 
+// 	void setIncludeTypedefs( bool b );
 
 	bool automaticCodeCompletion() const
 	{
@@ -110,10 +110,10 @@ private:
 private:
 	CppSupportPart* m_part;
 	QDomDocument* m_dom;
-	bool m_includeGlobalFunctions;
+/*	bool m_includeGlobalFunctions;
 	bool m_includeTypes;
 	bool m_includeEnums;
-	bool m_includeTypedefs;
+	bool m_includeTypedefs;*/
 	bool m_automaticCodeCompletion;
 	bool m_automaticArgumentsHint;
 	bool m_automaticHeaderCompletion;
