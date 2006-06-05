@@ -38,6 +38,7 @@
 #include <qstring.h>
 #include <qdir.h>
 #include <qvaluevector.h>
+#include <qeventloop.h>
 
 #include <iostream>
 #include <ctype.h>
@@ -942,7 +943,7 @@ void GDBController::slotStopDebugger()
         start = QTime::currentTime();
         while (-1)
         {
-            kapp->processEvents(20);
+            kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput, 20 );
             now = QTime::currentTime();
             if (!stateIsOn(s_dbgBusy) || start.msecsTo( now ) > 2000)
                 break;
@@ -960,7 +961,7 @@ void GDBController::slotStopDebugger()
         start = QTime::currentTime();
         while (-1)
         {
-             kapp->processEvents(20);
+             kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput, 20 );
              now = QTime::currentTime();
              if (!stateIsOn(s_attached) || start.msecsTo( now ) > 2000)
                  break;
@@ -976,7 +977,7 @@ void GDBController::slotStopDebugger()
     start = QTime::currentTime();
     while (-1)
     {
-         kapp->processEvents(20);
+         kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput, 20 );
          now = QTime::currentTime();
          if (stateIsOn(s_programExited) || start.msecsTo( now ) > 2000)
              break;
