@@ -92,7 +92,7 @@ If you click on one of those tabs, a so-called <emphasis>tool view window</empha
 <formalpara>
 <title>Menu and Toolbars</title>
 <para>On top there is the usual menubar, followed by several rows of toolbars, some being initially empty.
-They will get populated once there is a project opened for actual work.</para>
+They will get populated once there is a project open for actual work.</para>
 </formalpara>
 
 <formalpara>
@@ -104,7 +104,7 @@ They will get populated once there is a project opened for actual work.</para>
 <sect2 id="gettingstarted-overview-help">
 <title>How to Get Some Help</title>
 
-<para>Besides the <guimenu>Help</guimenu> which offers answers to specific questions, the status bar and two kinds of tool tips provide some quick information.</para>
+<para>Besides the <guimenu>Help</guimenu> menu which offers answers to specific questions, the status bar and two kinds of tool tips provide some quick information.</para>
 
 <formalpara>
 <title>What Does This Menu Entry Do?</title>
@@ -130,7 +130,7 @@ You can as well open any menu this way and click on a specific menu entry (activ
 <title>What is in the menus?</title>
 
 <para>There are ten menus selectable on the menubar.
-Most of them get fully populated once a project is opened for actual work while others need a document opened at least.
+Most of them get fully populated once a project is open for actual work while others require at least one document be open in an editor window.
 In short, they will allow the following action types.</para>
 
 <note>
@@ -149,8 +149,9 @@ It allows to create, open, save, print, and close document files as well as quit
 </formalpara>
 
 <formalpara>
-<title>Revert Changes</title>
-<para>Additionally it allows to revert changes by reloading file contents in an orderly way.</para>
+<title>Revert All</title>
+<para>This allows to revert all recent, yet unsaved changes by reloading the file from the disk.
+This works on any file you edit, not only on those which are part of a project.</para>
 </formalpara>
 </listitem>
 </varlistentry>
@@ -168,9 +169,8 @@ Furthermore it allows to select text blocks in various ways.</para>
 
 <formalpara>
 <title>Search and Replace</title>
-<para>There is a very powerful search facility available on the <guimenu>Edit</guimenu> menu.
-In addition to the usual search and replace actions limited to the the current document you may as well conduct global search and replace actions.
-This allows to work on all files of the project in a single turn.</para>
+<para>There are two very powerful search facility available, <menuchoice><guimenu>Edit</guimenu> <guimenuitem>Find in Files...</guimenuitem></menuchoice>, and <menuchoice><guimenu>Edit</guimenu> <guimenuitem>Find-Select-Replace...</guimenuitem></menuchoice>.
+These allow, in addition to the usual search and replace actions limited to the the current document, to conduct global search or search-and-replace actions in one single turn.</para>
 </formalpara>
 
 <formalpara>
@@ -183,7 +183,7 @@ This allows to work on all files of the project in a single turn.</para>
 <varlistentry>
 <term><guimenu>View</guimenu></term>
 <listitem>
-<para>Like the <guimenu>Edit</guimenu> menu, this menu is useful only if there is a project currently open.
+<para>Like the <guimenu>Edit</guimenu> menu, this menu is useful only if there is an open project.
 I this case there will be the following actions available (amongst others):</para>
 
 <formalpara>
@@ -360,7 +360,8 @@ Also, you can configure shortcuts, toolbars, notifications, the editor and &kdev
 <varlistentry>
 <term><guimenu>Help</guimenu></term>
 <listitem>
-<para>Here you can open this KDevelop manual, read Qt documentation, open man pages (the traditional UNIX manual format) and info pages (the GNU manual format), report bugs and get some info about your current KDevelop version and its authors.</para>
+<para>Here you can open this KDevelop manual, look up terms in various documentation files, open man pages (the traditional UNIX manual format) and info pages (the GNU manual format).
+Furthermore you can report bugs here or get some info about your current KDevelop version and its authors.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -396,7 +397,7 @@ Each of these three tool view areas serves a different main purpose.</para>
 </listitem>
 </itemizedlist>
 
-<para>The number of tool view tabs shown will change once a project is opened for actual work.
+<para>The number of tool view tabs shown will change once a project is open for actual work.
 More tools to work on that project will be available then.
 The actual number of tool views depends on the <link linkend="plugin-tools">Plugin Tools</link> being currently available to &kdevelop;.
 You will find more on this topic in the <link linkend="setup">Configuring KDevelop</link> chapter.</para>
@@ -420,7 +421,7 @@ A right click in the file selector area will pop up a navigation and file manipu
 <para>Lists the currently open files.
 Clicking on a file will usually select its editor window in the workspace area.
 Use this to quickly navigate in a large number of open files.
-Furthermore this view provides a means to organize the open files in different <emphasis>sessions</emphasis>.
+Furthermore this view provides a means to organize the open files into different <emphasis>sessions</emphasis>.
 This is particularly useful in very large and complex projects to help the developer concentrate on different tasks.
 Right clicking a file will pop up a file manipulation menu.</para>
 </formalpara>
@@ -464,7 +465,7 @@ Otherwise the global replace tool in the <menuchoice><guimenu>Edit</guimenu> <gu
 
 <formalpara>
 <title>Konsole</title>
-<para>Opens a &kde; <application>Konsole</application> like terminal emulator window where you can work keyboard commands in a traditional &UNIX; command line interface.</para>
+<para>Opens a &kde; <application>Konsole</application> like terminal emulator window where you can use keyboard commands in a traditional &UNIX; command line interface.</para>
 </formalpara>
 </listitem>
 </varlistentry>
@@ -475,15 +476,16 @@ Otherwise the global replace tool in the <menuchoice><guimenu>Edit</guimenu> <gu
 <formalpara>
 <title>Documentation</title>
 <para>&kdevelop; provides access to a whole bunch of documentation through this tool.
-You may select whole document files online and/or offline in this window.
-And there are several ways available to directly access valuable information from the manuals.</para>
+You may here access document files, usually online from remote locations, in a structured way.
+And there are several ways available to directly access valuable information from &kde; or &Qt; manuals.</para>
 </formalpara>
+
 <para>See the <link linkend="documentation">Documentation</link> and <link linkend="setup-docu">Configuring the Documentation</link> chapters for more details.</para>
 
 <formalpara>
 <title>Code Snippets</title>
 <para>This tool allows you to permanently store selected texts for later use in other editing cycles.
-It is a very flexible tool, as any text snipped stored here may contain a set of variables which will get there actual values at the time of actually inserting the snippet in some other text.</para>
+It is a very flexible tool, as any text snipped stored here may contain a set of variables which will get their actual values at the time when you insert such a snippet in some other text.</para>
 </formalpara>
 <para>More information on this is available in the <link linkend="editing-snippets">Code Snippets</link> and <link linkend="setup-snippets">Setting Up the Code Snippets Tool</link> chapters.</para>
 </listitem>
@@ -631,7 +633,7 @@ Thus the first practical step to develop software in &kdevelop; usually is to cr
 &kdevelop; provides the so-called &appwizard; tool for this.
 (See the <link linkend="applicationwizard">Getting Started &mdash; the &appwizard;</link> chapter for more.)</para>
 
-<para>We will now start a simple &kde; application project to illustrate how simple this is accomplished and which files and tools &kdevelop; will have provided.
+<para>We will now start a simple &kde; application project to illustrate how easily this is accomplished and which files and tools &kdevelop; will have provided.
 Thereby we will have a short look at:</para>
 
 <simplelist>
@@ -689,7 +691,7 @@ You will find that the &appwizard; rejects any other character.</para>
 </step>
 
 <step>
-<para>Make sure that the <guilabel>Location</guilabel> text box below shows the name of your top project directory as set up in the <link linkend="gettingstarted-configure">A Bit of Configuration</link> chapter above.
+<para>Make sure the <guilabel>Location</guilabel> text box below the input field shows the name of your top project directory as set up in the <link linkend="gettingstarted-configure">A Bit of Configuration</link> chapter above.
 If it does not do so, enter a suitable directory name or select one from the directory list provided by the folder labeled button to the right.</para>
 <para>If all went well, the <guilabel>Final location</guilabel> line at the bottom will show the directory path your new project will use.
 In case there was an <quote>(invalid)</quote> suffix appended, try another name for your project and/or make sure the top project directory in the <guilabel>Location</guilabel> text box really exists and is writable.</para>
@@ -851,7 +853,7 @@ Source files will produce the code to be run, others will provide necessary data
 These files must be maintained and orderly processed in the build stages by the project, hence they are called <emphasis>project files</emphasis>.</para>
 
 <para>If you have a look at the lower <guilabel>Automake Manager</guilabel> window to the right of the workspace area you will find all project files listed as well.
-The &automanag; tool uses this knowledge to take care of the build control as we will shortly see.</para>
+The &automanag; tool uses this knowledge to take care of the build control as we shortly will see.</para>
 
 <para>The other, non-bold listed files are of more auxiliary nature.
 They belong to several distinctive classes as follows:</para>
@@ -864,7 +866,7 @@ They belong to several distinctive classes as follows:</para>
 If the project utilizes the &GNU; <application>autotools</application> machinery as our example does, you will find a <filename>Makefile.am</filename> file in each project directory.
 These are kind of basic make core files which contain build control commands and will be processed in conjunction with various <filename>configure</filename> files during the build stages.
 Such a build produces a final <filename>Makefile</filename> in every directory.
-And from these in turn will the <application>make</application> utility finally build the application&apos;s binaries.</para>
+And from these in turn the <application>make</application> utility will finally build the binaries of the application.</para>
 </formalpara>
 
 <para>Those <filename>Makefile.am</filename> files need to be maintained throughout the development process.
@@ -881,8 +883,8 @@ They will be processed by some of the files in the <filename class="directory">a
 These are located in the project root directory, in our example <filename>hello.kdevelop</filename>, <filename>hello.kdevelop.pcs</filename>, and <filename>hello.kdevses</filename>.</para>
 </formalpara>
 
-<para>Of main interest to the outside in each project is the <filename>xxx.kdevelop</filename> (where <quote>xxx</quote> denotes the project name) file.
-It is the main <quote>KDevelop 3 Project File</quote> and needed if you want load another project into the &IDE;.</para>
+<para>Of particular importance in each project is the <filename>xxx.kdevelop</filename> (where <quote>xxx</quote> denotes the project name) file.
+It is the main <emphasis>KDevelop 3 Project File</emphasis> and needed if you later want load this project into the &IDE;.</para>
 
 <warning>
 <para>Never do manually modify, rename, or even delete any of these &kdevelop; control files! The &IDE; will most likely not function properly on your project afterwards.</para>
@@ -909,7 +911,11 @@ They are <filename>AUTHORS</filename>, <filename>ChangeLog</filename>, <filename
 </listitem>
 
 <listitem>
-<para>The <filename class="directory">templates</filename> directory containes file templates the &IDE; uses as stubs to create new source files.</para>
+<para>The <filename class="directory">templates</filename> directory containes file templates the &IDE; uses as stubs to create new source files.
+You may at any time edit these templates.
+The new contents will be reflected in the next source files you create of the related types.</para>
+
+<para>You may &eg; want to realign the right hand stars in the copyright lines the &appwizard; inserted into the <filename>cpp</filename> and <filename>h</filename> template files, so the source files created from them will look less awkward.</para>
 </listitem>
 
 <listitem>
@@ -932,7 +938,7 @@ It provides a whole bunch of files necessary to maintain the application&apos;s 
 <sect2 id="gettingstarted-new-toolviews">
 <title>Additional Tool Views</title>
 
-<para>As you will have noticed, as soon as the &appwizard; had the new project ready, several additional tool view were provided.
+<para>As you will have noticed, as soon as the &appwizard; had the new project ready, several additional tool views were provided.
 These make sense during project development only and, in short, provide the following functionality.</para>
 
 <note>
@@ -959,7 +965,7 @@ You need only click such an entry to open the editor window accordingly and posi
 <formalpara>
 <title>Classes</title>
 <para>Lists classes, methods, &etc; known in the project.
-Clicking the entry opens the appropriate header or source file in an editor window an positions the cursor at the respective declaration or definition.</para>
+Clicking the entry opens the appropriate header or source file in an editor window and positions the cursor at the respective declaration or definition.</para>
 </formalpara>
 </listitem>
 
@@ -987,7 +993,7 @@ Clicking an entry opens that file in an editor window.</para>
 <listitem>
 <formalpara>
 <title>Valgrind</title>
-<para><application>Valgrind</application> is a run-time memory analyzer.
+<para><application>Valgrind</application> is a run-time program analyzer.
 This tool view lists the results of such an analyze run.
 It is used &eg; to find memory leaks.</para>
 </formalpara>
@@ -1014,7 +1020,7 @@ It is used in conjunction with the debugger.</para>
 <title>CTags</title>
 <para>Allows to create a database of identifier indexes using the popular <application>CTags</application> application.
 This tags database may then be used from out this tool view window to look up any needed identifier in the project sources.
-Clicking a thus found position will open an editor window and position the cursor on the appropriate identifier there.</para>
+Clicking a thus found item line will open an editor window and position the cursor on the appropriate identifier there.</para>
 </formalpara>
 </listitem>
 
@@ -1034,7 +1040,7 @@ Clicking a thus found position will open an editor window and position the curso
 <listitem>
 <formalpara>
 <title>Automake Manager</title>
-<para>The &automanag; tool is basically a graphical front end to maintain the project&apos;s <filename>Makefile.am</filename> contents.
+<para>The &automanag; tool is basically a graphical front end to maintain the contents of the <filename>Makefile.am</filename> files located in each project directory.
 This tool view uses two windows to control its work.
 The upper window mirrors part of the project subdirectories, namely those which explicitly contain <emphasis>project files</emphasis>.
 Each subdirectory of this kind must contain a <filename>Makefile.am</filename> file and is termed a <emphasis>subproject</emphasis> in the &automanag; context.</para>
@@ -1626,7 +1632,7 @@ Hello::Hello()
 <imageobject>
 <imagedata fileref="problem-report-marks.png" format="PNG"/>
 </imageobject>
-<caption><para>The problem reporter listing lines which require attention.</para></caption>
+<caption><para>The problem reporter listing lines which require attention in the currently edited file.</para></caption>
 </mediaobject>
 </screenshot>
 
@@ -1645,7 +1651,7 @@ For example the <computeroutput>TODO</computeroutput> alerts will currently look
 
 <para>The <guilabel>Errors</guilabel> tab will however not list every coding error you make.
 This is the job of other tools in &eg; the build process.
-But you will find here alerts of some common programming mistakes which would likely go unnoticed otherwise and probably be catched with difficutulties during complex debugging session.</para>
+But you will find here alerts of some common programming mistakes which would likely go unnoticed otherwise and probably be catched with difficulties during complex debugging session.</para>
 
 <para>You will find the &kdevelop; problem reporter facility a very valuable tool, so check the <guilabel>Problems</guilabel> tool view regularly in the development process.</para>
 </sect2>
@@ -1727,6 +1733,12 @@ It is extremely difficult to change them later.
 
 <sect1 id="gettingstarted-keys">
 <title>Last But Not Least, Keyboard Shortcuts</title>
+
+<para>(- to be written -)</para>
+</sect1>
+
+<sect1 id="gettingstarted-whereto">
+<title>Where to go from here</title>
 
 <para>(- to be written -)</para>
 </sect1>
