@@ -287,7 +287,7 @@ void DDockWindow::showWidget(QWidget *widget)
     Ideal::Button *button = m_buttons[widget];
     if (button != 0)
         button->show();
-    widget->show();
+//     widget->show();
 }
 
 void DDockWindow::setMovingEnabled(bool b)
