@@ -21,7 +21,7 @@ libkdevelop_la_SOURCES = dummy.cpp
 
 
 
-SUBDIRS = util interfaces widgets $(QEXTMDI_SUBDIR) antlr catalog \
+SUBDIRS = util interfaces widgets antlr catalog \
 	cppparser $(COMPAT_SUBDIR) astyle 
 
 DOXYGEN_EMPTY = YES
