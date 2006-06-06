@@ -1160,11 +1160,11 @@ Did you initialize the indexes as shown <link linkend="gettingstarted-configure-
 <title>Project Internal Declarations and Definitions</title>
 
 <para>Such search facilities in external documentation have their limitations, however.
-Of course one cannot look up an identifier externally if it is only defined and used in the current project.
+Of course one cannot look up an identifier externally if it is only defined and used inside the current project.
 But there is help.
 &kdevelop; can use indexes built by the <application>CTags</application> application to search the sources in your project.</para>
 
-<para>Before we can use this on our <application>Hello</application> example project, we must however first generate a suitable index.
+<para>Before we can use this on our Hello example project, we must however first generate a suitable index.
 This is done by the <guilabel>CTags</guilabel> tool view at the bottom of the workspace area.</para>
 
 <para>When you click the <guibutton>CTags</guibutton> tab, a dialog window will open where you will find the following key in the lower right corner.</para>
@@ -1196,7 +1196,7 @@ On large projects this might take considerable time, but you should make it a ha
 <title>Use the CTags tool view</title>
 <para>This is easy.
 Just start typing the identifier name you are interested in into the <guilabel>Lookup</guilabel> input field in the bottom left.
-&kdevelop; will try to complete the word you have typed so far and show all occurrences of those identifiers which start with the text you did type in so far.</para>
+&kdevelop; will try to complete the word you have typed so far and show all occurrences of those identifiers which start with this character sequence.</para>
 </formalpara>
 
 <para>If for example you want to know wherever the <quote>Hello</quote> identifier was used in our example project, type an "H" into the <guilabel>Lookup</guilabel> input field.
@@ -1321,7 +1321,7 @@ If you initiate another global search, its results will display in another tabbe
 <title>Arranging Editor Windows</title>
 
 <para>When your work with large complex projects you will often end up with quite a lot of tabbed editor windows residing on the tab bar.
-This makes specific facilities to clean up, order and group all those editor tabs necessary.
+This makes specific facilities to clean up, order, and group all those editor tabs necessary.
 &kdevelop; provides several means for this.
 We will have a short look at some of them.</para>
 <simplelist>
@@ -1361,7 +1361,7 @@ Instead of searching and closing one editor window tab after another &kdevelop; 
 </formalpara>
 
 <para>Let us illustrate this on a simple example.
-In our Hello example project let us assume there were several files open to edit:
+In our Hello example project let us assume there were several files open for edit:
 <filename>hello.cpp</filename>, <filename>hello.h</filename>, <filename>helloui.rc</filename>, <filename>hello.desktop</filename>, and <filename>main.cpp</filename>.
 Now you want to close all of them except <filename>hello.cpp</filename> and <filename>hello.h</filename>.
 The easiest way to do so is with the <guilabel>File List</guilabel> tool view.
@@ -1449,7 +1449,7 @@ We will illustrate this splitting behavior again with our Hello example project.
 <para>Assume there are two source files open on the tab bar, <filename>hello.cpp</filename> and <filename>hello.h</filename>.
 Now, while working on the <filename>hello.cpp</filename> source, you often need to refer to the declarations in the <filename>hello.h</filename> headers file, so you want to keep both files open simultaneously.</para>
 
-<para>To get this done, just right click on the tab of, say, <filename>hello.h</filename>.
+<para>To get this done, right click on the tab of, say, <filename>hello.h</filename>.
 The following menu will then pop up.</para>
 
 <screenshot>
@@ -1462,7 +1462,7 @@ The following menu will then pop up.</para>
 </screenshot>
 
 <para>Select the <guimenuitem>Split Horizontal</guimenuitem> entry.
-This will split the current workspace area in the middle and move the editor window with the <filename>hello.h</filename> file into the lower part.</para>
+This will split the current workspace area in the middle and move the tabbed editor window holding the <filename>hello.h</filename> file into the lower part.</para>
 
 <screenshot>
 <mediaobject>
@@ -1476,7 +1476,7 @@ This will split the current workspace area in the middle and move the editor win
 <para>Note the dotted separator line between both windows.
 You can grab it with the mouse and adjust the heights of the editor windows according to your needs.</para>
 
-<para>There are a few points to note, however.</para>
+<para>There are a few points to note.</para>
 <itemizedlist>
 <listitem>
 <para>The split workspace areas are fully functional at their own.
@@ -1506,7 +1506,7 @@ The <guilabel>File List</guilabel> tool view of &kdevelop; allows you do to just
 <para>On top of the <guilabel>File List</guilabel> tool view window there is a tool bar where you can create, save, select, and remove such sessions.
 Or alternatively use the <menuchoice><guimenu>View</guimenu> <guimenuitem>View Sessions</guimenuitem></menuchoice> sub-menu.</para>
 
-<para>We will illustrate this facility again with our Hello example project. Assume you always want to open the <filename>hello.cpp</filename>, <filename>hello.h</filename>, and <filename>main.cpp</filename> files all in one step, no matter what development task you just did perform in the project.
+<para>We will illustrate this facility again with our Hello example project. Assume you want to always open the <filename>hello.cpp</filename>, <filename>hello.h</filename>, and <filename>main.cpp</filename> files all in one step, no matter what development task you just did perform in the project.
 To accomplish this, you first need to create a new development session named, say, <quote>sources</quote>.</para>
 
 <screenshot>
@@ -1538,7 +1538,7 @@ The new session will now be listed in the drop down box on the toolbar.</para>
 </step>
 <step>
 <para>This new session will initially be empty.
-You must populate it with the files you want it to group.</para>
+You must populate it with the files you want to be kept there.</para>
 <substeps>
 <step>
 <para>Open all files you want to be grouped in this development session.
@@ -1557,7 +1557,7 @@ Whenever you select the <guilabel>sources</guilabel> session from the <guilabel>
 
 <para>You can define as many sessions as you wish in the context of your project.
 If you want to change the session&apos;s contents, just update the remembered file list with a <guiicon>Save Session</guiicon> click.
-And if you want get rid of any session, select it in the drop down box, then click the <guiicon>Delete Session</guiicon> icon in the toolbar right.</para>
+And if you want get rid of a session, select it in the drop down box, then click the <guiicon>Delete Session</guiicon> icon in the toolbar right.</para>
 
 <para>There is even more. You can force &kdevelop; to open a given session by default when it loads the project.
 Just select the session in the drop down box on the <menuchoice><guimenu>Projects</guimenu> <guimenuitem>Project Options</guimenuitem> <guimenuitem>File List</guimenuitem></menuchoice> project options configuration page.</para>
@@ -1603,7 +1603,7 @@ If all went right, it will currently report this todo:</para>
 <imageobject>
 <imagedata fileref="problem-report-todo.png"/>
 </imageobject>
-<caption><para>&kdevelop; is alerting a source code line with a todo mark.</para></caption>
+<!-- <caption><para>&kdevelop; is alerting a source code line containing a todo mark.</para></caption> -->
 </mediaobject>
 </screenshot>
 </listitem>
