@@ -1603,7 +1603,7 @@ If all went right, it will currently report this todo:</para>
 <imageobject>
 <imagedata fileref="problem-report-todo.png"/>
 </imageobject>
-<!-- <caption><para>&kdevelop; is alerting a source code line containing a todo mark.</para></caption> -->
+<caption><para>&kdevelop; is alerting a source code line containing a todo mark.</para></caption>
 </mediaobject>
 </screenshot>
 </listitem>
@@ -1661,10 +1661,120 @@ But you will find here alerts of some common programming mistakes which would li
 <sect1 id="gettingstarted-compile">
 <title>How to Compile a Project</title>
 
-<para>(- to be written -)</para>
+<para>Compiling a project in &kdevelop; requires several setup steps and then building the application.
+All these are available through the <guimenu>Build</guimenu> menu.</para>
 
-<sect2 id="gettingstarted-compile-messages">
-<title>What the Messages Tell</title>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="build-menu.png" format="PNG"/>
+</imageobject>
+<caption><para>Building a project requires several steps.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>We are interested for now in the upper section only of this menu.
+The entries there are sorted in order of their importance.
+Thus the most often needed command is on top, the <guimenuitem>Build Project</guimenuitem> entry, which will cause all of the project be initialized, compiled and linked as needed.
+Other entries are there to compile selected project portions or a single file only, to perform several initialization sequences, or to install the completed application binaries.</para>
+
+<para>For now we will concentrate on several facilities which &kdevelop; provides for project setup, initializing, building, and running an application.
+In general, this includes:</para>
+<simplelist>
+<member><link linkend="gettingstarted-compile-basic">Looking briefly at the basic build cycle</link></member>
+</simplelist>
+
+<sect2 id="gettingstarted-compile-basic">
+<title>The Basic Build Cycle</title>
+
+<para>Once you created a new project you usually want to check if everything went right so far.
+This implies a first build and test run of the application, which we will do now.
+In order to initially compile a project there are several steps to perform, which we will briefly look at.</para>
+<simplelist>
+<member><link linkend="gettingstarted-compile-basic-init">How to initialize the project for a first build.</link></member>
+<member><link linkend="gettingstarted-compile-basic-config">How to do the initial configuration.</link></member>
+<member><link linkend="gettingstarted-compile-basic-build">How to build the project.</link></member>
+<member><link linkend="gettingstarted-compile-basic-run">How to run the application from within &kdevelop;.</link></member>
+</simplelist>
+
+<note>
+<para>This discussion implies that your project is based on the &GNU; autotools, which enabled the &automanag; tool in &kdevelop; as our example Hello project does.
+If you created another type project, &eg; for the &Qt; based <application>QMake</application> project manager, there will be other facilities available in the menus or perhaps even none of them.
+You will have to consult the respective vendor documentation on project management and application building in these cases.</para>
+</note>
+
+<sect3 id="gettingstarted-compile-basic-init">
+<title>Initialize the Project for the Build</title>
+
+<para>When the &appwizard; created our Hello example project, it left it in a sort of raw, <quote>virgin</quote> state.
+The &GNU; autotools chain dictates several initialization steps to be performed before the application could be actually compiled and linked.
+If you try to build a project in such a raw state, &eg; by selecting the <menuchoice><guimenu>Build</guimenu> <guimenuitem>Build Project</guimenuitem></menuchoice> menu or pressing the <keycap>F8</keycap> function key, you will get the following warning.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="raw-project-warning.png" format="PNG"/>
+</imageobject>
+<caption><para>Trying to build a raw automake based project.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>You may press the <guibutton>Run Them</guibutton> button in which case &kdevelop; will try to automatically run all required setup steps prior to compiling and linking the application.
+But we will look at those initial steps in sequence, so cancel the dialog by pressing <guibutton>Do Not run</guibutton>.</para>
+
+<para>As mentioned already, compiling and linking the application is done through the <guimenu>Build</guimenu> menu.
+Call it up and select <guimenuitem>Run automake and friends</guimenuitem>.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="build-menu-automake.png" format="PNG"/>
+</imageobject>
+<caption><para>Initiating a basic initialization run.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+&kdevelop; will now open the <guilabel>Messages</guilabel> tool view window at the bottom and list a series of messages produced by several make tools.
+If everything went right, the final line will read <computeroutput>*** Success ***</computeroutput>.</para>
+
+<para>If you scroll back to the top, you will find the command line, &kdevelop; issued to call up the tools beneath the surface:</para>
+
+<programlisting>
+cd '/home/devel/projects/hello' &amp;&amp; WANT_AUTOCONF_2_5="1" WANT_AUTOMAKE_1_6="1" gmake -f Makefile.cvs
+</programlisting>
+
+<para>This basically tells that &kdevelop; first switched to the root directory of our example project, advised the make system of the autoconf and automake tool revisions used for this initialization and then commanded the make tool (&GNU; <application>gmake</application> in this case) to process the <filename>Makefile.cvs</filename> make file.</para>
+
+<para>This make file was automatically set up when you created the Hello project.
+It contains all the commands necessary to properly initialize the project so the resulting application will run under &kde;.
+Especially this will create the <filename>configure</filename> file necessary to perform the next setup step.</para>
+</sect3>
+
+<sect3 id="gettingstarted-compile-basic-config">
+<title>Configure the project</title>
+
+<para>Configuring means to tailor the build process to the hardware and software peculiarities of your system. This is a basic requirement in build processes based on the &GNU; autotools chain as you probably will know.</para>
+
+<para>You can command a configure sequence once the basic automake initialization has been successfully finished because the necessary <filename>configure</filename> files will only be available after this run.
+This done, select the <menuchoice><guimenu>Build</guimenu> <guimenuitem>Run Configure</guimenuitem></menuchoice> menu entry to initiate a configuration sequence.</para>
+</sect3>
+
+<sect3 id="gettingstarted-compile-basic-build">
+<title>Build the Project</title>
+
+<para>(- to be written -)</para>
+</sect3>
+
+<sect3 id="gettingstarted-compile-basic-run">
+<title>Run the Application</title>
+
+<para>(- to be written -)</para>
+</sect3>
+</sect2>
+
+<sect2 id="gettingstarted-compile-setup">
+<title>Advanced Setup</title>
 
 <para>(- to be written -)</para>
 </sect2> 
