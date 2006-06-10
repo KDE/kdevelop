@@ -17,6 +17,7 @@ Name[pl]=Szablon programu Gtk--
 Name[pt]=Plataforma de aplicações em Gtk--
 Name[pt_BR]=Plataforma de aplicações em Gtk--
 Name[ru]=Gtk-- инфраструктура приложения
+Name[sk]=Gtk-- aplikačný framework
 Name[sl]=Ogrodje programa za Gtk--
 Name[sr]=Радни оквир Gtk-- програма
 Name[sr@Latn]=Radni okvir Gtk-- programa
@@ -42,6 +43,7 @@ Comment[pl]=Generuje prosty program Gtk--. Powinno być zainstalowane Gtkmm w we
 Comment[pt]=Gera uma aplicação simples em Gtk--. Deverá estar instalado o Gtkmm >= 1.2.8 e < 1.3.0. Para editar o ficheiro do Glade,, é necessário o glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[pt_BR]=Gera uma aplicação simples em Gtk--. Deverá estar instalado o Gtkmm >= 1.2.8 e < 1.3.0. Para editar o ficheiro do Glade,, é necessário o glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[ru]=Создание простого приложения Gtk. Требуется Gtkmm >= 1.2.8 и < 1.3.0. Для редактирования файла glade нужна соответствующая программа (http://home.wtal.de/petig/Gtk/).
+Comment[sk]=Vygeneruje jednoduchú Gtk-- aplikáciu. Vyžaduje nainštalovanéGtkmm >= 1.2.8 a < 1.3.0. Na editovanie glade súboru he potrebnýglade-- (http://home.wtal.de/petig/Gtk/).
 Comment[sr]=Прави једноставан Gtk-- програм. Gtkmm >= 1.2.8 и < 1.3.0 требало би да је инсталиран. Да бисте уређивали glade фајл, неопходан је glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[sr@Latn]=Pravi jednostavan Gtk-- program. Gtkmm >= 1.2.8 i < 1.3.0 trebalo bi da je instaliran. Da biste uređivali glade fajl, neophodan je glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[sv]=Skapar ett enkelt Gtk-- program. Gtkmm >= 1.2.8 och < 1.3.0 måste vara installerat. För att redigera glade-filer krävs glade-- (http://home.wtal.de/petig/Gtk/).
@@ -153,6 +155,7 @@ Comment[pl]=Szablon programu Gtk-- został utworzony w %{dest}
 Comment[pt]=Foi criada a plataforma de uma aplicação Gtk-- em %{dest}
 Comment[pt_BR]=Foi criada a plataforma de uma aplicação Gtk-- em %{dest}
 Comment[ru]=Инфраструктура Gtk создана в %{dest}
+Comment[sk]=Gtk-- aplikačný framework bol vytvorený v %{dest}
 Comment[sl]=Ogrodje za program v Gtk-- je bil ustvarjen v %{dest}
 Comment[sr]=Радни оквир Gtk-- програма направљен је у %{dest}
 Comment[sr@Latn]=Radni okvir Gtk-- programa napravljen je u %{dest}

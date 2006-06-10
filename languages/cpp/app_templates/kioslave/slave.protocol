@@ -23,6 +23,7 @@ Description[pl]=kioslave dla %{APPNAMELC}
 Description[pt]=Um 'kioslave' para %{APPNAMELC}
 Description[pt_BR]=Um kioslave para %{APPNAMELC}
 Description[ru]=Обработчик ввода-вывода для %{APPNAMELC}
+Description[sk]=KIO otrok pre %{APPNAMELC}
 Description[sl]=kioslave za %{APPNAMELC}
 Description[sr]=KIOSlave за %{APPNAMELC}
 Description[sr@Latn]=KIOSlave za %{APPNAMELC}

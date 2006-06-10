@@ -17,6 +17,7 @@ Name[pl]=GNOME-- Szablon programu
 Name[pt]=Plataforma de aplicações GNOME--
 Name[pt_BR]=Plataforma de aplicações GNOME--
 Name[ru]=GNOME-- инфраструктура приложения
+Name[sk]=GNOME-- aplikačný framework
 Name[sl]=Ogrodje programa za GNOME--
 Name[sr]=Радни оквир GNOME-- програма
 Name[sr@Latn]=Radni okvir GNOME-- programa
@@ -42,6 +43,7 @@ Comment[pl]=Generuje prosty program dla środowiska GNOME--. Gnomemm i Gtkmm w w
 Comment[pt]=Gera uma aplicação simples em GNOME--. Deverão estar instalados o Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0. Para editar o ficheiro do Glade,, é necessário o glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[pt_BR]=Gera uma aplicação simples em GNOME--. Deverão estar instalados o Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0. Para editar o ficheiro do Glade,, é necessário o glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[ru]=Создание простого приложения GNOME. Требуются Gnomemm, Gtkmm >= 1.2.8 и < 1.3.0. Для редактирования файла glade нужна соответствующая программа (http://home.wtal.de/petig/Gtk/).
+Comment[sk]=Vygeneruje jednoduchú GNOME-- aplikáciu. Vyžaduje nainštalovanéGnomemm, Gtkmm >= 1.2.8 a < 1.3.0. Na editovanie glade súboru he potrebnýglade-- (http://home.wtal.de/petig/Gtk/).
 Comment[sr]=Прави једноставан GNOME-- програм. Gnomemm, Gtkmm >= 1.2.8 и < 1.3.0 требало би да су инсталирани. Да бисте уређивали glade фајл, неопходан је glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[sr@Latn]=Pravi jednostavan GNOME-- program. Gnomemm, Gtkmm >= 1.2.8 i < 1.3.0 trebalo bi da su instalirani. Da biste uređivali glade fajl, neophodan je glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[sv]=Skapar ett enkelt GNOME-- program. Gnomemm, Gtkmm >= 1.2.8 och < 1.3.0 måste vara installerat. För att redigera glade-filer krävs glade-- (http://home.wtal.de/petig/Gtk/).
@@ -157,6 +159,7 @@ Comment[pl]=Szablon programu dla GNOME-- został utworzony w %{dest}
 Comment[pt]=Foi criada a plataforma de uma aplicação GNOME-- em %{dest}
 Comment[pt_BR]=Foi criada a plataforma de uma aplicação GNOME-- em %{dest}
 Comment[ru]=Инфраструктура GNOMEсоздана в %{dest}
+Comment[sk]=GNOME-- aplikačný framework bol vytvorený v %{dest}
 Comment[sl]=Ogrodje programa za GNOME-- je bilo ustvarjeno v %{dest}
 Comment[sr]=Радни оквир GNOME-- програма направљен је у %{dest}
 Comment[sr@Latn]=Radni okvir GNOME-- programa napravljen je u %{dest}

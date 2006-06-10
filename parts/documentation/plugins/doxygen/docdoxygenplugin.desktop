@@ -2,6 +2,7 @@
 Type=Service
 Name=DocDoxygenPlugin
 Name[da]=DocDoxygen-plugin
+Name[sk]=Doc Doxygen modul
 Name[sv]=Doxygen-dokumentationsinsticksmodul
 Name[ta]=DocDoxygen  சொருகு
 Exec=blubb
@@ -22,6 +23,7 @@ Comment[pl]=Wtyczka dokumentacji dla dokumentacji w formacie Doxygen
 Comment[pt]='Plugin' para documentação Doxygen
 Comment[pt_BR]=Plugin de documentação para documento Doxygen
 Comment[ru]=Модуль для просмотра документации Doxygen
+Comment[sk]=Dokumentačný modul pre Doxygen dokumentáciu
 Comment[sl]=Dokumentacijski vstavek za dokumentacijo Doxygen
 Comment[sr]=Документациони прикључак за Doxygen документацију
 Comment[sr@Latn]=Dokumentacioni priključak za Doxygen dokumentaciju
