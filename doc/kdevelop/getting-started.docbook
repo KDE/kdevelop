@@ -2,8 +2,7 @@
 <!--
 Please keep the formatting simple.
 Do not indent XML constructs.
-Use long, dynamic word wrapped sentence lines if you like but try to start each individual sentence on a line by its own within a para construct.
-This will keep diffs more meaningful and put less burden on cvs or svn with smaller text changes.
+Keep lines at 80 characters length maximum.
 -->
 
 <chapter id="getting-started">
@@ -17,39 +16,69 @@ This will keep diffs more meaningful and put less burden on cvs or svn with smal
 
 <title>Getting Started with &kdevelop; &mdash; a Guided Tour</title>
 
-<para>Now that you have got your new &kdevelop; &IDE;, how are you going to make good use of it?
-As this is a complex application, the learning curve may be somewhat steep, especially if you are not already used to this type of an Integrated Development Environment.</para>
+<para>Now that you have got your new &kdevelop; &IDE;, how are you going to make
+good use of it? As this is a complex application, the learning curve may be
+somewhat steep, especially if you are not already used to this type of an
+Integrated Development Environment.</para>
 
-<para>We will try to soften this learning curve a bit by stepping through the makings of a simple KDE C++ application.
-Thereby we will have a (cursory) look at:</para>
+<para>We will try to soften this learning curve a bit by stepping through the
+makings of a simple KDE C++ application. Thereby we will have a (cursory) look
+at:</para>
 
 <simplelist>
-<member><link linkend="gettingstarted-overview">A first look &mdash; the user interface elements of the &kdevelop; &IDE;.</link></member>
-<member><link linkend="gettingstarted-configure">Doing some initial configuration.</link></member>
-<member><link linkend="gettingstarted-new">How to create a new project.</link></member>
-<member><link linkend="gettingstarted-edit">Some tips about dealing with documents.</link></member>
-<member><link linkend="gettingstarted-compile">How to compile the application in this project.</link></member>
-<member><link linkend="gettingstarted-extend">How to add classes and other detail to your project.</link></member>
-<member><link linkend="gettingstarted-debug">What to do to debug the application.</link></member>
-<member><link linkend="gettingstarted-doc">Some basic tools to build program or user documentation.</link></member>
-<member><link linkend="gettingstarted-keys">Last but not least, keyboard shortcuts</link></member>
+<member><link linkend="gettingstarted-overview">A first look &mdash; the user
+interface elements of the &kdevelop; &IDE;.</link></member>
+<member><link linkend="gettingstarted-configure">Doing some initial
+configuration.</link></member>
+<member><link linkend="gettingstarted-new">How to create a new project.</link>
+</member>
+<member><link linkend="gettingstarted-edit">Some tips about dealing with
+documents.</link></member>
+<member><link linkend="gettingstarted-compile">How to compile the application in
+this project.</link></member>
+<member><link linkend="gettingstarted-extend">How to add classes and other
+detail to your project.</link></member>
+<member><link linkend="gettingstarted-debug">What to do to debug the
+application.</link></member>
+<member><link linkend="gettingstarted-doc">Some basic tools to build program or
+user documentation.</link></member>
+<member><link linkend="gettingstarted-keys">Last but not least, keyboard
+shortcuts</link></member>
 </simplelist>
 
 <para>Before we start, one important concept should be made clear.</para>
 
 <formalpara>
 <title>What to expect?</title>
-<para>As said, &kdevelop; is an <emphasis>Integrated Development Environment</emphasis>.
-That means in essence that &kdevelop; is no development tool by itself but rather a graphical front end to easily access a wide range of development tools, many of which actually would require complex keyboard commands run from a text console.</para>
+<para>As said, &kdevelop; is an <emphasis>Integrated Development
+Environment</emphasis>. That means in essence that &kdevelop; is no development
+tool by itself but rather a graphical front end to easily access a wide range of
+development tools, many of which actually would require complex keyboard
+commands run from a text console.</para>
 </formalpara>
 
-<para>While &kdevelop; eases many of those programming tasks, much of the complexity from this bundle of tools still remains which means that in order to fully understand the &kdevelop; &IDE; you will still need to comprehend these tools actually running beneath the surface.</para>
+<para>While &kdevelop; eases many of those programming tasks, much of the
+complexity from this bundle of tools still remains which means that in order to
+fully understand the &kdevelop; &IDE; you will still need to comprehend these
+tools actually running beneath the surface.</para>
 
-<para>Hence, we cannot teach you how to build software, but rather introduce you to some of the ways &kdevelop; was designed to ease such a software building process.
-If you want to learn more about what an Integrated Development Environment is meant for, you might want to have a look at the <link linkend="unixdev">Development on &UNIX;</link> historical overview and there especially at the <link linkend="unixdev-ide">Integrating Concepts and Tools</link> chapter.</para>
+<para>Hence, we cannot teach you how to build software, but rather introduce you
+to some of the ways &kdevelop; was designed to ease such a software building
+process. If you want to learn more about what an Integrated Development
+Environment is meant for, you might want to have a look at the <link
+linkend="unixdev">Development on &UNIX;</link> historical overview and there
+especially at the <link linkend="unixdev-ide">Integrating Concepts and
+Tools</link> chapter.</para>
 
 <note>
-<para>The following discussions apply to the default case, where &kdevelop; starts up in the <guilabel>Simplified IDEAl Window Mode</guilabel>. If you already did switch to another user interface mode some items may not be there as described or will behave slightly different. If in doubt which user interface mode your &kdevelop; currently uses, check with the <menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> <guimenuitem>User Interface</guimenuitem></menuchoice> dialog.</para>
+<para>The following discussions apply to the default case, where &kdevelop;
+starts up in the <guilabel>Simplified IDEAl Window Mode</guilabel>. If you
+already did switch to another user interface mode some items may not be there as
+described or will behave slightly different. If in doubt which user interface
+mode your &kdevelop; currently uses, check with the
+<menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure
+KDevelop...</guimenuitem> <guimenuitem>User Interface</guimenuitem></menuchoice>
+dialog.</para>
 </note>
 
 <sect1 id="gettingstarted-overview">
@@ -59,16 +88,21 @@ If you want to learn more about what an Integrated Development Environment is me
 You will find preliminary information about:</para>
 
 <simplelist>
-<member><link linkend="gettingstarted-overview-basic">What is there on the surface?</link></member>
-<member><link linkend="gettingstarted-overview-help">How to get some help.</link></member>
-<member><link linkend="gettingstarted-overview-menu">What is in the menus?</link></member>
-<member><link linkend="gettingstarted-overview-tools">What are those tool views for?</link></member>
+<member><link linkend="gettingstarted-overview-basic">What is there on the
+surface?</link></member>
+<member><link linkend="gettingstarted-overview-help">How to get some
+help.</link></member>
+<member><link linkend="gettingstarted-overview-menu">What is in the
+menus?</link></member>
+<member><link linkend="gettingstarted-overview-tools">What are those tool views
+for?</link></member>
 </simplelist>
 
 <sect2 id="gettingstarted-overview-basic">
 <title>On the Surface</title>
 
-<para>When you start &kdevelop; for the first time you will get a display similar to this one:</para>
+<para>When you start &kdevelop; for the first time you will get a display
+similar to this one:</para>
 
 <screenshot>
 <mediaobject>
@@ -77,65 +111,82 @@ You will find preliminary information about:</para>
 </imageobject>
 <caption>
 <para>The &kdevelop; initial layout</para>
-<para>(Actually the initial &kdevelop; window will be larger, but the elements you see are the same.)</para>
+<para>(Actually the initial &kdevelop; window will be larger, but the elements
+you see are the same.)</para>
 </caption>
 </mediaobject>
 </screenshot>
 
 <formalpara>
 <title>Workspace Area and Tool View Tabs</title>
-<para>In this initial case &kdevelop; uses the so-called <link linkend="uimodes-survey">IDEAl user interface mode</link>.
-A workspace area of maximum possible size is surrounded left, bottom, and right by a series of buttons which act similar to tabs on a tabbed display.
-If you click on one of those tabs, a so-called <emphasis>tool view window</emphasis> will open which allows you to work on a specific task.</para>
+<para>In this initial case &kdevelop; uses the so-called <link
+linkend="uimodes-survey">IDEAl user interface mode</link>. A workspace area of
+maximum possible size is surrounded left, bottom, and right by a series of
+buttons which act similar to tabs on a tabbed display. If you click on one of
+those tabs, a so-called <emphasis>tool view window</emphasis> will open which
+allows you to work on a specific task.</para>
 </formalpara>
 
 <formalpara>
 <title>Menu and Toolbars</title>
-<para>On top there is the usual menubar, followed by several rows of toolbars, some being initially empty.
-They will get populated once there is a project open for actual work.</para>
+<para>On top there is the usual menubar, followed by several rows of toolbars,
+some being initially empty. They will get populated once there is a project open
+for actual work.</para>
 </formalpara>
 
 <formalpara>
 <title>Status Bar</title>
-<para>Finally, there is a status bar on the bottom of the window where short informations on several tasks will be shown.</para>
+<para>Finally, there is a status bar on the bottom of the window where short
+informations on several tasks will be shown.</para>
 </formalpara>
 </sect2>
 
 <sect2 id="gettingstarted-overview-help">
 <title>How to Get Some Help</title>
 
-<para>Besides the <guimenu>Help</guimenu> menu which offers answers to specific questions, the status bar and two kinds of tool tips provide some quick information.</para>
+<para>Besides the <guimenu>Help</guimenu> menu which offers answers to specific
+questions, the status bar and two kinds of tool tips provide some quick
+information.</para>
 
 <formalpara>
 <title>What Does This Menu Entry Do?</title>
-<para>When you place the mouse cursor on a menu entry, there will usually some short information be displayed in the status bar.
-While in most cases this repeats just the name of the selection, in some cases it will provide additional information about the purpose of the menu command.</para>
+<para>When you place the mouse cursor on a menu entry, there will usually some
+short information be displayed in the status bar. While in most cases this
+repeats just the name of the selection, in some cases it will provide additional
+information about the purpose of the menu command.</para>
 </formalpara>
 
 <formalpara>
 <title>What Is the Name of This Item?</title>
-<para>On many items a short function name tool tip will pop up when you place the cursor on it for a few seconds.
-This is useful for quick orientation on toolbar or tool view tabs in IDEAl mode when the &IDE; has been set up to display icons only on these buttons.</para>
+<para>On many items a short function name tool tip will pop up when you place
+the cursor on it for a few seconds. This is useful for quick orientation on
+toolbar or tool view tabs in IDEAl mode when the &IDE; has been set up to
+display icons only on these buttons.</para>
 </formalpara>
 
 <formalpara>
 <title>What Does This Item Do?</title>
-<para>More information is available through expanded tool tip help for many items on the &IDE;.
-Select <menuchoice><guimenu>Help</guimenu> <guimenuitem>What&apos;s This?</guimenuitem></menuchoice> or press <keycombo><keycap>&Shift;</keycap><keycap>F1</keycap></keycombo>, then with the question mark cursor select the item you want to know more of.
-You can as well open any menu this way and click on a specific menu entry (active as well as greyed disabled ones) to see if more information is available.</para>
+<para>More information is available through expanded tool tip help for many
+items on the &IDE;. Select <menuchoice><guimenu>Help</guimenu>
+<guimenuitem>What&apos;s This?</guimenuitem></menuchoice> or press
+<keycombo><keycap>&Shift;</keycap><keycap>F1</keycap></keycombo>, then with the
+question mark cursor select the item you want to know more of. You can as well
+open any menu this way and click on a specific menu entry (active as well as
+greyed disabled ones) to see if more information is available.</para>
 </formalpara>
 </sect2>
 
 <sect2 id="gettingstarted-overview-menu">
 <title>What is in the menus?</title>
 
-<para>There are ten menus selectable on the menubar.
-Most of them get fully populated once a project is open for actual work while others require at least one document be open in an editor window.
-In short, they will allow the following action types.</para>
+<para>There are ten menus selectable on the menubar. Most of them get fully
+populated once a project is open for actual work while others require at least
+one document be open in an editor window. In short, they will allow the
+following action types.</para>
 
 <note>
-<para>This is only a preliminary overview.
-For a detailed menu description see the <link linkend="commands">Command Reference</link>.</para>
+<para>This is only a preliminary overview. For a detailed menu description see
+the <link linkend="commands">Command Reference</link>.</para>
 </note>
 
 <variablelist>
@@ -144,14 +195,15 @@ For a detailed menu description see the <link linkend="commands">Command Referen
 <listitem>
 <formalpara>
 <title>Usual Actions</title>
-<para>This is pretty standard.
-It allows to create, open, save, print, and close document files as well as quitting the &kdevelop; application as usual.</para>
+<para>This is pretty standard. It allows to create, open, save, print, and close
+document files as well as quitting the &kdevelop; application as usual.</para>
 </formalpara>
 
 <formalpara>
 <title>Revert All</title>
-<para>This allows to revert all recent, yet unsaved changes by reloading the file from the disk.
-This works on any file you edit, not only on those which are part of a project.</para>
+<para>This allows to revert all recent, yet unsaved changes by reloading the
+file from the disk. This works on any file you edit, not only on those which are
+part of a project.</para>
 </formalpara>
 </listitem>
 </varlistentry>
@@ -169,13 +221,19 @@ Furthermore it allows to select text blocks in various ways.</para>
 
 <formalpara>
 <title>Search and Replace</title>
-<para>There are two very powerful search facility available, <menuchoice><guimenu>Edit</guimenu> <guimenuitem>Find in Files...</guimenuitem></menuchoice>, and <menuchoice><guimenu>Edit</guimenu> <guimenuitem>Find-Select-Replace...</guimenuitem></menuchoice>.
-These allow, in addition to the usual search and replace actions limited to the the current document, to conduct global search or search-and-replace actions in one single turn.</para>
+<para>There are two very powerful search facility available,
+<menuchoice><guimenu>Edit</guimenu> <guimenuitem>Find in
+Files...</guimenuitem></menuchoice>, and <menuchoice><guimenu>Edit</guimenu>
+<guimenuitem>Find-Select-Replace...</guimenuitem></menuchoice>. These allow, in
+addition to the usual search and replace actions limited to the the current
+document, to conduct global search or search-and-replace actions in one single
+turn.</para>
 </formalpara>
 
 <formalpara>
 <title>Advanced Text Edit</title>
-<para>There are provisions to reformat the current document and to automatically complete partially typed texts in various ways.</para>
+<para>There are provisions to reformat the current document and to automatically
+complete partially typed texts in various ways.</para>
 </formalpara>
 </listitem>
 </varlistentry>
@@ -183,8 +241,9 @@ These allow, in addition to the usual search and replace actions limited to the 
 <varlistentry>
 <term><guimenu>View</guimenu></term>
 <listitem>
-<para>Like the <guimenu>Edit</guimenu> menu, this menu is useful only if there is an open project.
-I this case there will be the following actions available (amongst others):</para>
+<para>Like the <guimenu>Edit</guimenu> menu, this menu is useful only if there
+is an open project. I this case there will be the following actions available
+(amongst others):</para>
 
 <formalpara>
 <title>Navigation History</title>
@@ -193,13 +252,15 @@ I this case there will be the following actions available (amongst others):</par
 
 <formalpara>
 <title>Error Tracking</title>
-<para>Navigate to the source lines of the errors encountered in the most recent compilation/build process.</para>
+<para>Navigate to the source lines of the errors encountered in the most recent
+compilation/build process.</para>
 </formalpara>
 
 <formalpara>
 <title>Editor Related Actions</title>
-<para>Some entries in the <guimenu>View</guimenu> menu control the look and view of the editor you use.
-In case of the &kate; Part (Embedded Advanced Text Editor) there will be the following controls available:</para>
+<para>Some entries in the <guimenu>View</guimenu> menu control the look and view
+of the editor you use. In case of the &kate; Part (Embedded Advanced Text
+Editor) there will be the following controls available:</para>
 </formalpara>
 
 <itemizedlist>
@@ -207,10 +268,12 @@ In case of the &kate; Part (Embedded Advanced Text Editor) there will be the fol
 <para>Control the word wrap behavior in the document window.</para>
 </listitem>
 <listitem>
-<para>Show or hide several border displays in the document windows: line numbers, icons, and, additionally, bookmark marks in the scroll bar.</para>
+<para>Show or hide several border displays in the document windows: line
+numbers, icons, and, additionally, bookmark marks in the scroll bar.</para>
 </listitem>
 <listitem>
-<para>Control the display of folded (temporarily hidden) sections in a source text.</para>
+<para>Control the display of folded (temporarily hidden) sections in a source
+text.</para>
 </listitem>
 </itemizedlist>
 </listitem>
@@ -219,13 +282,16 @@ In case of the &kate; Part (Embedded Advanced Text Editor) there will be the fol
 <varlistentry>
 <term><guimenu>Project</guimenu></term>
 <listitem>
-<para>All work of &kdevelop; is based on <emphasis>projects</emphasis> which basically collect source files, build management files, and other information in one project directory.
-In this menu you control which project to use, which properties it has, and some other managing actions.
+<para>All work of &kdevelop; is based on <emphasis>projects</emphasis> which
+basically collect source files, build management files, and other information in
+one project directory. In this menu you control which project to use, which
+properties it has, and some other managing actions.
 In particular:</para>
 
 <formalpara>
 <title>Open a Project</title>
-<para>Allows to create new projects, open existing ones, and import projects from other environments.</para>
+<para>Allows to create new projects, open existing ones, and import projects
+from other environments.</para>
 </formalpara>
 
 <formalpara>
@@ -235,7 +301,8 @@ In particular:</para>
 
 <formalpara>
 <title>Classes Management</title>
-<para>Add new classes to the project and traverse the inheritance tree of a class.</para>
+<para>Add new classes to the project and traverse the inheritance tree of a
+class.</para>
 </formalpara>
 
 <formalpara>
@@ -248,30 +315,34 @@ In particular:</para>
 <varlistentry>
 <term><guimenu>Build</guimenu></term>
 <listitem>
-<para>This menu is all about compiling and documenting the project.
-Thus it is of use only when a project is actually open.
-In this case it provides the following actions:</para>
+<para>This menu is all about compiling and documenting the project. Thus it is
+of use only when a project is actually open. In this case it provides the
+following actions:</para>
 
 <formalpara>
 <title>Compile, Link, Execute</title>
-<para>Allows to compile and link the whole project or parts of it as well as run the application from within the &IDE;.</para>
+<para>Allows to compile and link the whole project or parts of it as well as run
+the application from within the &IDE;.</para>
 </formalpara>
 
 <formalpara>
 <title>Prepare Build Operations</title>
-<para>This actually depends on the make system you use for this project.
-In the case of automake projects it allows to run <filename>Makefile.cvs</filename> and <filename>configure</filename> on their own.
-There are also provisions to remove translated files from the project in various stages of intensity.</para>
+<para>This actually depends on the make system you use for this project. In the
+case of automake projects it allows to run <filename>Makefile.cvs</filename> and
+<filename>configure</filename> on their own. There are also provisions to remove
+translated files from the project in various stages of intensity.</para>
 </formalpara>
 
 <formalpara>
 <title>Install the Application</title>
-<para>Allows to install the application both in local directories as well as in system directories only accessible to the root user.</para>
+<para>Allows to install the application both in local directories as well as in
+system directories only accessible to the root user.</para>
 </formalpara>
 
 <formalpara>
 <title>API Documentation</title>
-<para>Build or remove a doxygen-based API documentation of the project as defined in the project options.</para>
+<para>Build or remove a doxygen-based API documentation of the project as
+defined in the project options.</para>
 </formalpara>
 </listitem>
 </varlistentry>
@@ -279,25 +350,32 @@ There are also provisions to remove translated files from the project in various
 <varlistentry>
 <term><guimenu>Debug</guimenu></term>
 <listitem>
-<para>Although this menu will be filled once a project is active, it of course is useful only if the actual project has been previously compiled with debugging information (this is basically set up in <menuchoice><guimenu>Project</guimenu> <guimenuitem>Project Options..</guimenuitem></menuchoice>).
-There are the following actions available in this case:</para>
+<para>Although this menu will be filled once a project is active, it of course
+is useful only if the actual project has been previously compiled with debugging
+information (this is basically set up in <menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Project Options..</guimenuitem></menuchoice>). There are the
+following actions available in this case:</para>
 
 <formalpara>
 <title>Usual Debugger Actions</title>
-<para>The first section in the <guimenu>Debug</guimenu> provides a graphical interface to the GDB &GNU; symbolic debugger.
-It allows to start and stop your application in the debugger and step through it in various ways.</para>
+<para>The first section in the <guimenu>Debug</guimenu> provides a graphical
+interface to the GDB &GNU; symbolic debugger. It allows to start and stop your
+application in the debugger and step through it in various ways.</para>
 </formalpara>
 
 <formalpara>
 <title>Breakpoints</title>
-<para>&kdevelop; provides several means to set breakpoints in your application sources.
-One is through the use of the <guimenuitem>Toggle Breakpoint</guimenuitem> menu entry.</para>
+<para>&kdevelop; provides several means to set breakpoints in your application
+sources. One is through the use of the <guimenuitem>Toggle
+Breakpoint</guimenuitem> menu entry.</para>
 </formalpara>
 
 <formalpara>
 <title>Advanced Debugging</title>
-<para>Other <guimenu>Debug</guimenu> menu entries allow more sophisticated program analysis.
-Use <keycombo><keycap>&Shift;</keycap><keycap>F1</keycap></keycombo> to get more information about their purpose.</para>
+<para>Other <guimenu>Debug</guimenu> menu entries allow more sophisticated
+program analysis. Use
+<keycombo><keycap>&Shift;</keycap><keycap>F1</keycap></keycombo> to get more
+information about their purpose.</para>
 </formalpara>
 </listitem>
 </varlistentry>
@@ -305,8 +383,9 @@ Use <keycombo><keycap>&Shift;</keycap><keycap>F1</keycap></keycombo> to get more
 <varlistentry>
 <term><guimenu>Scripts</guimenu></term>
 <listitem>
-<para>You can call various scripts from this menu to more easily accomplish tedious actions on the text in the currently selected editor window.
-The available actions depend on the selected script, however.
+<para>You can call various scripts from this menu to more easily accomplish
+tedious actions on the text in the currently selected editor window. The
+available actions depend on the selected script, however.
 </para>
 </listitem>
 </varlistentry>
@@ -314,11 +393,13 @@ The available actions depend on the selected script, however.
 <varlistentry>
 <term><guimenu>Window</guimenu></term>
 <listitem>
-<para>This is fairly standard.
-You may select any open document window as well as close one or more documents windows in here.
-You may even select a set of document windows to be closed in one single turn.</para>
-<para>Depending on the editor plugin you use may there be other menu items as well.
-So will the default Kate editor plugin additionally allow to split the editor window horizontally as well as vertically.</para>
+<para>This is fairly standard. You may select any open document window as well
+as close one or more documents windows in here. You may even select a set of
+document windows to be closed in one single turn.</para>
+
+<para>Depending on the editor plugin you use may there be other menu items as
+well. So will the default Kate editor plugin additionally allow to split the
+editor window horizontally as well as vertically.</para>
 </listitem>
 </varlistentry>
 
@@ -326,25 +407,35 @@ So will the default Kate editor plugin additionally allow to split the editor wi
 <term><guimenu>Tools</guimenu></term>
 <listitem>
 <para>&kdevelop; is highly customizable.
-You may select a favorite editor for your documents as well as provide external and plugged-in tools to extend the basic &IDE; capabilities.
-The <guimenu>Tools</guimenu> menu reflects most of this setup.</para>
+You may select a favorite editor for your documents as well as provide external
+and plugged-in tools to extend the basic &IDE; capabilities. The
+<guimenu>Tools</guimenu> menu reflects most of this setup.</para>
 
 <formalpara>
 <title>Advanced Editing</title>
-<para>The upper set of <guimenu>Tools</guimenu> menu entries will be provided by the editor plugin which is in use.
-You may select your favorite editor via <menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> <guilabel>Editor</guilabel></menuchoice>.
-Once an editable document file is selected, the upper part of the  <guimenu>Tools</guimenu> menu will provide advanced editing commands specific to the editor part in use.</para>
+<para>The upper set of <guimenu>Tools</guimenu> menu entries will be provided by
+the editor plugin which is in use. You may select your favorite editor via
+<menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure
+KDevelop...</guimenuitem> <guilabel>Editor</guilabel></menuchoice>. Once an
+editable document file is selected, the upper part of the 
+<guimenu>Tools</guimenu> menu will provide advanced editing commands specific to
+the editor part in use.</para>
 </formalpara>
 
 <formalpara>
 <title>Web Side Handling</title>
-<para>In case the active document window contains a HTML page (&eg; displayed from a <guilabel>Documentation</guilabel> selection), the <guimenu>Tools</guimenu> will show additional menu entries which provide various means to handle Web pages.</para>
+<para>In case the active document window contains a HTML page (&eg; displayed
+from a <guilabel>Documentation</guilabel> selection), the
+<guimenu>Tools</guimenu> will show additional menu entries which provide various
+means to handle Web pages.</para>
 </formalpara>
 
 <formalpara>
 <title>Other Tools</title>
-<para>Usually there will be a bunch of other entries according to the currently available tools.
-Use <keycombo><keycap>&Shift;</keycap><keycap>F1</keycap></keycombo> to get more information about their purposes.</para>
+<para>Usually there will be a bunch of other entries according to the currently
+available tools. Use <keycombo><keycap>&Shift;</keycap>
+<keycap>F1</keycap></keycombo> to get more information about their
+purposes.</para>
 </formalpara>
 </listitem>
 </varlistentry>
@@ -353,15 +444,18 @@ Use <keycombo><keycap>&Shift;</keycap><keycap>F1</keycap></keycombo> to get more
 <term><guimenu>Settings</guimenu></term>
 <listitem>
 <para>This menu allows you to show and hide menubar, toolbars and statusbar.
-Also, you can configure shortcuts, toolbars, notifications, the editor and &kdevelop;&apos;s general behavior.</para>
+Also, you can configure shortcuts, toolbars, notifications, the editor and
+&kdevelop;&apos;s general behavior.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenu>Help</guimenu></term>
 <listitem>
-<para>Here you can open this KDevelop manual, look up terms in various documentation files, open man pages (the traditional UNIX manual format) and info pages (the GNU manual format).
-Furthermore you can report bugs here or get some info about your current KDevelop version and its authors.</para>
+<para>Here you can open this KDevelop manual, look up terms in various
+documentation files, open man pages (the traditional UNIX manual format) and
+info pages (the GNU manual format). Furthermore you can report bugs here or get
+some info about your current KDevelop version and its authors.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -370,9 +464,11 @@ Furthermore you can report bugs here or get some info about your current KDevelo
 <sect2 id="gettingstarted-overview-tools">
 <title>What are those tool views for?</title>
 
-<para>In the IDEAl user interface mode the workspace will be surrounded by three areas of buttons, so-called <emphasis>tool view tabs</emphasis>.
-They provide access to <emphasis>tool view windows</emphasis> which accomplish main tasks during software development.
-Each of these three tool view areas serves a different main purpose.</para>
+<para>In the IDEAl user interface mode the workspace will be surrounded by three
+areas of buttons, so-called <emphasis>tool view tabs</emphasis>. They provide
+access to <emphasis>tool view windows</emphasis> which accomplish main tasks
+during software development. Each of these three tool view areas serves a
+different main purpose.</para>
 
 <itemizedlist>
 <listitem>
@@ -397,13 +493,15 @@ Each of these three tool view areas serves a different main purpose.</para>
 </listitem>
 </itemizedlist>
 
-<para>The number of tool view tabs shown will change once a project is open for actual work.
-More tools to work on that project will be available then.
-The actual number of tool views depends on the <link linkend="plugin-tools">Plugin Tools</link> being currently available to &kdevelop;.
-You will find more on this topic in the <link linkend="setup">Configuring KDevelop</link> chapter.</para>
+<para>The number of tool view tabs shown will change once a project is open for
+actual work. More tools to work on that project will be available then. The
+actual number of tool views depends on the <link linkend="plugin-tools">Plugin
+Tools</link> being currently available to &kdevelop;. You will find more on this
+topic in the <link linkend="setup">Configuring KDevelop</link> chapter.</para>
 
-<para>Currently, with no project open and the default number of plugin tools loaded, you will find the following tool views.
-Clicking on a tab will open respectively close its tool view window.</para>
+<para>Currently, with no project open and the default number of plugin tools
+loaded, you will find the following tool views. Clicking on a tab will open
+respectively close its tool view window.</para>
 
 <variablelist>
 <varlistentry>
@@ -411,19 +509,21 @@ Clicking on a tab will open respectively close its tool view window.</para>
 <listitem>
 <formalpara>
 <title>File Selector</title>
-<para>Provides a panel to navigate the directory tree and select files for work just like you do in the &konqueror;.
-Clicking a file will open it in an appropriate editor window in the workspace area.
-A right click in the file selector area will pop up a navigation and file manipulation menu.</para>
+<para>Provides a panel to navigate the directory tree and select files for work
+just like you do in the &konqueror;. Clicking a file will open it in an
+appropriate editor window in the workspace area. A right click in the file
+selector area will pop up a navigation and file manipulation menu.</para>
 </formalpara>
 
 <formalpara>
 <title>File List</title>
-<para>Lists the currently open files.
-Clicking on a file will usually select its editor window in the workspace area.
-Use this to quickly navigate in a large number of open files.
-Furthermore this view provides a means to organize the open files into different <emphasis>sessions</emphasis>.
-This is particularly useful in very large and complex projects to help the developer concentrate on different tasks.
-Right clicking a file will pop up a file manipulation menu.</para>
+<para>Lists the currently open files. Clicking on a file will usually select its
+editor window in the workspace area. Use this to quickly navigate in a large
+number of open files. Furthermore this view provides a means to organize the
+open files into different <emphasis>sessions</emphasis>. This is particularly
+useful in very large and complex projects to help the developer concentrate on
+different tasks. Right clicking a file will pop up a file manipulation
+menu.</para>
 </formalpara>
 </listitem>
 </varlistentry>
@@ -433,39 +533,54 @@ Right clicking a file will pop up a file manipulation menu.</para>
 <listitem>
 <formalpara>
 <title>Application</title>
-<para>Displays the output from an application started from within &kdevelop;.</para>
+<para>Displays the output from an application started from within
+&kdevelop;.</para>
 </formalpara>
 
 <formalpara>
 <title>Diff</title>
 <para>Used to display patch file contents.
-Displays the output from the difference viewer tool started from the <menuchoice><guimenu>Tools</guimenu> <guimenuitem>Difference Viewer...</guimenuitem></menuchoice> menu.</para>
+Displays the output from the difference viewer tool started from the
+<menuchoice><guimenu>Tools</guimenu> <guimenuitem>Difference
+Viewer...</guimenuitem></menuchoice> menu.</para>
 </formalpara>
 
 <formalpara>
 <title>Messages</title>
-<para>Displays messages produced by the build tools called from within &kdevelop;, usually from the <guimenu>Build</guimenu> menu.</para>
+<para>Displays messages produced by the build tools called from within
+&kdevelop;, usually from the <guimenu>Build</guimenu> menu.</para>
 </formalpara>
 
 <formalpara>
 <title>Find in Files</title>
-<para>Displays the list of items found by the global search operation started from the <menuchoice><guimenu>Edit</guimenu> <guimenuitem>Find in Files...</guimenuitem></menuchoice> menu.
-Clicking on a line here will automatically open that file at the specified position in an editor widow.</para>
+<para>Displays the list of items found by the global search operation started
+from the <menuchoice><guimenu>Edit</guimenu> <guimenuitem>Find in
+Files...</guimenuitem></menuchoice> menu. Clicking on a line here will
+automatically open that file at the specified position in an editor
+window.</para>
 </formalpara>
 
 <formalpara>
 <title>Replace</title>
-<para>Lists the results of the global search-and-replace operation issued from the <menuchoice><guimenu>Edit</guimenu> <guimenuitem>Find-Select-Replace...</guimenuitem></menuchoice> menu.
-In this view you can decide on every found item whether you really want it be replaced or not.</para>
+<para>Lists the results of the global search-and-replace operation issued from
+the <menuchoice><guimenu>Edit</guimenu>
+<guimenuitem>Find-Select-Replace...</guimenuitem></menuchoice> menu. In this
+view you can decide on every found item whether you really want it be replaced
+or not.</para>
 </formalpara>
 <note>
-<para>This global search-and-replace facility is actually available only after a project has been loaded into &kdevelop;.
-Otherwise the global replace tool in the <menuchoice><guimenu>Edit</guimenu> <guimenuitem>Find-Select-Replace...</guimenuitem> </menuchoice> menu will in fact be be disabled.</para>
+<para>This global search-and-replace facility is actually available only after a
+project has been loaded into &kdevelop;. Otherwise the global replace tool in
+the <menuchoice><guimenu>Edit</guimenu>
+<guimenuitem>Find-Select-Replace...</guimenuitem> </menuchoice> menu will in
+fact be be disabled.</para>
 </note>
 
 <formalpara>
 <title>Konsole</title>
-<para>Opens a &kde; <application>Konsole</application> like terminal emulator window where you can use keyboard commands in a traditional &UNIX; command line interface.</para>
+<para>Opens a &kde; <application>Konsole</application> like terminal emulator
+window where you can use keyboard commands in a traditional &UNIX; command line
+interface.</para>
 </formalpara>
 </listitem>
 </varlistentry>
@@ -475,19 +590,27 @@ Otherwise the global replace tool in the <menuchoice><guimenu>Edit</guimenu> <gu
 <listitem>
 <formalpara>
 <title>Documentation</title>
-<para>&kdevelop; provides access to a whole bunch of documentation through this tool.
-You may here access document files, usually online from remote locations, in a structured way.
-And there are several ways available to directly access valuable information from &kde; or &Qt; manuals.</para>
+<para>&kdevelop; provides access to a whole bunch of documentation through this
+tool. You may here access document files, usually online from remote locations,
+in a structured way. And there are several ways available to directly access
+valuable information from &kde; or &Qt; manuals.</para>
 </formalpara>
 
-<para>See the <link linkend="documentation">Documentation</link> and <link linkend="setup-docu">Configuring the Documentation</link> chapters for more details.</para>
+<para>See the <link linkend="documentation">Documentation</link> and <link
+linkend="setup-docu">Configuring the Documentation</link> chapters for more
+details.</para>
 
 <formalpara>
 <title>Code Snippets</title>
-<para>This tool allows you to permanently store selected texts for later use in other editing cycles.
-It is a very flexible tool, as any text snipped stored here may contain a set of variables which will get their actual values at the time when you insert such a snippet in some other text.</para>
+<para>This tool allows you to permanently store selected texts for later use in
+other editing cycles. It is a very flexible tool, as any text snipped stored
+here may contain a set of variables which will get their actual values at the
+time when you insert such a snippet in some other text.</para>
 </formalpara>
-<para>More information on this is available in the <link linkend="editing-snippets">Code Snippets</link> and <link linkend="setup-snippets">Setting Up the Code Snippets Tool</link> chapters.</para>
+<para>More information on this is available in the <link
+linkend="editing-snippets">Code Snippets</link> and <link
+linkend="setup-snippets">Setting Up the Code Snippets Tool</link>
+chapters.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -497,18 +620,24 @@ It is a very flexible tool, as any text snipped stored here may contain a set of
 <sect1 id="gettingstarted-configure">
 <title>A Bit of Configuration</title>
 
-<para>Before we actually start a first example project, we should tailor the &kdevelop; behavior to our needs.
-Although most of the default settings will be appropriate for now, there are a few places which better should be adjusted.</para>
+<para>Before we actually start a first example project, we should tailor the
+&kdevelop; behavior to our needs. Although most of the default settings will be
+appropriate for now, there are a few places which better should be
+adjusted.</para>
 
 <note>
-<para>If you want to know more about &kdevelop; configuration, have a look at the <link linkend="setup">Configuring KDevelop</link> chapter.</para>
+<para>If you want to know more about &kdevelop; configuration, have a look at
+the <link linkend="setup">Configuring KDevelop</link> chapter.</para>
 </note>
 
 <sect2 id="gettingstarted-configure-general">
 <title>Some General Settings</title>
 
-<para>To configure &kdevelop;, click the <menuchoice><guimenu>Settings</guimenu></menuchoice> menu and select <menuchoice><guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>.
-The <guilabel>Configure KDevelop</guilabel> dialog will pop up, showing the following <guilabel>General</guilabel> settings page to the right.</para>
+<para>To configure &kdevelop;, click the
+<menuchoice><guimenu>Settings</guimenu></menuchoice> menu and select
+<menuchoice><guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>. The
+<guilabel>Configure KDevelop</guilabel> dialog will pop up, showing the
+following <guilabel>General</guilabel> settings page to the right.</para>
 
 <screenshot>
 <mediaobject>
@@ -526,53 +655,70 @@ But you will probably want to change two of those settings.</para>
 
 <formalpara>
 <title>Default projects directory</title>
-<para>At first start of &kdevelop; this will most likely be preset to your home directory.
-Most people however prefer a dedicated projects directory for software development.
-Change the text box to your preferred parent development directory.
-You may select it from the directory tree if you press the <guilabel>Open file dialog</guilabel> button labeled with a folder icon to the right of it.</para>
+<para>At first start of &kdevelop; this will most likely be preset to your home
+directory. Most people however prefer a dedicated projects directory for
+software development. Change the text box to your preferred parent development
+directory. You may select it from the directory tree if you press the
+<guilabel>Open file dialog</guilabel> button labeled with a folder icon to the
+right of it.</para>
 </formalpara>
 
-<para>In our examples we will assume a (somewhat artificial) user called <filename class="directory">devel</filename>.
-Thus always replace this <quote>devel</quote> by your user name.
-Our devel user will utilize the <filename class="directory">/home/devel/projects</filename> parent directory for actual development.
-Again, replace <filename class="directory">projects</filename> with your development directory name.
+<para>In our examples we will assume a (somewhat artificial) user called
+<filename class="directory">devel</filename>.
+Thus always replace this <quote>devel</quote> by your user name. Our devel user
+will utilize the <filename class="directory">/home/devel/projects</filename>
+parent directory for actual development. Again, replace <filename
+class="directory">projects</filename> with your development directory name.
 </para>
 
-<para>&kdevelop; will by default set up an own subdirectory below this parent for every new project you create.
-So will &eg; all files of a project named <quote>Hello</quote> in our case be located in the <filename class="directory">/home/devel/projects/hello</filename> directory.</para>
+<para>&kdevelop; will by default set up an own subdirectory below this parent
+for every new project you create. So will &eg; all files of a project named
+<quote>Hello</quote> in our case be located in the <filename
+class="directory">/home/devel/projects/hello</filename> directory.</para>
 
-<para>You may of course temporarily override these directory settings if you need to.
-See the <link linkend="applicationwizard">&appwizard;</link> chapter for more info on this.</para>
+<para>You may of course temporarily override these directory settings if you
+need to. See the <link linkend="applicationwizard">&appwizard;</link> chapter
+for more info on this.</para>
 
 <formalpara>
 <title>Compiler output</title>
-<para>Whenever &kdevelop; compiles some source, it will display the messages of the <application>make</application>, etc.
-build tools in the <guilabel>Messages</guilabel> window in the lower part of the workspace area.
-Usually these messages will be overwhelmingly wordy.
-To keep a better overview of what happens, &kdevelop; has some means of shortening those messages built in.</para>
+<para>Whenever &kdevelop; compiles some source, it will display the messages of
+the <application>make</application>, etc. build tools in the
+<guilabel>Messages</guilabel> window in the lower part of the workspace area.
+Usually these messages will be overwhelmingly wordy. To keep a better overview
+of what happens, &kdevelop; has some means of shortening those messages built
+in.</para>
 </formalpara>
 
-<para>Depending on the &kdevelop; version you use, the <guilabel>Compiler output</guilabel> selection may be preset to <quote>Long</quote>, which will cause all message contents be fully shown.
-You may probably want to change this to the far more convenient <quote>Very Short</quote> setting.
-Just select this from the drop down box.</para>
+<para>Depending on the &kdevelop; version you use, the <guilabel>Compiler
+output</guilabel> selection may be preset to <quote>Long</quote>, which will
+cause all message contents be fully shown. You may probably want to change this
+to the far more convenient <quote>Very Short</quote> setting. Just select this
+from the drop down box.</para>
 
 <caution>
-<para>Be aware that only <emphasis>most basic</emphasis> information will be shown in the <guilabel>Messages</guilabel> window this way.
-In case of errors during &eg; a build run you will most likely want to see more, if not all, of the message texts.
-They are not lost, however.
-Just right click into the <guilabel>Messages</guilabel> window and select &eg; <quote>Full Compiler Output</quote> from the popup menu.</para>
+<para>Be aware that only <emphasis>most basic</emphasis> information will be
+shown in the <guilabel>Messages</guilabel> window this way. In case of errors
+during &eg; a build run you will most likely want to see more, if not all, of
+the message texts. They are not lost, however. Just right click into the
+<guilabel>Messages</guilabel> window and select &eg; <quote>Full Compiler
+Output</quote> from the popup menu.</para>
 </caution>
 </sect2>
 
 <sect2 id="gettingstarted-configure-search">
 <title>Initializing Documentation Search Indexes</title>
 
-<para>There is another, not so obvious, item which preferably should be initialized before you start actual development work.
-This is because you will want to perform documentation search regularly during development. &kdevelop; requires some search indexes be created before such search operations can be performed.
-So let&apos;s initialize them before we attempt our first steps toward actual &kdevelop; work.</para>
+<para>There is another, not so obvious, item which preferably should be
+initialized before you start actual development work. This is because you will
+want to perform documentation search regularly during development. &kdevelop;
+requires some search indexes be created before such search operations can be
+performed. So let&apos;s initialize them before we attempt our first steps
+toward actual &kdevelop; work.</para>
 
-<para>Open the <guilabel>Documentation</guilabel> tool view at the right side of the &kdevelop; main window.
-There open the <guilabel>Search</guilabel> dialog page.</para>
+<para>Open the <guilabel>Documentation</guilabel> tool view at the right side of
+the &kdevelop; main window. There open the <guilabel>Search</guilabel> dialog
+page.</para>
 
 <screenshot>
 <mediaobject>
@@ -583,38 +729,48 @@ There open the <guilabel>Search</guilabel> dialog page.</para>
 </mediaobject>
 </screenshot>
 
-<para>Now press the <guibutton>Update Config</guibutton> button to make sure the basic search tools are properly set up.
-A dialog should pop up, telling <quote>Configuration file updated</quote>.
-Click <guibutton>OK</guibutton> to make it disappear.</para>
+<para>Now press the <guibutton>Update Config</guibutton> button to make sure the
+basic search tools are properly set up. A dialog should pop up, telling
+<quote>Configuration file updated</quote>. Click <guibutton>OK</guibutton> to
+make it disappear.</para>
 
-<para>This done, &kdevelop; will be ready to parse the documentation it knows of and build some useful search indexes from it.
-Press the <guibutton>Update Index</guibutton> button to the right.
-Now the <guilabel>Generating Search Index</guilabel> dialog will pop up showing the progress of the index build operations.</para>
+<para>This done, &kdevelop; will be ready to parse the documentation it knows of
+and build some useful search indexes from it. Press the <guibutton>Update
+Index</guibutton> button to the right. Now the <guilabel>Generating Search
+Index</guilabel> dialog will pop up showing the progress of the index build
+operations.</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="configure-docu-indexgen.png" format="PNG"/>
 </imageobject>
-<caption><para>&kdevelop; is generating documentation search indexes.</para></caption>
+<caption><para>&kdevelop; is generating documentation search
+indexes.</para></caption>
 </mediaobject>
 </screenshot>
 
-<para>This will take some time depending on the size of documentation and the speed of your machine.
-But finally the <guibutton>Cancel</guibutton> will make place to <guibutton>OK</guibutton>.
-Just press this button to proceed.</para>
+<para>This will take some time depending on the size of documentation and the
+speed of your machine. But finally the <guibutton>Cancel</guibutton> will make
+place to <guibutton>OK</guibutton>. Just press this button to proceed.</para>
 
 <note>
 <itemizedlist>
 <listitem>
-<para>This usually should work out of the box.
-In some cases the <application>htdig</application> application &kdevelop; uses to perform its full text searches might not be properly set up.
-Refer to the <link linkend="setup-docu-textsearch">Setting Up Text Search Indexes</link> chapter for more help in this case.</para>
+<para>This usually should work out of the box. In some cases the
+<application>htdig</application> application &kdevelop; uses to perform its full
+text searches might not be properly set up. Refer to the <link
+linkend="setup-docu-textsearch">Setting Up Text Search Indexes</link> chapter
+for more help in this case.</para>
 </listitem>
 <listitem>
-<para>To be able to look up &kde; and &Qt; specific API documentation, it is mandatory that the <emphasis>KDELibs Apidocs</emphasis> were present when &kdevelop; was installed.
-If you experience problems building the indexes or perform the  <link linkend="gettingstarted-edit-defs">identifier lookup examples</link> later in this chapter, make sure that this documentation exists and is accessible to &kdevelop;.
-See <link linkend="kdevelop-install">Installing KDevelop</link> fore more detail.</para>
+<para>To be able to look up &kde; and &Qt; specific API documentation, it is
+mandatory that the <emphasis>KDELibs Apidocs</emphasis> were present when
+&kdevelop; was installed. If you experience problems building the indexes or
+perform the  <link linkend="gettingstarted-edit-defs">identifier lookup
+examples</link> later in this chapter, make sure that this documentation exists
+and is accessible to &kdevelop;. See <link linkend="kdevelop-install">Installing
+KDevelop</link> fore more detail.</para>
 </listitem>
 </itemizedlist>
 </note>
@@ -625,21 +781,28 @@ See <link linkend="kdevelop-install">Installing KDevelop</link> fore more detail
 <sect1 id="gettingstarted-new">
 <title>Starting a New Project</title>
 
-<para>Almost any application will consist of dozens, hundreds, even thousands of files which need kept structured and maintainable.
-To accomplish this, &kdevelop; organizes software development tasks in <emphasis>projects</emphasis>.
-Thus the first practical step to develop software in &kdevelop; usually is to create a new project.</para>
+<para>Almost any application will consist of dozens, hundreds, even thousands of
+files which need kept structured and maintainable. To accomplish this,
+&kdevelop; organizes software development tasks in
+<emphasis>projects</emphasis>. Thus the first practical step to develop software
+in &kdevelop; usually is to create a new project.</para>
 
-<para>Fortunately this is fairly easily accomplished.
-&kdevelop; provides the so-called &appwizard; tool for this.
-(See the <link linkend="applicationwizard">Getting Started &mdash; the &appwizard;</link> chapter for more.)</para>
+<para>Fortunately this is fairly easily accomplished. &kdevelop; provides the
+so-called &appwizard; tool for this. (See the <link
+linkend="applicationwizard">Getting Started &mdash; the &appwizard;</link>
+chapter for more.)</para>
 
-<para>We will now start a simple &kde; application project to illustrate how easily this is accomplished and which files and tools &kdevelop; will have provided.
-Thereby we will have a short look at:</para>
+<para>We will now start a simple &kde; application project to illustrate how
+easily this is accomplished and which files and tools &kdevelop; will have
+provided. Thereby we will have a short look at:</para>
 
 <simplelist>
-<member><link linkend="gettingstarted-new-setup">How to create a new project with the help of the &appwizard;.</link></member>
-<member><link linkend="gettingstarted-new-files">Which files the &appwizard; initially did set up.</link></member>
-<member><link linkend="gettingstarted-new-toolviews">What about the additional tool view shown with the project?</link></member>
+<member><link linkend="gettingstarted-new-setup">How to create a new project
+with the help of the &appwizard;.</link></member>
+<member><link linkend="gettingstarted-new-files">Which files the &appwizard;
+initially did set up.</link></member>
+<member><link linkend="gettingstarted-new-toolviews">What about the additional
+tool view shown with the project?</link></member>
 </simplelist>
 
 <sect2 id="gettingstarted-new-setup">
@@ -650,27 +813,35 @@ Just follow these steps.</para>
 
 <procedure>
 <step>
-<para>To start the &appwizard; click the <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project...</guimenuitem></menuchoice> menu.</para>
+<para>To start the &appwizard; click the <menuchoice><guimenu>Project</guimenu>
+<guimenuitem>New Project...</guimenuitem></menuchoice> menu.</para>
 </step>
 
 <step>
-<para>The <guilabel>Create New Project</guilabel> dialog will pop up.
-In the upper left <guilabel>All Projects</guilabel> window there will be a number of programming languages listed.</para>
+<para>The <guilabel>Create New Project</guilabel> dialog will pop up. In the
+upper left <guilabel>All Projects</guilabel> window there will be a number of
+programming languages listed.</para>
 
 <substeps>
 <step>
-<para>We want to build a &kde; C++ application as usual, thus click on the <guilabel>+</guilabel> label left of the <guilabel>C++</guilabel> label to open this branch.</para>
+<para>We want to build a &kde; C++ application as usual, thus click on the
+<guilabel>+</guilabel> label left of the <guilabel>C++</guilabel> label to open
+this branch.</para>
 </step>
 
 <step>
-<para>A series of possible application targets will be displayed.
-We will build a &kde; application, thus open the next sub-branch via the <guilabel>+</guilabel> label next to <guilabel>KDE</guilabel></para>
+<para>A series of possible application targets will be displayed. We will build
+a &kde; application, thus open the next sub-branch via the
+<guilabel>+</guilabel> label next to <guilabel>KDE</guilabel></para>
 </step>
 
 <step>
-<para>Now you will be offered a series of possible <emphasis>project templates</emphasis>.
-Navigate down to the end of this branch and click <guilabel>Simple KDE Application</guilabel>.</para>
-<para>A preview and short description of the application this project template will produce pops up in the two windows to the right.</para>
+<para>Now you will be offered a series of possible <emphasis>project
+templates</emphasis>. Navigate down to the end of this branch and click
+<guilabel>Simple KDE Application</guilabel>.</para>
+
+<para>A preview and short description of the application this project template
+will produce pops up in the two windows to the right.</para>
 
 <screenshot>
 <mediaobject>
@@ -684,31 +855,43 @@ Navigate down to the end of this branch and click <guilabel>Simple KDE Applicati
 </step>
 
 <step>
-<para>Our application will need a name.
-Find the <guilabel>Properties</guilabel> area on the dialog bottom and enter a suitable name into the <guilabel>Application name</guilabel> input field.</para>
-<para>We use <quote>Hello</quote> in our example, but you can use whatever you like, provided the name consists of letters, number digits, and underlines only.
+<para>Our application will need a name. Find the <guilabel>Properties</guilabel>
+area on the dialog bottom and enter a suitable name into the
+<guilabel>Application name</guilabel> input field.</para>
+
+<para>We use <quote>Hello</quote> in our example, but you can use whatever you
+like, provided the name consists of letters, number digits, and underlines only.
 You will find that the &appwizard; rejects any other character.</para>
 </step>
 
 <step>
-<para>Make sure the <guilabel>Location</guilabel> text box below the input field shows the name of your top project directory as set up in the <link linkend="gettingstarted-configure">A Bit of Configuration</link> chapter above.
-If it does not do so, enter a suitable directory name or select one from the directory list provided by the folder labeled button to the right.</para>
-<para>If all went well, the <guilabel>Final location</guilabel> line at the bottom will show the directory path your new project will use.
-In case there was an <quote>(invalid)</quote> suffix appended, try another name for your project and/or make sure the top project directory in the <guilabel>Location</guilabel> text box really exists and is writable.</para>
+<para>Make sure the <guilabel>Location</guilabel> text box below the input field
+shows the name of your top project directory as set up in the <link
+linkend="gettingstarted-configure">A Bit of Configuration</link> chapter above.
+If it does not do so, enter a suitable directory name or select one from the
+directory list provided by the folder labeled button to the right.</para>
+
+<para>If all went well, the <guilabel>Final location</guilabel> line at the
+bottom will show the directory path your new project will use. In case there was
+an <quote>(invalid)</quote> suffix appended, try another name for your project
+and/or make sure the top project directory in the <guilabel>Location</guilabel>
+text box really exists and is writable.</para>
 </step>
 
 <step>
-<para>Once everything is right, the <guibutton>Next</guibutton> button in the bottom row of the dialog will be enabled.
-Click it to proceed.</para>
+<para>Once everything is right, the <guibutton>Next</guibutton> button in the
+bottom row of the dialog will be enabled. Click it to proceed.</para>
 </step>
 </substeps>
 </step>
 
 <step>
-<para>This will lead you to the <guilabel>Project Options</guilabel> dialog page.
-Make sure the <guilabel>Author</guilabel> and <guilabel>Email</guilabel> text boxes are properly filled in.
-Usually they will default to your general &kde; user settings as given in the <guilabel>Password &amp; User Account</guilabel> dialog of the &kde; Control Center.
-If not, change them to some settings you prefer for your application.</para>
+<para>This will lead you to the <guilabel>Project Options</guilabel> dialog
+page. Make sure the <guilabel>Author</guilabel> and <guilabel>Email</guilabel>
+text boxes are properly filled in. Usually they will default to your general
+&kde; user settings as given in the <guilabel>Password &amp; User
+Account</guilabel> dialog of the &kde; Control Center. If not, change them to
+some settings you prefer for your application.</para>
 
 <screenshot id="gettingstarted-new-setup-options">
 <mediaobject>
@@ -722,8 +905,8 @@ If not, change them to some settings you prefer for your application.</para>
 </screenshot>
 
 <note>
-<para>You must provide an <guilabel>Author</guilabel> name at least.
-This is mandatory for the application files setup.</para>
+<para>You must provide an <guilabel>Author</guilabel> name at least. This is
+mandatory for the application files setup.</para>
 </note>
 
 <para>If all is right, the <guibutton>Next</guibutton> button will be enabled.
@@ -731,23 +914,32 @@ Click it to further proceed.</para>
 </step>
 
 <step>
-<para>The following <guilabel>Version Control System</guilabel>, <guilabel>Template for .h Files</guilabel>, and <guilabel>Template for .cpp Files</guilabel> dialog pages are not of interest for now.
-Skip them by clicking the <guibutton>Next</guibutton> buttons and, finally, the <guibutton>Finish</guibutton> button.</para>
+<para>The following <guilabel>Version Control System</guilabel>,
+<guilabel>Template for .h Files</guilabel>, and <guilabel>Template for .cpp
+Files</guilabel> dialog pages are not of interest for now. Skip them by clicking
+the <guibutton>Next</guibutton> buttons and, finally, the
+<guibutton>Finish</guibutton> button.</para>
 </step>
 </procedure>
 
 <para>That was all!
-The &appwizard; will take over and construct a series of initial files in the <guilabel>Final location</guilabel> directory you provided in step 2c above.</para>
+The &appwizard; will take over and construct a series of initial files in the
+<guilabel>Final location</guilabel> directory you provided in step 2c
+above.</para>
 
-<para>Once this file creation phase is finished, &kdevelop; will open an editor window for the <emphasis>application main window</emphasis> implementation file (which is <filename>hello.cpp</filename> in our example), so you can readily proceed.</para>
+<para>Once this file creation phase is finished, &kdevelop; will open an editor
+window for the <emphasis>application main window</emphasis> implementation file
+(which is <filename>hello.cpp</filename> in our example), so you can readily
+proceed.</para>
 </sect2>
 
 <sect2 id="gettingstarted-new-files">
 <title>Initial Project Files</title>
 
-<para>Even if our sample Hello project is fairly simple, the &appwizard; did create a whole bunch of source and project management files.
-You will most easily list them if you open the <guilabel>File Tree</guilabel> tool view on the bottom left.
-This will open a file list similar to the one below.</para>
+<para>Even if our sample Hello project is fairly simple, the &appwizard; did
+create a whole bunch of source and project management files. You will most
+easily list them if you open the <guilabel>File Tree</guilabel> tool view on the
+bottom left. This will open a file list similar to the one below.</para>
 
 <screenshot>
 <mediaobject>
@@ -760,23 +952,33 @@ This will open a file list similar to the one below.</para>
 </mediaobject>
 </screenshot>
 
-<para>To demonstrate the main bunch of files the &appwizard; produced, we did open most of the directory branches in the left-hand <guilabel>File Tree</guilabel> tool view window.
-Just click the branch names in the tree to see for yourself.</para>
+<para>To demonstrate the main bunch of files the &appwizard; produced, we did
+open most of the directory branches in the left-hand <guilabel>File
+Tree</guilabel> tool view window. Just click the branch names in the tree to see
+for yourself.</para>
 
-<para>Additionally, just for demonstration, we did as well open most of the branches the <guilabel>Automake Manager</guilabel> tool view window to the right where some of the project sources are listed, too.</para>
+<para>Additionally, just for demonstration, we did as well open most of the
+branches the <guilabel>Automake Manager</guilabel> tool view window to the right
+where some of the project sources are listed, too.</para>
 
 <sect3 id="gettingstarted-new-files-copyright">
 <title>Copyright Issues</title>
 
-<para>All &GNU; conformant applications must be copyrighted.
-There are two levels which require copyright notices, <emphasis>individual source files</emphasis> and <emphasis>run-time application level</emphasis>.
-The &appwizard; did already put appropriate copyright and licensing information into the project files.</para>
+<para>All &GNU; conformant applications must be copyrighted. There are two
+levels which require copyright notices, <emphasis>individual source
+files</emphasis> and <emphasis>run-time application level</emphasis>. The
+&appwizard; did already put appropriate copyright and licensing information into
+the project files.</para>
 
 <formalpara>
 <title>Source File Level Copyrights</title>
-<para>Do you remember the <link linkend="gettingstarted-new-setup-options"> <guilabel>Project Options</guilabel></link> dialog page in the new project setup? You had to provide your (the developer&apos;s) name and optionally an email address there.
-Now refer to the top of the <guilabel>hello.cpp</guilabel> editor window currently displayed in the workspace area.
-The &appwizard; did enter these statements on top of the licensing header of every source file it created.</para>
+<para>Do you remember the <link linkend="gettingstarted-new-setup-options">
+<guilabel>Project Options</guilabel></link> dialog page in the new project
+setup? You had to provide your (the developer&apos;s) name and optionally an
+email address there. Now refer to the top of the <guilabel>hello.cpp</guilabel>
+editor window currently displayed in the workspace area. The &appwizard; did
+enter these statements on top of the licensing header of every source file it
+created.</para>
 </formalpara>
 
 <programlisting>
@@ -787,51 +989,70 @@ The &appwizard; did enter these statements on top of the licensing header of eve
  *   This program is free software; you can redistribute it and/or modify  *
 </programlisting>
 
-<para>You will find exactly the same text headers in every source file you will create inside &kdevelop; (provided you use the proper built in tools for file creation).
-&kdevelop; remembers these settings in some template files you may find in the <filename class="directory">templates</filename> directory.</para>
+<para>You will find exactly the same text headers in every source file you will
+create inside &kdevelop; (provided you use the proper built in tools for file
+creation). &kdevelop; remembers these settings in some template files you may
+find in the <filename class="directory">templates</filename> directory.</para>
 
 <formalpara>
 <title>Application Run-Time Copyrights</title>
-<para>Once your &kde; application runs, the user may display some <guilabel>About</guilabel> data, usually from the <guimenu>Help</guimenu> menu.
-The &appwizard; did also take care of this.
-If you have a look at the <filename>main.cpp</filename> file, you will find an entry similar to the one below.</para>
+<para>Once your &kde; application runs, the user may display some
+<guilabel>About</guilabel> data, usually from the <guimenu>Help</guimenu> menu.
+The &appwizard; did also take care of this. If you have a look at the
+<filename>main.cpp</filename> file, you will find an entry similar to the one
+below.</para>
 </formalpara>
 
 <programlisting>
 int main(int argc, char **argv)
 {
     KAboutData about("hello", I18N_NOOP("Hello"), version, description,
-		     KAboutData::License_GPL, "(C) 2006 Joe User", 0, 0, "joe@user.com");
+		     KAboutData::License_GPL, "(C) 2006 Joe User", 0, 0,
+                     "joe@user.com");
     about.addAuthor( "Joe User", 0, "joe@user.com" );
 </programlisting>
 
-<para>This will put the main developer&apos;s name (<quote>Joe User</quote> in our case) and email address into the <guilabel>About</guilabel> copyright page in the display and list this name and address on the <guilabel>Authors</guilabel> page there as well.</para>
+<para>This will put the main developer&apos;s name (<quote>Joe User</quote> in
+our case) and email address into the <guilabel>About</guilabel> copyright page
+in the display and list this name and address on the
+<guilabel>Authors</guilabel> page there as well.</para>
 
 <important>
-<para>Whenever you make substantial changes to an existing project, be sure to enter your name and email address to the copyright notices on every file you changed and to the run-time copyright display as well.
-Don&apos;t be shy, you help the open source society considerably if you do so.</para>
+<para>Whenever you make substantial changes to an existing project, be sure to
+enter your name and email address to the copyright notices on every file you
+changed and to the run-time copyright display as well. Don&apos;t be shy, you
+help the open source society considerably if you do so.</para>
 </important>
 </sect3>
 
 <sect3 id="gettingstarted-new-files-source">
 <title>Initial Source Files</title>
 
-<para>The &appwizard; did put the source files into the <filename class="directory">src</filename> sub-directory of the project&apos;s directory.
-You will find the <filename>main.cpp</filename>, <filename>hello.h</filename>, and <filename>hello.cpp</filename> files there as you may have possibly expected.</para>
+<para>The &appwizard; did put the source files into the <filename
+class="directory">src</filename> sub-directory of the project&apos;s directory.
+You will find the <filename>main.cpp</filename>, <filename>hello.h</filename>,
+and <filename>hello.cpp</filename> files there as you may have possibly
+expected.</para>
 
-<para>There are some additional files you usually will find in a typical &kde; application, namely</para>
+<para>There are some additional files you usually will find in a typical &kde;
+application, namely</para>
 
 <itemizedlist>
 <listitem>
-<para><filename>hello.desktop</filename> contains some meta data used by &kdevelop; to maintain and start the application.</para>
+<para><filename>hello.desktop</filename> contains some meta data used by
+&kdevelop; to maintain and start the application.</para>
 </listitem>
 
 <listitem>
-<para><filename>hi16-app-hello.png</filename>, and <filename>hi32-app-hello.png</filename> contain some initial default icons, &kdevelop; will use for application display.</para>
+<para><filename>hi16-app-hello.png</filename>, and
+<filename>hi32-app-hello.png</filename> contain some initial default icons,
+&kdevelop; will use for application display.</para>
 </listitem>
 
 <listitem>
-<para>Finally, <filename>helloui.rc</filename> contains a description of the application&apos;s user interface, currently the menus the application will provide.</para>
+<para>Finally, <filename>helloui.rc</filename> contains a description of the
+application&apos;s user interface, currently the menus the application will
+provide.</para>
 </listitem>
 </itemizedlist>
 </sect3>
@@ -839,63 +1060,92 @@ You will find the <filename>main.cpp</filename>, <filename>hello.h</filename>, a
 <sect3 id="gettingstarted-new-files-doc">
 <title>Initial Application Documentation</title>
 
-<para>In the <filename class="directory">doc/en</filename> subdirectory of the project you will find the <filename>index.docbook</filename> file.
-This is a default template from where you can start to write a suitable user documentation.</para>
+<para>In the <filename class="directory">doc/en</filename> subdirectory of the
+project you will find the <filename>index.docbook</filename> file. This is a
+default template from where you can start to write a suitable user
+documentation.</para>
 </sect3>
 
 <sect3 id="gettingstarted-new-files-project">
 <title>Project and Auxiliary Files</title>
 
-<para>You will have noted that the files we introduced so far are listed in boldface in the <guilabel>File Tree</guilabel> tool view while most of the other files are not.
-This depicts the substantially different tasks these files are used for.
-The contents of those bold listed files directly influence the application.
-Source files will produce the code to be run, others will provide necessary data or documentation.
-These files must be maintained and orderly processed in the build stages by the project, hence they are called <emphasis>project files</emphasis>.</para>
+<para>You will have noted that the files we introduced so far are listed in
+boldface in the <guilabel>File Tree</guilabel> tool view while most of the other
+files are not. This depicts the substantially different tasks these files are
+used for. The contents of those bold listed files directly influence the
+application. Source files will produce the code to be run, others will provide
+necessary data or documentation. These files must be maintained and orderly
+processed in the build stages by the project, hence they are called
+<emphasis>project files</emphasis>.</para>
 
-<para>If you have a look at the lower <guilabel>Automake Manager</guilabel> window to the right of the workspace area you will find all project files listed as well.
-The &automanag; tool uses this knowledge to take care of the build control as we shortly will see.</para>
+<para>If you have a look at the lower <guilabel>Automake Manager</guilabel>
+window to the right of the workspace area you will find all project files listed
+as well. The &automanag; tool uses this knowledge to take care of the build
+control as we shortly will see.</para>
 
-<para>The other, non-bold listed files are of more auxiliary nature.
-They belong to several distinctive classes as follows:</para>
+<para>The other, non-bold listed files are of more auxiliary nature. They belong
+to several distinctive classes as follows:</para>
 
 <itemizedlist>
 <listitem>
 <formalpara>
 <title>Project Build Control</title>
-<para>These files control the compile, install, documentation building, &etc; processes.
-If the project utilizes the &GNU; <application>autotools</application> machinery as our example does, you will find a <filename>Makefile.am</filename> file in each project directory.
-These are kind of basic make core files which contain build control commands and will be processed in conjunction with various <filename>configure</filename> files during the build stages.
-Such a build produces a final <filename>Makefile</filename> in every directory.
-And from these in turn the <application>make</application> utility will finally build the binaries of the application.</para>
+<para>These files control the compile, install, documentation building, &etc;
+processes. If the project utilizes the &GNU;
+<application>autotools</application> machinery as our example does, you will
+find a <filename>Makefile.am</filename> file in each project directory. These
+are kind of basic make core files which contain build control commands and will
+be processed in conjunction with various <filename>configure</filename> files
+during the build stages. Such a build produces a final
+<filename>Makefile</filename> in every directory. And from these in turn the
+<application>make</application> utility will finally build the binaries of the
+application.</para>
 </formalpara>
 
-<para>Those <filename>Makefile.am</filename> files need to be maintained throughout the development process.
-Luckily, &kdevelop; relieves you of most of this burden by the &automanag; tool, which basically is a graphical front end to maintain <filename>Makefile.am</filename> contents.</para>
+<para>Those <filename>Makefile.am</filename> files need to be maintained
+throughout the development process. Luckily, &kdevelop; relieves you of most of
+this burden by the &automanag; tool, which basically is a graphical front end to
+maintain <filename>Makefile.am</filename> contents.</para>
 
-<para>Other project build control files currently listed are <filename>configure.in.in</filename> and <filename>subdirs</filename> in the project root directory.
-They will be processed by some of the files in the <filename class="directory">admin</filename> &kde; specific administration directory to produce more <filename>configure</filename> and <filename>Makefile</filename> type files and finally the application&apos;s binaries.</para>
+<para>Other project build control files currently listed are
+<filename>configure.in.in</filename> and <filename>subdirs</filename> in the
+project root directory. They will be processed by some of the files in the
+<filename class="directory">admin</filename> &kde; specific administration
+directory to produce more <filename>configure</filename> and
+<filename>Makefile</filename> type files and finally the application&apos;s
+binaries.</para>
 </listitem>
 
 <listitem>
 <formalpara>
 <title>&kdevelop; Control Files</title>
-<para>&kdevelop; needs some control and administration data on its own.
-These are located in the project root directory, in our example <filename>hello.kdevelop</filename>, <filename>hello.kdevelop.pcs</filename>, and <filename>hello.kdevses</filename>.</para>
+<para>&kdevelop; needs some control and administration data on its own. These
+are located in the project root directory, in our example
+<filename>hello.kdevelop</filename>, <filename>hello.kdevelop.pcs</filename>,
+and <filename>hello.kdevses</filename>.</para>
 </formalpara>
 
-<para>Of particular importance in each project is the <filename>xxx.kdevelop</filename> (where <quote>xxx</quote> denotes the project name) file.
-It is the main <emphasis>KDevelop 3 Project File</emphasis> and needed if you later want load this project into the &IDE;.</para>
+<para>Of particular importance in each project is the
+<filename>xxx.kdevelop</filename> (where <quote>xxx</quote> denotes the project
+name) file. It is the main <emphasis>KDevelop 3 Project File</emphasis> and
+needed if you later want load this project into the &IDE;.</para>
 
 <warning>
-<para>Never do manually modify, rename, or even delete any of these &kdevelop; control files! The &IDE; will most likely not function properly on your project afterwards.</para>
+<para>Never do manually modify, rename, or even delete any of these &kdevelop;
+control files! The &IDE; will most likely not function properly on your project
+afterwards.</para>
 </warning>
 </listitem>
 
 <listitem>
 <formalpara>
 <title>GNU Project Description Files</title>
-<para>Some files in the project root directory are mandatory in any &GNU; conformant application.
-They are <filename>AUTHORS</filename>, <filename>ChangeLog</filename>, <filename>INSTALL</filename>, <filename>COPYING</filename> (which contains the GNU GENERAL PUBLIC LICENSE), <filename>INSTALL</filename>, <filename>NEWS</filename>, <filename>README</filename>, and <filename>TODO</filename>.</para>
+<para>Some files in the project root directory are mandatory in any &GNU;
+conformant application. These are: <filename>AUTHORS</filename>,
+<filename>ChangeLog</filename>, <filename>INSTALL</filename>,
+<filename>COPYING</filename> (which contains the GNU GENERAL PUBLIC LICENSE),
+<filename>INSTALL</filename>, <filename>NEWS</filename>,
+<filename>README</filename>, and <filename>TODO</filename>.</para>
 </formalpara>
 </listitem>
 
@@ -907,26 +1157,34 @@ They are <filename>AUTHORS</filename>, <filename>ChangeLog</filename>, <filename
 
 <itemizedlist>
 <listitem>
-<para><filename>Doxyfile</filename> controls the creation of the project specific &API; internal programming interface documentation.</para>
+<para><filename>Doxyfile</filename> controls the creation of the project
+specific &API; internal programming interface documentation.</para>
 </listitem>
 
 <listitem>
-<para>The <filename class="directory">templates</filename> directory containes file templates the &IDE; uses as stubs to create new source files.
-You may at any time edit these templates.
-The new contents will be reflected in the next source files you create of the related types.</para>
+<para>The <filename class="directory">templates</filename> directory containes
+file templates the &IDE; uses as stubs to create new source files.
+You may at any time edit these templates. The new contents will be reflected in
+the next source files you create of the related types.</para>
 
-<para>You may &eg; want to realign the right hand stars in the copyright lines the &appwizard; inserted into the <filename>cpp</filename> and <filename>h</filename> template files, so the source files created from them will look less awkward.</para>
+<para>You may &eg; want to realign the right hand stars in the copyright lines
+the &appwizard; inserted into the <filename>cpp</filename> and
+<filename>h</filename> template files, so the source files created from them
+will look less awkward.</para>
 </listitem>
 
 <listitem>
-<para>The <filename class="directory">po</filename> directory will be used for localization purposes.
-It is essentially part of the project files (contains a <filename>Makefile.am</filename>) but will mainly be used in translation processing.
-Not of main interest to the application developer, however.</para>
+<para>The <filename class="directory">po</filename> directory will be used for
+localization purposes. It is essentially part of the project files (contains a
+<filename>Makefile.am</filename>) but will mainly be used in translation
+processing. Not of main interest to the application developer, however.</para>
 </listitem>
 
 <listitem>
-<para>Finally, the <filename class="directory">admin</filename> directory is specially needed in &kde; oriented applications.
-It provides a whole bunch of files necessary to maintain the application&apos;s sources and binaries so they will integrate properly into the &kde; environment.</para>
+<para>Finally, the <filename class="directory">admin</filename> directory is
+specially needed in &kde; oriented applications. It provides a whole bunch of
+files necessary to maintain the application&apos;s sources and binaries so they
+will integrate properly into the &kde; environment.</para>
 </listitem>
 </itemizedlist>
 
@@ -938,13 +1196,15 @@ It provides a whole bunch of files necessary to maintain the application&apos;s 
 <sect2 id="gettingstarted-new-toolviews">
 <title>Additional Tool Views</title>
 
-<para>As you will have noticed, as soon as the &appwizard; had the new project ready, several additional tool views were provided.
-These make sense during project development only and, in short, provide the following functionality.</para>
+<para>As you will have noticed, as soon as the &appwizard; had the new project
+ready, several additional tool views were provided. These make sense during
+project development only and, in short, provide the following
+functionality.</para>
 
 <note>
-<para>The tool views actually visible depend on the plugins currently loaded into &kdevelop;.
-There are ways to control this.
-See the <link linkend="setup-plugins">Plugin Tools</link> chapter for instructions.</para>
+<para>The tool views actually visible depend on the plugins currently loaded
+into &kdevelop;. There are ways to control this. See the <link
+linkend="setup-plugins">Plugin Tools</link> chapter for instructions.</para>
 </note>
 
 <sect3 id="gettingstarted-new-toolviews-left">
@@ -954,33 +1214,38 @@ See the <link linkend="setup-plugins">Plugin Tools</link> chapter for instructio
 <listitem>
 <formalpara>
 <title>Bookmarks</title>
-<para>You can mark any text file line in order to quickly return to this position from everywhere.
-&kdevelop; will remember all those <emphasis>bookmarks</emphasis>, even if you close the editor window afterwards.
-The <guilabel>Bookmarks</guilabel> tool view lists all those bookmarks by file name and line number.
-You need only click such an entry to open the editor window accordingly and position the cursor on that line.</para>
+<para>You can mark any text file line in order to quickly return to this
+position from everywhere. &kdevelop; will remember all those
+<emphasis>bookmarks</emphasis>, even if you close the editor window afterwards.
+The <guilabel>Bookmarks</guilabel> tool view lists all those bookmarks by file
+name and line number. You need only click such an entry to open the editor
+window accordingly and position the cursor on that line.</para>
 </formalpara>
 </listitem>
 
 <listitem>
 <formalpara>
 <title>Classes</title>
-<para>Lists classes, methods, &etc; known in the project.
-Clicking the entry opens the appropriate header or source file in an editor window and positions the cursor at the respective declaration or definition.</para>
+<para>Lists classes, methods, &etc; known in the project. Clicking the entry
+opens the appropriate header or source file in an editor window and positions
+the cursor at the respective declaration or definition.</para>
 </formalpara>
 </listitem>
 
 <listitem>
 <formalpara>
 <title>File Groups</title>
-<para>Sorts the files in the projects into various utility groups, &ie; Sources, User Interface, Icons, Translations, and Others.
-Clicking an entry opens that file in an editor window.</para>
+<para>Sorts the files in the projects into various utility groups, &ie; Sources,
+User Interface, Icons, Translations, and Others. Clicking an entry opens that
+file in an editor window.</para>
 </formalpara>
 </listitem>
 
 <listitem>
 <formalpara>
 <title>Variables</title>
-<para>This is used by the debugger tool to display, evaluate, and watch variables during debug runs.</para>
+<para>This is used by the debugger tool to display, evaluate, and watch
+variables during debug runs.</para>
 </formalpara>
 </listitem>
 </itemizedlist>
@@ -993,41 +1258,47 @@ Clicking an entry opens that file in an editor window.</para>
 <listitem>
 <formalpara>
 <title>Valgrind</title>
-<para><application>Valgrind</application> is a run-time program analyzer.
-This tool view lists the results of such an analyze run.
-It is used &eg; to find memory leaks.</para>
+<para><application>Valgrind</application> is a run-time program analyzer. This
+tool view lists the results of such an analyze run. It is used &eg; to find
+memory leaks.</para>
 </formalpara>
 </listitem>
 
 <listitem>
 <formalpara>
 <title>Security Problems</title>
-<para>There is a <guilabel>Security Checker</guilabel> plugin tool for &kdevelop;.
-It analyzes the currently edited source file for several common security problems which may occur in the application and notifies the user in this tool view window.</para>
+<para>There is a <guilabel>Security Checker</guilabel> plugin tool for
+&kdevelop;. It analyzes the currently edited source file for several common
+security problems which may occur in the application and notifies the user in
+this tool view window.</para>
 </formalpara>
 </listitem>
 
 <listitem>
 <formalpara>
 <title>Breakpoints</title>
-<para>This tool view allows to explicitly set, clear, and manage debug breakpoints in the application source files.
-It is used in conjunction with the debugger.</para>
+<para>This tool view allows to explicitly set, clear, and manage debug
+breakpoints in the application source files. It is used in conjunction with the
+debugger.</para>
 </formalpara>
 </listitem>
 
 <listitem>
 <formalpara>
 <title>CTags</title>
-<para>Allows to create a database of identifier indexes using the popular <application>CTags</application> application.
-This tags database may then be used from out this tool view window to look up any needed identifier in the project sources.
-Clicking a thus found item line will open an editor window and position the cursor on the appropriate identifier there.</para>
+<para>Allows to create a database of identifier indexes using the popular
+<application>CTags</application> application. This tags database may then be
+used from out this tool view window to look up any needed identifier in the
+project sources. Clicking a thus found item line will open an editor window and
+position the cursor on the appropriate identifier there.</para>
 </formalpara>
 </listitem>
 
 <listitem>
 <formalpara>
 <title>Problems</title>
-<para>&kdevelop; keeps track of common programming problems in the currently edited source file and notifies the user in this tool view window.</para>
+<para>&kdevelop; keeps track of common programming problems in the currently
+edited source file and notifies the user in this tool view window.</para>
 </formalpara>
 </listitem>
 </itemizedlist>
@@ -1040,18 +1311,26 @@ Clicking a thus found item line will open an editor window and position the curs
 <listitem>
 <formalpara>
 <title>Automake Manager</title>
-<para>The &automanag; tool is basically a graphical front end to maintain the contents of the <filename>Makefile.am</filename> files located in each project directory.
-This tool view uses two windows to control its work.
-The upper window mirrors part of the project subdirectories, namely those which explicitly contain <emphasis>project files</emphasis>.
-Each subdirectory of this kind must contain a <filename>Makefile.am</filename> file and is termed a <emphasis>subproject</emphasis> in the &automanag; context.</para>
+<para>The &automanag; tool is basically a graphical front end to maintain the
+contents of the <filename>Makefile.am</filename> files located in each project
+directory. This tool view uses two windows to control its work. The upper window
+mirrors part of the project subdirectories, namely those which explicitly
+contain <emphasis>project files</emphasis>. Each subdirectory of this kind must
+contain a <filename>Makefile.am</filename> file and is termed a
+<emphasis>subproject</emphasis> in the &automanag; context.</para>
 </formalpara>
 
-<para>Clicking a subproject entry opens a suitable display of the project files in this subproject in the lower window.
-The files listed there will be grouped according to their <filename>Makefile.am</filename> functionality in this subproject.</para>
+<para>Clicking a subproject entry opens a suitable display of the project files
+in this subproject in the lower window. The files listed there will be grouped
+according to their <filename>Makefile.am</filename> functionality in this
+subproject.</para>
 
-<para>The &automanag; is a very powerful tool to manage the project and its subprojects as well as the roles project files play in building the application.
-We will have a short look at a few major details <link linkend="gettingstarted-extend-automake">below</link>.
-See the <link linkend="project-management">Building and Project Management</link> chapter for a more extensive description.</para>
+<para>The &automanag; is a very powerful tool to manage the project and its
+subprojects as well as the roles project files play in building the application.
+We will have a short look at a few major details <link
+linkend="gettingstarted-extend-automake">below</link>. See the <link
+linkend="project-management">Building and Project Management</link> chapter for
+a more extensive description.</para>
 </listitem>
 </itemizedlist>
 </sect3>
@@ -1062,64 +1341,88 @@ See the <link linkend="project-management">Building and Project Management</link
 <sect1 id="gettingstarted-edit">
 <title>Some Tips About Dealing With Documents</title>
 
-<para>In our example project the &appwizard; did leave the <filename>hello.cpp</filename> file open in an editor window, so you can immediately start working.
-Now, we may well assume your are knowledgeable about using an editor, so we do not need talk much about this here.
-But there are some handy &kdevelop; specifics about dealing with such tabbed editor windows and the documents you are working on.
-We will have a short look at some of them, namely:</para>
+<para>In our example project the &appwizard; did leave the
+<filename>hello.cpp</filename> file open in an editor window, so you can
+immediately start working. Now, we may well assume your are knowledgeable about
+using an editor, so we do not need talk much about this here. But there are some
+handy &kdevelop; specifics about dealing with such tabbed editor windows and the
+documents you are working on. We will have a short look at some of them,
+namely:</para>
 
 <simplelist>
-<member><link linkend="gettingstarted-edit-headers">How to easily switch between header and implementation files.</link></member>
-<member><link linkend="gettingstarted-edit-defs">How to quickly access declarations and definitions.</link></member>
-<member><link linkend="gettingstarted-edit-arrange">How to arrange editor windows to your current needs.</link></member>
-<member><link linkend="gettingstarted-edit-problems">How to keep an eye on common problems.</link></member>
+<member><link linkend="gettingstarted-edit-headers">How to easily switch between
+header and implementation files.</link></member>
+<member><link linkend="gettingstarted-edit-defs">How to quickly access
+declarations and definitions.</link></member>
+<member><link linkend="gettingstarted-edit-arrange">How to arrange editor
+windows to your current needs.</link></member>
+<member><link linkend="gettingstarted-edit-problems">How to keep an eye on
+common problems.</link></member>
 </simplelist>
 
 <sect2 id="gettingstarted-edit-headers">
 <title>Switching Between Header and Implementation Files</title>
 
-<para>&kdevelop; provides a quick and easy way to switch from a given implementation (<filename>.cpp</filename>) file to the corresponding header (<filename>.h</filename>) file and vice versa.
-Just right click into the editor window you want to switch.
-A menu similar to the following will pop up.</para>
+<para>&kdevelop; provides a quick and easy way to switch from a given
+implementation (<filename>.cpp</filename>) file to the corresponding header
+(<filename>.h</filename>) file and vice versa. Just right click into the editor
+window you want to switch. A menu similar to the following will pop up.</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="editor-switch-header.png" format="PNG"/>
 </imageobject>
-<caption><para>How to switch between implementation and header files.</para></caption>
+<caption><para>How to switch between implementation and header
+files.</para></caption>
 </mediaobject>
 </screenshot>
 
-<para>Find the <guimenuitem>Switch header/implementation</guimenuitem> entry and select it. &kdevelop; will look up the corresponding header or implementation file and open it in another editor window.
-In our example, if you did right click into the <filename>hello.cpp</filename> source, the <filename>hello.h</filename> file will be displayed and the cursor positioned there.</para>
+<para>Find the <guimenuitem>Switch header/implementation</guimenuitem> entry and
+select it. &kdevelop; will look up the corresponding header or implementation
+file and open it in another editor window. In our example, if you did right
+click into the <filename>hello.cpp</filename> source, the
+<filename>hello.h</filename> file will be displayed and the cursor positioned
+there.</para>
 
-<para>There is even more. If you do right click inside the text of a class implementation, &kdevelop; will position the cursor on the corresponding declaration line in the header file.
-And vice versa, right clicking on a declaration line will bring you to the corresponding class implementation.</para>
+<para>There is even more. If you do right click inside the text of a class
+implementation, &kdevelop; will position the cursor on the corresponding
+declaration line in the header file. And vice versa, right clicking on a
+declaration line will bring you to the corresponding class
+implementation.</para>
 
-<para>If the editor window with the file to be switched to already exists, &kdevelop; will of course activate this one and reposition the cursor there if necessary.</para>
+<para>If the editor window with the file to be switched to already exists,
+&kdevelop; will of course activate this one and reposition the cursor there if
+necessary.</para>
 </sect2>
 
 <sect2 id="gettingstarted-edit-defs">
 <title>How to Access Declarations and Definitions</title>
 
-<para>But what if you are working on a source file and want to look up the declaration or definition of an identifier you just found there?
-Well, this is equally easily accomplished.
-Basically all you need to do is to right click on the identifier in question.</para>
+<para>But what if you are working on a source file and want to look up the
+declaration or definition of an identifier you just found there? Well, this is
+equally easily accomplished. Basically all you need to do is to right click on
+the identifier in question.</para>
 
 <para>There are two different cases to consider, however, namely:</para>
 <simplelist>
-<member><link linkend="gettingstarted-edit-defs-external">Accessing externally defined identifiers</link>, and</member>
-<member><link linkend="gettingstarted-edit-defs-project">dealing with project internal text items</link>.</member>
+<member><link linkend="gettingstarted-edit-defs-external">Accessing externally
+defined identifiers</link>, and</member>
+<member><link linkend="gettingstarted-edit-defs-project">dealing with project
+internal text items</link>.</member>
 </simplelist>
 
 <sect3 id="gettingstarted-edit-defs-external">
 <title>External Declarations and Definitions</title>
 
-<para>In a most common case you want to look up an identifier which was defined externally to your project.
-In &kde; projects such identifiers are most likely documented in various &kde; or &Qt; libraries.
-If &kde; and &kdevelop; were properly installed, &kdevelop; will be able to access such so-called API documentation and be able to search it for identifiers of this kind.</para>
+<para>In a most common case you want to look up an identifier which was defined
+externally to your project. In &kde; projects such identifiers are most likely
+documented in various &kde; or &Qt; libraries. If &kde; and &kdevelop; were
+properly installed, &kdevelop; will be able to access such so-called API
+documentation and be able to search it for identifiers of this kind.</para>
 
-<para>Let us look at an example. In the <filename>hello.cpp</filename> editor window find the following lines.</para>
+<para>Let us look at an example. In the <filename>hello.cpp</filename> editor
+window find the following lines.</para>
 
 <programlisting>
 Hello::Hello()
@@ -1128,116 +1431,146 @@ Hello::Hello()
 </programlisting>
 
 <para>Right click on <classname>KMainWindow</classname>.
-A menu will pop up.
-There select the <guimenuitem>Search in Documentation: KMainWindow</guimenuitem> entry and release the mouse button.
-Now the <guilabel>Documentation</guilabel> tool view will open, showing the <classname>KMainWindow</classname> entry as search item on the <guilabel>Search</guilabel> sub-page.
-And a short while after another editor window will open in the workspace area, showing the KDE API Reference page of the <classname>KMainWindow</classname> class.</para>
+A menu will pop up. There select the <guimenuitem>Search in Documentation:
+KMainWindow</guimenuitem> entry and release the mouse button. Now the
+<guilabel>Documentation</guilabel> tool view will open, showing the
+<classname>KMainWindow</classname> entry as search item on the
+<guilabel>Search</guilabel> sub-page. And a short while after another editor
+window will open in the workspace area, showing the KDE API Reference page of
+the <classname>KMainWindow</classname> class.</para>
 
-<para>This all will look like the following.
-(We deliberately opened the <guilabel>Documentation</guilabel>, <guilabel>Search</guilabel> page already to illustrate the result of the menu selection.)</para>
+<para>This all will look like the following. (We deliberately opened the
+<guilabel>Documentation</guilabel>, <guilabel>Search</guilabel> page already to
+illustrate the result of the menu selection.)</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="editor-search-doc.png" format="PNG"/>
 </imageobject>
-<caption><para>How to look up an externally documented identifier.</para></caption>
+<caption><para>How to look up an externally documented
+identifier.</para></caption>
 </mediaobject>
 </screenshot>
 
-<para>You might as well select <guimenuitem>Find Documentation: KMainWindow</guimenuitem>.
-In this case the <guilabel>Finder</guilabel> sub-page of the <guilabel>Documentation</guilabel> tool view will show up, usually providing a selection of pages containing the search term.
-(In our example this will probably be the <classname>KMainWindow</classname> and <classname>KMainWindowInterface</classname> classes.
-Select the one you are interested in and the corresponding documentation will be displayed in an editor window.</para>
+<para>You might as well select <guimenuitem>Find Documentation:
+KMainWindow</guimenuitem>. In this case the <guilabel>Finder</guilabel> sub-page
+of the <guilabel>Documentation</guilabel> tool view will show up, usually
+providing a selection of pages containing the search term. (In our example this
+will probably be the <classname>KMainWindow</classname> and
+<classname>KMainWindowInterface</classname> classes. Select the one you are
+interested in and the corresponding documentation will be displayed in an editor
+window.</para>
 
 <note>
-<para>If this did not work, then there is probably no documents index yet.
-Did you initialize the indexes as shown <link linkend="gettingstarted-configure-search">above</link>? If not, please do so, then come back here and try again.</para>
+<para>If this did not work, then there is probably no documents index yet. Did
+you initialize the indexes as shown <link
+linkend="gettingstarted-configure-search">above</link>? If not, please do so,
+then come back here and try again.</para>
 </note>
 </sect3>
 
 <sect3 id="gettingstarted-edit-defs-project">
 <title>Project Internal Declarations and Definitions</title>
 
-<para>Such search facilities in external documentation have their limitations, however.
-Of course one cannot look up an identifier externally if it is only defined and used inside the current project.
-But there is help.
-&kdevelop; can use indexes built by the <application>CTags</application> application to search the sources in your project.</para>
+<para>Such search facilities in external documentation have their limitations,
+however. Of course one cannot look up an identifier externally if it is only
+defined and used inside the current project. But there is help. &kdevelop; can
+use indexes built by the <application>CTags</application> application to search
+the sources in your project.</para>
 
-<para>Before we can use this on our Hello example project, we must however first generate a suitable index.
-This is done by the <guilabel>CTags</guilabel> tool view at the bottom of the workspace area.</para>
+<para>Before we can use this on our Hello example project, we must however first
+generate a suitable index. This is done by the <guilabel>CTags</guilabel> tool
+view at the bottom of the workspace area.</para>
 
-<para>When you click the <guibutton>CTags</guibutton> tab, a dialog window will open where you will find the following key in the lower right corner.</para>
+<para>When you click the <guibutton>CTags</guibutton> tab, a dialog window will
+open where you will find the following key in the lower right corner.</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="editor-ctags-regenerate.png" format="PNG"/>
 </imageobject>
-<caption><para>Build a CTags index with the <guibutton>Regenerate</guibutton> key.</para></caption>
+<caption><para>Build a CTags index with the <guibutton>Regenerate</guibutton>
+key.</para></caption>
 </mediaobject>
 </screenshot>
 
-<para>Press the <guibutton>Regenerate</guibutton> button and wait a few seconds. 
-Then the <guilabel>No CTags Database Found</guilabel> will be replaced by the current date.
-Now you are ready to perform some identifier look ups in your project source.</para>
+<para>Press the <guibutton>Regenerate</guibutton> button and wait a few seconds.
+Then the <guilabel>No CTags Database Found</guilabel> will be replaced by the
+current date. Now you are ready to perform some identifier look ups in your
+project source.</para>
 
 <tip>
-<para>The date next to the <guilabel>Regenerate</guilabel> button is there to remind you of possibly too old indexes.
-Whenever you are obviously not able to look up some identifier in your project, consider regenerating the index.
-On large projects this might take considerable time, but you should make it a habit to regenerate the index regularly after extensive source file changes.</para>
+<para>The date next to the <guilabel>Regenerate</guilabel> button is there to
+remind you of possibly too old indexes. Whenever you are obviously not able to
+look up some identifier in your project, consider regenerating the index. On
+large projects this might take considerable time, but you should make it a habit
+to regenerate the index regularly after extensive source file changes.</para>
 </tip>
 
-<para>To look up an identifier in your project sources there are several possibilities.</para>
+<para>To look up an identifier in your project sources there are several
+possibilities.</para>
 
 <itemizedlist>
 <listitem>
 <formalpara>
 <title>Use the CTags tool view</title>
 <para>This is easy.
-Just start typing the identifier name you are interested in into the <guilabel>Lookup</guilabel> input field in the bottom left.
-&kdevelop; will try to complete the word you have typed so far and show all occurrences of those identifiers which start with this character sequence.</para>
+Just start typing the identifier name you are interested in into the
+<guilabel>Lookup</guilabel> input field in the bottom left. &kdevelop; will try
+to complete the word you have typed so far and show all occurrences of those
+identifiers which start with this character sequence.</para>
 </formalpara>
 
-<para>If for example you want to know wherever the <quote>Hello</quote> identifier was used in our example project, type an "H" into the <guilabel>Lookup</guilabel> input field.
-&kdevelop; will immediately start working and present you a result like this:</para>
+<para>If for example you want to know wherever the <quote>Hello</quote>
+identifier was used in our example project, type an "H" into the
+<guilabel>Lookup</guilabel> input field. &kdevelop; will immediately start
+working and present you a result like this:</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="editor-ctags-lookup.png" format="PNG"/>
 </imageobject>
-<caption><para>How to look up an identifier in the <guilabel>CTags</guilabel> tool view.</para></caption>
+<caption><para>How to look up an identifier in the <guilabel>CTags</guilabel>
+tool view.</para></caption>
 </mediaobject>
 </screenshot>
 
-<para>If you click one of the listed entries, &kdevelop; will open an editor window with this file and position the cursor on the appropriate place.</para>
+<para>If you click one of the listed entries, &kdevelop; will open an editor
+window with this file and position the cursor on the appropriate place.</para>
 </listitem>
 
 <listitem>
 <formalpara>
 <title>Use a context menu in a source file</title>
 <para>This is handy while you are working on a certain source file.
-Assume you are studying the <filename>main.cpp</filename> file of our Hello example project.
-There you find the following line</para>
+Assume you are studying the <filename>main.cpp</filename> file of our Hello
+example project. There you find the following line</para>
 </formalpara>
 <programlisting>
     Hello *mainWin = 0;
 </programlisting>
 <para>and wonder whatever the <quote>Hello</quote> was used for in the program.
-To find out, simply right click on this Hello identifier.
-A menu will pop up in response to this right mouse click, featuring the following lines near the bottom.</para>
+To find out, simply right click on this Hello identifier. A menu will pop up in
+response to this right mouse click, featuring the following lines near the
+bottom.</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="editor-ctags-menu.png" format="PNG"/>
 </imageobject>
-<caption><para>Getting <application>CTags</application> information on a project internal identifier.</para></caption>
+<caption><para>Getting <application>CTags</application> information on a project
+internal identifier.</para></caption>
 </mediaobject>
 </screenshot>
 
-<para>Click what you are interested in, say <guilabel>CTags - Go to Definition: Hello</guilabel>, and &kdevelop; will immediately open the <filename>hello.cpp</filename> editor window and position the cursor right in front of this class definition:</para>
+<para>Click what you are interested in, say <guilabel>CTags - Go to Definition:
+Hello</guilabel>, and &kdevelop; will immediately open the
+<filename>hello.cpp</filename> editor window and position the cursor right in
+front of this class definition:</para>
 <programlisting>
 Hello::Hello()
     : KMainWindow( 0, "Hello" )
@@ -1248,70 +1581,92 @@ Hello::Hello()
 <listitem>
 <formalpara>
 <title>Do a global search</title>
-<para>This is especially useful if you want to look up arbitrary text in your project source.
-There are two possibilities to start a global search from within &kdevelop;.</para>
+<para>This is especially useful if you want to look up arbitrary text in your
+project source. There are two possibilities to start a global search from within
+&kdevelop;.</para>
 </formalpara>
 <itemizedlist>
 <listitem>
-<para>Start a global search from the <menuchoice><guimenu>Edit</guimenu> <guimenuitem>Find in Files...</guimenuitem></menuchoice> menu.
+<para>Start a global search from the <menuchoice><guimenu>Edit</guimenu>
+<guimenuitem>Find in Files...</guimenuitem></menuchoice> menu.
 Or</para>
 </listitem>
 <listitem>
-<para>Directly make use of the context menu with a right mouse click in the editor window.</para>
+<para>Directly make use of the context menu with a right mouse click in the
+editor window.</para>
 </listitem>
 </itemizedlist>
 
 <para>We will illustrate the second possibility on our Hello example project.
-The outcome of the menu call will essentially be the same.
-Let us assume you are studying the <filename>hello.cpp</filename> source file and have the cursor positioned on the first Hello occurrence there.
-Now you wonder, where this one word <quote>Hello</quote> was used in the project source and how many occurrences there are.
-This is a typical case where to use &kdevelop;&apos;s global search facilities.</para>
+The outcome of the menu call will essentially be the same. Let us assume you are
+studying the <filename>hello.cpp</filename> source file and have the cursor
+positioned on the first Hello occurrence there. Now you wonder, where this one
+word <quote>Hello</quote> was used in the project source and how many
+occurrences there are. This is a typical case where to use &kdevelop;&apos;s
+global search facilities.</para>
 
-<para>Now, still keeping the cursor somewhere on this <quote>Hello</quote> in the source text, click the right mouse button.
-The now well known context menu will pop up, where you should select the <guilabel>Grep: Hello</guilabel> line.</para>
+<para>Now, still keeping the cursor somewhere on this <quote>Hello</quote> in
+the source text, click the right mouse button. The now well known context menu
+will pop up, where you should select the <guilabel>Grep: Hello</guilabel>
+line.</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="editor-find-menu.png" format="PNG"/>
 </imageobject>
-<caption><para>Initiating a global search from within an editor window.</para></caption>
+<caption><para>Initiating a global search from within an editor
+window.</para></caption>
 </mediaobject>
 </screenshot>
 
-<para>This will pop up the following <guilabel>Find in Files</guilabel> dialog (exactly the same as if you did use the <menuchoice><guimenu>Edit</guimenu> <guimenuitem>Find in Files...</guimenuitem></menuchoice> menu).</para>
+<para>This will pop up the following <guilabel>Find in Files</guilabel> dialog
+(exactly the same as if you did use the <menuchoice><guimenu>Edit</guimenu>
+<guimenuitem>Find in Files...</guimenuitem></menuchoice> menu).</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="find-in-files.png" format="PNG"/>
 </imageobject>
-<caption><para>A versatile graphical front end to perform global searches in the project.</para></caption>
+<caption><para>A versatile graphical front end to perform global searches in the
+project.</para></caption>
 </mediaobject>
 </screenshot>
 
-<para>As you see, this is a very versatile tool to initiate <application>find</application>-and-<application>grep</application> searches throughout your project.
-We won&apos;t delve further into details here, but you may want to experiment with this facility on your own.
-For the moment, there should be our <quote>Hello</quote> be preselected in the <guilabel>Pattern</guilabel> field.
-If it is not, just type it in, then press the <guibutton>Search</guibutton> button at the bottom right.</para>
+<para>As you see, this is a very versatile tool to initiate
+<application>find</application>-and-<application>grep</application> searches
+throughout your project. We won&apos;t delve further into details here, but you
+may want to experiment with this facility on your own. For the moment, there
+should be our <quote>Hello</quote> be preselected in the
+<guilabel>Pattern</guilabel> field. If it is not, just type it in, then press
+the <guibutton>Search</guibutton> button at the bottom right.</para>
 
-<para>Now the <guilabel>Find in Files</guilabel> tool view will open at the bottom, showing you file names and lines of all literal occurrences of <quote>Hello</quote> in our example project. As usual, if you click an entry, &kdevelop; will get you to exactly that position in an editor window in the workspace area.</para>
+<para>Now the <guilabel>Find in Files</guilabel> tool view will open at the
+bottom, showing you file names and lines of all literal occurrences of
+<quote>Hello</quote> in our example project. As usual, if you click an entry,
+&kdevelop; will get you to exactly that position in an editor window in the
+workspace area.</para>
 
 <para>There are two lines of special interest in the tool view window.</para>
 <itemizedlist>
 <listitem>
-<para>Right on top you will find the command sequences &kdevelop; did actually use to perform the search.
-This will be useful to more precisely control the search outcome.</para>
+<para>Right on top you will find the command sequences &kdevelop; did actually
+use to perform the search. This will be useful to more precisely control the
+search outcome.</para>
 </listitem>
 
 <listitem>
-<para>On bottom the number of occurrences found in these search run will be listed.
-In our example this should read <quote>*** 11 matches found ***</quote>.</para>
+<para>On bottom the number of occurrences found in these search run will be
+listed. In our example this should read <quote>*** 11 matches found
+***</quote>.</para>
 </listitem>
 </itemizedlist>
 
-<para>&kdevelop; will remember these search results throughout the currently running session.
-If you initiate another global search, its results will display in another tabbed window in the <guilabel>Find in Files</guilabel> tool view window.</para>
+<para>&kdevelop; will remember these search results throughout the currently
+running session. If you initiate another global search, its results will display
+in another tabbed window in the <guilabel>Find in Files</guilabel> tool view
+window.</para>
 </listitem>
 </itemizedlist>
 </sect3>
@@ -1320,27 +1675,36 @@ If you initiate another global search, its results will display in another tabbe
 <sect2 id="gettingstarted-edit-arrange">
 <title>Arranging Editor Windows</title>
 
-<para>When your work with large complex projects you will often end up with quite a lot of tabbed editor windows residing on the tab bar.
-This makes specific facilities to clean up, order, and group all those editor tabs necessary.
-&kdevelop; provides several means for this.
-We will have a short look at some of them.</para>
+<para>When your work with large complex projects you will often end up with
+quite a lot of tabbed editor windows residing on the tab bar. This makes
+specific facilities to clean up, order, and group all those editor tabs
+necessary. &kdevelop; provides several means for this. We will have a short look
+at some of them.</para>
 <simplelist>
-<member><link linkend="gettingstarted-edit-arrange-clean">How to remove unneeded tabs.</link></member>
-<member><link linkend="gettingstarted-edit-arrange-tabs">How to rearrange the tabs.</link></member>
-<member><link linkend="gettingstarted-edit-arrange-split">How to view several files simultaneously in the workspace area.</link></member>
-<member><link linkend="gettingstarted-edit-arrange-group">How to group source files into development sessions.</link></member>
+<member><link linkend="gettingstarted-edit-arrange-clean">How to remove unneeded
+tabs.</link></member>
+<member><link linkend="gettingstarted-edit-arrange-tabs">How to rearrange the
+tabs.</link></member>
+<member><link linkend="gettingstarted-edit-arrange-split">How to view several
+files simultaneously in the workspace area.</link></member>
+<member><link linkend="gettingstarted-edit-arrange-group">How to group source
+files into development sessions.</link></member>
 </simplelist>
 
 <sect3 id="gettingstarted-edit-arrange-clean">
 <title>Cleaning up the Tabs Row</title>
 
-<para>If the vast amount of editor window tabs becomes badly arranged at all, you usually may want to close all those tabs you really do not need any more.
-&kdevelop; provides several facilities to do so, the usual way of bulk closing open editor windows and a more specific approach where you can expressly command which ones to close and which to keep open.</para>
+<para>If the vast amount of editor window tabs becomes badly arranged at all,
+you usually may want to close all those tabs you really do not need any more.
+&kdevelop; provides several facilities to do so, the usual way of bulk closing
+open editor windows and a more specific approach where you can expressly command
+which ones to close and which to keep open.</para>
 
 <formalpara>
 <title>Closing Several Tabs At Once</title>
-<para>This is kind of a bulk approach to close unnecessarily open tabs which you may find in other &kde; applications as well.
-You can use the <guimenu>Window</guimenu> menu or right click on a tab to either</para>
+<para>This is kind of a bulk approach to close unnecessarily open tabs which you
+may find in other &kde; applications as well. You can use the
+<guimenu>Window</guimenu> menu or right click on a tab to either</para>
 </formalpara>
 <itemizedlist>
 <listitem>
@@ -1350,32 +1714,42 @@ You can use the <guimenu>Window</guimenu> menu or right click on a tab to either
 <para>close all other open editor windows, or</para>
 </listitem>
 <listitem>
-<para>close all editor windows at once (available from the <guimenu>Window</guimenu> menu only).</para>
+<para>close all editor windows at once (available from the
+<guimenu>Window</guimenu> menu only).</para>
 </listitem>
 </itemizedlist>
 
 <formalpara>
 <title>Closing Selected Sets of Tabs</title>
-<para>The step-by-step approach of closing individual editor window tabs can become awkward if there are a great number of tabs from which you want to still keep several open.
-Instead of searching and closing one editor window tab after another &kdevelop; provides a means to select the candidates from a list and close those, and only those, with one single mouse click.</para>
+<para>The step-by-step approach of closing individual editor window tabs can
+become awkward if there are a great number of tabs from which you want to still
+keep several open. Instead of searching and closing one editor window tab after
+another &kdevelop; provides a means to select the candidates from a list and
+close those, and only those, with one single mouse click.</para>
 </formalpara>
 
 <para>Let us illustrate this on a simple example.
-In our Hello example project let us assume there were several files open for edit:
-<filename>hello.cpp</filename>, <filename>hello.h</filename>, <filename>helloui.rc</filename>, <filename>hello.desktop</filename>, and <filename>main.cpp</filename>.
-Now you want to close all of them except <filename>hello.cpp</filename> and <filename>hello.h</filename>.
-The easiest way to do so is with the <guilabel>File List</guilabel> tool view.
-Because this list of open files is alphabetically ordered you can more easily find the ones you want to be closed. Proceed as follows:</para>
+In our Hello example project let us assume there were several files open for
+edit: <filename>hello.cpp</filename>, <filename>hello.h</filename>,
+<filename>helloui.rc</filename>, <filename>hello.desktop</filename>, and
+<filename>main.cpp</filename>. Now you want to close all of them except
+<filename>hello.cpp</filename> and <filename>hello.h</filename>. The easiest way
+to do so is with the <guilabel>File List</guilabel> tool view. Because this list
+of open files is alphabetically ordered you can more easily find the ones you
+want to be closed. Proceed as follows:</para>
 
 <procedure>
 <step>
-<para>Open <guilabel>File List</guilabel> and, with the <keycap>Ctrl</keycap> key held down, click the files you want to be closed in the list.</para>
+<para>Open <guilabel>File List</guilabel> and, with the <keycap>Ctrl</keycap>
+key held down, click the files you want to be closed in the list.</para>
 </step>
 <step>
-<para>Then, keeping the mouse pointer on a file name in the list, click the right mouse button.</para>
+<para>Then, keeping the mouse pointer on a file name in the list, click the
+right mouse button.</para>
 </step>
 <step>
-<para>From the <guimenu>File List</guimenu> popup menu select <guimenuitem>Close Selected</guimenuitem>.</para>
+<para>From the <guimenu>File List</guimenu> popup menu select <guimenuitem>Close
+Selected</guimenuitem>.</para>
 </step>
 </procedure>
 
@@ -1384,85 +1758,108 @@ Because this list of open files is alphabetically ordered you can more easily fi
 <imageobject>
 <imagedata fileref="file-list-close-selected.png" format="PNG"/>
 </imageobject>
-<caption><para>How to close selected editor windows in one step.</para></caption>
+<caption><para>How to close selected editor windows in one
+step.</para></caption>
 </mediaobject>
 </screenshot>
 <para>That was all.
-&kdevelop; will have closed all editor windows at your wish, and you are ready to proceed with a clean tab bar again.</para>
+&kdevelop; will have closed all editor windows at your wish, and you are ready
+to proceed with a clean tab bar again.</para>
 </sect3>
 
 <sect3 id="gettingstarted-edit-arrange-tabs">
 <title>How to Rearrange Edit Window Tabs</title>
 
-<para>Even if you have only the really necessary editor windows open you may still want to have their tabs arranged in some logical way.
-&kdevelop; provides some common means to do so, in short:</para>
+<para>Even if you have only the really necessary editor windows open you may
+still want to have their tabs arranged in some logical way. &kdevelop; provides
+some common means to do so, in short:</para>
 
 <formalpara>
 <title>Basic Setup &mdash; Where to Position New Tabs</title>
 
-<para>By default, when you open a new editor window, its tab will be inserted to the right of the editor window tab currently in use.
-This can be changed so that the new tab will open to the far right on the tab bar.</para>
+<para>By default, when you open a new editor window, its tab will be inserted to
+the right of the editor window tab currently in use. This can be changed so that
+the new tab will open to the far right on the tab bar.</para>
 </formalpara>
-<para>You must change a basic user interface setting in &kdevelop; to enable this behavior.</para>
+<para>You must change a basic user interface setting in &kdevelop; to enable
+this behavior.</para>
 <procedure>
 <step>
-<para>Select <menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem></menuchoice></para>
+<para>Select <menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure
+KDevelop...</guimenuitem></menuchoice></para>
 </step>
 <step>
-<para>In the left hand icon bar on the dialog popup click the <guilabel>User Interface</guilabel> icon.
-The <guilabel>User Interface</guilabel> dialog page will be now shown.</para>
+<para>In the left hand icon bar on the dialog popup click the <guilabel>User
+Interface</guilabel> icon. The <guilabel>User Interface</guilabel> dialog page
+will be now shown.</para>
 </step>
 <step>
-<para>In the left bottom corner there find the section labeled <guilabel>Tabbed Browsing</guilabel>.
-Remove the check mark on the <guilabel>Open new tab after current tab</guilabel> line.</para>
+<para>In the left bottom corner there find the section labeled <guilabel>Tabbed
+Browsing</guilabel>. Remove the check mark on the <guilabel>Open new tab after
+current tab</guilabel> line.</para>
 </step>
 <step>
-<para>Close &kdevelop; and restart it again.
-Now the new editor window tabs will open at the far right end of the current tabs row.</para>
+<para>Close &kdevelop; and restart it again. Now the new editor window tabs will
+open at the far right end of the current tabs row.</para>
 </step>
 </procedure>
 
-<para>Unfortunately, this setting cannot be changed on the fly during a development session.
-You must make up your mind which behavior you prefer in the long run and then stick to it, at least until the next start of &kdevelop;.</para>
+<para>Unfortunately, this setting cannot be changed on the fly during a
+development session. You must make up your mind which behavior you prefer in the
+long run and then stick to it, at least until the next start of
+&kdevelop;.</para>
 
 <formalpara>
 <title>How to Rearrange the Tabs</title>
-<para>As development tasks do vary over time, the need to rearrange the tabbed editor windows will more or less often arise.
-This is easily accomplished in &kdevelop;.</para>
+<para>As development tasks do vary over time, the need to rearrange the tabbed
+editor windows will more or less often arise. This is easily accomplished in
+&kdevelop;.</para>
 </formalpara>
 <para>
-Just click the tab you want to move with the middle mouse button and move the mouse a short distance.
-The cursor will change to a crossed-arrow pattern.
-You can now drag this tab, holding the middle mouse button down, until it did skip into the place where you want it to be.</para>
+Just click the tab you want to move with the middle mouse button and move the
+mouse a short distance. The cursor will change to a crossed-arrow pattern. You
+can now drag this tab, holding the middle mouse button down, until it did skip
+into the place where you want it to be.</para>
 </sect3>
 
 <sect3 id="gettingstarted-edit-arrange-split">
 <title>Viewing Several Files Simultaneously</title>
 
-<para>At first sight there is always at most one single editor window open to work on a source file.
-Although you may fast switch the tabbed windows, there are times where you want have several files open at once, &eg; for reference purposes or to keep complex tasks under better control.
-To accomplish this, &kdevelop; provides a way to split the workspace area into different, simultaneously visible sections which each can hold their own series of tabbed windows.</para>
+<para>At first sight there is always at most one single editor window open to
+work on a source file. Although you may fast switch the tabbed windows, there
+are times where you want have several files open at once, &eg; for reference
+purposes or to keep complex tasks under better control. To accomplish this,
+&kdevelop; provides a way to split the workspace area into different,
+simultaneously visible sections which each can hold their own series of tabbed
+windows.</para>
 
-<para>There are two split commands which you can reach either through the <guimenu>Window</guimenu> menu or by right clicking either into a tabbed window or on the window tab itself.
-We will illustrate this splitting behavior again with our Hello example project.</para>
+<para>There are two split commands which you can reach either through the
+<guimenu>Window</guimenu> menu or by right clicking either into a tabbed window
+or on the window tab itself. We will illustrate this splitting behavior again
+with our Hello example project.</para>
 
-<para>Assume there are two source files open on the tab bar, <filename>hello.cpp</filename> and <filename>hello.h</filename>.
-Now, while working on the <filename>hello.cpp</filename> source, you often need to refer to the declarations in the <filename>hello.h</filename> headers file, so you want to keep both files open simultaneously.</para>
+<para>Assume there are two source files open on the tab bar,
+<filename>hello.cpp</filename> and <filename>hello.h</filename>. Now, while
+working on the <filename>hello.cpp</filename> source, you often need to refer to
+the declarations in the <filename>hello.h</filename> headers file, so you want
+to keep both files open simultaneously.</para>
 
-<para>To get this done, right click on the tab of, say, <filename>hello.h</filename>.
-The following menu will then pop up.</para>
+<para>To get this done, right click on the tab of, say,
+<filename>hello.h</filename>. The following menu will then pop up.</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="split-workspace.png" format="PNG"/>
 </imageobject>
-<caption><para>How to split the current workspace area into two parts.</para></caption>
+<caption><para>How to split the current workspace area into two
+parts.</para></caption>
 </mediaobject>
 </screenshot>
 
-<para>Select the <guimenuitem>Split Horizontal</guimenuitem> entry.
-This will split the current workspace area in the middle and move the tabbed editor window holding the <filename>hello.h</filename> file into the lower part.</para>
+<para>Select the <guimenuitem>Split Horizontal</guimenuitem> entry. This will
+split the current workspace area in the middle and move the tabbed editor window
+holding the <filename>hello.h</filename> file into the lower part.</para>
 
 <screenshot>
 <mediaobject>
@@ -1473,21 +1870,25 @@ This will split the current workspace area in the middle and move the tabbed edi
 </mediaobject>
 </screenshot>
 
-<para>Note the dotted separator line between both windows.
-You can grab it with the mouse and adjust the heights of the editor windows according to your needs.</para>
+<para>Note the dotted separator line between both windows. You can grab it with
+the mouse and adjust the heights of the editor windows according to your
+needs.</para>
 
 <para>There are a few points to note.</para>
 <itemizedlist>
 <listitem>
-<para>The split workspace areas are fully functional at their own.
-This means, new tabbed windows will open in the workspace which contains the currently active editor window.
-And you can split any sub-area again to your wish, thus keeping as much windows open simultaneously as you need.</para>
+<para>The split workspace areas are fully functional at their own. This means,
+new tabbed windows will open in the workspace which contains the currently
+active editor window. And you can split any sub-area again to your wish, thus
+keeping as much windows open simultaneously as you need.</para>
 </listitem>
 
 <listitem>
-<para>Any split will move the currently active editor window into the new workspace sub-area, either downward or to the right.
-The other tabbed windows all remain where they were.
-You cannot directly move tabbed windows between split areas, instead you need to explicitly close the window in one workspace area and reopen it in another to regroup.</para>
+<para>Any split will move the currently active editor window into the new
+workspace sub-area, either downward or to the right. The other tabbed windows
+all remain where they were. You cannot directly move tabbed windows between
+split areas, instead you need to explicitly close the window in one workspace
+area and reopen it in another to regroup.</para>
 </listitem>
 
 <listitem>
@@ -1500,21 +1901,31 @@ It closes automatically, once the last tabbed window in it was closed.</para>
 <sect3 id="gettingstarted-edit-arrange-group">
 <title>Grouping Source Files Into Development Sessions</title>
 
-<para>When your project grows larger, and the development tasks become more and more complex and force you to often switch between different, even distinct sets of files, it is about time to organize your development work into distinct sessions.
-The <guilabel>File List</guilabel> tool view of &kdevelop; allows you do to just this.</para>
+<para>When your project grows larger, and the development tasks become more and
+more complex and force you to often switch between different, even distinct sets
+of files, it is about time to organize your development work into distinct
+sessions. The <guilabel>File List</guilabel> tool view of &kdevelop; allows you
+do to just this.</para>
 
-<para>On top of the <guilabel>File List</guilabel> tool view window there is a tool bar where you can create, save, select, and remove such sessions.
-Or alternatively use the <menuchoice><guimenu>View</guimenu> <guimenuitem>View Sessions</guimenuitem></menuchoice> sub-menu.</para>
+<para>On top of the <guilabel>File List</guilabel> tool view window there is a
+tool bar where you can create, save, select, and remove such sessions. Or
+alternatively use the <menuchoice><guimenu>View</guimenu> <guimenuitem>View
+Sessions</guimenuitem></menuchoice> sub-menu.</para>
 
-<para>We will illustrate this facility again with our Hello example project. Assume you want to always open the <filename>hello.cpp</filename>, <filename>hello.h</filename>, and <filename>main.cpp</filename> files all in one step, no matter what development task you just did perform in the project.
-To accomplish this, you first need to create a new development session named, say, <quote>sources</quote>.</para>
+<para>We will illustrate this facility again with our Hello example project.
+Assume you want to always open the <filename>hello.cpp</filename>,
+<filename>hello.h</filename>, and <filename>main.cpp</filename> files all in one
+step, no matter what development task you just did perform in the project. To
+accomplish this, you first need to create a new development session named, say,
+<quote>sources</quote>.</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="file-list-session-create.png" format="PNG"/>
 </imageobject>
-<caption><para>Use development sessions to remember groups of files.</para></caption>
+<caption><para>Use development sessions to remember groups of
+files.</para></caption>
 </mediaobject>
 </screenshot>
 
@@ -1524,50 +1935,64 @@ To accomplish this, you first need to create a new development session named, sa
 <para>Create a new session</para>
 <substeps>
 <step>
-<para>Click the <guiicon>New Session</guiicon> icon top left in the <guilabel>File List</guilabel> tool view window.</para>
+<para>Click the <guiicon>New Session</guiicon> icon top left in the
+<guilabel>File List</guilabel> tool view window.</para>
 </step>
 <step>
-<para>A dialog will pop up.
-In the <guilabel>Enter the name of the session</guilabel> input field give your new session a name, &eg; <quote>sources</quote>.</para>
+<para>A dialog will pop up. In the <guilabel>Enter the name of the
+session</guilabel> input field give your new session a name, &eg;
+<quote>sources</quote>.</para>
 </step>
 <step>
-<para>Close the dialog with <guibutton>OK</guibutton>.
-The new session will now be listed in the drop down box on the toolbar.</para>
+<para>Close the dialog with <guibutton>OK</guibutton>. The new session will now
+be listed in the drop down box on the toolbar.</para>
 </step>
 </substeps>
 </step>
 <step>
-<para>This new session will initially be empty.
-You must populate it with the files you want to be kept there.</para>
+<para>This new session will initially be empty. You must populate it with the
+files you want to be kept there.</para>
 <substeps>
 <step>
-<para>Open all files you want to be grouped in this development session.
-In our example we decided to keep <filename>hello.cpp</filename>, <filename>hello.h</filename>, and <filename>main.cpp</filename> there as planned.</para>
+<para>Open all files you want to be grouped in this development session. In our
+example we decided to keep <filename>hello.cpp</filename>,
+<filename>hello.h</filename>, and <filename>main.cpp</filename> there as
+planned.</para>
 </step>
 <step>
-<para>Once your file list is complete, click the <guiicon>Save Session</guiicon> icon in the toolbar.
-Do not skip this step, &kdevelop; will forget the file list otherwise.</para>
+<para>Once your file list is complete, click the <guiicon>Save Session</guiicon>
+icon in the toolbar. Do not skip this step, &kdevelop; will forget the file list
+otherwise.</para>
 </step>
 </substeps>
 </step>
 </procedure>
 
-<para>That was it.
-Whenever you select the <guilabel>sources</guilabel> session from the <guilabel>Open Session</guilabel> drop down box, &kdevelop; will close all currently open editor windows and open the remembered ones (<filename>hello.cpp</filename>, <filename>hello.h</filename>, and <filename>main.cpp</filename> in our example) instead.</para>
+<para>That was it. Whenever you select the <guilabel>sources</guilabel> session
+from the <guilabel>Open Session</guilabel> drop down box, &kdevelop; will close
+all currently open editor windows and open the remembered ones
+(<filename>hello.cpp</filename>, <filename>hello.h</filename>, and
+<filename>main.cpp</filename> in our example) instead.</para>
 
-<para>You can define as many sessions as you wish in the context of your project.
-If you want to change the session&apos;s contents, just update the remembered file list with a <guiicon>Save Session</guiicon> click.
-And if you want get rid of a session, select it in the drop down box, then click the <guiicon>Delete Session</guiicon> icon in the toolbar right.</para>
+<para>You can define as many sessions as you wish in the context of your
+project. If you want to change the session&apos;s contents, just update the
+remembered file list with a <guiicon>Save Session</guiicon> click. And if you
+want get rid of a session, select it in the drop down box, then click the
+<guiicon>Delete Session</guiicon> icon in the toolbar right.</para>
 
-<para>There is even more. You can force &kdevelop; to open a given session by default when it loads the project.
-Just select the session in the drop down box on the <menuchoice><guimenu>Projects</guimenu> <guimenuitem>Project Options</guimenuitem> <guimenuitem>File List</guimenuitem></menuchoice> project options configuration page.</para>
+<para>There is even more. You can force &kdevelop; to open a given session by
+default when it loads the project. Just select the session in the drop down box
+on the <menuchoice><guimenu>Projects</guimenu> <guimenuitem>Project
+Options</guimenuitem> <guimenuitem>File List</guimenuitem></menuchoice> project
+options configuration page.</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="file-list-session-default.png" format="PNG"/>
 </imageobject>
-<caption><para>Let &kdevelop; open a specific session when the project is loaded.</para></caption>
+<caption><para>Let &kdevelop; open a specific session when the project is
+loaded.</para></caption>
 </mediaobject>
 </screenshot>
 </sect3>
@@ -1576,43 +2001,57 @@ Just select the session in the drop down box on the <menuchoice><guimenu>Project
 <sect2 id="gettingstarted-edit-problems">
 <title>Keeping an Eye on Common Problems</title>
 
-<para>When you open an editor window containing a source file, &kdevelop; will parse its contents.
-This allows the built in <emphasis>problem reporter</emphasis> to scan the source text for some common errors it knows of.
-And it can alert the user of different places which have been marked for special treatment.</para>
+<para>When you open an editor window containing a source file, &kdevelop; will
+parse its contents. This allows the built in <emphasis>problem
+reporter</emphasis> to scan the source text for some common errors it knows of.
+And it can alert the user of different places which have been marked for special
+treatment.</para>
 
 <para>Let us illustrate this facility with our Hello example project.</para>
 
 <itemizedlist>
 <listitem>
-<para>Open an editor window with the <filename>main.cpp</filename> source file.</para>
+<para>Open an editor window with the <filename>main.cpp</filename> source
+file.</para>
 </listitem>
 
 <listitem>
-<para>Make sure it still contains the following line somewhere towards the end:</para>
+<para>Make sure it still contains the following line somewhere towards the
+end:</para>
 <programlisting>
         /// @todo do something with the command line args here
 </programlisting>
-<para>This was inserted by the &appwizard; when you created the Hello project in the <link linkend="gettingstarted-new">Starting a New Project</link> chapter above.</para>
+<para>This was inserted by the &appwizard; when you created the Hello project in
+the <link linkend="gettingstarted-new">Starting a New Project</link> chapter
+above.</para>
 </listitem>
 
 <listitem>
-<para>Now open the <guilabel>Problems</guilabel> tool view in the bottom tabs row.
-If all went right, it will currently report this todo:</para>
+<para>Now open the <guilabel>Problems</guilabel> tool view in the bottom tabs
+row. If all went right, it will currently report this todo:</para>
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="problem-report-todo.png"/>
 </imageobject>
-<caption><para>&kdevelop; is alerting a source code line containing a todo mark.</para></caption>
+<caption><para>&kdevelop; is alerting a source code line containing a todo
+mark.</para></caption>
 </mediaobject>
 </screenshot>
 </listitem>
 </itemizedlist>
 
-<para>The format of the <computeroutput>/// @todo</computeroutput> command is for special treatment by the <application>Doxygen</application> code documenter, which we will look at briefly in the <link linkend="gettingstarted-doc">Documentation</link> section below.
-It is not mandatory that you use this format, the more common <computeroutput>TODO</computeroutput> and <computeroutput>FIXME</computeroutput> comment marks will be recognized as well.</para>
+<para>The format of the <computeroutput>/// @todo</computeroutput> command is
+for special treatment by the <application>Doxygen</application> code documenter,
+which we will look at briefly in the <link
+linkend="gettingstarted-doc">Documentation</link> section below. It is not
+mandatory that you use this format, the more common
+<computeroutput>TODO</computeroutput> and <computeroutput>FIXME</computeroutput>
+comment marks will be recognized as well.</para>
 
-<para>If you &eg; insert the following <computeroutput>TODO</computeroutput> and <computeroutput>FIXME</computeroutput> comment lines in our <filename>hello.cpp</filename> example file</para>
+<para>If you &eg; insert the following <computeroutput>TODO</computeroutput> and
+<computeroutput>FIXME</computeroutput> comment lines in our
+<filename>hello.cpp</filename> example file</para>
 <programlisting>
 Hello::Hello()
     : KMainWindow( 0, "Hello" )
@@ -1625,44 +2064,54 @@ Hello::Hello()
     new QLabel( "Hello World", this, "hello label" );
 }
 </programlisting>
-<para>you will find them listed in the <guilabel>Problems</guilabel> tool view as well:</para>
+<para>you will find them listed in the <guilabel>Problems</guilabel> tool view
+as well:</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="problem-report-marks.png" format="PNG"/>
 </imageobject>
-<caption><para>The problem reporter listing lines which require attention in the currently edited file.</para></caption>
+<caption><para>The problem reporter listing lines which require attention in the
+currently edited file.</para></caption>
 </mediaobject>
 </screenshot>
 
-<para>Note the other tabs in the <guilabel>Problem</guilabel> reporter tool view window, especially <guilabel>Fixme</guilabel>, and <guilabel>Todo</guilabel>.
-If you open them, you will find all <computeroutput>FIXME</computeroutput> and <computeroutput>TODO</computeroutput> marked lines, &kdevelop; has found so far in this session.
-For example the <computeroutput>TODO</computeroutput> alerts will currently look thus:</para>
+<para>Note the other tabs in the <guilabel>Problem</guilabel> reporter tool view
+window, especially <guilabel>Fixme</guilabel>, and <guilabel>Todo</guilabel>. If
+you open them, you will find all <computeroutput>FIXME</computeroutput> and
+<computeroutput>TODO</computeroutput> marked lines, &kdevelop; has found so far
+in this session. For example the <computeroutput>TODO</computeroutput> alerts
+will currently look thus:</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
 <imagedata fileref="problem-report-all-todos.png" format="PNG"/>
 </imageobject>
-<caption><para>The problem reporter has collected the <computeroutput>TODO</computeroutput> alerts.</para></caption>
+<caption><para>The problem reporter has collected the
+<computeroutput>TODO</computeroutput> alerts.</para></caption>
 </mediaobject>
 </screenshot>
 
-<para>The <guilabel>Errors</guilabel> tab will however not list every coding error you make.
-This is the job of other tools in &eg; the build process.
-But you will find here alerts of some common programming mistakes which would likely go unnoticed otherwise and probably be catched with difficulties during complex debugging session.</para>
+<para>The <guilabel>Errors</guilabel> tab will however not list every coding
+error you make. This is the job of other tools in &eg; the build process. But
+you will find here alerts of some common programming mistakes which would likely
+go unnoticed otherwise and probably be catched with difficulties during complex
+debugging session.</para>
 
-<para>You will find the &kdevelop; problem reporter facility a very valuable tool, so check the <guilabel>Problems</guilabel> tool view regularly in the development process.</para>
+<para>You will find the &kdevelop; problem reporter facility a very valuable
+tool, so check the <guilabel>Problems</guilabel> tool view regularly in the
+development process.</para>
 </sect2>
 </sect1>
-
 
 <sect1 id="gettingstarted-compile">
 <title>How to Compile a Project</title>
 
-<para>Compiling a project in &kdevelop; requires several setup steps and then building the application.
-All these are available through the <guimenu>Build</guimenu> menu.</para>
+<para>Compiling a project in &kdevelop; requires several setup steps and then
+building the application. All these are available through the
+<guimenu>Build</guimenu> menu.</para>
 
 <screenshot>
 <mediaobject>
@@ -1673,42 +2122,60 @@ All these are available through the <guimenu>Build</guimenu> menu.</para>
 </mediaobject>
 </screenshot>
 
-<para>We are interested for now in the upper section only of this menu.
-The entries there are sorted in order of their importance.
-Thus the most often needed command is on top, the <guimenuitem>Build Project</guimenuitem> entry, which will cause all of the project be initialized, compiled and linked as needed.
-Other entries are there to compile selected project portions or a single file only, to perform several initialization sequences, or to install the completed application binaries.</para>
+<para>We are interested for now in the upper section only of this menu. The
+entries there are sorted in order of their importance. Thus the most often
+needed command is on top, the <guimenuitem>Build Project</guimenuitem> entry,
+which will cause all of the project be initialized, compiled and linked as
+needed. Other entries are there to compile selected project portions or a single
+file only, to perform several initialization sequences, or to install the
+completed application binaries.</para>
 
-<para>For now we will concentrate on several facilities which &kdevelop; provides for project setup, initializing, building, and running an application.
+<para>For now we will concentrate on several facilities which &kdevelop;
+provides for project setup, initializing, building, and running an application.
 In general, this includes:</para>
 <simplelist>
-<member><link linkend="gettingstarted-compile-basic">Looking briefly at the basic build cycle</link></member>
+<member><link linkend="gettingstarted-compile-basic">Looking briefly at the
+basic build cycle</link></member>
 </simplelist>
 
 <sect2 id="gettingstarted-compile-basic">
 <title>The Basic Build Cycle</title>
 
-<para>Once you created a new project you usually want to check if everything went right so far.
-This implies a first build and test run of the application, which we will do now.
-In order to initially compile a project there are several steps to perform, which we will briefly look at.</para>
+<para>Once you created a new project you usually want to check if everything
+went right so far. This implies a first build and test run of the application,
+which we will do now. In order to initially compile a project there are several
+steps to perform, which we will briefly look at.</para>
 <simplelist>
-<member><link linkend="gettingstarted-compile-basic-init">How to initialize the project for a first build.</link></member>
-<member><link linkend="gettingstarted-compile-basic-config">How to do the initial configuration.</link></member>
-<member><link linkend="gettingstarted-compile-basic-build">How to build the project.</link></member>
-<member><link linkend="gettingstarted-compile-basic-run">How to run the application from within &kdevelop;.</link></member>
+<member><link linkend="gettingstarted-compile-basic-init">How to initialize the
+project for a first build.</link></member>
+<member><link linkend="gettingstarted-compile-basic-config">How to do the
+initial configuration.</link></member>
+<member><link linkend="gettingstarted-compile-basic-build">How to build the
+project.</link></member>
+<member><link linkend="gettingstarted-compile-basic-run">How to run the
+application from within &kdevelop;.</link></member>
 </simplelist>
 
 <note>
-<para>This discussion implies that your project is based on the &GNU; autotools, which enabled the &automanag; tool in &kdevelop; as our example Hello project does.
-If you created another type project, &eg; for the &Qt; based <application>QMake</application> project manager, there will be other facilities available in the menus or perhaps even none of them.
-You will have to consult the respective vendor documentation on project management and application building in these cases.</para>
+<para>This discussion implies that your project is based on the &GNU; autotools,
+which enabled the &automanag; tool in &kdevelop; as our example Hello project
+does. If you created another type project, &eg; for the &Qt; based
+<application>QMake</application> project manager, there will be other facilities
+available in the menus or perhaps even none of them. You will have to consult
+the respective vendor documentation on project management and application
+building in these cases.</para>
 </note>
 
 <sect3 id="gettingstarted-compile-basic-init">
 <title>Initialize the Project for the Build</title>
 
-<para>When the &appwizard; created our Hello example project, it left it in a sort of raw, <quote>virgin</quote> state.
-The &GNU; autotools chain dictates several initialization steps to be performed before the application could be actually compiled and linked.
-If you try to build a project in such a raw state, &eg; by selecting the <menuchoice><guimenu>Build</guimenu> <guimenuitem>Build Project</guimenuitem></menuchoice> menu or pressing the <keycap>F8</keycap> function key, you will get the following warning.</para>
+<para>When the &appwizard; created our Hello example project, it left it in a
+sort of raw, <quote>virgin</quote> state. The &GNU; autotools chain dictates
+several initialization steps to be performed before the application could be
+actually compiled and linked. If you try to build a project in such a raw state,
+&eg; by selecting the <menuchoice><guimenu>Build</guimenu> <guimenuitem>Build
+Project</guimenuitem></menuchoice> menu or pressing the <keycap>F8</keycap>
+function key, you will get the following warning.</para>
 
 <screenshot>
 <mediaobject>
@@ -1719,11 +2186,15 @@ If you try to build a project in such a raw state, &eg; by selecting the <menuch
 </mediaobject>
 </screenshot>
 
-<para>You may press the <guibutton>Run Them</guibutton> button in which case &kdevelop; will try to automatically run all required setup steps prior to compiling and linking the application.
-But we will look at those initial steps in sequence, so cancel the dialog by pressing <guibutton>Do Not run</guibutton>.</para>
+<para>You may press the <guibutton>Run Them</guibutton> button in which case
+&kdevelop; will try to automatically run all required setup steps prior to
+compiling and linking the application. But we will look at those initial steps
+in sequence, so cancel the dialog by pressing <guibutton>Do Not run</guibutton>.
+</para>
 
-<para>As mentioned already, compiling and linking the application is done through the <guimenu>Build</guimenu> menu.
-Call it up and select <guimenuitem>Run automake and friends</guimenuitem>.</para>
+<para>As mentioned already, compiling and linking the application is done
+through the <guimenu>Build</guimenu> menu. Call it up and select
+<guimenuitem>Run automake and friends</guimenuitem>.</para>
 
 <screenshot>
 <mediaobject>
@@ -1735,41 +2206,255 @@ Call it up and select <guimenuitem>Run automake and friends</guimenuitem>.</para
 </screenshot>
 
 <para>
-&kdevelop; will now open the <guilabel>Messages</guilabel> tool view window at the bottom and list a series of messages produced by several make tools.
-If everything went right, the final line will read <computeroutput>*** Success ***</computeroutput>.</para>
+&kdevelop; will now open the <guilabel>Messages</guilabel> tool view window at
+the bottom and list a series of messages produced by several make tools. If
+everything went right, the final line will read 
+<quote><computeroutput>*** Success ***</computeroutput></quote>.</para>
 
-<para>If you scroll back to the top, you will find the command line, &kdevelop; issued to call up the tools beneath the surface:</para>
+<para>If you scroll back to the top, you will find the command line, &kdevelop;
+issued to call up the tools beneath the surface:</para>
 
 <programlisting>
-cd '/home/devel/projects/hello' &amp;&amp; WANT_AUTOCONF_2_5="1" WANT_AUTOMAKE_1_6="1" gmake -f Makefile.cvs
+cd '/home/devel/projects/hello' &amp;&amp; \
+WANT_AUTOCONF_2_5="1" WANT_AUTOMAKE_1_6="1" gmake -f Makefile.cvs
 </programlisting>
 
-<para>This basically tells that &kdevelop; first switched to the root directory of our example project, advised the make system of the autoconf and automake tool revisions used for this initialization and then commanded the make tool (&GNU; <application>gmake</application> in this case) to process the <filename>Makefile.cvs</filename> make file.</para>
+<para>This basically tells that &kdevelop; first switched to the root directory
+of our example project. Then it set up a dedicated environment, advising the
+make system of the <application>autoconf</application> and
+<application>automake</application> tool revisions used for this initialization.
+And finally it instructed the make tool (&GNU; <application>gmake</application>
+in this case) to process the <filename>Makefile.cvs</filename> make file.</para>
 
-<para>This make file was automatically set up when you created the Hello project.
-It contains all the commands necessary to properly initialize the project so the resulting application will run under &kde;.
-Especially this will create the <filename>configure</filename> file necessary to perform the next setup step.</para>
+<para>This make file was automatically set up when you created the Hello
+project. It contains all the commands necessary to properly initialize the
+project so the resulting application will run under &kde;. Especially this will
+create the <filename>configure</filename> skript file necessary to perform the
+next setup step.</para>
 </sect3>
 
 <sect3 id="gettingstarted-compile-basic-config">
 <title>Configure the project</title>
 
-<para>Configuring means to tailor the build process to the hardware and software peculiarities of your system. This is a basic requirement in build processes based on the &GNU; autotools chain as you probably will know.</para>
+<para>Configuring means to tailor the build process to the hardware and software
+peculiarities of your system. This is a basic requirement in build processes
+based on the &GNU; autotools scheme as you probably will know.</para>
 
-<para>You can command a configure sequence once the basic automake initialization has been successfully finished because the necessary <filename>configure</filename> files will only be available after this run.
-This done, select the <menuchoice><guimenu>Build</guimenu> <guimenuitem>Run Configure</guimenuitem></menuchoice> menu entry to initiate a configuration sequence.</para>
+<para>You can command a configure sequence once the basic automake
+initialization has been successfully finished because only after this
+initial run the necessary <filename>configure</filename> files will be
+available. This done, select the <menuchoice><guimenu>Build</guimenu>
+<guimenuitem>Run Configure</guimenuitem></menuchoice> menu entry to initiate a
+configuration sequence.</para>
+
+<para>&kdevelop; opened the <guilabel>Messages</guilabel> tool view
+window again if necessary and listed the messages of the configure run therein.
+If all went right, the final messages will be <quote><computeroutput>Good - your
+configure finished. Start make now</computeroutput></quote> (which was issued by
+configure) followed by the &kdevelop; <quote><computeroutput>*** Success
+***</computeroutput></quote> message.</para>
+
+<para>On top of the <guilabel>Messages</guilabel> window you will again find
+the command line, &kdevelop; used to initiate this configuration run:</para>
+
+<programlisting>
+mkdir '/home/devel/projects/hello/debug' &amp;&amp; \
+cd '/home/devel/projects/hello/debug' &amp;&amp; \
+CXXFLAGS="-O0 -g3" "/home/devel/projects/hello/configure" --enable-debug=full
+</programlisting>
+
+<para>You can tell several interesting details from these commands.</para>
+
+<informaltable frame="none">
+<tgroup cols="2"><tbody><row>
+<entry>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-debug-tree.png"/>
+</imageobject>
+</mediaobject>
+</entry>
+<entry>
+<itemizedlist>
+<listitem>
+<para>First, &kdevelop; uses a dedicated subdirectory in the project directory
+tree for the build process. This <filename class="directory">debug</filename>
+build directory (shown to the left) mirrors the basic project structure and
+contains some set of build related files, such as several
+<filename>configure</filename> based files and additionally a
+<filename>Makefile</filename> in each subdirectory.</para>
+</listitem>
+<listitem>
+<para>In the <link linkend="gettingstarted-compile-setup">Advanced Setup</link>
+section shortly below we will have a brief look at the motivations why
+&kdevelop; uses separate build directories in cases like this one. For the
+moment it is enough to know that &kdevelop; created this <filename
+class="directory">debug</filename> directory &mdash; if necessary &mdash; prior
+to the configure call and that the <filename>configure</filename> script did
+build the sub structure and all the <filename>Makefiles</filename> in
+there.</para>
+</listitem>
+<listitem>
+<para>Next, from within the <filename class="directory">debug</filename> build
+directory, &kdevelop; called the <filename>configure</filename> script in the
+root directory of our project using a dedicated environment, where the
+<computeroutput>CXXFLAGS="-O0 -g3"</computeroutput> flags will later signal the
+&gcc; compiler that it should not optimize the resulting binaries and include
+full debugging information with them.</para>
+</listitem>
+<listitem>
+<para>Finally the <filename>configure</filename> script was called with the
+<computeroutput>--enable-debug=full</computeroutput> option which instructs it
+to create each <filename>Makefile</filename> so that later compilation and
+linking will have all necessary debugging information be built in and
+usable.</para>
+</listitem>
+</itemizedlist>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+
+<para>All these settings are configurable on a per project basis. You will learn
+more about this in the <link linkend="project-management">Project
+Management</link> chapter.</para>
 </sect3>
 
 <sect3 id="gettingstarted-compile-basic-build">
 <title>Build the Project</title>
 
-<para>(- to be written -)</para>
+<para>Once you got this far you will be ready to actually build, &ie;
+compile and link the application. Looking at the <guimenu>Build</guimenu> menu,
+there are three such compile options from which to select.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="build-commands.png" format="PNG"/>
+</imageobject>
+<caption><para>&kdevelop; commands to build binaries.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>Going from bottom to top, there are:</para>
+<itemizedlist>
+<listitem>
+<para><guimenuitem>Compile File</guimenuitem> &mdash; This will compile the
+source file in the currently open editor window. Mostly used for quick error
+checks.</para>
+</listitem>
+<listitem>
+<para><guimenuitem>Build Active Target</guimenuitem> &mdash; This is mainly used
+in conjunction with the <link linkend="gettingstarted-extend-automake">Automake
+Manager</link> which we will briefly look at below.</para>
+</listitem>
+<listitem>
+<para><guimenuitem>Build Project</guimenuitem> &mdash; Now this is what we
+currently are interested in. It will iterate over the whole project, compiling
+and linking all files as necessary.</para>
+</listitem>
+</itemizedlist>
+
+<para>It might be interesting to watch what happens to the 
+<filename class="directory">Debug</filename> directory created in the former
+<filename>configure</filename> run. So best keep it open with all
+subdirectories unfolded just as shown above. Then select
+<menuchoice><guimenu>Build</guimenu> <guimenuitem>Build
+Project</guimenuitem></menuchoice> (or press the <keycap>F8</keycap> key) to
+initiate the build sequence. As before, the <guilabel>Messages</guilabel> tool
+view window will open at the bottom and list the outcome of this build run. And
+additionally some files will appear on the <filename
+class="directory">Debug</filename> subtree.</para>
+
+<para>There are not many source files in our Hello example project, so the
+<guilabel>Messages</guilabel> window will contain only a few lines. On top of
+them again find the command line &kdevelop; issued to the underlying
+shell.</para>
+
+<programlisting>
+cd '/home/devel/projects/hello/debug' &amp;&amp; \
+WANT_AUTOCONF_2_5="1" WANT_AUTOMAKE_1_6="1" gmake -k 
+</programlisting>
+
+<para>Not very surprisingly, &kdevelop; switched to the <filename
+class="directory">Debug</filename> subtree root in order to run the
+<filename>Makefile</filename> located there. A dedicated sub-environment was
+set up again as before in the <link
+linkend="gettingstarted-compile-basic-init">Initialization step</link> in which
+then the <application>gmake</application> tool was called.</para>
+
+<para>Note the <computeroutput>-k</computeroutput> option in the
+<application>gmake</application> call. It forces the build process to continue
+up to its very end, even if errors will occur. This makes sense as &kdevelop;
+will list all error messages in the <guilabel>Messages</guilabel> window. If
+there are any, use the virtues of an &IDE;: Just click on the error message in
+the <guilabel>Messages</guilabel> window and &kdevelop; will take you to
+exactly the position where the error occurred in the source file.</para>
+
+<para>And what did happen inside the <filename
+class="directory">Debug</filename> subtree? Not very much. A few files showed up
+on the <filename class="directory">doc/en</filename> and <filename
+class="directory">src</filename> branches, most notably the
+<filename>hello</filename> file in <filename
+class="directory">/home/devel/projects/hello/debug/src/</filename>. This,
+finally, is the application binary we were looking for. All what is left
+to do in our initial project check is to run this
+<filename>hello</filename>.</para>
 </sect3>
 
 <sect3 id="gettingstarted-compile-basic-run">
 <title>Run the Application</title>
 
-<para>(- to be written -)</para>
+<para>There are no extra steps involved to run this new Hello
+application. Either select <menuchoice><guimenu>Build</guimenu>
+<guimenuitem>Execute Program</guimenuitem></menuchoice> or press
+<keycombo><keycap>Shift</keycap> <keycap>F9</keycap></keycombo> or use the
+<guibutton>Execute program</guibutton> button on the <guilabel>Build
+Toolbar</guilabel> shown below.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="run-button.png"/>
+</imageobject>
+<caption><para>Running an application form the <guilabel>Build
+Toolbar</guilabel>.</para>
+</caption>
+</mediaobject>
+</screenshot>
+
+<para>That was all. &kdevelop; will now start the new application in
+the dedicated console window which opens as <guilabel>Application</guilabel>
+tool view on the bottom.There the command &kdevelop; issued to execute the
+program will be shown in the top line:</para>
+
+<programlisting>
+./hello
+</programlisting>
+
+<para>showing that the &IDE; has a notion about where the executable it
+should run resides. This notion can be widely configured. See more about
+this in the <link linkend="project-management">Project
+Management</link> chapter.</para>
+
+<para>The <computeroutput>./hello</computeroutput> line will most likely
+be followed by a warning message. Ignore this for now. It does not keep
+our <application>Hello</application> form running.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hello-world-app.png" format="PNG"/>
+</imageobject>
+<caption>
+<para>Our initial <application>Hello</application> application.</para>
+</caption>
+</mediaobject>
+</screenshot>
+
+<para>Close the <application>Hello</application> application window as
+usual. If no errors occurred, &kdevelop; will report this as
+<quote><computeroutput>*** Exited normally ***</computeroutput></quote>
+in the <guilabel>Application</guilabel> tool view window.</para>
 </sect3>
 </sect2>
 
@@ -1803,9 +2488,8 @@ This done, select the <menuchoice><guimenu>Build</guimenu> <guimenuitem>Run Conf
 <para>(- to be written -)</para>
 
 <caution><para>
-Be careful when you select your class file names.
-It is extremely difficult to change them later.
-</para></caution>
+Be careful when you select your class file names. It is extremely difficult to
+change them later.</para></caution>
 </sect2> 
 
 <sect2 id="gettingstarted-extend-subproject">
