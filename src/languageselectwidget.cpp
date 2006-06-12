@@ -24,10 +24,11 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kservice.h>
+#include <kservicetypetrader.h>
 #include <kapplication.h>
 #include <kdevplugin.h>
 #include "domutil.h"
-#include <kservicetypetrader.h>
+
 #include "languageselectwidget.h"
 #include "plugincontroller.h"
 
@@ -104,7 +105,7 @@ LanguageSelectWidget::~LanguageSelectWidget()
 
 void LanguageSelectWidget::readProjectConfig()
 {
-	KService::List languageSupportOffers =
+    KService::List languageSupportOffers =
         KServiceTypeTrader::self()->query(QLatin1String("KDevelop/LanguageSupport"),
                                QString::fromLatin1("[X-KDevelop-Version] == %1"
                                ).arg( KDEVELOP_PLUGIN_VERSION ));

@@ -15,10 +15,9 @@
     <description/>
     <ignoreparts>
       <part>kdevbookmarks</part>
-      <part>kdevdebugger</part>
       <part>kdevfilegroups</part>
-      <part>kdevfileview</part>
-      <part>kdevvalgrind</part>
+      <part>kdevfilelist</part>
+      <part>kdevdistpart</part>
     </ignoreparts>
     <versioncontrol>kdevsubversion</versioncontrol>
     <defaultencoding/>
@@ -36,6 +35,7 @@
     <tree>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>
       <hidenonprojectfiles>false</hidenonprojectfiles>
+      <showvcsfields>false</showvcsfields>
     </tree>
   </kdevfileview>
   <kdevdoctreeview>

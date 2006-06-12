@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <kservicetypetrader.h>
+
 #include <QMap>
 #include <QFile>
 #include <qdebug.h>
@@ -10,12 +10,12 @@
 #include <QCheckBox>
 #include <qradiobutton.h>
 
+
 #include <krun.h>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
-#include <kservice.h>
 #include <kmimetype.h>
 #include <klineedit.h>
 #include <kshortcut.h>
@@ -31,6 +31,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kxmlguifactory.h>
+#include <kservicetypetrader.h>
 #include <ksqueezedtextlabel.h>
 #include <kencodingfiledialog.h>
 #include <krecentfilesaction.h>
@@ -709,7 +710,7 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
         {
             if ( dlg.open_with_kde->isChecked() )
             {
-                KRun::runUrl( url, mimeType->name(),0L );
+                KRun::runUrl( url, mimeType->name(), 0 );
             }
             else
             {
@@ -1074,7 +1075,7 @@ void DocumentController::slotNewDesignerStatus( const QString &formName,
     kDebug( 9000 ) << k_funcinfo << endl;
     kDebug( 9000 ) << " formName: " << formName
     << ", status: " << status << endl;
-    KDevDocument* document = documentForUrl(KUrl::fromPathOrUrl( formName ));
+    KDevDocument* document = documentForUrl(KUrl( formName ));
     if (document)
         emit documentStateChanged( document, KDevDocument::DocumentState( status ) );
 }
@@ -1226,7 +1227,7 @@ KParts::Factory *DocumentController::findPartFactory( const QString &mimeType,
         const QString &partType,
         const QString &preferredName )
 {
-    KService::List offers = KServiceTypeTrader::self()->query( mimeType,
+    KService::List offers = KServiceTypeTrader::self() ->query( mimeType,
                                 QString( "'%1' in ServiceTypes" ).arg( partType ) );
 
     if ( offers.count() > 0 )
@@ -1235,7 +1236,7 @@ KParts::Factory *DocumentController::findPartFactory( const QString &mimeType,
         // if there is a preferred plugin we'll take it
         if ( !preferredName.isEmpty() )
         {
-			KService::List::ConstIterator it;
+            KService::List::Iterator it;
             for ( it = offers.begin(); it != offers.end(); ++it )
             {
                 if ( ( *it ) ->desktopEntryName() == preferredName )

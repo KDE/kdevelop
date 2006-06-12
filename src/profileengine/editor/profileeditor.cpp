@@ -22,7 +22,6 @@
 #include <QLineEdit>
 #include <q3textedit.h>
 #include <qpalette.h>
-//Added by qt3to4:
 #include <QVBoxLayout>
 
 #include <kdebug.h>
@@ -35,7 +34,7 @@
 #include <kdialogbase.h>
 #include <kglobalsettings.h>
 #include <kdeversion.h>
-#include <kservicetypetrader.h>
+
 #include <profile.h>
 
 #include "addprofilewidget.h"
@@ -117,7 +116,7 @@ void ProfileEditor::refresh()
 
 void ProfileEditor::refreshPropertyCombo()
 {
-	KService::List list = KServiceTypeTrader::self()->query(QLatin1String("KDevelop/Plugin"));
+    KService::List list = KServiceTypeTrader::self()->query(QLatin1String("KDevelop/Plugin"));
     QStringList props;
     for (KService::List::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
     {
@@ -143,7 +142,7 @@ void ProfileEditor::refreshAvailableList()
     allProject = new K3ListViewItem(allList, i18n("Project"));
     allProject->setOpen(true);
 
-	KService::List olist = engine.allOffers(ProfileEngine::Core);
+    KService::List olist = engine.allOffers(ProfileEngine::Core);
     for (KService::List::iterator it = olist.begin(); it != olist.end(); ++it)
         new K3ListViewItem(allCore, (*it)->desktopEntryName(), (*it)->genericName());
     olist = engine.allOffers(ProfileEngine::Global);
@@ -207,19 +206,19 @@ void ProfileEditor::fillPluginsList(Profile *profile)
     K3ListViewItem *project = new K3ListViewItem(pluginsView, i18n("Project Plugins"));
     project->setOpen(true);
 
-	KService::List coreOffers = engine.offers(profile->name(), ProfileEngine::Core);
+    KService::List coreOffers = engine.offers(profile->name(), ProfileEngine::Core);
     for (KService::List::const_iterator it = coreOffers.constBegin();
             it != coreOffers.constEnd(); ++it)
         new K3ListViewItem(core, (*it)->desktopEntryName(), (*it)->genericName(),
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
 
-	KService::List globalOffers = engine.offers(profile->name(), ProfileEngine::Global);
+    KService::List globalOffers = engine.offers(profile->name(), ProfileEngine::Global);
     for (KService::List::const_iterator it = globalOffers.constBegin();
             it != globalOffers.constEnd(); ++it)
         new K3ListViewItem(global, (*it)->desktopEntryName(), (*it)->genericName(),
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
 
-	KService::List projectOffers = engine.offers(profile->name(), ProfileEngine::Project);
+    KService::List projectOffers = engine.offers(profile->name(), ProfileEngine::Project);
     for (KService::List::const_iterator it = projectOffers.constBegin();
             it != projectOffers.constEnd(); ++it)
         new K3ListViewItem(project, (*it)->desktopEntryName(), (*it)->genericName(),
@@ -253,13 +252,8 @@ void ProfileEditor::addProfile()
 
 void ProfileEditor::removeProfile()
 {
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
     if (KMessageBox::warningContinueCancel(this, i18n("Remove selected profile and all its subprofiles?"),
         i18n("Remove Profile"),KStdGuiItem::del()) == KMessageBox::Continue)
-#else
-    if (KMessageBox::warningContinueCancel(this, i18n("Remove selected profile and all its subprofiles?"),
-        i18n("Remove Profile"),KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ))) == KMessageBox::Continue)
-#endif
     {
         Profile *profile = currentProfile();
         if (profile->remove())

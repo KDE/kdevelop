@@ -23,7 +23,7 @@
 */
 #include "kdevcoreiface.h"
 #include "kdevcore.h"
-
+#include <dbus/qdbus.h>
 #include <QDir>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -283,7 +283,8 @@ const KDevProjectItem* ProjectItemContext::item() const
 KDevCore::KDevCore( QObject *parent)
     : QObject( parent )
 {
-    new KDevCoreIface(this);
+    QDBus::sessionBus().registerObject("/org/kdevelop/Core",
+                                       this, QDBusConnection::ExportSlots);
 }
 
 KDevCore::~KDevCore()

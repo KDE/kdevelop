@@ -20,8 +20,8 @@
 #define PROFILEENGINE_H
 
 #include <QMap>
-//Added by qt3to4:
 #include <Q3ValueList>
+
 #include <kservicetypetrader.h>
 
 #include "profile.h"
@@ -101,9 +101,9 @@ public:
     };
 
     /**@return The list of plugin offers for given profile and type.*/
-	KService::List offers(const QString &profileName, OfferType offerType);
+    KService::List offers(const QString &profileName, OfferType offerType);
     /**@return The list of all plugin offers for given type.*/
-	KService::List allOffers(OfferType offerType);
+    KService::List allOffers(OfferType offerType);
 
     /**@return The list of URLs to the resources (files) with given @p extension.
     @param profileName A name of a profile to find resources in.

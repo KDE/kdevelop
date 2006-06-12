@@ -8,6 +8,7 @@
 #include <QTimer>
 //Added by qt3to4:
 #include <QTextStream>
+#include <QTextDocument>
 
 class QDomDocument;
 
@@ -15,6 +16,7 @@ class QDomDocument;
 #include <kdebug.h>
 #include <klocale.h>
 #include <kservice.h>
+#include <kservicetypetrader.h>
 #include <ktoolbar.h>
 #include <kdialogbase.h>
 #include <kfiledialog.h>
@@ -474,8 +476,7 @@ bool ProjectManager::loadProjectPart()
     return false;
   }
 
-  KDevProject *projectPart = KParts::ComponentFactory
-    ::createInstanceFromService< KDevProject >( projectService, API::getInstance(),
+  KDevProject *projectPart = KService::createInstance< KDevProject >( projectService, API::getInstance(),
                                                   PluginController::argumentsFromService( projectService ) );
   if ( !projectPart ) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
@@ -531,8 +532,7 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
   }
 
   KService::Ptr languageSupportService = *languageSupportOffers.begin();
-  KDevLanguageSupport *langSupport = KParts::ComponentFactory
-      ::createInstanceFromService<KDevLanguageSupport>( languageSupportService,
+  KDevLanguageSupport *langSupport = KService::createInstance<KDevLanguageSupport>( languageSupportService,
                                                         API::getInstance(),
                                                         PluginController::argumentsFromService(  languageSupportService ) );
 

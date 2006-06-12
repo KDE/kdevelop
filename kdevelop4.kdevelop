@@ -2,7 +2,7 @@
 <kdevelop>
   <general>
     <projectmanagement>KDevProjectManager</projectmanagement>
-    <importer>KDevAutomakeImporter</importer>
+    <importer>KDevGenericImporter</importer>
     <builder>KDevMakeBuilder</builder>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>

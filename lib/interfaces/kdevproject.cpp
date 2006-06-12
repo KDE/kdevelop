@@ -27,6 +27,7 @@
 #include "kdevproject.h"
 #include <qfileinfo.h>
 #include <QTimer>
+#include <dbus/qdbus.h>
 #include "kdevprojectiface.h"
 #include "filetemplate.h"
 
@@ -42,6 +43,9 @@ struct KDevProject::Private {
 KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent)
     : KDevPlugin(info, parent), d(new KDevProject::Private())
 {
+    QDBus::sessionBus().registerObject("/org/kdevelop/Project",
+                                       this, QDBusConnection::ExportSlots);
+
     connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(buildFileMap()) );
     connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(buildFileMap()) );
 
@@ -50,7 +54,6 @@ KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent)
     
     d->m_timer = new QTimer(this);
     connect(d->m_timer, SIGNAL(timeout()), this, SLOT(slotBuildFileMap()));
-    d->m_iface = new KDevProjectIface(this);
 }
 
 KDevProject::~KDevProject()

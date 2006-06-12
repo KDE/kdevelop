@@ -30,12 +30,12 @@
 #include <kdevcore.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevmainwindow.h>
-#include <kservicetypetrader.h>
 
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
+#include <kservicetypetrader.h>
 #include <kaboutdata.h>
 
 #include <kparts/componentfactory.h>
@@ -62,14 +62,14 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringLis
   setInstance(KDevProjectManagerFactory::instance());
 
   { // load the importers
-	KService::List lst = KServiceTypeTrader::self()->query("KDevelop/ProjectImporter");
+    KService::List lst = KServiceTypeTrader::self()->query("KDevelop/ProjectImporter");
 
-    for (KService::List::ConstIterator it = lst.begin(); it != lst.end(); ++it)
+    for (KService::List::Iterator it = lst.begin(); it != lst.end(); ++it)
       {
         KService::Ptr ptr = *it;
 
         int error = 0;
-        if (KDevProjectImporter *i = KParts::ComponentFactory::createInstanceFromService<KDevProjectImporter>(ptr, this,
+        if (KDevProjectImporter *i = KService::createInstance<KDevProjectImporter>(ptr, this,
             QStringList(), &error))
           {
             m_importers.insert(ptr->name(), i);
@@ -82,14 +82,14 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringLis
   }
 
   { // load the builders
-     KService::List lst = KServiceTypeTrader::self()->query("KDevelop/ProjectBuilder");
+    KService::List lst = KServiceTypeTrader::self()->query("KDevelop/ProjectBuilder");
 
-    for (KService::List::ConstIterator it = lst.begin(); it != lst.end(); ++it)
+    for (KService::List::Iterator it = lst.begin(); it != lst.end(); ++it)
       {
         KService::Ptr ptr = *it;
 
         int error = 0;
-        if (KDevProjectBuilder *i = KParts::ComponentFactory::createInstanceFromService<KDevProjectBuilder>(ptr, this,
+        if (KDevProjectBuilder *i = KService::createInstance<KDevProjectBuilder>(ptr, this,
             QStringList(), &error))
           {
             m_builders.insert(ptr->name(), i);

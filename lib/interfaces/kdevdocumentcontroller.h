@@ -57,7 +57,7 @@ class KDevDocument;
 class KDEVINTERFACES_EXPORT KDevDocumentController: public KParts::PartManager
 {
     Q_OBJECT
-
+    Q_CLASSINFO("D-Bus Interface", "org.kdevelop.DocumentController")
 public:
     /**Constructor.
     @param parent The parent object.*/
@@ -67,13 +67,6 @@ public:
     document to be opened.
     @param encoding The encoding to open as.*/
     virtual void setEncoding( const QString &encoding ) = 0;
-
-    /**Opens a new or existing document.
-    @param url The Url of the document to open.
-    @param line The line number to place the cursor at, if applicable.
-    @param col The column number to place the cursor at, if applicable.
-    @param newWin If true, the new window will be created instead of using current.*/
-    virtual KDevDocument* editDocument( const KUrl &url, const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid() ) = 0;
 
     /**Shows a read-only document in the documentation viewer.
     @param url The Url of the document to view.*/
@@ -108,10 +101,6 @@ public:
     /**@return The list of open documents*/
     virtual QList<KDevDocument*> openDocuments() const = 0;
 
-    /**Saves all open documents.
-     @return false if it was cancelled by the user, true otherwise */
-    virtual bool saveAllDocuments() = 0;
-
     /**Saves a single document.
     @param doc the document to save
     @param force if true, force save even if the file was not modified.
@@ -122,9 +111,6 @@ public:
     @param list The list of Urls to save.
     @return false if it was cancelled by the user, true otherwise */
     virtual bool saveDocuments( const QList<KDevDocument*> &list ) = 0;
-
-    /**Reloads all open documents.*/
-    virtual void reloadAllDocuments() = 0;
 
     /**Reloads a document.
     * @param url The document to reload.*/
@@ -137,9 +123,6 @@ public:
     /**Closes a document.
     * @param url The document to close.*/
     virtual bool closeDocument( KDevDocument* document ) = 0;
-
-    /**Closes all open documents.*/
-    virtual bool closeAllDocuments() = 0;
 
     /**Closes a list of documents.
     @param list The list of documents to close.*/
@@ -165,6 +148,25 @@ public:
     @param document The document to check
     @return The DocumentState enum corresponding to the document state.*/
     virtual KDevDocument::DocumentState documentState(KDevDocument* document) const = 0;
+
+public Q_SLOTS:
+    /**Opens a new or existing document.
+    @param url The Url of the document to open.
+    @param line The line number to place the cursor at, if applicable.
+    @param col The column number to place the cursor at, if applicable.
+    @param newWin If true, the new window will be created instead of using current.*/
+    virtual Q_SCRIPTABLE KDevDocument* editDocument( const KUrl &url, 
+                                                     const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid() ) = 0;
+
+    /**Saves all open documents.
+     @return false if it was cancelled by the user, true otherwise */
+    virtual Q_SCRIPTABLE bool saveAllDocuments() = 0;
+
+    /**Reloads all open documents.*/
+    virtual Q_SCRIPTABLE void reloadAllDocuments() = 0;
+
+    /**Closes all open documents.*/
+    virtual Q_SCRIPTABLE bool closeAllDocuments() = 0;
 
 Q_SIGNALS:
     /**Emitted when the document is given focus or activated.*/

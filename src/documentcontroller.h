@@ -5,7 +5,7 @@
 
 #include <QMap>
 #include <QWidget>
-#include <qpointer.h>
+#include <QPointer>
 #include <QDateTime>
 #include <QHash>
 

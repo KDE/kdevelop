@@ -28,6 +28,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kservice.h>
+#include <kservicetypetrader.h>
 #include <kurllabel.h>
 #include <kapplication.h>
 #include <ktoolinvocation.h>

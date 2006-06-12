@@ -300,6 +300,7 @@ It defines:
 class KDEVINTERFACES_EXPORT KDevCore: public QObject
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kdevelop.Core")
 public:
     /**Constructor
     @param parent The QObject that's the parent of this class.
@@ -321,10 +322,6 @@ public:
     @param context The pointer to a Context object of this popup menu.*/
     virtual void fillContextMenu(QMenu *popup, const Context *context) = 0;
 
-    /**Closes the current project and open the new one
-    @param projectFileName The file name of the project to open.*/
-    virtual void openProject(const QString& projectFileName) = 0;
-
     /**Marks the component as running (or not running). As long as at least one
     component is running, the stop button is enabled. When it is pressed,
     component get a stopButtonClicked(). This is usable for plugins which
@@ -335,15 +332,22 @@ public:
     @param runs true if plugin is running something, false if it is not.*/
     virtual void running(KDevPlugin *which, bool runs) = 0;
 
+public Q_SLOTS:
+    /**Closes the current project and open the new one
+    @param projectFileName The file name of the project to open.*/
+    virtual Q_SCRIPTABLE void openProject(const QString& projectFileName) = 0;
+
 signals:
     /**Emitted after the core has done all initializations and
     the main window has been shown.*/
     void coreInitialized();
 
     /**A project has been opened.*/
+    //! TODO make this a dbus signal
     void projectOpened();
 
     /**The project is about to be closed.*/
+    //! TODO make this a dbus signal
     void projectClosed();
 
     /**The language support part has been changed.*/

@@ -23,8 +23,8 @@
 #include <qlist.h>
 
 #include <kurl.h>
-#include "kdevexport.h"
 #include <kservicetypetrader.h>
+#include "kdevexport.h"
 
 /**
 @file kdevplugincontroller.h

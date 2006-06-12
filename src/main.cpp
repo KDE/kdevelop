@@ -7,10 +7,8 @@
 #include <kmainwindow.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <dcopclient.h>
 
-#include <qfileinfo.h>
-//Added by qt3to4:
+#include <QFileInfo>
 #include <QPixmap>
 
 #include "splashscreen.h"
@@ -131,8 +129,6 @@ int main(int argc, char *argv[])
           DocumentController::getInstance()->editDocument( KUrl(args->url(a)) );
       }
   }
-
-  kapp->dcopClient()->registerAs("kdevelop");
 
   return app.exec();
 }

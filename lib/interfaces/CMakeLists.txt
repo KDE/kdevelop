@@ -18,12 +18,9 @@ set(kdevinterfaces_LIB_SRCS
     kdevdocumentcontroller.cpp
     kdevprojecteditor.cpp
     kdevcoderepository.cpp
-    kdevdocumentcontrolleriface.cpp
-    kdevprojectiface.cpp
     kdevcore.cpp
     kdevpcsimporter.cpp
     kdevprojectimporter.cpp
-    kdevcoreiface.cpp
     kdevplugincontroller.cpp
     kdevprojectmodel.cpp
     kdevdifffrontend.cpp
@@ -40,12 +37,6 @@ set(kdevinterfaces_LIB_SRCS
 )
 
 kde4_automoc(${kdevinterfaces_LIB_SRCS})
-
-set(kdevinterfaces_DCOP_SKEL_SRCS
-    kdevdocumentcontrolleriface.h
-    kdevcoreiface.h
-    kdevprojectiface.h
-)
 
 kde4_add_dcop_skels(kdevinterfaces_LIB_SRCS ${kdevinterfaces_DCOP_SKEL_SRCS})
 

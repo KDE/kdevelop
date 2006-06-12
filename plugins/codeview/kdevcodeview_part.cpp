@@ -33,7 +33,6 @@
 #include <kmimetype.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
-#include <kparts/componentfactory.h>
 
 #include <kdevplugininfo.h>
 #include <kdevmainwindow.h>

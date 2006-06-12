@@ -16,13 +16,14 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "kdevdocumentcontrolleriface.h"
 #include "kdevdocumentcontroller.h"
+#include <dbus/qdbus.h>
 
 KDevDocumentController::KDevDocumentController(QWidget *parent)
   : KParts::PartManager(parent)
 {
-    new KDevDocumentControllerIface(this);
+    QDBus::sessionBus().registerObject("/org/kdevelop/DocumentController",
+                                       this, QDBusConnection::ExportSlots);
 }
 
 KUrl KDevDocumentController::activeDocumentUrl( ) const

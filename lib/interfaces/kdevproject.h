@@ -55,6 +55,7 @@ as a way of providing support for a build system (like it is done in KDevelop ID
 class KDEVINTERFACES_EXPORT KDevProject: public KDevPlugin
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kdevelop.Project")
 public:
     /**Constructs a project plugin.
     @param info Important information about the plugin - plugin internal and generic
@@ -75,6 +76,19 @@ public:
         UsesQMakeBuildSystem =2         /**<Project uses qmake for building.*/
     };
 
+    /**@return The environment variables that sould be set before running mainProgram().*/
+    virtual DomUtil::PairList runEnvironmentVars() const = 0;
+
+    /**The command line arguments that the mainProgram() should be run with.*/
+    virtual QString runArguments() const = 0;
+
+    /** Reread template substitution map from dom */
+    virtual void readSubstitutionMap();
+
+    /**@return The template substitution map. */
+    virtual const QHash<QString, QString>& substMap( SubstitutionMapTypes type = NormalFile );
+
+public Q_SLOTS:
     /**This method is invoked when the project is opened
     (i.e. actually just after this class has been
     instantiated).
@@ -82,95 +96,84 @@ public:
     the projectDirectory() method.
     @param projectName The project name, which is equivalent
     to the project file name without the suffix.*/
-    virtual void openProject(const QString &dirName, const QString &projectName);
+    virtual Q_SCRIPTABLE void openProject(const QString &dirName, const QString &projectName);
     
     /**This method is invoked when the project is about to be closed.*/
-    virtual void closeProject() = 0;
+    virtual Q_SCRIPTABLE void closeProject() = 0;
 
     /**Reimplement this method to set project plugin options. Default implementation
     returns KDevProject::UsesOtherBuildSystem.*/
-    virtual Options options() const;
+    virtual Q_SCRIPTABLE Options options() const;
 
     /**@return The canonical absolute directory of the project. Canonical means that 
     a path does not contain symbolic links or redundant "." or ".." elements.*/
-    virtual QString projectDirectory() const = 0;
+    virtual Q_SCRIPTABLE QString projectDirectory() const = 0;
     
     /**Returns the name of the project.*/
-    virtual QString projectName() const = 0;
-    
-    /**@return The environment variables that sould be set before running mainProgram().*/
-    virtual DomUtil::PairList runEnvironmentVars() const = 0;
+    virtual Q_SCRIPTABLE QString projectName() const = 0;
     
     /**@return The path to main binary program of the project.
     @param relative if true then the path returned is relative to the project directory.*/
-    virtual QString mainProgram(bool relative = false) const = 0;
+    virtual Q_SCRIPTABLE QString mainProgram(bool relative = false) const = 0;
     
     /**Absolute path (directory) from where the mainProgram() should be run.*/
-    virtual QString runDirectory() const = 0;
-    
-    /**The command line arguments that the mainProgram() should be run with.*/
-    virtual QString runArguments() const = 0;
+    virtual Q_SCRIPTABLE QString runDirectory() const = 0;
     
     /**Returns the path (relative to the project directory)
     of the active directory. All newly automatically generated 
     classes and files are usually added here.*/
-    virtual QString activeDirectory() const = 0;
+    virtual Q_SCRIPTABLE QString activeDirectory() const = 0;
     
     /**@return The canonical build directory of the project.
     If the separate build directory is not supported, this should 
     return the same as projectDiretory(). Canonical means that 
     a path does not contain symbolic links or redundant "." or ".." elements.*/
-    virtual QString buildDirectory() const = 0;
+    virtual Q_SCRIPTABLE QString buildDirectory() const = 0;
     
     /**@return The list of all files in the project. The names are relative to 
     the project directory.*/
-    virtual QStringList allFiles() const = 0;
+    virtual Q_SCRIPTABLE QStringList allFiles() const = 0;
     
     /**@return The list of files that are part of the distribution but not under 
     project control. Used mainly to package and publish extra files among with the project.*/
-    virtual QStringList distFiles() const = 0;
+    virtual Q_SCRIPTABLE QStringList distFiles() const = 0;
     
     /**Adds a list of files to the project. Provided for convenience when adding many files.
     @param fileList The list of file names relative to the project directory.*/
-    virtual void addFiles(const QStringList &fileList) = 0;
+    virtual Q_SCRIPTABLE void addFiles(const QStringList &fileList) = 0;
     
     /**Adds a file to the project.
     @param fileName The file name relative to the project directory.*/
-    virtual void addFile(const QString &fileName)= 0;
+    virtual Q_SCRIPTABLE void addFile(const QString &fileName)= 0;
     
     /**Removes a list of files from the project. Provided for convenience when removing many files.
     @param fileList The list of file names relative to the project directory.*/
-    virtual void removeFiles(const QStringList& fileList)= 0;
+    virtual Q_SCRIPTABLE void removeFiles(const QStringList& fileList)= 0;
     
     /**Removes a file from the project.
     @param fileName The file name relative to the project directory.*/
-    virtual void removeFile(const QString &fileName) = 0;
+    virtual Q_SCRIPTABLE void removeFile(const QString &fileName) = 0;
     
     /**Notifies the project about changes to the files. Provided for
     convenience when changing many files.
     @param fileList The list of file names relative to the project directory..*/
-    virtual void changedFiles(const QStringList &fileList);
+    virtual Q_SCRIPTABLE void changedFiles(const QStringList &fileList);
     
     /**Notifies the project of a change to one of the files.
     @param fileName The file name relative to the project directory.*/
-    virtual void changedFile(const QString &fileName);
+    virtual Q_SCRIPTABLE void changedFile(const QString &fileName);
     
     /**@return true if the file @p absFileName is a part of the project.
     @param absFileName Absolute name of a file to check.*/
-    virtual bool isProjectFile(const QString &absFileName);
+    virtual Q_SCRIPTABLE bool isProjectFile(const QString &absFileName);
     
     /**@return The path (relative to the project directory) of the file @p absFileName.
     @param absFileName Absolute name of a file.*/
-    virtual QString relativeProjectFile(const QString &absFileName);
+    virtual Q_SCRIPTABLE QString relativeProjectFile(const QString &absFileName);
 
     /**@return The list of files known to the project through symlinks.*/
-    virtual QStringList symlinkProjectFiles();
+    virtual Q_SCRIPTABLE QStringList symlinkProjectFiles();
     
-    /** Reread template substitution map from dom */
-    virtual void readSubstitutionMap();
-
-    /**@return The template substitution map. */
-    virtual const QHash<QString, QString>& substMap( SubstitutionMapTypes type = NormalFile );
 
 private slots:
     void buildFileMap();

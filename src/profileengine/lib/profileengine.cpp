@@ -104,12 +104,12 @@ KService::List ProfileEngine::offers(const QString &profileName, OfferType offer
 //               << constraint << endl << endl;
 // //END debug
 
-	KService::List list = KServiceTypeTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
+    KService::List list = KServiceTypeTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
     QStringList names;
 
     Profile::EntryList disableList = profile->list(Profile::ExplicitDisable);
-//     for (KTrader::OfferList::iterator it = list.begin(); it != list.end(); ++it)
-	KService::List::Iterator it = list.begin();
+//     for (KServiceOfferList::iterator it = list.begin(); it != list.end(); ++it)
+    KService::List::iterator it = list.begin();
     while (it != list.end())
     {
         QString name = (*it)->desktopEntryName();
@@ -129,7 +129,7 @@ KService::List ProfileEngine::offers(const QString &profileName, OfferType offer
             continue;
         QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
         constraint += QString::fromLatin1("and [Name] == '%1'").arg((*it).name);
-		KService::List enable = KServiceTypeTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
+        KService::List enable = KServiceTypeTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
         list += enable;
     }
 
@@ -137,7 +137,7 @@ KService::List ProfileEngine::offers(const QString &profileName, OfferType offer
     kDebug() << "=============" << endl
         << "    =============" << endl
         << "        =============   Plugins for Profile:" << endl;
-    for (KTrader::OfferList::const_iterator it = list.begin(); it != list.end(); ++it)
+    for (KServiceOfferList::const_iterator it = list.begin(); it != list.end(); ++it)
         kDebug() << "        " << (*it)->name() << endl;
     kDebug() << endl << endl;
 //END debug*/
@@ -208,15 +208,15 @@ KUrl::List ProfileEngine::resourcesRecursive(const QString &profileName, const Q
 void ProfileEngine::diffProfiles(OfferType offerType, const QString &profile1,
     const QString &profile2, QStringList &unload, KService::List &load)
 {
-	KService::List offers1 = offers(profile1, offerType);
-	KService::List offers2 = offers(profile2, offerType);
+    KService::List offers1 = offers(profile1, offerType);
+    KService::List offers2 = offers(profile2, offerType);
 
     QStringList offers1List;
-    for (KService::List::ConstIterator it = offers1.constBegin();
+    for (KService::List::const_iterator it = offers1.constBegin();
         it != offers1.constEnd(); ++it)
         offers1List.append((*it)->desktopEntryName());
     QMap<QString, KService::Ptr> offers2List;
-    for (KService::List::ConstIterator it = offers2.constBegin();
+    for (KService::List::const_iterator it = offers2.constBegin();
         it != offers2.constEnd(); ++it)
         offers2List[(*it)->desktopEntryName()] = *it;
 

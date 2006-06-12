@@ -4,6 +4,7 @@
 #include <kapplication.h>
 #include <klibloader.h>
 #include <kservice.h>
+#include <kservicetypetrader.h>
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <klocale.h>
@@ -46,13 +47,12 @@ namespace
   template <class ComponentType>
   ComponentType *loadDefaultPart( const QString &serviceType )
   {
-     KService::List offers = KServiceTypeTrader::self()->query(serviceType, QString("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION));
-	 KService::List::ConstIterator serviceIt = offers.begin();
+    KService::List offers = KServiceTypeTrader::self()->query(serviceType, QString("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION));
+    KService::List::ConstIterator serviceIt = offers.begin();
     for ( ; serviceIt != offers.end(); ++serviceIt ) {
       KService::Ptr service = *serviceIt;
 
-      ComponentType *part = KParts::ComponentFactory
-        ::createInstanceFromService< ComponentType >( service, API::getInstance(), 0,
+      ComponentType *part = KService::createInstance< ComponentType >( service, API::getInstance(), 0,
                                                       PluginController::argumentsFromService( service ) );
 
       if ( part )
@@ -120,7 +120,7 @@ void PluginController::loadGlobalPlugins( const QStringList & ignorePlugins )
 
 void PluginController::loadProjectPlugins( const QStringList & ignorePlugins )
 {
-  KService::List projectOffers = m_engine.offers(m_profile, ProfileEngine::Project);
+	KService::List projectOffers = m_engine.offers(m_profile, ProfileEngine::Project);
 	loadPlugins( projectOffers, ignorePlugins );
 }
 
@@ -191,8 +191,7 @@ void PluginController::unloadPlugins( QStringList const & unloadParts )
 KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
 {
     int err = 0;
-    KDevPlugin * pl = KParts::ComponentFactory
-        ::createInstanceFromService<KDevPlugin>( service, API::getInstance(),
+    KDevPlugin * pl = KService::createInstance<KDevPlugin>( service, API::getInstance(),
                                                  argumentsFromService( service ), &err );
 //    kDebug() << "ERR: " << err << endl;
     return pl;
@@ -252,8 +251,8 @@ const QList<KDevPlugin *> PluginController::loadedPlugins()
 
 KDevPlugin * PluginController::extension( const QString & serviceType, const QString & constraint )
 {
-	KService::List offers = KDevPluginController::query(serviceType, constraint);
-    for (KService::List::ConstIterator it = offers.constBegin(); it != offers.constEnd(); ++it)
+    KService::List offers = KDevPluginController::query(serviceType, constraint);
+    for (KService::List::const_iterator it = offers.constBegin(); it != offers.constEnd(); ++it)
     {
         KDevPlugin *ext = m_parts.value((*it)->desktopEntryName());
         if (ext) return ext;
@@ -307,8 +306,8 @@ QString PluginController::changeProfile(const QString &newProfile)
 {
     kDebug() << "CHANGING PROFILE: from " << currentProfile() << " to " << newProfile << endl;
     QStringList unload;
-	KService::List coreLoad;
-	KService::List globalLoad;
+    KService::List coreLoad;
+    KService::List globalLoad;
     m_engine.diffProfiles(ProfileEngine::Core, currentProfile(), newProfile, unload, coreLoad);
     m_engine.diffProfiles(ProfileEngine::Global, currentProfile(), newProfile, unload, globalLoad);
 

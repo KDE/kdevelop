@@ -23,7 +23,7 @@ ValgrindDialog::ValgrindDialog( Type type, QWidget* parent )
   w = new Ui::ValgrindDialog();
   QWidget* top = new QWidget(this);
   w->setupUi(top);
-  w->valExecutableEdit->setUrl(KUrl( "valgrind" ));
+  w->valExecutableEdit->setUrl( KUrl("valgrind") );
   w->executableEdit->setFocus();
   w->stack->setCurrentWidget(type == Memcheck ? w->memcheckWidget : w->callgrindWidget);
   setMainWidget( top );
@@ -182,7 +182,7 @@ void ValgrindDialog::setKcExecutable( const QString& ke )
     KMessageBox::sorry( this, i18n( "Could not find kcachegrind in your $PATH. Please make "
                                     "sure it is installed properly." ),
                         i18n( "KCachegrind Not Found" ) );
-    w->kcExecutableEdit->setUrl( KUrl("kcachegrind" ));
+    w->kcExecutableEdit->setUrl( KUrl("kcachegrind") );
   } else {
     w->kcExecutableEdit->setUrl( vUrl );
   }
