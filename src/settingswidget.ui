@@ -41,7 +41,10 @@
                 <string>&lt;qt&gt;&lt;h3&gt;Project Settings&lt;/h3&gt;&lt;/qt&gt;</string>
             </property>
             <property name="alignment">
-                <set>WordBreak|AlignVCenter</set>
+                <set>AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+                <bool>true</bool>
             </property>
         </widget>
         <widget class="QCheckBox" row="8" column="1">
@@ -375,7 +378,10 @@
                 <enum>AutoText</enum>
             </property>
             <property name="alignment">
-                <set>WordBreak|AlignBottom|AlignLeft</set>
+                <set>AlignBottom|AlignLeft</set>
+            </property>
+            <property name="wordWrap">
+                <bool>true</bool>
             </property>
         </widget>
         <widget class="QLayoutWidget" row="3" column="1">
