@@ -2234,7 +2234,7 @@ next setup step.</para>
 </sect3>
 
 <sect3 id="gettingstarted-compile-basic-config">
-<title>Configure the project</title>
+<title>Initial Hello Configuration</title>
 
 <para>Configuring means to tailor the build process to the hardware and software
 peculiarities of your system. This is a basic requirement in build processes
@@ -2285,7 +2285,8 @@ contains some set of build related files, such as several
 <filename>Makefile</filename> in each subdirectory.</para>
 </listitem>
 <listitem>
-<para>In the <link linkend="gettingstarted-compile-setup">Advanced Setup</link>
+<para>In the <link linkend="gettingstarted-compile-setup">Configuring the
+Project</link>
 section shortly below we will have a brief look at the motivations why
 &kdevelop; uses separate build directories in cases like this one. For the
 moment it is enough to know that &kdevelop; created this <filename
@@ -2424,7 +2425,7 @@ Toolbar</guilabel>.</para>
 
 <para>That was all. &kdevelop; will now start the new application in
 the dedicated console window which opens as <guilabel>Application</guilabel>
-tool view on the bottom.There the command &kdevelop; issued to execute the
+tool view on the bottom. There the command &kdevelop; issued to execute the
 program will be shown in the top line:</para>
 
 <programlisting>
@@ -2432,7 +2433,7 @@ program will be shown in the top line:</para>
 </programlisting>
 
 <para>showing that the &IDE; has a notion about where the executable it
-should run resides. This notion can be widely configured. See more about
+shall run resides. This notion can be widely configured. See more about
 this in the <link linkend="project-management">Project
 Management</link> chapter.</para>
 
@@ -2459,9 +2460,174 @@ in the <guilabel>Application</guilabel> tool view window.</para>
 </sect2>
 
 <sect2 id="gettingstarted-compile-setup">
-<title>Advanced Setup</title>
+<title>Configuring the Project</title>
+
+<para>In &kdevelop; there are numerous ways how you can manage your project.
+This behavior is configurable on a per-project basis and mostly of interest to
+the advanced developer. Yet there are a few project specific settings you
+should know of right from the beginning.
+</para>
+
+<simplelist>
+<member><link linkend="gettingstarted-compile-setup-build">Of what use are build
+configurations?</link></member>
+
+<member><link linkend="gettingstarted-compile-setup-config">Where to the define
+the behavior of the <filename>configure</filename> script.</link></member>
+
+<member><link linkend="gettingstarted-compile-setup-make">Some considerations
+how <application>make</application> should run.</link></member>
+
+<member><link linkend="gettingstarted-compile-setup-run">Where should the
+executable be and how should it be called?</link></member>
+</simplelist>
+
+<sect3 id="gettingstarted-compile-setup-build">
+<title>Build Configurations</title>
+
+<para>When we did a first run of the <filename>configure</filename> script in
+the <link linkend="gettingstarted-compile-basic-config">Initial Hello
+Configuration</link> section above, we noted that &kdevelop; had set up a
+dedicated <filename class="directory">debug</filename> subdirectory for this
+purpose. In this section we will briefly consider some consequences of
+this feature.</para>
+
+<para>First of all, &kdevelop; does not necessarily use dedicated build
+directories apart from the source. The preparations to automatically use
+dedicated build configurations is done through templates the &appwizard; uses
+when creating a new project.</para>
+
+<para>To find out which build configurations currently are available, have a
+look at the <menuchoice><guimenu>Project</guimenu> <guisubmenu>Build
+Configuration</guisubmenu></menuchoice> menu.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="build-configurations.png" format="PNG"/>
+</imageobject>
+<caption><para>There are various build configurations available
+for this project.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>In this case, like our Hello example project, there are three different
+build configurations available. In other cases, there may &mdash; initially
+&mdash; be only one such build configuration, namely
+<guimenuitem>default</guimenuitem>.</para>
+
+<para>The currently used build configuration has a check mark left to it. In
+order to switch to another build configuration simply select its menu
+entry.</para>
+
+<para>Now let us have a brief look at what these build configurations
+provide.</para>
+
+<variablelist>
+<varlistentry>
+<term><guimenuitem>debug</guimenuitem></term>
+<listitem>
+<para>You should use this as the standard build configuration during the
+development process. The build occurs separately from the source directories in
+the dedicated <filename class="directory">debug</filename> subdirectory, &ie;
+all object, auxiliary, and executable files will be put in the subdirectories
+there instead of their counterparts in the project root. The
+<filename>configure</filename> script will be given the
+<computeroutput>--enable-debug=full</computeroutput> option and the
+<computeroutput>CXXFLAGS="-O0 -g3"</computeroutput> will signal the &gcc;
+compiler to not optimize the code and to insert extensive debug information
+into the resulting binaries.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>optimized</guimenuitem></term>
+<listitem>
+<para>This is used to build a final C++ application. The build occurs
+separately from the source directories in the dedicated <filename
+class="directory">optimized</filename> subdirectory. No specific arguments to
+the <filename>configure</filename> script will be preset, yet the
+<computeroutput>CXXFLAGS="-O2 -g0"</computeroutput> will signal the &gcc;
+compiler to optimize the code and to not insert debug information into the
+resulting binaries.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>default</guimenuitem></term>
+<listitem>
+<para>The term <quote>default</quote> denotes the standard setup when you build
+an application from from the console using &eg; the &GNU;
+<application>configure</application> and
+<application>make</application>/<application>gmake</application> command line
+oriented build tools. Other than <guimenuitem>debug</guimenuitem> or
+<guimenuitem>optimize</guimenuitem> no dedicated build directory will be used
+The application will by default be built in the sources directories instead.
+There are no special configuration switches predefined. Building and running the
+application will use the default settings of the underlying tools (e.g. &gcc;,
+etc.).</para>
+
+<warning>
+<para>Think twice before you decide to use the
+<guimenuitem>default</guimenuitem> build environment!</para>
+
+<para>It cannot be used in parallel to the dedicated
+<guimenuitem>debug</guimenuitem> or <guimenuitem>optimized</guimenuitem> ones.
+Any build operation using <guimenuitem>default</guimenuitem> will render both of
+the other build environments unusable. This is caused by some peculiarities of
+the <filename>Makefile</filename> construction process using the
+<application>automake</application>/<application>autoconf</application>
+machinery, which cannot be easily overcome.</para>
+</warning>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>Now, why does one one want to use different build configurations at all,
+when they even appear to be not compatible to each other? The answer is &mdash;
+it simplifies the edit-compile-debug cycles. The extra debug instructions
+inserted into the binaries as well as all those subtle structure changes to
+the program code made during optimizations will effect the run time behavior of
+the resulting application. So in many cases, when the logical structure of some
+routine appears to be correct, you may want to test whether it still behaves
+correctly under more practical conditions.</para>
+
+<para>This is where the build configurations of &kdevelop; step in. Because
+the built object and executable files in each dedicated build directory and the
+build commands are kept separately from each other only source changes need
+to be handled when you switch between these build configurations.</para>
+
+<para>Thus instead of cleaning up and recompile everything from scratch with
+alternate options, you need only switch from the
+<guimenuitem>debug</guimenuitem> to the <guimenuitem>optimize</guimenuitem>
+build configuration, have the changes compiled and test the application under
+these circumstances. If anything inappropriate shows up, simply switch back to
+<guimenuitem>debug</guimenuitem> and immediately continue your work
+there.</para>
+
+<para>A final note &mdash; many build configuration settings are configurable.
+You can even define your own build configurations if your development process
+requires some. We will briefly look at these possibilities in the next
+section.</para>
+</sect3>
+
+<sect3 id="gettingstarted-compile-setup-config">
+<title>Project Configure Options</title>
 
 <para>(- to be written -)</para>
+</sect3>
+
+<sect3 id="gettingstarted-compile-setup-make">
+<title>How Make Should Build the Program</title>
+
+<para>(- to be written -)</para>
+</sect3>
+
+<sect3 id="gettingstarted-compile-setup-run">
+<title>How to Run the Executable</title>
+
+<para>(- to be written -)</para>
+</sect3>
 </sect2> 
 </sect1>
 
@@ -2535,6 +2701,35 @@ change them later.</para></caution>
 <title>Where to go from here</title>
 
 <para>(- to be written -)</para>
+
+<sect2 id="gettingstarted-whereto-faq">
+<title>Frequently Encountered Problems</title>
+
+<simplelist>
+<member>The nutshell chapter</member>
+<member>FAQ pages</member>
+<member>Forum</member>
+<member>Mailing lists</member>
+</simplelist>
+</sect2>
+
+<sect2 id="gettingstarted-whereto-projects">
+<title>Working With Projects</title>
+
+<para>(- to be written -)</para>
+
+<sect3 id="gettingstarted-whereto-projects-open">
+<title>Using Existing &kdevelop; Projects</title>
+
+<para>(- to be written -)</para>
+</sect3>
+
+<sect3 id="gettingstarted-whereto-projects-import">
+<title>Importing External Projects</title>
+
+<para>(- to be written -)</para>
+</sect3>
+</sect2>
 </sect1>
 
 </chapter>
