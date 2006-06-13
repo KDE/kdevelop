@@ -28,14 +28,12 @@
 #include <qfileinfo.h>
 #include <QTimer>
 #include <dbus/qdbus.h>
-#include "kdevprojectiface.h"
 #include "filetemplate.h"
 
 struct KDevProject::Private {
     QMap<QString, QString> m_absToRel;
     QStringList m_symlinkList;
     QTimer *m_timer;
-    KDevProjectIface *m_iface;
     QHash<QString, QString> m_templExpandMap;
     QHash<QString, QString> m_templExpandMapXML;
 };
