@@ -38,8 +38,6 @@ set(kdevinterfaces_LIB_SRCS
 
 kde4_automoc(${kdevinterfaces_LIB_SRCS})
 
-kde4_add_dcop_skels(kdevinterfaces_LIB_SRCS ${kdevinterfaces_DCOP_SKEL_SRCS})
-
 kde4_add_library(kdevinterfaces SHARED ${kdevinterfaces_LIB_SRCS})
 target_link_libraries(kdevinterfaces ${KDE4_KDECORE_LIBS} kdeui kio kparts ktexteditor ${BERKELEY_DB_LIBRARIES})
 set_target_properties(kdevinterfaces PROPERTIES VERSION 4.0.0 SOVERSION 4)
@@ -52,7 +50,6 @@ install_files(/include/kdevelop/interfaces FILES
     kdevdocument.h
     kdevdocumentcontroller.h
     kdevapi.h
-    kdevdocumentcontrolleriface.h
     kdevappfrontend.h
     kdevpcsimporter.h
     kdevcatalog.h
@@ -63,7 +60,6 @@ install_files(/include/kdevelop/interfaces FILES
     kdevplugininfo.h
     kdevcore.h
     kdevprojectbuilder.h
-    kdevcoreiface.h
     kdevprojecteditor.h
     kdevcreatefile.h
     kdevproject.h
