@@ -59,6 +59,7 @@ void ConfigWidgetProxy::removeConfigPage( int pagenumber )
 
 void ConfigWidgetProxy::slotConfigWidget( KDialogBase * dlg )
 {
+/* FIXME port!
 	TitleMap::Iterator it = _globalTitleMap.begin();
 	while ( it != _globalTitleMap.end() )
 	{
@@ -67,11 +68,12 @@ void ConfigWidgetProxy::slotConfigWidget( KDialogBase * dlg )
 	}
 
 	connect( dlg, SIGNAL(currentPageChanged(QWidget*)), this, SLOT( slotAboutToShowPage(QWidget*)) );
-	connect( dlg, SIGNAL(destroyed()), this, SLOT(slotConfigWidgetDestroyed()) );
+	connect( dlg, SIGNAL(destroyed()), this, SLOT(slotConfigWidgetDestroyed()) );*/
 }
 
 void ConfigWidgetProxy::slotProjectConfigWidget( KDialogBase * dlg )
 {
+	/* FIXME port!
 	TitleMap::Iterator it = _projectTitleMap.begin();
 	while ( it != _projectTitleMap.end() )
 	{
@@ -81,6 +83,7 @@ void ConfigWidgetProxy::slotProjectConfigWidget( KDialogBase * dlg )
 
 	connect( dlg, SIGNAL(currentPageChanged(QWidget*)), this, SLOT( slotAboutToShowPage(QWidget*)) );
 	connect( dlg, SIGNAL(destroyed()), this, SLOT(slotConfigWidgetDestroyed()) );
+	*/
 }
 
 void ConfigWidgetProxy::slotConfigWidgetDestroyed( )

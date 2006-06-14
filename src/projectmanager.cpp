@@ -149,6 +149,7 @@ void ProjectManager::slotOpenProject()
 
 void ProjectManager::slotProjectOptions()
 {
+/*    FIXME Port!
     KDialogBase dlg(KDialogBase::IconList, i18n("Project Options"),
                   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, TopLevel::getInstance()->main(),
                   "project options dialog");
@@ -176,7 +177,7 @@ void ProjectManager::slotProjectOptions()
 
   config->setGroup("Project Settings Dialog");
   config->writeEntry( "Height", dlg.size().height() );
-  config->writeEntry( "Width", dlg.size().width() );
+  config->writeEntry( "Width", dlg.size().width() );*/
 }
 
 void ProjectManager::loadSettings()

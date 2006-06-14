@@ -232,13 +232,13 @@ void ProfileEditor::propertyExecuted(Q3ListBoxItem *item)
 
 void ProfileEditor::addProfile()
 {
+    /* FIXME port
     if (!profilesList->currentItem())
         return;
 
-    KDialogBase dlg(KDialogBase::Plain, i18n("Add Profile"), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok);
-// ### KDE4-PORTING    dlg.plainPage()->setMargin(0);
-    (new QVBoxLayout(dlg.plainPage(), 0, 0))->setAutoAdd(true);
-    AddProfileWidget *prof = new AddProfileWidget(dlg.plainPage());
+    KDialog dlg( this, i18n("Add Profile"), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok);
+    (new QVBoxLayout(dlg, 0, 0))->setAutoAdd(true);
+    AddProfileWidget *prof = new AddProfileWidget(dlg);
     prof->nameEdit->setFocus();
     if (dlg.exec() == QDialog::Accepted)
     {
@@ -248,6 +248,7 @@ void ProfileEditor::addProfile()
         profilesList->currentItem()->setOpen(true);
         new ProfileItem(static_cast<K3ListViewItem*>(profilesList->currentItem()), profile);
     }
+    */
 }
 
 void ProfileEditor::removeProfile()

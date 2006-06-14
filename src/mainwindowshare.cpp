@@ -296,30 +296,31 @@ void MainWindowShare::slotConfigureNotifications()
 
 void MainWindowShare::slotSettings()
 {
-    KDialogBase dlg(KDialogBase::IconList, i18n("Configure KDevelop"),
-                    KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_pMainWnd,
-                    "customization dialog");
-    dlg.setHelp("setup");
-
-    ShellExtension::getInstance()->createGlobalSettingsPage(&dlg);
-
-    KConfig* config = KGlobal::config();
-
-    config->setGroup("Global Settings Dialog");
-    int height = config->readEntry( "Height", 600 );
-    int width = config->readEntry( "Width", 800 );
-
-    dlg.resize( width, height );
-
-    Core::getInstance()->doEmitConfigWidget(&dlg);
-    dlg.exec();
-
-    config->setGroup("Global Settings Dialog");
-    config->writeEntry( "Height", dlg.size().height() );
-    config->writeEntry( "Width", dlg.size().width() );
-
-    if ( dlg.result() != QDialog::Rejected )
-        ShellExtension::getInstance()->acceptGlobalSettingsPage(&dlg);
+//     FIXME port!
+//     KDialogBase dlg(KDialogBase::IconList, i18n("Configure KDevelop"),
+//                     KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_pMainWnd,
+//                     "customization dialog");
+//     dlg.setHelp("setup");
+// 
+//     ShellExtension::getInstance()->createGlobalSettingsPage(&dlg);
+// 
+//     KConfig* config = KGlobal::config();
+// 
+//     config->setGroup("Global Settings Dialog");
+//     int height = config->readEntry( "Height", 600 );
+//     int width = config->readEntry( "Width", 800 );
+// 
+//     dlg.resize( width, height );
+// 
+//     Core::getInstance()->doEmitConfigWidget(&dlg);
+//     dlg.exec();
+// 
+//     config->setGroup("Global Settings Dialog");
+//     config->writeEntry( "Height", dlg.size().height() );
+//     config->writeEntry( "Width", dlg.size().width() );
+// 
+//     if ( dlg.result() != QDialog::Rejected )
+//         ShellExtension::getInstance()->acceptGlobalSettingsPage(&dlg);
 }
 
 void MainWindowShare::slotConfigureEditors()

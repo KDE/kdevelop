@@ -50,7 +50,7 @@ void KDevIDEExtension::init()
 
 void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
 {
-    KConfig* config = KGlobal::config();
+/*    KConfig* config = KGlobal::config();
     KVBox *vbox = dlg->addVBoxPage(i18n("General"), i18n("General"), BarIcon("kdevelop", K3Icon::SizeMedium) );
     gsw = new SettingsWidget(vbox, "general settings widget");
 
@@ -69,7 +69,7 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
 
     config->setGroup("TerminalEmulator");
     gsw->terminalButtonGroup->setButton( config->readEntry( "UseKDESetting", 0 ) );
-    gsw->terminalEdit->setText( config->readEntry( QLatin1String("TerminalApplication"), QString("konsole") ) );
+    gsw->terminalEdit->setText( config->readEntry( QLatin1String("TerminalApplication"), QString("konsole") ) );*/
 }
 
 void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase* /*dlg*/)

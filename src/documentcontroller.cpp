@@ -949,6 +949,7 @@ void DocumentController::slotForwardPopupActivated( int id )
 
 void DocumentController::slotSwitchTo()
 {
+/*    FIXME port!
     QMap<QString, KParts::ReadOnlyPart*> parts_map;
     QStringList part_list;
     foreach (KParts::Part* part, parts())
@@ -982,7 +983,7 @@ void DocumentController::slotSwitchTo()
         {
             activatePart( parts_map[ editbox->text() ] );
         }
-    }
+    }*/
 }
 
 void DocumentController::slotUploadFinished()

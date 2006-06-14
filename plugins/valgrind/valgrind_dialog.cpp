@@ -17,7 +17,7 @@
 
 
 ValgrindDialog::ValgrindDialog( Type type, QWidget* parent )
-  : KDialog( parent, i18n("Valgrind Memory Check"), Ok|Cancel )
+  : KDialog( parent )
   , m_type(type)
 {
   w = new Ui::ValgrindDialog();
