@@ -679,7 +679,10 @@ void AutoDetailsView::slotSetActiveTarget()
 	TargetItem * titem = static_cast<TargetItem*>( m_listView->selectedItem() );
 	if ( !titem ) return ;
 
-	QString targetPath = m_widget->selectedSubproject()->path + "/" + titem->name;
+       SubprojectItem * subpitem = m_widget->selectedSubproject();
+       if ( !subpitem ) return;
+
+	QString targetPath = subpitem->path + "/" + titem->name;
 	targetPath = targetPath.mid( m_part->projectDirectory().length() + 1 );
 	kdDebug( 9020 ) << "Setting active " << targetPath << endl;
 	m_widget->setActiveTarget( targetPath );
