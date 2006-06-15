@@ -15,7 +15,7 @@
 #include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <kprocess.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -52,8 +52,8 @@ KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const QStringList &)
     m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
 
-    connect(project()->core(), SIGNAL(projectConfigWidget(KDialogBase*)),
-        this, SLOT(projectConfigWidget(KDialogBase*)));
+    connect(project()->core(), SIGNAL(projectConfigWidget(KDialog*)),
+        this, SLOT(projectConfigWidget(KDialog*)));
 
     if (KDevMakeFrontend *make = project()->extension<KDevMakeFrontend>("KDevelop/MakeFrontend")) {
         connect(make, SIGNAL(commandFinished(const QString &)),
@@ -128,7 +128,7 @@ bool KDevMakeBuilder::execute(KDevProjectItem *dom)
     return false;
 }
 
-void KDevMakeBuilder::projectConfigWidget(KDialogBase *dlg)
+void KDevMakeBuilder::projectConfigWidget(KDialog *dlg)
 {
     Q_ASSERT(project());
 

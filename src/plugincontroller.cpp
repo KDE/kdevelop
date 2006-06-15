@@ -12,7 +12,7 @@
 #include <kparts/componentfactory.h>
 #include <assert.h>
 #include <kdebug.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kcmdlineargs.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
@@ -76,8 +76,8 @@ PluginController *PluginController::getInstance()
 PluginController::PluginController()
   : KDevPluginController()
 {
-  connect( Core::getInstance(), SIGNAL(configWidget(KDialogBase*)),
-           this, SLOT(slotConfigWidget(KDialogBase*)) );
+  connect( Core::getInstance(), SIGNAL(configWidget(KDialog*)),
+           this, SLOT(slotConfigWidget(KDialog*)) );
 
 /*  m_defaultProfile = QLatin1String( "FullIDE" );
   m_defaultProfilePath = kapp->dirs()->localkdedir() + "/" +
@@ -209,7 +209,7 @@ QStringList PluginController::argumentsFromService( const KService::Ptr &service
 	return args;
 }
 
-void PluginController::slotConfigWidget( KDialogBase* dlg )
+void PluginController::slotConfigWidget( KDialog* dlg )
 {
     //FIXME: adymo: i disabled this because plugin configuration should be project-wide
     // in profile-enabled shell

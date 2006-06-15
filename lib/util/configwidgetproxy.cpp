@@ -23,7 +23,7 @@
 #include <q3vbox.h>
 
 #include <kdebug.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kiconloader.h>
 
 #include <kdevcore.h>
@@ -34,8 +34,8 @@
 
 ConfigWidgetProxy::ConfigWidgetProxy( KDevCore * core )
 {
-	connect( core, SIGNAL(configWidget(KDialogBase*)), this, SLOT(slotConfigWidget( KDialogBase*)) );
-	connect( core, SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(slotProjectConfigWidget( KDialogBase*)) );
+	connect( core, SIGNAL(configWidget(KDialog*)), this, SLOT(slotConfigWidget( KDialog*)) );
+	connect( core, SIGNAL(projectConfigWidget(KDialog*)), this, SLOT(slotProjectConfigWidget( KDialog*)) );
 }
 
 ConfigWidgetProxy::~ConfigWidgetProxy()
@@ -57,7 +57,7 @@ void ConfigWidgetProxy::removeConfigPage( int pagenumber )
 	_projectTitleMap.remove( pagenumber );
 }
 
-void ConfigWidgetProxy::slotConfigWidget( KDialogBase * dlg )
+void ConfigWidgetProxy::slotConfigWidget( KDialog * dlg )
 {
 /* FIXME port!
 	TitleMap::Iterator it = _globalTitleMap.begin();
@@ -71,7 +71,7 @@ void ConfigWidgetProxy::slotConfigWidget( KDialogBase * dlg )
 	connect( dlg, SIGNAL(destroyed()), this, SLOT(slotConfigWidgetDestroyed()) );*/
 }
 
-void ConfigWidgetProxy::slotProjectConfigWidget( KDialogBase * dlg )
+void ConfigWidgetProxy::slotProjectConfigWidget( KDialog * dlg )
 {
 	/* FIXME port!
 	TitleMap::Iterator it = _projectTitleMap.begin();
@@ -98,7 +98,7 @@ void ConfigWidgetProxy::slotAboutToShowPage( QWidget * page )
 	PageMap::Iterator it = _pageMap.find( page );
 	if ( it != _pageMap.end() )
 	{
-		emit insertConfigWidget( static_cast<KDialogBase*>(const_cast<QObject*>(sender())), page, it.value() );
+		emit insertConfigWidget( static_cast<KDialog*>(const_cast<QObject*>(sender())), page, it.value() );
 		_pageMap.erase( it );
 	}
 }

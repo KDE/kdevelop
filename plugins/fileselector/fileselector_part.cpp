@@ -15,7 +15,7 @@
 #include <kfileitem.h>
 #include <kdevgenericfactory.h>
 #include <kdiroperator.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kvbox.h>
 
 #include <kdevapi.h>
@@ -44,7 +44,7 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const QStringList&)
 	     this, SLOT(fileSelected(const KFileItem*)));
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
 
-    connect( core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(slotConfigWidget(KDialogBase*)) );
+    connect( core(), SIGNAL(configWidget(KDialog*)), this, SLOT(slotConfigWidget(KDialog*)) );
 
     m_filetree->setWindowTitle( i18n("File Selector") );
     m_filetree->setWindowIcon( KIcon(info()->icon()) );
@@ -77,7 +77,7 @@ void FileSelectorPart::slotProjectOpened()
     m_filetree->setDir( u );
 }
 
-void FileSelectorPart::slotConfigWidget( KDialogBase * dlg )
+void FileSelectorPart::slotConfigWidget( KDialog * dlg )
 {
     //FIXME PORT!
 /*    KVBox* vbox = dlg->addVBoxPage( i18n("File Selector"), i18n("File Selector"), BarIcon( info()->icon(), K3Icon::SizeMedium) );

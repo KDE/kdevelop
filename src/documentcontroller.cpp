@@ -26,7 +26,7 @@
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kmainwindow.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kcompletion.h>
 #include <kiconloader.h>
 #include <kapplication.h>

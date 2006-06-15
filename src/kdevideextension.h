@@ -22,15 +22,15 @@
 
 #include <shellextension.h>
 #include "shellexport.h"
-
+class KDialog;
 class SettingsWidget;
 
 class KDEVSHELL_EXPORT KDevIDEExtension : public ShellExtension {
 public:
     static void init();
 
-    virtual void createGlobalSettingsPage(KDialogBase *dlg);
-    virtual void acceptGlobalSettingsPage(KDialogBase *dlg);
+    virtual void createGlobalSettingsPage(KDialog *dlg);
+    virtual void acceptGlobalSettingsPage(KDialog *dlg);
 
     virtual QString xmlFile();
 

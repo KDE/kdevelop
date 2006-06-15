@@ -26,7 +26,7 @@
 #include "kdevexport.h"
 
 class KDevCore;
-class KDialogBase;
+class KDialog;
 
 /**
 @file configwidgetproxy.h
@@ -108,11 +108,11 @@ signals:
 	* @param page The setting page. The client should use this as parent to the config widget.
 	* @param pagenumber The identifier set in createGlobalConfigPage() or createProjectConfigPage(). Identifies the requested config page.
 	*/
-	void insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber );
+	void insertConfigWidget( const KDialog * dlg, QWidget * page, unsigned int pagenumber );
 
 private slots:
-	void slotConfigWidget( KDialogBase * );
-	void slotProjectConfigWidget( KDialogBase * );
+	void slotConfigWidget( KDialog * );
+	void slotProjectConfigWidget( KDialog * );
 	void slotConfigWidgetDestroyed();	
 	void slotAboutToShowPage( QWidget * page );
 

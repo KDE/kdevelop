@@ -18,7 +18,7 @@ class QDomDocument;
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <ktoolbar.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kfiledialog.h>
 #include <kmainwindow.h>
 #include <kparts/componentfactory.h>
@@ -35,7 +35,6 @@ class QDomDocument;
 #include <kiconloader.h>
 #include <kvbox.h>
 #include <ktoolbar.h>
-#include <kdialogbase.h>
 #include <krecentfilesaction.h>
 
 #include "kdevproject.h"

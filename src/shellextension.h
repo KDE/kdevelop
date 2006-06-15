@@ -23,7 +23,7 @@
 #include <QString>
 #include "shellexport.h"
 
-class KDialogBase;
+class KDialog;
 
 /**
 Shell extension.
@@ -45,10 +45,10 @@ public:
     static ShellExtension *getInstance() { return s_instance; }
 
     /**Reimplement to create global settings page in the dialog @p dlg.*/
-    virtual void createGlobalSettingsPage(KDialogBase *dlg) = 0;
+    virtual void createGlobalSettingsPage(KDialog *dlg) = 0;
     /**Reimplement to perform actions when the global settings page in the
     dialog @p dlg is accepted (user clicked "Ok").*/
-    virtual void acceptGlobalSettingsPage(KDialogBase *dlg) = 0;
+    virtual void acceptGlobalSettingsPage(KDialog *dlg) = 0;
 
     /**Reimplement to return the name of KXMLGUI resource file for an application.*/
     virtual QString xmlFile() = 0;

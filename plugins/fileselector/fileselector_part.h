@@ -3,7 +3,7 @@
 
 #include <kdevplugin.h>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kfileitem.h>
 
 #include <qpointer.h>
@@ -26,7 +26,7 @@ public slots:
 
 private slots:
     void slotProjectOpened();
-    void slotConfigWidget( KDialogBase * );
+    void slotConfigWidget( KDialog * );
 
 private:
     QPointer<KDevFileSelector> m_filetree;

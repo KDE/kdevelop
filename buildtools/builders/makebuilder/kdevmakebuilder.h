@@ -24,7 +24,7 @@
 #include <QtCore/QPair>
 #include <QtCore/QStringList>
 
-class KDialogBase;
+class KDialog;
 
 /**
 @author Roberto Raggi
@@ -49,7 +49,7 @@ public:
     virtual bool execute(KDevProjectItem *dom);
 
 private slots:
-    void projectConfigWidget(KDialogBase *dialog);
+    void projectConfigWidget(KDialog *dialog);
     void commandFinished(const QString &command);
     void commandFailed(const QString &command);
 

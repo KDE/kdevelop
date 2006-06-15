@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 #include <kconfig.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kiconloader.h>
 #include <kurlrequester.h>
 #include <kapplication.h>
@@ -48,7 +48,7 @@ void KDevIDEExtension::init()
     s_instance = new KDevIDEExtension();
 }
 
-void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
+void KDevIDEExtension::createGlobalSettingsPage(KDialog *dlg)
 {
 /*    KConfig* config = KGlobal::config();
     KVBox *vbox = dlg->addVBoxPage(i18n("General"), i18n("General"), BarIcon("kdevelop", K3Icon::SizeMedium) );
@@ -72,7 +72,7 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
     gsw->terminalEdit->setText( config->readEntry( QLatin1String("TerminalApplication"), QString("konsole") ) );*/
 }
 
-void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase* /*dlg*/)
+void KDevIDEExtension::acceptGlobalSettingsPage(KDialog* /*dlg*/)
 {
     KConfig* config = KGlobal::config();
 
