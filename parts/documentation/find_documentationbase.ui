@@ -47,7 +47,7 @@
                 <bool>false</bool>
             </property>
         </widget>
-        <widget class="QLineEdit" row="1" column="0" rowspan="1" colspan="2">
+        <widget class="KLineEdit" row="1" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>search_term</cstring>
             </property>

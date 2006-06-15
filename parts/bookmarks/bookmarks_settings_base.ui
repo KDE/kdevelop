@@ -157,7 +157,7 @@
                                 <string></string>
                             </property>
                         </widget>
-                        <widget class="QLineEdit">
+                        <widget class="KLineEdit">
                             <property name="name">
                                 <cstring>lineEdit1</cstring>
                             </property>

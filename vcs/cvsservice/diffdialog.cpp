@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qradiobutton.h>
 
 #include "diffdialog.h"

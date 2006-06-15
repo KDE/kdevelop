@@ -12,10 +12,10 @@
 #include "toolsconfigwidget.h"
 
 #include <qcheckbox.h>
-#include <qlineedit.h>
 #include <qlistbox.h>
 #include <qtimer.h>
 
+#include <klineedit.h>
 #include <kconfig.h>
 #include <kdeversion.h>
 #include <kdebug.h>

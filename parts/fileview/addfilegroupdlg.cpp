@@ -24,13 +24,13 @@ AddFileGroupDialog::AddFileGroupDialog(const QString& old_title, const QString& 
     : QDialog(parent, name, true)
 {
     QLabel *title_label = new QLabel(i18n("&Title:"), this);
-    title_edit = new QLineEdit(old_title, this);
+    title_edit = new KLineEdit(old_title, this);
     title_edit->setFocus();
     title_label->setBuddy(title_edit);
     connect( title_edit, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotTextChanged() ) );
 
     QLabel *pattern_label = new QLabel(i18n("&Pattern:"), this);
-    pattern_edit = new QLineEdit(old_pattern, this);
+    pattern_edit = new KLineEdit(old_pattern, this);
     pattern_label->setBuddy(pattern_edit);
     QFontMetrics fm(pattern_edit->fontMetrics());
     pattern_edit->setMinimumWidth(fm.width('X')*35);

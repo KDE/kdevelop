@@ -91,7 +91,7 @@
                 <string>Version:</string>
             </property>
         </widget>
-        <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="2">
+        <widget class="KLineEdit" row="4" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>version_edit</cstring>
             </property>
@@ -110,12 +110,12 @@
                 </size>
             </property>
         </widget>
-        <widget class="QLineEdit" row="3" column="1" rowspan="1" colspan="4">
+        <widget class="KLineEdit" row="3" column="1" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>email_edit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="4">
+        <widget class="KLineEdit" row="2" column="1" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>author_edit</cstring>
             </property>
@@ -156,7 +156,7 @@
                 <pixmap>image0</pixmap>
             </property>
         </widget>
-        <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="3">
+        <widget class="KLineEdit" row="0" column="1" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>project_directory_edit</cstring>
             </property>

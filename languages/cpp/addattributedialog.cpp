@@ -30,10 +30,10 @@
 #include <kfiledialog.h>
 #include <kparts/part.h>
 #include <ktexteditor/editinterface.h>
+#include <klineedit.h>
 
 #include <qfileinfo.h>
 #include <qcombobox.h>
-#include <qlineedit.h>
 #include <qlistview.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>

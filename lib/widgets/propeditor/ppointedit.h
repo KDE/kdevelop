@@ -22,7 +22,7 @@
 
 #include "propertywidget.h"
 
-class QLineEdit;
+class KLineEdit;
 
 namespace PropertyLib{
 
@@ -40,7 +40,7 @@ public:
     virtual void setValue(const QVariant& value, bool emitChange);
 
 private:
-    QLineEdit *m_edit;
+    KLineEdit *m_edit;
     QVariant m_value;
 
 };

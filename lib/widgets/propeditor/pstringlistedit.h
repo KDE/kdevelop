@@ -22,7 +22,8 @@
 
 #include "propertywidget.h"
 
-class QLineEdit;
+
+class KLineEdit;
 class QPushButton;
 class QHBoxLayout;
 
@@ -49,9 +50,9 @@ private slots:
     void showEditor();
 
 private:
-    QLineEdit *edit;
     QPushButton *pbSelect;
     QHBoxLayout *l;
+    KLineEdit *edit;
 
     QStringList m_list;
 };

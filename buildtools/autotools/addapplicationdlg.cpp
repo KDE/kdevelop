@@ -15,10 +15,10 @@
 #include <qcombobox.h>
 #include <qfile.h>
 #include <qheader.h>
-#include <qlineedit.h>
 #include <qlistview.h>
 #include <qtextstream.h>
 #include <qapplication.h>
+#include <klineedit.h>
 #include <kdebug.h>
 #include <kicondialog.h>
 #include <klocale.h>

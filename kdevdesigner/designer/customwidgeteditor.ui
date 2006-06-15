@@ -278,7 +278,7 @@
                             <property name="spacing">
                                 <number>6</number>
                             </property>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>editHeader</cstring>
                                 </property>
@@ -332,7 +332,7 @@
                             </widget>
                         </hbox>
                     </widget>
-                    <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="2">
+                    <widget class="KLineEdit" row="0" column="1" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>editClass</cstring>
                         </property>
@@ -668,7 +668,7 @@
                                     <cstring>editSignal</cstring>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>editSignal</cstring>
                                 </property>
@@ -747,7 +747,7 @@
                             <cstring>editSlot</cstring>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="2" column="1">
+                    <widget class="KLineEdit" row="2" column="1">
                         <property name="name">
                             <cstring>editSlot</cstring>
                         </property>
@@ -1065,7 +1065,7 @@
                             <string>&lt;b&gt;The list of the current widget's properties.&lt;/b&gt;&lt;p&gt;The properties of the custom widget can be changed in the property editor.&lt;/p&gt;</string>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="2" column="1">
+                    <widget class="KLineEdit" row="2" column="1">
                         <property name="name">
                             <cstring>editProperty</cstring>
                         </property>

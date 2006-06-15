@@ -104,7 +104,7 @@
                         </size>
                     </property>
                 </spacer>
-                <widget class="QLineEdit">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>builddir_edit</cstring>
                     </property>

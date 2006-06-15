@@ -388,7 +388,7 @@
                                     <cstring>comboFields</cstring>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit" row="2" column="1">
+                            <widget class="KLineEdit" row="2" column="1">
                                 <property name="name">
                                     <cstring>editColumnText</cstring>
                                 </property>
@@ -622,7 +622,7 @@
                                     </widget>
                                 </hbox>
                             </widget>
-                            <widget class="QLineEdit" row="0" column="1">
+                            <widget class="KLineEdit" row="0" column="1">
                                 <property name="name">
                                     <cstring>editRowText</cstring>
                                 </property>

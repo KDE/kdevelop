@@ -85,7 +85,7 @@
                         <string>Lookup:</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>input_edit</cstring>
                     </property>

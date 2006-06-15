@@ -13,7 +13,7 @@
 #define _ADDPREFIXDLG_H_
 
 #include <qdialog.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 class QPushButton;
 
 class AddPrefixDialog : public QDialog
@@ -37,8 +37,8 @@ private slots:
 	void slotPrefixChanged();
 
 private:
-	QLineEdit *name_edit;
-	QLineEdit *path_edit;
+	KLineEdit *name_edit;
+	KLineEdit *path_edit;
 	QPushButton *m_pOk;
 };
 

@@ -14,7 +14,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qcombobox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qtooltip.h>
@@ -211,7 +211,7 @@ InputString::InputString(const QString & label,
         layout->addStretch(1);
     } else {
         QGridLayout *layout = new QGridLayout(this, 1, m==StringFree? 1 : 3, 5);
-        le = new QLineEdit(this);
+        le = new KLineEdit(this);
 	lab = new QLabel(le,label+":", this);
 	layout->addWidget(lab, 0, 0);
         le->setText(s);
@@ -331,7 +331,7 @@ InputStrList::InputStrList(const QString & label,
     
     QWidget *dw = new QWidget(this); /* dummy widget used for layouting */
     QHBoxLayout *boxlayout = new QHBoxLayout(dw, 0, 5);
-    le  = new QLineEdit(dw);
+    le  = new KLineEdit(dw);
     lab = new QLabel(le,label+":", this );
     layout->addWidget(lab, 0, 0);
     boxlayout->addWidget(le, 1);

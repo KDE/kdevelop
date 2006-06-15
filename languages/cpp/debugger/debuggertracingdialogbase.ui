@@ -78,7 +78,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QLineEdit" row="4" column="0" rowspan="1" colspan="3">
+        <widget class="KLineEdit" row="4" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>customFormat</cstring>
             </property>

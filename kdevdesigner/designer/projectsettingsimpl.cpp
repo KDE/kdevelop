@@ -36,8 +36,8 @@
 
 #include <kfiledialog.h>
 #include <klocale.h>
+#include <klineedit.h>
 
-#include <qlineedit.h>
 #include <qtextedit.h>
 #include <qcheckbox.h>
 #include <qfiledialog.h>

@@ -27,7 +27,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLineEdit" row="1" column="0">
+                <widget class="KLineEdit" row="1" column="0">
                     <property name="name">
                         <cstring>pattern_edit</cstring>
                     </property>

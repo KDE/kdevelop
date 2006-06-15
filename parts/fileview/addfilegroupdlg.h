@@ -13,7 +13,7 @@
 #define _ADDFILEGROUPDLG_H_
 
 #include <qdialog.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 class QPushButton;
 
 class AddFileGroupDialog : public QDialog
@@ -31,8 +31,8 @@ public:
  private slots:
     void slotTextChanged();
 private:
-    QLineEdit *title_edit;
-    QLineEdit *pattern_edit;
+    KLineEdit *title_edit;
+    KLineEdit *pattern_edit;
     QPushButton *m_pOk;
 };
 

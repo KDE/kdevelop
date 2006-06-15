@@ -21,6 +21,7 @@
 #define PHPERRORVIEW_H
 
 #include <klistview.h>
+#include <klineedit.h>
 #include <qguardedptr.h>
 #include "phpfile.h"
 
@@ -29,7 +30,6 @@ class QTimer;
 class QTabBar;
 class QWidgetStack;
 class QGridLayout;
-class QLineEdit;
 class KDialogBase;
 class Problem;
 class KURL;
@@ -90,7 +90,7 @@ private:
    KListView* m_warningList;
    KListView* m_todoList;
    KListView* m_filteredList;
-   QLineEdit* m_filterEdit;
+   KLineEdit* m_filterEdit;
 
    PHPSupportPart* m_phpSupport;
    QGuardedPtr<KTextEditor::Document> m_document;

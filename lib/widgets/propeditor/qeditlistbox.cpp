@@ -21,13 +21,14 @@
 
 #include "compat_tools.h"
 
+#include <klineedit.h>
+
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
 #include <qlistbox.h>
 #include <qwhatsthis.h>
 #include <qlabel.h>
-#include <qlineedit.h>
 #include <qcombobox.h>
 #include <qapplication.h>
 #include <qstringlist.h>
@@ -107,7 +108,7 @@ void QEditListBox::init( bool checkAtEntering, int buttons,
     if ( representationWidget )
         representationWidget->reparent( gb, QPoint(0,0) );
     else
-        m_lineEdit=new QLineEdit(gb);
+        m_lineEdit=new KLineEdit(gb);
 
     m_listBox = new QListBox(gb);
 
@@ -395,6 +396,6 @@ void QEditListBox::virtual_hook( int, void* )
 QEditListBox::CustomEditor::CustomEditor( QComboBox *combo )
 {
     m_representationWidget = combo;
-    m_lineEdit = dynamic_cast<QLineEdit*>( combo->lineEdit() );
+    m_lineEdit = dynamic_cast<KLineEdit*>( combo->lineEdit() );
     assert( m_lineEdit );
 }

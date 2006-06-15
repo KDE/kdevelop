@@ -589,7 +589,7 @@
                                             <cstring>m_targetLibraryVersion</cstring>
                                         </property>
                                     </widget>
-                                    <widget class="QLineEdit">
+                                    <widget class="KLineEdit">
                                         <property name="name">
                                             <cstring>m_targetLibraryVersion</cstring>
                                         </property>

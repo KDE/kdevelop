@@ -225,7 +225,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>appname_edit</cstring>
                                 </property>
@@ -394,7 +394,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>author_edit</cstring>
                                 </property>
@@ -407,7 +407,7 @@
                                     </sizepolicy>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>email_edit</cstring>
                                 </property>
@@ -428,7 +428,7 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QLineEdit">
+                                    <widget class="KLineEdit">
                                         <property name="name">
                                             <cstring>version_edit</cstring>
                                         </property>

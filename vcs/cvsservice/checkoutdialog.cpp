@@ -10,7 +10,6 @@
  ***************************************************************************/
 
 #include <qcheckbox.h>
-#include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qfile.h>
@@ -24,6 +23,7 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kapplication.h>
+#include <klineedit.h>
 
 #include <dcopref.h>
 #include <cvsjob_stub.h>

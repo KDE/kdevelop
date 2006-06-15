@@ -32,6 +32,7 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kstringhandler.h>
+#include <klineedit.h>
 
 #include <qprogressbar.h>
 #include <qheader.h>
@@ -39,7 +40,6 @@
 #include <qprocess.h>
 #include <qregexp.h>
 #include <qlayout.h>
-#include <qlineedit.h>
 #include <qtimer.h>
 #include <qpushbutton.h>
 

@@ -159,7 +159,7 @@
                                 <cstring>tagEdit</cstring>
                             </property>
                         </widget>
-                        <widget class="QLineEdit" row="1" column="2">
+                        <widget class="KLineEdit" row="1" column="2">
                             <property name="name">
                                 <cstring>tagEdit</cstring>
                             </property>
@@ -172,7 +172,7 @@
                                 </sizepolicy>
                             </property>
                         </widget>
-                        <widget class="QLineEdit" row="1" column="0">
+                        <widget class="KLineEdit" row="1" column="0">
                             <property name="name">
                                 <cstring>moduleEdit</cstring>
                             </property>

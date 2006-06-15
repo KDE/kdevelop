@@ -15,8 +15,8 @@
 #include <qheader.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlineedit.h>
 #include <qregexp.h>
+#include <klineedit.h>
 #include <kbuttonbox.h>
 #include <kdialog.h>
 #include <kinputdialog.h>

@@ -23,7 +23,7 @@
 #include <qgroupbox.h>
 #include <qlistbox.h>
 
-class QLineEdit;
+class KLineEdit;
 class QComboBox;
 class QPushButton;
 
@@ -56,7 +56,7 @@ public:
         CustomEditor()
             : m_representationWidget( 0L ),
               m_lineEdit( 0L ) {}
-        CustomEditor( QWidget *repWidget, QLineEdit *edit )
+        CustomEditor( QWidget *repWidget, KLineEdit *edit )
             : m_representationWidget( repWidget ),
               m_lineEdit( edit ) {}
         CustomEditor( QComboBox *combo );
@@ -64,20 +64,20 @@ public:
         void setRepresentationWidget( QWidget *repWidget ) {
             m_representationWidget = repWidget;
         }
-        void setLineEdit( QLineEdit *edit ) {
+        void setLineEdit( KLineEdit *edit ) {
             m_lineEdit = edit;
         }
 
         virtual QWidget   *representationWidget() const {
             return m_representationWidget;
         }
-        virtual QLineEdit *lineEdit() const {
+        virtual KLineEdit *lineEdit() const {
             return m_lineEdit;
         }
 
     protected:
         QWidget *m_representationWidget;
-        QLineEdit *m_lineEdit;
+        KLineEdit *m_lineEdit;
     };
 
    public:
@@ -136,9 +136,9 @@ public:
        */
       QListBox* listBox() const     { return m_listBox; }
       /**
-       * Return a pointer to the embedded QLineEdit.
+       * Return a pointer to the embedded KLineEdit.
        */
-      QLineEdit* lineEdit() const     { return m_lineEdit; }
+      KLineEdit* lineEdit() const     { return m_lineEdit; }
       /**
        * Return a pointer to the Add button
        */
@@ -239,7 +239,7 @@ public:
       QListBox *m_listBox;
       QPushButton *servUpButton, *servDownButton;
       QPushButton *servNewButton, *servRemoveButton;
-      QLineEdit *m_lineEdit;
+      KLineEdit *m_lineEdit;
 
       //this is called in both ctors, to avoid code duplication
       void init( bool checkAtEntering, int buttons,

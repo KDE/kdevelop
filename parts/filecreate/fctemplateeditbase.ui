@@ -47,7 +47,7 @@
                         <cstring>templatename_edit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>templatename_edit</cstring>
                     </property>

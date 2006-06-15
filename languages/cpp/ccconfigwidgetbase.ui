@@ -679,12 +679,12 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLineEdit" row="0" column="1">
+                            <widget class="KLineEdit" row="0" column="1">
                                 <property name="name">
                                     <cstring>interface_suffix</cstring>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit" row="1" column="1">
+                            <widget class="KLineEdit" row="1" column="1">
                                 <property name="name">
                                     <cstring>implementation_suffix</cstring>
                                 </property>

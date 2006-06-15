@@ -21,7 +21,7 @@
 #define _ADDENVVARDLG_H_
 
 #include <qdialog.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 class QPushButton;
 
 /**
@@ -46,8 +46,8 @@ public:
  private slots:
     void slotTextChanged();
 private:
-    QLineEdit *varname_edit;
-    QLineEdit *value_edit;
+    KLineEdit *varname_edit;
+    KLineEdit *value_edit;
     QPushButton *m_pOk;
 };
 

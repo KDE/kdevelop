@@ -1,6 +1,6 @@
 #include "filepropspage.h"
 #include <qlistbox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qtextview.h>
 #include <klocale.h>
 #include <qlabel.h>

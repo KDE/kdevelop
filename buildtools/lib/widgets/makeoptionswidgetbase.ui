@@ -57,7 +57,7 @@
                 <cstring>makebin_edit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="5" column="3" rowspan="1" colspan="3">
+        <widget class="KLineEdit" row="5" column="3" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>makebin_edit</cstring>
             </property>

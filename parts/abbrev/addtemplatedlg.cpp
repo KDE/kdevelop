@@ -19,7 +19,7 @@
  */
 #include "addtemplatedlg.h"
 #include <qcombobox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qpushbutton.h>
 
 AddTemplateDialog::AddTemplateDialog( QStringList suffixesList, QWidget *parent, const char *name )

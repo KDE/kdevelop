@@ -337,7 +337,7 @@
                     </property>
                 </widget>
                 <widget>
-                    <class>QLineEdit</class>
+                    <class>KLineEdit</class>
                     <property stdset="1">
                         <name>name</name>
                         <cstring>editArguments</cstring>

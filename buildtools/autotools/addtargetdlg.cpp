@@ -14,9 +14,9 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qgroupbox.h>
-#include <qlineedit.h>
 #include <qvalidator.h>
 
+#include <klineedit.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>

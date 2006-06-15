@@ -94,7 +94,7 @@
                 <cstring>comboDriver</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="0" column="1">
+        <widget class="KLineEdit" row="0" column="1">
             <property name="name">
                 <cstring>editName</cstring>
             </property>
@@ -135,7 +135,7 @@
                 <cstring>editName</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="5" column="1">
+        <widget class="KLineEdit" row="5" column="1">
             <property name="name">
                 <cstring>editHostname</cstring>
             </property>
@@ -154,7 +154,7 @@
                 <cstring>editPort</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="3" column="1">
+        <widget class="KLineEdit" row="3" column="1">
             <property name="name">
                 <cstring>editUsername</cstring>
             </property>
@@ -162,7 +162,7 @@
                 <bool>false</bool>
             </property>
         </widget>
-        <widget class="QLineEdit" row="4" column="1">
+        <widget class="KLineEdit" row="4" column="1">
             <property name="name">
                 <cstring>editPassword</cstring>
             </property>
@@ -173,7 +173,7 @@
                 <enum>Password</enum>
             </property>
         </widget>
-        <widget class="QLineEdit" row="2" column="1">
+        <widget class="KLineEdit" row="2" column="1">
             <property name="name">
                 <cstring>editDatabase</cstring>
             </property>

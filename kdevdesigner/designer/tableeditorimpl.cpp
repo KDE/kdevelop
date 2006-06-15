@@ -33,7 +33,7 @@
 #include <qcombobox.h>
 #include <qheader.h>
 #include <qlistbox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qpushbutton.h>
 #include "pixmapchooser.h"
 #include "command.h"

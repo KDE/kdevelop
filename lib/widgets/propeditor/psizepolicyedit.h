@@ -24,7 +24,7 @@
 
 #include <qmap.h>
 
-class QLineEdit;
+class KLineEdit;
 
 namespace PropertyLib{
 
@@ -44,7 +44,7 @@ public:
     QString findValueDescription(QVariant val) const;
     
 private:
-    QLineEdit *m_edit;
+    KLineEdit *m_edit;
     QVariant m_value;
     QMap<QString, QVariant> m_spValues;
 };

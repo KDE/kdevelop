@@ -246,7 +246,7 @@
                         <cstring>itemText</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="3">
+                <widget class="KLineEdit" row="0" column="1" rowspan="1" colspan="3">
                     <property name="name">
                         <cstring>itemText</cstring>
                     </property>

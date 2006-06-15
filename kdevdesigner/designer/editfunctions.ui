@@ -290,7 +290,7 @@
                                         <cstring>functionName</cstring>
                                     </property>
                                 </widget>
-                                <widget class="QLineEdit">
+                                <widget class="KLineEdit">
                                     <property name="name">
                                         <cstring>functionName</cstring>
                                     </property>
@@ -323,7 +323,7 @@
                                         <cstring>editType</cstring>
                                     </property>
                                 </widget>
-                                <widget class="QLineEdit">
+                                <widget class="KLineEdit">
                                     <property name="name">
                                         <cstring>editType</cstring>
                                     </property>

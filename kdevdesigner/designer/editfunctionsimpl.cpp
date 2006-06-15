@@ -33,11 +33,11 @@
 #include "project.h"
 
 #include <kiconloader.h>
+#include <klineedit.h>
 #include "kdevdesigner_part.h"
 
 #include <qlistview.h>
 #include <qpushbutton.h>
-#include <qlineedit.h>
 #include <qcombobox.h>
 #include <qstrlist.h>
 #include <qmessagebox.h>

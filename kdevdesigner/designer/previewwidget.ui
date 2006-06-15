@@ -192,7 +192,7 @@
                         <property name="spacing">
                             <number>6</number>
                         </property>
-                        <widget class="QLineEdit">
+                        <widget class="KLineEdit">
                             <property name="name">
                                 <cstring>LineEdit1</cstring>
                             </property>

@@ -29,13 +29,13 @@
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <klocale.h>
+#include <klineedit.h>
 
 #include <stdlib.h>
 #include <qaction.h>
 #include <qwhatsthis.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
-#include <qlineedit.h>
 #include <qtooltip.h>
 #include <qapplication.h>
 #include <qsignalmapper.h>

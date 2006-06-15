@@ -13,7 +13,7 @@
 
 #include <qcombobox.h>
 #include <qlabel.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kprocess.h>

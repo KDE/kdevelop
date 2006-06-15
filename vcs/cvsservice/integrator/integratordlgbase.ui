@@ -35,7 +35,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLineEdit" row="3" column="1" rowspan="1" colspan="4">
+                <widget class="KLineEdit" row="3" column="1" rowspan="1" colspan="4">
                     <property name="name">
                         <cstring>vendorTag</cstring>
                     </property>
@@ -127,7 +127,7 @@
                         </size>
                     </property>
                 </spacer>
-                <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="4">
+                <widget class="KLineEdit" row="2" column="1" rowspan="1" colspan="4">
                     <property name="name">
                         <cstring>module</cstring>
                     </property>
@@ -245,7 +245,7 @@
                         <cstring>repository</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="5" column="1" rowspan="1" colspan="4">
+                <widget class="KLineEdit" row="5" column="1" rowspan="1" colspan="4">
                     <property name="name">
                         <cstring>comment</cstring>
                     </property>
@@ -256,7 +256,7 @@
                         <string>First Import</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="4">
+                <widget class="KLineEdit" row="4" column="1" rowspan="1" colspan="4">
                     <property name="name">
                         <cstring>releaseTag</cstring>
                     </property>

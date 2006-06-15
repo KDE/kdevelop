@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "psizepolicyedit.h"
 
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qsizepolicy.h>
@@ -30,7 +30,7 @@ PSizePolicyEdit::PSizePolicyEdit(MultiProperty* property, const QMap<QString, QV
     :PropertyWidget(property, parent, name), m_spValues(spValues)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-    m_edit = new QLineEdit(this);
+    m_edit = new KLineEdit(this);
     m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
 

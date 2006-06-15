@@ -41,7 +41,7 @@
                         <cstring>m_slotView</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="2">
+                <widget class="KLineEdit" row="0" column="1" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>m_edClassName</cstring>
                     </property>
@@ -84,7 +84,7 @@
                         <cstring>m_edFileName</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
+                <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>m_edFileName</cstring>
                     </property>

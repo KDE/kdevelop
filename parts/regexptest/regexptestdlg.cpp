@@ -16,11 +16,11 @@
 #include <stdlib.h>
 #include <regex.h>
 #include <qlabel.h>
-#include <qlineedit.h>
 #include <qlistview.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
+#include <klineedit.h>
 #include <kdeversion.h>
 #include <kregexp.h>
 #include <kdebug.h>

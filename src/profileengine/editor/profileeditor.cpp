@@ -19,7 +19,7 @@
 #include "profileeditor.h"
 
 #include <qlayout.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qtextedit.h>
 #include <qpalette.h>
 

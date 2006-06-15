@@ -22,7 +22,7 @@
 
 #include "propertywidget.h"
 
-class QLineEdit;
+class KLineEdit;
 class QPushButton;
 class QHBoxLayout;
 
@@ -52,7 +52,7 @@ private slots:
     void updateProperty(const QString &val);
 
 private:
-    QLineEdit *m_edit;
+    KLineEdit *m_edit;
     QPushButton *m_select;
     QHBoxLayout *l;
 };

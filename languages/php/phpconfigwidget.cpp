@@ -1,6 +1,6 @@
 #include "domutil.h"
 #include <kprocess.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qcheckbox.h>
 #include <qmultilineedit.h>
 #include <qcstring.h>

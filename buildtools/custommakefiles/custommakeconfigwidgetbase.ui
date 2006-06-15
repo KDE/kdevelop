@@ -43,12 +43,12 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLineEdit" row="0" column="1">
+                <widget class="KLineEdit" row="0" column="1">
                     <property name="name">
                         <cstring>defaultTarget_edit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="1" column="1">
+                <widget class="KLineEdit" row="1" column="1">
                     <property name="name">
                         <cstring>makebin_edit</cstring>
                     </property>
@@ -64,7 +64,7 @@
                         <cstring>makeoptions_edit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="2" column="1">
+                <widget class="KLineEdit" row="2" column="1">
                     <property name="name">
                         <cstring>makeoptions_edit</cstring>
                     </property>

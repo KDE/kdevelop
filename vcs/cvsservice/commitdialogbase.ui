@@ -56,7 +56,7 @@
                         <string>&amp;Add to changelog:</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>changeLogNameEdit</cstring>
                     </property>

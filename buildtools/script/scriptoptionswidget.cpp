@@ -12,7 +12,7 @@
 #include "scriptoptionswidget.h"
 
 #include <qcheckbox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qradiobutton.h>
 #include <qtabwidget.h>
 #include "domutil.h"

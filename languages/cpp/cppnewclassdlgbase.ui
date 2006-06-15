@@ -111,7 +111,7 @@ doxygen or similar tools.</string>
                                     <cstring>header_edit</cstring>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>header_edit</cstring>
                                 </property>
@@ -133,7 +133,7 @@ still edit it afterwards.</string>
                                     <cstring>implementation_edit</cstring>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>implementation_edit</cstring>
                                 </property>
@@ -184,7 +184,7 @@ still edit it afterwards.</string>
                                     <cstring>classname_edit</cstring>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>classname_edit</cstring>
                                 </property>

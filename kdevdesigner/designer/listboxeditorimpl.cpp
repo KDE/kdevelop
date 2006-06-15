@@ -32,7 +32,7 @@
 #include "listboxdnd.h"
 #include "listboxrename.h"
 
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qlabel.h>
 #include <qlistbox.h>
 #include <qpushbutton.h>

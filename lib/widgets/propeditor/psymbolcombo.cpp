@@ -17,18 +17,18 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include <qlineedit.h>
-#include <qpushbutton.h>
+
 #include <qlayout.h>
 #include <qpainter.h>
+#include <qpushbutton.h>
+#include <klineedit.h>
 
 #ifndef PURE_QT
-#include <qdialog.h>
-
 #include <kcharselect.h>
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kstdguiitem.h>
+#include <qdialog.h>
 #endif
 
 #include "psymbolcombo.h"
@@ -39,8 +39,7 @@ PSymbolCombo::PSymbolCombo(MultiProperty *property, QWidget *parent, const char 
     :PropertyWidget(property, parent, name)
 {
     l = new QHBoxLayout(this);
-
-    m_edit = new QLineEdit(this);
+    m_edit = new KLineEdit(this);
     m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_edit->setMaxLength(1);
     l->addWidget(m_edit);

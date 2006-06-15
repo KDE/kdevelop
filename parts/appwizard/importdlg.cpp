@@ -16,7 +16,7 @@
 #include <qfile.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <qtextstream.h>

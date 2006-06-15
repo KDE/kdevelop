@@ -26,8 +26,8 @@
 #include <qregexp.h>
 #include <qdom.h>
 #include <qradiobutton.h>
-#include <qlineedit.h>
 
+#include <klineedit.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klistview.h>

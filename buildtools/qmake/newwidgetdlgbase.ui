@@ -73,7 +73,7 @@
                                 <string>Caption:</string>
                             </property>
                         </widget>
-                        <widget class="QLineEdit" row="2" column="1">
+                        <widget class="KLineEdit" row="2" column="1">
                             <property name="name">
                                 <cstring>subclassnameEd</cstring>
                             </property>
@@ -86,12 +86,12 @@
                                 <string>Subclass name:</string>
                             </property>
                         </widget>
-                        <widget class="QLineEdit" row="1" column="1">
+                        <widget class="KLineEdit" row="1" column="1">
                             <property name="name">
                                 <cstring>captionEd</cstring>
                             </property>
                         </widget>
-                        <widget class="QLineEdit" row="0" column="1">
+                        <widget class="KLineEdit" row="0" column="1">
                             <property name="name">
                                 <cstring>ui_classnameEd</cstring>
                             </property>

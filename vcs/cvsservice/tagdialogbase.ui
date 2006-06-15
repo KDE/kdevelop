@@ -41,7 +41,7 @@
                         <cstring>tagBranchEdit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>tagBranchEdit</cstring>
                     </property>

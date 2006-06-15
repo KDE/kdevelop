@@ -32,7 +32,7 @@
 #include <qlistbox.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qpushbutton.h>
 #include <qsqldatabase.h>
 #include <qmessagebox.h>

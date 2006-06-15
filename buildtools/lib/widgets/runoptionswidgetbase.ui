@@ -87,7 +87,7 @@
                         <number>2</number>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="2">
+                <widget class="KLineEdit" row="2" column="1" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>customRunDirectory_edit</cstring>
                     </property>
@@ -150,7 +150,7 @@
                         <cstring>mainprogram_edit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="1" column="0" rowspan="1" colspan="3">
+                <widget class="KLineEdit" row="1" column="0" rowspan="1" colspan="3">
                     <property name="name">
                         <cstring>mainprogram_edit</cstring>
                     </property>
@@ -177,7 +177,7 @@
                         <cstring>progargs_edit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="3" column="0" rowspan="1" colspan="4">
+                <widget class="KLineEdit" row="3" column="0" rowspan="1" colspan="4">
                     <property name="name">
                         <cstring>progargs_edit</cstring>
                     </property>

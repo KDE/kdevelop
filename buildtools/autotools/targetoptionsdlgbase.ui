@@ -121,7 +121,7 @@
                                             <cstring>ldflagsother_edit</cstring>
                                         </property>
                                     </widget>
-                                    <widget class="QLineEdit">
+                                    <widget class="KLineEdit">
                                         <property name="name">
                                             <cstring>ldflagsother_edit</cstring>
                                         </property>
@@ -164,7 +164,7 @@
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="2">
+                    <widget class="KLineEdit" row="4" column="1" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>dependencies_edit</cstring>
                         </property>
@@ -545,7 +545,7 @@
                             <cstring>run_arguments_edit</cstring>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="2" column="1">
+                    <widget class="KLineEdit" row="2" column="1">
                         <property name="name">
                             <cstring>run_arguments_edit</cstring>
                         </property>

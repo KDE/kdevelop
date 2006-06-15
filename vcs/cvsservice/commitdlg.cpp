@@ -14,7 +14,6 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
-#include <qlineedit.h>
 #include <qtextedit.h>
 #include <qpushbutton.h>
 
@@ -22,6 +21,7 @@
 #include <kbuttonbox.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <klineedit.h>
 
 #include "commitdlg.h"
 

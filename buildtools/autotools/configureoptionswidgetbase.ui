@@ -138,7 +138,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="4">
+                    <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="4">
                         <property name="name">
                             <cstring>configargs_edit</cstring>
                         </property>
@@ -182,7 +182,7 @@
                             <cstring>topsourcedir_edit</cstring>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="3">
+                    <widget class="KLineEdit" row="4" column="1" rowspan="1" colspan="3">
                         <property name="name">
                             <cstring>builddir_edit</cstring>
                         </property>
@@ -244,7 +244,7 @@
                             <string>...</string>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="6" column="1" rowspan="1" colspan="3">
+                    <widget class="KLineEdit" row="6" column="1" rowspan="1" colspan="3">
                         <property name="name">
                             <cstring>topsourcedir_edit</cstring>
                         </property>
@@ -298,7 +298,7 @@ nonstandard directory &lt;lib dir&gt;</string>
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QLineEdit" row="11" column="1" rowspan="1" colspan="4">
+                    <widget class="KLineEdit" row="11" column="1" rowspan="1" colspan="4">
                         <property name="name">
                             <cstring>ldflags_edit</cstring>
                         </property>
@@ -307,7 +307,7 @@ nonstandard directory &lt;lib dir&gt;</string>
 nonstandard directory &lt;lib dir&gt;</string>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="9" column="1" rowspan="1" colspan="4">
+                    <widget class="KLineEdit" row="9" column="1" rowspan="1" colspan="4">
                         <property name="name">
                             <cstring>cppflags_edit</cstring>
                         </property>
@@ -437,7 +437,7 @@ headers in a nonstandard directory &lt;include dir&gt;</string>
                             <cstring>cflags_edit</cstring>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="4" column="1">
+                    <widget class="KLineEdit" row="4" column="1">
                         <property name="name">
                             <cstring>cflags_edit</cstring>
                         </property>
@@ -492,7 +492,7 @@ headers in a nonstandard directory &lt;include dir&gt;</string>
                             <cstring>cbinary_edit</cstring>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="2" column="1">
+                    <widget class="KLineEdit" row="2" column="1">
                         <property name="name">
                             <cstring>cbinary_edit</cstring>
                         </property>
@@ -571,7 +571,7 @@ headers in a nonstandard directory &lt;include dir&gt;</string>
                             <cstring>cxxbinary_edit</cstring>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="2" column="1">
+                    <widget class="KLineEdit" row="2" column="1">
                         <property name="name">
                             <cstring>cxxbinary_edit</cstring>
                         </property>
@@ -604,7 +604,7 @@ headers in a nonstandard directory &lt;include dir&gt;</string>
                             <cstring>cxxflags_edit</cstring>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="4" column="1">
+                    <widget class="KLineEdit" row="4" column="1">
                         <property name="name">
                             <cstring>cxxflags_edit</cstring>
                         </property>
@@ -705,7 +705,7 @@ headers in a nonstandard directory &lt;include dir&gt;</string>
                             <cstring>f77binary_edit</cstring>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="2" column="1">
+                    <widget class="KLineEdit" row="2" column="1">
                         <property name="name">
                             <cstring>f77binary_edit</cstring>
                         </property>
@@ -738,7 +738,7 @@ headers in a nonstandard directory &lt;include dir&gt;</string>
                             <cstring>f77flags_edit</cstring>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="4" column="1">
+                    <widget class="KLineEdit" row="4" column="1">
                         <property name="name">
                             <cstring>f77flags_edit</cstring>
                         </property>

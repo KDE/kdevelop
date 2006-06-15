@@ -67,7 +67,7 @@
                                     <string>Use &amp;this file as default:</string>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>useDefaultFile_edit</cstring>
                                 </property>
@@ -128,7 +128,7 @@
                                     <cstring>include_path</cstring>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>include_path_edit</cstring>
                                 </property>
@@ -303,7 +303,7 @@ the internal web browser. Please make sure that the webserver was compiled with 
                             <cstring>weburl_edit</cstring>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="0" column="1">
+                    <widget class="KLineEdit" row="0" column="1">
                         <property name="name">
                             <cstring>weburl_edit</cstring>
                         </property>
@@ -357,7 +357,7 @@ the internal web browser. Please make sure that the webserver was compiled with 
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>exe_edit</cstring>
                                 </property>
@@ -411,7 +411,7 @@ the internal web browser. Please make sure that the webserver was compiled with 
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>ini_edit</cstring>
                                 </property>
@@ -457,7 +457,7 @@ the internal web browser. Please make sure that the webserver was compiled with 
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>zend_edit</cstring>
                                 </property>

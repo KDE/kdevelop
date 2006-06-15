@@ -93,7 +93,7 @@
                 <cstring>name_edit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="2">
+        <widget class="KLineEdit" row="2" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>name_edit</cstring>
             </property>
@@ -226,7 +226,7 @@
                 <cstring>email_edit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="7" column="1" rowspan="1" colspan="2">
+        <widget class="KLineEdit" row="7" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>email_edit</cstring>
             </property>
@@ -239,7 +239,7 @@
                 </sizepolicy>
             </property>
         </widget>
-        <widget class="QLineEdit" row="6" column="1" rowspan="1" colspan="2">
+        <widget class="KLineEdit" row="6" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>author_edit</cstring>
             </property>

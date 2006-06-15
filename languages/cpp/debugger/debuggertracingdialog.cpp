@@ -5,7 +5,7 @@
 #include <qbutton.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <keditlistbox.h>
 #include <kmessagebox.h>
 

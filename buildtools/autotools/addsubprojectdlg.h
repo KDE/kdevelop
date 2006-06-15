@@ -13,7 +13,7 @@
 #define _ADDSUBPROJECTDLG_H_
 
 #include <qdialog.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 
 #include "addsubprojectdlgbase.h"
 
@@ -34,7 +34,7 @@ public:
 private:
 	virtual void accept();
 
-	QLineEdit *name_edit;
+	KLineEdit *name_edit;
 
 	SubprojectItem *m_subProject;
 	AutoSubprojectView *m_subprojectView;

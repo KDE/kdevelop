@@ -19,7 +19,7 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <kurlrequester.h>
 #include <kcombobox.h>
 #include <klocale.h>
@@ -45,7 +45,7 @@ namespace FileCreate {
       l->setBuddy(m_urlreq);
       l = new QLabel(i18n("&File name:"), plainPage() );
       grid->addWidget(l, 1, 0);
-      m_filename = new QLineEdit( plainPage() );
+      m_filename = new KLineEdit( plainPage() );
       grid->addWidget(m_filename, 1, 1);
       l->setBuddy(m_filename);
 //      lay->addWidget( grid );

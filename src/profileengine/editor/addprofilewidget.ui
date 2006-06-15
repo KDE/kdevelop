@@ -44,7 +44,7 @@
                         <cstring>nameEdit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>nameEdit</cstring>
                     </property>
@@ -76,7 +76,7 @@
                         <cstring>genericNameEdit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>genericNameEdit</cstring>
                     </property>

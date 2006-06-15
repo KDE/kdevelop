@@ -34,13 +34,13 @@ AddEnvvarDialog::AddEnvvarDialog(QWidget *parent, const char *name)
     setCaption(i18n("Add Environment Variable"));
 
     QLabel *varname_label = new QLabel(i18n("&Name:"), this);
-    varname_edit = new QLineEdit(this);
+    varname_edit = new KLineEdit(this);
     varname_edit->setFocus();
     varname_label->setBuddy(varname_edit);
 
     connect( varname_edit, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotTextChanged() ) );
     QLabel *value_label = new QLabel(i18n("&Value:"), this);
-    value_edit = new QLineEdit(this);
+    value_edit = new KLineEdit(this);
     value_label->setBuddy(value_edit);
     QFontMetrics fm(value_edit->fontMetrics());
     value_edit->setMinimumWidth(fm.width('X')*35);

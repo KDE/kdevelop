@@ -31,11 +31,11 @@
 #include <kparts/part.h>
 #include <ktexteditor/editinterface.h>
 #include <kdebug.h>
+#include <klineedit.h>
 
 #include <qregexp.h>
 #include <qfileinfo.h>
 #include <qcombobox.h>
-#include <qlineedit.h>
 #include <qlistview.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>

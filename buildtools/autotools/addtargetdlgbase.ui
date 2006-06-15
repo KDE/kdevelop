@@ -97,7 +97,7 @@
                         <cstring>filename_edit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="2" column="1">
+                <widget class="KLineEdit" row="2" column="1">
                     <property name="name">
                         <cstring>filename_edit</cstring>
                     </property>
@@ -231,7 +231,7 @@
                                 <cstring>ldflagsother_edit</cstring>
                             </property>
                         </widget>
-                        <widget class="QLineEdit">
+                        <widget class="KLineEdit">
                             <property name="name">
                                 <cstring>ldflagsother_edit</cstring>
                             </property>

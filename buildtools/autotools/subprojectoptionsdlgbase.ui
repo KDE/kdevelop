@@ -60,7 +60,7 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>cflags_edit</cstring>
                                 </property>
@@ -143,7 +143,7 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>cxxflags_edit</cstring>
                                 </property>
@@ -218,7 +218,7 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>fflags_edit</cstring>
                                 </property>

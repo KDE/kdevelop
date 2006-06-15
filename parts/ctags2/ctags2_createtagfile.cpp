@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 #include <kurlrequester.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 
 #include "ctags2_createtagfile.h"
 #include "ctags2_part.h"

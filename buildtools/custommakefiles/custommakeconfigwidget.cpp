@@ -16,14 +16,13 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qlabel.h>
-#include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
-#include <qlineedit.h>
 #include <qspinbox.h>
 #include <qlistview.h>
 #include <qgroupbox.h>
 #include <qvalidator.h>
+#include <klineedit.h>
 #include <kdebug.h>
 #include <klocale.h>
 

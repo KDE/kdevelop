@@ -91,7 +91,7 @@
                 <cstring>gdbPath_edit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="2">
+        <widget class="KLineEdit" row="0" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>programArgs_edit</cstring>
             </property>

@@ -26,7 +26,7 @@
 
 #include <qlistview.h>
 #include <qgroupbox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qcombobox.h>
 #include <qmessagebox.h>
 

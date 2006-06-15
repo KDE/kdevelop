@@ -58,7 +58,7 @@
                         </size>
                     </property>
                 </spacer>
-                <widget class="QLineEdit">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>includepatterns_edit</cstring>
                     </property>
@@ -121,7 +121,7 @@
                         </size>
                     </property>
                 </spacer>
-                <widget class="QLineEdit">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>excludepatterns_edit</cstring>
                     </property>

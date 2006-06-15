@@ -17,10 +17,10 @@
 #include <qfileinfo.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
-#include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
 #include <qvalidator.h>
+#include <klineedit.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <klibloader.h>

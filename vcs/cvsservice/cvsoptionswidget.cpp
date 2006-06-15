@@ -12,7 +12,7 @@
  ***************************************************************************/
 
 #include <qcheckbox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <knuminput.h>
 #include <kdialog.h>
 

@@ -31,7 +31,7 @@
 #include <qgroupbox.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qlayout.h>
 #include <qsqldatabase.h>
 

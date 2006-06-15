@@ -11,10 +11,10 @@
 
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-#include <qlineedit.h>
 #include <qlistview.h>
 #include <qheader.h>
 
+#include <klineedit.h>
 #include <kdevproject.h>
 #include <kapplication.h>
 #include <kurlcompletion.h>

@@ -24,8 +24,8 @@
 #include <qregexp.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
-#include <qlineedit.h>
 
+#include <klineedit.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 

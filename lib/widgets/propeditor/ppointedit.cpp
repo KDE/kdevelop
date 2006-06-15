@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "ppointedit.h"
 
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qlayout.h>
 #include <qpainter.h>
 
@@ -28,7 +28,7 @@ namespace PropertyLib{
 PPointEdit::PPointEdit(MultiProperty* property, QWidget* parent, const char* name): PropertyWidget(property, parent, name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-    m_edit = new QLineEdit(this);
+    m_edit = new KLineEdit(this);
     m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
 

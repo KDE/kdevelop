@@ -37,7 +37,7 @@
                 <cstring>release_edit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="3">
+        <widget class="KLineEdit" row="2" column="1" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>module_edit</cstring>
             </property>
@@ -49,7 +49,7 @@
 Most of the thime you'll just reuse the project name</string>
             </property>
         </widget>
-        <widget class="QLineEdit" row="3" column="1" rowspan="1" colspan="3">
+        <widget class="KLineEdit" row="3" column="1" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>vendor_edit</cstring>
             </property>
@@ -93,7 +93,7 @@ Most of the thime you'll just reuse the project name</string>
                 <cstring>vendor_edit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="3">
+        <widget class="KLineEdit" row="4" column="1" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>message_edit</cstring>
             </property>
@@ -104,7 +104,7 @@ Most of the thime you'll just reuse the project name</string>
                 <string>Repository creation message</string>
             </property>
         </widget>
-        <widget class="QLineEdit" row="5" column="1" rowspan="1" colspan="3">
+        <widget class="KLineEdit" row="5" column="1" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>release_edit</cstring>
             </property>
@@ -132,7 +132,7 @@ Most of the thime you'll just reuse the project name</string>
                 <cstring>serverPathEdit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="3">
+        <widget class="KLineEdit" row="0" column="1" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>serverPathEdit</cstring>
             </property>

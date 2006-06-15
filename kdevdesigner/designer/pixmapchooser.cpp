@@ -30,6 +30,7 @@
 #include <kimageio.h>
 #include <kfiledialog.h>
 #include <kimagefilepreview.h>
+#include <klineedit.h>
 
 #include "kdevdesigner_part.h"
 
@@ -48,7 +49,6 @@
 #include <qimage.h>
 #include <qpainter.h>
 #include <qlabel.h>
-#include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qiconview.h>
 

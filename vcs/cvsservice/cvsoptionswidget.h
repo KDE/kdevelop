@@ -18,7 +18,6 @@
 #include "cvsoptionswidgetbase.h"
 
 class QLabel;
-class QLineEdit;
 class QVBoxLayout;
 
 class CvsOptionsWidget : public CvsOptionsWidgetBase

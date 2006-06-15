@@ -12,7 +12,7 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 
 #include "bookmarks_part.h"
 #include "bookmarks_config.h"

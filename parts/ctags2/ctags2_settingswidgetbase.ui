@@ -119,7 +119,7 @@
                                     <string>The default arguments should be fine, but if needed a custom generation arguments string can be used.</string>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>tagfileCustomEdit</cstring>
                                 </property>

@@ -74,7 +74,7 @@
                                 <bool>false</bool>
                             </property>
                         </widget>
-                        <widget class="QLineEdit">
+                        <widget class="KLineEdit">
                             <property name="name">
                                 <cstring>revisionEdit</cstring>
                             </property>
@@ -106,7 +106,7 @@
                                 <string>An arbitrary &amp;date:</string>
                             </property>
                         </widget>
-                        <widget class="QLineEdit">
+                        <widget class="KLineEdit">
                             <property name="name">
                                 <cstring>dateEdit</cstring>
                             </property>

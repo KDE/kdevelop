@@ -20,7 +20,7 @@
 #include "makeoptionswidget.h"
 
 #include <qcheckbox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qspinbox.h>
 #include <qlistview.h>
 #include <qgroupbox.h>

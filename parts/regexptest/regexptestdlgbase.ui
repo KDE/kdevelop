@@ -44,7 +44,7 @@
                 <cstring>teststring_edit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="2">
+        <widget class="KLineEdit" row="2" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>teststring_edit</cstring>
             </property>
@@ -126,7 +126,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QLineEdit" row="0" column="1">
+        <widget class="KLineEdit" row="0" column="1">
             <property name="name">
                 <cstring>pattern_edit</cstring>
             </property>

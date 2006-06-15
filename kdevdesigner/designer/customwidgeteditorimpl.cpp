@@ -34,10 +34,10 @@
 #include "widgetdatabase.h"
 
 #include <kfiledialog.h>
+#include <klineedit.h>
 
 #include <qlistbox.h>
 #include <qpushbutton.h>
-#include <qlineedit.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qlabel.h>

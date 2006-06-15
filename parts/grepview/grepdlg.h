@@ -15,16 +15,17 @@
 #define IGNORE_SCM_DIRS
 
 #include <qdialog.h>
-#include <qlineedit.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <kcombobox.h>
+#include <klineedit.h>
 
 
 class KConfig;
 class KURLRequester;
 class QPushButton;
 class GrepViewPart;
+class KLineEdit;
 
 class GrepDialog : public QDialog
 {
@@ -71,7 +72,7 @@ private slots:
 	void slotSynchDirectory();
 
 private:
-    QLineEdit *template_edit;
+    KLineEdit *template_edit;
     QComboBox *pattern_combo, *files_combo;
     KComboBox * dir_combo;
     KURLRequester * url_requester;

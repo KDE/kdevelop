@@ -74,7 +74,7 @@
                     <string>Filename:</string>
                 </property>
             </widget>
-            <widget class="QLineEdit">
+            <widget class="KLineEdit">
                 <property name="name">
                     <cstring>filename_edit</cstring>
                 </property>
@@ -87,7 +87,7 @@
                     <string>Description:</string>
                 </property>
             </widget>
-            <widget class="QLineEdit">
+            <widget class="KLineEdit">
                 <property name="name">
                     <cstring>description_edit</cstring>
                 </property>

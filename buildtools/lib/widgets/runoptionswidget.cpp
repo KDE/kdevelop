@@ -22,9 +22,9 @@
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kdirselectdialog.h>
+#include <klineedit.h>
 #include <urlutil.h>
 
-#include <qlineedit.h>
 #include <qlistview.h>
 #include <qgroupbox.h>
 #include <qcheckbox.h>

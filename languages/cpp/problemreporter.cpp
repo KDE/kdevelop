@@ -135,7 +135,7 @@ m_markIface( 0 )
 	m_timer = new QTimer( this );
 	m_parseCheckTimeout = new QTimer( this );
 
-	m_filterEdit = new QLineEdit(this);
+	m_filterEdit = new KLineEdit(this);
 
 	QLabel* m_filterLabel = new QLabel(i18n("Lookup:"),this);
 

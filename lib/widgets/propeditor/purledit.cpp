@@ -40,7 +40,7 @@ PUrlEdit::PUrlEdit(Mode mode, MultiProperty* property, QWidget* parent, const ch
     m_edit->setMode((KFile::Mode)mode);
     connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
 #else
-    m_edit = new QLineEdit(this);
+    m_edit = new KLineEdit(this);
     m_select = new QPushButton("...",this);
     l->addWidget(m_edit);
     l->addWidget(m_select);

@@ -22,7 +22,7 @@
 
 #include "propertywidget.h"
 
-class QLineEdit;
+class KLineEdit;
 
 namespace PropertyLib{
 
@@ -44,7 +44,7 @@ private slots:
     void updateProperty(const QString &val);
     
 private:
-    QLineEdit *m_edit;
+    KLineEdit *m_edit;
 };
 
 }

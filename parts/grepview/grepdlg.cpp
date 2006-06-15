@@ -35,6 +35,7 @@
 #include <kstdguiitem.h>
 #include <kparts/part.h>
 #include <kdevpartcontroller.h>
+#include <klineedit.h>
 
 #include "grepviewpart.h"
 
@@ -111,7 +112,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     QBoxLayout *template_layout = new QHBoxLayout(4);
     layout->addLayout(template_layout, 1, 1);
 
-    template_edit = new QLineEdit(this);
+    template_edit = new KLineEdit(this);
     template_label->setBuddy(template_edit);
     template_edit->setText(template_str[0]);
     template_layout->addWidget(template_edit, 1);

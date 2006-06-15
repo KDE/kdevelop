@@ -23,7 +23,6 @@
 #include <qdir.h>
 #include <qlayout.h>
 #include <qcombobox.h>
-#include <qlineedit.h>
 #include <qregexp.h>
 #include <qtextstream.h>
 #include <qcheckbox.h>
@@ -35,6 +34,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <klineedit.h>
 
 #include <cvsservice_stub.h>
 

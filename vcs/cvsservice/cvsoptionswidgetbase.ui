@@ -49,7 +49,7 @@
                         <cstring>cvsRshEnvVarEdit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>cvsRshEnvVarEdit</cstring>
                     </property>
@@ -71,7 +71,7 @@
                         <cstring>serverLocationEdit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>serverLocationEdit</cstring>
                     </property>
@@ -147,7 +147,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLineEdit" row="1" column="0">
+                <widget class="KLineEdit" row="1" column="0">
                     <property name="name">
                         <cstring>diffOptionsEdit</cstring>
                     </property>

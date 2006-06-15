@@ -74,8 +74,8 @@ namespace GDBDebugger
     class MemoryRangeSelector : public QWidget
     {
     public:
-        QLineEdit* startAddressLineEdit;
-        QLineEdit* amountLineEdit;
+        KLineEdit* startAddressLineEdit;
+        KLineEdit* amountLineEdit;
         QPushButton* okButton;
         QPushButton* cancelButton;
 
@@ -94,13 +94,13 @@ namespace GDBDebugger
             QLabel* l1 = new QLabel(i18n("Start"), this);
             gl->addWidget(l1, 0, 1);
             
-            startAddressLineEdit = new QLineEdit(this);            
+            startAddressLineEdit = new KLineEdit(this);
             gl->addWidget(startAddressLineEdit, 0, 3);
             
             QLabel* l2 = new QLabel(i18n("Amount"), this);
             gl->addWidget(l2, 2, 1);
             
-            amountLineEdit = new QLineEdit(this);
+            amountLineEdit = new KLineEdit(this);
             gl->addWidget(amountLineEdit, 2, 3);
 
             l->addSpacing(2);

@@ -16,7 +16,7 @@
 #include <qfileinfo.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qpushbutton.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
@@ -37,7 +37,7 @@ ScriptNewFileDialog::ScriptNewFileDialog(ScriptProjectPart *part,
 
     QLabel *filename_label = new QLabel(i18n("&File name:"), this);
 
-    filename_edit = new QLineEdit(this);
+    filename_edit = new KLineEdit(this);
     filename_edit->setFocus();
     filename_label->setBuddy(this);
     QFontMetrics fm(filename_edit->fontMetrics());

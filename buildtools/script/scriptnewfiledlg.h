@@ -15,7 +15,7 @@
 #include <qdialog.h>
 
 class QCheckBox;
-class QLineEdit;
+class KLineEdit;
 class ScriptProjectPart;
 
 
@@ -32,7 +32,7 @@ protected:
 
 private:
     QCheckBox *usetemplate_box;
-    QLineEdit *filename_edit;
+    KLineEdit *filename_edit;
     ScriptProjectPart *m_part;
 };
 

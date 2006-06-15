@@ -45,7 +45,7 @@
                     </property>
                 </widget>
                 <widget row="1"  column="0" >
-                    <class>QLineEdit</class>
+                    <class>KLineEdit</class>
                     <property stdset="1">
                         <name>name</name>
                         <cstring>classname_edit</cstring>
@@ -63,14 +63,14 @@
                     </property>
                 </widget>
                 <widget row="3"  column="0" >
-                    <class>QLineEdit</class>
+                    <class>KLineEdit</class>
                     <property stdset="1">
                         <name>name</name>
                         <cstring>baseclass_edit</cstring>
                     </property>
                 </widget>
                 <widget row="1"  column="1" >
-                    <class>QLineEdit</class>
+                    <class>KLineEdit</class>
                     <property stdset="1">
                         <name>name</name>
                         <cstring>headerfile_edit</cstring>
@@ -99,7 +99,7 @@
                     </property>
                 </widget>
                 <widget row="3"  column="1" >
-                    <class>QLineEdit</class>
+                    <class>KLineEdit</class>
                     <property stdset="1">
                         <name>name</name>
                         <cstring>implfile_edit</cstring>

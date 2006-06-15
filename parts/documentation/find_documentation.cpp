@@ -23,9 +23,9 @@
 #include <qprocess.h>
 #include <qcheckbox.h>
 #include <qheader.h>
-#include <qlineedit.h>
 #include <qapplication.h>
 
+#include <klineedit.h>
 #include <klistbox.h>
 
 #include <kdevpartcontroller.h>

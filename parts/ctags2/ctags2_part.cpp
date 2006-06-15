@@ -14,8 +14,8 @@
 #include <qtextstream.h>
 #include <qfile.h>
 #include <qregexp.h>
-#include <qlineedit.h>
 
+#include <klineedit.h>
 #include <klistview.h>
 #include <kiconloader.h>
 #include <klocale.h>

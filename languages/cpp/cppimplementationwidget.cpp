@@ -25,11 +25,11 @@
 #include <qdir.h>
 #include <qregexp.h>
 #include <qdom.h>
-#include <qlineedit.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klistview.h>
+#include <klineedit.h>
 
 #include <kdevlanguagesupport.h>
 #include <kdevproject.h>

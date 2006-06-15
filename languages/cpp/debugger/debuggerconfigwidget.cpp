@@ -18,10 +18,10 @@
 
 #include "domutil.h"
 #include <kurlrequester.h>
+#include <klineedit.h>
 
 #include <qcheckbox.h>
 #include <qfileinfo.h>
-#include <qlineedit.h>
 #include <qradiobutton.h>
 
 namespace GDBDebugger

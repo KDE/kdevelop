@@ -36,7 +36,7 @@
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qradiobutton.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qspinbox.h>
 #include <qcheckbox.h>
 

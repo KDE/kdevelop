@@ -21,8 +21,8 @@
 
 #include <qlayout.h>
 #include <qtoolbox.h>
-#include <qlineedit.h>
 
+#include <klineedit.h>
 #include <kparts/part.h>
 #include <klibloader.h>
 #include <kurl.h>

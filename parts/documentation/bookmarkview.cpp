@@ -21,9 +21,9 @@
 
 #include <qlayout.h>
 #include <qheader.h>
-#include <qlineedit.h>
 #include <qpoint.h>
 
+#include <klineedit.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdialog.h>

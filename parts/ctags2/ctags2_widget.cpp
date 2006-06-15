@@ -10,12 +10,12 @@
  ***************************************************************************/
 
 #include <qtimer.h>
-#include <qlineedit.h>
 #include <qlabel.h>
 #include <qfileinfo.h>
 #include <qdatetime.h>
 #include <qfocusdata.h>
 
+#include <klineedit.h>
 #include <klistview.h>
 #include <klocale.h>
 #include <kdebug.h>

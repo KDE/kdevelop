@@ -27,13 +27,13 @@ AddPrefixDialog::AddPrefixDialog( const QString& nameEdit, const QString& pathEd
     setCaption(i18n("Add Prefix"));
 
     QLabel *name_label = new QLabel(i18n("&Name:"), this);
-    name_edit = new QLineEdit(nameEdit, this);
+    name_edit = new KLineEdit(nameEdit, this);
     name_edit->setFocus();
     name_label->setBuddy(name_edit);
     connect( name_edit, SIGNAL( textChanged ( const QString & ) ), SLOT( slotPrefixChanged() ) );
 
     QLabel *path_label = new QLabel(i18n("&Path:"), this);
-    path_edit = new QLineEdit(pathEdit, this);
+    path_edit = new KLineEdit(pathEdit, this);
     path_label->setBuddy(path_edit);
     QFontMetrics fm(path_edit->fontMetrics());
     path_edit->setMinimumWidth(fm.width('X')*35);

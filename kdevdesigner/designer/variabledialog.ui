@@ -136,7 +136,7 @@
                         <cstring>varName</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="0" column="1">
+                <widget class="KLineEdit" row="0" column="1">
                     <property name="name">
                         <cstring>varName</cstring>
                     </property>

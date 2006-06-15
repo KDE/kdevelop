@@ -71,7 +71,7 @@
                 <cstring>m_baseClassEdit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="0" column="1">
+        <widget class="KLineEdit" row="0" column="1">
             <property name="name">
                 <cstring>m_classNameEdit</cstring>
             </property>
@@ -131,12 +131,12 @@
                 <string>...</string>
             </property>
         </widget>
-        <widget class="QLineEdit" row="1" column="1">
+        <widget class="KLineEdit" row="1" column="1">
             <property name="name">
                 <cstring>m_fileNameEdit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="5">
+        <widget class="KLineEdit" row="2" column="1" rowspan="1" colspan="5">
             <property name="name">
                 <cstring>m_dirEdit</cstring>
             </property>

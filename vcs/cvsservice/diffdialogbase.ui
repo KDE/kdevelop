@@ -49,7 +49,7 @@
                                 <string>Local copy and an arbitrary &amp;revision:</string>
                             </property>
                         </widget>
-                        <widget class="QLineEdit">
+                        <widget class="KLineEdit">
                             <property name="name">
                                 <cstring>revOtherEdit</cstring>
                             </property>
@@ -91,7 +91,7 @@
                                 <string>Revision A:</string>
                             </property>
                         </widget>
-                        <widget class="QLineEdit" row="1" column="1">
+                        <widget class="KLineEdit" row="1" column="1">
                             <property name="name">
                                 <cstring>revbEdit</cstring>
                             </property>
@@ -105,7 +105,7 @@
                                 <string>Second revision to compare (leave empty to diff against HEAD)</string>
                             </property>
                         </widget>
-                        <widget class="QLineEdit" row="1" column="0">
+                        <widget class="KLineEdit" row="1" column="0">
                             <property name="name">
                                 <cstring>revaEdit</cstring>
                             </property>

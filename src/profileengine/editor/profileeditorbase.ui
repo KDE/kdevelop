@@ -457,7 +457,7 @@
                                         <cstring>allList</cstring>
                                     </property>
                                 </widget>
-                                <widget class="QLineEdit">
+                                <widget class="KLineEdit">
                                     <property name="name">
                                         <cstring>allEdit</cstring>
                                     </property>

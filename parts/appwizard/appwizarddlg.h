@@ -27,7 +27,7 @@ class KArchiveFile;
 class ProfileSupport;
 #include <qptrlist.h>
 #include <qdict.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qlabel.h>
 #include <qstringlist.h>
 #include <klistview.h>

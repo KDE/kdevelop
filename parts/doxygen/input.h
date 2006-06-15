@@ -19,7 +19,7 @@
 
 class QComboBox;
 class QLabel;
-class QLineEdit;
+class KLineEdit;
 class QListBox;
 class QPushButton;
 class QSpinBox;
@@ -118,7 +118,7 @@ private slots:
 
 private:
     QLabel *lab;
-    QLineEdit *le;
+    KLineEdit *le;
     QPushButton *br;
     QComboBox *com;
     QCString &str;
@@ -160,7 +160,7 @@ private slots:
 
 private:
     QLabel *lab;
-    QLineEdit *le;
+    KLineEdit *le;
     QPushButton *add;
     QPushButton *del;
     QPushButton *upd;

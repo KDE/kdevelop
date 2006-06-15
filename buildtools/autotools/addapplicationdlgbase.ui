@@ -41,12 +41,12 @@
                         <string>Start in t&amp;erminal</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="3" column="1" rowspan="1" colspan="3">
+                <widget class="KLineEdit" row="3" column="1" rowspan="1" colspan="3">
                     <property name="name">
                         <cstring>comment_edit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="0" column="1">
+                <widget class="KLineEdit" row="0" column="1">
                     <property name="name">
                         <cstring>filename_edit</cstring>
                     </property>
@@ -106,7 +106,7 @@
                         <bool>true</bool>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="1" column="1">
+                <widget class="KLineEdit" row="1" column="1">
                     <property name="name">
                         <cstring>name_edit</cstring>
                     </property>

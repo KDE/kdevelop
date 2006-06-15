@@ -19,10 +19,10 @@
  ***************************************************************************/
 #include "pstringlistedit.h"
 
-#include <qlineedit.h>
 #include <qlayout.h>
 #include <qdialog.h>
 #include <qpainter.h>
+#include <klineedit.h>
 
 #ifndef PURE_QT
 #include <keditlistbox.h>
@@ -41,7 +41,7 @@ PStringListEdit::PStringListEdit(MultiProperty *property, QWidget *parent, const
 {
     l = new QHBoxLayout(this);
 
-    edit = new QLineEdit(this);
+    edit = new KLineEdit(this);
     edit->setReadOnly(true);
     edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(edit);

@@ -43,7 +43,7 @@
                     <number>0</number>
                 </property>
 
-                <widget class="QLineEdit">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>interpreter_edit</cstring>
                     </property>

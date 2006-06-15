@@ -21,7 +21,7 @@ class KURLRequester;
 class QGridLayout;
 class KComboBox;
 class QCheckBox;
-class QLineEdit;
+class KLineEdit;
 
 namespace FileCreate {
   class NewFileChooser : public KDialogBase {
@@ -48,7 +48,7 @@ namespace FileCreate {
     KURLRequester *m_urlreq;
     KComboBox *m_filetypes;
     QCheckBox *m_addToProject;
-    QLineEdit *m_filename;
+    KLineEdit *m_filename;
 
     QMap<int,const FileType*> m_typeInCombo;
 

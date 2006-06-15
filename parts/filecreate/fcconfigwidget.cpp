@@ -17,7 +17,7 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qcheckbox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qlabel.h>
 
 #include <kstandarddirs.h>

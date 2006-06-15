@@ -26,8 +26,8 @@
 #include <kfile.h>
 class KURLRequester;
 #else
+#include <klineedit.h>
 class QPushButton;
-class QLineEdit;
 #endif
 
 
@@ -58,7 +58,7 @@ private:
 #ifndef PURE_QT
     KURLRequester *m_edit;
 #else
-    QLineEdit *m_edit;
+    KLineEdit *m_edit;
     QPushButton *m_select;
     QString m_url;
     Mode m_mode;
