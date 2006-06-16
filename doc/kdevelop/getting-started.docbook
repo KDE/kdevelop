@@ -1687,6 +1687,9 @@ tabs.</link></member>
 tabs.</link></member>
 <member><link linkend="gettingstarted-edit-arrange-split">How to view several
 files simultaneously in the workspace area.</link></member>
+<member><link
+linkend="gettingstarted-edit-arrange-sourceheader">How to edit
+C++ source and header files simultaneously</link></member>
 <member><link linkend="gettingstarted-edit-arrange-group">How to group source
 files into development sessions.</link></member>
 </simplelist>
@@ -1896,6 +1899,76 @@ area and reopen it in another to regroup.</para>
 It closes automatically, once the last tabbed window in it was closed.</para>
 </listitem>
 </itemizedlist>
+</sect3>
+
+<sect3 id="gettingstarted-edit-arrange-sourceheader">
+<title>Edit C++ Source and Header Files Simultaneously</title>
+
+<para>There is a neat application of the abobve mentioned workspace split
+feature built into &kdevelop;. It allows to automatically keep a
+<filename>.cpp</filename> source and its accompanying
+<filename>.h</filename> header file side by side open in the workspace area.
+And, optionally, it allows to work on both files synchronously, such that if
+you select a declaration in the header file &kdevelop; will navigate to the
+respective definition in the source file and vice versa.</para>
+
+<para>This feature is however deactivated by default. If you want it in
+your project you need to activate it.</para>
+
+<para>Select <menuchoice><guibutton>Project</guibutton>
+<guimenuitem>Project Options</guimenuitem></menuchoice>. The
+<guilabel>Project Options</guilabel> dialog will pop up. In the left hand icon
+bar there select <guiicon>C++ Support</guiicon> and subsequently the
+<guilabel>Navigation</guilabel> tab on the dialog page which will display on
+the right side.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="split-source-header.png" format="PNG"/>
+</imageobject>
+<caption><para>Have C++ source and header files be displayed side by
+side.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>Now check the <guilabel>Enable split of Header/Source files</guilabel>
+box. This will enable <guilabel>Automatic Synchronize</guilabel>
+and <guilabel>Vertical</guilabel> by default. Keep these settings for now and
+press <guibutton>OK</guibutton>.</para>
+
+<para>To illustrate this feature, now close in our example Hello project
+both the <filename>hello.cpp</filename> and <filename>hello.h</filename> editor
+windows, if necessary. Then select <filename>hello.cpp</filename> again from the
+<filename class="directory">src</filename> subdirectory of the project. The
+editor window will open as usual. But if you now open the
+<filename>hello.h</filename> belonging to it, &kdevelop; will automatically
+split the workspace and open this header file editor window just beneath the
+<filename>hello.cpp</filename> window.</para>
+
+<para>There is even more, as we mentioned already. In the
+<filename>hello.cpp</filename> editor find &eg; this constructor definition
+line:</para>
+<programlisting>
+Hello::Hello()
+</programlisting>
+<para>and put the cursor there. Then look at the <filename>hello.h</filename>
+below and note how &kdevelop; did navigate to the corresponding default
+constructor declaration line.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="split-source-header-navigate.png" format="PNG"/>
+</imageobject>
+<caption><para>&kdevelop; automatically navigated to the constructor
+declaration.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>This works vice versa as well. Whenever put the cursor somewhere into a
+construct in one editor window, &kdevelop; will navigate to the corresponding
+construct in the other.</para>
 </sect3>
 
 <sect3 id="gettingstarted-edit-arrange-group">
