@@ -87,7 +87,7 @@ void KDevDocumentView::popupContextMenu( const QPoint &pos )
             KUrl::List list;
             list << fileItem->URL();
             FileContext context( list );
-            part() ->core() ->fillContextMenu( &menu, &context );
+            KDevApi::self() ->core() ->fillContextMenu( &menu, &context );
             menu.exec( mapToGlobal( pos ) );
         }
 }

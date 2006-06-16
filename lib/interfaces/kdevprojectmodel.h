@@ -25,6 +25,12 @@
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 
+#include <kurl.h>
+
+#include "domutil.h"
+
+class KDevProject;
+class KDevBuildProject;
 class KDevProjectFolderItem;
 class KDevProjectFileItem;
 class KDevProjectTargetItem;
@@ -41,6 +47,9 @@ class KDEVINTERFACES_EXPORT KDevProjectItem: public KDevItemCollection
 public:
   KDevProjectItem(const QString &name, KDevItemGroup *parent = 0)
     : KDevItemCollection(name, parent) {}
+
+  // Convenience function to return the current project
+  KDevProject* project() const;
 
   virtual KDevProjectItem *itemAt(int index) const;
 
@@ -60,23 +69,48 @@ public:
 class KDEVINTERFACES_EXPORT KDevProjectFolderItem: public KDevProjectItem
 {
 public:
-  KDevProjectFolderItem(const QDir &dir, KDevItemGroup *parent = 0)
-    : KDevProjectItem(dir.dirName(), parent), m_directory(dir) {}
+  KDevProjectFolderItem(const KUrl &dir, KDevItemGroup *parent = 0);
 
   virtual KDevProjectFolderItem *folder() const
   { return const_cast<KDevProjectFolderItem*>(this); }
 
-  /** Get the QDir representation of this folder */
-  QDir directory() const { return m_directory; }
+  /** Get the url of this folder */
+  const KUrl& url() const;
   virtual QIcon icon() const;
 
+  void setUrl( const KUrl& );
 private:
-  QDir m_directory;
+  KUrl m_url;
 };
 
 /**
- * Implementation of the KDevProjectItem interface that is specific to a
- * build target
+ * Folder which contains buildable targets as part of a buildable project
+ */
+class KDEVINTERFACES_EXPORT KDevProjectBuildFolderItem: public KDevProjectFolderItem
+{
+public:
+  KDevProjectBuildFolderItem(const KUrl &dir, KDevItemGroup *parent = 0);
+
+  /**
+   * Return a list of directories that are used as include directories
+   * for all targets in this directory.
+   */
+  const KUrl::List& includeDirectories() const;
+
+  /**
+   * Returns an association of environment variables which have been defined
+   * for all targets in this directory.
+   */
+  const QHash<QString, QString>& environment() const;
+
+private:
+  KUrl m_url;
+};
+
+/**
+ * Object which represents a target in a build system.
+ *
+ * This object contains all properties specific to a target.
  */
 class KDEVINTERFACES_EXPORT KDevProjectTargetItem: public KDevProjectItem
 {
@@ -86,28 +120,44 @@ public:
 
   virtual KDevProjectTargetItem *target() const
   { return const_cast<KDevProjectTargetItem*>(this); }
+
+  /**
+   * Return a list of directories that are used as additional include directories
+   * specific to this target.
+   */
+  virtual const KUrl::List& includeDirectories() const = 0;
+
+  /**
+   * Returns an association of additional environment variables which have been defined
+   * specifically for this target.
+   */
+  virtual const QHash<QString, QString>& environment() const = 0;
+
+  /**
+   * Returns a list of defines passed to the compiler with -D(macro) (value)
+   */
+  virtual const DomUtil::PairList& defines() const = 0;
 };
 
 /**
- * Implementation of the KDevProjectItem interface that is specific to a
- * file
+ * Object which represents a file.
  */
 class KDEVINTERFACES_EXPORT KDevProjectFileItem: public KDevProjectItem
 {
 public:
-  KDevProjectFileItem(const QFileInfo &fileInfo, KDevItemGroup *parent = 0)
-    : KDevProjectItem(fileInfo.fileName(), parent), m_fileInfo(fileInfo) {}
-
-  /** Get the QFileInfo representation of this item */
-  QFileInfo fileInfo() const { return m_fileInfo; }
+  KDevProjectFileItem(const KUrl& file, KDevItemGroup *parent = 0);
 
   virtual KDevProjectFileItem *file() const
   { return const_cast<KDevProjectFileItem*>(this); }
 
+  /** Get the url of this file. */
+  const KUrl& url() const;
+  void setUrl( const KUrl& );
   virtual QIcon icon() const;
 
+
 private:
-  QFileInfo m_fileInfo;
+  KUrl m_url;
 };
 
 class KDEVINTERFACES_EXPORT KDevProjectModel: public KDevItemModel
@@ -121,3 +171,4 @@ public:
 };
 
 #endif // KDEVPROJECTMODEL_H
+//kate: space-indent on; indent-width 2; indent-mode cstyle; replace-tabs on;

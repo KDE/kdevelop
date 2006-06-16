@@ -51,7 +51,7 @@ KDevCodeView::KDevCodeView( KDevCodeViewPart *part, QWidget *parent )
              this, SLOT( activated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ),
              this, SLOT( popupContextMenu( QPoint ) ) );
-    connect( m_part ->documentController(),
+    connect( KDevApi::self() ->documentController(),
              SIGNAL( documentActivated( KDevDocument* ) ),
              this, SLOT( documentActivated( KDevDocument* ) ) );
 }
@@ -72,7 +72,7 @@ KDevCodeProxy *KDevCodeView::codeProxy() const
 void KDevCodeView::documentActivated( KDevDocument* file )
 {
     if ( m_trackCurrent &&
-            part() ->languageSupport() ->supportsDocument( file ) )
+         KDevApi::self() ->languageSupport() ->supportsDocument( file ) )
         codeProxy() ->setFilterDocument( file->url() );
 }
 
@@ -82,7 +82,7 @@ void KDevCodeView::activated( const QModelIndex &index )
     {
         KUrl document( item->fileName() );
         if ( document.isValid() )
-            part() ->documentController() ->editDocument( document,
+            KDevApi::self() ->documentController() ->editDocument( document,
                     item->startPosition() );
     }
 }
@@ -91,7 +91,7 @@ void KDevCodeView::modeCurrent()
 {
     m_trackCurrent = true;
     codeProxy() ->setFilterDocument(
-        part() ->documentController() ->activeDocumentUrl() );
+        KDevApi::self() ->documentController() ->activeDocumentUrl() );
 }
 
 void KDevCodeView::modeNormalize()

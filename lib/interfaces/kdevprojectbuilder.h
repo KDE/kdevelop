@@ -51,7 +51,7 @@ public:
     virtual bool execute(KDevProjectItem *dom) = 0;
 
 signals:
-    void builded(KDevProjectItem *dom);
+    void built(KDevProjectItem *dom);
     void failed();
 };
 

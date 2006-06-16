@@ -29,7 +29,7 @@ namespace AutoTools { class ProjectAST; }
 class AutoMakeDirItem : public KDevProjectFolderItem
 {
 public:
-    AutoMakeDirItem( const QDir& dir, KDevItemGroup* parent = 0 );
+    AutoMakeDirItem( const KUrl& url, KDevItemGroup* parent = 0 );
     virtual ~AutoMakeDirItem();
 
     virtual KDevProjectFolderItem* folder() const
@@ -44,7 +44,7 @@ public:
 class AutoMakeFileItem : public KDevProjectFileItem
 {
 public:
-    AutoMakeFileItem( const QFileInfo& fileInfo, KDevItemGroup* parent = 0 );
+    AutoMakeFileItem( const KUrl& url, KDevItemGroup* parent = 0 );
     virtual ~AutoMakeFileItem();
 
     virtual KDevProjectFileItem* fileItem() const
@@ -64,6 +64,9 @@ public:
         return const_cast<AutoMakeTargetItem*>( this );
     }
 
+    virtual const KUrl::List& includeDirectories() const { return KUrl::List(); }
+    virtual const QHash<QString, QString>& environment() const { return QHash<QString,QString>(); }
+    virtual const QList<QPair<QString, QString> >& defines() const { return QList<QPair<QString, QString> >(); }
     void parseInfoFromAst( AutoTools::ProjectAST* ) {}
 
 

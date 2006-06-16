@@ -216,6 +216,7 @@ void ProfileEngine::diffProfiles(OfferType offerType, const QString &profile1,
         it != offers1.constEnd(); ++it)
         offers1List.append((*it)->desktopEntryName());
     QMap<QString, KService::Ptr> offers2List;
+
     for (KService::List::const_iterator it = offers2.constBegin();
         it != offers2.constEnd(); ++it)
         offers2List[(*it)->desktopEntryName()] = *it;

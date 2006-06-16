@@ -59,7 +59,6 @@
 #include "documentcontroller.h"
 #include "projectmanager.h"
 #include "core.h"
-#include "api.h"
 #include "kdevmakefrontend.h"
 #include "toplevel.h"
 #include "kdevplugincontroller.h"
@@ -180,7 +179,7 @@ void MainWindowShare::createActions()
   m_configureEditorAction->setWhatsThis(i18n("<b>Configure editor</b><p>Opens editor configuration dialog."));
   m_configureEditorAction->setEnabled( false );
 
-  KDevDocumentController * documentController = API::getInstance()->documentController();
+  KDevDocumentController * documentController = KDevApi::self()->documentController();
   connect( documentController, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )) );
 }
 
@@ -327,7 +326,7 @@ void MainWindowShare::slotConfigureEditors()
 {
     kDebug(9000) << " *** MainWindowShare::slotConfigureEditors()" << endl;
 
-    KDevDocumentController * documentController = API::getInstance()->documentController();
+    KDevDocumentController * documentController = KDevApi::self()->documentController();
     KParts::Part * part = documentController->activePart();
 
     KTextEditor::Document *doc = qobject_cast<KTextEditor::Document *>(part);

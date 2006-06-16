@@ -122,9 +122,7 @@ void KDevProjectManager::slotActivated(const QModelIndex &index)
 
   if (item && item->file())
     {
-      KUrl url;
-      url.setPath(item->file()->fileInfo().absoluteFilePath());
-      emit activateURL(url);
+      emit activateURL(item->file()->url());
     }
 }
 
@@ -138,11 +136,11 @@ void KDevProjectManager::popupContextMenu(const QPoint &pos)
 
       if (KDevProjectFolderItem *folder = item->folder())
         {
-          menu.addTitle(i18n("Folder: %1", folder->directory().dirName()));
+          menu.addTitle(i18n("Folder: %1", folder->url().directory()));
         }
       else if (KDevProjectFileItem *file = item->file())
         {
-          menu.addTitle(i18n("File: %1", file->fileInfo().fileName()));
+          menu.addTitle(i18n("File: %1", file->url().fileName()));
         }
       else if (KDevProjectTargetItem *target = item->target())
         {
@@ -150,7 +148,7 @@ void KDevProjectManager::popupContextMenu(const QPoint &pos)
         }
 
       ProjectItemContext context(item);
-      part()->core()->fillContextMenu(&menu, &context);
+      KDevApi::self()->core()->fillContextMenu(&menu, &context);
 
       menu.exec(mapToGlobal(pos));
     }

@@ -21,9 +21,7 @@
 
 #include <QMap>
 #include <Q3ValueList>
-
 #include <kservicetypetrader.h>
-
 #include "profile.h"
 
 /**
@@ -100,9 +98,10 @@ public:
         Core      /**<Core plugins.*/
     };
 
-    /**@return The list of plugin offers for given profile and type.*/
+    /** @return The list of plugin offers for given profile and type.*/
     KService::List offers(const QString &profileName, OfferType offerType);
-    /**@return The list of all plugin offers for given type.*/
+
+    /** @return The list of all plugin offers for given type.*/
     KService::List allOffers(OfferType offerType);
 
     /**@return The list of URLs to the resources (files) with given @p extension.

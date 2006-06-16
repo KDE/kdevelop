@@ -42,7 +42,6 @@
 #include <profileengine.h>
 #include <kglobal.h>
 
-#include "api.h"
 #include "core.h"
 #include "plugincontroller.h"
 #include "mainwindowshare.h"
@@ -246,7 +245,7 @@ void SimpleMainWindow::createActions()
 
 void SimpleMainWindow::raiseEditor()
 {
-    KDevDocumentController *partcontroller = API::getInstance()->documentController();
+    KDevDocumentController *partcontroller = KDevApi::self()->documentController();
     if (partcontroller->activePart() && partcontroller->activePart()->widget())
         partcontroller->activePart()->widget()->setFocus();
 }

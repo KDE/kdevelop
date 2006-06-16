@@ -35,7 +35,7 @@ KonsoleViewWidget::KonsoleViewWidget(KonsoleViewPart *part)
  : QWidget(0), part(0), owner( part )
 {
     setObjectName(QString::fromUtf8("konsole widget"));
-    connect(part->documentController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
+    connect(KDevApi::self()->documentController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
     vbox = new QVBoxLayout(this);
 }
 
@@ -98,8 +98,8 @@ void KonsoleViewWidget::activePartChanged(KParts::Part *activatedPart)
     QString dir;
     if (ro_part)
         dir = ro_part->url().directory();
-    else if (owner->project())
-        dir = owner->project()->projectDirectory();
+    else if (KDevApi::self()->project())
+        dir = KDevApi::self()->project()->projectDirectory();
 
     kDebug(9035) << k_funcinfo "Changing dir to " << dir << endl;
     if (dir.isEmpty())

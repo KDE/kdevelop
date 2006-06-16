@@ -25,12 +25,12 @@
 
 QIcon KDevProjectFolderItem::icon() const
 {
-    return KIO::pixmapForURL(KUrl::fromPath(directory().absolutePath()), 0, K3Icon::Small);
+    return KIO::pixmapForURL(url(), 0, K3Icon::Small);
 }
 
 QIcon KDevProjectFileItem::icon() const
 {
-    return KIO::pixmapForURL(KUrl::fromPath(fileInfo().absoluteFilePath()), 0, K3Icon::Small);
+    return KIO::pixmapForURL(url(), 0, K3Icon::Small);
 }
 
 QList<KDevProjectFolderItem*> KDevProjectItem::folderList() const
@@ -88,4 +88,38 @@ KDevProjectItem *KDevProjectModel::item(const QModelIndex &index) const
   return reinterpret_cast<KDevProjectItem*>(index.internalPointer());
 }
 
+KDevProjectFolderItem::KDevProjectFolderItem( const KUrl & dir, KDevItemGroup * parent )
+  : KDevProjectItem(dir.directory(), parent)
+  , m_url(dir)
+{
+}
+
+const KUrl& KDevProjectFolderItem::url( ) const
+{
+  return m_url;
+}
+
+void KDevProjectFolderItem::setUrl( const KUrl& url )
+{
+  m_url = url;
+}
+
+KDevProjectFileItem::KDevProjectFileItem( const KUrl & file, KDevItemGroup * parent )
+  : KDevProjectItem(file.fileName(), parent)
+  , m_url(file)
+{
+}
+
+const KUrl & KDevProjectFileItem::url( ) const
+{
+  return m_url;
+}
+
+void KDevProjectFileItem::setUrl( const KUrl& url )
+{
+  m_url = url;
+}
+
 #include "kdevprojectmodel.moc"
+//kate: space-indent on; indent-width 2; indent-mode cstyle; replace-tabs on;
+

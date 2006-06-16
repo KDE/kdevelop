@@ -19,13 +19,13 @@
 
 #include "importprojectjob.h"
 
-#include <kdevprojectimporter.h>
+#include "kdevfilemanager.h"
 
 #include <kglobal.h>
 #include <kapplication.h>
 #include <kdebug.h>
 
-ImportProjectJob::ImportProjectJob(KDevProjectFolderItem *folder, KDevProjectImporter *importer)
+ImportProjectJob::ImportProjectJob(KDevProjectFolderItem *folder, KDevFileManager *importer)
     : KIO::Job(false),
       m_folder(folder),
       m_importer(importer)
@@ -41,7 +41,7 @@ void ImportProjectJob::start()
     startNextJob(m_folder);
 }
 
-ImportProjectJob *ImportProjectJob::importProjectJob(KDevProjectFolderItem *folder, KDevProjectImporter *importer)
+ImportProjectJob *ImportProjectJob::importProjectJob(KDevProjectFolderItem *folder, KDevFileManager *importer)
 {
     return new ImportProjectJob(folder, importer);
 }

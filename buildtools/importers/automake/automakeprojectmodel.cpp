@@ -20,8 +20,8 @@
 
 #include "automakeprojectmodel.h"
 
-AutoMakeDirItem::AutoMakeDirItem( const QDir& name, KDevItemGroup* parent )
-    : KDevProjectFolderItem( name, parent )
+AutoMakeDirItem::AutoMakeDirItem( const KUrl& url, KDevItemGroup* parent )
+    : KDevProjectFolderItem( url, parent )
 {
 }
 
@@ -30,8 +30,8 @@ AutoMakeDirItem::~AutoMakeDirItem()
 }
 
 
-AutoMakeFileItem::AutoMakeFileItem( const QFileInfo& name, KDevItemGroup* parent )
-    : KDevProjectFileItem( name, parent )
+AutoMakeFileItem::AutoMakeFileItem( const KUrl& url, KDevItemGroup* parent )
+    : KDevProjectFileItem( url, parent )
 {
 }
 
@@ -40,7 +40,7 @@ AutoMakeFileItem::~AutoMakeFileItem()
 }
 
 AutoMakeTargetItem::AutoMakeTargetItem( const TargetInfo& target, KDevItemGroup* parent )
-    : KDevProjectTargetItem( !target.display.isEmpty() ? target.display : target.name, parent )
+    : KDevProjectTargetItem( target.url, parent )
 {
     m_target = target;
 }

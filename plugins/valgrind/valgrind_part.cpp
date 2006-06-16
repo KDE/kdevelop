@@ -40,9 +40,9 @@ ValgrindPart::ValgrindPart( QObject *parent, const QStringList& )
            this, SLOT(receivedStderr( KProcess*, char*, int )) );
   connect( proc, SIGNAL(processExited( KProcess* )),
            this, SLOT(processExited( KProcess* )) );
-  connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
+  connect( KDevApi::self()->core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
            this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
-  connect( core(), SIGNAL(projectOpened()),
+  connect( KDevApi::self()->core(), SIGNAL(projectOpened()),
            this, SLOT(projectOpened()) );
 
   m_widget = new ValgrindWidget( this );
@@ -70,14 +70,14 @@ ValgrindPart::ValgrindPart( QObject *parent, const QStringList& )
   action->setWhatsThis(i18n("<b>Profile with KCachegrind</b><p>Runs your program in calltree and then displays profiler information in KCachegrind."));
   connect(action, SIGNAL(triggered(bool)), SLOT(slotExecCalltree()));
 
-  mainWindow()->embedOutputView( m_widget, "Valgrind", i18n("Valgrind memory leak check") );
+  KDevApi::self()->mainWindow()->embedOutputView( m_widget, "Valgrind", i18n("Valgrind memory leak check") );
 }
 
 
 ValgrindPart::~ValgrindPart()
 {
   if ( m_widget )
-    mainWindow()->removeView( m_widget );
+      KDevApi::self()->mainWindow()->removeView( m_widget );
   delete m_widget;
   delete proc;
 }
@@ -112,9 +112,10 @@ void ValgrindPart::loadOutput()
 void ValgrindPart::getActiveFiles()
 {
   activeFiles.clear();
-  if ( project() ) {
-    QStringList projectFiles = project()->allFiles();
-    QString projectDirectory = project()->projectDirectory();
+  /* FIXME port when replacement for allFiles()
+  if ( KDevApi::self()->project() ) {
+    QStringList projectFiles = KDevApi::self()->project()->allFiles();
+    QString projectDirectory = KDevApi::self()->project()->projectDirectory();
     KUrl url;
     for ( QStringList::Iterator it = projectFiles.begin(); it != projectFiles.end(); ++it ) {
       KUrl url( projectDirectory + "/" + (*it) );
@@ -123,6 +124,7 @@ void ValgrindPart::getActiveFiles()
       kDebug() << "set project file: " << url.path().latin1() << endl;
     }
   }
+  */
 }
 
 static void guessActiveItem( ValgrindItem& item, const QStringList activeFiles )
@@ -152,9 +154,10 @@ void ValgrindPart::appendMessage( const QString& message )
 
 void ValgrindPart::slotExecValgrind()
 {
+    /* FIXME add a mainProgram function or equivalent so this can be ported
   ValgrindDialog* dlg = new ValgrindDialog(ValgrindDialog::Memcheck);
-  if ( project() && _lastExec.isEmpty() ) {
-    dlg->setExecutable( project()->mainProgram() );
+  if ( KDevApi::self()->project() && _lastExec.isEmpty() ) {
+    dlg->setExecutable( KDevApi::self()->project()->mainProgram() );
   } else {
     dlg->setExecutable( _lastExec );
   }
@@ -167,12 +170,14 @@ void ValgrindPart::slotExecValgrind()
   if ( dlg->exec() == QDialog::Accepted ) {
     runValgrind( dlg->executableName(), dlg->parameters(), dlg->valExecutable(), dlg->valParams() );
   }
+    */
 }
 
 void ValgrindPart::slotExecCalltree()
 {
+    /* FIXME add a mainProgram function or equivalent so this can be ported
   ValgrindDialog* dlg = new ValgrindDialog(ValgrindDialog::Calltree);
-  if ( project() && _lastExec.isEmpty() ) {
+  if ( KDevApi::self()->project() && _lastExec.isEmpty() ) {
     dlg->setExecutable( project()->mainProgram() );
   } else {
     dlg->setExecutable( _lastExec );
@@ -190,6 +195,7 @@ void ValgrindPart::slotExecCalltree()
   _lastKcExec = dlg->kcExecutable();
   _lastCtExec = dlg->ctExecutable();
   _lastCtParams = dlg->ctParams();
+    */
 }
 
 void ValgrindPart::slotKillValgrind()
@@ -229,8 +235,8 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
   proc->clearArguments();
   *proc << valExec << /*"--tool=memcheck" << */valParams << exec << params;
   proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
-  mainWindow()->raiseView( m_widget );
-  core()->running( this, true );
+  KDevApi::self()->mainWindow()->raiseView( m_widget );
+  KDevApi::self()->core()->running( this, true );
 
   _lastExec = exec;
   _lastParams = params;
@@ -295,7 +301,7 @@ void ValgrindPart::processExited( KProcess* p )
     appendMessage( currentMessage + lastPiece );
     currentMessage = QString();
     lastPiece = QString();
-    core()->running( this, false );
+    KDevApi::self()->core()->running( this, false );
 
     if (kcInfo.runKc)
     {

@@ -23,7 +23,7 @@
 
 #include <QList>
 #include <QString>
-#include "kdevprojecteditor.h"
+#include "kdevbuildmanager.h"
 
 class QObject;
 class KDevProject;
@@ -31,54 +31,58 @@ class KDevProjectItem;
 class AutoMakeItem;
 class MakefileInterface;
 class QDir;
+class KDevProjectFolderItem;
+class KDevProjectFileItem;
+class KDevProjectTargetItem;
+class KDevProjectBuilder;
 
 
-class AutoMakeImporter : public KDevProjectEditor
+class AutoMakeImporter : public KDevBuildManager
 {
 public:
 	AutoMakeImporter( QObject* parent = 0, const QStringList& args = QStringList() );
-	
+
 	virtual ~AutoMakeImporter();
-	
+
 	virtual KDevProject* project() const;
-	virtual KDevProjectEditor* editor() const;
-	
-	virtual Features features() const { return KDevProjectEditor::All; }
-	virtual bool addFolder( KDevProjectFolderItem* /*folder */,
+    virtual KDevProjectBuilder* builder() const { return 0; }
+    virtual QStringList includeDirectories() const { return QStringList(); }
+    virtual KUrl::List preprocessorDefines() const { return KUrl::List(); }
+
+	virtual KDevProjectFolderItem* addFolder( const KUrl& /*folder */,
 	                        KDevProject* /*parent*/ ) { return false; }
-	virtual bool addFolder( KDevProjectFolderItem*,
-	                        KDevProjectFolderItem* ) { return false; }
-	virtual bool addTarget( KDevProjectTargetItem* /*target*/,
-	                        KDevProjectFolderItem* /*parent*/ ) { return false; }
-	virtual bool addFile( KDevProjectFileItem*,
-	                      KDevProjectFolderItem* ) { return false; }
-	virtual bool addFile( KDevProjectFileItem*,
-	                      KDevProjectTargetItem* ) { return false; }
-	virtual bool removeFolder( KDevProjectFolderItem*,
-	                           KDevProjectFolderItem* ) { return false; }
-	virtual bool removeTarget( KDevProjectTargetItem*,
-	                           KDevProjectFolderItem* ) { return false; }
-	virtual bool removeFile( KDevProjectFileItem*,
+
+    virtual KDevProjectTargetItem* createTarget( const QString&,
+                                                 KDevProjectFolderItem* ) { return false; }
+
+    virtual KDevProjectFileItem* addFile( const KUrl&,
+	                                     KDevProjectFolderItem* ) { return false; }
+
+    virtual bool addFileToTarget( KDevProjectFileItem*, KDevProjectTargetItem* ) { return false; }
+
+	virtual bool removeFolder( KDevProjectFolderItem* ) { return false; }
+
+    virtual bool removeTarget( KDevProjectTargetItem* ) { return false; }
+
+    virtual bool removeFile( KDevProjectFileItem*,
 	                         KDevProjectFolderItem* ) { return false; }
-	virtual bool removeFile( KDevProjectFileItem*,
-	                         KDevProjectTargetItem* ) { return false; }
+	virtual bool removeFileFromTarget( KDevProjectFileItem*,
+	                                   KDevProjectTargetItem* ) { return false; }
 
     QList<KDevProjectTargetItem*> targets() const;
-    virtual FileItemList filesForTarget( KDevProjectTargetItem* target ) const;
 
-	
 	virtual QList<KDevProjectFolderItem*> parse( KDevProjectFolderItem* dom );
 	virtual KDevProjectItem* import( KDevProjectModel* model,
 	                                 const QString& fileName );
-	virtual QString findMakefile( KDevProjectFolderItem* dom ) const;
-	virtual QStringList findMakefiles( KDevProjectFolderItem* dom ) const;
-	
-	void createProjectItems( const QDir&, KDevProjectItem* );
-	
+	virtual KUrl findMakefile( KDevProjectFolderItem* dom ) const;
+    virtual KUrl::List findMakefiles( KDevProjectFolderItem* dom ) const;
+
+	void createProjectItems( const KUrl&, KDevProjectItem* );
+
 private:
 	KDevProject* m_project;
 	KDevProjectItem* m_rootItem;
-	
+
 	MakefileInterface* m_interface;
 };
 

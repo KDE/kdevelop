@@ -17,31 +17,52 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
 #include "kdevapi.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-// class KDevApi::Private
+// class KDevApiPrivate
 ///////////////////////////////////////////////////////////////////////////////
 
-class KDevApi::Private
+class KDevApiPrivate
 {
 public:
-    Private()
-        : m_projectDom(0), m_project(0), m_languageSupport(0)
+    KDevApiPrivate()
+        : mainWindow(0)
+        , documentController(0)
+        , pluginController(0)
+        , core(0)
+        , projectDom(0)
+        , project(0)
+        , languageSupport(0)
     {}
 
-    QDomDocument *m_projectDom;
-    KDevProject  *m_project;
-    KDevLanguageSupport *m_languageSupport;
+    KDevMainWindow *mainWindow;
+    KDevDocumentController *documentController;
+    KDevPluginController *pluginController;
+    KDevCore *core;
+    QDomDocument *projectDom;
+    KDevProject  *project;
+    KDevLanguageSupport *languageSupport;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // class KDevApi
 ///////////////////////////////////////////////////////////////////////////////
 
-KDevApi::KDevApi()
+KDevApi* KDevApi::s_self = 0;
+
+KDevApi* KDevApi::self()
 {
-    d = new KDevApi::Private;
+    if ( s_self == 0 )
+        s_self = new KDevApi();
+
+    return s_self;
+}
+
+KDevApi::KDevApi()
+    : d(new KDevApiPrivate())
+{
 }
 
 KDevApi::~KDevApi()
@@ -51,32 +72,72 @@ KDevApi::~KDevApi()
 
 KDevProject *KDevApi::project() const
 {
-  return d->m_project;
+  return d->project;
 }
 
 void KDevApi::setProject(KDevProject *project)
 {
-  d->m_project = project;
+  d->project = project;
 }
 
 KDevLanguageSupport *KDevApi::languageSupport() const
 {
-  return d->m_languageSupport;
+  return d->languageSupport;
 }
 
 void KDevApi::setLanguageSupport(KDevLanguageSupport *languageSupport)
 {
-  d->m_languageSupport = languageSupport;
+  d->languageSupport = languageSupport;
 }
 
 QDomDocument *KDevApi::projectDom() const
 {
-    return d->m_projectDom;
+    return d->projectDom;
 }
 
 void KDevApi::setProjectDom(QDomDocument *dom)
 {
-    d->m_projectDom = dom;
+    d->projectDom = dom;
 }
 
-#include "kdevapi.moc"
+void KDevApi::setMainWindow( KDevMainWindow * mainWindow )
+{
+    d->mainWindow = mainWindow;
+}
+
+KDevMainWindow * KDevApi::mainWindow( ) const
+{
+    return d->mainWindow;
+}
+
+void KDevApi::setDocumentController( KDevDocumentController * documentController )
+{
+    d->documentController = documentController;
+}
+
+KDevDocumentController * KDevApi::documentController( ) const
+{
+    return d->documentController;
+}
+
+void KDevApi::setPluginController( KDevPluginController * pluginController )
+{
+    d->pluginController = pluginController;
+}
+
+KDevPluginController * KDevApi::pluginController( ) const
+{
+    return d->pluginController;
+}
+
+void KDevApi::setCore( KDevCore * core )
+{
+    d->core = core;
+}
+
+KDevCore * KDevApi::core( ) const
+{
+    return d->core;
+}
+
+//kate: indent-mode cstyle; indent-width 4; replace-tabs on; space-indent on;

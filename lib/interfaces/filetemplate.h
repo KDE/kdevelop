@@ -22,6 +22,10 @@
 
 #include <QString>
 #include <QHash>
+#include <QDomDocument>
+
+#include <kurl.h>
+
 #include "kdevexport.h"
 
 class KDevPlugin;
@@ -46,26 +50,34 @@ public:
                        full paths are given for FileTemplate methods.*/
     } Policy;
 
+    /** Types of substitution maps */
+    enum SubstitutionMapTypes
+    {
+        NormalFile,        //!< For a normal file
+        XMLFile            //!< For a xml file
+    };
+
+
     /**
      * @return Whether a template with the given name
      * exists in the current project. File templates
      * are stored in the "templates" subdirectory of a project or in application shared dirs.
      */
-    static bool exists(KDevPlugin *part, const QString &name, Policy p = Default);
+    static bool exists(const QString &name, Policy p = Default);
     
     /**
      * Reads a template with the given name (e.g. "cpp")
      * and makes variable substitutions (like $AUTHOR$ etc.)
      * in it. The resulting string is returned.
      */
-    static QString read(KDevPlugin *part, const QString &name, Policy p = Default);
+    static QString read(const QString &name, Policy p = Default);
 
     /**
      * Reads a template with the given URL
      * and makes variable substitutions (like $AUTHOR$ etc.)
      * in it. The resulting string is returned.
      */
-    static QString readFile(KDevPlugin *part, const QString &fileName);
+    static QString readFile(const QString &fileName);
 
     /**
      * Makes variable substitutions on a text, based on a specified QDomDocument 
@@ -78,18 +90,28 @@ public:
      * file with the name dest and - while copying -
      * performs variable substitutions.
      */
-    static bool copy(KDevPlugin *part, const QString &name,
+    static bool copy(const QString &name,
                      const QString &dest, Policy p = Default);
     /**
      * Translates a template name into a full path, or suggests a full path
      * for the template in the project directory if it doesn't exist.
      */
-    static QString fullPathForName(KDevPlugin *part, const QString &name, Policy p = Default);
+    static KUrl fullPathForName(const QString &name, Policy p = Default);
 
     /**
      * Escape a substitution map for usage on a XML file.
      */
     static QHash<QString,QString> normalSubstMapToXML( const QHash<QString,QString>& src );
+
+    /** Reread template substitution map from dom */
+    void readSubstitutionMap(const QDomDocument& xml);
+
+    /**@return The template substitution map. */
+    const QHash<QString, QString>& substMap( SubstitutionMapTypes type = NormalFile );
+
+  private:
+    QHash<QString, QString> m_templExpandMap;
+    QHash<QString, QString> m_templExpandMapXML;
 };
 
 #endif

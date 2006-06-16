@@ -23,8 +23,8 @@ ValgrindDialog::ValgrindDialog( Type type, QWidget* parent )
   w = new Ui::ValgrindDialog();
   QWidget* top = new QWidget(this);
   w->setupUi(top);
-  w->valExecutableEdit->setUrl( KUrl("valgrind") );
-  w->executableEdit->setFocus();
+  w->valExecutableEdit->setUrl(KUrl( "valgrind" ));
+w->executableEdit->setFocus();
   w->stack->setCurrentWidget(type == Memcheck ? w->memcheckWidget : w->callgrindWidget);
   setMainWidget( top );
   connect( w->executableEdit->lineEdit(),  SIGNAL( textChanged( const QString &)), this, SLOT( valgrindTextChanged()));

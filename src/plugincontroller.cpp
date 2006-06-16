@@ -31,7 +31,6 @@
 #include <profileengine.h>
 
 #include "core.h"
-#include "api.h"
 #include "toplevel.h"
 #include "projectmanager.h"
 #include "partselectwidget.h"
@@ -52,7 +51,7 @@ namespace
     for ( ; serviceIt != offers.end(); ++serviceIt ) {
       KService::Ptr service = *serviceIt;
 
-      ComponentType *part = KService::createInstance< ComponentType >( service, API::getInstance(), 0,
+      ComponentType *part = KService::createInstance< ComponentType >( service, 0, 0,
                                                       PluginController::argumentsFromService( service ) );
 
       if ( part )
@@ -68,7 +67,9 @@ PluginController *PluginController::s_instance = 0;
 PluginController *PluginController::getInstance()
 {
   if (!s_instance)
+  {
     s_instance = new PluginController();
+  }
   return s_instance;
 }
 
@@ -191,7 +192,7 @@ void PluginController::unloadPlugins( QStringList const & unloadParts )
 KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
 {
     int err = 0;
-    KDevPlugin * pl = KService::createInstance<KDevPlugin>( service, API::getInstance(),
+    KDevPlugin * pl = KService::createInstance<KDevPlugin>( service, 0,
                                                  argumentsFromService( service ), &err );
 //    kDebug() << "ERR: " << err << endl;
     return pl;

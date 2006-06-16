@@ -36,6 +36,7 @@ class QDomDocument;
 #include <kvbox.h>
 #include <ktoolbar.h>
 #include <krecentfilesaction.h>
+#include <krecentfilesaction.h>
 
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"
@@ -44,7 +45,6 @@ class QDomDocument;
 
 #include "toplevel.h"
 #include "core.h"
-#include "api.h"
 #include "plugincontroller.h"
 #include "documentcontroller.h"
 #include "partselectwidget.h"
@@ -154,11 +154,11 @@ void ProjectManager::slotProjectOptions()
                   "project options dialog");
 
     KVBox *box = dlg.addVBoxPage( i18n("General"), i18n("General"), BarIcon( "kdevelop", K3Icon::SizeMedium ) );
-    GeneralInfoWidget *g = new GeneralInfoWidget(*API::getInstance()->projectDom(), box, "general informations widget");
+    GeneralInfoWidget *g = new GeneralInfoWidget(*KDevApi::self()->projectDom(), box, "general informations widget");
     connect (&dlg, SIGNAL(okClicked()), g, SLOT(accept()));
 
   KVBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", K3Icon::SizeMedium ) );
-  PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
+  PartSelectWidget *w = new PartSelectWidget(*KDevApi::self()->projectDom(), vbox, "part selection widget");
   connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
   connect( w, SIGNAL(accepted()), this, SLOT(loadLocalParts()) );
 
@@ -326,7 +326,7 @@ bool ProjectManager::closeProject( bool exiting )
   /// @todo if this fails, user is screwed
   saveProjectFile();
 
-  API::getInstance()->setProjectDom(0);
+  KDevApi::self()->setProjectDom(0);
 #warning "port me"
 #if 0
   API::getInstance()->codeModel()->wipeout();
@@ -387,14 +387,14 @@ bool ProjectManager::loadProjectFile()
   fin.close();
   KIO::NetAccess::removeTempFile(path);
 
-  API::getInstance()->setProjectDom(&m_info->m_document);
+  KDevApi::self()->setProjectDom(&m_info->m_document);
 
   return true;
 }
 
 bool ProjectManager::saveProjectFile()
 {
-  Q_ASSERT( API::getInstance()->projectDom() );
+    Q_ASSERT( KDevApi::self()->projectDom() );
 
   if (m_info->m_projectURL.isLocalFile()) {
     QFile fout(m_info->m_projectURL.path());
@@ -404,7 +404,7 @@ bool ProjectManager::saveProjectFile()
     }
 
     QTextStream stream(&fout);
-    API::getInstance()->projectDom()->save(stream, 2);
+    KDevApi::self()->projectDom()->save(stream, 2);
     fout.close();
   } else {
     KTempFile fout(QLatin1String("kdevelop3"));
@@ -413,7 +413,7 @@ bool ProjectManager::saveProjectFile()
       KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("Could not write the project file."));
       return false;
     }
-    API::getInstance()->projectDom()->save(*(fout.textStream()), 2);
+    KDevApi::self()->projectDom()->save(*(fout.textStream()), 2);
     fout.close();
     KIO::NetAccess::upload(fout.name(), m_info->m_projectURL, 0);
   }
@@ -476,7 +476,7 @@ bool ProjectManager::loadProjectPart()
     return false;
   }
 
-  KDevProject *projectPart = KService::createInstance< KDevProject >( projectService, API::getInstance(),
+  KDevProject *projectPart = KService::createInstance< KDevProject >( projectService, 0,
                                                   PluginController::argumentsFromService( projectService ) );
   if ( !projectPart ) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
@@ -485,9 +485,9 @@ bool ProjectManager::loadProjectPart()
     return false;
   }
 
-  API::getInstance()->setProject( projectPart );
+  KDevApi::self()->setProject( projectPart );
 
-  QDomDocument& dom = *API::getInstance()->projectDom();
+  QDomDocument& dom = *KDevApi::self()->projectDom();
   QString path = DomUtil::readEntry(dom,"/general/projectdirectory", ".");
   bool absolute = DomUtil::readBoolEntry(dom,"/general/absoluteprojectpath",false);
   QString projectDir = projectDirectory( path, absolute );
@@ -502,12 +502,12 @@ bool ProjectManager::loadProjectPart()
 
 void ProjectManager::unloadProjectPart()
 {
-  KDevProject *projectPart = API::getInstance()->project();
+  KDevProject *projectPart = KDevApi::self()->project();
   if( !projectPart ) return;
   PluginController::getInstance()->removePart( projectPart );
   projectPart->closeProject();
   delete projectPart;
-  API::getInstance()->setProject(0);
+  KDevApi::self()->setProject(0);
 }
 
 bool ProjectManager::loadLanguageSupport(const QString& lang)
@@ -532,8 +532,7 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
   }
 
   KService::Ptr languageSupportService = *languageSupportOffers.begin();
-  KDevLanguageSupport *langSupport = KService::createInstance<KDevLanguageSupport>( languageSupportService,
-                                                        API::getInstance(),
+  KDevLanguageSupport *langSupport = KService::createInstance<KDevLanguageSupport>( languageSupportService, 0,
                                                         PluginController::argumentsFromService(  languageSupportService ) );
 
   if ( !langSupport ) {
@@ -543,7 +542,7 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
     return false;
   }
 
-  API::getInstance()->setLanguageSupport( langSupport );
+  KDevApi::self()->setLanguageSupport( langSupport );
   PluginController::getInstance()->integratePart( langSupport );
   m_info->m_activeLanguage = lang;
   kDebug(9000) << "Language support for " << lang << " successfully loaded." << endl;
@@ -552,12 +551,12 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
 
 void ProjectManager::unloadLanguageSupport()
 {
-  KDevLanguageSupport *langSupport = API::getInstance()->languageSupport();
+  KDevLanguageSupport *langSupport = KDevApi::self()->languageSupport();
   if( !langSupport ) return;
   kDebug(9000) << "Language support for " << langSupport->name() << " unloading..." << endl;
   PluginController::getInstance()->removePart( langSupport );
   delete langSupport;
-  API::getInstance()->setLanguageSupport(0);
+  KDevApi::self()->setLanguageSupport(0);
 }
 
 void ProjectManager::loadLocalParts()

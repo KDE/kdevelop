@@ -12,7 +12,7 @@
 
 #include "toplevel.h"
 #include "documentcontroller.h"
-#include "api.h"
+#include "kdevapi.h"
 #include "projectmanager.h"
 
 #include "core.h"

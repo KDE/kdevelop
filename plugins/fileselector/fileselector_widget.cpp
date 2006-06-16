@@ -365,7 +365,7 @@ void KDevFileSelector::cmbPathReturnPressed( const QString& u )
     urls.prepend( u );
     cmbPath->setURLs( urls, KUrlComboBox::RemoveBottom );
     dir->setFocus();
-    dir->setURL( KUrl(u), true );
+    dir->setURL( KUrl::fromPathOrUrl(u), true );
 }
 
 void KDevFileSelector::dirUrlEntered( const KUrl& u )
@@ -755,8 +755,8 @@ void KDevDirOperator::activatedMenu( const KFileItem *fi, const QPoint & pos )
     if (fi)
     {
         FileContext context( KUrl::List(fi->url()));
-        if ( (m_part) && (m_part->core()))
-            m_part->core()->fillContextMenu(popup, &context);
+        if ( KDevApi::self()->core() )
+            KDevApi::self()->core()->fillContextMenu(popup, &context);
     }
 
     popup->popup(pos);

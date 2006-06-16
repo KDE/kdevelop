@@ -19,12 +19,12 @@
 #ifndef KDEVGENERICIMPORTER_H
 #define KDEVGENERICIMPORTER_H
 
-#include <kdevprojecteditor.h>
+#include <kdevfilemanager.h>
 #include <qstringlist.h>
 
 class QFileInfo;
 
-class KDevGenericImporter: public KDevProjectEditor
+class KDevGenericImporter: public KDevFileManager
 {
     Q_OBJECT
 public:
@@ -33,33 +33,19 @@ public:
     virtual ~KDevGenericImporter();
 
 //
-// KDevProjectEditor interface
+// KDevFileManager interface
 //
     virtual Features features() const
     { return Features(Folders | Files); }
 
-    virtual bool addFolder(KDevProjectFolderItem *folder, KDevProjectFolderItem *parent);
-    virtual bool addTarget(KDevProjectTargetItem *target, KDevProjectFolderItem *parent);
-    virtual bool addFile(KDevProjectFileItem *file, KDevProjectFolderItem *parent);
-    virtual bool addFile(KDevProjectFileItem *file, KDevProjectTargetItem *parent);
+    virtual KDevProjectFolderItem* addFolder(const KUrl& folder, KDevProjectFolderItem *parent);
+    virtual KDevProjectFileItem* addFile(const KUrl& file, KDevProjectFolderItem *parent);
+    virtual bool removeFolder(KDevProjectFolderItem *folder);
+    virtual bool removeFile(KDevProjectFileItem *file);
 
-    virtual bool removeFolder(KDevProjectFolderItem *folder, KDevProjectFolderItem *parent);
-    virtual bool removeTarget(KDevProjectTargetItem *target, KDevProjectFolderItem *parent);
-    virtual bool removeFile(KDevProjectFileItem *file, KDevProjectFolderItem *parent);
-    virtual bool removeFile(KDevProjectFileItem *file, KDevProjectTargetItem *parent);
-
-    virtual QList<KDevProjectTargetItem*> targets() const;
-    virtual FileItemList filesForTarget(KDevProjectTargetItem*) const;
-
-//
-// KDevProjectImporter interface
-//
     virtual KDevProject *project() const;
-
     virtual QList<KDevProjectFolderItem*> parse(KDevProjectFolderItem *item);
     virtual KDevProjectItem *import(KDevProjectModel *model, const QString &fileName);
-    virtual QString findMakefile(KDevProjectFolderItem *dom) const;
-    virtual QStringList findMakefiles(KDevProjectFolderItem *dom) const;
 
 private:
     bool isValid(const QFileInfo &fileName) const;

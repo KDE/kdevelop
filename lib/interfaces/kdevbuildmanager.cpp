@@ -1,5 +1,6 @@
-/* This file is part of KDevelop
-    Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
+/*  This file is part of KDevelop
+    Copyright (C) 2006 Matt Rogers <mattr@kde.org>
+    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,17 +17,38 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#include "kdevprojectimporter.h"
 
-KDevProjectImporter::KDevProjectImporter(QObject *parent)
-    : QObject(parent)
+#include "kdevbuildmanager.h"
+
+KDevBuildManager::KDevBuildManager(QObject* parent)
+: KDevFileManager(parent)
 {
 }
 
 
-KDevProjectImporter::~KDevProjectImporter()
+KDevBuildManager::~KDevBuildManager()
 {
 }
 
+QStringList KDevBuildManager::includeDirectories() const
+{
+  return QStringList();
+}
 
-#include "kdevprojectimporter.moc"
+KUrl::List KDevBuildManager::preprocessorDefines() const
+{
+  return KUrl::List();
+}
+
+KUrl::List KDevBuildManager::findMakefiles( KDevProjectFolderItem * ) const
+{
+  return KUrl::List();
+}
+
+KUrl KDevBuildManager::findMakefile( KDevProjectFolderItem * ) const
+{
+  return KUrl();
+}
+
+#include "kdevbuildmanager.moc"
+//kate: space-indent on; indent-width 2; indent-mode cstyle; replace-tabs on;

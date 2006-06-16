@@ -42,11 +42,12 @@
 #include <assert.h>
 
 ///////////////////////////////////////////////////////////////////////////////
-// struct KDevPlugin::Private
+// class KDevPluginPrivate
 ///////////////////////////////////////////////////////////////////////////////
 
-struct KDevPlugin::Private
+class KDevPluginPrivate
 {
+public:
     const KDevPluginInfo *info;
 };
 
@@ -55,10 +56,10 @@ struct KDevPlugin::Private
 ///////////////////////////////////////////////////////////////////////////////
 
 KDevPlugin::KDevPlugin(const KDevPluginInfo *info, QObject *parent)
-    :QObject(parent), d(new Private)
+    :QObject(parent)
+    , d(new KDevPluginPrivate)
 {
     assert(parent->inherits( "KDevApi" ));
-    m_api = static_cast<KDevApi *>( parent );
 
     d->info = info;
     KGlobal::iconLoader()->addAppDir("kdevelop");
@@ -66,42 +67,7 @@ KDevPlugin::KDevPlugin(const KDevPluginInfo *info, QObject *parent)
 
 KDevPlugin::~KDevPlugin()
 {
-   delete( d );
-}
-
-KDevMainWindow *KDevPlugin::mainWindow()
-{
-    return m_api->mainWindow();
-}
-
-KDevCore *KDevPlugin::core() const
-{
-    return m_api->core();
-}
-
-KDevProject *KDevPlugin::project() const
-{
-    return m_api->project();
-}
-
-QDomDocument *KDevPlugin::projectDom() const
-{
-    return m_api->projectDom();
-}
-
-KDevLanguageSupport *KDevPlugin::languageSupport() const
-{
-    return m_api->languageSupport();
-}
-
-KDevDocumentController *KDevPlugin::documentController() const
-{
-    return m_api->documentController();
-}
-
-KDevPluginController *KDevPlugin::pluginController() const
-{
-    return m_api->pluginController();
+   delete d;
 }
 
 void KDevPlugin::restorePartialProjectSession(const QDomElement* /*el*/)
@@ -116,7 +82,7 @@ void KDevPlugin::savePartialProjectSession(QDomElement* /*el*/)
 
 KDevPlugin * KDevPlugin::extension_internal(const QString &serviceType, const QString &constraint)
 {
-    return m_api->pluginController()->extension(serviceType, constraint);
+    return KDevApi::self()->pluginController()->extension(serviceType, constraint);
 }
 
 const KDevPluginInfo *KDevPlugin::info()

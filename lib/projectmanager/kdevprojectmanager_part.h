@@ -22,7 +22,7 @@
 #include "kdevprojectmodel.h"
 
 #include <QtCore/QPointer>
-#include <kdevproject.h>
+#include "kdevproject.h"
 
 class KDevProjectManager;
 class KDevProjectImporter;
@@ -59,29 +59,16 @@ public:
     KDevProjectTargetItem *activeTarget();
     KDevProjectFileItem *activeFile();
 
-    KDevProjectImporter *defaultImporter() const;
+    KDevFileManager *defaultImporter() const;
     KDevProjectBuilder *defaultBuilder() const;
 
 //
 // KDevProject interface
 //
-    virtual void openProject(const QString &dirName, const QString &projectName);
+    virtual void openProject(const KUrl &dirName, const QString &projectName);
     virtual void closeProject();
-    virtual Options options() const;
-    virtual QString projectDirectory() const;
+    virtual KUrl projectDirectory() const;
     virtual QString projectName() const;
-    virtual DomUtil::PairList runEnvironmentVars() const;
-    virtual QString mainProgram(bool relative = false) const;
-    virtual QString runDirectory() const;
-    virtual QString runArguments() const;
-    virtual QString activeDirectory() const;
-    virtual QString buildDirectory() const;
-    virtual QStringList allFiles() const;
-    virtual QStringList distFiles() const;
-    virtual void addFiles(const QStringList &fileList);
-    virtual void addFile(const QString &fileName);
-    virtual void removeFiles (const QStringList &fileList);
-    virtual void removeFile(const QString &fileName);
 
     void import(RefreshPolicy policy = Refresh);
 
@@ -111,11 +98,12 @@ private:
     QPointer<QWidget> m_widget;
     KDevProjectManager *m_projectOverview;
     KDevProjectManager *m_projectDetails;
-    QMap<QString, KDevProjectImporter*> m_importers;
+    QMap<QString, KDevFileManager*> m_importers;
     QMap<QString, KDevProjectBuilder*> m_builders;
+    KDevFileManager* m_manager;
     QStringList m_cachedFileList;
 
-    QString m_projectDirectory;
+    KUrl m_projectDirectory;
     QString m_projectName;
 
     bool m_dirty;

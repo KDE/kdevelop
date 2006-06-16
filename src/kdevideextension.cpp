@@ -35,7 +35,6 @@
 #include <kdevplugincontroller.h>
 #include <kglobal.h>
 
-#include "api.h"
 #include "settingswidget.h"
 
 KDevIDEExtension::KDevIDEExtension()
@@ -87,7 +86,7 @@ void KDevIDEExtension::acceptGlobalSettingsPage(KDialog* /*dlg*/)
     //current item id must be in sync with the enum!
     config->writeEntry("CompilerOutputLevel",gsw->compileOutputCombo->currentIndex());
     config->sync();
-    if( KDevPlugin *makeExt = API::getInstance()->pluginController()->extension("KDevelop/MakeFrontend"))
+    if( KDevPlugin *makeExt = KDevApi::self()->pluginController()->extension("KDevelop/MakeFrontend"))
     {
         static_cast<KDevMakeFrontend*>(makeExt)->updateSettingsFromConfig();
     }

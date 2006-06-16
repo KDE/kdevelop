@@ -38,17 +38,17 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const QStringList&)
 {
     setInstance(FileSelectorFactory::instance());
 
-    m_filetree = new KDevFileSelector( this, mainWindow(), documentController(), 0 );
+    m_filetree = new KDevFileSelector( this, KDevApi::self()->mainWindow(), KDevApi::self()->documentController(), 0 );
 
     connect( m_filetree->dirOperator(), SIGNAL(fileSelected(const KFileItem*)),
 	     this, SLOT(fileSelected(const KFileItem*)));
-    connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
+    connect( KDevApi::self()->core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
 
-    connect( core(), SIGNAL(configWidget(KDialog*)), this, SLOT(slotConfigWidget(KDialog*)) );
+    connect( KDevApi::self()->core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(slotConfigWidget(KDialogBase*)) );
 
     m_filetree->setWindowTitle( i18n("File Selector") );
     m_filetree->setWindowIcon( KIcon(info()->icon()) );
-    mainWindow()->embedSelectView( m_filetree, i18n("File Selector"), i18n("File selector") );
+    KDevApi::self()->mainWindow()->embedSelectView( m_filetree, i18n("File Selector"), i18n("File selector") );
     m_filetree->setWhatsThis( i18n("<b>File selector</b><p>This file selector lists directory contents and provides some file management functions."));
 
     m_filetree->readConfig( instance()->config(), "fileselector" );
@@ -57,7 +57,7 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const QStringList&)
 FileSelectorPart::~FileSelectorPart()
 {
     if (m_filetree){
-	mainWindow()->removeView( m_filetree );
+        KDevApi::self()->mainWindow()->removeView( m_filetree );
     }
 
     delete (KDevFileSelector*) m_filetree;
@@ -67,13 +67,13 @@ void FileSelectorPart::fileSelected( const KFileItem * file )
 {
     KUrl u(file->url());
 
-    documentController()->editDocument( u );
+    KDevApi::self()->documentController()->editDocument( u );
 }
 
 void FileSelectorPart::slotProjectOpened()
 {
     KUrl u;
-    u.setPath( project()->projectDirectory() );
+    u.setPath( KDevApi::self()->project()->projectDirectory() );
     m_filetree->setDir( u );
 }
 

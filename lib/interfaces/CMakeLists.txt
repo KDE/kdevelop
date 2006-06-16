@@ -16,11 +16,9 @@ set(kdevinterfaces_LIB_SRCS
     kdevproject.cpp
     kdevcodemodel.cpp
     kdevdocumentcontroller.cpp
-    kdevprojecteditor.cpp
     kdevcoderepository.cpp
     kdevcore.cpp
     kdevpcsimporter.cpp
-    kdevprojectimporter.cpp
     kdevplugincontroller.cpp
     kdevprojectmodel.cpp
     kdevdifffrontend.cpp
@@ -34,6 +32,9 @@ set(kdevinterfaces_LIB_SRCS
     kdevcodeaggregate.cpp
     kdevreadwritepart.cpp
     kdevdocument.cpp
+    kdevbuildableproject.cpp
+    kdevfilemanager.cpp
+    kdevbuildmanager.cpp
 )
 
 kde4_automoc(${kdevinterfaces_LIB_SRCS})
@@ -46,7 +47,7 @@ install_targets(/lib kdevinterfaces)
 
 ########### install files ###############
 
-install_files(/include/kdevelop/interfaces FILES 
+install_files(/include/kdevelop/interfaces FILES
     kdevdocument.h
     kdevdocumentcontroller.h
     kdevapi.h
@@ -60,13 +61,11 @@ install_files(/include/kdevelop/interfaces FILES
     kdevplugininfo.h
     kdevcore.h
     kdevprojectbuilder.h
-    kdevprojecteditor.h
     kdevcreatefile.h
     kdevproject.h
     kdevdifffrontend.h
     domutil.h
     kdevgenericfactory.h
-    kdevprojectimporter.h
     kdevlanguagesupport.h
     kdevprojectmodel.h
     kdevmainwindow.h
@@ -77,9 +76,12 @@ install_files(/include/kdevelop/interfaces FILES
     kdevcodedelegate.h
     kdevcodeproxy.h
     kdevreadwritepart.h
+    kdevfilemanager.h
+    kdevbuildableproject.h
+    kdevbuildmanager.h
 )
 
-install_files(${SERVICETYPES_INSTALL_DIR} FILES 
+install_files(${SERVICETYPES_INSTALL_DIR} FILES
     kdevelopappfrontend.desktop
     kdeveloppcsimporter.desktop
     kdevelopcreatefile.desktop
@@ -89,7 +91,7 @@ install_files(${SERVICETYPES_INSTALL_DIR} FILES
     kdeveloplanguagesupport.desktop
     kdevelopproject.desktop
     kdevelopmakefrontend.desktop
-    kdevelopprojectimporter.desktop
+    kdevelopprojectfilemanager.desktop
     kdevelop_part.desktop
     kdevelop_rwpart.desktop
 )

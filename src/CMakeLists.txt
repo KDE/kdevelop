@@ -11,7 +11,6 @@ include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces $
 ########### next target ###############
 
 set(kdevshell_LIB_SRCS
-    api.cpp
     core.cpp
     documentationpart.cpp
     editorproxy.cpp
@@ -77,7 +76,7 @@ install_targets(/bin kdevassistant)
 ########### install files ###############
 
 install_files(/include/kdevelop/shell FILES 
-    api.h core.h documentationpart.h editorproxy.h
+    core.h documentationpart.h editorproxy.h
     generalinfowidget.h languageselectwidget.h mainwindowshare.h
     partselectwidget.h plugincontroller.h projectmanager.h 
     projectsession.h shellextension.h splashscreen.h statusbar.h

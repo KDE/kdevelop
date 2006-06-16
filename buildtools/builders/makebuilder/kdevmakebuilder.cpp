@@ -52,8 +52,8 @@ KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const QStringList &)
     m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
 
-    connect(project()->core(), SIGNAL(projectConfigWidget(KDialog*)),
-        this, SLOT(projectConfigWidget(KDialog*)));
+    connect(KDevApi::self()->core(), SIGNAL(projectConfigWidget(KDialogBase*)),
+        this, SLOT(projectConfigWidget(KDialogBase*)));
 
     if (KDevMakeFrontend *make = project()->extension<KDevMakeFrontend>("KDevelop/MakeFrontend")) {
         connect(make, SIGNAL(commandFinished(const QString &)),
@@ -147,7 +147,7 @@ void KDevMakeBuilder::commandFinished(const QString &command)
         QPair<QString, KDevProjectItem *> item = m_commands.first();
         if (item.first == command) {
             m_commands.pop_front();
-            emit builded(item.second);
+            emit built(item.second);
         }
     }
 }
@@ -165,6 +165,10 @@ void KDevMakeBuilder::commandFailed(const QString &command)
 
 QString KDevMakeBuilder::buildCommand(KDevProjectItem *item, const QString &target)
 {
+    //FIXME redo the settings here
+    QString cmdline;
+
+    /*
     QDomDocument &dom = *project()->projectDom();
 
     QString cmdline = DomUtil::readEntry(dom, makeTool);
@@ -173,9 +177,10 @@ QString KDevMakeBuilder::buildCommand(KDevProjectItem *item, const QString &targ
     if (prio != 0) {
         nice = QString("nice -n%1 ").arg(prio);
     }
-
+    */
     if (cmdline.isEmpty())
         cmdline = MAKE_COMMAND;
+    /*
     if (!DomUtil::readBoolEntry(dom, abortOnError))
         cmdline += " -k";
     int jobs = DomUtil::readIntEntry(dom, numberOfJobs);
@@ -185,12 +190,12 @@ QString KDevMakeBuilder::buildCommand(KDevProjectItem *item, const QString &targ
     }
     if (DomUtil::readBoolEntry(dom, dontAct))
         cmdline += " -n";
-
+    */
     cmdline += " ";
     cmdline += target;
 
-    cmdline.prepend(nice);
-    cmdline.prepend(makeEnvironment());
+    //cmdline.prepend(nice);
+    //cmdline.prepend(makeEnvironment());
 
     Q_ASSERT(item->folder());
 
@@ -204,17 +209,18 @@ QString KDevMakeBuilder::buildCommand(KDevProjectItem *item, const QString &targ
 
 QString KDevMakeBuilder::makeEnvironment() const
 {
+    /*
     DomUtil::PairList envvars =
         DomUtil::readPairListEntry(*project()->projectDom(), environment, "envvar", "name", "value");
-
+    */
     QString env;
-    DomUtil::PairList::ConstIterator it;
+    /*DomUtil::PairList::ConstIterator it;
     for (it = envvars.begin(); it != envvars.end(); ++it) {
         env += (*it).first;
         env += "=";
         env += KProcess::quote((*it).second);
         env += " ";
-    }
+    }*/
     return env;
 }
 

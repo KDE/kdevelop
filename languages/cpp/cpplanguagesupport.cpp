@@ -50,11 +50,11 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
     m_backgroundParser = new BackgroundParser( this );
     m_highlights = new CppHighlighting( this );
 
-    connect( documentController(), SIGNAL( documentLoaded(KDevDocument*) ),
+    connect( KDevApi::self()->documentController(), SIGNAL( documentLoaded(KDevDocument*) ),
              this, SLOT( documentLoaded(KDevDocument*) ) );
-    connect( documentController(), SIGNAL( documentClosed(KDevDocument*) ),
+    connect( KDevApi::self()->documentController(), SIGNAL( documentClosed(KDevDocument*) ),
              this, SLOT( documentClosed(KDevDocument*) ) );
-    connect( documentController(), SIGNAL( documentActivated(KDevDocument*) ),
+    connect( KDevApi::self()->documentController(), SIGNAL( documentActivated(KDevDocument*) ),
              this, SLOT( documentActivated(KDevDocument*) ) );
 }
 
@@ -67,7 +67,7 @@ KDevCodeModel *CppLanguageSupport::codeModel( const KUrl &url ) const
     if ( url.isValid() )
         return m_codeProxy->codeModel( url );
     else
-        return m_codeProxy->codeModel( documentController() ->activeDocumentUrl() );
+        return m_codeProxy->codeModel( KDevApi::self()->documentController() ->activeDocumentUrl() );
 }
 
 KDevCodeProxy *CppLanguageSupport::codeProxy() const

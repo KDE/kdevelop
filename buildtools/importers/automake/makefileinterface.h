@@ -24,6 +24,7 @@
 #include <QObject>
 #include <QRegExp>
 #include <QDir>
+#include <kurl.h>
 
 class QFileInfo;
 
@@ -49,18 +50,14 @@ typedef QHash<QFileInfo, AutoTools::ProjectAST*> ASTHash;
 typedef QMap<QFileInfo, AutoTools::ProjectAST*> ASTMap;
 typedef QList<AutoTools::ProjectAST*> ASTList;
 
-uint qHash( const QFileInfo& key );
-
 struct TargetInfo
 {
     AutoTools::TargetType type;
     AutoTools::InstallLocation location;
     QString name;
-    QDir folder;
+    KUrl url;
     QString display;
 };
-
-
 
 class MakefileInterface : public QObject
 {
@@ -79,19 +76,19 @@ public:
 
     QString resolveVariable( const QString& variable, AutoTools::ProjectAST* ast ) const;
 
-    bool parse( const QDir& dir, ParserRecursion recursive = Recursive );
+    bool parse( const KUrl& dir, ParserRecursion recursive = Recursive );
 
     QString projectRoot() const;
-    void setProjectRoot( const QDir& dir );
+    void setProjectRoot( const KUrl& dir );
     QStringList topSubDirs() const;
-    QStringList subdirsFor( const QDir& dir ) const;
+    QStringList subdirsFor( const KUrl& dir ) const;
 
-    QList<TargetInfo> targetsForFolder( const QDir& dir ) const;
+    QList<TargetInfo> targetsForFolder( const KUrl& dir ) const;
     QList<QFileInfo> filesForTarget( const TargetInfo& ) const;
 
 private:
     QStringList subdirsFor( AutoTools::ProjectAST* ) const;
-    AutoTools::ProjectAST* astForFolder( const QDir& dir ) const;
+    AutoTools::ProjectAST* astForFolder( const KUrl& dir ) const;
     QStringList valuesForId( const QString&, AutoTools::ProjectAST* ) const;
 
 private:

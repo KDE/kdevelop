@@ -66,26 +66,28 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
     m_documentView->setItemDelegate( delegate );
     m_documentView->setWhatsThis( i18n( "Document View" ) );
 
-    mainWindow() ->embedSelectView( m_documentView,
+    KDevApi::self() ->mainWindow() ->embedSelectView( m_documentView,
                                     i18n( "Documents" ), i18n( "Documents" ) );
+
+    KDevDocumentController* docController = KDevApi::self() ->documentController();
 
     connect( m_documentView, SIGNAL( pressed( QModelIndex ) ),
              this, SLOT( pressed( QModelIndex ) ) );
-    connect( documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
+    connect( docController, SIGNAL( documentActivated( KDevDocument* ) ),
              this, SLOT( activated( KDevDocument* ) ) );
-    connect( documentController(), SIGNAL( documentSaved( KDevDocument* ) ),
+    connect( docController, SIGNAL( documentSaved( KDevDocument* ) ),
              this, SLOT( saved( KDevDocument* ) ) );
-    connect( documentController(), SIGNAL( documentLoaded( KDevDocument* ) ),
+    connect( docController, SIGNAL( documentLoaded( KDevDocument* ) ),
              this, SLOT( loaded( KDevDocument* ) ) );
-    connect( documentController(), SIGNAL( documentClosed( KDevDocument* ) ),
+    connect( docController, SIGNAL( documentClosed( KDevDocument* ) ),
              this, SLOT( closed( KDevDocument* ) ) );
-    connect( documentController(),
+    connect( docController,
              SIGNAL( documentExternallyModified( KDevDocument* ) ),
              this, SLOT( externallyModified( KDevDocument* ) ) );
-    connect( documentController(),
+    connect( docController,
              SIGNAL( documentUrlChanged( KDevDocument*, const KUrl &, const KUrl & ) ),
              this, SLOT( urlChanged( KDevDocument*, const KUrl &, const KUrl & ) ) );
-    connect( documentController(),
+    connect( docController,
              SIGNAL( documentStateChanged( KDevDocument*, KDevDocument::DocumentState ) ),
              this, SLOT( stateChanged( KDevDocument*, KDevDocument::DocumentState ) ) );
 
@@ -96,7 +98,7 @@ KDevDocumentViewPart::~KDevDocumentViewPart()
 {
     if ( m_documentView )
     {
-        mainWindow() ->removeView( m_documentView );
+        KDevApi::self() ->mainWindow() ->removeView( m_documentView );
         delete m_documentView;
     }
 }
@@ -187,7 +189,7 @@ void KDevDocumentViewPart::stateChanged( KDevDocument* document,
 void KDevDocumentViewPart::pressed( const QModelIndex & index )
 {
     if ( index.parent().isValid() )
-        documentController() ->editDocument(
+        KDevApi::self() ->documentController() ->editDocument(
             m_documentModel->item( index ) ->fileItem() ->URL() );
 }
 

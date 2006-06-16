@@ -34,11 +34,11 @@
 
 struct KDevPluginInfo::Private {
     QString m_pluginName;
-    // Duplicated because otherwise the temporary QByteArray is deleted and 
+    // Duplicated because otherwise the temporary QByteArray is deleted and
     // invalid memory is accessed in KAboutData
     QByteArray m_pluginNameAscii;
     QString m_rawGenericName;
-    // Duplicated because otherwise the temporary QByteArray is deleted and 
+    // Duplicated because otherwise the temporary QByteArray is deleted and
     // invalid memory is accessed in KAboutData
     QByteArray m_rawGenericNameAscii;
 
@@ -169,6 +169,7 @@ QString KDevPluginInfo::bugsEmailAddress() const
 QVariant KDevPluginInfo::property(const QString &name) const
 {
     KService::List offers = KDevPluginController::queryPlugins(QString("Name='%1'").arg(d->m_pluginName));
+
     if (offers.count() == 1)
         return offers.first()->property(name);
     return QVariant();

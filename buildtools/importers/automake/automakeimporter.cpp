@@ -35,7 +35,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevautomakeimporter,
 
 AutoMakeImporter::AutoMakeImporter( QObject* parent,
                                     const QStringList& )
-: KDevProjectEditor( parent ), m_rootItem(0L)
+: KDevBuildManager( parent ), m_rootItem(0L)
 {
     m_project = qobject_cast<KDevProject*>( parent );
     Q_ASSERT( m_project );
@@ -50,11 +50,6 @@ AutoMakeImporter::~AutoMakeImporter()
 KDevProject* AutoMakeImporter::project() const
 {
     return m_project;
-}
-
-KDevProjectEditor* AutoMakeImporter::editor() const
-{
-    return const_cast<AutoMakeImporter*>( this );
 }
 
 QList<KDevProjectFolderItem*> AutoMakeImporter::parse( KDevProjectFolderItem* dom )
@@ -85,19 +80,19 @@ KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
 
 }
 
-QString AutoMakeImporter::findMakefile( KDevProjectFolderItem* dom ) const
+KUrl AutoMakeImporter::findMakefile( KDevProjectFolderItem* dom ) const
 {
     Q_UNUSED( dom );
-    return QString();
+    return KUrl();
 }
 
-QStringList AutoMakeImporter::findMakefiles( KDevProjectFolderItem* dom ) const
+KUrl::List AutoMakeImporter::findMakefiles( KDevProjectFolderItem* dom ) const
 {
     Q_UNUSED( dom );
-    return QStringList();
+    return KUrl::List();
 }
 
-void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* rootItem )
+void AutoMakeImporter::createProjectItems( const KUrl& folder, KDevProjectItem* rootItem )
 {
     //first look for the subdirs
     //recursively descend into any other subdirs. when finished look for targets.
@@ -111,7 +106,7 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
     {
         foreach( QString dir, subdirs )
         {
-            QString fullPath = folder.absolutePath();
+            QString fullPath = folder.path();
             fullPath = fullPath + QDir::separator() + dir;
             createProjectItems( fullPath, folderItem );
         }
@@ -124,14 +119,14 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
     KDevProjectTargetItem* installedHeaders = 0;
 
     foreach( TargetInfo target, targets )
-    {
+    { /* FIXME port
         switch( target.type )
         {
         case AutoTools::Data:
             if ( target.name.contains( ".desktop" ) )
             {
                 if ( dotDesktopTarget == 0 )
-                    dotDesktopTarget = new KDevProjectTargetItem( i18n( "freedesktop.org Desktop Entry Files" ),
+                    dotDesktopTarget = new AutoMakeTargetItem( i18n( "freedesktop.org Desktop Entry Files" ),
                                                                 folderItem  );
                 QFileInfo desktopInfo( target.folder, target.name );
                 dotDesktopTarget->add( new AutoMakeFileItem( target.name, dotDesktopTarget ) );
@@ -172,6 +167,7 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
                 targetItem->add( new AutoMakeFileItem( fi, targetItem ) );
             break;
         };
+      */
     }
     if ( dotDesktopTarget )
         folderItem->add( dotDesktopTarget );
@@ -186,11 +182,6 @@ void AutoMakeImporter::createProjectItems( const QDir& folder, KDevProjectItem* 
 QList<KDevProjectTargetItem*> AutoMakeImporter::targets() const
 {
     return QList<KDevProjectTargetItem*>();
-}
-
-FileItemList AutoMakeImporter::filesForTarget( KDevProjectTargetItem* target ) const
-{
-    return FileItemList();
 }
 
 #include "automakeimporter.h"

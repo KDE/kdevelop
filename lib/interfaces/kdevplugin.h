@@ -131,28 +131,6 @@ public:
     @return KAboutData object which was initialized in the constructor.*/
     const KDevPluginInfo* info();
 
-    /**@return A reference to the toplevel widget.*/
-    KDevMainWindow *mainWindow();
-
-    /**@return A reference to the application core - an object which provides
-    basic functionalities for inter-parts communications / cooperation.*/
-    KDevCore *core() const;
-
-    /**@return A reference to the current project component or 0 if no project is loaded.*/
-    KDevProject *project() const;
-
-    /**@return A reference to the language support component or 0 if no support available.*/
-    KDevLanguageSupport *languageSupport() const;
-
-    /**@return A reference to the DOM tree that represents the project file or 0 if no project is loaded.*/
-    QDomDocument *projectDom() const;
-
-    /**@return A reference to the document controller which is used to manipulate loaded KParts.*/
-    KDevDocumentController *documentController() const;
-
-    /**@return A reference to the plugin controller which is used to manipulate loaded plugin.*/
-    virtual KDevPluginController *pluginController() const;
-
     /**Queries for the plugin which supports given service type (such plugins are called extensions in KDevelop).
     All already loaded plugins will be queried and the <b>first loaded one</b> to support
     the service type will be returned. Any plugin can be an extension, only "ServiceTypes=..."
@@ -190,9 +168,7 @@ public:
 private:
     KDevPlugin *extension_internal(const QString &serviceType, const QString &constraint = "");
 
-    KDevApi *m_api;
-    class Private;
-    Private *d;
+    class KDevPluginPrivate* const d;
 };
 
 #endif

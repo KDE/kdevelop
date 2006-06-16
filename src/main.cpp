@@ -11,6 +11,7 @@
 #include <QFileInfo>
 #include <QPixmap>
 
+#include "kdevapi.h"
 #include "splashscreen.h"
 #include "toplevel.h"
 #include "plugincontroller.h"
@@ -94,8 +95,16 @@ int main(int argc, char *argv[])
     splash->show();
     splash->repaint();
   }
+  
+  //initialize the api object
+  KDevApi::self()->setMainWindow( TopLevel::getInstance() );
+  KDevApi::self()->setPluginController( PluginController::getInstance() );
+  KDevApi::self()->setCore( Core::getInstance() );
+  KDevApi::self()->setDocumentController( DocumentController::getInstance() );
 
-  if (splash) splash->showMessage( i18n( "Loading Settings" ) );
+  if (splash)
+      splash->showMessage( i18n( "Loading Settings" ) );
+
   TopLevel::getInstance()->loadSettings();
 
   QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
@@ -105,7 +114,8 @@ int main(int argc, char *argv[])
 
   Core::getInstance()->doEmitCoreInitialized();
 
-  if (splash) splash->showMessage( i18n( "Starting GUI" ) );
+  if (splash)
+    splash->showMessage( i18n( "Starting GUI" ) );
 
   TopLevel::getInstance()->main()->show();
 

@@ -34,7 +34,7 @@
 #include <kdialog.h>
 #include <kglobalsettings.h>
 #include <kdeversion.h>
-
+#include <kservicetypetrader.h>
 #include <profile.h>
 
 #include "addprofilewidget.h"

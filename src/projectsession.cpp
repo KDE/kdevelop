@@ -29,7 +29,6 @@
 #include "ktexteditor/document.h"
 #include "ktexteditor/view.h"
 
-#include "api.h"
 #include "documentcontroller.h"
 #include "domutil.h"
 #include "documentationpart.h"

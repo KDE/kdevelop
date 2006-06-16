@@ -58,8 +58,7 @@ BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
     m_timer->setSingleShot( true );
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
     m_timer->start( 500 );
-
-    connect( m_cppSupport->core(), SIGNAL(projectOpened()), SLOT(projectOpened()) );
+    connect( KDevApi::self()->core(), SIGNAL(projectOpened()), SLOT(projectOpened()) );
 }
 
 BackgroundParser::~BackgroundParser()
@@ -130,9 +129,9 @@ void BackgroundParser::parseDocuments()
 
             p = false;
 
-            if ( url == m_cppSupport->documentController() ->activeDocumentUrl() )
+            if ( url == KDevApi::self()->documentController() ->activeDocumentUrl() )
             {
-                KDevDocument* document = m_cppSupport->documentController() ->documentForUrl( url );
+                KDevDocument* document = KDevApi::self()->documentController() ->documentForUrl( url );
                 Q_ASSERT(document->textDocument());
 
                 parse->setContents( document->textDocument()->text().toAscii() );
@@ -201,7 +200,8 @@ void BackgroundParser::projectOpened( )
     /*connect(m_cppSupport->project(), SIGNAL(addedFilesToProject(const QStringList&)), SLOT(filesAddedToProject(const QStringList&)));
     void removedFilesFromProject(const QStringList& fileList);
     void changedFilesInProject(const QStringList& fileList);*/
-
+    //FIXME need replacement for allFiles
+    /*
     foreach (QString file, m_cppSupport->project()->allFiles()) {
         file = m_cppSupport->project()->relativeProjectFile(file);
         if (QFile::exists(file)) {
@@ -211,6 +211,7 @@ void BackgroundParser::projectOpened( )
             kDebug() << "Missed file " << file << endl;
         }
     }
+    */
 }
 
 #include "backgroundparser.moc"

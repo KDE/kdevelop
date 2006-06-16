@@ -100,7 +100,7 @@ class MakefileInterface::Private
 public:
     ASTHash projects;
     QStringList filesToParse;
-    QDir topLevelParseDir;
+    KUrl topLevelParseDir;
 };
 
 MakefileInterface::MakefileInterface( QObject* parent )
@@ -136,9 +136,9 @@ QString MakefileInterface::canonicalize( const QString& target )
     return result;
 }
 
-bool MakefileInterface::parse( const QDir& dir, ParserRecursion recursive )
+bool MakefileInterface::parse( const KUrl& dir, ParserRecursion recursive )
 {
-    kDebug(9020) << k_funcinfo << "directory to parse is: " << dir.absolutePath() << endl;
+    kDebug(9020) << k_funcinfo << "directory to parse is: " << dir.path() << endl;
     int ret = -1;
     AutoTools::ProjectAST* ast = 0L;
 
@@ -146,7 +146,7 @@ bool MakefileInterface::parse( const QDir& dir, ParserRecursion recursive )
     QStringList::const_iterator it, itEnd = d->filesToParse.constEnd();
     for ( it = d->filesToParse.constBegin(); it != itEnd; ++it )
     {
-        parsingFile.setFile( dir, (*it) );
+        parsingFile.setFile( dir.path(), (*it) );
         if ( parsingFile.exists() )
         {
             using namespace AutoTools;
@@ -158,7 +158,7 @@ bool MakefileInterface::parse( const QDir& dir, ParserRecursion recursive )
 
     if ( !ast || ret == -1 )
     {
-        kWarning(9020) << k_funcinfo << "parsing " << dir.absolutePath()
+        kWarning(9020) << k_funcinfo << "parsing " << dir.path()
                 << " not successful! Fix your Makefile!" << endl;
         return false;
     }
@@ -173,20 +173,20 @@ bool MakefileInterface::parse( const QDir& dir, ParserRecursion recursive )
     foreach( QString sd, subdirs )
     {
         kDebug(9020) << k_funcinfo << "Beginning parsing of '" << sd << "'" << endl;
-        parse( dir.absolutePath() + '/' + sd, recursive );
+        parse( dir.path() + '/' + sd, recursive );
     }
 
     return (ret != -1);
 }
 
-void MakefileInterface::setProjectRoot( const QDir& dir )
+void MakefileInterface::setProjectRoot( const KUrl& dir )
 {
     d->topLevelParseDir = dir;
 }
 
 QString MakefileInterface::projectRoot() const
 {
-    return d->topLevelParseDir.absolutePath();
+    return d->topLevelParseDir.path();
 }
 
 QStringList MakefileInterface::topSubDirs() const
@@ -194,14 +194,14 @@ QStringList MakefileInterface::topSubDirs() const
     return subdirsFor( d->topLevelParseDir );
 }
 
-AutoTools::ProjectAST* MakefileInterface::astForFolder( const QDir& folder ) const
+AutoTools::ProjectAST* MakefileInterface::astForFolder( const KUrl& folder ) const
 {
     ProjectAST* ast = 0;
     QFileInfo parsingFile;
     QStringList::const_iterator it, itEnd = d->filesToParse.constEnd();
     for ( it = d->filesToParse.constBegin(); it != itEnd; ++it )
     {
-        parsingFile.setFile( folder, (*it) );
+        parsingFile.setFile( folder.path(), (*it) );
         if ( parsingFile.exists() )
             ast = d->projects[parsingFile];
 
@@ -248,22 +248,22 @@ QString MakefileInterface::resolveVariable( const QString& variable, AutoTools::
     return variable;
 }
 
-QStringList MakefileInterface::subdirsFor( const QDir& folder ) const
+QStringList MakefileInterface::subdirsFor( const KUrl& folder ) const
 {
     AutoTools::ProjectAST* ast = astForFolder( folder );
     if ( !ast )
     {
         kWarning(9020) << k_funcinfo << "Couldn't find AST for "
-                << folder.absolutePath() << endl;
+                << folder.path() << endl;
         return QStringList();
     }
 
     return subdirsFor( ast );
 }
 
-QList<TargetInfo> MakefileInterface::targetsForFolder( const QDir& folder ) const
+QList<TargetInfo> MakefileInterface::targetsForFolder( const KUrl& folder ) const
 {
-    kDebug(9020) << k_funcinfo << folder.absolutePath() << endl;
+    kDebug(9020) << k_funcinfo << folder.path() << endl;
 
     QList<TargetInfo> targetList;
     AutoTools::ProjectAST* ast = astForFolder( folder );
@@ -271,7 +271,7 @@ QList<TargetInfo> MakefileInterface::targetsForFolder( const QDir& folder ) cons
     if ( !ast )
     {
         kWarning(9020) << k_funcinfo << "Unable to get AST for "
-                << folder.absolutePath() << endl;
+                << folder.path() << endl;
         return targetList;
     }
 
@@ -300,7 +300,7 @@ QList<TargetInfo> MakefileInterface::targetsForFolder( const QDir& folder ) cons
                     info.type = AutoTools::convertToType( primary );
                     info.location = AutoTools::convertToLocation( location );
                     info.name = target;
-                    info.folder = folder;
+                    info.url = folder;
 
                     targetList.append( info );
                 }
@@ -363,7 +363,7 @@ QList<QFileInfo> MakefileInterface::filesForTarget( const TargetInfo& target ) c
 {
     QList<QFileInfo> fileInfoList;
     QString targetId;
-    AutoTools::ProjectAST* ast = astForFolder( target.folder );
+    AutoTools::ProjectAST* ast = astForFolder( target.url );
     if ( !ast )
         return QList<QFileInfo>();
 
@@ -415,7 +415,7 @@ QList<QFileInfo> MakefileInterface::filesForTarget( const TargetInfo& target ) c
         if ( value == QLatin1String( "\\" ) )
             continue;
 
-        QFileInfo fi( target.folder, value );
+        QFileInfo fi( target.url.path(), value );
         fileInfoList.append( fi );
     }
 

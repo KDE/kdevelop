@@ -23,17 +23,17 @@
 #include <kdevprojectmodel.h>
 #include "kdevexport.h"
 
-class KDevProjectImporter;
+class KDevFileManager;
 
 class KDEVPROJECTMANAGER_EXPORT ImportProjectJob: public KIO::Job
 {
     Q_OBJECT
 protected:
-    ImportProjectJob(KDevProjectFolderItem *folder, KDevProjectImporter *importer);
+    ImportProjectJob(KDevProjectFolderItem *folder, KDevFileManager *importer);
     virtual ~ImportProjectJob();
 
 public:
-    static ImportProjectJob *importProjectJob(KDevProjectFolderItem *folder, KDevProjectImporter *importer);
+    static ImportProjectJob *importProjectJob(KDevProjectFolderItem *folder, KDevFileManager *importer);
     void start();
 
 protected:
@@ -43,7 +43,7 @@ protected:
 
 private:
     KDevProjectFolderItem *m_folder;
-    KDevProjectImporter *m_importer;
+    KDevFileManager *m_importer;
     QList<KDevProjectFolderItem*> m_workingList;
 };
 

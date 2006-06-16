@@ -31,6 +31,7 @@
 #include <qstringlist.h>
 #include <QMap>
 
+#include <kurl.h>
 /**
 @file kdevproject.h
 KDevelop project interface.
@@ -38,55 +39,40 @@ KDevelop project interface.
 
 class QTimer;
 
-/** Types of substitution maps */
-enum SubstitutionMapTypes
-{
-    NormalFile,        //!< For a normal file
-    XMLFile            //!< For a xml file
-};
+class KDevFileManager;
+class KDevProjectFileItem;
+class KDevProjectFolderItem;
 
 /**
-KDevelop project interface.
-Plugins implementing the KDevProject interfaces are used to manage projects.
-
-Project can be considered as a way of grouping files (in text editors) or
-as a way of providing support for a build system (like it is done in KDevelop IDE buildtools).
-*/
+ * \short Object which represents a KDevelop project
+ *
+ * KDevProject is a container for everything which relates to the files
+ * within a development project.  It maintains a list of files contained
+ * in it.
+ *
+ * Unless otherwise specified, all returned URLs are absolute urls.  Provided
+ * URLs may be relative to the project directory or absolute.
+ */
 class KDEVINTERFACES_EXPORT KDevProject: public KDevPlugin
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kdevelop.Project")
 public:
-    /**Constructs a project plugin.
-    @param info Important information about the plugin - plugin internal and generic
-    (GUI) name, description, a list of authors, etc. That information is used to show
-    plugin information in various places like "about application" dialog, plugin selector
-    dialog, etc. Plugin does not take ownership on info object, also its lifetime should
-    be equal to the lifetime of the plugin.
-    @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
-    interface. Otherwise the plugin will not be constructed.*/
-    KDevProject(const KDevPluginInfo *info, QObject *parent=0);
-    /**Destructor.*/
+    /**
+     * Constructs a project.
+     *
+     * @param info information about the plugin - plugin internal and generic
+     * (GUI) name, description, a list of authors, etc. That information is used to show
+     * plugin information in various places like "about application" dialog, plugin selector
+     * dialog, etc. Plugin does not take ownership on info object, also its lifetime should
+     * be equal to the lifetime of the plugin.
+     * @param parent The parent object for the plugin.
+     */
+    KDevProject(const KDevPluginInfo *info, QObject *parent = 0);
+
+    /// Destructor.
     virtual ~KDevProject();
 
-    /**Options of the project plugin.*/
-    enum Options { 
-        UsesOtherBuildSystem = 0        /**<Project uses unknown or unspecified build system or build system is not used at all.*/,
-        UsesAutotoolsBuildSystem = 1    /**<Project uses autotools for building.*/,
-        UsesQMakeBuildSystem =2         /**<Project uses qmake for building.*/
-    };
-
-    /**@return The environment variables that sould be set before running mainProgram().*/
-    virtual DomUtil::PairList runEnvironmentVars() const = 0;
-
-    /**The command line arguments that the mainProgram() should be run with.*/
-    virtual QString runArguments() const = 0;
-
-    /** Reread template substitution map from dom */
-    virtual void readSubstitutionMap();
-
-    /**@return The template substitution map. */
-    virtual const QHash<QString, QString>& substMap( SubstitutionMapTypes type = NormalFile );
 
 public Q_SLOTS:
     /**This method is invoked when the project is opened
@@ -96,113 +82,65 @@ public Q_SLOTS:
     the projectDirectory() method.
     @param projectName The project name, which is equivalent
     to the project file name without the suffix.*/
-    virtual Q_SCRIPTABLE void openProject(const QString &dirName, const QString &projectName);
-    
+    virtual Q_SCRIPTABLE void openProject(const QString &dirName, const QString &projectName) {}
+
     /**This method is invoked when the project is about to be closed.*/
     virtual Q_SCRIPTABLE void closeProject() = 0;
 
-    /**Reimplement this method to set project plugin options. Default implementation
-    returns KDevProject::UsesOtherBuildSystem.*/
-    virtual Q_SCRIPTABLE Options options() const;
-
-    /**@return The canonical absolute directory of the project. Canonical means that 
+    /**@return The canonical absolute directory of the project. Canonical means that
     a path does not contain symbolic links or redundant "." or ".." elements.*/
-    virtual Q_SCRIPTABLE QString projectDirectory() const = 0;
-    
+    virtual Q_SCRIPTABLE KUrl projectDirectory() const = 0;
+
     /**Returns the name of the project.*/
     virtual Q_SCRIPTABLE QString projectName() const = 0;
-    
-    /**@return The path to main binary program of the project.
-    @param relative if true then the path returned is relative to the project directory.*/
-    virtual Q_SCRIPTABLE QString mainProgram(bool relative = false) const = 0;
-    
-    /**Absolute path (directory) from where the mainProgram() should be run.*/
-    virtual Q_SCRIPTABLE QString runDirectory() const = 0;
-    
-    /**Returns the path (relative to the project directory)
-    of the active directory. All newly automatically generated 
-    classes and files are usually added here.*/
-    virtual Q_SCRIPTABLE QString activeDirectory() const = 0;
-    
-    /**@return The canonical build directory of the project.
-    If the separate build directory is not supported, this should 
-    return the same as projectDiretory(). Canonical means that 
-    a path does not contain symbolic links or redundant "." or ".." elements.*/
-    virtual Q_SCRIPTABLE QString buildDirectory() const = 0;
-    
-    /**@return The list of all files in the project. The names are relative to 
-    the project directory.*/
-    virtual Q_SCRIPTABLE QStringList allFiles() const = 0;
-    
-    /**@return The list of files that are part of the distribution but not under 
-    project control. Used mainly to package and publish extra files among with the project.*/
-    virtual Q_SCRIPTABLE QStringList distFiles() const = 0;
-    
-    /**Adds a list of files to the project. Provided for convenience when adding many files.
-    @param fileList The list of file names relative to the project directory.*/
-    virtual Q_SCRIPTABLE void addFiles(const QStringList &fileList) = 0;
-    
-    /**Adds a file to the project.
-    @param fileName The file name relative to the project directory.*/
-    virtual Q_SCRIPTABLE void addFile(const QString &fileName)= 0;
-    
-    /**Removes a list of files from the project. Provided for convenience when removing many files.
-    @param fileList The list of file names relative to the project directory.*/
-    virtual Q_SCRIPTABLE void removeFiles(const QStringList& fileList)= 0;
-    
-    /**Removes a file from the project.
-    @param fileName The file name relative to the project directory.*/
-    virtual Q_SCRIPTABLE void removeFile(const QString &fileName) = 0;
-    
-    /**Notifies the project about changes to the files. Provided for
-    convenience when changing many files.
-    @param fileList The list of file names relative to the project directory..*/
-    virtual Q_SCRIPTABLE void changedFiles(const QStringList &fileList);
-    
-    /**Notifies the project of a change to one of the files.
-    @param fileName The file name relative to the project directory.*/
-    virtual Q_SCRIPTABLE void changedFile(const QString &fileName);
-    
-    /**@return true if the file @p absFileName is a part of the project.
-    @param absFileName Absolute name of a file to check.*/
-    virtual Q_SCRIPTABLE bool isProjectFile(const QString &absFileName);
-    
-    /**@return The path (relative to the project directory) of the file @p absFileName.
-    @param absFileName Absolute name of a file.*/
-    virtual Q_SCRIPTABLE QString relativeProjectFile(const QString &absFileName);
 
-    /**@return The list of files known to the project through symlinks.*/
-    virtual Q_SCRIPTABLE QStringList symlinkProjectFiles();
-    
+    /**
+     * Get the file manager for the project
+     *
+     * @return the file manager for the project, if one exists; otherwise null
+     */
+    KDevFileManager* fileManager() const;
 
-private slots:
-    void buildFileMap();
-    void slotBuildFileMap();
-    void slotAddFilesToFileMap(const QStringList & fileList );
-    void slotRemoveFilesFromFileMap(const QStringList & fileList );
+    /**
+     * Set the file manager for the project.
+     */
+    void setFileManager( KDevFileManager* fileManager );
 
-signals:
-    /**Emitted when a new list of files has been added to the
-    project. Provided for convenience when many files were added. 
-    @param fileList The file names relative to the project directory.*/
-    void addedFilesToProject(const QStringList& fileList);
-    
-    /**Emitted when a list of files has been removed from the project.
-    Provided for convenience when many files were removed. 
-    @param fileList The file names relative to the project directory.*/
-    void removedFilesFromProject(const QStringList& fileList);
-    
-    /**Emitted when a list of files has changed in the project.
-    @param fileList The file names relative to the project directory.*/
-    void changedFilesInProject(const QStringList& fileList);
+    /**
+     * Find the url relative to the project directory equivalent to @a absoluteUrl.
+     * This function does not check to see if the file is contained within the
+     * project; for that, use inProject().
+     *
+     * @param absoluteUrl Absolute url to convert
+     *
+     * @returns absoluteUrl relative to projectDirectory()
+     **/
+    KUrl relativeUrl(const KUrl& absoluteUrl) const;
 
-    /**Emitted when one compile related command (make, make install, make ...) ends sucessfuly.
-    Used to reparse the files after a sucessful compilation.*/
-    void projectCompiled();
-    
+    /**
+     * Returns the absolute url corresponding to the given \a relativeUrl and
+     * the project directory.
+     *
+     * @param relativeUrl Relative url to convert
+     *
+     * @returns the absolute URL relative to projectDirectory()
+     **/
+    KUrl absoluteUrl(const KUrl& relativeUrl) const;
+
+    /**
+     * Check if the url specified by @a url is part of the project.
+     * @a url can be either a relative url (to the project directory) or
+     * an absolute url.
+     *
+     * @param url the url to check
+     *
+     * @return true if the url @a url is a part of the project.
+     */
+    bool inProject(const KUrl &url) const;
+
 private:
-    class Private;
-    Private *d;
+    class KDevProjectPrivate* const d;
 };
 
 #endif
+//kate: indent-mode cstyle; auto-insert-doxygen on; indent-width 4; space-indent on;

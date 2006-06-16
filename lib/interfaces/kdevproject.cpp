@@ -22,156 +22,66 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <QFileInfo>
+#include <QSet>
+#include <QTimer>
+
 #include <kdebug.h>
 
 #include "kdevproject.h"
-#include <qfileinfo.h>
-#include <QTimer>
 #include <dbus/qdbus.h>
+#include "kdevfilemanager.h"
 #include "filetemplate.h"
 
-struct KDevProject::Private {
-    QMap<QString, QString> m_absToRel;
-    QStringList m_symlinkList;
-    QTimer *m_timer;
-    QHash<QString, QString> m_templExpandMap;
-    QHash<QString, QString> m_templExpandMapXML;
+class KDevProjectPrivate
+{
+public:
+    KDevFileManager* manager;
 };
 
 KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent)
-    : KDevPlugin(info, parent), d(new KDevProject::Private())
+    : KDevPlugin(info, parent)
+    , d(new KDevProjectPrivate())
 {
     QDBus::sessionBus().registerObject("/org/kdevelop/Project",
                                        this, QDBusConnection::ExportSlots);
 
-    connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(buildFileMap()) );
-    connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(buildFileMap()) );
-
-    connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(slotAddFilesToFileMap(const QStringList& )) ); 
-    connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(slotRemoveFilesFromFileMap(const QStringList& )) ); 
-    
-    d->m_timer = new QTimer(this);
-    connect(d->m_timer, SIGNAL(timeout()), this, SLOT(slotBuildFileMap()));
+    d->manager = 0;
 }
 
 KDevProject::~KDevProject()
 {
+    delete d;
 }
 
-void KDevProject::changedFile( const QString & fileName )
+bool KDevProject::inProject( const KUrl& url ) const
 {
-    QStringList fileList;
-    fileList.append ( fileName );
+    KUrl absolute = absoluteUrl(url);
 
-    emit changedFilesInProject( fileList );
-
+    /// FIXME implement!
 }
 
-void KDevProject::changedFiles( const QStringList & fileList )
+KUrl KDevProject::relativeUrl( const KUrl& absolute ) const
 {
-    emit changedFilesInProject( fileList );
+    return KUrl::relativeUrl(projectDirectory(), absolute);
 }
 
-KDevProject::Options KDevProject::options() const
+KUrl KDevProject::absoluteUrl( const KUrl & relativeUrl ) const
 {
-    return (KDevProject::Options)0;
+    if (KUrl::isRelativeUrl(relativeUrl.path()))
+        return KUrl(projectDirectory(), relativeUrl.path());
+
+    return relativeUrl;
 }
 
-bool KDevProject::isProjectFile( const QString & absFileName )
+KDevFileManager* KDevProject::fileManager() const
 {
-    return d->m_absToRel.contains( absFileName );
+	return d->manager;
 }
 
-QString KDevProject::relativeProjectFile( const QString & absFileName )
+void KDevProject::setFileManager( KDevFileManager* newManager )
 {
-    if( isProjectFile(absFileName) )
-	return d->m_absToRel[ absFileName ];
-    return QString();
-}
-
-void KDevProject::buildFileMap()
-{
-    d->m_timer->stop();
-    d->m_timer->start(0, true);
-}
-
-void KDevProject::slotBuildFileMap()
-{
-    kDebug(9000) << k_funcinfo << endl;
-
-    d->m_absToRel.clear();
-    d->m_symlinkList.clear();
-    const QStringList fileList = allFiles();
-    for( QStringList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it )
-    {
-	QFileInfo fileInfo( projectDirectory() + "/" + *it );
-	d->m_absToRel[ fileInfo.canonicalFilePath() ] = *it;
-	
-        if ( fileInfo.canonicalFilePath() != fileInfo.absoluteFilePath() )
-        {
-            d->m_symlinkList << *it;
-        }
-    }
-}
-
-void KDevProject::openProject( const QString & /*dirName*/, const QString & /*projectName*/ )
-{
-    buildFileMap();
-    readSubstitutionMap();
-}
-
-QStringList KDevProject::symlinkProjectFiles( )
-{
-    return d->m_symlinkList;
-}
-
-void KDevProject::slotAddFilesToFileMap( const QStringList & fileList )
-{
-	QStringList::ConstIterator it = fileList.begin();
-	while( it != fileList.end() )
-	{
-		QFileInfo fileInfo( projectDirectory() + "/" + *it );
-		d->m_absToRel[ fileInfo.canonicalFilePath() ] = *it;
-		
-    	if ( fileInfo.canonicalFilePath() != fileInfo.absoluteFilePath() )
-		{
-			d->m_symlinkList << *it;
-		}
-
-		++it;
-	}
-}
-
-void KDevProject::slotRemoveFilesFromFileMap( const QStringList & fileList )
-{
-	QStringList::ConstIterator it = fileList.begin();
-	while( it != fileList.end() )
-	{
-		QFileInfo fileInfo( projectDirectory() + "/" + *it );
-    	d->m_absToRel.remove( fileInfo.canonicalFilePath() );
-		
-		d->m_symlinkList.remove( *it );
-
-		++it;
-	}
-}
-
-void KDevProject::readSubstitutionMap()
-{
-    d->m_templExpandMap = DomUtil::readHashEntry(*projectDom(), "substmap");
-    d->m_templExpandMapXML = FileTemplate::normalSubstMapToXML(d->m_templExpandMap);
-}
-
-const QHash<QString, QString>& KDevProject::substMap( SubstitutionMapTypes type )
-{
-    switch( type )
-    {
-    default:
-    case NormalFile:
-        return d->m_templExpandMap;
-    case XMLFile:
-        return d->m_templExpandMapXML;
-    }
+	d->manager = newManager;
 }
 
 #include "kdevproject.moc"

@@ -4,6 +4,7 @@
 
 #include <QMap>
 #include <QFile>
+
 #include <qdebug.h>
 #include <QLabel>
 #include <QLayout>
@@ -51,7 +52,6 @@
 #include <ktexteditor/document.h>
 #include <kglobal.h>
 
-#include "api.h"
 #include "core.h"
 #include "toplevel.h"
 #include "editorproxy.h"
@@ -494,16 +494,16 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
         bool done = false;
 
         // Try to find this file in the current project's list instead
-        if ( API::getInstance() ->project() )
+        if ( KDevApi::self() ->project() )
         {
             if ( url.isRelativeUrl( url.url() ) )
             {
-                KUrl dir( API::getInstance() ->project() ->projectDirectory() );
+                KUrl dir( KDevApi::self() ->project() ->projectDirectory() );
                 KUrl relURL = KUrl( dir, url.url() );
 
                 kDebug( 9000 ) << k_funcinfo
                 << "Looking for file in project dir: "
-                << API::getInstance() ->project() ->projectDirectory()
+                << KDevApi::self() ->project() ->projectDirectory()
                 << " url " << url.url()
                 << " transformed to " << relURL.url()
                 << ": " << done << endl;
@@ -512,23 +512,6 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
                 {
                     url = relURL;
                     done = true;
-                }
-                else
-                {
-                    KUrl b( API::getInstance() ->project() ->buildDirectory() );
-                    KUrl relURL = KUrl( b, url.url() );
-                    kDebug( 9000 ) << k_funcinfo
-                    << "Looking for file in build dir: "
-                    << API::getInstance() ->project() ->buildDirectory()
-                    << " url " << url.url()
-                    << " transformed to " << relURL.url()
-                    << ": " << done << endl;
-                    if ( relURL.isValid()
-                            && KIO::NetAccess::exists( url, false, 0 ) )
-                    {
-                        url = relURL;
-                        done = true;
-                    }
                 }
             }
 
@@ -540,7 +523,7 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
                         || !KIO::NetAccess::exists( url, false, 0 ) )
                     // See if this url is relative to the
                     // current project's directory
-                    url = API::getInstance() ->project() ->projectDirectory()
+                    url = KDevApi::self() ->project() ->projectDirectory()
                           + "/" + url.path();
 
                 else
@@ -674,10 +657,6 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
         KParts::ReadOnlyPart * part = readOnly( factory->createPart( TopLevel::getInstance() ->main(), 0L, className.toLatin1() ) );
         if ( part )
         {
-            KDevReadWritePart* kdevPart = qobject_cast<KDevReadWritePart*>( part );
-            if ( kdevPart )
-                kdevPart->setApiInstance( API::getInstance() );
-
             part->openURL( url );
             addHistoryEntry();
 
@@ -1184,7 +1163,10 @@ void DocumentController::doEmitState( KDevDocument* document )
 
 KUrl DocumentController::findUrlInProject( const KUrl& url ) const
 {
-    QStringList fileList = API::getInstance() ->project() ->allFiles();
+#warning "port me!"
+
+#if 0
+    QStringList fileList = KDevApi::self() ->project() ->allFiles();
 
     bool filenameOnly = ( url.url().find( '/' ) == -1 );
     QString filename = filenameOnly ? "/" : "";
@@ -1196,12 +1178,14 @@ KUrl DocumentController::findUrlInProject( const KUrl& url ) const
         if ( ( *it ).endsWith( filename ) )
         {
             // Match! The first one is as good as any one, I guess...
-            return KUrl( API::getInstance() ->project() ->projectDirectory()
+            return KUrl( KDevApi::self() ->project() ->projectDirectory()
                          + "/" + *it );
         }
     }
 
     return url;
+#endif
+    return KUrl();
 }
 
 KParts::Part* DocumentController::findOpenDocument( const KUrl& url ) const
@@ -1214,7 +1198,7 @@ KParts::Part* DocumentController::findOpenDocument( const KUrl& url ) const
     }
 
     // ok, let's see if we can try harder
-    if ( API::getInstance() ->project() )
+    if ( KDevApi::self() ->project() )
     {
         KUrl partURL = findUrlInProject( url );
         partURL.cleanPath();
@@ -1237,7 +1221,7 @@ KParts::Factory *DocumentController::findPartFactory( const QString &mimeType,
         // if there is a preferred plugin we'll take it
         if ( !preferredName.isEmpty() )
         {
-            KService::List::Iterator it;
+            KService::List::ConstIterator it;
             for ( it = offers.begin(); it != offers.end(); ++it )
             {
                 if ( ( *it ) ->desktopEntryName() == preferredName )

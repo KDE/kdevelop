@@ -21,7 +21,9 @@
 #define KDEVAPI_H
 
 #include <QObject>
+#include <QtGlobal>
 #include "kdevexport.h"
+
 class QStringList;
 class QDomDocument;
 class KDevCore;
@@ -42,54 +44,98 @@ The interface to KDevelop's core components.
 Needs to be implemented in a shell. Developers do not need to use this
 class because @ref KDevPlugin already provides API convenience methods.
 */
-class KDEVINTERFACES_EXPORT KDevApi: public QObject
+class KDEVINTERFACES_EXPORT KDevApi
 {
-    Q_OBJECT
 public:
-    /**Constructor.*/
-    KDevApi();
+    /**
+     * Get an instance of KDevApi
+     *
+     * Gets the preexisting instance of KDevApi. If KDevApi doesn't exist, it
+     * will be created. If @p parent is supplied and the object will need to be
+     * created, then @p parent will be used as the object's parent. Otherwise,
+     * @p parent will be ignored.
+     * @param parent the parent of this object
+     */
+    static KDevApi* self();
 
-    /**Destructor.*/
     virtual ~KDevApi();
 
-    /**@return A reference to the toplevel widget.*/
-    virtual KDevMainWindow *mainWindow() const = 0;
+    /** Set the main window to be used by the API */
+    void setMainWindow( KDevMainWindow* );
 
-    /**@return A reference to the document controller which is used to manipulate loaded KParts.*/
-    virtual KDevDocumentController *documentController() const = 0;
+    /** @return A reference to the toplevel widget. */
+    KDevMainWindow *mainWindow() const;
 
-    /**@return A reference to the plugin controller which is used to manipulate loaded plugin.*/
-    virtual KDevPluginController *pluginController() const = 0;
+    /** Set the document controller to be used by the API */
+    void setDocumentController( KDevDocumentController* );
 
-    /**@return A reference to the application core - an object which provides
-    basic functionalities for inter-parts communications / cooperation.*/
-    virtual KDevCore *core() const = 0;
+    /**
+     * @return A reference to the document controller which is used to
+     * manipulate loaded KParts.
+     */
+    KDevDocumentController *documentController() const;
 
-    /**@return A reference to the DOM tree that represents the project file or 0 if no project is loaded.*/
+    /** Set the document controller to be used by the API */
+    void setPluginController( KDevPluginController* );
+
+    /**
+     * @return A reference to the plugin controller which is used to
+     * manipulate loaded plugin.
+     */
+    KDevPluginController *pluginController() const;
+
+    /** Set the application core for the API to use */
+    void setCore( KDevCore* );
+
+    /**
+     * @return A reference to the application core - an object which provides
+     * basic functionalities for inter-parts communications / cooperation.
+     */
+    KDevCore *core() const;
+
+    /**
+     * @return A reference to the DOM tree that represents the project
+     * file or 0 if no project is loaded.
+     */
     QDomDocument *projectDom() const;
 
-    /**Sets the Document Object Model for the current project.
-    @param dom The project DOM.*/
+    /**
+     * Sets the Document Object Model for the current project.
+     * @param dom The project DOM.
+     */
     void setProjectDom(QDomDocument *dom);
 
-    /**@return A reference to the current project component or 0 if no project is loaded.*/
+    /** @return the current project component or 0 if no project is loaded. */
     KDevProject *project() const;
 
-    /**Sets the current project.
-    @param project The project plugin which becames the current project.*/
+    /**
+     * Sets the current project.
+     * @param project The project plugin which becames the current project.
+     */
     void setProject(KDevProject *project);
 
-    /**@return A reference to the language support component or 0 if no support available.*/
+    /**
+     * Get the language support currently in use.
+     * @return the language support component or 0 if no support available.
+     */
     KDevLanguageSupport *languageSupport() const;
 
-    /**Sets the object charged of providing handling for the source files written in particular
-    language (languages support component).
-    @param languageSupport The language support plugin.*/
+    /**
+     * Sets the object charged of handling the source files written in a
+     * particular language (languages support component).
+     * @param languageSupport The language support plugin.
+     */
     void setLanguageSupport(KDevLanguageSupport *languageSupport);
 
+protected:
+    KDevApi(); /* private constructor. we're a singleton */
+    Q_DISABLE_COPY(KDevApi) //disable copying
+
 private:
-    class Private;
-    Private *d;
+    static KDevApi* s_self;
+
+    class KDevApiPrivate* const d;
 };
 
 #endif
+//kate: indent-mode cstyle; indent-width 4; replace-tabs on; auto-insert-doxygen on;

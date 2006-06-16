@@ -25,26 +25,30 @@
 #include <QRegExp>
 #include <qtextstream.h>
 
+#include <kmainwindow.h>
 #include <kstandarddirs.h>
+#include <kio/netaccess.h>
 
 #include "kdevplugin.h"
 #include "kdevproject.h"
 #include "domutil.h"
+#include "kdevmainwindow.h"
 
 
-bool FileTemplate::exists(KDevPlugin *part, const QString &name, Policy p)
+bool FileTemplate::exists(const QString &name, Policy p)
 {
-    return QFile::exists( fullPathForName(part,name,p) );
+    return KIO::NetAccess::exists( fullPathForName(name,p), true, KDevApi::self()->mainWindow()->main() );
 }
 
-QString FileTemplate::read(KDevPlugin *part, const QString &name, Policy p)
+QString FileTemplate::read(const QString &name, Policy p)
 {
-    return readFile(part, fullPathForName(part, name, p) );
+    return readFile(fullPathForName(name, p) );
 }
 
-QString FileTemplate::readFile(KDevPlugin *part, const QString &fileName)
+QString FileTemplate::readFile(const QString &fileName)
 {
-    QDomDocument &dom = *part->projectDom();
+    QDomDocument* dom = KDevApi::self()->projectDom();
+    Q_ASSERT(dom);
 
     QFile f(fileName);
     if (!f.open(QIODevice::ReadOnly))
@@ -52,7 +56,7 @@ QString FileTemplate::readFile(KDevPlugin *part, const QString &fileName)
     QTextStream stream(&f);
     QString str = stream.readAll();
 
-    return makeSubstitutions( dom, str );
+    return makeSubstitutions( *dom, str );
 }
 
 QString FileTemplate::makeSubstitutions( QDomDocument & dom, const QString & text )
@@ -74,10 +78,10 @@ QString FileTemplate::makeSubstitutions( QDomDocument & dom, const QString & tex
 }
 
 
-bool FileTemplate::copy(KDevPlugin *part, const QString &name,
+bool FileTemplate::copy(const QString &name,
                         const QString &dest, Policy p)
 {
-    QString text = read(part, name, p);
+    QString text = read(name, p);
 
     QFile f(dest);
     if (!f.open(QIODevice::WriteOnly))
@@ -96,22 +100,23 @@ bool FileTemplate::copy(KDevPlugin *part, const QString &name,
     return true;
 }
 
-QString FileTemplate::fullPathForName(KDevPlugin *part, const QString &name,
-                                      Policy p) {
+KUrl FileTemplate::fullPathForName(const QString &name, Policy p)
+{
     // if Policy is not default, full path is just the name
     if (p!=Default) return name;
 
-    QString fileName;
+    KUrl url;
     // first try project-specific
-    if (part->project())
+    if (KDevApi::self()->project())
     {
-        fileName = (part->project()->projectDirectory() + "/templates/" + name);
-        if (QFile::exists(fileName)) return fileName;
+        url = (KDevApi::self()->project()->projectDirectory() + "/templates/" + name);
+        if (KIO::NetAccess::exists(url, true, KDevApi::self()->mainWindow()->main()))
+            return url;
     }
 
     // next try global
-    QString globalName = ::locate("data", "kdevfilecreate/file-templates/" + name);
-    return globalName.isNull() ? fileName : globalName;
+    KUrl globalName = ::locate("data", "kdevfilecreate/file-templates/" + name);
+    return globalName.isEmpty() ? url : globalName;
 }
 
 
@@ -128,4 +133,22 @@ QHash<QString,QString> FileTemplate::normalSubstMapToXML( const QHash<QString,QS
         result.insert( it.key(), escaped );
     }
     return result;
+}
+
+void FileTemplate::readSubstitutionMap(const QDomDocument& xml)
+{
+    m_templExpandMap = DomUtil::readHashEntry(xml, "substmap");
+    m_templExpandMapXML = normalSubstMapToXML(m_templExpandMap);
+}
+
+const QHash<QString, QString>& FileTemplate::substMap( SubstitutionMapTypes type )
+{
+    switch( type )
+    {
+    default:
+    case NormalFile:
+        return m_templExpandMap;
+    case XMLFile:
+        return m_templExpandMapXML;
+    }
 }
