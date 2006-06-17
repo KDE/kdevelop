@@ -18,6 +18,7 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kmimetype.h>
+#include <kmimetypetrader.h>
 #include <klineedit.h>
 #include <kshortcut.h>
 #include <kdirwatch.h>
@@ -574,9 +575,15 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
     {
         m_openNextAsText = true;
     }
+    
+    bool isText = false;
+    QVariant v = mimeType->property("X-KDE-text");
+    kDebug(9000) << mimeType->property("X-KDE-text") << endl;
+    if (v.isValid())
+       isText = v.toBool();
 
     // is this regular text - open in editor
-    if ( m_openNextAsText
+    if ( m_openNextAsText || isText
             || mimeType->is( "text/plain" )
             || mimeType->is( "text/html" )
             || mimeType->is( "application/x-zerosize" ) )
@@ -1212,8 +1219,7 @@ KParts::Factory *DocumentController::findPartFactory( const QString &mimeType,
         const QString &partType,
         const QString &preferredName )
 {
-    KService::List offers = KServiceTypeTrader::self() ->query( mimeType,
-                                QString( "'%1' in ServiceTypes" ).arg( partType ) );
+    KService::List offers = KMimeTypeTrader::self()->query( mimeType, "KParts/ReadWritePart", QString( "'%1' in ServiceTypes" ).arg( partType ));
 
     if ( offers.count() > 0 )
     {
@@ -1244,6 +1250,7 @@ KParts::Factory *DocumentController::findPartFactory( const QString &mimeType,
 
 KTextEditor::Document *DocumentController::createEditorPart( bool activate )
 {
+    kDebug(9000) << k_funcinfo << endl;
     if ( !m_editorFactory )
     {
         KGlobal::config() ->setGroup( "Editor" );
