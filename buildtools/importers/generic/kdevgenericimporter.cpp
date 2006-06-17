@@ -50,7 +50,7 @@ KDevGenericImporter::~KDevGenericImporter()
 
 KDevProject *KDevGenericImporter::project() const
 {
-    return m_project;
+    return KDevApi::self()->project();
 }
 
 bool KDevGenericImporter::isValid(const QFileInfo &fileInfo) const

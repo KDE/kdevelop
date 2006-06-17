@@ -59,8 +59,6 @@ KDevPlugin::KDevPlugin(const KDevPluginInfo *info, QObject *parent)
     :QObject(parent)
     , d(new KDevPluginPrivate)
 {
-    assert(parent->inherits( "KDevApi" ));
-
     d->info = info;
     KGlobal::iconLoader()->addAppDir("kdevelop");
 }
