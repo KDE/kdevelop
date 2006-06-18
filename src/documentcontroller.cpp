@@ -935,7 +935,6 @@ void DocumentController::slotForwardPopupActivated( int id )
 
 void DocumentController::slotSwitchTo()
 {
-/*    FIXME port!
     QMap<QString, KParts::ReadOnlyPart*> parts_map;
     QStringList part_list;
     foreach (KParts::Part* part, parts())
@@ -952,24 +951,25 @@ void DocumentController::slotSwitchTo()
         }
     }
 
-    KDialogBase dialog( KDialogBase::Plain, i18n( "Switch To" ),
-                        KDialogBase::Ok | KDialogBase::Cancel,
-                        KDialogBase::Ok, 0, "Switch to", true );
-    QGridLayout *grid = new QGridLayout( dialog.plainPage(), 2, 1, 10, 10 );
-    KLineEdit *editbox = new KLineEdit( dialog.plainPage() );
+    KDialog dialog;
+    dialog.setCaption( i18n( "Switch To" ) );
+    dialog.setButtons( KDialog::Ok | KDialog::Cancel );
+    dialog.setDefaultButton( KDialog::Ok );
+    QGridLayout *grid = new QGridLayout( &dialog, 2, 1, 10, 10 );
+    KLineEdit *editbox = new KLineEdit( &dialog );
     grid->addWidget( new QLabel( i18n( "Switch to buffer:" ),
-                                 dialog.plainPage() ), 0, 0 );
+                                 &dialog ), 0, 0 );
     grid->addWidget( editbox, 1, 0 );
     editbox->completionObject() ->setItems( part_list );
     editbox->setFocus();
     int result = dialog.exec();
-    if ( result == KDialogBase::KDialogBase::Accepted )
+    if ( result == QDialog::Accepted )
     {
         if ( parts_map.contains( editbox->text() ) )
         {
             activatePart( parts_map[ editbox->text() ] );
         }
-    }*/
+    }
 }
 
 void DocumentController::slotUploadFinished()
