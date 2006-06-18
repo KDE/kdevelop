@@ -64,7 +64,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringLis
   setInstance(KDevProjectManagerFactory::instance());
 
   { // load the importers
-    KService::List lst = KServiceTypeTrader::self()->query("KDevelop/ProjectImporter");
+    KService::List lst = KServiceTypeTrader::self()->query("KDevelop/FileManager");
 
     for (KService::List::ConstIterator it = lst.begin(); it != lst.end(); ++it)
     {
