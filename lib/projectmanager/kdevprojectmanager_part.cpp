@@ -207,7 +207,7 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
     m_projectModel->removeItem(m_workspace);
 
   m_workspace = defaultImporter()->import(projectModel(), projectDirectory())->folder();
-  if ( m_workspace != 0)
+  if ( m_workspace != 0 )
   {
       m_projectModel->appendItem(m_workspace);
   }
@@ -253,7 +253,14 @@ QStringList KDevProjectManagerPart::allFiles()
 
 KDevFileManager *KDevProjectManagerPart::defaultImporter() const
 {
-  return fileManager();
+  QDomDocument &dom = *KDevApi::self()->projectDom();
+  QString manager = DomUtil::readEntry(dom, "/general/importer");
+
+  if ( m_importers.contains(manager) )
+    return m_importers[manager];
+
+  kWarning(9000) << k_funcinfo << "No default importer!" << endl;
+  return 0;
 }
 
 KDevProjectBuilder *KDevProjectManagerPart::defaultBuilder() const
