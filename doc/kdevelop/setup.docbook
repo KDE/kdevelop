@@ -48,7 +48,7 @@ If you want directly look up a certain configuration item use one of the followi
   <member><link linkend="setup-file-list">File List</link></member>
   <member><link linkend="setup-file-selector">File Selector</link></member>
   <member><link linkend="setup-cpp-generator">C++ Class generator</link></member>
-  <member><link linkend="setup-formatting">Formatting</link></member>
+  <member><link linkend="setup-format">Formatting</link></member>
   <member><link linkend="setup-cpp-parsing">C++ Parsing</link></member>
 </simplelist>
 

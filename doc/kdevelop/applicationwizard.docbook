@@ -8,6 +8,9 @@
 </chapterinfo>
 
 <title>Getting Started &mdash; the &appwizard;</title>
+<!-- FIXME (bp, 2006-06-18) This is a misnomer. It should be something like -->
+<!-- Working With Projects -->
+<!-- featuring the application manager as part of the New Projects section. -->
 
 <indexterm zone="applicationwizard">
   <primary>&appwizard;</primary></indexterm>
@@ -21,6 +24,9 @@ Organizing all development work in projects allows you to easily switch between 
 
 <sect1 id="new-projects">
 <title>New Projects</title>
+
+<!-- TODO (bp, 2006-06-18) This whole section must be completely rewritten. -->
+<!-- There is no need for a tutorial habit anymore. -->
 
 <indexterm zone="new-projects">
   <primary>project</primary>
@@ -803,5 +809,12 @@ Then it is advisable that you <emphasis>compile the initial project</emphasis> b
 </sect2> <!-- new-projects-start-build -->
 
 </sect1> <!-- new-projects -->
+
+<sect1 id="projects-configure">
+<title>Configuring Projects</title>
+
+<para>(... to be written ...)</para>
+
+</sect1>
 
 </chapter> <!-- applicationwizard -->

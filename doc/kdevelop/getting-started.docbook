@@ -1904,7 +1904,7 @@ It closes automatically, once the last tabbed window in it was closed.</para>
 <sect3 id="gettingstarted-edit-arrange-sourceheader">
 <title>Edit C++ Source and Header Files Simultaneously</title>
 
-<para>There is a neat application of the abobve mentioned workspace split
+<para>There is a neat application of the above mentioned workspace split
 feature built into &kdevelop;. It allows to automatically keep a
 <filename>.cpp</filename> source and its accompanying
 <filename>.h</filename> header file side by side open in the workspace area.
@@ -1912,7 +1912,7 @@ And, optionally, it allows to work on both files synchronously, such that if
 you select a declaration in the header file &kdevelop; will navigate to the
 respective definition in the source file and vice versa.</para>
 
-<para>This feature is however deactivated by default. If you want it in
+<para>This feature is however deactivated by default. If you want to use it in
 your project you need to activate it.</para>
 
 <para>Select <menuchoice><guibutton>Project</guibutton>
@@ -1953,7 +1953,7 @@ line:</para>
 Hello::Hello()
 </programlisting>
 <para>and put the cursor there. Then look at the <filename>hello.h</filename>
-below and note how &kdevelop; did navigate to the corresponding default
+window below and note how &kdevelop; did navigate to the corresponding default
 constructor declaration line.</para>
 
 <screenshot>
@@ -1966,8 +1966,8 @@ declaration.</para></caption>
 </mediaobject>
 </screenshot>
 
-<para>This works vice versa as well. Whenever put the cursor somewhere into a
-construct in one editor window, &kdevelop; will navigate to the corresponding
+<para>This works vice versa as well. Whenever you put the cursor somewhere into
+a construct in one editor window, &kdevelop; will navigate to the corresponding
 construct in the other.</para>
 </sect3>
 
@@ -2327,7 +2327,8 @@ configure finished. Start make now</computeroutput></quote> (which was issued by
 configure) followed by the &kdevelop; <quote><computeroutput>*** Success
 ***</computeroutput></quote> message.</para>
 
-<para>On top of the <guilabel>Messages</guilabel> window you will again find
+<para id="gettingstarted-compile-basic-config-cmd">On top of the
+<guilabel>Messages</guilabel> window you will again find
 the command line, &kdevelop; used to initiate this configuration run:</para>
 
 <programlisting>
@@ -2596,7 +2597,7 @@ entry.</para>
 <para>Now let us have a brief look at what these build configurations
 provide.</para>
 
-<variablelist>
+<variablelist id="gettingstarted-compile-setup-build-configs">
 <varlistentry>
 <term><guimenuitem>debug</guimenuitem></term>
 <listitem>
@@ -2630,11 +2631,11 @@ resulting binaries.</para>
 <term><guimenuitem>default</guimenuitem></term>
 <listitem>
 <para>The term <quote>default</quote> denotes the standard setup when you build
-an application from from the console using &eg; the &GNU;
+an application from the console using &eg; the &GNU;
 <application>configure</application> and
 <application>make</application>/<application>gmake</application> command line
 oriented build tools. Other than <guimenuitem>debug</guimenuitem> or
-<guimenuitem>optimize</guimenuitem> no dedicated build directory will be used
+<guimenuitem>optimize</guimenuitem> no dedicated build directory will be used.
 The application will by default be built in the sources directories instead.
 There are no special configuration switches predefined. Building and running the
 application will use the default settings of the underlying tools (e.g. &gcc;,
@@ -2646,9 +2647,10 @@ etc.).</para>
 
 <para>It cannot be used in parallel to the dedicated
 <guimenuitem>debug</guimenuitem> or <guimenuitem>optimized</guimenuitem> ones.
-Any build operation using <guimenuitem>default</guimenuitem> will render both of
-the other build environments unusable. This is caused by some peculiarities of
-the <filename>Makefile</filename> construction process using the
+<emphasis>Any build operation using <guimenuitem>default</guimenuitem> will
+render both of the other build environments unusable.</emphasis> This is caused
+by some peculiarities of the <filename>Makefile</filename> construction process
+using the
 <application>automake</application>/<application>autoconf</application>
 machinery, which cannot be easily overcome.</para>
 </warning>
@@ -2658,7 +2660,7 @@ machinery, which cannot be easily overcome.</para>
 
 <para>Now, why does one one want to use different build configurations at all,
 when they even appear to be not compatible to each other? The answer is &mdash;
-it simplifies the edit-compile-debug cycles. The extra debug instructions
+it simplifies edit-compile-debug cycles. The extra debug instructions
 inserted into the binaries as well as all those subtle structure changes to
 the program code made during optimizations will effect the run time behavior of
 the resulting application. So in many cases, when the logical structure of some
@@ -2673,10 +2675,10 @@ to be handled when you switch between these build configurations.</para>
 <para>Thus instead of cleaning up and recompile everything from scratch with
 alternate options, you need only switch from the
 <guimenuitem>debug</guimenuitem> to the <guimenuitem>optimize</guimenuitem>
-build configuration, have the changes compiled and test the application under
-these circumstances. If anything inappropriate shows up, simply switch back to
-<guimenuitem>debug</guimenuitem> and immediately continue your work
-there.</para>
+build configuration, have the source changes compiled in and then retest the
+application under these circumstances. If anything inappropriate shows up,
+simply switch back to <guimenuitem>debug</guimenuitem> and immediately continue
+your work there.</para>
 
 <para>A final note &mdash; many build configuration settings are configurable.
 You can even define your own build configurations if your development process
@@ -2687,7 +2689,209 @@ section.</para>
 <sect3 id="gettingstarted-compile-setup-config">
 <title>Project Configure Options</title>
 
-<para>(- to be written -)</para>
+<para>Configuring the application properly is vital in the &GNU;
+autotools building chain. This is usually guided by option definitions to the
+<filename>configure</filename> script and/or specific flags settings in the
+environment prior to running <filename>configure</filename> as &eg; the
+<computeroutput>CXXFLAGS</computeroutput> in our previous discussions.</para>
+
+<para>You may set most of the configuring options for a given project from
+within &kdevelop; &GUI;. Select
+<menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Project Options</guimenuitem></menuchoice> and then from the
+icon bar on the left of the dialog the <guiicon>Configure Options</guiicon>
+icon. The <guilabel>Configure Options</guilabel> dialog featuring several tabbed
+windows will display on the right handed side.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-project-configure.png" format="PNG"/>
+</imageobject>
+<caption><para>Most configure options can be defined here.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>As you see, there are quite a lot of options you can set up in this
+dialog. For now we will briefly look at only a few of them with regard to our
+Hello example project. For detailed instructions see the <link
+linkend="projects-configure">Configuring Projects</link> chapter. If you
+want to know more about the meaning of the various flags which can be
+set, look up <command>info make</command> from the console (or
+<command>info:make</command> from within &konqueror;) and there the
+<menuchoice><guimenu>Implicit Rules</guimenu>
+<guimenuitem>Implicit Variables</guimenuitem></menuchoice> section.</para>
+
+<para>There are several tabbed dialog setup windows from which the first
+one, <guilabel>General</guilabel>, refers to commonly used settings,
+while the others are rather compiler specific. In all cases, however, will the
+actual contents of those dialogs be governed by the given build
+configuration.</para>
+
+<para>You select the build configuration whose configuration settings
+have to be defined from the <guilabel>Configuration</guilabel> combo box
+on top of the <guilabel>Configure Options</guilabel> dialog.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-project-buildconfig.png" format="PNG"/>
+</imageobject>
+<caption><para>Select the build configuration whose settings to
+define.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>Now select another build configuration from this combo box and note how
+the contents of &eg; the <guilabel>Configure arguments</guilabel> and
+<guilabel>Build directory</guilabel> text boxes change according to the
+settings we mentioned in the <link
+linkend="gettingstarted-compile-setup-build-configs"> build
+configurations list</link> above.</para>
+
+<sect4 id="gettingstarted-compile-setup-config-general">
+<title>General Configuration Settings</title>
+
+<para>On the <guilabel>General</guilabel> dialog page, these
+configuration options can be defined:</para>
+
+<itemizedlist>
+<listitem>
+<formalpara>
+<title>Configure arguments</title>
+<para>These are the options &kdevelop; assigns to the
+<filename>configure</filename> script call in the build process. See the
+<link linkend="gettingstarted-compile-basic-config-cmd">example</link> in
+the <quote>Initial Hello Configuration</quote> section above.</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>Build directory</title>
+<para>This is the subdirectory in the current project root, where &kdevelop; 
+will put all files created in the build process. Ideally, this should
+correspond to the name of the build configuration in use, but you are
+free to use any name you like, provided it is different from any other
+build configuration directory.</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>Top source directory</title>
+<para>You won&apos;t need this one often. It defaults to the project root
+directory and needs only be redefined if your project sources are located
+in another place.</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>C/C++ preprocessor flags (CPPFLAGS)</title>
+<para>Put specific instructions for the preprocessor here. &kdevelop; will
+use this to set up a temporary environment before it calls the actual
+build tool. Again, see the <link
+linkend="gettingstarted-compile-basic-config-cmd">example</link> in
+the <quote>Initial Hello Configuration</quote> section above how this is
+done.</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>Linker flags (LDFLAGS)</title>
+<para>This is extra information for the <application>ld</application> linker
+tool where it should look for additional libraries. It is used to build the
+temporary build environment as well.</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>Environment Variables</title>
+<para>Here you may define additional variables to be set up in the
+temporal build environment, &kdevelop; will set up before calling the
+respective build tool. Again, you must define these environment variables for
+every build configuration where they are to be used.</para>
+</formalpara>
+</listitem>
+</itemizedlist>
+</sect4>
+
+<sect4 id="gettingstarted-compile-setup-config-spec">
+<title>Compiler Specific Settings</title>
+
+<para>The other tabs on the <guilabel>Configure Options</guilabel> dialog
+page are for compiler specific settings. They are similarly structured,
+so it suffices to have a brief look at the <guilabel>C++</guilabel> page.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-project-cpp.png" format="PNG"/>
+</imageobject>
+<caption><para>Select the compiler and its working environment &kdevelop; shall
+use here.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>This is what you can set up from here:</para>
+
+<itemizedlist>
+<listitem>
+<formalpara>
+<title>C++ compiler</title>
+<para>Select the C++ compiler &kdevelop; should regularly use from this
+combo box. It however lists only those compilers &kdevelop; really knows
+of.</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>Compiler command (CXX)</title>
+<para>Only for experts. This is only needed if the C++ compiler is not standard.
+Put the name by which it is called here.</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>Compiler flags (CXXFLAGS)</title>
+<para>Here you can enter any extra option, &kdevelop; shall pass (via the
+<filename>Makefile</filename>) to the compiler. Some option values will be
+preset according to the build configuration selected in the
+<guilabel>Configuration</guilabel> combo box.</para>
+</formalpara>
+
+<para>Note, that many common compiler options can be selected from a
+dialog which will pop up when you press the <guibutton>...</guibutton> to
+the right of the text box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-project-cppoptions.png" format="PNG"/>
+</imageobject>
+<caption><para>Use this dialog to define the &GNU; C++ compiler
+behavior.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>We deliberately selected the <guilabel>Optimization</guilabel> tab
+here. Note how the <guilabel>No Optimization</guilabel> option has been
+preselected (according to the <computeroutput>-O0</computeroutput>
+option preset in the <computeroutput>debug</computeroutput> build
+configuration).</para>
+
+<para>Unfortunately you cannot currently select all options from this
+dialog. The <computeroutput>-g3</computeroutput> option &eg; used by the
+<computeroutput>debug</computeroutput> build
+configuration would have to be altered manually if ever needed.</para>
+</listitem>
+</itemizedlist>
+</sect4>
 </sect3>
 
 <sect3 id="gettingstarted-compile-setup-make">
