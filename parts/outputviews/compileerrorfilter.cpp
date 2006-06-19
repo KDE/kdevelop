@@ -90,6 +90,8 @@ void CompileErrorFilter::processLine( const QString& line )
 			compiler = format->compiler;
 			if (regExp.cap(3).contains("warning", false))
 				isWarning = true;
+			if (regExp.cap(3).contains("instantiated from", false))
+				hasmatch =false;;
 			break;
 		}
 
