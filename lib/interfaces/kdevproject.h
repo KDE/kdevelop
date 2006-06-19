@@ -82,7 +82,7 @@ public Q_SLOTS:
     the projectDirectory() method.
     @param projectName The project name, which is equivalent
     to the project file name without the suffix.*/
-    virtual Q_SCRIPTABLE void openProject(const QString &dirName, const QString &projectName) {}
+    virtual Q_SCRIPTABLE void openProject(const KUrl &dirName, const QString &projectName) = 0;
 
     /**This method is invoked when the project is about to be closed.*/
     virtual Q_SCRIPTABLE void closeProject() = 0;
