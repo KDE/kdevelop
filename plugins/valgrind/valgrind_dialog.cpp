@@ -31,7 +31,7 @@ w->executableEdit->setFocus();
   connect( w->valExecutableEdit->lineEdit(), SIGNAL( textChanged( const QString &)), this, SLOT( valgrindTextChanged()));
   connect( w->ctExecutableEdit->lineEdit(),  SIGNAL( textChanged( const QString &)), this, SLOT( valgrindTextChanged()));
   connect( w->kcExecutableEdit->lineEdit(), SIGNAL( textChanged( const QString &)), this, SLOT( valgrindTextChanged()));
-  enableButtonOK( false );
+  enableButtonOk( false );
 }
 
 
@@ -42,9 +42,9 @@ ValgrindDialog::~ValgrindDialog()
 void ValgrindDialog::valgrindTextChanged()
 {
     if (m_type == Memcheck)
-        enableButtonOK( !w->valExecutableEdit->lineEdit()->text().isEmpty() &&  !w->executableEdit->lineEdit()->text().isEmpty() );
+        enableButtonOk( !w->valExecutableEdit->lineEdit()->text().isEmpty() &&  !w->executableEdit->lineEdit()->text().isEmpty() );
     else if (m_type == Calltree)
-        enableButtonOK( !w->executableEdit->lineEdit()->text().isEmpty() &&  !w->ctExecutableEdit->lineEdit()->text().isEmpty() && !w->kcExecutableEdit->lineEdit()->text().isEmpty() );
+        enableButtonOk( !w->executableEdit->lineEdit()->text().isEmpty() &&  !w->ctExecutableEdit->lineEdit()->text().isEmpty() && !w->kcExecutableEdit->lineEdit()->text().isEmpty() );
 }
 
 QString ValgrindDialog::executableName() const
