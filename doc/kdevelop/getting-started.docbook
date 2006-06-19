@@ -2206,9 +2206,12 @@ completed application binaries.</para>
 <para>For now we will concentrate on several facilities which &kdevelop;
 provides for project setup, initializing, building, and running an application.
 In general, this includes:</para>
+
 <simplelist>
 <member><link linkend="gettingstarted-compile-basic">Looking briefly at the
-basic build cycle</link></member>
+basic build cycle.</link></member>
+<member><link linkend="gettingstarted-compile-setup">Looking at some basic
+means to configure a project.</link></member>
 </simplelist>
 
 <sect2 id="gettingstarted-compile-basic">
@@ -2440,10 +2443,10 @@ view window will open at the bottom and list the outcome of this build run. And
 additionally some files will appear on the <filename
 class="directory">Debug</filename> subtree.</para>
 
-<para>There are not many source files in our Hello example project, so the
-<guilabel>Messages</guilabel> window will contain only a few lines. On top of
-them again find the command line &kdevelop; issued to the underlying
-shell.</para>
+<para id="gettingstarted-compile-basic-build-cmd">There are not many source
+files in our Hello example project, so the <guilabel>Messages</guilabel> window
+will contain only a few lines. On top of them again find the command line
+&kdevelop; issued to the underlying shell.</para>
 
 <programlisting>
 cd '/home/devel/projects/hello/debug' &amp;&amp; \
@@ -2859,14 +2862,14 @@ Put the name by which it is called here.</para>
 <listitem>
 <formalpara>
 <title>Compiler flags (CXXFLAGS)</title>
-<para>Here you can enter any extra option, &kdevelop; shall pass (via the
+<para>Here you can enter any extra option &kdevelop; shall pass (via the
 <filename>Makefile</filename>) to the compiler. Some option values will be
 preset according to the build configuration selected in the
 <guilabel>Configuration</guilabel> combo box.</para>
 </formalpara>
 
 <para>Note, that many common compiler options can be selected from a
-dialog which will pop up when you press the <guibutton>...</guibutton> to
+dialog which will pop up when you press the <guibutton>...</guibutton> button to
 the right of the text box.</para>
 
 <screenshot>
@@ -2897,13 +2900,193 @@ configuration would have to be altered manually if ever needed.</para>
 <sect3 id="gettingstarted-compile-setup-make">
 <title>How Make Should Build the Program</title>
 
-<para>(- to be written -)</para>
+<para>You can as well configure the way &kdevelop; will call the
+<application>make</application> tool in the project build. Select
+<menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Project Options</guimenuitem></menuchoice> and then the
+<guiicon>Make Options</guiicon> icon from the left dialog window side. The
+<guilabel>Make Options</guilabel> dialog page will then be displayed to
+the right.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-project-make.png" format="PNG"/>
+</imageobject>
+<caption><para>Define how &kdevelop; will call the
+<application>make</application> tool.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>There is not much to do here for now. The only setting of interest in
+most cases will be the <guilabel>Abort on first error</guilabel> switch.
+You will find it deactivated in most projects. This corresponds to the
+<computeroutput>-k</computeroutput> option in the
+<application>gmake</application> call we found in the <link
+linkend="gettingstarted-compile-basic-build-cmd">initial build</link> of
+our example Hello project.</para>
+
+<para>This makes sense in an &IDE; like &kdevelop; which will protocol any
+error message during the build. After the build process you may easily
+navigate to any error message in the <guilabel>Messages</guilabel> tool
+window. Use <menuchoice><guimenu>View</guimenu>
+<guimenuitem>Next Error</guimenuitem></menuchoice> and
+<menuchoice><guimenu>View</guimenu> <guimenuitem>Previous
+Error</guimenuitem></menuchoice> or respectively the <keycap>F4</keycap> and
+<keycombo><keycap>Shift</keycap> <keycap>F4</keycap></keycombo> keys for this.
+&kdevelop; will automatically activate the editor window of the source file in
+question and put the cursor on the error line.</para>
+
+<para>If on the other hand you rather want the build be stopped on whenever an
+error occurs, check the <guilabel>Abort on first error</guilabel> option
+in this dialog. &kdevelop; will then call <application>gmake</application>
+without the <computeroutput>-k</computeroutput> option.</para>
 </sect3>
 
 <sect3 id="gettingstarted-compile-setup-run">
 <title>How to Run the Executable</title>
 
-<para>(- to be written -)</para>
+<para>Once the build is complete, you can easily run the application from within
+&kdevelop;. Use either <menuchoice><guimenu>Build</guimenu>
+<guimenuitem>Execute Program</guimenuitem></menuchoice>, the
+<keycombo><keycap>Shift</keycap> <keycap>F9</keycap></keycombo> keys, or the
+<guibutton>Execute program</guibutton> button in the <guilabel>Build
+Toolbar</guilabel> of &kdevelop;.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="run-button.png" format="PNG"/>
+</imageobject>
+<caption><para>Run the program from here.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>But where is the executable located which should be run? How does
+one have &kdevelop; append options to the call? Or, how can I have the
+application executed in a terminal by its own to test its console interactive
+behavior?</para>
+
+<para>All this can be solved by configuring some project oriented run options in
+&kdevelop;. Select <menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Project Options</guimenuitem></menuchoice> and then the
+<guiicon>Run Options</guiicon> icon from the icon bar on the left dialog window
+side. The <guilabel>Run Options</guilabel> dialog page will display to the
+right.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-project-run.png" format="PNG"/>
+</imageobject>
+<caption><para>Define where and how your program shall be run.</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>Now, there is quite a lot which can be set up from this dialog.
+Basically there are four groups of configuration items.</para>
+
+<itemizedlist>
+<listitem>
+<formalpara>
+<title>Directory</title>
+<para>This tells &kdevelop; where it basically shall assume the
+executable to be called. There are three possibilities you can select
+from.</para>
+</formalpara>
+
+<para>Note however that only root directories are defined here.
+&kdevelop; usually looks for the executable in some subdirectory
+given in the next configuration group.</para>
+
+<itemizedlist>
+<listitem>
+<para>Run from the directory, where the executable was build the last
+time. This is the default. You can keep this for now.</para>
+</listitem>
+
+<listitem>
+<para>Run from the build directory according to the currently selected
+<link linkend="gettingstarted-compile-setup-build">build configuration</link>.
+The name of this directory was set up on the <link
+linkend="gettingstarted-compile-setup-config-general">General
+Configuration</link> dialog page.</para>
+
+<para>This is the root where &kdevelop; will find the executable. It
+changes automatically with the selection you made in
+<menuchoice><guimenu>Project</guimenu>
+<guisubmenu>Build Configurations</guisubmenu></menuchoice> menu. Try it.</para>
+
+<para>Other than always running the most recently built executable according to
+the setting above, this allows you to switch the program to be executed by
+simply selecting another build configuration from the <guimenu>Project</guimenu>
+menu.</para>
+</listitem>
+
+<listitem>
+<para>Run the executable found in a fixed custom directory. Again
+this is the root only from where the actual executable is to be
+found.</para>
+
+<para>Use this if you &eg; want to run the actually installed program instead of
+the version located in the project directories.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>Program</title>
+<para>This tells &kdevelop; the relative position and name of the
+program it shall actually call. This is relative to the root directory
+defined in the configuration group above. Furthermore you can define any
+argument &kdevelop; will pass to the program when it is actually called.</para>
+</formalpara>
+
+<note>
+<para>If leave the <guilabel>Main program</guilabel> text box empty, the
+<emphasis>active target</emphasis> settings of the &automanag; will be used.
+Although this is an expert setting, inadvertently leaving this input
+field blank is a common cause of problems. Check this setting if &kdevelop;
+appears not to call the executable you wanted.</para>
+</note>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>Environment Variables</title>
+<para>&kdevelop; will set up a dedicated shell environment to run the
+program in. Define any extra environment variable in this configuration
+group.</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara>
+<title>Miscellaneous</title>
+<para>Two more check boxes are located at the bottom of this dialog page.</para>
+</formalpara>
+
+<itemizedlist>
+<listitem>
+<para><guilabel>Automatically compile before execution</guilabel> comes
+in handy most of time. &kdevelop; will check the project for changes and
+perform necessary configure and build steps for you any time you command
+it to run the program.</para>
+
+<para>Uncheck this in case you want to run the program version prior to the
+last change.</para>
+</listitem>
+
+<listitem>
+<para><guilabel>Start in external terminal</guilabel> is interesting if
+you want to test the input/output behavior of non-&GUI; programs in a console
+terminal. This is unchecked by default, so &kdevelop; does start the program in
+a window of its own without console terminal I/O capabilities.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
 </sect3>
 </sect2> 
 </sect1>
