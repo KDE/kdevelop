@@ -36,7 +36,7 @@ K_EXPORT_COMPONENT_FACTORY(kdevgenericimporter, KGenericFactory<KDevGenericImpor
 KDevGenericImporter::KDevGenericImporter(QObject *parent, const QStringList &)
     : KDevFileManager(parent)
 {
-    project()->setFileManager( this );
+    kDebug() << k_funcinfo << "generic importer loaded" << endl;
 
     if (includes.isEmpty())
         includes << "*.h" << "*.cpp" << "*.c" << "*.ui";   // ### remove me
@@ -111,7 +111,7 @@ QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *
 
 KDevProjectItem *KDevGenericImporter::import(KDevProjectModel *model, const QString &fileName)
 {
-//     kDebug(9000) << "ROBE: ========================================= import filename: " << fileName << endl;
+    kDebug(9000) << k_funcinfo << "import filename: " << fileName << endl;
 
     KUrl url( fileName );
     QFileInfo fileInfo( fileName );
