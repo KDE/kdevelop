@@ -140,7 +140,8 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
                                 mActionCollection, "bookmarks" );
     acmBookmarks->setDelayed( false );
 
-    bookmarkHandler = new KBookmarkHandler( this, acmBookmarks->kMenu() );
+    bookmarkHandler = 0;
+//     bookmarkHandler = new KBookmarkHandler( this, acmBookmarks->kMenu() );
 
     Q3HBox* filterBox = new Q3HBox(this);
 
