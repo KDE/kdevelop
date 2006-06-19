@@ -63,41 +63,38 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringLis
 
   setInstance(KDevProjectManagerFactory::instance());
 
-  { // load the importers
-    KService::List lst = KServiceTypeTrader::self()->query("KDevelop/FileManager");
+  //load the importers
+  KService::List managerList = KServiceTypeTrader::self()->query("KDevelop/FileManager");
+  KService::List::Iterator it, itEnd = managerList.end();
+  for (it = managerList.begin(); it != itEnd; ++it)
+  {
+      KService::Ptr ptr = *it;
 
-    for (KService::List::ConstIterator it = lst.begin(); it != lst.end(); ++it)
-    {
-        KService::Ptr ptr = *it;
-
-        int error = 0;
-        if (KDevFileManager *i = KService::createInstance<KDevFileManager>(ptr, this,
-            QStringList(), &error))
-        {
-            m_importers.insert(ptr->name(), i);
-        }
-        else
-            kDebug(9000) << "error:" << error << endl;
-
+      int error = 0;
+      if (KDevFileManager *i = KService::createInstance<KDevFileManager>(ptr, this,
+          QStringList(), &error))
+      {
+          m_importers.insert(ptr->name(), i);
       }
+      else
+          kDebug(9000) << "error:" << error << endl;
   }
 
-  { // load the builders
-    KService::List lst = KServiceTypeTrader::self()->query("KDevelop/ProjectBuilder");
+  // load the builders
+  KService::List builderList = KServiceTypeTrader::self()->query("KDevelop/ProjectBuilder");
+  itEnd = builderList.end();
+  for (it = builderList.begin(); it != itEnd; ++it)
+  {
+      KService::Ptr ptr = *it;
 
-    for (KService::List::ConstIterator it = lst.begin(); it != lst.end(); ++it)
-    {
-        KService::Ptr ptr = *it;
-
-        int error = 0;
-        if (KDevProjectBuilder *i = KService::createInstance<KDevProjectBuilder>(ptr, this,
-            QStringList(), &error))
-        {
-            m_builders.insert(ptr->name(), i);
-        }
-        else
-            kDebug(9000) << "error:" << error << endl;
-    }
+      int error = 0;
+      if (KDevProjectBuilder *i = KService::createInstance<KDevProjectBuilder>(ptr, this,
+          QStringList(), &error))
+      {
+          m_builders.insert(ptr->name(), i);
+      }
+      else
+         kDebug(9000) << "error:" << error << endl;
   }
 
   m_widget = new QWidget(0);
@@ -193,20 +190,22 @@ void KDevProjectManagerPart::openProject(const KUrl &dirName, const QString &pro
 {
   m_projectDirectory = dirName;
   m_projectName = projectName;
-
+  kDebug(9000) << k_funcinfo << "Calling import" << endl;
   import(ForceRefresh);
 
-//   KDevProject::openProject(dirName, projectName);
 }
 
 void KDevProjectManagerPart::import(RefreshPolicy policy)
 {
+  
   QStringList oldFileList = allFiles();
 
   if (m_workspace)
     m_projectModel->removeItem(m_workspace);
-
+  kDebug(9000) << k_funcinfo << "default importer is: " << defaultImporter() << endl;
+  setFileManager( defaultImporter() );
   m_workspace = defaultImporter()->import(projectModel(), projectDirectory())->folder();
+  kDebug(9000) << k_funcinfo << "workspace is: " << m_workspace << endl;
   if ( m_workspace != 0 )
   {
       m_projectModel->appendItem(m_workspace);
