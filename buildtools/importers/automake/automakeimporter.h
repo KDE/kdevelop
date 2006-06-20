@@ -73,7 +73,7 @@ public:
 
 	virtual QList<KDevProjectFolderItem*> parse( KDevProjectFolderItem* dom );
 	virtual KDevProjectItem* import( KDevProjectModel* model,
-	                                 const QString& fileName );
+	                                 const KUrl& fileName );
 	virtual KUrl findMakefile( KDevProjectFolderItem* dom ) const;
     virtual KUrl::List findMakefiles( KDevProjectFolderItem* dom ) const;
 

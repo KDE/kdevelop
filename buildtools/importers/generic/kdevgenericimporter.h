@@ -45,7 +45,7 @@ public:
 
     virtual KDevProject *project() const;
     virtual QList<KDevProjectFolderItem*> parse(KDevProjectFolderItem *item);
-    virtual KDevProjectItem *import(KDevProjectModel *model, const QString &fileName);
+    virtual KDevProjectItem *import(KDevProjectModel *model, const KUrl &fileName);
 
 private:
     bool isValid(const QFileInfo &fileName) const;

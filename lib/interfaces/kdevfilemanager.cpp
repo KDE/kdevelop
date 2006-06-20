@@ -88,7 +88,7 @@ QList<KDevProjectFolderItem*> KDevFileManager::parse( KDevProjectFolderItem * do
     return QList<KDevProjectFolderItem*>();
 }
 
-KDevProjectItem* KDevFileManager::import( KDevProjectModel * model, const QString & fileName )
+KDevProjectItem* KDevFileManager::import( KDevProjectModel * model, const KUrl &fileName )
 {
     return 0;
 }

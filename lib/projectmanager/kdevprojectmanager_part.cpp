@@ -190,7 +190,6 @@ void KDevProjectManagerPart::openProject(const KUrl &dirName, const QString &pro
 {
   m_projectDirectory = dirName;
   m_projectName = projectName;
-  kDebug(9000) << k_funcinfo << "Calling import" << endl;
   import(ForceRefresh);
 
 }
@@ -202,9 +201,11 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
 
   if (m_workspace)
     m_projectModel->removeItem(m_workspace);
-  kDebug(9000) << k_funcinfo << "default importer is: " << defaultImporter() << endl;
-  setFileManager( defaultImporter() );
-  m_workspace = defaultImporter()->import(projectModel(), projectDirectory())->folder();
+  KDevFileManager* manager = defaultImporter();
+  kDebug(9000) << k_funcinfo << "default importer is: " << manager << endl;
+  setFileManager( manager );
+  KDevProjectItem* item = manager->import(m_projectModel, m_projectDirectory);
+  m_workspace = item ? item->folder() : 0;
   kDebug(9000) << k_funcinfo << "workspace is: " << m_workspace << endl;
   if ( m_workspace != 0 )
   {
@@ -213,7 +214,7 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
 
   Q_ASSERT(m_workspace != 0);
 
-  ImportProjectJob *job = ImportProjectJob::importProjectJob(m_workspace, defaultImporter());
+  ImportProjectJob *job = ImportProjectJob::importProjectJob(m_workspace, manager);
   connect(job, SIGNAL(result(KJob*)), this, SIGNAL(refresh()));
   job->start();
 

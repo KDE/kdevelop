@@ -59,7 +59,7 @@ QList<KDevProjectFolderItem*> AutoMakeImporter::parse( KDevProjectFolderItem* do
 }
 
 KDevProjectItem* AutoMakeImporter::import( KDevProjectModel* model,
-                                           const QString& fileName )
+                                           const KUrl& fileName )
 {
     Q_UNUSED( model );
     m_rootItem = new AutoMakeDirItem( fileName, 0 );

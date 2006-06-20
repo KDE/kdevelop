@@ -90,7 +90,7 @@ public:
      * This method creates the root item from the file @arg fileName
      * @return The created item
      */
-    virtual KDevProjectItem *import(KDevProjectModel *model, const QString &fileName);
+    virtual KDevProjectItem *import(KDevProjectModel *model, const KUrl &fileName);
 
     /**
      * Return the top item in this heirachy, which represents the root folder of the source
