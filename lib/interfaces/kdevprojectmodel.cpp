@@ -92,6 +92,8 @@ KDevProjectFolderItem::KDevProjectFolderItem( const KUrl & dir, KDevItemGroup * 
   : KDevProjectItem(dir.directory(), parent)
   , m_url(dir)
 {
+  QStringList dirParts = m_url.path().split('/');
+  setName( dirParts.last() );
 }
 
 const KUrl& KDevProjectFolderItem::url( ) const
