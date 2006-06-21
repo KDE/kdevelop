@@ -49,7 +49,7 @@ KBookmarkHandler::KBookmarkHandler( KDevFileSelector *parent, KMenu* kpopupmenu 
     if ( file.isEmpty() )
         file = locateLocal( "data", "kdevfileselector/fsbookmarks.xml" );
 
-    KBookmarkManager *manager = KBookmarkManager::managerForFile( file, false);
+    KBookmarkManager *manager = KBookmarkManager::managerForFile( file, "KDevFileSelector", false);
     manager->setUpdate( true );
     manager->setShowNSBookmarks( false );
 
