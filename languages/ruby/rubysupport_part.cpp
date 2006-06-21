@@ -499,7 +499,7 @@ void RubySupportPart::slotRun ()
         if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
             appFrontend->startAppCommand(project()->projectDirectory(), cmd, false);
     } else {
-        QString cmd = QString("%1 -K%2 -C%3 -I%4 %5 %6")
+        QString cmd = QString("%1 -K%2 -C\"%3\" -I\"%4\" \"%5\" %6")
                           .arg(interpreter())
                           .arg(characterCoding())
                           .arg(program.dirPath())
