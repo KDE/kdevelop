@@ -42,7 +42,7 @@ The interface to the application core and context menu classes.
 
 #include <ktexteditor/cursor.h>
 
-class KDialogBase;
+class KDialog;
 class KDevPlugin;
 class KDevCodeItem;
 class KDevProjectItem;
@@ -373,7 +373,7 @@ signals:
     global settings dialog is shown. Use @ref ConfigWidgetProxy in your plugin
     to create demand-loading configuration pages.
     @param dlg The dialog which the configuration widget should be added to.*/
-    void configWidget(KDialogBase *dlg);
+    void configWidget(KDialog *dlg);
 
     /**Expects that a configuration page for use in the
     Project settings dialog is created by the component.
@@ -381,7 +381,7 @@ signals:
     project settings dialog is shown. Use @ref ConfigWidgetProxy in your plugin
     to create demand-loading configuration pages.
     @param dlg The dialog which the configuration widget should be added to.*/
-    void projectConfigWidget(KDialogBase *dlg);
+    void projectConfigWidget(KDialog *dlg);
 };
 
 #endif

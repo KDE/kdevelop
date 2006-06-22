@@ -29,8 +29,8 @@ class KDEVSHELL_EXPORT KDevIDEExtension : public ShellExtension {
 public:
     static void init();
 
-    virtual void createGlobalSettingsPage(KDialog *dlg);
-    virtual void acceptGlobalSettingsPage(KDialog *dlg);
+    virtual void createGlobalSettingsPage(KPageDialog *dlg);
+    virtual void acceptGlobalSettingsPage(KPageDialog *dlg);
 
     virtual QString xmlFile();
 

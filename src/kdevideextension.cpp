@@ -29,6 +29,8 @@
 #include <kurlrequester.h>
 #include <kapplication.h>
 #include <kfontcombo.h>
+#include <kpagedialog.h>
+#include <kicon.h>
 
 #include <kdevplugin.h>
 #include <kdevmakefrontend.h>
@@ -47,11 +49,14 @@ void KDevIDEExtension::init()
     s_instance = new KDevIDEExtension();
 }
 
-void KDevIDEExtension::createGlobalSettingsPage(KDialog *dlg)
+void KDevIDEExtension::createGlobalSettingsPage(KPageDialog *dlg)
 {
-/*    KConfig* config = KGlobal::config();
-    KVBox *vbox = dlg->addVBoxPage(i18n("General"), i18n("General"), BarIcon("kdevelop", K3Icon::SizeMedium) );
-    gsw = new SettingsWidget(vbox, "general settings widget");
+    KConfig* config = KGlobal::config();
+    gsw = new SettingsWidget(dlg, "general settings widget");
+    KPageWidgetItem *pwi = new KPageWidgetItem( gsw, i18n("General") );
+    pwi->setHeader( i18n("General") );
+    pwi->setIcon( KIcon("kdevelop") );
+    dlg->addPage( pwi );
 
     gsw->projectsURL->setMode((int)KFile::Directory);
 
@@ -68,10 +73,10 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialog *dlg)
 
     config->setGroup("TerminalEmulator");
     gsw->terminalButtonGroup->setButton( config->readEntry( "UseKDESetting", 0 ) );
-    gsw->terminalEdit->setText( config->readEntry( QLatin1String("TerminalApplication"), QString("konsole") ) );*/
+    gsw->terminalEdit->setText( config->readEntry( QLatin1String("TerminalApplication"), QString("konsole") ) );
 }
 
-void KDevIDEExtension::acceptGlobalSettingsPage(KDialog* /*dlg*/)
+void KDevIDEExtension::acceptGlobalSettingsPage(KPageDialog* /*dlg*/)
 {
     KConfig* config = KGlobal::config();
 

@@ -43,6 +43,7 @@
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <ktoggleaction.h>
+#include <kpagedialog.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -295,31 +296,32 @@ void MainWindowShare::slotConfigureNotifications()
 
 void MainWindowShare::slotSettings()
 {
-//     FIXME port!
-//     KDialogBase dlg(KDialogBase::IconList, i18n("Configure KDevelop"),
-//                     KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_pMainWnd,
-//                     "customization dialog");
-//     dlg.setHelp("setup");
-//
-//     ShellExtension::getInstance()->createGlobalSettingsPage(&dlg);
-//
-//     KConfig* config = KGlobal::config();
-//
-//     config->setGroup("Global Settings Dialog");
-//     int height = config->readEntry( "Height", 600 );
-//     int width = config->readEntry( "Width", 800 );
-//
-//     dlg.resize( width, height );
-//
-//     Core::getInstance()->doEmitConfigWidget(&dlg);
-//     dlg.exec();
-//
-//     config->setGroup("Global Settings Dialog");
-//     config->writeEntry( "Height", dlg.size().height() );
-//     config->writeEntry( "Width", dlg.size().width() );
-//
-//     if ( dlg.result() != QDialog::Rejected )
-//         ShellExtension::getInstance()->acceptGlobalSettingsPage(&dlg);
+    KPageDialog dlg( m_pMainWnd );
+    dlg.setFaceType( KPageDialog::List );
+    dlg.setCaption( i18n("Configure KDevelop") );
+    dlg.setButtons( KDialog::Help | KDialog::Ok | KDialog::Cancel );
+    dlg.setDefaultButton( KDialog::Ok );
+    dlg.setHelp("setup");
+
+    ShellExtension::getInstance()->createGlobalSettingsPage(&dlg);
+
+    KConfig* config = KGlobal::config();
+
+    config->setGroup("Global Settings Dialog");
+    int height = config->readEntry( "Height", 600 );
+    int width = config->readEntry( "Width", 800 );
+
+    dlg.resize( width, height );
+
+    Core::getInstance()->doEmitConfigWidget(&dlg);
+    dlg.exec();
+
+    config->setGroup("Global Settings Dialog");
+    config->writeEntry( "Height", dlg.size().height() );
+    config->writeEntry( "Width", dlg.size().width() );
+
+    if ( dlg.result() != QDialog::Rejected )
+        ShellExtension::getInstance()->acceptGlobalSettingsPage(&dlg);
 }
 
 void MainWindowShare::slotConfigureEditors()

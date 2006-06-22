@@ -32,8 +32,8 @@ public:
   void doEmitProjectClosed() { emit projectClosed(); }
   void doEmitLanguageChanged() { emit languageChanged(); }
   void doEmitCoreInitialized() { emit coreInitialized(); }
-  void doEmitProjectConfigWidget(KDialogBase *base) { emit projectConfigWidget(base); }
-  void doEmitConfigWidget(KDialogBase *base) { emit configWidget(base); }
+  void doEmitProjectConfigWidget(KDialog *base) { emit projectConfigWidget(base); }
+  void doEmitConfigWidget(KDialog *base) { emit configWidget(base); }
   void doEmitStopButtonPressed(KDevPlugin* which = 0) { emit stopButtonClicked( which ); }
 
   bool queryClose();
