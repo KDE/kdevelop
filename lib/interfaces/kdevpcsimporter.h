@@ -37,7 +37,7 @@ class KDEVINTERFACES_EXPORT KDevPCSImporter: public QObject
 {
     Q_OBJECT
 public:
-    KDevPCSImporter( QObject* parent=0, const char* name=0 );
+    KDevPCSImporter( QObject* parent=0 );
     virtual ~KDevPCSImporter();
 
     virtual QString dbName() const = 0;

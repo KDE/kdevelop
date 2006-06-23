@@ -17,7 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 #include "kdevcoderepository.h"
-//Added by qt3to4:
 #include <QList>
 
 struct KDevCodeRepositoryData
@@ -56,7 +55,7 @@ void KDevCodeRepository::registerCatalog( Catalog * catalog )
 
 void KDevCodeRepository::unregisterCatalog( Catalog * catalog )
 {
-    d->catalogs.remove( catalog );
+    d->catalogs.removeAll( catalog );
     emit catalogUnregistered( catalog );
 }
 

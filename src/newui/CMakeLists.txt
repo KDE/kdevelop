@@ -13,6 +13,7 @@ set(newui_LIB_SRCS
     dtabwidget.cpp
 )
 
+add_definitions(-DQT3_SUPPORT)
 kde4_automoc(${newui_LIB_SRCS})
 kde4_add_library(newui SHARED ${newui_LIB_SRCS})
 target_link_libraries(newui ${KDE4_KDECORE_LIBS} kparts)

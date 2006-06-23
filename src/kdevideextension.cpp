@@ -37,11 +37,13 @@
 #include <kdevplugincontroller.h>
 #include <kglobal.h>
 
-#include "settingswidget.h"
+#include "ui_settingswidget.h"
 
 KDevIDEExtension::KDevIDEExtension()
  : ShellExtension()
 {
+    gsw = 0;
+    settingsWidget = 0;
 }
 
 void KDevIDEExtension::init()
@@ -52,8 +54,10 @@ void KDevIDEExtension::init()
 void KDevIDEExtension::createGlobalSettingsPage(KPageDialog *dlg)
 {
     KConfig* config = KGlobal::config();
-    gsw = new SettingsWidget(dlg, "general settings widget");
-    KPageWidgetItem *pwi = new KPageWidgetItem( gsw, i18n("General") );
+    settingsWidget = new QWidget( dlg );
+    gsw = new Ui::SettingsWidget();
+    gsw->setupUi( settingsWidget );
+    KPageWidgetItem *pwi = new KPageWidgetItem( settingsWidget, i18n("General") );
     pwi->setHeader( i18n("General") );
     pwi->setIcon( KIcon("kdevelop") );
     dlg->addPage( pwi );

@@ -22,8 +22,10 @@
 
 #include <shellextension.h>
 #include "shellexport.h"
+
 class KDialog;
-class SettingsWidget;
+class QWidget;
+namespace Ui { class SettingsWidget; }
 
 class KDEVSHELL_EXPORT KDevIDEExtension : public ShellExtension {
 public:
@@ -40,9 +42,17 @@ protected:
     KDevIDEExtension();
 
 private:
-    SettingsWidget *gsw;
+    Ui::SettingsWidget *gsw;
+    QWidget* settingsWidget;
 };
 
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+
+
+
+
+
+
+

@@ -20,8 +20,8 @@
 #include "kdevpcsimporter.h"
 #include "kdevpcsimporter.moc"
 
-KDevPCSImporter::KDevPCSImporter( QObject * parent, const char * name )
-    : QObject( parent, name )
+KDevPCSImporter::KDevPCSImporter( QObject * parent )
+    : QObject( parent )
 {
 }
 

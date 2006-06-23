@@ -45,12 +45,12 @@ QString FileTemplate::read(const QString &name, Policy p)
     return readFile(fullPathForName(name, p) );
 }
 
-QString FileTemplate::readFile(const QString &fileName)
+QString FileTemplate::readFile(const KUrl &fileName)
 {
     QDomDocument* dom = KDevApi::self()->projectDom();
     Q_ASSERT(dom);
 
-    QFile f(fileName);
+    QFile f(fileName.path());
     if (!f.open(QIODevice::ReadOnly))
         return QString();
     QTextStream stream(&f);
@@ -109,14 +109,16 @@ KUrl FileTemplate::fullPathForName(const QString &name, Policy p)
     // first try project-specific
     if (KDevApi::self()->project())
     {
-        url = (KDevApi::self()->project()->projectDirectory() + "/templates/" + name);
+        QString projectDir = KDevApi::self()->project()->projectDirectory().path();
+        projectDir += "/templates/" + name;
+        url = KUrl(projectDir);
         if (KIO::NetAccess::exists(url, true, KDevApi::self()->mainWindow()->main()))
             return url;
     }
 
     // next try global
     KUrl globalName = ::locate("data", "kdevfilecreate/file-templates/" + name);
-    return globalName.isEmpty() ? url : globalName;
+    return globalName.isEmpty() ? url : KUrl(globalName);
 }
 
 

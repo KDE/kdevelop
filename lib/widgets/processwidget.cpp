@@ -41,10 +41,10 @@ ProcessWidget::ProcessWidget(QWidget *parent)
 {
     setFocusPolicy(Qt::NoFocus);
     QPalette pal = palette();
-    pal.setColor(QColorGroup::HighlightedText,
-                 pal.color(QPalette::Normal, QColorGroup::Text));
-    pal.setColor(QColorGroup::Highlight,
-                 pal.color(QPalette::Normal, QColorGroup::Mid));
+    pal.setColor(QPalette::HighlightedText,
+                 pal.color(QPalette::Normal, QPalette::Text));
+    pal.setColor(QPalette::Highlight,
+                 pal.color(QPalette::Normal, QPalette::Mid));
     setPalette(pal);
 
     childproc = new KProcess();

@@ -77,7 +77,7 @@ public:
      * and makes variable substitutions (like $AUTHOR$ etc.)
      * in it. The resulting string is returned.
      */
-    static QString readFile(const QString &fileName);
+    static QString readFile(const KUrl& fileName);
 
     /**
      * Makes variable substitutions on a text, based on a specified QDomDocument 

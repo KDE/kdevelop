@@ -54,7 +54,7 @@ set(kdevelop_UI
 )
 
 kde4_automoc(${kdevelop_SRCS})
-kde4_add_ui3_files(kdevelop_SRCS ${kdevelop_UI})
+kde4_add_ui_files(kdevelop_SRCS ${kdevelop_UI})
 kde4_add_executable(kdevelop ${kdevelop_SRCS})
 target_link_libraries(kdevelop ${KDE4_KDECORE_LIBS} kdevshell)
 install_targets(/bin kdevelop)
