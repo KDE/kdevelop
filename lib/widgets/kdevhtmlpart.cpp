@@ -1,4 +1,3 @@
-#define QT3_SUPPORT
 #include <QFile>
 #include <qclipboard.h>
 #include <qapplication.h>

@@ -150,6 +150,7 @@ bool ValgrindModel::startDocument( )
   m_currentFrame = 0L;
 
   reset();
+  return true;
 }
 
 bool ValgrindModel::endElement( const QString & namespaceURI, const QString & localName, const QString & qName )

@@ -223,7 +223,7 @@ void KDevFileSelector::readConfig(KConfig *config, const QString & name)
     setupToolbar( config );
 
     cmbPath->setMaxItems( config->readEntry( "pathcombo history len", 9 ) );
-    cmbPath->setURLs( config->readListEntry("dir history") );
+    cmbPath->setURLs( config->readEntry("dir history", QStringList()) );
     // if we restore history
     if ( config->readEntry( "restore location", true ) || qApp->isSessionRestored() )
     {
@@ -298,7 +298,7 @@ void KDevFileSelector::writeConfig(KConfig *config, const QString & name)
     QStringList l;
     for (int i = 0; i < cmbPath->count(); i++)
     {
-        l.append( cmbPath->text( i ) );
+        l.append( cmbPath->itemText( i ) );
     }
     cg.writeEntry( "dir history", l );
     cg.writeEntry( "location", cmbPath->currentText() );
@@ -321,22 +321,20 @@ void KDevFileSelector::setView(KFile::FileView view)
 
 void KDevFileSelector::slotFilterChange( const QString & nf )
 {
-    QToolTip::remove( btnFilter );
-    QString f = nf.stripWhiteSpace();
+    btnFilter->setToolTip( "" ); //remove btnFilter as the tooltip
+    QString f = nf.trimmed();
     bool empty = f.isEmpty() || f == "*";
     if ( empty )
     {
         dir->clearFilter();
         filter->lineEdit()->setText( QString::null );
-        QToolTip::add
-            ( btnFilter, i18n( "Apply last filter (\"%1\")", lastFilter ) );
+        btnFilter->setToolTip( i18n( "Apply last filter (\"%1\")", lastFilter ) );
     }
     else
     {
         dir->setNameFilter( f );
         lastFilter = f;
-        QToolTip::add
-            ( btnFilter, i18n("Clear filter") );
+        btnFilter->setToolTip( i18n("Clear filter") );
     }
     btnFilter->setOn( !empty );
     dir->updateDir();
@@ -361,11 +359,11 @@ void KDevFileSelector::cmbPathActivated( const KUrl& u )
 void KDevFileSelector::cmbPathReturnPressed( const QString& u )
 {
     QStringList urls = cmbPath->urls();
-    urls.remove( u );
+    urls.removeAll( u );
     urls.prepend( u );
     cmbPath->setURLs( urls, KUrlComboBox::RemoveBottom );
     dir->setFocus();
-    dir->setURL( KUrl::fromPathOrUrl(u), true );
+    dir->setURL( KUrl(u), true );
 }
 
 void KDevFileSelector::dirUrlEntered( const KUrl& u )
@@ -693,7 +691,7 @@ void KFSConfigPage::init()
     KConfig *config = fileSelector->m_part->instance()->config();
     config->setGroup( "fileselector" );
     // toolbar
-    QStringList l = config->readListEntry( "toolbar actions", ',' );
+    QStringList l = config->readEntry( "toolbar actions", QStringList() );
     if ( l.isEmpty() ) // default toolbar
         l << "up" << "back" << "forward" << "home" <<
         "short view" << "detailed view" <<
@@ -729,8 +727,8 @@ void KFSConfigPage::init()
     sbPathHistLength->setValue( fileSelector->cmbPath->maxItems() );
     sbFilterHistLength->setValue( fileSelector->filter->maxCount() );
     // session
-    cbSesLocation->setChecked( config->readBoolEntry( "restore location", true ) );
-    cbSesFilter->setChecked( config->readBoolEntry( "restore last filter", true ) );
+    cbSesLocation->setChecked( config->readEntry( "restore location", true ) );
+    cbSesFilter->setChecked( config->readEntry( "restore last filter", true ) );
 }
 
 void KFSConfigPage::slotChanged()

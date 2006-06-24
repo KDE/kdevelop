@@ -127,8 +127,8 @@ void ProfileEditor::refreshPropertyCombo()
                 props.append(*p);
     }
     props.sort();
-    propertyCombo->insertStringList(props);
-    propertyCombo->setCurrentText("");
+    propertyCombo->insertItems(1, props);
+    propertyCombo->setItemText(0, "");
 }
 
 void ProfileEditor::refreshAvailableList()

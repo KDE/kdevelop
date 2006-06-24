@@ -255,7 +255,7 @@ void ValgrindPart::receivedStderr( KProcess*, char* msg, int len )
 void ValgrindPart::receivedString( const QString& str )
 {
   QString rmsg = lastPiece + str;
-  QStringList lines = QStringList::split( "\n", rmsg );
+  QStringList lines = rmsg.split( "\n" );
 
 //  kDebug() << "got: " << QString::fromLocal8Bit( msg, len ) << endl;
 
@@ -275,7 +275,7 @@ void ValgrindPart::appendMessages( const QStringList& lines )
   QRegExp valRe( "==(\\d+)== (.*)" );
 
   for ( QStringList::ConstIterator it = lines.begin(); it != lines.end(); ++it ) {
-    if ( valRe.search( *it ) < 0 )
+    if ( valRe.indexIn( *it ) < 0 )
       continue;
 
     int cPid = valRe.cap( 1 ).toInt();

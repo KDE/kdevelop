@@ -201,7 +201,7 @@ void ProjectManager::loadDefaultProject()
   KConfig *config = KGlobal::config();
   config->setGroup("General Options");
   QString project = config->readPathEntry("Last Project");
-  bool readProject = config->readBoolEntry("Read Last Project On Startup", true);
+  bool readProject = config->readEntry("Read Last Project On Startup", true);
   if (!project.isEmpty() && readProject)
   {
       loadProject(KUrl(project));
@@ -617,7 +617,7 @@ QString ProjectManager::profileByAttributes(const QString &language, const QStri
 
     QStringList profileKeywords = QStringList::split("/", "Empty");
     if (config.hasKey("Keywords"))
-        profileKeywords = config.readListEntry("Keywords");
+        profileKeywords = config.readEntry("Keywords", QStringList());
 
     int idx = 0;
     for (QStringList::const_iterator it = profileKeywords.constBegin();
@@ -633,7 +633,7 @@ QString ProjectManager::profileByAttributes(const QString &language, const QStri
     QStringList profiles;
     if (config.hasKey("Profiles"))
     {
-        profiles = config.readListEntry("Profiles");
+        profiles = config.readEntry("Profiles", QStringList());
         kDebug() << "IDX: " << idx << "    PROFILE: " << profiles[idx] << endl;
         return profiles[idx];
     }

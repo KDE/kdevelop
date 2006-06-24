@@ -65,22 +65,26 @@ bool KDevFileManager::renameFile( KDevProjectFileItem* oldFile,
 
 KDevProjectFolderItem * KDevFileManager::addFolder( const KUrl & folder, KDevProjectFolderItem * parent )
 {
+    Q_UNUSED( folder );
+    Q_UNUSED( parent );
     return 0;
 }
 
-KDevProjectFileItem * KDevFileManager::addFile( const KUrl & folder, KDevProjectFolderItem * parent )
+KDevProjectFileItem * KDevFileManager::addFile( const KUrl & file, KDevProjectFolderItem * parent )
 {
+    Q_UNUSED( file );
+    Q_UNUSED( parent );
     return 0;
 }
 
 bool KDevFileManager::removeFolder( KDevProjectFolderItem * folder )
 {
-    return false;
+    Q_UNUSED( folder ); return false;
 }
 
 bool KDevFileManager::removeFile( KDevProjectFileItem * file )
 {
-    return false;
+    Q_UNUSED( file ); return false;
 }
 
 QList<KDevProjectFolderItem*> KDevFileManager::parse( KDevProjectFolderItem * dom )
@@ -90,7 +94,7 @@ QList<KDevProjectFolderItem*> KDevFileManager::parse( KDevProjectFolderItem * do
 
 KDevProjectItem* KDevFileManager::import( KDevProjectModel * model, const KUrl &fileName )
 {
-    return 0;
+    Q_UNUSED( model ); Q_UNUSED( fileName ); return 0;
 }
 
 bool KDevFileManager::renameFolder( KDevProjectFolderItem* oldFolder,

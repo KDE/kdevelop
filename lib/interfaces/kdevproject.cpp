@@ -59,6 +59,7 @@ bool KDevProject::inProject( const KUrl& url ) const
     KUrl absolute = absoluteUrl(url);
 
     /// FIXME implement!
+    return false;
 }
 
 KUrl KDevProject::relativeUrl( const KUrl& absolute ) const

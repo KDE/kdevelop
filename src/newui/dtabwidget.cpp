@@ -60,9 +60,9 @@ void DTabWidget::loadSettings()
     KConfig *config = KGlobal::config();
     config->setGroup("UI");
 //    m_tabBarShown = config->readBoolEntry("TabBarShown", true);
-    m_tabBarShown = ! config->readNumEntry("TabWidgetVisibility", 0);
-    m_closeOnHover = config->readBoolEntry("CloseOnHover", false);
-    m_closeButtonShown = config->readBoolEntry("ShowCloseTabsButton", true);
+    m_tabBarShown = !config->readEntry("TabWidgetVisibility", 0);
+    m_closeOnHover = config->readEntry("CloseOnHover", false);
+    m_closeButtonShown = config->readEntry("ShowCloseTabsButton", true);
     //we do not delay hover close buttons - that looks and feels ugly
     setHoverCloseButtonDelayed(false);
 }

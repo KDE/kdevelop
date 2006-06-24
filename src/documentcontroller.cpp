@@ -1,4 +1,3 @@
-#define QT3_SUPPORT
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -1035,7 +1034,7 @@ void DocumentController::slotDocumentDirty( KTextEditor::Document * d,
         {
             // file has been reloaded
             emit documentStateChanged( doc, KDevDocument::Clean );
-            m_dirtyDocuments.remove( doc );
+            m_dirtyDocuments.removeAll( doc );
         }
         else
         {
@@ -1044,7 +1043,7 @@ void DocumentController::slotDocumentDirty( KTextEditor::Document * d,
     }
     else
     {
-        m_dirtyDocuments.remove( doc );
+        m_dirtyDocuments.removeAll( doc );
         emit documentStateChanged( doc, KDevDocument::Clean );
     }
 

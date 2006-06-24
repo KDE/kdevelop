@@ -10,16 +10,16 @@ ValgrindBacktraceItem::ValgrindBacktraceItem( const QString& rawOutput ): _rawOu
   QRegExp re1( "^==(\\d+)==\\s+(by|at) (0x[\\dABCDEF]+): (.*) \\((.*):(\\d+)\\)$" );
   QRegExp re2( "^==(\\d+)==\\s+(by|at) (0x[\\dABCDEF]+): (.*) \\(in (.*)\\)$" );
   QRegExp valRe( "==(\\d+)== (.*)" );
-  if ( valRe.search( _rawOutput ) >= 0 )
+  if ( valRe.indexIn( _rawOutput ) >= 0 )
     _message = valRe.cap( 2 );
-  if ( re1.search( _rawOutput ) >= 0 ) {
+  if ( re1.indexIn( _rawOutput ) >= 0 ) {
     _type = SourceCode;
     _pid = re1.cap( 1 ).toInt();
     _address = re1.cap( 3 );
     _function = re1.cap( 4 );
     _url = re1.cap( 5 );
     _line = re1.cap( 6 ).toInt();
-  } else if ( re2.search( _rawOutput ) >= 0 ) {
+  } else if ( re2.indexIn( _rawOutput ) >= 0 ) {
     _type = Library;
     _pid = re2.cap( 1 ).toInt();
     _address = re2.cap( 3 );
@@ -41,11 +41,11 @@ ValgrindBacktraceItem::~ValgrindBacktraceItem()
 ValgrindItem::ValgrindItem( const QString& message ): _pid(-1)
 {
   QRegExp valRe( "==(\\d+)== (.*)" );
-  QStringList lines = QStringList::split( "\n", message );
+  QStringList lines = message.split( "\n" );
   QString curMsg;
   
   for ( QStringList::ConstIterator it = lines.begin(); it != lines.end(); ++it ) {
-    if ( valRe.search( *it ) < 0 ) {
+    if ( valRe.indexIn( *it ) < 0 ) {
       kDebug() << "ValgrindItem: got unrecognizable line '" << *it << "'" << endl;
       continue; // not of interest
     }
