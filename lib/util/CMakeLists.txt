@@ -8,7 +8,6 @@ set(kdevutil_LIB_SRCS
     execcommand.cpp
     kfiltermodel.cpp
     kdevtreeview.cpp
-    configwidgetproxy.cpp
     settings.cpp
 )
 
@@ -22,6 +21,6 @@ install_targets(/lib kdevutil)
 
 ########### install files ###############
 
-install_files(/include/kdevelop/util FILES execcommand.h configwidgetproxy.h kfiltermodel.h kdevtreeview.h)
+install_files(/include/kdevelop/util FILES execcommand.h kfiltermodel.h kdevtreeview.h)
 
 

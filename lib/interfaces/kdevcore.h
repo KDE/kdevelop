@@ -366,22 +366,6 @@ signals:
     @param popupMenu The popup menu to fill.
     @param context The Context of this popup menu.*/
     void contextMenu(QMenu *popupMenu, const Context *context);
-
-    /**Expects that a configuration page for use in the
-    KDevelop settings dialog is created by the component.
-    The configuration page is not demand-loading, it will be created before
-    global settings dialog is shown. Use @ref ConfigWidgetProxy in your plugin
-    to create demand-loading configuration pages.
-    @param dlg The dialog which the configuration widget should be added to.*/
-    void configWidget(KDialog *dlg);
-
-    /**Expects that a configuration page for use in the
-    Project settings dialog is created by the component.
-    The configuration page is not demand-loading, it will be created before
-    project settings dialog is shown. Use @ref ConfigWidgetProxy in your plugin
-    to create demand-loading configuration pages.
-    @param dlg The dialog which the configuration widget should be added to.*/
-    void projectConfigWidget(KDialog *dlg);
 };
 
 #endif

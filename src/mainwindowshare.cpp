@@ -313,7 +313,6 @@ void MainWindowShare::slotSettings()
 
     dlg.resize( width, height );
 
-    Core::getInstance()->doEmitConfigWidget(&dlg);
     dlg.exec();
 
     config->setGroup("Global Settings Dialog");
