@@ -1,9 +1,9 @@
 
 add_subdirectory(profiles)
-add_subdirectory(profileengine) 
-add_subdirectory(newui) 
+add_subdirectory(profileengine)
+add_subdirectory(newui)
 
-include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets 
+include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets
     ${CMAKE_SOURCE_DIR}/src/newui ${CMAKE_SOURCE_DIR}/src/profileengine/lib
     )
 
@@ -31,11 +31,15 @@ set(kdevshell_LIB_SRCS
 
 set(kdevshell_UI
     generalinfowidgetbase.ui
+)
+
+set(kdevshell_UI3
     mimewarningdialog.ui
 )
 
 kde4_automoc(${kdevshell_LIB_SRCS})
-kde4_add_ui3_files(kdevshell_LIB_SRCS ${kdevshell_UI})
+kde4_add_ui_files(kdevshell_LIB_SRCS ${kdevshell_UI})
+kde4_add_ui3_files(kdevshell_LIB_SRCS ${kdevshell_UI3})
 kde4_add_library(kdevshell SHARED ${kdevshell_LIB_SRCS})
 target_link_libraries(kdevshell ${KDE4_KDECORE_LIBS} kdeui profileengine kdevinterfaces kdevutil kdevwidgets newui khtml ktexteditor)
 set_target_properties(kdevshell PROPERTIES VERSION 4.0.0 SOVERSION 4)
@@ -62,7 +66,7 @@ install_targets(/bin kdevelop)
 
 ########### next target ###############
 
-set(kdevassistant_SRCS 
+set(kdevassistant_SRCS
     main_assistant.cpp
     kdevassistantextension.cpp
 )
@@ -75,10 +79,10 @@ install_targets(/bin kdevassistant)
 
 ########### install files ###############
 
-install_files(/include/kdevelop/shell FILES 
+install_files(/include/kdevelop/shell FILES
     core.h documentationpart.h editorproxy.h
     generalinfowidget.h languageselectwidget.h mainwindowshare.h
-    partselectwidget.h plugincontroller.h projectmanager.h 
+    partselectwidget.h plugincontroller.h projectmanager.h
     projectsession.h shellextension.h splashscreen.h statusbar.h
     toplevel.h generalinfowidgetbase.h mimewarningdialog.h settingswidget.h
     simplemainwindow.h documentcontroller.h shellexport.h)

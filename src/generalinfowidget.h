@@ -12,22 +12,22 @@
 #define _GENERALINFOWIDGET_H_
 
 #include <QWidget>
-#include <qdom.h>
+#include <QDomDocument>
 
-#include "generalinfowidgetbase.h"
 #include "shellexport.h"
 
 class QDomDocument;
+namespace Ui { class GeneralInfoWidgetBase; }
 
 /**
 General project information widget.
 */
-class KDEVSHELL_EXPORT GeneralInfoWidget : public GeneralInfoWidgetBase {
+class KDEVSHELL_EXPORT GeneralInfoWidget : public QWidget {
     Q_OBJECT
 
 public:
 
-    GeneralInfoWidget(QDomDocument &projectDom, QWidget *parent=0, const char *name=0);
+    GeneralInfoWidget(QDomDocument &projectDom, QWidget *parent=0);
     ~GeneralInfoWidget();
 
 public slots:
@@ -40,6 +40,7 @@ private slots:
 private:
 
     QDomDocument m_projectDom;
+    Ui::GeneralInfoWidgetBase* m_baseUi;
 
     void readConfig();
     void writeConfig();

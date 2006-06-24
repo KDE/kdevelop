@@ -19,9 +19,7 @@
 #include "profile.h"
 
 #include <QDir>
-#include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QFileInfo>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -61,7 +59,7 @@ Profile::Profile(Profile *parent, const QString &name, const QString &genericNam
 
 Profile::~Profile()
 {
-    for (Q3ValueList<Profile*>::iterator it = m_children.begin(); it != m_children.end(); ++it)
+    for (QList<Profile*>::iterator it = m_children.begin(); it != m_children.end(); ++it)
         delete *it;
 }
 
@@ -72,7 +70,7 @@ void Profile::addChildProfile(Profile *profile)
 
 void Profile::removeChildProfile(Profile *profile)
 {
-    m_children.remove(profile);
+    m_children.removeAll(profile);
 }
 
 QString Profile::dirName() const
@@ -158,7 +156,7 @@ bool Profile::remove()
 {
     QStringList dirs = KGlobal::dirs()->findDirs("data", "kdevelop/profiles" + dirName());
     if ((dirs.count() == 1) && dirs[0].startsWith(QDir::homePath()))
-        return KIO::NetAccess::del(KUrl::fromPathOrUrl(dirs[0]), 0);
+        return KIO::NetAccess::del(KUrl(dirs[0]), 0);
     return false;
 }
 
@@ -178,7 +176,7 @@ KUrl::List Profile::resources(const QString &nameFilter)
         dir = dir + "kdevelop/profiles" + dirName();
 
         QDir d(dir);
-        const QFileInfoList infoList = d.entryInfoList(nameFilter, QDir::Files);
+        const QFileInfoList infoList = d.entryInfoList(QStringList(nameFilter), QDir::Files);
         for (int i = 0; i < infoList.count(); ++i)
             resources.append(infoList.at(i).absoluteFilePath());
     }
@@ -189,5 +187,5 @@ KUrl::List Profile::resources(const QString &nameFilter)
 void Profile::addResource(const KUrl &url)
 {
     QString saveLocation = KGlobal::dirs()->saveLocation("data", "kdevelop/profiles"+dirName(), true);
-    KIO::NetAccess::file_copy(url, KUrl::fromPathOrUrl(saveLocation), -1, true);
+    KIO::NetAccess::file_copy(url, KUrl(saveLocation), -1, true);
 }

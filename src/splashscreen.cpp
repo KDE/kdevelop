@@ -82,7 +82,7 @@ void SplashScreen::drawContents(QPainter* painter)
     // Draw message at given position, limited to 43 chars
     // If message is too long, string is truncated
     if (m_string.length() > 40) {m_string.truncate(39); m_string += "...";}
-    painter->drawText (90, 16, m_string, 42);
+    painter->drawText (90, 16, m_string);
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

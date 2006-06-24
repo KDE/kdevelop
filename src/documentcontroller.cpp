@@ -1,3 +1,4 @@
+#define QT3_SUPPORT
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -236,7 +237,7 @@ bool DocumentController::saveDocument( KDevDocument* document, bool force )
 
     if ( part->save() )
     {
-        m_dirtyDocuments.remove( document );
+        m_dirtyDocuments.removeAll( document );
         emit documentStateChanged( document, KDevDocument::Clean );
         emit documentSaved( document );
     }
@@ -286,7 +287,7 @@ void DocumentController::reloadDocument( KDevDocument* document )
 
         part->openURL( part->url() );
 
-        m_dirtyDocuments.remove( document );
+        m_dirtyDocuments.removeAll( document );
         emit documentStateChanged( document, KDevDocument::Clean );
 
         int i = 0;
@@ -522,11 +523,13 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
 
                 if ( !url.isValid()
                         || !KIO::NetAccess::exists( url, false, 0 ) )
+                {
                     // See if this url is relative to the
                     // current project's directory
-                    url = KDevApi::self() ->project() ->projectDirectory()
-                          + "/" + url.path();
-
+                    QString absPath = KDevApi::self() ->project() ->projectDirectory().path();
+                    absPath += "/" + url.path();
+                    url = absPath;
+                }
                 else
                     done = true;
             }
@@ -575,7 +578,7 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
     {
         m_openNextAsText = true;
     }
-    
+
     bool isText = false;
     QVariant v = mimeType->property("X-KDE-text");
     kDebug(9000) << mimeType->property("X-KDE-text") << endl;

@@ -18,7 +18,7 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kiconloader.h>
-
+#include "ui_generalinfowidgetbase.h"
 #include "generalinfowidget.h"
 #include "generalinfowidget.moc"
 #include "domutil.h"
@@ -26,40 +26,45 @@
 
 QString makeRelativePath(const QString& fromPath, const QString& toPath);
 
-GeneralInfoWidget::GeneralInfoWidget(QDomDocument &projectDom, QWidget *parent, const char *name)
-        : GeneralInfoWidgetBase(parent, name), m_projectDom(projectDom) {
-
-    connect(project_directory_edit, SIGNAL(textChanged(const QString&)),
+GeneralInfoWidget::GeneralInfoWidget(QDomDocument &projectDom, QWidget *parent)
+        : QWidget(parent), m_projectDom(projectDom)
+{
+    m_baseUi = new Ui::GeneralInfoWidgetBase();
+    m_baseUi->setupUi(this);
+    connect(m_baseUi->project_directory_edit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotProjectDirectoryChanged(const QString&)));
-    connect(project_directory_combo, SIGNAL(activated(int)),
+    connect(m_baseUi->project_directory_combo, SIGNAL(activated(int)),
             this, SLOT(slotProjectDirectoryComboChanged()));
     readConfig();
 }
 
 
 
-GeneralInfoWidget::~GeneralInfoWidget() {}
+GeneralInfoWidget::~GeneralInfoWidget()
+{
+    delete m_baseUi;
+}
 
 void GeneralInfoWidget::readConfig() {
     if(DomUtil::readBoolEntry(m_projectDom,"/general/absoluteprojectpath",false))
-        this->project_directory_combo->setCurrentIndex(0);
+        m_baseUi->project_directory_combo->setCurrentIndex(0);
     else
-        this->project_directory_combo->setCurrentIndex(1);
-    this->project_directory_edit->setText(DomUtil::readEntry(m_projectDom,"/general/projectdirectory","."));
-    this->author_edit->setText(DomUtil::readEntry(m_projectDom,"/general/author"));
-    this->email_edit->setText(DomUtil::readEntry(m_projectDom,"/general/email"));
-    this->version_edit->setText(DomUtil::readEntry(m_projectDom,"/general/version"));
-    this->description_edit->setText(DomUtil::readEntry(m_projectDom,"/general/description"));
+        m_baseUi->project_directory_combo->setCurrentIndex(1);
+    m_baseUi->project_directory_edit->setText(DomUtil::readEntry(m_projectDom,"/general/projectdirectory","."));
+    m_baseUi->author_edit->setText(DomUtil::readEntry(m_projectDom,"/general/author"));
+    m_baseUi->email_edit->setText(DomUtil::readEntry(m_projectDom,"/general/email"));
+    m_baseUi->version_edit->setText(DomUtil::readEntry(m_projectDom,"/general/version"));
+    m_baseUi->description_edit->setText(DomUtil::readEntry(m_projectDom,"/general/description"));
 }
 
 void GeneralInfoWidget::writeConfig() {
-    DomUtil::writeEntry(m_projectDom,"/general/projectdirectory",project_directory_edit->text());
+    DomUtil::writeEntry(m_projectDom,"/general/projectdirectory", m_baseUi->project_directory_edit->text());
     DomUtil::writeBoolEntry(m_projectDom,"/general/absoluteprojectpath",isProjectDirectoryAbsolute());
-    DomUtil::writeEntry(m_projectDom,"/general/email",email_edit->text());
-    DomUtil::writeEntry(m_projectDom,"/general/author",author_edit->text());
-    DomUtil::writeEntry(m_projectDom,"/general/email",email_edit->text());
-    DomUtil::writeEntry(m_projectDom,"/general/version",version_edit->text());
-    DomUtil::writeEntry(m_projectDom,"/general/description",description_edit->text());
+    DomUtil::writeEntry(m_projectDom,"/general/email", m_baseUi->email_edit->text());
+    DomUtil::writeEntry(m_projectDom,"/general/author", m_baseUi->author_edit->text());
+    DomUtil::writeEntry(m_projectDom,"/general/email", m_baseUi->email_edit->text());
+    DomUtil::writeEntry(m_projectDom,"/general/version", m_baseUi->version_edit->text());
+    DomUtil::writeEntry(m_projectDom,"/general/description", m_baseUi->description_edit->text());
 }
 
 void GeneralInfoWidget::accept() {
@@ -67,11 +72,11 @@ void GeneralInfoWidget::accept() {
 }
 
 bool GeneralInfoWidget::isProjectDirectoryAbsolute() {
-    return project_directory_combo->currentIndex() == 0;
+    return m_baseUi->project_directory_combo->currentIndex() == 0;
 }
 
 QString GeneralInfoWidget::projectDirectory() {
-    return ProjectManager::projectDirectory( project_directory_edit->text(), isProjectDirectoryAbsolute() );
+    return ProjectManager::projectDirectory( m_baseUi->project_directory_edit->text(), isProjectDirectoryAbsolute() );
 }
 
 void GeneralInfoWidget::slotProjectDirectoryChanged( const QString& text ) {
@@ -82,53 +87,53 @@ void GeneralInfoWidget::slotProjectDirectoryChanged( const QString& text ) {
     else if(isProjectDirectoryAbsolute() && text[0] != '/')
     {
        setProjectDirectoryError(
-           i18n("'%1' is not an absolute path.", 
-               project_directory_edit->text()));
+           i18n("'%1' is not an absolute path.",
+               m_baseUi->project_directory_edit->text()));
     }
     else if(!isProjectDirectoryAbsolute() && text[0] == '/')
     {
        setProjectDirectoryError(
-           i18n("'%1' is not a relative path.", 
-               project_directory_edit->text()));
+           i18n("'%1' is not a relative path.",
+               m_baseUi->project_directory_edit->text()));
     }
     else
     {
         QFileInfo info(projectDirectory());
         if(!info.exists())
            setProjectDirectoryError(
-               i18n("'%1' does not exist.", 
-                   project_directory_edit->text()));
+               i18n("'%1' does not exist.",
+                   m_baseUi->project_directory_edit->text()));
         else if(!info.isDir())
            setProjectDirectoryError(
-               i18n("'%1' is not a directory.", 
-                   project_directory_edit->text()));
+               i18n("'%1' is not a directory.",
+                   m_baseUi->project_directory_edit->text()));
         else
            setProjectDirectorySuccess();
     }
 }
 
 void GeneralInfoWidget::slotProjectDirectoryComboChanged() {
-    QString text = project_directory_edit->text();
+    QString text = m_baseUi->project_directory_edit->text();
     if(isProjectDirectoryAbsolute() && text[0] != '/' )
-        project_directory_edit->setText(ProjectManager::projectDirectory(text,false));
+        m_baseUi->project_directory_edit->setText(ProjectManager::projectDirectory(text,false));
     else if(!isProjectDirectoryAbsolute() && text[0] == '/')
     {
-        project_directory_edit->setText(KUrl(ProjectManager::getInstance()->projectFile(), text).url());
+        m_baseUi->project_directory_edit->setText(KUrl(ProjectManager::getInstance()->projectFile(), text).url());
     }
 }
 
 void GeneralInfoWidget::setProjectDirectoryError( const QString& error ) {
-    project_directory_diagnostic_icon->setPixmap(SmallIcon("no"));
-    project_directory_diagnostic_label->setText( error );
+    m_baseUi->project_directory_diagnostic_icon->setPixmap(SmallIcon("no"));
+    m_baseUi->project_directory_diagnostic_label->setText( error );
 }
 
 void GeneralInfoWidget::setProjectDirectorySuccess() {
-    project_directory_diagnostic_icon->setPixmap(SmallIcon("ok"));
+    m_baseUi->project_directory_diagnostic_icon->setPixmap(SmallIcon("ok"));
     if(isProjectDirectoryAbsolute())
-        project_directory_diagnostic_label->setText(
+        m_baseUi->project_directory_diagnostic_label->setText(
             i18n("'%1' is a valid project directory.", projectDirectory()));
     else
-        project_directory_diagnostic_label->setText(
+        m_baseUi->project_directory_diagnostic_label->setText(
             i18n("'%1' is a valid project directory.", projectDirectory()));
 }
 

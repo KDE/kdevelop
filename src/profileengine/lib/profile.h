@@ -19,9 +19,9 @@
 #ifndef PROFILE_H
 #define PROFILE_H
 
+#include <QStringList>
 #include <kurl.h>
-#include <qstringlist.h>
-#include <Q3ValueList>
+
 #include "kdevexport.h"
 
 /**
@@ -38,7 +38,7 @@ public:
         QString name;
         bool derived;
     };
-    typedef Q3ValueList<Entry> EntryList;
+    typedef QList<Entry> EntryList;
 
     /**Lists which are held by a profile.*/
     enum List {
@@ -51,7 +51,7 @@ public:
     Profile(Profile *parent, const QString &name, const QString &genericName, const QString &description);
     ~Profile();
 
-    Q3ValueList<Profile*> children() const { return m_children; }
+    QList<Profile*> children() const { return m_children; }
     Profile *parent() const { return m_parent; }
 
     void save();
@@ -82,7 +82,7 @@ protected:
 
 private:
     Profile *m_parent;
-    Q3ValueList<Profile*> m_children;
+    QList<Profile*> m_children;
 
     QString m_name;
 

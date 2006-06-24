@@ -206,7 +206,7 @@ QStringList PluginController::argumentsFromService( const KService::Ptr &service
 		return args;
 	QVariant prop = service->property( "X-KDevelop-Args" );
 	if ( prop.isValid() )
-		args = QStringList::split( " ", prop.toString() );
+		args = prop.toString().split( " " );
 	return args;
 }
 
