@@ -36,23 +36,9 @@ using namespace KTextEditor;
 
 EditorProxy *EditorProxy::s_instance = 0;
 
-// FIXME remove - legacy
-namespace KMdi {
-   enum MdiMode {
-      UndefinedMode  = 0,
-      ToplevelMode   = 1,
-      ChildframeMode = 2,
-      TabPageMode    = 3,
-      IDEAlMode      = 4
-   };
-}
-
 EditorProxy::EditorProxy()
   : QObject()
 {
-    KConfig *config = KGlobal::config();
-    config->setGroup("UI");
-    //int mdimode = config->readEntry("MDIMode", KMdi::IDEAlMode);
 }
 
 
@@ -122,22 +108,16 @@ void EditorProxy::installPopup( KParts::Part * part )
 void EditorProxy::popupAboutToShow(KTextEditor::View* view, QMenu* menu)
 {
     Q_ASSERT(view && menu);
-    
-    /*foreach (QAction* action, menu->actions())
-        menu->removeAction(action);
-    
-    view->defaultContextMenu(menu);*/
-    
     return;
-    
+/*
     KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(DocumentController::getInstance()->activePart());
     if (!ro_part)
         return;
-    
+
     // fill the menu in the editor context
     if (!ro_part->widget())
         return;
-    
+
     QString wordstr, linestr;
     bool hasMultilineSelection = false;
     if( view->selection() )
@@ -179,6 +159,7 @@ void EditorProxy::popupAboutToShow(KTextEditor::View* view, QMenu* menu)
 
     if ( lastWasSeparator && menu->actions().count() )
         menu->removeAction( menu->actions().last() );
+*/
 }
 
 QWidget * EditorProxy::widgetForPart( KParts::Part * part )
