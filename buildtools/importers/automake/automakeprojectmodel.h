@@ -57,6 +57,7 @@ class AutoMakeTargetItem : public KDevProjectTargetItem
 {
 public:
     AutoMakeTargetItem( const TargetInfo& target, KDevItemGroup* parent = 0 );
+    
     virtual ~AutoMakeTargetItem();
 
     virtual KDevProjectTargetItem* target() const
@@ -64,14 +65,25 @@ public:
         return const_cast<AutoMakeTargetItem*>( this );
     }
 
-    virtual const KUrl::List& includeDirectories() const { return KUrl::List(); }
-    virtual const QHash<QString, QString>& environment() const { return QHash<QString,QString>(); }
-    virtual const QList<QPair<QString, QString> >& defines() const { return QList<QPair<QString, QString> >(); }
+    virtual const KUrl::List& includeDirectories() const { return m_includes; }
+    virtual const QHash<QString, QString>& environment() const { return m_environment; }
+    virtual const QList<QPair<QString, QString> >& defines() const { return m_defines; }
     void parseInfoFromAst( AutoTools::ProjectAST* ) {}
 
 
 private:
     TargetInfo m_target;
+    KUrl::List m_includes;
+    QHash<QString, QString> m_environment;
+    QList<QPair<QString, QString> > m_defines;
+};
+
+class AutoMakeGenericItem : public KDevProjectItem
+{
+public:
+    AutoMakeGenericItem( const QString& target, KDevItemGroup* parent = 0 );
+    virtual ~AutoMakeGenericItem();
+
 };
 
 #endif // AUTOMAKEPROJECTMODEL_H

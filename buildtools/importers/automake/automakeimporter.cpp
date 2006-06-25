@@ -113,47 +113,50 @@ void AutoMakeImporter::createProjectItems( const KUrl& folder, KDevProjectItem* 
     }
 
     QList<TargetInfo> targets = m_interface->targetsForFolder( folder );
-    KDevProjectTargetItem* dotDesktopTarget = 0;
-    KDevProjectTargetItem* xmlGuiTarget = 0;
-    KDevProjectTargetItem* notInstalledHeaders = 0;
-    KDevProjectTargetItem* installedHeaders = 0;
+    KDevProjectItem* dotDesktopTarget = 0;
+    KDevProjectItem* xmlGuiTarget = 0;
+    KDevProjectItem* notInstalledHeaders = 0;
+    KDevProjectItem* installedHeaders = 0;
 
     foreach( TargetInfo target, targets )
-    { /* FIXME port
+    {
         switch( target.type )
         {
         case AutoTools::Data:
             if ( target.name.contains( ".desktop" ) )
             {
                 if ( dotDesktopTarget == 0 )
-                    dotDesktopTarget = new AutoMakeTargetItem( i18n( "freedesktop.org Desktop Entry Files" ),
+                    dotDesktopTarget = new KDevProjectItem( i18n( "freedesktop.org Desktop Entry Files" ),
                                                                 folderItem  );
-                QFileInfo desktopInfo( target.folder, target.name );
+                QFileInfo desktopInfo( target.url.path(), target.name );
                 dotDesktopTarget->add( new AutoMakeFileItem( target.name, dotDesktopTarget ) );
             }
             else if ( target.name.contains( ".rc" ) )
             {
                 if ( xmlGuiTarget == 0 )
-                    xmlGuiTarget = new KDevProjectTargetItem( i18n( "KDE XMLGUI Definitions" ),
+                    xmlGuiTarget = new KDevProjectItem( i18n( "KDE XMLGUI Definitions" ),
                                                             folderItem );
-                QFileInfo rcInfo( target.folder, target.name );
-                xmlGuiTarget->add( new AutoMakeFileItem( rcInfo, xmlGuiTarget ) );
+                QFileInfo rcInfo( target.url.path(), target.name );
+                xmlGuiTarget->add( new AutoMakeFileItem( KUrl(rcInfo.absoluteFilePath()),
+                                                         xmlGuiTarget ) );
             }
             break;
         case AutoTools::Headers:
             if ( target.location != AutoTools::None )
             {
                 if ( installedHeaders == 0 )
-                    installedHeaders = new KDevProjectTargetItem( i18n( "Installed headers" ) );
-                QFileInfo headerInfo( target.folder, target.name );
-                installedHeaders->add( new AutoMakeFileItem( headerInfo, installedHeaders ) );
+                    installedHeaders = new KDevProjectItem( i18n( "Installed headers" ) );
+                QFileInfo headerInfo( target.url.path(), target.name );
+                installedHeaders->add( new AutoMakeFileItem( KUrl(headerInfo.absoluteFilePath()),
+                                                             installedHeaders ) );
             }
             else
             {
                 if ( notInstalledHeaders == 0 )
-                    notInstalledHeaders = new KDevProjectTargetItem( i18n( "Uninstalled headers" ) );
-                QFileInfo headerInfo( target.folder, target.name );
-                notInstalledHeaders->add( new AutoMakeFileItem( headerInfo, notInstalledHeaders ) );
+                    notInstalledHeaders = new KDevProjectItem( i18n( "Uninstalled headers" ) );
+                QFileInfo headerInfo( target.url.path(), target.name );
+                notInstalledHeaders->add( new AutoMakeFileItem( KUrl(headerInfo.absoluteFilePath()),
+                                                                notInstalledHeaders ) );
             }
             break;
         case AutoTools::Program:
@@ -164,10 +167,9 @@ void AutoMakeImporter::createProjectItems( const KUrl& folder, KDevProjectItem* 
             folderItem->add( targetItem );
             QList<QFileInfo> targetFiles = m_interface->filesForTarget( target );
             foreach( QFileInfo fi, targetFiles )
-                targetItem->add( new AutoMakeFileItem( fi, targetItem ) );
+                targetItem->add( new AutoMakeFileItem( KUrl(fi.absoluteFilePath()), targetItem ) );
             break;
         };
-      */
     }
     if ( dotDesktopTarget )
         folderItem->add( dotDesktopTarget );
