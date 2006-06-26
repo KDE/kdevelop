@@ -20,9 +20,10 @@
 #include "mainwindow.h"
 
 #include <QMap>
-#include <QToolBar>
-#include <QSettings>
 #include <QLayout>
+
+#include <kglobal.h>
+#include <kconfig.h>
 
 #include "area.h"
 #include "button.h"
@@ -71,9 +72,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::initSettings()
 {
-    QSettings settings("Ideal", "Ideal");
+    KConfig *config = KGlobal::config();
     d->buttonMode = static_cast<Ideal::ButtonMode>(
-        settings.value("ButtonMode", Ideal::Text).toInt());
+        config->readEntry("ButtonMode", (int)Ideal::Text));
 }
 
 void MainWindow::initButtonBar(Ideal::Place place)

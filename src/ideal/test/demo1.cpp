@@ -26,6 +26,10 @@
 #include <QTextEdit>
 #include <QDockWidget>
 
+#include <kcmdlineargs.h>
+#include <kapplication.h>
+#include <klocale.h>
+
 #include "area.h"
 #include "button.h"
 #include "buttonbar.h"
@@ -37,7 +41,8 @@ using namespace Ideal;
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    KCmdLineArgs::init(argc, argv, "demo1", I18N_NOOP("Demo1"), I18N_NOOP("Demo1"), "0.0" );
+    KApplication app;
 
     MainWindow w;
 
