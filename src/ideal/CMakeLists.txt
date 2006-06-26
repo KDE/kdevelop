@@ -2,6 +2,7 @@
 set(ideal_LIB_SRCS
     button.cpp
     buttonbar.cpp
+    buttonbarcontainer.cpp
     mainwindow.cpp
     toolview.cpp
     area.cpp

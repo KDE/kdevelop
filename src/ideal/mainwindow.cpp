@@ -27,103 +27,10 @@
 #include "area.h"
 #include "button.h"
 #include "buttonbar.h"
+#include "buttonbarcontainer.h"
 #include "toolview.h"
 
 namespace Ideal {
-
-//==================== ButtonBarContainer =====================
-
-class ButtonBarContainer: public QToolBar {
-public:
-    ButtonBarContainer(Ideal::Place place, ButtonMode mode, QWidget *parent = 0)
-        :QToolBar(parent), m_place(place)
-    {
-        setWindowTitle(titleForPlace());
-
-        m_bar = new ButtonBar(place, mode, this);
-        addWidget(m_bar);
-        setMovable(false);
-        findChild<QBoxLayout*>()->setMargin(0);
-        if (m_bar->isEmpty())
-            hide();
-    }
-
-    void setButtonMode(ButtonMode mode)
-    {
-        m_bar->setMode(mode);
-    }
-
-    void addToolViewButton(ToolView *view)
-    {
-        if (!isVisible())
-            show();
-        Button *button = new Button(m_bar, view->widget()->windowTitle(),
-            view->widget()->windowIcon(), view->widget()->toolTip());
-        m_bar->addButton(button/*, false*/);
-        m_viewButtons[view] = button;
-
-    }
-
-    void showToolViewButton(ToolView *view)
-    {
-        m_viewButtons[view]->show();
-    }
-
-    void hideToolViewButton(ToolView *view)
-    {
-        m_viewButtons[view]->hide();
-    }
-
-    void removeToolViewButton(ToolView *view)
-    {
-        m_bar->removeButton(m_viewButtons[view]);
-        m_viewButtons.remove(view);
-        if (m_bar->isEmpty())
-            hide();
-    }
-
-    Qt::ToolBarArea toolBarPlace()
-    {
-        return toolBarPlace(m_place);
-    }
-
-    static Qt::ToolBarArea toolBarPlace(Ideal::Place place)
-    {
-        Qt::ToolBarArea dockArea = Qt::LeftToolBarArea;
-        if (place == Ideal::Right) dockArea = Qt::RightToolBarArea;
-        else if (place == Ideal::Bottom) dockArea = Qt::BottomToolBarArea;
-        else if (place == Ideal::Top) dockArea = Qt::TopToolBarArea;
-        return dockArea;
-    }
-
-    virtual void setVisible(bool visible)
-    {
-/*        if (visible && m_bar->isEmpty())
-            return;*/
-        QToolBar::setVisible(visible);
-    }
-
-private:
-
-    QString titleForPlace()
-    {
-        switch (m_place) {
-            case Ideal::Left: return "Left Button Bar";
-            case Ideal::Right: return "Right Button Bar";
-            case Ideal::Bottom: return "Bottom Button Bar";
-            case Ideal::Top: return "Top Button Bar";
-        }
-        return "";
-    }
-
-    Ideal::Place m_place;
-    ButtonMode m_mode;
-
-    ButtonBar *m_bar;
-    QMap<ToolView*, Button*> m_viewButtons;
-
-};
-
 
 //==================== MainWindowPrivate =====================
 
