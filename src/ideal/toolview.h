@@ -30,6 +30,7 @@ namespace Ideal {
 @short Ideal Tool View
 */
 class IDEAL_EXPORT ToolView: public QDockWidget {
+    Q_OBJECT
 public:
     ToolView(const QString &title, QWidget *parent = 0);
     ToolView(QWidget *parent = 0);
@@ -42,6 +43,12 @@ public:
     int areaKind() const { return m_areaKind; }
 
     static Qt::DockWidgetArea dockPlace(Ideal::Place place);
+
+public slots:
+    virtual void setVisible(bool v);
+
+signals:
+    void visibilityChanged(bool v);
 
 private:
     void init();

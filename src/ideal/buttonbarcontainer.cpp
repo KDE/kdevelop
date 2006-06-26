@@ -20,6 +20,7 @@
 #include "buttonbarcontainer.h"
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "button.h"
 #include "buttonbar.h"
@@ -53,7 +54,13 @@ void ButtonBarContainer::addToolViewButton(ToolView *view)
         view->widget()->windowIcon(), view->widget()->toolTip());
     m_bar->addButton(button/*, false*/);
     m_viewButtons[view] = button;
+    m_buttonViews[button] = view;
 
+    kDebug() << view->isVisible() << endl;
+    button->setChecked(true);
+
+    connect(button, SIGNAL(clicked()), this, SLOT(setToolViewVisibility()));
+    connect(view, SIGNAL(visibilityChanged(bool)), button, SLOT(setChecked(bool)));
 }
 
 void ButtonBarContainer::showToolViewButton(ToolView *view)
@@ -68,8 +75,10 @@ void ButtonBarContainer::hideToolViewButton(ToolView *view)
 
 void ButtonBarContainer::removeToolViewButton(ToolView *view)
 {
-    m_bar->removeButton(m_viewButtons[view]);
+    Button *button = m_viewButtons[view];
+    m_bar->removeButton(button);
     m_viewButtons.remove(view);
+    m_buttonViews.remove(button);
     if (m_bar->isEmpty())
         hide();
 }
@@ -92,4 +101,17 @@ QString ButtonBarContainer::titleForPlace()
     return "";
 }
 
+void ButtonBarContainer::setToolViewVisibility()
+{
+    Button *button = qobject_cast<Ideal::Button*>(sender());
+    if (!button)
+        return;
+    ToolView *view = m_buttonViews[button];
+    if (!view)
+        return;
+    view->setVisible(!view->isVisible());
 }
+
+}
+
+#include "buttonbarcontainer.moc"

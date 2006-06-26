@@ -57,6 +57,12 @@ Qt::DockWidgetArea ToolView::dockPlace(Ideal::Place place)
     return dockArea;
 }
 
+void ToolView::setVisible(bool v)
+{
+    QDockWidget::setVisible(v);
+    emit visibilityChanged(v);
+}
+
 }
 
 #include "toolview.moc"

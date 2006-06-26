@@ -17,6 +17,9 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
+#ifndef IDEALBUTTONBARCONTAINER
+#define IDEALBUTTONBARCONTAINER
+
 #include <QMap>
 #include <QToolBar>
 
@@ -29,6 +32,7 @@ class ButtonBar;
 class Button;
 
 class ButtonBarContainer: public QToolBar {
+    Q_OBJECT
 public:
     ButtonBarContainer(Ideal::Place place, ButtonMode mode, QWidget *parent = 0);
 
@@ -54,6 +58,9 @@ public:
 
     virtual void setVisible(bool visible);
 
+protected slots:
+    void setToolViewVisibility();
+
 private:
     QString titleForPlace();
 
@@ -62,7 +69,10 @@ private:
 
     ButtonBar *m_bar;
     QMap<ToolView*, Button*> m_viewButtons;
+    QMap<Button*, ToolView*> m_buttonViews;
 
 };
 
 }
+
+#endif
