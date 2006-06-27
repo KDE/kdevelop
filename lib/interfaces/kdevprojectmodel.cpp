@@ -104,6 +104,8 @@ const KUrl& KDevProjectFolderItem::url( ) const
 void KDevProjectFolderItem::setUrl( const KUrl& url )
 {
   m_url = url;
+  QStringList dirParts = m_url.path().split('/');
+  setName( dirParts.last() );
 }
 
 KDevProjectFileItem::KDevProjectFileItem( const KUrl & file, KDevItemGroup * parent )
