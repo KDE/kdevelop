@@ -1,7 +1,7 @@
 <!DOCTYPE kdeveloptoc>
 <kdeveloptoc>
 <title>Ruby bugs</title>
-<base href="http://www.ruby-lang.org/cgi-bin/"/>
-<tocsect1 name="Query" url="ruby-bugs">
+<base href="http://www.rrubyforge.org/"/>
+<tocsect1 name="Query" url="tracker/?atid=1698&amp;group_id=426&amp;func=browse">
 </tocsect1>
 </kdeveloptoc>
