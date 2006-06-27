@@ -301,7 +301,7 @@ QList<TargetInfo> MakefileInterface::targetsForFolder( const KUrl& folder ) cons
                     info.location = AutoTools::convertToLocation( location );
                     info.name = target;
                     info.url = folder;
-
+                    kDebug( 9020 ) << k_funcinfo << "target name: " << target << endl;
                     targetList.append( info );
                 }
             }

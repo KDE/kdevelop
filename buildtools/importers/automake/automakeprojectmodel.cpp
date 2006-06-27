@@ -43,6 +43,7 @@ AutoMakeTargetItem::AutoMakeTargetItem( const TargetInfo& target, KDevItemGroup*
     : KDevProjectTargetItem( target.url, parent )
 {
     m_target = target;
+    setName( target.name );
 }
 
 AutoMakeTargetItem::~AutoMakeTargetItem()
