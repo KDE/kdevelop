@@ -1,20 +1,20 @@
 /* This file is part of KDevelop
- Copyright (C) 2005 Adam Treat <treat@kde.org>
+Copyright (C) 2005 Adam Treat <treat@kde.org>
 
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Library General Public
- License as published by the Free Software Foundation; either
- version 2 of the License, or (at your option) any later version.
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
 
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Library General Public License for more details.
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
 
- You should have received a copy of the GNU Library General Public License
- along with this library; see the file COPYING.LIB.  If not, write to
- the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- Boston, MA 02110-1301, USA.
+You should have received a copy of the GNU Library General Public License
+along with this library; see the file COPYING.LIB.  If not, write to
+the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA 02110-1301, USA.
 */
 
 #include "kdevdocumentviewdelegate.h"
@@ -39,8 +39,7 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
     if ( !model->parent( index ).isValid() )
     {
         // this is a top-level item.
-/*        QStyleOptionButton buttonOption;*/
-        QStyleOptionHeader buttonOption;
+        QStyleOptionButton buttonOption;
 
         buttonOption.state = option.state;
 #ifdef Q_WS_MAC
@@ -51,14 +50,9 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
         buttonOption.state &= ~QStyle::State_HasFocus;
 
         buttonOption.rect = option.rect;
-        buttonOption.rect.setLeft( option.rect.left() - 1 );
-        buttonOption.rect.setRight( option.rect.right() - 1 );
         buttonOption.palette = option.palette;
-/*        buttonOption.features = QStyleOptionButton::None;*/
-        buttonOption.section = QStyleOptionHeader::OnlyOneSection;
-        buttonOption.textAlignment = Qt::AlignCenter;
-        buttonOption.text = model->data( index, Qt::DisplayRole ).toString();
-        m_view->style() ->drawControl( QStyle::CE_Header, &buttonOption, painter, m_view );
+        buttonOption.features = QStyleOptionButton::None;
+        m_view->style() ->drawControl( QStyle::CE_PushButton, &buttonOption, painter, m_view );
 
         QStyleOption branchOption;
         static const int i = 9; // ### hardcoded in qcommonstyle.cpp
@@ -71,13 +65,17 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
             branchOption.state |= QStyle::State_Open;
 
         m_view->style() ->drawPrimitive( QStyle::PE_IndicatorBranch, &branchOption, painter, m_view );
+
+        // draw text
+        QRect textrect = QRect( r.left() + i * 2, r.top(), r.width() - ( ( 5 * i ) / 2 ), r.height() );
+        QString text = elidedText( option.fontMetrics, textrect.width(), Qt::ElideMiddle,
+                                   model->data( index, Qt::DisplayRole ).toString() );
+        m_view->style() ->drawItemText( painter, textrect, Qt::AlignCenter,
+                                        option.palette, m_view->isEnabled(), text );
     }
     else
     {
-        QStyleOptionViewItem opt = option;
-        if ( !model->data( index, Qt::DecorationRole ).isNull() )
-            opt.rect.setLeft( option.rect.left() - option.decorationSize.width() - 2);
-        QItemDelegate::paint( painter, opt, index );
+        QItemDelegate::paint( painter, option, index );
     }
 }
 
