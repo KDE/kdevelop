@@ -116,6 +116,6 @@ void KDevKonsoleView::partDestroyed()
 }
 
 
-#include "KDevKonsoleView.moc"
+#include "kdevkonsoleview.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
