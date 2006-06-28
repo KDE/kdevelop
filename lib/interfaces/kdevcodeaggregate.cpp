@@ -73,7 +73,6 @@ void KDevCodeAggregate::setMode( KDevCodeProxy::Mode mode )
 void KDevCodeAggregate::setFilterDocument( const KUrl & url )
 {
     m_filter = url;
-    emit reset();   //Changing the file radically alters the structure
     setMode( KDevCodeProxy::Document );
 }
 
@@ -127,9 +126,9 @@ QModelIndex KDevCodeAggregate::index( int row, int column,
     }
     else if ( KDevCodeItem * codeItem = sourceToItem( parent ) )
     {
-        if ( row >= codeItem->itemCount() )
+        if ( row >= codeItem->itemCount()
+             && m_mode == KDevCodeProxy::Normalize )
         {
-            Q_ASSERT( m_mode == KDevCodeProxy::Normalize );
             KDevCodeItem * childItem = m_stepchildHash[ codeItem ][ row ];
             return createIndex( row, column, childItem );
         }

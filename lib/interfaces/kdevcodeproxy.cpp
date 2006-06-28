@@ -26,12 +26,6 @@ KDevCodeProxy::KDevCodeProxy( QObject* parent )
         : QSortFilterProxyModel( parent )
 {
     setSourceModel( new KDevCodeAggregate( this ) );
-    sourceModel() ->disconnect( SIGNAL( layoutChanged() ), this );
-    sourceModel() ->disconnect( SIGNAL( modelReset() ), this );
-    connect( sourceModel(), SIGNAL( modelReset() ),
-             this, SLOT( forceReset() ) );
-    connect( sourceModel(), SIGNAL( layoutChanged() ),
-             this, SLOT( forceClear() ) );
     sort( 0 );
 }
 
