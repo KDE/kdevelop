@@ -6,8 +6,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces 
 ########### next target ###############
 
 set(kdevkonsoleview_PART_SRCS
-    konsoleviewpart.cpp
-    konsoleviewwidget.cpp
+    kdevkonsoleview_part.cpp
+    kdevkonsoleview.cpp
 )
 
 kde4_automoc(${kdevkonsoleview_PART_SRCS})
