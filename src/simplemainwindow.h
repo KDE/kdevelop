@@ -15,46 +15,57 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 #ifndef SIMPLEMAINWINDOW_H
 #define SIMPLEMAINWINDOW_H
 
-#include <dmainwindow.h>
+#include <kmainwindow.h>
+
 #include <kdevplugin.h>
 #include <kdevmainwindow.h>
 #include <kdevdocumentcontroller.h>
 #include "shellexport.h"
 
+class QStackedWidget;
 class KAction;
 class KMenu;
 class MainWindowShare;
 
-namespace KParts {
-    class ReadOnlyPart;
+namespace KParts
+{
+class ReadOnlyPart;
 }
 
-class KDEVSHELL_EXPORT SimpleMainWindow: public DMainWindow, public KDevMainWindow
+class KDEVSHELL_EXPORT SimpleMainWindow:
+            public KMainWindow,
+            public KDevMainWindow
 {
     Q_OBJECT
 public:
-    SimpleMainWindow(QWidget* parent = 0);
+    SimpleMainWindow( QWidget *parent = 0, Qt::WFlags flags = 0 );
     virtual ~SimpleMainWindow();
 
-    virtual void embedPartView(QWidget *view, const QString &title, const QString& toolTip = QString());
-    virtual void embedSelectView(QWidget *view, const QString &title, const QString &toolTip);
-    virtual void embedOutputView(QWidget *view, const QString &title, const QString &toolTip);
-    virtual void embedSelectViewRight(QWidget* view, const QString& title, const QString &toolTip);
+    //BEGIN KDevMainWindow implementation
+    virtual void embedPartView( QWidget *view, const QString &title,
+                                const QString& toolTip = QString() );
+    virtual void embedSelectView( QWidget *view, const QString &title,
+                                  const QString &toolTip );
+    virtual void embedOutputView( QWidget *view, const QString &title,
+                                  const QString &toolTip );
+    virtual void embedSelectViewRight( QWidget* view, const QString& title,
+                                       const QString &toolTip );
 
-    virtual void removeView(QWidget *view);
-    virtual void setViewAvailable(QWidget *pView, bool bEnabled);
-    virtual void raiseView(QWidget *view);
-    virtual void lowerView(QWidget *view);
+    virtual void removeView( QWidget *view );
+    virtual void setViewAvailable( QWidget *pView, bool bEnabled );
+    virtual void raiseView( QWidget *view );
+    virtual void lowerView( QWidget *view );
 
     virtual void loadSettings();
     virtual void saveSettings();
 
     virtual KMainWindow *main();
+    //END KDevMainWindow implementation
 
     void init();
 
@@ -62,44 +73,28 @@ protected:
     virtual bool queryClose();
     virtual bool queryExit();
 
-protected slots:
-    virtual void closeTab();
-    virtual void closeTab(QWidget *w);
-    virtual void tabContext(QWidget *w, const QPoint &p);
-
 private slots:
     void gotoNextWindow();
     void gotoPreviousWindow();
     void gotoFirstWindow();
     void gotoLastWindow();
-    void slotCoreInitialized();
+
+    void coreInitialized();
     void projectOpened();
-    void slotDocumentUrlChanged( KDevDocument* document, const KUrl &oldURL, const KUrl &newURL );
-    void activePartChanged(KParts::Part *part);
-    void documentStateChanged(KDevDocument* document, KDevDocument::DocumentState state);
-    void tabContextActivated(int);
     void configureToolbars();
-    void slotNewToolbarConfig();
-    void raiseEditor();
-    void openURL(int w);
+    void newToolbarConfig();
+    void openURL( int w );
     void fillWindowMenu();
-    void slotSplitVertical();
-    void slotSplitHorizontal();
-    void tabWidgetChanged( QWidget *tabWidget );
 
 private:
-    void createFramework();
-    void createActions();
     void setupWindowMenu();
 
     MainWindowShare *m_mainWindowShare;
 
-    KDevDocument* m_currentTabDocument;
-    QMap<QWidget*, Qt::DockWidgetArea> m_docks;
-    KAction *m_raiseEditor;
     KMenu *m_windowMenu;
     typedef QPair<int, KDevDocument*> WinInfo;
     QList<WinInfo> m_windowList;
+    QStackedWidget *m_center;
 };
 
 #endif
