@@ -13,8 +13,8 @@
 #define KDEVKONSOLEVIEW_H
 
 #include <QWidget>
-#include <QString>
-#include <QVBoxLayout>
+
+class QVBoxLayout;
 
 class KDevProject;
 class KDevKonsoleViewPart;
@@ -24,14 +24,12 @@ namespace KParts
 class ReadOnlyPart;
 class Part;
 }
-class QVBoxLayout;
-
 
 class KDevKonsoleView : public QWidget
 {
     Q_OBJECT
 public:
-    KDevKonsoleView( KonsoleViewPart *part );
+    KDevKonsoleView( QWidget *parent );
     virtual ~KDevKonsoleView();
 
 public slots:
@@ -47,10 +45,9 @@ protected:
 private:
     void activate();
 
-    KDevDocumentViewPart *m_part;
+    KParts::ReadOnlyPart *m_part;
     QVBoxLayout *m_vbox;
 };
-
 
 #endif
 

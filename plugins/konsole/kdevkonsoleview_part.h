@@ -15,15 +15,13 @@
 #include <qpointer.h>
 #include "kdevplugin.h"
 
-
 class KDevKonsoleView;
-
 
 class KDevKonsoleViewPart : public KDevPlugin
 {
     Q_OBJECT
 public:
-        KDevKonsoleViewPart( QObject *parent, const QStringList & );
+    KDevKonsoleViewPart( QObject *parent, const QStringList & );
     virtual ~KDevKonsoleViewPart();
 
 private:

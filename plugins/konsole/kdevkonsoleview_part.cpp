@@ -23,15 +23,15 @@
 
 static const KDevPluginInfo data( "kdevkonsoleview" );
 K_EXPORT_COMPONENT_FACTORY( kdevkonsoleview,
-                            KDevGenericFactory<KonsoleViewPart>( data ) )
+                            KDevGenericFactory<KDevKonsoleViewPart>( data ) )
 
 KDevKonsoleViewPart::KDevKonsoleViewPart( QObject *parent, const QStringList & )
         : KDevPlugin( &data, parent )
 {
-    m_konsoleView = new KonsoleViewWidget( this );
+    m_konsoleView = new KDevKonsoleView( 0 );
 
     m_konsoleView->setWhatsThis( i18n( "<b>Konsole</b><p>"
-                                   "This window contains an embedded console." ) );
+                                       "This window contains an embedded console." ) );
 
     m_konsoleView->setWindowIcon( KIcon( "konsole" ) );
     m_konsoleView->setWindowTitle( i18n( "Konsole" ) );
@@ -42,7 +42,6 @@ KDevKonsoleViewPart::KDevKonsoleViewPart( QObject *parent, const QStringList & )
         i18n( "Embedded console window" ) );
 }
 
-
 KDevKonsoleViewPart::~KDevKonsoleViewPart()
 {
     if ( m_konsoleView )
@@ -51,7 +50,6 @@ KDevKonsoleViewPart::~KDevKonsoleViewPart()
         delete m_konsoleView;
     }
 }
-
 
 #include "kdevkonsoleview_part.moc"
 

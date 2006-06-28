@@ -12,8 +12,8 @@
 #include <QLayout>
 #include <QLabel>
 #include <QFrame>
-#include <QDir> 
-#include <QVboxLayout>
+#include <QDir>
+#include <QVBoxLayout>
 
 #include <klocale.h>
 #include <kparts/part.h>
@@ -30,14 +30,18 @@
 
 #include <QtCore/qdebug.h>
 
-KDevKonsoleView::KDevKonsoleView( KonsoleViewPart *part, QWidget *parent )
+KDevKonsoleView::KDevKonsoleView( QWidget *parent )
         : QWidget( parent ),
-        m_part( part )
+        m_part( 0 )
 {
-    connect( KDevApi::self() ->documentController(),
-             SIGNAL( activePartChanged( KParts::Part* ) ),
-             this, SLOT( activePartChanged( KParts::Part* ) ) );
-    m_vbox = new Qm_vboxLayout( this );
+    //TODO Make this configurable in the future,
+    // but by default the konsole shouldn't
+    // automatically switch directories on you.
+
+    //     connect( KDevApi::self() ->documentController(),
+    //              SIGNAL( activePartChanged( KParts::Part* ) ),
+    //              this, SLOT( activePartChanged( KParts::Part* ) ) );
+    m_vbox = new QVBoxLayout( this );
 }
 
 KDevKonsoleView::~KDevKonsoleView()
