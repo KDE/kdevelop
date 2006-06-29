@@ -51,6 +51,8 @@ private slots:
     void documentLoaded( KDevDocument* file );
     void documentClosed( KDevDocument* file );
     void documentActivated( KDevDocument* file );
+    void projectOpened();
+    void projectClosed();
 
 private:
     QStringList m_mimetypes;

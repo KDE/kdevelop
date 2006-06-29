@@ -1,29 +1,33 @@
 /*
- * KDevelop C++ Language Support
- *
- * Copyright (c) 2005 Matt Rogers <mattr@kde.org>
- * Copyright (c) 2006 Adam Treat <treat@kde.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Library General Public License as
- * published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the
- * Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+* KDevelop C++ Language Support
+*
+* Copyright (c) 2005 Matt Rogers <mattr@kde.org>
+* Copyright (c) 2006 Adam Treat <treat@kde.org>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Library General Public License as
+* published by the Free Software Foundation; either version 2 of the
+* License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public
+* License along with this program; if not, write to the
+* Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*/
 
 #include <kdebug.h>
 #include <kinstance.h>
 #include <kstandarddirs.h>
 
+#include <kdevcore.h>
+#include <kdevproject.h>
+#include <kdevfilemanager.h>
+#include <kdevprojectmodel.h>
 #include <kdevdocumentcontroller.h>
 
 #include "backgroundparser.h"
@@ -39,7 +43,7 @@
 
 CppLanguageSupport::CppLanguageSupport( QObject* parent,
                                         const QStringList& /*args*/ )
-    : KDevLanguageSupport( CppLanguageSupportFactory::info(), parent )
+        : KDevLanguageSupport( CppLanguageSupportFactory::info(), parent )
 {
     QString types =
         QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
@@ -50,24 +54,32 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
     m_backgroundParser = new BackgroundParser( this );
     m_highlights = new CppHighlighting( this );
 
-    connect( KDevApi::self()->documentController(), SIGNAL( documentLoaded(KDevDocument*) ),
-             this, SLOT( documentLoaded(KDevDocument*) ) );
-    connect( KDevApi::self()->documentController(), SIGNAL( documentClosed(KDevDocument*) ),
-             this, SLOT( documentClosed(KDevDocument*) ) );
-    connect( KDevApi::self()->documentController(), SIGNAL( documentActivated(KDevDocument*) ),
-             this, SLOT( documentActivated(KDevDocument*) ) );
+    connect( KDevApi::self() ->documentController(),
+             SIGNAL( documentLoaded( KDevDocument* ) ),
+             this, SLOT( documentLoaded( KDevDocument* ) ) );
+    connect( KDevApi::self() ->documentController(),
+             SIGNAL( documentClosed( KDevDocument* ) ),
+             this, SLOT( documentClosed( KDevDocument* ) ) );
+    connect( KDevApi::self() ->documentController(),
+             SIGNAL( documentActivated( KDevDocument* ) ),
+             this, SLOT( documentActivated( KDevDocument* ) ) );
+    connect( KDevApi::self() ->core(),
+             SIGNAL( projectOpened() ),
+             this, SLOT( projectOpened() ) );
+    connect( KDevApi::self() ->core(),
+             SIGNAL( projectClosed() ),
+             this, SLOT( projectClosed() ) );
 }
 
 CppLanguageSupport::~CppLanguageSupport()
-{
-}
+{}
 
 KDevCodeModel *CppLanguageSupport::codeModel( const KUrl &url ) const
 {
     if ( url.isValid() )
         return m_codeProxy->codeModel( url );
     else
-        return m_codeProxy->codeModel( KDevApi::self()->documentController() ->activeDocumentUrl() );
+        return m_codeProxy->codeModel( KDevApi::self() ->documentController() ->activeDocumentUrl() );
 }
 
 KDevCodeProxy *CppLanguageSupport::codeProxy() const
@@ -110,6 +122,31 @@ void CppLanguageSupport::documentActivated( KDevDocument* file )
 CppHighlighting * CppLanguageSupport::codeHighlighting( ) const
 {
     return m_highlights;
+}
+
+void CppLanguageSupport::projectOpened()
+{
+    kDebug() << "1" << k_funcinfo << endl;
+    // FIXME Add signals slots from the filemanager for:
+    // 1. filesAddedToProject
+    // 2. filesRemovedFromProject
+    // 3. filesChangedInProject
+
+    KUrl::List documentList;
+    QList<KDevProjectFileItem*> files = KDevApi::self() ->project() ->allFiles();
+    foreach ( KDevProjectFileItem *file, files )
+    {
+        if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith(".h")*/ )
+        {
+            documentList.append( file->url() );
+        }
+    }
+    m_backgroundParser->addDocumentList( documentList );
+}
+
+void CppLanguageSupport::projectClosed()
+{
+    // FIXME This should remove the project files from the backgroundparser
 }
 
 #include "cpplanguagesupport.moc"

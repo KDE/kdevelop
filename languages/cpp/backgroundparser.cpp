@@ -58,7 +58,6 @@ BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
     m_timer->setSingleShot( true );
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
     m_timer->start( 500 );
-    connect( KDevApi::self()->core(), SIGNAL(projectOpened()), SLOT(projectOpened()) );
 }
 
 BackgroundParser::~BackgroundParser()
@@ -75,14 +74,21 @@ void BackgroundParser::addDocument( const KUrl &url, KDevDocument* document )
     if ( !m_documents.contains( url ) )
     {
         m_documents.insert( url, true );
-
         parseDocuments();
-
     }
 
     if (document && document->textDocument())
         connect( document->textDocument(), SIGNAL( textChanged( KTextEditor::Document* ) ),
             SLOT( documentChanged( KTextEditor::Document* ) ) );
+}
+
+void BackgroundParser::addDocumentList( const KUrl::List &urls )
+{
+    foreach( KUrl url, urls)
+        if ( !m_documents.contains( url ) )
+            m_documents.insert( url, true );
+
+    parseDocuments();
 }
 
 void BackgroundParser::removeDocument( const KUrl &url )
@@ -191,27 +197,6 @@ void BackgroundParser::resume()
 void BackgroundParser::removeDocumentFile( KDevDocument * document )
 {
     m_openDocuments.remove(document->url());
-}
-
-void BackgroundParser::projectOpened( )
-{
-    // FIXME all quite temporary hacks until new project api available
-
-    /*connect(m_cppSupport->project(), SIGNAL(addedFilesToProject(const QStringList&)), SLOT(filesAddedToProject(const QStringList&)));
-    void removedFilesFromProject(const QStringList& fileList);
-    void changedFilesInProject(const QStringList& fileList);*/
-    //FIXME need replacement for allFiles
-    /*
-    foreach (QString file, m_cppSupport->project()->allFiles()) {
-        file = m_cppSupport->project()->relativeProjectFile(file);
-        if (QFile::exists(file)) {
-            kDebug() << "Found file " << file << endl;
-            addDocument(KUrl::fromPath(file));
-        } else {
-            kDebug() << "Missed file " << file << endl;
-        }
-    }
-    */
 }
 
 #include "backgroundparser.moc"

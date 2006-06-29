@@ -61,12 +61,12 @@ public slots:
     void suspend();
     void resume();
     void addDocument( const KUrl &url, KDevDocument* document = 0L );
+    void addDocumentList( const KUrl::List &urls );
     void removeDocumentFile( KDevDocument* document );
     void removeDocument( const KUrl &url );
     void parseDocuments();
     void parseComplete( Job* );
     void documentChanged( KTextEditor::Document* document );
-    void projectOpened();
 
 private:
     CppLanguageSupport *m_cppSupport;
