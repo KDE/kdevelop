@@ -214,7 +214,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         }
       }
 
-      Q_ASSERT(!input.atEnd() && input == ')');
+      //Q_ASSERT(!input.atEnd() && input == ')');
 
       ++input; // skip ')'
 

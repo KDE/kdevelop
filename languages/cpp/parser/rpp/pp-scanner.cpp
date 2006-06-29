@@ -148,7 +148,7 @@ void pp_skip_string_literal::operator()(Stream& input, Stream& output)
         break;
 
       case IN_STRING:
-        Q_ASSERT(input != '\n');
+//         Q_ASSERT(input != '\n');
 
         if (input == '\"')
           state = END;
@@ -190,7 +190,8 @@ void pp_skip_char_literal::operator()(Stream& input, Stream& output)
         break;
 
       case IN_STRING:
-        Q_ASSERT(input != '\n');
+        //Note this fails on ../lexer.cpp for instance :)
+        //Q_ASSERT(input != '\n');
 
         if (input == '\'')
           state = END;

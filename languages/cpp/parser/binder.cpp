@@ -309,7 +309,7 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
 
   decl_cc.run(declarator);
 
-  Q_ASSERT(! decl_cc.id().isEmpty());
+//   Q_ASSERT(! decl_cc.id().isEmpty());
 
   FunctionDefinitionModelItem
     old = changeCurrentFunction(model()->create<FunctionDefinitionModelItem>());
