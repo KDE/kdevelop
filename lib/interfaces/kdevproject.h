@@ -94,6 +94,8 @@ public Q_SLOTS:
     /**Returns the name of the project.*/
     virtual Q_SCRIPTABLE QString projectName() const = 0;
 
+    virtual QList<KDevProjectFileItem*> allFiles() = 0;
+
     /**
      * Get the file manager for the project
      *

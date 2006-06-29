@@ -38,7 +38,12 @@ KDevLanguageSupport::~KDevLanguageSupport()
 
 bool KDevLanguageSupport::supportsDocument( KDevDocument* file )
 {
-    KMimeType::Ptr mimetype = KMimeType::findByURL( file->url() );
+    return supportsDocument( file->url() );
+}
+
+bool KDevLanguageSupport::supportsDocument( const KUrl &url )
+{
+    KMimeType::Ptr mimetype = KMimeType::findByURL( url );
     foreach ( QString mime, mimeTypes() )
         if ( mimetype->is( mime ) )
             return true;
