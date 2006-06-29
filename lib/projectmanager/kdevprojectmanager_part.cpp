@@ -191,13 +191,12 @@ void KDevProjectManagerPart::openProject(const KUrl &dirName, const QString &pro
   m_projectDirectory = dirName;
   m_projectName = projectName;
   import(ForceRefresh);
-
 }
 
 void KDevProjectManagerPart::import(RefreshPolicy policy)
 {
   
-  QStringList oldFileList = allFiles();
+  QStringList oldFileList = fileList();
 
   if (m_workspace)
     m_projectModel->removeItem(m_workspace);
@@ -218,7 +217,7 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
   connect(job, SIGNAL(result(KJob*)), this, SIGNAL(refresh()));
   job->start();
 
-  QStringList newFileList = allFiles();
+  QStringList newFileList = fileList();
 
   bool hasChanges = computeChanges(oldFileList, newFileList);
 
@@ -240,7 +239,46 @@ QString KDevProjectManagerPart::projectName() const
   return m_projectName;
 }
 
-QStringList KDevProjectManagerPart::allFiles()
+QList<KDevProjectFileItem*> KDevProjectManagerPart::allFiles()
+{
+  if (!m_workspace)
+  return QList<KDevProjectFileItem*>();
+
+  return recurseFiles(m_workspace);
+}
+
+QList<KDevProjectFileItem*> KDevProjectManagerPart::recurseFiles(KDevProjectItem *item)
+{
+  QList<KDevProjectFileItem*> files;
+
+  if (KDevProjectFolderItem *folder = item->folder())
+  {
+    QList<KDevProjectFolderItem*> folder_list = folder->folderList();
+    for (QList<KDevProjectFolderItem*>::Iterator it = folder_list.begin(); it != folder_list.end(); ++it)
+      files += recurseFiles((*it));
+
+    QList<KDevProjectTargetItem*> target_list = folder->targetList();
+    for (QList<KDevProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it)
+      files += recurseFiles((*it));
+
+    QList<KDevProjectFileItem*> file_list = folder->fileList();
+    for (QList<KDevProjectFileItem*>::Iterator it = file_list.begin(); it != file_list.end(); ++it)
+      files += recurseFiles((*it));
+  }
+  else if (KDevProjectTargetItem *target = item->target())
+  {
+    QList<KDevProjectFileItem*> file_list = target->fileList();
+    for (QList<KDevProjectFileItem*>::Iterator it = file_list.begin(); it != file_list.end(); ++it)
+      files += recurseFiles((*it));
+  }
+  else if (KDevProjectFileItem *file = item->file())
+  {
+    files.append(file);
+  }
+  return files;
+}
+
+QStringList KDevProjectManagerPart::fileList()
 {
   if (!m_workspace)
     return QStringList();

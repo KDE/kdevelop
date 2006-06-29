@@ -69,6 +69,7 @@ public:
     virtual void closeProject();
     virtual KUrl projectDirectory() const;
     virtual QString projectName() const;
+    virtual QList<KDevProjectFileItem*> allFiles();
 
     void import(RefreshPolicy policy = Refresh);
 
@@ -90,7 +91,8 @@ private slots:
 protected:
     bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);
     QStringList fileList(KDevProjectItem *item);
-    QStringList allFiles();
+    QStringList fileList();
+    QList<KDevProjectFileItem*> recurseFiles(KDevProjectItem *item);
 
 private:
     KDevProjectModel *m_projectModel;
