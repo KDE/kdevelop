@@ -32,7 +32,7 @@ public:
 };
 
 KDevFileManager::KDevFileManager(QObject *parent)
-    : KDevItemModel(parent), d(new Private)
+    : QObject(parent), d(new Private)
 {
     KDevProject* project = qobject_cast<KDevProject*>( parent );
     d->parent = project;
@@ -49,7 +49,8 @@ KDevProject * KDevFileManager::project( ) const
 
 KDevProjectFolderItem * KDevFileManager::top( )
 {
-    return dynamic_cast<KDevProjectFolderItem*>(root());
+/*    return dynamic_cast<KDevProjectFolderItem*>(root());*/
+    return 0;
 }
 
 bool KDevFileManager::renameFile( KDevProjectFileItem* oldFile,

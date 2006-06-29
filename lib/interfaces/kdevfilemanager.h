@@ -49,7 +49,7 @@ class KDialogBase;
  *
  * @author Roberto Raggi, Matt Rogers, Hamish Rodda
  */
-class KDEVINTERFACES_EXPORT KDevFileManager: public KDevItemModel
+class KDEVINTERFACES_EXPORT KDevFileManager: public QObject
 {
     Q_OBJECT
 
