@@ -80,6 +80,7 @@ Comment[eu]="Kaixo mundua" programa sinple bat sortu da Haskell lengoaian hemen:
 Comment[fr]=Un programme « Hello World » simple en Haskell a été créé dans %{dest}
 Comment[hu]=Létrejött egy egyszerű 'Hello World' program Haskell nyelven itt: %{dest}
 Comment[it]=È stato creato un semplice programma di "Hello World" in Haskell in %{dest}
+Comment[ja]=Haskellで記述された簡単な hello world プログラムを %{dest} に生成しました
 Comment[nl]=Een eenvoudig Hello World-programma in Haskel is aangemaakt in  %{dest}
 Comment[pl]=Prosty program "Witaj świecie" w Haskellu został utworzony w %{dest}
 Comment[pt]=Foi criado um programa simples 'olá mundo' em Haskell em %{dest}

@@ -80,6 +80,7 @@ Comment[fr]=Une application QtRuby simple a été créée dans %{dest}
 Comment[ga]=Cruthaíodh feidhmchlár simplí QtRuby i %{dest}
 Comment[hu]=Létrejött egy egyszerű QtRuby-alapú alkalmazás itt: %{dest}
 Comment[it]=È stata creata una semplice applicazione QtRuby in %{dest}
+Comment[ja]=簡単な QtRuby アプリケーションを %{dest} に作成しました
 Comment[nl]=Een eenvoudige QtRuby-toepassing is aangemaakt in %{dest}
 Comment[pl]=Prosty program w QtRuby został utworzony w %{dest}
 Comment[pt]=Foi criada uma aplicação simples de QtRuby em %{dest}

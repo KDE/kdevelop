@@ -74,6 +74,7 @@ Comment[fr]=Un script Perl simple a été créé dans %{dest}
 Comment[ga]=Cruthaíodh script shimplí Perl i %{dest}
 Comment[hu]=Létrejött egy egyszerű Perl-szkript itt: %{dest}
 Comment[it]=È stato creato un semplice script Perl in %{dest}
+Comment[ja]=簡単な Perl スクリプトを %{dest} に生成しました
 Comment[nl]=Een eenvoudig Perl-script is aangemaakt in %{dest}
 Comment[pl]=Prosty skrypt w Perlu został utworzony w %{dest}
 Comment[pt]=Foi criado um programa simples em Perl em %{dest}

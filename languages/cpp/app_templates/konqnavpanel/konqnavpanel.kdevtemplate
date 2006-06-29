@@ -158,6 +158,7 @@ Comment[eu]=Konqueror-en arakatze-paneleko plugin bat sortu da hemen: %{dest}
 Comment[fr]=Un module pour le panneau de navigation de Konqueror a été créé dans %{dest}
 Comment[hu]=Létrejött egy konqueroros navigációs modul itt: %{dest}
 Comment[it]=È stato creato un pluging per il pannello di navigazione di Konqueror in %{dest}
+Comment[ja]=Konqueror ナビゲーションプラグインを %{dest} に作成しました
 Comment[nl]=Een Konqueror-navigatiepaneel-plugin is aangemaakt in %{dest}
 Comment[pl]=Wtyczka do panelu nawigacyjnego Konquerora została utworzona w %{dest}
 Comment[pt]=Um 'plugin' do painel de navegação do Konqueror foi criado em %{dest}

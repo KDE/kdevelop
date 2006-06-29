@@ -2,6 +2,7 @@
 Type=Service
 Name=KDevAutomakeImporter
 Name[da]=KDevelop Automake-importør
+Name[ja]=KDevCustomInporter
 Name[pl]=KDevImportAutomake
 Name[sk]=KDevAutomakeImportér
 Name[sv]=KDevelop Automake-import
@@ -19,6 +20,7 @@ Comment[ga]=Iompórtálaí Automake KDevelop
 Comment[hu]=KDevelop Automake-importáló
 Comment[is]=KDevelop Automake innflytjandi
 Comment[it]=Importatore per automake di KDevelop
+Comment[ja]=KDevelop Automake インポータ
 Comment[pl]=KDevelop: importowanie automake
 Comment[pt]=Importador de Automake do KDevelop
 Comment[pt_BR]=Importador Automake do KDevelop Automake

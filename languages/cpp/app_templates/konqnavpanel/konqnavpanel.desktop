@@ -14,6 +14,7 @@ Comment[eu]=$NAME$ izeneko konqueror arakatze-paneleko plugin bat
 Comment[fr]=Un module externe pour le panneau de navigation de Konqueror nommé $NAME$
 Comment[hu]=Bővítőmodul a Konqueror navigációs paneljéhez ($NAMES$)
 Comment[it]=Un plugin per la navigazione in konqueror chiamato $NAME$
+Comment[ja]=$NAME$ と呼ばれる konqueror ナビゲーションプラグイン
 Comment[nl]=Een konqueror navigatiepaneel-plugin met de naam $NAME$
 Comment[pl]=Wtyczka do panelu nawigacyjnego Konquerora o nazwie $NAME$
 Comment[pt]=Um 'plugin' do painel de navegação do konqueror chamado $NAME$
