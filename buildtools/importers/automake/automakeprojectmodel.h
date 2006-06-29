@@ -47,7 +47,7 @@ public:
     AutoMakeFileItem( const KUrl& url, KDevItemGroup* parent = 0 );
     virtual ~AutoMakeFileItem();
 
-    virtual KDevProjectFileItem* fileItem() const
+    virtual KDevProjectFileItem* file() const
     {
         return const_cast<AutoMakeFileItem*>( this );
     }
