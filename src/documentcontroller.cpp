@@ -471,10 +471,10 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
         const KTextEditor::Cursor& cursor,
         bool activate )
 {
-    kDebug( 9000 ) << k_funcinfo
-    << inputUrl.prettyUrl()
-    << " cursor " << cursor
-    << " activate? " << activate << endl;
+//     kDebug( 9000 ) << k_funcinfo
+//     << inputUrl.prettyUrl()
+//     << " cursor " << cursor
+//     << " activate? " << activate << endl;
 
     KUrl url = inputUrl;
 
@@ -585,10 +585,11 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
        isText = v.toBool();
 
     // is this regular text - open in editor
-    if ( m_openNextAsText || isText
+    if ( ( m_openNextAsText || isText
             || mimeType->is( "text/plain" )
             || mimeType->is( "text/html" )
             || mimeType->is( "application/x-zerosize" ) )
+            && !mimeType->is( "application/x-designer" ) )
     {
         KTextEditor::Document * editorPart = createEditorPart( activate );
 
