@@ -138,7 +138,24 @@ void AStyleWidget::accept()
 
 void AStyleWidget::styleChanged( int id )
 {
-	QString sample = "namespace foospace { class Bar { public: int foo(); private: int m_foo; }; int Bar::foo() { switch (x) { case 1: break; default: break; } if (isBar) { bar(); return m_foo+1; } else return 0; } }";
+	QString sample = "namespace foospace {\n"
+		"class Bar {\n"
+		"public:\n"
+		"int foo();\n"
+		"private:\n"
+		"int m_foo;\n"
+		"};\n"
+		"int Bar::foo() {\n"
+		"switch (x) {\n"
+		"case 1:\n"
+		"break;\n"
+		"default:\n"
+		"break;\n"
+		"} if (isBar) {\n"
+		"bar();\n"
+		"return m_foo+1;\n"
+		"} else return 0; \n"
+		"}\n }\n";
 
 	ConfigTabs->setTabEnabled(tab_2, id == 0);
 	ConfigTabs->setTabEnabled(tab_3, id == 0);
