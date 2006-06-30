@@ -126,7 +126,10 @@ CppHighlighting * CppLanguageSupport::codeHighlighting( ) const
 
 void CppLanguageSupport::projectOpened()
 {
-    kDebug() << "1" << k_funcinfo << endl;
+    //FIXME This is currently too slow and the parser is prone to crashing
+    // when parsing .cpp files.  The Binder seems to be a slow point too.
+    return;
+
     // FIXME Add signals slots from the filemanager for:
     // 1. filesAddedToProject
     // 2. filesRemovedFromProject
