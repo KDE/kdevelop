@@ -572,6 +572,9 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
     KConfig *config = KGlobal::config();
     config->setGroup( "General" );
 
+    //FIXME We should load designer files explicitly instead of relying on
+    // the fact that guibuilder is the only KDevelop/ReadWritePart
+
     QStringList textTypesList = config->readEntry( "TextTypes", QStringList() );
     if ( textTypesList.contains( mimeType->name() ) )
     {
@@ -633,8 +636,7 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
         }
     }
 
-    // OK, it's not text and it's not a designer file..
-    // let's see what else we can come up with..
+    // OK, it's not text let's see what else we can come up with..
 
     KParts::Factory *factory = 0;
     QString className;
