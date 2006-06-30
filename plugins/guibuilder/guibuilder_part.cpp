@@ -17,6 +17,7 @@
 #include <ksavefile.h>
 #include <kstdaction.h>
 
+#include <kdevapi.h>
 #include <kdevmainwindow.h>
 #include "internals/qdesigner_integration_p.h"
 
@@ -37,12 +38,34 @@ GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
   m_workspace->setScrollBarsEnabled(true);
   setWidget( m_workspace );
 
+  setXMLFile( "guibuilderpart.rc" );
+
+  m_designer = QDesignerComponents::createFormEditor(this);
+  m_designer->setTopLevel( KDevApi::self()->mainWindow()->main());
+
+  m_designer->setWidgetBox(QDesignerComponents::createWidgetBox(m_designer, 0));
+  Q_ASSERT(m_designer->widgetBox() != 0);
+
+  // load the standard widgets
+  m_designer->widgetBox()->setFileName(QLatin1String(":/trolltech/widgetbox/widgetbox.xml"));
+  m_designer->widgetBox()->load();
+
+  m_designer->setPropertyEditor(QDesignerComponents::createPropertyEditor(m_designer, 0));
+  Q_ASSERT(m_designer->propertyEditor() != 0);
+
+  (void) new qdesigner_internal::QDesignerIntegration(m_designer, this);
+
+  KDevApi::self()->mainWindow()->embedSelectView(m_designer->widgetBox(), i18n("Widget Box"), i18n("Widget Box"));
+  KDevApi::self()->mainWindow()->embedSelectViewRight(m_designer->propertyEditor(), i18n("Property Editor"), i18n("Property Editor"));
+
+  setupActions();
+
 }
 
 GuiBuilderPart::~GuiBuilderPart()
 {
-  mainWindow()->removeView( m_designer->widgetBox() );
-  mainWindow()->removeView( m_designer->propertyEditor() );
+  KDevApi::self()->mainWindow()->removeView( m_designer->widgetBox() );
+  KDevApi::self()->mainWindow()->removeView( m_designer->propertyEditor() );
   delete m_workspace;
 
 }
@@ -63,27 +86,7 @@ GuiBuilderPart::~GuiBuilderPart()
 void GuiBuilderPart::setApiInstance( KDevApi* api )
 {
   KDevReadWritePart::setApiInstance( api );
-  setXMLFile( "guibuilderpart.rc" );
 
-  m_designer = QDesignerComponents::createFormEditor(this);
-  m_designer->setTopLevel(mainWindow()->main());
-
-  m_designer->setWidgetBox(QDesignerComponents::createWidgetBox(m_designer, 0));
-  Q_ASSERT(m_designer->widgetBox() != 0);
-
-  // load the standard widgets
-  m_designer->widgetBox()->setFileName(QLatin1String(":/trolltech/widgetbox/widgetbox.xml"));
-  m_designer->widgetBox()->load();
-
-  m_designer->setPropertyEditor(QDesignerComponents::createPropertyEditor(m_designer, 0));
-  Q_ASSERT(m_designer->propertyEditor() != 0);
-
-  (void) new qdesigner_internal::QDesignerIntegration(m_designer, this);
-
-  mainWindow()->embedSelectView(m_designer->widgetBox(), i18n("Widget Box"), i18n("Widget Box"));
-  mainWindow()->embedSelectViewRight(m_designer->propertyEditor(), i18n("Property Editor"), i18n("Property Editor"));
-
-  setupActions();
 }
 
 QDesignerFormEditorInterface *GuiBuilderPart::designer() const
@@ -166,7 +169,7 @@ void GuiBuilderPart::setupActions()
 bool GuiBuilderPart::openFile()
 {
   QFile uiFile(m_file);
-  QDesignerFormWindowManagerInterface* manager = designer()->formWindowManager();
+  QDesignerFormWindowManagerInterface* manager = m_designer->formWindowManager();
   QDesignerFormWindowInterface* widget = manager->createFormWindow();
   widget->setFileName(m_file);
   widget->setContents(&uiFile);
