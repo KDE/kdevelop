@@ -120,7 +120,9 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringLis
   m_projectOverview->setWhatsThis(i18n("Project Overview"));
   vbox->addWidget(m_projectOverview);
 
-  connect(m_projectOverview, SIGNAL(activateURL(KUrl)), this, SLOT(openURL(KUrl)));
+//   connect(m_projectOverview, SIGNAL(activateURL(KUrl)), this, SLOT(openURL(KUrl)));
+  connect(m_projectOverview, SIGNAL(pressed(QModelIndex)),
+          this, SLOT(pressed(QModelIndex)));
 
 
 
@@ -136,12 +138,12 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringLis
   m_projectDetails->setWhatsThis(i18n("Project Details"));
   vbox->add(m_projectDetails);
 
-  connect(m_projectDetails, SIGNAL(activateURL(KUrl)), this, SLOT(openURL(KUrl)));
-
+//   connect(m_projectDetails, SIGNAL(activateURL(KUrl)), this, SLOT(openURL(KUrl)));
+  connect(m_projectDetails, SIGNAL(pressed(QModelIndex)),
+          this, SLOT(pressed(QModelIndex)));
   connect(m_projectOverview->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
           m_projectDetails, SLOT(setRootIndex(QModelIndex)));
 #endif
-
 
   KDevApi::self()->mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
 
@@ -195,7 +197,7 @@ void KDevProjectManagerPart::openProject(const KUrl &dirName, const QString &pro
 
 void KDevProjectManagerPart::import(RefreshPolicy policy)
 {
-  
+
   QStringList oldFileList = fileList();
 
   if (m_workspace)
@@ -396,6 +398,12 @@ bool KDevProjectManagerPart::computeChanges(const QStringList &oldFileList, cons
 
 void KDevProjectManagerPart::updateDetails(KDevProjectItem *)
 {
+}
+
+void KDevProjectManagerPart::pressed( const QModelIndex & index )
+{
+  if (KDevProjectFileItem *file = m_projectModel->item( index ) ->file())
+    KDevApi::self() ->documentController() ->editDocument( file ->url() );
 }
 
 #include "kdevprojectmanager_part.moc"

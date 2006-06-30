@@ -87,6 +87,7 @@ private slots:
     void fileCreated(const QString &fileName);
     void fileDeleted(const QString &fileName);
     void updateProjectTimeout();
+    void pressed( const QModelIndex & index );
 
 protected:
     bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);
