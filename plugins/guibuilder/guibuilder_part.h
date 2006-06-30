@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QHash>
+#include <QtCore/QPointer>
 #include <kdevreadwritepart.h>
 
 class QAction;
@@ -50,9 +51,9 @@ private Q_SLOTS:
 
 
 private:
-  QDesignerFormEditorInterface *m_designer;
-  QDesignerFormWindowInterface *m_window;
-  QWorkspace* m_workspace;
+  QPointer<QDesignerFormEditorInterface> m_designer;
+  QPointer<QDesignerFormWindowInterface> m_window;
+  QPointer<QWorkspace> m_workspace;
 
   DesignerActionHash m_designerActions;
 

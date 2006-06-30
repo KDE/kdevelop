@@ -30,9 +30,6 @@ GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
   : KDevReadWritePart(parent)
 {
   QDesignerComponents::initializeResources();
-  m_designer = 0;
-  m_window = 0;
-  m_workspace = 0;
 
   m_workspace = new QWorkspace;
   m_workspace->setScrollBarsEnabled(true);
@@ -64,10 +61,20 @@ GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
 
 GuiBuilderPart::~GuiBuilderPart()
 {
-  KDevApi::self()->mainWindow()->removeView( m_designer->widgetBox() );
-  KDevApi::self()->mainWindow()->removeView( m_designer->propertyEditor() );
-  delete m_workspace;
+    if (m_designer)
+    {
+        if (m_window)
+        {
+            m_designer->formWindowManager()->removeFormWindow( m_window );
+            delete m_window;
+        }
 
+        KDevApi::self()->mainWindow()->removeView( m_designer->widgetBox() );
+        KDevApi::self()->mainWindow()->removeView( m_designer->propertyEditor() );
+        delete m_designer;
+    }
+    if (m_workspace)
+        m_workspace->deleteLater();
 }
 
  KAboutData* GuiBuilderPart::createAboutData()
