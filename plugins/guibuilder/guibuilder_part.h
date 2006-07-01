@@ -5,6 +5,7 @@
 #include <QHash>
 #include <QtCore/QPointer>
 #include <kdevreadwritepart.h>
+#include <kdevdocumentcontroller.h>
 
 class QAction;
 class QDesignerFormEditorInterface;
@@ -48,6 +49,7 @@ private:
 
 private Q_SLOTS:
   void updateDesignerActions();
+  void activated( KDevDocument* );
 
 
 private:

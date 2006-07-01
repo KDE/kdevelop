@@ -11,6 +11,7 @@
 
 #include <kaboutdata.h>
 #include <kaction.h>
+#include <kmimetype.h>
 #include <kmainwindow.h>
 #include <kparts/genericfactory.h>
 #include <kparts/partmanager.h>
@@ -57,6 +58,8 @@ GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
 
   setupActions();
 
+  connect( KDevApi::self()->documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
+           this, SLOT( activated( KDevDocument* ) ) );
 }
 
 GuiBuilderPart::~GuiBuilderPart()
@@ -77,7 +80,26 @@ GuiBuilderPart::~GuiBuilderPart()
         m_workspace->deleteLater();
 }
 
- KAboutData* GuiBuilderPart::createAboutData()
+void GuiBuilderPart::activated( KDevDocument *document )
+{
+    if ( document->url() == url() )
+    {
+        KDevApi::self()->mainWindow()->raiseView(
+                m_designer->widgetBox(),
+                Qt::LeftDockWidgetArea);
+        KDevApi::self()->mainWindow()->raiseView(
+                m_designer->propertyEditor(),
+                Qt::RightDockWidgetArea);
+    }
+    KMimeType::Ptr mimeType = KMimeType::findByURL( document->url() );
+    if (!mimeType->is( "application/x-designer" ))
+    {
+        KDevApi::self()->mainWindow()->lowerView( m_designer->widgetBox() );
+        KDevApi::self()->mainWindow()->lowerView( m_designer->propertyEditor() );
+    }
+}
+
+KAboutData* GuiBuilderPart::createAboutData()
 {
   KAboutData* aboutData = new KAboutData( "KDevGuiBuilderPart",
                                           I18N_NOOP( "KDevelop GUI Builder" ),

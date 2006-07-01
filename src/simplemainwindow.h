@@ -58,7 +58,8 @@ public:
 
     virtual void removeView( QWidget *view );
     virtual void setViewAvailable( QWidget *pView, bool bEnabled );
-    virtual void raiseView( QWidget *view );
+    virtual void setCurrentWidget( QWidget *widget );
+    virtual void raiseView( QWidget *view, Qt::DockWidgetArea area = Qt::AllDockWidgetAreas);
     virtual void lowerView( QWidget *view );
 
     virtual void loadSettings();
@@ -94,6 +95,7 @@ private:
     KMenu *m_windowMenu;
     typedef QPair<int, KDevDocument*> WinInfo;
     QList<WinInfo> m_windowList;
+    QList<QDockWidget*> m_dockList;
     QStackedWidget *m_center;
 };
 

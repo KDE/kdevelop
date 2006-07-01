@@ -361,7 +361,7 @@ void DocumentController::activatePart( KParts::Part *part )
     QWidget * widget = EditorProxy::getInstance() ->widgetForPart( part );
     if ( widget )
     {
-        TopLevel::getInstance() ->raiseView( widget );
+        TopLevel::getInstance() ->setCurrentWidget( widget );
         widget->show();
         widget->setFocus();
     }

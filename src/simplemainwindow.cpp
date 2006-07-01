@@ -124,6 +124,7 @@ void SimpleMainWindow::embedPartView( QWidget *view, const QString &title,
         return ;
 
     m_center->addWidget( view );
+    m_center->setCurrentWidget( view );
     view->show();
 }
 
@@ -135,6 +136,7 @@ void SimpleMainWindow::embedSelectView( QWidget *view, const QString &title,
 
     QDockWidget * dock = new QDockWidget( title, this );
     dock->setWidget( view );
+    m_dockList.append( dock );
     addDockWidget( Qt::LeftDockWidgetArea, dock );
 }
 
@@ -146,6 +148,7 @@ void SimpleMainWindow::embedOutputView( QWidget *view, const QString &title,
 
     QDockWidget * dock = new QDockWidget( title, this );
     dock->setWidget( view );
+    m_dockList.append( dock );
     addDockWidget( Qt::BottomDockWidgetArea, dock );
 }
 
@@ -158,6 +161,7 @@ void SimpleMainWindow::embedSelectViewRight( QWidget *view,
 
     QDockWidget * dock = new QDockWidget( title, this );
     dock->setWidget( view );
+    m_dockList.append( dock );
     addDockWidget( Qt::RightDockWidgetArea, dock );
 }
 
@@ -166,8 +170,18 @@ void SimpleMainWindow::removeView( QWidget *view )
     if ( !view )
         return ;
 
+    foreach( QDockWidget *dock, m_dockList )
+    {
+        if ( dock->widget() == view )
+        {
+            removeDockWidget( dock );
+            m_dockList.remove( dock );
+            delete dock;
+            break;
+        }
+    }
+
     m_center->removeWidget( view );
-    //TODO remove potential docks
 }
 
 void SimpleMainWindow::setViewAvailable( QWidget *pView, bool bEnabled )
@@ -175,17 +189,42 @@ void SimpleMainWindow::setViewAvailable( QWidget *pView, bool bEnabled )
     //TODO hide docs
 }
 
-void SimpleMainWindow::raiseView( QWidget * view )
+void SimpleMainWindow::setCurrentWidget( QWidget * widget  )
+{
+    if ( !widget )
+        return ;
+    m_center->setCurrentWidget( widget );
+}
+
+void SimpleMainWindow::raiseView( QWidget * view, Qt::DockWidgetArea area )
 {
     if ( !view )
         return ;
 
-    m_center->setCurrentWidget( view );
+    foreach( QDockWidget *dock, m_dockList )
+    {
+        if ( dock->widget() == view )
+        {
+            addDockWidget( area, dock );
+            dock->show();
+            break;
+        }
+    }
 }
 
-void SimpleMainWindow::lowerView( QWidget * /*view*/ )
+void SimpleMainWindow::lowerView( QWidget * view )
 {
-    //nothing to do
+    if ( !view )
+        return ;
+
+    foreach( QDockWidget *dock, m_dockList )
+    {
+        if ( dock->widget() == view )
+        {
+            removeDockWidget( dock );
+            break;
+        }
+    }
 }
 
 void SimpleMainWindow::loadSettings()

@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #include "kdevdocumentview_part.h"
 #include "kdevdocumentmodel.h"
 
+#include <QtGui/QAction>
 #include <QtGui/QHeaderView>
 
 #include <kdevcore.h>
@@ -87,6 +88,9 @@ void KDevDocumentView::popupContextMenu( const QPoint &pos )
             KUrl::List list;
             list << fileItem->URL();
             FileContext context( list );
+
+            //QAction* test = menu.addAction( i18n("Test") );
+
             KDevApi::self() ->core() ->fillContextMenu( &menu, &context );
             menu.exec( mapToGlobal( pos ) );
         }
