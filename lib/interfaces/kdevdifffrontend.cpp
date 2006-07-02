@@ -20,8 +20,8 @@
 */
 #include "kdevdifffrontend.h"
 
-KDevDiffFrontend::KDevDiffFrontend(const KDevPluginInfo *info, QObject *parent)
-    : KDevPlugin(info, parent)
+KDevDiffFrontend::KDevDiffFrontend(KInstance *instance, QObject *parent)
+    : KDevPlugin(instance, parent)
 {
 }
 

@@ -34,7 +34,7 @@ class KDevBuildableProject : public KDevProject
 {
 Q_OBJECT
 public:
-    KDevBuildableProject(const KDevPluginInfo *info, QObject *parent = 0);
+    KDevBuildableProject(KInstance *instance, QObject *parent = 0);
     virtual ~KDevBuildableProject();
 
     /**

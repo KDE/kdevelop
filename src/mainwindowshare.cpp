@@ -64,8 +64,6 @@
 #include "toplevel.h"
 #include "kdevplugincontroller.h"
 
-#include "kdevplugininfo.h"
-
 #include "mainwindowshare.h"
 
 #include "shellextension.h"
@@ -251,6 +249,7 @@ void MainWindowShare::slotActiveProcessChanged( KDevPlugin* plugin, bool active 
 
 void MainWindowShare::slotStopPopupActivated( int id )
 {
+    /* FIXME port
     KDevPlugin* plugin = activeProcesses.at( id );
     if ( plugin && plugin->info()->genericName() == m_stopProcesses->popupMenu()->text( id ) ) {
         Core::getInstance()->doEmitStopButtonPressed( plugin );
@@ -265,11 +264,12 @@ void MainWindowShare::slotStopPopupActivated( int id )
                 return;
             }
         }
-    }
+    } */
 }
 
 void MainWindowShare::slotStopMenuAboutToShow()
 {
+  /* FIXME port
   QMenu* popup = m_stopProcesses->menu();
   popup->clear();
 
@@ -277,6 +277,7 @@ void MainWindowShare::slotStopMenuAboutToShow()
   foreach(KDevPlugin *plugin, activeProcesses) {
     popup->insertItem( plugin->info()->genericName(), i++ );
   }
+  */
 }
 
 void MainWindowShare::slotShowMenuBar()

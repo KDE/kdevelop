@@ -21,10 +21,9 @@
 #include "codedisplay.h"
 
 #include "codemodel.h"
-#include "../cppsupportfactory.h"
 
 #include <kurl.h>
-#include <kiconloader.h>
+#include <kicon.h>
 
 CodeDisplay::CodeDisplay()
 {}
@@ -170,9 +169,7 @@ QString CodeDisplay::whatsThis( const _CodeModelItem *item )
 
 QIcon CodeDisplay::loadIcon( const QString & name )
 {
-    return QIcon( UserIcon( name,
-                            K3Icon::DefaultState,
-                            CppLanguageSupportFactory::instance() ) );
+    return KIcon( name );
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

@@ -19,14 +19,12 @@
 
 #include "kdevreadwritepart.h"
 
-#include <cassert>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include "kdevapi.h"
 #include "kdevcore.h"
 #include "kdevdocumentcontroller.h"
 #include "kdevplugincontroller.h"
-#include "kdevplugininfo.h"
 
 struct KDevReadWritePart::Private
 {

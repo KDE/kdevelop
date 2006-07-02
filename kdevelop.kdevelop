@@ -12,7 +12,7 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <ignoreparts>
       <part>kdevbookmarks</part>
       <part>kdevfilegroups</part>
@@ -20,7 +20,7 @@
       <part>kdevdistpart</part>
     </ignoreparts>
     <versioncontrol>kdevsubversion</versioncontrol>
-    <defaultencoding/>
+    <defaultencoding></defaultencoding>
   </general>
   <kdevfileview>
     <groups>
@@ -78,12 +78,12 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell>libtool</dbgshell>
-      <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <dbgshell></dbgshell>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -189,16 +189,14 @@
       <headerCompletionDelay>250</headerCompletionDelay>
     </codecompletion>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
       <inlineGet>true</inlineGet>
       <inlineSet>true</inlineSet>
     </creategettersetter>
-    <references>
-      <pcs>Qt 4</pcs>
-    </references>
+    <references/>
     <qt>
       <used>true</used>
       <version>4</version>
@@ -219,29 +217,47 @@
   </kdevdocumentation>
   <kdevcustomproject>
     <run>
-      <directoryradio>build</directoryradio>
+      <directoryradio>custom</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>src/kdevelop</mainprogram>
-      <programargs/>
+      <mainprogram>/home/kde/installs/4.0/bin/kdevelop</mainprogram>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
-      <envvars/>
+      <envvars>
+        <envvar value="unix:abstract=/tmp/dbus-5c1qUTESsp,guid=fa749744e8e025172e8bc5b855da4b00" name="DBUS_SESSION_BUS_ADDRESS" />
+        <envvar value="28575" name="DBUS_SESSION_BUS_PID" />
+        <envvar value="$HOME/.kde4" name="KDEHOME" />
+        <envvar value="/tmp/$USER-kde4" name="KDETMP" />
+        <envvar value="/var/tmp/$USER-kde4" name="KDEVARTMP" />
+        <envvar value="$LD_LIBRARY_PATH:$QTDIR/lib" name="LD_LIBRARY_PATH" />
+        <envvar value="/home/kde/installs/4.0/bin:/home/qt/4.1/bin:$PATH" name="PATH" />
+        <envvar value="/home/qt/4.1" name="QTDIR" />
+      </envvars>
     </run>
     <build>
       <buildtool>make</buildtool>
-      <builddir>/home/kde/trunk/build/KDE/kdevelop</builddir>
+      <builddir>/home/kde/trunk/KDE/kdevelop</builddir>
     </build>
     <make>
       <abortonerror>false</abortonerror>
-      <numberofjobs>1</numberofjobs>
+      <numberofjobs>5</numberofjobs>
       <prio>0</prio>
       <dontact>false</dontact>
       <makebin>makeobj</makebin>
-      <defaulttarget/>
-      <makeoptions/>
+      <defaulttarget></defaulttarget>
+      <makeoptions></makeoptions>
       <selectedenvironment>default</selectedenvironment>
       <environments>
-        <default/>
+        <default>
+          <envvar value="/home/kde/installs/4.0" name="KDEDIR" />
+          <envvar value="$HOME/.kde4" name="KDEHOME" />
+          <envvar value="/tmp/$USER-kde4" name="KDETMP" />
+          <envvar value="/var/tmp/$USER-kde4" name="KDEVARTMP" />
+          <envvar value="s:/home/kde/trunk/:/home/kde/trunk/build/:" name="OBJ_REPLACEMENT" />
+          <envvar value="/opt/icecream/bin:/home/kde/installs/4.0/bin:/home/qt/4.1/bin:$PATH" name="PATH" />
+          <envvar value="/home/qt/4.1/lib/pkgconfig:/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH" name="PKG_CONFIG_PATH" />
+          <envvar value="/home/qt/4.1" name="QTDIR" />
+        </default>
       </environments>
     </make>
   </kdevcustomproject>

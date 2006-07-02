@@ -29,15 +29,12 @@
 
 #include "fileselector_widget.h"
 
-typedef KDevGenericFactory<FileSelectorPart> FileSelectorFactory;
-static const KDevPluginInfo data("kdevfileselector");
-K_EXPORT_COMPONENT_FACTORY( kdevfileselector, FileSelectorFactory( data ) )
+typedef KGenericFactory<FileSelectorPart> FileSelectorFactory;
+K_EXPORT_COMPONENT_FACTORY( kdevfileselector, FileSelectorFactory )
 
 FileSelectorPart::FileSelectorPart(QObject *parent, const QStringList&)
-    : KDevPlugin(&data, parent)
+    : KDevPlugin(FileSelectorFactory::instance(), parent)
 {
-    setInstance(FileSelectorFactory::instance());
-
     m_filetree = new KDevFileSelector( this, KDevApi::self()->mainWindow(), KDevApi::self()->documentController(), 0 );
 
     connect( m_filetree->dirOperator(), SIGNAL(fileSelected(const KFileItem*)),
@@ -47,7 +44,7 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const QStringList&)
     connect( KDevApi::self()->core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(slotConfigWidget(KDialogBase*)) );
 
     m_filetree->setWindowTitle( i18n("File Selector") );
-    m_filetree->setWindowIcon( KIcon(info()->icon()) );
+    //m_filetree->setWindowIcon( KIcon(info()->icon()) ); FIXME port
     KDevApi::self()->mainWindow()->embedSelectView( m_filetree, i18n("File Selector"), i18n("File selector") );
     m_filetree->setWhatsThis( i18n("<b>File selector</b><p>This file selector lists directory contents and provides some file management functions."));
 

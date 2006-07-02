@@ -7,6 +7,7 @@ Name=KDevelop Project Interface
 Name[fr]=Interface de projet de KDevelop
 Name[x-test]=xxKDevelop Project Interfacexx
 
-# versioning - prevent DLL hell
-[PropertyDef::X-KDevelop-Version]
-Type=int
+# only important for project plugins, you can add a list of programming languages which are supported
+# the plugin will be loaded by default, if the project use this language
+[PropertyDef::X-KDevelop-ProgrammingLanguages]
+Type=QStringList

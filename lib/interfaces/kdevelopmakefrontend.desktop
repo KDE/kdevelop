@@ -6,8 +6,3 @@ X-KDE-Derived=KDevelop/Plugin
 Name=Make Frontend Interface
 Name[fr]=Interface du programme « make »
 Name[x-test]=xxMake Frontend Interfacexx
-
-# versioning - prevent DLL hell
-[PropertyDef::X-KDevelop-Version]
-Type=int
-

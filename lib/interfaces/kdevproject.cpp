@@ -27,6 +27,7 @@
 #include <QTimer>
 
 #include <kdebug.h>
+#include <kinstance.h>
 
 #include "kdevproject.h"
 #include <dbus/qdbus.h>
@@ -39,8 +40,8 @@ public:
     KDevFileManager* manager;
 };
 
-KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent)
-    : KDevPlugin(info, parent)
+KDevProject::KDevProject(KInstance* instance, QObject *parent)
+    : KDevPlugin(instance, parent)
     , d(new KDevProjectPrivate())
 {
     QDBus::sessionBus().registerObject("/org/kdevelop/Project",

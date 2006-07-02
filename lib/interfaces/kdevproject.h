@@ -38,7 +38,7 @@ KDevelop project interface.
 */
 
 class QTimer;
-
+class KInstance;
 class KDevFileManager;
 class KDevProjectFileItem;
 class KDevProjectFolderItem;
@@ -68,7 +68,7 @@ public:
      * be equal to the lifetime of the plugin.
      * @param parent The parent object for the plugin.
      */
-    KDevProject(const KDevPluginInfo *info, QObject *parent = 0);
+    KDevProject(KInstance *instance, QObject *parent = 0);
 
     /// Destructor.
     virtual ~KDevProject();

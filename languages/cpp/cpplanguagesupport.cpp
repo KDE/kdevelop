@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <kinstance.h>
 #include <kstandarddirs.h>
+#include <kgenericfactory.h>
 
 #include <kdevcore.h>
 #include <kdevproject.h>
@@ -31,7 +32,6 @@
 #include <kdevdocumentcontroller.h>
 
 #include "backgroundparser.h"
-#include "cppsupportfactory.h"
 #include "cpplanguagesupport.h"
 #include "cpphighlighting.h"
 
@@ -41,9 +41,12 @@
 
 #include <kdebug.h>
 
+typedef KGenericFactory<CppLanguageSupport> KDevCppSupportFactory;
+K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdevcppsupport" ) )
+
 CppLanguageSupport::CppLanguageSupport( QObject* parent,
                                         const QStringList& /*args*/ )
-        : KDevLanguageSupport( CppLanguageSupportFactory::info(), parent )
+    : KDevLanguageSupport( KDevCppSupportFactory::instance(), parent )
 {
     QString types =
         QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );

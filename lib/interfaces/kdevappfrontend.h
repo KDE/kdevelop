@@ -67,8 +67,8 @@ public:
     be equal to the lifetime of the plugin.
     @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
     interface. Otherwise the plugin will not be constructed.*/
-    KDevAppFrontend(const KDevPluginInfo *info, QObject *parent=0)
-        :KDevPlugin(info, parent) {}
+    KDevAppFrontend(KInstance* instance, QObject *parent=0)
+        :KDevPlugin(instance, parent) {}
 
     /**@return Whether the application is currently running.*/
     virtual bool isRunning() = 0;

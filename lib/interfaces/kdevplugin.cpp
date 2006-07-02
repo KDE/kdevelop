@@ -28,7 +28,6 @@
 
 #include "kdevapi.h"
 #include "kdevcore.h"
-#include "kdevplugininfo.h"
 #include "kdevdocumentcontroller.h"
 #include "kdevplugincontroller.h"
 
@@ -45,21 +44,20 @@
 // class KDevPluginPrivate
 ///////////////////////////////////////////////////////////////////////////////
 
-class KDevPluginPrivate
+class KDevPlugin::Private
 {
 public:
-    const KDevPluginInfo *info;
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // class KDevPlugin
 ///////////////////////////////////////////////////////////////////////////////
 
-KDevPlugin::KDevPlugin(const KDevPluginInfo *info, QObject *parent)
-    :QObject(parent)
-    , d(new KDevPluginPrivate)
+KDevPlugin::KDevPlugin(KInstance *instance, QObject *parent)
+    : QObject(parent), KXMLGUIClient(), d(new Private)
 {
-    d->info = info;
+    setInstance( instance );
     KGlobal::iconLoader()->addAppDir("kdevelop");
 }
 
@@ -81,11 +79,6 @@ void KDevPlugin::savePartialProjectSession(QDomElement* /*el*/)
 KDevPlugin * KDevPlugin::extension_internal(const QString &serviceType, const QString &constraint)
 {
     return KDevApi::self()->pluginController()->extension(serviceType, constraint);
-}
-
-const KDevPluginInfo *KDevPlugin::info()
-{
-    return d->info;
 }
 
 #include "kdevplugin.moc"

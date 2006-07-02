@@ -24,7 +24,6 @@
 #include <kdevappfrontend.h>
 #include <kdevdifffrontend.h>
 #include <kdevcreatefile.h>
-#include <kdevplugininfo.h>
 #include <kaction.h>
 #include <kxmlguifactory.h>
 

@@ -121,8 +121,8 @@ public:
   @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
   interface. Otherwise the plugin will not be constructed.
   @param name The internal name which identifies the plugin.*/
-  KDevCreateFile(const KDevPluginInfo *info, QObject * parent = 0, const char * = 0)
-      :KDevPlugin(info, parent) {}
+  KDevCreateFile(KInstance* instance, QObject * parent = 0, const char * = 0)
+      :KDevPlugin(instance, parent) {}
 
   /**Creates a new file, within or without the project. 
   Supply as much information as you know. Leave what you don't know as QString().

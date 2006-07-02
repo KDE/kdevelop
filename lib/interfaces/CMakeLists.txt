@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib )
 set(kdevinterfaces_LIB_SRCS
     kdevapi.cpp
     kdevlanguagesupport.cpp
-    kdevplugininfo.cpp
     kdevappfrontend.cpp
     kdevmainwindow.cpp
     kdevprojectbuilder.cpp
@@ -58,14 +57,12 @@ install_files(/include/kdevelop/interfaces FILES
     kdevcodemodel.h
     kdevplugin.h
     kdevcoderepository.h
-    kdevplugininfo.h
     kdevcore.h
     kdevprojectbuilder.h
     kdevcreatefile.h
     kdevproject.h
     kdevdifffrontend.h
     domutil.h
-    kdevgenericfactory.h
     kdevlanguagesupport.h
     kdevprojectmodel.h
     kdevmainwindow.h

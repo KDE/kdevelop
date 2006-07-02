@@ -32,23 +32,20 @@
 #include <kmimetype.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
+#include <kgenericfactory.h>
 #include <kparts/componentfactory.h>
 
 #include <kdevapi.h>
 #include <kdevcore.h>
-#include <kdevplugininfo.h>
 #include <kdevmainwindow.h>
-#include <kdevgenericfactory.h>
 #include <kfiltermodel.h>
 
-typedef KDevGenericFactory<KDevDocumentViewPart> KDevDocumentViewFactory;
-static const KDevPluginInfo data( "kdevdocumentview" );
-K_EXPORT_COMPONENT_FACTORY( kdevdocumentview,
-                            KDevDocumentViewFactory( data ) )
+typedef KGenericFactory<KDevDocumentViewPart> KDevDocumentViewFactory;
+K_EXPORT_COMPONENT_FACTORY( kdevdocumentview, KDevDocumentViewFactory( "kdevdocumentview" ) )
 
 KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
         const QStringList& )
-        : KDevPlugin( &data, parent )
+    : KDevPlugin( KDevDocumentViewFactory::instance(), parent )
 {
     m_documentModel = new KDevDocumentModel( this );
 

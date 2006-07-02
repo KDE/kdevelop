@@ -115,21 +115,18 @@ class KDEVINTERFACES_EXPORT KDevPlugin: public QObject, public KXMLGUIClient
 
 public:
     /**Constructs a plugin.
-    @param info Important information about the plugin - plugin internal and generic
-    (GUI) name, description, a list of authors, etc. That information is used to show
-    plugin information in various places like "about application" dialog, plugin selector
-    dialog, etc. Plugin does not take ownership on info object, also its lifetime should
-    be equal to the lifetime of the plugin.
-    @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
-    interface. Otherwise the plugin will not be constructed.*/
-    KDevPlugin(const KDevPluginInfo *info, QObject *parent);
+     * @param info Important information about the plugin - plugin internal and generic
+     * (GUI) name, description, a list of authors, etc. That information is used to show
+     * plugin information in various places like "about application" dialog, plugin selector
+     * dialog, etc. Plugin does not take ownership on info object, also its lifetime should
+     * be equal to the lifetime of the plugin.
+     * @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
+     * interface. Otherwise the plugin will not be constructed.
+     */
+    KDevPlugin(KInstance *instance, QObject *parent);
 
     /**Destructs a plugin.*/
     virtual ~KDevPlugin();
-
-    /**Provides an information about the plugin.
-    @return KAboutData object which was initialized in the constructor.*/
-    const KDevPluginInfo* info();
 
     /**Queries for the plugin which supports given service type (such plugins are called extensions in KDevelop).
     All already loaded plugins will be queried and the <b>first loaded one</b> to support
@@ -168,7 +165,8 @@ public:
 private:
     KDevPlugin *extension_internal(const QString &serviceType, const QString &constraint = "");
 
-    class KDevPluginPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 #endif

@@ -71,9 +71,9 @@ public:
     used to show plugin information in various places like "about application"
     dialog, plugin selector dialog, etc. Plugin does not take ownership on info
     object, also its lifetime should be equal to the lifetime of the plugin.
-    @param parent The parent object for the plugin. Parent object must implement
-    @ref KDevApi interface. Otherwise the plugin will not be constructed.*/
-    KDevLanguageSupport(const KDevPluginInfo *info, QObject *parent);
+    @param parent The parent object for the plugin.
+    */
+    KDevLanguageSupport(KInstance* instance, QObject *parent);
 
     /**Destructor.*/
     ~KDevLanguageSupport();

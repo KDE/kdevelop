@@ -26,9 +26,9 @@
 
 #include <kdevdocument.h>
 
-KDevLanguageSupport::KDevLanguageSupport(const KDevPluginInfo *info,
+KDevLanguageSupport::KDevLanguageSupport(KInstance *instance,
                                          QObject *parent)
-    : KDevPlugin(info, parent)
+    : KDevPlugin(instance, parent)
 {
 }
 

@@ -23,14 +23,12 @@
 #include "valgrind_dialog.h"
 #include "valgrinditem.h"
 
-typedef KDevGenericFactory<ValgrindPart> ValgrindFactory;
-static const KDevPluginInfo data("kdevvalgrind");
-K_EXPORT_COMPONENT_FACTORY( kdevvalgrind, ValgrindFactory( data ) )
+typedef KGenericFactory<ValgrindPart> ValgrindFactory;
+K_EXPORT_COMPONENT_FACTORY( kdevvalgrind, ValgrindFactory( "kdevvalgrind" ) )
 
 ValgrindPart::ValgrindPart( QObject *parent, const QStringList& )
-  : KDevPlugin( &data, parent)
+    : KDevPlugin( ValgrindFactory::instance(), parent)
 {
-  setInstance( ValgrindFactory::instance() );
   setXMLFile( "kdevpart_valgrind.rc" );
 
   proc = new KShellProcess();

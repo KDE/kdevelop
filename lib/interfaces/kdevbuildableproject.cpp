@@ -19,8 +19,8 @@
 
 #include "kdevbuildableproject.h"
 
-KDevBuildableProject::KDevBuildableProject(const KDevPluginInfo *info, QObject *parent)
-  : KDevProject(info, parent)
+KDevBuildableProject::KDevBuildableProject(KInstance *instance, QObject *parent)
+  : KDevProject(instance, parent)
 {
 }
 

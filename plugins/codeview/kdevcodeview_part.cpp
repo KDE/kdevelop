@@ -33,23 +33,18 @@
 #include <kmimetype.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
+#include <kgenericfactory.h>
 
-#include <kdevplugininfo.h>
 #include <kdevmainwindow.h>
-#include <kdevgenericfactory.h>
 #include <kdevlanguagesupport.h>
 
-typedef KDevGenericFactory<KDevCodeViewPart> KDevCodeViewFactory;
-static const KDevPluginInfo data( "kdevcodeview" );
-K_EXPORT_COMPONENT_FACTORY( kdevcodeview,
-                            KDevCodeViewFactory( data ) )
+typedef KGenericFactory<KDevCodeViewPart> KDevCodeViewFactory;
+K_EXPORT_COMPONENT_FACTORY( kdevcodeview, KDevCodeViewFactory( "kdevcodeview" ) )
 
 KDevCodeViewPart::KDevCodeViewPart( QObject *parent,
                                     const QStringList& )
-        : KDevPlugin( &data, parent )
+    : KDevPlugin( KDevCodeViewFactory::instance(), parent )
 {
-    setInstance( KDevCodeViewFactory::instance() );
-
     if (!KDevApi::self() ->languageSupport())
         return;
     KDevCodeProxy * model = KDevApi::self()-> languageSupport() ->codeProxy();

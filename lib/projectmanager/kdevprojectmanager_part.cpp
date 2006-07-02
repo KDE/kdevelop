@@ -33,11 +33,10 @@
 #include <kdevdocumentcontroller.h>
 #include <kdevmainwindow.h>
 #include <kservicetypetrader.h>
-
+#include <kgenericfactory.h>
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdevgenericfactory.h>
 #include <kaboutdata.h>
 
 #include <kparts/componentfactory.h>
@@ -48,14 +47,11 @@
 #include <QTimer>
 #include <QLineEdit>
 
-#include <kdevplugininfo.h>
-
-typedef KDevGenericFactory<KDevProjectManagerPart> KDevProjectManagerFactory;
-static const KDevPluginInfo data("kdevprojectmanager");
-K_EXPORT_COMPONENT_FACTORY(kdevprojectmanager, KDevProjectManagerFactory(data))
+typedef KGenericFactory<KDevProjectManagerPart> KDevProjectManagerFactory;
+K_EXPORT_COMPONENT_FACTORY(kdevprojectmanager, KDevProjectManagerFactory("kdevprojectmanager"))
 
 KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringList&)
-    : KDevProject(&data, parent)
+  : KDevProject(KDevProjectManagerFactory::instance(), parent)
 {
   m_workspace = 0;
   m_projectModel = new KDevProjectModel(this);

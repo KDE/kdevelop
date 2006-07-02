@@ -57,7 +57,7 @@ public:
     be equal to the lifetime of the plugin.
     @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
     interface. Otherwise the plugin will not be constructed.*/
-    KDevDiffFrontend( const KDevPluginInfo *info, QObject *parent = 0);
+    KDevDiffFrontend( KInstance *instance, QObject *parent = 0);
     virtual ~KDevDiffFrontend();
 
     /**Displays the patch.

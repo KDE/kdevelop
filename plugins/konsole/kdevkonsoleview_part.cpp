@@ -13,20 +13,18 @@
 
 #include <kicon.h>
 #include <klocale.h>
-#include <kdevgenericfactory.h>
+#include <kgenericfactory.h>
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
-#include "kdevplugininfo.h"
-
 #include "kdevkonsoleview.h"
 
-static const KDevPluginInfo data( "kdevkonsoleview" );
+typedef KGenericFactory<KDevKonsoleViewPart> KonsoleViewFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevkonsoleview,
-                            KDevGenericFactory<KDevKonsoleViewPart>( data ) )
+                            KonsoleViewFactory( "kdevkonsoleview" )  )
 
 KDevKonsoleViewPart::KDevKonsoleViewPart( QObject *parent, const QStringList & )
-        : KDevPlugin( &data, parent )
+    : KDevPlugin( KonsoleViewFactory::instance(), parent )
 {
     m_konsoleView = new KDevKonsoleView( 0 );
 

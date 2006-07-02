@@ -7,10 +7,6 @@ Name=KDevelop Language Support Interface
 Name[fr]=Interface de la gestion de langages de KDevelop
 Name[x-test]=xxKDevelop Language Support Interfacexx
 
-# versioning - prevent DLL hell
-[PropertyDef::X-KDevelop-Version]
-Type=int
-
 [PropertyDef::X-KDevelop-Language]
 Type=QString
 
