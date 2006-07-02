@@ -8,5 +8,5 @@ GenericName=Document View
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevdocumentview
 X-KDevelop-Version=4
-X-KDevelop-Scope=Global
+X-KDevelop-Category=Global
 X-KDevelop-Properties=GlobalFileManagement

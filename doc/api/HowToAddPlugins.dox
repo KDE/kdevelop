@@ -17,7 +17,7 @@ If you install this file into <code>\$(kde_servicesdir)</code>, your plugin will
 
 You can change the default loading by changing some settings in your <code>foo.desktop</code> file:
 
-  - Set <code>X-KDevelop-Scope=</code> to <code>Global</code> or
+  - Set <code>X-KDevelop-Category=</code> to <code>Global</code> or
     <code>Project</code>
     - <b>Note:</b> This property is <i>not</i> optional
 	.
@@ -37,7 +37,7 @@ An example from the Java Debugger Plugin:
 
 <code><pre>
     #######################
-    X-KDevelop-Scope=Project
+    X-KDevelop-Category=Project
     X-KDevelop-ProgrammingLanguages=Java
     Keywords=
     ##########################

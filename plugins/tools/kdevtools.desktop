@@ -14,5 +14,5 @@ Icon=configure
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevtools
 X-KDevelop-Version=4
-X-KDevelop-Scope=Global
+X-KDevelop-Category=Global
 X-KDevelop-Properties=AdditionalTools

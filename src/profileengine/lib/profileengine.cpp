@@ -81,13 +81,13 @@ KService::List ProfileEngine::offers(const QString &profileName, OfferType offer
     QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
     switch (offerType) {
         case Global:
-            constraint += QString::fromLatin1(" and [X-KDevelop-Scope] == 'Global'");
+            constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Global'");
             break;
         case Project:
-            constraint += QString::fromLatin1(" and [X-KDevelop-Scope] == 'Project'");
+            constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Project'");
             break;
         case Core:
-            constraint += QString::fromLatin1(" and [X-KDevelop-Scope] == 'Core'");
+            constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Core'");
             break;
     }
     QString constraint_add = "";
@@ -150,13 +150,13 @@ KService::List ProfileEngine::allOffers(OfferType offerType)
     QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
     switch (offerType) {
         case Global:
-            constraint += QString::fromLatin1(" and [X-KDevelop-Scope] == 'Global'");
+            constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Global'");
             break;
         case Project:
-            constraint += QString::fromLatin1(" and [X-KDevelop-Scope] == 'Project'");
+            constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Project'");
             break;
         case Core:
-            constraint += QString::fromLatin1(" and [X-KDevelop-Scope] == 'Core'");
+            constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Core'");
             break;
     }
     return KServiceTypeTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);

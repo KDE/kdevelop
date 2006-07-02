@@ -54,14 +54,29 @@ public:
      */
     virtual void unloadPlugin( const QString & plugin ) = 0;
 
-    /**Unloads plugins specified by @p list.
+    /**
+     * Unloads plugins specified by @p list.
      * @param list The list of plugin names to unload. plugin name corresponds
      * to the "Name" property in plugin .desktop file.
      */
     virtual void unloadPlugins(QStringList const &list) = 0;
 
-    /** @return The list of currently loaded plugins. */
-    virtual const QList<KDevPlugin*> loadedPlugins() = 0;
+    /** 
+     * Get the list of all currently loaded plugins in a certain category.
+     * Currently, there are three supported types of categories:
+     * - <pre>project</pre> for project specific plugins
+     * - <pre>global</pre> for global plugins that don't require a project to operate
+     * - <pre>core</pre> 
+     *
+     * The category for a plugin is controlled by the X-KDevelop-Category item in the
+     * .desktop file for the plugin
+     *
+     * If no category given, then all currently loaded plugins are returned
+     *
+     * @param category the category to search for when getting the list of loaded plugins
+     * @return The list of currently loaded plugins.
+     */
+    virtual const QList<KDevPlugin*> loadedPlugins( const QString& category = QString::null ) = 0;
 
     /**
      * Queries for the plugin which supports given service type.

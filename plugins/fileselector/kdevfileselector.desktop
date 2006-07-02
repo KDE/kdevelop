@@ -11,6 +11,6 @@ Icon=fileopen
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevfileselector
 X-KDevelop-Version=4
-X-KDevelop-Scope=Global
+X-KDevelop-Category=Global
 X-KDevelop-Mode=AssistantMode
 X-KDevelop-Properties=GlobalFileManagement

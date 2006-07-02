@@ -1928,7 +1928,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/Part
 Name=KDevelop Part
 
-[PropertyDef::X-KDevelop-Scope]
+[PropertyDef::X-KDevelop-Category]
 Type=QString
 
 [PropertyDef::X-KDevelop-ProgrammingLanguages]
@@ -1978,7 +1978,7 @@ Name=KDevDoxygen
 ServiceTypes=KDevelop/Part
 X-KDE-Library=libkdevdoxygen
 X-KDevelop-ProgrammingLanguages=C,C++,Java
-X-KDevelop-Scope=Project
+X-KDevelop-Category=Project
 </programlisting>
 
 <para>

@@ -11,7 +11,7 @@ Name[x-test]=xxKDevelop Pluginxx
 [PropertyDef::X-KDevelop-Version]
 Type=int
 
-[PropertyDef::X-KDevelop-Scope]
+[PropertyDef::X-KDevelop-Category]
 Type=QString
 
 [PropertyDef::X-KDevelop-Mode]

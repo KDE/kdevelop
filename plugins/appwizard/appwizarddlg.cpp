@@ -567,7 +567,7 @@ void AppWizardDialog::openAfterGeneration()
 
     QStringList ignoreList;
 
-    KTrader::OfferList offers = KTrader::self()->query("KDevelop/Plugin", "[X-KDevelop-Scope] == 'Project'");
+    KTrader::OfferList offers = KTrader::self()->query("KDevelop/Plugin", "[X-KDevelop-Category] == 'Project'");
     KTrader::OfferList::ConstIterator itt = offers.begin();
     while( itt != offers.end() )
     {

@@ -14,5 +14,5 @@ Icon=exec
 ServiceTypes=KDevelop/AppFrontend
 X-KDE-Library=libkdevappview
 X-KDevelop-Version=4
-X-KDevelop-Scope=Core
+X-KDevelop-Category=Core
 X-KDevelop-Properties=OutputTool

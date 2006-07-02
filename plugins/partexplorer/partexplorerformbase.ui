@@ -101,7 +101,7 @@
                 <string></string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>&lt;b&gt;Constraints&lt;/b&gt;Refine your query by writing additional constraints such as &lt;i&gt;([X-KDevelop-Scope]='Global')&lt;/i&gt;).</string>
+                <string>&lt;b&gt;Constraints&lt;/b&gt;Refine your query by writing additional constraints such as &lt;i&gt;([X-KDevelop-Category]='Global')&lt;/i&gt;).</string>
             </property>
         </widget>
         <widget class="QLabel">

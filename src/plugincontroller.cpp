@@ -234,7 +234,7 @@ void PluginController::removeAndForgetPart(const QString &name, KDevPlugin *part
     removePart(part);
 }
 
-const QList<KDevPlugin *> PluginController::loadedPlugins()
+const QList<KDevPlugin *> PluginController::loadedPlugins( const QString& )
 {
     return m_parts.values();
 }

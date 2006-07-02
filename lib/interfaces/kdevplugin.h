@@ -69,7 +69,7 @@ X-KDevelop-Plugin-BugsEmailAddress=
 X-KDevelop-Plugin-Copyright=
 X-KDE-Library=
 X-KDevelop-Version=
-X-KDevelop-Scope=
+X-KDevelop-Category=
 X-KDevelop-Properties=
 X-KDevelop-Args=
 @endcode
@@ -88,7 +88,7 @@ QPL or Custom. If this property is not set, license is considered as unknown;
 - <i>X-KDevelop-Plugin-Copyright</i> is a copyright statement (optional);
 - <i>X-KDE-Library</i> is a name of library which contains the plugin (required);
 - <i>X-KDevelop-Version</i> is a version of KDevelop interfaces which is supported by the plugin (required);
-- <i>X-KDevelop-Scope</i> is a scope of a plugin (see below for explanation) (required);
+- <i>X-KDevelop-Category</i> is a scope of a plugin (see below for explanation) (required);
 - <i>X-KDevelop-Args</i> is a list of additional arguments passed to plugins constructor (optional);
 - <i>X-KDevelop-Properties</i> is a list of properties which this plugin supports, see @ref Profile class documentation for explanation (required to work with shells that support profiles).
 .

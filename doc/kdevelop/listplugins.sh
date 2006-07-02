@@ -26,7 +26,7 @@ for defscope in Core Global Project; do
 	# echo $dfile | wc -w
 	if [ `echo $dfile | wc -w` -gt 1 ]; then continue; fi
 	if [ ! -f $dfile ]; then continue; fi
-	scope=`cat $dfile | grep "X-KDevelop-Scope=" | cut -d= -f2-`
+	scope=`cat $dfile | grep "X-KDevelop-Category=" | cut -d= -f2-`
 	if [ $scope != $defscope ]; then continue; fi
 	comment=`cat $dfile | grep "Comment=" | cut -d= -f2-`
 	name=`cat $dfile | egrep "^Name=" | cut -d= -f2- | tr " " _`

@@ -20,7 +20,7 @@ X-KDevelop-Plugin-Copyright=(C) by %{AUTHOR}
 
 X-KDevelop-Args=
 
-X-KDevelop-Scope=%{SCOPE}
+X-KDevelop-Category=%{SCOPE}
 X-KDE-Library=libkdev%{APPNAMELC}
 X-KDevelop-Version=3
 X-KDevelop-Properties=%{PROPS}

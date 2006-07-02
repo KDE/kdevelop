@@ -14,4 +14,4 @@ ServiceTypes=KDevelop/DiffFrontend
 X-KDE-Library=libkdevdiff
 X-KDevelop-Version=4
 X-KDevelop-Properties=CodeEditing
-X-KDevelop-Scope=Core
+X-KDevelop-Category=Core

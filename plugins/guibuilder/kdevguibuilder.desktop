@@ -9,5 +9,5 @@ icon=kdevelop
 ServiceTypes=KDevelop/ReadOnlyPart,KDevelop/ReadWritePart
 X-KDE-Library=kdevguibuilder
 X-KDevelop-Version=4
-X-KDevelop-Scope=Global
+X-KDevelop-Category=Global
 MimeType=application/x-designer

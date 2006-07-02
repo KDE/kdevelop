@@ -8,5 +8,5 @@ GenericName=Code View
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcodeview
 X-KDevelop-Version=4
-X-KDevelop-Scope=Project
+X-KDevelop-Category=Project
 X-KDevelop-Properties=CodeNavigation

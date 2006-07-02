@@ -55,7 +55,7 @@ public:
   void removePart(KXMLGUIClient* part);
   void removeAndForgetPart(const QString &name, KDevPlugin* part);
 
-  const QList<KDevPlugin*> loadedPlugins();
+  const QList<KDevPlugin*> loadedPlugins( const QString& category = QString::null );
 
   ProfileEngine &engine() { return m_engine; }
 
