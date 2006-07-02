@@ -2,10 +2,12 @@
 set(ideal_LIB_SRCS
     button.cpp
     buttonbar.cpp
-    buttonbarcontainer.cpp
+    buttoncontainer.cpp
     mainwindow.cpp
     toolview.cpp
     area.cpp
+    settings.cpp
+    toolviewwidget.cpp
 )
 
 kde4_automoc(${ideal_LIB_SRCS})

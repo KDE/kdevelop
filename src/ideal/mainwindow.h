@@ -38,15 +38,32 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    virtual void setAreaKind(int areaKind);
+    /**Sets the current area for the main window and uses area's configuration
+    to place tool and code views and fill button bars.
+    See @ref Area class documentation for more information about areas.*/
+    virtual void setArea(int area);
 
-    virtual void addToolView(QWidget *view, Ideal::Place defaultPlace, int defaultAreaKind);
+    /**Adds the toolview @p view to the main window. The toolview button will not be shown
+    until the area is set for the mainwindow using @ref setArea method. The toolview
+    itself will be shown as late as possible.
+    @param defaultPlace defines where in the window the toolview will be placed (note that
+    this parameter is only a hint to mainwindow areas to place the view for the first time).
+    @param area is or-ed list of allowed areas for this toolview.*/
+    virtual void addToolView(QWidget *view, Ideal::Place defaultPlace, int area);
+    /**Removes permanently the toolview from the main window. The current area is
+    asked to remove it from the window layout also. To set just the visibility
+    of the toolview use @ref hideToolView and @ref showToolView.*/
     virtual void removeToolView(QWidget *view);
+    /**Shows the toolview @p view if the current area is allowed to show it.
+    Does nothing if the toolview can not be shown in the area.*/
+    virtual void showToolView(QWidget *view);
+    virtual void hideToolView(QWidget *view);
 
+    /** @return the list of all available toolviews in the mainwindow including
+    hidden views and views not available in the current area.*/
     QList<ToolView*> toolViews() const;
-
-protected:
-//     ButtonBar *buttonBar(Ideal::Place place) const;
+    /** @return the button bar for given @p place.*/
+    ButtonBar *buttonBar(Ideal::Place place);
 
 private:
     void initSettings();

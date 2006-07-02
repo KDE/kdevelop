@@ -17,8 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef IDEALBUTTONBAR_H
-#define IDEALBUTTONBAR_H
+#ifndef IDEALBUTTONCONTAINER_H
+#define IDEALBUTTONCONTAINER_H
 
 #include <QWidget>
 #include <QList>
@@ -29,20 +29,20 @@
 namespace Ideal {
 
 class Button;
-class ButtonBar;
+class ButtonContainer;
 
 /**
-@short A layout for a ButtonBar class.
+@short A layout for a ButtonContainer class.
 
 Overrides minimumSize method to allow shrinking button bar buttons.*/
 class IDEAL_EXPORT ButtonLayout: public QBoxLayout{
 public:
-    ButtonLayout(Direction dir, ButtonBar *parent);
+    ButtonLayout(Direction dir, ButtonContainer *parent);
 
     virtual QSize minimumSize() const;
 
 private:
-    ButtonBar *m_buttonBar;
+    ButtonContainer *m_buttonBar;
 };
 
 /**
@@ -51,12 +51,12 @@ private:
 Looks like a toolbar but has another behaviour. It is suitable for
 placing on the left(right, bottom, top) corners of a window as a bar with slider.
 */
-class ButtonBar: public QWidget {
+class ButtonContainer: public QWidget {
     Q_OBJECT
 public:
-    ButtonBar(Place place, ButtonMode mode = IconsAndText,
+    ButtonContainer(Place place, ButtonMode mode = IconsAndText,
         QWidget *parent = 0);
-    virtual ~ButtonBar();
+    virtual ~ButtonContainer();
 
     /**Adds a button to the bar.*/
     virtual void addButton(Button *button, bool isShown = true);

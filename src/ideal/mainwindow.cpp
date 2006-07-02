@@ -22,13 +22,8 @@
 #include <QMap>
 #include <QLayout>
 
-#include <kglobal.h>
-#include <kconfig.h>
-
 #include "area.h"
-#include "button.h"
 #include "buttonbar.h"
-#include "buttonbarcontainer.h"
 #include "toolview.h"
 
 namespace Ideal {
@@ -48,11 +43,10 @@ struct MainWindowPrivate {
 
     MainWindow *w;
     QList<ToolView*> toolViews;
-    QMap<QWidget*, ToolView*> viewsForWidgets;
-    QMap<Ideal::Place, ButtonBarContainer*> buttonBars;
+    QMap<QWidget*, ToolView*> toolViewsForWidget;
+    QMap<Ideal::Place, ButtonBar*> buttonBars;
 
     Area *area;
-    Ideal::ButtonMode buttonMode;
 };
 
 
@@ -62,7 +56,6 @@ MainWindow::MainWindow(QWidget *parent)
     :QMainWindow(parent)
 {
     d = new MainWindowPrivate(this);
-    initSettings();
 
     initButtonBar(Ideal::Left);
     initButtonBar(Ideal::Right);
@@ -70,16 +63,9 @@ MainWindow::MainWindow(QWidget *parent)
     initButtonBar(Ideal::Top);
 }
 
-void MainWindow::initSettings()
-{
-    KConfig *config = KGlobal::config();
-    d->buttonMode = static_cast<Ideal::ButtonMode>(
-        config->readEntry("ButtonMode", (int)Ideal::Text));
-}
-
 void MainWindow::initButtonBar(Ideal::Place place)
 {
-    ButtonBarContainer *bar = new ButtonBarContainer(place, d->buttonMode, this);
+    ButtonBar *bar = new ButtonBar(place, this);
     addToolBar(bar->toolBarPlace(), bar);
     d->buttonBars[place] = bar;
 }
@@ -89,37 +75,54 @@ MainWindow::~MainWindow()
     delete d;
 }
 
-// ButtonBar *MainWindow::buttonBar(Ideal::Place place) const
-// {
-//     return d->buttonBars[place];
-// }
-
-void MainWindow::setAreaKind(int areaKind)
+void MainWindow::setArea(int area)
 {
-    if (d->area)
-        delete d->area;
-    d->area = new Area(areaKind, this);
+    if (d->area && d->area->kind() == area)
+        return; //do not switch to the same area
+    delete d->area;
+    d->area = new Area(area, this);
 }
 
-void MainWindow::addToolView(QWidget *view, Ideal::Place defaultPlace, int defaultArea)
+void MainWindow::addToolView(QWidget *view, Ideal::Place defaultPlace, int area)
 {
-    ToolView *toolView = new ToolView(view->windowTitle());
-    toolView->setPlace(defaultPlace);
-    toolView->setAreaKind(defaultArea);
-    toolView->setWidget(view);
+    ToolView *toolView = new ToolView(this, view, defaultPlace, area);
+    d->toolViews.append(toolView);
+    d->toolViewsForWidget[view] = toolView;
 
     if (d->area)
-        d->area->placeToolView(toolView);
-
-    d->toolViews.append(toolView);
-    d->viewsForWidgets[view] = toolView;
-
-    d->buttonBars[toolView->place()]->addToolViewButton(toolView);
+        d->area->addToolView(toolView);
 }
 
 void MainWindow::removeToolView(QWidget *view)
 {
-    d->toolViews.removeAll(d->viewsForWidgets[view]);
+    ToolView *toolView = d->toolViewsForWidget[view];
+    if (!toolView)
+        return;
+
+    if (d->area)
+        d->area->removeToolView(toolView);
+    d->toolViews.removeAll(toolView);
+    d->toolViewsForWidget.remove(view);
+}
+
+void MainWindow::showToolView(QWidget *view)
+{
+    ToolView *toolView = d->toolViewsForWidget[view];
+    if (!toolView)
+        return;
+
+    if (d->area)
+        d->area->showToolView(toolView);
+}
+
+void MainWindow::hideToolView(QWidget *view)
+{
+    ToolView *toolView = d->toolViewsForWidget[view];
+    if (!toolView)
+        return;
+
+    if (d->area)
+        d->area->hideToolView(toolView);
 }
 
 QList<ToolView*> MainWindow::toolViews() const
@@ -127,6 +130,9 @@ QList<ToolView*> MainWindow::toolViews() const
     return d->toolViews;
 }
 
+ButtonBar *MainWindow::buttonBar(Ideal::Place place)
+{
+    return d->buttonBars[place];
 }
 
-#include "mainwindow.moc"
+}

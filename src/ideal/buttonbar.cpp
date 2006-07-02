@@ -17,23 +17,25 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include "buttonbarcontainer.h"
+#include "buttonbar.h"
 
 #include <klocale.h>
 #include <kdebug.h>
 
 #include "button.h"
+#include "buttoncontainer.h"
 #include "buttonbar.h"
-#include "toolview.h"
+#include "toolviewwidget.h"
+#include "settings.h"
 
 namespace Ideal {
 
-ButtonBarContainer::ButtonBarContainer(Ideal::Place place, ButtonMode mode, QWidget *parent)
+ButtonBar::ButtonBar(Ideal::Place place, QWidget *parent)
     :QToolBar(parent), m_place(place)
 {
     setWindowTitle(titleForPlace());
 
-    m_bar = new ButtonBar(place, mode, this);
+    m_bar = new ButtonContainer(place, Settings::buttonMode(), this);
     addWidget(m_bar);
     setMovable(false);
     findChild<QBoxLayout*>()->setMargin(0);
@@ -41,12 +43,12 @@ ButtonBarContainer::ButtonBarContainer(Ideal::Place place, ButtonMode mode, QWid
         hide();
 }
 
-void ButtonBarContainer::setButtonMode(ButtonMode mode)
+void ButtonBar::setButtonMode(ButtonMode mode)
 {
     m_bar->setMode(mode);
 }
 
-void ButtonBarContainer::addToolViewButton(ToolView *view)
+void ButtonBar::addToolViewButton(ToolViewWidget *view)
 {
     if (!isVisible())
         show();
@@ -59,21 +61,21 @@ void ButtonBarContainer::addToolViewButton(ToolView *view)
     kDebug() << view->isVisible() << endl;
     button->setChecked(true);
 
-    connect(button, SIGNAL(clicked()), this, SLOT(setToolViewVisibility()));
+    connect(button, SIGNAL(clicked()), this, SLOT(setToolViewWidgetVisibility()));
     connect(view, SIGNAL(visibilityChanged(bool)), button, SLOT(setChecked(bool)));
 }
 
-void ButtonBarContainer::showToolViewButton(ToolView *view)
+void ButtonBar::showToolViewButton(ToolViewWidget *view)
 {
     m_viewButtons[view]->show();
 }
 
-void ButtonBarContainer::hideToolViewButton(ToolView *view)
+void ButtonBar::hideToolViewButton(ToolViewWidget *view)
 {
     m_viewButtons[view]->hide();
 }
 
-void ButtonBarContainer::removeToolViewButton(ToolView *view)
+void ButtonBar::removeToolViewButton(ToolViewWidget *view)
 {
     Button *button = m_viewButtons[view];
     m_bar->removeButton(button);
@@ -83,14 +85,14 @@ void ButtonBarContainer::removeToolViewButton(ToolView *view)
         hide();
 }
 
-void ButtonBarContainer::setVisible(bool visible)
+void ButtonBar::setVisible(bool visible)
 {
 /*    if (visible && m_bar->isEmpty())
         return;*/
     QToolBar::setVisible(visible);
 }
 
-QString ButtonBarContainer::titleForPlace()
+QString ButtonBar::titleForPlace()
 {
     switch (m_place) {
         case Ideal::Left: return i18n("Left Button Bar");
@@ -101,12 +103,12 @@ QString ButtonBarContainer::titleForPlace()
     return "";
 }
 
-void ButtonBarContainer::setToolViewVisibility()
+void ButtonBar::setToolViewWidgetVisibility()
 {
     Button *button = qobject_cast<Ideal::Button*>(sender());
     if (!button)
         return;
-    ToolView *view = m_buttonViews[button];
+    ToolViewWidget *view = m_buttonViews[button];
     if (!view)
         return;
     view->setVisible(!view->isVisible());
@@ -114,4 +116,4 @@ void ButtonBarContainer::setToolViewVisibility()
 
 }
 
-#include "buttonbarcontainer.moc"
+#include "buttonbar.moc"

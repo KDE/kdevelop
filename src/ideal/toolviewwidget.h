@@ -17,54 +17,37 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef IDEALAREA_H
-#define IDEALAREA_H
+#ifndef IDEALTOOLVIEWWIDGET_H
+#define IDEALTOOLVIEWWIDGET_H
+
+#include <QDockWidget>
 
 #include "idealdefs.h"
 
 namespace Ideal {
 
-class ToolView;
-class MainWindow;
-
 /**
-@short Main window area - the profile and layout of tool and code views.
+@short Toolview widget.
 
-Provides means of saving, restoring and managing the layout of code
-and tool views in the main window. It stores and restores positions,
-shows and hides toolview buttons, layouts code views.
-
-Area also works as the profile for tool and code views. It determines
-whether the given tool or code view is visible at the moment and
+The dock widget that actually represents the toolview in the UI.
 */
-class IDEAL_EXPORT Area {
+class IDEAL_EXPORT ToolViewWidget: public QDockWidget {
+    Q_OBJECT
 public:
-    /**Kind of the area. Each application can define its own areas.*/
-    enum Kind { Default = 0, Code = 1, Debug = 2, Design = 4 };
+    ToolViewWidget(const QString &title, QWidget *parent = 0);
+    ToolViewWidget(QWidget *parent = 0);
 
-    /**Constructs the area of given @p kind in the @p mainWindow and layouts
-    its tool and code views in the mainwindow.*/
-    Area(int kind, MainWindow *mainWindow);
-    virtual ~Area();
 
-    /** @return the kind of the area.*/
-    int kind() const;
+public slots:
+    virtual void setVisible(bool v);
 
-    /**Adds the toolview to this area if possible.*/
-    virtual void addToolView(ToolView *view);
-    /**Permanently removes the toolview from this area if possible.*/
-    virtual void removeToolView(ToolView *view);
-    /**Shows the toolview and its button in this area if possible.*/
-    virtual void showToolView(ToolView *view);
-    /**Hides the toolview and its button in this area if possible.*/
-    virtual void hideToolView(ToolView *view);
+    void slotTopLevelChanged(bool topLevel);
+
+signals:
+    void visibilityChanged(bool v);
 
 private:
-    void initArea();
-    /** @return true if the toolview is allowed to be placed in this area.*/
-    bool allowed(ToolView *view);
-
-    struct AreaPrivate *d;
+    void init();
 
 };
 

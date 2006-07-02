@@ -17,62 +17,40 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef IDEALBUTTONBAR
-#define IDEALBUTTONBAR
-
-#include <QMap>
-#include <QToolBar>
-
-#include "idealdefs.h"
+#include "toolviewwidget.h"
 
 namespace Ideal {
 
-class ToolViewWidget;
-class ButtonContainer;
-class Button;
+ToolViewWidget::ToolViewWidget(const QString &title, QWidget *parent)
+    :QDockWidget(title, parent)
+{
+    init();
+}
 
-class ButtonBar: public QToolBar {
-    Q_OBJECT
-public:
-    ButtonBar(Ideal::Place place, QWidget *parent = 0);
+ToolViewWidget::ToolViewWidget(QWidget *parent)
+    :QDockWidget(parent)
+{
+    init();
+}
 
-    void setButtonMode(ButtonMode mode);
-    void addToolViewButton(ToolViewWidget *view);
-    void showToolViewButton(ToolViewWidget *view);
-    void hideToolViewButton(ToolViewWidget *view);
-    void removeToolViewButton(ToolViewWidget *view);
+void ToolViewWidget::init()
+{
+    setFeatures(AllDockWidgetFeatures);
+    connect(this, SIGNAL(topLevelChanged(bool)), this, SLOT(slotTopLevelChanged(bool)));
+}
 
-    Qt::ToolBarArea toolBarPlace()
-    {
-        return toolBarPlace(m_place);
-    }
+void ToolViewWidget::setVisible(bool v)
+{
+    QDockWidget::setVisible(v);
+    emit visibilityChanged(v);
+}
 
-    static Qt::ToolBarArea toolBarPlace(Ideal::Place place)
-    {
-        Qt::ToolBarArea dockArea = Qt::LeftToolBarArea;
-        if (place == Ideal::Right) dockArea = Qt::RightToolBarArea;
-        else if (place == Ideal::Bottom) dockArea = Qt::BottomToolBarArea;
-        else if (place == Ideal::Top) dockArea = Qt::TopToolBarArea;
-        return dockArea;
-    }
-
-    virtual void setVisible(bool visible);
-
-protected slots:
-    void setToolViewWidgetVisibility();
-
-private:
-    QString titleForPlace();
-
-    Ideal::Place m_place;
-    ButtonMode m_mode;
-
-    ButtonContainer *m_bar;
-    QMap<ToolViewWidget*, Button*> m_viewButtons;
-    QMap<Button*, ToolViewWidget*> m_buttonViews;
-
-};
+void ToolViewWidget::slotTopLevelChanged(bool topLevel)
+{
+    if (topLevel)
+        setWindowFlags(Qt::Window);
+}
 
 }
 
-#endif
+#include "toolviewwidget.moc"

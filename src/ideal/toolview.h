@@ -20,43 +20,39 @@
 #ifndef IDEALTOOLVIEW_H
 #define IDEALTOOLVIEW_H
 
-#include <QDockWidget>
+#include <QObject>
 
 #include "idealdefs.h"
 
 namespace Ideal {
 
 /**
-@short Ideal Tool View
+@short Toolview.
+
+Toolview represents a widget and its placement and area options.
 */
-class IDEAL_EXPORT ToolView: public QDockWidget {
-    Q_OBJECT
+class IDEAL_EXPORT ToolView: public QObject {
 public:
-    ToolView(const QString &title, QWidget *parent = 0);
-    ToolView(QWidget *parent = 0);
+    /**Creates a toolview with contents @p view in the @p place.
+    @p area defines the or-ed list of allowed areas.*/
+    ToolView(QObject *parent, QWidget *contents, Ideal::Place place, int area);
+    ~ToolView();
 
-    void setPlace(Ideal::Place place);
-    Ideal::Place place() const { return m_place; }
+    /** @return the place of the toolview.*/
+    Ideal::Place place() const;
+    /**The or-ed list of allowed toolview areas.*/
+    int area() const;
+    /**The contents widget of the toolview.*/
+    QWidget *contents() const;
+
+    /** @return the Qt dock place for the toolview.*/
     Qt::DockWidgetArea dockPlace() const;
-
-    void setAreaKind(int areaKind) { m_areaKind = areaKind; }
-    int areaKind() const { return m_areaKind; }
-
+    /** @return the Qt dock place corresponding to the given @p place.*/
     static Qt::DockWidgetArea dockPlace(Ideal::Place place);
 
-public slots:
-    virtual void setVisible(bool v);
-
-    void slotTopLevelChanged(bool topLevel);
-
-signals:
-    void visibilityChanged(bool v);
-
 private:
-    void init();
+    struct ToolViewPrivate *d;
 
-    int m_areaKind;
-    Ideal::Place m_place;
 };
 
 }

@@ -27,11 +27,11 @@
 #include <QApplication>
 #include <QPixmap>
 
-#include "buttonbar.h"
+#include "buttoncontainer.h"
 
 namespace Ideal {
 
-Button::Button(ButtonBar *parent, const QString text, const QIcon &icon,
+Button::Button(ButtonContainer *parent, const QString text, const QIcon &icon,
     const QString &description)
     :QPushButton(icon, text, parent), m_buttonBar(parent), m_description(description),
     m_place(parent->place()), m_realText(text), m_realIcon(icon)

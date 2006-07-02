@@ -21,32 +21,29 @@
 
 namespace Ideal {
 
-ToolView::ToolView(const QString &title, QWidget *parent)
-    :QDockWidget(title, parent)
+struct ToolViewPrivate {
+    QWidget *contents;
+    Ideal::Place place;
+    int area;
+};
+
+ToolView::ToolView(QObject *parent, QWidget *contents, Ideal::Place place, int area)
+    :QObject(parent)
 {
-    init();
+    d = new ToolViewPrivate;
+    d->contents = contents;
+    d->place = place;
+    d->area = area;
 }
 
-ToolView::ToolView(QWidget *parent)
-    :QDockWidget(parent)
+ToolView::~ToolView()
 {
-    init();
-}
-
-void ToolView::init()
-{
-    setFeatures(AllDockWidgetFeatures);
-    connect(this, SIGNAL(topLevelChanged(bool)), this, SLOT(slotTopLevelChanged(bool)));
-}
-
-void ToolView::setPlace(Ideal::Place place)
-{
-    m_place = place;
+    delete d;
 }
 
 Qt::DockWidgetArea ToolView::dockPlace() const
 {
-    return dockPlace(m_place);
+    return dockPlace(d->place);
 }
 
 Qt::DockWidgetArea ToolView::dockPlace(Ideal::Place place)
@@ -58,18 +55,19 @@ Qt::DockWidgetArea ToolView::dockPlace(Ideal::Place place)
     return dockArea;
 }
 
-void ToolView::setVisible(bool v)
+Ideal::Place ToolView::place() const
 {
-    QDockWidget::setVisible(v);
-    emit visibilityChanged(v);
+    return d->place;
 }
 
-void ToolView::slotTopLevelChanged(bool topLevel)
+int Ideal::ToolView::area() const
 {
-    if (topLevel)
-        setWindowFlags(Qt::Window);
+    return d->area;
+}
+
+QWidget *ToolView::contents() const
+{
+    return d->contents;
 }
 
 }
-
-#include "toolview.moc"

@@ -29,18 +29,18 @@ class QStyleOptionButton;
 
 namespace Ideal {
 
-class ButtonBar;
+class ButtonContainer;
 
 /**
-@short A button to place onto the ButtonBar
+@short A button to place onto the ButtonContainer
 
 A QPushButton derivative with a sizehint of a QToolButton. These buttons
-can be rotated (rotation depends on a "place" in ideal mode).
+can be rotated (rotation depends on a "place" in Ideal mode).
 */
 class IDEAL_EXPORT Button : public QPushButton {
     Q_OBJECT
 public:
-    Button(ButtonBar *parent, const QString text, const QIcon &icon = QIcon(),
+    Button(ButtonContainer *parent, const QString text, const QIcon &icon = QIcon(),
         const QString &description = "");
 
     /**Sets the description used as a tooltip.*/
@@ -79,7 +79,7 @@ private:
     void enableText();
     void disableText();
 
-    ButtonBar *m_buttonBar;
+    ButtonContainer *m_buttonBar;
 
     QString m_description;
     Place m_place;
@@ -87,7 +87,7 @@ private:
     QString m_realText;
     QIcon m_realIcon;
 
-friend class ButtonBar;
+friend class ButtonContainer;
 };
 
 }

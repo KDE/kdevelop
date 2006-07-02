@@ -22,13 +22,16 @@
 #include <QDebug>
 
 #include "mainwindow.h"
+#include "buttonbar.h"
 #include "toolview.h"
+#include "toolviewwidget.h"
 
 namespace Ideal {
 
 struct AreaPrivate {
     int kind;
     MainWindow *mainWindow;
+    QMap<ToolView*, ToolViewWidget*> toolDocks;
 };
 
 Area::Area(int kind, MainWindow *mainWindow)
@@ -49,20 +52,58 @@ void Area::initArea()
 {
     QList<ToolView*> toolViews = d->mainWindow->toolViews();
     foreach (ToolView *view, toolViews)
-        placeToolView(view);
+        addToolView(view);
 }
 
-void Area::placeToolView(ToolView *toolView)
+void Area::addToolView(ToolView *view)
 {
-    qDebug() << "1";
-    if (toolView->areaKind() & d->kind)
-    {
-        qDebug() << "2";
-        //TODO place the view here
-        d->mainWindow->addDockWidget(toolView->dockPlace(), toolView);
-    }
+    if (!allowed(view))
+        return;
+
+    ToolViewWidget *dockWidget = new ToolViewWidget(view->contents()->windowTitle(), d->mainWindow);
+    dockWidget->setWidget(view->contents());
+    d->toolDocks[view] = dockWidget;
+    d->mainWindow->addDockWidget(view->dockPlace(), dockWidget);
+    d->mainWindow->buttonBar(view->place())->addToolViewButton(dockWidget);
+}
+
+void Area::removeToolView(ToolView *view)
+{
+    if (!allowed(view))
+        return;
+    ToolViewWidget *dockWidget = d->toolDocks[view];
+    d->mainWindow->removeDockWidget(dockWidget);
+    d->mainWindow->buttonBar(view->place())->removeToolViewButton(dockWidget);
+    d->toolDocks.remove(view);
+    delete dockWidget;
+}
+
+void Area::showToolView(ToolView *view)
+{
+    if (!allowed(view))
+        return;
+    ToolViewWidget *dockWidget = d->toolDocks[view];
+    dockWidget->show();
+    d->mainWindow->buttonBar(view->place())->showToolViewButton(dockWidget);
+}
+
+void Area::hideToolView(ToolView *view)
+{
+    if (!allowed(view))
+        return;
+    ToolViewWidget *dockWidget = d->toolDocks[view];
+    dockWidget->hide();
+    d->mainWindow->buttonBar(view->place())->hideToolViewButton(dockWidget);
+}
+
+int Area::kind() const
+{
+    return d->kind;
+}
+
+bool Area::allowed(ToolView *view)
+{
+    return view->area() & d->kind;
 }
 
 }
-
-#include "area.moc"

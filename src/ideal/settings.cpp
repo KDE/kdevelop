@@ -17,62 +17,17 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef IDEALBUTTONBAR
-#define IDEALBUTTONBAR
+#include "settings.h"
 
-#include <QMap>
-#include <QToolBar>
-
-#include "idealdefs.h"
+#include <kglobal.h>
+#include <kconfig.h>
 
 namespace Ideal {
 
-class ToolViewWidget;
-class ButtonContainer;
-class Button;
-
-class ButtonBar: public QToolBar {
-    Q_OBJECT
-public:
-    ButtonBar(Ideal::Place place, QWidget *parent = 0);
-
-    void setButtonMode(ButtonMode mode);
-    void addToolViewButton(ToolViewWidget *view);
-    void showToolViewButton(ToolViewWidget *view);
-    void hideToolViewButton(ToolViewWidget *view);
-    void removeToolViewButton(ToolViewWidget *view);
-
-    Qt::ToolBarArea toolBarPlace()
-    {
-        return toolBarPlace(m_place);
-    }
-
-    static Qt::ToolBarArea toolBarPlace(Ideal::Place place)
-    {
-        Qt::ToolBarArea dockArea = Qt::LeftToolBarArea;
-        if (place == Ideal::Right) dockArea = Qt::RightToolBarArea;
-        else if (place == Ideal::Bottom) dockArea = Qt::BottomToolBarArea;
-        else if (place == Ideal::Top) dockArea = Qt::TopToolBarArea;
-        return dockArea;
-    }
-
-    virtual void setVisible(bool visible);
-
-protected slots:
-    void setToolViewWidgetVisibility();
-
-private:
-    QString titleForPlace();
-
-    Ideal::Place m_place;
-    ButtonMode m_mode;
-
-    ButtonContainer *m_bar;
-    QMap<ToolViewWidget*, Button*> m_viewButtons;
-    QMap<Button*, ToolViewWidget*> m_buttonViews;
-
-};
-
+Ideal::ButtonMode Settings::buttonMode()
+{
+    KConfig *config = KGlobal::config();
+    return static_cast<Ideal::ButtonMode>(config->readEntry("ButtonMode", (int)Ideal::Text));
 }
 
-#endif
+}

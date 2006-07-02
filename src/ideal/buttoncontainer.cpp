@@ -17,7 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include "buttonbar.h"
+#include "buttoncontainer.h"
 
 #include <QResizeEvent>
 
@@ -29,7 +29,7 @@ namespace Ideal {
 
 //ButtonLayout class
 
-ButtonLayout::ButtonLayout(Direction dir, ButtonBar *parent)
+ButtonLayout::ButtonLayout(Direction dir, ButtonContainer *parent)
     :QBoxLayout(dir, parent), m_buttonBar(parent)
 {
     setMargin(0);
@@ -58,10 +58,10 @@ QSize ButtonLayout::minimumSize() const
 
 
 
-//ButtonBar class
+//ButtonContainer class
 
 
-ButtonBar::ButtonBar(Place place, ButtonMode mode, QWidget *parent)
+ButtonContainer::ButtonContainer(Place place, ButtonMode mode, QWidget *parent)
     :QWidget(parent), m_place(place), m_buttonLayout(0),
     m_shrinked(false), m_autoResize(true)
 {
@@ -83,11 +83,11 @@ ButtonBar::ButtonBar(Place place, ButtonMode mode, QWidget *parent)
     m_buttonLayout->insertStretch(-1);
 }
 
-ButtonBar::~ButtonBar()
+ButtonContainer::~ButtonContainer()
 {
 }
 
-void ButtonBar::addButton(Button *button, bool isShown)
+void ButtonContainer::addButton(Button *button, bool isShown)
 {
     int buttonCount = m_buttons.count();
 
@@ -99,31 +99,31 @@ void ButtonBar::addButton(Button *button, bool isShown)
     fixDimensions();
 }
 
-void ButtonBar::removeButton(Button *button)
+void ButtonContainer::removeButton(Button *button)
 {
     m_buttons.removeAll(button);
     m_buttonLayout->removeWidget(button);
     delete button;
 }
 
-void ButtonBar::setMode(ButtonMode mode)
+void ButtonContainer::setMode(ButtonMode mode)
 {
     m_mode = mode;
     foreach (Button *button, m_buttons)
         button->setMode(mode);
 }
 
-ButtonMode ButtonBar::mode() const
+ButtonMode ButtonContainer::mode() const
 {
     return m_mode;
 }
 
-Place ButtonBar::place() const
+Place ButtonContainer::place() const
 {
     return m_place;
 }
 
-void ButtonBar::fixDimensions()
+void ButtonContainer::fixDimensions()
 {
     switch (m_place)
     {
@@ -142,13 +142,13 @@ void ButtonBar::fixDimensions()
     }
 }
 
-void ButtonBar::setButtonsPlace(Ideal::Place place)
+void ButtonContainer::setButtonsPlace(Ideal::Place place)
 {
     foreach (Button *button, m_buttons)
         button->setPlace(place);
 }
 
-void ButtonBar::resizeEvent(QResizeEvent *ev)
+void ButtonContainer::resizeEvent(QResizeEvent *ev)
 {
     int preferredDimension = 0;
     int actualDimension = 0;
@@ -181,7 +181,7 @@ void ButtonBar::resizeEvent(QResizeEvent *ev)
     QWidget::resizeEvent(ev);
 }
 
-void ButtonBar::shrink(int preferredDimension, int actualDimension)
+void ButtonContainer::shrink(int preferredDimension, int actualDimension)
 {
     if (!preferredDimension)
         return;
@@ -222,7 +222,7 @@ void ButtonBar::shrink(int preferredDimension, int actualDimension)
     }
 }
 
-void ButtonBar::deshrink(int preferredDimension, int actualDimension)
+void ButtonContainer::deshrink(int preferredDimension, int actualDimension)
 {
     if (!preferredDimension)
         return;
@@ -275,7 +275,7 @@ void ButtonBar::deshrink(int preferredDimension, int actualDimension)
     }
 }
 
-void ButtonBar::unshrink()
+void ButtonContainer::unshrink()
 {
     foreach (Button *button, m_buttons)
     {
@@ -285,7 +285,7 @@ void ButtonBar::unshrink()
     m_shrinked = false;
 }
 
-int ButtonBar::originalDimension()
+int ButtonContainer::originalDimension()
 {
     int size = 0;
     foreach (Button *button, m_buttons)
@@ -295,17 +295,17 @@ int ButtonBar::originalDimension()
     return size;
 }
 
-bool ButtonBar::autoResize() const
+bool ButtonContainer::autoResize() const
 {
     return m_autoResize;
 }
 
-void ButtonBar::setAutoResize(bool b)
+void ButtonContainer::setAutoResize(bool b)
 {
     m_autoResize = b;
 }
 
-QString ButtonBar::squeeze(const QString &str, int maxlen)
+QString ButtonContainer::squeeze(const QString &str, int maxlen)
 {
     if (str.length() > maxlen)
     {
@@ -316,11 +316,11 @@ QString ButtonBar::squeeze(const QString &str, int maxlen)
         return str;
 }
 
-bool ButtonBar::isEmpty()
+bool ButtonContainer::isEmpty()
 {
     return !m_buttons.count();
 }
 
 }
 
-#include "buttonbar.moc"
+#include "buttoncontainer.moc"
