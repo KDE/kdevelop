@@ -244,8 +244,8 @@ public:
     template<class Operation, class Result>
     void walkProfiles(Operation &op, Result *result, Profile *root)
     {
-        Q3ValueList<Profile*> children = root->children();
-        for (Q3ValueList<Profile*>::iterator it = children.begin(); it != children.end(); ++it)
+        QList<Profile*> children = root->children();
+        for (QList<Profile*>::iterator it = children.begin(); it != children.end(); ++it)
         {
             Result *newResult = op(result, *it);
             walkProfiles<Operation>(op, newResult, *it);
