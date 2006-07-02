@@ -36,6 +36,7 @@ ToolView::ToolView(QWidget *parent)
 void ToolView::init()
 {
     setFeatures(AllDockWidgetFeatures);
+    connect(this, SIGNAL(topLevelChanged(bool)), this, SLOT(slotTopLevelChanged(bool)));
 }
 
 void ToolView::setPlace(Ideal::Place place)
@@ -61,6 +62,12 @@ void ToolView::setVisible(bool v)
 {
     QDockWidget::setVisible(v);
     emit visibilityChanged(v);
+}
+
+void ToolView::slotTopLevelChanged(bool topLevel)
+{
+    if (topLevel)
+        setWindowFlags(Qt::Window);
 }
 
 }

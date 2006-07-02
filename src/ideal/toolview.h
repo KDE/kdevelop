@@ -47,6 +47,8 @@ public:
 public slots:
     virtual void setVisible(bool v);
 
+    void slotTopLevelChanged(bool topLevel);
+
 signals:
     void visibilityChanged(bool v);
 
