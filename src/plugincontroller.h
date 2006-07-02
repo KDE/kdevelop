@@ -72,7 +72,6 @@ protected:
   PluginController();
 
 private slots:
-  void slotConfigWidget( KDialog* );
   void loadCorePlugins();
   void loadPlugins( KService::List offers, const QStringList & ignorePlugins = QStringList() );
   void unloadPlugins();

@@ -209,16 +209,6 @@ QStringList PluginController::argumentsFromService( const KService::Ptr &service
 	return args;
 }
 
-void PluginController::slotConfigWidget( KDialog* dlg )
-{
-    //FIXME: adymo: i disabled this because plugin configuration should be project-wide
-    // in profile-enabled shell
-/*  QVBox *vbox = dlg->addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", K3Icon::SizeMedium ) );
-  PartSelectWidget *w = new PartSelectWidget(vbox, "part selection widget");
-  connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-  connect( w, SIGNAL(accepted()), this, SLOT(loadGlobalPlugins()) );*/
-}
-
 void PluginController::integratePart(KXMLGUIClient *part)
 {
     if ( ! part ) return;
