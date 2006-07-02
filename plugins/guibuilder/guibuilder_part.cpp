@@ -28,7 +28,7 @@ K_EXPORT_COMPONENT_FACTORY(kdevguibuilder, GuiBuilderPartFactory)
 GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
                                QObject *parent,
                                const QStringList &args)
-  : KDevReadWritePart(parent)
+    : KParts::ReadWritePart(parent)
 {
   QDesignerComponents::initializeResources();
 
@@ -110,12 +110,6 @@ KAboutData* GuiBuilderPart::createAboutData()
   aboutData->addCredit( "Roberto Raggi", 0, "roberto@kdevelop.org" );
 
   return aboutData;
-}
-
-void GuiBuilderPart::setApiInstance( KDevApi* api )
-{
-  KDevReadWritePart::setApiInstance( api );
-
 }
 
 QDesignerFormEditorInterface *GuiBuilderPart::designer() const

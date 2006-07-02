@@ -29,7 +29,6 @@ set(kdevinterfaces_LIB_SRCS
     kdevcodedelegate.cpp
     kdevcodeproxy.cpp
     kdevcodeaggregate.cpp
-    kdevreadwritepart.cpp
     kdevdocument.cpp
     kdevbuildableproject.cpp
     kdevfilemanager.cpp
@@ -72,7 +71,6 @@ install_files(/include/kdevelop/interfaces FILES
     filetemplate.h
     kdevcodedelegate.h
     kdevcodeproxy.h
-    kdevreadwritepart.h
     kdevfilemanager.h
     kdevbuildableproject.h
     kdevbuildmanager.h

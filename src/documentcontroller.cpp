@@ -61,7 +61,6 @@
 #include "documentationpart.h"
 #include "mimewarningdialog.h"
 #include "kdevlanguagesupport.h"
-#include "kdevreadwritepart.h"
 #include "kdevhtmlpart.h"
 
 #include "documentcontroller.h"

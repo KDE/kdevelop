@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QHash>
 #include <QtCore/QPointer>
-#include <kdevreadwritepart.h>
+#include <kparts/part.h>
 #include <kdevdocumentcontroller.h>
 
 class QAction;
@@ -20,14 +20,12 @@ template<class T> class QList;
 typedef QHash<KAction*, QAction*> DesignerActionHash;
 
 
-class GuiBuilderPart: public KDevReadWritePart
+class GuiBuilderPart: public KParts::ReadWritePart
 {
   Q_OBJECT
 public:
   GuiBuilderPart(QWidget* parentWidget, QObject *parent, const QStringList &args);
   virtual ~GuiBuilderPart();
-
-  virtual void setApiInstance( KDevApi* api );
 
   static KAboutData* createAboutData();
 
