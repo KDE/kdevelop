@@ -4282,7 +4282,7 @@ bool Parser::parseObjcMethodDef( DeclarationAST::Node & node )
 
 bool Parser::parseWinDeclSpec( GroupAST::Node & node )
 {
-    if( lex->lookAhead(0) == Token_identifier && lex->lookAhead(0).text() == "__declspec" && lex->lookAhead(1) == '(' ){
+    if( lex->lookAhead(0) == Token_identifier && lex->lookAhead(0).text() == "__declspec" && lex->lookAhead(1) == '(' && lex->lookAhead(2) != ')'){
 	int start = lex->index();
 	nextToken();
 	nextToken(); // skip '('
