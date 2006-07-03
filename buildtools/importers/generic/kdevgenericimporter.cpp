@@ -39,9 +39,9 @@ KDevGenericImporter::KDevGenericImporter(QObject *parent, const QStringList &)
     kDebug() << k_funcinfo << "generic importer loaded" << endl;
 
     if (includes.isEmpty())
-        includes = "(*.h|*.cpp|*.c|*.ui)"; // ### remove me
+        includes << "*.h" << "*.cpp" << "*.c" << "*.ui";   // ### remove me
 
-    excludes = "(.svn|CVS|moc_.*.cpp)"; // ### remove me
+    excludes << ".svn" << "CVS" << "moc_*.cpp"; // ### remove me
 }
 
 KDevGenericImporter::~KDevGenericImporter()
@@ -58,17 +58,22 @@ bool KDevGenericImporter::isValid(const QFileInfo &fileInfo) const
     QString fileName = fileInfo.fileName();
 
     bool ok = fileInfo.isDir();
-    QRegExp rx(includes, Qt::CaseSensitive, QRegExp::Wildcard);
-    if (rx.exactMatch(fileName)) {
+    for (QStringList::ConstIterator it = includes.begin(); !ok && it != includes.end(); ++it) {
+        QRegExp rx(*it, Qt::CaseSensitive, QRegExp::Wildcard);
+        if (rx.exactMatch(fileName)) {
             ok = true;
+        }
     }
 
     if (!ok)
         return false;
 
-    QRegExp rx2(excludes, Qt::CaseSensitive, QRegExp::Wildcard);
-    if (rx2.exactMatch(fileName))
-        return false;
+    for (QStringList::ConstIterator it = excludes.begin(); it != excludes.end(); ++it) {
+        QRegExp rx(*it, Qt::CaseSensitive, QRegExp::Wildcard);
+        if (rx.exactMatch(fileName)) {
+            return false;
+        }
+    }
 
     return true;
 }
