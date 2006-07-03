@@ -53,8 +53,8 @@ private:
 private:
     KDevProject *m_project;
 
-    QStringList includes;
-    QStringList excludes;
+    QString includes;
+    QString excludes;
 };
 
 #endif // KDEVGENERICIMPORTER_H
