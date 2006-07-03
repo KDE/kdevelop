@@ -27,8 +27,6 @@
 #include <kaction.h>
 #include <kxmlguifactory.h>
 
-#include <profileengine.h>
-
 #include "core.h"
 #include "toplevel.h"
 #include "projectmanager.h"

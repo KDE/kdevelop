@@ -34,7 +34,7 @@
 #include <ktoolinvocation.h>
 #include "domutil.h"
 
-#include <profileengine.h>
+#include <kdevprofileengine.h>
 
 #include "partselectwidget.h"
 #include "plugincontroller.h"

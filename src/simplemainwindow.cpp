@@ -37,8 +37,8 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
-#include <profile.h>
-#include <profileengine.h>
+#include <kdevprofile.h>
+#include <kdevprofileengine.h>
 
 #include "core.h"
 #include "toplevel.h"

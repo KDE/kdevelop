@@ -16,20 +16,20 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.             *
  ***************************************************************************/
-#ifndef PROFILEENGINE_H
-#define PROFILEENGINE_H
+#ifndef KDEVPROFILEENGINE_H
+#define KDEVPROFILEENGINE_H
 
 #include <QMap>
-#include <Q3ValueList>
+#include <QList>
 #include <kservicetypetrader.h>
-#include "profile.h"
+#include "kdevprofile.h"
 
 /**
 Profile listing operation.
 Used to get a plain list of profiles
 and store it in the QMap<QString, Profile*>.
 */
-class KDEVPROFILES_EXPORT ProfileListing{
+class KDEVINTERFACES_EXPORT ProfileListing{
 public:
     void operator() (Profile *profile)
     {
@@ -45,7 +45,7 @@ Used to get a list of urls to the profile resources.
 Resource urls can be filtered by an @p filter parameter
 passed to the constructor. Filter can have values
 as described in @ref QDir::setNameFilter function documentation.*/
-class KDEVPROFILES_EXPORT ProfileListingEx {
+class KDEVINTERFACES_EXPORT ProfileListingEx {
 public:
     ProfileListingEx(const QString &filter): m_filter(filter) {}
     void operator() (Profile *profile)
@@ -84,7 +84,7 @@ KDevelop
 @endcode
 To manage a tree of profiles, use @ref ProfileEngine::walkProfiles methods.
 */
-class KDEVPROFILES_EXPORT ProfileEngine {
+class KDEVINTERFACES_EXPORT ProfileEngine {
 public:
     ProfileEngine();
     ~ProfileEngine();
@@ -177,8 +177,8 @@ public:
     template<class Operation>
     void walkProfiles(Operation &op, Profile *root)
     {
-        Q3ValueList<Profile*> children = root->children();
-        for (Q3ValueList<Profile*>::iterator it = children.begin(); it != children.end(); ++it)
+        QList<Profile*> children = root->children();
+        for (QList<Profile*>::iterator it = children.begin(); it != children.end(); ++it)
         {
             op(*it);
             walkProfiles<Operation>(op, *it);

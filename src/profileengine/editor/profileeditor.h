@@ -19,7 +19,7 @@
 #ifndef PROFILEEDITOR_H
 #define PROFILEEDITOR_H
 
-#include <profileengine.h>
+#include <kdevprofileengine.h>
 
 #include "profileeditorbase.h"
 

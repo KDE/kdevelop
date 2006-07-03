@@ -7,7 +7,7 @@
 #include <kservicetypetrader.h>
 #include <kdevplugincontroller.h>
 
-#include <profileengine.h>
+#include <kdevprofileengine.h>
 #include "shellexport.h"
 
 class KXMLGUIClient;

@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.             *
  ***************************************************************************/
-#ifndef PROFILE_H
-#define PROFILE_H
+#ifndef KDEVPROFILE_H
+#define KDEVPROFILE_H
 
 #include <QStringList>
 #include <kurl.h>
@@ -29,7 +29,7 @@
 
 A class which represents a profile for KDevelop platform stored on disk.
 */
-class KDEVPROFILES_EXPORT Profile {
+class KDEVINTERFACES_EXPORT Profile {
 public:
     /**An entry in the lists that store profile information*/
     struct Entry {
