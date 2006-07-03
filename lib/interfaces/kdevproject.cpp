@@ -30,7 +30,7 @@
 #include <kinstance.h>
 
 #include "kdevproject.h"
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 #include "kdevfilemanager.h"
 #include "filetemplate.h"
 

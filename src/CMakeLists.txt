@@ -3,7 +3,7 @@ add_subdirectory(profiles)
 add_subdirectory(profileengine)
 # add_subdirectory(newui)
 
-include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/src/profileengine/lib
+include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets
     )
 
 
@@ -40,7 +40,7 @@ kde4_automoc(${kdevshell_LIB_SRCS})
 kde4_add_ui_files(kdevshell_LIB_SRCS ${kdevshell_UI})
 kde4_add_ui3_files(kdevshell_LIB_SRCS ${kdevshell_UI3})
 kde4_add_library(kdevshell SHARED ${kdevshell_LIB_SRCS})
-target_link_libraries(kdevshell ${KDE4_KDECORE_LIBS} kdeui profileengine kdevinterfaces kdevutil kdevwidgets khtml ktexteditor)
+target_link_libraries(kdevshell ${KDE4_KDECORE_LIBS} kdeui kdevinterfaces kdevutil kdevwidgets khtml ktexteditor)
 set_target_properties(kdevshell PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install_targets(/lib kdevshell)
 

@@ -211,7 +211,7 @@ void PartSelectWidget::itemSelected( Q3ListViewItem * item )
 	else
 	{
 		_urlLabel->show();
-		_urlLabel->setURL( pitem->url() );
+		_urlLabel->setUrl( pitem->url() );
 		_urlLabel->setText( pitem->url() );
 	}
 }

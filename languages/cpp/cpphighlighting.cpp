@@ -81,7 +81,7 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
 
       case ClassType: {
         KTextEditor::Attribute::Ptr e(new KTextEditor::Attribute());
-        e->setForeground(Qt::green);
+        e->setForeground(QColor(0x005500));
         a->setDynamicAttribute(Attribute::ActivateCaretIn, e);
         //a->setEffects(Attribute::EffectFadeIn | Attribute::EffectFadeOut);
         break;

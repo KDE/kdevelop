@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include "kdevdocumentcontroller.h"
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 KDevDocumentController::KDevDocumentController(QWidget *parent)
   : KParts::PartManager(parent)

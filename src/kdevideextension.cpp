@@ -30,6 +30,7 @@
 #include <kapplication.h>
 #include <kfontcombo.h>
 #include <kpagedialog.h>
+#include <kpagewidgetmodel.h>
 #include <kicon.h>
 
 #include <kdevplugin.h>

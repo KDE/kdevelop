@@ -4,7 +4,7 @@
 
 #include <QString>
 #include <QObject>
-
+#include <QDomDocument>
 
 #include <kxmlguiclient.h>
 #include <kservice.h>

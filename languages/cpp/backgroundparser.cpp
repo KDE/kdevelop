@@ -123,7 +123,7 @@ void BackgroundParser::parseDocuments()
 
                     } else {
                         highlight = smart->newSmartRange(document->textDocument()->documentRange(), 0L, KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
-                        smart->addHighlightToDocument(highlight, true);
+                        smart->addHighlightToDocument(highlight, false);
                     }
                 }
 
