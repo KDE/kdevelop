@@ -37,7 +37,7 @@ class ButtonContainer;
 Looks like a toolbar but has another behaviour. It is suitable for
 placing on the left(right, bottom, top) corners of a window as a bar with slider.
 */
-class ButtonContainer: public QWidget {
+class IDEAL_EXPORT ButtonContainer: public QWidget {
     Q_OBJECT
 public:
     ButtonContainer(Place place, ButtonMode mode = IconsAndText,

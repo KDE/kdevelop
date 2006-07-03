@@ -31,45 +31,36 @@ class ToolViewWidget;
 class ButtonContainer;
 class Button;
 
-class ButtonBar: public QToolBar {
+/**
+@short Toolbar for toolview buttons.
+
+Shows the ButtonContainer widget as the first enrty on the toolbar.
+*/
+class IDEAL_EXPORT ButtonBar: public QToolBar {
     Q_OBJECT
 public:
     ButtonBar(Ideal::Place place, QWidget *parent = 0);
 
-    void setButtonMode(ButtonMode mode);
+    /**Adds the button for the toolview.*/
     void addToolViewButton(ToolViewWidget *view);
+    /**Shows the button for the toolview.*/
     void showToolViewButton(ToolViewWidget *view);
+    /**Hides the button for the toolview.*/
     void hideToolViewButton(ToolViewWidget *view);
+    /**Removes the button for the toolview.*/
     void removeToolViewButton(ToolViewWidget *view);
 
-    Qt::ToolBarArea toolBarPlace()
-    {
-        return toolBarPlace(m_place);
-    }
+    /** @return the Qt toolbar area code.*/
+    Qt::ToolBarArea toolBarPlace();
+    /** @return the Qt toolbar area code for given Ideal @p place.*/
+    static Qt::ToolBarArea toolBarPlace(Ideal::Place place);
 
-    static Qt::ToolBarArea toolBarPlace(Ideal::Place place)
-    {
-        Qt::ToolBarArea dockArea = Qt::LeftToolBarArea;
-        if (place == Ideal::Right) dockArea = Qt::RightToolBarArea;
-        else if (place == Ideal::Bottom) dockArea = Qt::BottomToolBarArea;
-        else if (place == Ideal::Top) dockArea = Qt::TopToolBarArea;
-        return dockArea;
-    }
-
-    virtual void setVisible(bool visible);
-
-protected slots:
+private slots:
+    /**Sets the toolview visibility after clicking its button.*/
     void setToolViewWidgetVisibility();
 
 private:
-    QString titleForPlace();
-
-    Ideal::Place m_place;
-    ButtonMode m_mode;
-
-    ButtonContainer *m_bar;
-    QMap<ToolViewWidget*, Button*> m_viewButtons;
-    QMap<Button*, ToolViewWidget*> m_buttonViews;
+    struct ButtonBarPrivate *d;
 
 };
 

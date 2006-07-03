@@ -30,33 +30,56 @@
 
 namespace Ideal {
 
-ButtonBar::ButtonBar(Ideal::Place place, QWidget *parent)
-    :QToolBar(parent), m_place(place)
-{
-    setWindowTitle(titleForPlace());
+struct ButtonBarPrivate {
+    QString titleForPlace();
 
-    m_bar = new ButtonContainer(place, Settings::buttonMode(), this);
-    addWidget(m_bar);
-    setMovable(false);
-    findChild<QBoxLayout*>()->setMargin(0);
-    if (m_bar->isEmpty())
-        hide();
+    Ideal::Place place;
+
+    ButtonContainer *container;
+    QMap<ToolViewWidget*, Button*> viewButtons;
+    QMap<Button*, ToolViewWidget*> buttonViews;
+};
+
+QString ButtonBarPrivate::titleForPlace()
+{
+    switch (place) {
+        case Ideal::Left: return i18n("Left Button Bar");
+        case Ideal::Right: return i18n("Right Button Bar");
+        case Ideal::Bottom: return i18n("Bottom Button Bar");
+        case Ideal::Top: return i18n("Top Button Bar");
+    }
+    return "";
 }
 
-void ButtonBar::setButtonMode(ButtonMode mode)
+
+//class ButtonBar
+
+ButtonBar::ButtonBar(Ideal::Place place, QWidget *parent)
+    :QToolBar(parent)
 {
-    m_bar->setMode(mode);
+    ButtonBarPrivate *d = new ButtonBarPrivate;
+    d->place = place;
+
+    setWindowTitle(d->titleForPlace());
+
+    d->container = new ButtonContainer(place, Settings::buttonMode(), this);
+    addWidget(d->container);
+    setMovable(false);
+    //set the QToolBar's layout margin to 0 to please Mr. Fitt ;)
+    findChild<QBoxLayout*>()->setMargin(0);
+    if (d->container->isEmpty())
+        hide();
 }
 
 void ButtonBar::addToolViewButton(ToolViewWidget *view)
 {
     if (!isVisible())
         show();
-    Button *button = new Button(m_bar, view->widget()->windowTitle(),
+    Button *button = new Button(d->container, view->widget()->windowTitle(),
         view->widget()->windowIcon(), view->widget()->toolTip());
-    m_bar->addButton(button/*, false*/);
-    m_viewButtons[view] = button;
-    m_buttonViews[button] = view;
+    d->container->addButton(button/*, false*/);
+    d->viewButtons[view] = button;
+    d->buttonViews[button] = view;
 
     kDebug() << view->isVisible() << endl;
     button->setChecked(true);
@@ -67,40 +90,22 @@ void ButtonBar::addToolViewButton(ToolViewWidget *view)
 
 void ButtonBar::showToolViewButton(ToolViewWidget *view)
 {
-    m_viewButtons[view]->show();
+    d->viewButtons[view]->show();
 }
 
 void ButtonBar::hideToolViewButton(ToolViewWidget *view)
 {
-    m_viewButtons[view]->hide();
+    d->viewButtons[view]->hide();
 }
 
 void ButtonBar::removeToolViewButton(ToolViewWidget *view)
 {
-    Button *button = m_viewButtons[view];
-    m_bar->removeButton(button);
-    m_viewButtons.remove(view);
-    m_buttonViews.remove(button);
-    if (m_bar->isEmpty())
+    Button *button = d->viewButtons[view];
+    d->container->removeButton(button);
+    d->viewButtons.remove(view);
+    d->buttonViews.remove(button);
+    if (d->container->isEmpty())
         hide();
-}
-
-void ButtonBar::setVisible(bool visible)
-{
-/*    if (visible && m_bar->isEmpty())
-        return;*/
-    QToolBar::setVisible(visible);
-}
-
-QString ButtonBar::titleForPlace()
-{
-    switch (m_place) {
-        case Ideal::Left: return i18n("Left Button Bar");
-        case Ideal::Right: return i18n("Right Button Bar");
-        case Ideal::Bottom: return i18n("Bottom Button Bar");
-        case Ideal::Top: return i18n("Top Button Bar");
-    }
-    return "";
 }
 
 void ButtonBar::setToolViewWidgetVisibility()
@@ -108,10 +113,24 @@ void ButtonBar::setToolViewWidgetVisibility()
     Button *button = qobject_cast<Ideal::Button*>(sender());
     if (!button)
         return;
-    ToolViewWidget *view = m_buttonViews[button];
+    ToolViewWidget *view = d->buttonViews[button];
     if (!view)
         return;
     view->setVisible(!view->isVisible());
+}
+
+Qt::ToolBarArea ButtonBar::toolBarPlace()
+{
+    return toolBarPlace(d->place);
+}
+
+Qt::ToolBarArea ButtonBar::toolBarPlace(Ideal::Place place)
+{
+    Qt::ToolBarArea dockArea = Qt::LeftToolBarArea;
+    if (place == Ideal::Right) dockArea = Qt::RightToolBarArea;
+    else if (place == Ideal::Bottom) dockArea = Qt::BottomToolBarArea;
+    else if (place == Ideal::Top) dockArea = Qt::TopToolBarArea;
+    return dockArea;
 }
 
 }
