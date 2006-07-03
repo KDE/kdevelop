@@ -37,10 +37,11 @@ public:
     ToolViewWidget(const QString &title, QWidget *parent = 0);
     ToolViewWidget(QWidget *parent = 0);
 
-
 public slots:
+    /**Overridden to emit visibilityChanged signal.*/
     virtual void setVisible(bool v);
 
+private slots:
     void slotTopLevelChanged(bool topLevel);
 
 signals:

@@ -32,20 +32,6 @@ class Button;
 class ButtonContainer;
 
 /**
-@short A layout for a ButtonContainer class.
-
-Overrides minimumSize method to allow shrinking button bar buttons.*/
-class IDEAL_EXPORT ButtonLayout: public QBoxLayout{
-public:
-    ButtonLayout(Direction dir, ButtonContainer *parent);
-
-    virtual QSize minimumSize() const;
-
-private:
-    ButtonContainer *m_buttonBar;
-};
-
-/**
 @short A bar with tool buttons.
 
 Looks like a toolbar but has another behaviour. It is suitable for
@@ -65,45 +51,35 @@ public:
 
     /**Sets the mode.*/
     void setMode(ButtonMode mode);
-    /**@returns the mode.*/
+    /** @return the mode.*/
     ButtonMode mode() const;
 
-    /**@returns the place.*/
+    /** @return the place.*/
     Place place() const;
 
-    bool autoResize() const;
-    void setAutoResize(bool b);
-
+    /** @return true if the container has no buttons inside.*/
     bool isEmpty();
-
-    /**Shrinks the button bar so all buttons are visible. Shrinking is done by
-    reducing the amount of text shown on buttons. Button icon size is a minimum size
-    of a button. If a button does not have an icon, it displays "...".*/
-    virtual void shrink(int preferredDimension, int actualDimension);
-    virtual void deshrink(int preferredDimension, int actualDimension);
-    /**Restores the size of button bar buttons.*/
-    virtual void unshrink();
 
 protected:
     virtual void resizeEvent(QResizeEvent *ev);
 
     int originalDimension();
 
+    /**Shrinks the button bar so all buttons are visible. Shrinking is done by
+    reducing the amount of text shown on buttons. Button icon size is a minimum size
+    of a button. If a button does not have an icon, it displays "...".*/
+    virtual void shrink(int preferredDimension, int actualDimension);
+    /**Expands the button bar to fit into new dimension.*/
+    virtual void expand(int preferredDimension, int actualDimension);
+    /**Restores the size of button bar buttons.*/
+    virtual void unshrink();
+
 private:
     void fixDimensions();
     void setButtonsPlace(Ideal::Place place);
     QString squeeze(const QString &str, int maxlen);
 
-    typedef QList<Button*> ButtonList;
-    ButtonList m_buttons;
-
-    ButtonMode m_mode;
-    Place m_place;
-
-    ButtonLayout *m_buttonLayout;
-
-    bool m_shrinked;
-    bool m_autoResize;
+    struct ButtonContainerPrivate *d;
 };
 
 }

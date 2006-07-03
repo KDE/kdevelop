@@ -29,6 +29,23 @@ namespace Ideal {
 
 //ButtonLayout class
 
+/**
+@short A layout for a ButtonContainer class.
+
+Overrides minimumSize method to allow shrinking button bar buttons.
+Zero width/height minimum size is returned for
+horizontal/vertical layouts respectively.*/
+class ButtonLayout: public QBoxLayout{
+public:
+    ButtonLayout(Direction dir, ButtonContainer *parent);
+
+    virtual QSize minimumSize() const;
+
+private:
+    ButtonContainer *m_buttonBar;
+};
+
+
 ButtonLayout::ButtonLayout(Direction dir, ButtonContainer *parent)
     :QBoxLayout(dir, parent), m_buttonBar(parent)
 {
@@ -39,9 +56,6 @@ ButtonLayout::ButtonLayout(Direction dir, ButtonContainer *parent)
 QSize ButtonLayout::minimumSize() const
 {
     QSize size = QBoxLayout::minimumSize();
-
-    if (!m_buttonBar->autoResize())
-        return size;
 
     switch (m_buttonBar->place())
     {
@@ -60,27 +74,42 @@ QSize ButtonLayout::minimumSize() const
 
 //ButtonContainer class
 
+struct ButtonContainerPrivate {
+    typedef QList<Button*> ButtonList;
+    ButtonList buttons;
+
+    ButtonMode mode;
+    Place place;
+
+    ButtonLayout *buttonLayout;
+
+    bool shrinked;
+};
 
 ButtonContainer::ButtonContainer(Place place, ButtonMode mode, QWidget *parent)
-    :QWidget(parent), m_place(place), m_buttonLayout(0),
-    m_shrinked(false), m_autoResize(true)
+    :QWidget(parent)
 {
-    switch (m_place)
+    d = new ButtonContainerPrivate;
+    place = place;
+    d->buttonLayout = 0;
+    d->shrinked = false;
+
+    switch (place)
     {
         case Ideal::Left:
         case Ideal::Right:
-            m_buttonLayout = new ButtonLayout(QBoxLayout::TopToBottom, this);
+            d->buttonLayout = new ButtonLayout(QBoxLayout::TopToBottom, this);
             break;
         case Ideal::Top:
         case Ideal::Bottom:
-            m_buttonLayout = new ButtonLayout(QBoxLayout::TopToBottom, this);
+            d->buttonLayout = new ButtonLayout(QBoxLayout::TopToBottom, this);
             break;
     }
 
-    m_buttonLayout->setSizeConstraint(QLayout::SetMinimumSize);
+    d->buttonLayout->setSizeConstraint(QLayout::SetMinimumSize);
     setMode(mode);
 
-    m_buttonLayout->insertStretch(-1);
+    d->buttonLayout->insertStretch(-1);
 }
 
 ButtonContainer::~ButtonContainer()
@@ -89,11 +118,11 @@ ButtonContainer::~ButtonContainer()
 
 void ButtonContainer::addButton(Button *button, bool isShown)
 {
-    int buttonCount = m_buttons.count();
+    int buttonCount = d->buttons.count();
 
-    button->setMode(m_mode);
-    m_buttons.append(button);
-    m_buttonLayout->insertWidget(buttonCount, button);
+    button->setMode(d->mode);
+    d->buttons.append(button);
+    d->buttonLayout->insertWidget(buttonCount, button);
     if (isShown)
         button->show();
     fixDimensions();
@@ -101,31 +130,31 @@ void ButtonContainer::addButton(Button *button, bool isShown)
 
 void ButtonContainer::removeButton(Button *button)
 {
-    m_buttons.removeAll(button);
-    m_buttonLayout->removeWidget(button);
+    d->buttons.removeAll(button);
+    d->buttonLayout->removeWidget(button);
     delete button;
 }
 
 void ButtonContainer::setMode(ButtonMode mode)
 {
-    m_mode = mode;
-    foreach (Button *button, m_buttons)
+    d->mode = mode;
+    foreach (Button *button, d->buttons)
         button->setMode(mode);
 }
 
 ButtonMode ButtonContainer::mode() const
 {
-    return m_mode;
+    return d->mode;
 }
 
 Place ButtonContainer::place() const
 {
-    return m_place;
+    return d->place;
 }
 
 void ButtonContainer::fixDimensions()
 {
-    switch (m_place)
+    switch (d->place)
     {
         case Ideal::Left:
         case Ideal::Right:
@@ -144,7 +173,7 @@ void ButtonContainer::fixDimensions()
 
 void ButtonContainer::setButtonsPlace(Ideal::Place place)
 {
-    foreach (Button *button, m_buttons)
+    foreach (Button *button, d->buttons)
         button->setPlace(place);
 }
 
@@ -153,17 +182,17 @@ void ButtonContainer::resizeEvent(QResizeEvent *ev)
     int preferredDimension = 0;
     int actualDimension = 0;
     int oldDimension = 0;
-    switch (m_place)
+    switch (d->place)
     {
         case Ideal::Left:
         case Ideal::Right:
-            preferredDimension = m_buttonLayout->QBoxLayout::minimumSize().height();
+            preferredDimension = d->buttonLayout->QBoxLayout::minimumSize().height();
             actualDimension = size().height();
             oldDimension = ev->oldSize().height();
             break;
         case Ideal::Top:
         case Ideal::Bottom:
-            preferredDimension = m_buttonLayout->QBoxLayout::minimumSize().width();
+            preferredDimension = d->buttonLayout->QBoxLayout::minimumSize().width();
             actualDimension = size().width();
             oldDimension = ev->oldSize().width();
             break;
@@ -173,10 +202,10 @@ void ButtonContainer::resizeEvent(QResizeEvent *ev)
 
     if (preferredDimension > actualDimension)
         shrink(preferredDimension, actualDimension);
-    else if (m_shrinked && (originalDimension() < actualDimension))
+    else if (d->shrinked && (originalDimension() < actualDimension))
         unshrink();
-    else if (m_shrinked && actualDimension > oldDimension)
-        deshrink(preferredDimension, actualDimension);
+    else if (d->shrinked && actualDimension > oldDimension)
+        expand(preferredDimension, actualDimension);
 
     QWidget::resizeEvent(ev);
 }
@@ -186,12 +215,12 @@ void ButtonContainer::shrink(int preferredDimension, int actualDimension)
     if (!preferredDimension)
         return;
 
-    m_shrinked = true;
+    d->shrinked = true;
 
     uint textLength = 0;
     QList<uint> texts;
     uint maxLength = 0;
-    foreach (Button *button, m_buttons)
+    foreach (Button *button, d->buttons)
     {
         uint length = button->text().length();
         maxLength = length > maxLength ? length : maxLength ;
@@ -215,24 +244,24 @@ void ButtonContainer::shrink(int preferredDimension, int actualDimension)
     } while (newTextLength > newPreferredLength);
 
     int i = 0;
-    foreach (Button *button, m_buttons)
+    foreach (Button *button, d->buttons)
     {
         button->setText(squeeze(button->realText(), texts[i++]));
         button->updateSize();
     }
 }
 
-void ButtonContainer::deshrink(int preferredDimension, int actualDimension)
+void ButtonContainer::expand(int preferredDimension, int actualDimension)
 {
     if (!preferredDimension)
         return;
 
-    m_shrinked = true;
+    d->shrinked = true;
 
     uint textLength = 0;
     QList<uint> texts;
     uint maxLength = 0;
-    foreach (Button *button, m_buttons)
+    foreach (Button *button, d->buttons)
     {
         uint length = button->text().length();
         maxLength = length > maxLength ? length : maxLength ;
@@ -254,7 +283,7 @@ void ButtonContainer::deshrink(int preferredDimension, int actualDimension)
         int i = 0;
         for (QList<uint>::iterator it = texts.begin(); it != texts.end(); ++it, i++)
         {
-            if (m_buttons[i]->text().contains("..."))
+            if (d->buttons[i]->text().contains("..."))
                 (*it)++;
             newTextLength += *it;
         }
@@ -264,7 +293,7 @@ void ButtonContainer::deshrink(int preferredDimension, int actualDimension)
     } while (newTextLength < newPreferredLength);
 
     int i = 0;
-    foreach (Button *button, m_buttons)
+    foreach (Button *button, d->buttons)
     {
         if (texts[i] >= button->realText().length())
             button->setText(button->realText());
@@ -277,32 +306,22 @@ void ButtonContainer::deshrink(int preferredDimension, int actualDimension)
 
 void ButtonContainer::unshrink()
 {
-    foreach (Button *button, m_buttons)
+    foreach (Button *button, d->buttons)
     {
         button->setText(button->realText());
         button->updateSize();
     }
-    m_shrinked = false;
+    d->shrinked = false;
 }
 
 int ButtonContainer::originalDimension()
 {
     int size = 0;
-    foreach (Button *button, m_buttons)
+    foreach (Button *button, d->buttons)
     {
         size += button->sizeHint(button->realText()).width();
     }
     return size;
-}
-
-bool ButtonContainer::autoResize() const
-{
-    return m_autoResize;
-}
-
-void ButtonContainer::setAutoResize(bool b)
-{
-    m_autoResize = b;
 }
 
 QString ButtonContainer::squeeze(const QString &str, int maxlen)
@@ -318,7 +337,7 @@ QString ButtonContainer::squeeze(const QString &str, int maxlen)
 
 bool ButtonContainer::isEmpty()
 {
-    return !m_buttons.count();
+    return !d->buttons.count();
 }
 
 }
