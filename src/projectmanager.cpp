@@ -582,30 +582,6 @@ ProjectSession* ProjectManager::projectSession() const
   return m_pProjectSession;
 }
 
-bool ProjectManager::loadKDevelop2Project( const KUrl & url )
-{
-    if( !url.isValid() || !url.isLocalFile() ){
-        KMessageBox::sorry(0, i18n("Invalid URL."));
-        return false;
-    }
-
-    QString cmd = KGlobal::dirs()->findExe( "kdevprj2kdevelop" );
-    if (cmd.isEmpty()) {
-        KMessageBox::sorry(0, i18n("You do not have 'kdevprj2kdevelop' installed."));
-        return false;
-    }
-
-    QFileInfo fileInfo( url.path() );
-
-    KShellProcess proc( "/bin/sh" );
-    proc.setWorkingDirectory( fileInfo.dirPath(true) );
-    proc << "perl" << cmd << KShellProcess::quote( url.path() );
-    proc.start( KProcess::Block );
-
-    QString projectFile = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kdevelop";
-    return loadProject( KUrl(projectFile) );
-}
-
 QString ProjectManager::profileByAttributes(const QString &language, const QStringList &keywords)
 {
     KConfig config(locate("data", "kdevelop/profiles/projectprofiles"));
