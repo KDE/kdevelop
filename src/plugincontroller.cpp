@@ -191,7 +191,6 @@ KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
     int err = 0;
     KDevPlugin * pl = KService::createInstance<KDevPlugin>( service, 0,
                                                  argumentsFromService( service ), &err );
-//    kDebug() << "ERR: " << err << endl;
     return pl;
 }
 
@@ -227,7 +226,7 @@ void PluginController::removePart(KXMLGUIClient *part)
 
 void PluginController::removeAndForgetPart(const QString &name, KDevPlugin *part)
 {
-    kDebug() << "removing: " << name << endl;
+    kDebug(9000) << "removing: " << name << endl;
     m_parts.remove(name);
     removePart(part);
 }

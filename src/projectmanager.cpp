@@ -606,7 +606,7 @@ QString ProjectManager::profileByAttributes(const QString &language, const QStri
     if (config.hasKey("Profiles"))
     {
         profiles = config.readEntry("Profiles", QStringList());
-        kDebug() << "IDX: " << idx << "    PROFILE: " << profiles[idx] << endl;
+        kDebug(9000) << "IDX: " << idx << "    PROFILE: " << profiles[idx] << endl;
         return profiles[idx];
     }
     return "KDevelop";
