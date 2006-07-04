@@ -32,11 +32,11 @@ kde4_automoc(${kdevautomakeimporter_PART_SRCS})
 kde4_add_plugin(kdevautomakeimporter ${kdevautomakeimporter_PART_SRCS})
 target_link_libraries(kdevautomakeimporter ${KDE4_KDECORE_LIBS} kdevautomakeparser kdevinterfaces)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevautomakeimporter)
-install_targets(${PLUGIN_INSTALL_DIR} kdevautomakeimporter)
+install(TARGETS kdevautomakeimporter DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files(${SERVICES_INSTALL_DIR} FILES kdevautomakeimporter.desktop)
+install( FILES kdevautomakeimporter.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 

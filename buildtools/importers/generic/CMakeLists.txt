@@ -13,11 +13,11 @@ kde4_automoc(${kdevgenericimporter_PART_SRCS})
 kde4_add_plugin(kdevgenericimporter ${kdevgenericimporter_PART_SRCS})
 target_link_libraries(kdevgenericimporter ${KDE4_KDECORE_LIBS} kdevinterfaces)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevgenericimporter)
-install_targets(${PLUGIN_INSTALL_DIR} kdevgenericimporter)
+install(TARGETS kdevgenericimporter DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files(${SERVICES_INSTALL_DIR} FILES kdevgenericimporter.desktop)
+install( FILES kdevgenericimporter.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 

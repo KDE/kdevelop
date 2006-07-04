@@ -21,11 +21,11 @@ kde4_automoc(${kdevcpplanguagesupport_PART_SRCS})
 kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport ${KDE4_KDECORE_LIBS} kdevinterfaces kdevcppparser ThreadWeaver kdevcpprpp)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevcpplanguagesupport)
-install_targets(${PLUGIN_INSTALL_DIR} kdevcpplanguagesupport)
+install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files(${SERVICES_INSTALL_DIR} FILES kdevcppsupport.desktop)
+install( FILES kdevcppsupport.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 

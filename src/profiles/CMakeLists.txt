@@ -5,5 +5,5 @@ add_subdirectory(KDevAssistant)
 
 ########### install files ###############
 
-install_files(${DATA_INSTALL_DIR}/kdevelop/profiles FILES profile.config)
+install( FILES profile.config DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles )
 

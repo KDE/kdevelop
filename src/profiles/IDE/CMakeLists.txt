@@ -6,5 +6,5 @@ add_subdirectory(DatabaseIDE)
 
 ########### install files ###############
 
-install_files(${DATA_INSTALL_DIR}/kdevelop/profiles/IDE FILES profile.config)
+install( FILES profile.config DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles/IDE )
 

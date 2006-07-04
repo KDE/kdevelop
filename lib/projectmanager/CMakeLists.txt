@@ -18,12 +18,12 @@ kde4_automoc(${kdevprojectmanager_PART_SRCS})
 kde4_add_plugin(kdevprojectmanager ${kdevprojectmanager_PART_SRCS})
 target_link_libraries(kdevprojectmanager ${KDE4_KDECORE_LIBS} kdevinterfaces ThreadWeaver kdevutil kdevwidgets)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevprojectmanager)
-install_targets(${PLUGIN_INSTALL_DIR} kdevprojectmanager)
+install(TARGETS kdevprojectmanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files(${SERVICES_INSTALL_DIR} FILES kdevprojectmanager.desktop)
-install_files(${DATA_INSTALL_DIR}/kdevprojectmanager FILES kdevprojectmanager.rc)
+install( FILES kdevprojectmanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kdevprojectmanager.rc DESTINATION ${DATA_INSTALL_DIR}/kdevprojectmanager )
 
 

@@ -16,10 +16,10 @@ kde4_automoc(${kdevfileselector_PART_SRCS})
 kde4_add_plugin(kdevfileselector ${kdevfileselector_PART_SRCS})
 target_link_libraries(kdevfileselector ${KDE4_KDECORE_LIBS} ktexteditor kdevinterfaces)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevfileselector)
-install_targets(${PLUGIN_INSTALL_DIR} kdevfileselector)
+install(TARGETS kdevfileselector DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files(${SERVICES_INSTALL_DIR} FILES kdevfileselector.desktop)
+install( FILES kdevfileselector.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 

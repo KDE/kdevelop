@@ -31,9 +31,9 @@ macro(kdevelop_add_app_templates _templateNames)
 #	    DEPENDS ${_deps}
         )
 
-        install_files(${DATA_INSTALL_DIR}/kdevappwizard/templates FILES ${_templateName}/${_templateName}.kdevtemplate)
-        install_files(${DATA_INSTALL_DIR}/kdevappwizard FILES ${_templateName}/${_templateName}.png)
-        install_files(${DATA_INSTALL_DIR}/kdevappwizard FILES ${_template})
+install( FILES ${_templateName}/${_templateName}.kdevtemplate DESTINATION ${DATA_INSTALL_DIR}/kdevappwizard/templates )
+install( FILES ${_templateName}/${_templateName}.png DESTINATION ${DATA_INSTALL_DIR}/kdevappwizard )
+install( FILES ${_template} DESTINATION ${DATA_INSTALL_DIR}/kdevappwizard )
 	macro_additional_clean_files(${_template})
 
     endforeach(_templateName)

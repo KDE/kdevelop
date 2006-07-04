@@ -14,12 +14,12 @@ kde4_automoc(${kdevcodeview_PART_SRCS})
 kde4_add_plugin(kdevcodeview ${kdevcodeview_PART_SRCS})
 target_link_libraries(kdevcodeview ${KDE4_KDECORE_LIBS} kdevinterfaces kdevutil khtml)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevcodeview)
-install_targets(${PLUGIN_INSTALL_DIR} kdevcodeview)
+install(TARGETS kdevcodeview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files(${SERVICES_INSTALL_DIR} FILES kdevcodeview.desktop)
-install_files(${DATA_INSTALL_DIR}/kdevcodeview FILES kdevcodeview.rc)
+install( FILES kdevcodeview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kdevcodeview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcodeview )
 
 

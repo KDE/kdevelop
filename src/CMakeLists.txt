@@ -86,9 +86,9 @@ install_files(/include/kdevelop/shell FILES
     toplevel.h mimewarningdialog.h
     simplemainwindow.h documentcontroller.h shellexport.h)
 
-install_files(${CONFIG_INSTALL_DIR} FILES kdeveloprc kdevassistantrc)
-install_files(${DATA_INSTALL_DIR}/kdevelop FILES kdevelopui.rc eventsrc)
-install_files(${DATA_INSTALL_DIR}/kdevelop/profiles FILES projectprofiles)
-install_files(${DATA_INSTALL_DIR}/kdevassistant FILES kdevassistantui.rc)
+install( FILES kdeveloprc kdevassistantrc DESTINATION ${CONFIG_INSTALL_DIR} )
+install( FILES kdevelopui.rc eventsrc DESTINATION ${DATA_INSTALL_DIR}/kdevelop )
+install( FILES projectprofiles DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles )
+install( FILES kdevassistantui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevassistant )
 
 

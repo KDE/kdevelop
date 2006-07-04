@@ -5,5 +5,5 @@ add_subdirectory(CppIDE)
 
 ########### install files ###############
 
-install_files(${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE/CandCppIDE FILES profile.config)
+install( FILES profile.config DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE/CandCppIDE )
 

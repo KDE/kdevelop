@@ -1,6 +1,6 @@
 
 ########### install files ###############
 
-install_files(${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE/CandCppIDE/CIDE FILES profile.config)
+install( FILES profile.config DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE/CandCppIDE/CIDE )
 
 

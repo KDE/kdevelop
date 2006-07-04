@@ -1,5 +1,5 @@
 
 ########### install files ###############
 
-install_files(${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/ScriptingLanguageIDE/PHPIDE FILES profile.config)
+install( FILES profile.config DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/ScriptingLanguageIDE/PHPIDE )
 

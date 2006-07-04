@@ -1,6 +1,6 @@
 
 ########### install files ###############
 
-INSTALL_FILES( ${MIME_INSTALL_DIR}/application FILES chm.desktop )
+INSTALL( FILES chm.desktop DESTINATION ${MIME_INSTALL_DIR}/application)
 
 

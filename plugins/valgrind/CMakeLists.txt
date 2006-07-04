@@ -24,11 +24,11 @@ kde4_add_ui_files(kdevvalgrind_PART_SRCS ${kdevvalgrind_PART_UI})
 kde4_add_plugin(kdevvalgrind ${kdevvalgrind_PART_SRCS})
 target_link_libraries(kdevvalgrind ${KDE4_KDECORE_LIBS} ktexteditor kdevinterfaces)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevvalgrind)
-install_targets(${PLUGIN_INSTALL_DIR} kdevvalgrind)
+install(TARGETS kdevvalgrind DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files(${SERVICES_INSTALL_DIR} FILES kdevvalgrind.desktop)
-install_files(${DATA_INSTALL_DIR}/kdevvalgrind FILES kdevpart_valgrind.rc)
+install( FILES kdevvalgrind.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kdevpart_valgrind.rc DESTINATION ${DATA_INSTALL_DIR}/kdevvalgrind )
 

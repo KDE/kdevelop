@@ -1,6 +1,6 @@
 
 ########### install files ###############
 
-install_files(${DATA_INSTALL_DIR}/kdevelop/pics FILES kdevelop-splash.png kdevassistant-splash.png kdevdesigner-splash.png)
+install( FILES kdevelop-splash.png kdevassistant-splash.png kdevdesigner-splash.png DESTINATION ${DATA_INSTALL_DIR}/kdevelop/pics )
 
 

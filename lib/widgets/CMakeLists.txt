@@ -20,7 +20,7 @@ install_targets(/lib kdevwidgets)
 
 ########### install files ###############
 
-install_files(${DATA_INSTALL_DIR}/kdevelop FILES kdevhtml_partui.rc)
+install( FILES kdevhtml_partui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevelop )
 install_files(/include/kdevelop/widgets FILES kdevhtmlpart.h processlinemaker.h processwidget.h ksavealldialog.h)
 
 

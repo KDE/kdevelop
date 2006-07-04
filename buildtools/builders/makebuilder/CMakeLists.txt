@@ -13,11 +13,11 @@ kde4_automoc(${kdevmakebuilder_LIB_SRCS})
 kde4_add_plugin(kdevmakebuilder ${kdevmakebuilder_LIB_SRCS})
 target_link_libraries(kdevmakebuilder ${KDE4_KDECORE_LIBS} kdevinterfaces)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevmakebuilder)
-install_targets(${PLUGIN_INSTALL_DIR} kdevmakebuilder)
+install(TARGETS kdevmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files(${SERVICES_INSTALL_DIR} FILES kdevmakebuilder.desktop)
+install( FILES kdevmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 

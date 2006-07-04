@@ -16,8 +16,8 @@ kdevelop_add_app_templates(${apptemplate_DIRS})
 
 ########### install files ###############
 
-install_files(${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE/CandCppIDE/CppIDE/KDECppIDE FILES kdecpp.appwizard)
-install_files(${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE/CandCppIDE/CppIDE FILES cpp.appwizard)
-install_files(${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE/CandCppIDE/CIDE FILES c.appwizard)
+install( FILES kdecpp.appwizard DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE/CandCppIDE/CppIDE/KDECppIDE )
+install( FILES cpp.appwizard DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE/CandCppIDE/CppIDE )
+install( FILES c.appwizard DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE/CandCppIDE/CIDE )
 
 
