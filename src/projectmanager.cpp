@@ -133,17 +133,13 @@ void ProjectManager::slotOpenProject()
     QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homePath()+"/");
 
   KUrl url = KFileDialog::getOpenURL(defaultProjectsDir,
-        i18n("*.kdevelop|KDevelop 3 Project Files\n"
-             "*.kdevprj|KDevelop 2 Project Files"),
+        i18n("*.kdevelop|KDevelop 3 Project Files\n"),
         TopLevel::getInstance()->main(), i18n("Open Project") );
 
   if( url.isEmpty() )
       return;
 
-  if (url.path().endsWith("kdevprj"))
-      loadKDevelop2Project( url );
-  else
-      loadProject( url );
+  loadProject( url );
 }
 
 void ProjectManager::slotProjectOptions()
