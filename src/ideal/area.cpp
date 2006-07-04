@@ -29,18 +29,42 @@
 namespace Ideal {
 
 struct AreaPrivate {
+    AreaPrivate(Area *_area): area(_area) {}
+
+    Area *area;
     int kind;
     MainWindow *mainWindow;
     QMap<ToolView*, ToolViewWidget*> toolDocks;
+
+    void initArea();
+    /** @return true if the toolview is allowed to be placed in this area.*/
+    bool allowed(ToolView *view);
 };
+
+
+void AreaPrivate::initArea()
+{
+    QList<ToolView*> toolViews = mainWindow->toolViews();
+    foreach (ToolView *view, toolViews)
+        area->addToolView(view);
+}
+
+bool AreaPrivate::allowed(ToolView *view)
+{
+    return view->area() & kind;
+}
+
+
+
+//======================== Area ========================
 
 Area::Area(int kind, MainWindow *mainWindow)
 {
-    d = new AreaPrivate;
+    d = new AreaPrivate(this);
     d->kind = kind;
     d->mainWindow = mainWindow;
 
-    initArea();
+    d->initArea();
 }
 
 Area::~Area()
@@ -48,16 +72,9 @@ Area::~Area()
     delete d;
 }
 
-void Area::initArea()
-{
-    QList<ToolView*> toolViews = d->mainWindow->toolViews();
-    foreach (ToolView *view, toolViews)
-        addToolView(view);
-}
-
 void Area::addToolView(ToolView *view)
 {
-    if (!allowed(view))
+    if (!d->allowed(view))
         return;
 
     ToolViewWidget *dockWidget = new ToolViewWidget(view->contents()->windowTitle(), d->mainWindow);
@@ -69,7 +86,7 @@ void Area::addToolView(ToolView *view)
 
 void Area::removeToolView(ToolView *view)
 {
-    if (!allowed(view))
+    if (!d->allowed(view))
         return;
     ToolViewWidget *dockWidget = d->toolDocks[view];
     d->mainWindow->removeDockWidget(dockWidget);
@@ -80,7 +97,7 @@ void Area::removeToolView(ToolView *view)
 
 void Area::showToolView(ToolView *view)
 {
-    if (!allowed(view))
+    if (!d->allowed(view))
         return;
     ToolViewWidget *dockWidget = d->toolDocks[view];
     dockWidget->show();
@@ -89,7 +106,7 @@ void Area::showToolView(ToolView *view)
 
 void Area::hideToolView(ToolView *view)
 {
-    if (!allowed(view))
+    if (!d->allowed(view))
         return;
     ToolViewWidget *dockWidget = d->toolDocks[view];
     dockWidget->hide();
@@ -99,11 +116,6 @@ void Area::hideToolView(ToolView *view)
 int Area::kind() const
 {
     return d->kind;
-}
-
-bool Area::allowed(ToolView *view)
-{
-    return view->area() & d->kind;
 }
 
 }

@@ -66,9 +66,6 @@ public:
     ButtonBar *buttonBar(Ideal::Place place);
 
 private:
-    void initSettings();
-    void initButtonBar(Ideal::Place place);
-
     struct MainWindowPrivate *d;
 
 };

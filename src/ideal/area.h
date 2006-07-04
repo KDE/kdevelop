@@ -60,10 +60,6 @@ public:
     virtual void hideToolView(ToolView *view);
 
 private:
-    void initArea();
-    /** @return true if the toolview is allowed to be placed in this area.*/
-    bool allowed(ToolView *view);
-
     struct AreaPrivate *d;
 
 };

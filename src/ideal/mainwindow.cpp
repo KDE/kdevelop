@@ -47,7 +47,17 @@ struct MainWindowPrivate {
     QMap<Ideal::Place, ButtonBar*> buttonBars;
 
     Area *area;
+
+    void initButtonBar(Ideal::Place place);
 };
+
+void MainWindowPrivate::initButtonBar(Ideal::Place place)
+{
+    ButtonBar *bar = new ButtonBar(place, w);
+    w->addToolBar(bar->toolBarPlace(), bar);
+    buttonBars[place] = bar;
+}
+
 
 
 //======================== MainWindow ========================
@@ -57,17 +67,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     d = new MainWindowPrivate(this);
 
-    initButtonBar(Ideal::Left);
-    initButtonBar(Ideal::Right);
-    initButtonBar(Ideal::Bottom);
-    initButtonBar(Ideal::Top);
-}
-
-void MainWindow::initButtonBar(Ideal::Place place)
-{
-    ButtonBar *bar = new ButtonBar(place, this);
-    addToolBar(bar->toolBarPlace(), bar);
-    d->buttonBars[place] = bar;
+    d->initButtonBar(Ideal::Left);
+    d->initButtonBar(Ideal::Right);
+    d->initButtonBar(Ideal::Bottom);
+    d->initButtonBar(Ideal::Top);
 }
 
 MainWindow::~MainWindow()
