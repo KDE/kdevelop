@@ -32,7 +32,7 @@ Profile::Profile(Profile *parent, const QString &name)
     if (m_parent)
         m_parent->addChildProfile(this);
 
-    QString profileConfig = locate("data", "kdevelop/profiles" + dirName() + "/profile.config");
+    QString profileConfig = KStandardDirs::locate("data", "kdevelop/profiles" + dirName() + "/profile.config");
     KConfig config(profileConfig);
 
     config.setGroup("Information");
@@ -83,7 +83,7 @@ QString Profile::dirName() const
 
 void Profile::save()
 {
-    QString profileConfig = locateLocal("data", "kdevelop/profiles" + dirName() + "/profile.config");
+    QString profileConfig = KStandardDirs::locateLocal("data", "kdevelop/profiles" + dirName() + "/profile.config");
     KConfig config(profileConfig);
 
     config.setGroup("Information");

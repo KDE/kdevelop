@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
   KDevAssistantExtension::init();
 
   SplashScreen *splash = 0;
-  QString splashFile = locate("data", "kdevelop/pics/kdevassistant-splash.png");
+  QString splashFile = KStandardDirs::locate("data", "kdevelop/pics/kdevassistant-splash.png");
   if (!splashFile.isEmpty())
   {
     QPixmap pm;

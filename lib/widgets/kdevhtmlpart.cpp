@@ -25,7 +25,7 @@
 KDevHTMLPart::KDevHTMLPart()
   : KHTMLPart(static_cast<QWidget*>(0L), 0L, DefaultGUI )
 {
-  setXMLFile(locate("data", "kdevelop/kdevhtml_partui.rc"), true);
+  setXMLFile(KStandardDirs::locate("data", "kdevelop/kdevhtml_partui.rc"), true);
 
   connect(browserExtension(), SIGNAL(openURLRequestDelayed(const KUrl &,const KParts::URLArgs &)),
           this, SLOT(openURLRequest(const KUrl &)) );

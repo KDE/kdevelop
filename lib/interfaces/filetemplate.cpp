@@ -117,7 +117,7 @@ KUrl FileTemplate::fullPathForName(const QString &name, Policy p)
     }
 
     // next try global
-    KUrl globalName = ::locate("data", "kdevfilecreate/file-templates/" + name);
+    KUrl globalName = KStandardDirs::locate("data", "kdevfilecreate/file-templates/" + name);
     return globalName.isEmpty() ? url : KUrl(globalName);
 }
 

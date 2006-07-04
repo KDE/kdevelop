@@ -132,7 +132,7 @@ void ProjectManager::slotOpenProject()
     config->setGroup("General Options");
     QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homePath()+"/");
 
-  KUrl url = KFileDialog::getOpenURL(defaultProjectsDir,
+  KUrl url = KFileDialog::getOpenUrl(defaultProjectsDir,
         i18n("*.kdevelop|KDevelop 3 Project Files\n"),
         TopLevel::getInstance()->main(), i18n("Open Project") );
 
@@ -584,7 +584,7 @@ ProjectSession* ProjectManager::projectSession() const
 
 QString ProjectManager::profileByAttributes(const QString &language, const QStringList &keywords)
 {
-    KConfig config(locate("data", "kdevelop/profiles/projectprofiles"));
+    KConfig config(KStandardDirs::locate("data", "kdevelop/profiles/projectprofiles"));
     config.setGroup(language);
 
     QStringList profileKeywords = QStringList::split("/", "Empty");
