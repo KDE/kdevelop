@@ -31,37 +31,53 @@
 
 namespace Ideal {
 
+struct ButtonPrivate {
+    ButtonContainer *buttonBar;
+
+    QString description;
+    Place place;
+
+    QString realText;
+    QIcon realIcon;
+};
+
 Button::Button(ButtonContainer *parent, const QString text, const QIcon &icon,
     const QString &description)
-    :QPushButton(icon, text, parent), m_buttonBar(parent), m_description(description),
-    m_place(parent->place()), m_realText(text), m_realIcon(icon)
+    :QPushButton(icon, text, parent)
 {
+    d = new ButtonPrivate;
+    d->buttonBar = parent;
+    d->description = description;
+    d->place = parent->place();
+    d->realText = text;
+    d->realIcon = icon;
+
     hide();
     setFlat(true);
     setCheckable(true);
     setFocusPolicy(Qt::NoFocus);
-    setDescription(m_description);
+    setDescription(d->description);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     resize(sizeHint());
     fixDimensions(Ideal::Bottom);
 
-    setToolTip(m_realText);
+    setToolTip(d->realText);
 }
 
 Button::~Button()
 {
-//     m_buttonBar->removeButton(this);
+//     d->buttonBar->removeButton(this);
 }
 
 void Button::setDescription(const QString &description)
 {
-    m_description = description;
-    setToolTip(m_description);
+    d->description = description;
+    setToolTip(d->description);
 }
 
 QString Button::description() const
 {
-    return m_description;
+    return d->description;
 }
 
 QStyleOptionButton Button::styleOption() const
@@ -83,11 +99,11 @@ QStyleOptionButton Button::styleOption() const
 
     opt.text = text();
 
-    opt.icon = m_realIcon;
+    opt.icon = d->realIcon;
     opt.iconSize = QSize(16,16);
 
     QRect r = rect();
-    if (m_place == Ideal::Left || m_place == Ideal::Right)
+    if (d->place == Ideal::Left || d->place == Ideal::Right)
         r.setSize(QSize(r.height(), r.width()));
 
     opt.rect = r;
@@ -108,7 +124,7 @@ void Button::paintEvent(QPaintEvent *)
 
     QPainter p(this);
 
-    switch (m_place)
+    switch (d->place)
     {
         case Ideal::Left:
                 p.rotate(-90);
@@ -126,19 +142,19 @@ void Button::paintEvent(QPaintEvent *)
 
 ButtonMode Button::mode()
 {
-    return m_buttonBar->mode();
+    return d->buttonBar->mode();
 }
 
 void Button::setPlace(Ideal::Place place)
 {
-    Place oldPlace = m_place;
-    m_place = place;
+    Place oldPlace = d->place;
+    d->place = place;
     fixDimensions(oldPlace);
 }
 
 void Button::fixDimensions(Place oldPlace)
 {
-    switch (m_place)
+    switch (d->place)
     {
         case Ideal::Left:
         case Ideal::Right:
@@ -172,7 +188,7 @@ QSize Button::sizeHint(const QString &text) const
     QStyleOptionButton option = styleOption();
     int w = 0, h = 0;
 
-    if ( !icon().isNull() && (m_buttonBar->mode() != Text) ) {
+    if ( !icon().isNull() && (d->buttonBar->mode() != Text) ) {
         int iw = iconSize().width();
         int ih = iconSize().height();
         w += iw;
@@ -198,7 +214,7 @@ QSize Button::sizeHint(const QString &text) const
 
 void Ideal::Button::updateSize()
 {
-    switch (m_place)
+    switch (d->place)
     {
         case Ideal::Left:
         case Ideal::Right:
@@ -214,7 +230,7 @@ void Ideal::Button::updateSize()
 
 QString Button::realText() const
 {
-    return m_realText;
+    return d->realText;
 }
 
 void Button::setMode(Ideal::ButtonMode mode)
@@ -240,13 +256,13 @@ void Button::enableIcon()
 {
     if (!icon().isNull())
     {
-        if (m_realIcon.isNull())
+        if (d->realIcon.isNull())
         {
             QPixmap empty(16, 16);
             empty.fill(QColor(255,255,255,0));
-            m_realIcon = QIcon(empty);
+            d->realIcon = QIcon(empty);
         }
-        setIcon(m_realIcon);
+        setIcon(d->realIcon);
     }
 }
 
@@ -263,7 +279,7 @@ void Button::disableText()
 
 void Button::enableText()
 {
-    setText(m_realText);
+    setText(d->realText);
 }
 
 }

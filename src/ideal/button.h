@@ -79,13 +79,7 @@ private:
     void enableText();
     void disableText();
 
-    ButtonContainer *m_buttonBar;
-
-    QString m_description;
-    Place m_place;
-
-    QString m_realText;
-    QIcon m_realIcon;
+    struct ButtonPrivate *d;
 
 friend class ButtonContainer;
 };
