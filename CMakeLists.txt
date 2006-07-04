@@ -36,9 +36,3 @@ add_subdirectory(buildtools)
 add_subdirectory(xdg)
 #add_subdirectory(doc)
 
-
-
-########### install files ###############
-
-install(PROGRAMS kdevprj2kdevelop DESTINATION bin)
-
