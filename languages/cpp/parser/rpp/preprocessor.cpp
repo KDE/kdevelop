@@ -55,14 +55,14 @@ QString Preprocessor::processFile(const QString& fileName)
 {
     pp proc(this, d->env);
 
-    return proc.processFile(fileName);
+    return proc.processFile(fileName, pp::File);
 }
 
-QString Preprocessor::processString(const QByteArray &bytearray)
+QString Preprocessor::processString(const QString &bytearray)
 {
     pp proc(this, d->env);
 
-    return proc.processFile(bytearray);
+    return proc.processFile(bytearray, pp::Data);
 }
 
 void Preprocessor::addIncludePaths(const QStringList &includePaths)

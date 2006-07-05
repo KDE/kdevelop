@@ -62,17 +62,37 @@ void pp::reportError (const QString &fileName, int line, int column, const QStri
   _M_error_messages.append (msg);
 }
 
-QString pp::processFile(const QString& filename)
+QString pp::processFile(const QString& input, StringType type)
 {
-  QFile file(filename);
-  if (file.open(QIODevice::ReadOnly))
+  if ( type == File  )
   {
-    m_files.push(filename);
+    QFile file(input);
+    if (file.open(QIODevice::ReadOnly))
+    {
+      m_files.push(input);
 
-    Stream is(&file);
+      Stream is(&file);
+      QString result;
+
+      {
+        Stream rs(&result);
+        operator () (is, rs);
+      }
+
+      return result;
+    }
+
+    kWarning() << k_funcinfo << "file '" << input << "' not found!" << endl;
+    return QString();
+  }
+  else
+  {
+    QString realInput = input;
     QString result;
+    m_files.push("<internal>");
 
     {
+      Stream is(&realInput);
       Stream rs(&result);
       operator () (is, rs);
     }
@@ -80,8 +100,6 @@ QString pp::processFile(const QString& filename)
     return result;
   }
 
-  kWarning() << k_funcinfo << "file '" << filename << "' not found!" << endl;
-  return QString();
 }
 
 QString pp::processFile(QIODevice* device)
@@ -93,20 +111,6 @@ QString pp::processFile(QIODevice* device)
 
   {
     Stream is(device);
-    Stream rs(&result);
-    operator () (is, rs);
-  }
-
-  return result;
-}
-
-QString pp::processFile(const QByteArray& input)
-{
-  QString result;
-  m_files.push("<internal>");
-
-  {
-    Stream is(input);
     Stream rs(&result);
     operator () (is, rs);
   }

@@ -44,7 +44,7 @@ public:
     virtual ~Preprocessor();
 
     QString processFile(const QString &fileName);
-    QString processString(const QByteArray &str);
+    QString processString(const QString &str);
 
     void addIncludePaths(const QStringList &includePaths);
 

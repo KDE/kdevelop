@@ -26,6 +26,7 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 
+#include <QFile>
 #include <QByteArray>
 
 #include <kdebug.h>
@@ -86,31 +87,29 @@ CodeModel *ParseJob::codeModel() const
 void ParseJob::run()
 {
     bool readFromDisk = m_contents.isNull();
-    char *contents;
     std::size_t size;
 
-    if ( !readFromDisk )
-    {
-        contents = m_contents.data();
-        size = m_contents.length() + 1;
-    }
-    else
-    {
-        QByteArray path = m_document.path().toLatin1();
-        struct stat st;
-        stat( path.constData(), &st );
-        size = st.st_size + 1;
+    QString contents;
 
-        int fd = open( path.constData(), O_RDONLY );
-        if ( fd == -1 ) {
+    if ( readFromDisk )
+    {
+        QFile file( m_document.path() );
+        if ( !file.open( QIODevice::ReadOnly ) ) {
             m_errorMessage = i18n("Could not open file '%1'", m_document.path());
             kWarning(9007) << k_funcinfo << "Could not open file " << m_document << " (path " << m_document.path() << ")" << endl;
             return ;
         }
 
-        contents = ( char * ) mmap( 0, size, PROT_READ, MAP_SHARED, fd, 0 );
-        assert( contents != ( void* ) - 1 );
-        close( fd );
+        QByteArray fileData = file.readAll();
+        contents = QString::fromUtf8( fileData.constData() );
+        size = fileData.size();
+        assert( !contents.isEmpty() );
+        file.close();
+    }
+    else
+    {
+        contents = QString::fromUtf8( m_contents.constData() );
+        size = m_contents.size();
     }
 
     kDebug(9007) << "===-- PARSING --===> "
@@ -143,9 +142,6 @@ void ParseJob::run()
 
     //     DumpTree dumpTree;
     //     dumpTree.dump( m_translationUnit );
-
-    if ( readFromDisk )
-        munmap( contents, size );
 
     m_memoryPool = 0;
 }

@@ -112,6 +112,7 @@ class pp
 public:
   pp(Preprocessor* preprocessor, QHash<QString, pp_macro*>& environment);
 
+  enum StringType { File, Data };
   QList<ErrorMessage> errorMessages () const;
   void clearErrorMessages ();
 
@@ -119,9 +120,8 @@ public:
 
   long eval_expression (Stream& input);
 
-  QString processFile(const QString& filename);
+  QString processFile(const QString& input, StringType);
   QString processFile(QIODevice* input);
-  QString processFile(const QByteArray& input);
 
   void operator () (Stream& input, Stream& output);
 
