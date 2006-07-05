@@ -25,6 +25,7 @@
 namespace Ideal {
 
 class ToolView;
+class ToolViewWidget;
 class MainWindow;
 
 /**
@@ -58,6 +59,9 @@ public:
     virtual void showToolView(ToolView *view);
     /**Hides the toolview and its button in this area if possible.*/
     virtual void hideToolView(ToolView *view);
+
+    /**Selects the toolview (i.e. shows or hides it) and leaves its button visible.*/
+    virtual void selectToolView(ToolViewWidget *view);
 
 private:
     struct AreaPrivate *d;

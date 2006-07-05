@@ -29,6 +29,7 @@ namespace Ideal {
 
 class ButtonBar;
 class ToolView;
+class Area;
 
 /**
 @short Main Window for the Ideal UI.
@@ -42,6 +43,8 @@ public:
     to place tool and code views and fill button bars.
     See @ref Area class documentation for more information about areas.*/
     virtual void setArea(int area);
+    /** @return the current area or 0 if no area was set.*/
+    Area *area() const;
 
     /**Adds the toolview @p view to the main window. The toolview button will not be shown
     until the area is set for the mainwindow using @ref setArea method. The toolview

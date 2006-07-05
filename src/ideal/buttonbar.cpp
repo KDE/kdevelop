@@ -27,6 +27,8 @@
 #include "buttonbar.h"
 #include "toolviewwidget.h"
 #include "settings.h"
+#include "mainwindow.h"
+#include "area.h"
 
 namespace Ideal {
 
@@ -34,6 +36,7 @@ struct ButtonBarPrivate {
     QString titleForPlace();
 
     Ideal::Place place;
+    MainWindow *mainWindow;
 
     ButtonContainer *container;
     QMap<ToolViewWidget*, Button*> viewButtons;
@@ -54,11 +57,12 @@ QString ButtonBarPrivate::titleForPlace()
 
 //class ButtonBar
 
-ButtonBar::ButtonBar(Ideal::Place place, QWidget *parent)
+ButtonBar::ButtonBar(Ideal::Place place, MainWindow *parent)
     :QToolBar(parent)
 {
     ButtonBarPrivate *d = new ButtonBarPrivate;
     d->place = place;
+    d->mainWindow = parent;
 
     setWindowTitle(d->titleForPlace());
 
@@ -116,7 +120,7 @@ void ButtonBar::setToolViewWidgetVisibility()
     ToolViewWidget *view = d->buttonViews[button];
     if (!view)
         return;
-    view->setVisible(!view->isVisible());
+    d->mainWindow->area()->selectToolView(view);
 }
 
 Qt::ToolBarArea ButtonBar::toolBarPlace()
@@ -132,6 +136,11 @@ Qt::ToolBarArea ButtonBar::toolBarPlace(Ideal::Place place)
     else if (place == Ideal::Top) dockArea = Qt::TopToolBarArea;
     return dockArea;
 }
+
+// MainWindow *ButtonBar::mainWindow()
+// {
+//     return d->mainWindow;
+// }
 
 }
 

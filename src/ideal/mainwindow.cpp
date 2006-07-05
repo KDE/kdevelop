@@ -86,6 +86,11 @@ void MainWindow::setArea(int area)
     d->area = new Area(area, this);
 }
 
+Area *MainWindow::area() const
+{
+    return d->area;
+}
+
 void MainWindow::addToolView(QWidget *view, Ideal::Place defaultPlace, int area)
 {
     ToolView *toolView = new ToolView(this, view, defaultPlace, area);

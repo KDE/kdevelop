@@ -30,6 +30,7 @@ namespace Ideal {
 class ToolViewWidget;
 class ButtonContainer;
 class Button;
+class MainWindow;
 
 /**
 @short Toolbar for toolview buttons.
@@ -39,7 +40,7 @@ Shows the ButtonContainer widget as the first enrty on the toolbar.
 class IDEAL_EXPORT ButtonBar: public QToolBar {
     Q_OBJECT
 public:
-    ButtonBar(Ideal::Place place, QWidget *parent = 0);
+    ButtonBar(Ideal::Place place, MainWindow *parent = 0);
 
     /**Adds the button for the toolview.*/
     void addToolViewButton(ToolViewWidget *view);
@@ -54,6 +55,8 @@ public:
     Qt::ToolBarArea toolBarPlace();
     /** @return the Qt toolbar area code for given Ideal @p place.*/
     static Qt::ToolBarArea toolBarPlace(Ideal::Place place);
+
+//     MainWindow *mainWindow();
 
 private slots:
     /**Sets the toolview visibility after clicking its button.*/

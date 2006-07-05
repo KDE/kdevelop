@@ -118,4 +118,12 @@ int Area::kind() const
     return d->kind;
 }
 
+void Area::selectToolView(ToolViewWidget *view)
+{
+//     toolView = d->toolDocks.key(view);
+//     if (!toolView)
+//         return;
+    view->setVisible(!view->isVisible());
+}
+
 }
