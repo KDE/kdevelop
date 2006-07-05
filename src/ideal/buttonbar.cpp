@@ -60,7 +60,7 @@ QString ButtonBarPrivate::titleForPlace()
 ButtonBar::ButtonBar(Ideal::Place place, MainWindow *parent)
     :QToolBar(parent)
 {
-    ButtonBarPrivate *d = new ButtonBarPrivate;
+    d = new ButtonBarPrivate;
     d->place = place;
     d->mainWindow = parent;
 
@@ -90,7 +90,6 @@ void ButtonBar::addToolViewButton(ToolViewWidget *view)
     d->viewButtons[view] = button;
     d->buttonViews[button] = view;
 
-    kDebug() << view->isVisible() << endl;
     button->setChecked(true);
 
     connect(button, SIGNAL(clicked()), this, SLOT(setToolViewWidgetVisibility()));
@@ -125,7 +124,8 @@ void ButtonBar::setToolViewWidgetVisibility()
     ToolViewWidget *view = d->buttonViews[button];
     if (!view)
         return;
-    d->mainWindow->area()->selectToolView(view);
+    if (d->mainWindow->area())
+        d->mainWindow->area()->selectToolView(view);
 }
 
 Qt::ToolBarArea ButtonBar::toolBarPlace()
