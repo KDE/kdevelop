@@ -48,7 +48,7 @@ add_custom_command(
 kde4_add_library(ThreadWeaver SHARED ${ThreadWeaver_LIB_SRCS})
 target_link_libraries(ThreadWeaver ${QT_QTCORE_LIBRARY})
 set_target_properties(ThreadWeaver PROPERTIES VERSION 4.2.0 SOVERSION 4)
-install_targets(/lib ThreadWeaver)
+install(TARGETS ThreadWeaver DESTINATION ${LIB_INSTALL_DIR} )
 
 macro_additional_clean_files(${CMAKE_CURRENT_BINARY_DIR}/Job_moc.cpp ${CMAKE_CURRENT_BINARY_DIR}/Thread_moc.cpp)
 

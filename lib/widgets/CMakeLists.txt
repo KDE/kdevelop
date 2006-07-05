@@ -15,7 +15,7 @@ kde4_automoc(${kdevwidgets_LIB_SRCS})
 kde4_add_library(kdevwidgets SHARED ${kdevwidgets_LIB_SRCS})
 target_link_libraries(kdevwidgets ${KDE4_KDECORE_LIBS} kdeui khtml kdevinterfaces)
 set_target_properties(kdevwidgets PROPERTIES VERSION 4.0.0 SOVERSION 4)
-install_targets(/lib kdevwidgets)
+install(TARGETS kdevwidgets DESTINATION ${LIB_INSTALL_DIR} )
 
 
 ########### install files ###############

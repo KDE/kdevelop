@@ -13,7 +13,7 @@ kde4_automoc(${kdevlang_debugger_LIB_SRCS})
 kde4_add_library(kdevlang_debugger SHARED ${kdevlang_debugger_LIB_SRCS})
 target_link_libraries(kdevlang_debugger ${KDE4_KDECORE_LIBS} kparts kdevinterfaces)
 set_target_properties(kdevlang_debugger PROPERTIES VERSION 4.0.0 SOVERSION 4)
-install_targets(/lib kdevlang_debugger)
+install(TARGETS kdevlang_debugger DESTINATION ${LIB_INSTALL_DIR} )
 
 
 ########### install files ###############

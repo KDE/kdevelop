@@ -42,7 +42,7 @@ kde4_add_ui3_files(kdevshell_LIB_SRCS ${kdevshell_UI3})
 kde4_add_library(kdevshell SHARED ${kdevshell_LIB_SRCS})
 target_link_libraries(kdevshell ${KDE4_KDECORE_LIBS} kdeui kdevinterfaces kdevutil kdevwidgets khtml ktexteditor)
 set_target_properties(kdevshell PROPERTIES VERSION 4.0.0 SOVERSION 4)
-install_targets(/lib kdevshell)
+install(TARGETS kdevshell DESTINATION ${LIB_INSTALL_DIR} )
 
 
 ########### next target ###############
@@ -60,7 +60,7 @@ kde4_automoc(${kdevelop_SRCS})
 kde4_add_ui_files(kdevelop_SRCS ${kdevelop_UI})
 kde4_add_executable(kdevelop ${kdevelop_SRCS})
 target_link_libraries(kdevelop ${KDE4_KDECORE_LIBS} kdevshell)
-install_targets(/bin kdevelop)
+install(TARGETS kdevelop DESTINATION ${BIN_INSTALL_DIR} )
 
 
 ########### next target ###############
@@ -73,7 +73,7 @@ set(kdevassistant_SRCS
 kde4_automoc(${kdevassistant_SRCS})
 kde4_add_executable(kdevassistant ${kdevassistant_SRCS})
 target_link_libraries(kdevassistant ${KDE4_KDECORE_LIBS} kdevshell)
-install_targets(/bin kdevassistant)
+install(TARGETS kdevassistant DESTINATION ${BIN_INSTALL_DIR} )
 
 
 ########### install files ###############
