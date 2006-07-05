@@ -41,6 +41,7 @@ class IDEAL_EXPORT ButtonBar: public QToolBar {
     Q_OBJECT
 public:
     ButtonBar(Ideal::Place place, MainWindow *parent = 0);
+    virtual ~ButtonBar();
 
     /**Adds the button for the toolview.*/
     void addToolViewButton(ToolViewWidget *view);

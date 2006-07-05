@@ -75,6 +75,11 @@ ButtonBar::ButtonBar(Ideal::Place place, MainWindow *parent)
         hide();
 }
 
+ButtonBar::~ButtonBar()
+{
+    delete d;
+}
+
 void ButtonBar::addToolViewButton(ToolViewWidget *view)
 {
     if (!isVisible())

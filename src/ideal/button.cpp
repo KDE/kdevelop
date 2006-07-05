@@ -66,6 +66,7 @@ Button::Button(ButtonContainer *parent, const QString text, const QIcon &icon,
 
 Button::~Button()
 {
+    delete d;
 //     d->buttonBar->removeButton(this);
 }
 

@@ -114,6 +114,7 @@ ButtonContainer::ButtonContainer(Place place, ButtonMode mode, QWidget *parent)
 
 ButtonContainer::~ButtonContainer()
 {
+    delete d;
 }
 
 void ButtonContainer::addButton(Button *button, bool isShown)
