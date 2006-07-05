@@ -15,9 +15,8 @@ endif (APPLE)
 
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
-add_definitions (${QDBUS_DEFINITIONS})
 link_directories (${KDE4_LIB_DIR})
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${QDBUS_INCLUDE_DIRS})
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
 include(KDevelopMacros)
 

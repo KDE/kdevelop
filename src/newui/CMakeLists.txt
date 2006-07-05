@@ -23,6 +23,6 @@ install(TARGETS newui DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install_files(/include/kdevelop/shell FILES dmainwindow.h ddockwidget.h docksplitter.h dtabwidget.h dexport.h)
+install( FILES dmainwindow.h ddockwidget.h docksplitter.h dtabwidget.h dexport.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/shell)
 
 

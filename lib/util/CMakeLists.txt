@@ -21,6 +21,6 @@ install(TARGETS kdevutil DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install_files(/include/kdevelop/util FILES execcommand.h kfiltermodel.h kdevtreeview.h)
+install( FILES execcommand.h kfiltermodel.h kdevtreeview.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/util)
 
 

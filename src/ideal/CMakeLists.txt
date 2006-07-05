@@ -19,6 +19,6 @@ install(TARGETS ideal DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install_files(/include/kdevelop/ideal FILES area.h button.h buttonbar.h mainwindow.h toolview.h)
+install( FILES area.h button.h buttonbar.h mainwindow.h toolview.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/ideal)
 
 add_subdirectory(test)

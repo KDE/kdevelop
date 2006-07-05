@@ -15,10 +15,10 @@ kde4_add_plugin(kdevguibuilder ${kdevguibuilder_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevguibuilder  ${KDE4_KDECORE_LIBS} kdevinterfaces QtDesigner_debug QtDesignerComponents_debug)
 
-INSTALL_TARGETS(/lib/kde4 kdevguibuilder )
+install(TARGETS kdevguibuilder DESTINATION ${PLUGIN_INSTALL_DIR})
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kdevguibuilder )
 
 ########### install files ###############
 
-INSTALL_FILES( /share/services FILES  kdevguibuilder.desktop )
-INSTALL_FILES( ${DATA_INSTALL_DIR}/kdevelop FILES guibuilderpart.rc )
+install(FILES kdevguibuilder.desktop DESTINATION  ${SHARE_INSTALL_PREFIX}/services )
+install(FILES guibuilderpart.rc DESTINATION  ${DATA_INSTALL_DIR}/kdevelop )

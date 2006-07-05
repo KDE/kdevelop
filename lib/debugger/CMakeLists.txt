@@ -18,6 +18,6 @@ install(TARGETS kdevlang_debugger DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install_files(/include/kdevelop/languages/debugger FILES)
+install( FILES DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/languages/debugger)
 
 

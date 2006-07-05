@@ -78,13 +78,14 @@ install(TARGETS kdevassistant DESTINATION ${BIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install_files(/include/kdevelop/shell FILES
+install(FILES
     core.h documentationpart.h editorproxy.h
     generalinfowidget.h languageselectwidget.h mainwindowshare.h
     partselectwidget.h plugincontroller.h projectmanager.h
     projectsession.h shellextension.h splashscreen.h statusbar.h
     toplevel.h mimewarningdialog.h
-    simplemainwindow.h documentcontroller.h shellexport.h)
+    simplemainwindow.h documentcontroller.h shellexport.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/shell )
 
 install( FILES kdeveloprc kdevassistantrc DESTINATION ${CONFIG_INSTALL_DIR} )
 install( FILES kdevelopui.rc eventsrc DESTINATION ${DATA_INSTALL_DIR}/kdevelop )

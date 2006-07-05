@@ -6,5 +6,5 @@ add_subdirectory(widgets)
 add_subdirectory(debugger) 
 add_subdirectory(projectmanager) 
 
-install_files( /include/kdevelop/ FILES kdevexport.h )
+install( FILES kdevexport.h  DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/)
 

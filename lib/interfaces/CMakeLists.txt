@@ -47,7 +47,7 @@ install(TARGETS kdevinterfaces DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install_files(/include/kdevelop/interfaces FILES
+install(FILES
     kdevdocument.h
     kdevdocumentcontroller.h
     kdevapi.h
@@ -78,9 +78,10 @@ install_files(/include/kdevelop/interfaces FILES
     kdevbuildmanager.h
     kdevprofile.h
     kdevprofileengine.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/interfaces 
 )
 
-install_files(${SERVICETYPES_INSTALL_DIR} FILES
+install(FILES
     kdevelopappfrontend.desktop
     kdeveloppcsimporter.desktop
     kdevelopcreatefile.desktop
@@ -93,6 +94,6 @@ install_files(${SERVICETYPES_INSTALL_DIR} FILES
     kdevelopprojectfilemanager.desktop
     kdevelop_part.desktop
     kdevelop_rwpart.desktop
+    DESTINATION ${SERVICETYPES_INSTALL_DIR} 
 )
-
 
