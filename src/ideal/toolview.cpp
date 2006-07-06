@@ -118,12 +118,14 @@ ToolViewWidget *ToolView::dockWidget()
 
 void ToolView::setViewVisible(bool visible)
 {
+    d->mainWindow->buttonBar(d->place)->setVisible(true);
     d->button->setChecked(visible);
     dockWidget()->setVisible(visible);
 }
 
 void ToolView::setViewEnabled(bool enabled)
 {
+    d->mainWindow->buttonBar(d->place)->setVisible(true);
     d->button->setVisible(enabled);
 }
 

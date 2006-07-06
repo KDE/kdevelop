@@ -78,7 +78,7 @@ int Area::kind() const
 
 void Area::addToolView(ToolView *view)
 {
-    view->showView();
+    view->enableView();
 }
 
 }

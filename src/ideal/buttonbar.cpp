@@ -76,9 +76,10 @@ ButtonBar::~ButtonBar()
 
 void ButtonBar::addToolViewButton(Button *button)
 {
-    if (!isVisible())
-        show();
+//     if (!isVisible())
+//         show();
     d->container->addButton(button/*, false*/);
+    button->hide();
 }
 
 void ButtonBar::removeToolViewButton(Button *button)
