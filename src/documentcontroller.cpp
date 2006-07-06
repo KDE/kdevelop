@@ -466,23 +466,6 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
                     done = true;
                 }
             }
-
-            if ( !done )
-            {
-                url = findUrlInProject( url );
-
-                if ( !url.isValid()
-                        || !KIO::NetAccess::exists( url, false, 0 ) )
-                {
-                    // See if this url is relative to the
-                    // current project's directory
-                    QString absPath = KDevApi::self() ->project() ->projectDirectory().path();
-                    absPath += "/" + url.path();
-                    url = absPath;
-                }
-                else
-                    done = true;
-            }
         }
 
         if ( !done && ( !url.isValid()
@@ -1109,54 +1092,6 @@ void DocumentController::doEmitState( KDevDocument* document )
 {
     emit documentStateChanged( document, document->state() );
 }
-
-KUrl DocumentController::findUrlInProject( const KUrl& url ) const
-{
-#warning "port me!"
-
-#if 0
-    QStringList fileList = KDevApi::self() ->project() ->allFiles();
-
-    bool filenameOnly = ( url.url().find( '/' ) == -1 );
-    QString filename = filenameOnly ? "/" : "";
-    filename += url.url();
-
-    for ( QStringList::Iterator it = fileList.begin();
-            it != fileList.end(); ++it )
-    {
-        if ( ( *it ).endsWith( filename ) )
-        {
-            // Match! The first one is as good as any one, I guess...
-            return KUrl( KDevApi::self() ->project() ->projectDirectory()
-                         + "/" + *it );
-        }
-    }
-
-    return url;
-#endif
-
-    return KUrl();
-}
-
-// KParts::Part* DocumentController::findOpenDocument( const KUrl& url ) const
-// {
-// if we find it this way, all is well
-//     KParts::Part * part = partForUrl( url );
-//     if ( part )
-//     {
-//         return part;
-//     }
-
-// ok, let's see if we can try harder
-//     if ( KDevApi::self() ->project() )
-//     {
-//         KUrl partURL = findUrlInProject( url );
-//         partURL.cleanPath();
-//         return partForUrl( partURL );
-//     }
-
-//     return 0L;
-// }
 
 KParts::Factory *DocumentController::findPartFactory( const QString &mimeType,
         const QString &partType,

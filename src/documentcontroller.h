@@ -134,8 +134,6 @@ private:
     void setupActions();
     void doEmitState( KDevDocument* document );
 
-    KUrl findUrlInProject( const KUrl& url ) const;
-    //     KParts::Part* findOpenDocument( const KUrl& url ) const;
     KParts::Factory *findPartFactory( const QString &mimeType,
                                       const QString &partType,
                                       const QString &preferredName
