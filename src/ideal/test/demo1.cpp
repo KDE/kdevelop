@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
         w.addToolView(tv, Ideal::Left, Area::Code);
     }
 
-    w.setArea(Area::Code);
+//     w.setArea(Area::Code);
     w.resize(800, 600);
     w.show();
 

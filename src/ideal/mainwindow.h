@@ -57,10 +57,6 @@ public:
     asked to remove it from the window layout also. To set just the visibility
     of the toolview use @ref hideToolView and @ref showToolView.*/
     virtual void removeToolView(QWidget *view);
-    /**Shows the toolview @p view if the current area is allowed to show it.
-    Does nothing if the toolview can not be shown in the area.*/
-    virtual void showToolView(QWidget *view);
-    virtual void hideToolView(QWidget *view);
 
     /** @return the list of all available toolviews in the mainwindow including
     hidden views and views not available in the current area.*/
@@ -68,8 +64,17 @@ public:
     /** @return the button bar for given @p place.*/
     ButtonBar *buttonBar(Ideal::Place place);
 
+protected:
+    /**Factory method to create the toolview. Reimplement this to return
+    ToolView subclasses here.*/
+    virtual ToolView *createToolView(QWidget *view, Ideal::Place defaultPlace, int area);
+    /**Factory method to create the button bar for toolview buttons.
+    Reimplement this to return ButtonBar subclasses here.*/
+    virtual ButtonBar *createButtonBar(Ideal::Place place);
+
 private:
     struct MainWindowPrivate *d;
+    friend class MainWindowPrivate;
 
 };
 

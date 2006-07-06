@@ -21,10 +21,16 @@
 #define IDEALTOOLVIEW_H
 
 #include <QObject>
+#include <QString>
+#include <QIcon>
 
 #include "idealdefs.h"
 
 namespace Ideal {
+
+class Button;
+class MainWindow;
+class ToolViewWidget;
 
 /**
 @short Toolview.
@@ -32,11 +38,12 @@ namespace Ideal {
 Toolview represents a widget and its placement and area options.
 */
 class IDEAL_EXPORT ToolView: public QObject {
+    Q_OBJECT
 public:
     /**Creates a toolview with contents @p view in the @p place.
     @p area defines the or-ed list of allowed areas.*/
-    ToolView(QObject *parent, QWidget *contents, Ideal::Place place, int area);
-    ~ToolView();
+    ToolView(MainWindow *parent, QWidget *contents, Ideal::Place place, int area);
+    virtual ~ToolView();
 
     /** @return the place of the toolview.*/
     Ideal::Place place() const;
@@ -50,8 +57,41 @@ public:
     /** @return the Qt dock place corresponding to the given @p place.*/
     static Qt::DockWidgetArea dockPlace(Ideal::Place place);
 
+    /** @return the button for this toolview.*/
+    Button *button() const;
+    /** @return the dock widget for this toolview. Creates it if no dock is available.*/
+    virtual ToolViewWidget *dockWidget();
+
+public slots:
+    /**Toggles the visibility of the toolview. The toolview button is
+    checked or unchecked respectively.*/
+    virtual void setViewVisible(bool visible);
+    /**Toggles the availability of the toolview. The toolview button
+    is hidden or shown respectively. The toolview itself is not shown.*/
+    virtual void setViewEnabled(bool enabled);
+
+    /**Shows the toolview. Synonym for @ref setViewVisible(true).*/
+    void showView();
+    /**Hides the toolview. Synonym for @ref setViewVisible(false).*/
+    void hideView();
+    /**Enables the toolview. Synonym for @ref setViewEnabled(true).*/
+    void enableView();
+    /**Disables the toolview.  Synonym for @ref setViewEnabled(false).*/
+    void disableView();
+
+protected:
+    /**Factory method to create the dock widget for this toolview.
+    Reimplement to return ToolViewWidget subclasses here.*/
+    virtual ToolViewWidget *createDockWidget();
+    /**Adds the dockwidget to the main window and initializes it.*/
+    virtual void setupDockWidget(ToolViewWidget *dockWidget);
+    /**Factory method to create the toolview button for this toolview.
+    Reimplement to return Button subclasses here.*/
+    virtual Button *createToolViewButton(Ideal::Place place, const QString &title, const QIcon &icon);
+
 private:
     struct ToolViewPrivate *d;
+    friend class ToolViewPrivate;
 
 };
 

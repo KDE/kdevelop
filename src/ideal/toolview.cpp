@@ -19,21 +19,52 @@
  ***************************************************************************/
 #include "toolview.h"
 
+#include "button.h"
+#include "buttonbar.h"
+#include "mainwindow.h"
+#include "toolviewwidget.h"
+
 namespace Ideal {
 
+//==================== ToolViewPrivate =====================
+
 struct ToolViewPrivate {
+
+    ToolViewPrivate(ToolView *toolView, MainWindow *_mainWindow, QWidget *_contents,
+            Ideal::Place _place, int _area)
+        :toolView(toolView), mainWindow(_mainWindow), contents(_contents),
+            place(_place), area(_area)
+    {
+        button = toolView->createToolViewButton(place, contents->windowTitle(), contents->windowIcon());
+        toolView->connect(button, SIGNAL(toggled(bool)), toolView, SLOT(setViewVisible(bool)));
+
+        mainWindow->buttonBar(place)->addToolViewButton(button);
+
+        dockWidget = 0;
+    }
+    ~ToolViewPrivate()
+    {
+    }
+
+    ToolView *toolView;
+    MainWindow *mainWindow;
     QWidget *contents;
     Ideal::Place place;
     int area;
+    //toolview button
+    Button *button;
+    //toolview dock
+    ToolViewWidget *dockWidget;
 };
 
-ToolView::ToolView(QObject *parent, QWidget *contents, Ideal::Place place, int area)
+
+
+//==================== ToolView =====================
+
+ToolView::ToolView(MainWindow *parent, QWidget *contents, Ideal::Place place, int area)
     :QObject(parent)
 {
-    d = new ToolViewPrivate;
-    d->contents = contents;
-    d->place = place;
-    d->area = area;
+    d = new ToolViewPrivate(this, parent, contents, place, area);
 }
 
 ToolView::~ToolView()
@@ -70,4 +101,68 @@ QWidget *ToolView::contents() const
     return d->contents;
 }
 
+Button *ToolView::button() const
+{
+    return d->button;
 }
+
+ToolViewWidget *ToolView::dockWidget()
+{
+    if (!d->dockWidget)
+    {
+        d->dockWidget = createDockWidget();
+        setupDockWidget(d->dockWidget);
+    }
+    return d->dockWidget;
+}
+
+void ToolView::setViewVisible(bool visible)
+{
+    d->button->setChecked(visible);
+    dockWidget()->setVisible(visible);
+}
+
+void ToolView::setViewEnabled(bool enabled)
+{
+    d->button->setVisible(enabled);
+}
+
+void ToolView::showView()
+{
+    setViewVisible(true);
+}
+
+void ToolView::hideView()
+{
+    setViewVisible(false);
+}
+
+void ToolView::enableView()
+{
+    setViewEnabled(true);
+}
+
+void ToolView::disableView()
+{
+    setViewEnabled(false);
+}
+
+ToolViewWidget *ToolView::createDockWidget()
+{
+    return new ToolViewWidget(d->contents->windowTitle(), d->mainWindow);
+}
+
+void ToolView::setupDockWidget(ToolViewWidget *dockWidget)
+{
+    connect(dockWidget, SIGNAL(visibilityChanged(bool)), d->button, SLOT(setChecked(bool)));
+    d->mainWindow->addDockWidget(dockPlace(), dockWidget);
+    dockWidget->setWidget(d->contents);
+}
+
+Button *ToolView::createToolViewButton(Ideal::Place place, const QString &title, const QIcon &icon)
+{
+    return new Button(0, place, title, icon);
+}
+
+}
+#include "toolview.moc"

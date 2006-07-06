@@ -27,10 +27,8 @@
 
 namespace Ideal {
 
-class ToolViewWidget;
-class ButtonContainer;
 class Button;
-class MainWindow;
+class ButtonContainer;
 
 /**
 @short Toolbar for toolview buttons.
@@ -40,31 +38,27 @@ Shows the ButtonContainer widget as the first enrty on the toolbar.
 class IDEAL_EXPORT ButtonBar: public QToolBar {
     Q_OBJECT
 public:
-    ButtonBar(Ideal::Place place, MainWindow *parent = 0);
+    ButtonBar(Ideal::Place place, QWidget *parent = 0);
     virtual ~ButtonBar();
 
     /**Adds the button for the toolview.*/
-    void addToolViewButton(ToolViewWidget *view);
-    /**Shows the button for the toolview.*/
-    void showToolViewButton(ToolViewWidget *view);
-    /**Hides the button for the toolview.*/
-    void hideToolViewButton(ToolViewWidget *view);
+    virtual void addToolViewButton(Button *button);
     /**Removes the button for the toolview.*/
-    void removeToolViewButton(ToolViewWidget *view);
+    virtual void removeToolViewButton(Button *button);
 
     /** @return the Qt toolbar area code.*/
     Qt::ToolBarArea toolBarPlace();
     /** @return the Qt toolbar area code for given Ideal @p place.*/
     static Qt::ToolBarArea toolBarPlace(Ideal::Place place);
 
-//     MainWindow *mainWindow();
-
-private slots:
-    /**Sets the toolview visibility after clicking its button.*/
-    void setToolViewWidgetVisibility();
+protected:
+    /**Factory method to create the button container.
+    Reimplement to return ButtonContainer subclasses here.*/
+    virtual ButtonContainer *createButtonContainer(Ideal::Place place);
 
 private:
     struct ButtonBarPrivate *d;
+    friend class ButtonBarPrivate;
 
 };
 

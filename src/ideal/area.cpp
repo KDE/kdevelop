@@ -34,7 +34,6 @@ struct AreaPrivate {
     Area *area;
     int kind;
     MainWindow *mainWindow;
-    QMap<ToolView*, ToolViewWidget*> toolDocks;
 
     void initArea();
     /** @return true if the toolview is allowed to be placed in this area.*/
@@ -72,58 +71,14 @@ Area::~Area()
     delete d;
 }
 
-void Area::addToolView(ToolView *view)
-{
-    if (!d->allowed(view))
-        return;
-
-    ToolViewWidget *dockWidget = new ToolViewWidget(view->contents()->windowTitle(), d->mainWindow);
-    dockWidget->setWidget(view->contents());
-    d->toolDocks[view] = dockWidget;
-    d->mainWindow->addDockWidget(view->dockPlace(), dockWidget);
-    d->mainWindow->buttonBar(view->place())->addToolViewButton(dockWidget);
-}
-
-void Area::removeToolView(ToolView *view)
-{
-    if (!d->allowed(view))
-        return;
-    ToolViewWidget *dockWidget = d->toolDocks[view];
-    d->mainWindow->removeDockWidget(dockWidget);
-    d->mainWindow->buttonBar(view->place())->removeToolViewButton(dockWidget);
-    d->toolDocks.remove(view);
-    delete dockWidget;
-}
-
-void Area::showToolView(ToolView *view)
-{
-    if (!d->allowed(view))
-        return;
-    ToolViewWidget *dockWidget = d->toolDocks[view];
-    dockWidget->show();
-    d->mainWindow->buttonBar(view->place())->showToolViewButton(dockWidget);
-}
-
-void Area::hideToolView(ToolView *view)
-{
-    if (!d->allowed(view))
-        return;
-    ToolViewWidget *dockWidget = d->toolDocks[view];
-    dockWidget->hide();
-    d->mainWindow->buttonBar(view->place())->hideToolViewButton(dockWidget);
-}
-
 int Area::kind() const
 {
     return d->kind;
 }
 
-void Area::selectToolView(ToolViewWidget *view)
+void Area::addToolView(ToolView *view)
 {
-//     toolView = d->toolDocks.key(view);
-//     if (!toolView)
-//         return;
-    view->setVisible(!view->isVisible());
+    view->showView();
 }
 
 }

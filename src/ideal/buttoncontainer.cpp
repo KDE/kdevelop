@@ -121,6 +121,7 @@ void ButtonContainer::addButton(Button *button, bool isShown)
 {
     int buttonCount = d->buttons.count();
 
+    button->setParent(this);
     button->setMode(d->mode);
     d->buttons.append(button);
     d->buttonLayout->insertWidget(buttonCount, button);

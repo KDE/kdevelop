@@ -53,7 +53,7 @@ struct MainWindowPrivate {
 
 void MainWindowPrivate::initButtonBar(Ideal::Place place)
 {
-    ButtonBar *bar = new ButtonBar(place, w);
+    ButtonBar *bar = w->createButtonBar(place);
     w->addToolBar(bar->toolBarPlace(), bar);
     buttonBars[place] = bar;
 }
@@ -93,12 +93,9 @@ Area *MainWindow::area() const
 
 void MainWindow::addToolView(QWidget *view, Ideal::Place defaultPlace, int area)
 {
-    ToolView *toolView = new ToolView(this, view, defaultPlace, area);
+    ToolView *toolView = createToolView(view, defaultPlace, area);
     d->toolViews.append(toolView);
     d->toolViewsForWidget[view] = toolView;
-
-    if (d->area)
-        d->area->addToolView(toolView);
 }
 
 void MainWindow::removeToolView(QWidget *view)
@@ -107,30 +104,9 @@ void MainWindow::removeToolView(QWidget *view)
     if (!toolView)
         return;
 
-    if (d->area)
-        d->area->removeToolView(toolView);
     d->toolViews.removeAll(toolView);
     d->toolViewsForWidget.remove(view);
-}
-
-void MainWindow::showToolView(QWidget *view)
-{
-    ToolView *toolView = d->toolViewsForWidget[view];
-    if (!toolView)
-        return;
-
-    if (d->area)
-        d->area->showToolView(toolView);
-}
-
-void MainWindow::hideToolView(QWidget *view)
-{
-    ToolView *toolView = d->toolViewsForWidget[view];
-    if (!toolView)
-        return;
-
-    if (d->area)
-        d->area->hideToolView(toolView);
+    d->buttonBars[toolView->place()]->removeToolViewButton(toolView->button());
 }
 
 QList<ToolView*> MainWindow::toolViews() const
@@ -141,6 +117,16 @@ QList<ToolView*> MainWindow::toolViews() const
 ButtonBar *MainWindow::buttonBar(Ideal::Place place)
 {
     return d->buttonBars[place];
+}
+
+ToolView *MainWindow::createToolView(QWidget *view, Ideal::Place defaultPlace, int area)
+{
+    return new ToolView(this, view, defaultPlace, area);
+}
+
+ButtonBar *MainWindow::createButtonBar(Ideal::Place place)
+{
+    return new ButtonBar(place, this);
 }
 
 }

@@ -29,8 +29,6 @@ class QStyleOptionButton;
 
 namespace Ideal {
 
-class ButtonContainer;
-
 /**
 @short A button to place onto the ButtonContainer
 
@@ -40,7 +38,7 @@ can be rotated (rotation depends on a "place" in Ideal mode).
 class IDEAL_EXPORT Button : public QPushButton {
     Q_OBJECT
 public:
-    Button(ButtonContainer *parent, const QString text, const QIcon &icon = QIcon(),
+    Button(QWidget *parent, Ideal::Place place, const QString text, const QIcon &icon = QIcon(),
         const QString &description = "");
 
     /**Sets the description used as a tooltip.*/
@@ -69,7 +67,6 @@ protected:
 
 private:
     virtual ~Button();
-
     void fixDimensions(Place oldPlace);
 
     QStyleOptionButton styleOption() const;

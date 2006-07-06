@@ -27,13 +27,13 @@
 #include <QApplication>
 #include <QPixmap>
 
-#include "buttoncontainer.h"
+#include "kdebug.h"
+
+#include "settings.h"
 
 namespace Ideal {
 
 struct ButtonPrivate {
-    ButtonContainer *buttonBar;
-
     QString description;
     Place place;
 
@@ -41,14 +41,13 @@ struct ButtonPrivate {
     QIcon realIcon;
 };
 
-Button::Button(ButtonContainer *parent, const QString text, const QIcon &icon,
+Button::Button(QWidget *parent, Ideal::Place place, const QString text, const QIcon &icon,
     const QString &description)
     :QPushButton(icon, text, parent)
 {
     d = new ButtonPrivate;
-    d->buttonBar = parent;
     d->description = description;
-    d->place = parent->place();
+    d->place = place;
     d->realText = text;
     d->realIcon = icon;
 
@@ -67,7 +66,6 @@ Button::Button(ButtonContainer *parent, const QString text, const QIcon &icon,
 Button::~Button()
 {
     delete d;
-//     d->buttonBar->removeButton(this);
 }
 
 void Button::setDescription(const QString &description)
@@ -143,7 +141,7 @@ void Button::paintEvent(QPaintEvent *)
 
 ButtonMode Button::mode()
 {
-    return d->buttonBar->mode();
+    return Settings::buttonMode();
 }
 
 void Button::setPlace(Ideal::Place place)
@@ -189,7 +187,7 @@ QSize Button::sizeHint(const QString &text) const
     QStyleOptionButton option = styleOption();
     int w = 0, h = 0;
 
-    if ( !icon().isNull() && (d->buttonBar->mode() != Text) ) {
+    if ( !icon().isNull() && (Settings::buttonMode() != Text) ) {
         int iw = iconSize().width();
         int ih = iconSize().height();
         w += iw;

@@ -24,23 +24,22 @@
 
 #include "button.h"
 #include "buttoncontainer.h"
-#include "buttonbar.h"
-#include "toolviewwidget.h"
 #include "settings.h"
-#include "mainwindow.h"
-#include "area.h"
 
 namespace Ideal {
 
 struct ButtonBarPrivate {
+    ButtonBarPrivate(ButtonBar *_bar, Ideal::Place _place)
+        :bar(_bar), place(_place)
+    {
+        container = bar->createButtonContainer(place);
+    }
+
+    ButtonBar *bar;
     QString titleForPlace();
 
     Ideal::Place place;
-    MainWindow *mainWindow;
-
     ButtonContainer *container;
-    QMap<ToolViewWidget*, Button*> viewButtons;
-    QMap<Button*, ToolViewWidget*> buttonViews;
 };
 
 QString ButtonBarPrivate::titleForPlace()
@@ -57,16 +56,11 @@ QString ButtonBarPrivate::titleForPlace()
 
 //class ButtonBar
 
-ButtonBar::ButtonBar(Ideal::Place place, MainWindow *parent)
+ButtonBar::ButtonBar(Ideal::Place place, QWidget *parent)
     :QToolBar(parent)
 {
-    d = new ButtonBarPrivate;
-    d->place = place;
-    d->mainWindow = parent;
-
+    d = new ButtonBarPrivate(this, place);
     setWindowTitle(d->titleForPlace());
-
-    d->container = new ButtonContainer(place, Settings::buttonMode(), this);
     addWidget(d->container);
     setMovable(false);
     //set the QToolBar's layout margin to 0 to please Mr. Fitt ;)
@@ -80,52 +74,18 @@ ButtonBar::~ButtonBar()
     delete d;
 }
 
-void ButtonBar::addToolViewButton(ToolViewWidget *view)
+void ButtonBar::addToolViewButton(Button *button)
 {
     if (!isVisible())
         show();
-    Button *button = new Button(d->container, view->widget()->windowTitle(),
-        view->widget()->windowIcon(), view->widget()->toolTip());
     d->container->addButton(button/*, false*/);
-    d->viewButtons[view] = button;
-    d->buttonViews[button] = view;
-
-    button->setChecked(true);
-
-    connect(button, SIGNAL(clicked()), this, SLOT(setToolViewWidgetVisibility()));
-    connect(view, SIGNAL(visibilityChanged(bool)), button, SLOT(setChecked(bool)));
 }
 
-void ButtonBar::showToolViewButton(ToolViewWidget *view)
+void ButtonBar::removeToolViewButton(Button *button)
 {
-    d->viewButtons[view]->show();
-}
-
-void ButtonBar::hideToolViewButton(ToolViewWidget *view)
-{
-    d->viewButtons[view]->hide();
-}
-
-void ButtonBar::removeToolViewButton(ToolViewWidget *view)
-{
-    Button *button = d->viewButtons[view];
     d->container->removeButton(button);
-    d->viewButtons.remove(view);
-    d->buttonViews.remove(button);
     if (d->container->isEmpty())
         hide();
-}
-
-void ButtonBar::setToolViewWidgetVisibility()
-{
-    Button *button = qobject_cast<Ideal::Button*>(sender());
-    if (!button)
-        return;
-    ToolViewWidget *view = d->buttonViews[button];
-    if (!view)
-        return;
-    if (d->mainWindow->area())
-        d->mainWindow->area()->selectToolView(view);
 }
 
 Qt::ToolBarArea ButtonBar::toolBarPlace()
@@ -142,10 +102,10 @@ Qt::ToolBarArea ButtonBar::toolBarPlace(Ideal::Place place)
     return dockArea;
 }
 
-// MainWindow *ButtonBar::mainWindow()
-// {
-//     return d->mainWindow;
-// }
+ButtonContainer *ButtonBar::createButtonContainer(Ideal::Place place)
+{
+    return new ButtonContainer(place, Settings::buttonMode(), this);
+}
 
 }
 

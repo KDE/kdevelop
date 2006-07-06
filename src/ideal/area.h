@@ -25,7 +25,6 @@
 namespace Ideal {
 
 class ToolView;
-class ToolViewWidget;
 class MainWindow;
 
 /**
@@ -48,20 +47,10 @@ public:
     Area(int kind, MainWindow *mainWindow);
     virtual ~Area();
 
+    virtual void addToolView(ToolView *view);
+
     /** @return the kind of the area.*/
     int kind() const;
-
-    /**Adds the toolview to this area if possible.*/
-    virtual void addToolView(ToolView *view);
-    /**Permanently removes the toolview from this area if possible.*/
-    virtual void removeToolView(ToolView *view);
-    /**Shows the toolview and its button in this area if possible.*/
-    virtual void showToolView(ToolView *view);
-    /**Hides the toolview and its button in this area if possible.*/
-    virtual void hideToolView(ToolView *view);
-
-    /**Selects the toolview (i.e. shows or hides it) and leaves its button visible.*/
-    virtual void selectToolView(ToolViewWidget *view);
 
 private:
     struct AreaPrivate *d;
