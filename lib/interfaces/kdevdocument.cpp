@@ -42,6 +42,11 @@ KParts::Part * KDevDocument::part( ) const
   return m_part;
 }
 
+KMimeType::Ptr KDevDocument::mimeType( ) const
+{
+    return KMimeType::findByURL(url());
+}
+
 KDevDocumentController * KDevDocument::parent( ) const
 {
   return static_cast<KDevDocumentController*>(const_cast<QObject*>(QObject::parent()));

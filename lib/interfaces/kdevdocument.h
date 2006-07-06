@@ -24,6 +24,7 @@
 #include <QPointer>
 
 #include <kurl.h>
+#include <kmimetype.h>
 #include "kdevexport.h"
 
 namespace KParts
@@ -80,6 +81,11 @@ class KDEVINTERFACES_EXPORT KDevDocument : public QObject
      * Returns the part corresponding to this document.
      */
     KParts::Part* part() const;
+
+    /**
+     * Returns the mimetype of the document.
+     */
+    KMimeType::Ptr mimeType() const;
 
     /**
      * Returns the text editor document, if this is a text document.

@@ -50,7 +50,7 @@ class Document;
 class KDevDocument;
 
 /**
- * \short Interface to control loaded parts and other documents.
+ * \short Interface to control open documents.
  * The document controller manages open documents in the IDE.
  * Open documents are usually editors, GUI designers, html documentation etc.
 */
