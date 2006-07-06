@@ -83,7 +83,7 @@ install(FILES
     generalinfowidget.h languageselectwidget.h mainwindowshare.h
     partselectwidget.h plugincontroller.h projectmanager.h
     projectsession.h shellextension.h splashscreen.h statusbar.h
-    toplevel.h mimewarningdialog.h
+    toplevel.h 
     simplemainwindow.h documentcontroller.h shellexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/shell )
 
