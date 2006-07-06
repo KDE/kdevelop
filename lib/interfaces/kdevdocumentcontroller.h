@@ -51,8 +51,8 @@ class KDevDocument;
 
 /**
  * \short Interface to control loaded parts and other documents.
- * The document controller enables parts to be embedded into the IDE, and control of them.
- * Such parts are usually editors, GUI designers, etc.
+ * The document controller manages open documents in the IDE.
+ * Open documents are usually editors, GUI designers, html documentation etc.
 */
 class KDEVINTERFACES_EXPORT KDevDocumentController: public KParts::PartManager
 {
