@@ -30,7 +30,7 @@ set(kdevprofileeditor_SRCS
 kde4_automoc(${kdevprofileeditor_SRCS})
 kde4_add_executable(kdevprofileeditor ${kdevprofileeditor_SRCS})
 target_link_libraries(kdevprofileeditor ${KDE4_KDECORE_LIBS} kdevinterfaces profileeditor kdeui kio)
-install(TARGETS kdevprofileeditor DESTINATION ${BIN_INSTALL_DIR} )
+install(TARGETS kdevprofileeditor DESTINATION /bin )
 
 
 ########### install files ###############
