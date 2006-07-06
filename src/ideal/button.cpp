@@ -98,7 +98,10 @@ QStyleOptionButton Button::styleOption() const
 
     opt.text = text();
 
-    opt.icon = d->realIcon;
+    if (Settings::buttonMode() != Ideal::Text)
+        opt.icon = d->realIcon;
+    else
+        opt.icon = QIcon();
     opt.iconSize = QSize(16,16);
 
     QRect r = rect();
