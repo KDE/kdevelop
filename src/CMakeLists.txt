@@ -60,7 +60,7 @@ kde4_automoc(${kdevelop_SRCS})
 kde4_add_ui_files(kdevelop_SRCS ${kdevelop_UI})
 kde4_add_executable(kdevelop ${kdevelop_SRCS})
 target_link_libraries(kdevelop ${KDE4_KDECORE_LIBS} kdevshell)
-install(TARGETS kdevelop DESTINATION /bin )
+install(TARGETS kdevelop DESTINATION ${CMAKE_INSTALL_DIR}/bin )
 
 
 ########### next target ###############
@@ -73,7 +73,7 @@ set(kdevassistant_SRCS
 kde4_automoc(${kdevassistant_SRCS})
 kde4_add_executable(kdevassistant ${kdevassistant_SRCS})
 target_link_libraries(kdevassistant ${KDE4_KDECORE_LIBS} kdevshell)
-install(TARGETS kdevassistant DESTINATION /bin )
+install(TARGETS kdevassistant DESTINATION ${CMAKE_INSTALL_DIR}/bin )
 
 
 ########### install files ###############
