@@ -34,13 +34,13 @@ KUrl KDevDocumentController::activeDocumentUrl( ) const
     return KUrl();
 }
 
-KParts::Part * KDevDocumentController::partForUrl( const KUrl & url ) const
-{
-    if (KDevDocument* file = documentForUrl(url))
-        return file->part();
-
-    return 0L;
-}
+// KParts::Part * KDevDocumentController::partForUrl( const KUrl & url ) const
+// {
+//     if (KDevDocument* file = documentForUrl(url))
+//         return file->part();
+// 
+//     return 0L;
+// }
 
 KDevDocument * KDevDocumentController::documentForUrl( const KUrl & url ) const
 {

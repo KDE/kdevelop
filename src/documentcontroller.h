@@ -52,12 +52,10 @@ public:
     KDevDocument* editDocument( const KUrl &inputUrl, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid() );
 
     KDevDocument* showDocumentation( const KUrl& url, bool newWin = false );
-    KDevDocument* showPart( KParts::Part* part, const QString& name,
-                   const QString& shortDescription );
 
     KDevDocument* documentForPart( KParts::Part* part ) const;
 
-    KParts::Part* partForWidget( const QWidget * widget ) const;
+    //     KParts::Part* partForWidget( const QWidget * widget ) const;
 
     QList<KDevDocument*> openDocuments() const;
 
@@ -74,21 +72,11 @@ public:
     bool closeDocuments( const QList<KDevDocument*> & list );
     bool closeAllOthers( KDevDocument* document );
 
-    bool closePart( KParts::Part * part );
-
     void activateDocument( KDevDocument* document );
-    void activatePart( KParts::Part * part );
 
     KDevDocument::DocumentState documentState( KDevDocument* document ) const;
     KDevDocument* activeDocument() const;
     //END KDevDocumentController
-
-    //BEGIN PartManager overrides
-    virtual void addPart (KParts::Part *part, bool setActive=true);
-    virtual void removePart (KParts::Part *part);
-    virtual void replacePart (KParts::Part *oldPart, KParts::Part *newPart, bool setActive=true);
-    virtual void setActivePart (KParts::Part *part, QWidget *widget=0L);
-    //END
 
     KDevHTMLPart* htmlPartForURL( KDevDocument* document ) const;
 
@@ -137,11 +125,17 @@ private slots:
     void slotNewDesignerStatus( const QString &formName, int status );
 
 private:
+    KDevDocument *addDocument( KParts::Part * part, bool setActive = true );
+    void removeDocument( KDevDocument* document );
+    void replaceDocument( KDevDocument* newDocument,
+                          KDevDocument* oldDocument, bool setActive = true );
+    void setActiveDocument( KDevDocument* document, QWidget *widget = 0L );
+
     void setupActions();
-    void doEmitState( KDevDocument* document);
+    void doEmitState( KDevDocument* document );
 
     KUrl findUrlInProject( const KUrl& url ) const;
-    KParts::Part* findOpenDocument( const KUrl& url ) const;
+    //     KParts::Part* findOpenDocument( const KUrl& url ) const;
     KParts::Factory *findPartFactory( const QString &mimeType,
                                       const QString &partType,
                                       const QString &preferredName
@@ -150,8 +144,8 @@ private:
     KTextEditor::Document *createEditorPart( bool activate );
 
     KDevDocument* integratePart( KParts::Part *part,
-                        QWidget* widget = 0,
-                        bool activate = true );
+                                 QWidget* widget = 0,
+                                 bool activate = true );
 
     QList<KDevDocument*> modifiedDocuments() const;
     void clearModified( QList<KDevDocument*> const & filelist );

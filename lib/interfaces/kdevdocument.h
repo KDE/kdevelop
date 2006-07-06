@@ -21,6 +21,7 @@
 #define KDEVDOCUMENT_H
 
 #include <QObject>
+#include <QPointer>
 
 #include <kurl.h>
 #include "kdevexport.h"
@@ -115,7 +116,7 @@ class KDEVINTERFACES_EXPORT KDevDocument : public QObject
     DocumentState state() const;
 
   private:
-    KParts::Part* m_part;
+    QPointer<KParts::Part> m_part;
 };
 
 #endif

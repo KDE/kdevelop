@@ -72,13 +72,7 @@ public:
     @param url The Url of the document to view.*/
     virtual KDevDocument* showDocumentation( const KUrl &url, bool newWin ) = 0;
 
-    /**Embeds a part into the main area of the mainwindow.
-    @param part The part to embed.
-    @param name The name of the part.
-    @param shortDescription Currently not used.*/
-    virtual KDevDocument* showPart( KParts::Part* part, const QString& name, const QString& shortDescription ) = 0;
-
-    /**Finds the document object corresponding to a given url.
+    /**Finds the first document object corresponding to a given url.
     @param url The Url of the document.
     @return The corresponding document, or null if not found.*/
     virtual KDevDocument* documentForUrl( const KUrl & url ) const;
@@ -86,17 +80,17 @@ public:
     /**Finds the document representing an embedded part.
     @param part the embedded part
     @return The corresponding document, or null if not found.*/
-    virtual KDevDocument* documentForPart( KParts::Part * part ) const = 0;
+//     virtual KDevDocument* documentForPart( KParts::Part * part ) const = 0;
 
     /**Finds the embedded part corresponding to a given url.
     @param url The Url of the document.
     @return The corresponding part, 0 if not found.*/
-    KParts::Part* partForUrl( const KUrl & url ) const;
+//     KParts::Part* partForUrl( const KUrl & url ) const;
 
     /**Finds the embedded part corresponding to a given main widget
     @param widget The parts main widget.
     @return The corresponding part, 0 if not found.*/
-    virtual KParts::Part* partForWidget( const QWidget *widget ) const = 0;
+//     virtual KParts::Part* partForWidget( const QWidget *widget ) const = 0;
 
     /**@return The list of open documents*/
     virtual QList<KDevDocument*> openDocuments() const = 0;

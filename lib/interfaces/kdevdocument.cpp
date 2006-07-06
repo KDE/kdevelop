@@ -32,11 +32,13 @@ KDevDocument::KDevDocument(KParts::Part* part, KDevDocumentController* parent)
 
 KUrl KDevDocument::url( ) const
 {
-  return static_cast<KParts::ReadOnlyPart*>(m_part)->url();
+  Q_ASSERT(m_part);
+  return qobject_cast<KParts::ReadOnlyPart*>(m_part)->url();
 }
 
 KParts::Part * KDevDocument::part( ) const
 {
+  Q_ASSERT(m_part);
   return m_part;
 }
 
@@ -72,7 +74,8 @@ KDevDocument::DocumentState KDevDocument::state( ) const
 
 KTextEditor::Document * KDevDocument::textDocument( ) const
 {
-  return qobject_cast<KTextEditor::Document*>(part());
+  Q_ASSERT(m_part);
+  return qobject_cast<KTextEditor::Document*>(m_part);
 }
 
 void KDevDocument::activate( )

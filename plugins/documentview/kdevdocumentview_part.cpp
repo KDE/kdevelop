@@ -38,7 +38,6 @@
 #include <kdevapi.h>
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
-#include <kfiltermodel.h>
 
 typedef KGenericFactory<KDevDocumentViewPart> KDevDocumentViewFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevdocumentview, KDevDocumentViewFactory( "kdevdocumentview" ) )
