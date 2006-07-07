@@ -1268,6 +1268,12 @@ bool Parser::parseAbstractDeclarator(DeclaratorAST *&node)
   ast->ptr_ops = 0;
   ast->array_dimensions = 0;
   ast->fun_cv = 0;
+  ast->sub_declarator = 0;
+  ast->parameter_declaration_clause = 0;
+  ast->id = 0;
+  ast->exception_spec = 0;
+  ast->bit_expression = 0;
+
   DeclaratorAST *decl = 0;
 
   PtrOperatorAST *ptrOp = 0;
@@ -2020,6 +2026,7 @@ bool Parser::parseEnumerator(EnumeratorAST *&node)
 
   EnumeratorAST *ast = CreateNode<EnumeratorAST>(_M_pool);
   ast->id = id;
+  ast->expression = 0;
 
   if (token_stream.lookAhead() == '=')
     {
