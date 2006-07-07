@@ -229,10 +229,10 @@ void GrepViewWidget::searchActivated()
 	QString command = filepattern + " " ;
 	if (grepdlg->ignoreSCMDirsFlag())
 	{
-		command += "| grep -v \"SCCS/\" ";
-		command += "| grep -v \"CVS/\" ";
-		command += "| grep -v \"\\.svn/\" ";
-		command += "| grep -v \"_darcs/\" ";
+		command += "| grep -v -e \"SCCS/\" ";
+		command += "-e \"CVS/\" ";
+		command += "-e \"\\.svn/\" ";
+		command += "-e \"_darcs/\" ";
 	}
 
 	// quote spaces in filenames going to xargs
