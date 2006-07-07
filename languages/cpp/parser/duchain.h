@@ -19,6 +19,9 @@
 #ifndef DUCHAIN_H
 #define DUCHAIN_H
 
+#include <QList>
+#include <QPair>
+
 #include <ktexteditor/cursor.h>
 
 namespace KTextEditor { class SmartRange; }
