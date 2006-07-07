@@ -9,4 +9,4 @@ Icon=gear
 ServiceTypes=KDevelop/FileManager
 X-KDE-Library=kdevautomakeimporter
 X-KDevelop-FileManager=
-X-KDevelop-Version=3
+X-KDevelop-Version=4
