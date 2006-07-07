@@ -194,7 +194,7 @@ struct AST
 
 struct TypeSpecifierAST: public AST
 {
-  const ListNode<std::size_t> *cv;
+  const ListNode<std::size_t> *cv; // const or volatile tokens
 };
 
 struct StatementAST: public AST

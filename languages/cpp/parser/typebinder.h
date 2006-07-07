@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2002-2005 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef BINDER_H
-#define BINDER_H
+#ifndef TYPEBINDER_H
+#define TYPEBINDER_H
 
 #include "default_visitor.h"
 #include "codemodel.h"
@@ -35,6 +36,7 @@
 class Lexer;
 class TokenStream;
 struct NameSymbol;
+class TypeEnvironment;
 
 namespace KTextEditor { class SmartRange; }
 
@@ -47,14 +49,16 @@ namespace KTextEditor { class SmartRange; }
  *
  * \sa DUBuilder
  */
-class Binder: protected DefaultVisitor
+class TypeBinder: protected DefaultVisitor
 {
 public:
-  Binder(CodeModel *model,
+  TypeBinder(TypeEnvironment* environment,
          TokenStream *token_stream,
          Lexer *lexer,
          KTextEditor::SmartRange* highlight);
-  virtual ~Binder();
+  virtual ~TypeBinder();
+
+  inline TypeEnvironment* typeEnvironment() const { return m_environment; }
 
   void run(const KUrl &url, AST *node);
 
@@ -74,8 +78,6 @@ protected:
   virtual void visitTypedef(TypedefAST *);
   virtual void visitUsing(UsingAST *);
   virtual void visitUsingDirective(UsingDirectiveAST *);
-
-  inline CodeModel *model() const { return _M_model; }
 
 private:
   TypeInfo qualifyType(const TypeInfo &type, const QStringList &context) const;
@@ -105,7 +107,8 @@ private:
   KTextEditor::SmartRange* newRange(std::size_t token);
 
 private:
-  CodeModel *_M_model;
+  TypeEnvironment* m_environment;
+
   TokenStream *_M_token_stream;
   Lexer *_M_lexer;
   KTextEditor::SmartRange* _M_highlight;
