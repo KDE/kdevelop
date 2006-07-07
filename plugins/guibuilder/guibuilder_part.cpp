@@ -32,7 +32,7 @@ GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
 {
   QDesignerComponents::initializeResources();
 
-  m_workspace = new QWorkspace;
+  m_workspace = new QWorkspace(parentWidget);
   m_workspace->setScrollBarsEnabled(true);
   setWidget( m_workspace );
 
