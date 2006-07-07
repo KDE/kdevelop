@@ -20,6 +20,7 @@
 #define FASTLIST_H
 
 #include "memorypool.h"
+#include <kdebug.h>
 
 template <typename Tp>
 struct ListNode
@@ -81,6 +82,7 @@ template <class Tp>
 inline const ListNode<Tp> *snoc(const ListNode<Tp> *list,
 				const Tp &element, pool *p)
 {
+
   if (!list)
     return ListNode<Tp>::create(element, p);
 
