@@ -91,6 +91,8 @@ void KDevCustomImporter::processDir( const QString path, QStringList & files )
 	do
 	{
 		dir.setPath( s.pop() );
+		if (!dir.exists())
+		    continue;
 		kdDebug( 9015 ) << "Examining: " << dir.path() << endl;
 		const QFileInfoList *dirEntries = dir.entryInfoList();
 		QPtrListIterator<QFileInfo> it( *dirEntries );
