@@ -730,8 +730,8 @@ void Binder::visit( AST * node )
       QString text = _M_highlight->document()->text(KTextEditor::Range(start, end));
       kDebug() << k_funcinfo << node << text << endl;
     }*/
-
-  DefaultVisitor::visit(node);
+  if ( node )
+      DefaultVisitor::visit(node);
 
 
   //_M_highlight = thisLevel;

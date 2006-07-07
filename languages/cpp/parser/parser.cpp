@@ -952,6 +952,10 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
 
   SimpleTypeSpecifierAST *ast = CreateNode<SimpleTypeSpecifierAST>(_M_pool);
   ast->integrals = 0;
+  ast->type_id = 0;
+  ast->name = 0;
+  ast->expression = 0;
+
   if (isIntegral)
     {
       ast->integrals = integrals;
@@ -1101,8 +1105,13 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
 
   DeclaratorAST *ast = CreateNode<DeclaratorAST>(_M_pool);
   ast->ptr_ops = 0;
+  ast->sub_declarator = 0;
+  ast->id = 0;
+  ast->bit_expression = 0;
   ast->array_dimensions = 0;
+  ast->parameter_declaration_clause = 0;
   ast->fun_cv = 0;
+  ast->exception_spec = 0;
 
   DeclaratorAST *decl = 0;
   NameAST *declId = 0;
@@ -1628,6 +1637,7 @@ bool Parser::parseParameterDeclarationClause(ParameterDeclarationClauseAST *&nod
 
   ParameterDeclarationClauseAST *ast
     = CreateNode<ParameterDeclarationClauseAST>(_M_pool);
+  ast->parameter_declarations = 0;
 
   if (!parseParameterDeclarationList(ast->parameter_declarations))
     {
@@ -1921,6 +1931,7 @@ bool Parser::parseCtorInitializer(CtorInitializerAST *&node)
   CHECK(':');
 
   CtorInitializerAST *ast = CreateNode<CtorInitializerAST>(_M_pool);
+  ast->member_initializers = 0;
   ast->colon = start;
 
   if (!parseMemInitializerList(ast->member_initializers))

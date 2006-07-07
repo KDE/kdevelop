@@ -136,10 +136,12 @@ void ParseJob::run()
     Parser parser( new Control() );
     m_translationUnit = parser.parse( preprocessed, preprocessed.length() + 1, m_memoryPool );
 
-    m_model = new CodeModel;
-    Binder binder( m_model, &parser.token_stream, &parser.lexer, m_highlight );
-    binder.run( m_document, m_translationUnit );
-
+    if ( m_translationUnit )
+    {
+        m_model = new CodeModel;
+        Binder binder( m_model, &parser.token_stream, &parser.lexer, m_highlight );
+        binder.run( m_document, m_translationUnit );
+    }
     //     DumpTree dumpTree;
     //     dumpTree.dump( m_translationUnit );
 
