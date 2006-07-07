@@ -31,6 +31,7 @@
 DemoWindow2::DemoWindow2(QWidget *parent)
     :MainWindow(parent)
 {
+    setCentralWidget(new QTextEdit());
     createActions();
     createToolViews();
     setArea(Area::Code);

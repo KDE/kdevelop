@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
     KApplication app;
 
     MainWindow w;
+    w.setCentralWidget(new QTextEdit());
 
     for (int i = 0; i < 3; ++i)
     {

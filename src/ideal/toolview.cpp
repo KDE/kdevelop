@@ -173,9 +173,10 @@ ToolViewWidget *ToolView::createDockWidget()
 
 void ToolView::setupDockWidget(ToolViewWidget *dockWidget)
 {
+    dockWidget->setAllowedAreas(dockPlace());
+    dockWidget->setWidget(d->contents);
     connect(dockWidget, SIGNAL(visibilityChanged(bool)), d->button, SLOT(setChecked(bool)));
     d->mainWindow->addDockWidget(dockPlace(), dockWidget);
-    dockWidget->setWidget(d->contents);
 }
 
 Button *ToolView::createToolViewButton(Ideal::Place place, const QString &title, const QIcon &icon)
