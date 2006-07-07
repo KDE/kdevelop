@@ -424,6 +424,9 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
         const KTextEditor::Cursor& cursor,
         bool activate )
 {
+    // For the splash screen...
+    emit openingDocument("Opening: " + inputUrl.fileName());
+
     //     kDebug( 9000 ) << k_funcinfo
     //     << inputUrl.prettyUrl()
     //     << " cursor " << cursor

@@ -62,19 +62,21 @@ public:
     virtual void raiseView( QWidget *view, Qt::DockWidgetArea area = Qt::AllDockWidgetAreas);
     virtual void lowerView( QWidget *view );
 
-    virtual void loadSettings();
-    virtual void saveSettings();
-
     virtual KMainWindow *main();
     //END KDevMainWindow implementation
 
     void init();
+
+signals:
+    void finishedLoading();
 
 protected:
     virtual bool queryClose();
     virtual bool queryExit();
 
 private slots:
+    virtual void loadSettings();
+    virtual void saveSettings();
     void gotoNextWindow();
     void gotoPreviousWindow();
     void gotoFirstWindow();

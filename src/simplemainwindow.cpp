@@ -54,7 +54,6 @@
 SimpleMainWindow::SimpleMainWindow( QWidget *parent, Qt::WFlags flags )
         : KMainWindow( parent, flags )
 {
-    resize( 800, 600 );
     m_mainWindowShare = new MainWindowShare( this );
 
     m_center = new QStackedWidget( this );
@@ -113,8 +112,6 @@ void SimpleMainWindow::init()
              this, SLOT( coreInitialized() ) );
     connect( Core::getInstance(), SIGNAL( projectOpened() ),
              this, SLOT( projectOpened() ) );
-
-    loadSettings();
 }
 
 void SimpleMainWindow::embedPartView( QWidget *view, const QString &title,
@@ -129,10 +126,11 @@ void SimpleMainWindow::embedPartView( QWidget *view, const QString &title,
 void SimpleMainWindow::embedSelectView( QWidget *view, const QString &title,
                                         const QString & /*toolTip*/ )
 {
-    if ( !view )
+    if ( !view || title.isEmpty() )
         return ;
 
     QDockWidget * dock = new QDockWidget( title, this );
+    dock->setObjectName( title );
     dock->setWidget( view );
     m_dockList.append( dock );
     addDockWidget( Qt::LeftDockWidgetArea, dock );
@@ -141,10 +139,11 @@ void SimpleMainWindow::embedSelectView( QWidget *view, const QString &title,
 void SimpleMainWindow::embedOutputView( QWidget *view, const QString &title,
                                         const QString & /*toolTip*/ )
 {
-    if ( !view )
+    if ( !view || title.isEmpty() )
         return ;
 
     QDockWidget * dock = new QDockWidget( title, this );
+    dock->setObjectName( title );
     dock->setWidget( view );
     m_dockList.append( dock );
     addDockWidget( Qt::BottomDockWidgetArea, dock );
@@ -154,10 +153,11 @@ void SimpleMainWindow::embedSelectViewRight( QWidget *view,
         const QString &title,
         const QString & /*toolTip*/ )
 {
-    if ( !view )
+    if ( !view || title.isEmpty() )
         return ;
 
     QDockWidget * dock = new QDockWidget( title, this );
+    dock->setObjectName( title );
     dock->setWidget( view );
     m_dockList.append( dock );
     addDockWidget( Qt::RightDockWidgetArea, dock );
@@ -231,6 +231,10 @@ void SimpleMainWindow::loadSettings()
 
     ProjectManager::getInstance() ->loadSettings();
     applyMainWindowSettings( config, QLatin1String( "SimpleMainWindow" ) );
+
+    show(); //kind of crucial
+
+    emit finishedLoading();
 }
 
 void SimpleMainWindow::saveSettings( )

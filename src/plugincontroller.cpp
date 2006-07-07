@@ -119,7 +119,8 @@ void PluginController::loadGlobalPlugins( const QStringList & ignorePlugins )
 void PluginController::loadProjectPlugins( const QStringList & ignorePlugins )
 {
 	KService::List projectOffers = m_engine.offers(m_profile, ProfileEngine::Project);
-	loadPlugins( projectOffers, ignorePlugins );
+    loadPlugins( projectOffers, ignorePlugins );
+    emit pluginsLoaded();
 }
 
 void PluginController::loadPlugins( KService::List offers, const QStringList & ignorePlugins )

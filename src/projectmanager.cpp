@@ -278,7 +278,8 @@ void ProjectManager::slotLoadProject( )
         // first restore the project session stored in a .kdevses file
         if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() ))
         {
-            kWarning() << i18n("error during restoring of the KDevelop session") << endl;
+            kWarning() << i18n("error during restoring of the KDevelop session") << endl;  
+            Core::getInstance()->doEmitProjectOpened();
         }
     }
 
@@ -286,8 +287,6 @@ void ProjectManager::slotLoadProject( )
 
   m_closeProjectAction->setEnabled(true);
   m_projectOptionsAction->setEnabled(true);
-
-  Core::getInstance()->doEmitProjectOpened();
 
   TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
   kapp->restoreOverrideCursor();

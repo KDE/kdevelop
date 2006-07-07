@@ -29,6 +29,7 @@
 #include "ktexteditor/document.h"
 #include "ktexteditor/view.h"
 
+#include "core.h"
 #include "documentcontroller.h"
 #include "domutil.h"
 #include "documentationpart.h"
@@ -427,6 +428,10 @@ void ProjectSession::loadDocument( )
 
               loadDocument();
               //QTimer::singleShot( 0, this, SLOT(loadDocument()) );
+       }
+       else 
+       {
+           Core::getInstance()->doEmitProjectOpened();
        }
 }
 

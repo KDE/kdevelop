@@ -90,6 +90,9 @@ public:
     void integrateTextEditorPart( KTextEditor::Document* doc );
     KDevDocument* editDocumentInternal( const KUrl &inputUrl, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid(), bool activate = true );
 
+signals:
+    void openingDocument( const QString &document );
+
 public slots:
     void slotSave();
     void slotReload();

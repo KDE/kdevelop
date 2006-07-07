@@ -66,7 +66,8 @@ public:
   QString changeProfile(const QString &newProfile);
 
 signals:
-  void loadingPlugin(const QString &plugin);
+    void pluginsLoaded();
+    void loadingPlugin(const QString &plugin);
 
 protected:
   PluginController();
