@@ -21,6 +21,7 @@
 
 #include <QCheckBox>
 #include <qradiobutton.h>
+#include <QFontComboBox>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -28,7 +29,6 @@
 #include <kiconloader.h>
 #include <kurlrequester.h>
 #include <kapplication.h>
-#include <kfontcombo.h>
 #include <kpagedialog.h>
 #include <kpagewidgetmodel.h>
 #include <kicon.h>

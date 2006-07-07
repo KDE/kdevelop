@@ -353,7 +353,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KFontCombo" name="outputViewFontCombo" >
+      <widget class="QFontComboBox" name="outputViewFontCombo" >
        <property name="toolTip" >
         <string>The font to use for the output views</string>
        </property>
@@ -409,13 +409,6 @@
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
-  <customwidget>
-   <class>KFontCombo</class>
-   <extends>QWidget</extends>
-   <header>kfontcombo.h</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
   <customwidget>
    <class>Q3ButtonGroup</class>
    <extends>Q3GroupBox</extends>
