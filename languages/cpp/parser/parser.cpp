@@ -459,7 +459,8 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
 
             SimpleDeclarationAST *ast =
               CreateNode<SimpleDeclarationAST>(_M_pool);
-
+            ast->function_specifiers = 0;
+            ast->win_decl_specifiers = 0;
             ast->storage_specifiers = storageSpec;
             ast->type_specifier = spec;
             ast->init_declarators = declarators;
@@ -1914,6 +1915,9 @@ bool Parser::parseMemberSpecification(DeclarationAST *&node)
       SimpleDeclarationAST *ast = CreateNode<SimpleDeclarationAST>(_M_pool);
       ast->type_specifier = spec;
       ast->init_declarators = declarators;
+      ast->function_specifiers = 0;
+      ast->storage_specifiers = 0;
+      ast->win_decl_specifiers = 0;
       UPDATE_POS(ast, start, token_stream.cursor());
       node = ast;
 
@@ -2924,7 +2928,9 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
   SimpleDeclarationAST *ast = CreateNode<SimpleDeclarationAST>(_M_pool);
   ast->type_specifier = spec;
   ast->init_declarators = declarators;
-
+  ast->function_specifiers = 0;
+  ast->storage_specifiers = 0;
+  ast->win_decl_specifiers = 0;
   UPDATE_POS(ast, start, token_stream.cursor());
   node = ast;
 
@@ -3021,6 +3027,10 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
 
                 SimpleDeclarationAST *ast
                   = CreateNode<SimpleDeclarationAST>(_M_pool);
+                ast->type_specifier = 0;
+                ast->function_specifiers = 0;
+                ast->storage_specifiers = 0;
+                ast->win_decl_specifiers = 0;
                 ast->init_declarators = 0;
                 ast->init_declarators = snoc(ast->init_declarators,
                                              declarator, _M_pool);
@@ -3108,6 +3118,10 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
 #warning "mark the ast as constant"
 #endif
       SimpleDeclarationAST *ast = CreateNode<SimpleDeclarationAST>(_M_pool);
+      ast->function_specifiers = 0;
+      ast->storage_specifiers = 0;
+      ast->win_decl_specifiers = 0;
+      ast->type_specifier = 0;
       ast->init_declarators = declarators;
 
       UPDATE_POS(ast, start, token_stream.cursor());
