@@ -57,6 +57,12 @@ bool KDevDocument::isActive( ) const
   return parent()->activeDocument() == this;
 }
 
+bool KDevDocument::isReadWrite( ) const
+{
+    Q_ASSERT(m_part);
+    return (qobject_cast<KParts::ReadWritePart*>( m_part ) != 0L);
+}
+
 void KDevDocument::save( )
 {
   parent()->saveDocuments(QList<KDevDocument*>() << this);

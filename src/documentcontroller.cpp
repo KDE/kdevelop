@@ -11,6 +11,7 @@
 #include <QCheckBox>
 #include <qradiobutton.h>
 
+#include "partcontroller.h"
 
 #include <krun.h>
 #include <kmenu.h>
@@ -70,7 +71,9 @@ DocumentController *DocumentController::s_instance = 0;
 using namespace MainWindowUtils;
 
 DocumentController::DocumentController( QWidget *parent )
-        : KDevDocumentController( parent ), m_editorFactory( 0L )
+        : KDevDocumentController( parent ),
+        m_editorFactory( 0L ),
+        m_partController( new PartController( parent ) )
 {
     setupActions();
 
@@ -308,8 +311,7 @@ bool DocumentController::closeDocument( KDevDocument* document )
     //     if ( QWidget * w = EditorProxy::getInstance() ->topWidgetForPart( part ) )
     //         TopLevel::getInstance() ->removeView( w );
 
-    delete document->part();
-    delete document;
+    removeDocument( document );
     return true;
 }
 
@@ -348,10 +350,10 @@ KDevDocument::DocumentState DocumentController::documentState( KDevDocument* doc
 
 KDevDocument* DocumentController::activeDocument() const
 {
-    if ( !activePart() )
+    if ( !m_partController->activePart() )
         return 0L;
 
-    return documentForPart( activePart() );
+    return documentForPart( m_partController->activePart() );
 }
 
 void DocumentController::createInstance( QWidget *parent )
@@ -382,7 +384,7 @@ bool DocumentController::querySaveDocuments()
 
 void DocumentController::openEmptyTextDocument()
 {
-    KTextEditor::Document * document = createEditorPart( true );
+    KTextEditor::Document * document = createEditorPart( KUrl(), true );
 
     if ( document )
     {
@@ -524,8 +526,7 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
             || mimeType->is( "text/html" )
             || mimeType->is( "application/x-zerosize" ) )
     {
-        KTextEditor::Document * editorPart = createEditorPart( activate );
-
+        KTextEditor::Document * editorPart = createEditorPart( url, activate );
         if ( editorPart )
         {
             if ( !m_presetEncoding.isNull() )
@@ -547,7 +548,7 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
             if ( !editorPart->widget() )
             {
                 // The tab widget does the reparenting
-                editorPart->createView( 0L );
+                editorPart->createView( TopLevel::getInstance() ->main() ->centralWidget() );
             }
 
             addHistoryEntry();
@@ -568,60 +569,30 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
     }
 
     // OK, it's not text let's see what else we can come up with..
-
-    KParts::Factory *factory = 0;
-    QString className;
-
-    QString services[] = {
-                             "KDevelop/ReadWritePart", "KDevelop/ReadOnlyPart",
-                             "KParts/ReadWritePart", "KParts/ReadOnlyPart"
-                         };
-
-    QString classNames[] = {
-                               "KParts::ReadWritePart", "KParts::ReadOnlyPart",
-                               "KParts::ReadWritePart", "KParts::ReadOnlyPart"
-                           };
-
-    for ( uint i = 0; i < 4; ++i )
-    {
-        factory = findPartFactory( mimeType->name(), services[ i ] );
-        if ( factory )
-        {
-            className = classNames[ i ];
-            break;
-        }
-    }
-
-    kDebug( 9000 ) << "factory = " << factory << endl;
-
-    if ( factory )
+    if ( KParts::ReadOnlyPart * part = readOnly( m_partController->createPart( url ) ) )
     {
         // create the object of the desired class
-        KParts::ReadOnlyPart * part = readOnly( factory->createPart( TopLevel::getInstance() ->main(), 0L, className.toLatin1() ) );
-        if ( part )
+        part->openURL( url );
+        addHistoryEntry();
+
+        // we can have ended up with a texteditor,
+        // in which case need to treat it as such
+        KDevDocument *document = 0;
+        if ( dynamic_cast<KTextEditor::Editor*>( part ) )
         {
-            part->openURL( url );
-            addHistoryEntry();
-
-            // we can have ended up with a texteditor,
-            // in which case need to treat it as such
-            KDevDocument *document = 0;
-            if ( dynamic_cast<KTextEditor::Editor*>( part ) )
-            {
-                document = integratePart( part, part->widget(), activate );
-                //                 EditorProxy::getInstance() ->setCursorPosition( part, cursor );
-            }
-            else
-            {
-                document = integratePart( part );
-            }
-
-            m_openRecentAction->addUrl( url );
-            m_openRecentAction->saveEntries( KGlobal::config(),
-                                             "RecentDocuments" );
-
-            return document;
+            document = integratePart( part, part->widget(), activate );
+            //                 EditorProxy::getInstance() ->setCursorPosition( part, cursor );
         }
+        else
+        {
+            document = integratePart( part );
+        }
+
+        m_openRecentAction->addUrl( url );
+        m_openRecentAction->saveEntries( KGlobal::config(),
+                                         "RecentDocuments" );
+
+        return document;
     }
     else
     {
@@ -641,7 +612,8 @@ KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
                 {
                     KConfig * config = KGlobal::config();
                     config->setGroup( "General" );
-                    QStringList textTypesList = config->readEntry( "TextTypes", QStringList() );
+                    QStringList textTypesList = config->readEntry( "TextTypes",
+                                                QStringList() );
                     textTypesList << mimeType->name();
                     config->writeEntry( "TextTypes", textTypesList );
                 }
@@ -684,26 +656,6 @@ void DocumentController::slotCloseOtherWindows()
 {
     if ( activeReadOnly() )
         closeAllOthers( activeDocument() );
-}
-
-void DocumentController::slotWaitForFactoryHack( )
-{
-    //kDebug(9000) << k_funcinfo << endl;
-
-    if ( !activePart() )
-        return ;
-
-    if ( dynamic_cast<KTextEditor::View*>( activePart() ->widget() ) )
-    {
-        if ( !activePart() ->factory() )
-        {
-            QTimer::singleShot( 100, this, SLOT( slotWaitForFactoryHack() ) );
-        }
-        else
-        {
-            //             EditorProxy::getInstance() ->installPopup( activePart() );
-        }
-    }
 }
 
 void DocumentController::slotSaveAllDocuments()
@@ -860,41 +812,41 @@ void DocumentController::slotForwardPopupActivated( int id )
 void DocumentController::slotSwitchTo()
 {
     //FIXME Port to new documentcontroller API
-//     QMap<QString, KParts::ReadOnlyPart*> parts_map;
-//     QStringList part_list;
-//     foreach ( KParts::Part * part, parts() )
-//     {
-//         kDebug( 9000 ) << "Part..." << endl;
-//         if ( part->inherits( "KParts::ReadOnlyPart" ) )
-//         {
-//             KParts::ReadOnlyPart * ro_part = readOnly( part );
-//             QString name = ro_part->url().fileName();
-//             part_list.append( name );
-//             parts_map[ name ] = ro_part;
-//             kDebug( 9000 ) << "Found part for URL "
-//             << ro_part->url().prettyUrl() << endl;
-//         }
-//     }
-// 
-//     KDialog dialog;
-//     dialog.setCaption( i18n( "Switch To" ) );
-//     dialog.setButtons( KDialog::Ok | KDialog::Cancel );
-//     dialog.setDefaultButton( KDialog::Ok );
-//     QGridLayout *grid = new QGridLayout( &dialog, 2, 1, 10, 10 );
-//     KLineEdit *editbox = new KLineEdit( &dialog );
-//     grid->addWidget( new QLabel( i18n( "Switch to buffer:" ),
-//                                  &dialog ), 0, 0 );
-//     grid->addWidget( editbox, 1, 0 );
-//     editbox->completionObject() ->setItems( part_list );
-//     editbox->setFocus();
-//     int result = dialog.exec();
-//     if ( result == QDialog::Accepted )
-//     {
-//         if ( parts_map.contains( editbox->text() ) )
-//         {
-//             activatePart( parts_map[ editbox->text() ] );
-//         }
-//     }
+    //     QMap<QString, KParts::ReadOnlyPart*> parts_map;
+    //     QStringList part_list;
+    //     foreach ( KParts::Part * part, parts() )
+    //     {
+    //         kDebug( 9000 ) << "Part..." << endl;
+    //         if ( part->inherits( "KParts::ReadOnlyPart" ) )
+    //         {
+    //             KParts::ReadOnlyPart * ro_part = readOnly( part );
+    //             QString name = ro_part->url().fileName();
+    //             part_list.append( name );
+    //             parts_map[ name ] = ro_part;
+    //             kDebug( 9000 ) << "Found part for URL "
+    //             << ro_part->url().prettyUrl() << endl;
+    //         }
+    //     }
+    //
+    //     KDialog dialog;
+    //     dialog.setCaption( i18n( "Switch To" ) );
+    //     dialog.setButtons( KDialog::Ok | KDialog::Cancel );
+    //     dialog.setDefaultButton( KDialog::Ok );
+    //     QGridLayout *grid = new QGridLayout( &dialog, 2, 1, 10, 10 );
+    //     KLineEdit *editbox = new KLineEdit( &dialog );
+    //     grid->addWidget( new QLabel( i18n( "Switch to buffer:" ),
+    //                                  &dialog ), 0, 0 );
+    //     grid->addWidget( editbox, 1, 0 );
+    //     editbox->completionObject() ->setItems( part_list );
+    //     editbox->setFocus();
+    //     int result = dialog.exec();
+    //     if ( result == QDialog::Accepted )
+    //     {
+    //         if ( parts_map.contains( editbox->text() ) )
+    //         {
+    //             activatePart( parts_map[ editbox->text() ] );
+    //         }
+    //     }
 }
 
 void DocumentController::slotUploadFinished()
@@ -910,7 +862,7 @@ void DocumentController::updateMenuItems()
     bool hasWriteParts = false;
     bool hasReadOnlyParts = false;
 
-    foreach ( KParts::Part * part, parts() )
+    foreach ( KParts::Part * part, m_partController->parts() )
     {
         if ( part->inherits( "KParts::ReadWritePart" ) )
             hasWriteParts = true;
@@ -1126,27 +1078,18 @@ KParts::Factory *DocumentController::findPartFactory( const QString &mimeType,
     return 0;
 }
 
-KTextEditor::Document *DocumentController::createEditorPart( bool activate )
+KTextEditor::Document *DocumentController::createEditorPart( const KUrl &url, bool activate )
 {
     kDebug( 9000 ) << k_funcinfo << endl;
-    if ( !m_editorFactory )
-    {
-        KGlobal::config() ->setGroup( "Editor" );
-        QString preferred =
-            KGlobal::config() ->readPathEntry( "EmbeddedKTextEditor" );
+    KGlobal::config() ->setGroup( "Editor" );
+    QString preferred =
+        KGlobal::config() ->readPathEntry( "EmbeddedKTextEditor" );
 
-        m_editorFactory = findPartFactory( "text/plain",
-                                           "KTextEditor/Document", preferred );
-
-        if ( !m_editorFactory )
-            return 0;
-    }
-
-    KTextEditor::Document *doc =
-        qobject_cast<KTextEditor::Document *>( m_editorFactory->createPart(
-                                                   TopLevel::getInstance() ->main(),
-                                                   0, "KParts::ReadWritePart" ) );
-    return doc;
+    return qobject_cast<KTextEditor::Document *>( m_partController->createPart(
+                "text/plain",
+                "KTextEditor/Document",
+                "KTextEditor::Document",
+                preferred ) );
 }
 
 KDevDocument* DocumentController::integratePart( KParts::Part *part, QWidget* widget, bool activate )
@@ -1252,7 +1195,7 @@ bool DocumentController::reactToDirty( KDevDocument* document, unsigned char rea
         return false;
     }
 
-    if ( reason == 3 )                                       // means the file was deleted
+    if ( reason == 3 )                                                         // means the file was deleted
     {
         KMessageBox::sorry( TopLevel::getInstance() ->main(),
                             i18n( "Warning: The file \"%1\" has been deleted on"
@@ -1335,7 +1278,7 @@ bool DocumentController::closeDocumentsDialog( const QList<KDevDocument*>& ignor
     if ( !saveDocumentsDialog( ignoreList ) )
         return false;
 
-    foreach ( KParts::Part * part, parts() )
+    foreach ( KParts::Part * part, m_partController->parts() )
     {
         KDevDocument * document = documentForPart( part );
         if ( readOnly( document->part() ) && !ignoreList.contains( document ) )
@@ -1348,22 +1291,22 @@ bool DocumentController::closeDocumentsDialog( const QList<KDevDocument*>& ignor
 
 KParts::ReadOnlyPart* DocumentController::activeReadOnly() const
 {
-    return readOnly( activePart() );
+    return m_partController->activeReadOnly();
 }
 
 KParts::ReadWritePart* DocumentController::activeReadWrite() const
 {
-    return readWrite( activePart() );
+    return m_partController->activeReadWrite();
 }
 
 KParts::ReadOnlyPart* DocumentController::readOnly( KParts::Part *part ) const
 {
-    return qobject_cast<KParts::ReadOnlyPart*>( part );
+    return m_partController->readOnly( part );
 }
 
 KParts::ReadWritePart* DocumentController::readWrite( KParts::Part *part ) const
 {
-    return qobject_cast<KParts::ReadWritePart*>( part );
+    return m_partController->readWrite( part );
 }
 
 DocumentController::HistoryEntry::HistoryEntry( const KUrl & u, const KTextEditor::Cursor& c )
@@ -1425,7 +1368,7 @@ KDevDocument * DocumentController::addDocument( KParts::Part * part, bool setAct
     KDevDocument * document =
         new KDevDocument( static_cast<KParts::ReadOnlyPart*>( part ), this );
     m_partHash.insert( static_cast<KParts::ReadOnlyPart*>( part ), document );
-    addPart( part, setActive );
+    m_partController->addPart( part, setActive );
     updateDocumentUrl( document );
     updateMenuItems();
 
@@ -1436,9 +1379,11 @@ void DocumentController::removeDocument( KDevDocument * document )
 {
     Q_ASSERT( document );
 
-    removePart( document->part() );
+    m_partController->removePart( document->part() );
     m_documentUrls.remove( document );
     m_partHash.remove( static_cast<KParts::ReadOnlyPart*>( document->part() ) );
+
+    delete document->part();
     delete document;
 
     updateMenuItems();
@@ -1449,18 +1394,19 @@ void DocumentController::replaceDocument( KDevDocument * oldDocument,
 {
     Q_ASSERT( oldDocument );
     m_partHash.remove( static_cast<KParts::ReadOnlyPart*>( oldDocument->part() ) );
-    replacePart( oldDocument->part(), newDocument->part(), setActive );
+    m_partController->replacePart( oldDocument->part(), newDocument->part(), setActive );
     delete oldDocument;
 }
 
 void DocumentController::setActiveDocument( KDevDocument *document, QWidget *widget )
 {
-    setActivePart( document->part(), widget );
+    m_partController->setActivePart( document->part(), widget );
 
-    kDebug( 9000 ) << k_funcinfo << activePart() << " " << activeDocument() << endl;
+    kDebug( 9000 ) << k_funcinfo
+    << m_partController->activePart()
+    << " " << activeDocument() << endl;
 
     updateMenuItems();
-    QTimer::singleShot( 100, this, SLOT( slotWaitForFactoryHack() ) );
 
     if ( activeDocument() )
         emit documentActivated( activeDocument() );
@@ -1470,10 +1416,12 @@ void DocumentController::activateDocument( KDevDocument * document )
 {
     Q_ASSERT( document );
 
+    if ( document->isActive() )
+        return ;
+
     setActiveDocument( document );
 
     QWidget * widget = document->part() ->widget();
-    //     QWidget * widget = EditorProxy::getInstance() ->widgetForPart( part );
     if ( widget )
     {
         TopLevel::getInstance() ->setCurrentWidget( widget );

@@ -26,6 +26,7 @@ set(kdevshell_LIB_SRCS
     shellextension.cpp
     simplemainwindow.cpp
     documentcontroller.cpp
+    partcontroller.cpp
 )
 
 set(kdevshell_UI
@@ -83,8 +84,8 @@ install(FILES
     generalinfowidget.h languageselectwidget.h mainwindowshare.h
     partselectwidget.h plugincontroller.h projectmanager.h
     projectsession.h shellextension.h splashscreen.h statusbar.h
-    toplevel.h 
-    simplemainwindow.h documentcontroller.h shellexport.h
+    toplevel.h  simplemainwindow.h documentcontroller.h shellexport.h
+    partcontroller.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/shell )
 
 install( FILES kdeveloprc kdevassistantrc DESTINATION ${CONFIG_INSTALL_DIR} )

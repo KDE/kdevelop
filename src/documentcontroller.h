@@ -14,6 +14,8 @@
 #include <ktexteditor/modificationinterface.h>
 #include "shellexport.h"
 
+class PartController;
+
 namespace KParts
 {
 class Part;
@@ -97,8 +99,6 @@ public slots:
     void slotHTMLDocumentURLChanged( const KUrl& oldUrl, const KUrl& newUrl );
 
 private slots:
-    void slotWaitForFactoryHack();
-
     void slotSaveAllDocuments();
     void slotRevertAllDocuments();
 
@@ -139,7 +139,7 @@ private:
                                       const QString &preferredName
                                       = QString::null );
 
-    KTextEditor::Document *createEditorPart( bool activate );
+    KTextEditor::Document *createEditorPart( const KUrl &url, bool activate );
 
     KDevDocument* integratePart( KParts::Part *part,
                                  QWidget* widget = 0,
@@ -187,6 +187,7 @@ private:
     QHash< KDevDocument*, KUrl > m_documentUrls;
 
     QPointer<KParts::Factory> m_editorFactory;
+    QPointer<PartController> m_partController;
 
     struct HistoryEntry
     {

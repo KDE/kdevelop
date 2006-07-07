@@ -54,7 +54,7 @@ class KDevDocument;
  * The document controller manages open documents in the IDE.
  * Open documents are usually editors, GUI designers, html documentation etc.
 */
-class KDEVINTERFACES_EXPORT KDevDocumentController: public KParts::PartManager
+class KDEVINTERFACES_EXPORT KDevDocumentController: public QObject
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kdevelop.DocumentController")

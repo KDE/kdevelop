@@ -20,7 +20,7 @@
 #include <QtDBus/QtDBus>
 
 KDevDocumentController::KDevDocumentController(QWidget *parent)
-  : KParts::PartManager(parent)
+  : QObject(parent)
 {
     QDBus::sessionBus().registerObject("/org/kdevelop/DocumentController",
                                        this, QDBusConnection::ExportSlots);

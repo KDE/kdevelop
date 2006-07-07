@@ -329,9 +329,9 @@ void MainWindowShare::slotConfigureEditors()
     kDebug(9000) << " *** MainWindowShare::slotConfigureEditors()" << endl;
 
     KDevDocumentController * documentController = KDevApi::self()->documentController();
-    KParts::Part * part = documentController->activePart();
+    KDevDocument * document = documentController->activeDocument();
 
-    KTextEditor::Document *doc = qobject_cast<KTextEditor::Document *>(part);
+    KTextEditor::Document *doc = document->textDocument();
     KTextEditor::Editor *editor = doc ? doc->editor() : 0;
     if (!editor)
     {
@@ -406,18 +406,19 @@ void MainWindowShare::slotKeyBindings()
   }
   if ( dlg.configure() == KKeyDialog::Accepted )
   {
+      //FIXME is this really needed any longer?
   // this is needed for when we have multiple embedded kateparts and change one of them.
   // it also needs to be done to their views, as they too have actioncollections to update
-    foreach (KParts::Part* part, DocumentController::getInstance()->parts())
-    {
-        if ( KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( part ) )
-        {
-            doc->reloadXML();
-
-            foreach(KDocument::View *view, doc->views())
-                view->reloadXML();
-        }
-    }
+//     foreach (KParts::Part* part, DocumentController::getInstance()->parts())
+//     {
+//         if ( KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( part ) )
+//         {
+//             doc->reloadXML();
+// 
+//             foreach(KDocument::View *view, doc->views())
+//                 view->reloadXML();
+//         }
+//     }
   }
 }
 

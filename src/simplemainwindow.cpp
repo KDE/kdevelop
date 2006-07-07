@@ -124,8 +124,6 @@ void SimpleMainWindow::embedPartView( QWidget *view, const QString &title,
         return ;
 
     m_center->addWidget( view );
-    m_center->setCurrentWidget( view );
-    view->show();
 }
 
 void SimpleMainWindow::embedSelectView( QWidget *view, const QString &title,
@@ -299,8 +297,9 @@ void SimpleMainWindow::configureToolbars()
 void SimpleMainWindow::newToolbarConfig()
 {
     setupWindowMenu();
-    m_mainWindowShare->slotGUICreated(
-        DocumentController::getInstance() ->activePart() );
+    //FIXME
+//     m_mainWindowShare->slotGUICreated(
+//         DocumentController::getInstance() ->activePart() );
     applyMainWindowSettings( KGlobal::config(),
                              QLatin1String( "SimpleMainWindow" ) );
 }

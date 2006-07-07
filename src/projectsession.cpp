@@ -261,15 +261,12 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const Q3ValueL
       docsAndViewsEl.removeChild(toBeRemoved);
     }
   }
-
-       foreach (KParts::Part* part, DocumentController::getInstance()->parts())
+       foreach (KDevDocument *document, DocumentController::getInstance()->openDocuments())
        {
-
-              KParts::ReadOnlyPart* pReadOnlyPart = dynamic_cast<KParts::ReadOnlyPart*>(part);
-              if (!pReadOnlyPart)
+              if (!document->isReadWrite())
                      continue;
 
-              QString url = pReadOnlyPart->url().url();
+              QString url = document->url().url();
 
               docIdStr.setNum(nDocs);
               QDomElement docEl = domdoc.createElement("Doc" + docIdStr);
@@ -281,14 +278,14 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const Q3ValueL
               QDomElement viewEl = domdoc.createElement( "View0");
               docEl.appendChild( viewEl);
 
-              if ( dynamic_cast<HTMLDocumentationPart*>(pReadOnlyPart) )
+              if ( dynamic_cast<HTMLDocumentationPart*>(document->part()) )
               {
                      viewEl.setAttribute("Type", "Documentation");
               }
-              else if ( pReadOnlyPart->inherits("KTextEditor::Document") )
+              else if ( document->part()->inherits("KTextEditor::Document") )
               {
                      viewEl.setAttribute("Type", "Source");
-                        KTextEditor::View *view = qobject_cast<KTextEditor::View *>(pReadOnlyPart->widget());
+                  KTextEditor::View *view = qobject_cast<KTextEditor::View *>(document->part()->widget());
                      if (view)
                             viewEl.setAttribute( "line", view->cursorPosition().line() );
               }

@@ -88,14 +88,24 @@ class KDEVINTERFACES_EXPORT KDevDocument : public QObject
     KMimeType::Ptr mimeType() const;
 
     /**
-     * Returns the text editor document, if this is a text document.
+     * Returns the text editor, if this is a text document.
      */
     KTextEditor::Document* textDocument() const;
+
+    /**
+     * Returns the gui builder, if this is a gui document.
+     */
+//     KDevGuiBuilder* guiDocument() const;
 
     /**
      * Enquires whether this document is currently the active part in the editor.
      */
     bool isActive() const;
+
+    /**
+     * Enquires whether this document is editable..
+     */
+    bool isReadWrite() const;
 
     /**
      * Make this the active document.
