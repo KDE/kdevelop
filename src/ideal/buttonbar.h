@@ -51,6 +51,9 @@ public:
     /** @return the Qt toolbar area code for given Ideal @p place.*/
     static Qt::ToolBarArea toolBarPlace(Ideal::Place place);
 
+    /** @return true if the button bar is empty.*/
+    bool isEmpty() const;
+
 protected:
     /**Factory method to create the button container.
     Reimplement to return ButtonContainer subclasses here.*/

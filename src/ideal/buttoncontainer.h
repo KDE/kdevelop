@@ -58,7 +58,9 @@ public:
     Place place() const;
 
     /** @return true if the container has no buttons inside.*/
-    bool isEmpty();
+    bool isEmpty() const;
+    /** @return true if the container has no visible buttons inside.*/
+    bool isVisuallyEmpty() const;
 
 protected:
     virtual void resizeEvent(QResizeEvent *ev);

@@ -17,71 +17,35 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include "area.h"
 
-#include <QDebug>
+#ifndef DEMOWINDOW2_H
+#define DEMOWINDOW2_H
 
-#include "mainwindow.h"
-#include "buttonbar.h"
-#include "toolview.h"
-#include "toolviewwidget.h"
+#include <mainwindow.h>
 
-namespace Ideal {
+class QMenu;
+class QAction;
 
-struct AreaPrivate {
-    AreaPrivate(Area *_area): area(_area) {}
+using namespace Ideal;
 
-    Area *area;
-    int kind;
-    MainWindow *mainWindow;
+class DemoWindow2: public MainWindow {
+    Q_OBJECT
+public:
+    DemoWindow2(QWidget *parent = 0);
 
-    void initArea();
-    /** @return true if the toolview is allowed to be placed in this area.*/
-    bool allowed(ToolView *view);
+private slots:
+    void selectArea();
+
+private:
+    void createToolViews();
+    void createActions();
+
+    QMenu *areaMenu;
+    QAction *defaultArea;
+    QAction *codeArea;
+    QAction *debugArea;
+    QAction *designArea;
+
 };
 
-
-void AreaPrivate::initArea()
-{
-    QList<ToolView*> toolViews = mainWindow->toolViews();
-    foreach (ToolView *view, toolViews)
-        area->addToolView(view);
-}
-
-bool AreaPrivate::allowed(ToolView *view)
-{
-    return view->area() & kind;
-}
-
-
-
-//======================== Area ========================
-
-Area::Area(int kind, MainWindow *mainWindow)
-{
-    d = new AreaPrivate(this);
-    d->kind = kind;
-    d->mainWindow = mainWindow;
-
-    d->initArea();
-}
-
-Area::~Area()
-{
-    delete d;
-}
-
-int Area::kind() const
-{
-    return d->kind;
-}
-
-void Area::addToolView(ToolView *view)
-{
-    if (view->area() & d->kind)
-        view->enableView();
-    else
-        view->disableView();
-}
-
-}
+#endif

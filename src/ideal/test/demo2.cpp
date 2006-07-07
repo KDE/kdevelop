@@ -17,71 +17,25 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include "area.h"
 
-#include <QDebug>
+#include <QApplication>
 
-#include "mainwindow.h"
-#include "buttonbar.h"
-#include "toolview.h"
-#include "toolviewwidget.h"
+#include <kcmdlineargs.h>
+#include <kapplication.h>
+#include <klocale.h>
 
-namespace Ideal {
+#include "demowindow2.h"
 
-struct AreaPrivate {
-    AreaPrivate(Area *_area): area(_area) {}
-
-    Area *area;
-    int kind;
-    MainWindow *mainWindow;
-
-    void initArea();
-    /** @return true if the toolview is allowed to be placed in this area.*/
-    bool allowed(ToolView *view);
-};
+using namespace Ideal;
 
 
-void AreaPrivate::initArea()
+int main(int argc, char *argv[])
 {
-    QList<ToolView*> toolViews = mainWindow->toolViews();
-    foreach (ToolView *view, toolViews)
-        area->addToolView(view);
-}
+    KCmdLineArgs::init(argc, argv, "demo1", I18N_NOOP("Demo1"), I18N_NOOP("Demo1"), "0.0" );
+    KApplication app;
 
-bool AreaPrivate::allowed(ToolView *view)
-{
-    return view->area() & kind;
-}
+    DemoWindow2 w;
+    w.show();
 
-
-
-//======================== Area ========================
-
-Area::Area(int kind, MainWindow *mainWindow)
-{
-    d = new AreaPrivate(this);
-    d->kind = kind;
-    d->mainWindow = mainWindow;
-
-    d->initArea();
-}
-
-Area::~Area()
-{
-    delete d;
-}
-
-int Area::kind() const
-{
-    return d->kind;
-}
-
-void Area::addToolView(ToolView *view)
-{
-    if (view->area() & d->kind)
-        view->enableView();
-    else
-        view->disableView();
-}
-
+    return app.exec();
 }

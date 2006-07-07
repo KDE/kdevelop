@@ -21,9 +21,9 @@
 
 #include <QResizeEvent>
 
-#include "button.h"
+#include "kdebug.h"
 
-#include <QDebug>
+#include "button.h"
 
 namespace Ideal {
 
@@ -90,7 +90,7 @@ ButtonContainer::ButtonContainer(Place place, ButtonMode mode, QWidget *parent)
     :QWidget(parent)
 {
     d = new ButtonContainerPrivate;
-    place = place;
+    d->place = place;
     d->buttonLayout = 0;
     d->shrinked = false;
 
@@ -102,7 +102,7 @@ ButtonContainer::ButtonContainer(Place place, ButtonMode mode, QWidget *parent)
             break;
         case Ideal::Top:
         case Ideal::Bottom:
-            d->buttonLayout = new ButtonLayout(QBoxLayout::TopToBottom, this);
+            d->buttonLayout = new ButtonLayout(QBoxLayout::LeftToRight, this);
             break;
     }
 
@@ -200,8 +200,6 @@ void ButtonContainer::resizeEvent(QResizeEvent *ev)
             break;
     }
 
-    qDebug() << "pref: " << preferredDimension << " act: " << actualDimension;
-
     if (preferredDimension > actualDimension)
         shrink(preferredDimension, actualDimension);
     else if (d->shrinked && (originalDimension() < actualDimension))
@@ -276,8 +274,6 @@ void ButtonContainer::expand(int preferredDimension, int actualDimension)
     if (newPreferredLength <= textLength)
         return;
 
-    qDebug() << newPreferredLength << " " << textLength;
-
     uint newTextLength;
     uint prevTextLength = 0;
     do {
@@ -337,9 +333,17 @@ QString ButtonContainer::squeeze(const QString &str, int maxlen)
         return str;
 }
 
-bool ButtonContainer::isEmpty()
+bool ButtonContainer::isEmpty() const
 {
     return !d->buttons.count();
+}
+
+bool ButtonContainer::isVisuallyEmpty() const
+{
+    foreach (Button *button, d->buttons)
+        if (button->isVisible())
+            return false;
+    return true;
 }
 
 }

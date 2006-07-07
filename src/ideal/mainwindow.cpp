@@ -22,6 +22,8 @@
 #include <QMap>
 #include <QLayout>
 
+#include <kdebug.h>
+
 #include "area.h"
 #include "buttonbar.h"
 #include "toolview.h"

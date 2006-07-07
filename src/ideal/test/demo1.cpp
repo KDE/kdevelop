@@ -19,21 +19,13 @@
  ***************************************************************************/
 
 #include <QApplication>
-#include <QWidget>
-#include <QLayout>
-#include <QMainWindow>
-#include <QToolBar>
 #include <QTextEdit>
-#include <QDockWidget>
 
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 #include <klocale.h>
 
 #include "area.h"
-#include "button.h"
-#include "buttonbar.h"
-
 #include "mainwindow.h"
 
 using namespace Ideal;

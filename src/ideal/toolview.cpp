@@ -19,6 +19,8 @@
  ***************************************************************************/
 #include "toolview.h"
 
+#include <kdebug.h>
+
 #include "button.h"
 #include "buttonbar.h"
 #include "mainwindow.h"
@@ -118,15 +120,30 @@ ToolViewWidget *ToolView::dockWidget()
 
 void ToolView::setViewVisible(bool visible)
 {
-    d->mainWindow->buttonBar(d->place)->setVisible(true);
+    ButtonBar *bar = d->mainWindow->buttonBar(d->place);
+    if (visible)
+        bar->setVisible(true);
     d->button->setChecked(visible);
     dockWidget()->setVisible(visible);
 }
 
 void ToolView::setViewEnabled(bool enabled)
 {
-    d->mainWindow->buttonBar(d->place)->setVisible(true);
+    ButtonBar *bar = d->mainWindow->buttonBar(d->place);
     d->button->setVisible(enabled);
+    if (enabled)
+        bar->setVisible(true);
+    else
+    {
+        kDebug() << "disable view" << endl;
+        //if we have the dock widget and it is visible we should hide it
+        //to make the view disabled
+        if (d->dockWidget)
+           d->dockWidget->hide();
+        //also hide the empty button bar
+        if (bar->isEmpty())
+            bar->setVisible(false);
+    }
 }
 
 void ToolView::showView()

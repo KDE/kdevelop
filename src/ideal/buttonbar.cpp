@@ -108,6 +108,11 @@ ButtonContainer *ButtonBar::createButtonContainer(Ideal::Place place)
     return new ButtonContainer(place, Settings::buttonMode(), this);
 }
 
+bool ButtonBar::isEmpty() const
+{
+    return d->container->isVisuallyEmpty();
+}
+
 }
 
 #include "buttonbar.moc"
