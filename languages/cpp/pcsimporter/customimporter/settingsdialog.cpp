@@ -96,6 +96,7 @@ void SettingsDialog::validateDirectory( const QString & dir )
 		QString errormsg = QString( "<qt><b>%1</b> is not a directory</qt>" ).arg( dir );
 		KMessageBox::error( 0, errormsg, "Couldn't find directory" );
 	}
+	emit enabled( elb->listBox()->count() > 0 );
 }
 
 #include "settingsdialog.moc" 
