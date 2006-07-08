@@ -33,6 +33,10 @@ public:
     PartController( QWidget *toplevel );
     virtual ~PartController();
 
+    KTextEditor::Document* createTextPart( const KUrl &url,
+                                           const QString &encoding,
+                                           bool activate );
+
     KParts::Part* createPart( const KUrl &url );
     KParts::Part* createPart( const QString &mimeType,
                               const QString &partType,
@@ -43,6 +47,8 @@ public:
     KParts::ReadWritePart* activeReadWrite() const;
     KParts::ReadOnlyPart* readOnly( KParts::Part *part ) const;
     KParts::ReadWritePart* readWrite( KParts::Part *part ) const;
+
+    bool isTextType( KMimeType::Ptr mimeType );
 
 private:
     KParts::Factory *findPartFactory( const QString &mimeType,

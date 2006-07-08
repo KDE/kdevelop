@@ -14,6 +14,7 @@
 #include <kparts/part.h>
 #include <kparts/factory.h>
 #include <kparts/partmanager.h>
+#include <kparts/browserextension.h>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
@@ -32,10 +33,73 @@ PartController::PartController( QWidget *parent )
 PartController::~PartController()
 {}
 
-KParts::Part* PartController::createPart( const QString &mimeType,
-        const QString &partType,
-        const QString &className,
-        const QString &preferredName )
+//MOVE BACK TO DOCUMENTCONTROLLER OR MULTIBUFFER EVENTUALLY
+bool PartController::isTextType( KMimeType::Ptr mimeType )
+{
+    KConfig * config = KGlobal::config();
+    config->setGroup( "General" );
+
+    bool isTextType = false;
+    QStringList textTypesList = config->readEntry( "TextTypes", QStringList() );
+    if ( textTypesList.contains( mimeType->name() ) )
+    {
+        isTextType = true;
+    }
+
+    bool isKDEText = false;
+    QVariant v = mimeType->property( "X-KDE-text" );
+    if ( v.isValid() )
+        isKDEText = v.toBool();
+
+    // is this regular text - open in editor
+    return ( isTextType || isKDEText
+             || mimeType->is( "text/plain" )
+             || mimeType->is( "text/html" )
+             || mimeType->is( "application/x-zerosize" ) );
+}
+
+KTextEditor::Document* PartController::createTextPart(
+    const KUrl &url,
+    const QString &encoding,
+    bool activate )
+{
+    //Can this be cached instead of reading config?
+    KGlobal::config() ->setGroup( "Editor" );
+    QString preferred =
+        KGlobal::config() ->readPathEntry( "EmbeddedKTextEditor" );
+
+    KTextEditor::Document* doc =
+        qobject_cast<KTextEditor::Document *>( createPart(
+                                                   "text/plain",
+                                                   "KTextEditor/Document",
+                                                   "KTextEditor::Document",
+                                                   preferred ) );
+    if ( !encoding.isNull() )
+    {
+        KParts::BrowserExtension * extension =
+            KParts::BrowserExtension::childObject( doc );
+        if ( extension )
+        {
+            KParts::URLArgs args;
+            args.serviceType = QString( "text/plain;" )
+                               + encoding;
+            extension->setURLArgs( args );
+        }
+    }
+
+    doc->openURL( url );
+
+    if ( !doc->widget() /*&& activate*/ )
+    {
+        doc->createView( TopLevel::getInstance() ->main() ->centralWidget() );
+    }
+    return doc;
+}
+
+KParts::Part* PartController::createPart( const QString & mimeType,
+        const QString & partType,
+        const QString & className,
+        const QString & preferredName )
 {
     KParts::Factory * editorFactory = findPartFactory(
                                           mimeType,
@@ -53,7 +117,7 @@ KParts::Part* PartController::createPart( const QString &mimeType,
     return 0;
 }
 
-KParts::Part* PartController::createPart( const KUrl &url )
+KParts::Part* PartController::createPart( const KUrl & url )
 {
     if ( !url.isValid() )
         return 0;
@@ -85,19 +149,21 @@ KParts::Part* PartController::createPart( const KUrl &url )
 
     if ( !className.isEmpty() && editorFactory )
     {
-        return editorFactory->createPart(
-                   TopLevel::getInstance() ->main() ->centralWidget(),
-                   TopLevel::getInstance() ->main() ->centralWidget(),
-                   className.toLatin1() );
+        KParts::Part * part = editorFactory->createPart(
+                                  TopLevel::getInstance() ->main() ->centralWidget(),
+                                  TopLevel::getInstance() ->main() ->centralWidget(),
+                                  className.toLatin1() );
+        readOnly( part ) ->openURL( url );
+        return part;
     }
 
     return 0;
 }
 
 KParts::Factory *PartController::findPartFactory(
-    const QString &mimeType,
-    const QString &partType,
-    const QString &preferredName )
+    const QString & mimeType,
+    const QString & partType,
+    const QString & preferredName )
 {
     KService::List offers = KMimeTypeTrader::self() ->query(
                                 mimeType,
@@ -142,12 +208,12 @@ KParts::ReadWritePart* PartController::activeReadWrite() const
     return readWrite( activePart() );
 }
 
-KParts::ReadOnlyPart* PartController::readOnly( KParts::Part *part ) const
+KParts::ReadOnlyPart* PartController::readOnly( KParts::Part * part ) const
 {
     return qobject_cast<KParts::ReadOnlyPart*>( part );
 }
 
-KParts::ReadWritePart* PartController::readWrite( KParts::Part *part ) const
+KParts::ReadWritePart* PartController::readWrite( KParts::Part * part ) const
 {
     return qobject_cast<KParts::ReadWritePart*>( part );
 }

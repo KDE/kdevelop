@@ -412,7 +412,7 @@ void ProjectSession::loadDocument( )
               DocumentData & dd = _docDataList.first();
               if ( dd.type == "Source" )
               {
-                  DocumentController::getInstance()->editDocumentInternal( dd.url, KTextEditor::Cursor(dd.line, -1), dd.activate );
+                  DocumentController::getInstance()->editDocument( dd.url, KTextEditor::Cursor(dd.line, -1), dd.activate );
               }
               else if ( dd.type == "Documentation" )
               {

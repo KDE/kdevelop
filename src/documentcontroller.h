@@ -51,7 +51,10 @@ public:
 
     //BEGIN KDevDocumentController
     void setEncoding( const QString &encoding );
-    KDevDocument* editDocument( const KUrl &inputUrl, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid() );
+    KDevDocument* editDocument( const KUrl &inputUrl,
+                                const KTextEditor::Cursor& cursor =
+                                    KTextEditor::Cursor::invalid(),
+                                bool activate = true );
 
     KDevDocument* showDocumentation( const KUrl& url, bool newWin = false );
 
@@ -88,7 +91,6 @@ public:
     bool querySaveDocuments();
     void openEmptyTextDocument();
     void integrateTextEditorPart( KTextEditor::Document* doc );
-    KDevDocument* editDocumentInternal( const KUrl &inputUrl, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid(), bool activate = true );
 
 signals:
     void openingDocument( const QString &document );
@@ -128,6 +130,9 @@ private slots:
     void slotNewDesignerStatus( const QString &formName, int status );
 
 private:
+    void setCursorPosition( KParts::Part *part,
+                            const KTextEditor::Cursor& cursor );
+    bool openAsDialog( const KUrl &url, KMimeType::Ptr mimeType );
     KDevDocument *addDocument( KParts::Part * part, bool setActive = true );
     void removeDocument( KDevDocument* document );
     void replaceDocument( KDevDocument* newDocument,
@@ -141,8 +146,6 @@ private:
                                       const QString &partType,
                                       const QString &preferredName
                                       = QString::null );
-
-    KTextEditor::Document *createEditorPart( const KUrl &url, bool activate );
 
     KDevDocument* integratePart( KParts::Part *part,
                                  QWidget* widget = 0,

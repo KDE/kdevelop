@@ -145,12 +145,13 @@ public:
 
 public Q_SLOTS:
     /**Opens a new or existing document.
-    @param url The Url of the document to open.
-    @param line The line number to place the cursor at, if applicable.
-    @param col The column number to place the cursor at, if applicable.
-    @param newWin If true, the new window will be created instead of using current.*/
-    virtual Q_SCRIPTABLE KDevDocument* editDocument( const KUrl &url, 
-                                                     const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid() ) = 0;
+    @param url The full Url of the document to open.
+    @param range The location information, if applicable.
+    @param activate Indicates whether to fully activate the document.*/
+    virtual Q_SCRIPTABLE KDevDocument* editDocument( const KUrl &url,
+                                                     const KTextEditor::Cursor& range =
+                                                     KTextEditor::Cursor::invalid(),
+                                                     bool activate = true ) = 0;
 
     /**Saves all open documents.
      @return false if it was cancelled by the user, true otherwise */

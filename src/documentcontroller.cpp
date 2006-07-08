@@ -90,9 +90,130 @@ void DocumentController::setEncoding( const QString &encoding )
     m_presetEncoding = encoding;
 }
 
-KDevDocument* DocumentController::editDocument( const KUrl &inputUrl, const KTextEditor::Cursor& cursor )
+
+
+KDevDocument* DocumentController::editDocument( const KUrl & inputUrl,
+        const KTextEditor::Cursor& cursor,
+        bool activate )
 {
-    return editDocumentInternal( inputUrl, cursor );
+    KUrl url = inputUrl;
+
+    // is it already open?
+    // (Try this once before verifying the URL, we could be dealing with a
+    // document that no longer exists on disc)
+    if ( KDevDocument * existingDoc = documentForUrl( url ) )
+    {
+        addHistoryEntry();
+        activateDocument( existingDoc );
+        setCursorPosition( existingDoc->part(), cursor );
+        return existingDoc;
+    }
+
+    // Make sure the URL exists
+    if ( !url.isValid() || !KIO::NetAccess::exists( url, false, 0 ) )
+    {
+        kDebug( 9000 ) << "cannot find URL: " << url.url() << endl;
+        return 0L;
+    }
+
+    // For the splash screen...
+    emit openingDocument( "Opening: " + url.fileName() );
+
+    // clean it and resolve possible symlink
+    url.cleanPath( KUrl::SimplifyDirSeparators );
+    if ( url.isLocalFile() )
+    {
+        QString path = QFileInfo( url.path() ).canonicalFilePath();
+        if ( !path.isEmpty() )
+            url.setPath( path );
+    }
+
+    KMimeType::Ptr mimeType = KMimeType::findByURL( url );
+    // kDebug( 9000 ) << "mimeType = " << mimeType->name() << endl;
+
+    // is the URL pointing to a directory?
+    if ( mimeType->is( "inode/directory" ) )
+    {
+        kDebug( 9000 ) << "cannot open directory: " << url.url() << endl;
+        return 0L;
+    }
+
+    KParts::Part * part = 0;
+
+    if ( !m_presetEncoding.isNull() || m_partController->isTextType( mimeType ) )
+        part = m_partController->createTextPart( url, m_presetEncoding, activate );
+    else
+        part = m_partController->createPart( url );
+
+    /*The open as dialog asks for text right now*/
+    if ( !part )
+        if ( openAsDialog( url, mimeType ) )
+            part = m_partController->createTextPart( url, m_presetEncoding, activate );
+        else
+            return 0;
+
+    addHistoryEntry();
+
+    // we can have ended up with a texteditor,
+    // in which case need to treat it as such
+    KDevDocument *document = 0;
+    if ( qobject_cast<KTextEditor::Document*>( part ) )
+        document = integratePart( part, part->widget(), activate );
+    else
+        document = integratePart( part );
+
+    m_openRecentAction->addUrl( url );
+    m_openRecentAction->saveEntries( KGlobal::config(),
+                                     "RecentDocuments" );
+    setCursorPosition( part, cursor );
+
+    return document;
+}
+
+void DocumentController::setCursorPosition( KParts::Part *part,
+        const KTextEditor::Cursor &cursor )
+{
+    if ( cursor.line() < 0 )
+        return ;
+
+    if ( !qobject_cast<KTextEditor::Document*>( part ) )
+        return ;
+
+    KTextEditor::View *view = qobject_cast<KTextEditor::View *>( part->widget() );
+
+    KTextEditor::Cursor c = cursor;
+    if ( c.column() == 1 )
+        c.setColumn( 0 );
+
+    if ( view )
+        view->setCursorPosition( c );
+}
+
+bool DocumentController::openAsDialog( const KUrl &url, KMimeType::Ptr mimeType )
+{
+    MimeWarningDialog dialog;
+    dialog.text2->setText( QString( "<qt><b>%1</b></qt>" ).arg( url.path() ) );
+    dialog.text3->setText( dialog.text3->text().arg( mimeType->name() ) );
+
+    if ( dialog.exec() == QDialog::Accepted )
+    {
+        if ( dialog.open_with_kde->isChecked() )
+        {
+            KRun::runUrl( url, mimeType->name(), 0 );
+            return false; //FIXME
+        }
+        else if ( dialog.always_open_as_text->isChecked() )
+        {
+            KConfig * config = KGlobal::config();
+            config->setGroup( "General" );
+            QStringList textTypesList = config->readEntry( "TextTypes",
+                                        QStringList() );
+            textTypesList << mimeType->name();
+            config->writeEntry( "TextTypes", textTypesList );
+            return true;
+        }
+    }
+    return false;
 }
 
 KDevDocument* DocumentController::showDocumentation( const KUrl &url, bool newWin )
@@ -384,33 +505,12 @@ bool DocumentController::querySaveDocuments()
 
 void DocumentController::openEmptyTextDocument()
 {
-    KTextEditor::Document * document = createEditorPart( KUrl(), true );
-
-    if ( document )
+    if ( KTextEditor::Document * document =
+                m_partController->createTextPart( KUrl(), m_presetEncoding, true ) )
     {
-        if ( !m_presetEncoding.isNull() )
-        {
-            KParts::BrowserExtension * extension =
-                KParts::BrowserExtension::childObject( document );
-            if ( extension )
-            {
-                KParts::URLArgs args;
-                args.serviceType = QString( "text/plain;" ) + m_presetEncoding;
-                extension->setURLArgs( args );
-            }
-            m_presetEncoding = QString::null;
-        }
-
-        if ( !document->widget() )
-        {
-            document->createView( TopLevel::getInstance() ->main() );
-        }
-
         addHistoryEntry();
-        integratePart( document, document->widget(),
-                       true );
-
-        //         EditorProxy::getInstance() ->setCursorPosition( document, KTextEditor::Cursor() );
+        integratePart( document, document->widget(), true );
+        setCursorPosition( document, KTextEditor::Cursor() );
     }
 }
 
@@ -418,215 +518,6 @@ void DocumentController::integrateTextEditorPart( KTextEditor::Document* doc )
 {
     connect( doc, SIGNAL( textChanged( KTextEditor::Document* ) ),
              this, SLOT( slotNewStatus( KTextEditor::Document* ) ) );
-}
-
-KDevDocument* DocumentController::editDocumentInternal( const KUrl & inputUrl,
-        const KTextEditor::Cursor& cursor,
-        bool activate )
-{
-    // For the splash screen...
-    emit openingDocument("Opening: " + inputUrl.fileName());
-
-    //     kDebug( 9000 ) << k_funcinfo
-    //     << inputUrl.prettyUrl()
-    //     << " cursor " << cursor
-    //     << " activate? " << activate << endl;
-
-    KUrl url = inputUrl;
-
-    // is it already open?
-    // (Try this once before verifying the URL, we could be dealing with a
-    // document that no longer exists on disc)
-    if ( KDevDocument * existingDoc = documentForUrl( url ) )
-    {
-        addHistoryEntry();
-        activateDocument( existingDoc );
-        //         EditorProxy::getInstance() ->setCursorPosition( existingPart, cursor );
-        return existingDoc;
-    }
-
-    // Make sure the URL exists
-    if ( !url.isValid() || !KIO::NetAccess::exists( url, false, 0 ) )
-    {
-        bool done = false;
-
-        // Try to find this file in the current project's list instead
-        if ( KDevApi::self() ->project() )
-        {
-            if ( url.isRelativeUrl( url.url() ) )
-            {
-                KUrl dir( KDevApi::self() ->project() ->projectDirectory() );
-                KUrl relURL = KUrl( dir, url.url() );
-
-                kDebug( 9000 ) << k_funcinfo
-                << "Looking for file in project dir: "
-                << KDevApi::self() ->project() ->projectDirectory()
-                << " url " << url.url()
-                << " transformed to " << relURL.url()
-                << ": " << done << endl;
-                if ( relURL.isValid()
-                        && KIO::NetAccess::exists( url, false, 0 ) )
-                {
-                    url = relURL;
-                    done = true;
-                }
-            }
-        }
-
-        if ( !done && ( !url.isValid()
-                        || !KIO::NetAccess::exists( url, false, 0 ) ) )
-        {
-            // Not found - prompt the user to find it?
-            kDebug( 9000 ) << "cannot find URL: " << url.url() << endl;
-            return 0L;
-        }
-    }
-
-    // We now have a url that exists ;)
-
-    // clean it and resolve possible symlink
-    url.cleanPath( KUrl::SimplifyDirSeparators );
-    if ( url.isLocalFile() )
-    {
-        QString path = QFileInfo( url.path() ).canonicalFilePath();
-        if ( !path.isEmpty() )
-            url.setPath( path );
-    }
-
-    KMimeType::Ptr mimeType = KMimeType::findByURL( url );
-
-    kDebug( 9000 ) << "mimeType = " << mimeType->name() << endl;
-
-    // is the URL pointing to a directory?
-    if ( mimeType->is( "inode/directory" ) )
-    {
-        return 0L;
-    }
-
-    if ( !m_presetEncoding.isNull() )
-    {
-        m_openNextAsText = true;
-    }
-
-    KConfig *config = KGlobal::config();
-    config->setGroup( "General" );
-
-    QStringList textTypesList = config->readEntry( "TextTypes", QStringList() );
-    if ( textTypesList.contains( mimeType->name() ) )
-    {
-        m_openNextAsText = true;
-    }
-
-    bool isText = false;
-    QVariant v = mimeType->property( "X-KDE-text" );
-    kDebug( 9000 ) << mimeType->property( "X-KDE-text" ) << endl;
-    if ( v.isValid() )
-        isText = v.toBool();
-
-    // is this regular text - open in editor
-    if ( m_openNextAsText || isText
-            || mimeType->is( "text/plain" )
-            || mimeType->is( "text/html" )
-            || mimeType->is( "application/x-zerosize" ) )
-    {
-        KTextEditor::Document * editorPart = createEditorPart( url, activate );
-        if ( editorPart )
-        {
-            if ( !m_presetEncoding.isNull() )
-            {
-                KParts::BrowserExtension * extension =
-                    KParts::BrowserExtension::childObject( editorPart );
-                if ( extension )
-                {
-                    KParts::URLArgs args;
-                    args.serviceType = QString( "text/plain;" )
-                                       + m_presetEncoding;
-                    extension->setURLArgs( args );
-                }
-                m_presetEncoding = QString::null;
-            }
-
-            editorPart->openURL( url );
-
-            if ( !editorPart->widget() )
-            {
-                // The tab widget does the reparenting
-                editorPart->createView( TopLevel::getInstance() ->main() ->centralWidget() );
-            }
-
-            addHistoryEntry();
-            KDevDocument *document =
-                integratePart( editorPart, editorPart->widget(), activate );
-
-            //             EditorProxy::getInstance() ->setCursorPosition( editorPart,
-            //                     cursor );
-
-            m_openNextAsText = false;
-
-            m_openRecentAction->addUrl( url );
-            m_openRecentAction->saveEntries( KGlobal::config(),
-                                             "RecentDocuments" );
-
-            return document;
-        }
-    }
-
-    // OK, it's not text let's see what else we can come up with..
-    if ( KParts::ReadOnlyPart * part = readOnly( m_partController->createPart( url ) ) )
-    {
-        // create the object of the desired class
-        part->openURL( url );
-        addHistoryEntry();
-
-        // we can have ended up with a texteditor,
-        // in which case need to treat it as such
-        KDevDocument *document = 0;
-        if ( dynamic_cast<KTextEditor::Editor*>( part ) )
-        {
-            document = integratePart( part, part->widget(), activate );
-            //                 EditorProxy::getInstance() ->setCursorPosition( part, cursor );
-        }
-        else
-        {
-            document = integratePart( part );
-        }
-
-        m_openRecentAction->addUrl( url );
-        m_openRecentAction->saveEntries( KGlobal::config(),
-                                         "RecentDocuments" );
-
-        return document;
-    }
-    else
-    {
-        MimeWarningDialog dlg;
-        dlg.text2->setText( QString( "<qt><b>%1</b></qt>" ).arg( url.path() ) );
-        dlg.text3->setText( dlg.text3->text().arg( mimeType->name() ) );
-
-        if ( dlg.exec() == QDialog::Accepted )
-        {
-            if ( dlg.open_with_kde->isChecked() )
-            {
-                KRun::runUrl( url, mimeType->name(), 0 );
-            }
-            else
-            {
-                if ( dlg.always_open_as_text->isChecked() )
-                {
-                    KConfig * config = KGlobal::config();
-                    config->setGroup( "General" );
-                    QStringList textTypesList = config->readEntry( "TextTypes",
-                                                QStringList() );
-                    textTypesList << mimeType->name();
-                    config->writeEntry( "TextTypes", textTypesList );
-                }
-                m_openNextAsText = true;
-                return editDocument( url, cursor );
-            }
-        }
-    }
-
-    return 0L;
 }
 
 void DocumentController::slotSave()
@@ -1081,20 +972,6 @@ KParts::Factory *DocumentController::findPartFactory( const QString &mimeType,
     return 0;
 }
 
-KTextEditor::Document *DocumentController::createEditorPart( const KUrl &url, bool activate )
-{
-    kDebug( 9000 ) << k_funcinfo << endl;
-    KGlobal::config() ->setGroup( "Editor" );
-    QString preferred =
-        KGlobal::config() ->readPathEntry( "EmbeddedKTextEditor" );
-
-    return qobject_cast<KTextEditor::Document *>( m_partController->createPart(
-                "text/plain",
-                "KTextEditor/Document",
-                "KTextEditor::Document",
-                preferred ) );
-}
-
 KDevDocument* DocumentController::integratePart( KParts::Part *part, QWidget* widget, bool activate )
 {
     // tell the parts we loaded a document
@@ -1198,7 +1075,7 @@ bool DocumentController::reactToDirty( KDevDocument* document, unsigned char rea
         return false;
     }
 
-    if ( reason == 3 )                                                         // means the file was deleted
+    if ( reason == 3 )                                                                                                // means the file was deleted
     {
         KMessageBox::sorry( TopLevel::getInstance() ->main(),
                             i18n( "Warning: The file \"%1\" has been deleted on"
