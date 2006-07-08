@@ -40,8 +40,9 @@ KDevStatusBar::KDevStatusBar(QWidget *parent, const char *name)
     _status->setAlignment(Qt::AlignCenter);
     addWidget(_status, 0, true);
 
-    connect(DocumentController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
-        this, SLOT(activePartChanged(KParts::Part*)));
+    //FIXME PORT
+//     connect(DocumentController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
+//         this, SLOT(activePartChanged(KParts::Part*)));
 }
 
 

@@ -178,8 +178,9 @@ void MainWindowShare::createActions()
   m_configureEditorAction->setWhatsThis(i18n("<b>Configure editor</b><p>Opens editor configuration dialog."));
   m_configureEditorAction->setEnabled( false );
 
-  KDevDocumentController * documentController = KDevApi::self()->documentController();
-  connect( documentController, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )) );
+    //FIXME PORT
+//   KDevDocumentController * documentController = KDevApi::self()->documentController();
+//   connect( documentController, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )) );
 }
 
 void MainWindowShare::slotReportBug()

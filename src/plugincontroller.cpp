@@ -74,8 +74,6 @@ PluginController *PluginController::getInstance()
 PluginController::PluginController()
   : KDevPluginController()
 {
-  connect( Core::getInstance(), SIGNAL(configWidget(KDialog*)),
-           this, SLOT(slotConfigWidget(KDialog*)) );
 
 /*  m_defaultProfile = QLatin1String( "FullIDE" );
   m_defaultProfilePath = kapp->dirs()->localkdedir() + "/" +
