@@ -173,7 +173,7 @@ void ProjectManager::saveSettings()
   m_openRecentProjectAction->saveEntries(config, "RecentProjects");
 }
 
-void ProjectManager::loadDefaultProject()
+bool ProjectManager::loadDefaultProject()
 {
   KConfig *config = KGlobal::config();
   config->setGroup("General Options");
@@ -182,7 +182,9 @@ void ProjectManager::loadDefaultProject()
   if (!project.isEmpty() && readProject)
   {
       loadProject(KUrl(project));
+      return true;
   }
+  return false;
 }
 
 bool ProjectManager::loadProject(const KUrl &url)

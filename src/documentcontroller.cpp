@@ -62,7 +62,6 @@
 #include "documentationpart.h"
 #include "mimewarningdialog.h"
 #include "kdevlanguagesupport.h"
-#include "kdevhtmlpart.h"
 
 #include "documentcontroller.h"
 
@@ -219,57 +218,8 @@ bool DocumentController::openAsDialog( const KUrl &url, KMimeType::Ptr mimeType 
 KDevDocument* DocumentController::showDocumentation( const KUrl &url, bool newWin )
 {
     //FIXME Port to new documentcontroller API
-    // possibly could env vars
-    //     QString fixedPath = HTMLDocumentationPart::resolveEnvVarsInURL( url.url() );
-    //     KUrl docUrl( fixedPath );
-    //     kDebug( 9000 ) << "SHOW: " << docUrl.url() << endl;
-    //
-    //     if ( docUrl.isLocalFile()
-    //             && KMimeType::findByURL( docUrl ) ->name() != "text/html" )
-    //     {
-    //         // a link in a html-file pointed to a local text file - display
-    //         // it in the editor instead of a html-view to avoid uglyness
-    //         return editDocument( docUrl );
-    //     }
-    //
-    //     addHistoryEntry();
-    //
-    //     KDevHTMLPart *html = htmlPartForURL( activeDocument() );
-    //     if ( !html || newWin )
-    //     {
-    //         html = new HTMLDocumentationPart();
-    //         html->openURL(docUrl);
-    //         integratePart( html );
-    //         connect( html, SIGNAL( documentURLChanged( const KUrl &, const KUrl & ) ),
-    //                  this, SLOT( slotHTMLDocumentURLChanged( const KUrl &, const KUrl & ) ) );
-    //     }
-    //     else
-    //     {
-    //         activatePart( html );
-    //     }
-    //
-    //     html->openURL( docUrl );
-    //
-    //     return documentForPart(html);
     return 0;
 }
-
-KDevHTMLPart* DocumentController::htmlPartForURL( KDevDocument* document ) const
-{
-    return qobject_cast<KDevHTMLPart*>( document->part() );
-}
-
-// KParts::Part * DocumentController::partForWidget( const QWidget * widget ) const
-// {
-//     foreach ( KParts::Part * part, parts() )
-//     {
-//         if ( part->widget() == widget )
-//         {
-//             return part;
-//         }
-//     }
-//     return 0;
-// }
 
 QList<KDevDocument*> DocumentController::openDocuments( ) const
 {
@@ -1308,14 +1258,6 @@ void DocumentController::activateDocument( KDevDocument * document )
         widget->show();
         widget->setFocus();
     }
-}
-
-void DocumentController::slotHTMLDocumentURLChanged( const KUrl & oldUrl, const KUrl & newUrl )
-{
-    KParts::Part * part = qobject_cast<KParts::Part*>( sender() );
-    if ( !part )
-        return ;
-    emit documentUrlChanged( documentForPart( part ), oldUrl, newUrl );
 }
 
 #include "documentcontroller.moc"

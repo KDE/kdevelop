@@ -51,7 +51,7 @@ public:
 
   void loadSettings();
   void saveSettings();
-  void loadDefaultProject();
+  bool loadDefaultProject();
 
   bool projectLoaded() const;
 

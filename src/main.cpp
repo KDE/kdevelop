@@ -110,8 +110,6 @@ int main( int argc, char *argv[] )
                       SIGNAL( openingDocument( const QString & ) ),
                       splash, SLOT( showMessage( const QString & ) ) );
 
-    PluginController::getInstance() ->loadInitialPlugins();
-
     Core::getInstance() ->doEmitCoreInitialized();
 
     if ( splash )
@@ -120,8 +118,7 @@ int main( int argc, char *argv[] )
     bool openProject = false;
     if ( args->count() == 0 )
     {
-        ProjectManager::getInstance() ->loadDefaultProject();
-        openProject = true;
+        openProject = ProjectManager::getInstance() ->loadDefaultProject();
     }
     else if ( args->count() > 0 )
     {
@@ -138,12 +135,16 @@ int main( int argc, char *argv[] )
     {
         QObject::connect( PluginController::getInstance(), SIGNAL( pluginsLoaded() ),
                           TopLevel::getInstance() ->main(), SLOT( loadSettings() ) );
-        delete splash;
+        QObject::connect( TopLevel::getInstance() ->main(), SIGNAL( finishedLoading() ),
+                          splash, SLOT( deleteLater() ) );
+        PluginController::getInstance() ->loadInitialPlugins();
     }
     else
     {
         QObject::connect( Core::getInstance(), SIGNAL( projectOpened() ),
                           TopLevel::getInstance() ->main(), SLOT( loadSettings() ) );
+        QObject::connect( TopLevel::getInstance() ->main(), SIGNAL( finishedLoading() ),
+                          splash, SLOT( deleteLater() ) );
     }
 
     if ( !openProject )
@@ -153,9 +154,6 @@ int main( int argc, char *argv[] )
             DocumentController::getInstance() ->editDocument( KUrl( args->url( a ) ) );
         }
     }
-
-    QObject::connect( TopLevel::getInstance() ->main(), SIGNAL( finishedLoading() ),
-                      splash, SLOT( deleteLater() ) );
 
     return app.exec();
 }

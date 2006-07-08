@@ -35,9 +35,7 @@ class QTabWidget;
 class KAction;
 class KToolBarPopupAction;
 class KRecentFilesAction;
-class HTMLDocumentationPart;
 class KDirWatch;
-class KDevHTMLPart;
 
 /**
 Implementation for the KDevDocumentController Interface
@@ -60,8 +58,6 @@ public:
 
     KDevDocument* documentForPart( KParts::Part* part ) const;
 
-    //     KParts::Part* partForWidget( const QWidget * widget ) const;
-
     QList<KDevDocument*> openDocuments() const;
 
     bool saveAllDocuments();
@@ -83,8 +79,6 @@ public:
     KDevDocument* activeDocument() const;
     //END KDevDocumentController
 
-    KDevHTMLPart* htmlPartForURL( KDevDocument* document ) const;
-
     static void createInstance( QWidget *parent );
     static DocumentController *getInstance();
     bool readyToClose();
@@ -101,7 +95,6 @@ public slots:
     void slotCloseWindow();
     void slotCloseAllWindows();
     void slotCloseOtherWindows();
-    void slotHTMLDocumentURLChanged( const KUrl& oldUrl, const KUrl& newUrl );
 
 private slots:
     void slotSaveAllDocuments();
