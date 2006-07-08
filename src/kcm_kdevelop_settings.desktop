@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kdevelop_settings
+X-KDE-FactoryName=KDevelopPreferencesFactory
+X-KDE-ParentApp=kdevelop
+X-KDE-ParentComponents=kdevelop
+
+Name=KDevelop Settings
+Comment=Configure KDevelop's global settings
+

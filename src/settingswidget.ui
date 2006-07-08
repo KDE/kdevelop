@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>SettingsWidget</class>
  <widget class="QWidget" name="SettingsWidget" >
   <property name="geometry" >
@@ -22,18 +19,18 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item rowspan="2" row="1" column="0" >
+   <item row="3" column="1" >
     <spacer>
      <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeType" >
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Expanding</enum>
      </property>
      <property name="sizeHint" >
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>61</height>
       </size>
      </property>
     </spacer>
@@ -52,12 +49,12 @@
         <string>Default pro&amp;jects directory:</string>
        </property>
        <property name="buddy" >
-        <cstring>projectsURL</cstring>
+        <cstring>kcfg_defaultProjectDir</cstring>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KUrlRequester" name="projectsURL" >
+      <widget class="KUrlRequester" name="kcfg_defaultProjectDir" >
        <property name="focusPolicy" >
         <enum>Qt::WheelFocus</enum>
        </property>
@@ -65,97 +62,17 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="0" colspan="2" >
-    <widget class="QLabel" name="textLabel2_2" >
+   <item row="1" column="1" >
+    <widget class="QCheckBox" name="kcfg_readLastOnStartup" >
      <property name="text" >
-      <string>&lt;qt>&lt;h3>Output View Settings&lt;/h3>&lt;/qt></string>
+      <string>Lo&amp;ad last project on startup</string>
      </property>
-     <property name="textFormat" >
-      <enum>Qt::AutoText</enum>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-     </property>
-     <property name="wordWrap" >
-      <bool>true</bool>
+     <property name="shortcut" >
+      <string>Alt+A</string>
      </property>
     </widget>
    </item>
-   <item row="12" column="1" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType" >
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>20</width>
-       <height>61</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="10" column="0" colspan="2" >
-    <widget class="QLabel" name="textLabel5_2" >
-     <property name="text" >
-      <string>&lt;qt>&lt;h3>Terminal Emulation&lt;/h3>&lt;/qt></string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignTop</set>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="1" >
-    <widget class="Q3ButtonGroup" name="terminalButtonGroup" >
-     <property name="title" >
-      <string/>
-     </property>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="useOtherTerminal" >
-        <property name="text" >
-         <string>&amp;Other:</string>
-        </property>
-        <property name="shortcut" >
-         <string>Alt+O</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" colspan="2" >
-       <widget class="QRadioButton" name="useKDETerminal" >
-        <property name="text" >
-         <string>Use &amp;KDE setting</string>
-        </property>
-        <property name="shortcut" >
-         <string>Alt+K</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QLineEdit" name="terminalEdit" >
-        <property name="enabled" >
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="11" column="0" >
+   <item rowspan="2" row="1" column="0" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
@@ -166,220 +83,10 @@
      <property name="sizeHint" >
       <size>
        <width>20</width>
-       <height>50</height>
+       <height>40</height>
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="9" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType" >
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>16</width>
-       <height>60</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="9" column="1" >
-    <widget class="Q3ButtonGroup" name="designerButtonGroup" >
-     <property name="title" >
-      <string/>
-     </property>
-     <property name="flat" >
-      <bool>false</bool>
-     </property>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QRadioButton" name="embeddedDesignerRadioButton" >
-        <property name="whatsThis" >
-         <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to integrate the UI designer into KDevelop.</string>
-        </property>
-        <property name="text" >
-         <string>Use KDe&amp;velop's embedded designer</string>
-        </property>
-        <property name="shortcut" >
-         <string>Alt+V</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="seperateAppRadioButton" >
-        <property name="whatsThis" >
-         <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to run KDevelop's UI designer as a separate program.</string>
-        </property>
-        <property name="text" >
-         <string>Run KDevelop's &amp;designer as a separate application</string>
-        </property>
-        <property name="shortcut" >
-         <string>Alt+D</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QRadioButton" name="qtDesignerRadioButton" >
-        <property name="whatsThis" >
-         <string>Check this button if you wish to use Qt Designer rather than KDevelop's integrated designer.</string>
-        </property>
-        <property name="text" >
-         <string>Run Qt Desi&amp;gner</string>
-        </property>
-        <property name="shortcut" >
-         <string>Alt+G</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item rowspan="4" row="4" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType" >
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>16</width>
-       <height>80</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="8" column="0" colspan="2" >
-    <widget class="QLabel" name="textLabel5" >
-     <property name="text" >
-      <string>&lt;qt>&lt;h3>UI Designer Integration&lt;/h3>&lt;/qt></string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignTop</set>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1" >
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="compilerLabel" >
-       <property name="text" >
-        <string>&amp;Compiler output:</string>
-       </property>
-       <property name="buddy" >
-        <cstring>compileOutputCombo</cstring>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="compileOutputCombo" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>3</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="toolTip" >
-        <string/>
-       </property>
-       <item>
-        <property name="text" >
-         <string>Very Short</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Short</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Long</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="4" column="1" >
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="buttonLabel" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>4</hsizetype>
-         <vsizetype>5</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="toolTip" >
-        <string/>
-       </property>
-       <property name="text" >
-        <string>Window &amp;font:</string>
-       </property>
-       <property name="buddy" >
-        <cstring>outputViewFontCombo</cstring>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QFontComboBox" name="outputViewFontCombo" >
-       <property name="toolTip" >
-        <string>The font to use for the output views</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="7" column="1" >
-    <widget class="QCheckBox" name="dirNavigMsgCheckBox" >
-     <property name="text" >
-      <string>Directory &amp;navigation messages</string>
-     </property>
-     <property name="shortcut" >
-      <string>Alt+N</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1" >
-    <widget class="QCheckBox" name="lineWrappingCheckBox" >
-     <property name="text" >
-      <string>Line &amp;wrapping</string>
-     </property>
-     <property name="shortcut" >
-      <string>Alt+W</string>
-     </property>
-    </widget>
    </item>
    <item row="0" column="0" colspan="2" >
     <widget class="QLabel" name="textLabel2" >
@@ -394,34 +101,16 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="QCheckBox" name="lastProjectCheckbox" >
-     <property name="text" >
-      <string>Lo&amp;ad last project on startup</string>
-     </property>
-     <property name="shortcut" >
-      <string>Alt+A</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends>Q3GroupBox</extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
    <header>kurlrequester.h</header>
    <container>1</container>
-   <pixmap></pixmap>
   </customwidget>
  </customwidgets>
  <resources/>

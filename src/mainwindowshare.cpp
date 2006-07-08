@@ -52,7 +52,7 @@
 #include <kdeversion.h>
 #include <kdebug.h>
 #include <knotifydialog.h>
-
+#include <ksettings/dialog.h>
 
 #include <config.h>
 #include <kglobal.h>
@@ -80,6 +80,8 @@ MainWindowShare::MainWindowShare(QObject* pParent)
   ,m_stopProcesses(0)
 {
   m_pMainWnd = (KParts::MainWindow*)pParent;
+  m_settingsDialog = 0;
+
 }
 
 void MainWindowShare::init()
@@ -298,31 +300,10 @@ void MainWindowShare::slotConfigureNotifications()
 
 void MainWindowShare::slotSettings()
 {
-    KPageDialog dlg( m_pMainWnd );
-    dlg.setFaceType( KPageDialog::List );
-    dlg.setCaption( i18n("Configure KDevelop") );
-    dlg.setButtons( KDialog::Help | KDialog::Ok | KDialog::Cancel );
-    dlg.setDefaultButton( KDialog::Ok );
-    dlg.setHelp("setup");
+    if ( !m_settingsDialog )
+        m_settingsDialog = new KSettings::Dialog( KSettings::Dialog::Static, m_pMainWnd );
 
-    ShellExtension::getInstance()->createGlobalSettingsPage(&dlg);
-
-    KConfig* config = KGlobal::config();
-
-    config->setGroup("Global Settings Dialog");
-    int height = config->readEntry( "Height", 600 );
-    int width = config->readEntry( "Width", 800 );
-
-    dlg.resize( width, height );
-
-    dlg.exec();
-
-    config->setGroup("Global Settings Dialog");
-    config->writeEntry( "Height", dlg.size().height() );
-    config->writeEntry( "Width", dlg.size().width() );
-
-    if ( dlg.result() != QDialog::Rejected )
-        ShellExtension::getInstance()->acceptGlobalSettingsPage(&dlg);
+    m_settingsDialog->show();
 }
 
 void MainWindowShare::slotConfigureEditors()

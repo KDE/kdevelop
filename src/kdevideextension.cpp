@@ -38,8 +38,6 @@
 #include <kdevplugincontroller.h>
 #include <kglobal.h>
 
-#include "ui_settingswidget.h"
-
 KDevIDEExtension::KDevIDEExtension()
  : ShellExtension()
 {
@@ -54,56 +52,11 @@ void KDevIDEExtension::init()
 
 void KDevIDEExtension::createGlobalSettingsPage(KPageDialog *dlg)
 {
-    KConfig* config = KGlobal::config();
-    settingsWidget = new QWidget( dlg );
-    gsw = new Ui::SettingsWidget();
-    gsw->setupUi( settingsWidget );
-    KPageWidgetItem *pwi = new KPageWidgetItem( settingsWidget, i18n("General") );
-    pwi->setHeader( i18n("General") );
-    pwi->setIcon( KIcon("kdevelop") );
-    dlg->addPage( pwi );
-
-    gsw->projectsURL->setMode((int)KFile::Directory);
-
-    config->setGroup("General Options");
-    gsw->lastProjectCheckbox->setChecked(config->readEntry("Read Last Project On Startup",true));
-    gsw->outputViewFontCombo->setCurrentFont( config->readEntry( "OutputViewFont", QFont() ).family() );
-    config->setGroup("MakeOutputView");
-    gsw->lineWrappingCheckBox->setChecked(config->readEntry("LineWrapping",true));
-    gsw->dirNavigMsgCheckBox->setChecked(config->readEntry("ShowDirNavigMsg",false));
-    gsw->compileOutputCombo->setCurrentIndex(config->readEntry("CompilerOutputLevel",2));
-    config->setGroup("General Options");
-    gsw->projectsURL->setUrl(config->readEntry("DefaultProjectsDir", QDir::homePath()+"/"));
-    gsw->designerButtonGroup->setButton( config->readEntry( "DesignerApp", 0 ) );
-
-    config->setGroup("TerminalEmulator");
-    gsw->terminalButtonGroup->setButton( config->readEntry( "UseKDESetting", 0 ) );
-    gsw->terminalEdit->setText( config->readEntry( QLatin1String("TerminalApplication"), QString("konsole") ) );
 }
 
 void KDevIDEExtension::acceptGlobalSettingsPage(KPageDialog* /*dlg*/)
 {
     KConfig* config = KGlobal::config();
-
-    config->setGroup("General Options");
-    config->writeEntry("DesignerApp", gsw->designerButtonGroup->selectedId());
-    config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
-    config->writePathEntry("DefaultProjectsDir", gsw->projectsURL->url());
-    config->writeEntry("OutputViewFont", gsw->outputViewFontCombo->currentFont());
-    config->setGroup("MakeOutputView");
-    config->writeEntry("LineWrapping",gsw->lineWrappingCheckBox->isChecked());
-    config->writeEntry("ShowDirNavigMsg",gsw->dirNavigMsgCheckBox->isChecked());
-    //current item id must be in sync with the enum!
-    config->writeEntry("CompilerOutputLevel",gsw->compileOutputCombo->currentIndex());
-    config->sync();
-    if( KDevPlugin *makeExt = KDevApi::self()->pluginController()->extension("KDevelop/MakeFrontend"))
-    {
-        static_cast<KDevMakeFrontend*>(makeExt)->updateSettingsFromConfig();
-    }
-
-    config->setGroup("TerminalEmulator");
-    config->writeEntry("UseKDESetting", gsw->useKDETerminal->isChecked() );
-    config->writeEntry("TerminalApplication", gsw->terminalEdit->text().trimmed() );
 }
 
 QString KDevIDEExtension::xmlFile()

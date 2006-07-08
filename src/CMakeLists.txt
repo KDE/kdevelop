@@ -41,9 +41,27 @@ kde4_automoc(${kdevshell_LIB_SRCS})
 kde4_add_ui_files(kdevshell_LIB_SRCS ${kdevshell_UI})
 kde4_add_ui3_files(kdevshell_LIB_SRCS ${kdevshell_UI3})
 kde4_add_library(kdevshell SHARED ${kdevshell_LIB_SRCS})
+kde4_add_kcfg_files(kdevshell_LIB_SRCS kdevelopconfig.kcfgc )
 target_link_libraries(kdevshell ${KDE4_KDECORE_LIBS} kdeui kdevinterfaces kdevutil kdevwidgets khtml ktexteditor)
 set_target_properties(kdevshell PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevshell DESTINATION ${LIB_INSTALL_DIR} )
+
+### Configuration module for general kdevelop settings
+
+set( kdev_config_SRC
+    kdeveloppreferences.cpp
+)
+set( kdevelop_UI
+    settingswidget.ui
+)
+kde4_automoc( ${kdev_config_SRC} )
+kde4_add_ui_files( kdev_config_SRC ${kdevelop_UI} )
+kde4_add_kcfg_files(kdev_config_SRC kdevelopconfig.kcfgc )
+kde4_add_plugin(kcm_kdevelop_settings ${kdev_config_SRC})
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kdevelop_settings )
+target_link_libraries(kcm_kdevelop_settings ${KDE4_KUTILS_LIBS} )
+install(TARGETS kcm_kdevelop_settings  DESTINATION ${PLUGIN_INSTALL_DIR})
+install( FILES kcm_kdevelop_settings.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -53,12 +71,9 @@ set(kdevelop_SRCS
     kdevideextension.cpp
 )
 
-set(kdevelop_UI
-    settingswidget.ui
-)
+
 
 kde4_automoc(${kdevelop_SRCS})
-kde4_add_ui_files(kdevelop_SRCS ${kdevelop_UI})
 kde4_add_executable(kdevelop ${kdevelop_SRCS})
 target_link_libraries(kdevelop ${KDE4_KDECORE_LIBS} kdevshell)
 install(TARGETS kdevelop DESTINATION ${BIN_INSTALL_DIR} )

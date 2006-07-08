@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg> 
+  <kcfgfile name="kdeveloprc"/>
+  <group name="General Options">
+    <entry name="readLastOnStartup" key="Read Last Project On Startup" type="Bool">
+        <label>Open the last project that was loaded on startup</label>
+        <whatsthis>If this option is set, KDevelop will reopen the project that
+        was open when KDevelop was closed. If this option is not set, no project
+        will be loaded during KDevelop startup</whatsthis>
+    </entry>
+    <entry name="defaultProjectDir" key="DefaultProjectsDir" type="Path">
+        <label>The default directory that project files will be stored in</label>
+    </entry>
+  </group>
+</kcfg>

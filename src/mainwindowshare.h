@@ -28,6 +28,11 @@ class KToolBarPopupAction;
 namespace KParts {
   class MainWindow;
 }
+
+namespace KSettings {
+  class Dialog;
+}
+
 /**
 Shared main window functionality.
 */
@@ -86,6 +91,8 @@ private:
 
   KParts::MainWindow*   m_pMainWnd;
   QList<KDevPlugin *>  activeProcesses;
+  KSettings::Dialog* m_settingsDialog;
+
 };
 
 #endif // __MAINWINDOWSHARE_H__
