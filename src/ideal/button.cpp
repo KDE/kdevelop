@@ -119,7 +119,9 @@ void Button::paintEvent(QPaintEvent *)
     QRect r = opt.rect;
 
     QPixmap pm(r.width(), r.height());
-//     pm.fill(QColor(255,255,255,0));
+#if QT_VERSION >= 0x040200
+    pm.fill(QColor(255,255,255,0));
+#endif
 
     QStylePainter p2(&pm, this);
     p2.drawControl(QStyle::CE_PushButton, opt);
