@@ -37,6 +37,7 @@ class QDomDocument;
 #include <ktoolbar.h>
 #include <krecentfilesaction.h>
 #include <krecentfilesaction.h>
+#include <ksettings/dialog.h>
 
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"
@@ -74,8 +75,9 @@ QString ProjectManager::projectDirectory( const QString& path, bool absolute ) {
 ProjectManager *ProjectManager::s_instance = 0;
 
 ProjectManager::ProjectManager()
-: m_info(0L)
- ,m_pProjectSession(new ProjectSession)
+: m_info(0L),
+  m_pProjectSession(new ProjectSession),
+  m_settingsDialog( 0 )
 {
 }
 
@@ -144,35 +146,14 @@ void ProjectManager::slotOpenProject()
 
 void ProjectManager::slotProjectOptions()
 {
-/*    FIXME Port!
-    KDialogBase dlg(KDialogBase::IconList, i18n("Project Options"),
-                  KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, TopLevel::getInstance()->main(),
-                  "project options dialog");
+    if ( !m_settingsDialog )
+    {
+        using namespace KSettings;
+        m_settingsDialog = new Dialog( QStringList( "kdevprojectconfig"),
+                                       KDevApi::self()->mainWindow()->main() );
+    }
 
-    KVBox *box = dlg.addVBoxPage( i18n("General"), i18n("General"), BarIcon( "kdevelop", K3Icon::SizeMedium ) );
-    GeneralInfoWidget *g = new GeneralInfoWidget(*KDevApi::self()->projectDom(), box, "general informations widget");
-    connect (&dlg, SIGNAL(okClicked()), g, SLOT(accept()));
-
-  KVBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", K3Icon::SizeMedium ) );
-  PartSelectWidget *w = new PartSelectWidget(*KDevApi::self()->projectDom(), vbox, "part selection widget");
-  connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-  connect( w, SIGNAL(accepted()), this, SLOT(loadLocalParts()) );
-
-  KConfig *config = KGlobal::config();
-  config->setGroup("Project Settings Dialog");
-  int height = config->readNumEntry( "Height", 600 );
-  int width = config->readNumEntry( "Width", 800 );
-
-  dlg.resize( width, height );
-
-  Core::getInstance()->doEmitProjectConfigWidget(&dlg);
-  dlg.exec();
-
-  saveProjectFile();
-
-  config->setGroup("Project Settings Dialog");
-  config->writeEntry( "Height", dlg.size().height() );
-  config->writeEntry( "Width", dlg.size().width() );*/
+    m_settingsDialog->show();
 }
 
 void ProjectManager::loadSettings()

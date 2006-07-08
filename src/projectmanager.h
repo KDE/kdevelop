@@ -19,6 +19,7 @@ class ProjectSession;
 class KRecentFilesAction;
 class KDevPlugin;
 
+namespace KSettings { class Dialog; }
 
 class ProjectInfo
 {
@@ -104,6 +105,9 @@ private:
   QString m_oldProfileName;
 
   bool m_toolbarStatus[5];
+
+  KSettings::Dialog* m_settingsDialog;
+
 };
 
 
