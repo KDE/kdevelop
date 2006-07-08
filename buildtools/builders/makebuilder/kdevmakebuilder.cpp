@@ -52,9 +52,6 @@ KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const QStringList &)
     m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
 
-//     connect(KDevApi::self()->core(), SIGNAL(projectConfigWidget(KDialog*)),
-//         this, SLOT(projectConfigWidget(KDialog*)));
-
     if (KDevMakeFrontend *make = project()->extension<KDevMakeFrontend>("KDevelop/MakeFrontend")) {
         connect(make, SIGNAL(commandFinished(const QString &)),
             this, SLOT(commandFinished(const QString &)));
@@ -126,19 +123,6 @@ bool KDevMakeBuilder::execute(KDevProjectItem *dom)
 {
     Q_UNUSED(dom);
     return false;
-}
-
-void KDevMakeBuilder::projectConfigWidget(KDialog *dlg)
-{
-    Q_ASSERT(project());
-
-#warning "port me"
-
-#if 0
-    KVBox *vbox = dlg->addVBoxPage(i18n("Make Options"), i18n("Make Options"), BarIcon( "make", K3Icon::SizeMedium ));
-    MakeOptionsWidget *widget = new MakeOptionsWidget(*project()->projectDom(), builder, vbox);
-    connect(dlg, SIGNAL(okClicked()), widget, SLOT(accept()));
-#endif
 }
 
 void KDevMakeBuilder::commandFinished(const QString &command)

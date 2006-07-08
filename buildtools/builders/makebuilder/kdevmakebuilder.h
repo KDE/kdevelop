@@ -49,7 +49,6 @@ public:
     virtual bool execute(KDevProjectItem *dom);
 
 private slots:
-    void projectConfigWidget(KDialog *dialog);
     void commandFinished(const QString &command);
     void commandFailed(const QString &command);
 
