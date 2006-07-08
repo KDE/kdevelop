@@ -44,12 +44,6 @@ public:
     @endcode*/
     static ShellExtension *getInstance() { return s_instance; }
 
-    /**Reimplement to create global settings page in the dialog @p dlg.*/
-    virtual void createGlobalSettingsPage(KPageDialog *dlg) = 0;
-    /**Reimplement to perform actions when the global settings page in the
-    dialog @p dlg is accepted (user clicked "Ok").*/
-    virtual void acceptGlobalSettingsPage(KPageDialog *dlg) = 0;
-
     /**Reimplement to return the name of KXMLGUI resource file for an application.*/
     virtual QString xmlFile() = 0;
 

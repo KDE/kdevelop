@@ -39,7 +39,6 @@ K_EXPORT_COMPONENT_FACTORY( kcm_kdevelop_settings, KDevelopPreferencesFactory( "
 KDevelopPreferences::KDevelopPreferences(QWidget *parent, const QStringList &args)
     : KCModule( KDevelopPreferencesFactory::instance(), parent, args )
 {
-    kDebug() << k_funcinfo << "loaded" << endl;
 
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;

@@ -25,14 +25,10 @@
 
 class KDialog;
 class QWidget;
-namespace Ui { class SettingsWidget; }
 
 class KDEVSHELL_EXPORT KDevIDEExtension : public ShellExtension {
 public:
     static void init();
-
-    virtual void createGlobalSettingsPage(KPageDialog *dlg);
-    virtual void acceptGlobalSettingsPage(KPageDialog *dlg);
 
     virtual QString xmlFile();
 
@@ -40,10 +36,6 @@ public:
 
 protected:
     KDevIDEExtension();
-
-private:
-    Ui::SettingsWidget *gsw;
-    QWidget* settingsWidget;
 };
 
 #endif

@@ -41,22 +41,11 @@
 KDevIDEExtension::KDevIDEExtension()
  : ShellExtension()
 {
-    gsw = 0;
-    settingsWidget = 0;
 }
 
 void KDevIDEExtension::init()
 {
     s_instance = new KDevIDEExtension();
-}
-
-void KDevIDEExtension::createGlobalSettingsPage(KPageDialog *dlg)
-{
-}
-
-void KDevIDEExtension::acceptGlobalSettingsPage(KPageDialog* /*dlg*/)
-{
-    KConfig* config = KGlobal::config();
 }
 
 QString KDevIDEExtension::xmlFile()
