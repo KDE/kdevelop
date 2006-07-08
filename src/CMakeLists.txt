@@ -59,7 +59,7 @@ kde4_add_ui_files( kdev_config_SRC ${kdevelop_UI} )
 kde4_add_kcfg_files(kdev_config_SRC kdevelopconfig.kcfgc )
 kde4_add_plugin(kcm_kdevelop_settings ${kdev_config_SRC})
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kdevelop_settings )
-target_link_libraries(kcm_kdevelop_settings ${KDE4_KUTILS_LIBS} )
+target_link_libraries(kcm_kdevelop_settings ${KDE4_KUTILS_LIBS} kdevinterfaces )
 install(TARGETS kcm_kdevelop_settings  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES kcm_kdevelop_settings.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

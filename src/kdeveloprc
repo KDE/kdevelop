@@ -21,6 +21,7 @@ EmbeddedKTextEditor=Embedded KDE Advanced Text Editor Component
 
 [General Options]
 Read Last Project On Startup=true
+Display Document Categories=true
 
 [Mainwindow]
 Height 768=548

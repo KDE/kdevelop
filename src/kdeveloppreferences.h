@@ -21,11 +21,11 @@
 #ifndef KDEVELOPPREFERENCES_H
 #define KDEVELOPPREFERENCES_H
 
-#include <kcmodule.h>
+#include <kdevcmodule.h>
 
 namespace Ui { class SettingsWidget; }
 
-class KDevelopPreferences : public KCModule
+class KDevelopPreferences : public KDevCModule
 {
 Q_OBJECT
 public:

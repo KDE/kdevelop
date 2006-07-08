@@ -10,6 +10,6 @@ X-KDE-FactoryName=KDevelopPreferencesFactory
 X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
 
-Name=KDevelop Settings
-Comment=Configure KDevelop's global settings
+Name=General
+Comment=Configure General settings
 

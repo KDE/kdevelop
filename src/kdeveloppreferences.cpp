@@ -37,7 +37,8 @@ typedef KGenericFactory<KDevelopPreferences> KDevelopPreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kdevelop_settings, KDevelopPreferencesFactory( "kcm_kdevelop_settings" ) )
 
 KDevelopPreferences::KDevelopPreferences(QWidget *parent, const QStringList &args)
-    : KCModule( KDevelopPreferencesFactory::instance(), parent, args )
+    : KDevCModule( KDevGeneralSettings::self(),
+                   KDevelopPreferencesFactory::instance(), parent, args )
 {
 
     QVBoxLayout* l = new QVBoxLayout( this );
@@ -59,12 +60,12 @@ KDevelopPreferences::~KDevelopPreferences( )
 
 void KDevelopPreferences::save()
 {
-    KCModule::save();
+    KDevCModule::save();
 }
 
 void KDevelopPreferences::load()
 {
-    KCModule::load();
+    KDevCModule::load();
 }
 
 void KDevelopPreferences::slotSettingsChanged()
