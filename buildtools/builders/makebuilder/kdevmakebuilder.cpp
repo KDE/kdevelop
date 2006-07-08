@@ -52,8 +52,8 @@ KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const QStringList &)
     m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
 
-    connect(KDevApi::self()->core(), SIGNAL(projectConfigWidget(KDialog*)),
-        this, SLOT(projectConfigWidget(KDialog*)));
+//     connect(KDevApi::self()->core(), SIGNAL(projectConfigWidget(KDialog*)),
+//         this, SLOT(projectConfigWidget(KDialog*)));
 
     if (KDevMakeFrontend *make = project()->extension<KDevMakeFrontend>("KDevelop/MakeFrontend")) {
         connect(make, SIGNAL(commandFinished(const QString &)),
