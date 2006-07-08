@@ -35,6 +35,7 @@ set(kdevinterfaces_LIB_SRCS
     kdevbuildmanager.cpp
     kdevprofile.cpp
     kdevprofileengine.cpp
+    kdevcmodule.cpp
 )
 
 kde4_automoc(${kdevinterfaces_LIB_SRCS})
@@ -78,6 +79,7 @@ install(FILES
     kdevbuildmanager.h
     kdevprofile.h
     kdevprofileengine.h
+    kdevcmodule.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/interfaces 
 )
 
