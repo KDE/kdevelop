@@ -60,7 +60,7 @@ struct ListNode
   }
 
   inline bool hasNext() const
-  { return index < next->index; }
+  { return ( next && index < next->index ); }
 
   inline int count() const
   { return 1 + toBack()->index; }
