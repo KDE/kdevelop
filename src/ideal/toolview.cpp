@@ -43,6 +43,7 @@ struct ToolViewPrivate {
         mainWindow->buttonBar(place)->addToolViewButton(button);
 
         dockWidget = 0;
+        isVisible = false;
     }
     ~ToolViewPrivate()
     {
@@ -57,6 +58,7 @@ struct ToolViewPrivate {
     Button *button;
     //toolview dock
     ToolViewWidget *dockWidget;
+    bool isVisible;
 };
 
 
@@ -120,9 +122,19 @@ ToolViewWidget *ToolView::dockWidget()
 
 void ToolView::setViewVisible(bool visible)
 {
+    if (d->isVisible == visible)
+        return;
+    d->isVisible = visible;
     ButtonBar *bar = d->mainWindow->buttonBar(d->place);
     if (visible)
+    {
         bar->setVisible(true);
+        foreach (ToolView *view, d->mainWindow->toolViews())
+        {
+            if ((view->place() == d->place) and (view != this))
+                view->hideView();
+        }
+    }
     d->button->setChecked(visible);
     dockWidget()->setVisible(visible);
 }
