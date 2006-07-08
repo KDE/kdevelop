@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg> 
+  <kcfgfile name="kdeveloprc"/>
+  <group name="General Options">
+    <entry name="displayMimeType" key="Display Document Categories" type="Bool">
+        <label>Display document categories (mimetypes) in the view</label>
+        <whatsthis>If this option is set, the Document View will organize documents
+        by their mimetype. If this option is not set, the Document View will not
+        organize the open documents by type.</whatsthis>
+    </entry>
+  </group>
+</kcfg>

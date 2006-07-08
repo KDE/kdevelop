@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=documentview_settings
+X-KDE-FactoryName=PreferencesFactory
+X-KDE-ParentApp=kdevelop
+X-KDE-ParentComponents=kdevelop
+
+Name=Document View
+Comment=Configure Document View settings
+
