@@ -21,6 +21,8 @@
 
 #include <ktexteditor/editinterface.h>
 
+#include "cppsupport_utils.h"
+
 AST* findNodeAt( AST* node, int line, int column )
 {
 	// kdDebug(9007) << "findNodeAt(" << node << ")" << endl;
@@ -154,7 +156,7 @@ QString declaratorToString( DeclaratorAST* declarator, const QString& scope, boo
 	
 	if ( declarator->parameterDeclarationClause() )
 	{
-		text += "( ";
+		text += formattedOpeningParenthesis();
 		
 		ParameterDeclarationListAST* l = declarator->parameterDeclarationClause() ->parameterDeclarationList();
 		if ( l != 0 )
@@ -177,7 +179,7 @@ QString declaratorToString( DeclaratorAST* declarator, const QString& scope, boo
 			}
 		}
 		
-		text += " )";
+		text += formattedClosingParenthesis();
 		
 		if ( declarator->constant() != 0 )
 			text += " const";

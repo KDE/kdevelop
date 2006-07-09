@@ -20,6 +20,9 @@
 QStringList typeNameList( const CodeModel* model );
 QMap<QString, QString> typedefMap( const CodeModel* model );
 
+QString formattedOpeningParenthesis(bool suppressSpace = false);
+QString formattedClosingParenthesis(bool suppressSpace = false);
+
 #endif // __cppsupport_utils_h 
 // kate: indent-mode csands; tab-width 4;
 

@@ -3072,10 +3072,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		else*/
 			entry.text = meth->name();
 		
-		if ( !args.size() )
-			entry.text += "(";
-		else
-			entry.text += "( ";
+		entry.text += formattedOpeningParenthesis(args.size() == 0);
 		
 		while ( argIt != args.end() )
 		{
@@ -3091,11 +3088,11 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 				text += ", ";
 		}
 
-		if ( text.isEmpty() )
-			entry.text += ")";
-		else
-			text += " )";
-
+		if ( args.size() == 0) {
+			entry.text += formattedClosingParenthesis(true);
+		} else {
+			text += formattedClosingParenthesis(false);
+		}
 		
 		entry.userdata += QString("%1").arg( meth->access() );
 		

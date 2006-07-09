@@ -1,9 +1,12 @@
-
-#include "cppsupport_utils.h"
-#include <codemodel.h>
 #include <qdir.h>
 
+#include <kapplication.h>
+#include <kconfig.h>
 #include <kdebug.h>
+
+#include <codemodel.h>
+
+#include "cppsupport_utils.h"
 
 static void typeNameList( QStringList& path, QStringList & lst, const CodeModel * model );
 static void typeNameList( QStringList& path, QStringList & lst, NamespaceDom ns );
@@ -113,6 +116,24 @@ static void typedefMap( QMap<QString, QString> & map, ClassDom klass )
 	const ClassList classList = klass->classList();
 	for( ClassList::ConstIterator it=classList.begin(); it!=classList.end(); ++it )
 		typedefMap( map, *it );
+}
+
+QString formattedOpeningParenthesis(bool suppressSpace)
+{
+	KConfig * config = kapp->config();
+	config->setGroup("AStyle");
+	bool use_spaces = config->readBoolEntry("PadParentheses", false);
+	if (not use_spaces or suppressSpace) return "(";
+	return "( ";
+}
+
+QString formattedClosingParenthesis(bool suppressSpace)
+{
+	KConfig * config = kapp->config();
+	config->setGroup("AStyle");
+	bool use_spaces = config->readBoolEntry("PadParentheses", false);
+	if (not use_spaces or suppressSpace) return ")";
+	return " )";
 }
 
 //kate: indent-mode csands; tab-width 4; space-indent off;
