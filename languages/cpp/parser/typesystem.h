@@ -243,6 +243,11 @@ private:
   const AbstractType* _M_elementType;
 };
 
+/**
+ * A class which creates types and holds a reference to those types.
+ *
+ * \todo there's something wrong with memory management here (not surprising given the magic in use)
+ */
 class TypeEnvironment
 {
 public:

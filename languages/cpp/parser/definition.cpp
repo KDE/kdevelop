@@ -16,35 +16,48 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "duchain.h"
+#include "definition.h"
 
-#include "ducontext.h"
+#include <ktexteditor/smartrange.h>
+#include <ktexteditor/document.h>
+
+using namespace KTextEditor;
+
+Definition::Definition( const AbstractType * type, const QString & identifier, Scope scope )
+  : m_scope(scope)
+  , m_type(type)
+  , m_identifier(identifier)
+{
+}
+
+void Definition::removeUse( SmartRange * range )
+{
+  m_uses.removeAll(range);
+}
+
+void Definition::addUse( SmartRange * range )
+{
+  m_uses.append(range);
+}
+
+const QList< SmartRange * > & Definition::uses( ) const
+{
+  return m_uses;
+}
+
+const QString & Definition::identifier( ) const
+{
+  return m_identifier;
+}
+
+const AbstractType * Definition::type( ) const
+{
+  return m_type;
+}
+
+Definition::Scope Definition::scope( ) const
+{
+  return m_scope;
+}
 
 // kate: indent-width 2;
-
-void DUChain::removeDocumentChain( const KUrl & document )
-{
-  m_chains.remove(document);
-}
-
-void DUChain::addDocumentChain( const KUrl & document, DUContext * chain )
-{
-  m_chains.insert(document, chain);
-}
-
-DUContext * DUChain::chainForDocument( const KUrl & document )
-{
-  return m_chains[document];
-}
-
-DUChain* DUChain::s_chain = 0;
-
-DUChain * DUChain::self( )
-{
-  if (!s_chain)
-    s_chain = new DUChain();
-
-  return s_chain;
-}
-
-#include "duchain.moc"

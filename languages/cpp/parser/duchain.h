@@ -19,120 +19,41 @@
 #ifndef DUCHAIN_H
 #define DUCHAIN_H
 
-#include <QList>
-#include <QPair>
+#include <QObject>
 
-#include <ktexteditor/cursor.h>
+#include <kurl.h>
 
-namespace KTextEditor { class SmartRange; }
-
-class AbstractType;
+class DUContext;
 
 /**
- * Represents a single variable definition in a definition-use chain.
- */
-class Definition
-{
-public:
-  enum Scope {
-    GlobalScope,
-    NamespaceScope,
-    ClassScope,
-    FunctionScope,
-    LocalScope
-  };
-
-  Definition(AbstractType* type, const QString& identifier, Scope scope);
-
-  Scope scope() const;
-
-  AbstractType* type() const;
-  const QString& identifier() const;
-
-  const QList<KTextEditor::SmartRange*>& uses() const;
-  void addUse(KTextEditor::SmartRange* range);
-  void removeUse(KTextEditor::SmartRange* range);
-
-private:
-  Scope m_scope;
-  AbstractType* m_type;
-  QString m_identifier;
-
-  QList<KTextEditor::SmartRange*> m_uses;
-};
-
-/**
- * A single context in source code, represented as a node in a
- * directed acyclic graph.
+ * Holds references to all top level source file contexts.
  *
- * \todo change child relationships to a linked list within the context?
+ * Decision was made to have a top-level context for each file, even though
+ * it may not be strictly necessary, for simplicity reasons.
+ *
+ * \todo to pull the sorting off properly, will need to know the location of
+ *       the defines used to pull in URLs other than the source file URL.
+ *
+ * \todo need to do some tricky reference counting; need to know the file include tree.
+ *       will probably have to assume an acyclic structure for this (ie. header guards)
+ *       otherwise the code wouldn't compile anyway.
  */
-class DUContext
+class DUChain : public QObject
 {
+  Q_OBJECT
+
 public:
-  DUContext(DUContext* parent = 0);
-  inline virtual ~DUContext() {};
+  DUContext* chainForDocument(const KUrl& document);
+  void addDocumentChain(const KUrl& document, DUContext* chain);
 
-  /**
-   * Returns the text range covered by this DUContext.  This usually includes the actual
-   * definition.
-   */
-  KTextEditor::SmartRange* textRange() const;
+  static DUChain* self();
 
-  const QList<DUContext*>& parentDUContexts() const;
-  const QList<DUContext*>& childDUContexts() const;
-
-  /**
-   * Returns the context in which \a identifier was defined, or
-   * null if one is not found.
-   */
-  DUContext* definitionDUContext(const QString& identifier);
-
-  /**
-   * Returns the type of any existing valid \a identifier in this context, or
-   * null if one is not found.
-   *
-   * \overload
-   */
-  Definition* definitionForIdentifier(const QString& identifier);
-
-  /**
-   * Returns the type of any \a identifier defined in this context, or
-   * null if one is not found.
-   */
-  Definition* definitionForLocalIdentifier(const QString& identifier);
-
-  /**
-   * Adds a new definition to this context. Passes back that definition for convenience.
-   */
-  Definition* addDefinition(Definition* definition);
-
-  // TODO perhaps make this take the abstract type? dunno.
-  void removeDefinition(const QString& name);
+public slots:
+  void removeDocumentChain(const KUrl& document);
 
 private:
-  QList<DUContext*> m_parentDUContexts;
-  QList<DUContext*> m_childDUContexts;
-
-  // TODO: consider splitting context into two separate classes with a common base class,
-  // to prevent having a list for every context where only one use is defined.
-  QList< QPair<QString, AbstractType*> > m_locallyDefinedIdentifiers;
-};
-
-/**
- * Holds references to all scopes in one parsed source file.
- * Uses a directed acyclic graph design.
- */
-class DUChain : public DUContext
-{
-public:
-  DUContext* contextAt(const KTextEditor::Cursor& pos) const;
-
-  QList< QPair<QString, AbstractType*> > definitionsAt(const KTextEditor::Cursor& position) const;
-  AbstractType* findDefinition(const QString& identifier, const KTextEditor::Cursor& position) const;
-
-private:
-  QList<DUContext*> m_contexts;
+  static DUChain* s_chain;
+  QMap<KUrl, DUContext*> m_chains;
 };
 
 #endif // DUCHAIN_H

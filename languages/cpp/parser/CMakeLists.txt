@@ -32,6 +32,9 @@ set(kdevcppparser_STAT_SRCS
     dubuilder.cpp
     typesystem.cpp
     duchain.cpp
+    ducontext.cpp
+    definition.cpp
+    textlocation.cpp
 )
 
 kde4_automoc(${kdevcppparser_STAT_SRCS})

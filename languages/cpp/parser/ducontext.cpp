@@ -1,0 +1,230 @@
+/* This  is part of KDevelop
+    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#include "ducontext.h"
+
+#include "typesystem.h"
+#include "definition.h"
+#include "duchain.h"
+
+using namespace KTextEditor;
+
+DUContext::DUContext()
+{
+}
+
+DUContext::~DUContext( )
+{
+  deleteChildContextsRecursively(url());
+
+  qDeleteAll(m_localDefinitions);
+}
+
+const QList< DUContext * > & DUContext::childContexts( ) const
+{
+  return m_childContexts;
+}
+
+const QList< DUContext * > & DUContext::parentContexts( ) const
+{
+  return m_parentContexts;
+}
+
+Definition * DUContext::addDefinition( Definition * newDefinition )
+{
+  foreach (Definition* definition, m_localDefinitions)
+    if (definition->identifier() == newDefinition->identifier()) {
+      kWarning() << k_funcinfo << "Attempted to add definition with identical identifier to a context." << endl;
+      // Shouldn't ever hit this, but return the old definition for now...
+      return definition;
+    }
+
+  m_localDefinitions.append(newDefinition);
+  return newDefinition;
+}
+
+Definition * DUContext::findLocalDefinition( const QString & identifier ) const
+{
+  foreach (Definition* definition, m_localDefinitions)
+    if (definition->identifier() == identifier)
+      return definition;
+
+  return 0;
+}
+
+Definition * DUContext::findDefinition( const QString & identifier ) const
+{
+  DUContext* context = definitionContext(identifier);
+  if (context)
+    return context->findLocalDefinition(identifier);
+
+  return 0;
+}
+
+DUContext * DUContext::definitionContext( const QString & identifier ) const
+{
+  if (findLocalDefinition(identifier))
+    return const_cast<DUContext*>(this);
+
+  QListIterator<DUContext*> it = m_parentContexts;
+  it.toBack();
+  while (it.hasPrevious()) {
+    if (DUContext* context = it.previous()->definitionContext(identifier))
+      return context;
+  }
+
+  return 0;
+}
+
+void DUContext::addChildContext( DUContext * context )
+{
+  for (int i = 0; i < m_childContexts.count(); ++i) {
+    DUContext* parent = m_childContexts.at(i);
+    if (context->textRange().start() < parent->textRange().start()) {
+      m_childContexts.insert(i, context);
+      context->addParentContext(this);
+      return;
+    }
+  }
+  m_childContexts.append(context);
+  context->addParentContext(this);
+}
+
+DUContext* DUContext::takeChildContext( DUContext * context )
+{
+  m_childContexts.removeAll(context);
+  context->removeParentContext(this);
+  return context;
+}
+
+void DUContext::removeParentContext( DUContext * context )
+{
+  m_parentContexts.removeAll(context);
+}
+
+void DUContext::addParentContext( DUContext * context )
+{
+  for (int i = 0; i < m_parentContexts.count(); ++i) {
+    DUContext* parent = m_parentContexts.at(i);
+    if (context->textRange().start() < parent->textRange().start()) {
+      m_parentContexts.insert(i, context);
+      return;
+    }
+  }
+  m_parentContexts.append(context);
+}
+
+DUContext * DUContext::findContext( const TextPosition& position, DUContext* parent) const
+{
+  if (!parent)
+    parent = const_cast<DUContext*>(this);
+
+  foreach (DUContext* context, parent->childContexts())
+    if (context->url() == position.url() && context->textRange().contains(position.textPosition())) {
+      DUContext* ret = findContext(position, context);
+      if (!ret)
+        ret = context;
+
+      return ret;
+    }
+
+  return 0;
+}
+
+QHash<QString, Definition*> DUContext::allDefinitions(const TextPosition& position) const
+{
+  QHash<QString, Definition*> ret;
+
+  DUContext* context = findContext(position, const_cast<DUContext*>(this));
+
+  // Iterate back up the chain
+  mergeDefinitions(context, ret);
+
+  return ret;
+}
+
+const QList<Definition*> DUContext::localDefinitions() const
+{
+  return m_localDefinitions;
+}
+
+void DUContext::mergeDefinitions(DUContext* context, QHash<QString, Definition*>& definitions) const
+{
+  foreach (Definition* definition, context->localDefinitions())
+    if (!definitions.contains(definition->identifier()))
+      definitions.insert(definition->identifier(), definition);
+
+  QListIterator<DUContext*> it = context->parentContexts();
+  it.toBack();
+  while (it.hasPrevious()) {
+    mergeDefinitions(it.previous(), definitions);
+  }
+}
+
+void DUContext::deleteLocalDefinitions()
+{
+  qDeleteAll(m_localDefinitions);
+  m_localDefinitions.clear();
+}
+
+QList<DUContext*> DUContext::takeChildContexts()
+{
+  QList<DUContext*> ret = m_childContexts;
+
+  foreach (DUContext* context, m_childContexts)
+    takeChildContext(context);
+
+  Q_ASSERT(m_childContexts.isEmpty());
+
+  return ret;
+}
+
+void DUContext::deleteChildContextsRecursively()
+{
+  deleteChildContextsRecursively(url());
+}
+
+void DUContext::deleteChildContextsRecursively(const KUrl& url)
+{
+  foreach (DUContext* context, m_childContexts) {
+    takeChildContext(context);
+    context->deleteChildContextsRecursively(url);
+    delete context;
+  }
+
+  Q_ASSERT(m_childContexts.isEmpty());
+}
+
+QList< Definition * > DUContext::clearLocalDefinitions( )
+{
+  QList< Definition * > ret = m_localDefinitions;
+  m_localDefinitions.clear();
+  return ret;
+}
+
+Definition * DUContext::findDefinition( const QString & identifier, const TextPosition & position, DUContext * parent ) const
+{
+  DUContext* context = findContext(position, parent);
+
+  if (context)
+    return context->findLocalDefinition(identifier);
+
+  return 0;
+}
+
+// kate: indent-width 2;

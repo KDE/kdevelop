@@ -18,6 +18,16 @@ add_test(kdevelop-parsertest ${EXECUTABLE_OUTPUT_PATH}/parsertest)
 
 ########### next target ###############
 
+set(duchaintest_SRCS test_duchain.cpp)
+
+kdevelop_add_test(${duchaintest_SRCS})
+kde4_add_executable(duchaintest ${duchaintest_SRCS})
+target_link_libraries(duchaintest ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kdevcppparser ktexteditor)
+add_test(kdevelop-duchaintest ${EXECUTABLE_OUTPUT_PATH}/duchaintest)
+
+
+########### next target ###############
+
 set(pooltest_SRCS test_pool.cpp)
 
 kdevelop_add_test(${pooltest_SRCS})

@@ -23,9 +23,11 @@
 
 #include "lexer.h"
 #include "duchain.h"
+#include "ducontext.h"
 #include "typesystem.h"
 #include "editorintegrator.h"
 #include "name_compiler.h"
+#include "definition.h"
 
 DUBuilder::DUBuilder (TokenStream *token_stream, DUChain* chain):
   _M_token_stream (token_stream), m_editor(new EditorIntegrator(token_stream)), m_nameCompiler(new NameCompiler(token_stream)),
@@ -91,8 +93,8 @@ void DUBuilder::closeContext(AST* node, DUContext* parent)
   KTextEditor::Cursor endPosition = m_editor->findPosition(node->end_token, EditorIntegrator::FrontEdge);
 
   // Set the correct end point of all of the contexts finishing here
-  foreach (DUContext* context, parent->childDUContexts())
-    context->textRange()->end().setPosition(endPosition);
+  foreach (DUContext* context, parent->childContexts())
+    context->textRange().end().setPosition(endPosition);
 
   // Go back to the context prior to this function definition
   m_currentContext = parent;
@@ -135,8 +137,8 @@ void DUBuilder::visitName (NameAST *node)
   m_nameCompiler->run(node);
 
   // Find definition
-  DUContext* definitionDUContext = m_currentContext->definitionDUContext(m_nameCompiler->name());
-  Definition* definition = definitionDUContext->definitionForLocalIdentifier(m_nameCompiler->name());
+  DUContext* definitionDUContext = m_currentContext->definitionContext(m_nameCompiler->name());
+  Definition* definition = definitionDUContext->findLocalDefinition(m_nameCompiler->name());
 
   KTextEditor::SmartRange* use = m_editor->createRange(node);
   definition->addUse(use);
@@ -151,10 +153,6 @@ DUContext * DUBuilder::newDeclaration( TypeSpecifierAST* type )
 
   // FIXME here we need to interface with the type system properly...
   AbstractType* abstractType = 0;//m_types->findIntegral(integralType);
-
-  DUContext* newDUContext = new DUContext(m_currentContext);
-
-  m_currentContext = newDUContext;
 
   Definition::Scope scope = Definition::GlobalScope;
   if (in_function_definition)
