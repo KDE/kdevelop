@@ -134,7 +134,7 @@ void ButtonContainer::removeButton(Button *button)
 {
     d->buttons.removeAll(button);
     d->buttonLayout->removeWidget(button);
-    delete button;
+//     delete button;
 }
 
 void ButtonContainer::setMode(ButtonMode mode)

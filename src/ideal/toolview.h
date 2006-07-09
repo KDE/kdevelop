@@ -58,6 +58,10 @@ public:
     Qt::DockWidgetArea dockPlace() const;
     /** @return the Qt dock place corresponding to the given @p place.*/
     static Qt::DockWidgetArea dockPlace(Ideal::Place place);
+    /** @return the Ideal place corresponding to the given Qt dock place.*/
+    static Ideal::Place idealPlace(Qt::DockWidgetArea dockPlace);
+    /**Repositions the toolview and its button to the new place.*/
+    virtual void setDockPlace(Qt::DockWidgetArea dockPlace);
 
     /** @return the button for this toolview.*/
     Button *button() const;
@@ -97,6 +101,14 @@ protected:
     /**Factory method to create the toolview button for this toolview.
     Reimplement to return Button subclasses here.*/
     virtual Button *createToolViewButton(Ideal::Place place, const QString &title, const QIcon &icon);
+
+protected slots:
+    /**Called when dockwidget was dragged to check if its placement was
+    changed and it is nessesary to reposition the toolview button.
+    Actual repositioning is made with @ref setDockPlace method.*/
+    virtual void adjustPlacement(bool toplevel);
+    /**Sets the dock place according to mainwindow's dockWidgetPlace().*/
+    virtual void setDockPlace();
 
 private:
     struct ToolViewPrivate *d;

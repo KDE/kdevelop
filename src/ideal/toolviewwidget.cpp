@@ -19,6 +19,8 @@
  ***************************************************************************/
 #include "toolviewwidget.h"
 
+#include <kdebug.h>
+
 namespace Ideal {
 
 ToolViewWidget::ToolViewWidget(const QString &title, QWidget *parent)

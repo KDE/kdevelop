@@ -19,6 +19,8 @@
  ***************************************************************************/
 #include "toolview.h"
 
+#include <QTimer>
+
 #include <kdebug.h>
 
 #include "button.h"
@@ -90,6 +92,15 @@ Qt::DockWidgetArea ToolView::dockPlace(Ideal::Place place)
     else if (place == Ideal::Bottom) dockArea = Qt::BottomDockWidgetArea;
     else if (place == Ideal::Top) dockArea = Qt::TopDockWidgetArea;
     return dockArea;
+}
+
+Ideal::Place ToolView::idealPlace(Qt::DockWidgetArea dockPlace)
+{
+    Ideal::Place place = Ideal::Left;
+    if (dockPlace == Qt::RightDockWidgetArea) place = Ideal::Right;
+    else if (dockPlace == Qt::BottomDockWidgetArea) place = Ideal::Bottom;
+    else if (dockPlace == Qt::TopDockWidgetArea) place = Ideal::Top;
+    return place;
 }
 
 Ideal::Place ToolView::place() const
@@ -192,9 +203,10 @@ ToolViewWidget *ToolView::createDockWidget()
 
 void ToolView::setupDockWidget(ToolViewWidget *dockWidget)
 {
-    dockWidget->setAllowedAreas(dockPlace());
+//     dockWidget->setAllowedAreas(dockPlace());
     dockWidget->setWidget(d->contents);
     connect(dockWidget, SIGNAL(visibilityChanged(bool)), d->button, SLOT(setChecked(bool)));
+    connect(dockWidget, SIGNAL(topLevelChanged(bool)), this, SLOT(adjustPlacement(bool)));
     d->mainWindow->addDockWidget(dockPlace(), dockWidget);
 }
 
@@ -223,6 +235,47 @@ int ToolView::mode() const
     if (!d->isVisible && !d->isEnabled)
         mode = ToolView::None;
     return mode;
+}
+
+void ToolView::adjustPlacement(bool toplevel)
+{
+    if (toplevel)
+        return;
+
+    QTimer::singleShot(1000, this, SLOT(setDockPlace()));
+}
+
+void ToolView::setDockPlace(Qt::DockWidgetArea dockPlace)
+{
+    kDebug() << "set dock place from " << ToolView::dockPlace()<< " to " << dockPlace << endl;
+    if (dockPlace == ToolView::dockPlace())
+        return; //nothing to do here - already in the place
+    if (d->dockWidget)
+    {
+        if (d->mainWindow->dockWidgetArea(d->dockWidget) != dockPlace)
+        {
+            //we need to move the dock widget first
+            d->mainWindow->removeDockWidget(d->dockWidget);
+            d->mainWindow->addDockWidget(dockPlace, d->dockWidget);
+        }
+    }
+    ButtonBar *origBar = d->mainWindow->buttonBar(d->place);
+    d->place = idealPlace(dockPlace);
+    ButtonBar *newBar = d->mainWindow->buttonBar(d->place);
+    origBar->removeToolViewButton(d->button);
+    newBar->addToolViewButton(d->button);
+
+    d->button->setPlace(d->place);
+    if (d->isVisible)
+        d->button->show();
+    if (d->isEnabled)
+        newBar->show();
+}
+
+void ToolView::setDockPlace()
+{
+    kDebug() << "TEST: dock area is: " << d->mainWindow->dockWidgetArea(d->dockWidget) << endl;
+    setDockPlace(d->mainWindow->dockWidgetArea(d->dockWidget));
 }
 
 }
