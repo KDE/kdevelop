@@ -44,6 +44,7 @@ struct ToolViewPrivate {
 
         dockWidget = 0;
         isVisible = false;
+        isEnabled = false;
     }
     ~ToolViewPrivate()
     {
@@ -59,6 +60,7 @@ struct ToolViewPrivate {
     //toolview dock
     ToolViewWidget *dockWidget;
     bool isVisible;
+    bool isEnabled;
 };
 
 
@@ -129,7 +131,8 @@ void ToolView::setViewVisible(bool visible)
     if (visible)
     {
         bar->setVisible(true);
-        foreach (ToolView *view, d->mainWindow->toolViews())
+        foreach (ToolView *view,
+            d->mainWindow->toolViews(d->place, ToolView::Enabled | ToolView::Visible))
         {
             if ((view->place() == d->place) and (view != this))
                 view->hideView();
@@ -141,6 +144,10 @@ void ToolView::setViewVisible(bool visible)
 
 void ToolView::setViewEnabled(bool enabled)
 {
+    if (d->isEnabled == enabled)
+        return;
+    d->isEnabled = enabled;
+
     ButtonBar *bar = d->mainWindow->buttonBar(d->place);
     d->button->setVisible(enabled);
     if (enabled)
@@ -153,7 +160,7 @@ void ToolView::setViewEnabled(bool enabled)
         if (d->dockWidget)
            d->dockWidget->hide();
         //also hide the empty button bar
-        if (bar->isEmpty())
+        if (d->mainWindow->toolViews(d->place, ToolView::Visible).count() == 0)
             bar->setVisible(false);
     }
 }
@@ -196,5 +203,28 @@ Button *ToolView::createToolViewButton(Ideal::Place place, const QString &title,
     return new Button(0, place, title, icon);
 }
 
+bool ToolView::isVisible() const
+{
+    return d->isVisible;
 }
+
+bool ToolView::isEnabled() const
+{
+    return d->isEnabled;
+}
+
+int ToolView::mode() const
+{
+    int mode = 0;
+    if (d->isVisible)
+        mode |= ToolView::Visible;
+    if (d->isEnabled)
+        mode |= ToolView::Enabled;
+    if (!d->isVisible && !d->isEnabled)
+        mode = ToolView::None;
+    return mode;
+}
+
+}
+
 #include "toolview.moc"

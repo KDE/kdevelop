@@ -61,6 +61,10 @@ public:
     /** @return the list of all available toolviews in the mainwindow including
     hidden views and views not available in the current area.*/
     QList<ToolView*> toolViews() const;
+    /** @return the list of all toolviews in the given place in the
+    mainwindow including hidden views and views not available in the current area.
+    @param mode defines the or-ed list of toolview modes (ToolView::Mode) - visible and/or enabled*/
+    QList<ToolView*> toolViews(Ideal::Place place, int mode) const;
     /** @return the button bar for given @p place.*/
     ButtonBar *buttonBar(Ideal::Place place);
 

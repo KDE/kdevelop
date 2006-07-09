@@ -341,8 +341,10 @@ bool ButtonContainer::isEmpty() const
 bool ButtonContainer::isVisuallyEmpty() const
 {
     foreach (Button *button, d->buttons)
+    {
         if (button->isVisible())
             return false;
+    }
     return true;
 }
 

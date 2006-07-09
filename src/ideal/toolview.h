@@ -40,6 +40,8 @@ Toolview represents a widget and its placement and area options.
 class IDEAL_EXPORT ToolView: public QObject {
     Q_OBJECT
 public:
+    enum Mode { None = 1, Visible=2, Enabled=4 };
+
     /**Creates a toolview with contents @p view in the @p place.
     @p area defines the or-ed list of allowed areas.*/
     ToolView(MainWindow *parent, QWidget *contents, Ideal::Place place, int area);
@@ -61,6 +63,13 @@ public:
     Button *button() const;
     /** @return the dock widget for this toolview. Creates it if no dock is available.*/
     virtual ToolViewWidget *dockWidget();
+
+    /** @return true if the toolview is visible.*/
+    bool isVisible() const;
+    /** @return true if the toolview is enabled.*/
+    bool isEnabled() const;
+    /** @return the mode of the toolview (visible and/or enabled: or-ed list of ToolView::Mode).*/
+    int mode() const;
 
 public slots:
     /**Toggles the visibility of the toolview. The toolview button is

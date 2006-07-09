@@ -116,6 +116,17 @@ QList<ToolView*> MainWindow::toolViews() const
     return d->toolViews;
 }
 
+QList<ToolView*> MainWindow::toolViews(Ideal::Place place, int mode) const
+{
+    QList<ToolView*> list;
+    foreach (ToolView *view, d->toolViews)
+    {
+        if (view->mode() & mode)
+            list << view;
+    }
+    return list;
+}
+
 ButtonBar *MainWindow::buttonBar(Ideal::Place place)
 {
     return d->buttonBars[place];
