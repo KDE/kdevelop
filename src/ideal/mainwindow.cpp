@@ -73,6 +73,11 @@ MainWindow::MainWindow(QWidget *parent)
     d->initButtonBar(Ideal::Right);
     d->initButtonBar(Ideal::Bottom);
     d->initButtonBar(Ideal::Top);
+
+    setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
+    setCorner(Qt::TopLeftCorner, Qt::LeftDockWidgetArea);
+    setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
+    setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
 }
 
 MainWindow::~MainWindow()
