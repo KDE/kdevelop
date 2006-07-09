@@ -29,35 +29,22 @@ Boston, MA 02110-1301, USA.
 /**
  * \short The base class for all KCModule's used by the platform.
  *
- * The base class settings.  Control's the location of the KConfig
- * object we save to based on the mode..
+ * The base class settings.
  */
 class KDEVINTERFACES_EXPORT KDevCModule: public KCModule
 {
     Q_OBJECT
 public:
-    /**Config mode enum.*/
-    enum ConfigMode
-    {
-        Global,             /**< Save settings to kdevelop globally.*/
-        LocalProject,       /**< Save settings to local project directory.*/
-        GlobalProject       /**< Save settings to project file suitable for passing around.*/
-    };
-
     KDevCModule( KConfigSkeleton *config,
                  KInstance *instance,
                  QWidget *parent = 0,
                  const QStringList &args = QStringList() );
     virtual ~KDevCModule();
 
-    static ConfigMode configMode();
-    static void setConfigMode( ConfigMode mode );
-
     virtual void save();
     virtual void load();
 
 private:
-    static ConfigMode s_mode;
     QPointer<KConfigSkeleton> m_config;
 };
 
