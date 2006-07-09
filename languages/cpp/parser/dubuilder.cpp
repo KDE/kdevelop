@@ -127,7 +127,8 @@ void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
 
 void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 {
-  newDeclaration(node->type_specifier);
+  Definition* definition = newDeclaration(node->type_specifier);
+  definition->setTextPosition(m_editor->createCursor(node->start_token, EditorIntegrator::FrontEdge));
 
   DefaultVisitor::visitSimpleDeclaration (node);
 }
@@ -144,7 +145,7 @@ void DUBuilder::visitName (NameAST *node)
   definition->addUse(use);
 }
 
-DUContext * DUBuilder::newDeclaration( TypeSpecifierAST* type )
+Definition* DUBuilder::newDeclaration( TypeSpecifierAST* type )
 {
   // This cast may well be an incorrect assumption...
   m_nameCompiler->run(static_cast<ElaboratedTypeSpecifierAST*>(type)->name);
@@ -162,9 +163,10 @@ DUContext * DUBuilder::newDeclaration( TypeSpecifierAST* type )
   else if (in_namespace)
     scope = Definition::NamespaceScope;
 
-  m_currentContext->addDefinition(new Definition(abstractType, identifier, scope));
+  Definition* definition = new Definition(abstractType, identifier, scope);
+  m_currentContext->addDefinition(definition);
 
-  return m_currentContext;
+  return definition;
 }
 
 // kate: indent-width 2;

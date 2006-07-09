@@ -28,6 +28,7 @@ class DUContext;
 class EditorIntegrator;
 class NameCompiler;
 class TypeEnvironment;
+class Definition;
 
 /**
  * A class which iterates the AST to extract definitions of types and their uses.
@@ -97,7 +98,7 @@ private:
    * Register a new declaration with the definition-use chain.
    * Returns the new context created by this definition.
    */
-  DUContext* newDeclaration(TypeSpecifierAST* type);
+  Definition* newDeclaration(TypeSpecifierAST* type);
 
   void closeContext(AST* node, DUContext* parent);
 

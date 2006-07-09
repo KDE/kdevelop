@@ -35,6 +35,7 @@ set(kdevcppparser_STAT_SRCS
     ducontext.cpp
     definition.cpp
     textlocation.cpp
+    editorintegrator.cpp
 )
 
 kde4_automoc(${kdevcppparser_STAT_SRCS})

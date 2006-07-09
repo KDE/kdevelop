@@ -43,7 +43,7 @@ public:
   /**
    * Constructor which accepts a text \a position and the \a url to which it refers.
    */
-  TextPosition(const KTextEditor::Cursor& position, const KUrl& url);
+  TextPosition(const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const KUrl& url = KUrl());
 
   /**
    * Constructor which accepts a smart cursor for purposes of information

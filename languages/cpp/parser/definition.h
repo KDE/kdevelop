@@ -29,7 +29,7 @@ class AbstractType;
 /**
  * Represents a single variable definition in a definition-use chain.
  */
-class Definition : public TextRange
+class Definition : public TextPosition
 {
 public:
   enum Scope {
