@@ -125,6 +125,13 @@ public:
   /// Override: detect when the range is deleted.
   virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
+  /**
+   * Test to see if this range contains \a position.
+   *
+   * \todo follow include heirachy to test other documents
+   */
+  bool contains(const TextPosition& position) const;
+
 private:
   KTextEditor::Range* m_range;
   KUrl m_url;

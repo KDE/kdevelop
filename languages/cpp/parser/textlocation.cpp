@@ -120,3 +120,8 @@ void TextRange::setSmartTextRange( KTextEditor::SmartRange* range )
 //END
 
 // kate: indent-width 2;
+
+bool TextRange::contains( const TextPosition & position ) const
+{
+  return url() == position.url() && textRange().contains(position.textPosition());
+}

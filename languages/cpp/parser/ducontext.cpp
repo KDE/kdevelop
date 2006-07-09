@@ -69,11 +69,7 @@ Definition * DUContext::findLocalDefinition( const QString & identifier ) const
 
 Definition * DUContext::findDefinition( const QString & identifier ) const
 {
-  DUContext* context = definitionContext(identifier);
-  if (context)
-    return context->findLocalDefinition(identifier);
-
-  return 0;
+  return findDefinition(identifier, TextPosition(textRange().end(), url()));
 }
 
 DUContext * DUContext::definitionContext( const QString & identifier ) const
@@ -94,8 +90,8 @@ DUContext * DUContext::definitionContext( const QString & identifier ) const
 void DUContext::addChildContext( DUContext * context )
 {
   for (int i = 0; i < m_childContexts.count(); ++i) {
-    DUContext* parent = m_childContexts.at(i);
-    if (context->textRange().start() < parent->textRange().start()) {
+    DUContext* child = m_childContexts.at(i);
+    if (context->textRange().start() < child->textRange().start()) {
       m_childContexts.insert(i, context);
       context->addParentContext(this);
       return;
@@ -135,7 +131,7 @@ DUContext * DUContext::findContext( const TextPosition& position, DUContext* par
     parent = const_cast<DUContext*>(this);
 
   foreach (DUContext* context, parent->childContexts())
-    if (context->url() == position.url() && context->textRange().contains(position.textPosition())) {
+    if (context->contains(position)) {
       DUContext* ret = findContext(position, context);
       if (!ret)
         ret = context;
@@ -217,14 +213,35 @@ QList< Definition * > DUContext::clearLocalDefinitions( )
   return ret;
 }
 
-Definition * DUContext::findDefinition( const QString & identifier, const TextPosition & position, DUContext * parent ) const
+Definition * DUContext::findDefinition( const QString & identifier, const TextPosition & position ) const
 {
-  DUContext* context = findContext(position, parent);
+  return findDefinitionInternal(identifier, position, this);
+}
 
-  if (context)
-    return context->findLocalDefinition(identifier);
+Definition * DUContext::findDefinitionInternal( const QString & identifier, const TextPosition & position, const DUContext * const context ) const
+{
+  if (Definition* definition = context->findLocalDefinition(identifier))
+    return definition;
+
+  QListIterator<DUContext*> it = context->parentContexts();
+  it.toBack();
+  while (it.hasPrevious())
+    if (Definition* definition = findDefinitionInternal(identifier, position, it.previous()))
+      return definition;
 
   return 0;
+}
+
+Definition* DUContext::takeDefinition(Definition* definition)
+{
+  m_localDefinitions.removeAll(definition);
+  return definition;
+}
+
+void DUContext::deleteDefinition(Definition* definition)
+{
+  m_localDefinitions.removeAll(definition);
+  delete definition;
 }
 
 // kate: indent-width 2;

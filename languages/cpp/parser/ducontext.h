@@ -101,17 +101,15 @@ public:
   Definition* findDefinition(const QString& identifier) const;
 
   /**
-   * Searches for and returns a definition with a given \a identifier, which is currently active at the given cursor \a position
-   * in the given \a url.
+   * Searches for and returns a definition with a given \a identifier in this context, which
+   * is currently active at the given text \a position.
    *
    * \param identifier the identifier of the definition to search for
    * \param location the text position to search for
-   * \param parent the parent context to search from (this is mostly an internal detail, but if you only
-   *               want to search in a subbranch of the chain, you may specify the parent here)
    *
    * \returns the requested definition if one was found, otherwise null.
    */
-  Definition* findDefinition(const QString& identifier, const TextPosition& position, DUContext* parent = 0) const;
+  Definition* findDefinition(const QString& identifier, const TextPosition& position) const;
 
   /**
    * Returns the type of any \a identifier defined in this context, or
@@ -142,9 +140,14 @@ public:
   Definition* addDefinition(Definition* definition);
 
   /**
-   * Remove a specified \a definition from this context.
+   * Take a specified \a definition from this context and pass ownership to the caller.
    */
-  void removeDefinition(Definition* definition);
+  Definition* takeDefinition(Definition* definition);
+
+  /**
+   * Remove the specified \a definition from this context and delete it.
+   */
+  void deleteDefinition(Definition* definition);
 
   /**
    * Searches for the most specific context for the given cursor \a position in the given \a url.
@@ -188,6 +191,9 @@ private:
 
   /// Deletion function which respects file boundaries.
   void deleteChildContextsRecursively(const KUrl& url);
+
+  /// Logic for finding a definition, traversing up the chain.
+  Definition* findDefinitionInternal(const QString& identifier, const TextPosition& position, const DUContext * const context) const;
 
   QList<DUContext*> m_parentContexts;
   QList<DUContext*> m_childContexts;
