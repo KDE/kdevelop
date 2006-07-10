@@ -53,12 +53,12 @@ public:
   /**
    * Returns the currently active document for operations.
    */
-  KTextEditor::Document* activeDocument() const;
+  KTextEditor::Document* currentDocument() const;
 
   /**
    * Sets a document as the currently active document for operations.
    */
-  void setActiveDocument(KTextEditor::Document* document);
+  void setCurrentDocument(KTextEditor::Document* document);
 
   KTextEditor::SmartInterface* smart() const;
 
@@ -209,7 +209,7 @@ private:
 
   Lexer* m_lexer;
   TokenStream* m_tokenStream;
-  KTextEditor::Document* m_activeDocument;
+  KTextEditor::Document* m_currentDocument;
   KTextEditor::SmartRange* m_currentRange;
   KTextEditor::Range m_newRangeMarker;
 };
