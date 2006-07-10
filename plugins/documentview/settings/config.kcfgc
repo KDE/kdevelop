@@ -1,3 +1,5 @@
 File=config.kcfg
 ClassName=DocumentViewSettings
 Singleton=true
+Inherits=KDevConfigSkeleton
+IncludeFiles="kdevconfigskeleton.h"
