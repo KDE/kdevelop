@@ -25,9 +25,11 @@
 
 using namespace KTextEditor;
 
-DUContext::DUContext(KTextEditor::Range* range)
+DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
   : RangeObject(range)
 {
+  if (parent)
+    parent->addChildContext(this);
 }
 
 DUContext::~DUContext( )

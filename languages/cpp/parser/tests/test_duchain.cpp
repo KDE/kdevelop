@@ -17,6 +17,7 @@
 */
 
 #include <QtTest/QtTest>
+#include <QFlags>
 
 #include "duchain.h"
 #include "ducontext.h"
@@ -42,7 +43,6 @@ class TestDUChain : public QObject
   // Parser
   Control control;
   DumpTree dumper;
-  Parser parser;
 
   // Definition - use chain
   TypeEnvironment types;
@@ -58,7 +58,6 @@ class TestDUChain : public QObject
 
 public:
   TestDUChain()
-    : parser(&control)
   {
   }
 
@@ -218,10 +217,28 @@ private slots:
     //delete top;
   }
 
+  void testDeclareFunction()
+  {
+    //                 0         1         2
+    //                 012345678901234567890123456789
+    QByteArray method("void A::t(int i) { i = i + 3; }");
+
+    DUContext* top = parse(method);
+
+    /*QCOMPARE(top->childContexts(), 0);
+    QCOMPARE(top->localDefinitions(), 1);
+
+    Definition* def = top->localDefinitions().first();
+    QCOMPARE(def->identifier(), QString("i"));*/
+
+    //delete top;
+  }
 
   void testDeclareFor()
   {
-    QByteArray method("for (int i = 0; i < 10; i++) {}");
+    //                 0         1         2         3         4         5
+    //                 012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("int main() { for (int i = 0; i < 10; i++) {} }");
 
     DUContext* top = parse(method);
 
@@ -234,40 +251,46 @@ private slots:
     //delete top;
   }
 
-  void testDeclareFunction()
-  {
-    QByteArray method("void A::t() { }");
-
-    DUContext* top = parse(method);
-
-    /*QCOMPARE(top->childContexts(), 0);
-    QCOMPARE(top->localDefinitions(), 1);
-
-    Definition* def = top->localDefinitions().first();
-    QCOMPARE(def->identifier(), QString("i"));*/
-
-    //delete top;
-  }
+public:
+  enum DumpType {
+    DumpAST = 1,
+    DumpDUChain = 2
+  };
+  Q_DECLARE_FLAGS(DumpTypes, DumpType)
 
 private:
-  DUContext* parse(const QByteArray& unit)
-  {
-    pool mem_pool;
-
-    TranslationUnitAST* ast = parser.parse(unit.constData(), unit.size() + 1, &mem_pool);
-
-    EditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
-
-    dumper.dump(ast, &parser.token_stream);
-
-    DUBuilder dubuilder(&parser.token_stream);
-    DUContext* top = dubuilder.build(KUrl("file:///internal"), ast);
-
-    dumper.dump(top);
-    return top;
-  }
+  DUContext* parse(const QByteArray& unit, DumpTypes dump = static_cast<DumpTypes>(DumpAST | DumpDUChain));
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(TestDUChain::DumpTypes)
+
+DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
+{
+  kDebug() << "==== Beginning new test case...:" << endl << unit << endl << endl;
+  pool mem_pool;
+
+  Parser parser(&control);
+  TranslationUnitAST* ast = parser.parse(unit.constData(), unit.size() + 1, &mem_pool);
+
+  EditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
+
+  if (dump & DumpAST) {
+    kDebug() << "===== AST:" << endl;
+    dumper.dump(ast, &parser.token_stream);
+  }
+
+  DUBuilder dubuilder(&parser.token_stream);
+  DUContext* top = dubuilder.build(KUrl("file:///internal"), ast);
+
+  if (dump & DumpDUChain) {
+    kDebug() << "===== DUChain:" << endl;
+    dumper.dump(top);
+  }
+
+  kDebug() << "===== Finished test case." << endl;
+
+  return top;
+}
 
 #include "test_duchain.moc"
 

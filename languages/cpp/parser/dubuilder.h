@@ -59,6 +59,7 @@ protected:
   virtual void visitSimpleDeclaration (SimpleDeclarationAST *);
   virtual void visitDeclarator (DeclaratorAST*);
   virtual void visitName (NameAST *);
+  virtual void visitPrimaryExpression (PrimaryExpressionAST*);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;

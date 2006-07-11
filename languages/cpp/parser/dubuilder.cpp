@@ -36,7 +36,7 @@ DUBuilder::DUBuilder (TokenStream *token_stream):
   _M_token_stream (token_stream), m_editor(new EditorIntegrator(token_stream)), m_nameCompiler(new NameCompiler(token_stream)),
   in_namespace(false), in_class(false), in_template_declaration(false),
   in_typedef(false), in_function_definition(false), in_parameter_declaration(false),
-  m_types(new TypeEnvironment)
+  m_types(new TypeEnvironment), m_currentDefinition(0)
 {
   flags = 0;
 }
@@ -150,16 +150,13 @@ void DUBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
 
 void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
 {
-  kDebug() << "Visit compound statement" << endl;
-
   DUContext* previousContext = m_currentContext;
+  m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
 
   DefaultVisitor::visitCompoundStatement (node);
 
   if (previousContext != m_currentContext)
     closeContext(node, previousContext);
-
-  kDebug() << "End visit compound statement" << endl;
 }
 
 void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
@@ -174,12 +171,25 @@ void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
   m_currentDefinition = oldDefinition;
 }
 
+void DUBuilder::visitPrimaryExpression (PrimaryExpressionAST* node)
+{
+  DefaultVisitor::visitPrimaryExpression(node);
+
+  if (node->name) {
+    Range* use = m_editor->createRange(node->name);
+
+    Definition* definition = m_currentContext->findDefinition(m_currentIdentifier, DocumentCursor(use, DocumentCursor::Start));
+    if (definition)
+      definition->addUse(use);
+    else
+      kWarning() << k_funcinfo << "Could not find definition for identifier " << m_currentIdentifier << " at " << *use << endl;
+  }
+}
+
 void DUBuilder::visitName (NameAST *node)
 {
   m_nameCompiler->run(node);
   m_currentIdentifier = m_nameCompiler->name();
-
-  //Range* use = m_editor->createRange(node);
 
   DefaultVisitor::visitName(node);
 }
