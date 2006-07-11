@@ -53,6 +53,7 @@ class TestDUChain : public QObject
   Definition* definition2;
   Definition* definition3;
   Definition* definition4;
+  Definition* noDef;
   KUrl file1, file2;
   DUContext* topContext;
 
@@ -85,6 +86,7 @@ private slots:
     definition4->setType(type2);
     definition4->setIdentifier("m_errorCode2");
 
+    noDef = 0;
 
     file1 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/duchain.cpp";
     file2 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/dubuilder.cpp";
@@ -213,6 +215,7 @@ private slots:
 
     Definition* def = top->localDefinitions().first();
     QCOMPARE(def->identifier(), QString("i"));
+    QCOMPARE(top->findDefinition("i"), def);
 
     //delete top;
   }
@@ -228,20 +231,29 @@ private slots:
     QCOMPARE(top->childContexts().count(), 1);
     QCOMPARE(top->localDefinitions().count(), 1);
 
-    Definition* def = top->localDefinitions().first();
-    QCOMPARE(def->identifier(), QString("A::t"));
+    Definition* defAT = top->localDefinitions().first();
+    QCOMPARE(defAT->identifier(), QString("A::t"));
+
+    QCOMPARE(top->findDefinition("A::t"), defAT);
+    QCOMPARE(top->findDefinition("i"), noDef);
 
     DUContext* fn = top->childContexts().first();
     QCOMPARE(fn->childContexts().count(), 1);
     QCOMPARE(fn->localDefinitions().count(), 1);
 
-    def = fn->localDefinitions().first();
-    QCOMPARE(def->identifier(), QString("i"));
-    QCOMPARE(def->uses().count(), 2);
+    Definition* defI = fn->localDefinitions().first();
+    QCOMPARE(defI->identifier(), QString("i"));
+    QCOMPARE(defI->uses().count(), 2);
+
+    QCOMPARE(fn->findDefinition("A::t"), defAT);
+    QCOMPARE(fn->findDefinition("i"), defI);
 
     DUContext* insideFn = fn->childContexts().first();
     QCOMPARE(insideFn->childContexts().count(), 0);
     QCOMPARE(insideFn->localDefinitions().count(), 0);
+
+    QCOMPARE(insideFn->findDefinition("A::t"), defAT);
+    QCOMPARE(insideFn->findDefinition("i"), defI);
 
     //delete top;
   }
