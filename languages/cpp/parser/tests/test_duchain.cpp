@@ -206,7 +206,7 @@ private slots:
   {
     QByteArray method("int i;");
 
-    DUContext* top = parse(method);
+    DUContext* top = parse(method, DumpDUChain);
 
     QCOMPARE(top->childContexts().count(), 0);
     QCOMPARE(top->localDefinitions().count(), 1);
@@ -223,13 +223,25 @@ private slots:
     //                 012345678901234567890123456789
     QByteArray method("void A::t(int i) { i = i + 3; }");
 
-    DUContext* top = parse(method);
+    DUContext* top = parse(method, DumpDUChain);
 
-    /*QCOMPARE(top->childContexts(), 0);
-    QCOMPARE(top->localDefinitions(), 1);
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->localDefinitions().count(), 1);
 
     Definition* def = top->localDefinitions().first();
-    QCOMPARE(def->identifier(), QString("i"));*/
+    QCOMPARE(def->identifier(), QString("A::t"));
+
+    DUContext* fn = top->childContexts().first();
+    QCOMPARE(fn->childContexts().count(), 1);
+    QCOMPARE(fn->localDefinitions().count(), 1);
+
+    def = fn->localDefinitions().first();
+    QCOMPARE(def->identifier(), QString("i"));
+    QCOMPARE(def->uses().count(), 2);
+
+    DUContext* insideFn = fn->childContexts().first();
+    QCOMPARE(insideFn->childContexts().count(), 0);
+    QCOMPARE(insideFn->localDefinitions().count(), 0);
 
     //delete top;
   }
@@ -240,10 +252,10 @@ private slots:
     //                 012345678901234567890123456789012345678901234567890123456789
     QByteArray method("int main() { for (int i = 0; i < 10; i++) {} }");
 
-    DUContext* top = parse(method);
+    DUContext* top = parse(method, DumpDUChain);
 
-    /*QCOMPARE(top->childContexts(), 0);
-    QCOMPARE(top->localDefinitions(), 1);
+    /*QCOMPARE(top->childContexts().count(), 0);
+    QCOMPARE(top->localDefinitions().count(), 1);
 
     Definition* def = top->localDefinitions().first();
     QCOMPARE(def->identifier(), QString("i"));*/
@@ -253,6 +265,7 @@ private slots:
 
 public:
   enum DumpType {
+    DumpNone = 0,
     DumpAST = 1,
     DumpDUChain = 2
   };

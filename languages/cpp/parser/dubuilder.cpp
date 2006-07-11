@@ -102,9 +102,13 @@ void DUBuilder::visitTypedef (TypedefAST *node)
 
 void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
-  kDebug() << "Visit function declaration" << endl;
+  Definition* oldDefinition = m_currentDefinition;
+
+  Range* range = m_editor->createRange(node);
+  m_currentDefinition = newDeclaration(range);
 
   DUContext* previousContext = m_currentContext;
+  m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
 
   bool was = inFunctionDefinition (node);
   DefaultVisitor::visitFunctionDefinition (node);
@@ -112,7 +116,7 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 
   closeContext(node, previousContext);
 
-  kDebug() << "End visit function declaration" << endl;
+  m_currentDefinition = oldDefinition;
 }
 
 void DUBuilder::closeContext(AST* node, DUContext* parent)
@@ -130,7 +134,6 @@ void DUBuilder::closeContext(AST* node, DUContext* parent)
 
 void DUBuilder::visitParameterDeclarationClause (ParameterDeclarationClauseAST * node)
 {
-  // TODO can you put other declarations inside a parameter declaration list??
   bool was = inParameterDeclaration (node);
   DefaultVisitor::visitParameterDeclarationClause (node);
   inParameterDeclaration (was);
@@ -155,8 +158,7 @@ void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
 
   DefaultVisitor::visitCompoundStatement (node);
 
-  if (previousContext != m_currentContext)
-    closeContext(node, previousContext);
+  closeContext(node, previousContext);
 }
 
 void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
@@ -196,10 +198,14 @@ void DUBuilder::visitName (NameAST *node)
 
 void DUBuilder::visitDeclarator (DeclaratorAST* node)
 {
+  QString oldIdentifier = m_currentIdentifier;
+
   DefaultVisitor::visitDeclarator(node);
 
   if (m_currentDefinition)
     m_currentDefinition->setIdentifier(m_currentIdentifier);
+
+  m_currentIdentifier = oldIdentifier;
 }
 
 Definition* DUBuilder::newDeclaration(Range* range)
