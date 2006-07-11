@@ -104,7 +104,7 @@ install(FILES
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/shell )
 
 install( FILES kdeveloprc kdevassistantrc DESTINATION ${CONFIG_INSTALL_DIR} )
-install( FILES kdevelopui.rc eventsrc DESTINATION ${DATA_INSTALL_DIR}/kdevelop )
+install( FILES kdevelopui.rc eventsrc data.kdev4 DESTINATION ${DATA_INSTALL_DIR}/kdevelop )
 install( FILES projectprofiles DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles )
 install( FILES kdevassistantui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevassistant )
 

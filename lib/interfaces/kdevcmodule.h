@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-Copyright (C) 2005 Adam Treat <treat@kde.org>
+Copyright (C) 2006 Adam Treat <treat@kde.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -23,8 +23,10 @@ Boston, MA 02110-1301, USA.
 #include <QPointer>
 
 #include <kcmodule.h>
-#include <kconfigskeleton.h>
 #include "kdevexport.h"
+#include "kdevconfigskeleton.h"
+
+class KUrl;
 
 /**
  * \short The base class for all KCModule's used by the platform.
@@ -35,7 +37,7 @@ class KDEVINTERFACES_EXPORT KDevCModule: public KCModule
 {
     Q_OBJECT
 public:
-    KDevCModule( KConfigSkeleton *config,
+    KDevCModule( KDevConfigSkeleton *config,
                  KInstance *instance,
                  QWidget *parent = 0,
                  const QStringList &args = QStringList() );
@@ -44,8 +46,16 @@ public:
     virtual void save();
     virtual void load();
 
+  /**
+   * KCModule's which inherit this class must implement this function and
+   * return the url of the kcm's data.kdev4 file installed with the plugin
+   * in the plugin's data dir.
+   * @return the full url to the installed data.kdev4 of the plugin
+   */
+    virtual KUrl localNonShareableFile() const = 0;
+
 private:
-    QPointer<KConfigSkeleton> m_config;
+    QPointer<KDevConfigSkeleton> m_config;
 };
 
 #endif

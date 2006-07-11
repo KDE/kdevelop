@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-Copyright (C) 2005 Adam Treat <treat@kde.org>
+Copyright (C) 2006 Adam Treat <treat@kde.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -19,6 +19,10 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevconfigskeleton.h"
 
+#include <QFile>
+#include <QTextStream>
+
+#include <kurl.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kinstance.h>
@@ -27,12 +31,11 @@ Boston, MA 02110-1301, USA.
 
 
 KDevConfigSkeleton::KDevConfigSkeleton( const QString & configname )
-        : KConfigSkeleton( configname )
+        : KConfigSkeleton( configname ), m_parsed( false )
 {}
 
-
 KDevConfigSkeleton::KDevConfigSkeleton( KSharedConfig::Ptr config )
-        : KConfigSkeleton( config )
+        : KConfigSkeleton( config ), m_parsed( false )
 {}
 
 KDevConfigSkeleton::~KDevConfigSkeleton()
@@ -40,12 +43,20 @@ KDevConfigSkeleton::~KDevConfigSkeleton()
 
 void KDevConfigSkeleton::usrWriteConfig()
 {
+    //FIXME need to see receive the projectOpened, otherwise return right here..
+    if (true)
+        return KConfigSkeleton::usrWriteConfig();
+
     kDebug() << k_funcinfo << endl;
 
     KSharedConfig::Ptr standardConfig =
         KSharedPtr<KSharedConfig>( KGlobal::sharedConfig() );
+
+    //FIXME patch KInstance or KConfig/KConfigBackEnd to return the configFileName();
     KSharedConfig::Ptr localProjectConfig =
-        KSharedConfig::openConfig( "FIXME" );
+        KSharedConfig::openConfig( KGlobal::instance()->instanceName() + "rc" );
+    localProjectConfig->addFileToMergeStack( "/home/kde/trunk/KDE/kdevelop/local.kdevelop4" );
+    localProjectConfig->reparseConfiguration();
 
     QString origStandardGroup = standardConfig->group();
     QString origLocalProjectGroup = localProjectConfig->group();
@@ -54,11 +65,16 @@ void KDevConfigSkeleton::usrWriteConfig()
     KConfigSkeletonItem::List::ConstIterator it;
     for ( it = _items.begin(); it != _items.end(); ++it )
     {
-        kDebug() << ( *it ) ->name() << endl;
-        if ( !nonShareable.contains( ( *it ) ->name() ) )
+        if ( !m_nonShareable.contains( ( *it ) ->name() ) )
+        {
+//             kDebug() << ( *it ) ->name() << " written to global file" << endl;
             ( *it ) ->writeConfig( standardConfig.data() ); //write to the standard config
+        }
         else
+        {
+//             kDebug() << ( *it ) ->name() << " written to local file" << endl;
             ( *it ) ->writeConfig( localProjectConfig.data() ); //write to the local project
+        }
     }
 
     standardConfig->sync();
@@ -72,9 +88,27 @@ void KDevConfigSkeleton::usrWriteConfig()
     emit configChanged();
 }
 
-void KDevConfigSkeleton::parseNonShareableFile()
+void KDevConfigSkeleton::parseNonShareableFile( const KUrl &url )
 {
-    //implement me
+    //Don't need to parse the file more than once?
+    if ( m_parsed )
+        return ;
+
+    m_parsed = true;
+
+    QString fileName = url.toLocalFile();
+    QFile dataFile( fileName );
+    if ( dataFile.open( QIODevice::ReadOnly ) )
+    {
+        QTextStream txt( &dataFile );
+        while( !txt.atEnd() )
+            m_nonShareable.append( txt.readLine() );
+
+        dataFile.close();
+    }
+    else
+        kDebug() << k_funcinfo << "Can not open " << fileName << endl;
+
 }
 
 #include "kdevconfigskeleton.moc"

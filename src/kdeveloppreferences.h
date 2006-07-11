@@ -23,18 +23,30 @@
 
 #include <kdevcmodule.h>
 
-namespace Ui { class SettingsWidget; }
+#include <kurl.h>
+#include <kstandarddirs.h>
+
+namespace Ui
+{
+class SettingsWidget;
+}
 
 class KDevelopPreferences : public KDevCModule
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    KDevelopPreferences(QWidget *parent, const QStringList &args);
+    KDevelopPreferences( QWidget *parent, const QStringList &args );
     virtual ~KDevelopPreferences();
 
     virtual void save();
     virtual void load();
     virtual void defaults();
+
+    virtual KUrl localNonShareableFile() const
+    {
+        return KUrl::fromPath(
+                   KStandardDirs::locate( "data", "kdevelop/data.kdev4" ) );
+    }
 
 private slots:
     void slotSettingsChanged();

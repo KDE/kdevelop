@@ -1,3 +1,5 @@
 File=kdevelopconfig.kcfg
 ClassName=KDevGeneralSettings
 Singleton=true
+Inherits=KDevConfigSkeleton
+IncludeFiles="kdevconfigskeleton.h"
