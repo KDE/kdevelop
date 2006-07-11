@@ -27,7 +27,7 @@ set(ThreadWeaver_LIB_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/Thread_moc.cpp
 )
 
-kde4_automoc(${ThreadWeaver_LIB_SRCS})
+kde4_automoc(Thread.cpp Job.cpp ${ThreadWeaver_LIB_SRCS})
 
 
 QT4_GET_MOC_INC_DIRS(_moc_INCS)
