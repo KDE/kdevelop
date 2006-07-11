@@ -147,7 +147,6 @@ void DMainWindow::removeWidget(QWidget *widget)
                 {
                     if (m_activeTabWidget->currentPage())
                     {
-                        kdDebug() << "trying best!" << endl;
                         m_activeTabWidget->currentPage()->setFocus();
                     }
                 }
@@ -157,6 +156,13 @@ void DMainWindow::removeWidget(QWidget *widget)
 
     m_widgets.remove(widget);
     m_widgetTabs.remove(widget);
+    if (m_activeTabWidget && m_activeTabWidget->currentPage())
+    {
+        //a hack to please multibuffer and actually switch the active part
+        m_activeTabWidget->currentPage()->setFocus();
+        QFocusEvent ev(QEvent::FocusIn);
+        QApplication::sendEvent(m_activeTabWidget->currentPage(), &ev);
+    }
 }
 
 DTabWidget *DMainWindow::splitHorizontal()
