@@ -892,6 +892,7 @@ bool PartController::closePart(KParts::Part *part)
                 _dirtyDocuments.remove( static_cast<KParts::ReadWritePart*>( ro_part ) );
                 emit closedFile( url );
 /*                kdDebug(9000) << "Deleting MultiBuffer Part" << endl;*/
+                TopLevel::getInstance()->main()->guiFactory()->removeClient( part );
                 delete part;
 /*                kdDebug(9000) << "DeleteLater Actual MultiBuffer" << endl;*/
                 multiBuffer->deleteLater();
@@ -901,6 +902,7 @@ bool PartController::closePart(KParts::Part *part)
             {
 /*                kdDebug(9000) << "Deleting MultiBuffer Part" << endl;*/
                 _dirtyDocuments.remove( static_cast<KParts::ReadWritePart*>( ro_part ) );
+                TopLevel::getInstance()->main()->guiFactory()->removeClient( part );
                 emit closedFile( url );
                 delete part;
                 // Switch to a remaining buffer
