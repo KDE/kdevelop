@@ -55,7 +55,7 @@ void KDevConfigSkeleton::usrWriteConfig()
     //FIXME patch KInstance or KConfig/KConfigBackEnd to return the configFileName();
     KSharedConfig::Ptr localProjectConfig =
         KSharedConfig::openConfig( KGlobal::instance()->instanceName() + "rc" );
-    localProjectConfig->addFileToMergeStack( "/home/kde/trunk/KDE/kdevelop/local.kdevelop4" );
+    //localProjectConfig->addFileToMergeStack( "/home/kde/trunk/KDE/kdevelop/local.kdevelop4" );
     localProjectConfig->reparseConfiguration();
 
     QString origStandardGroup = standardConfig->group();
