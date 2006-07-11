@@ -254,11 +254,27 @@ private slots:
 
     DUContext* top = parse(method, DumpDUChain);
 
-    /*QCOMPARE(top->childContexts().count(), 0);
+    QCOMPARE(top->childContexts().count(), 1);
     QCOMPARE(top->localDefinitions().count(), 1);
 
     Definition* def = top->localDefinitions().first();
-    QCOMPARE(def->identifier(), QString("i"));*/
+    QCOMPARE(def->identifier(), QString("main"));
+
+    DUContext* main = top->childContexts().first();
+    QCOMPARE(main->childContexts().count(), 1);
+    QCOMPARE(main->localDefinitions().count(), 0);
+
+    DUContext* forCtx = main->childContexts().first();
+    QCOMPARE(forCtx->childContexts().count(), 1);
+    QCOMPARE(forCtx->localDefinitions().count(), 1);
+
+    def = forCtx->localDefinitions().first();
+    QCOMPARE(def->identifier(), QString("i"));
+    QCOMPARE(def->uses().count(), 2);
+
+    DUContext* insideFor = forCtx->childContexts().first();
+    QCOMPARE(insideFor->childContexts().count(), 0);
+    QCOMPARE(insideFor->localDefinitions().count(), 0);
 
     //delete top;
   }
