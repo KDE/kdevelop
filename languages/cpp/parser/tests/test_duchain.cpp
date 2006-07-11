@@ -208,13 +208,15 @@ private slots:
   {
     QByteArray method("int i;");
 
-    DUContext* top = parse(method, DumpDUChain);
+    DUContext* top = parse(method, DumpNone);
 
     QCOMPARE(top->childContexts().count(), 0);
     QCOMPARE(top->localDefinitions().count(), 1);
 
     Definition* def = top->localDefinitions().first();
     QCOMPARE(def->identifier(), QString("i"));
+    QCOMPARE(top->findDefinition("i"), def);
+
     QCOMPARE(top->findDefinition("i"), def);
 
     //delete top;
@@ -226,7 +228,7 @@ private slots:
     //                 012345678901234567890123456789
     QByteArray method("void A::t(int i) { i = i + 3; }");
 
-    DUContext* top = parse(method, DumpDUChain);
+    DUContext* top = parse(method, DumpNone);
 
     QCOMPARE(top->childContexts().count(), 1);
     QCOMPARE(top->localDefinitions().count(), 1);
@@ -264,29 +266,41 @@ private slots:
     //                 012345678901234567890123456789012345678901234567890123456789
     QByteArray method("int main() { for (int i = 0; i < 10; i++) {} }");
 
-    DUContext* top = parse(method, DumpDUChain);
+    DUContext* top = parse(method, DumpNone);
 
     QCOMPARE(top->childContexts().count(), 1);
     QCOMPARE(top->localDefinitions().count(), 1);
 
-    Definition* def = top->localDefinitions().first();
-    QCOMPARE(def->identifier(), QString("main"));
+    Definition* defMain = top->localDefinitions().first();
+    QCOMPARE(defMain->identifier(), QString("main"));
+
+    QCOMPARE(top->findDefinition("main"), defMain);
+    QCOMPARE(top->findDefinition("i"), noDef);
 
     DUContext* main = top->childContexts().first();
     QCOMPARE(main->childContexts().count(), 1);
     QCOMPARE(main->localDefinitions().count(), 0);
 
+    QCOMPARE(main->findDefinition("main"), defMain);
+    QCOMPARE(main->findDefinition("i"), noDef);
+
     DUContext* forCtx = main->childContexts().first();
     QCOMPARE(forCtx->childContexts().count(), 1);
     QCOMPARE(forCtx->localDefinitions().count(), 1);
 
-    def = forCtx->localDefinitions().first();
-    QCOMPARE(def->identifier(), QString("i"));
-    QCOMPARE(def->uses().count(), 2);
+    Definition* defI = forCtx->localDefinitions().first();
+    QCOMPARE(defI->identifier(), QString("i"));
+    QCOMPARE(defI->uses().count(), 2);
+
+    QCOMPARE(forCtx->findDefinition("main"), defMain);
+    QCOMPARE(forCtx->findDefinition("i"), defI);
 
     DUContext* insideFor = forCtx->childContexts().first();
     QCOMPARE(insideFor->childContexts().count(), 0);
     QCOMPARE(insideFor->localDefinitions().count(), 0);
+
+    QCOMPARE(insideFor->findDefinition("main"), defMain);
+    QCOMPARE(insideFor->findDefinition("i"), defI);
 
     //delete top;
   }
@@ -307,7 +321,9 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(TestDUChain::DumpTypes)
 
 DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
 {
-  kDebug() << "==== Beginning new test case...:" << endl << unit << endl << endl;
+  if (dump)
+    kDebug() << "==== Beginning new test case...:" << endl << unit << endl << endl;
+
   pool mem_pool;
 
   Parser parser(&control);
@@ -328,7 +344,8 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
     dumper.dump(top);
   }
 
-  kDebug() << "===== Finished test case." << endl;
+  if (dump)
+    kDebug() << "===== Finished test case." << endl;
 
   return top;
 }
