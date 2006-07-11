@@ -871,8 +871,6 @@ bool PartController::closePart(KParts::Part *part)
 
     KURL url = ro_part->url();
 
-    TopLevel::getInstance()->main()->guiFactory()->removeClient( part );
-
     if (QWidget* w = EditorProxy::getInstance()->topWidgetForPart( part ) )
     {
         if ( MultiBuffer *multiBuffer = dynamic_cast<MultiBuffer*>( w ) )
@@ -913,6 +911,7 @@ bool PartController::closePart(KParts::Part *part)
     }
     else if ( !ro_part->closeURL() )
         return false;
+    TopLevel::getInstance()->main()->guiFactory()->removeClient( part );
 
     _dirtyDocuments.remove( static_cast<KParts::ReadWritePart*>( ro_part ) );
     emit closedFile( url );
