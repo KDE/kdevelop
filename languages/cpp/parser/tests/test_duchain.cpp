@@ -24,6 +24,14 @@
 #include "typesystem.h"
 #include "definition.h"
 #include "documentrange.h"
+#include "editorintegrator.h"
+#include "dubuilder.h"
+
+#include "parser.h"
+#include "control.h"
+#include "dumptree.h"
+#include "tokens.h"
+#include "testconfig.h"
 
 using namespace KTextEditor;
 
@@ -31,6 +39,12 @@ class TestDUChain : public QObject
 {
   Q_OBJECT
 
+  // Parser
+  Control control;
+  DumpTree dumper;
+  Parser parser;
+
+  // Definition - use chain
   TypeEnvironment types;
   const AbstractType* type1;
   const AbstractType* type2;
@@ -44,6 +58,7 @@ class TestDUChain : public QObject
 
 public:
   TestDUChain()
+    : parser(&control)
   {
   }
 
@@ -174,6 +189,25 @@ private slots:
     topContext->takeDefinition(definition2);
 
     topContext->deleteChildContextsRecursively();
+  }
+
+  void testParsing()
+  {
+    QByteArray method("void A::t() { for (int i = 0; i < 10; i++) { ; }}");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+    EditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
+
+    dumper.dump(ast, &parser.token_stream);
+
+    DUBuilder dubuilder(&parser.token_stream);
+    dubuilder.build(KUrl("file:///internal"), ast);
+  }
+
+private:
+  TranslationUnitAST* parse(const QByteArray& unit, pool* mem_pool)
+  {
+    return  parser.parse(unit.constData(), unit.size() + 1, mem_pool);
   }
 };
 

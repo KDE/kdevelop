@@ -19,7 +19,10 @@
 #include "dumptree.h"
 
 #include <QtCore/QString>
-#include <QtCore/qdebug.h>
+
+#include <kdebug.h>
+
+#include "editorintegrator.h"
 
 static char const * const names[] = {
   0,
@@ -99,7 +102,19 @@ static char const * const names[] = {
 };
 
 DumpTree::DumpTree()
+  : m_editor(0)
 {
+}
+
+void DumpTree::dump( AST * node, class TokenStream * tokenStream )
+{
+  delete m_editor;
+  m_editor = 0;
+
+  if (tokenStream)
+    m_editor = new EditorIntegrator(tokenStream);
+
+  visit(node);
 }
 
 void DumpTree::visit(AST *node)
@@ -107,12 +122,22 @@ void DumpTree::visit(AST *node)
   static int indent = 0;
 
   if (node)
-    qDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
-             << '[' << node->start_token << ", " << node->end_token << ']';
+    if (m_editor)
+      kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
+              << '[' << m_editor->findPosition(node->start_token, EditorIntegrator::FrontEdge) << ", "
+              << m_editor->findPosition(node->end_token, EditorIntegrator::FrontEdge) << ']' << endl;
+    else
+      kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
+              << '[' << node->start_token << ", " << node->end_token << ']' << endl;
 
   ++indent;
   DefaultVisitor::visit(node);
   --indent;
+}
+
+DumpTree::~ DumpTree( )
+{
+  delete m_editor;
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

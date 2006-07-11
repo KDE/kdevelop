@@ -77,9 +77,9 @@ DocumentCursor EditorIntegrator::findPosition( const Token & token, Edge edge ) 
 
   if (fileName.isEmpty())
     // FIXME assumption wrong? Best to fix in the parser I think, always return a filename.
-    fileName = currentDocument()->url().toString();//m_currentFile;
-
-  return DocumentCursor(KUrl(fileName), Cursor(line, column));
+    return DocumentCursor(m_currentUrl, Cursor(line, column));
+  else
+    return DocumentCursor(KUrl(fileName), Cursor(line, column));
 }
 
 Document* EditorIntegrator::currentDocument() const
@@ -93,7 +93,11 @@ Range* EditorIntegrator::topRange( TopRangeType type )
     s_topRanges.insert(currentDocument(), QVector<Range*>(TopRangeCount));
 
   if (!s_topRanges[currentDocument()][type])
-    s_topRanges[currentDocument()][type] = createRange(currentDocument()->documentRange());
+    if (currentDocument())
+      s_topRanges[currentDocument()][type] = createRange(currentDocument()->documentRange());
+    else
+      // FIXME...
+      s_topRanges[currentDocument()][type] = createRange(Range(0,0, INT_MAX, 0));
 
   return s_topRanges[currentDocument()][type];
 }

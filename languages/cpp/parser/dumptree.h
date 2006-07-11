@@ -25,11 +25,15 @@ class DumpTree: protected DefaultVisitor
 {
 public:
   DumpTree();
+  virtual ~DumpTree();
 
-  void dump(AST *node) { visit(node); }
+  void dump(AST *node, class TokenStream* tokenStream = 0);
 
 protected:
   virtual void visit(AST *node);
+
+private:
+  class EditorIntegrator* m_editor;
 };
 
 #endif // DUMPTREE_H

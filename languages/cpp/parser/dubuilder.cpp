@@ -38,6 +38,7 @@ DUBuilder::DUBuilder (TokenStream *token_stream):
   in_typedef(false), in_function_definition(false), in_parameter_declaration(false),
   m_types(new TypeEnvironment)
 {
+  flags = 0;
 }
 
 DUBuilder::~DUBuilder ()
@@ -101,6 +102,8 @@ void DUBuilder::visitTypedef (TypedefAST *node)
 
 void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
+  kDebug() << "Visit function declaration" << endl;
+
   DUContext* previousContext = m_currentContext;
 
   bool was = inFunctionDefinition (node);
@@ -108,6 +111,8 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   inFunctionDefinition (was);
 
   closeContext(node, previousContext);
+
+  kDebug() << "End visit function declaration" << endl;
 }
 
 void DUBuilder::closeContext(AST* node, DUContext* parent)
@@ -140,18 +145,23 @@ void DUBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
 
 void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
 {
+  kDebug() << "Visit compound statement" << endl;
+
   DUContext* previousContext = m_currentContext;
 
   DefaultVisitor::visitCompoundStatement (node);
 
   if (previousContext != m_currentContext)
     closeContext(node, previousContext);
+
+  kDebug() << "End visit compound statement" << endl;
 }
 
 void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 {
-  Definition* definition = newDeclaration(m_editor->createRange(node), node->type_specifier);
-  definition->setTextRange(m_editor->createRange(node));
+  Range* range = m_editor->createRange(node);
+  kDebug() << "Visit simple declaration: " << *range << endl;
+  Definition* definition = newDeclaration(range, node->type_specifier);
 
   DefaultVisitor::visitSimpleDeclaration (node);
 }
@@ -163,9 +173,19 @@ void DUBuilder::visitName (NameAST *node)
   Range* use = m_editor->createRange(node);
 
   // Find definition
-  Definition* definition = m_currentContext->findDefinition(m_nameCompiler->name(), DocumentCursor(use, DocumentCursor::Start));
+  QString identifier = m_nameCompiler->name();
+  kDebug() << "Visit name: " << identifier << " flags " << flags << endl;
 
-  definition->addUse(use);
+  Definition* definition = m_currentContext->findDefinition(identifier, DocumentCursor(use, DocumentCursor::Start));
+
+  if (definition)
+    definition->addUse(use);
+  else
+    kWarning() << k_funcinfo << "No definition found for \"" << identifier << "\" in context " << m_currentContext->textRange() << endl;
+
+  DefaultVisitor::visitName(node);
+
+  kDebug() << "End visit name " << identifier << endl;
 }
 
 Definition* DUBuilder::newDeclaration(Range* range, TypeSpecifierAST* type )
@@ -186,6 +206,7 @@ Definition* DUBuilder::newDeclaration(Range* range, TypeSpecifierAST* type )
   else if (in_namespace)
     scope = Definition::NamespaceScope;
 
+  //kDebug() << "Visit declaration: " << identifier << " range " << *range << endl;
   Definition* definition = new Definition(range, abstractType, identifier, scope);
   m_currentContext->addDefinition(definition);
 
