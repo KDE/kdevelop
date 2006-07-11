@@ -292,9 +292,9 @@ QWidget * EditorProxy::widgetForPart( KParts::Part * part )
 
 	if (part->widget())
 		return part->widget();
-    
+
     KURL url = dynamic_cast<KParts::ReadOnlyPart*>( part )->url();
-    
+
     for (QValueList<MultiBuffer*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
         if ((*it)->hasURL( url ))
 			return *it;
@@ -305,9 +305,9 @@ QWidget * EditorProxy::widgetForPart( KParts::Part * part )
 QWidget * EditorProxy::topWidgetForPart( KParts::Part * part )
 {
 	if ( !part ) return 0;
-    
+
     KURL url = dynamic_cast<KParts::ReadOnlyPart*>( part )->url();
-    
+
     for (QValueList<MultiBuffer*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
         if ((*it)->hasURL( url ))
 			return *it;
@@ -321,6 +321,18 @@ QWidget * EditorProxy::topWidgetForPart( KParts::Part * part )
 bool EditorProxy::isDelayedViewCapable( )
 {
 	return m_delayedViewCreationCompatibleUI;
+}
+
+QWidget *EditorProxy::findPartWidget(KParts::Part *part)
+{
+    for (QValueList<MultiBuffer*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
+        if ((*it)->hasPart(part))
+            return *it;
+
+    if (part->widget())
+        return part->widget();
+
+    return 0L;
 }
 
 #include "editorproxy.moc"

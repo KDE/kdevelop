@@ -25,15 +25,17 @@ public:
   void setLineNumber(KParts::Part *part, int lineNum, int col);
 
   void installPopup(KParts::Part *part);
-  
+
   void registerEditor(MultiBuffer* wrapper);
   void deregisterEditor(MultiBuffer* wrapper);
 
   QWidget * widgetForPart( KParts::Part * part );
   QWidget * topWidgetForPart( KParts::Part * part );
-  
+
   bool isDelayedViewCapable();
-  
+
+  QWidget * findPartWidget( KParts::Part * part );
+
 private slots:
 
   void popupAboutToShow();
@@ -49,7 +51,7 @@ private:
 
   // This list is used to save line/col information for not yet activated editor views.
   QValueList< MultiBuffer* > m_editorParts;
-  
+
   bool m_delayedViewCreationCompatibleUI;
 };
 

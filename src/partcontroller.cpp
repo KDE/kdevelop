@@ -709,6 +709,9 @@ void PartController::integrateTextEditorPart(KTextEditor::Document* doc)
   if ( !doc ) return;
 
   connect( doc, SIGNAL(textChanged()), this, SLOT(textChanged()) );
+  connect( doc, SIGNAL(fileNameChanged()),
+    this, SLOT(slotDocumentUrlChanged()));
+
 
   if ( KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( doc->widget() ) )
   {
@@ -1755,6 +1758,21 @@ void PartController::textChanged()
 void PartController::gotoLastEditPos()
 {
 	editDocument( m_lastEditPos.url, m_lastEditPos.pos.first, m_lastEditPos.pos.second );
+}
+
+void PartController::slotDocumentUrlChanged()
+{
+    QObject *obj = const_cast<QObject*>(sender());
+    KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>( obj );
+    if (!doc)
+        return;
+
+    MultiBuffer *multiBuffer = dynamic_cast<MultiBuffer*>(
+        EditorProxy::getInstance()->findPartWidget( doc ));
+    if (!multiBuffer)
+        return;
+
+    multiBuffer->updateUrlForPart(doc, doc->url());
 }
 
 #include "partcontroller.moc"

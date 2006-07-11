@@ -20,10 +20,10 @@ namespace KParts
   class ReadWritePart;
 }
 
-namespace KTextEditor 
-{ 
+namespace KTextEditor
+{
   class Document;
-  class Editor; 
+  class Editor;
 }
 
 namespace Kate { class Document; }
@@ -51,52 +51,52 @@ public:
   static PartController *getInstance();
 
   ///// KDevPartController interface
-  
+
   void setEncoding(const QString &encoding);
   void editDocument(const KURL &inputUrl, int lineNum=-1, int col=-1);
   void splitCurrentDocument(const KURL &inputUrl, int lineNum=-1, int col=-1);
   void scrollToLineColumn(const KURL &url, int lineNum=-1, int col=-1);
-  void editDocumentInternal(const KURL &inputUrl, int lineNum=-1, int col=-1, 
+  void editDocumentInternal(const KURL &inputUrl, int lineNum=-1, int col=-1,
                             bool activate = true, bool addToCurrentBuffer = false );
   void integrateTextEditorPart(KTextEditor::Document* doc);
-  
+
   void showDocument(const KURL &url, bool newWin = false);
   void showPart( KParts::Part* part, const QString& name, const QString& shortDescription );
 
   KParts::ReadOnlyPart *partForURL(const KURL &url);
   KParts::ReadOnlyPart *qtDesignerPart();
   KParts::Part * partForWidget( const QWidget * widget );
-  
+
   void activatePart( KParts::Part * part );
   bool closePart( KParts::Part * part );
 
   KURL::List openURLs();
 
   bool querySaveFiles();
-  
+
   bool saveAllFiles();
   bool saveFiles( const KURL::List & list);
   bool saveFile( const KURL & url, bool force = false );
-  
+
   void revertAllFiles();
   void revertFiles( const KURL::List & list );
-  
+
   bool closeAllFiles();
   bool closeFiles( const KURL::List & list );
-  
+
   DocumentState documentState( KURL const & );
-  
+
   ////////////////////////////////////////
-  
+
   bool readyToClose();
 
   bool closeFile( const KURL & );
   bool closeAllOthers( const KURL & );
   void reloadFile( const KURL & url );
-  
+
   KTextEditor::Editor *openTextDocument( bool activate = true );
-  KParts::Factory *findPartFactory(const QString &mimeType, 
-                                   const QString &partType, 
+  KParts::Factory *findPartFactory(const QString &mimeType,
+                                   const QString &partType,
                                    const QString &preferredName = QString::null );
 
 public slots:
@@ -114,9 +114,10 @@ protected:
   ~PartController();
 
 private slots:
-  
+
   void slotWaitForFactoryHack();
 
+  void slotDocumentUrlChanged();
   void slotSaveAllFiles();
   void slotRevertAllFiles();
 
@@ -131,7 +132,7 @@ private slots:
   void slotForwardPopupActivated( int id );
 
   void slotSwitchTo();
-  
+
   void slotPartAdded( KParts::Part* );
   void slotPartRemoved( KParts::Part* );
 
@@ -153,28 +154,28 @@ private:
 
   bool closeFilesDialog( KURL::List const & ignoreList );
   bool saveFilesDialog( KURL::List const & ignoreList );
-  
+
   void doEmitState( KURL const & );
 
-  KTextEditor::Editor * createEditorPart( bool activate, 
+  KTextEditor::Editor * createEditorPart( bool activate,
                                           bool addToCurrentBuffer = false,
                                           const KURL &url = KURL() );
 
-  void integratePart(KParts::Part *part, const KURL &url, QWidget* widget = 0, 
-                       bool isTextEditor=false, bool activate=true, 
+  void integratePart(KParts::Part *part, const KURL &url, QWidget* widget = 0,
+                       bool isTextEditor=false, bool activate=true,
                        bool addToCurrentBuffer = false );
 
   // returns a list of modified documents
   KURL::List modifiedDocuments();
   void clearModified( KURL::List const & filelist );
-  
+
   bool isDirty( KURL const & url );
   bool reactToDirty( KURL const & url, unsigned char reason );
-    
+
   KURL storedURLForPart( KParts::ReadOnlyPart * );
   void updatePartURL( KParts::ReadOnlyPart * );
   bool partURLHasChanged( KParts::ReadOnlyPart * );
-  
+
   static PartController *s_instance;
 
   KAction *m_closeWindowAction, *m_saveAllFilesAction, *m_revertAllFilesAction;
@@ -185,20 +186,20 @@ private:
   KToolBarPopupAction* m_backAction;
   KToolBarPopupAction* m_forwardAction;
   KAction * m_gotoLastEditPosAction;
-  
+
   bool m_openNextAsText;
-  
+
   QValueList<KParts::ReadWritePart*> _dirtyDocuments;
-  
+
   QMap< KParts::ReadOnlyPart*, KURL > _partURLMap;	// used to note when a URL changes (a file changes name)
-  
+
   QGuardedPtr<KParts::Factory> _editorFactory;
-    
-	struct HistoryEntry 
+
+	struct HistoryEntry
 	{
 		HistoryEntry() {}
 		HistoryEntry( const KURL & url, int line, int col );
-		
+
 		KURL url;
 		int line;
 		int col;
@@ -208,7 +209,7 @@ private:
 	void addHistoryEntry();
 	HistoryEntry createHistoryEntry();
 	void jumpTo( const HistoryEntry & );
-		
+
 	QValueList<HistoryEntry> m_backHistory;
 	QValueList<HistoryEntry> m_forwardHistory;
 	bool m_isJumping;

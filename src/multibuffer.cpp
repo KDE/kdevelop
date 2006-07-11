@@ -271,6 +271,32 @@ void MultiBuffer::focusInEvent( QFocusEvent *ev )
     QSplitter::focusInEvent(ev);
 }
 
+bool MultiBuffer::hasPart( KParts::Part *part )
+{
+    for (BufferMap::iterator it = m_buffers.begin(); it != m_buffers.end(); ++it)
+    {
+        if (it.data() == part)
+            return true;
+    }
+    return false;
+}
+
+void MultiBuffer::updateUrlForPart(KParts::Part *part, KURL url)
+{
+    if (!url.isValid())
+        return;
+    KURL formerURL;
+    for (BufferMap::iterator it = m_buffers.begin(); it != m_buffers.end(); ++it)
+    {
+        if (it.data() == part)
+        {
+            formerURL = it.key();
+            break;
+        }
+    }
+    m_buffers.remove(formerURL);
+    m_buffers.insert(url, part);
+}
 
 #include "multibuffer.moc"
 

@@ -46,6 +46,7 @@ public:
 
     KParts::Part *activeBuffer() const;
     bool hasURL( const KURL &url ) const;
+    bool hasPart( KParts::Part *part );
     int numberOfBuffers() const;
     bool isActivated() const;
     void setDelayedActivation( bool delayed );
@@ -60,6 +61,8 @@ public:
 
     void registerURL( const KURL &url, KParts::Part *part );
     void registerDelayedActivation( KParts::Part *part, int line, int col );
+
+    void updateUrlForPart( KParts::Part *part, KURL url );
 
 public slots:
     virtual void show();
