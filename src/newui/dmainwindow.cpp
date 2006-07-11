@@ -159,7 +159,6 @@ void DMainWindow::removeWidget(QWidget *widget)
     if (m_activeTabWidget && m_activeTabWidget->currentPage())
     {
         //a hack to please multibuffer and actually switch the active part
-        m_activeTabWidget->currentPage()->setFocus();
         QFocusEvent ev(QEvent::FocusIn);
         QApplication::sendEvent(m_activeTabWidget->currentPage(), &ev);
     }
