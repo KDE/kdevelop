@@ -53,7 +53,7 @@ MultiBuffer::MultiBuffer( QWidget *parent )
         m_activeBuffer( 0 )
 {
     EditorProxy::getInstance() ->registerEditor( this );
-    if ( KDevLanguageSupport *lang = 
+    if ( KDevLanguageSupport *lang =
          API::getInstance() ->languageSupport() )
     {
         setOrientation( lang->splitOrientation() );
@@ -127,11 +127,15 @@ bool MultiBuffer::closeURL( const KURL &url )
     if ( !m_buffers.contains( url ) )
         return false;
 
+    bool result = false;
     KParts::ReadOnlyPart * part =
         dynamic_cast<KParts::ReadOnlyPart *>( m_buffers[ url ] );
-    m_buffers.remove( url );
     if ( part )
-        return part->closeURL();
+        if (part->closeURL())
+        {
+            m_buffers.remove( url );
+            return true;
+        }
     return false;
 }
 
