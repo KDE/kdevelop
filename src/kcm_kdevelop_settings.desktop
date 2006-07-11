@@ -6,7 +6,7 @@ ServiceTypes=KCModule
 
 X-KDE-ModuleType=Library
 X-KDE-Library=kdevelop_settings
-X-KDE-FactoryName=KDevelopPreferencesFactory
+X-KDE-FactoryName=kcm_kdevelop_settings
 X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
 
