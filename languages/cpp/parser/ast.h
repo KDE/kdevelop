@@ -109,79 +109,79 @@ struct AST
     {
       Kind_UNKNOWN = 0,
 
-      Kind_AccessSpecifier,
-      Kind_AsmDefinition,
-      Kind_BaseClause,
-      Kind_BaseSpecifier,
-      Kind_BinaryExpression,
-      Kind_CastExpression,
-      Kind_ClassMemberAccess,
-      Kind_ClassSpecifier,
-      Kind_CompoundStatement,
-      Kind_Condition,
-      Kind_ConditionalExpression,
-      Kind_CppCastExpression,
-      Kind_CtorInitializer,
-      Kind_DeclarationStatement,
-      Kind_Declarator,
-      Kind_DeleteExpression,
-      Kind_DoStatement,
-      Kind_ElaboratedTypeSpecifier,
-      Kind_EnumSpecifier,
-      Kind_Enumerator,
-      Kind_ExceptionSpecification,
-      Kind_ExpressionOrDeclarationStatement,
-      Kind_ExpressionStatement,
-      Kind_ForStatement,
-      Kind_FunctionCall,
-      Kind_FunctionDefinition,
-      Kind_IfStatement,
-      Kind_IncrDecrExpression,
-      Kind_InitDeclarator,
-      Kind_Initializer,
-      Kind_InitializerClause,
-      Kind_LabeledStatement,
-      Kind_LinkageBody,
-      Kind_LinkageSpecification,
-      Kind_MemInitializer,
-      Kind_Name,
-      Kind_Namespace,
-      Kind_NamespaceAliasDefinition,
-      Kind_NewDeclarator,
-      Kind_NewExpression,
-      Kind_NewInitializer,
-      Kind_NewTypeId,
-      Kind_Operator,
-      Kind_OperatorFunctionId,
-      Kind_ParameterDeclaration,
-      Kind_ParameterDeclarationClause,
-      Kind_PostfixExpression,
-      Kind_PrimaryExpression,
-      Kind_PtrOperator,
-      Kind_PtrToMember,
-      Kind_ReturnStatement,
-      Kind_SimpleDeclaration,
-      Kind_SimpleTypeSpecifier,
-      Kind_SizeofExpression,
-      Kind_StringLiteral,
-      Kind_SubscriptExpression,
-      Kind_SwitchStatement,
-      Kind_TemplateArgument,
-      Kind_TemplateDeclaration,
-      Kind_TemplateParameter,
-      Kind_ThrowExpression,
-      Kind_TranslationUnit,
-      Kind_TryBlockStatement,
-      Kind_TypeId,
-      Kind_TypeIdentification,
-      Kind_TypeParameter,
-      Kind_Typedef,
-      Kind_UnaryExpression,
-      Kind_UnqualifiedName,
-      Kind_Using,
-      Kind_UsingDirective,
-      Kind_WhileStatement,
-      Kind_WinDeclSpec,
+      Kind_AccessSpecifier,                     // 1
+      Kind_AsmDefinition,                       // 2
+      Kind_BaseClause,                          // 3
+      Kind_BaseSpecifier,                       // 4
+      Kind_BinaryExpression,                    // 5
+      Kind_CastExpression,                      // 6
+      Kind_ClassMemberAccess,                   // 7
+      Kind_ClassSpecifier,                      // 8
+      Kind_CompoundStatement,                   // 9
+      Kind_Condition,                           // 10
+      Kind_ConditionalExpression,               // 11
+      Kind_CppCastExpression,                   // 12
+      Kind_CtorInitializer,                     // 13
+      Kind_DeclarationStatement,                // 14
+      Kind_Declarator,                          // 15
+      Kind_DeleteExpression,                    // 16
+      Kind_DoStatement,                         // 17
+      Kind_ElaboratedTypeSpecifier,             // 18
+      Kind_EnumSpecifier,                       // 19
+      Kind_Enumerator,                          // 20
+      Kind_ExceptionSpecification,              // 21
+      Kind_ExpressionOrDeclarationStatement,    // 22
+      Kind_ExpressionStatement,                 // 23
+      Kind_ForStatement,                        // 24
+      Kind_FunctionCall,                        // 25
+      Kind_FunctionDefinition,                  // 26
+      Kind_IfStatement,                         // 27
+      Kind_IncrDecrExpression,                  // 28
+      Kind_InitDeclarator,                      // 29
+      Kind_Initializer,                         // 30
+      Kind_InitializerClause,                   // 31
+      Kind_LabeledStatement,                    // 32
+      Kind_LinkageBody,                         // 33
+      Kind_LinkageSpecification,                // 34
+      Kind_MemInitializer,                      // 35
+      Kind_Name,                                // 36
+      Kind_Namespace,                           // 37
+      Kind_NamespaceAliasDefinition,            // 38
+      Kind_NewDeclarator,                       // 39
+      Kind_NewExpression,                       // 40
+      Kind_NewInitializer,                      // 41
+      Kind_NewTypeId,                           // 42
+      Kind_Operator,                            // 43
+      Kind_OperatorFunctionId,                  // 44
+      Kind_ParameterDeclaration,                // 45
+      Kind_ParameterDeclarationClause,          // 46
+      Kind_PostfixExpression,                   // 47
+      Kind_PrimaryExpression,                   // 48
+      Kind_PtrOperator,                         // 49
+      Kind_PtrToMember,                         // 50
+      Kind_ReturnStatement,                     // 51
+      Kind_SimpleDeclaration,                   // 52
+      Kind_SimpleTypeSpecifier,                 // 53
+      Kind_SizeofExpression,                    // 54
+      Kind_StringLiteral,                       // 55
+      Kind_SubscriptExpression,                 // 56
+      Kind_SwitchStatement,                     // 57
+      Kind_TemplateArgument,                    // 58
+      Kind_TemplateDeclaration,                 // 59
+      Kind_TemplateParameter,                   // 60
+      Kind_ThrowExpression,                     // 61
+      Kind_TranslationUnit,                     // 62
+      Kind_TryBlockStatement,                   // 63
+      Kind_TypeId,                              // 64
+      Kind_TypeIdentification,                  // 65
+      Kind_TypeParameter,                       // 66
+      Kind_Typedef,                             // 67
+      Kind_UnaryExpression,                     // 68
+      Kind_UnqualifiedName,                     // 69
+      Kind_Using,                               // 70
+      Kind_UsingDirective,                      // 71
+      Kind_WhileStatement,                      // 72
+      Kind_WinDeclSpec,                         // 73
 
       NODE_KIND_COUNT
     };

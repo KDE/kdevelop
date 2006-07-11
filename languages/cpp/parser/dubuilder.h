@@ -57,6 +57,7 @@ protected:
   virtual void visitParameterDeclaration (ParameterDeclarationAST *);
   virtual void visitCompoundStatement (CompoundStatementAST *);
   virtual void visitSimpleDeclaration (SimpleDeclarationAST *);
+  virtual void visitDeclarator (DeclaratorAST*);
   virtual void visitName (NameAST *);
 
   inline bool inNamespace (bool f) {
@@ -100,7 +101,7 @@ private:
    * Register a new declaration with the definition-use chain.
    * Returns the new context created by this definition.
    */
-  Definition* newDeclaration(KTextEditor::Range* range, TypeSpecifierAST* type);
+  Definition* newDeclaration(KTextEditor::Range* range);
 
   void closeContext(AST* node, DUContext* parent);
 
@@ -123,6 +124,9 @@ private:
 
   DUContext* m_currentContext;
   TypeEnvironment* m_types;
+
+  Definition* m_currentDefinition;
+  QString m_currentIdentifier;
 };
 
 #endif // DUBUILDER_H

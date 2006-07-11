@@ -23,11 +23,10 @@
 
 using namespace KTextEditor;
 
-Definition::Definition(KTextEditor::Range* range, const AbstractType * type, const QString & identifier, Scope scope )
+Definition::Definition(KTextEditor::Range* range, Scope scope )
   : RangeObject(range)
   , m_scope(scope)
-  , m_type(type)
-  , m_identifier(identifier)
+  , m_type(0)
 {
 }
 
@@ -51,9 +50,19 @@ const QString & Definition::identifier( ) const
   return m_identifier;
 }
 
+void Definition::setIdentifier(const QString& identifier)
+{
+  m_identifier = identifier;
+}
+
 const AbstractType * Definition::type( ) const
 {
   return m_type;
+}
+
+void Definition::setType(const AbstractType* type)
+{
+  m_type = type;
 }
 
 Definition::Scope Definition::scope( ) const

@@ -40,11 +40,14 @@ public:
     LocalScope
   };
 
-  Definition(KTextEditor::Range* range, const AbstractType* type, const QString& identifier, Scope scope);
+  Definition(KTextEditor::Range* range, Scope scope);
 
   Scope scope() const;
 
   const AbstractType* type() const;
+  void setType(const AbstractType* type);
+
+  void setIdentifier(const QString& identifier);
   const QString& identifier() const;
 
   const QList<KTextEditor::Range*>& uses() const;

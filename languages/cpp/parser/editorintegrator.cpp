@@ -136,7 +136,8 @@ Range* EditorIntegrator::createRange()
 
 Range* EditorIntegrator::createRange( AST * node, RangeEdge edge )
 {
-  return createRange(findPosition(node->start_token, edge == OuterEdge ? FrontEdge : BackEdge), findPosition(node->end_token, edge == InnerEdge ? FrontEdge : BackEdge));
+  Q_UNUSED(edge);
+  return createRange(findPosition(node->start_token, FrontEdge), findPosition(node->end_token, FrontEdge));
 }
 
 Range* EditorIntegrator::createRange( const Token & token )

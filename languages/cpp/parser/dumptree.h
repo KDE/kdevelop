@@ -21,19 +21,25 @@
 
 #include "default_visitor.h"
 
+class TokenStream;
+class DUContext;
+
 class DumpTree: protected DefaultVisitor
 {
 public:
   DumpTree();
   virtual ~DumpTree();
 
-  void dump(AST *node, class TokenStream* tokenStream = 0);
+  void dump(AST *node, TokenStream* tokenStream = 0);
+
+  void dump(DUContext* context);
 
 protected:
   virtual void visit(AST *node);
 
 private:
   class EditorIntegrator* m_editor;
+  int indent;
 };
 
 #endif // DUMPTREE_H

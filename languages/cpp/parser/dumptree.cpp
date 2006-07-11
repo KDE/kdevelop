@@ -23,6 +23,8 @@
 #include <kdebug.h>
 
 #include "editorintegrator.h"
+#include "ducontext.h"
+#include "definition.h"
 
 static char const * const names[] = {
   0,
@@ -103,6 +105,7 @@ static char const * const names[] = {
 
 DumpTree::DumpTree()
   : m_editor(0)
+  , indent(0)
 {
 }
 
@@ -119,11 +122,9 @@ void DumpTree::dump( AST * node, class TokenStream * tokenStream )
 
 void DumpTree::visit(AST *node)
 {
-  static int indent = 0;
-
   if (node)
     if (m_editor)
-      kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
+      kDebug() << QString(indent * 2, ' ') << names[node->kind]
               << '[' << m_editor->findPosition(node->start_token, EditorIntegrator::FrontEdge) << ", "
               << m_editor->findPosition(node->end_token, EditorIntegrator::FrontEdge) << ']' << endl;
     else
@@ -133,11 +134,35 @@ void DumpTree::visit(AST *node)
   ++indent;
   DefaultVisitor::visit(node);
   --indent;
+
+  if (node)
+    if (m_editor)
+      kDebug() << QString(indent * 2, ' ') << names[node->kind]
+              << "[Close: " << m_editor->findPosition(node->start_token, EditorIntegrator::FrontEdge) << ", "
+              << m_editor->findPosition(node->end_token, EditorIntegrator::FrontEdge) << ']' << endl;
+    else
+      kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
+              << "[Close: " << node->start_token << ", " << node->end_token << ']' << endl;
 }
 
 DumpTree::~ DumpTree( )
 {
   delete m_editor;
+}
+
+void DumpTree::dump( DUContext * context )
+{
+  kDebug() << QString(indent * 2, ' ') << "New Context" << endl;
+  foreach (Definition* def, context->localDefinitions()) {
+    kDebug() << QString((indent+1) * 2, ' ') << "-> \"" << def->identifier() << "\" " << def->textRange() << ", " << def->uses().count() << " uses:" << endl;
+    foreach (KTextEditor::Range* use, def->uses())
+      kDebug() << QString((indent+1) * 2, ' ') << "==> " << *use << endl;
+  }
+
+  ++indent;
+  foreach (DUContext* child, context->childContexts())
+    dump(child);
+  --indent;
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

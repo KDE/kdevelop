@@ -138,9 +138,14 @@ void DUBuilder::visitParameterDeclarationClause (ParameterDeclarationClauseAST *
 
 void DUBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
 {
-  newDeclaration(m_editor->createRange(node), node->type_specifier);
+  Definition* oldDefinition = m_currentDefinition;
+
+  Range* range = m_editor->createRange(node);
+  m_currentDefinition = newDeclaration(range);
 
   DefaultVisitor::visitParameterDeclaration (node);
+
+  m_currentDefinition = oldDefinition;
 }
 
 void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
@@ -159,45 +164,36 @@ void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
 
 void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 {
+  Definition* oldDefinition = m_currentDefinition;
+
   Range* range = m_editor->createRange(node);
-  kDebug() << "Visit simple declaration: " << *range << endl;
-  Definition* definition = newDeclaration(range, node->type_specifier);
+  m_currentDefinition = newDeclaration(range);
 
   DefaultVisitor::visitSimpleDeclaration (node);
+
+  m_currentDefinition = oldDefinition;
 }
 
 void DUBuilder::visitName (NameAST *node)
 {
   m_nameCompiler->run(node);
+  m_currentIdentifier = m_nameCompiler->name();
 
-  Range* use = m_editor->createRange(node);
-
-  // Find definition
-  QString identifier = m_nameCompiler->name();
-  kDebug() << "Visit name: " << identifier << " flags " << flags << endl;
-
-  Definition* definition = m_currentContext->findDefinition(identifier, DocumentCursor(use, DocumentCursor::Start));
-
-  if (definition)
-    definition->addUse(use);
-  else
-    kWarning() << k_funcinfo << "No definition found for \"" << identifier << "\" in context " << m_currentContext->textRange() << endl;
+  //Range* use = m_editor->createRange(node);
 
   DefaultVisitor::visitName(node);
-
-  kDebug() << "End visit name " << identifier << endl;
 }
 
-Definition* DUBuilder::newDeclaration(Range* range, TypeSpecifierAST* type )
+void DUBuilder::visitDeclarator (DeclaratorAST* node)
 {
-  // This cast may well be an incorrect assumption...
-  m_nameCompiler->run(static_cast<ElaboratedTypeSpecifierAST*>(type)->name);
+  DefaultVisitor::visitDeclarator(node);
 
-  QString identifier = m_nameCompiler->name();
+  if (m_currentDefinition)
+    m_currentDefinition->setIdentifier(m_currentIdentifier);
+}
 
-  // FIXME here we need to interface with the type system properly...
-  AbstractType* abstractType = 0;//m_types->findIntegral(integralType);
-
+Definition* DUBuilder::newDeclaration(Range* range)
+{
   Definition::Scope scope = Definition::GlobalScope;
   if (in_function_definition)
     scope = Definition::LocalScope;
@@ -207,7 +203,7 @@ Definition* DUBuilder::newDeclaration(Range* range, TypeSpecifierAST* type )
     scope = Definition::NamespaceScope;
 
   //kDebug() << "Visit declaration: " << identifier << " range " << *range << endl;
-  Definition* definition = new Definition(range, abstractType, identifier, scope);
+  Definition* definition = new Definition(range, scope);
   m_currentContext->addDefinition(definition);
 
   return definition;

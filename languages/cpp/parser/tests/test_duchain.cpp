@@ -70,10 +70,22 @@ private slots:
     type2 = types.referenceType(type1);
     type3 = types.pointerType(type1);
 
-    definition1 = new Definition(new DocumentRange(file1, Range(4,4,4,16)), type1, QString("lazy"), Definition::LocalScope);
-    definition2 = new Definition(new DocumentRange(file1, Range(5,4,5,16)), type2, QString("m_errorCode"), Definition::ClassScope);
-    definition3 = new Definition(new DocumentRange(file1, Range(6,4,6,16)), type3, QString("lazy"), Definition::GlobalScope);
-    definition4 = new Definition(new DocumentRange(file1, Range(7,4,7,16)), type2, QString("m_errorCode2"), Definition::ClassScope);
+    definition1 = new Definition(new DocumentRange(file1, Range(4,4,4,16)), Definition::LocalScope);
+    definition1->setType(type1);
+    definition1->setIdentifier("lazy");
+
+    definition2 = new Definition(new DocumentRange(file1, Range(5,4,5,16)), Definition::ClassScope);
+    definition2->setType(type2);
+    definition2->setIdentifier("m_errorCode");
+
+    definition3 = new Definition(new DocumentRange(file1, Range(6,4,6,16)), Definition::GlobalScope);
+    definition3->setType(type3);
+    definition3->setIdentifier("lazy");
+
+    definition4 = new Definition(new DocumentRange(file1, Range(7,4,7,16)), Definition::ClassScope);
+    definition4->setType(type2);
+    definition4->setIdentifier("m_errorCode2");
+
 
     file1 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/duchain.cpp";
     file2 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/dubuilder.cpp";
@@ -193,7 +205,7 @@ private slots:
 
   void testParsing()
   {
-    QByteArray method("void A::t() { for (int i = 0; i < 10; i++) { ; }}");
+    QByteArray method("int i;");//void A::t() { for (int i = 0; i < 10; i++) { ; }}");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
     EditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
@@ -201,7 +213,10 @@ private slots:
     dumper.dump(ast, &parser.token_stream);
 
     DUBuilder dubuilder(&parser.token_stream);
-    dubuilder.build(KUrl("file:///internal"), ast);
+    DUContext* top = dubuilder.build(KUrl("file:///internal"), ast);
+
+    dumper.dump(top);
+    delete top;
   }
 
 private:
