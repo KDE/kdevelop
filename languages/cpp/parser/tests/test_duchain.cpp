@@ -203,11 +203,59 @@ private slots:
     topContext->deleteChildContextsRecursively();
   }
 
-  void testParsing()
+  void testDeclareInt()
   {
-    QByteArray method("int i;");//void A::t() { for (int i = 0; i < 10; i++) { ; }}");
+    QByteArray method("int i;");
+
+    DUContext* top = parse(method);
+
+    QCOMPARE(top->childContexts().count(), 0);
+    QCOMPARE(top->localDefinitions().count(), 1);
+
+    Definition* def = top->localDefinitions().first();
+    QCOMPARE(def->identifier(), QString("i"));
+
+    //delete top;
+  }
+
+
+  void testDeclareFor()
+  {
+    QByteArray method("for (int i = 0; i < 10; i++) {}");
+
+    DUContext* top = parse(method);
+
+    /*QCOMPARE(top->childContexts(), 0);
+    QCOMPARE(top->localDefinitions(), 1);
+
+    Definition* def = top->localDefinitions().first();
+    QCOMPARE(def->identifier(), QString("i"));*/
+
+    //delete top;
+  }
+
+  void testDeclareFunction()
+  {
+    QByteArray method("void A::t() { }");
+
+    DUContext* top = parse(method);
+
+    /*QCOMPARE(top->childContexts(), 0);
+    QCOMPARE(top->localDefinitions(), 1);
+
+    Definition* def = top->localDefinitions().first();
+    QCOMPARE(def->identifier(), QString("i"));*/
+
+    //delete top;
+  }
+
+private:
+  DUContext* parse(const QByteArray& unit)
+  {
     pool mem_pool;
-    TranslationUnitAST* ast = parse(method, &mem_pool);
+
+    TranslationUnitAST* ast = parser.parse(unit.constData(), unit.size() + 1, &mem_pool);
+
     EditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
 
     dumper.dump(ast, &parser.token_stream);
@@ -216,13 +264,7 @@ private slots:
     DUContext* top = dubuilder.build(KUrl("file:///internal"), ast);
 
     dumper.dump(top);
-    delete top;
-  }
-
-private:
-  TranslationUnitAST* parse(const QByteArray& unit, pool* mem_pool)
-  {
-    return  parser.parse(unit.constData(), unit.size() + 1, mem_pool);
+    return top;
   }
 };
 
