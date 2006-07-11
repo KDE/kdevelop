@@ -389,7 +389,10 @@ void SimpleMainWindow::projectOpened()
 void SimpleMainWindow::slotPartURLChanged(KParts::ReadOnlyPart *part)
 {
     if (QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(part))
+    {
+        kdDebug() << "new caption for widget: " << part->url().fileName() << endl;
         widget->setCaption(part->url().fileName());
+    }
         //do smth with caption: ro_part->url().fileName()
 }
 

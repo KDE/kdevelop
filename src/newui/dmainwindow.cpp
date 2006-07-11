@@ -89,7 +89,7 @@ void DMainWindow::addWidget(QWidget *widget, const QString &title)
         m_central->addDock(0, 0, m_activeTabWidget);
         m_firstRemoved = false;
     }
-        
+
     addWidget(m_activeTabWidget, widget, title);
 }
 
@@ -116,7 +116,7 @@ void DMainWindow::removeWidget(QWidget *widget)
 {
     if (!m_widgets.contains(widget))
         return; //not a widget in main window
-    
+
     if (m_widgetTabs.contains(widget))
     {
         DTabWidget *tab = m_widgetTabs[widget];
@@ -154,19 +154,19 @@ void DMainWindow::removeWidget(QWidget *widget)
             }
         }
     }
-    
+
     m_widgets.remove(widget);
     m_widgetTabs.remove(widget);
 }
 
-DTabWidget *DMainWindow::splitHorizontal() 
+DTabWidget *DMainWindow::splitHorizontal()
 {
     m_activeTabWidget = createTab();
     m_central->addDock(m_central->numRows(), 0, m_activeTabWidget);
     return m_activeTabWidget;
 }
 
-DTabWidget *DMainWindow::splitVertical() 
+DTabWidget *DMainWindow::splitVertical()
 {
 //     invalidateActiveTabWidget();
     int row = m_central->indexOf(m_activeTabWidget).first;
@@ -203,7 +203,7 @@ DTabWidget *DMainWindow::createTab()
     if (tab->closeButton())
         connect(tab->closeButton(), SIGNAL(clicked()), this, SLOT(closeTab()));
     connect(tab, SIGNAL(closeRequest(QWidget*)), this, SLOT(closeTab(QWidget*)));
-    connect(tab, SIGNAL(contextMenu(QWidget*,const QPoint &)), 
+    connect(tab, SIGNAL(contextMenu(QWidget*,const QPoint &)),
         this, SLOT(tabContext(QWidget*,const QPoint &)));
     return tab;
 }
@@ -213,7 +213,7 @@ bool DMainWindow::eventFilter(QObject *obj, QEvent *ev)
     QWidget *w = (QWidget*)obj;
     if (!m_widgets.contains(w))
         return KParts::MainWindow::eventFilter(obj, ev);
-    
+
     if ((m_currentWidget != w) && (ev->type() == QEvent::FocusIn))
     {
         m_currentWidget = w;
@@ -230,6 +230,8 @@ bool DMainWindow::eventFilter(QObject *obj, QEvent *ev)
     else if (ev->type() == QEvent::CaptionChange)
     {
         kdDebug() << "caption change" << endl;
+        DTabWidget *tab = m_widgetTabs[w];
+        tab->changeTab(w, w->caption());
     }
 
     return KParts::MainWindow::eventFilter(obj, ev);

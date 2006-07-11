@@ -1773,6 +1773,8 @@ void PartController::slotDocumentUrlChanged()
         return;
 
     multiBuffer->updateUrlForPart(doc, doc->url());
+    updatePartURL(doc);
+    emit partURLChanged(doc);
 }
 
 #include "partcontroller.moc"
