@@ -34,8 +34,10 @@ set(kdevcppparser_STAT_SRCS
     duchain.cpp
     ducontext.cpp
     definition.cpp
-    textlocation.cpp
     editorintegrator.cpp
+    documentrange.cpp
+    documentcursor.cpp
+    rangeobject.cpp
 )
 
 kde4_automoc(${kdevcppparser_STAT_SRCS})

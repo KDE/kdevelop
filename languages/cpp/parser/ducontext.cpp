@@ -21,10 +21,12 @@
 #include "typesystem.h"
 #include "definition.h"
 #include "duchain.h"
+#include "editorintegrator.h"
 
 using namespace KTextEditor;
 
-DUContext::DUContext()
+DUContext::DUContext(KTextEditor::Range* range)
+  : RangeObject(range)
 {
 }
 
@@ -69,7 +71,7 @@ Definition * DUContext::findLocalDefinition( const QString & identifier ) const
 
 Definition * DUContext::findDefinition( const QString & identifier ) const
 {
-  return findDefinition(identifier, TextPosition(textRange().end(), url()));
+  return findDefinition(identifier, DocumentCursor(textRangePtr(), DocumentCursor::Start));
 }
 
 DUContext * DUContext::definitionContext( const QString & identifier ) const
@@ -125,7 +127,7 @@ void DUContext::addParentContext( DUContext * context )
   m_parentContexts.append(context);
 }
 
-DUContext * DUContext::findContext( const TextPosition& position, DUContext* parent) const
+DUContext * DUContext::findContext( const DocumentCursor& position, DUContext* parent) const
 {
   if (!parent)
     parent = const_cast<DUContext*>(this);
@@ -142,7 +144,7 @@ DUContext * DUContext::findContext( const TextPosition& position, DUContext* par
   return 0;
 }
 
-QHash<QString, Definition*> DUContext::allDefinitions(const TextPosition& position) const
+QHash<QString, Definition*> DUContext::allDefinitions(const DocumentCursor& position) const
 {
   QHash<QString, Definition*> ret;
 
@@ -213,12 +215,12 @@ QList< Definition * > DUContext::clearLocalDefinitions( )
   return ret;
 }
 
-Definition * DUContext::findDefinition( const QString & identifier, const TextPosition & position ) const
+Definition * DUContext::findDefinition( const QString & identifier, const DocumentCursor & position ) const
 {
   return findDefinitionInternal(identifier, position, this);
 }
 
-Definition * DUContext::findDefinitionInternal( const QString & identifier, const TextPosition & position, const DUContext * const context ) const
+Definition * DUContext::findDefinitionInternal( const QString & identifier, const DocumentCursor & position, const DUContext * const context ) const
 {
   if (Definition* definition = context->findLocalDefinition(identifier))
     return definition;

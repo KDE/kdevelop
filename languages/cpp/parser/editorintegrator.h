@@ -21,11 +21,16 @@
 
 #include <QObject>
 
+#include <kurl.h>
+
 #include <ktexteditor/range.h>
 
 #include "lexer.h"
+#include "documentcursor.h"
 
 class AST;
+class DocumentRange;
+class DocumentCursor;
 
 namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterface; }
 
@@ -51,20 +56,26 @@ public:
   static void addDocument(KTextEditor::Document* document);
 
   /**
-   * Returns the currently active document for operations.
+   * Returns the text document for \a url, if one exists.
+   */
+  static KTextEditor::Document* findDocument(const KUrl& url);
+
+  const KUrl& currentUrl() const;
+  void setCurrentUrl(const KUrl& currentUrl);
+
+  /**
+   * Return the current text editor document, based on the current URL.
    */
   KTextEditor::Document* currentDocument() const;
 
-  /**
-   * Sets a document as the currently active document for operations.
-   */
-  void setCurrentDocument(KTextEditor::Document* document);
-
+  /// Convenience function to return the SmartInterface for the current document.
   KTextEditor::SmartInterface* smart() const;
 
   enum TopRangeType {
     Highlighting,
-    DefinitionUseChain
+    DefinitionUseChain,
+
+    TopRangeCount
   };
 
   /**
@@ -77,7 +88,7 @@ public:
    * \returns the range either found or created, if the document was valid and supports
    *          smart ranges.
    */
-  KTextEditor::SmartRange* topRange(TopRangeType type);
+  KTextEditor::Range* topRange(TopRangeType type);
 
   enum Edge {
     FrontEdge,
@@ -89,29 +100,27 @@ public:
    * does not change any of the EditorIntegrator's state.
    *
    * \param token token to locate
-   * \param fileName provide a QString to this parameter to return the file which the token was found in.
-   * \param end set to false to return the start position of the token, true to return the end position.
+   * \param edge set to FrontEdge to return the start position of the token, BackEdge to return the end position.
    *
    * \returns the requested cursor relating to the start or end of the given token.
    */
-  KTextEditor::Cursor findPosition(const Token& token, Edge edge = BackEdge, QString* file = 0) const;
+  DocumentCursor findPosition(const Token& token, Edge edge = BackEdge) const;
 
   /**
    * Finds the location and \a file where the given \a token was parsed from.  This function
    * does not change any of the EditorIntegrator's state.
    *
    * \param token token to locate
-   * \param fileName provide a QString to this parameter to return the file which the token was found in.
-   * \param end set to false to return the start position of the token, true to return the end position.
+   * \param edge set to FrontEdge to return the start position of the token, BackEdge to return the end position.
    *
    * \returns the requested cursor relating to the start or end of the given token.
    */
-  KTextEditor::Cursor findPosition(std::size_t token, Edge edge = BackEdge, QString* file = 0) const;
+  DocumentCursor findPosition(std::size_t token, Edge edge = BackEdge) const;
 
   /**
    * Create a new smart cursor from the given \a position.
    */
-  KTextEditor::SmartCursor* createCursor(const KTextEditor::Cursor& position);
+  KTextEditor::SmartCursor* createCursor(const DocumentCursor& position);
 
   /**
    * Create a new smart cursor from the given \a token on the given \a edge.
@@ -124,38 +133,47 @@ public:
   void setNewEnd(const KTextEditor::Cursor& position);
 
   /**
-   * Create a smart range over \a range with the given \a parent.
+   * Create a text range over \a range as a child range of the current range.
    * The returned range will become the new currentRange().
+   *
+   * If the current document is loaded, and it supports creating smart ranges,
+   * this will be a smart range, otherwise it will be a DocumentRange.
    *
    * \param range Range of text to cover.  If this is outside the parent's range, the
    * parent will be adjusted (standard behaviour of SmartRange%s).
-   * \returns the newly created smart range.
+   *
+   * \returns the newly created text range.
    */
-  KTextEditor::SmartRange* createRange(const KTextEditor::Range& range);
+  KTextEditor::Range* createRange(const KTextEditor::Range& range);
 
   /**
-   * Create a smart range over \a range with the given \a parent.
+   * Create a text range from \a start to \a end as a child range of the current range.
    * The returned range will become the new currentRange().
    *
-   * \param range Range of text to cover.  If this is outside the parent's range, the
+   * If the current document is loaded, and it supports creating smart ranges,
+   * this will be a smart range, otherwise it will be a DocumentRange.
+   *
+   * \param start start of the range of text to cover.  If this is outside the parent's range, the
    * parent will be adjusted (standard behaviour of SmartRange%s).
-   * \param parent Parent range to the range to be created.  If none is set, the current range will
-   * be used as the parent.
-   * \returns the newly created smart range.
+   * \param end end of the range of text to cover.  If this is outside the parent's range, the
+   * parent will be adjusted (standard behaviour of SmartRange%s).
+   *
+   * \returns the newly created text range.
    * \overload
    */
-  KTextEditor::SmartRange* createRange(const KTextEditor::Cursor& start, const KTextEditor::Cursor& end);
+  KTextEditor::Range* createRange(const DocumentCursor& start, const DocumentCursor& end);
 
   /**
-   * Create a smart range over the marked range with the given \a parent.
+   * Create a text range over the marked range as a child range of the current range.
    * The returned range will become the new currentRange().
    *
-   * \param parent Parent range to the range to be created.  If none is set, the current range will
-   * be used as the parent.
+   * If the current document is loaded, and it supports creating smart ranges,
+   * this will be a smart range, otherwise it will be a DocumentRange.
+   *
    * \returns the newly created smart range.
    * \overload
    */
-  KTextEditor::SmartRange* createRange();
+  KTextEditor::Range* createRange();
 
   enum RangeEdge {
     InnerEdge,
@@ -163,54 +181,63 @@ public:
   };
 
   /**
-   * Create a new start range encompassing the given AST \a node.
+   * Create a new text range encompassing the given AST \a node.
    * The returned range will become the new currentRange().
+   *
+   * If the current document is loaded, and it supports creating smart ranges,
+   * this will be a smart range, otherwise it will be a DocumentRange.
    *
    * \returns the newly created smart range.
    * \overload
    */
-  KTextEditor::SmartRange* createRange(AST* node, RangeEdge = OuterEdge);
+  KTextEditor::Range* createRange(AST* node, RangeEdge = OuterEdge);
 
   /**
    * Create a new start range encompassing the given AST \a token.
    * The returned range will become the new currentRange().
    *
+   * If the current document is loaded, and it supports creating smart ranges,
+   * this will be a smart range, otherwise it will be a DocumentRange.
+   *
    * \returns the newly created smart range.
    * \overload
    */
-  KTextEditor::SmartRange* createRange(const Token& token);
+  KTextEditor::Range* createRange(const Token& token);
 
   /**
    * Create a new start range encompassing the given AST \a token.
    * The returned range will become the new currentRange().
    *
+   * If the current document is loaded, and it supports creating smart ranges,
+   * this will be a smart range, otherwise it will be a DocumentRange.
+   *
    * \returns the newly created smart range.
    * \overload
    */
-  KTextEditor::SmartRange* createRange(std::size_t token);
+  KTextEditor::Range* createRange(std::size_t token);
 
   /**
-   * Returns the current smart text range.
+   * Returns the current text range.
    */
-  KTextEditor::SmartRange* currentRange() const;
+  KTextEditor::Range* currentRange() const;
 
   /**
    * Sets the current range to \a range.
    */
-  void setCurrentRange(KTextEditor::SmartRange* range);
+  void setCurrentRange(KTextEditor::Range* range);
 
 public slots:
   static void removeTextSource(KTextEditor::Document* document);
 
 private:
   static QHash<TokenStream*, Lexer*> s_parsedSources;
-  static QList<KTextEditor::Document*> s_documents;
-  static QHash<KTextEditor::Document*, QVector<KTextEditor::SmartRange*> > s_topRanges;
+  static QHash<KUrl, KTextEditor::Document*> s_documents;
+  static QHash<KTextEditor::Document*, QVector<KTextEditor::Range*> > s_topRanges;
 
   Lexer* m_lexer;
   TokenStream* m_tokenStream;
-  KTextEditor::Document* m_currentDocument;
-  KTextEditor::SmartRange* m_currentRange;
+  KUrl m_currentUrl;
+  KTextEditor::Range* m_currentRange;
   KTextEditor::Range m_newRangeMarker;
 };
 

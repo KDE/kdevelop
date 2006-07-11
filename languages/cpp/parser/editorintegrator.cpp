@@ -23,22 +23,24 @@
 #include <ktexteditor/smartinterface.h>
 
 #include "ast.h"
+#include "documentrange.h"
+
+using namespace KTextEditor;
 
 QHash<TokenStream*, Lexer*> EditorIntegrator::s_parsedSources;
-QList<KTextEditor::Document*> EditorIntegrator::s_documents;
-QHash<KTextEditor::Document*, QVector<KTextEditor::SmartRange*> > EditorIntegrator::s_topRanges;
+QHash<KUrl, Document*> EditorIntegrator::s_documents;
+QHash<Document*, QVector<Range*> > EditorIntegrator::s_topRanges;
 
 EditorIntegrator::EditorIntegrator( TokenStream * tokenStream )
   : m_lexer(s_parsedSources[tokenStream])
   , m_tokenStream(tokenStream)
-  , m_currentDocument(0)
   , m_currentRange(0)
 {
 }
 
-void EditorIntegrator::addDocument( KTextEditor::Document * document )
+void EditorIntegrator::addDocument( Document * document )
 {
-  s_documents.append(document);
+  s_documents.insert(document->url(), document);
 }
 
 void EditorIntegrator::addParsedSource( Lexer * lexer, TokenStream * tokenStream )
@@ -46,31 +48,26 @@ void EditorIntegrator::addParsedSource( Lexer * lexer, TokenStream * tokenStream
   s_parsedSources.insert(tokenStream, lexer);
 }
 
-void EditorIntegrator::setCurrentDocument( KTextEditor::Document * document )
+SmartInterface* EditorIntegrator::smart() const
 {
-  m_currentDocument = document;
+  return dynamic_cast<SmartInterface*>(currentDocument());
 }
 
-KTextEditor::SmartInterface* EditorIntegrator::smart() const
+SmartCursor* EditorIntegrator::createCursor(const DocumentCursor& position)
 {
-  return dynamic_cast<KTextEditor::SmartInterface*>(currentDocument());
-}
-
-KTextEditor::SmartCursor* EditorIntegrator::createCursor(const KTextEditor::Cursor& position)
-{
-  if (KTextEditor::SmartInterface* iface = smart())
+  if (SmartInterface* iface = smart())
     return iface->newSmartCursor(position);
 
   return 0;
 }
 
-KTextEditor::Cursor EditorIntegrator::findPosition( std::size_t token, Edge edge, QString * file ) const
+DocumentCursor EditorIntegrator::findPosition( std::size_t token, Edge edge ) const
 {
   const Token& t = m_tokenStream->token(token);
-  return findPosition(t, edge, file);
+  return findPosition(t, edge);
 }
 
-KTextEditor::Cursor EditorIntegrator::findPosition( const Token & token, Edge edge, QString * file ) const
+DocumentCursor EditorIntegrator::findPosition( const Token & token, Edge edge ) const
 {
   int line, column;
   QString fileName;
@@ -78,98 +75,125 @@ KTextEditor::Cursor EditorIntegrator::findPosition( const Token & token, Edge ed
   m_lexer->positionAt((edge == BackEdge) ? token.position + token.size : token.position,
                        &line, &column, &fileName);
 
-  if (file) {
-    if (fileName.isEmpty())
-      // FIXME assumption wrong? Best to fix in the parser I think, always return a filename.
-      fileName = currentDocument()->url().toString();//m_currentFile;
+  if (fileName.isEmpty())
+    // FIXME assumption wrong? Best to fix in the parser I think, always return a filename.
+    fileName = currentDocument()->url().toString();//m_currentFile;
 
-    *file = fileName;
-  }
-
-  return KTextEditor::Cursor(line, column);
+  return DocumentCursor(KUrl(fileName), Cursor(line, column));
 }
 
-KTextEditor::Document* EditorIntegrator::currentDocument() const
+Document* EditorIntegrator::currentDocument() const
 {
-  return m_currentDocument;
+  return s_documents[m_currentUrl];
 }
 
-KTextEditor::SmartRange * EditorIntegrator::topRange( TopRangeType type )
+Range* EditorIntegrator::topRange( TopRangeType type )
 {
-  if (s_topRanges.contains(currentDocument()))
-    return s_topRanges[currentDocument()][type];
+  if (!s_topRanges.contains(currentDocument()))
+    s_topRanges.insert(currentDocument(), QVector<Range*>(TopRangeCount));
 
-  return 0;
+  if (!s_topRanges[currentDocument()][type])
+    s_topRanges[currentDocument()][type] = createRange(currentDocument()->documentRange());
+
+  return s_topRanges[currentDocument()][type];
 }
 
-KTextEditor::SmartRange * EditorIntegrator::createRange( const KTextEditor::Range & range )
+Range* EditorIntegrator::createRange( const Range & range )
 {
-  if (KTextEditor::SmartInterface* iface = smart()) {
-    m_currentRange = iface->newSmartRange(range, m_currentRange);
-    return m_currentRange;
-  }
+  Range* ret;
 
-  return 0;
+  if (SmartInterface* iface = smart())
+    if (!m_currentRange || m_currentRange->isSmartRange())
+      ret = iface->newSmartRange(range, static_cast<SmartRange*>(m_currentRange));
+    else
+      ret = iface->newSmartRange(range);
+  else
+    ret = new DocumentRange(m_currentUrl, range);
+
+  m_currentRange = ret;
+  return m_currentRange;
 }
 
 
-KTextEditor::SmartRange * EditorIntegrator::createRange( const KTextEditor::Cursor & start, const KTextEditor::Cursor & end )
+Range* EditorIntegrator::createRange( const DocumentCursor& start, const DocumentCursor& end )
 {
-  return createRange(KTextEditor::Range(start, end));
+  Q_ASSERT(start.document() == end.document());
+  KUrl oldUrl = m_currentUrl;
+  m_currentUrl = start.document();
+  Range* ret = createRange(Range(start, end));
+  m_currentUrl = oldUrl;
+  return ret;
 }
 
-KTextEditor::SmartRange * EditorIntegrator::createRange()
+Range* EditorIntegrator::createRange()
 {
   return createRange(m_newRangeMarker);
 }
 
-KTextEditor::SmartRange * EditorIntegrator::createRange( AST * node, RangeEdge edge )
+Range* EditorIntegrator::createRange( AST * node, RangeEdge edge )
 {
   return createRange(findPosition(node->start_token, edge == OuterEdge ? FrontEdge : BackEdge), findPosition(node->end_token, edge == InnerEdge ? FrontEdge : BackEdge));
 }
 
-KTextEditor::SmartRange * EditorIntegrator::createRange( const Token & token )
+Range* EditorIntegrator::createRange( const Token & token )
 {
   return createRange(findPosition(token, FrontEdge), findPosition(token, BackEdge));
 }
 
-void EditorIntegrator::setNewRange(const KTextEditor::Range& range)
+void EditorIntegrator::setNewRange(const Range& range)
 {
   m_newRangeMarker = range;
 }
 
-void EditorIntegrator::setNewEnd( const KTextEditor::Cursor & position )
+void EditorIntegrator::setNewEnd( const Cursor & position )
 {
   m_newRangeMarker.end() = position;
 }
 
-void EditorIntegrator::setNewStart( const KTextEditor::Cursor & position )
+void EditorIntegrator::setNewStart( const Cursor & position )
 {
   m_newRangeMarker.start() = position;
 }
 
-KTextEditor::SmartCursor * EditorIntegrator::createCursor( std::size_t token, Edge edge )
+SmartCursor * EditorIntegrator::createCursor( std::size_t token, Edge edge )
 {
   const Token& t = m_tokenStream->token(token);
   return createCursor(findPosition(t, edge));
 }
 
-
-void EditorIntegrator::removeTextSource( KTextEditor::Document * document )
+Document * EditorIntegrator::findDocument(const KUrl& url)
 {
-  s_documents.removeAll(document);
+  foreach (Document* d, s_documents)
+    if (d->url() == url)
+      return d;
+
+  return 0;
+}
+
+void EditorIntegrator::removeTextSource( Document * document )
+{
+  s_documents.remove(document->url());
   s_topRanges.remove(document);
 }
 
-void EditorIntegrator::setCurrentRange( KTextEditor::SmartRange * range )
+void EditorIntegrator::setCurrentRange( Range* range )
 {
   m_currentRange = range;
-  m_currentDocument = range->document();
 }
 
-KTextEditor::SmartRange * EditorIntegrator::currentRange( ) const
+Range* EditorIntegrator::currentRange( ) const
 {
   return m_currentRange;
+}
+
+const KUrl& EditorIntegrator::currentUrl() const
+{
+  return m_currentUrl;
+}
+
+void EditorIntegrator::setCurrentUrl(const KUrl& url)
+{
+  m_currentUrl = url;
 }
 
 #include "editorintegrator.moc"

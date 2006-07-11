@@ -16,49 +16,47 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DEFINITION_H
-#define DEFINITION_H
+#include "documentcursor.h"
 
-#include <QList>
-#include <QPair>
+#include <ktexteditor/smartcursor.h>
+#include <ktexteditor/document.h>
 
 #include "rangeobject.h"
 
-class AbstractType;
+using namespace KTextEditor;
 
-/**
- * Represents a single variable definition in a definition-use chain.
- */
-class Definition : public RangeObject
+DocumentCursor::DocumentCursor(const KUrl& document, const Cursor& cursor)
+  : Cursor(cursor)
+  , m_document(document)
 {
-public:
-  enum Scope {
-    GlobalScope,
-    NamespaceScope,
-    ClassScope,
-    FunctionScope,
-    LocalScope
-  };
+}
 
-  Definition(KTextEditor::Range* range, const AbstractType* type, const QString& identifier, Scope scope);
+DocumentCursor::DocumentCursor(KTextEditor::Range* range, Position position )
+  : Cursor(position == Start ? range->start() : range->end())
+  , m_document(RangeObject::url(range))
+{
+}
 
-  Scope scope() const;
+DocumentCursor::DocumentCursor(SmartCursor* cursor)
+  : Cursor(*cursor)
+  , m_document(cursor->document()->url())
+{
+}
 
-  const AbstractType* type() const;
-  const QString& identifier() const;
+DocumentCursor::DocumentCursor(const DocumentCursor& copy)
+  : Cursor(copy)
+  , m_document(copy.document())
+{
+}
 
-  const QList<KTextEditor::Range*>& uses() const;
-  void addUse(KTextEditor::Range* range);
-  void removeUse(KTextEditor::Range* range);
+const KUrl& DocumentCursor::document() const
+{
+  return m_document;
+}
 
-private:
-  Scope m_scope;
-  const AbstractType* m_type;
-  QString m_identifier;
-
-  QList<KTextEditor::Range*> m_uses;
-};
-
-#endif // DEFINITION_H
+void DocumentCursor::setDocument(const KUrl& document)
+{
+  m_document = document;
+}
 
 // kate: indent-width 2;

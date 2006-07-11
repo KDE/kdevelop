@@ -30,6 +30,8 @@ class NameCompiler;
 class TypeEnvironment;
 class Definition;
 
+namespace KTextEditor { class Range; }
+
 /**
  * A class which iterates the AST to extract definitions of types and their uses.
  *
@@ -40,10 +42,10 @@ class Definition;
 class DUBuilder: protected DefaultVisitor
 {
 public:
-  DUBuilder (TokenStream *token_stream, DUChain* chain);
+  DUBuilder (TokenStream *token_stream);
   virtual ~DUBuilder ();
 
-  void operator () (AST *node);
+  DUContext* build(const KUrl& url, AST *node);
 
 protected:
   virtual void visitNamespace (NamespaceAST *);
@@ -98,7 +100,7 @@ private:
    * Register a new declaration with the definition-use chain.
    * Returns the new context created by this definition.
    */
-  Definition* newDeclaration(TypeSpecifierAST* type);
+  Definition* newDeclaration(KTextEditor::Range* range, TypeSpecifierAST* type);
 
   void closeContext(AST* node, DUContext* parent);
 
@@ -114,7 +116,6 @@ private:
   bool in_function_definition: 1;
   bool in_parameter_declaration: 1;
 
-  DUChain* m_chain;
   DUContext* m_currentContext;
   TypeEnvironment* m_types;
 };

@@ -23,6 +23,9 @@
 #include "dubuilder.h"
 #include "typesystem.h"
 #include "definition.h"
+#include "documentrange.h"
+
+using namespace KTextEditor;
 
 class TestDUChain : public QObject
 {
@@ -52,16 +55,15 @@ private slots:
     type2 = types.referenceType(type1);
     type3 = types.pointerType(type1);
 
-    definition1 = new Definition(type1, QString("lazy"), Definition::LocalScope);
-    definition2 = new Definition(type2, QString("m_errorCode"), Definition::ClassScope);
-    definition3 = new Definition(type3, QString("lazy"), Definition::GlobalScope);
-    definition4 = new Definition(type2, QString("m_errorCode2"), Definition::ClassScope);
+    definition1 = new Definition(new DocumentRange(file1, Range(4,4,4,16)), type1, QString("lazy"), Definition::LocalScope);
+    definition2 = new Definition(new DocumentRange(file1, Range(5,4,5,16)), type2, QString("m_errorCode"), Definition::ClassScope);
+    definition3 = new Definition(new DocumentRange(file1, Range(6,4,6,16)), type3, QString("lazy"), Definition::GlobalScope);
+    definition4 = new Definition(new DocumentRange(file1, Range(7,4,7,16)), type2, QString("m_errorCode2"), Definition::ClassScope);
 
     file1 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/duchain.cpp";
     file2 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/dubuilder.cpp";
 
-    topContext = new DUContext;
-    topContext->setTextRange(KTextEditor::Range(0,0,25,0), file1);
+    topContext = new DUContext(new DocumentRange(file1, Range(0,0,25,0)));
     DUChain::self()->addDocumentChain(file1, topContext);
   }
 
@@ -83,8 +85,7 @@ private slots:
   {
     QCOMPARE(DUChain::self()->chainForDocument(file1), topContext);
 
-    DUContext* firstChild = new DUContext;
-    firstChild->setTextRange(KTextEditor::Range(4,4, 10,3), file1);
+    DUContext* firstChild = new DUContext(new DocumentRange(file1, Range(4,4, 10,3)));
     topContext->addChildContext(firstChild);
 
     QCOMPARE(firstChild->parentContexts().count(), 1);
@@ -93,15 +94,13 @@ private slots:
     QCOMPARE(topContext->childContexts().count(), 1);
     QCOMPARE(topContext->childContexts().last(), firstChild);
 
-    DUContext* secondChild = new DUContext;
-    secondChild->setTextRange(KTextEditor::Range(14,4, 19,3), file1);
+    DUContext* secondChild = new DUContext(new DocumentRange(file1, Range(14,4, 19,3)));
     topContext->addChildContext(secondChild);
 
     QCOMPARE(topContext->childContexts().count(), 2);
     QCOMPARE(topContext->childContexts()[1], secondChild);
 
-    DUContext* thirdChild = new DUContext;
-    thirdChild->setTextRange(KTextEditor::Range(10,4, 14,3), file1);
+    DUContext* thirdChild = new DUContext(new DocumentRange(file1, Range(10,4, 14,3)));
     topContext->addChildContext(thirdChild);
 
     QCOMPARE(topContext->childContexts().count(), 3);
@@ -143,10 +142,9 @@ private slots:
     topContext->addDefinition(definition1);
     topContext->addDefinition(definition2);
 
-    DUContext* context1 = new DUContext;
-    context1->setTextRange(KTextEditor::Range(4,4, 14,3), file1);
+    DUContext* context1 = new DUContext(new DocumentRange(file1, Range(4,4, 14,3)));
     topContext->addChildContext(context1);
-    TextPosition insideContext1(KTextEditor::Cursor(5,9), file1);
+    DocumentCursor insideContext1(file1, KTextEditor::Cursor(5,9));
 
     QCOMPARE(topContext->findContext(insideContext1), context1);
     QCOMPARE(topContext->findDefinition(definition1->identifier(), insideContext1), definition1);
@@ -160,12 +158,10 @@ private slots:
     QCOMPARE(topContext->findDefinition(definition1->identifier(), insideContext1), definition1);
     QCOMPARE(context1->findDefinition(definition1->identifier(), insideContext1), definition1);
 
-    DUContext* subContext1 = new DUContext;
-    subContext1->setTextRange(KTextEditor::Range(5,4, 7,3), file1);
+    DUContext* subContext1 = new DUContext(new DocumentRange(file1, Range(5,4, 7,3)));
     topContext->addChildContext(subContext1);
 
-    DUContext* subContext2 = new DUContext;
-    subContext2->setTextRange(KTextEditor::Range(9,4, 12,3), file1);
+    DUContext* subContext2 = new DUContext(new DocumentRange(file1, Range(9,4, 12,3)));
     topContext->addChildContext(subContext2);
 
     subContext1->addDefinition(definition3);

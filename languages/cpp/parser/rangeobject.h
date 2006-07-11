@@ -16,49 +16,38 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DEFINITION_H
-#define DEFINITION_H
+#ifndef RANGEOBJECT_H
+#define RANGEOBJECT_H
 
-#include <QList>
-#include <QPair>
+#include <ktexteditor/range.h>
 
-#include "rangeobject.h"
-
-class AbstractType;
+#include "documentcursor.h"
 
 /**
- * Represents a single variable definition in a definition-use chain.
+ * Base class for any object which has an associated range of text.
  */
-class Definition : public RangeObject
+class RangeObject
 {
 public:
-  enum Scope {
-    GlobalScope,
-    NamespaceScope,
-    ClassScope,
-    FunctionScope,
-    LocalScope
-  };
+  RangeObject(KTextEditor::Range* range);
+  virtual ~RangeObject();
 
-  Definition(KTextEditor::Range* range, const AbstractType* type, const QString& identifier, Scope scope);
+  void setTextRange(KTextEditor::Range* range);
 
-  Scope scope() const;
+  KTextEditor::Range& textRange();
+  const KTextEditor::Range& textRange() const;
+  KTextEditor::Range* textRangePtr() const;
+  KTextEditor::SmartRange* smartRange() const;
 
-  const AbstractType* type() const;
-  const QString& identifier() const;
+  KUrl url() const;
+  static KUrl url(const KTextEditor::Range* range);
 
-  const QList<KTextEditor::Range*>& uses() const;
-  void addUse(KTextEditor::Range* range);
-  void removeUse(KTextEditor::Range* range);
+  bool contains(const DocumentCursor& cursor) const;
 
 private:
-  Scope m_scope;
-  const AbstractType* m_type;
-  QString m_identifier;
-
-  QList<KTextEditor::Range*> m_uses;
+  KTextEditor::Range* m_range;
 };
 
-#endif // DEFINITION_H
+#endif // RANGEOBJECT_H
 
 // kate: indent-width 2;

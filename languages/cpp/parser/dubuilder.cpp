@@ -20,6 +20,7 @@
 #include "dubuilder.h"
 
 #include <ktexteditor/smartrange.h>
+#include <ktexteditor/document.h>
 
 #include "lexer.h"
 #include "duchain.h"
@@ -29,11 +30,13 @@
 #include "name_compiler.h"
 #include "definition.h"
 
-DUBuilder::DUBuilder (TokenStream *token_stream, DUChain* chain):
+using namespace KTextEditor;
+
+DUBuilder::DUBuilder (TokenStream *token_stream):
   _M_token_stream (token_stream), m_editor(new EditorIntegrator(token_stream)), m_nameCompiler(new NameCompiler(token_stream)),
   in_namespace(false), in_class(false), in_template_declaration(false),
   in_typedef(false), in_function_definition(false), in_parameter_declaration(false),
-  m_chain(chain), m_types(new TypeEnvironment)
+  m_types(new TypeEnvironment)
 {
 }
 
@@ -43,9 +46,29 @@ DUBuilder::~DUBuilder ()
   delete m_nameCompiler;
 }
 
-void DUBuilder::operator () (AST *node)
+DUContext* DUBuilder::build(const KUrl& url, AST *node)
 {
+  m_editor->setCurrentUrl(url);
+
+  DUContext* topLevelContext = DUChain::self()->chainForDocument(url);
+
+  if (topLevelContext) {
+    // FIXME for now, just clear the chain... later, need to implement incremental parsing
+    topLevelContext->deleteChildContextsRecursively();
+    topLevelContext->deleteLocalDefinitions();
+
+  } else {
+    // FIXME the top range will probably get deleted without the editor integrator knowing...?
+    topLevelContext = new DUContext(m_editor->topRange(EditorIntegrator::DefinitionUseChain));
+
+    DUChain::self()->addDocumentChain(url, topLevelContext);
+  }
+
+  m_currentContext = topLevelContext;
+
   visit (node);
+
+  return topLevelContext;
 }
 
 void DUBuilder::visitNamespace (NamespaceAST *node)
@@ -90,11 +113,11 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 void DUBuilder::closeContext(AST* node, DUContext* parent)
 {
   // Find the end position of this function definition (just inside the bracket)
-  KTextEditor::Cursor endPosition = m_editor->findPosition(node->end_token, EditorIntegrator::FrontEdge);
+  DocumentCursor endPosition = m_editor->findPosition(node->end_token, EditorIntegrator::FrontEdge);
 
   // Set the correct end point of all of the contexts finishing here
   foreach (DUContext* context, parent->childContexts())
-    context->textRange().end().setPosition(endPosition);
+    context->textRange().end() = endPosition;
 
   // Go back to the context prior to this function definition
   m_currentContext = parent;
@@ -110,7 +133,7 @@ void DUBuilder::visitParameterDeclarationClause (ParameterDeclarationClauseAST *
 
 void DUBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
 {
-  newDeclaration(node->type_specifier);
+  newDeclaration(m_editor->createRange(node), node->type_specifier);
 
   DefaultVisitor::visitParameterDeclaration (node);
 }
@@ -127,8 +150,8 @@ void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
 
 void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 {
-  Definition* definition = newDeclaration(node->type_specifier);
-  definition->setTextPosition(m_editor->createCursor(node->start_token, EditorIntegrator::FrontEdge));
+  Definition* definition = newDeclaration(m_editor->createRange(node), node->type_specifier);
+  definition->setTextRange(m_editor->createRange(node));
 
   DefaultVisitor::visitSimpleDeclaration (node);
 }
@@ -137,15 +160,15 @@ void DUBuilder::visitName (NameAST *node)
 {
   m_nameCompiler->run(node);
 
-  // Find definition
-  DUContext* definitionDUContext = m_currentContext->definitionContext(m_nameCompiler->name());
-  Definition* definition = definitionDUContext->findLocalDefinition(m_nameCompiler->name());
+  Range* use = m_editor->createRange(node);
 
-  KTextEditor::SmartRange* use = m_editor->createRange(node);
+  // Find definition
+  Definition* definition = m_currentContext->findDefinition(m_nameCompiler->name(), DocumentCursor(use, DocumentCursor::Start));
+
   definition->addUse(use);
 }
 
-Definition* DUBuilder::newDeclaration( TypeSpecifierAST* type )
+Definition* DUBuilder::newDeclaration(Range* range, TypeSpecifierAST* type )
 {
   // This cast may well be an incorrect assumption...
   m_nameCompiler->run(static_cast<ElaboratedTypeSpecifierAST*>(type)->name);
@@ -163,7 +186,7 @@ Definition* DUBuilder::newDeclaration( TypeSpecifierAST* type )
   else if (in_namespace)
     scope = Definition::NamespaceScope;
 
-  Definition* definition = new Definition(abstractType, identifier, scope);
+  Definition* definition = new Definition(range, abstractType, identifier, scope);
   m_currentContext->addDefinition(definition);
 
   return definition;

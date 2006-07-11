@@ -19,9 +19,10 @@
 #ifndef DUCONTEXT_H
 #define DUCONTEXT_H
 
-#include "textlocation.h"
-
 #include <QHash>
+
+#include "rangeobject.h"
+#include "documentcursor.h"
 
 class AbstractType;
 class Definition;
@@ -35,14 +36,14 @@ class DUChain;
  * \todo check that redefinition of local variables within a base function context
  *       is supported by the current code.
  */
-class DUContext : public TextRange
+class DUContext : public RangeObject
 {
 public:
   /**
    * Constructor. No convenience methods, as the initialisation order is important,
    * and providing all permutations would be overkill.
    */
-  DUContext();
+  DUContext(KTextEditor::Range* range);
 
   /**
    * Destructor. Will delete all child contexts which are defined within
@@ -109,7 +110,7 @@ public:
    *
    * \returns the requested definition if one was found, otherwise null.
    */
-  Definition* findDefinition(const QString& identifier, const TextPosition& position) const;
+  Definition* findDefinition(const QString& identifier, const DocumentCursor& position) const;
 
   /**
    * Returns the type of any \a identifier defined in this context, or
@@ -158,7 +159,7 @@ public:
    *
    * \returns the requested context if one was found, otherwise null.
    */
-  DUContext* findContext(const TextPosition& position, DUContext* parent = 0) const;
+  DUContext* findContext(const DocumentCursor& position, DUContext* parent = 0) const;
 
   /**
    * Return a list of definitions for a given cursor \a position in a given \a url.
@@ -169,7 +170,7 @@ public:
    *
    * \returns the requested definitions, if any were active at that location.
    */
-  QHash<QString, Definition*> allDefinitions(const TextPosition& position) const;
+  QHash<QString, Definition*> allDefinitions(const DocumentCursor& position) const;
 
 private:
   /**
@@ -193,7 +194,7 @@ private:
   void deleteChildContextsRecursively(const KUrl& url);
 
   /// Logic for finding a definition, traversing up the chain.
-  Definition* findDefinitionInternal(const QString& identifier, const TextPosition& position, const DUContext * const context) const;
+  Definition* findDefinitionInternal(const QString& identifier, const DocumentCursor& position, const DUContext * const context) const;
 
   QList<DUContext*> m_parentContexts;
   QList<DUContext*> m_childContexts;

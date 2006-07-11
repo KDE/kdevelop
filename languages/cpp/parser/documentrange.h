@@ -16,49 +16,36 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DEFINITION_H
-#define DEFINITION_H
+#ifndef DOCUMENTRANGE_H
+#define DOCUMENTRANGE_H
 
-#include <QList>
-#include <QPair>
+#include <kurl.h>
 
-#include "rangeobject.h"
-
-class AbstractType;
+#include <ktexteditor/range.h>
 
 /**
- * Represents a single variable definition in a definition-use chain.
+ * Extends KTextEditor::Range with information about the URL to which the range
+ * refers.
+ *
+ * \todo parent/child relationships here too?
  */
-class Definition : public RangeObject
+class DocumentRange : public KTextEditor::Range
 {
 public:
-  enum Scope {
-    GlobalScope,
-    NamespaceScope,
-    ClassScope,
-    FunctionScope,
-    LocalScope
-  };
+  DocumentRange(const KUrl& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end);
+  DocumentRange(const KUrl& document, const KTextEditor::Range& range = KTextEditor::Range::invalid());
+  DocumentRange(const DocumentRange& copy);
 
-  Definition(KTextEditor::Range* range, const AbstractType* type, const QString& identifier, Scope scope);
+  /// Returns the associated document.
+  const KUrl& document() const;
 
-  Scope scope() const;
-
-  const AbstractType* type() const;
-  const QString& identifier() const;
-
-  const QList<KTextEditor::Range*>& uses() const;
-  void addUse(KTextEditor::Range* range);
-  void removeUse(KTextEditor::Range* range);
+  /// Sets the associated document.
+  void setDocument(const KUrl& document);
 
 private:
-  Scope m_scope;
-  const AbstractType* m_type;
-  QString m_identifier;
-
-  QList<KTextEditor::Range*> m_uses;
+  KUrl m_document;
 };
 
-#endif // DEFINITION_H
+#endif // DOCUMENTRANGE_H
 
 // kate: indent-width 2;

@@ -1,4 +1,4 @@
-/* This  is part of KDevelop
+/* This file is part of KDevelop
     Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -16,49 +16,36 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "definition.h"
-
-#include <ktexteditor/smartrange.h>
-#include <ktexteditor/document.h>
+#include "documentrange.h"
 
 using namespace KTextEditor;
 
-Definition::Definition(KTextEditor::Range* range, const AbstractType * type, const QString & identifier, Scope scope )
-  : RangeObject(range)
-  , m_scope(scope)
-  , m_type(type)
-  , m_identifier(identifier)
+DocumentRange::DocumentRange(const KUrl& document, const Cursor& start, const Cursor& end)
+  : Range(start, end)
+  , m_document(document)
 {
 }
 
-void Definition::removeUse( Range* range )
+DocumentRange::DocumentRange(const KUrl& document, const Range& range)
+  : Range(range)
+  , m_document(document)
 {
-  m_uses.removeAll(range);
 }
 
-void Definition::addUse( Range* range )
+DocumentRange::DocumentRange(const DocumentRange& copy)
+  : Range(copy)
+  , m_document(copy.document())
 {
-  m_uses.append(range);
 }
 
-const QList< Range* > & Definition::uses( ) const
+const KUrl& DocumentRange::document() const
 {
-  return m_uses;
+  return m_document;
 }
 
-const QString & Definition::identifier( ) const
+void DocumentRange::setDocument(const KUrl& document)
 {
-  return m_identifier;
-}
-
-const AbstractType * Definition::type( ) const
-{
-  return m_type;
-}
-
-Definition::Scope Definition::scope( ) const
-{
-  return m_scope;
+  m_document = document;
 }
 
 // kate: indent-width 2;
