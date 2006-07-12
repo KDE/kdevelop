@@ -221,7 +221,7 @@ private slots:
 
     QCOMPARE(top->findDefinition("i"), def);
 
-    //delete top;
+    release(top);
   }
 
   void testDeclareFunction()
@@ -263,7 +263,7 @@ private slots:
     QCOMPARE(insideFn->findDefinition("A::t"), defAT);
     QCOMPARE(insideFn->findDefinition("i"), defI);
 
-    //delete top;
+    release(top);
   }
 
   void testDeclareFor()
@@ -313,7 +313,7 @@ private slots:
     QCOMPARE(insideFor->findDefinition("main"), defMain);
     QCOMPARE(insideFor->findDefinition("i"), defI);
 
-    //delete top;
+    release(top);
   }
 
   void testDeclareStruct()
@@ -377,7 +377,7 @@ private slots:
     QCOMPARE(insideCtorCtx->localDefinitions().count(), 0);
     QVERIFY(insideCtorCtx->localScopeIdentifier().isEmpty());
 
-    //delete top;
+    release(top);
   }
 
   void testDeclareNamespace()
@@ -402,7 +402,7 @@ private slots:
     QCOMPARE(bar->uses().count(), 0);
     QCOMPARE(fooNS->findDefinition(bar->identifier()), bar);
 
-    //delete top;
+    release(top);
   }
 
 public:
@@ -415,6 +415,11 @@ public:
 
 private:
   DUContext* parse(const QByteArray& unit, DumpTypes dump = static_cast<DumpTypes>(DumpAST | DumpDUChain));
+
+  void release(DUContext* top)
+  {
+    EditorIntegrator::deleteTopRange(top->takeTextRange());
+  }
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(TestDUChain::DumpTypes)

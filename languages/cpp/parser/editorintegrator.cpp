@@ -24,12 +24,13 @@
 
 #include "ast.h"
 #include "documentrange.h"
+#include "rangeobject.h"
 
 using namespace KTextEditor;
 
 QHash<TokenStream*, Lexer*> EditorIntegrator::s_parsedSources;
 QHash<KUrl, Document*> EditorIntegrator::s_documents;
-QHash<Document*, QVector<Range*> > EditorIntegrator::s_topRanges;
+QHash<KUrl, QVector<Range*> > EditorIntegrator::s_topRanges;
 
 EditorIntegrator::EditorIntegrator( TokenStream * tokenStream )
   : m_lexer(s_parsedSources[tokenStream])
@@ -89,17 +90,17 @@ Document* EditorIntegrator::currentDocument() const
 
 Range* EditorIntegrator::topRange( TopRangeType type )
 {
-  if (!s_topRanges.contains(currentDocument()))
-    s_topRanges.insert(currentDocument(), QVector<Range*>(TopRangeCount));
+  if (!s_topRanges.contains(currentUrl()))
+    s_topRanges.insert(currentUrl(), QVector<Range*>(TopRangeCount));
 
-  if (!s_topRanges[currentDocument()][type])
+  if (!s_topRanges[currentUrl()][type])
     if (currentDocument())
-      s_topRanges[currentDocument()][type] = createRange(currentDocument()->documentRange());
+      s_topRanges[currentUrl()][type] = createRange(currentDocument()->documentRange());
     else
       // FIXME...
-      s_topRanges[currentDocument()][type] = createRange(Range(0,0, INT_MAX, 0));
+      s_topRanges[currentUrl()][type] = createRange(Range(0,0, INT_MAX, 0));
 
-  return s_topRanges[currentDocument()][type];
+  return s_topRanges[currentUrl()][type];
 }
 
 Range* EditorIntegrator::createRange( const Range & range )
@@ -178,7 +179,7 @@ Document * EditorIntegrator::findDocument(const KUrl& url)
 void EditorIntegrator::removeTextSource( Document * document )
 {
   s_documents.remove(document->url());
-  s_topRanges.remove(document);
+  s_topRanges.remove(document->url());
 }
 
 void EditorIntegrator::setCurrentRange( Range* range )
@@ -199,6 +200,24 @@ const KUrl& EditorIntegrator::currentUrl() const
 void EditorIntegrator::setCurrentUrl(const KUrl& url)
 {
   m_currentUrl = url;
+}
+
+void EditorIntegrator::deleteTopRange(KTextEditor::Range * range)
+{
+  KUrl url = RangeObject::url(range);
+
+  if (s_topRanges.contains(url)) {
+    QVector<Range*>& ranges = s_topRanges[url];
+    for (int i = 0; i < ranges.count(); ++i) {
+      if (range == ranges[i]) {
+        delete range;
+        ranges[i] = 0;
+        return;
+      }
+    }
+  }
+
+  kWarning() << k_funcinfo << "Could not find top range to delete." << endl;
 }
 
 #include "editorintegrator.moc"

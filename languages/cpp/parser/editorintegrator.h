@@ -90,6 +90,11 @@ public:
    */
   KTextEditor::Range* topRange(TopRangeType type);
 
+  /**
+   * Deletes a toplevel \a range.
+   */
+  static void deleteTopRange(KTextEditor::Range* range);
+
   enum Edge {
     FrontEdge,
     BackEdge
@@ -232,7 +237,7 @@ public slots:
 private:
   static QHash<TokenStream*, Lexer*> s_parsedSources;
   static QHash<KUrl, KTextEditor::Document*> s_documents;
-  static QHash<KTextEditor::Document*, QVector<KTextEditor::Range*> > s_topRanges;
+  static QHash<KUrl, QVector<KTextEditor::Range*> > s_topRanges;
 
   Lexer* m_lexer;
   TokenStream* m_tokenStream;

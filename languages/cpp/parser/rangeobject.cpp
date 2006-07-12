@@ -25,7 +25,7 @@
 
 using namespace KTextEditor;
 
-RangeObject::RangeObject(KTextEditor::Range* range)
+RangeObject::RangeObject(Range* range)
   : m_range(range)
 {
   Q_ASSERT(m_range);
@@ -36,7 +36,7 @@ RangeObject::~ RangeObject( )
   delete m_range;
 }
 
-void RangeObject::setTextRange( KTextEditor::Range * range )
+void RangeObject::setTextRange( Range * range )
 {
   if (m_range == range)
     return;
@@ -45,12 +45,12 @@ void RangeObject::setTextRange( KTextEditor::Range * range )
   m_range = range;
 }
 
-const KTextEditor::Range& RangeObject::textRange( ) const
+const Range& RangeObject::textRange( ) const
 {
   return *m_range;
 }
 
-KTextEditor::Range& RangeObject::textRange( )
+Range& RangeObject::textRange( )
 {
   return *m_range;
 }
@@ -60,15 +60,15 @@ KUrl RangeObject::url() const
   return url(m_range);
 }
 
-KUrl RangeObject::url( const KTextEditor::Range * range )
+KUrl RangeObject::url( const Range * range )
 {
   if (range->isSmartRange())
-    return static_cast<const KTextEditor::SmartRange*>(range)->document()->url();
+    return static_cast<const SmartRange*>(range)->document()->url();
   else
     return static_cast<const DocumentRange*>(range)->document();
 }
 
-KTextEditor::SmartRange* RangeObject::smartRange() const
+SmartRange* RangeObject::smartRange() const
 {
   if (m_range->isSmartRange())
     return static_cast<SmartRange*>(m_range);
@@ -81,9 +81,16 @@ bool RangeObject::contains(const DocumentCursor& cursor) const
   return url() == cursor.document() && m_range->contains(cursor);
 }
 
-KTextEditor::Range* RangeObject::textRangePtr() const
+Range* RangeObject::textRangePtr() const
 {
   return m_range;
+}
+
+Range * RangeObject::takeTextRange()
+{
+  Range* r = m_range;
+  m_range = 0;
+  return r;
 }
 
 // kate: indent-width 2;
