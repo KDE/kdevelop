@@ -170,6 +170,7 @@ void DefaultVisitor::visitFunctionDefinition(FunctionDefinitionAST *node)
 {
   visit(node->type_specifier);
   visit(node->init_declarator);
+  visit(node->constructor_initializers);
   visit(node->function_body);
   visit(node->win_decl_specifiers);
 }

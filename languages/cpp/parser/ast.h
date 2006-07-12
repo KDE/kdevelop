@@ -422,6 +422,7 @@ struct FunctionDefinitionAST: public DeclarationAST
   InitDeclaratorAST *init_declarator;
   StatementAST *function_body;
   WinDeclSpecAST *win_decl_specifiers;
+  CtorInitializerAST *constructor_initializers;
 };
 
 struct ForStatementAST: public StatementAST

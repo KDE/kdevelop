@@ -3063,6 +3063,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
                     ast->function_specifiers = funSpec;
                     ast->init_declarator = declarator;
                     ast->function_body = funBody;
+                    ast->constructor_initializers = ctorInit;
 
                     UPDATE_POS(ast, start, token_stream.cursor());
                     node = ast;
