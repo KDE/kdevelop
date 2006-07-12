@@ -22,6 +22,8 @@
 
 #include "default_visitor.h"
 
+#include <QStack>
+
 class TokenStream;
 class DUChain;
 class DUContext;
@@ -60,6 +62,7 @@ protected:
   virtual void visitDeclarator (DeclaratorAST*);
   virtual void visitName (NameAST *);
   virtual void visitPrimaryExpression (PrimaryExpressionAST*);
+  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST*);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;
@@ -127,7 +130,7 @@ private:
   TypeEnvironment* m_types;
 
   Definition* m_currentDefinition;
-  QString m_currentIdentifier;
+  QStack<QString> m_identifierStack;
 };
 
 #endif // DUBUILDER_H

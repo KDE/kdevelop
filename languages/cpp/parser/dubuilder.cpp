@@ -69,21 +69,39 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node)
 
   visit (node);
 
+  //Q_ASSERT(m_identifierStack.isEmpty());
+  if (!m_identifierStack.isEmpty())
+    kWarning() << k_funcinfo << "Unused identifiers: " << m_identifierStack.toList() << endl;
+
   return topLevelContext;
 }
 
 void DUBuilder::visitNamespace (NamespaceAST *node)
 {
+  DUContext* previousContext = m_currentContext;
+  m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
+
   bool was = inNamespace (true);
   DefaultVisitor::visitNamespace (node);
   inNamespace (was);
+
+  m_currentContext->setLocalScopeIdentifier(_M_token_stream->symbol(node->namespace_name)->as_string());
+
+  closeContext(node, previousContext);
 }
 
 void DUBuilder::visitClassSpecifier (ClassSpecifierAST *node)
 {
+  DUContext* previousContext = m_currentContext;
+  m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
+
   bool was = inClass (true);
   DefaultVisitor::visitClassSpecifier (node);
   inClass (was);
+
+  m_currentContext->setLocalScopeIdentifier(m_currentDefinition->identifier());
+
+  closeContext(node, previousContext);
 }
 
 void DUBuilder::visitTemplateDeclaration (TemplateDeclarationAST *node)
@@ -115,6 +133,12 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   inFunctionDefinition (was);
 
   closeContext(node, previousContext);
+
+  if (m_currentDefinition) {
+    m_currentDefinition->setIdentifier(m_identifierStack.pop());
+
+    m_currentContext->setLocalScopeIdentifier(m_currentDefinition->identifier());
+  }
 
   m_currentDefinition = oldDefinition;
 }
@@ -148,6 +172,9 @@ void DUBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
 
   DefaultVisitor::visitParameterDeclaration (node);
 
+  if (m_currentDefinition)
+    m_currentDefinition->setIdentifier(m_identifierStack.pop());
+
   m_currentDefinition = oldDefinition;
 }
 
@@ -170,6 +197,9 @@ void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 
   DefaultVisitor::visitSimpleDeclaration (node);
 
+  if (m_currentDefinition)
+    m_currentDefinition->setIdentifier(m_identifierStack.pop());
+
   m_currentDefinition = oldDefinition;
 }
 
@@ -180,32 +210,44 @@ void DUBuilder::visitPrimaryExpression (PrimaryExpressionAST* node)
   if (node->name) {
     Range* use = m_editor->createRange(node->name);
 
-    Definition* definition = m_currentContext->findDefinition(m_currentIdentifier, DocumentCursor(use, DocumentCursor::Start));
+    QString identifier = m_identifierStack.pop();
+    Definition* definition = m_currentContext->findDefinition(identifier, DocumentCursor(use, DocumentCursor::Start));
     if (definition)
       definition->addUse(use);
     else
-      kWarning() << k_funcinfo << "Could not find definition for identifier " << m_currentIdentifier << " at " << *use << endl;
+      kWarning() << k_funcinfo << "Could not find definition for identifier " << identifier << " at " << *use << endl;
   }
+}
+
+void DUBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
+{
+  //int identifierStackDepth = m_identifierStack.count();
+  DefaultVisitor::visitSimpleTypeSpecifier(node);
+
+  // Pop off unneeded name...!?
+  // Ask Roberto: why doesn't a class name get surrounded with Declarator?
+  if (node->name)
+    m_identifierStack.pop();
+
+  //for (int i = m_identifierStack.count(); i > identifierStackDepth; --i) {
+    //kDebug() << "visitSimpleTypeSpecifier: Removing unneeded name " << m_identifierStack.top() << endl;
+  //}
 }
 
 void DUBuilder::visitName (NameAST *node)
 {
   m_nameCompiler->run(node);
-  m_currentIdentifier = m_nameCompiler->name();
+  m_identifierStack.push(m_nameCompiler->name());
 
   DefaultVisitor::visitName(node);
 }
 
 void DUBuilder::visitDeclarator (DeclaratorAST* node)
 {
-  QString oldIdentifier = m_currentIdentifier;
-
   DefaultVisitor::visitDeclarator(node);
 
-  if (m_currentDefinition)
-    m_currentDefinition->setIdentifier(m_currentIdentifier);
-
-  m_currentIdentifier = oldIdentifier;
+  /*if (m_currentDefinition)
+    m_currentDefinition->setIdentifier(m_identifierStack.pop());*/
 }
 
 Definition* DUBuilder::newDeclaration(Range* range)

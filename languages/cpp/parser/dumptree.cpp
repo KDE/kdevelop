@@ -152,7 +152,7 @@ DumpTree::~ DumpTree( )
 
 void DumpTree::dump( DUContext * context )
 {
-  kDebug() << QString(indent * 2, ' ') << "New Context " << context->textRange() << endl;
+  kDebug() << QString(indent * 2, ' ') << "New Context \"" << context->localScopeIdentifier() << "\" " << context->textRange() << endl;
   foreach (Definition* def, context->localDefinitions()) {
     kDebug() << QString((indent+1) * 2, ' ') << "Definition: \"" << def->identifier() << "\" " << def->textRange() << ", " << def->uses().count() << " use(s)." << endl;
     foreach (KTextEditor::Range* use, def->uses())

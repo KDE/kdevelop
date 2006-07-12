@@ -51,12 +51,13 @@ const QList< DUContext * > & DUContext::parentContexts( ) const
 
 Definition * DUContext::addDefinition( Definition * newDefinition )
 {
-  foreach (Definition* definition, m_localDefinitions)
+  // The definition may not have its identifier set when it's assigned... allow dupes here, TODO catch the error elsewhere
+  /*foreach (Definition* definition, m_localDefinitions)
     if (definition->identifier() == newDefinition->identifier()) {
       kWarning() << k_funcinfo << "Attempted to add definition with identical identifier to a context." << endl;
       // Shouldn't ever hit this, but return the old definition for now...
       return definition;
-    }
+    }*/
 
   m_localDefinitions.append(newDefinition);
   return newDefinition;
@@ -246,6 +247,33 @@ void DUContext::deleteDefinition(Definition* definition)
 {
   m_localDefinitions.removeAll(definition);
   delete definition;
+}
+
+QString DUContext::scopeIdentifier() const
+{
+  QString ret = scopeIdentifier();
+
+  QListIterator<DUContext*> it = parentContexts();
+  it.toBack();
+  while (it.hasPrevious()) {
+    QString scope = it.previous()->scopeIdentifier();
+    if (!scope.isEmpty() && !ret.isEmpty())
+      ret = scope + "::" + ret;
+    else if (ret.isEmpty())
+      ret = scope;
+  }
+
+  return ret;
+}
+
+void DUContext::setLocalScopeIdentifier(const QString & identifier)
+{
+  m_scopeIdentifier = identifier;
+}
+
+const QString & DUContext::localScopeIdentifier() const
+{
+  return m_scopeIdentifier;
 }
 
 // kate: indent-width 2;

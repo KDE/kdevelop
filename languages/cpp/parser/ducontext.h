@@ -52,6 +52,21 @@ public:
   virtual ~DUContext();
 
   /**
+   * Calculate the fully qualified scope identifier
+   */
+  QString scopeIdentifier() const;
+
+  /**
+   * Scope identifier, used to qualify the identifiers occurring in each context
+   */
+  const QString& localScopeIdentifier() const;
+
+  /**
+   * Scope identifier, used to qualify the identifiers occurring in each context
+   */
+  void setLocalScopeIdentifier(const QString& identifier);
+
+  /**
    * Returns the list of immediate parent contexts for this context.
    */
   const QList<DUContext*>& parentContexts() const;
@@ -195,6 +210,11 @@ private:
 
   /// Logic for finding a definition, traversing up the chain.
   Definition* findDefinitionInternal(const QString& identifier, const DocumentCursor& position, const DUContext * const context) const;
+
+  /// Logic for calculating the fully qualified scope name
+  QString scopeIdentifierInternal(DUContext* context) const;
+
+  QString m_scopeIdentifier;
 
   QList<DUContext*> m_parentContexts;
   QList<DUContext*> m_childContexts;
