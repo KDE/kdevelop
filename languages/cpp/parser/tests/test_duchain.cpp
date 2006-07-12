@@ -210,6 +210,7 @@ private slots:
 
     DUContext* top = parse(method, DumpNone);
 
+    QCOMPARE(top->parentContexts().count(), 0);
     QCOMPARE(top->childContexts().count(), 0);
     QCOMPARE(top->localDefinitions().count(), 1);
 
@@ -230,6 +231,7 @@ private slots:
 
     DUContext* top = parse(method, DumpNone);
 
+    QCOMPARE(top->parentContexts().count(), 0);
     QCOMPARE(top->childContexts().count(), 1);
     QCOMPARE(top->localDefinitions().count(), 1);
 
@@ -268,6 +270,7 @@ private slots:
 
     DUContext* top = parse(method);//, DumpNone);
 
+    QCOMPARE(top->parentContexts().count(), 0);
     QCOMPARE(top->childContexts().count(), 1);
     QCOMPARE(top->localDefinitions().count(), 1);
 
@@ -329,12 +332,11 @@ private slots:
     DUContext* structA = top->childContexts().first();
     QCOMPARE(structA->childContexts().count(), 1);
     // FIXME AST limitation... pure virtual functions are not shown as functions, thus we can't properly scope int j
-    QCOMPARE(structA->localDefinitions().count(), 3);
+    QCOMPARE(structA->localDefinitions().count(), 4);//3);
 
     Definition* defI = structA->localDefinitions().first();
     QCOMPARE(defI->identifier(), QString("i"));
-    // FIXME AST limitation.. AST doesn't see the use
-    QCOMPARE(defI->uses().count(), 0);//1);
+    QCOMPARE(defI->uses().count(), 1);
 
     Definition* defACtor = structA->localDefinitions()[1];
     QCOMPARE(defACtor->identifier(), QString("A"));
@@ -361,13 +363,6 @@ private slots:
     DUContext* insideCtorCtx = ctorCtx->childContexts().first();
     QCOMPARE(insideCtorCtx->childContexts().count(), 0);
     QCOMPARE(insideCtorCtx->localDefinitions().count(), 0);
-
-    DUContext* testCtx = structA->childContexts()[1];
-    QCOMPARE(testCtx->childContexts().count(), 1);
-    QCOMPARE(testCtx->localDefinitions().count(), 0);
-
-    QCOMPARE(testCtx->childContexts().first()->childContexts().count(), 0);
-    QCOMPARE(testCtx->childContexts().first()->localDefinitions().count(), 0);
 
     //delete top;
   }
@@ -404,7 +399,8 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
   }
 
   DUBuilder dubuilder(&parser.token_stream);
-  DUContext* top = dubuilder.build(KUrl("file:///internal"), ast);
+  static int testNumber = 0;
+  DUContext* top = dubuilder.build(KUrl(QString("file:///internal/%1").arg(testNumber++)), ast);
 
   if (dump & DumpDUChain) {
     kDebug() << "===== DUChain:" << endl;

@@ -63,6 +63,7 @@ protected:
   virtual void visitName (NameAST *);
   virtual void visitPrimaryExpression (PrimaryExpressionAST*);
   virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST*);
+  virtual void visitMemInitializer(MemInitializerAST *);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;

@@ -219,6 +219,23 @@ void DUBuilder::visitPrimaryExpression (PrimaryExpressionAST* node)
   }
 }
 
+
+void DUBuilder::visitMemInitializer(MemInitializerAST * node)
+{
+  DefaultVisitor::visitMemInitializer(node);
+
+  if (node->initializer_id) {
+    Range* use = m_editor->createRange(node->initializer_id);
+
+    QString identifier = m_identifierStack.pop();
+    Definition* definition = m_currentContext->findDefinition(identifier, DocumentCursor(use, DocumentCursor::Start));
+    if (definition)
+      definition->addUse(use);
+    else
+      kWarning() << k_funcinfo << "Could not find definition for identifier " << identifier << " at " << *use << endl;
+  }
+}
+
 void DUBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
 {
   //int identifierStackDepth = m_identifierStack.count();
