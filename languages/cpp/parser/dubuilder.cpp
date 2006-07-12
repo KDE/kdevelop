@@ -79,6 +79,8 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node)
 void DUBuilder::visitNamespace (NamespaceAST *node)
 {
   DUContext* previousContext = m_currentContext;
+  int identifierStackDepth = m_identifierStack.count();
+
   m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
 
   bool was = inNamespace (true);
@@ -87,21 +89,21 @@ void DUBuilder::visitNamespace (NamespaceAST *node)
 
   m_currentContext->setLocalScopeIdentifier(_M_token_stream->symbol(node->namespace_name)->as_string());
 
-  closeContext(node, previousContext);
+  closeContext(node, previousContext, identifierStackDepth);
 }
 
 void DUBuilder::visitClassSpecifier (ClassSpecifierAST *node)
 {
   DUContext* previousContext = m_currentContext;
+  int identifierStackDepth = m_identifierStack.count();
+
   m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
 
   bool was = inClass (true);
   DefaultVisitor::visitClassSpecifier (node);
   inClass (was);
 
-  m_currentContext->setLocalScopeIdentifier(m_currentDefinition->identifier());
-
-  closeContext(node, previousContext);
+  closeContext(node, previousContext, identifierStackDepth);
 }
 
 void DUBuilder::visitTemplateDeclaration (TemplateDeclarationAST *node)
@@ -126,24 +128,21 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   m_currentDefinition = newDeclaration(range);
 
   DUContext* previousContext = m_currentContext;
+  int identifierStackDepth = m_identifierStack.count();
   m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
 
   bool was = inFunctionDefinition (node);
   DefaultVisitor::visitFunctionDefinition (node);
   inFunctionDefinition (was);
 
-  closeContext(node, previousContext);
+  closeContext(node, previousContext, identifierStackDepth);
 
-  if (m_currentDefinition) {
-    m_currentDefinition->setIdentifier(m_identifierStack.pop());
-
-    m_currentContext->setLocalScopeIdentifier(m_currentDefinition->identifier());
-  }
+  setIdentifier();
 
   m_currentDefinition = oldDefinition;
 }
 
-void DUBuilder::closeContext(AST* node, DUContext* parent)
+void DUBuilder::closeContext(AST* node, DUContext* parent, int identifierStackDepth)
 {
   // Find the end position of this function definition (just inside the bracket)
   DocumentCursor endPosition = m_editor->findPosition(node->end_token, EditorIntegrator::FrontEdge);
@@ -151,6 +150,10 @@ void DUBuilder::closeContext(AST* node, DUContext* parent)
   // Set the correct end point of all of the contexts finishing here
   foreach (DUContext* context, parent->childContexts())
     context->textRange().end() = endPosition;
+
+  // Set context identifier
+  if (identifierStackDepth < m_identifierStack.count())
+    m_currentContext->setLocalScopeIdentifier(m_identifierStack.top());
 
   // Go back to the context prior to this function definition
   m_currentContext = parent;
@@ -172,8 +175,7 @@ void DUBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
 
   DefaultVisitor::visitParameterDeclaration (node);
 
-  if (m_currentDefinition)
-    m_currentDefinition->setIdentifier(m_identifierStack.pop());
+  setIdentifier();
 
   m_currentDefinition = oldDefinition;
 }
@@ -181,11 +183,12 @@ void DUBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
 void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
 {
   DUContext* previousContext = m_currentContext;
+  int identifierStackDepth = m_identifierStack.count();
   m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
 
   DefaultVisitor::visitCompoundStatement (node);
 
-  closeContext(node, previousContext);
+  closeContext(node, previousContext, identifierStackDepth);
 }
 
 void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
@@ -197,10 +200,16 @@ void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 
   DefaultVisitor::visitSimpleDeclaration (node);
 
-  if (m_currentDefinition)
-    m_currentDefinition->setIdentifier(m_identifierStack.pop());
+  setIdentifier();
 
   m_currentDefinition = oldDefinition;
+}
+
+void DUBuilder::setIdentifier()
+{
+  if (m_currentDefinition)
+    m_currentDefinition->setIdentifier(m_identifierStack.pop());
+    //m_currentContext->setLocalScopeIdentifier(m_currentDefinition->identifier());
 }
 
 void DUBuilder::visitPrimaryExpression (PrimaryExpressionAST* node)

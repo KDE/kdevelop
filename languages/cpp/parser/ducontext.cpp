@@ -251,7 +251,7 @@ void DUContext::deleteDefinition(Definition* definition)
 
 QString DUContext::scopeIdentifier() const
 {
-  QString ret = scopeIdentifier();
+  QString ret = localScopeIdentifier();
 
   QListIterator<DUContext*> it = parentContexts();
   it.toBack();

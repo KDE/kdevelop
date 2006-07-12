@@ -108,7 +108,8 @@ private:
    */
   Definition* newDeclaration(KTextEditor::Range* range);
 
-  void closeContext(AST* node, DUContext* parent);
+  void closeContext(AST* node, DUContext* parent, int identifierStackDepth);
+  void setIdentifier();
 
   TokenStream *_M_token_stream;
   EditorIntegrator* m_editor;
