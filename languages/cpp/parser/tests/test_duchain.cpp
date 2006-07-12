@@ -208,7 +208,7 @@ private slots:
   {
     QByteArray method("int i;");
 
-    DUContext* top = parse(method);//, DumpNone);
+    DUContext* top = parse(method, DumpNone);
 
     QCOMPARE(top->parentContexts().count(), 0);
     QCOMPARE(top->childContexts().count(), 0);
@@ -272,7 +272,7 @@ private slots:
     //                 012345678901234567890123456789012345678901234567890123456789
     QByteArray method("int main() { for (int i = 0; i < 10; i++) {} }");
 
-    DUContext* top = parse(method);//, DumpNone);
+    DUContext* top = parse(method, DumpNone);
 
     QCOMPARE(top->parentContexts().count(), 0);
     QCOMPARE(top->childContexts().count(), 1);
@@ -324,7 +324,7 @@ private slots:
 
     // FIXME test scope indentifiers... they're wrong currently
 
-    DUContext* top = parse(method/*, DumpNone*/);
+    DUContext* top = parse(method, DumpNone);
 
     QCOMPARE(top->parentContexts().count(), 0);
     QCOMPARE(top->childContexts().count(), 1);
@@ -376,6 +376,31 @@ private slots:
     QCOMPARE(insideCtorCtx->childContexts().count(), 0);
     QCOMPARE(insideCtorCtx->localDefinitions().count(), 0);
     QVERIFY(insideCtorCtx->localScopeIdentifier().isEmpty());
+
+    //delete top;
+  }
+
+  void testDeclareNamespace()
+  {
+    QByteArray method("namespace foo { int bar; }");
+
+    DUContext* top = parse(method);//, DumpNone);
+
+    QCOMPARE(top->parentContexts().count(), 0);
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->localDefinitions().count(), 0);
+    QVERIFY(top->localScopeIdentifier().isEmpty());
+    QCOMPARE(top->findDefinition("foo"), noDef);
+
+    DUContext* fooNS = top->childContexts().first();
+    QCOMPARE(fooNS->childContexts().count(), 0);
+    QCOMPARE(fooNS->localDefinitions().count(), 1);
+    QCOMPARE(fooNS->localScopeIdentifier(), QString("foo"));
+
+    Definition* bar = fooNS->localDefinitions().first();
+    QCOMPARE(bar->identifier(), QString("bar"));
+    QCOMPARE(bar->uses().count(), 0);
+    QCOMPARE(fooNS->findDefinition(bar->identifier()), bar);
 
     //delete top;
   }
