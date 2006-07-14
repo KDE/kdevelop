@@ -38,6 +38,7 @@ set(kdevcppparser_STAT_SRCS
     documentrange.cpp
     documentcursor.cpp
     rangeobject.cpp
+    identifier.cpp
 )
 
 kde4_automoc(${kdevcppparser_STAT_SRCS})

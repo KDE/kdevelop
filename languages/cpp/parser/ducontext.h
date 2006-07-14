@@ -23,6 +23,7 @@
 
 #include "rangeobject.h"
 #include "documentcursor.h"
+#include "identifier.h"
 
 class AbstractType;
 class Definition;
@@ -51,20 +52,30 @@ public:
    */
   virtual ~DUContext();
 
+  enum ContextType {
+    Namespace,
+    Class,
+    Function,
+    Other
+  };
+
+  ContextType type() const;
+  void setType(ContextType type);
+
   /**
    * Calculate the fully qualified scope identifier
    */
-  QString scopeIdentifier() const;
+  QualifiedIdentifier scopeIdentifier() const;
 
   /**
    * Scope identifier, used to qualify the identifiers occurring in each context
    */
-  const QString& localScopeIdentifier() const;
+  const QualifiedIdentifier& localScopeIdentifier() const;
 
   /**
    * Scope identifier, used to qualify the identifiers occurring in each context
    */
-  void setLocalScopeIdentifier(const QString& identifier);
+  void setLocalScopeIdentifier(const QualifiedIdentifier& identifier);
 
   /**
    * Returns the list of immediate parent contexts for this context.
@@ -102,19 +113,14 @@ public:
    */
   void deleteChildContextsRecursively();
 
+  void addUsingNamespace(KTextEditor::Cursor* cursor, const QualifiedIdentifier& nsIdentifier);
+  const QHash<QualifiedIdentifier, KTextEditor::Cursor*>& usingNamespaces() const;
+
   /**
    * Returns the context in which \a identifier was defined, or
    * null if one is not found.
    */
-  DUContext* definitionContext(const QString& identifier) const;
-
-  /**
-   * Returns the type of any existing valid \a identifier anywhere this context, or
-   * null if one is not found.
-   *
-   * \overload
-   */
-  Definition* findDefinition(const QString& identifier) const;
+  DUContext* definitionContext(const QualifiedIdentifier& identifier) const;
 
   /**
    * Searches for and returns a definition with a given \a identifier in this context, which
@@ -125,13 +131,42 @@ public:
    *
    * \returns the requested definition if one was found, otherwise null.
    */
-  Definition* findDefinition(const QString& identifier, const DocumentCursor& position) const;
+  Definition* findDefinition(const QualifiedIdentifier& identifier, const DocumentCursor& position) const;
+
+  /**
+   * Searches for and returns a definition with a given \a identifier in this context, which
+   * is currently active at the given text \a position.
+   *
+   * \param identifier the identifier of the definition to search for
+   * \param location the text position to search for
+   *
+   * \returns the requested definition if one was found, otherwise null.
+   *
+   * \overload
+   */
+  Definition* findDefinition(const Identifier& identifier, const DocumentCursor& position) const;
+
+  /**
+   * Returns the type of any existing valid \a identifier anywhere this context, or
+   * null if one is not found.
+   *
+   * \overload
+   */
+  Definition* findDefinition(const QualifiedIdentifier& identifier) const;
+
+  /**
+   * Returns the type of any existing valid \a identifier anywhere this context, or
+   * null if one is not found.
+   *
+   * \overload
+   */
+  Definition* findDefinition(const Identifier& identifier) const;
 
   /**
    * Returns the type of any \a identifier defined in this context, or
    * null if one is not found.
    */
-  Definition* findLocalDefinition(const QString& identifier) const;
+  Definition* findLocalDefinition(const QualifiedIdentifier& identifier) const;
 
   /**
    * Clears all local definitions. Does not delete the definitions; the caller
@@ -185,7 +220,7 @@ public:
    *
    * \returns the requested definitions, if any were active at that location.
    */
-  QHash<QString, Definition*> allDefinitions(const DocumentCursor& position) const;
+  QHash<QualifiedIdentifier, Definition*> allDefinitions(const DocumentCursor& position) const;
 
 private:
   /**
@@ -203,23 +238,24 @@ private:
   /**
    * Merges definitions up all branches of the definition-use chain into one hash.
    */
-  void mergeDefinitions(DUContext* context, QHash<QString, Definition*>& definitions) const;
+  void mergeDefinitions(DUContext* context, QHash<QualifiedIdentifier, Definition*>& definitions) const;
 
   /// Deletion function which respects file boundaries.
   void deleteChildContextsRecursively(const KUrl& url);
 
-  /// Logic for finding a definition, traversing up the chain.
-  Definition* findDefinitionInternal(const QString& identifier, const DocumentCursor& position, const DUContext * const context) const;
-
   /// Logic for calculating the fully qualified scope name
-  QString scopeIdentifierInternal(DUContext* context) const;
+  QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
-  QString m_scopeIdentifier;
+  ContextType m_contextType;
+
+  QualifiedIdentifier m_scopeIdentifier;
 
   QList<DUContext*> m_parentContexts;
   QList<DUContext*> m_childContexts;
 
   QList<Definition*> m_localDefinitions;
+
+  QHash<QualifiedIdentifier, KTextEditor::Cursor*> m_usingNamespaces;
 };
 
 #endif // DUCONTEXT_H

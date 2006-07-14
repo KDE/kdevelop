@@ -34,11 +34,10 @@ QString NameCompiler::decode_operator(std::size_t index) const
   return QString::fromUtf8(&tk.text[tk.position], tk.size);
 }
 
-QString NameCompiler::internal_run(AST *node)
+void NameCompiler::internal_run(AST *node)
 {
   _M_name.clear();
   visit(node);
-  return name();
 }
 
 void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
@@ -65,16 +64,14 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
         tmp_name += QLatin1String("<...cast...>");
     }
 
-  _M_name += tmp_name;
+  m_currentIdentifier = Identifier(tmp_name);
+
   if (node->template_arguments)
     {
-      // ### cleanup
-      _M_name.last() += QLatin1String("<");
       visitNodes(this, node->template_arguments);
-      _M_name.last().truncate(_M_name.last().count() - 1); // remove the last ','
-      _M_name.last() += QLatin1String(">");
     }
 
+  _M_name.push(m_currentIdentifier);
 }
 
 void NameCompiler::visitTemplateArgument(TemplateArgumentAST *node)
@@ -83,9 +80,13 @@ void NameCompiler::visitTemplateArgument(TemplateArgumentAST *node)
     {
       TypeCompiler type_cc(_M_token_stream);
       type_cc.run(node->type_id->type_specifier);
-      _M_name.last() += type_cc.qualifiedName().join("::");
-      _M_name.last() += QLatin1String(",");
+      m_currentIdentifier.appendTemplateIdentifier(type_cc.identifier());
     }
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
+
+const QualifiedIdentifier& NameCompiler::identifier() const
+{
+  return _M_name;
+}

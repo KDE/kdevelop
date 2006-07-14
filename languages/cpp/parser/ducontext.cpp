@@ -27,6 +27,7 @@ using namespace KTextEditor;
 
 DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
   : RangeObject(range)
+  , m_contextType(Other)
 {
   if (parent)
     parent->addChildContext(this);
@@ -37,6 +38,10 @@ DUContext::~DUContext( )
   deleteChildContextsRecursively(url());
 
   qDeleteAll(m_localDefinitions);
+
+  QList<Cursor*> usingNS = m_usingNamespaces.values();
+  m_usingNamespaces.clear();
+  qDeleteAll(usingNS);
 }
 
 const QList< DUContext * > & DUContext::childContexts( ) const
@@ -52,32 +57,51 @@ const QList< DUContext * > & DUContext::parentContexts( ) const
 Definition * DUContext::addDefinition( Definition * newDefinition )
 {
   // The definition may not have its identifier set when it's assigned... allow dupes here, TODO catch the error elsewhere
-  /*foreach (Definition* definition, m_localDefinitions)
-    if (definition->identifier() == newDefinition->identifier()) {
-      kWarning() << k_funcinfo << "Attempted to add definition with identical identifier to a context." << endl;
-      // Shouldn't ever hit this, but return the old definition for now...
-      return definition;
-    }*/
+  if (type() == Namespace) {
+    Q_ASSERT(parentContexts().count() == 1);
+    parentContexts().first()->addDefinition(newDefinition);
+  }
 
+  newDefinition->setContext(this);
   m_localDefinitions.append(newDefinition);
   return newDefinition;
 }
 
-Definition * DUContext::findLocalDefinition( const QString & identifier ) const
+Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifier ) const
 {
+  if (identifier.count() > 1) {
+    QualifiedIdentifier scope = scopeIdentifier();
+
+    if (identifier.explicitlyGlobal()) {
+      QualifiedIdentifier id = identifier;
+      id.pop();
+      if (scope != id)
+        goto Continue;
+
+      return 0;
+    }
+
+    if (scope.count() < identifier.count() - 1)
+      return 0;
+
+    for (int i = identifier.count() - 2, j = 0; i >= 0; --i, ++j)
+      if (identifier.at(i) == scope.at(scope.count() - j - 1))
+        continue;
+      else
+        // The requested identifier is not within the local scope.
+        return 0;
+  }
+
+  Continue:
+
   foreach (Definition* definition, m_localDefinitions)
-    if (definition->identifier() == identifier)
+    if (definition->identifier() == identifier.top())
       return definition;
 
   return 0;
 }
 
-Definition * DUContext::findDefinition( const QString & identifier ) const
-{
-  return findDefinition(identifier, DocumentCursor(textRangePtr(), DocumentCursor::Start));
-}
-
-DUContext * DUContext::definitionContext( const QString & identifier ) const
+DUContext * DUContext::definitionContext( const QualifiedIdentifier& identifier ) const
 {
   if (findLocalDefinition(identifier))
     return const_cast<DUContext*>(this);
@@ -147,9 +171,9 @@ DUContext * DUContext::findContext( const DocumentCursor& position, DUContext* p
   return 0;
 }
 
-QHash<QString, Definition*> DUContext::allDefinitions(const DocumentCursor& position) const
+QHash<QualifiedIdentifier, Definition*> DUContext::allDefinitions(const DocumentCursor& position) const
 {
-  QHash<QString, Definition*> ret;
+  QHash<QualifiedIdentifier, Definition*> ret;
 
   DUContext* context = findContext(position, const_cast<DUContext*>(this));
 
@@ -164,11 +188,11 @@ const QList<Definition*> DUContext::localDefinitions() const
   return m_localDefinitions;
 }
 
-void DUContext::mergeDefinitions(DUContext* context, QHash<QString, Definition*>& definitions) const
+void DUContext::mergeDefinitions(DUContext* context, QHash<QualifiedIdentifier, Definition*>& definitions) const
 {
   foreach (Definition* definition, context->localDefinitions())
-    if (!definitions.contains(definition->identifier()))
-      definitions.insert(definition->identifier(), definition);
+    if (!definitions.contains(definition->qualifiedIdentifier()))
+      definitions.insert(definition->qualifiedIdentifier(), definition);
 
   QListIterator<DUContext*> it = context->parentContexts();
   it.toBack();
@@ -218,27 +242,33 @@ QList< Definition * > DUContext::clearLocalDefinitions( )
   return ret;
 }
 
-Definition * DUContext::findDefinition( const QString & identifier, const DocumentCursor & position ) const
+Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, const DocumentCursor & position ) const
 {
-  return findDefinitionInternal(identifier, position, this);
-}
-
-Definition * DUContext::findDefinitionInternal( const QString & identifier, const DocumentCursor & position, const DUContext * const context ) const
-{
-  if (Definition* definition = context->findLocalDefinition(identifier))
+  if (Definition* definition = findLocalDefinition(identifier))
     return definition;
 
-  QListIterator<DUContext*> it = context->parentContexts();
+  QListIterator<DUContext*> it = parentContexts();
   it.toBack();
   while (it.hasPrevious())
-    if (Definition* definition = findDefinitionInternal(identifier, position, it.previous()))
+    if (Definition* definition = it.previous()->findDefinition(identifier, position))
       return definition;
 
   return 0;
 }
 
+Definition * DUContext::findDefinition( const QualifiedIdentifier& identifier ) const
+{
+  return findDefinition(identifier, DocumentCursor(textRangePtr(), DocumentCursor::Start));
+}
+
 Definition* DUContext::takeDefinition(Definition* definition)
 {
+  // The definition may not have its identifier set when it's assigned... allow dupes here, TODO catch the error elsewhere
+  if (type() == Namespace) {
+    Q_ASSERT(parentContexts().count() == 1);
+    return parentContexts().first()->takeDefinition(definition);
+  }
+
   m_localDefinitions.removeAll(definition);
   return definition;
 }
@@ -249,31 +279,56 @@ void DUContext::deleteDefinition(Definition* definition)
   delete definition;
 }
 
-QString DUContext::scopeIdentifier() const
+QualifiedIdentifier DUContext::scopeIdentifier() const
 {
-  QString ret = localScopeIdentifier();
+  QualifiedIdentifier ret = localScopeIdentifier();
 
   QListIterator<DUContext*> it = parentContexts();
   it.toBack();
-  while (it.hasPrevious()) {
-    QString scope = it.previous()->scopeIdentifier();
-    if (!scope.isEmpty() && !ret.isEmpty())
-      ret = scope + "::" + ret;
-    else if (ret.isEmpty())
-      ret = scope;
-  }
+  while (it.hasPrevious())
+    ret.merge(it.previous()->scopeIdentifier());
 
   return ret;
 }
 
-void DUContext::setLocalScopeIdentifier(const QString & identifier)
+void DUContext::setLocalScopeIdentifier(const QualifiedIdentifier & identifier)
 {
   m_scopeIdentifier = identifier;
 }
 
-const QString & DUContext::localScopeIdentifier() const
+const QualifiedIdentifier & DUContext::localScopeIdentifier() const
 {
   return m_scopeIdentifier;
+}
+
+void DUContext::addUsingNamespace(Cursor * cursor, const QualifiedIdentifier& nsIdentifier)
+{
+  m_usingNamespaces.insert(nsIdentifier, cursor);
+}
+
+const QHash<QualifiedIdentifier, KTextEditor::Cursor*>& DUContext::usingNamespaces() const
+{
+  return m_usingNamespaces;
+}
+
+DUContext::ContextType DUContext::type() const
+{
+  return m_contextType;
+}
+
+void DUContext::setType(ContextType type)
+{
+  m_contextType = type;
+}
+
+Definition * DUContext::findDefinition(const Identifier & identifier) const
+{
+  return findDefinition(QualifiedIdentifier(identifier));
+}
+
+Definition* DUContext::findDefinition(const Identifier& identifier, const DocumentCursor& position) const
+{
+  return findDefinition(QualifiedIdentifier(identifier), position);
 }
 
 // kate: indent-width 2;

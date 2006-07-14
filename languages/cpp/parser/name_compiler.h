@@ -20,7 +20,7 @@
 #define NAME_COMPILER_H
 
 #include "default_visitor.h"
-#include <QtCore/QStringList>
+#include "identifier.h"
 
 class TokenStream;
 
@@ -32,19 +32,23 @@ public:
   void run(NameAST *node) { internal_run(node); }
   void run(UnqualifiedNameAST *node) { internal_run(node); }
 
-  QString name() const { return _M_name.join("::"); }
-  QStringList qualifiedName() const { return _M_name; }
+  QString name() const { return _M_name.toString(); }
+  QStringList qualifiedName() const { return _M_name.toStringList(); }
+
+  const QualifiedIdentifier& identifier() const;
 
 protected:
   virtual void visitUnqualifiedName(UnqualifiedNameAST *node);
   virtual void visitTemplateArgument(TemplateArgumentAST *node);
 
-  QString internal_run(AST *node);
+  void internal_run(AST *node);
   QString decode_operator(std::size_t index) const;
 
 private:
   TokenStream *_M_token_stream;
-  QStringList _M_name;
+  QualifiedIdentifier m_base;
+  Identifier m_currentIdentifier;
+  QualifiedIdentifier _M_name;
 };
 
 #endif // NAME_COMPILER_H

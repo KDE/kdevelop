@@ -54,12 +54,22 @@ SmartInterface* EditorIntegrator::smart() const
   return dynamic_cast<SmartInterface*>(currentDocument());
 }
 
-SmartCursor* EditorIntegrator::createCursor(const DocumentCursor& position)
+Cursor* EditorIntegrator::createCursor(const DocumentCursor& position)
 {
-  if (SmartInterface* iface = smart())
-    return iface->newSmartCursor(position);
+  Cursor* ret = 0;
 
-  return 0;
+  KUrl oldCurrent = m_currentUrl;
+  m_currentUrl = position.document();
+
+  if (SmartInterface* iface = smart())
+    ret = iface->newSmartCursor(position);
+
+  m_currentUrl = oldCurrent;
+
+  if (!ret)
+    ret = new DocumentCursor(position);
+
+  return ret;
 }
 
 DocumentCursor EditorIntegrator::findPosition( std::size_t token, Edge edge ) const
@@ -161,7 +171,7 @@ void EditorIntegrator::setNewStart( const Cursor & position )
   m_newRangeMarker.start() = position;
 }
 
-SmartCursor * EditorIntegrator::createCursor( std::size_t token, Edge edge )
+Cursor * EditorIntegrator::createCursor( std::size_t token, Edge edge )
 {
   const Token& t = m_tokenStream->token(token);
   return createCursor(findPosition(t, edge));

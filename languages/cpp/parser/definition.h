@@ -22,9 +22,11 @@
 #include <QList>
 #include <QPair>
 
+#include "identifier.h"
 #include "rangeobject.h"
 
 class AbstractType;
+class DUContext;
 
 /**
  * Represents a single variable definition in a definition-use chain.
@@ -42,22 +44,28 @@ public:
 
   Definition(KTextEditor::Range* range, Scope scope);
 
+  DUContext* context() const;
+  void setContext(DUContext* context);
+
   Scope scope() const;
 
   const AbstractType* type() const;
   void setType(const AbstractType* type);
 
-  void setIdentifier(const QString& identifier);
-  const QString& identifier() const;
+  void setIdentifier(const Identifier& identifier);
+  const Identifier& identifier() const;
+
+  QualifiedIdentifier qualifiedIdentifier() const;
 
   const QList<KTextEditor::Range*>& uses() const;
   void addUse(KTextEditor::Range* range);
   void removeUse(KTextEditor::Range* range);
 
 private:
+  DUContext* m_context;
   Scope m_scope;
   const AbstractType* m_type;
-  QString m_identifier;
+  Identifier m_identifier;
 
   QList<KTextEditor::Range*> m_uses;
 };

@@ -76,7 +76,8 @@ void TypeCompiler::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       do
         {
           std::size_t token = it->element;
-          _M_type += token_name(_M_token_stream->kind(token));
+          // FIXME
+          _M_type += Identifier(token_name(_M_token_stream->kind(token)));
           it = it->next;
         }
       while (it != end);
@@ -84,7 +85,7 @@ void TypeCompiler::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   else if (node->type_of)
     {
       // ### implement me
-      _M_type += QLatin1String("typeof<...>");
+      _M_type += Identifier("typeof<...>");
     }
 
   visit(node->name);
@@ -94,7 +95,7 @@ void TypeCompiler::visitName(NameAST *node)
 {
   NameCompiler name_cc(_M_token_stream);
   name_cc.run(node);
-  _M_type = name_cc.qualifiedName();
+  _M_type = name_cc.identifier();
 }
 
 QStringList TypeCompiler::cvString() const
@@ -120,6 +121,11 @@ bool TypeCompiler::isConstant() const
 bool TypeCompiler::isVolatile() const
 {
     return _M_cv.contains(Token_volatile);
+}
+
+QualifiedIdentifier TypeCompiler::identifier() const
+{
+  return _M_type;
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

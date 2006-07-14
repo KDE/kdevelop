@@ -1,0 +1,116 @@
+/* This file is part of KDevelop
+    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#ifndef IDENTIFIER_H
+#define IDENTIFIER_H
+
+#include <QList>
+#include <QStack>
+#include <QStringList>
+
+#include <kdebug.h>
+
+class QualifiedIdentifier;
+
+/// Represents a single unqualified identifier
+class Identifier
+{
+public:
+  explicit Identifier(const QString id);
+  Identifier();
+
+  static Identifier unique(int token);
+
+  bool isUnique() const;
+  int uniqueToken() const;
+  /// If \a token is non-zero, turns this Identifier into the special per-document
+  /// Unique identifier, used for anonymous namespaces.
+  /// Pass a token which is specific to the document to allow correct equality comparison.
+  void setUnique(int token);
+
+  const QString& identifier() const;
+  void setIdentifier(const QString& identifier);
+
+  const QList<QualifiedIdentifier>& templateIdentifiers() const;
+  void appendTemplateIdentifier(const QualifiedIdentifier& identifier);
+  void clearTemplateIdentifiers();
+  void setTemplateIdentifiers(const QList<QualifiedIdentifier>& templateIdentifiers);
+
+  QString toString() const;
+
+  bool operator==(const Identifier& rhs) const;
+  bool operator!=(const Identifier& rhs) const;
+
+  /**
+    * kDebug() stream operator.  Writes this identifier to the debug output in a nicely formatted way.
+    */
+  inline friend kdbgstream& operator<< (kdbgstream& s, const Identifier& identifier) {
+    s << identifier.toString();
+    return s;
+  }
+
+  /**
+    * Non-debug stream operator; does nothing.
+    */
+  inline friend kndbgstream& operator<< (kndbgstream& s, const Identifier&) { return s; }
+
+private:
+  int m_unique;
+  QString m_identifier;
+  QList<QualifiedIdentifier> m_templateIdentifiers;
+};
+
+/// Represents a qualified identifier
+class QualifiedIdentifier : public QStack<Identifier>
+{
+public:
+  explicit QualifiedIdentifier(const QString id);
+  explicit QualifiedIdentifier(const Identifier& id);
+  QualifiedIdentifier();
+
+  static QualifiedIdentifier merge(const QStack<QualifiedIdentifier>& idStack);
+
+  bool explicitlyGlobal() const;
+
+  QString toString() const;
+  QStringList toStringList() const;
+
+  void merge(const QualifiedIdentifier& base);
+
+  bool operator==(const QualifiedIdentifier& rhs) const;
+  bool operator!=(const QualifiedIdentifier& rhs) const;
+
+  /**
+    * kDebug() stream operator.  Writes this identifier to the debug output in a nicely formatted way.
+    */
+  inline friend kdbgstream& operator<< (kdbgstream& s, const QualifiedIdentifier& identifier) {
+    s << identifier.toString();
+    return s;
+  }
+
+  /**
+    * Non-debug stream operator; does nothing.
+    */
+  inline friend kndbgstream& operator<< (kndbgstream& s, const QualifiedIdentifier&) { return s; }
+};
+
+uint qHash(const QualifiedIdentifier& id);
+
+#endif // IDENTIFIER_H
+
+// kate: indent-width 2;

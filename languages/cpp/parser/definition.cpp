@@ -21,10 +21,13 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 
+#include "ducontext.h"
+
 using namespace KTextEditor;
 
 Definition::Definition(KTextEditor::Range* range, Scope scope )
   : RangeObject(range)
+  , m_context(0)
   , m_scope(scope)
   , m_type(0)
 {
@@ -45,12 +48,12 @@ const QList< Range* > & Definition::uses( ) const
   return m_uses;
 }
 
-const QString & Definition::identifier( ) const
+const Identifier& Definition::identifier( ) const
 {
   return m_identifier;
 }
 
-void Definition::setIdentifier(const QString& identifier)
+void Definition::setIdentifier(const Identifier& identifier)
 {
   m_identifier = identifier;
 }
@@ -68,6 +71,23 @@ void Definition::setType(const AbstractType* type)
 Definition::Scope Definition::scope( ) const
 {
   return m_scope;
+}
+
+QualifiedIdentifier Definition::qualifiedIdentifier() const
+{
+  QualifiedIdentifier ret = context()->scopeIdentifier();
+  ret.push(identifier());
+  return ret;
+}
+
+DUContext * Definition::context() const
+{
+  return m_context;
+}
+
+void Definition::setContext(DUContext* context)
+{
+  m_context = context;
 }
 
 // kate: indent-width 2;

@@ -58,10 +58,7 @@ public:
 
   void run(const KUrl &url, AST *node);
 
-  virtual void visit(AST *node);
-
 protected:
-  virtual void visitDeclarator(DeclaratorAST *);
   virtual void visitAccessSpecifier(AccessSpecifierAST *);
   virtual void visitClassSpecifier(ClassSpecifierAST *);
   virtual void visitEnumSpecifier(EnumSpecifierAST *);
@@ -99,10 +96,6 @@ private:
   void applyFunctionSpecifiers(const ListNode<std::size_t> *it, FunctionModelItem item);
 
   void setPositionAt(_CodeModelItem *item, AST *ast);
-  KTextEditor::Cursor tokenToPosition(const Token& token, QString& fileName, bool end = false) const;
-  KTextEditor::SmartRange* newRange(AST *ast);
-  KTextEditor::SmartRange* newRange(const Token& token);
-  KTextEditor::SmartRange* newRange(std::size_t token);
 
 private:
   CodeModel *_M_model;

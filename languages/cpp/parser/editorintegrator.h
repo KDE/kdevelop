@@ -39,6 +39,8 @@ namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterfac
  * the information parsed from a source file.
  *
  * Uses a disguised singleton + stateful design.
+ *
+ * \todo introduce stacks for the state?
  */
 class EditorIntegrator : public QObject
 {
@@ -123,14 +125,14 @@ public:
   DocumentCursor findPosition(std::size_t token, Edge edge = BackEdge) const;
 
   /**
-   * Create a new smart cursor from the given \a position.
+   * Create a new persistant cursor from the given \a position.
    */
-  KTextEditor::SmartCursor* createCursor(const DocumentCursor& position);
+  KTextEditor::Cursor* createCursor(const DocumentCursor& position);
 
   /**
-   * Create a new smart cursor from the given \a token on the given \a edge.
+   * Create a new persistant cursor from the given \a token on the given \a edge.
    */
-  KTextEditor::SmartCursor* createCursor(std::size_t token, Edge edge);
+  KTextEditor::Cursor* createCursor(std::size_t token, Edge edge);
 
   // Set defaults for creation of ranges
   void setNewRange(const KTextEditor::Range& range);

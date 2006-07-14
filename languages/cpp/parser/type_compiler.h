@@ -20,6 +20,7 @@
 #define TYPE_COMPILER_H
 
 #include "default_visitor.h"
+#include "identifier.h"
 
 #include <QtCore/QString>
 #include <QtCore/QStringList>
@@ -32,7 +33,8 @@ class TypeCompiler: protected DefaultVisitor
 public:
   TypeCompiler(TokenStream *token_stream);
 
-  inline QStringList qualifiedName() const { return _M_type; }
+  QualifiedIdentifier identifier() const;
+  inline QStringList qualifiedName() const { return _M_type.toStringList(); }
   inline QList<int> cv() const { return _M_cv; }
 
   bool isConstant() const;
@@ -52,7 +54,7 @@ protected:
 
 private:
   TokenStream *_M_token_stream;
-  QStringList _M_type;
+  QualifiedIdentifier _M_type;
   QList<int> _M_cv;
 };
 

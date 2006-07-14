@@ -22,7 +22,7 @@
 
 #include "default_visitor.h"
 
-#include <QStack>
+#include "identifier.h"
 
 class TokenStream;
 class DUChain;
@@ -64,6 +64,7 @@ protected:
   virtual void visitPrimaryExpression (PrimaryExpressionAST*);
   virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST*);
   virtual void visitMemInitializer(MemInitializerAST *);
+  virtual void visitUsingDirective(UsingDirectiveAST *);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;
@@ -108,7 +109,15 @@ private:
    */
   Definition* newDeclaration(KTextEditor::Range* range);
 
-  void closeContext(AST* node, DUContext* parent, int identifierStackDepth);
+  /// Register a new use
+  void newUse(NameAST* name);
+
+  /**
+   * Closes the current context.  Only provide the previous identifier stack depth
+   * if you want the identifier for the object which created this scope to get assigned
+   * to this scope's identifier
+   */
+  void closeContext(AST* node, DUContext* parent, int identifierStackDepth = -1);
   void setIdentifier();
 
   TokenStream *_M_token_stream;
@@ -132,7 +141,7 @@ private:
   TypeEnvironment* m_types;
 
   Definition* m_currentDefinition;
-  QStack<QString> m_identifierStack;
+  QStack<QualifiedIdentifier> m_identifierStack;
 };
 
 #endif // DUBUILDER_H
