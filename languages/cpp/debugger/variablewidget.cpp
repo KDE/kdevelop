@@ -676,7 +676,15 @@ void VariableTree::localsReady(const GDBMI::ResultRecord& r)
 
     for(unsigned i = 0; i < locals.size(); ++i)
     {
-        locals_and_arguments.push_back(locals[i].literal());
+        QString val = locals[i].literal();
+
+        // Check ada internal variables like <R45b>, <L23R> ...
+        bool is_ada_variable = (val[0] == '<' && val[val.length() - 1] == '>');
+
+        if (!is_ada_variable)
+        {
+            locals_and_arguments.push_back(val);
+        }
     }
 
     controller_->addCommand(new CliCommand("info frame",
