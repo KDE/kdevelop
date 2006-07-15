@@ -312,7 +312,7 @@
                     <string>If checked, KDevelop will use the default terminal as set in KControl in KDE components, Component Chooser.</string>
                 </property>
             </widget>
-            <widget class="QLineEdit">
+            <widget class="KLineEdit">
                 <property name="name">
                     <cstring>terminalEdit</cstring>
                 </property>

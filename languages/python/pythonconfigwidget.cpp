@@ -12,7 +12,7 @@
 #include "pythonconfigwidget.h"
 
 #include <qcheckbox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include "domutil.h"
 
 

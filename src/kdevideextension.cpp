@@ -24,7 +24,7 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 
 #include <klocale.h>
 #include <kconfig.h>

@@ -71,7 +71,7 @@
                         <string>This is the name of the main program source file</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="3" column="1">
+                <widget class="KLineEdit" row="3" column="1">
                     <property name="name">
                         <cstring>programArgsEdit</cstring>
                     </property>
@@ -121,17 +121,17 @@
 def cd(dir) Dir.chdir dir end</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="1" column="1">
+                <widget class="KLineEdit" row="1" column="1">
                     <property name="name">
                         <cstring>shellEdit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="2" column="1">
+                <widget class="KLineEdit" row="2" column="1">
                     <property name="name">
                         <cstring>mainProgramEdit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="0" column="1">
+                <widget class="KLineEdit" row="0" column="1">
                     <property name="name">
                         <cstring>interpreterEdit</cstring>
                     </property>
@@ -359,4 +359,7 @@ def cd(dir) Dir.chdir dir end</string>
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+</includehints>
 </UI>

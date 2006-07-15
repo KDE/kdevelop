@@ -99,7 +99,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     QLabel *pattern_label = new QLabel(i18n("&Pattern:"), this);
     layout->addWidget(pattern_label, 0, 0, AlignRight | AlignVCenter);
 
-    pattern_combo = new QComboBox(true, this);
+    pattern_combo = new KComboBox(true, this);
     pattern_label->setBuddy(pattern_combo);
     pattern_combo->setFocus();
     pattern_combo->insertStringList(config->readListEntry("LastSearchItems"));
@@ -117,14 +117,14 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     template_edit->setText(template_str[0]);
     template_layout->addWidget(template_edit, 1);
 
-    QComboBox *template_combo = new QComboBox(false, this);
+    KComboBox *template_combo = new KComboBox(false, this);
     template_combo->insertStrList(template_desc);
     template_layout->addWidget(template_combo, 0);
 
     QLabel *files_label = new QLabel(i18n("&Files:"), this);
     layout->addWidget(files_label, 2, 0, AlignRight | AlignVCenter);
 
-    files_combo = new QComboBox(true, this);
+    files_combo = new KComboBox(true, this);
     files_label->setBuddy(files_combo->focusProxy());
     files_combo->insertStrList(filepatterns);
     layout->addWidget(files_combo, 2, 1);

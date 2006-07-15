@@ -73,7 +73,7 @@ private slots:
 
 private:
     KLineEdit *template_edit;
-    QComboBox *pattern_combo, *files_combo;
+    KComboBox *pattern_combo, *files_combo;
     KComboBox * dir_combo;
     KURLRequester * url_requester;
 

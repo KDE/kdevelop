@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qpushbutton.h>
 #include "fctypeedit.h"
 
