@@ -796,6 +796,7 @@ void DebuggerPart::slotFileSaved()
 
 void DebuggerPart::slotProjectCompiled()
 {
+    justOpened_ = false;
     needRebuild_ = false;
 }
 
