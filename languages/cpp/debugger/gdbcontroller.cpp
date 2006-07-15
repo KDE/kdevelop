@@ -804,15 +804,19 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
     if (!shell.isEmpty())
     {
         *dbgProcess_ << "/bin/sh" << "-c" << shell + " " + gdb + 
-                      " --interpreter=mi2 -quiet";
-        emit gdbUserCommandStdout(QString( "/bin/sh -c " + shell + " " + gdb
-                      +" --interpreter=mi2 -quiet" ).latin1());
+                      + " " + application + " --interpreter=mi2 -quiet";
+        emit gdbUserCommandStdout(
+            QString( "/bin/sh -c " + shell + " " + gdb
+                     + " " + application 
+                     + " --interpreter=mi2 -quiet" ).latin1());
     }
     else
     {
-        *dbgProcess_ << gdb << "-interpreter=mi2" << "-quiet";
-        emit gdbUserCommandStdout(QString( gdb + 
-                        " --interpreter=mi2 -quiet" ).latin1());
+        *dbgProcess_ << gdb << application
+                     << "-interpreter=mi2" << "-quiet";
+        emit gdbUserCommandStdout(
+            QString( gdb + " " + application +
+                     " --interpreter=mi2 -quiet" ).latin1());
     }
 
     if (!dbgProcess_->start( KProcess::NotifyOnExit,
@@ -911,6 +915,7 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
     // FIXME: a bit hacky, as we're really not ready for new commands.
     setStateOn(s_dbgBusy);
     raiseEvent(debugger_ready);
+    raiseEvent(connected_to_program);
    
     // Now gdb has been started and the application has been loaded,
     // BUT the app hasn't been started yet! A run command is about to be issued
@@ -1028,6 +1033,14 @@ void GDBController::slotAttachTo(int pid)
     setStateOff(s_appNotStarted|s_programExited);
     setStateOn(s_attached);
 
+    // Currently, we always start debugger with a name of binary,
+    // we might be connecting to a different binary completely,
+    // so cancel all symbol tables gdb has.
+    // We can't omit application name from gdb invocation
+    // because for libtool binaries, we have no way to guess
+    // real binary name.
+    queueCmd(new GDBCommand(QString("file"), NOTINFOCMD, 0));
+
     // The MI interface does not implements -target-attach yet,
     // and we don't recognize whatever gibberish 'attach' pours out, so...
     queueCmd(new GDBCommand(
@@ -1143,13 +1156,6 @@ void GDBController::slotRun()
             }
             else
             {
-                // We use 'file' command instead of passing application name
-                // to 'gdb', so that for attach command, gdb does not
-                // thing it's debugging the wrong application.
-                queueCmd(new GDBCommand(QString("file %1").arg(application_),
-                                        NOTINFOCMD, 0));
-                raiseEvent(connected_to_program);
-
                 queueCmd(new GDBCommand("-exec-run", NOTINFOCMD, 0));
             }
         }
