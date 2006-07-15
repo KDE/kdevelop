@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=KDevCMakeImporter
+Comment=KDevelop CMake Importer
+Icon=gear
+ServiceTypes=KDevelop/FileManager
+X-KDE-Library=kdevcmakeimporter
+X-KDE-PluginInfo-Author=Matt Rogers
+X-KDE-PluginInfo-Email=mattr@kde.org
+X-KDE-PluginInfo-Name=kdevcmakeimporter
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-FileManager=
+X-KDevelop-Version=4

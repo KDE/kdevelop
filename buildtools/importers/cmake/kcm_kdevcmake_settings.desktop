@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kdevcmake_settings
+X-KDE-FactoryName=CMakePreferencesFactory
+X-KDE-ParentApp=kdevelop
+X-KDE-ParentComponents=kdevelop
+
+Name=CMake
+Comment=Configure CMake settings
+

@@ -1,0 +1,100 @@
+<ui version="4.0" >
+ <class>CMakeBuildSettings</class>
+ <widget class="QWidget" name="CMakeBuildSettings" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>473</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string/>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="1" >
+    <widget class="QLineEdit" name="installPrefix" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>7</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="QLineEdit" name="buildType" />
+   </item>
+   <item row="3" column="1" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>287</width>
+       <height>111</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QLineEdit" name="buildFolder" />
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="label_3" >
+     <property name="text" >
+      <string>Build &amp;directory:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>buildFolder</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Installation &amp;Prefix:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>installPrefix</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="label_2" >
+     <property name="text" >
+      <string>Build &amp;type:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>buildType</cstring>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>installPrefix</tabstop>
+  <tabstop>buildType</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

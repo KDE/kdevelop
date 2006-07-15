@@ -1,0 +1,167 @@
+/*=========================================================================
+
+  Program:   CMake - Cross-Platform Makefile Generator
+  Module:    $RCSfile: cmFLTKWrapUICommand.cxx,v $
+  Language:  C++
+  Date:      $Date: 2006/05/11 14:45:33 $
+  Version:   $Revision: 1.31 $
+
+  Copyright (c) 2002 Kitware, Inc., Insight Consortium.  All rights reserved.
+  See Copyright.txt or http://www.cmake.org/HTML/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#include "cmFLTKWrapUICommand.h"
+
+#include "cmSourceFile.h"
+
+// cmFLTKWrapUICommand
+bool cmFLTKWrapUICommand::InitialPass(std::vector<std::string> const& args)
+{
+  if(args.size() < 2 )
+    {
+    this->SetError("called with incorrect number of arguments");
+    return false;
+    }
+
+  // what is the current source dir
+  std::string cdir = this->Makefile->GetCurrentDirectory();
+  const char* fluid_exe =
+    this->Makefile->GetRequiredDefinition("FLTK_FLUID_EXECUTABLE");
+
+  // get parameter for the command
+  this->Target = args[0];  // Target that will use the generated files
+
+  std::vector<std::string> newArgs;
+  this->Makefile->ExpandSourceListArguments(args,newArgs, 1);
+  
+  // get the list of GUI files from which .cxx and .h will be generated 
+  std::string outputDirectory = this->Makefile->GetCurrentOutputDirectory();
+
+  // Some of the generated files are *.h so the directory "GUI" 
+  // where they are created have to be added to the include path
+  this->Makefile->AddIncludeDirectory( outputDirectory.c_str() );
+
+  for(std::vector<std::string>::iterator i = (newArgs.begin() + 1); 
+      i != newArgs.end(); i++)
+    {
+    cmSourceFile *curr = this->Makefile->GetSource(i->c_str());
+    // if we should use the source GUI 
+    // to generate .cxx and .h files
+    if (!curr || !curr->GetPropertyAsBool("WRAP_EXCLUDE"))
+      {
+      cmSourceFile header_file;
+      std::string srcName = cmSystemTools::GetFilenameWithoutExtension(*i);
+      const bool headerFileOnly = true;
+      header_file.SetName(srcName.c_str(), 
+                  outputDirectory.c_str(), "h",headerFileOnly);
+      std::string origname = cdir + "/" + *i;
+      std::string hname   = header_file.GetFullPath();
+      // add starting depends
+      std::vector<std::string> depends;
+      depends.push_back(origname);
+      depends.push_back(fluid_exe);
+      std::string cxxres = outputDirectory.c_str();
+      cxxres += "/" + srcName;
+      cxxres += ".cxx";
+
+      cmCustomCommandLine commandLine;
+      commandLine.push_back(fluid_exe);
+      commandLine.push_back("-c"); // instructs Fluid to run in command line
+      commandLine.push_back("-h"); // optionally rename .h files
+      commandLine.push_back(hname);
+      commandLine.push_back("-o"); // optionally rename .cxx files
+      commandLine.push_back(cxxres);
+      commandLine.push_back(origname);// name of the GUI fluid file
+      cmCustomCommandLines commandLines;
+      commandLines.push_back(commandLine);
+
+      // Add command for generating the .h and .cxx files
+      const char* no_main_dependency = 0;
+      const char* no_comment = 0;
+      const char* no_working_dir = 0;
+      this->Makefile->AddCustomCommandToOutput(cxxres.c_str(),
+                                           depends, no_main_dependency,
+                                           commandLines, no_comment,
+                                           no_working_dir);
+      this->Makefile->AddCustomCommandToOutput(hname.c_str(),
+                                           depends, no_main_dependency,
+                                           commandLines, no_comment,
+                                           no_working_dir);
+
+      cmSourceFile *sf = this->Makefile->GetSource(cxxres.c_str());
+      sf->GetDepends().push_back(hname);
+      sf->GetDepends().push_back(origname);
+      this->GeneratedSourcesClasses.push_back(sf);
+      }
+    }
+
+  // create the variable with the list of sources in it
+  size_t lastHeadersClass = this->GeneratedSourcesClasses.size();
+  std::string sourceListValue;
+  for(size_t classNum = 0; classNum < lastHeadersClass; classNum++)
+    {
+    if (classNum)
+      {
+      sourceListValue += ";";
+      }
+    sourceListValue += this->GeneratedSourcesClasses[classNum]->GetFullPath();
+    }
+  std::string varName = this->Target;
+  varName += "_FLTK_UI_SRCS";
+  this->Makefile->AddDefinition(varName.c_str(), sourceListValue.c_str());
+  
+  return true;
+}
+
+void cmFLTKWrapUICommand::FinalPass() 
+{
+  // people should add the srcs to the target themselves, but the old command
+  // didn't support that, so check and see if they added the files in and if
+  // they didn;t then print a warning and add then anyhow
+  std::vector<std::string> srcs = 
+    this->Makefile->GetTargets()[this->Target].GetSourceLists();
+  bool found = false;
+  for (unsigned int i = 0; i < srcs.size(); ++i)
+    {
+    if (srcs[i] == 
+        this->GeneratedSourcesClasses[0]->GetFullPath())
+      {
+      found = true;
+      break;
+      }
+    }
+  if (!found)
+    {
+    std::string msg = 
+      "In CMake 2.2 the FLTK_WRAP_UI command sets a variable to the list of "
+      "source files that should be added to your executable or library. It "
+      "appears that you have not added these source files to your target. "
+      "You should change your CMakeLists.txt file to "
+      "directly add the generated files to the target. "
+      "For example FTLK_WRAP_UI(foo src1 src2 src3) "
+      "will create a variable named foo_FLTK_UI_SRCS that contains the list "
+      "of sources to add to your target when you call ADD_LIBRARY or "
+      "ADD_EXECUTABLE. For now CMake will add the sources to your target "
+      "for you as was done in CMake 2.0 and earlier. In the future this may "
+      "become an error."; 
+    msg +="The problem was found while processing the source directory: ";
+    msg += this->Makefile->GetStartDirectory();
+    cmSystemTools::Message(msg.c_str(),"Warning");
+    // first we add the rules for all the .fl to .h and .cxx files
+    size_t lastHeadersClass = this->GeneratedSourcesClasses.size();
+    
+    // Generate code for all the .fl files
+    for(size_t classNum = 0; classNum < lastHeadersClass; classNum++)
+      {
+      this->Makefile->GetTargets()[this->Target].GetSourceFiles().
+        push_back(this->GeneratedSourcesClasses[classNum]);
+      }
+    }
+}
+
+
+

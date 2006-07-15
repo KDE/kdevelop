@@ -1,0 +1,9 @@
+PLATFORM="aix15"
+CC="xlc"
+CXX="xlC"
+
+# Write entries into the cache file before building cmake.
+write_cache()
+{
+write_standard_cache
+}
