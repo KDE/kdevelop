@@ -98,9 +98,8 @@ void ProjectManager::createActions( KActionCollection* ac )
 {
   KAction *action;
 
-  action = new KAction(i18n("&Open Project..."), "project_open", 0,
-                       this, SLOT(slotOpenProject()),
-                       ac, "project_open");
+  action = new KAction(KIcon("project_open"), i18n("&Open Project..."), ac, "project_open");
+  connect(action, SIGNAL(triggered(bool) ), SLOT(slotOpenProject()));
   action->setToolTip( i18n("Open project"));
   action->setWhatsThis(i18n("<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project."));
 
@@ -112,17 +111,14 @@ void ProjectManager::createActions( KActionCollection* ac )
   m_openRecentProjectAction->setWhatsThis(i18n("<b>Open recent project</b><p>Opens recently opened project."));
   m_openRecentProjectAction->loadEntries(KGlobal::config(), "RecentProjects");
 
-  m_closeProjectAction =
-    new KAction(i18n("C&lose Project"), "fileclose",0,
-                this, SLOT(closeProject()),
-                ac, "project_close");
+  m_closeProjectAction = new KAction(KIcon("fileclose"), i18n("C&lose Project"), ac, "project_close");
+  connect(m_closeProjectAction, SIGNAL(triggered(bool) ), SLOT(closeProject()));
   m_closeProjectAction->setEnabled(false);
   m_closeProjectAction->setToolTip(i18n("Close project"));
   m_closeProjectAction->setWhatsThis(i18n("<b>Close project</b><p>Closes the current project."));
 
-  m_projectOptionsAction = new KAction(i18n("Project &Options"), "configure", 0,
-                this, SLOT(slotProjectOptions()),
-                ac, "project_options" );
+  m_projectOptionsAction = new KAction(KIcon("configure"), i18n("Project &Options"), ac, "project_options" );
+  connect(m_projectOptionsAction, SIGNAL(triggered(bool) ), SLOT(slotProjectOptions()));
   m_projectOptionsAction->setToolTip(i18n("Project options"));
   m_projectOptionsAction->setWhatsThis(i18n("<b>Project options</b><p>Lets you customize project options."));
   m_projectOptionsAction->setEnabled(false);
