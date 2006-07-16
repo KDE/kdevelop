@@ -113,14 +113,12 @@ public:
    */
   void deleteChildContextsRecursively();
 
+  struct UsingNS {
+    KTextEditor::Cursor* origin;
+    QualifiedIdentifier nsIdentifier;
+  };
   void addUsingNamespace(KTextEditor::Cursor* cursor, const QualifiedIdentifier& nsIdentifier);
-  const QHash<QualifiedIdentifier, KTextEditor::Cursor*>& usingNamespaces() const;
-
-  /**
-   * Returns the context in which \a identifier was defined, or
-   * null if one is not found.
-   */
-  DUContext* definitionContext(const QualifiedIdentifier& identifier) const;
+  const QList<UsingNS*>& usingNamespaces() const;
 
   /**
    * Searches for and returns a definition with a given \a identifier in this context, which
@@ -131,7 +129,7 @@ public:
    *
    * \returns the requested definition if one was found, otherwise null.
    */
-  Definition* findDefinition(const QualifiedIdentifier& identifier, const DocumentCursor& position) const;
+  Definition* findDefinition(const QualifiedIdentifier& identifier, const DocumentCursor& position, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
 
   /**
    * Searches for and returns a definition with a given \a identifier in this context, which
@@ -166,7 +164,7 @@ public:
    * Returns the type of any \a identifier defined in this context, or
    * null if one is not found.
    */
-  Definition* findLocalDefinition(const QualifiedIdentifier& identifier) const;
+  Definition* findLocalDefinition(const QualifiedIdentifier& identifier, const DocumentCursor & position, bool allowUnqualifiedMatch = false, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
 
   /**
    * Clears all local definitions. Does not delete the definitions; the caller
@@ -246,6 +244,9 @@ private:
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
+  /// Search closed contexts which have not necessarily lost scope
+  Definition* findDefinitionInChildren(const QualifiedIdentifier& identifier, const DocumentCursor& position, const DUContext* sourceChild, const QList<UsingNS*>& usingNamespaces) const;
+
   ContextType m_contextType;
 
   QualifiedIdentifier m_scopeIdentifier;
@@ -255,7 +256,7 @@ private:
 
   QList<Definition*> m_localDefinitions;
 
-  QHash<QualifiedIdentifier, KTextEditor::Cursor*> m_usingNamespaces;
+  QList<UsingNS*> m_usingNamespaces;
 };
 
 #endif // DUCONTEXT_H

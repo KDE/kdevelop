@@ -37,10 +37,13 @@ DocumentCursor::DocumentCursor(KTextEditor::Range* range, Position position )
 {
 }
 
-DocumentCursor::DocumentCursor(SmartCursor* cursor)
+DocumentCursor::DocumentCursor(Cursor* cursor)
   : Cursor(*cursor)
-  , m_document(cursor->document()->url())
 {
+  if (cursor->isSmartCursor())
+    m_document = cursor->toSmartCursor()->document()->url();
+  else
+    m_document = static_cast<DocumentCursor*>(cursor)->document();
 }
 
 DocumentCursor::DocumentCursor(const DocumentCursor& copy)

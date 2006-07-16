@@ -141,13 +141,18 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
   m_currentContext->setType(DUContext::Function);
 
+  int stackCount = m_identifierStack.count();
+
   bool was = inFunctionDefinition (node);
   DefaultVisitor::visitFunctionDefinition (node);
   inFunctionDefinition (was);
 
   closeContext(node, previousContext);
 
-  setIdentifier();
+  setIdentifier(stackCount);
+
+  // TODO once type system is established, check to see if there was a forward
+  // declaration and if so, merge this definition with that definition.
 
   m_currentDefinition = oldDefinition;
 }
@@ -195,9 +200,11 @@ void DUBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
   Range* range = m_editor->createRange(node);
   m_currentDefinition = newDeclaration(range);
 
+  int stackCount = m_identifierStack.count();
+
   DefaultVisitor::visitParameterDeclaration (node);
 
-  setIdentifier();
+  setIdentifier(stackCount);
 
   m_currentDefinition = oldDefinition;
 }
@@ -219,19 +226,30 @@ void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
   Range* range = m_editor->createRange(node);
   m_currentDefinition = newDeclaration(range);
 
+  int stackCount = m_identifierStack.count();
+
   DefaultVisitor::visitSimpleDeclaration (node);
 
-  setIdentifier();
+  setIdentifier(stackCount);
 
   m_currentDefinition = oldDefinition;
 }
 
-void DUBuilder::setIdentifier()
+void DUBuilder::setIdentifier(int stackCount)
 {
-  if (m_currentDefinition) {
-    Q_ASSERT(m_identifierStack.top().count() == 1);
-    m_currentDefinition->setIdentifier(m_identifierStack.pop().first());
-  }
+  Q_ASSERT(m_identifierStack.count() >= stackCount);
+  Q_ASSERT(m_identifierStack.count() <= stackCount + 1);
+
+  if (m_identifierStack.count() == stackCount + 1)
+    if (m_currentDefinition) {
+      // FIXME this can happen if we're defining a staticly declared variable
+      //Q_ASSERT(m_identifierStack.top().count() == 1);
+      m_currentDefinition->setIdentifier(m_identifierStack.pop().first());
+
+    } else {
+      // Unused identifier...?
+      m_identifierStack.pop();
+    }
 }
 
 void DUBuilder::visitPrimaryExpression (PrimaryExpressionAST* node)
@@ -306,7 +324,7 @@ void DUBuilder::visitUsingDirective(UsingDirectiveAST * node)
 {
   DefaultVisitor::visitUsingDirective(node);
 
-  m_currentContext->addUsingNamespace(m_editor->createCursor(node->end_token, EditorIntegrator::BackEdge), m_identifierStack.pop());
+  m_currentContext->addUsingNamespace(m_editor->createCursor(node->end_token, EditorIntegrator::FrontEdge), m_identifierStack.pop());
 }
 
 // kate: indent-width 2;

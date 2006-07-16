@@ -81,19 +81,30 @@ class QualifiedIdentifier : public QStack<Identifier>
 public:
   explicit QualifiedIdentifier(const QString id);
   explicit QualifiedIdentifier(const Identifier& id);
+  explicit QualifiedIdentifier(const QVector<Identifier>& idStack);
   QualifiedIdentifier();
 
   static QualifiedIdentifier merge(const QStack<QualifiedIdentifier>& idStack);
 
   bool explicitlyGlobal() const;
+  bool isQualified() const;
 
   QString toString() const;
   QStringList toStringList() const;
 
-  void merge(const QualifiedIdentifier& base);
+  QualifiedIdentifier merge(const QualifiedIdentifier& base) const;
 
   bool operator==(const QualifiedIdentifier& rhs) const;
   bool operator!=(const QualifiedIdentifier& rhs) const;
+
+  enum MatchTypes {
+    NoMatch,
+    Contains,
+    ContainedBy,
+    ExactMatch
+  };
+
+  MatchTypes match(const QualifiedIdentifier& other) const;
 
   /**
     * kDebug() stream operator.  Writes this identifier to the debug output in a nicely formatted way.

@@ -28,6 +28,8 @@ namespace KTextEditor { class SmartCursor; }
 /**
  * Extends KTextEditor::Range with information about the URL to which the range
  * refers.
+ *
+ * \todo override comparison operators and take them into account
  */
 class DocumentCursor : public KTextEditor::Cursor
 {
@@ -44,7 +46,8 @@ public:
   DocumentCursor(KTextEditor::Range* range, Position position);
 
   /// Constructor for information extraction only, does not take ownership of the cursor.
-  DocumentCursor(KTextEditor::SmartCursor* cursor);
+  /// \a cursor must be either a DocumentCursor or a KTextEditor::SmartCursor.
+  DocumentCursor(KTextEditor::Cursor* cursor);
 
   DocumentCursor(const DocumentCursor& copy);
 

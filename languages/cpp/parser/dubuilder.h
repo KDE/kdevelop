@@ -118,7 +118,9 @@ private:
    * to this scope's identifier
    */
   void closeContext(AST* node, DUContext* parent, int identifierStackDepth = -1);
-  void setIdentifier();
+
+  // Sets the identifier of the current definition.
+  void setIdentifier(int stackCount);
 
   TokenStream *_M_token_stream;
   EditorIntegrator* m_editor;

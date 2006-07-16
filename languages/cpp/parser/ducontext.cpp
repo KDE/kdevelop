@@ -18,6 +18,8 @@
 
 #include "ducontext.h"
 
+#include <QMutableLinkedListIterator>
+
 #include "typesystem.h"
 #include "definition.h"
 #include "duchain.h"
@@ -39,9 +41,10 @@ DUContext::~DUContext( )
 
   qDeleteAll(m_localDefinitions);
 
-  QList<Cursor*> usingNS = m_usingNamespaces.values();
-  m_usingNamespaces.clear();
-  qDeleteAll(usingNS);
+  foreach (UsingNS* use, m_usingNamespaces) {
+    delete use->origin;
+    delete use;
+  }
 }
 
 const QList< DUContext * > & DUContext::childContexts( ) const
@@ -57,63 +60,162 @@ const QList< DUContext * > & DUContext::parentContexts( ) const
 Definition * DUContext::addDefinition( Definition * newDefinition )
 {
   // The definition may not have its identifier set when it's assigned... allow dupes here, TODO catch the error elsewhere
-  if (type() == Namespace) {
-    Q_ASSERT(parentContexts().count() == 1);
-    parentContexts().first()->addDefinition(newDefinition);
-  }
 
   newDefinition->setContext(this);
   m_localDefinitions.append(newDefinition);
   return newDefinition;
 }
 
-Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifier ) const
+Definition* DUContext::takeDefinition(Definition* definition)
 {
-  if (identifier.count() > 1) {
-    QualifiedIdentifier scope = scopeIdentifier();
+  definition->setContext(0);
+  m_localDefinitions.removeAll(definition);
+  return definition;
+}
 
-    if (identifier.explicitlyGlobal()) {
-      QualifiedIdentifier id = identifier;
-      id.pop();
-      if (scope != id)
-        goto Continue;
+Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifier, const DocumentCursor & position, bool allowUnqualifiedMatch, const QList<UsingNS*>& usingNamespaces ) const
+{
+  QLinkedList<Definition*> tryToResolve;
+  QSet<Definition*> resolved;
 
-      return 0;
+  foreach (Definition* definition, m_localDefinitions) {
+    if (identifier.top() == definition->identifier()) {
+      if (identifier.explicitlyGlobal() || identifier.count() > 1) {
+        tryToResolve.append(definition);
+      } else if (!allowUnqualifiedMatch) {
+        tryToResolve.append(definition);
+      } else {
+        resolved.insert(definition);
+      }
     }
-
-    if (scope.count() < identifier.count() - 1)
-      return 0;
-
-    for (int i = identifier.count() - 2, j = 0; i >= 0; --i, ++j)
-      if (identifier.at(i) == scope.at(scope.count() - j - 1))
-        continue;
-      else
-        // The requested identifier is not within the local scope.
-        return 0;
   }
 
-  Continue:
-
-  foreach (Definition* definition, m_localDefinitions)
-    if (definition->identifier() == identifier.top())
+  if (resolved.count() == 1) {
+    Definition* definition  = *resolved.constBegin();
+    if (position >= definition->textRange().start())
       return definition;
+
+    return 0;
+
+  } else if (resolved.count() > 1) {
+    kWarning() << k_funcinfo << "Multiple matching definitions (shouldn't happen, code error)" << endl;
+    return 0;
+
+  } else if (tryToResolve.isEmpty()) {
+    return 0;
+  }
+
+  QualifiedIdentifier scope = scopeIdentifier();
+
+  QMutableLinkedListIterator<Definition*> it = tryToResolve;
+  while (it.hasNext()) {
+    QualifiedIdentifier::MatchTypes m = identifier.match(it.next()->qualifiedIdentifier());
+    switch (m) {
+      case QualifiedIdentifier::NoMatch:
+      case QualifiedIdentifier::Contains:
+        //kDebug() << k_funcinfo << identifier << " mismatched " << m << ": " << it.value()->qualifiedIdentifier() << endl;
+        break;
+
+      case QualifiedIdentifier::ContainedBy:
+        //kDebug() << k_funcinfo << identifier << " contained by " << it.value()->qualifiedIdentifier() << endl;
+      case QualifiedIdentifier::ExactMatch:
+        resolved.insert(it.value());
+        break;
+    }
+  }
+
+  foreach (UsingNS* use, usingNamespaces) {
+    QualifiedIdentifier id = identifier.merge(use->nsIdentifier);
+
+    QMutableLinkedListIterator<Definition*> it = tryToResolve;
+    while (it.hasNext()) {
+      QualifiedIdentifier::MatchTypes m = id.match(it.next()->qualifiedIdentifier());
+      switch (m) {
+        case QualifiedIdentifier::NoMatch:
+        case QualifiedIdentifier::Contains:
+          //kDebug() << k_funcinfo << identifier << " mismatched " << m << ": " << it.value()->qualifiedIdentifier() << endl;
+          break;
+
+        case QualifiedIdentifier::ContainedBy:
+          //kDebug() << k_funcinfo << identifier << " contained by " << it.value()->qualifiedIdentifier() << endl;
+        case QualifiedIdentifier::ExactMatch:
+          resolved.insert(it.value());
+          break;
+      }
+    }
+  }
+
+  if (resolved.count() == 1) {
+    return *resolved.constBegin();
+  } else if (resolved.count() > 1) {
+    kWarning() << k_funcinfo << "Multiple matching definitions (shouldn't happen, code error)" << endl;
+    return 0;
+  }
+
+  // todo: namespace abbreviations
 
   return 0;
 }
 
-DUContext * DUContext::definitionContext( const QualifiedIdentifier& identifier ) const
+Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, const DocumentCursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNS ) const
 {
-  if (findLocalDefinition(identifier))
-    return const_cast<DUContext*>(this);
+  // TODO we're missing ambiguous references by not checking every resolution before returning...
+  // but is that such a bad thing? (might be good performance-wise)
+  if (Definition* definition = findLocalDefinition(identifier, position, sourceChild, usingNS))
+    return definition;
 
-  QListIterator<DUContext*> it = m_parentContexts;
+  if (identifier.isQualified()) {
+    if (Definition* definition = findDefinitionInChildren(identifier, position, sourceChild, usingNS))
+      return definition;
+
+  } else if (!usingNamespaces().isEmpty() && !identifier.explicitlyGlobal()) {
+    QList<UsingNS*> currentUsingNS = usingNS;
+
+    foreach (UsingNS* use, usingNamespaces())
+      if (position >= *use->origin)
+        currentUsingNS.append(use);
+
+    if (!currentUsingNS.isEmpty())
+      if (Definition* definition = findDefinitionInChildren(identifier, position, sourceChild, currentUsingNS))
+        return definition;
+  }
+
+  QListIterator<DUContext*> it = parentContexts();
   it.toBack();
   while (it.hasPrevious()) {
-    if (DUContext* context = it.previous()->definitionContext(identifier))
-      return context;
+    DUContext* parent = it.previous();
+
+    if (Definition* definition = parent->findDefinition(identifier, position, this))
+      return definition;
   }
 
   return 0;
+}
+
+Definition * DUContext::findDefinitionInChildren(const QualifiedIdentifier & identifier, const DocumentCursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNamespaces) const
+{
+  foreach (DUContext* context, childContexts()) {
+    if (context == sourceChild)
+      continue;
+
+    if (context->type() != DUContext::Namespace)
+      continue;
+
+    if (Definition* match = context->findLocalDefinition(identifier, position, false, usingNamespaces))
+      return match;
+
+    if (Definition* match = context->findDefinitionInChildren(identifier, position, false, usingNamespaces))
+      return match;
+  }
+
+  // todo nested using definitions
+
+  return 0;
+}
+
+Definition * DUContext::findDefinition( const QualifiedIdentifier& identifier ) const
+{
+  return findDefinition(identifier, DocumentCursor(textRangePtr(), DocumentCursor::Start));
 }
 
 void DUContext::addChildContext( DUContext * context )
@@ -242,37 +344,6 @@ QList< Definition * > DUContext::clearLocalDefinitions( )
   return ret;
 }
 
-Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, const DocumentCursor & position ) const
-{
-  if (Definition* definition = findLocalDefinition(identifier))
-    return definition;
-
-  QListIterator<DUContext*> it = parentContexts();
-  it.toBack();
-  while (it.hasPrevious())
-    if (Definition* definition = it.previous()->findDefinition(identifier, position))
-      return definition;
-
-  return 0;
-}
-
-Definition * DUContext::findDefinition( const QualifiedIdentifier& identifier ) const
-{
-  return findDefinition(identifier, DocumentCursor(textRangePtr(), DocumentCursor::Start));
-}
-
-Definition* DUContext::takeDefinition(Definition* definition)
-{
-  // The definition may not have its identifier set when it's assigned... allow dupes here, TODO catch the error elsewhere
-  if (type() == Namespace) {
-    Q_ASSERT(parentContexts().count() == 1);
-    return parentContexts().first()->takeDefinition(definition);
-  }
-
-  m_localDefinitions.removeAll(definition);
-  return definition;
-}
-
 void DUContext::deleteDefinition(Definition* definition)
 {
   m_localDefinitions.removeAll(definition);
@@ -301,12 +372,24 @@ const QualifiedIdentifier & DUContext::localScopeIdentifier() const
   return m_scopeIdentifier;
 }
 
-void DUContext::addUsingNamespace(Cursor * cursor, const QualifiedIdentifier& nsIdentifier)
+void DUContext::addUsingNamespace(KTextEditor::Cursor* cursor, const QualifiedIdentifier& id)
 {
-  m_usingNamespaces.insert(nsIdentifier, cursor);
+  UsingNS* use = new UsingNS;
+  use->origin = cursor;
+  use->nsIdentifier = id;
+
+  QMutableListIterator<UsingNS*> it = m_usingNamespaces;
+  while (it.hasPrevious())
+    if (*use->origin > *it.previous()->origin) {
+      it.next();
+      it.insert(use);
+      return;
+    }
+
+  m_usingNamespaces.prepend(use);
 }
 
-const QHash<QualifiedIdentifier, KTextEditor::Cursor*>& DUContext::usingNamespaces() const
+const QList<DUContext::UsingNS*>& DUContext::usingNamespaces() const
 {
   return m_usingNamespaces;
 }

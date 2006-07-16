@@ -34,9 +34,19 @@
 #include "tokens.h"
 #include "testconfig.h"
 
+#include "rpp/preprocessor.h"
+
 using namespace KTextEditor;
 
 namespace QTest {
+  template<>
+  char* toString(const Cursor& cursor)
+  {
+    QByteArray ba = "Cursor(";
+    ba += QByteArray::number(cursor.line()) + ", " + QByteArray::number(cursor.column());
+    ba += ')';
+    return qstrdup(ba.data());
+  }
   template<>
   char* toString(const QualifiedIdentifier& id)
   {
@@ -125,9 +135,14 @@ private slots:
     at2.push(Identifier("A"));
     at2.push(Identifier("t"));
     QCOMPARE(at, at2);
+    QVERIFY(at.isQualified());
 
     QualifiedIdentifier global("::test::foo()");
     QVERIFY(global.explicitlyGlobal());
+    QVERIFY(global.isQualified());
+
+    QualifiedIdentifier unqualified("unqualified");
+    QVERIFY(!unqualified.isQualified());
   }
 
   void testContextRelationships()
@@ -178,9 +193,9 @@ private slots:
     QCOMPARE(topContext->localDefinitions().count(), 2);
     QCOMPARE(topContext->localDefinitions()[1], definition2);
 
-    /*kDebug() << k_funcinfo << "Warning expected here (bug if not present)." << endl;
-    topContext->addDefinition(definition2);
-    QCOMPARE(topContext->localDefinitions().count(), 2);*/
+    //kDebug() << k_funcinfo << "Warning expected here (bug if not present)." << endl;
+    //topContext->addDefinition(definition2);
+    //QCOMPARE(topContext->localDefinitions().count(), 2);
 
     topContext->clearLocalDefinitions();
     QVERIFY(topContext->localDefinitions().isEmpty());
@@ -193,7 +208,7 @@ private slots:
 
     DUContext* context1 = new DUContext(new DocumentRange(file1, Range(4,4, 14,3)));
     topContext->addChildContext(context1);
-    DocumentCursor insideContext1(file1, KTextEditor::Cursor(5,9));
+    DocumentCursor insideContext1(file1, Cursor(5,9));
 
     QCOMPARE(topContext->findContext(insideContext1), context1);
     QCOMPARE(topContext->findDefinition(definition1->identifier(), insideContext1), definition1);
@@ -343,8 +358,6 @@ private slots:
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("struct A { int i; A(int b, int c) : i(5) { } virtual void test(int j) = 0; };");
 
-    // FIXME test scope indentifiers... they're wrong currently
-
     DUContext* top = parse(method, DumpNone);
 
     QCOMPARE(top->parentContexts().count(), 0);
@@ -412,32 +425,131 @@ private slots:
 
   void testDeclareNamespace()
   {
-    QByteArray method("namespace foo { int bar; int test(); } using namespace foo; int test() { return bar; }");
+    //                 0         1         2         3         4         5         6         7
+    //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("namespace foo { int bar; int test() { return bar; } } int test() { return foo::bar; }");
 
-    DUContext* top = parse(method);//, DumpNone);
+    DUContext* top = parse(method, DumpNone);
 
     QCOMPARE(top->parentContexts().count(), 0);
-    QCOMPARE(top->childContexts().count(), 1);
-    QCOMPARE(top->localDefinitions().count(), 2);
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->localDefinitions().count(), 1);
+    QVERIFY(top->localScopeIdentifier().isEmpty());
+    QCOMPARE(top->findDefinition(Identifier("foo")), noDef);
+
+    QCOMPARE(top->usingNamespaces().count(), 0);
+
+    DUContext* fooCtx = top->childContexts().first();
+    QCOMPARE(fooCtx->childContexts().count(), 1);
+    QCOMPARE(fooCtx->localDefinitions().count(), 2);
+    QCOMPARE(fooCtx->localScopeIdentifier(), QualifiedIdentifier("foo"));
+    QCOMPARE(fooCtx->scopeIdentifier(), QualifiedIdentifier("foo"));
+
+    Definition* bar = fooCtx->localDefinitions().first();
+    QCOMPARE(bar->identifier(), Identifier("bar"));
+    QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
+    QCOMPARE(bar->uses().count(), 2);
+    QCOMPARE(top->findDefinition(bar->identifier()), noDef);
+    QCOMPARE(top->findDefinition(bar->qualifiedIdentifier()), bar);
+
+    Definition* test = fooCtx->localDefinitions()[1];
+    QCOMPARE(test->identifier(), Identifier("test"));
+    QCOMPARE(test->qualifiedIdentifier(), QualifiedIdentifier("foo::test"));
+    QCOMPARE(test->uses().count(), 0);
+
+    Definition* test2 = top->localDefinitions().first();
+    QCOMPARE(test2->identifier(), Identifier("test"));
+    QCOMPARE(test2->qualifiedIdentifier(), QualifiedIdentifier("test"));
+    QCOMPARE(test2->uses().count(), 0);
+
+    QCOMPARE(top->findDefinition(QualifiedIdentifier("test")), test2);
+    QCOMPARE(top->findDefinition(QualifiedIdentifier("::test")), test2);
+    QCOMPARE(top->findDefinition(QualifiedIdentifier("foo::test")), test);
+    QCOMPARE(top->findDefinition(QualifiedIdentifier("::foo::test")), test);
+
+    DUContext* testCtx = fooCtx->childContexts().first();
+    QCOMPARE(testCtx->childContexts().count(), 1);
+    QCOMPARE(testCtx->localDefinitions().count(), 0);
+    QVERIFY(testCtx->localScopeIdentifier().isEmpty());
+
+    DUContext* testfnCtx = testCtx->childContexts().first();
+    QCOMPARE(testfnCtx->childContexts().count(), 0);
+    QCOMPARE(testfnCtx->localDefinitions().count(), 0);
+    QVERIFY(testfnCtx->localScopeIdentifier().isEmpty());
+
+    release(top);
+  }
+
+  void testDeclareUsingNamespace()
+  {
+    //                 0         1         2         3         4         5         6         7
+    //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("namespace foo { int bar; int test(); } using namespace foo; int test() { return bar; }");
+
+    DUContext* top = parse(method, DumpNone);
+
+    QCOMPARE(top->parentContexts().count(), 0);
+    QCOMPARE(top->childContexts().count(), 2);
+    // Needs to wait for type system to recognise forward declarations
+    QCOMPARE(top->localDefinitions().count(), 1);//0);
     QVERIFY(top->localScopeIdentifier().isEmpty());
     QCOMPARE(top->findDefinition(Identifier("foo")), noDef);
 
     QCOMPARE(top->usingNamespaces().count(), 1);
+    QCOMPARE(top->usingNamespaces().first()->nsIdentifier, QualifiedIdentifier("foo"));
+    QCOMPARE(*top->usingNamespaces().first()->origin, Cursor(0, 59));
 
-    Definition* bar = top->localDefinitions().first();
+    DUContext* fooCtx = top->childContexts().first();
+    QCOMPARE(fooCtx->childContexts().count(), 1);
+    QCOMPARE(fooCtx->localDefinitions().count(), 2);
+    QCOMPARE(fooCtx->localScopeIdentifier(), QualifiedIdentifier("foo"));
+    QCOMPARE(fooCtx->scopeIdentifier(), QualifiedIdentifier("foo"));
+
+    Definition* bar = fooCtx->localDefinitions().first();
     QCOMPARE(bar->identifier(), Identifier("bar"));
+    QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
     QCOMPARE(bar->uses().count(), 1);
-    QCOMPARE(top->findDefinition(bar->identifier()), bar);
+    QCOMPARE(top->findDefinition(bar->identifier(), DocumentCursor(top->textRangePtr(), DocumentCursor::Start)), noDef);
+    QCOMPARE(top->findDefinition(bar->identifier()), noDef);
+    QCOMPARE(top->findDefinition(bar->qualifiedIdentifier()), bar);
 
-    Definition* test = top->localDefinitions()[1];
+    Definition* test = fooCtx->localDefinitions()[1];
     QCOMPARE(test->identifier(), Identifier("test"));
+    QCOMPARE(test->qualifiedIdentifier(), QualifiedIdentifier("foo::test"));
     QCOMPARE(test->uses().count(), 0);
-    QCOMPARE(top->findDefinition(test->identifier()), test);
 
-    DUContext* testCtx = top->childContexts().first();
+    Definition* test2 = top->localDefinitions().first();
+    QCOMPARE(test2->identifier(), Identifier("test"));
+    // Needs to wait for type system to recognise forward declarations
+    QCOMPARE(test2->qualifiedIdentifier(), QualifiedIdentifier("test"));//"foo::test"));
+    QCOMPARE(test2->uses().count(), 0);
+
+    QCOMPARE(top->findDefinition(QualifiedIdentifier("test")), test2);
+    QCOMPARE(top->findDefinition(QualifiedIdentifier("::test")), test2);
+    QCOMPARE(top->findDefinition(QualifiedIdentifier("foo::test")), test);
+    QCOMPARE(top->findDefinition(QualifiedIdentifier("::foo::test")), test);
+
+    DUContext* testCtx = fooCtx->childContexts().first();
     QCOMPARE(testCtx->childContexts().count(), 0);
     QCOMPARE(testCtx->localDefinitions().count(), 0);
     QVERIFY(testCtx->localScopeIdentifier().isEmpty());
+
+    release(top);
+  }
+
+  void testFileParse()
+  {
+    QFile file("/opt/kde4/src/kdelibs/kate/part/kateautoindent.cpp");
+    QVERIFY( file.open( QIODevice::ReadOnly ) );
+
+    QByteArray fileData = file.readAll();
+    file.close();
+    QString contents = QString::fromUtf8( fileData.constData() );
+    Preprocessor preprocessor;
+    QString ppd = preprocessor.processString( contents );
+    QByteArray preprocessed = ppd.toUtf8();
+
+    DUContext* top = parse(preprocessed, DumpNone);
 
     release(top);
   }

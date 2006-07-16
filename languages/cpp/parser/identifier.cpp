@@ -177,15 +177,14 @@ QString QualifiedIdentifier::toString() const
   return ret;
 }
 
-void QualifiedIdentifier::merge(const QualifiedIdentifier& base)
+QualifiedIdentifier QualifiedIdentifier::merge(const QualifiedIdentifier& base) const
 {
   if (explicitlyGlobal())
-    return;
+    return *this;
 
-  for (int i = base.count() - 1; i >= 0; --i)
-    prepend(base.at(i));
-
-  return;
+  QualifiedIdentifier ret = base;
+  ret << *this;
+  return ret;
 }
 
 bool QualifiedIdentifier::explicitlyGlobal() const
@@ -203,7 +202,7 @@ bool QualifiedIdentifier::operator==(const QualifiedIdentifier& rhs) const
     return false;
 
   for (int i = 0; i < count() - l; ++i)
-    if (at(i - l) != rhs.at(i - r))
+    if (at(i + l) != rhs.at(i + r))
       return false;
 
   return true;
@@ -212,6 +211,36 @@ bool QualifiedIdentifier::operator==(const QualifiedIdentifier& rhs) const
 bool QualifiedIdentifier::operator!=(const QualifiedIdentifier& rhs) const
 {
   return !operator==(rhs);
+}
+
+QualifiedIdentifier::MatchTypes QualifiedIdentifier::match(const QualifiedIdentifier& rhs) const
+{
+  int l = 0, r = 0;
+  if (explicitlyGlobal()) l++;
+  if (rhs.explicitlyGlobal()) r++;
+
+  int i = count() - 1;
+  int j = rhs.count() - 1;
+  for (; i >= l && j >= r; --i, --j)
+    if (at(i) != rhs.at(j))
+      return NoMatch;
+
+  // put i and j back where they were before the last unneeded decrement
+  ++i;
+  ++j;
+
+  if (i == l && j == r)
+    return ExactMatch;
+
+  if (i > l)
+    if (!rhs.explicitlyGlobal())
+      return Contains;
+    else
+      return NoMatch;
+  else if (!explicitlyGlobal())
+    return ContainedBy;
+  else
+    return NoMatch;
 }
 
 uint qHash(const QualifiedIdentifier& id)
@@ -233,3 +262,13 @@ QualifiedIdentifier QualifiedIdentifier::merge(const QStack<QualifiedIdentifier>
 }
 
 // kate: indent-width 2;
+
+QualifiedIdentifier::QualifiedIdentifier(const QVector< Identifier > & idStack)
+{
+  *this << idStack;
+}
+
+bool QualifiedIdentifier::isQualified() const
+{
+  return count() > 1 || explicitlyGlobal();
+}
