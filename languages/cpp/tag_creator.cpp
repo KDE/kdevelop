@@ -729,6 +729,7 @@ void TagCreator::parseBaseClause( const QString& className, BaseClauseAST * base
 		bool isVirtual = baseSpecifier->isVirtual() != 0;
 		
 		QString baseName;
+		if( baseSpecifier->name() == 0 ) return; ///Workaround for some bug elsewhere
 		
 		QPtrList<ClassOrNamespaceNameAST> l = baseSpecifier->name() ->classOrNamespaceNameList();
 		QPtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
