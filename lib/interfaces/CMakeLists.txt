@@ -82,6 +82,7 @@ install(FILES
     kdevprofileengine.h
     kdevcmodule.h
     kdevconfigskeleton.h
+    kdevsharedptr.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/interfaces 
 )
 
