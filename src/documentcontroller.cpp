@@ -807,17 +807,15 @@ void DocumentController::setupActions()
     m_openRecentAction->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( m_openRecentAction->text() ) ).arg( i18n( "Opens recently opened file." ) ) );
     m_openRecentAction->loadEntries( KGlobal::config(), "RecentDocuments" );
 
-    m_saveAllDocumentsAction =
-        new KAction( i18n( "Save Al&l" ), 0, this,
-                     SLOT( slotSaveAllDocuments() ), ac, "file_save_all" );
+    m_saveAllDocumentsAction = new KAction( i18n( "Save Al&l" ), ac, "file_save_all" );
+    connect(m_saveAllDocumentsAction, SIGNAL(triggered(bool)), SLOT( slotSaveAllDocuments() ));
     m_saveAllDocumentsAction->setToolTip( i18n( "Save all modified files" ) );
     m_saveAllDocumentsAction->setWhatsThis( i18n( "<b>Save all</b><p>Saves all "
                                             "modified files." ) );
     m_saveAllDocumentsAction->setEnabled( false );
 
     m_revertAllDocumentsAction = new KAction( i18n( "Rever&t All" ), 0,
-                                 this, SLOT( slotRevertAllDocuments() ),
-                                 ac, "file_revert_all" );
+                                 this, SLOT( slotRevertAllDocuments() ), ac, "file_revert_all" );
     m_revertAllDocumentsAction->setToolTip( i18n( "Revert all changes" ) );
     m_revertAllDocumentsAction->setWhatsThis( i18n( "<b>Revert all</b>"
             "<p>Reverts all changes in opened files. Prompts to save changes so"
@@ -832,16 +830,14 @@ void DocumentController::setupActions()
     m_closeWindowAction->setEnabled( false );
 
     m_closeAllWindowsAction = new KAction( i18n( "Close All" ), 0,
-                                           this, SLOT( slotCloseAllWindows() ),
-                                           ac, "file_close_all" );
+                                           this, SLOT( slotCloseAllWindows() ), ac, "file_close_all" );
     m_closeAllWindowsAction->setToolTip( i18n( "Close all files" ) );
     m_closeAllWindowsAction->setWhatsThis( i18n( "<b>Close all</b><p>Close all "
                                            "opened files." ) );
     m_closeAllWindowsAction->setEnabled( false );
 
     m_closeOtherWindowsAction = new KAction( i18n( "Close All Others" ), 0,
-                                this, SLOT( slotCloseOtherWindows() ),
-                                ac, "file_closeother" );
+                                this, SLOT( slotCloseOtherWindows() ), ac, "file_closeother" );
     m_closeOtherWindowsAction->setToolTip( i18n( "Close other files" ) );
     m_closeOtherWindowsAction->setWhatsThis( i18n( "<b>Close all others</b>"
             "<p>Close all opened files except current." ) );
@@ -849,8 +845,7 @@ void DocumentController::setupActions()
 
     m_switchToAction = new KAction( i18n( "Switch To..." ),
                                     KShortcut( "CTRL+/" ),
-                                    this, SLOT( slotSwitchTo() ),
-                                    ac, "file_switchto" );
+                                    this, SLOT( slotSwitchTo() ), ac, "file_switchto" );
     m_switchToAction->setToolTip( i18n( "Switch to" ) );
     m_switchToAction->setWhatsThis( i18n( "<b>Switch to</b><p>Prompts to enter "
                                           "the name of previously opened file "

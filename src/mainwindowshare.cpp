@@ -159,23 +159,32 @@ void MainWindowShare::createActions()
   m_toggleStatusbar->setToolTip( i18n("Show statusbar") );
   m_toggleStatusbar->setWhatsThis(i18n("<b>Show statusbar</b><p>Hides or shows the statusbar."));
 
-  action = new KAction( i18n("&Next Window"), Qt::ALT+Qt::Key_Right, this, SIGNAL(gotoNextWindow()),m_pMainWnd->actionCollection(), "view_next_window");
+  action = new KAction( i18n("&Next Window"), m_pMainWnd->actionCollection(), "view_next_window");
+  connect(action, SIGNAL(triggered(bool)), SIGNAL(gotoNextWindow()));
+  action->setShortcut(Qt::ALT+Qt::Key_Right);
   action->setToolTip( i18n("Next window") );
   action->setWhatsThis(i18n("<b>Next window</b><p>Switches to the next window."));
 
-  action = new KAction( i18n("&Previous Window"), Qt::ALT+Qt::Key_Left, this, SIGNAL(gotoPreviousWindow()),m_pMainWnd->actionCollection(), "view_previous_window");
+  action = new KAction( i18n("&Previous Window"), m_pMainWnd->actionCollection(), "view_previous_window");
+  connect(action, SIGNAL(triggered(bool)), SIGNAL(gotoPreviousWindow()));
+  action->setShortcut(Qt::ALT+Qt::Key_Left);
   action->setToolTip( i18n("Previous window") );
   action->setWhatsThis(i18n("<b>Previous window</b><p>Switches to the previous window."));
 
-  action = new KAction( i18n("&Last Accessed Window"), Qt::ALT+Qt::Key_Up, this, SIGNAL(gotoLastWindow()), m_pMainWnd->actionCollection(), "view_last_window");
+  action = new KAction( i18n("&Last Accessed Window"), m_pMainWnd->actionCollection(), "view_last_window");
+  connect(action, SIGNAL(triggered(bool)), SIGNAL(gotoLastWindow()));
+  action->setShortcut(Qt::ALT+Qt::Key_Up);
   action->setToolTip( i18n("Last accessed window") );
   action->setWhatsThis(i18n("<b>Last accessed window</b><p>Switches to the last viewed window (Hold the Alt key pressed and walk on by repeating the Up key)."));
 
-  action = new KAction( i18n("&First Accessed Window"), Qt::ALT+Qt::Key_Down, this, SIGNAL(gotoFirstWindow()), m_pMainWnd->actionCollection(), "view_first_window");
+  action = new KAction( i18n("&First Accessed Window"), m_pMainWnd->actionCollection(), "view_first_window");
+  connect(action, SIGNAL(triggered(bool)), SIGNAL(gotoFirstWindow()));
+  action->setShortcut(Qt::ALT+Qt::Key_Down);
   action->setToolTip( i18n("First accessed window") );
   action->setWhatsThis(i18n("<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key)."));
 
-  m_configureEditorAction = new KAction( i18n("Configure &Editor..."), 0, this, SLOT( slotConfigureEditors() ), m_pMainWnd->actionCollection(), "settings_configure_editors");
+  m_configureEditorAction = new KAction( i18n("Configure &Editor..."), m_pMainWnd->actionCollection(), "settings_configure_editors");
+  connect(m_configureEditorAction, SIGNAL(triggered(bool)), SLOT( slotConfigureEditors() ));
   m_configureEditorAction->setToolTip( i18n("Configure editor settings") );
   m_configureEditorAction->setWhatsThis(i18n("<b>Configure editor</b><p>Opens editor configuration dialog."));
   m_configureEditorAction->setEnabled( false );
