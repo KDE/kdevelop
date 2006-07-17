@@ -311,6 +311,11 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
 
 //   Q_ASSERT(! decl_cc.id().isEmpty());
 
+  if (!declarator->id) {
+    // FIXME ?? Anonymous function ??
+    return;
+  }
+
   FunctionDefinitionModelItem
     old = changeCurrentFunction(model()->create<FunctionDefinitionModelItem>());
   _M_current_function->setScope(functionScope->qualifiedName());
@@ -430,7 +435,7 @@ void Binder::visitClassSpecifier(ClassSpecifierAST *node)
   ClassCompiler class_cc(_M_token_stream);
   class_cc.run(node);
 
-  if (class_cc.name().isEmpty())
+  if (class_cc.name().isEmpty() || node->name == 0)
     {
       // anonymous not supported
       return;
