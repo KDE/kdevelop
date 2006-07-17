@@ -52,10 +52,7 @@ namespace KTextEditor { class SmartRange; }
 class TypeBinder: protected DefaultVisitor
 {
 public:
-  TypeBinder(TypeEnvironment* environment,
-         TokenStream *token_stream,
-         Lexer *lexer,
-         KTextEditor::SmartRange* highlight);
+  TypeBinder(TypeEnvironment* environment, TokenStream *token_stream);
   virtual ~TypeBinder();
 
   inline TypeEnvironment* typeEnvironment() const { return m_environment; }
@@ -100,18 +97,11 @@ private:
   void applyStorageSpecifiers(const ListNode<std::size_t> *storage_specifiers, MemberModelItem item);
   void applyFunctionSpecifiers(const ListNode<std::size_t> *it, FunctionModelItem item);
 
-  void setPositionAt(_CodeModelItem *item, AST *ast);
-  KTextEditor::Cursor tokenToPosition(const Token& token, QString& fileName, bool end = false) const;
-  KTextEditor::SmartRange* newRange(AST *ast);
-  KTextEditor::SmartRange* newRange(const Token& token);
-  KTextEditor::SmartRange* newRange(std::size_t token);
 
 private:
   TypeEnvironment* m_environment;
 
   TokenStream *_M_token_stream;
-  Lexer *_M_lexer;
-  KTextEditor::SmartRange* _M_highlight;
   QString _M_currentFile;
 
   CodeModel::AccessPolicy _M_current_access;
@@ -122,8 +112,6 @@ private:
   FunctionDefinitionModelItem _M_current_function;
   TemplateModelItem _M_current_template;
   EnumModelItem _M_current_enum;
-
-  //QStack<KDevCodeItem*> _M_current_item;
 
   QStringList _M_context;
   QSet<QString> _M_qualified_types;

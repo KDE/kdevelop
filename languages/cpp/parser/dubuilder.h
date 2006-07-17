@@ -65,6 +65,8 @@ protected:
   virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST*);
   virtual void visitMemInitializer(MemInitializerAST *);
   virtual void visitUsingDirective(UsingDirectiveAST *);
+  virtual void visitClassMemberAccess(ClassMemberAccessAST *);
+  virtual void visitInitDeclarator(InitDeclaratorAST*);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;
@@ -121,6 +123,8 @@ private:
 
   // Sets the identifier of the current definition.
   void setIdentifier(int stackCount);
+  // Ignores an identifier
+  void ignoreIdentifier(int stackCount);
 
   TokenStream *_M_token_stream;
   EditorIntegrator* m_editor;
@@ -136,6 +140,7 @@ private:
   bool in_typedef: 1;
   bool in_function_definition: 1;
   bool in_parameter_declaration: 1;
+  bool function_just_defined: 1;
     };
   };
 

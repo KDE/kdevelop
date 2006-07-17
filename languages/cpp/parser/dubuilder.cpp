@@ -16,6 +16,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+// kate: indent-width 2;
 
 #include "dubuilder.h"
 
@@ -36,7 +37,7 @@ DUBuilder::DUBuilder (TokenStream *token_stream):
   _M_token_stream (token_stream), m_editor(new EditorIntegrator(token_stream)), m_nameCompiler(new NameCompiler(token_stream)),
   in_namespace(false), in_class(false), in_template_declaration(false),
   in_typedef(false), in_function_definition(false), in_parameter_declaration(false),
-  m_types(new TypeEnvironment), m_currentDefinition(0)
+  function_just_defined(false), m_types(new TypeEnvironment), m_currentDefinition(0)
 {
   flags = 0;
 }
@@ -80,10 +81,6 @@ void DUBuilder::visitNamespace (NamespaceAST *node)
 {
   DUContext* previousContext = m_currentContext;
 
-  // Namespaces have their own context, but because their definitions
-  // do not go out of scope (just require qualification or using statements
-  // to become accessible again), the context itself will assign any definitions to
-  // the next non-namespace parent context (todo: this is always the top context, correct?)
   QualifiedIdentifier identifier = QualifiedIdentifier::merge(m_identifierStack);
   if (node->namespace_name)
     identifier << QualifiedIdentifier(_M_token_stream->symbol(node->namespace_name)->as_string());
@@ -106,6 +103,11 @@ void DUBuilder::visitClassSpecifier (ClassSpecifierAST *node)
   DUContext* previousContext = m_currentContext;
   int identifierStackDepth = m_identifierStack.count();
 
+  Definition* oldDefinition = m_currentDefinition;
+
+  Range* range = m_editor->createRange(node);
+  m_currentDefinition = newDeclaration(range);
+
   m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
   m_currentContext->setType(DUContext::Class);
 
@@ -114,6 +116,10 @@ void DUBuilder::visitClassSpecifier (ClassSpecifierAST *node)
   inClass (was);
 
   closeContext(node, previousContext, identifierStackDepth);
+
+  setIdentifier(identifierStackDepth);
+
+  m_currentDefinition = oldDefinition;
 }
 
 void DUBuilder::visitTemplateDeclaration (TemplateDeclarationAST *node)
@@ -132,7 +138,10 @@ void DUBuilder::visitTypedef (TypedefAST *node)
 
 void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
-  Definition* oldDefinition = m_currentDefinition;
+  DUContext* previousContext = m_currentContext;
+  function_just_defined = true;
+
+  /*Definition* oldDefinition = m_currentDefinition;
 
   Range* range = m_editor->createRange(node);
   m_currentDefinition = newDeclaration(range);
@@ -141,7 +150,7 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
   m_currentContext->setType(DUContext::Function);
 
-  int stackCount = m_identifierStack.count();
+  int stackCount = m_identifierStack.count();*/
 
   bool was = inFunctionDefinition (node);
   DefaultVisitor::visitFunctionDefinition (node);
@@ -149,23 +158,22 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 
   closeContext(node, previousContext);
 
-  setIdentifier(stackCount);
+  /*setIdentifier(stackCount);
 
   // TODO once type system is established, check to see if there was a forward
   // declaration and if so, merge this definition with that definition.
 
-  m_currentDefinition = oldDefinition;
+  m_currentDefinition = oldDefinition;*/
 }
 
 void DUBuilder::closeContext(AST* node, DUContext* parent, int identifierStackDepth)
 {
-  Q_UNUSED(node);
   // Find the end position of this function definition (just inside the bracket)
-  /*DocumentCursor endPosition = m_editor->findPosition(node->end_token, EditorIntegrator::FrontEdge);
+  DocumentCursor endPosition = m_editor->findPosition(node->end_token, EditorIntegrator::FrontEdge);
 
-  // Set the correct end point of all of the contexts finishing here
-  foreach (DUContext* context, parent->childContexts())
-    context->textRange().end() = endPosition;*/
+  // Set the correct end point of the current context finishing here
+  if (m_currentContext->textRange().end() != endPosition)
+      m_currentContext->textRange().end() = endPosition;
 
   // Set context identifier
   if (identifierStackDepth != -1 && identifierStackDepth < m_identifierStack.count())
@@ -179,18 +187,18 @@ void DUBuilder::visitParameterDeclarationClause (ParameterDeclarationClauseAST *
 {
   DUContext* previousContext = m_currentContext;
 
-  if (m_currentDefinition->textRange() != m_currentContext->textRange()) {
-    // This is within a forward declaration, but we need a new context so as to properly scope
-    // definitions within parameters.  TODO: do we even want to know about these definitions?
-    m_currentContext = new DUContext(m_editor->createRange(m_currentDefinition->textRange()), m_currentContext);
-    m_currentContext->setType(DUContext::Function);
-  }
+  m_currentContext = new DUContext(m_editor->createRange(m_currentDefinition->textRange()), m_currentContext);
+  m_currentContext->setType(DUContext::Function);
 
   bool was = inParameterDeclaration (node);
   DefaultVisitor::visitParameterDeclarationClause (node);
   inParameterDeclaration (was);
 
-  m_currentContext = previousContext;
+  // Don't close context here, it's closed in the function definition
+  if (!function_just_defined)
+    m_currentContext = previousContext;
+
+  function_just_defined = false;
 }
 
 void DUBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
@@ -221,6 +229,22 @@ void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
 
 void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 {
+  /*Definition* oldDefinition = m_currentDefinition;
+
+  Range* range = m_editor->createRange(node);
+  m_currentDefinition = newDeclaration(range);
+
+  int stackCount = m_identifierStack.count();*/
+
+  DefaultVisitor::visitSimpleDeclaration (node);
+
+  /*setIdentifier(stackCount);
+
+  m_currentDefinition = oldDefinition;*/
+}
+
+void DUBuilder::visitInitDeclarator(InitDeclaratorAST* node)
+{
   Definition* oldDefinition = m_currentDefinition;
 
   Range* range = m_editor->createRange(node);
@@ -228,7 +252,7 @@ void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 
   int stackCount = m_identifierStack.count();
 
-  DefaultVisitor::visitSimpleDeclaration (node);
+  DefaultVisitor::visitInitDeclarator(node);
 
   setIdentifier(stackCount);
 
@@ -250,6 +274,15 @@ void DUBuilder::setIdentifier(int stackCount)
       // Unused identifier...?
       m_identifierStack.pop();
     }
+}
+
+void DUBuilder::ignoreIdentifier(int stackCount)
+{
+  Q_ASSERT(m_identifierStack.count() >= stackCount);
+  Q_ASSERT(m_identifierStack.count() <= stackCount + 1);
+
+  if (m_identifierStack.count() == stackCount + 1)
+    m_identifierStack.pop();
 }
 
 void DUBuilder::visitPrimaryExpression (PrimaryExpressionAST* node)
@@ -276,8 +309,8 @@ void DUBuilder::newUse(NameAST* name)
   Definition* definition = m_currentContext->findDefinition(id, DocumentCursor(use, DocumentCursor::Start));
   if (definition)
     definition->addUse(use);
-  else
-    kWarning() << k_funcinfo << "Could not find definition for identifier " << id << " at " << *use << endl;
+
+  //else kWarning() << k_funcinfo << "Could not find definition for identifier " << id << " at " << *use << endl;
 }
 
 void DUBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
@@ -327,4 +360,12 @@ void DUBuilder::visitUsingDirective(UsingDirectiveAST * node)
   m_currentContext->addUsingNamespace(m_editor->createCursor(node->end_token, EditorIntegrator::FrontEdge), m_identifierStack.pop());
 }
 
-// kate: indent-width 2;
+void DUBuilder::visitClassMemberAccess(ClassMemberAccessAST * node)
+{
+  // FIXME need type system
+  int stackCount = m_identifierStack.count();
+
+  DefaultVisitor::visitClassMemberAccess(node);
+
+  ignoreIdentifier(stackCount);
+}

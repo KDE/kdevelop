@@ -98,7 +98,13 @@ Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifi
     return 0;
 
   } else if (resolved.count() > 1) {
-    kWarning() << k_funcinfo << "Multiple matching definitions (shouldn't happen, code error)" << endl;
+    /*kWarning() << k_funcinfo << "Multiple matching definitions (shouldn't happen, code error)" << endl;
+    QSetIterator<Definition*> it = resolved;
+    while (it.hasNext()) {
+      Definition* def = it.next();
+      kDebug() << " Definition: " << def->qualifiedIdentifier() << " range " << def->textRange() << endl;
+    }*/
+
     return 0;
 
   } else if (tryToResolve.isEmpty()) {
@@ -148,7 +154,13 @@ Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifi
   if (resolved.count() == 1) {
     return *resolved.constBegin();
   } else if (resolved.count() > 1) {
-    kWarning() << k_funcinfo << "Multiple matching definitions (shouldn't happen, code error)" << endl;
+    /*kWarning() << k_funcinfo << "Multiple matching definitions (shouldn't happen, code error)" << endl;
+    QSetIterator<Definition*> it = resolved;
+    while (it.hasNext()) {
+      Definition* def = it.next();
+      kDebug() << " Definition: " << def->qualifiedIdentifier() << " range " << def->textRange() << endl;
+    }*/
+
     return 0;
   }
 

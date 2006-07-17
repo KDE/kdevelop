@@ -539,6 +539,8 @@ private slots:
 
   void testFileParse()
   {
+    //QSKIP("Excessive currently", SkipSingle);
+
     QFile file("/opt/kde4/src/kdelibs/kate/part/kateautoindent.cpp");
     QVERIFY( file.open( QIODevice::ReadOnly ) );
 
