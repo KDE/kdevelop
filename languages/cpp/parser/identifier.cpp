@@ -246,7 +246,7 @@ QualifiedIdentifier::MatchTypes QualifiedIdentifier::match(const QualifiedIdenti
 uint qHash(const QualifiedIdentifier& id)
 {
   // FIXME
-  return reinterpret_cast<uint>(&id);
+  return reinterpret_cast<ulong>(&id);
 }
 
 QualifiedIdentifier QualifiedIdentifier::merge(const QStack<QualifiedIdentifier>& idStack)
