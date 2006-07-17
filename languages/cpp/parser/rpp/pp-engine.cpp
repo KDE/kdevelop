@@ -229,6 +229,21 @@ void pp::handle_directive(const QString& directive, Stream& input, Stream& outpu
 
 void pp::handle_include(Stream& input, Stream& output)
 {
+  /*pp_macro_expander expand_include(this);
+  skip_blanks(_input, PPInternal::devnull());
+  QString includeString;
+  {
+    Stream cs(&includeString);
+    expand_include(_input, cs);
+  }
+
+  Stream input(&includeString);*/
+
+  if (input != '<' && input != '"') {
+    kWarning() << k_funcinfo << "Macro in place of an include statement, please fix me :)" << endl;
+    return;
+  }
+
   Q_ASSERT(input == '<' || input == '"');
   QChar quote((input == '"') ? '"' : '>');
   ++input;

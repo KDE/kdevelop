@@ -49,6 +49,7 @@ QString pp_macro_expander::resolve_formal(const QString& name)
         return m_frame->actuals[index];
       else
         kWarning() << k_funcinfo << "No actual found for frame " << name << endl;
+        // Triggers on deflate.c
         //Q_ASSERT(0); // internal error?
     }
   }
