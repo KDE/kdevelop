@@ -96,7 +96,6 @@ FOREACH(func
     snprintf
     strlcpy
     strmode
-    strsep
     strdup
     strftime
     vsnprintf
@@ -106,6 +105,7 @@ FOREACH(func
     )
   CHECK_SYMBOL_EXISTS_EX("${func}")
 ENDFOREACH(func)
+check_function_exists(strsep HAVE_STRSEP)
 
 CHECK_TYPE_SIZE("dev_t" SIZEOF_DEV_T)
 IF(HAVE_SIZEOF_DEV_T)
