@@ -88,7 +88,7 @@ void DUBuilder::visitNamespace (NamespaceAST *node)
   if (node->namespace_name)
     identifier << QualifiedIdentifier(_M_token_stream->symbol(node->namespace_name)->as_string());
   else
-    identifier << Identifier::unique(reinterpret_cast<int>(_M_token_stream));
+    identifier << Identifier::unique(reinterpret_cast<long>(_M_token_stream));
 
   m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
   m_currentContext->setType(DUContext::Namespace);
