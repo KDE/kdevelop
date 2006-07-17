@@ -51,7 +51,8 @@
 BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
         : QObject( cppSupport ),
         m_cppSupport( cppSupport ),
-        m_suspend( false )
+        m_suspend( false ),
+        m_weaver(new Weaver(this, 1, 1))
 {
     m_memoryPool = new pool;
     m_timer = new QTimer( this );
@@ -62,7 +63,7 @@ BackgroundParser::BackgroundParser( CppLanguageSupport* cppSupport )
 
 BackgroundParser::~BackgroundParser()
 {
-    Weaver::instance() ->finish();
+    m_weaver->finish();
     delete m_memoryPool;
 }
 
@@ -148,7 +149,7 @@ void BackgroundParser::parseDocuments()
             collection->addJob( parse );
         }
     }
-    Weaver::instance() ->enqueue( collection );
+    m_weaver ->enqueue( collection );
 }
 
 void BackgroundParser::parseComplete( Job *job )

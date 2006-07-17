@@ -81,6 +81,7 @@ private:
     // The translation unit for each document
     QMap<KUrl, TranslationUnitAST* > m_url2unit;
     mutable QMutex m_mutex;
+    ThreadWeaver::Weaver* m_weaver;
 };
 
 #endif
