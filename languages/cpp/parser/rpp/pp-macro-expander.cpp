@@ -48,7 +48,8 @@ QString pp_macro_expander::resolve_formal(const QString& name)
       if (index < m_frame->actuals.size())
         return m_frame->actuals[index];
       else
-        Q_ASSERT(0); // internal error?
+        kWarning() << k_funcinfo << "No actual found for frame " << name << endl;
+        //Q_ASSERT(0); // internal error?
     }
   }
 
