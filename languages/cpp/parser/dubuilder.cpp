@@ -39,7 +39,6 @@ DUBuilder::DUBuilder (TokenStream *token_stream):
   in_typedef(false), in_function_definition(false), in_parameter_declaration(false),
   function_just_defined(false), m_types(new TypeEnvironment), m_currentDefinition(0)
 {
-  flags = 0;
 }
 
 DUBuilder::~DUBuilder ()

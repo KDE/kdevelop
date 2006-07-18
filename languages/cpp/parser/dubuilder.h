@@ -131,9 +131,6 @@ private:
 
   NameCompiler* m_nameCompiler;
 
-  union {
-    int flags;
-    struct {
   bool in_namespace: 1;
   bool in_class: 1;
   bool in_template_declaration: 1;
@@ -141,8 +138,6 @@ private:
   bool in_function_definition: 1;
   bool in_parameter_declaration: 1;
   bool function_just_defined: 1;
-    };
-  };
 
   DUContext* m_currentContext;
   TypeEnvironment* m_types;
