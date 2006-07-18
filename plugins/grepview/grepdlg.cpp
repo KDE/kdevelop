@@ -94,8 +94,8 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     QGridLayout *layout = new QGridLayout(this, 6, 2, 10, 4);
     layout->addItem( new QSpacerItem( 0, 10), 4, 0 );
     layout->setRowStretch(4, 0);
-    layout->setColStretch(0, 0);
-    layout->setColStretch(1, 20);
+    layout->setColumnStretch(0, 0);
+    layout->setColumnStretch(1, 20);
 
     QLabel *pattern_label = new QLabel(i18n("&Pattern:"), this);
     layout->addWidget(pattern_label, 0, 0, Qt::AlignRight | Qt::AlignVCenter);
