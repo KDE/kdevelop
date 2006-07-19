@@ -43,8 +43,8 @@ public:
      * to different config files depending on whether a project is opened.
      * If a project IS NOT opened then the config object will consist of the
      * settings found in $KDEINSTALL/config/kdeveloprc and $USER/.kde/config/kdeveloprc.
-     *
      * THE MOST SPECIFIC FILE WILL BE $USER/.kde/config/kdeveloprc.
+     *
      * If a project IS opened then it will additionally consist of the settings
      * found in the global project file and the local project file.  THE MOST
      * SPECIFIC FILE WILL BE THE GLOBAL PROJECT FILE.
@@ -56,8 +56,8 @@ public:
      * to different config files depending on whether a project is opened.
      * If a project IS NOT opened then the config object will consist of the
      * settings found in $KDEINSTALL/config/kdeveloprc and $USER/.kde/config/kdeveloprc.
-     *
      * THE MOST SPECIFIC FILE WILL BE $USER/.kde/config/kdeveloprc.
+     *
      * If a project IS opened then it will additionally consist of the settings
      * found in the global project file and the local project file.  THE MOST
      * SPECIFIC FILE WILL BE THE LOCAL PROJECT FILE.
@@ -69,13 +69,13 @@ public:
      * to different config files depending on whether a project is opened.
      * If a project IS NOT opened then the config object will consist of the
      * settings found in $KDEINSTALL/config/kdeveloprc and $USER/.kde/config/kdeveloprc.
-     *
      * THE MOST SPECIFIC FILE WILL BE $USER/.kde/config/kdeveloprc.
+     *
      * If a project IS opened then it will additionally consist of the settings
      * found in the global project file and the local project file.  THE MOST
      * SPECIFIC FILE WILL BE THE LOCAL GLOBAL PROJECT FILE.
      *
-     * This function should be RARELY used as it is operationally the same as standard()
+     * This function should RARELY be used as it is operationally the same as standard()
      */
     static KConfig *globalProject();
 
