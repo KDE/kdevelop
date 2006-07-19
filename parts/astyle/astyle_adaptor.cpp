@@ -90,11 +90,11 @@ KDevFormatter::KDevFormatter()
 
   // padding
   setOperatorPaddingMode(config->readBoolEntry("PadOperators", false));
-  setParenthesisPaddingMode(config->readBoolEntry("PadOperators", false));
+  setParenthesisPaddingMode(config->readBoolEntry("PadParentheses", false));
 
   // oneliner
-  setBreakOneLineBlocksMode(config->readBoolEntry("KeepBlocks", false));
-  setSingleStatementsMode(config->readBoolEntry("KeepStatements", false));
+  setBreakOneLineBlocksMode(!config->readBoolEntry("KeepBlocks", false));
+  setSingleStatementsMode(!config->readBoolEntry("KeepStatements", false));
 }
 
 KDevFormatter::KDevFormatter( AStyleWidget * widget )
