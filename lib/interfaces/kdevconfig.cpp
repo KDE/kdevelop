@@ -25,8 +25,6 @@ Boston, MA 02110-1301, USA.
 #include "kdevapi.h"
 #include "kdevcore.h"
 
-KDevConfig *KDevConfig ::s_instance = 0;
-
 KDevConfig::KDevConfig( QObject *parent )
         : QObject( parent )
 {}
@@ -34,14 +32,20 @@ KDevConfig::KDevConfig( QObject *parent )
 KDevConfig::~KDevConfig()
 {}
 
-KDevConfig *KDevConfig::getInstance()
+KConfig *KDevConfig::standard()
 {
-    if ( !s_instance )
-        s_instance = new KDevConfig;
-    return s_instance;
+    return sharedStandard().data();
 }
 
-//FIXME patch KInstance or KConfig/KConfigBackEnd to return the configFileName();
+KConfig *KDevConfig::localProject()
+{
+    return sharedLocalProject().data();
+}
+
+KConfig *KDevConfig::globalProject()
+{
+    return sharedGlobalProject().data();
+}
 
 KSharedConfig::Ptr KDevConfig::sharedStandard()
 {
@@ -107,21 +111,6 @@ KSharedConfig::Ptr KDevConfig::sharedGlobalProject()
     }
 
     return config;
-}
-
-KConfig *KDevConfig::globalProject()
-{
-    return sharedGlobalProject().data();
-}
-
-KConfig *KDevConfig::localProject()
-{
-    return sharedLocalProject().data();
-}
-
-KConfig *KDevConfig::standard()
-{
-    return sharedStandard().data();
 }
 
 #include "kdevconfig.moc"

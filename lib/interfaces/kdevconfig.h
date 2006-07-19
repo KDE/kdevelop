@@ -25,6 +25,12 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevexport.h"
 
+/**
+The interface to KDevelop's config objects.
+Developers using the KDevelop API should use these config objects instead of
+the standard KGlobal::config object.  Again, DO NOT USE KGlobal::config() as
+it can cause unexpected syncing issues.
+*/
 class KDEVINTERFACES_EXPORT KDevConfig: public QObject
 {
     Q_OBJECT
@@ -32,24 +38,59 @@ public:
     KDevConfig( QObject *parent = 0 );
     virtual ~KDevConfig();
 
-    static KSharedConfig::Ptr sharedGlobalProject();
-
-    static KSharedConfig::Ptr sharedLocalProject();
-
-    static KSharedConfig::Ptr sharedStandard();
-
-    static KConfig *globalProject();
-
-    static KConfig *localProject();
-
+    /**
+     * @return A pointer to the standard config object.  This object will point
+     * to different config files depending on whether a project is opened.
+     * If a project IS NOT opened then the config object will consist of the
+     * settings found in $KDEINSTALL/config/kdeveloprc and $USER/.kde/config/kdeveloprc.
+     *
+     * THE MOST SPECIFIC FILE WILL BE $USER/.kde/config/kdeveloprc.
+     * If a project IS opened then it will additionally consist of the settings
+     * found in the global project file and the local project file.  THE MOST
+     * SPECIFIC FILE WILL BE THE GLOBAL PROJECT FILE.
+     */
     static KConfig *standard();
 
-private:
-    static KDevConfig *getInstance();
-    static KDevConfig *s_instance;
-//     KSharedConfig::Ptr m_global;
-//     KSharedConfig::Ptr m_local;
-//     KSharedConfig::Ptr m_standard;
+    /**
+     * @return A pointer to the local project config object.  This object will point
+     * to different config files depending on whether a project is opened.
+     * If a project IS NOT opened then the config object will consist of the
+     * settings found in $KDEINSTALL/config/kdeveloprc and $USER/.kde/config/kdeveloprc.
+     *
+     * THE MOST SPECIFIC FILE WILL BE $USER/.kde/config/kdeveloprc.
+     * If a project IS opened then it will additionally consist of the settings
+     * found in the global project file and the local project file.  THE MOST
+     * SPECIFIC FILE WILL BE THE LOCAL PROJECT FILE.
+     */
+    static KConfig *localProject();
+
+    /**
+     * @return A pointer to the global project config object.  This object will point
+     * to different config files depending on whether a project is opened.
+     * If a project IS NOT opened then the config object will consist of the
+     * settings found in $KDEINSTALL/config/kdeveloprc and $USER/.kde/config/kdeveloprc.
+     *
+     * THE MOST SPECIFIC FILE WILL BE $USER/.kde/config/kdeveloprc.
+     * If a project IS opened then it will additionally consist of the settings
+     * found in the global project file and the local project file.  THE MOST
+     * SPECIFIC FILE WILL BE THE LOCAL GLOBAL PROJECT FILE.
+     *
+     * This function should be RARELY used as it is operationally the same as standard()
+     */
+    static KConfig *globalProject();
+
+    /**
+     * @return A shared pointer to the standard config object.
+     */
+    static KSharedConfig::Ptr sharedStandard();
+    /**
+     * @return A shared pointer to the local project config object.
+     */
+    static KSharedConfig::Ptr sharedLocalProject();
+    /**
+     * @return A shared pointer to the global project config object.
+     */
+    static KSharedConfig::Ptr sharedGlobalProject();
 };
 
 #endif
