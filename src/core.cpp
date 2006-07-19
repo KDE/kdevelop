@@ -44,12 +44,6 @@ bool Core::queryClose()
     if ( !ProjectController::getInstance()->closeProject() )
         return false;
 
-    // save the the project to open it automaticly on startup if needed
-    KUrl lastProject = ProjectController::getInstance()->globalFile();
-    KConfig* config = KDevConfig::standard();
-    config->setGroup("General Options");
-    config->writePathEntry("Last Project", lastProject );
-
     if ( !DocumentController::getInstance()->querySaveDocuments() )
       return false;
 

@@ -155,8 +155,8 @@ bool ProjectController::openProject( const KUrl &KDev4ProjectFile )
 
 bool ProjectController::closeProject()
 {
-    KConfig * config = KDevConfig::localProject();
-    config->setGroup( "General Options" );
+    KConfig * local = KDevConfig::localProject();
+    local->setGroup( "General Options" );
 
     QStringList recentDocs;
     QList<KDevDocument* > openDocs = DocumentController::getInstance()->openDocuments();
@@ -167,16 +167,23 @@ bool ProjectController::closeProject()
     }
 
     if ( !recentDocs.empty() )
-        config->writePathEntry( "OpenedDocuments", recentDocs );
+        local->writePathEntry( "OpenedDocuments", recentDocs );
 
     m_name = QString::null;
 
-    config ->sync();
+    local ->sync();
+
+    // save the the project to open it automaticly on startup if needed
+    KUrl lastProject = m_globalFile;
 
     m_localFile.clear();
     m_globalFile.clear();
     m_projectsDir.clear();
     m_isLoaded = false;
+
+    KConfig* standard = KDevConfig::standard();
+    standard->setGroup("General Options");
+    standard->writePathEntry("Last Project", lastProject.path() );
 
     Core::getInstance() ->doEmitProjectClosed();
 
