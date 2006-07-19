@@ -58,7 +58,6 @@
 #include <kglobal.h>
 
 #include "documentcontroller.h"
-#include "projectmanager.h"
 #include "core.h"
 #include "kdevmakefrontend.h"
 #include "toplevel.h"
@@ -105,7 +104,8 @@ void MainWindowShare::slotActionStatusText( const QString &text )
 
 void MainWindowShare::createActions()
 {
-  ProjectManager::getInstance()->createActions( m_pMainWnd->actionCollection() );
+    //FIXME
+//   ProjectManager::getInstance()->createActions( m_pMainWnd->actionCollection() );
 
   KStdAction::quit(this->parent(), SLOT(close()), m_pMainWnd->actionCollection());
 

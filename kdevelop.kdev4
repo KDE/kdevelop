@@ -1,0 +1,6 @@
+[General Options]
+Builder=KDevMakeBuilder
+Display Document Categories=false
+Importer=KDevGenericImporter
+PrimaryLanguage=C++
+Project Management=KDevProjectManager

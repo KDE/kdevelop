@@ -20,7 +20,7 @@
     <number>6</number>
    </property>
    <item row="0" column="1" >
-    <widget class="QLineEdit" name="installPrefix" >
+    <widget class="QLineEdit" name="kcfg_installPrefix" >
      <property name="sizePolicy" >
       <sizepolicy>
        <hsizetype>7</hsizetype>
@@ -32,7 +32,7 @@
     </widget>
    </item>
    <item row="2" column="1" >
-    <widget class="QLineEdit" name="buildType" />
+    <widget class="QLineEdit" name="kcfg_buildType" />
    </item>
    <item row="3" column="1" >
     <spacer>
@@ -48,7 +48,7 @@
     </spacer>
    </item>
    <item row="1" column="1" >
-    <widget class="QLineEdit" name="buildFolder" />
+    <widget class="QLineEdit" name="kcfg_buildFolder" />
    </item>
    <item row="1" column="0" >
     <widget class="QLabel" name="label_3" >
@@ -59,7 +59,7 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy" >
-      <cstring>buildFolder</cstring>
+      <cstring>kcfg_buildFolder</cstring>
      </property>
     </widget>
    </item>
@@ -72,7 +72,7 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy" >
-      <cstring>installPrefix</cstring>
+      <cstring>kcfg_installPrefix</cstring>
      </property>
     </widget>
    </item>
@@ -85,15 +85,15 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy" >
-      <cstring>buildType</cstring>
+      <cstring>kcfg_buildType</cstring>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>installPrefix</tabstop>
-  <tabstop>buildType</tabstop>
+  <tabstop>kcfg_installPrefix</tabstop>
+  <tabstop>kcfg_buildType</tabstop>
  </tabstops>
  <resources/>
  <connections/>

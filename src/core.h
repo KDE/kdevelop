@@ -26,7 +26,12 @@ public:
 
   virtual void running(KDevPlugin *which, bool runs);
   virtual void fillContextMenu(QMenu *popup, const Context *context);
-  virtual void openProject(const QString& projectFileName);
+  virtual void openProject( const KUrl& KDev4ProjectFile );
+
+    //FIXME Remove project specific for ProjectController
+    virtual KUrl localFile() const;
+    
+    virtual KUrl globalFile() const;
 
   void doEmitProjectOpened() { emit projectOpened(); }
   void doEmitProjectClosed() { emit projectClosed(); }

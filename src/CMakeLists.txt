@@ -18,7 +18,6 @@ set(kdevshell_LIB_SRCS
     mainwindowshare.cpp
     partselectwidget.cpp
     plugincontroller.cpp
-    projectmanager.cpp
     projectsession.cpp
     splashscreen.cpp
     statusbar.cpp
@@ -27,6 +26,8 @@ set(kdevshell_LIB_SRCS
     simplemainwindow.cpp
     documentcontroller.cpp
     partcontroller.cpp
+    projectcontroller.cpp
+    languagecontroller.cpp
 )
 
 set(kdevshell_UI
@@ -97,10 +98,10 @@ install(TARGETS kdevassistant DESTINATION ${BIN_INSTALL_DIR} )
 install(FILES
     core.h documentationpart.h editorproxy.h
     generalinfowidget.h languageselectwidget.h mainwindowshare.h
-    partselectwidget.h plugincontroller.h projectmanager.h
+    partselectwidget.h plugincontroller.h
     projectsession.h shellextension.h splashscreen.h statusbar.h
     toplevel.h  simplemainwindow.h documentcontroller.h shellexport.h
-    partcontroller.h
+    partcontroller.h projectcontroller.h languagecontroller.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/shell )
 
 install( FILES kdeveloprc kdevassistantrc DESTINATION ${CONFIG_INSTALL_DIR} )

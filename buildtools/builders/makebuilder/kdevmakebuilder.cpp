@@ -149,33 +149,35 @@ void KDevMakeBuilder::commandFailed(const QString &command)
 
 QString KDevMakeBuilder::buildCommand(KDevProjectItem *item, const QString &target)
 {
-    QDomDocument &dom = *KDevApi::self()->projectDom();
+    //FIXME Get this from the new project file format
+//     QDomDocument &dom = *KDevApi::self()->projectDom();
 
-    QString cmdline = DomUtil::readEntry(dom, makeTool);
-    int prio = DomUtil::readIntEntry(dom, priority);
-    QString nice;
-    if (prio != 0) {
-        nice = QString("nice -n%1 ").arg(prio);
-    }
+    QString cmdline;
+//     QString cmdline = DomUtil::readEntry(dom, makeTool);
+//     int prio = DomUtil::readIntEntry(dom, priority);
+//     QString nice;
+//     if (prio != 0) {
+//         nice = QString("nice -n%1 ").arg(prio);
+//     }
 
     if (cmdline.isEmpty())
         cmdline = MAKE_COMMAND;
 
-    if (!DomUtil::readBoolEntry(dom, abortOnError))
-        cmdline += " -k";
-    int jobs = DomUtil::readIntEntry(dom, numberOfJobs);
-    if (jobs != 0) {
-        cmdline += " -j";
-        cmdline += QString::number(jobs);
-    }
-    if (DomUtil::readBoolEntry(dom, dontAct))
-        cmdline += " -n";
+//     if (!DomUtil::readBoolEntry(dom, abortOnError))
+//         cmdline += " -k";
+//     int jobs = DomUtil::readIntEntry(dom, numberOfJobs);
+//     if (jobs != 0) {
+//         cmdline += " -j";
+//         cmdline += QString::number(jobs);
+//     }
+//     if (DomUtil::readBoolEntry(dom, dontAct))
+//         cmdline += " -n";
 
     cmdline += " ";
     cmdline += target;
 
-    cmdline.prepend(nice);
-    cmdline.prepend(makeEnvironment());
+//     cmdline.prepend(nice);
+//     cmdline.prepend(makeEnvironment());
 
     Q_ASSERT(item->folder());
 
@@ -189,18 +191,19 @@ QString KDevMakeBuilder::buildCommand(KDevProjectItem *item, const QString &targ
 
 QString KDevMakeBuilder::makeEnvironment() const
 {
-    DomUtil::PairList envvars =
-        DomUtil::readPairListEntry(*KDevApi::self()->projectDom(), environment, "envvar", "name", "value");
-
-    QString env;
-    DomUtil::PairList::ConstIterator it;
-    for (it = envvars.begin(); it != envvars.end(); ++it) {
-        env += (*it).first;
-        env += "=";
-        env += KProcess::quote((*it).second);
-        env += " ";
-    }
-    return env;
+    //FIXME use the new KDevEnv class
+//     DomUtil::PairList envvars =
+//         DomUtil::readPairListEntry(*KDevApi::self()->projectDom(), environment, "envvar", "name", "value");
+// 
+//     QString env;
+//     DomUtil::PairList::ConstIterator it;
+//     for (it = envvars.begin(); it != envvars.end(); ++it) {
+//         env += (*it).first;
+//         env += "=";
+//         env += KProcess::quote((*it).second);
+//         env += " ";
+//     }
+//     return env;
 }
 
 #include "kdevmakebuilder.moc"

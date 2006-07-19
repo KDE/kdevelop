@@ -33,6 +33,7 @@ class KDevDocumentController;
 class KDevMainWindow;
 class KDevPlugin;
 class KDevPluginController;
+class KDevEnv;
 
 /**
 @file kdevapi.h
@@ -93,17 +94,8 @@ public:
      */
     KDevCore *core() const;
 
-    /**
-     * @return A reference to the DOM tree that represents the project
-     * file or 0 if no project is loaded.
-     */
-    QDomDocument *projectDom() const;
-
-    /**
-     * Sets the Document Object Model for the current project.
-     * @param dom The project DOM.
-     */
-    void setProjectDom(QDomDocument *dom);
+    void setEnvironment( KDevEnv * );
+    KDevEnv *environment() const;
 
     /** @return the current project component or 0 if no project is loaded. */
     KDevProject *project() const;

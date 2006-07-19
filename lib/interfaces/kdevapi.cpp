@@ -32,6 +32,7 @@ public:
         , documentController(0)
         , pluginController(0)
         , core(0)
+        , environment(0)
         , projectDom(0)
         , project(0)
         , languageSupport(0)
@@ -41,6 +42,7 @@ public:
     KDevDocumentController *documentController;
     KDevPluginController *pluginController;
     KDevCore *core;
+    KDevEnv *environment;
     QDomDocument *projectDom;
     KDevProject  *project;
     KDevLanguageSupport *languageSupport;
@@ -90,16 +92,6 @@ void KDevApi::setLanguageSupport(KDevLanguageSupport *languageSupport)
   d->languageSupport = languageSupport;
 }
 
-QDomDocument *KDevApi::projectDom() const
-{
-    return d->projectDom;
-}
-
-void KDevApi::setProjectDom(QDomDocument *dom)
-{
-    d->projectDom = dom;
-}
-
 void KDevApi::setMainWindow( KDevMainWindow * mainWindow )
 {
     d->mainWindow = mainWindow;
@@ -138,6 +130,16 @@ void KDevApi::setCore( KDevCore * core )
 KDevCore * KDevApi::core( ) const
 {
     return d->core;
+}
+
+void KDevApi::setEnvironment( KDevEnv * env )
+{
+    d->environment = env;
+}
+
+KDevEnv * KDevApi::environment( ) const
+{
+    return d->environment;
 }
 
 //kate: indent-mode cstyle; indent-width 4; replace-tabs on; space-indent on;

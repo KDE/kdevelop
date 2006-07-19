@@ -116,9 +116,8 @@
  <customwidgets>
   <customwidget>
    <class>KUrlRequester</class>
-   <extends>QWidget</extends>
+   <extends>QFrame</extends>
    <header>kurlrequester.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

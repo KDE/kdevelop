@@ -16,7 +16,6 @@
 #include "plugincontroller.h"
 #include "documentcontroller.h"
 #include "core.h"
-#include "projectmanager.h"
 
 #include "kdevassistantextension.h"
 
@@ -100,7 +99,7 @@ int main(int argc, char *argv[])
   if (splash) splash->showMessage( i18n( "Loading Settings" ) );
   TopLevel::getInstance()->loadSettings();
 
-  PluginController::getInstance()->loadInitialPlugins();
+//   PluginController::getInstance()->loadInitialPlugins();
 
   if (splash) splash->showMessage( i18n( "Starting GUI" ) );
 

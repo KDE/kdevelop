@@ -21,6 +21,7 @@
 #include "kdevprojectmodel.h"
 #include "kdevprojectmanager.h"
 #include "kdevapi.h"
+#include "kdevconfig.h"
 #include "kdevplugin.h"
 #include "kdevfilemanager.h"
 #include "kdevbuildmanager.h"
@@ -289,11 +290,13 @@ QStringList KDevProjectManagerPart::fileList()
 
 KDevFileManager *KDevProjectManagerPart::defaultImporter() const
 {
-  QDomDocument &dom = *KDevApi::self()->projectDom();
-  QString manager = DomUtil::readEntry(dom, "/general/importer");
+  KConfig * config = KDevConfig::standard();
+  config->setGroup( "General Options" );
 
-  if ( m_importers.contains(manager) )
-    return m_importers[manager];
+  QString importer = config->readPathEntry( "Importer", "KDevGenericImporter" );
+
+  if ( m_importers.contains(importer) )
+    return m_importers[importer];
 
   kWarning(9000) << k_funcinfo << "No default importer!" << endl;
   return 0;

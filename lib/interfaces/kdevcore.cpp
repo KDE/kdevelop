@@ -25,6 +25,8 @@
 #include <QtDBus/QtDBus>
 #include <QDir>
 
+#include "kdevenv.h"
+
 ///////////////////////////////////////////////////////////////////////////////
 // class Context
 ///////////////////////////////////////////////////////////////////////////////
@@ -284,6 +286,8 @@ KDevCore::KDevCore( QObject *parent)
 {
     QDBus::sessionBus().registerObject("/org/kdevelop/Core",
                                        this, QDBusConnection::ExportSlots);
+
+    KDevEnv *env = new KDevEnv( this );
 }
 
 KDevCore::~KDevCore()

@@ -11,13 +11,13 @@
 #include <QFileInfo>
 #include <QPixmap>
 
-#include "kdevapi.h"
-#include "splashscreen.h"
-#include "toplevel.h"
-#include "plugincontroller.h"
-#include "documentcontroller.h"
 #include "core.h"
-#include "projectmanager.h"
+#include "kdevapi.h"
+#include "toplevel.h"
+#include "splashscreen.h"
+#include "plugincontroller.h"
+#include "projectcontroller.h"
+#include "documentcontroller.h"
 
 #include "kdevideextension.h"
 
@@ -97,9 +97,9 @@ int main( int argc, char *argv[] )
     }
 
     //initialize the api object
+    KDevApi::self() ->setCore( Core::getInstance() );
     KDevApi::self() ->setMainWindow( TopLevel::getInstance() );
     KDevApi::self() ->setPluginController( PluginController::getInstance() );
-    KDevApi::self() ->setCore( Core::getInstance() );
     KDevApi::self() ->setDocumentController( DocumentController::getInstance() );
 
     QObject::connect( PluginController::getInstance(),
@@ -115,43 +115,29 @@ int main( int argc, char *argv[] )
     if ( splash )
         splash->showMessage( i18n( "Starting GUI" ) );
 
-    bool openProject = false;
+    QObject::connect( Core::getInstance(), SIGNAL( projectOpened() ),
+                      TopLevel::getInstance() ->main(), SLOT( loadSettings() ) );
+    QObject::connect( TopLevel::getInstance() ->main(), SIGNAL( finishedLoading() ),
+                      splash, SLOT( deleteLater() ) );
+
     if ( args->count() == 0 )
     {
-        openProject = ProjectManager::getInstance() ->loadDefaultProject();
+        ProjectController::getInstance() ->init();
     }
     else if ( args->count() > 0 )
     {
         KUrl url = args->url( 0 );
         QString ext = QFileInfo( url.fileName() ).suffix();
-        if ( ext == "kdevelop" )
+        if ( ext == "kdev4" )
         {
-            ProjectManager::getInstance() ->loadProject( url );
-            openProject = true;
+            ProjectController::getInstance() ->openProject( url );
         }
-    }
-
-    if ( !openProject )
-    {
-        QObject::connect( PluginController::getInstance(), SIGNAL( pluginsLoaded() ),
-                          TopLevel::getInstance() ->main(), SLOT( loadSettings() ) );
-        QObject::connect( TopLevel::getInstance() ->main(), SIGNAL( finishedLoading() ),
-                          splash, SLOT( deleteLater() ) );
-        PluginController::getInstance() ->loadInitialPlugins();
-    }
-    else
-    {
-        QObject::connect( Core::getInstance(), SIGNAL( projectOpened() ),
-                          TopLevel::getInstance() ->main(), SLOT( loadSettings() ) );
-        QObject::connect( TopLevel::getInstance() ->main(), SIGNAL( finishedLoading() ),
-                          splash, SLOT( deleteLater() ) );
-    }
-
-    if ( !openProject )
-    {
-        for ( int a = 0; a < args->count(); ++a )
+        else
         {
-            DocumentController::getInstance() ->editDocument( KUrl( args->url( a ) ) );
+            for ( int a = 0; a < args->count(); ++a )
+            {
+                DocumentController::getInstance() ->editDocument( KUrl( args->url( a ) ) );
+            }
         }
     }
 

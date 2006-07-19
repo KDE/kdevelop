@@ -1,4 +1,6 @@
 
+add_subdirectory(settings)
+
 include_directories( ${CMAKE_SOURCE_DIR}/lib )
 
 
@@ -37,6 +39,8 @@ set(kdevinterfaces_LIB_SRCS
     kdevprofileengine.cpp
     kdevcmodule.cpp
     kdevconfigskeleton.cpp
+    kdevenv.cpp
+    kdevconfig.cpp
 )
 
 kde4_automoc(${kdevinterfaces_LIB_SRCS})
@@ -82,6 +86,8 @@ install(FILES
     kdevprofileengine.h
     kdevcmodule.h
     kdevconfigskeleton.h
+    kdevenv.h
+    kdevconfig.h
     kdevsharedptr.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/interfaces 
 )

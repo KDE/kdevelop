@@ -24,7 +24,6 @@
 
 #include <kmenu.h>
 #include <kicon.h>
-#include <kglobal.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kmenubar.h>
@@ -37,6 +36,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
+#include "kdevconfig.h"
 #include <kdevprofile.h>
 #include <kdevprofileengine.h>
 
@@ -44,7 +44,6 @@
 #include "toplevel.h"
 #include "statusbar.h"
 #include "editorproxy.h"
-#include "projectmanager.h"
 #include "shellextension.h"
 #include "mainwindowshare.h"
 #include "plugincontroller.h"
@@ -227,9 +226,8 @@ void SimpleMainWindow::lowerView( QWidget * view )
 
 void SimpleMainWindow::loadSettings()
 {
-    KConfig * config = KGlobal::config();
+    KConfig * config = KDevConfig::standard();
 
-    ProjectManager::getInstance() ->loadSettings();
     applyMainWindowSettings( config, QLatin1String( "SimpleMainWindow" ) );
 
     show(); //kind of crucial
@@ -239,9 +237,8 @@ void SimpleMainWindow::loadSettings()
 
 void SimpleMainWindow::saveSettings( )
 {
-    KConfig * config = KGlobal::config();
+    KConfig * config = KDevConfig::standard();
 
-    ProjectManager::getInstance() ->saveSettings();
     saveMainWindowSettings( config, QLatin1String( "SimpleMainWindow" ) );
 }
 
@@ -310,8 +307,9 @@ void SimpleMainWindow::newToolbarConfig()
 
 bool SimpleMainWindow::queryClose()
 {
+    bool query = Core::getInstance() ->queryClose();
     saveSettings();
-    return Core::getInstance() ->queryClose();
+    return query;
 }
 
 bool SimpleMainWindow::queryExit()

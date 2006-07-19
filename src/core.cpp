@@ -8,12 +8,12 @@
 #include <kconfig.h>
 #include <kdeversion.h>
 #include <kstandarddirs.h>
-#include <kglobal.h>
 
 #include "toplevel.h"
+#include "projectcontroller.h"
 #include "documentcontroller.h"
 #include "kdevapi.h"
-#include "projectmanager.h"
+#include "kdevconfig.h"
 
 #include "core.h"
 
@@ -41,15 +41,16 @@ Core::~Core()
 
 bool Core::queryClose()
 {
-  // save the the project to open it automaticly on startup if needed
-  KConfig* config = KGlobal::config();
-  config->setGroup("General Options");
-  config->writePathEntry("Last Project",ProjectManager::getInstance()->projectFile().url());
+    if ( !ProjectController::getInstance()->closeProject() )
+        return false;
+
+    // save the the project to open it automaticly on startup if needed
+    KUrl lastProject = ProjectController::getInstance()->globalFile();
+    KConfig* config = KDevConfig::standard();
+    config->setGroup("General Options");
+    config->writePathEntry("Last Project", lastProject );
 
     if ( !DocumentController::getInstance()->querySaveDocuments() )
-      return false;
-
-    if ( !ProjectManager::getInstance()->closeProject( true ) )
       return false;
 
     if ( !DocumentController::getInstance()->readyToClose() )
@@ -71,9 +72,19 @@ void Core::fillContextMenu(QMenu *popup, const Context *context)
 }
 
 
-void Core::openProject(const QString& projectFileName)
+void Core::openProject(const KUrl& projectFileName)
 {
-    ProjectManager::getInstance()->loadProject(KUrl( projectFileName ));
+    ProjectController::getInstance()->openProject( projectFileName );
+}
+
+KUrl Core::localFile() const
+{
+    return ProjectController::getInstance()->localFile();
+}
+
+KUrl Core::globalFile() const
+{
+    return ProjectController::getInstance()->globalFile();
 }
 
 namespace MainWindowUtils{

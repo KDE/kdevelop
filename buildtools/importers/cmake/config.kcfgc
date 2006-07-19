@@ -1,0 +1,5 @@
+File=config.kcfg
+ClassName=CMakeSettings
+Singleton=true
+Inherits=KDevConfigSkeleton
+IncludeFiles="kdevconfigskeleton.h"

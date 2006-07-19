@@ -35,7 +35,7 @@
 #include "cmLocalGenerator.h"
 #include "cmGlobalGenerator.h"
 
-#include "cmakesettings.h"
+#include "config.h"
 #include "cmaketargetitem.h"
 
 
@@ -78,7 +78,7 @@ KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
 {
     QString projectPath = m_project->projectDirectory().path();
     kDebug( 9025 ) << k_funcinfo << "project path is " << projectPath << endl;
-    QString buildDir = CMakeSettings::self()->buildDirectory().path();
+    QString buildDir = CMakeSettings::self()->buildFolder();
     kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
     
     m_cmakeEngine.SetHomeDirectory( projectPath.toLocal8Bit().data() );

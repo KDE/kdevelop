@@ -24,11 +24,10 @@ Boston, MA 02110-1301, USA.
 
 #include <kurl.h>
 #include <kconfig.h>
-#include <kglobal.h>
-#include <kinstance.h>
 
 #include <kdebug.h>
 
+#include "kdevconfig.h"
 
 KDevConfigSkeleton::KDevConfigSkeleton( const QString & configname )
         : KConfigSkeleton( configname ), m_parsed( false )
@@ -44,46 +43,44 @@ KDevConfigSkeleton::~KDevConfigSkeleton()
 void KDevConfigSkeleton::usrWriteConfig()
 {
     //FIXME need to see receive the projectOpened, otherwise return right here..
-    if (true)
+    if ( m_nonShareable.empty() )
         return KConfigSkeleton::usrWriteConfig();
 
-    kDebug() << k_funcinfo << endl;
+/*    kDebug() << k_funcinfo << endl;*/
 
-    KSharedConfig::Ptr standardConfig =
-        KSharedPtr<KSharedConfig>( KGlobal::sharedConfig() );
+    // We iterate twice so that we're not changing the config object too much
 
-    //FIXME patch KInstance or KConfig/KConfigBackEnd to return the configFileName();
-    KSharedConfig::Ptr localProjectConfig =
-        KSharedConfig::openConfig( KGlobal::instance()->instanceName() + "rc" );
-    //localProjectConfig->addFileToMergeStack( "/home/kde/trunk/KDE/kdevelop/local.kdevelop4" );
-    localProjectConfig->reparseConfiguration();
-
-    QString origStandardGroup = standardConfig->group();
+    KSharedConfig::Ptr localProjectConfig = KDevConfig::sharedLocalProject();
     QString origLocalProjectGroup = localProjectConfig->group();
-
     KConfigSkeletonItem::List _items = items();
     KConfigSkeletonItem::List::ConstIterator it;
     for ( it = _items.begin(); it != _items.end(); ++it )
     {
-        if ( !m_nonShareable.contains( ( *it ) ->name() ) )
+        if ( m_nonShareable.contains( ( *it ) ->name() ) )
         {
-//             kDebug() << ( *it ) ->name() << " written to global file" << endl;
-            ( *it ) ->writeConfig( standardConfig.data() ); //write to the standard config
-        }
-        else
-        {
-//             kDebug() << ( *it ) ->name() << " written to local file" << endl;
+/*            kDebug() << ( *it ) ->name() << " written to local file" << endl;*/
             ( *it ) ->writeConfig( localProjectConfig.data() ); //write to the local project
         }
     }
-
-    standardConfig->sync();
     localProjectConfig->sync();
+    localProjectConfig->setGroup( origLocalProjectGroup );
+
+    KSharedConfig::Ptr standardConfig = KDevConfig::sharedStandard();
+    QString origStandardGroup = standardConfig->group();
+    KConfigSkeletonItem::List _items2 = items();
+    KConfigSkeletonItem::List::ConstIterator it2;
+    for ( it2 = _items2.begin(); it2 != _items2.end(); ++it2 )
+    {
+        if ( !m_nonShareable.contains( ( *it2 ) ->name() ) )
+        {
+/*            kDebug() << ( *it ) ->name() << " written to global file" << endl;*/
+            ( *it2 ) ->writeConfig( standardConfig.data() ); //write to the standard config
+        }
+    }
+    standardConfig->sync();
+    standardConfig->setGroup( origStandardGroup );
 
     readConfig();
-
-    standardConfig->setGroup( origStandardGroup );
-    localProjectConfig->setGroup( origLocalProjectGroup );
 
     emit configChanged();
 }
@@ -101,7 +98,7 @@ void KDevConfigSkeleton::parseNonShareableFile( const KUrl &url )
     if ( dataFile.open( QIODevice::ReadOnly ) )
     {
         QTextStream txt( &dataFile );
-        while( !txt.atEnd() )
+        while ( !txt.atEnd() )
             m_nonShareable.append( txt.readLine() );
 
         dataFile.close();

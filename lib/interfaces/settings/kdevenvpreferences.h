@@ -1,6 +1,6 @@
-/* KDevelop CMake Support
+/* KDevEnv Settings
  *
- * Copyright 2006 Matt Rogers <mattr@kde.org>
+ * Copyright 2006  Matt Rogers <mattr@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,36 +18,39 @@
  * 02110-1301, USA.
  */
 
-#ifndef CMAKESETTINGS_H
-#define CMAKESETTINGS_H
+#ifndef KDEVENVPREFERENCES_H
+#define KDEVENVPREFERENCES_H
 
-class QString;
-class KUrl;
+#include <kdevcmodule.h>
 
-/**
- * @author Matt Rogers <mattr@kde.org>
- */
-class CMakeSettings
+#include <kurl.h>
+#include <kstandarddirs.h>
+
+class KDevEnvWidget;
+
+class KDevEnvPreferences : public KDevCModule
 {
+    Q_OBJECT
 public:
-    ~CMakeSettings();
+    KDevEnvPreferences( QWidget *parent, const QStringList &args );
+    virtual ~KDevEnvPreferences();
 
-    static CMakeSettings* self();
+    virtual void save();
+    virtual void load();
+    virtual void defaults();
 
-    KUrl installationPrefix() const;
-    KUrl buildDirectory() const;
-    QString buildType() const;
+    virtual KUrl localNonShareableFile() const
+    {
+        return KUrl::fromPath(
+                   KStandardDirs::locate( "data", "kdevelop/data.kdev4" ) );
+    }
 
-    void setInstallationPrefix( const KUrl& );
-    void setBuildDirectory( const KUrl& );
-    void setBuildType( const QString& );
+private slots:
+    void slotSettingsChanged();
 
 private:
-    CMakeSettings();
-
-    static CMakeSettings* s_instance;
+    KDevEnvWidget *preferencesDialog;
 
 };
 
 #endif
-//kate: space-indent on; indent-width 4; replace-tabs on;

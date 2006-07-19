@@ -52,9 +52,9 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
 #include <ktexteditor/document.h>
-#include <kglobal.h>
 
 #include "core.h"
+#include "kdevconfig.h"
 #include "toplevel.h" 
 // #include "editorproxy.h"
 #include "kdevproject.h"
@@ -162,7 +162,7 @@ KDevDocument* DocumentController::editDocument( const KUrl & inputUrl,
         document = integratePart( part );
 
     m_openRecentAction->addUrl( url );
-    m_openRecentAction->saveEntries( KGlobal::config(),
+    m_openRecentAction->saveEntries( KDevConfig::localProject(),
                                      "RecentDocuments" );
     setCursorPosition( part, cursor );
 
@@ -203,7 +203,7 @@ bool DocumentController::openAsDialog( const KUrl &url, KMimeType::Ptr mimeType 
         }
         else if ( dialog.always_open_as_text->isChecked() )
         {
-            KConfig * config = KGlobal::config();
+            KConfig * config = KDevConfig::standard();
             config->setGroup( "General" );
             QStringList textTypesList = config->readEntry( "TextTypes",
                                         QStringList() );
@@ -805,7 +805,7 @@ void DocumentController::setupActions()
         KStdAction::openRecent( this, SLOT( slotOpenRecent( const KUrl& ) ),
                                 ac, "file_open_recent" );
     m_openRecentAction->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( m_openRecentAction->text() ) ).arg( i18n( "Opens recently opened file." ) ) );
-    m_openRecentAction->loadEntries( KGlobal::config(), "RecentDocuments" );
+    m_openRecentAction->loadEntries( KDevConfig::localProject(), "RecentDocuments" );
 
     m_saveAllDocumentsAction = new KAction( i18n( "Save Al&l" ), ac, "file_save_all" );
     connect(m_saveAllDocumentsAction, SIGNAL(triggered(bool)), SLOT( slotSaveAllDocuments() ));
@@ -990,7 +990,7 @@ bool DocumentController::isDirty( KDevDocument* document ) const
 
 bool DocumentController::reactToDirty( KDevDocument* document, unsigned char reason )
 {
-    KConfig * config = KGlobal::config();
+    KConfig * config = KDevConfig::standard();
     config->setGroup( "Editor" );
     QString dirtyAction = config->readEntry( "DirtyAction" );
 

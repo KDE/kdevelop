@@ -47,16 +47,18 @@ QString FileTemplate::read(const QString &name, Policy p)
 
 QString FileTemplate::readFile(const KUrl &fileName)
 {
-    QDomDocument* dom = KDevApi::self()->projectDom();
-    Q_ASSERT(dom);
-
-    QFile f(fileName.path());
-    if (!f.open(QIODevice::ReadOnly))
-        return QString();
-    QTextStream stream(&f);
-    QString str = stream.readAll();
-
-    return makeSubstitutions( *dom, str );
+    //FIXME
+//     QDomDocument* dom = KDevApi::self()->projectDom();
+//     Q_ASSERT(dom);
+// 
+//     QFile f(fileName.path());
+//     if (!f.open(QIODevice::ReadOnly))
+//         return QString();
+//     QTextStream stream(&f);
+//     QString str = stream.readAll();
+// 
+//     return makeSubstitutions( *dom, str );
+    return QString::null;
 }
 
 QString FileTemplate::makeSubstitutions( QDomDocument & dom, const QString & text )

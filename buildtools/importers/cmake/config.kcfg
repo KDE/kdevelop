@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg> 
+  <kcfgfile name="kdeveloprc"/>
+  <group name="CMake">
+    <entry name="installPrefix" key="Prefix" type="String">
+    </entry>
+    <entry name="buildFolder" key="Build Dir" type="String">
+    </entry>
+    <entry name="buildType" key="Build Type" type="String">
+    </entry>
+  </group>
+</kcfg>

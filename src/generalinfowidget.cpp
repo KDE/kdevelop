@@ -22,7 +22,6 @@
 #include "generalinfowidget.h"
 #include "generalinfowidget.moc"
 #include "domutil.h"
-#include "projectmanager.h"
 
 QString makeRelativePath(const QString& fromPath, const QString& toPath);
 
@@ -76,7 +75,8 @@ bool GeneralInfoWidget::isProjectDirectoryAbsolute() {
 }
 
 QString GeneralInfoWidget::projectDirectory() {
-    return ProjectManager::projectDirectory( m_baseUi->project_directory_edit->text(), isProjectDirectoryAbsolute() );
+    //FIXME
+    return QString::null;
 }
 
 void GeneralInfoWidget::slotProjectDirectoryChanged( const QString& text ) {
@@ -113,13 +113,7 @@ void GeneralInfoWidget::slotProjectDirectoryChanged( const QString& text ) {
 }
 
 void GeneralInfoWidget::slotProjectDirectoryComboChanged() {
-    QString text = m_baseUi->project_directory_edit->text();
-    if(isProjectDirectoryAbsolute() && text[0] != '/' )
-        m_baseUi->project_directory_edit->setText(ProjectManager::projectDirectory(text,false));
-    else if(!isProjectDirectoryAbsolute() && text[0] == '/')
-    {
-        m_baseUi->project_directory_edit->setText(KUrl(ProjectManager::getInstance()->projectFile(), text).url());
-    }
+    //FIXME
 }
 
 void GeneralInfoWidget::setProjectDirectoryError( const QString& error ) {

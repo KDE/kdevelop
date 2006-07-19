@@ -26,24 +26,27 @@
 #include <kurl.h>
 #include <kgenericfactory.h>
 
-#include "cmakesettings.h"
 #include "ui_cmakebuildsettings.h"
+#include "config.h"
 
 typedef KGenericFactory<CMakePreferences> CMakePreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kdevcmake_settings, CMakePreferencesFactory( "kcm_kdevcmake_settings" )  )
 
-
 CMakePreferences::CMakePreferences(QWidget* parent, const QStringList& args)
- : KCModule(CMakePreferencesFactory::instance(), parent, args)
+: KDevCModule(CMakeSettings::self(),CMakePreferencesFactory::instance(), parent, args)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
     m_prefsUi = new Ui::CMakeBuildSettings;
     m_prefsUi->setupUi( w );
     l->addWidget( w );
-    load();
-}
 
+        //Is this correct?
+    addConfig( CMakeSettings::self(), w );
+
+    load();
+
+}
 
 CMakePreferences::~CMakePreferences()
 {
@@ -51,26 +54,17 @@ CMakePreferences::~CMakePreferences()
 
 void CMakePreferences::load()
 {
-    CMakeSettings *settings = CMakeSettings::self();
-    m_prefsUi->buildFolder->setText(settings->buildDirectory().path());
-    m_prefsUi->installPrefix->setText(settings->installationPrefix().path());
-    m_prefsUi->buildType->setText(settings->buildType());
+    KDevCModule::load();
 }
 
 void CMakePreferences::save()
 {
-    CMakeSettings* settings = CMakeSettings::self();
-    settings->setInstallationPrefix(KUrl(m_prefsUi->installPrefix->text()));
-    settings->setBuildDirectory(KUrl(m_prefsUi->buildFolder->text()));
-    settings->setBuildType(m_prefsUi->buildType->text());
+    KDevCModule::save();
 }
 
 void CMakePreferences::defaults()
 {
-    m_prefsUi->buildFolder->setText( QString() );
-    m_prefsUi->installPrefix->setText( QString() );
-    m_prefsUi->buildType->setText( QString() );
+    KDevCModule::defaults();
 }
-
 
 //kate: space-indent on; indent-width 4; replace-tabs on;
