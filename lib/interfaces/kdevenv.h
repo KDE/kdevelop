@@ -31,17 +31,29 @@ public:
     KDevEnv( QObject *parent = 0 );
     virtual ~KDevEnv();
 
+    void populateOverrides();
+    void populateProcessDefaults();
+
     QString variable( const QString &name ) const;
     void setVariable( const QString &name, const QString &value );
     void unsetVariable( const QString &name );
 
-    void clear();
+    bool isOverride( const QString &name ) const;
+    QString override( const QString &name ) const;
+    bool removeOverride( const QString &name, bool unset = false );
+    void clearOverrides();
 
-    QMap<QString, QString> variableMap() const { return m_variables; }
+    bool isProcessDefault( const QString &name ) const;
+    QString processDefault( const QString &name ) const;
+    bool removeProcessDefault( const QString &name, bool unset = false  );
+    void clearProcessDefaults();
+
+    QMap<QString, QString> overrideMap() const { return m_overrides; }
+    QMap<QString, QString> processDefaultMap() const { return m_processDefaults; }
 
 private:
-    QMap<QString, QString> m_variables;
     QMap<QString, QString> m_overrides;
+    QMap<QString, QString> m_processDefaults;
 };
 
 #endif

@@ -32,6 +32,8 @@ public:
     KDevEnvWidget( QWidget *parent = 0 );
     virtual ~KDevEnvWidget();
 
+    void saveChanges();
+
 signals:
     void changed( bool changed );
 
@@ -39,7 +41,18 @@ private slots:
     void on_new_button_clicked();
     void on_edit_button_clicked();
     void on_delete_button_clicked();
-    void settingsChanged();
+    void settingsChanged( int row, int column );
+
+private:
+    bool isOverride( QTableWidgetItem *item ) const;
+    bool isProcessDefault( QTableWidgetItem *item ) const;
+    void setOverride( QTableWidgetItem *item );
+    void setProcessDefault( QTableWidgetItem *item );
+    bool diff() const;
+
+private:
+    QMap<QString, QString> m_mergeMap;
+
 };
 
 #endif
