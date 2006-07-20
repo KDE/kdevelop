@@ -112,6 +112,9 @@ void Lexer::tokenize(const char *contents, std::size_t size)
     current_token->size = cursor - begin_buffer - current_token->position;
   } while (cursor < end_buffer-1);
 
+    if (index == token_stream.size())
+      token_stream.resize(token_stream.size() * 2);
+
   token_stream[index].position = cursor - begin_buffer;
   token_stream[index].kind = Token_EOF;
 }
