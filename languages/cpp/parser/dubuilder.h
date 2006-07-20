@@ -52,6 +52,7 @@ public:
 protected:
   virtual void visitNamespace (NamespaceAST *);
   virtual void visitClassSpecifier (ClassSpecifierAST *);
+  virtual void visitBaseSpecifier(BaseSpecifierAST*);
   virtual void visitTemplateDeclaration (TemplateDeclarationAST *);
   virtual void visitTypedef (TypedefAST *);
   virtual void visitFunctionDefinition (FunctionDefinitionAST *);
@@ -67,6 +68,8 @@ protected:
   virtual void visitUsingDirective(UsingDirectiveAST *);
   virtual void visitClassMemberAccess(ClassMemberAccessAST *);
   virtual void visitInitDeclarator(InitDeclaratorAST*);
+  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
+  virtual void visitEnumSpecifier(EnumSpecifierAST*);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;

@@ -541,7 +541,7 @@ private slots:
   {
     //QSKIP("Excessive currently", SkipSingle);
 
-    QFile file("/opt/kde4/src/kdelibs/kate/part/kateautoindent.cpp");
+    QFile file("/opt/kde4/src/kdelibs/kate/part/katestyletreewidget.cpp");
     QVERIFY( file.open( QIODevice::ReadOnly ) );
 
     QByteArray fileData = file.readAll();

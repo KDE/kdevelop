@@ -121,6 +121,15 @@ void DUBuilder::visitClassSpecifier (ClassSpecifierAST *node)
   m_currentDefinition = oldDefinition;
 }
 
+void DUBuilder::visitBaseSpecifier(BaseSpecifierAST* node)
+{
+  int identifierStackDepth = m_identifierStack.count();
+
+  DefaultVisitor::visitBaseSpecifier(node);
+
+  ignoreIdentifier(identifierStackDepth);
+}
+
 void DUBuilder::visitTemplateDeclaration (TemplateDeclarationAST *node)
 {
   bool was = inTemplateDeclaration (true);
@@ -365,6 +374,24 @@ void DUBuilder::visitClassMemberAccess(ClassMemberAccessAST * node)
   int stackCount = m_identifierStack.count();
 
   DefaultVisitor::visitClassMemberAccess(node);
+
+  ignoreIdentifier(stackCount);
+}
+
+void DUBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
+{
+  int stackCount = m_identifierStack.count();
+
+  DefaultVisitor::visitElaboratedTypeSpecifier(node);
+
+  ignoreIdentifier(stackCount);
+}
+
+void DUBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
+{
+  int stackCount = m_identifierStack.count();
+
+  DefaultVisitor::visitEnumSpecifier(node);
 
   ignoreIdentifier(stackCount);
 }
