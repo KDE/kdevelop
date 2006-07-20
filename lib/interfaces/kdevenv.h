@@ -31,14 +31,17 @@ public:
     KDevEnv( QObject *parent = 0 );
     virtual ~KDevEnv();
 
+    QString variable( const QString &name ) const;
+    void setVariable( const QString &name, const QString &value );
+    void unsetVariable( const QString &name );
+
+    void clear();
+
     QMap<QString, QString> variableMap() const { return m_variables; }
-
-    QStringList currentVariables() const;
-
-    QString getenv( const QString &name );
 
 private:
     QMap<QString, QString> m_variables;
+    QMap<QString, QString> m_overrides;
 };
 
 #endif

@@ -1,5 +1,0 @@
-File=kdevenvconfig.kcfg
-ClassName=KDevEnvSettings
-Singleton=true
-Inherits=KDevConfigSkeleton
-IncludeFiles="kdevconfigskeleton.h"

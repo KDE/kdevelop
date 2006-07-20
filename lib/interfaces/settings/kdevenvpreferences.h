@@ -46,7 +46,7 @@ public:
     }
 
 private slots:
-    void slotSettingsChanged();
+    void settingsChanged( bool changed );
 
 private:
     KDevEnvWidget *preferencesDialog;

@@ -37,6 +37,10 @@ class KDEVINTERFACES_EXPORT KDevCModule: public KCModule
 {
     Q_OBJECT
 public:
+    KDevCModule( KInstance *instance,
+                 QWidget *parent = 0,
+                 const QStringList &args = QStringList() );
+
     KDevCModule( KDevConfigSkeleton *config,
                  KInstance *instance,
                  QWidget *parent = 0,
@@ -46,12 +50,12 @@ public:
     virtual void save();
     virtual void load();
 
-  /**
-   * KCModule's which inherit this class must implement this function and
-   * return the url of the kcm's data.kdev4 file installed with the plugin
-   * in the plugin's data dir.
-   * @return the full url to the installed data.kdev4 of the plugin
-   */
+    /**
+     * KCModule's which inherit this class must implement this function and
+     * return the url of the kcm's data.kdev4 file installed with the plugin
+     * in the plugin's data dir.
+     * @return the full url to the installed data.kdev4 of the plugin
+     */
     virtual KUrl localNonShareableFile() const = 0;
 
 private:

@@ -23,6 +23,8 @@ Boston, MA 02110-1301, USA.
 #include <QDialog>
 #include "ui_kdevenvsettings.h"
 
+class KDevConfigSkeleton;
+
 class KDevEnvWidget: public QDialog, private Ui::EnvironmentWidget
 {
     Q_OBJECT
@@ -30,11 +32,14 @@ public:
     KDevEnvWidget( QWidget *parent = 0 );
     virtual ~KDevEnvWidget();
 
+signals:
+    void changed( bool changed );
+
 private slots:
-    void on_variable_combo_highlighted( const QString & );
-    void on_add_button_clicked();
+    void on_new_button_clicked();
     void on_edit_button_clicked();
-    void on_remove_button_clicked();
+    void on_delete_button_clicked();
+    void settingsChanged();
 };
 
 #endif

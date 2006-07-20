@@ -13,7 +13,6 @@ kdevenvsettings.ui
 )
 kde4_automoc( ${kdevenv_config_SRC} )
 kde4_add_ui_files( kdevenv_config_SRC ${kdevenv_config_UI} )
-kde4_add_kcfg_files(kdevenv_config_SRC kdevenvconfig.kcfgc )
 kde4_add_plugin(kcm_kdevenv_settings ${kdevenv_config_SRC})
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kdevenv_settings )
 target_link_libraries(kcm_kdevenv_settings ${KDE4_KUTILS_LIBS} kdevinterfaces )

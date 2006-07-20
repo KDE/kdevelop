@@ -20,18 +20,18 @@ Boston, MA 02110-1301, USA.
 #include "kdevenv.h"
 
 #include <QStringList>
-
 #include <kdebug.h>
+#include <stdlib.h>
 
 #include "kdevapi.h"
-
-#include <iostream>
 
 extern char **environ;
 
 KDevEnv::KDevEnv( QObject *parent )
         : QObject( parent )
 {
+    //http://www.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap08.html
+
     //parse environ
     register char **ep;
     for ( ep = environ; *ep != 0; ++ep )
@@ -43,21 +43,39 @@ KDevEnv::KDevEnv( QObject *parent )
     KDevApi::self()->setEnvironment( this );
 }
 
-QStringList KDevEnv::currentVariables() const
-{
-    return m_variables.keys();
-}
+KDevEnv::~KDevEnv()
+{}
 
-QString KDevEnv::getenv( const QString &name )
+QString KDevEnv::variable( const QString &name ) const
 {
     //Get the override if the user has specified it
+    if ( m_overrides.contains( name ) )
+        return m_overrides.value( name );
 
+    //Get the override if the user has specified it
     if ( m_variables.contains( name ) )
         return m_variables.value( name );
 }
 
-KDevEnv::~KDevEnv()
-{}
+void KDevEnv::setVariable( const QString &name, const QString &value )
+{
+    m_overrides.insert( name, value );
+
+    //http://www.opengroup.org/onlinepubs/009695399/functions/setenv.html
+    setenv( name.toLatin1().data(), value.toLatin1().data(), 1 );
+}
+
+void KDevEnv::unsetVariable( const QString &name )
+{
+    //http://www.opengroup.org/onlinepubs/009695399/functions/unsetenv.html
+    unsetenv( name.toLatin1().data() );
+}
+
+void KDevEnv::clear()
+{
+    foreach( QString v, m_variables.keys() )
+        unsetVariable( v );
+}
 
 #include "kdevenv.moc"
 
