@@ -24,12 +24,16 @@ Boston, MA 02110-1301, USA.
 #include <QMap>
 #include "kdevexport.h"
 
+typedef QMap<QString, QString> EnvironmentMap;
+
 class KDEVINTERFACES_EXPORT KDevEnv: public QObject
 {
     Q_OBJECT
 public:
     KDevEnv( QObject *parent = 0 );
     virtual ~KDevEnv();
+
+    void saveSettings( EnvironmentMap overrides );
 
     void populateOverrides();
     void populateProcessDefaults();
@@ -45,15 +49,24 @@ public:
 
     bool isProcessDefault( const QString &name ) const;
     QString processDefault( const QString &name ) const;
-    bool removeProcessDefault( const QString &name, bool unset = false  );
+    bool removeProcessDefault( const QString &name, bool unset = false );
     void clearProcessDefaults();
 
-    QMap<QString, QString> overrideMap() const { return m_overrides; }
-    QMap<QString, QString> processDefaultMap() const { return m_processDefaults; }
+    EnvironmentMap overrideMap() const
+    {
+        return m_overrides;
+    }
+    EnvironmentMap processDefaultMap() const
+    {
+        return m_processDefaults;
+    }
+
+public slots:
+    void populate();
 
 private:
-    QMap<QString, QString> m_overrides;
-    QMap<QString, QString> m_processDefaults;
+    EnvironmentMap m_overrides;
+    EnvironmentMap m_processDefaults;
 };
 
 #endif

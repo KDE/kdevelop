@@ -155,35 +155,35 @@ bool ProjectController::openProject( const KUrl &KDev4ProjectFile )
 
 bool ProjectController::closeProject()
 {
-    KConfig * local = KDevConfig::localProject();
-    local->setGroup( "General Options" );
-
-    QStringList recentDocs;
-    QList<KDevDocument* > openDocs = DocumentController::getInstance()->openDocuments();
+    QStringList paths;
+    QList<KDevDocument* > openDocs = DocumentController::getInstance() ->openDocuments();
     QList<KDevDocument* >::const_iterator it = openDocs.begin();
     for ( ; it != openDocs.end(); ++it )
     {
-        recentDocs.append( ( *it )->url().path() );
+        paths.append( ( *it ) ->url().path() );
     }
 
-    if ( !recentDocs.empty() )
-        local->writePathEntry( "OpenedDocuments", recentDocs );
-
-    m_name = QString::null;
+    KConfig * local = KDevConfig::localProject();
+    local->setGroup( "General Options" );
+    if ( !paths.empty() )
+        local->writePathEntry( "OpenDocuments", paths );
+    else
+        local->deleteEntry( "OpenDocuments" );
 
     local ->sync();
 
     // save the the project to open it automaticly on startup if needed
     KUrl lastProject = m_globalFile;
 
+    m_name = QString::null;
     m_localFile.clear();
     m_globalFile.clear();
     m_projectsDir.clear();
     m_isLoaded = false;
 
     KConfig* standard = KDevConfig::standard();
-    standard->setGroup("General Options");
-    standard->writePathEntry("Last Project", lastProject.path() );
+    standard->setGroup( "General Options" );
+    standard->writePathEntry( "Last Project", lastProject.path() );
 
     Core::getInstance() ->doEmitProjectClosed();
 
@@ -209,10 +209,10 @@ void ProjectController::legacyLoading()
 
     QString language = config->readPathEntry( "PrimaryLanguage", "C++" );
     LanguageController::getInstance() ->languageSupport( language );
-    QStringList recentDocs = config->readPathListEntry( "OpenedDocuments" );
+    QStringList recentDocs = config->readPathListEntry( "OpenDocuments" );
     foreach( QString doc, recentDocs )
     {
-        DocumentController::getInstance()->editDocument( KUrl::fromPath( doc ) );
+        DocumentController::getInstance() ->editDocument( KUrl::fromPath( doc ) );
     }
 
     QString projectManagement =

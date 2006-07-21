@@ -21,6 +21,8 @@ Boston, MA 02110-1301, USA.
 #define KDEVENVWIDGET_H
 
 #include <QDialog>
+
+#include "kdevenv.h"
 #include "ui_kdevenvsettings.h"
 
 class KDevConfigSkeleton;
@@ -32,26 +34,33 @@ public:
     KDevEnvWidget( QWidget *parent = 0 );
     virtual ~KDevEnvWidget();
 
-    void saveChanges();
+    void loadSettings();
+    void saveSettings();
+    void defaults();
 
 signals:
     void changed( bool changed );
 
 private slots:
-    void on_new_button_clicked();
-    void on_edit_button_clicked();
-    void on_delete_button_clicked();
+    void newButtonClicked();
+    void deleteButtonClicked();
+    void processDefaultButtonClicked();
     void settingsChanged( int row, int column );
+    void focusChanged( int row, int column, int, int );
 
 private:
     bool isOverride( QTableWidgetItem *item ) const;
     bool isProcessDefault( QTableWidgetItem *item ) const;
     void setOverride( QTableWidgetItem *item );
     void setProcessDefault( QTableWidgetItem *item );
-    bool diff() const;
+    bool diff();
+    void generateCurrentMaps();
 
 private:
-    QMap<QString, QString> m_mergeMap;
+    EnvironmentMap m_overrides;
+    EnvironmentMap m_processDefaults;
+    EnvironmentMap m_currentOverrides;
+    EnvironmentMap m_currentProcessDefaults;
 
 };
 

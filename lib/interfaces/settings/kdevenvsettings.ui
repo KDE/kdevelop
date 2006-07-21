@@ -55,23 +55,23 @@
       </spacer>
      </item>
      <item>
-      <widget class="KPushButton" name="new_button" >
+      <widget class="KPushButton" name="newButton" >
        <property name="text" >
         <string>New</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="edit_button" >
+      <widget class="KPushButton" name="deleteButton" >
        <property name="text" >
-        <string>Edit</string>
+        <string>Delete</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="delete_button" >
+      <widget class="KPushButton" name="processDefaultButton" >
        <property name="text" >
-        <string>Delete</string>
+        <string>Process Default</string>
        </property>
       </widget>
      </item>

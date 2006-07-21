@@ -47,7 +47,6 @@ KDevelopPreferences::KDevelopPreferences(QWidget *parent, const QStringList &arg
     preferencesDialog->setupUi( w );
     l->addWidget( w );
 
-        //Is this correct?
     addConfig( KDevGeneralSettings::self(), w );
 
     load();

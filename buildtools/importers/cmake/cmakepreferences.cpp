@@ -41,7 +41,6 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QStringList& args)
     m_prefsUi->setupUi( w );
     l->addWidget( w );
 
-        //Is this correct?
     addConfig( CMakeSettings::self(), w );
 
     load();

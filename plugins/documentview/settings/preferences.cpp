@@ -46,7 +46,6 @@ Preferences::Preferences(QWidget *parent, const QStringList &args)
     preferencesDialog->setupUi( w );
     l->addWidget( w );
 
-        //Is this correct?
     addConfig( DocumentViewSettings::self(), w );
 
     load();

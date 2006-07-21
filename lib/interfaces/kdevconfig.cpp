@@ -49,11 +49,12 @@ KConfig *KDevConfig::globalProject()
 
 KSharedConfig::Ptr KDevConfig::sharedStandard()
 {
+    KDevCore *core = KDevApi::self() ->core();
     KSharedConfig::Ptr config = KSharedPtr<KSharedConfig>( KGlobal::sharedConfig() );
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
-    KUrl local = KDevApi::self() ->core() ->localFile();
-    KUrl global = KDevApi::self() ->core() ->globalFile();
+    KUrl local = core ->localFile();
+    KUrl global = core ->globalFile();
     if ( local.isValid() )
         extraConfig.append( local.path() );
     if ( global.isValid() )
@@ -71,11 +72,12 @@ KSharedConfig::Ptr KDevConfig::sharedStandard()
 
 KSharedConfig::Ptr KDevConfig::sharedLocalProject()
 {
+    KDevCore *core = KDevApi::self() ->core();
     KSharedConfig::Ptr config = KSharedPtr<KSharedConfig>( KGlobal::sharedConfig() );
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
-    KUrl local = KDevApi::self() ->core() ->localFile();
-    KUrl global = KDevApi::self() ->core() ->globalFile();
+    KUrl local = core ->localFile();
+    KUrl global = core ->globalFile();
     if ( global.isValid() )
         extraConfig.append( global.path() );
     if ( local.isValid() )
@@ -93,11 +95,12 @@ KSharedConfig::Ptr KDevConfig::sharedLocalProject()
 
 KSharedConfig::Ptr KDevConfig::sharedGlobalProject()
 {
+    KDevCore *core = KDevApi::self() ->core();
     KSharedConfig::Ptr config = KSharedPtr<KSharedConfig>( KGlobal::sharedConfig() );
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
-    KUrl local = KDevApi::self() ->core() ->localFile();
-    KUrl global = KDevApi::self() ->core() ->globalFile();
+    KUrl local = core ->localFile();
+    KUrl global = core ->globalFile();
     if ( local.isValid() )
         extraConfig.append( local.path() );
     if ( global.isValid() )

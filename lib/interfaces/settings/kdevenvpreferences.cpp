@@ -55,16 +55,19 @@ KDevEnvPreferences::~KDevEnvPreferences( )
 
 void KDevEnvPreferences::save()
 {
+    preferencesDialog->saveSettings();
     KDevCModule::save();
 }
 
 void KDevEnvPreferences::load()
 {
+    preferencesDialog->loadSettings();
     KDevCModule::load();
 }
 
 void KDevEnvPreferences::defaults()
 {
+    preferencesDialog->defaults();
     KDevCModule::defaults();
 }
 

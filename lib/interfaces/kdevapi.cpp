@@ -20,6 +20,8 @@
 
 #include "kdevapi.h"
 
+#include <kdevenv.h>
+
 ///////////////////////////////////////////////////////////////////////////////
 // class KDevApiPrivate
 ///////////////////////////////////////////////////////////////////////////////
@@ -125,6 +127,8 @@ KDevPluginController * KDevApi::pluginController( ) const
 void KDevApi::setCore( KDevCore * core )
 {
     d->core = core;
+
+    new KDevEnv;
 }
 
 KDevCore * KDevApi::core( ) const
