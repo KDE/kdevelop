@@ -19,8 +19,13 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevenv.h"
 
+#include <QProcess>
+
 #include <QStringList>
+
 #include <kdebug.h>
+#include <kprocess.h>
+
 #include <stdlib.h>
 
 #include "kdevapi.h"
@@ -49,6 +54,107 @@ KDevEnv::KDevEnv( QObject *parent )
 KDevEnv::~KDevEnv()
 {}
 
+QString KDevEnv::variable( const QString &name ) const
+{
+    Q_ASSERT( !name.isEmpty() );
+    //Get the override if the user has specified it
+    if ( m_overrides.contains( name ) )
+        return m_overrides.value( name );
+
+    //Get the process default
+    if ( m_processDefaults.contains( name ) )
+        return m_processDefaults.value( name );
+
+    return QString::null;
+}
+
+void KDevEnv::setVariable( const QString &name, const QString &value )
+{
+    Q_ASSERT( !name.isEmpty() );
+    if ( m_processDefaults.value( name ) != value )
+        m_overrides.insert( name, value );
+    else
+        m_overrides.remove( name );
+
+    //http://www.opengroup.org/onlinepubs/009695399/functions/setenv.html
+    setenv( name.toLatin1().data(), value.toLatin1().data(), 1 );
+}
+
+void KDevEnv::unsetVariable( const QString &name )
+{
+    Q_ASSERT( !name.isEmpty() );
+    if ( isOverride( name ) )
+        removeOverride( name, true );
+    if ( isProcessDefault( name ) )
+        removeProcessDefault( name, true );
+}
+
+bool KDevEnv::revertToProcessDefault( const QString &name )
+{
+    Q_ASSERT( !name.isEmpty() );
+    bool revert = m_processDefaults.contains( name );
+    if ( revert )
+        setVariable( name, m_processDefaults.value( name ) );
+    return revert;
+}
+
+void KDevEnv::saveSettings()
+{
+    QStringList pairs;
+    EnvironmentMap::const_iterator it = m_overrides.constBegin();
+    for ( ; it != m_overrides.constEnd(); ++it )
+    {
+        pairs.append( it.key() + "=" + it.value() );
+    }
+
+    KConfig *local = KDevConfig::localProject();
+    local->setGroup( "Environment" );
+    if ( !pairs.isEmpty() )
+        local->writeEntry( "Variables", pairs );
+    else
+        local->deleteEntry( "Variables" );
+
+    local->sync();
+}
+
+void KDevEnv::syncProcess( QProcess *process )
+{
+    QStringList pairs;
+    EnvironmentMap::const_iterator it = m_overrides.constBegin();
+    for ( ; it != m_overrides.constEnd(); ++it )
+    {
+        pairs.append( it.key() + "=" + it.value() );
+    }
+    EnvironmentMap::const_iterator it2 = m_processDefaults.constBegin();
+    for ( ; it2 != m_processDefaults.constEnd(); ++it2 )
+    {
+        if ( !m_overrides.contains( it2.key() ) )
+            pairs.append( it2.key() + "=" + it2.value() );
+    }
+    process->setEnvironment( pairs );
+}
+
+void KDevEnv::syncProcess( KProcess *process )
+{
+    EnvironmentMap::const_iterator it = m_overrides.constBegin();
+    for ( ; it != m_overrides.constEnd(); ++it )
+    {
+        process->setEnvironment( it.key(), it.value( ) );
+    }
+    EnvironmentMap::const_iterator it2 = m_processDefaults.constBegin();
+    for ( ; it2 != m_processDefaults.constEnd(); ++it2 )
+    {
+        if ( !m_overrides.contains( it2.key() ) )
+            process->setEnvironment( it2.key(), it2.value() );
+    }
+}
+
+void KDevEnv::populate()
+{
+    populateProcessDefaults();
+    populateOverrides();
+}
+
 void KDevEnv::saveSettings( EnvironmentMap overrides )
 {
     if ( overrides != m_overrides )
@@ -76,28 +182,8 @@ void KDevEnv::saveSettings( EnvironmentMap overrides )
             setVariable( v, overrides.value( v ) );
         }
 
-        QStringList pairs;
-        EnvironmentMap::const_iterator it = m_overrides.constBegin();
-        for ( ; it != m_overrides.constEnd(); ++it )
-        {
-            pairs.append( it.key() + "=" + it.value() );
-        }
-
-        KConfig *local = KDevConfig::localProject();
-        local->setGroup( "Environment" );
-        if ( !pairs.isEmpty() )
-            local->writeEntry( "Variables", pairs );
-        else
-            local->deleteEntry( "Variables" );
-
-        local->sync();
+        saveSettings();
     }
-}
-
-void KDevEnv::populate()
-{
-    populateProcessDefaults();
-    populateOverrides();
 }
 
 void KDevEnv::populateOverrides()
@@ -128,36 +214,6 @@ void KDevEnv::populateProcessDefaults()
         if ( nv.count() == 2 )
             m_processDefaults.insert( nv[ 0 ], nv[ 1 ] );
     }
-}
-
-QString KDevEnv::variable( const QString &name ) const
-{
-    //Get the override if the user has specified it
-    if ( m_overrides.contains( name ) )
-        return m_overrides.value( name );
-
-    //Get the process default
-    if ( m_processDefaults.contains( name ) )
-        return m_processDefaults.value( name );
-
-    return QString::null;
-}
-
-void KDevEnv::setVariable( const QString &name, const QString &value )
-{
-    if ( m_processDefaults.value( name ) != value )
-        m_overrides.insert( name, value );
-
-    //http://www.opengroup.org/onlinepubs/009695399/functions/setenv.html
-    setenv( name.toLatin1().data(), value.toLatin1().data(), 1 );
-}
-
-void KDevEnv::unsetVariable( const QString &name )
-{
-    if ( isOverride( name ) )
-        removeOverride( name, true );
-    if ( isProcessDefault( name ) )
-        removeProcessDefault( name, true );
 }
 
 bool KDevEnv::isOverride( const QString &name ) const
