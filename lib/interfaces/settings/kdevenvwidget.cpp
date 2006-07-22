@@ -19,9 +19,14 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevenvwidget.h"
 
+#include <QLabel>
+#include <QVBoxLayout>
 #include <QHeaderView>
 
 #include <kdebug.h>
+#include <kdialog.h>
+#include <klineedit.h>
+#include <ktextedit.h>
 
 #include "kdevapi.h"
 #include "kdevconfig.h"
@@ -34,6 +39,7 @@ KDevEnvWidget::KDevEnvWidget( QWidget *parent )
     variableTable->setColumnCount( 2 );
     variableTable->setRowCount( 0 );
     variableTable->verticalHeader() ->hide();
+    variableTable->setSelectionMode( QAbstractItemView::NoSelection );
     variableTable->horizontalHeader() ->setStretchLastSection ( true );
     connect( variableTable, SIGNAL( cellChanged( int, int ) ),
              this, SLOT( settingsChanged( int, int ) ) );
@@ -46,6 +52,9 @@ KDevEnvWidget::KDevEnvWidget( QWidget *parent )
              this, SLOT( deleteButtonClicked() ) );
     connect( processDefaultButton, SIGNAL( clicked() ),
              this, SLOT( processDefaultButtonClicked() ) );
+
+    deleteButton->setEnabled( false );
+    processDefaultButton->setEnabled( false );
 }
 
 KDevEnvWidget::~KDevEnvWidget()
@@ -53,12 +62,30 @@ KDevEnvWidget::~KDevEnvWidget()
 
 void KDevEnvWidget::loadSettings()
 {
-    kDebug() << k_funcinfo << endl;
+    load( false );
+}
 
+void KDevEnvWidget::saveSettings()
+{
+    //make sure the maps are set
+    generateCurrentMaps();
+    KDevApi::self() ->environment() ->saveSettings( m_currentOverrides );
+}
+
+void KDevEnvWidget::defaults()
+{
+    load( true );
+}
+
+void KDevEnvWidget::load( bool defaults )
+{
     variableTable->blockSignals( true );
 
     //Clear the maps
-    m_overrides.clear();
+    if ( !defaults )
+    {
+        m_overrides.clear();
+    }
     m_processDefaults.clear();
     m_currentOverrides.clear();
     m_currentProcessDefaults.clear();
@@ -67,25 +94,28 @@ void KDevEnvWidget::loadSettings()
     variableTable->clearContents();
     variableTable->setRowCount( 0 );
 
-    int i = 0;
-    EnvironmentMap ovrMap = KDevApi::self() ->environment() ->overrideMap();
-    EnvironmentMap::const_iterator it = ovrMap.constBegin();
-    for ( ; it != ovrMap.constEnd(); ++it )
+    if ( !defaults )  //Don't use overrides if only showing defaults
     {
-        variableTable->insertRow( i );
+        int i = 0;
+        EnvironmentMap ovrMap = KDevApi::self() ->environment() ->overrideMap();
+        EnvironmentMap::const_iterator it = ovrMap.constBegin();
+        for ( ; it != ovrMap.constEnd(); ++it )
+        {
+            variableTable->insertRow( i );
 
-        QTableWidgetItem * name = new QTableWidgetItem( it.key() );
-        setOverride( name );
-        variableTable->setItem( i, 0, name );
-        name->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+            QTableWidgetItem * name = new QTableWidgetItem( it.key() );
+            setOverride( name );
+            variableTable->setItem( i, 0, name );
+            name->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
 
-        QTableWidgetItem * value = new QTableWidgetItem( it.value() );
-        setOverride( value );
-        variableTable->setItem( i, 1, value );
+            QTableWidgetItem * value = new QTableWidgetItem( it.value() );
+            setOverride( value );
+            variableTable->setItem( i, 1, value );
 
-        //Store this in a map for easy diffs
-        m_overrides.insert( it.key(), it.value() );
-        i++;
+            //Store this in a map for easy diffs
+            m_overrides.insert( it.key(), it.value() );
+            i++;
+        }
     }
 
     int i2 = 0;
@@ -116,34 +146,89 @@ void KDevEnvWidget::loadSettings()
     //     variableTable->setSortingEnabled( true );
     //     variableTable->sortItems( 0, Qt::DescendingOrder );
     variableTable->blockSignals( false );
-}
 
-void KDevEnvWidget::saveSettings()
-{
-    kDebug() << k_funcinfo << endl;
-    //make sure the maps are set
-    generateCurrentMaps();
-    KDevApi::self() ->environment() ->saveSettings( m_currentOverrides );
-}
-
-void KDevEnvWidget::defaults()
-{
-    kDebug() << k_funcinfo << endl;
+    if ( defaults )
+    {
+        emit changed( m_overrides.count() );
+    }
 }
 
 void KDevEnvWidget::newButtonClicked()
 {
-    kDebug() << k_funcinfo << endl;
+    KDialog * dialog = new KDialog( this );
+    dialog->setCaption( i18n( "New Environment Variable" ) );
+    dialog->setButtons( KDialog::Ok | KDialog::Cancel );
+    dialog->setDefaultButton( KDialog::Ok );
+
+    QWidget *main = new QWidget( dialog );
+    QVBoxLayout *layout = new QVBoxLayout( main );
+
+    layout->addWidget( new QLabel( i18n( "Name:" ), main ) );
+    KLineEdit *nameEdit = new KLineEdit( main );
+    layout->addWidget( nameEdit );
+    layout->addWidget( new QLabel( i18n( "Value:" ), main ) );
+    KTextEdit *valueEdit = new KTextEdit( main );
+    layout->addWidget( valueEdit, 1 );
+    nameEdit->setFocus();
+    dialog->setMainWidget( main );
+
+    if ( dialog->exec() == QDialog::Accepted )
+    {
+        QString _name = nameEdit->text();
+        QString _value = valueEdit->text();
+        if ( _name.isEmpty() )
+            return ; //message box?
+
+        generateCurrentMaps();
+        if ( m_currentOverrides.contains( _name )
+                || m_currentProcessDefaults.contains( _name ) )
+            return ; //message box?
+
+        variableTable->blockSignals( true );
+
+        //Add it at the top?
+        int row = variableTable->rowCount();
+        variableTable->insertRow( row );
+
+        QTableWidgetItem * name = new QTableWidgetItem( _name );
+        setOverride( name );
+        variableTable->setItem( row, 0, name );
+        name->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+
+        QTableWidgetItem * value = new QTableWidgetItem( _value );
+        setOverride( value );
+        variableTable->setItem( row, 1, value );
+
+        //Make sure it is visible
+        variableTable->scrollToItem( name );
+
+        variableTable->blockSignals( false );
+
+        variableTable->setCurrentItem( name );
+        emit changed( diff() );
+    }
 }
 
 void KDevEnvWidget::deleteButtonClicked()
 {
-    kDebug() << k_funcinfo << endl;
+    variableTable->removeRow( variableTable->currentRow() );
+    processDefaultButton->setEnabled( false );
+    emit changed( diff() );
 }
 
 void KDevEnvWidget::processDefaultButtonClicked()
 {
-    kDebug() << k_funcinfo << endl;
+    int row = variableTable->currentRow();
+    QTableWidgetItem * name = variableTable->item( row, 0 );
+    QTableWidgetItem * value = variableTable->item( row, 1 );
+    QString _name = name->text();
+
+    QString pValue = KDevApi::self() ->environment() ->processDefault( _name );
+
+    value->setText( pValue );
+    setProcessDefault( name );
+    setProcessDefault( value );
+    processDefaultButton->setEnabled( false );
 }
 
 void KDevEnvWidget::settingsChanged( int row, int /*column*/ )
@@ -173,13 +258,12 @@ void KDevEnvWidget::settingsChanged( int row, int /*column*/ )
     emit changed( diff() );
 }
 
-void KDevEnvWidget::focusChanged( int row, int /*column*/, int, int )
+void KDevEnvWidget::focusChanged( int row, int, int, int )
 {
-    kDebug() << k_funcinfo << endl;
-    QString name = variableTable->item( row, 0 )->text();
-    QString value = variableTable->item( row, 1 )->text();
+    QString name = variableTable->item( row, 0 ) ->text();
+    QString value = variableTable->item( row, 1 ) ->text();
 
-    bool pDefault = KDevApi::self() ->environment()->isProcessDefault( name );
+    bool pDefault = KDevApi::self() ->environment() ->isProcessDefault( name );
     QString pValue = KDevApi::self() ->environment() ->processDefault( name );
 
     // Var is not processDefault?
@@ -209,13 +293,6 @@ void KDevEnvWidget::setProcessDefault( QTableWidgetItem * item )
     item->setTextColor( Qt::black );
 }
 
-bool KDevEnvWidget::diff()
-{
-    generateCurrentMaps();
-    return ( m_currentOverrides != m_overrides
-             || m_currentProcessDefaults != m_processDefaults );
-}
-
 void KDevEnvWidget::generateCurrentMaps()
 {
     //create maps of current settings to compare
@@ -233,6 +310,13 @@ void KDevEnvWidget::generateCurrentMaps()
         else if ( isProcessDefault( name ) )
             m_currentProcessDefaults.insert( _name, _value );
     }
+}
+
+bool KDevEnvWidget::diff()
+{
+    generateCurrentMaps();
+    return ( m_currentOverrides != m_overrides
+             || m_currentProcessDefaults != m_processDefaults );
 }
 
 #include "kdevenvwidget.moc"

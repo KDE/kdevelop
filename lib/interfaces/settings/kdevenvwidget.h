@@ -46,15 +46,16 @@ private slots:
     void deleteButtonClicked();
     void processDefaultButtonClicked();
     void settingsChanged( int row, int column );
-    void focusChanged( int row, int column, int, int );
+    void focusChanged( int row, int, int, int );
 
 private:
+    void load( bool defaults );
     bool isOverride( QTableWidgetItem *item ) const;
     bool isProcessDefault( QTableWidgetItem *item ) const;
     void setOverride( QTableWidgetItem *item );
     void setProcessDefault( QTableWidgetItem *item );
-    bool diff();
     void generateCurrentMaps();
+    bool diff();
 
 private:
     EnvironmentMap m_overrides;
