@@ -157,14 +157,16 @@ KDevDocument* DocumentController::editDocument( const KUrl & inputUrl,
     // in which case need to treat it as such
     KDevDocument *document = 0;
     if ( qobject_cast<KTextEditor::Document*>( part ) )
-        document = integratePart( part, part->widget(), activate );
+        document = integratePart( part, activate );
     else
         document = integratePart( part );
 
     m_openRecentAction->addUrl( url );
     m_openRecentAction->saveEntries( KDevConfig::localProject(),
                                      "RecentDocuments" );
-    setCursorPosition( part, cursor );
+
+    if ( activate )
+        setCursorPosition( part, cursor );
 
     return document;
 }
@@ -459,7 +461,7 @@ void DocumentController::openEmptyTextDocument()
                 m_partController->createTextPart( KUrl(), m_presetEncoding, true ) )
     {
         addHistoryEntry();
-        integratePart( document, document->widget(), true );
+        integratePart( document, true );
         setCursorPosition( document, KTextEditor::Cursor() );
     }
 }
@@ -472,7 +474,7 @@ void DocumentController::integrateTextEditorPart( KTextEditor::Document* doc )
 
 void DocumentController::slotSave()
 {
-    kDebug( 9000 ) << k_funcinfo << endl;
+//     kDebug( 9000 ) << k_funcinfo << endl;
 
     if ( activeReadWrite() )
         saveDocument( activeDocument() );
@@ -480,7 +482,7 @@ void DocumentController::slotSave()
 
 void DocumentController::slotReload()
 {
-    kDebug( 9000 ) << k_funcinfo << endl;
+//     kDebug( 9000 ) << k_funcinfo << endl;
 
     if ( activeReadWrite() )
         reloadDocument( activeDocument() );
@@ -727,7 +729,7 @@ void DocumentController::slotDocumentDirty( KTextEditor::Document * d,
         bool isModified,
         KTextEditor::ModificationInterface::ModifiedOnDiskReason reason )
 {
-    kDebug( 9000 ) << k_funcinfo << endl;
+//     kDebug( 9000 ) << k_funcinfo << endl;
 
     KDevDocument* doc = documentForPart( d );
 
@@ -766,9 +768,9 @@ void DocumentController::slotDocumentDirty( KTextEditor::Document * d,
         emit documentStateChanged( doc, KDevDocument::Clean );
     }
 
-    kDebug( 9000 ) << doc->url() << endl;
-    kDebug( 9000 ) << isModified << endl;
-    kDebug( 9000 ) << reason << endl;
+//     kDebug( 9000 ) << doc->url() << endl;
+//     kDebug( 9000 ) << isModified << endl;
+//     kDebug( 9000 ) << reason << endl;
 }
 
 
@@ -780,9 +782,9 @@ void DocumentController::slotNewStatus( KTextEditor::Document * doc )
 void DocumentController::slotNewDesignerStatus( const QString &formName,
         int status )
 {
-    kDebug( 9000 ) << k_funcinfo << endl;
-    kDebug( 9000 ) << " formName: " << formName
-    << ", status: " << status << endl;
+//     kDebug( 9000 ) << k_funcinfo << endl;
+//     kDebug( 9000 ) << " formName: " << formName
+//     << ", status: " << status << endl;
     KDevDocument* document = documentForUrl( KUrl( formName ) );
     if ( document )
         emit documentStateChanged( document, KDevDocument::DocumentState( status ) );
@@ -808,14 +810,14 @@ void DocumentController::setupActions()
     m_openRecentAction->loadEntries( KDevConfig::localProject(), "RecentDocuments" );
 
     m_saveAllDocumentsAction = new KAction( i18n( "Save Al&l" ), ac, "file_save_all" );
-    connect(m_saveAllDocumentsAction, SIGNAL(triggered(bool)), SLOT( slotSaveAllDocuments() ));
+    connect( m_saveAllDocumentsAction, SIGNAL( triggered( bool ) ), SLOT( slotSaveAllDocuments() ) );
     m_saveAllDocumentsAction->setToolTip( i18n( "Save all modified files" ) );
     m_saveAllDocumentsAction->setWhatsThis( i18n( "<b>Save all</b><p>Saves all "
                                             "modified files." ) );
     m_saveAllDocumentsAction->setEnabled( false );
 
     m_revertAllDocumentsAction = new KAction( i18n( "Rever&t All" ), ac, "file_revert_all" );
-    connect(m_revertAllDocumentsAction, SIGNAL(toggled(bool)), SLOT( slotRevertAllDocuments() ));
+    connect( m_revertAllDocumentsAction, SIGNAL( toggled( bool ) ), SLOT( slotRevertAllDocuments() ) );
     m_revertAllDocumentsAction->setToolTip( i18n( "Revert all changes" ) );
     m_revertAllDocumentsAction->setWhatsThis( i18n( "<b>Revert all</b>"
             "<p>Reverts all changes in opened files. Prompts to save changes so"
@@ -830,22 +832,22 @@ void DocumentController::setupActions()
     m_closeWindowAction->setEnabled( false );
 
     m_closeAllWindowsAction = new KAction( i18n( "Close All" ), ac, "file_close_all" );
-    connect(m_closeAllWindowsAction, SIGNAL(toggled(bool)), SLOT( slotCloseAllWindows() ));
+    connect( m_closeAllWindowsAction, SIGNAL( toggled( bool ) ), SLOT( slotCloseAllWindows() ) );
     m_closeAllWindowsAction->setToolTip( i18n( "Close all files" ) );
     m_closeAllWindowsAction->setWhatsThis( i18n( "<b>Close all</b><p>Close all "
                                            "opened files." ) );
     m_closeAllWindowsAction->setEnabled( false );
 
     m_closeOtherWindowsAction = new KAction( i18n( "Close All Others" ), ac, "file_closeother" );
-    connect(m_closeOtherWindowsAction, SIGNAL(toggled(bool)), SLOT( slotCloseOtherWindows() ));
+    connect( m_closeOtherWindowsAction, SIGNAL( toggled( bool ) ), SLOT( slotCloseOtherWindows() ) );
     m_closeOtherWindowsAction->setToolTip( i18n( "Close other files" ) );
     m_closeOtherWindowsAction->setWhatsThis( i18n( "<b>Close all others</b>"
             "<p>Close all opened files except current." ) );
     m_closeOtherWindowsAction->setEnabled( false );
 
     m_switchToAction = new KAction( i18n( "Switch To..." ), ac, "file_switchto" );
-    m_switchToAction->setShortcut(KShortcut( "CTRL+/" ));
-    connect(m_switchToAction, SIGNAL(toggled(bool)), SLOT(slotSwitchTo() ));
+    m_switchToAction->setShortcut( KShortcut( "CTRL+/" ) );
+    connect( m_switchToAction, SIGNAL( toggled( bool ) ), SLOT( slotSwitchTo() ) );
     m_switchToAction->setToolTip( i18n( "Switch to" ) );
     m_switchToAction->setWhatsThis( i18n( "<b>Switch to</b><p>Prompts to enter "
                                           "the name of previously opened file "
@@ -917,26 +919,28 @@ KParts::Factory *DocumentController::findPartFactory( const QString &mimeType,
     return 0;
 }
 
-KDevDocument* DocumentController::integratePart( KParts::Part *part, QWidget* widget, bool activate )
+KDevDocument* DocumentController::integratePart( KParts::Part *part, bool activate )
 {
     // tell the parts we loaded a document
     KParts::ReadOnlyPart * ro_part = readOnly( part );
     if ( !ro_part )
         return 0L;
 
-    if ( !widget )
-        widget = part->widget();
-
-    if ( !widget )
+    if ( activate )
     {
-        /// @todo error handling
-        kDebug( 9000 ) << "no widget for this part!!" << endl;
-        return 0L; // to avoid later crash
-    }
+        QWidget * widget = part->widget();
 
-    TopLevel::getInstance() ->embedPartView( widget,
-            ro_part->url().fileName(),
-            ro_part->url().url() );
+        if ( !widget )
+        {
+            /// @todo error handling
+            kDebug( 9000 ) << "no widget for this part!!" << endl;
+            return 0L; // to avoid later crash
+        }
+
+        TopLevel::getInstance() ->embedPartView( widget,
+                ro_part->url().fileName(),
+                ro_part->url().url() );
+    }
 
     KDevDocument* doc = addDocument( part, activate );
     emit documentLoaded( doc );
@@ -1020,7 +1024,7 @@ bool DocumentController::reactToDirty( KDevDocument* document, unsigned char rea
         return false;
     }
 
-    if ( reason == 3 )                                                                                                // means the file was deleted
+    if ( reason == 3 )                                                                                                  // means the file was deleted
     {
         KMessageBox::sorry( TopLevel::getInstance() ->main(),
                             i18n( "Warning: The file \"%1\" has been deleted on"
@@ -1227,9 +1231,9 @@ void DocumentController::setActiveDocument( KDevDocument *document, QWidget *wid
 {
     m_partController->setActivePart( document->part(), widget );
 
-    kDebug( 9000 ) << k_funcinfo
-    << m_partController->activePart()
-    << " " << activeDocument() << endl;
+//     kDebug( 9000 ) << k_funcinfo
+//     << m_partController->activePart()
+//     << " " << activeDocument() << endl;
 
     updateMenuItems();
 
@@ -1249,6 +1253,17 @@ void DocumentController::activateDocument( KDevDocument * document )
     QWidget * widget = document->part() ->widget();
     if ( widget )
     {
+        if ( !TopLevel::getInstance() ->containsWidget( widget ) )
+        {
+            KParts::ReadOnlyPart * ro_part = readOnly( document->part() );
+            if ( !ro_part )
+                return;
+
+            TopLevel::getInstance() ->embedPartView( widget,
+                    ro_part->url().fileName(),
+                    ro_part->url().url() );
+        }
+
         TopLevel::getInstance() ->setCurrentWidget( widget );
         widget->show();
         widget->setFocus();

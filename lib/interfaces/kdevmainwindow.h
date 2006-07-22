@@ -75,6 +75,8 @@ public:
     @param bEnabled true if view should be shown, false it it is not.*/
     virtual void setViewAvailable(QWidget *pView, bool bEnabled) = 0;
 
+    virtual bool containsWidget( QWidget *widget ) const = 0;
+
     /**Brings the widget to the front of the stack.
     @param widget The widget to give focus.*/
     virtual void setCurrentWidget(QWidget *widget) = 0;

@@ -1,22 +1,22 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Alexander Dymo                                  *
- *   adymo@kdevelop.org                                                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU Library General Public License as       *
- *   published by the Free Software Foundation; either version 2 of the    *
- *   License, or (at your option) any later version.                       *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU Library General Public     *
- *   License along with this program; if not, write to the                 *
- *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
- ***************************************************************************/
+*   Copyright (C) 2005 by Alexander Dymo                                  *
+*   adymo@kdevelop.org                                                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU Library General Public License as       *
+*   published by the Free Software Foundation; either version 2 of the    *
+*   License, or (at your option) any later version.                       *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU Library General Public     *
+*   License along with this program; if not, write to the                 *
+*   Free Software Foundation, Inc.,                                       *
+*   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
+***************************************************************************/
 #include "simplemainwindow.h"
 
 #include <qdockwidget.h>
@@ -167,7 +167,7 @@ void SimpleMainWindow::removeView( QWidget *view )
     if ( !view )
         return ;
 
-    foreach( QDockWidget *dock, m_dockList )
+    foreach( QDockWidget * dock, m_dockList )
     {
         if ( dock->widget() == view )
         {
@@ -186,19 +186,25 @@ void SimpleMainWindow::setViewAvailable( QWidget *pView, bool bEnabled )
     //TODO hide docs
 }
 
-void SimpleMainWindow::setCurrentWidget( QWidget * widget  )
+bool SimpleMainWindow::containsWidget( QWidget *widget ) const
+{
+    return ( m_center->indexOf( widget ) != -1 );
+}
+
+void SimpleMainWindow::setCurrentWidget( QWidget *widget )
 {
     if ( !widget )
         return ;
+
     m_center->setCurrentWidget( widget );
 }
 
-void SimpleMainWindow::raiseView( QWidget * view, Qt::DockWidgetArea area )
+void SimpleMainWindow::raiseView( QWidget *view, Qt::DockWidgetArea area )
 {
     if ( !view )
         return ;
 
-    foreach( QDockWidget *dock, m_dockList )
+    foreach( QDockWidget * dock, m_dockList )
     {
         if ( dock->widget() == view )
         {
@@ -214,7 +220,7 @@ void SimpleMainWindow::lowerView( QWidget * view )
     if ( !view )
         return ;
 
-    foreach( QDockWidget *dock, m_dockList )
+    foreach( QDockWidget * dock, m_dockList )
     {
         if ( dock->widget() == view )
         {
@@ -299,8 +305,8 @@ void SimpleMainWindow::newToolbarConfig()
 {
     setupWindowMenu();
     //FIXME
-//     m_mainWindowShare->slotGUICreated(
-//         DocumentController::getInstance() ->activePart() );
+    //     m_mainWindowShare->slotGUICreated(
+    //         DocumentController::getInstance() ->activePart() );
     applyMainWindowSettings( KGlobal::config(),
                              QLatin1String( "SimpleMainWindow" ) );
 }

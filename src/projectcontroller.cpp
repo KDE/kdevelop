@@ -209,11 +209,20 @@ void ProjectController::legacyLoading()
 
     QString language = config->readPathEntry( "PrimaryLanguage", "C++" );
     LanguageController::getInstance() ->languageSupport( language );
-    QStringList recentDocs = config->readPathListEntry( "OpenDocuments" );
-    foreach( QString doc, recentDocs )
+    QStringList paths = config->readPathListEntry( "OpenDocuments" );
+    foreach( QString doc, paths )
     {
-        DocumentController::getInstance() ->editDocument( KUrl::fromPath( doc ) );
+        DocumentController::getInstance() ->editDocument(
+            KUrl::fromPath( doc ),
+            KTextEditor::Cursor::invalid(),
+            false );
     }
+
+    //Activate the first doc in the list
+    DocumentController::getInstance() ->editDocument(
+        KUrl::fromPath( paths.first() ),
+        KTextEditor::Cursor::invalid(),
+        true );
 
     QString projectManagement =
         config->readPathEntry( "Project Management", "KDevProjectManager" );

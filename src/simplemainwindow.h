@@ -58,6 +58,7 @@ public:
 
     virtual void removeView( QWidget *view );
     virtual void setViewAvailable( QWidget *pView, bool bEnabled );
+    virtual bool containsWidget( QWidget *widget ) const;
     virtual void setCurrentWidget( QWidget *widget );
     virtual void raiseView( QWidget *view, Qt::DockWidgetArea area = Qt::AllDockWidgetAreas);
     virtual void lowerView( QWidget *view );

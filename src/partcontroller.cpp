@@ -72,7 +72,7 @@ KTextEditor::Document* PartController::createTextPart(
         qobject_cast<KTextEditor::Document *>( createPart(
                                                    "text/plain",
                                                    "KTextEditor/Document",
-                                                   "KTextEditor::Document",
+                                                   "KTextEditor::Editor",
                                                    preferred ) );
     if ( !encoding.isNull() )
     {
@@ -89,10 +89,6 @@ KTextEditor::Document* PartController::createTextPart(
 
     doc->openURL( url );
 
-    if ( !doc->widget() /*&& activate*/ )
-    {
-        doc->createView( TopLevel::getInstance() ->main() ->centralWidget() );
-    }
     return doc;
 }
 
@@ -109,7 +105,7 @@ KParts::Part* PartController::createPart( const QString & mimeType,
     if ( !className.isEmpty() && editorFactory )
     {
         return editorFactory->createPart(
-                   TopLevel::getInstance() ->main() ->centralWidget(),
+                   /*TopLevel::getInstance() ->main() ->centralWidget()*/0,
                    TopLevel::getInstance() ->main() ->centralWidget(),
                    className.toLatin1() );
     }

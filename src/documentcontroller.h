@@ -141,7 +141,6 @@ private:
                                       = QString::null );
 
     KDevDocument* integratePart( KParts::Part *part,
-                                 QWidget* widget = 0,
                                  bool activate = true );
 
     QList<KDevDocument*> modifiedDocuments() const;
