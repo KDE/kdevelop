@@ -20,7 +20,6 @@
 
 #include "cmakepreferences.h"
 
-#include <QWidget>
 #include <QVBoxLayout>
 
 #include <kurl.h>

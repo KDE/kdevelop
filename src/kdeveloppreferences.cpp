@@ -19,14 +19,8 @@
  */
 #include "kdeveloppreferences.h"
 
-#include <qspinbox.h>
-#include <qlineedit.h>
-#include <qlayout.h>
-#include <qradiobutton.h>
-//Added by qt3to4:
 #include <QVBoxLayout>
 
-#include <klocale.h>
 #include <kgenericfactory.h>
 
 #include "ui_settingswidget.h"
