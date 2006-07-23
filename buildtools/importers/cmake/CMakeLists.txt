@@ -34,7 +34,7 @@ kde4_automoc( ${cmakesettings_SRCS} )
 kde4_add_ui_files( cmakesettings_SRCS ${cmakesettings_UI} )
 kde4_add_kcfg_files( cmakesettings_SRCS config.kcfgc )
 kde4_add_plugin( kcm_kdevcmake_settings ${cmakesettings_SRCS} )
-target_link_libraries( kcm_kdevcmake_settings ${KDE4_KUTILS_LIBS} kdevinterfaces )
+target_link_libraries( kcm_kdevcmake_settings ${KDE4_KUTILS_LIBS} kdevinterfaces CMakeLib )
 
 
 
