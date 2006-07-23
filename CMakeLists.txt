@@ -26,6 +26,6 @@ add_subdirectory(src)
 add_subdirectory(languages)
 add_subdirectory(plugins)
 add_subdirectory(buildtools)
-add_subdirectory(xdg)
+add_subdirectory(menus)
 #add_subdirectory(doc)
 
