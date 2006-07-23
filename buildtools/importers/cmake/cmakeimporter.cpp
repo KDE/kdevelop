@@ -55,6 +55,13 @@ CMakeImporter::CMakeImporter( QObject* parent,
     Q_ASSERT( m_project );
     QString appPath = QCoreApplication::applicationFilePath();
     m_cmakeEngine.SetCMakeCommand( appPath.toLocal8Bit().data() );
+
+    CMakeSettings* settings = CMakeSettings::self();
+
+    //what do the settings say about our generator?
+    QString generator = settings->generator();
+    /*if ( generator.contains( "Unix" ) ) //use make
+        m_builder = new KDevMakeBuilder()*/
 }
 
 CMakeImporter::~CMakeImporter()

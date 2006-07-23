@@ -47,54 +47,55 @@ public:
 
     virtual ~CMakeImporter();
 
-	virtual KDevProject* project() const;
+    virtual KDevProject* project() const;
     virtual KDevProjectBuilder* builder() const { return 0; }
     virtual QStringList includeDirectories() const { return QStringList(); }
     virtual KUrl::List preprocessorDefines() const { return KUrl::List(); }
 
-	virtual KDevProjectFolderItem* addFolder( const KUrl& /*folder */,
-	                                          KDevProject* /*parent*/ ) { return false; }
+    virtual KDevProjectFolderItem* addFolder( const KUrl& /*folder */,
+                                              KDevProject* /*parent*/ ) { return false; }
 
     virtual KDevProjectTargetItem* createTarget( const QString&,
                                                  KDevProjectFolderItem* ) { return false; }
 
     virtual KDevProjectFileItem* addFile( const KUrl&,
-	                                      KDevProjectFolderItem* ) { return false; }
+                                          KDevProjectFolderItem* ) { return false; }
 
     virtual bool addFileToTarget( KDevProjectFileItem*, KDevProjectTargetItem* ) { return false; }
 
-	virtual bool removeFolder( KDevProjectFolderItem* ) { return false; }
+    virtual bool removeFolder( KDevProjectFolderItem* ) { return false; }
 
     virtual bool removeTarget( KDevProjectTargetItem* ) { return false; }
 
     virtual bool removeFile( KDevProjectFileItem*,
-	                         KDevProjectFolderItem* ) { return false; }
-	virtual bool removeFileFromTarget( KDevProjectFileItem*,
-	                                   KDevProjectTargetItem* ) { return false; }
+                             KDevProjectFolderItem* ) { return false; }
+    virtual bool removeFileFromTarget( KDevProjectFileItem*,
+                                       KDevProjectTargetItem* ) { return false; }
 
     QList<KDevProjectTargetItem*> targets() const;
 
-	virtual QList<KDevProjectFolderItem*> parse( KDevProjectFolderItem* dom );
-	virtual KDevProjectItem* import( KDevProjectModel* model,
-	                                 const KUrl& fileName );
-	virtual KUrl findMakefile( KDevProjectFolderItem* dom ) const;
+    virtual QList<KDevProjectFolderItem*> parse( KDevProjectFolderItem* dom );
+    virtual KDevProjectItem* import( KDevProjectModel* model,
+                                     const KUrl& fileName );
+    virtual KUrl findMakefile( KDevProjectFolderItem* dom ) const;
     virtual KUrl::List findMakefiles( KDevProjectFolderItem* dom ) const;
 
-	void createProjectItems( cmLocalGenerator*, KDevProjectItem* );
+    void createProjectItems( cmLocalGenerator*, KDevProjectItem* );
 
     //cmake progress callback
     static void updateProgress( const char*, float, void* );
 
 
 private:
-	KDevProject* m_project;
-	KDevProjectItem* m_rootItem;
 
+    KDevProject* m_project;
+    KDevProjectItem* m_rootItem;
+    KDevProjectBuilder* m_builder;
     cmake m_cmakeEngine;
 
 
 };
 
 #endif
-// kate: indent-mode cstyle; space-indent off; tab-width 4; auto-insert-doxygen on;
+// kate: indent-mode cstyle; space-indent off; tab-width 4; replace-tabs on; auto-insert-doxygen on;
 
