@@ -17,7 +17,7 @@ set(kdevdocumentview_PART_SRCS
 
 kde4_automoc(${kdevdocumentview_PART_SRCS})
 kde4_add_plugin(kdevdocumentview ${kdevdocumentview_PART_SRCS})
-target_link_libraries(kdevdocumentview ${KDE4_KDECORE_LIBS} kdevinterfaces kdevwidgets kdevutil khtml)
+target_link_libraries(kdevdocumentview ${KDE4_KDECORE_LIBS} kdevinterfaces kdevwidgets kdevutil ${KDE4_KHTML_LIBS})
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevdocumentview)
 install(TARGETS kdevdocumentview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
