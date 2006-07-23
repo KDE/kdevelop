@@ -1,5 +1,8 @@
 
 #include <config.h>
+
+#include <QtCore/QStringList>
+
 #include "kdevmakebuilder.h"
 #include <kdevprojectmodel.h>
 

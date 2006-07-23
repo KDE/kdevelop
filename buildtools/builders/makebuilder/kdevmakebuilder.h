@@ -22,8 +22,8 @@
 #include <kdevprojectbuilder.h>
 #include <QtCore/QList>
 #include <QtCore/QPair>
-#include <QtCore/QStringList>
 
+class QStringList;
 class KDialog;
 
 /**
