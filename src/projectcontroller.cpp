@@ -219,10 +219,13 @@ void ProjectController::legacyLoading()
     }
 
     //Activate the first doc in the list
-    DocumentController::getInstance() ->editDocument(
-        KUrl::fromPath( paths.first() ),
-        KTextEditor::Cursor::invalid(),
-        true );
+    if ( !paths.isEmpty() )
+    {
+        DocumentController::getInstance() ->editDocument(
+            KUrl::fromPath( paths.first() ),
+            KTextEditor::Cursor::invalid(),
+            true );
+    }
 
     QString projectManagement =
         config->readPathEntry( "Project Management", "KDevProjectManager" );
