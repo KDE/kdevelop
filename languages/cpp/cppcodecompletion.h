@@ -167,15 +167,15 @@ private:
     SimpleType typeOf( QValueList<Tag>& tags, MemberAccessOp accessOp );
     
 	/// @todo remove isInstance
-	void computeCompletionEntryList( QValueList<CodeCompletionEntry>& entryList, SimpleContext* ctx, bool isInstance );
-    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const QStringList& type, bool isInstance );
-    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, QValueList<Tag>& tags, bool isInstance );
-    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, ClassDom klass, bool isInstance );
-    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, NamespaceDom scope, bool isInstance );
-    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const FunctionList& methods, bool isInstance );
-    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const VariableList& attributes, bool isInstance );
-    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const ClassList& lst, bool isInstance );
-    void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const NamespaceList& lst, bool isInstance );
+	void computeCompletionEntryList( QValueList<CodeCompletionEntry>& entryList, SimpleContext* ctx, bool isInstance, int depth = 0 );
+	void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const QStringList& type, bool isInstance, int depth = 0  );
+	void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, QValueList<Tag>& tags, bool isInstance, int depth  );
+	void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, ClassDom klass, bool isInstance, int depth   );
+	void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, NamespaceDom scope, bool isInstance, int depth   );
+	void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const FunctionList& methods, bool isInstance, int depth );
+	void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const VariableList& attributes, bool isInstance, int depth );
+	void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const ClassList& lst, bool isInstance, int depth );
+	void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const NamespaceList& lst, bool isInstance, int depth );
 
 	SimpleContext* computeContext( FunctionDefinitionAST* ast, int line, int col, int lineOffset, int colOffset );
 	void computeContext( SimpleContext*& ctx, StatementAST* ast, int line, int col );

@@ -28,8 +28,6 @@
 #include "simpletypenamespace.h"
 #include "tree_parser.h"
 
-const QString hardCodedAliases = "std=_GLIBCXX_STD;";
-
 static QString toSimpleName( NameAST* name )
 {
   if ( !name )
@@ -69,17 +67,17 @@ struct RecoveryPoint
   {}
   
     ///Registers the recovery-points imports into the given namespace
-  void registerImports( SimpleType ns ) {
+  void registerImports( SimpleType ns, QString hardCodedAliases ) {
     SimpleTypeNamespace* n = dynamic_cast<SimpleTypeNamespace*>( &(*ns) );
     if( !n ) {
       kdDebug( 9007 ) << "the global namespace was not resolved correctly " << endl;
     } else {
             ///put the imports into the global namespace
       for( QValueList<QStringList>::iterator it = imports.begin(); it != imports.end(); ++it ) {
-        kdDebug( 9007 ) << "inserting import " << *it << " into the global scole" << endl;
+        kdDebug( 9007 ) << "inserting import " << *it << " into the global scope" << endl;
         n->addAliasMap( "", (*it).join("::") );
       }
-      n->addAliases( hardCodedAliases );
+	  n->addAliases( hardCodedAliases );
     }
   }
   

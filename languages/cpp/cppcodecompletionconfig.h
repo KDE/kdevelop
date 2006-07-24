@@ -56,8 +56,50 @@ public:
 // 
 // 	void setIncludeTypedefs( bool b );
 
+	enum CompletionBoxItemOrder {
+		ByAccessLevel,
+		ByClass,
+		Alphabetic
+	};
+
+	CompletionBoxItemOrder completionBoxItemOrder() const {
+		///not yet used
+		return ByAccessLevel;
+	}
+
+	bool showEvaluationContextMenu() const {
+		///used
+		return true;
+	}
+
+	bool showCommentWithArgumentHint() const {
+		///used
+		return true;
+	}
+
+	bool statusBarTypeEvaluation() const {
+		///used
+		return true;
+	}
+
+	QString namespaceAliases() const {
+		///used
+		return "std=_GLIBCXX_STD";
+	}
+
+	bool processPrimaryTypes() const { ///The "do complete return-type-evaluation" entry. However it should be renamed, because it also covers Variable-types and typedefs!
+		///used
+		return true;
+	}
+
+	bool processFunctionArguments() const { ///The "do complete argument-type-evaluation" entry
+		///used
+		return true; ///@todo: link this to the GUI-Configuration
+	}
+	
 	bool automaticCodeCompletion() const
 	{
+		///used
 		return m_automaticCodeCompletion;
 	}
 
@@ -65,6 +107,7 @@ public:
 
 	bool automaticArgumentsHint() const
 	{
+		///used
 		return m_automaticArgumentsHint;
 	}
 
@@ -72,6 +115,7 @@ public:
 
 	bool automaticHeaderCompletion() const
 	{
+		///used
 		return m_automaticHeaderCompletion;
 	}
 
@@ -79,6 +123,7 @@ public:
 
 	int codeCompletionDelay() const
 	{
+		///used
 		return m_codeCompletionDelay;
 	}
 
@@ -86,6 +131,7 @@ public:
 
 	int argumentsHintDelay() const
 	{
+		///used
 		return m_argumentsHintDelay;
 	}
 
@@ -93,6 +139,7 @@ public:
 
 	int headerCompletionDelay() const
 	{
+		///used
 		return m_headerCompletionDelay;
 	}
 

@@ -370,7 +370,7 @@ class PopupFiller {
   QString depthAdd;
   SafetyCounter s;
 public:
-PopupFiller( HelpStruct s , QString dAdd, int maxCount = 100 ) : struk( s ), depthAdd( dAdd), s(maxCount) {
+PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ), depthAdd( dAdd), s(maxCount) {
 }
 
   void fill( QPopupMenu* parent, TypeDesc d, QString prefix = "" ) {
@@ -450,17 +450,21 @@ PopupFiller( HelpStruct s , QString dAdd, int maxCount = 100 ) : struk( s ), dep
   }
 };
 
-struct CompTypeProcessor : public TypeProcessor {
+struct CompTypeProcessor : public TypeProcessor
+{
   SimpleType m_scope;
-CompTypeProcessor( SimpleType scope )  : m_scope(scope) {
-}
+  bool m_processArguments;
+
+  CompTypeProcessor( SimpleType scope, bool processArguments)  : m_scope(scope), m_processArguments( processArguments ) {
+  }
   
   virtual QString parentType() {
     return m_scope->fullType();
   }
   
-  virtual QString processType( const QString& type ) {
-        ///TODO: Option: should arguments be processed? If no, just return "type"
+  virtual QString processType( const QString& type )
+  {
+    if( !m_processArguments ) return type;
     SimpleTypeImpl::LocateResult t = m_scope->locateDecType( type );
     if( t )
       return t->fullNameChain();
@@ -1104,7 +1108,10 @@ void CppCodeCompletion::popupClassViewAction( int number ) {
 	}
 }
 
-void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int column ) {
+void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int column )
+{
+	if( !m_pSupport->codeCompletionConfig()->showEvaluationContextMenu() ) return;
+	
 	kdDebug( 9007 ) << "CppCodeCompletion::contextEvaluationMenu()" << endl;
 	m_popupActions.clear();
 	m_popupClassViewActions.clear();
@@ -1185,9 +1192,12 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		popup->insertSeparator( cpos );
 }
 
-void CppCodeCompletion::slotTextHint(int line, int column, QString &text) {
-	//  return;
+void CppCodeCompletion::slotTextHint(int line, int column, QString &text)
+{
+	if( ! m_pSupport->codeCompletionConfig()->statusBarTypeEvaluation() ) return;
+	
 	kdDebug( 9007 ) << "CppCodeCompletion::slotTextHint()" << endl;
+	
 	clearStatusText();
 	
 	if( m_lastHintTime.msecsTo( QTime::currentTime() ) < 300 ) {
@@ -1424,7 +1434,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 			SimpleType global = ctx->global();
 			
 			if( recoveryPoint ) {
-				recoveryPoint->registerImports( global );
+				recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig()->namespaceAliases() );
 			} else {
 				kdDebug( 9007 ) << "no recovery-point, cannot use imports" << endl;
 			}
@@ -1634,7 +1644,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 		conf.setGlobalNamespace( &(*global) );
 		
 		if( recoveryPoint )
-			recoveryPoint->registerImports( global );
+			recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig()->namespaceAliases() );
 		
 		ExpressionInfo exp = findExpressionAt( line, column , startLine, startCol );
 		exp.t = ExpressionInfo::TypeExpression;	///Outside of functions, we can only handle type-expressions
@@ -1687,7 +1697,6 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 	if ( !m_pSupport || !m_activeCursor || !m_activeEditor || !m_activeCompletion )
 		return ;
 
-	
 	m_demandCompletion = invokedOnDemand;
 	
 	FileDom file = m_pSupport->codeModel()->fileByName( m_activeFileName );
@@ -1967,7 +1976,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 								kdDebug( 9007 ) << "WARNING: no recovery-point, cannot use imports" << endl;
 							}
 							
-							n->addAliases( hardCodedAliases );
+							n->addAliases(  m_pSupport->codeCompletionConfig()->namespaceAliases() );
 						}
 						
 					
@@ -2167,13 +2176,15 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 			SimpleType t = this_type;
 			bool ready = false;
 			SafetyCounter cnt( 20 );
+			int depth = 0;
 			while( !ready & cnt ) {
 				if( t->scope().isEmpty() ) {
 					ready = true;
 				} else {
 					//	tstack.push_front( t );
-					computeCompletionEntryList( t, entryList, t->scope(), isInstance );
+					computeCompletionEntryList( t, entryList, t->scope(), isInstance, depth );
 					t = t->parent();
+					depth++;
 				}
 			}
 			/*
@@ -2191,12 +2202,12 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 			
 // 			if ( m_pSupport->codeCompletionConfig() ->includeGlobalFunctions() )
 // 				computeCompletionEntryList( type, entryList, QStringList(), false );
-			
+
 			computeCompletionEntryList( type, entryList, QStringList(), false );
 			
 			if ( this_type.scope().size() )
 				computeCompletionEntryList( this_type, entryList, this_type.scope(), isInstance );
-				computeCompletionEntryList( type, entryList,  type->resolved()->scope() , isInstance );
+			computeCompletionEntryList( type, entryList,  type->resolved()->scope() , isInstance );
 		}
 		else if ( type->resolved() )
 		{
@@ -2310,11 +2321,14 @@ QValueList<QStringList> CppCodeCompletion::computeSignatureList( EvaluationResul
 		QString sig = buildSignature( currType.get() );
 		QString comment = currType->comment();
 		QStringList commentList;
-		if( !comment.isEmpty() ) {
-			if( sig.length() + comment.length() < 130 ) {
-			sig += ":  \"" + currType->comment() + "\"";
-			} else {
-				commentList = formatComment( comment );
+		if( m_pSupport->codeCompletionConfig()->showCommentWithArgumentHint() ) {
+		    	
+			if( !comment.isEmpty() ) {
+				if( sig.length() + comment.length() < 130 ) {
+				sig += ":  \"" + currType->comment() + "\"";
+				} else {
+					commentList = formatComment( comment );
+				}
 			}
 		}
 		
@@ -2769,7 +2783,7 @@ void CppCodeCompletion::computeRecoveryPoints( )
 	walker.parseTranslationUnit( unit );
 }
 
-void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList< CodeCompletionEntry > & entryList, const QStringList & type, bool isInstance )
+void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList< CodeCompletionEntry > & entryList, const QStringList & type, bool isInstance, int depth  )
 {
 	dbgState.setState( disableVerboseForCompletionList );
 	
@@ -2783,7 +2797,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 		ItemDom item = ( dynamic_cast<SimpleTypeCodeModel*>(m) )->item();
 		if( item)
 			if( ClassModel* mod = dynamic_cast<ClassModel*> (&(*item)) )
-				computeCompletionEntryList( typeR, entryList, ClassDom( mod ) , isInstance );
+				computeCompletionEntryList( typeR, entryList, ClassDom( mod ) , isInstance, depth );
 	} /*else*/ {
 		QValueList<Catalog::QueryArgument> args;
 		QValueList<Tag> tags;
@@ -2792,13 +2806,13 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 		args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
 		<< Catalog::QueryArgument( "scope", type );
 		tags = m_repository->query( args );
-		computeCompletionEntryList( typeR, entryList, tags, isInstance );
+		computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
 
 		args.clear();
 		args << Catalog::QueryArgument( "kind", Tag::Kind_Variable )
 		<< Catalog::QueryArgument( "scope", type );
 		tags = m_repository->query( args );
-		computeCompletionEntryList( typeR, entryList, tags, isInstance );
+		computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
 
 // 		if ( !isInstance && cfg->includeEnums() )
 		{
@@ -2806,7 +2820,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 			args << Catalog::QueryArgument( "kind", Tag::Kind_Enumerator )
 			<< Catalog::QueryArgument( "scope", type );
 			tags = m_repository->query( args );
-			computeCompletionEntryList( typeR, entryList, tags, isInstance );
+			computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
 		}
 
 // 		if ( !isInstance && cfg->includeTypedefs() )
@@ -2815,7 +2829,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 			args << Catalog::QueryArgument( "kind", Tag::Kind_Typedef )
 			<< Catalog::QueryArgument( "scope", type );
 			tags = m_repository->query( args );
-			computeCompletionEntryList( typeR, entryList, tags, isInstance );
+			computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
 		}
 
 		args.clear();
@@ -2831,18 +2845,19 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 		{
 			if( !(*it)->resolved() ) continue;
 			SimpleType tp = SimpleType( (*it)->resolved() );
-			if( tp ) computeCompletionEntryList( tp, entryList, tp.scope(), isInstance );
+			if( tp ) computeCompletionEntryList( tp, entryList, tp.scope(), isInstance, depth+1 );
 		}
 	}
 	dbgState.setState( true );
 }
 
-void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, QValueList< Tag > & tags, bool /*isInstance*/ )
+void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, QValueList< Tag > & tags, bool /*isInstance*/, int depth  )
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
 	
-	CompTypeProcessor proc( type );
+	CompTypeProcessor proc( type, m_pSupport->codeCompletionConfig()->processFunctionArguments() );
+	bool resolve =  m_pSupport->codeCompletionConfig()->processPrimaryTypes();
 	
 	QValueList<Tag>::Iterator it = tags.begin();
 	while ( it != tags.end() )
@@ -2890,7 +2905,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		else if( str == "private" )
 			num = 2;
 		
-		e.userdata = QString("%1").arg( num ); // num > 0 ? num - 1 : 0 );
+		e.userdata = QString("%1%2").arg( num ).arg( depth );
 		
 		if( !type->isNamespace() ) {
 			if( num == 1 ) 
@@ -2904,7 +2919,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			
 		if((tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_Variable || tag.kind() == Tag::Kind_Typedef))
 		{
-			if( !prefix.isEmpty() ) {
+			if( !prefix.isEmpty() && resolve ) {
 				SimpleTypeImpl::LocateResult et =  type->locateDecType( prefix );
 				
 				if( et )
@@ -2923,14 +2938,14 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, ClassDom klass, bool isInstance )
+void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, ClassDom klass, bool isInstance, int depth  )
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
 	
-	computeCompletionEntryList( type, entryList, klass->functionList(), isInstance );
+	computeCompletionEntryList( type, entryList, klass->functionList(), isInstance, depth );
 	if ( m_completionMode == NormalCompletion )
-		computeCompletionEntryList( type, entryList, klass->variableList(), isInstance );
+		computeCompletionEntryList( type, entryList, klass->variableList(), isInstance, depth );
 
 	QValueList<SimpleTypeImpl::LocateResult> parents = type->getBases();
 	for ( QValueList<SimpleTypeImpl::LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it )
@@ -2943,13 +2958,13 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			ItemDom item = m->item();
 			ClassModel* kl = dynamic_cast<ClassModel*> ( &( *item ) );
 			if( kl ) {
-				computeCompletionEntryList( SimpleType( (*it)->resolved() ), entryList, ClassDom ( kl ), isInstance );
+				computeCompletionEntryList( SimpleType( (*it)->resolved() ), entryList, ClassDom ( kl ), isInstance, depth+1 );
 			}
 		}
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, NamespaceDom scope, bool isInstance )
+void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, NamespaceDom scope, bool isInstance, int depth   )
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
@@ -2958,21 +2973,21 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 
 // 	if ( cfg->includeGlobalFunctions() )
 	{
-		computeCompletionEntryList( type, entryList, scope->functionList(), isInstance );
+		computeCompletionEntryList( type, entryList, scope->functionList(), isInstance, depth );
 
 		if ( m_completionMode == NormalCompletion )
-			computeCompletionEntryList( type, entryList, scope->variableList(), isInstance );
+			computeCompletionEntryList( type, entryList, scope->variableList(), isInstance, depth );
 	}
 
 // 	if ( !isInstance && cfg->includeTypes() )
 	if ( !isInstance )
 	{
-		computeCompletionEntryList( type, entryList, scope->classList(), isInstance );
-		computeCompletionEntryList( type, entryList, scope->namespaceList(), isInstance );
+		computeCompletionEntryList( type, entryList, scope->classList(), isInstance, depth );
+		computeCompletionEntryList( type, entryList, scope->namespaceList(), isInstance, depth );
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, const ClassList & lst, bool isInstance )
+void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, const ClassList & lst, bool isInstance, int depth )
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
@@ -2989,16 +3004,18 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		entry.prefix = "class";
 		entry.text = klass->name();
 		entry.comment = klass->comment();
+		entry.userdata = QString("9");
 		entryList << entry;
+		
 
 // 		if ( cfg->includeTypes() )
 		{
-			computeCompletionEntryList( type, entryList, klass->classList(), isInstance );
+			computeCompletionEntryList( type, entryList, klass->classList(), isInstance, depth );
 		}
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, const NamespaceList & lst, bool /*isInstance*/ )
+void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, const NamespaceList & lst, bool /*isInstance*/, int depth )
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
@@ -3017,13 +3034,13 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, const FunctionList & methods, bool isInstance )
+void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, const FunctionList & methods, bool isInstance, int depth )
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
 	
-	bool resolve = type->usingTemplates();
-	CompTypeProcessor proc( type );
+	bool resolve = type->usingTemplates() && m_pSupport->codeCompletionConfig()->processPrimaryTypes();
+	CompTypeProcessor proc( type, m_pSupport->codeCompletionConfig()->processFunctionArguments() );
 	
 	FunctionList::ConstIterator it = methods.begin();
 	while ( it != methods.end() )
@@ -3094,7 +3111,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			text += formattedClosingParenthesis(false);
 		}
 		
-		entry.userdata += QString("%1").arg( meth->access() );
+		entry.userdata += QString("%1%2").arg( meth->access() ).arg( depth );
 		
 		if ( m_completionMode == VirtualDeclCompletion )
 			entry.text += text + ";";
@@ -3116,14 +3133,14 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, const VariableList & attributes, bool isInstance )
+void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, const VariableList & attributes, bool isInstance, int depth )
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
 	
 	if ( m_completionMode != NormalCompletion )
 		return ;
-	bool resolve = type->usingTemplates();
+	bool resolve = type->usingTemplates() && m_pSupport->codeCompletionConfig()->processPrimaryTypes();
 	
 	VariableList::ConstIterator it = attributes.begin();
 	while ( it != attributes.end() )
@@ -3137,7 +3154,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		CodeCompletionEntry entry;
 		entry.text = attr->name();
 		entry.comment = attr->comment();
-		entry.userdata += QString("%1").arg( attr->access() );
+		entry.userdata += QString("%1%2").arg( attr->access() ).arg( depth );
 		
 		
 		if( ! resolve ) {
@@ -3160,7 +3177,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< CodeCompletionEntry > & entryList, SimpleContext * ctx, bool /*isInstance*/ )
+void CppCodeCompletion::computeCompletionEntryList( QValueList< CodeCompletionEntry > & entryList, SimpleContext * ctx, bool /*isInstance*/, int depth )
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
@@ -3176,7 +3193,9 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< CodeCompletionEn
 
 			CodeCompletionEntry entry;
 			entry.text = var.name;
+			entry.userdata = "00";
 			entryList << entry;
+			
 		}
 		ctx = ctx->prev();
 	}
