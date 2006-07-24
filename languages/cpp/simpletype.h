@@ -197,6 +197,8 @@ class SimpleTypeImpl : public KShared {
   };
 
 public:
+  typedef KSharedPtr<SimpleTypeImpl> TypePointer;
+	
   SimpleTypeImpl( const QStringList& scope ) :  m_resolutionCount(0), m_resolutionFlags(NoFlag), m_scope(scope) {
     checkTemplateParams();
     reg();
@@ -211,14 +213,6 @@ public:
     reg();
   };
   
-  typedef KSharedPtr<SimpleTypeImpl> TypePointer;
-  void tracePrepend( const TypeDesc& t ) {
-    m_trace.push_front( t );
-  }
-  
-  QValueList<TypeDesc> trace() {
-    return m_trace;
-  }
   
   class TemplateParamInfo {
   public:
@@ -323,7 +317,6 @@ public:
 private:
   int m_resolutionCount;
   ResolutionFlags m_resolutionFlags;
-  QValueList<TypeDesc> m_trace; ///pointer to the previous type in the trace-chain
 	
   SimpleTypeImpl( const SimpleTypeImpl& /*rhs*/ ) : KShared() {
   }
@@ -519,7 +512,9 @@ public:
         return "unknown";
       };
     }
-    
+
+    typedef KSharedPtr<SimpleTypeImpl> TypePointer;
+	  
     void setBuildInfo( KSharedPtr<TypeBuildInfo> build ) {
       m_build = build;
     }
@@ -541,10 +536,18 @@ public:
     QString name;
     TypeDesc type;
     
-        ///This member is only filles for variables!
+        ///This member is only filles for variables and typedefs!
     DeclarationInfo decl;
   };
+
+  void tracePrepend( const MemberInfo& t ) {
+    m_trace.push_front( t );
+  }
   
+  QValueList<MemberInfo> trace() {
+    return m_trace;
+  }
+
   enum LocateMode {
     Normal = 1,
       ExcludeTemplates = 2,
@@ -737,9 +740,11 @@ public:
 private:
   QStringList m_scope;
   TypePointer m_parent;
+  QValueList<MemberInfo> m_trace; ///pointer to the previous type in the trace-chain
+	
   
 protected:
-  SimpleTypeImpl( SimpleTypeImpl* rhs ) : m_masterProxy( rhs->m_masterProxy ), m_resolutionCount( rhs->m_resolutionCount ), m_resolutionFlags( rhs->m_resolutionFlags ), m_trace( rhs->m_trace ), m_scope( rhs->m_scope ), m_parent( rhs->m_parent ), m_desc( rhs->m_desc )  {
+  SimpleTypeImpl( SimpleTypeImpl* rhs ) : m_masterProxy( rhs->m_masterProxy ), m_resolutionCount( rhs->m_resolutionCount ), m_resolutionFlags( rhs->m_resolutionFlags ), m_scope( rhs->m_scope ), m_parent( rhs->m_parent ), m_trace( rhs->m_trace ), m_desc( rhs->m_desc )  {
    reg();
   }
   

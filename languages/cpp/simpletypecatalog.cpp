@@ -66,6 +66,11 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
   } else if( tag.kind() == Tag::Kind_Typedef && ( type & MemberInfo::Typedef ) ) {
     ret.memberType = MemberInfo::Typedef;
     ret.type = tagType( tag );
+	ret.decl.name = tag.name();
+	ret.decl.comment = tag.comment();
+	tag.getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
+	tag.getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
+	ret.decl.file = tag.fileName();
   } else if ( tag.kind() == Tag::Kind_Namespace && ( type & MemberInfo::Namespace ) ){
     ret.setBuildInfo( new CatalogBuildInfo( tag , name, TypePointer( this ) ) );
     ret.memberType = MemberInfo::Namespace;

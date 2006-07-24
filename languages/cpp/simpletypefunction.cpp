@@ -268,6 +268,11 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Simp
     TypeAliasList l = klass->typeAliasByName( name.name() );
     if( !l.isEmpty() && l.front() ) {
       ret.type = l.front()->type();
+	  ret.decl.name = l.front()->name();
+	  ret.decl.file = l.front()->fileName();
+	  ret.decl.comment = l.front()->comment();
+	  l.front()->getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
+	  l.front()->getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
     }
   } else if ( klass->hasClass( name.name() ) && ( type & MemberInfo::NestedType ) ) {
     ClassList l = klass->classByName( name.name() );

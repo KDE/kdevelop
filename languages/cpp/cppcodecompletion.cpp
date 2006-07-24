@@ -288,8 +288,17 @@ struct PopupFillerHelpStruct {
   PopupFillerHelpStruct( CppCodeCompletion* rec ) {
     receiver = rec;
   }
+
+  void insertItem(  QPopupMenu* parent, SimpleTypeImpl::MemberInfo d , QString prefix )
+  {
+    QString txt = i18n("Jump to %1 %2").arg( d.memberTypeToString() ).arg( cleanForMenu( d.name ) );
+    int id = parent->insertItem( txt, receiver, SLOT( popupAction( int ) ) );
+    
+    receiver->m_popupActions.insert( id, d.decl );
+  }
   
-  void insertItem ( QPopupMenu* parent, TypeDesc d , QString prefix ) {
+  void insertItem ( QPopupMenu* parent, TypeDesc d , QString prefix )
+  {
     QString txt;
     
     if( d.resolved() && d.resolved()->isNamespace() ) return;
@@ -299,7 +308,7 @@ struct PopupFillerHelpStruct {
       if( d.resolved()->asFunction() )
         n = receiver->buildSignature( d.resolved() );
       
-      txt = prefix + i18n("jump to %1").arg( cleanForMenu( n ) );
+      txt = prefix + i18n("Jump to %1").arg( cleanForMenu( n ) );
     } else {
       txt = prefix + d.name() + i18n(" is unresolved");
     }
@@ -311,12 +320,70 @@ struct PopupFillerHelpStruct {
 };
 
 
+ItemDom itemFromScope(const QStringList& scope, NamespaceDom startNamespace)
+{
+	if(scope.isEmpty())return ItemDom();
+	
+	NamespaceDom glob = startNamespace;
+	if( !glob ) return ItemDom();
+	
+	ClassModel* curr =  glob ;
+	
+	QStringList::const_iterator mit = scope.begin();
+	
+	while(curr->isNamespace() && mit != scope.end() && ((NamespaceModel*)curr)->hasNamespace( *mit )) {
+		curr = &(*( ((NamespaceModel*)curr)->namespaceByName( *mit ) ));
+		++mit;
+	}
+	
+	while((curr->isNamespace() || curr->isClass()) && mit != scope.end() && curr->hasClass( *mit )) {
+		ClassList cl = curr->classByName( *mit );
+		curr = &(**cl.begin() );
+		++mit;
+	}
+
+	if( mit != --scope.end() ) return ItemDom();
+
+	TypeAliasList l = curr->typeAliasByName( *mit );
+	if( !l.isEmpty() ) return model_cast<ItemDom>( l.front() );
+
+	VariableDom v = curr->variableByName( *mit );
+    if( v ) return model_cast<ItemDom>( v );
+
+	ClassList c = curr->classByName( *mit );
+	if( !c.isEmpty() ) return model_cast<ItemDom>( c.front() );
+
+	EnumDom en = curr->enumByName(  *mit );
+	if( en ) return model_cast<ItemDom>( en );
+
+	FunctionList f  = curr->functionByName( *mit );
+	if( !f.isEmpty() ) return model_cast<ItemDom>( f.front() );
+
+	FunctionDefinitionList fd  = curr->functionDefinitionByName( *mit );
+	if( !fd.isEmpty() ) return model_cast<ItemDom>( fd.front() );
+	
+	return ItemDom();
+}
+
 struct PopupClassViewFillerHelpStruct {
   CppCodeCompletion* receiver;
   PopupClassViewFillerHelpStruct( CppCodeCompletion* rec ) {
     receiver = rec;
   }
-  
+
+  void insertItem(  QPopupMenu* parent, SimpleTypeImpl::MemberInfo d , QString prefix )
+  {
+	FileDom f = receiver->m_pSupport->codeModel()->fileByName( d.decl.file );
+	if( !f ) return;
+
+	ItemDom dom  = itemFromScope( QStringList::split( "::", d.name ), model_cast<NamespaceDom>( f ) );
+
+	QString txt = i18n("Show %1 %2").arg( d.memberTypeToString() ).arg( cleanForMenu( d.name ) );
+    int id = parent->insertItem( txt, receiver, SLOT( popupClassViewAction( int ) ) );
+    
+	receiver->m_popupClassViewActions.insert( id, dom );
+  }
+	
   void insertItem ( QPopupMenu* parent, TypeDesc d , QString prefix ) {
     QString txt;
     
@@ -349,7 +416,7 @@ struct PopupClassViewFillerHelpStruct {
         if( d.resolved()->asFunction() ) {
           n = receiver->buildSignature( d.resolved() );
         }
-        txt = prefix + i18n("show %1").arg( cleanForMenu( n ) );
+        txt = prefix + i18n("Show %1").arg( cleanForMenu( n ) );
       } else {
         txt = prefix + d.name() + " not in code-model";
       }
@@ -385,7 +452,7 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
     for( TypeDesc::TemplateParams::iterator it = p.begin(); it != p.end(); ++it ){
       if( (*it)->resolved() ) {
         QPopupMenu * m = new QPopupMenu( parent );
-        int gid = parent->insertItem( i18n( "template-param \"%1\"" ).arg( cleanForMenu( (*it)->resolved()->fullTypeResolved() ) ), m );
+        int gid = parent->insertItem( i18n( "Template-param \"%1\"" ).arg( cleanForMenu( (*it)->resolved()->fullTypeResolved() ) ), m );
         fill( m, **it );
       } else {
         fill( parent, **it, prefix + depthAdd );
@@ -397,7 +464,7 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
         SimpleTypeImpl::LocateResult rt = d.resolved()->locateDecType( d.resolved()->asFunction()->getReturnType() );
         if( rt ) {
           QPopupMenu * m = new QPopupMenu( parent );
-          int gid = parent->insertItem( i18n( "return-type \"%1\"" ).arg( cleanForMenu( rt->fullNameChain() ) ), m );
+          int gid = parent->insertItem( i18n( "Return-type \"%1\"" ).arg( cleanForMenu( rt->fullNameChain() ) ), m );
           fill( m, (TypeDesc)rt );
         }
         
@@ -405,7 +472,7 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
         QStringList argNames = d.resolved()->asFunction()->getArgumentNames();
         if( !args.isEmpty() ) {
           QPopupMenu * m = new QPopupMenu( parent );
-          int gid = parent->insertItem( i18n( "argument-types" ), m );
+          int gid = parent->insertItem( i18n( "Argument-types" ), m );
           QStringList::iterator it2 = argNames.begin();
           for( QValueList<TypeDesc>::iterator it = args.begin(); it != args.end(); ++it )
           {
@@ -416,35 +483,57 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
               ++it2;
             }
             QPopupMenu * mo = new QPopupMenu( m );
-            int gid = m->insertItem( i18n( "argument \"%1\"" ).arg( cleanForMenu( at->fullNameChain() + " " + name ) ), mo );
+            int gid = m->insertItem( i18n( "Argument \"%1\"" ).arg( cleanForMenu( at->fullNameChain() + " " + name ) ), mo );
             fill( mo, at );
             
           }
         }
-        
       }
+
+		QValueList<SimpleTypeImpl::MemberInfo> trace = d.resolved()->trace();
+	  if( !trace.isEmpty() ) {
+		  QPopupMenu * m = new QPopupMenu( parent );
+		  int gid = parent->insertItem( i18n( "Trace" ), m );
+		  
+		  for( QValueList<SimpleTypeImpl::MemberInfo>::iterator it = trace.begin(); it != trace.end(); ++it ) {
+			  QPopupMenu * mo = new QPopupMenu( m );
+			  int gid = m->insertItem( i18n( "%1 -> %2" ).arg( cleanForMenu( (*it).name ) ).arg( cleanForMenu( (*it).type.fullNameChain() ) ), mo );
+
+			  struk.insertItem( mo, *it, prefix );
+			  
+			  if( !(*it).decl.comment.isEmpty() ) {
+				  mo->insertSeparator();
+				  QPopupMenu * m = new QPopupMenu( mo );
+				  int gid = mo->insertItem( i18n( "Comment" ), m );
+				  QStringList ls = prepareTextForMenu( (*it).decl.comment, 15, 100 );
+				  for( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
+					  m->insertItem( *it, 0, SLOT( popupClassViewAction( int ) ) );
+				  }
+			  }
+		  }
+	  }
+		
       QValueList<SimpleTypeImpl::LocateResult> bases = d.resolved()->getBases();
       for( QValueList<SimpleTypeImpl::LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
         QPopupMenu * m = new QPopupMenu( parent );
-        int gid = parent->insertItem( i18n( "base-class \"%1\"" ).arg( cleanForMenu( (*it)->fullNameChain() ) ), m );
+        int gid = parent->insertItem( i18n( "Base-class \"%1\"" ).arg( cleanForMenu( (*it)->fullNameChain() ) ), m );
         fill( m, *it );
       }
       
       if( d.resolved()->parent() && d.resolved()->parent()->desc() ) {
         QPopupMenu * m = new QPopupMenu( parent );
-        int gid = parent->insertItem( i18n( "nested in \"%1\"" ).arg( cleanForMenu( d.resolved()->parent()->fullTypeResolved() ) ), m );
+        int gid = parent->insertItem( i18n( "Nested in \"%1\"" ).arg( cleanForMenu( d.resolved()->parent()->fullTypeResolved() ) ), m );
         fill( m, d.resolved()->parent()->desc() );
       }
 
 	  if( !d.resolved()->comment().isEmpty() ) {
 		  parent->insertSeparator();
 		  QPopupMenu * m = new QPopupMenu( parent );
-		  int gid = parent->insertItem( i18n( "comment on %1" ).arg( cleanForMenu( d.name() ) ), m );
+		  int gid = parent->insertItem( i18n( "Comment on %1" ).arg( cleanForMenu( d.name() ) ), m );
 		  QStringList ls = prepareTextForMenu( d.resolved()->comment(), 15, 100 );
 		  for( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
 			m->insertItem( *it, 0, SLOT( popupClassViewAction( int ) ) );
 		  }
-		  
 	  }
     }
   }

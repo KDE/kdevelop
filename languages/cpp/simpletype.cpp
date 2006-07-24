@@ -426,7 +426,14 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
 	          if( mem.memberType == MemberInfo::Typedef )
 		          ret.addResolutionFlag( HadTypedef );
 	          ret.increaseResolutionCount();
-		          //if( mode & TraceAliases ) ret->tracePrepend( name );
+	          if( mode & TraceAliases && ret->resolved() )
+	          {
+		          MemberInfo m = mem;
+		          if( !scope().isEmpty() ) {
+			          m.name = scope().join("::") + "::" + m.name;
+		          }
+		          ret->resolved()->tracePrepend( m );
+	          }
 	          
 	          if( ret->resolved() )
 				return ret;
