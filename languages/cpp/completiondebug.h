@@ -13,7 +13,7 @@
 #ifndef __COMPLETIONDEBUG_H__
 #define __COMPLETIONDEBUG_H__
 
-#define VERBOSE
+//#define VERBOSE
 #define VERBOSEMAJOR
 //#define DEPTHBACKTRACE
 #define NOFULLVERBOSE

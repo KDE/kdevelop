@@ -2783,6 +2783,192 @@ void CppCodeCompletion::computeRecoveryPoints( )
 	walker.parseTranslationUnit( unit );
 }
 
+QString codeModelAccessToString( CodeModelItem::Access access ) {
+	switch( access ) {
+	case CodeModelItem::Public:
+		return "public";
+	case CodeModelItem::Protected:
+		return "protected";
+	case CodeModelItem::Private:
+		return "private";
+	default:
+		return "unknown";
+	}
+}
+
+
+QString commentFromItem( const SimpleType& parent, const ItemDom& item )
+{
+	QString ret;
+	int line, col;
+	item->getStartPosition( &line, &col );
+
+
+	if( !parent->scope().isEmpty() ) {
+		ret += "Container: " + parent->fullTypeResolvedWithScope();
+	}
+
+	if( item->isEnum() ) {
+		ret += "\nKind: Enum";
+		ret += "\nValues:";
+		const EnumModel* en = dynamic_cast<const EnumModel*>( item.data() );
+		if( en ) {
+			EnumeratorList values =en->enumeratorList();
+			for( EnumeratorList::iterator it = values.begin(); it != values.end(); ++it )
+			{
+				ret += "\n  " + (*it)->name();
+				if( !(*it)->value().isEmpty() ) {
+					ret + " = " + (*it)->value();
+				}
+			}
+
+			ret += "\n\nAccess: " + codeModelAccessToString( (CodeModelItem::Access)en->access() );
+		} else {
+		}
+
+	}
+	
+	if( item->isFunction() || item->isFunctionDefinition() ) {
+		const FunctionModel* f = dynamic_cast<const FunctionModel*>( item.data() );
+		ret += "\nKind: Function";
+		if( f ) {
+			QString state;
+			if( f->isStatic() ) state += "static ";
+			if( f->isVirtual() ) state += "virtual ";
+			if( f->isAbstract() ) state += "abstract ";
+			//if( f->isTemplateable() ) state += "template ";
+			if( f->isConstant() ) state += "const ";
+			if( f->isSlot() ) state += "slot ";
+			if( f->isSignal() ) state += "signal ";
+
+			if( !state.isEmpty() )
+				ret += "\nModifiers: " + state;
+			
+			ret += "\nAccess: " + codeModelAccessToString( (CodeModelItem::Access)f->access() );
+		}
+	}
+
+	if( item->isEnumerator() ) {
+		const EnumeratorModel* f = dynamic_cast<const EnumeratorModel*>( item.data() );
+		ret += "\nKind: Enumerator";
+		if( f ) {
+			if( !f->value().isEmpty() )
+				ret += "\nValue: " + f->value();
+			
+			//ret += "\nAccess: " + codeModelAccessToString( f->() );
+		}
+	} else {
+		if( item->isVariable() ) {
+			const VariableModel* f = dynamic_cast<const VariableModel*>( item.data() );
+			ret += "\nKind: Variable";
+			if( f ) {
+				if( f->isStatic() )
+					ret += "Modifiers: static";
+				ret += "\nAccess: " + codeModelAccessToString( (CodeModelItem::Access)f->access() );
+			}
+		}
+	}
+
+	if( item->isTypeAlias() ) {
+		const TypeAliasModel* t = dynamic_cast<const TypeAliasModel*>( item.data() );
+		ret += "\nKind: Typedef";
+		if( t ) {
+			ret += "\nType: " + t->type();
+		}
+	}
+		
+	ret += QString( "\nFile: %1\nLine: %2 Column: %3").arg( item->fileName() ).arg( line ).arg( col );
+	if( !item->comment().isEmpty() )
+		ret += "\n\n" + item->comment();
+	return ret;
+};
+
+QString commentFromTag( const SimpleType& parent, Tag& tag ) {
+	int line, col;
+	tag.getStartPosition( &line, &col );
+	QString ret;// = tag.comment();
+
+	if( !parent->scope().isEmpty() ) {
+		ret += "Container: " + parent->fullTypeResolvedWithScope();
+	}
+	/*
+	if( tag.kind() == Tag::Kind_Enum ) {
+	ret += "\nKind: Enum";
+	ret += "\nValues:";
+		EnumModel* en = dynamic_cast<EnumModel*>( item.data() );
+		if( en ) {
+			EnumeratorList values =en->enumeratorList();
+			for( EnumeratorList::iterator it = values.begin(); it != values.end(); ++it )
+			{
+				ret += "\n  " + (*it)->name();
+				if( !(*it)->value().isEmpty() ) {
+					ret + " = " + (*it)->value();
+				}
+			}
+			
+		ret += "\n\nAccess: " + codeModelAccessToString( (CodeModelItem::Access)en->access() );
+		} else {
+		}
+	}*/
+	
+	if( tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_FunctionDeclaration ) {
+		CppFunction<Tag> function( tag );
+		
+		ret += "\nKind: Function";
+
+		QString state;
+		if( function.isStatic() ) state += "static ";
+		if( function.isVirtual() ) state += "virtual ";
+		//if( function.isVolatile() ) state += "volatile ";
+		if( function.isConst() ) state += "const ";
+		if( function.isSlot() ) state += "slot ";
+		if( function.isSignal() ) state += "signal ";
+		if( !state.isEmpty() )
+			ret += "\nModifiers: " + state;
+	
+		ret += "\nAccess: " + TagUtils::accessToString( function.access() );
+	}
+	
+	/*if( item->isEnumerator() ) {
+		EnumeratorModel* f = dynamic_cast<EnumeratorModel*>( item.data() );
+	ret += "\nKind: Enumerator";
+		if( f ) {
+			if( !f->value().isEmpty() )
+				ret += "\nValue: " + f->value();
+			
+			//ret += "\nAccess: " + codeModelAccessToString( f->() );
+		}
+	} else {
+		if( item->isVariable() ) {
+			VariableModel* f = dynamic_cast<VariableModel*>( item.data() );
+		ret += "\nKind: Variable";
+			if( f ) {
+			ret += "\nAccess: " + codeModelAccessToString( (CodeModelItem::Access)f->access() );
+			}
+		}
+	}*/
+	
+	if( tag.kind() == Tag::Kind_Variable ) {
+		CppVariable<Tag> var( tag );
+		
+		ret += "\nKind: Variable";
+		if( var.isStatic() ) ret += "\nModifiers: static";
+		ret += "\nAccess: " + TagUtils::accessToString( var.access() );
+	}
+
+	if( tag.kind() == Tag::Kind_Typedef ) {
+		ret += "\nKind: Typedef";
+	ret += "\nType: " + tagType( tag );
+	}
+	
+	ret += QString( "\nFile: %1\nLine: %2 Column: %3").arg( tag.fileName() ).arg( line ).arg( col );
+	if( !tag.comment().isEmpty() ) {
+		ret += "\n\n" + tag.comment();
+	}
+	return ret;
+};
+
+
 void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList< CodeCompletionEntry > & entryList, const QStringList & type, bool isInstance, int depth  )
 {
 	dbgState.setState( disableVerboseForCompletionList );
@@ -2904,14 +3090,42 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			num = 1;
 		else if( str == "private" )
 			num = 2;
+
+		int sortPosition = 0;
+
+		switch( tag.kind() )
+		{
+		case Tag::Kind_Enum:
+			sortPosition = 3;
+			break;
+		case Tag::Kind_Enumerator:
+			sortPosition = 4;
+			break;
+		case Tag::Kind_Struct:
+		case Tag::Kind_Union:
+		case Tag::Kind_Class:
+			sortPosition = 5;
+			break;
+		case Tag::Kind_VariableDeclaration:
+		case Tag::Kind_Variable:
+			sortPosition = 2;
+			break;
+		case Tag::Kind_FunctionDeclaration:
+		case Tag::Kind_Function:
+			sortPosition = 1;
+			break;
+		case Tag::Kind_Typedef:
+			sortPosition = 6;
+			break;
+		}
 		
-		e.userdata = QString("%1%2").arg( num ).arg( depth );
+		e.userdata = QString("%1%2%2").arg( num ).arg( depth ).arg( sortPosition );
 		
 		if( !type->isNamespace() ) {
 			if( num == 1 ) 
-				e.postfix += "; (protected in " + proc.parentType() + ")";
+				e.postfix += ";   (protected)";// in " + proc.parentType() + ")";
 			if( num == 2 ) 
-				e.postfix += "; (private in " + proc.parentType() + ")";
+				e.postfix += ";   (private)";// in " + proc.parentType() + ")";
 		}
 		
 		
@@ -2926,6 +3140,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 					prefix = et->fullNameChain();
 			}
 		}
+
+		e.comment = commentFromTag( type, tag );
 		
 		if( e.prefix.isEmpty() )
 			e.prefix = prefix;
@@ -3004,7 +3220,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		entry.prefix = "class";
 		entry.text = klass->name();
 		entry.comment = klass->comment();
-		entry.userdata = QString("9");
+		entry.userdata = QString("000");
 		entryList << entry;
 		
 
@@ -3060,7 +3276,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 
 		CodeCompletionEntry entry;
 		
-		entry.comment = meth->comment();
+		entry.comment = commentFromItem( type, model_cast<ItemDom>(meth) );
 		
 		if( ! resolve ) {
 			entry.prefix = meth->resultType();
@@ -3112,7 +3328,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			text += formattedClosingParenthesis(false);
 		}
 		
-		entry.userdata += QString("%1%2").arg( meth->access() ).arg( depth );
+		entry.userdata += QString("%1%2%3").arg( meth->access() ).arg( depth ).arg( 1 );
 		
 		if ( m_completionMode == VirtualDeclCompletion )
 			entry.text += text + ";";
@@ -3125,9 +3341,9 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			entry.postfix += " const";
 		if( !type->isNamespace() ) {
 			if( meth->access() == CodeModelItem::Protected ) 
-				entry.postfix += "; (protected in " + type->fullType() + ")";
+				entry.postfix += "; (protected)"; // in " + type->fullType() + ")";
 			if( meth->access() == CodeModelItem::Private ) 
-				entry.postfix += "; (private in " + type->fullType() + ")";
+				entry.postfix += "; (private)"; // in " + type->fullType() + ")";
 		}
 		
 		entryList << entry;
@@ -3154,8 +3370,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 
 		CodeCompletionEntry entry;
 		entry.text = attr->name();
-		entry.comment = attr->comment();
-		entry.userdata += QString("%1%2").arg( attr->access() ).arg( depth );
+		entry.comment = commentFromItem( type, model_cast<ItemDom>(attr) );
+		entry.userdata += QString("%1%2%3").arg( attr->access() ).arg( depth ).arg( 2 );
 		
 		
 		if( ! resolve ) {
@@ -3170,9 +3386,9 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 				entry.prefix = attr->type();
 		}		
 		if( attr->access() == CodeModelItem::Protected ) 
-			entry.postfix += "; (protected in " + type->fullType() + ")";
+			entry.postfix += "; (protected)";// in " + type->fullType() + ")";
 		if( attr->access() == CodeModelItem::Private ) 
-			entry.postfix += "; (private in " + type->fullType() + ")";
+			entry.postfix += "; (private)";// in " + type->fullType() + ")";
 		
 		entryList << entry;
 	}
@@ -3194,7 +3410,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< CodeCompletionEn
 
 			CodeCompletionEntry entry;
 			entry.text = var.name;
-			entry.userdata = "00";
+			entry.userdata = "000";
 			entryList << entry;
 			
 		}

@@ -805,6 +805,8 @@ int TagUtils::stringToAccess( const QString & access )
 
 QString TagUtils::accessToString( int id )
 {
+	if( id == 0 ) return "unknown";
+	
 	QStringList l = QStringList()
 		<< "public" << "protected" << "private"
 		<< "public slots" << "protected slots" << "private slots"
