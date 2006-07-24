@@ -128,10 +128,13 @@
                                     <cstring>checkCompleteArgumentType</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Do complete argument type e&amp;valuation</string>
+                                    <string>Do complete argument-type-e&amp;valuation</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+V</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Completely evaluate the function-argument-types of template-class member-functions in the completion-box.</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="2" column="0">
@@ -139,10 +142,13 @@
                                     <cstring>checkCompleteReturnType</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Do complete return type evaluation</string>
+                                    <string>&amp;Do complete member-type-evaluation</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+D</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Completely evaluate member-types of template-classes(this includes types of member-variables and return-types of member-functions) in the completion-box.</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="1" column="0">
@@ -150,7 +156,7 @@
                                     <cstring>checkShowOnlyAccessible</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Only show accessible &amp;items</string>
+                                    <string>Show accessible &amp;items only</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+I</string>
@@ -345,6 +351,9 @@
                                         </property>
                                         <property name="text">
                                             <string>std=_GLIBCXX_STD</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>This class may contain a semicolon-seperated list of namespace-aliases example: "std=_GLIBCXX_STD;NewNamespaceName=OldNamespaceName; = SomeGloballyImportedNamespace" (without paratheses).</string>
                                         </property>
                                     </widget>
                                 </hbox>
@@ -1184,6 +1193,8 @@
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>

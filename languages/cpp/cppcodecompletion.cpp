@@ -2856,8 +2856,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
 	
-	CompTypeProcessor proc( type, m_pSupport->codeCompletionConfig()->processFunctionArguments() );
-	bool resolve =  m_pSupport->codeCompletionConfig()->processPrimaryTypes();
+	CompTypeProcessor proc( type, m_pSupport->codeCompletionConfig()->processFunctionArguments() && type->usingTemplates() );
+	bool resolve =  m_pSupport->codeCompletionConfig()->processPrimaryTypes() && type->usingTemplates();
 	
 	QValueList<Tag>::Iterator it = tags.begin();
 	while ( it != tags.end() )
@@ -3040,7 +3040,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	if( !safetyCounter || !d ) return;
 	
 	bool resolve = type->usingTemplates() && m_pSupport->codeCompletionConfig()->processPrimaryTypes();
-	CompTypeProcessor proc( type, m_pSupport->codeCompletionConfig()->processFunctionArguments() );
+	
+	CompTypeProcessor proc( type, m_pSupport->codeCompletionConfig()->processFunctionArguments() && type->usingTemplates() );
 	
 	FunctionList::ConstIterator it = methods.begin();
 	while ( it != methods.end() )

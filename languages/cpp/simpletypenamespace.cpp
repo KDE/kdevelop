@@ -178,7 +178,11 @@ void SimpleTypeNamespace::addAliases( QString map ) {
     int mid = map.find( "=" );
     if( mid == -1 ) break;
     int end = map.find( ";", mid+1 );
-    if( end == -1 ) break;
+	  if( end == -1 ) {
+		  //break;
+		  end = map.length();
+		  if( end - (mid+1) <  1 ) break;
+	  }
     
     addAliasMap( map.left( mid ).stripWhiteSpace(), map.mid( mid+1, end - mid - 1 ).stripWhiteSpace() );
     map = map.mid( end + 1);
