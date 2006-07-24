@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kdev_makebuilder
+X-KDE-FactoryName=kcm_kdev_makebuilder
+X-KDE-ParentApp=kdevelop
+X-KDE-ParentComponents=kdevelop
+
+Name=Make
+Comment=Configure Make settings
+

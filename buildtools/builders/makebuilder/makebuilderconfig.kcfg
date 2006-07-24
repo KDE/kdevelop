@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg> 
+  <kcfgfile name="kdeveloprc"/>
+  <group name="MakeBuilder">
+    <entry name="displayOnly" key="Display Only" type="Bool">
+    </entry>
+    <entry name="abortOnFirstError" key="Abort on First Error" type="Bool">
+    </entry>
+    <entry name="runMoreThanOneJob" key="Run Multiple Jobs" type="Bool">
+    </entry>
+    <entry name="numberOfJobs" key="Number Of Jobs" type="UInt">
+    </entry>
+  </group>
+</kcfg>
