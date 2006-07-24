@@ -41,6 +41,16 @@ void CppCodeCompletionConfig::init( )
 	m_codeCompletionDelay = DomUtil::readIntEntry( *m_dom, defaultPath + "/codeCompletionDelay", 250 );
 	m_argumentsHintDelay = DomUtil::readIntEntry( *m_dom, defaultPath + "/argumentsHintDelay", 400 );
 	m_headerCompletionDelay = DomUtil::readIntEntry( *m_dom, defaultPath + "/headerCompletionDelay", 250 );
+
+	m_showOnlyAccessibleItems = DomUtil::readBoolEntry( *m_dom, defaultPath + "/showOnlyAccessibleItems", false );
+	m_completionBoxItemOrder = (CompletionBoxItemOrder)DomUtil::readIntEntry( *m_dom, defaultPath + "/completionBoxItemOrder", ByAccessLevel );
+	m_showEvaluationContextMenu = DomUtil::readBoolEntry( *m_dom, defaultPath + "/howEvaluationContextMenu", true );
+	m_showCommentWithArgumentHint = DomUtil::readBoolEntry( *m_dom, defaultPath + "/showCommentWithArgumentHint", true );
+	m_statusBarTypeEvaluation = DomUtil::readBoolEntry( *m_dom, defaultPath + "/statusBarTypeEvaluation", false );
+	m_namespaceAliases = DomUtil::readEntry( *m_dom, defaultPath + "/namespaceAliases", "std=_GLIBCXX_STD" );
+	m_processPrimaryTypes = DomUtil::readBoolEntry( *m_dom, defaultPath + "/processPrimaryTypes", true );
+	m_processFunctionArguments = DomUtil::readBoolEntry( *m_dom, defaultPath + "/processFunctionArguments", false );
+
 }
 
 void CppCodeCompletionConfig::store( )
@@ -55,6 +65,15 @@ void CppCodeCompletionConfig::store( )
 	DomUtil::writeIntEntry( *m_dom, defaultPath + "/codeCompletionDelay", m_codeCompletionDelay );
 	DomUtil::writeIntEntry( *m_dom, defaultPath + "/argumentsHintDelay", m_argumentsHintDelay );
 	DomUtil::writeIntEntry( *m_dom, defaultPath + "/headerCompletionDelay", m_headerCompletionDelay );
+	
+	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/showOnlyAccessibleItems", m_showOnlyAccessibleItems );
+	DomUtil::writeIntEntry( *m_dom, defaultPath + "/completionBoxItemOrder", m_completionBoxItemOrder );
+	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/howEvaluationContextMenu", m_showEvaluationContextMenu );
+	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/showCommentWithArgumentHint", m_showCommentWithArgumentHint );
+	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/statusBarTypeEvaluation", m_statusBarTypeEvaluation );
+	DomUtil::writeEntry( *m_dom, defaultPath + "/namespaceAliases", m_namespaceAliases );
+	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/processPrimaryTypes", m_processPrimaryTypes );
+	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/processFunctionArguments", m_processFunctionArguments );
 
 	emit stored();
 }

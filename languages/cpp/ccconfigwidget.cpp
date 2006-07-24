@@ -129,10 +129,26 @@ void CCConfigWidget::initCodeCompletionTab( )
 	checkAutomaticCodeCompletion->setChecked( c->automaticCodeCompletion() );
 	checkAutomaticArgumentsHint->setChecked( c->automaticArgumentsHint() );
 
-// 	m_includeGlobalFunctions->setChecked( c->includeGlobalFunctions() );
-// 	m_includeTypes->setChecked( c->includeTypes() );
-// 	m_includeEnums->setChecked( c->includeEnums() );
-// 	m_includeTypedefs->setChecked( c->includeTypedefs() );
+	checkCompleteArgumentType->setChecked( c->processFunctionArguments() );
+	checkCompleteReturnType->setChecked( c->processPrimaryTypes() );
+	checkShowOnlyAccessible->setChecked( c->showOnlyAccessibleItems() );
+
+	editNamespaceAlias->setText( c->namespaceAliases() );
+	checkBox18->setChecked( c->showEvaluationContextMenu() );
+	checkShowTypeEvaluationInStatusBar->setChecked( c->statusBarTypeEvaluation() );
+	checkShowCommentInArgumentHint->setChecked( c->showCommentWithArgumentHint() );
+	
+	switch( c->completionBoxItemOrder() ) {
+	case CppCodeCompletionConfig::ByAccessLevel:
+		radioGroupByAccess->setChecked( true );
+		break;
+	case CppCodeCompletionConfig::ByClass:
+		radioGroupByClass->setChecked( true );
+		break;
+	case CppCodeCompletionConfig::ByAlphabet:
+		radioGroupByAlphabet->setChecked( true );
+		break;
+	}
 
 	QValueList<Catalog*> catalogs = m_pPart->codeRepository() ->registeredCatalogs();
 	for ( QValueList<Catalog*>::Iterator it = catalogs.begin(); it != catalogs.end(); ++it )
@@ -156,10 +172,23 @@ void CCConfigWidget::saveCodeCompletionTab( )
 	c->setAutomaticCodeCompletion( checkAutomaticCodeCompletion->isChecked() );
 	c->setAutomaticArgumentsHint( checkAutomaticArgumentsHint->isChecked() );
 
-// 	c->setIncludeGlobalFunctions( m_includeGlobalFunctions->isChecked() );
-// 	c->setIncludeTypes( m_includeTypes->isChecked() );
-// 	c->setIncludeEnums( m_includeEnums->isChecked() );
-// 	c->setIncludeTypedefs( m_includeTypedefs->isChecked() );
+	c->setProcessFunctionArguments( checkCompleteArgumentType->isChecked() );
+	c->setProcessPrimaryTypes( checkCompleteReturnType->isChecked() );
+	c->setShowOnlyAccessibleItems( checkShowOnlyAccessible->isChecked() );
+	
+	c->setNamespaceAliases( editNamespaceAlias->text() );
+	c->setShowEvaluationContextMenu( checkBox18->isChecked() );
+	c->setStatusBarTypeEvaluation( checkShowTypeEvaluationInStatusBar->isChecked() );
+	c->setShowCommentWithArgumentHint( checkShowCommentInArgumentHint->isChecked() );
+
+	if( radioGroupByAccess->isChecked() )
+		c->setCompletionBoxItemOrder( CppCodeCompletionConfig::ByAccessLevel );
+
+	if( radioGroupByClass->isChecked() )
+		c->setCompletionBoxItemOrder( CppCodeCompletionConfig::ByClass );
+
+	if( radioGroupByAlphabet->isChecked() )
+		c->setCompletionBoxItemOrder( CppCodeCompletionConfig::ByAlphabet );
 
 	for ( QMap<QCheckListItem*, Catalog*>::Iterator it = m_catalogs.begin(); it != m_catalogs.end(); ++it )
 	{

@@ -59,50 +59,96 @@ public:
 	enum CompletionBoxItemOrder {
 		ByAccessLevel,
 		ByClass,
-		Alphabetic
+		ByAlphabet
 	};
+
+
+	bool showOnlyAccessibleItems() const {
+		///not yet used
+		return m_showOnlyAccessibleItems;
+	}
 
 	CompletionBoxItemOrder completionBoxItemOrder() const {
 		///not yet used
-		return ByAccessLevel;
+		return m_completionBoxItemOrder;
 	}
 
 	bool showEvaluationContextMenu() const {
 		///used
-		return true;
+		return m_showEvaluationContextMenu;
 	}
 
 	bool showCommentWithArgumentHint() const {
 		///used
-		return true;
+		return m_showCommentWithArgumentHint;
 	}
 
 	bool statusBarTypeEvaluation() const {
 		///used
-		return true;
+		return m_statusBarTypeEvaluation;
 	}
 
 	QString namespaceAliases() const {
 		///used
-		return "std=_GLIBCXX_STD";
+		return m_namespaceAliases;
 	}
 
 	bool processPrimaryTypes() const { ///The "do complete return-type-evaluation" entry. However it should be renamed, because it also covers Variable-types and typedefs!
 		///used
-		return true;
+		return m_processPrimaryTypes;
 	}
 
 	bool processFunctionArguments() const { ///The "do complete argument-type-evaluation" entry
 		///used
-		return true; ///@todo: link this to the GUI-Configuration
-	}
-	
-	bool automaticCodeCompletion() const
-	{
-		///used
-		return m_automaticCodeCompletion;
+		return m_processFunctionArguments;
 	}
 
+
+	void setShowOnlyAccessibleItems( bool b ) {
+		///not yet used
+		m_showOnlyAccessibleItems = b;
+	}
+	
+	void setCompletionBoxItemOrder( CompletionBoxItemOrder b ) {
+		///not yet used
+		m_completionBoxItemOrder = b;
+	}
+	
+	void setShowEvaluationContextMenu( bool b ) {
+		///used
+		m_showEvaluationContextMenu = b;
+	}
+	
+	void setShowCommentWithArgumentHint( bool b ) {
+		///used
+		m_showCommentWithArgumentHint = b;
+	}
+	
+	void setStatusBarTypeEvaluation( bool b ) {
+		///used
+		m_statusBarTypeEvaluation = b;
+	}
+	
+	void setNamespaceAliases( QString n ) {
+		///used
+		m_namespaceAliases = n;
+	}
+	
+	void setProcessPrimaryTypes( bool b ) { ///The "do complete return-type-evaluation" entry. However it should be renamed, because it also covers Variable-types and typedefs!
+		///used
+		m_processPrimaryTypes = b;
+	}
+	
+	void setProcessFunctionArguments( bool b ) { ///The "do complete argument-type-evaluation" entry
+		///used
+		m_processFunctionArguments = b;
+	}
+
+	bool automaticCodeCompletion() const {
+		return m_automaticCodeCompletion;
+	}
+	
+	
 	void setAutomaticCodeCompletion( bool b );
 
 	bool automaticArgumentsHint() const
@@ -167,6 +213,15 @@ private:
 	int m_codeCompletionDelay;
 	int m_argumentsHintDelay;
 	int m_headerCompletionDelay;
+
+	bool m_showOnlyAccessibleItems;
+	CompletionBoxItemOrder m_completionBoxItemOrder;
+	bool m_showEvaluationContextMenu;
+	bool m_showCommentWithArgumentHint;
+	bool m_statusBarTypeEvaluation;
+	QString m_namespaceAliases;
+	bool m_processPrimaryTypes;
+	bool m_processFunctionArguments;
 
 	static QString defaultPath;
 };
