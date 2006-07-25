@@ -32,14 +32,14 @@ class JavaLanguageSupport : public KDevLanguageSupport
 {
 Q_OBJECT
 public:
-    CppLanguageSupport( QObject* parent, const QStringList& args = QStringList() );
-    virtual ~CppLanguageSupport();
+    JavaLanguageSupport( QObject* parent, const QStringList& args = QStringList() );
+    virtual ~JavaLanguageSupport();
 
     //KDevLanguageSupport implementation
-//     virtual KDevCodeModel *codeModel( const KUrl& url ) const;
-//     virtual KDevCodeProxy *codeProxy() const;
-//     virtual KDevCodeDelegate *codeDelegate() const;
-//     virtual KDevCodeRepository *codeRepository() const;
+    virtual KDevCodeModel *codeModel( const KUrl& url ) const;
+    virtual KDevCodeProxy *codeProxy() const;
+    virtual KDevCodeDelegate *codeDelegate() const;
+    virtual KDevCodeRepository *codeRepository() const;
     virtual QStringList mimeTypes() const;
 
 private slots:

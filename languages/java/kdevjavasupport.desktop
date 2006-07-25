@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Java Language Support
+Name=KDevJavaSupport
+Name[x-test]=xxKDevJavaSupportxx
+GenericName=Java Support
+ServiceTypes=KDevelop/LanguageSupport
+Icon=source_java
+X-KDE-Library=kdevjavalanguagesupport
+X-KDevelop-Version=4
+X-KDevelop-Language=Java
+X-KDevelop-Args=JAVA

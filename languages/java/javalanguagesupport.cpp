@@ -37,12 +37,12 @@ Boston, MA 02110-1301, USA.
 
 #include <kdebug.h>
 
-typedef KGenericFactory<JavaLanguageSupport> KDevCppSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdevcppsupport" ) )
+typedef KGenericFactory<JavaLanguageSupport> KDevJavaSupportFactory;
+K_EXPORT_COMPONENT_FACTORY( kdevjavalanguagesupport, KDevJavaSupportFactory( "kdevcppsupport" ) )
 
 JavaLanguageSupport::JavaLanguageSupport( QObject* parent,
                                         const QStringList& /*args*/ )
-    : KDevLanguageSupport( KDevCppSupportFactory::instance(), parent )
+    : KDevLanguageSupport( KDevJavaSupportFactory::instance(), parent )
 {
     QString types =
         QLatin1String( "text/x-java" );
@@ -73,28 +73,32 @@ JavaLanguageSupport::JavaLanguageSupport( QObject* parent,
 JavaLanguageSupport::~JavaLanguageSupport()
 {}
 
-// KDevCodeModel *JavaLanguageSupport::codeModel( const KUrl &url ) const
-// {
+KDevCodeModel *JavaLanguageSupport::codeModel( const KUrl &url ) const
+{
+    Q_UNUSED( url );
+    return 0;
 //     if ( url.isValid() )
 //         return m_codeProxy->codeModel( url );
 //     else
 //         return m_codeProxy->codeModel( KDevApi::self() ->documentController() ->activeDocumentUrl() );
-// }
-//
-// KDevCodeProxy *JavaLanguageSupport::codeProxy() const
-// {
+}
+
+KDevCodeProxy *JavaLanguageSupport::codeProxy() const
+{
+    return 0;
 //     return m_codeProxy;
-// }
-//
-// KDevCodeDelegate *JavaLanguageSupport::codeDelegate() const
-// {
+}
+
+KDevCodeDelegate *JavaLanguageSupport::codeDelegate() const
+{
+    return 0;
 //     return m_codeDelegate;
-// }
-//
-// KDevCodeRepository *JavaLanguageSupport::codeRepository() const
-// {
-//     return 0;
-// }
+}
+
+KDevCodeRepository *JavaLanguageSupport::codeRepository() const
+{
+    return 0;
+}
 
 QStringList JavaLanguageSupport::mimeTypes() const
 {
@@ -103,14 +107,16 @@ QStringList JavaLanguageSupport::mimeTypes() const
 
 void JavaLanguageSupport::documentLoaded( KDevDocument* file )
 {
-    if ( supportsDocument( file ) )
-        m_backgroundParser->addDocument( file->url(), file );
+    Q_UNUSED( file );
+//     if ( supportsDocument( file ) )
+//         m_backgroundParser->addDocument( file->url(), file );
 }
 
 void JavaLanguageSupport::documentClosed( KDevDocument* file )
 {
-    if ( supportsDocument( file ) )
-        m_backgroundParser->removeDocumentFile( file );
+    Q_UNUSED( file );
+//     if ( supportsDocument( file ) )
+//         m_backgroundParser->removeDocumentFile( file );
 }
 
 void JavaLanguageSupport::documentActivated( KDevDocument* file )
