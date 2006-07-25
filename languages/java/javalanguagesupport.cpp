@@ -28,14 +28,12 @@ Boston, MA 02110-1301, USA.
 #include <kdevprojectmodel.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevbackgroundparser.h>
-#include <kdevparsejob.h>
+#include "parsejob.h"
 
 #include "javalanguagesupport.h"
 
-// #include "parser/codemodel.h"
 // #include "codeproxy.h"
 // #include "codedelegate.h"
-// #include "backgroundparser.h"
 
 #include <kdebug.h>
 
@@ -51,6 +49,7 @@ JavaLanguageSupport::JavaLanguageSupport( QObject* parent,
         QLatin1String( "text/x-java" );
     m_mimetypes = types.split( "," );
 
+    m_memoryPool = new parser::memory_pool_type;
     //     m_codeProxy = new CodeProxy( this );
     //     m_codeDelegate = new CodeDelegate( this );
     //     m_backgroundParser = new BackgroundParser( this );
@@ -74,7 +73,9 @@ JavaLanguageSupport::JavaLanguageSupport( QObject* parent,
 }
 
 JavaLanguageSupport::~JavaLanguageSupport()
-{}
+{
+    delete m_memoryPool;
+}
 
 KDevCodeModel *JavaLanguageSupport::codeModel( const KUrl &url ) const
 {
@@ -105,13 +106,13 @@ KDevCodeRepository *JavaLanguageSupport::codeRepository() const
 
 KDevParseJob *JavaLanguageSupport::createParseJob( const KUrl &url )
 {
-    return 0;
+    return new ParseJob( url, this, m_memoryPool );
 }
 
 KDevParseJob *JavaLanguageSupport::createParseJob( KDevDocument *document,
         KTextEditor::SmartRange *highlight )
 {
-    return 0;
+    return new ParseJob( document, highlight, this, m_memoryPool );
 }
 
 QStringList JavaLanguageSupport::mimeTypes() const
@@ -121,17 +122,14 @@ QStringList JavaLanguageSupport::mimeTypes() const
 
 void JavaLanguageSupport::documentLoaded( KDevDocument* file )
 {
-    kDebug() << k_funcinfo << endl;
     if ( supportsDocument( file ) )
-        kDebug() << file->url() << endl;
-/*        m_backgroundParser->addDocument( file->url(), file );*/
+        KDevApi::self() ->backgroundParser() ->addDocument( file->url(), file );
 }
 
 void JavaLanguageSupport::documentClosed( KDevDocument* file )
 {
-    Q_UNUSED( file );
-    //     if ( supportsDocument( file ) )
-    //         m_backgroundParser->removeDocumentFile( file );
+    if ( supportsDocument( file ) )
+        KDevApi::self() ->backgroundParser() ->removeDocumentFile( file );
 }
 
 void JavaLanguageSupport::documentActivated( KDevDocument* file )

@@ -22,11 +22,16 @@ Boston, MA 02110-1301, USA.
 
 #include <kdevlanguagesupport.h>
 
+#include "parser/java.h"
+#include "parser/decoder.h"
+
+#include <kdebug.h>
+
+using namespace java;
 // class CodeModel;
 // class CodeProxy;
 // class CodeDelegate;
 // class CodeAggregate;
-// class BackgroundParser;
 
 class JavaLanguageSupport : public KDevLanguageSupport
 {
@@ -54,9 +59,9 @@ private slots:
 
 private:
     QStringList m_mimetypes;
+    parser::memory_pool_type *m_memoryPool;
 //     CodeProxy *m_codeProxy;
 //     CodeDelegate *m_codeDelegate;
-//     BackgroundParser *m_backgroundParser;
 //     CppHighlighting *m_highlights;
 };
 

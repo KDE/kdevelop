@@ -84,7 +84,7 @@ void parser::report_problem( parser::problem_type type, const char* message )
 // custom error recovery
 bool parser::yy_expected_token(int /*expected*/, std::size_t where, char const *name)
 {
-  print_token_environment(this);
+//   print_token_environment(this);
   report_problem(
     parser::error,
     std::string("Expected token ``") + name
@@ -96,7 +96,7 @@ bool parser::yy_expected_token(int /*expected*/, std::size_t where, char const *
 
 bool parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
 {
-  print_token_environment(this);
+//   print_token_environment(this);
   report_problem(
     parser::error,
     std::string("Expected symbol ``") + name

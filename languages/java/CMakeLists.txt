@@ -9,8 +9,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces 
 
 set(kdevjavalanguagesupport_PART_SRCS
     javalanguagesupport.cpp
-#     backgroundparser.cpp
-#     parsejob.cpp
+    parsejob.cpp
 #     codedelegate.cpp
 #     codeproxy.cpp
 )
