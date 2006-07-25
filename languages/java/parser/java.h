@@ -2124,6 +2124,9 @@ namespace java
         _M_compatibility_mode = java15_compatibility;
       }
 
+      virtual ~parser()
+      {}
+
       bool parse_additive_expression(additive_expression_ast **yynode);
       bool parse_additive_expression_rest(additive_expression_rest_ast **yynode);
       bool parse_annotation(annotation_ast **yynode);
@@ -2742,7 +2745,7 @@ namespace java
         visit_node(node->label);
       }
 
-      virtual void visit_builtin_type(builtin_type_ast *node)
+      virtual void visit_builtin_type(builtin_type_ast *)
       {}
 
       virtual void visit_builtin_type_dot_class(builtin_type_dot_class_ast *node)
@@ -2764,7 +2767,7 @@ namespace java
         visit_node(node->body);
       }
 
-      virtual void visit_class_access_data(class_access_data_ast *node)
+      virtual void visit_class_access_data(class_access_data_ast *)
       {}
 
       virtual void visit_class_body(class_body_ast *node)
@@ -3051,7 +3054,7 @@ namespace java
         visit_node(node->foreach_parameter);
       }
 
-      virtual void visit_identifier(identifier_ast *node)
+      virtual void visit_identifier(identifier_ast *)
       {}
 
       virtual void visit_if_statement(if_statement_ast *node)
@@ -3144,7 +3147,7 @@ namespace java
         visit_node(node->statement);
       }
 
-      virtual void visit_literal(literal_ast *node)
+      virtual void visit_literal(literal_ast *)
       {}
 
       virtual void visit_logical_and_expression(logical_and_expression_ast *node)
@@ -3181,7 +3184,7 @@ namespace java
         visit_node(node->declarator_brackets);
       }
 
-      virtual void visit_mandatory_declarator_brackets(mandatory_declarator_brackets_ast *node)
+      virtual void visit_mandatory_declarator_brackets(mandatory_declarator_brackets_ast *)
       {}
 
       virtual void visit_method_call_data(method_call_data_ast *node)
@@ -3271,7 +3274,7 @@ namespace java
         visit_node(node->declarator_brackets);
       }
 
-      virtual void visit_optional_declarator_brackets(optional_declarator_brackets_ast *node)
+      virtual void visit_optional_declarator_brackets(optional_declarator_brackets_ast *)
       {}
 
       virtual void visit_optional_modifiers(optional_modifiers_ast *node)
@@ -3347,7 +3350,7 @@ namespace java
         visit_node(node->declarator_brackets);
       }
 
-      virtual void visit_postfix_operator(postfix_operator_ast *node)
+      virtual void visit_postfix_operator(postfix_operator_ast *)
       {}
 
       virtual void visit_primary_atom(primary_atom_ast *node)
@@ -3537,7 +3540,7 @@ namespace java
                                  visit_node(node->synchronized_body);
                                }
 
-                               virtual void visit_this_access_data(this_access_data_ast *node)
+                               virtual void visit_this_access_data(this_access_data_ast *)
                                {}
 
                                virtual void visit_this_call_data(this_call_data_ast *node)
@@ -3613,7 +3616,7 @@ namespace java
                                    }
                                }
 
-                               virtual void visit_type_arguments_or_parameters_end(type_arguments_or_parameters_end_ast *node)
+                               virtual void visit_type_arguments_or_parameters_end(type_arguments_or_parameters_end_ast *)
                              {}
 
                                virtual void visit_type_declaration(type_declaration_ast *node)
