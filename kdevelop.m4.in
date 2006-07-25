@@ -438,7 +438,7 @@ ac_db_lib=db
    ])
 
   if test "$ac_cv_bdb" = "no"; then
-    AC_MSG_ERROR(no - please install Berkeley DB >= 4.2)
+    AC_MSG_ERROR(no - please install Berkeley DB >= 3 and <= 4.1)
   else
     if test "$ac_cv_bdb" = "yes_3or40" ; then
       bdb_open_hack=""
