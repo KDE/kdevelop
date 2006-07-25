@@ -34,6 +34,10 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
     if( s ) {
       ret.memberType = MemberInfo::Template;
       ret.type = s;
+	  ret.decl.name = name.name();
+	  ret.decl.file = m_tag.fileName();
+	  m_tag.getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
+	  m_tag.getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
     }
   }
   

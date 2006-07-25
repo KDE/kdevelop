@@ -18,18 +18,90 @@
 #include <ktexteditor/codecompletioninterface.h>
 #include <ksharedptr.h>
 
-
 #include "typedecoration.h"
 
+class TypeDesc;
 class TypeDescShared;
 class SimpleTypeImpl;
+
+class TypeTrace;
 
 typedef KSharedPtr<TypeDescShared> TypeDescPointer;
 typedef KSharedPtr<SimpleTypeImpl> TypePointer;
 
+enum ResolutionFlags {
+	NoFlag = 0,
+	HadTypedef = 1,
+	HadTemplate = 2,
+	HadAlias = 3
+};
+
+class LocateResult {
+	TypeDescPointer m_desc;
+	int m_resolutionCount;
+	ResolutionFlags m_flags;
+	TypeTrace* m_trace; ///pointer to the previous type in the trace-chain
+
+public:
+	LocateResult();
+	LocateResult( const TypeDesc& desc );
+
+	LocateResult( const TypeDescPointer& desc );
+	LocateResult( TypeDescShared* desc );
+	LocateResult( const LocateResult& rhs );
+	~LocateResult();
+	/*
+	LocateResult& operator = ( const TypeDesc& rhs ) {
+		m_desc = new rhs;
+		return *this;
+	}*/
+
+	operator const TypeDesc&() const;
+
+	operator TypeDesc&() ;
+	
+	TypeDesc& desc();
+
+	LocateResult& operator * () {
+		return *this;
+	}
+
+	const LocateResult& operator * () const {
+		return *this;
+	}
+	
+	operator TypeDescPointer();
+
+	operator bool() const;
+
+	LocateResult& operator = ( const LocateResult& rhs );
+
+	bool operator >( const LocateResult& rhs ) const {
+		return m_resolutionCount > rhs.m_resolutionCount;
+	}
+
+	const TypeDesc* operator ->() const;
+
+	TypeDesc* operator ->();
+
+	int resolutionCount() const {
+		return m_resolutionCount;
+	}
+
+	void increaseResolutionCount() {
+		m_resolutionCount++;
+	}
+
+	void addResolutionFlag( ResolutionFlags flag );
+
+	bool hasResolutionFlag( ResolutionFlags flag ) const;
+
+	TypeTrace* trace();
+};
+
 class TypeDesc {
 public:
- typedef QValueList<TypeDescPointer> TemplateParams;
+ typedef QValueList<LocateResult> TemplateParams;
   
  TypeDesc( const QString& name = "" );
  

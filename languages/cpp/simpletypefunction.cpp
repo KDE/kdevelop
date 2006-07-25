@@ -296,6 +296,12 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Simp
       if( s ) {
         ret.memberType = MemberInfo::Template;
         ret.type = s;
+		ret.decl.name = name.name();
+	  if( m_item ) {
+		  ret.decl.file = m_item->fileName();
+		  m_item->getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
+		  m_item->getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
+	  }
       }
     }
   }

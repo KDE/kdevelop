@@ -28,6 +28,90 @@ const char* TypeDesc::functionMark = "[function] ";
 
 using namespace StringHelpers;
 
+LocateResult::LocateResult()  : m_desc( 0 ), m_resolutionCount(0), m_flags( NoFlag), m_trace( 0 ) {
+}
+
+LocateResult::LocateResult( const TypeDesc& desc ) : m_desc( new TypeDescShared( desc ) ), m_resolutionCount(0), m_flags( NoFlag), m_trace( 0 ) {
+}
+
+LocateResult::LocateResult( const TypeDescPointer& desc ) : m_desc( desc ), m_resolutionCount(0), m_flags( NoFlag), m_trace( 0 ) {
+}
+
+LocateResult::LocateResult( TypeDescShared* desc ) : m_desc( desc ), m_resolutionCount(0), m_flags( NoFlag), m_trace( 0 ) {
+}
+
+LocateResult::LocateResult( const LocateResult& rhs ) : m_desc( rhs.m_desc ), m_resolutionCount( rhs.m_resolutionCount ), m_flags( rhs.m_flags ), m_trace( 0 ) {
+	if( rhs.m_trace ) m_trace = new TypeTrace( *rhs.m_trace );
+}
+
+
+LocateResult::~LocateResult() {
+	if( m_trace ) delete m_trace;
+}
+
+LocateResult& LocateResult::operator = ( const LocateResult& rhs ) {
+	if( &rhs == this ) return *this;
+	m_desc = rhs.m_desc;
+	if( m_trace ) delete m_trace;
+	if( !rhs.m_trace ) {
+		m_trace = 0;
+	} else {
+		m_trace = new TypeTrace( *rhs.m_trace );
+	}
+	return  *this;
+}
+
+
+LocateResult::operator const TypeDesc&() const {
+	if( !m_desc ) const_cast<TypeDescPointer&>(m_desc) = new TypeDescShared();
+	return *m_desc;
+}
+
+LocateResult::operator TypeDesc&() {
+	if( !m_desc ) m_desc = new TypeDescShared();
+	return *m_desc;
+}
+
+TypeDesc& LocateResult::desc() {
+	if( !m_desc ) m_desc = new TypeDescShared();
+	return *m_desc;
+}
+
+const TypeDesc* LocateResult::operator ->() const {
+	if( !m_desc ) const_cast<TypeDescPointer&>(m_desc) = new TypeDescShared();
+	return m_desc;
+}
+
+TypeDesc* LocateResult::operator ->() {
+	if( !m_desc ) m_desc = new TypeDescShared();
+	return m_desc;
+}
+
+LocateResult::operator bool() const {
+	return m_desc && *m_desc;
+}
+
+
+LocateResult::operator TypeDescPointer() {
+	if( !m_desc ) m_desc = new TypeDescShared();
+	return m_desc;
+}
+
+
+void LocateResult::addResolutionFlag( ResolutionFlags flag ) {
+	m_flags = addFlag(flag, m_flags);
+}
+
+bool LocateResult::hasResolutionFlag( ResolutionFlags flag ) const {
+	return (bool) ( m_flags & flag );
+}
+
+TypeTrace* LocateResult::trace() {
+	if(!m_trace ) m_trace = new TypeTrace();
+	return m_trace;
+}
+
+
 TypeDesc::TypeDesc( const QString& name )  {
  init( name );
 }

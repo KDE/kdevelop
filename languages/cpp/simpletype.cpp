@@ -328,7 +328,7 @@ TypeDesc SimpleTypeImpl::resolveTemplateParams( TypeDesc desc, LocateMode mode )
       TypeDesc::TemplateParams& params = ret.templateParams();
       for( TypeDesc::TemplateParams::iterator it = params.begin(); it != params.end(); ++it ) {
 	      if( !(*it)->resolved() && !(*it)->hasFlag( TypeDesc::ResolutionTried ) ) {
-	        *it = new TypeDescShared(  locateDecType( **it, mode ) );
+	        *it = locateDecType( **it, mode );
 		      (*it)->setFlag( TypeDesc::ResolutionTried );
         }
       }
@@ -351,8 +351,8 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
       return TypeDesc( "CompletionError::too_much_recursion" );
     }
     ifVerbose( dbg() << "\"" << desc().fullName() << "\": locating type \"" << name.fullNameChain() << "\"" << endl );
-	if( name.resolved() ) {
-        ifVerbose( dbg() << "\"" << desc().fullName() << "\": type \"" << describeWithParams() << "\" is already resolved, returning stored instance" << endl );
+	if( name.resolved() && !name.next() ) {
+		ifVerbose( dbg() << "\"" << desc().fullName() << "\": type \"" << name.fullNameChain() << "\" is already resolved, returning stored instance" << endl );
 		return name;
 	}
 	/*
@@ -368,8 +368,9 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
       return ret;
     }*/
     
-    SimpleTypeImpl::LocateResult ret = name; ///In case the type cannot be located, this helps to find at least the best match
-    
+	SimpleTypeImpl::LocateResult ret = name; ///In case the type cannot be located, this helps to find at least the best match
+	//SimpleTypeImpl::LocateResult ret;
+	
 	TypeDesc first = resolveTemplateParams( name.firstType(), mode );
 		
 	MemberInfo mem = findMember( first, typeMask );
@@ -426,13 +427,13 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
 	          if( mem.memberType == MemberInfo::Typedef )
 		          ret.addResolutionFlag( HadTypedef );
 	          ret.increaseResolutionCount();
-	          if( mode & TraceAliases && ret->resolved() )
+// 	          if( mode & TraceAliases && ret->resolved() )
 	          {
 		          MemberInfo m = mem;
 		          if( !scope().isEmpty() ) {
-			          m.name = scope().join("::") + "::" + m.name;
+			          m.name = fullTypeUnresolvedWithScope() + "::" + name.fullNameChain();
 		          }
-		          ret->resolved()->tracePrepend( m );
+		          ret.trace()->prepend( m );
 	          }
 	          
 	          if( ret->resolved() )
@@ -500,7 +501,7 @@ void SimpleTypeImpl::breakReferences() {
 	TypePointer p( this ); ///necessary so this type is not deleted in between
     m_parent = 0;
 	m_desc.resetResolved();
-	m_trace.clear();
+	//	m_trace.clear();
     m_masterProxy = 0;
     invalidateCache();
 }
@@ -524,6 +525,10 @@ SimpleType SimpleTypeImpl::parent() {
       if( !sc.isEmpty() ) {
         sc.pop_back();
         SimpleType r = SimpleType( sc );
+	      if( &(*r.get()) == this ) {
+	      	kdDebug( 9007 ) << "error: self set as parent" << kdBacktrace() << endl;
+		  	return SimpleType( new SimpleTypeImpl("") );
+	      }
         m_parent = r.get();
         return r;
       } else {
@@ -588,6 +593,15 @@ QString SimpleTypeImpl::fullTypeResolved( int depth ) {
     return t.fullNameChain();
 }
 
+
+QString SimpleTypeImpl::fullTypeUnresolvedWithScope( ) {
+	if( m_parent && !m_parent->scope().isEmpty() ) {
+		return m_parent->fullTypeUnresolvedWithScope() + "::" + m_desc.fullNameChain();
+	} else {
+		return m_desc.fullNameChain();
+	}
+}
+	
 QString SimpleTypeImpl::fullTypeResolvedWithScope( int depth ) {
     Q_UNUSED(depth);
     if( parent() ) {

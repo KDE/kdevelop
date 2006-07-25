@@ -79,12 +79,12 @@ public:
       resultType = rhs->desc();
   }
   
-EvaluationResult( SimpleTypeImpl::LocateResult tp = TypeDesc(), DeclarationInfo var = DeclarationInfo() ): resultType( tp ), sourceVariable( var ) {
-}
-  
-  operator TypeDesc () const {
-    return (TypeDesc)resultType;
+  EvaluationResult( SimpleTypeImpl::LocateResult tp = TypeDesc(), DeclarationInfo var = DeclarationInfo() ): resultType( tp ), sourceVariable( var ) {
   }
+  
+	/*operator TypeDesc () const {
+    return (TypeDesc)resultType;
+  }*/
   
     ///This must be removed
   operator SimpleType() const {
@@ -99,7 +99,7 @@ EvaluationResult( SimpleTypeImpl::LocateResult tp = TypeDesc(), DeclarationInfo 
     return &resultType.desc();
   }
   
-  operator SimpleTypeImpl::LocateResult () {
+  operator SimpleTypeImpl::LocateResult () const {
     return resultType;
   }
   

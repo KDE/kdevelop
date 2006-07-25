@@ -189,12 +189,12 @@ void setGlobalNamespace( TypePointer globalNamespace );
 
 
 class SimpleTypeImpl : public KShared {
-  enum ResolutionFlags {
+	/*enum ResolutionFlags {
     NoFlag = 0,
     HadTypedef = 1,
     HadTemplate = 2,
     HadAlias = 3
-  };
+  };*/
 
 public:
   typedef KSharedPtr<SimpleTypeImpl> TypePointer;
@@ -476,7 +476,7 @@ public:
   class MemberInfo {
     KSharedPtr<TypeBuildInfo> m_build;
   public:
-    
+
     enum MemberType {
       NotFound = 0,
         Function = 1,
@@ -487,11 +487,11 @@ public:
         Namespace = 32,
         AllTypes = 0xffffffff
     } memberType;
-    
+
     MemberInfo() {
       memberType = NotFound;
     }
-    
+
     QString memberTypeToString() {
       switch( memberType ) {
       case Namespace:
@@ -514,11 +514,11 @@ public:
     }
 
     typedef KSharedPtr<SimpleTypeImpl> TypePointer;
-	  
+
     void setBuildInfo( KSharedPtr<TypeBuildInfo> build ) {
       m_build = build;
     }
-    
+
     TypePointer build() {
       if( !m_build)
         return TypePointer();
@@ -528,25 +528,18 @@ public:
         return r;
       }
     }
-    
+
     operator bool() const {
       return memberType != NotFound;
     }
-    
+
     QString name;
     TypeDesc type;
-    
-        ///This member is only filles for variables and typedefs!
+
+        ///This member is only filles for variables, typedefs and template-params!
     DeclarationInfo decl;
   };
 
-  void tracePrepend( const MemberInfo& t ) {
-    m_trace.push_front( t );
-  }
-  
-  QValueList<MemberInfo> trace() {
-    return m_trace;
-  }
 
   enum LocateMode {
     Normal = 1,
@@ -568,69 +561,9 @@ public:
   TypeDesc replaceTemplateParams( TypeDesc desc, TemplateParamInfo& paramInfo );
   TypeDesc resolveTemplateParams( TypeDesc desc, LocateMode mode = Normal );
 
-	class LocateResult {
-		TypeDesc m_desc;
-		int m_resolutionCount;
-		ResolutionFlags m_flags;
-	
-	public:
-		/*enum ResolutionFlags {
-			NoFlag = 0,
-			HadTypedef = 1,
-			HadTemplate = 2,
-			HadAlias = 3
-		};*/
-	public:
+	typedef ::LocateResult LocateResult;
 
-		LocateResult( const TypeDesc& desc = TypeDesc() ) : m_desc( desc ), m_resolutionCount(0), m_flags( NoFlag) {
-		}
 
-		LocateResult& operator = ( const TypeDesc& rhs ) {
-			m_desc = rhs;
-			return *this;
-		}
-		
-		operator TypeDesc() const {
-			return m_desc;
-		}
-
-		TypeDesc& desc() {
-			return m_desc;
-		}
-
-		operator bool() const {
-			return (bool)m_desc;
-		}
-
-		bool operator >( const LocateResult& rhs ) const {
-			return m_resolutionCount > rhs.m_resolutionCount;
-		}
-
-		const TypeDesc* operator ->() const {
-			return &m_desc;
-		}
-
-		TypeDesc* operator ->() {
-			return &m_desc;
-		}
-
-		int resolutionCount() const {
-			return m_resolutionCount;
-		}
-
-		void increaseResolutionCount() {
-			m_resolutionCount++;
-		}
-
-		void addResolutionFlag( ResolutionFlags flag ) {
-			m_flags = addFlag(flag, m_flags);
-		}
-
-		bool hasResolutionFlag( ResolutionFlags flag ) const {
-			return (bool) ( m_flags & flag );
-		}
-	};
-	
     /**By default templates are included while the resolution, so when the type should be addressed from
     outside of the class, ExcludeTemplates should be set as LocateMode, since templates can not be directly accessed    from the outside.
     The resulting type's template-params may not be completely resolved, but can all be resolved locally by that type*/
@@ -736,15 +669,16 @@ public:
     
     ///this completely evaluates everything
   QString fullTypeResolvedWithScope( int depth = 0 );
+
+	
+  QString fullTypeUnresolvedWithScope();
   
 private:
   QStringList m_scope;
   TypePointer m_parent;
-  QValueList<MemberInfo> m_trace; ///pointer to the previous type in the trace-chain
-	
-  
+
 protected:
-  SimpleTypeImpl( SimpleTypeImpl* rhs ) : m_masterProxy( rhs->m_masterProxy ), m_resolutionCount( rhs->m_resolutionCount ), m_resolutionFlags( rhs->m_resolutionFlags ), m_scope( rhs->m_scope ), m_parent( rhs->m_parent ), m_trace( rhs->m_trace ), m_desc( rhs->m_desc )  {
+  SimpleTypeImpl( SimpleTypeImpl* rhs ) : m_masterProxy( rhs->m_masterProxy ), m_resolutionCount( rhs->m_resolutionCount ), m_resolutionFlags( rhs->m_resolutionFlags ), m_scope( rhs->m_scope ), m_parent( rhs->m_parent )/*, m_trace( rhs->m_trace )*/, m_desc( rhs->m_desc )  {
    reg();
   }
   
@@ -757,6 +691,21 @@ protected:
     
   TypeOfResult searchBases ( const TypeDesc& name );
 };
+
+
+class TypeTrace {
+	QValueList<SimpleTypeImpl::MemberInfo> m_trace;
+public:
+	
+	QValueList<SimpleTypeImpl::MemberInfo>& trace() {
+		return m_trace;
+	};
+	
+	void prepend( const SimpleTypeImpl::MemberInfo& t ) {
+		m_trace.push_front( t );
+	}
+};
+
 
 #endif
 // kate: indent-mode csands; tab-width 4;

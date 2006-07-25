@@ -13,10 +13,11 @@
 #ifndef __COMPLETIONDEBUG_H__
 #define __COMPLETIONDEBUG_H__
 
+///With verbose shut on, the whole type-resolution-process is nicely traced for easy debugging.
 //#define VERBOSE
 #define VERBOSEMAJOR
-//#define DEPTHBACKTRACE
-#define NOFULLVERBOSE
+#define DEPTHBACKTRACE
+//#define NOFULLVERBOSE
 
 #include <qstringlist.h>
 #include <kdebug.h>
@@ -26,6 +27,7 @@ template <class StreamType>
   class KDDebugState {
   private:
   StreamType m_stream;
+  kndbgstream m_nstream;
   QStringList m_prefixStack;
 	int m_counter;
 	int m_depth;
@@ -45,7 +47,7 @@ template <class StreamType>
  
   void pop() {
       m_prefixStack.pop_back();
-	  pushDepth();
+	  popDepth();
   };
 
   inline void pushDepth() {
@@ -57,7 +59,7 @@ template <class StreamType>
   }
  
   StreamType& dbg() {
-    if( !m_enabled ) kndbgstream();
+    if( !m_enabled ) return m_nstream;
     m_stream << "(" << m_counter << ")";
     for( QStringList::iterator it = m_prefixStack.begin(); it != m_prefixStack.end() ; ++it )
       m_stream << *it;
@@ -89,7 +91,7 @@ template <class StreamType>
   }
 	  
   int depth() {
-    return m_prefixStack.size();
+    return m_depth;
   }
 };
 #ifndef NDEBUG 
@@ -130,9 +132,9 @@ template<>
      bool r = depth() < m_max;
   
 	if( !r ) {
-      dbg() << "recursion is too deep";
+      dbg() << "recursion is too deep" << endl;
 #ifdef DEPTHBACKTRACE
-	   kdDebug( 9007 ) << kdBacktrace();
+	   kdDebug( 9007 ) << kdBacktrace() << endl;
 #endif
 	}
   
@@ -148,10 +150,10 @@ template<>
   public:
   	DepthDebug( const QString& prefix = "#", int max = completionMaxDepth, DBGStreamType& st = dbgState ) : m_state( st ), m_max( max ) {
       Q_UNUSED( prefix );
-	  	dbgState.pushDepth();
+	  	m_state.pushDepth();
     };
 	  ~DepthDebug() {
-		dbgState.popDepth();
+	  	m_state.popDepth();
 	  }
     
     kndbgstream dbg() {
@@ -166,9 +168,9 @@ template<>
       bool r = depth() < m_max;
       
 	if( !r ) {
-        kdDebug( 9007 ) << "recursion is too deep";
+        kdDebug( 9007 ) << "recursion is too deep" << endl;
 #ifdef DEPTHBACKTRACE
-		kdDebug( 9007 ) << kdBacktrace();
+		kdDebug( 9007 ) << kdBacktrace() << endl;
 #endif
 	}
       

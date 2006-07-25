@@ -81,9 +81,10 @@
 #include "simplecontext.h"
 #include "simpletypefunction.h"
 
+//#define DISABLE_TRACING
 
-const bool disableVerboseForCompletionList = true;
-const bool disableVerboseForContextMenu = true;
+const bool disableVerboseForCompletionList = false;
+const bool disableVerboseForContextMenu = false;
 const bool contextMenuEntriesAtTop = false;
 
 ///This enables-disables the automatic processing of the expression under the mouse-cursor 
@@ -304,7 +305,7 @@ struct PopupFillerHelpStruct {
     if( d.resolved() && d.resolved()->isNamespace() ) return;
     
     if( d.resolved() && d.resolved()->hasNode() ) {
-      QString n = d.name();
+	  QString n = d.resolved()->scope().join("::");
       if( d.resolved()->asFunction() )
         n = receiver->buildSignature( d.resolved() );
       
@@ -386,6 +387,7 @@ struct PopupClassViewFillerHelpStruct {
 	
   void insertItem ( QPopupMenu* parent, TypeDesc d , QString prefix ) {
     QString txt;
+	if( !d.resolved() ) return;
     
     ItemDom dom;
     
@@ -412,7 +414,8 @@ struct PopupClassViewFillerHelpStruct {
       
       
       if( dom ) {
-        QString n = d.name();
+	    QString n = d.resolved()->scope().join("::");
+		//QString n = d.fullNameChain();
         if( d.resolved()->asFunction() ) {
           n = receiver->buildSignature( d.resolved() );
         }
@@ -440,7 +443,7 @@ public:
 PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ), depthAdd( dAdd), s(maxCount) {
 }
 
-  void fill( QPopupMenu* parent, TypeDesc d, QString prefix = "" ) {
+  void fill( QPopupMenu* parent, SimpleTypeImpl::LocateResult d, QString prefix = "" ) {
 	Debug dbg( "#fl# ", 10 );
     if( !s || !dbg ) {
 	    //dbgMajor() << "safety-counter triggered while filling \"" << d.fullNameChain() << "\"" << endl;
@@ -448,35 +451,35 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
     }
     struk.insertItem( parent, d, prefix );
     
-    TypeDesc::TemplateParams p = d.templateParams();
+    TypeDesc::TemplateParams p = d->templateParams();
     for( TypeDesc::TemplateParams::iterator it = p.begin(); it != p.end(); ++it ){
       if( (*it)->resolved() ) {
         QPopupMenu * m = new QPopupMenu( parent );
-        int gid = parent->insertItem( i18n( "Template-param \"%1\"" ).arg( cleanForMenu( (*it)->resolved()->fullTypeResolved() ) ), m );
+        int gid = parent->insertItem( i18n( "Template-param \"%1\"" ).arg( cleanForMenu( (*it)->fullNameChain() ) ), m );
         fill( m, **it );
       } else {
         fill( parent, **it, prefix + depthAdd );
       }
     }
     
-	if( d.resolved() ) {
-      if( d.resolved()->asFunction() ) {
-        SimpleTypeImpl::LocateResult rt = d.resolved()->locateDecType( d.resolved()->asFunction()->getReturnType() );
+	if( d->resolved() ) {
+		if( d->resolved()->asFunction() ) {
+			SimpleTypeImpl::LocateResult rt = d->resolved()->locateDecType( d->resolved()->asFunction()->getReturnType() );
         if( rt ) {
           QPopupMenu * m = new QPopupMenu( parent );
           int gid = parent->insertItem( i18n( "Return-type \"%1\"" ).arg( cleanForMenu( rt->fullNameChain() ) ), m );
-          fill( m, (TypeDesc)rt );
+          fill( m, rt );
         }
         
-        QValueList<TypeDesc> args = d.resolved()->asFunction()->getArgumentTypes();
-        QStringList argNames = d.resolved()->asFunction()->getArgumentNames();
+			QValueList<TypeDesc> args = d->resolved()->asFunction()->getArgumentTypes();
+			QStringList argNames = d->resolved()->asFunction()->getArgumentNames();
         if( !args.isEmpty() ) {
           QPopupMenu * m = new QPopupMenu( parent );
           int gid = parent->insertItem( i18n( "Argument-types" ), m );
           QStringList::iterator it2 = argNames.begin();
           for( QValueList<TypeDesc>::iterator it = args.begin(); it != args.end(); ++it )
           {
-            SimpleTypeImpl::LocateResult at = d.resolved()->locateDecType( *it );
+	          SimpleTypeImpl::LocateResult at = d->resolved()->locateDecType( *it );
             QString name ="";
             if( it2 != argNames.end() ) {
               name = *it2;
@@ -489,8 +492,8 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
           }
         }
       }
-
-		QValueList<SimpleTypeImpl::MemberInfo> trace = d.resolved()->trace();
+#ifndef DISABLE_TRACING
+		QValueList<SimpleTypeImpl::MemberInfo> trace = d.trace()->trace();
 	  if( !trace.isEmpty() ) {
 		  QPopupMenu * m = new QPopupMenu( parent );
 		  int gid = parent->insertItem( i18n( "Trace" ), m );
@@ -512,25 +515,26 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
 			  }
 		  }
 	  }
+#endif
 		
-      QValueList<SimpleTypeImpl::LocateResult> bases = d.resolved()->getBases();
+		QValueList<SimpleTypeImpl::LocateResult> bases = d->resolved()->getBases();
       for( QValueList<SimpleTypeImpl::LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
         QPopupMenu * m = new QPopupMenu( parent );
         int gid = parent->insertItem( i18n( "Base-class \"%1\"" ).arg( cleanForMenu( (*it)->fullNameChain() ) ), m );
         fill( m, *it );
       }
       
-      if( d.resolved()->parent() && d.resolved()->parent()->desc() ) {
+		if( d->resolved()->parent() && d->resolved()->parent()->desc() ) {
         QPopupMenu * m = new QPopupMenu( parent );
-        int gid = parent->insertItem( i18n( "Nested in \"%1\"" ).arg( cleanForMenu( d.resolved()->parent()->fullTypeResolved() ) ), m );
-        fill( m, d.resolved()->parent()->desc() );
+			int gid = parent->insertItem( i18n( "Nested in \"%1\"" ).arg( cleanForMenu( d->resolved()->parent()->fullTypeResolved() ) ), m );
+			fill( m, d->resolved()->parent()->desc() );
       }
 
-	  if( !d.resolved()->comment().isEmpty() ) {
+		if( !d->resolved()->comment().isEmpty() ) {
 		  parent->insertSeparator();
 		  QPopupMenu * m = new QPopupMenu( parent );
-		  int gid = parent->insertItem( i18n( "Comment on %1" ).arg( cleanForMenu( d.name() ) ), m );
-		  QStringList ls = prepareTextForMenu( d.resolved()->comment(), 15, 100 );
+			int gid = parent->insertItem( i18n( "Comment on %1" ).arg( cleanForMenu( d->name() ) ), m );
+			QStringList ls = prepareTextForMenu( d->resolved()->comment(), 15, 100 );
 		  for( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
 			m->insertItem( *it, 0, SLOT( popupClassViewAction( int ) ) );
 		  }
@@ -1184,7 +1188,7 @@ void CppCodeCompletion::selectItem( ItemDom item )
 		ItemDom itemDom( &(*item) );
 		f->jumpedToItem( itemDom );
 	} else {
-		kdDebug() << "could not find the proper extension\n";
+		kdDebug() << "could not find the proper extension" << endl;
 	}
 }
 
@@ -1256,7 +1260,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 			m_popupActions.insert( id, type.sourceVariable );
 		}
 		
-		filler.fill( m, (TypeDesc)type );
+		filler.fill( m, type );
 	}
 	if( type->resolved() ) {
 		///Now fill the class-view-browsing-stuff
@@ -1273,7 +1277,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 			PopupClassViewFillerHelpStruct h(this);
 			PopupFiller<PopupClassViewFillerHelpStruct> filler( h, "" );
 			
-			filler.fill( m, (TypeDesc)type );
+			filler.fill( m, type );
 		}
 	}
 
@@ -1290,7 +1294,7 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text)
 	clearStatusText();
 	
 	if( m_lastHintTime.msecsTo( QTime::currentTime() ) < 300 ) {
-		kdDebug( 9007 ) << "slotNeedTextHint called too often";
+		kdDebug( 9007 ) << "slotNeedTextHint called too often" << endl;
 		return;
 	}
 	
@@ -1663,7 +1667,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 						if( ! (opt & IncludeTypeExpression) ) {
 							kdDebug( 9007 ) << "recognized a type-expression, but another expression-type is desired" << endl;
 						} else {
-							ret.resultType = ctx->container()->locateDecType( exp.expr(), SimpleTypeImpl::TraceAliases );
+							ret.resultType = ctx->container()->locateDecType( exp.expr() );
 							ret.expr = exp;
 						}
 						
@@ -1741,7 +1745,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 		
 		if( exp && (exp.t & ExpressionInfo::TypeExpression) ) {
 			kdDebug( 9007 ) << "locating \"" << exp.expr() << "\" in " << container->fullTypeResolvedWithScope() << endl;
-			ret.resultType = container->locateDecType( exp.expr(), SimpleTypeImpl::TraceAliases );
+			ret.resultType = container->locateDecType( exp.expr() );
 		} else {
 			if( exp ) {
 				kdDebug( 9007 ) << "wrong expression-type recognized" << endl;
