@@ -39,7 +39,9 @@
 #include <kdevcodedelegate.h>
 #include <kdevcoderepository.h>
 
+
 class KDevDocument;
+class KDevParseJob;
 
 /**
 @file kdevlanguagesupport.h
@@ -92,6 +94,10 @@ public:
     /**@return A code repository (accessor to persistant symbol stores) for
     codemodel's.*/
     virtual KDevCodeRepository *codeRepository() const = 0;
+
+    virtual KDevParseJob *createParseJob( const KUrl &url ) = 0;
+    virtual KDevParseJob *createParseJob( KDevDocument *document,
+                                          KTextEditor::SmartRange *highlight ) = 0;
 
     /**@return A typical mimetype list for the support language, this list
     should be configurable in the languagesupport dialog.*/

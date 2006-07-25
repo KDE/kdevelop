@@ -30,12 +30,15 @@
 #include <kdevfilemanager.h>
 #include <kdevprojectmodel.h>
 #include <kdevdocumentcontroller.h>
+#include <kdevbackgroundparser.h>
 
-#include "backgroundparser.h"
 #include "cpplanguagesupport.h"
 #include "cpphighlighting.h"
 
 #include "parser/codemodel.h"
+#include "parser/memorypool.h"
+
+#include "parsejob.h"
 #include "codeproxy.h"
 #include "codedelegate.h"
 
@@ -46,15 +49,15 @@ K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdev
 
 CppLanguageSupport::CppLanguageSupport( QObject* parent,
                                         const QStringList& /*args*/ )
-    : KDevLanguageSupport( KDevCppSupportFactory::instance(), parent )
+        : KDevLanguageSupport( KDevCppSupportFactory::instance(), parent )
 {
     QString types =
         QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
     m_mimetypes = types.split( "," );
 
+    m_memoryPool = new pool;
     m_codeProxy = new CodeProxy( this );
     m_codeDelegate = new CodeDelegate( this );
-    m_backgroundParser = new BackgroundParser( this );
     m_highlights = new CppHighlighting( this );
 
     connect( KDevApi::self() ->documentController(),
@@ -75,7 +78,9 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
 }
 
 CppLanguageSupport::~CppLanguageSupport()
-{}
+{
+    delete m_memoryPool;
+}
 
 KDevCodeModel *CppLanguageSupport::codeModel( const KUrl &url ) const
 {
@@ -100,6 +105,17 @@ KDevCodeRepository *CppLanguageSupport::codeRepository() const
     return 0;
 }
 
+KDevParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
+{
+    return new ParseJob( url, this, m_memoryPool );
+}
+
+KDevParseJob *CppLanguageSupport::createParseJob( KDevDocument *document,
+        KTextEditor::SmartRange *highlight )
+{
+    return new ParseJob( document, highlight, this, m_memoryPool );
+}
+
 QStringList CppLanguageSupport::mimeTypes() const
 {
     return m_mimetypes;
@@ -108,13 +124,13 @@ QStringList CppLanguageSupport::mimeTypes() const
 void CppLanguageSupport::documentLoaded( KDevDocument* file )
 {
     if ( supportsDocument( file ) )
-        m_backgroundParser->addDocument( file->url(), file );
+        KDevApi::self() ->backgroundParser() ->addDocument( file->url(), file );
 }
 
 void CppLanguageSupport::documentClosed( KDevDocument* file )
 {
     if ( supportsDocument( file ) )
-        m_backgroundParser->removeDocumentFile( file );
+        KDevApi::self() ->backgroundParser() ->removeDocumentFile( file );
 }
 
 void CppLanguageSupport::documentActivated( KDevDocument* file )
@@ -122,7 +138,7 @@ void CppLanguageSupport::documentActivated( KDevDocument* file )
     Q_UNUSED( file );
 }
 
-CppHighlighting * CppLanguageSupport::codeHighlighting( ) const
+CppHighlighting * CppLanguageSupport::codeHighlighting() const
 {
     return m_highlights;
 }
@@ -131,7 +147,7 @@ void CppLanguageSupport::projectOpened()
 {
     //FIXME This is currently too slow and the parser is prone to crashing
     // when parsing .cpp files.  The Binder seems to be a slow point too.
-    return;
+    return ;
 
     // FIXME Add signals slots from the filemanager for:
     // 1. filesAddedToProject
@@ -140,14 +156,14 @@ void CppLanguageSupport::projectOpened()
 
     KUrl::List documentList;
     QList<KDevProjectFileItem*> files = KDevApi::self() ->project() ->allFiles();
-    foreach ( KDevProjectFileItem *file, files )
+    foreach ( KDevProjectFileItem * file, files )
     {
-        if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith(".h")*/ )
+        if ( supportsDocument( file->url() )  /*&& file->url().fileName().endsWith(".h")*/ )
         {
             documentList.append( file->url() );
         }
     }
-    m_backgroundParser->addDocumentList( documentList );
+    KDevApi::self() ->backgroundParser() ->addDocumentList( documentList );
 }
 
 void CppLanguageSupport::projectClosed()

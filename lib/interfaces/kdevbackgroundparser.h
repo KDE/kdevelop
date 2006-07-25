@@ -41,36 +41,31 @@ class Document;
 
 class QTimer;
 
-class pool;
-class Parser;
-class Preprocessor;
-class TranslationUnitAST;
-class CppLanguageSupport;
+class KDevAST;
+class KDevLanguageSupport;
 class KDevDocument;
 
 using namespace ThreadWeaver;
 
-class BackgroundParser : public QObject
+class KDevBackgroundParser : public QObject
 {
     Q_OBJECT
 public:
-    BackgroundParser( CppLanguageSupport* cppSupport );
-    virtual ~BackgroundParser();
+    KDevBackgroundParser( QObject* parent = 0 );
+    virtual ~KDevBackgroundParser();
 
 public slots:
     void suspend();
     void resume();
-    void addDocument( const KUrl &url, KDevDocument* document = 0L );
+    void addDocument( const KUrl &url, KDevDocument *document = 0L );
     void addDocumentList( const KUrl::List &urls );
-    void removeDocumentFile( KDevDocument* document );
+    void removeDocumentFile( KDevDocument *document );
     void removeDocument( const KUrl &url );
     void parseDocuments();
-    void parseComplete( Job* );
-    void documentChanged( KTextEditor::Document* document );
+    void parseComplete( Job *job );
+    void documentChanged( KTextEditor::Document *document );
 
 private:
-    CppLanguageSupport *m_cppSupport;
-    pool *m_memoryPool;
     QTimer *m_timer;
     bool m_suspend;
 
@@ -79,7 +74,7 @@ private:
     // A list of open documents
     QMap<KUrl, KDevDocument*> m_openDocuments;
     // The translation unit for each document
-    QMap<KUrl, TranslationUnitAST* > m_url2unit;
+    QMap<KUrl, KDevAST* > m_url2unit;
     mutable QMutex m_mutex;
     ThreadWeaver::Weaver* m_weaver;
 };

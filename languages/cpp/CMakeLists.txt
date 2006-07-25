@@ -10,7 +10,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces 
 
 set(kdevcpplanguagesupport_PART_SRCS
     cpplanguagesupport.cpp
-    backgroundparser.cpp
     parsejob.cpp
     codedelegate.cpp
     codeproxy.cpp

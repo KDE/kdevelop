@@ -1,23 +1,23 @@
 /*
- * This file is part of KDevelop
- *
- * Copyright (c) 2006 Adam Treat <treat@kde.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Library General Public License as
- * published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the
- * Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+* This file is part of KDevelop
+*
+* Copyright (c) 2006 Adam Treat <treat@kde.org>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Library General Public License as
+* published by the Free Software Foundation; either version 2 of the
+* License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public
+* License along with this program; if not, write to the
+* Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*/
 
 #include "parsejob.h"
 
@@ -32,8 +32,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <kdevdocumentcontroller.h>
-
 #include "parser/binder.h"
 #include "parser/parser.h"
 #include "parser/control.h"
@@ -41,44 +39,34 @@
 #include "parser/rpp/preprocessor.h"
 
 ParseJob::ParseJob( const KUrl &url,
-                    pool *memoryPool,
-                    QObject* parent )
-        : ThreadWeaver::Job( parent ),
-        m_openDocument( 0 ),
-        m_document( url ),
+                    QObject *parent,
+                    pool *memoryPool )
+        : KDevParseJob( url, parent ),
         m_memoryPool( memoryPool ),
-        m_translationUnit( 0 ),
-        m_model( 0 ),
-        m_highlight( 0 )
-{
-}
+        m_AST( 0 ),
+        m_model( 0 )
+{}
 
-ParseJob::ParseJob( KDevDocument * document, pool * memoryPool, QObject * parent, KTextEditor::SmartRange* highlight )
-        : ThreadWeaver::Job( parent ),
-        m_openDocument( document ),
-        m_document( document->url() ),
+ParseJob::ParseJob( KDevDocument *document,
+                    KTextEditor::SmartRange *highlight,
+                    QObject *parent,
+                    pool *memoryPool )
+        : KDevParseJob( document, highlight, parent ),
         m_memoryPool( memoryPool ),
-        m_translationUnit( 0 ),
-        m_model( 0 ),
-        m_highlight( highlight )
-{
-}
+        m_AST( 0 ),
+        m_model( 0 )
+{}
 
 ParseJob::~ParseJob()
 {}
 
-KUrl ParseJob::document() const
+KDevAST *ParseJob::AST() const
 {
-    return m_document;
+    Q_ASSERT ( isFinished () && m_AST );
+    return m_AST;
 }
 
-TranslationUnitAST *ParseJob::translationUnit() const
-{
-    Q_ASSERT ( isFinished () && m_translationUnit );
-    return m_translationUnit;
-}
-
-CodeModel *ParseJob::codeModel() const
+KDevCodeModel *ParseJob::codeModel() const
 {
     Q_ASSERT ( isFinished () && m_model );
     return m_model;
@@ -94,9 +82,10 @@ void ParseJob::run()
     if ( readFromDisk )
     {
         QFile file( m_document.path() );
-        if ( !file.open( QIODevice::ReadOnly ) ) {
-            m_errorMessage = i18n("Could not open file '%1'", m_document.path());
-            kWarning(9007) << k_funcinfo << "Could not open file " << m_document << " (path " << m_document.path() << ")" << endl;
+        if ( !file.open( QIODevice::ReadOnly ) )
+        {
+            m_errorMessage = i18n( "Could not open file '%1'", m_document.path() );
+            kWarning( 9007 ) << k_funcinfo << "Could not open file " << m_document << " (path " << m_document.path() << ")" << endl;
             return ;
         }
 
@@ -112,7 +101,7 @@ void ParseJob::run()
         size = m_contents.size();
     }
 
-    kDebug(9007) << "===-- PARSING --===> "
+    kDebug( 9007 ) << "===-- PARSING --===> "
     << m_document.fileName()
     << " <== readFromDisk: " << readFromDisk
     << " size: " << size
@@ -134,33 +123,18 @@ void ParseJob::run()
     QByteArray preprocessed = ppd.toUtf8();
 
     Parser parser( new Control() );
-    m_translationUnit = parser.parse( preprocessed, preprocessed.length() + 1, m_memoryPool );
+    m_AST = parser.parse( preprocessed, preprocessed.length() + 1, m_memoryPool );
 
-    if ( m_translationUnit )
+    if ( m_AST )
     {
         m_model = new CodeModel;
         Binder binder( m_model, &parser.token_stream, &parser.lexer, m_highlight );
-        binder.run( m_document, m_translationUnit );
+        binder.run( m_document, m_AST );
     }
     //     DumpTree dumpTree;
-    //     dumpTree.dump( m_translationUnit );
+    //     dumpTree.dump( m_AST );
 
     m_memoryPool = 0;
-}
-
-bool ParseJob::wasSuccessful( ) const
-{
-    return m_model;
-}
-
-const QString & ParseJob::errorMessage( ) const
-{
-    return m_errorMessage;
-}
-
-KTextEditor::SmartRange * ParseJob::highlight( ) const
-{
-    return m_highlight;
 }
 
 #include "parsejob.moc"

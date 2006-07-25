@@ -19,6 +19,8 @@
 #ifndef AST_H
 #define AST_H
 
+#include <kdevast.h>
+
 #include "memorypool.h"
 #include "listnode.h"
 
@@ -103,7 +105,7 @@ struct UsingDirectiveAST;
 struct WhileStatementAST;
 struct WinDeclSpecAST;
 
-struct AST
+struct AST: public KDevAST
 {
   enum NODE_KIND
     {

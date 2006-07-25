@@ -27,6 +27,8 @@ Boston, MA 02110-1301, USA.
 #include <kdevfilemanager.h>
 #include <kdevprojectmodel.h>
 #include <kdevdocumentcontroller.h>
+#include <kdevbackgroundparser.h>
+#include <kdevparsejob.h>
 
 #include "javalanguagesupport.h"
 
@@ -97,6 +99,17 @@ KDevCodeDelegate *JavaLanguageSupport::codeDelegate() const
 }
 
 KDevCodeRepository *JavaLanguageSupport::codeRepository() const
+{
+    return 0;
+}
+
+KDevParseJob *JavaLanguageSupport::createParseJob( const KUrl &url )
+{
+    return 0;
+}
+
+KDevParseJob *JavaLanguageSupport::createParseJob( KDevDocument *document,
+        KTextEditor::SmartRange *highlight )
 {
     return 0;
 }

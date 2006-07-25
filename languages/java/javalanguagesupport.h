@@ -40,6 +40,9 @@ public:
     virtual KDevCodeProxy *codeProxy() const;
     virtual KDevCodeDelegate *codeDelegate() const;
     virtual KDevCodeRepository *codeRepository() const;
+    virtual KDevParseJob *createParseJob( const KUrl &url );
+    virtual KDevParseJob *createParseJob( KDevDocument *document,
+                                          KTextEditor::SmartRange *highlight );
     virtual QStringList mimeTypes() const;
 
 private slots:

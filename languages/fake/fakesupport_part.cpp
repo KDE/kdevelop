@@ -53,6 +53,17 @@ KDevCodeRepository *FakeLanguageSupport::codeRepository() const
     return 0;
 }
 
+KDevParseJob *FakeLanguageSupport::createParseJob( const KUrl &url )
+{
+    return 0;
+}
+
+KDevParseJob *FakeLanguageSupport::createParseJob( KDevDocument *document,
+        KTextEditor::SmartRange *highlight )
+{
+    return 0;
+}
+
 QStringList FakeLanguageSupport::mimeTypes() const
 {
     return QStringList();

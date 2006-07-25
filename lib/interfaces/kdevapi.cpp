@@ -21,6 +21,7 @@
 #include "kdevapi.h"
 
 #include <kdevenv.h>
+#include <kdevbackgroundparser.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 // class KDevApiPrivate
@@ -48,6 +49,7 @@ public:
     QDomDocument *projectDom;
     KDevProject  *project;
     KDevLanguageSupport *languageSupport;
+    KDevBackgroundParser *backgroundParser;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -94,6 +96,16 @@ void KDevApi::setLanguageSupport(KDevLanguageSupport *languageSupport)
   d->languageSupport = languageSupport;
 }
 
+KDevBackgroundParser *KDevApi::backgroundParser() const
+{
+    return d->backgroundParser;
+}
+
+void KDevApi::setBackgroundParser(KDevBackgroundParser *backgroundParser)
+{
+    d->backgroundParser = backgroundParser;
+}
+
 void KDevApi::setMainWindow( KDevMainWindow * mainWindow )
 {
     d->mainWindow = mainWindow;
@@ -129,6 +141,7 @@ void KDevApi::setCore( KDevCore * core )
     d->core = core;
 
     new KDevEnv;
+    new KDevBackgroundParser;
 }
 
 KDevCore * KDevApi::core( ) const

@@ -27,6 +27,8 @@ Boston, MA 02110-1301, USA.
 #include <kdevfilemanager.h>
 #include <kdevprojectmodel.h>
 #include <kdevdocumentcontroller.h>
+#include <kdevbackgroundparser.h>
+#include <kdevparsejob.h>
 
 #include "csharplanguagesupport.h"
 
@@ -96,6 +98,17 @@ KDevCodeDelegate *CSharpLanguageSupport::codeDelegate() const
 }
 
 KDevCodeRepository *CSharpLanguageSupport::codeRepository() const
+{
+    return 0;
+}
+
+KDevParseJob *CSharpLanguageSupport::createParseJob( const KUrl &url )
+{
+    return 0;
+}
+
+KDevParseJob *CSharpLanguageSupport::createParseJob( KDevDocument *document,
+        KTextEditor::SmartRange *highlight )
 {
     return 0;
 }

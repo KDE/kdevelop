@@ -29,6 +29,7 @@ class QDomDocument;
 class KDevCore;
 class KDevProject;
 class KDevLanguageSupport;
+class KDevBackgroundParser;
 class KDevDocumentController;
 class KDevMainWindow;
 class KDevPlugin;
@@ -118,6 +119,10 @@ public:
      * @param languageSupport The language support plugin.
      */
     void setLanguageSupport(KDevLanguageSupport *languageSupport);
+
+    //FIXME make this a singleton in kdev-its-gonna-be-great and document it
+    KDevBackgroundParser *backgroundParser() const;
+    void setBackgroundParser(KDevBackgroundParser *backgroundParser);
 
 protected:
     KDevApi(); /* private constructor. we're a singleton */
