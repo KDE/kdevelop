@@ -60,7 +60,6 @@ GenericName[sv]=Doxygen-stöd
 GenericName[ta]=Doxygen ஆதரவு
 GenericName[tg]=Тарафдори намудани Doxygen
 GenericName[tr]=Doxygen Desteği
-GenericName[uk]=Підтримка Doxygen
 GenericName[zh_CN]=Doxygen 支持
 ServiceTypes=KDevelop/Plugin
 Icon=kdevelop

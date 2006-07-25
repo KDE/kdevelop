@@ -24,7 +24,6 @@ Name[sr@Latn]=Informacije za %{APPNAME}
 Name[sv]=%{APPNAME} information
 Name[ta]=%{APPNAME} தகவல்
 Name[tg]=Маълумот дар бораи %{APPNAME} 
-Name[uk]=Інформація про %{APPNAME}
 Name[zh_CN]=%{APPNAME}的信息
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_%{APPNAMELC}

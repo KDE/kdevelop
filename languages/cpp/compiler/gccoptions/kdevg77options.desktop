@@ -31,7 +31,6 @@ Comment[sv]=GNU Fortran 77-compilator
 Comment[ta]=GNU Fortran 77 தொகுப்பி
 Comment[tg]=Талфифгари GNU Fortran 77 
 Comment[tr]=GNU Fortran 77 Derleyicisi
-Comment[uk]=Компілятор GNU Fortran 77
 Comment[zh_CN]=GNU Fortran 77 编译器
 Name=G77Options
 Name[de]=G77-Einstellungen (KDevelop)

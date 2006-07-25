@@ -28,6 +28,5 @@ Name[sv]=%{APPNAME} importfilter
 Name[ta]=%{APPNAME} இறக்குமதி வடிகட்டி
 Name[tg]=Воридот аз %{APPNAME} 
 Name[tr]=%{APPNAME} Aktarım Filtresi
-Name[uk]=Фільтр імпортування %{APPNAME}
 Name[zh_CN]=%{APPNAME} 导入过滤器
 X-KBear-ImportFile=sitemanager

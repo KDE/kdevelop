@@ -36,7 +36,6 @@ Name[sr]=Постављање...
 Name[sr@Latn]=Postavljanje...
 Name[sv]=Inställning...
 Name[tr]=Kurulum...
-Name[uk]=Налаштувати...
 Name[zh_CN]=设置...
 Icon=kscreensaver
 
@@ -69,7 +68,6 @@ Name[sr]=Прикажи у наведеном прозору
 Name[sr@Latn]=Prikaži u navedenom prozoru
 Name[sv]=Visa i angivet fönster
 Name[tr]=Belirtilen Pencerede Göster
-Name[uk]=Відобразити у вказаному вікні
 Name[zh_CN]=在指定窗口中显示
 NoDisplay=true
 
@@ -102,6 +100,5 @@ Name[sr]=Прикажи у кореном прозору
 Name[sr@Latn]=Prikaži u korenom prozoru
 Name[sv]=Visa i rotfönster
 Name[tr]=Kök Pencerede Göster
-Name[uk]=Відобразити в кореневому вікні
 Name[zh_CN]=在根窗口中显示
 NoDisplay=true
