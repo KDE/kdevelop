@@ -739,70 +739,6 @@
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QButtonGroup" row="1" column="0">
-                        <property name="name">
-                            <cstring>m_qtVersionBox</cstring>
-                        </property>
-                        <property name="enabled">
-                            <bool>false</bool>
-                        </property>
-                        <property name="title">
-                            <string>Qt include syntax</string>
-                        </property>
-                        <property name="exclusive">
-                            <bool>true</bool>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>Select which Qt version your project is using.</string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>m_qtVersion3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Qt &amp;3 style (#include &lt;qwidget.h&gt;)</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+3</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Select this if your project is using Qt version 3.x.</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>m_qtVersion4</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Qt &amp;4 style (#include &lt;QWidget&gt;)</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+4</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Select this if your project is using Qt version 4.x.</string>
-                                </property>
-                            </widget>
-                        </vbox>
-                    </widget>
-                    <widget class="QCheckBox" row="0" column="0">
-                        <property name="name">
-                            <cstring>m_qtUsed</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Enable &amp;Qt options</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+Q</string>
-                        </property>
-                    </widget>
                 </grid>
             </widget>
             <widget class="QWidget">
@@ -1071,6 +1007,273 @@
                     </spacer>
                 </grid>
             </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>qtPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Qt Options</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>m_qtUsed</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Enable &amp;Qt options</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+Q</string>
+                        </property>
+                    </widget>
+                    <widget class="QButtonGroup">
+                        <property name="name">
+                            <cstring>m_qtVersionDirectoryBox</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="title">
+                            <string>Qt Version and Directory</string>
+                        </property>
+                        <property name="exclusive">
+                            <bool>true</bool>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Select which Qt version your project is using and where that Qt version is installed to.</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout8</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_versionQt3</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Qt 3</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select this if your project is using Qt version 3.x.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_versionQt4</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Qt 4</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Select this if your project is using Qt version 4.x.</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer13_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>111</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </hbox>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout9</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1_4</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Qt Directory:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KURLRequester">
+                                        <property name="name">
+                                            <cstring>m_qtDir</cstring>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Choose the directory that Qt was installed to.</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QButtonGroup">
+                        <property name="name">
+                            <cstring>m_qtStyleBox</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="title">
+                            <string>Qt include syntax</string>
+                        </property>
+                        <property name="exclusive">
+                            <bool>true</bool>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Select which include style your project is using.</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>m_qtStyleVersion3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Qt &amp;3 style (#include &lt;qwidget.h&gt;)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+3</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Select this if your project is using include style as known from Qt version 3.x.</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>m_qtStyleVersion4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Qt &amp;4 style (#include &lt;QWidget&gt;)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+4</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Select this if your project is using include style as known from Qt version 4.x.</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QButtonGroup">
+                        <property name="name">
+                            <cstring>m_designerBox</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="title">
+                            <string>UI Designer Integration</string>
+                        </property>
+                        <property name="flat">
+                            <bool>false</bool>
+                        </property>
+                        <property name="exclusive">
+                            <bool>true</bool>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>m_kdevembedded</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Use KDevelop's embedded designer</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Start KDevelop own designer embedded within KDevelop</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to integrate the UI designer into KDevelop.</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>m_kdevexternal</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Run &amp;KDevelop's designer as a separate application</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+K</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Start KDevelop own designer externally</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to run KDevelop's UI designer as a separate program.</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>m_qtdesigner</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Run Qt &amp;Designer</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+D</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Use Qt Designer externally</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Check this button if you wish to use Qt Designer rather than KDevelop's integrated designer.</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer14_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>270</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
         </widget>
     </vbox>
 </widget>
@@ -1138,15 +1341,27 @@
         <slot>slotEnableSplit(bool)</slot>
     </connection>
     <connection>
-        <sender>m_qtUsed</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_qtVersionBox</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
         <sender>m_splitEnable</sender>
         <signal>toggled(bool)</signal>
         <receiver>m_splitSync</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_qtUsed</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_qtStyleBox</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_qtUsed</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_qtVersionDirectoryBox</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_qtUsed</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_designerBox</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
@@ -1154,6 +1369,48 @@
         <signal>toggled(bool)</signal>
         <receiver>m_splitOrientationBox</receiver>
         <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_versionQt3</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_qtStyleVersion4</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_versionQt4</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_qtStyleVersion4</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_versionQt4</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_kdevembedded</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_versionQt4</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_kdevexternal</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_versionQt3</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_kdevembedded</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_versionQt3</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_kdevexternal</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_versionQt4</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_qtdesigner</receiver>
+        <slot>toggle()</slot>
     </connection>
 </connections>
 <tabstops>
@@ -1172,15 +1429,15 @@
 <slots>
     <slot access="protected">implementationFile()</slot>
     <slot access="protected">interfaceFile()</slot>
-    <slot access="protected">slotAddPPPath( )</slot>
-    <slot access="protected">slotEnableCC( )</slot>
-    <slot access="protected">slotEnableCH( )</slot>
+    <slot access="protected">slotAddPPPath()</slot>
+    <slot access="protected">slotEnableCC()</slot>
+    <slot access="protected">slotEnableCH()</slot>
     <slot access="protected">slotEnableChooseFiles( bool )</slot>
-    <slot access="protected">slotEnablePCS( )</slot>
-    <slot access="protected">slotEnablePP( )</slot>
-    <slot access="protected">slotRemovePPPath( )</slot>
+    <slot access="protected">slotEnablePCS()</slot>
+    <slot access="protected">slotEnablePP()</slot>
+    <slot access="protected">slotRemovePPPath()</slot>
     <slot access="protected">slotSelectTemplateGroup( const QString &amp; )</slot>
-    <slot access="protected">slotSetCHWindow( )</slot>
+    <slot access="protected">slotSetCHWindow()</slot>
     <slot>slotNewPCS()</slot>
     <slot access="protected">slotGetterSetterValuesChanged()</slot>
     <slot access="protected">slotRemovePCS()</slot>
@@ -1203,5 +1460,10 @@
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

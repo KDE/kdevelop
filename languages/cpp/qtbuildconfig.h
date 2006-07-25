@@ -38,11 +38,15 @@ public:
 
 	inline bool isUsed() const { return m_used; }
 	inline int version() const { return m_version; }
+	inline int includeStyle() const { return m_includeStyle; }
 	inline const QString& root() const { return m_root; }
+	inline const QString& designerIntegration() const { return m_designerIntegration; }
 	
 	void setUsed( bool used );
 	void setVersion( int version );
+	void setIncludeStyle( int style );
 	void setRoot( const QString& root );
+	void setDesignerIntegration( const QString& designerIntegration );
 	
 public slots:
 	void store();
@@ -59,7 +63,9 @@ private:
 	
 	bool m_used; ///< Flag if qt is used in this project.
 	int m_version; ///< The major version of the qt library (3 or 4)
+	int m_includeStyle; ///< The type of include style used (qt 3 or 4)
 	QString m_root; ///< The root directory of the used qt installation
+	QString m_designerIntegration; ///< The type of designer used, kdevdesigner or qt designer
 	
 	static const QString m_configRoot; ///< The root path of the configuration
 };

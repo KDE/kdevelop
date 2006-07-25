@@ -45,10 +45,23 @@ void QtBuildConfig::init( )
 	{
 		m_version = 3;
 	}
+	m_includeStyle = DomUtil::readIntEntry( *m_dom, m_configRoot + "/includestyle", 3 );
+	if( m_includeStyle < 3 || m_includeStyle > 4 )
+	{
+		m_includeStyle = m_version;
+	}
 	m_root = DomUtil::readEntry( *m_dom, m_configRoot + "/root" );
 	if( m_root.isEmpty() )
 	{
 		m_root = QString( getenv( "QTDIR" ) );
+	}
+	m_designerIntegration = DomUtil::readEntry( *m_dom, m_configRoot + "/designerintegration" );
+	if( m_designerIntegration.isEmpty() )
+	{
+		if ( m_version == 3 )
+			m_designerIntegration = "EmbeddedKDevDesigner";
+		else
+			m_designerIntegration = "ExternalDesigner";
 	}
 }
 
@@ -56,7 +69,9 @@ void QtBuildConfig::store( )
 {
 	DomUtil::writeBoolEntry( *m_dom, m_configRoot + "/used", m_used );
 	DomUtil::writeIntEntry( *m_dom, m_configRoot + "/version", m_version );
+	DomUtil::writeIntEntry( *m_dom, m_configRoot + "/includestyle", m_includeStyle );
 	DomUtil::writeEntry( *m_dom, m_configRoot + "/root", m_root );
+	DomUtil::writeEntry( *m_dom, m_configRoot + "/designerintegration", m_designerIntegration );
 
 	emit stored();
 }
@@ -71,11 +86,20 @@ void QtBuildConfig::setVersion( int version )
 	m_version = version;
 }
 
+void QtBuildConfig::setIncludeStyle( int style )
+{
+	m_includeStyle = style;
+}
+
 void QtBuildConfig::setRoot( const QString& root )
 {
 	m_root = root;
 }
 
+void QtBuildConfig::setDesignerIntegration( const QString& designerIntegration )
+{
+	m_designerIntegration = designerIntegration;
+}
 #include "qtbuildconfig.moc"
 
 // kate: indent-mode csands; tab-width 4; space-indent off;

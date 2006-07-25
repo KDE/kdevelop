@@ -384,16 +384,37 @@ void CCConfigWidget::saveSplitTab( )
 
 void CCConfigWidget::initQtTab()
 {
+	m_qtDir->setMode(KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly);
+	
 	QtBuildConfig* c = m_pPart->qtBuildConfig();
 
 	m_qtUsed->setChecked( c->isUsed() );
 	if( c->version() == 4 )
 	{
-		m_qtVersion4->setChecked( true );
+		m_versionQt4->setChecked( true );
 	}
 	else
 	{
-		m_qtVersion3->setChecked( true );
+		m_versionQt3->setChecked( true );
+	}
+	if( c->includeStyle() == 4 )
+	{
+		m_qtStyleVersion4->setChecked( true );
+	}else
+	{
+		m_qtStyleVersion3->setChecked( true );
+	}
+	m_qtDir->setURL( c->root() );
+	if ( c->designerIntegration() == "EmbeddedKDevDesigner" )
+	{
+		m_kdevembedded->setChecked( true );
+	}
+	else if ( c->designerIntegration() == "ExternalKDevDesigner" )
+	{
+		m_kdevexternal->setChecked( true );
+	}else
+	{
+		m_qtdesigner->setChecked( true );
 	}
 }
 
@@ -402,7 +423,7 @@ void CCConfigWidget::saveQtTab()
 	QtBuildConfig* c = m_pPart->qtBuildConfig();
 	
 	c->setUsed( m_qtUsed->isChecked() );
-	if( m_qtVersion4->isChecked() )
+	if( m_versionQt4->isChecked() )
 	{
 		c->setVersion( 4 );
 	}
@@ -410,7 +431,25 @@ void CCConfigWidget::saveQtTab()
 	{
 		c->setVersion( 3 );
 	}
-	
+	if( m_qtStyleVersion4->isChecked() )
+	{
+		c->setIncludeStyle( 4 );
+	}else
+	{
+		c->setIncludeStyle( 4 );
+	}
+	c->setRoot( m_qtDir->url() );
+	if( m_kdevembedded->isChecked() )
+	{
+		c->setDesignerIntegration( "EmbeddedKDevDesigner" );
+	}
+	else if ( m_kdevexternal->isChecked() )
+	{
+		c->setDesignerIntegration( "ExternalKDevDesigner" );
+	}else
+	{
+		c->setDesignerIntegration( "ExternalDesigner" );
+	}
 	c->store();
 }
 

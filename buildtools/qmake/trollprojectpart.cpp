@@ -167,7 +167,9 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                          "# Target is %s %s\n");
 
     m_availableQtDirList = availableQtDirList();
-    m_defaultQtDir = ::getenv( "QTDIR" );
+    m_defaultQtDir = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "");
+    if( m_defaultQtDir.isEmpty() )
+        m_defaultQtDir = ::getenv( "QTDIR" );
     if( m_defaultQtDir.isEmpty() && !m_availableQtDirList.isEmpty() )
         m_defaultQtDir = m_availableQtDirList.front();
 }
@@ -489,8 +491,18 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
 void TrollProjectPart::startQMakeCommand(const QString &dir)
 {
     QFileInfo fi(dir);
+    QString cmdline;
 
-    QString cmdline = QString::fromLatin1( isTMakeProject() ? "tmake " : "qmake " );
+    if ( isTMakeProject() )
+    {
+    	cmdline = "tmake ";
+    }else
+    {
+	cmdline = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "")+"/bin/";
+	cmdline += "qmake ";
+    }
+
+    //QString cmdline = QString::fromLatin1( isTMakeProject() ? "tmake " : "qmake " );
 //    cmdline += fi.baseName() + ".pro";
     QDir d(dir);
     QStringList l = d.entryList("*.pro");
@@ -564,7 +576,7 @@ KDevProject::Options TrollProjectPart::options( ) const
 
 bool TrollProjectPart::isValidQtDir( const QString& path ) const
 {
-    return QFile::exists( path + "/include/qt.h" );
+    return QFile::exists( path + "/include/qt.h" ) || QFile::exists( path + "/include/Qt/qglobal.h" ) ;
 }
 
 QStringList TrollProjectPart::availableQtDirList() const

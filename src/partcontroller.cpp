@@ -377,34 +377,49 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 	// we don't trust KDE with designer files, let's handle it ourselves
 	if ( !m_openNextAsText && MimeType->is( "application/x-designer" ) )
 	{
-		QString DesignerSetting = config->readEntry( "DesignerSetting", "ExternalDesigner" );
-
-		if ( DesignerSetting == "EmbeddedKDevDesigner" )
+		QDomDocument* dom = API::getInstance()->projectDom();
+		if ( dom != 0 )
 		{
-			if ( KParts::ReadOnlyPart *designerPart = qtDesignerPart() )
+			QString DesignerSetting = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designerintegration");
+
+			if ( DesignerSetting == "EmbeddedKDevDesigner" )
 			{
-				addHistoryEntry();
-				activatePart(designerPart);
-				designerPart->openURL(url);
-				return;
+				if ( KParts::ReadOnlyPart *designerPart = qtDesignerPart() )
+				{
+					addHistoryEntry();
+					activatePart(designerPart);
+					designerPart->openURL(url);
+					return;
+				}
+				else if ( KParts::Factory * KDevDesignerFactory = static_cast<KParts::Factory*>( KLibLoader::self()->factory( QFile::encodeName( "libkdevdesignerpart" ) ) ) )
+				{
+					KParts::ReadWritePart * kdevpart = static_cast<KParts::ReadWritePart*>( KDevDesignerFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, "KParts::ReadWritePart"  ) );
+					kdevpart->openURL( url );
+					addHistoryEntry();
+					integratePart( kdevpart, url );
+					m_openRecentAction->addURL( url );
+					m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
+					return;
+				}
 			}
-			else if ( KParts::Factory * KDevDesignerFactory = static_cast<KParts::Factory*>( KLibLoader::self()->factory( QFile::encodeName( "libkdevdesignerpart" ) ) ) )
+	
+			QString designerDesktopName;
+	
+			if ( DesignerSetting == "ExternalKDevDesigner" )
 			{
-				KParts::ReadWritePart * kdevpart = static_cast<KParts::ReadWritePart*>( KDevDesignerFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, "KParts::ReadWritePart"  ) );
-				kdevpart->openURL( url );
-				addHistoryEntry();
-				integratePart( kdevpart, url );
-				m_openRecentAction->addURL( url );
-				m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
-				return;
+				designerDesktopName = "kdevdesigner";
 			}
+			else
+			{
+				QString QtDir = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/root");
+				if ( QtDir != QString::null )
+					designerDesktopName = QtDir+"/bin/";
+				designerDesktopName += "designer";
+			}
+	
+			KRun::run( designerDesktopName, url );
+			return;
 		}
-
-		QString designerDesktopName = "designer";
-		if ( DesignerSetting == "ExternalKDevDesigner" ) designerDesktopName = "kdevdesigner";
-
-		KRun::run( designerDesktopName, url );
-		return;
 	}
 
 	config->setGroup("General");

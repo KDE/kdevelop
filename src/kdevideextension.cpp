@@ -69,12 +69,6 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
 
     config->setGroup("General Options");
     gsw->projectsURL->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
-    gsw->designerButtonGroup->setButton( config->readNumEntry( "DesignerApp", 0 ) );
-
-    QString DesignerSetting = config->readEntry( "DesignerSetting", "ExternalDesigner" );
-    gsw->qtDesignerRadioButton->setChecked( DesignerSetting == "ExternalDesigner" );
-    gsw->seperateAppRadioButton->setChecked( DesignerSetting == "ExternalKDevDesigner" );
-    gsw->embeddedDesignerRadioButton->setChecked( DesignerSetting == "EmbeddedKDevDesigner" );
 
     config->setGroup("TerminalEmulator");
     gsw->terminalButtonGroup->setButton( config->readNumEntry( "UseKDESetting", 0 ) );
@@ -87,16 +81,9 @@ void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase *dlg)
     KConfig* config = kapp->config();
 
     config->setGroup("General Options");
-    config->writeEntry("DesignerApp", gsw->designerButtonGroup->selectedId());
     config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
     config->writePathEntry("DefaultProjectsDir", gsw->projectsURL->url());
     config->writeEntry("OutputViewFont", gsw->outputFont->font());
-
-    QString DesignerSetting;
-    if ( gsw->qtDesignerRadioButton->isChecked() ) DesignerSetting = "ExternalDesigner";
-    if ( gsw->seperateAppRadioButton->isChecked() ) DesignerSetting = "ExternalKDevDesigner";
-    if ( gsw->embeddedDesignerRadioButton->isChecked() ) DesignerSetting = "EmbeddedKDevDesigner";
-    config->writeEntry( "DesignerSetting", DesignerSetting );
 
     config->setGroup("MakeOutputView");
     config->writeEntry("LineWrapping",gsw->lineWrappingCheckBox->isChecked());
