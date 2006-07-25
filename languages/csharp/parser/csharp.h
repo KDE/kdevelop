@@ -3051,9 +3051,9 @@ namespace csharp
        *  @param type   Either parser::error or parser::warning.
        *  @param label  The error/warning text.
        */
-      virtual void pp_diagnostic( parser::problem_type type, std::string message )
+      virtual void pp_diagnostic( parser::problem_type /*type*/, std::string /*message*/ )
       {}
-      virtual void pp_diagnostic( parser::problem_type type )
+      virtual void pp_diagnostic( parser::problem_type /*type*/ )
       {}
 
     private:
@@ -3097,6 +3097,9 @@ namespace csharp
         _M_compatibility_mode = csharp20_compatibility;
 
       }
+
+      virtual ~parser()
+      {}
 
       bool parse_accessor_declarations(accessor_declarations_ast **yynode);
       bool parse_accessor_modifier(accessor_modifier_ast **yynode);
@@ -3676,7 +3679,7 @@ namespace csharp
         visit_node(node->accessor2_body);
       }
 
-      virtual void visit_accessor_modifier(accessor_modifier_ast *node)
+      virtual void visit_accessor_modifier(accessor_modifier_ast *)
     {}
 
       virtual void visit_additive_expression(additive_expression_ast *node)
@@ -3922,10 +3925,10 @@ namespace csharp
         visit_node(node->expression);
       }
 
-      virtual void visit_break_statement(break_statement_ast *node)
+      virtual void visit_break_statement(break_statement_ast *)
       {}
 
-      virtual void visit_builtin_class_type(builtin_class_type_ast *node)
+      virtual void visit_builtin_class_type(builtin_class_type_ast *)
       {}
 
       virtual void visit_cast_expression(cast_expression_ast *node)
@@ -4132,7 +4135,7 @@ namespace csharp
         visit_node(node->expression);
       }
 
-      virtual void visit_constructor_constraint(constructor_constraint_ast *node)
+      virtual void visit_constructor_constraint(constructor_constraint_ast *)
       {}
 
       virtual void visit_constructor_declaration(constructor_declaration_ast *node)
@@ -4159,7 +4162,7 @@ namespace csharp
         visit_node(node->arguments);
       }
 
-      virtual void visit_continue_statement(continue_statement_ast *node)
+      virtual void visit_continue_statement(continue_statement_ast *)
       {}
 
       virtual void visit_conversion_operator_declaration(conversion_operator_declaration_ast *node)
@@ -4400,7 +4403,7 @@ namespace csharp
         visit_node(node->body);
       }
 
-      virtual void visit_floating_point_type(floating_point_type_ast *node)
+      virtual void visit_floating_point_type(floating_point_type_ast *)
       {}
 
       virtual void visit_for_control(for_control_ast *node)
@@ -4480,7 +4483,7 @@ namespace csharp
         visit_node(node->body);
       }
 
-      virtual void visit_generic_dimension_specifier(generic_dimension_specifier_ast *node)
+      virtual void visit_generic_dimension_specifier(generic_dimension_specifier_ast *)
       {}
 
       virtual void visit_global_attribute_section(global_attribute_section_ast *node)
@@ -4503,7 +4506,7 @@ namespace csharp
         visit_node(node->constant_expression);
       }
 
-      virtual void visit_identifier(identifier_ast *node)
+      virtual void visit_identifier(identifier_ast *)
       {}
 
       virtual void visit_if_statement(if_statement_ast *node)
@@ -4532,7 +4535,7 @@ namespace csharp
         visit_node(node->accessor_declarations);
       }
 
-      virtual void visit_integral_type(integral_type_ast *node)
+      virtual void visit_integral_type(integral_type_ast *)
     {}
 
       virtual void visit_interface_accessors(interface_accessors_ast *node)
@@ -4684,7 +4687,7 @@ namespace csharp
         visit_node(node->interface_accessors);
       }
 
-      virtual void visit_keyword(keyword_ast *node)
+      virtual void visit_keyword(keyword_ast *)
     {}
 
       virtual void visit_labeled_statement(labeled_statement_ast *node)
@@ -4692,7 +4695,7 @@ namespace csharp
         visit_node(node->label);
       }
 
-      virtual void visit_literal(literal_ast *node)
+      virtual void visit_literal(literal_ast *)
       {}
 
       virtual void visit_local_constant_declaration(local_constant_declaration_ast *node)
@@ -4847,7 +4850,7 @@ namespace csharp
         visit_node(node->type_declaration);
       }
 
-      virtual void visit_namespace_name(namespace_name_ast *node)
+      virtual void visit_namespace_name(namespace_name_ast *)
       {}
 
       virtual void visit_namespace_or_type_name(namespace_or_type_name_ast *node)
@@ -4944,7 +4947,7 @@ namespace csharp
           }
       }
 
-      virtual void visit_optional_modifiers(optional_modifiers_ast *node)
+      virtual void visit_optional_modifiers(optional_modifiers_ast *)
     {}
 
       virtual void visit_optionally_nullable_type(optionally_nullable_type_ast *node)
@@ -4952,13 +4955,13 @@ namespace csharp
         visit_node(node->non_nullable_type);
       }
 
-      virtual void visit_overloadable_binary_only_operator(overloadable_binary_only_operator_ast *node)
+      virtual void visit_overloadable_binary_only_operator(overloadable_binary_only_operator_ast *)
       {}
 
-      virtual void visit_overloadable_unary_only_operator(overloadable_unary_only_operator_ast *node)
+      virtual void visit_overloadable_unary_only_operator(overloadable_unary_only_operator_ast *)
       {}
 
-      virtual void visit_overloadable_unary_or_binary_operator(overloadable_unary_or_binary_operator_ast *node)
+      virtual void visit_overloadable_unary_or_binary_operator(overloadable_unary_or_binary_operator_ast *)
       {}
 
       virtual void visit_parameter_array(parameter_array_ast *node)
@@ -4967,7 +4970,7 @@ namespace csharp
         visit_node(node->variable_name);
       }
 
-      virtual void visit_parameter_modifier(parameter_modifier_ast *node)
+      virtual void visit_parameter_modifier(parameter_modifier_ast *)
       {}
 
       virtual void visit_pointer_type(pointer_type_ast *node)
@@ -4990,7 +4993,7 @@ namespace csharp
         visit_node(node->attribute_argument_expression);
       }
 
-      virtual void visit_predefined_type(predefined_type_ast *node)
+      virtual void visit_predefined_type(predefined_type_ast *)
       {}
 
       virtual void visit_primary_atom(primary_atom_ast *node)
@@ -5075,7 +5078,7 @@ namespace csharp
           }
       }
 
-      virtual void visit_rank_specifier(rank_specifier_ast *node)
+      virtual void visit_rank_specifier(rank_specifier_ast *)
     {}
 
       virtual void visit_relational_expression(relational_expression_ast *node)
@@ -5307,7 +5310,7 @@ namespace csharp
                                                             }
                                                         }
 
-                                                        virtual void visit_type_arguments_or_parameters_end(type_arguments_or_parameters_end_ast *node)
+                                                        virtual void visit_type_arguments_or_parameters_end(type_arguments_or_parameters_end_ast *)
                                                       {}
 
                                                         virtual void visit_type_declaration(type_declaration_ast *node)
@@ -5324,10 +5327,10 @@ namespace csharp
                                                           visit_node(node->delegate_declaration);
                                                         }
 
-                                                        virtual void visit_type_name(type_name_ast *node)
+                                                        virtual void visit_type_name(type_name_ast *)
                                                         {}
 
-                                                        virtual void visit_type_name_safe(type_name_safe_ast *node)
+                                                        virtual void visit_type_name_safe(type_name_safe_ast *)
                                                         {}
 
                                                         virtual void visit_type_parameter(type_parameter_ast *node)

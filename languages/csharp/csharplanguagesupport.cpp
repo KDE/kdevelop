@@ -107,9 +107,10 @@ QStringList CSharpLanguageSupport::mimeTypes() const
 
 void CSharpLanguageSupport::documentLoaded( KDevDocument* file )
 {
-    Q_UNUSED( file );
-    //     if ( supportsDocument( file ) )
-    //         m_backgroundParser->addDocument( file->url(), file );
+    kDebug() << k_funcinfo << endl;
+    if ( supportsDocument( file ) )
+        kDebug() << file->url() << endl;
+    /*        m_backgroundParser->addDocument( file->url(), file );*/
 }
 
 void CSharpLanguageSupport::documentClosed( KDevDocument* file )

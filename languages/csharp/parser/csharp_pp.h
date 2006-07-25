@@ -434,6 +434,9 @@ namespace csharp_pp
 
       }
 
+      virtual ~parser()
+      {}
+
       bool parse_pp_and_expression(pp_and_expression_ast **yynode);
       bool parse_pp_declaration(pp_declaration_ast **yynode);
       bool parse_pp_diagnostic(pp_diagnostic_ast **yynode);
@@ -515,10 +518,10 @@ namespace csharp_pp
           }
       }
 
-      virtual void visit_pp_declaration(pp_declaration_ast *node)
+      virtual void visit_pp_declaration(pp_declaration_ast *)
     {}
 
-      virtual void visit_pp_diagnostic(pp_diagnostic_ast *node)
+      virtual void visit_pp_diagnostic(pp_diagnostic_ast *)
       {}
 
       virtual void visit_pp_directive(pp_directive_ast *node)
@@ -539,10 +542,10 @@ namespace csharp_pp
         visit_node(node->expression);
       }
 
-      virtual void visit_pp_else_clause(pp_else_clause_ast *node)
+      virtual void visit_pp_else_clause(pp_else_clause_ast *)
       {}
 
-      virtual void visit_pp_endif_clause(pp_endif_clause_ast *node)
+      virtual void visit_pp_endif_clause(pp_endif_clause_ast *)
       {}
 
       virtual void visit_pp_equality_expression(pp_equality_expression_ast *node)
@@ -584,10 +587,10 @@ namespace csharp_pp
         visit_node(node->expression);
       }
 
-      virtual void visit_pp_line(pp_line_ast *node)
+      virtual void visit_pp_line(pp_line_ast *)
       {}
 
-      virtual void visit_pp_pragma(pp_pragma_ast *node)
+      virtual void visit_pp_pragma(pp_pragma_ast *)
       {}
 
       virtual void visit_pp_primary_expression(pp_primary_expression_ast *node)
@@ -595,7 +598,7 @@ namespace csharp_pp
         visit_node(node->parenthesis_expression);
       }
 
-      virtual void visit_pp_region(pp_region_ast *node)
+      virtual void visit_pp_region(pp_region_ast *)
       {}
 
       virtual void visit_pp_unary_expression(pp_unary_expression_ast *node)

@@ -97,7 +97,7 @@ void handler_visitor::visit_pp_elif_clause(pp_elif_clause_ast* node)
     _M_scope->set_activated(false);
 }
 
-void handler_visitor::visit_pp_else_clause(pp_else_clause_ast* node)
+void handler_visitor::visit_pp_else_clause(pp_else_clause_ast*)
 {
   if (_M_scope == 0 || _M_pp_parser == 0)
     return;
@@ -114,7 +114,7 @@ void handler_visitor::visit_pp_else_clause(pp_else_clause_ast* node)
     _M_scope->set_activated(false);
 }
 
-void handler_visitor::visit_pp_endif_clause(pp_endif_clause_ast* node)
+void handler_visitor::visit_pp_endif_clause(pp_endif_clause_ast*)
 {
   if (_M_scope == 0 || _M_pp_parser == 0)
     return;

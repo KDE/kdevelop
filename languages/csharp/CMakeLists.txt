@@ -17,7 +17,7 @@ set(kdevcsharplanguagesupport_PART_SRCS
 
 kde4_automoc(${kdevcsharplanguagesupport_PART_SRCS})
 kde4_add_plugin(kdevcsharplanguagesupport ${kdevcsharplanguagesupport_PART_SRCS})
-target_link_libraries(kdevcsharplanguagesupport ${KDE4_KDECORE_LIBS} kdevinterfaces ThreadWeaver )
+target_link_libraries(kdevcsharplanguagesupport ${KDE4_KDECORE_LIBS} kdevinterfaces ThreadWeaver kdevcsharpparser )
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevcsharplanguagesupport)
 install(TARGETS kdevcsharplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR} )
 
