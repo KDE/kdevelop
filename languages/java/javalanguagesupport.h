@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVCPPLANGUAGESUPPORT_H
-#define KDEVCPPLANGUAGESUPPORT_H
+#ifndef KDEVJAVALANGUAGESUPPORT_H
+#define KDEVJAVALANGUAGESUPPORT_H
 
 #include <kdevlanguagesupport.h>
 
