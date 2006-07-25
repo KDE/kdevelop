@@ -108,9 +108,10 @@ QStringList JavaLanguageSupport::mimeTypes() const
 
 void JavaLanguageSupport::documentLoaded( KDevDocument* file )
 {
-    Q_UNUSED( file );
-    //     if ( supportsDocument( file ) )
-    //         m_backgroundParser->addDocument( file->url(), file );
+    kDebug() << k_funcinfo << endl;
+    if ( supportsDocument( file ) )
+        kDebug() << file->url() << endl;
+/*        m_backgroundParser->addDocument( file->url(), file );*/
 }
 
 void JavaLanguageSupport::documentClosed( KDevDocument* file )
