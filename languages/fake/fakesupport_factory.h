@@ -20,5 +20,5 @@ protected:
 
 #endif // FAKESUPPORT_FACTORY_H
 
-// kate: indent-mode csands; tab-width 4;
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
 
