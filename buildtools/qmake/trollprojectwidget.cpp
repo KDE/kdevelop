@@ -2308,7 +2308,10 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                     fcext = "h";
                     break;
                 case GroupItem::Forms:
-                    fcext = "ui-widget";
+                    if ( DomUtil::readIntEntry( *m_part->projectDom(), "/kdevcppsupport/qt/version", 3 ) == 3 )
+                        fcext = "ui-widget";
+                    else
+                        fcext = "ui-widget-qt4";
                     break;
                 case GroupItem::Translations:
                     fcext = "ts";
@@ -2410,8 +2413,11 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           popup.setWhatsThis(idSubclassWidget, i18n("<b>Subclass widget</b><p>Launches <b>Subclassing</b> wizard. "
                            "It allows to create a subclass from the class defined in .ui file. "
                            "There is also possibility to implement slots and functions defined in the base class."));
-      idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h"),i18n("Open ui.h File"));
-          popup.setWhatsThis(idViewUIH, i18n("<b>Open ui.h file</b><p>Opens .ui.h file associated with the selected .ui."));
+      if ( DomUtil::readIntEntry( *m_part->projectDom(), "kdevcppsupport/qt/version", 3 ) == 3 )
+      {
+          idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h"),i18n("Open ui.h File"));
+              popup.setWhatsThis(idViewUIH, i18n("<b>Open ui.h file</b><p>Opens .ui.h file associated with the selected .ui."));
+      }
       idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("List of Subclasses..."));
           popup.setWhatsThis(idUISubclasses, i18n("<b>List of subclasses</b><p>Shows subclasses list editor. "
                            "There is possibility to add or remove subclasses from the list."));
