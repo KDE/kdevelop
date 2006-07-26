@@ -147,7 +147,9 @@ namespace FileCreate {
 
 	void NewFileChooser::accept()
 	{
-		QFileInfo file( url().path() );
+		QString fullPath = url().path();
+		if ( !selectedType()->ext().isEmpty() && !fullPath.endsWith("." + selectedType()->ext())) fullPath+="." + selectedType()->ext();
+		QFileInfo file( fullPath );
 		if ( file.exists() )
 		{
 			KMessageBox::sorry( this, i18n("A file with this name already exists"), i18n("File Exists") );
