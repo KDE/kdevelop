@@ -45,7 +45,9 @@ KDevKonsoleView::KDevKonsoleView( QWidget *parent )
 }
 
 KDevKonsoleView::~KDevKonsoleView()
-{}
+{
+    delete m_part;
+}
 
 void KDevKonsoleView::showEvent( QShowEvent *event )
 {
