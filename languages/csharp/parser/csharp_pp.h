@@ -8,6 +8,9 @@
 #include "kdev-pg-allocator.h"
 #include "kdev-pg-list.h"
 #include "kdev-pg-token-stream.h"
+
+#include <kdevast.h>
+
 #include <cassert>
 
 namespace csharp_pp
@@ -73,7 +76,7 @@ namespace csharp_pp
   }
 
 
-  struct ast_node
+  struct ast_node: public KDevAST
     {
       enum ast_node_kind_enum {
         Kind_pp_and_expression = 1000,

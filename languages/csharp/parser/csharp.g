@@ -217,8 +217,8 @@ namespace csharp_pp
    *  @param type   Either parser::error or parser::warning.
    *  @param label  The error/warning text.
    */
-  virtual void pp_diagnostic( parser::problem_type type, std::string message ) {}
-  virtual void pp_diagnostic( parser::problem_type type ) {}
+  virtual void pp_diagnostic( parser::problem_type /*type*/, std::string /*message*/ ) {}
+  virtual void pp_diagnostic( parser::problem_type /*type*/ ) {}
 :]
 
 %parserclass (private declaration)

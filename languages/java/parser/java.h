@@ -8,6 +8,9 @@
 #include "kdev-pg-allocator.h"
 #include "kdev-pg-list.h"
 #include "kdev-pg-token-stream.h"
+
+#include <kdevast.h>
+
 #include <cassert>
 
 namespace java
@@ -207,17 +210,17 @@ namespace java
   namespace modifiers
     {
     enum modifier_enum {
-      mod_private      = 1,
-      mod_public       = 2,
-      mod_protected    = 4,
-      mod_static       = 8,
-      mod_transient    = 16,
-      mod_final        = 32,
-      mod_abstract     = 64,
-      mod_native       = 128,
+      mod_private = 1,
+      mod_public = 2,
+      mod_protected = 4,
+      mod_static = 8,
+      mod_transient = 16,
+      mod_final = 32,
+      mod_abstract = 64,
+      mod_native = 128,
       mod_synchronized = 256,
-      mod_volatile     = 512,
-      mod_strictfp     = 1024,
+      mod_volatile = 512,
+      mod_strictfp = 1024,
     };
   }
 
@@ -295,7 +298,7 @@ namespace java
   }
 
 
-  struct ast_node
+  struct ast_node: public KDevAST
     {
       enum ast_node_kind_enum {
         Kind_additive_expression = 1000,

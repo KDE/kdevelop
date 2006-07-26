@@ -8,6 +8,9 @@
 #include "kdev-pg-allocator.h"
 #include "kdev-pg-list.h"
 #include "kdev-pg-token-stream.h"
+
+#include <kdevast.h>
+
 #include <cassert>
 
 namespace csharp
@@ -196,7 +199,7 @@ namespace csharp
     enum accessor_declarations_enum {
       type_get,
       type_set,
-      type_none, // only possible for the second, optional accessor
+      type_none,  // only possible for the second, optional accessor
     };
   }
 
@@ -331,21 +334,21 @@ namespace csharp
   namespace modifiers
     {
     enum modifier_enum {
-      mod_new          = 1,
-      mod_public       = 2,
-      mod_protected    = 4,
-      mod_internal     = 8,
-      mod_private      = 16,
-      mod_abstract     = 32,
-      mod_sealed       = 64,
-      mod_static       = 128,
-      mod_readonly     = 256,
-      mod_volatile     = 512,
-      mod_virtual      = 1024,
-      mod_override     = 2048,
-      mod_extern       = 4096,
-      mod_unsafe       = 8192,
-      mod_fixed        = 16384,
+      mod_new = 1,
+      mod_public = 2,
+      mod_protected = 4,
+      mod_internal = 8,
+      mod_private = 16,
+      mod_abstract = 32,
+      mod_sealed = 64,
+      mod_static = 128,
+      mod_readonly = 256,
+      mod_volatile = 512,
+      mod_virtual = 1024,
+      mod_override = 2048,
+      mod_extern = 4096,
+      mod_unsafe = 8192,
+      mod_fixed = 16384,
     };
   }
 
@@ -566,7 +569,7 @@ namespace csharp
                   }
 
 
-                  struct ast_node
+                  struct ast_node: public KDevAST
                     {
                       enum ast_node_kind_enum {
                         Kind_accessor_declarations = 1000,
@@ -3062,7 +3065,7 @@ namespace csharp
       bool pp_is_symbol_defined( std::string symbol_name );
 
       parser::csharp_compatibility_mode _M_compatibility_mode;
-      std::set<std::string>
+      std::set <std::string>
       _M_pp_defined_symbols;
 
       // _M_ltCounter stores the amount of currently open type arguments rules,
