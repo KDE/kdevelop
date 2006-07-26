@@ -105,17 +105,20 @@ namespace csharp_pp
             return yy_expected_symbol(ast_node::Kind_pp_equality_expression, "pp_equality_expression");
           }
         (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_0, memory_pool);
+
         while (yytoken == Token_PP_LOG_AND)
           {
             if (yytoken != Token_PP_LOG_AND)
               return yy_expected_token(yytoken, Token_PP_LOG_AND, "&&");
             yylex();
+
             pp_equality_expression_ast *__node_1 = 0;
             if (!parse_pp_equality_expression(&__node_1))
               {
                 return yy_expected_symbol(ast_node::Kind_pp_equality_expression, "pp_equality_expression");
               }
             (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_1, memory_pool);
+
           }
       }
     else
@@ -142,6 +145,7 @@ namespace csharp_pp
             if (yytoken != Token_PP_DEFINE)
               return yy_expected_token(yytoken, Token_PP_DEFINE, "#define");
             yylex();
+
             (*yynode)->type = pp_declaration::type_define;
           }
         else if (yytoken == Token_PP_UNDEF)
@@ -149,6 +153,7 @@ namespace csharp_pp
             if (yytoken != Token_PP_UNDEF)
               return yy_expected_token(yytoken, Token_PP_UNDEF, "#undef");
             yylex();
+
             (*yynode)->type = pp_declaration::type_undef;
           }
         else
@@ -159,6 +164,7 @@ namespace csharp_pp
           return yy_expected_token(yytoken, Token_PP_CONDITIONAL_SYMBOL, "pre-processor symbol");
         (*yynode)->conditional_symbol = token_stream->index() - 1;
         yylex();
+
       }
     else
       {
@@ -184,6 +190,7 @@ namespace csharp_pp
             if (yytoken != Token_PP_ERROR)
               return yy_expected_token(yytoken, Token_PP_ERROR, "#error");
             yylex();
+
             (*yynode)->type = pp_diagnostic::type_error;
           }
         else if (yytoken == Token_PP_WARNING)
@@ -191,6 +198,7 @@ namespace csharp_pp
             if (yytoken != Token_PP_WARNING)
               return yy_expected_token(yytoken, Token_PP_WARNING, "#warning");
             yylex();
+
             (*yynode)->type = pp_diagnostic::type_warning;
           }
         else
@@ -203,6 +211,7 @@ namespace csharp_pp
               return yy_expected_token(yytoken, Token_PP_MESSAGE, "single-line text");
             (*yynode)->message = token_stream->index() - 1;
             yylex();
+
           }
         else if (true /*epsilon*/)
         {}
@@ -249,6 +258,7 @@ namespace csharp_pp
                 return yy_expected_symbol(ast_node::Kind_pp_declaration, "pp_declaration");
               }
             (*yynode)->declaration = __node_2;
+
           }
         else if (yytoken == Token_PP_IF)
           {
@@ -258,6 +268,7 @@ namespace csharp_pp
                 return yy_expected_symbol(ast_node::Kind_pp_if_clause, "pp_if_clause");
               }
             (*yynode)->if_clause = __node_3;
+
           }
         else if (yytoken == Token_PP_ELIF)
           {
@@ -267,6 +278,7 @@ namespace csharp_pp
                 return yy_expected_symbol(ast_node::Kind_pp_elif_clause, "pp_elif_clause");
               }
             (*yynode)->elif_clause = __node_4;
+
           }
         else if (yytoken == Token_PP_ELSE)
           {
@@ -276,6 +288,7 @@ namespace csharp_pp
                 return yy_expected_symbol(ast_node::Kind_pp_else_clause, "pp_else_clause");
               }
             (*yynode)->else_clause = __node_5;
+
           }
         else if (yytoken == Token_PP_ENDIF)
           {
@@ -285,6 +298,7 @@ namespace csharp_pp
                 return yy_expected_symbol(ast_node::Kind_pp_endif_clause, "pp_endif_clause");
               }
             (*yynode)->endif_clause = __node_6;
+
           }
         else if (yytoken == Token_PP_ERROR
                  || yytoken == Token_PP_WARNING)
@@ -295,6 +309,7 @@ namespace csharp_pp
                 return yy_expected_symbol(ast_node::Kind_pp_diagnostic, "pp_diagnostic");
               }
             (*yynode)->diagnostic = __node_7;
+
           }
         else if (yytoken == Token_PP_REGION
                  || yytoken == Token_PP_ENDREGION)
@@ -305,6 +320,7 @@ namespace csharp_pp
                 return yy_expected_symbol(ast_node::Kind_pp_region, "pp_region");
               }
             (*yynode)->region = __node_8;
+
           }
         else if (yytoken == Token_PP_LINE)
           {
@@ -314,6 +330,7 @@ namespace csharp_pp
                 return yy_expected_symbol(ast_node::Kind_pp_line, "pp_line");
               }
             (*yynode)->line = __node_9;
+
           }
         else if (yytoken == Token_PP_PRAGMA)
           {
@@ -323,6 +340,7 @@ namespace csharp_pp
                 return yy_expected_symbol(ast_node::Kind_pp_pragma, "pp_pragma");
               }
             (*yynode)->pragma = __node_10;
+
           }
         else
           {
@@ -331,6 +349,7 @@ namespace csharp_pp
         if (yytoken != Token_PP_NEW_LINE)
           return yy_expected_token(yytoken, Token_PP_NEW_LINE, "line break");
         yylex();
+
         if (Token_EOF != yytoken)
           {
             return false;
@@ -357,12 +376,14 @@ namespace csharp_pp
         if (yytoken != Token_PP_ELIF)
           return yy_expected_token(yytoken, Token_PP_ELIF, "#elif");
         yylex();
+
         pp_expression_ast *__node_11 = 0;
         if (!parse_pp_expression(&__node_11))
           {
             return yy_expected_symbol(ast_node::Kind_pp_expression, "pp_expression");
           }
         (*yynode)->expression = __node_11;
+
       }
     else
       {
@@ -385,6 +406,7 @@ namespace csharp_pp
         if (yytoken != Token_PP_ELSE)
           return yy_expected_token(yytoken, Token_PP_ELSE, "#else");
         yylex();
+
       }
     else
       {
@@ -407,6 +429,7 @@ namespace csharp_pp
         if (yytoken != Token_PP_ENDIF)
           return yy_expected_token(yytoken, Token_PP_ENDIF, "#endif");
         yylex();
+
       }
     else
       {
@@ -436,6 +459,7 @@ namespace csharp_pp
             return yy_expected_symbol(ast_node::Kind_pp_unary_expression, "pp_unary_expression");
           }
         (*yynode)->expression = __node_12;
+
         while (yytoken == Token_PP_EQUAL
                || yytoken == Token_PP_NOT_EQUAL)
           {
@@ -445,6 +469,7 @@ namespace csharp_pp
                 return yy_expected_symbol(ast_node::Kind_pp_equality_expression_rest, "pp_equality_expression_rest");
               }
             (*yynode)->additional_expression_sequence = snoc((*yynode)->additional_expression_sequence, __node_13, memory_pool);
+
           }
       }
     else
@@ -471,6 +496,7 @@ namespace csharp_pp
             if (yytoken != Token_PP_EQUAL)
               return yy_expected_token(yytoken, Token_PP_EQUAL, "==");
             yylex();
+
             (*yynode)->equality_operator = pp_equality_expression_rest::op_equal;
           }
         else if (yytoken == Token_PP_NOT_EQUAL)
@@ -478,6 +504,7 @@ namespace csharp_pp
             if (yytoken != Token_PP_NOT_EQUAL)
               return yy_expected_token(yytoken, Token_PP_NOT_EQUAL, "!=");
             yylex();
+
             (*yynode)->equality_operator = pp_equality_expression_rest::op_not_equal;
           }
         else
@@ -490,6 +517,7 @@ namespace csharp_pp
             return yy_expected_symbol(ast_node::Kind_pp_unary_expression, "pp_unary_expression");
           }
         (*yynode)->expression = __node_14;
+
       }
     else
       {
@@ -519,17 +547,20 @@ namespace csharp_pp
             return yy_expected_symbol(ast_node::Kind_pp_and_expression, "pp_and_expression");
           }
         (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_15, memory_pool);
+
         while (yytoken == Token_PP_LOG_OR)
           {
             if (yytoken != Token_PP_LOG_OR)
               return yy_expected_token(yytoken, Token_PP_LOG_OR, "||");
             yylex();
+
             pp_and_expression_ast *__node_16 = 0;
             if (!parse_pp_and_expression(&__node_16))
               {
                 return yy_expected_symbol(ast_node::Kind_pp_and_expression, "pp_and_expression");
               }
             (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_16, memory_pool);
+
           }
       }
     else
@@ -553,12 +584,14 @@ namespace csharp_pp
         if (yytoken != Token_PP_IF)
           return yy_expected_token(yytoken, Token_PP_IF, "#if");
         yylex();
+
         pp_expression_ast *__node_17 = 0;
         if (!parse_pp_expression(&__node_17))
           {
             return yy_expected_symbol(ast_node::Kind_pp_expression, "pp_expression");
           }
         (*yynode)->expression = __node_17;
+
       }
     else
       {
@@ -581,18 +614,21 @@ namespace csharp_pp
         if (yytoken != Token_PP_LINE)
           return yy_expected_token(yytoken, Token_PP_LINE, "#line");
         yylex();
+
         if (yytoken == Token_PP_LINE_NUMBER)
           {
             if (yytoken != Token_PP_LINE_NUMBER)
               return yy_expected_token(yytoken, Token_PP_LINE_NUMBER, "line number");
             (*yynode)->line_number = token_stream->index() - 1;
             yylex();
+
             if (yytoken == Token_PP_FILE_NAME)
               {
                 if (yytoken != Token_PP_FILE_NAME)
                   return yy_expected_token(yytoken, Token_PP_FILE_NAME, "file name (in double quotes)");
                 (*yynode)->file_name = token_stream->index() - 1;
                 yylex();
+
               }
             else if (true /*epsilon*/)
             {}
@@ -607,6 +643,7 @@ namespace csharp_pp
               return yy_expected_token(yytoken, Token_PP_DEFAULT, "default");
             (*yynode)->token_default = token_stream->index() - 1;
             yylex();
+
           }
         else if (yytoken == Token_PP_IDENTIFIER_OR_KEYWORD)
           {
@@ -614,6 +651,7 @@ namespace csharp_pp
               return yy_expected_token(yytoken, Token_PP_IDENTIFIER_OR_KEYWORD, "identifier or keyword");
             (*yynode)->identifier_or_keyword = token_stream->index() - 1;
             yylex();
+
           }
         else
           {
@@ -641,12 +679,14 @@ namespace csharp_pp
         if (yytoken != Token_PP_PRAGMA)
           return yy_expected_token(yytoken, Token_PP_PRAGMA, "#pragma");
         yylex();
+
         if (yytoken == Token_PP_PRAGMA_TEXT)
           {
             if (yytoken != Token_PP_PRAGMA_TEXT)
               return yy_expected_token(yytoken, Token_PP_PRAGMA_TEXT, "pragma text");
             (*yynode)->pragma_text = token_stream->index() - 1;
             yylex();
+
           }
         else if (true /*epsilon*/)
         {}
@@ -681,6 +721,7 @@ namespace csharp_pp
             if (yytoken != Token_PP_TRUE)
               return yy_expected_token(yytoken, Token_PP_TRUE, "true");
             yylex();
+
             (*yynode)->type = pp_primary_expression::type_true;
           }
         else if (yytoken == Token_PP_FALSE)
@@ -688,6 +729,7 @@ namespace csharp_pp
             if (yytoken != Token_PP_FALSE)
               return yy_expected_token(yytoken, Token_PP_FALSE, "false");
             yylex();
+
             (*yynode)->type = pp_primary_expression::type_false;
           }
         else if (yytoken == Token_PP_CONDITIONAL_SYMBOL)
@@ -696,6 +738,7 @@ namespace csharp_pp
               return yy_expected_token(yytoken, Token_PP_CONDITIONAL_SYMBOL, "pre-processor symbol");
             (*yynode)->conditional_symbol = token_stream->index() - 1;
             yylex();
+
             (*yynode)->type = pp_primary_expression::type_conditional_symbol;
           }
         else if (yytoken == Token_PP_LPAREN)
@@ -703,15 +746,18 @@ namespace csharp_pp
             if (yytoken != Token_PP_LPAREN)
               return yy_expected_token(yytoken, Token_PP_LPAREN, "(");
             yylex();
+
             pp_expression_ast *__node_18 = 0;
             if (!parse_pp_expression(&__node_18))
               {
                 return yy_expected_symbol(ast_node::Kind_pp_expression, "pp_expression");
               }
             (*yynode)->parenthesis_expression = __node_18;
+
             if (yytoken != Token_PP_RPAREN)
               return yy_expected_token(yytoken, Token_PP_RPAREN, ")");
             yylex();
+
             (*yynode)->type = pp_primary_expression::type_parenthesis_expression;
           }
         else
@@ -743,6 +789,7 @@ namespace csharp_pp
             if (yytoken != Token_PP_REGION)
               return yy_expected_token(yytoken, Token_PP_REGION, "#region");
             yylex();
+
             (*yynode)->type = pp_region::type_region;
           }
         else if (yytoken == Token_PP_ENDREGION)
@@ -750,6 +797,7 @@ namespace csharp_pp
             if (yytoken != Token_PP_ENDREGION)
               return yy_expected_token(yytoken, Token_PP_ENDREGION, "#endregion");
             yylex();
+
             (*yynode)->type = pp_region::type_endregion;
           }
         else
@@ -762,6 +810,7 @@ namespace csharp_pp
               return yy_expected_token(yytoken, Token_PP_MESSAGE, "single-line text");
             (*yynode)->label = token_stream->index() - 1;
             yylex();
+
           }
         else if (true /*epsilon*/)
         {}
@@ -797,12 +846,14 @@ namespace csharp_pp
             if (yytoken != Token_PP_BANG)
               return yy_expected_token(yytoken, Token_PP_BANG, "!");
             yylex();
+
             pp_primary_expression_ast *__node_19 = 0;
             if (!parse_pp_primary_expression(&__node_19))
               {
                 return yy_expected_symbol(ast_node::Kind_pp_primary_expression, "pp_primary_expression");
               }
             (*yynode)->expression = __node_19;
+
             (*yynode)->negated = true;
           }
         else if (yytoken == Token_PP_CONDITIONAL_SYMBOL
@@ -816,6 +867,7 @@ namespace csharp_pp
                 return yy_expected_symbol(ast_node::Kind_pp_primary_expression, "pp_primary_expression");
               }
             (*yynode)->expression = __node_20;
+
             (*yynode)->negated = false;
           }
         else

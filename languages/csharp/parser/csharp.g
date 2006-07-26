@@ -27,7 +27,7 @@
 -----------------------------------------------------------------------------
 
 
--- 15 first/follow conflicts:
+-- 20 first/follow conflicts:
 --  - The EXTERN conflicts in compilation_unit. They would be gone if
 --    type_declaration used optional_type_modifiers instead of
 --    broader optional_modifiers, but we stick with the latter one in order
@@ -42,6 +42,8 @@
 --    (manually resolved, 1 conflict)
 --  - The COMMA conflict in attribute_section, exactly the same one as above.
 --    (manually resolved, 1 conflict)
+--  - The COMMA conflict in attribute_arguments: greedy is ok.
+--    (done right by default, 1 conflict)
 --  - The EXTERN conflict in namespace_body. This is exactly the same as
 --    the other "extern" conflicts from above, see there for the explanation.
 --    (done right by default, 1 conflict)
@@ -56,24 +58,23 @@
 --    (manually resolved, 1 conflict)
 --  - The COMMA conflict in array_initializer, another one of those.
 --    (manually resolved, 1 conflict)
---  - The BIT_AND conflict in bit_and_expression and
---    the PLUS, MINUS conflict in additive expression.
+--  - The BIT_AND conflict in bit_and_expression,
+--    the PLUS, MINUS conflict in additive_expression,
+--    the STAR conflict in multiplicative_expression, and
+--    the LPAREN, INCREMENT, DECREMENT conflict in primary_expression.
 --    They originate in the rather hackish solution to make expressions like
 --    "a is sometype ? if_exp : else_exp" work (see conditional_expression)
 --    and can be ignored, because the condition does the necessary check.
---    (manually resolved, 2 conflicts)
+--    (manually resolved, 4 conflicts)
+--  - The LBRACKET conflict in array_creation_expression_rest, for which
+--    new_expression with its array_creation_expression part is to blame.
+--    Caused by the fact that array_creation_expression can't be seperated
+--    from primary_atom and put into primary_expression instead.
+--    (manually resolved, 1 conflict)
 --  - The STAR conflict in unmanaged_type:
 --    Caused by the may-end-with-epsilon type_arguments. It doesn't apply
 --    at all, only kdevelop-pg thinks it does. Code segments...
 --    (done right by default, 1 conflict)
---  - The LPAREN, INCREMENT, DECREMENT conflict in primary_expression is
---    the same one as the BIT_AND and PLUS, MINUS conflicts further above,
---    and can also be ignored.
---    (manually resolved, 1 conflict)
---  - The LBRACKET conflict in array_creation_expression, for which new_expression
---    with its array_creation_expression part is to blame.
---    Caused by the fact that array_creation_expression can't be seperated.
---    (manually resolved, 1 conflict)
 --  - The LBRACKET, STAR conflict in unmanaged_type, similar to the one
 --    in array_creation_expression, only that it's triggered by the
 --    rank specifiers instead. The LBRACKET conflict is caused by the fact
@@ -154,7 +155,7 @@
 --    Needs LL(k), solved by lookahead_is_unbound_type_name().
 --    (1 conflict)
 
--- Total amount of conflicts: 32
+-- Total amount of conflicts: 37
 
 
 
@@ -703,12 +704,13 @@ namespace csharp_pp
 ------------------------------------------------------------
 
 
-   (#extern_alias=extern_alias_directive)*  -- TODO: probably not in C# 1.0
-   (#using=using_directive)*
-   (  0 [: if (LA(2).kind != Token_ASSEMBLY) break; :] -- exit the "star loop"
-      #global_attribute=global_attribute_section
+   recover(#extern_alias=extern_alias_directive)*  -- TODO: probably not in C# 1.0
+   recover(#using=using_directive)*
+   recover(
+     0 [: if (LA(2).kind != Token_ASSEMBLY) break; :] -- exit the "star loop"
+     #global_attribute=global_attribute_section
    )*
-   (#namespace=namespace_member_declaration)*
+   recover(#namespace=namespace_member_declaration)*
 -> compilation_unit ;;
 
 
@@ -742,6 +744,9 @@ namespace csharp_pp
    ( COMMA | 0 )
    RBRACKET
 -> global_attribute_section ;;
+
+   recover(#attribute=attribute_section)*
+-> optional_attribute_sections ;;
 
    LBRACKET
    (  ?[: LA(2).kind == Token_COLON :] target=attribute_target COLON
@@ -806,15 +811,15 @@ namespace csharp_pp
 -> namespace_declaration ;;
 
    LBRACE
-   (#extern_alias=extern_alias_directive)*  -- TODO: probably not in C# 1.0
-   (#using=using_directive)*
-   (#namespace=namespace_member_declaration)*
+   recover(#extern_alias=extern_alias_directive)*  -- TODO: probably not in C# 1.0
+   recover(#using=using_directive)*
+   recover(#namespace=namespace_member_declaration)*
    RBRACE
 -> namespace_body ;;
 
-   (#attribute:attribute_section)*
+   attributes:optional_attribute_sections
    modifiers:optional_modifiers
-   rest=type_declaration_rest[ attribute_sequence, modifiers ]
+   rest=type_declaration_rest[ attributes, modifiers ]
 -> type_declaration ;;
 
 -- TODO: after parsing, check if the modifiers are allowed for the specific
@@ -822,20 +827,20 @@ namespace csharp_pp
 
  (
    PARTIAL
-   (  class_declaration=class_declaration[ attribute_sequence, modifiers, true ]
-    | struct_declaration=struct_declaration[ attribute_sequence, modifiers, true ]
-    | interface_declaration=interface_declaration[ attribute_sequence, modifiers, true ]
+   (  class_declaration=class_declaration[ attributes, modifiers, true ]
+    | struct_declaration=struct_declaration[ attributes, modifiers, true ]
+    | interface_declaration=interface_declaration[ attributes, modifiers, true ]
    )
  |
-   (  class_declaration=class_declaration[ attribute_sequence, modifiers, false ]
-    | struct_declaration=struct_declaration[ attribute_sequence, modifiers, false ]
-    | interface_declaration=interface_declaration[ attribute_sequence, modifiers, false ]
-    | enum_declaration=enum_declaration[ attribute_sequence, modifiers ]
-    | delegate_declaration=delegate_declaration[ attribute_sequence, modifiers ]
+   (  class_declaration=class_declaration[ attributes, modifiers, false ]
+    | struct_declaration=struct_declaration[ attributes, modifiers, false ]
+    | interface_declaration=interface_declaration[ attributes, modifiers, false ]
+    | enum_declaration=enum_declaration[ attributes, modifiers ]
+    | delegate_declaration=delegate_declaration[ attributes, modifiers ]
    )
  )
 -> type_declaration_rest [
-     argument temporary node #attribute: attribute_section;
+     argument temporary node attributes: optional_attribute_sections;
      argument temporary node modifiers:  optional_modifiers;
 ] ;;
 
@@ -846,19 +851,18 @@ namespace csharp_pp
    CLASS class_name=identifier
    (
       ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameters=type_parameters
+      recover(type_parameters=type_parameters)
     | 0
    )
    (class_base=class_base | 0)
    (
       ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameter_constraints_clauses=type_parameter_constraints_clauses
-    | 0
+      type_parameter_constraints_clauses=optional_type_parameter_constraints_clauses
    )
    body=class_body
    (SEMICOLON | 0)
 -> class_declaration [
-     argument member node #attribute:  attribute_section;
+     argument member node attributes:  optional_attribute_sections;
      argument member node modifiers:   optional_modifiers;
      argument member variable partial: bool;
 ] ;;
@@ -869,19 +873,18 @@ namespace csharp_pp
    STRUCT struct_name=identifier
    (
       ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameters=type_parameters
+      recover(type_parameters=type_parameters)
     | 0
    )
    (struct_interfaces=struct_interfaces | 0)
    (
       ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameter_constraints_clauses=type_parameter_constraints_clauses
-    | 0
+      type_parameter_constraints_clauses=optional_type_parameter_constraints_clauses
    )
    body=struct_body
    (SEMICOLON | 0)
 -> struct_declaration [
-     argument member node #attribute:  attribute_section;
+     argument member node attributes:  optional_attribute_sections;
      argument member node modifiers:   optional_modifiers;
      argument member variable partial: bool;
 ] ;;
@@ -892,19 +895,18 @@ namespace csharp_pp
    INTERFACE interface_name=identifier
    (
       ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameters=type_parameters
+      recover(type_parameters=type_parameters)
     | 0
    )
    (interface_base=interface_base | 0)
    (
       ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameter_constraints_clauses=type_parameter_constraints_clauses
-    | 0
+      type_parameter_constraints_clauses=optional_type_parameter_constraints_clauses
    )
    body=interface_body
    (SEMICOLON | 0)
 -> interface_declaration [
-     argument member node #attribute:  attribute_section;
+     argument member node attributes:  optional_attribute_sections;
      argument member node modifiers:   optional_modifiers;
      argument member variable partial: bool;
 ] ;;
@@ -917,7 +919,7 @@ namespace csharp_pp
    body=enum_body
    (SEMICOLON | 0)
 -> enum_declaration [
-     argument member node #attribute:  attribute_section;
+     argument member node attributes:  optional_attribute_sections;
      argument member node modifiers:   optional_modifiers;
 ] ;;
 
@@ -927,18 +929,17 @@ namespace csharp_pp
    DELEGATE return_type=return_type delegate_name=identifier
    (
       ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameters=type_parameters
+      recover(type_parameters=type_parameters)
     | 0
    )
    LPAREN (formal_parameters=formal_parameter_list | 0) RPAREN
    (
       ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameter_constraints_clauses=type_parameter_constraints_clauses
-    | 0
+      type_parameter_constraints_clauses=optional_type_parameter_constraints_clauses
    )
    SEMICOLON
 -> delegate_declaration [
-     argument member node #attribute:  attribute_section;
+     argument member node attributes:  optional_attribute_sections;
      argument member node modifiers:   optional_modifiers;
 ] ;;
 
@@ -973,17 +974,17 @@ namespace csharp_pp
 
 -- BODIES of classes, interfaces, and the likes.
 
-   LBRACE (#member_declaration=class_member_declaration)* RBRACE
+   LBRACE recover(#member_declaration=class_member_declaration)* RBRACE
 -> class_body ;;
 
-   LBRACE (#member_declaration=struct_member_declaration)* RBRACE
+   LBRACE recover(#member_declaration=struct_member_declaration)* RBRACE
 -> struct_body ;;
 
-   LBRACE (#member_declaration=interface_member_declaration)* RBRACE
+   LBRACE recover(#member_declaration=interface_member_declaration)* RBRACE
 -> interface_body ;;
 
    LBRACE
-   (
+   recover(
       #member_declaration=enum_member_declaration
       ( 0 [: if (LA(2).kind == Token_RBRACE) break; :] -- exit the "star loop"
         COMMA #member_declaration=enum_member_declaration
@@ -995,7 +996,7 @@ namespace csharp_pp
    RBRACE
 -> enum_body ;;
 
-   (#attribute=attribute_section)*
+   attributes=optional_attribute_sections
    member_name=identifier
    (ASSIGN constant_expression=constant_expression | 0)
 -> enum_member_declaration ;;
@@ -1009,37 +1010,37 @@ namespace csharp_pp
 -- The CLASS MEMBER DECLARATION is one of the most complex rules in here,
 -- and covers everything that can occur inside a class body.
 
-   (#attribute:attribute_section)*
+   attributes:optional_attribute_sections
    modifiers:optional_modifiers
-   (  finalizer_declaration=finalizer_declaration[ attribute_sequence, modifiers ]
-    | other_declaration=class_or_struct_member_declaration[ attribute_sequence, modifiers ]
+   (  finalizer_declaration=finalizer_declaration[ attributes, modifiers ]
+    | other_declaration=class_or_struct_member_declaration[ attributes, modifiers ]
    )
 -> class_member_declaration ;;
 
-   (#attribute:attribute_section)*
+   attributes:optional_attribute_sections
    modifiers:optional_modifiers
-   declaration=class_or_struct_member_declaration[ attribute_sequence, modifiers ]
+   declaration=class_or_struct_member_declaration[ attributes, modifiers ]
 -> struct_member_declaration ;;
 
 -- The first few declarations start with a specific token and don't need
 -- to be refactored. The other declarations must be split to avoid conflicts.
 
  (
-   constant_declaration=constant_declaration[ attribute_sequence, modifiers ]
- | event_declaration=event_declaration[ attribute_sequence, modifiers ]
+   constant_declaration=constant_declaration[ attributes, modifiers ]
+ | event_declaration=event_declaration[ attributes, modifiers ]
  |
    -- The OPERATOR DECLARATION, part one: conversion operator overloading.
-   conversion_operator_declaration=conversion_operator_declaration[ attribute_sequence, modifiers ]
+   conversion_operator_declaration=conversion_operator_declaration[ attributes, modifiers ]
  |
    -- A normal or static CONSTRUCTOR DECLARATION.
    ?[: LA(2).kind == Token_LPAREN :]
-   constructor_declaration=constructor_declaration[ attribute_sequence, modifiers ]
+   constructor_declaration=constructor_declaration[ attributes, modifiers ]
  |
    -- The TYPE DECLARATION, buried under lookahead conditions ;)
    ?[: (yytoken != Token_PARTIAL) || (LA(2).kind == Token_CLASS
         || LA(2).kind == Token_INTERFACE || LA(2).kind == Token_ENUM
         || LA(2).kind == Token_STRUCT || LA(2).kind == Token_DELEGATE) :]
-   type_declaration_rest=type_declaration_rest[ attribute_sequence, modifiers ]
+   type_declaration_rest=type_declaration_rest[ attributes, modifiers ]
  |
    -- Many of the declarations start with a type, and method declarations
    -- start with a return type which is therefore the least common denominator.
@@ -1048,13 +1049,13 @@ namespace csharp_pp
       -- The OPERATOR DECLARATION rest, part two: overloading of real operators
       ?[: member_type->type == return_type::type_regular :]
       unary_or_binary_operator_declaration=unary_or_binary_operator_declaration[
-        attribute_sequence, modifiers, member_type->regular_type
+        attributes, modifiers, member_type->regular_type
       ]
     |
       -- The INDEXER DECLARATION rest, part one.
       ?[: member_type->type == return_type::type_regular :]
       indexer_declaration=indexer_declaration[
-        attribute_sequence, modifiers, member_type->regular_type, 0 /* no interface type */
+        attributes, modifiers, member_type->regular_type, 0 /* no interface type */
       ]
     |
       -- The FIELD DECLARATION rest. Declares member variables.
@@ -1063,7 +1064,7 @@ namespace csharp_pp
           ) && (member_type->type == return_type::type_regular)  :]
       (#variable_declarator:variable_declarator @ COMMA) SEMICOLON
       field_declaration=variable_declaration_data[
-        attribute_sequence, modifiers,
+        attributes, modifiers,
         member_type->regular_type, variable_declarator_sequence
       ]
     |
@@ -1075,25 +1076,25 @@ namespace csharp_pp
          ?[: member_type->type == return_type::type_regular :]
          DOT
          indexer_declaration=indexer_declaration[
-           attribute_sequence, modifiers,
+           attributes, modifiers,
            member_type->regular_type, member_name_or_interface_type
          ]
        |
          -- The PROPERTY DECLARATION rest.
          ?[: member_type->type == return_type::type_regular :]
          property_declaration=property_declaration[
-           attribute_sequence, modifiers, member_type->regular_type, member_name_or_interface_type
+           attributes, modifiers, member_type->regular_type, member_name_or_interface_type
          ]
        |
          -- The METHOD DECLARATION rest.
          method_declaration=method_declaration[
-           attribute_sequence, modifiers, member_type, member_name_or_interface_type
+           attributes, modifiers, member_type, member_name_or_interface_type
          ]
       )
    )
  )
 -> class_or_struct_member_declaration [
-     argument temporary node #attribute: attribute_section;
+     argument temporary node attributes: optional_attribute_sections;
      argument temporary node modifiers:  optional_modifiers;
      member variable declaration_type: class_or_struct_member_declaration::class_or_struct_member_declaration_enum;
 ] ;;
@@ -1110,7 +1111,7 @@ namespace csharp_pp
    TILDE class_name=identifier LPAREN RPAREN
    (finalizer_body=block | SEMICOLON)
 -> finalizer_declaration [
-     argument member node #attribute: attribute_section;
+     argument member node attributes: optional_attribute_sections;
      argument member node modifiers:  optional_modifiers;
 ] ;;
 
@@ -1124,7 +1125,7 @@ namespace csharp_pp
    (constructor_initializer=constructor_initializer | 0)
    (body=block | SEMICOLON)
 -> constructor_declaration [
-     argument member node #attribute: attribute_section;
+     argument member node attributes: optional_attribute_sections;
      argument member node modifiers:  optional_modifiers;
 ] ;;
 
@@ -1165,21 +1166,21 @@ namespace csharp_pp
       LBRACE event_accessor_declarations=event_accessor_declarations RBRACE
    )
 -> event_declaration [
-     argument member node #attribute: attribute_section;
+     argument member node attributes: optional_attribute_sections;
      argument member node modifiers:  optional_modifiers;
 ] ;;
 
 -- EVENT ACCESSOR DECLARATIONS appear inside an event declaration.
 
-   (#attributes_accessor1=attribute_section)*
+   accessor1_attributes=optional_attribute_sections
    (
       ADD accessor1_body=block
-      (#attributes_accessor2=attribute_section)*
+      accessor2_attributes=optional_attribute_sections
       REMOVE accessor2_body=block
       [: (*yynode)->order = event_accessor_declarations::order_add_remove; :]
     |
       REMOVE accessor1_body=block
-      (#attributes_accessor2=attribute_section)*
+      accessor2_attributes=optional_attribute_sections
       ADD accessor2_body=block
       [: (*yynode)->order = event_accessor_declarations::order_remove_add; :]
    )
@@ -1199,7 +1200,7 @@ namespace csharp_pp
    LPAREN source_type=type source_name=identifier RPAREN
    (body=block | SEMICOLON)
 -> conversion_operator_declaration [
-     argument member node #attribute: attribute_section;
+     argument member node attributes: optional_attribute_sections;
      argument member node modifiers:  optional_modifiers;
      member variable conversion_type: conversion_operator_declaration::conversion_type_enum;
 ] ;;
@@ -1229,7 +1230,7 @@ namespace csharp_pp
    )
    (body=block | SEMICOLON)
 -> unary_or_binary_operator_declaration [
-     argument member node #attribute:            attribute_section;
+     argument member node attributes:            optional_attribute_sections;
      argument member node modifiers:             optional_modifiers;
      argument member node return_type:           type;
      member variable overloadable_operator_type: overloadable_operator::overloadable_operator_enum;
@@ -1287,7 +1288,7 @@ namespace csharp_pp
    THIS LBRACKET formal_parameters=formal_parameter_list RBRACKET
    LBRACE accessor_declarations=accessor_declarations RBRACE
 -> indexer_declaration [
-     argument member node #attribute:     attribute_section;
+     argument member node attributes:     optional_attribute_sections;
      argument member node modifiers:      optional_modifiers;
      argument member node type:           type;
      argument member node interface_type: type_name_safe;
@@ -1299,7 +1300,7 @@ namespace csharp_pp
 
    LBRACE accessor_declarations=accessor_declarations RBRACE
 -> property_declaration [
-     argument member node #attribute:     attribute_section;
+     argument member node attributes:     optional_attribute_sections;
      argument member node modifiers:      optional_modifiers;
      argument member node type:           type;
      argument member node property_name:  type_name_safe;
@@ -1307,13 +1308,13 @@ namespace csharp_pp
 
 -- ACCESSOR DECLARATIONS appear inside a property declaration.
 
-   (#accessor1_attribute=attribute_section)*
+   accessor1_attributes=optional_attribute_sections
    (accessor1_modifier=accessor_modifier | 0)
    (
       GET (accessor1_body=block | SEMICOLON)
         [: (*yynode)->accessor1_type = accessor_declarations::type_get; :]
       (
-         (#accessor2_attribute=attribute_section)*
+         accessor2_attributes=optional_attribute_sections
          (accessor2_modifier=accessor_modifier | 0)
          SET (accessor2_body=block | SEMICOLON)
            [: (*yynode)->accessor2_type = accessor_declarations::type_set;  :]
@@ -1323,7 +1324,7 @@ namespace csharp_pp
       SET (accessor1_body=block | SEMICOLON)
         [: (*yynode)->accessor1_type = accessor_declarations::type_set; :]
       (
-         (#accessor2_attribute=attribute_section)*
+         accessor2_attributes=optional_attribute_sections
          (accessor2_modifier=accessor_modifier | 0)
          GET (accessor2_body=block | SEMICOLON)
            [: (*yynode)->accessor2_type = accessor_declarations::type_get;  :]
@@ -1353,18 +1354,17 @@ namespace csharp_pp
 -- The METHOD DECLARATION rest.
 
    (  ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameters=type_parameters
+      recover(type_parameters=type_parameters)
     | 0
    )
    LPAREN (formal_parameters=formal_parameter_list | 0) RPAREN
    (
       ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameter_constraints_clauses=type_parameter_constraints_clauses
-    | 0
+      type_parameter_constraints_clauses=optional_type_parameter_constraints_clauses
    )
    (method_body=block | SEMICOLON)
 -> method_declaration [
-     argument member node #attribute:     attribute_section;
+     argument member node attributes:     optional_attribute_sections;
      argument member node modifiers:      optional_modifiers;
      argument member node return_type:    return_type;
      argument member node method_name:    type_name_safe;
@@ -1376,13 +1376,13 @@ namespace csharp_pp
 -- Interfaces have their own specific INTERFACE MEMBER DECLARATIONS.
 -- Resembling the class_or_struct_member_declaration, but less complex.
 
-   (#attribute:attribute_section)*
+   attributes:optional_attribute_sections
    (  NEW  [: decl_new = true;  :]
     | 0    [: decl_new = false; :]
    )
    (
       event_declaration=interface_event_declaration[
-        attribute_sequence, decl_new
+        attributes, decl_new
       ]
     |
       -- Many of the declarations start with a type, and method declarations
@@ -1392,7 +1392,7 @@ namespace csharp_pp
          -- The INDEXER DECLARATION rest.
          ?[: member_type->type == return_type::type_regular :]
          indexer_declaration=interface_indexer_declaration[
-           attribute_sequence, decl_new, member_type->regular_type
+           attributes, decl_new, member_type->regular_type
          ]
        |
          -- The method and property declarations need to be split further.
@@ -1401,13 +1401,13 @@ namespace csharp_pp
             -- The INTERFACE PROPERTY DECLARATION rest.
             ?[: member_type->type == return_type::type_regular :]
             interface_property_declaration=interface_property_declaration[
-              attribute_sequence, decl_new,
+              attributes, decl_new,
               member_type->regular_type, member_name
             ]
           |
             -- The INTERFACE METHOD DECLARATION rest.
             interface_method_declaration=interface_method_declaration[
-              attribute_sequence, decl_new, member_type, member_name
+              attributes, decl_new, member_type, member_name
             ]
          )
       )
@@ -1424,7 +1424,7 @@ namespace csharp_pp
 
    EVENT event_type=type event_name=identifier SEMICOLON
 -> interface_event_declaration [
-     argument member node #attribute:    attribute_section;
+     argument member node attributes:    optional_attribute_sections;
      argument member variable decl_new:  bool;
 ] ;;
 
@@ -1433,7 +1433,7 @@ namespace csharp_pp
    THIS LBRACKET formal_parameters=formal_parameter_list RBRACKET
    LBRACE interface_accessors=interface_accessors RBRACE
 -> interface_indexer_declaration [
-     argument member node #attribute:    attribute_section;
+     argument member node attributes:    optional_attribute_sections;
      argument member variable decl_new:  bool;
      argument member node type:          type;
 ] ;;
@@ -1442,7 +1442,7 @@ namespace csharp_pp
 
    LBRACE interface_accessors=interface_accessors RBRACE
 -> interface_property_declaration [
-     argument member node #attribute:    attribute_section;
+     argument member node attributes:    optional_attribute_sections;
      argument member variable decl_new:  bool;
      argument member node type:          type;
      argument member node property_name: identifier;
@@ -1451,17 +1451,16 @@ namespace csharp_pp
 -- And last but not least, the INTERFACE METHOD DECLARATION.
 
    (  ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameters=type_parameters
+      recover(type_parameters=type_parameters)
     | 0
    )
    LPAREN (formal_parameters=formal_parameter_list | 0) RPAREN
    (  ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameter_constraints_clauses=type_parameter_constraints_clauses
-    | 0
+      type_parameter_constraints_clauses=optional_type_parameter_constraints_clauses
    )
    SEMICOLON
 -> interface_method_declaration [
-     argument member node #attribute:    attribute_section;
+     argument member node attributes:    optional_attribute_sections;
      argument member variable decl_new:  bool;
      argument member node return_type:   return_type;
      argument member node method_name:   identifier;
@@ -1472,12 +1471,12 @@ namespace csharp_pp
 -- An INTERFACE ACCESSOR looks like "[attributes] get;" or "[attributes] set;"
 -- and is used by interface_indexer_declaration and interface_property_declaration.
 
-   (#accessor1_attribute=attribute_section)*
+   accessor1_attributes=optional_attribute_sections
    (
       GET SEMICOLON
         [: (*yynode)->accessor1_type = accessor_declarations::type_get; :]
       (
-         (#accessor2_attribute=attribute_section)* SET SEMICOLON
+         accessor2_attributes=optional_attribute_sections SET SEMICOLON
            [: (*yynode)->accessor2_type = accessor_declarations::type_set;  :]
        | 0 [: (*yynode)->accessor2_type = accessor_declarations::type_none; :]
       )
@@ -1485,7 +1484,7 @@ namespace csharp_pp
       SET SEMICOLON
         [: (*yynode)->accessor1_type = accessor_declarations::type_set; :]
       (
-         (#accessor2_attribute=attribute_section)* GET SEMICOLON
+         accessor2_attributes=optional_attribute_sections GET SEMICOLON
            [: (*yynode)->accessor2_type = accessor_declarations::type_get;  :]
        | 0 [: (*yynode)->accessor2_type = accessor_declarations::type_none; :]
       )
@@ -1520,7 +1519,7 @@ namespace csharp_pp
 --        -- kdev-pg dismisses this condition!
 -- -> formal_parameter_list ;;
 
-   (#attribute=attribute_section)*
+   attributes=optional_attribute_sections
    (
       parameter_array=parameter_array
         [: *parameter_array_occurred = true; :]
@@ -1577,7 +1576,7 @@ namespace csharp_pp
    :]
 -> type_parameters ;;
 
-   (#attribute=attribute_section)* parameter_name=identifier
+   attributes=optional_attribute_sections parameter_name=identifier
 -> type_parameter ;;
 
 
@@ -1608,8 +1607,8 @@ namespace csharp_pp
 -- Type parameter CONSTRAINTS CLAUSES also belong to C#'s generics,
 -- and can narrow down the allowed types given as type arguments.
 
-   (#clause=type_parameter_constraints_clause)+
--> type_parameter_constraints_clauses ;;
+   recover(#clause=type_parameter_constraints_clause)*
+-> optional_type_parameter_constraints_clauses ;;
 
    WHERE type_parameter=identifier COLON constraints=type_parameter_constraints
 -> type_parameter_constraints_clause ;;
@@ -1665,7 +1664,7 @@ namespace csharp_pp
 --  - As a completely independent braced block of code inside a method,
 --    starting a new scope for variable definitions
 
-   LBRACE (#statement=block_statement)* RBRACE
+   LBRACE recover(#statement=block_statement)* RBRACE
 -> block ;;
 
 -- A BLOCK STATEMENT is either an embedded statement or a variable declaration.
@@ -1706,8 +1705,8 @@ namespace csharp_pp
 
    0
 -> variable_declaration_data [
-     argument member node #attribute:  attribute_section;  -- not used in local
-     argument member node modifiers:   optional_modifiers; -- variable declarations
+     argument member node attributes:  optional_attribute_sections; -- not used in local
+     argument member node modifiers:   optional_modifiers;          -- variable declarations
      argument member node type:                 type;
      argument member node #variable_declarator: variable_declarator;
 ] ;;
@@ -1732,17 +1731,17 @@ namespace csharp_pp
 
    CONST type:type (#declarator:constant_declarator @ COMMA) SEMICOLON
    data=constant_declaration_data[
-     attribute_sequence, modifiers, type, declarator_sequence
+     attributes, modifiers, type, declarator_sequence
    ]
 -> constant_declaration [
-     argument temporary node #attribute:  attribute_section;
+     argument temporary node attributes:  optional_attribute_sections;
      argument temporary node modifiers:   optional_modifiers;
 ] ;;
 
    0
 -> constant_declaration_data [
-     argument member node #attribute:  attribute_section;  -- not used in local
-     argument member node modifiers:   optional_modifiers; -- constant declarations
+     argument member node attributes:  optional_attribute_sections; -- not used in local
+     argument member node modifiers:   optional_modifiers;          -- constant declarations
      argument member node type:                 type;
      argument member node #constant_declarator: constant_declarator;
 ] ;;
@@ -1760,7 +1759,7 @@ namespace csharp_pp
 -> variable_initializer ;;
 
    LBRACE
-   (
+   recover(
       #variable_initializer=variable_initializer
       ( 0 [: if (LA(2).kind == Token_RBRACE) { break; } :]
         COMMA #variable_initializer=variable_initializer
@@ -1915,7 +1914,7 @@ namespace csharp_pp
 -- "case x:" or "default:" switch statement groups.
 
    SWITCH LPAREN switch_expression=expression RPAREN
-   LBRACE (#switch_section=switch_section)* RBRACE
+   LBRACE recover(#switch_section=switch_section)* RBRACE
 -> switch_statement ;;
 
    (#label=switch_label)+

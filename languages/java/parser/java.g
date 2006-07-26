@@ -384,21 +384,21 @@
 
 
    0 [: ltCounter = 0; :]
-   ( -- The first thing there is (haha) is a serious conflict between
-     -- package_declaration and type_declaration, both of which can start
-     -- with annotations. As this is only solvable with LL(k), it's
-     -- implemented with a workaround hack until backtracking or real
-     -- LL(k) is available. When this is available, you can also say:
-     -- ?( package_declararation_lookahead ) instead of the current one:
-     ?[: lookahead_is_package_declaration() == true :]
-      package_declaration=package_declaration
+   (  -- The first thing there is (haha) is a serious conflict between
+      -- package_declaration and type_declaration, both of which can start
+      -- with annotations. As this is only solvable with LL(k), it's
+      -- implemented with a workaround hack until backtracking or real
+      -- LL(k) is available. When this is available, you can also say:
+      -- ?( package_declararation_lookahead ) instead of the current one:
+      ?[: lookahead_is_package_declaration() == true :]
+      recover(package_declaration=package_declaration)
     | 0
    )
-   (#import_declaration=import_declaration)*
-   (#type_declaration=type_declaration)*
+   recover(#import_declaration=import_declaration)*
+   recover(#type_declaration=type_declaration)*
 -> compilation_unit ;;
 
---    (#annotation=annotation)* PACKAGE
+--    recover(#annotation=annotation)* PACKAGE
 -- -> package_declaration_lookahead ;;  -- only use for lookaheads!
 
 
@@ -409,7 +409,7 @@
 -- inside of compilation_unit may both be 0. The ANTLR grammar
 -- checks on ?[:annotations "package":] to do a package_declaration.
 
-   (#annotation=annotation)*
+   recover(#annotation=annotation)*
    PACKAGE package_name=qualified_identifier SEMICOLON
 -> package_declaration ;;
 
@@ -540,20 +540,20 @@
 
 -- BODIES of classes, interfaces, annotation types and enums.
 
-   LBRACE (#declaration=class_field)* RBRACE
+   LBRACE recover(#declaration=class_field)* RBRACE
 -> class_body ;;
 
-   LBRACE (#declaration=interface_field)* RBRACE
+   LBRACE recover(#declaration=interface_field)* RBRACE
 -> interface_body ;;
 
-   LBRACE (#annotation_type_field=annotation_type_field)* RBRACE
+   LBRACE recover(#annotation_type_field=annotation_type_field)* RBRACE
 -> annotation_type_body ;;
 
 -- In an enum body, you can have zero or more enum constants
 -- followed by any number of fields like a regular class.
 
    LBRACE
-   ( #enum_constant=enum_constant
+   ( recover(#enum_constant=enum_constant)
      @ ( 0 [: if ( LA(2).kind == Token_SEMICOLON
                 || LA(2).kind == Token_RBRACE )
               { break; } :] -- if the list is over, then exit the loop
@@ -562,18 +562,18 @@
    | 0
    )
    ( COMMA | 0 )
-   ( SEMICOLON (#class_field=class_field)* | 0 )
+   ( SEMICOLON recover(#class_field=class_field)* | 0 )
    RBRACE
 -> enum_body ;;
 
 -- An enum constant may have optional parameters and may have a class body
 
-   ( #annotation=annotation )* identifier=identifier
+   recover(#annotation=annotation)* identifier=identifier
    ( LPAREN arguments=optional_argument_list RPAREN | 0 )
    ( body=enum_constant_body | 0 )
 -> enum_constant ;;
 
-   LBRACE (#declaration=enum_constant_field)* RBRACE
+   LBRACE recover(#declaration=enum_constant_field)* RBRACE
 -> enum_constant_body ;;
 
 
@@ -868,7 +868,7 @@
 
    0 [: (*yynode)->has_mod_final = false; :]
    (  FINAL [: (*yynode)->has_mod_final = true; :]
-    | #mod_annotation=annotation
+    | recover(#mod_annotation=annotation)
    )*
 -> optional_parameter_modifiers [
      member variable has_mod_final: bool;
@@ -890,8 +890,10 @@
 -- to resolve, so class_field uses block instead of constructor_body.
 --
 --    LBRACE
---    (explicit_constructor_invocation=explicit_constructor_invocation | 0)
---    (#statement=embedded_statement)*
+--    ( recover(explicit_constructor_invocation=explicit_constructor_invocation)
+--    | 0
+--    )
+--    recover(#statement=embedded_statement)*
 --    RBRACE
 -- -> constructor_body ;;
 --
@@ -1017,7 +1019,7 @@
 --  - As a completely independent braced block of code inside a method,
 --    starting a new scope for variable definitions
 
-   LBRACE (#statement=block_statement)* RBRACE
+   LBRACE recover(#statement=block_statement)* RBRACE
 -> block ;;
 
 -- A BLOCK STATEMENT is either an embedded statement, a variable declaration
@@ -1233,11 +1235,11 @@
 -- "case x:" or "default:" switch statement groups.
 
    SWITCH LPAREN switch_expression=expression RPAREN
-   LBRACE (#switch_section=switch_section)* RBRACE
+   LBRACE recover(#switch_section=switch_section)* RBRACE
 -> switch_statement ;;
 
    (#label=switch_label)+
-   (#statement=block_statement)*
+   recover(#statement=block_statement)*
 -> switch_section ;;
 
    (  CASE case_expression=expression
@@ -1844,7 +1846,7 @@
  -- This condition resolves the conflict between modifiers
  -- and annotation type declarations:
    0 [: if (yytoken == Token_AT && LA(2).kind == Token_INTERFACE) { break; } :]
-   #mod_annotation=annotation
+   recover(#mod_annotation=annotation)
  )*
 -> optional_modifiers [
      member variable modifiers: int;

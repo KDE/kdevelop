@@ -2606,8 +2606,8 @@ namespace java
 
       virtual void visit_annotation_method_declaration(annotation_method_declaration_ast *node)
       {
-        visit_node(node->return_type);
         visit_node(node->modifiers);
+        visit_node(node->return_type);
         visit_node(node->annotation_name);
         visit_node(node->annotation_element_value);
       }
@@ -2875,8 +2875,8 @@ namespace java
 
       virtual void visit_constructor_declaration(constructor_declaration_ast *node)
       {
-        visit_node(node->type_parameters);
         visit_node(node->modifiers);
+        visit_node(node->type_parameters);
         visit_node(node->class_name);
         visit_node(node->parameters);
         visit_node(node->throws_clause);
@@ -3053,8 +3053,8 @@ namespace java
 
       virtual void visit_foreach_declaration_data(foreach_declaration_data_ast *node)
       {
-        visit_node(node->iterable_expression);
         visit_node(node->foreach_parameter);
+        visit_node(node->iterable_expression);
       }
 
       virtual void visit_identifier(identifier_ast *)
@@ -3135,9 +3135,9 @@ namespace java
 
       virtual void visit_interface_method_declaration(interface_method_declaration_ast *node)
       {
-        visit_node(node->return_type);
-        visit_node(node->type_parameters);
         visit_node(node->modifiers);
+        visit_node(node->type_parameters);
+        visit_node(node->return_type);
         visit_node(node->method_name);
         visit_node(node->parameters);
         visit_node(node->declarator_brackets);
@@ -3192,16 +3192,16 @@ namespace java
 
       virtual void visit_method_call_data(method_call_data_ast *node)
       {
-        visit_node(node->arguments);
-        visit_node(node->method_name);
         visit_node(node->type_arguments);
+        visit_node(node->method_name);
+        visit_node(node->arguments);
       }
 
       virtual void visit_method_declaration(method_declaration_ast *node)
       {
-        visit_node(node->return_type);
-        visit_node(node->type_parameters);
         visit_node(node->modifiers);
+        visit_node(node->type_parameters);
+        visit_node(node->return_type);
         visit_node(node->method_name);
         visit_node(node->parameters);
         visit_node(node->declarator_brackets);
@@ -3482,8 +3482,8 @@ namespace java
 
                                virtual void visit_super_access_data(super_access_data_ast *node)
                                {
-                                 visit_node(node->super_suffix);
                                  visit_node(node->type_arguments);
+                                 visit_node(node->super_suffix);
                                }
 
                                virtual void visit_super_suffix(super_suffix_ast *node)
@@ -3548,8 +3548,8 @@ namespace java
 
                                virtual void visit_this_call_data(this_call_data_ast *node)
                                {
-                                 visit_node(node->arguments);
                                  visit_node(node->type_arguments);
+                                 visit_node(node->arguments);
                                }
 
                                virtual void visit_throw_statement(throw_statement_ast *node)
@@ -3704,6 +3704,8 @@ namespace java
 
                                virtual void visit_variable_declaration_data(variable_declaration_data_ast *node)
                                {
+                                 visit_node(node->modifiers);
+                                 visit_node(node->type);
                                  if (node->declarator_sequence)
                                    {
                                      const list_node<variable_declarator_ast*> *__it = node->declarator_sequence->to_front(), *__end = __it;
@@ -3714,8 +3716,6 @@ namespace java
                                        }
                                      while (__it != __end);
                                    }
-                                 visit_node(node->type);
-                                 visit_node(node->modifiers);
                                }
 
                                virtual void visit_variable_declaration_rest(variable_declaration_rest_ast *node)
