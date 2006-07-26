@@ -67,6 +67,11 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
 	connect( m_pPart->codeRepository(), SIGNAL( catalogUnregistered( Catalog* ) ),
 	         this, SLOT( catalogUnregistered( Catalog* ) ) );
 
+	connect( m_qtDir, SIGNAL(urlSelected(const QString &)), 
+		 this, SLOT(isValidQtDir(const QString &)));
+	connect( m_qtDir, SIGNAL(textChanged(const QString &)), 
+		 this, SLOT(isValidQtDir(const QString &)));
+
 	initGeneralTab( );
 	initQtTab();
 	initCodeCompletionTab( );
@@ -405,6 +410,7 @@ void CCConfigWidget::initQtTab()
 		m_qtStyleVersion3->setChecked( true );
 	}
 	m_qtDir->setURL( c->root() );
+	isValidQtDir(m_qtDir->url());
 	if ( c->designerIntegration() == "EmbeddedKDevDesigner" )
 	{
 		m_kdevembedded->setChecked( true );
@@ -451,6 +457,17 @@ void CCConfigWidget::saveQtTab()
 		c->setDesignerIntegration( "ExternalDesigner" );
 	}
 	c->store();
+}
+
+void CCConfigWidget::isValidQtDir( const QString &dir )
+{
+	if ( !QFile::exists( dir + "/include/qt.h" ) && !QFile::exists( dir + "/include/Qt/qglobal.h" ) )
+	{
+		m_qtDir->lineEdit()->setPaletteForegroundColor(QColor("#ff0000"));
+	}else
+	{
+		m_qtDir->lineEdit()->unsetPalette();
+	}
 }
 
 #include "ccconfigwidget.moc"

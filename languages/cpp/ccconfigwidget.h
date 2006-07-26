@@ -38,6 +38,7 @@ protected slots:
 private slots:
 	void catalogRegistered( Catalog* c );
 	void catalogUnregistered( Catalog* c );
+	void isValidQtDir( const QString & );
 
 private:
 	void initGeneralTab();
