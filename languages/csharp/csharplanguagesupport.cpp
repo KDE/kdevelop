@@ -28,14 +28,12 @@ Boston, MA 02110-1301, USA.
 #include <kdevprojectmodel.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevbackgroundparser.h>
-#include <kdevparsejob.h>
+#include "parsejob.h"
 
 #include "csharplanguagesupport.h"
 
-// #include "parser/codemodel.h"
 // #include "codeproxy.h"
 // #include "codedelegate.h"
-// #include "backgroundparser.h"
 
 #include <kdebug.h>
 
@@ -43,13 +41,14 @@ typedef KGenericFactory<CSharpLanguageSupport> KDevCSharpSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevcsharplanguagesupport,
                             KDevCSharpSupportFactory( "kdevcsharpsupport" ) )
 
-        CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
-                                    const QStringList& /*args*/ )
-    : KDevLanguageSupport( KDevCSharpSupportFactory::instance(), parent )
+CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
+                                              const QStringList& /*args*/ )
+        : KDevLanguageSupport( KDevCSharpSupportFactory::instance(), parent )
 {
     QString types = QLatin1String( "text/x-csharp" );
     m_mimetypes = types.split( "," );
 
+    m_memoryPool = new parser::memory_pool_type;
     //     m_codeProxy = new CodeProxy( this );
     //     m_codeDelegate = new CodeDelegate( this );
     //     m_backgroundParser = new BackgroundParser( this );
@@ -73,7 +72,9 @@ K_EXPORT_COMPONENT_FACTORY( kdevcsharplanguagesupport,
 }
 
 CSharpLanguageSupport::~CSharpLanguageSupport()
-{}
+{
+    delete m_memoryPool;
+}
 
 KDevCodeModel *CSharpLanguageSupport::codeModel( const KUrl &url ) const
 {
@@ -104,7 +105,7 @@ KDevCodeRepository *CSharpLanguageSupport::codeRepository() const
 
 KDevParseJob *CSharpLanguageSupport::createParseJob( const KUrl &url )
 {
-    return 0;
+    return new ParseJob( url, this, m_memoryPool );
 }
 
 KDevParseJob *CSharpLanguageSupport::createParseJob( KDevDocument *document,
@@ -120,17 +121,14 @@ QStringList CSharpLanguageSupport::mimeTypes() const
 
 void CSharpLanguageSupport::documentLoaded( KDevDocument* file )
 {
-    kDebug() << k_funcinfo << endl;
     if ( supportsDocument( file ) )
-        kDebug() << file->url() << endl;
-    /*        m_backgroundParser->addDocument( file->url(), file );*/
+        KDevApi::self() ->backgroundParser() ->addDocument( file->url(), file );
 }
 
 void CSharpLanguageSupport::documentClosed( KDevDocument* file )
 {
-    Q_UNUSED( file );
-    //     if ( supportsDocument( file ) )
-    //         m_backgroundParser->removeDocumentFile( file );
+    if ( supportsDocument( file ) )
+        KDevApi::self() ->backgroundParser() ->removeDocumentFile( file );
 }
 
 void CSharpLanguageSupport::documentActivated( KDevDocument* file )

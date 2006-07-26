@@ -9,8 +9,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces 
 
 set(kdevcsharplanguagesupport_PART_SRCS
     csharplanguagesupport.cpp
-#     backgroundparser.cpp
-#     parsejob.cpp
+    parsejob.cpp
 #     codedelegate.cpp
 #     codeproxy.cpp
 )

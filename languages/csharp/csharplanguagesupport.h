@@ -22,11 +22,15 @@ Boston, MA 02110-1301, USA.
 
 #include <kdevlanguagesupport.h>
 
+#include "parser/csharp.h"
+#include "parser/decoder.h"
+
+using namespace csharp;
+
 // class CodeModel;
 // class CodeProxy;
 // class CodeDelegate;
 // class CodeAggregate;
-// class BackgroundParser;
 
 class CSharpLanguageSupport : public KDevLanguageSupport
 {
@@ -54,9 +58,9 @@ private slots:
 
 private:
     QStringList m_mimetypes;
+    parser::memory_pool_type *m_memoryPool;
 //     CodeProxy *m_codeProxy;
 //     CodeDelegate *m_codeDelegate;
-//     BackgroundParser *m_backgroundParser;
 //     CSharpHighlighting *m_highlights;
 };
 
