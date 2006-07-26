@@ -308,6 +308,7 @@ bool SubclassingDlg::replaceKeywords(QString &buffer,bool canBeModal)
 	replace(buffer,"$BASEFILENAMELC$",m_formName.lower());
 	replace(buffer,"$BASEFILENAME$",m_formName);
 	replace(buffer,"$NEWCLASS$",m_edClassName->text());
+	replace(buffer,"$QTBASECLASS$", m_qtBaseClassName );
 	replace(buffer,"$BASECLASS$",m_baseClassName);
 	replace(buffer,"$NEWFILENAMELC$",m_edFileName->text().lower());
 	if (canBeModal)
@@ -365,9 +366,14 @@ void SubclassingDlg::accept()
 		"/*$PROTECTED_FUNCTIONS$*/\n  ";
 	
 	QString buffer;
+	int qtVersion = DomUtil::readIntEntry( *m_cppSupport->project()->projectDom(), "/kdevcppsupport/qt/version", 3 );
 	if (m_creatingNewSubclass)
 	{
-		loadBuffer(buffer,::locate("data", "kdevcppsupport/subclassing/subclass_template.h"));
+		if ( qtVersion == 3 )
+			loadBuffer(buffer,::locate("data", "kdevcppsupport/subclassing/subclass_template.h"));
+		else
+			loadBuffer(buffer,::locate("data", "kdevcppsupport/subclassing/subclass_qt4_template.h"));
+			
 		buffer = FileTemplate::read(m_cppSupport, "h") + buffer;
 		QFileInfo fi(m_filename + ".h");
 		QString module = fi.baseName();
@@ -458,7 +464,11 @@ void SubclassingDlg::accept()
 	
 	if (m_creatingNewSubclass)
 	{
-		loadBuffer(buffer,::locate("data", "kdevcppsupport/subclassing/subclass_template.cpp"));
+		if ( qtVersion == 3 )
+			loadBuffer(buffer,::locate("data", "kdevcppsupport/subclassing/subclass_template.cpp"));
+		else
+			loadBuffer(buffer,::locate("data", "kdevcppsupport/subclassing/subclass_qt4_template.cpp"));
+
 		buffer = FileTemplate::read(m_cppSupport, "cpp") + buffer;
 		QFileInfo fi(m_filename + ".cpp");
 		QString module = fi.baseName();

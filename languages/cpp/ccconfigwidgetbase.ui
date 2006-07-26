@@ -1121,13 +1121,12 @@
                                         <property name="name">
                                             <cstring>m_qtDir</cstring>
                                         </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Choose the directory that Qt was installed to. If this is shown in red the directory is not a valid Qt directory.</string>
-                                        </property>
                                         <property name="toolTip" stdset="0">
                                             <string>The Qt directory, will be red if it is not a valid Qt directory.</string>
                                         </property>
-
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Choose the directory that Qt was installed to. If this is shown in red the directory is not a valid Qt directory.</string>
+                                        </property>
                                     </widget>
                                 </hbox>
                             </widget>
@@ -1409,12 +1408,6 @@
         <signal>toggled(bool)</signal>
         <receiver>m_kdevexternal</receiver>
         <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_versionQt4</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_qtdesigner</receiver>
-        <slot>toggle()</slot>
     </connection>
 </connections>
 <tabstops>
