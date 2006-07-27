@@ -277,7 +277,13 @@ QStringList splitType( QString str ) {
   return ret;
 }
 
+QString stringMult( int count, QString str ){
+	QString ret;
+	for( int a = 0; a < count; a++ ) ret += str;
+	return ret;
+}
 
 }
+
 
 // kate: indent-mode csands; tab-width 4;

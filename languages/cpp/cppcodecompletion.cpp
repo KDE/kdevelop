@@ -2889,6 +2889,8 @@ QString codeModelAccessToString( CodeModelItem::Access access ) {
 	}
 }
 
+#define MAXCOMMENTCOLUMNS 45
+
 
 QString commentFromItem( const SimpleType& parent, const ItemDom& item )
 {
@@ -2970,9 +2972,9 @@ QString commentFromItem( const SimpleType& parent, const ItemDom& item )
 		}
 	}
 		
-	ret += QString( "\nFile: %1\nLine: %2 Column: %3").arg( item->fileName() ).arg( line ).arg( col );
+	ret += QString( "\nFile: %1\nLine: %2 Column: %3").arg( prepareTextForMenu( item->fileName(), 3, MAXCOMMENTCOLUMNS ).join("\n") ).arg( line ).arg( col );
 	if( !item->comment().isEmpty() )
-		ret += "\n\n" + item->comment();
+		ret += "\n\n" + prepareTextForMenu( item->comment(), 3, MAXCOMMENTCOLUMNS ).join("\n");
 	return ret;
 };
 
@@ -3054,9 +3056,9 @@ QString commentFromTag( const SimpleType& parent, Tag& tag ) {
 	ret += "\nType: " + tagType( tag );
 	}
 	
-	ret += QString( "\nFile: %1\nLine: %2 Column: %3").arg( tag.fileName() ).arg( line ).arg( col );
+	ret += QString( "\nFile: %1\nLine: %2 Column: %3").arg( prepareTextForMenu( tag.fileName(), 3, MAXCOMMENTCOLUMNS ).join("\n") ).arg( line ).arg( col );
 	if( !tag.comment().isEmpty() ) {
-		ret += "\n\n" + tag.comment();
+		ret += "\n\n" + prepareTextForMenu( tag.comment(), 20, MAXCOMMENTCOLUMNS ).join("\n");
 	}
 	return ret;
 };
@@ -3129,6 +3131,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 	}
 	dbgState.setState( true );
 }
+
 
 void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, QValueList< Tag > & tags, bool /*isInstance*/, int depth  )
 {
@@ -3222,7 +3225,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		}
 		
 		
-		QString prefix = tagType( tag );
+		QString prefix = tagType( tag ).stripWhiteSpace();
 			
 		if((tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_Variable || tag.kind() == Tag::Kind_Typedef))
 		{
@@ -3241,6 +3244,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		else
 			if( !prefix.isEmpty() )
 				e.prefix+= " " + prefix;
+
+		e.prefix = stringMult( depth, "  " ) + e.prefix.stripWhiteSpace();
 		
 		if( str != "private" )
 			entryList << e;
@@ -3311,6 +3316,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 
 		CodeCompletionEntry entry;
 		entry.prefix = "class";
+		entry.prefix = stringMult( depth, "  " ) + entry.prefix.stripWhiteSpace();
 		entry.text = klass->name();
 		entry.comment = klass->comment();
 		entry.userdata = QString("000");
@@ -3337,6 +3343,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 
 		CodeCompletionEntry entry;
 		entry.prefix = "namespace";
+		entry.prefix = stringMult( depth, "  " ) + entry.prefix.stripWhiteSpace();
 		entry.text = scope->name();
 		entry.comment = scope->comment();
 		entryList << entry;
@@ -3383,6 +3390,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 				entry.prefix = meth->resultType();
 		}
 
+		entry.prefix = stringMult( depth, "  " ) + entry.prefix.stripWhiteSpace();
 		QString text;
 
 		ArgumentList args = meth->argumentList();
@@ -3483,6 +3491,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		if( attr->access() == CodeModelItem::Private ) 
 			entry.postfix += "; (private)";// in " + type->fullType() + ")";
 		
+		entry.prefix = stringMult( depth, "  " ) + entry.prefix.stripWhiteSpace();
+
 		entryList << entry;
 	}
 }
