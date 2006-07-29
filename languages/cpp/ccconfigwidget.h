@@ -39,6 +39,7 @@ private slots:
 	void catalogRegistered( Catalog* c );
 	void catalogUnregistered( Catalog* c );
 	void isValidQtDir( const QString & );
+	void toggleQtVersion( bool );
 
 private:
 	void initGeneralTab();

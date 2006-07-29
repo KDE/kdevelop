@@ -470,6 +470,24 @@ void CCConfigWidget::isValidQtDir( const QString &dir )
 	}
 }
 
+void CCConfigWidget::toggleQtVersion( bool )
+{
+  if ( m_versionQt3->isChecked() )
+  {
+    m_qtStyleVersion4->setEnabled( false );
+    m_qtStyleVersion3->setChecked( true );
+    m_kdevembedded->setEnabled( true );
+    m_kdevexternal->setEnabled( true );
+  }
+  if ( m_versionQt4->isChecked() )
+  {
+    m_qtStyleVersion4->setEnabled( true );
+    m_qtdesigner->setChecked( true );
+    m_kdevembedded->setEnabled( false );
+    m_kdevexternal->setEnabled( false );
+  }
+}
+
 #include "ccconfigwidget.moc"
 
 //kate: indent-mode csands; tab-width 4; space-indent off;
