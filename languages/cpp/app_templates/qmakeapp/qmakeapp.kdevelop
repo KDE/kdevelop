@@ -24,12 +24,11 @@
   </kdevfileview>
   <kdevcppsupport>
     <qt>
-      <version>3</version>
       <used>true</used>
+      <version>3</version>
       <includestyle>3</includestyle>
-      <designerintegration>EmbeddedKDevDesigner</designerintegration>
+      <designerintegration>KDevEmbeddedDesigner</designerintegration>
     </qt>
-  </kdevcppsupport>
   <kdevdoctreeview>
     <ignoretocs>
       <toc>bash</toc>

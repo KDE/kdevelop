@@ -24,8 +24,8 @@
   </kdevfileview>
   <kdevcppsupport>
     <qt>
-      <version>4</version>
       <used>true</used>
+      <version>4</version>
       <includestyle>4</includestyle>
       <designerintegration>ExternalDesigner</designerintegration>
     </qt>
