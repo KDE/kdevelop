@@ -22,6 +22,14 @@
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>  
     </tree> 
   </kdevfileview>
+  <kdevcppsupport>
+    <qt>
+      <version>4</version>
+      <used>true</used>
+      <includestyle>4</includestyle>
+      <designerintegration>ExternalDesigner</designerintegration>
+    </qt>
+  </kdevcppsupport>
   <kdevdoctreeview>
     <ignoretocs>
       <toc>bash</toc>

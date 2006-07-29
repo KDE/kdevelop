@@ -18,6 +18,14 @@
    <group pattern="*" name="Others" />
   </groups>
  </kdevfileview>
+ <kdevcppsupport>
+   <qt>
+     <version>3</version>
+     <used>true</used>
+     <includestyle>3</includestyle>
+     <designerintegration>EmbeddedKDevDesigner</designerintegration>
+   </qt>
+ </kdevcppsupport>
  <kdevdoctreeview>
     <ignoretocs>
       <toc>ada</toc>
