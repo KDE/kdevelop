@@ -5,7 +5,7 @@
 #include <klocale.h>
 
 
-static QMap<QCString,QString> messages;
+static QMap<QCString,QString> sMessages;
 
 
 // Note: this function seems to be completely unnecessary, but messages.insert
@@ -13,7 +13,7 @@ static QMap<QCString,QString> messages;
 // the compile time of this trivial file from >5m to <30s on my machine. mhk.
 static void addMessage(const QCString key, const QString &message)
 {
-  messages.insert(key, message);
+  sMessages.insert(key, message);
 }
 
 
@@ -277,13 +277,13 @@ QString message(const QCString &key)
     initialized = true;
   }
 
-  if (!messages.contains(key))
+  if (!sMessages.contains(key))
   {
     kdDebug() << "Unhandled message: " << key << endl;
 
     return key;
   }
 
-  return messages[key];
+  return sMessages[key];
 }
 
