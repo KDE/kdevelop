@@ -22,6 +22,7 @@
 #include <QDir>
 #include <QRegExp>
 
+#include <knotifyconfigwidget.h>
 #include <kaction.h>
 #include <kaboutdata.h>
 #include <kstdaction.h>
@@ -304,7 +305,7 @@ void MainWindowShare::slotShowMenuBar()
 
 void MainWindowShare::slotConfigureNotifications()
 {
-    KNotifyDialog::configure(m_pMainWnd, "Notification Configuration Dialog");
+    KNotifyConfigWidget::configure(m_pMainWnd);
 }
 
 void MainWindowShare::slotSettings()

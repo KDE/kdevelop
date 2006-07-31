@@ -21,7 +21,7 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/cursor.h>
-
+#include <knotification.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <knotifyclient.h>
@@ -357,10 +357,10 @@ void MakeWidget::nextError()
         {
             m_lastErrorSelected = -1;
             if ( !scanErrorForward( 0 ) )
-                KNotifyClient::beep();
+                KNotification::beep();
         }
         else
-            KNotifyClient::beep();
+            KNotification::beep();
 }
 
 void MakeWidget::prevError()
@@ -385,10 +385,10 @@ void MakeWidget::prevError()
 #endif
 
             if ( !scanErrorBackward( parag ) )
-                KNotifyClient::beep();
+                KNotification::beep();
         }
         else
-            KNotifyClient::beep();
+            KNotification::beep();
 }
 
 void MakeWidget::contentsMouseReleaseEvent( QMouseEvent* e )
@@ -543,12 +543,12 @@ void MakeWidget::slotProcessExited( KProcess * )
     {
         if ( childproc->exitStatus() )
         {
-            KNotifyClient::event( topLevelWidget() ->winId(), "ProcessError", i18n( "The process has finished with errors" ) );
+            KNotification::event( "ProcessError", i18n( "The process has finished with errors" ) ,QPixmap(), topLevelWidget());
             emit m_part->commandFailed( currentCommand );
         }
         else
         {
-            KNotifyClient::event( topLevelWidget() ->winId(), "ProcessSuccess", i18n( "The process has finished successfully" ) );
+            KNotification::event( "ProcessSuccess", i18n( "The process has finished successfully" ) ,QPixmap(), topLevelWidget());
             emit m_part->commandFinished( currentCommand );
         }
     }
