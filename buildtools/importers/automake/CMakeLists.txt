@@ -2,7 +2,7 @@
 add_subdirectory(tests) 
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/projectmanager/interfaces 
-    ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/project ${CMAKE_SOURCE_DIR}/lib/util
+    ${CMAKE_SOURCE_DIR}/lib/project ${CMAKE_SOURCE_DIR}/lib/util
     )
 
 
@@ -30,7 +30,7 @@ set(kdevautomakeimporter_PART_SRCS
 
 kde4_automoc(${kdevautomakeimporter_PART_SRCS})
 kde4_add_plugin(kdevautomakeimporter ${kdevautomakeimporter_PART_SRCS})
-target_link_libraries(kdevautomakeimporter ${KDE4_KDECORE_LIBS} kdevautomakeparser kdevinterfaces)
+target_link_libraries(kdevautomakeimporter ${KDE4_KDECORE_LIBS} kdevautomakeparser kdevplatform)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevautomakeimporter)
 install(TARGETS kdevautomakeimporter DESTINATION ${PLUGIN_INSTALL_DIR} )
 

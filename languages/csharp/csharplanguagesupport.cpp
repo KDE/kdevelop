@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <kdevproject.h>
 #include <kdevfilemanager.h>
 #include <kdevprojectmodel.h>
+#include <kdevprojectcontroller.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevbackgroundparser.h>
 #include "parsejob.h"
@@ -54,19 +55,19 @@ CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
     //     m_backgroundParser = new BackgroundParser( this );
     //     m_highlights = new CppHighlighting( this );
 
-    connect( KDevApi::self() ->documentController(),
+    connect( KDevCore::documentController(),
              SIGNAL( documentLoaded( KDevDocument* ) ),
              this, SLOT( documentLoaded( KDevDocument* ) ) );
-    connect( KDevApi::self() ->documentController(),
+    connect( KDevCore::documentController(),
              SIGNAL( documentClosed( KDevDocument* ) ),
              this, SLOT( documentClosed( KDevDocument* ) ) );
-    connect( KDevApi::self() ->documentController(),
+    connect( KDevCore::documentController(),
              SIGNAL( documentActivated( KDevDocument* ) ),
              this, SLOT( documentActivated( KDevDocument* ) ) );
-    connect( KDevApi::self() ->core(),
+    connect( KDevCore::projectController(),
              SIGNAL( projectOpened() ),
              this, SLOT( projectOpened() ) );
-    connect( KDevApi::self() ->core(),
+    connect( KDevCore::projectController(),
              SIGNAL( projectClosed() ),
              this, SLOT( projectClosed() ) );
 }
@@ -83,7 +84,7 @@ KDevCodeModel *CSharpLanguageSupport::codeModel( const KUrl &url ) const
     //     if ( url.isValid() )
     //         return m_codeProxy->codeModel( url );
     //     else
-    //         return m_codeProxy->codeModel( KDevApi::self() ->documentController() ->activeDocumentUrl() );
+    //         return m_codeProxy->codeModel( KDevCore::documentController() ->activeDocumentUrl() );
 }
 
 KDevCodeProxy *CSharpLanguageSupport::codeProxy() const
@@ -122,13 +123,13 @@ QStringList CSharpLanguageSupport::mimeTypes() const
 void CSharpLanguageSupport::documentLoaded( KDevDocument* file )
 {
     if ( supportsDocument( file ) )
-        KDevApi::self() ->backgroundParser() ->addDocument( file->url(), file );
+        KDevCore::backgroundParser() ->addDocument( file->url(), file );
 }
 
 void CSharpLanguageSupport::documentClosed( KDevDocument* file )
 {
     if ( supportsDocument( file ) )
-        KDevApi::self() ->backgroundParser() ->removeDocumentFile( file );
+        KDevCore::backgroundParser() ->removeDocumentFile( file );
 }
 
 void CSharpLanguageSupport::documentActivated( KDevDocument* file )

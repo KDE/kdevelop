@@ -11,13 +11,17 @@
 #include <QFileInfo>
 #include <QPixmap>
 
-#include "core.h"
-#include "kdevapi.h"
-#include "toplevel.h"
+#include "kdevcore.h"
+#include "kdevconfig.h"
+#include "kdevmainwindow.h"
+#include "kdevenvironment.h"
+#include "kdevpartcontroller.h"
+#include "kdevlanguagecontroller.h"
 #include "splashscreen.h"
-#include "plugincontroller.h"
-#include "projectcontroller.h"
-#include "documentcontroller.h"
+#include "kdevplugincontroller.h"
+#include "kdevprojectcontroller.h"
+#include "kdevdocumentcontroller.h"
+#include "kdevbackgroundparser.h"
 
 #include "kdevideextension.h"
 
@@ -97,32 +101,44 @@ int main( int argc, char *argv[] )
     }
 
     //initialize the api object
-    KDevApi::self() ->setCore( Core::getInstance() );
-    KDevApi::self() ->setMainWindow( TopLevel::getInstance() );
-    KDevApi::self() ->setPluginController( PluginController::getInstance() );
-    KDevApi::self() ->setDocumentController( DocumentController::getInstance() );
+    //WARNING! the order is important
+    KDevCore::setMainWindow( new KDevMainWindow );
+    KDevCore::setPluginController( new KDevPluginController );
+    KDevCore::setPartController( new KDevPartController );
+    KDevCore::setDocumentController( new KDevDocumentController );
+    KDevCore::setLanguageController( new KDevLanguageController );
+    KDevCore::setBackgroundParser( new KDevBackgroundParser );
+    KDevCore::setProjectController( new KDevProjectController );
+    KDevCore::setEnvironment( new KDevEnvironment );
 
-    QObject::connect( PluginController::getInstance(),
+    QObject::connect( KDevCore::pluginController(),
                       SIGNAL( loadingPlugin( const QString & ) ),
                       splash, SLOT( showMessage( const QString & ) ) );
 
-    QObject::connect( DocumentController::getInstance(),
+    QObject::connect( KDevCore::documentController(),
                       SIGNAL( openingDocument( const QString & ) ),
                       splash, SLOT( showMessage( const QString & ) ) );
-
-    Core::getInstance() ->doEmitCoreInitialized();
 
     if ( splash )
         splash->showMessage( i18n( "Starting GUI" ) );
 
-    QObject::connect( Core::getInstance(), SIGNAL( projectOpened() ),
-                      TopLevel::getInstance() ->main(), SLOT( loadSettings() ) );
-    QObject::connect( TopLevel::getInstance() ->main(), SIGNAL( finishedLoading() ),
+    QObject::connect( KDevCore::projectController(), SIGNAL( projectOpened() ),
+                      KDevCore::mainWindow(), SLOT( loadSettings() ) );
+    QObject::connect( KDevCore::mainWindow(), SIGNAL( finishedLoading() ),
                       splash, SLOT( deleteLater() ) );
+
+    KDevCore::initialize();
 
     if ( args->count() == 0 )
     {
-        ProjectController::getInstance() ->init();
+        KConfig * config = KDevConfig::standard();
+        config->setGroup( "General Options" );
+        QString project = config->readPathEntry( "Last Project" );
+        bool readProject = config->readEntry( "Read Last Project On Startup", true );
+        if ( !project.isEmpty() && readProject )
+        {
+            KDevCore::projectController()->openProject( KUrl( project ) );
+        }
     }
     else if ( args->count() > 0 )
     {
@@ -130,13 +146,13 @@ int main( int argc, char *argv[] )
         QString ext = QFileInfo( url.fileName() ).suffix();
         if ( ext == "kdev4" )
         {
-            ProjectController::getInstance() ->openProject( url );
+            KDevCore::projectController()->openProject( url );
         }
         else
         {
             for ( int a = 0; a < args->count(); ++a )
             {
-                DocumentController::getInstance() ->editDocument( KUrl( args->url( a ) ) );
+                KDevCore::documentController()->editDocument( KUrl( args->url( a ) ) );
             }
         }
     }

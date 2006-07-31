@@ -38,10 +38,11 @@ ValgrindPart::ValgrindPart( QObject *parent, const QStringList& )
            this, SLOT(receivedStderr( KProcess*, char*, int )) );
   connect( proc, SIGNAL(processExited( KProcess* )),
            this, SLOT(processExited( KProcess* )) );
-  connect( KDevApi::self()->core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
-           this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
-  connect( KDevApi::self()->core(), SIGNAL(projectOpened()),
-           this, SLOT(projectOpened()) );
+//   FIXME find replacement
+//   connect( KDevApi::self()->core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
+//            this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
+//   connect( KDevApi::self()->core(), SIGNAL(projectOpened()),
+//            this, SLOT(projectOpened()) );
 
   m_widget = new ValgrindWidget( this );
   m_widget->setIcon( SmallIcon("fork") );
@@ -68,14 +69,14 @@ ValgrindPart::ValgrindPart( QObject *parent, const QStringList& )
   action->setWhatsThis(i18n("<b>Profile with KCachegrind</b><p>Runs your program in calltree and then displays profiler information in KCachegrind."));
   connect(action, SIGNAL(triggered(bool)), SLOT(slotExecCalltree()));
 
-  KDevApi::self()->mainWindow()->embedOutputView( m_widget, "Valgrind", i18n("Valgrind memory leak check") );
+  KDevCore::mainWindow()->embedOutputView( m_widget, "Valgrind", i18n("Valgrind memory leak check") );
 }
 
 
 ValgrindPart::~ValgrindPart()
 {
   if ( m_widget )
-      KDevApi::self()->mainWindow()->removeView( m_widget );
+      KDevCore::mainWindow()->removeView( m_widget );
   delete m_widget;
   delete proc;
 }
@@ -233,8 +234,8 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
   proc->clearArguments();
   *proc << valExec << /*"--tool=memcheck" << */valParams << exec << params;
   proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
-  KDevApi::self()->mainWindow()->raiseView( m_widget );
-  KDevApi::self()->core()->running( this, true );
+  KDevCore::mainWindow()->raiseView( m_widget );
+//   KDevApi::self()->core()->running( this, true ); FIXME find replacement
 
   _lastExec = exec;
   _lastParams = params;
@@ -299,7 +300,7 @@ void ValgrindPart::processExited( KProcess* p )
     appendMessage( currentMessage + lastPiece );
     currentMessage = QString();
     lastPiece = QString();
-    KDevApi::self()->core()->running( this, false );
+//     KDevApi::self()->core()->running( this, false ); FIXME find replacement
 
     if (kcInfo.runKc)
     {

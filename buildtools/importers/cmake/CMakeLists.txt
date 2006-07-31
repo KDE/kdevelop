@@ -3,7 +3,6 @@ add_subdirectory( cmakelib )
 include_directories(
  ${CMAKE_SOURCE_DIR}/lib 
  ${CMAKE_SOURCE_DIR}/lib/projectmanager/interfaces
- ${CMAKE_SOURCE_DIR}/lib/interfaces 
  ${CMAKE_SOURCE_DIR}/lib/project
  ${CMAKE_SOURCE_DIR}/lib/util
  ${CMAKE_SOURCE_DIR}/buildtools/importers/cmake/cmakelib/Source
@@ -28,13 +27,13 @@ kde4_automoc( ${cmakeimporter_SRCS} )
 kde4_add_kcfg_files( cmakeimporter_SRCS config.kcfgc )
 kde4_add_plugin( kdevcmakeimporter ${cmakeimporter_SRCS} )
 target_link_libraries( kdevcmakeimporter ${KDE4_KDECORE_LIBS} 
-                       kdevinterfaces CMakeLib )
+                       kdevplatform CMakeLib )
 
 kde4_automoc( ${cmakesettings_SRCS} )
 kde4_add_ui_files( cmakesettings_SRCS ${cmakesettings_UI} )
 kde4_add_kcfg_files( cmakesettings_SRCS config.kcfgc )
 kde4_add_plugin( kcm_kdevcmake_settings ${cmakesettings_SRCS} )
-target_link_libraries( kcm_kdevcmake_settings ${KDE4_KUTILS_LIBS} kdevinterfaces CMakeLib )
+target_link_libraries( kcm_kdevcmake_settings ${KDE4_KUTILS_LIBS} kdevplatform CMakeLib )
 
 
 

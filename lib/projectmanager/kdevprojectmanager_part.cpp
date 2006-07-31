@@ -20,7 +20,7 @@
 #include "kdevprojectmanagerdelegate.h"
 #include "kdevprojectmodel.h"
 #include "kdevprojectmanager.h"
-#include "kdevapi.h"
+#include "kdevcore.h"
 #include "kdevconfig.h"
 #include "kdevplugin.h"
 #include "kdevfilemanager.h"
@@ -142,7 +142,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringLis
           m_projectDetails, SLOT(setRootIndex(QModelIndex)));
 #endif
 
-  KDevApi::self()->mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
+  KDevCore::mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
 
   setXMLFile("kdevprojectmanager.rc");
 
@@ -154,7 +154,7 @@ KDevProjectManagerPart::~KDevProjectManagerPart()
 {
   if (m_projectOverview)
     {
-      KDevApi::self()->mainWindow()->removeView(m_widget);
+      KDevCore::mainWindow()->removeView(m_widget);
       delete m_widget;
       m_widget = 0;
     }
@@ -162,7 +162,7 @@ KDevProjectManagerPart::~KDevProjectManagerPart()
 
 void KDevProjectManagerPart::openURL(const KUrl &url)
 {
-  KDevApi::self()->documentController()->editDocument(url);
+  KDevCore::documentController()->editDocument(url);
 }
 
 KDevProjectFolderItem *KDevProjectManagerPart::activeFolder()
@@ -402,7 +402,7 @@ void KDevProjectManagerPart::updateDetails(KDevProjectItem *)
 void KDevProjectManagerPart::pressed( const QModelIndex & index )
 {
   if (KDevProjectFileItem *file = m_projectModel->item( index ) ->file())
-    KDevApi::self() ->documentController() ->editDocument( file ->url() );
+    KDevCore::documentController() ->editDocument( file ->url() );
 }
 
 #include "kdevprojectmanager_part.moc"

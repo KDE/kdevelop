@@ -34,7 +34,7 @@ KDevKonsoleViewPart::KDevKonsoleViewPart( QObject *parent, const QStringList & )
     m_konsoleView->setWindowIcon( KIcon( "konsole" ) );
     m_konsoleView->setWindowTitle( i18n( "Konsole" ) );
 
-    KDevApi::self() ->mainWindow() ->embedOutputView(
+    KDevCore::mainWindow() ->embedOutputView(
         m_konsoleView,
         i18n( "Konsole" ),
         i18n( "Embedded console window" ) );
@@ -44,7 +44,7 @@ KDevKonsoleViewPart::~KDevKonsoleViewPart()
 {
     if ( m_konsoleView )
     {
-        KDevApi::self() ->mainWindow() ->removeView( m_konsoleView );
+        KDevCore::mainWindow() ->removeView( m_konsoleView );
         delete m_konsoleView;
     }
 }

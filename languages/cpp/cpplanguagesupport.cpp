@@ -29,6 +29,7 @@
 #include <kdevproject.h>
 #include <kdevfilemanager.h>
 #include <kdevprojectmodel.h>
+#include <kdevprojectcontroller.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevbackgroundparser.h>
 
@@ -60,19 +61,19 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
     m_codeDelegate = new CodeDelegate( this );
     m_highlights = new CppHighlighting( this );
 
-    connect( KDevApi::self() ->documentController(),
+    connect( KDevCore::documentController(),
              SIGNAL( documentLoaded( KDevDocument* ) ),
              this, SLOT( documentLoaded( KDevDocument* ) ) );
-    connect( KDevApi::self() ->documentController(),
+    connect( KDevCore::documentController(),
              SIGNAL( documentClosed( KDevDocument* ) ),
              this, SLOT( documentClosed( KDevDocument* ) ) );
-    connect( KDevApi::self() ->documentController(),
+    connect( KDevCore::documentController(),
              SIGNAL( documentActivated( KDevDocument* ) ),
              this, SLOT( documentActivated( KDevDocument* ) ) );
-    connect( KDevApi::self() ->core(),
+    connect( KDevCore::projectController(),
              SIGNAL( projectOpened() ),
              this, SLOT( projectOpened() ) );
-    connect( KDevApi::self() ->core(),
+    connect( KDevCore::projectController(),
              SIGNAL( projectClosed() ),
              this, SLOT( projectClosed() ) );
 }
@@ -87,7 +88,7 @@ KDevCodeModel *CppLanguageSupport::codeModel( const KUrl &url ) const
     if ( url.isValid() )
         return m_codeProxy->codeModel( url );
     else
-        return m_codeProxy->codeModel( KDevApi::self() ->documentController() ->activeDocumentUrl() );
+        return m_codeProxy->codeModel( KDevCore::documentController() ->activeDocumentUrl() );
 }
 
 KDevCodeProxy *CppLanguageSupport::codeProxy() const
@@ -124,13 +125,13 @@ QStringList CppLanguageSupport::mimeTypes() const
 void CppLanguageSupport::documentLoaded( KDevDocument* file )
 {
     if ( supportsDocument( file ) )
-        KDevApi::self() ->backgroundParser() ->addDocument( file->url(), file );
+        KDevCore::backgroundParser() ->addDocument( file->url(), file );
 }
 
 void CppLanguageSupport::documentClosed( KDevDocument* file )
 {
     if ( supportsDocument( file ) )
-        KDevApi::self() ->backgroundParser() ->removeDocumentFile( file );
+        KDevCore::backgroundParser() ->removeDocumentFile( file );
 }
 
 void CppLanguageSupport::documentActivated( KDevDocument* file )
@@ -155,7 +156,7 @@ void CppLanguageSupport::projectOpened()
     // 3. filesChangedInProject
 
     KUrl::List documentList;
-    QList<KDevProjectFileItem*> files = KDevApi::self() ->project() ->allFiles();
+    QList<KDevProjectFileItem*> files = KDevCore::activeProject()->allFiles();
     foreach ( KDevProjectFileItem * file, files )
     {
         if ( supportsDocument( file->url() )  /*&& file->url().fileName().endsWith(".h")*/ )
@@ -163,7 +164,7 @@ void CppLanguageSupport::projectOpened()
             documentList.append( file->url() );
         }
     }
-    KDevApi::self() ->backgroundParser() ->addDocumentList( documentList );
+    KDevCore::backgroundParser() ->addDocumentList( documentList );
 }
 
 void CppLanguageSupport::projectClosed()

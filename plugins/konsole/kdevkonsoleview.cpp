@@ -38,7 +38,7 @@ KDevKonsoleView::KDevKonsoleView( QWidget *parent )
     // but by default the konsole shouldn't
     // automatically switch directories on you.
 
-    //     connect( KDevApi::self() ->documentController(),
+    //     connect( KDevCore::documentController(),
     //              SIGNAL( activePartChanged( KParts::Part* ) ),
     //              this, SLOT( activePartChanged( KParts::Part* ) ) );
     m_vbox = new QVBoxLayout( this );
@@ -101,8 +101,8 @@ void KDevKonsoleView::activePartChanged( KParts::Part *activatedPart )
     QString dir;
     if ( ro_part )
         dir = ro_part->url().directory();
-    else if ( KDevApi::self() ->project() )
-        dir = KDevApi::self() ->project() ->projectDirectory();
+    else if ( KDevCore::activeProject() )
+        dir = KDevCore::activeProject() ->projectDirectory();
 
     if ( dir.isEmpty() )
         return ;

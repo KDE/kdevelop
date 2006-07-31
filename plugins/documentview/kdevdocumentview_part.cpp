@@ -1,23 +1,23 @@
 /*
- * This file is part of KDevelop
- *
- * Copyright (c) 2006 Adam Treat <treat@kde.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Library General Public License as
- * published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the
- * Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+* This file is part of KDevelop
+*
+* Copyright (c) 2006 Adam Treat <treat@kde.org>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Library General Public License as
+* published by the Free Software Foundation; either version 2 of the
+* License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public
+* License along with this program; if not, write to the
+* Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*/
 
 #include "kdevdocumentview_part.h"
 #include "kdevdocumentviewdelegate.h"
@@ -35,7 +35,6 @@
 #include <kgenericfactory.h>
 #include <kparts/componentfactory.h>
 
-#include <kdevapi.h>
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 
@@ -44,7 +43,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevdocumentview, KDevDocumentViewFactory( "kdevdocu
 
 KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
         const QStringList& )
-    : KDevPlugin( KDevDocumentViewFactory::instance(), parent )
+        : KDevPlugin( KDevDocumentViewFactory::instance(), parent )
 {
     m_documentModel = new KDevDocumentModel( this );
 
@@ -62,10 +61,10 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
     m_documentView->setItemDelegate( delegate );
     m_documentView->setWhatsThis( i18n( "Document View" ) );
 
-    KDevApi::self() ->mainWindow() ->embedSelectView( m_documentView,
-                                    i18n( "Documents" ), i18n( "Documents" ) );
+    KDevCore::mainWindow() ->embedSelectView( m_documentView,
+            i18n( "Documents" ), i18n( "Documents" ) );
 
-    KDevDocumentController* docController = KDevApi::self() ->documentController();
+    KDevDocumentController* docController = KDevCore::documentController();
 
     connect( m_documentView, SIGNAL( pressed( QModelIndex ) ),
              this, SLOT( pressed( QModelIndex ) ) );
@@ -94,7 +93,7 @@ KDevDocumentViewPart::~KDevDocumentViewPart()
 {
     if ( m_documentView )
     {
-        KDevApi::self() ->mainWindow() ->removeView( m_documentView );
+        KDevCore::mainWindow() ->removeView( m_documentView );
         delete m_documentView;
     }
 }
@@ -185,7 +184,7 @@ void KDevDocumentViewPart::stateChanged( KDevDocument* document,
 void KDevDocumentViewPart::pressed( const QModelIndex & index )
 {
     if ( index.parent().isValid() )
-        KDevApi::self() ->documentController() ->editDocument(
+        KDevCore::documentController() ->editDocument(
             m_documentModel->item( index ) ->fileItem() ->URL() );
 }
 

@@ -753,8 +753,8 @@ void KDevDirOperator::activatedMenu( const KFileItem *fi, const QPoint & pos )
     if (fi)
     {
         FileContext context( KUrl::List(fi->url()));
-        if ( KDevApi::self()->core() )
-            KDevApi::self()->core()->fillContextMenu(popup, &context);
+//         if ( KDevApi::self()->core() )
+//             KDevApi::self()->core()->fillContextMenu(popup, &context); FIXME find replacement
     }
 
     popup->popup(pos);

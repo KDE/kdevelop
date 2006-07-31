@@ -1,5 +1,5 @@
 
-include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces )
+include_directories(${CMAKE_SOURCE_DIR}/lib )
 
 
 ########### next target ###############
@@ -13,7 +13,7 @@ set(kdevwidgets_LIB_SRCS
 
 kde4_automoc(${kdevwidgets_LIB_SRCS})
 kde4_add_library(kdevwidgets SHARED ${kdevwidgets_LIB_SRCS})
-target_link_libraries(kdevwidgets ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KHTML_LIBS} kdevinterfaces)
+target_link_libraries(kdevwidgets ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KHTML_LIBS} kdevplatform)
 set_target_properties(kdevwidgets PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevwidgets DESTINATION ${LIB_INSTALL_DIR} )
 

@@ -15,7 +15,6 @@
 #include <ktextbrowser.h>
 #include <ktip.h>
 
-#include "kdevapi.h"
 #include "kdevcore.h"
 
 static const KDevPluginInfo data("kdevtipofday");

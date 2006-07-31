@@ -1,23 +1,23 @@
 /*
- * This file is part of KDevelop
- *
- * Copyright (c) 2006 Adam Treat <treat@kde.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Library General Public License as
- * published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the
- * Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+* This file is part of KDevelop
+*
+* Copyright (c) 2006 Adam Treat <treat@kde.org>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Library General Public License as
+* published by the Free Software Foundation; either version 2 of the
+* License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public
+* License along with this program; if not, write to the
+* Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*/
 
 #include "kdevcodeview.h"
 #include "kdevcodeview_part.h"
@@ -29,7 +29,6 @@
 #include <kfile.h>
 #include <klocale.h>
 
-#include <kdevapi.h>
 #include <kdevcore.h>
 #include <kdevcodeproxy.h>
 #include <kdevlanguagesupport.h>
@@ -51,7 +50,7 @@ KDevCodeView::KDevCodeView( KDevCodeViewPart *part, QWidget *parent )
              this, SLOT( activated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ),
              this, SLOT( popupContextMenu( QPoint ) ) );
-    connect( KDevApi::self() ->documentController(),
+    connect( KDevCore::documentController(),
              SIGNAL( documentActivated( KDevDocument* ) ),
              this, SLOT( documentActivated( KDevDocument* ) ) );
 }
@@ -72,7 +71,7 @@ KDevCodeProxy *KDevCodeView::codeProxy() const
 void KDevCodeView::documentActivated( KDevDocument* file )
 {
     if ( m_trackCurrent &&
-         KDevApi::self() ->languageSupport() ->supportsDocument( file ) )
+            KDevCore::activeLanguage() ->supportsDocument( file ) )
         codeProxy() ->setFilterDocument( file->url() );
 }
 
@@ -82,7 +81,7 @@ void KDevCodeView::activated( const QModelIndex &index )
     {
         KUrl document( item->fileName() );
         if ( document.isValid() )
-            KDevApi::self() ->documentController() ->editDocument( document,
+            KDevCore::documentController() ->editDocument( document,
                     item->startPosition() );
     }
 }
@@ -91,7 +90,7 @@ void KDevCodeView::modeCurrent()
 {
     m_trackCurrent = true;
     codeProxy() ->setFilterDocument(
-        KDevApi::self() ->documentController() ->activeDocumentUrl() );
+        KDevCore::documentController() ->activeDocumentUrl() );
 }
 
 void KDevCodeView::modeNormalize()

@@ -2,7 +2,7 @@
 add_subdirectory(parser)
 add_subdirectory(app_templates) 
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/weaver
+include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/weaver
     )
 
 
@@ -18,7 +18,7 @@ set(kdevcpplanguagesupport_PART_SRCS
 
 kde4_automoc(${kdevcpplanguagesupport_PART_SRCS})
 kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
-target_link_libraries(kdevcpplanguagesupport ${KDE4_KDECORE_LIBS} kdevinterfaces kdevcppparser ThreadWeaver kdevcpprpp)
+target_link_libraries(kdevcpplanguagesupport ${KDE4_KDECORE_LIBS} kdevplatform kdevcppparser ThreadWeaver kdevcpprpp)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevcpplanguagesupport)
 install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR} )
 

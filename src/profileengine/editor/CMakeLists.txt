@@ -1,5 +1,5 @@
 
-include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util
+include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/util
     ${CMAKE_SOURCE_DIR}/lib/widgets
     )
 
@@ -29,7 +29,7 @@ set(kdevprofileeditor_SRCS
 
 kde4_automoc(${kdevprofileeditor_SRCS})
 kde4_add_executable(kdevprofileeditor ${kdevprofileeditor_SRCS})
-target_link_libraries(kdevprofileeditor ${KDE4_KDECORE_LIBS} kdevinterfaces profileeditor ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
+target_link_libraries(kdevprofileeditor ${KDE4_KDECORE_LIBS} kdevplatform profileeditor ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
 install(TARGETS kdevprofileeditor DESTINATION ${BIN_INSTALL_DIR} )
 
 

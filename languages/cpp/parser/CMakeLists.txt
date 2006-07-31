@@ -2,7 +2,7 @@
 add_subdirectory(rpp)
 add_subdirectory(tests)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces )
+include_directories( ${CMAKE_SOURCE_DIR}/lib )
 
 add_definitions(-fPIC)
 

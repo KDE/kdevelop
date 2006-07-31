@@ -18,7 +18,7 @@
 #include <ksavefile.h>
 #include <kstdaction.h>
 
-#include <kdevapi.h>
+#include "kdevcore.h"
 #include <kdevmainwindow.h>
 #include "internals/qdesigner_integration_p.h"
 
@@ -39,7 +39,7 @@ GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
   setXMLFile( "guibuilderpart.rc" );
 
   m_designer = QDesignerComponents::createFormEditor(this);
-  m_designer->setTopLevel( KDevApi::self()->mainWindow()->main());
+  m_designer->setTopLevel( KDevCore::mainWindow());
 
   m_designer->setWidgetBox(QDesignerComponents::createWidgetBox(m_designer, 0));
   Q_ASSERT(m_designer->widgetBox() != 0);
@@ -53,12 +53,12 @@ GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
 
   (void) new qdesigner_internal::QDesignerIntegration(m_designer, this);
 
-  KDevApi::self()->mainWindow()->embedSelectView(m_designer->widgetBox(), i18n("Widget Box"), i18n("Widget Box"));
-  KDevApi::self()->mainWindow()->embedSelectViewRight(m_designer->propertyEditor(), i18n("Property Editor"), i18n("Property Editor"));
+  KDevCore::mainWindow()->embedSelectView(m_designer->widgetBox(), i18n("Widget Box"), i18n("Widget Box"));
+  KDevCore::mainWindow()->embedSelectViewRight(m_designer->propertyEditor(), i18n("Property Editor"), i18n("Property Editor"));
 
   setupActions();
 
-  connect( KDevApi::self()->documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
+  connect( KDevCore::documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
            this, SLOT( activated( KDevDocument* ) ) );
 }
 
@@ -72,8 +72,8 @@ GuiBuilderPart::~GuiBuilderPart()
             delete m_window;
         }
 
-        KDevApi::self()->mainWindow()->removeView( m_designer->widgetBox() );
-        KDevApi::self()->mainWindow()->removeView( m_designer->propertyEditor() );
+        KDevCore::mainWindow()->removeView( m_designer->widgetBox() );
+        KDevCore::mainWindow()->removeView( m_designer->propertyEditor() );
         delete m_designer;
     }
     if (m_workspace)
@@ -84,18 +84,18 @@ void GuiBuilderPart::activated( KDevDocument *document )
 {
     if ( document->url() == url() )
     {
-        KDevApi::self()->mainWindow()->raiseView(
+        KDevCore::mainWindow()->raiseView(
                 m_designer->widgetBox(),
                 Qt::LeftDockWidgetArea);
-        KDevApi::self()->mainWindow()->raiseView(
+        KDevCore::mainWindow()->raiseView(
                 m_designer->propertyEditor(),
                 Qt::RightDockWidgetArea);
     }
     KMimeType::Ptr mimeType = KMimeType::findByURL( document->url() );
     if (!mimeType->is( "application/x-designer" ))
     {
-        KDevApi::self()->mainWindow()->lowerView( m_designer->widgetBox() );
-        KDevApi::self()->mainWindow()->lowerView( m_designer->propertyEditor() );
+        KDevCore::mainWindow()->lowerView( m_designer->widgetBox() );
+        KDevCore::mainWindow()->lowerView( m_designer->propertyEditor() );
     }
 }
 

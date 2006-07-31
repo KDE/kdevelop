@@ -45,9 +45,9 @@ KDevCodeViewPart::KDevCodeViewPart( QObject *parent,
                                     const QStringList& )
     : KDevPlugin( KDevCodeViewFactory::instance(), parent )
 {
-    if (!KDevApi::self() ->languageSupport())
+    if (!KDevCore::activeLanguage())
         return;
-    KDevCodeProxy * model = KDevApi::self()-> languageSupport() ->codeProxy();
+    KDevCodeProxy * model = KDevCore::activeLanguage() ->codeProxy();
     if ( !model )
         return ;
 
@@ -110,12 +110,12 @@ KDevCodeViewPart::KDevCodeViewPart( QObject *parent,
 
     m_codeView->setModel( model );
 
-    if ( KDevCodeDelegate * delegate = KDevApi::self() ->languageSupport() ->codeDelegate() )
+    if ( KDevCodeDelegate * delegate = KDevCore::activeLanguage() ->codeDelegate() )
         m_codeView->setItemDelegate( delegate );
 
     m_codeView->setWhatsThis( i18n( "Code View" ) );
 
-    KDevApi::self() ->mainWindow() ->embedSelectViewRight( window,
+    KDevCore::mainWindow() ->embedSelectViewRight( window,
                                          i18n( "Code View" ),
                                          i18n( "Code View" ) );
 
@@ -126,7 +126,7 @@ KDevCodeViewPart::~KDevCodeViewPart()
 {
     if ( m_codeView )
     {
-        KDevApi::self() ->mainWindow() ->removeView( m_codeView );
+        KDevCore::mainWindow() ->removeView( m_codeView );
         delete m_codeView;
     }
 }

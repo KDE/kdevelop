@@ -147,8 +147,8 @@ void ValgrindWidget::addMessage( const ValgrindItem& vi )
 void ValgrindWidget::executed( Q3ListViewItem* lvi )
 {
   Q_ASSERT( _part );
-  Q_ASSERT( KDevApi::self()->documentController() );
-  Q_ASSERT( KDevApi::self()->mainWindow() );
+  Q_ASSERT( KDevCore::documentController() );
+  Q_ASSERT( KDevCore::mainWindow() );
 
   if ( !lvi || lvi->rtti() != VALLISTVIEWITEMRTTI )
     return;
@@ -166,9 +166,9 @@ void ValgrindWidget::executed( Q3ListViewItem* lvi )
   }
   if ( vli ) {
     // display the file
-    KDevApi::self()->documentController()->editDocument( KUrl( vli->fileName() ), KTextEditor::Cursor(vli->line() - 1, 0) );
-    KDevApi::self()->mainWindow()->statusBar()->message( vli->message(), 10000 );
-    KDevApi::self()->mainWindow()->lowerView( this );
+      KDevCore::documentController()->editDocument( KUrl( vli->fileName() ), KTextEditor::Cursor(vli->line() - 1, 0) );
+      KDevCore::mainWindow()->statusBar()->message( vli->message(), 10000 );
+      KDevCore::mainWindow()->lowerView( this );
   }
 }
 

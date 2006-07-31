@@ -12,10 +12,10 @@
 #include <QPixmap>
 
 #include "splashscreen.h"
-#include "toplevel.h"
-#include "plugincontroller.h"
-#include "documentcontroller.h"
-#include "core.h"
+#include "kdevmainwindow.h"
+#include "kdevplugincontroller.h"
+#include "kdevdocumentcontroller.h"
+#include "kdevcore.h"
 
 #include "kdevassistantextension.h"
 
@@ -91,29 +91,20 @@ int main(int argc, char *argv[])
   }
   if (splash) splash->show();
 
-  app.processEvents();
+  app.processEvents(); //FIXME UGLY BEYOND WORDS!
 
-  QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
+  KDevCore::setPluginController( new KDevPluginController );
+  QObject::connect(KDevCore::pluginController(), SIGNAL(loadingPlugin(const QString &)),
            splash, SLOT(showMessage(const QString &)));
 
   if (splash) splash->showMessage( i18n( "Loading Settings" ) );
-  TopLevel::getInstance()->loadSettings();
+  KDevCore::mainWindow()->loadSettings();
 
-//   PluginController::getInstance()->loadInitialPlugins();
+//   KDevPluginController::getInstance()->loadInitialPlugins();
 
   if (splash) splash->showMessage( i18n( "Starting GUI" ) );
 
-#if 0
-//BEGIN a workaround on kmdi bug - we do not allow mainwindow to be shown until now
-  NewMainWindow *mw = dynamic_cast<NewMainWindow*>(TopLevel::getInstance()->main());
-  if (mw)
-      mw->enableShow();
-//END workaround
-#endif
-
-  TopLevel::getInstance()->main()->show();
-
-  Core::getInstance()->doEmitCoreInitialized();
+  KDevCore::mainWindow()->show();
 
   if (splash) delete splash;
 

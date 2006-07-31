@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <QtGui/QHeaderView>
 
 #include <kdevcore.h>
-#include <kdevapi.h>
+#include <kdevcontext.h>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <kurl.h>
@@ -91,7 +91,7 @@ void KDevDocumentView::popupContextMenu( const QPoint &pos )
 
             //QAction* test = menu.addAction( i18n("Test") );
 
-            KDevApi::self() ->core() ->fillContextMenu( &menu, &context );
+            //KDevApi::self() ->core() ->fillContextMenu( &menu, &context ); FIXME
             menu.exec( mapToGlobal( pos ) );
         }
 }

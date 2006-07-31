@@ -18,7 +18,6 @@
 #include <kdialog.h>
 #include <kvbox.h>
 
-#include <kdevapi.h>
 #include <kdevcore.h>
 #include <kdevproject.h>
 #include <kdevmainwindow.h>
@@ -35,17 +34,18 @@ K_EXPORT_COMPONENT_FACTORY( kdevfileselector, FileSelectorFactory )
 FileSelectorPart::FileSelectorPart(QObject *parent, const QStringList&)
     : KDevPlugin(FileSelectorFactory::instance(), parent)
 {
-    m_filetree = new KDevFileSelector( this, KDevApi::self()->mainWindow(), KDevApi::self()->documentController(), 0 );
+    m_filetree = new KDevFileSelector( this, KDevCore::mainWindow(), KDevCore::documentController(), 0 );
 
     connect( m_filetree->dirOperator(), SIGNAL(fileSelected(const KFileItem*)),
 	     this, SLOT(fileSelected(const KFileItem*)));
-    connect( KDevApi::self()->core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
-
-    connect( KDevApi::self()->core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(slotConfigWidget(KDialogBase*)) );
+//     FIXME find replacement
+//     connect( KDevApi::self()->core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
+//
+//     connect( KDevApi::self()->core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(slotConfigWidget(KDialogBase*)) );
 
     m_filetree->setWindowTitle( i18n("File Selector") );
     //m_filetree->setWindowIcon( KIcon(info()->icon()) ); FIXME port
-    KDevApi::self()->mainWindow()->embedSelectView( m_filetree, i18n("File Selector"), i18n("File selector") );
+    KDevCore::mainWindow()->embedSelectView( m_filetree, i18n("File Selector"), i18n("File selector") );
     m_filetree->setWhatsThis( i18n("<b>File selector</b><p>This file selector lists directory contents and provides some file management functions."));
 
     m_filetree->readConfig( instance()->config(), "fileselector" );
@@ -54,7 +54,7 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const QStringList&)
 FileSelectorPart::~FileSelectorPart()
 {
     if (m_filetree){
-        KDevApi::self()->mainWindow()->removeView( m_filetree );
+        KDevCore::mainWindow()->removeView( m_filetree );
     }
 
     delete (KDevFileSelector*) m_filetree;
@@ -64,13 +64,13 @@ void FileSelectorPart::fileSelected( const KFileItem * file )
 {
     KUrl u(file->url());
 
-    KDevApi::self()->documentController()->editDocument( u );
+    KDevCore::documentController()->editDocument( u );
 }
 
 void FileSelectorPart::slotProjectOpened()
 {
     KUrl u;
-    u.setPath( KDevApi::self()->project()->projectDirectory() );
+    u.setPath( KDevCore::activeProject()->projectDirectory() );
     m_filetree->setDir( u );
 }
 
