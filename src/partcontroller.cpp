@@ -380,7 +380,17 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 		QDomDocument* dom = API::getInstance()->projectDom();
 		if ( dom != 0 )
 		{
-			QString DesignerSetting = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designerintegration");
+
+			// Short explanation for the following: 
+			// The global option specifies a fallback if the project
+			// has no setting or no project is open. However for Qt4
+			// projects we want to use ExternalDesigner in any case.
+			QString DefaultDesignerSetting = config->readEntry( "DesignerSetting", "ExternalDesigner" );
+
+			if ( DomUtil::readIntEntry( *dom, "/kdevcppsupport/qt/version", 3 ) == 4 )
+				DefaultDesignerSetting = "ExternalDesigner";
+
+			QString DesignerSetting = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designerintegration", DefaultDesignerSetting );
 
 			if ( DesignerSetting == "EmbeddedKDevDesigner" )
 			{

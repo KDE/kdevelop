@@ -139,6 +139,17 @@
                 </widget>
             </hbox>
         </widget>
+        <widget class="QLabel" row="8" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>textLabel5</cstring>
+            </property>
+            <property name="text">
+                <string>&lt;qt&gt;&lt;h3&gt;UI Designer Integration&lt;/h3&gt;&lt;/qt&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>AlignTop</set>
+            </property>
+        </widget>
         <spacer row="4" column="0" rowspan="4" colspan="1">
             <property name="name">
                 <cstring>spacer13_2</cstring>
@@ -153,6 +164,96 @@
                 <size>
                     <width>16</width>
                     <height>80</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QButtonGroup" row="9" column="1">
+            <property name="name">
+                <cstring>designerButtonGroup</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="title">
+                <string></string>
+            </property>
+            <property name="flat">
+                <bool>false</bool>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>embeddedDesignerRadioButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Use KDevelop's embedded designer</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+U</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Start KDevelop own designer embedded within KDevelop</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to integrate the UI designer into KDevelop.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>seperateAppRadioButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Run KDevelop's &amp;designer as a separate application</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+D</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Start KDevelop own designer externally</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to run KDevelop's UI designer as a separate program.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="2" column="0">
+                    <property name="name">
+                        <cstring>qtDesignerRadioButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Run &amp;Qt Designer</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+Q</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Use Qt Designer externally</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Check this button if you wish to use Qt Designer rather than KDevelop's integrated designer.</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <spacer row="9" column="0">
+            <property name="name">
+                <cstring>spacer13_2_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>16</width>
+                    <height>60</height>
                 </size>
             </property>
         </spacer>
@@ -386,8 +487,6 @@
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>useOtherTerminal</sender>
@@ -398,7 +497,6 @@
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
