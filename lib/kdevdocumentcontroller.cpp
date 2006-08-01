@@ -195,6 +195,8 @@ bool KDevDocumentController::closeAllDocuments()
 
 KDevDocument* KDevDocumentController::showDocumentation( const KUrl &url, bool newWin )
 {
+    Q_UNUSED( url );
+    Q_UNUSED( newWin );
     //FIXME Port to new documentcontroller API
     return 0;
 }
@@ -566,7 +568,7 @@ void KDevDocumentController::slotForward()
 
 void KDevDocumentController::slotBackAboutToShow()
 {
-    KMenu * popup = m_backAction->popupMenu();
+    QMenu * popup = m_backAction->menu();
     popup->clear();
 
     if ( m_backHistory.isEmpty() )
@@ -727,6 +729,7 @@ void KDevDocumentController::slotDocumentDirty( KTextEditor::Document * d,
                                             bool isModified,
                                             KTextEditor::ModificationInterface::ModifiedOnDiskReason reason )
 {
+    Q_UNUSED( isModified );
 //     kDebug( 9000 ) << k_funcinfo << endl;
 
     KDevDocument* doc = documentForPart( d );
@@ -954,9 +957,9 @@ void KDevDocumentController::init()
     m_backAction->setToolTip( i18n( "Back" ) );
     m_backAction->setWhatsThis( i18n( "<b>Back</b><p>Moves backwards one step "
             "in the navigation history." ) );
-    connect( m_backAction->popupMenu(), SIGNAL( aboutToShow() ),
+    connect( m_backAction->menu(), SIGNAL( aboutToShow() ),
              this, SLOT( slotBackAboutToShow() ) );
-    connect( m_backAction->popupMenu(), SIGNAL( activated( int ) ),
+    connect( m_backAction->menu(), SIGNAL( activated( int ) ),
              this, SLOT( slotBackPopupActivated( int ) ) );
 
     m_forwardAction = new KToolBarPopupAction( i18n( "Forward" ), "forward", 0,
@@ -966,9 +969,9 @@ void KDevDocumentController::init()
     m_forwardAction->setToolTip( i18n( "Forward" ) );
     m_forwardAction->setWhatsThis( i18n( "<b>Forward</b><p>Moves forward one "
             "step in the navigation history." ) );
-    connect( m_forwardAction->popupMenu(), SIGNAL( aboutToShow() ),
+    connect( m_forwardAction->menu(), SIGNAL( aboutToShow() ),
              this, SLOT( slotForwardAboutToShow() ) );
-    connect( m_forwardAction->popupMenu(), SIGNAL( activated( int ) ),
+    connect( m_forwardAction->menu(), SIGNAL( activated( int ) ),
              this, SLOT( slotForwardPopupActivated( int ) ) );
 
 }
@@ -1175,6 +1178,7 @@ bool KDevDocumentController::documentUrlHasChanged( KDevDocument* document )
 
 bool KDevDocumentController::saveDocumentsDialog( const QList<KDevDocument*>& ignoreList )
 {
+    Q_UNUSED( ignoreList );
     //FIXME circular dependency on kdevwidgets
 //     QList<KDevDocument*> modList = modifiedDocuments();
 // 

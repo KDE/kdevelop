@@ -28,7 +28,7 @@
 
 #include "qdebug.h"
 
-KDevStatusBar::KDevStatusBar(QWidget *parent, const char *name)
+KDevStatusBar::KDevStatusBar(QWidget *parent )
     : KStatusBar(parent), _activePart(0), _view(0)
 {
     QWidget * w = new QWidget( this );
@@ -84,7 +84,10 @@ void KDevStatusBar::statusChanged()
 
 void KDevStatusBar::addWidget ( QWidget *widget, int stretch, bool permanent)
 {
-    KStatusBar::addWidget(widget,stretch,permanent);
+    if ( permanent )
+        KStatusBar::addPermanentWidget(widget,stretch);
+    else
+        KStatusBar::addWidget(widget,stretch);
 
     if(widget->sizeHint().height() + 4 > height())
         setFixedHeight(widget->sizeHint().height() + 4);

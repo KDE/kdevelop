@@ -169,14 +169,7 @@ QSize ProcessWidget::minimumSizeHint() const
 */
 void ProcessWidget::maybeScrollToBottom()
 {
-#warning "port me"
-
-#if 0
-    if ( verticalScrollBar()->value() == verticalScrollBar()->maxValue() ) 
-    {
-        setBottomItem( count() -1 );
-    }
-#endif
+    //FIXME
 }
 
 #include "processwidget.moc"

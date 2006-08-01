@@ -62,6 +62,7 @@ KTextEditor::Document* KDevPartController::createTextPart(
     const QString &encoding,
     bool activate )
 {
+    Q_UNUSED( activate );
     //Can this be cached instead of reading config?
     KGlobal::config() ->setGroup( "Editor" );
     QString preferred =

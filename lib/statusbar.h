@@ -29,7 +29,7 @@ class KDEVINTERFACES_EXPORT KDevStatusBar : public KStatusBar
     Q_OBJECT
 
 public:
-    KDevStatusBar( QWidget *parent=0, const char *name=0 );
+    KDevStatusBar( QWidget *parent=0 );
     ~KDevStatusBar();
     void addWidget ( QWidget *widget, int stretch = 0, bool permanent = FALSE );
 

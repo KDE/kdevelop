@@ -155,7 +155,7 @@ void KDevMainWindow::removeView( QWidget *view )
         if ( dock->widget() == view )
         {
             removeDockWidget( dock );
-            m_dockList.remove( dock );
+            m_dockList.removeAll( dock );
             delete dock;
             break;
         }
@@ -166,6 +166,8 @@ void KDevMainWindow::removeView( QWidget *view )
 
 void KDevMainWindow::setViewAvailable( QWidget *pView, bool bEnabled )
 {
+    Q_UNUSED( pView );
+    Q_UNUSED( bEnabled );
     //TODO hide docs
 }
 
@@ -359,7 +361,7 @@ void KDevMainWindow::fillWindowMenu()
     string_list.sort();
 
     QList<KDevDocument*> list;
-    for ( uint i = 0; i != string_list.size(); ++i )
+    for ( int i = 0; i != string_list.size(); ++i )
         list.append( map[ string_list[ i ] ] );
 
     if ( list.count() > 0 )

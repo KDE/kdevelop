@@ -48,6 +48,7 @@ QString FileTemplate::read(const QString &name, Policy p)
 
 QString FileTemplate::readFile(const KUrl &fileName)
 {
+    Q_UNUSED( fileName );
     //FIXME
 //     QDomDocument* dom = KDevApi::self()->projectDom();
 //     Q_ASSERT(dom);

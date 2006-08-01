@@ -175,7 +175,7 @@ void KDevEnvWidget::newButtonClicked()
     if ( dialog->exec() == QDialog::Accepted )
     {
         QString _name = nameEdit->text();
-        QString _value = valueEdit->text();
+        QString _value = valueEdit->toPlainText();
         if ( _name.isEmpty() )
             return ; //message box?
 

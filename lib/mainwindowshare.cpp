@@ -101,7 +101,7 @@ void MainWindowShare::slotActionStatusText( const QString &text )
 
     if ( ! statusBar ) return;
 
-    statusBar->message( text );
+    statusBar->showMessage( text );
 }
 
 void MainWindowShare::createActions()
@@ -119,9 +119,9 @@ void MainWindowShare::createActions()
   m_stopProcesses->setToolTip(i18n("Stop"));
   m_stopProcesses->setWhatsThis(i18n("<b>Stop</b><p>Stops all running processes (like building process, grep command, etc.). When placed onto a toolbar provides a popup menu to choose a process to stop."));
   m_stopProcesses->setEnabled( false );
-  connect(m_stopProcesses->popupMenu(), SIGNAL(aboutToShow()),
+  connect(m_stopProcesses->menu(), SIGNAL(aboutToShow()),
          this, SLOT(slotStopMenuAboutToShow()));
-  connect(m_stopProcesses->popupMenu(), SIGNAL(activated(int)),
+  connect(m_stopProcesses->menu(), SIGNAL(activated(int)),
          this, SLOT(slotStopPopupActivated(int)));
 
   /*FIXME fix connection after gutting of KDevCore
@@ -265,6 +265,7 @@ void MainWindowShare::slotActiveProcessChanged( KDevPlugin* plugin, bool active 
 
 void MainWindowShare::slotStopPopupActivated( int id )
 {
+    Q_UNUSED( id );
     /* FIXME port
     KDevPlugin* plugin = activeProcesses.at( id );
     if ( plugin && plugin->info()->genericName() == m_stopProcesses->popupMenu()->text( id ) ) {

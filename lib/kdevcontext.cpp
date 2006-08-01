@@ -250,6 +250,4 @@ const KDevProjectItem* ProjectItemContext::item() const
     return d->m_item;
 }
 
-#include "kdevcontext.moc"
-
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

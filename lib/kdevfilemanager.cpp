@@ -90,6 +90,7 @@ bool KDevFileManager::removeFile( KDevProjectFileItem * file )
 
 QList<KDevProjectFolderItem*> KDevFileManager::parse( KDevProjectFolderItem * dom )
 {
+    Q_UNUSED( dom );
     return QList<KDevProjectFolderItem*>();
 }
 
