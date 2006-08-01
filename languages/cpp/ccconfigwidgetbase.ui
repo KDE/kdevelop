@@ -1051,7 +1051,7 @@
                             </property>
                             <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>layout8</cstring>
+                                    <cstring>layout9</cstring>
                                 </property>
                                 <hbox>
                                     <property name="name">
@@ -1067,8 +1067,11 @@
                                         <property name="checked">
                                             <bool>true</bool>
                                         </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Use Qt version 3(When this is changed the project needs to be closed and re-opened.)</string>
+                                        </property>
                                         <property name="whatsThis" stdset="0">
-                                            <string>Select this if your project is using Qt version 3.x.</string>
+                                            <string>Select this if your project is using Qt version 3.x.&lt;br&gt;When this is changed the project needs to be closed and re-opened.</string>
                                         </property>
                                     </widget>
                                     <widget class="QRadioButton">
@@ -1078,8 +1081,22 @@
                                         <property name="text">
                                             <string>Qt 4</string>
                                         </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Use Qt version 4(When this is changed the project needs to be closed and re-opened.)</string>
+                                        </property>
                                         <property name="whatsThis" stdset="0">
-                                            <string>Select this if your project is using Qt version 4.x.</string>
+                                            <string>Select this if your project is using Qt version 4.x.&lt;br&gt;When this is changed the project needs to be closed and re-opened.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1_5</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>(After changing the Qt version the project needs to be closed and re-opened)</string>
+                                        </property>
+                                        <property name="alignment">
+                                            <set>AlignVCenter</set>
                                         </property>
                                     </widget>
                                     <spacer>
@@ -1094,7 +1111,7 @@
                                         </property>
                                         <property name="sizeHint">
                                             <size>
-                                                <width>111</width>
+                                                <width>470</width>
                                                 <height>20</height>
                                             </size>
                                         </property>
