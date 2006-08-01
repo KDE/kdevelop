@@ -13,6 +13,14 @@
    <keyword>KDE</keyword>
   </keywords>
  </general>
+ <kdevcppsupport>
+    <qt>
+      <version>3</version>
+      <used>true</used>
+      <includestyle>3</includestyle>
+      <designerintegration>KDevEmbeddedDesigner</designerintegration>
+    </qt>
+  </kdevcppsupport>
  <kdevautoproject>
   <general>
    <activetarget>src/%{APPNAMELC}</activetarget>

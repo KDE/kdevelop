@@ -122,6 +122,12 @@
     <rshoptions></rshoptions>
   </kdevcvs>
   <kdevcppsupport>
+    <qt>
+      <version>3</version>
+      <used>true</used>
+      <includestyle>3</includestyle>
+      <designerintegration>KDevEmbeddedDesigner</designerintegration>
+    </qt>
     <codecompletion>
       <includeGlobalFunctions>true</includeGlobalFunctions>
       <includeTypes>true</includeTypes>

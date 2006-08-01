@@ -10,6 +10,15 @@
       <keyword>Qt</keyword>
     </keywords>
   </general>
+  <kdevcppsupport>
+    <qt>
+      <version>3</version>
+      <used>true</used>
+      <includestyle>3</includestyle>
+      <designerintegration>KDevEmbeddedDesigner</designerintegration>
+    </qt>
+  </kdevcppsupport>
+
   <kdevfileview>
     <groups>
       <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
