@@ -397,10 +397,16 @@ void CCConfigWidget::initQtTab()
 	if( c->version() == 4 )
 	{
 		m_versionQt4->setChecked( true );
+		m_kdevembedded->setEnabled( false );
+		m_kdevexternal->setEnabled( false );
+		m_qtStyleVersion4->setEnabled( true );
 	}
 	else
 	{
 		m_versionQt3->setChecked( true );
+		m_kdevembedded->setEnabled( true );
+		m_kdevexternal->setEnabled( true );
+		m_qtStyleVersion4->setEnabled( false );
 	}
 	if( c->includeStyle() == 4 )
 	{
