@@ -104,6 +104,7 @@ namespace csharp
   struct literal_ast;
   struct local_constant_declaration_ast;
   struct local_variable_declaration_ast;
+  struct local_variable_declaration_statement_ast;
   struct lock_statement_ast;
   struct logical_and_expression_ast;
   struct logical_or_expression_ast;
@@ -661,96 +662,97 @@ namespace csharp
                         Kind_literal = 1085,
                         Kind_local_constant_declaration = 1086,
                         Kind_local_variable_declaration = 1087,
-                        Kind_lock_statement = 1088,
-                        Kind_logical_and_expression = 1089,
-                        Kind_logical_or_expression = 1090,
-                        Kind_managed_type = 1091,
-                        Kind_method_declaration = 1092,
-                        Kind_multiplicative_expression = 1093,
-                        Kind_multiplicative_expression_rest = 1094,
-                        Kind_named_argument = 1095,
-                        Kind_namespace_body = 1096,
-                        Kind_namespace_declaration = 1097,
-                        Kind_namespace_member_declaration = 1098,
-                        Kind_namespace_name = 1099,
-                        Kind_namespace_or_type_name = 1100,
-                        Kind_namespace_or_type_name_part = 1101,
-                        Kind_namespace_or_type_name_safe = 1102,
-                        Kind_new_expression = 1103,
-                        Kind_non_array_type = 1104,
-                        Kind_non_nullable_type = 1105,
-                        Kind_null_coalescing_expression = 1106,
-                        Kind_numeric_type = 1107,
-                        Kind_object_or_delegate_creation_expression_rest = 1108,
-                        Kind_optional_argument_list = 1109,
-                        Kind_optional_attribute_sections = 1110,
-                        Kind_optional_modifiers = 1111,
-                        Kind_optional_type_parameter_constraints_clauses = 1112,
-                        Kind_optionally_nullable_type = 1113,
-                        Kind_overloadable_binary_only_operator = 1114,
-                        Kind_overloadable_unary_only_operator = 1115,
-                        Kind_overloadable_unary_or_binary_operator = 1116,
-                        Kind_parameter_array = 1117,
-                        Kind_parameter_modifier = 1118,
-                        Kind_pointer_type = 1119,
-                        Kind_positional_argument = 1120,
-                        Kind_predefined_type = 1121,
-                        Kind_primary_atom = 1122,
-                        Kind_primary_expression = 1123,
-                        Kind_primary_or_secondary_constraint = 1124,
-                        Kind_primary_suffix = 1125,
-                        Kind_property_declaration = 1126,
-                        Kind_qualified_identifier = 1127,
-                        Kind_rank_specifier = 1128,
-                        Kind_relational_expression = 1129,
-                        Kind_relational_expression_rest = 1130,
-                        Kind_resource_acquisition = 1131,
-                        Kind_return_statement = 1132,
-                        Kind_return_type = 1133,
-                        Kind_secondary_constraints = 1134,
-                        Kind_shift_expression = 1135,
-                        Kind_shift_expression_rest = 1136,
-                        Kind_simple_name_or_member_access = 1137,
-                        Kind_simple_type = 1138,
-                        Kind_specific_catch_clause = 1139,
-                        Kind_stackalloc_initializer = 1140,
-                        Kind_statement_expression = 1141,
-                        Kind_struct_body = 1142,
-                        Kind_struct_declaration = 1143,
-                        Kind_struct_interfaces = 1144,
-                        Kind_struct_member_declaration = 1145,
-                        Kind_switch_label = 1146,
-                        Kind_switch_section = 1147,
-                        Kind_switch_statement = 1148,
-                        Kind_throw_statement = 1149,
-                        Kind_try_statement = 1150,
-                        Kind_type = 1151,
-                        Kind_type_arguments = 1152,
-                        Kind_type_arguments_or_parameters_end = 1153,
-                        Kind_type_declaration = 1154,
-                        Kind_type_declaration_rest = 1155,
-                        Kind_type_name = 1156,
-                        Kind_type_name_safe = 1157,
-                        Kind_type_parameter = 1158,
-                        Kind_type_parameter_constraints = 1159,
-                        Kind_type_parameter_constraints_clause = 1160,
-                        Kind_type_parameters = 1161,
-                        Kind_typeof_expression = 1162,
-                        Kind_unary_expression = 1163,
-                        Kind_unary_or_binary_operator_declaration = 1164,
-                        Kind_unbound_type_name = 1165,
-                        Kind_unbound_type_name_part = 1166,
-                        Kind_unchecked_statement = 1167,
-                        Kind_unmanaged_type = 1168,
-                        Kind_unmanaged_type_suffix = 1169,
-                        Kind_unsafe_statement = 1170,
-                        Kind_using_directive = 1171,
-                        Kind_using_statement = 1172,
-                        Kind_variable_declaration_data = 1173,
-                        Kind_variable_declarator = 1174,
-                        Kind_variable_initializer = 1175,
-                        Kind_while_statement = 1176,
-                        Kind_yield_statement = 1177,
+                        Kind_local_variable_declaration_statement = 1088,
+                        Kind_lock_statement = 1089,
+                        Kind_logical_and_expression = 1090,
+                        Kind_logical_or_expression = 1091,
+                        Kind_managed_type = 1092,
+                        Kind_method_declaration = 1093,
+                        Kind_multiplicative_expression = 1094,
+                        Kind_multiplicative_expression_rest = 1095,
+                        Kind_named_argument = 1096,
+                        Kind_namespace_body = 1097,
+                        Kind_namespace_declaration = 1098,
+                        Kind_namespace_member_declaration = 1099,
+                        Kind_namespace_name = 1100,
+                        Kind_namespace_or_type_name = 1101,
+                        Kind_namespace_or_type_name_part = 1102,
+                        Kind_namespace_or_type_name_safe = 1103,
+                        Kind_new_expression = 1104,
+                        Kind_non_array_type = 1105,
+                        Kind_non_nullable_type = 1106,
+                        Kind_null_coalescing_expression = 1107,
+                        Kind_numeric_type = 1108,
+                        Kind_object_or_delegate_creation_expression_rest = 1109,
+                        Kind_optional_argument_list = 1110,
+                        Kind_optional_attribute_sections = 1111,
+                        Kind_optional_modifiers = 1112,
+                        Kind_optional_type_parameter_constraints_clauses = 1113,
+                        Kind_optionally_nullable_type = 1114,
+                        Kind_overloadable_binary_only_operator = 1115,
+                        Kind_overloadable_unary_only_operator = 1116,
+                        Kind_overloadable_unary_or_binary_operator = 1117,
+                        Kind_parameter_array = 1118,
+                        Kind_parameter_modifier = 1119,
+                        Kind_pointer_type = 1120,
+                        Kind_positional_argument = 1121,
+                        Kind_predefined_type = 1122,
+                        Kind_primary_atom = 1123,
+                        Kind_primary_expression = 1124,
+                        Kind_primary_or_secondary_constraint = 1125,
+                        Kind_primary_suffix = 1126,
+                        Kind_property_declaration = 1127,
+                        Kind_qualified_identifier = 1128,
+                        Kind_rank_specifier = 1129,
+                        Kind_relational_expression = 1130,
+                        Kind_relational_expression_rest = 1131,
+                        Kind_resource_acquisition = 1132,
+                        Kind_return_statement = 1133,
+                        Kind_return_type = 1134,
+                        Kind_secondary_constraints = 1135,
+                        Kind_shift_expression = 1136,
+                        Kind_shift_expression_rest = 1137,
+                        Kind_simple_name_or_member_access = 1138,
+                        Kind_simple_type = 1139,
+                        Kind_specific_catch_clause = 1140,
+                        Kind_stackalloc_initializer = 1141,
+                        Kind_statement_expression = 1142,
+                        Kind_struct_body = 1143,
+                        Kind_struct_declaration = 1144,
+                        Kind_struct_interfaces = 1145,
+                        Kind_struct_member_declaration = 1146,
+                        Kind_switch_label = 1147,
+                        Kind_switch_section = 1148,
+                        Kind_switch_statement = 1149,
+                        Kind_throw_statement = 1150,
+                        Kind_try_statement = 1151,
+                        Kind_type = 1152,
+                        Kind_type_arguments = 1153,
+                        Kind_type_arguments_or_parameters_end = 1154,
+                        Kind_type_declaration = 1155,
+                        Kind_type_declaration_rest = 1156,
+                        Kind_type_name = 1157,
+                        Kind_type_name_safe = 1158,
+                        Kind_type_parameter = 1159,
+                        Kind_type_parameter_constraints = 1160,
+                        Kind_type_parameter_constraints_clause = 1161,
+                        Kind_type_parameters = 1162,
+                        Kind_typeof_expression = 1163,
+                        Kind_unary_expression = 1164,
+                        Kind_unary_or_binary_operator_declaration = 1165,
+                        Kind_unbound_type_name = 1166,
+                        Kind_unbound_type_name_part = 1167,
+                        Kind_unchecked_statement = 1168,
+                        Kind_unmanaged_type = 1169,
+                        Kind_unmanaged_type_suffix = 1170,
+                        Kind_unsafe_statement = 1171,
+                        Kind_using_directive = 1172,
+                        Kind_using_statement = 1173,
+                        Kind_variable_declaration_data = 1174,
+                        Kind_variable_declarator = 1175,
+                        Kind_variable_initializer = 1176,
+                        Kind_while_statement = 1177,
+                        Kind_yield_statement = 1178,
                         AST_NODE_KIND_COUNT
                       };
 
@@ -992,7 +994,7 @@ namespace csharp
 
       labeled_statement_ast *labeled_statement;
       local_constant_declaration_ast *local_constant_declaration_statement;
-      local_variable_declaration_ast *local_variable_declaration_statement;
+      local_variable_declaration_statement_ast *local_variable_declaration_statement;
       embedded_statement_ast *statement;
     };
 
@@ -1810,6 +1812,16 @@ namespace csharp
       };
 
       variable_declaration_data_ast *data;
+    };
+
+  struct local_variable_declaration_statement_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_local_variable_declaration_statement
+      };
+
+      local_variable_declaration_ast *declaration;
     };
 
   struct lock_statement_ast: public ast_node
@@ -2853,6 +2865,11 @@ namespace csharp
       {
         return (yytoken = token_stream->next_token());
       }
+      inline void rewind(std::size_t index)
+      {
+        token_stream->rewind(index);
+        yylex();
+      }
 
       // token stream
       void set_token_stream(kdev_pg_token_stream *s)
@@ -2860,9 +2877,17 @@ namespace csharp
         token_stream = s;
       }
 
-      // error recovery
-      bool yy_expected_symbol(int kind, char const *name);
-      bool yy_expected_token(int kind, std::size_t token, char const *name);
+      // error handling
+      void yy_expected_symbol(int kind, char const *name);
+      void yy_expected_token(int kind, std::size_t token, char const *name);
+
+      bool yy_block_errors;
+      inline bool block_errors(bool block)
+      {
+        bool previous = yy_block_errors;
+        yy_block_errors = block;
+        return previous;
+      }
 
       // memory pool
       typedef kdev_pg_memory_pool memory_pool_type;
@@ -3080,11 +3105,15 @@ namespace csharp
       std::set <std::string>
       _M_pp_defined_symbols;
 
-      // _M_ltCounter stores the amount of currently open type arguments rules,
-      // all of which are beginning with a less than ("<") character.
-      // This way, also RSHIFT (">>") can be used to close type arguments rules,
-      // in addition to GREATER_THAN (">").
-      int _M_ltCounter;
+      struct parser_state
+        {
+          // ltCounter stores the amount of currently open type arguments rules,
+          // all of which are beginning with a less than ("<") character.
+          // This way, also RSHIFT (">>") can be used to close type arguments rules,
+          // in addition to GREATER_THAN (">").
+          int ltCounter;
+        };
+      parser_state _M_state;
 
       // Rather hackish solution for recognizing expressions like
       // "a is sometype ? if_exp : else_exp", see conditional_expression.
@@ -3093,19 +3122,26 @@ namespace csharp
       type_ast *last_relational_expression_rest_type(
         null_coalescing_expression_ast *null_coalescing_expression);
 
-      // Lookahead hacks
-      bool lookahead_is_local_variable_declaration();
-      bool lookahead_is_cast_expression();
-      bool lookahead_is_unbound_type_name();
-      bool lookahead_is_type_arguments();
-
 
     public:
+      // The copy_current_state() and restore_state() methods are only declared
+      // if you are using try blocks in your grammar, and have to be
+      // implemented by yourself, and you also have to define a
+      // "struct parser_state" inside a %parserclass directive.
+
+      // This method should create a new parser_state object and return it,
+      // or return 0 if no state variables need to be saved.
+      parser_state *copy_current_state();
+
+      // This method is only called for parser_state objects != 0
+      // and should restore the parser state given as argument.
+      void restore_state(parser_state *state);
       parser()
       {
         memory_pool = 0;
         token_stream = 0;
         yytoken = Token_EOF;
+        yy_block_errors = false;
 
         // user defined constructor code:
 
@@ -3204,6 +3240,7 @@ namespace csharp
       bool parse_literal(literal_ast **yynode);
       bool parse_local_constant_declaration(local_constant_declaration_ast **yynode);
       bool parse_local_variable_declaration(local_variable_declaration_ast **yynode);
+      bool parse_local_variable_declaration_statement(local_variable_declaration_statement_ast **yynode);
       bool parse_lock_statement(lock_statement_ast **yynode);
       bool parse_logical_and_expression(logical_and_expression_ast **yynode);
       bool parse_logical_or_expression(logical_or_expression_ast **yynode);
@@ -3483,6 +3520,8 @@ namespace csharp
       virtual void visit_local_constant_declaration(local_constant_declaration_ast *)
       {}
       virtual void visit_local_variable_declaration(local_variable_declaration_ast *)
+      {}
+      virtual void visit_local_variable_declaration_statement(local_variable_declaration_statement_ast *)
       {}
       virtual void visit_lock_statement(lock_statement_ast *)
       {}
@@ -4526,6 +4565,11 @@ namespace csharp
       virtual void visit_local_variable_declaration(local_variable_declaration_ast *node)
       {
         visit_node(node->data);
+      }
+
+      virtual void visit_local_variable_declaration_statement(local_variable_declaration_statement_ast *node)
+      {
+        visit_node(node->declaration);
       }
 
       virtual void visit_lock_statement(lock_statement_ast *node)

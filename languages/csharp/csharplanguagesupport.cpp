@@ -112,7 +112,7 @@ KDevParseJob *CSharpLanguageSupport::createParseJob( const KUrl &url )
 KDevParseJob *CSharpLanguageSupport::createParseJob( KDevDocument *document,
         KTextEditor::SmartRange *highlight )
 {
-    return 0;
+    return new ParseJob( document, highlight, this, m_memoryPool );
 }
 
 QStringList CSharpLanguageSupport::mimeTypes() const

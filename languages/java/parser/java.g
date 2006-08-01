@@ -55,7 +55,7 @@
 --  - The AT conflict in optional_modifiers.
 --    (manually resolved, 1 conflict)
 
--- 16 first/first conflicts:
+-- 12 first/first conflicts:
 --  - The IDENTIFIER conflict in annotation_arguments
 --    (manually resolved, 1 conflict)
 --  - The IDENTIFIER conflicts in *_field,
@@ -65,38 +65,19 @@
 --    (manually resolved, 1 conflict)
 --  - The STATIC conflict in class_field
 --    (manually resolved, 1 conflict)
---  - The BOOLEAN, BYTE, CHAR, DOUBLE, etc. conflict in block_statement,
---    which is essentially an variable declarations vs. expression statements
---    conflict. Needs LL(k), solved by lookahead_is_parameter_declaration().
---    (manually resolved, 1 conflict)
---  - The FINAL, SYNCHRONIZED, AT conflict in block_statement, which is a
---    side product of the lookahead solution and solved by it as well.
---    Harmless because lookahead chooses the right one.
+--  - The SYNCHRONIZED conflict in block_statement.
 --    (manually resolved, 1 conflict)
 --  - The IDENTIFIER conflict (labels) in embedded_statement
---    (manually resolved, 1 conflict)
---  - The BOOLEAN, BYTE, CHAR, DOUBLE etc. conflict in for_control.
---    This is the same variable declaration vs. expression issue
---    that block_statement also suffers from.
---    Needs LL(k), also solved by lookahead_is_parameter_declaration().
---    (manually resolved, 1 conflict)
---  - The LPAREN conflict in unary_expression_not_plusminus
---    which is cast_expression vs. primary_expression.
---    Needs LL(k), solved by lookahead_is_cast_expression().
 --    (manually resolved, 1 conflict)
 --  - The IDENTIFIER conflicts in primary_selector and super_suffix.
 --    Could be written without conflict, but done on purpose to tell methods
 --    (with possible type arguments) and variables (without those) apart.
 --    (manually resolved, 2 identical conflicts)
---  - The IDENTIFIER conflict in primary_atom.
---    Using LL(k) on purpose in order to get a better AST,
---    and even the parsing time doesn't increase.
---    (manually resolved, 1 conflict)
 --  - The LBRACKET conflict in array_creator_rest.
 --    This is by design and works as expected.
 --    (manually resolved, 1 conflict)
 
--- Total amount of conflicts: 26
+-- Total amount of conflicts: 22
 
 
 
@@ -149,17 +130,14 @@
 [:
   parser::java_compatibility_mode _M_compatibility_mode;
 
-  // ltCounter stores the amount of currently open type arguments rules,
-  // all of which are beginning with a less than ("<") character.
-  // This way, also SIGNED_RSHIFT (">>") and UNSIGNED_RSHIFT (">>>") can be used
-  // to close type arguments rules, in addition to GREATER_THAN (">").
-  int ltCounter;
-
-  // Lookahead hacks
-  bool lookahead_is_package_declaration();
-  bool lookahead_is_parameter_declaration();
-  bool lookahead_is_cast_expression();
-  bool lookahead_is_array_type_dot_class();
+  struct parser_state {
+    // ltCounter stores the amount of currently open type arguments rules,
+    // all of which are beginning with a less than ("<") character.
+    // This way, also SIGNED_RSHIFT (">>") and UNSIGNED_RSHIFT (">>>") can be used
+    // to close type arguments rules, in addition to GREATER_THAN (">").
+    int ltCounter;
+  };
+  parser_state _M_state;
 :]
 
 %parserclass (constructor)
@@ -383,23 +361,15 @@
 ------------------------------------------------------------
 
 
-   0 [: ltCounter = 0; :]
-   (  -- The first thing there is (haha) is a serious conflict between
-      -- package_declaration and type_declaration, both of which can start
-      -- with annotations. As this is only solvable with LL(k), it's
-      -- implemented with a workaround hack until backtracking or real
-      -- LL(k) is available. When this is available, you can also say:
-      -- ?( package_declararation_lookahead ) instead of the current one:
-      ?[: lookahead_is_package_declaration() == true :]
-      recover(package_declaration=package_declaration)
-    | 0
-   )
-   recover(#import_declaration=import_declaration)*
-   recover(#type_declaration=type_declaration)*
+   0 [: _M_state.ltCounter = 0; :]
+   -- There is a conflict between package_declaration and type_declaration
+   -- (both can start with annotations) which requires arbitrary-length LL(k).
+   -- The following construct uses backtracking with try/rollback to work
+   -- around this issue.
+   try/rollback(package_declaration=package_declaration) catch(0)
+   try/recover(#import_declaration=import_declaration)*
+   try/recover(#type_declaration=type_declaration)*
 -> compilation_unit ;;
-
---    recover(#annotation=annotation)* PACKAGE
--- -> package_declaration_lookahead ;;  -- only use for lookaheads!
 
 
 
@@ -409,7 +379,7 @@
 -- inside of compilation_unit may both be 0. The ANTLR grammar
 -- checks on ?[:annotations "package":] to do a package_declaration.
 
-   recover(#annotation=annotation)*
+   try/recover(#annotation=annotation)*
    PACKAGE package_name=qualified_identifier SEMICOLON
 -> package_declaration ;;
 
@@ -540,20 +510,20 @@
 
 -- BODIES of classes, interfaces, annotation types and enums.
 
-   LBRACE recover(#declaration=class_field)* RBRACE
+   LBRACE try/recover(#declaration=class_field)* RBRACE
 -> class_body ;;
 
-   LBRACE recover(#declaration=interface_field)* RBRACE
+   LBRACE try/recover(#declaration=interface_field)* RBRACE
 -> interface_body ;;
 
-   LBRACE recover(#annotation_type_field=annotation_type_field)* RBRACE
+   LBRACE try/recover(#annotation_type_field=annotation_type_field)* RBRACE
 -> annotation_type_body ;;
 
 -- In an enum body, you can have zero or more enum constants
 -- followed by any number of fields like a regular class.
 
    LBRACE
-   ( recover(#enum_constant=enum_constant)
+   ( try/recover(#enum_constant=enum_constant)
      @ ( 0 [: if ( LA(2).kind == Token_SEMICOLON
                 || LA(2).kind == Token_RBRACE )
               { break; } :] -- if the list is over, then exit the loop
@@ -562,18 +532,18 @@
    | 0
    )
    ( COMMA | 0 )
-   ( SEMICOLON recover(#class_field=class_field)* | 0 )
+   ( SEMICOLON try/recover(#class_field=class_field)* | 0 )
    RBRACE
 -> enum_body ;;
 
 -- An enum constant may have optional parameters and may have a class body
 
-   recover(#annotation=annotation)* identifier=identifier
+   try/recover(#annotation=annotation)* identifier=identifier
    ( LPAREN arguments=optional_argument_list RPAREN | 0 )
    ( body=enum_constant_body | 0 )
 -> enum_constant ;;
 
-   LBRACE recover(#declaration=enum_constant_field)* RBRACE
+   LBRACE try/recover(#declaration=enum_constant_field)* RBRACE
 -> enum_constant_body ;;
 
 
@@ -868,7 +838,7 @@
 
    0 [: (*yynode)->has_mod_final = false; :]
    (  FINAL [: (*yynode)->has_mod_final = true; :]
-    | recover(#mod_annotation=annotation)
+    | try/recover(#mod_annotation=annotation)
    )*
 -> optional_parameter_modifiers [
      member variable has_mod_final: bool;
@@ -879,7 +849,7 @@
 -- An OPTIONAL ARGUMENT LIST is used when calling methods
 -- (not for declaring them, that's what parameter declaration lists are for).
 
-   (#expression=expression @ COMMA | 0)
+   try/recover(#expression=expression @ COMMA) | 0
 -> optional_argument_list ;;
 
 
@@ -890,10 +860,10 @@
 -- to resolve, so class_field uses block instead of constructor_body.
 --
 --    LBRACE
---    ( recover(explicit_constructor_invocation=explicit_constructor_invocation)
+--    ( try/recover(explicit_constructor_invocation=explicit_constructor_invocation)
 --    | 0
 --    )
---    recover(#statement=embedded_statement)*
+--    try/recover(#statement=embedded_statement)*
 --    RBRACE
 -- -> constructor_body ;;
 --
@@ -917,7 +887,7 @@
 -- TYPE PARAMETERS are used in class, interface etc. declarations to
 -- determine the generic types allowed as type argument.
 
-   LESS_THAN [: int currentLtLevel = ltCounter; ltCounter++; :]
+   LESS_THAN [: int currentLtLevel = _M_state.ltCounter; _M_state.ltCounter++; :]
    #type_parameter=type_parameter @ COMMA
    (
       type_arguments_or_parameters_end
@@ -925,8 +895,10 @@
    )
    -- make sure we have gobbled up enough '>' characters
    -- if we are at the "top level" of nested type_parameters productions
-   [: if (currentLtLevel == 0 && ltCounter != currentLtLevel) {
-        report_problem(error, "The amount of closing ``>'' characters is incorrect");
+   [: if (currentLtLevel == 0 && _M_state.ltCounter != currentLtLevel ) {
+        if (!yy_block_errors) {
+          report_problem(error, "The amount of closing ``>'' characters is incorrect");
+        }
         return false;
       }
    :]
@@ -940,10 +912,10 @@
 -- TYPE ARGUMENTS are used in initializers, invocations, etc. to
 -- specify the exact types for this generic class/method instance.
 
-   LESS_THAN [: int currentLtLevel = ltCounter; ltCounter++; :]
+   LESS_THAN [: int currentLtLevel = _M_state.ltCounter; _M_state.ltCounter++; :]
    #type_argument=type_argument
    ( -- only proceed when we are at the right nesting level:
-     0 [: if( ltCounter != currentLtLevel + 1 ) { break; } :]
+     0 [: if( _M_state.ltCounter != currentLtLevel + 1 ) { break; } :]
      COMMA #type_argument=type_argument
    )*
    (
@@ -952,17 +924,19 @@
    )
    -- make sure we have gobbled up enough '>' characters
    -- if we are at the "top level" of nested type_arguments productions
-   [: if (currentLtLevel == 0 && ltCounter != currentLtLevel) {
-        report_problem(error, "The amount of closing ``>'' characters is incorrect");
+   [: if (currentLtLevel == 0 && _M_state.ltCounter != currentLtLevel ) {
+        if (!yy_block_errors) {
+          report_problem(error, "The amount of closing ``>'' characters is incorrect");
+        }
         return false;
       }
    :]
 -> type_arguments ;;
 
-   LESS_THAN [: int currentLtLevel = ltCounter; ltCounter++; :]
+   LESS_THAN [: int currentLtLevel = _M_state.ltCounter; _M_state.ltCounter++; :]
    #type_argument_type=type_argument_type
    ( -- only proceed when we are at the right nesting level:
-     0 [: if( ltCounter != currentLtLevel + 1 ) { break; } :]
+     0 [: if( _M_state.ltCounter != currentLtLevel + 1 ) { break; } :]
      COMMA #type_argument_type=type_argument_type
    )*
    (
@@ -971,8 +945,10 @@
    )
    -- make sure we have gobbled up enough '>' characters
    -- if we are at the "top level" of nested type_arguments productions
-   [: if (currentLtLevel == 0 && ltCounter != currentLtLevel) {
-        report_problem(error, "The amount of closing ``>'' characters is incorrect");
+   [: if (currentLtLevel == 0 && _M_state.ltCounter != currentLtLevel ) {
+        if (!yy_block_errors) {
+          report_problem(error, "The amount of closing ``>'' characters is incorrect");
+        }
         return false;
       }
    :]
@@ -1001,9 +977,9 @@
 ] ;;
 
 
-   GREATER_THAN    [: ltCounter -= 1; :]  -- ">"
- | SIGNED_RSHIFT   [: ltCounter -= 2; :]  -- ">>"
- | UNSIGNED_RSHIFT [: ltCounter -= 3; :]  -- ">>>"
+   GREATER_THAN    [: _M_state.ltCounter -= 1; :]  -- ">"
+ | SIGNED_RSHIFT   [: _M_state.ltCounter -= 2; :]  -- ">>"
+ | UNSIGNED_RSHIFT [: _M_state.ltCounter -= 3; :]  -- ">>>"
 -> type_arguments_or_parameters_end ;;
 
 
@@ -1019,37 +995,33 @@
 --  - As a completely independent braced block of code inside a method,
 --    starting a new scope for variable definitions
 
-   LBRACE recover(#statement=block_statement)* RBRACE
+   LBRACE try/recover(#statement=block_statement)* RBRACE
 -> block ;;
 
 -- A BLOCK STATEMENT is either an embedded statement, a variable declaration
 -- or a type declaration (you know, nested classes and the likes...).
 
- (
    -- Variable declarations, as well as expression statements, can start with
-   -- class1<xxx>.bla or similar. This is only solvable with LL(k), so what's
-   -- needed here is the following hack lookahead function, until backtracking
-   -- or real LL(k) is implemented. Note that a variable declaration starts
-   -- just like a mere parameter declaration.
-   ?[: lookahead_is_parameter_declaration() == true :]
-   variable_declaration=variable_declaration SEMICOLON
- |
-   -- resolves the SYNCHRONIZED conflict between
-   -- synchronized_statement and modifier:
-   ?[: (yytoken != Token_SYNCHRONIZED) ||
-       (yytoken == Token_SYNCHRONIZED && LA(2).kind == Token_LPAREN)
-     :]
-   statement=embedded_statement
- |
-   -- Inside a block, our four "complex types" can be declared
-   -- (enums, nested classes and the likes...):
-   modifiers:optional_modifiers
-   (  class_declaration=class_declaration[modifiers]
-    | enum_declaration=enum_declaration[modifiers]
-    | interface_declaration=interface_declaration[modifiers]
-    | annotation_type_declaration=annotation_type_declaration[modifiers]
+   -- class1<xxx>.bla or similar. This is only solvable with LL(k), so we need
+   -- backtracking in form of the try/rollback() construct.
+   try/rollback(variable_declaration_statement=variable_declaration_statement)
+   catch(
+      -- resolves the SYNCHRONIZED conflict between
+      -- synchronized_statement and modifier:
+      ?[: (yytoken != Token_SYNCHRONIZED) ||
+          (yytoken == Token_SYNCHRONIZED && LA(2).kind == Token_LPAREN)
+        :]
+      statement=embedded_statement
+    |
+      -- Inside a block, our four "complex types" can be declared
+      -- (enums, nested classes and the likes...):
+      modifiers:optional_modifiers
+      (  class_declaration=class_declaration[modifiers]
+        | enum_declaration=enum_declaration[modifiers]
+        | interface_declaration=interface_declaration[modifiers]
+        | annotation_type_declaration=annotation_type_declaration[modifiers]
+      )
    )
- )
 -> block_statement ;;
 
 
@@ -1057,6 +1029,9 @@
 -- VARIABLE DECLARATIONS, initializers, etc.
 -- TODO: the modifiers need to be checked (after parsing) if they contain
 --       only the allowed modifiers, which is FINAL and annotations.
+
+   variable_declaration=variable_declaration SEMICOLON
+-> variable_declaration_statement ;;
 
    modifiers:optional_modifiers type:type
    #variable_declarator:variable_declarator @ COMMA
@@ -1235,11 +1210,11 @@
 -- "case x:" or "default:" switch statement groups.
 
    SWITCH LPAREN switch_expression=expression RPAREN
-   LBRACE recover(#switch_section=switch_section)* RBRACE
+   LBRACE try/recover(#switch_section=switch_section)* RBRACE
 -> switch_statement ;;
 
    (#label=switch_label)+
-   recover(#statement=block_statement)*
+   try/recover(#statement=block_statement)*
 -> switch_section ;;
 
    (  CASE case_expression=expression
@@ -1261,31 +1236,34 @@
 -- The FOR CONTROL is the three statements inside the for(...) parentheses,
 -- or the alternative foreach specifier. It has the same problematic conflict
 -- between parameter_declaration and expression that block_statement also has
--- and which is only solvable with LL(k). Until backtracking or real LL(k) is
--- implemented, we have to workaround with a lookahead hack function.
+-- and which is only solvable with arbitrary-length LL(k) and therefore needs
+-- backtracking with try/rollback.
 
- ( ?[: lookahead_is_parameter_declaration() == true :]
-   vardecl_start_or_foreach_parameter:parameter_declaration  -- "int i"
-   (
-      -- foreach: int i : intList.values()
-      ?[: compatibility_mode() >= java15_compatibility :]
-      COLON iterable_expression:expression
-      foreach_declaration=foreach_declaration_data[
-        vardecl_start_or_foreach_parameter, iterable_expression
-      ]
-    |
-      -- traditional: int i = 0; i < size; i++
-      variable_declaration_rest:variable_declaration_rest -- "= 0"
-      variable_declaration=variable_declaration_split_data[
-        vardecl_start_or_foreach_parameter, variable_declaration_rest
-      ]
-      traditional_for_rest=for_clause_traditional_rest    -- "; i < size; i++"
+ (
+   try/rollback(
+     vardecl_start_or_foreach_parameter:parameter_declaration  -- "int i"
+     (
+         -- foreach: int i : intList.values()
+         ?[: compatibility_mode() >= java15_compatibility :]
+         COLON iterable_expression:expression
+         foreach_declaration=foreach_declaration_data[
+           vardecl_start_or_foreach_parameter, iterable_expression
+         ]
+       |
+         -- traditional: int i = 0; i < size; i++
+         variable_declaration_rest:variable_declaration_rest  -- "= 0"
+         variable_declaration=variable_declaration_split_data[
+           vardecl_start_or_foreach_parameter, variable_declaration_rest
+         ]
+         traditional_for_rest=for_clause_traditional_rest  -- "; i < size; i++"
+     )
+   )
+   catch(
+     #statement_expression=statement_expression @ COMMA
+     traditional_for_rest=for_clause_traditional_rest
    )
  |
    traditional_for_rest=for_clause_traditional_rest  -- only starting with ";"
- |
-   #statement_expression=statement_expression @ COMMA
-   traditional_for_rest=for_clause_traditional_rest
  )
 -> for_control ;;
 
@@ -1491,8 +1469,7 @@
 -- The conflict in this rule is the ambiguity between type casts (which
 -- can be arbitrary class names within parentheses) and primary_expressions,
 -- which can also look that way from an LL(1) perspective.
--- Until real LL(k) or backtracking is implemented in kdev-pg, this problem
--- is solved with another lookahead hack function.
+-- Using backtracking with try/rollback solves the problem.
 
  (
    TILDE bitwise_not_expression=unary_expression
@@ -1500,23 +1477,18 @@
  | BANG  logical_not_expression=unary_expression
      [: (*yynode)->rule_type = unary_expression_not_plusminus::type_logical_not_expression; :]
  |
-   ?[: lookahead_is_cast_expression() == true :]
-   cast_expression=cast_expression
-     [: (*yynode)->rule_type = unary_expression_not_plusminus::type_cast_expression;        :]
- |
-   primary_expression=primary_expression (#postfix_operator=postfix_operator)*
-     [: (*yynode)->rule_type = unary_expression_not_plusminus::type_primary_expression;     :]
+   try/rollback(
+     cast_expression=cast_expression
+       [: (*yynode)->rule_type = unary_expression_not_plusminus::type_cast_expression;      :]
+   )
+   catch (
+     primary_expression=primary_expression (#postfix_operator=postfix_operator)*
+       [: (*yynode)->rule_type = unary_expression_not_plusminus::type_primary_expression;   :]
+   )
  )
 -> unary_expression_not_plusminus [
      member variable rule_type: unary_expression_not_plusminus::unary_expression_not_plusminus_enum;
 ] ;;
-
-
---    LPAREN
---    (  optional_array_builtin_type RPAREN
---     | class_type RPAREN unary_expression_not_plusminus
---    )
--- -> cast_expression_lookahead ;;  -- only use for lookaheads!
 
    LPAREN
    (  builtin_type=optional_array_builtin_type RPAREN
@@ -1639,20 +1611,22 @@
       method_call=method_call_data[ type_arguments, identifier, arguments ]
    )
  |
-   -- type names (normal) - either pure or as method
-   ?[: lookahead_is_array_type_dot_class() == false :]
-   identifier:identifier
-   (
-      LPAREN arguments:optional_argument_list RPAREN
-      method_call=method_call_data[
-        0 /* no type arguments */, identifier, arguments
-      ]
-    |
-      simple_name_access=simple_name_access_data[ identifier ]
+   try/rollback(
+     -- stuff like narf.zoht[][].class
+     array_type_dot_class=array_type_dot_class
    )
- |
-   -- stuff like narf.zoht[][].class
-   array_type_dot_class=array_type_dot_class
+   catch (
+     -- type names (normal) - either pure or as method
+     identifier:identifier
+     (
+         LPAREN arguments:optional_argument_list RPAREN
+         method_call=method_call_data[
+           0 /* no type arguments */, identifier, arguments
+         ]
+       |
+         simple_name_access=simple_name_access_data[ identifier ]
+     )
+   )
  )
 -> primary_atom ;;
 
@@ -1846,7 +1820,7 @@
  -- This condition resolves the conflict between modifiers
  -- and annotation type declarations:
    0 [: if (yytoken == Token_AT && LA(2).kind == Token_INTERFACE) { break; } :]
-   recover(#mod_annotation=annotation)
+   try/recover(#mod_annotation=annotation)
  )*
 -> optional_modifiers [
      member variable modifiers: int;
@@ -1891,9 +1865,6 @@
 -----------------------------------------------------------------
 
 [:
-#include "java_lookahead.h"
-
-
 namespace java
 {
 
@@ -1905,77 +1876,16 @@ void parser::set_compatibility_mode( parser::java_compatibility_mode mode ) {
 }
 
 
-// lookahead hacks to make up for backtracking or LL(k)
-// which are not yet implemented
-
-/**
-* This method checks if the next following tokens of the parser class
-* match the beginning of a package declaration. If true is returned then it
-* looks like a package declaration is coming up. It doesn't have to match the
-* full package_declaration rule (because annotation contents are only checked
-* rudimentarily), but it is guaranteed that the upcoming tokens are
-* not a type specification.
-* The method returns false if the upcoming tokens are (for sure) not
-* the beginning of a package declaration.
-*/
-bool parser::lookahead_is_package_declaration()
+parser::parser_state *parser::copy_current_state()
 {
-    lookahead* la = new lookahead(this);
-    bool result = la->is_package_declaration_start();
-    delete la;
-    return result;
+  parser_state *state = new parser_state();
+  state->ltCounter = _M_state.ltCounter;
+  return state;
 }
 
-/**
-* This method checks if the next following tokens of the parser class
-* match the beginning of a variable declaration. If true is returned then it
-* looks like a variable declaration is coming up. It doesn't have to match the
-* full variable_declaration rule (as only the first few tokens are checked),
-* but it is guaranteed that the upcoming tokens are not an expression.
-* The method returns false if the upcoming tokens are (for sure) not
-* the beginning of a variable declaration.
-*/
-bool parser::lookahead_is_parameter_declaration()
+void parser::restore_state(parser::parser_state *state)
 {
-    lookahead* la = new lookahead(this);
-    bool result = la->is_parameter_declaration_start();
-    delete la;
-    return result;
-}
-
-/**
-* This method checks if the next following tokens of the parser class
-* match the beginning of a cast expression. If true is returned then it
-* looks like a cast expression is coming up. It doesn't have to match the
-* full cast_expression rule (because type arguments are only checked
-* rudimentarily, and expressions are not checked at all), but there's a very
-* high chance that the upcoming tokens are not a primary expression.
-* The method returns false if the upcoming tokens are (for sure) not
-* the beginning of a cast expression.
-*/
-bool parser::lookahead_is_cast_expression()
-{
-    lookahead* la = new lookahead(this);
-    bool result = la->is_cast_expression_start();
-    delete la;
-    return result;
-}
-
-/**
-* This method checks if the next following tokens of the parser class
-* match the beginning of a variable declaration. If true is returned then it
-* looks like a variable declaration is coming up. It doesn't have to match the
-* full variable_declaration rule (as only the first few tokens are checked),
-* but it is guaranteed that the upcoming tokens are not an expression.
-* The method returns false if the upcoming tokens are (for sure) not
-* the beginning of a variable declaration.
-*/
-bool parser::lookahead_is_array_type_dot_class()
-{
-    lookahead* la = new lookahead(this);
-    bool result = la->is_array_type_dot_class_start();
-    delete la;
-    return result;
+  _M_state.ltCounter = state->ltCounter;
 }
 
 } // end of namespace java

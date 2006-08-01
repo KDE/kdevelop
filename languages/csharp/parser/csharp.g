@@ -27,13 +27,13 @@
 -----------------------------------------------------------------------------
 
 
--- 20 first/follow conflicts:
+-- 21 first/follow conflicts:
 --  - The EXTERN conflicts in compilation_unit. They would be gone if
 --    type_declaration used optional_type_modifiers instead of
 --    broader optional_modifiers, but we stick with the latter one in order
 --    to improve the AST. As the extern_alias_directive comes first, it
 --    rightfully gets selected, and so the conflict is harmless.
---    (done right by default, 2 conflicts)
+--    (done right by default, 3 conflicts)
 --  - The LBRACKET conflict in compilation_unit,
 --    and the following EXTERN, LBRACKET conflict there.
 --    LBRACKET is resolved, EXTERN is just the above harmless conflict again.
@@ -91,7 +91,7 @@
 --    which actually stems from indexer_declaration.
 --    (manually resolved, 1 conflict)
 
--- 17 first/first conflicts:
+-- 14 first/first conflicts:
 --  - The ADD, ALIAS, etc. (identifier) conflict in using_directive.
 --    (manually resolved, 1 conflict)
 --  - The ADD, ALIAS, etc. (identifier) conflicts in attribute_arguments,
@@ -111,8 +111,6 @@
 --  - The ADD, ALIAS, etc. (identifier) conflict in event_declaration,
 --    between variable_declarator and type_name.
 --    (manually resolved, 1 conflict)
---  - The VOID conflict in return_type.
---    (manually resolved, 1 conflict)
 --  - The ADD, ALIAS, etc. (identifier) conflict
 --    in type_parameter_constraints, caused by the similarity of
 --    primary_or_secondary_constraint (with class_type) and
@@ -121,13 +119,10 @@
 --    (done right by default, 1 conflict)
 --  - The ADD, ALIAS, etc. (identifier) conflict in block_statement
 --    between all three statement types. labeled_statement vs. the other two
---    is resolved easily, whereas declaration_statement vs. embedded_statement
---    needs arbitrary-length LL(k), as is described further above.
+--    is resolved easily, whereas local_variable_declaration_statement
+--    vs. embedded_statement needs arbitrary-length LL(k), and is solved
+--    with a try/rollback() block.
 --    (manually resolved, 1 conflict)
---  - The BOOLEAN, BYTE, CHAR, DOUBLE etc. in block_statement, it's the
---    classic conflict between local_variable_declaration and expression.
---    Needs LL(k), solved by lookahead_is_local_variable_declaration().
---    (1 conflict)
 --  - The CHECKED, UNCHECKED, YIELD conflict in embedded_statement.
 --    For "checked" and "unchecked", this is because there are both blocks
 --    and expression statements starting with "(un)checked". For "yield",
@@ -137,25 +132,17 @@
 --    (manually resolved, 1 conflict)
 --  - The CATCH conflict in catch_clauses.
 --    (manually resolved, 1 conflict)
---  - The BOOLEAN, BYTE, CHAR, DOUBLE etc. in resource_acquisition, it's the
---    classic conflict between local_variable_declaration and expression.
---    Needs LL(k), solved by lookahead_is_local_variable_declaration().
---    (1 conflict)
---  - The BOOLEAN, BYTE, CHAR, DOUBLE etc. in for_control, it's the
---    classic conflict between local_variable_declaration and expression.
---    Needs LL(k), solved by lookahead_is_local_variable_declaration().
---    (1 conflict)
---  - The LPAREN conflict in unary_expression,
---    which is cast_expression vs. primary_expression.
---    Needs LL(k), solved by lookahead_is_cast_expression().
---    (1 conflict)
---  - The ADD, ALIAS, etc. (identifier) conflict in typeof_expression,
---    between unbound_type_name and type
---    (both of which can be something like a.b.c.d or longer).
---    Needs LL(k), solved by lookahead_is_unbound_type_name().
---    (1 conflict)
+--  - The VOID conflict in typeof_expression.
+--    (manually resolved, 1 conflict)
+--  - The BOOL, BYTE, CHAR, etc. conflict in typeof_expression.
+--    That conflict is only naturally, because there's the same "type" rule
+--    in two branches of an alternative item. One for C# 2.0 or higher,
+--    and another one for C# 1.0. So, this is an artificial conflict.
+--    (manually resolved, 1 conflict)
+--  - The VOID conflict in return_type.
+--    (manually resolved, 1 conflict)
 
--- Total amount of conflicts: 37
+-- Total amount of conflicts: 35
 
 
 
@@ -230,11 +217,14 @@ namespace csharp_pp
   parser::csharp_compatibility_mode _M_compatibility_mode;
   std::set<std::string> _M_pp_defined_symbols;
 
-  // _M_ltCounter stores the amount of currently open type arguments rules,
-  // all of which are beginning with a less than ("<") character.
-  // This way, also RSHIFT (">>") can be used to close type arguments rules,
-  // in addition to GREATER_THAN (">").
-  int _M_ltCounter;
+  struct parser_state {
+    // ltCounter stores the amount of currently open type arguments rules,
+    // all of which are beginning with a less than ("<") character.
+    // This way, also RSHIFT (">>") can be used to close type arguments rules,
+    // in addition to GREATER_THAN (">").
+    int ltCounter;
+  };
+  parser_state _M_state;
 
   // Rather hackish solution for recognizing expressions like
   // "a is sometype ? if_exp : else_exp", see conditional_expression.
@@ -242,12 +232,6 @@ namespace csharp_pp
   void unset_nullable_type(type_ast *type);
   type_ast *last_relational_expression_rest_type(
     null_coalescing_expression_ast *null_coalescing_expression);
-
-  // Lookahead hacks
-  bool lookahead_is_local_variable_declaration();
-  bool lookahead_is_cast_expression();
-  bool lookahead_is_unbound_type_name();
-  bool lookahead_is_type_arguments();
 :]
 
 %parserclass (constructor)
@@ -704,13 +688,14 @@ namespace csharp_pp
 ------------------------------------------------------------
 
 
-   recover(#extern_alias=extern_alias_directive)*  -- TODO: probably not in C# 1.0
-   recover(#using=using_directive)*
-   recover(
+   0 [: _M_state.ltCounter = 0; :]
+   try/recover(#extern_alias=extern_alias_directive)*  -- TODO: probably not in C# 1.0
+   try/recover(#using=using_directive)*
+   try/recover(
      0 [: if (LA(2).kind != Token_ASSEMBLY) break; :] -- exit the "star loop"
      #global_attribute=global_attribute_section
    )*
-   recover(#namespace=namespace_member_declaration)*
+   try/recover(#namespace=namespace_member_declaration)*
 -> compilation_unit ;;
 
 
@@ -745,7 +730,7 @@ namespace csharp_pp
    RBRACKET
 -> global_attribute_section ;;
 
-   recover(#attribute=attribute_section)*
+   try/recover(#attribute=attribute_section)*
 -> optional_attribute_sections ;;
 
    LBRACKET
@@ -811,9 +796,9 @@ namespace csharp_pp
 -> namespace_declaration ;;
 
    LBRACE
-   recover(#extern_alias=extern_alias_directive)*  -- TODO: probably not in C# 1.0
-   recover(#using=using_directive)*
-   recover(#namespace=namespace_member_declaration)*
+   try/recover(#extern_alias=extern_alias_directive)*  -- TODO: probably not in C# 1.0
+   try/recover(#using=using_directive)*
+   try/recover(#namespace=namespace_member_declaration)*
    RBRACE
 -> namespace_body ;;
 
@@ -851,7 +836,7 @@ namespace csharp_pp
    CLASS class_name=identifier
    (
       ?[: compatibility_mode() >= csharp20_compatibility :]
-      recover(type_parameters=type_parameters)
+      try/recover(type_parameters=type_parameters)
     | 0
    )
    (class_base=class_base | 0)
@@ -873,7 +858,7 @@ namespace csharp_pp
    STRUCT struct_name=identifier
    (
       ?[: compatibility_mode() >= csharp20_compatibility :]
-      recover(type_parameters=type_parameters)
+      try/recover(type_parameters=type_parameters)
     | 0
    )
    (struct_interfaces=struct_interfaces | 0)
@@ -895,7 +880,7 @@ namespace csharp_pp
    INTERFACE interface_name=identifier
    (
       ?[: compatibility_mode() >= csharp20_compatibility :]
-      recover(type_parameters=type_parameters)
+      try/recover(type_parameters=type_parameters)
     | 0
    )
    (interface_base=interface_base | 0)
@@ -929,7 +914,7 @@ namespace csharp_pp
    DELEGATE return_type=return_type delegate_name=identifier
    (
       ?[: compatibility_mode() >= csharp20_compatibility :]
-      recover(type_parameters=type_parameters)
+      try/recover(type_parameters=type_parameters)
     | 0
    )
    LPAREN (formal_parameters=formal_parameter_list | 0) RPAREN
@@ -974,17 +959,17 @@ namespace csharp_pp
 
 -- BODIES of classes, interfaces, and the likes.
 
-   LBRACE recover(#member_declaration=class_member_declaration)* RBRACE
+   LBRACE try/recover(#member_declaration=class_member_declaration)* RBRACE
 -> class_body ;;
 
-   LBRACE recover(#member_declaration=struct_member_declaration)* RBRACE
+   LBRACE try/recover(#member_declaration=struct_member_declaration)* RBRACE
 -> struct_body ;;
 
-   LBRACE recover(#member_declaration=interface_member_declaration)* RBRACE
+   LBRACE try/recover(#member_declaration=interface_member_declaration)* RBRACE
 -> interface_body ;;
 
    LBRACE
-   recover(
+   try/recover(
       #member_declaration=enum_member_declaration
       ( 0 [: if (LA(2).kind == Token_RBRACE) break; :] -- exit the "star loop"
         COMMA #member_declaration=enum_member_declaration
@@ -1354,7 +1339,7 @@ namespace csharp_pp
 -- The METHOD DECLARATION rest.
 
    (  ?[: compatibility_mode() >= csharp20_compatibility :]
-      recover(type_parameters=type_parameters)
+      try/recover(type_parameters=type_parameters)
     | 0
    )
    LPAREN (formal_parameters=formal_parameter_list | 0) RPAREN
@@ -1451,7 +1436,7 @@ namespace csharp_pp
 -- And last but not least, the INTERFACE METHOD DECLARATION.
 
    (  ?[: compatibility_mode() >= csharp20_compatibility :]
-      recover(type_parameters=type_parameters)
+      try/recover(type_parameters=type_parameters)
     | 0
    )
    LPAREN (formal_parameters=formal_parameter_list | 0) RPAREN
@@ -1502,21 +1487,32 @@ namespace csharp_pp
 -- It's not as hackish as it used to be, nevertheless it could still be nicer.
 
    0 [: bool parameter_array_occurred = false; :]
-   #formal_parameter=formal_parameter[&parameter_array_occurred]
-   @ ( 0 [: if( parameter_array_occurred == true ) { break; } :]
-         -- Don't proceed after the parameter array. If there's a cleaner way
-         -- to exit the loop when _M_parameter_array_occurred == true,
-         -- please use that instead of this construct.
-       COMMA
-     )
+   (
+      try/recover(
+        #formal_parameter=formal_parameter[&parameter_array_occurred]
+        ( 0 [: if( parameter_array_occurred == true ) { break; } :]
+            -- Don't proceed after the parameter array. If there's a cleaner way
+            -- to exit the loop when _M_parameter_array_occurred == true,
+            -- please use that instead of this construct.
+          COMMA #formal_parameter=formal_parameter[&parameter_array_occurred]
+        )*
+      )
+    | 0
+   )
 -> formal_parameter_list ;;
 
 -- How it _should_ look:
 --
 --    0 [: bool parameter_array_occurred = false; :]
---    #formal_parameter=formal_parameter[&parameter_array_occurred]
---    @ ( ?[: parameter_array_occurred == false :] COMMA )
---        -- kdev-pg dismisses this condition!
+--    (
+--       try/recover(
+--         #formal_parameter=formal_parameter[&parameter_array_occurred]
+--         ( ?[: parameter_array_occurred == false :] -- kdev-pg dismisses this condition!
+--           COMMA #formal_parameter=formal_parameter[&parameter_array_occurred]
+--         )*
+--       )
+--     | 0
+--    )
 -- -> formal_parameter_list ;;
 
    attributes=optional_attribute_sections
@@ -1537,7 +1533,7 @@ namespace csharp_pp
 -- An OPTIONAL ARGUMENT LIST is used when calling methods
 -- (not for declaring them, that's what formal parameter lists are for).
 
-   (#argument=argument @ COMMA | 0)
+   try/recover(#argument=argument @ COMMA) | 0
 -> optional_argument_list ;;
 
  (
@@ -1561,7 +1557,7 @@ namespace csharp_pp
 -- TYPE PARAMETERS are used in class, interface etc. declarations to
 -- determine the generic types allowed as type argument.
 
-   LESS_THAN [: int currentLtLevel = _M_ltCounter; _M_ltCounter++; :]
+   LESS_THAN [: int currentLtLevel = _M_state.ltCounter; _M_state.ltCounter++; :]
    #type_parameter=type_parameter @ COMMA
    (
       type_arguments_or_parameters_end
@@ -1569,8 +1565,10 @@ namespace csharp_pp
    )
    -- make sure we have gobbled up enough '>' characters
    -- if we are at the "top level" of nested type_parameters productions
-   [: if( currentLtLevel == 0 && _M_ltCounter != currentLtLevel ) {
-        report_problem(error, "The amount of closing ``>'' characters is incorrect");
+   [: if (currentLtLevel == 0 && _M_state.ltCounter != currentLtLevel ) {
+        if (!yy_block_errors) {
+          report_problem(error, "The amount of closing ``>'' characters is incorrect");
+        }
         return false;
       }
    :]
@@ -1583,7 +1581,7 @@ namespace csharp_pp
 -- TYPE ARGUMENTS are used in initializers, invocations, etc. to
 -- specify the exact types for this generic class/method instance.
 
-   LESS_THAN [: int currentLtLevel = _M_ltCounter; _M_ltCounter++; :]
+   LESS_THAN [: int currentLtLevel = _M_state.ltCounter; _M_state.ltCounter++; :]
    #type_argument=type @ COMMA
    (
       type_arguments_or_parameters_end
@@ -1591,23 +1589,25 @@ namespace csharp_pp
    )
    -- make sure we have gobbled up enough '>' characters
    -- if we are at the "top level" of nested type_arguments productions
-   [: if( currentLtLevel == 0 && _M_ltCounter != currentLtLevel ) {
-        report_problem(error, "The amount of closing ``>'' characters is incorrect");
+   [: if (currentLtLevel == 0 && _M_state.ltCounter != currentLtLevel ) {
+        if (!yy_block_errors) {
+          report_problem(error, "The amount of closing ``>'' characters is incorrect");
+        }
         return false;
       }
    :]
 -> type_arguments ;;
 
 
-   GREATER_THAN  [: _M_ltCounter -= 1; :]  -- ">"
- | RSHIFT        [: _M_ltCounter -= 2; :]  -- ">>"
+   GREATER_THAN  [: _M_state.ltCounter -= 1; :]  -- ">"
+ | RSHIFT        [: _M_state.ltCounter -= 2; :]  -- ">>"
 -> type_arguments_or_parameters_end ;;
 
 
 -- Type parameter CONSTRAINTS CLAUSES also belong to C#'s generics,
 -- and can narrow down the allowed types given as type arguments.
 
-   recover(#clause=type_parameter_constraints_clause)*
+   try/recover(#clause=type_parameter_constraints_clause)*
 -> optional_type_parameter_constraints_clauses ;;
 
    WHERE type_parameter=identifier COLON constraints=type_parameter_constraints
@@ -1664,7 +1664,7 @@ namespace csharp_pp
 --  - As a completely independent braced block of code inside a method,
 --    starting a new scope for variable definitions
 
-   LBRACE recover(#statement=block_statement)* RBRACE
+   LBRACE try/recover(#statement=block_statement)* RBRACE
 -> block ;;
 
 -- A BLOCK STATEMENT is either an embedded statement or a variable declaration.
@@ -1679,10 +1679,11 @@ namespace csharp_pp
    -- with class1<xxx>.bla or similar. This is only solvable with LL(k), so
    -- what's needed here is the following hack lookahead function, until
    -- backtracking or real LL(k) is implemented.
-   ?[: lookahead_is_local_variable_declaration() == true :]
-   local_variable_declaration_statement=local_variable_declaration SEMICOLON
- |
-   statement=embedded_statement
+   try/rollback (
+     local_variable_declaration_statement=local_variable_declaration_statement
+   ) catch (
+     statement=embedded_statement
+   )
  )
 -> block_statement ;;
 
@@ -1696,6 +1697,9 @@ namespace csharp_pp
 -- The LOCAL VARIABLE DECLARATION does not allow attributes or modifiers,
 -- this is only allowed in field declarations. Both store their data with
 -- the variable_declaration_data rule, using rule arguments.
+
+   declaration=local_variable_declaration SEMICOLON
+-> local_variable_declaration_statement ;;
 
    type:type (#declarator:variable_declarator @ COMMA)
    data=variable_declaration_data[
@@ -1759,7 +1763,7 @@ namespace csharp_pp
 -> variable_initializer ;;
 
    LBRACE
-   recover(
+   try/recover(
       #variable_initializer=variable_initializer
       ( 0 [: if (LA(2).kind == Token_RBRACE) { break; } :]
         COMMA #variable_initializer=variable_initializer
@@ -1914,7 +1918,7 @@ namespace csharp_pp
 -- "case x:" or "default:" switch statement groups.
 
    SWITCH LPAREN switch_expression=expression RPAREN
-   LBRACE recover(#switch_section=switch_section)* RBRACE
+   LBRACE try/recover(#switch_section=switch_section)* RBRACE
 -> switch_statement ;;
 
    (#label=switch_label)+
@@ -1974,11 +1978,8 @@ namespace csharp_pp
 -- Hm, we know that LL(k) conflict from somewhere, don't we?
 -- Right, it's the same one as in block_statement and the upcoming for_control.
 
- (
-   ?[: lookahead_is_local_variable_declaration() == true :]
-   local_variable_declaration=local_variable_declaration
- | expression = expression
- )
+   try/rollback( local_variable_declaration=local_variable_declaration )
+   catch( expression=expression )
 -> resource_acquisition ;;
 
 
@@ -1994,10 +1995,11 @@ namespace csharp_pp
 -- is implemented, we have to workaround with a lookahead hack function.
 
    (
-      ?[: lookahead_is_local_variable_declaration() == true :]
-      local_variable_declaration=local_variable_declaration    -- "int i = 0"
-    |
-      #statement_expression=statement_expression @ COMMA
+      try/rollback (
+        local_variable_declaration=local_variable_declaration  -- "int i = 0"
+      ) catch (
+        #statement_expression=statement_expression @ COMMA
+      )
     |
       0
    )
@@ -2215,12 +2217,14 @@ namespace csharp_pp
  | BANG  unary_expression=unary_expression
      [: (*yynode)->rule_type = unary_expression::type_logical_not_expression; :]
  |
-   ?[: lookahead_is_cast_expression() == true :]
-   cast_expression=cast_expression
-     [: (*yynode)->rule_type = unary_expression::type_cast_expression;        :]
- |
-   primary_expression=primary_expression
-     [: (*yynode)->rule_type = unary_expression::type_primary_expression;     :]
+   try/rollback (
+     cast_expression=cast_expression
+       [: (*yynode)->rule_type = unary_expression::type_cast_expression;      :]
+   )
+   catch (
+     primary_expression=primary_expression
+       [: (*yynode)->rule_type = unary_expression::type_primary_expression;   :]
+   )
  |
    -- unsafe grammar extension: pointer indirection expression
    STAR unary_expression=unary_expression
@@ -2247,10 +2251,11 @@ namespace csharp_pp
  (
    -- this is the part of member_access that's not in primary_atom
    DOT member_name=identifier
-   (  ?[: lookahead_is_type_arguments() == true :]
+   try/rollback(
+      ?[: compatibility_mode() >= csharp20_compatibility :]
       type_arguments=type_arguments
     | 0
-   )
+   ) catch(0)
      [: (*yynode)->suffix_type = primary_suffix::type_member_access;   :]
  |
    -- the suffix part of invocation_expression
@@ -2269,10 +2274,11 @@ namespace csharp_pp
  |
    -- unsafe grammar extension: pointer access
    ARROW_RIGHT member_name=identifier
-   (  ?[: lookahead_is_type_arguments() == true :]
+   try/rollback(
+      ?[: compatibility_mode() >= csharp20_compatibility :]
       type_arguments=type_arguments
     | 0
-   )
+   ) catch(0)
      [: (*yynode)->suffix_type = primary_suffix::type_pointer_member_access; :]
  )
 -> primary_suffix [
@@ -2336,16 +2342,18 @@ namespace csharp_pp
     | 0
    )
    member_name=identifier
-   (  ?[: lookahead_is_type_arguments() == true :]
+   try/rollback(
+      ?[: compatibility_mode() >= csharp20_compatibility :]
       type_arguments=type_arguments
     | 0
-   )
+   ) catch(0)
  |
    predefined_type=predefined_type DOT member_name=identifier
-   (  ?[: lookahead_is_type_arguments() == true :]
+   try/rollback(
+      ?[: compatibility_mode() >= csharp20_compatibility :]
       type_arguments=type_arguments
     | 0
-   )
+   ) catch(0)
  )
 -> simple_name_or_member_access ;;
 
@@ -2373,10 +2381,11 @@ namespace csharp_pp
 
    BASE
    (  DOT identifier=identifier
-      (  ?[: lookahead_is_type_arguments() == true :]
-          type_arguments=type_arguments
-        | 0
-      )
+      try/rollback(
+         ?[: compatibility_mode() >= csharp20_compatibility :]
+         type_arguments=type_arguments
+       | 0
+      ) catch(0)
         [: (*yynode)->access_type = base_access::type_base_member_access;  :]
     |
       LBRACKET (#expression=expression @ COMMA) RBRACKET
@@ -2444,16 +2453,20 @@ namespace csharp_pp
    (
       ?[: LA(2).kind == Token_RPAREN :]
       VOID
-        [: (*yynode)->typeof_type = typeof_expression::type_void; :]
+        [: (*yynode)->typeof_type = typeof_expression::type_void;   :]
     |
-      ?[: (compatibility_mode() >= csharp20_compatibility)
-          && (lookahead_is_unbound_type_name() == true)
-        :]
-      unbound_type_name=unbound_type_name
-        [: (*yynode)->typeof_type = typeof_expression::type_unbound_type_name; :]
+      ?[: compatibility_mode() >= csharp20_compatibility :]
+      try/rollback(
+        unbound_type_name=unbound_type_name
+          [: (*yynode)->typeof_type = typeof_expression::type_unbound_type_name; :]
+      )
+      catch(
+        other_type=type
+          [: (*yynode)->typeof_type = typeof_expression::type_type; :]
+      )
     |
       other_type=type
-        [: (*yynode)->typeof_type = typeof_expression::type_type; :]
+        [: (*yynode)->typeof_type = typeof_expression::type_type;   :]
    )
    RPAREN
 -> typeof_expression [
@@ -2467,9 +2480,7 @@ namespace csharp_pp
 -> unbound_type_name ;;
 
    identifier=identifier
-   (  generic_dimension_specifier=generic_dimension_specifier
-    | 0
-   )
+   generic_dimension_specifier=generic_dimension_specifier
 -> unbound_type_name_part ;;
 
    LESS_THAN [: (*yynode)->comma_count = 0; :]
@@ -2666,10 +2677,11 @@ namespace csharp_pp
 -> namespace_or_type_name ;;
 
    identifier=identifier
-   (  ?[: lookahead_is_type_arguments() == true :]
+   try/rollback(
+      ?[: compatibility_mode() >= csharp20_compatibility :]
       type_arguments=type_arguments
     | 0
-   )
+   ) catch(0)
 -> namespace_or_type_name_part ;;
 
    namespace_or_type_name_safe
@@ -2802,10 +2814,6 @@ namespace csharp_pp
 -----------------------------------------------------------------
 
 [:
-#include "csharp_lookahead.h"
-void print_token_environment(csharp::parser* parser);
-
-
 namespace csharp
 {
 
@@ -2882,71 +2890,16 @@ type_ast *parser::last_relational_expression_rest_type(
 }
 
 
-// lookahead hacks to make up for backtracking or LL(k)
-// which are not yet implemented
-
-/**
- * This function checks if the next following tokens of the parser class
- * match the beginning of a local variable declaration (that is, a variable
- * declaration without attributes and modifiers). If true is returned then it
- * looks like a variable declaration is coming up. It doesn't have to match the
- * full local_variable_declaration rule (as only the first few tokens are
- * checked), but it is guaranteed that the upcoming tokens are not an
- * expression. The function returns false if the upcoming tokens are (for sure)
- * not the beginning of a local variable declaration.
- */
-bool parser::lookahead_is_local_variable_declaration()
+parser::parser_state *parser::copy_current_state()
 {
-    csharp::lookahead* la = new csharp::lookahead(this);
-    bool result = la->is_local_variable_declaration_start();
-    delete la;
-    return result;
+  parser_state *state = new parser_state();
+  state->ltCounter = _M_state.ltCounter;
+  return state;
 }
 
-/**
-* This function checks if the next following tokens of the parser class
-* match the beginning of a cast expression. If true is returned then it
-* looks like a cast expression is coming up. It doesn't have to match the
-* full cast_expression rule (because type arguments are only checked
-* rudimentarily, and expressions are not checked at all), but there's a very
-* high chance that the upcoming tokens are not a primary expression.
-* The function returns false if the upcoming tokens are (for sure) not
-* the beginning of a cast expression.
-*/
-bool parser::lookahead_is_cast_expression()
+void parser::restore_state(parser::parser_state *state)
 {
-    csharp::lookahead* la = new csharp::lookahead(this);
-    bool result = la->is_cast_expression_start();
-    delete la;
-    return result;
-}
-
-/**
-* This function checks if the next following tokens of the parser class
-* match the beginning of an unbound type name. If true is returned then it
-* looks like such a type name is coming up. It doesn't have to match the
-* full unbound_type_name rule, because it returns when it's clear that the
-* upcoming tokens are not a standard type_name.
-* The function returns false if the upcoming tokens are not
-* the beginning of an unbound type name.
-*/
-bool parser::lookahead_is_unbound_type_name()
-{
-    csharp::lookahead* la = new csharp::lookahead(this);
-    bool result = la->is_unbound_type_name();
-    delete la;
-    return result;
-}
-
-bool parser::lookahead_is_type_arguments()
-{
-    if (compatibility_mode() < csharp20_compatibility)
-      return false;
-
-    csharp::lookahead* la = new csharp::lookahead(this);
-    bool result = la->is_type_arguments();
-    delete la;
-    return result;
+  _M_state.ltCounter = state->ltCounter;
 }
 
 } // end of namespace csharp

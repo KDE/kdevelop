@@ -344,7 +344,7 @@ parser::pp_parse_result parser::pp_parse_line(
 
 
 // custom error recovery
-bool parser::yy_expected_token(int /*expected*/, std::size_t where, char const *name)
+void parser::yy_expected_token(int /*expected*/, std::size_t where, char const *name)
 {
   //print_token_environment(this);
   if (_M_scope->csharp_parser() != 0)
@@ -356,10 +356,9 @@ bool parser::yy_expected_token(int /*expected*/, std::size_t where, char const *
           + "''"
       );
     }
-  return false;
 }
 
-bool parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
+void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
 {
   //print_token_environment(this);
   if (_M_scope->csharp_parser() != 0)
@@ -371,7 +370,6 @@ bool parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
           + "''"
       );
     }
-  return false;
 }
 
 } // end of namespace csharp_pp

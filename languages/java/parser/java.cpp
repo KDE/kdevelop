@@ -4,9 +4,6 @@
 #include "java.h"
 
 
-#include "java_lookahead.h"
-
-
 namespace java
   {
 
@@ -20,77 +17,16 @@ namespace java
   }
 
 
-  // lookahead hacks to make up for backtracking or LL(k)
-  // which are not yet implemented
-
-  /**
-  * This method checks if the next following tokens of the parser class
-  * match the beginning of a package declaration. If true is returned then it
-  * looks like a package declaration is coming up. It doesn't have to match the
-  * full package_declaration rule (because annotation contents are only checked
-  * rudimentarily), but it is guaranteed that the upcoming tokens are
-  * not a type specification.
-  * The method returns false if the upcoming tokens are (for sure) not
-  * the beginning of a package declaration.
-  */
-  bool parser::lookahead_is_package_declaration()
+  parser::parser_state *parser::copy_current_state()
   {
-    lookahead* la = new lookahead(this);
-    bool result = la->is_package_declaration_start();
-    delete la;
-    return result;
+    parser_state *state = new parser_state();
+    state->ltCounter = _M_state.ltCounter;
+    return state;
   }
 
-  /**
-  * This method checks if the next following tokens of the parser class
-  * match the beginning of a variable declaration. If true is returned then it
-  * looks like a variable declaration is coming up. It doesn't have to match the
-  * full variable_declaration rule (as only the first few tokens are checked),
-  * but it is guaranteed that the upcoming tokens are not an expression.
-  * The method returns false if the upcoming tokens are (for sure) not
-  * the beginning of a variable declaration.
-  */
-  bool parser::lookahead_is_parameter_declaration()
+  void parser::restore_state(parser::parser_state *state)
   {
-    lookahead* la = new lookahead(this);
-    bool result = la->is_parameter_declaration_start();
-    delete la;
-    return result;
-  }
-
-  /**
-  * This method checks if the next following tokens of the parser class
-  * match the beginning of a cast expression. If true is returned then it
-  * looks like a cast expression is coming up. It doesn't have to match the
-  * full cast_expression rule (because type arguments are only checked
-  * rudimentarily, and expressions are not checked at all), but there's a very
-  * high chance that the upcoming tokens are not a primary expression.
-  * The method returns false if the upcoming tokens are (for sure) not
-  * the beginning of a cast expression.
-  */
-  bool parser::lookahead_is_cast_expression()
-  {
-    lookahead* la = new lookahead(this);
-    bool result = la->is_cast_expression_start();
-    delete la;
-    return result;
-  }
-
-  /**
-  * This method checks if the next following tokens of the parser class
-  * match the beginning of a variable declaration. If true is returned then it
-  * looks like a variable declaration is coming up. It doesn't have to match the
-  * full variable_declaration rule (as only the first few tokens are checked),
-  * but it is guaranteed that the upcoming tokens are not an expression.
-  * The method returns false if the upcoming tokens are (for sure) not
-  * the beginning of a variable declaration.
-  */
-  bool parser::lookahead_is_array_type_dot_class()
-  {
-    lookahead* la = new lookahead(this);
-    bool result = la->is_array_type_dot_class_start();
-    delete la;
-    return result;
+    _M_state.ltCounter = state->ltCounter;
   }
 
 } // end of namespace java
@@ -137,7 +73,11 @@ namespace java
         multiplicative_expression_ast *__node_0 = 0;
         if (!parse_multiplicative_expression(&__node_0))
           {
-            return yy_expected_symbol(ast_node::Kind_multiplicative_expression, "multiplicative_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_multiplicative_expression, "multiplicative_expression");
+              }
+            return false;
           }
         (*yynode)->expression = __node_0;
 
@@ -147,7 +87,11 @@ namespace java
             additive_expression_rest_ast *__node_1 = 0;
             if (!parse_additive_expression_rest(&__node_1))
               {
-                return yy_expected_symbol(ast_node::Kind_additive_expression_rest, "additive_expression_rest");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_additive_expression_rest, "additive_expression_rest");
+                  }
+                return false;
               }
             (*yynode)->additional_expression_sequence = snoc((*yynode)->additional_expression_sequence, __node_1, memory_pool);
 
@@ -175,7 +119,13 @@ namespace java
         if (yytoken == Token_PLUS)
           {
             if (yytoken != Token_PLUS)
-              return yy_expected_token(yytoken, Token_PLUS, "+");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_PLUS, "+");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->additive_operator = additive_expression_rest::op_plus;
@@ -183,7 +133,13 @@ namespace java
         else if (yytoken == Token_MINUS)
           {
             if (yytoken != Token_MINUS)
-              return yy_expected_token(yytoken, Token_MINUS, "-");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_MINUS, "-");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->additive_operator = additive_expression_rest::op_minus;
@@ -195,7 +151,11 @@ namespace java
         multiplicative_expression_ast *__node_2 = 0;
         if (!parse_multiplicative_expression(&__node_2))
           {
-            return yy_expected_symbol(ast_node::Kind_multiplicative_expression, "multiplicative_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_multiplicative_expression, "multiplicative_expression");
+              }
+            return false;
           }
         (*yynode)->expression = __node_2;
 
@@ -219,20 +179,36 @@ namespace java
     if (yytoken == Token_AT)
       {
         if (yytoken != Token_AT)
-          return yy_expected_token(yytoken, Token_AT, "@");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_AT, "@");
+              }
+            return false;
+          }
         yylex();
 
         qualified_identifier_ast *__node_3 = 0;
         if (!parse_qualified_identifier(&__node_3))
           {
-            return yy_expected_symbol(ast_node::Kind_qualified_identifier, "qualified_identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_qualified_identifier, "qualified_identifier");
+              }
+            return false;
           }
         (*yynode)->type_name = __node_3;
 
         if (yytoken == Token_LPAREN)
           {
             if (yytoken != Token_LPAREN)
-              return yy_expected_token(yytoken, Token_LPAREN, "(");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LPAREN, "(");
+                  }
+                return false;
+              }
             yylex();
 
             if (yytoken == Token_BOOLEAN
@@ -269,7 +245,11 @@ namespace java
                 annotation_arguments_ast *__node_4 = 0;
                 if (!parse_annotation_arguments(&__node_4))
                   {
-                    return yy_expected_symbol(ast_node::Kind_annotation_arguments, "annotation_arguments");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_annotation_arguments, "annotation_arguments");
+                      }
+                    return false;
                   }
                 (*yynode)->args = __node_4;
 
@@ -281,7 +261,13 @@ namespace java
                 return false;
               }
             if (yytoken != Token_RPAREN)
-              return yy_expected_token(yytoken, Token_RPAREN, ")");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_RPAREN, ")");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->has_parentheses = true;
@@ -347,20 +333,34 @@ namespace java
             annotation_element_value_pair_ast *__node_5 = 0;
             if (!parse_annotation_element_value_pair(&__node_5))
               {
-                return yy_expected_symbol(ast_node::Kind_annotation_element_value_pair, "annotation_element_value_pair");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_annotation_element_value_pair, "annotation_element_value_pair");
+                  }
+                return false;
               }
             (*yynode)->value_pair_sequence = snoc((*yynode)->value_pair_sequence, __node_5, memory_pool);
 
             while (yytoken == Token_COMMA)
               {
                 if (yytoken != Token_COMMA)
-                  return yy_expected_token(yytoken, Token_COMMA, ",");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_COMMA, ",");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 annotation_element_value_pair_ast *__node_6 = 0;
                 if (!parse_annotation_element_value_pair(&__node_6))
                   {
-                    return yy_expected_symbol(ast_node::Kind_annotation_element_value_pair, "annotation_element_value_pair");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_annotation_element_value_pair, "annotation_element_value_pair");
+                      }
+                    return false;
                   }
                 (*yynode)->value_pair_sequence = snoc((*yynode)->value_pair_sequence, __node_6, memory_pool);
 
@@ -400,7 +400,11 @@ namespace java
             annotation_element_value_ast *__node_7 = 0;
             if (!parse_annotation_element_value(&__node_7))
               {
-                return yy_expected_symbol(ast_node::Kind_annotation_element_value, "annotation_element_value");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_annotation_element_value, "annotation_element_value");
+                  }
+                return false;
               }
             (*yynode)->element_value = __node_7;
 
@@ -429,7 +433,13 @@ namespace java
     if (yytoken == Token_LBRACE)
       {
         if (yytoken != Token_LBRACE)
-          return yy_expected_token(yytoken, Token_LBRACE, "{");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LBRACE, "{");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken == Token_BOOLEAN
@@ -465,7 +475,11 @@ namespace java
             annotation_element_array_value_ast *__node_8 = 0;
             if (!parse_annotation_element_array_value(&__node_8))
               {
-                return yy_expected_symbol(ast_node::Kind_annotation_element_array_value, "annotation_element_array_value");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_annotation_element_array_value, "annotation_element_array_value");
+                  }
+                return false;
               }
             (*yynode)->element_value_sequence = snoc((*yynode)->element_value_sequence, __node_8, memory_pool);
 
@@ -476,13 +490,23 @@ namespace java
                     break;
                   }
                 if (yytoken != Token_COMMA)
-                  return yy_expected_token(yytoken, Token_COMMA, ",");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_COMMA, ",");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 annotation_element_array_value_ast *__node_9 = 0;
                 if (!parse_annotation_element_array_value(&__node_9))
                   {
-                    return yy_expected_symbol(ast_node::Kind_annotation_element_array_value, "annotation_element_array_value");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_annotation_element_array_value, "annotation_element_array_value");
+                      }
+                    return false;
                   }
                 (*yynode)->element_value_sequence = snoc((*yynode)->element_value_sequence, __node_9, memory_pool);
 
@@ -497,7 +521,13 @@ namespace java
         if (yytoken == Token_COMMA)
           {
             if (yytoken != Token_COMMA)
-              return yy_expected_token(yytoken, Token_COMMA, ",");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_COMMA, ",");
+                  }
+                return false;
+              }
             yylex();
 
           }
@@ -508,7 +538,13 @@ namespace java
             return false;
           }
         if (yytoken != Token_RBRACE)
-          return yy_expected_token(yytoken, Token_RBRACE, "}");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RBRACE, "}");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -590,7 +626,11 @@ namespace java
             conditional_expression_ast *__node_10 = 0;
             if (!parse_conditional_expression(&__node_10))
               {
-                return yy_expected_symbol(ast_node::Kind_conditional_expression, "conditional_expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_conditional_expression, "conditional_expression");
+                  }
+                return false;
               }
             (*yynode)->cond_expression = __node_10;
 
@@ -600,7 +640,11 @@ namespace java
             annotation_ast *__node_11 = 0;
             if (!parse_annotation(&__node_11))
               {
-                return yy_expected_symbol(ast_node::Kind_annotation, "annotation");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_annotation, "annotation");
+                  }
+                return false;
               }
             (*yynode)->annotation = __node_11;
 
@@ -689,7 +733,11 @@ namespace java
             conditional_expression_ast *__node_12 = 0;
             if (!parse_conditional_expression(&__node_12))
               {
-                return yy_expected_symbol(ast_node::Kind_conditional_expression, "conditional_expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_conditional_expression, "conditional_expression");
+                  }
+                return false;
               }
             (*yynode)->cond_expression = __node_12;
 
@@ -699,7 +747,11 @@ namespace java
             annotation_ast *__node_13 = 0;
             if (!parse_annotation(&__node_13))
               {
-                return yy_expected_symbol(ast_node::Kind_annotation, "annotation");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_annotation, "annotation");
+                  }
+                return false;
               }
             (*yynode)->annotation = __node_13;
 
@@ -709,7 +761,11 @@ namespace java
             annotation_element_array_initializer_ast *__node_14 = 0;
             if (!parse_annotation_element_array_initializer(&__node_14))
               {
-                return yy_expected_symbol(ast_node::Kind_annotation_element_array_initializer, "annotation_element_array_initializer");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_annotation_element_array_initializer, "annotation_element_array_initializer");
+                  }
+                return false;
               }
             (*yynode)->element_array_initializer = __node_14;
 
@@ -740,18 +796,32 @@ namespace java
         identifier_ast *__node_15 = 0;
         if (!parse_identifier(&__node_15))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->element_name = __node_15;
 
         if (yytoken != Token_ASSIGN)
-          return yy_expected_token(yytoken, Token_ASSIGN, "=");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_ASSIGN, "=");
+              }
+            return false;
+          }
         yylex();
 
         annotation_element_value_ast *__node_16 = 0;
         if (!parse_annotation_element_value(&__node_16))
           {
-            return yy_expected_symbol(ast_node::Kind_annotation_element_value, "annotation_element_value");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_annotation_element_value, "annotation_element_value");
+              }
+            return false;
           }
         (*yynode)->element_value = __node_16;
 
@@ -785,28 +855,54 @@ namespace java
         identifier_ast *__node_17 = 0;
         if (!parse_identifier(&__node_17))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->annotation_name = __node_17;
 
         if (yytoken != Token_LPAREN)
-          return yy_expected_token(yytoken, Token_LPAREN, "(");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LPAREN, "(");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken != Token_RPAREN)
-          return yy_expected_token(yytoken, Token_RPAREN, ")");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RPAREN, ")");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken == Token_DEFAULT)
           {
             if (yytoken != Token_DEFAULT)
-              return yy_expected_token(yytoken, Token_DEFAULT, "default");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_DEFAULT, "default");
+                  }
+                return false;
+              }
             yylex();
 
             annotation_element_value_ast *__node_18 = 0;
             if (!parse_annotation_element_value(&__node_18))
               {
-                return yy_expected_symbol(ast_node::Kind_annotation_element_value, "annotation_element_value");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_annotation_element_value, "annotation_element_value");
+                  }
+                return false;
               }
             (*yynode)->annotation_element_value = __node_18;
 
@@ -818,7 +914,13 @@ namespace java
             return false;
           }
         if (yytoken != Token_SEMICOLON)
-          return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -841,7 +943,13 @@ namespace java
     if (yytoken == Token_LBRACE)
       {
         if (yytoken != Token_LBRACE)
-          return yy_expected_token(yytoken, Token_LBRACE, "{");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LBRACE, "{");
+              }
+            return false;
+          }
         yylex();
 
         while (yytoken == Token_ABSTRACT
@@ -871,19 +979,29 @@ namespace java
                || yytoken == Token_AT
                || yytoken == Token_IDENTIFIER)
           {
-            std::size_t start_recovery_1 = token_stream->index() - 1;
+            std::size_t try_start_token_1 = token_stream->index() - 1;
+            parser_state *try_start_state_1 = copy_current_state();
+            {
+              annotation_type_field_ast *__node_19 = 0;
+              if (!parse_annotation_type_field(&__node_19))
+                {
+                  goto __catch_1;
+                }
+              (*yynode)->annotation_type_field_sequence = snoc((*yynode)->annotation_type_field_sequence, __node_19, memory_pool);
 
-            annotation_type_field_ast *__node_19 = 0;
-            if (!parse_annotation_type_field(&__node_19))
-              {
-                goto __recovery_1;
-              }
-            (*yynode)->annotation_type_field_sequence = snoc((*yynode)->annotation_type_field_sequence, __node_19, memory_pool);
+            }
+            if (try_start_state_1)
+              delete try_start_state_1;
 
-            if (false) // recovery section: the only way to enter is goto
+            if (false) // the only way to enter here is using goto
               {
-              __recovery_1:
-                if (start_recovery_1 == token_stream->index() - 1)
+              __catch_1:
+                if (try_start_state_1)
+                  {
+                    restore_state(try_start_state_1);
+                    delete try_start_state_1;
+                  }
+                if (try_start_token_1 == token_stream->index() - 1)
                   yylex();
 
                 while (yytoken != Token_EOF
@@ -921,7 +1039,13 @@ namespace java
 
           }
         if (yytoken != Token_RBRACE)
-          return yy_expected_token(yytoken, Token_RBRACE, "}");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RBRACE, "}");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -948,24 +1072,44 @@ namespace java
     if (yytoken == Token_AT)
       {
         if (yytoken != Token_AT)
-          return yy_expected_token(yytoken, Token_AT, "@");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_AT, "@");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken != Token_INTERFACE)
-          return yy_expected_token(yytoken, Token_INTERFACE, "interface");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_INTERFACE, "interface");
+              }
+            return false;
+          }
         yylex();
 
         identifier_ast *__node_20 = 0;
         if (!parse_identifier(&__node_20))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->annotation_type_name = __node_20;
 
         annotation_type_body_ast *__node_21 = 0;
         if (!parse_annotation_type_body(&__node_21))
           {
-            return yy_expected_symbol(ast_node::Kind_annotation_type_body, "annotation_type_body");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_annotation_type_body, "annotation_type_body");
+              }
+            return false;
           }
         (*yynode)->body = __node_21;
 
@@ -1048,7 +1192,11 @@ namespace java
             optional_modifiers_ast *__node_22 = 0;
             if (!parse_optional_modifiers(&__node_22))
               {
-                return yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+                  }
+                return false;
               }
             modifiers = __node_22;
 
@@ -1057,7 +1205,11 @@ namespace java
                 class_declaration_ast *__node_23 = 0;
                 if (!parse_class_declaration(&__node_23, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_class_declaration, "class_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_class_declaration, "class_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->class_declaration = __node_23;
 
@@ -1067,7 +1219,11 @@ namespace java
                 enum_declaration_ast *__node_24 = 0;
                 if (!parse_enum_declaration(&__node_24, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_enum_declaration, "enum_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_enum_declaration, "enum_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->enum_declaration = __node_24;
 
@@ -1077,7 +1233,11 @@ namespace java
                 interface_declaration_ast *__node_25 = 0;
                 if (!parse_interface_declaration(&__node_25, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_interface_declaration, "interface_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_interface_declaration, "interface_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->interface_declaration = __node_25;
 
@@ -1087,7 +1247,11 @@ namespace java
                 annotation_type_declaration_ast *__node_26 = 0;
                 if (!parse_annotation_type_declaration(&__node_26, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_annotation_type_declaration, "annotation_type_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_annotation_type_declaration, "annotation_type_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->annotation_type_declaration = __node_26;
 
@@ -1106,7 +1270,11 @@ namespace java
                 type_ast *__node_27 = 0;
                 if (!parse_type(&__node_27))
                   {
-                    return yy_expected_symbol(ast_node::Kind_type, "type");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_type, "type");
+                      }
+                    return false;
                   }
                 type = __node_27;
 
@@ -1115,7 +1283,11 @@ namespace java
                     annotation_method_declaration_ast *__node_28 = 0;
                     if (!parse_annotation_method_declaration(&__node_28, modifiers, type ))
                       {
-                        return yy_expected_symbol(ast_node::Kind_annotation_method_declaration, "annotation_method_declaration");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_annotation_method_declaration, "annotation_method_declaration");
+                          }
+                        return false;
                       }
                     (*yynode)->method_declaration = __node_28;
 
@@ -1125,26 +1297,46 @@ namespace java
                     variable_declarator_ast *__node_29 = 0;
                     if (!parse_variable_declarator(&__node_29))
                       {
-                        return yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                          }
+                        return false;
                       }
                     variable_declarator_sequence = snoc(variable_declarator_sequence, __node_29, memory_pool);
 
                     while (yytoken == Token_COMMA)
                       {
                         if (yytoken != Token_COMMA)
-                          return yy_expected_token(yytoken, Token_COMMA, ",");
+                          {
+                            if (!yy_block_errors)
+                              {
+                                yy_expected_token(yytoken, Token_COMMA, ",");
+                              }
+                            return false;
+                          }
                         yylex();
 
                         variable_declarator_ast *__node_30 = 0;
                         if (!parse_variable_declarator(&__node_30))
                           {
-                            return yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                            if (!yy_block_errors)
+                              {
+                                yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                              }
+                            return false;
                           }
                         variable_declarator_sequence = snoc(variable_declarator_sequence, __node_30, memory_pool);
 
                       }
                     if (yytoken != Token_SEMICOLON)
-                      return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                          }
+                        return false;
+                      }
                     yylex();
 
                     variable_declaration_data_ast *__node_31 = 0;
@@ -1152,7 +1344,11 @@ namespace java
                                                          modifiers, type, variable_declarator_sequence
                                                         ))
                       {
-                        return yy_expected_symbol(ast_node::Kind_variable_declaration_data, "variable_declaration_data");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_variable_declaration_data, "variable_declaration_data");
+                          }
+                        return false;
                       }
                     (*yynode)->constant_declaration = __node_31;
 
@@ -1170,7 +1366,13 @@ namespace java
         else if (yytoken == Token_SEMICOLON)
           {
             if (yytoken != Token_SEMICOLON)
-              return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                  }
+                return false;
+              }
             yylex();
 
           }
@@ -1198,18 +1400,34 @@ namespace java
     if (yytoken == Token_LBRACKET)
       {
         if (yytoken != Token_LBRACKET)
-          return yy_expected_token(yytoken, Token_LBRACKET, "[");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LBRACKET, "[");
+              }
+            return false;
+          }
         yylex();
 
         expression_ast *__node_32 = 0;
         if (!parse_expression(&__node_32))
           {
-            return yy_expected_symbol(ast_node::Kind_expression, "expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_expression, "expression");
+              }
+            return false;
           }
         (*yynode)->array_index_expression = __node_32;
 
         if (yytoken != Token_RBRACKET)
-          return yy_expected_token(yytoken, Token_RBRACKET, "]");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RBRACKET, "]");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -1236,14 +1454,22 @@ namespace java
             mandatory_declarator_brackets_ast *__node_33 = 0;
             if (!parse_mandatory_declarator_brackets(&__node_33))
               {
-                return yy_expected_symbol(ast_node::Kind_mandatory_declarator_brackets, "mandatory_declarator_brackets");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_mandatory_declarator_brackets, "mandatory_declarator_brackets");
+                  }
+                return false;
               }
             (*yynode)->mandatory_declarator_brackets = __node_33;
 
             variable_array_initializer_ast *__node_34 = 0;
             if (!parse_variable_array_initializer(&__node_34))
               {
-                return yy_expected_symbol(ast_node::Kind_variable_array_initializer, "variable_array_initializer");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_variable_array_initializer, "variable_array_initializer");
+                  }
+                return false;
               }
             (*yynode)->array_initializer = __node_34;
 
@@ -1251,18 +1477,34 @@ namespace java
         else if (yytoken == Token_LBRACKET)
           {
             if (yytoken != Token_LBRACKET)
-              return yy_expected_token(yytoken, Token_LBRACKET, "[");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LBRACKET, "[");
+                  }
+                return false;
+              }
             yylex();
 
             expression_ast *__node_35 = 0;
             if (!parse_expression(&__node_35))
               {
-                return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_expression, "expression");
+                  }
+                return false;
               }
             (*yynode)->index_expression_sequence = snoc((*yynode)->index_expression_sequence, __node_35, memory_pool);
 
             if (yytoken != Token_RBRACKET)
-              return yy_expected_token(yytoken, Token_RBRACKET, "]");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_RBRACKET, "]");
+                  }
+                return false;
+              }
             yylex();
 
             while (yytoken == Token_LBRACKET)
@@ -1272,25 +1514,45 @@ namespace java
                     break;
                   }
                 if (yytoken != Token_LBRACKET)
-                  return yy_expected_token(yytoken, Token_LBRACKET, "[");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_LBRACKET, "[");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 expression_ast *__node_36 = 0;
                 if (!parse_expression(&__node_36))
                   {
-                    return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_expression, "expression");
+                      }
+                    return false;
                   }
                 (*yynode)->index_expression_sequence = snoc((*yynode)->index_expression_sequence, __node_36, memory_pool);
 
                 if (yytoken != Token_RBRACKET)
-                  return yy_expected_token(yytoken, Token_RBRACKET, "]");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_RBRACKET, "]");
+                      }
+                    return false;
+                  }
                 yylex();
 
               }
             optional_declarator_brackets_ast *__node_37 = 0;
             if (!parse_optional_declarator_brackets(&__node_37))
               {
-                return yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+                  }
+                return false;
               }
             (*yynode)->optional_declarator_brackets = __node_37;
 
@@ -1321,23 +1583,43 @@ namespace java
         qualified_identifier_ast *__node_38 = 0;
         if (!parse_qualified_identifier(&__node_38))
           {
-            return yy_expected_symbol(ast_node::Kind_qualified_identifier, "qualified_identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_qualified_identifier, "qualified_identifier");
+              }
+            return false;
           }
         (*yynode)->qualified_identifier = __node_38;
 
         mandatory_declarator_brackets_ast *__node_39 = 0;
         if (!parse_mandatory_declarator_brackets(&__node_39))
           {
-            return yy_expected_symbol(ast_node::Kind_mandatory_declarator_brackets, "mandatory_declarator_brackets");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_mandatory_declarator_brackets, "mandatory_declarator_brackets");
+              }
+            return false;
           }
         (*yynode)->declarator_brackets = __node_39;
 
         if (yytoken != Token_DOT)
-          return yy_expected_token(yytoken, Token_DOT, ".");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_DOT, ".");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken != Token_CLASS)
-          return yy_expected_token(yytoken, Token_CLASS, "class");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_CLASS, "class");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -1360,26 +1642,46 @@ namespace java
     if (yytoken == Token_ASSERT)
       {
         if (yytoken != Token_ASSERT)
-          return yy_expected_token(yytoken, Token_ASSERT, "assert");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_ASSERT, "assert");
+              }
+            return false;
+          }
         yylex();
 
         expression_ast *__node_40 = 0;
         if (!parse_expression(&__node_40))
           {
-            return yy_expected_symbol(ast_node::Kind_expression, "expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_expression, "expression");
+              }
+            return false;
           }
         (*yynode)->condition = __node_40;
 
         if (yytoken == Token_COLON)
           {
             if (yytoken != Token_COLON)
-              return yy_expected_token(yytoken, Token_COLON, ":");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_COLON, ":");
+                  }
+                return false;
+              }
             yylex();
 
             expression_ast *__node_41 = 0;
             if (!parse_expression(&__node_41))
               {
-                return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_expression, "expression");
+                  }
+                return false;
               }
             (*yynode)->message = __node_41;
 
@@ -1391,7 +1693,13 @@ namespace java
             return false;
           }
         if (yytoken != Token_SEMICOLON)
-          return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -1443,20 +1751,34 @@ namespace java
         equality_expression_ast *__node_42 = 0;
         if (!parse_equality_expression(&__node_42))
           {
-            return yy_expected_symbol(ast_node::Kind_equality_expression, "equality_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_equality_expression, "equality_expression");
+              }
+            return false;
           }
         (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_42, memory_pool);
 
         while (yytoken == Token_BIT_AND)
           {
             if (yytoken != Token_BIT_AND)
-              return yy_expected_token(yytoken, Token_BIT_AND, "&");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_BIT_AND, "&");
+                  }
+                return false;
+              }
             yylex();
 
             equality_expression_ast *__node_43 = 0;
             if (!parse_equality_expression(&__node_43))
               {
-                return yy_expected_symbol(ast_node::Kind_equality_expression, "equality_expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_equality_expression, "equality_expression");
+                  }
+                return false;
               }
             (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_43, memory_pool);
 
@@ -1510,20 +1832,34 @@ namespace java
         bit_xor_expression_ast *__node_44 = 0;
         if (!parse_bit_xor_expression(&__node_44))
           {
-            return yy_expected_symbol(ast_node::Kind_bit_xor_expression, "bit_xor_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_bit_xor_expression, "bit_xor_expression");
+              }
+            return false;
           }
         (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_44, memory_pool);
 
         while (yytoken == Token_BIT_OR)
           {
             if (yytoken != Token_BIT_OR)
-              return yy_expected_token(yytoken, Token_BIT_OR, "|");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_BIT_OR, "|");
+                  }
+                return false;
+              }
             yylex();
 
             bit_xor_expression_ast *__node_45 = 0;
             if (!parse_bit_xor_expression(&__node_45))
               {
-                return yy_expected_symbol(ast_node::Kind_bit_xor_expression, "bit_xor_expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_bit_xor_expression, "bit_xor_expression");
+                  }
+                return false;
               }
             (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_45, memory_pool);
 
@@ -1577,20 +1913,34 @@ namespace java
         bit_and_expression_ast *__node_46 = 0;
         if (!parse_bit_and_expression(&__node_46))
           {
-            return yy_expected_symbol(ast_node::Kind_bit_and_expression, "bit_and_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_bit_and_expression, "bit_and_expression");
+              }
+            return false;
           }
         (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_46, memory_pool);
 
         while (yytoken == Token_BIT_XOR)
           {
             if (yytoken != Token_BIT_XOR)
-              return yy_expected_token(yytoken, Token_BIT_XOR, "^");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_BIT_XOR, "^");
+                  }
+                return false;
+              }
             yylex();
 
             bit_and_expression_ast *__node_47 = 0;
             if (!parse_bit_and_expression(&__node_47))
               {
-                return yy_expected_symbol(ast_node::Kind_bit_and_expression, "bit_and_expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_bit_and_expression, "bit_and_expression");
+                  }
+                return false;
               }
             (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_47, memory_pool);
 
@@ -1615,7 +1965,13 @@ namespace java
     if (yytoken == Token_LBRACE)
       {
         if (yytoken != Token_LBRACE)
-          return yy_expected_token(yytoken, Token_LBRACE, "{");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LBRACE, "{");
+              }
+            return false;
+          }
         yylex();
 
         while (yytoken == Token_ABSTRACT
@@ -1675,19 +2031,29 @@ namespace java
                || yytoken == Token_STRING_LITERAL
                || yytoken == Token_IDENTIFIER)
           {
-            std::size_t start_recovery_2 = token_stream->index() - 1;
+            std::size_t try_start_token_2 = token_stream->index() - 1;
+            parser_state *try_start_state_2 = copy_current_state();
+            {
+              block_statement_ast *__node_48 = 0;
+              if (!parse_block_statement(&__node_48))
+                {
+                  goto __catch_2;
+                }
+              (*yynode)->statement_sequence = snoc((*yynode)->statement_sequence, __node_48, memory_pool);
 
-            block_statement_ast *__node_48 = 0;
-            if (!parse_block_statement(&__node_48))
-              {
-                goto __recovery_2;
-              }
-            (*yynode)->statement_sequence = snoc((*yynode)->statement_sequence, __node_48, memory_pool);
+            }
+            if (try_start_state_2)
+              delete try_start_state_2;
 
-            if (false) // recovery section: the only way to enter is goto
+            if (false) // the only way to enter here is using goto
               {
-              __recovery_2:
-                if (start_recovery_2 == token_stream->index() - 1)
+              __catch_2:
+                if (try_start_state_2)
+                  {
+                    restore_state(try_start_state_2);
+                    delete try_start_state_2;
+                  }
+                if (try_start_token_2 == token_stream->index() - 1)
                   yylex();
 
                 while (yytoken != Token_EOF
@@ -1755,7 +2121,13 @@ namespace java
 
           }
         if (yytoken != Token_RBRACE)
-          return yy_expected_token(yytoken, Token_RBRACE, "}");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RBRACE, "}");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -1834,166 +2206,184 @@ namespace java
       {
         optional_modifiers_ast *modifiers = 0;
 
-        if ((yytoken == Token_ABSTRACT
-             || yytoken == Token_BOOLEAN
-             || yytoken == Token_BYTE
-             || yytoken == Token_CHAR
-             || yytoken == Token_DOUBLE
-             || yytoken == Token_FINAL
-             || yytoken == Token_FLOAT
-             || yytoken == Token_INT
-             || yytoken == Token_LONG
-             || yytoken == Token_NATIVE
-             || yytoken == Token_PRIVATE
-             || yytoken == Token_PROTECTED
-             || yytoken == Token_PUBLIC
-             || yytoken == Token_SHORT
-             || yytoken == Token_STATIC
-             || yytoken == Token_STRICTFP
-             || yytoken == Token_SYNCHRONIZED
-             || yytoken == Token_TRANSIENT
-             || yytoken == Token_VOID
-             || yytoken == Token_VOLATILE
-             || yytoken == Token_AT
-             || yytoken == Token_IDENTIFIER) && ( lookahead_is_parameter_declaration() == true ))
+        bool block_errors_3 = block_errors(true);
+        std::size_t try_start_token_3 = token_stream->index() - 1;
+        parser_state *try_start_state_3 = copy_current_state();
+        {
+          variable_declaration_statement_ast *__node_49 = 0;
+          if (!parse_variable_declaration_statement(&__node_49))
+            {
+              goto __catch_3;
+            }
+          (*yynode)->variable_declaration_statement = __node_49;
+
+        }
+        block_errors(block_errors_3);
+        if (try_start_state_3)
+          delete try_start_state_3;
+
+        if (false) // the only way to enter here is using goto
           {
-            variable_declaration_ast *__node_49 = 0;
-            if (!parse_variable_declaration(&__node_49))
+          __catch_3:
+            if (try_start_state_3)
               {
-                return yy_expected_symbol(ast_node::Kind_variable_declaration, "variable_declaration");
+                restore_state(try_start_state_3);
+                delete try_start_state_3;
               }
-            (*yynode)->variable_declaration = __node_49;
+            block_errors(block_errors_3);
+            rewind(try_start_token_3);
 
-            if (yytoken != Token_SEMICOLON)
-              return yy_expected_token(yytoken, Token_SEMICOLON, ";");
-            yylex();
-
-          }
-        else if ((yytoken == Token_ASSERT
-                  || yytoken == Token_BOOLEAN
-                  || yytoken == Token_BREAK
-                  || yytoken == Token_BYTE
-                  || yytoken == Token_CHAR
-                  || yytoken == Token_CONTINUE
-                  || yytoken == Token_DO
-                  || yytoken == Token_DOUBLE
-                  || yytoken == Token_FLOAT
-                  || yytoken == Token_FOR
-                  || yytoken == Token_IF
-                  || yytoken == Token_INT
-                  || yytoken == Token_LONG
-                  || yytoken == Token_NEW
-                  || yytoken == Token_RETURN
-                  || yytoken == Token_SHORT
-                  || yytoken == Token_SUPER
-                  || yytoken == Token_SWITCH
-                  || yytoken == Token_SYNCHRONIZED
-                  || yytoken == Token_THIS
-                  || yytoken == Token_THROW
-                  || yytoken == Token_TRY
-                  || yytoken == Token_VOID
-                  || yytoken == Token_WHILE
-                  || yytoken == Token_LPAREN
-                  || yytoken == Token_LBRACE
-                  || yytoken == Token_SEMICOLON
-                  || yytoken == Token_LESS_THAN
-                  || yytoken == Token_BANG
-                  || yytoken == Token_TILDE
-                  || yytoken == Token_INCREMENT
-                  || yytoken == Token_DECREMENT
-                  || yytoken == Token_PLUS
-                  || yytoken == Token_MINUS
-                  || yytoken == Token_TRUE
-                  || yytoken == Token_FALSE
-                  || yytoken == Token_NULL
-                  || yytoken == Token_INTEGER_LITERAL
-                  || yytoken == Token_FLOATING_POINT_LITERAL
-                  || yytoken == Token_CHARACTER_LITERAL
-                  || yytoken == Token_STRING_LITERAL
-                  || yytoken == Token_IDENTIFIER) && ( (yytoken != Token_SYNCHRONIZED) ||
-                                                       (yytoken == Token_SYNCHRONIZED && LA(2).kind == Token_LPAREN)
-                                                     ))
-          {
-            embedded_statement_ast *__node_50 = 0;
-            if (!parse_embedded_statement(&__node_50))
-              {
-                return yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
-              }
-            (*yynode)->statement = __node_50;
-
-          }
-        else if (yytoken == Token_ABSTRACT
-                 || yytoken == Token_CLASS
-                 || yytoken == Token_ENUM
-                 || yytoken == Token_FINAL
-                 || yytoken == Token_INTERFACE
-                 || yytoken == Token_NATIVE
-                 || yytoken == Token_PRIVATE
-                 || yytoken == Token_PROTECTED
-                 || yytoken == Token_PUBLIC
-                 || yytoken == Token_STATIC
-                 || yytoken == Token_STRICTFP
+            if ((yytoken == Token_ASSERT
+                 || yytoken == Token_BOOLEAN
+                 || yytoken == Token_BREAK
+                 || yytoken == Token_BYTE
+                 || yytoken == Token_CHAR
+                 || yytoken == Token_CONTINUE
+                 || yytoken == Token_DO
+                 || yytoken == Token_DOUBLE
+                 || yytoken == Token_FLOAT
+                 || yytoken == Token_FOR
+                 || yytoken == Token_IF
+                 || yytoken == Token_INT
+                 || yytoken == Token_LONG
+                 || yytoken == Token_NEW
+                 || yytoken == Token_RETURN
+                 || yytoken == Token_SHORT
+                 || yytoken == Token_SUPER
+                 || yytoken == Token_SWITCH
                  || yytoken == Token_SYNCHRONIZED
-                 || yytoken == Token_TRANSIENT
-                 || yytoken == Token_VOLATILE
-                 || yytoken == Token_AT)
-          {
-            optional_modifiers_ast *__node_51 = 0;
-            if (!parse_optional_modifiers(&__node_51))
+                 || yytoken == Token_THIS
+                 || yytoken == Token_THROW
+                 || yytoken == Token_TRY
+                 || yytoken == Token_VOID
+                 || yytoken == Token_WHILE
+                 || yytoken == Token_LPAREN
+                 || yytoken == Token_LBRACE
+                 || yytoken == Token_SEMICOLON
+                 || yytoken == Token_LESS_THAN
+                 || yytoken == Token_BANG
+                 || yytoken == Token_TILDE
+                 || yytoken == Token_INCREMENT
+                 || yytoken == Token_DECREMENT
+                 || yytoken == Token_PLUS
+                 || yytoken == Token_MINUS
+                 || yytoken == Token_TRUE
+                 || yytoken == Token_FALSE
+                 || yytoken == Token_NULL
+                 || yytoken == Token_INTEGER_LITERAL
+                 || yytoken == Token_FLOATING_POINT_LITERAL
+                 || yytoken == Token_CHARACTER_LITERAL
+                 || yytoken == Token_STRING_LITERAL
+                 || yytoken == Token_IDENTIFIER) && ( (yytoken != Token_SYNCHRONIZED) ||
+                                                      (yytoken == Token_SYNCHRONIZED && LA(2).kind == Token_LPAREN)
+                                                    ))
               {
-                return yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
-              }
-            modifiers = __node_51;
-
-            if (yytoken == Token_CLASS)
-              {
-                class_declaration_ast *__node_52 = 0;
-                if (!parse_class_declaration(&__node_52, modifiers))
+                embedded_statement_ast *__node_50 = 0;
+                if (!parse_embedded_statement(&__node_50))
                   {
-                    return yy_expected_symbol(ast_node::Kind_class_declaration, "class_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
+                      }
+                    return false;
                   }
-                (*yynode)->class_declaration = __node_52;
-
-              }
-            else if (yytoken == Token_ENUM)
-              {
-                enum_declaration_ast *__node_53 = 0;
-                if (!parse_enum_declaration(&__node_53, modifiers))
-                  {
-                    return yy_expected_symbol(ast_node::Kind_enum_declaration, "enum_declaration");
-                  }
-                (*yynode)->enum_declaration = __node_53;
-
-              }
-            else if (yytoken == Token_INTERFACE)
-              {
-                interface_declaration_ast *__node_54 = 0;
-                if (!parse_interface_declaration(&__node_54, modifiers))
-                  {
-                    return yy_expected_symbol(ast_node::Kind_interface_declaration, "interface_declaration");
-                  }
-                (*yynode)->interface_declaration = __node_54;
+                (*yynode)->statement = __node_50;
 
               }
-            else if (yytoken == Token_AT)
+            else if (yytoken == Token_ABSTRACT
+                     || yytoken == Token_CLASS
+                     || yytoken == Token_ENUM
+                     || yytoken == Token_FINAL
+                     || yytoken == Token_INTERFACE
+                     || yytoken == Token_NATIVE
+                     || yytoken == Token_PRIVATE
+                     || yytoken == Token_PROTECTED
+                     || yytoken == Token_PUBLIC
+                     || yytoken == Token_STATIC
+                     || yytoken == Token_STRICTFP
+                     || yytoken == Token_SYNCHRONIZED
+                     || yytoken == Token_TRANSIENT
+                     || yytoken == Token_VOLATILE
+                     || yytoken == Token_AT)
               {
-                annotation_type_declaration_ast *__node_55 = 0;
-                if (!parse_annotation_type_declaration(&__node_55, modifiers))
+                optional_modifiers_ast *__node_51 = 0;
+                if (!parse_optional_modifiers(&__node_51))
                   {
-                    return yy_expected_symbol(ast_node::Kind_annotation_type_declaration, "annotation_type_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+                      }
+                    return false;
                   }
-                (*yynode)->annotation_type_declaration = __node_55;
+                modifiers = __node_51;
 
+                if (yytoken == Token_CLASS)
+                  {
+                    class_declaration_ast *__node_52 = 0;
+                    if (!parse_class_declaration(&__node_52, modifiers))
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_class_declaration, "class_declaration");
+                          }
+                        return false;
+                      }
+                    (*yynode)->class_declaration = __node_52;
+
+                  }
+                else if (yytoken == Token_ENUM)
+                  {
+                    enum_declaration_ast *__node_53 = 0;
+                    if (!parse_enum_declaration(&__node_53, modifiers))
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_enum_declaration, "enum_declaration");
+                          }
+                        return false;
+                      }
+                    (*yynode)->enum_declaration = __node_53;
+
+                  }
+                else if (yytoken == Token_INTERFACE)
+                  {
+                    interface_declaration_ast *__node_54 = 0;
+                    if (!parse_interface_declaration(&__node_54, modifiers))
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_interface_declaration, "interface_declaration");
+                          }
+                        return false;
+                      }
+                    (*yynode)->interface_declaration = __node_54;
+
+                  }
+                else if (yytoken == Token_AT)
+                  {
+                    annotation_type_declaration_ast *__node_55 = 0;
+                    if (!parse_annotation_type_declaration(&__node_55, modifiers))
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_annotation_type_declaration, "annotation_type_declaration");
+                          }
+                        return false;
+                      }
+                    (*yynode)->annotation_type_declaration = __node_55;
+
+                  }
+                else
+                  {
+                    return false;
+                  }
               }
             else
               {
                 return false;
               }
           }
-        else
-          {
-            return false;
-          }
+
       }
     else
       {
@@ -2014,7 +2404,13 @@ namespace java
     if (yytoken == Token_BREAK)
       {
         if (yytoken != Token_BREAK)
-          return yy_expected_token(yytoken, Token_BREAK, "break");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_BREAK, "break");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken == Token_IDENTIFIER)
@@ -2022,7 +2418,11 @@ namespace java
             identifier_ast *__node_56 = 0;
             if (!parse_identifier(&__node_56))
               {
-                return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                  }
+                return false;
               }
             (*yynode)->label = __node_56;
 
@@ -2034,7 +2434,13 @@ namespace java
             return false;
           }
         if (yytoken != Token_SEMICOLON)
-          return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -2067,7 +2473,13 @@ namespace java
         if (yytoken == Token_VOID)
           {
             if (yytoken != Token_VOID)
-              return yy_expected_token(yytoken, Token_VOID, "void");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_VOID, "void");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->type = builtin_type::type_void;
@@ -2075,7 +2487,13 @@ namespace java
         else if (yytoken == Token_BOOLEAN)
           {
             if (yytoken != Token_BOOLEAN)
-              return yy_expected_token(yytoken, Token_BOOLEAN, "boolean");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_BOOLEAN, "boolean");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->type = builtin_type::type_boolean;
@@ -2083,7 +2501,13 @@ namespace java
         else if (yytoken == Token_BYTE)
           {
             if (yytoken != Token_BYTE)
-              return yy_expected_token(yytoken, Token_BYTE, "byte");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_BYTE, "byte");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->type = builtin_type::type_byte;
@@ -2091,7 +2515,13 @@ namespace java
         else if (yytoken == Token_CHAR)
           {
             if (yytoken != Token_CHAR)
-              return yy_expected_token(yytoken, Token_CHAR, "char");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_CHAR, "char");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->type = builtin_type::type_char;
@@ -2099,7 +2529,13 @@ namespace java
         else if (yytoken == Token_SHORT)
           {
             if (yytoken != Token_SHORT)
-              return yy_expected_token(yytoken, Token_SHORT, "short");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_SHORT, "short");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->type = builtin_type::type_short;
@@ -2107,7 +2543,13 @@ namespace java
         else if (yytoken == Token_INT)
           {
             if (yytoken != Token_INT)
-              return yy_expected_token(yytoken, Token_INT, "int");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_INT, "int");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->type = builtin_type::type_int;
@@ -2115,7 +2557,13 @@ namespace java
         else if (yytoken == Token_FLOAT)
           {
             if (yytoken != Token_FLOAT)
-              return yy_expected_token(yytoken, Token_FLOAT, "float");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_FLOAT, "float");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->type = builtin_type::type_float;
@@ -2123,7 +2571,13 @@ namespace java
         else if (yytoken == Token_LONG)
           {
             if (yytoken != Token_LONG)
-              return yy_expected_token(yytoken, Token_LONG, "long");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LONG, "long");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->type = builtin_type::type_long;
@@ -2131,7 +2585,13 @@ namespace java
         else if (yytoken == Token_DOUBLE)
           {
             if (yytoken != Token_DOUBLE)
-              return yy_expected_token(yytoken, Token_DOUBLE, "double");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_DOUBLE, "double");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->type = builtin_type::type_double;
@@ -2170,16 +2630,32 @@ namespace java
         optional_array_builtin_type_ast *__node_57 = 0;
         if (!parse_optional_array_builtin_type(&__node_57))
           {
-            return yy_expected_symbol(ast_node::Kind_optional_array_builtin_type, "optional_array_builtin_type");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_optional_array_builtin_type, "optional_array_builtin_type");
+              }
+            return false;
           }
         (*yynode)->builtin_type = __node_57;
 
         if (yytoken != Token_DOT)
-          return yy_expected_token(yytoken, Token_DOT, ".");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_DOT, ".");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken != Token_CLASS)
-          return yy_expected_token(yytoken, Token_CLASS, "class");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_CLASS, "class");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -2202,7 +2678,13 @@ namespace java
     if (yytoken == Token_LPAREN)
       {
         if (yytoken != Token_LPAREN)
-          return yy_expected_token(yytoken, Token_LPAREN, "(");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LPAREN, "(");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken == Token_BOOLEAN
@@ -2218,18 +2700,32 @@ namespace java
             optional_array_builtin_type_ast *__node_58 = 0;
             if (!parse_optional_array_builtin_type(&__node_58))
               {
-                return yy_expected_symbol(ast_node::Kind_optional_array_builtin_type, "optional_array_builtin_type");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_optional_array_builtin_type, "optional_array_builtin_type");
+                  }
+                return false;
               }
             (*yynode)->builtin_type = __node_58;
 
             if (yytoken != Token_RPAREN)
-              return yy_expected_token(yytoken, Token_RPAREN, ")");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_RPAREN, ")");
+                  }
+                return false;
+              }
             yylex();
 
             unary_expression_ast *__node_59 = 0;
             if (!parse_unary_expression(&__node_59))
               {
-                return yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                  }
+                return false;
               }
             (*yynode)->builtin_casted_expression = __node_59;
 
@@ -2239,18 +2735,32 @@ namespace java
             class_type_ast *__node_60 = 0;
             if (!parse_class_type(&__node_60))
               {
-                return yy_expected_symbol(ast_node::Kind_class_type, "class_type");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_class_type, "class_type");
+                  }
+                return false;
               }
             (*yynode)->class_type = __node_60;
 
             if (yytoken != Token_RPAREN)
-              return yy_expected_token(yytoken, Token_RPAREN, ")");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_RPAREN, ")");
+                  }
+                return false;
+              }
             yylex();
 
             unary_expression_not_plusminus_ast *__node_61 = 0;
             if (!parse_unary_expression_not_plusminus(&__node_61))
               {
-                return yy_expected_symbol(ast_node::Kind_unary_expression_not_plusminus, "unary_expression_not_plusminus");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_unary_expression_not_plusminus, "unary_expression_not_plusminus");
+                  }
+                return false;
               }
             (*yynode)->class_casted_expression = __node_61;
 
@@ -2281,35 +2791,65 @@ namespace java
         parameter_declaration_ast *exception_parameter = 0;
 
         if (yytoken != Token_CATCH)
-          return yy_expected_token(yytoken, Token_CATCH, "catch");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_CATCH, "catch");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken != Token_LPAREN)
-          return yy_expected_token(yytoken, Token_LPAREN, "(");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LPAREN, "(");
+              }
+            return false;
+          }
         yylex();
 
         parameter_declaration_ast *__node_62 = 0;
         if (!parse_parameter_declaration(&__node_62))
           {
-            return yy_expected_symbol(ast_node::Kind_parameter_declaration, "parameter_declaration");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_parameter_declaration, "parameter_declaration");
+              }
+            return false;
           }
         exception_parameter = __node_62;
 
         if (yytoken != Token_RPAREN)
-          return yy_expected_token(yytoken, Token_RPAREN, ")");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RPAREN, ")");
+              }
+            return false;
+          }
         yylex();
 
         variable_declaration_split_data_ast *__node_63 = 0;
         if (!parse_variable_declaration_split_data(&__node_63, exception_parameter, 0))
           {
-            return yy_expected_symbol(ast_node::Kind_variable_declaration_split_data, "variable_declaration_split_data");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_variable_declaration_split_data, "variable_declaration_split_data");
+              }
+            return false;
           }
         (*yynode)->exception_declaration = __node_63;
 
         block_ast *__node_64 = 0;
         if (!parse_block(&__node_64))
           {
-            return yy_expected_symbol(ast_node::Kind_block, "block");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_block, "block");
+              }
+            return false;
           }
         (*yynode)->body = __node_64;
 
@@ -2393,7 +2933,13 @@ namespace java
     if (yytoken == Token_LBRACE)
       {
         if (yytoken != Token_LBRACE)
-          return yy_expected_token(yytoken, Token_LBRACE, "{");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LBRACE, "{");
+              }
+            return false;
+          }
         yylex();
 
         while (yytoken == Token_ABSTRACT
@@ -2425,19 +2971,29 @@ namespace java
                || yytoken == Token_LESS_THAN
                || yytoken == Token_IDENTIFIER)
           {
-            std::size_t start_recovery_3 = token_stream->index() - 1;
+            std::size_t try_start_token_4 = token_stream->index() - 1;
+            parser_state *try_start_state_4 = copy_current_state();
+            {
+              class_field_ast *__node_65 = 0;
+              if (!parse_class_field(&__node_65))
+                {
+                  goto __catch_4;
+                }
+              (*yynode)->declaration_sequence = snoc((*yynode)->declaration_sequence, __node_65, memory_pool);
 
-            class_field_ast *__node_65 = 0;
-            if (!parse_class_field(&__node_65))
-              {
-                goto __recovery_3;
-              }
-            (*yynode)->declaration_sequence = snoc((*yynode)->declaration_sequence, __node_65, memory_pool);
+            }
+            if (try_start_state_4)
+              delete try_start_state_4;
 
-            if (false) // recovery section: the only way to enter is goto
+            if (false) // the only way to enter here is using goto
               {
-              __recovery_3:
-                if (start_recovery_3 == token_stream->index() - 1)
+              __catch_4:
+                if (try_start_state_4)
+                  {
+                    restore_state(try_start_state_4);
+                    delete try_start_state_4;
+                  }
+                if (try_start_token_4 == token_stream->index() - 1)
                   yylex();
 
                 while (yytoken != Token_EOF
@@ -2477,7 +3033,13 @@ namespace java
 
           }
         if (yytoken != Token_RBRACE)
-          return yy_expected_token(yytoken, Token_RBRACE, "}");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RBRACE, "}");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -2504,13 +3066,23 @@ namespace java
     if (yytoken == Token_CLASS)
       {
         if (yytoken != Token_CLASS)
-          return yy_expected_token(yytoken, Token_CLASS, "class");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_CLASS, "class");
+              }
+            return false;
+          }
         yylex();
 
         identifier_ast *__node_66 = 0;
         if (!parse_identifier(&__node_66))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->class_name = __node_66;
 
@@ -2519,7 +3091,11 @@ namespace java
             type_parameters_ast *__node_67 = 0;
             if (!parse_type_parameters(&__node_67))
               {
-                return yy_expected_symbol(ast_node::Kind_type_parameters, "type_parameters");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_type_parameters, "type_parameters");
+                  }
+                return false;
               }
             (*yynode)->type_parameters = __node_67;
 
@@ -2535,7 +3111,11 @@ namespace java
             class_extends_clause_ast *__node_68 = 0;
             if (!parse_class_extends_clause(&__node_68))
               {
-                return yy_expected_symbol(ast_node::Kind_class_extends_clause, "class_extends_clause");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_class_extends_clause, "class_extends_clause");
+                  }
+                return false;
               }
             (*yynode)->extends = __node_68;
 
@@ -2551,7 +3131,11 @@ namespace java
             implements_clause_ast *__node_69 = 0;
             if (!parse_implements_clause(&__node_69))
               {
-                return yy_expected_symbol(ast_node::Kind_implements_clause, "implements_clause");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_implements_clause, "implements_clause");
+                  }
+                return false;
               }
             (*yynode)->implements = __node_69;
 
@@ -2565,7 +3149,11 @@ namespace java
         class_body_ast *__node_70 = 0;
         if (!parse_class_body(&__node_70))
           {
-            return yy_expected_symbol(ast_node::Kind_class_body, "class_body");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_class_body, "class_body");
+              }
+            return false;
           }
         (*yynode)->body = __node_70;
 
@@ -2589,13 +3177,23 @@ namespace java
     if (yytoken == Token_EXTENDS)
       {
         if (yytoken != Token_EXTENDS)
-          return yy_expected_token(yytoken, Token_EXTENDS, "extends");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_EXTENDS, "extends");
+              }
+            return false;
+          }
         yylex();
 
         class_or_interface_type_name_ast *__node_71 = 0;
         if (!parse_class_or_interface_type_name(&__node_71))
           {
-            return yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+              }
+            return false;
           }
         (*yynode)->type = __node_71;
 
@@ -2683,7 +3281,11 @@ namespace java
             optional_modifiers_ast *__node_72 = 0;
             if (!parse_optional_modifiers(&__node_72))
               {
-                return yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+                  }
+                return false;
               }
             modifiers = __node_72;
 
@@ -2692,7 +3294,11 @@ namespace java
                 class_declaration_ast *__node_73 = 0;
                 if (!parse_class_declaration(&__node_73, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_class_declaration, "class_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_class_declaration, "class_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->class_declaration = __node_73;
 
@@ -2702,7 +3308,11 @@ namespace java
                 enum_declaration_ast *__node_74 = 0;
                 if (!parse_enum_declaration(&__node_74, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_enum_declaration, "enum_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_enum_declaration, "enum_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->enum_declaration = __node_74;
 
@@ -2712,7 +3322,11 @@ namespace java
                 interface_declaration_ast *__node_75 = 0;
                 if (!parse_interface_declaration(&__node_75, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_interface_declaration, "interface_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_interface_declaration, "interface_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->interface_declaration = __node_75;
 
@@ -2722,7 +3336,11 @@ namespace java
                 annotation_type_declaration_ast *__node_76 = 0;
                 if (!parse_annotation_type_declaration(&__node_76, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_annotation_type_declaration, "annotation_type_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_annotation_type_declaration, "annotation_type_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->annotation_type_declaration = __node_76;
 
@@ -2744,7 +3362,11 @@ namespace java
                     type_parameters_ast *__node_77 = 0;
                     if (!parse_type_parameters(&__node_77))
                       {
-                        return yy_expected_symbol(ast_node::Kind_type_parameters, "type_parameters");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_type_parameters, "type_parameters");
+                          }
+                        return false;
                       }
                     type_parameters = __node_77;
 
@@ -2762,7 +3384,11 @@ namespace java
                                                        modifiers, type_parameters
                                                       ))
                       {
-                        return yy_expected_symbol(ast_node::Kind_constructor_declaration, "constructor_declaration");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_constructor_declaration, "constructor_declaration");
+                          }
+                        return false;
                       }
                     (*yynode)->constructor_declaration = __node_78;
 
@@ -2781,7 +3407,11 @@ namespace java
                     type_ast *__node_79 = 0;
                     if (!parse_type(&__node_79))
                       {
-                        return yy_expected_symbol(ast_node::Kind_type, "type");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_type, "type");
+                          }
+                        return false;
                       }
                     type = __node_79;
 
@@ -2792,7 +3422,11 @@ namespace java
                                                       modifiers, type_parameters, type
                                                      ))
                           {
-                            return yy_expected_symbol(ast_node::Kind_method_declaration, "method_declaration");
+                            if (!yy_block_errors)
+                              {
+                                yy_expected_symbol(ast_node::Kind_method_declaration, "method_declaration");
+                              }
+                            return false;
                           }
                         (*yynode)->method_declaration = __node_80;
 
@@ -2802,26 +3436,46 @@ namespace java
                         variable_declarator_ast *__node_81 = 0;
                         if (!parse_variable_declarator(&__node_81))
                           {
-                            return yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                            if (!yy_block_errors)
+                              {
+                                yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                              }
+                            return false;
                           }
                         variable_declarator_sequence = snoc(variable_declarator_sequence, __node_81, memory_pool);
 
                         while (yytoken == Token_COMMA)
                           {
                             if (yytoken != Token_COMMA)
-                              return yy_expected_token(yytoken, Token_COMMA, ",");
+                              {
+                                if (!yy_block_errors)
+                                  {
+                                    yy_expected_token(yytoken, Token_COMMA, ",");
+                                  }
+                                return false;
+                              }
                             yylex();
 
                             variable_declarator_ast *__node_82 = 0;
                             if (!parse_variable_declarator(&__node_82))
                               {
-                                return yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                                if (!yy_block_errors)
+                                  {
+                                    yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                                  }
+                                return false;
                               }
                             variable_declarator_sequence = snoc(variable_declarator_sequence, __node_82, memory_pool);
 
                           }
                         if (yytoken != Token_SEMICOLON)
-                          return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                          {
+                            if (!yy_block_errors)
+                              {
+                                yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                              }
+                            return false;
+                          }
                         yylex();
 
                         variable_declaration_data_ast *__node_83 = 0;
@@ -2829,7 +3483,11 @@ namespace java
                                                              modifiers, type, variable_declarator_sequence
                                                             ))
                           {
-                            return yy_expected_symbol(ast_node::Kind_variable_declaration_data, "variable_declaration_data");
+                            if (!yy_block_errors)
+                              {
+                                yy_expected_symbol(ast_node::Kind_variable_declaration_data, "variable_declaration_data");
+                              }
+                            return false;
                           }
                         (*yynode)->variable_declaration = __node_83;
 
@@ -2839,7 +3497,13 @@ namespace java
                         report_problem( error,
                                         "Expected method declaration after type parameter list" );
                         if (yytoken != Token_SEMICOLON)
-                          return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                          {
+                            if (!yy_block_errors)
+                              {
+                                yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                              }
+                            return false;
+                          }
                         yylex();
 
                       }
@@ -2863,7 +3527,11 @@ namespace java
             block_ast *__node_84 = 0;
             if (!parse_block(&__node_84))
               {
-                return yy_expected_symbol(ast_node::Kind_block, "block");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_block, "block");
+                  }
+                return false;
               }
             (*yynode)->instance_initializer_block = __node_84;
 
@@ -2871,13 +3539,23 @@ namespace java
         else if (yytoken == Token_STATIC)
           {
             if (yytoken != Token_STATIC)
-              return yy_expected_token(yytoken, Token_STATIC, "static");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_STATIC, "static");
+                  }
+                return false;
+              }
             yylex();
 
             block_ast *__node_85 = 0;
             if (!parse_block(&__node_85))
               {
-                return yy_expected_symbol(ast_node::Kind_block, "block");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_block, "block");
+                  }
+                return false;
               }
             (*yynode)->static_initializer_block = __node_85;
 
@@ -2885,7 +3563,13 @@ namespace java
         else if (yytoken == Token_SEMICOLON)
           {
             if (yytoken != Token_SEMICOLON)
-              return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                  }
+                return false;
+              }
             yylex();
 
           }
@@ -2915,20 +3599,34 @@ namespace java
         class_or_interface_type_name_part_ast *__node_86 = 0;
         if (!parse_class_or_interface_type_name_part(&__node_86))
           {
-            return yy_expected_symbol(ast_node::Kind_class_or_interface_type_name_part, "class_or_interface_type_name_part");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_class_or_interface_type_name_part, "class_or_interface_type_name_part");
+              }
+            return false;
           }
         (*yynode)->part_sequence = snoc((*yynode)->part_sequence, __node_86, memory_pool);
 
         while (yytoken == Token_DOT)
           {
             if (yytoken != Token_DOT)
-              return yy_expected_token(yytoken, Token_DOT, ".");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_DOT, ".");
+                  }
+                return false;
+              }
             yylex();
 
             class_or_interface_type_name_part_ast *__node_87 = 0;
             if (!parse_class_or_interface_type_name_part(&__node_87))
               {
-                return yy_expected_symbol(ast_node::Kind_class_or_interface_type_name_part, "class_or_interface_type_name_part");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_class_or_interface_type_name_part, "class_or_interface_type_name_part");
+                  }
+                return false;
               }
             (*yynode)->part_sequence = snoc((*yynode)->part_sequence, __node_87, memory_pool);
 
@@ -2955,7 +3653,11 @@ namespace java
         identifier_ast *__node_88 = 0;
         if (!parse_identifier(&__node_88))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->identifier = __node_88;
 
@@ -2964,7 +3666,11 @@ namespace java
             type_arguments_ast *__node_89 = 0;
             if (!parse_type_arguments(&__node_89))
               {
-                return yy_expected_symbol(ast_node::Kind_type_arguments, "type_arguments");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_type_arguments, "type_arguments");
+                  }
+                return false;
               }
             (*yynode)->type_arguments = __node_89;
 
@@ -2997,14 +3703,22 @@ namespace java
         class_or_interface_type_name_ast *__node_90 = 0;
         if (!parse_class_or_interface_type_name(&__node_90))
           {
-            return yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+              }
+            return false;
           }
         (*yynode)->type = __node_90;
 
         optional_declarator_brackets_ast *__node_91 = 0;
         if (!parse_optional_declarator_brackets(&__node_91))
           {
-            return yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+              }
+            return false;
           }
         (*yynode)->declarator_brackets = __node_91;
 
@@ -3044,71 +3758,61 @@ namespace java
         || yytoken == Token_SEMICOLON
         || yytoken == Token_AT || yytoken == Token_EOF)
       {
-        ltCounter = 0;
-        if ((yytoken == Token_PACKAGE
-             || yytoken == Token_AT) && ( lookahead_is_package_declaration() == true ))
+        _M_state.ltCounter = 0;
+        bool block_errors_5 = block_errors(true);
+        std::size_t try_start_token_5 = token_stream->index() - 1;
+        parser_state *try_start_state_5 = copy_current_state();
+        {
+          package_declaration_ast *__node_92 = 0;
+          if (!parse_package_declaration(&__node_92))
+            {
+              goto __catch_5;
+            }
+          (*yynode)->package_declaration = __node_92;
+
+        }
+        block_errors(block_errors_5);
+        if (try_start_state_5)
+          delete try_start_state_5;
+
+        if (false) // the only way to enter here is using goto
           {
-            std::size_t start_recovery_4 = token_stream->index() - 1;
-
-            package_declaration_ast *__node_92 = 0;
-            if (!parse_package_declaration(&__node_92))
+          __catch_5:
+            if (try_start_state_5)
               {
-                goto __recovery_4;
+                restore_state(try_start_state_5);
+                delete try_start_state_5;
               }
-            (*yynode)->package_declaration = __node_92;
-
-            if (false) // recovery section: the only way to enter is goto
-              {
-              __recovery_4:
-                if (start_recovery_4 == token_stream->index() - 1)
-                  yylex();
-
-                while (yytoken != Token_EOF
-                       && yytoken != Token_ABSTRACT
-                       && yytoken != Token_CLASS
-                       && yytoken != Token_ENUM
-                       && yytoken != Token_FINAL
-                       && yytoken != Token_IMPORT
-                       && yytoken != Token_INTERFACE
-                       && yytoken != Token_NATIVE
-                       && yytoken != Token_PRIVATE
-                       && yytoken != Token_PROTECTED
-                       && yytoken != Token_PUBLIC
-                       && yytoken != Token_STATIC
-                       && yytoken != Token_STRICTFP
-                       && yytoken != Token_SYNCHRONIZED
-                       && yytoken != Token_TRANSIENT
-                       && yytoken != Token_VOLATILE
-                       && yytoken != Token_SEMICOLON
-                       && yytoken != Token_AT
-                       && yytoken != Token_EOF)
-                  {
-                    yylex();
-                  }
-              }
+            block_errors(block_errors_5);
+            rewind(try_start_token_5);
 
           }
-        else if (true /*epsilon*/)
-        {}
-        else
-          {
-            return false;
-          }
+
         while (yytoken == Token_IMPORT)
           {
-            std::size_t start_recovery_5 = token_stream->index() - 1;
+            std::size_t try_start_token_6 = token_stream->index() - 1;
+            parser_state *try_start_state_6 = copy_current_state();
+            {
+              import_declaration_ast *__node_93 = 0;
+              if (!parse_import_declaration(&__node_93))
+                {
+                  goto __catch_6;
+                }
+              (*yynode)->import_declaration_sequence = snoc((*yynode)->import_declaration_sequence, __node_93, memory_pool);
 
-            import_declaration_ast *__node_93 = 0;
-            if (!parse_import_declaration(&__node_93))
-              {
-                goto __recovery_5;
-              }
-            (*yynode)->import_declaration_sequence = snoc((*yynode)->import_declaration_sequence, __node_93, memory_pool);
+            }
+            if (try_start_state_6)
+              delete try_start_state_6;
 
-            if (false) // recovery section: the only way to enter is goto
+            if (false) // the only way to enter here is using goto
               {
-              __recovery_5:
-                if (start_recovery_5 == token_stream->index() - 1)
+              __catch_6:
+                if (try_start_state_6)
+                  {
+                    restore_state(try_start_state_6);
+                    delete try_start_state_6;
+                  }
+                if (try_start_token_6 == token_stream->index() - 1)
                   yylex();
 
                 while (yytoken != Token_EOF
@@ -3153,19 +3857,29 @@ namespace java
                || yytoken == Token_SEMICOLON
                || yytoken == Token_AT)
           {
-            std::size_t start_recovery_6 = token_stream->index() - 1;
+            std::size_t try_start_token_7 = token_stream->index() - 1;
+            parser_state *try_start_state_7 = copy_current_state();
+            {
+              type_declaration_ast *__node_94 = 0;
+              if (!parse_type_declaration(&__node_94))
+                {
+                  goto __catch_7;
+                }
+              (*yynode)->type_declaration_sequence = snoc((*yynode)->type_declaration_sequence, __node_94, memory_pool);
 
-            type_declaration_ast *__node_94 = 0;
-            if (!parse_type_declaration(&__node_94))
-              {
-                goto __recovery_6;
-              }
-            (*yynode)->type_declaration_sequence = snoc((*yynode)->type_declaration_sequence, __node_94, memory_pool);
+            }
+            if (try_start_state_7)
+              delete try_start_state_7;
 
-            if (false) // recovery section: the only way to enter is goto
+            if (false) // the only way to enter here is using goto
               {
-              __recovery_6:
-                if (start_recovery_6 == token_stream->index() - 1)
+              __catch_7:
+                if (try_start_state_7)
+                  {
+                    restore_state(try_start_state_7);
+                    delete try_start_state_7;
+                  }
+                if (try_start_token_7 == token_stream->index() - 1)
                   yylex();
 
                 while (yytoken != Token_EOF
@@ -3245,31 +3959,55 @@ namespace java
         logical_or_expression_ast *__node_95 = 0;
         if (!parse_logical_or_expression(&__node_95))
           {
-            return yy_expected_symbol(ast_node::Kind_logical_or_expression, "logical_or_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_logical_or_expression, "logical_or_expression");
+              }
+            return false;
           }
         (*yynode)->logical_or_expression = __node_95;
 
         if (yytoken == Token_QUESTION)
           {
             if (yytoken != Token_QUESTION)
-              return yy_expected_token(yytoken, Token_QUESTION, "?");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_QUESTION, "?");
+                  }
+                return false;
+              }
             yylex();
 
             expression_ast *__node_96 = 0;
             if (!parse_expression(&__node_96))
               {
-                return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_expression, "expression");
+                  }
+                return false;
               }
             (*yynode)->if_expression = __node_96;
 
             if (yytoken != Token_COLON)
-              return yy_expected_token(yytoken, Token_COLON, ":");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_COLON, ":");
+                  }
+                return false;
+              }
             yylex();
 
             conditional_expression_ast *__node_97 = 0;
             if (!parse_conditional_expression(&__node_97))
               {
-                return yy_expected_symbol(ast_node::Kind_conditional_expression, "conditional_expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_conditional_expression, "conditional_expression");
+                  }
+                return false;
               }
             (*yynode)->else_expression = __node_97;
 
@@ -3310,23 +4048,43 @@ namespace java
         identifier_ast *__node_98 = 0;
         if (!parse_identifier(&__node_98))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->class_name = __node_98;
 
         if (yytoken != Token_LPAREN)
-          return yy_expected_token(yytoken, Token_LPAREN, "(");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LPAREN, "(");
+              }
+            return false;
+          }
         yylex();
 
         optional_parameter_declaration_list_ast *__node_99 = 0;
         if (!parse_optional_parameter_declaration_list(&__node_99))
           {
-            return yy_expected_symbol(ast_node::Kind_optional_parameter_declaration_list, "optional_parameter_declaration_list");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_optional_parameter_declaration_list, "optional_parameter_declaration_list");
+              }
+            return false;
           }
         (*yynode)->parameters = __node_99;
 
         if (yytoken != Token_RPAREN)
-          return yy_expected_token(yytoken, Token_RPAREN, ")");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RPAREN, ")");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken == Token_THROWS)
@@ -3334,7 +4092,11 @@ namespace java
             throws_clause_ast *__node_100 = 0;
             if (!parse_throws_clause(&__node_100))
               {
-                return yy_expected_symbol(ast_node::Kind_throws_clause, "throws_clause");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_throws_clause, "throws_clause");
+                  }
+                return false;
               }
             (*yynode)->throws_clause = __node_100;
 
@@ -3348,7 +4110,11 @@ namespace java
         block_ast *__node_101 = 0;
         if (!parse_block(&__node_101))
           {
-            return yy_expected_symbol(ast_node::Kind_block, "block");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_block, "block");
+              }
+            return false;
           }
         (*yynode)->body = __node_101;
 
@@ -3372,7 +4138,13 @@ namespace java
     if (yytoken == Token_CONTINUE)
       {
         if (yytoken != Token_CONTINUE)
-          return yy_expected_token(yytoken, Token_CONTINUE, "continue");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_CONTINUE, "continue");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken == Token_IDENTIFIER)
@@ -3380,7 +4152,11 @@ namespace java
             identifier_ast *__node_102 = 0;
             if (!parse_identifier(&__node_102))
               {
-                return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                  }
+                return false;
               }
             (*yynode)->label = __node_102;
 
@@ -3392,7 +4168,13 @@ namespace java
             return false;
           }
         if (yytoken != Token_SEMICOLON)
-          return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -3415,37 +4197,75 @@ namespace java
     if (yytoken == Token_DO)
       {
         if (yytoken != Token_DO)
-          return yy_expected_token(yytoken, Token_DO, "do");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_DO, "do");
+              }
+            return false;
+          }
         yylex();
 
         embedded_statement_ast *__node_103 = 0;
         if (!parse_embedded_statement(&__node_103))
           {
-            return yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
+              }
+            return false;
           }
         (*yynode)->body = __node_103;
 
         if (yytoken != Token_WHILE)
-          return yy_expected_token(yytoken, Token_WHILE, "while");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_WHILE, "while");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken != Token_LPAREN)
-          return yy_expected_token(yytoken, Token_LPAREN, "(");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LPAREN, "(");
+              }
+            return false;
+          }
         yylex();
 
         expression_ast *__node_104 = 0;
         if (!parse_expression(&__node_104))
           {
-            return yy_expected_symbol(ast_node::Kind_expression, "expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_expression, "expression");
+              }
+            return false;
           }
         (*yynode)->condition = __node_104;
 
         if (yytoken != Token_RPAREN)
-          return yy_expected_token(yytoken, Token_RPAREN, ")");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RPAREN, ")");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken != Token_SEMICOLON)
-          return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -3513,7 +4333,11 @@ namespace java
             block_ast *__node_105 = 0;
             if (!parse_block(&__node_105))
               {
-                return yy_expected_symbol(ast_node::Kind_block, "block");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_block, "block");
+                  }
+                return false;
               }
             (*yynode)->block = __node_105;
 
@@ -3523,7 +4347,11 @@ namespace java
             assert_statement_ast *__node_106 = 0;
             if (!parse_assert_statement(&__node_106))
               {
-                return yy_expected_symbol(ast_node::Kind_assert_statement, "assert_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_assert_statement, "assert_statement");
+                  }
+                return false;
               }
             (*yynode)->assert_statement = __node_106;
 
@@ -3533,7 +4361,11 @@ namespace java
             if_statement_ast *__node_107 = 0;
             if (!parse_if_statement(&__node_107))
               {
-                return yy_expected_symbol(ast_node::Kind_if_statement, "if_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_if_statement, "if_statement");
+                  }
+                return false;
               }
             (*yynode)->if_statement = __node_107;
 
@@ -3543,7 +4375,11 @@ namespace java
             for_statement_ast *__node_108 = 0;
             if (!parse_for_statement(&__node_108))
               {
-                return yy_expected_symbol(ast_node::Kind_for_statement, "for_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_for_statement, "for_statement");
+                  }
+                return false;
               }
             (*yynode)->for_statement = __node_108;
 
@@ -3553,7 +4389,11 @@ namespace java
             while_statement_ast *__node_109 = 0;
             if (!parse_while_statement(&__node_109))
               {
-                return yy_expected_symbol(ast_node::Kind_while_statement, "while_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_while_statement, "while_statement");
+                  }
+                return false;
               }
             (*yynode)->while_statement = __node_109;
 
@@ -3563,7 +4403,11 @@ namespace java
             do_while_statement_ast *__node_110 = 0;
             if (!parse_do_while_statement(&__node_110))
               {
-                return yy_expected_symbol(ast_node::Kind_do_while_statement, "do_while_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_do_while_statement, "do_while_statement");
+                  }
+                return false;
               }
             (*yynode)->do_while_statement = __node_110;
 
@@ -3573,7 +4417,11 @@ namespace java
             try_statement_ast *__node_111 = 0;
             if (!parse_try_statement(&__node_111))
               {
-                return yy_expected_symbol(ast_node::Kind_try_statement, "try_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_try_statement, "try_statement");
+                  }
+                return false;
               }
             (*yynode)->try_statement = __node_111;
 
@@ -3583,7 +4431,11 @@ namespace java
             switch_statement_ast *__node_112 = 0;
             if (!parse_switch_statement(&__node_112))
               {
-                return yy_expected_symbol(ast_node::Kind_switch_statement, "switch_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_switch_statement, "switch_statement");
+                  }
+                return false;
               }
             (*yynode)->switch_statement = __node_112;
 
@@ -3593,7 +4445,11 @@ namespace java
             synchronized_statement_ast *__node_113 = 0;
             if (!parse_synchronized_statement(&__node_113))
               {
-                return yy_expected_symbol(ast_node::Kind_synchronized_statement, "synchronized_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_synchronized_statement, "synchronized_statement");
+                  }
+                return false;
               }
             (*yynode)->synchronized_statement = __node_113;
 
@@ -3603,7 +4459,11 @@ namespace java
             return_statement_ast *__node_114 = 0;
             if (!parse_return_statement(&__node_114))
               {
-                return yy_expected_symbol(ast_node::Kind_return_statement, "return_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_return_statement, "return_statement");
+                  }
+                return false;
               }
             (*yynode)->return_statement = __node_114;
 
@@ -3613,7 +4473,11 @@ namespace java
             throw_statement_ast *__node_115 = 0;
             if (!parse_throw_statement(&__node_115))
               {
-                return yy_expected_symbol(ast_node::Kind_throw_statement, "throw_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_throw_statement, "throw_statement");
+                  }
+                return false;
               }
             (*yynode)->throw_statement = __node_115;
 
@@ -3623,7 +4487,11 @@ namespace java
             break_statement_ast *__node_116 = 0;
             if (!parse_break_statement(&__node_116))
               {
-                return yy_expected_symbol(ast_node::Kind_break_statement, "break_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_break_statement, "break_statement");
+                  }
+                return false;
               }
             (*yynode)->break_statement = __node_116;
 
@@ -3633,7 +4501,11 @@ namespace java
             continue_statement_ast *__node_117 = 0;
             if (!parse_continue_statement(&__node_117))
               {
-                return yy_expected_symbol(ast_node::Kind_continue_statement, "continue_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_continue_statement, "continue_statement");
+                  }
+                return false;
               }
             (*yynode)->continue_statement = __node_117;
 
@@ -3641,7 +4513,13 @@ namespace java
         else if (yytoken == Token_SEMICOLON)
           {
             if (yytoken != Token_SEMICOLON)
-              return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                  }
+                return false;
+              }
             yylex();
 
           }
@@ -3650,7 +4528,11 @@ namespace java
             labeled_statement_ast *__node_118 = 0;
             if (!parse_labeled_statement(&__node_118))
               {
-                return yy_expected_symbol(ast_node::Kind_labeled_statement, "labeled_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_labeled_statement, "labeled_statement");
+                  }
+                return false;
               }
             (*yynode)->labeled_statement = __node_118;
 
@@ -3687,12 +4569,22 @@ namespace java
             statement_expression_ast *__node_119 = 0;
             if (!parse_statement_expression(&__node_119))
               {
-                return yy_expected_symbol(ast_node::Kind_statement_expression, "statement_expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_statement_expression, "statement_expression");
+                  }
+                return false;
               }
             (*yynode)->expression_statement = __node_119;
 
             if (yytoken != Token_SEMICOLON)
-              return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                  }
+                return false;
+              }
             yylex();
 
           }
@@ -3720,25 +4612,41 @@ namespace java
     if (yytoken == Token_LBRACE)
       {
         if (yytoken != Token_LBRACE)
-          return yy_expected_token(yytoken, Token_LBRACE, "{");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LBRACE, "{");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken == Token_AT
             || yytoken == Token_IDENTIFIER)
           {
-            std::size_t start_recovery_7 = token_stream->index() - 1;
+            std::size_t try_start_token_8 = token_stream->index() - 1;
+            parser_state *try_start_state_8 = copy_current_state();
+            {
+              enum_constant_ast *__node_120 = 0;
+              if (!parse_enum_constant(&__node_120))
+                {
+                  goto __catch_8;
+                }
+              (*yynode)->enum_constant_sequence = snoc((*yynode)->enum_constant_sequence, __node_120, memory_pool);
 
-            enum_constant_ast *__node_120 = 0;
-            if (!parse_enum_constant(&__node_120))
-              {
-                goto __recovery_7;
-              }
-            (*yynode)->enum_constant_sequence = snoc((*yynode)->enum_constant_sequence, __node_120, memory_pool);
+            }
+            if (try_start_state_8)
+              delete try_start_state_8;
 
-            if (false) // recovery section: the only way to enter is goto
+            if (false) // the only way to enter here is using goto
               {
-              __recovery_7:
-                if (start_recovery_7 == token_stream->index() - 1)
+              __catch_8:
+                if (try_start_state_8)
+                  {
+                    restore_state(try_start_state_8);
+                    delete try_start_state_8;
+                  }
+                if (try_start_token_8 == token_stream->index() - 1)
                   yylex();
 
                 while (yytoken != Token_EOF
@@ -3758,22 +4666,38 @@ namespace java
                     break;
                   }
                 if (yytoken != Token_COMMA)
-                  return yy_expected_token(yytoken, Token_COMMA, ",");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_COMMA, ",");
+                      }
+                    return false;
+                  }
                 yylex();
 
-                std::size_t start_recovery_8 = token_stream->index() - 1;
+                std::size_t try_start_token_9 = token_stream->index() - 1;
+                parser_state *try_start_state_9 = copy_current_state();
+                {
+                  enum_constant_ast *__node_121 = 0;
+                  if (!parse_enum_constant(&__node_121))
+                    {
+                      goto __catch_9;
+                    }
+                  (*yynode)->enum_constant_sequence = snoc((*yynode)->enum_constant_sequence, __node_121, memory_pool);
 
-                enum_constant_ast *__node_121 = 0;
-                if (!parse_enum_constant(&__node_121))
-                  {
-                    goto __recovery_8;
-                  }
-                (*yynode)->enum_constant_sequence = snoc((*yynode)->enum_constant_sequence, __node_121, memory_pool);
+                }
+                if (try_start_state_9)
+                  delete try_start_state_9;
 
-                if (false) // recovery section: the only way to enter is goto
+                if (false) // the only way to enter here is using goto
                   {
-                  __recovery_8:
-                    if (start_recovery_8 == token_stream->index() - 1)
+                  __catch_9:
+                    if (try_start_state_9)
+                      {
+                        restore_state(try_start_state_9);
+                        delete try_start_state_9;
+                      }
+                    if (try_start_token_9 == token_stream->index() - 1)
                       yylex();
 
                     while (yytoken != Token_EOF
@@ -3796,7 +4720,13 @@ namespace java
         if (yytoken == Token_COMMA)
           {
             if (yytoken != Token_COMMA)
-              return yy_expected_token(yytoken, Token_COMMA, ",");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_COMMA, ",");
+                  }
+                return false;
+              }
             yylex();
 
           }
@@ -3809,7 +4739,13 @@ namespace java
         if (yytoken == Token_SEMICOLON)
           {
             if (yytoken != Token_SEMICOLON)
-              return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                  }
+                return false;
+              }
             yylex();
 
             while (yytoken == Token_ABSTRACT
@@ -3841,19 +4777,29 @@ namespace java
                    || yytoken == Token_LESS_THAN
                    || yytoken == Token_IDENTIFIER)
               {
-                std::size_t start_recovery_9 = token_stream->index() - 1;
+                std::size_t try_start_token_10 = token_stream->index() - 1;
+                parser_state *try_start_state_10 = copy_current_state();
+                {
+                  class_field_ast *__node_122 = 0;
+                  if (!parse_class_field(&__node_122))
+                    {
+                      goto __catch_10;
+                    }
+                  (*yynode)->class_field_sequence = snoc((*yynode)->class_field_sequence, __node_122, memory_pool);
 
-                class_field_ast *__node_122 = 0;
-                if (!parse_class_field(&__node_122))
-                  {
-                    goto __recovery_9;
-                  }
-                (*yynode)->class_field_sequence = snoc((*yynode)->class_field_sequence, __node_122, memory_pool);
+                }
+                if (try_start_state_10)
+                  delete try_start_state_10;
 
-                if (false) // recovery section: the only way to enter is goto
+                if (false) // the only way to enter here is using goto
                   {
-                  __recovery_9:
-                    if (start_recovery_9 == token_stream->index() - 1)
+                  __catch_10:
+                    if (try_start_state_10)
+                      {
+                        restore_state(try_start_state_10);
+                        delete try_start_state_10;
+                      }
+                    if (try_start_token_10 == token_stream->index() - 1)
                       yylex();
 
                     while (yytoken != Token_EOF
@@ -3900,7 +4846,13 @@ namespace java
             return false;
           }
         if (yytoken != Token_RBRACE)
-          return yy_expected_token(yytoken, Token_RBRACE, "}");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RBRACE, "}");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -3925,19 +4877,29 @@ namespace java
       {
         while (yytoken == Token_AT)
           {
-            std::size_t start_recovery_10 = token_stream->index() - 1;
+            std::size_t try_start_token_11 = token_stream->index() - 1;
+            parser_state *try_start_state_11 = copy_current_state();
+            {
+              annotation_ast *__node_123 = 0;
+              if (!parse_annotation(&__node_123))
+                {
+                  goto __catch_11;
+                }
+              (*yynode)->annotation_sequence = snoc((*yynode)->annotation_sequence, __node_123, memory_pool);
 
-            annotation_ast *__node_123 = 0;
-            if (!parse_annotation(&__node_123))
-              {
-                goto __recovery_10;
-              }
-            (*yynode)->annotation_sequence = snoc((*yynode)->annotation_sequence, __node_123, memory_pool);
+            }
+            if (try_start_state_11)
+              delete try_start_state_11;
 
-            if (false) // recovery section: the only way to enter is goto
+            if (false) // the only way to enter here is using goto
               {
-              __recovery_10:
-                if (start_recovery_10 == token_stream->index() - 1)
+              __catch_11:
+                if (try_start_state_11)
+                  {
+                    restore_state(try_start_state_11);
+                    delete try_start_state_11;
+                  }
+                if (try_start_token_11 == token_stream->index() - 1)
                   yylex();
 
                 while (yytoken != Token_EOF
@@ -3952,25 +4914,45 @@ namespace java
         identifier_ast *__node_124 = 0;
         if (!parse_identifier(&__node_124))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->identifier = __node_124;
 
         if (yytoken == Token_LPAREN)
           {
             if (yytoken != Token_LPAREN)
-              return yy_expected_token(yytoken, Token_LPAREN, "(");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LPAREN, "(");
+                  }
+                return false;
+              }
             yylex();
 
             optional_argument_list_ast *__node_125 = 0;
             if (!parse_optional_argument_list(&__node_125))
               {
-                return yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                  }
+                return false;
               }
             (*yynode)->arguments = __node_125;
 
             if (yytoken != Token_RPAREN)
-              return yy_expected_token(yytoken, Token_RPAREN, ")");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_RPAREN, ")");
+                  }
+                return false;
+              }
             yylex();
 
           }
@@ -3985,7 +4967,11 @@ namespace java
             enum_constant_body_ast *__node_126 = 0;
             if (!parse_enum_constant_body(&__node_126))
               {
-                return yy_expected_symbol(ast_node::Kind_enum_constant_body, "enum_constant_body");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_enum_constant_body, "enum_constant_body");
+                  }
+                return false;
               }
             (*yynode)->body = __node_126;
 
@@ -4016,7 +5002,13 @@ namespace java
     if (yytoken == Token_LBRACE)
       {
         if (yytoken != Token_LBRACE)
-          return yy_expected_token(yytoken, Token_LBRACE, "{");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LBRACE, "{");
+              }
+            return false;
+          }
         yylex();
 
         while (yytoken == Token_ABSTRACT
@@ -4048,19 +5040,29 @@ namespace java
                || yytoken == Token_LESS_THAN
                || yytoken == Token_IDENTIFIER)
           {
-            std::size_t start_recovery_11 = token_stream->index() - 1;
+            std::size_t try_start_token_12 = token_stream->index() - 1;
+            parser_state *try_start_state_12 = copy_current_state();
+            {
+              enum_constant_field_ast *__node_127 = 0;
+              if (!parse_enum_constant_field(&__node_127))
+                {
+                  goto __catch_12;
+                }
+              (*yynode)->declaration_sequence = snoc((*yynode)->declaration_sequence, __node_127, memory_pool);
 
-            enum_constant_field_ast *__node_127 = 0;
-            if (!parse_enum_constant_field(&__node_127))
-              {
-                goto __recovery_11;
-              }
-            (*yynode)->declaration_sequence = snoc((*yynode)->declaration_sequence, __node_127, memory_pool);
+            }
+            if (try_start_state_12)
+              delete try_start_state_12;
 
-            if (false) // recovery section: the only way to enter is goto
+            if (false) // the only way to enter here is using goto
               {
-              __recovery_11:
-                if (start_recovery_11 == token_stream->index() - 1)
+              __catch_12:
+                if (try_start_state_12)
+                  {
+                    restore_state(try_start_state_12);
+                    delete try_start_state_12;
+                  }
+                if (try_start_token_12 == token_stream->index() - 1)
                   yylex();
 
                 while (yytoken != Token_EOF
@@ -4100,7 +5102,13 @@ namespace java
 
           }
         if (yytoken != Token_RBRACE)
-          return yy_expected_token(yytoken, Token_RBRACE, "}");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RBRACE, "}");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -4187,7 +5195,11 @@ namespace java
             optional_modifiers_ast *__node_128 = 0;
             if (!parse_optional_modifiers(&__node_128))
               {
-                return yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+                  }
+                return false;
               }
             modifiers = __node_128;
 
@@ -4196,7 +5208,11 @@ namespace java
                 class_declaration_ast *__node_129 = 0;
                 if (!parse_class_declaration(&__node_129, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_class_declaration, "class_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_class_declaration, "class_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->class_declaration = __node_129;
 
@@ -4206,7 +5222,11 @@ namespace java
                 enum_declaration_ast *__node_130 = 0;
                 if (!parse_enum_declaration(&__node_130, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_enum_declaration, "enum_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_enum_declaration, "enum_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->enum_declaration = __node_130;
 
@@ -4216,7 +5236,11 @@ namespace java
                 interface_declaration_ast *__node_131 = 0;
                 if (!parse_interface_declaration(&__node_131, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_interface_declaration, "interface_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_interface_declaration, "interface_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->interface_declaration = __node_131;
 
@@ -4226,7 +5250,11 @@ namespace java
                 annotation_type_declaration_ast *__node_132 = 0;
                 if (!parse_annotation_type_declaration(&__node_132, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_annotation_type_declaration, "annotation_type_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_annotation_type_declaration, "annotation_type_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->annotation_type_declaration = __node_132;
 
@@ -4248,7 +5276,11 @@ namespace java
                     type_parameters_ast *__node_133 = 0;
                     if (!parse_type_parameters(&__node_133))
                       {
-                        return yy_expected_symbol(ast_node::Kind_type_parameters, "type_parameters");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_type_parameters, "type_parameters");
+                          }
+                        return false;
                       }
                     type_parameters = __node_133;
 
@@ -4262,7 +5294,11 @@ namespace java
                 type_ast *__node_134 = 0;
                 if (!parse_type(&__node_134))
                   {
-                    return yy_expected_symbol(ast_node::Kind_type, "type");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_type, "type");
+                      }
+                    return false;
                   }
                 type = __node_134;
 
@@ -4273,7 +5309,11 @@ namespace java
                                                   modifiers, type_parameters, type
                                                  ))
                       {
-                        return yy_expected_symbol(ast_node::Kind_method_declaration, "method_declaration");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_method_declaration, "method_declaration");
+                          }
+                        return false;
                       }
                     (*yynode)->method_declaration = __node_135;
 
@@ -4283,26 +5323,46 @@ namespace java
                     variable_declarator_ast *__node_136 = 0;
                     if (!parse_variable_declarator(&__node_136))
                       {
-                        return yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                          }
+                        return false;
                       }
                     variable_declarator_sequence = snoc(variable_declarator_sequence, __node_136, memory_pool);
 
                     while (yytoken == Token_COMMA)
                       {
                         if (yytoken != Token_COMMA)
-                          return yy_expected_token(yytoken, Token_COMMA, ",");
+                          {
+                            if (!yy_block_errors)
+                              {
+                                yy_expected_token(yytoken, Token_COMMA, ",");
+                              }
+                            return false;
+                          }
                         yylex();
 
                         variable_declarator_ast *__node_137 = 0;
                         if (!parse_variable_declarator(&__node_137))
                           {
-                            return yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                            if (!yy_block_errors)
+                              {
+                                yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                              }
+                            return false;
                           }
                         variable_declarator_sequence = snoc(variable_declarator_sequence, __node_137, memory_pool);
 
                       }
                     if (yytoken != Token_SEMICOLON)
-                      return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                          }
+                        return false;
+                      }
                     yylex();
 
                     variable_declaration_data_ast *__node_138 = 0;
@@ -4310,7 +5370,11 @@ namespace java
                                                          modifiers, type, variable_declarator_sequence
                                                         ))
                       {
-                        return yy_expected_symbol(ast_node::Kind_variable_declaration_data, "variable_declaration_data");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_variable_declaration_data, "variable_declaration_data");
+                          }
+                        return false;
                       }
                     (*yynode)->variable_declaration = __node_138;
 
@@ -4320,7 +5384,13 @@ namespace java
                     report_problem( error,
                                     "Expected method declaration after type parameter list" );
                     if (yytoken != Token_SEMICOLON)
-                      return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                          }
+                        return false;
+                      }
                     yylex();
 
                   }
@@ -4339,7 +5409,11 @@ namespace java
             block_ast *__node_139 = 0;
             if (!parse_block(&__node_139))
               {
-                return yy_expected_symbol(ast_node::Kind_block, "block");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_block, "block");
+                  }
+                return false;
               }
             (*yynode)->instance_initializer_block = __node_139;
 
@@ -4347,7 +5421,13 @@ namespace java
         else if (yytoken == Token_SEMICOLON)
           {
             if (yytoken != Token_SEMICOLON)
-              return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                  }
+                return false;
+              }
             yylex();
 
           }
@@ -4379,13 +5459,23 @@ namespace java
     if (yytoken == Token_ENUM)
       {
         if (yytoken != Token_ENUM)
-          return yy_expected_token(yytoken, Token_ENUM, "enum");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_ENUM, "enum");
+              }
+            return false;
+          }
         yylex();
 
         identifier_ast *__node_140 = 0;
         if (!parse_identifier(&__node_140))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->enum_name = __node_140;
 
@@ -4394,7 +5484,11 @@ namespace java
             implements_clause_ast *__node_141 = 0;
             if (!parse_implements_clause(&__node_141))
               {
-                return yy_expected_symbol(ast_node::Kind_implements_clause, "implements_clause");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_implements_clause, "implements_clause");
+                  }
+                return false;
               }
             (*yynode)->implements = __node_141;
 
@@ -4408,7 +5502,11 @@ namespace java
         enum_body_ast *__node_142 = 0;
         if (!parse_enum_body(&__node_142))
           {
-            return yy_expected_symbol(ast_node::Kind_enum_body, "enum_body");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_enum_body, "enum_body");
+              }
+            return false;
           }
         (*yynode)->body = __node_142;
 
@@ -4461,7 +5559,11 @@ namespace java
         relational_expression_ast *__node_143 = 0;
         if (!parse_relational_expression(&__node_143))
           {
-            return yy_expected_symbol(ast_node::Kind_relational_expression, "relational_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_relational_expression, "relational_expression");
+              }
+            return false;
           }
         (*yynode)->expression = __node_143;
 
@@ -4471,7 +5573,11 @@ namespace java
             equality_expression_rest_ast *__node_144 = 0;
             if (!parse_equality_expression_rest(&__node_144))
               {
-                return yy_expected_symbol(ast_node::Kind_equality_expression_rest, "equality_expression_rest");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_equality_expression_rest, "equality_expression_rest");
+                  }
+                return false;
               }
             (*yynode)->additional_expression_sequence = snoc((*yynode)->additional_expression_sequence, __node_144, memory_pool);
 
@@ -4499,7 +5605,13 @@ namespace java
         if (yytoken == Token_EQUAL)
           {
             if (yytoken != Token_EQUAL)
-              return yy_expected_token(yytoken, Token_EQUAL, "==");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_EQUAL, "==");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->equality_operator = equality_expression_rest::op_equal;
@@ -4507,7 +5619,13 @@ namespace java
         else if (yytoken == Token_NOT_EQUAL)
           {
             if (yytoken != Token_NOT_EQUAL)
-              return yy_expected_token(yytoken, Token_NOT_EQUAL, "!=");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_NOT_EQUAL, "!=");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->equality_operator = equality_expression_rest::op_not_equal;
@@ -4519,7 +5637,11 @@ namespace java
         relational_expression_ast *__node_145 = 0;
         if (!parse_relational_expression(&__node_145))
           {
-            return yy_expected_symbol(ast_node::Kind_relational_expression, "relational_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_relational_expression, "relational_expression");
+              }
+            return false;
           }
         (*yynode)->expression = __node_145;
 
@@ -4572,7 +5694,11 @@ namespace java
         conditional_expression_ast *__node_146 = 0;
         if (!parse_conditional_expression(&__node_146))
           {
-            return yy_expected_symbol(ast_node::Kind_conditional_expression, "conditional_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_conditional_expression, "conditional_expression");
+              }
+            return false;
           }
         (*yynode)->conditional_expression = __node_146;
 
@@ -4592,7 +5718,13 @@ namespace java
             if (yytoken == Token_ASSIGN)
               {
                 if (yytoken != Token_ASSIGN)
-                  return yy_expected_token(yytoken, Token_ASSIGN, "=");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_ASSIGN, "=");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->assignment_operator = expression::op_assign;
@@ -4600,7 +5732,13 @@ namespace java
             else if (yytoken == Token_PLUS_ASSIGN)
               {
                 if (yytoken != Token_PLUS_ASSIGN)
-                  return yy_expected_token(yytoken, Token_PLUS_ASSIGN, "+=");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_PLUS_ASSIGN, "+=");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->assignment_operator = expression::op_plus_assign;
@@ -4608,7 +5746,13 @@ namespace java
             else if (yytoken == Token_MINUS_ASSIGN)
               {
                 if (yytoken != Token_MINUS_ASSIGN)
-                  return yy_expected_token(yytoken, Token_MINUS_ASSIGN, "-=");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_MINUS_ASSIGN, "-=");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->assignment_operator = expression::op_minus_assign;
@@ -4616,7 +5760,13 @@ namespace java
             else if (yytoken == Token_STAR_ASSIGN)
               {
                 if (yytoken != Token_STAR_ASSIGN)
-                  return yy_expected_token(yytoken, Token_STAR_ASSIGN, "*=");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_STAR_ASSIGN, "*=");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->assignment_operator = expression::op_star_assign;
@@ -4624,7 +5774,13 @@ namespace java
             else if (yytoken == Token_SLASH_ASSIGN)
               {
                 if (yytoken != Token_SLASH_ASSIGN)
-                  return yy_expected_token(yytoken, Token_SLASH_ASSIGN, "/=");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_SLASH_ASSIGN, "/=");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->assignment_operator = expression::op_slash_assign;
@@ -4632,7 +5788,13 @@ namespace java
             else if (yytoken == Token_BIT_AND_ASSIGN)
               {
                 if (yytoken != Token_BIT_AND_ASSIGN)
-                  return yy_expected_token(yytoken, Token_BIT_AND_ASSIGN, "&=");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_BIT_AND_ASSIGN, "&=");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->assignment_operator = expression::op_bit_and_assign;
@@ -4640,7 +5802,13 @@ namespace java
             else if (yytoken == Token_BIT_OR_ASSIGN)
               {
                 if (yytoken != Token_BIT_OR_ASSIGN)
-                  return yy_expected_token(yytoken, Token_BIT_OR_ASSIGN, "|=");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_BIT_OR_ASSIGN, "|=");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->assignment_operator = expression::op_bit_or_assign;
@@ -4648,7 +5816,13 @@ namespace java
             else if (yytoken == Token_BIT_XOR_ASSIGN)
               {
                 if (yytoken != Token_BIT_XOR_ASSIGN)
-                  return yy_expected_token(yytoken, Token_BIT_XOR_ASSIGN, "^=");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_BIT_XOR_ASSIGN, "^=");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->assignment_operator = expression::op_bit_xor_assign;
@@ -4656,7 +5830,13 @@ namespace java
             else if (yytoken == Token_REMAINDER_ASSIGN)
               {
                 if (yytoken != Token_REMAINDER_ASSIGN)
-                  return yy_expected_token(yytoken, Token_REMAINDER_ASSIGN, "%=");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_REMAINDER_ASSIGN, "%=");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->assignment_operator = expression::op_remainder_assign;
@@ -4664,7 +5844,13 @@ namespace java
             else if (yytoken == Token_LSHIFT_ASSIGN)
               {
                 if (yytoken != Token_LSHIFT_ASSIGN)
-                  return yy_expected_token(yytoken, Token_LSHIFT_ASSIGN, "<<=");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_LSHIFT_ASSIGN, "<<=");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->assignment_operator = expression::op_lshift_assign;
@@ -4672,7 +5858,13 @@ namespace java
             else if (yytoken == Token_SIGNED_RSHIFT_ASSIGN)
               {
                 if (yytoken != Token_SIGNED_RSHIFT_ASSIGN)
-                  return yy_expected_token(yytoken, Token_SIGNED_RSHIFT_ASSIGN, ">>=");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_SIGNED_RSHIFT_ASSIGN, ">>=");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->assignment_operator = expression::op_signed_rshift_assign;
@@ -4680,7 +5872,13 @@ namespace java
             else if (yytoken == Token_UNSIGNED_RSHIFT_ASSIGN)
               {
                 if (yytoken != Token_UNSIGNED_RSHIFT_ASSIGN)
-                  return yy_expected_token(yytoken, Token_UNSIGNED_RSHIFT_ASSIGN, ">>>=");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_UNSIGNED_RSHIFT_ASSIGN, ">>>=");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->assignment_operator = expression::op_unsigned_rshift_assign;
@@ -4692,7 +5890,11 @@ namespace java
             expression_ast *__node_147 = 0;
             if (!parse_expression(&__node_147))
               {
-                return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_expression, "expression");
+                  }
+                return false;
               }
             (*yynode)->assignment_expression = __node_147;
 
@@ -4725,7 +5927,13 @@ namespace java
     if (yytoken == Token_SEMICOLON)
       {
         if (yytoken != Token_SEMICOLON)
-          return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken == Token_BOOLEAN
@@ -4760,7 +5968,11 @@ namespace java
             expression_ast *__node_148 = 0;
             if (!parse_expression(&__node_148))
               {
-                return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_expression, "expression");
+                  }
+                return false;
               }
             (*yynode)->for_condition = __node_148;
 
@@ -4772,7 +5984,13 @@ namespace java
             return false;
           }
         if (yytoken != Token_SEMICOLON)
-          return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken == Token_BOOLEAN
@@ -4807,20 +6025,34 @@ namespace java
             statement_expression_ast *__node_149 = 0;
             if (!parse_statement_expression(&__node_149))
               {
-                return yy_expected_symbol(ast_node::Kind_statement_expression, "statement_expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_statement_expression, "statement_expression");
+                  }
+                return false;
               }
             (*yynode)->for_update_expression_sequence = snoc((*yynode)->for_update_expression_sequence, __node_149, memory_pool);
 
             while (yytoken == Token_COMMA)
               {
                 if (yytoken != Token_COMMA)
-                  return yy_expected_token(yytoken, Token_COMMA, ",");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_COMMA, ",");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 statement_expression_ast *__node_150 = 0;
                 if (!parse_statement_expression(&__node_150))
                   {
-                    return yy_expected_symbol(ast_node::Kind_statement_expression, "statement_expression");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_statement_expression, "statement_expression");
+                      }
+                    return false;
                   }
                 (*yynode)->for_update_expression_sequence = snoc((*yynode)->for_update_expression_sequence, __node_150, memory_pool);
 
@@ -4897,156 +6129,188 @@ namespace java
 
         variable_declaration_rest_ast *variable_declaration_rest = 0;
 
-        if ((yytoken == Token_ABSTRACT
-             || yytoken == Token_BOOLEAN
-             || yytoken == Token_BYTE
-             || yytoken == Token_CHAR
-             || yytoken == Token_DOUBLE
-             || yytoken == Token_FINAL
-             || yytoken == Token_FLOAT
-             || yytoken == Token_INT
-             || yytoken == Token_LONG
-             || yytoken == Token_NATIVE
-             || yytoken == Token_PRIVATE
-             || yytoken == Token_PROTECTED
-             || yytoken == Token_PUBLIC
-             || yytoken == Token_SHORT
-             || yytoken == Token_STATIC
-             || yytoken == Token_STRICTFP
-             || yytoken == Token_SYNCHRONIZED
-             || yytoken == Token_TRANSIENT
-             || yytoken == Token_VOID
-             || yytoken == Token_VOLATILE
-             || yytoken == Token_AT
-             || yytoken == Token_IDENTIFIER) && ( lookahead_is_parameter_declaration() == true ))
+        if (yytoken == Token_ABSTRACT
+            || yytoken == Token_BOOLEAN
+            || yytoken == Token_BYTE
+            || yytoken == Token_CHAR
+            || yytoken == Token_DOUBLE
+            || yytoken == Token_FINAL
+            || yytoken == Token_FLOAT
+            || yytoken == Token_INT
+            || yytoken == Token_LONG
+            || yytoken == Token_NATIVE
+            || yytoken == Token_NEW
+            || yytoken == Token_PRIVATE
+            || yytoken == Token_PROTECTED
+            || yytoken == Token_PUBLIC
+            || yytoken == Token_SHORT
+            || yytoken == Token_STATIC
+            || yytoken == Token_STRICTFP
+            || yytoken == Token_SUPER
+            || yytoken == Token_SYNCHRONIZED
+            || yytoken == Token_THIS
+            || yytoken == Token_TRANSIENT
+            || yytoken == Token_VOID
+            || yytoken == Token_VOLATILE
+            || yytoken == Token_LPAREN
+            || yytoken == Token_AT
+            || yytoken == Token_LESS_THAN
+            || yytoken == Token_BANG
+            || yytoken == Token_TILDE
+            || yytoken == Token_INCREMENT
+            || yytoken == Token_DECREMENT
+            || yytoken == Token_PLUS
+            || yytoken == Token_MINUS
+            || yytoken == Token_TRUE
+            || yytoken == Token_FALSE
+            || yytoken == Token_NULL
+            || yytoken == Token_INTEGER_LITERAL
+            || yytoken == Token_FLOATING_POINT_LITERAL
+            || yytoken == Token_CHARACTER_LITERAL
+            || yytoken == Token_STRING_LITERAL
+            || yytoken == Token_IDENTIFIER)
           {
-            parameter_declaration_ast *__node_151 = 0;
-            if (!parse_parameter_declaration(&__node_151))
+            bool block_errors_13 = block_errors(true);
+            std::size_t try_start_token_13 = token_stream->index() - 1;
+            parser_state *try_start_state_13 = copy_current_state();
+            {
+              parameter_declaration_ast *__node_151 = 0;
+              if (!parse_parameter_declaration(&__node_151))
+                {
+                  goto __catch_13;
+                }
+              vardecl_start_or_foreach_parameter = __node_151;
+
+              if ((yytoken == Token_COLON) && ( compatibility_mode() >= java15_compatibility ))
+                {
+                  if (yytoken != Token_COLON)
+                    goto __catch_13;
+                  yylex();
+
+                  expression_ast *__node_152 = 0;
+                  if (!parse_expression(&__node_152))
+                    {
+                      goto __catch_13;
+                    }
+                  iterable_expression = __node_152;
+
+                  foreach_declaration_data_ast *__node_153 = 0;
+                  if (!parse_foreach_declaration_data(&__node_153,
+                                                      vardecl_start_or_foreach_parameter, iterable_expression
+                                                     ))
+                    {
+                      goto __catch_13;
+                    }
+                  (*yynode)->foreach_declaration = __node_153;
+
+                }
+              else if (yytoken == Token_SEMICOLON
+                       || yytoken == Token_COMMA
+                       || yytoken == Token_ASSIGN)
+                {
+                  variable_declaration_rest_ast *__node_154 = 0;
+                  if (!parse_variable_declaration_rest(&__node_154))
+                    {
+                      goto __catch_13;
+                    }
+                  variable_declaration_rest = __node_154;
+
+                  variable_declaration_split_data_ast *__node_155 = 0;
+                  if (!parse_variable_declaration_split_data(&__node_155,
+                      vardecl_start_or_foreach_parameter, variable_declaration_rest
+                                                            ))
+                    {
+                      goto __catch_13;
+                    }
+                  (*yynode)->variable_declaration = __node_155;
+
+                  for_clause_traditional_rest_ast *__node_156 = 0;
+                  if (!parse_for_clause_traditional_rest(&__node_156))
+                    {
+                      goto __catch_13;
+                    }
+                  (*yynode)->traditional_for_rest = __node_156;
+
+                }
+              else
+                {
+                  goto __catch_13;
+                }
+            }
+            block_errors(block_errors_13);
+            if (try_start_state_13)
+              delete try_start_state_13;
+
+            if (false) // the only way to enter here is using goto
               {
-                return yy_expected_symbol(ast_node::Kind_parameter_declaration, "parameter_declaration");
+              __catch_13:
+                if (try_start_state_13)
+                  {
+                    restore_state(try_start_state_13);
+                    delete try_start_state_13;
+                  }
+                block_errors(block_errors_13);
+                rewind(try_start_token_13);
+
+                statement_expression_ast *__node_157 = 0;
+                if (!parse_statement_expression(&__node_157))
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_statement_expression, "statement_expression");
+                      }
+                    return false;
+                  }
+                (*yynode)->statement_expression_sequence = snoc((*yynode)->statement_expression_sequence, __node_157, memory_pool);
+
+                while (yytoken == Token_COMMA)
+                  {
+                    if (yytoken != Token_COMMA)
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_token(yytoken, Token_COMMA, ",");
+                          }
+                        return false;
+                      }
+                    yylex();
+
+                    statement_expression_ast *__node_158 = 0;
+                    if (!parse_statement_expression(&__node_158))
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_statement_expression, "statement_expression");
+                          }
+                        return false;
+                      }
+                    (*yynode)->statement_expression_sequence = snoc((*yynode)->statement_expression_sequence, __node_158, memory_pool);
+
+                  }
+                for_clause_traditional_rest_ast *__node_159 = 0;
+                if (!parse_for_clause_traditional_rest(&__node_159))
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_for_clause_traditional_rest, "for_clause_traditional_rest");
+                      }
+                    return false;
+                  }
+                (*yynode)->traditional_for_rest = __node_159;
+
               }
-            vardecl_start_or_foreach_parameter = __node_151;
 
-            if ((yytoken == Token_COLON) && ( compatibility_mode() >= java15_compatibility ))
-              {
-                if (yytoken != Token_COLON)
-                  return yy_expected_token(yytoken, Token_COLON, ":");
-                yylex();
-
-                expression_ast *__node_152 = 0;
-                if (!parse_expression(&__node_152))
-                  {
-                    return yy_expected_symbol(ast_node::Kind_expression, "expression");
-                  }
-                iterable_expression = __node_152;
-
-                foreach_declaration_data_ast *__node_153 = 0;
-                if (!parse_foreach_declaration_data(&__node_153,
-                                                    vardecl_start_or_foreach_parameter, iterable_expression
-                                                   ))
-                  {
-                    return yy_expected_symbol(ast_node::Kind_foreach_declaration_data, "foreach_declaration_data");
-                  }
-                (*yynode)->foreach_declaration = __node_153;
-
-              }
-            else if (yytoken == Token_SEMICOLON
-                     || yytoken == Token_COMMA
-                     || yytoken == Token_ASSIGN)
-              {
-                variable_declaration_rest_ast *__node_154 = 0;
-                if (!parse_variable_declaration_rest(&__node_154))
-                  {
-                    return yy_expected_symbol(ast_node::Kind_variable_declaration_rest, "variable_declaration_rest");
-                  }
-                variable_declaration_rest = __node_154;
-
-                variable_declaration_split_data_ast *__node_155 = 0;
-                if (!parse_variable_declaration_split_data(&__node_155,
-                    vardecl_start_or_foreach_parameter, variable_declaration_rest
-                                                          ))
-                  {
-                    return yy_expected_symbol(ast_node::Kind_variable_declaration_split_data, "variable_declaration_split_data");
-                  }
-                (*yynode)->variable_declaration = __node_155;
-
-                for_clause_traditional_rest_ast *__node_156 = 0;
-                if (!parse_for_clause_traditional_rest(&__node_156))
-                  {
-                    return yy_expected_symbol(ast_node::Kind_for_clause_traditional_rest, "for_clause_traditional_rest");
-                  }
-                (*yynode)->traditional_for_rest = __node_156;
-
-              }
-            else
-              {
-                return false;
-              }
           }
         else if (yytoken == Token_SEMICOLON)
           {
-            for_clause_traditional_rest_ast *__node_157 = 0;
-            if (!parse_for_clause_traditional_rest(&__node_157))
-              {
-                return yy_expected_symbol(ast_node::Kind_for_clause_traditional_rest, "for_clause_traditional_rest");
-              }
-            (*yynode)->traditional_for_rest = __node_157;
-
-          }
-        else if (yytoken == Token_BOOLEAN
-                 || yytoken == Token_BYTE
-                 || yytoken == Token_CHAR
-                 || yytoken == Token_DOUBLE
-                 || yytoken == Token_FLOAT
-                 || yytoken == Token_INT
-                 || yytoken == Token_LONG
-                 || yytoken == Token_NEW
-                 || yytoken == Token_SHORT
-                 || yytoken == Token_SUPER
-                 || yytoken == Token_THIS
-                 || yytoken == Token_VOID
-                 || yytoken == Token_LPAREN
-                 || yytoken == Token_LESS_THAN
-                 || yytoken == Token_BANG
-                 || yytoken == Token_TILDE
-                 || yytoken == Token_INCREMENT
-                 || yytoken == Token_DECREMENT
-                 || yytoken == Token_PLUS
-                 || yytoken == Token_MINUS
-                 || yytoken == Token_TRUE
-                 || yytoken == Token_FALSE
-                 || yytoken == Token_NULL
-                 || yytoken == Token_INTEGER_LITERAL
-                 || yytoken == Token_FLOATING_POINT_LITERAL
-                 || yytoken == Token_CHARACTER_LITERAL
-                 || yytoken == Token_STRING_LITERAL
-                 || yytoken == Token_IDENTIFIER)
-          {
-            statement_expression_ast *__node_158 = 0;
-            if (!parse_statement_expression(&__node_158))
-              {
-                return yy_expected_symbol(ast_node::Kind_statement_expression, "statement_expression");
-              }
-            (*yynode)->statement_expression_sequence = snoc((*yynode)->statement_expression_sequence, __node_158, memory_pool);
-
-            while (yytoken == Token_COMMA)
-              {
-                if (yytoken != Token_COMMA)
-                  return yy_expected_token(yytoken, Token_COMMA, ",");
-                yylex();
-
-                statement_expression_ast *__node_159 = 0;
-                if (!parse_statement_expression(&__node_159))
-                  {
-                    return yy_expected_symbol(ast_node::Kind_statement_expression, "statement_expression");
-                  }
-                (*yynode)->statement_expression_sequence = snoc((*yynode)->statement_expression_sequence, __node_159, memory_pool);
-
-              }
             for_clause_traditional_rest_ast *__node_160 = 0;
             if (!parse_for_clause_traditional_rest(&__node_160))
               {
-                return yy_expected_symbol(ast_node::Kind_for_clause_traditional_rest, "for_clause_traditional_rest");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_for_clause_traditional_rest, "for_clause_traditional_rest");
+                  }
+                return false;
               }
             (*yynode)->traditional_for_rest = __node_160;
 
@@ -5075,28 +6339,54 @@ namespace java
     if (yytoken == Token_FOR)
       {
         if (yytoken != Token_FOR)
-          return yy_expected_token(yytoken, Token_FOR, "for");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_FOR, "for");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken != Token_LPAREN)
-          return yy_expected_token(yytoken, Token_LPAREN, "(");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LPAREN, "(");
+              }
+            return false;
+          }
         yylex();
 
         for_control_ast *__node_161 = 0;
         if (!parse_for_control(&__node_161))
           {
-            return yy_expected_symbol(ast_node::Kind_for_control, "for_control");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_for_control, "for_control");
+              }
+            return false;
           }
         (*yynode)->for_control = __node_161;
 
         if (yytoken != Token_RPAREN)
-          return yy_expected_token(yytoken, Token_RPAREN, ")");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RPAREN, ")");
+              }
+            return false;
+          }
         yylex();
 
         embedded_statement_ast *__node_162 = 0;
         if (!parse_embedded_statement(&__node_162))
           {
-            return yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
+              }
+            return false;
           }
         (*yynode)->for_body = __node_162;
 
@@ -5146,7 +6436,13 @@ namespace java
     if (yytoken == Token_IDENTIFIER)
       {
         if (yytoken != Token_IDENTIFIER)
-          return yy_expected_token(yytoken, Token_IDENTIFIER, "identifier");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_IDENTIFIER, "identifier");
+              }
+            return false;
+          }
         (*yynode)->ident = token_stream->index() - 1;
         yylex();
 
@@ -5170,41 +6466,77 @@ namespace java
     if (yytoken == Token_IF)
       {
         if (yytoken != Token_IF)
-          return yy_expected_token(yytoken, Token_IF, "if");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_IF, "if");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken != Token_LPAREN)
-          return yy_expected_token(yytoken, Token_LPAREN, "(");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LPAREN, "(");
+              }
+            return false;
+          }
         yylex();
 
         expression_ast *__node_163 = 0;
         if (!parse_expression(&__node_163))
           {
-            return yy_expected_symbol(ast_node::Kind_expression, "expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_expression, "expression");
+              }
+            return false;
           }
         (*yynode)->condition = __node_163;
 
         if (yytoken != Token_RPAREN)
-          return yy_expected_token(yytoken, Token_RPAREN, ")");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RPAREN, ")");
+              }
+            return false;
+          }
         yylex();
 
         embedded_statement_ast *__node_164 = 0;
         if (!parse_embedded_statement(&__node_164))
           {
-            return yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
+              }
+            return false;
           }
         (*yynode)->if_body = __node_164;
 
         if (yytoken == Token_ELSE)
           {
             if (yytoken != Token_ELSE)
-              return yy_expected_token(yytoken, Token_ELSE, "else");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_ELSE, "else");
+                  }
+                return false;
+              }
             yylex();
 
             embedded_statement_ast *__node_165 = 0;
             if (!parse_embedded_statement(&__node_165))
               {
-                return yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
+                  }
+                return false;
               }
             (*yynode)->else_body = __node_165;
 
@@ -5235,26 +6567,46 @@ namespace java
     if (yytoken == Token_IMPLEMENTS)
       {
         if (yytoken != Token_IMPLEMENTS)
-          return yy_expected_token(yytoken, Token_IMPLEMENTS, "implements");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_IMPLEMENTS, "implements");
+              }
+            return false;
+          }
         yylex();
 
         class_or_interface_type_name_ast *__node_166 = 0;
         if (!parse_class_or_interface_type_name(&__node_166))
           {
-            return yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+              }
+            return false;
           }
         (*yynode)->type_sequence = snoc((*yynode)->type_sequence, __node_166, memory_pool);
 
         while (yytoken == Token_COMMA)
           {
             if (yytoken != Token_COMMA)
-              return yy_expected_token(yytoken, Token_COMMA, ",");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_COMMA, ",");
+                  }
+                return false;
+              }
             yylex();
 
             class_or_interface_type_name_ast *__node_167 = 0;
             if (!parse_class_or_interface_type_name(&__node_167))
               {
-                return yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+                  }
+                return false;
               }
             (*yynode)->type_sequence = snoc((*yynode)->type_sequence, __node_167, memory_pool);
 
@@ -5279,13 +6631,25 @@ namespace java
     if (yytoken == Token_IMPORT)
       {
         if (yytoken != Token_IMPORT)
-          return yy_expected_token(yytoken, Token_IMPORT, "import");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_IMPORT, "import");
+              }
+            return false;
+          }
         yylex();
 
         if (yytoken == Token_STATIC)
           {
             if (yytoken != Token_STATIC)
-              return yy_expected_token(yytoken, Token_STATIC, "static");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_STATIC, "static");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->static_import = true;
@@ -5301,12 +6665,22 @@ namespace java
         qualified_identifier_with_optional_star_ast *__node_168 = 0;
         if (!parse_qualified_identifier_with_optional_star(&__node_168))
           {
-            return yy_expected_symbol(ast_node::Kind_qualified_identifier_with_optional_star, "qualified_identifier_with_optional_star");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_qualified_identifier_with_optional_star, "qualified_identifier_with_optional_star");
+              }
+            return false;
           }
         (*yynode)->identifier_name = __node_168;
 
         if (yytoken != Token_SEMICOLON)
-          return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -5329,7 +6703,13 @@ namespace java
     if (yytoken == Token_LBRACE)
       {
         if (yytoken != Token_LBRACE)
-          return yy_expected_token(yytoken, Token_LBRACE, "{");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LBRACE, "{");
+              }
+            return false;
+          }
         yylex();
 
         while (yytoken == Token_ABSTRACT
@@ -5360,19 +6740,29 @@ namespace java
                || yytoken == Token_LESS_THAN
                || yytoken == Token_IDENTIFIER)
           {
-            std::size_t start_recovery_12 = token_stream->index() - 1;
+            std::size_t try_start_token_14 = token_stream->index() - 1;
+            parser_state *try_start_state_14 = copy_current_state();
+            {
+              interface_field_ast *__node_169 = 0;
+              if (!parse_interface_field(&__node_169))
+                {
+                  goto __catch_14;
+                }
+              (*yynode)->declaration_sequence = snoc((*yynode)->declaration_sequence, __node_169, memory_pool);
 
-            interface_field_ast *__node_169 = 0;
-            if (!parse_interface_field(&__node_169))
-              {
-                goto __recovery_12;
-              }
-            (*yynode)->declaration_sequence = snoc((*yynode)->declaration_sequence, __node_169, memory_pool);
+            }
+            if (try_start_state_14)
+              delete try_start_state_14;
 
-            if (false) // recovery section: the only way to enter is goto
+            if (false) // the only way to enter here is using goto
               {
-              __recovery_12:
-                if (start_recovery_12 == token_stream->index() - 1)
+              __catch_14:
+                if (try_start_state_14)
+                  {
+                    restore_state(try_start_state_14);
+                    delete try_start_state_14;
+                  }
+                if (try_start_token_14 == token_stream->index() - 1)
                   yylex();
 
                 while (yytoken != Token_EOF
@@ -5411,7 +6801,13 @@ namespace java
 
           }
         if (yytoken != Token_RBRACE)
-          return yy_expected_token(yytoken, Token_RBRACE, "}");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RBRACE, "}");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -5438,13 +6834,23 @@ namespace java
     if (yytoken == Token_INTERFACE)
       {
         if (yytoken != Token_INTERFACE)
-          return yy_expected_token(yytoken, Token_INTERFACE, "interface");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_INTERFACE, "interface");
+              }
+            return false;
+          }
         yylex();
 
         identifier_ast *__node_170 = 0;
         if (!parse_identifier(&__node_170))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->interface_name = __node_170;
 
@@ -5453,7 +6859,11 @@ namespace java
             type_parameters_ast *__node_171 = 0;
             if (!parse_type_parameters(&__node_171))
               {
-                return yy_expected_symbol(ast_node::Kind_type_parameters, "type_parameters");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_type_parameters, "type_parameters");
+                  }
+                return false;
               }
             (*yynode)->type_parameters = __node_171;
 
@@ -5469,7 +6879,11 @@ namespace java
             interface_extends_clause_ast *__node_172 = 0;
             if (!parse_interface_extends_clause(&__node_172))
               {
-                return yy_expected_symbol(ast_node::Kind_interface_extends_clause, "interface_extends_clause");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_interface_extends_clause, "interface_extends_clause");
+                  }
+                return false;
               }
             (*yynode)->extends = __node_172;
 
@@ -5483,7 +6897,11 @@ namespace java
         interface_body_ast *__node_173 = 0;
         if (!parse_interface_body(&__node_173))
           {
-            return yy_expected_symbol(ast_node::Kind_interface_body, "interface_body");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_interface_body, "interface_body");
+              }
+            return false;
           }
         (*yynode)->body = __node_173;
 
@@ -5507,26 +6925,46 @@ namespace java
     if (yytoken == Token_EXTENDS)
       {
         if (yytoken != Token_EXTENDS)
-          return yy_expected_token(yytoken, Token_EXTENDS, "extends");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_EXTENDS, "extends");
+              }
+            return false;
+          }
         yylex();
 
         class_or_interface_type_name_ast *__node_174 = 0;
         if (!parse_class_or_interface_type_name(&__node_174))
           {
-            return yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+              }
+            return false;
           }
         (*yynode)->type_sequence = snoc((*yynode)->type_sequence, __node_174, memory_pool);
 
         while (yytoken == Token_COMMA)
           {
             if (yytoken != Token_COMMA)
-              return yy_expected_token(yytoken, Token_COMMA, ",");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_COMMA, ",");
+                  }
+                return false;
+              }
             yylex();
 
             class_or_interface_type_name_ast *__node_175 = 0;
             if (!parse_class_or_interface_type_name(&__node_175))
               {
-                return yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+                  }
+                return false;
               }
             (*yynode)->type_sequence = snoc((*yynode)->type_sequence, __node_175, memory_pool);
 
@@ -5614,7 +7052,11 @@ namespace java
             optional_modifiers_ast *__node_176 = 0;
             if (!parse_optional_modifiers(&__node_176))
               {
-                return yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+                  }
+                return false;
               }
             modifiers = __node_176;
 
@@ -5623,7 +7065,11 @@ namespace java
                 class_declaration_ast *__node_177 = 0;
                 if (!parse_class_declaration(&__node_177, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_class_declaration, "class_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_class_declaration, "class_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->class_declaration = __node_177;
 
@@ -5633,7 +7079,11 @@ namespace java
                 enum_declaration_ast *__node_178 = 0;
                 if (!parse_enum_declaration(&__node_178, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_enum_declaration, "enum_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_enum_declaration, "enum_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->enum_declaration = __node_178;
 
@@ -5643,7 +7093,11 @@ namespace java
                 interface_declaration_ast *__node_179 = 0;
                 if (!parse_interface_declaration(&__node_179, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_interface_declaration, "interface_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_interface_declaration, "interface_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->interface_declaration = __node_179;
 
@@ -5653,7 +7107,11 @@ namespace java
                 annotation_type_declaration_ast *__node_180 = 0;
                 if (!parse_annotation_type_declaration(&__node_180, modifiers))
                   {
-                    return yy_expected_symbol(ast_node::Kind_annotation_type_declaration, "annotation_type_declaration");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_annotation_type_declaration, "annotation_type_declaration");
+                      }
+                    return false;
                   }
                 (*yynode)->annotation_type_declaration = __node_180;
 
@@ -5676,7 +7134,11 @@ namespace java
                     type_parameters_ast *__node_181 = 0;
                     if (!parse_type_parameters(&__node_181))
                       {
-                        return yy_expected_symbol(ast_node::Kind_type_parameters, "type_parameters");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_type_parameters, "type_parameters");
+                          }
+                        return false;
                       }
                     type_parameters = __node_181;
 
@@ -5691,7 +7153,11 @@ namespace java
                 type_ast *__node_182 = 0;
                 if (!parse_type(&__node_182))
                   {
-                    return yy_expected_symbol(ast_node::Kind_type, "type");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_type, "type");
+                      }
+                    return false;
                   }
                 type = __node_182;
 
@@ -5702,7 +7168,11 @@ namespace java
                                                             modifiers, type_parameters, type
                                                            ))
                       {
-                        return yy_expected_symbol(ast_node::Kind_interface_method_declaration, "interface_method_declaration");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_interface_method_declaration, "interface_method_declaration");
+                          }
+                        return false;
                       }
                     (*yynode)->interface_method_declaration = __node_183;
 
@@ -5712,26 +7182,46 @@ namespace java
                     variable_declarator_ast *__node_184 = 0;
                     if (!parse_variable_declarator(&__node_184))
                       {
-                        return yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                          }
+                        return false;
                       }
                     variable_declarator_sequence = snoc(variable_declarator_sequence, __node_184, memory_pool);
 
                     while (yytoken == Token_COMMA)
                       {
                         if (yytoken != Token_COMMA)
-                          return yy_expected_token(yytoken, Token_COMMA, ",");
+                          {
+                            if (!yy_block_errors)
+                              {
+                                yy_expected_token(yytoken, Token_COMMA, ",");
+                              }
+                            return false;
+                          }
                         yylex();
 
                         variable_declarator_ast *__node_185 = 0;
                         if (!parse_variable_declarator(&__node_185))
                           {
-                            return yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                            if (!yy_block_errors)
+                              {
+                                yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                              }
+                            return false;
                           }
                         variable_declarator_sequence = snoc(variable_declarator_sequence, __node_185, memory_pool);
 
                       }
                     if (yytoken != Token_SEMICOLON)
-                      return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                          }
+                        return false;
+                      }
                     yylex();
 
                     variable_declaration_data_ast *__node_186 = 0;
@@ -5739,7 +7229,11 @@ namespace java
                                                          modifiers, type, variable_declarator_sequence
                                                         ))
                       {
-                        return yy_expected_symbol(ast_node::Kind_variable_declaration_data, "variable_declaration_data");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_variable_declaration_data, "variable_declaration_data");
+                          }
+                        return false;
                       }
                     (*yynode)->variable_declaration = __node_186;
 
@@ -5749,7 +7243,13 @@ namespace java
                     report_problem( error,
                                     "Expected method declaration after type parameter list" );
                     if (yytoken != Token_SEMICOLON)
-                      return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                          }
+                        return false;
+                      }
                     yylex();
 
                   }
@@ -5766,7 +7266,13 @@ namespace java
         else if (yytoken == Token_SEMICOLON)
           {
             if (yytoken != Token_SEMICOLON)
-              return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                  }
+                return false;
+              }
             yylex();
 
           }
@@ -5808,29 +7314,53 @@ namespace java
         identifier_ast *__node_187 = 0;
         if (!parse_identifier(&__node_187))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->method_name = __node_187;
 
         if (yytoken != Token_LPAREN)
-          return yy_expected_token(yytoken, Token_LPAREN, "(");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LPAREN, "(");
+              }
+            return false;
+          }
         yylex();
 
         optional_parameter_declaration_list_ast *__node_188 = 0;
         if (!parse_optional_parameter_declaration_list(&__node_188))
           {
-            return yy_expected_symbol(ast_node::Kind_optional_parameter_declaration_list, "optional_parameter_declaration_list");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_optional_parameter_declaration_list, "optional_parameter_declaration_list");
+              }
+            return false;
           }
         (*yynode)->parameters = __node_188;
 
         if (yytoken != Token_RPAREN)
-          return yy_expected_token(yytoken, Token_RPAREN, ")");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RPAREN, ")");
+              }
+            return false;
+          }
         yylex();
 
         optional_declarator_brackets_ast *__node_189 = 0;
         if (!parse_optional_declarator_brackets(&__node_189))
           {
-            return yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+              }
+            return false;
           }
         (*yynode)->declarator_brackets = __node_189;
 
@@ -5839,7 +7369,11 @@ namespace java
             throws_clause_ast *__node_190 = 0;
             if (!parse_throws_clause(&__node_190))
               {
-                return yy_expected_symbol(ast_node::Kind_throws_clause, "throws_clause");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_throws_clause, "throws_clause");
+                  }
+                return false;
               }
             (*yynode)->throws_clause = __node_190;
 
@@ -5851,7 +7385,13 @@ namespace java
             return false;
           }
         if (yytoken != Token_SEMICOLON)
-          return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -5876,18 +7416,32 @@ namespace java
         identifier_ast *__node_191 = 0;
         if (!parse_identifier(&__node_191))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->label = __node_191;
 
         if (yytoken != Token_COLON)
-          return yy_expected_token(yytoken, Token_COLON, ":");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_COLON, ":");
+              }
+            return false;
+          }
         yylex();
 
         embedded_statement_ast *__node_192 = 0;
         if (!parse_embedded_statement(&__node_192))
           {
-            return yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
+              }
+            return false;
           }
         (*yynode)->statement = __node_192;
 
@@ -5919,7 +7473,13 @@ namespace java
         if (yytoken == Token_TRUE)
           {
             if (yytoken != Token_TRUE)
-              return yy_expected_token(yytoken, Token_TRUE, "true");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_TRUE, "true");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->literal_type = literal::type_true;
@@ -5927,7 +7487,13 @@ namespace java
         else if (yytoken == Token_FALSE)
           {
             if (yytoken != Token_FALSE)
-              return yy_expected_token(yytoken, Token_FALSE, "false");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_FALSE, "false");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->literal_type = literal::type_false;
@@ -5935,7 +7501,13 @@ namespace java
         else if (yytoken == Token_NULL)
           {
             if (yytoken != Token_NULL)
-              return yy_expected_token(yytoken, Token_NULL, "null");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_NULL, "null");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->literal_type = literal::type_null;
@@ -5943,7 +7515,13 @@ namespace java
         else if (yytoken == Token_INTEGER_LITERAL)
           {
             if (yytoken != Token_INTEGER_LITERAL)
-              return yy_expected_token(yytoken, Token_INTEGER_LITERAL, "integer literal");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_INTEGER_LITERAL, "integer literal");
+                  }
+                return false;
+              }
             (*yynode)->integer_literal = token_stream->index() - 1;
             yylex();
 
@@ -5952,7 +7530,13 @@ namespace java
         else if (yytoken == Token_FLOATING_POINT_LITERAL)
           {
             if (yytoken != Token_FLOATING_POINT_LITERAL)
-              return yy_expected_token(yytoken, Token_FLOATING_POINT_LITERAL, "floating point literal");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_FLOATING_POINT_LITERAL, "floating point literal");
+                  }
+                return false;
+              }
             (*yynode)->floating_point_literal = token_stream->index() - 1;
             yylex();
 
@@ -5961,7 +7545,13 @@ namespace java
         else if (yytoken == Token_CHARACTER_LITERAL)
           {
             if (yytoken != Token_CHARACTER_LITERAL)
-              return yy_expected_token(yytoken, Token_CHARACTER_LITERAL, "character literal");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_CHARACTER_LITERAL, "character literal");
+                  }
+                return false;
+              }
             (*yynode)->character_literal = token_stream->index() - 1;
             yylex();
 
@@ -5970,7 +7560,13 @@ namespace java
         else if (yytoken == Token_STRING_LITERAL)
           {
             if (yytoken != Token_STRING_LITERAL)
-              return yy_expected_token(yytoken, Token_STRING_LITERAL, "string literal");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_STRING_LITERAL, "string literal");
+                  }
+                return false;
+              }
             (*yynode)->string_literal = token_stream->index() - 1;
             yylex();
 
@@ -6029,20 +7625,34 @@ namespace java
         bit_or_expression_ast *__node_193 = 0;
         if (!parse_bit_or_expression(&__node_193))
           {
-            return yy_expected_symbol(ast_node::Kind_bit_or_expression, "bit_or_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_bit_or_expression, "bit_or_expression");
+              }
+            return false;
           }
         (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_193, memory_pool);
 
         while (yytoken == Token_LOG_AND)
           {
             if (yytoken != Token_LOG_AND)
-              return yy_expected_token(yytoken, Token_LOG_AND, "&&");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LOG_AND, "&&");
+                  }
+                return false;
+              }
             yylex();
 
             bit_or_expression_ast *__node_194 = 0;
             if (!parse_bit_or_expression(&__node_194))
               {
-                return yy_expected_symbol(ast_node::Kind_bit_or_expression, "bit_or_expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_bit_or_expression, "bit_or_expression");
+                  }
+                return false;
               }
             (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_194, memory_pool);
 
@@ -6096,20 +7706,34 @@ namespace java
         logical_and_expression_ast *__node_195 = 0;
         if (!parse_logical_and_expression(&__node_195))
           {
-            return yy_expected_symbol(ast_node::Kind_logical_and_expression, "logical_and_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_logical_and_expression, "logical_and_expression");
+              }
+            return false;
           }
         (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_195, memory_pool);
 
         while (yytoken == Token_LOG_OR)
           {
             if (yytoken != Token_LOG_OR)
-              return yy_expected_token(yytoken, Token_LOG_OR, "||");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LOG_OR, "||");
+                  }
+                return false;
+              }
             yylex();
 
             logical_and_expression_ast *__node_196 = 0;
             if (!parse_logical_and_expression(&__node_196))
               {
-                return yy_expected_symbol(ast_node::Kind_logical_and_expression, "logical_and_expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_logical_and_expression, "logical_and_expression");
+                  }
+                return false;
               }
             (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_196, memory_pool);
 
@@ -6144,14 +7768,22 @@ namespace java
         builtin_type_ast *__node_197 = 0;
         if (!parse_builtin_type(&__node_197))
           {
-            return yy_expected_symbol(ast_node::Kind_builtin_type, "builtin_type");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_builtin_type, "builtin_type");
+              }
+            return false;
           }
         (*yynode)->type = __node_197;
 
         mandatory_declarator_brackets_ast *__node_198 = 0;
         if (!parse_mandatory_declarator_brackets(&__node_198))
           {
-            return yy_expected_symbol(ast_node::Kind_mandatory_declarator_brackets, "mandatory_declarator_brackets");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_mandatory_declarator_brackets, "mandatory_declarator_brackets");
+              }
+            return false;
           }
         (*yynode)->declarator_brackets = __node_198;
 
@@ -6177,11 +7809,23 @@ namespace java
         do
           {
             if (yytoken != Token_LBRACKET)
-              return yy_expected_token(yytoken, Token_LBRACKET, "[");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LBRACKET, "[");
+                  }
+                return false;
+              }
             yylex();
 
             if (yytoken != Token_RBRACKET)
-              return yy_expected_token(yytoken, Token_RBRACKET, "]");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_RBRACKET, "]");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->bracket_count++;
@@ -6295,29 +7939,53 @@ namespace java
         identifier_ast *__node_199 = 0;
         if (!parse_identifier(&__node_199))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->method_name = __node_199;
 
         if (yytoken != Token_LPAREN)
-          return yy_expected_token(yytoken, Token_LPAREN, "(");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LPAREN, "(");
+              }
+            return false;
+          }
         yylex();
 
         optional_parameter_declaration_list_ast *__node_200 = 0;
         if (!parse_optional_parameter_declaration_list(&__node_200))
           {
-            return yy_expected_symbol(ast_node::Kind_optional_parameter_declaration_list, "optional_parameter_declaration_list");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_optional_parameter_declaration_list, "optional_parameter_declaration_list");
+              }
+            return false;
           }
         (*yynode)->parameters = __node_200;
 
         if (yytoken != Token_RPAREN)
-          return yy_expected_token(yytoken, Token_RPAREN, ")");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RPAREN, ")");
+              }
+            return false;
+          }
         yylex();
 
         optional_declarator_brackets_ast *__node_201 = 0;
         if (!parse_optional_declarator_brackets(&__node_201))
           {
-            return yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+              }
+            return false;
           }
         (*yynode)->declarator_brackets = __node_201;
 
@@ -6326,7 +7994,11 @@ namespace java
             throws_clause_ast *__node_202 = 0;
             if (!parse_throws_clause(&__node_202))
               {
-                return yy_expected_symbol(ast_node::Kind_throws_clause, "throws_clause");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_throws_clause, "throws_clause");
+                  }
+                return false;
               }
             (*yynode)->throws_clause = __node_202;
 
@@ -6342,7 +8014,11 @@ namespace java
             block_ast *__node_203 = 0;
             if (!parse_block(&__node_203))
               {
-                return yy_expected_symbol(ast_node::Kind_block, "block");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_block, "block");
+                  }
+                return false;
               }
             body = __node_203;
 
@@ -6350,7 +8026,13 @@ namespace java
         else if (yytoken == Token_SEMICOLON)
           {
             if (yytoken != Token_SEMICOLON)
-              return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                  }
+                return false;
+              }
             yylex();
 
           }
@@ -6407,7 +8089,11 @@ namespace java
         unary_expression_ast *__node_204 = 0;
         if (!parse_unary_expression(&__node_204))
           {
-            return yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+              }
+            return false;
           }
         (*yynode)->expression = __node_204;
 
@@ -6418,7 +8104,11 @@ namespace java
             multiplicative_expression_rest_ast *__node_205 = 0;
             if (!parse_multiplicative_expression_rest(&__node_205))
               {
-                return yy_expected_symbol(ast_node::Kind_multiplicative_expression_rest, "multiplicative_expression_rest");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_multiplicative_expression_rest, "multiplicative_expression_rest");
+                  }
+                return false;
               }
             (*yynode)->additional_expression_sequence = snoc((*yynode)->additional_expression_sequence, __node_205, memory_pool);
 
@@ -6447,7 +8137,13 @@ namespace java
         if (yytoken == Token_STAR)
           {
             if (yytoken != Token_STAR)
-              return yy_expected_token(yytoken, Token_STAR, "*");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_STAR, "*");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->multiplicative_operator = multiplicative_expression_rest::op_star;
@@ -6455,7 +8151,13 @@ namespace java
         else if (yytoken == Token_SLASH)
           {
             if (yytoken != Token_SLASH)
-              return yy_expected_token(yytoken, Token_SLASH, "/");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_SLASH, "/");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->multiplicative_operator = multiplicative_expression_rest::op_slash;
@@ -6463,7 +8165,13 @@ namespace java
         else if (yytoken == Token_REMAINDER)
           {
             if (yytoken != Token_REMAINDER)
-              return yy_expected_token(yytoken, Token_REMAINDER, "%");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_REMAINDER, "%");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->multiplicative_operator = multiplicative_expression_rest::op_remainder;
@@ -6475,7 +8183,11 @@ namespace java
         unary_expression_ast *__node_206 = 0;
         if (!parse_unary_expression(&__node_206))
           {
-            return yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+              }
+            return false;
           }
         (*yynode)->expression = __node_206;
 
@@ -6499,7 +8211,13 @@ namespace java
     if (yytoken == Token_NEW)
       {
         if (yytoken != Token_NEW)
-          return yy_expected_token(yytoken, Token_NEW, "new");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_NEW, "new");
+              }
+            return false;
+          }
         yylex();
 
         if ((yytoken == Token_LESS_THAN) && ( compatibility_mode() >= java15_compatibility ))
@@ -6507,7 +8225,11 @@ namespace java
             non_wildcard_type_arguments_ast *__node_207 = 0;
             if (!parse_non_wildcard_type_arguments(&__node_207))
               {
-                return yy_expected_symbol(ast_node::Kind_non_wildcard_type_arguments, "non_wildcard_type_arguments");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_non_wildcard_type_arguments, "non_wildcard_type_arguments");
+                  }
+                return false;
               }
             (*yynode)->type_arguments = __node_207;
 
@@ -6521,25 +8243,45 @@ namespace java
         non_array_type_ast *__node_208 = 0;
         if (!parse_non_array_type(&__node_208))
           {
-            return yy_expected_symbol(ast_node::Kind_non_array_type, "non_array_type");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_non_array_type, "non_array_type");
+              }
+            return false;
           }
         (*yynode)->type = __node_208;
 
         if (yytoken == Token_LPAREN)
           {
             if (yytoken != Token_LPAREN)
-              return yy_expected_token(yytoken, Token_LPAREN, "(");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LPAREN, "(");
+                  }
+                return false;
+              }
             yylex();
 
             optional_argument_list_ast *__node_209 = 0;
             if (!parse_optional_argument_list(&__node_209))
               {
-                return yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                  }
+                return false;
               }
             (*yynode)->class_constructor_arguments = __node_209;
 
             if (yytoken != Token_RPAREN)
-              return yy_expected_token(yytoken, Token_RPAREN, ")");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_RPAREN, ")");
+                  }
+                return false;
+              }
             yylex();
 
             if (yytoken == Token_LBRACE)
@@ -6547,7 +8289,11 @@ namespace java
                 class_body_ast *__node_210 = 0;
                 if (!parse_class_body(&__node_210))
                   {
-                    return yy_expected_symbol(ast_node::Kind_class_body, "class_body");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_class_body, "class_body");
+                      }
+                    return false;
                   }
                 (*yynode)->class_body = __node_210;
 
@@ -6564,7 +8310,11 @@ namespace java
             array_creator_rest_ast *__node_211 = 0;
             if (!parse_array_creator_rest(&__node_211))
               {
-                return yy_expected_symbol(ast_node::Kind_array_creator_rest, "array_creator_rest");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_array_creator_rest, "array_creator_rest");
+                  }
+                return false;
               }
             (*yynode)->array_creator_rest = __node_211;
 
@@ -6606,7 +8356,11 @@ namespace java
             class_or_interface_type_name_ast *__node_212 = 0;
             if (!parse_class_or_interface_type_name(&__node_212))
               {
-                return yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+                  }
+                return false;
               }
             (*yynode)->class_or_interface_type = __node_212;
 
@@ -6624,7 +8378,11 @@ namespace java
             builtin_type_ast *__node_213 = 0;
             if (!parse_builtin_type(&__node_213))
               {
-                return yy_expected_symbol(ast_node::Kind_builtin_type, "builtin_type");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_builtin_type, "builtin_type");
+                  }
+                return false;
               }
             (*yynode)->builtin_type = __node_213;
 
@@ -6653,32 +8411,52 @@ namespace java
     if (yytoken == Token_LESS_THAN)
       {
         if (yytoken != Token_LESS_THAN)
-          return yy_expected_token(yytoken, Token_LESS_THAN, "<");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LESS_THAN, "<");
+              }
+            return false;
+          }
         yylex();
 
-        int currentLtLevel = ltCounter;
-        ltCounter++;
+        int currentLtLevel = _M_state.ltCounter;
+        _M_state.ltCounter++;
         type_argument_type_ast *__node_214 = 0;
         if (!parse_type_argument_type(&__node_214))
           {
-            return yy_expected_symbol(ast_node::Kind_type_argument_type, "type_argument_type");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_type_argument_type, "type_argument_type");
+              }
+            return false;
           }
         (*yynode)->type_argument_type_sequence = snoc((*yynode)->type_argument_type_sequence, __node_214, memory_pool);
 
         while (yytoken == Token_COMMA)
           {
-            if ( ltCounter != currentLtLevel + 1 )
+            if ( _M_state.ltCounter != currentLtLevel + 1 )
               {
                 break;
               }
             if (yytoken != Token_COMMA)
-              return yy_expected_token(yytoken, Token_COMMA, ",");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_COMMA, ",");
+                  }
+                return false;
+              }
             yylex();
 
             type_argument_type_ast *__node_215 = 0;
             if (!parse_type_argument_type(&__node_215))
               {
-                return yy_expected_symbol(ast_node::Kind_type_argument_type, "type_argument_type");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_type_argument_type, "type_argument_type");
+                  }
+                return false;
               }
             (*yynode)->type_argument_type_sequence = snoc((*yynode)->type_argument_type_sequence, __node_215, memory_pool);
 
@@ -6690,7 +8468,11 @@ namespace java
             type_arguments_or_parameters_end_ast *__node_216 = 0;
             if (!parse_type_arguments_or_parameters_end(&__node_216))
               {
-                return yy_expected_symbol(ast_node::Kind_type_arguments_or_parameters_end, "type_arguments_or_parameters_end");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_type_arguments_or_parameters_end, "type_arguments_or_parameters_end");
+                  }
+                return false;
               }
           }
         else if (true /*epsilon*/)
@@ -6699,9 +8481,12 @@ namespace java
           {
             return false;
           }
-        if (currentLtLevel == 0 && ltCounter != currentLtLevel)
+        if (currentLtLevel == 0 && _M_state.ltCounter != currentLtLevel )
           {
-            report_problem(error, "The amount of closing ``>'' characters is incorrect");
+            if (!yy_block_errors)
+              {
+                report_problem(error, "The amount of closing ``>'' characters is incorrect");
+              }
             return false;
           }
       }
@@ -6779,27 +8564,52 @@ namespace java
             || yytoken == Token_STRING_LITERAL
             || yytoken == Token_IDENTIFIER)
           {
-            expression_ast *__node_217 = 0;
-            if (!parse_expression(&__node_217))
-              {
-                return yy_expected_symbol(ast_node::Kind_expression, "expression");
-              }
-            (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_217, memory_pool);
+            std::size_t try_start_token_15 = token_stream->index() - 1;
+            parser_state *try_start_state_15 = copy_current_state();
+            {
+              expression_ast *__node_217 = 0;
+              if (!parse_expression(&__node_217))
+                {
+                  goto __catch_15;
+                }
+              (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_217, memory_pool);
 
-            while (yytoken == Token_COMMA)
-              {
-                if (yytoken != Token_COMMA)
-                  return yy_expected_token(yytoken, Token_COMMA, ",");
-                yylex();
+              while (yytoken == Token_COMMA)
+                {
+                  if (yytoken != Token_COMMA)
+                    goto __catch_15;
+                  yylex();
 
-                expression_ast *__node_218 = 0;
-                if (!parse_expression(&__node_218))
+                  expression_ast *__node_218 = 0;
+                  if (!parse_expression(&__node_218))
+                    {
+                      goto __catch_15;
+                    }
+                  (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_218, memory_pool);
+
+                }
+            }
+            if (try_start_state_15)
+              delete try_start_state_15;
+
+            if (false) // the only way to enter here is using goto
+              {
+              __catch_15:
+                if (try_start_state_15)
                   {
-                    return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                    restore_state(try_start_state_15);
+                    delete try_start_state_15;
                   }
-                (*yynode)->expression_sequence = snoc((*yynode)->expression_sequence, __node_218, memory_pool);
+                if (try_start_token_15 == token_stream->index() - 1)
+                  yylex();
 
+                while (yytoken != Token_EOF
+                       && yytoken != Token_RPAREN)
+                  {
+                    yylex();
+                  }
               }
+
           }
         else if (true /*epsilon*/)
         {}
@@ -6837,14 +8647,22 @@ namespace java
         builtin_type_ast *__node_219 = 0;
         if (!parse_builtin_type(&__node_219))
           {
-            return yy_expected_symbol(ast_node::Kind_builtin_type, "builtin_type");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_builtin_type, "builtin_type");
+              }
+            return false;
           }
         (*yynode)->type = __node_219;
 
         optional_declarator_brackets_ast *__node_220 = 0;
         if (!parse_optional_declarator_brackets(&__node_220))
           {
-            return yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+              }
+            return false;
           }
         (*yynode)->declarator_brackets = __node_220;
 
@@ -6930,11 +8748,23 @@ namespace java
         while (yytoken == Token_LBRACKET)
           {
             if (yytoken != Token_LBRACKET)
-              return yy_expected_token(yytoken, Token_LBRACKET, "[");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LBRACKET, "[");
+                  }
+                return false;
+              }
             yylex();
 
             if (yytoken != Token_RBRACKET)
-              return yy_expected_token(yytoken, Token_RBRACKET, "]");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_RBRACKET, "]");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->bracket_count++;
@@ -6999,7 +8829,13 @@ namespace java
             if (yytoken == Token_PRIVATE)
               {
                 if (yytoken != Token_PRIVATE)
-                  return yy_expected_token(yytoken, Token_PRIVATE, "private");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_PRIVATE, "private");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->modifiers |= modifiers::mod_private;
@@ -7007,7 +8843,13 @@ namespace java
             else if (yytoken == Token_PUBLIC)
               {
                 if (yytoken != Token_PUBLIC)
-                  return yy_expected_token(yytoken, Token_PUBLIC, "public");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_PUBLIC, "public");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->modifiers |= modifiers::mod_public;
@@ -7015,7 +8857,13 @@ namespace java
             else if (yytoken == Token_PROTECTED)
               {
                 if (yytoken != Token_PROTECTED)
-                  return yy_expected_token(yytoken, Token_PROTECTED, "protected");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_PROTECTED, "protected");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->modifiers |= modifiers::mod_protected;
@@ -7023,7 +8871,13 @@ namespace java
             else if (yytoken == Token_STATIC)
               {
                 if (yytoken != Token_STATIC)
-                  return yy_expected_token(yytoken, Token_STATIC, "static");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_STATIC, "static");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->modifiers |= modifiers::mod_static;
@@ -7031,7 +8885,13 @@ namespace java
             else if (yytoken == Token_TRANSIENT)
               {
                 if (yytoken != Token_TRANSIENT)
-                  return yy_expected_token(yytoken, Token_TRANSIENT, "transient");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_TRANSIENT, "transient");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->modifiers |= modifiers::mod_transient;
@@ -7039,7 +8899,13 @@ namespace java
             else if (yytoken == Token_FINAL)
               {
                 if (yytoken != Token_FINAL)
-                  return yy_expected_token(yytoken, Token_FINAL, "final");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_FINAL, "final");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->modifiers |= modifiers::mod_final;
@@ -7047,7 +8913,13 @@ namespace java
             else if (yytoken == Token_ABSTRACT)
               {
                 if (yytoken != Token_ABSTRACT)
-                  return yy_expected_token(yytoken, Token_ABSTRACT, "abstract");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_ABSTRACT, "abstract");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->modifiers |= modifiers::mod_abstract;
@@ -7055,7 +8927,13 @@ namespace java
             else if (yytoken == Token_NATIVE)
               {
                 if (yytoken != Token_NATIVE)
-                  return yy_expected_token(yytoken, Token_NATIVE, "native");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_NATIVE, "native");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->modifiers |= modifiers::mod_native;
@@ -7063,7 +8941,13 @@ namespace java
             else if (yytoken == Token_SYNCHRONIZED)
               {
                 if (yytoken != Token_SYNCHRONIZED)
-                  return yy_expected_token(yytoken, Token_SYNCHRONIZED, "synchronized");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_SYNCHRONIZED, "synchronized");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->modifiers |= modifiers::mod_synchronized;
@@ -7071,7 +8955,13 @@ namespace java
             else if (yytoken == Token_VOLATILE)
               {
                 if (yytoken != Token_VOLATILE)
-                  return yy_expected_token(yytoken, Token_VOLATILE, "volatile");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_VOLATILE, "volatile");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->modifiers |= modifiers::mod_volatile;
@@ -7079,7 +8969,13 @@ namespace java
             else if (yytoken == Token_STRICTFP)
               {
                 if (yytoken != Token_STRICTFP)
-                  return yy_expected_token(yytoken, Token_STRICTFP, "strictfp");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_STRICTFP, "strictfp");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->modifiers |= modifiers::mod_strictfp;
@@ -7090,19 +8986,29 @@ namespace java
                   {
                     break;
                   }
-                std::size_t start_recovery_13 = token_stream->index() - 1;
+                std::size_t try_start_token_16 = token_stream->index() - 1;
+                parser_state *try_start_state_16 = copy_current_state();
+                {
+                  annotation_ast *__node_221 = 0;
+                  if (!parse_annotation(&__node_221))
+                    {
+                      goto __catch_16;
+                    }
+                  (*yynode)->mod_annotation_sequence = snoc((*yynode)->mod_annotation_sequence, __node_221, memory_pool);
 
-                annotation_ast *__node_221 = 0;
-                if (!parse_annotation(&__node_221))
-                  {
-                    goto __recovery_13;
-                  }
-                (*yynode)->mod_annotation_sequence = snoc((*yynode)->mod_annotation_sequence, __node_221, memory_pool);
+                }
+                if (try_start_state_16)
+                  delete try_start_state_16;
 
-                if (false) // recovery section: the only way to enter is goto
+                if (false) // the only way to enter here is using goto
                   {
-                  __recovery_13:
-                    if (start_recovery_13 == token_stream->index() - 1)
+                  __catch_16:
+                    if (try_start_state_16)
+                      {
+                        restore_state(try_start_state_16);
+                        delete try_start_state_16;
+                      }
+                    if (try_start_token_16 == token_stream->index() - 1)
                       yylex();
 
                     while (yytoken != Token_EOF
@@ -7190,7 +9096,11 @@ namespace java
             parameter_declaration_ellipsis_ast *__node_222 = 0;
             if (!parse_parameter_declaration_ellipsis(&__node_222, &ellipsis_occurred))
               {
-                return yy_expected_symbol(ast_node::Kind_parameter_declaration_ellipsis, "parameter_declaration_ellipsis");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_parameter_declaration_ellipsis, "parameter_declaration_ellipsis");
+                  }
+                return false;
               }
             (*yynode)->parameter_declaration_sequence = snoc((*yynode)->parameter_declaration_sequence, __node_222, memory_pool);
 
@@ -7201,13 +9111,23 @@ namespace java
                     break;
                   }
                 if (yytoken != Token_COMMA)
-                  return yy_expected_token(yytoken, Token_COMMA, ",");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_COMMA, ",");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 parameter_declaration_ellipsis_ast *__node_223 = 0;
                 if (!parse_parameter_declaration_ellipsis(&__node_223, &ellipsis_occurred))
                   {
-                    return yy_expected_symbol(ast_node::Kind_parameter_declaration_ellipsis, "parameter_declaration_ellipsis");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_parameter_declaration_ellipsis, "parameter_declaration_ellipsis");
+                      }
+                    return false;
                   }
                 (*yynode)->parameter_declaration_sequence = snoc((*yynode)->parameter_declaration_sequence, __node_223, memory_pool);
 
@@ -7255,26 +9175,42 @@ namespace java
             if (yytoken == Token_FINAL)
               {
                 if (yytoken != Token_FINAL)
-                  return yy_expected_token(yytoken, Token_FINAL, "final");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_FINAL, "final");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->has_mod_final = true;
               }
             else if (yytoken == Token_AT)
               {
-                std::size_t start_recovery_14 = token_stream->index() - 1;
+                std::size_t try_start_token_17 = token_stream->index() - 1;
+                parser_state *try_start_state_17 = copy_current_state();
+                {
+                  annotation_ast *__node_224 = 0;
+                  if (!parse_annotation(&__node_224))
+                    {
+                      goto __catch_17;
+                    }
+                  (*yynode)->mod_annotation_sequence = snoc((*yynode)->mod_annotation_sequence, __node_224, memory_pool);
 
-                annotation_ast *__node_224 = 0;
-                if (!parse_annotation(&__node_224))
-                  {
-                    goto __recovery_14;
-                  }
-                (*yynode)->mod_annotation_sequence = snoc((*yynode)->mod_annotation_sequence, __node_224, memory_pool);
+                }
+                if (try_start_state_17)
+                  delete try_start_state_17;
 
-                if (false) // recovery section: the only way to enter is goto
+                if (false) // the only way to enter here is using goto
                   {
-                  __recovery_14:
-                    if (start_recovery_14 == token_stream->index() - 1)
+                  __catch_17:
+                    if (try_start_state_17)
+                      {
+                        restore_state(try_start_state_17);
+                        delete try_start_state_17;
+                      }
+                    if (try_start_token_17 == token_stream->index() - 1)
                       yylex();
 
                     while (yytoken != Token_EOF
@@ -7323,19 +9259,29 @@ namespace java
       {
         while (yytoken == Token_AT)
           {
-            std::size_t start_recovery_15 = token_stream->index() - 1;
+            std::size_t try_start_token_18 = token_stream->index() - 1;
+            parser_state *try_start_state_18 = copy_current_state();
+            {
+              annotation_ast *__node_225 = 0;
+              if (!parse_annotation(&__node_225))
+                {
+                  goto __catch_18;
+                }
+              (*yynode)->annotation_sequence = snoc((*yynode)->annotation_sequence, __node_225, memory_pool);
 
-            annotation_ast *__node_225 = 0;
-            if (!parse_annotation(&__node_225))
-              {
-                goto __recovery_15;
-              }
-            (*yynode)->annotation_sequence = snoc((*yynode)->annotation_sequence, __node_225, memory_pool);
+            }
+            if (try_start_state_18)
+              delete try_start_state_18;
 
-            if (false) // recovery section: the only way to enter is goto
+            if (false) // the only way to enter here is using goto
               {
-              __recovery_15:
-                if (start_recovery_15 == token_stream->index() - 1)
+              __catch_18:
+                if (try_start_state_18)
+                  {
+                    restore_state(try_start_state_18);
+                    delete try_start_state_18;
+                  }
+                if (try_start_token_18 == token_stream->index() - 1)
                   yylex();
 
                 while (yytoken != Token_EOF
@@ -7348,18 +9294,34 @@ namespace java
 
           }
         if (yytoken != Token_PACKAGE)
-          return yy_expected_token(yytoken, Token_PACKAGE, "package");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_PACKAGE, "package");
+              }
+            return false;
+          }
         yylex();
 
         qualified_identifier_ast *__node_226 = 0;
         if (!parse_qualified_identifier(&__node_226))
           {
-            return yy_expected_symbol(ast_node::Kind_qualified_identifier, "qualified_identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_qualified_identifier, "qualified_identifier");
+              }
+            return false;
           }
         (*yynode)->package_name = __node_226;
 
         if (yytoken != Token_SEMICOLON)
-          return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_SEMICOLON, ";");
+              }
+            return false;
+          }
         yylex();
 
       }
@@ -7405,28 +9367,44 @@ namespace java
         optional_modifiers_ast *__node_227 = 0;
         if (!parse_optional_modifiers(&__node_227))
           {
-            return yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+              }
+            return false;
           }
         (*yynode)->parameter_modifiers = __node_227;
 
         type_ast *__node_228 = 0;
         if (!parse_type(&__node_228))
           {
-            return yy_expected_symbol(ast_node::Kind_type, "type");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_type, "type");
+              }
+            return false;
           }
         (*yynode)->type = __node_228;
 
         identifier_ast *__node_229 = 0;
         if (!parse_identifier(&__node_229))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->variable_name = __node_229;
 
         optional_declarator_brackets_ast *__node_230 = 0;
         if (!parse_optional_declarator_brackets(&__node_230))
           {
-            return yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+              }
+            return false;
           }
         (*yynode)->declarator_brackets = __node_230;
 
@@ -7463,21 +9441,35 @@ namespace java
         optional_parameter_modifiers_ast *__node_231 = 0;
         if (!parse_optional_parameter_modifiers(&__node_231))
           {
-            return yy_expected_symbol(ast_node::Kind_optional_parameter_modifiers, "optional_parameter_modifiers");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_optional_parameter_modifiers, "optional_parameter_modifiers");
+              }
+            return false;
           }
         (*yynode)->parameter_modifiers = __node_231;
 
         type_ast *__node_232 = 0;
         if (!parse_type(&__node_232))
           {
-            return yy_expected_symbol(ast_node::Kind_type, "type");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_type, "type");
+              }
+            return false;
           }
         (*yynode)->type = __node_232;
 
         if (yytoken == Token_ELLIPSIS)
           {
             if (yytoken != Token_ELLIPSIS)
-              return yy_expected_token(yytoken, Token_ELLIPSIS, "...");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_ELLIPSIS, "...");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->has_ellipsis = true;
@@ -7494,14 +9486,22 @@ namespace java
         identifier_ast *__node_233 = 0;
         if (!parse_identifier(&__node_233))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->variable_name = __node_233;
 
         optional_declarator_brackets_ast *__node_234 = 0;
         if (!parse_optional_declarator_brackets(&__node_234))
           {
-            return yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+              }
+            return false;
           }
         (*yynode)->declarator_brackets = __node_234;
 
@@ -7528,7 +9528,13 @@ namespace java
         if (yytoken == Token_INCREMENT)
           {
             if (yytoken != Token_INCREMENT)
-              return yy_expected_token(yytoken, Token_INCREMENT, "++");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_INCREMENT, "++");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->postfix_operator = postfix_operator::op_increment;
@@ -7536,7 +9542,13 @@ namespace java
         else if (yytoken == Token_DECREMENT)
           {
             if (yytoken != Token_DECREMENT)
-              return yy_expected_token(yytoken, Token_DECREMENT, "--");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_DECREMENT, "--");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->postfix_operator = postfix_operator::op_decrement;
@@ -7604,7 +9616,11 @@ namespace java
             literal_ast *__node_235 = 0;
             if (!parse_literal(&__node_235))
               {
-                return yy_expected_symbol(ast_node::Kind_literal, "literal");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_literal, "literal");
+                  }
+                return false;
               }
             (*yynode)->literal = __node_235;
 
@@ -7614,7 +9630,11 @@ namespace java
             new_expression_ast *__node_236 = 0;
             if (!parse_new_expression(&__node_236))
               {
-                return yy_expected_symbol(ast_node::Kind_new_expression, "new_expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_new_expression, "new_expression");
+                  }
+                return false;
               }
             (*yynode)->new_expression = __node_236;
 
@@ -7622,18 +9642,34 @@ namespace java
         else if (yytoken == Token_LPAREN)
           {
             if (yytoken != Token_LPAREN)
-              return yy_expected_token(yytoken, Token_LPAREN, "(");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LPAREN, "(");
+                  }
+                return false;
+              }
             yylex();
 
             expression_ast *__node_237 = 0;
             if (!parse_expression(&__node_237))
               {
-                return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_expression, "expression");
+                  }
+                return false;
               }
             (*yynode)->parenthesis_expression = __node_237;
 
             if (yytoken != Token_RPAREN)
-              return yy_expected_token(yytoken, Token_RPAREN, ")");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_RPAREN, ")");
+                  }
+                return false;
+              }
             yylex();
 
           }
@@ -7650,7 +9686,11 @@ namespace java
             builtin_type_dot_class_ast *__node_238 = 0;
             if (!parse_builtin_type_dot_class(&__node_238))
               {
-                return yy_expected_symbol(ast_node::Kind_builtin_type_dot_class, "builtin_type_dot_class");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_builtin_type_dot_class, "builtin_type_dot_class");
+                  }
+                return false;
               }
             (*yynode)->builtin_type_dot_class = __node_238;
 
@@ -7658,30 +9698,56 @@ namespace java
         else if (yytoken == Token_THIS)
           {
             if (yytoken != Token_THIS)
-              return yy_expected_token(yytoken, Token_THIS, "this");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_THIS, "this");
+                  }
+                return false;
+              }
             yylex();
 
             if (yytoken == Token_LPAREN)
               {
                 if (yytoken != Token_LPAREN)
-                  return yy_expected_token(yytoken, Token_LPAREN, "(");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_LPAREN, "(");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 optional_argument_list_ast *__node_239 = 0;
                 if (!parse_optional_argument_list(&__node_239))
                   {
-                    return yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                      }
+                    return false;
                   }
                 arguments = __node_239;
 
                 if (yytoken != Token_RPAREN)
-                  return yy_expected_token(yytoken, Token_RPAREN, ")");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_RPAREN, ")");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 this_call_data_ast *__node_240 = 0;
                 if (!parse_this_call_data(&__node_240, 0 /* no type arguments */, arguments ))
                   {
-                    return yy_expected_symbol(ast_node::Kind_this_call_data, "this_call_data");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_this_call_data, "this_call_data");
+                      }
+                    return false;
                   }
                 (*yynode)->this_call = __node_240;
 
@@ -7691,7 +9757,11 @@ namespace java
                 this_access_data_ast *__node_241 = 0;
                 if (!parse_this_access_data(&__node_241))
                   {
-                    return yy_expected_symbol(ast_node::Kind_this_access_data, "this_access_data");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_this_access_data, "this_access_data");
+                      }
+                    return false;
                   }
                 (*yynode)->this_access = __node_241;
 
@@ -7704,20 +9774,34 @@ namespace java
         else if (yytoken == Token_SUPER)
           {
             if (yytoken != Token_SUPER)
-              return yy_expected_token(yytoken, Token_SUPER, "super");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_SUPER, "super");
+                  }
+                return false;
+              }
             yylex();
 
             super_suffix_ast *__node_242 = 0;
             if (!parse_super_suffix(&__node_242))
               {
-                return yy_expected_symbol(ast_node::Kind_super_suffix, "super_suffix");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_super_suffix, "super_suffix");
+                  }
+                return false;
               }
             super_suffix = __node_242;
 
             super_access_data_ast *__node_243 = 0;
             if (!parse_super_access_data(&__node_243, 0 /* no type arguments */, super_suffix ))
               {
-                return yy_expected_symbol(ast_node::Kind_super_access_data, "super_access_data");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_super_access_data, "super_access_data");
+                  }
+                return false;
               }
             (*yynode)->super_access = __node_243;
 
@@ -7727,27 +9811,45 @@ namespace java
             non_wildcard_type_arguments_ast *__node_244 = 0;
             if (!parse_non_wildcard_type_arguments(&__node_244))
               {
-                return yy_expected_symbol(ast_node::Kind_non_wildcard_type_arguments, "non_wildcard_type_arguments");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_non_wildcard_type_arguments, "non_wildcard_type_arguments");
+                  }
+                return false;
               }
             type_arguments = __node_244;
 
             if (yytoken == Token_SUPER)
               {
                 if (yytoken != Token_SUPER)
-                  return yy_expected_token(yytoken, Token_SUPER, "super");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_SUPER, "super");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 super_suffix_ast *__node_245 = 0;
                 if (!parse_super_suffix(&__node_245))
                   {
-                    return yy_expected_symbol(ast_node::Kind_super_suffix, "super_suffix");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_super_suffix, "super_suffix");
+                      }
+                    return false;
                   }
                 super_suffix = __node_245;
 
                 super_access_data_ast *__node_246 = 0;
                 if (!parse_super_access_data(&__node_246, type_arguments, super_suffix ))
                   {
-                    return yy_expected_symbol(ast_node::Kind_super_access_data, "super_access_data");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_super_access_data, "super_access_data");
+                      }
+                    return false;
                   }
                 (*yynode)->super_access = __node_246;
 
@@ -7755,28 +9857,54 @@ namespace java
             else if (yytoken == Token_THIS)
               {
                 if (yytoken != Token_THIS)
-                  return yy_expected_token(yytoken, Token_THIS, "this");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_THIS, "this");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 if (yytoken != Token_LPAREN)
-                  return yy_expected_token(yytoken, Token_LPAREN, "(");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_LPAREN, "(");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 optional_argument_list_ast *__node_247 = 0;
                 if (!parse_optional_argument_list(&__node_247))
                   {
-                    return yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                      }
+                    return false;
                   }
                 arguments = __node_247;
 
                 if (yytoken != Token_RPAREN)
-                  return yy_expected_token(yytoken, Token_RPAREN, ")");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_RPAREN, ")");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 this_call_data_ast *__node_248 = 0;
                 if (!parse_this_call_data(&__node_248, type_arguments, arguments ))
                   {
-                    return yy_expected_symbol(ast_node::Kind_this_call_data, "this_call_data");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_this_call_data, "this_call_data");
+                      }
+                    return false;
                   }
                 (*yynode)->this_call = __node_248;
 
@@ -7786,29 +9914,53 @@ namespace java
                 identifier_ast *__node_249 = 0;
                 if (!parse_identifier(&__node_249))
                   {
-                    return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                      }
+                    return false;
                   }
                 identifier = __node_249;
 
                 if (yytoken != Token_LPAREN)
-                  return yy_expected_token(yytoken, Token_LPAREN, "(");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_LPAREN, "(");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 optional_argument_list_ast *__node_250 = 0;
                 if (!parse_optional_argument_list(&__node_250))
                   {
-                    return yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                      }
+                    return false;
                   }
                 arguments = __node_250;
 
                 if (yytoken != Token_RPAREN)
-                  return yy_expected_token(yytoken, Token_RPAREN, ")");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_RPAREN, ")");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 method_call_data_ast *__node_251 = 0;
                 if (!parse_method_call_data(&__node_251, type_arguments, identifier, arguments ))
                   {
-                    return yy_expected_symbol(ast_node::Kind_method_call_data, "method_call_data");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_method_call_data, "method_call_data");
+                      }
+                    return false;
                   }
                 (*yynode)->method_call = __node_251;
 
@@ -7818,65 +9970,112 @@ namespace java
                 return false;
               }
           }
-        else if ((yytoken == Token_IDENTIFIER) && ( lookahead_is_array_type_dot_class() == false ))
-          {
-            identifier_ast *__node_252 = 0;
-            if (!parse_identifier(&__node_252))
-              {
-                return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
-              }
-            identifier = __node_252;
-
-            if (yytoken == Token_LPAREN)
-              {
-                if (yytoken != Token_LPAREN)
-                  return yy_expected_token(yytoken, Token_LPAREN, "(");
-                yylex();
-
-                optional_argument_list_ast *__node_253 = 0;
-                if (!parse_optional_argument_list(&__node_253))
-                  {
-                    return yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
-                  }
-                arguments = __node_253;
-
-                if (yytoken != Token_RPAREN)
-                  return yy_expected_token(yytoken, Token_RPAREN, ")");
-                yylex();
-
-                method_call_data_ast *__node_254 = 0;
-                if (!parse_method_call_data(&__node_254,
-                                            0 /* no type arguments */, identifier, arguments
-                                           ))
-                  {
-                    return yy_expected_symbol(ast_node::Kind_method_call_data, "method_call_data");
-                  }
-                (*yynode)->method_call = __node_254;
-
-              }
-            else if (true /*epsilon*/)
-              {
-                simple_name_access_data_ast *__node_255 = 0;
-                if (!parse_simple_name_access_data(&__node_255, identifier ))
-                  {
-                    return yy_expected_symbol(ast_node::Kind_simple_name_access_data, "simple_name_access_data");
-                  }
-                (*yynode)->simple_name_access = __node_255;
-
-              }
-            else
-              {
-                return false;
-              }
-          }
         else if (yytoken == Token_IDENTIFIER)
           {
-            array_type_dot_class_ast *__node_256 = 0;
-            if (!parse_array_type_dot_class(&__node_256))
+            bool block_errors_19 = block_errors(true);
+            std::size_t try_start_token_19 = token_stream->index() - 1;
+            parser_state *try_start_state_19 = copy_current_state();
+            {
+              array_type_dot_class_ast *__node_252 = 0;
+              if (!parse_array_type_dot_class(&__node_252))
+                {
+                  goto __catch_19;
+                }
+              (*yynode)->array_type_dot_class = __node_252;
+
+            }
+            block_errors(block_errors_19);
+            if (try_start_state_19)
+              delete try_start_state_19;
+
+            if (false) // the only way to enter here is using goto
               {
-                return yy_expected_symbol(ast_node::Kind_array_type_dot_class, "array_type_dot_class");
+              __catch_19:
+                if (try_start_state_19)
+                  {
+                    restore_state(try_start_state_19);
+                    delete try_start_state_19;
+                  }
+                block_errors(block_errors_19);
+                rewind(try_start_token_19);
+
+                identifier_ast *__node_253 = 0;
+                if (!parse_identifier(&__node_253))
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                      }
+                    return false;
+                  }
+                identifier = __node_253;
+
+                if (yytoken == Token_LPAREN)
+                  {
+                    if (yytoken != Token_LPAREN)
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_token(yytoken, Token_LPAREN, "(");
+                          }
+                        return false;
+                      }
+                    yylex();
+
+                    optional_argument_list_ast *__node_254 = 0;
+                    if (!parse_optional_argument_list(&__node_254))
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                          }
+                        return false;
+                      }
+                    arguments = __node_254;
+
+                    if (yytoken != Token_RPAREN)
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_token(yytoken, Token_RPAREN, ")");
+                          }
+                        return false;
+                      }
+                    yylex();
+
+                    method_call_data_ast *__node_255 = 0;
+                    if (!parse_method_call_data(&__node_255,
+                                                0 /* no type arguments */, identifier, arguments
+                                               ))
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_method_call_data, "method_call_data");
+                          }
+                        return false;
+                      }
+                    (*yynode)->method_call = __node_255;
+
+                  }
+                else if (true /*epsilon*/)
+                  {
+                    simple_name_access_data_ast *__node_256 = 0;
+                    if (!parse_simple_name_access_data(&__node_256, identifier ))
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_simple_name_access_data, "simple_name_access_data");
+                          }
+                        return false;
+                      }
+                    (*yynode)->simple_name_access = __node_256;
+
+                  }
+                else
+                  {
+                    return false;
+                  }
               }
-            (*yynode)->array_type_dot_class = __node_256;
 
           }
         else
@@ -7926,7 +10125,11 @@ namespace java
         primary_atom_ast *__node_257 = 0;
         if (!parse_primary_atom(&__node_257))
           {
-            return yy_expected_symbol(ast_node::Kind_primary_atom, "primary_atom");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_primary_atom, "primary_atom");
+              }
+            return false;
           }
         (*yynode)->primary_atom = __node_257;
 
@@ -7936,7 +10139,11 @@ namespace java
             primary_selector_ast *__node_258 = 0;
             if (!parse_primary_selector(&__node_258))
               {
-                return yy_expected_symbol(ast_node::Kind_primary_selector, "primary_selector");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_primary_selector, "primary_selector");
+                  }
+                return false;
               }
             (*yynode)->selector_sequence = snoc((*yynode)->selector_sequence, __node_258, memory_pool);
 
@@ -7972,19 +10179,35 @@ namespace java
         if (yytoken == Token_DOT)
           {
             if (yytoken != Token_DOT)
-              return yy_expected_token(yytoken, Token_DOT, ".");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_DOT, ".");
+                  }
+                return false;
+              }
             yylex();
 
             if (yytoken == Token_CLASS)
               {
                 if (yytoken != Token_CLASS)
-                  return yy_expected_token(yytoken, Token_CLASS, "class");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_CLASS, "class");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 class_access_data_ast *__node_259 = 0;
                 if (!parse_class_access_data(&__node_259))
                   {
-                    return yy_expected_symbol(ast_node::Kind_class_access_data, "class_access_data");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_class_access_data, "class_access_data");
+                      }
+                    return false;
                   }
                 (*yynode)->class_access = __node_259;
 
@@ -7992,13 +10215,23 @@ namespace java
             else if (yytoken == Token_THIS)
               {
                 if (yytoken != Token_THIS)
-                  return yy_expected_token(yytoken, Token_THIS, "this");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_THIS, "this");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 this_access_data_ast *__node_260 = 0;
                 if (!parse_this_access_data(&__node_260))
                   {
-                    return yy_expected_symbol(ast_node::Kind_this_access_data, "this_access_data");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_this_access_data, "this_access_data");
+                      }
+                    return false;
                   }
                 (*yynode)->this_access = __node_260;
 
@@ -8008,7 +10241,11 @@ namespace java
                 new_expression_ast *__node_261 = 0;
                 if (!parse_new_expression(&__node_261))
                   {
-                    return yy_expected_symbol(ast_node::Kind_new_expression, "new_expression");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_new_expression, "new_expression");
+                      }
+                    return false;
                   }
                 (*yynode)->new_expression = __node_261;
 
@@ -8018,14 +10255,22 @@ namespace java
                 identifier_ast *__node_262 = 0;
                 if (!parse_identifier(&__node_262))
                   {
-                    return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                      }
+                    return false;
                   }
                 identifier = __node_262;
 
                 simple_name_access_data_ast *__node_263 = 0;
                 if (!parse_simple_name_access_data(&__node_263, identifier ))
                   {
-                    return yy_expected_symbol(ast_node::Kind_simple_name_access_data, "simple_name_access_data");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_simple_name_access_data, "simple_name_access_data");
+                      }
+                    return false;
                   }
                 (*yynode)->simple_name_access = __node_263;
 
@@ -8039,7 +10284,11 @@ namespace java
                     non_wildcard_type_arguments_ast *__node_264 = 0;
                     if (!parse_non_wildcard_type_arguments(&__node_264))
                       {
-                        return yy_expected_symbol(ast_node::Kind_non_wildcard_type_arguments, "non_wildcard_type_arguments");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_non_wildcard_type_arguments, "non_wildcard_type_arguments");
+                          }
+                        return false;
                       }
                     type_arguments = __node_264;
 
@@ -8053,20 +10302,34 @@ namespace java
                 if (yytoken == Token_SUPER)
                   {
                     if (yytoken != Token_SUPER)
-                      return yy_expected_token(yytoken, Token_SUPER, "super");
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_token(yytoken, Token_SUPER, "super");
+                          }
+                        return false;
+                      }
                     yylex();
 
                     super_suffix_ast *__node_265 = 0;
                     if (!parse_super_suffix(&__node_265))
                       {
-                        return yy_expected_symbol(ast_node::Kind_super_suffix, "super_suffix");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_super_suffix, "super_suffix");
+                          }
+                        return false;
                       }
                     super_suffix = __node_265;
 
                     super_access_data_ast *__node_266 = 0;
                     if (!parse_super_access_data(&__node_266, type_arguments, super_suffix ))
                       {
-                        return yy_expected_symbol(ast_node::Kind_super_access_data, "super_access_data");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_super_access_data, "super_access_data");
+                          }
+                        return false;
                       }
                     (*yynode)->super_access = __node_266;
 
@@ -8076,29 +10339,53 @@ namespace java
                     identifier_ast *__node_267 = 0;
                     if (!parse_identifier(&__node_267))
                       {
-                        return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                          }
+                        return false;
                       }
                     identifier = __node_267;
 
                     if (yytoken != Token_LPAREN)
-                      return yy_expected_token(yytoken, Token_LPAREN, "(");
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_token(yytoken, Token_LPAREN, "(");
+                          }
+                        return false;
+                      }
                     yylex();
 
                     optional_argument_list_ast *__node_268 = 0;
                     if (!parse_optional_argument_list(&__node_268))
                       {
-                        return yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                          }
+                        return false;
                       }
                     arguments = __node_268;
 
                     if (yytoken != Token_RPAREN)
-                      return yy_expected_token(yytoken, Token_RPAREN, ")");
+                      {
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_token(yytoken, Token_RPAREN, ")");
+                          }
+                        return false;
+                      }
                     yylex();
 
                     method_call_data_ast *__node_269 = 0;
                     if (!parse_method_call_data(&__node_269, type_arguments, identifier, arguments ))
                       {
-                        return yy_expected_symbol(ast_node::Kind_method_call_data, "method_call_data");
+                        if (!yy_block_errors)
+                          {
+                            yy_expected_symbol(ast_node::Kind_method_call_data, "method_call_data");
+                          }
+                        return false;
                       }
                     (*yynode)->method_call = __node_269;
 
@@ -8118,7 +10405,11 @@ namespace java
             array_access_ast *__node_270 = 0;
             if (!parse_array_access(&__node_270))
               {
-                return yy_expected_symbol(ast_node::Kind_array_access, "array_access");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_array_access, "array_access");
+                  }
+                return false;
               }
             (*yynode)->array_access = __node_270;
 
@@ -8149,20 +10440,34 @@ namespace java
         identifier_ast *__node_271 = 0;
         if (!parse_identifier(&__node_271))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->name_sequence = snoc((*yynode)->name_sequence, __node_271, memory_pool);
 
         while (yytoken == Token_DOT)
           {
             if (yytoken != Token_DOT)
-              return yy_expected_token(yytoken, Token_DOT, ".");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_DOT, ".");
+                  }
+                return false;
+              }
             yylex();
 
             identifier_ast *__node_272 = 0;
             if (!parse_identifier(&__node_272))
               {
-                return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                  }
+                return false;
               }
             (*yynode)->name_sequence = snoc((*yynode)->name_sequence, __node_272, memory_pool);
 
@@ -8189,7 +10494,11 @@ namespace java
         identifier_ast *__node_273 = 0;
         if (!parse_identifier(&__node_273))
           {
-            return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+              }
+            return false;
           }
         (*yynode)->name_sequence = snoc((*yynode)->name_sequence, __node_273, memory_pool);
 
@@ -8197,7 +10506,13 @@ namespace java
         while (yytoken == Token_DOT)
           {
             if (yytoken != Token_DOT)
-              return yy_expected_token(yytoken, Token_DOT, ".");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_DOT, ".");
+                  }
+                return false;
+              }
             yylex();
 
             if (yytoken == Token_IDENTIFIER)
@@ -8205,7 +10520,11 @@ namespace java
                 identifier_ast *__node_274 = 0;
                 if (!parse_identifier(&__node_274))
                   {
-                    return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                      }
+                    return false;
                   }
                 (*yynode)->name_sequence = snoc((*yynode)->name_sequence, __node_274, memory_pool);
 
@@ -8213,7 +10532,13 @@ namespace java
             else if (yytoken == Token_STAR)
               {
                 if (yytoken != Token_STAR)
-                  return yy_expected_token(yytoken, Token_STAR, "*");
+                  {
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_token(yytoken, Token_STAR, "*");
+                      }
+                    return false;
+                  }
                 yylex();
 
                 (*yynode)->has_star = true;
@@ -8273,7 +10598,11 @@ namespace java
         shift_expression_ast *__node_275 = 0;
         if (!parse_shift_expression(&__node_275))
           {
-            return yy_expected_symbol(ast_node::Kind_shift_expression, "shift_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_shift_expression, "shift_expression");
+              }
+            return false;
           }
         (*yynode)->expression = __node_275;
 
@@ -8287,7 +10616,11 @@ namespace java
                 relational_expression_rest_ast *__node_276 = 0;
                 if (!parse_relational_expression_rest(&__node_276))
                   {
-                    return yy_expected_symbol(ast_node::Kind_relational_expression_rest, "relational_expression_rest");
+                    if (!yy_block_errors)
+                      {
+                        yy_expected_symbol(ast_node::Kind_relational_expression_rest, "relational_expression_rest");
+                      }
+                    return false;
                   }
                 (*yynode)->additional_expression_sequence = snoc((*yynode)->additional_expression_sequence, __node_276, memory_pool);
 
@@ -8300,13 +10633,23 @@ namespace java
         else if (yytoken == Token_INSTANCEOF)
           {
             if (yytoken != Token_INSTANCEOF)
-              return yy_expected_token(yytoken, Token_INSTANCEOF, "instanceof");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_INSTANCEOF, "instanceof");
+                  }
+                return false;
+              }
             yylex();
 
             type_ast *__node_277 = 0;
             if (!parse_type(&__node_277))
               {
-                return yy_expected_symbol(ast_node::Kind_type, "type");
+                if (!yy_block_errors)
+                  {
+                    yy_expected_symbol(ast_node::Kind_type, "type");
+                  }
+                return false;
               }
             (*yynode)->instanceof_type = __node_277;
 
@@ -8342,7 +10685,13 @@ namespace java
         if (yytoken == Token_LESS_THAN)
           {
             if (yytoken != Token_LESS_THAN)
-              return yy_expected_token(yytoken, Token_LESS_THAN, "<");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LESS_THAN, "<");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->relational_operator = relational_expression_rest::op_less_than;
@@ -8350,7 +10699,13 @@ namespace java
         else if (yytoken == Token_GREATER_THAN)
           {
             if (yytoken != Token_GREATER_THAN)
-              return yy_expected_token(yytoken, Token_GREATER_THAN, ">");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_GREATER_THAN, ">");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->relational_operator = relational_expression_rest::op_greater_than;
@@ -8358,7 +10713,13 @@ namespace java
         else if (yytoken == Token_LESS_EQUAL)
           {
             if (yytoken != Token_LESS_EQUAL)
-              return yy_expected_token(yytoken, Token_LESS_EQUAL, "<=");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LESS_EQUAL, "<=");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->relational_operator = relational_expression_rest::op_less_equal;
@@ -8366,7 +10727,13 @@ namespace java
         else if (yytoken == Token_GREATER_EQUAL)
           {
             if (yytoken != Token_GREATER_EQUAL)
-              return yy_expected_token(yytoken, Token_GREATER_EQUAL, ">=");
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_GREATER_EQUAL, ">=");
+                  }
+                return false;
+              }
             yylex();
 
             (*yynode)->relational_operator = relational_expression_rest::op_greater_equal;
@@ -8378,7 +10745,11 @@ namespace java
         shift_expression_ast *__node_278 = 0;
         if (!parse_shift_expression(&__node_278))
           {
-            return yy_expected_symbol(ast_node::Kind_shift_expression, "shift_expression");
+            if (!yy_block_errors)
+              {
+                yy_expected_symbol(ast_node::Kind_shift_expression, "shift_expression");
+              }
+            return false;
           }
         (*yynode)->expression = __node_278;
 
@@ -8402,7 +10773,13 @@ namespace java
                              if (yytoken == Token_RETURN)
                                {
                                  if (yytoken != Token_RETURN)
-                                   return yy_expected_token(yytoken, Token_RETURN, "return");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_RETURN, "return");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  if (yytoken == Token_BOOLEAN
@@ -8437,7 +10814,11 @@ namespace java
                                      expression_ast *__node_279 = 0;
                                      if (!parse_expression(&__node_279))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->return_expression = __node_279;
 
@@ -8449,7 +10830,13 @@ namespace java
                                      return false;
                                    }
                                  if (yytoken != Token_SEMICOLON)
-                                   return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                }
@@ -8501,7 +10888,11 @@ namespace java
                                  additive_expression_ast *__node_280 = 0;
                                  if (!parse_additive_expression(&__node_280))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_additive_expression, "additive_expression");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_additive_expression, "additive_expression");
+                                       }
+                                     return false;
                                    }
                                  (*yynode)->expression = __node_280;
 
@@ -8512,7 +10903,11 @@ namespace java
                                      shift_expression_rest_ast *__node_281 = 0;
                                      if (!parse_shift_expression_rest(&__node_281))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_shift_expression_rest, "shift_expression_rest");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_shift_expression_rest, "shift_expression_rest");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->additional_expression_sequence = snoc((*yynode)->additional_expression_sequence, __node_281, memory_pool);
 
@@ -8541,7 +10936,13 @@ namespace java
                                  if (yytoken == Token_LSHIFT)
                                    {
                                      if (yytoken != Token_LSHIFT)
-                                       return yy_expected_token(yytoken, Token_LSHIFT, "<<");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_LSHIFT, "<<");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      (*yynode)->shift_operator = shift_expression_rest::op_lshift;
@@ -8549,7 +10950,13 @@ namespace java
                                  else if (yytoken == Token_SIGNED_RSHIFT)
                                    {
                                      if (yytoken != Token_SIGNED_RSHIFT)
-                                       return yy_expected_token(yytoken, Token_SIGNED_RSHIFT, ">>");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_SIGNED_RSHIFT, ">>");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      (*yynode)->shift_operator = shift_expression_rest::op_signed_rshift;
@@ -8557,7 +10964,13 @@ namespace java
                                  else if (yytoken == Token_UNSIGNED_RSHIFT)
                                    {
                                      if (yytoken != Token_UNSIGNED_RSHIFT)
-                                       return yy_expected_token(yytoken, Token_UNSIGNED_RSHIFT, ">>>");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_UNSIGNED_RSHIFT, ">>>");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      (*yynode)->shift_operator = shift_expression_rest::op_unsigned_rshift;
@@ -8569,7 +10982,11 @@ namespace java
                                  additive_expression_ast *__node_282 = 0;
                                  if (!parse_additive_expression(&__node_282))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_additive_expression, "additive_expression");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_additive_expression, "additive_expression");
+                                       }
+                                     return false;
                                    }
                                  (*yynode)->expression = __node_282;
 
@@ -8686,7 +11103,11 @@ namespace java
                                  expression_ast *__node_283 = 0;
                                  if (!parse_expression(&__node_283))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                       }
+                                     return false;
                                    }
                                  (*yynode)->expression = __node_283;
 
@@ -8787,25 +11208,47 @@ namespace java
                                  if (yytoken == Token_LPAREN)
                                    {
                                      if (yytoken != Token_LPAREN)
-                                       return yy_expected_token(yytoken, Token_LPAREN, "(");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_LPAREN, "(");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      optional_argument_list_ast *__node_284 = 0;
                                      if (!parse_optional_argument_list(&__node_284))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->constructor_arguments = __node_284;
 
                                      if (yytoken != Token_RPAREN)
-                                       return yy_expected_token(yytoken, Token_RPAREN, ")");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_RPAREN, ")");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                    }
                                  else if (yytoken == Token_DOT)
                                    {
                                      if (yytoken != Token_DOT)
-                                       return yy_expected_token(yytoken, Token_DOT, ".");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_DOT, ".");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      if ((yytoken == Token_IDENTIFIER) && ( LA(2).kind != Token_LPAREN ))
@@ -8813,14 +11256,22 @@ namespace java
                                          identifier_ast *__node_285 = 0;
                                          if (!parse_identifier(&__node_285))
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                                               }
+                                             return false;
                                            }
                                          identifier = __node_285;
 
                                          simple_name_access_data_ast *__node_286 = 0;
                                          if (!parse_simple_name_access_data(&__node_286, identifier ))
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_simple_name_access_data, "simple_name_access_data");
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_simple_name_access_data, "simple_name_access_data");
+                                               }
+                                             return false;
                                            }
                                          (*yynode)->simple_name_access = __node_286;
 
@@ -8833,7 +11284,11 @@ namespace java
                                              non_wildcard_type_arguments_ast *__node_287 = 0;
                                              if (!parse_non_wildcard_type_arguments(&__node_287))
                                                {
-                                                 return yy_expected_symbol(ast_node::Kind_non_wildcard_type_arguments, "non_wildcard_type_arguments");
+                                                 if (!yy_block_errors)
+                                                   {
+                                                     yy_expected_symbol(ast_node::Kind_non_wildcard_type_arguments, "non_wildcard_type_arguments");
+                                                   }
+                                                 return false;
                                                }
                                              type_arguments = __node_287;
 
@@ -8847,29 +11302,53 @@ namespace java
                                          identifier_ast *__node_288 = 0;
                                          if (!parse_identifier(&__node_288))
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                                               }
+                                             return false;
                                            }
                                          identifier = __node_288;
 
                                          if (yytoken != Token_LPAREN)
-                                           return yy_expected_token(yytoken, Token_LPAREN, "(");
+                                           {
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_token(yytoken, Token_LPAREN, "(");
+                                               }
+                                             return false;
+                                           }
                                          yylex();
 
                                          optional_argument_list_ast *__node_289 = 0;
                                          if (!parse_optional_argument_list(&__node_289))
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_optional_argument_list, "optional_argument_list");
+                                               }
+                                             return false;
                                            }
                                          arguments = __node_289;
 
                                          if (yytoken != Token_RPAREN)
-                                           return yy_expected_token(yytoken, Token_RPAREN, ")");
+                                           {
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_token(yytoken, Token_RPAREN, ")");
+                                               }
+                                             return false;
+                                           }
                                          yylex();
 
                                          method_call_data_ast *__node_290 = 0;
                                          if (!parse_method_call_data(&__node_290, type_arguments, identifier, arguments ))
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_method_call_data, "method_call_data");
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_method_call_data, "method_call_data");
+                                               }
+                                             return false;
                                            }
                                          (*yynode)->method_call = __node_290;
 
@@ -8906,13 +11385,23 @@ namespace java
                                  if (yytoken == Token_CASE)
                                    {
                                      if (yytoken != Token_CASE)
-                                       return yy_expected_token(yytoken, Token_CASE, "case");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_CASE, "case");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      expression_ast *__node_291 = 0;
                                      if (!parse_expression(&__node_291))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->case_expression = __node_291;
 
@@ -8921,7 +11410,13 @@ namespace java
                                  else if (yytoken == Token_DEFAULT)
                                    {
                                      if (yytoken != Token_DEFAULT)
-                                       return yy_expected_token(yytoken, Token_DEFAULT, "default");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_DEFAULT, "default");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      (*yynode)->branch_type = switch_label::default_branch;
@@ -8931,7 +11426,13 @@ namespace java
                                      return false;
                                    }
                                  if (yytoken != Token_COLON)
-                                   return yy_expected_token(yytoken, Token_COLON, ":");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_COLON, ":");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                }
@@ -8959,7 +11460,11 @@ namespace java
                                      switch_label_ast *__node_292 = 0;
                                      if (!parse_switch_label(&__node_292))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_switch_label, "switch_label");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_switch_label, "switch_label");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->label_sequence = snoc((*yynode)->label_sequence, __node_292, memory_pool);
 
@@ -9023,19 +11528,29 @@ namespace java
                                         || yytoken == Token_STRING_LITERAL
                                         || yytoken == Token_IDENTIFIER)
                                    {
-                                     std::size_t start_recovery_16 = token_stream->index() - 1;
+                                     std::size_t try_start_token_20 = token_stream->index() - 1;
+                                     parser_state *try_start_state_20 = copy_current_state();
+                                     {
+                                       block_statement_ast *__node_293 = 0;
+                                       if (!parse_block_statement(&__node_293))
+                                         {
+                                           goto __catch_20;
+                                         }
+                                       (*yynode)->statement_sequence = snoc((*yynode)->statement_sequence, __node_293, memory_pool);
 
-                                     block_statement_ast *__node_293 = 0;
-                                     if (!parse_block_statement(&__node_293))
-                                       {
-                                         goto __recovery_16;
-                                       }
-                                     (*yynode)->statement_sequence = snoc((*yynode)->statement_sequence, __node_293, memory_pool);
+                                     }
+                                     if (try_start_state_20)
+                                       delete try_start_state_20;
 
-                                     if (false) // recovery section: the only way to enter is goto
+                                     if (false) // the only way to enter here is using goto
                                        {
-                                       __recovery_16:
-                                         if (start_recovery_16 == token_stream->index() - 1)
+                                       __catch_20:
+                                         if (try_start_state_20)
+                                           {
+                                             restore_state(try_start_state_20);
+                                             delete try_start_state_20;
+                                           }
+                                         if (try_start_token_20 == token_stream->index() - 1)
                                            yylex();
 
                                          while (yytoken != Token_EOF
@@ -9124,44 +11639,82 @@ namespace java
                              if (yytoken == Token_SWITCH)
                                {
                                  if (yytoken != Token_SWITCH)
-                                   return yy_expected_token(yytoken, Token_SWITCH, "switch");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_SWITCH, "switch");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  if (yytoken != Token_LPAREN)
-                                   return yy_expected_token(yytoken, Token_LPAREN, "(");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_LPAREN, "(");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  expression_ast *__node_294 = 0;
                                  if (!parse_expression(&__node_294))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                       }
+                                     return false;
                                    }
                                  (*yynode)->switch_expression = __node_294;
 
                                  if (yytoken != Token_RPAREN)
-                                   return yy_expected_token(yytoken, Token_RPAREN, ")");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_RPAREN, ")");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  if (yytoken != Token_LBRACE)
-                                   return yy_expected_token(yytoken, Token_LBRACE, "{");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_LBRACE, "{");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  while (yytoken == Token_CASE
                                         || yytoken == Token_DEFAULT)
                                    {
-                                     std::size_t start_recovery_17 = token_stream->index() - 1;
+                                     std::size_t try_start_token_21 = token_stream->index() - 1;
+                                     parser_state *try_start_state_21 = copy_current_state();
+                                     {
+                                       switch_section_ast *__node_295 = 0;
+                                       if (!parse_switch_section(&__node_295))
+                                         {
+                                           goto __catch_21;
+                                         }
+                                       (*yynode)->switch_section_sequence = snoc((*yynode)->switch_section_sequence, __node_295, memory_pool);
 
-                                     switch_section_ast *__node_295 = 0;
-                                     if (!parse_switch_section(&__node_295))
-                                       {
-                                         goto __recovery_17;
-                                       }
-                                     (*yynode)->switch_section_sequence = snoc((*yynode)->switch_section_sequence, __node_295, memory_pool);
+                                     }
+                                     if (try_start_state_21)
+                                       delete try_start_state_21;
 
-                                     if (false) // recovery section: the only way to enter is goto
+                                     if (false) // the only way to enter here is using goto
                                        {
-                                       __recovery_17:
-                                         if (start_recovery_17 == token_stream->index() - 1)
+                                       __catch_21:
+                                         if (try_start_state_21)
+                                           {
+                                             restore_state(try_start_state_21);
+                                             delete try_start_state_21;
+                                           }
+                                         if (try_start_token_21 == token_stream->index() - 1)
                                            yylex();
 
                                          while (yytoken != Token_EOF
@@ -9175,7 +11728,13 @@ namespace java
 
                                    }
                                  if (yytoken != Token_RBRACE)
-                                   return yy_expected_token(yytoken, Token_RBRACE, "}");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_RBRACE, "}");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                }
@@ -9198,28 +11757,54 @@ namespace java
                              if (yytoken == Token_SYNCHRONIZED)
                                {
                                  if (yytoken != Token_SYNCHRONIZED)
-                                   return yy_expected_token(yytoken, Token_SYNCHRONIZED, "synchronized");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_SYNCHRONIZED, "synchronized");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  if (yytoken != Token_LPAREN)
-                                   return yy_expected_token(yytoken, Token_LPAREN, "(");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_LPAREN, "(");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  expression_ast *__node_296 = 0;
                                  if (!parse_expression(&__node_296))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                       }
+                                     return false;
                                    }
                                  (*yynode)->locked_type = __node_296;
 
                                  if (yytoken != Token_RPAREN)
-                                   return yy_expected_token(yytoken, Token_RPAREN, ")");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_RPAREN, ")");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  block_ast *__node_297 = 0;
                                  if (!parse_block(&__node_297))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_block, "block");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_block, "block");
+                                       }
+                                     return false;
                                    }
                                  (*yynode)->synchronized_body = __node_297;
 
@@ -9371,18 +11956,34 @@ namespace java
                              if (yytoken == Token_THROW)
                                {
                                  if (yytoken != Token_THROW)
-                                   return yy_expected_token(yytoken, Token_THROW, "throw");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_THROW, "throw");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  expression_ast *__node_298 = 0;
                                  if (!parse_expression(&__node_298))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                       }
+                                     return false;
                                    }
                                  (*yynode)->exception = __node_298;
 
                                  if (yytoken != Token_SEMICOLON)
-                                   return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                }
@@ -9405,26 +12006,46 @@ namespace java
                              if (yytoken == Token_THROWS)
                                {
                                  if (yytoken != Token_THROWS)
-                                   return yy_expected_token(yytoken, Token_THROWS, "throws");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_THROWS, "throws");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  qualified_identifier_ast *__node_299 = 0;
                                  if (!parse_qualified_identifier(&__node_299))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_qualified_identifier, "qualified_identifier");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_qualified_identifier, "qualified_identifier");
+                                       }
+                                     return false;
                                    }
                                  (*yynode)->identifier_sequence = snoc((*yynode)->identifier_sequence, __node_299, memory_pool);
 
                                  while (yytoken == Token_COMMA)
                                    {
                                      if (yytoken != Token_COMMA)
-                                       return yy_expected_token(yytoken, Token_COMMA, ",");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_COMMA, ",");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      qualified_identifier_ast *__node_300 = 0;
                                      if (!parse_qualified_identifier(&__node_300))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_qualified_identifier, "qualified_identifier");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_qualified_identifier, "qualified_identifier");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->identifier_sequence = snoc((*yynode)->identifier_sequence, __node_300, memory_pool);
 
@@ -9449,13 +12070,23 @@ namespace java
                              if (yytoken == Token_TRY)
                                {
                                  if (yytoken != Token_TRY)
-                                   return yy_expected_token(yytoken, Token_TRY, "try");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_TRY, "try");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  block_ast *__node_301 = 0;
                                  if (!parse_block(&__node_301))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_block, "block");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_block, "block");
+                                       }
+                                     return false;
                                    }
                                  (*yynode)->try_body = __node_301;
 
@@ -9466,7 +12097,11 @@ namespace java
                                          catch_clause_ast *__node_302 = 0;
                                          if (!parse_catch_clause(&__node_302))
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_catch_clause, "catch_clause");
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_catch_clause, "catch_clause");
+                                               }
+                                             return false;
                                            }
                                          (*yynode)->catch_clause_sequence = snoc((*yynode)->catch_clause_sequence, __node_302, memory_pool);
 
@@ -9475,13 +12110,23 @@ namespace java
                                      if (yytoken == Token_FINALLY)
                                        {
                                          if (yytoken != Token_FINALLY)
-                                           return yy_expected_token(yytoken, Token_FINALLY, "finally");
+                                           {
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_token(yytoken, Token_FINALLY, "finally");
+                                               }
+                                             return false;
+                                           }
                                          yylex();
 
                                          block_ast *__node_303 = 0;
                                          if (!parse_block(&__node_303))
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_block, "block");
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_block, "block");
+                                               }
+                                             return false;
                                            }
                                          (*yynode)->finally_body = __node_303;
 
@@ -9496,13 +12141,23 @@ namespace java
                                  else if (yytoken == Token_FINALLY)
                                    {
                                      if (yytoken != Token_FINALLY)
-                                       return yy_expected_token(yytoken, Token_FINALLY, "finally");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_FINALLY, "finally");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      block_ast *__node_304 = 0;
                                      if (!parse_block(&__node_304))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_block, "block");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_block, "block");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->finally_body = __node_304;
 
@@ -9544,7 +12199,11 @@ namespace java
                                      class_type_ast *__node_305 = 0;
                                      if (!parse_class_type(&__node_305))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_class_type, "class_type");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_class_type, "class_type");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->class_type = __node_305;
 
@@ -9562,7 +12221,11 @@ namespace java
                                      optional_array_builtin_type_ast *__node_306 = 0;
                                      if (!parse_optional_array_builtin_type(&__node_306))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_optional_array_builtin_type, "optional_array_builtin_type");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_optional_array_builtin_type, "optional_array_builtin_type");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->builtin_type = __node_306;
 
@@ -9614,7 +12277,11 @@ namespace java
                                      type_argument_type_ast *__node_307 = 0;
                                      if (!parse_type_argument_type(&__node_307))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_type_argument_type, "type_argument_type");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_type_argument_type, "type_argument_type");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->type_argument_type = __node_307;
 
@@ -9624,7 +12291,11 @@ namespace java
                                      wildcard_type_ast *__node_308 = 0;
                                      if (!parse_wildcard_type(&__node_308))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_wildcard_type, "wildcard_type");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_wildcard_type, "wildcard_type");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->wildcard_type = __node_308;
 
@@ -9666,7 +12337,11 @@ namespace java
                                      class_type_ast *__node_309 = 0;
                                      if (!parse_class_type(&__node_309))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_class_type, "class_type");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_class_type, "class_type");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->class_type = __node_309;
 
@@ -9684,7 +12359,11 @@ namespace java
                                      mandatory_array_builtin_type_ast *__node_310 = 0;
                                      if (!parse_mandatory_array_builtin_type(&__node_310))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_mandatory_array_builtin_type, "mandatory_array_builtin_type");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_mandatory_array_builtin_type, "mandatory_array_builtin_type");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->mandatory_array_builtin_type = __node_310;
 
@@ -9713,32 +12392,52 @@ namespace java
                              if (yytoken == Token_LESS_THAN)
                                {
                                  if (yytoken != Token_LESS_THAN)
-                                   return yy_expected_token(yytoken, Token_LESS_THAN, "<");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_LESS_THAN, "<");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
-                                 int currentLtLevel = ltCounter;
-                                 ltCounter++;
+                                 int currentLtLevel = _M_state.ltCounter;
+                                 _M_state.ltCounter++;
                                  type_argument_ast *__node_311 = 0;
                                  if (!parse_type_argument(&__node_311))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_type_argument, "type_argument");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_type_argument, "type_argument");
+                                       }
+                                     return false;
                                    }
                                  (*yynode)->type_argument_sequence = snoc((*yynode)->type_argument_sequence, __node_311, memory_pool);
 
                                  while (yytoken == Token_COMMA)
                                    {
-                                     if ( ltCounter != currentLtLevel + 1 )
+                                     if ( _M_state.ltCounter != currentLtLevel + 1 )
                                        {
                                          break;
                                        }
                                      if (yytoken != Token_COMMA)
-                                       return yy_expected_token(yytoken, Token_COMMA, ",");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_COMMA, ",");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      type_argument_ast *__node_312 = 0;
                                      if (!parse_type_argument(&__node_312))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_type_argument, "type_argument");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_type_argument, "type_argument");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->type_argument_sequence = snoc((*yynode)->type_argument_sequence, __node_312, memory_pool);
 
@@ -9750,7 +12449,11 @@ namespace java
                                      type_arguments_or_parameters_end_ast *__node_313 = 0;
                                      if (!parse_type_arguments_or_parameters_end(&__node_313))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_type_arguments_or_parameters_end, "type_arguments_or_parameters_end");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_type_arguments_or_parameters_end, "type_arguments_or_parameters_end");
+                                           }
+                                         return false;
                                        }
                                    }
                                  else if (true /*epsilon*/)
@@ -9759,9 +12462,12 @@ namespace java
                                    {
                                      return false;
                                    }
-                                 if (currentLtLevel == 0 && ltCounter != currentLtLevel)
+                                 if (currentLtLevel == 0 && _M_state.ltCounter != currentLtLevel )
                                    {
-                                     report_problem(error, "The amount of closing ``>'' characters is incorrect");
+                                     if (!yy_block_errors)
+                                       {
+                                         report_problem(error, "The amount of closing ``>'' characters is incorrect");
+                                       }
                                      return false;
                                    }
                                }
@@ -9788,26 +12494,44 @@ namespace java
                                  if (yytoken == Token_GREATER_THAN)
                                    {
                                      if (yytoken != Token_GREATER_THAN)
-                                       return yy_expected_token(yytoken, Token_GREATER_THAN, ">");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_GREATER_THAN, ">");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
-                                     ltCounter -= 1;
+                                     _M_state.ltCounter -= 1;
                                    }
                                  else if (yytoken == Token_SIGNED_RSHIFT)
                                    {
                                      if (yytoken != Token_SIGNED_RSHIFT)
-                                       return yy_expected_token(yytoken, Token_SIGNED_RSHIFT, ">>");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_SIGNED_RSHIFT, ">>");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
-                                     ltCounter -= 2;
+                                     _M_state.ltCounter -= 2;
                                    }
                                  else if (yytoken == Token_UNSIGNED_RSHIFT)
                                    {
                                      if (yytoken != Token_UNSIGNED_RSHIFT)
-                                       return yy_expected_token(yytoken, Token_UNSIGNED_RSHIFT, ">>>");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_UNSIGNED_RSHIFT, ">>>");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
-                                     ltCounter -= 3;
+                                     _M_state.ltCounter -= 3;
                                    }
                                  else
                                    {
@@ -9868,7 +12592,11 @@ namespace java
                                      optional_modifiers_ast *__node_314 = 0;
                                      if (!parse_optional_modifiers(&__node_314))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+                                           }
+                                         return false;
                                        }
                                      modifiers = __node_314;
 
@@ -9877,7 +12605,11 @@ namespace java
                                          class_declaration_ast *__node_315 = 0;
                                          if (!parse_class_declaration(&__node_315, modifiers))
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_class_declaration, "class_declaration");
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_class_declaration, "class_declaration");
+                                               }
+                                             return false;
                                            }
                                          (*yynode)->class_declaration = __node_315;
 
@@ -9887,7 +12619,11 @@ namespace java
                                          enum_declaration_ast *__node_316 = 0;
                                          if (!parse_enum_declaration(&__node_316, modifiers))
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_enum_declaration, "enum_declaration");
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_enum_declaration, "enum_declaration");
+                                               }
+                                             return false;
                                            }
                                          (*yynode)->enum_declaration = __node_316;
 
@@ -9897,7 +12633,11 @@ namespace java
                                          interface_declaration_ast *__node_317 = 0;
                                          if (!parse_interface_declaration(&__node_317, modifiers))
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_interface_declaration, "interface_declaration");
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_interface_declaration, "interface_declaration");
+                                               }
+                                             return false;
                                            }
                                          (*yynode)->interface_declaration = __node_317;
 
@@ -9907,7 +12647,11 @@ namespace java
                                          annotation_type_declaration_ast *__node_318 = 0;
                                          if (!parse_annotation_type_declaration(&__node_318, modifiers))
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_annotation_type_declaration, "annotation_type_declaration");
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_annotation_type_declaration, "annotation_type_declaration");
+                                               }
+                                             return false;
                                            }
                                          (*yynode)->annotation_type_declaration = __node_318;
 
@@ -9920,7 +12664,13 @@ namespace java
                                  else if (yytoken == Token_SEMICOLON)
                                    {
                                      if (yytoken != Token_SEMICOLON)
-                                       return yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                    }
@@ -9950,33 +12700,57 @@ namespace java
                                  identifier_ast *__node_319 = 0;
                                  if (!parse_identifier(&__node_319))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                                       }
+                                     return false;
                                    }
                                  (*yynode)->identifier = __node_319;
 
                                  if (yytoken == Token_EXTENDS)
                                    {
                                      if (yytoken != Token_EXTENDS)
-                                       return yy_expected_token(yytoken, Token_EXTENDS, "extends");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_EXTENDS, "extends");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      class_or_interface_type_name_ast *__node_320 = 0;
                                      if (!parse_class_or_interface_type_name(&__node_320))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->extends_type_sequence = snoc((*yynode)->extends_type_sequence, __node_320, memory_pool);
 
                                      while (yytoken == Token_BIT_AND)
                                        {
                                          if (yytoken != Token_BIT_AND)
-                                           return yy_expected_token(yytoken, Token_BIT_AND, "&");
+                                           {
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_token(yytoken, Token_BIT_AND, "&");
+                                               }
+                                             return false;
+                                           }
                                          yylex();
 
                                          class_or_interface_type_name_ast *__node_321 = 0;
                                          if (!parse_class_or_interface_type_name(&__node_321))
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_class_or_interface_type_name, "class_or_interface_type_name");
+                                               }
+                                             return false;
                                            }
                                          (*yynode)->extends_type_sequence = snoc((*yynode)->extends_type_sequence, __node_321, memory_pool);
 
@@ -10008,28 +12782,48 @@ namespace java
                              if (yytoken == Token_LESS_THAN)
                                {
                                  if (yytoken != Token_LESS_THAN)
-                                   return yy_expected_token(yytoken, Token_LESS_THAN, "<");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_LESS_THAN, "<");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
-                                 int currentLtLevel = ltCounter;
-                                 ltCounter++;
+                                 int currentLtLevel = _M_state.ltCounter;
+                                 _M_state.ltCounter++;
                                  type_parameter_ast *__node_322 = 0;
                                  if (!parse_type_parameter(&__node_322))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_type_parameter, "type_parameter");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_type_parameter, "type_parameter");
+                                       }
+                                     return false;
                                    }
                                  (*yynode)->type_parameter_sequence = snoc((*yynode)->type_parameter_sequence, __node_322, memory_pool);
 
                                  while (yytoken == Token_COMMA)
                                    {
                                      if (yytoken != Token_COMMA)
-                                       return yy_expected_token(yytoken, Token_COMMA, ",");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_COMMA, ",");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      type_parameter_ast *__node_323 = 0;
                                      if (!parse_type_parameter(&__node_323))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_type_parameter, "type_parameter");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_type_parameter, "type_parameter");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->type_parameter_sequence = snoc((*yynode)->type_parameter_sequence, __node_323, memory_pool);
 
@@ -10041,7 +12835,11 @@ namespace java
                                      type_arguments_or_parameters_end_ast *__node_324 = 0;
                                      if (!parse_type_arguments_or_parameters_end(&__node_324))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_type_arguments_or_parameters_end, "type_arguments_or_parameters_end");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_type_arguments_or_parameters_end, "type_arguments_or_parameters_end");
+                                           }
+                                         return false;
                                        }
                                    }
                                  else if (true /*epsilon*/)
@@ -10050,9 +12848,12 @@ namespace java
                                    {
                                      return false;
                                    }
-                                 if (currentLtLevel == 0 && ltCounter != currentLtLevel)
+                                 if (currentLtLevel == 0 && _M_state.ltCounter != currentLtLevel )
                                    {
-                                     report_problem(error, "The amount of closing ``>'' characters is incorrect");
+                                     if (!yy_block_errors)
+                                       {
+                                         report_problem(error, "The amount of closing ``>'' characters is incorrect");
+                                       }
                                      return false;
                                    }
                                }
@@ -10104,13 +12905,23 @@ namespace java
                                  if (yytoken == Token_INCREMENT)
                                    {
                                      if (yytoken != Token_INCREMENT)
-                                       return yy_expected_token(yytoken, Token_INCREMENT, "++");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_INCREMENT, "++");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      unary_expression_ast *__node_325 = 0;
                                      if (!parse_unary_expression(&__node_325))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->unary_expression = __node_325;
 
@@ -10119,13 +12930,23 @@ namespace java
                                  else if (yytoken == Token_DECREMENT)
                                    {
                                      if (yytoken != Token_DECREMENT)
-                                       return yy_expected_token(yytoken, Token_DECREMENT, "--");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_DECREMENT, "--");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      unary_expression_ast *__node_326 = 0;
                                      if (!parse_unary_expression(&__node_326))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->unary_expression = __node_326;
 
@@ -10134,13 +12955,23 @@ namespace java
                                  else if (yytoken == Token_MINUS)
                                    {
                                      if (yytoken != Token_MINUS)
-                                       return yy_expected_token(yytoken, Token_MINUS, "-");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_MINUS, "-");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      unary_expression_ast *__node_327 = 0;
                                      if (!parse_unary_expression(&__node_327))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->unary_expression = __node_327;
 
@@ -10149,13 +12980,23 @@ namespace java
                                  else if (yytoken == Token_PLUS)
                                    {
                                      if (yytoken != Token_PLUS)
-                                       return yy_expected_token(yytoken, Token_PLUS, "+");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_PLUS, "+");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      unary_expression_ast *__node_328 = 0;
                                      if (!parse_unary_expression(&__node_328))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->unary_expression = __node_328;
 
@@ -10189,7 +13030,11 @@ namespace java
                                      unary_expression_not_plusminus_ast *__node_329 = 0;
                                      if (!parse_unary_expression_not_plusminus(&__node_329))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_unary_expression_not_plusminus, "unary_expression_not_plusminus");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_unary_expression_not_plusminus, "unary_expression_not_plusminus");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->unary_expression_not_plusminus = __node_329;
 
@@ -10244,13 +13089,23 @@ namespace java
                                  if (yytoken == Token_TILDE)
                                    {
                                      if (yytoken != Token_TILDE)
-                                       return yy_expected_token(yytoken, Token_TILDE, "~");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_TILDE, "~");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      unary_expression_ast *__node_330 = 0;
                                      if (!parse_unary_expression(&__node_330))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->bitwise_not_expression = __node_330;
 
@@ -10259,28 +13114,27 @@ namespace java
                                  else if (yytoken == Token_BANG)
                                    {
                                      if (yytoken != Token_BANG)
-                                       return yy_expected_token(yytoken, Token_BANG, "!");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_BANG, "!");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      unary_expression_ast *__node_331 = 0;
                                      if (!parse_unary_expression(&__node_331))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_unary_expression, "unary_expression");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->logical_not_expression = __node_331;
 
                                      (*yynode)->rule_type = unary_expression_not_plusminus::type_logical_not_expression;
-                                   }
-                                 else if ((yytoken == Token_LPAREN) && ( lookahead_is_cast_expression() == true ))
-                                   {
-                                     cast_expression_ast *__node_332 = 0;
-                                     if (!parse_cast_expression(&__node_332))
-                                       {
-                                         return yy_expected_symbol(ast_node::Kind_cast_expression, "cast_expression");
-                                       }
-                                     (*yynode)->cast_expression = __node_332;
-
-                                     (*yynode)->rule_type = unary_expression_not_plusminus::type_cast_expression;
                                    }
                                  else if (yytoken == Token_BOOLEAN
                                           || yytoken == Token_BYTE
@@ -10305,25 +13159,63 @@ namespace java
                                           || yytoken == Token_STRING_LITERAL
                                           || yytoken == Token_IDENTIFIER)
                                    {
-                                     primary_expression_ast *__node_333 = 0;
-                                     if (!parse_primary_expression(&__node_333))
-                                       {
-                                         return yy_expected_symbol(ast_node::Kind_primary_expression, "primary_expression");
-                                       }
-                                     (*yynode)->primary_expression = __node_333;
+                                     bool block_errors_22 = block_errors(true);
+                                     std::size_t try_start_token_22 = token_stream->index() - 1;
+                                     parser_state *try_start_state_22 = copy_current_state();
+                                     {
+                                       cast_expression_ast *__node_332 = 0;
+                                       if (!parse_cast_expression(&__node_332))
+                                         {
+                                           goto __catch_22;
+                                         }
+                                       (*yynode)->cast_expression = __node_332;
 
-                                     while (yytoken == Token_INCREMENT
-                                            || yytoken == Token_DECREMENT)
+                                       (*yynode)->rule_type = unary_expression_not_plusminus::type_cast_expression;
+                                     }
+                                     block_errors(block_errors_22);
+                                     if (try_start_state_22)
+                                       delete try_start_state_22;
+
+                                     if (false) // the only way to enter here is using goto
                                        {
-                                         postfix_operator_ast *__node_334 = 0;
-                                         if (!parse_postfix_operator(&__node_334))
+                                       __catch_22:
+                                         if (try_start_state_22)
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_postfix_operator, "postfix_operator");
+                                             restore_state(try_start_state_22);
+                                             delete try_start_state_22;
                                            }
-                                         (*yynode)->postfix_operator_sequence = snoc((*yynode)->postfix_operator_sequence, __node_334, memory_pool);
+                                         block_errors(block_errors_22);
+                                         rewind(try_start_token_22);
 
+                                         primary_expression_ast *__node_333 = 0;
+                                         if (!parse_primary_expression(&__node_333))
+                                           {
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_primary_expression, "primary_expression");
+                                               }
+                                             return false;
+                                           }
+                                         (*yynode)->primary_expression = __node_333;
+
+                                         while (yytoken == Token_INCREMENT
+                                                || yytoken == Token_DECREMENT)
+                                           {
+                                             postfix_operator_ast *__node_334 = 0;
+                                             if (!parse_postfix_operator(&__node_334))
+                                               {
+                                                 if (!yy_block_errors)
+                                                   {
+                                                     yy_expected_symbol(ast_node::Kind_postfix_operator, "postfix_operator");
+                                                   }
+                                                 return false;
+                                               }
+                                             (*yynode)->postfix_operator_sequence = snoc((*yynode)->postfix_operator_sequence, __node_334, memory_pool);
+
+                                           }
+                                         (*yynode)->rule_type = unary_expression_not_plusminus::type_primary_expression;
                                        }
-                                     (*yynode)->rule_type = unary_expression_not_plusminus::type_primary_expression;
+
                                    }
                                  else
                                    {
@@ -10349,7 +13241,13 @@ namespace java
                              if (yytoken == Token_LBRACE)
                                {
                                  if (yytoken != Token_LBRACE)
-                                   return yy_expected_token(yytoken, Token_LBRACE, "{");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_LBRACE, "{");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  if (yytoken == Token_BOOLEAN
@@ -10385,7 +13283,11 @@ namespace java
                                      variable_initializer_ast *__node_335 = 0;
                                      if (!parse_variable_initializer(&__node_335))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_variable_initializer, "variable_initializer");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_variable_initializer, "variable_initializer");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->variable_initializer_sequence = snoc((*yynode)->variable_initializer_sequence, __node_335, memory_pool);
 
@@ -10396,13 +13298,23 @@ namespace java
                                              break;
                                            }
                                          if (yytoken != Token_COMMA)
-                                           return yy_expected_token(yytoken, Token_COMMA, ",");
+                                           {
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_token(yytoken, Token_COMMA, ",");
+                                               }
+                                             return false;
+                                           }
                                          yylex();
 
                                          variable_initializer_ast *__node_336 = 0;
                                          if (!parse_variable_initializer(&__node_336))
                                            {
-                                             return yy_expected_symbol(ast_node::Kind_variable_initializer, "variable_initializer");
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_symbol(ast_node::Kind_variable_initializer, "variable_initializer");
+                                               }
+                                             return false;
                                            }
                                          (*yynode)->variable_initializer_sequence = snoc((*yynode)->variable_initializer_sequence, __node_336, memory_pool);
 
@@ -10410,7 +13322,13 @@ namespace java
                                      if (yytoken == Token_COMMA)
                                        {
                                          if (yytoken != Token_COMMA)
-                                           return yy_expected_token(yytoken, Token_COMMA, ",");
+                                           {
+                                             if (!yy_block_errors)
+                                               {
+                                                 yy_expected_token(yytoken, Token_COMMA, ",");
+                                               }
+                                             return false;
+                                           }
                                          yylex();
 
                                        }
@@ -10428,7 +13346,13 @@ namespace java
                                      return false;
                                    }
                                  if (yytoken != Token_RBRACE)
-                                   return yy_expected_token(yytoken, Token_RBRACE, "}");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_RBRACE, "}");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                }
@@ -10480,34 +13404,56 @@ namespace java
                                  optional_modifiers_ast *__node_337 = 0;
                                  if (!parse_optional_modifiers(&__node_337))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_optional_modifiers, "optional_modifiers");
+                                       }
+                                     return false;
                                    }
                                  modifiers = __node_337;
 
                                  type_ast *__node_338 = 0;
                                  if (!parse_type(&__node_338))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_type, "type");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_type, "type");
+                                       }
+                                     return false;
                                    }
                                  type = __node_338;
 
                                  variable_declarator_ast *__node_339 = 0;
                                  if (!parse_variable_declarator(&__node_339))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                                       }
+                                     return false;
                                    }
                                  variable_declarator_sequence = snoc(variable_declarator_sequence, __node_339, memory_pool);
 
                                  while (yytoken == Token_COMMA)
                                    {
                                      if (yytoken != Token_COMMA)
-                                       return yy_expected_token(yytoken, Token_COMMA, ",");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_COMMA, ",");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      variable_declarator_ast *__node_340 = 0;
                                      if (!parse_variable_declarator(&__node_340))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                                           }
+                                         return false;
                                        }
                                      variable_declarator_sequence = snoc(variable_declarator_sequence, __node_340, memory_pool);
 
@@ -10517,7 +13463,11 @@ namespace java
                                                                       modifiers, type, variable_declarator_sequence
                                                                      ))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_variable_declaration_data, "variable_declaration_data");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_variable_declaration_data, "variable_declaration_data");
+                                       }
+                                     return false;
                                    }
                                  (*yynode)->data = __node_341;
 
@@ -10602,13 +13552,23 @@ namespace java
                                  if (yytoken == Token_ASSIGN)
                                    {
                                      if (yytoken != Token_ASSIGN)
-                                       return yy_expected_token(yytoken, Token_ASSIGN, "=");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_ASSIGN, "=");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      variable_initializer_ast *__node_342 = 0;
                                      if (!parse_variable_initializer(&__node_342))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_variable_initializer, "variable_initializer");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_variable_initializer, "variable_initializer");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->first_initializer = __node_342;
 
@@ -10622,13 +13582,23 @@ namespace java
                                  while (yytoken == Token_COMMA)
                                    {
                                      if (yytoken != Token_COMMA)
-                                       return yy_expected_token(yytoken, Token_COMMA, ",");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_COMMA, ",");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      variable_declarator_ast *__node_343 = 0;
                                      if (!parse_variable_declarator(&__node_343))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_variable_declarator, "variable_declarator");
+                                           }
+                                         return false;
                                        }
                                      (*yynode)->variable_declarator_sequence = snoc((*yynode)->variable_declarator_sequence, __node_343, memory_pool);
 
@@ -10685,11 +13655,76 @@ namespace java
                                                                       declarator_sequence
                                                                      ))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_variable_declaration_data, "variable_declaration_data");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_variable_declaration_data, "variable_declaration_data");
+                                       }
+                                     return false;
                                    }
                                  if (__node_344->start_token < (*yynode)->start_token)
                                    (*yynode)->start_token = __node_344->start_token;
                                  (*yynode)->data = __node_344;
+
+                               }
+                             else
+                               {
+                                 return false;
+                               }
+
+                             (*yynode)->end_token = token_stream->index() - 1;
+
+                             return true;
+                           }
+
+                           bool parser::parse_variable_declaration_statement(variable_declaration_statement_ast **yynode)
+                           {
+                             *yynode = create<variable_declaration_statement_ast>();
+
+                             (*yynode)->start_token = token_stream->index() - 1;
+
+                             if (yytoken == Token_ABSTRACT
+                                 || yytoken == Token_BOOLEAN
+                                 || yytoken == Token_BYTE
+                                 || yytoken == Token_CHAR
+                                 || yytoken == Token_DOUBLE
+                                 || yytoken == Token_FINAL
+                                 || yytoken == Token_FLOAT
+                                 || yytoken == Token_INT
+                                 || yytoken == Token_LONG
+                                 || yytoken == Token_NATIVE
+                                 || yytoken == Token_PRIVATE
+                                 || yytoken == Token_PROTECTED
+                                 || yytoken == Token_PUBLIC
+                                 || yytoken == Token_SHORT
+                                 || yytoken == Token_STATIC
+                                 || yytoken == Token_STRICTFP
+                                 || yytoken == Token_SYNCHRONIZED
+                                 || yytoken == Token_TRANSIENT
+                                 || yytoken == Token_VOID
+                                 || yytoken == Token_VOLATILE
+                                 || yytoken == Token_AT
+                                 || yytoken == Token_IDENTIFIER)
+                               {
+                                 variable_declaration_ast *__node_345 = 0;
+                                 if (!parse_variable_declaration(&__node_345))
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_variable_declaration, "variable_declaration");
+                                       }
+                                     return false;
+                                   }
+                                 (*yynode)->variable_declaration = __node_345;
+
+                                 if (yytoken != Token_SEMICOLON)
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_SEMICOLON, ";");
+                                       }
+                                     return false;
+                                   }
+                                 yylex();
 
                                }
                              else
@@ -10710,32 +13745,50 @@ namespace java
 
                              if (yytoken == Token_IDENTIFIER)
                                {
-                                 identifier_ast *__node_345 = 0;
-                                 if (!parse_identifier(&__node_345))
+                                 identifier_ast *__node_346 = 0;
+                                 if (!parse_identifier(&__node_346))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_identifier, "identifier");
+                                       }
+                                     return false;
                                    }
-                                 (*yynode)->variable_name = __node_345;
+                                 (*yynode)->variable_name = __node_346;
 
-                                 optional_declarator_brackets_ast *__node_346 = 0;
-                                 if (!parse_optional_declarator_brackets(&__node_346))
+                                 optional_declarator_brackets_ast *__node_347 = 0;
+                                 if (!parse_optional_declarator_brackets(&__node_347))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_optional_declarator_brackets, "optional_declarator_brackets");
+                                       }
+                                     return false;
                                    }
-                                 (*yynode)->declarator_brackets = __node_346;
+                                 (*yynode)->declarator_brackets = __node_347;
 
                                  if (yytoken == Token_ASSIGN)
                                    {
                                      if (yytoken != Token_ASSIGN)
-                                       return yy_expected_token(yytoken, Token_ASSIGN, "=");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_ASSIGN, "=");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
-                                     variable_initializer_ast *__node_347 = 0;
-                                     if (!parse_variable_initializer(&__node_347))
+                                     variable_initializer_ast *__node_348 = 0;
+                                     if (!parse_variable_initializer(&__node_348))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_variable_initializer, "variable_initializer");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_variable_initializer, "variable_initializer");
+                                           }
+                                         return false;
                                        }
-                                     (*yynode)->initializer = __node_347;
+                                     (*yynode)->initializer = __node_348;
 
                                    }
                                  else if (true /*epsilon*/)
@@ -10820,22 +13873,30 @@ namespace java
                                      || yytoken == Token_STRING_LITERAL
                                      || yytoken == Token_IDENTIFIER)
                                    {
-                                     expression_ast *__node_348 = 0;
-                                     if (!parse_expression(&__node_348))
+                                     expression_ast *__node_349 = 0;
+                                     if (!parse_expression(&__node_349))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                           }
+                                         return false;
                                        }
-                                     (*yynode)->expression = __node_348;
+                                     (*yynode)->expression = __node_349;
 
                                    }
                                  else if (yytoken == Token_LBRACE)
                                    {
-                                     variable_array_initializer_ast *__node_349 = 0;
-                                     if (!parse_variable_array_initializer(&__node_349))
+                                     variable_array_initializer_ast *__node_350 = 0;
+                                     if (!parse_variable_array_initializer(&__node_350))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_variable_array_initializer, "variable_array_initializer");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_variable_array_initializer, "variable_array_initializer");
+                                           }
+                                         return false;
                                        }
-                                     (*yynode)->array_initializer = __node_349;
+                                     (*yynode)->array_initializer = __node_350;
 
                                    }
                                  else
@@ -10862,30 +13923,56 @@ namespace java
                              if (yytoken == Token_WHILE)
                                {
                                  if (yytoken != Token_WHILE)
-                                   return yy_expected_token(yytoken, Token_WHILE, "while");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_WHILE, "while");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  if (yytoken != Token_LPAREN)
-                                   return yy_expected_token(yytoken, Token_LPAREN, "(");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_LPAREN, "(");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
-                                 expression_ast *__node_350 = 0;
-                                 if (!parse_expression(&__node_350))
+                                 expression_ast *__node_351 = 0;
+                                 if (!parse_expression(&__node_351))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_expression, "expression");
+                                       }
+                                     return false;
                                    }
-                                 (*yynode)->condition = __node_350;
+                                 (*yynode)->condition = __node_351;
 
                                  if (yytoken != Token_RPAREN)
-                                   return yy_expected_token(yytoken, Token_RPAREN, ")");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_RPAREN, ")");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
-                                 embedded_statement_ast *__node_351 = 0;
-                                 if (!parse_embedded_statement(&__node_351))
+                                 embedded_statement_ast *__node_352 = 0;
+                                 if (!parse_embedded_statement(&__node_352))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_embedded_statement, "embedded_statement");
+                                       }
+                                     return false;
                                    }
-                                 (*yynode)->body = __node_351;
+                                 (*yynode)->body = __node_352;
 
                                }
                              else
@@ -10907,18 +13994,28 @@ namespace java
                              if (yytoken == Token_QUESTION)
                                {
                                  if (yytoken != Token_QUESTION)
-                                   return yy_expected_token(yytoken, Token_QUESTION, "?");
+                                   {
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_token(yytoken, Token_QUESTION, "?");
+                                       }
+                                     return false;
+                                   }
                                  yylex();
 
                                  if (yytoken == Token_EXTENDS
                                      || yytoken == Token_SUPER)
                                    {
-                                     wildcard_type_bounds_ast *__node_352 = 0;
-                                     if (!parse_wildcard_type_bounds(&__node_352))
+                                     wildcard_type_bounds_ast *__node_353 = 0;
+                                     if (!parse_wildcard_type_bounds(&__node_353))
                                        {
-                                         return yy_expected_symbol(ast_node::Kind_wildcard_type_bounds, "wildcard_type_bounds");
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_symbol(ast_node::Kind_wildcard_type_bounds, "wildcard_type_bounds");
+                                           }
+                                         return false;
                                        }
-                                     (*yynode)->bounds = __node_352;
+                                     (*yynode)->bounds = __node_353;
 
                                    }
                                  else if (true /*epsilon*/)
@@ -10950,7 +14047,13 @@ namespace java
                                  if (yytoken == Token_EXTENDS)
                                    {
                                      if (yytoken != Token_EXTENDS)
-                                       return yy_expected_token(yytoken, Token_EXTENDS, "extends");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_EXTENDS, "extends");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      (*yynode)->extends_or_super = wildcard_type_bounds::extends;
@@ -10958,7 +14061,13 @@ namespace java
                                  else if (yytoken == Token_SUPER)
                                    {
                                      if (yytoken != Token_SUPER)
-                                       return yy_expected_token(yytoken, Token_SUPER, "super");
+                                       {
+                                         if (!yy_block_errors)
+                                           {
+                                             yy_expected_token(yytoken, Token_SUPER, "super");
+                                           }
+                                         return false;
+                                       }
                                      yylex();
 
                                      (*yynode)->extends_or_super = wildcard_type_bounds::super;
@@ -10967,12 +14076,16 @@ namespace java
                                    {
                                      return false;
                                    }
-                                 class_type_ast *__node_353 = 0;
-                                 if (!parse_class_type(&__node_353))
+                                 class_type_ast *__node_354 = 0;
+                                 if (!parse_class_type(&__node_354))
                                    {
-                                     return yy_expected_symbol(ast_node::Kind_class_type, "class_type");
+                                     if (!yy_block_errors)
+                                       {
+                                         yy_expected_symbol(ast_node::Kind_class_type, "class_type");
+                                       }
+                                     return false;
                                    }
-                                 (*yynode)->type = __node_353;
+                                 (*yynode)->type = __node_354;
 
                                }
                              else
@@ -11108,6 +14221,7 @@ namespace java
                                  reinterpret_cast<parser_fun_t>(&visitor::visit_variable_declaration_data),
                                  reinterpret_cast<parser_fun_t>(&visitor::visit_variable_declaration_rest),
                                  reinterpret_cast<parser_fun_t>(&visitor::visit_variable_declaration_split_data),
+                                 reinterpret_cast<parser_fun_t>(&visitor::visit_variable_declaration_statement),
                                  reinterpret_cast<parser_fun_t>(&visitor::visit_variable_declarator),
                                  reinterpret_cast<parser_fun_t>(&visitor::visit_variable_initializer),
                                  reinterpret_cast<parser_fun_t>(&visitor::visit_while_statement),

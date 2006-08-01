@@ -8,7 +8,6 @@ add_definitions(-fPIC)
 set(kdevjavaparser_STAT_SRCS
     decoder.cpp
     java.cpp
-    java_lookahead.cpp
 #Hmm, I don't think cmake knows how to deal with ll file
     java_lexer.cc
     java_io.cpp

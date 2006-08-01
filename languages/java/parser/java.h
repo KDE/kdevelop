@@ -138,6 +138,7 @@ namespace java
   struct variable_declaration_data_ast;
   struct variable_declaration_rest_ast;
   struct variable_declaration_split_data_ast;
+  struct variable_declaration_statement_ast;
   struct variable_declarator_ast;
   struct variable_initializer_ast;
   struct while_statement_ast;
@@ -423,11 +424,12 @@ namespace java
         Kind_variable_declaration_data = 1119,
         Kind_variable_declaration_rest = 1120,
         Kind_variable_declaration_split_data = 1121,
-        Kind_variable_declarator = 1122,
-        Kind_variable_initializer = 1123,
-        Kind_while_statement = 1124,
-        Kind_wildcard_type = 1125,
-        Kind_wildcard_type_bounds = 1126,
+        Kind_variable_declaration_statement = 1122,
+        Kind_variable_declarator = 1123,
+        Kind_variable_initializer = 1124,
+        Kind_while_statement = 1125,
+        Kind_wildcard_type = 1126,
+        Kind_wildcard_type_bounds = 1127,
         AST_NODE_KIND_COUNT
       };
 
@@ -667,7 +669,7 @@ namespace java
         KIND = Kind_block_statement
       };
 
-      variable_declaration_ast *variable_declaration;
+      variable_declaration_statement_ast *variable_declaration_statement;
       embedded_statement_ast *statement;
       class_declaration_ast *class_declaration;
       enum_declaration_ast *enum_declaration;
@@ -1435,8 +1437,8 @@ namespace java
       this_access_data_ast *this_access;
       super_access_data_ast *super_access;
       method_call_data_ast *method_call;
-      simple_name_access_data_ast *simple_name_access;
       array_type_dot_class_ast *array_type_dot_class;
+      simple_name_access_data_ast *simple_name_access;
     };
 
   struct primary_expression_ast: public ast_node
@@ -1847,6 +1849,16 @@ namespace java
       variable_declaration_data_ast *data;
     };
 
+  struct variable_declaration_statement_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_variable_declaration_statement
+      };
+
+      variable_declaration_ast *variable_declaration;
+    };
+
   struct variable_declarator_ast: public ast_node
     {
       enum
@@ -1928,6 +1940,11 @@ namespace java
       {
         return (yytoken = token_stream->next_token());
       }
+      inline void rewind(std::size_t index)
+      {
+        token_stream->rewind(index);
+        yylex();
+      }
 
       // token stream
       void set_token_stream(kdev_pg_token_stream *s)
@@ -1935,9 +1952,17 @@ namespace java
         token_stream = s;
       }
 
-      // error recovery
-      bool yy_expected_symbol(int kind, char const *name);
-      bool yy_expected_token(int kind, std::size_t token, char const *name);
+      // error handling
+      void yy_expected_symbol(int kind, char const *name);
+      void yy_expected_token(int kind, std::size_t token, char const *name);
+
+      bool yy_block_errors;
+      inline bool block_errors(bool block)
+      {
+        bool previous = yy_block_errors;
+        yy_block_errors = block;
+        return previous;
+      }
 
       // memory pool
       typedef kdev_pg_memory_pool memory_pool_type;
@@ -2103,25 +2128,36 @@ namespace java
 
       parser::java_compatibility_mode _M_compatibility_mode;
 
-      // ltCounter stores the amount of currently open type arguments rules,
-      // all of which are beginning with a less than ("<") character.
-      // This way, also SIGNED_RSHIFT (">>") and UNSIGNED_RSHIFT (">>>") can be used
-      // to close type arguments rules, in addition to GREATER_THAN (">").
-      int ltCounter;
-
-      // Lookahead hacks
-      bool lookahead_is_package_declaration();
-      bool lookahead_is_parameter_declaration();
-      bool lookahead_is_cast_expression();
-      bool lookahead_is_array_type_dot_class();
+      struct parser_state
+        {
+          // ltCounter stores the amount of currently open type arguments rules,
+          // all of which are beginning with a less than ("<") character.
+          // This way, also SIGNED_RSHIFT (">>") and UNSIGNED_RSHIFT (">>>") can be used
+          // to close type arguments rules, in addition to GREATER_THAN (">").
+          int ltCounter;
+        };
+      parser_state _M_state;
 
 
     public:
+      // The copy_current_state() and restore_state() methods are only declared
+      // if you are using try blocks in your grammar, and have to be
+      // implemented by yourself, and you also have to define a
+      // "struct parser_state" inside a %parserclass directive.
+
+      // This method should create a new parser_state object and return it,
+      // or return 0 if no state variables need to be saved.
+      parser_state *copy_current_state();
+
+      // This method is only called for parser_state objects != 0
+      // and should restore the parser state given as argument.
+      void restore_state(parser_state *state);
       parser()
       {
         memory_pool = 0;
         token_stream = 0;
         yytoken = Token_EOF;
+        yy_block_errors = false;
 
         // user defined constructor code:
         _M_compatibility_mode = java15_compatibility;
@@ -2252,6 +2288,7 @@ namespace java
       bool parse_variable_declaration_data(variable_declaration_data_ast **yynode, optional_modifiers_ast *modifiers, type_ast *type, const list_node<variable_declarator_ast *> *declarator_sequence);
       bool parse_variable_declaration_rest(variable_declaration_rest_ast **yynode);
       bool parse_variable_declaration_split_data(variable_declaration_split_data_ast **yynode, parameter_declaration_ast *parameter_declaration, variable_declaration_rest_ast *rest);
+      bool parse_variable_declaration_statement(variable_declaration_statement_ast **yynode);
       bool parse_variable_declarator(variable_declarator_ast **yynode);
       bool parse_variable_initializer(variable_initializer_ast **yynode);
       bool parse_while_statement(while_statement_ast **yynode);
@@ -2515,6 +2552,8 @@ namespace java
                                {}
                                virtual void visit_variable_declaration_split_data(variable_declaration_split_data_ast *)
                                {}
+                               virtual void visit_variable_declaration_statement(variable_declaration_statement_ast *)
+                               {}
                                virtual void visit_variable_declarator(variable_declarator_ast *)
                                {}
                                virtual void visit_variable_initializer(variable_initializer_ast *)
@@ -2735,7 +2774,7 @@ namespace java
 
       virtual void visit_block_statement(block_statement_ast *node)
       {
-        visit_node(node->variable_declaration);
+        visit_node(node->variable_declaration_statement);
         visit_node(node->statement);
         visit_node(node->class_declaration);
         visit_node(node->enum_declaration);
@@ -3366,8 +3405,8 @@ namespace java
         visit_node(node->this_access);
         visit_node(node->super_access);
         visit_node(node->method_call);
-        visit_node(node->simple_name_access);
         visit_node(node->array_type_dot_class);
+        visit_node(node->simple_name_access);
       }
 
       virtual void visit_primary_expression(primary_expression_ast *node)
@@ -3736,6 +3775,11 @@ namespace java
                                virtual void visit_variable_declaration_split_data(variable_declaration_split_data_ast *node)
                                {
                                  visit_node(node->data);
+                               }
+
+                               virtual void visit_variable_declaration_statement(variable_declaration_statement_ast *node)
+                               {
+                                 visit_node(node->variable_declaration);
                                }
 
                                virtual void visit_variable_declarator(variable_declarator_ast *node)

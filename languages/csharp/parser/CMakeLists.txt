@@ -8,7 +8,6 @@ add_definitions(-fPIC)
 set(kdevcsharpparser_STAT_SRCS
     decoder.cpp
     csharp.cpp
-    csharp_lookahead.cpp
     # cmake doesn't know how to deal with .ll files, so take the .cc one
     csharp_lexer.cc
     csharp_io.cpp

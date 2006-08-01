@@ -83,7 +83,7 @@ void parser::report_problem( parser::problem_type type, const char* message )
 
 
 // custom error recovery
-bool parser::yy_expected_token(int /*expected*/, std::size_t where, char const *name)
+void parser::yy_expected_token(int /*expected*/, std::size_t where, char const *name)
 {
   //   print_token_environment(this);
   report_problem(
@@ -92,10 +92,9 @@ bool parser::yy_expected_token(int /*expected*/, std::size_t where, char const *
       //+ "'' instead of ``" + current_token_text
       + "''"
   );
-  return false;
 }
 
-bool parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
+void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
 {
   //   print_token_environment(this);
   report_problem(
@@ -104,7 +103,6 @@ bool parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
       //+ "'' instead of ``" + current_token_text
       + "''"
   );
-  return false;
 }
 
 } // end of namespace csharp
