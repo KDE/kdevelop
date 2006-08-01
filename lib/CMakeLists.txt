@@ -51,6 +51,7 @@ set(kdevplatform_LIB_SRCS
     kdevast.cpp
     kdevbackgroundparser.cpp
     kdevparsejob.cpp
+    mainwindowshare.cpp
 )
 
 set(kdevplatform_UI3

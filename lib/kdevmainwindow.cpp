@@ -44,7 +44,7 @@
 #include "kdevmainwindow.h"
 #include "statusbar.h"
 #include "shellextension.h"
-// #include "mainwindowshare.h"
+#include "mainwindowshare.h"
 #include "kdevplugincontroller.h"
 #include "kdevprojectcontroller.h"
 #include "kdevdocumentcontroller.h"
@@ -53,7 +53,7 @@ KDevMainWindow::KDevMainWindow( QWidget *parent, Qt::WFlags flags )
         : KMainWindow( parent, flags )
 {
     setObjectName( QLatin1String( "KDevMainWindow" ) );
-//     m_mainWindowShare = new MainWindowShare( this );
+    m_mainWindowShare = new MainWindowShare( this );
     m_center = new QStackedWidget( this );
     setCentralWidget( m_center );
 
@@ -74,22 +74,22 @@ void KDevMainWindow::init()
                                    actionCollection(),
                                    "set_configure_toolbars" );
 
-//     m_mainWindowShare->createActions();
+    m_mainWindowShare->createActions();
 
-//     connect( m_mainWindowShare, SIGNAL( gotoNextWindow() ),
-//              this, SLOT( gotoNextWindow() ) );
-//     connect( m_mainWindowShare, SIGNAL( gotoPreviousWindow() ),
-//              this, SLOT( gotoPreviousWindow() ) );
-//     connect( m_mainWindowShare, SIGNAL( gotoFirstWindow() ),
-//              this, SLOT( gotoFirstWindow() ) );
-//     connect( m_mainWindowShare, SIGNAL( gotoLastWindow() ),
-//              this, SLOT( gotoLastWindow() ) );
+    connect( m_mainWindowShare, SIGNAL( gotoNextWindow() ),
+             this, SLOT( gotoNextWindow() ) );
+    connect( m_mainWindowShare, SIGNAL( gotoPreviousWindow() ),
+             this, SLOT( gotoPreviousWindow() ) );
+    connect( m_mainWindowShare, SIGNAL( gotoFirstWindow() ),
+             this, SLOT( gotoFirstWindow() ) );
+    connect( m_mainWindowShare, SIGNAL( gotoLastWindow() ),
+             this, SLOT( gotoLastWindow() ) );
 
     new KDevStatusBar( this );
 
     createGUI( ShellExtension::getInstance() ->xmlFile() );
 
-//     m_mainWindowShare->init();
+    m_mainWindowShare->init();
     setupWindowMenu();
 
     connect( KDevCore::projectController(), SIGNAL( projectOpened() ),
