@@ -444,6 +444,20 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
         }
         break;
       }
+	    ///A Function is treated similar as a type
+    case MemberInfo::Function:
+	{
+		if( !name.next() ) {
+			TypePointer t = mem.build();
+			if( t ) {
+				return t->desc();
+			} else {
+				ifVerbose( dbg() <<  "\"" << str() << "\"" << ": could not build function: \"" << name.fullNameChain() << "\"" );
+			}
+		} else {
+			ifVerbose( dbg() <<  "\"" << str() << "\"" << ": name-conflict: searched for \"" << name.fullNameChain() << "\" and found function \"" << mem.name << "\"" );
+		}
+	};
     }
     
         ///Ask bases but only on this level

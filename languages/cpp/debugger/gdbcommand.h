@@ -22,6 +22,7 @@
 
 #include "dbgcommand.h"
 #include "mi/gdbmi.h"
+#include <qguardedptr.h>
 
 namespace GDBDebugger
 {
@@ -124,7 +125,7 @@ public:
     const QValueVector<QString>& allStreamOutput() const;
 
 private:
-    QObject* handler_this;
+    QGuardedPtr<QObject> handler_this;
     typedef void (QObject::* handler_t)(const GDBMI::ResultRecord&);
     handler_t handler_method;
     QValueVector<QString> lines;
@@ -173,7 +174,7 @@ public: // GDBCommand overrides
     bool invokeHandler(const GDBMI::ResultRecord& r);
 
 private:
-    QObject* cli_handler_this;
+		QGuardedPtr<QObject> cli_handler_this;
     typedef void (QObject::* cli_handler_t)(const QValueVector<QString>&);
     cli_handler_t cli_handler_method;
 };
@@ -206,7 +207,7 @@ public:
     }
 
 private:
-    QObject* handler_this;
+		QGuardedPtr<QObject> handler_this;
     handler_method_t handler_method;
 
 };
@@ -234,7 +235,7 @@ public:
     }
 
 private:
-    QObject* handler_this;
+		QGuardedPtr<QObject> handler_this;
     handler_method_t handler_method;
 };
 

@@ -1101,7 +1101,12 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
 			current += ch2;
 			ADD_CURRENT();
 			index += 2;
-		}
+		}/*else if ( ch2 == "::" )
+		{
+			current += ch2;
+			ADD_CURRENT();
+			index += 2;
+		}*/
 		else
 		{
 			current += text[ index ];
@@ -1154,7 +1159,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column ,
 		if( column >= (int)curLine.length() || curLine[ column ].isSpace() ) return EvaluationResult();
 			
 		QString expr = curLine.left( column +1 );
-		kdDebug( 9007 ) << "evaluating \"" << expr.stripWhiteSpace() << "\"" << endl;
+		kdDebug( 9007 ) << "evaluating line \"" << expr.stripWhiteSpace() << "\"" << endl;
 		
 		if( curLine[column] == '-' || curLine[column] == ';' ) --column;
 		

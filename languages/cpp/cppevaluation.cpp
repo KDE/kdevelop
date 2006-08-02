@@ -374,7 +374,7 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exp
   {
     currentExpr = split.front();
     
-    SimpleTypeImpl::LocateResult type = searchIn->locateDecType( currentExpr );
+  	SimpleTypeImpl::LocateResult type = searchIn->locateDecType( currentExpr, SimpleTypeImpl::Normal, 0, SimpleTypeImpl::MemberInfo::AllTypes  );
     if ( type )
     {
       if( !split.isEmpty() ) split.pop_front();
