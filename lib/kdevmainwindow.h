@@ -3,6 +3,7 @@ Copyright (C) 2003 F@lk Brettschneider <falkbr@kdevelop.org>
 Copyright (C) 2003 John Firebaugh <jfirebaugh@kde.org>
 Copyright (C) 2003 Amilcar do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
 Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
+Copyright (C) 2006 Adam Treat <treat@kde.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -28,13 +29,30 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevexport.h"
 
-class QStackedWidget;
+class KAction;
+class KToggleAction;
+class KToolBarPopupAction;
 
-class KMenu;
-class KStatusBar;
+namespace KParts
+{
+class MainWindow;
+}
+
+namespace KSettings
+{
+class Dialog;
+}
+
+class Context;
 
 class KDevDocument;
-class MainWindowShare;
+
+namespace KParts
+{
+class Part;
+}
+
+class KDevMainWindowPrivate;
 
 /**
 @file kdevmainwindow.h
@@ -114,7 +132,6 @@ Q_SIGNALS:
 protected:
     //FIXME DOCUMENT!!!  queryClose() must call all of the KDevCore cleanup() methods!
     virtual bool queryClose();
-    virtual bool queryExit();
 
 private Q_SLOTS:
     void gotoNextWindow();
@@ -123,22 +140,32 @@ private Q_SLOTS:
     void gotoLastWindow();
 
     void projectOpened();
+    void projectClosed();
     void configureToolbars();
-    void newToolbarConfig();
-    void openURL( int w );
     void fillWindowMenu();
+    void newToolbarConfig();
+
+    void reportBug();
+    void keyBindings();
+    void configureNotifications();
+    void configureEditors();
+    void settings();
+    void activeProcessChanged( KDevPlugin*, bool );
+    void activePartChanged( KParts::Part* part );
+    void stopPopupActivated( int );
+    void stopMenuAboutToShow();
+    void stopButtonPressed();
+    void showMenuBar();
+
+    void toggleStatusbar();
+    void contextMenu( QMenu*, const Context *context );
 
 private:
+    void setupActions();
     void setupWindowMenu();
     void init();
-
-    MainWindowShare *m_mainWindowShare;
-
-    KMenu *m_windowMenu;
-    typedef QPair<int, KDevDocument*> WinInfo;
-    QList<WinInfo> m_windowList;
-    QList<QDockWidget*> m_dockList;
-    QStackedWidget *m_center;
+    QString beautifyToolTip( const QString& text ) const;
+    KDevMainWindowPrivate *d;
 };
 
 #endif

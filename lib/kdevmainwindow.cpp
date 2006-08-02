@@ -1,21 +1,22 @@
 /* This file is part of the KDE project
-  Copyright (C) 2002 F@lk Brettschneider <falkbr@kdevelop.org>
-  Copyright (C) 2003 John Firebaugh <jfirebaugh@kde.org>
+Copyright (C) 2002 F@lk Brettschneider <falkbr@kdevelop.org>
+Copyright (C) 2003 John Firebaugh <jfirebaugh@kde.org>
+Copyright (C) 2006 Adam Treat <treat@kde.org>
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
 
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
 
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  Boston, MA 02110-1301, USA.
+You should have received a copy of the GNU Library General Public License
+along with this library; see the file COPYING.LIB.  If not, write to
+the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA 02110-1301, USA.
 */
 #include "kdevmainwindow.h"
 
@@ -23,18 +24,18 @@
 #include <QStackedWidget>
 
 #include <kmenu.h>
-#include <kicon.h>
-#include <kaction.h>
 #include <klocale.h>
-#include <kmenubar.h>
 #include <kstdaction.h>
 #include <kparts/part.h>
-#include <kmessagebox.h>
-#include <kedittoolbar.h>
-#include <kapplication.h>
-#include <kactioncollection.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/editor.h>
+
+#include <ktoggleaction.h>
+#include <ktoolbarpopupaction.h>
+
+#include <knotifydialog.h>
+#include <ksettings/dialog.h>
 
 #include "kdevconfig.h"
 #include "kdevprofile.h"
@@ -44,18 +45,42 @@
 #include "kdevmainwindow.h"
 #include "statusbar.h"
 #include "shellextension.h"
-#include "mainwindowshare.h"
 #include "kdevplugincontroller.h"
 #include "kdevprojectcontroller.h"
 #include "kdevdocumentcontroller.h"
+
+class KDevMainWindowPrivate
+{
+public:
+    KDevMainWindowPrivate()
+            : center( 0 ),
+            settingsDialog( 0 ),
+            configureEditor( 0 ),
+            toggleStatusbar( 0 ),
+            stopProcesses( 0 )
+    {}
+
+    QStackedWidget *center;
+    KSettings::Dialog *settingsDialog;
+
+    QList<QDockWidget*> dockList;
+    QList<KDevPlugin*> activeProcesses;
+
+    KAction *configureEditor;
+    KAction *configureSettings;
+
+    KToggleAction *toggleStatusbar;
+
+    KToolBarPopupAction *stopProcesses;
+};
 
 KDevMainWindow::KDevMainWindow( QWidget *parent, Qt::WFlags flags )
         : KMainWindow( parent, flags )
 {
     setObjectName( QLatin1String( "KDevMainWindow" ) );
-    m_mainWindowShare = new MainWindowShare( this );
-    m_center = new QStackedWidget( this );
-    setCentralWidget( m_center );
+    d = new KDevMainWindowPrivate();
+    d->center = new QStackedWidget( this );
+    setCentralWidget( d->center );
 
     setCorner( Qt::TopLeftCorner, Qt::LeftDockWidgetArea );
     setCorner( Qt::TopRightCorner, Qt::RightDockWidgetArea );
@@ -66,6 +91,100 @@ KDevMainWindow::KDevMainWindow( QWidget *parent, Qt::WFlags flags )
 KDevMainWindow::~ KDevMainWindow()
 {}
 
+void KDevMainWindow::setupActions()
+{
+    KStdAction::quit( this, SLOT( close() ), actionCollection() );
+
+    d->configureSettings = KStdAction::preferences( this, SLOT( settings() ),
+                           actionCollection(), "settings_configure" );
+
+    QString app = qApp->applicationName();
+    QString text = i18n( "Configure %1" ).arg( app );
+    d->configureSettings->setToolTip( text );
+    d->configureSettings->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg( i18n( "Lets you customize $1." ).arg( app ) ) );
+
+    d->configureEditor = new KAction( i18n( "Configure &Editor..." ), actionCollection(), "settings_configure_editors" );
+    connect( d->configureEditor, SIGNAL( triggered( bool ) ), SLOT( configureEditors() ) );
+    d->configureEditor->setToolTip( i18n( "Configure editor settings" ) );
+    d->configureEditor->setWhatsThis( i18n( "<b>Configure editor</b><p>Opens editor configuration dialog." ) );
+    //     d->configureEditor->setEnabled( false );
+
+    d->toggleStatusbar = ( KToggleAction* ) KStdAction::create( KStdAction::ShowToolbar, this, SLOT( toggleStatusbar() ), actionCollection() );
+    d->toggleStatusbar->setText( i18n( "Show &Statusbar" ) );
+    d->toggleStatusbar->setToolTip( i18n( "Show statusbar" ) );
+    d->toggleStatusbar->setWhatsThis( i18n( "<b>Show statusbar</b><p>Hides or shows the statusbar." ) );
+
+    d->stopProcesses = new KToolBarPopupAction( KIcon( "stop" ),
+                       i18n( "&Stop" ),
+                       actionCollection(),
+                       "stop_processes" );
+
+    d->stopProcesses->setShortcut( Qt::Key_Escape );
+    d->stopProcesses->setToolTip( i18n( "Stop" ) );
+    d->stopProcesses->setWhatsThis( i18n( "<b>Stop</b><p>Stops all running processes." ) );
+    d->stopProcesses->setEnabled( false );
+    connect( d->stopProcesses, SIGNAL( triggered() ),
+             this, SLOT( stopButtonPressed() ) );
+    connect( d->stopProcesses->menu(), SIGNAL( aboutToShow() ),
+             this, SLOT( stopMenuAboutToShow() ) );
+    connect( d->stopProcesses->menu(), SIGNAL( activated( int ) ),
+             this, SLOT( stopPopupActivated( int ) ) );
+
+    //FIXME fix connection after gutting of KDevCore
+    /*connect( KDevCore::getInstance(), SIGNAL( activeProcessChanged( KDevPlugin*, bool ) ),
+    this, SLOT( activeProcessChanged( KDevPlugin*, bool ) ) );*/
+
+    KAction* action;
+
+    action = KStdAction::showMenubar(
+                 this, SLOT( showMenuBar() ),
+                 actionCollection(), "settings_show_menubar" );
+    action->setToolTip( beautifyToolTip( action->text() ) );
+    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( action->text() ) ).arg( i18n( "Lets you switch the menubar on/off." ) ) );
+
+    action = KStdAction::keyBindings(
+                 this, SLOT( keyBindings() ),
+                 actionCollection(), "settings_configure_shortcuts" );
+    action->setToolTip( beautifyToolTip( action->text() ) );
+    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( action->text() ) ).arg( i18n( "Lets you configure shortcut keys." ) ) );
+
+    action = KStdAction::configureToolbars(
+                 this, SLOT( configureToolbars() ),
+                 actionCollection(), "settings_configure_toolbars" );
+    action->setToolTip( beautifyToolTip( action->text() ) );
+    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( action->text() ) ).arg( i18n( "Lets you configure toolbars." ) ) );
+
+    action = KStdAction::configureNotifications(
+                 this, SLOT( configureNotifications() ),
+                 actionCollection(), "settings_configure_notifications" );
+    action->setToolTip( beautifyToolTip( action->text() ) );
+    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( action->text() ) ).arg( i18n( "Lets you configure system notifications." ) ) );
+
+    action = new KAction( i18n( "&Next Window" ), actionCollection(), "view_next_window" );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoNextWindow() ) );
+    action->setShortcut( Qt::ALT + Qt::Key_Right );
+    action->setToolTip( i18n( "Next window" ) );
+    action->setWhatsThis( i18n( "<b>Next window</b><p>Switches to the next window." ) );
+
+    action = new KAction( i18n( "&Previous Window" ), actionCollection(), "view_previous_window" );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoPreviousWindow() ) );
+    action->setShortcut( Qt::ALT + Qt::Key_Left );
+    action->setToolTip( i18n( "Previous window" ) );
+    action->setWhatsThis( i18n( "<b>Previous window</b><p>Switches to the previous window." ) );
+
+    action = new KAction( i18n( "&Last Accessed Window" ), actionCollection(), "view_last_window" );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoLastWindow() ) );
+    action->setShortcut( Qt::ALT + Qt::Key_Up );
+    action->setToolTip( i18n( "Last accessed window" ) );
+    action->setWhatsThis( i18n( "<b>Last accessed window</b><p>Switches to the last viewed window (Hold the Alt key pressed and walk on by repeating the Up key)." ) );
+
+    action = new KAction( i18n( "&First Accessed Window" ), actionCollection(), "view_first_window" );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoFirstWindow() ) );
+    action->setShortcut( Qt::ALT + Qt::Key_Down );
+    action->setToolTip( i18n( "First accessed window" ) );
+    action->setWhatsThis( i18n( "<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key)." ) );
+}
+
 void KDevMainWindow::init()
 {
     setStandardToolBarMenuEnabled( true );
@@ -74,26 +193,18 @@ void KDevMainWindow::init()
                                    actionCollection(),
                                    "set_configure_toolbars" );
 
-    m_mainWindowShare->createActions();
-
-    connect( m_mainWindowShare, SIGNAL( gotoNextWindow() ),
-             this, SLOT( gotoNextWindow() ) );
-    connect( m_mainWindowShare, SIGNAL( gotoPreviousWindow() ),
-             this, SLOT( gotoPreviousWindow() ) );
-    connect( m_mainWindowShare, SIGNAL( gotoFirstWindow() ),
-             this, SLOT( gotoFirstWindow() ) );
-    connect( m_mainWindowShare, SIGNAL( gotoLastWindow() ),
-             this, SLOT( gotoLastWindow() ) );
-
     new KDevStatusBar( this );
+
+    setupActions();
 
     createGUI( ShellExtension::getInstance() ->xmlFile() );
 
-    m_mainWindowShare->init();
     setupWindowMenu();
 
     connect( KDevCore::projectController(), SIGNAL( projectOpened() ),
              this, SLOT( projectOpened() ) );
+    connect( KDevCore::projectController(), SIGNAL( projectClosed() ),
+             this, SLOT( projectClosed() ) );
 }
 
 void KDevMainWindow::embedPartView( QWidget *view, const QString &title,
@@ -102,7 +213,7 @@ void KDevMainWindow::embedPartView( QWidget *view, const QString &title,
     if ( !view || title.isEmpty() )
         return ;
 
-    m_center->addWidget( view );
+    d->center->addWidget( view );
 }
 
 void KDevMainWindow::embedSelectView( QWidget *view, const QString &title,
@@ -114,7 +225,7 @@ void KDevMainWindow::embedSelectView( QWidget *view, const QString &title,
     QDockWidget * dock = new QDockWidget( title, this );
     dock->setObjectName( title );
     dock->setWidget( view );
-    m_dockList.append( dock );
+    d->dockList.append( dock );
     addDockWidget( Qt::LeftDockWidgetArea, dock );
 }
 
@@ -127,7 +238,7 @@ void KDevMainWindow::embedOutputView( QWidget *view, const QString &title,
     QDockWidget * dock = new QDockWidget( title, this );
     dock->setObjectName( title );
     dock->setWidget( view );
-    m_dockList.append( dock );
+    d->dockList.append( dock );
     addDockWidget( Qt::BottomDockWidgetArea, dock );
 }
 
@@ -141,7 +252,7 @@ void KDevMainWindow::embedSelectViewRight( QWidget *view,
     QDockWidget * dock = new QDockWidget( title, this );
     dock->setObjectName( title );
     dock->setWidget( view );
-    m_dockList.append( dock );
+    d->dockList.append( dock );
     addDockWidget( Qt::RightDockWidgetArea, dock );
 }
 
@@ -150,18 +261,18 @@ void KDevMainWindow::removeView( QWidget *view )
     if ( !view )
         return ;
 
-    foreach( QDockWidget * dock, m_dockList )
+    foreach( QDockWidget * dock, d->dockList )
     {
         if ( dock->widget() == view )
         {
             removeDockWidget( dock );
-            m_dockList.removeAll( dock );
+            d->dockList.removeAll( dock );
             delete dock;
             break;
         }
     }
 
-    m_center->removeWidget( view );
+    d->center->removeWidget( view );
 }
 
 void KDevMainWindow::setViewAvailable( QWidget *pView, bool bEnabled )
@@ -173,7 +284,7 @@ void KDevMainWindow::setViewAvailable( QWidget *pView, bool bEnabled )
 
 bool KDevMainWindow::containsWidget( QWidget *widget ) const
 {
-    return ( m_center->indexOf( widget ) != -1 );
+    return ( d->center->indexOf( widget ) != -1 );
 }
 
 void KDevMainWindow::setCurrentWidget( QWidget *widget )
@@ -181,7 +292,7 @@ void KDevMainWindow::setCurrentWidget( QWidget *widget )
     if ( !widget )
         return ;
 
-    m_center->setCurrentWidget( widget );
+    d->center->setCurrentWidget( widget );
 }
 
 void KDevMainWindow::raiseView( QWidget *view, Qt::DockWidgetArea area )
@@ -189,7 +300,7 @@ void KDevMainWindow::raiseView( QWidget *view, Qt::DockWidgetArea area )
     if ( !view )
         return ;
 
-    foreach( QDockWidget * dock, m_dockList )
+    foreach( QDockWidget * dock, d->dockList )
     {
         if ( dock->widget() == view )
         {
@@ -205,7 +316,7 @@ void KDevMainWindow::lowerView( QWidget * view )
     if ( !view )
         return ;
 
-    foreach( QDockWidget * dock, m_dockList )
+    foreach( QDockWidget * dock, d->dockList )
     {
         if ( dock->widget() == view )
         {
@@ -240,46 +351,48 @@ void KDevMainWindow::saveSettings( )
 
 void KDevMainWindow::gotoNextWindow()
 {
-    if ( ( m_center->currentIndex() + 1 ) < m_center->count() )
-        m_center->setCurrentIndex( m_center->currentIndex() + 1 );
+    if ( ( d->center->currentIndex() + 1 ) < d->center->count() )
+        d->center->setCurrentIndex( d->center->currentIndex() + 1 );
     else
-        m_center->setCurrentIndex( 0 );
+        d->center->setCurrentIndex( 0 );
 }
 
 void KDevMainWindow::gotoPreviousWindow()
 {
-    if ( ( m_center->currentIndex() - 1 ) >= 0 )
-        m_center->setCurrentIndex( m_center->currentIndex() - 1 );
+    if ( ( d->center->currentIndex() - 1 ) >= 0 )
+        d->center->setCurrentIndex( d->center->currentIndex() - 1 );
     else
-        m_center->setCurrentIndex( m_center->count() - 1 );
+        d->center->setCurrentIndex( d->center->count() - 1 );
 }
 
 void KDevMainWindow::gotoFirstWindow()
 {
-    m_center->setCurrentIndex( 0 );
+    d->center->setCurrentIndex( 0 );
 }
 
 void KDevMainWindow::gotoLastWindow()
 {
-    m_center->setCurrentIndex( m_center->count() - 1 );
+    d->center->setCurrentIndex( d->center->count() - 1 );
 }
 
 void KDevMainWindow::projectOpened()
 {
-    setCaption( QString() );
+    QString app = i18n( "Project" );
+    QString text = i18n( "Configure %1" ).arg( app );
+    d->configureSettings->setToolTip( text );
+    d->configureSettings->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg( i18n( "Lets you customize $1." ).arg( app ) ) );
+}
+
+void KDevMainWindow::projectClosed()
+{
+    QString app = qApp->applicationName();
+    QString text = i18n( "Configure %1" ).arg( app );
+    d->configureSettings->setToolTip( text );
+    d->configureSettings->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg( i18n( "Lets you customize $1." ).arg( app ) ) );
 }
 
 void KDevMainWindow::configureToolbars()
-{
-    saveMainWindowSettings( KGlobal::config(),
-                            QLatin1String( "KDevMainWindow" ) );
-    KEditToolbar* dlg = new KEditToolbar( factory() );
-    connect( dlg, SIGNAL( newToolbarConfig() ),
-             this, SLOT( newToolbarConfig() ) );
-    connect( dlg, SIGNAL( finished( int ) ),
-             dlg, SLOT( deleteLater() ) );
-    dlg->show();
-}
+{}
 
 void KDevMainWindow::newToolbarConfig()
 {
@@ -308,72 +421,104 @@ bool KDevMainWindow::queryClose()
     return success;
 }
 
-bool KDevMainWindow::queryExit()
-{
-    return true;
-}
-
 void KDevMainWindow::setupWindowMenu()
 {
-    /*    get the xmlgui created one instead*/
-    m_windowMenu = qFindChild<KMenu *>( this, QLatin1String( "window" ) );
-
-    m_windowMenu->addAction( actionCollection() ->action( "file_close" ) );
-    m_windowMenu->addAction( actionCollection() ->action( "file_close_all" ) );
-    m_windowMenu->addAction( actionCollection() ->action( "file_closeother" ) );
-
-    QObject::connect( m_windowMenu, SIGNAL( activated( int ) ),
-                      this, SLOT( openURL( int ) ) );
-    QObject::connect( m_windowMenu, SIGNAL( aboutToShow() ),
-                      this, SLOT( fillWindowMenu() ) );
-}
-
-void KDevMainWindow::openURL( int w )
-{
-    foreach( WinInfo pair, m_windowList )
-    {
-        if ( pair.first == w )
-        {
-            if ( pair.second )
-            {
-                pair.second->activate();
-                return ;
-            }
-        }
-    }
+    //FIXME This should setup a window menu or perhaps dialog instead.
+    // Either way, we need one with a scroll bar.  I'm tired of menus that take
+    // up the entire screen.
 }
 
 void KDevMainWindow::fillWindowMenu()
 {
-    // clear menu
-    foreach( WinInfo pair, m_windowList )
+    //FIXME This should fill a window menu or perhaps dialog instead.
+    // Either way, we need one with a scroll bar.  I'm tired of menus that take
+    // up the entire screen.
+}
+
+QString KDevMainWindow::beautifyToolTip( const QString& text ) const
+{
+    QString temp = text;
+    temp.replace( QRegExp( "&" ), "" );
+    temp.replace( QRegExp( "\\.\\.\\." ), "" );
+    return temp;
+}
+
+void KDevMainWindow::reportBug()
+{}
+
+void KDevMainWindow::toggleStatusbar()
+{
+    if ( d->toggleStatusbar->isChecked() )
+        statusBar() ->show();
+    else
+        statusBar() ->hide();
+}
+
+void KDevMainWindow::stopButtonPressed()
+{}
+
+void KDevMainWindow::activeProcessChanged( KDevPlugin* plugin, bool active )
+{
+    Q_UNUSED( plugin );
+    Q_UNUSED( active );
+}
+
+void KDevMainWindow::stopPopupActivated( int id )
+{
+    Q_UNUSED( id );
+}
+
+void KDevMainWindow::stopMenuAboutToShow()
+{}
+
+void KDevMainWindow::showMenuBar()
+{}
+
+void KDevMainWindow::configureNotifications()
+{
+    KNotifyDialog::configure( this, "Notification Configuration Dialog" );
+}
+
+void KDevMainWindow::settings()
+{
+    if ( !d->settingsDialog )
+        d->settingsDialog = new KSettings::Dialog(
+                                KSettings::Dialog::Static, this );
+    d->settingsDialog->show();
+}
+
+void KDevMainWindow::configureEditors()
+{
+    //FIXME Change this so that it is embedded in our config dialog.
+    //Perhaps this will require a change to the KTextEditor interface too...
+    KTextEditor::Document * doc =
+        KDevCore::documentController() ->activeDocument() ->textDocument();
+    KTextEditor::Editor *editor = doc ? doc->editor() : 0;
+    if ( !editor )
     {
-        m_windowMenu->removeItem( pair.first );
+        kDebug( 9000 ) << "*** No KTextEditor::ConfigInterface for part!" << endl;
+        return ;
     }
 
-    QMap<QString, KDevDocument*> map;
-    QStringList string_list;
-    foreach ( KDevDocument * file, KDevCore::documentController() ->openDocuments() )
-    {
-        map[ file->url().fileName() ] = file;
-        string_list.append( file->url().fileName() );
-    }
-    string_list.sort();
+    if ( !editor->configDialogSupported() )
+        return ;
 
-    QList<KDevDocument*> list;
-    for ( int i = 0; i != string_list.size(); ++i )
-        list.append( map[ string_list[ i ] ] );
+    // show the modal config dialog for this part if it has a ConfigInterface
+    editor->configDialog( this );
+}
 
-    if ( list.count() > 0 )
-        m_windowList << qMakePair( m_windowMenu->insertSeparator(), static_cast<KDevDocument*>( 0L ) );
+void KDevMainWindow::keyBindings()
+{}
 
-    int i = 0;
-    foreach ( KDevDocument * file, list )
-    {
-        int temp = m_windowMenu->insertItem( i < 10 ? QString( "&%1 %2" ).arg( i ).arg( file->url().fileName() ) : file->url().fileName() );
-        m_windowList << qMakePair( temp, file );
-        ++i;
-    }
+void KDevMainWindow::contextMenu( QMenu* popup, const Context *context )
+{
+    Q_UNUSED( popup )
+    Q_UNUSED( context );
+}
+
+void KDevMainWindow::activePartChanged( KParts::Part * part )
+{
+    d->configureEditor->setEnabled( part && dynamic_cast<KTextEditor::Document*>( part ) );
 }
 
 #include "kdevmainwindow.moc"
