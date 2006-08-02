@@ -249,20 +249,20 @@ namespace csharp_pp
 [:
   enum modifier_enum {
     mod_new          = 1,
-    mod_public       = 2,
-    mod_protected    = 4,
-    mod_internal     = 8,
-    mod_private      = 16,
-    mod_abstract     = 32,
-    mod_sealed       = 64,
-    mod_static       = 128,
-    mod_readonly     = 256,
-    mod_volatile     = 512,
-    mod_virtual      = 1024,
-    mod_override     = 2048,
-    mod_extern       = 4096,
-    mod_unsafe       = 8192,
-    mod_fixed        = 16384,
+    mod_public       = 1 << 1,
+    mod_protected    = 1 << 2,
+    mod_internal     = 1 << 3,
+    mod_private      = 1 << 4,
+    mod_abstract     = 1 << 5,
+    mod_sealed       = 1 << 6,
+    mod_static       = 1 << 7,
+    mod_readonly     = 1 << 8,
+    mod_volatile     = 1 << 9,
+    mod_virtual      = 1 << 10,
+    mod_override     = 1 << 11,
+    mod_extern       = 1 << 12,
+    mod_unsafe       = 1 << 13,
+    mod_fixed        = 1 << 14,
   };
 :]
 
@@ -689,7 +689,10 @@ namespace csharp_pp
 
 
    0 [: _M_state.ltCounter = 0; :]
-   try/recover(#extern_alias=extern_alias_directive)*  -- TODO: probably not in C# 1.0
+   (  ?[: compatibility_mode() >= csharp20_compatibility :]
+      try/recover(#extern_alias=extern_alias_directive)+
+    | 0
+   )
    try/recover(#using=using_directive)*
    try/recover(
      0 [: if (LA(2).kind != Token_ASSEMBLY) break; :] -- exit the "star loop"
@@ -807,6 +810,9 @@ namespace csharp_pp
    rest=type_declaration_rest[ attributes, modifiers ]
 -> type_declaration ;;
 
+-- C# 2.0 or higher allows partial classes, structs and interfaces.
+-- We don't need to introduce an additional check here, because the lexer only
+-- returns the PARTIAL token for C# versions >= 2.0, and IDENTIFIER otherwise.
 -- TODO: after parsing, check if the modifiers are allowed for the specific
 --       kind of type declaration.
 
@@ -834,15 +840,14 @@ namespace csharp_pp
 -- Definition of a C# CLASS
 
    CLASS class_name=identifier
-   (
-      ?[: compatibility_mode() >= csharp20_compatibility :]
+   (  ?[: compatibility_mode() >= csharp20_compatibility :]
       try/recover(type_parameters=type_parameters)
     | 0
    )
    (class_base=class_base | 0)
-   (
-      ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameter_constraints_clauses=optional_type_parameter_constraints_clauses
+   (  ?[: compatibility_mode() >= csharp20_compatibility :]
+      try/recover(#type_parameter_constraints=type_parameter_constraints_clause)+
+    | 0
    )
    body=class_body
    (SEMICOLON | 0)
@@ -856,15 +861,14 @@ namespace csharp_pp
 -- Definition of a C# STRUCT
 
    STRUCT struct_name=identifier
-   (
-      ?[: compatibility_mode() >= csharp20_compatibility :]
+   (  ?[: compatibility_mode() >= csharp20_compatibility :]
       try/recover(type_parameters=type_parameters)
     | 0
    )
    (struct_interfaces=struct_interfaces | 0)
-   (
-      ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameter_constraints_clauses=optional_type_parameter_constraints_clauses
+   (  ?[: compatibility_mode() >= csharp20_compatibility :]
+      try/recover(#type_parameter_constraints=type_parameter_constraints_clause)+
+    | 0
    )
    body=struct_body
    (SEMICOLON | 0)
@@ -878,15 +882,14 @@ namespace csharp_pp
 -- Definition of a C# INTERFACE
 
    INTERFACE interface_name=identifier
-   (
-      ?[: compatibility_mode() >= csharp20_compatibility :]
+   (  ?[: compatibility_mode() >= csharp20_compatibility :]
       try/recover(type_parameters=type_parameters)
     | 0
    )
    (interface_base=interface_base | 0)
-   (
-      ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameter_constraints_clauses=optional_type_parameter_constraints_clauses
+   (  ?[: compatibility_mode() >= csharp20_compatibility :]
+      try/recover(#type_parameter_constraints=type_parameter_constraints_clause)+
+    | 0
    )
    body=interface_body
    (SEMICOLON | 0)
@@ -912,15 +915,14 @@ namespace csharp_pp
 -- Definition of a C# DELEGATE
 
    DELEGATE return_type=return_type delegate_name=identifier
-   (
-      ?[: compatibility_mode() >= csharp20_compatibility :]
+   (  ?[: compatibility_mode() >= csharp20_compatibility :]
       try/recover(type_parameters=type_parameters)
     | 0
    )
    LPAREN (formal_parameters=formal_parameter_list | 0) RPAREN
-   (
-      ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameter_constraints_clauses=optional_type_parameter_constraints_clauses
+   (  ?[: compatibility_mode() >= csharp20_compatibility :]
+      try/recover(#type_parameter_constraints=type_parameter_constraints_clause)+
+    | 0
    )
    SEMICOLON
 -> delegate_declaration [
@@ -1045,9 +1047,12 @@ namespace csharp_pp
     |
       -- The FIELD DECLARATION rest. Declares member variables.
       ?[: ( LA(2).kind == Token_SEMICOLON || LA(2).kind == Token_ASSIGN
-            || LA(2).kind == Token_COMMA
+            || LA(2).kind == Token_COMMA || LA(2).kind == Token_LBRACKET
           ) && (member_type->type == return_type::type_regular)  :]
-      (#variable_declarator:variable_declarator @ COMMA) SEMICOLON
+      (#variable_declarator:variable_declarator[
+         ((modifiers->modifiers & modifiers::mod_fixed) != 0) /* is a fixed size buffer? */
+       ] @ COMMA)
+      SEMICOLON
       field_declaration=variable_declaration_data[
         attributes, modifiers,
         member_type->regular_type, variable_declarator_sequence
@@ -1145,7 +1150,7 @@ namespace csharp_pp
       ?[: (LA(2).kind == Token_COMMA) || (LA(2).kind == Token_ASSIGN)
           || (LA(2).kind == Token_SEMICOLON)
        :]
-      (#variable_declarator=variable_declarator @ COMMA) SEMICOLON
+      (#variable_declarator=variable_declarator[false] @ COMMA) SEMICOLON
     |
       event_name=type_name
       LBRACE event_accessor_declarations=event_accessor_declarations RBRACE
@@ -1331,7 +1336,7 @@ namespace csharp_pp
    )
  | PRIVATE       [: (*yynode)->modifiers |= modifiers::mod_private;   :]
 -> accessor_modifier [
-     member variable modifiers: int; -- using the modifier_enum values
+     member variable modifiers: unsigned int; -- using the modifier_enum values
 ] ;;
 
 
@@ -1343,9 +1348,9 @@ namespace csharp_pp
     | 0
    )
    LPAREN (formal_parameters=formal_parameter_list | 0) RPAREN
-   (
-      ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameter_constraints_clauses=optional_type_parameter_constraints_clauses
+   (  ?[: compatibility_mode() >= csharp20_compatibility :]
+      try/recover(#type_parameter_constraints=type_parameter_constraints_clause)+
+    | 0
    )
    (method_body=block | SEMICOLON)
 -> method_declaration [
@@ -1441,7 +1446,8 @@ namespace csharp_pp
    )
    LPAREN (formal_parameters=formal_parameter_list | 0) RPAREN
    (  ?[: compatibility_mode() >= csharp20_compatibility :]
-      type_parameter_constraints_clauses=optional_type_parameter_constraints_clauses
+      try/recover(#type_parameter_constraints=type_parameter_constraints_clause)+
+    | 0
    )
    SEMICOLON
 -> interface_method_declaration [
@@ -1607,9 +1613,6 @@ namespace csharp_pp
 -- Type parameter CONSTRAINTS CLAUSES also belong to C#'s generics,
 -- and can narrow down the allowed types given as type arguments.
 
-   try/recover(#clause=type_parameter_constraints_clause)*
--> optional_type_parameter_constraints_clauses ;;
-
    WHERE type_parameter=identifier COLON constraints=type_parameter_constraints
 -> type_parameter_constraints_clause ;;
 
@@ -1701,7 +1704,7 @@ namespace csharp_pp
    declaration=local_variable_declaration SEMICOLON
 -> local_variable_declaration_statement ;;
 
-   type:type (#declarator:variable_declarator @ COMMA)
+   type:type (#declarator:variable_declarator[false] @ COMMA)
    data=variable_declaration_data[
      0 /* no attributes */, 0 /* no modifiers */, type, declarator_sequence
    ]
@@ -1719,8 +1722,21 @@ namespace csharp_pp
 -- variable declaration. There can be more declarators, seperated by commas.
 
    variable_name=identifier
-   (ASSIGN variable_initializer=variable_initializer | 0)
--> variable_declarator ;;
+   (
+      -- Fixed size buffers are a C# 2.0 feature. Not in the
+      -- ECMA specification, but used by both Microsoft and Mono compilers.
+      ?[: fixed_size_buffer :]
+      LBRACKET array_size=expression RBRACKET
+    |
+      ?[: !fixed_size_buffer :]
+      ASSIGN variable_initializer=variable_initializer
+    |
+      ?[: !fixed_size_buffer :]
+      0
+   )
+-> variable_declarator [
+     argument temporary variable fixed_size_buffer: bool;
+] ;;
 
 
 -- The CONSTANT DECLARATION. Declares "const" values.
@@ -1815,7 +1831,10 @@ namespace csharp_pp
    ?[: LA(2).kind == Token_LBRACE :]
    unchecked_statement=unchecked_statement
  |
-   -- YIELD is a non-keyword identifier, so it clashes with expressions
+   -- Iterators with yield have been introduced by C# 2.0, and for C# 1.0
+   -- the lexer returns the IDENTIFIER token instead of YIELD, so we don't
+   -- need to do a specific version check here.
+   -- YIELD is a non-keyword identifier, so it clashes with expressions:
    ?[: LA(2).kind == Token_RETURN || LA(2).kind == Token_BREAK :]
    yield_statement=yield_statement
  |
@@ -2092,7 +2111,8 @@ namespace csharp_pp
       -- this rather hackish solution prevents false errors for expressions
       -- like "a is sometype ? if_exp : else_exp", where nullable_type steals
       -- the question mark from conditional_expression.
-      ?[: is_nullable_type(last_relational_expression_rest_type((*yynode)->null_coalescing_expression)) :]
+      ?[: (compatibility_mode() >= csharp20_compatibility)
+          && is_nullable_type(last_relational_expression_rest_type((*yynode)->null_coalescing_expression)) :]
       0 [: unset_nullable_type(last_relational_expression_rest_type((*yynode)->null_coalescing_expression)); :]
       if_expression=expression COLON else_expression=expression
     |
@@ -2320,6 +2340,7 @@ namespace csharp_pp
    DEFAULT LPAREN type=type RPAREN
      [: (*yynode)->rule_type = primary_atom::type_default_value_expression;    :]
  |
+   ?[: compatibility_mode() >= csharp20_compatibility :]
    anonymous_method_expression=anonymous_method_expression
      [: (*yynode)->rule_type = primary_atom::type_anonymous_method_expression; :]
  |
@@ -2740,7 +2761,7 @@ namespace csharp_pp
    FIXED      [: (*yynode)->modifiers |= modifiers::mod_fixed;     :]
  )*
 -> optional_modifiers [
-  member variable modifiers: int; -- using the modifier_enum values
+  member variable modifiers: unsigned int; -- using the modifier_enum values
 ] ;;
 
  (

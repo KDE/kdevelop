@@ -225,7 +225,16 @@ ppNewLine       {Whitespace}?{LineComment}?{NewLine}
  /* operators */
 
 ":"             return csharp::parser::Token_COLON;
-"::"            return csharp::parser::Token_SCOPE; // TODO: new in 2.0?
+"::" {
+    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility ) {
+      return csharp::parser::Token_SCOPE;
+    }
+    else {
+      _G_parser->report_problem( csharp::parser::error,
+        "Global alias access (with \"::\") is not supported by C# 1.0" );
+      return csharp::parser::Token_INVALID;
+    }
+}
 "?"             return csharp::parser::Token_QUESTION;
 "??" {
     if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility ) {
@@ -355,20 +364,47 @@ ppNewLine       {Whitespace}?{LineComment}?{NewLine}
 
 
  /* Non-keyword identifiers. They only have special meaning in
-  * specific contexts and are treated as identifiers otherwise. */
+  * specific contexts and are treated as identifiers otherwise.
+  * Many of those have been introduced by C# 2.0. */
 
 "add"           return csharp::parser::Token_ADD;
-"alias"         return csharp::parser::Token_ALIAS;
+"alias" {
+    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
+      return csharp::parser::Token_ALIAS;
+    else
+      return csharp::parser::Token_IDENTIFIER;
+}
 "get"           return csharp::parser::Token_GET;
-"global"        return csharp::parser::Token_GLOBAL;
-"partial"       return csharp::parser::Token_PARTIAL;
+"global" {
+    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
+      return csharp::parser::Token_GLOBAL;
+    else
+      return csharp::parser::Token_IDENTIFIER;
+}
+"partial" {
+    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
+      return csharp::parser::Token_PARTIAL;
+    else
+      return csharp::parser::Token_IDENTIFIER;
+}
 "remove"        return csharp::parser::Token_REMOVE;
 "set"           return csharp::parser::Token_SET;
 "value"         return csharp::parser::Token_VALUE;
-"where"         return csharp::parser::Token_WHERE;
-"yield"         return csharp::parser::Token_YIELD;
+"where" {
+    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
+      return csharp::parser::Token_WHERE;
+    else
+      return csharp::parser::Token_IDENTIFIER;
+}
+"yield" {
+    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
+      return csharp::parser::Token_YIELD;
+    else
+      return csharp::parser::Token_IDENTIFIER;
+}
 
- /* An unspecified one, for global attributes: */
+ /* A non-keyword identifier that is not marked as such by the specification,
+  * for global attributes: */
 "assembly"      return csharp::parser::Token_ASSEMBLY;
 
 

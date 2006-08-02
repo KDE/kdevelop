@@ -129,7 +129,6 @@ namespace csharp
   struct optional_argument_list_ast;
   struct optional_attribute_sections_ast;
   struct optional_modifiers_ast;
-  struct optional_type_parameter_constraints_clauses_ast;
   struct optionally_nullable_type_ast;
   struct overloadable_binary_only_operator_ast;
   struct overloadable_unary_only_operator_ast;
@@ -337,20 +336,20 @@ namespace csharp
     {
     enum modifier_enum {
       mod_new = 1,
-      mod_public = 2,
-      mod_protected = 4,
-      mod_internal = 8,
-      mod_private = 16,
-      mod_abstract = 32,
-      mod_sealed = 64,
-      mod_static = 128,
-      mod_readonly = 256,
-      mod_volatile = 512,
-      mod_virtual = 1024,
-      mod_override = 2048,
-      mod_extern = 4096,
-      mod_unsafe = 8192,
-      mod_fixed = 16384,
+      mod_public = 1 << 1,
+      mod_protected = 1 << 2,
+      mod_internal = 1 << 3,
+      mod_private = 1 << 4,
+      mod_abstract = 1 << 5,
+      mod_sealed = 1 << 6,
+      mod_static = 1 << 7,
+      mod_readonly = 1 << 8,
+      mod_volatile = 1 << 9,
+      mod_virtual = 1 << 10,
+      mod_override = 1 << 11,
+      mod_extern = 1 << 12,
+      mod_unsafe = 1 << 13,
+      mod_fixed = 1 << 14,
     };
   }
 
@@ -687,72 +686,71 @@ namespace csharp
                         Kind_optional_argument_list = 1110,
                         Kind_optional_attribute_sections = 1111,
                         Kind_optional_modifiers = 1112,
-                        Kind_optional_type_parameter_constraints_clauses = 1113,
-                        Kind_optionally_nullable_type = 1114,
-                        Kind_overloadable_binary_only_operator = 1115,
-                        Kind_overloadable_unary_only_operator = 1116,
-                        Kind_overloadable_unary_or_binary_operator = 1117,
-                        Kind_parameter_array = 1118,
-                        Kind_parameter_modifier = 1119,
-                        Kind_pointer_type = 1120,
-                        Kind_positional_argument = 1121,
-                        Kind_predefined_type = 1122,
-                        Kind_primary_atom = 1123,
-                        Kind_primary_expression = 1124,
-                        Kind_primary_or_secondary_constraint = 1125,
-                        Kind_primary_suffix = 1126,
-                        Kind_property_declaration = 1127,
-                        Kind_qualified_identifier = 1128,
-                        Kind_rank_specifier = 1129,
-                        Kind_relational_expression = 1130,
-                        Kind_relational_expression_rest = 1131,
-                        Kind_resource_acquisition = 1132,
-                        Kind_return_statement = 1133,
-                        Kind_return_type = 1134,
-                        Kind_secondary_constraints = 1135,
-                        Kind_shift_expression = 1136,
-                        Kind_shift_expression_rest = 1137,
-                        Kind_simple_name_or_member_access = 1138,
-                        Kind_simple_type = 1139,
-                        Kind_specific_catch_clause = 1140,
-                        Kind_stackalloc_initializer = 1141,
-                        Kind_statement_expression = 1142,
-                        Kind_struct_body = 1143,
-                        Kind_struct_declaration = 1144,
-                        Kind_struct_interfaces = 1145,
-                        Kind_struct_member_declaration = 1146,
-                        Kind_switch_label = 1147,
-                        Kind_switch_section = 1148,
-                        Kind_switch_statement = 1149,
-                        Kind_throw_statement = 1150,
-                        Kind_try_statement = 1151,
-                        Kind_type = 1152,
-                        Kind_type_arguments = 1153,
-                        Kind_type_arguments_or_parameters_end = 1154,
-                        Kind_type_declaration = 1155,
-                        Kind_type_declaration_rest = 1156,
-                        Kind_type_name = 1157,
-                        Kind_type_name_safe = 1158,
-                        Kind_type_parameter = 1159,
-                        Kind_type_parameter_constraints = 1160,
-                        Kind_type_parameter_constraints_clause = 1161,
-                        Kind_type_parameters = 1162,
-                        Kind_typeof_expression = 1163,
-                        Kind_unary_expression = 1164,
-                        Kind_unary_or_binary_operator_declaration = 1165,
-                        Kind_unbound_type_name = 1166,
-                        Kind_unbound_type_name_part = 1167,
-                        Kind_unchecked_statement = 1168,
-                        Kind_unmanaged_type = 1169,
-                        Kind_unmanaged_type_suffix = 1170,
-                        Kind_unsafe_statement = 1171,
-                        Kind_using_directive = 1172,
-                        Kind_using_statement = 1173,
-                        Kind_variable_declaration_data = 1174,
-                        Kind_variable_declarator = 1175,
-                        Kind_variable_initializer = 1176,
-                        Kind_while_statement = 1177,
-                        Kind_yield_statement = 1178,
+                        Kind_optionally_nullable_type = 1113,
+                        Kind_overloadable_binary_only_operator = 1114,
+                        Kind_overloadable_unary_only_operator = 1115,
+                        Kind_overloadable_unary_or_binary_operator = 1116,
+                        Kind_parameter_array = 1117,
+                        Kind_parameter_modifier = 1118,
+                        Kind_pointer_type = 1119,
+                        Kind_positional_argument = 1120,
+                        Kind_predefined_type = 1121,
+                        Kind_primary_atom = 1122,
+                        Kind_primary_expression = 1123,
+                        Kind_primary_or_secondary_constraint = 1124,
+                        Kind_primary_suffix = 1125,
+                        Kind_property_declaration = 1126,
+                        Kind_qualified_identifier = 1127,
+                        Kind_rank_specifier = 1128,
+                        Kind_relational_expression = 1129,
+                        Kind_relational_expression_rest = 1130,
+                        Kind_resource_acquisition = 1131,
+                        Kind_return_statement = 1132,
+                        Kind_return_type = 1133,
+                        Kind_secondary_constraints = 1134,
+                        Kind_shift_expression = 1135,
+                        Kind_shift_expression_rest = 1136,
+                        Kind_simple_name_or_member_access = 1137,
+                        Kind_simple_type = 1138,
+                        Kind_specific_catch_clause = 1139,
+                        Kind_stackalloc_initializer = 1140,
+                        Kind_statement_expression = 1141,
+                        Kind_struct_body = 1142,
+                        Kind_struct_declaration = 1143,
+                        Kind_struct_interfaces = 1144,
+                        Kind_struct_member_declaration = 1145,
+                        Kind_switch_label = 1146,
+                        Kind_switch_section = 1147,
+                        Kind_switch_statement = 1148,
+                        Kind_throw_statement = 1149,
+                        Kind_try_statement = 1150,
+                        Kind_type = 1151,
+                        Kind_type_arguments = 1152,
+                        Kind_type_arguments_or_parameters_end = 1153,
+                        Kind_type_declaration = 1154,
+                        Kind_type_declaration_rest = 1155,
+                        Kind_type_name = 1156,
+                        Kind_type_name_safe = 1157,
+                        Kind_type_parameter = 1158,
+                        Kind_type_parameter_constraints = 1159,
+                        Kind_type_parameter_constraints_clause = 1160,
+                        Kind_type_parameters = 1161,
+                        Kind_typeof_expression = 1162,
+                        Kind_unary_expression = 1163,
+                        Kind_unary_or_binary_operator_declaration = 1164,
+                        Kind_unbound_type_name = 1165,
+                        Kind_unbound_type_name_part = 1166,
+                        Kind_unchecked_statement = 1167,
+                        Kind_unmanaged_type = 1168,
+                        Kind_unmanaged_type_suffix = 1169,
+                        Kind_unsafe_statement = 1170,
+                        Kind_using_directive = 1171,
+                        Kind_using_statement = 1172,
+                        Kind_variable_declaration_data = 1173,
+                        Kind_variable_declarator = 1174,
+                        Kind_variable_initializer = 1175,
+                        Kind_while_statement = 1176,
+                        Kind_yield_statement = 1177,
                         AST_NODE_KIND_COUNT
                       };
 
@@ -785,7 +783,7 @@ namespace csharp
         KIND = Kind_accessor_modifier
       };
 
-      int modifiers;
+      unsigned int modifiers;
     };
 
   struct additive_expression_ast: public ast_node
@@ -1094,7 +1092,7 @@ namespace csharp
       identifier_ast *class_name;
       type_parameters_ast *type_parameters;
       class_base_ast *class_base;
-      optional_type_parameter_constraints_clauses_ast *type_parameter_constraints_clauses;
+      const list_node<type_parameter_constraints_clause_ast *> *type_parameter_constraints_sequence;
       class_body_ast *body;
     };
 
@@ -1281,7 +1279,7 @@ namespace csharp
       identifier_ast *delegate_name;
       type_parameters_ast *type_parameters;
       formal_parameter_list_ast *formal_parameters;
-      optional_type_parameter_constraints_clauses_ast *type_parameter_constraints_clauses;
+      const list_node<type_parameter_constraints_clause_ast *> *type_parameter_constraints_sequence;
     };
 
   struct do_while_statement_ast: public ast_node
@@ -1686,7 +1684,7 @@ namespace csharp
       identifier_ast *interface_name;
       type_parameters_ast *type_parameters;
       interface_base_ast *interface_base;
-      optional_type_parameter_constraints_clauses_ast *type_parameter_constraints_clauses;
+      const list_node<type_parameter_constraints_clause_ast *> *type_parameter_constraints_sequence;
       interface_body_ast *body;
     };
 
@@ -1743,7 +1741,7 @@ namespace csharp
       identifier_ast *method_name;
       type_parameters_ast *type_parameters;
       formal_parameter_list_ast *formal_parameters;
-      optional_type_parameter_constraints_clauses_ast *type_parameter_constraints_clauses;
+      const list_node<type_parameter_constraints_clause_ast *> *type_parameter_constraints_sequence;
     };
 
   struct interface_property_declaration_ast: public ast_node
@@ -1879,7 +1877,7 @@ namespace csharp
       type_name_safe_ast *method_name;
       type_parameters_ast *type_parameters;
       formal_parameter_list_ast *formal_parameters;
-      optional_type_parameter_constraints_clauses_ast *type_parameter_constraints_clauses;
+      const list_node<type_parameter_constraints_clause_ast *> *type_parameter_constraints_sequence;
       block_ast *method_body;
     };
 
@@ -2085,17 +2083,7 @@ namespace csharp
         KIND = Kind_optional_modifiers
       };
 
-      int modifiers;
-    };
-
-  struct optional_type_parameter_constraints_clauses_ast: public ast_node
-    {
-      enum
-      {
-        KIND = Kind_optional_type_parameter_constraints_clauses
-      };
-
-      const list_node<type_parameter_constraints_clause_ast *> *clause_sequence;
+      unsigned int modifiers;
     };
 
   struct optionally_nullable_type_ast: public ast_node
@@ -2448,7 +2436,7 @@ namespace csharp
       identifier_ast *struct_name;
       type_parameters_ast *type_parameters;
       struct_interfaces_ast *struct_interfaces;
-      optional_type_parameter_constraints_clauses_ast *type_parameter_constraints_clauses;
+      const list_node<type_parameter_constraints_clause_ast *> *type_parameter_constraints_sequence;
       struct_body_ast *body;
     };
 
@@ -2796,6 +2784,7 @@ namespace csharp
       };
 
       identifier_ast *variable_name;
+      expression_ast *array_size;
       variable_initializer_ast *variable_initializer;
     };
 
@@ -3265,7 +3254,6 @@ namespace csharp
       bool parse_optional_argument_list(optional_argument_list_ast **yynode);
       bool parse_optional_attribute_sections(optional_attribute_sections_ast **yynode);
       bool parse_optional_modifiers(optional_modifiers_ast **yynode);
-      bool parse_optional_type_parameter_constraints_clauses(optional_type_parameter_constraints_clauses_ast **yynode);
       bool parse_optionally_nullable_type(optionally_nullable_type_ast **yynode);
       bool parse_overloadable_binary_only_operator(overloadable_binary_only_operator_ast **yynode, overloadable_operator::overloadable_operator_enum* op);
       bool parse_overloadable_unary_only_operator(overloadable_unary_only_operator_ast **yynode, overloadable_operator::overloadable_operator_enum* op);
@@ -3327,7 +3315,7 @@ namespace csharp
       bool parse_using_directive(using_directive_ast **yynode);
       bool parse_using_statement(using_statement_ast **yynode);
       bool parse_variable_declaration_data(variable_declaration_data_ast **yynode, optional_attribute_sections_ast *attributes, optional_modifiers_ast *modifiers, type_ast *type, const list_node<variable_declarator_ast *> *variable_declarator_sequence);
-      bool parse_variable_declarator(variable_declarator_ast **yynode);
+      bool parse_variable_declarator(variable_declarator_ast **yynode, bool fixed_size_buffer);
       bool parse_variable_initializer(variable_initializer_ast **yynode);
       bool parse_while_statement(while_statement_ast **yynode);
       bool parse_yield_statement(yield_statement_ast **yynode);
@@ -3570,8 +3558,6 @@ namespace csharp
       virtual void visit_optional_attribute_sections(optional_attribute_sections_ast *)
       {}
       virtual void visit_optional_modifiers(optional_modifiers_ast *)
-      {}
-      virtual void visit_optional_type_parameter_constraints_clauses(optional_type_parameter_constraints_clauses_ast *)
       {}
       virtual void visit_optionally_nullable_type(optionally_nullable_type_ast *)
       {}
@@ -4042,7 +4028,16 @@ namespace csharp
         visit_node(node->class_name);
         visit_node(node->type_parameters);
         visit_node(node->class_base);
-        visit_node(node->type_parameter_constraints_clauses);
+        if (node->type_parameter_constraints_sequence)
+          {
+            const list_node<type_parameter_constraints_clause_ast*> *__it = node->type_parameter_constraints_sequence->to_front(), *__end = __it;
+            do
+              {
+                visit_node(__it->element);
+                __it = __it->next;
+              }
+            while (__it != __end);
+          }
         visit_node(node->body);
       }
 
@@ -4195,7 +4190,16 @@ namespace csharp
         visit_node(node->delegate_name);
         visit_node(node->type_parameters);
         visit_node(node->formal_parameters);
-        visit_node(node->type_parameter_constraints_clauses);
+        if (node->type_parameter_constraints_sequence)
+          {
+            const list_node<type_parameter_constraints_clause_ast*> *__it = node->type_parameter_constraints_sequence->to_front(), *__end = __it;
+            do
+              {
+                visit_node(__it->element);
+                __it = __it->next;
+              }
+            while (__it != __end);
+          }
       }
 
       virtual void visit_do_while_statement(do_while_statement_ast *node)
@@ -4501,7 +4505,16 @@ namespace csharp
         visit_node(node->interface_name);
         visit_node(node->type_parameters);
         visit_node(node->interface_base);
-        visit_node(node->type_parameter_constraints_clauses);
+        if (node->type_parameter_constraints_sequence)
+          {
+            const list_node<type_parameter_constraints_clause_ast*> *__it = node->type_parameter_constraints_sequence->to_front(), *__end = __it;
+            do
+              {
+                visit_node(__it->element);
+                __it = __it->next;
+              }
+            while (__it != __end);
+          }
         visit_node(node->body);
       }
 
@@ -4535,7 +4548,16 @@ namespace csharp
         visit_node(node->method_name);
         visit_node(node->type_parameters);
         visit_node(node->formal_parameters);
-        visit_node(node->type_parameter_constraints_clauses);
+        if (node->type_parameter_constraints_sequence)
+          {
+            const list_node<type_parameter_constraints_clause_ast*> *__it = node->type_parameter_constraints_sequence->to_front(), *__end = __it;
+            do
+              {
+                visit_node(__it->element);
+                __it = __it->next;
+              }
+            while (__it != __end);
+          }
       }
 
       virtual void visit_interface_property_declaration(interface_property_declaration_ast *node)
@@ -4629,7 +4651,16 @@ namespace csharp
         visit_node(node->method_name);
         visit_node(node->type_parameters);
         visit_node(node->formal_parameters);
-        visit_node(node->type_parameter_constraints_clauses);
+        if (node->type_parameter_constraints_sequence)
+          {
+            const list_node<type_parameter_constraints_clause_ast*> *__it = node->type_parameter_constraints_sequence->to_front(), *__end = __it;
+            do
+              {
+                visit_node(__it->element);
+                __it = __it->next;
+              }
+            while (__it != __end);
+          }
         visit_node(node->method_body);
       }
 
@@ -4818,20 +4849,6 @@ namespace csharp
 
       virtual void visit_optional_modifiers(optional_modifiers_ast *)
     {}
-
-      virtual void visit_optional_type_parameter_constraints_clauses(optional_type_parameter_constraints_clauses_ast *node)
-      {
-        if (node->clause_sequence)
-          {
-            const list_node<type_parameter_constraints_clause_ast*> *__it = node->clause_sequence->to_front(), *__end = __it;
-            do
-              {
-                visit_node(__it->element);
-                __it = __it->next;
-              }
-            while (__it != __end);
-          }
-      }
 
       virtual void visit_optionally_nullable_type(optionally_nullable_type_ast *node)
       {
@@ -5077,7 +5094,16 @@ namespace csharp
                                                           visit_node(node->struct_name);
                                                           visit_node(node->type_parameters);
                                                           visit_node(node->struct_interfaces);
-                                                          visit_node(node->type_parameter_constraints_clauses);
+                                                          if (node->type_parameter_constraints_sequence)
+                                                            {
+                                                              const list_node<type_parameter_constraints_clause_ast*> *__it = node->type_parameter_constraints_sequence->to_front(), *__end = __it;
+                                                              do
+                                                                {
+                                                                  visit_node(__it->element);
+                                                                  __it = __it->next;
+                                                                }
+                                                              while (__it != __end);
+                                                            }
                                                           visit_node(node->body);
                                                         }
 
@@ -5340,6 +5366,7 @@ namespace csharp
                                                         virtual void visit_variable_declarator(variable_declarator_ast *node)
                                                         {
                                                           visit_node(node->variable_name);
+                                                          visit_node(node->array_size);
                                                           visit_node(node->variable_initializer);
                                                         }
 

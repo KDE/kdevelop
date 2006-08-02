@@ -3208,16 +3208,25 @@ return csharp::parser::Token_COLON;
 case 19:
 YY_RULE_SETUP
 #line 228 "csharp_lexer.ll"
-return csharp::parser::Token_SCOPE; // TODO: new in 2.0?
+{
+    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility ) {
+      return csharp::parser::Token_SCOPE;
+    }
+    else {
+      _G_parser->report_problem( csharp::parser::error,
+        "Global alias access (with \"::\") is not supported by C# 1.0" );
+      return csharp::parser::Token_INVALID;
+    }
+}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 229 "csharp_lexer.ll"
+#line 238 "csharp_lexer.ll"
 return csharp::parser::Token_QUESTION;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 230 "csharp_lexer.ll"
+#line 239 "csharp_lexer.ll"
 {
     if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility ) {
       return csharp::parser::Token_QUESTIONQUESTION;
@@ -3231,628 +3240,655 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 240 "csharp_lexer.ll"
+#line 249 "csharp_lexer.ll"
 return csharp::parser::Token_BANG;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 241 "csharp_lexer.ll"
+#line 250 "csharp_lexer.ll"
 return csharp::parser::Token_TILDE;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 242 "csharp_lexer.ll"
+#line 251 "csharp_lexer.ll"
 return csharp::parser::Token_EQUAL;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 243 "csharp_lexer.ll"
+#line 252 "csharp_lexer.ll"
 return csharp::parser::Token_LESS_THAN;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 244 "csharp_lexer.ll"
+#line 253 "csharp_lexer.ll"
 return csharp::parser::Token_LESS_EQUAL;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 245 "csharp_lexer.ll"
+#line 254 "csharp_lexer.ll"
 return csharp::parser::Token_GREATER_THAN;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 246 "csharp_lexer.ll"
+#line 255 "csharp_lexer.ll"
 return csharp::parser::Token_GREATER_EQUAL;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 247 "csharp_lexer.ll"
+#line 256 "csharp_lexer.ll"
 return csharp::parser::Token_NOT_EQUAL;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 248 "csharp_lexer.ll"
+#line 257 "csharp_lexer.ll"
 return csharp::parser::Token_LOG_AND;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 249 "csharp_lexer.ll"
+#line 258 "csharp_lexer.ll"
 return csharp::parser::Token_LOG_OR;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 250 "csharp_lexer.ll"
+#line 259 "csharp_lexer.ll"
 return csharp::parser::Token_ARROW_RIGHT; // TODO: new in 2.0 or not?
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 251 "csharp_lexer.ll"
+#line 260 "csharp_lexer.ll"
 return csharp::parser::Token_INCREMENT;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 252 "csharp_lexer.ll"
+#line 261 "csharp_lexer.ll"
 return csharp::parser::Token_DECREMENT;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 253 "csharp_lexer.ll"
+#line 262 "csharp_lexer.ll"
 return csharp::parser::Token_ASSIGN;
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 254 "csharp_lexer.ll"
+#line 263 "csharp_lexer.ll"
 return csharp::parser::Token_PLUS;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 255 "csharp_lexer.ll"
+#line 264 "csharp_lexer.ll"
 return csharp::parser::Token_PLUS_ASSIGN;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 256 "csharp_lexer.ll"
+#line 265 "csharp_lexer.ll"
 return csharp::parser::Token_MINUS;
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 257 "csharp_lexer.ll"
+#line 266 "csharp_lexer.ll"
 return csharp::parser::Token_MINUS_ASSIGN;
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 258 "csharp_lexer.ll"
+#line 267 "csharp_lexer.ll"
 return csharp::parser::Token_STAR;
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 259 "csharp_lexer.ll"
+#line 268 "csharp_lexer.ll"
 return csharp::parser::Token_STAR_ASSIGN;
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 260 "csharp_lexer.ll"
+#line 269 "csharp_lexer.ll"
 return csharp::parser::Token_SLASH;
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 261 "csharp_lexer.ll"
+#line 270 "csharp_lexer.ll"
 return csharp::parser::Token_SLASH_ASSIGN;
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 262 "csharp_lexer.ll"
+#line 271 "csharp_lexer.ll"
 return csharp::parser::Token_BIT_AND;
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 263 "csharp_lexer.ll"
+#line 272 "csharp_lexer.ll"
 return csharp::parser::Token_BIT_AND_ASSIGN;
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 264 "csharp_lexer.ll"
+#line 273 "csharp_lexer.ll"
 return csharp::parser::Token_BIT_OR;
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 265 "csharp_lexer.ll"
+#line 274 "csharp_lexer.ll"
 return csharp::parser::Token_BIT_OR_ASSIGN;
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 266 "csharp_lexer.ll"
+#line 275 "csharp_lexer.ll"
 return csharp::parser::Token_BIT_XOR;
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 267 "csharp_lexer.ll"
+#line 276 "csharp_lexer.ll"
 return csharp::parser::Token_BIT_XOR_ASSIGN;
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 268 "csharp_lexer.ll"
+#line 277 "csharp_lexer.ll"
 return csharp::parser::Token_REMAINDER;
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 269 "csharp_lexer.ll"
+#line 278 "csharp_lexer.ll"
 return csharp::parser::Token_REMAINDER_ASSIGN;
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 270 "csharp_lexer.ll"
+#line 279 "csharp_lexer.ll"
 return csharp::parser::Token_LSHIFT;
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 271 "csharp_lexer.ll"
+#line 280 "csharp_lexer.ll"
 return csharp::parser::Token_LSHIFT_ASSIGN;
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 272 "csharp_lexer.ll"
+#line 281 "csharp_lexer.ll"
 return csharp::parser::Token_RSHIFT;
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 273 "csharp_lexer.ll"
+#line 282 "csharp_lexer.ll"
 return csharp::parser::Token_RSHIFT_ASSIGN;
 	YY_BREAK
 /* reserved words */
 case 56:
 YY_RULE_SETUP
-#line 278 "csharp_lexer.ll"
+#line 287 "csharp_lexer.ll"
 return csharp::parser::Token_ABSTRACT;
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 279 "csharp_lexer.ll"
+#line 288 "csharp_lexer.ll"
 return csharp::parser::Token_AS;
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 280 "csharp_lexer.ll"
+#line 289 "csharp_lexer.ll"
 return csharp::parser::Token_BASE;
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 281 "csharp_lexer.ll"
+#line 290 "csharp_lexer.ll"
 return csharp::parser::Token_BOOL;
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 282 "csharp_lexer.ll"
+#line 291 "csharp_lexer.ll"
 return csharp::parser::Token_BREAK;
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 283 "csharp_lexer.ll"
+#line 292 "csharp_lexer.ll"
 return csharp::parser::Token_BYTE;
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 284 "csharp_lexer.ll"
+#line 293 "csharp_lexer.ll"
 return csharp::parser::Token_CASE;
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 285 "csharp_lexer.ll"
+#line 294 "csharp_lexer.ll"
 return csharp::parser::Token_CATCH;
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 286 "csharp_lexer.ll"
+#line 295 "csharp_lexer.ll"
 return csharp::parser::Token_CHAR;
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 287 "csharp_lexer.ll"
+#line 296 "csharp_lexer.ll"
 return csharp::parser::Token_CHECKED;
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 288 "csharp_lexer.ll"
+#line 297 "csharp_lexer.ll"
 return csharp::parser::Token_CLASS;
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 289 "csharp_lexer.ll"
+#line 298 "csharp_lexer.ll"
 return csharp::parser::Token_CONST;
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 290 "csharp_lexer.ll"
+#line 299 "csharp_lexer.ll"
 return csharp::parser::Token_CONTINUE;
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 291 "csharp_lexer.ll"
+#line 300 "csharp_lexer.ll"
 return csharp::parser::Token_DECIMAL;
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 292 "csharp_lexer.ll"
+#line 301 "csharp_lexer.ll"
 return csharp::parser::Token_DEFAULT;
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 293 "csharp_lexer.ll"
+#line 302 "csharp_lexer.ll"
 return csharp::parser::Token_DELEGATE;
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 294 "csharp_lexer.ll"
+#line 303 "csharp_lexer.ll"
 return csharp::parser::Token_DO;
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 295 "csharp_lexer.ll"
+#line 304 "csharp_lexer.ll"
 return csharp::parser::Token_DOUBLE;
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 296 "csharp_lexer.ll"
+#line 305 "csharp_lexer.ll"
 return csharp::parser::Token_ELSE;
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 297 "csharp_lexer.ll"
+#line 306 "csharp_lexer.ll"
 return csharp::parser::Token_ENUM;
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 298 "csharp_lexer.ll"
+#line 307 "csharp_lexer.ll"
 return csharp::parser::Token_EVENT;
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 299 "csharp_lexer.ll"
+#line 308 "csharp_lexer.ll"
 return csharp::parser::Token_EXPLICIT;
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 300 "csharp_lexer.ll"
+#line 309 "csharp_lexer.ll"
 return csharp::parser::Token_EXTERN;
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 301 "csharp_lexer.ll"
+#line 310 "csharp_lexer.ll"
 return csharp::parser::Token_FALSE;
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 302 "csharp_lexer.ll"
+#line 311 "csharp_lexer.ll"
 return csharp::parser::Token_FINALLY;
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 303 "csharp_lexer.ll"
+#line 312 "csharp_lexer.ll"
 return csharp::parser::Token_FIXED;
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 304 "csharp_lexer.ll"
+#line 313 "csharp_lexer.ll"
 return csharp::parser::Token_FLOAT;
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 305 "csharp_lexer.ll"
+#line 314 "csharp_lexer.ll"
 return csharp::parser::Token_FOR;
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 306 "csharp_lexer.ll"
+#line 315 "csharp_lexer.ll"
 return csharp::parser::Token_FOREACH;
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 307 "csharp_lexer.ll"
+#line 316 "csharp_lexer.ll"
 return csharp::parser::Token_GOTO;
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 308 "csharp_lexer.ll"
+#line 317 "csharp_lexer.ll"
 return csharp::parser::Token_IF;
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 309 "csharp_lexer.ll"
+#line 318 "csharp_lexer.ll"
 return csharp::parser::Token_IMPLICIT;
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 310 "csharp_lexer.ll"
+#line 319 "csharp_lexer.ll"
 return csharp::parser::Token_IN;
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 311 "csharp_lexer.ll"
+#line 320 "csharp_lexer.ll"
 return csharp::parser::Token_INT;
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 312 "csharp_lexer.ll"
+#line 321 "csharp_lexer.ll"
 return csharp::parser::Token_INTERFACE;
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 313 "csharp_lexer.ll"
+#line 322 "csharp_lexer.ll"
 return csharp::parser::Token_INTERNAL;
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 314 "csharp_lexer.ll"
+#line 323 "csharp_lexer.ll"
 return csharp::parser::Token_IS;
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 315 "csharp_lexer.ll"
+#line 324 "csharp_lexer.ll"
 return csharp::parser::Token_LOCK;
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 316 "csharp_lexer.ll"
+#line 325 "csharp_lexer.ll"
 return csharp::parser::Token_LONG;
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 317 "csharp_lexer.ll"
+#line 326 "csharp_lexer.ll"
 return csharp::parser::Token_NAMESPACE;
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 318 "csharp_lexer.ll"
+#line 327 "csharp_lexer.ll"
 return csharp::parser::Token_NEW;
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 319 "csharp_lexer.ll"
+#line 328 "csharp_lexer.ll"
 return csharp::parser::Token_NULL;
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 320 "csharp_lexer.ll"
+#line 329 "csharp_lexer.ll"
 return csharp::parser::Token_OBJECT;
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 321 "csharp_lexer.ll"
+#line 330 "csharp_lexer.ll"
 return csharp::parser::Token_OPERATOR;
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 322 "csharp_lexer.ll"
+#line 331 "csharp_lexer.ll"
 return csharp::parser::Token_OUT;
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
-#line 323 "csharp_lexer.ll"
+#line 332 "csharp_lexer.ll"
 return csharp::parser::Token_OVERRIDE;
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 324 "csharp_lexer.ll"
+#line 333 "csharp_lexer.ll"
 return csharp::parser::Token_PARAMS;
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
-#line 325 "csharp_lexer.ll"
+#line 334 "csharp_lexer.ll"
 return csharp::parser::Token_PRIVATE;
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 326 "csharp_lexer.ll"
+#line 335 "csharp_lexer.ll"
 return csharp::parser::Token_PROTECTED;
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 327 "csharp_lexer.ll"
+#line 336 "csharp_lexer.ll"
 return csharp::parser::Token_PUBLIC;
 	YY_BREAK
 case 106:
 YY_RULE_SETUP
-#line 328 "csharp_lexer.ll"
+#line 337 "csharp_lexer.ll"
 return csharp::parser::Token_READONLY;
 	YY_BREAK
 case 107:
 YY_RULE_SETUP
-#line 329 "csharp_lexer.ll"
+#line 338 "csharp_lexer.ll"
 return csharp::parser::Token_REF;
 	YY_BREAK
 case 108:
 YY_RULE_SETUP
-#line 330 "csharp_lexer.ll"
+#line 339 "csharp_lexer.ll"
 return csharp::parser::Token_RETURN;
 	YY_BREAK
 case 109:
 YY_RULE_SETUP
-#line 331 "csharp_lexer.ll"
+#line 340 "csharp_lexer.ll"
 return csharp::parser::Token_SBYTE;
 	YY_BREAK
 case 110:
 YY_RULE_SETUP
-#line 332 "csharp_lexer.ll"
+#line 341 "csharp_lexer.ll"
 return csharp::parser::Token_SEALED;
 	YY_BREAK
 case 111:
 YY_RULE_SETUP
-#line 333 "csharp_lexer.ll"
+#line 342 "csharp_lexer.ll"
 return csharp::parser::Token_SHORT;
 	YY_BREAK
 case 112:
 YY_RULE_SETUP
-#line 334 "csharp_lexer.ll"
+#line 343 "csharp_lexer.ll"
 return csharp::parser::Token_SIZEOF;
 	YY_BREAK
 case 113:
 YY_RULE_SETUP
-#line 335 "csharp_lexer.ll"
+#line 344 "csharp_lexer.ll"
 return csharp::parser::Token_STACKALLOC;
 	YY_BREAK
 case 114:
 YY_RULE_SETUP
-#line 336 "csharp_lexer.ll"
+#line 345 "csharp_lexer.ll"
 return csharp::parser::Token_STATIC;
 	YY_BREAK
 case 115:
 YY_RULE_SETUP
-#line 337 "csharp_lexer.ll"
+#line 346 "csharp_lexer.ll"
 return csharp::parser::Token_STRING;
 	YY_BREAK
 case 116:
 YY_RULE_SETUP
-#line 338 "csharp_lexer.ll"
+#line 347 "csharp_lexer.ll"
 return csharp::parser::Token_STRUCT;
 	YY_BREAK
 case 117:
 YY_RULE_SETUP
-#line 339 "csharp_lexer.ll"
+#line 348 "csharp_lexer.ll"
 return csharp::parser::Token_SWITCH;
 	YY_BREAK
 case 118:
 YY_RULE_SETUP
-#line 340 "csharp_lexer.ll"
+#line 349 "csharp_lexer.ll"
 return csharp::parser::Token_THIS;
 	YY_BREAK
 case 119:
 YY_RULE_SETUP
-#line 341 "csharp_lexer.ll"
+#line 350 "csharp_lexer.ll"
 return csharp::parser::Token_THROW;
 	YY_BREAK
 case 120:
 YY_RULE_SETUP
-#line 342 "csharp_lexer.ll"
+#line 351 "csharp_lexer.ll"
 return csharp::parser::Token_TRUE;
 	YY_BREAK
 case 121:
 YY_RULE_SETUP
-#line 343 "csharp_lexer.ll"
+#line 352 "csharp_lexer.ll"
 return csharp::parser::Token_TRY;
 	YY_BREAK
 case 122:
 YY_RULE_SETUP
-#line 344 "csharp_lexer.ll"
+#line 353 "csharp_lexer.ll"
 return csharp::parser::Token_TYPEOF;
 	YY_BREAK
 case 123:
 YY_RULE_SETUP
-#line 345 "csharp_lexer.ll"
+#line 354 "csharp_lexer.ll"
 return csharp::parser::Token_UINT;
 	YY_BREAK
 case 124:
 YY_RULE_SETUP
-#line 346 "csharp_lexer.ll"
+#line 355 "csharp_lexer.ll"
 return csharp::parser::Token_ULONG;
 	YY_BREAK
 case 125:
 YY_RULE_SETUP
-#line 347 "csharp_lexer.ll"
+#line 356 "csharp_lexer.ll"
 return csharp::parser::Token_UNCHECKED;
 	YY_BREAK
 case 126:
 YY_RULE_SETUP
-#line 348 "csharp_lexer.ll"
+#line 357 "csharp_lexer.ll"
 return csharp::parser::Token_UNSAFE;
 	YY_BREAK
 case 127:
 YY_RULE_SETUP
-#line 349 "csharp_lexer.ll"
+#line 358 "csharp_lexer.ll"
 return csharp::parser::Token_USHORT;
 	YY_BREAK
 case 128:
 YY_RULE_SETUP
-#line 350 "csharp_lexer.ll"
+#line 359 "csharp_lexer.ll"
 return csharp::parser::Token_USING;
 	YY_BREAK
 case 129:
 YY_RULE_SETUP
-#line 351 "csharp_lexer.ll"
+#line 360 "csharp_lexer.ll"
 return csharp::parser::Token_VIRTUAL;
 	YY_BREAK
 case 130:
 YY_RULE_SETUP
-#line 352 "csharp_lexer.ll"
+#line 361 "csharp_lexer.ll"
 return csharp::parser::Token_VOID;
 	YY_BREAK
 case 131:
 YY_RULE_SETUP
-#line 353 "csharp_lexer.ll"
+#line 362 "csharp_lexer.ll"
 return csharp::parser::Token_VOLATILE;
 	YY_BREAK
 case 132:
 YY_RULE_SETUP
-#line 354 "csharp_lexer.ll"
+#line 363 "csharp_lexer.ll"
 return csharp::parser::Token_WHILE;
 	YY_BREAK
 /* Non-keyword identifiers. They only have special meaning in
-  * specific contexts and are treated as identifiers otherwise. */
+  * specific contexts and are treated as identifiers otherwise.
+  * Many of those have been introduced by C# 2.0. */
 case 133:
 YY_RULE_SETUP
-#line 360 "csharp_lexer.ll"
+#line 370 "csharp_lexer.ll"
 return csharp::parser::Token_ADD;
 	YY_BREAK
 case 134:
 YY_RULE_SETUP
-#line 361 "csharp_lexer.ll"
-return csharp::parser::Token_ALIAS;
+#line 371 "csharp_lexer.ll"
+{
+    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
+      return csharp::parser::Token_ALIAS;
+    else
+      return csharp::parser::Token_IDENTIFIER;
+}
 	YY_BREAK
 case 135:
 YY_RULE_SETUP
-#line 362 "csharp_lexer.ll"
+#line 377 "csharp_lexer.ll"
 return csharp::parser::Token_GET;
 	YY_BREAK
 case 136:
 YY_RULE_SETUP
-#line 363 "csharp_lexer.ll"
-return csharp::parser::Token_GLOBAL;
+#line 378 "csharp_lexer.ll"
+{
+    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
+      return csharp::parser::Token_GLOBAL;
+    else
+      return csharp::parser::Token_IDENTIFIER;
+}
 	YY_BREAK
 case 137:
 YY_RULE_SETUP
-#line 364 "csharp_lexer.ll"
-return csharp::parser::Token_PARTIAL;
+#line 384 "csharp_lexer.ll"
+{
+    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
+      return csharp::parser::Token_PARTIAL;
+    else
+      return csharp::parser::Token_IDENTIFIER;
+}
 	YY_BREAK
 case 138:
 YY_RULE_SETUP
-#line 365 "csharp_lexer.ll"
+#line 390 "csharp_lexer.ll"
 return csharp::parser::Token_REMOVE;
 	YY_BREAK
 case 139:
 YY_RULE_SETUP
-#line 366 "csharp_lexer.ll"
+#line 391 "csharp_lexer.ll"
 return csharp::parser::Token_SET;
 	YY_BREAK
 case 140:
 YY_RULE_SETUP
-#line 367 "csharp_lexer.ll"
+#line 392 "csharp_lexer.ll"
 return csharp::parser::Token_VALUE;
 	YY_BREAK
 case 141:
 YY_RULE_SETUP
-#line 368 "csharp_lexer.ll"
-return csharp::parser::Token_WHERE;
+#line 393 "csharp_lexer.ll"
+{
+    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
+      return csharp::parser::Token_WHERE;
+    else
+      return csharp::parser::Token_IDENTIFIER;
+}
 	YY_BREAK
 case 142:
 YY_RULE_SETUP
-#line 369 "csharp_lexer.ll"
-return csharp::parser::Token_YIELD;
+#line 399 "csharp_lexer.ll"
+{
+    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
+      return csharp::parser::Token_YIELD;
+    else
+      return csharp::parser::Token_IDENTIFIER;
+}
 	YY_BREAK
-/* An unspecified one, for global attributes: */
+/* A non-keyword identifier that is not marked as such by the specification,
+  * for global attributes: */
 case 143:
 YY_RULE_SETUP
-#line 372 "csharp_lexer.ll"
+#line 408 "csharp_lexer.ll"
 return csharp::parser::Token_ASSEMBLY;
 	YY_BREAK
 /* characters and strings */
 case 144:
 YY_RULE_SETUP
-#line 377 "csharp_lexer.ll"
+#line 413 "csharp_lexer.ll"
 return csharp::parser::Token_CHARACTER_LITERAL;
 	YY_BREAK
 case 145:
 /* rule 145 can match eol */
 YY_RULE_SETUP
-#line 378 "csharp_lexer.ll"
+#line 414 "csharp_lexer.ll"
 {
     _G_parser->report_problem( csharp::parser::error,
       std::string("Invalid character literal: ") + yytext );
@@ -3861,13 +3897,13 @@ YY_RULE_SETUP
 	YY_BREAK
 case 146:
 YY_RULE_SETUP
-#line 384 "csharp_lexer.ll"
+#line 420 "csharp_lexer.ll"
 return csharp::parser::Token_STRING_LITERAL;
 	YY_BREAK
 case 147:
 /* rule 147 can match eol */
 YY_RULE_SETUP
-#line 385 "csharp_lexer.ll"
+#line 421 "csharp_lexer.ll"
 {
     _G_parser->report_problem( csharp::parser::error,
       std::string("Invalid string literal: ") + yytext );
@@ -3878,69 +3914,69 @@ YY_RULE_SETUP
 case 148:
 /* rule 148 can match eol */
 YY_RULE_SETUP
-#line 391 "csharp_lexer.ll"
+#line 427 "csharp_lexer.ll"
 return csharp::parser::Token_STRING_LITERAL;
 	YY_BREAK
 /* the pre-processor */
 
 case 149:
 YY_RULE_SETUP
-#line 398 "csharp_lexer.ll"
+#line 434 "csharp_lexer.ll"
 BEGIN(PP_DECLARATION);     PP_PROCESS_TOKEN(PP_DEFINE);
 	YY_BREAK
 case 150:
 YY_RULE_SETUP
-#line 399 "csharp_lexer.ll"
+#line 435 "csharp_lexer.ll"
 BEGIN(PP_DECLARATION);     PP_PROCESS_TOKEN(PP_UNDEF);
 	YY_BREAK
 case 151:
 YY_RULE_SETUP
-#line 400 "csharp_lexer.ll"
+#line 436 "csharp_lexer.ll"
 BEGIN(PP_IF_CLAUSE);       PP_PROCESS_TOKEN(PP_IF);
 	YY_BREAK
 case 152:
 YY_RULE_SETUP
-#line 401 "csharp_lexer.ll"
+#line 437 "csharp_lexer.ll"
 BEGIN(PP_IF_CLAUSE);       PP_PROCESS_TOKEN(PP_ELIF);
 	YY_BREAK
 case 153:
 YY_RULE_SETUP
-#line 402 "csharp_lexer.ll"
+#line 438 "csharp_lexer.ll"
 BEGIN(PP_EXPECT_NEW_LINE); PP_PROCESS_TOKEN(PP_ELSE);
 	YY_BREAK
 case 154:
 YY_RULE_SETUP
-#line 403 "csharp_lexer.ll"
+#line 439 "csharp_lexer.ll"
 BEGIN(PP_EXPECT_NEW_LINE); PP_PROCESS_TOKEN(PP_ENDIF);
 	YY_BREAK
 case 155:
 YY_RULE_SETUP
-#line 404 "csharp_lexer.ll"
+#line 440 "csharp_lexer.ll"
 BEGIN(PP_LINE);            PP_PROCESS_TOKEN(PP_LINE);
 	YY_BREAK
 case 156:
 YY_RULE_SETUP
-#line 405 "csharp_lexer.ll"
+#line 441 "csharp_lexer.ll"
 BEGIN(PP_MESSAGE); PP_PROCESS_TOKEN(PP_ERROR);
 	YY_BREAK
 case 157:
 YY_RULE_SETUP
-#line 406 "csharp_lexer.ll"
+#line 442 "csharp_lexer.ll"
 BEGIN(PP_MESSAGE); PP_PROCESS_TOKEN(PP_WARNING);
 	YY_BREAK
 case 158:
 YY_RULE_SETUP
-#line 407 "csharp_lexer.ll"
+#line 443 "csharp_lexer.ll"
 BEGIN(PP_MESSAGE); PP_PROCESS_TOKEN(PP_REGION);
 	YY_BREAK
 case 159:
 YY_RULE_SETUP
-#line 408 "csharp_lexer.ll"
+#line 444 "csharp_lexer.ll"
 BEGIN(PP_MESSAGE); PP_PROCESS_TOKEN(PP_ENDREGION);
 	YY_BREAK
 case 160:
 YY_RULE_SETUP
-#line 409 "csharp_lexer.ll"
+#line 445 "csharp_lexer.ll"
 {
     if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility ) {
       BEGIN(PP_PRAGMA); PP_PROCESS_TOKEN(PP_PRAGMA);
@@ -3955,7 +3991,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 161:
 YY_RULE_SETUP
-#line 420 "csharp_lexer.ll"
+#line 456 "csharp_lexer.ll"
 {
     _G_parser->report_problem( csharp::parser::error,
       std::string("Invalid pre-processor directive: ``") + yytext + "''" );
@@ -3970,7 +4006,7 @@ case YY_STATE_EOF(PP_IF_CLAUSE):
 case YY_STATE_EOF(PP_LINE):
 case YY_STATE_EOF(PP_MESSAGE):
 case YY_STATE_EOF(PP_PRAGMA):
-#line 428 "csharp_lexer.ll"
+#line 464 "csharp_lexer.ll"
 {
     _G_parser->report_problem( csharp::parser::warning,
       "No newline at the end of the file" );
@@ -3981,12 +4017,12 @@ case YY_STATE_EOF(PP_PRAGMA):
 
 case 162:
 YY_RULE_SETUP
-#line 436 "csharp_lexer.ll"
+#line 472 "csharp_lexer.ll"
 /* skip */ ;
 	YY_BREAK
 case 163:
 YY_RULE_SETUP
-#line 437 "csharp_lexer.ll"
+#line 473 "csharp_lexer.ll"
 /* before an unexpected EOF, skip */ ;
 	YY_BREAK
 
@@ -3994,19 +4030,19 @@ YY_RULE_SETUP
 case 164:
 /* rule 164 can match eol */
 YY_RULE_SETUP
-#line 442 "csharp_lexer.ll"
+#line 478 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NEW_LINE;
 	YY_BREAK
 case 165:
 YY_RULE_SETUP
-#line 443 "csharp_lexer.ll"
+#line 479 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_INVALID;
 	YY_BREAK
 
 
 case 166:
 YY_RULE_SETUP
-#line 447 "csharp_lexer.ll"
+#line 483 "csharp_lexer.ll"
 {
     _G_parser->report_problem( csharp::parser::error,
       "You may not define ``true'' or ``false'' with #define or #undef" );
@@ -4016,81 +4052,81 @@ YY_RULE_SETUP
 	YY_BREAK
 case 167:
 YY_RULE_SETUP
-#line 453 "csharp_lexer.ll"
+#line 489 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_CONDITIONAL_SYMBOL; // ...including keywords
 	YY_BREAK
 case 168:
 /* rule 168 can match eol */
 YY_RULE_SETUP
-#line 454 "csharp_lexer.ll"
+#line 490 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NEW_LINE;
 	YY_BREAK
 case 169:
 YY_RULE_SETUP
-#line 455 "csharp_lexer.ll"
+#line 491 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_INVALID;
 	YY_BREAK
 
 
 case 170:
 YY_RULE_SETUP
-#line 459 "csharp_lexer.ll"
+#line 495 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_EQUAL;
 	YY_BREAK
 case 171:
 YY_RULE_SETUP
-#line 460 "csharp_lexer.ll"
+#line 496 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NOT_EQUAL;
 	YY_BREAK
 case 172:
 YY_RULE_SETUP
-#line 461 "csharp_lexer.ll"
+#line 497 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_LOG_AND;
 	YY_BREAK
 case 173:
 YY_RULE_SETUP
-#line 462 "csharp_lexer.ll"
+#line 498 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_LOG_OR;
 	YY_BREAK
 case 174:
 YY_RULE_SETUP
-#line 463 "csharp_lexer.ll"
+#line 499 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_BANG;
 	YY_BREAK
 case 175:
 YY_RULE_SETUP
-#line 464 "csharp_lexer.ll"
+#line 500 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_TRUE;
 	YY_BREAK
 case 176:
 YY_RULE_SETUP
-#line 465 "csharp_lexer.ll"
+#line 501 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_FALSE;
 	YY_BREAK
 case 177:
 YY_RULE_SETUP
-#line 466 "csharp_lexer.ll"
+#line 502 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_LPAREN;
 	YY_BREAK
 case 178:
 YY_RULE_SETUP
-#line 467 "csharp_lexer.ll"
+#line 503 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_RPAREN;
 	YY_BREAK
 case 179:
 YY_RULE_SETUP
-#line 468 "csharp_lexer.ll"
+#line 504 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_CONDITIONAL_SYMBOL;
 	YY_BREAK
 case 180:
 /* rule 180 can match eol */
 YY_RULE_SETUP
-#line 469 "csharp_lexer.ll"
+#line 505 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NEW_LINE;
 	YY_BREAK
 case 181:
 YY_RULE_SETUP
-#line 470 "csharp_lexer.ll"
+#line 506 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_INVALID;
 	YY_BREAK
 
@@ -4099,18 +4135,18 @@ return csharp_pp::parser::Token_PP_INVALID;
 /* so that those are recognized and not taken as skipped text as well.     */
 case 182:
 YY_RULE_SETUP
-#line 476 "csharp_lexer.ll"
+#line 512 "csharp_lexer.ll"
 /* skip */ ;
 	YY_BREAK
 case 183:
 YY_RULE_SETUP
-#line 477 "csharp_lexer.ll"
+#line 513 "csharp_lexer.ll"
 /* skip */ ;
 	YY_BREAK
 case 184:
 /* rule 184 can match eol */
 YY_RULE_SETUP
-#line 478 "csharp_lexer.ll"
+#line 514 "csharp_lexer.ll"
 /* skip */ ;
 	YY_BREAK
 
@@ -4118,88 +4154,88 @@ YY_RULE_SETUP
 case 185:
 /* rule 185 can match eol */
 YY_RULE_SETUP
-#line 482 "csharp_lexer.ll"
+#line 518 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NEW_LINE;
 	YY_BREAK
 case 186:
 YY_RULE_SETUP
-#line 483 "csharp_lexer.ll"
+#line 519 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_LINE_NUMBER;
 	YY_BREAK
 case 187:
 YY_RULE_SETUP
-#line 484 "csharp_lexer.ll"
+#line 520 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_FILE_NAME;
 	YY_BREAK
 case 188:
 YY_RULE_SETUP
-#line 485 "csharp_lexer.ll"
+#line 521 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_DEFAULT;
 	YY_BREAK
 case 189:
 YY_RULE_SETUP
-#line 486 "csharp_lexer.ll"
+#line 522 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_IDENTIFIER_OR_KEYWORD;
 	YY_BREAK
 case 190:
 YY_RULE_SETUP
-#line 487 "csharp_lexer.ll"
+#line 523 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_INVALID;
 	YY_BREAK
 
 
 case 191:
 YY_RULE_SETUP
-#line 491 "csharp_lexer.ll"
+#line 527 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_MESSAGE;
 	YY_BREAK
 case 192:
 /* rule 192 can match eol */
 YY_RULE_SETUP
-#line 492 "csharp_lexer.ll"
+#line 528 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NEW_LINE;
 	YY_BREAK
 
 
 case 193:
 YY_RULE_SETUP
-#line 496 "csharp_lexer.ll"
+#line 532 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_PRAGMA_TEXT;
 	YY_BREAK
 case 194:
 /* rule 194 can match eol */
 YY_RULE_SETUP
-#line 497 "csharp_lexer.ll"
+#line 533 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NEW_LINE;
 	YY_BREAK
 
 /* identifiers and number literals */
 case 195:
 YY_RULE_SETUP
-#line 503 "csharp_lexer.ll"
+#line 539 "csharp_lexer.ll"
 return csharp::parser::Token_IDENTIFIER;
 	YY_BREAK
 case 196:
 YY_RULE_SETUP
-#line 505 "csharp_lexer.ll"
+#line 541 "csharp_lexer.ll"
 return csharp::parser::Token_INTEGER_LITERAL;
 	YY_BREAK
 case 197:
 YY_RULE_SETUP
-#line 506 "csharp_lexer.ll"
+#line 542 "csharp_lexer.ll"
 return csharp::parser::Token_REAL_LITERAL;
 	YY_BREAK
 /* everything else is not a valid lexeme */
 case 198:
 YY_RULE_SETUP
-#line 511 "csharp_lexer.ll"
+#line 547 "csharp_lexer.ll"
 return csharp::parser::Token_INVALID;
 	YY_BREAK
 /* some additional checking for unclosed #ifs and #regions at the EOF */
 
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(PP_SKIPPED_SECTION_PART):
-#line 517 "csharp_lexer.ll"
+#line 553 "csharp_lexer.ll"
 {
   cleanup();
   return csharp::parser::Token_EOF;
@@ -4208,10 +4244,10 @@ case YY_STATE_EOF(PP_SKIPPED_SECTION_PART):
 
 case 199:
 YY_RULE_SETUP
-#line 523 "csharp_lexer.ll"
+#line 559 "csharp_lexer.ll"
 ECHO;
 	YY_BREAK
-#line 4215 "csharp_lexer.cc"
+#line 4251 "csharp_lexer.cc"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -5178,7 +5214,7 @@ void yyfree (void * ptr )
 #undef YY_DECL_IS_OURS
 #undef YY_DECL
 #endif
-#line 523 "csharp_lexer.ll"
+#line 559 "csharp_lexer.ll"
 
 
 

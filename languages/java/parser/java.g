@@ -276,16 +276,16 @@
 [:
   enum modifier_enum {
     mod_private      = 1,
-    mod_public       = 2,
-    mod_protected    = 4,
-    mod_static       = 8,
-    mod_transient    = 16,
-    mod_final        = 32,
-    mod_abstract     = 64,
-    mod_native       = 128,
-    mod_synchronized = 256,
-    mod_volatile     = 512,
-    mod_strictfp     = 1024,
+    mod_public       = 1 << 1,
+    mod_protected    = 1 << 2,
+    mod_static       = 1 << 3,
+    mod_transient    = 1 << 4,
+    mod_final        = 1 << 5,
+    mod_abstract     = 1 << 6,
+    mod_native       = 1 << 7,
+    mod_synchronized = 1 << 8,
+    mod_volatile     = 1 << 9,
+    mod_strictfp     = 1 << 10,
   };
 :]
 
@@ -1823,7 +1823,7 @@
    try/recover(#mod_annotation=annotation)
  )*
 -> optional_modifiers [
-     member variable modifiers: int;
+     member variable modifiers: unsigned int;
 ] ;;
 
 
