@@ -457,7 +457,13 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
 		} else {
 			ifVerbose( dbg() <<  "\"" << str() << "\"" << ": name-conflict: searched for \"" << name.fullNameChain() << "\" and found function \"" << mem.name << "\"" );
 		}
+		break;
 	};
+	    ///Currently there is no representation of a Variable as a SimpleType, so only the type of the variable is used.
+    case MemberInfo::Variable:
+	{
+		return locateDecType( mem.type, remFlag( mode, ExcludeTemplates ) );
+	}
     }
     
         ///Ask bases but only on this level
