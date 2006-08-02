@@ -1030,6 +1030,7 @@ int CppCodeCompletion::expressionAt( const QString& contents, int index )
 			break;
 		}
 	}
+
 	return index;
 }
 
@@ -1446,7 +1447,11 @@ ExpressionInfo CppCodeCompletion::findExpressionAt( int line, int column, int st
 	int start_expr = expressionAt(  contents, contents.length() - 1 );
 	
 	if ( start_expr != int( contents.length() ) - 1 ) {
-		ret.setExpr( contents.mid( start_expr, contents.length() - start_expr ).stripWhiteSpace() );
+		QString str = contents.mid( start_expr, contents.length() - start_expr ).stripWhiteSpace();
+		if( str.startsWith( "new " ) ) {
+			str = str.mid( 4 ).stripWhiteSpace();
+		}
+		ret.setExpr( str );
 		if( !ret.expr().isEmpty() ) ret.t = ExpressionInfo::NormalExpression;
 	}
 	
@@ -1887,8 +1892,12 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		}
 
 		if( s1 && s2 && isValidIdentifierSign( strCurLine[column-1] ) ) {
-			///it is a constructor
-			nCol = column;
+			if( column >= 3 && strCurLine.mid( column-3, 3 ) == "new" ) {
+				///It is a constructor using "new"
+			} else {
+				///it is a local constructor
+				nCol = column;
+			}
 		}
 
 
