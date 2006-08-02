@@ -46,6 +46,8 @@ class QListViewItem;
 class QTimer;
 class KListView;
 class Driver;
+class KPopupMenu;
+
 
 namespace KParts
 {
@@ -200,6 +202,7 @@ private slots:
     void codeCompletionConfigStored();
     void splitHeaderSourceConfigStored();
     //	void recomputeCodeModel( const QString& fileName );
+	void slotNavigate();
 	void slotNewClass();
 	void slotSwitchHeader( bool scrollOnly = false );
 	void slotGotoIncludeFile();
@@ -327,6 +330,8 @@ private:
 	ClassDom m_activeClass;
 	FunctionDom m_activeFunction;
 	VariableDom m_activeVariable;
+
+	QGuardedPtr<KPopupMenu> m_navigationMenu;
 
 	QTimer* m_functionHintTimer;
 	QTimer* m_deleteParserStoreTimer;

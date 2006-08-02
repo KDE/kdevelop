@@ -39,6 +39,7 @@
 #include "kdevsourceformatter.h"
 #include "kdevcreatefile.h" 
 #include "qtbuildconfig.h"
+#include <kpopupmenu.h>
 // wizards
 #include "cppnewclassdlg.h"
 #include "subclassingdlg.h"
@@ -101,6 +102,7 @@
 
 ///Currently activating this leads to mysterious crashes, but on long-term it's better
 const bool alwaysParseInBackground = false;
+
 
 enum { KDEV_DB_VERSION = 11 };
 enum { KDEV_PCS_VERSION = 9 };
@@ -237,6 +239,14 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	action->setWhatsThis( i18n( "<b>Make member</b><p>Creates a class member function in implementation file "
 	                            "based on the member declaration at the current line." ) );
 	action->plug( new QWidget() );
+
+	action = new KAction( i18n( "Navigation Menu" ), 0, ALT + Key_Space,
+	                      this, SLOT( slotNavigate() ),
+	                      actionCollection(), "edit_navigate" );
+	action->setToolTip( i18n( "Show the navigation-menu" ) );
+	action->setWhatsThis( i18n( "<b>Navigate</b><p>Shows a navigation-menu based on the type-evaluation of the item under the cursor." ) );
+	action->plug( new QWidget() );
+	
 	
 	action = new KAction( i18n( "New Class..." ), "classnew", 0,
 	                      this, SLOT( slotNewClass() ),
@@ -527,6 +537,23 @@ QString CppSupportPart::findHeader( const QStringList &list, const QString &head
 	}
 	
 	return QString::null;
+}
+
+
+void CppSupportPart::slotNavigate() {
+	if( codeCompletion() && m_activeView && m_activeViewCursor ) {
+		unsigned int curLine = 0, curCol = 0;
+		m_activeViewCursor->cursorPositionReal( &curLine, &curCol );
+
+		if( m_navigationMenu ) delete (KPopupMenu*)m_navigationMenu;
+		
+		m_navigationMenu = new KPopupMenu( m_activeView );
+		
+		codeCompletion()->contextEvaluationMenus( m_navigationMenu, 0, curLine, curCol );
+
+		m_navigationMenu->move( m_activeView->mapToGlobal( m_activeViewCursor->cursorCoordinates() ) );
+		m_navigationMenu->show();
+	}
 }
 
 
