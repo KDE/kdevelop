@@ -169,11 +169,10 @@ public Q_SLOTS:
     Q_SCRIPTABLE bool closeAllDocuments();
 
     //FIXME figure out if these need to be public and/or use friend classes/document them
-    void slotSave();
-    void slotReload();
-    void slotCloseWindow();
-    void slotCloseAllWindows();
-    void slotCloseOtherWindows();
+    void saveActiveDocument();
+    void reloadActiveDocument();
+    void closeActiveDocument();
+    void closeAllExceptActiveDocument();
 
 Q_SIGNALS:
     /**Emitted when the document is given focus or activated.*/
@@ -203,9 +202,6 @@ Q_SIGNALS:
     void openingDocument( const QString &document );
 
 private Q_SLOTS:
-    void slotSaveAllDocuments();
-    void slotRevertAllDocuments();
-
     void slotOpenDocument();
     void slotOpenRecent( const KUrl& );
 

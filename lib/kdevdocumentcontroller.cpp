@@ -471,46 +471,27 @@ void KDevDocumentController::integrateTextEditorPart( KTextEditor::Document* doc
              this, SLOT( slotNewStatus( KTextEditor::Document* ) ) );
 }
 
-void KDevDocumentController::slotSave()
+void KDevDocumentController::saveActiveDocument()
 {
-//     kDebug( 9000 ) << k_funcinfo << endl;
-
     if ( activeReadWrite() )
         saveDocument( activeDocument() );
 }
 
-void KDevDocumentController::slotReload()
+void KDevDocumentController::reloadActiveDocument()
 {
-//     kDebug( 9000 ) << k_funcinfo << endl;
-
     if ( activeReadWrite() )
         reloadDocument( activeDocument() );
 }
 
-void KDevDocumentController::slotCloseWindow()
+void KDevDocumentController::closeActiveDocument()
 {
     closeDocument( activeDocument() );
 }
 
-void KDevDocumentController::slotCloseAllWindows()
-{
-    closeAllDocuments();
-}
-
-void KDevDocumentController::slotCloseOtherWindows()
+void KDevDocumentController::closeAllExceptActiveDocument()
 {
     if ( activeReadOnly() )
         closeAllOthers( activeDocument() );
-}
-
-void KDevDocumentController::slotSaveAllDocuments()
-{
-    saveAllDocuments();
-}
-
-void KDevDocumentController::slotRevertAllDocuments()
-{
-    reloadAllDocuments();
 }
 
 void KDevDocumentController::slotOpenDocument()
@@ -906,14 +887,14 @@ void KDevDocumentController::init()
     m_openRecentAction->loadEntries( KDevConfig::localProject(), "RecentDocuments" );
 
     m_saveAllDocumentsAction = new KAction( i18n( "Save Al&l" ), ac, "file_save_all" );
-    connect( m_saveAllDocumentsAction, SIGNAL( triggered( bool ) ), SLOT( slotSaveAllDocuments() ) );
+    connect( m_saveAllDocumentsAction, SIGNAL( triggered( bool ) ), SLOT( saveAllDocuments() ) );
     m_saveAllDocumentsAction->setToolTip( i18n( "Save all modified files" ) );
     m_saveAllDocumentsAction->setWhatsThis( i18n( "<b>Save all</b><p>Saves all "
             "modified files." ) );
     m_saveAllDocumentsAction->setEnabled( false );
 
     m_revertAllDocumentsAction = new KAction( i18n( "Rever&t All" ), ac, "file_revert_all" );
-    connect( m_revertAllDocumentsAction, SIGNAL( toggled( bool ) ), SLOT( slotRevertAllDocuments() ) );
+    connect( m_revertAllDocumentsAction, SIGNAL( toggled( bool ) ), SLOT( reloadAllDocuments() ) );
     m_revertAllDocumentsAction->setToolTip( i18n( "Revert all changes" ) );
     m_revertAllDocumentsAction->setWhatsThis( i18n( "<b>Revert all</b>"
             "<p>Reverts all changes in opened files. Prompts to save changes so"
@@ -928,7 +909,7 @@ void KDevDocumentController::init()
     m_closeWindowAction->setEnabled( false );
 
     m_closeAllWindowsAction = new KAction( i18n( "Close All" ), ac, "file_close_all" );
-    connect( m_closeAllWindowsAction, SIGNAL( toggled( bool ) ), SLOT( slotCloseAllWindows() ) );
+    connect( m_closeAllWindowsAction, SIGNAL( toggled( bool ) ), SLOT( closeAllDocuments() ) );
     m_closeAllWindowsAction->setToolTip( i18n( "Close all files" ) );
     m_closeAllWindowsAction->setWhatsThis( i18n( "<b>Close all</b><p>Close all "
             "opened files." ) );
