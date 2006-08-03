@@ -49,14 +49,19 @@ QStringList KDevQt4Importer::fileList()
     KTempFile ifile;
     QTextStream &is = *ifile.textStream();
 
-    is << "#include <QtCore/QtCore>\n"
+		is << "#include <QtCore/qobjectdefs.h>\n"
+		   << "#undef Q_SLOTS\n#undef Q_SIGNALS\n#undef slots\n#undef signals"
+		   << "#define Q_SLOTS slots\n"
+			 << "#define Q_SIGNALS signals\n"
+			 << "#include <QtCore/QtCore>\n"
        << "#include <QtGui/QtGui>\n"
        << "#include <QtNetwork/QtNetwork>\n"
        << "#include <QtXml/QtXml>\n"
        << "#include <Qt3Support/Qt3Support>\n"
        << "#include <QtSql/QtSql>\n"
        << "#include <QtTest/QtTest>\n"
-       << "#include <QtOpenGL/QtOpenGL>\n";
+			 << "#include <QtOpenGL/QtOpenGL>\n";
+			
 
 
     KProcess proc;

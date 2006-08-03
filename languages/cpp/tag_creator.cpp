@@ -567,7 +567,7 @@ void TagCreator::parseAccessDeclaration( AccessDeclarationAST * access )
 	
 	m_currentAccess = l.at( 0 )->text();
 	if( m_currentAccess == "signals" )
-		m_currentAccess = "public"; //!?
+		m_currentAccess = "protected";
 	
 	m_inSlots = l.count() > 1 ? l.at( 1 )->text() == "slots" : false;
 	m_inSignals = l.count() >= 1 ? l.at( 0 )->text() == "signals" : false;

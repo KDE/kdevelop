@@ -3230,12 +3230,14 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		}
 		
 		e.userdata = QString("%1%2%2").arg( num ).arg( depth ).arg( sortPosition );
-		
-		if( !type->isNamespace() ) {
-			if( num == 1 ) 
-				e.postfix += ";   (protected)";// in " + proc.parentType() + ")";
-			if( num == 2 ) 
-				e.postfix += ";   (private)";// in " + proc.parentType() + ")";
+
+		if( m_completionMode != SignalCompletion ) {
+			if( !type->isNamespace() ) {
+				if( num == 1 ) 
+					e.postfix += ";   (protected)";// in " + proc.parentType() + ")";
+				if( num == 2 ) 
+					e.postfix += ";   (private)";// in " + proc.parentType() + ")";
+			}
 		}
 		
 		
@@ -3454,11 +3456,13 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 
 		if ( meth->isConstant() )
 			entry.postfix += " const";
-		if( !type->isNamespace() ) {
-			if( meth->access() == CodeModelItem::Protected ) 
-				entry.postfix += "; (protected)"; // in " + type->fullType() + ")";
-			if( meth->access() == CodeModelItem::Private ) 
-				entry.postfix += "; (private)"; // in " + type->fullType() + ")";
+		if( m_completionMode != SignalCompletion ) {
+			if( !type->isNamespace() ) {
+				if( meth->access() == CodeModelItem::Protected ) 
+					entry.postfix += "; (protected)"; // in " + type->fullType() + ")";
+				if( meth->access() == CodeModelItem::Private ) 
+					entry.postfix += "; (private)"; // in " + type->fullType() + ")";
+			}
 		}
 		
 		entryList << entry;
