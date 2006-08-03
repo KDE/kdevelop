@@ -1,5 +1,6 @@
+#line 2 "csharp_lexer.cc"
 
-#line 3 "csharp_lexer.cc"
+#line 4 "csharp_lexer.cc"
 
 #define  YY_INT_ALIGNED short int
 
@@ -2849,7 +2850,7 @@ for performance and convenience reasons. */
 
 
 
-#line 2853 "csharp_lexer.cc"
+#line 2854 "csharp_lexer.cc"
 
 #define INITIAL 0
 #define IN_BLOCKCOMMENT 1
@@ -3016,7 +3017,7 @@ YY_DECL
 
  /* whitespace, newlines and comments */
 
-#line 3020 "csharp_lexer.cc"
+#line 3021 "csharp_lexer.cc"
 
 	if ( (yy_init) )
 		{
@@ -4247,7 +4248,7 @@ YY_RULE_SETUP
 #line 559 "csharp_lexer.ll"
 ECHO;
 	YY_BREAK
-#line 4251 "csharp_lexer.cc"
+#line 4252 "csharp_lexer.cc"
 
 	case YY_END_OF_BUFFER:
 		{

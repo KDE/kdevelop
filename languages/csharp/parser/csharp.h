@@ -200,7 +200,7 @@ namespace csharp
     enum accessor_declarations_enum {
       type_get,
       type_set,
-      type_none,  // only possible for the second, optional accessor
+      type_none, // only possible for the second, optional accessor
     };
   }
 
@@ -335,21 +335,21 @@ namespace csharp
   namespace modifiers
     {
     enum modifier_enum {
-      mod_new = 1,
-      mod_public = 1 << 1,
-      mod_protected = 1 << 2,
-      mod_internal = 1 << 3,
-      mod_private = 1 << 4,
-      mod_abstract = 1 << 5,
-      mod_sealed = 1 << 6,
-      mod_static = 1 << 7,
-      mod_readonly = 1 << 8,
-      mod_volatile = 1 << 9,
-      mod_virtual = 1 << 10,
-      mod_override = 1 << 11,
-      mod_extern = 1 << 12,
-      mod_unsafe = 1 << 13,
-      mod_fixed = 1 << 14,
+      mod_new          = 1,
+      mod_public       = 1 << 1,
+      mod_protected    = 1 << 2,
+      mod_internal     = 1 << 3,
+      mod_private      = 1 << 4,
+      mod_abstract     = 1 << 5,
+      mod_sealed       = 1 << 6,
+      mod_static       = 1 << 7,
+      mod_readonly     = 1 << 8,
+      mod_volatile     = 1 << 9,
+      mod_virtual      = 1 << 10,
+      mod_override     = 1 << 11,
+      mod_extern       = 1 << 12,
+      mod_unsafe       = 1 << 13,
+      mod_fixed        = 1 << 14,
     };
   }
 
@@ -3091,7 +3091,7 @@ namespace csharp
       bool pp_is_symbol_defined( std::string symbol_name );
 
       parser::csharp_compatibility_mode _M_compatibility_mode;
-      std::set <std::string>
+      std::set<std::string>
       _M_pp_defined_symbols;
 
       struct parser_state

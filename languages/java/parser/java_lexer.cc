@@ -1,5 +1,6 @@
+#line 2 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.cc"
 
-#line 3 "java_lexer.cc"
+#line 4 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.cc"
 
 #define  YY_INT_ALIGNED short int
 
@@ -2674,8 +2675,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "java_lexer.ll"
-#line 2 "java_lexer.ll"
+#line 1 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
+#line 2 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 /*****************************************************************************
  * This file is part of KDevelop.                                            *
  * Copyright (c) 2005, 2006 Jakob Petsovits <jpetso@gmx.at>                  *
@@ -2762,7 +2763,7 @@ _G_token_end += yyleng;
 /* Any multi-byte Unicode character. Single-byte ones are just . in lex. */
 /* non-Unicode stuff */
 
-#line 2766 "java_lexer.cc"
+#line 2767 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.cc"
 
 #define INITIAL 0
 #define IN_BLOCKCOMMENT 1
@@ -2914,12 +2915,12 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 153 "java_lexer.ll"
+#line 153 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 
 
  /* whitespace, newlines and comments */
 
-#line 2923 "java_lexer.cc"
+#line 2924 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.cc"
 
 	if ( (yy_init) )
 		{
@@ -3004,49 +3005,49 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 157 "java_lexer.ll"
+#line 157 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 /* skip */ ;
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 158 "java_lexer.ll"
+#line 158 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 /* { newLine(); } */ ;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 160 "java_lexer.ll"
+#line 160 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 /* line comments, skip */ ;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 162 "java_lexer.ll"
+#line 162 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 BEGIN(IN_BLOCKCOMMENT);
 	YY_BREAK
 
 case 5:
 YY_RULE_SETUP
-#line 164 "java_lexer.ll"
+#line 164 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 /* eat anything that's not a '*' */ ;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 165 "java_lexer.ll"
+#line 165 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 /* eat up '*'s that are not followed by slashes or newlines */;
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 166 "java_lexer.ll"
+#line 166 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 /* { newLine(); } */ ;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 167 "java_lexer.ll"
+#line 167 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 BEGIN(INITIAL);
 	YY_BREAK
 case YY_STATE_EOF(IN_BLOCKCOMMENT):
-#line 168 "java_lexer.ll"
+#line 168 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 {
     _G_parser->report_problem( java::parser::error,
       "Encountered end of file in an unclosed block comment");
@@ -3057,52 +3058,52 @@ case YY_STATE_EOF(IN_BLOCKCOMMENT):
 /* seperators */
 case 9:
 YY_RULE_SETUP
-#line 178 "java_lexer.ll"
+#line 178 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_LPAREN;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 179 "java_lexer.ll"
+#line 179 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_RPAREN;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 180 "java_lexer.ll"
+#line 180 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_LBRACE;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 181 "java_lexer.ll"
+#line 181 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_RBRACE;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 182 "java_lexer.ll"
+#line 182 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_LBRACKET;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 183 "java_lexer.ll"
+#line 183 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_RBRACKET;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 184 "java_lexer.ll"
+#line 184 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_COMMA;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 185 "java_lexer.ll"
+#line 185 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_SEMICOLON;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 186 "java_lexer.ll"
+#line 186 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_DOT;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 187 "java_lexer.ll"
+#line 187 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 {
     if (_G_parser->compatibility_mode() >= java::parser::java15_compatibility)
       return java::parser::Token_AT;
@@ -3116,192 +3117,192 @@ YY_RULE_SETUP
 /* operators */
 case 19:
 YY_RULE_SETUP
-#line 200 "java_lexer.ll"
+#line 200 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_QUESTION;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 201 "java_lexer.ll"
+#line 201 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_COLON;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 202 "java_lexer.ll"
+#line 202 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_BANG;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 203 "java_lexer.ll"
+#line 203 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_TILDE;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 204 "java_lexer.ll"
+#line 204 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_EQUAL;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 205 "java_lexer.ll"
+#line 205 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_LESS_THAN;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 206 "java_lexer.ll"
+#line 206 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_LESS_EQUAL;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 207 "java_lexer.ll"
+#line 207 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_GREATER_THAN;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 208 "java_lexer.ll"
+#line 208 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_GREATER_EQUAL;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 209 "java_lexer.ll"
+#line 209 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_NOT_EQUAL;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 210 "java_lexer.ll"
+#line 210 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_LOG_AND;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 211 "java_lexer.ll"
+#line 211 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_LOG_OR;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 212 "java_lexer.ll"
+#line 212 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_INCREMENT;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 213 "java_lexer.ll"
+#line 213 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_DECREMENT;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 214 "java_lexer.ll"
+#line 214 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_ASSIGN;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 215 "java_lexer.ll"
+#line 215 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_PLUS;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 216 "java_lexer.ll"
+#line 216 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_PLUS_ASSIGN;
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 217 "java_lexer.ll"
+#line 217 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_MINUS;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 218 "java_lexer.ll"
+#line 218 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_MINUS_ASSIGN;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 219 "java_lexer.ll"
+#line 219 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_STAR;
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 220 "java_lexer.ll"
+#line 220 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_STAR_ASSIGN;
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 221 "java_lexer.ll"
+#line 221 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_SLASH;
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 222 "java_lexer.ll"
+#line 222 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_SLASH_ASSIGN;
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 223 "java_lexer.ll"
+#line 223 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_BIT_AND;
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 224 "java_lexer.ll"
+#line 224 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_BIT_AND_ASSIGN;
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 225 "java_lexer.ll"
+#line 225 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_BIT_OR;
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 226 "java_lexer.ll"
+#line 226 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_BIT_OR_ASSIGN;
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 227 "java_lexer.ll"
+#line 227 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_BIT_XOR;
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 228 "java_lexer.ll"
+#line 228 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_BIT_XOR_ASSIGN;
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 229 "java_lexer.ll"
+#line 229 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_REMAINDER;
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 230 "java_lexer.ll"
+#line 230 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_REMAINDER_ASSIGN;
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 231 "java_lexer.ll"
+#line 231 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_LSHIFT;
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 232 "java_lexer.ll"
+#line 232 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_LSHIFT_ASSIGN;
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 233 "java_lexer.ll"
+#line 233 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_SIGNED_RSHIFT;
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 234 "java_lexer.ll"
+#line 234 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_SIGNED_RSHIFT_ASSIGN;
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 235 "java_lexer.ll"
+#line 235 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_UNSIGNED_RSHIFT;
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 236 "java_lexer.ll"
+#line 236 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_UNSIGNED_RSHIFT_ASSIGN;
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 237 "java_lexer.ll"
+#line 237 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 {
     if (_G_parser->compatibility_mode() >= java::parser::java15_compatibility)
       return java::parser::Token_ELLIPSIS;
@@ -3315,12 +3316,12 @@ YY_RULE_SETUP
 /* reserved words */
 case 57:
 YY_RULE_SETUP
-#line 250 "java_lexer.ll"
+#line 250 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_ABSTRACT;
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 251 "java_lexer.ll"
+#line 251 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 {
     if (_G_parser->compatibility_mode() >= java::parser::java14_compatibility)
       return java::parser::Token_ASSERT;
@@ -3330,42 +3331,42 @@ YY_RULE_SETUP
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 257 "java_lexer.ll"
+#line 257 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_BOOLEAN;
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 258 "java_lexer.ll"
+#line 258 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_BREAK;
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 259 "java_lexer.ll"
+#line 259 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_BYTE;
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 260 "java_lexer.ll"
+#line 260 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_CASE;
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 261 "java_lexer.ll"
+#line 261 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_CATCH;
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 262 "java_lexer.ll"
+#line 262 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_CHAR;
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 263 "java_lexer.ll"
+#line 263 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_CLASS;
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 264 "java_lexer.ll"
+#line 264 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 {
     _G_parser->report_problem( java::parser::error,
       "\"const\": reserved but unused (invalid) keyword");
@@ -3374,32 +3375,32 @@ YY_RULE_SETUP
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 269 "java_lexer.ll"
+#line 269 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_CONTINUE;
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 270 "java_lexer.ll"
+#line 270 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_DEFAULT;
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 271 "java_lexer.ll"
+#line 271 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_DO;
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 272 "java_lexer.ll"
+#line 272 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_DOUBLE;
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 273 "java_lexer.ll"
+#line 273 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_ELSE;
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 274 "java_lexer.ll"
+#line 274 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 {
     if (_G_parser->compatibility_mode() >= java::parser::java15_compatibility)
       return java::parser::Token_ENUM;
@@ -3409,37 +3410,37 @@ YY_RULE_SETUP
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 280 "java_lexer.ll"
+#line 280 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_EXTENDS;
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 281 "java_lexer.ll"
+#line 281 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_FALSE;
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 282 "java_lexer.ll"
+#line 282 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_FINAL;
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 283 "java_lexer.ll"
+#line 283 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_FINALLY;
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 284 "java_lexer.ll"
+#line 284 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_FLOAT;
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 285 "java_lexer.ll"
+#line 285 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_FOR;
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 286 "java_lexer.ll"
+#line 286 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 {
     _G_parser->report_problem( java::parser::error,
       "\"goto\": reserved but unused (invalid) keyword");
@@ -3448,164 +3449,164 @@ YY_RULE_SETUP
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 291 "java_lexer.ll"
+#line 291 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_IF;
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 292 "java_lexer.ll"
+#line 292 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_IMPLEMENTS;
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 293 "java_lexer.ll"
+#line 293 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_IMPORT;
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 294 "java_lexer.ll"
+#line 294 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_INSTANCEOF;
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 295 "java_lexer.ll"
+#line 295 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_INT;
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 296 "java_lexer.ll"
+#line 296 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_INTERFACE;
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 297 "java_lexer.ll"
+#line 297 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_LONG;
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 298 "java_lexer.ll"
+#line 298 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_NATIVE;
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 299 "java_lexer.ll"
+#line 299 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_NEW;
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 300 "java_lexer.ll"
+#line 300 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_NULL;
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 301 "java_lexer.ll"
+#line 301 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_PACKAGE;
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 302 "java_lexer.ll"
+#line 302 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_PRIVATE;
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 303 "java_lexer.ll"
+#line 303 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_PROTECTED;
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 304 "java_lexer.ll"
+#line 304 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_PUBLIC;
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 305 "java_lexer.ll"
+#line 305 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_RETURN;
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 306 "java_lexer.ll"
+#line 306 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_SHORT;
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 307 "java_lexer.ll"
+#line 307 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_STATIC;
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 308 "java_lexer.ll"
+#line 308 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_STRICTFP;
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 309 "java_lexer.ll"
+#line 309 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_SUPER;
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 310 "java_lexer.ll"
+#line 310 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_SWITCH;
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 311 "java_lexer.ll"
+#line 311 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_SYNCHRONIZED;
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
-#line 312 "java_lexer.ll"
+#line 312 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_THIS;
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 313 "java_lexer.ll"
+#line 313 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_THROW;
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
-#line 314 "java_lexer.ll"
+#line 314 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_THROWS;
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 315 "java_lexer.ll"
+#line 315 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_TRANSIENT;
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 316 "java_lexer.ll"
+#line 316 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_TRUE;
 	YY_BREAK
 case 106:
 YY_RULE_SETUP
-#line 317 "java_lexer.ll"
+#line 317 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_TRY;
 	YY_BREAK
 case 107:
 YY_RULE_SETUP
-#line 318 "java_lexer.ll"
+#line 318 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_VOID;
 	YY_BREAK
 case 108:
 YY_RULE_SETUP
-#line 319 "java_lexer.ll"
+#line 319 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_VOLATILE;
 	YY_BREAK
 case 109:
 YY_RULE_SETUP
-#line 320 "java_lexer.ll"
+#line 320 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_WHILE;
 	YY_BREAK
 /* characters and strings */
 case 110:
 YY_RULE_SETUP
-#line 325 "java_lexer.ll"
+#line 325 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_CHARACTER_LITERAL;
 	YY_BREAK
 case 111:
 /* rule 111 can match eol */
 YY_RULE_SETUP
-#line 326 "java_lexer.ll"
+#line 326 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 {
     _G_parser->report_problem( java::parser::error,
       std::string("Invalid character literal: ") + yytext );
@@ -3614,13 +3615,13 @@ YY_RULE_SETUP
 	YY_BREAK
 case 112:
 YY_RULE_SETUP
-#line 332 "java_lexer.ll"
+#line 332 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_STRING_LITERAL;
 	YY_BREAK
 case 113:
 /* rule 113 can match eol */
 YY_RULE_SETUP
-#line 333 "java_lexer.ll"
+#line 333 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 {
     _G_parser->report_problem( java::parser::error,
       std::string("Invalid string literal: ") + yytext );
@@ -3630,31 +3631,31 @@ YY_RULE_SETUP
 /* identifiers and number literals */
 case 114:
 YY_RULE_SETUP
-#line 342 "java_lexer.ll"
+#line 342 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_IDENTIFIER;
 	YY_BREAK
 case 115:
 YY_RULE_SETUP
-#line 344 "java_lexer.ll"
+#line 344 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_INTEGER_LITERAL;
 	YY_BREAK
 case 116:
 YY_RULE_SETUP
-#line 345 "java_lexer.ll"
+#line 345 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_FLOATING_POINT_LITERAL;
 	YY_BREAK
 /* everything else is not a valid lexeme */
 case 117:
 YY_RULE_SETUP
-#line 350 "java_lexer.ll"
+#line 350 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 return java::parser::Token_INVALID;
 	YY_BREAK
 case 118:
 YY_RULE_SETUP
-#line 352 "java_lexer.ll"
+#line 352 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 ECHO;
 	YY_BREAK
-#line 3658 "java_lexer.cc"
+#line 3659 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.cc"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -4620,7 +4621,7 @@ void yyfree (void * ptr )
 #undef YY_DECL_IS_OURS
 #undef YY_DECL
 #endif
-#line 352 "java_lexer.ll"
+#line 352 "/home/kde-devel/svn-trunk/kdevelop/languages/java/parser/java_lexer.ll"
 
 
 

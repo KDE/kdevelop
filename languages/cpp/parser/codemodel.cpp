@@ -29,6 +29,7 @@ CodeModel::CodeModel( QObject *parent )
 
 CodeModel::~CodeModel()
 {
+  // FIXME jpetso: don't we need "delete _M_globalNamespace;" here?
 }
 
 void CodeModel::wipeout()
