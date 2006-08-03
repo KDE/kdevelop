@@ -150,8 +150,8 @@ private Q_SLOTS:
     void configureNotifications();
     void configureEditors();
     void settings();
-    void activeProcessChanged( KDevPlugin*, bool );
-    void activePartChanged( KParts::Part* part );
+    void activeProcessChanged( KDevPlugin *plugin, bool b );
+    void documentActivated( KDevDocument *document );
     void stopPopupActivated( int );
     void stopMenuAboutToShow();
     void stopButtonPressed();

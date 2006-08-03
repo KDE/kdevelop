@@ -25,13 +25,15 @@ Boston, MA 02110-1301, USA.
 
 #include <kmenu.h>
 #include <klocale.h>
-#include <kstdaction.h>
+
 #include <kparts/part.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/editor.h>
 
+#include <kstdaction.h>
 #include <ktoggleaction.h>
+#include <kactioncollection.h>
 #include <ktoolbarpopupaction.h>
 
 #include <knotifydialog.h>
@@ -54,10 +56,10 @@ class KDevMainWindowPrivate
 public:
     KDevMainWindowPrivate()
             : center( 0 ),
-            settingsDialog( 0 ),
-            configureEditor( 0 ),
-            toggleStatusbar( 0 ),
-            stopProcesses( 0 )
+            settingsDialog( 0 )
+            //             configureEditor( 0 ),
+            //             toggleStatusbar( 0 ),
+            //             stopProcesses( 0 )
     {}
 
     QStackedWidget *center;
@@ -66,12 +68,12 @@ public:
     QList<QDockWidget*> dockList;
     QList<KDevPlugin*> activeProcesses;
 
-    KAction *configureEditor;
-    KAction *configureSettings;
-
-    KToggleAction *toggleStatusbar;
-
-    KToolBarPopupAction *stopProcesses;
+    //     KAction *configureEditor;
+    //     KAction *configureSettings;
+    //
+    //     KToggleAction *toggleStatusbar;
+    //
+    //     KToolBarPopupAction *stopProcesses;
 };
 
 KDevMainWindow::KDevMainWindow( QWidget *parent, Qt::WFlags flags )
@@ -95,46 +97,49 @@ void KDevMainWindow::setupActions()
 {
     KStdAction::quit( this, SLOT( close() ), actionCollection() );
 
-    d->configureSettings = KStdAction::preferences( this, SLOT( settings() ),
-                           actionCollection(), "settings_configure" );
+    KAction *action;
 
     QString app = qApp->applicationName();
     QString text = i18n( "Configure %1" ).arg( app );
-    d->configureSettings->setToolTip( text );
-    d->configureSettings->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg( i18n( "Lets you customize $1." ).arg( app ) ) );
+    action = KStdAction::preferences( this, SLOT( settings() ),
+                                      actionCollection(), "settings_configure" );
+    action->setToolTip( text );
+    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
+                              i18n( "Lets you customize %1." ).arg( app ) ) );
 
-    d->configureEditor = new KAction( i18n( "Configure &Editor..." ), actionCollection(), "settings_configure_editors" );
-    connect( d->configureEditor, SIGNAL( triggered( bool ) ), SLOT( configureEditors() ) );
-    d->configureEditor->setToolTip( i18n( "Configure editor settings" ) );
-    d->configureEditor->setWhatsThis( i18n( "<b>Configure editor</b><p>Opens editor configuration dialog." ) );
-    //     d->configureEditor->setEnabled( false );
+    action = new KAction( i18n( "Configure &Editor..." ), actionCollection(),
+                          "settings_configure_editors" );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( configureEditors() ) );
+    action->setToolTip( i18n( "Configure editor settings" ) );
+    action->setWhatsThis( i18n( "<b>Configure editor</b><p>Opens editor configuration dialog." ) );
+    action->setEnabled( false );
 
-    d->toggleStatusbar = ( KToggleAction* ) KStdAction::create( KStdAction::ShowToolbar, this, SLOT( toggleStatusbar() ), actionCollection() );
-    d->toggleStatusbar->setText( i18n( "Show &Statusbar" ) );
-    d->toggleStatusbar->setToolTip( i18n( "Show statusbar" ) );
-    d->toggleStatusbar->setWhatsThis( i18n( "<b>Show statusbar</b><p>Hides or shows the statusbar." ) );
+    action = KStdAction::showStatusbar( this, SLOT( toggleStatusbar() ),
+                                        actionCollection(), "show_toolbar" );
+    action->setText( i18n( "Show &Statusbar" ) );
+    action->setToolTip( i18n( "Show statusbar" ) );
+    action->setWhatsThis( i18n( "<b>Show statusbar</b><p>Hides or shows the statusbar." ) );
 
-    d->stopProcesses = new KToolBarPopupAction( KIcon( "stop" ),
-                       i18n( "&Stop" ),
-                       actionCollection(),
-                       "stop_processes" );
+    KToolBarPopupAction *popupAction;
+    popupAction = new KToolBarPopupAction( KIcon( "stop" ),
+                                           i18n( "&Stop" ),
+                                           actionCollection(),
+                                           "stop_processes" );
 
-    d->stopProcesses->setShortcut( Qt::Key_Escape );
-    d->stopProcesses->setToolTip( i18n( "Stop" ) );
-    d->stopProcesses->setWhatsThis( i18n( "<b>Stop</b><p>Stops all running processes." ) );
-    d->stopProcesses->setEnabled( false );
-    connect( d->stopProcesses, SIGNAL( triggered() ),
+    popupAction->setShortcut( Qt::Key_Escape );
+    popupAction->setToolTip( i18n( "Stop" ) );
+    popupAction->setWhatsThis( i18n( "<b>Stop</b><p>Stops all running processes." ) );
+    popupAction->setEnabled( false );
+    connect( popupAction, SIGNAL( triggered() ),
              this, SLOT( stopButtonPressed() ) );
-    connect( d->stopProcesses->menu(), SIGNAL( aboutToShow() ),
+    connect( popupAction->menu(), SIGNAL( aboutToShow() ),
              this, SLOT( stopMenuAboutToShow() ) );
-    connect( d->stopProcesses->menu(), SIGNAL( activated( int ) ),
+    connect( popupAction->menu(), SIGNAL( activated( int ) ),
              this, SLOT( stopPopupActivated( int ) ) );
 
     //FIXME fix connection after gutting of KDevCore
     /*connect( KDevCore::getInstance(), SIGNAL( activeProcessChanged( KDevPlugin*, bool ) ),
     this, SLOT( activeProcessChanged( KDevPlugin*, bool ) ) );*/
-
-    KAction* action;
 
     action = KStdAction::showMenubar(
                  this, SLOT( showMenuBar() ),
@@ -201,6 +206,8 @@ void KDevMainWindow::init()
 
     setupWindowMenu();
 
+    connect( KDevCore::documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
+             this, SLOT( documentActivated( KDevDocument* ) ) );
     connect( KDevCore::projectController(), SIGNAL( projectOpened() ),
              this, SLOT( projectOpened() ) );
     connect( KDevCore::projectController(), SIGNAL( projectClosed() ),
@@ -379,16 +386,20 @@ void KDevMainWindow::projectOpened()
 {
     QString app = i18n( "Project" );
     QString text = i18n( "Configure %1" ).arg( app );
-    d->configureSettings->setToolTip( text );
-    d->configureSettings->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg( i18n( "Lets you customize $1." ).arg( app ) ) );
+    KAction *action = actionCollection() ->action( "settings_configure" );
+    action->setToolTip( text );
+    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
+                              i18n( "Lets you customize %1." ).arg( app ) ) );
 }
 
 void KDevMainWindow::projectClosed()
 {
     QString app = qApp->applicationName();
     QString text = i18n( "Configure %1" ).arg( app );
-    d->configureSettings->setToolTip( text );
-    d->configureSettings->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg( i18n( "Lets you customize $1." ).arg( app ) ) );
+    KAction *action = actionCollection() ->action( "settings_configure" );
+    action->setToolTip( text );
+    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
+                              i18n( "Lets you customize %1." ).arg( app ) ) );
 }
 
 void KDevMainWindow::configureToolbars()
@@ -448,10 +459,9 @@ void KDevMainWindow::reportBug()
 
 void KDevMainWindow::toggleStatusbar()
 {
-    if ( d->toggleStatusbar->isChecked() )
-        statusBar() ->show();
-    else
-        statusBar() ->hide();
+    KToggleAction * action =
+        qobject_cast< KToggleAction*>( actionCollection() ->action( "show_statusbar" ) );
+    statusBar() ->setHidden( !action->isChecked() );
 }
 
 void KDevMainWindow::stopButtonPressed()
@@ -496,12 +506,13 @@ void KDevMainWindow::configureEditors()
     KTextEditor::Editor *editor = doc ? doc->editor() : 0;
     if ( !editor )
     {
-        kDebug( 9000 ) << "*** No KTextEditor::ConfigInterface for part!" << endl;
         return ;
     }
 
     if ( !editor->configDialogSupported() )
-        return ;
+    {
+        kDebug( 9000 ) << "KTextEditor::configDialogSupported() == false" << endl;
+    }
 
     // show the modal config dialog for this part if it has a ConfigInterface
     editor->configDialog( this );
@@ -516,9 +527,10 @@ void KDevMainWindow::contextMenu( QMenu* popup, const Context *context )
     Q_UNUSED( context );
 }
 
-void KDevMainWindow::activePartChanged( KParts::Part * part )
+void KDevMainWindow::documentActivated( KDevDocument *document )
 {
-    d->configureEditor->setEnabled( part && dynamic_cast<KTextEditor::Document*>( part ) );
+    KAction * action = actionCollection() ->action( "settings_configure_editors" );
+    action->setEnabled( document->textDocument() );
 }
 
 #include "kdevmainwindow.moc"
