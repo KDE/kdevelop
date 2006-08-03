@@ -36,7 +36,7 @@
 using namespace QMake;
 
 Viewer::Viewer(QWidget *parent, const char *name)
-    :ViewerBase(parent, name)
+    :ViewerBase(parent, name), projectAST(0)
 {
     if (QFile::exists(QDir::currentDirPath() + "/" + "qtlist"))
     {
@@ -89,7 +89,7 @@ void Viewer::files_currentChanged(QListBoxItem* item)
 
 void Viewer::tabWidget2_selected(const QString& text)
 {
-    if ((text == "Source to be written back") && projectAST)
+    if ((text == "Source to Be Written Back") && projectAST)
     {
         QString buffer;
         projectAST->writeBack(buffer);

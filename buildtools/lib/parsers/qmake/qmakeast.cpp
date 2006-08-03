@@ -59,16 +59,6 @@ QString AST::indentation()
 
 void ProjectAST::writeBack(QString &buffer)
 {
-    if (isScope())
-        buffer += indentation() + scopedID + "{";
-    else if (isFunctionScope())
-        buffer += indentation() + scopedID + "(" + args + ")" + (statements.count() > 0 ? "{" : "");
-    else
-        buffer += indentation();
-    AST::writeBack(buffer);
-    if (isScope())
-        buffer += indentation() + "}";
-
     bool hasActualStatements = false;
     for (QValueList<QMake::AST*>::const_iterator it = statements.begin(); it != statements.end(); ++it)
     {
@@ -78,6 +68,17 @@ void ProjectAST::writeBack(QString &buffer)
             break;
         }
     }
+
+    if (isScope())
+        buffer += indentation() + scopedID + "{";
+    else if (isFunctionScope())
+        buffer += indentation() + scopedID + "(" + args + ")" + ((statements.count() > 0 && hasActualStatements) ? "{" : "");
+    else
+        buffer += indentation();
+    AST::writeBack(buffer);
+    if (isScope())
+        buffer += indentation() + "}";
+
     if (isFunctionScope() && (hasActualStatements))
         buffer += indentation() + "}";
 }
