@@ -416,6 +416,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
           ifVerbose( dbg() << "\"" << str() << "\":warning: \"" << name.fullName() << "\" is a " << mem.memberTypeToString() << ", but it has template-params itself! Not matching" << endl );
         } else {
           if( mem.type.name() != name.name() ) {
+
 	          if( name.next() ) {
 		          mem.type.makePrivate();
 				  mem.type.append( name.next() );
@@ -430,9 +431,13 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
 // 	          if( mode & TraceAliases && ret->resolved() )
 	          {
 		          MemberInfo m = mem;
+		          m.name = "";
+
 		          if( !scope().isEmpty() ) {
-			          m.name = fullTypeUnresolvedWithScope() + "::" + name.fullNameChain();
+			          m.name = fullTypeUnresolvedWithScope() + "::";
 		          }
+		          m.name += name.fullNameChain();
+		          
 		          ret.trace()->prepend( m );
 	          }
 	          
