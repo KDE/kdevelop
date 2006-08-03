@@ -36,6 +36,9 @@ public:
     KDevProjectController( QObject *parent = 0 );
     virtual ~KDevProjectController();
 
+    /** Release all resources that depend on other KDevCore objects */
+    void cleanUp();
+
     QString name() const;
     void setName( const QString &name );
 

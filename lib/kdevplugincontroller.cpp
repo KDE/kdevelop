@@ -78,6 +78,11 @@ KDevPluginController::~KDevPluginController()
     unloadPlugins();
 }
 
+void KDevPluginController::cleanUp()
+{
+    unloadPlugins();
+}
+
 KService::List KDevPluginController::query( const QString &serviceType,
         const QString &constraint )
 {

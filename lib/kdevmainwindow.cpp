@@ -414,22 +414,14 @@ void KDevMainWindow::newToolbarConfig()
 
 bool KDevMainWindow::queryClose()
 {
-    bool success = true;
-    //FIXME change all of these method calls to cleanUp()
-    if ( !KDevCore::projectController() ->closeProject() )
-        success = false;
-
-    if ( !KDevCore::documentController() ->querySaveDocuments() )
-        success = false;
-
-    if ( !KDevCore::documentController() ->readyToClose() )
-        success = false;
-
-    if ( !KDevCore::pluginController() ->unloadPlugins() )
-        success = false;
+    //All KDevCore API objects must release all resources which
+    //depend upon one another.
+    KDevCore::projectController() ->cleanUp();
+    KDevCore::documentController() ->cleanUp();
+    KDevCore::pluginController() ->cleanUp();
 
     saveSettings();
-    return success;
+    return true;
 }
 
 void KDevMainWindow::setupWindowMenu()

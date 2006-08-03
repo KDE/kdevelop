@@ -53,6 +53,9 @@ public:
     KDevPluginController();
     virtual ~KDevPluginController();
 
+    /** Release all resources that depend on other KDevCore objects */
+    void cleanUp();
+
     /**
      * Returns a uniquely specified plugin. If it isn't already loaded, it will be.
      * Use with caution! See extension for parameter details.

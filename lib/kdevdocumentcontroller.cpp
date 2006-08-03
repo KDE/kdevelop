@@ -92,6 +92,17 @@ KDevDocumentController::KDevDocumentController( QObject *parent )
     m_openNextAsText = false;
 }
 
+KDevDocumentController::~KDevDocumentController()
+{
+}
+
+void KDevDocumentController::cleanUp()
+{
+    querySaveDocuments();
+    blockSignals( true ); //No more signals as we're ready to close
+    closeAllDocuments();
+}
+
 void KDevDocumentController::setEncoding( const QString &encoding )
 {
     m_presetEncoding = encoding;
@@ -438,16 +449,6 @@ KDevDocument::DocumentState KDevDocumentController::documentState( KDevDocument*
     return state;
 }
 
-bool KDevDocumentController::readyToClose()
-{
-    blockSignals( true );
-
-    // this should never return false, as the files are already saved
-    closeAllDocuments();
-
-    return true;
-}
-
 bool KDevDocumentController::querySaveDocuments()
 {
     return saveDocumentsDialog();
@@ -704,7 +705,7 @@ void KDevDocumentController::slotUploadFinished()
 void KDevDocumentController::updateMenuItems()
 {
     //FIXME by moving all of this out of documentcontroller preferably
-    return;
+
     bool hasWriteParts = false;
     bool hasReadOnlyParts = false;
 

@@ -79,6 +79,10 @@ public:
     /**Constructor.
     @param parent The parent object.*/
     KDevDocumentController( QObject *parent = 0 );
+    virtual ~KDevDocumentController();
+
+    /** Release all resources that depend on other KDevCore objects */
+    void cleanUp();
 
     /**Call this before a call to @ref editDocument to set the encoding of the
     document to be opened.
@@ -145,19 +149,13 @@ public:
     @return The DocumentState enum corresponding to the document state.*/
     KDevDocument::DocumentState documentState( KDevDocument* document ) const;
 
-    bool readyToClose();
-    bool querySaveDocuments();
-    void openEmptyTextDocument();
-    void integrateTextEditorPart( KTextEditor::Document* doc );
-
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open.
     @param range The location information, if applicable.
     @param activate Indicates whether to fully activate the document.*/
     Q_SCRIPTABLE KDevDocument* editDocument( const KUrl &url,
-            const KTextEditor::Cursor& range =
-                KTextEditor::Cursor::invalid(),
+            const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid(),
             bool activate = true );
 
     /**Saves all open documents.
@@ -231,6 +229,9 @@ private Q_SLOTS:
     void slotNewDesignerStatus( const QString &formName, int status );
 
 private:
+    bool querySaveDocuments();
+    void openEmptyTextDocument();
+    void integrateTextEditorPart( KTextEditor::Document* doc );
     void setCursorPosition( KParts::Part *part,
                             const KTextEditor::Cursor& cursor );
     bool openAsDialog( const KUrl &url, KMimeType::Ptr mimeType );

@@ -47,6 +47,11 @@ KDevProjectController::KDevProjectController( QObject *parent )
 KDevProjectController::~KDevProjectController()
 {}
 
+void KDevProjectController::cleanUp()
+{
+    closeProject();
+}
+
 void KDevProjectController::init()
 {
     KConfig * config = KDevConfig::standard();

@@ -202,6 +202,11 @@ void KDevCore::setBackgroundParser( KDevBackgroundParser* backgroundParser )
 
 void KDevCore::initialize()
 {
+    //All KDevCore API objects can utilize all resources which
+    //depend upon one another.  Can not do this in the constructor
+    //as they might depend upon one another.
+
+    //FIXME standardize on 'initialize' method name.
     Q_ASSERT( d->documentController );
     Q_ASSERT( d->mainWindow );
     d->documentController->init();
