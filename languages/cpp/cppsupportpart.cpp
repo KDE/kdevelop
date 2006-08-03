@@ -219,7 +219,7 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	                            "this brings you to the corresponding header file." ) );
 	action->setEnabled( false );
 	
-	action = new KAction( i18n( "Complete Text" ), CTRL + Key_Space,
+	action = new KAction( i18n( "Complete Text" ), CTRL + ALT + Key_Space,
 	                      this, SLOT( slotCompleteText() ),
 	                      actionCollection(), "edit_complete_text" );
 	action->setToolTip( i18n( "Complete current expression" ) );
