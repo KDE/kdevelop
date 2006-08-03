@@ -1,27 +1,27 @@
 /* This document is part of the KDE project
- Copyright (C) 2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
- Copyright (C) 2002 Bernd Gehrmann <bernd@kdevelop.org>
- Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
- Copyright (C) 2003 Hamish Rodda <rodda@kde.org>
- Copyright (C) 2003 Harald Fernengel <harry@kdevelop.org>
- Copyright (C) 2003 Jens Dagerbo <jens.dagerbo@swipnet.se>
- Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
- Copyright (C) 2005 Adam Treat <treat@kde.org>
+Copyright (C) 2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
+Copyright (C) 2002 Bernd Gehrmann <bernd@kdevelop.org>
+Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
+Copyright (C) 2003 Hamish Rodda <rodda@kde.org>
+Copyright (C) 2003 Harald Fernengel <harry@kdevelop.org>
+Copyright (C) 2003 Jens Dagerbo <jens.dagerbo@swipnet.se>
+Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
+Copyright (C) 2005 Adam Treat <treat@kde.org>
 
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Library General Public
- License as published by the Free Software Foundation; either
- version 2 of the License, or (at your option) any later version.
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
 
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Library General Public License for more details.
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
 
- You should have received a copy of the GNU Library General Public License
- along with this library; see the document COPYING.LIB.  If not, write to
- the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- Boston, MA 02110-1301, USA.
+You should have received a copy of the GNU Library General Public License
+along with this library; see the document COPYING.LIB.  If not, write to
+the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA 02110-1301, USA.
 */
 #ifndef KDEV_DOCUMENTCONTROLLER_H
 #define KDEV_DOCUMENTCONTROLLER_H
@@ -144,11 +144,6 @@ public:
     @return The Url of the active document.*/
     KUrl activeDocumentUrl() const;
 
-    /**Checks the state of a document.
-    @param document The document to check
-    @return The DocumentState enum corresponding to the document state.*/
-    KDevDocument::DocumentState documentState( KDevDocument* document ) const;
-
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open.
@@ -196,7 +191,7 @@ Q_SIGNALS:
 
     /**This is emitted when the document changes, either internally
     or on disc.*/
-    void documentStateChanged( KDevDocument* document, KDevDocument::DocumentState state );
+    void documentStateChanged( KDevDocument* document );
 
     //FIXME figure out if these need to be public and/or use friend classes/document them
     void openingDocument( const QString &document );
@@ -218,15 +213,12 @@ private Q_SLOTS:
 
     void updateMenuItems();
 
-    void slotDocumentDirty( KTextEditor::Document * doc,
-                            bool isModified,
-                            KTextEditor::ModificationInterface::ModifiedOnDiskReason reason );
-    void slotNewStatus( KTextEditor::Document * doc );
-    void slotNewDesignerStatus( const QString &formName, int status );
+    void modifiedOnDisk( KTextEditor::Document * doc, bool isModified,
+                         KTextEditor::ModificationInterface::ModifiedOnDiskReason reason );
+    void newDocumentStatus( KTextEditor::Document * doc );
 
 private:
     bool querySaveDocuments();
-    void openEmptyTextDocument();
     void integrateTextEditorPart( KTextEditor::Document* doc );
     void setCursorPosition( KParts::Part *part,
                             const KTextEditor::Cursor& cursor );
@@ -238,7 +230,6 @@ private:
     void setActiveDocument( KDevDocument* document, QWidget *widget = 0L );
 
     void init();
-    void doEmitState( KDevDocument* document );
 
     KParts::Factory *findPartFactory( const QString &mimeType,
                                       const QString &partType,
@@ -250,9 +241,6 @@ private:
 
     QList<KDevDocument*> modifiedDocuments() const;
     void clearModified( QList<KDevDocument*> const & filelist );
-
-    bool isDirty( KDevDocument* document ) const;
-    bool reactToDirty( KDevDocument* document, unsigned char reason );
 
     KUrl storedUrlForDocument( KDevDocument* ) const;
     void updateDocumentUrl( KDevDocument* );
@@ -280,8 +268,6 @@ private:
     KToolBarPopupAction* m_forwardAction;
 
     bool m_openNextAsText;
-
-    QList<KDevDocument*> m_dirtyDocuments;
 
     QHash<KParts::ReadOnlyPart*, KDevDocument*> m_partHash;
 

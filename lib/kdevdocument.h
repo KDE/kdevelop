@@ -131,7 +131,12 @@ class KDEVINTERFACES_EXPORT KDevDocument : public QObject
     @return The DocumentState corresponding to the document state.*/
     DocumentState state() const;
 
+    /**Set the document state for the document.
+    @param state The state to set.*/
+    void setState( DocumentState state );
+
   private:
+    DocumentState m_state;
     QPointer<KParts::Part> m_part;
 };
 

@@ -1,20 +1,20 @@
 /* This file is part of the KDE project
-  Copyright (C) 2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
+Copyright (C) 2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
 
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
 
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  Boston, MA 02110-1301, USA.
+You should have received a copy of the GNU Library General Public License
+along with this library; see the file COPYING.LIB.  If not, write to
+the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA 02110-1301, USA.
 */
 #include "kdevdocumentcontroller.h"
 
@@ -93,8 +93,7 @@ KDevDocumentController::KDevDocumentController( QObject *parent )
 }
 
 KDevDocumentController::~KDevDocumentController()
-{
-}
+{}
 
 void KDevDocumentController::cleanUp()
 {
@@ -156,17 +155,17 @@ KDevDocument* KDevDocumentController::editDocument( const KUrl & inputUrl,
 
     KParts::Part * part = 0;
 
-    if ( !m_presetEncoding.isNull() || KDevCore::partController()->isTextType( mimeType ) )
-        part = KDevCore::partController()->createTextPart( url, m_presetEncoding, activate );
+    if ( !m_presetEncoding.isNull() || KDevCore::partController() ->isTextType( mimeType ) )
+        part = KDevCore::partController() ->createTextPart( url, m_presetEncoding, activate );
     else
-        part = KDevCore::partController()->createPart( url );
+        part = KDevCore::partController() ->createPart( url );
 
     /*The open as dialog asks for text right now*/
     if ( !part )
         if ( openAsDialog( url, mimeType ) )
-            part = KDevCore::partController()->createTextPart( url, m_presetEncoding, activate );
-    else
-        return 0;
+            part = KDevCore::partController() ->createTextPart( url, m_presetEncoding, activate );
+        else
+            return 0;
 
     addHistoryEntry();
 
@@ -179,9 +178,9 @@ KDevDocument* KDevDocumentController::editDocument( const KUrl & inputUrl,
         document = integratePart( part );
 
     //FIXME by moving all of this out of documentcontroller preferably
-//     m_openRecentAction->addUrl( url );
-//     m_openRecentAction->saveEntries( KDevConfig::localProject(),
-//                                      "RecentDocuments" );
+    //     m_openRecentAction->addUrl( url );
+    //     m_openRecentAction->saveEntries( KDevConfig::localProject(),
+    //                                      "RecentDocuments" );
 
     if ( activate )
         setCursorPosition( part, cursor );
@@ -215,8 +214,8 @@ KDevDocument* KDevDocumentController::showDocumentation( const KUrl &url, bool n
 KDevDocument * KDevDocumentController::documentForUrl( const KUrl & url ) const
 {
     foreach ( KDevDocument * document, openDocuments() )
-        if ( document->url() == url )
-            return document;
+    if ( document->url() == url )
+        return document;
 
     return 0L;
 }
@@ -234,27 +233,27 @@ bool KDevDocumentController::saveDocument( KDevDocument* document, bool force )
 
     switch ( document->state() )
     {
-        case KDevDocument::Clean:
-            if ( !force )
-            {
-                return true;
-            }
-            kDebug( 9000 ) << "Forced save" << endl;
-            break;
+    case KDevDocument::Clean:
+        if ( !force )
+        {
+            return true;
+        }
+        kDebug( 9000 ) << "Forced save" << endl;
+        break;
 
-        case KDevDocument::Modified:
-            kDebug( 9000 ) << "Normal save" << endl;
-            break;
+    case KDevDocument::Modified:
+        kDebug( 9000 ) << "Normal save" << endl;
+        break;
 
-        case KDevDocument::Dirty:
-        case KDevDocument::DirtyAndModified:
+    case KDevDocument::Dirty:
+    case KDevDocument::DirtyAndModified:
         {
             int code = KMessageBox::warningYesNoCancel(
-                    KDevCore::mainWindow(),
-            i18n( "The file \"%1\" is modified on disk.\n\nAre "
-                    "you sure you want to overwrite it? (External "
-                    "changes will be lost.)", part->url().path() ),
-            i18n( "Document Externally Modified" ) );
+                           KDevCore::mainWindow(),
+                           i18n( "The file \"%1\" is modified on disk.\n\nAre "
+                                 "you sure you want to overwrite it? (External "
+                                 "changes will be lost.)", part->url().path() ),
+                           i18n( "Document Externally Modified" ) );
             if ( code == KMessageBox::Yes )
             {
                 kDebug( 9000 ) << "Dirty save!!" << endl;
@@ -272,14 +271,13 @@ bool KDevDocumentController::saveDocument( KDevDocument* document, bool force )
         }
         break;
 
-        default:
-            break;
+    default:
+        break;
     }
 
     if ( part->save() )
     {
-        m_dirtyDocuments.removeAll( document );
-        emit documentStateChanged( document, KDevDocument::Clean );
+        emit documentStateChanged( document );
         emit documentSaved( document );
     }
 
@@ -289,8 +287,8 @@ bool KDevDocumentController::saveDocument( KDevDocument* document, bool force )
 bool KDevDocumentController::saveDocuments( const QList<KDevDocument*> & list )
 {
     foreach ( KDevDocument * document, list )
-        if ( saveDocument( document ) == false )
-            return false; //user cancelled
+    if ( saveDocument( document ) == false )
+        return false; //user cancelled
 
     return true;
 }
@@ -303,11 +301,11 @@ void KDevDocumentController::reloadDocument( KDevDocument* document )
         if ( part->isModified() )
         {
             if ( KMessageBox::warningYesNo( KDevCore::mainWindow(),
-                 i18n( "The file \"%1\" is modified "
-                         "in memory. Are you sure you "
-                         "want to reload it? (Local "
-                         "changes will be lost.)", part->url().path() ),
-                 i18n( "Document is Modified" ) ) == KMessageBox::Yes )
+                                            i18n( "The file \"%1\" is modified "
+                                                  "in memory. Are you sure you "
+                                                  "want to reload it? (Local "
+                                                  "changes will be lost.)", part->url().path() ),
+                                            i18n( "Document is Modified" ) ) == KMessageBox::Yes )
             {
                 part->setModified( false );
             }
@@ -319,23 +317,22 @@ void KDevDocumentController::reloadDocument( KDevDocument* document )
 
         QList<KTextEditor::Cursor> cursors;
         foreach ( KTextEditor::View * view, document->textDocument() ->textViews() )
-            cursors << view->cursorPosition();
+        cursors << view->cursorPosition();
 
         part->openURL( part->url() );
 
-        m_dirtyDocuments.removeAll( document );
-        emit documentStateChanged( document, KDevDocument::Clean );
+        emit documentStateChanged( document );
 
         int i = 0;
         foreach ( KTextEditor::View * view, document->textDocument() ->textViews() )
-            view->setCursorPosition( cursors[ i++ ] );
+        view->setCursorPosition( cursors[ i++ ] );
     }
 }
 
 void KDevDocumentController::reloadDocuments( const QList<KDevDocument*> & list )
 {
     foreach ( KDevDocument * document, list )
-        reloadDocument( document );
+    reloadDocument( document );
 }
 
 bool KDevDocumentController::closeDocument( KDevDocument* document )
@@ -349,7 +346,6 @@ bool KDevDocumentController::closeDocument( KDevDocument* document )
         if ( ! rw_part->closeURL() )
             return false;
 
-        m_dirtyDocuments.removeAll( document );
         emit documentClosed( document );
     }
 
@@ -365,8 +361,8 @@ bool KDevDocumentController::closeDocument( KDevDocument* document )
 bool KDevDocumentController::closeDocuments( const QList<KDevDocument*>& list )
 {
     foreach ( KDevDocument * document, list )
-        if ( !closeDocument( document ) )
-            return false;
+    if ( !closeDocument( document ) )
+        return false;
 
     return true;
 }
@@ -392,11 +388,11 @@ void KDevDocumentController::activateDocument( KDevDocument * document )
         {
             KParts::ReadOnlyPart * ro_part = readOnly( document->part() );
             if ( !ro_part )
-                return;
+                return ;
 
             KDevCore::mainWindow() ->embedPartView( widget,
-            ro_part->url().fileName(),
-            ro_part->url().url() );
+                                                    ro_part->url().fileName(),
+                                                    ro_part->url().url() );
         }
 
         KDevCore::mainWindow() ->setCurrentWidget( widget );
@@ -407,10 +403,10 @@ void KDevDocumentController::activateDocument( KDevDocument * document )
 
 KDevDocument* KDevDocumentController::activeDocument() const
 {
-    if ( !KDevCore::partController()->activePart() )
+    if ( !KDevCore::partController() ->activePart() )
         return 0L;
 
-    return documentForPart( KDevCore::partController()->activePart() );
+    return documentForPart( KDevCore::partController() ->activePart() );
 }
 
 KUrl KDevDocumentController::activeDocumentUrl() const
@@ -421,54 +417,9 @@ KUrl KDevDocumentController::activeDocumentUrl() const
     return KUrl();
 }
 
-KDevDocument::DocumentState KDevDocumentController::documentState( KDevDocument* document ) const
-{
-    KParts::ReadWritePart * rw_part = readWrite( document->part() );
-
-    if ( !rw_part )
-        return KDevDocument::Clean;
-
-    KDevDocument::DocumentState state = KDevDocument::Clean;
-    if ( rw_part->isModified() )
-    {
-        state = KDevDocument::Modified;
-    }
-
-    if ( isDirty( document ) )
-    {
-        if ( state == KDevDocument::Modified )
-        {
-            state = KDevDocument::DirtyAndModified;
-        }
-        else
-        {
-            state = KDevDocument::Dirty;
-        }
-    }
-
-    return state;
-}
-
 bool KDevDocumentController::querySaveDocuments()
 {
     return saveDocumentsDialog();
-}
-
-void KDevDocumentController::openEmptyTextDocument()
-{
-    if ( KTextEditor::Document * document =
-         KDevCore::partController()->createTextPart( KUrl(), m_presetEncoding, true ) )
-    {
-        addHistoryEntry();
-        integratePart( document, true );
-        setCursorPosition( document, KTextEditor::Cursor() );
-    }
-}
-
-void KDevDocumentController::integrateTextEditorPart( KTextEditor::Document* doc )
-{
-    connect( doc, SIGNAL( textChanged( KTextEditor::Document* ) ),
-             this, SLOT( slotNewStatus( KTextEditor::Document* ) ) );
 }
 
 void KDevDocumentController::saveActiveDocument()
@@ -497,12 +448,12 @@ void KDevDocumentController::closeAllExceptActiveDocument()
 void KDevDocumentController::slotOpenDocument()
 {
     KEncodingFileDialog::Result result =
-            KEncodingFileDialog::getOpenURLsAndEncoding(
+        KEncodingFileDialog::getOpenURLsAndEncoding(
             QString::null, QString::null, QString::null,
-    KDevCore::mainWindow(), QString::null );
+            KDevCore::mainWindow(), QString::null );
 
     for ( KUrl::List::Iterator it = result.URLs.begin();
-          it != result.URLs.end(); ++it )
+            it != result.URLs.end(); ++it )
     {
         m_presetEncoding = result.encoding;
         editDocument( *it );
@@ -561,8 +512,8 @@ void KDevDocumentController::slotBackAboutToShow()
     while ( i < 10 && it != m_backHistory.end() )
     {
         popup->insertItem( ( *it ).url.fileName()
-                + QString( " (%1)" ).arg( ( *it ).cursor.line() + 1 ),
-        ( *it ).id );
+                           + QString( " (%1)" ).arg( ( *it ).cursor.line() + 1 ),
+                           ( *it ).id );
         ++i;
         ++it;
     }
@@ -580,8 +531,8 @@ void KDevDocumentController::slotForwardAboutToShow( )
     {
         HistoryEntry entry = m_forwardHistory.at( i );
         popup->insertItem( entry.url.fileName()
-                + QString( " (%1)" ).arg( entry.cursor.line() + 1 ),
-        entry.id );
+                           + QString( " (%1)" ).arg( entry.cursor.line() + 1 ),
+                           entry.id );
     }
 }
 
@@ -690,7 +641,7 @@ void KDevDocumentController::updateMenuItems()
     bool hasWriteParts = false;
     bool hasReadOnlyParts = false;
 
-    foreach ( KParts::Part * part, KDevCore::partController()->parts() )
+    foreach ( KParts::Part * part, KDevCore::partController() ->parts() )
     {
         if ( part->inherits( "KParts::ReadWritePart" ) )
             hasWriteParts = true;
@@ -707,73 +658,59 @@ void KDevDocumentController::updateMenuItems()
     m_backAction->setEnabled( !m_backHistory.isEmpty() );
 }
 
-void KDevDocumentController::slotDocumentDirty( KTextEditor::Document * d,
-                                            bool isModified,
-                                            KTextEditor::ModificationInterface::ModifiedOnDiskReason reason )
+void KDevDocumentController::modifiedOnDisk( KTextEditor::Document * d, bool isModified,
+        KTextEditor::ModificationInterface::ModifiedOnDiskReason reason )
 {
     Q_UNUSED( isModified );
-//     kDebug( 9000 ) << k_funcinfo << endl;
-
     KDevDocument* doc = documentForPart( d );
 
     if ( !doc )
         return ;
 
-    KUrl url = storedUrlForDocument( doc );
-    if ( url.isEmpty() )
-    {
-        kDebug( 9000 ) << "Warning!! the stored url is empty. Bailing out!"
-                << endl;
-        return ;
-    }
+    KParts::ReadWritePart *rw = readWrite( doc->part() );
+    if ( !rw )
+        return;
 
-    if ( reason > 0 )
+    switch ( reason )
     {
-        if ( !m_dirtyDocuments.contains( doc ) )
-        {
-            m_dirtyDocuments.append( doc );
-        }
-
-        if ( reactToDirty( doc, reason ) )
-        {
-            // file has been reloaded
-            emit documentStateChanged( doc, KDevDocument::Clean );
-            m_dirtyDocuments.removeAll( doc );
-        }
+    case KTextEditor::ModificationInterface::OnDiskUnmodified:
+        if ( !rw->isModified() )
+            doc->setState( KDevDocument::Clean );
         else
-        {
-            doEmitState( doc );
-        }
+            doc->setState( KDevDocument::Dirty );
+        break;
+    case KTextEditor::ModificationInterface::OnDiskModified:
+        doc->setState( KDevDocument::DirtyAndModified );
+        break;
+    case KTextEditor::ModificationInterface::OnDiskCreated:
+        doc->setState( KDevDocument::DirtyAndModified );
+        break;
+    case KTextEditor::ModificationInterface::OnDiskDeleted:
+        doc->setState( KDevDocument::DirtyAndModified );
+        break;
+    default:
+        break;
     }
+    emit documentStateChanged( doc );
+}
+
+void KDevDocumentController::newDocumentStatus( KTextEditor::Document * doc )
+{
+    KDevDocument * document = documentForPart( doc );
+
+    KParts::ReadWritePart *rw = readWrite( document->part() );
+    if ( !rw )
+        return;
+
+    if ( !rw->isModified() )
+        document->setState( KDevDocument::Clean );
     else
-    {
-        m_dirtyDocuments.removeAll( doc );
-        emit documentStateChanged( doc, KDevDocument::Clean );
-    }
-
-//     kDebug( 9000 ) << doc->url() << endl;
-//     kDebug( 9000 ) << isModified << endl;
-//     kDebug( 9000 ) << reason << endl;
-}
-
-void KDevDocumentController::slotNewStatus( KTextEditor::Document * doc )
-{
-    doEmitState( documentForPart( doc ) );
-}
-
-void KDevDocumentController::slotNewDesignerStatus( const QString &formName,
-        int status )
-{
-//     kDebug( 9000 ) << k_funcinfo << endl;
-//     kDebug( 9000 ) << " formName: " << formName
-//     << ", status: " << status << endl;
-    KDevDocument* document = documentForUrl( KUrl( formName ) );
-    if ( document )
-        emit documentStateChanged( document, KDevDocument::DocumentState( status ) );
+        document->setState( KDevDocument::Dirty );
+    emit documentStateChanged( document );
 }
 
 void KDevDocumentController::setCursorPosition( KParts::Part *part,
-                                            const KTextEditor::Cursor &cursor )
+        const KTextEditor::Cursor &cursor )
 {
     if ( cursor.line() < 0 )
         return ;
@@ -809,7 +746,7 @@ bool KDevDocumentController::openAsDialog( const KUrl &url, KMimeType::Ptr mimeT
             KConfig * config = KDevConfig::standard();
             config->setGroup( "General" );
             QStringList textTypesList = config->readEntry( "TextTypes",
-                    QStringList() );
+                                        QStringList() );
             textTypesList << mimeType->name();
             config->writeEntry( "TextTypes", textTypesList );
             return true;
@@ -821,9 +758,9 @@ bool KDevDocumentController::openAsDialog( const KUrl &url, KMimeType::Ptr mimeT
 KDevDocument * KDevDocumentController::addDocument( KParts::Part * part, bool setActive )
 {
     KDevDocument * document =
-            new KDevDocument( static_cast<KParts::ReadOnlyPart*>( part ), this );
+        new KDevDocument( static_cast<KParts::ReadOnlyPart*>( part ), this );
     m_partHash.insert( static_cast<KParts::ReadOnlyPart*>( part ), document );
-    KDevCore::partController()->addPart( part, setActive );
+    KDevCore::partController() ->addPart( part, setActive );
     updateDocumentUrl( document );
     updateMenuItems();
 
@@ -834,7 +771,7 @@ void KDevDocumentController::removeDocument( KDevDocument * document )
 {
     Q_ASSERT( document );
 
-    KDevCore::partController()->removePart( document->part() );
+    KDevCore::partController() ->removePart( document->part() );
     m_documentUrls.remove( document );
     m_partHash.remove( static_cast<KParts::ReadOnlyPart*>( document->part() ) );
 
@@ -845,21 +782,21 @@ void KDevDocumentController::removeDocument( KDevDocument * document )
 }
 
 void KDevDocumentController::replaceDocument( KDevDocument * oldDocument,
-                                          KDevDocument * newDocument, bool setActive )
+        KDevDocument * newDocument, bool setActive )
 {
     Q_ASSERT( oldDocument );
     m_partHash.remove( static_cast<KParts::ReadOnlyPart*>( oldDocument->part() ) );
-    KDevCore::partController()->replacePart( oldDocument->part(), newDocument->part(), setActive );
+    KDevCore::partController() ->replacePart( oldDocument->part(), newDocument->part(), setActive );
     delete oldDocument;
 }
 
 void KDevDocumentController::setActiveDocument( KDevDocument *document, QWidget *widget )
 {
-    KDevCore::partController()->setActivePart( document->part(), widget );
+    KDevCore::partController() ->setActivePart( document->part(), widget );
 
-//     kDebug( 9000 ) << k_funcinfo
-//     << KDevCore::partController()->activePart()
-//     << " " << activeDocument() << endl;
+    //     kDebug( 9000 ) << k_funcinfo
+    //     << KDevCore::partController()->activePart()
+    //     << " " << activeDocument() << endl;
 
     updateMenuItems();
 
@@ -870,19 +807,19 @@ void KDevDocumentController::setActiveDocument( KDevDocument *document, QWidget 
 void KDevDocumentController::init()
 {
     KActionCollection * ac =
-            KDevCore::mainWindow() ->actionCollection();
+        KDevCore::mainWindow() ->actionCollection();
 
     KAction* newAction =
-            KStdAction::open( this,
-                              SLOT( slotOpenDocument() ),
-                              ac, "file_open" );
+        KStdAction::open( this,
+                          SLOT( slotOpenDocument() ),
+                          ac, "file_open" );
     newAction->setToolTip( i18n( "Open file" ) );
     newAction->setWhatsThis( i18n( "<b>Open file</b><p>Opens an existing file "
-            "without adding it to the project.</p>" ) );
+                                   "without adding it to the project.</p>" ) );
 
     m_openRecentAction =
-            KStdAction::openRecent( this, SLOT( slotOpenRecent( const KUrl& ) ),
-                                    ac, "file_open_recent" );
+        KStdAction::openRecent( this, SLOT( slotOpenRecent( const KUrl& ) ),
+                                ac, "file_open_recent" );
     m_openRecentAction->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( m_openRecentAction->text() ) ).arg( i18n( "Opens recently opened file." ) ) );
     m_openRecentAction->loadEntries( KDevConfig::localProject(), "RecentDocuments" );
 
@@ -890,7 +827,7 @@ void KDevDocumentController::init()
     connect( m_saveAllDocumentsAction, SIGNAL( triggered( bool ) ), SLOT( saveAllDocuments() ) );
     m_saveAllDocumentsAction->setToolTip( i18n( "Save all modified files" ) );
     m_saveAllDocumentsAction->setWhatsThis( i18n( "<b>Save all</b><p>Saves all "
-            "modified files." ) );
+                                            "modified files." ) );
     m_saveAllDocumentsAction->setEnabled( false );
 
     m_revertAllDocumentsAction = new KAction( i18n( "Rever&t All" ), ac, "file_revert_all" );
@@ -902,8 +839,8 @@ void KDevDocumentController::init()
     m_revertAllDocumentsAction->setEnabled( false );
 
     m_closeWindowAction = KStdAction::close(
-            this, SLOT( slotCloseWindow() ),
-    ac, "file_close" );
+                              this, SLOT( slotCloseWindow() ),
+                              ac, "file_close" );
     m_closeWindowAction->setToolTip( i18n( "Close current file" ) );
     m_closeWindowAction->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( m_closeWindowAction->text() ) ).arg( i18n( "Closes current file." ) ) );
     m_closeWindowAction->setEnabled( false );
@@ -912,7 +849,7 @@ void KDevDocumentController::init()
     connect( m_closeAllWindowsAction, SIGNAL( toggled( bool ) ), SLOT( closeAllDocuments() ) );
     m_closeAllWindowsAction->setToolTip( i18n( "Close all files" ) );
     m_closeAllWindowsAction->setWhatsThis( i18n( "<b>Close all</b><p>Close all "
-            "opened files." ) );
+                                           "opened files." ) );
     m_closeAllWindowsAction->setEnabled( false );
 
     m_closeOtherWindowsAction = new KAction( i18n( "Close All Others" ), ac, "file_closeother" );
@@ -927,8 +864,8 @@ void KDevDocumentController::init()
     connect( m_switchToAction, SIGNAL( toggled( bool ) ), SLOT( slotSwitchTo() ) );
     m_switchToAction->setToolTip( i18n( "Switch to" ) );
     m_switchToAction->setWhatsThis( i18n( "<b>Switch to</b><p>Prompts to enter "
-            "the name of previously opened file "
-            "to switch to." ) );
+                                          "the name of previously opened file "
+                                          "to switch to." ) );
 
     new KSeparatorAction( ac, "dummy_separator" );
 
@@ -938,29 +875,24 @@ void KDevDocumentController::init()
     m_backAction->setEnabled( false );
     m_backAction->setToolTip( i18n( "Back" ) );
     m_backAction->setWhatsThis( i18n( "<b>Back</b><p>Moves backwards one step "
-            "in the navigation history." ) );
+                                      "in the navigation history." ) );
     connect( m_backAction->menu(), SIGNAL( aboutToShow() ),
              this, SLOT( slotBackAboutToShow() ) );
     connect( m_backAction->menu(), SIGNAL( activated( int ) ),
              this, SLOT( slotBackPopupActivated( int ) ) );
 
     m_forwardAction = new KToolBarPopupAction( i18n( "Forward" ), "forward", 0,
-                                               this, SLOT( slotForward() ), ac,
-                                               "history_forward" );
+                      this, SLOT( slotForward() ), ac,
+                      "history_forward" );
     m_forwardAction->setEnabled( false );
     m_forwardAction->setToolTip( i18n( "Forward" ) );
     m_forwardAction->setWhatsThis( i18n( "<b>Forward</b><p>Moves forward one "
-            "step in the navigation history." ) );
+                                         "step in the navigation history." ) );
     connect( m_forwardAction->menu(), SIGNAL( aboutToShow() ),
              this, SLOT( slotForwardAboutToShow() ) );
     connect( m_forwardAction->menu(), SIGNAL( activated( int ) ),
              this, SLOT( slotForwardPopupActivated( int ) ) );
 
-}
-
-void KDevDocumentController::doEmitState( KDevDocument* document )
-{
-    emit documentStateChanged( document, document->state() );
 }
 
 KParts::Factory *KDevDocumentController::findPartFactory( const QString &mimeType,
@@ -990,7 +922,7 @@ KParts::Factory *KDevDocumentController::findPartFactory( const QString &mimeTyp
             ptr = offers.first();
         }
         return static_cast<KParts::Factory*>( KLibLoader::self() ->factory(
-                QFile::encodeName( ptr->library() ) ) );
+                                                  QFile::encodeName( ptr->library() ) ) );
     }
 
     return 0;
@@ -1015,26 +947,35 @@ KDevDocument* KDevDocumentController::integratePart( KParts::Part *part, bool ac
         }
 
         KDevCore::mainWindow() ->embedPartView( widget,
-        ro_part->url().fileName(),
-        ro_part->url().url() );
+                                                ro_part->url().fileName(),
+                                                ro_part->url().url() );
     }
 
     KDevDocument* doc = addDocument( part, activate );
     emit documentLoaded( doc );
 
-    if ( qobject_cast<KTextEditor::ModificationInterface*>( part ) )
-        connect( part, SIGNAL( modifiedOnDisk( KTextEditor::Document*,
-                 bool,
-                 KTextEditor::ModificationInterface::ModifiedOnDiskReason ) ),
-                 this, SLOT( slotDocumentDirty( KTextEditor::Document*,
-                             bool,
-                             KTextEditor::ModificationInterface::ModifiedOnDiskReason ) ) );
+    KTextEditor::ModificationInterface* iface =
+        qobject_cast<KTextEditor::ModificationInterface*>( part );
+    if ( iface )
+    {
+        iface->setModifiedOnDiskWarning( true );
+        connect( part, SIGNAL(
+                     modifiedOnDisk( KTextEditor::Document*, bool,
+                                     KTextEditor::ModificationInterface::ModifiedOnDiskReason ) ),
+                 this, SLOT(
+                     modifiedOnDisk( KTextEditor::Document*, bool,
+                                     KTextEditor::ModificationInterface::ModifiedOnDiskReason ) )
+               );
+    }
 
     // let's get notified when a document has been changed
     connect( part, SIGNAL( completed() ), this, SLOT( slotUploadFinished() ) );
 
     if ( doc->textDocument() )
-        integrateTextEditorPart( doc->textDocument() );
+    {
+        connect( doc, SIGNAL( textChanged( KTextEditor::Document* ) ),
+                 this, SIGNAL( newDocumentStatus( KTextEditor::Document* ) ) );
+    }
 
     return doc;
 }
@@ -1064,71 +1005,6 @@ void KDevDocumentController::clearModified( const QList<KDevDocument*>& list )
     }
 }
 
-bool KDevDocumentController::isDirty( KDevDocument* document ) const
-{
-    return m_dirtyDocuments.contains( document );
-}
-
-bool KDevDocumentController::reactToDirty( KDevDocument* document, unsigned char reason )
-{
-    KConfig * config = KDevConfig::standard();
-    config->setGroup( "Editor" );
-    QString dirtyAction = config->readEntry( "DirtyAction" );
-
-    if ( dirtyAction == "nothing" )
-        return false;
-
-    bool isModified = true;
-    if ( KParts::ReadWritePart * part = readWrite( document->part() ) )
-    {
-        isModified = part->isModified();
-    }
-    else
-    {
-        kDebug( 9000 ) << k_funcinfo
-                << " Warning. Not a ReadWritePart." << endl;
-        return false;
-    }
-
-    if ( isModified )
-    {
-        KMessageBox::sorry( KDevCore::mainWindow(),
-                            i18n( "Conflict: The file \"%1\" has changed on "
-                                    "disk while being modified in memory.\n\n"
-                                    "You should investigate before saving to make"
-                                    "sure you are not losing data.", document->url().path() ),
-                            i18n( "Conflict" ) );
-        return false;
-    }
-
-    if ( reason == 3 )                                                                                                  // means the file was deleted
-    {
-        KMessageBox::sorry( KDevCore::mainWindow(),
-                            i18n( "Warning: The file \"%1\" has been deleted on"
-                                    "disk.\n\n"
-                                    "If this was not your intention, make sure to"
-                                    "save this file now.", document->url().path() ),
-                            i18n( "Document Deleted" ) );
-        return false;
-    }
-
-    if ( dirtyAction == "alert" )
-    {
-        if ( KMessageBox::warningYesNo( KDevCore::mainWindow(),
-             i18n( "The file \"%1\" has changed on"
-                     "disk.\n\nDo you want to reload it?", document->url().path() ),
-             i18n( "Document Changed" ) ) == KMessageBox::No )
-        {
-            return false;
-        }
-    }
-
-    // here we either answered yes above or are in autoreload mode
-    reloadDocument( document );
-
-    return true;
-}
-
 KUrl KDevDocumentController::storedUrlForDocument( KDevDocument* document ) const
 {
     return m_documentUrls[ document ];
@@ -1139,7 +1015,7 @@ void KDevDocumentController::updateDocumentUrl( KDevDocument* document )
     if ( document->url().isEmpty() )
     {
         kDebug( 9000 ) << "updatePartURL() called with empty URL for document: "
-                << document << endl;
+        << document << endl;
         return ;
     }
     m_documentUrls[ document ] = document->url();
@@ -1161,23 +1037,6 @@ bool KDevDocumentController::documentUrlHasChanged( KDevDocument* document )
 bool KDevDocumentController::saveDocumentsDialog( const QList<KDevDocument*>& ignoreList )
 {
     Q_UNUSED( ignoreList );
-    //FIXME circular dependency on kdevwidgets
-//     QList<KDevDocument*> modList = modifiedDocuments();
-// 
-//     if ( modList.count() > 0 && modList != ignoreList )
-//     {
-//         KSaveSelectDialog dlg( modList, ignoreList,
-//                                KDevCore::mainWindow() );
-//         if ( dlg.exec() == QDialog::Accepted )
-//         {
-//             saveDocuments( dlg.filesToSave() );
-//             clearModified( dlg.filesNotToSave() );
-//         }
-//         else
-//         {
-//             return false;
-//         }
-//     }
     return true;
 }
 
@@ -1186,7 +1045,7 @@ bool KDevDocumentController::closeDocumentsDialog( const QList<KDevDocument*>& i
     if ( !saveDocumentsDialog( ignoreList ) )
         return false;
 
-    foreach ( KParts::Part * part, KDevCore::partController()->parts() )
+    foreach ( KParts::Part * part, KDevCore::partController() ->parts() )
     {
         KDevDocument * document = documentForPart( part );
         if ( readOnly( document->part() ) && !ignoreList.contains( document ) )
@@ -1199,26 +1058,26 @@ bool KDevDocumentController::closeDocumentsDialog( const QList<KDevDocument*>& i
 
 KParts::ReadOnlyPart* KDevDocumentController::activeReadOnly() const
 {
-    return KDevCore::partController()->activeReadOnly();
+    return KDevCore::partController() ->activeReadOnly();
 }
 
 KParts::ReadWritePart* KDevDocumentController::activeReadWrite() const
 {
-    return KDevCore::partController()->activeReadWrite();
+    return KDevCore::partController() ->activeReadWrite();
 }
 
 KParts::ReadOnlyPart* KDevDocumentController::readOnly( KParts::Part *part ) const
 {
-    return KDevCore::partController()->readOnly( part );
+    return KDevCore::partController() ->readOnly( part );
 }
 
 KParts::ReadWritePart* KDevDocumentController::readWrite( KParts::Part *part ) const
 {
-    return KDevCore::partController()->readWrite( part );
+    return KDevCore::partController() ->readWrite( part );
 }
 
 KDevDocumentController::HistoryEntry::HistoryEntry( const KUrl & u, const KTextEditor::Cursor& c )
-    : url( u ), cursor( c )
+        : url( u ), cursor( c )
 {
     // should provide a reasonably unique number
     id = abs( QTime::currentTime().msecsTo( QTime() ) );
@@ -1234,7 +1093,7 @@ KDevDocumentController::HistoryEntry KDevDocumentController::createHistoryEntry(
         return HistoryEntry();
 
     KTextEditor::View *view =
-            qobject_cast<KTextEditor::View *>( doc->activeView() );
+        qobject_cast<KTextEditor::View *>( doc->activeView() );
     if ( !view )
         return HistoryEntry();
 

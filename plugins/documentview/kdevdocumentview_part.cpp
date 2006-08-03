@@ -83,8 +83,8 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
              SIGNAL( documentUrlChanged( KDevDocument*, const KUrl &, const KUrl & ) ),
              this, SLOT( urlChanged( KDevDocument*, const KUrl &, const KUrl & ) ) );
     connect( docController,
-             SIGNAL( documentStateChanged( KDevDocument*, KDevDocument::DocumentState ) ),
-             this, SLOT( stateChanged( KDevDocument*, KDevDocument::DocumentState ) ) );
+             SIGNAL( documentStateChanged( KDevDocument* ) ),
+             this, SLOT( stateChanged( KDevDocument* ) ) );
 
     setXMLFile( "kdevdocumentview.rc" );
 }
@@ -165,8 +165,7 @@ void KDevDocumentViewPart::urlChanged( KDevDocument*, const KUrl & /*oldurl*/,
     kDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::stateChanged( KDevDocument* document,
-        KDevDocument::DocumentState state )
+void KDevDocumentViewPart::stateChanged( KDevDocument* document )
 {
     KDevDocumentItem * documentItem =
         m_documentModel->item( m_doc2index[ document ] );
@@ -174,10 +173,10 @@ void KDevDocumentViewPart::stateChanged( KDevDocument* document,
     if ( !documentItem )
         return ;
 
-    if ( documentItem->documentState() == state )
+    if ( documentItem->documentState() == document->state() )
         return ;
 
-    documentItem->setDocumentState( state );
+    documentItem->setDocumentState( document->state() );
     m_documentView->doItemsLayout();
 }
 
