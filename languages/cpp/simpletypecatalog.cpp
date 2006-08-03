@@ -62,11 +62,10 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
     tag.getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
     tag.getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
     ret.decl.file = tag.fileName();
-  } else if( (tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function)  && ( type & MemberInfo::Function ) ) {
-    ret.memberType = MemberInfo::Function;
-    ret.type = tagType( tag );
-    ret.type.increaseFunctionDepth();
-    ret.setBuildInfo( new SimpleTypeCatalogFunction::CatalogFunctionBuildInfo( tags, name, TypePointer( this ) ) );
+  } else if ( tag.kind() == Tag::Kind_Class && ( type & MemberInfo::NestedType ) ){
+  	ret.setBuildInfo( new CatalogBuildInfo( tag, name, TypePointer( this ) ) );
+  	ret.memberType = MemberInfo::NestedType;
+  	ret.type = name;
   } else if( tag.kind() == Tag::Kind_Typedef && ( type & MemberInfo::Typedef ) ) {
     ret.memberType = MemberInfo::Typedef;
     ret.type = tagType( tag );
@@ -75,13 +74,14 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
 	tag.getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
 	tag.getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
 	ret.decl.file = tag.fileName();
+  } else if( (tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function)  && ( type & MemberInfo::Function ) ) {
+    ret.memberType = MemberInfo::Function;
+    ret.type = tagType( tag );
+    ret.type.increaseFunctionDepth();
+    ret.setBuildInfo( new SimpleTypeCatalogFunction::CatalogFunctionBuildInfo( tags, name, TypePointer( this ) ) );
   } else if ( tag.kind() == Tag::Kind_Namespace && ( type & MemberInfo::Namespace ) ){
     ret.setBuildInfo( new CatalogBuildInfo( tag , name, TypePointer( this ) ) );
     ret.memberType = MemberInfo::Namespace;
-    ret.type = name;
-  } else if ( tag.kind() == Tag::Kind_Class && ( type & MemberInfo::NestedType ) ){
-    ret.setBuildInfo( new CatalogBuildInfo( tag, name, TypePointer( this ) ) );
-    ret.memberType = MemberInfo::NestedType;
     ret.type = name;
   }
   

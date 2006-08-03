@@ -222,7 +222,7 @@ ClassDom SimpleTypeCodeModel::pickMostRelated( ClassList lst, QString fn ) {
 }
 
 
-SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , SimpleTypeImpl::MemberInfo::MemberType type ) 
+SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , MemberInfo::MemberType type )
 {
   MemberInfo ret;
   ret.name = name.name();
@@ -247,22 +247,6 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Simp
       d->getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
       d->getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
     }
-  } else if( klass->hasFunction( name.name() )  && ( type & MemberInfo::Function ) ) {
-    ret.memberType = MemberInfo::Function;
-    FunctionList l = klass->functionByName( name.name() );
-    if( !l.isEmpty() && l.front() ) {
-      ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name , TypePointer(this) ) );
-      ret.type = l.front()->resultType();
-      ret.type.increaseFunctionDepth();
-    }
-  } else if( klass->hasFunctionDefinition( name.name() )  && ( type & MemberInfo::Function ) ) {
-    ret.memberType = MemberInfo::Function;
-    FunctionDefinitionList l = klass->functionDefinitionByName( name.name() );
-    if( !l.isEmpty() && l.front() ) {
-      ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name, TypePointer(this) ) );
-      ret.type = l.front()->resultType();
-      ret.type.increaseFunctionDepth();
-    }
   } else if( klass->hasTypeAlias( name.name() ) && ( type & MemberInfo::Typedef ) ) {
     ret.memberType = MemberInfo::Typedef;
     TypeAliasList l = klass->typeAliasByName( name.name() );
@@ -285,6 +269,22 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Simp
         ret.memberType = MemberInfo::NestedType;
         ret.type = name;
       }
+    }
+  } else if( klass->hasFunction( name.name() )  && ( type & MemberInfo::Function ) ) {
+    ret.memberType = MemberInfo::Function;
+    FunctionList l = klass->functionByName( name.name() );
+    if( !l.isEmpty() && l.front() ) {
+      ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name , TypePointer(this) ) );
+      ret.type = l.front()->resultType();
+      ret.type.increaseFunctionDepth();
+    }
+  } else if( klass->hasFunctionDefinition( name.name() )  && ( type & MemberInfo::Function ) ) {
+    ret.memberType = MemberInfo::Function;
+    FunctionDefinitionList l = klass->functionDefinitionByName( name.name() );
+    if( !l.isEmpty() && l.front() ) {
+      ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name, TypePointer(this) ) );
+      ret.type = l.front()->resultType();
+      ret.type.increaseFunctionDepth();
     }
   } else if ( ns && ns->hasNamespace( name.name() )  && ( type & MemberInfo::Namespace ) ) {
     ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( ns->namespaceByName( name.name() )), name, TypePointer( this ) ) );
