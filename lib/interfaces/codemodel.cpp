@@ -1051,7 +1051,7 @@ bool VariableModel::isEnumeratorVariable() const {
 }
 
 void VariableModel::setEnumeratorVariable( bool b) {
-	m_isEnumeratorVariable = true;
+	m_isEnumeratorVariable = b;
 }
 
 int FunctionModel::access( ) const
