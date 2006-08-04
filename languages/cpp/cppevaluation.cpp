@@ -344,9 +344,11 @@ EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr,
   return res;
 }
 
+///This function needs a clean workover.
 EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exprList, EvaluationResult scope, SimpleContext * ctx, bool canBeTypeExpression ) {
   LogDebug d( "#evt#");
   if( !safetyCounter || !d ) return SimpleType();
+	bool canBeItemExpression = true; ///To be implemented
   
   ifVerboseMajor( dbgMajor() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl );
   
@@ -361,73 +363,76 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exp
     ifVerboseMajor( dbgMajor() << "scope-type is not resolved" << endl );
     return EvaluationResult();
   }
-  
-  if( ctx )
-    searchIn = ctx->container().get();
-  
+
   QStringList split = splitType( currentExpr );
-  
+	currentExpr = split.front();
+	
+	if( ctx )
+		searchIn = ctx->container().get();
+	
+	if( ctx && split.count() == 1 && exprList.count() == 0 && canBeItemExpression ) {
+		///Search for variables and functions, first in the current context, and then through the container-classes upwards.
+			// find the variable in the current context
+		SimpleVariable var = ctx->findVariable( currentExpr );
+	
+		if ( var.type ) {
+			EvaluationResult res = evaluateAtomicExpression(  exprList, EvaluationResult( ctx->container()->locateDecType( var.type ), var.toDeclarationInfo( "current_file" )) );
+			return res;
+		}
+	
+		SimpleType current = ctx->container();
+	
+		SimpleTypeImpl::TypeOfResult type;
+	
+		SafetyCounter s( 20 );
+		bool ready = false;
+		while( !ready && s )
+		{
+			if( !current ) ready = true;
+	
+			type = current->typeOf( currentExpr );
+			if ( type)
+				return EvaluationResult( type.type, type.decl );
+	
+			if( !ready ) current = current->parent();
+		}
+	}
+	/*
   if( scope.expr.t & ExpressionInfo::TypeExpression )
-    canBeTypeExpression = true;
+    canBeTypeExpression = true;*/
   
-  if ( !split.isEmpty() && (currentExpr.endsWith( "::" ) || split.size() > 1 || canBeTypeExpression ) )
-  {
-    currentExpr = split.front();
-    
-  	SimpleTypeImpl::LocateResult type = searchIn->locateDecType( currentExpr, SimpleTypeImpl::Normal, 0, SimpleTypeImpl::MemberInfo::AllTypes  );
-    if ( type )
-    {
-      if( !split.isEmpty() ) split.pop_front();
-      EvaluationResult ret = evaluateAtomicExpression( split + exprList, type, 0, true );
-      ret.expr.t = ExpressionInfo::TypeExpression;
-      return ret;
-    } else {
-      ifVerboseMajor( dbgMajor() << "\"" << scope.resultType->fullNameChain() << "\"could not locate " << currentExpr << endl );
-    }
-  }
   
-  if ( ctx )
-  {
-            // find the variable type in the current context
-    SimpleVariable var = ctx->findVariable( currentExpr );
-    
-    if ( var.type ) {
-      
-      EvaluationResult res = evaluateAtomicExpression(  exprList, EvaluationResult( ctx->container()->locateDecType( var.type ), var.toDeclarationInfo( "current_file" )) );
-      return res;
-    }
-    
-    SimpleType current = ctx->container();
-    
-    SimpleTypeImpl::TypeOfResult type;
-    
-    SafetyCounter s( 20 );
-    bool ready = false;
-    while( !ready && s )
-    {
-      if( !current ) ready = true;
-      
-      type = current->typeOf( currentExpr );
-      if ( type)
-        return evaluateAtomicExpression( exprList, EvaluationResult( type.type, type.decl ) );
-      
-      if( !ready ) current = current->parent();
-    }
-    
-    if( !canBeTypeExpression && exprList.isEmpty() && !scope ) {
-      exprList << currentExpr;
-                ///Try as a type again    
-      return evaluateAtomicExpression( exprList, scope, ctx, true );
-    } else {
-      return EvaluationResult();
-    }
-  }
-  
-  SimpleTypeImpl::TypeOfResult type = searchIn->typeOf( currentExpr );
-  return evaluateAtomicExpression( exprList, EvaluationResult( type.type, type.decl ) );
+	if( canBeTypeExpression || split.count() > 1 || exprList.count() > 0 ) {
+		///Search for Types
+		SimpleTypeImpl::LocateResult type = searchIn->locateDecType( currentExpr );
+	
+		if ( type && type->resolved() )
+		{
+			if( !split.isEmpty() ) split.pop_front();
+			EvaluationResult ret = evaluateAtomicExpression( split + exprList, type, 0, true );
+			ret.expr.t = ExpressionInfo::TypeExpression;
+			return ret;
+		} else {
+		}
+	}
+
+	if( split.count() == 1 && exprList.count() == 0 && canBeItemExpression ) {
+	///Since it's the last element of a scope-chain, also search for functions and variables.
+		SimpleTypeImpl::TypeOfResult res = searchIn->typeOf( currentExpr );
+		
+		if( res )
+			return EvaluationResult( res.type, res.decl );
+	}
+
+	if( !canBeTypeExpression && !scope ) {
+		return evaluateAtomicExpression( split + exprList, scope, ctx, true );
+	} else {
+		ifVerboseMajor( dbgMajor() << "\"" << scope.resultType->fullNameChain() << "\"could not locate " << currentExpr << endl );
+		return EvaluationResult();
+	}
 }
 
 
 }
 
-// kate: indent-mode csands; tab-width 4;
+// kate: indent-mode csands; tab-width 2;

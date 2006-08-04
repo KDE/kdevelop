@@ -258,6 +258,15 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
 	  l.front()->getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
 	  l.front()->getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
     }
+  } else if( klass->hasEnum( name.name() ) && ( type & MemberInfo::Typedef ) ) {
+    ret.memberType = MemberInfo::Typedef;
+    EnumDom e = klass->enumByName( name.name() );
+      ret.type = "int";
+	  ret.decl.name = e->name();
+	  ret.decl.file = e->fileName();
+	  ret.decl.comment = e->comment();
+	  e->getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
+	  e->getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
   } else if ( klass->hasClass( name.name() ) && ( type & MemberInfo::NestedType ) ) {
     ClassList l = klass->classByName( name.name() );
     

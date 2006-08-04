@@ -443,12 +443,39 @@ public:
 PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ), depthAdd( dAdd), s(maxCount) {
 }
 
-  void fill( QPopupMenu* parent, SimpleTypeImpl::LocateResult d, QString prefix = "" ) {
+	void fill( QPopupMenu* parent, SimpleTypeImpl::LocateResult d, QString prefix = "", const DeclarationInfo& sourceVariable = DeclarationInfo() ) {
 	Debug dbg( "#fl# ", 10 );
     if( !s || !dbg ) {
 	    //dbgMajor() << "safety-counter triggered while filling \"" << d.fullNameChain() << "\"" << endl;
       return;
     }
+
+	if( !sourceVariable.name.isEmpty() && sourceVariable.name != "this" ) {
+		  SimpleTypeImpl::MemberInfo f;
+		  f.decl = sourceVariable;
+		  f.name = sourceVariable.name;
+		  f.type = d.desc();
+		  f.memberType = SimpleTypeImpl::MemberInfo::Variable;
+		  
+		  /*int id = m->insertItem( i18n("jump to variable-declaration \"%1\"").arg( type.sourceVariable.name ) , this, SLOT( popupAction( int ) ) );
+		  
+		  m_popupActions.insert( id, type.sourceVariable );*/
+		  struk.insertItem( parent, f, prefix );
+		  
+		  parent->insertSeparator();
+
+		  if( !sourceVariable.comment.isEmpty() ) {
+			  QPopupMenu * m = new QPopupMenu( parent );
+			  int gid = parent->insertItem( i18n( "Comment on %1" ).arg( sourceVariable.name ), m );
+			  QStringList ls = prepareTextForMenu( sourceVariable.comment, 15, 100 );
+			  for( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
+				  m->insertItem( *it, 0, SLOT( popupClassViewAction( int ) ) );
+			  }
+			  parent->insertSeparator();
+		  }
+		  
+	  }
+	  
     struk.insertItem( parent, d, prefix );
     
     TypeDesc::TemplateParams p = d->templateParams();
@@ -1260,13 +1287,13 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		
 		popup->setWhatsThis( gid, i18n( "<b>Navigation</b><p>Provides a menu to navigate to positions of items that are involved in this expression" ) );
 		
-		if( type.sourceVariable && type.sourceVariable.name != "this" ) {
+		/*if( type.sourceVariable && type.sourceVariable.name != "this" ) {
 			int id = m->insertItem( i18n("jump to variable-declaration \"%1\"").arg( type.sourceVariable.name ) , this, SLOT( popupAction( int ) ) );
 			
 			m_popupActions.insert( id, type.sourceVariable );
-		}
+		}*/
 		
-		filler.fill( m, type );
+		filler.fill( m, type, "", type.sourceVariable );
 	}
 	if( type->resolved() ) {
 		///Now fill the class-view-browsing-stuff
@@ -1683,7 +1710,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 						
 					}
 				}
-				if( exp.canBeNormalExpression() && !ret.resultType->resolved() ) {
+				if( /*exp.canBeNormalExpression() &&*/ !ret.resultType->resolved() ) { ///It is not cleary possible to recognize the kind of an expression from the syntax as long as it's not written completely
 					{
 						if( ! (opt & IncludeStandardExpressions) ) {
 							kdDebug( 9007 ) << "recognized a standard-expression, but another expression-type is desired" << endl;
@@ -2969,10 +2996,16 @@ QString commentFromItem( const SimpleType& parent, const ItemDom& item )
 	} else {
 		if( item->isVariable() ) {
 			const VariableModel* f = dynamic_cast<const VariableModel*>( item.data() );
-			ret += "\nKind: Variable";
 			if( f ) {
-				if( f->isStatic() )
-					ret += "Modifiers: static";
+				if( !f->isEnumeratorVariable() ) {
+					ret += "\nKind: Variable";
+					if( f->isStatic() )
+						ret += "Modifiers: static";
+				} else {
+					ret += "\nKind: Enumerator";
+					ret += "\nEnum: " + f->type();
+				}
+
 				ret += "\nAccess: " + codeModelAccessToString( (CodeModelItem::Access)f->access() );
 			}
 		}
@@ -3013,7 +3046,7 @@ QString commentFromTag( const SimpleType& parent, Tag& tag ) {
 				if( !(*it)->value().isEmpty() ) {
 					ret + " = " + (*it)->value();
 				}
-			}
+		}
 			
 		ret += "\n\nAccess: " + codeModelAccessToString( (CodeModelItem::Access)en->access() );
 		} else {
@@ -3056,6 +3089,20 @@ QString commentFromTag( const SimpleType& parent, Tag& tag ) {
 			}
 		}
 	}*/
+
+	if( tag.kind() == Tag::Kind_Enum ) {
+		CppVariable<Tag> var( tag );
+		
+		ret += "\nKind: Enum";
+	}
+
+	if( tag.kind() == Tag::Kind_Enumerator ) {
+		CppVariable<Tag> var( tag );
+		
+		ret += "\nKind: Enumerator";
+		if( tag.hasAttribute( "enum" ) && tag.attribute( "enum" ).asString() != "int" )
+			ret += "\nEnum: " + tag.attribute( "enum" ).asString();
+	}
 	
 	if( tag.kind() == Tag::Kind_Variable ) {
 		CppVariable<Tag> var( tag );
@@ -3242,7 +3289,14 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		
 		
 		QString prefix = tagType( tag ).stripWhiteSpace();
-			
+
+		if( tag.kind() == Tag::Kind_Enumerator && tag.hasAttribute( "enum" ) ) {
+			prefix = tag.attribute( "enum" ).asString();
+			e.userdata += prefix; ///Sort enumerators together
+		} else if( tag.kind() == Tag::Kind_Enum ) {
+			prefix = "enum";
+		} else {
+		
 		if((tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_Variable || tag.kind() == Tag::Kind_Typedef))
 		{
 			if( !prefix.isEmpty() && resolve ) {
@@ -3251,6 +3305,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 				if( et )
 					prefix = et->fullNameChain();
 			}
+		}
 		}
 
 		e.comment = commentFromTag( type, tag );
@@ -3492,18 +3547,23 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		entry.comment = commentFromItem( type, model_cast<ItemDom>(attr) );
 		entry.userdata += QString("%1%2%3").arg( attr->access() ).arg( depth ).arg( 2 );
 		
-		
-		if( ! resolve ) {
-			entry.prefix = attr->type();
-		}else{
-			QString tt = attr->type();
-			SimpleTypeImpl::LocateResult t = type->locateDecType( tt );
-			//SimpleType t = type->typeOf( attr->name() );
-			if( t ) 
-				entry.prefix = t->fullNameChain();
-			else
+
+		if( !attr->isEnumeratorVariable() ) {
+			if( ! resolve ) {
 				entry.prefix = attr->type();
-		}		
+			}else{
+				QString tt = attr->type();
+				SimpleTypeImpl::LocateResult t = type->locateDecType( tt );
+				//SimpleType t = type->typeOf( attr->name() );
+				if( t ) 
+					entry.prefix = t->fullNameChain();
+				else
+					entry.prefix = attr->type();
+			}
+		} else {
+			entry.prefix = attr->type();
+			entry.userdata += attr->type(); ///Sort enumerators by their enum
+		}
 		if( attr->access() == CodeModelItem::Protected ) 
 			entry.postfix += "; (protected)";// in " + type->fullType() + ")";
 		if( attr->access() == CodeModelItem::Private ) 

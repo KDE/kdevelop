@@ -549,11 +549,8 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
 		m_currentNamespace.top() ->addTypeAlias( typeAlias );
 	else
 		m_file->addTypeAlias( typeAlias );
-	} else {
-		kdDebug() << "enum has no name" << endl;
 	}
-	
-	
+
 	QPtrList<EnumeratorAST> l = ast->enumeratorList();
 	QPtrListIterator<EnumeratorAST> it( l );
 	while ( it.current() )
@@ -562,7 +559,15 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
 		attr->setName( it.current() ->id() ->text() );
 		attr->setFileName( m_fileName );
 		attr->setAccess( m_currentAccess );
-		attr->setType( "int" );
+		
+		if( !ast->name() ) {
+			attr->setType( "int" );
+		} else {
+			attr->setType( ast->name()->text() );
+		}
+
+		attr->setEnumeratorVariable( true );
+
 		attr->setComment( (*it)->comment() );
 		attr->setStatic( true );
 		

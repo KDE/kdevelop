@@ -472,10 +472,17 @@ void TagCreator::parseEnumSpecifier( EnumSpecifierAST* ast )
 		
 		Tag tag;
 		tag.setKind( Tag::Kind_Enumerator );
+		tag.setComment( it.current()->comment() );
 		
 		tag.setFileName( m_fileName );
 		tag.setName( name );
 		tag.setScope( m_currentScope );
+
+		if( ast->name() ) {
+			tag.setAttribute( "enum", ast->name()->text() );
+		} else {
+			tag.setAttribute( "enum", "int" );
+		}
 		
 		int line, col;
 		it.current() ->getStartPosition( &line, &col );

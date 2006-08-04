@@ -104,8 +104,8 @@
 const bool alwaysParseInBackground = false;
 
 
-enum { KDEV_DB_VERSION = 11 };
-enum { KDEV_PCS_VERSION = 9 };
+enum { KDEV_DB_VERSION = 12 };
+enum { KDEV_PCS_VERSION = 10 };
 
 QStringList CppSupportPart::m_sourceMimeTypes = QStringList() << "text/x-csrc" << "text/x-c++src";
 QStringList CppSupportPart::m_headerMimeTypes = QStringList() << "text/x-chdr" << "text/x-c++hdr";
@@ -219,7 +219,7 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	                            "this brings you to the corresponding header file." ) );
 	action->setEnabled( false );
 	
-	action = new KAction( i18n( "Complete Text" ), CTRL + ALT + Key_Space,
+	action = new KAction( i18n( "Complete Text" ), CTRL + Key_Space,
 	                      this, SLOT( slotCompleteText() ),
 	                      actionCollection(), "edit_complete_text" );
 	action->setToolTip( i18n( "Complete current expression" ) );
@@ -240,7 +240,7 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	                            "based on the member declaration at the current line." ) );
 	action->plug( new QWidget() );
 
-	action = new KAction( i18n( "Navigation Menu" ), 0, ALT + Key_Space,
+	action = new KAction( i18n( "Navigation Menu" ), 0, CTRL + ALT + Key_Space,
 	                      this, SLOT( slotNavigate() ),
 	                      actionCollection(), "edit_navigate" );
 	action->setToolTip( i18n( "Show the navigation-menu" ) );
