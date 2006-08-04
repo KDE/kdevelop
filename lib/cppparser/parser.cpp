@@ -2607,21 +2607,31 @@ bool Parser::parseCondition( ConditionAST::Node& node )
     TypeSpecifierAST::Node spec;
     if( parseTypeSpecifier(spec) ){
     	DeclaratorAST::Node decl;
-	if( parseDeclarator(decl) && lex->lookAhead(0) == '=' ) {
-	    nextToken();
-
-	    AST::Node expr;
-	    if( skipExpression(expr) ){
-                ast->setTypeSpec( spec );
-                ast->setDeclarator( decl );
-                ast->setExpression( expr );
-
-                UPDATE_POS( ast, start, lex->index() );
-                node = ast;
-
-		return true;
-            }
-	}
+		if( parseDeclarator(decl) ) {
+			if( lex->lookAhead(0) == '=' ) {
+			nextToken();
+	
+			AST::Node expr;
+			if( skipExpression(expr) ){
+					ast->setTypeSpec( spec );
+					ast->setDeclarator( decl );
+					ast->setExpression( expr );
+	
+					UPDATE_POS( ast, start, lex->index() );
+					node = ast;
+	
+					return true;
+				}
+			} else {
+				ast->setTypeSpec( spec );
+				ast->setDeclarator( decl );
+				
+				UPDATE_POS( ast, start, lex->index() );
+				node = ast;
+				
+				return true;
+			}
+		}
     }
 
     lex->setIndex( start );
@@ -3350,6 +3360,17 @@ bool Parser::parseTryBlockStatement( StatementAST::Node& node )
 	CatchStatementAST::Node cstmt = CreateNode<CatchStatementAST>();
 	cstmt->setCondition( cond );
 	cstmt->setStatement( body );
+	int l=0, c=0;
+	    if( cond.get() )
+	    cond->getStartPosition( &l, &c );
+	else if( body.get() )
+		body->getStartPosition( &l, &c );
+	    
+	cstmt->setStartPosition( l, c );
+	if( body.get() )
+		body->getEndPosition( &l, &c );
+		
+	cstmt->setEndPosition( l, c ); 
 	list->addStatement( cstmt );
     }
 

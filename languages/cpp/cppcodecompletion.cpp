@@ -2744,8 +2744,8 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, TryBlockStatementAS
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, CatchStatementListAST* ast, int line, int col )
 {
-	if ( !inContextScope( ast, line, col, false, true ) )
-		return;
+	/*if ( !inContextScope( ast, line, col, false, true ) )
+		return;*/
 	
 	QPtrList<CatchStatementAST> l( ast->statementList() );
 	QPtrListIterator<CatchStatementAST> it( l );
@@ -2760,7 +2760,8 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, CatchStatementListA
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, CatchStatementAST* ast, int line, int col )
 {
-	if ( !inContextScope( ast, line, col ) )
+	if( !ast->statement() ) return;
+	if ( !inContextScope( ast->statement(), line, col ) )
 		return;
 	
 	computeContext( ctx, ast->condition(), line, col );
