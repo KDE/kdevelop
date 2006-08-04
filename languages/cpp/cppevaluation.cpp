@@ -349,7 +349,8 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exp
   LogDebug d( "#evt#");
   if( !safetyCounter || !d ) return SimpleType();
 	bool canBeItemExpression = true; ///To be implemented
-  
+	canBeTypeExpression = true; ///Shut this always on for now
+
   ifVerboseMajor( dbgMajor() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl );
 
 	EvaluationResult bestRet; ///This helps to get at least a trace of unresolved types
@@ -358,7 +359,8 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exp
     return scope;
   
   QString currentExpr = exprList.front().stripWhiteSpace();
-  exprList.pop_front();
+  
+	exprList.pop_front();
   
   TypePointer searchIn = scope->resolved();
   if( !searchIn ) {
