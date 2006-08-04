@@ -292,7 +292,12 @@ struct PopupFillerHelpStruct {
 
   void insertItem(  QPopupMenu* parent, SimpleTypeImpl::MemberInfo d , QString prefix )
   {
-    QString txt = i18n("Jump to %1 %2").arg( d.memberTypeToString() ).arg( cleanForMenu( d.name ) );
+	  QString memType = d.memberTypeToString();
+
+	  if( d.memberType == SimpleTypeImpl::MemberInfo::Typedef && d.type.fullName() == "const int" )
+		  memType = "enum";
+	  
+    QString txt = i18n("Jump to %1 %2").arg( memType ).arg( cleanForMenu( d.name ) );
     int id = parent->insertItem( txt, receiver, SLOT( popupAction( int ) ) );
     
     receiver->m_popupActions.insert( id, d.decl );
@@ -379,7 +384,12 @@ struct PopupClassViewFillerHelpStruct {
 
 	ItemDom dom  = itemFromScope( QStringList::split( "::", d.name ), model_cast<NamespaceDom>( f ) );
 
-	QString txt = i18n("Show %1 %2").arg( d.memberTypeToString() ).arg( cleanForMenu( d.name ) );
+	  QString memType = d.memberTypeToString();
+
+	  if( d.memberType == SimpleTypeImpl::MemberInfo::Typedef && d.type.fullName() == "const int" )
+		  memType = "enum";
+	  
+	  QString txt = i18n("Show %1 %2").arg( memType ).arg( cleanForMenu( d.name ) );
     int id = parent->insertItem( txt, receiver, SLOT( popupClassViewAction( int ) ) );
     
 	receiver->m_popupClassViewActions.insert( id, dom );
@@ -519,31 +529,37 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
           }
         }
       }
+	}
 #ifndef DISABLE_TRACING
-		QValueList<SimpleTypeImpl::MemberInfo> trace = d.trace()->trace();
+      if( d.trace() ) {
+      QValueList<QPair<SimpleTypeImpl::MemberInfo, TypeDesc> > trace = d.trace()->trace();
 	  if( !trace.isEmpty() ) {
 		  QPopupMenu * m = new QPopupMenu( parent );
 		  int gid = parent->insertItem( i18n( "Trace" ), m );
 		  
-		  for( QValueList<SimpleTypeImpl::MemberInfo>::iterator it = trace.begin(); it != trace.end(); ++it ) {
+		  for( QValueList<QPair<SimpleTypeImpl::MemberInfo, TypeDesc> >::iterator it = trace.begin(); it != trace.end(); ++it ) {
 			  QPopupMenu * mo = new QPopupMenu( m );
-			  int gid = m->insertItem( i18n( "%1 -> %2" ).arg( cleanForMenu( (*it).name ) ).arg( cleanForMenu( (*it).type.fullNameChain() ) ), mo );
+			  QString tail = (*it).second.fullNameChain();
+			  if( !tail.isEmpty() ) tail = "::" + tail;
+			  int gid = m->insertItem( i18n( "%1 -> %2" ).arg( cleanForMenu( (*it).first.name + tail ) ).arg( cleanForMenu( (*it).first.type.fullNameChain() + tail ) ), mo );
 
-			  struk.insertItem( mo, *it, prefix );
+			  struk.insertItem( mo, (*it).first, prefix );
 			  
-			  if( !(*it).decl.comment.isEmpty() ) {
+			  if( !(*it).first.decl.comment.isEmpty() ) {
 				  mo->insertSeparator();
 				  QPopupMenu * m = new QPopupMenu( mo );
 				  int gid = mo->insertItem( i18n( "Comment" ), m );
-				  QStringList ls = prepareTextForMenu( (*it).decl.comment, 15, 100 );
+				  QStringList ls = prepareTextForMenu( (*it).first.decl.comment, 15, 100 );
 				  for( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
 					  m->insertItem( *it, 0, SLOT( popupClassViewAction( int ) ) );
 				  }
 			  }
 		  }
 	  }
+	  }
 #endif
-		
+	
+	if( d->resolved() ) {
 		QValueList<SimpleTypeImpl::LocateResult> bases = d->resolved()->getBases();
       for( QValueList<SimpleTypeImpl::LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
         QPopupMenu * m = new QPopupMenu( parent );
@@ -1265,13 +1281,13 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 	
 	EvaluationResult type = evaluateExpressionAt( line, column, conf );
 
-	if( !type->resolved() && !type.sourceVariable ) return;
+	if( !type->resolved() && !type.sourceVariable && (!type.resultType.trace() || type.resultType.trace()->trace().isEmpty()) ) return;
 	
 	QString name = type->fullNameChain();
 	if( type.sourceVariable )
 		name += " " + type.sourceVariable.name;
 	if( type.resultType->resolved() && type.resultType->resolved()->asFunction() )
-		name = buildSignature(type.resultType->resolved() );
+		name = buildSignature( type.resultType->resolved() );
 	
 	///Fill the jump-menu
 	{
@@ -3635,4 +3651,4 @@ void CppCodeCompletion::computeFileEntryList( )
 }
 
 #include "cppcodecompletion.moc"
-//kate: indent-mode csands; tab-width 4; space-indent off;
+//kate: indent-mode csands; tab-width 2; space-indent off;

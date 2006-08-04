@@ -417,6 +417,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
         } else {
           if( mem.type.name() != name.name() ) {
 
+	          MemberInfo m = mem;
 	          if( name.next() ) {
 		          mem.type.makePrivate();
 				  mem.type.append( name.next() );
@@ -430,15 +431,18 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
 	          ret.increaseResolutionCount();
 // 	          if( mode & TraceAliases && ret->resolved() )
 	          {
-		          MemberInfo m = mem;
 		          m.name = "";
 
 		          if( !scope().isEmpty() ) {
 			          m.name = fullTypeUnresolvedWithScope() + "::";
 		          }
-		          m.name += name.fullNameChain();
+		          m.name += name.nameWithParams();
+		          //m.name += name.fullNameChain();
 		          
-		          ret.trace()->prepend( m );
+		          if( name.next() )
+			          ret.trace()->prepend( m, *name.next() );
+		          else
+			          ret.trace()->prepend( m );
 	          }
 	          
 	          if( ret->resolved() )

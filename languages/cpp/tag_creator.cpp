@@ -481,7 +481,7 @@ void TagCreator::parseEnumSpecifier( EnumSpecifierAST* ast )
 		if( ast->name() ) {
 			tag.setAttribute( "enum", ast->name()->text() );
 		} else {
-			tag.setAttribute( "enum", "int" );
+			tag.setAttribute( "enum", "const int" );
 		}
 		
 		int line, col;

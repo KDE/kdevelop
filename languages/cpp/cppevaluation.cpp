@@ -351,7 +351,9 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exp
 	bool canBeItemExpression = true; ///To be implemented
   
   ifVerboseMajor( dbgMajor() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl );
-  
+
+	EvaluationResult bestRet; ///This helps to get at least a trace of unresolved types
+	
   if( exprList.isEmpty() )
     return scope;
   
@@ -405,7 +407,7 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exp
 	if( canBeTypeExpression || split.count() > 1 || exprList.count() > 0 ) {
 		///Search for Types
 		SimpleTypeImpl::LocateResult type = searchIn->locateDecType( currentExpr );
-	
+
 		if ( type && type->resolved() )
 		{
 			if( !split.isEmpty() ) split.pop_front();
@@ -413,6 +415,11 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exp
 			ret.expr.t = ExpressionInfo::TypeExpression;
 			return ret;
 		} else {
+			bestRet = EvaluationResult( type );
+			QStringList s = split+exprList;
+			s.pop_front();
+			if( !s.isEmpty() )
+				bestRet->append( new TypeDescShared( s.join("::") ) );
 		}
 	}
 
@@ -428,7 +435,7 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exp
 		return evaluateAtomicExpression( split + exprList, scope, ctx, true );
 	} else {
 		ifVerboseMajor( dbgMajor() << "\"" << scope.resultType->fullNameChain() << "\"could not locate " << currentExpr << endl );
-		return EvaluationResult();
+		return bestRet;
 	}
 }
 

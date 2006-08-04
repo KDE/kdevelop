@@ -533,7 +533,7 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
 	TypeAliasDom typeAlias = m_store->create<TypeAliasModel>();
 	typeAlias->setFileName( m_fileName );
 	typeAlias->setName( ast->name()->text() );
-	typeAlias->setType( "int" );
+	typeAlias->setType( "const int" );
 	typeAlias->setComment( ast->comment() );
 	
 	int line, col;
@@ -561,7 +561,7 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
 		attr->setAccess( m_currentAccess );
 		
 		if( !ast->name() ) {
-			attr->setType( "int" );
+			attr->setType( "const int" );
 		} else {
 			attr->setType( ast->name()->text() );
 		}

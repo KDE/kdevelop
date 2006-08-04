@@ -23,6 +23,7 @@
 #include "completiondebug.h"
 #include "typedesc.h"
 #include "declarationinfo.h"
+#include <qpair.h>
 
 #include "cpp_tags.h"
 #include "codemodel.h"
@@ -694,15 +695,15 @@ protected:
 
 
 class TypeTrace {
-	QValueList<SimpleTypeImpl::MemberInfo> m_trace;
+	QValueList<QPair< SimpleTypeImpl::MemberInfo, TypeDesc> > m_trace;
 public:
 	
-	QValueList<SimpleTypeImpl::MemberInfo>& trace() {
+	QValueList<QPair< SimpleTypeImpl::MemberInfo, TypeDesc> >& trace() {
 		return m_trace;
 	};
 	
-	void prepend( const SimpleTypeImpl::MemberInfo& t ) {
-		m_trace.push_front( t );
+	void prepend( const SimpleTypeImpl::MemberInfo& t, const TypeDesc& tail = TypeDesc() ) {
+		m_trace.push_front( QPair< SimpleTypeImpl::MemberInfo, TypeDesc>( t, tail ) );
 	}
 };
 
