@@ -55,7 +55,9 @@ private:
                                       const QString &partType,
                                       const QString &preferredName = QString::null );
 
-    QHash<KParts::ReadOnlyPart*, KDevDocument*> m_partHash;
+    QHash< QString, KParts::Factory* > m_factoryCache;
+    QString m_editor;
+    QStringList m_textTypes;
 
 };
 

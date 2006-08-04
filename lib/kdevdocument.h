@@ -77,6 +77,10 @@ class KDEVINTERFACES_EXPORT KDevDocument : public QObject
      */
     KUrl url() const;
 
+    /**Set the URL of this document.
+    @param url The url to set.*/
+    void setUrl( const KUrl &url );
+
     /**
      * Returns the part corresponding to this document.
      */
@@ -86,6 +90,10 @@ class KDEVINTERFACES_EXPORT KDevDocument : public QObject
      * Returns the mimetype of the document.
      */
     KMimeType::Ptr mimeType() const;
+
+    /**Set the MimeType of this document.
+    @param state The MimeType to set.*/
+    void setMimeType( KMimeType::Ptr mimeType );
 
     /**
      * Returns the text editor, if this is a text document.
@@ -101,6 +109,11 @@ class KDEVINTERFACES_EXPORT KDevDocument : public QObject
      * Enquires whether this document is currently the active part in the editor.
      */
     bool isActive() const;
+
+    /**
+     * Enquires whether this document has ever been activated.
+     */
+    bool isInitialized() const;
 
     /**
      * Enquires whether this document is editable..
@@ -127,15 +140,17 @@ class KDEVINTERFACES_EXPORT KDevDocument : public QObject
      */
     void close();
 
-    /**Checks the state of the document.
-    @return The DocumentState corresponding to the document state.*/
+    /**Checks the state of this document.
+    @return The document state.*/
     DocumentState state() const;
 
-    /**Set the document state for the document.
+    /**Set the document state of this document.
     @param state The state to set.*/
     void setState( DocumentState state );
 
   private:
+    KUrl m_url;
+    KMimeType::Ptr m_mimeType;
     DocumentState m_state;
     QPointer<KParts::Part> m_part;
 };

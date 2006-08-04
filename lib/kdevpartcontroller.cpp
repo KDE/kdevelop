@@ -6,7 +6,6 @@
 #include <QTimer>
 
 #include <kdebug.h>
-#include <kglobal.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
@@ -21,13 +20,24 @@
 #include <ktexteditor/document.h>
 
 #include "kdevmainwindow.h"
-#include "kmainwindow.h"
+#include "kdevconfig.h"
 
 #include "kdevpartcontroller.h"
 
 KDevPartController::KDevPartController()
-        : KParts::PartManager( KDevCore::mainWindow() )
-{}
+        : KParts::PartManager( KDevCore::mainWindow() ),
+        m_editor( QString::null ),
+        m_textTypes( QStringList() )
+{
+    //Cache this as it is too expensive when creating parts
+    //     KConfig * config = KDevConfig::standard();
+    //     config->setGroup( "General" );
+    //
+    //     m_textTypes = config->readEntry( "TextTypes", QStringList() );
+    //
+    //     config ->setGroup( "Editor" );
+    //     m_editor = config->readPathEntry( "EmbeddedKTextEditor" );
+}
 
 KDevPartController::~KDevPartController()
 {}
@@ -35,12 +45,8 @@ KDevPartController::~KDevPartController()
 //MOVE BACK TO DOCUMENTCONTROLLER OR MULTIBUFFER EVENTUALLY
 bool KDevPartController::isTextType( KMimeType::Ptr mimeType )
 {
-    KConfig * config = KGlobal::config();
-    config->setGroup( "General" );
-
     bool isTextType = false;
-    QStringList textTypesList = config->readEntry( "TextTypes", QStringList() );
-    if ( textTypesList.contains( mimeType->name() ) )
+    if ( m_textTypes.contains( mimeType->name() ) )
     {
         isTextType = true;
     }
@@ -63,31 +69,31 @@ KTextEditor::Document* KDevPartController::createTextPart(
     bool activate )
 {
     Q_UNUSED( activate );
-    //Can this be cached instead of reading config?
-    KGlobal::config() ->setGroup( "Editor" );
-    QString preferred =
-        KGlobal::config() ->readPathEntry( "EmbeddedKTextEditor" );
 
     KTextEditor::Document* doc =
         qobject_cast<KTextEditor::Document *>( createPart(
                                                    "text/plain",
                                                    "KTextEditor/Document",
                                                    "KTextEditor::Editor",
-                                                   preferred ) );
+                                                   m_editor ) );
+
     if ( !encoding.isNull() )
     {
         KParts::BrowserExtension * extension =
-            KParts::BrowserExtension::childObject( doc );
+                KParts::BrowserExtension::childObject( doc );
         if ( extension )
         {
             KParts::URLArgs args;
             args.serviceType = QString( "text/plain;" )
-                               + encoding;
+                    + encoding;
             extension->setURLArgs( args );
         }
     }
 
-    doc->openURL( url );
+    if ( activate )
+    {
+        doc->openURL( url );
+    }
 
     return doc;
 }
@@ -161,6 +167,11 @@ KParts::Factory *KDevPartController::findPartFactory(
     const QString & partType,
     const QString & preferredName )
 {
+    //Cache the factories as it is too expensive to use KLibLoader for
+    //every part.
+    if ( m_factoryCache.contains( mimeType + partType + preferredName ) )
+        return m_factoryCache.value( mimeType + partType + preferredName );
+
     KService::List offers = KMimeTypeTrader::self() ->query(
                                 mimeType,
                                 "KParts/ReadOnlyPart",
@@ -186,9 +197,11 @@ KParts::Factory *KDevPartController::findPartFactory(
         {
             ptr = offers.first();
         }
-        return static_cast<KParts::Factory*>(
-                   KLibLoader::self() ->factory(
-                       QFile::encodeName( ptr->library() ) ) );
+        KParts::Factory *factory = static_cast<KParts::Factory*>(
+                                       KLibLoader::self() ->factory(
+                                           QFile::encodeName( ptr->library() ) ) );
+        m_factoryCache.insert( mimeType + partType + preferredName, factory );
+        return factory;
     }
 
     return 0;

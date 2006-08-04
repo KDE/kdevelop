@@ -23,7 +23,7 @@
 
 KDevCodeAggregate::KDevCodeAggregate( QObject *parent )
         : QAbstractProxyModel( parent ),
-        m_mode( KDevCodeProxy::Normalize ),
+        m_mode( KDevCodeProxy::Document ),
         m_filter( KUrl() )
 {}
 
@@ -50,6 +50,22 @@ void KDevCodeAggregate::insertModel( const KUrl &url,
         deleteModel( url );
 
     m_codeModels.insert( url, model );
+    mapCodeModels();
+}
+
+void KDevCodeAggregate::insertModelCache( const CodeModelCache &list )
+{
+    CodeModelCache::const_iterator it = list.begin();
+    for ( ; it != list.end(); it++ )
+    {
+        KUrl url = ( *it ).first;
+        KDevCodeModel *model = ( *it ).second;
+
+        if ( m_codeModels.contains( url ) )
+            deleteModel( url );
+
+        m_codeModels.insert( url, model );
+    }
     mapCodeModels();
 }
 

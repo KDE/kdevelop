@@ -113,7 +113,7 @@ void KDevDocumentViewPart::saved( KDevDocument* )
 
 void KDevDocumentViewPart::loaded( KDevDocument* document )
 {
-    QString mimeType = KMimeType::findByURL( document->url() ) ->comment();
+    QString mimeType = document->mimeType() ->comment();
     KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( mimeType );
     if ( !mimeItem )
     {

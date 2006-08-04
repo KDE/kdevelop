@@ -219,7 +219,6 @@ private Q_SLOTS:
 
 private:
     bool querySaveDocuments();
-    void integrateTextEditorPart( KTextEditor::Document* doc );
     void setCursorPosition( KParts::Part *part,
                             const KTextEditor::Cursor& cursor );
     bool openAsDialog( const KUrl &url, KMimeType::Ptr mimeType );
@@ -239,15 +238,9 @@ private:
     KDevDocument* integratePart( KParts::Part *part,
                                  bool activate = true );
 
-    QList<KDevDocument*> modifiedDocuments() const;
-    void clearModified( QList<KDevDocument*> const & filelist );
-
     KUrl storedUrlForDocument( KDevDocument* ) const;
     void updateDocumentUrl( KDevDocument* );
     bool documentUrlHasChanged( KDevDocument* );
-
-    bool saveDocumentsDialog( QList<KDevDocument*> const & ignoreList = QList<KDevDocument*>() );
-    bool closeDocumentsDialog( QList<KDevDocument*> const & ignoreList = QList<KDevDocument*>() );
 
     KParts::ReadOnlyPart* activeReadOnly() const;
     KParts::ReadWritePart* activeReadWrite() const;
@@ -273,8 +266,7 @@ private:
 
     // used to note when a URL changes (a document changes url)
     QHash< KDevDocument*, KUrl > m_documentUrls;
-
-    QPointer<KParts::Factory> m_editorFactory;
+    QHash< KUrl, KDevDocument* > m_url2Document;
 
     struct HistoryEntry
     {

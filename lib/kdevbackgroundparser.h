@@ -26,6 +26,7 @@
 
 #include <kurl.h>
 #include <QMap>
+#include <QPair>
 #include <QMutex>
 
 namespace ThreadWeaver
@@ -42,8 +43,11 @@ class Document;
 class QTimer;
 
 class KDevAST;
-class KDevLanguageSupport;
 class KDevDocument;
+class KDevCodeModel;
+class KDevLanguageSupport;
+
+typedef QList< QPair<KUrl, KDevCodeModel* > > CodeModelCache;
 
 using namespace ThreadWeaver;
 
@@ -64,15 +68,19 @@ public slots:
     void parseDocuments();
     void parseComplete( Job *job );
     void documentChanged( KTextEditor::Document *document );
+    void cacheModels( uint modelsToCache );
 
 private:
     QTimer *m_timer;
     bool m_suspend;
+    uint m_modelsToCache;
 
     // A list of known documents, and whether they are due to be parsed or not
     QMap<KUrl, bool> m_documents;
     // A list of open documents
     QMap<KUrl, KDevDocument*> m_openDocuments;
+    // A list of cached models when parsing a large amount of files.
+    CodeModelCache m_modelCache;
     // The translation unit for each document
     QMap<KUrl, KDevAST* > m_url2unit;
     mutable QMutex m_mutex;

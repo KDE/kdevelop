@@ -48,6 +48,11 @@ void KDevCodeProxy::insertModel( const KUrl &url,
     codeAggregate() ->insertModel( url, model );
 }
 
+void KDevCodeProxy::insertModelCache( const CodeModelCache &list )
+{
+    codeAggregate() ->insertModelCache( list );
+}
+
 void KDevCodeProxy::deleteModel( const KUrl &url )
 {
     codeAggregate() ->deleteModel( url );

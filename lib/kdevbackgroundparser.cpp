@@ -48,6 +48,7 @@
 KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         : QObject( parent ),
         m_suspend( false ),
+        m_modelsToCache( 0 ),
         m_weaver( new Weaver( this, 1, 1 ) )
 {
     m_timer = new QTimer( this );
@@ -73,16 +74,25 @@ void KDevBackgroundParser::addDocument( const KUrl &url, KDevDocument* document 
     }
 
     if ( document && document->textDocument() )
+    {
         connect( document->textDocument(), SIGNAL( textChanged( KTextEditor::Document* ) ),
-                 SLOT( documentChanged( KTextEditor::Document* ) ) );
+                 this, SLOT( documentChanged( KTextEditor::Document* ) ) );
+    }
 }
 
 void KDevBackgroundParser::addDocumentList( const KUrl::List &urls )
 {
+    uint i = 0;
     foreach( KUrl url, urls )
-    if ( !m_documents.contains( url ) )
-        m_documents.insert( url, true );
+    {
+        if ( !m_documents.contains( url ) )
+        {
+            i++;
+            m_documents.insert( url, true );
+        }
+    }
 
+    cacheModels( i );
     parseDocuments();
 }
 
@@ -143,14 +153,14 @@ void KDevBackgroundParser::parseDocuments()
             }
 
             if ( !parse )
-                return; //Language part did not produce a valid KDevParseJob
+                return ; //Language part did not produce a valid KDevParseJob
 
             p = false;
 
             if ( url == KDevCore::documentController() ->activeDocumentUrl() )
             {
                 KDevDocument * document =
-                        KDevCore::documentController() ->documentForUrl( url );
+                    KDevCore::documentController() ->documentForUrl( url );
                 Q_ASSERT( document->textDocument() );
 
                 parse->setContents( document->textDocument() ->text().toAscii() );
@@ -164,29 +174,42 @@ void KDevBackgroundParser::parseDocuments()
     m_weaver ->enqueue( collection );
 }
 
+void KDevBackgroundParser::cacheModels( uint modelsToCache )
+{
+    m_modelsToCache = modelsToCache;
+}
+
 void KDevBackgroundParser::parseComplete( Job *job )
 {
-    QMutexLocker locker( &m_mutex );
-
     KDevLanguageSupport * langSupport = KDevCore::activeLanguage();
     if ( !langSupport )
         return ;
 
-    if (JobCollection* collection = qobject_cast<JobCollection*>( job ))
-        return collection->deleteLater();
-
-    if (KDevParseJob * parseJob = qobject_cast<KDevParseJob*>( job )) {
-        if (!parseJob->wasSuccessful())
-            // TODO get it to the UI?
-            return;
+    if ( KDevParseJob * parseJob = qobject_cast<KDevParseJob*>( job ) )
+    {
+        if ( !parseJob->wasSuccessful() )
+            return ;
 
         //FIXME abstract out codehighlingting in kdevlanguagesupport
         //langSupport->codeHighlighting()->highlightModel(parseJob->codeModel());
         //langSupport->codeHighlighting()->highlightTree(parseJob->highlight());
 
-        langSupport->codeProxy() ->insertModel(
-                parseJob->document(),
-                parseJob->codeModel() );
+        if ( m_modelsToCache )
+        {
+            m_modelCache.append( qMakePair( parseJob->document(), parseJob->codeModel() ) );
+
+            m_modelsToCache--; //decrement
+
+            if ( !m_modelsToCache && !m_modelCache.isEmpty() ) //decremented to zero
+            {
+                langSupport->codeProxy() ->insertModelCache( m_modelCache );
+                m_modelCache.clear();
+            }
+        }
+        else
+        {
+            langSupport->codeProxy() ->insertModel( parseJob->document(), parseJob->codeModel() );
+        }
         m_url2unit.insert( parseJob->document(), parseJob->AST() );
 
         parseJob->deleteLater();

@@ -32,8 +32,12 @@ KDevDocument::KDevDocument(KParts::Part* part, KDevDocumentController* parent)
 
 KUrl KDevDocument::url() const
 {
-  Q_ASSERT(m_part);
-  return qobject_cast<KParts::ReadOnlyPart*>(m_part)->url();
+    return m_url;
+}
+
+void KDevDocument::setUrl( const KUrl &url )
+{
+    m_url = url;
 }
 
 KParts::Part * KDevDocument::part() const
@@ -44,7 +48,12 @@ KParts::Part * KDevDocument::part() const
 
 KMimeType::Ptr KDevDocument::mimeType() const
 {
-    return KMimeType::findByURL(url());
+    return m_mimeType;
+}
+
+void KDevDocument::setMimeType( KMimeType::Ptr mimeType )
+{
+    m_mimeType = mimeType;
 }
 
 KDevDocumentController * KDevDocument::parent() const
@@ -55,6 +64,13 @@ KDevDocumentController * KDevDocument::parent() const
 bool KDevDocument::isActive() const
 {
   return parent()->activeDocument() == this;
+}
+
+bool KDevDocument::isInitialized() const
+{
+    Q_ASSERT(m_part);
+    KParts::ReadWritePart *rw = qobject_cast<KParts::ReadWritePart*>( m_part );
+    return rw->url().isValid();
 }
 
 bool KDevDocument::isReadWrite() const

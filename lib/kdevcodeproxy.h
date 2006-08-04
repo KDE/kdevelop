@@ -28,6 +28,7 @@
 #include "kdevcodemodel.h"
 
 typedef QList<KDevCodeModel*> CodeModelList;
+typedef QList< QPair<KUrl, KDevCodeModel* > > CodeModelCache;
 
 class KDevCodeAggregate;
 
@@ -58,6 +59,7 @@ public:
     KDevCodeModel *codeModel( const KUrl &url ) const;
     void insertModel( const KUrl &url,
                       KDevCodeModel *model );
+    void insertModelCache( const CodeModelCache &list );
     void deleteModel( const KUrl &url );
 
     KDevCodeProxy::Mode mode() const;

@@ -32,6 +32,7 @@ Boston, MA 02110-1301, USA.
 #include "kdevmainwindow.h"
 #include "kdevlanguagecontroller.h"
 #include "kdevplugincontroller.h"
+#include "kdevbackgroundparser.h"
 #include "kdevdocumentcontroller.h"
 
 KDevProjectController::KDevProjectController( QObject *parent )
@@ -210,10 +211,17 @@ void KDevProjectController::legacyLoading()
     QString language = config->readPathEntry( "PrimaryLanguage", "C++" );
     KDevCore::languageController() ->languageSupport( language );
     QStringList paths = config->readPathListEntry( "OpenDocuments" );
-    foreach( QString doc, paths )
+
+    kDebug() << "Open documents count = " << paths.count() << endl;
+    //Put the backgroundParser in caching mode until all documents are opened
+    KDevCore::backgroundParser() ->cacheModels( paths.count() );
+
+    //Use this iterator for speed on large projects
+    QStringList::const_iterator it = paths.begin();
+    for ( ; it != paths.end(); it++ )
     {
         KDevCore::documentController() ->editDocument(
-            KUrl::fromPath( doc ),
+            KUrl::fromPath( *it ),
             KTextEditor::Cursor::invalid(),
             false );
     }

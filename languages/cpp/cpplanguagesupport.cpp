@@ -148,7 +148,7 @@ void CppLanguageSupport::projectOpened()
 {
     //FIXME This is currently too slow and the parser is prone to crashing
     // when parsing .cpp files.  The Binder seems to be a slow point too.
-    return ;
+//     return ;
 
     // FIXME Add signals slots from the filemanager for:
     // 1. filesAddedToProject
