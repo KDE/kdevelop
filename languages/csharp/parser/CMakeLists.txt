@@ -25,38 +25,12 @@ FIND_PROGRAM(KDEVPG_EXECUTABLE
     PATHS /usr/bin
     DOC "kdev-pg executable")
 
-IF(FLEX_EXECUTABLE)
-    # Add command to generate the lexer.
-    ADD_CUSTOM_COMMAND(
-        OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cc"
-        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.ll"
-        COMMAND ${FLEX_EXECUTABLE}
-        ARGS    -o"csharp_lexer.cc"
-                "csharp_lexer.ll"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        )
-
-    SET(kdevcsharpparser_STAT_SRCS
-        ${kdevcsharpparser_STAT_SRCS}
-        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cc)
-
-    SET_SOURCE_FILES_PROPERTIES(
-        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cc
-        GENERATED
-        )
-ELSE(FLEX_EXECUTABLE)
-    MESSAGE("Assuming existence of the generated lexer file csharp_lexer.cc")
-    SET(kdevcsharpparser_STAT_SRCS
-        ${kdevcsharpparser_STAT_SRCS}
-        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cc)
-ENDIF(FLEX_EXECUTABLE)
-
 IF(KDEVPG_EXECUTABLE)
     # Add commands to generate the parsers.
     ADD_CUSTOM_COMMAND(
         OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/csharp.cpp"
+                "${CMAKE_CURRENT_SOURCE_DIR}/csharp.h"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/csharp.g"
-                ${parser_srcs}
         COMMAND ${KDEVPG_EXECUTABLE}
         ARGS    --adapt-to=kdevelop
                 --output=csharp
@@ -65,8 +39,8 @@ IF(KDEVPG_EXECUTABLE)
         )
     ADD_CUSTOM_COMMAND(
         OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp.cpp"
+                "${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp.h"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp.g"
-                ${parser_srcs}
         COMMAND ${KDEVPG_EXECUTABLE}
         ARGS    --adapt-to=kdevelop
                 --output=csharp_pp
@@ -75,22 +49,54 @@ IF(KDEVPG_EXECUTABLE)
         )
 
     SET(kdevcsharpparser_STAT_SRCS
-        ${kdevcsharpparser_STAT_SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/csharp.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp.cpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp.cpp
+        ${kdevcsharpparser_STAT_SRCS})
 
     SET_SOURCE_FILES_PROPERTIES(
         ${CMAKE_CURRENT_SOURCE_DIR}/csharp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/csharp.h
         ${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp.h
         GENERATED
         )
 ELSE(KDEVPG_EXECUTABLE)
-    MESSAGE("Assuming existence of the generated parser files csharp.cpp and csharp_pp.cpp")
+    MESSAGE("Assuming existence of the generated parser files csharp.[h,cpp] and csharp_pp.[h,cpp]")
     SET(kdevcsharpparser_STAT_SRCS
-        ${kdevcsharpparser_STAT_SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/csharp.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp.cpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/csharp.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp.h
+        ${kdevcsharpparser_STAT_SRCS})
 ENDIF(KDEVPG_EXECUTABLE)
+
+IF(FLEX_EXECUTABLE)
+    # Add command to generate the lexer.
+    ADD_CUSTOM_COMMAND(
+        OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cc"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.ll"
+                "${CMAKE_CURRENT_SOURCE_DIR}/csharp.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp.h"
+        COMMAND ${FLEX_EXECUTABLE}
+        ARGS    -o"csharp_lexer.cc"
+                "csharp_lexer.ll"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+
+    SET(kdevcsharpparser_STAT_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cc
+        ${kdevcsharpparser_STAT_SRCS})
+
+    SET_SOURCE_FILES_PROPERTIES(
+        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cc
+        GENERATED
+        )
+ELSE(FLEX_EXECUTABLE)
+    MESSAGE("Assuming existence of the generated lexer file csharp_lexer.cc")
+    SET(kdevcsharpparser_STAT_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cc
+        ${kdevcsharpparser_STAT_SRCS})
+ENDIF(FLEX_EXECUTABLE)
 
 
 kde4_automoc(${kdevcsharpparser_STAT_SRCS})

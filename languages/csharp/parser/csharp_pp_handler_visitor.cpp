@@ -137,7 +137,7 @@ void handler_visitor::visit_pp_diagnostic(pp_diagnostic_ast* node)
       ::csharp::parser::problem_type diagnostic_type;
       if (node->type == pp_diagnostic::type_error)
         diagnostic_type = ::csharp::parser::error;
-      else if (node->type == pp_diagnostic::type_warning)
+      else // if (node->type == pp_diagnostic::type_warning)
         diagnostic_type = ::csharp::parser::warning;
 
       if (node->message)
