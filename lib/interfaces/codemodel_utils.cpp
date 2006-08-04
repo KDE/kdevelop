@@ -312,6 +312,8 @@ bool resultTypesFit( const FunctionDom & dec, const FunctionDefinitionDom & def 
     }
     
     if( l2.isEmpty() ) return true;
+		
+		return false;
 }
 
 

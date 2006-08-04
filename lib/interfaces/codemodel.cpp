@@ -20,7 +20,6 @@
 #include "codemodel.h"
 #include <kdebug.h>
 
-
 CodeModel::CodeModel()
 {
     wipeout();
@@ -1024,6 +1023,7 @@ VariableModel::VariableModel( CodeModel* model )
 {
     m_access = Public;
     m_static = false;
+		m_isEnumeratorVariable = false;
 }
 
 bool VariableModel::isStatic( ) const
@@ -1044,6 +1044,14 @@ QString VariableModel::type( ) const
 void VariableModel::setType( const QString& type )
 {
     m_type = type;
+}
+
+bool VariableModel::isEnumeratorVariable() const {
+	return m_isEnumeratorVariable;
+}
+
+void VariableModel::setEnumeratorVariable( bool b) {
+	m_isEnumeratorVariable = true;
 }
 
 int FunctionModel::access( ) const
@@ -1347,13 +1355,13 @@ void CodeModel::write( QDataStream & stream ) const
 void VariableModel::read( QDataStream & stream )
 {
     CodeModelItem::read( stream );
-    stream >> m_access >> m_static >> m_type;
+		stream >> m_access >> m_static >> m_type >> m_isEnumeratorVariable;
 }
 
 void VariableModel::write( QDataStream & stream ) const
 {
     CodeModelItem::write( stream );
-    stream << m_access << m_static << m_type;
+		stream << m_access << m_static << m_type << m_isEnumeratorVariable;
 }
 
 // -------------------------------------------------------

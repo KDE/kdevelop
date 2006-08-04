@@ -26,6 +26,7 @@
 Code Model - a memory symbol store.
 */
 
+
 #include <qmap.h>
 #include <qstringlist.h>
 #include <ksharedptr.h>
@@ -1215,6 +1216,11 @@ public:
     @param type The type name.*/
     void setType( const QString& type );
 
+		/**@return If this is an enumerator, the enum it is part of, else an empty string. This is just a hack, necessary because EnumeratorModel is not used at all by the cpp-code-model. */
+		bool isEnumeratorVariable() const;
+
+		void setEnumeratorVariable( bool b );
+
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
@@ -1224,6 +1230,7 @@ private:
     int m_access;
     int m_static;
     QString m_type;
+		int m_isEnumeratorVariable;
 
 private:
     VariableModel( const VariableModel& source );
