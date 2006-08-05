@@ -17,6 +17,7 @@
 #include <kparts/partmanager.h>
 #include <ksavefile.h>
 #include <kstdaction.h>
+#include <kicon.h>
 
 #include "kdevcore.h"
 #include <kdevmainwindow.h>

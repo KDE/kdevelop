@@ -32,7 +32,7 @@
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
+#include <kicon.h>
 #include <kgenericfactory.h>
 
 #include <kdevmainwindow.h>
