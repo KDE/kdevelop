@@ -2228,20 +2228,20 @@ void CppSupportPart::emitFileParsed( QStringList l )
 
 bool CppSupportPart::isHeader( const QString& fileName ) const
 {
-	KMimeType::Ptr ptr = KMimeType::findByPath( fileName );
+	/*KMimeType::Ptr ptr = KMimeType::findByPath( fileName );
 	if ( ptr && m_headerMimeTypes.contains( ptr->name() ) )
-		return true;
+		return true;*/
 	
-	return m_headerExtensions.contains( QFileInfo( fileName ).extension() );
+	return ( m_headerExtensions.findIndex( QFileInfo( fileName ).extension() ) != -1 );
 }
 
 bool CppSupportPart::isSource( const QString& fileName ) const
 {
-	KMimeType::Ptr ptr = KMimeType::findByPath( fileName );
+	/*KMimeType::Ptr ptr = KMimeType::findByPath( fileName );
 	if ( ptr && m_sourceMimeTypes.contains( ptr->name() ) )
-		return true;
+		return true;*/
 	
-	return m_sourceExtensions.contains( QFileInfo( fileName ).extension() );
+	return ( m_sourceExtensions.findIndex( QFileInfo( fileName ).extension() ) != -1 );
 }
 
 void CppSupportPart::gotoDeclarationLine( int line )
