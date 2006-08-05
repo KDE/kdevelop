@@ -81,9 +81,6 @@ GDBOutputWidget::GDBOutputWidget( QWidget *parent, const char *name) :
     connect( m_userGDBCmdEditor, SIGNAL(returnPressed()), SLOT(slotGDBCmd()) );
     connect( m_Interrupt,        SIGNAL(clicked()),       SIGNAL(breakInto()));
 
-    connect( m_gdbView, SIGNAL(showInternalCommandsChanged(bool)),
-             this,      SLOT(slotShowInternalCommandsChanged(bool)));
-
     connect( &updateTimer_, SIGNAL(timeout()),
              this,  SLOT(flushPending()));
 }

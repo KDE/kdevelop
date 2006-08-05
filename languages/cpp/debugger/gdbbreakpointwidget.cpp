@@ -272,7 +272,7 @@ controller_(controller)
     connect( m_table,       SIGNAL(deletePressed()),
              this,          SLOT(slotRemoveBreakpoint()));
     connect( m_table,       SIGNAL(insertPressed()),
-             this,          SLOT(slotAddBreakpoint()));
+             this,          SLOT(slotAddBlankBreakpoint()));
 
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
