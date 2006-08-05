@@ -9,7 +9,7 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kmenu.h>
-#include <kiconloader.h>
+#include <kicon.h>
 #include <kmainwindow.h>
 #include <khtmlview.h>
 #include <khtml_settings.h>
