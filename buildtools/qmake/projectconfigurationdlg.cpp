@@ -5,6 +5,8 @@
  *   cloudtemple@mksat.net                                                 *
  *   Copyright (C) 2003 by Thomas Hasart                                   *
  *   thasart@gmx.de                                                        *
+ *   Copyright (C) 2006 by Andreas Pakulat                                 *
+ *   apaku@gmx.de                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,6 +34,7 @@
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
 #include <qlistview.h>
+#include <qlabel.h>
 #include <iostream>
 #include <qregexp.h>
 #include <qvalidator.h>
@@ -100,7 +103,7 @@ KGuiItem remove()
 	return returnItem;
 }
 
-ProjectConfigurationDlg::ProjectConfigurationDlg(SubqmakeprojectItem *_item,QListView *_prjList,QWidget* parent, const char* name, bool modal, WFlags fl)
+ProjectConfigurationDlg::ProjectConfigurationDlg(SubqmakeprojectItem *_item,QListView *_prjList,bool isQt4Project,QWidget* parent, const char* name, bool modal, WFlags fl)
 : ProjectConfigurationDlgBase(parent,name,modal,fl)
 //=================================================
 {
@@ -145,12 +148,22 @@ ProjectConfigurationDlg::ProjectConfigurationDlg(SubqmakeprojectItem *_item,QLis
   */
       // End remove in kde 3.4
 
+  this->isQt4Project = isQt4Project;
   myProjectItem=_item;
   prjList=_prjList;
 //  m_projectConfiguration = conf;
   m_targetLibraryVersion->setValidator(new QRegExpValidator(
     QRegExp("\\d+(\\.\\d+)?(\\.\\d+)"), this));
-  UpdateControls();
+  updateControls();
+  if ( isQt4Project )
+  {
+    radioDebugReleaseMode->setEnabled( true );
+    checkBuildAll->setEnabled(true);
+    qt4Group->setEnabled( myProjectItem->configuration.m_requirements & QD_QT );
+    rccdir_url->setEnabled( true );
+    rccdir_label->setEnabled( true );
+  }
+
 }
 
 
@@ -192,21 +205,23 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   {
 	if (radioApplication->isChecked())
 	{
-	myProjectItem->configuration.m_template = QTMP_APPLICATION;
-	myProjectItem->setPixmap(0,SmallIcon("qmake_app"));
+		myProjectItem->configuration.m_template = QTMP_APPLICATION;
+		myProjectItem->setPixmap(0,SmallIcon("qmake_app"));
 	}
 	else if (radioLibrary->isChecked())
 	{
-	myProjectItem->configuration.m_template = QTMP_LIBRARY;
-	if (staticRadio->isOn())
-	myProjectItem->configuration.m_requirements += QD_STATIC;
-	if (sharedRadio->isOn()){
-	myProjectItem->configuration.m_requirements += QD_SHARED;
-	myProjectItem->configuration.m_libraryversion = m_targetLibraryVersion->text();
-	}
-	if (pluginRadio->isOn())
-	myProjectItem->configuration.m_requirements += QD_PLUGIN;
-	myProjectItem->setPixmap(0,SmallIcon("qmake_lib"));
+		myProjectItem->configuration.m_template = QTMP_LIBRARY;
+		if (staticRadio->isOn())
+			myProjectItem->configuration.m_requirements += QD_STATIC;
+		else if (sharedRadio->isOn()){
+			myProjectItem->configuration.m_requirements += QD_SHARED;
+			myProjectItem->configuration.m_libraryversion = m_targetLibraryVersion->text();
+		}
+		if (checkPlugin->isOn())
+		myProjectItem->configuration.m_requirements += QD_PLUGIN;
+		if ( checkDesigner->isChecked() )
+			myProjectItem->configuration.m_requirements += QD_DESIGNER;
+		myProjectItem->setPixmap(0,SmallIcon("qmake_lib"));
 	}
 	else if (radioSubdirs->isChecked())
 	{
@@ -219,7 +234,9 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     myProjectItem->configuration.m_buildMode = QBM_DEBUG;
   if (radioReleaseMode->isChecked())
     myProjectItem->configuration.m_buildMode = QBM_RELEASE;
-
+  if ( radioDebugReleaseMode->isChecked() )
+    myProjectItem->configuration.m_buildMode = QBM_DEBUG_AND_RELEASE;
+  
   // requirements
   if (exceptionCheck->isChecked())
     myProjectItem->configuration.m_requirements += QD_EXCEPTIONS;
@@ -245,21 +262,49 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   {
     myProjectItem->configuration.m_requirements += QD_PKGCONF;
   }
-  if (checkDll->isChecked() )
-  {
-    myProjectItem->configuration.m_requirements += QD_DLL;
-  }
   if (checkConsole->isChecked() )
   {
     myProjectItem->configuration.m_requirements += QD_CONSOLE;
   }
   if (checkPCH->isChecked() )
     myProjectItem->configuration.m_requirements += QD_PCH;
-
   // Warnings
   myProjectItem->configuration.m_warnings = QWARN_OFF;
   if (checkWarning->isChecked())
     myProjectItem->configuration.m_warnings = QWARN_ON;
+ 
+  //Qt4 libs
+  if ( isQt4Project )
+  {
+    if ( checkTestlib->isChecked() )
+      myProjectItem->configuration.m_requirements += QD_TESTLIB;
+    if ( checkAssistant->isChecked() )
+      myProjectItem->configuration.m_requirements += QD_ASSISTANT;
+    if ( checkUiTools->isChecked() )
+      myProjectItem->configuration.m_requirements += QD_UITOOLS;
+    if ( checkQDBus->isChecked() )
+      myProjectItem->configuration.m_requirements += QD_DBUS;
+    if ( checkBuildAll->isChecked() )
+      myProjectItem->configuration.m_requirements += QD_BUILDALL;
+  
+    myProjectItem->configuration.m_qt4libs = 0;
+    if ( checkQt4Core->isChecked() )
+      myProjectItem->configuration.m_qt4libs += Q4L_CORE;
+    if ( checkQt4Gui->isChecked() )
+      myProjectItem->configuration.m_qt4libs += Q4L_GUI;
+    if ( checkQt4SQL->isChecked() )
+      myProjectItem->configuration.m_qt4libs += Q4L_SQL;
+    if ( checkQt4SVG->isChecked() )
+      myProjectItem->configuration.m_qt4libs += Q4L_SVG;
+    if ( checkQt4XML->isChecked() )
+      myProjectItem->configuration.m_qt4libs += Q4L_XML;
+    if ( checkQt4Network->isChecked() )
+      myProjectItem->configuration.m_qt4libs += Q4L_NETWORK;
+    if ( checkQt3Support->isChecked() )
+      myProjectItem->configuration.m_qt4libs += Q4L_QT3;
+    if ( checkQt4OpenGL->isChecked() )
+      myProjectItem->configuration.m_qt4libs += Q4L_OPENGL;
+  }
 
   myProjectItem->configuration.m_target = "";
 /*  if ((m_targetPath->text().simplifyWhiteSpace()!="" ||
@@ -427,7 +472,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
 }
 
 
-void ProjectConfigurationDlg::UpdateControls()
+void ProjectConfigurationDlg::updateControls()
 //============================================
 {
   QRadioButton *activateRadiobutton=NULL;
@@ -456,9 +501,9 @@ void ProjectConfigurationDlg::UpdateControls()
 	}
 
 	if (myProjectItem->configuration.m_requirements & QD_PLUGIN)
-		pluginRadio->setChecked(true);
-	if (myProjectItem->configuration.m_requirements & QD_DLL )
-		checkDll->setChecked(true);
+		checkPlugin->setChecked(true);
+	if ( myProjectItem->configuration.m_requirements & QD_DESIGNER )
+		checkDesigner->setChecked( true );
 	if (myProjectItem->configuration.m_requirements & QD_LIBTOOL )
 		checkLibtool->setChecked(true);
 	if (myProjectItem->configuration.m_requirements & QD_PKGCONF )
@@ -480,10 +525,13 @@ void ProjectConfigurationDlg::UpdateControls()
     case QBM_RELEASE:
       activateRadiobutton = radioReleaseMode;
       break;
+    case QBM_DEBUG_AND_RELEASE:
+      activateRadiobutton = radioDebugReleaseMode;
+      break;
   }
   if (activateRadiobutton)
     activateRadiobutton->setChecked(true);
-
+  
   // Requirements
   if (myProjectItem->configuration.m_requirements & QD_QT)
     checkQt->setChecked(true);
@@ -507,6 +555,43 @@ void ProjectConfigurationDlg::UpdateControls()
   if (myProjectItem->configuration.m_warnings == QWARN_ON)
   {
     checkWarning->setChecked(true);
+  }
+
+  //Qt4 libs
+  if ( isQt4Project )
+  {
+
+    if ( myProjectItem->configuration.m_requirements & QD_ASSISTANT )
+      checkAssistant->setChecked( true );
+    if ( myProjectItem->configuration.m_requirements & QD_TESTLIB )
+      checkTestlib->setChecked( true );
+    if ( myProjectItem->configuration.m_requirements & QD_UITOOLS )
+      checkUiTools->setChecked( true );
+    if ( myProjectItem->configuration.m_requirements & QD_DBUS )
+      checkQDBus->setChecked( true );
+    if ( myProjectItem->configuration.m_requirements & QD_BUILDALL )
+      checkBuildAll->setChecked( true );
+    
+    if ( myProjectItem->configuration.m_qt4libs & Q4L_CORE )
+      checkQt4Core->setChecked( true );
+    else
+      checkQt4Core->setChecked( false );
+    if ( myProjectItem->configuration.m_qt4libs & Q4L_GUI )
+      checkQt4Gui->setChecked( true );
+    else
+      checkQt4Gui->setChecked( false );
+    if ( myProjectItem->configuration.m_qt4libs & Q4L_SQL )
+      checkQt4SQL->setChecked( true );
+    if ( myProjectItem->configuration.m_qt4libs & Q4L_XML )
+      checkQt4XML->setChecked( true );
+    if ( myProjectItem->configuration.m_qt4libs & Q4L_NETWORK )
+      checkQt4Network->setChecked( true );
+    if ( myProjectItem->configuration.m_qt4libs & Q4L_SVG )
+      checkQt4SVG->setChecked( true );
+    if ( myProjectItem->configuration.m_qt4libs & Q4L_OPENGL )
+      checkQt4OpenGL->setChecked( true );
+    if ( myProjectItem->configuration.m_qt4libs & Q4L_QT3 )
+      checkQt3Support->setChecked( true );
   }
 
   //makefile
@@ -911,8 +996,21 @@ void ProjectConfigurationDlg::slotStaticLibClicked(int)
     libAddTab->setEnabled(true);
     libPathTab->setEnabled(true);
   }*/
+  if ( staticRadio->isChecked() )
+  {
+    checkPlugin->setEnabled( false );
+    checkDesigner->setEnabled( false );
+  }
 }
 
+void ProjectConfigurationDlg::sharedLibChanged()
+{
+  if ( sharedRadio->isChecked() )
+  {
+    checkPlugin->setEnabled( true );
+    checkDesigner->setEnabled( checkPlugin->isChecked() );
+  }
+}
 
 void ProjectConfigurationDlg::templateLibraryClicked(int)
 {
@@ -1367,5 +1465,27 @@ void ProjectConfigurationDlg::newCustomVariableActive( )
 	customVariableData->setText(item->text(1));
 	customVariableName->setFocus();
 	customVariableName->setEnabled(false);
+  }
+}
+
+void ProjectConfigurationDlg::checkPluginChanged( )
+{
+  if ( checkPlugin->isChecked() && isQt4Project )
+  {
+    checkDesigner->setEnabled( true );
+  }else
+  {
+    checkDesigner->setEnabled( false );
+  }
+}
+
+void ProjectConfigurationDlg::qtRequirementChanged()
+{
+  if ( checkQt->isChecked() && isQt4Project)
+  {
+    qt4Group->setEnabled( true );
+  }else
+  {
+    qt4Group->setEnabled( false );
   }
 }

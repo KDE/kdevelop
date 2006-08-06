@@ -9,6 +9,8 @@
  *   cloudtemple@mksat.net                                                 *
  *   Copyright (C) 2003 by Thomas Hasart                                   *
  *   thasart@gmx.de                                                        *
+ *   Copyright (C) 2006 by Andreas Pakulat                                 *
+ *   apaku@gmx.de                                                          *
  *                                                                         *
  *   Part of this file is taken from Qt Designer.                          *
  *                                                                         *
@@ -247,6 +249,8 @@ void SubqmakeprojectItem::init()
   configuration.m_warnings = QWARN_ON;
   configuration.m_buildMode = QBM_RELEASE;
   configuration.m_requirements = QD_QT;
+  configuration.m_qt4libs += Q4L_CORE;
+  configuration.m_qt4libs += Q4L_GUI;
   groups.setAutoDelete(true);
   if (scopeString.isEmpty())
   {
@@ -291,6 +295,8 @@ GroupItem::GroupType GroupItem::groupTypeForExtension(const QString &ext)
         return Yaccsources;
     else if (ext == "ts")
         return Translations;
+    else if ( ext == "qrc" )
+        return Resources;
     else
         return NoType;
 }
@@ -326,6 +332,10 @@ void GroupItem::groupTypeMeanings(GroupItem::GroupType type, QString& title, QSt
             title = i18n("Images");
             ext = "*.jpg *.jpeg *.png *.xpm *.gif *.bmp";
             break;
+	case GroupItem::Resources:
+	    title = i18n("Resources");
+	    ext = "*.qrc";
+	    break;
         case GroupItem::Distfiles:
             title = i18n("Distfiles");
             ext = "*";
@@ -670,7 +680,7 @@ QStringList TrollProjectWidget::allFiles()
         for (QPtrListIterator<GroupItem> tit(spitem->groups); tit.current(); ++tit) {
             GroupItem::GroupType type = (*tit)->groupType;
 
-            if (type == GroupItem::Sources || type == GroupItem::Headers || type == GroupItem::Forms || type == GroupItem::Images ||
+            if (type == GroupItem::Sources || type == GroupItem::Headers || type == GroupItem::Forms || type == GroupItem::Images || type == GroupItem::Resources ||
             type ==  GroupItem::Lexsources || type ==  GroupItem::Yaccsources || type == GroupItem::Distfiles ||
         type ==  GroupItem::Translations || type ==  GroupItem::IDLs || type ==  GroupItem::InstallObject  ) {
         for (QPtrListIterator<FileItem> fit(tit.current()->files); fit.current(); ++fit){
@@ -928,8 +938,8 @@ void TrollProjectWidget::slotConfigureProject()
 {
 //  ProjectOptionsDlg *d = new ProjectOptionsDlg(m_part,this);
 //  d->exec();
-
-  ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(m_shownSubproject,overview);
+  
+  ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(m_shownSubproject,overview,m_part->isQt4Project());
   if (dlg->exec() == QDialog::Accepted)
   {
     updateProjectConfiguration(m_shownSubproject);
@@ -1226,7 +1236,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     }
     else if (r == idProjectConfiguration)
     {
-      ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(spitem,overview);
+      ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(spitem,overview,m_part->isQt4Project());
       if (dlg->exec() == QDialog::Accepted)
         updateProjectConfiguration(spitem);
     }
@@ -1285,6 +1295,9 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
     configList.append("release");
   else if (item->configuration.m_buildMode == QBM_DEBUG)
     configList.append("debug");
+  else if (item->configuration.m_buildMode == QBM_DEBUG_AND_RELEASE)
+    configList.append("debug_and_release");
+
   if (item->configuration.m_warnings == QWARN_ON)
     configList.append("warn_on");
   else if (item->configuration.m_warnings == QWARN_OFF)
@@ -1311,9 +1324,22 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
     configList.append("rtti");
   if (item->configuration.m_requirements & QD_ORDERED)
     configList.append("ordered");
+  
+  //Qt4 specific
+  if ( m_part->isQt4Project() )
+  {
+    if ( item->configuration.m_requirements & QD_BUILDALL )
+      configList.append( "build_all" );
+    if ( item->configuration.m_requirements & QD_TESTLIB )
+      configList.append( "qtestlib" );
+    if ( item->configuration.m_requirements & QD_UITOOLS )
+      configList.append( "uitools" );
+    if ( item->configuration.m_requirements & QD_ASSISTANT )
+      configList.append( "assistant" );
+    if ( item->configuration.m_requirements & QD_DBUS )
+      configList.append( "dbus" );
+  }
 
-  if (item->configuration.m_requirements & QD_DLL )
-    configList.append("dll");
   if (item->configuration.m_requirements & QD_LIBTOOL )
   {
     configList.append("create_libtool");
@@ -1334,6 +1360,43 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
     Buffer->setValues("CONFIG",configList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   else
     Buffer->setValues("CONFIG",configList,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+
+  //Qt4 libs, if a qt4 project
+  if ( m_part->isQt4Project() )
+  {
+    QStringList removeList;
+    QStringList qt4libs;
+    Buffer->removeValues( "QT" );
+    if ( !(  item->configuration.m_qt4libs & Q4L_CORE ) )
+      removeList.append( "core" );
+    if ( !(  item->configuration.m_qt4libs & Q4L_GUI ) )
+      removeList.append( "gui" );
+    if (  item->configuration.m_qt4libs & Q4L_SVG )
+      qt4libs.append( "svg" );
+    if (  item->configuration.m_qt4libs & Q4L_XML )
+      qt4libs.append( "xml" );
+    if (  item->configuration.m_qt4libs & Q4L_SQL )
+      qt4libs.append( "sql" );
+    if (  item->configuration.m_qt4libs & Q4L_OPENGL )
+      qt4libs.append( "opengl" );
+    if (  item->configuration.m_qt4libs & Q4L_NETWORK )
+      qt4libs.append( "network" );
+    if (  item->configuration.m_qt4libs & Q4L_QT3 )
+      qt4libs.append( "qt3support" );
+    
+    if (item->configuration.m_inheritconfig == true)
+    {
+        if ( !qt4libs.isEmpty() )
+            Buffer->setValues( "QT", qt4libs, FileBuffer::VSM_APPEND, VALUES_PER_ROW );
+        if ( !removeList.isEmpty() )
+            Buffer->setValues( "QT", removeList, FileBuffer::VSM_EXCLUDE, VALUES_PER_ROW );
+    }else
+    {
+        Buffer->setValues( "QT", qt4libs, FileBuffer::VSM_RESET, VALUES_PER_ROW );
+    }
+
+
+  }
 
   // Config strings
   Buffer->removeValues("DESTDIR");
@@ -1468,9 +1531,17 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   subBuffer->setValues("IDLS",spitem->idls,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   subBuffer->setValues("IDLS",spitem->idls_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
 
-  subBuffer->removeValues("IMAGES");
-  subBuffer->setValues("IMAGES",spitem->images,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  subBuffer->setValues("IMAGES",spitem->images_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
+  if ( m_part->isQt4Project() )
+  {
+    subBuffer->removeValues("RESOURCES");
+    subBuffer->setValues("RESOURCES",spitem->resources,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+    subBuffer->setValues("RESOURCES",spitem->resources_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
+  }else
+  {
+    subBuffer->removeValues("IMAGES");
+    subBuffer->setValues("IMAGES",spitem->images,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+    subBuffer->setValues("IMAGES",spitem->images_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
+  }
 
   subBuffer->removeValues("DISTFILES");
   subBuffer->setValues("DISTFILES",spitem->distfiles,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
@@ -1605,6 +1676,9 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QStri
     case GroupItem::Images:
       titem->owner->images.append(filename);
       break;
+    case GroupItem::Resources:
+      titem->owner->resources.append(filename);
+      break;
     case GroupItem::Distfiles:
       titem->owner->distfiles.append(filename);
       break;
@@ -1672,6 +1746,9 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype, 
       break;
     case GroupItem::Images:
       m_shownSubproject->images.append(filename);
+      break;
+    case GroupItem::Resources:
+      m_shownSubproject->resources.append(filename);
       break;
     case GroupItem::Distfiles:
       m_shownSubproject->distfiles.append(filename);
@@ -2308,7 +2385,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                     fcext = "h";
                     break;
                 case GroupItem::Forms:
-                    if ( DomUtil::readIntEntry( *m_part->projectDom(), "/kdevcppsupport/qt/version", 3 ) == 3 )
+                    if ( !m_part->isQt4Project() )
                         fcext = "ui-widget";
                     else
                         fcext = "ui-widget-qt4";
@@ -2322,6 +2399,9 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                 case GroupItem::Yaccsources:
                     fcext = "y";
                     break;
+		case GroupItem::Resources:
+		    fcext = "qrc";
+		    break;
                 default:
                     fcext = QString::null;
                 }
@@ -2413,7 +2493,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           popup.setWhatsThis(idSubclassWidget, i18n("<b>Subclass widget</b><p>Launches <b>Subclassing</b> wizard. "
                            "It allows to create a subclass from the class defined in .ui file. "
                            "There is also possibility to implement slots and functions defined in the base class."));
-      if ( DomUtil::readIntEntry( *m_part->projectDom(), "kdevcppsupport/qt/version", 3 ) == 3 )
+      if ( !m_part->isQt4Project() )
       {
           idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h"),i18n("Open ui.h File"));
               popup.setWhatsThis(idViewUIH, i18n("<b>Open ui.h file</b><p>Opens .ui.h file associated with the selected .ui."));
@@ -2634,6 +2714,9 @@ void TrollProjectWidget::removeFile(SubqmakeprojectItem *spitem, FileItem *fitem
       case GroupItem::Images:
         spitem->images.remove(fitem->text(0));
         break;
+      case GroupItem::Resources:
+        spitem->resources.remove(fitem->text(0));
+        break;
       case GroupItem::Distfiles:
         spitem->distfiles.remove(fitem->text(0));
         break;
@@ -2729,7 +2812,10 @@ void TrollProjectWidget::parseScope(SubqmakeprojectItem *item, QString scopeStri
     subBuffer->getValues("HEADERS",item->headers,item->headers_exclude);
     subBuffer->getValues("LEXSOURCES",item->lexsources,item->lexsources_exclude);
     subBuffer->getValues("YACCSOURCES",item->yaccsources,item->yaccsources_exclude);
-    subBuffer->getValues("IMAGES",item->images,item->images_exclude);
+    if ( m_part->isQt4Project() )
+    	subBuffer->getValues("RESOURCES", item->resources, item->resources_exclude);
+    else
+    	subBuffer->getValues("IMAGES",item->images,item->images_exclude);
     subBuffer->getValues("DISTFILES",item->distfiles,item->distfiles_exclude);
     subBuffer->getValues("TRANSLATIONS",item->translations,item->translations_exclude);
     subBuffer->getValues("IDLS",item->idls,item->idls_exclude);
@@ -2812,17 +2898,36 @@ void TrollProjectWidget::parseScope(SubqmakeprojectItem *item, QString scopeStri
             titem->files.append(fitem);
         }
     }
-    titem = createGroupItem(GroupItem::Images, "IMAGES",scopeString);
-    titem->owner = item;
-    item->groups.append(titem);
-    if (!item->images.isEmpty()) {
-        QStringList l = item->images;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            FileItem *fitem = createFileItem(*it);
-            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
-            titem->files.append(fitem);
-        }
+    if ( m_part->isQt4Project() )
+    {
+        titem = createGroupItem(GroupItem::Resources, "RESOURCES",scopeString);
+        titem->owner = item;
+        item->groups.append(titem);
+        if (!item->resources.isEmpty()) {
+            QStringList l = item->resources;
+            QStringList::Iterator it;
+            for (it = l.begin(); it != l.end(); ++it) {
+                FileItem *fitem = createFileItem(*it);
+                fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
+                titem->files.append(fitem);
+            }
+	}
+
+    }
+    else
+    {
+        titem = createGroupItem(GroupItem::Images, "IMAGES",scopeString);
+        titem->owner = item;
+        item->groups.append(titem);
+        if (!item->images.isEmpty()) {
+            QStringList l = item->images;
+            QStringList::Iterator it;
+            for (it = l.begin(); it != l.end(); ++it) {
+                FileItem *fitem = createFileItem(*it);
+                fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
+                titem->files.append(fitem);
+            }
+	}
     }
     titem = createGroupItem(GroupItem::Translations, "TRANSLATIONS",scopeString);
     titem->owner = item;
@@ -2922,6 +3027,7 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
     item->configuration.m_buildMode = QBM_RELEASE;
     item->configuration.m_warnings = QWARN_ON;
     item->configuration.m_requirements = 0;
+    item->configuration.m_qt4libs = Q4L_GUI+Q4L_CORE;
     item->setPixmap(0,SmallIcon("qmake_app"));
 
     // retrieve the project configuration
@@ -2971,6 +3077,10 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
         item->configuration.m_buildMode = QBM_DEBUG;
       if (lst.find("release")!=lst.end())
         item->configuration.m_buildMode = QBM_RELEASE;
+      if (m_part->isQt4Project() && lst.find("debug_and_release" )!=lst.end())
+      {
+        item->configuration.m_buildMode = QBM_DEBUG_AND_RELEASE;
+      }
       // config warnings on/off
       if (lst.find("warn_on")!=lst.end())
         item->configuration.m_warnings = QWARN_ON;
@@ -2991,7 +3101,10 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
       if (lst.find("dll")!=lst.end())
         item->configuration.m_requirements += QD_SHARED;
       if (lst.find("plugin")!=lst.end())
+      {
         item->configuration.m_requirements += QD_PLUGIN;
+        item->configuration.m_requirements += QD_SHARED;
+      }
       if (lst.find("exceptions")!=lst.end())
         item->configuration.m_requirements += QD_EXCEPTIONS;
       if (lst.find("stl")!=lst.end())
@@ -3002,15 +3115,49 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
         item->configuration.m_requirements += QD_ORDERED;
       if (lst.find("console")!=lst.end())
         item->configuration.m_requirements += QD_CONSOLE;
-      if (lst.find("dll")!=lst.end())
-        item->configuration.m_requirements += QD_DLL;
       if (lst.find("create_libtool")!=lst.end())
         item->configuration.m_requirements += QD_LIBTOOL;
       if (lst.find("create_pkgconf")!=lst.end())
         item->configuration.m_requirements += QD_PKGCONF;
       if (lst.find("precompile_header")!=lst.end())
 	item->configuration.m_requirements += QD_PCH;
+      if ( m_part->isQt4Project() )
+      {
+        if (lst.find( "uitools" )!=lst.end())
+          item->configuration.m_requirements += QD_UITOOLS;
+        if (lst.find( "assistant" )!=lst.end())
+          item->configuration.m_requirements += QD_ASSISTANT;
+        if (lst.find( "qtestlib" )!=lst.end())
+          item->configuration.m_requirements += QD_TESTLIB;
+        if (lst.find( "dbus" )!=lst.end())
+          item->configuration.m_requirements += QD_DBUS;
+        if ( lst.find( "build_all" )!=lst.end() )
+          item->configuration.m_requirements += QD_BUILDALL ;
+      }
     }
+    
+    //QT from Qt4
+    if ( m_part->isQt4Project() )
+    {
+      item->m_FileBuffer.getValues("QT",lst,minusListDummy);
+      if ( minusListDummy.find( "gui" )!=minusListDummy.end() )
+        item->configuration.m_qt4libs -= Q4L_GUI;
+      if ( minusListDummy.find( "core" )!=minusListDummy.end() )
+        item->configuration.m_qt4libs -= Q4L_CORE;
+      if ( lst.find( "sql" )!=lst.end() )
+        item->configuration.m_qt4libs += Q4L_SQL;
+      if ( lst.find( "xml" )!=lst.end() )
+        item->configuration.m_qt4libs += Q4L_XML;
+      if ( lst.find( "svg" )!=lst.end() )
+        item->configuration.m_qt4libs += Q4L_SVG;
+      if ( lst.find( "network" )!=lst.end() )
+        item->configuration.m_qt4libs += Q4L_NETWORK;
+      if ( lst.find( "opengl" )!=lst.end() )
+        item->configuration.m_qt4libs += Q4L_OPENGL;
+      if ( lst.find( "qt3support" )!=lst.end() )
+        item->configuration.m_qt4libs += Q4L_QT3;
+    }
+
     item->m_FileBuffer.getValues("DESTDIR",lst,minusListDummy);
     if (lst.count())
       item->configuration.m_destdir = lst[0];

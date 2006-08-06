@@ -635,6 +635,11 @@ QStringList TrollProjectPart::distFiles() const
 	return sourceList + files;
 }
 
+bool TrollProjectPart::isQt4Project() const
+{
+	return ( DomUtil::readIntEntry( *projectDom(), "kdevcppsupport/qt/version", 3 ) == 4 );
+}
+
 #include "trollprojectpart.moc"
 
 

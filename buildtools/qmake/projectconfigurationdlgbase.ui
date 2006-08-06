@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>578</width>
-            <height>424</height>
+            <width>536</width>
+            <height>680</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -68,6 +68,12 @@
             <property name="name">
                 <cstring>TabBuild</cstring>
             </property>
+            <property name="enabled">
+                <bool>true</bool>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
             <widget class="QWidget">
                 <property name="name">
                     <cstring>buildTab</cstring>
@@ -75,57 +81,100 @@
                 <attribute name="title">
                     <string>&amp;Basics</string>
                 </attribute>
-                <grid>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QButtonGroup" row="0" column="0">
+                    <widget class="QButtonGroup">
                         <property name="name">
                             <cstring>groupTemplate</cstring>
                         </property>
                         <property name="title">
                             <string>Template</string>
                         </property>
-                        <vbox>
+                        <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>radioApplication</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Application</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Create an application</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton">
+                            <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="3">
                                 <property name="name">
                                     <cstring>radioLibrary</cstring>
                                 </property>
                                 <property name="text">
                                     <string>Librar&amp;y</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+Y</string>
+                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Create a library</string>
                                 </property>
                             </widget>
-                            <widget class="QRadioButton">
+                            <widget class="QRadioButton" row="2" column="0">
                                 <property name="name">
                                     <cstring>radioSubdirs</cstring>
                                 </property>
                                 <property name="text">
                                     <string>S&amp;ubdirectories</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
+                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>This project holds subdirectories</string>
                                 </property>
                             </widget>
-                        </vbox>
+                            <widget class="QCheckBox" row="2" column="1">
+                                <property name="name">
+                                    <cstring>checkOrdered</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="text">
+                                    <string>Ord&amp;ered</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+E</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Support required for X11 application or library</string>
+                                </property>
+                            </widget>
+                            <spacer row="2" column="2">
+                                <property name="name">
+                                    <cstring>spacer15</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>101</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="3">
+                                <property name="name">
+                                    <cstring>radioApplication</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Application</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+A</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Create an application</string>
+                                </property>
+                            </widget>
+                        </grid>
                     </widget>
-                    <widget class="QGroupBox" row="1" column="0">
+                    <widget class="QGroupBox">
                         <property name="name">
                             <cstring>GroupBox1</cstring>
                         </property>
@@ -189,24 +238,7 @@
                             </widget>
                         </grid>
                     </widget>
-                    <spacer row="4" column="0">
-                        <property name="name">
-                            <cstring>Spacer3</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>120</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QGroupBox" row="2" column="0">
+                    <widget class="QGroupBox">
                         <property name="name">
                             <cstring>groupBox7</cstring>
                         </property>
@@ -243,7 +275,7 @@
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QGroupBox" row="3" column="0">
+                    <widget class="QGroupBox">
                         <property name="name">
                             <cstring>groupBox6</cstring>
                         </property>
@@ -261,7 +293,24 @@
                             </widget>
                         </grid>
                     </widget>
-                </grid>
+                    <spacer>
+                        <property name="name">
+                            <cstring>Spacer3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>120</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -279,10 +328,16 @@
                             <cstring>checkDontInheritConfig</cstring>
                         </property>
                         <property name="text">
-                            <string>Do &amp;not inherit the configuration options of top level projects</string>
+                            <string>Do &amp;not inherit the default configuration options</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+N</string>
                         </property>
                         <property name="toolTip" stdset="0">
-                            <string></string>
+                            <string>Reset the configuration options in the profile</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Checking this option resets the configuration variables in the project file. Unchecking appends the selected options to the variables</string>
                         </property>
                     </widget>
                     <widget class="QButtonGroup">
@@ -295,44 +350,104 @@
                         <property name="toolTip" stdset="0">
                             <string>Set project to be built in release mode</string>
                         </property>
-                        <hbox>
+                        <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QRadioButton">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>radioDebugMode</cstring>
+                                    <cstring>layout147</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>&amp;Debug</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Set project to be built in debug mode</string>
-                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>radioDebugMode</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Debug</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+D</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Set project to be built in debug mode</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>radioReleaseMode</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Release</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+R</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Set project to be built in release mode</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>radioDebugReleaseMode</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>Debug &amp;&amp; Release</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Set project to be built in debug_and_release mode</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
                             </widget>
-                            <widget class="QRadioButton">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>radioReleaseMode</cstring>
+                                    <cstring>layout30</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>&amp;Release</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Set project to be built in release mode</string>
-                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkWarning</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Enable &amp;warnings</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+W</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Show compiler warnings</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkBuildAll</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>Build All</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Builds Debug and Release version if Debug&amp;Release is configured</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
                             </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>checkWarning</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Enable &amp;warnings</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Show compiler warnings</string>
-                                </property>
-                            </widget>
-                        </hbox>
+                        </vbox>
                     </widget>
                     <widget class="QButtonGroup">
                         <property name="name">
@@ -345,15 +460,15 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QCheckBox" row="0" column="0">
+                            <widget class="QCheckBox" row="2" column="0">
                                 <property name="name">
-                                    <cstring>checkQt</cstring>
+                                    <cstring>stlCheck</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Qt</string>
+                                    <string>&amp;STL</string>
                                 </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Requires the Qt header files/library</string>
+                                <property name="accel">
+                                    <string>Alt+S</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="1" column="0">
@@ -363,8 +478,39 @@
                                 <property name="text">
                                     <string>Open&amp;GL</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+G</string>
+                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Requires the OpenGL (or Mesa) headers/libraries</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="0">
+                                <property name="name">
+                                    <cstring>checkQt</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Qt</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+Q</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Requires the Qt header files/library</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="1">
+                                <property name="name">
+                                    <cstring>checkThread</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Thread</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+T</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Requires support for multi-threaded application or library.</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="1" column="1">
@@ -381,42 +527,18 @@
                                     <string>Support required for X11 application or library</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="0" column="1">
-                                <property name="name">
-                                    <cstring>checkThread</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Thread</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Requires support for multi-threaded application or library.</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="0" column="2">
-                                <property name="name">
-                                    <cstring>exceptionCheck</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>E&amp;xceptions </string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="2" column="1" rowspan="2" colspan="2">
+                            <widget class="QCheckBox" row="2" column="1">
                                 <property name="name">
                                     <cstring>rttiCheck</cstring>
                                 </property>
                                 <property name="text">
                                     <string>RTT&amp;I</string>
                                 </property>
-                            </widget>
-                            <widget class="QCheckBox" row="2" column="0" rowspan="2" colspan="1">
-                                <property name="name">
-                                    <cstring>stlCheck</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;STL</string>
+                                <property name="accel">
+                                    <string>Alt+I</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="3" column="2">
+                            <widget class="QCheckBox" row="2" column="2">
                                 <property name="name">
                                     <cstring>checkPCH</cstring>
                                 </property>
@@ -428,6 +550,9 @@
                                 <property name="name">
                                     <cstring>checkConsole</cstring>
                                 </property>
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
                                 <property name="text">
                                     <string>Console</string>
                                 </property>
@@ -435,7 +560,136 @@
                                     <string></string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Requires support for multi-threaded application or library.</string>
+                                    <string>Check to build a win32 console app</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="2">
+                                <property name="name">
+                                    <cstring>exceptionCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>E&amp;xceptions </string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+X</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup">
+                        <property name="name">
+                            <cstring>qt4Group</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="title">
+                            <string>Qt4 Libraries</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox" row="1" column="1">
+                                <property name="name">
+                                    <cstring>checkQt4OpenGL</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>OpenGL</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="0">
+                                <property name="name">
+                                    <cstring>checkQt4Gui</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Gui</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="0">
+                                <property name="name">
+                                    <cstring>checkQt4Core</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Core</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="2">
+                                <property name="name">
+                                    <cstring>checkQt4SQL</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>SQL</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="2">
+                                <property name="name">
+                                    <cstring>checkQt4SVG</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>SVG</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="2" column="0">
+                                <property name="name">
+                                    <cstring>checkQt4XML</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>XML</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="3">
+                                <property name="name">
+                                    <cstring>checkQt3Support</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Qt3 Support</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="3">
+                                <property name="name">
+                                    <cstring>checkQDBus</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>QDBus (Qt4.2)</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="2" column="2">
+                                <property name="name">
+                                    <cstring>checkTestlib</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>QtTest</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="2" column="3">
+                                <property name="name">
+                                    <cstring>checkAssistant</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>QtAssistant</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="2" column="1">
+                                <property name="name">
+                                    <cstring>checkUiTools</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>QtUiTools</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="1">
+                                <property name="name">
+                                    <cstring>checkQt4Network</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Network</string>
                                 </property>
                             </widget>
                         </grid>
@@ -448,7 +702,7 @@
                             <string>Library Options</string>
                         </property>
                         <property name="exclusive">
-                            <bool>true</bool>
+                            <bool>false</bool>
                         </property>
                         <vbox>
                             <property name="name">
@@ -456,7 +710,7 @@
                             </property>
                             <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>layout26</cstring>
+                                    <cstring>layout59</cstring>
                                 </property>
                                 <hbox>
                                     <property name="name">
@@ -467,7 +721,10 @@
                                             <cstring>staticRadio</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>St&amp;atic library</string>
+                                            <string>Build as st&amp;atic library</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+A</string>
                                         </property>
                                         <property name="checked">
                                             <bool>true</bool>
@@ -478,15 +735,48 @@
                                             <cstring>sharedRadio</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>S&amp;hared library</string>
+                                            <string>Build as s&amp;hared library</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+H</string>
                                         </property>
                                     </widget>
-                                    <widget class="QRadioButton">
+                                </hbox>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout60</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QCheckBox">
                                         <property name="name">
-                                            <cstring>pluginRadio</cstring>
+                                            <cstring>checkPlugin</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
                                         </property>
                                         <property name="text">
                                             <string>Pl&amp;ugin</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+U</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkDesigner</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>Designer Plugin</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
                                         </property>
                                     </widget>
                                 </hbox>
@@ -509,6 +799,9 @@
                                         <property name="text">
                                             <string>Ma&amp;ke libtool archive</string>
                                         </property>
+                                        <property name="accel">
+                                            <string>Alt+K</string>
+                                        </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Support required for X11 application or library</string>
                                         </property>
@@ -525,41 +818,6 @@
                                         </property>
                                         <property name="accel">
                                             <string></string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout28</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>checkOrdered</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>true</bool>
-                                        </property>
-                                        <property name="text">
-                                            <string>Ord&amp;ered</string>
-                                        </property>
-                                        <property name="toolTip" stdset="0">
-                                            <string>Support required for X11 application or library</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>checkDll</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>true</bool>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Build as DLL</string>
                                         </property>
                                     </widget>
                                 </hbox>
@@ -622,7 +880,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>16</height>
+                                <height>20</height>
                             </size>
                         </property>
                     </spacer>
@@ -1448,7 +1706,7 @@
                             </property>
                             <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>layout18</cstring>
+                                    <cstring>layout84</cstring>
                                 </property>
                                 <vbox>
                                     <property name="name">
@@ -1487,11 +1745,22 @@
                                             <cstring>objdir_url</cstring>
                                         </property>
                                     </widget>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>rccdir_label</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>RCC files:</string>
+                                        </property>
+                                    </widget>
                                 </vbox>
                             </widget>
                             <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>layout19</cstring>
+                                    <cstring>layout85</cstring>
                                 </property>
                                 <vbox>
                                     <property name="name">
@@ -1510,6 +1779,14 @@
                                     <widget class="KURLRequester">
                                         <property name="name">
                                             <cstring>objdir_url</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="KURLRequester">
+                                        <property name="name">
+                                            <cstring>rccdir_url</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
                                         </property>
                                     </widget>
                                 </vbox>
@@ -1774,7 +2051,15 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
+    <connection>
+        <sender>Browse</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>browseTargetPath()</slot>
+    </connection>
     <connection>
         <sender>buttonCancel</sender>
         <signal>clicked()</signal>
@@ -1786,6 +2071,210 @@
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>updateProjectConfiguration()</slot>
+    </connection>
+    <connection>
+        <sender>checkInstallTarget</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>slotInstallTargetClicked()</slot>
+    </connection>
+    <connection>
+        <sender>checkPlugin</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>checkPluginChanged()</slot>
+    </connection>
+    <connection>
+        <sender>checkQt</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>qtRequirementChanged()</slot>
+    </connection>
+    <connection>
+        <sender>customVariables</sender>
+        <signal>selectionChanged()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>newCustomVariableActive()</slot>
+    </connection>
+    <connection>
+        <sender>extAdd_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extAdd_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extEdit_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extEdit_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extMoveDown_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extMoveDown_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extMoveUp_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extMoveUp_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extRemove_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extRemove_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideIncMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideIncMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideIncMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideIncMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideLibMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideLibMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideLibMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideLibMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>intMoveDown_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>intMoveDown_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>intMoveUp_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>intMoveUp_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncAddBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncAddClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncEditBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncEditClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncRemoveBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncRemoveClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibAddBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibAddClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibDirAddBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibDirAddClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibDirEditBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibDirEditClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibDirMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibDirMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibDirMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibDirRemoveBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibDirRemoveClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibEditBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibEditClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibRemoveBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibRemoveClicked()</slot>
+    </connection>
+    <connection>
+        <sender>radioLibrary</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>templateLibraryClicked(int)</slot>
+    </connection>
+    <connection>
+        <sender>radioSubdirs</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>clickSubdirsTemplate()</slot>
+    </connection>
+    <connection>
+        <sender>staticRadio</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>slotStaticLibClicked(int)</slot>
+    </connection>
+    <connection>
+        <sender>varAdd_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>addCustomValueClicked()</slot>
     </connection>
     <connection>
         <sender>varEdit_button</sender>
@@ -1807,207 +2296,33 @@
     </connection>
     <connection>
         <sender>varRemove_button</sender>
-        <signal>clicked()</signal>
+        <signal>stateChanged(int)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>removeCustomValueClicked()</slot>
     </connection>
     <connection>
-        <sender>varAdd_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>addCustomValueClicked()</slot>
-    </connection>
-    <connection>
-        <sender>customVariables</sender>
-        <signal>selectionChanged()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>newCustomVariableActive()</slot>
-    </connection>
-    <connection>
-        <sender>extMoveDown_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extMoveDown_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>extMoveUp_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extMoveUp_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>extEdit_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extEdit_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>extRemove_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extRemove_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>extAdd_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extAdd_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>intMoveDown_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>intMoveDown_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>intMoveUp_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>intMoveUp_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>insideLibMoveDownBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>insideLibMoveDownClicked()</slot>
-    </connection>
-    <connection>
-        <sender>insideLibMoveUpBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>insideLibMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibMoveDownBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibMoveDownClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibMoveUpBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibEditBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibEditClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibRemoveBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibRemoveClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibAddBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibAddClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibDirMoveDownBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibDirMoveDownClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibDirMoveUpBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibDirEditBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibDirEditClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibDirRemoveBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibDirRemoveClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibDirAddBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibDirAddClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideIncMoveDownBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideIncMoveDownClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideIncMoveUpBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideIncMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideIncEditBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideIncEditClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideIncRemoveBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideIncRemoveClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideIncAddBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideIncAddClicked()</slot>
-    </connection>
-    <connection>
-        <sender>insideIncMoveDownBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>insideIncMoveDownClicked()</slot>
-    </connection>
-    <connection>
-        <sender>insideIncMoveUpBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>insideIncMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>staticRadio</sender>
+        <sender>sharedRadio</sender>
         <signal>stateChanged(int)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>slotStaticLibClicked(int)</slot>
+        <slot>sharedLibChanged()</slot>
     </connection>
     <connection>
-        <sender>checkInstallTarget</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>slotInstallTargetClicked()</slot>
-    </connection>
-    <connection>
-        <sender>Browse</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>browseTargetPath()</slot>
-    </connection>
-    <connection>
-        <sender>radioSubdirs</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>clickSubdirsTemplate()</slot>
+        <sender>radioApplication</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>checkOrdered</receiver>
+        <slot>setDisabled(bool)</slot>
     </connection>
     <connection>
         <sender>radioLibrary</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>templateLibraryClicked(int)</slot>
+        <signal>toggled(bool)</signal>
+        <receiver>checkOrdered</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>radioSubdirs</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>checkOrdered</receiver>
+        <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
 <tabstops>
@@ -2036,11 +2351,8 @@
     <tabstop>checkPCH</tabstop>
     <tabstop>staticRadio</tabstop>
     <tabstop>sharedRadio</tabstop>
-    <tabstop>pluginRadio</tabstop>
     <tabstop>checkLibtool</tabstop>
     <tabstop>checkPkgconf</tabstop>
-    <tabstop>checkOrdered</tabstop>
-    <tabstop>checkDll</tabstop>
     <tabstop>m_targetLibraryVersion</tabstop>
     <tabstop>insideinc_listview</tabstop>
     <tabstop>insideIncMoveUpBtn</tabstop>
@@ -2136,13 +2448,17 @@
     <slot>extEdit_button_clicked()</slot>
     <slot>extMoveUp_button_clicked()</slot>
     <slot>extMoveDown_button_clicked()</slot>
-    <slot>addCustomValueClicked()</slot>
+    <slot>qtRequirementChanged()</slot>
     <slot>removeCustomValueClicked()</slot>
     <slot>upCustomValueClicked()</slot>
     <slot>downCustomValueClicked()</slot>
     <slot>newCustomVariableActive()</slot>
     <slot>customVariables_selectionChanged()</slot>
     <slot>editCustomValueClicked()</slot>
+    <slot>checkPluginChanged()</slot>
+    <slot>addCustomValueClicked()</slot>
+    <slot>radioSharedLibChanged()</slot>
+    <slot>sharedLibChanged()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
@@ -2156,6 +2472,7 @@
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
@@ -2187,6 +2504,9 @@
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

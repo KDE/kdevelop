@@ -343,7 +343,7 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
 
 void FileBuffer::getValueNames()
 {
-	QRegExp var("([_.\\d\\w]+)[\\s]*(=|-=|\\+=)");
+	QRegExp var("([_.\\d\\w]+)[\\s]*(=|-=|\\+=|\\*=|~=)");
 	m_customValueNames.clear();
 	QStringList::ConstIterator idx = m_buffer.begin();
 	for( ; idx != m_buffer.end(); ++idx)

@@ -36,6 +36,7 @@ public:
     ~TrollProjectPart();
 
     bool isTMakeProject() const { return m_tmakeProject; }
+    bool isQt4Project() const;
     bool isDirty();
     virtual Options options() const;
     QStringList distFiles() const;

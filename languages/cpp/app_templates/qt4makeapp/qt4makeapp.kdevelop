@@ -99,6 +99,7 @@
       <type ext="cpp" />
       <type ext="h" />
       <type ext="ts" />
+      <type ext="qrc" />
     </useglobaltypes>
   </kdevfilecreate>
   <kdevdocumentation>

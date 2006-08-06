@@ -71,6 +71,9 @@
           <descr>A new Qt4 Dialog box with buttons on the bottom.</descr>
         </subtype>
       </type>
+      <type ext="qrc" name="Qt4 Resource" create="template" icon="template_source">
+        <descr>A new Qt4 Resource file.</descr>
+      </type>
       <type ext="cpp" name="C++ Source" create="template" icon="source_cpp">
         <descr>A new empty C++ file.</descr>
       </type>

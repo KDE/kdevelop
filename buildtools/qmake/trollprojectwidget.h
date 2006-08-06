@@ -7,6 +7,8 @@
  *   cloudtemple@mksat.net                                                 *
  *   Copyright (C) 2003 by Thomas Hasart                                   *
  *   thasart@gmx.de                                                        *
+ *   Copyright (C) 2006 by Andreas Pakulat                                 *
+ *   apaku@gmx.de                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,6 +55,7 @@ struct ProjectConfiguration
   QMakeTemplate   m_template;
   QMakeBuildMode  m_buildMode;
   QMakeWarnings   m_warnings;
+  int             m_qt4libs;
   int             m_requirements;
   QString         m_destdir;
   QString         m_target;
@@ -135,6 +138,8 @@ public:
     QStringList headers_exclude;
     QStringList forms;
     QStringList forms_exclude;
+    QStringList resources;
+    QStringList resources_exclude;
 
     QStringList distfiles;
     QStringList distfiles_exclude;
@@ -203,7 +208,7 @@ protected:
 class GroupItem : public qProjectItem
 {
 public:
-    enum GroupType {NoType, Sources, Headers, Forms,Distfiles,Images,Lexsources,Yaccsources,Translations,IDLs, InstallRoot, InstallObject, MaxTypeEnum };
+    enum GroupType {NoType, Sources, Headers, Forms,Distfiles,Images,Resources,Lexsources,Yaccsources,Translations,IDLs, InstallRoot, InstallObject, MaxTypeEnum };
 
     static GroupType groupTypeForExtension(const QString &ext);
     static void groupTypeMeanings(GroupItem::GroupType type, QString& title, QString& ext);

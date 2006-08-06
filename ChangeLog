@@ -1,3 +1,10 @@
+2006-08-06 Andreas Pakulat <apaku@gmx.de>
+* Implemented Support for Qt4 qmake in the qmake buildsystem
+  # Recognize the QT option
+  # Support RESOURCES variable
+  # cleanup the configuration
+  # provide an import configuration for Qt4 projects
+
 2006-04-26 Jens Dagerbo <jens.dagerbo@swipnet.se>
 * Made the ClassView restore it's state after a refresh. It will no 
   longer close up after each successful build.
