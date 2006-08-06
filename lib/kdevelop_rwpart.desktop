@@ -4,4 +4,6 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/ReadWritePart
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevReadWritePart
+Name[x-test]=xxKDevReadWritePartxx
 Comment=Special ReadWritePart for KDevelop
+Comment[x-test]=xxSpecial ReadWritePart for KDevelopxx

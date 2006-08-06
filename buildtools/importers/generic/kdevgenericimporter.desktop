@@ -1,7 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=KDevGenericImporter
+Name[x-test]=xxKDevGenericImporterxx
 Comment=KDevelop Generic Importer
+Comment[x-test]=xxKDevelop Generic Importerxx
 Icon=gear
 ServiceTypes=KDevelop/FileManager
 X-KDE-Library=kdevgenericimporter

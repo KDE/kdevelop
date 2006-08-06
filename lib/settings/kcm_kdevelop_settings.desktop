@@ -11,5 +11,7 @@ X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
 
 Name=General
+Name[x-test]=xxGeneralxx
 Comment=Configure General settings
+Comment[x-test]=xxConfigure General settingsxx
 

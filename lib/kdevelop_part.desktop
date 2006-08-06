@@ -4,3 +4,4 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/ReadOnlyPart
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevReadOnlyPart
+Name[x-test]=xxKDevReadOnlyPartxx

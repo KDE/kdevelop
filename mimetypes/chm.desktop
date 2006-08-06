@@ -1,5 +1,6 @@
 [Desktop Entry]
 Comment=HTML Help Document
+Comment[x-test]=xxHTML Help Documentxx
 Hidden=false
 Icon=help
 MimeType=application/chm

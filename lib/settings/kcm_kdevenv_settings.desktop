@@ -11,5 +11,7 @@ X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
 
 Name=Environment
+Name[x-test]=xxEnvironmentxx
 Comment=Configure Environment Variable settings
+Comment[x-test]=xxConfigure Environment Variable settingsxx
 

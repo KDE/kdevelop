@@ -1,7 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=KDevCMakeImporter
+Name[x-test]=xxKDevCMakeImporterxx
 Comment=KDevelop CMake Importer
+Comment[x-test]=xxKDevelop CMake Importerxx
 Icon=gear
 ServiceTypes=KDevelop/FileManager
 X-KDE-Library=kdevcmakeimporter

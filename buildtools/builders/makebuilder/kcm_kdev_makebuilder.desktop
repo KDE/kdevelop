@@ -11,5 +11,7 @@ X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
 
 Name=Make
+Name[x-test]=xxMakexx
 Comment=Configure Make settings
+Comment[x-test]=xxConfigure Make settingsxx
 

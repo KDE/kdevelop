@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/FileManager
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Project File Manager
+Name[x-test]=xxKDevelop Project File Managerxx
 
 [PropertyDef::X-KDevelop-FileManager]
 Type=QString

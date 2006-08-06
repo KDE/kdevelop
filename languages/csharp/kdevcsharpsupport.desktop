@@ -4,7 +4,6 @@ Type=Service
 Exec=blubb
 Comment=C# Language Support
 Name=KDevCSharpSupport
-Name[x-test]=xxKDevCSharpSupportxx
 GenericName=C# Support
 ServiceTypes=KDevelop/LanguageSupport
 Icon=source

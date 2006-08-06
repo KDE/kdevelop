@@ -11,5 +11,7 @@ X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
 
 Name=CMake
+Name[x-test]=xxCMakexx
 Comment=Configure CMake settings
+Comment[x-test]=xxConfigure CMake settingsxx
 
