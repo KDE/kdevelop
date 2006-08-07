@@ -3250,6 +3250,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			if( info.isSlot() ) subSorting = 2;
 			if( info.isSignal() ) subSorting = 3;
 			if( info.isVirtual() ) subSorting = 4;
+			if( info.isStatic() ) subSorting = 5;
 		}
 		
 		CodeCompletionEntry e = CodeInformationRepository::toEntry( tag, m_completionMode, &proc );
@@ -3531,6 +3532,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		if( meth->isSlot() ) subSorting = 2;
 		if( meth->isSignal() ) subSorting = 3;
 		if( meth->isVirtual() ) subSorting = 4;
+		if( meth->isStatic() ) subSorting = 5;
 		
 		entry.userdata += QString("%1%2%3%4%5").arg( meth->access() ).arg( depth ).arg( className ).arg( 1 ).arg( subSorting );
 		
