@@ -832,6 +832,8 @@ bool MakeWidget::scanErrorForward( int parag )
 		ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[it] );
 		if ( !item )
 			continue;
+		if( item->m_isWarning )
+			continue;
 		parag = it;
 		document()->removeSelection(0);
 		setSelection(parag, 0, parag+1, 0, 0);
@@ -849,6 +851,8 @@ bool MakeWidget::scanErrorBackward( int parag )
 	{
 		ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[it] );
 		if ( !item )
+			continue;
+		if( item->m_isWarning )
 			continue;
 		parag = it;
 		document()->removeSelection(0);
