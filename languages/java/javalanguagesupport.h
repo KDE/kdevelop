@@ -22,9 +22,6 @@ Boston, MA 02110-1301, USA.
 
 #include <kdevlanguagesupport.h>
 
-#include "parser/java.h"
-#include "parser/decoder.h"
-
 #include <kdebug.h>
 
 using namespace java;
@@ -59,7 +56,6 @@ private slots:
 
 private:
     QStringList m_mimetypes;
-    parser::memory_pool_type *m_memoryPool;
 //     CodeProxy *m_codeProxy;
 //     CodeDelegate *m_codeDelegate;
 //     CppHighlighting *m_highlights;

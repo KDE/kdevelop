@@ -35,20 +35,16 @@
 #include <klocale.h>
 
 ParseJob::ParseJob( const KUrl &url,
-                    QObject *parent,
-                    parser::memory_pool_type *memoryPool )
+                    QObject *parent )
         : KDevParseJob( url, parent ),
-        m_memoryPool( memoryPool ),
         m_AST( 0 ),
         m_model( 0 )
 {}
 
 ParseJob::ParseJob( KDevDocument *document,
                     KTextEditor::SmartRange *highlight,
-                    QObject *parent,
-                    parser::memory_pool_type *memoryPool )
+                    QObject *parent )
         : KDevParseJob( document, highlight, parent ),
-        m_memoryPool( memoryPool ),
         m_AST( 0 ),
         m_model( 0 )
 {}
@@ -105,21 +101,22 @@ void ParseJob::run()
         _G_contents = m_contents.data();
     }
 
-    kDebug( 9007 ) << "===-- PARSING --===> "
+    kDebug() << "===-- PARSING --===> "
     << m_document.fileName()
     << " <== readFromDisk: " << readFromDisk
     << " size: " << size
     << endl;
 
-    parser::csharp_compatibility_mode compatibility_mode = parser::csharp20_compatibility;
+    parser::csharp_compatibility_mode compatibility_mode = parser::csharp10_compatibility;
 
     parser::token_stream_type token_stream;
+    parser::memory_pool_type memory_pool;
 
   // 0) setup
     csharp::parser csharp_parser;
     csharp_parser.set_compatibility_mode(compatibility_mode);
     csharp_parser.set_token_stream(&token_stream);
-    csharp_parser.set_memory_pool(m_memoryPool);
+    csharp_parser.set_memory_pool(&memory_pool);
 
   // 1) tokenize
     csharp_parser.tokenize();
@@ -139,8 +136,6 @@ void ParseJob::run()
 
 //FIXME Don't use this for the API please
 //     delete[] _G_contents;
-
-    m_memoryPool = 0;
 }
 
 #include "parsejob.moc"

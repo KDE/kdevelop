@@ -50,7 +50,6 @@ JavaLanguageSupport::JavaLanguageSupport( QObject* parent,
         QLatin1String( "text/x-java" );
     m_mimetypes = types.split( "," );
 
-    m_memoryPool = new parser::memory_pool_type;
     //     m_codeProxy = new CodeProxy( this );
     //     m_codeDelegate = new CodeDelegate( this );
     //     m_backgroundParser = new BackgroundParser( this );
@@ -75,7 +74,6 @@ JavaLanguageSupport::JavaLanguageSupport( QObject* parent,
 
 JavaLanguageSupport::~JavaLanguageSupport()
 {
-    delete m_memoryPool;
 }
 
 KDevCodeModel *JavaLanguageSupport::codeModel( const KUrl &url ) const
@@ -107,13 +105,13 @@ KDevCodeRepository *JavaLanguageSupport::codeRepository() const
 
 KDevParseJob *JavaLanguageSupport::createParseJob( const KUrl &url )
 {
-    return new ParseJob( url, this, m_memoryPool );
+    return new ParseJob( url, this );
 }
 
 KDevParseJob *JavaLanguageSupport::createParseJob( KDevDocument *document,
         KTextEditor::SmartRange *highlight )
 {
-    return new ParseJob( document, highlight, this, m_memoryPool );
+    return new ParseJob( document, highlight, this );
 }
 
 QStringList JavaLanguageSupport::mimeTypes() const

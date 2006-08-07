@@ -39,20 +39,16 @@
 #include "parser/rpp/preprocessor.h"
 
 ParseJob::ParseJob( const KUrl &url,
-                    QObject *parent,
-                    pool *memoryPool )
+                    QObject *parent )
         : KDevParseJob( url, parent ),
-        m_memoryPool( memoryPool ),
         m_AST( 0 ),
         m_model( 0 )
 {}
 
 ParseJob::ParseJob( KDevDocument *document,
                     KTextEditor::SmartRange *highlight,
-                    QObject *parent,
-                    pool *memoryPool )
+                    QObject *parent )
         : KDevParseJob( document, highlight, parent ),
-        m_memoryPool( memoryPool ),
         m_AST( 0 ),
         m_model( 0 )
 {}
@@ -123,7 +119,8 @@ void ParseJob::run()
     QByteArray preprocessed = ppd.toUtf8();
 
     Parser parser( new Control() );
-    m_AST = parser.parse( preprocessed, preprocessed.length() + 1, m_memoryPool );
+    pool memoryPool;
+    m_AST = parser.parse( preprocessed, preprocessed.length() + 1, &memoryPool );
 
     if ( m_AST )
     {
@@ -133,8 +130,6 @@ void ParseJob::run()
     }
     //     DumpTree dumpTree;
     //     dumpTree.dump( m_AST );
-
-    m_memoryPool = 0;
 }
 
 #include "parsejob.moc"

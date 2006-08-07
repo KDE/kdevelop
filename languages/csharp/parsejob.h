@@ -37,13 +37,11 @@ class ParseJob : public KDevParseJob
     Q_OBJECT
 public:
     ParseJob( const KUrl &url,
-              QObject* parent,
-              parser::memory_pool_type *memoryPool );
+              QObject* parent );
 
     ParseJob( KDevDocument* document,
               KTextEditor::SmartRange* highlight,
-              QObject* parent,
-              parser::memory_pool_type *memoryPool );
+              QObject* parent );
 
     virtual ~ParseJob();
 
@@ -54,7 +52,6 @@ protected:
     virtual void run();
 
 private:
-    parser::memory_pool_type *m_memoryPool;
     compilation_unit_ast *m_AST;
     KDevCodeModel *m_model;
 };

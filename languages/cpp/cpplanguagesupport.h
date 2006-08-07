@@ -24,7 +24,6 @@
 
 #include <kdevlanguagesupport.h>
 
-class pool;
 class CodeModel;
 class CodeProxy;
 class CodeDelegate;
@@ -62,7 +61,6 @@ private:
     CodeProxy *m_codeProxy;
     CodeDelegate *m_codeDelegate;
     CppHighlighting *m_highlights;
-    pool *m_memoryPool;
 };
 
 #endif

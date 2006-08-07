@@ -37,7 +37,6 @@
 #include "cpphighlighting.h"
 
 #include "parser/codemodel.h"
-#include "parser/memorypool.h"
 
 #include "parsejob.h"
 #include "codeproxy.h"
@@ -56,7 +55,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
         QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
     m_mimetypes = types.split( "," );
 
-    m_memoryPool = new pool;
     m_codeProxy = new CodeProxy( this );
     m_codeDelegate = new CodeDelegate( this );
     m_highlights = new CppHighlighting( this );
@@ -80,7 +78,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
 
 CppLanguageSupport::~CppLanguageSupport()
 {
-    delete m_memoryPool;
 }
 
 KDevCodeModel *CppLanguageSupport::codeModel( const KUrl &url ) const
@@ -108,13 +105,13 @@ KDevCodeRepository *CppLanguageSupport::codeRepository() const
 
 KDevParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
 {
-    return new ParseJob( url, this, m_memoryPool );
+    return new ParseJob( url, this );
 }
 
 KDevParseJob *CppLanguageSupport::createParseJob( KDevDocument *document,
         KTextEditor::SmartRange *highlight )
 {
-    return new ParseJob( document, highlight, this, m_memoryPool );
+    return new ParseJob( document, highlight, this );
 }
 
 QStringList CppLanguageSupport::mimeTypes() const
@@ -148,7 +145,7 @@ void CppLanguageSupport::projectOpened()
 {
     //FIXME This is currently too slow and the parser is prone to crashing
     // when parsing .cpp files.  The Binder seems to be a slow point too.
-//     return ;
+    return ;
 
     // FIXME Add signals slots from the filemanager for:
     // 1. filesAddedToProject

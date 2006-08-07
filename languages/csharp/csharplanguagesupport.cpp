@@ -33,6 +33,8 @@ Boston, MA 02110-1301, USA.
 
 #include "csharplanguagesupport.h"
 
+#include "parser/csharp.h"
+
 // #include "codeproxy.h"
 // #include "codedelegate.h"
 
@@ -49,7 +51,6 @@ CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
     QString types = QLatin1String( "text/x-csharp" );
     m_mimetypes = types.split( "," );
 
-    m_memoryPool = new parser::memory_pool_type;
     //     m_codeProxy = new CodeProxy( this );
     //     m_codeDelegate = new CodeDelegate( this );
     //     m_backgroundParser = new BackgroundParser( this );
@@ -74,7 +75,6 @@ CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
 
 CSharpLanguageSupport::~CSharpLanguageSupport()
 {
-    delete m_memoryPool;
 }
 
 KDevCodeModel *CSharpLanguageSupport::codeModel( const KUrl &url ) const
@@ -106,13 +106,13 @@ KDevCodeRepository *CSharpLanguageSupport::codeRepository() const
 
 KDevParseJob *CSharpLanguageSupport::createParseJob( const KUrl &url )
 {
-    return new ParseJob( url, this, m_memoryPool );
+    return new ParseJob( url, this );
 }
 
 KDevParseJob *CSharpLanguageSupport::createParseJob( KDevDocument *document,
         KTextEditor::SmartRange *highlight )
 {
-    return new ParseJob( document, highlight, this, m_memoryPool );
+    return new ParseJob( document, highlight, this );
 }
 
 QStringList CSharpLanguageSupport::mimeTypes() const
@@ -139,7 +139,25 @@ void CSharpLanguageSupport::documentActivated( KDevDocument* file )
 
 void CSharpLanguageSupport::projectOpened()
 {
-    // FIXME This should add the project files to the backgroundparser
+    //FIXME This is currently too slow and the parser is prone to crashing
+    // when parsing .cpp files.  The Binder seems to be a slow point too.
+ //   return ;
+
+    // FIXME Add signals slots from the filemanager for:
+    // 1. filesAddedToProject
+    // 2. filesRemovedFromProject
+    // 3. filesChangedInProject
+
+    KUrl::List documentList;
+    QList<KDevProjectFileItem*> files = KDevCore::activeProject()->allFiles();
+    foreach ( KDevProjectFileItem * file, files )
+    {
+        if ( /*supportsDocument( file->url() )  &&*/ file->url().fileName().endsWith(".cs") )
+        {
+            documentList.append( file->url() );
+        }
+    }
+    KDevCore::backgroundParser() ->addDocumentList( documentList );
 }
 
 void CSharpLanguageSupport::projectClosed()
