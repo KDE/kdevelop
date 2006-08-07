@@ -26,6 +26,7 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdir.h>
+#include <assert.h>
 
 class DefaultSourceProvider: public SourceProvider
 {
@@ -110,12 +111,71 @@ void Driver::remove( const QString & fileName )
 
 void Driver::removeAllMacrosInFile( const QString& fileName )
 {
-    QMap<QString, Macro>::Iterator it = m_macros.begin();
-    while( it != m_macros.end() ){
-        Macro m = *it++;
-        if( m.fileName() == fileName )
-            removeMacro( m.name() );
+    MacroMap::iterator it = m_macros.begin();
+    while( it != m_macros.end() )
+		{
+			Macro m = (*it).second;
+			if( m.fileName() == fileName ) {
+				m_macros.erase( it++ );
+			} else {
+				++it;
+			}
     }
+}
+
+bool Driver::hasMacro( const QString& name ) const
+{
+	std::pair< MacroMap::const_iterator, MacroMap::const_iterator > range = m_macros.equal_range( name );
+	if( range.first == range.second ) {
+		return false;
+	} else {
+		const Macro& m( (*(--range.second)).second );
+		if( m.isUndef() )
+			return false;
+		else
+			return true;
+	}
+}
+
+const Macro& Driver::macro( const QString& name ) const
+{
+	std::pair< MacroMap::const_iterator, MacroMap::const_iterator > range = m_macros.equal_range( name );
+	if( range.first == range.second ) {
+		return (*const_cast<MacroMap&>(m_macros).insert( std::make_pair( name, Macro() ) )).second;  ///Since we need to return a reference, there's no other way.
+	} else {
+		return (*(--range.second)).second;
+	}
+}
+Macro& Driver::macro( const QString& name )
+{
+	std::pair< MacroMap::iterator, MacroMap::iterator > range = m_macros.equal_range( name );
+	if( range.first == range.second ) {
+		return (*m_macros.insert( std::make_pair( name, Macro() ) )).second;
+	} else {
+		return (*(--range.second)).second;
+	}
+}
+
+void Driver::addMacro( const Macro & macro )
+{
+	std::pair< MacroMap::iterator, MacroMap::iterator > range = m_macros.equal_range( macro.name() );
+
+	if( range.first == range.second ) {
+		m_macros.insert( std::make_pair( macro.name(), macro ) );
+	} else {
+		///Insert behind the other macros
+		m_macros.insert( range.second, std::make_pair( macro.name(), macro ) );
+		assert( macro == this->macro( macro.name() ) );
+	}
+}
+
+void Driver::removeMacro( const QString& macroName )
+{
+	std::pair< MacroMap::iterator, MacroMap::iterator > range = m_macros.equal_range( macroName );
+	if( range.first != range.second )
+	{
+		m_macros.erase( --range.second );
+	}
 }
 
 TranslationUnitAST::Node Driver::takeTranslationUnit( const QString& fileName )
@@ -164,10 +224,6 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep )
     lexer = l;
 }
 
-void Driver::addMacro( const Macro & macro )
-{
-    m_macros.insert( macro.name(), macro );
-}
 
 void Driver::addProblem( const QString & fileName, const Problem & problem )
 {
@@ -204,7 +260,7 @@ QMap< QString, Dependence > Driver::dependences( const QString & fileName ) cons
     return QMap<QString, Dependence>();
 }
 
-QMap< QString, Macro > Driver::macros() const
+Driver::MacroMap Driver::macros() const
 {
     return m_macros;
 }
@@ -387,11 +443,6 @@ void Driver::setupLexer( Lexer * lexer )
 void Driver::setupParser( Parser * parser )
 {
     Q_UNUSED( parser );
-}
-
-void Driver::removeMacro( const QString& macroName )
-{
-    m_macros.remove( macroName );
 }
 
 void Driver::addIncludePath( const QString &path )

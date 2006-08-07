@@ -26,6 +26,7 @@
 #include <qvaluestack.h>
 #include <qstringlist.h>
 #include <qmap.h>
+#include <map>
 
 class Lexer;
 class Parser;
@@ -104,15 +105,15 @@ public:
     typedef QString Argument;
 
 public:
-    Macro( bool hasArguments = false ): m_hasArguments( hasArguments ) {}
-    Macro( const QString &n, const QString &b ) : m_name( n ), m_body( b ), m_hasArguments( false ) {}
+		Macro( bool hasArguments = false ): m_hasArguments( hasArguments ), m_isUndefMacro( false ) {}
+		Macro( const QString &n, const QString &b ) : m_name( n ), m_body( b ), m_hasArguments( false ), m_isUndefMacro( false ) {}
 
     Macro( const Macro& source )
 	: m_name( source.m_name),
 	  m_fileName( source.m_fileName ),
 	  m_body( source.m_body ),
 	  m_hasArguments( source.m_hasArguments ),
-	  m_argumentList( source.m_argumentList ) {}
+		m_argumentList( source.m_argumentList ), m_isUndefMacro( false ) {}
 
     Macro& operator = ( const Macro& source )
     {
@@ -149,6 +150,11 @@ public:
     /** Set the body of the macro */
     void setBody( const QString& body ) { m_body = body; }
 
+		/** This is used so the lexer does not have to remove macros that should really stay(they are just temporarily shadowed by an isUndef-macro */
+		bool isUndef() const { return m_isUndefMacro; };
+
+		void setUndef() { m_isUndefMacro = true; };
+		
     /** Check whether the macro has arguments that are passed to it */
     bool hasArguments() const { return m_hasArguments; }
     void setHasArguments( bool hasArguments ) { m_hasArguments = hasArguments; }
@@ -168,6 +174,7 @@ private:
     QString m_body;
     bool m_hasArguments;
     QValueList<Argument> m_argumentList;
+		bool m_isUndefMacro;
 };
 
 /**
@@ -206,6 +213,8 @@ class Driver
 public:
     Driver();
     virtual ~Driver();
+		
+		typedef std::multimap< QString, Macro > MacroMap;
 
     /**
      * Get the source provider for this driver. This would be useful for
@@ -289,7 +298,7 @@ public:
      * Get all the macros the driver contains
      * @return The macros
      */
-    QMap<QString, Macro> macros() const;
+    MacroMap macros() const;
     /**
      * Get the list of problem areas the driver contains
      * @param fileName The filename to get problems for
@@ -299,32 +308,34 @@ public:
 
     /**
      * Check if we have a macro in the driver
+		 * If the last stacked macro of that name is an undef-macro, false is returned.
      * @param name The name of the macro to check for
      * @return true if we have the macro in the driver
      * @return false if we don't have the macro in the driver
      */
-    bool hasMacro( const QString& name ) const { return m_macros.contains( name ); }
+		bool hasMacro( const QString& name ) const;
     /**
      * Get the macro identified by @p name
      * @param name The name of the macro to get
      * @return A const reference of the macro object represented by @p name
      */
-    const Macro& macro( const QString& name ) const { return m_macros[ name ]; }
+		const Macro& macro( const QString& name ) const;
     /**
-     * Get the macro identified by @p name
+     * Get the last inserted macro identified by @p name
      * @override
      * @param name The name of the macro to get
      * @return A non-const reference of the macro object represented by @p name
      * 
      */
-    Macro& macro( const QString& name ) { return m_macros[ name ]; }
+		Macro& macro( const QString& name );
 
     /**
-     * Remove a macro from the driver
+     * Remove the last inserted Macro of that name
      * @param macroName The name of the macro to remove
      */
     virtual void removeMacro( const QString& macroName );
-    /**
+    
+		/**
      * Remove all macros from the driver for a certain file
      * @param fileName The file name 
      */
@@ -369,7 +380,7 @@ private:
 private:
     QString m_currentFileName;
     QMap< QString, QMap<QString, Dependence> > m_dependences;
-    QMap<QString, Macro> m_macros;
+		MacroMap m_macros;
     QMap< QString, QValueList<Problem> > m_problems;
     QMap<QString, TranslationUnitAST*> m_parsedUnits;
     QStringList m_includePaths;

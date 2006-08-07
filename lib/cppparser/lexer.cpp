@@ -287,7 +287,6 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 
 //	    Macro& m = m_driver->macro( ide );
 	    Macro m = m_driver->macro( ide );
-	    //m_driver->removeMacro( m.name() );
 
             QString ellipsisArg;
 
@@ -636,7 +635,6 @@ void Lexer::processDefine( Macro& m )
     int startMacroName = currentPosition();
     readIdentifier();
     QString macroName = m_source.mid( startMacroName, int(currentPosition()-startMacroName) );
-    m_driver->removeMacro( macroName );
     m.setName( macroName );
 
     if( currentChar() == '(' ){
@@ -800,7 +798,13 @@ void Lexer::processUndef()
     int startWord = currentPosition();
     readIdentifier();
     QString word = m_source.mid( startWord, currentPosition() - startWord );
-    m_driver->removeMacro( word );
+
+		Macro m( word, "" );
+		m.setFileName( m_driver->currentFileName() );
+		m.setUndef();
+
+		///Adds an undef-macro that shadows the other macro
+		m_driver->addMacro( m );
 }
 
 int Lexer::macroPrimary()
