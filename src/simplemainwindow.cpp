@@ -264,7 +264,14 @@ void SimpleMainWindow::saveSettings( )
 }
 
 void SimpleMainWindow::setCurrentDocumentCaption( const QString &caption )
-{}
+{
+	if( !PartController::getInstance()->activePart() ) return;
+	
+	if (QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(PartController::getInstance()->activePart()))
+	{
+		widget->setCaption(caption);
+	}
+}
 
 KMainWindow *SimpleMainWindow::main()
 {
