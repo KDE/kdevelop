@@ -319,7 +319,7 @@ bool Parser::parseName(NameAST *&node, bool acceptTemplateId)
   parseWinDeclSpec(winDeclSpec);
 
   NameAST *ast = CreateNode<NameAST>(_M_pool);
-  ast->qualified_names = 0;
+
   if (token_stream.lookAhead() == Token_scope)
     {
       ast->global = true;
@@ -376,7 +376,7 @@ bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
 
   std::size_t start = token_stream.cursor();
   TranslationUnitAST *ast = CreateNode<TranslationUnitAST>(_M_pool);
-  ast->declarations = 0;
+
   while (token_stream.lookAhead())
     {
       std::size_t startDecl = token_stream.cursor();
@@ -459,8 +459,6 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
 
             SimpleDeclarationAST *ast =
               CreateNode<SimpleDeclarationAST>(_M_pool);
-            ast->function_specifiers = 0;
-            ast->win_decl_specifiers = 0;
             ast->storage_specifiers = storageSpec;
             ast->type_specifier = spec;
             ast->init_declarators = declarators;
@@ -512,7 +510,7 @@ bool Parser::parseLinkageBody(LinkageBodyAST *&node)
   CHECK('{');
 
   LinkageBodyAST *ast = CreateNode<LinkageBodyAST>(_M_pool);
-  ast->declarations = 0;
+
   while (token_stream.lookAhead())
     {
       int tk = token_stream.lookAhead();
@@ -663,7 +661,6 @@ bool Parser::parseOperatorFunctionId(OperatorFunctionIdAST *&node)
   CHECK(Token_operator);
 
   OperatorFunctionIdAST *ast = CreateNode<OperatorFunctionIdAST>(_M_pool);
-  ast->ptr_ops = 0;
   if (!parseOperator(ast->op))
     {
       ast->op = 0;
@@ -952,10 +949,6 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
     }
 
   SimpleTypeSpecifierAST *ast = CreateNode<SimpleTypeSpecifierAST>(_M_pool);
-  ast->integrals = 0;
-  ast->type_id = 0;
-  ast->name = 0;
-  ast->expression = 0;
 
   if (isIntegral)
     {
@@ -1019,7 +1012,6 @@ bool Parser::parsePtrOperator(PtrOperatorAST *&node)
   std::size_t start = token_stream.cursor();
 
   PtrOperatorAST *ast = CreateNode<PtrOperatorAST>(_M_pool);
-  ast->cv = 0;
   switch (token_stream.lookAhead())
     {
     case '&':
@@ -1105,15 +1097,6 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
   std::size_t start = token_stream.cursor();
 
   DeclaratorAST *ast = CreateNode<DeclaratorAST>(_M_pool);
-  ast->ptr_ops = 0;
-  ast->sub_declarator = 0;
-  ast->id = 0;
-  ast->bit_expression = 0;
-  ast->array_dimensions = 0;
-  ast->parameter_declaration_clause = 0;
-  ast->fun_cv = 0;
-  ast->exception_spec = 0;
-
   DeclaratorAST *decl = 0;
   NameAST *declId = 0;
 
@@ -1265,15 +1248,6 @@ bool Parser::parseAbstractDeclarator(DeclaratorAST *&node)
   std::size_t start = token_stream.cursor();
 
   DeclaratorAST *ast = CreateNode<DeclaratorAST>(_M_pool);
-  ast->ptr_ops = 0;
-  ast->array_dimensions = 0;
-  ast->fun_cv = 0;
-  ast->sub_declarator = 0;
-  ast->parameter_declaration_clause = 0;
-  ast->id = 0;
-  ast->exception_spec = 0;
-  ast->bit_expression = 0;
-
   DeclaratorAST *decl = 0;
 
   PtrOperatorAST *ptrOp = 0;
@@ -1394,7 +1368,6 @@ bool Parser::parseEnumSpecifier(TypeSpecifierAST *&node)
 
   EnumSpecifierAST *ast = CreateNode<EnumSpecifierAST>(_M_pool);
   ast->name = name;
-  ast->enumerators = 0;
 
   EnumeratorAST *enumerator = 0;
   if (parseEnumerator(enumerator))
@@ -1476,7 +1449,6 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
 
   TypeParameterAST *ast = CreateNode<TypeParameterAST>(_M_pool);
   ast->type = start;
-  ast->template_parameters = 0;
 
   switch(token_stream.lookAhead())
     {
@@ -1644,7 +1616,6 @@ bool Parser::parseParameterDeclarationClause(ParameterDeclarationClauseAST *&nod
 
   ParameterDeclarationClauseAST *ast
     = CreateNode<ParameterDeclarationClauseAST>(_M_pool);
-  ast->parameter_declarations = 0;
 
   if (!parseParameterDeclarationList(ast->parameter_declarations))
     {
@@ -1799,7 +1770,6 @@ bool Parser::parseClassSpecifier(TypeSpecifierAST *&node)
   ast->class_key = class_key;
   ast->name = name;
   ast->base_clause = bases;
-  ast->member_specs = 0;
   while (token_stream.lookAhead())
     {
       if (token_stream.lookAhead() == '}')
@@ -1921,9 +1891,6 @@ bool Parser::parseMemberSpecification(DeclarationAST *&node)
       SimpleDeclarationAST *ast = CreateNode<SimpleDeclarationAST>(_M_pool);
       ast->type_specifier = spec;
       ast->init_declarators = declarators;
-      ast->function_specifiers = 0;
-      ast->storage_specifiers = 0;
-      ast->win_decl_specifiers = 0;
       UPDATE_POS(ast, start, token_stream.cursor());
       node = ast;
 
@@ -1941,7 +1908,6 @@ bool Parser::parseCtorInitializer(CtorInitializerAST *&node)
   CHECK(':');
 
   CtorInitializerAST *ast = CreateNode<CtorInitializerAST>(_M_pool);
-  ast->member_initializers = 0;
   ast->colon = start;
 
   if (!parseMemInitializerList(ast->member_initializers))
@@ -2027,7 +1993,6 @@ bool Parser::parseEnumerator(EnumeratorAST *&node)
 
   EnumeratorAST *ast = CreateNode<EnumeratorAST>(_M_pool);
   ast->id = id;
-  ast->expression = 0;
 
   if (token_stream.lookAhead() == '=')
     {
@@ -2086,7 +2051,6 @@ bool Parser::parseBaseClause(BaseClauseAST *&node)
     return false;
 
   BaseClauseAST *ast = CreateNode<BaseClauseAST>(_M_pool);
-  ast->base_specifiers = 0;
   ast->base_specifiers = snoc(ast->base_specifiers, baseSpec, _M_pool);
 
   while (token_stream.lookAhead() == ',')
@@ -2366,7 +2330,6 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
   ast->tilde = tilde;
   ast->id = id;
   ast->operator_id = operator_id;
-  ast->template_arguments = 0;
 
   if (parseTemplateId && !tilde)
     {
@@ -2405,7 +2368,6 @@ bool Parser::parseStringLiteral(StringLiteralAST *&node)
     return false;
 
   StringLiteralAST *ast = CreateNode<StringLiteralAST>(_M_pool);
-  ast->literals = 0;
 
   while (token_stream.lookAhead() == Token_string_literal)
     {
@@ -2728,7 +2690,6 @@ bool Parser::parseCompoundStatement(StatementAST *&node)
   CHECK('{');
 
   CompoundStatementAST *ast = CreateNode<CompoundStatementAST>(_M_pool);
-  ast->statements = 0;
   while (token_stream.lookAhead())
     {
       if (token_stream.lookAhead() == '}')
@@ -2936,9 +2897,6 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
   SimpleDeclarationAST *ast = CreateNode<SimpleDeclarationAST>(_M_pool);
   ast->type_specifier = spec;
   ast->init_declarators = declarators;
-  ast->function_specifiers = 0;
-  ast->storage_specifiers = 0;
-  ast->win_decl_specifiers = 0;
   UPDATE_POS(ast, start, token_stream.cursor());
   node = ast;
 
@@ -3035,11 +2993,6 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
 
                 SimpleDeclarationAST *ast
                   = CreateNode<SimpleDeclarationAST>(_M_pool);
-                ast->type_specifier = 0;
-                ast->function_specifiers = 0;
-                ast->storage_specifiers = 0;
-                ast->win_decl_specifiers = 0;
-                ast->init_declarators = 0;
                 ast->init_declarators = snoc(ast->init_declarators,
                                              declarator, _M_pool);
 
@@ -3127,10 +3080,6 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
 #warning "mark the ast as constant"
 #endif
       SimpleDeclarationAST *ast = CreateNode<SimpleDeclarationAST>(_M_pool);
-      ast->function_specifiers = 0;
-      ast->storage_specifiers = 0;
-      ast->win_decl_specifiers = 0;
-      ast->type_specifier = 0;
       ast->init_declarators = declarators;
 
       UPDATE_POS(ast, start, token_stream.cursor());
@@ -3480,7 +3429,6 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
         ast->op = castOp;
         ast->type_id = typeId;
         ast->expression = expr;
-        ast->sub_expressions = 0;
 
         ExpressionAST *e = 0;
         while (parsePostfixExpressionInternal(e))
@@ -3756,7 +3704,6 @@ bool Parser::parseNewDeclarator(NewDeclaratorAST *&node)
   std::size_t start = token_stream.cursor();
 
   NewDeclaratorAST *ast = CreateNode<NewDeclaratorAST>(_M_pool);
-  ast->expressions = 0;
   PtrOperatorAST *ptrOp = 0;
   if (parsePtrOperator(ptrOp))
     {
