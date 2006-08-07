@@ -3215,6 +3215,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
+	QString className = type->desc().name();
 	
 	CompTypeProcessor proc( type, m_pSupport->codeCompletionConfig()->processFunctionArguments() && type->usingTemplates() );
 	bool resolve =  m_pSupport->codeCompletionConfig()->processPrimaryTypes() && type->usingTemplates();
@@ -3225,6 +3226,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		Tag & tag = *it;
 		++it;
 
+		int subSorting = 0;
+		
 		if ( tag.name().isEmpty() )
 		{
 			continue;
@@ -3242,6 +3245,11 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 				continue;
 			else if ( m_completionMode == VirtualDeclCompletion && !info.isVirtual() )
 				continue;
+
+			if( info.isConst() ) subSorting = 1;
+			if( info.isSlot() ) subSorting = 2;
+			if( info.isSignal() ) subSorting = 3;
+			if( info.isVirtual() ) subSorting = 4;
 		}
 		
 		CodeCompletionEntry e = CodeInformationRepository::toEntry( tag, m_completionMode, &proc );
@@ -3292,8 +3300,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			sortPosition = 6;
 			break;
 		}
-		
-		e.userdata = QString("%1%2%2").arg( num ).arg( depth ).arg( sortPosition );
+
+		e.userdata = QString("%1%2%3%4%5").arg( num ).arg( depth ).arg( className ).arg( sortPosition ).arg( subSorting );
 
 		if( m_completionMode != SignalCompletion ) {
 			if( !type->isNamespace() ) {
@@ -3442,6 +3450,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
+	QString className = type->desc().name();
 	
 	bool resolve = type->usingTemplates() && m_pSupport->codeCompletionConfig()->processPrimaryTypes();
 	
@@ -3516,8 +3525,14 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		} else {
 			text += formattedClosingParenthesis(false);
 		}
+
+		int subSorting = 0;
+		if( meth->isConstant() ) subSorting = 1;
+		if( meth->isSlot() ) subSorting = 2;
+		if( meth->isSignal() ) subSorting = 3;
+		if( meth->isVirtual() ) subSorting = 4;
 		
-		entry.userdata += QString("%1%2%3").arg( meth->access() ).arg( depth ).arg( 1 );
+		entry.userdata += QString("%1%2%3%4%5").arg( meth->access() ).arg( depth ).arg( className ).arg( 1 ).arg( subSorting );
 		
 		if ( m_completionMode == VirtualDeclCompletion )
 			entry.text += text + ";";
@@ -3544,6 +3559,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, const VariableList & attributes, bool isInstance, int depth )
 {
 	Debug d("#cel#");
+	QString className = type->desc().name();
+	
 	if( !safetyCounter || !d ) return;
 	
 	if ( m_completionMode != NormalCompletion )
@@ -3562,7 +3579,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		CodeCompletionEntry entry;
 		entry.text = attr->name();
 		entry.comment = commentFromItem( type, model_cast<ItemDom>(attr) );
-		entry.userdata += QString("%1%2%3").arg( attr->access() ).arg( depth ).arg( 2 );
+		entry.userdata += QString("%1%2%3%4").arg( attr->access() ).arg( depth ).arg( className ).arg( 2 );
 		
 
 		if( !attr->isEnumeratorVariable() ) {
