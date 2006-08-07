@@ -5,3 +5,4 @@ X-KDE-ServiceType=KDevelop/CreateFile
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Create File Interface
 Name[fr]=Interface de création de fichiers KDevelop
+Name[x-test]=xxKDevelop Create File Interfacexx

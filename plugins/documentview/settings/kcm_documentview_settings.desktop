@@ -11,5 +11,7 @@ X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
 
 Name=Document View
+Name[x-test]=xxDocument Viewxx
 Comment=Configure Document View settings
+Comment[x-test]=xxConfigure Document View settingsxx
 
