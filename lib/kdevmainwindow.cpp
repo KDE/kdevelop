@@ -57,9 +57,6 @@ public:
     KDevMainWindowPrivate()
             : center( 0 ),
             settingsDialog( 0 )
-            //             configureEditor( 0 ),
-            //             toggleStatusbar( 0 ),
-            //             stopProcesses( 0 )
     {}
 
     QStackedWidget *center;
@@ -67,13 +64,6 @@ public:
 
     QList<QDockWidget*> dockList;
     QList<KDevPlugin*> activeProcesses;
-
-    //     KAction *configureEditor;
-    //     KAction *configureSettings;
-    //
-    //     KToggleAction *toggleStatusbar;
-    //
-    //     KToolBarPopupAction *stopProcesses;
 };
 
 KDevMainWindow::KDevMainWindow( QWidget *parent, Qt::WFlags flags )
@@ -212,6 +202,18 @@ void KDevMainWindow::init()
              this, SLOT( projectOpened() ) );
     connect( KDevCore::projectController(), SIGNAL( projectClosed() ),
              this, SLOT( projectClosed() ) );
+}
+
+void KDevMainWindow::fillContextMenu( KMenu *menu, const Context *context )
+{
+    //Perhaps we get rid of this framework and instead have every Context contains
+    //a kactioncollection.  Plugins could add their actions directly to the context
+    //object retrieved from KDevCore... ??
+    emit contextMenu( menu, context );
+
+    //Put this in every context menu so that plugins will be encouraged to allow shortcuts
+    KAction * action = actionCollection() ->action( "settings_configure_shortcuts" );
+    menu->addAction( action );
 }
 
 void KDevMainWindow::embedPartView( QWidget *view, const QString &title,
@@ -512,12 +514,6 @@ void KDevMainWindow::configureEditors()
 
 void KDevMainWindow::keyBindings()
 {}
-
-void KDevMainWindow::contextMenu( QMenu* popup, const Context *context )
-{
-    Q_UNUSED( popup )
-    Q_UNUSED( context );
-}
 
 void KDevMainWindow::documentActivated( KDevDocument *document )
 {

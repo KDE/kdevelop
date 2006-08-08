@@ -71,6 +71,9 @@ public:
     KDevMainWindow( QWidget *parent = 0, Qt::WFlags flags = 0 );
     virtual ~KDevMainWindow();
 
+    //FIXME document this
+    virtual void fillContextMenu( KMenu *menu, const Context *context );
+
     /**Embeds a view of a part into the main window.
     @param view The view to embed. Must be a KPart.
     @param title The title of a view.
@@ -128,6 +131,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void finishedLoading();
+    void contextMenu( KMenu *menu, const Context *context );
 
 protected:
     //FIXME DOCUMENT!!!  queryClose() must call all of the KDevCore cleanup() methods!
@@ -158,7 +162,6 @@ private Q_SLOTS:
     void showMenuBar();
 
     void toggleStatusbar();
-    void contextMenu( QMenu*, const Context *context );
 
 private:
     void setupActions();

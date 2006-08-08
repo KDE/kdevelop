@@ -24,14 +24,14 @@ Boston, MA 02110-1301, USA.
 #include <QtGui/QAction>
 #include <QtGui/QHeaderView>
 
-#include <kdevcore.h>
-#include <kdevcontext.h>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <klocale.h>
 
-#include <QtCore/qdebug.h>
+#include <kdevcore.h>
+#include <kdevcontext.h>
+#include <kdevmainwindow.h>
 
 KDevDocumentView::KDevDocumentView( KDevDocumentViewPart *part, QWidget *parent )
         : KDevTreeView( parent ),
@@ -81,11 +81,8 @@ void KDevDocumentView::popupContextMenu( const QPoint &pos )
             KMenu menu( this );
             KUrl::List list;
             list << fileItem->URL();
-            FileContext context( list );
-
-            //QAction* test = menu.addAction( i18n("Test") );
-
-            //KDevApi::self() ->core() ->fillContextMenu( &menu, &context ); FIXME
+            FileContext context( list ); //FIXME change filecontext to documentcontext
+            KDevCore::mainWindow()->fillContextMenu( &menu, &context );
             menu.exec( mapToGlobal( pos ) );
         }
     }
