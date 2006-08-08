@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.             *
  ***************************************************************************/
-#include "autotoolsdriver.h"
-#include "autotoolsast.h"
+#include "automakedriver.h"
+#include "automakeast.h"
 
 #include <stdio.h>
 #include <qstack.h>

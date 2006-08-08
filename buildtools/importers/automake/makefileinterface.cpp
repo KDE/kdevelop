@@ -28,8 +28,8 @@
 
 #include <kdebug.h>
 
-#include "autotoolsast.h"
-#include "autotoolsdriver.h"
+#include "automakeast.h"
+#include "automakedriver.h"
 
 
 uint qHash( const QFileInfo& key )

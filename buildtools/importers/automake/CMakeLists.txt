@@ -11,9 +11,9 @@ add_definitions(-fPIC)
 ########### next target ###############
 
 set(kdevautomakeparser_STAT_SRCS
-    autotoolsast.cpp
-    autotoolsdriver.cpp
-    autotools_yacc.cpp
+    automakeast.cpp
+    automakedriver.cpp
+    automakeparser.cpp
     makefileinterface.cpp
 )
 

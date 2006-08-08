@@ -156,7 +156,7 @@ noinst_HEADERS = foo.h #regognize me
 
 
 #include <qstack.h>
-#include "autotoolsast.h"
+#include "automakeast.h"
 
 #define YYSTYPE_IS_DECLARED
 
@@ -1784,5 +1784,5 @@ yyreturn:
 #line 322 "autotools.yy"
 
 
-#include "autotools_lex.cpp"
+#include "automake_lex.cpp"
 
