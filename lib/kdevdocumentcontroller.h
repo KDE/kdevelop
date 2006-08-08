@@ -60,10 +60,14 @@ class Editor;
 }
 
 class QTabWidget;
+
+class KMenu;
 class KAction;
 class KToolBarPopupAction;
 class KRecentFilesAction;
 class KDirWatch;
+
+class Context;
 
 /**
  * \short Interface to control open documents.
@@ -130,7 +134,7 @@ public:
 
     /**Closes all other open documents.
     @param document The document not to close.*/
-    bool closeAllOthers( KDevDocument* document );
+    bool closeAllOthers( const QList<KDevDocument*> &list );
 
     /**Activate this part.
     @param part The part to activate.*/
@@ -197,6 +201,8 @@ Q_SIGNALS:
     void openingDocument( const QString &document );
 
 private Q_SLOTS:
+    void contextMenu( KMenu *menu, const Context *context );
+
     void slotOpenDocument();
     void slotOpenRecent( const KUrl& );
 
@@ -266,7 +272,10 @@ private:
 
     // used to note when a URL changes (a document changes url)
     QHash< KDevDocument*, KUrl > m_documentUrls;
+    // used to map urls to open docs
     QHash< KUrl, KDevDocument* > m_url2Document;
+    // used to fill the context menu
+    KUrl::List m_selectedURLs;
 
     struct HistoryEntry
     {

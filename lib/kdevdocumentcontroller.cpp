@@ -73,6 +73,7 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevcore.h"
 #include "kdevconfig.h"
+#include "kdevcontext.h"
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
 #include "kdevmainwindow.h"
@@ -119,7 +120,7 @@ KDevDocument* KDevDocumentController::editDocument( const KUrl & inputUrl,
     {
         if ( !existingDoc->isInitialized() )
         {
-            KParts::ReadWritePart *rw = readWrite( existingDoc->part() );
+            KParts::ReadWritePart * rw = readWrite( existingDoc->part() );
             rw->openURL( url );
         }
 
@@ -382,14 +383,14 @@ bool KDevDocumentController::closeDocuments( const QList<KDevDocument*>& list )
     return true;
 }
 
-bool KDevDocumentController::closeAllOthers( KDevDocument* document )
+bool KDevDocumentController::closeAllOthers( const QList<KDevDocument*>& list )
 {
     QList<KParts::Part*> docs = KDevCore::partController() ->parts();
     QList<KParts::Part*>::ConstIterator it = docs.begin();
     for ( ; it != docs.end(); ++it )
     {
         KDevDocument * doc = documentForPart( *it );
-        if ( doc != document )
+        if ( !list.contains( doc ) )
         {
             if ( !closeDocument( doc ) )
             {
@@ -453,25 +454,95 @@ bool KDevDocumentController::querySaveDocuments()
 
 void KDevDocumentController::saveActiveDocument()
 {
-    if ( activeReadWrite() )
-        saveDocument( activeDocument() );
+    QList<KDevDocument*> list;
+    if ( m_selectedURLs.count() )
+    {
+        //Called from a FileContext menu action
+        foreach ( KUrl url, m_selectedURLs )
+        {
+            KDevDocument *doc = documentForUrl( url );
+            list.append( doc );
+        }
+        m_selectedURLs.clear();
+    }
+    else if ( activeReadWrite() )
+    {
+        list.append( activeDocument() );
+    }
+    saveDocuments( list );
 }
 
 void KDevDocumentController::reloadActiveDocument()
 {
-    if ( activeReadWrite() )
-        reloadDocument( activeDocument() );
+    QList<KDevDocument*> list;
+    if ( m_selectedURLs.count() )
+    {
+        //Called from a FileContext menu action
+        foreach ( KUrl url, m_selectedURLs )
+        {
+            KDevDocument *doc = documentForUrl( url );
+            list.append( doc );
+        }
+        m_selectedURLs.clear();
+    }
+    else if ( activeReadWrite() )
+    {
+        list.append( activeDocument() );
+    }
+    reloadDocuments( list );
 }
 
 void KDevDocumentController::closeActiveDocument()
 {
-    closeDocument( activeDocument() );
+    QList<KDevDocument*> list;
+    if ( m_selectedURLs.count() )
+    {
+        //Called from a FileContext menu action
+        foreach ( KUrl url, m_selectedURLs )
+        {
+            KDevDocument *doc = documentForUrl( url );
+            list.append( doc );
+        }
+        m_selectedURLs.clear();
+    }
+    else if ( activeReadOnly() )
+    {
+        list.append( activeDocument() );
+    }
+    closeDocuments( list );
 }
 
 void KDevDocumentController::closeAllExceptActiveDocument()
 {
-    if ( activeReadOnly() )
-        closeAllOthers( activeDocument() );
+    QList<KDevDocument*> list;
+    if ( m_selectedURLs.count() )
+    {
+        //Called from a FileContext menu action
+        foreach ( KUrl url, m_selectedURLs )
+        {
+            KDevDocument *doc = documentForUrl( url );
+            list.append( doc );
+        }
+        m_selectedURLs.clear();
+    }
+    else if ( activeReadOnly() )
+    {
+        list.append( activeDocument() );
+    }
+    closeAllOthers( list );
+}
+
+void KDevDocumentController::contextMenu( KMenu *menu, const Context *context )
+{
+    if ( context->hasType( Context::FileContext ) )
+    {
+        const FileContext * file = static_cast<const FileContext*>( context );
+        m_selectedURLs = file->urls();
+        menu->addAction( m_closeWindowAction );
+        menu->addAction( m_closeOtherWindowsAction );
+        //save
+        //reload
+    }
 }
 
 void KDevDocumentController::slotOpenDocument()
@@ -835,6 +906,9 @@ void KDevDocumentController::setActiveDocument( KDevDocument *document, QWidget 
 
 void KDevDocumentController::init()
 {
+    connect( KDevCore::mainWindow(), SIGNAL( contextMenu( KMenu *, const Context * ) ),
+             this, SLOT( contextMenu( KMenu *, const Context * ) ) );
+
     KActionCollection * ac =
         KDevCore::mainWindow() ->actionCollection();
 

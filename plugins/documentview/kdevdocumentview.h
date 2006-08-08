@@ -22,8 +22,8 @@
 
 #include "kdevtreeview.h"
 
-class KDevDocumentViewPart;
 class KUrl;
+class KDevDocumentViewPart;
 
 class KDevDocumentView: public KDevTreeView
 {
@@ -37,9 +37,9 @@ public:
 signals:
     void activateURL( const KUrl &url );
 
-protected slots:
-    void handleMousePress( const QModelIndex & index );
-    void popupContextMenu( const QPoint &pos );
+protected:
+    virtual void mousePressEvent( QMouseEvent * event );
+    virtual void contextMenuEvent( QContextMenuEvent * event );
 
 private:
     KDevDocumentViewPart *m_part;

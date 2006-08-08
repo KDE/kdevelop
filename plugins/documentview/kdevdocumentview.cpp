@@ -21,8 +21,9 @@ Boston, MA 02110-1301, USA.
 #include "kdevdocumentview_part.h"
 #include "kdevdocumentmodel.h"
 
-#include <QtGui/QAction>
-#include <QtGui/QHeaderView>
+#include <QAction>
+#include <QHeaderView>
+#include <QContextMenuEvent>
 
 #include <kmenu.h>
 #include <kdebug.h>
@@ -32,25 +33,20 @@ Boston, MA 02110-1301, USA.
 #include <kdevcore.h>
 #include <kdevcontext.h>
 #include <kdevmainwindow.h>
+#include <kdevdocumentcontroller.h>
 
 KDevDocumentView::KDevDocumentView( KDevDocumentViewPart *part, QWidget *parent )
         : KDevTreeView( parent ),
         m_part( part )
 {
-    setFocusPolicy(Qt::NoFocus);
+    setFocusPolicy( Qt::NoFocus );
 
     setRootIsDecorated( false );
     header() ->hide();
     header() ->setResizeMode( QHeaderView::Stretch );
 
-    setContextMenuPolicy( Qt::CustomContextMenu );
+    setSelectionBehavior( QAbstractItemView::SelectRows );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
-
-    connect( this, SIGNAL( pressed( QModelIndex ) ),
-             this, SLOT( handleMousePress( QModelIndex ) ) );
-
-    connect( this, SIGNAL( customContextMenuRequested( QPoint ) ),
-                this, SLOT( popupContextMenu( QPoint ) ) );
 }
 
 KDevDocumentView::~KDevDocumentView()
@@ -61,31 +57,47 @@ KDevDocumentViewPart *KDevDocumentView::part() const
     return m_part;
 }
 
-void KDevDocumentView::handleMousePress( const QModelIndex & index )
+void KDevDocumentView::mousePressEvent( QMouseEvent * event )
 {
+    QModelIndex index = indexAt( event->pos() );
+    KDevDocumentModel *docModel = qobject_cast<KDevDocumentModel*>( model() );
+
+    if ( event->button() == Qt::LeftButton && index.parent().isValid() &&
+         event->modifiers() == Qt::NoModifier )
+    {
+        KDevCore::documentController() ->editDocument(
+                docModel->item( index ) ->fileItem() ->URL() );
+
+    }
+
     if ( !index.parent().isValid() )
     {
         setExpanded( index, !isExpanded( index ) );
     }
+
+    KDevTreeView::mousePressEvent( event );
 }
 
-void KDevDocumentView::popupContextMenu( const QPoint &pos )
+void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
 {
-    QModelIndex index = indexAt( pos );
+    QModelIndexList indexes = selectionModel() ->selectedIndexes();
     KDevDocumentModel *docModel = qobject_cast<KDevDocumentModel*>( model() );
-    if ( KDevDocumentItem * item = docModel->item( index ) )
+
+    KUrl::List list;
+    foreach ( QModelIndex index, indexes )
     {
-        if ( KDevFileItem * fileItem = item->fileItem() )
+        if ( KDevFileItem * fileItem = docModel->item( index )->fileItem() )
         {
-            QModelIndexList indexes = selectedIndexes();
-            KMenu menu( this );
-            KUrl::List list;
-            list << fileItem->URL();
-            FileContext context( list ); //FIXME change filecontext to documentcontext
-            KDevCore::mainWindow()->fillContextMenu( &menu, &context );
-            menu.exec( mapToGlobal( pos ) );
+            list.append( fileItem->URL() );
         }
     }
+
+    KMenu menu( this );
+    FileContext context( list ); //FIXME change filecontext to documentcontext
+    KDevCore::mainWindow() ->fillContextMenu( &menu, &context );
+    menu.exec( event->globalPos() );
+
+    KDevTreeView::contextMenuEvent( event );
 }
 
 #include "kdevdocumentview.moc"

@@ -60,7 +60,6 @@ private slots:
     void externallyModified( KDevDocument* document );
     void urlChanged( KDevDocument* document, const KUrl &oldurl, const KUrl &newurl );
     void stateChanged( KDevDocument* document );
-    void pressed( const QModelIndex & index );
 
 private:
     KDevDocumentModel *m_documentModel;

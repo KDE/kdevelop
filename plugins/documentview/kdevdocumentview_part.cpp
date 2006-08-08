@@ -54,10 +54,13 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
     m_documentView->setWindowTitle( i18n( "Documents" ) );
 
     m_documentView->setModel( m_documentModel );
-    KDevDocumentViewDelegate *delegate =
-        new KDevDocumentViewDelegate( m_documentView, this );
+
     m_documentView->setSelectionModel(
         new KDevDocumentSelection( m_documentModel ) );
+
+    KDevDocumentViewDelegate *delegate =
+        new KDevDocumentViewDelegate( m_documentView, this );
+
     m_documentView->setItemDelegate( delegate );
     m_documentView->setWhatsThis( i18n( "Document View" ) );
 
@@ -66,8 +69,6 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
 
     KDevDocumentController* docController = KDevCore::documentController();
 
-    connect( m_documentView, SIGNAL( pressed( QModelIndex ) ),
-             this, SLOT( pressed( QModelIndex ) ) );
     connect( docController, SIGNAL( documentActivated( KDevDocument* ) ),
              this, SLOT( activated( KDevDocument* ) ) );
     connect( docController, SIGNAL( documentSaved( KDevDocument* ) ),
@@ -133,7 +134,6 @@ void KDevDocumentViewPart::loaded( KDevDocument* document )
 
 void KDevDocumentViewPart::closed( KDevDocument* document )
 {
-    kDebug() << k_funcinfo << endl;
     QModelIndex fileIndex = m_doc2index[ document ];
     KDevDocumentItem *fileItem = m_documentModel->item( fileIndex );
     if ( !fileItem )
@@ -178,13 +178,6 @@ void KDevDocumentViewPart::stateChanged( KDevDocument* document )
 
     documentItem->setDocumentState( document->state() );
     m_documentView->doItemsLayout();
-}
-
-void KDevDocumentViewPart::pressed( const QModelIndex & index )
-{
-    if ( index.parent().isValid() )
-        KDevCore::documentController() ->editDocument(
-            m_documentModel->item( index ) ->fileItem() ->URL() );
 }
 
 #include "kdevdocumentview_part.moc"
