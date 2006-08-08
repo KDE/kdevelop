@@ -859,7 +859,7 @@ void KDevDocumentController::init()
     m_revertAllDocumentsAction->setEnabled( false );
 
     m_closeWindowAction = KStdAction::close(
-                              this, SLOT( slotCloseWindow() ),
+                              this, SLOT( closeActiveDocument() ),
                               ac, "file_close" );
     m_closeWindowAction->setToolTip( i18n( "Close current file" ) );
     m_closeWindowAction->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( m_closeWindowAction->text() ) ).arg( i18n( "Closes current file." ) ) );
@@ -873,7 +873,7 @@ void KDevDocumentController::init()
     m_closeAllWindowsAction->setEnabled( false );
 
     m_closeOtherWindowsAction = new KAction( i18n( "Close All Others" ), ac, "file_closeother" );
-    connect( m_closeOtherWindowsAction, SIGNAL( toggled( bool ) ), SLOT( slotCloseOtherWindows() ) );
+    connect( m_closeOtherWindowsAction, SIGNAL( toggled( bool ) ), SLOT( closeAllExceptActiveDocument() ) );
     m_closeOtherWindowsAction->setToolTip( i18n( "Close other files" ) );
     m_closeOtherWindowsAction->setWhatsThis( i18n( "<b>Close all others</b>"
             "<p>Close all opened files except current." ) );
