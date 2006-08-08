@@ -19,6 +19,7 @@
  *                                                                         *
  ***************************************************************************/
 
+
 #include "cppevaluation.h"
 #include "simplecontext.h"
 #include "safetycounter.h"
