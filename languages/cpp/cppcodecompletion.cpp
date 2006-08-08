@@ -1840,6 +1840,7 @@ bool isAfterKeyword( const QString& str, int column ) {
 	keywords << "new";
 	keywords << "throw";
 	keywords << "return";
+	keywords << "emit"; ///This could be done even better by only showing signals for completion..
 	for( QStringList::iterator it = keywords.begin(); it != keywords.end(); ++it ) {
 		int len = (*it).length();
 		if( column >= len && str.mid( column-len, len ) == *it ) return true;
