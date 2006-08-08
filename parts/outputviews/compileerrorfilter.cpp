@@ -69,13 +69,14 @@ CompileErrorFilter::ErrorFormat* CompileErrorFilter::errorFormats()
 
 void CompileErrorFilter::processLine( const QString& line )
 {
-       	bool hasmatch = false;
+	bool hasmatch = false;
 	QString file;
 	int lineNum = 0;
 	QString text;
 	QString compiler;
 	int i = 0;
 	bool isWarning = false;
+	bool isInstantiationInfo = false;
 	ErrorFormat* const errFormats = errorFormats();
 	ErrorFormat* format = &errFormats[i];
 	while( !format->expression.isEmpty() )
@@ -90,8 +91,9 @@ void CompileErrorFilter::processLine( const QString& line )
 			compiler = format->compiler;
 			if (regExp.cap(3).contains("warning", false))
 				isWarning = true;
-			if (regExp.cap(3).contains("instantiated from", false))
-				hasmatch =false;;
+			if (regExp.cap(3).contains("instantiated from", false)) {
+				isInstantiationInfo = true;
+			}
 			break;
 		}
 
@@ -108,7 +110,7 @@ void CompileErrorFilter::processLine( const QString& line )
 
 	if ( hasmatch )
 	{
-		emit item( new ErrorItem( file, lineNum, text, line, isWarning, compiler ) );
+		emit item( new ErrorItem( file, lineNum, text, line, isWarning, isInstantiationInfo, compiler ) );
 	}
 	else
 	{

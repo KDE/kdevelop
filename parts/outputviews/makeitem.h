@@ -127,12 +127,12 @@ namespace KTextEditor { class Cursor; class Document; }
 class ErrorItem : public MakeItem
 {
 public:
-	ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line, bool isWarning, const QString& compiler );
+	ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line, bool isWarning, bool isInstatiationInfo, const QString& compiler );
 	virtual ~ErrorItem();
 
 	virtual bool append( const QString& text );
   virtual int displayMode() const { return DelayedDisplay | Append; }
-	Type type() { return m_isWarning ? Warning : Error; }
+	Type type() { return m_isInstatiationInfo ? Diagnostic : (m_isWarning ? Warning : Error); }
 	virtual bool visible( EOutputLevel ) { return true; }
 
 	QString fileName;
@@ -141,6 +141,7 @@ public:
 	KTextEditor::Cursor* m_cursor;
 	KTextEditor::Document* m_doc;
 	bool m_isWarning;
+	bool m_isInstatiationInfo; ///this also implies isWarning
 	QString m_compiler;
 };
 

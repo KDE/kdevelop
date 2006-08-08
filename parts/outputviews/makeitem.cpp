@@ -93,14 +93,15 @@ QString MakeItem::br()
     return br;
 }
 
-ErrorItem::ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line, bool isWarning, const QString& compiler )
+ErrorItem::ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line, bool isWarning, bool isInstatiationInfo, const QString& compiler )
 	: MakeItem( line )
 	, fileName(fn)
 	, lineNum(ln)
 	, m_error(tx)
 	, m_cursor(0L)
 	, m_doc(0L)
-	, m_isWarning(isWarning)
+	, m_isWarning(isWarning | isInstatiationInfo)
+	, m_isInstatiationInfo( isInstatiationInfo )
 	, m_compiler(compiler)
 {}
 
