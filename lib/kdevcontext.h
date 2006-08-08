@@ -31,13 +31,12 @@ Boston, MA 02110-1301, USA.
 #define KDEVCONTEXT_H
 
 /**
-@file kdevcore.h
+@file kdevcontext.h
 The context menu classes.
  */
 
 #include "kdevexport.h"
 
-#include <QMenu>
 #include <QStringList>
 
 #include <kurl.h>
@@ -45,59 +44,42 @@ The context menu classes.
 
 #include "kdevexport.h"
 
-
-class KDialog;
-class KDevPlugin;
 class KDevCodeItem;
 class KDevProjectItem;
 
-namespace KParts
-{
-class Part;
-}
-
-class QStatusBar;
-
 /**
 Base class for every context.
-Think of a Context-based class as "useful
-info associated to a context menu". Several context menu can be defined,
-each defining different information: because of these context menus being
-used in many modules, they are defined here.
-
-When context menu with a certain "context" associated appears, KDevelop core
-sends a notification signal and all plugins which receive this signal have
-the ability to add own items into the menu. For example, VCS plugin could
-add "commit" and "update" menu items to the context menu of a file.
-
-<b>How to use context from a plugin:</b>
--# Create a popup menu in context menu event handler: @code KMenu menu(this); @endcode
--# Create a context: @code MyContext context(param). @endcode
--# Fill a context menu: @code core()->fillContextMenu(&menu, &context); @endcode
--# Show the popup menu: @code menu.exec(event->globalPos()); @endcode
-.
-In this example @em event is an object of QContextMenuEvent class which you have access
-to if you reimplement QWidget::contextMenuEvent method.
-
-<b>How to fill context menu from a plugin:</b>
--# Create a @code contextMenu(QPopupMenu *, const Context *) @endcode slot in your plugin class.
--# Connect KDevCore::contextMenu(QPopupMenu *, const Context *) signal to that slot in
+Think of a Context-based class as "useful information associated with a context menu".
+ 
+When a context menu with a certain "context" associated appears, the platform's
+KDevMainWindow sends a notification signal and all plugins which receive this signal have
+the ability to add their own actions to the menu. For example, a SVN plugin could
+add "commit" and "update" actions to the context menu of a document.
+ 
+<b>How to use show a context menu from a plugin:</b>
+-# Create a KMenu in context menu event handler: @code KMenu menu(this); @endcode
+-# Create a context: @code FileContext context(list). @endcode
+-# Ask KDevMainWindow to fill the menu:
+@code KDevCore::mainWindow()->fillContextMenu(&menu, &context); @endcode
+-# Show the popup menu: @code menu.exec(mapToGlobal(pos)); @endcode
+ 
+<b>How to fill a context menu from a plugin:</b>
+-# Create a @code contextMenu(KMenu *, const Context *) @endcode slot in your plugin class.
+-# Connect KDevMainWindow::contextMenu(KMenu *, const Context *) signal to that slot in
 the constructor of your plugin:\n
 @code
-connect(core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-    this, SLOT(contextMenu(QPopupMenu *, const Context *)));
+connect(KDevCore::mainWindow(), SIGNAL(contextMenu(KMenu *, const Context *)),
+        this, SLOT(contextMenu(KMenu *, const Context *)));
 @endcode
 -# Fill the menu in the slot you created, for example:\n
 @code
 if (context->hasType(Context::EditorContext))
 {
-    const EditorContext *econtext = static_cast<const EditorContext*>(context);
-    int id = popup->insertItem(i18n("My Menu Item 1"), this, SLOT(myMenuAction1()));
-    popup->setWhatsThis(id, i18n("What's this for my menu item 1"));
+    menu->addAction(...);
 }
-else if context->hasType(MyContext))
+else if context->hasType(Context::FileContext))
 {
-    int id = popup->insertItem(...
+    menu->addAction(...);
     ...
 }
 ...
@@ -108,14 +90,13 @@ class KDEVINTERFACES_EXPORT Context
 public:
     /**Pre-defined context types. More may be added so it is possible to add custom
         contexts. <strong>We reserve enum values until 1000 (yeah, it is one thousand )
-        for kdevelop official context types.</strong>*/
+        for kdevplatform official context types.</strong>*/
     enum Type
     {
-        EditorContext,              /**<Editor context menu.*/
-        DocumentationContext,       /**<Documentation browser context menu.*/
-        FileContext,                /**<File context menu.*/
-        ProjectItemContext,         /**<Project tree context menu.*/
-        CodeItemContext           /**<Class tree context menu.*/
+        EditorContext,               /**<Editor menu.*/
+        FileContext,                 /**<File menu.*/
+        CodeItemContext,             /**<CodeItem context menu.*/
+        ProjectItemContext           /**<ProjectItem context menu.*/
     };
 
     /**Implement this in the context so we can provide rtti.*/
@@ -133,14 +114,13 @@ protected:
     virtual ~Context();
 };
 
-/**A context for the popup menu in the editor.*/
+/**A context for the KTextEditor.*/
 class KDEVINTERFACES_EXPORT EditorContext: public Context
 {
 public:
-    /**Builds a context for an editor part.
+    /**Builds a context for a KTextEditor part.
         @param url The url of a file in the editor.
-        @param line The line number where the cursor is.
-        @param col The column number where the cursor is.
+        @param position The position where the cursor is.
         @param linestr The content of the line where the cursor is.
         @param wordstr The current word under the cursor.*/
     EditorContext( const KUrl &url, const KTextEditor::Cursor& position,
@@ -173,56 +153,22 @@ private:
     EditorContext &operator=( const EditorContext & );
 };
 
-
 /**
-A context for the popup menu in the documentation browser widget.
- */
-class KDEVINTERFACES_EXPORT DocumentationContext: public Context
-{
-public:
-
-    /**Builds a DocumentationContext.
-        @param url The URL that the context will be for.
-        @param selection Selected text.*/
-    DocumentationContext( const QString &url, const QString &selection );
-
-    /**Copy constructor.*/
-    DocumentationContext( const DocumentationContext & );
-    DocumentationContext &operator=( const DocumentationContext & );
-
-    /**Destructor.*/
-    virtual ~DocumentationContext();
-
-    virtual int type() const;
-
-    /**@return The url of the document this context was invoked for.*/
-    QString url() const;
-
-    /**@return The selected text in the document.*/
-    QString selection() const;
-
-private:
-    class Private;
-    Private *d;
-};
-
-/**
-A context for the popup menu in file views and other parts that show files.
-Context allows multiple selections of files.
+A context for the a list of selected urls.
  */
 class KDEVINTERFACES_EXPORT FileContext : public Context
 {
 public:
     /**Builds the file context using a @ref KUrl::List
-        @param someURLs The list of selected files URLs.*/
-    FileContext( const KUrl::List &someURLs );
+        @param urls The list of selected url.*/
+    FileContext( const KUrl::List &urls );
 
     /**Destructor.*/
     virtual ~FileContext();
 
     virtual int type() const;
 
-    /**@return A reference to the selected of URLs.*/
+    /**@return A reference to the selected URLs.*/
     const KUrl::List &urls() const;
 
 private:
@@ -234,14 +180,13 @@ private:
 };
 
 /**
-A context for the popup menu in class views.
+A context for KDevCodeItem's.
  */
 class KDEVINTERFACES_EXPORT CodeItemContext: public Context
 {
 public:
     /**Builds the context.
-        @param item Selected code model item representation. Usually a symbol from the code
-        like class, function, etc.*/
+    @param item The item to build the context from.*/
     CodeItemContext( const KDevCodeItem* item );
 
     /**Destructor.*/
@@ -261,7 +206,7 @@ private:
 };
 
 /**
-A context for the popup menu in project views.
+A context for KDevProjectItem's.
  */
 class KDEVINTERFACES_EXPORT ProjectItemContext : public Context
 {
@@ -275,7 +220,7 @@ public:
 
     virtual int type() const;
 
-    /**@return The code model item for the selected item.*/
+    /**@return The project model item for the selected item.*/
     const KDevProjectItem* item() const;
 
 private:

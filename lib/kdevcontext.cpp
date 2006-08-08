@@ -95,32 +95,15 @@ QString EditorContext::currentWord() const
 class FileContext::Private
 {
 public:
-    Private( const KUrl::List &someURLs ) : m_urls( someURLs )
-    {
-        if ( m_urls.count() == 0 )
-        {
-            m_fileName = "INVALID-FILENAME";
-            m_isDirectory = false;  // well, "true" should be ok too ...
-        }
-        else
-        {
-            m_fileName = m_urls[ 0 ].path();
-            m_isDirectory = QDir( m_fileName ).exists();
-        }
-    }
-    Private( const QString &fileName, bool isDirectory )
-            : m_fileName( fileName ), m_isDirectory( isDirectory )
+    Private( const KUrl::List &urls )
+            : m_urls( urls )
     {}
 
     KUrl::List m_urls;
-    /// \FIXME the following data members should be removed, but first other
-    // parts should be modified to comply with this change.
-    QString m_fileName;
-    bool m_isDirectory;
 };
 
-FileContext::FileContext( const KUrl::List &someURLs )
-        : Context(), d( new Private( someURLs ) )
+FileContext::FileContext( const KUrl::List &urls )
+        : Context(), d( new Private( urls ) )
 {}
 
 FileContext::~FileContext()
@@ -137,59 +120,6 @@ int FileContext::type() const
 const KUrl::List &FileContext::urls() const
 {
     return d->m_urls;
-}
-
-class DocumentationContext::Private
-{
-public:
-    Private( const QString &url, const QString &selection )
-            : m_url( url ), m_selection( selection )
-    {}
-
-    QString m_url;
-    QString m_selection;
-};
-
-DocumentationContext::DocumentationContext( const QString &url, const QString &selection )
-        : Context(), d( new Private( url, selection ) )
-{}
-
-DocumentationContext::DocumentationContext( const DocumentationContext &aContext )
-        : Context(), d( 0 )
-{
-    *this = aContext;
-}
-
-DocumentationContext &DocumentationContext::operator=( const DocumentationContext &aContext )
-{
-    if ( d )
-    {
-        delete d;
-        d = 0;
-    }
-    d = new Private( *aContext.d );
-    return *this;
-}
-
-DocumentationContext::~DocumentationContext()
-{
-    delete d;
-    d = 0;
-}
-
-int DocumentationContext::type() const
-{
-    return Context::DocumentationContext;
-}
-
-QString DocumentationContext::url() const
-{
-    return d->m_url;
-}
-
-QString DocumentationContext::selection() const
-{
-    return d->m_selection;
 }
 
 class CodeItemContext::Private

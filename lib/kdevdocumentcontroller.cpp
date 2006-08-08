@@ -342,8 +342,12 @@ void KDevDocumentController::reloadDocument( KDevDocument* document )
 
 void KDevDocumentController::reloadDocuments( const QList<KDevDocument*> & list )
 {
-    foreach ( KDevDocument * document, list )
-    reloadDocument( document );
+    QList<KDevDocument*>::ConstIterator it = list.begin();
+    for ( ; it != list.end(); ++it )
+    {
+        //FIXME return a bool?
+        reloadDocument( *it );
+    }
 }
 
 bool KDevDocumentController::closeDocument( KDevDocument* document )
@@ -351,16 +355,13 @@ bool KDevDocumentController::closeDocument( KDevDocument* document )
     if ( !document )
         return false;
 
-    if ( KParts::ReadWritePart * rw_part = readWrite( document->part() ) )
+    if ( KParts::ReadWritePart * rw = readWrite( document->part() ) )
     {
-        if ( ! rw_part->closeURL() )
+        if ( ! rw->closeURL() )
             return false;
     }
 
     KDevCore::mainWindow() ->guiFactory() ->removeClient( document->part() );
-
-    //     if ( QWidget * w = EditorProxy::getInstance() ->topWidgetForPart( part ) )
-    //         KDevCore::mainWindow() ->removeView( w );
 
     emit documentClosed( document );
     removeDocument( document );
@@ -413,13 +414,13 @@ void KDevDocumentController::activateDocument( KDevDocument * document )
     {
         if ( !KDevCore::mainWindow() ->containsWidget( widget ) )
         {
-            KParts::ReadOnlyPart * ro_part = readOnly( document->part() );
-            if ( !ro_part )
+            KParts::ReadOnlyPart * ro = readOnly( document->part() );
+            if ( !ro )
                 return ;
 
             KDevCore::mainWindow() ->embedPartView( widget,
-                                                    ro_part->url().fileName(),
-                                                    ro_part->url().url() );
+                                                    ro->url().fileName(),
+                                                    ro->url().url() );
         }
 
         KDevCore::mainWindow() ->setCurrentWidget( widget );
@@ -624,12 +625,12 @@ void KDevDocumentController::slotSwitchTo()
     //         kDebug( 9000 ) << "Part..." << endl;
     //         if ( part->inherits( "KParts::ReadOnlyPart" ) )
     //         {
-    //             KParts::ReadOnlyPart * ro_part = readOnly( part );
-    //             QString name = ro_part->url().fileName();
+    //             KParts::ReadOnlyPart * ro = readOnly( part );
+    //             QString name = ro->url().fileName();
     //             part_list.append( name );
-    //             parts_map[ name ] = ro_part;
+    //             parts_map[ name ] = ro;
     //             kDebug( 9000 ) << "Found part for URL "
-    //             << ro_part->url().prettyUrl() << endl;
+    //             << ro->url().prettyUrl() << endl;
     //         }
     //     }
     //
@@ -959,8 +960,8 @@ KParts::Factory *KDevDocumentController::findPartFactory( const QString &mimeTyp
 KDevDocument* KDevDocumentController::integratePart( KParts::Part *part, bool activate )
 {
     // tell the parts we loaded a document
-    KParts::ReadOnlyPart * ro_part = readOnly( part );
-    if ( !ro_part )
+    KParts::ReadOnlyPart * ro = readOnly( part );
+    if ( !ro )
     {
         kDebug( 9000 ) << k_funcinfo << "no part!!" << endl;
         return 0L;
@@ -977,8 +978,8 @@ KDevDocument* KDevDocumentController::integratePart( KParts::Part *part, bool ac
         }
 
         KDevCore::mainWindow() ->embedPartView( widget,
-                                                ro_part->url().fileName(),
-                                                ro_part->url().url() );
+                                                ro->url().fileName(),
+                                                ro->url().url() );
     }
 
     KDevDocument* doc = addDocument( part, activate );
