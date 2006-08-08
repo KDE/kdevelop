@@ -679,7 +679,7 @@ void KDevDocumentController::updateMenuItems()
     }
 
     m_saveAllDocumentsAction->setEnabled( hasWriteParts );
-    m_revertAllDocumentsAction->setEnabled( hasWriteParts );
+    m_reloadAllDocumentsAction->setEnabled( hasWriteParts );
     m_closeWindowAction->setEnabled( hasReadOnlyParts );
     m_closeAllWindowsAction->setEnabled( hasReadOnlyParts );
     m_closeOtherWindowsAction->setEnabled( hasReadOnlyParts );
@@ -859,13 +859,13 @@ void KDevDocumentController::init()
                                             "modified files." ) );
     m_saveAllDocumentsAction->setEnabled( false );
 
-    m_revertAllDocumentsAction = new KAction( i18n( "Rever&t All" ), ac, "file_revert_all" );
-    connect( m_revertAllDocumentsAction, SIGNAL( triggered() ), SLOT( reloadAllDocuments() ) );
-    m_revertAllDocumentsAction->setToolTip( i18n( "Revert all changes" ) );
-    m_revertAllDocumentsAction->setWhatsThis( i18n( "<b>Revert all</b>"
-            "<p>Reverts all changes in opened files. Prompts to save changes so"
-            "the reversion can be canceled for each modified file." ) );
-    m_revertAllDocumentsAction->setEnabled( false );
+    m_reloadAllDocumentsAction = new KAction( i18n( "Reloa&d All" ), ac, "file_revert_all" );
+    connect( m_reloadAllDocumentsAction, SIGNAL( triggered() ), SLOT( reloadAllDocuments() ) );
+    m_reloadAllDocumentsAction->setToolTip( i18n( "Reload all changes" ) );
+    m_reloadAllDocumentsAction->setWhatsThis( i18n( "<b>Reload all</b>"
+            "<p>Reloads open documents. Prompts to save changes so"
+            "the reload can be canceled for each modified file." ) );
+    m_reloadAllDocumentsAction->setEnabled( false );
 
     m_closeWindowAction = KStdAction::close(
                               this, SLOT( closeActiveDocument() ),

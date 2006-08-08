@@ -250,7 +250,7 @@ private:
 
     KAction *m_closeWindowAction;
     KAction *m_saveAllDocumentsAction;
-    KAction *m_revertAllDocumentsAction;
+    KAction *m_reloadAllDocumentsAction;
     KAction *m_closeAllWindowsAction;
     KAction *m_closeOtherWindowsAction;
     KAction *m_switchToAction;
