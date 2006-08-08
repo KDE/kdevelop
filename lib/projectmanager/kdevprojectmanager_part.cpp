@@ -200,11 +200,9 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
   if (m_workspace)
     m_projectModel->removeItem(m_workspace);
   KDevFileManager* manager = defaultImporter();
-  kDebug(9000) << k_funcinfo << "default importer is: " << manager << endl;
   setFileManager( manager );
   KDevProjectItem* item = manager->import(m_projectModel, m_projectDirectory);
   m_workspace = item ? item->folder() : 0;
-  kDebug(9000) << k_funcinfo << "workspace is: " << m_workspace << endl;
   if ( m_workspace != 0 )
   {
       m_projectModel->appendItem(m_workspace);

@@ -212,7 +212,8 @@ void KDevProjectController::legacyLoading()
     KDevCore::languageController() ->languageSupport( language );
     QStringList paths = config->readPathListEntry( "OpenDocuments" );
 
-    kDebug() << "Open documents count = " << paths.count() << endl;
+    //kDebug() << "Open documents count = " << paths.count() << endl;
+
     //Put the backgroundParser in caching mode until all documents are opened
     KDevCore::backgroundParser() ->cacheModels( paths.count() );
 
