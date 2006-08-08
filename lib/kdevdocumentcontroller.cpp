@@ -953,7 +953,10 @@ KDevDocument* KDevDocumentController::integratePart( KParts::Part *part, bool ac
     // tell the parts we loaded a document
     KParts::ReadOnlyPart * ro_part = readOnly( part );
     if ( !ro_part )
+    {
+        kDebug( 9000 ) << k_funcinfo << "no part!!" << endl;
         return 0L;
+    }
 
     if ( activate )
     {
@@ -961,8 +964,7 @@ KDevDocument* KDevDocumentController::integratePart( KParts::Part *part, bool ac
 
         if ( !widget )
         {
-            /// @todo error handling
-            kDebug( 9000 ) << "no widget for this part!!" << endl;
+            kDebug( 9000 ) << k_funcinfo << "no widget for this part!!" << endl;
             return 0L; // to avoid later crash
         }
 
@@ -973,27 +975,27 @@ KDevDocument* KDevDocumentController::integratePart( KParts::Part *part, bool ac
 
     KDevDocument* doc = addDocument( part, activate );
 
-    //     KTextEditor::ModificationInterface* iface =
-    //         qobject_cast<KTextEditor::ModificationInterface*>( part );
-    //     if ( iface )
-    //     {
-    //         iface->setModifiedOnDiskWarning( true );
-    //         connect( part, SIGNAL(
-    //                      modifiedOnDisk( KTextEditor::Document*, bool,
-    //                                      KTextEditor::ModificationInterface::ModifiedOnDiskReason ) ),
-    //                  this, SLOT(
-    //                      modifiedOnDisk( KTextEditor::Document*, bool,
-    //                                      KTextEditor::ModificationInterface::ModifiedOnDiskReason ) )
-    //                );
-    //     }
+    KTextEditor::ModificationInterface* iface =
+        qobject_cast<KTextEditor::ModificationInterface*>( part );
+    if ( iface )
+    {
+        iface->setModifiedOnDiskWarning( true );
+        connect( part, SIGNAL(
+                     modifiedOnDisk( KTextEditor::Document*, bool,
+                                     KTextEditor::ModificationInterface::ModifiedOnDiskReason ) ),
+                 this, SLOT(
+                     modifiedOnDisk( KTextEditor::Document*, bool,
+                                     KTextEditor::ModificationInterface::ModifiedOnDiskReason ) )
+               );
+    }
 
     // let's get notified when a document has been changed
     connect( part, SIGNAL( completed() ), this, SLOT( slotUploadFinished() ) );
 
     if ( doc->textDocument() )
     {
-        //         connect( doc, SIGNAL( textChanged( KTextEditor::Document* ) ),
-        //                  this, SIGNAL( newDocumentStatus( KTextEditor::Document* ) ) );
+        connect( doc->textDocument(), SIGNAL( modifiedChanged( KTextEditor::Document* ) ),
+                 this, SLOT( newDocumentStatus( KTextEditor::Document* ) ) );
     }
 
     return doc;
