@@ -373,9 +373,11 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exp
 	
 	if( ctx )
 		searchIn = ctx->container().get();
-	
+
+	///@todo correctly handle shadowing of variables etc.
+                                                                                                           
+	///Local variables have the highest priority
 	if( ctx && split.count() == 1 && exprList.count() == 0 && canBeItemExpression ) {
-		///Search for variables and functions, first in the current context, and then through the container-classes upwards.
 			// find the variable in the current context
 		SimpleVariable var = ctx->findVariable( currentExpr );
 	
@@ -383,24 +385,8 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exp
 			EvaluationResult res = evaluateAtomicExpression(  exprList, EvaluationResult( ctx->container()->locateDecType( var.type ), var.toDeclarationInfo( "current_file" )) );
 			return res;
 		}
-	
-		SimpleType current = ctx->container();
-	
-		SimpleTypeImpl::TypeOfResult type;
-	
-		SafetyCounter s( 20 );
-		bool ready = false;
-		while( !ready && s )
-		{
-			if( !current ) ready = true;
-	
-			type = current->typeOf( currentExpr );
-			if ( type)
-				return EvaluationResult( type.type, type.decl );
-	
-			if( !ready ) current = current->parent();
-		}
 	}
+
 	/*
   if( scope.expr.t & ExpressionInfo::TypeExpression )
     canBeTypeExpression = true;*/
@@ -424,6 +410,27 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exp
 				bestRet->append( new TypeDescShared( s.join("::") ) );
 		}
 	}
+
+		///Search for variables and functions, upwards from the current context
+	if( ctx && split.count() == 1 && exprList.count() == 0 && canBeItemExpression ) {
+		SimpleType current = ctx->container();
+		
+		SimpleTypeImpl::TypeOfResult type;
+		
+		SafetyCounter s( 20 );
+		bool ready = false;
+		while( !ready && s )
+		{
+			if( !current ) ready = true;
+			
+			type = current->typeOf( currentExpr );
+			if ( type)
+				return EvaluationResult( type.type, type.decl );
+			
+			if( !ready ) current = current->parent();
+		}
+	}
+	
 
 	if( split.count() == 1 && exprList.count() == 0 && canBeItemExpression ) {
 	///Since it's the last element of a scope-chain, also search for functions and variables.

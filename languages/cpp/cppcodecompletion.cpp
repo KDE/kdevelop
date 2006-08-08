@@ -1835,6 +1835,18 @@ QString CppCodeCompletion::buildSignature( TypePointer currType )
 	return sig;
 }
 
+bool isAfterKeyword( const QString& str, int column ) {
+	QStringList keywords;
+	keywords << "new";
+	keywords << "throw";
+	keywords << "return";
+	for( QStringList::iterator it = keywords.begin(); it != keywords.end(); ++it ) {
+		int len = (*it).length();
+		if( column >= len && str.mid( column-len, len ) == *it ) return true;
+	}
+	return false;
+}
+
 ///TODO: make this use findExpressionAt etc. (like the other expression-evaluation-stuff)
 void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 {
@@ -1935,10 +1947,10 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		}
 
 		if( s1 && s2 && isValidIdentifierSign( strCurLine[column-1] ) ) {
-			if( column >= 3 && strCurLine.mid( column-3, 3 ) == "new" ) {
-				///It is a constructor using "new"
+			if( isAfterKeyword( strCurLine, column ) ) {
+				///Maybe a constructor using "new", or "throw", "return", ...
 			} else {
-				///it is a local constructor
+				///it is a local constructor like "QString name("David");"
 				nCol = column;
 			}
 		}

@@ -2021,7 +2021,6 @@ FileDom CppSupportPart::fileByName( const QString& name) {
 
 
 int CppSupportPart::parseFilesAndDependencies( QStringList files, bool background ) {
-
 	QMap<QString, int> fileGroups;
 	int nextGroup = 0;
 
