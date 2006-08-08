@@ -193,7 +193,7 @@ void GrepViewWidget::searchActivated()
 {
 	if ( grepdlg->keepOutputFlag() )
 		slotKeepOutput();
-		
+
 	m_tabWidget->showPage( m_curOutput );
 
 	m_curOutput->setLastFileName("");
@@ -225,8 +225,19 @@ void GrepViewWidget::searchActivated()
 	filepattern += " \\( -name ";
 	filepattern += files;
 	filepattern += " \\) -print -follow";
+	if (grepdlg->noFindErrorsFlag())
+		filepattern += " 2>/dev/null";
 
 	QString command = filepattern + " " ;
+
+	QStringList excludelist = QStringList::split(",", grepdlg->excludeString());
+	if (!excludelist.isEmpty())
+	{
+		QStringList::Iterator it(excludelist.begin());
+		for (; it != excludelist.end(); ++it)
+			command += "| grep -v " + KShellProcess::quote(*it) + " ";
+	}
+
 	if (grepdlg->ignoreSCMDirsFlag())
 	{
 		command += "| grep -v -e \"SCCS/\" ";
@@ -322,7 +333,7 @@ void GrepViewWidget::popupMenu(QListBoxItem*, const QPoint& p)
 	if(m_curOutput->isRunning()) return;
 
 	KPopupMenu rmbMenu;
-	
+
 	if(KAction *findAction = m_part->actionCollection()->action("edit_grep"))
 	{
 		rmbMenu.insertTitle(i18n("Find in Files"));
@@ -334,7 +345,7 @@ void GrepViewWidget::popupMenu(QListBoxItem*, const QPoint& p)
 void GrepViewWidget::slotKeepOutput( )
 {
 	if ( m_lastPattern == QString::null ) return;
-	
+
 	m_tabWidget->changeTab(m_curOutput, m_lastPattern);
 
 	m_curOutput = new GrepViewProcessWidget(m_tabWidget);

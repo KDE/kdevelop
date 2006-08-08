@@ -12,8 +12,6 @@
 #ifndef _GREPDLG_H_
 #define _GREPDLG_H_
 
-#define IGNORE_SCM_DIRS
-
 #include <qdialog.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
@@ -46,15 +44,19 @@ public:
 	{ return template_edit->text(); }
     QString filesString() const
 	{ return files_combo->currentText(); }
+    QString excludeString() const
+	{ return exclude_combo->currentText(); }
     QString directoryString() const
 	{ return dir_combo->currentText(); }
-	
+
 	bool regexpFlag() const
 		{ return regexp_box->isChecked(); }
 	bool recursiveFlag() const
 		{ return recursive_box->isChecked(); }
 	bool ignoreSCMDirsFlag() const
 		{ return ignore_scm_box->isChecked(); }
+	bool noFindErrorsFlag() const
+		{ return no_find_err_box->isChecked(); }
 	bool caseSensitiveFlag() const
 		{ return case_sens_box->isChecked(); }
 	bool keepOutputFlag() const
@@ -73,13 +75,14 @@ private slots:
 
 private:
     KLineEdit *template_edit;
-    KComboBox *pattern_combo, *files_combo;
+    KComboBox *pattern_combo, *files_combo, *exclude_combo;
     KComboBox * dir_combo;
     KURLRequester * url_requester;
 
     QCheckBox *regexp_box;
     QCheckBox *recursive_box;
     QCheckBox *ignore_scm_box;
+    QCheckBox *no_find_err_box;
     QCheckBox *case_sens_box;
     QCheckBox *keep_output_box;
     KConfig* config;

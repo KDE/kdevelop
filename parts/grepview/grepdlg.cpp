@@ -90,7 +90,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     config = GrepViewFactory::instance()->config();
     config->setGroup("GrepDialog");
 
-    QGridLayout *layout = new QGridLayout(this, 6, 2, 10, 4);
+    QGridLayout *layout = new QGridLayout(this, 7, 2, 10, 4);
     layout->addRowSpacing(4, 10);
     layout->setRowStretch(4, 0);
     layout->setColStretch(0, 0);
@@ -129,11 +129,27 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     files_combo->insertStrList(filepatterns);
     layout->addWidget(files_combo, 2, 1);
 
+    QLabel *exclude_label = new QLabel(i18n("&Exclude:"), this);
+    layout->addWidget(exclude_label, 3, 0, AlignRight | AlignVCenter);
+
+    QStringList exclude_list = config->readListEntry("exclude_patterns");
+    exclude_combo = new KComboBox(true, this);
+    exclude_label->setBuddy(files_combo->focusProxy());
+    if (exclude_list.count()) {
+        exclude_combo->insertStringList(exclude_list);
+    }
+    else
+    {
+        exclude_combo->insertItem("/CVS/,/SCCS/,/\\.svn/,/_darcs/");
+        exclude_combo->insertItem("");
+    }
+    layout->addWidget(exclude_combo, 3, 1);
+
     QLabel *dir_label = new QLabel(i18n("&Directory:"), this);
-    layout->addWidget(dir_label, 3, 0, AlignRight | AlignVCenter);
+    layout->addWidget(dir_label, 4, 0, AlignRight | AlignVCenter);
 
     QBoxLayout *dir_layout = new QHBoxLayout(4);
-    layout->addLayout(dir_layout, 3, 1);
+    layout->addLayout(dir_layout, 4, 1);
 
     dir_combo = new KComboBox( true, this );
     dir_combo->insertStringList(config->readPathListEntry("LastSearchPaths"));
@@ -153,8 +169,8 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
 	dir_layout->addWidget( synch_button );
 
     QBoxLayout *dir_checks_layout = new QHBoxLayout(4);
-    layout->addLayout(dir_checks_layout, 4, 1);
-	
+    layout->addLayout(dir_checks_layout, 5, 1);
+
     regexp_box = new QCheckBox(i18n("Regular &Expression"), this);
     regexp_box->setChecked(true);
     dir_checks_layout->addSpacing(10);
@@ -169,19 +185,24 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     case_sens_box->setChecked(config->readBoolEntry("case_sens", true));
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(case_sens_box);
-    
+
     keep_output_box = new QCheckBox(i18n("New view"), this);
     keep_output_box->setChecked(config->readBoolEntry("new_view", true));
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(keep_output_box);
-    
+
     ignore_scm_box = new QCheckBox(i18n("S&kip VCS dirs"), this);
     ignore_scm_box->setChecked(config->readBoolEntry("vcs_dirs", true));
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(ignore_scm_box);
 
+    no_find_err_box = new QCheckBox(i18n("&Suppress find errors"), this);
+    no_find_err_box->setChecked(config->readBoolEntry("no_find_errs", true));
+    dir_checks_layout->addSpacing(10);
+    dir_checks_layout->addWidget(no_find_err_box);
+
     QBoxLayout *button_layout = new QHBoxLayout(4);
-    layout->addLayout(button_layout, 5, 1);
+    layout->addLayout(button_layout, 6, 1);
     search_button = new KPushButton(KGuiItem(i18n("&Search"),"grep"), this);
     search_button->setDefault(true);
     KPushButton *done_button = new KPushButton(KStdGuiItem::cancel(), this);
@@ -257,7 +278,8 @@ GrepDialog::~GrepDialog()
 	config->writeEntry("recursive", recursive_box->isChecked());
 	config->writeEntry("case_sens", case_sens_box->isChecked());
 	config->writeEntry("new_view", keep_output_box->isChecked());
-	config->writeEntry("vcs_dirs", ignore_scm_box->isChecked());
+	config->writeEntry("no_find_errs", no_find_err_box->isChecked());
+	config->writeEntry("exclude_patterns", qCombo2StringList(exclude_combo));
 }
 
 void GrepDialog::slotPatternChanged( const QString & _text )
@@ -296,6 +318,12 @@ void GrepDialog::slotSearchClicked()
     }
     if (pattern_combo->count() > 15) {
 	pattern_combo->removeItem(15);
+    }
+    if (!qComboContains(exclude_combo->currentText(), exclude_combo)) {
+	exclude_combo->insertItem(exclude_combo->currentText(), 0);
+    }
+    if (exclude_combo->count() > 15) {
+	exclude_combo->removeItem(15);
     }
     if (!qComboContains(dir_combo->currentText(), dir_combo)) {
 	dir_combo->insertItem(dir_combo->currentText(), 0);
