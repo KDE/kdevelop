@@ -37,15 +37,20 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPart *part, QWidget *parent 
         : KDevTreeView( parent ),
         m_part( part )
 {
+    setFocusPolicy(Qt::NoFocus);
+
     setRootIsDecorated( false );
     header() ->hide();
     header() ->setResizeMode( QHeaderView::Stretch );
 
     setContextMenuPolicy( Qt::CustomContextMenu );
+    setSelectionMode( QAbstractItemView::ExtendedSelection );
+
     connect( this, SIGNAL( pressed( QModelIndex ) ),
              this, SLOT( handleMousePress( QModelIndex ) ) );
+
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ),
-             this, SLOT( popupContextMenu( QPoint ) ) );
+                this, SLOT( popupContextMenu( QPoint ) ) );
 }
 
 KDevDocumentView::~KDevDocumentView()
@@ -56,23 +61,11 @@ KDevDocumentViewPart *KDevDocumentView::part() const
     return m_part;
 }
 
-void KDevDocumentView::currentChanged( const QModelIndex & current,
-                                       const QModelIndex & previous )
-{
-    if ( !current.parent().isValid() )
-        setCurrentIndex( previous );
-    else
-        KDevTreeView::currentChanged( current, previous );
-}
-
 void KDevDocumentView::handleMousePress( const QModelIndex & index )
 {
     if ( !index.parent().isValid() )
     {
-        if ( isExpanded( index ) )
-            collapse( index );
-        else
-            expand( index );
+        setExpanded( index, !isExpanded( index ) );
     }
 }
 
@@ -81,6 +74,7 @@ void KDevDocumentView::popupContextMenu( const QPoint &pos )
     QModelIndex index = indexAt( pos );
     KDevDocumentModel *docModel = qobject_cast<KDevDocumentModel*>( model() );
     if ( KDevDocumentItem * item = docModel->item( index ) )
+    {
         if ( KDevFileItem * fileItem = item->fileItem() )
         {
             QModelIndexList indexes = selectedIndexes();
@@ -94,6 +88,7 @@ void KDevDocumentView::popupContextMenu( const QPoint &pos )
             //KDevApi::self() ->core() ->fillContextMenu( &menu, &context ); FIXME
             menu.exec( mapToGlobal( pos ) );
         }
+    }
 }
 
 #include "kdevdocumentview.moc"

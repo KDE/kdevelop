@@ -20,8 +20,6 @@ Boston, MA 02110-1301, USA.
 #include "kdevdocumentmodel.h"
 #include "kdevdocumentselection.h"
 
-#include <kdebug.h>
-
 KDevDocumentSelection::KDevDocumentSelection( KDevDocumentModel * model )
         : QItemSelectionModel( model )
 {}
@@ -42,7 +40,7 @@ void KDevDocumentSelection::select( const QItemSelection & selection,
                                     QItemSelectionModel::SelectionFlags command )
 {
     QList<QModelIndex> selections = selection.indexes();
-    QList<QModelIndex>::Iterator it = selections.begin();
+    QList<QModelIndex>::ConstIterator it = selections.begin();
     for ( ; it != selections.end(); ++it )
         if ( !( *it ).parent().isValid() )
             return QItemSelectionModel::select( selection, NoUpdate );
