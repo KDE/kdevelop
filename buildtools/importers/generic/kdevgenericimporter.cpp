@@ -36,10 +36,8 @@ K_EXPORT_COMPONENT_FACTORY(kdevgenericimporter, KGenericFactory<KDevGenericImpor
 KDevGenericImporter::KDevGenericImporter(QObject *parent, const QStringList &)
     : KDevFileManager(parent)
 {
-    kDebug() << k_funcinfo << "generic importer loaded" << endl;
-
     if (includes.isEmpty())
-        includes << "*.h" << "*.cpp" << "*.c" << "*.ui";   // ### remove me
+        includes << "*.h" << "*.cpp" << "*.c" << "*.ui" << ".cs" << ".java";   // ### remove me
 
     excludes << ".svn" << "CVS" << "moc_*.cpp"; // ### remove me
 }
@@ -111,8 +109,6 @@ QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *
 
 KDevProjectItem *KDevGenericImporter::import(KDevProjectModel *model, const KUrl &fileName)
 {
-    kDebug(9000) << k_funcinfo << "import filename: " << fileName << endl;
-
     QFileInfo fileInfo( fileName.path() );
     if (fileInfo.isDir()) {
         KDevProjectFolderItem *folder = new KDevProjectFolderItem(fileName, 0);
