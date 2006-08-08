@@ -231,7 +231,7 @@ KDevDocument * KDevDocumentController::documentForUrl( const KUrl & url ) const
     return 0L;
 }
 
-QList<KDevDocument*> KDevDocumentController::openDocuments( ) const
+QList<KDevDocument*> KDevDocumentController::openDocuments() const
 {
     return m_partHash.values();
 }
@@ -353,11 +353,8 @@ bool KDevDocumentController::closeDocument( KDevDocument* document )
 
     if ( KParts::ReadWritePart * rw_part = readWrite( document->part() ) )
     {
-        KUrl url = rw_part->url();
         if ( ! rw_part->closeURL() )
             return false;
-
-        emit documentClosed( document );
     }
 
     KDevCore::mainWindow() ->guiFactory() ->removeClient( document->part() );
@@ -365,27 +362,38 @@ bool KDevDocumentController::closeDocument( KDevDocument* document )
     //     if ( QWidget * w = EditorProxy::getInstance() ->topWidgetForPart( part ) )
     //         KDevCore::mainWindow() ->removeView( w );
 
+    emit documentClosed( document );
     removeDocument( document );
+
     return true;
 }
 
 bool KDevDocumentController::closeDocuments( const QList<KDevDocument*>& list )
 {
-    foreach ( KDevDocument * document, list )
-    if ( !closeDocument( document ) )
-        return false;
-
+    QList<KDevDocument*>::ConstIterator it = list.begin();
+    for ( ; it != list.end(); ++it )
+    {
+        if ( !closeDocument( *it ) )
+        {
+            return false;
+        }
+    }
     return true;
 }
 
 bool KDevDocumentController::closeAllOthers( KDevDocument* document )
 {
-    foreach ( KParts::Part * part, KDevCore::partController() ->parts() )
+    QList<KParts::Part*> docs = KDevCore::partController() ->parts();
+    QList<KParts::Part*>::ConstIterator it = docs.begin();
+    for ( ; it != docs.end(); ++it )
     {
-        KDevDocument * doc = documentForPart( part );
-        if ( readOnly( doc->part() ) && doc != document )
+        KDevDocument * doc = documentForPart( *it );
+        if ( doc != document )
         {
-            closeDocument( doc );
+            if ( !closeDocument( doc ) )
+            {
+                return false;
+            }
         }
     }
     return true;
@@ -851,7 +859,7 @@ void KDevDocumentController::init()
     m_saveAllDocumentsAction->setEnabled( false );
 
     m_revertAllDocumentsAction = new KAction( i18n( "Rever&t All" ), ac, "file_revert_all" );
-    connect( m_revertAllDocumentsAction, SIGNAL( toggled( bool ) ), SLOT( reloadAllDocuments() ) );
+    connect( m_revertAllDocumentsAction, SIGNAL( triggered() ), SLOT( reloadAllDocuments() ) );
     m_revertAllDocumentsAction->setToolTip( i18n( "Revert all changes" ) );
     m_revertAllDocumentsAction->setWhatsThis( i18n( "<b>Revert all</b>"
             "<p>Reverts all changes in opened files. Prompts to save changes so"
@@ -866,14 +874,14 @@ void KDevDocumentController::init()
     m_closeWindowAction->setEnabled( false );
 
     m_closeAllWindowsAction = new KAction( i18n( "Close All" ), ac, "file_close_all" );
-    connect( m_closeAllWindowsAction, SIGNAL( toggled( bool ) ), SLOT( closeAllDocuments() ) );
+    connect( m_closeAllWindowsAction, SIGNAL( triggered() ), SLOT( closeAllDocuments() ) );
     m_closeAllWindowsAction->setToolTip( i18n( "Close all files" ) );
     m_closeAllWindowsAction->setWhatsThis( i18n( "<b>Close all</b><p>Close all "
                                            "opened files." ) );
     m_closeAllWindowsAction->setEnabled( false );
 
     m_closeOtherWindowsAction = new KAction( i18n( "Close All Others" ), ac, "file_closeother" );
-    connect( m_closeOtherWindowsAction, SIGNAL( toggled( bool ) ), SLOT( closeAllExceptActiveDocument() ) );
+    connect( m_closeOtherWindowsAction, SIGNAL( triggered() ), SLOT( closeAllExceptActiveDocument() ) );
     m_closeOtherWindowsAction->setToolTip( i18n( "Close other files" ) );
     m_closeOtherWindowsAction->setWhatsThis( i18n( "<b>Close all others</b>"
             "<p>Close all opened files except current." ) );
@@ -881,7 +889,7 @@ void KDevDocumentController::init()
 
     m_switchToAction = new KAction( i18n( "Switch To..." ), ac, "file_switchto" );
     m_switchToAction->setShortcut( KShortcut( "CTRL+/" ) );
-    connect( m_switchToAction, SIGNAL( toggled( bool ) ), SLOT( slotSwitchTo() ) );
+    connect( m_switchToAction, SIGNAL( triggered() ), SLOT( slotSwitchTo() ) );
     m_switchToAction->setToolTip( i18n( "Switch to" ) );
     m_switchToAction->setWhatsThis( i18n( "<b>Switch to</b><p>Prompts to enter "
                                           "the name of previously opened file "
