@@ -22,7 +22,7 @@
  ***************************************************************************/
 #include "autotoolsast.h"
 
-namespace AutoTools {
+namespace AutoMake {
 
 //AST
 

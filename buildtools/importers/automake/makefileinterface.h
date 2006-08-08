@@ -28,7 +28,7 @@
 
 class QFileInfo;
 
-namespace AutoTools
+namespace AutoMake
 {
     class ProjectAST;
     enum TargetType { Program, Library, LibtoolLibrary, Lisp, Python, Java,
@@ -46,14 +46,14 @@ template <typename T> class QList;
 template <typename T1, typename T2> class QMap;
 template <typename T1, typename T2> class QHash;
 
-typedef QHash<QFileInfo, AutoTools::ProjectAST*> ASTHash;
-typedef QMap<QFileInfo, AutoTools::ProjectAST*> ASTMap;
-typedef QList<AutoTools::ProjectAST*> ASTList;
+typedef QHash<QFileInfo, AutoMake::ProjectAST*> AutoMakeASTHash;
+typedef QMap<QFileInfo, AutoMake::ProjectAST*> AutoMakeASTMap;
+typedef QList<AutoMake::ProjectAST*> AutoMakeASTList;
 
 struct TargetInfo
 {
-    AutoTools::TargetType type;
-    AutoTools::InstallLocation location;
+    AutoMake::TargetType type;
+    AutoMake::InstallLocation location;
     QString name;
     KUrl url;
     QString display;
@@ -74,7 +74,7 @@ public:
     static QString canonicalize( const QString& target );
     static bool isVariable( const QString& item );
 
-    QString resolveVariable( const QString& variable, AutoTools::ProjectAST* ast ) const;
+    QString resolveVariable( const QString& variable, AutoMake::ProjectAST* ast ) const;
 
     bool parse( const KUrl& dir, ParserRecursion recursive = Recursive );
 
@@ -87,9 +87,9 @@ public:
     QList<QFileInfo> filesForTarget( const TargetInfo& ) const;
 
 private:
-    QStringList subdirsFor( AutoTools::ProjectAST* ) const;
-    AutoTools::ProjectAST* astForFolder( const KUrl& dir ) const;
-    QStringList valuesForId( const QString&, AutoTools::ProjectAST* ) const;
+    QStringList subdirsFor( AutoMake::ProjectAST* ) const;
+    AutoMake::ProjectAST* astForFolder( const KUrl& dir ) const;
+    QStringList valuesForId( const QString&, AutoMake::ProjectAST* ) const;
 
 private:
     class Private;

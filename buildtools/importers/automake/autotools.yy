@@ -41,7 +41,7 @@ noinst_HEADERS = foo.h #regognize me
 
 #define YYSTYPE_IS_DECLARED
 
-using namespace AutoTools;
+using namespace AutoMake;
 
 /**
 The yylval type.

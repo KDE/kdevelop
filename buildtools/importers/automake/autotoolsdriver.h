@@ -26,7 +26,7 @@
 #include <qlist.h>
 #include <kurl.h>
 
-namespace AutoTools {
+namespace AutoMake {
 
 /**
 @file autotoolsdriver.h

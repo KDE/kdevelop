@@ -31,7 +31,7 @@
 Abstract Syntax Tree (AST) class declarations.
 */
 
-namespace AutoTools
+namespace AutoMake
 {
 
 /**
@@ -160,7 +160,7 @@ public:
 	bool hasElse;
 	
 	/**List of statements.*/
-	QList<AutoTools::AST*> statements;
+	QList<AutoMake::AST*> statements;
 	
 private:
 	Kind m_kind;

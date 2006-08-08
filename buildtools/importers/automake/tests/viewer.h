@@ -24,7 +24,7 @@
 
 #include "viewerbase.h"
 
-namespace AutoTools { class ProjectAST; }
+namespace AutoMake { class ProjectAST; }
 
 class Q3ListViewItem;
 
@@ -33,14 +33,14 @@ class Viewer: public QWidget, private Ui::ViewerBase
 Q_OBJECT
 public:
     Viewer(QWidget *parent = 0);
-    void processAST(AutoTools::ProjectAST *projectAST, Q3ListViewItem *globAfter = 0);
+    void processAST(AutoMake::ProjectAST *projectAST, Q3ListViewItem *globAfter = 0);
 public slots:
     virtual void tabWidget2_selected(const QString&);
     virtual void on_files_currentChanged(Q3ListBoxItem*);
     virtual void on_choose_clicked();
     virtual void on_addAll_clicked();
 private:
-    AutoTools::ProjectAST *projectAST;
+    AutoMake::ProjectAST *projectAST;
     QStack<Q3ListViewItem *> parentProject;
 };
 

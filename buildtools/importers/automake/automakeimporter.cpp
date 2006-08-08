@@ -122,7 +122,7 @@ void AutoMakeImporter::createProjectItems( const KUrl& folder, KDevProjectItem* 
     {
         switch( target.type )
         {
-        case AutoTools::Data:
+        case AutoMake::Data:
             if ( target.name.contains( ".desktop" ) )
             {
                 if ( dotDesktopTarget == 0 )
@@ -141,8 +141,8 @@ void AutoMakeImporter::createProjectItems( const KUrl& folder, KDevProjectItem* 
                                                          xmlGuiTarget ) );
             }
             break;
-        case AutoTools::Headers:
-            if ( target.location != AutoTools::None )
+        case AutoMake::Headers:
+            if ( target.location != AutoMake::None )
             {
                 if ( installedHeaders == 0 )
                     installedHeaders = new KDevProjectItem( i18n( "Installed headers" ) );
@@ -159,9 +159,9 @@ void AutoMakeImporter::createProjectItems( const KUrl& folder, KDevProjectItem* 
                                                                 notInstalledHeaders ) );
             }
             break;
-        case AutoTools::Program:
-        case AutoTools::Library:
-        case AutoTools::LibtoolLibrary:
+        case AutoMake::Program:
+        case AutoMake::Library:
+        case AutoMake::LibtoolLibrary:
         default:
             AutoMakeTargetItem* targetItem = new AutoMakeTargetItem( target, folderItem );
             folderItem->add( targetItem );

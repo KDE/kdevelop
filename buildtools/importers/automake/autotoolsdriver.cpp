@@ -30,9 +30,9 @@
 extern FILE *yyin, *yyout;
 extern int yyparse();
 extern int yydebug;
-extern QStack<AutoTools::ProjectAST *> projects;
+extern QStack<AutoMake::ProjectAST *> projects;
 
-namespace AutoTools {
+namespace AutoMake {
 
 int Driver::parseFile(const char *fileName, ProjectAST **ast)
 {
