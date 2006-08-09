@@ -37,7 +37,7 @@ KDevGenericImporter::KDevGenericImporter(QObject *parent, const QStringList &)
     : KDevFileManager(parent)
 {
     if (includes.isEmpty())
-        includes << "*.h" << "*.cpp" << "*.c" << "*.ui" << ".cs" << ".java";   // ### remove me
+        includes << "*.h" << "*.cpp" << "*.c" << "*.ui" << "*.cs" << "*.java";   // ### remove me
 
     excludes << ".svn" << "CVS" << "moc_*.cpp"; // ### remove me
 }
