@@ -66,15 +66,12 @@ KDevCodeModel *ParseJob::codeModel() const
 //     return new KDevCodeModel;
 }
 
-//FIXME Don't use this for the API please
-char *_G_contents;
-
 void ParseJob::run()
 {
     bool readFromDisk = m_contents.isNull();
     std::size_t size;
 
-    QString contents;
+    char *contents;
 
     if ( readFromDisk )
     {
@@ -88,17 +85,18 @@ void ParseJob::run()
         }
 
         QByteArray fileData = file.readAll();
-        contents = QString::fromUtf8( fileData.constData() );
-        _G_contents = fileData.data();
+        QString qcontents = QString::fromUtf8( fileData.constData() );
+        contents = fileData.data();
         size = fileData.size();
-        assert( !contents.isEmpty() );
+        assert( !qcontents.isEmpty() );
         file.close();
     }
     else
     {
-        contents = QString::fromUtf8( m_contents.constData() );
+        // FIXME: jpetso says: why is this here if we don't use it?
+        // qcontents = QString::fromUtf8( m_contents.constData() );
         size = m_contents.size();
-        _G_contents = m_contents.data();
+        contents = m_contents.data();
     }
 
     kDebug() << "===-- PARSING --===> "
@@ -119,7 +117,7 @@ void ParseJob::run()
     csharp_parser.set_memory_pool(&memory_pool);
 
   // 1) tokenize
-    csharp_parser.tokenize();
+    csharp_parser.tokenize(contents);
 
   // 2) parse
     compilation_unit_ast *ast = 0;
@@ -133,9 +131,6 @@ void ParseJob::run()
     {
         csharp_parser.yy_expected_symbol(ast_node::Kind_compilation_unit, "compilation_unit"); // ### remove me
     }
-
-//FIXME Don't use this for the API please
-//     delete[] _G_contents;
 }
 
 #include "parsejob.moc"

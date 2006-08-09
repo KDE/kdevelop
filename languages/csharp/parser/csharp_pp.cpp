@@ -5,6 +5,7 @@
 
 
 #include "csharp.h"
+#include "csharp_lexer.h"
 #include "csharp_pp_handler_visitor.h"
 
 #include <string>
@@ -13,8 +14,52 @@
 namespace csharp_pp
   {
 
+  void parser::tokenize(bool &encountered_eof)
+  {
+    encountered_eof = false;
+    int kind = parser::Token_EOF;
+    do
+      {
+        kind = _M_lexer->yylex();
+        //std::cerr << "pp: " << lexer.YYText() << std::endl; //" "; // debug output
+
+        parser::token_type &t = this->token_stream->next();
+        t.kind = kind;
+        t.begin = _M_lexer->token_begin();
+        t.end = _M_lexer->token_end();
+        t.text = _M_lexer->contents();
+
+        if (kind == parser::Token_EOF)
+          {
+            t.kind = parser::Token_PP_NEW_LINE;
+            encountered_eof = true;
+            break;
+          }
+      }
+    while (kind != parser::Token_PP_NEW_LINE);
+
+    parser::token_type &t = this->token_stream->next();
+    t.kind = parser::Token_EOF;
+    t.begin = _M_lexer->token_begin();
+    t.end = _M_lexer->token_end();
+    t.text = _M_lexer->contents();
+
+    this->yylex(); // produce the look ahead token
+  }
+
+  void parser::add_token(parser::token_type_enum token_kind)
+  {
+    //std::cerr << "pp: " << lexer.YYText() << std::endl; //" "; // debug output
+    parser::token_type &t = this->token_stream->next();
+    t.kind = token_kind;
+    t.begin = _M_lexer->token_begin();
+    t.end = _M_lexer->token_end();
+    t.text = _M_lexer->contents();
+  }
+
+
   parser::pp_parse_result parser::pp_parse_line(
-    parser::token_type_enum first_token, scope* scope )
+    parser::token_type_enum first_token, scope* scope, csharp::Lexer *lexer )
   {
     // 0) setup
     if (scope == 0)
@@ -24,6 +69,7 @@ namespace csharp_pp
     bool encountered_eof;
 
     // 1) tokenize
+    _M_lexer = lexer;
     add_token(first_token);
     tokenize(encountered_eof);
 
@@ -51,13 +97,13 @@ namespace csharp_pp
 
 
   // custom error recovery
-  void parser::yy_expected_token(int /*expected*/, std::size_t where, char const *name)
+  void parser::yy_expected_token(int /*expected*/, std::size_t /*where*/, char const *name)
   {
     //print_token_environment(this);
     if (_M_scope->csharp_parser() != 0)
       {
         _M_scope->csharp_parser()->report_problem(
-          ::csharp::parser::error,
+          csharp::parser::error,
           std::string("Invalid pre-processor directive: Expected token ``") + name
           //+ "'' instead of ``" + current_token_text
           + "''"
@@ -71,7 +117,7 @@ namespace csharp_pp
     if (_M_scope->csharp_parser() != 0)
       {
         _M_scope->csharp_parser()->report_problem(
-          ::csharp::parser::error,
+          csharp::parser::error,
           std::string("Invalid pre-processor directive: Expected symbol ``") + name
           //+ "'' instead of ``" + current_token_text
           + "''"

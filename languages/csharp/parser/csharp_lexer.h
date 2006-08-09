@@ -17,61 +17,54 @@
  * Boston, MA 02110-1301, USA.                                               *
  *****************************************************************************/
 
-// This file is meant to be specific to the framework in which the parser
-// operates, and is likely to be adapted for different environments.
-// Specifically, the error output might not always go to std::cerr,
-// but will rather be placed as items inside some listbox.
-
-
 #include "csharp.h"
-#include "csharp_lexer.h"
+#include "csharp_pp.h"
 
 #include <iostream>
 
-// void print_token_environment(csharp::parser* parser);
-
+#ifndef DONT_INCLUDE_FLEXLEXER
+#include <FlexLexer.h>
+#endif
 
 namespace csharp
 {
 
-void parser::report_problem( parser::problem_type type, std::string message )
+class Lexer : public yyFlexLexer
 {
-  report_problem( type, message.c_str() );
-}
+public:
+  Lexer(csharp::parser *parser, char *contents) { restart(parser, contents); }
+  void restart(csharp::parser *parser, char *contents);
 
-void parser::report_problem( parser::problem_type type, const char* message )
-{
-  if (type == error)
-    std::cerr << "** ERROR: " << message << std::endl;
-  else if (type == warning)
-    std::cerr << "** WARNING: " << message << std::endl;
-  else if (type == info)
-    std::cerr << "** Info: " << message << std::endl;
-}
+  virtual ~Lexer() { cleanup(); }
+  void cleanup();
 
+  int yylex();
+  char *contents()          { return _M_contents;    }
+  std::size_t token_begin() { return _M_token_begin; }
+  std::size_t token_end()   { return _M_token_end;   }
 
-// custom error recovery
-void parser::yy_expected_token(int /*expected*/, std::size_t /*where*/, char const *name)
-{
-  // print_token_environment(this);
-  report_problem(
-    parser::error,
-    std::string("Expected token ``") + name
-      //+ "'' instead of ``" + current_token_text
-      + "''"
-  );
-}
+protected:
+  // retrieves the upper-most pre-processor scope
+  csharp_pp::scope* pp_current_scope();
 
-void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
-{
-  // print_token_environment(this);
-  report_problem(
-    parser::error,
-    std::string("Expected symbol ``") + name
-      //+ "'' instead of ``" + current_token_text
-      + "''"
-  );
-}
+  // reads a character, and returns 1 as the number of characters read
+  // (or 0 when the end of the string is reached)
+  virtual int LexerInput(char *buf, int /*max_size*/)
+  {
+    int c = _M_contents[_M_current_offset++];
+    return (c == 0) ? 0 : (buf[0] = c, 1);
+  }
+
+  // dismisses any lexer output (which should not happen anyways)
+  virtual void LexerOutput(const char * /*buf*/, int /*max_size*/) { return; }
+  virtual void LexerError(const char */*msg*/) { return; }
+
+protected:
+  csharp::parser* _M_parser;
+  char *_M_contents;
+  std::size_t _M_token_begin, _M_token_end;
+  std::size_t _M_current_offset;
+  csharp_pp::scope* _M_pp_root_scope;
+};
 
 } // end of namespace csharp
-

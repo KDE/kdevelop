@@ -30,10 +30,13 @@ IF(KDEVPG_EXECUTABLE)
     ADD_CUSTOM_COMMAND(
         OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/csharp.cpp"
                 "${CMAKE_CURRENT_SOURCE_DIR}/csharp.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/csharp_serialize_visitor.h"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/csharp.g"
+                "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.h"
         COMMAND ${KDEVPG_EXECUTABLE}
         ARGS    --adapt-to=kdevelop
                 --output=csharp
+                --serialize-visitor
                 "csharp.g"
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
@@ -61,7 +64,7 @@ IF(KDEVPG_EXECUTABLE)
         GENERATED
         )
 ELSE(KDEVPG_EXECUTABLE)
-    MESSAGE("Assuming existence of the generated parser files csharp.[h,cpp] and csharp_pp.[h,cpp]")
+    MESSAGE("Assuming existence of the generated parser files")
     SET(kdevcsharpparser_STAT_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/csharp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/csharp.h
@@ -73,28 +76,29 @@ ENDIF(KDEVPG_EXECUTABLE)
 IF(FLEX_EXECUTABLE)
     # Add command to generate the lexer.
     ADD_CUSTOM_COMMAND(
-        OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cc"
+        OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.ll"
+                "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.h"
                 "${CMAKE_CURRENT_SOURCE_DIR}/csharp.h"
                 "${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp.h"
         COMMAND ${FLEX_EXECUTABLE}
-        ARGS    -o"csharp_lexer.cc"
+        ARGS    -o"csharp_lexer.cpp"
                 "csharp_lexer.ll"
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
 
     SET(kdevcsharpparser_STAT_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cc
+        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp
         ${kdevcsharpparser_STAT_SRCS})
 
     SET_SOURCE_FILES_PROPERTIES(
-        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cc
+        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp
         GENERATED
         )
 ELSE(FLEX_EXECUTABLE)
-    MESSAGE("Assuming existence of the generated lexer file csharp_lexer.cc")
+    MESSAGE("Assuming existence of the generated lexer file csharp_lexer.cpp")
     SET(kdevcsharpparser_STAT_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cc
+        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp
         ${kdevcsharpparser_STAT_SRCS})
 ENDIF(FLEX_EXECUTABLE)
 

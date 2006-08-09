@@ -1,8 +1,8 @@
 // THIS FILE IS GENERATED
 // WARNING! All changes made in this file will be lost!
 
-#ifndef csharp_h_INCLUDED
-#define csharp_h_INCLUDED
+#ifndef csharp_H_INCLUDED
+#define csharp_H_INCLUDED
 
 #include "kdev-pg-memory-pool.h"
 #include "kdev-pg-allocator.h"
@@ -12,6 +12,15 @@
 #include <kdevast.h>
 
 #include <cassert>
+
+
+#include <string>
+#include <set>
+
+namespace csharp_pp
+  {
+  class handler_visitor;
+}
 
 namespace csharp
   {
@@ -2104,7 +2113,6 @@ namespace csharp
         KIND = Kind_overloadable_binary_only_operator
       };
 
-      std::size_t op;
     };
 
   struct overloadable_unary_only_operator_ast: public ast_node
@@ -2114,7 +2122,6 @@ namespace csharp
         KIND = Kind_overloadable_unary_only_operator
       };
 
-      std::size_t op;
     };
 
   struct overloadable_unary_or_binary_operator_ast: public ast_node
@@ -2124,7 +2131,6 @@ namespace csharp
         KIND = Kind_overloadable_unary_or_binary_operator
       };
 
-      std::size_t op;
     };
 
   struct parameter_array_ast: public ast_node
@@ -2667,7 +2673,6 @@ namespace csharp
       type_ast *return_type;
       overloadable_operator::overloadable_operator_enum overloadable_operator_type;
       overloadable_operator::unary_or_binary_enum unary_or_binary;
-      std::size_t overloadable_operator_token;
       type_ast *source1_type;
       identifier_ast *source1_name;
       type_ast *source2_type;
@@ -2825,15 +2830,6 @@ namespace csharp
 
 
 } // end of namespace csharp
-
-
-#include <string>
-#include <set>
-
-namespace csharp_pp
-  {
-  class handler_visitor;
-}
 
 namespace csharp
   {
@@ -3049,7 +3045,7 @@ namespace csharp
        * When this method returns, the parser's token stream has been filled
        * and any parse_*() method can be called.
        */
-      void tokenize();
+      void tokenize(char *contents);
 
       /**
        * The compatibility_mode status variable tells which version of C#

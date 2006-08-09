@@ -1,6 +1,27 @@
-#line 2 "csharp_lexer.cc"
+#line 2 "csharp_lexer.cpp"
+#line 2 "csharp_lexer.ll"
+/*****************************************************************************
+ * Copyright (c) 2005, 2006 Jakob Petsovits <jpetso@gmx.at>                  *
+ *                                                                           *
+ * This program is free software; you can redistribute it and/or             *
+ * modify it under the terms of the GNU Library General Public               *
+ * License as published by the Free Software Foundation; either              *
+ * version 2 of the License, or (at your option) any later version.          *
+ *                                                                           *
+ * This grammar is distributed in the hope that it will be useful,           *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU         *
+ * Lesser General Public License for more details.                           *
+ *                                                                           *
+ * You should have received a copy of the GNU Library General Public License *
+ * along with this library; see the file COPYING.LIB.  If not, write to      *
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,      *
+ * Boston, MA 02110-1301, USA.                                               *
+ *****************************************************************************/
 
-#line 4 "csharp_lexer.cc"
+
+
+#line 25 "csharp_lexer.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -14,13 +35,14 @@
 #define FLEX_BETA
 #endif
 
+    /* The c++ scanner is a mess. The FlexLexer.h header file relies on the
+     * following macro.
+     */
+    #define yyFlexLexer yyFlexLexer
+
 /* First, we deal with  platform-specific or compiler-specific issues. */
 
 /* begin standard C headers. */
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <stdlib.h>
 
 /* end standard C headers. */
 
@@ -79,6 +101,13 @@ typedef unsigned int flex_uint32_t;
 
 #endif /* ! FLEXINT_H */
 
+/* begin standard C++ headers. */
+#include <iostream> 
+#include <errno.h>
+#include <cstdlib>
+#include <cstring>
+/* end standard C++ headers. */
+
 #ifdef __cplusplus
 
 /* The "const" storage-class-modifier is valid. */
@@ -126,7 +155,7 @@ typedef unsigned int flex_uint32_t;
 #define YY_STATE_EOF(state) (YY_END_OF_BUFFER + state + 1)
 
 /* Special action meaning "start processing a new file". */
-#define YY_NEW_FILE yyrestart(yyin  )
+#define YY_NEW_FILE yyrestart( yyin  )
 
 #define YY_END_OF_BUFFER_CHAR 0
 
@@ -141,8 +170,6 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
 #endif
 
 extern int yyleng;
-
-extern FILE *yyin, *yyout;
 
 #define EOB_ACT_CONTINUE_SCAN 0
 #define EOB_ACT_END_OF_FILE 1
@@ -180,7 +207,8 @@ typedef unsigned int yy_size_t;
 #define YY_STRUCT_YY_BUFFER_STATE
 struct yy_buffer_state
 	{
-	FILE *yy_input_file;
+
+	std::istream* yy_input_file;
 
 	char *yy_ch_buf;		/* input buffer */
 	char *yy_buf_pos;		/* current position in input buffer */
@@ -241,11 +269,6 @@ struct yy_buffer_state
 	};
 #endif /* !YY_STRUCT_YY_BUFFER_STATE */
 
-/* Stack of input buffers. */
-static size_t yy_buffer_stack_top = 0; /**< index of top of stack. */
-static size_t yy_buffer_stack_max = 0; /**< capacity of stack. */
-static YY_BUFFER_STATE * yy_buffer_stack = 0; /**< Stack as an array. */
-
 /* We provide macros for accessing buffer states in case in the
  * future we want to put the buffer states in a more general
  * "scanner state".
@@ -261,39 +284,6 @@ static YY_BUFFER_STATE * yy_buffer_stack = 0; /**< Stack as an array. */
  */
 #define YY_CURRENT_BUFFER_LVALUE (yy_buffer_stack)[(yy_buffer_stack_top)]
 
-/* yy_hold_char holds the character lost when yytext is formed. */
-static char yy_hold_char;
-static int yy_n_chars;		/* number of characters read into yy_ch_buf */
-int yyleng;
-
-/* Points to current character in buffer. */
-static char *yy_c_buf_p = (char *) 0;
-static int yy_init = 1;		/* whether we need to initialize */
-static int yy_start = 0;	/* start state number */
-
-/* Flag which is used to allow yywrap()'s to do buffer switches
- * instead of setting up a fresh yyin.  A bit of a hack ...
- */
-static int yy_did_buffer_switch_on_eof;
-
-void yyrestart (FILE *input_file  );
-void yy_switch_to_buffer (YY_BUFFER_STATE new_buffer  );
-YY_BUFFER_STATE yy_create_buffer (FILE *file,int size  );
-void yy_delete_buffer (YY_BUFFER_STATE b  );
-void yy_flush_buffer (YY_BUFFER_STATE b  );
-void yypush_buffer_state (YY_BUFFER_STATE new_buffer  );
-void yypop_buffer_state (void );
-
-static void yyensure_buffer_stack (void );
-static void yy_load_buffer_state (void );
-static void yy_init_buffer (YY_BUFFER_STATE b,FILE *file  );
-
-#define YY_FLUSH_BUFFER yy_flush_buffer(YY_CURRENT_BUFFER )
-
-YY_BUFFER_STATE yy_scan_buffer (char *base,yy_size_t size  );
-YY_BUFFER_STATE yy_scan_string (yyconst char *yy_str  );
-YY_BUFFER_STATE yy_scan_bytes (yyconst char *bytes,int len  );
-
 void *yyalloc (yy_size_t  );
 void *yyrealloc (void *,yy_size_t  );
 void yyfree (void *  );
@@ -305,7 +295,7 @@ void yyfree (void *  );
 	if ( ! YY_CURRENT_BUFFER ){ \
         yyensure_buffer_stack (); \
 		YY_CURRENT_BUFFER_LVALUE =    \
-            yy_create_buffer(yyin,YY_BUF_SIZE ); \
+            yy_create_buffer( yyin, YY_BUF_SIZE ); \
 	} \
 	YY_CURRENT_BUFFER_LVALUE->yy_is_interactive = is_interactive; \
 	}
@@ -315,7 +305,7 @@ void yyfree (void *  );
 	if ( ! YY_CURRENT_BUFFER ){\
         yyensure_buffer_stack (); \
 		YY_CURRENT_BUFFER_LVALUE =    \
-            yy_create_buffer(yyin,YY_BUF_SIZE ); \
+            yy_create_buffer( yyin, YY_BUF_SIZE ); \
 	} \
 	YY_CURRENT_BUFFER_LVALUE->yy_at_bol = at_bol; \
 	}
@@ -324,23 +314,22 @@ void yyfree (void *  );
 
 /* Begin user sect3 */
 
+#define yywrap() 1
+#define YY_SKIP_YYWRAP
+
 typedef unsigned char YY_CHAR;
 
-FILE *yyin = (FILE *) 0, *yyout = (FILE *) 0;
-
-typedef int yy_state_type;
-
-extern int yylineno;
-
-int yylineno = 1;
-
-extern char *yytext;
 #define yytext_ptr yytext
+#define YY_INTERACTIVE
 
-static yy_state_type yy_get_previous_state (void );
-static yy_state_type yy_try_NUL_trans (yy_state_type current_state  );
-static int yy_get_next_buffer (void );
-static void yy_fatal_error (yyconst char msg[]  );
+#include <FlexLexer.h>
+int yyFlexLexer::yylex()
+	{
+	LexerError( "yyFlexLexer::yylex invoked but %option yyclass used" );
+	return 0;
+	}
+
+#define YY_DECL int csharp::Lexer::yylex()
 
 /* Done after the current pattern has been matched and before the
  * corresponding action - sets up yytext.
@@ -2711,12 +2700,6 @@ static yyconst flex_int16_t yy_chk[8481] =
      1201, 1201, 1201, 1201, 1201, 1201, 1201, 1201, 1201, 1201
     } ;
 
-static yy_state_type yy_last_accepting_state;
-static char *yy_last_accepting_cpos;
-
-extern int yy_flex_debug;
-int yy_flex_debug = 0;
-
 /* The intent behind this definition is that it'll catch
  * any uses of REJECT which flex missed.
  */
@@ -2724,79 +2707,17 @@ int yy_flex_debug = 0;
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
-char *yytext;
 #line 1 "csharp_lexer.ll"
-#line 2 "csharp_lexer.ll"
-/*****************************************************************************
- * This file is part of KDevelop.                                            *
- * Copyright (c) 2005, 2006 Jakob Petsovits <jpetso@gmx.at>                  *
- *                                                                           *
- * This program is free software; you can redistribute it and/or             *
- * modify it under the terms of the GNU Library General Public               *
- * License as published by the Free Software Foundation; either              *
- * version 2 of the License, or (at your option) any later version.          *
- *                                                                           *
- * This grammar is distributed in the hope that it will be useful,           *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of            *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU         *
- * Lesser General Public License for more details.                           *
- *                                                                           *
- * You should have received a copy of the GNU Library General Public License *
- * along with this library; see the file COPYING.LIB.  If not, write to      *
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,      *
- * Boston, MA 02110-1301, USA.                                               *
- *****************************************************************************/
 
+#line 28 "csharp_lexer.ll"
 
-#include "csharp.h"
-#include "csharp_pp.h"
+#define DONT_INCLUDE_FLEXLEXER
+#include "csharp_lexer.h"
 
-#include <iostream>
-
-/* call this before calling yylex(): */
-void lexer_restart(csharp::parser* parser);
-
-extern std::size_t _G_token_begin, _G_token_end;
-extern char *_G_contents;
-
-
-
-/* the rest of these declarations are internal to the lexer,
- * don't use them outside of this file. */
-
-namespace
-{
-  std::size_t _G_current_offset;
-  csharp::parser* _G_parser;
-  csharp_pp::scope* _G_pp_root_scope;
-}
-
-// retrieves the upper-most pre-processor scope
-csharp_pp::scope* pp_current_scope();
-
-// to be called from within <<EOF>> rules to free memory and report open scopes
-void cleanup();
-
-
-#define YY_INPUT(buf, result, max_size) \
-  { \
-    int c = _G_contents[_G_current_offset++]; \
-    result = c == 0 ? YY_NULL : (buf[0] = c, 1); \
-  }
-
-#define YY_USER_INIT \
-_G_token_begin = _G_token_end = 0; \
-_G_current_offset = 0; \
-\
-unsigned char *contents = (unsigned char *) _G_contents; \
-if (contents[0] == 0xEF && contents[1] == 0xBB && contents[2] == 0xBF) { \
-  _G_token_begin = _G_token_end = 3; \
-  _G_current_offset = 3; \
-} // check for and ignore the UTF-8 byte order mark
 
 #define YY_USER_ACTION \
-_G_token_begin = _G_token_end; \
-_G_token_end += yyleng;
+_M_token_begin = _M_token_end; \
+_M_token_end += yyleng;
 
 // This is meant to be called with the first token in a pre-processor line.
 // Pre-processing completely bypasses the normal tokenizing process.
@@ -2804,7 +2725,7 @@ _G_token_end += yyleng;
   { \
     csharp_pp::parser pp_parser; \
     csharp_pp::parser::pp_parse_result result = \
-      pp_parser.pp_parse_line( csharp_pp::parser::Token_##t, pp_current_scope() ); \
+      pp_parser.pp_parse_line( csharp_pp::parser::Token_##t, pp_current_scope(), this ); \
     \
     if (result == csharp_pp::parser::result_eof) \
       { \
@@ -2814,7 +2735,7 @@ _G_token_end += yyleng;
     else if (result == csharp_pp::parser::result_invalid) \
       { \
         BEGIN(INITIAL); \
-        return csharp::parser::Token_INVALID; \
+        return parser::Token_INVALID; \
       } \
     else if (result == csharp_pp::parser::result_ok) \
       { \
@@ -2850,7 +2771,7 @@ for performance and convenience reasons. */
 
 
 
-#line 2854 "csharp_lexer.cc"
+#line 2775 "csharp_lexer.cpp"
 
 #define INITIAL 0
 #define IN_BLOCKCOMMENT 1
@@ -2874,20 +2795,6 @@ for performance and convenience reasons. */
 #define YY_EXTRA_TYPE void *
 #endif
 
-/* Macros after this point can all be overridden by user definitions in
- * section 1.
- */
-
-#ifndef YY_SKIP_YYWRAP
-#ifdef __cplusplus
-extern "C" int yywrap (void );
-#else
-extern int yywrap (void );
-#endif
-#endif
-
-    static void yyunput (int c,char *buf_ptr  );
-    
 #ifndef yytext_ptr
 static void yy_flex_strncpy (char *,yyconst char *,int );
 #endif
@@ -2898,12 +2805,6 @@ static int yy_flex_strlen (yyconst char * );
 
 #ifndef YY_NO_INPUT
 
-#ifdef __cplusplus
-static int yyinput (void );
-#else
-static int input (void );
-#endif
-
 #endif
 
 /* Amount of stuff to slurp up with each read. */
@@ -2913,10 +2814,7 @@ static int input (void );
 
 /* Copy whatever the last rule matched to the standard output. */
 #ifndef ECHO
-/* This used to be an fputs(), but since the string might contain NUL's,
- * we now use fwrite().
- */
-#define ECHO (void) fwrite( yytext, yyleng, 1, yyout )
+#define ECHO LexerOutput( yytext, yyleng )
 #endif
 
 /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
@@ -2924,34 +2822,9 @@ static int input (void );
  */
 #ifndef YY_INPUT
 #define YY_INPUT(buf,result,max_size) \
-	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
-		{ \
-		int c = '*'; \
-		size_t n; \
-		for ( n = 0; n < max_size && \
-			     (c = getc( yyin )) != EOF && c != '\n'; ++n ) \
-			buf[n] = (char) c; \
-		if ( c == '\n' ) \
-			buf[n++] = (char) c; \
-		if ( c == EOF && ferror( yyin ) ) \
-			YY_FATAL_ERROR( "input in flex scanner failed" ); \
-		result = n; \
-		} \
-	else \
-		{ \
-		errno=0; \
-		while ( (result = fread(buf, 1, max_size, yyin))==0 && ferror(yyin)) \
-			{ \
-			if( errno != EINTR) \
-				{ \
-				YY_FATAL_ERROR( "input in flex scanner failed" ); \
-				break; \
-				} \
-			errno=0; \
-			clearerr(yyin); \
-			} \
-		}\
 \
+	if ( (result = LexerInput( (char *) buf, max_size )) < 0 ) \
+		YY_FATAL_ERROR( "input in flex scanner failed" );
 
 #endif
 
@@ -2970,7 +2843,7 @@ static int input (void );
 
 /* Report a fatal error. */
 #ifndef YY_FATAL_ERROR
-#define YY_FATAL_ERROR(msg) yy_fatal_error( msg )
+#define YY_FATAL_ERROR(msg) LexerError( msg )
 #endif
 
 /* end tables serialization structures and prototypes */
@@ -2980,10 +2853,7 @@ static int input (void );
  */
 #ifndef YY_DECL
 #define YY_DECL_IS_OURS 1
-
-extern int yylex (void);
-
-#define YY_DECL int yylex (void)
+#define YY_DECL int yyFlexLexer::yylex()
 #endif /* !YY_DECL */
 
 /* Code executed at the beginning of each rule, after yytext and yyleng
@@ -3012,12 +2882,12 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 188 "csharp_lexer.ll"
+#line 152 "csharp_lexer.ll"
 
 
  /* whitespace, newlines and comments */
 
-#line 3021 "csharp_lexer.cc"
+#line 2891 "csharp_lexer.cpp"
 
 	if ( (yy_init) )
 		{
@@ -3031,18 +2901,18 @@ YY_DECL
 			(yy_start) = 1;	/* first start state */
 
 		if ( ! yyin )
-			yyin = stdin;
+			yyin = & std::cin;
 
 		if ( ! yyout )
-			yyout = stdout;
+			yyout = & std::cout;
 
 		if ( ! YY_CURRENT_BUFFER ) {
 			yyensure_buffer_stack ();
 			YY_CURRENT_BUFFER_LVALUE =
-				yy_create_buffer(yyin,YY_BUF_SIZE );
+				yy_create_buffer( yyin, YY_BUF_SIZE );
 		}
 
-		yy_load_buffer_state( );
+		yy_load_buffer_state(  );
 		}
 
 	while ( 1 )		/* loops until end-of-file is reached */
@@ -3103,900 +2973,900 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 192 "csharp_lexer.ll"
+#line 156 "csharp_lexer.ll"
 /* skip */ ;
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 193 "csharp_lexer.ll"
+#line 157 "csharp_lexer.ll"
 /* { newLine(); } */ ;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 195 "csharp_lexer.ll"
+#line 159 "csharp_lexer.ll"
 /* line comments, skip */ ;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 197 "csharp_lexer.ll"
+#line 161 "csharp_lexer.ll"
 BEGIN(IN_BLOCKCOMMENT);
 	YY_BREAK
 
 case 5:
 YY_RULE_SETUP
-#line 199 "csharp_lexer.ll"
+#line 163 "csharp_lexer.ll"
 /* eat anything that's not a '*' */ ;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 200 "csharp_lexer.ll"
+#line 164 "csharp_lexer.ll"
 /* eat up '*'s that are not followed by slashes or newlines */;
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 201 "csharp_lexer.ll"
+#line 165 "csharp_lexer.ll"
 /* { newLine(); } */ ;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 202 "csharp_lexer.ll"
+#line 166 "csharp_lexer.ll"
 BEGIN(INITIAL);
 	YY_BREAK
 case YY_STATE_EOF(IN_BLOCKCOMMENT):
-#line 203 "csharp_lexer.ll"
+#line 167 "csharp_lexer.ll"
 {
-    _G_parser->report_problem( csharp::parser::error,
+    _M_parser->report_problem( parser::error,
       "Encountered end of file in an unclosed block comment" );
     cleanup();
-    return csharp::parser::Token_EOF;
+    return parser::Token_EOF;
 }
 	YY_BREAK
 
 /* seperators */
 case 9:
 YY_RULE_SETUP
-#line 214 "csharp_lexer.ll"
-return csharp::parser::Token_LPAREN;
+#line 178 "csharp_lexer.ll"
+return parser::Token_LPAREN;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 215 "csharp_lexer.ll"
-return csharp::parser::Token_RPAREN;
+#line 179 "csharp_lexer.ll"
+return parser::Token_RPAREN;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 216 "csharp_lexer.ll"
-return csharp::parser::Token_LBRACE;
+#line 180 "csharp_lexer.ll"
+return parser::Token_LBRACE;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 217 "csharp_lexer.ll"
-return csharp::parser::Token_RBRACE;
+#line 181 "csharp_lexer.ll"
+return parser::Token_RBRACE;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 218 "csharp_lexer.ll"
-return csharp::parser::Token_LBRACKET;
+#line 182 "csharp_lexer.ll"
+return parser::Token_LBRACKET;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 219 "csharp_lexer.ll"
-return csharp::parser::Token_RBRACKET;
+#line 183 "csharp_lexer.ll"
+return parser::Token_RBRACKET;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 220 "csharp_lexer.ll"
-return csharp::parser::Token_COMMA;
+#line 184 "csharp_lexer.ll"
+return parser::Token_COMMA;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 221 "csharp_lexer.ll"
-return csharp::parser::Token_SEMICOLON;
+#line 185 "csharp_lexer.ll"
+return parser::Token_SEMICOLON;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 222 "csharp_lexer.ll"
-return csharp::parser::Token_DOT;
+#line 186 "csharp_lexer.ll"
+return parser::Token_DOT;
 	YY_BREAK
 /* operators */
 case 18:
 YY_RULE_SETUP
-#line 227 "csharp_lexer.ll"
-return csharp::parser::Token_COLON;
+#line 191 "csharp_lexer.ll"
+return parser::Token_COLON;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 228 "csharp_lexer.ll"
+#line 192 "csharp_lexer.ll"
 {
-    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility ) {
-      return csharp::parser::Token_SCOPE;
+    if( _M_parser->compatibility_mode() >= parser::csharp20_compatibility ) {
+      return parser::Token_SCOPE;
     }
     else {
-      _G_parser->report_problem( csharp::parser::error,
+      _M_parser->report_problem( parser::error,
         "Global alias access (with \"::\") is not supported by C# 1.0" );
-      return csharp::parser::Token_INVALID;
+      return parser::Token_INVALID;
     }
 }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 238 "csharp_lexer.ll"
-return csharp::parser::Token_QUESTION;
+#line 202 "csharp_lexer.ll"
+return parser::Token_QUESTION;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 239 "csharp_lexer.ll"
+#line 203 "csharp_lexer.ll"
 {
-    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility ) {
-      return csharp::parser::Token_QUESTIONQUESTION;
+    if( _M_parser->compatibility_mode() >= parser::csharp20_compatibility ) {
+      return parser::Token_QUESTIONQUESTION;
     }
     else {
-      _G_parser->report_problem( csharp::parser::error,
+      _M_parser->report_problem( parser::error,
         "Null coalescing expressions (with \"??\") are not supported by C# 1.0" );
-      return csharp::parser::Token_INVALID;
+      return parser::Token_INVALID;
     }
 }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 249 "csharp_lexer.ll"
-return csharp::parser::Token_BANG;
+#line 213 "csharp_lexer.ll"
+return parser::Token_BANG;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 250 "csharp_lexer.ll"
-return csharp::parser::Token_TILDE;
+#line 214 "csharp_lexer.ll"
+return parser::Token_TILDE;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 251 "csharp_lexer.ll"
-return csharp::parser::Token_EQUAL;
+#line 215 "csharp_lexer.ll"
+return parser::Token_EQUAL;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 252 "csharp_lexer.ll"
-return csharp::parser::Token_LESS_THAN;
+#line 216 "csharp_lexer.ll"
+return parser::Token_LESS_THAN;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 253 "csharp_lexer.ll"
-return csharp::parser::Token_LESS_EQUAL;
+#line 217 "csharp_lexer.ll"
+return parser::Token_LESS_EQUAL;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 254 "csharp_lexer.ll"
-return csharp::parser::Token_GREATER_THAN;
+#line 218 "csharp_lexer.ll"
+return parser::Token_GREATER_THAN;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 255 "csharp_lexer.ll"
-return csharp::parser::Token_GREATER_EQUAL;
+#line 219 "csharp_lexer.ll"
+return parser::Token_GREATER_EQUAL;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 256 "csharp_lexer.ll"
-return csharp::parser::Token_NOT_EQUAL;
+#line 220 "csharp_lexer.ll"
+return parser::Token_NOT_EQUAL;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 257 "csharp_lexer.ll"
-return csharp::parser::Token_LOG_AND;
+#line 221 "csharp_lexer.ll"
+return parser::Token_LOG_AND;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 258 "csharp_lexer.ll"
-return csharp::parser::Token_LOG_OR;
+#line 222 "csharp_lexer.ll"
+return parser::Token_LOG_OR;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 259 "csharp_lexer.ll"
-return csharp::parser::Token_ARROW_RIGHT; // TODO: new in 2.0 or not?
+#line 223 "csharp_lexer.ll"
+return parser::Token_ARROW_RIGHT; // TODO: new in 2.0 or not?
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 260 "csharp_lexer.ll"
-return csharp::parser::Token_INCREMENT;
+#line 224 "csharp_lexer.ll"
+return parser::Token_INCREMENT;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 261 "csharp_lexer.ll"
-return csharp::parser::Token_DECREMENT;
+#line 225 "csharp_lexer.ll"
+return parser::Token_DECREMENT;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 262 "csharp_lexer.ll"
-return csharp::parser::Token_ASSIGN;
+#line 226 "csharp_lexer.ll"
+return parser::Token_ASSIGN;
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 263 "csharp_lexer.ll"
-return csharp::parser::Token_PLUS;
+#line 227 "csharp_lexer.ll"
+return parser::Token_PLUS;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 264 "csharp_lexer.ll"
-return csharp::parser::Token_PLUS_ASSIGN;
+#line 228 "csharp_lexer.ll"
+return parser::Token_PLUS_ASSIGN;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 265 "csharp_lexer.ll"
-return csharp::parser::Token_MINUS;
+#line 229 "csharp_lexer.ll"
+return parser::Token_MINUS;
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 266 "csharp_lexer.ll"
-return csharp::parser::Token_MINUS_ASSIGN;
+#line 230 "csharp_lexer.ll"
+return parser::Token_MINUS_ASSIGN;
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 267 "csharp_lexer.ll"
-return csharp::parser::Token_STAR;
+#line 231 "csharp_lexer.ll"
+return parser::Token_STAR;
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 268 "csharp_lexer.ll"
-return csharp::parser::Token_STAR_ASSIGN;
+#line 232 "csharp_lexer.ll"
+return parser::Token_STAR_ASSIGN;
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 269 "csharp_lexer.ll"
-return csharp::parser::Token_SLASH;
+#line 233 "csharp_lexer.ll"
+return parser::Token_SLASH;
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 270 "csharp_lexer.ll"
-return csharp::parser::Token_SLASH_ASSIGN;
+#line 234 "csharp_lexer.ll"
+return parser::Token_SLASH_ASSIGN;
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 271 "csharp_lexer.ll"
-return csharp::parser::Token_BIT_AND;
+#line 235 "csharp_lexer.ll"
+return parser::Token_BIT_AND;
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 272 "csharp_lexer.ll"
-return csharp::parser::Token_BIT_AND_ASSIGN;
+#line 236 "csharp_lexer.ll"
+return parser::Token_BIT_AND_ASSIGN;
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 273 "csharp_lexer.ll"
-return csharp::parser::Token_BIT_OR;
+#line 237 "csharp_lexer.ll"
+return parser::Token_BIT_OR;
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 274 "csharp_lexer.ll"
-return csharp::parser::Token_BIT_OR_ASSIGN;
+#line 238 "csharp_lexer.ll"
+return parser::Token_BIT_OR_ASSIGN;
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 275 "csharp_lexer.ll"
-return csharp::parser::Token_BIT_XOR;
+#line 239 "csharp_lexer.ll"
+return parser::Token_BIT_XOR;
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 276 "csharp_lexer.ll"
-return csharp::parser::Token_BIT_XOR_ASSIGN;
+#line 240 "csharp_lexer.ll"
+return parser::Token_BIT_XOR_ASSIGN;
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 277 "csharp_lexer.ll"
-return csharp::parser::Token_REMAINDER;
+#line 241 "csharp_lexer.ll"
+return parser::Token_REMAINDER;
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 278 "csharp_lexer.ll"
-return csharp::parser::Token_REMAINDER_ASSIGN;
+#line 242 "csharp_lexer.ll"
+return parser::Token_REMAINDER_ASSIGN;
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 279 "csharp_lexer.ll"
-return csharp::parser::Token_LSHIFT;
+#line 243 "csharp_lexer.ll"
+return parser::Token_LSHIFT;
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 280 "csharp_lexer.ll"
-return csharp::parser::Token_LSHIFT_ASSIGN;
+#line 244 "csharp_lexer.ll"
+return parser::Token_LSHIFT_ASSIGN;
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 281 "csharp_lexer.ll"
-return csharp::parser::Token_RSHIFT;
+#line 245 "csharp_lexer.ll"
+return parser::Token_RSHIFT;
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 282 "csharp_lexer.ll"
-return csharp::parser::Token_RSHIFT_ASSIGN;
+#line 246 "csharp_lexer.ll"
+return parser::Token_RSHIFT_ASSIGN;
 	YY_BREAK
 /* reserved words */
 case 56:
 YY_RULE_SETUP
-#line 287 "csharp_lexer.ll"
-return csharp::parser::Token_ABSTRACT;
+#line 251 "csharp_lexer.ll"
+return parser::Token_ABSTRACT;
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 288 "csharp_lexer.ll"
-return csharp::parser::Token_AS;
+#line 252 "csharp_lexer.ll"
+return parser::Token_AS;
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 289 "csharp_lexer.ll"
-return csharp::parser::Token_BASE;
+#line 253 "csharp_lexer.ll"
+return parser::Token_BASE;
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 290 "csharp_lexer.ll"
-return csharp::parser::Token_BOOL;
+#line 254 "csharp_lexer.ll"
+return parser::Token_BOOL;
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 291 "csharp_lexer.ll"
-return csharp::parser::Token_BREAK;
+#line 255 "csharp_lexer.ll"
+return parser::Token_BREAK;
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 292 "csharp_lexer.ll"
-return csharp::parser::Token_BYTE;
+#line 256 "csharp_lexer.ll"
+return parser::Token_BYTE;
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 293 "csharp_lexer.ll"
-return csharp::parser::Token_CASE;
+#line 257 "csharp_lexer.ll"
+return parser::Token_CASE;
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 294 "csharp_lexer.ll"
-return csharp::parser::Token_CATCH;
+#line 258 "csharp_lexer.ll"
+return parser::Token_CATCH;
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 295 "csharp_lexer.ll"
-return csharp::parser::Token_CHAR;
+#line 259 "csharp_lexer.ll"
+return parser::Token_CHAR;
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 296 "csharp_lexer.ll"
-return csharp::parser::Token_CHECKED;
+#line 260 "csharp_lexer.ll"
+return parser::Token_CHECKED;
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 297 "csharp_lexer.ll"
-return csharp::parser::Token_CLASS;
+#line 261 "csharp_lexer.ll"
+return parser::Token_CLASS;
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 298 "csharp_lexer.ll"
-return csharp::parser::Token_CONST;
+#line 262 "csharp_lexer.ll"
+return parser::Token_CONST;
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 299 "csharp_lexer.ll"
-return csharp::parser::Token_CONTINUE;
+#line 263 "csharp_lexer.ll"
+return parser::Token_CONTINUE;
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 300 "csharp_lexer.ll"
-return csharp::parser::Token_DECIMAL;
+#line 264 "csharp_lexer.ll"
+return parser::Token_DECIMAL;
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 301 "csharp_lexer.ll"
-return csharp::parser::Token_DEFAULT;
+#line 265 "csharp_lexer.ll"
+return parser::Token_DEFAULT;
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 302 "csharp_lexer.ll"
-return csharp::parser::Token_DELEGATE;
+#line 266 "csharp_lexer.ll"
+return parser::Token_DELEGATE;
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 303 "csharp_lexer.ll"
-return csharp::parser::Token_DO;
+#line 267 "csharp_lexer.ll"
+return parser::Token_DO;
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 304 "csharp_lexer.ll"
-return csharp::parser::Token_DOUBLE;
+#line 268 "csharp_lexer.ll"
+return parser::Token_DOUBLE;
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 305 "csharp_lexer.ll"
-return csharp::parser::Token_ELSE;
+#line 269 "csharp_lexer.ll"
+return parser::Token_ELSE;
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 306 "csharp_lexer.ll"
-return csharp::parser::Token_ENUM;
+#line 270 "csharp_lexer.ll"
+return parser::Token_ENUM;
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 307 "csharp_lexer.ll"
-return csharp::parser::Token_EVENT;
+#line 271 "csharp_lexer.ll"
+return parser::Token_EVENT;
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 308 "csharp_lexer.ll"
-return csharp::parser::Token_EXPLICIT;
+#line 272 "csharp_lexer.ll"
+return parser::Token_EXPLICIT;
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 309 "csharp_lexer.ll"
-return csharp::parser::Token_EXTERN;
+#line 273 "csharp_lexer.ll"
+return parser::Token_EXTERN;
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 310 "csharp_lexer.ll"
-return csharp::parser::Token_FALSE;
+#line 274 "csharp_lexer.ll"
+return parser::Token_FALSE;
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 311 "csharp_lexer.ll"
-return csharp::parser::Token_FINALLY;
+#line 275 "csharp_lexer.ll"
+return parser::Token_FINALLY;
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 312 "csharp_lexer.ll"
-return csharp::parser::Token_FIXED;
+#line 276 "csharp_lexer.ll"
+return parser::Token_FIXED;
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 313 "csharp_lexer.ll"
-return csharp::parser::Token_FLOAT;
+#line 277 "csharp_lexer.ll"
+return parser::Token_FLOAT;
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 314 "csharp_lexer.ll"
-return csharp::parser::Token_FOR;
+#line 278 "csharp_lexer.ll"
+return parser::Token_FOR;
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 315 "csharp_lexer.ll"
-return csharp::parser::Token_FOREACH;
+#line 279 "csharp_lexer.ll"
+return parser::Token_FOREACH;
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 316 "csharp_lexer.ll"
-return csharp::parser::Token_GOTO;
+#line 280 "csharp_lexer.ll"
+return parser::Token_GOTO;
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 317 "csharp_lexer.ll"
-return csharp::parser::Token_IF;
+#line 281 "csharp_lexer.ll"
+return parser::Token_IF;
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 318 "csharp_lexer.ll"
-return csharp::parser::Token_IMPLICIT;
+#line 282 "csharp_lexer.ll"
+return parser::Token_IMPLICIT;
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 319 "csharp_lexer.ll"
-return csharp::parser::Token_IN;
+#line 283 "csharp_lexer.ll"
+return parser::Token_IN;
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 320 "csharp_lexer.ll"
-return csharp::parser::Token_INT;
+#line 284 "csharp_lexer.ll"
+return parser::Token_INT;
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 321 "csharp_lexer.ll"
-return csharp::parser::Token_INTERFACE;
+#line 285 "csharp_lexer.ll"
+return parser::Token_INTERFACE;
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 322 "csharp_lexer.ll"
-return csharp::parser::Token_INTERNAL;
+#line 286 "csharp_lexer.ll"
+return parser::Token_INTERNAL;
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 323 "csharp_lexer.ll"
-return csharp::parser::Token_IS;
+#line 287 "csharp_lexer.ll"
+return parser::Token_IS;
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 324 "csharp_lexer.ll"
-return csharp::parser::Token_LOCK;
+#line 288 "csharp_lexer.ll"
+return parser::Token_LOCK;
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 325 "csharp_lexer.ll"
-return csharp::parser::Token_LONG;
+#line 289 "csharp_lexer.ll"
+return parser::Token_LONG;
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 326 "csharp_lexer.ll"
-return csharp::parser::Token_NAMESPACE;
+#line 290 "csharp_lexer.ll"
+return parser::Token_NAMESPACE;
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 327 "csharp_lexer.ll"
-return csharp::parser::Token_NEW;
+#line 291 "csharp_lexer.ll"
+return parser::Token_NEW;
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 328 "csharp_lexer.ll"
-return csharp::parser::Token_NULL;
+#line 292 "csharp_lexer.ll"
+return parser::Token_NULL;
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 329 "csharp_lexer.ll"
-return csharp::parser::Token_OBJECT;
+#line 293 "csharp_lexer.ll"
+return parser::Token_OBJECT;
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 330 "csharp_lexer.ll"
-return csharp::parser::Token_OPERATOR;
+#line 294 "csharp_lexer.ll"
+return parser::Token_OPERATOR;
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 331 "csharp_lexer.ll"
-return csharp::parser::Token_OUT;
+#line 295 "csharp_lexer.ll"
+return parser::Token_OUT;
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
-#line 332 "csharp_lexer.ll"
-return csharp::parser::Token_OVERRIDE;
+#line 296 "csharp_lexer.ll"
+return parser::Token_OVERRIDE;
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 333 "csharp_lexer.ll"
-return csharp::parser::Token_PARAMS;
+#line 297 "csharp_lexer.ll"
+return parser::Token_PARAMS;
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
-#line 334 "csharp_lexer.ll"
-return csharp::parser::Token_PRIVATE;
+#line 298 "csharp_lexer.ll"
+return parser::Token_PRIVATE;
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 335 "csharp_lexer.ll"
-return csharp::parser::Token_PROTECTED;
+#line 299 "csharp_lexer.ll"
+return parser::Token_PROTECTED;
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 336 "csharp_lexer.ll"
-return csharp::parser::Token_PUBLIC;
+#line 300 "csharp_lexer.ll"
+return parser::Token_PUBLIC;
 	YY_BREAK
 case 106:
 YY_RULE_SETUP
-#line 337 "csharp_lexer.ll"
-return csharp::parser::Token_READONLY;
+#line 301 "csharp_lexer.ll"
+return parser::Token_READONLY;
 	YY_BREAK
 case 107:
 YY_RULE_SETUP
-#line 338 "csharp_lexer.ll"
-return csharp::parser::Token_REF;
+#line 302 "csharp_lexer.ll"
+return parser::Token_REF;
 	YY_BREAK
 case 108:
 YY_RULE_SETUP
-#line 339 "csharp_lexer.ll"
-return csharp::parser::Token_RETURN;
+#line 303 "csharp_lexer.ll"
+return parser::Token_RETURN;
 	YY_BREAK
 case 109:
 YY_RULE_SETUP
-#line 340 "csharp_lexer.ll"
-return csharp::parser::Token_SBYTE;
+#line 304 "csharp_lexer.ll"
+return parser::Token_SBYTE;
 	YY_BREAK
 case 110:
 YY_RULE_SETUP
-#line 341 "csharp_lexer.ll"
-return csharp::parser::Token_SEALED;
+#line 305 "csharp_lexer.ll"
+return parser::Token_SEALED;
 	YY_BREAK
 case 111:
 YY_RULE_SETUP
-#line 342 "csharp_lexer.ll"
-return csharp::parser::Token_SHORT;
+#line 306 "csharp_lexer.ll"
+return parser::Token_SHORT;
 	YY_BREAK
 case 112:
 YY_RULE_SETUP
-#line 343 "csharp_lexer.ll"
-return csharp::parser::Token_SIZEOF;
+#line 307 "csharp_lexer.ll"
+return parser::Token_SIZEOF;
 	YY_BREAK
 case 113:
 YY_RULE_SETUP
-#line 344 "csharp_lexer.ll"
-return csharp::parser::Token_STACKALLOC;
+#line 308 "csharp_lexer.ll"
+return parser::Token_STACKALLOC;
 	YY_BREAK
 case 114:
 YY_RULE_SETUP
-#line 345 "csharp_lexer.ll"
-return csharp::parser::Token_STATIC;
+#line 309 "csharp_lexer.ll"
+return parser::Token_STATIC;
 	YY_BREAK
 case 115:
 YY_RULE_SETUP
-#line 346 "csharp_lexer.ll"
-return csharp::parser::Token_STRING;
+#line 310 "csharp_lexer.ll"
+return parser::Token_STRING;
 	YY_BREAK
 case 116:
 YY_RULE_SETUP
-#line 347 "csharp_lexer.ll"
-return csharp::parser::Token_STRUCT;
+#line 311 "csharp_lexer.ll"
+return parser::Token_STRUCT;
 	YY_BREAK
 case 117:
 YY_RULE_SETUP
-#line 348 "csharp_lexer.ll"
-return csharp::parser::Token_SWITCH;
+#line 312 "csharp_lexer.ll"
+return parser::Token_SWITCH;
 	YY_BREAK
 case 118:
 YY_RULE_SETUP
-#line 349 "csharp_lexer.ll"
-return csharp::parser::Token_THIS;
+#line 313 "csharp_lexer.ll"
+return parser::Token_THIS;
 	YY_BREAK
 case 119:
 YY_RULE_SETUP
-#line 350 "csharp_lexer.ll"
-return csharp::parser::Token_THROW;
+#line 314 "csharp_lexer.ll"
+return parser::Token_THROW;
 	YY_BREAK
 case 120:
 YY_RULE_SETUP
-#line 351 "csharp_lexer.ll"
-return csharp::parser::Token_TRUE;
+#line 315 "csharp_lexer.ll"
+return parser::Token_TRUE;
 	YY_BREAK
 case 121:
 YY_RULE_SETUP
-#line 352 "csharp_lexer.ll"
-return csharp::parser::Token_TRY;
+#line 316 "csharp_lexer.ll"
+return parser::Token_TRY;
 	YY_BREAK
 case 122:
 YY_RULE_SETUP
-#line 353 "csharp_lexer.ll"
-return csharp::parser::Token_TYPEOF;
+#line 317 "csharp_lexer.ll"
+return parser::Token_TYPEOF;
 	YY_BREAK
 case 123:
 YY_RULE_SETUP
-#line 354 "csharp_lexer.ll"
-return csharp::parser::Token_UINT;
+#line 318 "csharp_lexer.ll"
+return parser::Token_UINT;
 	YY_BREAK
 case 124:
 YY_RULE_SETUP
-#line 355 "csharp_lexer.ll"
-return csharp::parser::Token_ULONG;
+#line 319 "csharp_lexer.ll"
+return parser::Token_ULONG;
 	YY_BREAK
 case 125:
 YY_RULE_SETUP
-#line 356 "csharp_lexer.ll"
-return csharp::parser::Token_UNCHECKED;
+#line 320 "csharp_lexer.ll"
+return parser::Token_UNCHECKED;
 	YY_BREAK
 case 126:
 YY_RULE_SETUP
-#line 357 "csharp_lexer.ll"
-return csharp::parser::Token_UNSAFE;
+#line 321 "csharp_lexer.ll"
+return parser::Token_UNSAFE;
 	YY_BREAK
 case 127:
 YY_RULE_SETUP
-#line 358 "csharp_lexer.ll"
-return csharp::parser::Token_USHORT;
+#line 322 "csharp_lexer.ll"
+return parser::Token_USHORT;
 	YY_BREAK
 case 128:
 YY_RULE_SETUP
-#line 359 "csharp_lexer.ll"
-return csharp::parser::Token_USING;
+#line 323 "csharp_lexer.ll"
+return parser::Token_USING;
 	YY_BREAK
 case 129:
 YY_RULE_SETUP
-#line 360 "csharp_lexer.ll"
-return csharp::parser::Token_VIRTUAL;
+#line 324 "csharp_lexer.ll"
+return parser::Token_VIRTUAL;
 	YY_BREAK
 case 130:
 YY_RULE_SETUP
-#line 361 "csharp_lexer.ll"
-return csharp::parser::Token_VOID;
+#line 325 "csharp_lexer.ll"
+return parser::Token_VOID;
 	YY_BREAK
 case 131:
 YY_RULE_SETUP
-#line 362 "csharp_lexer.ll"
-return csharp::parser::Token_VOLATILE;
+#line 326 "csharp_lexer.ll"
+return parser::Token_VOLATILE;
 	YY_BREAK
 case 132:
 YY_RULE_SETUP
-#line 363 "csharp_lexer.ll"
-return csharp::parser::Token_WHILE;
+#line 327 "csharp_lexer.ll"
+return parser::Token_WHILE;
 	YY_BREAK
 /* Non-keyword identifiers. They only have special meaning in
   * specific contexts and are treated as identifiers otherwise.
   * Many of those have been introduced by C# 2.0. */
 case 133:
 YY_RULE_SETUP
-#line 370 "csharp_lexer.ll"
-return csharp::parser::Token_ADD;
+#line 334 "csharp_lexer.ll"
+return parser::Token_ADD;
 	YY_BREAK
 case 134:
 YY_RULE_SETUP
-#line 371 "csharp_lexer.ll"
+#line 335 "csharp_lexer.ll"
 {
-    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
-      return csharp::parser::Token_ALIAS;
+    if( _M_parser->compatibility_mode() >= parser::csharp20_compatibility )
+      return parser::Token_ALIAS;
     else
-      return csharp::parser::Token_IDENTIFIER;
+      return parser::Token_IDENTIFIER;
 }
 	YY_BREAK
 case 135:
 YY_RULE_SETUP
-#line 377 "csharp_lexer.ll"
-return csharp::parser::Token_GET;
+#line 341 "csharp_lexer.ll"
+return parser::Token_GET;
 	YY_BREAK
 case 136:
 YY_RULE_SETUP
-#line 378 "csharp_lexer.ll"
+#line 342 "csharp_lexer.ll"
 {
-    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
-      return csharp::parser::Token_GLOBAL;
+    if( _M_parser->compatibility_mode() >= parser::csharp20_compatibility )
+      return parser::Token_GLOBAL;
     else
-      return csharp::parser::Token_IDENTIFIER;
+      return parser::Token_IDENTIFIER;
 }
 	YY_BREAK
 case 137:
 YY_RULE_SETUP
-#line 384 "csharp_lexer.ll"
+#line 348 "csharp_lexer.ll"
 {
-    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
-      return csharp::parser::Token_PARTIAL;
+    if( _M_parser->compatibility_mode() >= parser::csharp20_compatibility )
+      return parser::Token_PARTIAL;
     else
-      return csharp::parser::Token_IDENTIFIER;
+      return parser::Token_IDENTIFIER;
 }
 	YY_BREAK
 case 138:
 YY_RULE_SETUP
-#line 390 "csharp_lexer.ll"
-return csharp::parser::Token_REMOVE;
+#line 354 "csharp_lexer.ll"
+return parser::Token_REMOVE;
 	YY_BREAK
 case 139:
 YY_RULE_SETUP
-#line 391 "csharp_lexer.ll"
-return csharp::parser::Token_SET;
+#line 355 "csharp_lexer.ll"
+return parser::Token_SET;
 	YY_BREAK
 case 140:
 YY_RULE_SETUP
-#line 392 "csharp_lexer.ll"
-return csharp::parser::Token_VALUE;
+#line 356 "csharp_lexer.ll"
+return parser::Token_VALUE;
 	YY_BREAK
 case 141:
 YY_RULE_SETUP
-#line 393 "csharp_lexer.ll"
+#line 357 "csharp_lexer.ll"
 {
-    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
-      return csharp::parser::Token_WHERE;
+    if( _M_parser->compatibility_mode() >= parser::csharp20_compatibility )
+      return parser::Token_WHERE;
     else
-      return csharp::parser::Token_IDENTIFIER;
+      return parser::Token_IDENTIFIER;
 }
 	YY_BREAK
 case 142:
 YY_RULE_SETUP
-#line 399 "csharp_lexer.ll"
+#line 363 "csharp_lexer.ll"
 {
-    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility )
-      return csharp::parser::Token_YIELD;
+    if( _M_parser->compatibility_mode() >= parser::csharp20_compatibility )
+      return parser::Token_YIELD;
     else
-      return csharp::parser::Token_IDENTIFIER;
+      return parser::Token_IDENTIFIER;
 }
 	YY_BREAK
 /* A non-keyword identifier that is not marked as such by the specification,
   * for global attributes: */
 case 143:
 YY_RULE_SETUP
-#line 408 "csharp_lexer.ll"
-return csharp::parser::Token_ASSEMBLY;
+#line 372 "csharp_lexer.ll"
+return parser::Token_ASSEMBLY;
 	YY_BREAK
 /* characters and strings */
 case 144:
 YY_RULE_SETUP
-#line 413 "csharp_lexer.ll"
-return csharp::parser::Token_CHARACTER_LITERAL;
+#line 377 "csharp_lexer.ll"
+return parser::Token_CHARACTER_LITERAL;
 	YY_BREAK
 case 145:
 /* rule 145 can match eol */
 YY_RULE_SETUP
-#line 414 "csharp_lexer.ll"
+#line 378 "csharp_lexer.ll"
 {
-    _G_parser->report_problem( csharp::parser::error,
+    _M_parser->report_problem( parser::error,
       std::string("Invalid character literal: ") + yytext );
-    return csharp::parser::Token_CHARACTER_LITERAL;
+    return parser::Token_CHARACTER_LITERAL;
 }
 	YY_BREAK
 case 146:
 YY_RULE_SETUP
-#line 420 "csharp_lexer.ll"
-return csharp::parser::Token_STRING_LITERAL;
+#line 384 "csharp_lexer.ll"
+return parser::Token_STRING_LITERAL;
 	YY_BREAK
 case 147:
 /* rule 147 can match eol */
 YY_RULE_SETUP
-#line 421 "csharp_lexer.ll"
+#line 385 "csharp_lexer.ll"
 {
-    _G_parser->report_problem( csharp::parser::error,
+    _M_parser->report_problem( parser::error,
       std::string("Invalid string literal: ") + yytext );
-    return csharp::parser::Token_STRING_LITERAL;
+    return parser::Token_STRING_LITERAL;
 }
 	YY_BREAK
 /* verbatim strings: */
 case 148:
 /* rule 148 can match eol */
 YY_RULE_SETUP
-#line 427 "csharp_lexer.ll"
-return csharp::parser::Token_STRING_LITERAL;
+#line 391 "csharp_lexer.ll"
+return parser::Token_STRING_LITERAL;
 	YY_BREAK
 /* the pre-processor */
 
 case 149:
 YY_RULE_SETUP
-#line 434 "csharp_lexer.ll"
+#line 398 "csharp_lexer.ll"
 BEGIN(PP_DECLARATION);     PP_PROCESS_TOKEN(PP_DEFINE);
 	YY_BREAK
 case 150:
 YY_RULE_SETUP
-#line 435 "csharp_lexer.ll"
+#line 399 "csharp_lexer.ll"
 BEGIN(PP_DECLARATION);     PP_PROCESS_TOKEN(PP_UNDEF);
 	YY_BREAK
 case 151:
 YY_RULE_SETUP
-#line 436 "csharp_lexer.ll"
+#line 400 "csharp_lexer.ll"
 BEGIN(PP_IF_CLAUSE);       PP_PROCESS_TOKEN(PP_IF);
 	YY_BREAK
 case 152:
 YY_RULE_SETUP
-#line 437 "csharp_lexer.ll"
+#line 401 "csharp_lexer.ll"
 BEGIN(PP_IF_CLAUSE);       PP_PROCESS_TOKEN(PP_ELIF);
 	YY_BREAK
 case 153:
 YY_RULE_SETUP
-#line 438 "csharp_lexer.ll"
+#line 402 "csharp_lexer.ll"
 BEGIN(PP_EXPECT_NEW_LINE); PP_PROCESS_TOKEN(PP_ELSE);
 	YY_BREAK
 case 154:
 YY_RULE_SETUP
-#line 439 "csharp_lexer.ll"
+#line 403 "csharp_lexer.ll"
 BEGIN(PP_EXPECT_NEW_LINE); PP_PROCESS_TOKEN(PP_ENDIF);
 	YY_BREAK
 case 155:
 YY_RULE_SETUP
-#line 440 "csharp_lexer.ll"
+#line 404 "csharp_lexer.ll"
 BEGIN(PP_LINE);            PP_PROCESS_TOKEN(PP_LINE);
 	YY_BREAK
 case 156:
 YY_RULE_SETUP
-#line 441 "csharp_lexer.ll"
+#line 405 "csharp_lexer.ll"
 BEGIN(PP_MESSAGE); PP_PROCESS_TOKEN(PP_ERROR);
 	YY_BREAK
 case 157:
 YY_RULE_SETUP
-#line 442 "csharp_lexer.ll"
+#line 406 "csharp_lexer.ll"
 BEGIN(PP_MESSAGE); PP_PROCESS_TOKEN(PP_WARNING);
 	YY_BREAK
 case 158:
 YY_RULE_SETUP
-#line 443 "csharp_lexer.ll"
+#line 407 "csharp_lexer.ll"
 BEGIN(PP_MESSAGE); PP_PROCESS_TOKEN(PP_REGION);
 	YY_BREAK
 case 159:
 YY_RULE_SETUP
-#line 444 "csharp_lexer.ll"
+#line 408 "csharp_lexer.ll"
 BEGIN(PP_MESSAGE); PP_PROCESS_TOKEN(PP_ENDREGION);
 	YY_BREAK
 case 160:
 YY_RULE_SETUP
-#line 445 "csharp_lexer.ll"
+#line 409 "csharp_lexer.ll"
 {
-    if( _G_parser->compatibility_mode() >= csharp::parser::csharp20_compatibility ) {
+    if( _M_parser->compatibility_mode() >= parser::csharp20_compatibility ) {
       BEGIN(PP_PRAGMA); PP_PROCESS_TOKEN(PP_PRAGMA);
     }
     else {
       BEGIN(INITIAL);
-      _G_parser->report_problem( csharp::parser::error,
+      _M_parser->report_problem( parser::error,
         "#pragma directives are not supported by C# 1.0" );
-      return csharp::parser::Token_INVALID;
+      return parser::Token_INVALID;
     }
 }
 	YY_BREAK
 case 161:
 YY_RULE_SETUP
-#line 456 "csharp_lexer.ll"
+#line 420 "csharp_lexer.ll"
 {
-    _G_parser->report_problem( csharp::parser::error,
+    _M_parser->report_problem( parser::error,
       std::string("Invalid pre-processor directive: ``") + yytext + "''" );
-    return csharp::parser::Token_INVALID;
+    return parser::Token_INVALID;
 }
 	YY_BREAK
 
@@ -4007,9 +3877,9 @@ case YY_STATE_EOF(PP_IF_CLAUSE):
 case YY_STATE_EOF(PP_LINE):
 case YY_STATE_EOF(PP_MESSAGE):
 case YY_STATE_EOF(PP_PRAGMA):
-#line 464 "csharp_lexer.ll"
+#line 428 "csharp_lexer.ll"
 {
-    _G_parser->report_problem( csharp::parser::warning,
+    _M_parser->report_problem( parser::warning,
       "No newline at the end of the file" );
     return csharp_pp::parser::Token_EOF;
 }
@@ -4018,12 +3888,12 @@ case YY_STATE_EOF(PP_PRAGMA):
 
 case 162:
 YY_RULE_SETUP
-#line 472 "csharp_lexer.ll"
+#line 436 "csharp_lexer.ll"
 /* skip */ ;
 	YY_BREAK
 case 163:
 YY_RULE_SETUP
-#line 473 "csharp_lexer.ll"
+#line 437 "csharp_lexer.ll"
 /* before an unexpected EOF, skip */ ;
 	YY_BREAK
 
@@ -4031,21 +3901,21 @@ YY_RULE_SETUP
 case 164:
 /* rule 164 can match eol */
 YY_RULE_SETUP
-#line 478 "csharp_lexer.ll"
+#line 442 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NEW_LINE;
 	YY_BREAK
 case 165:
 YY_RULE_SETUP
-#line 479 "csharp_lexer.ll"
+#line 443 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_INVALID;
 	YY_BREAK
 
 
 case 166:
 YY_RULE_SETUP
-#line 483 "csharp_lexer.ll"
+#line 447 "csharp_lexer.ll"
 {
-    _G_parser->report_problem( csharp::parser::error,
+    _M_parser->report_problem( parser::error,
       "You may not define ``true'' or ``false'' with #define or #undef" );
     return csharp_pp::parser::Token_PP_CONDITIONAL_SYMBOL;  // we could do Token_INVALID here,
     // but this way the error is shown and the parser continues, I prefer this.
@@ -4053,81 +3923,81 @@ YY_RULE_SETUP
 	YY_BREAK
 case 167:
 YY_RULE_SETUP
-#line 489 "csharp_lexer.ll"
+#line 453 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_CONDITIONAL_SYMBOL; // ...including keywords
 	YY_BREAK
 case 168:
 /* rule 168 can match eol */
 YY_RULE_SETUP
-#line 490 "csharp_lexer.ll"
+#line 454 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NEW_LINE;
 	YY_BREAK
 case 169:
 YY_RULE_SETUP
-#line 491 "csharp_lexer.ll"
+#line 455 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_INVALID;
 	YY_BREAK
 
 
 case 170:
 YY_RULE_SETUP
-#line 495 "csharp_lexer.ll"
+#line 459 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_EQUAL;
 	YY_BREAK
 case 171:
 YY_RULE_SETUP
-#line 496 "csharp_lexer.ll"
+#line 460 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NOT_EQUAL;
 	YY_BREAK
 case 172:
 YY_RULE_SETUP
-#line 497 "csharp_lexer.ll"
+#line 461 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_LOG_AND;
 	YY_BREAK
 case 173:
 YY_RULE_SETUP
-#line 498 "csharp_lexer.ll"
+#line 462 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_LOG_OR;
 	YY_BREAK
 case 174:
 YY_RULE_SETUP
-#line 499 "csharp_lexer.ll"
+#line 463 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_BANG;
 	YY_BREAK
 case 175:
 YY_RULE_SETUP
-#line 500 "csharp_lexer.ll"
+#line 464 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_TRUE;
 	YY_BREAK
 case 176:
 YY_RULE_SETUP
-#line 501 "csharp_lexer.ll"
+#line 465 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_FALSE;
 	YY_BREAK
 case 177:
 YY_RULE_SETUP
-#line 502 "csharp_lexer.ll"
+#line 466 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_LPAREN;
 	YY_BREAK
 case 178:
 YY_RULE_SETUP
-#line 503 "csharp_lexer.ll"
+#line 467 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_RPAREN;
 	YY_BREAK
 case 179:
 YY_RULE_SETUP
-#line 504 "csharp_lexer.ll"
+#line 468 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_CONDITIONAL_SYMBOL;
 	YY_BREAK
 case 180:
 /* rule 180 can match eol */
 YY_RULE_SETUP
-#line 505 "csharp_lexer.ll"
+#line 469 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NEW_LINE;
 	YY_BREAK
 case 181:
 YY_RULE_SETUP
-#line 506 "csharp_lexer.ll"
+#line 470 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_INVALID;
 	YY_BREAK
 
@@ -4136,18 +4006,18 @@ return csharp_pp::parser::Token_PP_INVALID;
 /* so that those are recognized and not taken as skipped text as well.     */
 case 182:
 YY_RULE_SETUP
-#line 512 "csharp_lexer.ll"
+#line 476 "csharp_lexer.ll"
 /* skip */ ;
 	YY_BREAK
 case 183:
 YY_RULE_SETUP
-#line 513 "csharp_lexer.ll"
+#line 477 "csharp_lexer.ll"
 /* skip */ ;
 	YY_BREAK
 case 184:
 /* rule 184 can match eol */
 YY_RULE_SETUP
-#line 514 "csharp_lexer.ll"
+#line 478 "csharp_lexer.ll"
 /* skip */ ;
 	YY_BREAK
 
@@ -4155,100 +4025,100 @@ YY_RULE_SETUP
 case 185:
 /* rule 185 can match eol */
 YY_RULE_SETUP
-#line 518 "csharp_lexer.ll"
+#line 482 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NEW_LINE;
 	YY_BREAK
 case 186:
 YY_RULE_SETUP
-#line 519 "csharp_lexer.ll"
+#line 483 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_LINE_NUMBER;
 	YY_BREAK
 case 187:
 YY_RULE_SETUP
-#line 520 "csharp_lexer.ll"
+#line 484 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_FILE_NAME;
 	YY_BREAK
 case 188:
 YY_RULE_SETUP
-#line 521 "csharp_lexer.ll"
+#line 485 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_DEFAULT;
 	YY_BREAK
 case 189:
 YY_RULE_SETUP
-#line 522 "csharp_lexer.ll"
+#line 486 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_IDENTIFIER_OR_KEYWORD;
 	YY_BREAK
 case 190:
 YY_RULE_SETUP
-#line 523 "csharp_lexer.ll"
+#line 487 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_INVALID;
 	YY_BREAK
 
 
 case 191:
 YY_RULE_SETUP
-#line 527 "csharp_lexer.ll"
+#line 491 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_MESSAGE;
 	YY_BREAK
 case 192:
 /* rule 192 can match eol */
 YY_RULE_SETUP
-#line 528 "csharp_lexer.ll"
+#line 492 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NEW_LINE;
 	YY_BREAK
 
 
 case 193:
 YY_RULE_SETUP
-#line 532 "csharp_lexer.ll"
+#line 496 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_PRAGMA_TEXT;
 	YY_BREAK
 case 194:
 /* rule 194 can match eol */
 YY_RULE_SETUP
-#line 533 "csharp_lexer.ll"
+#line 497 "csharp_lexer.ll"
 return csharp_pp::parser::Token_PP_NEW_LINE;
 	YY_BREAK
 
 /* identifiers and number literals */
 case 195:
 YY_RULE_SETUP
-#line 539 "csharp_lexer.ll"
-return csharp::parser::Token_IDENTIFIER;
+#line 503 "csharp_lexer.ll"
+return parser::Token_IDENTIFIER;
 	YY_BREAK
 case 196:
 YY_RULE_SETUP
-#line 541 "csharp_lexer.ll"
-return csharp::parser::Token_INTEGER_LITERAL;
+#line 505 "csharp_lexer.ll"
+return parser::Token_INTEGER_LITERAL;
 	YY_BREAK
 case 197:
 YY_RULE_SETUP
-#line 542 "csharp_lexer.ll"
-return csharp::parser::Token_REAL_LITERAL;
+#line 506 "csharp_lexer.ll"
+return parser::Token_REAL_LITERAL;
 	YY_BREAK
 /* everything else is not a valid lexeme */
 case 198:
 YY_RULE_SETUP
-#line 547 "csharp_lexer.ll"
-return csharp::parser::Token_INVALID;
+#line 511 "csharp_lexer.ll"
+return parser::Token_INVALID;
 	YY_BREAK
 /* some additional checking for unclosed #ifs and #regions at the EOF */
 
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(PP_SKIPPED_SECTION_PART):
-#line 553 "csharp_lexer.ll"
+#line 517 "csharp_lexer.ll"
 {
   cleanup();
-  return csharp::parser::Token_EOF;
+  return parser::Token_EOF;
 }
 	YY_BREAK
 
 case 199:
 YY_RULE_SETUP
-#line 559 "csharp_lexer.ll"
+#line 523 "csharp_lexer.ll"
 ECHO;
 	YY_BREAK
-#line 4252 "csharp_lexer.cc"
+#line 4122 "csharp_lexer.cpp"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -4324,7 +4194,7 @@ ECHO;
 				{
 				(yy_did_buffer_switch_on_eof) = 0;
 
-				if ( yywrap( ) )
+				if ( yywrap(  ) )
 					{
 					/* Note: because we've taken care in
 					 * yy_get_next_buffer() to have set up
@@ -4379,6 +4249,81 @@ ECHO;
 		} /* end of scanning one token */
 } /* end of yylex */
 
+yyFlexLexer::yyFlexLexer( std::istream* arg_yyin, std::ostream* arg_yyout )
+{
+	yyin = arg_yyin;
+	yyout = arg_yyout;
+	yy_c_buf_p = 0;
+	yy_init = 1;
+	yy_start = 0;
+	yy_flex_debug = 0;
+	yylineno = 1;	// this will only get updated if %option yylineno
+
+	yy_did_buffer_switch_on_eof = 0;
+
+	yy_looking_for_trail_begin = 0;
+	yy_more_flag = 0;
+	yy_more_len = 0;
+	yy_more_offset = yy_prev_more_offset = 0;
+
+	yy_start_stack_ptr = yy_start_stack_depth = 0;
+	yy_start_stack = 0;
+
+    (yy_buffer_stack) = 0;
+    (yy_buffer_stack_top) = 0;
+    (yy_buffer_stack_max) = 0;
+
+	yy_state_buf = 0;
+
+}
+
+void yyFlexLexer::switch_streams( std::istream* new_in, std::ostream* new_out )
+{
+	if ( new_in )
+		{
+		yy_delete_buffer( YY_CURRENT_BUFFER );
+		yy_switch_to_buffer( yy_create_buffer( new_in, YY_BUF_SIZE  ) );
+		}
+
+	if ( new_out )
+		yyout = new_out;
+}
+
+#ifdef YY_INTERACTIVE
+int yyFlexLexer::LexerInput( char* buf, int /* max_size */ )
+#else
+int yyFlexLexer::LexerInput( char* buf, int max_size )
+#endif
+{
+	if ( yyin->eof() || yyin->fail() )
+		return 0;
+
+#ifdef YY_INTERACTIVE
+	yyin->get( buf[0] );
+
+	if ( yyin->eof() )
+		return 0;
+
+	if ( yyin->bad() )
+		return -1;
+
+	return 1;
+
+#else
+	(void) yyin->read( buf, max_size );
+
+	if ( yyin->bad() )
+		return -1;
+	else
+		return yyin->gcount();
+#endif
+}
+
+void yyFlexLexer::LexerOutput( const char* buf, int size )
+{
+	(void) yyout->write( buf, size );
+}
+
 /* yy_get_next_buffer - try to read in a new buffer
  *
  * Returns a code representing an action:
@@ -4386,7 +4331,7 @@ ECHO;
  *	EOB_ACT_CONTINUE_SCAN - continue scanning from current position
  *	EOB_ACT_END_OF_FILE - end of file
  */
-static int yy_get_next_buffer (void)
+int yyFlexLexer::yy_get_next_buffer()
 {
     	register char *dest = YY_CURRENT_BUFFER_LVALUE->yy_ch_buf;
 	register char *source = (yytext_ptr);
@@ -4487,7 +4432,7 @@ static int yy_get_next_buffer (void)
 		if ( number_to_move == YY_MORE_ADJ )
 			{
 			ret_val = EOB_ACT_END_OF_FILE;
-			yyrestart(yyin  );
+			yyrestart( yyin  );
 			}
 
 		else
@@ -4512,7 +4457,7 @@ static int yy_get_next_buffer (void)
 
 /* yy_get_previous_state - get the state just before the EOB char was reached */
 
-    static yy_state_type yy_get_previous_state (void)
+    yy_state_type yyFlexLexer::yy_get_previous_state()
 {
 	register yy_state_type yy_current_state;
 	register char *yy_cp;
@@ -4545,7 +4490,7 @@ static int yy_get_next_buffer (void)
  * synopsis
  *	next_state = yy_try_NUL_trans( current_state );
  */
-    static yy_state_type yy_try_NUL_trans  (yy_state_type yy_current_state )
+    yy_state_type yyFlexLexer::yy_try_NUL_trans( yy_state_type yy_current_state )
 {
 	register int yy_is_jam;
     	register char *yy_cp = (yy_c_buf_p);
@@ -4568,7 +4513,7 @@ static int yy_get_next_buffer (void)
 	return yy_is_jam ? 0 : yy_current_state;
 }
 
-    static void yyunput (int c, register char * yy_bp )
+    void yyFlexLexer::yyunput( int c, register char* yy_bp)
 {
 	register char *yy_cp;
     
@@ -4605,13 +4550,7 @@ static int yy_get_next_buffer (void)
 	(yy_c_buf_p) = yy_cp;
 }
 
-#ifndef YY_NO_INPUT
-#ifdef __cplusplus
-    static int yyinput (void)
-#else
-    static int input  (void)
-#endif
-
+    int yyFlexLexer::yyinput()
 {
 	int c;
     
@@ -4646,13 +4585,13 @@ static int yy_get_next_buffer (void)
 					 */
 
 					/* Reset buffer status. */
-					yyrestart(yyin );
+					yyrestart( yyin );
 
 					/*FALLTHROUGH*/
 
 				case EOB_ACT_END_OF_FILE:
 					{
-					if ( yywrap( ) )
+					if ( yywrap(  ) )
 						return EOF;
 
 					if ( ! (yy_did_buffer_switch_on_eof) )
@@ -4679,31 +4618,30 @@ static int yy_get_next_buffer (void)
 
 	return c;
 }
-#endif	/* ifndef YY_NO_INPUT */
 
 /** Immediately switch to a different input stream.
  * @param input_file A readable stream.
  * 
  * @note This function does not reset the start condition to @c INITIAL .
  */
-    void yyrestart  (FILE * input_file )
+    void yyFlexLexer::yyrestart( std::istream* input_file )
 {
     
 	if ( ! YY_CURRENT_BUFFER ){
         yyensure_buffer_stack ();
 		YY_CURRENT_BUFFER_LVALUE =
-            yy_create_buffer(yyin,YY_BUF_SIZE );
+            yy_create_buffer( yyin, YY_BUF_SIZE );
 	}
 
-	yy_init_buffer(YY_CURRENT_BUFFER,input_file );
-	yy_load_buffer_state( );
+	yy_init_buffer( YY_CURRENT_BUFFER, input_file );
+	yy_load_buffer_state(  );
 }
 
 /** Switch to a different input buffer.
  * @param new_buffer The new input buffer.
  * 
  */
-    void yy_switch_to_buffer  (YY_BUFFER_STATE  new_buffer )
+    void yyFlexLexer::yy_switch_to_buffer( YY_BUFFER_STATE new_buffer )
 {
     
 	/* TODO. We should be able to replace this entire function body
@@ -4724,7 +4662,7 @@ static int yy_get_next_buffer (void)
 		}
 
 	YY_CURRENT_BUFFER_LVALUE = new_buffer;
-	yy_load_buffer_state( );
+	yy_load_buffer_state(  );
 
 	/* We don't actually know whether we did this switch during
 	 * EOF (yywrap()) processing, but the only time this flag
@@ -4734,7 +4672,7 @@ static int yy_get_next_buffer (void)
 	(yy_did_buffer_switch_on_eof) = 1;
 }
 
-static void yy_load_buffer_state  (void)
+    void yyFlexLexer::yy_load_buffer_state()
 {
     	(yy_n_chars) = YY_CURRENT_BUFFER_LVALUE->yy_n_chars;
 	(yytext_ptr) = (yy_c_buf_p) = YY_CURRENT_BUFFER_LVALUE->yy_buf_pos;
@@ -4748,7 +4686,7 @@ static void yy_load_buffer_state  (void)
  * 
  * @return the allocated buffer state.
  */
-    YY_BUFFER_STATE yy_create_buffer  (FILE * file, int  size )
+    YY_BUFFER_STATE yyFlexLexer::yy_create_buffer( std::istream* file, int size )
 {
 	YY_BUFFER_STATE b;
     
@@ -4767,7 +4705,7 @@ static void yy_load_buffer_state  (void)
 
 	b->yy_is_our_buffer = 1;
 
-	yy_init_buffer(b,file );
+	yy_init_buffer( b, file );
 
 	return b;
 }
@@ -4776,7 +4714,7 @@ static void yy_load_buffer_state  (void)
  * @param b a buffer created with yy_create_buffer()
  * 
  */
-    void yy_delete_buffer (YY_BUFFER_STATE  b )
+    void yyFlexLexer::yy_delete_buffer( YY_BUFFER_STATE b )
 {
     
 	if ( ! b )
@@ -4791,20 +4729,18 @@ static void yy_load_buffer_state  (void)
 	yyfree((void *) b  );
 }
 
-#ifndef __cplusplus
-extern int isatty (int );
-#endif /* __cplusplus */
-    
+extern "C" int isatty (int );
+
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,
  * such as during a yyrestart() or at EOF.
  */
-    static void yy_init_buffer  (YY_BUFFER_STATE  b, FILE * file )
+    void yyFlexLexer::yy_init_buffer( YY_BUFFER_STATE b, std::istream* file )
 
 {
 	int oerrno = errno;
     
-	yy_flush_buffer(b );
+	yy_flush_buffer( b );
 
 	b->yy_input_file = file;
 	b->yy_fill_buffer = 1;
@@ -4818,8 +4754,7 @@ extern int isatty (int );
         b->yy_bs_column = 0;
     }
 
-        b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
-    
+	b->yy_is_interactive = 0;
 	errno = oerrno;
 }
 
@@ -4827,7 +4762,7 @@ extern int isatty (int );
  * @param b the buffer state to be flushed, usually @c YY_CURRENT_BUFFER.
  * 
  */
-    void yy_flush_buffer (YY_BUFFER_STATE  b )
+    void yyFlexLexer::yy_flush_buffer( YY_BUFFER_STATE b )
 {
     	if ( ! b )
 		return;
@@ -4847,7 +4782,7 @@ extern int isatty (int );
 	b->yy_buffer_status = YY_BUFFER_NEW;
 
 	if ( b == YY_CURRENT_BUFFER )
-		yy_load_buffer_state( );
+		yy_load_buffer_state(  );
 }
 
 /** Pushes the new state onto the stack. The new state becomes
@@ -4856,7 +4791,7 @@ extern int isatty (int );
  *  @param new_buffer The new state.
  *  
  */
-void yypush_buffer_state (YY_BUFFER_STATE new_buffer )
+void yyFlexLexer::yypush_buffer_state (YY_BUFFER_STATE new_buffer)
 {
     	if (new_buffer == NULL)
 		return;
@@ -4878,7 +4813,7 @@ void yypush_buffer_state (YY_BUFFER_STATE new_buffer )
 	YY_CURRENT_BUFFER_LVALUE = new_buffer;
 
 	/* copied from yy_switch_to_buffer. */
-	yy_load_buffer_state( );
+	yy_load_buffer_state(  );
 	(yy_did_buffer_switch_on_eof) = 1;
 }
 
@@ -4886,7 +4821,7 @@ void yypush_buffer_state (YY_BUFFER_STATE new_buffer )
  *  The next element becomes the new top.
  *  
  */
-void yypop_buffer_state (void)
+void yyFlexLexer::yypop_buffer_state (void)
 {
     	if (!YY_CURRENT_BUFFER)
 		return;
@@ -4897,7 +4832,7 @@ void yypop_buffer_state (void)
 		--(yy_buffer_stack_top);
 
 	if (YY_CURRENT_BUFFER) {
-		yy_load_buffer_state( );
+		yy_load_buffer_state(  );
 		(yy_did_buffer_switch_on_eof) = 1;
 	}
 }
@@ -4905,7 +4840,7 @@ void yypop_buffer_state (void)
 /* Allocates the stack if it does not exist.
  *  Guarantees space for at least one push.
  */
-static void yyensure_buffer_stack (void)
+void yyFlexLexer::yyensure_buffer_stack(void)
 {
 	int num_to_alloc;
     
@@ -4944,99 +4879,51 @@ static void yyensure_buffer_stack (void)
 	}
 }
 
-/** Setup the input buffer state to scan directly from a user-specified character buffer.
- * @param base the character buffer
- * @param size the size in bytes of the character buffer
- * 
- * @return the newly allocated buffer state object. 
- */
-YY_BUFFER_STATE yy_scan_buffer  (char * base, yy_size_t  size )
+    void yyFlexLexer::yy_push_state( int new_state )
 {
-	YY_BUFFER_STATE b;
-    
-	if ( size < 2 ||
-	     base[size-2] != YY_END_OF_BUFFER_CHAR ||
-	     base[size-1] != YY_END_OF_BUFFER_CHAR )
-		/* They forgot to leave room for the EOB's. */
-		return 0;
+    	if ( (yy_start_stack_ptr) >= (yy_start_stack_depth) )
+		{
+		yy_size_t new_size;
 
-	b = (YY_BUFFER_STATE) yyalloc(sizeof( struct yy_buffer_state )  );
-	if ( ! b )
-		YY_FATAL_ERROR( "out of dynamic memory in yy_scan_buffer()" );
+		(yy_start_stack_depth) += YY_START_STACK_INCR;
+		new_size = (yy_start_stack_depth) * sizeof( int );
 
-	b->yy_buf_size = size - 2;	/* "- 2" to take care of EOB's */
-	b->yy_buf_pos = b->yy_ch_buf = base;
-	b->yy_is_our_buffer = 0;
-	b->yy_input_file = 0;
-	b->yy_n_chars = b->yy_buf_size;
-	b->yy_is_interactive = 0;
-	b->yy_at_bol = 1;
-	b->yy_fill_buffer = 0;
-	b->yy_buffer_status = YY_BUFFER_NEW;
+		if ( ! (yy_start_stack) )
+			(yy_start_stack) = (int *) yyalloc(new_size  );
 
-	yy_switch_to_buffer(b  );
+		else
+			(yy_start_stack) = (int *) yyrealloc((void *) (yy_start_stack),new_size  );
 
-	return b;
+		if ( ! (yy_start_stack) )
+			YY_FATAL_ERROR(
+			"out of memory expanding start-condition stack" );
+		}
+
+	(yy_start_stack)[(yy_start_stack_ptr)++] = YY_START;
+
+	BEGIN(new_state);
 }
 
-/** Setup the input buffer state to scan a string. The next call to yylex() will
- * scan from a @e copy of @a str.
- * @param str a NUL-terminated string to scan
- * 
- * @return the newly allocated buffer state object.
- * @note If you want to scan bytes that may contain NUL values, then use
- *       yy_scan_bytes() instead.
- */
-YY_BUFFER_STATE yy_scan_string (yyconst char * yy_str )
+    void yyFlexLexer::yy_pop_state()
 {
-    
-	return yy_scan_bytes(yy_str,strlen(yy_str) );
+    	if ( --(yy_start_stack_ptr) < 0 )
+		YY_FATAL_ERROR( "start-condition stack underflow" );
+
+	BEGIN((yy_start_stack)[(yy_start_stack_ptr)]);
 }
 
-/** Setup the input buffer state to scan the given bytes. The next call to yylex() will
- * scan from a @e copy of @a bytes.
- * @param bytes the byte buffer to scan
- * @param len the number of bytes in the buffer pointed to by @a bytes.
- * 
- * @return the newly allocated buffer state object.
- */
-YY_BUFFER_STATE yy_scan_bytes  (yyconst char * bytes, int  len )
+    int yyFlexLexer::yy_top_state()
 {
-	YY_BUFFER_STATE b;
-	char *buf;
-	yy_size_t n;
-	int i;
-    
-	/* Get memory for full buffer, including space for trailing EOB's. */
-	n = len + 2;
-	buf = (char *) yyalloc(n  );
-	if ( ! buf )
-		YY_FATAL_ERROR( "out of dynamic memory in yy_scan_bytes()" );
-
-	for ( i = 0; i < len; ++i )
-		buf[i] = bytes[i];
-
-	buf[len] = buf[len+1] = YY_END_OF_BUFFER_CHAR;
-
-	b = yy_scan_buffer(buf,n );
-	if ( ! b )
-		YY_FATAL_ERROR( "bad buffer in yy_scan_bytes()" );
-
-	/* It's okay to grow etc. this buffer, and we should throw it
-	 * away when we're done.
-	 */
-	b->yy_is_our_buffer = 1;
-
-	return b;
+    	return (yy_start_stack)[(yy_start_stack_ptr) - 1];
 }
 
 #ifndef YY_EXIT_FAILURE
 #define YY_EXIT_FAILURE 2
 #endif
 
-static void yy_fatal_error (yyconst char* msg )
+void yyFlexLexer::LexerError( yyconst char msg[] )
 {
-    	(void) fprintf( stderr, "%s\n", msg );
+    	std::cerr << msg << std::endl;
 	exit( YY_EXIT_FAILURE );
 }
 
@@ -5059,91 +4946,12 @@ static void yy_fatal_error (yyconst char* msg )
 
 /* Accessor  methods (get/set functions) to struct members. */
 
-/** Get the current line number.
- * 
- */
-int yyget_lineno  (void)
-{
-        
-    return yylineno;
-}
-
-/** Get the input stream.
- * 
- */
-FILE *yyget_in  (void)
-{
-        return yyin;
-}
-
-/** Get the output stream.
- * 
- */
-FILE *yyget_out  (void)
-{
-        return yyout;
-}
-
-/** Get the length of the current token.
- * 
- */
-int yyget_leng  (void)
-{
-        return yyleng;
-}
-
-/** Get the current token.
- * 
- */
-
-char *yyget_text  (void)
-{
-        return yytext;
-}
-
-/** Set the current line number.
- * @param line_number
- * 
- */
-void yyset_lineno (int  line_number )
-{
-    
-    yylineno = line_number;
-}
-
-/** Set the input stream. This does not discard the current
- * input buffer.
- * @param in_str A readable stream.
- * 
- * @see yy_switch_to_buffer
- */
-void yyset_in (FILE *  in_str )
-{
-        yyin = in_str ;
-}
-
-void yyset_out (FILE *  out_str )
-{
-        yyout = out_str ;
-}
-
-int yyget_debug  (void)
-{
-        return yy_flex_debug;
-}
-
-void yyset_debug (int  bdebug )
-{
-        yy_flex_debug = bdebug ;
-}
-
-/* yylex_destroy is for both reentrant and non-reentrant scanners. */
-int yylex_destroy  (void)
+yyFlexLexer::~yyFlexLexer()
 {
     
     /* Pop the buffer stack, destroying each element. */
 	while(YY_CURRENT_BUFFER){
-		yy_delete_buffer(YY_CURRENT_BUFFER  );
+		yy_delete_buffer( YY_CURRENT_BUFFER  );
 		YY_CURRENT_BUFFER_LVALUE = NULL;
 		yypop_buffer_state();
 	}
@@ -5152,7 +4960,9 @@ int yylex_destroy  (void)
 	yyfree((yy_buffer_stack) );
 	(yy_buffer_stack) = NULL;
 
-    return 0;
+	delete [] (yy_state_buf);
+	yyfree((yy_start_stack)  );
+
 }
 
 /*
@@ -5215,31 +5025,46 @@ void yyfree (void * ptr )
 #undef YY_DECL_IS_OURS
 #undef YY_DECL
 #endif
-#line 559 "csharp_lexer.ll"
+#line 523 "csharp_lexer.ll"
 
 
 
-void lexer_restart(csharp::parser* parser) {
-  _G_parser = parser;
-  _G_pp_root_scope = 0;
+namespace csharp
+{
+
+void Lexer::restart(parser *parser, char *contents)
+{
+  _M_parser = parser;
+  _M_contents = contents;
+  _M_pp_root_scope = 0;
+  _M_token_begin = _M_token_end = 0;
+  _M_current_offset = 0;
+
+  // check for and ignore the UTF-8 byte order mark
+  unsigned char *ucontents = (unsigned char *) _M_contents;
+  if (ucontents[0] == 0xEF && ucontents[1] == 0xBB && ucontents[2] == 0xBF)
+    {
+      _M_token_begin = _M_token_end = 3;
+      _M_current_offset = 3;
+    }
+
   yyrestart(NULL);
   BEGIN(INITIAL); // is not set automatically by yyrestart()
-  YY_USER_INIT
 }
 
-csharp_pp::scope* pp_current_scope()
+csharp_pp::scope* Lexer::pp_current_scope()
 {
-  if (_G_pp_root_scope == 0)
+  if (_M_pp_root_scope == 0)
     {
-      _G_pp_root_scope = new csharp_pp::scope(_G_parser);
+      _M_pp_root_scope = new csharp_pp::scope(_M_parser);
     }
-  return _G_pp_root_scope->current_scope();
+  return _M_pp_root_scope->current_scope();
 }
 
-void cleanup()
+void Lexer::cleanup()
 {
   // check for open scopes, and pop them / report errors as needed
-  if (_G_pp_root_scope != 0)
+  if (_M_pp_root_scope != 0)
     {
       csharp_pp::scope* current_scope = pp_current_scope();
       csharp_pp::scope::scope_type scope_type = current_scope->type();
@@ -5248,12 +5073,12 @@ void cleanup()
         {
           if (scope_type == csharp_pp::scope::type_if)
             {
-              _G_parser->report_problem( csharp::parser::error,
+              _M_parser->report_problem( parser::error,
                 "Encountered end of file in an unclosed #if/#elif/#else section" );
             }
           else if (scope_type == csharp_pp::scope::type_region)
             {
-              _G_parser->report_problem( csharp::parser::error,
+              _M_parser->report_problem( parser::error,
                 "Encountered end of file in an unclosed #region section" );
             }
 
@@ -5263,10 +5088,11 @@ void cleanup()
           scope_type = current_scope->type();
         }
 
-      delete _G_pp_root_scope;
-      _G_pp_root_scope = 0;
+      delete _M_pp_root_scope;
+      _M_pp_root_scope = 0;
     }
 }
 
-int yywrap() { return 1; }
+} // end of namespace csharp
+
 

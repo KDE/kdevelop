@@ -1,4 +1,4 @@
--- This file is part of KDevelop.
+-----------------------------------------------------------------------------
 -- Copyright (c) 2006 Jakob Petsovits <jpetso@gmx.at>
 --
 -- This grammar is free software; you can redistribute it and/or
@@ -15,17 +15,20 @@
 -- along with this library; see the file COPYING.LIB.  If not, write to
 -- the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 -- Boston, MA 02110-1301, USA.
+-----------------------------------------------------------------------------
 
 
+-----------------------------------------------------------------------------
 -- Grammar for the pre-processor part of C# 2.0
 -- Modelled after the reference grammar of the C# 2.0 language specification
 -- (ECMA-334, Third Edition from June 2005, available at
 -- http://www.ecma-international.org/publications/standards/Ecma-334.htm).
+-----------------------------------------------------------------------------
 
 
---
+------------------------------------------------------------
 -- Global declarations
---
+------------------------------------------------------------
 
 [:
 #include "csharp_pp_scope.h"
@@ -33,14 +36,15 @@
 namespace csharp
 {
   class parser;
+  class Lexer;
 }
 :]
 
 
 
---
+------------------------------------------------------------
 -- Parser class members
---
+------------------------------------------------------------
 
 %parserclass (public declaration)
 [:
@@ -60,17 +64,19 @@ namespace csharp
    *
    * @param first_token  The first token of the pre-processor line.
    * @param scope  The currently active pre-processor state, stored as a scope.
+   * @param lexer  The lexer object which is currently processing the source file.
    * @return  csharp_pp::parser::result_ok if the line was processed correctly,
    *          csharp_pp::parser::result_invalid if there was a parsing error,
    *          or csharp_pp::parser::result_eof if the end of file was found (unexpectedly).
    */
   parser::pp_parse_result pp_parse_line(
-    parser::token_type_enum first_token, scope* scope );
+    parser::token_type_enum first_token, scope *scope, csharp::Lexer *lexer );
 :]
 
 %parserclass (private declaration)
 [:
-  scope* _M_scope;
+  scope *_M_scope;
+  csharp::Lexer *_M_lexer;
 
   /**
    * Transform the raw input into tokens.
@@ -85,7 +91,7 @@ namespace csharp
    * given token kind. Used by the pre-processor that has to bypass
    * the normal tokenizing process.
    */
-  void add_token( parser::token_type_enum token_kind );
+  void add_token(parser::token_type_enum token_kind);
 
   token_stream_type _M_token_stream;
   memory_pool_type _M_memory_pool;
@@ -99,9 +105,9 @@ namespace csharp
 
 
 
---
--- Additional AST members
---
+------------------------------------------------------------
+-- Enumeration types for additional AST members
+------------------------------------------------------------
 
 %namespace pp_equality_expression_rest
 [:
@@ -148,9 +154,9 @@ namespace csharp
 
 
 
---
+------------------------------------------------------------
 -- List of defined tokens
---
+------------------------------------------------------------
 
 -- start tokens:
 %token PP_DEFINE ("#define"), PP_UNDEF ("#undef"), PP_IF ("#if"),
@@ -177,9 +183,9 @@ namespace csharp
 
 
 
---
+------------------------------------------------------------
 -- Start of the actual grammar
---
+------------------------------------------------------------
 
 --
 -- Preprocessor rules. Those are handled before the grammar is
@@ -290,14 +296,15 @@ namespace csharp
 
 
 
---
+-----------------------------------------------------------------
 -- Code segments copied to the implementation (.cpp) file.
--- If existent, kdevelop-pg's current syntax requires this block to occur
--- at the end of the file.
---
+-- If existent, kdevelop-pg's current syntax requires this block
+-- to occur at the end of the file.
+-----------------------------------------------------------------
 
 [:
 #include "csharp.h"
+#include "csharp_lexer.h"
 #include "csharp_pp_handler_visitor.h"
 
 #include <string>
@@ -306,8 +313,52 @@ namespace csharp
 namespace csharp_pp
 {
 
+void parser::tokenize(bool &encountered_eof)
+{
+  encountered_eof = false;
+  int kind = parser::Token_EOF;
+  do
+    {
+      kind = _M_lexer->yylex();
+      //std::cerr << "pp: " << lexer.YYText() << std::endl; //" "; // debug output
+
+      parser::token_type &t = this->token_stream->next();
+      t.kind = kind;
+      t.begin = _M_lexer->token_begin();
+      t.end = _M_lexer->token_end();
+      t.text = _M_lexer->contents();
+
+      if (kind == parser::Token_EOF)
+        {
+          t.kind = parser::Token_PP_NEW_LINE;
+          encountered_eof = true;
+          break;
+        }
+    }
+  while (kind != parser::Token_PP_NEW_LINE);
+
+  parser::token_type &t = this->token_stream->next();
+  t.kind = parser::Token_EOF;
+  t.begin = _M_lexer->token_begin();
+  t.end = _M_lexer->token_end();
+  t.text = _M_lexer->contents();
+
+  this->yylex(); // produce the look ahead token
+}
+
+void parser::add_token(parser::token_type_enum token_kind)
+{
+  //std::cerr << "pp: " << lexer.YYText() << std::endl; //" "; // debug output
+  parser::token_type &t = this->token_stream->next();
+  t.kind = token_kind;
+  t.begin = _M_lexer->token_begin();
+  t.end = _M_lexer->token_end();
+  t.text = _M_lexer->contents();
+}
+
+
 parser::pp_parse_result parser::pp_parse_line(
-  parser::token_type_enum first_token, scope* scope )
+  parser::token_type_enum first_token, scope* scope, csharp::Lexer *lexer )
 {
   // 0) setup
   if (scope == 0)
@@ -317,6 +368,7 @@ parser::pp_parse_result parser::pp_parse_line(
   bool encountered_eof;
 
   // 1) tokenize
+  _M_lexer = lexer;
   add_token(first_token);
   tokenize(encountered_eof);
 
@@ -344,13 +396,13 @@ parser::pp_parse_result parser::pp_parse_line(
 
 
 // custom error recovery
-void parser::yy_expected_token(int /*expected*/, std::size_t where, char const *name)
+void parser::yy_expected_token(int /*expected*/, std::size_t /*where*/, char const *name)
 {
   //print_token_environment(this);
   if (_M_scope->csharp_parser() != 0)
     {
       _M_scope->csharp_parser()->report_problem(
-        ::csharp::parser::error,
+        csharp::parser::error,
         std::string("Invalid pre-processor directive: Expected token ``") + name
           //+ "'' instead of ``" + current_token_text
           + "''"
@@ -364,7 +416,7 @@ void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
   if (_M_scope->csharp_parser() != 0)
     {
       _M_scope->csharp_parser()->report_problem(
-        ::csharp::parser::error,
+        csharp::parser::error,
         std::string("Invalid pre-processor directive: Expected symbol ``") + name
           //+ "'' instead of ``" + current_token_text
           + "''"

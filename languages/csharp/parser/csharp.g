@@ -1,4 +1,4 @@
--- This file is part of KDevelop.
+-----------------------------------------------------------------------------
 -- Copyright (c) 2006 Jakob Petsovits <jpetso@gmx.at>
 --
 -- This grammar is free software; you can redistribute it and/or
@@ -15,6 +15,7 @@
 -- along with this library; see the file COPYING.LIB.  If not, write to
 -- the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 -- Boston, MA 02110-1301, USA.
+-----------------------------------------------------------------------------
 
 
 -----------------------------------------------------------------------------
@@ -173,7 +174,7 @@ namespace csharp_pp
    * When this method returns, the parser's token stream has been filled
    * and any parse_*() method can be called.
    */
-  void tokenize();
+  void tokenize(char *contents);
 
   /**
    * The compatibility_mode status variable tells which version of C#
@@ -1086,7 +1087,6 @@ namespace csharp_pp
 -> class_or_struct_member_declaration [
      argument temporary node attributes: optional_attribute_sections;
      argument temporary node modifiers:  optional_modifiers;
-     member variable declaration_type: class_or_struct_member_declaration::class_or_struct_member_declaration_enum;
 ] ;;
 
 
@@ -1198,17 +1198,14 @@ namespace csharp_pp
    OPERATOR
    (   unary_op:overloadable_unary_only_operator[&(*yynode)->overloadable_operator_type]
        LPAREN source1_type=type source1_name=identifier RPAREN
-         [: (*yynode)->overloadable_operator_token = unary_op->op;
-            (*yynode)->unary_or_binary = overloadable_operator::type_unary;     :]
+         [: (*yynode)->unary_or_binary = overloadable_operator::type_unary;     :]
      |
        binary_op:overloadable_binary_only_operator[&(*yynode)->overloadable_operator_type]
        LPAREN source1_type=type source1_name=identifier
        COMMA  source2_type=type source2_name=identifier RPAREN
-         [: (*yynode)->overloadable_operator_token = binary_op->op;
-            (*yynode)->unary_or_binary = overloadable_operator::type_binary;    :]
+         [: (*yynode)->unary_or_binary = overloadable_operator::type_binary;    :]
      |
        unary_or_binary_op:overloadable_unary_or_binary_operator[&(*yynode)->overloadable_operator_type]
-         [: (*yynode)->overloadable_operator_token = unary_or_binary_op->op;    :]
        LPAREN source1_type=type source1_name=identifier
        (
           COMMA source2_type=type source2_name=identifier
@@ -1225,47 +1222,46 @@ namespace csharp_pp
      argument member node return_type:           type;
      member variable overloadable_operator_type: overloadable_operator::overloadable_operator_enum;
      member variable unary_or_binary:            overloadable_operator::unary_or_binary_enum;
-     member token overloadable_operator_token;
 ] ;;
 
 
 -- OVERLOADABLE OPERATORS for operator declarations.
 
  (
-   op=BANG          [: *op = overloadable_operator::op_bang;          :]
- | op=TILDE         [: *op = overloadable_operator::op_tilde;         :]
- | op=INCREMENT     [: *op = overloadable_operator::op_increment;     :]
- | op=DECREMENT     [: *op = overloadable_operator::op_decrement;     :]
- | op=TRUE          [: *op = overloadable_operator::op_true;          :]
- | op=FALSE         [: *op = overloadable_operator::op_false;         :]
+   BANG          [: *op = overloadable_operator::op_bang;          :]
+ | TILDE         [: *op = overloadable_operator::op_tilde;         :]
+ | INCREMENT     [: *op = overloadable_operator::op_increment;     :]
+ | DECREMENT     [: *op = overloadable_operator::op_decrement;     :]
+ | TRUE          [: *op = overloadable_operator::op_true;          :]
+ | FALSE         [: *op = overloadable_operator::op_false;         :]
  )
 -> overloadable_unary_only_operator [
      argument temporary variable op: overloadable_operator::overloadable_operator_enum*;
 ] ;;
 
  (
-   op=STAR          [: *op = overloadable_operator::op_star;          :]
- | op=SLASH         [: *op = overloadable_operator::op_slash;         :]
- | op=REMAINDER     [: *op = overloadable_operator::op_remainder;     :]
- | op=BIT_AND       [: *op = overloadable_operator::op_bit_and;       :]
- | op=BIT_OR        [: *op = overloadable_operator::op_bit_or;        :]
- | op=BIT_XOR       [: *op = overloadable_operator::op_bit_xor;       :]
- | op=LSHIFT        [: *op = overloadable_operator::op_lshift;        :]
- | op=RSHIFT        [: *op = overloadable_operator::op_rshift;        :]
- | op=EQUAL         [: *op = overloadable_operator::op_equal;         :]
- | op=NOT_EQUAL     [: *op = overloadable_operator::op_not_equal;     :]
- | op=GREATER_THAN  [: *op = overloadable_operator::op_greater_than;  :]
- | op=LESS_THAN     [: *op = overloadable_operator::op_less_than;     :]
- | op=GREATER_EQUAL [: *op = overloadable_operator::op_greater_equal; :]
- | op=LESS_EQUAL    [: *op = overloadable_operator::op_less_equal;    :]
+   STAR          [: *op = overloadable_operator::op_star;          :]
+ | SLASH         [: *op = overloadable_operator::op_slash;         :]
+ | REMAINDER     [: *op = overloadable_operator::op_remainder;     :]
+ | BIT_AND       [: *op = overloadable_operator::op_bit_and;       :]
+ | BIT_OR        [: *op = overloadable_operator::op_bit_or;        :]
+ | BIT_XOR       [: *op = overloadable_operator::op_bit_xor;       :]
+ | LSHIFT        [: *op = overloadable_operator::op_lshift;        :]
+ | RSHIFT        [: *op = overloadable_operator::op_rshift;        :]
+ | EQUAL         [: *op = overloadable_operator::op_equal;         :]
+ | NOT_EQUAL     [: *op = overloadable_operator::op_not_equal;     :]
+ | GREATER_THAN  [: *op = overloadable_operator::op_greater_than;  :]
+ | LESS_THAN     [: *op = overloadable_operator::op_less_than;     :]
+ | GREATER_EQUAL [: *op = overloadable_operator::op_greater_equal; :]
+ | LESS_EQUAL    [: *op = overloadable_operator::op_less_equal;    :]
  )
 -> overloadable_binary_only_operator [
      argument temporary variable op: overloadable_operator::overloadable_operator_enum*;
 ] ;;
 
  (
-   op=PLUS          [: *op = overloadable_operator::op_plus;          :]
- | op=MINUS         [: *op = overloadable_operator::op_minus;         :]
+   PLUS          [: *op = overloadable_operator::op_plus;          :]
+ | MINUS         [: *op = overloadable_operator::op_minus;         :]
  )
 -> overloadable_unary_or_binary_operator [
      argument temporary variable op: overloadable_operator::overloadable_operator_enum*;
@@ -2835,8 +2831,36 @@ namespace csharp_pp
 -----------------------------------------------------------------
 
 [:
+#include "csharp_lexer.h"
+
+
 namespace csharp
 {
+
+void parser::tokenize(char *contents)
+{
+  Lexer lexer(this, contents);
+
+  int kind = parser::Token_EOF;
+  do
+    {
+      kind = lexer.yylex();
+      //std::cerr << lexer.YYText() << std::endl; //" "; // debug output
+
+      if (!kind) // when the lexer returns 0, the end of file is reached
+        kind = parser::Token_EOF;
+
+      parser::token_type &t = this->token_stream->next();
+      t.kind = kind;
+      t.begin = lexer.token_begin();
+      t.end = lexer.token_end();
+      t.text = contents;
+    }
+  while (kind != parser::Token_EOF);
+
+  this->yylex(); // produce the look ahead token
+}
+
 
 parser::csharp_compatibility_mode parser::compatibility_mode() {
   return _M_compatibility_mode;
