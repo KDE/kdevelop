@@ -31,10 +31,10 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
-#include <autotoolsast.h>
-#include <autotoolsdriver.h>
+#include <automakeast.h>
+#include <automakedriver.h>
 
-using namespace AutoTools;
+using namespace AutoMake;
 
 Viewer::Viewer(QWidget *parent)
     : QWidget(parent), Ui::ViewerBase()
@@ -73,13 +73,13 @@ void Viewer::on_choose_clicked()
 void Viewer::on_files_currentChanged(Q3ListBoxItem* item)
 {
     ast->clear();
-    
+
     QFile f(item->text());
     f.open(QIODevice::ReadOnly);
     QTextStream str(&f);
     source->setText(str.read());
     f.close();
-    
+
     int result = Driver::parseFile(item->text().ascii(), &projectAST);
     if (projectAST && (result == 0))
     {
@@ -110,7 +110,7 @@ void Viewer::processAST(ProjectAST *projectAST, Q3ListViewItem *globAfter)
             projectIt = new Q3ListViewItem(parentProject.top(), globAfter, projectAST->scopedID);
     }
     projectIt->setOpen(true);
-    
+
     Q3ListViewItem *after = 0;
     for (QList<AST*>::const_iterator it = projectAST->statements.constBegin();
             it != projectAST->statements.constEnd(); ++it)
@@ -135,15 +135,15 @@ void Viewer::processAST(ProjectAST *projectAST, Q3ListViewItem *globAfter)
 			after = item;
 		}
 		break;
-		
+
 	case AST::NewLineAST:
 //                 after = new QListViewItem(projectIt, after, "<newline>");
 		break;
-		
+
 	case AST::CommentAST:
 //                 after = new QListViewItem(projectIt, after, "<comment>");
 		break;
-		
+
 	case AST::MakefileConditionalAST:
 		{
 			ConditionAST* ata = static_cast<ConditionAST*>(ast);

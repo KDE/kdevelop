@@ -17,10 +17,10 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include <autotoolsast.h>
-#include <autotoolsdriver.h>
+#include <automakeast.h>
+#include <automakedriver.h>
 
-using namespace AutoTools;
+using namespace AutoMake;
 
 int main(int argc, char *argv[])
 {
