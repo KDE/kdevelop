@@ -1,8 +1,8 @@
 // THIS FILE IS GENERATED
 // WARNING! All changes made in this file will be lost!
 
-#ifndef java_h_INCLUDED
-#define java_h_INCLUDED
+#ifndef java_H_INCLUDED
+#define java_H_INCLUDED
 
 #include "kdev-pg-memory-pool.h"
 #include "kdev-pg-allocator.h"
@@ -12,6 +12,9 @@
 #include <kdevast.h>
 
 #include <cassert>
+
+
+#include <string>
 
 namespace java
   {
@@ -1918,9 +1921,6 @@ namespace java
 
 } // end of namespace java
 
-
-#include <string>
-
 namespace java
   {
 
@@ -2101,7 +2101,7 @@ namespace java
        * When this method returns, the parser's token stream has been filled
        * and any parse_*() method can be called.
        */
-      void tokenize();
+      void tokenize(char *contents);
 
       /**
        * The compatibility_mode status variable tells which version of Java

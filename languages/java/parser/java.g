@@ -102,7 +102,7 @@
    * When this method returns, the parser's token stream has been filled
    * and any parse_*() method can be called.
    */
-  void tokenize();
+  void tokenize(char *contents);
 
   /**
    * The compatibility_mode status variable tells which version of Java
@@ -1865,8 +1865,35 @@
 -----------------------------------------------------------------
 
 [:
+#include "java_lexer.h"
+
+
 namespace java
 {
+
+void parser::tokenize(char *contents)
+{
+  Lexer lexer(this, contents);
+
+  int kind = parser::Token_EOF;
+  do
+    {
+      kind = lexer.yylex();
+      //std::cerr << lexer.YYText() << std::endl; //" "; // debug output
+
+      if (!kind) // when the lexer returns 0, the end of file is reached
+        kind = parser::Token_EOF;
+
+      parser::token_type &t = this->token_stream->next();
+      t.kind = kind;
+      t.begin = lexer.token_begin();
+      t.end = lexer.token_end();
+      t.text = contents;
+    }
+  while (kind != parser::Token_EOF);
+
+  this->yylex(); // produce the look ahead token
+}
 
 parser::java_compatibility_mode parser::compatibility_mode() {
   return _M_compatibility_mode;
