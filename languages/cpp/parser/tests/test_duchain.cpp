@@ -541,7 +541,7 @@ private slots:
   {
     //QSKIP("Excessive currently", SkipSingle);
 
-    QFile file("/opt/kde4/src/kdelibs/kate/part/katestyletreewidget.cpp");
+    QFile file("/opt/kde4/src/kdelibs/kate/part/katetextlayout.h");
     QVERIFY( file.open( QIODevice::ReadOnly ) );
 
     QByteArray fileData = file.readAll();

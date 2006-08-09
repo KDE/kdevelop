@@ -70,6 +70,7 @@ protected:
   virtual void visitInitDeclarator(InitDeclaratorAST*);
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
   virtual void visitEnumSpecifier(EnumSpecifierAST*);
+  virtual void visitTypeParameter(TypeParameterAST*);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;

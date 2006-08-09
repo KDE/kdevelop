@@ -336,7 +336,8 @@ void DUBuilder::visitName (NameAST *node)
 
   m_identifierStack.push(m_nameCompiler->identifier());
 
-  DefaultVisitor::visitName(node);
+  // Note: we don't want to visit the name node, the name compiler does that for us
+  //DefaultVisitor::visitName(node);
 }
 
 void DUBuilder::visitDeclarator (DeclaratorAST* node)
@@ -392,6 +393,15 @@ void DUBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
   int stackCount = m_identifierStack.count();
 
   DefaultVisitor::visitEnumSpecifier(node);
+
+  ignoreIdentifier(stackCount);
+}
+
+void DUBuilder::visitTypeParameter(TypeParameterAST* node)
+{
+  int stackCount = m_identifierStack.count();
+
+  DefaultVisitor::visitTypeParameter(node);
 
   ignoreIdentifier(stackCount);
 }
