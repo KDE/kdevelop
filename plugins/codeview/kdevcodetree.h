@@ -19,19 +19,38 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVCODEVIEW_H
-#define KDEVCODEVIEW_H
+#ifndef KDEVCODETREE_H
+#define KDEVCODETREE_H
 
-#include <QWidget>
+#include "kdevtreeview.h"
 
-class KDevCodeView: public QWidget
+class KUrl;
+class KDevDocument;
+class KDevCodeProxy;
+
+class KDevCodeTree: public KDevTreeView
 {
     Q_OBJECT
 public:
-    KDevCodeView( QWidget *parent = 0 );
-    virtual ~KDevCodeView();
+    KDevCodeTree( QWidget *parent );
+    virtual ~KDevCodeTree();
+
+    KDevCodeProxy *codeProxy() const;
+
+private slots:
+    void documentActivated( KDevDocument* file );
+    void activated( const QModelIndex &index );
+    void modeCurrent();
+    void modeNormalize();
+    void modeAggregate();
+    void filterKind();
+    void popupContextMenu( const QPoint &pos );
+
+private:
+    bool m_trackCurrent;
+    int m_kindFilter;
 };
 
-#endif // KDEVCODEVIEW_H
+#endif // KDEVCODETREE_H
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

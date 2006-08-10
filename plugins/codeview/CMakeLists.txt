@@ -7,6 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/util ${CMAK
 
 set(kdevcodeview_PART_SRCS
     kdevcodeview.cpp
+    kdevcodetree.cpp
     kdevcodeview_part.cpp
 )
 

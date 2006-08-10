@@ -22,21 +22,10 @@
 #include "kdevcodeview_part.h"
 #include "kdevcodeview.h"
 
-#include <QMenu>
-#include <QAction>
-#include <QToolButton>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-
-#include <kaction.h>
 #include <klocale.h>
-#include <kmimetype.h>
-#include <kaboutdata.h>
-#include <kicon.h>
 #include <kgenericfactory.h>
 
 #include <kdevmainwindow.h>
-#include <kdevlanguagesupport.h>
 
 typedef KGenericFactory<KDevCodeViewPart> KDevCodeViewFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevcodeview, KDevCodeViewFactory( "kdevcodeview" ) )
@@ -45,77 +34,9 @@ KDevCodeViewPart::KDevCodeViewPart( QObject *parent,
                                     const QStringList& )
     : KDevPlugin( KDevCodeViewFactory::instance(), parent )
 {
-    if (!KDevCore::activeLanguage())
-        return;
-    KDevCodeProxy * model = KDevCore::activeLanguage() ->codeProxy();
-    if ( !model )
-        return ;
+    m_codeView = new KDevCodeView;
 
-    QWidget *window = new QWidget;
-    QVBoxLayout *vbox = new QVBoxLayout( window );
-    vbox->setMargin( 0 );
-    vbox->setSpacing( 0 );
-
-    QFrame *toolBar = new QFrame( window );
-    toolBar->setFrameShape( QFrame::StyledPanel );
-    toolBar->setFrameShadow( QFrame::Raised );
-
-    m_codeView = new KDevCodeView( this, window );
-    m_codeView->setWindowIcon( KIcon( "view_tree" ) );
-    m_codeView->setWindowTitle( i18n( "Code View" ) );
-
-    QHBoxLayout *hbox = new QHBoxLayout( toolBar );
-    hbox->setMargin( 2 );
-
-    QToolButton *mode = new QToolButton( toolBar );
-    mode->setText( i18n( "Mode" ) );
-    mode->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
-    mode->setArrowType( Qt::DownArrow );
-    mode->setPopupMode( QToolButton::InstantPopup );
-    QMenu *modeMenu = new QMenu( i18n( "Mode" ) );
-    QAction *currentdoc = modeMenu->addAction( i18n( "&Current" ) );
-    QAction *normalize = modeMenu->addAction( i18n( "&Normalize" ) );
-    QAction *aggregate = modeMenu->addAction( i18n( "&Aggregate" ) );
-    mode->setMenu( modeMenu );
-
-    connect( currentdoc, SIGNAL( triggered() ), m_codeView, SLOT( modeCurrent() ) );
-    connect( normalize, SIGNAL( triggered() ), m_codeView, SLOT( modeNormalize() ) );
-    connect( aggregate, SIGNAL( triggered() ), m_codeView, SLOT( modeAggregate() ) );
-
-    QToolButton *filter = new QToolButton( toolBar );
-    filter->setText( i18n( "Filter" ) );
-    filter->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
-    filter->setArrowType( Qt::DownArrow );
-    filter->setPopupMode( QToolButton::InstantPopup );
-    QMenu *filterMenu = new QMenu( i18n( "Filter" ) );
-
-    QMap<QString, int> kindFilterList = model->kindFilterList();
-    QMap<QString, int>::ConstIterator kind = kindFilterList.begin();
-    for ( ; kind != kindFilterList.end(); ++kind )
-    {
-        QAction *action = filterMenu->addAction( kind.key() );
-        action->setData( kind.value() );
-        action->setCheckable( true );
-        connect( action, SIGNAL( triggered() ), m_codeView, SLOT( filterKind() ) );
-    }
-    filter->setMenu( filterMenu );
-
-    hbox->addWidget( mode );
-    hbox->addWidget( filter );
-    hbox->addStretch( 1 );
-    toolBar->setLayout( hbox );
-    vbox->addWidget( toolBar );
-    vbox->addWidget( m_codeView );
-    window->setLayout( vbox );
-
-    m_codeView->setModel( model );
-
-    if ( KDevCodeDelegate * delegate = KDevCore::activeLanguage() ->codeDelegate() )
-        m_codeView->setItemDelegate( delegate );
-
-    m_codeView->setWhatsThis( i18n( "Code View" ) );
-
-    KDevCore::mainWindow() ->embedSelectViewRight( window,
+    KDevCore::mainWindow() ->embedSelectViewRight( m_codeView,
                                          i18n( "Code View" ),
                                          i18n( "Code View" ) );
 
@@ -133,7 +54,6 @@ KDevCodeViewPart::~KDevCodeViewPart()
 
 void KDevCodeViewPart::import( RefreshPolicy /*policy*/ )
 {}
-
 
 #include "kdevcodeview_part.moc"
 

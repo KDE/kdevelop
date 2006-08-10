@@ -20,10 +20,17 @@
 */
 
 #include "kdevcodeview.h"
-#include "kdevcodeview_part.h"
 
-#include <QtGui/QHeaderView>
+#include "kdevcodetree.h"
 
+#include <QMenu>
+#include <QLabel>
+#include <QAction>
+#include <QToolButton>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+
+#include <kicon.h>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <kfile.h>
@@ -34,93 +41,102 @@
 #include <kdevlanguagesupport.h>
 #include <kdevdocumentcontroller.h>
 
-#include <QtCore/qdebug.h>
-
-KDevCodeView::KDevCodeView( KDevCodeViewPart *part, QWidget *parent )
-        : KDevTreeView( parent ),
-        m_part( part ),
-        m_trackCurrent( true ),
-        m_kindFilter( 0 )
+KDevCodeView::KDevCodeView( QWidget *parent )
+        : QWidget( parent )
 {
-    header() ->hide();
-    header() ->setResizeMode( QHeaderView::Stretch );
+    QVBoxLayout * vbox = new QVBoxLayout( this );
+    vbox->setMargin( 0 );
+    vbox->setSpacing( 0 );
 
-    setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( this, SIGNAL( pressed( QModelIndex ) ),
-             this, SLOT( activated( QModelIndex ) ) );
-    connect( this, SIGNAL( customContextMenuRequested( QPoint ) ),
-             this, SLOT( popupContextMenu( QPoint ) ) );
-    connect( KDevCore::documentController(),
-             SIGNAL( documentActivated( KDevDocument* ) ),
-             this, SLOT( documentActivated( KDevDocument* ) ) );
+    if ( !KDevCore::activeLanguage() )
+    {
+        QLabel * label = new QLabel( this );
+        label->setMargin( 20 );
+        label->setWordWrap( true );
+        label->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+        label->setText( i18n( "No active language part loaded!" ) );
+        label->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
+        vbox->addWidget( label );
+        setLayout( vbox );
+        return ;
+    }
+
+    KDevCodeProxy * model = KDevCore::activeLanguage() ->codeProxy();
+    if ( !model )
+    {
+        QLabel * label = new QLabel( this );
+        label->setMargin( 20 );
+        label->setWordWrap( true );
+        label->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+        label->setText( i18n( "Active language part does not offer a proper codemodel!" ) );
+        label->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
+        vbox->addWidget( label );
+        setLayout( vbox );
+        return ;
+    }
+
+    QFrame *toolBar = new QFrame( this );
+    toolBar->setFrameShape( QFrame::StyledPanel );
+    toolBar->setFrameShadow( QFrame::Raised );
+
+    KDevCodeTree *codeTree = new KDevCodeTree( this );
+    codeTree->setWindowIcon( KIcon( "view_tree" ) );
+    codeTree->setWindowTitle( i18n( "Code View" ) );
+
+    QHBoxLayout *hbox = new QHBoxLayout( toolBar );
+    hbox->setMargin( 2 );
+
+    QToolButton *mode = new QToolButton( toolBar );
+    mode->setText( i18n( "Mode" ) );
+    mode->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
+    mode->setArrowType( Qt::DownArrow );
+    mode->setPopupMode( QToolButton::InstantPopup );
+    QMenu *modeMenu = new QMenu( i18n( "Mode" ) );
+    QAction *currentdoc = modeMenu->addAction( i18n( "&Current" ) );
+    QAction *normalize = modeMenu->addAction( i18n( "&Normalize" ) );
+    QAction *aggregate = modeMenu->addAction( i18n( "&Aggregate" ) );
+    mode->setMenu( modeMenu );
+
+    connect( currentdoc, SIGNAL( triggered() ), codeTree, SLOT( modeCurrent() ) );
+    connect( normalize, SIGNAL( triggered() ), codeTree, SLOT( modeNormalize() ) );
+    connect( aggregate, SIGNAL( triggered() ), codeTree, SLOT( modeAggregate() ) );
+
+    QToolButton *filter = new QToolButton( toolBar );
+    filter->setText( i18n( "Filter" ) );
+    filter->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
+    filter->setArrowType( Qt::DownArrow );
+    filter->setPopupMode( QToolButton::InstantPopup );
+    QMenu *filterMenu = new QMenu( i18n( "Filter" ) );
+
+    QMap<QString, int> kindFilterList = model->kindFilterList();
+    QMap<QString, int>::ConstIterator kind = kindFilterList.begin();
+    for ( ; kind != kindFilterList.end(); ++kind )
+    {
+        QAction *action = filterMenu->addAction( kind.key() );
+        action->setData( kind.value() );
+        action->setCheckable( true );
+        connect( action, SIGNAL( triggered() ), codeTree, SLOT( filterKind() ) );
+    }
+    filter->setMenu( filterMenu );
+
+    hbox->addWidget( mode );
+    hbox->addWidget( filter );
+    hbox->addStretch( 1 );
+    toolBar->setLayout( hbox );
+    vbox->addWidget( toolBar );
+    vbox->addWidget( codeTree );
+    setLayout( vbox );
+
+    codeTree->setModel( model );
+
+    if ( KDevCodeDelegate * delegate = KDevCore::activeLanguage() ->codeDelegate() )
+        codeTree->setItemDelegate( delegate );
+
+    setWhatsThis( i18n( "Code View" ) );
 }
 
 KDevCodeView::~KDevCodeView()
 {}
-
-KDevCodeViewPart *KDevCodeView::part() const
-{
-    return m_part;
-}
-
-KDevCodeProxy *KDevCodeView::codeProxy() const
-{
-    return qobject_cast<KDevCodeProxy*>( model() );
-}
-
-void KDevCodeView::documentActivated( KDevDocument* file )
-{
-    if ( m_trackCurrent &&
-            KDevCore::activeLanguage() ->supportsDocument( file ) )
-        codeProxy() ->setFilterDocument( file->url() );
-}
-
-void KDevCodeView::activated( const QModelIndex &index )
-{
-    if ( KDevCodeItem * item = codeProxy() ->proxyToItem( index ) )
-    {
-        KUrl document( item->fileName() );
-        if ( document.isValid() )
-            KDevCore::documentController() ->editDocument( document,
-                    item->startPosition() );
-    }
-}
-
-void KDevCodeView::modeCurrent()
-{
-    m_trackCurrent = true;
-    codeProxy() ->setFilterDocument(
-        KDevCore::documentController() ->activeDocumentUrl() );
-}
-
-void KDevCodeView::modeNormalize()
-{
-    m_trackCurrent = false;
-    codeProxy() ->setMode( KDevCodeProxy::Normalize );
-}
-
-void KDevCodeView::modeAggregate()
-{
-    m_trackCurrent = false;
-    codeProxy() ->setMode( KDevCodeProxy::Aggregate );
-}
-
-void KDevCodeView::popupContextMenu( const QPoint &pos )
-{
-    Q_UNUSED( pos );
-}
-
-void KDevCodeView::filterKind()
-{
-    QAction * action = qobject_cast<QAction*>( sender() );
-    int kind = action->data().toInt();
-
-    if ( action->isChecked() )
-        m_kindFilter = m_kindFilter | kind;
-    else
-        m_kindFilter = m_kindFilter ^ kind;
-    codeProxy() ->setKindFilter( m_kindFilter );
-}
 
 #include "kdevcodeview.moc"
 
