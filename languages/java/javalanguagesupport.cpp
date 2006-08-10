@@ -138,7 +138,16 @@ void JavaLanguageSupport::documentActivated( KDevDocument* file )
 
 void JavaLanguageSupport::projectOpened()
 {
-    // FIXME This should add the project files to the backgroundparser
+    KUrl::List documentList;
+    QList<KDevProjectFileItem*> files = KDevCore::activeProject()->allFiles();
+    foreach ( KDevProjectFileItem * file, files )
+    {
+        if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith( ".java" )*/ )
+        {
+            documentList.append( file->url() );
+        }
+    }
+    KDevCore::backgroundParser() ->addDocumentList( documentList );
 }
 
 void JavaLanguageSupport::projectClosed()

@@ -22,6 +22,9 @@ Boston, MA 02110-1301, USA.
 #include <kstandarddirs.h>
 #include <kgenericfactory.h>
 
+#include <kdevast.h>
+#include "parser/csharp_serialize_visitor.h"
+
 #include <kdevcore.h>
 #include <kdevproject.h>
 #include <kdevfilemanager.h>
@@ -33,8 +36,6 @@ Boston, MA 02110-1301, USA.
 
 #include "csharplanguagesupport.h"
 
-#include "parser/csharp.h"
-
 // #include "codeproxy.h"
 // #include "codedelegate.h"
 
@@ -45,7 +46,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevcsharplanguagesupport,
                             KDevCSharpSupportFactory( "kdevcsharpsupport" ) )
 
 CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
-                                              const QStringList& /*args*/ )
+        const QStringList& /*args*/ )
         : KDevLanguageSupport( KDevCSharpSupportFactory::instance(), parent )
 {
     QString types = QLatin1String( "text/x-csharp" );
@@ -74,8 +75,7 @@ CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
 }
 
 CSharpLanguageSupport::~CSharpLanguageSupport()
-{
-}
+{}
 
 KDevCodeModel *CSharpLanguageSupport::codeModel( const KUrl &url ) const
 {
@@ -120,6 +120,27 @@ QStringList CSharpLanguageSupport::mimeTypes() const
     return m_mimetypes;
 }
 
+void CSharpLanguageSupport::read( KDevAST * ast, std::ifstream &in )
+{
+    //FIXME Need to attach the memory pool to the ast somehow so it is saved
+    parser::memory_pool_type memory_pool;
+
+    // This is how we read the AST from a file
+    if ( in.is_open() )
+    {
+        serialize::read( &memory_pool, static_cast<ast_node*>( ast ), &in );
+    }
+}
+
+void CSharpLanguageSupport::write( KDevAST * ast, std::ofstream &out )
+{
+    // This is how we save the AST to a file
+    if ( out.is_open() )
+    {
+        serialize::write( static_cast<ast_node*>( ast ), &out );
+    }
+}
+
 void CSharpLanguageSupport::documentLoaded( KDevDocument* file )
 {
     if ( supportsDocument( file ) )
@@ -139,20 +160,11 @@ void CSharpLanguageSupport::documentActivated( KDevDocument* file )
 
 void CSharpLanguageSupport::projectOpened()
 {
-    //FIXME This is currently too slow and the parser is prone to crashing
-    // when parsing .cpp files.  The Binder seems to be a slow point too.
- //   return ;
-
-    // FIXME Add signals slots from the filemanager for:
-    // 1. filesAddedToProject
-    // 2. filesRemovedFromProject
-    // 3. filesChangedInProject
-
     KUrl::List documentList;
-    QList<KDevProjectFileItem*> files = KDevCore::activeProject()->allFiles();
+    QList<KDevProjectFileItem*> files = KDevCore::activeProject() ->allFiles();
     foreach ( KDevProjectFileItem * file, files )
     {
-        if ( /*supportsDocument( file->url() )  &&*/ file->url().fileName().endsWith(".cs") )
+        if (  /*supportsDocument( file->url() ) &&*/ file->url().fileName().endsWith( ".cs" ) )
         {
             documentList.append( file->url() );
         }

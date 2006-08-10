@@ -51,6 +51,7 @@ set(kdevplatform_LIB_SRCS
     kdevast.cpp
     kdevbackgroundparser.cpp
     kdevparsejob.cpp
+    kdevpersistenthash.cpp
 )
 
 set(kdevplatform_UI3
@@ -109,6 +110,7 @@ install(FILES
     kdevast.h
     kdevbackgroundparser.h
     kdevparsejob.h
+    kdevpersistenthash.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/
 )
 

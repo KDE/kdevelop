@@ -189,9 +189,8 @@ KDevDocument* KDevDocumentController::editDocument( const KUrl & inputUrl,
     m_url2Document.insert( url, document );
 
     //FIXME by moving all of this out of documentcontroller preferably
-    //     m_openRecentAction->addUrl( url );
-    //     m_openRecentAction->saveEntries( KDevConfig::localProject(),
-    //                                      "RecentDocuments" );
+    m_openRecentAction->addUrl( url );
+    m_openRecentAction->saveEntries( KDevConfig::localProject(), "RecentDocuments" );
 
     if ( activate )
         setCursorPosition( part, cursor );

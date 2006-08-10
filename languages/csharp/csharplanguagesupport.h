@@ -46,6 +46,9 @@ public:
                                           KTextEditor::SmartRange *highlight );
     virtual QStringList mimeTypes() const;
 
+    virtual void read( KDevAST * ast, std::ifstream &in );
+    virtual void write( KDevAST * ast, std::ofstream &out );
+
 private slots:
     void documentLoaded( KDevDocument* file );
     void documentClosed( KDevDocument* file );

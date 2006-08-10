@@ -38,6 +38,7 @@ class Job;
 namespace KTextEditor
 {
 class Document;
+class SmartRange;
 }
 
 class QTimer;
@@ -46,6 +47,7 @@ class KDevAST;
 class KDevDocument;
 class KDevCodeModel;
 class KDevLanguageSupport;
+class KDevPersistentHash;
 
 typedef QList< QPair<KUrl, KDevCodeModel* > > CodeModelCache;
 
@@ -69,6 +71,7 @@ public slots:
     void parseComplete( Job *job );
     void documentChanged( KTextEditor::Document *document );
     void cacheModels( uint modelsToCache );
+    KTextEditor::SmartRange *buildHighlight( KDevDocument *document );
 
 private:
     QTimer *m_timer;
@@ -81,8 +84,10 @@ private:
     QMap<KUrl, KDevDocument*> m_openDocuments;
     // A list of cached models when parsing a large amount of files.
     CodeModelCache m_modelCache;
-    // The translation unit for each document
-    QMap<KUrl, KDevAST* > m_url2unit;
+
+    // The persistent AST storage
+    KDevPersistentHash *m_peristentHash;
+
     mutable QMutex m_mutex;
     ThreadWeaver::Weaver* m_weaver;
 };

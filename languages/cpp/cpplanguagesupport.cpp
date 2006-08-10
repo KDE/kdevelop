@@ -143,20 +143,16 @@ CppHighlighting * CppLanguageSupport::codeHighlighting() const
 
 void CppLanguageSupport::projectOpened()
 {
-    //FIXME This is currently too slow and the parser is prone to crashing
-    // when parsing .cpp files.  The Binder seems to be a slow point too.
-    return ;
-
     // FIXME Add signals slots from the filemanager for:
-    // 1. filesAddedToProject
-    // 2. filesRemovedFromProject
-    // 3. filesChangedInProject
+    //       1. filesAddedToProject
+    //       2. filesRemovedFromProject
+    //       3. filesChangedInProject
 
     KUrl::List documentList;
     QList<KDevProjectFileItem*> files = KDevCore::activeProject()->allFiles();
     foreach ( KDevProjectFileItem * file, files )
     {
-        if ( supportsDocument( file->url() )  /*&& file->url().fileName().endsWith(".h")*/ )
+        if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith( ".h" )*/ )
         {
             documentList.append( file->url() );
         }

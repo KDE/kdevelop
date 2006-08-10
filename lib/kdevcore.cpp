@@ -208,8 +208,10 @@ void KDevCore::initialize()
 
     //FIXME standardize on 'initialize' method name.
     Q_ASSERT( d->documentController );
+    Q_ASSERT( d->projectController );
     Q_ASSERT( d->mainWindow );
     d->documentController->init();
+    d->projectController->init();
     d->mainWindow->init();
 }
 

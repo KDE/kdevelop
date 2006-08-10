@@ -21,15 +21,15 @@
 
 #include "kdevbackgroundparser.h"
 
-#include "kdevcodemodel.h"
-#include "kdevcodeaggregate_p.h"
-#include "kdevdocumentcontroller.h"
-#include "kdevlanguagesupport.h"
 #include "kdevcore.h"
 #include "kdevproject.h"
+#include "kdevcodemodel.h"
+#include "kdevlanguagesupport.h"
+#include "kdevdocumentcontroller.h"
 
 #include "kdevast.h"
 #include "kdevparsejob.h"
+#include "kdevpersistenthash.h"
 
 #include <QList>
 #include <QTimer>
@@ -49,8 +49,13 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         : QObject( parent ),
         m_suspend( false ),
         m_modelsToCache( 0 ),
-        m_weaver( new Weaver( this, 1, 1 ) )
+        m_peristentHash( new KDevPersistentHash ),
+        m_weaver( new Weaver( this, 1, 1 ) ) //C++ parser can't multi-thread at the moment
 {
+    //FIXME Stub for now, but eventually load persistent parser info
+    //whatever that may entail.
+    m_peristentHash->load();
+
     m_timer = new QTimer( this );
     m_timer->setSingleShot( true );
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
@@ -121,41 +126,12 @@ void KDevBackgroundParser::parseDocuments()
             KDevDocument* document = m_openDocuments[ url ];
 
             if ( document )
-            {
-                KTextEditor::SmartRange * highlight = 0L;
-                if ( KTextEditor::SmartInterface * smart =
-                            dynamic_cast<KTextEditor::SmartInterface*>( document->textDocument() )
-                   )
-                {
-                    if ( smart->documentHighlights().count() )
-                    {
-                        highlight = smart->documentHighlights().first();
-                        highlight->deleteChildRanges();
-
-                    }
-                    else
-                    {
-                        highlight =
-                            smart->newSmartRange( document->textDocument() ->documentRange(),
-                                                  0L,
-                                                  KTextEditor::SmartRange::ExpandLeft
-                                                  | KTextEditor::SmartRange::ExpandRight );
-                        smart->addHighlightToDocument( highlight, false );
-                    }
-                }
-
-                parse = langSupport->createParseJob( document, highlight );
-
-            }
+                parse = langSupport->createParseJob( document, buildHighlight( document ) );
             else
-            {
                 parse = langSupport->createParseJob( url );
-            }
 
             if ( !parse )
                 return ; //Language part did not produce a valid KDevParseJob
-
-            p = false;
 
             if ( url == KDevCore::documentController() ->activeDocumentUrl() )
             {
@@ -165,8 +141,11 @@ void KDevBackgroundParser::parseDocuments()
 
                 parse->setContents( document->textDocument() ->text().toAscii() );
             }
+
             connect( parse, SIGNAL( done( Job* ) ),
                      this, SLOT( parseComplete( Job* ) ) );
+
+            p = false; //Don't parse for next time
 
             collection->addJob( parse );
         }
@@ -187,6 +166,8 @@ void KDevBackgroundParser::parseComplete( Job *job )
 
     if ( KDevParseJob * parseJob = qobject_cast<KDevParseJob*>( job ) )
     {
+        //FIXME The Java and CSharp parsers don't get past this as they have
+        //no current code model.
         if ( !parseJob->wasSuccessful() )
             return ;
 
@@ -196,21 +177,30 @@ void KDevBackgroundParser::parseComplete( Job *job )
 
         if ( m_modelsToCache )
         {
-            m_modelCache.append( qMakePair( parseJob->document(), parseJob->codeModel() ) );
+            m_modelCache.append( qMakePair( parseJob->document(),
+                                            parseJob->codeModel() ) );
 
             m_modelsToCache--; //decrement
 
-            if ( !m_modelsToCache && !m_modelCache.isEmpty() ) //decremented to zero
+            if ( !m_modelsToCache && !m_modelCache.isEmpty() )         //decremented to zero
             {
                 langSupport->codeProxy() ->insertModelCache( m_modelCache );
                 m_modelCache.clear();
+
+                //FIXME Stub for now, but eventually save persistent parser info
+                //whatever that may entail.
+                m_peristentHash->save();
             }
         }
         else
         {
-            langSupport->codeProxy() ->insertModel( parseJob->document(), parseJob->codeModel() );
+            langSupport->codeProxy() ->insertModel( parseJob->document(),
+                                                    parseJob->codeModel() );
         }
-        m_url2unit.insert( parseJob->document(), parseJob->AST() );
+
+        //FIXME Stub for now, but eventually save persistent parser info
+        //whatever that may entail.
+        m_peristentHash->insert( parseJob->document(), parseJob->AST() );
 
         parseJob->deleteLater();
     }
@@ -239,6 +229,32 @@ void KDevBackgroundParser::resume()
 void KDevBackgroundParser::removeDocumentFile( KDevDocument * document )
 {
     m_openDocuments.remove( document->url() );
+}
+
+KTextEditor::SmartRange *KDevBackgroundParser::buildHighlight( KDevDocument *document )
+{
+    KTextEditor::SmartRange * highlight = 0L;
+    if ( KTextEditor::SmartInterface * smart =
+         dynamic_cast<KTextEditor::SmartInterface*>( document->textDocument() ) )
+    {
+        if ( smart->documentHighlights().count() )
+        {
+            KTextEditor::SmartRange * highlight = smart->documentHighlights().first();
+            highlight->deleteChildRanges();
+            return highlight;
+
+        }
+        else
+        {
+            KTextEditor::SmartRange * highlight =
+                    smart->newSmartRange( document->textDocument() ->documentRange(),
+                                          0L,
+                                          KTextEditor::SmartRange::ExpandLeft
+                                                  | KTextEditor::SmartRange::ExpandRight );
+            smart->addHighlightToDocument( highlight, false );
+            return highlight;
+        }
+    }
 }
 
 #include "kdevbackgroundparser.moc"

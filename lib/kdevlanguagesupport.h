@@ -28,6 +28,9 @@
 
 #include "kdevplugin.h"
 
+#include <iostream> //Needed to serialize the AST
+#include <fstream> //Needed to serialize the AST
+
 #include <QString>
 #include <qstringlist.h>
 
@@ -39,6 +42,7 @@
 #include <kdevcodedelegate.h>
 #include <kdevcoderepository.h>
 
+class KDevAST;
 class KDevDocument;
 class KDevParseJob;
 
@@ -97,6 +101,11 @@ public:
     virtual KDevParseJob *createParseJob( const KUrl &url ) = 0;
     virtual KDevParseJob *createParseJob( KDevDocument *document,
                                           KTextEditor::SmartRange *highlight ) = 0;
+
+    //FIXME Make these pure to force language parts to provide this.
+    //Right now the cpp language part can't persist the AST...
+    virtual void read( KDevAST * ast, std::ifstream &in );
+    virtual void write( KDevAST * ast, std::ofstream &out );
 
     /**@return A typical mimetype list for the support language, this list
     should be configurable in the languagesupport dialog.*/

@@ -19,10 +19,4 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevast.h"
 
-KDevAST::KDevAST()
-{}
-
-KDevAST::~KDevAST()
-{}
-
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

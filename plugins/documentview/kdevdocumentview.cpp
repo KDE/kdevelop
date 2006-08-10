@@ -63,10 +63,10 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
     KDevDocumentModel *docModel = qobject_cast<KDevDocumentModel*>( model() );
 
     if ( event->button() == Qt::LeftButton && index.parent().isValid() &&
-         event->modifiers() == Qt::NoModifier )
+            event->modifiers() == Qt::NoModifier )
     {
         KDevCore::documentController() ->editDocument(
-                docModel->item( index ) ->fileItem() ->URL() );
+            docModel->item( index ) ->fileItem() ->URL() );
 
     }
 
@@ -86,7 +86,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
     KUrl::List list;
     foreach ( QModelIndex index, indexes )
     {
-        if ( KDevFileItem * fileItem = docModel->item( index )->fileItem() )
+        if ( KDevFileItem * fileItem = docModel->item( index ) ->fileItem() )
         {
             list.append( fileItem->URL() );
         }

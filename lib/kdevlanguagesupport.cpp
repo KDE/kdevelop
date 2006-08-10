@@ -24,6 +24,7 @@
 */
 #include "kdevlanguagesupport.h"
 
+#include <kdevast.h>
 #include <kdevdocument.h>
 
 KDevLanguageSupport::KDevLanguageSupport(KInstance *instance,
@@ -56,6 +57,16 @@ bool KDevLanguageSupport::supportsDocument( const KUrl &url )
         if ( mimetype->is( *it ) )
             return true;
     return false;
+}
+
+void KDevLanguageSupport::read( KDevAST * ast, std::ifstream &in )
+{
+    //Do Nothing
+}
+
+void KDevLanguageSupport::write( KDevAST * ast, std::ofstream &out )
+{
+    //Do Nothing
 }
 
 #include "kdevlanguagesupport.moc"

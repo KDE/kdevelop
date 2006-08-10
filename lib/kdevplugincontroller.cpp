@@ -213,7 +213,6 @@ void KDevPluginController::removePart( KXMLGUIClient *part )
 
 void KDevPluginController::removeAndForgetPart( const QString &name, KDevPlugin *part )
 {
-    kDebug( 9000 ) << "removing: " << name << endl;
     m_parts.remove( name );
     removePart( part );
 }

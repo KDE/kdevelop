@@ -19,12 +19,19 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevprojectcontroller.h"
 
+#include <QDir>
+
+#include <kaction.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kservice.h>
+#include <kstdaction.h>
 #include <kmessagebox.h>
 #include <kmainwindow.h>
+#include <kfiledialog.h>
+#include <kactioncollection.h>
 #include <kservicetypetrader.h>
+#include <krecentfilesaction.h>
 
 #include "kdevcore.h"
 #include "kdevconfig.h"
@@ -55,14 +62,33 @@ void KDevProjectController::cleanUp()
 
 void KDevProjectController::init()
 {
+    KActionCollection * ac =
+        KDevCore::mainWindow() ->actionCollection();
+
+    KAction *action;
+
+    action = new KAction( i18n( "&Open Project..." ), ac, "project_open" );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
+    action->setToolTip( i18n( "Open project" ) );
+    action->setWhatsThis( i18n( "<b>Open project</b><p>Opens a KDevelop 4 project." ) );
+
+    action = new KAction( i18n( "C&lose Project" ), ac, "project_close" );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( closeProject() ) );
+    action->setToolTip( i18n( "Close project" ) );
+    action->setWhatsThis( i18n( "<b>Close project</b><p>Closes the current project." ) );
+    action->setEnabled( false );
+
     KConfig * config = KDevConfig::standard();
     config->setGroup( "General Options" );
-    QString project = config->readPathEntry( "Last Project" );
-    bool readProject = config->readEntry( "Read Last Project On Startup", true );
-    if ( !project.isEmpty() && readProject )
-    {
-        openProject( KUrl( project ) );
-    }
+
+    KRecentFilesAction *recentAction;
+    recentAction =
+        KStdAction::openRecent( this, SLOT( openProject( const KUrl& ) ),
+                                ac, "project_open_recent" );
+    recentAction->setToolTip( i18n( "Open recent project" ) );
+    recentAction->setWhatsThis(
+        i18n( "<b>Open recent project</b><p>Opens recently opened project." ) );
+    recentAction->loadEntries( config, "RecentProjects" );
 }
 
 bool KDevProjectController::isLoaded() const
@@ -122,10 +148,25 @@ KDevProject* KDevProjectController::activeProject() const
 
 bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
 {
-    if ( !KDev4ProjectFile.isValid() )
+    KUrl url = KDev4ProjectFile;
+
+    if ( url.isEmpty() )
+    {
+        KConfig * config = KDevConfig::standard();
+        config->setGroup( "General Options" );
+        QString dir = config->readPathEntry( "DefaultProjectsDirectory",
+                                             QDir::homePath() );
+
+        url = KFileDialog::getOpenUrl( dir, i18n( "*.kdev4|KDevelop 4 Project Files\n" ),
+                                       KDevCore::mainWindow(),
+                                       i18n( "Open Project" ) );
+
+    }
+
+    if ( !url.isValid() )
         return false;
 
-    if ( KDev4ProjectFile == m_globalFile )
+    if ( url == m_globalFile )
     {
         if ( KMessageBox::questionYesNo( KDevCore::mainWindow(),
                                          i18n( "Reopen the current project?" ) )
@@ -136,7 +177,7 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
     if ( m_isLoaded )
         closeProject();
 
-    m_globalFile = KDev4ProjectFile;
+    m_globalFile = url;
 
     //FIXME Create the hidden directory if it doesn't exist
     m_localFile = KUrl::fromPath( m_globalFile.directory( KUrl::AppendTrailingSlash )
@@ -149,6 +190,17 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
     legacyLoading();
 
     m_isLoaded = true;
+
+    KActionCollection * ac = KDevCore::mainWindow() ->actionCollection();
+    KAction * action;
+
+    action = ac->action( "project_close" );
+    action->setEnabled( true );
+
+    KRecentFilesAction *recentAction;
+    recentAction = qobject_cast<KRecentFilesAction *>( ac->action( "project_open_recent" ) );
+    recentAction->addUrl( m_globalFile );
+    recentAction->saveEntries( KDevConfig::localProject(), "RecentProjects" );
 
     emit projectOpened();
 
@@ -186,6 +238,12 @@ bool KDevProjectController::closeProject()
     KConfig* standard = KDevConfig::standard();
     standard->setGroup( "General Options" );
     standard->writePathEntry( "Last Project", lastProject.path() );
+
+    KActionCollection * ac = KDevCore::mainWindow() ->actionCollection();
+    KAction * action;
+
+    action = ac->action( "project_close" );
+    action->setEnabled( true );
 
     emit projectClosed();
 
