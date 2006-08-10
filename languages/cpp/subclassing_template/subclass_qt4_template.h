@@ -9,7 +9,7 @@ class $NEWCLASS$ : public $QTBASECLASS$, private Ui::$BASECLASS$
   Q_OBJECT
 
 public:
-  $NEWCLASS$(QWidget* parent = 0, WFlags fl = 0 );
+  $NEWCLASS$(QWidget* parent = 0, Qt::WFlags fl = 0 );
   ~$NEWCLASS$();
   /*$PUBLIC_FUNCTIONS$*/
 
