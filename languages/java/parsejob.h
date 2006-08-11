@@ -25,7 +25,7 @@
 #include <kurl.h>
 #include <kdevparsejob.h>
 
-#include "parser/java.h"
+#include "parser/java_ast.h"
 #include "parser/decoder.h"
 
 using namespace java;

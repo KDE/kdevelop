@@ -34,6 +34,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "parser/java_parser.h"
+#include "parser/java_default_visitor.h"
+
 ParseJob::ParseJob( const KUrl &url,
                     QObject *parent )
         : KDevParseJob( url, parent ),

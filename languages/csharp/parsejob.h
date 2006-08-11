@@ -25,7 +25,7 @@
 #include <kurl.h>
 #include <kdevparsejob.h>
 
-#include "parser/csharp.h"
+#include "parser/csharp_ast.h"
 #include "parser/decoder.h"
 
 using namespace csharp;

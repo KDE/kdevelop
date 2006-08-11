@@ -34,6 +34,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "parser/csharp_parser.h"
+#include "parser/csharp_default_visitor.h"
+
 ParseJob::ParseJob( const KUrl &url,
                     QObject *parent )
         : KDevParseJob( url, parent ),
