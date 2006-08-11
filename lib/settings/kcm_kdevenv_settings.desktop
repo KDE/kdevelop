@@ -2,10 +2,10 @@
 Encoding=UTF-8
 Icon=kdevelop
 Type=Service
-ServiceTypes=KCModuleInit
+ServiceTypes=KCModule
 
 X-KDE-ModuleType=Library
-X-KDE-Library=kdevenv_settings
+X-KDE-Library=kdevelop_settings
 X-KDE-FactoryName=kcm_kdevenv_settings
 X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
