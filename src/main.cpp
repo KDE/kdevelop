@@ -139,6 +139,13 @@ int main( int argc, char *argv[] )
         {
             KDevCore::projectController()->openProject( KUrl( project ) );
         }
+        else
+        {
+            //Make sure to show the mainwindow if a project isn't opened
+            //FIXME load the plugins that are currently loaded by the
+            //project controller.
+            KDevCore::mainWindow()->loadSettings();
+        }
     }
     else if ( args->count() > 0 )
     {
