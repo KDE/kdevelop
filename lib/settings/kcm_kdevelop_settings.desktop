@@ -9,9 +9,10 @@ X-KDE-Library=kdevelop_settings
 X-KDE-FactoryName=kcm_kdevelop_settings
 X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
+X-KDE-CfgDlgHierarchy=GENERAL
 
-Name=General
-Name[x-test]=xxGeneralxx
-Comment=Configure General settings
-Comment[x-test]=xxConfigure General settingsxx
+Name=Project
+Name[x-test]=xxProjectxx
+Comment=Configure Project settings
+Comment[x-test]=xxConfigure Project settingsxx
 

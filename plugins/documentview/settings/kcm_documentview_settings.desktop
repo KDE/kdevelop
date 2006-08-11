@@ -9,6 +9,7 @@ X-KDE-Library=documentview_settings
 X-KDE-FactoryName=kcm_documentview_settings
 X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
+X-KDE-CfgDlgHierarchy=CORE
 
 Name=Document View
 Name[x-test]=xxDocument Viewxx

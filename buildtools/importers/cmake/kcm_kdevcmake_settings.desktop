@@ -9,6 +9,7 @@ X-KDE-Library=kdevcmake_settings
 X-KDE-FactoryName=kcm_kdevcmake_settings
 X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
+X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=CMake
 Name[x-test]=xxCMakexx

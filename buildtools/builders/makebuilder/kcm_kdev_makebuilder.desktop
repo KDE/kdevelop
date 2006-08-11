@@ -9,6 +9,7 @@ X-KDE-Library=kdev_makebuilder
 X-KDE-FactoryName=kcm_kdev_makebuilder
 X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
+X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Make
 Name[x-test]=xxMakexx

@@ -1,0 +1,36 @@
+[GENERAL]
+Name=General Settings
+Comment=General Settings
+Icon=kdevelop
+Weight=0
+Parent=
+
+[LANGUAGE]
+Name=Languages
+Comment=Language Settings
+Icon=kdevelop
+Weight=1
+
+[BUILDTOOL]
+Name=Build Tools
+Comment=Build Tool Settings
+Icon=kdevelop
+Weight=2
+
+[GLOBAL]
+Name=Global Plugins
+Comment=Global Plugins Settings
+Icon=kdevelop
+Weight=3
+
+[CORE]
+Name=Core Plugins
+Comment=Core Plugins Settings
+Icon=kdevelop
+Weight=4
+
+[PROJECT]
+Name=Project Plugins
+Comment=Project Plugins Settings
+Icon=kdevelop
+Weight=5

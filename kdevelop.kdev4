@@ -3,6 +3,3 @@ Builder=KDevMakeBuilder
 Importer=KDevGenericImporter
 PrimaryLanguage=C++
 Project Management=KDevProjectManager
-
-[KFileDialog Settings]
-KFileIconView_ViewMode=LargeRows

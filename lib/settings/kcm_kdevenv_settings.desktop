@@ -9,6 +9,7 @@ X-KDE-Library=kdevelop_settings
 X-KDE-FactoryName=kcm_kdevenv_settings
 X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
+X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Environment
 Name[x-test]=xxEnvironmentxx
