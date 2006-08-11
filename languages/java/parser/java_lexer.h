@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.                                               *
  *****************************************************************************/
 
-#include "java.h"
+#include "java_parser.h"
 
 #include <iostream>
 

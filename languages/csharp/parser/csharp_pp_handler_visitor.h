@@ -21,11 +21,12 @@
 #ifndef CSHARP_PP_HANDLER_VISITOR_H
 #define CSHARP_PP_HANDLER_VISITOR_H
 
-#include "csharp_pp.h"
+#include "csharp_pp_default_visitor.h"
 
 namespace csharp_pp
 {
 
+class parser;
 class scope;
 
 

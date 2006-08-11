@@ -4,7 +4,7 @@
 #ifndef csharp_SERIALIZATION_H_INCLUDED
 #define csharp_SERIALIZATION_H_INCLUDED
 
-#include "csharp.h"
+#include "csharp_default_visitor.h"
 
 #include <iostream>
 #include <fstream>

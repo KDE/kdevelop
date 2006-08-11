@@ -105,21 +105,21 @@ void ParseJob::run()
     << " size: " << size
     << endl;
 
-    parser::csharp_compatibility_mode compatibility_mode = parser::csharp10_compatibility;
+    parser::csharp_compatibility_mode compatibility_mode = parser::csharp20_compatibility;
 
     parser::token_stream_type token_stream;
     parser::memory_pool_type memory_pool;
 
-  // 0) setup
-    csharp::parser csharp_parser;
+    // 0) setup
+    parser csharp_parser;
     csharp_parser.set_compatibility_mode(compatibility_mode);
     csharp_parser.set_token_stream(&token_stream);
     csharp_parser.set_memory_pool(&memory_pool);
 
-  // 1) tokenize
+    // 1) tokenize
     csharp_parser.tokenize(contents);
 
-  // 2) parse
+    // 2) parse
     compilation_unit_ast *ast = 0;
     bool matched = csharp_parser.parse_compilation_unit(&ast);
     if (matched)

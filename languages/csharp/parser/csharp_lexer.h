@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.                                               *
  *****************************************************************************/
 
-#include "csharp.h"
-#include "csharp_pp.h"
+#include "csharp_parser.h"
+#include "csharp_pp_parser.h"
 
 #include <iostream>
 

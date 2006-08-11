@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "csharp_pp_handler_visitor.h"
+#include "csharp_pp_parser.h"
 #include "decoder.h"
 
 #include <string>

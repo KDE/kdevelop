@@ -26,8 +26,13 @@ FIND_PROGRAM(KDEVPG_EXECUTABLE
 IF(KDEVPG_EXECUTABLE)
     # Add command to generate the parser.
     ADD_CUSTOM_COMMAND(
-        OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/java.cpp"
-                "${CMAKE_CURRENT_SOURCE_DIR}/java.h"
+        OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/java_ast.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/java_parser.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/java_parser.cpp"
+                "${CMAKE_CURRENT_SOURCE_DIR}/java_visitor.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/java_visitor.cpp"
+                "${CMAKE_CURRENT_SOURCE_DIR}/java_default_visitor.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/java_default_visitor.cpp"
                 "${CMAKE_CURRENT_SOURCE_DIR}/java_serialize_visitor.h"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/java.g"
                 "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.h"
@@ -40,18 +45,28 @@ IF(KDEVPG_EXECUTABLE)
         )
 
     SET(kdevjavaparser_STAT_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/java.cpp
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_parser.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_visitor.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_default_visitor.cpp"
         ${kdevjavaparser_STAT_SRCS})
 
     SET_SOURCE_FILES_PROPERTIES(
-        ${CMAKE_CURRENT_SOURCE_DIR}/java.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/java.h
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_ast.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_parser.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_parser.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_visitor.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_visitor.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_default_visitor.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_default_visitor.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_serialize_visitor.h"
         GENERATED
         )
 ELSE(KDEVPG_EXECUTABLE)
     MESSAGE("Assuming existence of the generated parser files")
     SET(kdevjavaparser_STAT_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/java.cpp
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_parser.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_visitor.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/java_default_visitor.cpp"
         ${kdevjavaparser_STAT_SRCS})
 ENDIF(KDEVPG_EXECUTABLE)
 
@@ -61,7 +76,7 @@ IF(FLEX_EXECUTABLE)
         OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.cpp"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.ll"
                 "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/java.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/java_parser.h"
         COMMAND ${FLEX_EXECUTABLE}
         ARGS    -o"java_lexer.cpp"
                 "java_lexer.ll"

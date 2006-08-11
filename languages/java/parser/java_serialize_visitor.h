@@ -4,7 +4,7 @@
 #ifndef java_SERIALIZATION_H_INCLUDED
 #define java_SERIALIZATION_H_INCLUDED
 
-#include "java.h"
+#include "java_default_visitor.h"
 
 #include <iostream>
 #include <fstream>

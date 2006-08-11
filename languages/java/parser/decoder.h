@@ -1,7 +1,7 @@
 #ifndef JAVA_DECODER_H
 #define JAVA_DECODER_H
 
-#include "java.h"
+#include "java_parser.h"
 
 #include <string>
 #include <cstdlib>
