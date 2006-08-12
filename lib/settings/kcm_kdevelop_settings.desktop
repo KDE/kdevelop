@@ -12,7 +12,5 @@ X-KDE-ParentComponents=kdevelop
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Project
-Name[x-test]=xxProjectxx
 Comment=Configure Project settings
-Comment[x-test]=xxConfigure Project settingsxx
 
