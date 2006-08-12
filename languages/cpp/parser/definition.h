@@ -23,7 +23,7 @@
 #include <QPair>
 
 #include "identifier.h"
-#include "rangeobject.h"
+#include "kdevdocumentrangeobject.h"
 
 class AbstractType;
 class DUContext;
@@ -31,7 +31,7 @@ class DUContext;
 /**
  * Represents a single variable definition in a definition-use chain.
  */
-class Definition : public RangeObject
+class Definition : public KDevDocumentRangeObject
 {
 public:
   enum Scope {

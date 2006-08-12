@@ -39,7 +39,7 @@ protected:
   virtual void visit(AST *node);
 
 private:
-  class EditorIntegrator* m_editor;
+  class CppEditorIntegrator* m_editor;
   int indent;
 };
 

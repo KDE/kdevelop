@@ -27,7 +27,7 @@
 class TokenStream;
 class DUChain;
 class DUContext;
-class EditorIntegrator;
+class CppEditorIntegrator;
 class NameCompiler;
 class TypeEnvironment;
 class Definition;
@@ -134,7 +134,7 @@ private:
   void ignoreIdentifier(int stackCount);
 
   TokenStream *_M_token_stream;
-  EditorIntegrator* m_editor;
+  CppEditorIntegrator* m_editor;
 
   NameCompiler* m_nameCompiler;
 

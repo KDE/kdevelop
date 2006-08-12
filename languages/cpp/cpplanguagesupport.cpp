@@ -135,7 +135,7 @@ void CppLanguageSupport::documentActivated( KDevDocument* file )
     Q_UNUSED( file );
 }
 
-CppHighlighting * CppLanguageSupport::codeHighlighting() const
+KDevCodeHighlighting* CppLanguageSupport::codeHighlighting() const
 {
     return m_highlights;
 }

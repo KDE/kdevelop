@@ -23,12 +23,11 @@
 #include "typesystem.h"
 #include "definition.h"
 #include "duchain.h"
-#include "editorintegrator.h"
 
 using namespace KTextEditor;
 
 DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
-  : RangeObject(range)
+  : KDevDocumentRangeObject(range)
   , m_contextType(Other)
 {
   if (parent)
@@ -73,7 +72,7 @@ Definition* DUContext::takeDefinition(Definition* definition)
   return definition;
 }
 
-Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifier, const DocumentCursor & position, bool allowUnqualifiedMatch, const QList<UsingNS*>& usingNamespaces ) const
+Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifier, const KDevDocumentCursor & position, bool allowUnqualifiedMatch, const QList<UsingNS*>& usingNamespaces ) const
 {
   QLinkedList<Definition*> tryToResolve;
   QSet<Definition*> resolved;
@@ -169,7 +168,7 @@ Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifi
   return 0;
 }
 
-Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, const DocumentCursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNS ) const
+Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, const KDevDocumentCursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNS ) const
 {
   // TODO we're missing ambiguous references by not checking every resolution before returning...
   // but is that such a bad thing? (might be good performance-wise)
@@ -204,7 +203,7 @@ Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, 
   return 0;
 }
 
-Definition * DUContext::findDefinitionInChildren(const QualifiedIdentifier & identifier, const DocumentCursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNamespaces) const
+Definition * DUContext::findDefinitionInChildren(const QualifiedIdentifier & identifier, const KDevDocumentCursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNamespaces) const
 {
   foreach (DUContext* context, childContexts()) {
     if (context == sourceChild)
@@ -227,7 +226,7 @@ Definition * DUContext::findDefinitionInChildren(const QualifiedIdentifier & ide
 
 Definition * DUContext::findDefinition( const QualifiedIdentifier& identifier ) const
 {
-  return findDefinition(identifier, DocumentCursor(textRangePtr(), DocumentCursor::Start));
+  return findDefinition(identifier, KDevDocumentCursor(textRangePtr(), KDevDocumentCursor::Start));
 }
 
 void DUContext::addChildContext( DUContext * context )
@@ -268,7 +267,7 @@ void DUContext::addParentContext( DUContext * context )
   m_parentContexts.append(context);
 }
 
-DUContext * DUContext::findContext( const DocumentCursor& position, DUContext* parent) const
+DUContext * DUContext::findContext( const KDevDocumentCursor& position, DUContext* parent) const
 {
   if (!parent)
     parent = const_cast<DUContext*>(this);
@@ -285,7 +284,7 @@ DUContext * DUContext::findContext( const DocumentCursor& position, DUContext* p
   return 0;
 }
 
-QHash<QualifiedIdentifier, Definition*> DUContext::allDefinitions(const DocumentCursor& position) const
+QHash<QualifiedIdentifier, Definition*> DUContext::allDefinitions(const KDevDocumentCursor& position) const
 {
   QHash<QualifiedIdentifier, Definition*> ret;
 
@@ -297,7 +296,7 @@ QHash<QualifiedIdentifier, Definition*> DUContext::allDefinitions(const Document
   return ret;
 }
 
-const QList<Definition*> DUContext::localDefinitions() const
+const QList<Definition*>& DUContext::localDefinitions() const
 {
   return m_localDefinitions;
 }
@@ -421,7 +420,7 @@ Definition * DUContext::findDefinition(const Identifier & identifier) const
   return findDefinition(QualifiedIdentifier(identifier));
 }
 
-Definition* DUContext::findDefinition(const Identifier& identifier, const DocumentCursor& position) const
+Definition* DUContext::findDefinition(const Identifier& identifier, const KDevDocumentCursor& position) const
 {
   return findDefinition(QualifiedIdentifier(identifier), position);
 }

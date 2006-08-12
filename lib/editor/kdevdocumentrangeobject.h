@@ -28,7 +28,7 @@
  *
  * This allows text without a currently loaded text editor to be represented.
  */
-class KDevDocumentRangeObject
+class KDEVINTERFACES_EXPORT KDevDocumentRangeObject
 {
 public:
   KDevDocumentRangeObject(KTextEditor::Range* range);

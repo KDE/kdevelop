@@ -24,8 +24,8 @@
 #include "dubuilder.h"
 #include "typesystem.h"
 #include "definition.h"
-#include "documentrange.h"
-#include "editorintegrator.h"
+#include "kdevdocumentrange.h"
+#include "cppeditorintegrator.h"
 #include "dubuilder.h"
 
 #include "parser.h"
@@ -89,19 +89,19 @@ private slots:
     type2 = types.referenceType(type1);
     type3 = types.pointerType(type1);
 
-    definition1 = new Definition(new DocumentRange(file1, Range(4,4,4,16)), Definition::LocalScope);
+    definition1 = new Definition(new KDevDocumentRange(file1, Range(4,4,4,16)), Definition::LocalScope);
     definition1->setType(type1);
     definition1->setIdentifier(Identifier("lazy"));
 
-    definition2 = new Definition(new DocumentRange(file1, Range(5,4,5,16)), Definition::ClassScope);
+    definition2 = new Definition(new KDevDocumentRange(file1, Range(5,4,5,16)), Definition::ClassScope);
     definition2->setType(type2);
     definition2->setIdentifier(Identifier("m_errorCode"));
 
-    definition3 = new Definition(new DocumentRange(file1, Range(6,4,6,16)), Definition::GlobalScope);
+    definition3 = new Definition(new KDevDocumentRange(file1, Range(6,4,6,16)), Definition::GlobalScope);
     definition3->setType(type3);
     definition3->setIdentifier(Identifier("lazy"));
 
-    definition4 = new Definition(new DocumentRange(file1, Range(7,4,7,16)), Definition::ClassScope);
+    definition4 = new Definition(new KDevDocumentRange(file1, Range(7,4,7,16)), Definition::ClassScope);
     definition4->setType(type2);
     definition4->setIdentifier(Identifier("m_errorCode2"));
 
@@ -110,7 +110,7 @@ private slots:
     file1 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/duchain.cpp";
     file2 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/dubuilder.cpp";
 
-    topContext = new DUContext(new DocumentRange(file1, Range(0,0,25,0)));
+    topContext = new DUContext(new KDevDocumentRange(file1, Range(0,0,25,0)));
     DUChain::self()->addDocumentChain(file1, topContext);
   }
 
@@ -149,7 +149,7 @@ private slots:
   {
     QCOMPARE(DUChain::self()->chainForDocument(file1), topContext);
 
-    DUContext* firstChild = new DUContext(new DocumentRange(file1, Range(4,4, 10,3)));
+    DUContext* firstChild = new DUContext(new KDevDocumentRange(file1, Range(4,4, 10,3)));
     topContext->addChildContext(firstChild);
 
     QCOMPARE(firstChild->parentContexts().count(), 1);
@@ -158,13 +158,13 @@ private slots:
     QCOMPARE(topContext->childContexts().count(), 1);
     QCOMPARE(topContext->childContexts().last(), firstChild);
 
-    DUContext* secondChild = new DUContext(new DocumentRange(file1, Range(14,4, 19,3)));
+    DUContext* secondChild = new DUContext(new KDevDocumentRange(file1, Range(14,4, 19,3)));
     topContext->addChildContext(secondChild);
 
     QCOMPARE(topContext->childContexts().count(), 2);
     QCOMPARE(topContext->childContexts()[1], secondChild);
 
-    DUContext* thirdChild = new DUContext(new DocumentRange(file1, Range(10,4, 14,3)));
+    DUContext* thirdChild = new DUContext(new KDevDocumentRange(file1, Range(10,4, 14,3)));
     topContext->addChildContext(thirdChild);
 
     QCOMPARE(topContext->childContexts().count(), 3);
@@ -206,9 +206,9 @@ private slots:
     topContext->addDefinition(definition1);
     topContext->addDefinition(definition2);
 
-    DUContext* context1 = new DUContext(new DocumentRange(file1, Range(4,4, 14,3)));
+    DUContext* context1 = new DUContext(new KDevDocumentRange(file1, Range(4,4, 14,3)));
     topContext->addChildContext(context1);
-    DocumentCursor insideContext1(file1, Cursor(5,9));
+    KDevDocumentCursor insideContext1(file1, Cursor(5,9));
 
     QCOMPARE(topContext->findContext(insideContext1), context1);
     QCOMPARE(topContext->findDefinition(definition1->identifier(), insideContext1), definition1);
@@ -222,10 +222,10 @@ private slots:
     QCOMPARE(topContext->findDefinition(definition1->identifier(), insideContext1), definition1);
     QCOMPARE(context1->findDefinition(definition1->identifier(), insideContext1), definition1);
 
-    DUContext* subContext1 = new DUContext(new DocumentRange(file1, Range(5,4, 7,3)));
+    DUContext* subContext1 = new DUContext(new KDevDocumentRange(file1, Range(5,4, 7,3)));
     topContext->addChildContext(subContext1);
 
-    DUContext* subContext2 = new DUContext(new DocumentRange(file1, Range(9,4, 12,3)));
+    DUContext* subContext2 = new DUContext(new KDevDocumentRange(file1, Range(9,4, 12,3)));
     topContext->addChildContext(subContext2);
 
     subContext1->addDefinition(definition3);
@@ -509,7 +509,7 @@ private slots:
     QCOMPARE(bar->identifier(), Identifier("bar"));
     QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
     QCOMPARE(bar->uses().count(), 1);
-    QCOMPARE(top->findDefinition(bar->identifier(), DocumentCursor(top->textRangePtr(), DocumentCursor::Start)), noDef);
+    QCOMPARE(top->findDefinition(bar->identifier(), KDevDocumentCursor(top->textRangePtr(), KDevDocumentCursor::Start)), noDef);
     QCOMPARE(top->findDefinition(bar->identifier()), noDef);
     QCOMPARE(top->findDefinition(bar->qualifiedIdentifier()), bar);
 
@@ -539,7 +539,7 @@ private slots:
 
   void testFileParse()
   {
-    //QSKIP("Excessive currently", SkipSingle);
+    QSKIP("Unwanted", SkipSingle);
 
     QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
     QVERIFY( file.open( QIODevice::ReadOnly ) );
@@ -569,7 +569,7 @@ private:
 
   void release(DUContext* top)
   {
-    EditorIntegrator::deleteTopRange(top->takeTextRange());
+    CppEditorIntegrator::deleteTopRange(top->takeTextRange());
   }
 };
 
@@ -585,7 +585,7 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
   Parser parser(&control);
   TranslationUnitAST* ast = parser.parse(unit.constData(), unit.size() + 1, &mem_pool);
 
-  EditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
+  CppEditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
 
   if (dump & DumpAST) {
     kDebug() << "===== AST:" << endl;

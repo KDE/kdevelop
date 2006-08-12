@@ -2,7 +2,7 @@
 add_subdirectory(rpp)
 add_subdirectory(tests)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib )
+include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/editor )
 
 add_definitions(-fPIC)
 
@@ -34,11 +34,8 @@ set(kdevcppparser_STAT_SRCS
     duchain.cpp
     ducontext.cpp
     definition.cpp
-    editorintegrator.cpp
-    documentrange.cpp
-    documentcursor.cpp
-    rangeobject.cpp
     identifier.cpp
+    cppeditorintegrator.cpp
 )
 
 kde4_automoc(${kdevcppparser_STAT_SRCS})

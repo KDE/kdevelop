@@ -27,14 +27,14 @@
 #include "duchain.h"
 #include "ducontext.h"
 #include "typesystem.h"
-#include "editorintegrator.h"
+#include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include "definition.h"
 
 using namespace KTextEditor;
 
 DUBuilder::DUBuilder (TokenStream *token_stream):
-  _M_token_stream (token_stream), m_editor(new EditorIntegrator(token_stream)), m_nameCompiler(new NameCompiler(token_stream)),
+  _M_token_stream (token_stream), m_editor(new CppEditorIntegrator(token_stream)), m_nameCompiler(new NameCompiler(token_stream)),
   in_namespace(false), in_class(false), in_template_declaration(false),
   in_typedef(false), in_function_definition(false), in_parameter_declaration(false),
   function_just_defined(false), m_types(new TypeEnvironment), m_currentDefinition(0)
@@ -60,7 +60,7 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node)
 
   } else {
     // FIXME the top range will probably get deleted without the editor integrator knowing...?
-    topLevelContext = new DUContext(m_editor->topRange(EditorIntegrator::DefinitionUseChain));
+    topLevelContext = new DUContext(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
 
     DUChain::self()->addDocumentChain(url, topLevelContext);
   }
@@ -177,7 +177,7 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 void DUBuilder::closeContext(AST* node, DUContext* parent, int identifierStackDepth)
 {
   // Find the end position of this function definition (just inside the bracket)
-  DocumentCursor endPosition = m_editor->findPosition(node->end_token, EditorIntegrator::FrontEdge);
+  KDevDocumentCursor endPosition = m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge);
 
   // Set the correct end point of the current context finishing here
   if (m_currentContext->textRange().end() != endPosition)
@@ -336,7 +336,7 @@ void DUBuilder::newUse(NameAST* name)
   Range* use = m_editor->createRange(name);
 
   QualifiedIdentifier id = m_identifierStack.pop();
-  Definition* definition = m_currentContext->findDefinition(id, DocumentCursor(use, DocumentCursor::Start));
+  Definition* definition = m_currentContext->findDefinition(id, KDevDocumentCursor(use, KDevDocumentCursor::Start));
   if (definition)
     definition->addUse(use);
 
@@ -383,7 +383,7 @@ void DUBuilder::visitUsingDirective(UsingDirectiveAST * node)
 {
   DefaultVisitor::visitUsingDirective(node);
 
-  m_currentContext->addUsingNamespace(m_editor->createCursor(node->end_token, EditorIntegrator::FrontEdge), m_identifierStack.pop());
+  m_currentContext->addUsingNamespace(m_editor->createCursor(node->end_token, CppEditorIntegrator::FrontEdge), m_identifierStack.pop());
 }
 
 void DUBuilder::visitClassMemberAccess(ClassMemberAccessAST * node)

@@ -1,8 +1,8 @@
 
 add_subdirectory(parser)
-add_subdirectory(app_templates) 
+add_subdirectory(app_templates)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/weaver
+include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/weaver ${CMAKE_SOURCE_DIR}/lib/editor
     )
 
 

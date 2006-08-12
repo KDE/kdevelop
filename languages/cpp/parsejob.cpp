@@ -37,7 +37,7 @@
 #include "parser/control.h"
 #include "parser/dumptree.h"
 #include "parser/rpp/preprocessor.h"
-#include "parser/editorintegrator.h"
+#include "parser/cppeditorintegrator.h"
 #include "parser/dubuilder.h"
 
 ParseJob::ParseJob( const KUrl &url,
@@ -131,16 +131,18 @@ void ParseJob::run()
         Binder binder( m_model, &parser.token_stream, &parser.lexer );
         binder.run( m_document, m_AST );
 
-        EditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
-        // HACK... move to the correct place (where documents get opened and closed
-        //if (m_openDocument)
-            //EditorIntegrator::addDocument(m_openDocument->textDocument());
+        CppEditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
 
         DUBuilder dubuilder(&parser.token_stream);
         m_duContext = dubuilder.build(m_document, m_AST);
     }
     //     DumpTree dumpTree;
     //     dumpTree.dump( m_AST );
+}
+
+DUContext * ParseJob::duChain() const
+{
+    return m_duContext;
 }
 
 #include "parsejob.moc"

@@ -21,8 +21,8 @@
 
 #include <QHash>
 
-#include "rangeobject.h"
-#include "documentcursor.h"
+#include "kdevdocumentrangeobject.h"
+#include "kdevdocumentcursor.h"
 #include "identifier.h"
 
 class AbstractType;
@@ -37,7 +37,7 @@ class DUChain;
  * \todo check that redefinition of local variables within a base function context
  *       is supported by the current code.
  */
-class DUContext : public RangeObject
+class DUContext : public KDevDocumentRangeObject
 {
 public:
   /**
@@ -129,7 +129,7 @@ public:
    *
    * \returns the requested definition if one was found, otherwise null.
    */
-  Definition* findDefinition(const QualifiedIdentifier& identifier, const DocumentCursor& position, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
+  Definition* findDefinition(const QualifiedIdentifier& identifier, const KDevDocumentCursor& position, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
 
   /**
    * Searches for and returns a definition with a given \a identifier in this context, which
@@ -142,7 +142,7 @@ public:
    *
    * \overload
    */
-  Definition* findDefinition(const Identifier& identifier, const DocumentCursor& position) const;
+  Definition* findDefinition(const Identifier& identifier, const KDevDocumentCursor& position) const;
 
   /**
    * Returns the type of any existing valid \a identifier anywhere this context, or
@@ -164,7 +164,7 @@ public:
    * Returns the type of any \a identifier defined in this context, or
    * null if one is not found.
    */
-  Definition* findLocalDefinition(const QualifiedIdentifier& identifier, const DocumentCursor & position, bool allowUnqualifiedMatch = false, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
+  Definition* findLocalDefinition(const QualifiedIdentifier& identifier, const KDevDocumentCursor & position, bool allowUnqualifiedMatch = false, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
 
   /**
    * Clears all local definitions. Does not delete the definitions; the caller
@@ -181,7 +181,7 @@ public:
   /**
    * Returns all local definitions
    */
-  const QList<Definition*> localDefinitions() const;
+  const QList<Definition*>& localDefinitions() const;
 
   /**
    * Adds a new definition to this context. Passes back that definition for convenience.
@@ -207,7 +207,7 @@ public:
    *
    * \returns the requested context if one was found, otherwise null.
    */
-  DUContext* findContext(const DocumentCursor& position, DUContext* parent = 0) const;
+  DUContext* findContext(const KDevDocumentCursor& position, DUContext* parent = 0) const;
 
   /**
    * Return a list of definitions for a given cursor \a position in a given \a url.
@@ -218,7 +218,7 @@ public:
    *
    * \returns the requested definitions, if any were active at that location.
    */
-  QHash<QualifiedIdentifier, Definition*> allDefinitions(const DocumentCursor& position) const;
+  QHash<QualifiedIdentifier, Definition*> allDefinitions(const KDevDocumentCursor& position) const;
 
 private:
   /**
@@ -245,7 +245,7 @@ private:
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
   /// Search closed contexts which have not necessarily lost scope
-  Definition* findDefinitionInChildren(const QualifiedIdentifier& identifier, const DocumentCursor& position, const DUContext* sourceChild, const QList<UsingNS*>& usingNamespaces) const;
+  Definition* findDefinitionInChildren(const QualifiedIdentifier& identifier, const KDevDocumentCursor& position, const DUContext* sourceChild, const QList<UsingNS*>& usingNamespaces) const;
 
   ContextType m_contextType;
 

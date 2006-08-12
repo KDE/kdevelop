@@ -24,6 +24,8 @@
 #include <ktexteditor/smartrange.h>
 
 #include "parser/codemodel.h"
+#include "parser/ducontext.h"
+#include "parser/definition.h"
 
 using namespace KTextEditor;
 
@@ -40,15 +42,15 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
 {
   KTextEditor::Attribute::Ptr a;
   switch (context) {
-    case Definition:
+    case DefinitionContext:
       a = m_definitionAttributes[type];
       break;
 
-    case Declaration:
+    case DeclarationContext:
       a = m_declarationAttributes[type];
       break;
 
-    case Reference:
+    case ReferenceContext:
       a = m_referenceAttributes[type];
       break;
   }
@@ -57,15 +59,15 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
     a = KTextEditor::Attribute::Ptr(new KTextEditor::Attribute());
     a->setBackgroundFillWhitespace(true);
     switch (context) {
-      case Definition:
+      case DefinitionContext:
         m_definitionAttributes.insert(type, a);
         break;
 
-      case Declaration:
+      case DeclarationContext:
         m_declarationAttributes.insert(type, a);
         break;
 
-      case Reference:
+      case ReferenceContext:
         m_referenceAttributes.insert(type, a);
         break;
     }
@@ -95,8 +97,24 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         a->setBackground(QColor(Qt::blue).light(175));
         break;
 
-      case VariableType:
-        a->setBackground(QColor(Qt::green).light());
+      case MemberVariableType:
+        a->setForeground(QColor(Qt::green).light());
+        break;
+
+      case LocalVariableType:
+        a->setForeground(QColor(Qt::blue).light());
+        break;
+
+      case FunctionVariableType:
+        a->setForeground(QColor(Qt::red).light());
+        break;
+
+      case NamespaceVariableType:
+        a->setForeground(QColor(0xa48323));
+        break;
+
+      case GlobalVariableType:
+        a->setForeground(QColor(0x9379e8));
         break;
 
       case NamespaceType:
@@ -107,7 +125,6 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
       case TemplateType:
       case TemplateParameterType:
       case TypeAliasType:
-      case MemberType:
       case CodeType:
       case EnumType:
       case EnumeratorType:
@@ -116,15 +133,15 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
     }
 
     switch (context) {
-      case Definition:
+      case DefinitionContext:
         a->setFontBold();
         break;
 
-      case Declaration:
+      case DeclarationContext:
         a = m_declarationAttributes[type];
         break;
 
-      case Reference:
+      case ReferenceContext:
         a->setFontUnderline(true);
 
         KTextEditor::Attribute::Ptr d(new KTextEditor::Attribute());
@@ -174,17 +191,13 @@ void CppHighlighting::highlightModel(CodeModel* model, const QModelIndex & paren
       type = TemplateParameterType;
     else if (dynamic_cast<const _TypeAliasModelItem*>(c))
       type = TypeAliasType;
-    else if (dynamic_cast<const _VariableModelItem*>(c))
-      type = VariableType;
-    else if (dynamic_cast<const _MemberModelItem*>(c))
-      type = MemberType;
 
     foreach (KTextEditor::SmartRange* sr, c->references())
-      sr->setAttribute(attributeForType(type, Reference));
+      sr->setAttribute(attributeForType(type, ReferenceContext));
     if (c->definition())
-      c->definition()->setAttribute(attributeForType(type, Definition));
+      c->definition()->setAttribute(attributeForType(type, DefinitionContext));
     if (c->declaration())
-      c->declaration()->setAttribute(attributeForType(type, Declaration));
+      c->declaration()->setAttribute(attributeForType(type, DeclarationContext));
 
     highlightModel(model, index);
   }
@@ -203,6 +216,41 @@ void CppHighlighting::highlightTree( KTextEditor::SmartRange * range ) const
   range->setAttribute(m_depthAttributes[depth]);
   foreach (KTextEditor::SmartRange* child, range->childRanges())
     highlightTree(child);
+}
+
+void CppHighlighting::highlightDUChain(DUContext* context) const
+{
+  if (!context->smartRange())
+    return;
+
+  foreach (Definition* def, context->localDefinitions()) {
+    Types type = LocalVariableType;
+    if (context->scopeIdentifier().isEmpty())
+      type = GlobalVariableType;
+    switch (context->type()) {
+      case DUContext::Namespace:
+        type = NamespaceVariableType;
+        break;
+      case DUContext::Class:
+        type = MemberVariableType;
+        break;
+      case DUContext::Function:
+        type = FunctionVariableType;
+        break;
+      default:
+        break;
+     }
+
+    if (def->smartRange())
+      def->smartRange()->setAttribute(attributeForType(type, DefinitionContext));
+
+    foreach (Range* use, def->uses())
+      if (use->isSmartRange())
+        use->toSmartRange()->setAttribute(attributeForType(type, ReferenceContext));
+  }
+
+  foreach (DUContext* child, context->childContexts())
+    highlightDUChain(child);
 }
 
 #include "cpphighlighting.moc"

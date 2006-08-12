@@ -26,7 +26,7 @@
 using namespace KTextEditor;
 
 Definition::Definition(KTextEditor::Range* range, Scope scope )
-  : RangeObject(range)
+  : KDevDocumentRangeObject(range)
   , m_context(0)
   , m_scope(scope)
   , m_type(0)

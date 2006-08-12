@@ -28,11 +28,13 @@
 
 #include <ktexteditor/attribute.h>
 
+#include "kdevcodehighlighting.h"
+
 namespace KTextEditor { class SmartRange; }
 
 class CodeModel;
 
-class CppHighlighting : public QObject
+class CppHighlighting : public QObject, public KDevCodeHighlighting
 {
   Q_OBJECT
 
@@ -52,14 +54,17 @@ class CppHighlighting : public QObject
       TemplateType,
       TemplateParameterType,
       TypeAliasType,
-      VariableType,
-      MemberType
+      LocalVariableType,
+      FunctionVariableType,
+      MemberVariableType,
+      NamespaceVariableType,
+      GlobalVariableType
     };
 
     enum Contexts {
-      Definition,
-      Declaration,
-      Reference
+      DefinitionContext,
+      DeclarationContext,
+      ReferenceContext
     };
 
     CppHighlighting(QObject* parent);
@@ -68,6 +73,7 @@ class CppHighlighting : public QObject
     void highlightModel(CodeModel* model, const QModelIndex& parent = QModelIndex()) const;
 
     void highlightTree(KTextEditor::SmartRange* topRange) const;
+    void highlightDUChain(DUContext* context) const;
 
     KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context) const;
 

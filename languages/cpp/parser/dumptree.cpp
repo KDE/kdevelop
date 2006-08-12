@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-#include "editorintegrator.h"
+#include "cppeditorintegrator.h"
 #include "ducontext.h"
 #include "definition.h"
 
@@ -116,7 +116,7 @@ void DumpTree::dump( AST * node, class TokenStream * tokenStream )
   m_editor = 0;
 
   if (tokenStream)
-    m_editor = new EditorIntegrator(tokenStream);
+    m_editor = new CppEditorIntegrator(tokenStream);
 
   visit(node);
 }
@@ -126,8 +126,8 @@ void DumpTree::visit(AST *node)
   if (node)
     if (m_editor)
       kDebug() << QString(indent * 2, ' ') << names[node->kind]
-              << '[' << m_editor->findPosition(node->start_token, EditorIntegrator::FrontEdge) << ", "
-              << m_editor->findPosition(node->end_token, EditorIntegrator::FrontEdge) << ']' << endl;
+              << '[' << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << ", "
+              << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) << ']' << endl;
     else
       kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
               << '[' << node->start_token << ", " << node->end_token << ']' << endl;
@@ -139,8 +139,8 @@ void DumpTree::visit(AST *node)
   if (node)
     if (m_editor)
       kDebug() << QString(indent * 2, ' ') << names[node->kind]
-              << "[Close: " << m_editor->findPosition(node->start_token, EditorIntegrator::FrontEdge) << ", "
-              << m_editor->findPosition(node->end_token, EditorIntegrator::FrontEdge) << ']' << endl;
+              << "[Close: " << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << ", "
+              << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) << ']' << endl;
     else
       kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
               << "[Close: " << node->start_token << ", " << node->end_token << ']' << endl;

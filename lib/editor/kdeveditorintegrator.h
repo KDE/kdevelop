@@ -40,7 +40,7 @@ namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterfac
  *
  * \todo introduce stacks for the state?
  */
-class KDevEditorIntegrator : public QObject
+class KDEVINTERFACES_EXPORT KDevEditorIntegrator : public QObject
 {
   Q_OBJECT
 

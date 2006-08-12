@@ -44,6 +44,7 @@ public:
 
     virtual KDevAST *AST() const;
     virtual KDevCodeModel *codeModel() const;
+    virtual DUContext *duChain() const;
 
 protected:
     virtual void run();
