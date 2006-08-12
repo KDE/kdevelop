@@ -84,7 +84,7 @@ private:
     CodeModelCache m_modelCache;
 
     // The persistent AST storage
-    KDevPersistentHash *m_peristentHash;
+    KDevPersistentHash *m_persistentHash;
 
     mutable QMutex m_mutex;
     ThreadWeaver::Weaver* m_weaver;

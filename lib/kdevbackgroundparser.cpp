@@ -50,12 +50,12 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         : QObject( parent ),
         m_suspend( false ),
         m_modelsToCache( 0 ),
-        m_peristentHash( new KDevPersistentHash ),
+        m_persistentHash( new KDevPersistentHash ),
         m_weaver( new Weaver( this, 1, 1 ) ) //C++ parser can't multi-thread at the moment
 {
     //FIXME Stub for now, but eventually load persistent parser info
     //whatever that may entail.
-    m_peristentHash->load();
+    m_persistentHash->load();
 
     m_timer = new QTimer( this );
     m_timer->setSingleShot( true );
@@ -192,7 +192,7 @@ void KDevBackgroundParser::parseComplete( Job *job )
 
                 //FIXME Stub for now, but eventually save persistent parser info
                 //whatever that may entail.
-                m_peristentHash->save();
+                m_persistentHash->save();
             }
         }
         else
@@ -203,7 +203,7 @@ void KDevBackgroundParser::parseComplete( Job *job )
 
         //FIXME Stub for now, but eventually save persistent parser info
         //whatever that may entail.
-        m_peristentHash->insert( parseJob->document(), parseJob->AST() );
+        m_persistentHash->insert( parseJob->document(), parseJob->AST() );
 
         parseJob->deleteLater();
     }
