@@ -2,7 +2,7 @@
 add_subdirectory(rpp)
 add_subdirectory(tests)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/editor )
+include_directories( ${CMAKE_SOURCE_DIR}/lib )
 
 add_definitions(-fPIC)
 
@@ -16,7 +16,6 @@ set(kdevcppparser_STAT_SRCS
     type_compiler.cpp
     binder.cpp
     compiler_utils.cpp
-    dumptree.cpp
     name_compiler.cpp
     visitor.cpp
     class_compiler.cpp
@@ -29,13 +28,8 @@ set(kdevcppparser_STAT_SRCS
     tokens.cpp
     problem.cpp
     codedisplay.cpp
-    dubuilder.cpp
     typesystem.cpp
-    duchain.cpp
-    ducontext.cpp
-    definition.cpp
     identifier.cpp
-    cppeditorintegrator.cpp
 )
 
 kde4_automoc(${kdevcppparser_STAT_SRCS})

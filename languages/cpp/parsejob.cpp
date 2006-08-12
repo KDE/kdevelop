@@ -35,10 +35,10 @@
 #include "parser/binder.h"
 #include "parser/parser.h"
 #include "parser/control.h"
-#include "parser/dumptree.h"
+#include "duchain/dumptree.h"
 #include "parser/rpp/preprocessor.h"
-#include "parser/cppeditorintegrator.h"
-#include "parser/dubuilder.h"
+#include "duchain/cppeditorintegrator.h"
+#include "duchain/dubuilder.h"
 
 ParseJob::ParseJob( const KUrl &url,
                     QObject *parent )

@@ -24,8 +24,8 @@
 #include <ktexteditor/smartrange.h>
 
 #include "parser/codemodel.h"
-#include "parser/ducontext.h"
-#include "parser/definition.h"
+#include "duchain/ducontext.h"
+#include "duchain/definition.h"
 
 using namespace KTextEditor;
 
