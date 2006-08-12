@@ -45,9 +45,8 @@ ParseJob::ParseJob( const KUrl &url,
 {}
 
 ParseJob::ParseJob( KDevDocument *document,
-                    KTextEditor::SmartRange *highlight,
                     QObject *parent )
-        : KDevParseJob( document, highlight, parent ),
+        : KDevParseJob( document, parent ),
         m_AST( 0 ),
         m_model( 0 )
 {}

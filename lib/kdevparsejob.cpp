@@ -37,16 +37,13 @@
 KDevParseJob::KDevParseJob( const KUrl &url,
                             QObject *parent )
         : ThreadWeaver::Job( parent ),
-        m_document( url ),
-        m_highlight( 0 )
+        m_document( url )
 {}
 
 KDevParseJob::KDevParseJob( KDevDocument *document,
-                            KTextEditor::SmartRange *highlight,
                             QObject *parent )
         : ThreadWeaver::Job( parent ),
-        m_document( document->url() ),
-        m_highlight( highlight )
+        m_document( document->url() )
 {}
 
 KDevParseJob::~KDevParseJob()
@@ -65,11 +62,6 @@ bool KDevParseJob::wasSuccessful() const
 const QString & KDevParseJob::errorMessage() const
 {
     return m_errorMessage;
-}
-
-KTextEditor::SmartRange *KDevParseJob::highlight() const
-{
-    return m_highlight;
 }
 
 #include "kdevparsejob.moc"

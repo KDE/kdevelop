@@ -108,10 +108,9 @@ KDevParseJob *JavaLanguageSupport::createParseJob( const KUrl &url )
     return new ParseJob( url, this );
 }
 
-KDevParseJob *JavaLanguageSupport::createParseJob( KDevDocument *document,
-        KTextEditor::SmartRange *highlight )
+KDevParseJob *JavaLanguageSupport::createParseJob( KDevDocument *document )
 {
-    return new ParseJob( document, highlight, this );
+    return new ParseJob( document, this );
 }
 
 QStringList JavaLanguageSupport::mimeTypes() const

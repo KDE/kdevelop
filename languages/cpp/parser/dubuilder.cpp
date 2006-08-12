@@ -211,18 +211,18 @@ void DUBuilder::visitParameterDeclarationClause (ParameterDeclarationClauseAST *
 
 void DUBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
 {
-  Definition* oldDefinition = m_currentDefinition;
+  /*Definition* oldDefinition = m_currentDefinition;
 
   Range* range = m_editor->createRange(node);
   m_currentDefinition = newDeclaration(range);
 
-  int stackCount = m_identifierStack.count();
+  int stackCount = m_identifierStack.count();*/
 
   DefaultVisitor::visitParameterDeclaration (node);
 
-  setIdentifier(stackCount);
+  /*setIdentifier(stackCount);
 
-  m_currentDefinition = oldDefinition;
+  m_currentDefinition = oldDefinition;*/
 }
 
 void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
@@ -253,6 +253,22 @@ void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 
 void DUBuilder::visitInitDeclarator(InitDeclaratorAST* node)
 {
+  /*Definition* oldDefinition = m_currentDefinition;
+
+  Range* range = m_editor->createRange(node);
+  m_currentDefinition = newDeclaration(range);
+
+  int stackCount = m_identifierStack.count();*/
+
+  DefaultVisitor::visitInitDeclarator(node);
+
+  /*setIdentifier(stackCount);
+
+  m_currentDefinition = oldDefinition;*/
+}
+
+void DUBuilder::visitDeclarator (DeclaratorAST* node)
+{
   Definition* oldDefinition = m_currentDefinition;
 
   Range* range = m_editor->createRange(node);
@@ -260,7 +276,7 @@ void DUBuilder::visitInitDeclarator(InitDeclaratorAST* node)
 
   int stackCount = m_identifierStack.count();
 
-  DefaultVisitor::visitInitDeclarator(node);
+  DefaultVisitor::visitDeclarator(node);
 
   setIdentifier(stackCount);
 
@@ -270,7 +286,13 @@ void DUBuilder::visitInitDeclarator(InitDeclaratorAST* node)
 void DUBuilder::setIdentifier(int stackCount)
 {
   Q_ASSERT(m_identifierStack.count() >= stackCount);
-  Q_ASSERT(m_identifierStack.count() <= stackCount + 1);
+
+  int index = m_identifierStack.count();
+  while (index > stackCount + 1) {
+    kWarning() << k_funcinfo << "Unrecognised identifier present at " << m_currentDefinition->textRange() << endl;
+    m_identifierStack.pop();
+    --index;
+  }
 
   if (m_identifierStack.count() == stackCount + 1)
     if (m_currentDefinition) {
@@ -287,7 +309,7 @@ void DUBuilder::setIdentifier(int stackCount)
 void DUBuilder::ignoreIdentifier(int stackCount)
 {
   Q_ASSERT(m_identifierStack.count() >= stackCount);
-  Q_ASSERT(m_identifierStack.count() <= stackCount + 1);
+  Q_ASSERT(m_identifierStack.count() <= stackCount + 2);
 
   if (m_identifierStack.count() == stackCount + 1)
     m_identifierStack.pop();
@@ -323,11 +345,11 @@ void DUBuilder::newUse(NameAST* name)
 
 void DUBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
 {
+  int stackCount = m_identifierStack.count();
+
   DefaultVisitor::visitSimpleTypeSpecifier(node);
 
-  // Pop off unneeded name...
-  if (node->name)
-    m_identifierStack.pop();
+  ignoreIdentifier(stackCount);
 }
 
 void DUBuilder::visitName (NameAST *node)
@@ -338,11 +360,6 @@ void DUBuilder::visitName (NameAST *node)
 
   // Note: we don't want to visit the name node, the name compiler does that for us
   //DefaultVisitor::visitName(node);
-}
-
-void DUBuilder::visitDeclarator (DeclaratorAST* node)
-{
-  DefaultVisitor::visitDeclarator(node);
 }
 
 Definition* DUBuilder::newDeclaration(Range* range)
@@ -402,6 +419,37 @@ void DUBuilder::visitTypeParameter(TypeParameterAST* node)
   int stackCount = m_identifierStack.count();
 
   DefaultVisitor::visitTypeParameter(node);
+
+  ignoreIdentifier(stackCount);
+}
+
+void DUBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)
+{
+  // TODO store the alias
+
+  int stackCount = m_identifierStack.count();
+
+  DefaultVisitor::visitNamespaceAliasDefinition(node);
+
+  ignoreIdentifier(stackCount);
+}
+
+void DUBuilder::visitTypeIdentification(TypeIdentificationAST* node)
+{
+  int stackCount = m_identifierStack.count();
+
+  DefaultVisitor::visitTypeIdentification(node);
+
+  ignoreIdentifier(stackCount);
+}
+
+void DUBuilder::visitUsing(UsingAST* node)
+{
+  // TODO store the using
+
+  int stackCount = m_identifierStack.count();
+
+  DefaultVisitor::visitUsing(node);
 
   ignoreIdentifier(stackCount);
 }

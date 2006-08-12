@@ -38,7 +38,6 @@ class Job;
 namespace KTextEditor
 {
 class Document;
-class SmartRange;
 }
 
 class QTimer;
@@ -71,7 +70,6 @@ public slots:
     void parseComplete( Job *job );
     void documentChanged( KTextEditor::Document *document );
     void cacheModels( uint modelsToCache );
-    KTextEditor::SmartRange *buildHighlight( KDevDocument *document );
 
 private:
     QTimer *m_timer;

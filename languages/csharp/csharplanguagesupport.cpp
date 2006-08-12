@@ -109,10 +109,9 @@ KDevParseJob *CSharpLanguageSupport::createParseJob( const KUrl &url )
     return new ParseJob( url, this );
 }
 
-KDevParseJob *CSharpLanguageSupport::createParseJob( KDevDocument *document,
-        KTextEditor::SmartRange *highlight )
+KDevParseJob *CSharpLanguageSupport::createParseJob( KDevDocument *document )
 {
-    return new ParseJob( document, highlight, this );
+    return new ParseJob( document, this );
 }
 
 QStringList CSharpLanguageSupport::mimeTypes() const

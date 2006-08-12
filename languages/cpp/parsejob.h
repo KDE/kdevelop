@@ -28,6 +28,7 @@
 class pool;
 class CodeModel;
 class TranslationUnitAST;
+class DUContext;
 
 class ParseJob : public KDevParseJob
 {
@@ -37,7 +38,6 @@ public:
               QObject* parent );
 
     ParseJob( KDevDocument* document,
-              KTextEditor::SmartRange* highlight,
               QObject* parent );
 
     virtual ~ParseJob();
@@ -51,6 +51,7 @@ protected:
 private:
     TranslationUnitAST *m_AST;
     CodeModel *m_model;
+    DUContext* m_duContext;
 };
 
 #endif

@@ -60,7 +60,7 @@ public:
   /**
    * Returns the text document for \a url, if one exists.
    */
-  static KTextEditor::Document* findDocument(const KUrl& url);
+  static KTextEditor::Document* documentForUrl(const KUrl& url);
 
   const KUrl& currentUrl() const;
   void setCurrentUrl(const KUrl& currentUrl);
@@ -71,7 +71,7 @@ public:
   KTextEditor::Document* currentDocument() const;
 
   /// Convenience function to return the SmartInterface for the current document.
-  KTextEditor::SmartInterface* smart() const;
+  KTextEditor::SmartInterface* smart(KTextEditor::Document* document = 0) const;
 
   enum TopRangeType {
     Highlighting,
@@ -151,7 +151,7 @@ public:
    *
    * \returns the newly created text range.
    */
-  KTextEditor::Range* createRange(const KTextEditor::Range& range);
+  KTextEditor::Range* createRange(const KTextEditor::Range& range, KTextEditor::Document* document = 0);
 
   /**
    * Create a text range from \a start to \a end as a child range of the current range.
@@ -244,6 +244,7 @@ private:
   Lexer* m_lexer;
   TokenStream* m_tokenStream;
   KUrl m_currentUrl;
+  KTextEditor::Document* m_currentDocument;
   KTextEditor::Range* m_currentRange;
   KTextEditor::Range m_newRangeMarker;
 };

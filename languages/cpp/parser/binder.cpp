@@ -27,18 +27,14 @@
 
 #include <qdebug.h>
 
-#include <ktexteditor/smartrange.h>
-#include <ktexteditor/smartinterface.h>
 #include <ktexteditor/document.h>
 
 Binder::Binder(CodeModel *model,
                TokenStream *token_stream,
-               Lexer *lexer,
-               KTextEditor::SmartRange* highlight)
+               Lexer *lexer)
   : _M_model(model),
     _M_token_stream(token_stream),
     _M_lexer(lexer),
-    _M_highlight(highlight),
     type_cc(token_stream),
     name_cc(token_stream),
     decl_cc(token_stream)

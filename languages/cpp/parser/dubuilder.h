@@ -71,6 +71,9 @@ protected:
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
   virtual void visitEnumSpecifier(EnumSpecifierAST*);
   virtual void visitTypeParameter(TypeParameterAST*);
+  virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST*);
+  virtual void visitTypeIdentification(TypeIdentificationAST*);
+  virtual void visitUsing(UsingAST*);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;

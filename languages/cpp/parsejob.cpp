@@ -37,20 +37,23 @@
 #include "parser/control.h"
 #include "parser/dumptree.h"
 #include "parser/rpp/preprocessor.h"
+#include "parser/editorintegrator.h"
+#include "parser/dubuilder.h"
 
 ParseJob::ParseJob( const KUrl &url,
                     QObject *parent )
         : KDevParseJob( url, parent ),
         m_AST( 0 ),
-        m_model( 0 )
+        m_model( 0 ),
+        m_duContext( 0 )
 {}
 
 ParseJob::ParseJob( KDevDocument *document,
-                    KTextEditor::SmartRange *highlight,
                     QObject *parent )
-        : KDevParseJob( document, highlight, parent ),
+        : KDevParseJob( document, parent ),
         m_AST( 0 ),
-        m_model( 0 )
+        m_model( 0 ),
+        m_duContext( 0 )
 {}
 
 ParseJob::~ParseJob()
@@ -125,8 +128,16 @@ void ParseJob::run()
     if ( m_AST )
     {
         m_model = new CodeModel;
-        Binder binder( m_model, &parser.token_stream, &parser.lexer, m_highlight );
+        Binder binder( m_model, &parser.token_stream, &parser.lexer );
         binder.run( m_document, m_AST );
+
+        EditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
+        // HACK... move to the correct place (where documents get opened and closed
+        //if (m_openDocument)
+            //EditorIntegrator::addDocument(m_openDocument->textDocument());
+
+        DUBuilder dubuilder(&parser.token_stream);
+        m_duContext = dubuilder.build(m_document, m_AST);
     }
     //     DumpTree dumpTree;
     //     dumpTree.dump( m_AST );

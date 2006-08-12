@@ -30,13 +30,9 @@
 
 #include <kurl.h>
 
-#include <ktexteditor/cursor.h>
-
 class Lexer;
 class TokenStream;
 struct NameSymbol;
-
-namespace KTextEditor { class SmartRange; }
 
 /**
  * A class which iterates the AST to find all declarations and bind them
@@ -52,8 +48,7 @@ class Binder: protected DefaultVisitor
 public:
   Binder(CodeModel *model,
          TokenStream *token_stream,
-         Lexer *lexer,
-         KTextEditor::SmartRange* highlight);
+         Lexer *lexer);
   virtual ~Binder();
 
   void run(const KUrl &url, AST *node);
@@ -101,7 +96,6 @@ private:
   CodeModel *_M_model;
   TokenStream *_M_token_stream;
   Lexer *_M_lexer;
-  KTextEditor::SmartRange* _M_highlight;
   QString _M_currentFile;
 
   CodeModel::AccessPolicy _M_current_access;

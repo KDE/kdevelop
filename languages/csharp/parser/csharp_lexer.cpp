@@ -164,6 +164,10 @@ typedef unsigned int flex_uint32_t;
 #define YY_BUF_SIZE 16384
 #endif
 
+/* The state buf must be large enough to hold one state per character in the main buffer.
+ */
+#define YY_STATE_BUF_SIZE   ((YY_BUF_SIZE + 2) * sizeof(yy_state_type))
+
 #ifndef YY_TYPEDEF_YY_BUFFER_STATE
 #define YY_TYPEDEF_YY_BUFFER_STATE
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
@@ -314,7 +318,7 @@ void yyfree (void *  );
 
 /* Begin user sect3 */
 
-#define yywrap() 1
+#define yywrap(n) 1
 #define YY_SKIP_YYWRAP
 
 typedef unsigned char YY_CHAR;
@@ -2771,7 +2775,7 @@ for performance and convenience reasons. */
 
 
 
-#line 2775 "csharp_lexer.cpp"
+#line 2779 "csharp_lexer.cpp"
 
 #define INITIAL 0
 #define IN_BLOCKCOMMENT 1
@@ -2783,13 +2787,11 @@ for performance and convenience reasons. */
 #define PP_PRAGMA 7
 #define PP_SKIPPED_SECTION_PART 8
 
-#ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
  * down here because we want the user's section 1 to have been scanned first.
  * The user has a chance to override it with an option.
  */
 #include <unistd.h>
-#endif
 
 #ifndef YY_EXTRA_TYPE
 #define YY_EXTRA_TYPE void *
@@ -2887,7 +2889,7 @@ YY_DECL
 
  /* whitespace, newlines and comments */
 
-#line 2891 "csharp_lexer.cpp"
+#line 2893 "csharp_lexer.cpp"
 
 	if ( (yy_init) )
 		{
@@ -4118,7 +4120,7 @@ YY_RULE_SETUP
 #line 523 "csharp_lexer.ll"
 ECHO;
 	YY_BREAK
-#line 4122 "csharp_lexer.cpp"
+#line 4124 "csharp_lexer.cpp"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -4277,6 +4279,13 @@ yyFlexLexer::yyFlexLexer( std::istream* arg_yyin, std::ostream* arg_yyout )
 
 }
 
+yyFlexLexer::~yyFlexLexer()
+{
+	delete [] yy_state_buf;
+	yyfree(yy_start_stack  );
+	yy_delete_buffer( YY_CURRENT_BUFFER );
+}
+
 void yyFlexLexer::switch_streams( std::istream* new_in, std::ostream* new_out )
 {
 	if ( new_in )
@@ -4377,7 +4386,7 @@ int yyFlexLexer::yy_get_next_buffer()
 
 	else
 		{
-			int num_to_read =
+			size_t num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
@@ -4946,25 +4955,6 @@ void yyFlexLexer::LexerError( yyconst char msg[] )
 
 /* Accessor  methods (get/set functions) to struct members. */
 
-yyFlexLexer::~yyFlexLexer()
-{
-    
-    /* Pop the buffer stack, destroying each element. */
-	while(YY_CURRENT_BUFFER){
-		yy_delete_buffer( YY_CURRENT_BUFFER  );
-		YY_CURRENT_BUFFER_LVALUE = NULL;
-		yypop_buffer_state();
-	}
-
-	/* Destroy the stack itself. */
-	yyfree((yy_buffer_stack) );
-	(yy_buffer_stack) = NULL;
-
-	delete [] (yy_state_buf);
-	yyfree((yy_start_stack)  );
-
-}
-
 /*
  * Internal utility routines.
  */
@@ -5013,18 +5003,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#undef YY_NEW_FILE
-#undef YY_FLUSH_BUFFER
-#undef yy_set_bol
-#undef yy_new_buffer
-#undef yy_set_interactive
-#undef yytext_ptr
-#undef YY_DO_BEFORE_ACTION
-
-#ifdef YY_DECL_IS_OURS
-#undef YY_DECL_IS_OURS
-#undef YY_DECL
-#endif
 #line 523 "csharp_lexer.ll"
 
 

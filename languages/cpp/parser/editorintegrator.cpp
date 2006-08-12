@@ -35,6 +35,7 @@ QHash<KUrl, QVector<Range*> > EditorIntegrator::s_topRanges;
 EditorIntegrator::EditorIntegrator( TokenStream * tokenStream )
   : m_lexer(s_parsedSources[tokenStream])
   , m_tokenStream(tokenStream)
+  , m_currentDocument(0)
   , m_currentRange(0)
 {
 }
@@ -49,22 +50,23 @@ void EditorIntegrator::addParsedSource( Lexer * lexer, TokenStream * tokenStream
   s_parsedSources.insert(tokenStream, lexer);
 }
 
-SmartInterface* EditorIntegrator::smart() const
+SmartInterface* EditorIntegrator::smart(KTextEditor::Document* document) const
 {
-  return dynamic_cast<SmartInterface*>(currentDocument());
+  return dynamic_cast<SmartInterface*>(document ? document : currentDocument());
 }
 
 Cursor* EditorIntegrator::createCursor(const DocumentCursor& position)
 {
   Cursor* ret = 0;
 
-  KUrl oldCurrent = m_currentUrl;
-  m_currentUrl = position.document();
-
-  if (SmartInterface* iface = smart())
-    ret = iface->newSmartCursor(position);
-
-  m_currentUrl = oldCurrent;
+  if (position.document() == m_currentUrl) {
+    if (SmartInterface* iface = smart())
+      ret = iface->newSmartCursor(position);
+  } else {
+    KTextEditor::Document* document = s_documents[position.document()];
+    if (SmartInterface* iface = smart(document))
+      ret = iface->newSmartCursor(position);
+  }
 
   if (!ret)
     ret = new DocumentCursor(position);
@@ -95,7 +97,7 @@ DocumentCursor EditorIntegrator::findPosition( const Token & token, Edge edge ) 
 
 Document* EditorIntegrator::currentDocument() const
 {
-  return s_documents[m_currentUrl];
+  return m_currentDocument;
 }
 
 Range* EditorIntegrator::topRange( TopRangeType type )
@@ -104,21 +106,27 @@ Range* EditorIntegrator::topRange( TopRangeType type )
     s_topRanges.insert(currentUrl(), QVector<Range*>(TopRangeCount));
 
   if (!s_topRanges[currentUrl()][type])
-    if (currentDocument())
-      s_topRanges[currentUrl()][type] = createRange(currentDocument()->documentRange());
-    else
+    if (currentDocument()) {
+      Range* newRange = s_topRanges[currentUrl()][type] = createRange(currentDocument()->documentRange());
+      if (SmartInterface* iface = smart()) {
+        Q_ASSERT(newRange->isSmartRange());
+        iface->addHighlightToDocument( newRange->toSmartRange(), false );
+      }
+
+    } else {
       // FIXME...
-      s_topRanges[currentUrl()][type] = createRange(Range(0,0, INT_MAX, 0));
+      s_topRanges[currentUrl()][type] = createRange(Range(0,0, INT_MAX, INT_MAX));
+    }
 
   return s_topRanges[currentUrl()][type];
 }
 
-Range* EditorIntegrator::createRange( const Range & range )
+Range* EditorIntegrator::createRange( const Range & range, KTextEditor::Document* document )
 {
   Range* ret;
 
-  if (SmartInterface* iface = smart())
-    if (!m_currentRange || m_currentRange->isSmartRange())
+  if (SmartInterface* iface = smart(document))
+    if (m_currentRange && m_currentRange->isSmartRange())
       ret = iface->newSmartRange(range, static_cast<SmartRange*>(m_currentRange));
     else
       ret = iface->newSmartRange(range);
@@ -132,12 +140,13 @@ Range* EditorIntegrator::createRange( const Range & range )
 
 Range* EditorIntegrator::createRange( const DocumentCursor& start, const DocumentCursor& end )
 {
-  Q_ASSERT(start.document() == end.document());
-  KUrl oldUrl = m_currentUrl;
-  m_currentUrl = start.document();
-  Range* ret = createRange(Range(start, end));
-  m_currentUrl = oldUrl;
-  return ret;
+  if (start.document() != end.document()) {
+    kWarning() << k_funcinfo << "Start: " << start << ", End: " << end << ", documents " << start.document() << " != " << end.document() << endl;
+    // FIXME difficult problem
+    createRange(Range(start, start), documentForUrl(start.document()));
+  }
+
+  return createRange(Range(start, end), documentForUrl(start.document()));
 }
 
 Range* EditorIntegrator::createRange()
@@ -177,7 +186,7 @@ Cursor * EditorIntegrator::createCursor( std::size_t token, Edge edge )
   return createCursor(findPosition(t, edge));
 }
 
-Document * EditorIntegrator::findDocument(const KUrl& url)
+Document * EditorIntegrator::documentForUrl(const KUrl& url)
 {
   foreach (Document* d, s_documents)
     if (d->url() == url)
@@ -210,6 +219,7 @@ const KUrl& EditorIntegrator::currentUrl() const
 void EditorIntegrator::setCurrentUrl(const KUrl& url)
 {
   m_currentUrl = url;
+  m_currentDocument = documentForUrl(url);
 }
 
 void EditorIntegrator::deleteTopRange(KTextEditor::Range * range)

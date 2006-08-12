@@ -44,7 +44,6 @@ public:
     KDevParseJob( const KUrl &url, QObject *parent );
 
     KDevParseJob( KDevDocument *document,
-                  KTextEditor::SmartRange *highlight,
                   QObject* parent );
 
     virtual ~KDevParseJob();
@@ -59,7 +58,6 @@ public:
     }
 
     KUrl document() const;
-    KTextEditor::SmartRange *highlight() const;
     bool wasSuccessful() const;
     const QString& errorMessage() const;
 
@@ -71,7 +69,6 @@ protected:
     KUrl m_document;
     QByteArray m_contents;
     QString m_errorMessage;
-    KTextEditor::SmartRange* m_highlight;
 };
 
 #endif

@@ -40,7 +40,6 @@ public:
               QObject* parent );
 
     ParseJob( KDevDocument* document,
-              KTextEditor::SmartRange* highlight,
               QObject* parent );
 
     virtual ~ParseJob();

@@ -42,8 +42,7 @@ public:
     virtual KDevCodeDelegate *codeDelegate() const;
     virtual KDevCodeRepository *codeRepository() const;
     virtual KDevParseJob *createParseJob( const KUrl &url );
-    virtual KDevParseJob *createParseJob( KDevDocument *document,
-                                          KTextEditor::SmartRange *highlight );
+    virtual KDevParseJob *createParseJob( KDevDocument *document );
     virtual QStringList mimeTypes() const;
 
     virtual void read( KDevAST * ast, std::ifstream &in );

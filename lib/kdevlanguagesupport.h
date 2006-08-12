@@ -99,8 +99,7 @@ public:
     virtual KDevCodeRepository *codeRepository() const = 0;
 
     virtual KDevParseJob *createParseJob( const KUrl &url ) = 0;
-    virtual KDevParseJob *createParseJob( KDevDocument *document,
-                                          KTextEditor::SmartRange *highlight ) = 0;
+    virtual KDevParseJob *createParseJob( KDevDocument *document ) = 0;
 
     //FIXME Make these pure to force language parts to provide this.
     //Right now the cpp language part can't persist the AST...

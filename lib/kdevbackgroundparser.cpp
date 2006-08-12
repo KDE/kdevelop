@@ -126,7 +126,7 @@ void KDevBackgroundParser::parseDocuments()
             KDevDocument* document = m_openDocuments[ url ];
 
             if ( document )
-                parse = langSupport->createParseJob( document, buildHighlight( document ) );
+                parse = langSupport->createParseJob( document );
             else
                 parse = langSupport->createParseJob( url );
 
@@ -229,32 +229,6 @@ void KDevBackgroundParser::resume()
 void KDevBackgroundParser::removeDocumentFile( KDevDocument * document )
 {
     m_openDocuments.remove( document->url() );
-}
-
-KTextEditor::SmartRange *KDevBackgroundParser::buildHighlight( KDevDocument *document )
-{
-    KTextEditor::SmartRange * highlight = 0L;
-    if ( KTextEditor::SmartInterface * smart =
-         dynamic_cast<KTextEditor::SmartInterface*>( document->textDocument() ) )
-    {
-        if ( smart->documentHighlights().count() )
-        {
-            KTextEditor::SmartRange * highlight = smart->documentHighlights().first();
-            highlight->deleteChildRanges();
-            return highlight;
-
-        }
-        else
-        {
-            KTextEditor::SmartRange * highlight =
-                    smart->newSmartRange( document->textDocument() ->documentRange(),
-                                          0L,
-                                          KTextEditor::SmartRange::ExpandLeft
-                                                  | KTextEditor::SmartRange::ExpandRight );
-            smart->addHighlightToDocument( highlight, false );
-            return highlight;
-        }
-    }
 }
 
 #include "kdevbackgroundparser.moc"
