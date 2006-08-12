@@ -26,6 +26,7 @@
 #include "kdevcodemodel.h"
 #include "kdevlanguagesupport.h"
 #include "kdevdocumentcontroller.h"
+#include "kdevcodehighlighting.h"
 
 #include "kdevast.h"
 #include "kdevparsejob.h"
@@ -171,9 +172,11 @@ void KDevBackgroundParser::parseComplete( Job *job )
         if ( !parseJob->wasSuccessful() )
             return ;
 
-        //FIXME abstract out codehighlingting in kdevlanguagesupport
-        //langSupport->codeHighlighting()->highlightModel(parseJob->codeModel());
-        //langSupport->codeHighlighting()->highlightTree(parseJob->highlight());
+        if (langSupport->codeHighlighting()) {
+            //FIXME abstract out codehighlingting in kdevlanguagesupport
+            //langSupport->codeHighlighting()->highlightModel(parseJob->codeModel());
+            langSupport->codeHighlighting()->highlightDUChain(parseJob->duChain());
+        }
 
         if ( m_modelsToCache )
         {

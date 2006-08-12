@@ -64,6 +64,12 @@ const QString & KDevParseJob::errorMessage() const
     return m_errorMessage;
 }
 
+DUContext * KDevParseJob::duChain() const
+{
+    // No definition-use chain available by default
+    return 0L;
+}
+
 #include "kdevparsejob.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

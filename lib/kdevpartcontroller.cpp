@@ -21,6 +21,7 @@
 
 #include "kdevmainwindow.h"
 #include "kdevconfig.h"
+#include "kdeveditorintegrator.h"
 
 #include "kdevpartcontroller.h"
 
@@ -76,6 +77,8 @@ KTextEditor::Document* KDevPartController::createTextPart(
                                                    "KTextEditor/Document",
                                                    "KTextEditor::Editor",
                                                    m_editor ) );
+
+    KDevEditorIntegrator::addDocument(doc);
 
     if ( !encoding.isNull() )
     {

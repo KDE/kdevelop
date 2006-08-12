@@ -69,4 +69,10 @@ void KDevLanguageSupport::write( KDevAST * ast, std::ofstream &out )
     //Do Nothing
 }
 
+KDevCodeHighlighting * KDevLanguageSupport::codeHighlighting() const
+{
+  // No default highlighting support
+  return 0L;
+}
+
 #include "kdevlanguagesupport.moc"

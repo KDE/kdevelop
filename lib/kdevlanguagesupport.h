@@ -45,6 +45,7 @@
 class KDevAST;
 class KDevDocument;
 class KDevParseJob;
+class KDevCodeHighlighting;
 
 /**
 @file kdevlanguagesupport.h
@@ -97,6 +98,10 @@ public:
     /**@return A code repository (accessor to persistant symbol stores) for
     codemodel's.*/
     virtual KDevCodeRepository *codeRepository() const = 0;
+
+    /**@return A code highlighting object for highlighting text editor views, or null
+    if there is not one available.*/
+    virtual KDevCodeHighlighting *codeHighlighting() const;
 
     virtual KDevParseJob *createParseJob( const KUrl &url ) = 0;
     virtual KDevParseJob *createParseJob( KDevDocument *document ) = 0;

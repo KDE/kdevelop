@@ -36,6 +36,7 @@ class SmartRange;
 
 class KDevAST;
 class KDevCodeModel;
+class DUContext;
 
 class KDevParseJob : public ThreadWeaver::Job
 {
@@ -63,6 +64,7 @@ public:
 
     virtual KDevAST *AST() const = 0;
     virtual KDevCodeModel *codeModel() const = 0;
+    virtual DUContext *duChain() const;
 
 protected:
     virtual void run() = 0;

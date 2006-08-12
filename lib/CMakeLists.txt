@@ -6,7 +6,7 @@ add_subdirectory(debugger)
 add_subdirectory(projectmanager)
 add_subdirectory(settings)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/lib/weaver )
+include_directories( ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/lib/weaver ${CMAKE_SOURCE_DIR}/lib/editor )
 
 ########### next target ###############
 
@@ -52,6 +52,11 @@ set(kdevplatform_LIB_SRCS
     kdevbackgroundparser.cpp
     kdevparsejob.cpp
     kdevpersistenthash.cpp
+    kdevcodehighlighting.cpp
+    editor/kdeveditorintegrator.cpp
+    editor/kdevdocumentrangeobject.cpp
+    editor/kdevdocumentcursor.cpp
+    editor/kdevdocumentrange.cpp
 )
 
 set(kdevplatform_UI3
@@ -111,6 +116,11 @@ install(FILES
     kdevbackgroundparser.h
     kdevparsejob.h
     kdevpersistenthash.h
+    kdevcodehighlighting.h
+    editor/kdeveditorintegrator.h
+    editor/kdevdocumentrangeobject.h
+    editor/kdevdocumentcursor.h
+    editor/kdevdocumentrange.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/
 )
 
