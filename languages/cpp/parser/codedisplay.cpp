@@ -24,6 +24,7 @@
 
 #include <kurl.h>
 #include <kicon.h>
+#include <kstandarddirs.h>
 
 CodeDisplay::CodeDisplay()
 {}
@@ -169,7 +170,7 @@ QString CodeDisplay::whatsThis( const _CodeModelItem *item )
 
 QIcon CodeDisplay::loadIcon( const QString & name )
 {
-    return KIcon( name );
+    return QIcon(KStandardDirs::locate("appdata", QString("pics/%1.png").arg(name)));
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
