@@ -175,7 +175,7 @@ public:
    */
   void setCurrentRange(KTextEditor::Range* range);
 
-private:
+protected:
   static QHash<KUrl, KTextEditor::Document*> s_documents;
   static QHash<KUrl, QVector<KTextEditor::Range*> > s_topRanges;
 

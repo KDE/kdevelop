@@ -116,10 +116,6 @@ private:
 
   Lexer* m_lexer;
   TokenStream* m_tokenStream;
-  KUrl m_currentUrl;
-  KTextEditor::Document* m_currentDocument;
-  KTextEditor::Range* m_currentRange;
-  KTextEditor::Range m_newRangeMarker;
 };
 
 #endif // EDITORINTEGRATOR_H
