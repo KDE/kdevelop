@@ -111,16 +111,18 @@ int main( int argc, char *argv[] )
     KDevCore::setProjectController( new KDevProjectController );
     KDevCore::setEnvironment( new KDevEnvironment );
 
-    QObject::connect( KDevCore::pluginController(),
-                      SIGNAL( loadingPlugin( const QString & ) ),
-                      splash, SLOT( showMessage( const QString & ) ) );
-
-    QObject::connect( KDevCore::documentController(),
-                      SIGNAL( openingDocument( const QString & ) ),
-                      splash, SLOT( showMessage( const QString & ) ) );
-
     if ( splash )
+    {
+        QObject::connect( KDevCore::pluginController(),
+                          SIGNAL( loadingPlugin( const QString & ) ),
+                          splash, SLOT( showMessage( const QString & ) ) );
+
+        QObject::connect( KDevCore::documentController(),
+                          SIGNAL( openingDocument( const QString & ) ),
+                          splash, SLOT( showMessage( const QString & ) ) );
+
         splash->showMessage( i18n( "Starting GUI" ) );
+    }
 
     QObject::connect( KDevCore::projectController(), SIGNAL( projectOpened() ),
                       KDevCore::mainWindow(), SLOT( loadSettings() ) );

@@ -121,9 +121,6 @@ public:
     @param view The view to be lowered.*/
     virtual void lowerView( QWidget *view );
 
-    /**@return KStatusBar object which actually represents the status bar in the main window.*/
-    KStatusBar *statusBar();
-
 public Q_SLOTS:
     /**Loads main window settings.*/
     virtual void loadSettings();

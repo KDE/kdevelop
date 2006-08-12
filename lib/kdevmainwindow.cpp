@@ -105,7 +105,7 @@ void KDevMainWindow::setupActions()
     action->setEnabled( false );
 
     action = KStdAction::showStatusbar( this, SLOT( toggleStatusbar() ),
-                                        actionCollection(), "show_toolbar" );
+                                        actionCollection(), "settings_show_statusbar" );
     action->setText( i18n( "Show &Statusbar" ) );
     action->setToolTip( i18n( "Show statusbar" ) );
     action->setWhatsThis( i18n( "<b>Show statusbar</b><p>Hides or shows the statusbar." ) );
@@ -135,7 +135,7 @@ void KDevMainWindow::setupActions()
                  this, SLOT( showMenuBar() ),
                  actionCollection(), "settings_show_menubar" );
     action->setToolTip( beautifyToolTip( action->text() ) );
-    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( action->text() ) ).arg( i18n( "Lets you switch the menubar on/off." ) ) );
+    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( action->text() ) ).arg( i18n( "Lets you toggle the menubar on/off." ) ) );
 
     action = KStdAction::keyBindings(
                  this, SLOT( keyBindings() ),
@@ -183,18 +183,10 @@ void KDevMainWindow::setupActions()
 void KDevMainWindow::init()
 {
     setStandardToolBarMenuEnabled( true );
-
-    KStdAction::configureToolbars( this, SLOT( configureToolbars() ),
-                                   actionCollection(),
-                                   "set_configure_toolbars" );
-
-    new KDevStatusBar( this );
-
     setupActions();
+    setStatusBar( new KDevStatusBar( this ) );
 
     createGUI( ShellExtension::getInstance() ->xmlFile() );
-
-    setupWindowMenu();
 
     connect( KDevCore::documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
              this, SLOT( documentActivated( KDevDocument* ) ) );
@@ -335,11 +327,6 @@ void KDevMainWindow::lowerView( QWidget * view )
     }
 }
 
-KStatusBar *KDevMainWindow::statusBar()
-{
-    return statusBar();
-}
-
 void KDevMainWindow::loadSettings()
 {
     KConfig * config = KDevConfig::standard();
@@ -409,7 +396,6 @@ void KDevMainWindow::configureToolbars()
 
 void KDevMainWindow::newToolbarConfig()
 {
-    setupWindowMenu();
     applyMainWindowSettings( KGlobal::config(),
                              QLatin1String( "KDevMainWindow" ) );
 }
@@ -454,7 +440,7 @@ void KDevMainWindow::reportBug()
 void KDevMainWindow::toggleStatusbar()
 {
     KToggleAction * action =
-        qobject_cast< KToggleAction*>( actionCollection() ->action( "show_statusbar" ) );
+            qobject_cast< KToggleAction*>( actionCollection() ->action( "settings_show_statusbar" ) );
     statusBar() ->setHidden( !action->isChecked() );
 }
 

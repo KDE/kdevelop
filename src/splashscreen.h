@@ -2,25 +2,21 @@
 #ifndef _SPLASHSCREEN_H_
 #define _SPLASHSCREEN_H_
 
-#include <qsplashscreen.h>
-#include "shellexport.h"
+#include <QSplashScreen>
 
-class QPainter;
 class QPixmap;
+class QPainter;
 
-/**
-Splash screen.
-*/
-class KDEVSHELL_EXPORT SplashScreen : public QSplashScreen
+class SplashScreen : public QSplashScreen
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    SplashScreen(const QPixmap& pixmap, Qt::WFlags f = 0);
+    SplashScreen( const QPixmap& pixmap = QPixmap(), Qt::WindowFlags f = 0 );
     virtual ~SplashScreen();
 
 protected:
-    void drawContents (QPainter * painter);
+    void drawContents( QPainter * painter );
 
 public slots:
     void animate();
@@ -28,8 +24,8 @@ public slots:
                       const QColor &color = Qt::black );
 
 private:
-    int state;
-    int progress_bar_size;
+    int m_state;
+    int m_progress_bar_size;
     QString m_string;
 };
 

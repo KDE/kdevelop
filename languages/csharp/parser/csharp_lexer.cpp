@@ -30,13 +30,16 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 31
+#define YY_FLEX_SUBMINOR_VERSION 33
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
 
     /* The c++ scanner is a mess. The FlexLexer.h header file relies on the
-     * following macro.
+     * following macro. This is required in order to pass the c++-multiple-scanners
+     * test in the regression suite. We get reports that it breaks inheritance.
+     * We will address this in a future release of flex, or omit the C++ scanner
+     * altogether.
      */
     #define yyFlexLexer yyFlexLexer
 
@@ -53,7 +56,15 @@
 
 /* C99 systems have <inttypes.h>. Non-C99 systems may or may not. */
 
-#if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
+#if __STDC_VERSION__ >= 199901L
+
+/* C99 says to define __STDC_LIMIT_MACROS before including stdint.h,
+ * if you want the limit (max/min) macros for int types. 
+ */
+#ifndef __STDC_LIMIT_MACROS
+#define __STDC_LIMIT_MACROS 1
+#endif
+
 #include <inttypes.h>
 typedef int8_t flex_int8_t;
 typedef uint8_t flex_uint8_t;
@@ -2775,7 +2786,7 @@ for performance and convenience reasons. */
 
 
 
-#line 2779 "csharp_lexer.cpp"
+#line 2790 "csharp_lexer.cpp"
 
 #define INITIAL 0
 #define IN_BLOCKCOMMENT 1
@@ -2787,11 +2798,13 @@ for performance and convenience reasons. */
 #define PP_PRAGMA 7
 #define PP_SKIPPED_SECTION_PART 8
 
+#ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
  * down here because we want the user's section 1 to have been scanned first.
  * The user has a chance to override it with an option.
  */
 #include <unistd.h>
+#endif
 
 #ifndef YY_EXTRA_TYPE
 #define YY_EXTRA_TYPE void *
@@ -2889,11 +2902,11 @@ YY_DECL
 
  /* whitespace, newlines and comments */
 
-#line 2893 "csharp_lexer.cpp"
+#line 2906 "csharp_lexer.cpp"
 
-	if ( (yy_init) )
+	if ( !(yy_init) )
 		{
-		(yy_init) = 0;
+		(yy_init) = 1;
 
 #ifdef YY_USER_INIT
 		YY_USER_INIT;
@@ -4120,7 +4133,7 @@ YY_RULE_SETUP
 #line 523 "csharp_lexer.ll"
 ECHO;
 	YY_BREAK
-#line 4124 "csharp_lexer.cpp"
+#line 4137 "csharp_lexer.cpp"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -4256,7 +4269,7 @@ yyFlexLexer::yyFlexLexer( std::istream* arg_yyin, std::ostream* arg_yyout )
 	yyin = arg_yyin;
 	yyout = arg_yyout;
 	yy_c_buf_p = 0;
-	yy_init = 1;
+	yy_init = 0;
 	yy_start = 0;
 	yy_flex_debug = 0;
 	yylineno = 1;	// this will only get updated if %option yylineno
@@ -4269,7 +4282,7 @@ yyFlexLexer::yyFlexLexer( std::istream* arg_yyin, std::ostream* arg_yyout )
 	yy_more_offset = yy_prev_more_offset = 0;
 
 	yy_start_stack_ptr = yy_start_stack_depth = 0;
-	yy_start_stack = 0;
+	yy_start_stack = NULL;
 
     (yy_buffer_stack) = 0;
     (yy_buffer_stack_top) = 0;
@@ -4386,7 +4399,7 @@ int yyFlexLexer::yy_get_next_buffer()
 
 	else
 		{
-			size_t num_to_read =
+			int num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
@@ -4963,7 +4976,7 @@ void yyFlexLexer::LexerError( yyconst char msg[] )
 static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 {
 	register int i;
-    	for ( i = 0; i < n; ++i )
+	for ( i = 0; i < n; ++i )
 		s1[i] = s2[i];
 }
 #endif
@@ -4972,7 +4985,7 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 static int yy_flex_strlen (yyconst char * s )
 {
 	register int n;
-    	for ( n = 0; s[n]; ++n )
+	for ( n = 0; s[n]; ++n )
 		;
 
 	return n;

@@ -408,8 +408,6 @@ void KDevDocumentController::activateDocument( KDevDocument * document )
     if ( document->isActive() )
         return ;
 
-    setActiveDocument( document );
-
     QWidget * widget = document->part() ->widget();
     if ( widget )
     {
@@ -428,6 +426,8 @@ void KDevDocumentController::activateDocument( KDevDocument * document )
         widget->show();
         widget->setFocus();
     }
+
+    setActiveDocument( document );
 }
 
 KDevDocument* KDevDocumentController::activeDocument() const
@@ -860,9 +860,18 @@ KDevDocument * KDevDocumentController::addDocument( KParts::Part * part, bool se
     KDevDocument * document =
         new KDevDocument( static_cast<KParts::ReadOnlyPart*>( part ), this );
     m_partHash.insert( static_cast<KParts::ReadOnlyPart*>( part ), document );
+
+    if ( setActive )
+    {
+        KDevCore::mainWindow() ->guiFactory() ->removeClient(
+                KDevCore::partController() ->activePart() );
+        KDevCore::mainWindow() ->guiFactory() ->addClient( part );
+    }
+
     KDevCore::partController() ->addPart( part, setActive );
-    //     updateDocumentUrl( document );
-    //     updateMenuItems();
+
+//     updateDocumentUrl( document );
+    updateMenuItems();
 
     return document;
 }
@@ -895,7 +904,14 @@ void KDevDocumentController::replaceDocument( KDevDocument * oldDocument,
 
 void KDevDocumentController::setActiveDocument( KDevDocument *document, QWidget *widget )
 {
+    //Remove the current part from the xmlgui
+    KDevCore::mainWindow() ->guiFactory() ->removeClient(
+            KDevCore::partController() ->activePart() );
+
     KDevCore::partController() ->setActivePart( document->part(), widget );
+
+    KDevCore::mainWindow() ->guiFactory() ->addClient(
+            KDevCore::partController() ->activePart() );
 
     //     kDebug( 9000 ) << k_funcinfo
     //     << KDevCore::partController()->activePart()

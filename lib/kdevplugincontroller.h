@@ -64,7 +64,7 @@ public:
 
     /**
      * Unloads the plugin specified by @p plugin
-     * @param plugin The plugin desktopEntryName of the plugin to unload
+     * @param plugin The desktopEntryName of the plugin to unload
      */
     void unloadPlugin( const QString & plugin );
 

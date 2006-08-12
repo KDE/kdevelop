@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui version="25" name="kdevelop" >
 <MenuBar>
-  <Menu name="file" noMerge="1"><text>&amp;File</text>
+  <Menu name="file"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
     <Separator/>
     <Action name="file_open"/>
@@ -58,7 +58,7 @@
     <DefineGroup name="project_new"/>
     <Action name="project_open"/>
     <Action name="project_open_recent"/>
-<!--    <Action name="project_active_language"/> -->
+<!-- <Action name="project_active_language"/> -->
     <DefineGroup name="project_import"/>
     <Separator/>
     <DefineGroup name="project_classes"/>
@@ -74,11 +74,13 @@
     <Separator/>
     <Action name="stop_processes"/>
   </Menu>
+<!--
   <Menu name="debug">
     <text>&amp;Debug</text>
     <DefineGroup name="debug"/>
     <DefineGroup name="profile"/>
   </Menu>
+-->
   <Merge/>
   <Menu name="tools">
     <text>&amp;Tools</text>
@@ -92,6 +94,7 @@
     <Separator/>
     <Merge/>
   </Menu>
+<!--
   <Menu name="window">
     <text>&amp;Window</text>
     <Action name="split_h"/>
@@ -100,9 +103,11 @@
     <DefineGroup name="window_operations"/>
     <Merge/>
   </Menu>
-  <Menu name="settings" noMerge="1">
+-->
+  <Menu name="settings" noMerge="1" >
     <text>&amp;Settings</text>
     <Action name="settings_show_menubar" />
+    <Action name="settings_show_statusbar" />
     <Merge name="StandardToolBarMenuHandler" />
     <Action name="settings_main_toolbar"/>
     <Action name="settings_build_toolbar"/>
