@@ -1,15 +1,15 @@
 [Desktop Entry]
 Type=Service
-Name=KDevCMakeImporter
+Name=KDevelop CMake Manager
 Name[x-test]=xxKDevCMakeImporterxx
-Comment=KDevelop CMake Importer
+Comment=Allows KDevelop to manager CMake based projects
 Comment[x-test]=xxKDevelop CMake Importerxx
 Icon=gear
 ServiceTypes=KDevelop/FileManager
 X-KDE-Library=kdevcmakeimporter
 X-KDE-PluginInfo-Author=Matt Rogers
 X-KDE-PluginInfo-Email=mattr@kde.org
-X-KDE-PluginInfo-Name=kdevcmakeimporter
+X-KDE-PluginInfo-Name=KDevCMakeImporter
 X-KDE-PluginInfo-License=GPL
 X-KDevelop-FileManager=
 X-KDevelop-Version=4

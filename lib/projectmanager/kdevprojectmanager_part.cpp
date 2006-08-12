@@ -39,6 +39,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kaboutdata.h>
+#include <kplugininfo.h>
 
 #include <kparts/componentfactory.h>
 
@@ -54,44 +55,32 @@ K_EXPORT_COMPONENT_FACTORY(kdevprojectmanager, KDevProjectManagerFactory("kdevpr
 KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringList&)
   : KDevProject(KDevProjectManagerFactory::instance(), parent)
 {
+  m_manager = 0;
   m_workspace = 0;
   m_projectModel = new KDevProjectModel(this);
   m_dirty = false;
 
   setInstance(KDevProjectManagerFactory::instance());
 
-  //load the importers
+  KConfig * config = KDevConfig::standard();
+  config->setGroup( "General Options" );
+
+  //Get our importer
   KService::List managerList = KServiceTypeTrader::self()->query("KDevelop/FileManager");
-  KService::List::Iterator it, itEnd = managerList.end();
-  for (it = managerList.begin(); it != itEnd; ++it)
+  KPluginInfo::List pluginList = KPluginInfo::fromServices( managerList );
+
+  QString importer = config->readPathEntry( "Importer", "KDevGenericImporter" );
+  kDebug(9000) << k_funcinfo << "looking for the " << importer << " importer" << endl;
+  KPluginInfo::List::Iterator it, itEnd = pluginList.end();
+  for (it = pluginList.begin(); it != itEnd; ++it)
   {
-      KService::Ptr ptr = *it;
+    kDebug(9000) << k_funcinfo << "checking " << ( *it )->pluginName() << endl;
+    if ( ( *it )->pluginName() == importer )
+    {
+      m_manager = KService::createInstance<KDevFileManager>( ( *it )->service(),
+          this, QStringList(), 0 );
+    }
 
-      int error = 0;
-      if (KDevFileManager *i = KService::createInstance<KDevFileManager>(ptr, this,
-          QStringList(), &error))
-      {
-          m_importers.insert(ptr->name(), i);
-      }
-      else
-          kDebug(9000) << "error:" << error << endl;
-  }
-
-  // load the builders
-  KService::List builderList = KServiceTypeTrader::self()->query("KDevelop/ProjectBuilder");
-  itEnd = builderList.end();
-  for (it = builderList.begin(); it != itEnd; ++it)
-  {
-      KService::Ptr ptr = *it;
-
-      int error = 0;
-      if (KDevProjectBuilder *i = KService::createInstance<KDevProjectBuilder>(ptr, this,
-          QStringList(), &error))
-      {
-          m_builders.insert(ptr->name(), i);
-      }
-      else
-         kDebug(9000) << "error:" << error << endl;
   }
 
   m_widget = new QWidget(0);
@@ -199,9 +188,8 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
 
   if (m_workspace)
     m_projectModel->removeItem(m_workspace);
-  KDevFileManager* manager = defaultImporter();
-  setFileManager( manager );
-  KDevProjectItem* item = manager->import(m_projectModel, m_projectDirectory);
+
+  KDevProjectItem* item = m_manager->import(m_projectModel, m_projectDirectory);
   m_workspace = item ? item->folder() : 0;
   if ( m_workspace != 0 )
   {
@@ -210,7 +198,7 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
 
   Q_ASSERT(m_workspace != 0);
 
-  ImportProjectJob *job = ImportProjectJob::importProjectJob(m_workspace, manager);
+  ImportProjectJob *job = ImportProjectJob::importProjectJob(m_workspace, m_manager);
   connect(job, SIGNAL(result(KJob*)), this, SIGNAL(refresh()));
   job->start();
 
@@ -288,29 +276,7 @@ QStringList KDevProjectManagerPart::fileList()
 
 KDevFileManager *KDevProjectManagerPart::defaultImporter() const
 {
-  KConfig * config = KDevConfig::standard();
-  config->setGroup( "General Options" );
-
-  QString importer = config->readPathEntry( "Importer", "KDevGenericImporter" );
-
-  if ( m_importers.contains(importer) )
-    return m_importers[importer];
-
-  kWarning(9000) << k_funcinfo << "No default importer!" << endl;
-  return 0;
-}
-
-KDevProjectBuilder *KDevProjectManagerPart::defaultBuilder() const
-{
-  KDevBuildManager *buildManager;
-  buildManager = dynamic_cast<KDevBuildManager*>( fileManager() );
-  if ( buildManager )
-    return buildManager->builder();
-  else
-  {
-    kDebug(9000) << "not a buildable project" << endl;
-    return 0;
-  }
+  return m_manager;
 }
 
 QStringList KDevProjectManagerPart::fileList(KDevProjectItem *item)

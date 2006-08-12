@@ -1,11 +1,13 @@
 [Desktop Entry]
 Type=Service
-Name=KDevGenericImporter
+Name=KDevelop Generic Importer
 Name[x-test]=xxKDevGenericImporterxx
-Comment=KDevelop Generic Importer
+Comment=Allow KDevelop to manage generic projects
 Comment[x-test]=xxKDevelop Generic Importerxx
 Icon=gear
 ServiceTypes=KDevelop/FileManager
 X-KDE-Library=kdevgenericimporter
+X-KDE-PluginInfo-Name=KDevGenericImporter
 X-KDevelop-FileManager=
-X-KDevelop-Version=3
+X-KDevelop-Version=4
+

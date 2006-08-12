@@ -60,11 +60,10 @@ public:
     KDevProjectFileItem *activeFile();
 
     KDevFileManager *defaultImporter() const;
-    KDevProjectBuilder *defaultBuilder() const;
 
-//
-// KDevProject interface
-//
+    //
+    // KDevProject interface
+    //
     virtual void openProject(const KUrl &dirName, const QString &projectName);
     virtual void closeProject();
     virtual KUrl projectDirectory() const;
@@ -101,8 +100,6 @@ private:
     QPointer<QWidget> m_widget;
     KDevProjectManager *m_projectOverview;
     KDevProjectManager *m_projectDetails;
-    QMap<QString, KDevFileManager*> m_importers;
-    QMap<QString, KDevProjectBuilder*> m_builders;
     KDevFileManager* m_manager;
     QStringList m_cachedFileList;
 
