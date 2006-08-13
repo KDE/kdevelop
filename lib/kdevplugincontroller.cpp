@@ -1,20 +1,20 @@
 /* This file is part of the KDE project
-  Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
+Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
 
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
 
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  Boston, MA 02110-1301, USA.
+You should have received a copy of the GNU Library General Public License
+along with this library; see the file COPYING.LIB.  If not, write to
+the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA 02110-1301, USA.
 */
 #include "kdevplugincontroller.h"
 
@@ -41,14 +41,16 @@
 #include <kxmlguifactory.h>
 
 #include "kdevcore.h"
+#include "kdevconfig.h"
 #include "kdevplugin.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
+#include "kdevprojectcontroller.h"
 #include "kdevdifffrontend.h"
 #include "kdevcreatefile.h"
 #include "kdevmainwindow.h"
 
-#include "kdevcore.h"
+#include "kdevcore.h" 
 /*#include "partselectwidget.h"*/
 #include "shellextension.h"
 
@@ -75,6 +77,31 @@ KDevPluginController::KDevPluginController()
 KDevPluginController::~KDevPluginController()
 {
     unloadPlugins();
+}
+
+void KDevPluginController::init()
+{
+    loadPlugins( ProfileEngine::Core );
+    loadPlugins( ProfileEngine::Global );
+
+    KCmdLineArgs * args = KCmdLineArgs::parsedArgs();
+    if ( args->isSet( "project" ) )
+    {
+        QString project = QString::fromLocal8Bit( args->getOption( "project" ) );
+        KDevCore::projectController() ->openProject( KUrl( project ) );
+    }
+    else
+    {
+        KConfig * config = KDevConfig::standard();
+        config->setGroup( "General Options" );
+        QString project = config->readPathEntry( "Last Project" );
+        bool readProject = config->readEntry( "Read Last Project On Startup", true );
+
+        if ( !project.isEmpty() && readProject )
+        {
+            KDevCore::projectController() ->openProject( KUrl( project ) );
+        }
+    }
 }
 
 void KDevPluginController::cleanUp()

@@ -53,6 +53,8 @@ public:
     KDevPluginController();
     virtual ~KDevPluginController();
 
+    void init();
+
     /** Release all resources that depend on other KDevCore objects */
     void cleanUp();
 

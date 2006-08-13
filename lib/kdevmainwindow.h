@@ -125,6 +125,7 @@ public Q_SLOTS:
     /**Loads main window settings.*/
     virtual void loadSettings();
     virtual void saveSettings(); //FIXME Document
+    virtual void setVisible( bool visible );
 
 Q_SIGNALS:
     void finishedLoading();

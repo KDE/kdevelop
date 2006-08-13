@@ -332,17 +332,22 @@ void KDevMainWindow::loadSettings()
     KConfig * config = KDevConfig::standard();
 
     applyMainWindowSettings( config, QLatin1String( "KDevMainWindow" ) );
-
-    show(); //kind of crucial
-
-    emit finishedLoading();
 }
 
-void KDevMainWindow::saveSettings( )
+void KDevMainWindow::saveSettings()
 {
     KConfig * config = KDevConfig::standard();
 
     saveMainWindowSettings( config, QLatin1String( "KDevMainWindow" ) );
+}
+
+void KDevMainWindow::setVisible( bool visible )
+{
+    loadSettings();
+
+    KMainWindow::setVisible( visible );
+
+    emit finishedLoading();
 }
 
 void KDevMainWindow::gotoNextWindow()

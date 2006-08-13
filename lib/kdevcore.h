@@ -192,7 +192,7 @@ public:
      */
     static void setBackgroundParser( KDevBackgroundParser *backgroundParser );
 
-    static KDE_DEPRECATED void initialize();
+    static void initialize();
 };
 
 #endif

@@ -263,11 +263,9 @@ void KDevProjectController::legacyLoading()
     KConfig * config = KDevConfig::standard();
     config->setGroup( "General Options" );
 
-    KDevCore::pluginController() ->loadPlugins( ProfileEngine::Core );
-    KDevCore::pluginController() ->loadPlugins( ProfileEngine::Global );
-
     QString language = config->readPathEntry( "PrimaryLanguage", "C++" );
     KDevCore::languageController() ->languageSupport( language );
+
     QStringList paths = config->readPathListEntry( "OpenDocuments" );
 
     //kDebug() << "Open documents count = " << paths.count() << endl;
@@ -296,7 +294,9 @@ void KDevProjectController::legacyLoading()
 
     QString projectManagement =
         config->readPathEntry( "Project Management", "KDevProjectManager" );
+
     loadProjectPart( projectManagement );
+
     KDevCore::pluginController() ->loadPlugins( ProfileEngine::Project );
 }
 

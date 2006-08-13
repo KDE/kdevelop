@@ -213,10 +213,14 @@ void KDevCore::initialize()
     Q_ASSERT( d->projectController );
     Q_ASSERT( d->mainWindow );
     Q_ASSERT( d->backgroundParser );
+    Q_ASSERT( d->pluginController );
     d->documentController->init();
     d->projectController->init();
     d->mainWindow->init();
     d->backgroundParser->init();
+    d->pluginController->init();
+
+    d->mainWindow->setVisible( true ); //Done initializing
 }
 
 //FIXME
