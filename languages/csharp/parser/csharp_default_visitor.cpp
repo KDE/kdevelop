@@ -577,7 +577,7 @@ namespace csharp
   {
     visit_node(node->attributes);
     visit_node(node->member_name);
-    visit_node(node->constant_expression);
+    visit_node(node->value);
   }
 
   void default_visitor::visit_equality_expression(equality_expression_ast *node)
@@ -600,12 +600,16 @@ namespace csharp
     visit_node(node->expression);
   }
 
+  void default_visitor::visit_event_accessor_declaration(event_accessor_declaration_ast *node)
+  {
+    visit_node(node->attributes);
+    visit_node(node->body);
+  }
+
   void default_visitor::visit_event_accessor_declarations(event_accessor_declarations_ast *node)
   {
-    visit_node(node->accessor1_attributes);
-    visit_node(node->accessor1_body);
-    visit_node(node->accessor2_attributes);
-    visit_node(node->accessor2_body);
+    visit_node(node->add_accessor_declaration);
+    visit_node(node->remove_accessor_declaration);
   }
 
   void default_visitor::visit_event_declaration(event_declaration_ast *node)
@@ -705,10 +709,10 @@ namespace csharp
   void default_visitor::visit_formal_parameter(formal_parameter_ast *node)
   {
     visit_node(node->attributes);
-    visit_node(node->parameter_array);
+    visit_node(node->params_type);
+    visit_node(node->variable_name);
     visit_node(node->modifier);
     visit_node(node->type);
-    visit_node(node->variable_name);
   }
 
   void default_visitor::visit_formal_parameter_list(formal_parameter_list_ast *node)
@@ -1162,6 +1166,9 @@ namespace csharp
   void default_visitor::visit_optional_modifiers(optional_modifiers_ast *)
 {}
 
+  void default_visitor::visit_optional_parameter_modifier(optional_parameter_modifier_ast *)
+  {}
+
   void default_visitor::visit_optionally_nullable_type(optionally_nullable_type_ast *node)
   {
     visit_node(node->non_nullable_type);
@@ -1174,15 +1181,6 @@ namespace csharp
   {}
 
   void default_visitor::visit_overloadable_unary_or_binary_operator(overloadable_unary_or_binary_operator_ast *)
-  {}
-
-  void default_visitor::visit_parameter_array(parameter_array_ast *node)
-  {
-    visit_node(node->type);
-    visit_node(node->variable_name);
-  }
-
-  void default_visitor::visit_parameter_modifier(parameter_modifier_ast *)
   {}
 
   void default_visitor::visit_pointer_type(pointer_type_ast *node)
@@ -1321,7 +1319,7 @@ namespace csharp
                                                                         visit_node(node->regular_type);
                                                                       }
 
-                                                                      void default_visitor::visit_secondary_constraints(secondary_constraints_ast *node)
+                                                                      void default_visitor::visit_secondary_constraint(secondary_constraint_ast *node)
                                                                       {
                                                                         if (node->interface_type_or_type_parameter_sequence)
                                                                           {
@@ -1545,7 +1543,16 @@ namespace csharp
                                                                       void default_visitor::visit_type_parameter_constraints(type_parameter_constraints_ast *node)
                                                                       {
                                                                         visit_node(node->primary_or_secondary_constraint);
-                                                                        visit_node(node->secondary_constraints);
+                                                                        if (node->secondary_constraint_sequence)
+                                                                          {
+                                                                            const list_node<secondary_constraint_ast*> *__it = node->secondary_constraint_sequence->to_front(), *__end = __it;
+                                                                            do
+                                                                              {
+                                                                                visit_node(__it->element);
+                                                                                __it = __it->next;
+                                                                              }
+                                                                            while (__it != __end);
+                                                                          }
                                                                         visit_node(node->constructor_constraint);
                                                                       }
 
@@ -1645,10 +1652,20 @@ namespace csharp
                                                                         visit_node(node->body);
                                                                       }
 
-                                                                      void default_visitor::visit_using_directive(using_directive_ast *node)
+                                                                      void default_visitor::visit_using_alias_directive_data(using_alias_directive_data_ast *node)
                                                                       {
                                                                         visit_node(node->alias);
                                                                         visit_node(node->namespace_or_type_name);
+                                                                      }
+
+                                                                      void default_visitor::visit_using_directive(using_directive_ast *node)
+                                                                      {
+                                                                        visit_node(node->using_alias_directive);
+                                                                        visit_node(node->using_namespace_directive);
+                                                                      }
+
+                                                                      void default_visitor::visit_using_namespace_directive_data(using_namespace_directive_data_ast *node)
+                                                                      {
                                                                         visit_node(node->namespace_name);
                                                                       }
 

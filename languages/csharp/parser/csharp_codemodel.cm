@@ -1,0 +1,444 @@
+-- This file is part of KDevelop.
+-- Copyright (c) 2006 Jakob Petsovits <jpetso@gmx.at>
+--
+-- This grammar is free software; you can redistribute it and/or
+-- modify it under the terms of the GNU Library General Public
+-- License as published by the Free Software Foundation; either
+-- version 2 of the License, or (at your option) any later version.
+--
+-- This grammar is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-- Lesser General Public License for more details.
+--
+-- You should have received a copy of the GNU Library General Public License
+-- along with this library; see the file COPYING.LIB.  If not, write to
+-- the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+-- Boston, MA 02110-1301, USA.
+
+
+------------------------------------------------------------
+-- Code model for C#
+------------------------------------------------------------
+
+[:
+#include "csharp_ast.h"
+
+// #include "codedisplay.h"
+
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+:]
+
+
+CodeModel
+{
+  root = globalNamespace: GlobalNamespaceDeclaration;
+
+  constructor
+  [:
+    _M_globalNamespace = create<ITEM(GlobalNamespaceDeclaration)>();
+  :]
+
+  destructor
+  [:
+    // FIXME jpetso: don't we need "delete _M_globalNamespace;" here?
+  :]
+
+  -- TODO: provide findItem() method
+}
+
+TypeInfo
+{
+  qualifiedName: QStringList;
+
+  public declaration
+  [:
+    bool operator==(const TypeInfo &other);
+    bool operator!=(const TypeInfo &other) { return !(*this==other); }
+
+    // ### arrays and templates??
+
+    QString toString() const;
+  :]
+
+  implementation
+  [:
+    QString CLASS::toString() const
+    {
+      return qualifiedName().join(".");
+    }
+
+    bool CLASS::operator==(const CLASS &other)
+    {
+      return qualifiedName() == other.qualifiedName();
+    }
+  :]
+}
+
+Code
+{
+  name:     QString;
+  scope:    QStringList;
+  fileName: QString;
+
+  public declaration
+  [:
+    QStringList qualifiedName() const;
+
+    /*
+    // TODO: These methods should be cached upon initialization
+    QString display() const;
+    QIcon decoration() const;
+    QString toolTip() const;
+    QString whatsThis() const;
+    */
+  :]
+
+  implementation
+  [:
+    QStringList CLASS::qualifiedName() const
+    {
+      QStringList q = scope();
+
+      if (!name().isEmpty())
+        q += name();
+
+      return q;
+    }
+
+    /*
+    // TODO: These methods should be cached upon initialization
+    QString CLASS::display() const
+    {
+      return CodeDisplay::display( const_cast<const CLASS*>( this ) );
+    }
+    QIcon CLASS::decoration() const
+    {
+      return CodeDisplay::decoration( const_cast<const CLASS*>( this ) );
+    }
+    QString CLASS::toolTip() const
+    {
+      return CodeDisplay::toolTip( const_cast<const CLASS*>( this ) );
+    }
+    QString CLASS::whatsThis() const
+    {
+      return CodeDisplay::whatsThis( const_cast<const CLASS*>( this ) );
+    }
+    */
+  :]
+}
+
+Scope: Code
+{
+}
+
+NamespaceDeclaration: Scope
+{
+  #namespace:       NamespaceDeclaration { hashed(name) };
+  #externAlias:     ExternAliasDirective { hashed(name) };
+  #usingAlias:      UsingAliasDirective  { hashed(name) };
+  #usingNamespace:  UsingNamespaceDirective;
+
+  #class:           ClassDeclaration     { hashed(name) };
+  #struct:          StructDeclaration    { hashed(name) };
+  #interface:       InterfaceDeclaration { hashed(name) };
+  #enum:            EnumDeclaration      { hashed(name) };
+  #delegate:        DelegateDeclaration  { hashed(name) };
+}
+
+GlobalNamespaceDeclaration: NamespaceDeclaration
+{
+  constructor       [: setName(QString::null); :]
+  #globalAttribute: AttributeSection;
+}
+
+ExternAliasDirective: Code
+{
+}
+
+UsingAliasDirective: Code
+{
+  namespaceOrType:  TypeInfo;
+}
+
+UsingNamespaceDirective: Code
+{
+  constructor       [: setName(QString::null); :]
+  namespaceUsed:    QStringList; -- namespaces may not have type arguments
+}
+
+TypeDeclaration: Scope
+{
+  accessPolicy:     access_policy::access_policy_enum
+                         { init[: access_policy::access_private :] };
+  isNew:            bool { init[: false :] };
+}
+
+ClassLikeDeclaration: TypeDeclaration  -- a class, struct or interface type
+{
+  baseType:         TypeInfo;
+
+  #event:           EventDeclaration     { hashed(name) };
+  #indexer:         IndexerDeclaration;
+  #property:        PropertyDeclaration  { hashed(name) };
+  #method:          MethodDeclaration    { multihashed(name) };
+    -- { multihashed(name),
+    --   unique [: !existingItem->isSimilar( model_static_cast<ITEM(Code)>(item) ) :]
+    -- };
+  #typeParameter:   TypeParameter;
+  #typeParameterConstraint: TypeParameterConstraint;
+
+  isPartial:        bool { init[: false :] };
+  isUnsafe:         bool { init[: false :] };
+
+  -- only inside class or struct declarations, not interfaces:
+  #class:           ClassDeclaration     { hashed(name) };
+  #struct:          StructDeclaration    { hashed(name) };
+  #interface:       InterfaceDeclaration { hashed(name) };
+  #enum:            EnumDeclaration      { hashed(name) };
+  #delegate:        DelegateDeclaration  { hashed(name) };
+  #variable:        VariableDeclaration  { hashed(name) };
+
+  public declaration
+  [:
+    ITEM(MethodDeclaration) declaredMethod(ITEM(MethodDeclaration) item);
+  :]
+
+  implementation
+  [:
+    ITEM(MethodDeclaration) CLASS::declaredMethod(ITEM(MethodDeclaration) item)
+    {
+      LIST(MethodDeclaration) methodList = findMethods(item->name());
+
+      foreach (ITEM(MethodDeclaration) method, methodList)
+        {
+          if (method->isSimilar(model_static_cast<ITEM(Code)>(item),false))
+            return method;
+        }
+
+      return ITEM(MethodDeclaration)();
+    }
+ :]
+}
+
+ClassDeclaration: ClassLikeDeclaration
+{
+  isSealed:         bool { init[: false :] };
+  isAbstract:       bool { init[: false :] };
+  isStatic:         bool { init[: false :] };
+}
+
+StructDeclaration: ClassLikeDeclaration
+{
+}
+
+InterfaceDeclaration: ClassLikeDeclaration
+{
+}
+
+DelegateDeclaration: TypeDeclaration
+{
+  #attribute:       AttributeSection;
+  returnType:       TypeInfo;
+  #parameter:       Parameter;
+  #typeParameter:   TypeParameter;
+  #typeParameterConstraint: TypeParameterConstraint;
+
+  isUnsafe:         bool { init[: false :] };
+}
+
+EnumDeclaration: TypeDeclaration
+{
+  #enumValue:       EnumValue;
+  baseIntegralType: TypeInfo;
+}
+
+EnumValue: Code
+{
+  #attribute:       AttributeSection;
+  value:            QString;
+}
+
+EventDeclaration: Scope
+{
+  #attribute:       AttributeSection;
+  type:             TypeInfo;
+  fromInterface:    TypeInfo;
+  addAccessor:      EventAccessorDeclaration;
+  removeAccessor:   EventAccessorDeclaration;
+
+  accessPolicy:     access_policy::access_policy_enum
+                         { init[: access_policy::access_private :] };
+  isNew:            bool { init[: false :] };
+  isStatic:         bool { init[: false :] };
+  isVirtual:        bool { init[: false :] };
+  isSealed:         bool { init[: false :] };
+  isOverride:       bool { init[: false :] };
+  isAbstract:       bool { init[: false :] };
+  isExtern:         bool { init[: false :] };
+  isUnsafe:         bool { init[: false :] };
+}
+
+EventAccessorDeclaration: Code
+{
+  #attribute:       AttributeSection;
+}
+
+IndexerDeclaration: Scope
+{
+  constructor       [: setName(QString::null); :] -- indexers don't have names
+
+  #attribute:       AttributeSection;
+  type:             TypeInfo;
+  fromInterface:    TypeInfo;
+  #parameter:       Parameter;
+  #accessor:        AccessorDeclaration;
+
+  accessPolicy:     access_policy::access_policy_enum
+                         { init[: access_policy::access_private :] };
+  isNew:            bool { init[: false :] };
+  isVirtual:        bool { init[: false :] };
+  isSealed:         bool { init[: false :] };
+  isOverride:       bool { init[: false :] };
+  isAbstract:       bool { init[: false :] };
+  isExtern:         bool { init[: false :] };
+  isUnsafe:         bool { init[: false :] };
+}
+
+PropertyDeclaration: Scope
+{
+  #attribute:       AttributeSection;
+  type:             TypeInfo;
+  fromInterface:    TypeInfo;
+  #accessor:        AccessorDeclaration;
+
+  accessPolicy:     access_policy::access_policy_enum
+                         { init[: access_policy::access_private :] };
+  isNew:            bool { init[: false :] };
+  isStatic:         bool { init[: false :] };
+  isVirtual:        bool { init[: false :] };
+  isSealed:         bool { init[: false :] };
+  isOverride:       bool { init[: false :] };
+  isAbstract:       bool { init[: false :] };
+  isExtern:         bool { init[: false :] };
+  isUnsafe:         bool { init[: false :] };
+}
+
+AccessorDeclaration: Code
+{
+  #attribute:       AttributeSection;
+  type:             accessor_declarations::accessor_type_enum;
+  accessPolicy:     access_policy::access_policy_enum
+                         { init[: access_policy::access_private :] };
+  hasAccessPolicy:  bool { init[: false :] };
+}
+
+MethodDeclaration: Scope
+{
+  #attribute:       AttributeSection;
+  returnType:       TypeInfo;
+  fromInterface:    TypeInfo;
+  #typeParameter:   TypeParameter;
+  #typeParameterConstraint: TypeParameterConstraint;
+  #parameter:       Parameter;
+
+  isConstructor:    bool { init[: false :] };
+  isFinalizer:      bool { init[: false :] };
+
+  accessPolicy:     access_policy::access_policy_enum
+                         { init[: access_policy::access_private :] };
+  isNew:            bool { init[: false :] };
+  isStatic:         bool { init[: false :] };
+  isVirtual:        bool { init[: false :] };
+  isSealed:         bool { init[: false :] };
+  isOverride:       bool { init[: false :] };
+  isAbstract:       bool { init[: false :] };
+  isExtern:         bool { init[: false :] };
+  isUnsafe:         bool { init[: false :] };
+}
+
+VariableDeclaration: Code
+{
+  #attribute:       AttributeSection;
+  type:             TypeInfo;
+
+  accessPolicy:     access_policy::access_policy_enum
+                         { init[: access_policy::access_private :] };
+  isConstant:       bool { init[: false :] };
+  isNew:            bool { init[: false :] };
+  isStatic:         bool { init[: false :] };
+  isReadonly:       bool { init[: false :] };
+  isVolatile:       bool { init[: false :] };
+  isUnsafe:         bool { init[: false :] };
+}
+
+OperatorDeclaration: Scope
+{
+  constructor       [: setName(QString::null); :] -- operator declarations don't have names
+
+  #attribute:       AttributeSection;
+  sourceType:       TypeInfo;
+  sourceName:       QString;
+
+  isExtern:         bool { init[: false :] };
+  -- ...and the public and static modifiers are mandatory
+  isUnsafe:         bool { init[: false :] };
+}
+
+ConversionOperatorDeclaration: OperatorDeclaration
+{
+  targetType:       TypeInfo;
+  conversion:       conversion_operator_declaration::conversion_type_enum;
+}
+
+UnaryOperatorDeclaration: OperatorDeclaration
+{
+  returnType:       TypeInfo;
+  overloadedOperator: overloadable_operator::overloadable_operator_enum;
+}
+
+BinaryOperatorDeclaration: OperatorDeclaration
+{
+  returnType:       TypeInfo;
+  overloadedOperator: overloadable_operator::overloadable_operator_enum;
+
+  source2Type:      TypeInfo;
+  source2Name:      QString;
+}
+
+Parameter: Code
+{
+  #attribute:       AttributeSection;
+  type:             TypeInfo;
+  isArray:          bool { init[: false :] };
+  parameterType:    parameter::parameter_type_enum
+                         { init[: parameter::value_parameter :] };
+}
+
+TypeParameter: Code
+{
+  #attribute:       AttributeSection;
+}
+
+TypeParameterConstraint: Code
+{
+}
+
+PrimaryOrSecondaryConstraint: TypeParameterConstraint
+{
+  typeOrParameterName: TypeInfo;
+  constraint_type:  primary_or_secondary_constraint::primary_or_secondary_constraint_enum
+                      { init[: primary_or_secondary_constraint::type_type :] };
+}
+
+ConstructorConstraint: TypeParameterConstraint
+{
+}
+
+AttributeSection: Code
+{
+  constructor       [: setName(QString::null); :] -- attributes don't have names
+  target:           QString;
+  attribute:        QString;
+}

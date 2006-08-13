@@ -154,7 +154,7 @@ namespace csharp
 
       virtual void visit_accessor_modifier(accessor_modifier_ast *node)
       {
-        handle_variable(&node->modifiers);
+        handle_variable(&node->access_policy);
         default_visitor::visit_accessor_modifier(node);
       }
 
@@ -534,7 +534,7 @@ namespace csharp
       {
         handle_ast_node(node->attributes);
         handle_ast_node(node->modifiers);
-        handle_variable(&node->conversion_type);
+        handle_variable(&node->conversion);
         handle_ast_node(node->target_type);
         handle_ast_node(node->source_type);
         handle_ast_node(node->source_name);
@@ -619,7 +619,7 @@ namespace csharp
       {
         handle_ast_node(node->attributes);
         handle_ast_node(node->member_name);
-        handle_ast_node(node->constant_expression);
+        handle_ast_node(node->value);
         default_visitor::visit_enum_member_declaration(node);
       }
 
@@ -640,13 +640,17 @@ namespace csharp
         default_visitor::visit_equality_expression_rest(node);
       }
 
+      virtual void visit_event_accessor_declaration(event_accessor_declaration_ast *node)
+      {
+        handle_ast_node(node->attributes);
+        handle_ast_node(node->body);
+        default_visitor::visit_event_accessor_declaration(node);
+      }
+
       virtual void visit_event_accessor_declarations(event_accessor_declarations_ast *node)
       {
-        handle_variable(&node->order);
-        handle_ast_node(node->accessor1_attributes);
-        handle_ast_node(node->accessor1_body);
-        handle_ast_node(node->accessor2_attributes);
-        handle_ast_node(node->accessor2_body);
+        handle_ast_node(node->add_accessor_declaration);
+        handle_ast_node(node->remove_accessor_declaration);
         default_visitor::visit_event_accessor_declarations(node);
       }
 
@@ -742,10 +746,10 @@ namespace csharp
       virtual void visit_formal_parameter(formal_parameter_ast *node)
       {
         handle_ast_node(node->attributes);
-        handle_ast_node(node->parameter_array);
+        handle_ast_node(node->params_type);
+        handle_ast_node(node->variable_name);
         handle_ast_node(node->modifier);
         handle_ast_node(node->type);
-        handle_ast_node(node->variable_name);
         default_visitor::visit_formal_parameter(node);
       }
 
@@ -1158,7 +1162,14 @@ namespace csharp
       virtual void visit_optional_modifiers(optional_modifiers_ast *node)
       {
         handle_variable(&node->modifiers);
+        handle_variable(&node->access_policy);
         default_visitor::visit_optional_modifiers(node);
+      }
+
+      virtual void visit_optional_parameter_modifier(optional_parameter_modifier_ast *node)
+      {
+        handle_variable(&node->parameter_type);
+        default_visitor::visit_optional_parameter_modifier(node);
       }
 
       virtual void visit_optionally_nullable_type(optionally_nullable_type_ast *node)
@@ -1181,19 +1192,6 @@ namespace csharp
       virtual void visit_overloadable_unary_or_binary_operator(overloadable_unary_or_binary_operator_ast *node)
       {
         default_visitor::visit_overloadable_unary_or_binary_operator(node);
-      }
-
-      virtual void visit_parameter_array(parameter_array_ast *node)
-      {
-        handle_ast_node(node->type);
-        handle_ast_node(node->variable_name);
-        default_visitor::visit_parameter_array(node);
-      }
-
-      virtual void visit_parameter_modifier(parameter_modifier_ast *node)
-      {
-        handle_variable(&node->modifier);
-        default_visitor::visit_parameter_modifier(node);
       }
 
       virtual void visit_pointer_type(pointer_type_ast *node)
@@ -1328,13 +1326,13 @@ namespace csharp
                                                           default_visitor::visit_return_type(node);
                                                         }
 
-                                                        virtual void visit_secondary_constraints(secondary_constraints_ast *node)
+                                                        virtual void visit_secondary_constraint(secondary_constraint_ast *node)
                                                         {
                                                           {
                                                             type_name_ast *e = 0;
                                                             handle_list_node(node->interface_type_or_type_parameter_sequence, e);
                                                           }
-                                                          default_visitor::visit_secondary_constraints(node);
+                                                          default_visitor::visit_secondary_constraint(node);
                                                         }
 
                                                         virtual void visit_shift_expression(shift_expression_ast *node)
@@ -1530,7 +1528,10 @@ namespace csharp
                                                         virtual void visit_type_parameter_constraints(type_parameter_constraints_ast *node)
                                                         {
                                                           handle_ast_node(node->primary_or_secondary_constraint);
-                                                          handle_ast_node(node->secondary_constraints);
+                                                          {
+                                                            secondary_constraint_ast *e = 0;
+                                                            handle_list_node(node->secondary_constraint_sequence, e);
+                                                          }
                                                           handle_ast_node(node->constructor_constraint);
                                                           default_visitor::visit_type_parameter_constraints(node);
                                                         }
@@ -1630,12 +1631,24 @@ namespace csharp
                                                           default_visitor::visit_unsafe_statement(node);
                                                         }
 
-                                                        virtual void visit_using_directive(using_directive_ast *node)
+                                                        virtual void visit_using_alias_directive_data(using_alias_directive_data_ast *node)
                                                         {
                                                           handle_ast_node(node->alias);
                                                           handle_ast_node(node->namespace_or_type_name);
-                                                          handle_ast_node(node->namespace_name);
+                                                          default_visitor::visit_using_alias_directive_data(node);
+                                                        }
+
+                                                        virtual void visit_using_directive(using_directive_ast *node)
+                                                        {
+                                                          handle_ast_node(node->using_alias_directive);
+                                                          handle_ast_node(node->using_namespace_directive);
                                                           default_visitor::visit_using_directive(node);
+                                                        }
+
+                                                        virtual void visit_using_namespace_directive_data(using_namespace_directive_data_ast *node)
+                                                        {
+                                                          handle_ast_node(node->namespace_name);
+                                                          default_visitor::visit_using_namespace_directive_data(node);
                                                         }
 
                                                         virtual void visit_using_statement(using_statement_ast *node)

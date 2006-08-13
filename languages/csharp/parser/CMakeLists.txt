@@ -13,7 +13,8 @@ set(kdevcsharpparser_STAT_SRCS
 )
 
 
-# autogenerate the lexer and the two parsers (csharp and csharp_pp)
+# autogenerate the lexer, the two parsers (csharp and csharp_pp)
+# and the KDevelop codemodel
 
 FIND_PROGRAM(FLEX_EXECUTABLE
     NAMES flex
@@ -24,6 +25,12 @@ FIND_PROGRAM(KDEVPG_EXECUTABLE
     NAMES kdev-pg
     PATHS /usr/bin
     DOC "kdev-pg executable")
+
+FIND_PROGRAM(KDEVCMG_EXECUTABLE
+    NAMES kdev-cmg
+    PATHS /usr/bin
+    DOC "kdev-cmg executable")
+
 
 IF(KDEVPG_EXECUTABLE)
     # Add commands to generate the parsers.
@@ -90,7 +97,7 @@ IF(KDEVPG_EXECUTABLE)
         GENERATED
         )
 ELSE(KDEVPG_EXECUTABLE)
-    MESSAGE("Assuming existence of the generated parser files")
+    MESSAGE("--- Assuming existence of the generated csharp parser files")
     SET(kdevcsharpparser_STAT_SRCS
         "${CMAKE_CURRENT_SOURCE_DIR}/csharp_parser.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/csharp_visitor.cpp"
@@ -116,19 +123,50 @@ IF(FLEX_EXECUTABLE)
         )
 
     SET(kdevcsharpparser_STAT_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp
+        "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
         ${kdevcsharpparser_STAT_SRCS})
 
     SET_SOURCE_FILES_PROPERTIES(
-        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp
+        "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
         GENERATED
         )
 ELSE(FLEX_EXECUTABLE)
-    MESSAGE("Assuming existence of the generated lexer file csharp_lexer.cpp")
+    MESSAGE("--- Assuming existence of the generated lexer file csharp_lexer.cpp")
     SET(kdevcsharpparser_STAT_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp
+        "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
         ${kdevcsharpparser_STAT_SRCS})
 ENDIF(FLEX_EXECUTABLE)
+
+
+IF(KDEVCMG_EXECUTABLE)
+    # Add command to generate the code model
+    ADD_CUSTOM_COMMAND(
+        OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/csharp_codemodel.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/csharp_codemodel.cpp"
+                "${CMAKE_CURRENT_SOURCE_DIR}/csharp_codemodel_fwd.h"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/csharp_codemodel.cm"
+        COMMAND ${KDEVCMG_EXECUTABLE}
+        ARGS    --language=csharp
+                "csharp_codemodel.cm"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+
+    SET(kdevcsharpparser_STAT_SRCS
+        ${kdevcsharpparser_STAT_SRCS}
+        "${CMAKE_CURRENT_SOURCE_DIR}/csharp_codemodel.cpp")
+
+    SET_SOURCE_FILES_PROPERTIES(
+        "${CMAKE_CURRENT_SOURCE_DIR}/csharp_codemodel.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/csharp_codemodel.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/csharp_codemodel_fwd.h"
+        GENERATED
+        )
+ELSE(KDEVCMG_EXECUTABLE)
+    MESSAGE("--- Assuming existence of the generated csharp codemodel files")
+    SET(kdevcsharpparser_STAT_SRCS
+        ${kdevcsharpparser_STAT_SRCS}
+        "${CMAKE_CURRENT_SOURCE_DIR}/csharp_codemodel.cpp")
+ENDIF(KDEVCMG_EXECUTABLE)
 
 
 kde4_automoc(${kdevcsharpparser_STAT_SRCS})

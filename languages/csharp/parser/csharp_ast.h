@@ -73,6 +73,7 @@ namespace csharp
   struct enum_member_declaration_ast;
   struct equality_expression_ast;
   struct equality_expression_rest_ast;
+  struct event_accessor_declaration_ast;
   struct event_accessor_declarations_ast;
   struct event_declaration_ast;
   struct expression_ast;
@@ -133,12 +134,11 @@ namespace csharp
   struct optional_argument_list_ast;
   struct optional_attribute_sections_ast;
   struct optional_modifiers_ast;
+  struct optional_parameter_modifier_ast;
   struct optionally_nullable_type_ast;
   struct overloadable_binary_only_operator_ast;
   struct overloadable_unary_only_operator_ast;
   struct overloadable_unary_or_binary_operator_ast;
-  struct parameter_array_ast;
-  struct parameter_modifier_ast;
   struct pointer_type_ast;
   struct positional_argument_ast;
   struct predefined_type_ast;
@@ -154,7 +154,7 @@ namespace csharp
   struct resource_acquisition_ast;
   struct return_statement_ast;
   struct return_type_ast;
-  struct secondary_constraints_ast;
+  struct secondary_constraint_ast;
   struct shift_expression_ast;
   struct shift_expression_rest_ast;
   struct simple_name_or_member_access_ast;
@@ -191,7 +191,9 @@ namespace csharp
   struct unmanaged_type_ast;
   struct unmanaged_type_suffix_ast;
   struct unsafe_statement_ast;
+  struct using_alias_directive_data_ast;
   struct using_directive_ast;
+  struct using_namespace_directive_data_ast;
   struct using_statement_ast;
   struct variable_declaration_data_ast;
   struct variable_declarator_ast;
@@ -199,9 +201,20 @@ namespace csharp
   struct while_statement_ast;
   struct yield_statement_ast;
 
+  namespace access_policy
+    {
+    enum access_policy_enum {
+      access_private = 0, // default value: memory pool initializes everything with zeros
+      access_protected,
+      access_protected_internal,
+      access_internal,
+      access_public,
+    };
+  }
+
   namespace accessor_declarations
     {
-    enum accessor_declarations_enum {
+    enum accessor_type_enum {
       type_get,
       type_set,
       type_none, // only possible for the second, optional accessor
@@ -262,14 +275,6 @@ namespace csharp
     enum equality_operator_enum {
       op_equal,
       op_not_equal,
-    };
-  }
-
-  namespace event_accessor_declarations
-    {
-    enum event_accessor_declarations_enum {
-      order_add_remove,
-      order_remove_add,
     };
   }
 
@@ -340,20 +345,16 @@ namespace csharp
     {
     enum modifier_enum {
       mod_new          = 1,
-      mod_public       = 1 << 1,
-      mod_protected    = 1 << 2,
-      mod_internal     = 1 << 3,
-      mod_private      = 1 << 4,
-      mod_abstract     = 1 << 5,
-      mod_sealed       = 1 << 6,
-      mod_static       = 1 << 7,
-      mod_readonly     = 1 << 8,
-      mod_volatile     = 1 << 9,
-      mod_virtual      = 1 << 10,
-      mod_override     = 1 << 11,
-      mod_extern       = 1 << 12,
-      mod_unsafe       = 1 << 13,
-      mod_fixed        = 1 << 14,
+      mod_abstract     = 1 << 1,
+      mod_sealed       = 1 << 2,
+      mod_static       = 1 << 3,
+      mod_readonly     = 1 << 4,
+      mod_volatile     = 1 << 5,
+      mod_virtual      = 1 << 6,
+      mod_override     = 1 << 7,
+      mod_extern       = 1 << 8,
+      mod_unsafe       = 1 << 9,
+      mod_fixed        = 1 << 10,
     };
   }
 
@@ -412,11 +413,12 @@ namespace csharp
     };
   }
 
-  namespace parameter_modifier
+  namespace parameter
     {
-    enum parameter_modifier_enum {
-      mod_ref,
-      mod_out,
+    enum parameter_type_enum {
+      value_parameter,
+      reference_parameter,
+      output_parameter,
     };
   }
 
@@ -630,72 +632,72 @@ namespace csharp
                         Kind_enum_member_declaration = 1050,
                         Kind_equality_expression = 1051,
                         Kind_equality_expression_rest = 1052,
-                        Kind_event_accessor_declarations = 1053,
-                        Kind_event_declaration = 1054,
-                        Kind_expression = 1055,
-                        Kind_extern_alias_directive = 1056,
-                        Kind_finalizer_declaration = 1057,
-                        Kind_fixed_pointer_declarator = 1058,
-                        Kind_fixed_statement = 1059,
-                        Kind_floating_point_type = 1060,
-                        Kind_for_control = 1061,
-                        Kind_for_statement = 1062,
-                        Kind_foreach_statement = 1063,
-                        Kind_formal_parameter = 1064,
-                        Kind_formal_parameter_list = 1065,
-                        Kind_general_catch_clause = 1066,
-                        Kind_generic_dimension_specifier = 1067,
-                        Kind_global_attribute_section = 1068,
-                        Kind_goto_statement = 1069,
-                        Kind_identifier = 1070,
-                        Kind_if_statement = 1071,
-                        Kind_indexer_declaration = 1072,
-                        Kind_integral_type = 1073,
-                        Kind_interface_accessors = 1074,
-                        Kind_interface_base = 1075,
-                        Kind_interface_body = 1076,
-                        Kind_interface_declaration = 1077,
-                        Kind_interface_event_declaration = 1078,
-                        Kind_interface_indexer_declaration = 1079,
-                        Kind_interface_member_declaration = 1080,
-                        Kind_interface_method_declaration = 1081,
-                        Kind_interface_property_declaration = 1082,
-                        Kind_keyword = 1083,
-                        Kind_labeled_statement = 1084,
-                        Kind_literal = 1085,
-                        Kind_local_constant_declaration = 1086,
-                        Kind_local_variable_declaration = 1087,
-                        Kind_local_variable_declaration_statement = 1088,
-                        Kind_lock_statement = 1089,
-                        Kind_logical_and_expression = 1090,
-                        Kind_logical_or_expression = 1091,
-                        Kind_managed_type = 1092,
-                        Kind_method_declaration = 1093,
-                        Kind_multiplicative_expression = 1094,
-                        Kind_multiplicative_expression_rest = 1095,
-                        Kind_named_argument = 1096,
-                        Kind_namespace_body = 1097,
-                        Kind_namespace_declaration = 1098,
-                        Kind_namespace_member_declaration = 1099,
-                        Kind_namespace_name = 1100,
-                        Kind_namespace_or_type_name = 1101,
-                        Kind_namespace_or_type_name_part = 1102,
-                        Kind_namespace_or_type_name_safe = 1103,
-                        Kind_new_expression = 1104,
-                        Kind_non_array_type = 1105,
-                        Kind_non_nullable_type = 1106,
-                        Kind_null_coalescing_expression = 1107,
-                        Kind_numeric_type = 1108,
-                        Kind_object_or_delegate_creation_expression_rest = 1109,
-                        Kind_optional_argument_list = 1110,
-                        Kind_optional_attribute_sections = 1111,
-                        Kind_optional_modifiers = 1112,
-                        Kind_optionally_nullable_type = 1113,
-                        Kind_overloadable_binary_only_operator = 1114,
-                        Kind_overloadable_unary_only_operator = 1115,
-                        Kind_overloadable_unary_or_binary_operator = 1116,
-                        Kind_parameter_array = 1117,
-                        Kind_parameter_modifier = 1118,
+                        Kind_event_accessor_declaration = 1053,
+                        Kind_event_accessor_declarations = 1054,
+                        Kind_event_declaration = 1055,
+                        Kind_expression = 1056,
+                        Kind_extern_alias_directive = 1057,
+                        Kind_finalizer_declaration = 1058,
+                        Kind_fixed_pointer_declarator = 1059,
+                        Kind_fixed_statement = 1060,
+                        Kind_floating_point_type = 1061,
+                        Kind_for_control = 1062,
+                        Kind_for_statement = 1063,
+                        Kind_foreach_statement = 1064,
+                        Kind_formal_parameter = 1065,
+                        Kind_formal_parameter_list = 1066,
+                        Kind_general_catch_clause = 1067,
+                        Kind_generic_dimension_specifier = 1068,
+                        Kind_global_attribute_section = 1069,
+                        Kind_goto_statement = 1070,
+                        Kind_identifier = 1071,
+                        Kind_if_statement = 1072,
+                        Kind_indexer_declaration = 1073,
+                        Kind_integral_type = 1074,
+                        Kind_interface_accessors = 1075,
+                        Kind_interface_base = 1076,
+                        Kind_interface_body = 1077,
+                        Kind_interface_declaration = 1078,
+                        Kind_interface_event_declaration = 1079,
+                        Kind_interface_indexer_declaration = 1080,
+                        Kind_interface_member_declaration = 1081,
+                        Kind_interface_method_declaration = 1082,
+                        Kind_interface_property_declaration = 1083,
+                        Kind_keyword = 1084,
+                        Kind_labeled_statement = 1085,
+                        Kind_literal = 1086,
+                        Kind_local_constant_declaration = 1087,
+                        Kind_local_variable_declaration = 1088,
+                        Kind_local_variable_declaration_statement = 1089,
+                        Kind_lock_statement = 1090,
+                        Kind_logical_and_expression = 1091,
+                        Kind_logical_or_expression = 1092,
+                        Kind_managed_type = 1093,
+                        Kind_method_declaration = 1094,
+                        Kind_multiplicative_expression = 1095,
+                        Kind_multiplicative_expression_rest = 1096,
+                        Kind_named_argument = 1097,
+                        Kind_namespace_body = 1098,
+                        Kind_namespace_declaration = 1099,
+                        Kind_namespace_member_declaration = 1100,
+                        Kind_namespace_name = 1101,
+                        Kind_namespace_or_type_name = 1102,
+                        Kind_namespace_or_type_name_part = 1103,
+                        Kind_namespace_or_type_name_safe = 1104,
+                        Kind_new_expression = 1105,
+                        Kind_non_array_type = 1106,
+                        Kind_non_nullable_type = 1107,
+                        Kind_null_coalescing_expression = 1108,
+                        Kind_numeric_type = 1109,
+                        Kind_object_or_delegate_creation_expression_rest = 1110,
+                        Kind_optional_argument_list = 1111,
+                        Kind_optional_attribute_sections = 1112,
+                        Kind_optional_modifiers = 1113,
+                        Kind_optional_parameter_modifier = 1114,
+                        Kind_optionally_nullable_type = 1115,
+                        Kind_overloadable_binary_only_operator = 1116,
+                        Kind_overloadable_unary_only_operator = 1117,
+                        Kind_overloadable_unary_or_binary_operator = 1118,
                         Kind_pointer_type = 1119,
                         Kind_positional_argument = 1120,
                         Kind_predefined_type = 1121,
@@ -711,7 +713,7 @@ namespace csharp
                         Kind_resource_acquisition = 1131,
                         Kind_return_statement = 1132,
                         Kind_return_type = 1133,
-                        Kind_secondary_constraints = 1134,
+                        Kind_secondary_constraint = 1134,
                         Kind_shift_expression = 1135,
                         Kind_shift_expression_rest = 1136,
                         Kind_simple_name_or_member_access = 1137,
@@ -748,13 +750,15 @@ namespace csharp
                         Kind_unmanaged_type = 1168,
                         Kind_unmanaged_type_suffix = 1169,
                         Kind_unsafe_statement = 1170,
-                        Kind_using_directive = 1171,
-                        Kind_using_statement = 1172,
-                        Kind_variable_declaration_data = 1173,
-                        Kind_variable_declarator = 1174,
-                        Kind_variable_initializer = 1175,
-                        Kind_while_statement = 1176,
-                        Kind_yield_statement = 1177,
+                        Kind_using_alias_directive_data = 1171,
+                        Kind_using_directive = 1172,
+                        Kind_using_namespace_directive_data = 1173,
+                        Kind_using_statement = 1174,
+                        Kind_variable_declaration_data = 1175,
+                        Kind_variable_declarator = 1176,
+                        Kind_variable_initializer = 1177,
+                        Kind_while_statement = 1178,
+                        Kind_yield_statement = 1179,
                         AST_NODE_KIND_COUNT
                       };
 
@@ -770,8 +774,8 @@ namespace csharp
         KIND = Kind_accessor_declarations
       };
 
-      accessor_declarations::accessor_declarations_enum accessor1_type;
-      accessor_declarations::accessor_declarations_enum accessor2_type;
+      accessor_declarations::accessor_type_enum accessor1_type;
+      accessor_declarations::accessor_type_enum accessor2_type;
       optional_attribute_sections_ast *accessor1_attributes;
       accessor_modifier_ast *accessor1_modifier;
       block_ast *accessor1_body;
@@ -787,7 +791,7 @@ namespace csharp
         KIND = Kind_accessor_modifier
       };
 
-      unsigned int modifiers;
+      access_policy::access_policy_enum access_policy;
     };
 
   struct additive_expression_ast: public ast_node
@@ -830,7 +834,7 @@ namespace csharp
         KIND = Kind_anonymous_method_parameter
       };
 
-      parameter_modifier_ast *modifier;
+      optional_parameter_modifier_ast *modifier;
       type_ast *type;
       identifier_ast *variable_name;
     };
@@ -1263,7 +1267,7 @@ namespace csharp
 
       optional_attribute_sections_ast *attributes;
       optional_modifiers_ast *modifiers;
-      conversion_operator_declaration::conversion_type_enum conversion_type;
+      conversion_operator_declaration::conversion_type_enum conversion;
       type_ast *target_type;
       type_ast *source_type;
       identifier_ast *source_name;
@@ -1370,7 +1374,7 @@ namespace csharp
 
       optional_attribute_sections_ast *attributes;
       identifier_ast *member_name;
-      constant_expression_ast *constant_expression;
+      constant_expression_ast *value;
     };
 
   struct equality_expression_ast: public ast_node
@@ -1395,6 +1399,17 @@ namespace csharp
       relational_expression_ast *expression;
     };
 
+  struct event_accessor_declaration_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_event_accessor_declaration
+      };
+
+      optional_attribute_sections_ast *attributes;
+      block_ast *body;
+    };
+
   struct event_accessor_declarations_ast: public ast_node
     {
       enum
@@ -1402,11 +1417,8 @@ namespace csharp
         KIND = Kind_event_accessor_declarations
       };
 
-      event_accessor_declarations::event_accessor_declarations_enum order;
-      optional_attribute_sections_ast *accessor1_attributes;
-      block_ast *accessor1_body;
-      optional_attribute_sections_ast *accessor2_attributes;
-      block_ast *accessor2_body;
+      event_accessor_declaration_ast *add_accessor_declaration;
+      event_accessor_declaration_ast *remove_accessor_declaration;
     };
 
   struct event_declaration_ast: public ast_node
@@ -1537,10 +1549,10 @@ namespace csharp
       };
 
       optional_attribute_sections_ast *attributes;
-      parameter_array_ast *parameter_array;
-      parameter_modifier_ast *modifier;
-      type_ast *type;
+      array_type_ast *params_type;
       identifier_ast *variable_name;
+      optional_parameter_modifier_ast *modifier;
+      type_ast *type;
     };
 
   struct formal_parameter_list_ast: public ast_node
@@ -1649,8 +1661,8 @@ namespace csharp
         KIND = Kind_interface_accessors
       };
 
-      accessor_declarations::accessor_declarations_enum accessor1_type;
-      accessor_declarations::accessor_declarations_enum accessor2_type;
+      accessor_declarations::accessor_type_enum accessor1_type;
+      accessor_declarations::accessor_type_enum accessor2_type;
       optional_attribute_sections_ast *accessor1_attributes;
       optional_attribute_sections_ast *accessor2_attributes;
     };
@@ -2088,6 +2100,17 @@ namespace csharp
       };
 
       unsigned int modifiers;
+      access_policy::access_policy_enum access_policy;
+    };
+
+  struct optional_parameter_modifier_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_optional_parameter_modifier
+      };
+
+      parameter::parameter_type_enum parameter_type;
     };
 
   struct optionally_nullable_type_ast: public ast_node
@@ -2126,27 +2149,6 @@ namespace csharp
         KIND = Kind_overloadable_unary_or_binary_operator
       };
 
-    };
-
-  struct parameter_array_ast: public ast_node
-    {
-      enum
-      {
-        KIND = Kind_parameter_array
-      };
-
-      array_type_ast *type;
-      identifier_ast *variable_name;
-    };
-
-  struct parameter_modifier_ast: public ast_node
-    {
-      enum
-      {
-        KIND = Kind_parameter_modifier
-      };
-
-      parameter_modifier::parameter_modifier_enum modifier;
     };
 
   struct pointer_type_ast: public ast_node
@@ -2326,11 +2328,11 @@ namespace csharp
                    type_ast *regular_type;
                  };
 
-  struct secondary_constraints_ast: public ast_node
+  struct secondary_constraint_ast: public ast_node
     {
       enum
       {
-        KIND = Kind_secondary_constraints
+        KIND = Kind_secondary_constraint
       };
 
       const list_node<type_name_ast *> *interface_type_or_type_parameter_sequence;
@@ -2606,7 +2608,7 @@ namespace csharp
       };
 
       primary_or_secondary_constraint_ast *primary_or_secondary_constraint;
-      secondary_constraints_ast *secondary_constraints;
+      const list_node<secondary_constraint_ast *> *secondary_constraint_sequence;
       constructor_constraint_ast *constructor_constraint;
     };
 
@@ -2740,6 +2742,17 @@ namespace csharp
       block_ast *body;
     };
 
+  struct using_alias_directive_data_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_using_alias_directive_data
+      };
+
+      identifier_ast *alias;
+      namespace_or_type_name_ast *namespace_or_type_name;
+    };
+
   struct using_directive_ast: public ast_node
     {
       enum
@@ -2747,9 +2760,18 @@ namespace csharp
         KIND = Kind_using_directive
       };
 
-      identifier_ast *alias;
-      namespace_or_type_name_ast *namespace_or_type_name;
-      namespace_or_type_name_ast *namespace_name;
+      using_alias_directive_data_ast *using_alias_directive;
+      using_namespace_directive_data_ast *using_namespace_directive;
+    };
+
+  struct using_namespace_directive_data_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_using_namespace_directive_data
+      };
+
+      namespace_name_ast *namespace_name;
     };
 
   struct using_statement_ast: public ast_node

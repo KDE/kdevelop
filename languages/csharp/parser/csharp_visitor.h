@@ -128,6 +128,8 @@ namespace csharp
       {}
       virtual void visit_equality_expression_rest(equality_expression_rest_ast *)
       {}
+      virtual void visit_event_accessor_declaration(event_accessor_declaration_ast *)
+      {}
       virtual void visit_event_accessor_declarations(event_accessor_declarations_ast *)
       {}
       virtual void visit_event_declaration(event_declaration_ast *)
@@ -248,6 +250,8 @@ namespace csharp
       {}
       virtual void visit_optional_modifiers(optional_modifiers_ast *)
       {}
+      virtual void visit_optional_parameter_modifier(optional_parameter_modifier_ast *)
+      {}
       virtual void visit_optionally_nullable_type(optionally_nullable_type_ast *)
       {}
       virtual void visit_overloadable_binary_only_operator(overloadable_binary_only_operator_ast *)
@@ -255,10 +259,6 @@ namespace csharp
       virtual void visit_overloadable_unary_only_operator(overloadable_unary_only_operator_ast *)
       {}
       virtual void visit_overloadable_unary_or_binary_operator(overloadable_unary_or_binary_operator_ast *)
-      {}
-      virtual void visit_parameter_array(parameter_array_ast *)
-      {}
-      virtual void visit_parameter_modifier(parameter_modifier_ast *)
       {}
       virtual void visit_pointer_type(pointer_type_ast *)
       {}
@@ -290,7 +290,7 @@ namespace csharp
                                {}
                                virtual void visit_return_type(return_type_ast *)
                                                         {}
-                                                        virtual void visit_secondary_constraints(secondary_constraints_ast *)
+                                                        virtual void visit_secondary_constraint(secondary_constraint_ast *)
                                                         {}
                                                         virtual void visit_shift_expression(shift_expression_ast *)
                                                         {}
@@ -364,7 +364,11 @@ namespace csharp
                                                         {}
                                                         virtual void visit_unsafe_statement(unsafe_statement_ast *)
                                                         {}
+                                                        virtual void visit_using_alias_directive_data(using_alias_directive_data_ast *)
+                                                        {}
                                                         virtual void visit_using_directive(using_directive_ast *)
+                                                        {}
+                                                        virtual void visit_using_namespace_directive_data(using_namespace_directive_data_ast *)
                                                         {}
                                                         virtual void visit_using_statement(using_statement_ast *)
                                                         {}

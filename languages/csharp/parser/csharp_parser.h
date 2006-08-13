@@ -368,6 +368,7 @@ namespace csharp
       bool parse_enum_member_declaration(enum_member_declaration_ast **yynode);
       bool parse_equality_expression(equality_expression_ast **yynode);
       bool parse_equality_expression_rest(equality_expression_rest_ast **yynode);
+      bool parse_event_accessor_declaration(event_accessor_declaration_ast **yynode, optional_attribute_sections_ast *attributes, block_ast *body);
       bool parse_event_accessor_declarations(event_accessor_declarations_ast **yynode);
       bool parse_event_declaration(event_declaration_ast **yynode, optional_attribute_sections_ast *attributes, optional_modifiers_ast *modifiers);
       bool parse_expression(expression_ast **yynode);
@@ -428,12 +429,11 @@ namespace csharp
       bool parse_optional_argument_list(optional_argument_list_ast **yynode);
       bool parse_optional_attribute_sections(optional_attribute_sections_ast **yynode);
       bool parse_optional_modifiers(optional_modifiers_ast **yynode);
+      bool parse_optional_parameter_modifier(optional_parameter_modifier_ast **yynode);
       bool parse_optionally_nullable_type(optionally_nullable_type_ast **yynode);
       bool parse_overloadable_binary_only_operator(overloadable_binary_only_operator_ast **yynode, overloadable_operator::overloadable_operator_enum* op);
       bool parse_overloadable_unary_only_operator(overloadable_unary_only_operator_ast **yynode, overloadable_operator::overloadable_operator_enum* op);
       bool parse_overloadable_unary_or_binary_operator(overloadable_unary_or_binary_operator_ast **yynode, overloadable_operator::overloadable_operator_enum* op);
-      bool parse_parameter_array(parameter_array_ast **yynode);
-      bool parse_parameter_modifier(parameter_modifier_ast **yynode);
       bool parse_pointer_type(pointer_type_ast **yynode);
       bool parse_positional_argument(positional_argument_ast **yynode);
       bool parse_predefined_type(predefined_type_ast **yynode);
@@ -449,7 +449,7 @@ namespace csharp
       bool parse_resource_acquisition(resource_acquisition_ast **yynode);
       bool parse_return_statement(return_statement_ast **yynode);
       bool parse_return_type(return_type_ast **yynode);
-      bool parse_secondary_constraints(secondary_constraints_ast **yynode);
+      bool parse_secondary_constraint(secondary_constraint_ast **yynode);
       bool parse_shift_expression(shift_expression_ast **yynode);
       bool parse_shift_expression_rest(shift_expression_rest_ast **yynode);
       bool parse_simple_name_or_member_access(simple_name_or_member_access_ast **yynode);
@@ -486,7 +486,9 @@ namespace csharp
       bool parse_unmanaged_type(unmanaged_type_ast **yynode);
       bool parse_unmanaged_type_suffix(unmanaged_type_suffix_ast **yynode);
       bool parse_unsafe_statement(unsafe_statement_ast **yynode);
+      bool parse_using_alias_directive_data(using_alias_directive_data_ast **yynode, identifier_ast *alias, namespace_or_type_name_ast *namespace_or_type_name);
       bool parse_using_directive(using_directive_ast **yynode);
+      bool parse_using_namespace_directive_data(using_namespace_directive_data_ast **yynode, namespace_name_ast *namespace_name);
       bool parse_using_statement(using_statement_ast **yynode);
       bool parse_variable_declaration_data(variable_declaration_data_ast **yynode, optional_attribute_sections_ast *attributes, optional_modifiers_ast *modifiers, type_ast *type, const list_node<variable_declarator_ast *> *variable_declarator_sequence);
       bool parse_variable_declarator(variable_declarator_ast **yynode, bool fixed_size_buffer);

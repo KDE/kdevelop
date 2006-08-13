@@ -246,24 +246,31 @@ namespace csharp_pp
 -- Enumeration types for additional AST members
 ------------------------------------------------------------
 
+%namespace access_policy
+[:
+  enum access_policy_enum {
+    access_private = 0, // default value: memory pool initializes everything with zeros
+    access_protected,
+    access_protected_internal,
+    access_internal,
+    access_public,
+  };
+:]
+
 %namespace modifiers
 [:
   enum modifier_enum {
     mod_new          = 1,
-    mod_public       = 1 << 1,
-    mod_protected    = 1 << 2,
-    mod_internal     = 1 << 3,
-    mod_private      = 1 << 4,
-    mod_abstract     = 1 << 5,
-    mod_sealed       = 1 << 6,
-    mod_static       = 1 << 7,
-    mod_readonly     = 1 << 8,
-    mod_volatile     = 1 << 9,
-    mod_virtual      = 1 << 10,
-    mod_override     = 1 << 11,
-    mod_extern       = 1 << 12,
-    mod_unsafe       = 1 << 13,
-    mod_fixed        = 1 << 14,
+    mod_abstract     = 1 << 1,
+    mod_sealed       = 1 << 2,
+    mod_static       = 1 << 3,
+    mod_readonly     = 1 << 4,
+    mod_volatile     = 1 << 5,
+    mod_virtual      = 1 << 6,
+    mod_override     = 1 << 7,
+    mod_extern       = 1 << 8,
+    mod_unsafe       = 1 << 9,
+    mod_fixed        = 1 << 10,
   };
 :]
 
@@ -322,18 +329,10 @@ namespace csharp_pp
 
 %namespace accessor_declarations
 [:
-  enum accessor_declarations_enum {
+  enum accessor_type_enum {
     type_get,
     type_set,
     type_none, // only possible for the second, optional accessor
-  };
-:]
-
-%namespace event_accessor_declarations
-[:
-  enum event_accessor_declarations_enum {
-    order_add_remove,
-    order_remove_add,
   };
 :]
 
@@ -599,11 +598,12 @@ namespace csharp_pp
   };
 :]
 
-%namespace parameter_modifier
+%namespace parameter
 [:
-  enum parameter_modifier_enum {
-    mod_ref,
-    mod_out,
+  enum parameter_type_enum {
+    value_parameter,
+    reference_parameter,
+    output_parameter,
   };
 :]
 
@@ -707,13 +707,26 @@ namespace csharp_pp
 -> extern_alias_directive ;;
 
    USING
-   (  ?[: LA(2).kind == Token_ASSIGN :]      -- "using alias" directive
-      alias=identifier ASSIGN namespace_or_type_name=namespace_or_type_name
+   (  ?[: LA(2).kind == Token_ASSIGN :]  -- "using alias" directive
+      alias:identifier ASSIGN namespace_or_type_name:namespace_or_type_name
+      using_alias_directive=using_alias_directive_data[alias, namespace_or_type_name]
     |
-      namespace_name=namespace_or_type_name  -- "using namespace" directive
+      namespace_name:namespace_name      -- "using namespace" directive
+      using_namespace_directive=using_namespace_directive_data[namespace_name]
    )
    SEMICOLON
 -> using_directive ;;
+
+   0
+-> using_alias_directive_data [
+     argument member node alias:                  identifier;
+     argument member node namespace_or_type_name: namespace_or_type_name;
+] ;;
+
+   0
+-> using_namespace_directive_data [
+     argument member node namespace_name: namespace_name;
+] ;;
 
 
 
@@ -800,7 +813,10 @@ namespace csharp_pp
 -> namespace_declaration ;;
 
    LBRACE
-   try/recover(#extern_alias=extern_alias_directive)*  -- TODO: probably not in C# 1.0
+   (  ?[: compatibility_mode() >= csharp20_compatibility :]
+      try/recover(#extern_alias=extern_alias_directive)+
+    | 0
+   )
    try/recover(#using=using_directive)*
    try/recover(#namespace=namespace_member_declaration)*
    RBRACE
@@ -986,7 +1002,7 @@ namespace csharp_pp
 
    attributes=optional_attribute_sections
    member_name=identifier
-   (ASSIGN constant_expression=constant_expression | 0)
+   (ASSIGN value=constant_expression | 0)
 -> enum_member_declaration ;;
 
 
@@ -1162,20 +1178,34 @@ namespace csharp_pp
 
 -- EVENT ACCESSOR DECLARATIONS appear inside an event declaration.
 
-   accessor1_attributes=optional_attribute_sections
+   accessor1_attributes:optional_attribute_sections
    (
-      ADD accessor1_body=block
-      accessor2_attributes=optional_attribute_sections
-      REMOVE accessor2_body=block
-      [: (*yynode)->order = event_accessor_declarations::order_add_remove; :]
+      ADD accessor1_body:block
+      add_accessor_declaration=event_accessor_declaration[
+        accessor1_attributes, accessor1_body
+      ]
+      accessor2_attributes:optional_attribute_sections
+      REMOVE accessor2_body:block
+      remove_accessor_declaration=event_accessor_declaration[
+        accessor2_attributes, accessor2_body
+      ]
     |
-      REMOVE accessor1_body=block
-      accessor2_attributes=optional_attribute_sections
-      ADD accessor2_body=block
-      [: (*yynode)->order = event_accessor_declarations::order_remove_add; :]
+      REMOVE accessor1_body:block
+      remove_accessor_declaration=event_accessor_declaration[
+        accessor1_attributes, accessor1_body
+      ]
+      accessor2_attributes:optional_attribute_sections
+      ADD accessor2_body:block
+      add_accessor_declaration=event_accessor_declaration[
+        accessor2_attributes, accessor2_body
+      ]
    )
--> event_accessor_declarations [
-     member variable order: event_accessor_declarations::event_accessor_declarations_enum;
+-> event_accessor_declarations ;;
+
+   0
+-> event_accessor_declaration [
+     argument member node attributes: optional_attribute_sections;
+     argument member node body:       block;
 ] ;;
 
 
@@ -1183,8 +1213,8 @@ namespace csharp_pp
 -- The different forms of the OPERATOR DECLARATION which overloads operators:
 -- conversion, unary and binary operator declarations.
 
-   (  IMPLICIT [: (*yynode)->conversion_type = conversion_operator_declaration::conversion_implicit; :]
-    | EXPLICIT [: (*yynode)->conversion_type = conversion_operator_declaration::conversion_explicit; :]
+   (  IMPLICIT [: (*yynode)->conversion = conversion_operator_declaration::conversion_implicit; :]
+    | EXPLICIT [: (*yynode)->conversion = conversion_operator_declaration::conversion_explicit; :]
    )
    OPERATOR target_type=type
    LPAREN source_type=type source_name=identifier RPAREN
@@ -1192,7 +1222,7 @@ namespace csharp_pp
 -> conversion_operator_declaration [
      argument member node attributes: optional_attribute_sections;
      argument member node modifiers:  optional_modifiers;
-     member variable conversion_type: conversion_operator_declaration::conversion_type_enum;
+     member variable conversion:      conversion_operator_declaration::conversion_type_enum;
 ] ;;
 
    OPERATOR
@@ -1298,7 +1328,7 @@ namespace csharp_pp
    (accessor1_modifier=accessor_modifier | 0)
    (
       GET (accessor1_body=block | SEMICOLON)
-        [: (*yynode)->accessor1_type = accessor_declarations::type_get; :]
+        [: (*yynode)->accessor1_type = accessor_declarations::type_get;     :]
       (
          accessor2_attributes=optional_attribute_sections
          (accessor2_modifier=accessor_modifier | 0)
@@ -1308,7 +1338,7 @@ namespace csharp_pp
       )
     |
       SET (accessor1_body=block | SEMICOLON)
-        [: (*yynode)->accessor1_type = accessor_declarations::type_set; :]
+        [: (*yynode)->accessor1_type = accessor_declarations::type_set;     :]
       (
          accessor2_attributes=optional_attribute_sections
          (accessor2_modifier=accessor_modifier | 0)
@@ -1318,21 +1348,23 @@ namespace csharp_pp
       )
    )
 -> accessor_declarations [
-     member variable accessor1_type: accessor_declarations::accessor_declarations_enum;
-     member variable accessor2_type: accessor_declarations::accessor_declarations_enum;
+     member variable accessor1_type: accessor_declarations::accessor_type_enum;
+     member variable accessor2_type: accessor_declarations::accessor_type_enum;
 ] ;;
 
-   PROTECTED     [: (*yynode)->modifiers |= modifiers::mod_protected; :]
-   (  INTERNAL   [: (*yynode)->modifiers |= modifiers::mod_internal;  :]
+ (
+   PROTECTED     [: (*yynode)->access_policy = access_policy::access_protected;          :]
+   (  INTERNAL   [: (*yynode)->access_policy = access_policy::access_protected_internal; :]
     | 0
    )
- | INTERNAL      [: (*yynode)->modifiers |= modifiers::mod_internal;  :]
-   (  PROTECTED  [: (*yynode)->modifiers |= modifiers::mod_protected; :]
+ | INTERNAL      [: (*yynode)->access_policy = access_policy::access_internal;           :]
+   (  PROTECTED  [: (*yynode)->access_policy = access_policy::access_protected_internal; :]
     | 0
    )
- | PRIVATE       [: (*yynode)->modifiers |= modifiers::mod_private;   :]
+ | PRIVATE       [: (*yynode)->access_policy = access_policy::access_private;            :]
+ )
 -> accessor_modifier [
-     member variable modifiers: unsigned int; -- using the modifier_enum values
+     member variable access_policy: access_policy::access_policy_enum;
 ] ;;
 
 
@@ -1477,8 +1509,8 @@ namespace csharp_pp
       )
    )
 -> interface_accessors [
-     member variable accessor1_type: accessor_declarations::accessor_declarations_enum;
-     member variable accessor2_type: accessor_declarations::accessor_declarations_enum;
+     member variable accessor1_type: accessor_declarations::accessor_type_enum;
+     member variable accessor2_type: accessor_declarations::accessor_type_enum;
 ] ;;
 
 
@@ -1519,17 +1551,14 @@ namespace csharp_pp
 
    attributes=optional_attribute_sections
    (
-      parameter_array=parameter_array
+      PARAMS params_type=array_type variable_name=identifier
         [: *parameter_array_occurred = true; :]
     |
-      (modifier=parameter_modifier | 0) type=type variable_name=identifier
+      modifier=optional_parameter_modifier type=type variable_name=identifier
    )
 -> formal_parameter [
      argument temporary variable parameter_array_occurred: bool*;
 ] ;;
-
-   PARAMS type=array_type variable_name=identifier
--> parameter_array ;;
 
 
 -- An OPTIONAL ARGUMENT LIST is used when calling methods
@@ -1615,16 +1644,24 @@ namespace csharp_pp
  (
    primary_or_secondary_constraint=primary_or_secondary_constraint
    (  COMMA
-      (  secondary_constraints=secondary_constraints
-         (COMMA constructor_constraint=constructor_constraint | 0)
+      (  #secondary_constraint=secondary_constraint
+         (COMMA (  #secondary_constraint=secondary_constraint
+                 | constructor_constraint=constructor_constraint
+                     [: break; :] -- it's the last item: exit the "star loop"
+                )
+         )*
        |
          constructor_constraint=constructor_constraint
       )
     | 0
    )
  |
-   secondary_constraints=secondary_constraints
-   (COMMA constructor_constraint=constructor_constraint | 0)
+   #secondary_constraint=secondary_constraint
+   (COMMA (  #secondary_constraint=secondary_constraint
+           | constructor_constraint=constructor_constraint
+               [: break; :] -- it's the last item: exit the "star loop"
+          )
+   )*
  |
    constructor_constraint=constructor_constraint
  )
@@ -1641,12 +1678,7 @@ namespace csharp_pp
 ] ;;
 
    #interface_type_or_type_parameter=type_name
-   (
-     -- don't make constructor constraints unparsable:
-     0 [: if (LA(2).kind == Token_NEW) { break; } :]
-     COMMA #interface_type_or_type_parameter=type_name
-   )*
--> secondary_constraints ;;
+-> secondary_constraint ;;
 
    NEW LPAREN RPAREN
 -> constructor_constraint ;;
@@ -2422,7 +2454,7 @@ namespace csharp_pp
    RPAREN
 -> anonymous_method_signature ;;
 
-   (modifier=parameter_modifier | 0) type=type variable_name=identifier
+   modifier=optional_parameter_modifier type=type variable_name=identifier
 -> anonymous_method_parameter ;;
 
 
@@ -2531,7 +2563,7 @@ namespace csharp_pp
 -- specification, but had to be refactored quite a bit. Looks different here.
 
    unmanaged_type=unmanaged_type   -- it's too cumbersome to track "unsafe",
-   -- | managed_type=managed_type  -- so have it on by default for performance
+   -- | managed_type=managed_type  -- so have it on by default
 -> type ;;
 
    -- unsafe grammar extension: unmanaged type (includes all of the managed one)
@@ -2726,10 +2758,13 @@ namespace csharp_pp
 -- MODIFIERS, KEYWORDS, LITERALS, and the IDENTIFIER wrapper
 --
 
-   REF       [: (*yynode)->modifier = parameter_modifier::mod_ref; :]
- | OUT       [: (*yynode)->modifier = parameter_modifier::mod_out; :]
--> parameter_modifier [
-     member variable modifier: parameter_modifier::parameter_modifier_enum;
+ (
+   REF       [: (*yynode)->parameter_type = parameter::reference_parameter; :]
+ | OUT       [: (*yynode)->parameter_type = parameter::output_parameter;    :]
+ | 0         [: (*yynode)->parameter_type = parameter::value_parameter;     :]
+ )
+-> optional_parameter_modifier [
+     member variable parameter_type: parameter::parameter_type_enum;
 ] ;;
 
 -- These are all the modifiers that can occur in front of type and type member
@@ -2737,27 +2772,38 @@ namespace csharp_pp
 -- checked seperately after parsing this rule.
 
  (
-   NEW        [: (*yynode)->modifiers |= modifiers::mod_new;       :]
- | PUBLIC     [: (*yynode)->modifiers |= modifiers::mod_public;    :]
- | PROTECTED  [: (*yynode)->modifiers |= modifiers::mod_protected; :]
- | INTERNAL   [: (*yynode)->modifiers |= modifiers::mod_internal;  :]
- | PRIVATE    [: (*yynode)->modifiers |= modifiers::mod_private;   :]
- | ABSTRACT   [: (*yynode)->modifiers |= modifiers::mod_abstract;  :]
- | SEALED     [: (*yynode)->modifiers |= modifiers::mod_sealed;    :]
- | STATIC     [: (*yynode)->modifiers |= modifiers::mod_static;    :]
- | READONLY   [: (*yynode)->modifiers |= modifiers::mod_readonly;  :]
- | VOLATILE   [: (*yynode)->modifiers |= modifiers::mod_volatile;  :]
- | VIRTUAL    [: (*yynode)->modifiers |= modifiers::mod_virtual;   :]
- | OVERRIDE   [: (*yynode)->modifiers |= modifiers::mod_override;  :]
- | EXTERN     [: (*yynode)->modifiers |= modifiers::mod_extern;    :]
+   PUBLIC     [: (*yynode)->access_policy = access_policy::access_public;  :]
+ | PRIVATE    [: (*yynode)->access_policy = access_policy::access_private; :]
+ | PROTECTED
+     [: if ((*yynode)->access_policy == access_policy::access_internal)
+          (*yynode)->access_policy = access_policy::access_protected_internal;
+        else
+          (*yynode)->access_policy = access_policy::access_protected;
+     :]
+ | INTERNAL
+     [: if ((*yynode)->access_policy == access_policy::access_protected)
+          (*yynode)->access_policy = access_policy::access_protected_internal;
+        else
+          (*yynode)->access_policy = access_policy::access_internal;
+     :]
+ | NEW        [: (*yynode)->modifiers |= modifiers::mod_new;        :]
+ | ABSTRACT   [: (*yynode)->modifiers |= modifiers::mod_abstract;   :]
+ | SEALED     [: (*yynode)->modifiers |= modifiers::mod_sealed;     :]
+ | STATIC     [: (*yynode)->modifiers |= modifiers::mod_static;     :]
+ | READONLY   [: (*yynode)->modifiers |= modifiers::mod_readonly;   :]
+ | VOLATILE   [: (*yynode)->modifiers |= modifiers::mod_volatile;   :]
+ | VIRTUAL    [: (*yynode)->modifiers |= modifiers::mod_virtual;    :]
+ | OVERRIDE   [: (*yynode)->modifiers |= modifiers::mod_override;   :]
+ | EXTERN     [: (*yynode)->modifiers |= modifiers::mod_extern;     :]
  -- unsafe grammar extension: "unsafe" keyword
- | UNSAFE     [: (*yynode)->modifiers |= modifiers::mod_unsafe;    :]
+ | UNSAFE     [: (*yynode)->modifiers |= modifiers::mod_unsafe;     :]
  -- unspecified unsafe modifier, but used by MS and Mono, so accept it here as well:
  | ?[: compatibility_mode() >= csharp20_compatibility :]
-   FIXED      [: (*yynode)->modifiers |= modifiers::mod_fixed;     :]
+   FIXED      [: (*yynode)->modifiers |= modifiers::mod_fixed;      :]
  )*
 -> optional_modifiers [
   member variable modifiers: unsigned int; -- using the modifier_enum values
+  member variable access_policy: access_policy::access_policy_enum;
 ] ;;
 
  (

@@ -65,6 +65,7 @@ namespace csharp
       virtual void visit_enum_member_declaration(enum_member_declaration_ast *node);
       virtual void visit_equality_expression(equality_expression_ast *node);
       virtual void visit_equality_expression_rest(equality_expression_rest_ast *node);
+      virtual void visit_event_accessor_declaration(event_accessor_declaration_ast *node);
       virtual void visit_event_accessor_declarations(event_accessor_declarations_ast *node);
       virtual void visit_event_declaration(event_declaration_ast *node);
       virtual void visit_expression(expression_ast *node);
@@ -125,12 +126,11 @@ namespace csharp
       virtual void visit_optional_argument_list(optional_argument_list_ast *node);
       virtual void visit_optional_attribute_sections(optional_attribute_sections_ast *node);
       virtual void visit_optional_modifiers(optional_modifiers_ast *node);
+      virtual void visit_optional_parameter_modifier(optional_parameter_modifier_ast *node);
       virtual void visit_optionally_nullable_type(optionally_nullable_type_ast *node);
       virtual void visit_overloadable_binary_only_operator(overloadable_binary_only_operator_ast *node);
       virtual void visit_overloadable_unary_only_operator(overloadable_unary_only_operator_ast *node);
       virtual void visit_overloadable_unary_or_binary_operator(overloadable_unary_or_binary_operator_ast *node);
-      virtual void visit_parameter_array(parameter_array_ast *node);
-      virtual void visit_parameter_modifier(parameter_modifier_ast *node);
       virtual void visit_pointer_type(pointer_type_ast *node);
       virtual void visit_positional_argument(positional_argument_ast *node);
       virtual void visit_predefined_type(predefined_type_ast *node);
@@ -146,7 +146,7 @@ namespace csharp
       virtual void visit_resource_acquisition(resource_acquisition_ast *node);
       virtual void visit_return_statement(return_statement_ast *node);
       virtual void visit_return_type(return_type_ast *node);
-      virtual void visit_secondary_constraints(secondary_constraints_ast *node);
+      virtual void visit_secondary_constraint(secondary_constraint_ast *node);
       virtual void visit_shift_expression(shift_expression_ast *node);
       virtual void visit_shift_expression_rest(shift_expression_rest_ast *node);
       virtual void visit_simple_name_or_member_access(simple_name_or_member_access_ast *node);
@@ -183,7 +183,9 @@ namespace csharp
       virtual void visit_unmanaged_type(unmanaged_type_ast *node);
       virtual void visit_unmanaged_type_suffix(unmanaged_type_suffix_ast *node);
       virtual void visit_unsafe_statement(unsafe_statement_ast *node);
+      virtual void visit_using_alias_directive_data(using_alias_directive_data_ast *node);
       virtual void visit_using_directive(using_directive_ast *node);
+      virtual void visit_using_namespace_directive_data(using_namespace_directive_data_ast *node);
       virtual void visit_using_statement(using_statement_ast *node);
       virtual void visit_variable_declaration_data(variable_declaration_data_ast *node);
       virtual void visit_variable_declarator(variable_declarator_ast *node);
