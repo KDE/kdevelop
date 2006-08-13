@@ -62,7 +62,7 @@ IF(KDEVPG_EXECUTABLE)
         GENERATED
         )
 ELSE(KDEVPG_EXECUTABLE)
-    MESSAGE("Assuming existence of the generated parser files")
+    MESSAGE("--- Assuming existence of the generated java parser files")
     SET(kdevjavaparser_STAT_SRCS
         "${CMAKE_CURRENT_SOURCE_DIR}/java_parser.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/java_visitor.cpp"
@@ -92,7 +92,7 @@ IF(FLEX_EXECUTABLE)
         GENERATED
         )
 ELSE(FLEX_EXECUTABLE)
-    MESSAGE("Assuming existence of the generated lexer file java_lexer.cpp")
+    MESSAGE("--- Assuming existence of the generated lexer file java_lexer.cpp")
     SET(kdevjavaparser_STAT_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.cpp
         ${kdevjavaparser_STAT_SRCS})
