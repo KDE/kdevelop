@@ -116,7 +116,7 @@ private:
    * Register a new declaration with the definition-use chain.
    * Returns the new context created by this definition.
    */
-  Definition* newDeclaration(KTextEditor::Range* range);
+  Definition* newDeclaration(KTextEditor::Range* range, NameAST* name);
 
   /// Register a new use
   void newUse(NameAST* name);
@@ -126,12 +126,7 @@ private:
    * if you want the identifier for the object which created this scope to get assigned
    * to this scope's identifier
    */
-  void closeContext(AST* node, DUContext* parent, int identifierStackDepth = -1);
-
-  // Sets the identifier of the current definition.
-  void setIdentifier(int stackCount);
-  // Ignores an identifier
-  void ignoreIdentifier(int stackCount);
+  void closeContext(AST* node, DUContext* parent, NameAST* name = 0);
 
   TokenStream *_M_token_stream;
   CppEditorIntegrator* m_editor;
@@ -150,7 +145,6 @@ private:
   TypeEnvironment* m_types;
 
   Definition* m_currentDefinition;
-  QStack<QualifiedIdentifier> m_identifierStack;
 };
 
 #endif // DUBUILDER_H

@@ -195,7 +195,7 @@ void KDevBackgroundParser::parseComplete( Job *job )
 
     if ( KDevParseJob * parseJob = qobject_cast<KDevParseJob*>( job ) )
     {
-        if ( langSupport->codeHighlighting() )
+        if ( langSupport->codeHighlighting() && parseJob->duChain() )
         {
             langSupport->codeHighlighting()->highlightDUChain( parseJob->duChain() );
         }

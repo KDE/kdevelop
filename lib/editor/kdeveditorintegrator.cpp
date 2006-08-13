@@ -17,10 +17,9 @@
 */
 
 #include "kdeveditorintegrator.h"
+#include "kdeveditorintegrator_p.h"
 
 #include <limits.h>
-
-#include <QHash>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartrange.h>
@@ -32,8 +31,7 @@
 
 using namespace KTextEditor;
 
-QHash<KUrl, Document*> KDevEditorIntegrator::s_documents;
-QHash<KUrl, QVector<Range*> > KDevEditorIntegrator::s_topRanges;
+KDevEditorIntegratorPrivate* KDevEditorIntegrator::s_data = 0;
 
 KDevEditorIntegrator::KDevEditorIntegrator()
   : m_currentDocument(0)
@@ -43,7 +41,56 @@ KDevEditorIntegrator::KDevEditorIntegrator()
 
 void KDevEditorIntegrator::addDocument( Document * document )
 {
-  s_documents.insert(document->url(), document);
+  QObject::connect(document, SIGNAL(completed()), data(), SLOT(documentLoaded()));
+  QObject::connect(document, SIGNAL(aboutToClose(KTextEditor::Document*)), data(), SLOT(removeDocument(KTextEditor::Document*)));
+  QObject::connect(document, SIGNAL(documentUrlChanged(KTextEditor::Document*)), data(), SLOT(documentUrlChanged(KTextEditor::Document*)));
+}
+
+void KDevEditorIntegratorPrivate::documentLoaded()
+{
+  Document* doc = qobject_cast<Document*>(sender());
+  if (!doc) {
+    kWarning() << k_funcinfo << "Unexpected non-document sender called this slot!" << endl;
+    return;
+  }
+
+  //kDebug() << k_funcinfo << "Loaded document " << doc->url() << " with text range " << doc->documentRange() << endl;
+  documents.insert(doc->url(), doc);
+}
+
+void KDevEditorIntegratorPrivate::documentUrlChanged(Document* document)
+{
+  QMutableHashIterator<KUrl, Document*>  it = documents;
+  while (it.hasNext()) {
+    it.next();
+    if (it.value() == document) {
+      if (topRanges.contains(it.key()))
+        topRanges.insert(document->url(), topRanges.take(it.key()));
+
+      it.remove();
+      documents.insert(document->url(), document);
+      // TODO trigger reparsing??
+      return;
+    }
+  }
+
+  //kWarning() << k_funcinfo << "Document URL change - couldn't find corresponding document!" << endl;
+}
+
+Document * KDevEditorIntegrator::documentForUrl(const KUrl& url)
+{
+  if (data()->documents.contains(url))
+    return data()->documents[url];
+
+  return 0;
+}
+
+void KDevEditorIntegratorPrivate::removeDocument( Document* document )
+{
+  // TODO save smart stuff to non-smart cursors and ranges
+
+  documents.remove(document->url());
+  topRanges.remove(document->url());
 }
 
 SmartInterface* KDevEditorIntegrator::smart(KTextEditor::Document* document) const
@@ -59,7 +106,7 @@ Cursor* KDevEditorIntegrator::createCursor(const KDevDocumentCursor& position)
     if (SmartInterface* iface = smart())
       ret = iface->newSmartCursor(position);
   } else {
-    KTextEditor::Document* document = s_documents[position.document()];
+    KTextEditor::Document* document = data()->documents[position.document()];
     if (SmartInterface* iface = smart(document))
       ret = iface->newSmartCursor(position);
   }
@@ -77,12 +124,12 @@ Document* KDevEditorIntegrator::currentDocument() const
 
 Range* KDevEditorIntegrator::topRange( TopRangeType type )
 {
-  if (!s_topRanges.contains(currentUrl()))
-    s_topRanges.insert(currentUrl(), QVector<Range*>(TopRangeCount));
+  if (!data()->topRanges.contains(currentUrl()))
+    data()->topRanges.insert(currentUrl(), QVector<Range*>(TopRangeCount));
 
-  if (!s_topRanges[currentUrl()][type])
+  if (!data()->topRanges[currentUrl()][type])
     if (currentDocument()) {
-      Range* newRange = s_topRanges[currentUrl()][type] = createRange(currentDocument()->documentRange());
+      Range* newRange = data()->topRanges[currentUrl()][type] = createRange(currentDocument()->documentRange());
       if (SmartInterface* iface = smart()) {
         Q_ASSERT(newRange->isSmartRange());
         iface->addHighlightToDocument( newRange->toSmartRange(), false );
@@ -90,10 +137,10 @@ Range* KDevEditorIntegrator::topRange( TopRangeType type )
 
     } else {
       // FIXME...
-      s_topRanges[currentUrl()][type] = createRange(Range(0,0, INT_MAX, INT_MAX));
+      data()->topRanges[currentUrl()][type] = createRange(Range(0,0, INT_MAX, INT_MAX));
     }
 
-  return s_topRanges[currentUrl()][type];
+  return data()->topRanges[currentUrl()][type];
 }
 
 Range* KDevEditorIntegrator::createRange( const Range & range, KTextEditor::Document* document )
@@ -144,21 +191,6 @@ void KDevEditorIntegrator::setNewStart( const Cursor & position )
   m_newRangeMarker.start() = position;
 }
 
-Document * KDevEditorIntegrator::documentForUrl(const KUrl& url)
-{
-  foreach (Document* d, s_documents)
-    if (d->url() == url)
-      return d;
-
-  return 0;
-}
-
-void KDevEditorIntegrator::removeDocument( Document * document )
-{
-  s_documents.remove(document->url());
-  s_topRanges.remove(document->url());
-}
-
 void KDevEditorIntegrator::setCurrentRange( Range* range )
 {
   m_currentRange = range;
@@ -184,8 +216,8 @@ void KDevEditorIntegrator::deleteTopRange(KTextEditor::Range * range)
 {
   KUrl url = KDevDocumentRangeObject::url(range);
 
-  if (s_topRanges.contains(url)) {
-    QVector<Range*>& ranges = s_topRanges[url];
+  if (data()->topRanges.contains(url)) {
+    QVector<Range*>& ranges = data()->topRanges[url];
     for (int i = 0; i < ranges.count(); ++i) {
       if (range == ranges[i]) {
         delete range;
@@ -198,6 +230,25 @@ void KDevEditorIntegrator::deleteTopRange(KTextEditor::Range * range)
   kWarning() << k_funcinfo << "Could not find top range to delete." << endl;
 }
 
-#include "kdeveditorintegrator.moc"
+KDevEditorIntegratorPrivate * KDevEditorIntegrator::data()
+{
+  if (!s_data)
+    s_data = new KDevEditorIntegratorPrivate();
+
+  return s_data;
+}
+
+void KDevEditorIntegrator::exitCurrentRange()
+{
+  if (!m_currentRange)
+    return;
+
+  if (m_currentRange->isSmartRange())
+    m_currentRange = m_currentRange->toSmartRange()->parentRange();
+  else
+    m_currentRange = static_cast<KDevDocumentRange*>(m_currentRange)->parentRange();
+}
+
+#include "kdeveditorintegrator_p.moc"
 
 // kate: indent-width 2;

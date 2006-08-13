@@ -26,9 +26,10 @@
 using namespace KTextEditor;
 
 KDevDocumentRangeObject::KDevDocumentRangeObject(Range* range)
-  : m_range(range)
+  : m_range(0)
 {
-  Q_ASSERT(m_range);
+  Q_ASSERT(range);
+  setTextRange(range);
 }
 
 KDevDocumentRangeObject::~ KDevDocumentRangeObject( )
@@ -41,8 +42,20 @@ void KDevDocumentRangeObject::setTextRange( Range * range )
   if (m_range == range)
     return;
 
-  delete m_range;
+  if (m_range) {
+    // TODO.. overkill???
+    //if (m_range->isSmartRange())
+      //m_range->toSmartRange()->removeWatcher(this);
+
+    delete m_range;
+  }
+
   m_range = range;
+
+  if (m_range) {
+    //if (m_range->isSmartRange())
+      //m_range->toSmartRange()->addWatcher(this);
+  }
 }
 
 const Range& KDevDocumentRangeObject::textRange( ) const
@@ -94,3 +107,9 @@ Range * KDevDocumentRangeObject::takeTextRange()
 }
 
 // kate: indent-width 2;
+
+void KDevDocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
+{
+  Q_ASSERT(range == m_range);
+  m_range = new KDevDocumentRange(url(), *m_range);
+}

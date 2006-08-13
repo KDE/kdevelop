@@ -20,6 +20,7 @@
 #define KDEVDOCUMENTRANGEOBJECT_H
 
 #include <ktexteditor/range.h>
+#include <ktexteditor/rangefeedback.h>
 
 #include "kdevdocumentcursor.h"
 
@@ -28,7 +29,7 @@
  *
  * This allows text without a currently loaded text editor to be represented.
  */
-class KDEVINTERFACES_EXPORT KDevDocumentRangeObject
+class KDEVINTERFACES_EXPORT KDevDocumentRangeObject : public KTextEditor::SmartRangeWatcher
 {
 public:
   KDevDocumentRangeObject(KTextEditor::Range* range);
@@ -46,6 +47,8 @@ public:
   static KUrl url(const KTextEditor::Range* range);
 
   bool contains(const KDevDocumentCursor& cursor) const;
+
+  virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
 private:
   KTextEditor::Range* m_range;

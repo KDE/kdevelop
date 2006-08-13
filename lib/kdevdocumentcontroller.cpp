@@ -78,7 +78,6 @@ Boston, MA 02110-1301, USA.
 #include "kdevmainwindow.h"
 #include "mimewarningdialog.h"
 #include "kdevlanguagesupport.h"
-#include "kdeveditorintegrator.h"
 
 using namespace MainWindowUtils;
 
@@ -878,9 +877,6 @@ KDevDocument * KDevDocumentController::addDocument( KParts::Part * part, bool se
 void KDevDocumentController::removeDocument( KDevDocument * document )
 {
     Q_ASSERT( document );
-
-    if (KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>(document->part()))
-        KDevEditorIntegrator::removeDocument(doc);
 
     KDevCore::mainWindow() ->guiFactory() ->removeClient( document->part() );
 

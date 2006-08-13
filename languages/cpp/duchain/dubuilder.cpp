@@ -69,10 +69,6 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node)
 
   visit (node);
 
-  //Q_ASSERT(m_identifierStack.isEmpty());
-  if (!m_identifierStack.isEmpty())
-    kWarning() << k_funcinfo << "Unused identifiers: " << m_identifierStack.toList() << endl;
-
   return topLevelContext;
 }
 
@@ -80,7 +76,7 @@ void DUBuilder::visitNamespace (NamespaceAST *node)
 {
   DUContext* previousContext = m_currentContext;
 
-  QualifiedIdentifier identifier = QualifiedIdentifier::merge(m_identifierStack);
+  QualifiedIdentifier identifier = previousContext->scopeIdentifier();
   if (node->namespace_name)
     identifier << QualifiedIdentifier(_M_token_stream->symbol(node->namespace_name)->as_string());
   else
@@ -95,39 +91,37 @@ void DUBuilder::visitNamespace (NamespaceAST *node)
   inNamespace (was);
 
   closeContext(node, previousContext);
+  m_editor->exitCurrentRange();
 }
 
 void DUBuilder::visitClassSpecifier (ClassSpecifierAST *node)
 {
   DUContext* previousContext = m_currentContext;
-  int identifierStackDepth = m_identifierStack.count();
 
   Definition* oldDefinition = m_currentDefinition;
 
-  Range* range = m_editor->createRange(node);
-  m_currentDefinition = newDeclaration(range);
+  Range* contextRange = m_editor->createRange(node);
 
-  m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
+  Range* range = m_editor->createRange(node->name);
+  m_currentDefinition = newDeclaration(range, node->name);
+  m_editor->exitCurrentRange();
+
+  m_currentContext = new DUContext(contextRange, m_currentContext);
   m_currentContext->setType(DUContext::Class);
 
   bool was = inClass (true);
   DefaultVisitor::visitClassSpecifier (node);
   inClass (was);
 
-  closeContext(node, previousContext, identifierStackDepth);
+  closeContext(node, previousContext, node->name);
 
-  setIdentifier(identifierStackDepth);
-
+  m_editor->exitCurrentRange();
   m_currentDefinition = oldDefinition;
 }
 
 void DUBuilder::visitBaseSpecifier(BaseSpecifierAST* node)
 {
-  int identifierStackDepth = m_identifierStack.count();
-
   DefaultVisitor::visitBaseSpecifier(node);
-
-  ignoreIdentifier(identifierStackDepth);
 }
 
 void DUBuilder::visitTemplateDeclaration (TemplateDeclarationAST *node)
@@ -149,32 +143,15 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   DUContext* previousContext = m_currentContext;
   function_just_defined = true;
 
-  /*Definition* oldDefinition = m_currentDefinition;
-
-  Range* range = m_editor->createRange(node);
-  m_currentDefinition = newDeclaration(range);
-
-  DUContext* previousContext = m_currentContext;
-  m_currentContext = new DUContext(m_editor->createRange(node), m_currentContext);
-  m_currentContext->setType(DUContext::Function);
-
-  int stackCount = m_identifierStack.count();*/
-
   bool was = inFunctionDefinition (node);
   DefaultVisitor::visitFunctionDefinition (node);
   inFunctionDefinition (was);
 
   closeContext(node, previousContext);
-
-  /*setIdentifier(stackCount);
-
-  // TODO once type system is established, check to see if there was a forward
-  // declaration and if so, merge this definition with that definition.
-
-  m_currentDefinition = oldDefinition;*/
+  m_editor->exitCurrentRange();
 }
 
-void DUBuilder::closeContext(AST* node, DUContext* parent, int identifierStackDepth)
+void DUBuilder::closeContext(AST* node, DUContext* parent, NameAST* name)
 {
   // Find the end position of this function definition (just inside the bracket)
   KDevDocumentCursor endPosition = m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge);
@@ -184,8 +161,10 @@ void DUBuilder::closeContext(AST* node, DUContext* parent, int identifierStackDe
       m_currentContext->textRange().end() = endPosition;
 
   // Set context identifier
-  if (identifierStackDepth != -1 && identifierStackDepth < m_identifierStack.count())
-    m_currentContext->setLocalScopeIdentifier(m_identifierStack.top());
+  if (name) {
+    m_nameCompiler->run(name);
+    m_currentContext->setLocalScopeIdentifier(m_nameCompiler->identifier());
+  }
 
   // Go back to the context prior to this function definition
   m_currentContext = parent;
@@ -211,18 +190,7 @@ void DUBuilder::visitParameterDeclarationClause (ParameterDeclarationClauseAST *
 
 void DUBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
 {
-  /*Definition* oldDefinition = m_currentDefinition;
-
-  Range* range = m_editor->createRange(node);
-  m_currentDefinition = newDeclaration(range);
-
-  int stackCount = m_identifierStack.count();*/
-
   DefaultVisitor::visitParameterDeclaration (node);
-
-  /*setIdentifier(stackCount);
-
-  m_currentDefinition = oldDefinition;*/
 }
 
 void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
@@ -233,38 +201,17 @@ void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
   DefaultVisitor::visitCompoundStatement (node);
 
   closeContext(node, previousContext);
+  m_editor->exitCurrentRange();
 }
 
 void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 {
-  /*Definition* oldDefinition = m_currentDefinition;
-
-  Range* range = m_editor->createRange(node);
-  m_currentDefinition = newDeclaration(range);
-
-  int stackCount = m_identifierStack.count();*/
-
   DefaultVisitor::visitSimpleDeclaration (node);
-
-  /*setIdentifier(stackCount);
-
-  m_currentDefinition = oldDefinition;*/
 }
 
 void DUBuilder::visitInitDeclarator(InitDeclaratorAST* node)
 {
-  /*Definition* oldDefinition = m_currentDefinition;
-
-  Range* range = m_editor->createRange(node);
-  m_currentDefinition = newDeclaration(range);
-
-  int stackCount = m_identifierStack.count();*/
-
   DefaultVisitor::visitInitDeclarator(node);
-
-  /*setIdentifier(stackCount);
-
-  m_currentDefinition = oldDefinition;*/
 }
 
 void DUBuilder::visitDeclarator (DeclaratorAST* node)
@@ -272,47 +219,12 @@ void DUBuilder::visitDeclarator (DeclaratorAST* node)
   Definition* oldDefinition = m_currentDefinition;
 
   Range* range = m_editor->createRange(node);
-  m_currentDefinition = newDeclaration(range);
-
-  int stackCount = m_identifierStack.count();
+  m_currentDefinition = newDeclaration(range, node->id);
 
   DefaultVisitor::visitDeclarator(node);
 
-  setIdentifier(stackCount);
-
   m_currentDefinition = oldDefinition;
-}
-
-void DUBuilder::setIdentifier(int stackCount)
-{
-  Q_ASSERT(m_identifierStack.count() >= stackCount);
-
-  int index = m_identifierStack.count();
-  while (index > stackCount + 1) {
-    kWarning() << k_funcinfo << "Unrecognised identifier present at " << m_currentDefinition->textRange() << endl;
-    m_identifierStack.pop();
-    --index;
-  }
-
-  if (m_identifierStack.count() == stackCount + 1)
-    if (m_currentDefinition) {
-      // FIXME this can happen if we're defining a staticly declared variable
-      //Q_ASSERT(m_identifierStack.top().count() == 1);
-      m_currentDefinition->setIdentifier(m_identifierStack.pop().first());
-
-    } else {
-      // Unused identifier...?
-      m_identifierStack.pop();
-    }
-}
-
-void DUBuilder::ignoreIdentifier(int stackCount)
-{
-  Q_ASSERT(m_identifierStack.count() >= stackCount);
-  Q_ASSERT(m_identifierStack.count() <= stackCount + 2);
-
-  if (m_identifierStack.count() == stackCount + 1)
-    m_identifierStack.pop();
+  m_editor->exitCurrentRange();
 }
 
 void DUBuilder::visitPrimaryExpression (PrimaryExpressionAST* node)
@@ -334,9 +246,11 @@ void DUBuilder::visitMemInitializer(MemInitializerAST * node)
 void DUBuilder::newUse(NameAST* name)
 {
   Range* use = m_editor->createRange(name);
+  m_editor->exitCurrentRange();
 
-  QualifiedIdentifier id = m_identifierStack.pop();
-  Definition* definition = m_currentContext->findDefinition(id, KDevDocumentCursor(use, KDevDocumentCursor::Start));
+  m_nameCompiler->run(name);
+
+  Definition* definition = m_currentContext->findDefinition(m_nameCompiler->identifier(), KDevDocumentCursor(use, KDevDocumentCursor::Start));
   if (definition)
     definition->addUse(use);
 
@@ -345,24 +259,19 @@ void DUBuilder::newUse(NameAST* name)
 
 void DUBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
 {
-  int stackCount = m_identifierStack.count();
-
   DefaultVisitor::visitSimpleTypeSpecifier(node);
-
-  ignoreIdentifier(stackCount);
 }
 
-void DUBuilder::visitName (NameAST *node)
+void DUBuilder::visitName (NameAST *)
 {
-  m_nameCompiler->run(node);
-
-  m_identifierStack.push(m_nameCompiler->identifier());
+  //m_nameCompiler->run(node);
+  //m_identifierStack.push(m_nameCompiler->identifier());
 
   // Note: we don't want to visit the name node, the name compiler does that for us
   //DefaultVisitor::visitName(node);
 }
 
-Definition* DUBuilder::newDeclaration(Range* range)
+Definition* DUBuilder::newDeclaration(Range* range, NameAST* name)
 {
   Definition::Scope scope = Definition::GlobalScope;
   if (in_function_definition)
@@ -376,6 +285,15 @@ Definition* DUBuilder::newDeclaration(Range* range)
   Definition* definition = new Definition(range, scope);
   m_currentContext->addDefinition(definition);
 
+  if (name) {
+    m_nameCompiler->run(name);
+
+    // FIXME this can happen if we're defining a staticly declared variable
+    //Q_ASSERT(m_nameCompiler->identifier().count() == 1);
+    Q_ASSERT(!m_nameCompiler->identifier().isEmpty());
+    definition->setIdentifier(m_nameCompiler->identifier().first());
+  }
+
   return definition;
 }
 
@@ -383,73 +301,44 @@ void DUBuilder::visitUsingDirective(UsingDirectiveAST * node)
 {
   DefaultVisitor::visitUsingDirective(node);
 
-  m_currentContext->addUsingNamespace(m_editor->createCursor(node->end_token, CppEditorIntegrator::FrontEdge), m_identifierStack.pop());
+  m_nameCompiler->run(node->name);
+
+  m_currentContext->addUsingNamespace(m_editor->createCursor(node->end_token, CppEditorIntegrator::FrontEdge), m_nameCompiler->identifier());
 }
 
 void DUBuilder::visitClassMemberAccess(ClassMemberAccessAST * node)
 {
-  // FIXME need type system
-  int stackCount = m_identifierStack.count();
-
   DefaultVisitor::visitClassMemberAccess(node);
-
-  ignoreIdentifier(stackCount);
 }
 
 void DUBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
 {
-  int stackCount = m_identifierStack.count();
-
   DefaultVisitor::visitElaboratedTypeSpecifier(node);
-
-  ignoreIdentifier(stackCount);
 }
 
 void DUBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
 {
-  int stackCount = m_identifierStack.count();
-
   DefaultVisitor::visitEnumSpecifier(node);
-
-  ignoreIdentifier(stackCount);
 }
 
 void DUBuilder::visitTypeParameter(TypeParameterAST* node)
 {
-  int stackCount = m_identifierStack.count();
-
   DefaultVisitor::visitTypeParameter(node);
-
-  ignoreIdentifier(stackCount);
 }
 
 void DUBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)
 {
   // TODO store the alias
-
-  int stackCount = m_identifierStack.count();
-
   DefaultVisitor::visitNamespaceAliasDefinition(node);
-
-  ignoreIdentifier(stackCount);
 }
 
 void DUBuilder::visitTypeIdentification(TypeIdentificationAST* node)
 {
-  int stackCount = m_identifierStack.count();
-
   DefaultVisitor::visitTypeIdentification(node);
-
-  ignoreIdentifier(stackCount);
 }
 
 void DUBuilder::visitUsing(UsingAST* node)
 {
   // TODO store the using
-
-  int stackCount = m_identifierStack.count();
-
   DefaultVisitor::visitUsing(node);
-
-  ignoreIdentifier(stackCount);
 }

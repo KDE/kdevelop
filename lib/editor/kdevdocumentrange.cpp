@@ -20,22 +20,28 @@
 
 using namespace KTextEditor;
 
-KDevDocumentRange::KDevDocumentRange(const KUrl& document, const Cursor& start, const Cursor& end)
+KDevDocumentRange::KDevDocumentRange(const KUrl& document, const Cursor& start, const Cursor& end, KDevDocumentRange* parent)
   : Range(start, end)
   , m_document(document)
+  , m_parentRange(0)
 {
+  setParentRange(parent);
 }
 
-KDevDocumentRange::KDevDocumentRange(const KUrl& document, const Range& range)
+KDevDocumentRange::KDevDocumentRange(const KUrl& document, const Range& range, KDevDocumentRange* parent)
   : Range(range)
   , m_document(document)
+  , m_parentRange(0)
 {
+  setParentRange(parent);
 }
 
 KDevDocumentRange::KDevDocumentRange(const KDevDocumentRange& copy)
   : Range(copy)
   , m_document(copy.document())
+  , m_parentRange(0)
 {
+  setParentRange(copy.parentRange());
 }
 
 const KUrl& KDevDocumentRange::document() const
@@ -49,3 +55,34 @@ void KDevDocumentRange::setDocument(const KUrl& document)
 }
 
 // kate: indent-width 2;
+
+const QList< KDevDocumentRange * > & KDevDocumentRange::childRanges() const
+{
+  return m_childRanges;
+}
+
+void KDevDocumentRange::setParentRange(KDevDocumentRange * parent)
+{
+  if (m_parentRange)
+    m_parentRange->m_childRanges.removeAll(this);
+
+  m_parentRange = parent;
+
+  if (m_parentRange) {
+    QMutableListIterator<KDevDocumentRange*> it = m_parentRange->m_childRanges;
+    while (it.hasNext()) {
+      if (start() < it.next()->start()) {
+        it.previous();
+        it.insert(this);
+        return;
+      }
+    }
+
+    it.insert(this);
+  }
+}
+
+KDevDocumentRange * KDevDocumentRange::parentRange() const
+{
+  return m_parentRange;
+}

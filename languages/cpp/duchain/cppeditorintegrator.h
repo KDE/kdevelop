@@ -35,8 +35,6 @@ class AST;
  */
 class CppEditorIntegrator : public KDevEditorIntegrator
 {
-  Q_OBJECT
-
 public:
   CppEditorIntegrator(TokenStream* tokenStream);
 

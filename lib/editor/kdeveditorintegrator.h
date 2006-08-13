@@ -19,8 +19,6 @@
 #ifndef KDEVEDITORINTEGRATOR_H
 #define KDEVEDITORINTEGRATOR_H
 
-#include <QObject>
-
 #include <kurl.h>
 
 #include <ktexteditor/range.h>
@@ -29,6 +27,7 @@
 
 class KDevDocumentRange;
 class KDevDocumentCursor;
+class KDevEditorIntegratorPrivate;
 
 namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterface; }
 
@@ -40,10 +39,8 @@ namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterfac
  *
  * \todo introduce stacks for the state?
  */
-class KDEVINTERFACES_EXPORT KDevEditorIntegrator : public QObject
+class KDEVINTERFACES_EXPORT KDevEditorIntegrator
 {
-  Q_OBJECT
-
 public:
   KDevEditorIntegrator();
 
@@ -175,9 +172,15 @@ public:
    */
   void setCurrentRange(KTextEditor::Range* range);
 
+  /**
+   * Sets the parent range to be the new current range.
+   */
+  void exitCurrentRange();
+
 protected:
-  static QHash<KUrl, KTextEditor::Document*> s_documents;
-  static QHash<KUrl, QVector<KTextEditor::Range*> > s_topRanges;
+  static KDevEditorIntegratorPrivate* data();
+
+  static KDevEditorIntegratorPrivate* s_data;
 
   KUrl m_currentUrl;
   KTextEditor::Document* m_currentDocument;

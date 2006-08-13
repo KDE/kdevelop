@@ -79,6 +79,4 @@ Cursor * CppEditorIntegrator::createCursor( std::size_t token, Edge edge )
   return createCursor(findPosition(t, edge));
 }
 
-#include "cppeditorintegrator.moc"
-
 // kate: indent-width 2;

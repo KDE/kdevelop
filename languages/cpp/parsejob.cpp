@@ -131,10 +131,10 @@ void ParseJob::run()
         Binder binder( m_model, &parser.token_stream, &parser.lexer );
         binder.run( m_document, m_AST );
 
-        CppEditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
+        /*CppEditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
 
         DUBuilder dubuilder(&parser.token_stream);
-        m_duContext = dubuilder.build(m_document, m_AST);
+        m_duContext = dubuilder.build(m_document, m_AST);*/
     }
     //     DumpTree dumpTree;
     //     dumpTree.dump( m_AST );
