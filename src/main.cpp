@@ -28,8 +28,9 @@
 static KCmdLineOptions options[] =
     {
         { "profile <profile>", I18N_NOOP( "Profile to load" ), 0 },
+        { "project <project>", I18N_NOOP( "Project to load" ), 0 },
         { "+file(s)", I18N_NOOP( "Files to load" ), 0 },
-        { 0, 0, 0 }
+        KCmdLineLastOption // End of options.
     };
 
 int main( int argc, char *argv[] )
@@ -124,46 +125,14 @@ int main( int argc, char *argv[] )
         splash->showMessage( i18n( "Starting GUI" ) );
     }
 
-    QObject::connect( KDevCore::projectController(), SIGNAL( projectOpened() ),
-                      KDevCore::mainWindow(), SLOT( loadSettings() ) );
     QObject::connect( KDevCore::mainWindow(), SIGNAL( finishedLoading() ),
                       splash, SLOT( deleteLater() ) );
 
     KDevCore::initialize();
 
-    if ( args->count() == 0 )
+    for ( int a = 0; a < args->count(); ++a )
     {
-        KConfig * config = KDevConfig::standard();
-        config->setGroup( "General Options" );
-        QString project = config->readPathEntry( "Last Project" );
-        bool readProject = config->readEntry( "Read Last Project On Startup", true );
-        if ( !project.isEmpty() && readProject )
-        {
-            KDevCore::projectController()->openProject( KUrl( project ) );
-        }
-        else
-        {
-            //Make sure to show the mainwindow if a project isn't opened
-            //FIXME load the plugins that are currently loaded by the
-            //project controller.
-            KDevCore::mainWindow()->loadSettings();
-        }
-    }
-    else if ( args->count() > 0 )
-    {
-        KUrl url = args->url( 0 );
-        QString ext = QFileInfo( url.fileName() ).suffix();
-        if ( ext == "kdev4" )
-        {
-            KDevCore::projectController()->openProject( url );
-        }
-        else
-        {
-            for ( int a = 0; a < args->count(); ++a )
-            {
-                KDevCore::documentController()->editDocument( KUrl( args->url( a ) ) );
-            }
-        }
+        KDevCore::documentController()->editDocument( KUrl( args->url( a ) ) );
     }
 
     return app.exec();

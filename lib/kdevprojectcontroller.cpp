@@ -177,6 +177,17 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
     if ( m_isLoaded )
         closeProject();
 
+    KActionCollection * ac = KDevCore::mainWindow() ->actionCollection();
+    KAction * action;
+
+    action = ac->action( "project_close" );
+    action->setEnabled( true );
+
+    KRecentFilesAction *recentAction;
+    recentAction = qobject_cast<KRecentFilesAction *>( ac->action( "project_open_recent" ) );
+    recentAction->addUrl( url );
+    recentAction->saveEntries( KDevConfig::standard(), "RecentProjects" );
+
     m_globalFile = url;
 
     //FIXME Create the hidden directory if it doesn't exist
@@ -190,17 +201,6 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
     legacyLoading();
 
     m_isLoaded = true;
-
-    KActionCollection * ac = KDevCore::mainWindow() ->actionCollection();
-    KAction * action;
-
-    action = ac->action( "project_close" );
-    action->setEnabled( true );
-
-    KRecentFilesAction *recentAction;
-    recentAction = qobject_cast<KRecentFilesAction *>( ac->action( "project_open_recent" ) );
-    recentAction->addUrl( m_globalFile );
-    recentAction->saveEntries( KDevConfig::localProject(), "RecentProjects" );
 
     emit projectOpened();
 
@@ -225,6 +225,8 @@ bool KDevProjectController::closeProject()
         local->deleteEntry( "OpenDocuments" );
 
     local ->sync();
+
+    KDevCore::documentController()->closeAllDocuments();
 
     // save the the project to open it automaticly on startup if needed
     KUrl lastProject = m_globalFile;

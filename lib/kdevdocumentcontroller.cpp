@@ -882,8 +882,10 @@ void KDevDocumentController::removeDocument( KDevDocument * document )
     if (KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>(document->part()))
         KDevEditorIntegrator::removeDocument(doc);
 
-    KDevCore::partController() ->removePart( document->part() );
+    KDevCore::mainWindow() ->guiFactory() ->removeClient( document->part() );
+
     m_documentUrls.remove( document );
+    m_url2Document.remove( document->url() );
     m_partHash.remove( static_cast<KParts::ReadOnlyPart*>( document->part() ) );
 
     delete document->part();
