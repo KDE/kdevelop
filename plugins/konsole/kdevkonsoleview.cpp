@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright (C) 2003 by KDevelop Authors                                *
+*   Copyright (C) 2003, 2006 by KDevelop Authors                          *
 *   kdevelop-devel@kde.org                                                *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -9,39 +9,47 @@
 *                                                                         *
 ***************************************************************************/
 
-#include <QLayout>
-#include <QLabel>
-#include <QFrame>
-#include <QDir>
-#include <QVBoxLayout>
-
-#include <klocale.h>
-#include <kparts/part.h>
-#include <klibloader.h>
-#include <kurl.h>
-#include <kdebug.h>
-
-#include "kdevcore.h"
-#include "kdevproject.h"
-#include "kdevkonsoleview_part.h"
-#include "kdevdocumentcontroller.h"
-
 #include "kdevkonsoleview.h"
 
-#include <QtCore/qdebug.h>
+#include <QDir>
+#include <QLabel>
+#include <QFrame>
+#include <QLayout>
+#include <QVBoxLayout>
+
+#include <kurl.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <klibloader.h>
+
+#include <kparts/part.h>
+
+#include "kdevcore.h"
+#include "kdevprojectcontroller.h"
+#include "kdevdocumentcontroller.h"
 
 KDevKonsoleView::KDevKonsoleView( QWidget *parent )
         : QWidget( parent ),
         m_part( 0 )
 {
+    m_vbox = new QVBoxLayout( this );
+    m_vbox->setMargin( 0 );
+    m_vbox->setSpacing( 0 );
+
+    init();
+
     //TODO Make this configurable in the future,
     // but by default the konsole shouldn't
     // automatically switch directories on you.
 
-    //     connect( KDevCore::documentController(),
-    //              SIGNAL( activePartChanged( KParts::Part* ) ),
-    //              this, SLOT( activePartChanged( KParts::Part* ) ) );
-    m_vbox = new QVBoxLayout( this );
+//     connect( KDevCore::documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
+//              this, SLOT( documentActivated( KDevDocument* ) ) );
+
+    connect( KDevCore::projectController(), SIGNAL( projectOpened() ),
+             this, SLOT( projectOpened() ) );
+
+    connect( KDevCore::projectController(), SIGNAL( projectClosed() ),
+             this, SLOT( projectClosed() ) );
 }
 
 KDevKonsoleView::~KDevKonsoleView()
@@ -49,37 +57,26 @@ KDevKonsoleView::~KDevKonsoleView()
     delete m_part;
 }
 
-void KDevKonsoleView::showEvent( QShowEvent *event )
+void KDevKonsoleView::init()
 {
-    QWidget::showEvent( event );
-    activate();
-}
-
-void KDevKonsoleView::activate()
-{
-    static bool initialized = false;
-
-    if ( initialized )
-        return ;
-
     Q_ASSERT( m_part == 0 );
-    initialized = true;
 
     if ( KLibFactory * factory = KLibLoader::self() ->factory( "libkonsolepart" ) )
     {
-        if ( m_part = qobject_cast<KParts::ReadOnlyPart*>( factory->create( this ) ) )
+        if ( ( m_part = qobject_cast<KParts::ReadOnlyPart*>( factory->create( this ) ) ) )
         {
             m_part->widget() ->setFocusPolicy( Qt::WheelFocus );
-            setFocusProxy( m_part->widget() );
             m_part->widget() ->setFocus();
 
             if ( QFrame * frame = qobject_cast<QFrame*>( m_part->widget() ) )
                 frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
 
             m_vbox->addWidget( m_part->widget() );
-            m_part->widget() ->show();
-
             connect( m_part, SIGNAL( destroyed() ), this, SLOT( partDestroyed() ) );
+
+            setFocusProxy( m_part->widget() );
+
+            m_part->widget() ->show();
         }
     }
     else
@@ -90,37 +87,35 @@ void KDevKonsoleView::activate()
     }
 }
 
-
-void KDevKonsoleView::activePartChanged( KParts::Part *activatedPart )
-{
-    KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( activatedPart );
-
-    if ( ro_part && !ro_part->url().isLocalFile() )
-        return ;
-
-    QString dir;
-    if ( ro_part )
-        dir = ro_part->url().directory();
-    else if ( KDevCore::activeProject() )
-        dir = KDevCore::activeProject() ->projectDirectory();
-
-    if ( dir.isEmpty() )
-        return ;
-    setDirectory( KUrl( dir ) );
-}
-
-void KDevKonsoleView::setDirectory( const KUrl &dirUrl )
-{
-    if ( m_part && dirUrl != m_part->url() )
-        m_part->openURL( dirUrl );
-}
-
 void KDevKonsoleView::partDestroyed()
 {
     m_part = 0;
-    activate();
+    init();
 }
 
+void KDevKonsoleView::projectOpened()
+{
+    setDirectory( KDevCore::projectController()->globalFile() );
+}
+
+void KDevKonsoleView::projectClosed()
+{
+    setDirectory( KDevCore::projectController()->projectsDirectory() );
+}
+
+void KDevKonsoleView::documentActivated( KDevDocument *document )
+{
+    setDirectory( document->url() );
+}
+
+void KDevKonsoleView::setDirectory( const KUrl &url )
+{
+    if ( !url.isValid() || !url.isLocalFile() )
+        return ;
+
+    if ( m_part && url != m_part->url() )
+        m_part->openURL( url );
+}
 
 #include "kdevkonsoleview.moc"
 

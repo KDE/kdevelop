@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright (C) 2003 by KDevelop Authors                                *
+*   Copyright (C) 2003, 2006 by KDevelop Authors                          *
 *   kdevelop-devel@kde.org                                                *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -14,36 +14,35 @@
 
 #include <QWidget>
 
+#include <kurl.h>
+
 class QVBoxLayout;
 
-class KDevProject;
-class KDevKonsoleViewPart;
+class KDevDocument;
 
 namespace KParts
 {
 class ReadOnlyPart;
-class Part;
 }
 
 class KDevKonsoleView : public QWidget
 {
     Q_OBJECT
 public:
-    KDevKonsoleView( QWidget *parent );
+    KDevKonsoleView( QWidget *parent = 0 );
     virtual ~KDevKonsoleView();
 
 public slots:
     void setDirectory( const KUrl &dirUrl );
 
 private slots:
-    void activePartChanged( KParts::Part *activatedPart );
+    void projectOpened();
+    void projectClosed();
+    void documentActivated( KDevDocument *document );
     void partDestroyed();
 
-protected:
-    virtual void showEvent( QShowEvent *event );
-
 private:
-    void activate();
+    void init();
 
     KParts::ReadOnlyPart *m_part;
     QVBoxLayout *m_vbox;

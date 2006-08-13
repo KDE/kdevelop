@@ -26,7 +26,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevkonsoleview,
 KDevKonsoleViewPart::KDevKonsoleViewPart( QObject *parent, const QStringList & )
     : KDevPlugin( KonsoleViewFactory::instance(), parent )
 {
-    m_konsoleView = new KDevKonsoleView( 0 );
+    m_konsoleView = new KDevKonsoleView;
 
     m_konsoleView->setWhatsThis( i18n( "<b>Konsole</b><p>"
                                        "This window contains an embedded console." ) );
