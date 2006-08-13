@@ -118,24 +118,24 @@ QStringList CppLanguageSupport::mimeTypes() const
     return m_mimetypes;
 }
 
-void CppLanguageSupport::documentLoaded( KDevDocument* file )
+void CppLanguageSupport::documentLoaded( KDevDocument *document )
 {
-    if ( supportsDocument( file ) )
-        KDevCore::backgroundParser() ->addDocument( file->url(), file );
+    if ( supportsDocument( document ) )
+        KDevCore::backgroundParser() ->addDocument( document );
 }
 
-void CppLanguageSupport::documentClosed( KDevDocument* file )
+void CppLanguageSupport::documentClosed( KDevDocument *document )
 {
-    if ( supportsDocument( file ) )
-        KDevCore::backgroundParser() ->removeDocumentFile( file );
+    if ( supportsDocument( document ) )
+        KDevCore::backgroundParser() ->removeDocument( document );
 }
 
-void CppLanguageSupport::documentActivated( KDevDocument* file )
+void CppLanguageSupport::documentActivated( KDevDocument *document )
 {
-    Q_UNUSED( file );
+    Q_UNUSED( document );
 }
 
-KDevCodeHighlighting* CppLanguageSupport::codeHighlighting() const
+KDevCodeHighlighting *CppLanguageSupport::codeHighlighting() const
 {
     return m_highlights;
 }

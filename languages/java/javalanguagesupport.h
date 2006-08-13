@@ -47,9 +47,9 @@ public:
     virtual QStringList mimeTypes() const;
 
 private slots:
-    void documentLoaded( KDevDocument* file );
-    void documentClosed( KDevDocument* file );
-    void documentActivated( KDevDocument* file );
+    void documentLoaded( KDevDocument *document );
+    void documentClosed( KDevDocument *document );
+    void documentActivated( KDevDocument *document );
     void projectOpened();
     void projectClosed();
 

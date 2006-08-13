@@ -61,18 +61,23 @@ public:
     virtual ~KDevBackgroundParser();
 
     void init();
+    void cacheModels( uint modelsToCache );
 
 public slots:
     void suspend();
     void resume();
-    void addDocument( const KUrl &url, KDevDocument *document = 0L );
+
+    void addDocument( const KUrl &url );
+    void addDocument( KDevDocument *document );
     void addDocumentList( const KUrl::List &urls );
-    void removeDocumentFile( KDevDocument *document );
     void removeDocument( const KUrl &url );
+    void removeDocument( KDevDocument *document );
+
     void parseDocuments();
+
+private slots:
     void parseComplete( Job *job );
     void documentChanged( KTextEditor::Document *document );
-    void cacheModels( uint modelsToCache );
 
 private:
     QTimer *m_timer;

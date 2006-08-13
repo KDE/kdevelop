@@ -140,21 +140,21 @@ void CSharpLanguageSupport::write( KDevAST * ast, std::ofstream &out )
     }
 }
 
-void CSharpLanguageSupport::documentLoaded( KDevDocument* file )
+void CSharpLanguageSupport::documentLoaded( KDevDocument *document )
 {
-    if ( supportsDocument( file ) )
-        KDevCore::backgroundParser() ->addDocument( file->url(), file );
+    if ( supportsDocument( document ) )
+        KDevCore::backgroundParser() ->addDocument( document );
 }
 
-void CSharpLanguageSupport::documentClosed( KDevDocument* file )
+void CSharpLanguageSupport::documentClosed( KDevDocument *document )
 {
-    if ( supportsDocument( file ) )
-        KDevCore::backgroundParser() ->removeDocumentFile( file );
+    if ( supportsDocument( document ) )
+        KDevCore::backgroundParser() ->removeDocument( document );
 }
 
-void CSharpLanguageSupport::documentActivated( KDevDocument* file )
+void CSharpLanguageSupport::documentActivated( KDevDocument *document )
 {
-    Q_UNUSED( file );
+    Q_UNUSED( document );
 }
 
 void CSharpLanguageSupport::projectOpened()

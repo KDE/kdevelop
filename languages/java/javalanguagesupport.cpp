@@ -118,21 +118,21 @@ QStringList JavaLanguageSupport::mimeTypes() const
     return m_mimetypes;
 }
 
-void JavaLanguageSupport::documentLoaded( KDevDocument* file )
+void JavaLanguageSupport::documentLoaded( KDevDocument *document )
 {
-    if ( supportsDocument( file ) )
-        KDevCore::backgroundParser() ->addDocument( file->url(), file );
+    if ( supportsDocument( document ) )
+        KDevCore::backgroundParser() ->addDocument( document );
 }
 
-void JavaLanguageSupport::documentClosed( KDevDocument* file )
+void JavaLanguageSupport::documentClosed( KDevDocument *document )
 {
-    if ( supportsDocument( file ) )
-        KDevCore::backgroundParser() ->removeDocumentFile( file );
+    if ( supportsDocument( document ) )
+        KDevCore::backgroundParser() ->removeDocument( document );
 }
 
-void JavaLanguageSupport::documentActivated( KDevDocument* file )
+void JavaLanguageSupport::documentActivated( KDevDocument *document )
 {
-    Q_UNUSED( file );
+    Q_UNUSED( document );
 }
 
 void JavaLanguageSupport::projectOpened()

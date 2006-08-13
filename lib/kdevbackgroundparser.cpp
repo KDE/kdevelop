@@ -78,22 +78,36 @@ void KDevBackgroundParser::init()
     m_progressBar->hide();
 }
 
-void KDevBackgroundParser::addDocument( const KUrl &url, KDevDocument* document )
+void KDevBackgroundParser::cacheModels( uint modelsToCache )
 {
-    if ( document )
-        m_openDocuments.insert( url, document );
+    m_modelsToCache = modelsToCache;
+    m_progressBar->reset();
+    m_progressBar->setMinimum( 0 );
+    m_progressBar->setMaximum( modelsToCache );
+    m_progressBar->show();
+}
+
+void KDevBackgroundParser::addDocument( const KUrl &url )
+{
+    Q_ASSERT( url.isValid() );
 
     if ( !m_documents.contains( url ) )
     {
         m_documents.insert( url, true );
         parseDocuments();
     }
+}
 
-    if ( document && document->textDocument() )
-    {
-        connect( document->textDocument(), SIGNAL( textChanged( KTextEditor::Document* ) ),
-                 this, SLOT( documentChanged( KTextEditor::Document* ) ) );
-    }
+void KDevBackgroundParser::addDocument( KDevDocument* document )
+{
+    Q_ASSERT( document && document->textDocument() );
+
+    m_openDocuments.insert( document->url(), document );
+
+    connect( document->textDocument(), SIGNAL( textChanged( KTextEditor::Document* ) ),
+                this, SLOT( documentChanged( KTextEditor::Document* ) ) );
+
+    addDocument( document->url() );
 }
 
 void KDevBackgroundParser::addDocumentList( const KUrl::List &urls )
@@ -114,9 +128,18 @@ void KDevBackgroundParser::addDocumentList( const KUrl::List &urls )
 
 void KDevBackgroundParser::removeDocument( const KUrl &url )
 {
+    Q_ASSERT( url.isValid() );
+
     m_documents.remove( url );
     if ( m_openDocuments.contains( url ) )
         m_openDocuments.remove( url );
+}
+
+void KDevBackgroundParser::removeDocument( KDevDocument* document )
+{
+    Q_ASSERT( document && document->textDocument() );
+
+    removeDocument( document->url() );
 }
 
 void KDevBackgroundParser::parseDocuments()
@@ -162,15 +185,6 @@ void KDevBackgroundParser::parseDocuments()
         }
     }
     m_weaver ->enqueue( collection );
-}
-
-void KDevBackgroundParser::cacheModels( uint modelsToCache )
-{
-    m_modelsToCache = modelsToCache;
-    m_progressBar->reset();
-    m_progressBar->setMinimum( 0 );
-    m_progressBar->setMaximum( modelsToCache );
-    m_progressBar->show();
 }
 
 void KDevBackgroundParser::parseComplete( Job *job )
@@ -240,11 +254,6 @@ void KDevBackgroundParser::resume()
 {
     m_suspend = false;
     m_timer->start( 500 );
-}
-
-void KDevBackgroundParser::removeDocumentFile( KDevDocument * document )
-{
-    m_openDocuments.remove( document->url() );
 }
 
 #include "kdevbackgroundparser.moc"
