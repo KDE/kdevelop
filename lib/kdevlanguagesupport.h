@@ -79,7 +79,7 @@ public:
     object, also its lifetime should be equal to the lifetime of the plugin.
     @param parent The parent object for the plugin.
     */
-    KDevLanguageSupport(KInstance* instance, QObject *parent);
+    KDevLanguageSupport(KInstance *instance, QObject *parent);
 
     /**Destructor.*/
     ~KDevLanguageSupport();
@@ -108,15 +108,15 @@ public:
 
     //FIXME Make these pure to force language parts to provide this.
     //Right now the cpp language part can't persist the AST...
-    virtual void read( KDevAST * ast, std::ifstream &in );
-    virtual void write( KDevAST * ast, std::ofstream &out );
+    virtual void read( KDevAST *ast, std::ifstream &in );
+    virtual void write( KDevAST *ast, std::ofstream &out );
 
     /**@return A typical mimetype list for the support language, this list
     should be configurable in the languagesupport dialog.*/
     virtual QStringList mimeTypes() const = 0;
 
     /**@return Whether the given document is supported by the language part.*/
-    virtual bool supportsDocument( KDevDocument* file );
+    virtual bool supportsDocument( KDevDocument *document );
 
     /**@return Whether the given url is supported by the language part.*/
     virtual bool supportsDocument( const KUrl &url );

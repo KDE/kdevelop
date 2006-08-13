@@ -37,9 +37,9 @@ KDevLanguageSupport::~KDevLanguageSupport()
 {
 }
 
-bool KDevLanguageSupport::supportsDocument( KDevDocument* file )
+bool KDevLanguageSupport::supportsDocument( KDevDocument *document )
 {
-    KMimeType::Ptr mimetype = file->mimeType();
+    KMimeType::Ptr mimetype = document->mimeType();
     QStringList mimeList = mimeTypes();
     QStringList::const_iterator it = mimeList.begin();
     for ( ; it != mimeList.end(); it++ )
@@ -59,17 +59,21 @@ bool KDevLanguageSupport::supportsDocument( const KUrl &url )
     return false;
 }
 
-void KDevLanguageSupport::read( KDevAST * ast, std::ifstream &in )
+void KDevLanguageSupport::read( KDevAST *ast, std::ifstream &in )
 {
+    Q_UNUSED( ast );
+    Q_UNUSED( in );
     //Do Nothing
 }
 
-void KDevLanguageSupport::write( KDevAST * ast, std::ofstream &out )
+void KDevLanguageSupport::write( KDevAST *ast, std::ofstream &out )
 {
+    Q_UNUSED( ast );
+    Q_UNUSED( out );
     //Do Nothing
 }
 
-KDevCodeHighlighting * KDevLanguageSupport::codeHighlighting() const
+KDevCodeHighlighting *KDevLanguageSupport::codeHighlighting() const
 {
   // No default highlighting support
   return 0L;
