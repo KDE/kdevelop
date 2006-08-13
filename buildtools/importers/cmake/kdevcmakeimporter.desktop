@@ -1,9 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KDevelop CMake Manager
-Name[x-test]=xxKDevCMakeImporterxx
 Comment=Allows KDevelop to manager CMake based projects
-Comment[x-test]=xxKDevelop CMake Importerxx
 Icon=gear
 ServiceTypes=KDevelop/FileManager
 X-KDE-Library=kdevcmakeimporter

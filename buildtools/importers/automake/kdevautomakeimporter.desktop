@@ -1,10 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KDevelop Autotools Importer
-Name[x-test]=xxKDevAutomakeImporterxx
 Comment=Allows KDevelop to manage projects based on a GNU-based build system
-Comment[fr]=Importation d'Automake pour KDevelop
-Comment[x-test]=xxKDevelop Automake Importerxx
 Icon=gear
 ServiceTypes=KDevelop/FileManager
 X-KDE-Library=kdevautomakeimporter
