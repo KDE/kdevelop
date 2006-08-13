@@ -24,6 +24,7 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevcodemodel.h"
+#include "kdevmainwindow.h"
 #include "kdevlanguagesupport.h"
 #include "kdevdocumentcontroller.h"
 #include "kdevcodehighlighting.h"
@@ -33,11 +34,12 @@
 #include "kdevpersistenthash.h"
 
 #include <QList>
-#include <QTimer>
-#include <QMutexLocker>
 #include <QFile>
+#include <QTimer>
+#include <QProgressBar>
 
 #include <kdebug.h>
+#include <kstatusbar.h>
 
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
@@ -50,6 +52,7 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         : QObject( parent ),
         m_suspend( false ),
         m_modelsToCache( 0 ),
+        m_progressBar( new QProgressBar ),
         m_persistentHash( new KDevPersistentHash ),
         m_weaver( new Weaver( this, 1, 1 ) ) //C++ parser can't multi-thread at the moment
 {
@@ -66,6 +69,13 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
 KDevBackgroundParser::~KDevBackgroundParser()
 {
     m_weaver->finish();
+}
+
+void KDevBackgroundParser::init()
+{
+    m_progressBar->setMinimumWidth( 150 );
+    KDevCore::mainWindow()->statusBar()->addPermanentWidget( m_progressBar );
+    m_progressBar->hide();
 }
 
 void KDevBackgroundParser::addDocument( const KUrl &url, KDevDocument* document )
@@ -157,6 +167,10 @@ void KDevBackgroundParser::parseDocuments()
 void KDevBackgroundParser::cacheModels( uint modelsToCache )
 {
     m_modelsToCache = modelsToCache;
+    m_progressBar->reset();
+    m_progressBar->setMinimum( 0 );
+    m_progressBar->setMaximum( modelsToCache );
+    m_progressBar->show();
 }
 
 void KDevBackgroundParser::parseComplete( Job *job )
@@ -167,36 +181,35 @@ void KDevBackgroundParser::parseComplete( Job *job )
 
     if ( KDevParseJob * parseJob = qobject_cast<KDevParseJob*>( job ) )
     {
-        //FIXME The Java and CSharp parsers don't get past this as they have
-        //no current code model.
-        if ( !parseJob->wasSuccessful() )
-            return ;
-
-        if (langSupport->codeHighlighting()) {
-            //FIXME abstract out codehighlingting in kdevlanguagesupport
-            //langSupport->codeHighlighting()->highlightModel(parseJob->codeModel());
-            langSupport->codeHighlighting()->highlightDUChain(parseJob->duChain());
+        if ( langSupport->codeHighlighting() )
+        {
+            langSupport->codeHighlighting()->highlightDUChain( parseJob->duChain() );
         }
 
         if ( m_modelsToCache )
         {
+            if ( parseJob->codeModel() )
             m_modelCache.append( qMakePair( parseJob->document(),
                                             parseJob->codeModel() ) );
 
             m_modelsToCache--; //decrement
+            m_progressBar->setValue( m_progressBar->value() + 1 );
 
-            if ( !m_modelsToCache && !m_modelCache.isEmpty() )         //decremented to zero
+            if ( !m_modelsToCache /*&& !m_modelCache.isEmpty()*/ )
             {
+                if ( parseJob->codeModel() )
                 langSupport->codeProxy() ->insertModelCache( m_modelCache );
                 m_modelCache.clear();
 
                 //FIXME Stub for now, but eventually save persistent parser info
                 //whatever that may entail.
                 m_persistentHash->save();
+                m_progressBar->hide();
             }
         }
         else
         {
+            if ( parseJob->codeModel() )
             langSupport->codeProxy() ->insertModel( parseJob->document(),
                                                     parseJob->codeModel() );
         }

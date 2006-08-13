@@ -41,7 +41,6 @@ Boston, MA 02110-1301, USA.
 #include <klineedit.h>
 #include <kshortcut.h>
 #include <kdirwatch.h>
-#include <kstatusbar.h>
 #include <khtml_part.h>
 #include <kdeversion.h>
 #include <kmessagebox.h>

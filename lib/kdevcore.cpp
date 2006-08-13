@@ -206,13 +206,17 @@ void KDevCore::initialize()
     //depend upon one another.  Can not do this in the constructor
     //as they might depend upon one another.
 
+    //WARNING! the order is important
+
     //FIXME standardize on 'initialize' method name.
     Q_ASSERT( d->documentController );
     Q_ASSERT( d->projectController );
     Q_ASSERT( d->mainWindow );
+    Q_ASSERT( d->backgroundParser );
     d->documentController->init();
     d->projectController->init();
     d->mainWindow->init();
+    d->backgroundParser->init();
 }
 
 //FIXME

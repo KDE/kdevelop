@@ -35,7 +35,6 @@
 #include <kdialog.h>
 #include <kcmdlineargs.h>
 #include <kstandarddirs.h>
-#include <kstatusbar.h>
 #include <kiconloader.h>
 #include <kaction.h>
 #include <kaction.h>

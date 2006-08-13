@@ -45,7 +45,7 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
-#include "statusbar.h"
+#include "kdevstatusbar.h"
 #include "shellextension.h"
 #include "kdevplugincontroller.h"
 #include "kdevprojectcontroller.h"

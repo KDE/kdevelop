@@ -41,6 +41,7 @@ class Document;
 }
 
 class QTimer;
+class QProgressBar;
 
 class KDevAST;
 class KDevDocument;
@@ -58,6 +59,8 @@ class KDevBackgroundParser : public QObject
 public:
     KDevBackgroundParser( QObject* parent = 0 );
     virtual ~KDevBackgroundParser();
+
+    void init();
 
 public slots:
     void suspend();
@@ -82,6 +85,8 @@ private:
     QMap<KUrl, KDevDocument*> m_openDocuments;
     // A list of cached models when parsing a large amount of files.
     CodeModelCache m_modelCache;
+
+    QProgressBar *m_progressBar;
 
     // The persistent AST storage
     KDevPersistentHash *m_persistentHash;

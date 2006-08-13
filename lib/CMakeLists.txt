@@ -45,7 +45,7 @@ set(kdevplatform_LIB_SRCS
     kdevprojectcontroller.cpp
     kdevpartcontroller.cpp
     kdevlanguagecontroller.cpp
-    statusbar.cpp
+    kdevstatusbar.cpp
     shellextension.cpp
     kdevcontext.cpp
     kdevast.cpp
@@ -109,7 +109,7 @@ install(FILES
     kdevprojectcontroller.h
     kdevpartcontroller.h
     kdevlanguagecontroller.h
-    statusbar.h
+    kdevstatusbar.h
     shellextension.h
     kdevcontext.h
     kdevast.h
