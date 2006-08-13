@@ -12,6 +12,7 @@ Comment[ga]=Clár %{APPNAME}
 Comment[hu]=%{APPNAME} program
 Comment[it]=Un programma per %{APPNAME}
 Comment[ja]=%{APPNAME} プログラム
+Comment[nds]=En %{APPNAME}-Programm
 Comment[nl]=Een %{APPNAME} programma
 Comment[pl]=Program %{APPNAME}
 Comment[pt]=Um Programa %{APPNAME}

@@ -14,6 +14,7 @@ Comment[fr]=Simple module d'envoi de fichier. Il fait une copie de fichier par n
 Comment[hu]=Egyszerű fájlfeltöltő modul. Fájlok másolására képes bármelyik KDE-protokollon keresztül.
 Comment[it]=Semplice plugin di invio file. Fa una copia del file tramite qualunque protocollo KIO supportato.
 Comment[ja]=簡単なファイルアップローダプラグイン。KIO がサポートするプロトコル上でファイルをコピーします。
+Comment[nds]=En eenfach Dateihoochlaadmoduul. Dateien köönt över elk vun en In-/Utgaavmoduul ünnerstütt Protokoll kopeert warrn.
 Comment[nl]=Eenvoudige bestands-upload plugin. De plugin kopiëert bestanden over elk KIO ondersteund protocol.
 Comment[pl]=Prosta wtyczka do wysyłania plików. Kopiuje pliki za pomocą dowolnego protokołu obsługiwanego przez KIO.
 Comment[pt]='Plugin' de envio de ficheiros. Copia ficheiros sobre qualquer protocolo suportado pelo KIO.
