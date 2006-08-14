@@ -52,6 +52,7 @@ protected:
   // declarations
   virtual void visit_namespace_declaration(namespace_declaration_ast *node);
   virtual void visit_qualified_identifier(qualified_identifier_ast *node);
+  virtual void visit_class_declaration(class_declaration_ast *node);
   virtual void visit_optional_modifiers(optional_modifiers_ast *node);
 
   /*
@@ -63,7 +64,6 @@ protected:
   virtual void visit_attribute_target(attribute_target_ast *node);
   virtual void visit_block(block_ast *node);
   virtual void visit_class_base(class_base_ast *node);
-  virtual void visit_class_declaration(class_declaration_ast *node);
   virtual void visit_constant_declaration_data(constant_declaration_data_ast *node);
   virtual void visit_constant_declarator(constant_declarator_ast *node);
   virtual void visit_constructor_constraint(constructor_constraint_ast *node);
@@ -134,29 +134,29 @@ protected:
 private:
   std::string decode_string(std::size_t index) const;
 
-  QStringList changeCurrentContext(const QStringList& context);
-  bool changeEditContext(bool edit);
+  ScopeModelItem changeCurrentScope(ScopeModelItem item);
 
-  ScopeModelItem changeCurrentScope(ScopeModelItem scope);
-  access_policy::access_policy_enum changeCurrentAccess(access_policy::access_policy_enum accessPolicy);
-  NamespaceDeclarationModelItem changeCurrentNamespace(NamespaceDeclarationModelItem item);
+  access_policy::access_policy_enum changeCurrentAccessPolicy(access_policy::access_policy_enum accessPolicy);
+  uint changeCurrentModifiers(uint modifiers);
 
   void setPositionAt(_CodeModelItem *item, ast_node *ast);
 
 private:
+  // will be generated as pre-defined text
   CodeModel *_M_model;
   parser::token_stream_type *_M_token_stream;
   decoder _M_decoder;
   Lexer *_M_lexer;
-  GlobalNamespaceDeclarationModelItem _M_globalNamespace;
   QString _M_currentFile;
-
-  QStringList _M_currentContext;
-  bool _M_editContext;
-
   ScopeModelItem _M_currentScope;
-  access_policy::access_policy_enum _M_currentAccess;
-  NamespaceDeclarationModelItem _M_currentNamespace;
+
+  // will be generated depending on the codemodel, or whatever
+  access_policy::access_policy_enum _M_currentAccessPolicy;
+  uint _M_currentModifiers;
+  AttributeSectionList _M_currentAttributes;
+
+  // custom inserted code
+  QStringList _M_additionalContext;
 };
 
 } // end of namespace csharp

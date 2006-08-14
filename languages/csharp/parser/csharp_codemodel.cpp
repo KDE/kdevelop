@@ -476,34 +476,6 @@ namespace csharp
       return  _M_delegates.value(name);
     }
 
-
-  ITEM(NamespaceDeclaration) CLASS::createNamespace(QStringList names)
-  {
-    if  (names.isEmpty())
-      return  this;
-    else
-      {
-        QString first =  names.takeFirst();
-        NamespaceDeclarationModelItem ns =  findNamespace(first);
-
-        if  (!ns)
-          {
-            ns =  model()->create<NamespaceDeclarationModelItem>();
-
-            QStringList childScope =  scope();
-
-            if  (!name().isNull())
-              childScope.append(name());
-
-            ns->setName(first);
-            ns->setScope(childScope);
-            addNamespace(ns);
-          }
-
-        return  ns->createNamespace(names);
-      }
-  }
-
 #undef CLASS
 #undef BASECLASS
 

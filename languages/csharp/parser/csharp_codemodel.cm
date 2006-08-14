@@ -127,6 +127,16 @@ Code
 
 Scope: Code
 {
+  public declaration
+  [:
+    QStringList context()
+    {
+      if (name().isNull())
+        return scope();
+      else
+        return scope() << name();
+    }
+  :]
 }
 
 NamespaceDeclaration: Scope
@@ -141,38 +151,6 @@ NamespaceDeclaration: Scope
   #interface:       InterfaceDeclaration { hashed(name) };
   #enum:            EnumDeclaration      { hashed(name) };
   #delegate:        DelegateDeclaration  { hashed(name) };
-
-  public declaration
-  [:
-    ITEM(NamespaceDeclaration) createNamespace(QStringList names);
-  :]
-
-  implementation
-  [:
-    ITEM(NamespaceDeclaration) CLASS::createNamespace(QStringList names)
-    {
-      if (names.isEmpty())
-        return this;
-      else
-        {
-          QString first = names.takeFirst();
-          NamespaceDeclarationModelItem ns = findNamespace(first);
-          if (!ns)
-            {
-              ns = model()->create<NamespaceDeclarationModelItem>();
-
-              QStringList childScope = scope();
-              if (!name().isNull())
-                childScope.append(name());
-
-              ns->setName(first);
-              ns->setScope(childScope);
-              addNamespace(ns);
-            }
-          return ns->createNamespace(names);
-        }
-    }
-  :]
 }
 
 GlobalNamespaceDeclaration: NamespaceDeclaration

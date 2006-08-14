@@ -45,8 +45,6 @@ QIcon CodeDisplay::decoration( const _CodeModelItem *item )
 {
     switch ( item->kind() )
     {
-    case _CodeModelItem::Kind_Scope:
-        break;
     case _CodeModelItem::Kind_NamespaceDeclaration:
         return loadIcon( "namespace" );
     case _CodeModelItem::Kind_ClassDeclaration:
@@ -71,8 +69,26 @@ QIcon CodeDisplay::decoration( const _CodeModelItem *item )
 
 QString CodeDisplay::toolTip( const _CodeModelItem *item )
 {
-    QString qualified = item->qualifiedName().join( "." );
-    return qualified;
+    QString tooltip;
+    switch ( item->kind() )
+    {
+        case _CodeModelItem::Kind_NamespaceDeclaration:
+            tooltip = "namespace "; break;
+        case _CodeModelItem::Kind_ClassDeclaration:
+            tooltip = "class "; break;
+        case _CodeModelItem::Kind_StructDeclaration:
+            tooltip = "struct "; break;
+        case _CodeModelItem::Kind_InterfaceDeclaration:
+            tooltip = "interface "; break;
+        case _CodeModelItem::Kind_EnumDeclaration:
+            tooltip = "enum "; break;
+        case _CodeModelItem::Kind_DelegateDeclaration:
+            tooltip = "delegate "; break;
+        default:
+            break;
+    }
+    tooltip += item->qualifiedName().join( "." );
+    return tooltip;
 }
 
 QString CodeDisplay::whatsThis( const _CodeModelItem *item )

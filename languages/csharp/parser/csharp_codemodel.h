@@ -212,6 +212,15 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_ScopeModelItem();
 
     public:
+      QStringList context()
+      {
+        if  (name().isNull())
+          return  scope();
+        else
+          return  scope() <<  name();
+      }
+
+    public:
 
     private:
 
@@ -231,9 +240,6 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
 
       static NamespaceDeclarationModelItem create(CodeModel *model);
       virtual ~_NamespaceDeclarationModelItem();
-
-    public:
-      ITEM(NamespaceDeclaration) createNamespace(QStringList names);
 
     public:
       NamespaceDeclarationList namespaces() const;
