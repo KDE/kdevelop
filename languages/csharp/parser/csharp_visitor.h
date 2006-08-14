@@ -310,8 +310,6 @@ namespace csharp
                                                         {}
                                                         virtual void visit_struct_declaration(struct_declaration_ast *)
                                                         {}
-                                                        virtual void visit_struct_interfaces(struct_interfaces_ast *)
-                                                        {}
                                                         virtual void visit_struct_member_declaration(struct_member_declaration_ast *)
                                                         {}
                                                         virtual void visit_switch_label(switch_label_ast *)

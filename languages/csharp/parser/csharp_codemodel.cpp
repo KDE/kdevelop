@@ -180,25 +180,27 @@ namespace csharp
       return  q;
     }
 
-  /*
   // TODO: These methods should be cached upon initialization
   QString CLASS::display() const
-  {
-    return CodeDisplay::display( const_cast<const CLASS*>( this ) );
-  }
+    {
+      return  CodeDisplay::display( const_cast<const CLASS*>( this ) );
+    }
+
   QIcon CLASS::decoration() const
-  {
-    return CodeDisplay::decoration( const_cast<const CLASS*>( this ) );
-  }
+    {
+      return  CodeDisplay::decoration( const_cast<const CLASS*>( this ) );
+    }
+
   QString CLASS::toolTip() const
-  {
-    return CodeDisplay::toolTip( const_cast<const CLASS*>( this ) );
-  }
+    {
+      return  CodeDisplay::toolTip( const_cast<const CLASS*>( this ) );
+    }
+
   QString CLASS::whatsThis() const
-  {
-    return CodeDisplay::whatsThis( const_cast<const CLASS*>( this ) );
-  }
-  */
+    {
+      return  CodeDisplay::whatsThis( const_cast<const CLASS*>( this ) );
+    }
+
 #undef CLASS
 #undef BASECLASS
 
@@ -208,7 +210,7 @@ namespace csharp
 
   _ScopeModelItem::_ScopeModelItem(CodeModel *model,  int kind)
       :  _CodeModelItem(model,  kind)
-{}
+  {}
 
   _ScopeModelItem::~_ScopeModelItem()
   {}
@@ -473,6 +475,34 @@ namespace csharp
     {
       return  _M_delegates.value(name);
     }
+
+
+  ITEM(NamespaceDeclaration) CLASS::createNamespace(QStringList names)
+  {
+    if  (names.isEmpty())
+      return  this;
+    else
+      {
+        QString first =  names.takeFirst();
+        NamespaceDeclarationModelItem ns =  findNamespace(first);
+
+        if  (!ns)
+          {
+            ns =  model()->create<NamespaceDeclarationModelItem>();
+
+            QStringList childScope =  scope();
+
+            if  (!name().isNull())
+              childScope.append(name());
+
+            ns->setName(first);
+            ns->setScope(childScope);
+            addNamespace(ns);
+          }
+
+        return  ns->createNamespace(names);
+      }
+  }
 
 #undef CLASS
 #undef BASECLASS
@@ -2343,462 +2373,239 @@ namespace csharp
 #undef BASECLASS
 
           // ---------------------------------------------------------------------------
-#define CLASS _OperatorDeclarationModelItem
-#define BASECLASS _ScopeModelItem
+#define CLASS _ParameterModelItem
+#define BASECLASS _CodeModelItem
 
-          _OperatorDeclarationModelItem::_OperatorDeclarationModelItem(CodeModel *model,  int kind)
-              :  _ScopeModelItem(model,  kind)
-              ,  _M_isExtern( false )
-              ,  _M_isUnsafe( false )
-          {
-            setName(QString::null);
-          }
-
-          _OperatorDeclarationModelItem::~_OperatorDeclarationModelItem()
+          _ParameterModelItem::_ParameterModelItem(CodeModel *model,  int kind)
+              :  _CodeModelItem(model,  kind)
+              ,  _M_isArray( false )
+              ,  _M_parameterType( parameter::value_parameter )
           {}
 
-          OperatorDeclarationModelItem _OperatorDeclarationModelItem::create(CodeModel *model)
+          _ParameterModelItem::~_ParameterModelItem()
+          {}
+
+          ParameterModelItem _ParameterModelItem::create(CodeModel *model)
           {
-            OperatorDeclarationModelItem item(new _OperatorDeclarationModelItem(model));
+            ParameterModelItem item(new _ParameterModelItem(model));
             return  item;
           }
 
-          AttributeSectionList _OperatorDeclarationModelItem::attributes() const
+          AttributeSectionList _ParameterModelItem::attributes() const
             {
               return  _M_attributes;
             }
 
-          void _OperatorDeclarationModelItem::addAttribute(AttributeSectionModelItem item)
+          void _ParameterModelItem::addAttribute(AttributeSectionModelItem item)
           {
             model()->beginAppendItem(item,  this);
             _M_attributes.append(item);
             model()->endAppendItem();
           }
 
-          void _OperatorDeclarationModelItem::removeAttribute(AttributeSectionModelItem item)
+          void _ParameterModelItem::removeAttribute(AttributeSectionModelItem item)
           {
             model()->beginRemoveItem(item);
             _M_attributes.removeAt(_M_attributes.indexOf(item));
             model()->endRemoveItem();
           }
 
-          TypeInfo _OperatorDeclarationModelItem::sourceType() const
+          TypeInfo _ParameterModelItem::type() const
             {
-              return  _M_sourceType;
+              return  _M_type;
             }
 
-          void _OperatorDeclarationModelItem::setSourceType(TypeInfo sourceType)
+          void _ParameterModelItem::setType(TypeInfo type)
           {
-            _M_sourceType =  sourceType;
+            _M_type =  type;
           }
 
-          QString _OperatorDeclarationModelItem::sourceName() const
+          bool _ParameterModelItem::isArray() const
             {
-              return  _M_sourceName;
+              return  _M_isArray;
             }
 
-          void _OperatorDeclarationModelItem::setSourceName(QString sourceName)
+          void _ParameterModelItem::setArray(bool isArray)
           {
-            _M_sourceName =  sourceName;
+            _M_isArray =  isArray;
           }
 
-          bool _OperatorDeclarationModelItem::isExtern() const
+          parameter::parameter_type_enum _ParameterModelItem::parameterType() const
             {
-              return  _M_isExtern;
+              return  _M_parameterType;
             }
 
-          void _OperatorDeclarationModelItem::setExtern(bool isExtern)
+          void _ParameterModelItem::setParameterType(parameter::parameter_type_enum parameterType)
           {
-            _M_isExtern =  isExtern;
-          }
-
-          bool _OperatorDeclarationModelItem::isUnsafe() const
-            {
-              return  _M_isUnsafe;
-            }
-
-          void _OperatorDeclarationModelItem::setUnsafe(bool isUnsafe)
-          {
-            _M_isUnsafe =  isUnsafe;
+            _M_parameterType =  parameterType;
           }
 
 #undef CLASS
 #undef BASECLASS
 
           // ---------------------------------------------------------------------------
-#define CLASS _ConversionOperatorDeclarationModelItem
-#define BASECLASS _OperatorDeclarationModelItem
-
-          _ConversionOperatorDeclarationModelItem::_ConversionOperatorDeclarationModelItem(CodeModel *model,  int kind)
-              :  _OperatorDeclarationModelItem(model,  kind)
-          {}
-
-          _ConversionOperatorDeclarationModelItem::~_ConversionOperatorDeclarationModelItem()
-          {}
-
-          ConversionOperatorDeclarationModelItem _ConversionOperatorDeclarationModelItem::create(CodeModel *model)
-          {
-            ConversionOperatorDeclarationModelItem item(new _ConversionOperatorDeclarationModelItem(model));
-            return  item;
-          }
-
-          TypeInfo _ConversionOperatorDeclarationModelItem::targetType() const
-            {
-              return  _M_targetType;
-            }
-
-          void _ConversionOperatorDeclarationModelItem::setTargetType(TypeInfo targetType)
-          {
-            _M_targetType =  targetType;
-          }
-
-          conversion_operator_declaration::conversion_type_enum _ConversionOperatorDeclarationModelItem::conversion() const
-            {
-              return  _M_conversion;
-            }
-
-          void _ConversionOperatorDeclarationModelItem::setConversion(conversion_operator_declaration::conversion_type_enum conversion)
-          {
-            _M_conversion =  conversion;
-          }
-
-#undef CLASS
-#undef BASECLASS
-
-          // ---------------------------------------------------------------------------
-#define CLASS _UnaryOperatorDeclarationModelItem
-#define BASECLASS _OperatorDeclarationModelItem
-
-          _UnaryOperatorDeclarationModelItem::_UnaryOperatorDeclarationModelItem(CodeModel *model,  int kind)
-              :  _OperatorDeclarationModelItem(model,  kind)
-          {}
-
-          _UnaryOperatorDeclarationModelItem::~_UnaryOperatorDeclarationModelItem()
-          {}
-
-          UnaryOperatorDeclarationModelItem _UnaryOperatorDeclarationModelItem::create(CodeModel *model)
-          {
-            UnaryOperatorDeclarationModelItem item(new _UnaryOperatorDeclarationModelItem(model));
-            return  item;
-          }
-
-          TypeInfo _UnaryOperatorDeclarationModelItem::returnType() const
-                {
-                  return  _M_returnType;
-                }
-
-              void _UnaryOperatorDeclarationModelItem::setReturnType(TypeInfo returnType)
-              {
-                _M_returnType =  returnType;
-              }
-
-              overloadable_operator::overloadable_operator_enum _UnaryOperatorDeclarationModelItem::overloadedOperator() const
-                {
-                  return  _M_overloadedOperator;
-                }
-
-              void _UnaryOperatorDeclarationModelItem::setOverloadedOperator(overloadable_operator::overloadable_operator_enum overloadedOperator)
-              {
-                _M_overloadedOperator =  overloadedOperator;
-              }
-
-#undef CLASS
-#undef BASECLASS
-
-              // ---------------------------------------------------------------------------
-#define CLASS _BinaryOperatorDeclarationModelItem
-#define BASECLASS _OperatorDeclarationModelItem
-
-              _BinaryOperatorDeclarationModelItem::_BinaryOperatorDeclarationModelItem(CodeModel *model,  int kind)
-                  :  _OperatorDeclarationModelItem(model,  kind)
-              {}
-
-              _BinaryOperatorDeclarationModelItem::~_BinaryOperatorDeclarationModelItem()
-              {}
-
-              BinaryOperatorDeclarationModelItem _BinaryOperatorDeclarationModelItem::create(CodeModel *model)
-              {
-                BinaryOperatorDeclarationModelItem item(new _BinaryOperatorDeclarationModelItem(model));
-                return  item;
-              }
-
-              TypeInfo _BinaryOperatorDeclarationModelItem::returnType() const
-                    {
-                      return  _M_returnType;
-                    }
-
-                  void _BinaryOperatorDeclarationModelItem::setReturnType(TypeInfo returnType)
-                  {
-                    _M_returnType =  returnType;
-                  }
-
-                  overloadable_operator::overloadable_operator_enum _BinaryOperatorDeclarationModelItem::overloadedOperator() const
-                    {
-                      return  _M_overloadedOperator;
-                    }
-
-                  void _BinaryOperatorDeclarationModelItem::setOverloadedOperator(overloadable_operator::overloadable_operator_enum overloadedOperator)
-                  {
-                    _M_overloadedOperator =  overloadedOperator;
-                  }
-
-                  TypeInfo _BinaryOperatorDeclarationModelItem::source2Type() const
-                    {
-                      return  _M_source2Type;
-                    }
-
-                  void _BinaryOperatorDeclarationModelItem::setSource2Type(TypeInfo source2Type)
-                  {
-                    _M_source2Type =  source2Type;
-                  }
-
-                  QString _BinaryOperatorDeclarationModelItem::source2Name() const
-                    {
-                      return  _M_source2Name;
-                    }
-
-                  void _BinaryOperatorDeclarationModelItem::setSource2Name(QString source2Name)
-                  {
-                    _M_source2Name =  source2Name;
-                  }
-
-#undef CLASS
-#undef BASECLASS
-
-                  // ---------------------------------------------------------------------------
-#define CLASS _ParameterModelItem
-#define BASECLASS _CodeModelItem
-
-                  _ParameterModelItem::_ParameterModelItem(CodeModel *model,  int kind)
-                      :  _CodeModelItem(model,  kind)
-                      ,  _M_isArray( false )
-                      ,  _M_parameterType( parameter::value_parameter )
-                  {}
-
-                  _ParameterModelItem::~_ParameterModelItem()
-                  {}
-
-                  ParameterModelItem _ParameterModelItem::create(CodeModel *model)
-                  {
-                    ParameterModelItem item(new _ParameterModelItem(model));
-                    return  item;
-                  }
-
-                  AttributeSectionList _ParameterModelItem::attributes() const
-                    {
-                      return  _M_attributes;
-                    }
-
-                  void _ParameterModelItem::addAttribute(AttributeSectionModelItem item)
-                  {
-                    model()->beginAppendItem(item,  this);
-                    _M_attributes.append(item);
-                    model()->endAppendItem();
-                  }
-
-                  void _ParameterModelItem::removeAttribute(AttributeSectionModelItem item)
-                  {
-                    model()->beginRemoveItem(item);
-                    _M_attributes.removeAt(_M_attributes.indexOf(item));
-                    model()->endRemoveItem();
-                  }
-
-                  TypeInfo _ParameterModelItem::type() const
-                    {
-                      return  _M_type;
-                    }
-
-                  void _ParameterModelItem::setType(TypeInfo type)
-                  {
-                    _M_type =  type;
-                  }
-
-                  bool _ParameterModelItem::isArray() const
-                    {
-                      return  _M_isArray;
-                    }
-
-                  void _ParameterModelItem::setArray(bool isArray)
-                  {
-                    _M_isArray =  isArray;
-                  }
-
-                  parameter::parameter_type_enum _ParameterModelItem::parameterType() const
-                    {
-                      return  _M_parameterType;
-                    }
-
-                  void _ParameterModelItem::setParameterType(parameter::parameter_type_enum parameterType)
-                  {
-                    _M_parameterType =  parameterType;
-                  }
-
-#undef CLASS
-#undef BASECLASS
-
-                  // ---------------------------------------------------------------------------
 #define CLASS _TypeParameterModelItem
 #define BASECLASS _CodeModelItem
 
-                  _TypeParameterModelItem::_TypeParameterModelItem(CodeModel *model,  int kind)
-                      :  _CodeModelItem(model,  kind)
-                  {}
+          _TypeParameterModelItem::_TypeParameterModelItem(CodeModel *model,  int kind)
+              :  _CodeModelItem(model,  kind)
+          {}
 
-                  _TypeParameterModelItem::~_TypeParameterModelItem()
-                  {}
+          _TypeParameterModelItem::~_TypeParameterModelItem()
+          {}
 
-                  TypeParameterModelItem _TypeParameterModelItem::create(CodeModel *model)
-                  {
-                    TypeParameterModelItem item(new _TypeParameterModelItem(model));
-                    return  item;
-                  }
+          TypeParameterModelItem _TypeParameterModelItem::create(CodeModel *model)
+          {
+            TypeParameterModelItem item(new _TypeParameterModelItem(model));
+            return  item;
+          }
 
-                  AttributeSectionList _TypeParameterModelItem::attributes() const
-                    {
-                      return  _M_attributes;
-                    }
+          AttributeSectionList _TypeParameterModelItem::attributes() const
+            {
+              return  _M_attributes;
+            }
 
-                  void _TypeParameterModelItem::addAttribute(AttributeSectionModelItem item)
-                  {
-                    model()->beginAppendItem(item,  this);
-                    _M_attributes.append(item);
-                    model()->endAppendItem();
-                  }
+          void _TypeParameterModelItem::addAttribute(AttributeSectionModelItem item)
+          {
+            model()->beginAppendItem(item,  this);
+            _M_attributes.append(item);
+            model()->endAppendItem();
+          }
 
-                  void _TypeParameterModelItem::removeAttribute(AttributeSectionModelItem item)
-                  {
-                    model()->beginRemoveItem(item);
-                    _M_attributes.removeAt(_M_attributes.indexOf(item));
-                    model()->endRemoveItem();
-                  }
+          void _TypeParameterModelItem::removeAttribute(AttributeSectionModelItem item)
+          {
+            model()->beginRemoveItem(item);
+            _M_attributes.removeAt(_M_attributes.indexOf(item));
+            model()->endRemoveItem();
+          }
 
 #undef CLASS
 #undef BASECLASS
 
-                  // ---------------------------------------------------------------------------
+          // ---------------------------------------------------------------------------
 #define CLASS _TypeParameterConstraintModelItem
 #define BASECLASS _CodeModelItem
 
-                  _TypeParameterConstraintModelItem::_TypeParameterConstraintModelItem(CodeModel *model,  int kind)
-                      :  _CodeModelItem(model,  kind)
-                  {}
+          _TypeParameterConstraintModelItem::_TypeParameterConstraintModelItem(CodeModel *model,  int kind)
+              :  _CodeModelItem(model,  kind)
+          {}
 
-                  _TypeParameterConstraintModelItem::~_TypeParameterConstraintModelItem()
-                  {}
+          _TypeParameterConstraintModelItem::~_TypeParameterConstraintModelItem()
+          {}
 
-                  TypeParameterConstraintModelItem _TypeParameterConstraintModelItem::create(CodeModel *model)
-                  {
-                    TypeParameterConstraintModelItem item(new _TypeParameterConstraintModelItem(model));
-                    return  item;
-                  }
+          TypeParameterConstraintModelItem _TypeParameterConstraintModelItem::create(CodeModel *model)
+          {
+            TypeParameterConstraintModelItem item(new _TypeParameterConstraintModelItem(model));
+            return  item;
+          }
 
 #undef CLASS
 #undef BASECLASS
 
-                  // ---------------------------------------------------------------------------
+          // ---------------------------------------------------------------------------
 #define CLASS _PrimaryOrSecondaryConstraintModelItem
 #define BASECLASS _TypeParameterConstraintModelItem
 
-                  _PrimaryOrSecondaryConstraintModelItem::_PrimaryOrSecondaryConstraintModelItem(CodeModel *model,  int kind)
-                      :  _TypeParameterConstraintModelItem(model,  kind)
-                      ,  _M_constraint_type( primary_or_secondary_constraint::type_type )
-                  {}
+          _PrimaryOrSecondaryConstraintModelItem::_PrimaryOrSecondaryConstraintModelItem(CodeModel *model,  int kind)
+              :  _TypeParameterConstraintModelItem(model,  kind)
+              ,  _M_constraint_type( primary_or_secondary_constraint::type_type )
+          {}
 
-                  _PrimaryOrSecondaryConstraintModelItem::~_PrimaryOrSecondaryConstraintModelItem()
-                  {}
+          _PrimaryOrSecondaryConstraintModelItem::~_PrimaryOrSecondaryConstraintModelItem()
+          {}
 
-                  PrimaryOrSecondaryConstraintModelItem _PrimaryOrSecondaryConstraintModelItem::create(CodeModel *model)
-                  {
-                    PrimaryOrSecondaryConstraintModelItem item(new _PrimaryOrSecondaryConstraintModelItem(model));
-                    return  item;
-                  }
+          PrimaryOrSecondaryConstraintModelItem _PrimaryOrSecondaryConstraintModelItem::create(CodeModel *model)
+          {
+            PrimaryOrSecondaryConstraintModelItem item(new _PrimaryOrSecondaryConstraintModelItem(model));
+            return  item;
+          }
 
-                  TypeInfo _PrimaryOrSecondaryConstraintModelItem::typeOrParameterName() const
-                    {
-                      return  _M_typeOrParameterName;
-                    }
+          TypeInfo _PrimaryOrSecondaryConstraintModelItem::typeOrParameterName() const
+            {
+              return  _M_typeOrParameterName;
+            }
 
-                  void _PrimaryOrSecondaryConstraintModelItem::setTypeOrParameterName(TypeInfo typeOrParameterName)
-                  {
-                    _M_typeOrParameterName =  typeOrParameterName;
-                  }
+          void _PrimaryOrSecondaryConstraintModelItem::setTypeOrParameterName(TypeInfo typeOrParameterName)
+          {
+            _M_typeOrParameterName =  typeOrParameterName;
+          }
 
-                  primary_or_secondary_constraint::primary_or_secondary_constraint_enum _PrimaryOrSecondaryConstraintModelItem::constraint_type() const
-                    {
-                      return  _M_constraint_type;
-                    }
+          primary_or_secondary_constraint::primary_or_secondary_constraint_enum _PrimaryOrSecondaryConstraintModelItem::constraint_type() const
+            {
+              return  _M_constraint_type;
+            }
 
-                  void _PrimaryOrSecondaryConstraintModelItem::setConstraint_type(primary_or_secondary_constraint::primary_or_secondary_constraint_enum constraint_type)
-                  {
-                    _M_constraint_type =  constraint_type;
-                  }
+          void _PrimaryOrSecondaryConstraintModelItem::setConstraint_type(primary_or_secondary_constraint::primary_or_secondary_constraint_enum constraint_type)
+          {
+            _M_constraint_type =  constraint_type;
+          }
 
 #undef CLASS
 #undef BASECLASS
 
-                  // ---------------------------------------------------------------------------
+          // ---------------------------------------------------------------------------
 #define CLASS _ConstructorConstraintModelItem
 #define BASECLASS _TypeParameterConstraintModelItem
 
-                  _ConstructorConstraintModelItem::_ConstructorConstraintModelItem(CodeModel *model,  int kind)
-                      :  _TypeParameterConstraintModelItem(model,  kind)
-                  {}
+          _ConstructorConstraintModelItem::_ConstructorConstraintModelItem(CodeModel *model,  int kind)
+              :  _TypeParameterConstraintModelItem(model,  kind)
+          {}
 
-                  _ConstructorConstraintModelItem::~_ConstructorConstraintModelItem()
-                  {}
+          _ConstructorConstraintModelItem::~_ConstructorConstraintModelItem()
+          {}
 
-                  ConstructorConstraintModelItem _ConstructorConstraintModelItem::create(CodeModel *model)
-                  {
-                    ConstructorConstraintModelItem item(new _ConstructorConstraintModelItem(model));
-                    return  item;
-                  }
+          ConstructorConstraintModelItem _ConstructorConstraintModelItem::create(CodeModel *model)
+          {
+            ConstructorConstraintModelItem item(new _ConstructorConstraintModelItem(model));
+            return  item;
+          }
 
 #undef CLASS
 #undef BASECLASS
 
-                  // ---------------------------------------------------------------------------
+          // ---------------------------------------------------------------------------
 #define CLASS _AttributeSectionModelItem
 #define BASECLASS _CodeModelItem
 
-                  _AttributeSectionModelItem::_AttributeSectionModelItem(CodeModel *model,  int kind)
-                      :  _CodeModelItem(model,  kind)
-                  {
-                    setName(QString::null);
-                  }
+          _AttributeSectionModelItem::_AttributeSectionModelItem(CodeModel *model,  int kind)
+              :  _CodeModelItem(model,  kind)
+          {
+            setName(QString::null);
+          }
 
-                  _AttributeSectionModelItem::~_AttributeSectionModelItem()
-                  {}
+          _AttributeSectionModelItem::~_AttributeSectionModelItem()
+          {}
 
-                  AttributeSectionModelItem _AttributeSectionModelItem::create(CodeModel *model)
-                  {
-                    AttributeSectionModelItem item(new _AttributeSectionModelItem(model));
-                    return  item;
-                  }
+          AttributeSectionModelItem _AttributeSectionModelItem::create(CodeModel *model)
+          {
+            AttributeSectionModelItem item(new _AttributeSectionModelItem(model));
+            return  item;
+          }
 
-                  QString _AttributeSectionModelItem::target() const
-                    {
-                      return  _M_target;
-                    }
+          QString _AttributeSectionModelItem::target() const
+            {
+              return  _M_target;
+            }
 
-                  void _AttributeSectionModelItem::setTarget(QString target)
-                  {
-                    _M_target =  target;
-                  }
+          void _AttributeSectionModelItem::setTarget(QString target)
+          {
+            _M_target =  target;
+          }
 
-                  QString _AttributeSectionModelItem::attribute() const
-                    {
-                      return  _M_attribute;
-                    }
+          QString _AttributeSectionModelItem::attribute() const
+            {
+              return  _M_attribute;
+            }
 
-                  void _AttributeSectionModelItem::setAttribute(QString attribute)
-                  {
-                    _M_attribute =  attribute;
-                  }
+          void _AttributeSectionModelItem::setAttribute(QString attribute)
+          {
+            _M_attribute =  attribute;
+          }
 
 #undef CLASS
 #undef BASECLASS
 
 
-                } // end of namespace csharp
+        } // end of namespace csharp
 
 

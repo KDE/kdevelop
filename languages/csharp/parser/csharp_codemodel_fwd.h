@@ -61,14 +61,6 @@ namespace csharp
 
   class _VariableDeclarationModelItem;
 
-  class _OperatorDeclarationModelItem;
-
-  class _ConversionOperatorDeclarationModelItem;
-
-  class _UnaryOperatorDeclarationModelItem;
-
-  class _BinaryOperatorDeclarationModelItem;
-
   class _ParameterModelItem;
 
   class _TypeParameterModelItem;
@@ -103,10 +95,6 @@ namespace csharp
   typedef KDevSharedPtr<_AccessorDeclarationModelItem> AccessorDeclarationModelItem;
   typedef KDevSharedPtr<_MethodDeclarationModelItem> MethodDeclarationModelItem;
   typedef KDevSharedPtr<_VariableDeclarationModelItem> VariableDeclarationModelItem;
-  typedef KDevSharedPtr<_OperatorDeclarationModelItem> OperatorDeclarationModelItem;
-  typedef KDevSharedPtr<_ConversionOperatorDeclarationModelItem> ConversionOperatorDeclarationModelItem;
-  typedef KDevSharedPtr<_UnaryOperatorDeclarationModelItem> UnaryOperatorDeclarationModelItem;
-  typedef KDevSharedPtr<_BinaryOperatorDeclarationModelItem> BinaryOperatorDeclarationModelItem;
   typedef KDevSharedPtr<_ParameterModelItem> ParameterModelItem;
   typedef KDevSharedPtr<_TypeParameterModelItem> TypeParameterModelItem;
   typedef KDevSharedPtr<_TypeParameterConstraintModelItem> TypeParameterConstraintModelItem;
@@ -137,10 +125,6 @@ namespace csharp
   typedef QList<AccessorDeclarationModelItem> AccessorDeclarationList;
   typedef QList<MethodDeclarationModelItem> MethodDeclarationList;
   typedef QList<VariableDeclarationModelItem> VariableDeclarationList;
-  typedef QList<OperatorDeclarationModelItem> OperatorDeclarationList;
-  typedef QList<ConversionOperatorDeclarationModelItem> ConversionOperatorDeclarationList;
-  typedef QList<UnaryOperatorDeclarationModelItem> UnaryOperatorDeclarationList;
-  typedef QList<BinaryOperatorDeclarationModelItem> BinaryOperatorDeclarationList;
   typedef QList<ParameterModelItem> ParameterList;
   typedef QList<TypeParameterModelItem> TypeParameterList;
   typedef QList<TypeParameterConstraintModelItem> TypeParameterConstraintList;

@@ -1413,15 +1413,6 @@ namespace csharp
                                                           default_visitor::visit_struct_declaration(node);
                                                         }
 
-                                                        virtual void visit_struct_interfaces(struct_interfaces_ast *node)
-                                                        {
-                                                          {
-                                                            type_name_ast *e = 0;
-                                                            handle_list_node(node->interface_type_sequence, e);
-                                                          }
-                                                          default_visitor::visit_struct_interfaces(node);
-                                                        }
-
                                                         virtual void visit_struct_member_declaration(struct_member_declaration_ast *node)
                                                         {
                                                           handle_ast_node(node->declaration);

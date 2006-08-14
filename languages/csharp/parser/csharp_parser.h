@@ -459,7 +459,6 @@ namespace csharp
       bool parse_statement_expression(statement_expression_ast **yynode);
       bool parse_struct_body(struct_body_ast **yynode);
       bool parse_struct_declaration(struct_declaration_ast **yynode, optional_attribute_sections_ast *attributes, optional_modifiers_ast *modifiers, bool partial);
-      bool parse_struct_interfaces(struct_interfaces_ast **yynode);
       bool parse_struct_member_declaration(struct_member_declaration_ast **yynode);
       bool parse_switch_label(switch_label_ast **yynode);
       bool parse_switch_section(switch_section_ast **yynode);

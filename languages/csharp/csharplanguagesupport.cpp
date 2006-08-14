@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <kgenericfactory.h>
 
 #include <kdevast.h>
+#include "parser/csharp_parser.h"
 #include "parser/csharp_serialize_visitor.h"
 
 #include <kdevcore.h>
@@ -36,10 +37,12 @@ Boston, MA 02110-1301, USA.
 
 #include "csharplanguagesupport.h"
 
-// #include "codeproxy.h"
-// #include "codedelegate.h"
+#include "codeproxy.h"
+#include "codedelegate.h"
 
 #include <kdebug.h>
+
+using namespace csharp;
 
 typedef KGenericFactory<CSharpLanguageSupport> KDevCSharpSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevcsharplanguagesupport,
@@ -52,10 +55,9 @@ CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
     QString types = QLatin1String( "text/x-csharp" );
     m_mimetypes = types.split( "," );
 
-    //     m_codeProxy = new CodeProxy( this );
-    //     m_codeDelegate = new CodeDelegate( this );
-    //     m_backgroundParser = new BackgroundParser( this );
-    //     m_highlights = new CppHighlighting( this );
+    m_codeProxy = new csharp::CodeProxy( this );
+    m_codeDelegate = new csharp::CodeDelegate( this );
+    //     m_highlights = new CSharpHighlighting( this );
 
     connect( KDevCore::documentController(),
              SIGNAL( documentLoaded( KDevDocument* ) ),
@@ -79,24 +81,20 @@ CSharpLanguageSupport::~CSharpLanguageSupport()
 
 KDevCodeModel *CSharpLanguageSupport::codeModel( const KUrl &url ) const
 {
-    Q_UNUSED( url );
-    return 0;
-    //     if ( url.isValid() )
-    //         return m_codeProxy->codeModel( url );
-    //     else
-    //         return m_codeProxy->codeModel( KDevCore::documentController() ->activeDocumentUrl() );
+    if ( url.isValid() )
+        return m_codeProxy->codeModel( url );
+    else
+        return m_codeProxy->codeModel( KDevCore::documentController() ->activeDocumentUrl() );
 }
 
 KDevCodeProxy *CSharpLanguageSupport::codeProxy() const
 {
-    return 0;
-    //     return m_codeProxy;
+    return m_codeProxy;
 }
 
 KDevCodeDelegate *CSharpLanguageSupport::codeDelegate() const
 {
-    return 0;
-    //     return m_codeDelegate;
+    return m_codeDelegate;
 }
 
 KDevCodeRepository *CSharpLanguageSupport::codeRepository() const
@@ -163,7 +161,7 @@ void CSharpLanguageSupport::projectOpened()
     QList<KDevProjectFileItem*> files = KDevCore::activeProject() ->allFiles();
     foreach ( KDevProjectFileItem * file, files )
     {
-        if (  /*supportsDocument( file->url() ) &&*/ file->url().fileName().endsWith( ".cs" ) )
+        if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith( ".cs" )*/ )
         {
             documentList.append( file->url() );
         }

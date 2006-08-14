@@ -52,7 +52,7 @@ void handler_visitor::visit_pp_declaration(pp_declaration_ast* node)
     return; // don't do anything if the current section is #if'd out.
 
   decoder d(_M_pp_parser->token_stream);
-  std::string symbol_name = d.decode_id(node->conditional_symbol);
+  std::string symbol_name = d.decode_string(node->conditional_symbol);
 
   if (node->type == pp_declaration::type_define)
     _M_scope->csharp_parser()->pp_define_symbol(symbol_name);
@@ -144,7 +144,7 @@ void handler_visitor::visit_pp_diagnostic(pp_diagnostic_ast* node)
       if (node->message)
         {
           decoder d(_M_pp_parser->token_stream);
-          std::string message = d.decode_id(node->message);
+          std::string message = d.decode_string(node->message);
           _M_scope->csharp_parser()->pp_diagnostic( diagnostic_type, message );
         }
       else
@@ -258,7 +258,7 @@ void handler_visitor::visit_pp_primary_expression(pp_primary_expression_ast* nod
     {
       decoder d(_M_pp_parser->token_stream);
       _M_expression_bool = _M_scope->csharp_parser()->pp_is_symbol_defined(
-        d.decode_id(node->conditional_symbol)
+        d.decode_string(node->conditional_symbol)
       );
     }
     break;

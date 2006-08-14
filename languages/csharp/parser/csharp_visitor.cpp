@@ -151,7 +151,6 @@ namespace csharp
         reinterpret_cast<parser_fun_t>(&visitor::visit_statement_expression),
         reinterpret_cast<parser_fun_t>(&visitor::visit_struct_body),
         reinterpret_cast<parser_fun_t>(&visitor::visit_struct_declaration),
-        reinterpret_cast<parser_fun_t>(&visitor::visit_struct_interfaces),
         reinterpret_cast<parser_fun_t>(&visitor::visit_struct_member_declaration),
         reinterpret_cast<parser_fun_t>(&visitor::visit_switch_label),
         reinterpret_cast<parser_fun_t>(&visitor::visit_switch_section),

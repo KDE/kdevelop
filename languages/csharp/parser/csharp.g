@@ -28,13 +28,13 @@
 -----------------------------------------------------------------------------
 
 
--- 21 first/follow conflicts:
+-- 18 first/follow conflicts:
 --  - The EXTERN conflicts in compilation_unit. They would be gone if
 --    type_declaration used optional_type_modifiers instead of
 --    broader optional_modifiers, but we stick with the latter one in order
 --    to improve the AST. As the extern_alias_directive comes first, it
 --    rightfully gets selected, and so the conflict is harmless.
---    (done right by default, 3 conflicts)
+--    (done right by default, 2 conflicts)
 --  - The LBRACKET conflict in compilation_unit,
 --    and the following EXTERN, LBRACKET conflict there.
 --    LBRACKET is resolved, EXTERN is just the above harmless conflict again.
@@ -45,17 +45,11 @@
 --    (manually resolved, 1 conflict)
 --  - The COMMA conflict in attribute_arguments: greedy is ok.
 --    (done right by default, 1 conflict)
---  - The EXTERN conflict in namespace_body. This is exactly the same as
---    the other "extern" conflicts from above, see there for the explanation.
---    (done right by default, 1 conflict)
 --  - The COMMA conflict in enum_body, also similar to the above.
 --    (manually resolved, 1 conflict)
 --  - The COMMA conflict in type_arguments:
 --    the approach for catching ">" signs works this way, and the conflict
 --    is resolved by the trailing condition at the end of the rule.
---    (manually resolved, 1 conflict)
---  - The COMMA conflict in secondary_constraints,
---    battling against constructor_constraints.
 --    (manually resolved, 1 conflict)
 --  - The COMMA conflict in array_initializer, another one of those.
 --    (manually resolved, 1 conflict)
@@ -72,10 +66,6 @@
 --    Caused by the fact that array_creation_expression can't be seperated
 --    from primary_atom and put into primary_expression instead.
 --    (manually resolved, 1 conflict)
---  - The STAR conflict in unmanaged_type:
---    Caused by the may-end-with-epsilon type_arguments. It doesn't apply
---    at all, only kdevelop-pg thinks it does. Code segments...
---    (done right by default, 1 conflict)
 --  - The LBRACKET, STAR conflict in unmanaged_type, similar to the one
 --    in array_creation_expression, only that it's triggered by the
 --    rank specifiers instead. The LBRACKET conflict is caused by the fact
@@ -143,7 +133,7 @@
 --  - The VOID conflict in return_type.
 --    (manually resolved, 1 conflict)
 
--- Total amount of conflicts: 35
+-- Total amount of conflicts: 32
 
 
 
@@ -882,7 +872,7 @@ namespace csharp_pp
       try/recover(type_parameters=type_parameters)
     | 0
    )
-   (struct_interfaces=struct_interfaces | 0)
+   (struct_interfaces=interface_base | 0)
    (  ?[: compatibility_mode() >= csharp20_compatibility :]
       try/recover(#type_parameter_constraints=type_parameter_constraints_clause)+
     | 0
@@ -964,9 +954,6 @@ namespace csharp_pp
       #base_type=type_name @ COMMA
    )
 -> class_base ;;
-
-   COLON #interface_type=type_name @ COMMA
--> struct_interfaces ;;
 
    COLON #interface_type=type_name @ COMMA
 -> interface_base ;;
@@ -2746,7 +2733,8 @@ namespace csharp_pp
 -> namespace_or_type_name_safe ;;
 
 
--- QUALIFIED identifiers are either qualified ones or raw identifiers.
+-- QUALIFIED IDENTIFIERs are either qualified ones or raw identifiers.
+-- In the C# grammar, they're only used as namespace names.
 
    #name=identifier @ DOT
 -> qualified_identifier ;;

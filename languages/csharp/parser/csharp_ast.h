@@ -164,7 +164,6 @@ namespace csharp
   struct statement_expression_ast;
   struct struct_body_ast;
   struct struct_declaration_ast;
-  struct struct_interfaces_ast;
   struct struct_member_declaration_ast;
   struct switch_label_ast;
   struct switch_section_ast;
@@ -723,42 +722,41 @@ namespace csharp
                         Kind_statement_expression = 1141,
                         Kind_struct_body = 1142,
                         Kind_struct_declaration = 1143,
-                        Kind_struct_interfaces = 1144,
-                        Kind_struct_member_declaration = 1145,
-                        Kind_switch_label = 1146,
-                        Kind_switch_section = 1147,
-                        Kind_switch_statement = 1148,
-                        Kind_throw_statement = 1149,
-                        Kind_try_statement = 1150,
-                        Kind_type = 1151,
-                        Kind_type_arguments = 1152,
-                        Kind_type_arguments_or_parameters_end = 1153,
-                        Kind_type_declaration = 1154,
-                        Kind_type_declaration_rest = 1155,
-                        Kind_type_name = 1156,
-                        Kind_type_name_safe = 1157,
-                        Kind_type_parameter = 1158,
-                        Kind_type_parameter_constraints = 1159,
-                        Kind_type_parameter_constraints_clause = 1160,
-                        Kind_type_parameters = 1161,
-                        Kind_typeof_expression = 1162,
-                        Kind_unary_expression = 1163,
-                        Kind_unary_or_binary_operator_declaration = 1164,
-                        Kind_unbound_type_name = 1165,
-                        Kind_unbound_type_name_part = 1166,
-                        Kind_unchecked_statement = 1167,
-                        Kind_unmanaged_type = 1168,
-                        Kind_unmanaged_type_suffix = 1169,
-                        Kind_unsafe_statement = 1170,
-                        Kind_using_alias_directive_data = 1171,
-                        Kind_using_directive = 1172,
-                        Kind_using_namespace_directive_data = 1173,
-                        Kind_using_statement = 1174,
-                        Kind_variable_declaration_data = 1175,
-                        Kind_variable_declarator = 1176,
-                        Kind_variable_initializer = 1177,
-                        Kind_while_statement = 1178,
-                        Kind_yield_statement = 1179,
+                        Kind_struct_member_declaration = 1144,
+                        Kind_switch_label = 1145,
+                        Kind_switch_section = 1146,
+                        Kind_switch_statement = 1147,
+                        Kind_throw_statement = 1148,
+                        Kind_try_statement = 1149,
+                        Kind_type = 1150,
+                        Kind_type_arguments = 1151,
+                        Kind_type_arguments_or_parameters_end = 1152,
+                        Kind_type_declaration = 1153,
+                        Kind_type_declaration_rest = 1154,
+                        Kind_type_name = 1155,
+                        Kind_type_name_safe = 1156,
+                        Kind_type_parameter = 1157,
+                        Kind_type_parameter_constraints = 1158,
+                        Kind_type_parameter_constraints_clause = 1159,
+                        Kind_type_parameters = 1160,
+                        Kind_typeof_expression = 1161,
+                        Kind_unary_expression = 1162,
+                        Kind_unary_or_binary_operator_declaration = 1163,
+                        Kind_unbound_type_name = 1164,
+                        Kind_unbound_type_name_part = 1165,
+                        Kind_unchecked_statement = 1166,
+                        Kind_unmanaged_type = 1167,
+                        Kind_unmanaged_type_suffix = 1168,
+                        Kind_unsafe_statement = 1169,
+                        Kind_using_alias_directive_data = 1170,
+                        Kind_using_directive = 1171,
+                        Kind_using_namespace_directive_data = 1172,
+                        Kind_using_statement = 1173,
+                        Kind_variable_declaration_data = 1174,
+                        Kind_variable_declarator = 1175,
+                        Kind_variable_initializer = 1176,
+                        Kind_while_statement = 1177,
+                        Kind_yield_statement = 1178,
                         AST_NODE_KIND_COUNT
                       };
 
@@ -2438,19 +2436,9 @@ namespace csharp
       bool partial;
       identifier_ast *struct_name;
       type_parameters_ast *type_parameters;
-      struct_interfaces_ast *struct_interfaces;
+      interface_base_ast *struct_interfaces;
       const list_node<type_parameter_constraints_clause_ast *> *type_parameter_constraints_sequence;
       struct_body_ast *body;
-    };
-
-  struct struct_interfaces_ast: public ast_node
-    {
-      enum
-      {
-        KIND = Kind_struct_interfaces
-      };
-
-      const list_node<type_name_ast *> *interface_type_sequence;
     };
 
   struct struct_member_declaration_ast: public ast_node

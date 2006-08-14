@@ -18,13 +18,13 @@ public:
   decoder(parser::token_stream_type *token_stream)
     : _M_token_stream(token_stream) {}
 
-  int decode_op(std::size_t index) const
+  int decode_kind(std::size_t index) const
   {
     parser::token_type const &tk = _M_token_stream->token(index);
     return tk.kind;
   }
 
-  std::string decode_id(std::size_t index) const
+  std::string decode_string(std::size_t index) const
   {
     parser::token_type const &tk = _M_token_stream->token(index);
     return std::string(&tk.text[tk.begin], tk.end - tk.begin);
@@ -51,13 +51,13 @@ public:
   decoder(parser::token_stream_type *token_stream)
     : _M_token_stream(token_stream) {}
 
-  int decode_op(std::size_t index) const
+  int decode_kind(std::size_t index) const
   {
     parser::token_type const &tk = _M_token_stream->token(index);
     return tk.kind;
   }
 
-  std::string decode_id(std::size_t index) const
+  std::string decode_string(std::size_t index) const
   {
     parser::token_type const &tk = _M_token_stream->token(index);
     return std::string(&tk.text[tk.begin], tk.end - tk.begin);

@@ -24,7 +24,7 @@
 [:
 #include "csharp_ast.h"
 
-// #include "codedisplay.h"
+#include "codedisplay.h"
 
 #include <QtCore/QString>
 #include <QtCore/QStringList>
@@ -86,13 +86,11 @@ Code
   [:
     QStringList qualifiedName() const;
 
-    /*
     // TODO: These methods should be cached upon initialization
     QString display() const;
     QIcon decoration() const;
     QString toolTip() const;
     QString whatsThis() const;
-    */
   :]
 
   implementation
@@ -107,7 +105,6 @@ Code
       return q;
     }
 
-    /*
     // TODO: These methods should be cached upon initialization
     QString CLASS::display() const
     {
@@ -125,7 +122,6 @@ Code
     {
       return CodeDisplay::whatsThis( const_cast<const CLASS*>( this ) );
     }
-    */
   :]
 }
 
@@ -145,6 +141,38 @@ NamespaceDeclaration: Scope
   #interface:       InterfaceDeclaration { hashed(name) };
   #enum:            EnumDeclaration      { hashed(name) };
   #delegate:        DelegateDeclaration  { hashed(name) };
+
+  public declaration
+  [:
+    ITEM(NamespaceDeclaration) createNamespace(QStringList names);
+  :]
+
+  implementation
+  [:
+    ITEM(NamespaceDeclaration) CLASS::createNamespace(QStringList names)
+    {
+      if (names.isEmpty())
+        return this;
+      else
+        {
+          QString first = names.takeFirst();
+          NamespaceDeclarationModelItem ns = findNamespace(first);
+          if (!ns)
+            {
+              ns = model()->create<NamespaceDeclarationModelItem>();
+
+              QStringList childScope = scope();
+              if (!name().isNull())
+                childScope.append(name());
+
+              ns->setName(first);
+              ns->setScope(childScope);
+              addNamespace(ns);
+            }
+          return ns->createNamespace(names);
+        }
+    }
+  :]
 }
 
 GlobalNamespaceDeclaration: NamespaceDeclaration
@@ -371,40 +399,6 @@ VariableDeclaration: Code
   isReadonly:       bool { init[: false :] };
   isVolatile:       bool { init[: false :] };
   isUnsafe:         bool { init[: false :] };
-}
-
-OperatorDeclaration: Scope
-{
-  constructor       [: setName(QString::null); :] -- operator declarations don't have names
-
-  #attribute:       AttributeSection;
-  sourceType:       TypeInfo;
-  sourceName:       QString;
-
-  isExtern:         bool { init[: false :] };
-  -- ...and the public and static modifiers are mandatory
-  isUnsafe:         bool { init[: false :] };
-}
-
-ConversionOperatorDeclaration: OperatorDeclaration
-{
-  targetType:       TypeInfo;
-  conversion:       conversion_operator_declaration::conversion_type_enum;
-}
-
-UnaryOperatorDeclaration: OperatorDeclaration
-{
-  returnType:       TypeInfo;
-  overloadedOperator: overloadable_operator::overloadable_operator_enum;
-}
-
-BinaryOperatorDeclaration: OperatorDeclaration
-{
-  returnType:       TypeInfo;
-  overloadedOperator: overloadable_operator::overloadable_operator_enum;
-
-  source2Type:      TypeInfo;
-  source2Name:      QString;
 }
 
 Parameter: Code

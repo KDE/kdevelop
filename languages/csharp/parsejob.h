@@ -26,9 +26,7 @@
 #include <kdevparsejob.h>
 
 #include "parser/csharp_ast.h"
-#include "parser/decoder.h"
-
-using namespace csharp;
+#include "parser/csharp_codemodel.h"
 
 class KDevCodeModel;
 
@@ -51,8 +49,8 @@ protected:
     virtual void run();
 
 private:
-    compilation_unit_ast *m_AST;
-    KDevCodeModel *m_model;
+    csharp::compilation_unit_ast *m_AST;
+    csharp::CodeModel *m_model;
 };
 
 #endif

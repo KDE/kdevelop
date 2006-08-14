@@ -10,8 +10,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/weaver
 set(kdevcsharplanguagesupport_PART_SRCS
     csharplanguagesupport.cpp
     parsejob.cpp
-#     codedelegate.cpp
-#     codeproxy.cpp
+    codedelegate.cpp
+    codeproxy.cpp
 )
 
 kde4_automoc(${kdevcsharplanguagesupport_PART_SRCS})

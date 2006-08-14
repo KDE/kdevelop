@@ -156,7 +156,6 @@ namespace csharp
       virtual void visit_statement_expression(statement_expression_ast *node);
       virtual void visit_struct_body(struct_body_ast *node);
       virtual void visit_struct_declaration(struct_declaration_ast *node);
-      virtual void visit_struct_interfaces(struct_interfaces_ast *node);
       virtual void visit_struct_member_declaration(struct_member_declaration_ast *node);
       virtual void visit_switch_label(switch_label_ast *node);
       virtual void visit_switch_section(switch_section_ast *node);

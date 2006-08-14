@@ -1417,20 +1417,6 @@ namespace csharp
                                                                         visit_node(node->body);
                                                                       }
 
-                                                                      void default_visitor::visit_struct_interfaces(struct_interfaces_ast *node)
-                                                                      {
-                                                                        if (node->interface_type_sequence)
-                                                                          {
-                                                                            const list_node<type_name_ast*> *__it = node->interface_type_sequence->to_front(), *__end = __it;
-                                                                            do
-                                                                              {
-                                                                                visit_node(__it->element);
-                                                                                __it = __it->next;
-                                                                              }
-                                                                            while (__it != __end);
-                                                                          }
-                                                                      }
-
                                                                       void default_visitor::visit_struct_member_declaration(struct_member_declaration_ast *node)
                                                                       {
                                                                         visit_node(node->declaration);

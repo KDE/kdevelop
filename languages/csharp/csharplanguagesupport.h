@@ -22,18 +22,18 @@ Boston, MA 02110-1301, USA.
 
 #include <kdevlanguagesupport.h>
 
-using namespace csharp;
-
-// class CodeModel;
-// class CodeProxy;
-// class CodeDelegate;
-// class CodeAggregate;
+namespace csharp
+{
+    class CodeModel;
+    class CodeProxy;
+    class CodeDelegate;
+}
 
 class CSharpLanguageSupport : public KDevLanguageSupport
 {
 Q_OBJECT
 public:
-    CSharpLanguageSupport( QObject* parent, const QStringList& args = QStringList() );
+    CSharpLanguageSupport( QObject *parent, const QStringList& args = QStringList() );
     virtual ~CSharpLanguageSupport();
 
     //KDevLanguageSupport implementation
@@ -45,8 +45,8 @@ public:
     virtual KDevParseJob *createParseJob( KDevDocument *document );
     virtual QStringList mimeTypes() const;
 
-    virtual void read( KDevAST * ast, std::ifstream &in );
-    virtual void write( KDevAST * ast, std::ofstream &out );
+    virtual void read( KDevAST *ast, std::ifstream &in );
+    virtual void write( KDevAST *ast, std::ofstream &out );
 
 private slots:
     void documentLoaded( KDevDocument *document );
@@ -57,8 +57,8 @@ private slots:
 
 private:
     QStringList m_mimetypes;
-//     CodeProxy *m_codeProxy;
-//     CodeDelegate *m_codeDelegate;
+    csharp::CodeProxy *m_codeProxy;
+    csharp::CodeDelegate *m_codeDelegate;
 //     CSharpHighlighting *m_highlights;
 };
 

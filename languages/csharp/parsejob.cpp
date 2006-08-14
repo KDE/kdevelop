@@ -35,7 +35,9 @@
 #include <klocale.h>
 
 #include "parser/csharp_parser.h"
-#include "parser/csharp_default_visitor.h"
+#include "parser/csharp_binder.h"
+
+using namespace csharp;
 
 ParseJob::ParseJob( const KUrl &url,
                     QObject *parent )
@@ -56,16 +58,14 @@ ParseJob::~ParseJob()
 
 KDevAST *ParseJob::AST() const
 {
-    return 0;
-//     Q_ASSERT ( isFinished () && m_AST );
-//     return m_AST;
+    Q_ASSERT ( isFinished () && m_AST );
+    return m_AST;
 }
 
 KDevCodeModel *ParseJob::codeModel() const
 {
-    return 0;
-//     Q_ASSERT ( isFinished () && m_model );
-//     return new KDevCodeModel;
+    Q_ASSERT ( isFinished () && m_model );
+    return m_model;
 }
 
 void ParseJob::run()
@@ -114,20 +114,21 @@ void ParseJob::run()
 
     // 0) setup
     parser csharp_parser;
-    csharp_parser.set_compatibility_mode(compatibility_mode);
-    csharp_parser.set_token_stream(&token_stream);
-    csharp_parser.set_memory_pool(&memory_pool);
+    csharp_parser.set_compatibility_mode( compatibility_mode );
+    csharp_parser.set_token_stream( &token_stream );
+    csharp_parser.set_memory_pool( &memory_pool );
 
     // 1) tokenize
-    csharp_parser.tokenize(contents);
+    csharp_parser.tokenize( contents );
 
     // 2) parse
-    compilation_unit_ast *ast = 0;
-    bool matched = csharp_parser.parse_compilation_unit(&ast);
+    bool matched = csharp_parser.parse_compilation_unit( &m_AST );
+    m_model = new CodeModel;
+
     if (matched)
     {
-        default_visitor v;
-        v.visit_node(ast);
+        Binder binder( m_model, csharp_parser.token_stream );
+        binder.run( m_document, m_AST );
     }
     else
     {

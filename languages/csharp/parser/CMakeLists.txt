@@ -10,6 +10,8 @@ set(kdevcsharpparser_STAT_SRCS
     csharp_io.cpp
     csharp_pp_scope.cpp
     csharp_pp_handler_visitor.cpp
+    csharp_binder.cpp
+    codedisplay.cpp
 )
 
 
