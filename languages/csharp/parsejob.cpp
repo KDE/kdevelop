@@ -74,6 +74,7 @@ void ParseJob::run()
     std::size_t size;
 
     char *contents;
+    QByteArray fileData;
 
     if ( readFromDisk )
     {
@@ -86,7 +87,7 @@ void ParseJob::run()
             return ;
         }
 
-        QByteArray fileData = file.readAll();
+        fileData = file.readAll();
         QString qcontents = QString::fromUtf8( fileData.constData() );
         contents = fileData.data();
         size = fileData.size();
