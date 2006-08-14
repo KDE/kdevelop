@@ -650,7 +650,6 @@ namespace csharp
 
   _ClassLikeDeclarationModelItem::_ClassLikeDeclarationModelItem(CodeModel *model,  int kind)
       :  _TypeDeclarationModelItem(model,  kind)
-      ,  _M_isPartial( false )
       ,  _M_isUnsafe( false )
   {}
 
@@ -820,16 +819,6 @@ namespace csharp
     model()->beginRemoveItem(item);
     _M_typeParameterConstraints.removeAt(_M_typeParameterConstraints.indexOf(item));
     model()->endRemoveItem();
-  }
-
-  bool _ClassLikeDeclarationModelItem::isPartial() const
-    {
-      return  _M_isPartial;
-    }
-
-  void _ClassLikeDeclarationModelItem::setPartial(bool isPartial)
-  {
-    _M_isPartial =  isPartial;
   }
 
   bool _ClassLikeDeclarationModelItem::isUnsafe() const

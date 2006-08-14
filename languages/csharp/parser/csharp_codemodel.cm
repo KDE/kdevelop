@@ -195,7 +195,6 @@ ClassLikeDeclaration: TypeDeclaration  -- a class, struct or interface type
   #typeParameter:   TypeParameter;
   #typeParameterConstraint: TypeParameterConstraint;
 
-  isPartial:        bool { init[: false :] };
   isUnsafe:         bool { init[: false :] };
 
   -- only inside class or struct declarations, not interfaces:

@@ -54,6 +54,8 @@ protected:
   virtual void visit_qualified_identifier(qualified_identifier_ast *node);
   virtual void visit_class_declaration(class_declaration_ast *node);
   virtual void visit_optional_modifiers(optional_modifiers_ast *node);
+  virtual void visit_struct_declaration(struct_declaration_ast *node);
+  virtual void visit_interface_declaration(interface_declaration_ast *node);
 
   /*
   virtual void visit_accessor_declarations(accessor_declarations_ast *node);
@@ -83,7 +85,6 @@ protected:
   virtual void visit_indexer_declaration(indexer_declaration_ast *node);
   virtual void visit_interface_accessors(interface_accessors_ast *node);
   virtual void visit_interface_base(interface_base_ast *node);
-  virtual void visit_interface_declaration(interface_declaration_ast *node);
   virtual void visit_interface_event_declaration(interface_event_declaration_ast *node);
   virtual void visit_interface_indexer_declaration(interface_indexer_declaration_ast *node);
   virtual void visit_interface_member_declaration(interface_member_declaration_ast *node);
@@ -96,7 +97,6 @@ protected:
   virtual void visit_property_declaration(property_declaration_ast *node);
   virtual void visit_rank_specifier(rank_specifier_ast *node);
   virtual void visit_secondary_constraint(secondary_constraint_ast *node);
-  virtual void visit_struct_declaration(struct_declaration_ast *node);
   virtual void visit_struct_member_declaration(struct_member_declaration_ast *node);
   virtual void visit_type_arguments(type_arguments_ast *node);
   virtual void visit_type_arguments_or_parameters_end(type_arguments_or_parameters_end_ast *node);
@@ -163,4 +163,4 @@ private:
 
 #endif // BINDER_H
 
-// kate: space-indent on; indent-width 2; replace-tabs on;
+// kate: space-indent on; indent-width 4; replace-tabs on;
