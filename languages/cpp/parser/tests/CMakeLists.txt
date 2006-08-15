@@ -1,8 +1,7 @@
 
-set (KDE4_BUILD_TESTS false)
-if(KDE4_BUILD_TESTS)
+if(false)
 
-include_directories(${CMAKE_SOURCE_DIR}/languages/cpp/parser ${CMAKE_SOURCE_DIR}/languages/cpp/duchain ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/editor)
+include_directories(${CMAKE_SOURCE_DIR}/languages/cpp/parser)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/testconfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/testconfig.h)
 
@@ -13,18 +12,8 @@ set(parsertest_SRCS test_parser.cpp)
 
 kdevelop_add_test(${parsertest_SRCS})
 kde4_add_executable(parsertest ${parsertest_SRCS})
-target_link_libraries(parsertest ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kdevcppparser ktexteditor kdevcpplanguagesupport)
+target_link_libraries(parsertest ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kdevcppparser ktexteditor)
 add_test(kdevelop-parsertest ${EXECUTABLE_OUTPUT_PATH}/parsertest)
-
-
-########### next target ###############
-
-set(duchaintest_SRCS test_duchain.cpp)
-
-kdevelop_add_test(${duchaintest_SRCS})
-kde4_add_executable(duchaintest ${duchaintest_SRCS})
-target_link_libraries(duchaintest ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kdevcppparser kdevcpprpp ktexteditor kdevcpplanguagesupport)
-add_test(kdevelop-duchaintest ${EXECUTABLE_OUTPUT_PATH}/duchaintest)
 
 
 ########### next target ###############

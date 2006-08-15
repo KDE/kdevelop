@@ -20,7 +20,7 @@
 
 using namespace KTextEditor;
 
-KDevDocumentRange::KDevDocumentRange(const KUrl& document, const Cursor& start, const Cursor& end, KDevDocumentRange* parent)
+KDevDocumentRange::KDevDocumentRange(const KUrl& document, const Cursor& start, const Cursor& end, Range* parent)
   : Range(start, end)
   , m_document(document)
   , m_parentRange(0)
@@ -28,7 +28,7 @@ KDevDocumentRange::KDevDocumentRange(const KUrl& document, const Cursor& start, 
   setParentRange(parent);
 }
 
-KDevDocumentRange::KDevDocumentRange(const KUrl& document, const Range& range, KDevDocumentRange* parent)
+KDevDocumentRange::KDevDocumentRange(const KUrl& document, const Range& range, Range* parent)
   : Range(range)
   , m_document(document)
   , m_parentRange(0)
@@ -61,15 +61,15 @@ const QList< KDevDocumentRange * > & KDevDocumentRange::childRanges() const
   return m_childRanges;
 }
 
-void KDevDocumentRange::setParentRange(KDevDocumentRange * parent)
+void KDevDocumentRange::setParentRange(Range* parent)
 {
-  if (m_parentRange)
-    m_parentRange->m_childRanges.removeAll(this);
+  if (m_parentRange && !m_parentRange->isSmartRange())
+    static_cast<KDevDocumentRange*>(m_parentRange)->m_childRanges.removeAll(this);
 
   m_parentRange = parent;
 
-  if (m_parentRange) {
-    QMutableListIterator<KDevDocumentRange*> it = m_parentRange->m_childRanges;
+  if (m_parentRange && !m_parentRange->isSmartRange()) {
+    QMutableListIterator<KDevDocumentRange*> it = static_cast<KDevDocumentRange*>(m_parentRange)->m_childRanges;
     while (it.hasNext()) {
       if (start() < it.next()->start()) {
         it.previous();
@@ -82,7 +82,7 @@ void KDevDocumentRange::setParentRange(KDevDocumentRange * parent)
   }
 }
 
-KDevDocumentRange * KDevDocumentRange::parentRange() const
+Range* KDevDocumentRange::parentRange() const
 {
   return m_parentRange;
 }

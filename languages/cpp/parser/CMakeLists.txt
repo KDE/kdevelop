@@ -30,6 +30,7 @@ set(kdevcppparser_STAT_SRCS
     codedisplay.cpp
     typesystem.cpp
     identifier.cpp
+    dumptree.cpp
 )
 
 kde4_automoc(${kdevcppparser_STAT_SRCS})

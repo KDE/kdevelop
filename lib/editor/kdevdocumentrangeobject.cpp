@@ -44,8 +44,8 @@ void KDevDocumentRangeObject::setTextRange( Range * range )
 
   if (m_range) {
     // TODO.. overkill???
-    //if (m_range->isSmartRange())
-      //m_range->toSmartRange()->removeWatcher(this);
+    if (m_range->isSmartRange())
+      m_range->toSmartRange()->removeWatcher(this);
 
     delete m_range;
   }
@@ -53,8 +53,8 @@ void KDevDocumentRangeObject::setTextRange( Range * range )
   m_range = range;
 
   if (m_range) {
-    //if (m_range->isSmartRange())
-      //m_range->toSmartRange()->addWatcher(this);
+    if (m_range->isSmartRange())
+      m_range->toSmartRange()->addWatcher(this);
   }
 }
 

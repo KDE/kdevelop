@@ -33,13 +33,10 @@ public:
 
   void dump(AST *node, TokenStream* tokenStream = 0);
 
-  void dump(DUContext* context);
-
 protected:
   virtual void visit(AST *node);
 
 private:
-  class CppEditorIntegrator* m_editor;
   int indent;
 };
 

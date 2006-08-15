@@ -30,9 +30,8 @@
 
 #include "parser.h"
 #include "control.h"
-#include "dumptree.h"
+#include "dumpchain.h"
 #include "tokens.h"
-#include "testconfig.h"
 
 #include "rpp/preprocessor.h"
 
@@ -61,7 +60,7 @@ class TestDUChain : public QObject
 
   // Parser
   Control control;
-  DumpTree dumper;
+  DumpChain dumper;
 
   // Definition - use chain
   TypeEnvironment types;

@@ -35,10 +35,11 @@
 #include "parser/binder.h"
 #include "parser/parser.h"
 #include "parser/control.h"
-#include "duchain/dumptree.h"
+#include "duchain/dumpchain.h"
 #include "parser/rpp/preprocessor.h"
 #include "duchain/cppeditorintegrator.h"
 #include "duchain/dubuilder.h"
+#include "duchain/ducontext.h"
 
 ParseJob::ParseJob( const KUrl &url,
                     QObject *parent )
@@ -135,6 +136,12 @@ void ParseJob::run()
 
         DUBuilder dubuilder(&parser.token_stream);
         m_duContext = dubuilder.build(m_document, m_AST);*/
+
+        /* Debug output...
+        if (m_duContext->smartRange()) {
+            DumpChain dump;
+            dump.dump(m_duContext);
+        }*/
     }
     //     DumpTree dumpTree;
     //     dumpTree.dump( m_AST );

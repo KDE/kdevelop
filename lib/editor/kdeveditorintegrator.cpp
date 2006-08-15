@@ -127,6 +127,12 @@ Range* KDevEditorIntegrator::topRange( TopRangeType type )
   if (!data()->topRanges.contains(currentUrl()))
     data()->topRanges.insert(currentUrl(), QVector<Range*>(TopRangeCount));
 
+  // FIXME temporary until we get conversion working
+  if (data()->topRanges[currentUrl()][type] && !data()->topRanges[currentUrl()][type]->isSmartRange() && smart()) {
+    //delete data()->topRanges[currentUrl()][type];
+    data()->topRanges[currentUrl()][type] = 0L;
+  }
+
   if (!data()->topRanges[currentUrl()][type])
     if (currentDocument()) {
       Range* newRange = data()->topRanges[currentUrl()][type] = createRange(currentDocument()->documentRange());
@@ -149,11 +155,11 @@ Range* KDevEditorIntegrator::createRange( const Range & range, KTextEditor::Docu
 
   if (SmartInterface* iface = smart(document))
     if (m_currentRange && m_currentRange->isSmartRange())
-      ret = iface->newSmartRange(range, static_cast<SmartRange*>(m_currentRange));
+      ret = iface->newSmartRange(range, m_currentRange->toSmartRange());
     else
       ret = iface->newSmartRange(range);
   else
-    ret = new KDevDocumentRange(m_currentUrl, range);
+    ret = new KDevDocumentRange(m_currentUrl, range, m_currentRange);
 
   m_currentRange = ret;
   return m_currentRange;

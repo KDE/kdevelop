@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "dumptree.h"
+#include "dumpchain.h"
 
 #include <QtCore/QString>
 
@@ -104,13 +104,13 @@ static char const * const names[] = {
   "WinDeclSpec"
 };
 
-DumpTree::DumpTree()
+DumpChain::DumpChain()
   : m_editor(0)
   , indent(0)
 {
 }
 
-void DumpTree::dump( AST * node, class TokenStream * tokenStream )
+void DumpChain::dump( AST * node, class TokenStream * tokenStream )
 {
   delete m_editor;
   m_editor = 0;
@@ -121,7 +121,7 @@ void DumpTree::dump( AST * node, class TokenStream * tokenStream )
   visit(node);
 }
 
-void DumpTree::visit(AST *node)
+void DumpChain::visit(AST *node)
 {
   if (node)
     if (m_editor)
@@ -146,18 +146,18 @@ void DumpTree::visit(AST *node)
               << "[Close: " << node->start_token << ", " << node->end_token << ']' << endl;
 }
 
-DumpTree::~ DumpTree( )
+DumpChain::~ DumpChain( )
 {
   delete m_editor;
 }
 
-void DumpTree::dump( DUContext * context )
+void DumpChain::dump( DUContext * context )
 {
   kDebug() << QString(indent * 2, ' ') << "New Context \"" << context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "] " << context->textRange() << endl;
   foreach (Definition* def, context->localDefinitions()) {
     kDebug() << QString((indent+1) * 2, ' ') << "Definition: \"" << def->identifier() << "\" [" << def->qualifiedIdentifier() << "]  " << def->textRange() << ", " << def->uses().count() << " use(s)." << endl;
     foreach (KTextEditor::Range* use, def->uses())
-      kDebug() << QString((indent+1) * 2, ' ') << "Use: " << *use << endl;
+      kDebug() << QString((indent+2) * 2, ' ') << "Use: " << *use << endl;
   }
 
   ++indent;

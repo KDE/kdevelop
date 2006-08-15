@@ -1,5 +1,6 @@
 
 add_subdirectory(parser)
+add_subdirectory(duchain)
 add_subdirectory(app_templates)
 
 include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/weaver ${CMAKE_SOURCE_DIR}/lib/editor ${CMAKE_SOURCE_DIR}/languages/cpp/duchain ${CMAKE_SOURCE_DIR}/languages/cpp/parser
@@ -8,18 +9,22 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/weaver ${CM
 
 ########### next target ###############
 
+set(kdevcppduchain_SRCS
+    duchain/cppeditorintegrator.cpp
+    duchain/duchain.cpp
+    duchain/dubuilder.cpp
+    duchain/ducontext.cpp
+    duchain/definition.cpp
+    duchain/dumpchain.cpp
+)
+
 set(kdevcpplanguagesupport_PART_SRCS
     cpplanguagesupport.cpp
     parsejob.cpp
     codedelegate.cpp
     codeproxy.cpp
     cpphighlighting.cpp
-    duchain/cppeditorintegrator.cpp
-    duchain/duchain.cpp
-    duchain/dubuilder.cpp
-    duchain/ducontext.cpp
-    duchain/definition.cpp
-    duchain/dumptree.cpp
+    ${kdevcppduchain_SRCS}
 )
 
 kde4_automoc(${kdevcpplanguagesupport_PART_SRCS})

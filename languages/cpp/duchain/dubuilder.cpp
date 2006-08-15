@@ -58,6 +58,10 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node)
     topLevelContext->deleteChildContextsRecursively();
     topLevelContext->deleteLocalDefinitions();
 
+    // FIXME remove once conversion works
+    if (!topLevelContext->smartRange() && m_editor->smart())
+      topLevelContext->setTextRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
+
   } else {
     // FIXME the top range will probably get deleted without the editor integrator knowing...?
     topLevelContext = new DUContext(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
@@ -91,7 +95,6 @@ void DUBuilder::visitNamespace (NamespaceAST *node)
   inNamespace (was);
 
   closeContext(node, previousContext);
-  m_editor->exitCurrentRange();
 }
 
 void DUBuilder::visitClassSpecifier (ClassSpecifierAST *node)
@@ -106,6 +109,8 @@ void DUBuilder::visitClassSpecifier (ClassSpecifierAST *node)
   m_currentDefinition = newDeclaration(range, node->name);
   m_editor->exitCurrentRange();
 
+  Q_ASSERT(m_editor->currentRange() == contextRange);
+
   m_currentContext = new DUContext(contextRange, m_currentContext);
   m_currentContext->setType(DUContext::Class);
 
@@ -115,7 +120,6 @@ void DUBuilder::visitClassSpecifier (ClassSpecifierAST *node)
 
   closeContext(node, previousContext, node->name);
 
-  m_editor->exitCurrentRange();
   m_currentDefinition = oldDefinition;
 }
 
@@ -148,11 +152,14 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   inFunctionDefinition (was);
 
   closeContext(node, previousContext);
-  m_editor->exitCurrentRange();
 }
 
 void DUBuilder::closeContext(AST* node, DUContext* parent, NameAST* name)
 {
+  Q_ASSERT(m_currentContext->parentContexts().contains(parent));
+  if (m_currentContext->smartRange() && parent->smartRange())
+    Q_ASSERT(m_currentContext->smartRange()->parentRange() == parent->smartRange());
+
   // Find the end position of this function definition (just inside the bracket)
   KDevDocumentCursor endPosition = m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge);
 
@@ -168,6 +175,9 @@ void DUBuilder::closeContext(AST* node, DUContext* parent, NameAST* name)
 
   // Go back to the context prior to this function definition
   m_currentContext = parent;
+
+  // Go back to the previous range
+  m_editor->exitCurrentRange();
 }
 
 void DUBuilder::visitParameterDeclarationClause (ParameterDeclarationClauseAST * node)
@@ -201,7 +211,6 @@ void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
   DefaultVisitor::visitCompoundStatement (node);
 
   closeContext(node, previousContext);
-  m_editor->exitCurrentRange();
 }
 
 void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
@@ -220,11 +229,11 @@ void DUBuilder::visitDeclarator (DeclaratorAST* node)
 
   Range* range = m_editor->createRange(node);
   m_currentDefinition = newDeclaration(range, node->id);
+  m_editor->exitCurrentRange();
 
   DefaultVisitor::visitDeclarator(node);
 
   m_currentDefinition = oldDefinition;
-  m_editor->exitCurrentRange();
 }
 
 void DUBuilder::visitPrimaryExpression (PrimaryExpressionAST* node)
@@ -245,8 +254,13 @@ void DUBuilder::visitMemInitializer(MemInitializerAST * node)
 
 void DUBuilder::newUse(NameAST* name)
 {
+  Range* current = m_editor->currentRange();
   Range* use = m_editor->createRange(name);
   m_editor->exitCurrentRange();
+  Q_ASSERT(m_editor->currentRange() == current);
+
+  if (use->isSmartRange())
+    Q_ASSERT(use->toSmartRange()->parentRange() == m_currentContext->smartRange());
 
   m_nameCompiler->run(name);
 

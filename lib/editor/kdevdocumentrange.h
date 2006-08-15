@@ -34,8 +34,8 @@
 class KDEVINTERFACES_EXPORT KDevDocumentRange : public KTextEditor::Range
 {
 public:
-  KDevDocumentRange(const KUrl& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KDevDocumentRange* parent = 0);
-  KDevDocumentRange(const KUrl& document, const KTextEditor::Range& range = KTextEditor::Range::invalid(), KDevDocumentRange* parent = 0);
+  KDevDocumentRange(const KUrl& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KTextEditor::Range* parent = 0);
+  KDevDocumentRange(const KUrl& document, const KTextEditor::Range& range = KTextEditor::Range::invalid(), KTextEditor::Range* parent = 0);
   KDevDocumentRange(const KDevDocumentRange& copy);
 
   /// Returns the associated document.
@@ -44,14 +44,14 @@ public:
   /// Sets the associated document.
   void setDocument(const KUrl& document);
 
-  KDevDocumentRange* parentRange() const;
-  void setParentRange(KDevDocumentRange* parent);
+  KTextEditor::Range* parentRange() const;
+  void setParentRange(KTextEditor::Range* parent);
 
   const QList<KDevDocumentRange*>& childRanges() const;
 
 private:
   KUrl m_document;
-  KDevDocumentRange* m_parentRange;
+  KTextEditor::Range* m_parentRange;
   QList<KDevDocumentRange*> m_childRanges;
 };
 
