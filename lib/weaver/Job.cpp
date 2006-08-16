@@ -66,7 +66,7 @@ Job::~Job()
         d->queuePolicies->at( index )->destructed( this );
     }
 
-    delete d;
+    delete d; d = 0;
 }
 
 class ThreadWeaver::JobRunHelper : public QObject
