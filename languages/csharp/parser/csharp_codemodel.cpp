@@ -82,7 +82,7 @@ namespace csharp
 
   // ---------------------------------------------------------------------------
 #define CLASS _CodeModelItem
-#define BASECLASS has_no_base_class!
+#define BASECLASS KDevCodeItem
 
   _CodeModelItem::_CodeModelItem(CodeModel *model,  int kind)
       :  KDevCodeItem( QString::null,  0 )

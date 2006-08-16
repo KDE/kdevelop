@@ -22,6 +22,7 @@
 
 #include "csharp_default_visitor.h"
 #include "csharp_codemodel.h"
+#include "csharp_codemodel_chameleon.h"
 #include "decoder.h"
 #include "csharp_parser.h" // for parser::token_stream_type
 
@@ -56,6 +57,8 @@ protected:
   virtual void visit_optional_modifiers(optional_modifiers_ast *node);
   virtual void visit_struct_declaration(struct_declaration_ast *node);
   virtual void visit_interface_declaration(interface_declaration_ast *node);
+  virtual void visit_delegate_declaration(delegate_declaration_ast *node);
+  virtual void visit_enum_declaration(enum_declaration_ast *node);
 
   /*
   virtual void visit_accessor_declarations(accessor_declarations_ast *node);
@@ -71,9 +74,7 @@ protected:
   virtual void visit_constructor_constraint(constructor_constraint_ast *node);
   virtual void visit_constructor_declaration(constructor_declaration_ast *node);
   virtual void visit_conversion_operator_declaration(conversion_operator_declaration_ast *node);
-  virtual void visit_delegate_declaration(delegate_declaration_ast *node);
   virtual void visit_enum_base(enum_base_ast *node);
-  virtual void visit_enum_declaration(enum_declaration_ast *node);
   virtual void visit_enum_member_declaration(enum_member_declaration_ast *node);
   virtual void visit_event_accessor_declaration(event_accessor_declaration_ast *node);
   virtual void visit_event_accessor_declarations(event_accessor_declarations_ast *node);
@@ -132,14 +133,16 @@ protected:
   */
 
 private:
-  std::string decode_string(std::size_t index) const;
+  std::string decode_string( std::size_t index ) const;
 
-  ScopeModelItem changeCurrentScope(ScopeModelItem item);
+  ScopeModelItem changeCurrentScope( ScopeModelItem item );
+  void setModifiers( ModelItemChameleon item, uint modifiers );
+  void setAccessPolicy( ModelItemChameleon item, access_policy::access_policy_enum accessPolicy );
 
-  access_policy::access_policy_enum changeCurrentAccessPolicy(access_policy::access_policy_enum accessPolicy);
-  uint changeCurrentModifiers(uint modifiers);
+  access_policy::access_policy_enum changeCurrentAccessPolicy( access_policy::access_policy_enum accessPolicy );
+  uint changeCurrentModifiers( uint modifiers );
 
-  void setPositionAt(_CodeModelItem *item, ast_node *ast);
+  void setPositionAt( _CodeModelItem *item, ast_node *ast );
 
 private:
   // will be generated as pre-defined text
