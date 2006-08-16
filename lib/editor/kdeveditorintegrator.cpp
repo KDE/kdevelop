@@ -146,7 +146,8 @@ Range* KDevEditorIntegrator::topRange( TopRangeType type )
       data()->topRanges[currentUrl()][type] = createRange(Range(0,0, INT_MAX, INT_MAX));
     }
 
-  return data()->topRanges[currentUrl()][type];
+  m_currentRange = data()->topRanges[currentUrl()][type];
+  return m_currentRange;
 }
 
 Range* KDevEditorIntegrator::createRange( const Range & range, KTextEditor::Document* document )
