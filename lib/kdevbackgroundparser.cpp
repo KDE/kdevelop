@@ -47,6 +47,7 @@
 
 #include <weaver/ThreadWeaver.h>
 #include <weaver/JobCollection.h>
+#include <weaver/DebuggingAids.h>
 
 KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         : QObject( parent ),
@@ -56,6 +57,7 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         m_persistentHash( new KDevPersistentHash ),
         m_weaver( new Weaver( this, 1 ) ) //C++ parser can't multi-thread at the moment
 {
+    //ThreadWeaver::setDebugLevel(true, 5);
     //FIXME Stub for now, but eventually load persistent parser info
     //whatever that may entail.
     m_persistentHash->load();
@@ -167,17 +169,8 @@ void KDevBackgroundParser::parseDocuments()
             if ( !parse )
                 return ; //Language part did not produce a valid KDevParseJob
 
-            if ( url == KDevCore::documentController() ->activeDocumentUrl() )
-            {
-                KDevDocument * document =
-                    KDevCore::documentController() ->documentForUrl( url );
-                Q_ASSERT( document->textDocument() );
-
-                parse->setContents( document->textDocument() ->text().toAscii() );
-            }
-
             connect( parse, SIGNAL( done( Job* ) ),
-                     this, SLOT( parseComplete( Job* ) ) );
+                     this, SLOT( parseComplete( Job* ) ), Qt::QueuedConnection );
 
             p = false; //Don't parse for next time
 
@@ -195,11 +188,6 @@ void KDevBackgroundParser::parseComplete( Job *job )
 
     if ( KDevParseJob * parseJob = qobject_cast<KDevParseJob*>( job ) )
     {
-        if ( langSupport->codeHighlighting() && parseJob->duChain() )
-        {
-            langSupport->codeHighlighting()->highlightDUChain( parseJob->duChain() );
-        }
-
         if ( m_modelsToCache )
         {
             if ( parseJob->codeModel() )
@@ -232,7 +220,9 @@ void KDevBackgroundParser::parseComplete( Job *job )
         //whatever that may entail.
         m_persistentHash->insert( parseJob->document(), parseJob->AST() );
 
-        parseJob->deleteLater();
+        // FIXME hack, threadweaver doesn't let us know when we can delete, so just pick an arbitrary time...
+        // (awaiting reply from Mirko on this one)
+        QTimer::singleShot(500, parseJob, SLOT(deleteLater()));
     }
 }
 

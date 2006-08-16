@@ -32,18 +32,22 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <ktexteditor/document.h>
+
 #include <kdevdocumentcontroller.h>
 
 KDevParseJob::KDevParseJob( const KUrl &url,
                             QObject *parent )
-        : ThreadWeaver::Job( parent ),
-        m_document( url )
+        : ThreadWeaver::JobSequence( parent ),
+        m_document( url ),
+        m_openDocument( 0 )
 {}
 
 KDevParseJob::KDevParseJob( KDevDocument *document,
                             QObject *parent )
-        : ThreadWeaver::Job( parent ),
-        m_document( document->url() )
+        : ThreadWeaver::JobSequence( parent ),
+        m_document( document->url() ),
+        m_openDocument( document )
 {}
 
 KDevParseJob::~KDevParseJob()
@@ -52,6 +56,11 @@ KDevParseJob::~KDevParseJob()
 KUrl KDevParseJob::document() const
 {
     return m_document;
+}
+
+KDevDocument* KDevParseJob::openDocument() const
+{
+    return m_openDocument;
 }
 
 bool KDevParseJob::wasSuccessful() const
@@ -68,6 +77,16 @@ DUContext * KDevParseJob::duChain() const
 {
     // No definition-use chain available by default
     return 0L;
+}
+
+QString KDevParseJob::contentsFromEditor() const
+{
+    return m_openDocument->textDocument()->text();
+}
+
+void KDevParseJob::setErrorMessage(const QString& message)
+{
+    m_errorMessage = message;
 }
 
 #include "kdevparsejob.moc"

@@ -121,6 +121,10 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         a->setForeground(QColor(Qt::blue).dark());
         break;
 
+      case ErrorVariableType:
+        a->setForeground(Qt::red);
+        break;
+
       case ScopeType:
       case TemplateType:
       case TemplateParameterType:
@@ -206,22 +210,25 @@ void CppHighlighting::highlightModel(CodeModel* model, const QModelIndex & paren
 void CppHighlighting::highlightTree( KTextEditor::SmartRange * range ) const
 {
   int depth = range->depth();
-  while (depth >= m_depthAttributes.count()) {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute());
-    a->setBackground(QColor(Qt::white).dark(100 + (m_depthAttributes.count() * 25)));
-    if (depth % 2)
-      a->setOutline(Qt::red);
-    m_depthAttributes.append(a);
-  }
   range->setAttribute(m_depthAttributes[depth]);
   foreach (KTextEditor::SmartRange* child, range->childRanges())
     highlightTree(child);
+}
+
+void CppHighlighting::outputRange( KTextEditor::SmartRange * range ) const
+{
+  kDebug() << range << QString(range->depth(), ' ') << *range << " attr " << range->attribute() << endl;
+  Q_ASSERT(range->start() <= range->end());
+  foreach (SmartRange* child, range->childRanges())
+    outputRange(child);
 }
 
 void CppHighlighting::highlightDUChain(DUContext* context) const
 {
   if (!context->smartRange())
     return;
+
+  //context->smartRange()->setAttribute(attributeForDepth(context->depth()));
 
   foreach (Definition* def, context->localDefinitions()) {
     Types type = LocalVariableType;
@@ -249,10 +256,30 @@ void CppHighlighting::highlightDUChain(DUContext* context) const
         use->toSmartRange()->setAttribute(attributeForType(type, ReferenceContext));
   }
 
+  foreach (Range* use, context->orphanUses())
+    use->toSmartRange()->setAttribute(attributeForType(ErrorVariableType, ReferenceContext));
+
   foreach (DUContext* child, context->childContexts())
     highlightDUChain(child);
+
+  /*if (context->parentContexts().isEmpty())
+    outputRange(context->smartRange());*/
 }
 
 #include "cpphighlighting.moc"
 
 // kate: space-indent on; indent-width 2; replace-tabs on
+
+KTextEditor::Attribute::Ptr CppHighlighting::attributeForDepth(int depth) const
+{
+  while (depth >= m_depthAttributes.count()) {
+    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute());
+    a->setBackground(QColor(Qt::white).dark(100 + (m_depthAttributes.count() * 25)));
+    a->setBackgroundFillWhitespace(true);
+    if (depth % 2)
+      a->setOutline(Qt::red);
+    m_depthAttributes.append(a);
+  }
+
+  return m_depthAttributes[depth];
+}

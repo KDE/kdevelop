@@ -32,6 +32,14 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "kdevdocument.h"
+
+#include <ktexteditor/document.h>
+#include <ktexteditor/smartinterface.h>
+
+#include "cpplanguagesupport.h"
+#include "cpphighlighting.h"
+
 #include "parser/binder.h"
 #include "parser/parser.h"
 #include "parser/control.h"
@@ -41,70 +49,118 @@
 #include "duchain/dubuilder.h"
 #include "duchain/ducontext.h"
 
-ParseJob::ParseJob( const KUrl &url,
-                    QObject *parent )
+CPPParseJob::CPPParseJob( const KUrl &url,
+                    CppLanguageSupport *parent )
         : KDevParseJob( url, parent ),
         m_AST( 0 ),
         m_model( 0 ),
         m_duContext( 0 )
-{}
+{
+    addJob(new PreprocessJob(this));
+    addJob(new ParseJob(this));
+}
 
-ParseJob::ParseJob( KDevDocument *document,
-                    QObject *parent )
+CPPParseJob::CPPParseJob( KDevDocument *document,
+                    CppLanguageSupport *parent )
         : KDevParseJob( document, parent ),
         m_AST( 0 ),
         m_model( 0 ),
         m_duContext( 0 )
+{
+    addJob(new PreprocessJob(this));
+    addJob(new ParseJob(this));
+}
+
+CPPParseJob::~CPPParseJob()
 {}
 
-ParseJob::~ParseJob()
-{}
-
-KDevAST *ParseJob::AST() const
+KDevAST *CPPParseJob::AST() const
 {
     Q_ASSERT ( isFinished () && m_AST );
     return m_AST;
 }
 
-KDevCodeModel *ParseJob::codeModel() const
+KDevCodeModel *CPPParseJob::codeModel() const
 {
     Q_ASSERT ( isFinished () && m_model );
     return m_model;
 }
 
-void ParseJob::run()
+DUContext * CPPParseJob::duChain() const
 {
-    bool readFromDisk = m_contents.isNull();
-    std::size_t size;
+    return m_duContext;
+}
+
+CppLanguageSupport * CPPParseJob::cpp() const
+{
+    return static_cast<CppLanguageSupport*>(const_cast<QObject*>(parent()));
+}
+
+CPPParseJob * PreprocessJob::parentJob() const
+{
+    return static_cast<CPPParseJob*>(const_cast<QObject*>(parent()));
+}
+
+CPPParseJob * ParseJob::parentJob() const
+{
+    return static_cast<CPPParseJob*>(const_cast<QObject*>(parent()));
+}
+
+PreprocessJob::PreprocessJob(CPPParseJob * parent)
+    : ThreadWeaver::Job(parent)
+{
+}
+
+void CPPParseJob::setAST(TranslationUnitAST * ast)
+{
+    m_AST = ast;
+}
+
+void CPPParseJob::setCodeModel(CodeModel * model)
+{
+    m_model = model;
+}
+
+void CPPParseJob::setDUChain(DUContext * duChain)
+{
+    m_duContext = duChain;
+}
+
+ParseJob::ParseJob(CPPParseJob * parent)
+    : ThreadWeaver::Job(parent)
+{
+}
+
+void PreprocessJob::run()
+{
+    bool readFromDisk = !parentJob()->openDocument();
 
     QString contents;
 
     if ( readFromDisk )
     {
-        QFile file( m_document.path() );
+        QFile file( parentJob()->document().path() );
         if ( !file.open( QIODevice::ReadOnly ) )
         {
-            m_errorMessage = i18n( "Could not open file '%1'", m_document.path() );
-            kWarning( 9007 ) << k_funcinfo << "Could not open file " << m_document << " (path " << m_document.path() << ")" << endl;
+            parentJob()->setErrorMessage(i18n( "Could not open file '%1'", parentJob()->document().path() ));
+            kWarning( 9007 ) << k_funcinfo << "Could not open file " << parentJob()->document() << " (path " << parentJob()->document().path() << ")" << endl;
             return ;
         }
 
         QByteArray fileData = file.readAll();
         contents = QString::fromUtf8( fileData.constData() );
-        size = fileData.size();
         assert( !contents.isEmpty() );
         file.close();
     }
     else
     {
-        contents = QString::fromUtf8( m_contents.constData() );
-        size = m_contents.size();
+        contents = parentJob()->contentsFromEditor();
     }
 
     kDebug( 9007 ) << "===-- PARSING --===> "
-    << m_document.fileName()
+    << parentJob()->document().fileName()
     << " <== readFromDisk: " << readFromDisk
-    << " size: " << size
+    << " size: " << contents.length()
     << endl;
 
     Preprocessor preprocessor;
@@ -119,37 +175,63 @@ void ParseJob::run()
     includes.append ( "." );
     preprocessor.addIncludePaths( includes );
 
-    QString ppd = preprocessor.processString( contents );
-    QByteArray preprocessed = ppd.toUtf8();
+    parentJob()->setPreprocessed( preprocessor.processString( contents ) );
+}
+
+void CPPParseJob::setPreprocessed(QString preprocessed)
+{
+    m_preprocessed = preprocessed;
+}
+
+QString CPPParseJob::preprocessed() const
+{
+    return m_preprocessed;
+}
+
+void ParseJob::run()
+{
+    QByteArray preprocessed = parentJob()->preprocessed().toUtf8();
 
     Parser parser( new Control() );
     pool memoryPool;
-    m_AST = parser.parse( preprocessed, preprocessed.length() + 1, &memoryPool );
+    TranslationUnitAST* ast = parser.parse( preprocessed, preprocessed.length() + 1, &memoryPool );
 
-    if ( m_AST )
+    parentJob()->setAST(ast);
+
+    if ( ast )
     {
-        m_model = new CodeModel;
-        Binder binder( m_model, &parser.token_stream, &parser.lexer );
-        binder.run( m_document, m_AST );
+        CodeModel* model = new CodeModel;
+        Binder binder( model, &parser.token_stream, &parser.lexer );
+        binder.run( parentJob()->document(), ast );
+
+        parentJob()->setCodeModel(model);
 
         /*CppEditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
 
-        DUBuilder dubuilder(&parser.token_stream);
-        m_duContext = dubuilder.build(m_document, m_AST);*/
+        KTextEditor::SmartInterface* smart = 0;
+        if ( parentJob()->openDocument() && parentJob()->openDocument()->textDocument() )
+            smart = dynamic_cast<KTextEditor::SmartInterface*>(parentJob()->openDocument()->textDocument());
 
-        /* Debug output...
-        if (m_duContext->smartRange()) {
+        // Lock the smart interface, if one exists
+        // Locking the interface here allows all of the highlighting to update before a redraw happens, thus no flicker
+        QMutexLocker lock(smart ? smart->smartMutex() : 0);
+
+        DUBuilder dubuilder(&parser.token_stream);
+        DUContext* topContext = dubuilder.build(parentJob()->document(), ast);
+        parentJob()->setDUChain(topContext);
+
+        if ( parentJob()->cpp()->codeHighlighting() )
+            parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );*/
+
+        // Debug output...
+        /*if (topContext->smartRange()) {
             DumpChain dump;
-            dump.dump(m_duContext);
+            //dump.dump(m_AST, &parser.token_stream);
+            dump.dump(topContext);
         }*/
     }
     //     DumpTree dumpTree;
     //     dumpTree.dump( m_AST );
-}
-
-DUContext * ParseJob::duChain() const
-{
-    return m_duContext;
 }
 
 #include "parsejob.moc"

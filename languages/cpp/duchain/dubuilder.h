@@ -23,6 +23,7 @@
 #include "default_visitor.h"
 
 #include "identifier.h"
+#include "ducontext.h"
 
 class TokenStream;
 class DUChain;
@@ -115,18 +116,24 @@ private:
   /**
    * Register a new declaration with the definition-use chain.
    * Returns the new context created by this definition.
+   * \param range provide a valid AST here if name is null
    */
-  Definition* newDeclaration(KTextEditor::Range* range, NameAST* name);
+  Definition* newDeclaration(NameAST* name, AST* range = 0);
 
   /// Register a new use
   void newUse(NameAST* name);
 
   /**
-   * Closes the current context.  Only provide the previous identifier stack depth
-   * if you want the identifier for the object which created this scope to get assigned
-   * to this scope's identifier
+   * Opens a new context.
    */
-  void closeContext(AST* node, DUContext* parent, NameAST* name = 0);
+  DUContext* openContext(AST* range, DUContext::ContextType type);
+
+  /**
+   * Closes the current context.
+   */
+  void closeContext(NameAST* name = 0, AST* node = 0);
+
+  inline DUContext* currentContext() { return m_contextStack.top(); }
 
   TokenStream *_M_token_stream;
   CppEditorIntegrator* m_editor;
@@ -139,12 +146,9 @@ private:
   bool in_typedef: 1;
   bool in_function_definition: 1;
   bool in_parameter_declaration: 1;
-  bool function_just_defined: 1;
 
-  DUContext* m_currentContext;
+  QStack<DUContext*> m_contextStack;
   TypeEnvironment* m_types;
-
-  Definition* m_currentDefinition;
 };
 
 #endif // DUBUILDER_H

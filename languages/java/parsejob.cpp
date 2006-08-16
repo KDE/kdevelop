@@ -70,8 +70,7 @@ KDevCodeModel *ParseJob::codeModel() const
 
 void ParseJob::run()
 {
-    bool readFromDisk = m_contents.isNull();
-    std::size_t size;
+    bool readFromDisk = !openDocument();
 
     char *contents;
     QByteArray fileData;
@@ -90,22 +89,19 @@ void ParseJob::run()
         fileData = file.readAll();
         QString qcontents = QString::fromUtf8( fileData.constData() );
         contents = fileData.data();
-        size = fileData.size();
         assert( !qcontents.isEmpty() );
         file.close();
     }
     else
     {
-        // FIXME: jpetso says: why is this here if we don't use it?
-        // qcontents = QString::fromUtf8( m_contents.constData() );
-        size = m_contents.size();
-        contents = m_contents.data();
+        fileData = contentsFromEditor().toAscii();
+        contents = fileData.data();
     }
 
     kDebug() << "===-- PARSING --===> "
     << m_document.fileName()
     << " <== readFromDisk: " << readFromDisk
-    << " size: " << size
+    << " size: " << fileData.length()
     << endl;
 
     parser::java_compatibility_mode compatibility_mode = parser::java15_compatibility;

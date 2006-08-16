@@ -40,6 +40,8 @@ DUContext::~DUContext( )
 
   qDeleteAll(m_localDefinitions);
 
+  deleteOrphanUses();
+
   foreach (UsingNS* use, m_usingNamespaces) {
     delete use->origin;
     delete use;
@@ -339,11 +341,13 @@ void DUContext::deleteChildContextsRecursively()
 
 void DUContext::deleteChildContextsRecursively(const KUrl& url)
 {
+  QList<DUContext*> childContexts = m_childContexts;
   foreach (DUContext* context, m_childContexts) {
     takeChildContext(context);
     context->deleteChildContextsRecursively(url);
-    delete context;
   }
+
+  qDeleteAll(childContexts);
 
   Q_ASSERT(m_childContexts.isEmpty());
 }
@@ -424,5 +428,22 @@ Definition* DUContext::findDefinition(const Identifier& identifier, const KDevDo
 {
   return findDefinition(QualifiedIdentifier(identifier), position);
 }
+
+void DUContext::addOrphanUse(KTextEditor::Range* orphan)
+{
+  m_orphanUses.append(orphan);
+}
+
+void DUContext::deleteOrphanUses()
+{
+  qDeleteAll(m_orphanUses);
+  m_orphanUses.clear();
+}
+
+const QList<KTextEditor::Range*>& DUContext::orphanUses() const
+{
+  return m_orphanUses;
+}
+
 
 // kate: indent-width 2;

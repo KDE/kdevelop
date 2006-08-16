@@ -105,12 +105,12 @@ KDevCodeRepository *CppLanguageSupport::codeRepository() const
 
 KDevParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
 {
-    return new ParseJob( url, this );
+    return new CPPParseJob( url, this );
 }
 
 KDevParseJob *CppLanguageSupport::createParseJob( KDevDocument *document )
 {
-    return new ParseJob( document, this );
+    return new CPPParseJob( document, this );
 }
 
 QStringList CppLanguageSupport::mimeTypes() const
@@ -153,7 +153,10 @@ void CppLanguageSupport::projectOpened()
     {
         if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith( ".h" )*/ )
         {
-            documentList.append( file->url() );
+            /*if ( KDevDocument* openDocument = KDevCore::documentController()->documentForUrl( file->url() ) )
+                KDevCore::backgroundParser() ->addDocument( openDocument );
+            else*/
+                documentList.append( file->url() );
         }
     }
     KDevCore::backgroundParser() ->addDocumentList( documentList );

@@ -58,7 +58,8 @@ class CppHighlighting : public QObject, public KDevCodeHighlighting
       FunctionVariableType,
       MemberVariableType,
       NamespaceVariableType,
-      GlobalVariableType
+      GlobalVariableType,
+      ErrorVariableType
     };
 
     enum Contexts {
@@ -76,8 +77,11 @@ class CppHighlighting : public QObject, public KDevCodeHighlighting
     void highlightDUChain(DUContext* context) const;
 
     KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context) const;
+    KTextEditor::Attribute::Ptr attributeForDepth(int depth) const;
 
   private:
+    void outputRange( KTextEditor::SmartRange * range ) const;
+
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_definitionAttributes;
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_declarationAttributes;
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_referenceAttributes;

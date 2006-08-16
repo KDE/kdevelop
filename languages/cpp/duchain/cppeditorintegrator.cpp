@@ -70,7 +70,7 @@ Range* CppEditorIntegrator::createRange( AST * node, RangeEdge edge )
 
 Range* CppEditorIntegrator::createRange( const Token & token )
 {
-  return createRange(findPosition(token, FrontEdge), findPosition(token, BackEdge));
+  return createRange(findPosition(token, FrontEdge), findPosition(token, FrontEdge));
 }
 
 Cursor * CppEditorIntegrator::createCursor( std::size_t token, Edge edge )

@@ -311,13 +311,9 @@ private slots:
 
     QCOMPARE(top->parentContexts().count(), 0);
     QCOMPARE(top->childContexts().count(), 1);
-    QCOMPARE(top->localDefinitions().count(), 1);
+    QCOMPARE(top->localDefinitions().count(), 0);
     QVERIFY(top->localScopeIdentifier().isEmpty());
 
-    Definition* defMain = top->localDefinitions().first();
-    QCOMPARE(defMain->identifier(), Identifier("main"));
-
-    QCOMPARE(top->findDefinition(defMain->identifier()), defMain);
     QCOMPARE(top->findDefinition(Identifier("i")), noDef);
 
     DUContext* main = top->childContexts().first();
@@ -325,7 +321,6 @@ private slots:
     QCOMPARE(main->localDefinitions().count(), 0);
     QVERIFY(main->localScopeIdentifier().isEmpty());
 
-    QCOMPARE(main->findDefinition(defMain->identifier()), defMain);
     QCOMPARE(main->findDefinition(Identifier("i")), noDef);
 
     DUContext* forCtx = main->childContexts().first();
@@ -337,7 +332,6 @@ private slots:
     QCOMPARE(defI->identifier(), Identifier("i"));
     QCOMPARE(defI->uses().count(), 2);
 
-    QCOMPARE(forCtx->findDefinition(defMain->identifier()), defMain);
     QCOMPARE(forCtx->findDefinition(defI->identifier()), defI);
 
     DUContext* insideFor = forCtx->childContexts().first();
@@ -345,7 +339,6 @@ private slots:
     QCOMPARE(insideFor->localDefinitions().count(), 0);
     QVERIFY(insideFor->localScopeIdentifier().isEmpty());
 
-    QCOMPARE(insideFor->findDefinition(defMain->identifier()), defMain);
     QCOMPARE(insideFor->findDefinition(defI->identifier()), defI);
 
     release(top);
@@ -357,40 +350,26 @@ private slots:
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("struct A { int i; A(int b, int c) : i(5) { } virtual void test(int j) = 0; };");
 
-    DUContext* top = parse(method, DumpNone);
+    DUContext* top = parse(method);//, DumpNone);
 
     QCOMPARE(top->parentContexts().count(), 0);
     QCOMPARE(top->childContexts().count(), 1);
-    QCOMPARE(top->localDefinitions().count(), 1);
+    QCOMPARE(top->localDefinitions().count(), 0);
     QVERIFY(top->localScopeIdentifier().isEmpty());
-
-    Definition* defA = top->localDefinitions().first();
-    QCOMPARE(defA->identifier(), Identifier("A"));
-
-    QCOMPARE(top->findDefinition(Identifier("A")), defA);
-    QCOMPARE(top->findDefinition(Identifier("i")), noDef);
-    QCOMPARE(top->findDefinition(Identifier("b")), noDef);
-    QCOMPARE(top->findDefinition(Identifier("c")), noDef);
 
     DUContext* structA = top->childContexts().first();
     QCOMPARE(structA->childContexts().count(), 2);
-    QCOMPARE(structA->localDefinitions().count(), 3);
+    QCOMPARE(structA->localDefinitions().count(), 2);
     QCOMPARE(structA->localScopeIdentifier(), QualifiedIdentifier("A"));
 
     Definition* defI = structA->localDefinitions().first();
     QCOMPARE(defI->identifier(), Identifier("i"));
     QCOMPARE(defI->uses().count(), 1);
 
-    Definition* defACtor = structA->localDefinitions()[1];
-    QCOMPARE(defACtor->identifier(), Identifier("A"));
-    QCOMPARE(defACtor->uses().count(), 0);
-
     Definition* defTest = structA->localDefinitions()[2];
     QCOMPARE(defTest->identifier(), Identifier("test"));
     QCOMPARE(defTest->uses().count(), 0);
 
-    QCOMPARE(structA->findDefinition(QualifiedIdentifier("::A")), defA);
-    QCOMPARE(structA->findDefinition(Identifier("A")), defACtor);
     QCOMPARE(structA->findDefinition(Identifier("i")), defI);
     QCOMPARE(structA->findDefinition(Identifier("b")), noDef);
     QCOMPARE(structA->findDefinition(Identifier("c")), noDef);
@@ -400,7 +379,6 @@ private slots:
     QCOMPARE(ctorCtx->localDefinitions().count(), 2);
     QVERIFY(ctorCtx->localScopeIdentifier().isEmpty());
 
-    QCOMPARE(ctorCtx->findDefinition(QualifiedIdentifier("A")), defACtor);
     QCOMPARE(ctorCtx->findDefinition(QualifiedIdentifier("i")), defI);
     QCOMPARE(ctorCtx->findDefinition(QualifiedIdentifier("b")), ctorCtx->localDefinitions().first());
     QCOMPARE(ctorCtx->findDefinition(QualifiedIdentifier("c")), ctorCtx->localDefinitions().last());
@@ -538,9 +516,9 @@ private slots:
 
   void testFileParse()
   {
-    QSKIP("Unwanted", SkipSingle);
+    //QSKIP("Unwanted", SkipSingle);
 
-    QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
+    QFile file("/opt/kde4/src/kdelibs/kate/part/katebuffer.h");
     QVERIFY( file.open( QIODevice::ReadOnly ) );
 
     QByteArray fileData = file.readAll();
@@ -550,7 +528,7 @@ private slots:
     QString ppd = preprocessor.processString( contents );
     QByteArray preprocessed = ppd.toUtf8();
 
-    DUContext* top = parse(preprocessed, DumpNone);
+    DUContext* top = parse(preprocessed);//, DumpNone);
 
     release(top);
   }

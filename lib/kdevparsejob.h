@@ -22,7 +22,7 @@
 #ifndef KDEVPARSEJOB_H
 #define KDEVPARSEJOB_H
 
-#include <Job.h>
+#include <JobSequence.h>
 #include <kurl.h>
 
 class KDevDocument;
@@ -38,7 +38,7 @@ class KDevAST;
 class KDevCodeModel;
 class DUContext;
 
-class KDevParseJob : public ThreadWeaver::Job
+class KDevParseJob : public ThreadWeaver::JobSequence
 {
     Q_OBJECT
 public:
@@ -49,17 +49,13 @@ public:
 
     virtual ~KDevParseJob();
 
-    const QByteArray &contents() const
-    {
-        return m_contents;
-    }
-    void setContents( const QByteArray &contents )
-    {
-        m_contents = contents;
-    }
+    QString contentsFromEditor() const;
 
     KUrl document() const;
+    KDevDocument* openDocument() const;
     bool wasSuccessful() const;
+
+    void setErrorMessage(const QString& message);
     const QString& errorMessage() const;
 
     virtual KDevAST *AST() const = 0;
@@ -67,9 +63,8 @@ public:
     virtual DUContext *duChain() const;
 
 protected:
-    virtual void run() = 0;
     KUrl m_document;
-    QByteArray m_contents;
+    KDevDocument* m_openDocument;
     QString m_errorMessage;
 };
 

@@ -29,30 +29,63 @@ class pool;
 class CodeModel;
 class TranslationUnitAST;
 class DUContext;
+class CppLanguageSupport;
 
-class ParseJob : public KDevParseJob
+class CPPParseJob : public KDevParseJob
 {
     Q_OBJECT
 public:
-    ParseJob( const KUrl &url,
-              QObject* parent );
+    CPPParseJob( const KUrl &url,
+              CppLanguageSupport* parent );
 
-    ParseJob( KDevDocument* document,
-              QObject* parent );
+    CPPParseJob( KDevDocument* document,
+              CppLanguageSupport* parent );
 
-    virtual ~ParseJob();
+    virtual ~CPPParseJob();
 
+    CppLanguageSupport* cpp() const;
+
+    QString preprocessed() const;
+    void setPreprocessed(QString preprocessed);
+
+    void setAST(TranslationUnitAST* ast);
     virtual KDevAST *AST() const;
-    virtual KDevCodeModel *codeModel() const;
-    virtual DUContext *duChain() const;
 
-protected:
-    virtual void run();
+    void setCodeModel(CodeModel* model);
+    virtual KDevCodeModel *codeModel() const;
+
+    void setDUChain(DUContext* duChain);
+    virtual DUContext *duChain() const;
 
 private:
     TranslationUnitAST *m_AST;
     CodeModel *m_model;
     DUContext* m_duContext;
+    QString m_preprocessed;
+};
+
+class PreprocessJob : public ThreadWeaver::Job
+{
+    Q_OBJECT
+public:
+    PreprocessJob(CPPParseJob* parent);
+
+    CPPParseJob* parentJob() const;
+
+protected:
+    virtual void run();
+};
+
+class ParseJob : public ThreadWeaver::Job
+{
+    Q_OBJECT
+public:
+    ParseJob(CPPParseJob* parent);
+
+    CPPParseJob* parentJob() const;
+
+protected:
+    virtual void run();
 };
 
 #endif

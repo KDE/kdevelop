@@ -110,7 +110,7 @@ DumpChain::DumpChain()
 {
 }
 
-void DumpChain::dump( AST * node, class TokenStream * tokenStream )
+void DumpChain::dump( AST * node, TokenStream * tokenStream )
 {
   delete m_editor;
   m_editor = 0;

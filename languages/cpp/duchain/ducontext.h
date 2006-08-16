@@ -62,6 +62,8 @@ public:
   ContextType type() const;
   void setType(ContextType type);
 
+  inline int depth() const { if (parentContexts().isEmpty()) return 0; return parentContexts().first()->depth() + 1; }
+
   /**
    * Calculate the fully qualified scope identifier
    */
@@ -220,6 +222,22 @@ public:
    */
   QHash<QualifiedIdentifier, Definition*> allDefinitions(const KDevDocumentCursor& position) const;
 
+  /**
+   * Return a list of uses which don't have a corresponding definition.
+   */
+  const QList<KTextEditor::Range*>& orphanUses() const;
+
+  /**
+   * Add an orphan use (a use which doesn't have a corresponding definition)
+   * to this context.
+   */
+  void addOrphanUse(KTextEditor::Range* orphan);
+
+  /**
+   * Clear and delete all orphan uses.
+   */
+  void deleteOrphanUses();
+
 private:
   /**
    * \internal
@@ -257,6 +275,7 @@ private:
   QList<Definition*> m_localDefinitions;
 
   QList<UsingNS*> m_usingNamespaces;
+  QList<KTextEditor::Range*> m_orphanUses;
 };
 
 #endif // DUCONTEXT_H
