@@ -78,7 +78,7 @@ public:
     Q_DECLARE_FLAGS( Features, Feature )
 
     /** @return The current project. */
-    KDevProject *project() const;
+    virtual KDevProject *project() const;
 
     /**
      * This method initialize the model item @arg dom
@@ -94,11 +94,10 @@ public:
 
     /**
      * Return the top item in this heirachy, which represents the root folder of the source
-     * heirachy.
+     * hierarchy.
      *
-     * \sa root()
      */
-    KDevProjectFolderItem* top();
+    virtual KDevProjectFolderItem* top();
 
     /**
      * Add a folder to the project
