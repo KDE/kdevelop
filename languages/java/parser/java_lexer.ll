@@ -1,4 +1,4 @@
-%top{
+%{
 /*****************************************************************************
  * Copyright (c) 2005, 2006 Jakob Petsovits <jpetso@gmx.at>                  *
  *                                                                           *
@@ -17,7 +17,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,      *
  * Boston, MA 02110-1301, USA.                                               *
  *****************************************************************************/
-}
+%}
 
 %option c++
 %option yyclass="java::Lexer"
