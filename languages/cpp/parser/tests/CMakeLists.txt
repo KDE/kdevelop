@@ -1,5 +1,5 @@
 
-if(KDE4_BUILD_TESTS)
+if(false)
 
 include_directories(${CMAKE_SOURCE_DIR}/languages/cpp/parser)
 
