@@ -55,6 +55,7 @@
 #include <QShowEvent>
 #include <QResizeEvent>
 #include <QVBoxLayout>
+#include <QLineEdit>
 
 #include <ktexteditor/document.h>
 
@@ -74,6 +75,7 @@
 #include <kmenu.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
+#include <kicon.h>
 
 #include <kdebug.h>
 //END Includes
@@ -105,6 +107,7 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
 
     QVBoxLayout* lo = new QVBoxLayout(this);
     lo->setMargin(0);
+    lo->setSpacing(0);
 
     QtMsgHandler oldHandler = qInstallMsgHandler( silenceQToolBar );
 
@@ -140,18 +143,18 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
                                 mActionCollection, "bookmarks" );
     acmBookmarks->setDelayed( false );
 
-    bookmarkHandler = new KBookmarkHandler( this, acmBookmarks->kMenu() );
+    bookmarkHandler = new KBookmarkHandler( this, acmBookmarks->menu() );
 
-    Q3HBox* filterBox = new Q3HBox(this);
-
-    btnFilter = new QToolButton( filterBox );
+    btnFilter = new QToolButton( this );
     btnFilter->setIcon( KIcon("filter" ) );
     btnFilter->setToggleButton( true );
-    filter = new KHistoryCombo( true, filterBox);
+    filter = new KHistoryCombo( true, this);
     filter->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ));
-    filterBox->setStretchFactor(filter, 2);
     connect( btnFilter, SIGNAL( clicked() ), this, SLOT( btnFilterClick() ) );
-    lo->addWidget(filterBox);
+
+    QHBoxLayout* filterLayout = new QHBoxLayout(lo);
+    filterLayout->addWidget(btnFilter);
+    filterLayout->addWidget(filter);
 
     connect( filter, SIGNAL( activated(const QString&) ),
              SLOT( slotFilterChange(const QString&) ) );
@@ -163,7 +166,7 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
     connect(acSyncDir, SIGNAL(triggered(bool)), SLOT( setActiveDocumentDir() ));
     toolbar->setToolButtonStyle( Qt::ToolButtonIconOnly );
     toolbar->setIconSize( QSize(16, 16) );
-    toolbar->setEnableContextMenu( false );
+    toolbar->setContextMenuEnabled( false );
 
     connect( cmbPath, SIGNAL( urlActivated( const KUrl&  )),
              this,  SLOT( cmbPathActivated( const KUrl& ) ));
@@ -176,8 +179,8 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
             this, SLOT(dirFinishedLoading()) );
 
     // enable dir sync button if current doc has a valid URL
-    connect ( partController, SIGNAL(activePartChanged(KParts::Part*) ),
-              this, SLOT(viewChanged() ) );
+    connect ( partController, SIGNAL(documentActivated(KDevDocument*)),
+              this, SLOT(viewChanged()) );
 
     // Connect the bookmark handler
     connect( bookmarkHandler, SIGNAL( openURL( const QString& )),
@@ -508,13 +511,7 @@ private:
 
 KUrl KDevFileSelector::activeDocumentUrl( )
 {
-	KParts::ReadOnlyPart * part = dynamic_cast<KParts::ReadOnlyPart*>( partController->activePart() );
-	if ( part )
-	{
-		return part->url();
-	}
-
-    return KUrl();
+	return partController->activeDocument()->url();
 }
 //END ActionLBItem
 
@@ -748,14 +745,14 @@ void KDevDirOperator::activatedMenu( const KFileItem *fi, const QPoint & pos )
     KActionMenu * am = dynamic_cast<KActionMenu*>(actionCollection()->action("popupMenu"));
     if (!am)
         return;
-    KMenu *popup = am->kMenu();
+    KMenu *popup = am->menu();
 
-    if (fi)
+    /*if (fi)
     {
         FileContext context( KUrl::List(fi->url()));
 //         if ( KDevApi::self()->core() )
 //             KDevApi::self()->core()->fillContextMenu(popup, &context); FIXME find replacement
-    }
+    }*/
 
     popup->popup(pos);
 }

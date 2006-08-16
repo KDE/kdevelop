@@ -13,31 +13,32 @@
 #include <ktextbrowser.h>
 #include <kconfig.h>
 #include <kfileitem.h>
-#include <kdevgenericfactory.h>
 #include <kdiroperator.h>
 #include <kdialog.h>
 #include <kvbox.h>
+#include <kgenericfactory.h>
 
 #include <kdevcore.h>
 #include <kdevproject.h>
 #include <kdevmainwindow.h>
 #include <kdevdocumentcontroller.h>
-#include <kdevplugininfo.h>
+#include <kdevplugin.h>
 
 #include <ktip.h>
 
 #include "fileselector_widget.h"
 
-typedef KGenericFactory<FileSelectorPart> FileSelectorFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevfileselector, FileSelectorFactory )
+typedef KGenericFactory<FileSelectorPart> KDevFileSelectorFactory;
+K_EXPORT_COMPONENT_FACTORY( kdevfileselector, KDevFileSelectorFactory("kdevfileselector") )
 
 FileSelectorPart::FileSelectorPart(QObject *parent, const QStringList&)
-    : KDevPlugin(FileSelectorFactory::instance(), parent)
+    : KDevPlugin(KDevFileSelectorFactory::instance(), parent)
 {
     m_filetree = new KDevFileSelector( this, KDevCore::mainWindow(), KDevCore::documentController(), 0 );
 
     connect( m_filetree->dirOperator(), SIGNAL(fileSelected(const KFileItem*)),
 	     this, SLOT(fileSelected(const KFileItem*)));
+
 //     FIXME find replacement
 //     connect( KDevApi::self()->core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
 //

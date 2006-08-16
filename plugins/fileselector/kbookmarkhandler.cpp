@@ -45,9 +45,9 @@ KBookmarkHandler::KBookmarkHandler( KDevFileSelector *parent, KMenu* kpopupmenu 
     if (!m_menu)
       m_menu = new KMenu( parent );
 
-    QString file = locate( "data", "kdevfileselector/fsbookmarks.xml" );
+    QString file = KStandardDirs::locate( "data", "kdevfileselector/fsbookmarks.xml" );
     if ( file.isEmpty() )
-        file = locateLocal( "data", "kdevfileselector/fsbookmarks.xml" );
+        file = KStandardDirs::locateLocal( "data", "kdevfileselector/fsbookmarks.xml" );
 
     KBookmarkManager *manager = KBookmarkManager::managerForFile( file, "KDevFileSelector", false);
     manager->setUpdate( true );
