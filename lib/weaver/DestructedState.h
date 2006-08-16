@@ -3,7 +3,7 @@
    This file declares the DestructedState class.
 
    $ Author: Mirko Boehm $
-   $ Copyright: (C) 2005, Mirko Boehm $
+   $ Copyright: (C) 2005, 2006 Mirko Boehm $
    $ Contact: mirko@kde.org
          http://www.kde.org
          http://www.hackerbuero.org $
@@ -17,19 +17,22 @@
 #ifndef DestructedState_H
 #define DestructedState_H
 
+#ifndef THREADWEAVER_PRIVATE_API
+#define THREADWEAVER_PRIVATE_API
+#endif
 
-#include "State.h"
+#include "StateImplementation.h"
 
 namespace ThreadWeaver {
 
     /** DestructedState is only active after the thread have been destroyed by
         the destructor, but before superclass destructors have finished.
     */
-    class DestructedState : public State
+    class DestructedState : public StateImplementation
     {
     public:
-	explicit DestructedState( WeaverImpl *weaver)
-	    : State (weaver, Destructed)
+	explicit DestructedState( WeaverInterface *weaver)
+	    : StateImplementation (weaver)
 	    {
 	    }
 	/** Suspend job processing. */
@@ -40,6 +43,9 @@ namespace ThreadWeaver {
         virtual Job* applyForWork ( Thread *th,  Job* previous );
         /** Wait (by suspending the calling thread) until a job becomes available. */
         virtual void waitForAvailableJob ( Thread *th );
+
+        /** reimpl */
+        StateId stateId() const;
     };
 
 }

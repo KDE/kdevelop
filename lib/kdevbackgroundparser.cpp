@@ -54,7 +54,7 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         m_modelsToCache( 0 ),
         m_progressBar( new QProgressBar ),
         m_persistentHash( new KDevPersistentHash ),
-        m_weaver( new Weaver( this, 1, 1 ) ) //C++ parser can't multi-thread at the moment
+        m_weaver( new Weaver( this, 1 ) ) //C++ parser can't multi-thread at the moment
 {
     //FIXME Stub for now, but eventually load persistent parser info
     //whatever that may entail.

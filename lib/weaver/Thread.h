@@ -5,7 +5,7 @@
    Thread is not a part of the public interface of the ThreadWeaver library.
 
    $ Author: Mirko Boehm $
-   $ Copyright: (C) 2004, 2005 Mirko Boehm $
+   $ Copyright: (C) 2004, 2005, 2006 Mirko Boehm $
    $ Contact: mirko@kde.org
          http://www.kde.org
          http://www.hackerbuero.org $
@@ -19,20 +19,21 @@
 #ifndef THREADWEAVER_THREAD_H
 #define THREADWEAVER_THREAD_H
 
-#include <QThread>
 #include <QMutex>
+#include <QThread>
 
 namespace ThreadWeaver {
 
-    class ThreadRunHelper;
-    class WeaverImpl;
     class Job;
+    class WeaverImpl;
+    class ThreadRunHelper;
 
     /** The class Thread is used to represent the worker threads in
         the weaver's inventory. It is not meant to be overloaded. */
     class Thread : public QThread
     {
         Q_OBJECT
+
     public:
 	/** Create a thread.
 	    These thread objects are only used inside the Weaver parent
@@ -40,7 +41,7 @@ namespace ThreadWeaver {
 
             @param parent the parent WeaverImpl
         */
-        explicit Thread(WeaverImpl *parent=0);
+        explicit Thread ( WeaverImpl *parent = 0 );
 
 	/** The destructor. */
         ~Thread();
@@ -57,7 +58,7 @@ namespace ThreadWeaver {
 	    available  for executed jobs.
 	    @param msec amount of milliseconds
         */
-	void msleep(unsigned long msec);
+	void msleep ( unsigned long msec );
 
 	/** Returns the thread id.
 	    This id marks the respective Thread object, and must
@@ -79,17 +80,10 @@ namespace ThreadWeaver {
         void jobStarted ( Thread*,  Job* );
         /** The thread finished to execute a job. */
         void jobDone ( Job* );
+
     private:
-        WeaverImpl *m_parent;
-
-        ThreadRunHelper* m_runhelper;
-
-	const unsigned int m_id;
-
-	static unsigned int sm_Id;
-        static QMutex sm_mutex;
-
-	static unsigned int makeId();
+        class Private;
+        Private* d;
     };
 
 }

@@ -1,27 +1,27 @@
 /* -*- C++ -*-
 
-   This file implements the public interfaces of the WeaverImpl class.
+This file implements the public interfaces of the WeaverImpl class.
 
-   $ Author: Mirko Boehm $
-   $ Copyright: (C) 2005, Mirko Boehm $
-   $ Contact: mirko@kde.org
-         http://www.kde.org
-         http://www.hackerbuero.org $
-   $ License: LGPL with the following explicit clarification:
-         This code may be linked against any version of the Qt toolkit
-         from Trolltech, Norway. $
+$ Author: Mirko Boehm $
+$ Copyright: (C) 2005, 2006 Mirko Boehm $
+$ Contact: mirko@kde.org
+http://www.kde.org
+http://www.hackerbuero.org $
+$ License: LGPL with the following explicit clarification:
+This code may be linked against any version of the Qt toolkit
+from Trolltech, Norway. $
 
-   $Id: WeaverImpl.h 32 2005-08-17 08:38:01Z mirko $
+$Id: WeaverImpl.h 32 2005-08-17 08:38:01Z mirko $
 */
 #ifndef WeaverImpl_H
 #define WeaverImpl_H
 
-// #ifndef THREADWEAVER_H
-// #error WeaverImpl.h is not supposed to be included directly, use ThreadWeaver.h!
-// #endif
-
 #include <QObject>
 #include <QWaitCondition>
+
+#ifndef THREADWEAVER_PRIVATE_API
+#define THREADWEAVER_PRIVATE_API
+#endif
 
 #include "State.h"
 #include "WeaverInterface.h"
@@ -41,9 +41,7 @@ namespace ThreadWeaver {
         Q_OBJECT
     public:
 	/** Construct a WeaverImpl object. */
-        WeaverImpl (QObject* parent=0,
-                int inventoryMin = 4, // minimal number of provided threads
-                int inventoryMax = 32); // maximum number of provided threads
+        WeaverImpl (QObject* parent=0, int inventoryMax = 32); // maximum number of provided threads
 	/** Destruct a WeaverImpl object. */
         virtual ~WeaverImpl ();
 	const State& state() const;
@@ -56,9 +54,9 @@ namespace ThreadWeaver {
 	virtual void finish();
         virtual void suspend( );
         virtual void resume();
-        bool isEmpty ();
-	bool isIdle ();
-        int queueLength ();
+        bool isEmpty () const;
+	bool isIdle () const;
+        int queueLength () const;
         /** Assign a job to the calling thread.
 	    This is supposed to be called from the Thread objects in
 	    the inventory. Do not call this method from your code.
@@ -93,8 +91,12 @@ namespace ThreadWeaver {
             This will try to distribute as many jobs as possible
             to all idle threads. */
         void assignJobs();
-	int noOfThreads ();
+	int numberOfThreads () const;
         void requestAbort();
+
+        /** Dump the current jobs to the console. Not part of the API. */
+        void dumpJobs();
+
     signals:
         /** A Thread has been created. */
         void threadStarted ( Thread* );
@@ -104,8 +106,13 @@ namespace ThreadWeaver {
         void threadSuspended ( Thread* );
         /** The thread is busy executing job j. */
         void threadBusy ( Thread*,  Job* j);
-        /** The Weaver's state has changed. */
-        void stateChanged ( State* );
+
+        // some more private signals: There are situations where other threads
+        // call functions of (this). In this case, there may be confusion
+        // about whether to handle th signals synchroneously or not. The
+        // following signals are asynchroneoulsy connected to their siblings.
+        void asyncThreadSuspended( Thread* );
+
     protected:
         /** Adjust active thread count.
             This is a helper function for incActiveThreadCount and decActiveThreadCount. */
@@ -116,21 +123,21 @@ namespace ThreadWeaver {
         virtual Thread* createThread();
         /** Adjust the inventory size.
 
-	    This method creates threads on demand. Threads in the inventory
-	    are not created upon construction of the WeaverImpl object, but
-	    when jobs are queued. This avoids costly delays on the application
-	    startup time. Threads are created when the inventory size is under
-	    inventoryMin and new jobs are queued.
-	    */
+        This method creates threads on demand. Threads in the inventory
+        are not created upon construction of the WeaverImpl object, but
+        when jobs are queued. This avoids costly delays on the application
+        startup time. Threads are created when the inventory size is under
+        inventoryMin and new jobs are queued.
+        */
         // @TODO: add code to raise inventory size over inventoryMin
         // @TODO: add code to quit unnecessary threads
         void adjustInventory ( int noOfNewJobs );
 	/** Lock the mutex for this weaver. The threads in the
 	    inventory need to lock the weaver's mutex to synchronize
 	    the job management. */
-	void lock ();
-	/** Unlock. See lock(). */
-	void unlock ();
+// 	void lock ();
+// 	/** Unlock. See lock(). */
+// 	void unlock ();
         /** The thread inventory. */
         QList<Thread*> m_inventory;
         /** The job queue. */
@@ -138,21 +145,27 @@ namespace ThreadWeaver {
 	/** The number of jobs that are assigned to the worker
 	    threads, but not finished. */
 	int m_active;
-        /** Stored setting. */
-        int m_inventoryMin;
         /** Stored setting . */
         int m_inventoryMax;
         /** Wait condition all idle or done threads wait for. */
         QWaitCondition m_jobAvailable;
 	/** Wait for a job to finish. */
 	QWaitCondition m_jobFinished;
+
     private:
 	/** Mutex to serialize operations. */
 	QMutex *m_mutex;
+
+        /** Non-recursive mutex to serialize calls to finish(). */
+        QMutex* m_finishMutex;
+
+        /** Mutex used by m_jobAvailable wait condition. */
+        QMutex* m_jobAvailableMutex;
+
         // @TODO: make state objects static
 	/** The state of the art.
          * @see StateId
-	*/
+         */
 	State*  m_state;
         /** The state objects. */
         State *m_states[NoOfStates];

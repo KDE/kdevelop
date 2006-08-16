@@ -3,7 +3,7 @@
    This file implements the InConstructionState class.
 
    $ Author: Mirko Boehm $
-   $ Copyright: (C) 2005, Mirko Boehm $
+   $ Copyright: (C) 2005, 2006 Mirko Boehm $
    $ Contact: mirko@kde.org
          http://www.kde.org
          http://www.hackerbuero.org $
@@ -14,10 +14,9 @@
    $Id: InConstructionState.cpp 30 2005-08-16 16:16:04Z mirko $
 */
 
-#include "InConstructionState.h"
-
-#include "ThreadWeaver.h"
 #include "WeaverImpl.h"
+#include "ThreadWeaver.h"
+#include "InConstructionState.h"
 
 namespace ThreadWeaver {
 
@@ -38,16 +37,21 @@ namespace ThreadWeaver {
         // return from the blocked state when jobs are queued. By then, we
         // should not be in InConstruction state anymore, and we hand the job
         // application over to the then active state.
-        while ( m_weaver->state().stateId() == InConstruction )
+        while ( weaver()->state().stateId() == InConstruction )
         {
-            m_weaver->waitForAvailableJob ( th);
+            weaver()->waitForAvailableJob ( th);
         }
-        return m_weaver->applyForWork ( th,  previous );
+        return weaver()->applyForWork ( th,  previous );
     }
 
     void InConstructionState::waitForAvailableJob ( Thread * th)
     {
-        m_weaver->blockThreadUntilJobsAreBeingAssigned ( th );
+        weaver()->blockThreadUntilJobsAreBeingAssigned ( th );
+    }
+
+    StateId InConstructionState::stateId() const
+    {
+        return InConstruction;
     }
 
 }

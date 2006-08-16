@@ -3,7 +3,7 @@
    This file declares the WeaverObserver class.
 
    $ Author: Mirko Boehm $
-   $ Copyright: (C) 2005, Mirko Boehm $
+   $ Copyright: (C) 2005, 2006 Mirko Boehm $
    $ Contact: mirko@kde.org
          http://www.kde.org
          http://www.hackerbuero.org $
@@ -21,22 +21,25 @@
 
 namespace ThreadWeaver {
 
-    class Thread;
     class Job;
     class State;
+    class Thread;
 
-    /** Observers provides signals on different weaver events that are
+    /** Observers provides signals on some Weaver events that are
         otherwise only available through objects of different classes
         (threads, jobs). Usually, access to the signals of those objects
-        is not provided through the weaver API. Use an observer to reveice
+        is not provided through the ThreadWeaver API. Use an observer to receive
         notice, for example, on thread activity.
+
+        Observers are registered through the WeaverInterface API
+        (see WeaverInterface::registerObserver).
 
         To unregister, simply delete the observer.
 
-        When using WeaverObservers, it is recommended to create and delete
-        Jobs only in the controlling (usually the main) thread. Also, it is
-        better to use deleteLater(..), as Job pointers are passed around in
-        signals.
+        Observers are meant to be used within the controlling thread (usually
+        the main thread), that creates the Jobs. If this is not the case, be
+        aware not to delete Job objects externally that you reference in a
+        WeaverObserver implementation.
     */
     class WeaverObserver : public QObject
     {

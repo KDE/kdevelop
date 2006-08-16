@@ -3,7 +3,7 @@
    This file declares the SuspendingState class.
 
    $ Author: Mirko Boehm $
-   $ Copyright: (C) 2005, Mirko Boehm $
+   $ Copyright: (C) 2005, 2006 Mirko Boehm $
    $ Contact: mirko@kde.org
          http://www.kde.org
          http://www.hackerbuero.org $
@@ -17,19 +17,22 @@
 #ifndef SuspendingState_H
 #define SuspendingState_H
 
+#ifndef THREADWEAVER_PRIVATE_API
+#define THREADWEAVER_PRIVATE_API
+#endif
 
-#include "State.h"
+#include "StateImplementation.h"
 
 namespace ThreadWeaver {
 
     /** SuspendingState is the state after suspend() has been called, but
         before all threads finished executing the current job and blocked.
     */
-    class SuspendingState : public State
+    class SuspendingState : public StateImplementation
     {
     public:
 	explicit SuspendingState( WeaverImpl *weaver)
-	    : State (weaver, Suspending)
+	    : StateImplementation (weaver)
 	    {
 	    }
 	/** Suspend job processing. */
@@ -42,6 +45,9 @@ namespace ThreadWeaver {
         virtual void waitForAvailableJob ( Thread *th );
 	/** Overload. */
 	void activated();
+
+        /** reimpl */
+        StateId stateId() const;
     };
 
 }

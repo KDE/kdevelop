@@ -13,6 +13,7 @@
 
    $Id: DebuggingAids.h 30 2005-08-16 16:16:04Z mirko $
 */
+
 #ifndef DEBUGGINGAIDS_H
 #define DEBUGGINGAIDS_H
 
@@ -88,6 +89,7 @@ namespace ThreadWeaver {
 	DebugLevel = level;
     }
 
+#ifndef QT_NO_DEBUG
     inline void debug(int severity, const char * cformat, ...)
     {
 	if ( Debug == true && ( severity<=DebugLevel || severity == 0) )
@@ -113,6 +115,27 @@ namespace ThreadWeaver {
 	    va_end (ap);
 	}
     }
+#else
+#define debug(x,...)
+#endif
+
+  inline bool invariant() { return true; }
+
+#define INVARIANT Q_ASSERT_X (invariant(), __FILE__, "class invariant failed" );
+
+#define REQUIRE(x) \
+INVARIANT \
+Q_ASSERT_X (x, __FUNCTION__, "unfulfilled requirement " #x );
+
+#define ENSURE(x) \
+INVARIANT \
+Q_ASSERT_X (x, __FUNCTION__, "broken guarantee " #x );
+
+#ifdef QT_NO_DEBUG
+#define DEBUGONLY(x)
+#else
+#define DEBUGONLY(x) x
+#endif
 
 }
 

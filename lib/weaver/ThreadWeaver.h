@@ -19,22 +19,15 @@
 #define THREADWEAVER_H
 
 #include <QObject>
-
-#include <Job.h>
-#include <State.h>
-#include <DebuggingAids.h>
 #include "WeaverInterface.h"
-#include "kdevexport.h"
 
 namespace ThreadWeaver {
 
+    class Job;
+    class State;
     class WeaverObserver;
 
-    /** The Weaver class acts as a facade to the WeaverImpl class.
-
-        It creates and destroys WeaverImpl objects. Also, it provides a
-        factory method for this purpose that can be overloaded to create
-        derived WeaverImpl objects.
+    /** The Weaver class provides the public implementation of the WeaverInterface.
 
         Weaver provides a static instance that can be used to perform jobs in
         threads without managing a weaver object. The static instance will
@@ -46,15 +39,22 @@ namespace ThreadWeaver {
         that are handled by it, and one for the ThreadWeaver users
         (application developers). To separate those two different API parts,
         Weaver only provides the interface supposed to be used by developers
-        of multithreaded applications. */
-    class KDEVWEAVER_EXPORT Weaver : public WeaverInterface
+        of multithreaded applications.
+
+        Weaver creates and destroys WeaverImpl objects. It hides the
+        implementation details of the WeaverImpl class. It is strongly
+        discouraged to use the WeaverImpl class in programs, as its API will
+        be changed without notice.
+        Also, Weaver provides a factory method for this purpose that can be overloaded to create
+        derived WeaverImpl objects.
+
+    */
+    class Weaver : public WeaverInterface
     {
         Q_OBJECT
     public:
 	/** Construct a Weaver object. */
-        Weaver (QObject* parent=0,
-                int inventoryMin = 4, // minimal number of provided threads
-                int inventoryMax = 32); // maximum number of provided threads
+        Weaver (QObject* parent=0, int inventoryMax = 4 ); // maximum number of provided threads
 	/** Destruct a Weaver object. */
         virtual ~Weaver ();
 	const State& state() const;
@@ -74,22 +74,20 @@ namespace ThreadWeaver {
 	virtual void finish();
         virtual void suspend( );
         virtual void resume();
-        bool isEmpty ();
-	bool isIdle ();
-	int queueLength ();
-	int noOfThreads ();
+        bool isEmpty () const;
+	bool isIdle () const;
+	int queueLength () const;
+	int numberOfThreads () const;
         void requestAbort();
-    protected:
-        WeaverInterface *m_weaverinterface;
-	/** The application-global Weaver instance.
 
-	    This  instance will only be created if this method is actually called
-	    in the lifetime of the application. */
-	static Weaver *m_instance;
+    protected:
+
+      class Private;
+      Private* d;
         /** The factory method to create the actual Weaver implementation.
             Overload this method to use a different or adapted implementation.
             */
-        virtual WeaverInterface* makeWeaverImpl(int inventoryMin, int inventoryMax );
+        virtual WeaverInterface* makeWeaverImpl ( int inventoryMax );
     };
 }
 

@@ -1,24 +1,23 @@
 /* -*- C++ -*-
 
-   This file declares the Job class.
+This file declares the Job class.
 
-   $ Author: Mirko Boehm $
-   $ Copyright: (C) 2004, 2005 Mirko Boehm $
-   $ Contact: mirko@kde.org
-         http://www.kde.org
-         http://www.hackerbuero.org $
-   $ License: LGPL with the following explicit clarification:
-         This code may be linked against any version of the Qt toolkit
-         from Troll Tech, Norway. $
+$ Author: Mirko Boehm $
+$ Copyright: (C) 2004, 2005, 2006 Mirko Boehm $
+$ Contact: mirko@kde.org
+http://www.kde.org
+http://www.hackerbuero.org $
+$ License: LGPL with the following explicit clarification:
+This code may be linked against any version of the Qt toolkit
+from Troll Tech, Norway. $
 
-   $Id: Job.h 32 2005-08-17 08:38:01Z mirko $
+$Id: Job.h 32 2005-08-17 08:38:01Z mirko $
 */
+
 #ifndef THREADWEAVER_JOB_H
 #define THREADWEAVER_JOB_H
 
-#include <QList>
 #include <QObject>
-#include "kdevexport.h"
 
 class QMutex;
 class QWaitCondition;
@@ -26,9 +25,10 @@ class QWaitCondition;
 namespace ThreadWeaver {
 
     class Thread;
-    class WeaverInterface;
+    class QueuePolicy;
     class JobRunHelper;
-    class JobMultiMap;
+    class WeaverInterface;
+    class QueuePolicyList;
 
     /** A Job is a simple abstraction of an action that is to be
         executed in a thread context.
@@ -41,17 +41,20 @@ namespace ThreadWeaver {
 	different objects to perform two consecutive or parallel runs.
 
 	Jobs may declare dependencies. If Job B depends on Job A, B may not be
-	executed before A is finished.
-
+	executed before A is finished. To learn about dependencies, see
+	DependencyPolicy.
     */
 
-    class KDEVWEAVER_EXPORT Job : public QObject
+    class Job : public QObject
     {
         Q_OBJECT
+
     public:
+        friend class JobRunHelper;
+
         /** Construct a Job.
 
-            @param parent the parent QObject
+        @param parent the parent QObject
         */
         explicit Job ( QObject* parent = 0 );
 
@@ -63,6 +66,39 @@ namespace ThreadWeaver {
             Do not overload this method to create your own Job
             implementation, overload run(). */
         virtual void execute(Thread*);
+
+        /** The queueing priority of the job.
+            Jobs will be sorted by their queueing priority when
+            enqueued. A higher queueing priority will place the job in
+            front of all lower-priority jobs in the queue.
+
+            Note: A higher or lower priority does not influence queue
+            policies. For example, a high-priority job that has an
+            unresolved dependency will not be executed, which means an
+            available lower-priority job will take precedence.
+
+            The default implementation returns zero. Only if this method
+            is overloaded for some job classes, priorities will
+            influence the execution order of jobs.
+        */
+        virtual int priority() const;
+
+        /** Return whether the Job finished successfully or not.
+            The default implementation simply returns true. Overload in
+            derived classes if the derived Job class can fail.
+
+            If a job fails (success() returns false), it will *NOT* resolve
+            it's dependencies when it finishes. This will make sure that Jobs
+            that depend on the failed job will not be started.
+
+            There is an important gotcha: When a Job object is deleted, it
+            will always resolve it's dependencies. If dependent jobs should
+            not be executed after a failure, it is important to dequeue those
+            befor deleting the failed Job.
+
+            A JobSequence may be helpful for that purpose.
+        */
+        virtual bool success () const { return true; }
 
         /** Abort the execution of the job.
             Call this method to ask the Job to abort if it is currently executed.
@@ -86,46 +122,55 @@ namespace ThreadWeaver {
             Use this method to, for example, queue sub-operations as jobs
             before the job itself is queued.
 
+            Note: When this method is called, the associated Weaver object's
+            thread holds a lock on the weaver's queue. Therefore, it is save
+            to assume that recursive queueing is atomic from the queues
+            perspective.
+
             @param weaver the Weaver object the job will be queued in
-            */
+        */
         virtual void aboutToBeQueued ( WeaverInterface *weaver );
 
+        /** This Job is about the be dequeued from the weaver's job queue.
+            The job will be removed from the queue right after this method
+            returns.
+            Use this method to dequeue, if necessary,  sub-operations (joobs) that this job
+            has enqueued.
+
+            Note: When this method is called, the associated Weaver object's
+            thread does hold a lock on the weaver's queue.
+
+            Note: The default implementation does nothing.
+
+            @param weaver the Weaver object from which the job will be dequeued
+        */
+        virtual void aboutToBeDequeued ( WeaverInterface *weaver );
+
+        /** canBeExecuted() returns true if all the jobs queue policies agree to it.
+            If it returns true, it expects that the job is executed right
+            after that. The done() methods of the queue policies will be
+            automatically called when the job is finished.
+
+            If it returns false, all queue policy resources have been freed,
+            and the method can be called again at a later time.
+        */
+        virtual bool canBeExecuted();
+
         /** Returns true if the jobs's execute method finished. */
-        bool isFinished() const { return m_finished; }
+        bool isFinished() const;
 
-	/** Process events related to this job (created by the processing
-	    thread or the weaver or whoever). */
-	// virtual void processEvent ( Event* );
-
-        /** Add a dependency.
-            The object given will be added as a dependency. The Job will not
-            be executed until all dependencies have been processed.
-            The job is automatically added to the dependency as a dependent.
-            @param dependency: the other job this job depends on
+        /** Assign a queue policy.
+            Queue Policies customize the queueing (running) behaviour of sets
+            of jobs. Examples for queue policies are dependencies and resource
+            restrictions.
+            Every queue policy object can only be assigned once to a job,
+            multiple assignments will be IGNORED.
         */
-        void addDependency (Job* dependency);
+        void assignQueuePolicy ( QueuePolicy* );
 
-        /** Remove dependency.
-            The given dependency will be removed. If none are left, the job
-            will be executed as soon as a waiting thread is available.
-            The job will automatically be removed as a dependent of dep.
-
-            Returns false if the given object is not dependency of this job.
-
-	    This function is inefficient, and should be used only to abort
-	    execution of a job.
-
-	    @param dep the dependency that will be removed
-        */
-        bool removeDependency (Job *dep);
-
-        /** Retrieve a list of dependencies of this job. */
-        QList<Job*> getDependencies() const;
-
-        /** Query whether the job has an unresolved dependency.
-            In case it does, it will not be processed by a thread trying to
-            request a job. */
-        virtual bool hasUnresolvedDependencies();
+        /** Remove a queue policy from this job.
+         */
+        void removeQueuePolicy ( QueuePolicy* );
 
     signals:
 	/** This signal is emitted when this job is being processed by a
@@ -134,8 +179,19 @@ namespace ThreadWeaver {
 	/** This signal is emitted when the job has been finished. */
 	void done ( Job* );
 
+        /** This job has failed.
+            This signal is emitted when success() returns false after the job
+            is executed.
+        */
+        void failed( Job* );
+
     protected:
-        friend class JobRunHelper;
+        class Private;
+        Private* d;
+
+        /** Free the queue policies acquired before this job has been
+            executed. */
+        void freeQueuePolicyResources();
 
         /** The method that actually performs the job. It is called from
             execute(). This method is the one to overload it with the
@@ -145,43 +201,17 @@ namespace ThreadWeaver {
 	    Returns zero of the job is not currently executed.
 
 	    Do not confuse with QObject::thread() const !
-	    //  @TODO rename to executingThread()
+	    //  @todo rename to executingThread()
 	    */
-	inline Thread *thread() { return m_thread; }
+        Thread *thread();
+
 	/** Call with status = true to mark this job as done. */
-	inline void setFinished ( bool status ) { m_finished = status; }
-        /** Resolve all dependencies.
-            This method is called after the Job has been finished, or
-            when it is deleted without being executed (performed by the
-            destructor).
-            The method will remove all entries stating that another Job
-            depends on this one.
-        */
-        virtual void resolveDependencies();
+        void setFinished ( bool status );
 
-        Thread * m_thread;
+        /** The mutex used to protect this job. */
+        // QMutex& mutex();
 
-//         QMutex *m_wcmutex;
-// 	QWaitCondition *m_wc;
-
-	/** A container to keep track of Job dependencies.
-	    For each dependency A->B, which means Job B depends on Job A and
-	    may only be executed after A has been finished, an entry will be
-	    added with key A and value B. When A is finished, the entry will
-	    be removed. */
-        static JobMultiMap* sm_dep();
-//         static QMultiMap<Job*, Job*> *sm_dep();
-	static QMutex *sm_mutex;
-    private:
-	QMutex *m_mutex;
-	/** m_finished is set to true when the Job has been executed. */
-        bool m_finished;
-
-    public:
-        /** This method should be useful for debugging purposes. */
-        static void DumpJobDependencies();
     };
-
 }
 
 #endif // THREADWEAVER_JOB_H

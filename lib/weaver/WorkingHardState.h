@@ -3,7 +3,7 @@
    This file declares the WorkingHardState class.
 
    $ Author: Mirko Boehm $
-   $ Copyright: (C) 2005, Mirko Boehm $
+   $ Copyright: (C) 2005, 2006 Mirko Boehm $
    $ Contact: mirko@kde.org
          http://www.kde.org
          http://www.hackerbuero.org $
@@ -17,17 +17,21 @@
 #ifndef WorkingHardState_H
 #define WorkingHardState_H
 
-#include "State.h"
+#include "StateImplementation.h"
+
+#ifndef THREADWEAVER_PRIVATE_API
+#define THREADWEAVER_PRIVATE_API
+#endif
 
 namespace ThreadWeaver {
 
     /* WorkingHardState handles the state dependent calls in the state where
        jobs are executed.  */
-    class WorkingHardState : public State
+    class WorkingHardState : public StateImplementation
     {
     public:
 	explicit WorkingHardState( WeaverImpl *weaver)
-	    : State (weaver, WorkingHard)
+	    : StateImplementation (weaver)
 	    {
 	    }
 	/** Suspend job processing. */
@@ -40,6 +44,9 @@ namespace ThreadWeaver {
         virtual void waitForAvailableJob ( Thread *th );
 	/** Overload. */
 	void activated();
+
+        /** reimpl */
+        StateId stateId() const;
     };
 
 }

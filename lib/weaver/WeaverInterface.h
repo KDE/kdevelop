@@ -3,7 +3,7 @@
    This file declares the WeaverInterface class.
 
    $ Author: Mirko Boehm $
-   $ Copyright: (C) 2005, Mirko Boehm $
+   $ Copyright: (C) 2005, 2006 Mirko Boehm $
    $ Contact: mirko@kde.org
          http://www.kde.org
          http://www.hackerbuero.org $
@@ -18,24 +18,39 @@
 #define WeaverInterface_H
 
 #include <QObject>
-#include <QList>
-
-#include "State.h"
 
 namespace ThreadWeaver {
 
-    class WeaverObserver;
     class Job;
+    class State;
+    class WeaverObserver;
 
-    /** WeaverInterface provides a common interface for weaver
-        implementations, to be used for example in adapters and
+    /** WeaverInterface provides a common interface for weaver implementations.
+
+        In most cases, it is sufficient for an application to hold exactly one
+        ThreadWeaver job queue. To execute jobs in a specific order, use job
+        dependencies. To limit the number of jobs of a certain type that can
+        be executed at the same time, use resource restrictions. To handle
+        special requirements of the application when it comes to the order of
+        execution of jobs, implement a special queue policy and apply it to
+        the jobs.
+
+        Users of the ThreadWeaver API are encouraged to program to this
+        interface, instead of the implementation. This way, implementation
+        changes will not affect user programs.
+
+        This interface can be used for example to implement adapters and
         decorators. The member documentation is provided in the Weaver and
         WeaverImpl classes.
     */
 
     class WeaverInterface : public QObject {
         Q_OBJECT
+
     public:
+        /** A ThreadWeaver object manages a queue of Jobs.
+            It inherits QObject.
+        */
         explicit WeaverInterface ( QObject* parent = 0 );
         virtual ~WeaverInterface() {}
         /** Return the state of the weaver object. */
@@ -101,19 +116,19 @@ namespace ThreadWeaver {
         virtual void resume () = 0;
         /** Is the queue empty?
 	    The queue is empty if no more jobs are queued. */
-        virtual bool isEmpty () = 0;
+        virtual bool isEmpty () const = 0;
 	/** Is the weaver idle?
 	    The weaver is idle if no jobs are queued and no jobs are processed
-            by the threads (m_active is zero). */
-        virtual bool isIdle () = 0;
+            by the threads. */
+        virtual bool isIdle () const = 0;
 	/** Returns the number of pending jobs.
             This will return the number of queued jobs. Jobs that are
 	    currently being executed are not part of the queue. All jobs in
 	    the queue are waiting to be executed.
         */
-        virtual int queueLength () = 0;
+        virtual int queueLength () const = 0;
 	/** Returns the current number of threads in the inventory. */
-        virtual int noOfThreads () = 0;
+        virtual int numberOfThreads () const = 0;
         /** Request aborts of the currently executed jobs.
             It is important to understand that aborts are requested, but
 	    cannot be guaranteed, as not all Job classes support it. It is up
@@ -144,6 +159,9 @@ namespace ThreadWeaver {
 	    programmer to decide if this signal or the done signal of the job
 	    is more handy. */
         void jobDone (Job*);
+
+        /** The Weaver's state has changed. */
+        void stateChanged ( State* );
     };
 
 }

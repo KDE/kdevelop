@@ -3,7 +3,7 @@
    This file implements the WeaverInterface class.
 
    $ Author: Mirko Boehm $
-   $ Copyright: (C) 2005, Mirko Boehm $
+   $ Copyright: (C) 2005, 2006 Mirko Boehm $
    $ Contact: mirko@kde.org
          http://www.kde.org
          http://www.hackerbuero.org $
@@ -16,11 +16,13 @@
 
 #include "WeaverInterface.h"
 
-namespace ThreadWeaver {
+using namespace ThreadWeaver;
 
-    WeaverInterface:: WeaverInterface ( QObject* parent )
-        : QObject ( parent )
-    {
-    }
-
+WeaverInterface:: WeaverInterface ( QObject* parent )
+    : QObject ( parent )
+{
 }
+
+#ifdef USE_CMAKE
+#include "WeaverInterface.moc"
+#endif

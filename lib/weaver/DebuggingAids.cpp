@@ -16,12 +16,10 @@
 
 #include <QMutex>
 
-namespace ThreadWeaver {
+#include "DebuggingAids.h"
 
-    /** A global mutex for the ThreadWeaver objects.
-	Generally, you should not use it in your own code. */
-    QMutex GlobalMutex;
-    bool Debug = true;
-    int DebugLevel = 01;
-
-}
+/** A global mutex for the ThreadWeaver objects.
+    Generally, you should not use it in your own code. */
+QMutex ThreadWeaver::GlobalMutex;
+bool ThreadWeaver::Debug = true;
+int ThreadWeaver::DebugLevel = 01;

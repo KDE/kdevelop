@@ -3,7 +3,7 @@
    This file implements the state handling in ThreadWeaver.
 
    $ Author: Mirko Boehm $
-   $ Copyright: (C) 2005, Mirko Boehm $
+   $ Copyright: (C) 2005, 2006 Mirko Boehm $
    $ Contact: mirko@kde.org
          http://www.kde.org
          http://www.hackerbuero.org $
@@ -23,11 +23,13 @@ namespace ThreadWeaver {
 
     class Job;
     class Thread;
-    class WeaverImpl;
+    class WeaverInterface;
 
     /** All weaver objects maintain a state of operation which can be
         queried by the application. See the threadweaver documentation on
         how the different states are related.
+
+        State is not part of the published API.
     */
     enum StateId {
         /** The object is in the state of construction and has not yet
@@ -52,15 +54,13 @@ namespace ThreadWeaver {
         NoOfStates
     };
 
-    extern const QString StateNames[];
-
     /** We use a State pattern to handle the system state in ThreadWeaver.
      */
     class State
     {
     public:
         /** Default constructor. */
-        explicit State( WeaverImpl *weaver,  const StateId id = InConstruction );
+        explicit State( WeaverInterface *weaver );
 
 	/** Destructor. */
         virtual ~State();
@@ -70,7 +70,7 @@ namespace ThreadWeaver {
         */
         const QString& stateName() const;
         /** The state Id. */
-        const StateId stateId() const;
+        virtual StateId stateId() const = 0;
         /** Suspend job processing. */
         virtual void suspend() = 0;
         /** Resume job processing. */
@@ -85,13 +85,13 @@ namespace ThreadWeaver {
         /** The state has been changed so that this object is responsible for
          * state handling. */
         virtual void activated();
+
     protected:
-        /** Id of this state.
-            Set in the constructor.
-        */
-        StateId m_id;
-        /** The Weaver we relate to. */
-        WeaverImpl *m_weaver;
+        /** The Weaver interface this state handles. */
+        WeaverInterface* weaver();
+
+        class Private;
+        Private *d;
     };
 }
 
