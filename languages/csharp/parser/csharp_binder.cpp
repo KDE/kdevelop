@@ -18,6 +18,7 @@
 */
 
 #include "csharp_binder.h"
+#include <kdebug.h> // should not be in SVN, remove this right now
 
 
 namespace csharp
@@ -401,31 +402,26 @@ void Binder::setModifiers( ModelItemChameleon item, uint mods )
     item->setUnsafe( mods & modifiers::mod_unsafe );
 }
 
-std::string Binder::decode_string(std::size_t index) const
+std::string Binder::decode_string( std::size_t index ) const
 {
     return _M_decoder.decode_string( index );
 }
 
-void Binder::setPositionAt(_CodeModelItem *item, ast_node */*node*/)
+void Binder::setPositionAt( _CodeModelItem *item, ast_node *node )
 {
-/*
     int startLine, startColumn;
     int endLine, endColumn;
 
-    const parser::token_type &start_token =
-    _M_token_stream->token( node->start_token );
-    const parser::token_type &end_token =
-    _M_token_stream->token( node->end_token );
-
-    _M_lexer->positionAt( start_token.position,
-    &startLine, &startColumn, &fileName );
-    _M_lexer->positionAt( end_token.position,
-    &endLine, &endColumn, &fileName );
-*/
+    _M_token_stream->start_position( node->start_token, &startLine, &startColumn );
+    _M_token_stream->end_position( node->end_token, &endLine, &endColumn );
 
     item->setFileName( _M_currentFile );
-    item->setStartPosition( KTextEditor::Cursor(0 /*startLine*/, 0 /*startColumn*/) );
-    item->setEndPosition( KTextEditor::Cursor(0 /*endLine*/, 0 /*endColumn*/) );
+    item->setStartPosition( KTextEditor::Cursor(startLine, startColumn) );
+    item->setEndPosition( KTextEditor::Cursor(endLine, endColumn) );
+
+    kDebug() << ">>> " << item->qualifiedName() << ": from line " << startLine
+             << ", column " << startColumn << " to line " << endLine
+             << ", column " << endColumn << endl;
 }
 
 } // end of namespace csharp

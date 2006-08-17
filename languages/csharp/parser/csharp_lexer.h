@@ -26,45 +26,52 @@
 #include <FlexLexer.h>
 #endif
 
+// The YY_USER_ACTION macro is called whenever a token is found by Flex
+#define YY_USER_ACTION \
+m_tokenBegin = m_tokenEnd; \
+m_tokenEnd += yyleng;
+
+
 namespace csharp
 {
 
 class Lexer : public yyFlexLexer
 {
 public:
-  Lexer(csharp::parser *parser, char *contents) { restart(parser, contents); }
-  void restart(csharp::parser *parser, char *contents);
+    Lexer( csharp::parser *parser, char *contents );
+    void restart( csharp::parser *parser, char *contents );
 
-  virtual ~Lexer() { cleanup(); }
-  void cleanup();
+    virtual ~Lexer() { cleanup(); }
 
-  int yylex();
-  char *contents()          { return _M_contents;    }
-  std::size_t token_begin() { return _M_token_begin; }
-  std::size_t token_end()   { return _M_token_end;   }
+    int yylex();
+    char *contents()         { return m_contents;   }
+    std::size_t tokenBegin() { return m_tokenBegin; }
+    std::size_t tokenEnd()   { return m_tokenEnd;   }
 
-protected:
-  // retrieves the upper-most pre-processor scope
-  csharp_pp::scope* pp_current_scope();
+private:
+    // Takes care of handling and destroying unclosed scopes.
+    void cleanup();
 
-  // reads a character, and returns 1 as the number of characters read
-  // (or 0 when the end of the string is reached)
-  virtual int LexerInput(char *buf, int /*max_size*/)
-  {
-    int c = _M_contents[_M_current_offset++];
-    return (c == 0) ? 0 : (buf[0] = c, 1);
-  }
-
-  // dismisses any lexer output (which should not happen anyways)
-  virtual void LexerOutput(const char * /*buf*/, int /*max_size*/) { return; }
-  virtual void LexerError(const char */*msg*/) { return; }
+    // retrieves the upper-most pre-processor scope
+    csharp_pp::scope* ppCurrentScope();
 
 protected:
-  csharp::parser* _M_parser;
-  char *_M_contents;
-  std::size_t _M_token_begin, _M_token_end;
-  std::size_t _M_current_offset;
-  csharp_pp::scope* _M_pp_root_scope;
+    // custom input, replacing the Flex default input stdin
+    virtual int LexerInput( char *buf, int max_size );
+
+    // dismisses any lexer output (which should not happen anyways)
+    virtual void LexerOutput( const char * /*buf*/, int /*max_size*/ ) { return; }
+    virtual void LexerError( const char */*msg*/ ) { return; }
+
+private:
+    csharp::parser* m_parser;
+    char *m_contents;
+    std::size_t m_tokenBegin, m_tokenEnd;
+    std::size_t m_currentOffset;
+    csharp_pp::scope* m_ppRootScope;
+    kdev_pg_location_table *m_lineTable;
 };
 
 } // end of namespace csharp
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

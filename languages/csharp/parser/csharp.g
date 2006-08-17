@@ -2886,8 +2886,8 @@ void parser::tokenize(char *contents)
 
       parser::token_type &t = this->token_stream->next();
       t.kind = kind;
-      t.begin = lexer.token_begin();
-      t.end = lexer.token_end();
+      t.begin = lexer.tokenBegin();
+      t.end = lexer.tokenEnd();
       t.text = contents;
     }
   while (kind != parser::Token_EOF);

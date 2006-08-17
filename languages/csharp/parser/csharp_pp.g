@@ -324,8 +324,8 @@ void parser::tokenize(bool &encountered_eof)
 
       parser::token_type &t = this->token_stream->next();
       t.kind = kind;
-      t.begin = _M_lexer->token_begin();
-      t.end = _M_lexer->token_end();
+      t.begin = _M_lexer->tokenBegin();
+      t.end = _M_lexer->tokenEnd();
       t.text = _M_lexer->contents();
 
       if (kind == parser::Token_EOF)
@@ -339,8 +339,8 @@ void parser::tokenize(bool &encountered_eof)
 
   parser::token_type &t = this->token_stream->next();
   t.kind = parser::Token_EOF;
-  t.begin = _M_lexer->token_begin();
-  t.end = _M_lexer->token_end();
+  t.begin = _M_lexer->tokenBegin();
+  t.end = _M_lexer->tokenEnd();
   t.text = _M_lexer->contents();
 
   this->yylex(); // produce the look ahead token
@@ -351,8 +351,8 @@ void parser::add_token(parser::token_type_enum token_kind)
   //std::cerr << "pp: " << lexer.YYText() << std::endl; //" "; // debug output
   parser::token_type &t = this->token_stream->next();
   t.kind = token_kind;
-  t.begin = _M_lexer->token_begin();
-  t.end = _M_lexer->token_end();
+  t.begin = _M_lexer->tokenBegin();
+  t.end = _M_lexer->tokenEnd();
   t.text = _M_lexer->contents();
 }
 

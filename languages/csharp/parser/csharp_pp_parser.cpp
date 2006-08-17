@@ -25,8 +25,8 @@ namespace csharp_pp
 
         parser::token_type &t = this->token_stream->next();
         t.kind = kind;
-        t.begin = _M_lexer->token_begin();
-        t.end = _M_lexer->token_end();
+        t.begin = _M_lexer->tokenBegin();
+        t.end = _M_lexer->tokenEnd();
         t.text = _M_lexer->contents();
 
         if (kind == parser::Token_EOF)
@@ -40,8 +40,8 @@ namespace csharp_pp
 
     parser::token_type &t = this->token_stream->next();
     t.kind = parser::Token_EOF;
-    t.begin = _M_lexer->token_begin();
-    t.end = _M_lexer->token_end();
+    t.begin = _M_lexer->tokenBegin();
+    t.end = _M_lexer->tokenEnd();
     t.text = _M_lexer->contents();
 
     this->yylex(); // produce the look ahead token
@@ -52,8 +52,8 @@ namespace csharp_pp
     //std::cerr << "pp: " << lexer.YYText() << std::endl; //" "; // debug output
     parser::token_type &t = this->token_stream->next();
     t.kind = token_kind;
-    t.begin = _M_lexer->token_begin();
-    t.end = _M_lexer->token_end();
+    t.begin = _M_lexer->tokenBegin();
+    t.end = _M_lexer->tokenEnd();
     t.text = _M_lexer->contents();
   }
 

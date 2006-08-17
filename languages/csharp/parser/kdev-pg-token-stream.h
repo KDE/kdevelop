@@ -22,6 +22,8 @@
 
 #include <cstdlib>
 
+#include "kdev-pg-location-table.h"
+
 class kdev_pg_token_stream
 {
 public:
@@ -38,7 +40,8 @@ public:
     : _M_token_buffer(0),
       _M_token_buffer_size(0),
       _M_index(0),
-      _M_token_count(0)
+      _M_token_count(0),
+      _M_line_table(0)
   {
     reset();
   }
@@ -47,6 +50,8 @@ public:
   {
     if (_M_token_buffer)
       ::free(_M_token_buffer);
+    if (_M_line_table)
+      delete _M_line_table;
   }
 
   inline void reset()
@@ -101,11 +106,40 @@ public:
     return _M_token_buffer[_M_token_count++];
   }
 
+  inline kdev_pg_location_table *line_table()
+  {
+    if (!_M_line_table)
+      _M_line_table = new kdev_pg_location_table();
+
+    return _M_line_table;
+  }
+
+  inline void start_position(std::size_t index, int *line, int *column)
+  {
+    if (!_M_line_table)
+      {
+        *line = 0; *column = 0;
+      }
+    else
+      _M_line_table->position_at(token(index).begin, line, column);
+  }
+
+  inline void end_position(std::size_t index, int *line, int *column)
+  {
+    if (!_M_line_table)
+      {
+        *line = 0; *column = 0;
+      }
+    else
+      _M_line_table->position_at(token(index).end, line, column);
+  }
+
 private:
   token_type *_M_token_buffer;
   std::size_t _M_token_buffer_size;
   std::size_t _M_index;
   std::size_t _M_token_count;
+  kdev_pg_location_table *_M_line_table;
 
 private:
   kdev_pg_token_stream(kdev_pg_token_stream const &other);
