@@ -75,6 +75,7 @@ protected:
   virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST*);
   virtual void visitTypeIdentification(TypeIdentificationAST*);
   virtual void visitUsing(UsingAST*);
+  virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST*);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;

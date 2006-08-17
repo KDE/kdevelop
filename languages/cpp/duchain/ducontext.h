@@ -53,6 +53,7 @@ public:
   virtual ~DUContext();
 
   enum ContextType {
+    Global,
     Namespace,
     Class,
     Function,

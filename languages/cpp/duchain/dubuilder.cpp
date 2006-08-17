@@ -56,6 +56,8 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node)
   DUContext* topLevelContext = DUChain::self()->chainForDocument(url);
 
   if (topLevelContext) {
+    m_contextStack.push(topLevelContext);
+
     Q_ASSERT(topLevelContext->textRangePtr());
     // FIXME for now, just clear the chain... later, need to implement incremental parsing
     topLevelContext->deleteChildContextsRecursively();
@@ -69,17 +71,17 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node)
 
   } else {
     // FIXME the top range will probably get deleted without the editor integrator knowing...?
-    topLevelContext = new DUContext(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
+    topLevelContext = openContext(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain), DUContext::Global);
 
     DUChain::self()->addDocumentChain(url, topLevelContext);
   }
 
-  m_contextStack.push(topLevelContext);
   m_editor->setCurrentRange(currentContext()->textRangePtr());
 
   visit (node);
 
-  m_contextStack.pop();
+  closeContext();
+
   Q_ASSERT(m_contextStack.isEmpty());
 
   return topLevelContext;
@@ -148,8 +150,12 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 DUContext* DUBuilder::openContext(AST* rangeNode, DUContext::ContextType type)
 {
   Range* range = m_editor->createRange(rangeNode);
+  return openContext(range, type);
+}
 
-  DUContext* ret = new DUContext(range, currentContext());
+DUContext* DUBuilder::openContext(Range* range, DUContext::ContextType type)
+{
+  DUContext* ret = new DUContext(range, m_contextStack.isEmpty() ? 0 : currentContext());
   ret->setType(type);
 
   m_contextStack.push(ret);
@@ -372,4 +378,20 @@ void DUBuilder::visitUsing(UsingAST* node)
 {
   // TODO store the using
   DefaultVisitor::visitUsing(node);
+}
+
+void DUBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST* node)
+{
+  switch (currentContext()->type()) {
+    case DUContext::Global:
+    case DUContext::Namespace:
+    case DUContext::Class:
+        visit(node->declaration);
+        break;
+
+    case DUContext::Function:
+    case DUContext::Other:
+        visit(node->expression);
+        break;
+  }
 }
