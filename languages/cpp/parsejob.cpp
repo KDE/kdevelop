@@ -40,6 +40,7 @@
 #include "cpplanguagesupport.h"
 #include "cpphighlighting.h"
 
+#include "parser/parsesession.h"
 #include "parser/binder.h"
 #include "parser/parser.h"
 #include "parser/control.h"
@@ -193,22 +194,22 @@ void ParseJob::run()
     QByteArray preprocessed = parentJob()->preprocessed().toUtf8();
 
     Parser parser( new Control() );
-    pool memoryPool;
-    TranslationUnitAST* ast = parser.parse( preprocessed, preprocessed.length() + 1, &memoryPool );
+    ParseSession* session = new ParseSession(preprocessed, preprocessed.length() + 1, new pool);
+
+    TranslationUnitAST* ast = parser.parse( session );
+    ast->session = session;
 
     parentJob()->setAST(ast);
 
     if ( ast )
     {
         CodeModel* model = new CodeModel;
-        Binder binder( model, &parser.token_stream, &parser.lexer );
+        Binder binder( model, session );
         binder.run( parentJob()->document(), ast );
 
         parentJob()->setCodeModel(model);
 
-        /*CppEditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
-
-        KTextEditor::SmartInterface* smart = 0;
+        /*KTextEditor::SmartInterface* smart = 0;
         if ( parentJob()->openDocument() && parentJob()->openDocument()->textDocument() )
             smart = dynamic_cast<KTextEditor::SmartInterface*>(parentJob()->openDocument()->textDocument());
 
@@ -216,7 +217,7 @@ void ParseJob::run()
         // Locking the interface here allows all of the highlighting to update before a redraw happens, thus no flicker
         QMutexLocker lock(smart ? smart->smartMutex() : 0);
 
-        DUBuilder dubuilder(&parser.token_stream);
+        DUBuilder dubuilder(session);
         DUContext* topContext = dubuilder.build(parentJob()->document(), ast);
         parentJob()->setDUChain(topContext);
 
@@ -226,12 +227,22 @@ void ParseJob::run()
         // Debug output...
         /*if (topContext->smartRange()) {
             DumpChain dump;
-            //dump.dump(m_AST, &parser.token_stream);
+            dump.dump(ast, session);
             dump.dump(topContext);
         }*/
     }
     //     DumpTree dumpTree;
     //     dumpTree.dump( m_AST );
+}
+
+
+void CPPParseJob::addIncludedFile(const QString & filename)
+{
+    m_includedFiles.append(filename);
+}
+
+void CPPParseJob::requestDependancies()
+{
 }
 
 #include "parsejob.moc"

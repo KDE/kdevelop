@@ -21,9 +21,10 @@
 #include "type_compiler.h"
 #include "compiler_utils.h"
 #include "lexer.h"
+#include "parsesession.h"
 
-DeclaratorCompiler::DeclaratorCompiler(TokenStream *token_stream)
-  : _M_token_stream(token_stream)
+DeclaratorCompiler::DeclaratorCompiler(ParseSession* session)
+  : m_session(session)
 {
 }
 
@@ -38,7 +39,7 @@ void DeclaratorCompiler::run(DeclaratorAST *node)
 
   if (node)
     {
-      NameCompiler name_cc(_M_token_stream);
+      NameCompiler name_cc(m_session);
       name_cc.run(node->id);
       _M_id = name_cc.name();
       _M_function = (node->parameter_declaration_clause != 0);
@@ -56,8 +57,8 @@ void DeclaratorCompiler::run(DeclaratorAST *node)
 
               if (ExpressionAST *expr = it->element)
                 {
-                  const Token &start_token = _M_token_stream->token(expr->start_token);
-                  const Token &end_token = _M_token_stream->token(expr->end_token);
+                  const Token &start_token = m_session->token_stream->token(expr->start_token);
+                  const Token &end_token = m_session->token_stream->token(expr->end_token);
 
                   _M_array += QString::fromUtf8(&start_token.text[start_token.position],
                                                 end_token.position - start_token.position).trimmed();
@@ -74,7 +75,7 @@ void DeclaratorCompiler::run(DeclaratorAST *node)
 
 void DeclaratorCompiler::visitPtrOperator(PtrOperatorAST *node)
 {
-    std::size_t op =  _M_token_stream->kind(node->op);
+    std::size_t op =  m_session->token_stream->kind(node->op);
   switch (op)
     {
       case '&':
@@ -100,13 +101,13 @@ void DeclaratorCompiler::visitParameterDeclaration(ParameterDeclarationAST *node
 {
   Parameter p;
 
-  TypeCompiler type_cc(_M_token_stream);
-  DeclaratorCompiler decl_cc(_M_token_stream);
+  TypeCompiler type_cc(m_session);
+  DeclaratorCompiler decl_cc(m_session);
 
   decl_cc.run(node->declarator);
 
   p.name = decl_cc.id();
-  p.type = CompilerUtils::typeDescription(node->type_specifier, node->declarator, _M_token_stream);
+  p.type = CompilerUtils::typeDescription(node->type_specifier, node->declarator, m_session);
   p.defaultValue = (node->expression != 0);
 
   _M_parameters.append(p);

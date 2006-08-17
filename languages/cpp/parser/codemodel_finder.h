@@ -23,7 +23,7 @@
 #include "codemodel_fwd.h"
 #include "name_compiler.h"
 
-class TokenStream;
+class ParseSession;
 
 class CodeModelFinder: protected DefaultVisitor
 {
@@ -34,7 +34,7 @@ class CodeModelFinder: protected DefaultVisitor
   };
 
 public:
-  CodeModelFinder(CodeModel *model, TokenStream *token_stream);
+  CodeModelFinder(CodeModel *model, ParseSession* session);
   virtual ~CodeModelFinder();
 
   ScopeModelItem resolveScope(NameAST *name, ScopeModelItem scope);
@@ -49,7 +49,6 @@ protected:
 
 private:
   CodeModel *_M_model;
-  TokenStream *_M_token_stream;
   NameCompiler name_cc;
 
   ScopeModelItem _M_current_scope;

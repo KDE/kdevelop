@@ -26,12 +26,12 @@
 #include "name_compiler.h"
 #include "type_compiler.h"
 
-class TokenStream;
+class ParseSession;
 
 class ClassCompiler: protected DefaultVisitor
 {
 public:
-  ClassCompiler(TokenStream *token_stream);
+  ClassCompiler(ParseSession* session);
   virtual ~ClassCompiler();
 
   inline QString name() const { return _M_name; }
@@ -44,7 +44,6 @@ protected:
   virtual void visitBaseSpecifier(BaseSpecifierAST *node);
 
 private:
-  TokenStream *_M_token_stream;
   QString _M_name;
   QStringList _M_base_classes;
   NameCompiler name_cc;

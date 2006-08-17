@@ -22,6 +22,8 @@
 #ifndef PARSEJOB_H
 #define PARSEJOB_H
 
+#include <QStringList>
+
 #include <kurl.h>
 #include <kdevparsejob.h>
 
@@ -57,11 +59,15 @@ public:
     void setDUChain(DUContext* duChain);
     virtual DUContext *duChain() const;
 
+    void addIncludedFile(const QString& filename);
+    void requestDependancies();
+
 private:
     TranslationUnitAST *m_AST;
     CodeModel *m_model;
     DUContext* m_duContext;
     QString m_preprocessed;
+    QStringList m_includedFiles;
 };
 
 class PreprocessJob : public ThreadWeaver::Job

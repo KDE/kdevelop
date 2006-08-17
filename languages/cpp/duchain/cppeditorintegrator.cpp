@@ -22,28 +22,22 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
 
-#include "ast.h"
 #include "kdevdocumentrange.h"
 #include "kdevdocumentrangeobject.h"
 
+#include "ast.h"
+#include "parsesession.h"
+
 using namespace KTextEditor;
 
-QHash<TokenStream*, Lexer*> CppEditorIntegrator::s_parsedSources;
-
-CppEditorIntegrator::CppEditorIntegrator( TokenStream * tokenStream )
-  : m_lexer(s_parsedSources[tokenStream])
-  , m_tokenStream(tokenStream)
+CppEditorIntegrator::CppEditorIntegrator( ParseSession* session )
+  : m_session(session)
 {
-}
-
-void CppEditorIntegrator::addParsedSource( Lexer * lexer, TokenStream * tokenStream )
-{
-  s_parsedSources.insert(tokenStream, lexer);
 }
 
 KDevDocumentCursor CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) const
 {
-  const Token& t = m_tokenStream->token(token);
+  const Token& t = m_session->token_stream->token(token);
   return findPosition(t, edge);
 }
 
@@ -52,7 +46,7 @@ KDevDocumentCursor CppEditorIntegrator::findPosition( const Token & token, Edge 
   int line, column;
   QString fileName;
 
-  m_lexer->positionAt((edge == BackEdge) ? token.position + token.size : token.position,
+  m_session->positionAt((edge == BackEdge) ? token.position + token.size : token.position,
                        &line, &column, &fileName);
 
   if (fileName.isEmpty())
@@ -80,8 +74,13 @@ Range* CppEditorIntegrator::createRange( const Token & token )
 
 Cursor * CppEditorIntegrator::createCursor( std::size_t token, Edge edge )
 {
-  const Token& t = m_tokenStream->token(token);
+  const Token& t = m_session->token_stream->token(token);
   return createCursor(findPosition(t, edge));
+}
+
+QString CppEditorIntegrator::tokenToString(std::size_t token) const
+{
+  return m_session->token_stream->symbol(token)->as_string();
 }
 
 // kate: indent-width 2;

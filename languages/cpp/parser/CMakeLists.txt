@@ -31,6 +31,7 @@ set(kdevcppparser_STAT_SRCS
     typesystem.cpp
     identifier.cpp
     dumptree.cpp
+    parsesession.cpp
 )
 
 kde4_automoc(${kdevcppparser_STAT_SRCS})

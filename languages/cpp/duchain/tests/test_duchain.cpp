@@ -32,6 +32,7 @@
 #include "control.h"
 #include "dumpchain.h"
 #include "tokens.h"
+#include "parsesession.h"
 
 #include "rpp/preprocessor.h"
 
@@ -511,17 +512,17 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
 
   pool mem_pool;
 
-  Parser parser(&control);
-  TranslationUnitAST* ast = parser.parse(unit.constData(), unit.size() + 1, &mem_pool);
+  ParseSession session(unit.constData(), unit.size() + 1, &mem_pool);
 
-  CppEditorIntegrator::addParsedSource(&parser.lexer, &parser.token_stream);
+  Parser parser(&control);
+  TranslationUnitAST* ast = parser.parse(&session);
 
   if (dump & DumpAST) {
     kDebug() << "===== AST:" << endl;
-    dumper.dump(ast, &parser.token_stream);
+    dumper.dump(ast, &session);
   }
 
-  DUBuilder dubuilder(&parser.token_stream);
+  DUBuilder dubuilder(&session);
   static int testNumber = 0;
   DUContext* top = dubuilder.build(KUrl(QString("file:///internal/%1").arg(testNumber++)), ast);
 
@@ -532,6 +533,11 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
 
   if (dump)
     kDebug() << "===== Finished test case." << endl;
+
+  // Don't delete these...
+  session.contents = 0;
+  session.size = 0;
+  session.mempool = 0;
 
   return top;
 }

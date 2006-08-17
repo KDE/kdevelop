@@ -22,6 +22,7 @@
 #include "class_compiler.h"
 #include "compiler_utils.h"
 #include "tokens.h"
+#include "parsesession.h"
 
 #include <iostream>
 
@@ -29,15 +30,12 @@
 
 #include <ktexteditor/document.h>
 
-Binder::Binder(CodeModel *model,
-               TokenStream *token_stream,
-               Lexer *lexer)
+Binder::Binder(CodeModel *model, ParseSession* session)
   : _M_model(model),
-    _M_token_stream(token_stream),
-    _M_lexer(lexer),
-    type_cc(token_stream),
-    name_cc(token_stream),
-    decl_cc(token_stream)
+    m_session(session),
+    type_cc(session),
+    name_cc(session),
+    decl_cc(session)
 {
   // generalize me
   _M_qualified_types.insert(QString::fromUtf8("bool"));
@@ -109,7 +107,7 @@ FunctionDefinitionModelItem Binder::changeCurrentFunction(FunctionDefinitionMode
 
 int Binder::decode_token(std::size_t index) const
 {
-  return _M_token_stream->kind(index);
+  return m_session->token_stream->kind(index);
 }
 
 CodeModel::AccessPolicy Binder::decode_access_policy(std::size_t index) const
@@ -147,7 +145,7 @@ CodeModel::ClassType Binder::decode_class_type(std::size_t index) const
 
 const NameSymbol *Binder::decode_symbol(std::size_t index) const
 {
-  return _M_token_stream->symbol(index);
+  return m_session->token_stream->symbol(index);
 }
 
 void Binder::visitAccessSpecifier(AccessSpecifierAST *node)
@@ -217,7 +215,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
   DeclaratorAST *declarator = init_declarator->declarator;
   NameAST *id = declarator->id;
 
-  CodeModelFinder finder(model(), _M_token_stream);
+  CodeModelFinder finder(model(), m_session);
   ScopeModelItem symbolScope = finder.resolveScope(id, currentScope());
   if (! symbolScope)
     {
@@ -247,7 +245,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
       // build the type
       TypeInfo typeInfo = CompilerUtils::typeDescription(node->type_specifier,
                                                          declarator,
-                                                         _M_token_stream);
+                                                         m_session);
       fun->setType(typeInfo);
 
       // ... and the signature
@@ -271,7 +269,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
       var->setName(name_cc.name());
       TypeInfo typeInfo = CompilerUtils::typeDescription(node->type_specifier,
                                                          declarator,
-                                                         _M_token_stream);
+                                                         m_session);
       var->setType(qualifyType(typeInfo, _M_context));
       applyStorageSpecifiers(node->storage_specifiers, model_static_cast<MemberModelItem>(var));
 
@@ -290,7 +288,7 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
   InitDeclaratorAST *init_declarator = node->init_declarator;
   DeclaratorAST *declarator = init_declarator->declarator;
 
-  CodeModelFinder finder(model(), _M_token_stream);
+  CodeModelFinder finder(model(), m_session);
 
   ScopeModelItem functionScope = finder.resolveScope(declarator->id, scope);
   if (! functionScope)
@@ -322,7 +320,7 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
 
   _M_current_function->setName(unqualified_name);
   TypeInfo tmp_type = CompilerUtils::typeDescription(node->type_specifier,
-                                                     declarator, _M_token_stream);
+                                                     declarator, m_session);
   _M_current_function->setType(qualifyType(tmp_type, _M_context));
   _M_current_function->setAccessPolicy(_M_current_access);
   _M_current_function->setConstant(declarator->fun_cv != 0);
@@ -428,7 +426,7 @@ void Binder::visitNamespace(NamespaceAST *node)
 
 void Binder::visitClassSpecifier(ClassSpecifierAST *node)
 {
-  ClassCompiler class_cc(_M_token_stream);
+  ClassCompiler class_cc(m_session);
   class_cc.run(node);
 
   if (class_cc.name().isEmpty() || node->name == 0)
@@ -473,7 +471,7 @@ void Binder::visitUsing(UsingAST *node)
 
 void Binder::visitEnumSpecifier(EnumSpecifierAST *node)
 {
-  CodeModelFinder finder(model(), _M_token_stream);
+  CodeModelFinder finder(model(), m_session);
   ScopeModelItem scope = currentScope();
   ScopeModelItem enumScope = finder.resolveScope(node->name, scope);
 
@@ -509,8 +507,8 @@ void Binder::visitEnumerator(EnumeratorAST *node)
 
   if (ExpressionAST *expr = node->expression)
     {
-      const Token &start_token = _M_token_stream->token(expr->start_token);
-      const Token &end_token = _M_token_stream->token(expr->end_token);
+      const Token &start_token = m_session->token_stream->token(expr->start_token);
+      const Token &end_token = m_session->token_stream->token(expr->end_token);
 
       e->setValue(QString::fromUtf8(&start_token.text[start_token.position],
                                     end_token.position - start_token.position).trimmed());
@@ -632,13 +630,13 @@ void Binder::setPositionAt(_CodeModelItem *item, AST *ast)
   int endLine, endColumn;
 
   const Token &start_token =
-    _M_token_stream->token(ast->start_token);
+    m_session->token_stream->token(ast->start_token);
   const Token &end_token =
-    _M_token_stream->token(ast->end_token);
+    m_session->token_stream->token(ast->end_token);
 
-  _M_lexer->positionAt(start_token.position,
+  m_session->positionAt(start_token.position,
                        &startLine, &startColumn, &fileName);
-  _M_lexer->positionAt(end_token.position,
+  m_session->positionAt(end_token.position,
                        &endLine, &endColumn, &fileName);
 
   item->setFileName(fileName.isEmpty() ? _M_currentFile : fileName);

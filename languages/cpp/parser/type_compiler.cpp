@@ -21,11 +21,12 @@
 #include "lexer.h"
 #include "symbol.h"
 #include "tokens.h"
+#include "parsesession.h"
 
 #include <QtCore/QString>
 
-TypeCompiler::TypeCompiler(TokenStream *token_stream)
-  : _M_token_stream(token_stream)
+TypeCompiler::TypeCompiler(ParseSession* session)
+  : m_session(session)
 {
 }
 
@@ -42,7 +43,7 @@ void TypeCompiler::run(TypeSpecifierAST *node)
       const ListNode<std::size_t> *end = it;
       do
         {
-          int kind = _M_token_stream->kind(it->element);
+          int kind = m_session->token_stream->kind(it->element);
           if (! _M_cv.contains(kind))
             _M_cv.append(kind);
 
@@ -77,7 +78,7 @@ void TypeCompiler::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
         {
           std::size_t token = it->element;
           // FIXME
-          _M_type += Identifier(token_name(_M_token_stream->kind(token)));
+          _M_type += Identifier(token_name(m_session->token_stream->kind(token)));
           it = it->next;
         }
       while (it != end);
@@ -93,7 +94,7 @@ void TypeCompiler::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 
 void TypeCompiler::visitName(NameAST *node)
 {
-  NameCompiler name_cc(_M_token_stream);
+  NameCompiler name_cc(m_session);
   name_cc.run(node);
   _M_type = name_cc.identifier();
 }

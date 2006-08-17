@@ -47,7 +47,7 @@ public:
   if nothing was parsed.
 
   @sa pool for more information about the memory pool used.*/
-  TranslationUnitAST *parse(const char *contents, std::size_t size, pool *p);
+  TranslationUnitAST *parse(ParseSession* session);
   /**@return the problem count.*/
   int problemCount() const { return _M_problem_count; }
 
@@ -181,8 +181,8 @@ public:
   void advance();
 
   // private:
-  TokenStream token_stream;
-  LocationTable location_table;
+  TokenStream* token_stream;
+  LocationTable* location_table;
   LocationTable line_table;
 
   bool block_errors(bool block);
@@ -193,7 +193,7 @@ public:
 private:
   int _M_problem_count;
   int _M_max_problem_count;
-  pool *_M_pool;
+  ParseSession* session;
   bool _M_block_errors;
 
 private:

@@ -110,13 +110,13 @@ DumpChain::DumpChain()
 {
 }
 
-void DumpChain::dump( AST * node, TokenStream * tokenStream )
+void DumpChain::dump( AST * node, ParseSession* session)
 {
   delete m_editor;
   m_editor = 0;
 
-  if (tokenStream)
-    m_editor = new CppEditorIntegrator(tokenStream);
+  if (session)
+    m_editor = new CppEditorIntegrator(session);
 
   visit(node);
 }

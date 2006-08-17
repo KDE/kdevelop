@@ -28,6 +28,7 @@ struct NameSymbol;
 class Lexer;
 class Control;
 class Problem;
+class ParseSession;
 
 typedef void (Lexer::*scan_fun_ptr)();
 
@@ -212,26 +213,12 @@ public:
    * \param location_table a table which will be filled with non-preprocessed line -> offset values
    * \param line_table a table which will be filled with (non-preproccessed line which contains a preprocessor line) -> offset values
    */
-  Lexer(TokenStream &token_stream,
-	LocationTable &location_table,
-	LocationTable &line_table,
-	Control *control);
+  Lexer(Control *control);
 
   /**Finds tokens in the @p contents buffer and fills the @ref token_stream.*/
-  void tokenize(const char *contents, std::size_t size);
+  void tokenize(ParseSession* session);
 
-  /**The stream of tokens.*/
-  TokenStream &token_stream;
-  LocationTable &location_table;
-  LocationTable &line_table;
-
-  /**
-   * Return the position (\a line%, \a column%) of the \a offset in \a filename
-   *
-   * \note the line starts from 0.
-   */
-  void positionAt(std::size_t offset, int *line, int *column,
-                  QString *filename) const;
+  ParseSession* session;
 
 private:
   /**Fills the scan table with method pointers.*/
@@ -290,15 +277,11 @@ private:
   void scan_tilde();
   void scan_EOF();
 
-  void extract_line(int offset, int *line, QString *filename) const;
-
   Problem createProblem() const;
 
 private:
   Control *control;
-  const unsigned char *cursor;
-  const unsigned char *begin_buffer;
-  const unsigned char *end_buffer;
+  const char *cursor;
   std::size_t index;
 
   ///scan table contains pointers to the methods to scan for various token types

@@ -26,20 +26,23 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
 
-#include "lexer.h"
 #include "duchain.h"
-#include "typesystem.h"
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include "definition.h"
 
 using namespace KTextEditor;
 
-DUBuilder::DUBuilder (TokenStream *token_stream):
-  _M_token_stream (token_stream), m_editor(new CppEditorIntegrator(token_stream)), m_nameCompiler(new NameCompiler(token_stream)),
-  in_namespace(false), in_class(false), in_template_declaration(false),
-  in_typedef(false), in_function_definition(false), in_parameter_declaration(false),
-  m_secondParentContext(0), m_types(new TypeEnvironment)
+DUBuilder::DUBuilder (ParseSession* session)
+  : m_editor(new CppEditorIntegrator(session))
+  , m_nameCompiler(new NameCompiler(session))
+  , in_namespace(false)
+  , in_class(false)
+  , in_template_declaration(false)
+  , in_typedef(false)
+  , in_function_definition(false)
+  , in_parameter_declaration(false)
+  , m_secondParentContext(0)
 {
 }
 
@@ -97,9 +100,9 @@ void DUBuilder::visitNamespace (NamespaceAST *node)
 {
   QualifiedIdentifier identifier = currentContext()->scopeIdentifier();
   if (node->namespace_name)
-    identifier << QualifiedIdentifier(_M_token_stream->symbol(node->namespace_name)->as_string());
+    identifier << QualifiedIdentifier(m_editor->tokenToString(node->namespace_name));
   else
-    identifier << Identifier::unique(reinterpret_cast<long>(_M_token_stream));
+    identifier << Identifier::unique(0);
 
   openContext(node, DUContext::Namespace)->setLocalScopeIdentifier(identifier);
 
@@ -435,7 +438,21 @@ void DUBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationSta
 void DUBuilder::visitForStatement(ForStatementAST *node)
 {
   // Not setting the member var because it gets nuked in visitSimpleDeclaration
-  DUContext* secondParentContext = openContext(m_editor->createRange(node->init_statement, node->expression), DUContext::Other);
+  AST* first = node->init_statement;
+  if (!first)
+    first = node->condition;
+  if (!first)
+    first = node->expression;
+  if (!first)
+    return;
+
+  AST* second = node->expression;
+  if (!second)
+    second = node->condition;
+  if (!second)
+    second = node->init_statement;
+
+  DUContext* secondParentContext = openContext(first, second, DUContext::Other);
 
   visit(node->init_statement);
   visit(node->condition);
@@ -457,7 +474,8 @@ void DUBuilder::visitForStatement(ForStatementAST *node)
 void DUBuilder::reparentSecondContext()
 {
   if (m_secondParentContext) {
-    m_secondParentContext->parentContexts().first()->takeChildContext(m_secondParentContext);
+    if (m_secondParentContext->parentContexts().count())
+      m_secondParentContext->parentContexts().first()->takeChildContext(m_secondParentContext);
     m_secondParentContext->addChildContext(currentContext());
     m_secondParentContext = 0;
   }

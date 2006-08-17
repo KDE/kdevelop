@@ -19,10 +19,9 @@
 #include "codemodel_finder.h"
 #include "codemodel.h"
 
-CodeModelFinder::CodeModelFinder(CodeModel *model, TokenStream *token_stream)
+CodeModelFinder::CodeModelFinder(CodeModel *model, ParseSession* session)
   : _M_model(model),
-    _M_token_stream(token_stream),
-    name_cc(token_stream),
+    name_cc(session),
     _M_resolve_policy(ResolveItem)
 {
 }

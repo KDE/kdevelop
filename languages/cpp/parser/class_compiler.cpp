@@ -19,10 +19,9 @@
 #include "class_compiler.h"
 #include "lexer.h"
 
-ClassCompiler::ClassCompiler(TokenStream *token_stream)
-  : _M_token_stream(token_stream),
-     name_cc(token_stream),
-     type_cc(token_stream)
+ClassCompiler::ClassCompiler(ParseSession* session)
+  : name_cc(session),
+    type_cc(session)
 {
 }
 

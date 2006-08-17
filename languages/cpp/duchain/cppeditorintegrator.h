@@ -36,9 +36,7 @@ class AST;
 class CppEditorIntegrator : public KDevEditorIntegrator
 {
 public:
-  CppEditorIntegrator(TokenStream* tokenStream);
-
-  static void addParsedSource(Lexer* lexer, TokenStream* tokenStream);
+  CppEditorIntegrator(ParseSession* session);
 
   /**
    * Finds the location and \a file where the given \a token was parsed from.  This function
@@ -119,13 +117,16 @@ public:
    */
   KTextEditor::Cursor* createCursor(std::size_t token, Edge edge);
 
+  /**
+   * Retrieve the string represented by a token.
+   */
+  QString tokenToString(std::size_t token) const;
+
 private:
-  static QHash<TokenStream*, Lexer*> s_parsedSources;
   static QHash<KUrl, KTextEditor::Document*> s_documents;
   static QHash<KUrl, QVector<KTextEditor::Range*> > s_topRanges;
 
-  Lexer* m_lexer;
-  TokenStream* m_tokenStream;
+  ParseSession* m_session;
 };
 
 #endif // EDITORINTEGRATOR_H

@@ -25,12 +25,11 @@
 #include "identifier.h"
 #include "ducontext.h"
 
-class TokenStream;
+class ParseSession;
 class DUChain;
 class DUContext;
 class CppEditorIntegrator;
 class NameCompiler;
-class TypeEnvironment;
 class Definition;
 
 namespace KTextEditor { class Range; }
@@ -45,7 +44,7 @@ namespace KTextEditor { class Range; }
 class DUBuilder: protected DefaultVisitor
 {
 public:
-  DUBuilder (TokenStream *token_stream);
+  DUBuilder(ParseSession* session);
   virtual ~DUBuilder ();
 
   DUContext* build(const KUrl& url, AST *node);
@@ -143,7 +142,6 @@ private:
 
   inline DUContext* currentContext() { return m_contextStack.top(); }
 
-  TokenStream *_M_token_stream;
   CppEditorIntegrator* m_editor;
 
   NameCompiler* m_nameCompiler;
@@ -157,7 +155,6 @@ private:
 
   QStack<DUContext*> m_contextStack;
   DUContext* m_secondParentContext;
-  TypeEnvironment* m_types;
 };
 
 #endif // DUBUILDER_H

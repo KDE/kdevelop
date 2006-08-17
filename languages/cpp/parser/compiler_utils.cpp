@@ -22,10 +22,10 @@
 #include "declarator_compiler.h"
 #include "ast.h"
 
-TypeInfo CompilerUtils::typeDescription(TypeSpecifierAST *type_specifier, DeclaratorAST *declarator, TokenStream *token_stream)
+TypeInfo CompilerUtils::typeDescription(TypeSpecifierAST *type_specifier, DeclaratorAST *declarator, ParseSession* session)
 {
-  TypeCompiler type_cc(token_stream);
-  DeclaratorCompiler decl_cc(token_stream);
+  TypeCompiler type_cc(session);
+  DeclaratorCompiler decl_cc(session);
 
   type_cc.run(type_specifier);
   decl_cc.run(declarator);

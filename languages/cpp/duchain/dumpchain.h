@@ -22,7 +22,7 @@
 
 #include "default_visitor.h"
 
-class TokenStream;
+class ParseSession;
 class DUContext;
 
 class DumpChain: protected DefaultVisitor
@@ -31,7 +31,7 @@ public:
   DumpChain();
   virtual ~DumpChain();
 
-  void dump(AST *node, TokenStream* tokenStream = 0);
+  void dump(AST *node, ParseSession* session = 0);
 
   void dump(DUContext* context, bool recurse = true);
 

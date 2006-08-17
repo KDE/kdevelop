@@ -22,12 +22,12 @@
 #include "default_visitor.h"
 #include "identifier.h"
 
-class TokenStream;
+class ParseSession;
 
 class NameCompiler: protected DefaultVisitor
 {
 public:
-  NameCompiler(TokenStream *token_stream);
+  NameCompiler(ParseSession* session);
 
   void run(NameAST *node) { internal_run(node); }
   void run(UnqualifiedNameAST *node) { internal_run(node); }
@@ -45,7 +45,7 @@ protected:
   QString decode_operator(std::size_t index) const;
 
 private:
-  TokenStream *_M_token_stream;
+  ParseSession* m_session;
   QualifiedIdentifier m_base;
   Identifier m_currentIdentifier;
   QualifiedIdentifier _M_name;

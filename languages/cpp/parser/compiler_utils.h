@@ -27,12 +27,12 @@ class QString;
 class QStringList;
 struct TypeSpecifierAST;
 struct DeclaratorAST;
-class TokenStream;
+class ParseSession;
 
 namespace CompilerUtils
 {
 
-TypeInfo typeDescription(TypeSpecifierAST *type_specifier, DeclaratorAST *declarator, TokenStream *token_stream);
+TypeInfo typeDescription(TypeSpecifierAST *type_specifier, DeclaratorAST *declarator, ParseSession* session);
 
 } // namespace CompilerUtils
 

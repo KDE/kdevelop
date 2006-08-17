@@ -27,6 +27,8 @@
 #define DECLARE_AST_NODE(k) \
     enum { __node_kind = Kind_##k };
 
+class ParseSession;
+
 struct AccessSpecifierAST;
 struct AsmDefinitionAST;
 struct BaseClauseAST;
@@ -734,6 +736,9 @@ struct TranslationUnitAST: public AST
   DECLARE_AST_NODE(TranslationUnit)
 
   const ListNode<DeclarationAST*> *declarations;
+
+  // Note: non AST related, saves parsing session...
+  ParseSession* session;
 };
 
 struct TryBlockStatementAST: public StatementAST

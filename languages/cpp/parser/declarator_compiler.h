@@ -25,7 +25,7 @@
 #include <QtCore/QString>
 #include <QtCore/QList>
 
-class TokenStream;
+class ParseSession;
 
 class DeclaratorCompiler: protected DefaultVisitor
 {
@@ -40,7 +40,7 @@ public:
   };
 
 public:
-  DeclaratorCompiler(TokenStream *token_stream);
+  DeclaratorCompiler(ParseSession* session);
 
   void run(DeclaratorAST *node);
 
@@ -56,7 +56,7 @@ protected:
   virtual void visitParameterDeclaration(ParameterDeclarationAST *node);
 
 private:
-  TokenStream *_M_token_stream;
+  ParseSession* m_session;
 
   bool _M_function;
   bool _M_reference;

@@ -225,6 +225,11 @@ void CppHighlighting::outputRange( KTextEditor::SmartRange * range ) const
 
 void CppHighlighting::highlightDUChain(DUContext* context) const
 {
+  highlightDUChain(context, true);
+}
+
+void CppHighlighting::highlightDUChain(DUContext* context, bool iterate) const
+{
   if (!context->smartRange())
     return;
 
@@ -259,16 +264,17 @@ void CppHighlighting::highlightDUChain(DUContext* context) const
   foreach (Range* use, context->orphanUses())
     use->toSmartRange()->setAttribute(attributeForType(ErrorVariableType, ReferenceContext));
 
-  foreach (DUContext* child, context->childContexts())
-    highlightDUChain(child);
+  if (iterate) {
+    for (int i = context->parentContexts().count() - 1; i > 0; --i)
+      highlightDUChain(context->parentContexts()[i], false);
+
+    foreach (DUContext* child, context->childContexts())
+      highlightDUChain(child, true);
+  }
 
   /*if (context->parentContexts().isEmpty())
     outputRange(context->smartRange());*/
 }
-
-#include "cpphighlighting.moc"
-
-// kate: space-indent on; indent-width 2; replace-tabs on
 
 KTextEditor::Attribute::Ptr CppHighlighting::attributeForDepth(int depth) const
 {
@@ -283,3 +289,7 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForDepth(int depth) const
 
   return m_depthAttributes[depth];
 }
+
+#include "cpphighlighting.moc"
+
+// kate: space-indent on; indent-width 2; replace-tabs on

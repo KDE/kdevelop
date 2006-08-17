@@ -81,6 +81,7 @@ class CppHighlighting : public QObject, public KDevCodeHighlighting
 
   private:
     void outputRange( KTextEditor::SmartRange * range ) const;
+    void highlightDUChain(DUContext* context, bool iterate) const;
 
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_definitionAttributes;
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_declarationAttributes;

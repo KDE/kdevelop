@@ -46,9 +46,7 @@ struct NameSymbol;
 class Binder: protected DefaultVisitor
 {
 public:
-  Binder(CodeModel *model,
-         TokenStream *token_stream,
-         Lexer *lexer);
+  Binder(CodeModel *model, ParseSession* session);
   virtual ~Binder();
 
   void run(const KUrl &url, AST *node);
@@ -93,9 +91,8 @@ private:
   void setPositionAt(_CodeModelItem *item, AST *ast);
 
 private:
-  CodeModel *_M_model;
-  TokenStream *_M_token_stream;
-  Lexer *_M_lexer;
+  CodeModel* _M_model;
+  ParseSession* m_session;
   QString _M_currentFile;
 
   CodeModel::AccessPolicy _M_current_access;

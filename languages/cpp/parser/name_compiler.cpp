@@ -20,17 +20,18 @@
 #include "type_compiler.h"
 #include "lexer.h"
 #include "symbol.h"
+#include "parsesession.h"
 
 #include <QtCore/qdebug.h>
 
-NameCompiler::NameCompiler(TokenStream *token_stream)
-  : _M_token_stream(token_stream)
+NameCompiler::NameCompiler(ParseSession* session)
+  : m_session(session)
 {
 }
 
 QString NameCompiler::decode_operator(std::size_t index) const
 {
-  const Token &tk = _M_token_stream->token(index);
+  const Token &tk = m_session->token_stream->token(index);
   return QString::fromUtf8(&tk.text[tk.position], tk.size);
 }
 
@@ -48,7 +49,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
     tmp_name += QLatin1String("~");
 
   if (node->id)
-    tmp_name += _M_token_stream->symbol(node->id)->as_string();
+    tmp_name += m_session->token_stream->symbol(node->id)->as_string();
 
   if (OperatorFunctionIdAST *op_id = node->operator_id)
     {
@@ -78,7 +79,7 @@ void NameCompiler::visitTemplateArgument(TemplateArgumentAST *node)
 {
   if (node->type_id && node->type_id->type_specifier)
     {
-      TypeCompiler type_cc(_M_token_stream);
+      TypeCompiler type_cc(m_session);
       type_cc.run(node->type_id->type_specifier);
       m_currentIdentifier.appendTemplateIdentifier(type_cc.identifier());
     }

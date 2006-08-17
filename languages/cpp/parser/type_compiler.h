@@ -26,12 +26,12 @@
 #include <QtCore/QStringList>
 #include <QtCore/QList>
 
-class TokenStream;
+class ParseSession;
 
 class TypeCompiler: protected DefaultVisitor
 {
 public:
-  TypeCompiler(TokenStream *token_stream);
+  TypeCompiler(ParseSession* session);
 
   QualifiedIdentifier identifier() const;
   inline QStringList qualifiedName() const { return _M_type.toStringList(); }
@@ -53,7 +53,7 @@ protected:
   virtual void visitName(NameAST *node);
 
 private:
-  TokenStream *_M_token_stream;
+  ParseSession* m_session;
   QualifiedIdentifier _M_type;
   QList<int> _M_cv;
 };
