@@ -1,5 +1,5 @@
 
-if(KDE4_BUILD_TESTS)
+if(false)
 
 include_directories(${CMAKE_SOURCE_DIR}/languages/cpp/parser)
 
@@ -26,5 +26,5 @@ target_link_libraries(pooltest ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kdevcpp
 add_test(kdevelop-memorypooltest ${EXECUTABLE_OUTPUT_PATH}/pooltest)
 
 
-endif(KDE4_BUILD_TESTS)
+endif(false)
 
