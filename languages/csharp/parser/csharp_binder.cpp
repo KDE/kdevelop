@@ -18,7 +18,6 @@
 */
 
 #include "csharp_binder.h"
-#include <kdebug.h> // should not be in SVN, remove this right now
 
 
 namespace csharp
@@ -418,10 +417,6 @@ void Binder::setPositionAt( _CodeModelItem *item, ast_node *node )
     item->setFileName( _M_currentFile );
     item->setStartPosition( KTextEditor::Cursor(startLine, startColumn) );
     item->setEndPosition( KTextEditor::Cursor(endLine, endColumn) );
-
-    kDebug() << ">>> " << item->qualifiedName() << ": from line " << startLine
-             << ", column " << startColumn << " to line " << endLine
-             << ", column " << endColumn << endl;
 }
 
 } // end of namespace csharp

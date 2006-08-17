@@ -89,7 +89,7 @@ void ParseJob::run()
         fileData = file.readAll();
         QString qcontents = QString::fromUtf8( fileData.constData() );
         contents = fileData.data();
-        assert( !qcontents.isEmpty() );
+        Q_ASSERT ( !qcontents.isEmpty() );
         file.close();
     }
     else
