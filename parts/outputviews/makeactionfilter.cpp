@@ -75,7 +75,11 @@ MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
 		ActionFormat( i18n("compiling"), 1, 2, "(gcc|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)"),
 		ActionFormat( i18n("compiling"), 1, 2, "(gcc|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)"),
 		ActionFormat( i18n("compiling"), 1, 2, "(gcc|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)"),
-		ActionFormat( i18n("compiling"), 1, 2, "^compiling (.*)" ), //unsermake
+		ActionFormat( i18n("compiling"), 1, 1, "^compiling (.*)" ), //unsermake
+		ActionFormat( i18n("compiling"), 1, 1, "\\[.+%\\] Building .* object (.*)" ), //cmake
+
+		ActionFormat( i18n("built"), 1, 1, "\\[.+%\\] Built target (.*)" ), //cmake
+		ActionFormat( i18n("generating"), 1, 1, "\\[.+%\\] Generating (.*)" ), //cmake
 
                 //moc and uic
 		ActionFormat( i18n("generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)"),
@@ -85,11 +89,14 @@ MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
                 //can distcc link too ?
 		ActionFormat( i18n("linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-o ([^\\s;]+)"),
 		ActionFormat( i18n("linking"), 1, 2, "^linking (.*)" ), //unsermaker
+		ActionFormat( i18n("linking"), 1, 1, "^Linking .* module (.*)" ), //cmake
+		ActionFormat( i18n("linking"), 1, 1, "^Linking (.*)" ), //cmake
 
 		ActionFormat( i18n("creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 ),
 		ActionFormat( i18n("installing"), "", "/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs|bin/sh\\s.*libtool.*--mode=install).*\\s([^\\s;]+)", 1 ),
 		ActionFormat( i18n("generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 ),
 		ActionFormat( i18n("compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 ),
+		ActionFormat( i18n("installing"), 1, 1, "-- Installing (.*)" ), //cmake
 
 		ActionFormat( QString::null, QString::null, 0, 0 )
 	};
