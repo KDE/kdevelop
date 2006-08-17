@@ -164,15 +164,15 @@ namespace csharp_pp
    * When this method returns, the parser's token stream has been filled
    * and any parse_*() method can be called.
    */
-  void tokenize(char *contents);
+  void tokenize( char *contents );
 
   /**
    * The compatibility_mode status variable tells which version of C#
    * should be checked against.
    */
   enum csharp_compatibility_mode {
-    csharp10_compatibility = 100,
-    csharp20_compatibility = 200,
+      csharp10_compatibility = 100,
+      csharp20_compatibility = 200,
   };
   parser::csharp_compatibility_mode compatibility_mode();
   void set_compatibility_mode( parser::csharp_compatibility_mode mode );
@@ -180,9 +180,9 @@ namespace csharp_pp
   void pp_define_symbol( std::string symbol_name );
 
   enum problem_type {
-    error,
-    warning,
-    info
+      error,
+      warning,
+      info
   };
   void report_problem( parser::problem_type type, const char* message );
   void report_problem( parser::problem_type type, std::string message );
@@ -209,20 +209,20 @@ namespace csharp_pp
   std::set<std::string> _M_pp_defined_symbols;
 
   struct parser_state {
-    // ltCounter stores the amount of currently open type arguments rules,
-    // all of which are beginning with a less than ("<") character.
-    // This way, also RSHIFT (">>") can be used to close type arguments rules,
-    // in addition to GREATER_THAN (">").
-    int ltCounter;
+      // ltCounter stores the amount of currently open type arguments rules,
+      // all of which are beginning with a less than ("<") character.
+      // This way, also RSHIFT (">>") can be used to close type arguments rules,
+      // in addition to GREATER_THAN (">").
+      int ltCounter;
   };
   parser_state _M_state;
 
   // Rather hackish solution for recognizing expressions like
   // "a is sometype ? if_exp : else_exp", see conditional_expression.
-  bool is_nullable_type(type_ast *type);
-  void unset_nullable_type(type_ast *type);
+  bool is_nullable_type( type_ast *type );
+  void unset_nullable_type( type_ast *type );
   type_ast *last_relational_expression_rest_type(
-    null_coalescing_expression_ast *null_coalescing_expression);
+      null_coalescing_expression_ast *null_coalescing_expression );
 :]
 
 %parserclass (constructor)
@@ -2871,51 +2871,53 @@ namespace csharp_pp
 namespace csharp
 {
 
-void parser::tokenize(char *contents)
+void parser::tokenize( char *contents )
 {
-  Lexer lexer(this, contents);
+    Lexer lexer( this, contents );
 
-  int kind = parser::Token_EOF;
-  do
+    int kind = parser::Token_EOF;
+    do
     {
-      kind = lexer.yylex();
-      //std::cerr << lexer.YYText() << std::endl; //" "; // debug output
+        kind = lexer.yylex();
+        //std::cerr << lexer.YYText() << std::endl; //" "; // debug output
 
-      if (!kind) // when the lexer returns 0, the end of file is reached
-        kind = parser::Token_EOF;
+        if ( !kind ) // when the lexer returns 0, the end of file is reached
+            kind = parser::Token_EOF;
 
-      parser::token_type &t = this->token_stream->next();
-      t.kind = kind;
-      t.begin = lexer.tokenBegin();
-      t.end = lexer.tokenEnd();
-      t.text = contents;
+        parser::token_type &t = this->token_stream->next();
+        t.kind = kind;
+        t.begin = lexer.tokenBegin();
+        t.end = lexer.tokenEnd();
+        t.text = contents;
     }
-  while (kind != parser::Token_EOF);
+    while (kind != parser::Token_EOF);
 
-  this->yylex(); // produce the look ahead token
+    this->yylex(); // produce the look ahead token
 }
 
 
-parser::csharp_compatibility_mode parser::compatibility_mode() {
-  return _M_compatibility_mode;
+parser::csharp_compatibility_mode parser::compatibility_mode()
+{
+    return _M_compatibility_mode;
 }
-void parser::set_compatibility_mode( parser::csharp_compatibility_mode mode ) {
-  _M_compatibility_mode = mode;
+void parser::set_compatibility_mode( parser::csharp_compatibility_mode mode )
+{
+    _M_compatibility_mode = mode;
 }
 
 void parser::pp_define_symbol( std::string symbol_name )
 {
-  _M_pp_defined_symbols.insert(symbol_name);
+    _M_pp_defined_symbols.insert( symbol_name );
 }
 
 void parser::pp_undefine_symbol( std::string symbol_name )
 {
-  _M_pp_defined_symbols.erase(symbol_name);
+    _M_pp_defined_symbols.erase( symbol_name );
 }
 
 bool parser::pp_is_symbol_defined( std::string symbol_name )
 {
-  return (_M_pp_defined_symbols.find(symbol_name) != _M_pp_defined_symbols.end());
+    return (_M_pp_defined_symbols.find(symbol_name) != _M_pp_defined_symbols.end());
 }
 
 
@@ -2923,62 +2925,62 @@ bool parser::pp_is_symbol_defined( std::string symbol_name )
 // "a is sometype ? if_exp : else_exp", see conditional_expression.
 // Needs three methods to fix parsing for about 0.2% of all C# source files.
 
-bool parser::is_nullable_type(type_ast *type)
+bool parser::is_nullable_type( type_ast *type )
 {
-  if (!type)
-    return false;
-  else if (!type->unmanaged_type)
-    return false;
-  else if (!type->unmanaged_type->regular_type || type->unmanaged_type->unmanaged_type_suffix_sequence)
-    return false;
-  else if (!type->unmanaged_type->regular_type->optionally_nullable_type)
-    return false;
-  else if (type->unmanaged_type->regular_type->optionally_nullable_type->nullable == false)
-    return false;
-  else // if (optionally_nullable_type->nullable == true)
-    return true;
+    if ( !type )
+        return false;
+    else if ( !type->unmanaged_type )
+        return false;
+    else if ( !type->unmanaged_type->regular_type || type->unmanaged_type->unmanaged_type_suffix_sequence )
+        return false;
+    else if ( !type->unmanaged_type->regular_type->optionally_nullable_type )
+        return false;
+    else if ( type->unmanaged_type->regular_type->optionally_nullable_type->nullable == false )
+        return false;
+    else // if ( optionally_nullable_type->nullable == true )
+        return true;
 }
 
 // This method is only to be called after is_nullable_type(type) returns true,
 // and therefore expects all the appropriate members not to be 0.
-void parser::unset_nullable_type(type_ast *type)
+void parser::unset_nullable_type( type_ast *type )
 {
-  type->unmanaged_type->regular_type->optionally_nullable_type->nullable = false;
+    type->unmanaged_type->regular_type->optionally_nullable_type->nullable = false;
 }
 
 // This method expects null_coalescing_expression to be fully parsed and valid.
 // (Otherwise, this method is not called at all.
 type_ast *parser::last_relational_expression_rest_type(
-  null_coalescing_expression_ast *null_coalescing_expression)
+        null_coalescing_expression_ast *null_coalescing_expression )
 {
-  relational_expression_ast *relexp =
-    null_coalescing_expression
-    ->expression_sequence->to_back()->element // gets a logical_or_expression
-    ->expression_sequence->to_back()->element // gets a logical_and_expression
-    ->expression_sequence->to_back()->element // gets a bit_or_expression
-    ->expression_sequence->to_back()->element // gets a bit_xor_expression
-    ->expression_sequence->to_back()->element // gets a bit_and_expression
-    ->expression_sequence->to_back()->element // gets an equality_expression
-    ->expression                              // gets a relational_expression
-  ;
+    relational_expression_ast *relexp =
+        null_coalescing_expression
+        ->expression_sequence->to_back()->element // gets a logical_or_expression
+        ->expression_sequence->to_back()->element // gets a logical_and_expression
+        ->expression_sequence->to_back()->element // gets a bit_or_expression
+        ->expression_sequence->to_back()->element // gets a bit_xor_expression
+        ->expression_sequence->to_back()->element // gets a bit_and_expression
+        ->expression_sequence->to_back()->element // gets an equality_expression
+        ->expression                              // gets a relational_expression
+    ;
 
-  if (relexp->additional_expression_sequence != 0)
-    return relexp->additional_expression_sequence->to_back()->element->type;
-  else
-    return 0;
+    if ( relexp->additional_expression_sequence != 0 )
+        return relexp->additional_expression_sequence->to_back()->element->type;
+    else
+        return 0;
 }
 
 
 parser::parser_state *parser::copy_current_state()
 {
-  parser_state *state = new parser_state();
-  state->ltCounter = _M_state.ltCounter;
-  return state;
+    parser_state *state = new parser_state();
+    state->ltCounter = _M_state.ltCounter;
+    return state;
 }
 
-void parser::restore_state(parser::parser_state *state)
+void parser::restore_state( parser::parser_state *state )
 {
-  _M_state.ltCounter = state->ltCounter;
+    _M_state.ltCounter = state->ltCounter;
 }
 
 } // end of namespace csharp

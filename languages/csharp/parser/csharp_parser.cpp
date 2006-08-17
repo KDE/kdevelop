@@ -10,9 +10,9 @@
 namespace csharp
   {
 
-  void parser::tokenize(char *contents)
+  void parser::tokenize( char *contents )
   {
-    Lexer lexer(this, contents);
+    Lexer lexer( this, contents );
 
     int kind = parser::Token_EOF;
     do
@@ -20,7 +20,7 @@ namespace csharp
         kind = lexer.yylex();
         //std::cerr << lexer.YYText() << std::endl; //" "; // debug output
 
-        if (!kind) // when the lexer returns 0, the end of file is reached
+        if ( !kind ) // when the lexer returns 0, the end of file is reached
           kind = parser::Token_EOF;
 
         parser::token_type &t = this->token_stream->next();
@@ -46,12 +46,12 @@ namespace csharp
 
   void parser::pp_define_symbol( std::string symbol_name )
   {
-    _M_pp_defined_symbols.insert(symbol_name);
+    _M_pp_defined_symbols.insert( symbol_name );
   }
 
   void parser::pp_undefine_symbol( std::string symbol_name )
   {
-    _M_pp_defined_symbols.erase(symbol_name);
+    _M_pp_defined_symbols.erase( symbol_name );
   }
 
   bool parser::pp_is_symbol_defined( std::string symbol_name )
@@ -64,25 +64,25 @@ namespace csharp
   // "a is sometype ? if_exp : else_exp", see conditional_expression.
   // Needs three methods to fix parsing for about 0.2% of all C# source files.
 
-  bool parser::is_nullable_type(type_ast *type)
+  bool parser::is_nullable_type( type_ast *type )
   {
-    if (!type)
+    if ( !type )
       return false;
-    else if (!type->unmanaged_type)
+    else if ( !type->unmanaged_type )
       return false;
-    else if (!type->unmanaged_type->regular_type || type->unmanaged_type->unmanaged_type_suffix_sequence)
+    else if ( !type->unmanaged_type->regular_type || type->unmanaged_type->unmanaged_type_suffix_sequence )
       return false;
-    else if (!type->unmanaged_type->regular_type->optionally_nullable_type)
+    else if ( !type->unmanaged_type->regular_type->optionally_nullable_type )
       return false;
-    else if (type->unmanaged_type->regular_type->optionally_nullable_type->nullable == false)
+    else if ( type->unmanaged_type->regular_type->optionally_nullable_type->nullable == false )
       return false;
-    else // if (optionally_nullable_type->nullable == true)
+    else // if ( optionally_nullable_type->nullable == true )
       return true;
   }
 
   // This method is only to be called after is_nullable_type(type) returns true,
   // and therefore expects all the appropriate members not to be 0.
-  void parser::unset_nullable_type(type_ast *type)
+  void parser::unset_nullable_type( type_ast *type )
   {
     type->unmanaged_type->regular_type->optionally_nullable_type->nullable = false;
   }
@@ -90,7 +90,7 @@ namespace csharp
   // This method expects null_coalescing_expression to be fully parsed and valid.
   // (Otherwise, this method is not called at all.
   type_ast *parser::last_relational_expression_rest_type(
-    null_coalescing_expression_ast *null_coalescing_expression)
+    null_coalescing_expression_ast *null_coalescing_expression )
   {
     relational_expression_ast *relexp =
       null_coalescing_expression
@@ -103,7 +103,7 @@ namespace csharp
       ->expression                              // gets a relational_expression
       ;
 
-    if (relexp->additional_expression_sequence != 0)
+    if ( relexp->additional_expression_sequence != 0 )
       return relexp->additional_expression_sequence->to_back()->element->type;
     else
       return 0;
@@ -117,7 +117,7 @@ namespace csharp
     return state;
   }
 
-  void parser::restore_state(parser::parser_state *state)
+  void parser::restore_state( parser::parser_state *state )
   {
     _M_state.ltCounter = state->ltCounter;
   }

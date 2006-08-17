@@ -10,7 +10,7 @@
 namespace java
   {
 
-  void parser::tokenize(char *contents)
+  void parser::tokenize( char *contents )
   {
     Lexer lexer( this, contents );
 
@@ -51,7 +51,7 @@ namespace java
     return state;
   }
 
-  void parser::restore_state(parser::parser_state *state)
+  void parser::restore_state( parser::parser_state *state )
   {
     _M_state.ltCounter = state->ltCounter;
   }

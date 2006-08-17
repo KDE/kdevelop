@@ -102,25 +102,25 @@
    * When this method returns, the parser's token stream has been filled
    * and any parse_*() method can be called.
    */
-  void tokenize(char *contents);
+  void tokenize( char *contents );
 
   /**
    * The compatibility_mode status variable tells which version of Java
    * should be checked against.
    */
   enum java_compatibility_mode {
-    java13_compatibility = 130,
-    java14_compatibility = 140,
-    java15_compatibility = 150,
+      java13_compatibility = 130,
+      java14_compatibility = 140,
+      java15_compatibility = 150,
   };
 
   parser::java_compatibility_mode compatibility_mode();
   void set_compatibility_mode( parser::java_compatibility_mode mode );
 
   enum problem_type {
-    error,
-    warning,
-    info,
+      error,
+      warning,
+      info,
   };
   void report_problem( parser::problem_type type, const char* message );
   void report_problem( parser::problem_type type, std::string message );
@@ -131,11 +131,11 @@
   parser::java_compatibility_mode _M_compatibility_mode;
 
   struct parser_state {
-    // ltCounter stores the amount of currently open type arguments rules,
-    // all of which are beginning with a less than ("<") character.
-    // This way, also SIGNED_RSHIFT (">>") and UNSIGNED_RSHIFT (">>>") can be used
-    // to close type arguments rules, in addition to GREATER_THAN (">").
-    int ltCounter;
+      // ltCounter stores the amount of currently open type arguments rules,
+      // all of which are beginning with a less than ("<") character.
+      // This way, also SIGNED_RSHIFT (">>") and UNSIGNED_RSHIFT (">>>") can be used
+      // to close type arguments rules, in addition to GREATER_THAN (">").
+      int ltCounter;
   };
   parser_state _M_state;
 :]
@@ -1871,48 +1871,50 @@
 namespace java
 {
 
-void parser::tokenize(char *contents)
+void parser::tokenize( char *contents )
 {
-  Lexer lexer( this, contents );
+    Lexer lexer( this, contents );
 
-  int kind = parser::Token_EOF;
-  do
+    int kind = parser::Token_EOF;
+    do
     {
-      kind = lexer.yylex();
-      //std::cerr << lexer.YYText() << std::endl; //" "; // debug output
+        kind = lexer.yylex();
+        //std::cerr << lexer.YYText() << std::endl; //" "; // debug output
 
-      if ( !kind ) // when the lexer returns 0, the end of file is reached
-        kind = parser::Token_EOF;
+        if ( !kind ) // when the lexer returns 0, the end of file is reached
+            kind = parser::Token_EOF;
 
-      parser::token_type &t = this->token_stream->next();
-      t.kind = kind;
-      t.begin = lexer.tokenBegin();
-      t.end = lexer.tokenEnd();
-      t.text = contents;
+        parser::token_type &t = this->token_stream->next();
+        t.kind = kind;
+        t.begin = lexer.tokenBegin();
+        t.end = lexer.tokenEnd();
+        t.text = contents;
     }
-  while ( kind != parser::Token_EOF );
+    while ( kind != parser::Token_EOF );
 
-  this->yylex(); // produce the look ahead token
+    this->yylex(); // produce the look ahead token
 }
 
-parser::java_compatibility_mode parser::compatibility_mode() {
-  return _M_compatibility_mode;
+parser::java_compatibility_mode parser::compatibility_mode()
+{
+    return _M_compatibility_mode;
 }
-void parser::set_compatibility_mode( parser::java_compatibility_mode mode ) {
-  _M_compatibility_mode = mode;
+void parser::set_compatibility_mode( parser::java_compatibility_mode mode )
+{
+    _M_compatibility_mode = mode;
 }
 
 
 parser::parser_state *parser::copy_current_state()
 {
-  parser_state *state = new parser_state();
-  state->ltCounter = _M_state.ltCounter;
-  return state;
+    parser_state *state = new parser_state();
+    state->ltCounter = _M_state.ltCounter;
+    return state;
 }
 
-void parser::restore_state(parser::parser_state *state)
+void parser::restore_state( parser::parser_state *state )
 {
-  _M_state.ltCounter = state->ltCounter;
+    _M_state.ltCounter = state->ltCounter;
 }
 
 } // end of namespace java

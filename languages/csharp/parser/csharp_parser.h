@@ -223,7 +223,7 @@ namespace csharp
        * When this method returns, the parser's token stream has been filled
        * and any parse_*() method can be called.
        */
-      void tokenize(char *contents);
+      void tokenize( char *contents );
 
       /**
        * The compatibility_mode status variable tells which version of C#
@@ -280,10 +280,10 @@ namespace csharp
 
       // Rather hackish solution for recognizing expressions like
       // "a is sometype ? if_exp : else_exp", see conditional_expression.
-      bool is_nullable_type(type_ast *type);
-      void unset_nullable_type(type_ast *type);
+      bool is_nullable_type( type_ast *type );
+      void unset_nullable_type( type_ast *type );
       type_ast *last_relational_expression_rest_type(
-        null_coalescing_expression_ast *null_coalescing_expression);
+        null_coalescing_expression_ast *null_coalescing_expression );
 
 
     public:
