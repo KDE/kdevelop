@@ -248,8 +248,22 @@ void DUBuilder::visitInitDeclarator(InitDeclaratorAST* node)
 void DUBuilder::visitDeclarator (DeclaratorAST* node)
 {
   // Don't create a definition for a function
-  if (!node->parameter_declaration_clause)
+  if (node->parameter_declaration_clause) {
+    switch (currentContext()->type()) {
+      case DUContext::Global:
+      case DUContext::Namespace:
+      case DUContext::Class:
+          break;
+
+      case DUContext::Function:
+      case DUContext::Other:
+          newDeclaration(node->id, node);
+          break;
+    }
+
+  } else {
     newDeclaration(node->id, node);
+  }
 
   DefaultVisitor::visitDeclarator(node);
 }

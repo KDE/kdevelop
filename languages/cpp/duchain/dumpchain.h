@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DUMPTREE_H
-#define DUMPTREE_H
+#ifndef DUMPCHAIN_H
+#define DUMPCHAIN_H
 
 #include "default_visitor.h"
 
@@ -43,6 +43,6 @@ private:
   int indent;
 };
 
-#endif // DUMPTREE_H
+#endif // DUMPCHAIN_H
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
