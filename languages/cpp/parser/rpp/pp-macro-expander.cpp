@@ -108,9 +108,9 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         if (input == '\n' || !input.current().isSpace())
           break;
 
-      } while (!(++input).atEnd());
+        output << input;
 
-      output << ' ';
+      } while (!(++input).atEnd());
     }
     else if (input.current().isNumber())
     {
