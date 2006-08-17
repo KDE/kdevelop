@@ -32,6 +32,7 @@
 #include "kdevproject.h"
 #include <QtDBus/QtDBus>
 #include "kdevfilemanager.h"
+#include "kdevprojectmodel.h"
 #include "filetemplate.h"
 
 class KDevProjectPrivate
@@ -57,10 +58,15 @@ KDevProject::~KDevProject()
 
 bool KDevProject::inProject( const KUrl& url ) const
 {
-    KUrl absolute = absoluteUrl(url);
-
-    /// FIXME implement!
-    return false;
+  //This is slow, but right now I don't see a better implementation
+  QList<KDevProjectFileItem*> files = const_cast<KDevProject*>(this)->allFiles();
+  KDevProjectFileItem *file;
+  foreach (file, files)
+  {
+    if (file->url() == url)
+      return true;
+  }
+  return false;
 }
 
 KUrl KDevProject::relativeUrl( const KUrl& absolute ) const
