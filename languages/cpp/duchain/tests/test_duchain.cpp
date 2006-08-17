@@ -304,7 +304,7 @@ private slots:
   {
     //                 0         1         2         3         4         5         6         7
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-    QByteArray method("struct A { int i; A(int b, int c) : i(5) { } virtual void test(int j) = 0; };");
+    QByteArray method("struct A { int i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; };");
 
     DUContext* top = parse(method, DumpNone);
 
@@ -334,6 +334,18 @@ private slots:
     QCOMPARE(ctorCtx->findDefinition(QualifiedIdentifier("i")), defI);
     QCOMPARE(ctorCtx->findDefinition(QualifiedIdentifier("b")), ctorCtx->localDefinitions().first());
     QCOMPARE(ctorCtx->findDefinition(QualifiedIdentifier("c")), ctorCtx->localDefinitions().last());
+
+    Definition* defB = ctorCtx->localDefinitions().first();
+    QCOMPARE(defB->identifier(), Identifier("b"));
+    QCOMPARE(defB->uses().count(), 0);
+
+    Definition* defC = ctorCtx->localDefinitions()[1];
+    QCOMPARE(defC->identifier(), Identifier("c"));
+    QCOMPARE(defC->uses().count(), 1);
+
+    QCOMPARE(ctorCtx->findDefinition(Identifier("i")), defI);
+    QCOMPARE(ctorCtx->findDefinition(Identifier("b")), defB);
+    QCOMPARE(ctorCtx->findDefinition(Identifier("c")), defC);
 
     DUContext* testCtx = structA->childContexts().last();
     QCOMPARE(testCtx->childContexts().count(), 0);
