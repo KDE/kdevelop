@@ -39,7 +39,7 @@ DUBuilder::DUBuilder (TokenStream *token_stream):
   _M_token_stream (token_stream), m_editor(new CppEditorIntegrator(token_stream)), m_nameCompiler(new NameCompiler(token_stream)),
   in_namespace(false), in_class(false), in_template_declaration(false),
   in_typedef(false), in_function_definition(false), in_parameter_declaration(false),
-  m_types(new TypeEnvironment)
+  m_secondParentContext(0), m_types(new TypeEnvironment)
 {
 }
 
@@ -83,6 +83,12 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node)
   closeContext();
 
   Q_ASSERT(m_contextStack.isEmpty());
+
+  // FIXME Hrm, didn't get used..??
+  if (m_secondParentContext) {
+    kWarning() << k_funcinfo << "Previous parameter declaration context didn't get used??" << endl;
+    m_secondParentContext = 0;
+  }
 
   return topLevelContext;
 }
@@ -138,18 +144,23 @@ void DUBuilder::visitTypedef (TypedefAST *node)
 
 void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
-  openContext(node, DUContext::Function);
-
   bool was = inFunctionDefinition (node);
   DefaultVisitor::visitFunctionDefinition (node);
   inFunctionDefinition (was);
 
-  closeContext(0, node);
+  // Didn't get claimed if it was set
+  m_secondParentContext = 0;
 }
 
 DUContext* DUBuilder::openContext(AST* rangeNode, DUContext::ContextType type)
 {
   Range* range = m_editor->createRange(rangeNode);
+  return openContext(range, type);
+}
+
+DUContext* DUBuilder::openContext(AST* fromRange, AST* toRange, DUContext::ContextType type)
+{
+  Range* range = m_editor->createRange(fromRange, toRange);
   return openContext(range, type);
 }
 
@@ -193,11 +204,13 @@ void DUBuilder::closeContext(NameAST* name, AST* node)
 
 void DUBuilder::visitParameterDeclarationClause (ParameterDeclarationClauseAST * node)
 {
-  //openContext(node, DUContext::Function);
+  m_secondParentContext = openContext(node, DUContext::Function);
 
   bool was = inParameterDeclaration (node);
   DefaultVisitor::visitParameterDeclarationClause (node);
   inParameterDeclaration (was);
+
+  closeContext();
 }
 
 void DUBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
@@ -209,6 +222,8 @@ void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
 {
   openContext(node, DUContext::Other);
 
+  reparentSecondContext();
+
   DefaultVisitor::visitCompoundStatement (node);
 
   closeContext();
@@ -216,10 +231,13 @@ void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
 
 void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 {
-  // We need to detect function declarations
-  // Replaces DefaultVisitor::visitSimpleDeclaration (node);
+  DefaultVisitor::visitSimpleDeclaration (node);
 
-  visit(node->type_specifier);
+  // Didn't get claimed if it was still set
+  m_secondParentContext = 0;
+
+  // We need to detect function declarations
+  /*visit(node->type_specifier);
 
   if (node->init_declarators) {
     const ListNode<InitDeclaratorAST*> *it = node->init_declarators->toFront(), *end = it;
@@ -237,7 +255,7 @@ void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
     } while (it != end);
   }
 
-  visit(node->win_decl_specifiers);
+  visit(node->win_decl_specifiers);*/
 }
 
 void DUBuilder::visitInitDeclarator(InitDeclaratorAST* node)
@@ -253,9 +271,9 @@ void DUBuilder::visitDeclarator (DeclaratorAST* node)
       case DUContext::Global:
       case DUContext::Namespace:
       case DUContext::Class:
+      case DUContext::Function:
           break;
 
-      case DUContext::Function:
       case DUContext::Other:
           newDeclaration(node->id, node);
           break;
@@ -297,10 +315,14 @@ void DUBuilder::newUse(NameAST* name)
 
   m_nameCompiler->run(name);
 
-  Definition* definition = currentContext()->findDefinition(m_nameCompiler->identifier(), KDevDocumentCursor(use, KDevDocumentCursor::Start));
-  if (definition)
-    definition->addUse(use);
+  if (m_secondParentContext)
+    if (Definition* definition = m_secondParentContext->findDefinition(m_nameCompiler->identifier(), KDevDocumentCursor(use, KDevDocumentCursor::Start))) {
+      definition->addUse(use);
+      return;
+    }
 
+  if (Definition* definition = currentContext()->findDefinition(m_nameCompiler->identifier(), KDevDocumentCursor(use, KDevDocumentCursor::Start)))
+    definition->addUse(use);
   else
     currentContext()->addOrphanUse(use);
     //kWarning() << k_funcinfo << "Could not find definition for identifier " << id << " at " << *use << endl;
@@ -408,4 +430,75 @@ void DUBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationSta
         visit(node->expression);
         break;
   }
+}
+
+void DUBuilder::visitForStatement(ForStatementAST *node)
+{
+  // Not setting the member var because it gets nuked in visitSimpleDeclaration
+  DUContext* secondParentContext = openContext(m_editor->createRange(node->init_statement, node->expression), DUContext::Other);
+
+  visit(node->init_statement);
+  visit(node->condition);
+  visit(node->expression);
+
+  closeContext();
+
+  const bool contextNeeded = createContextIfNeeded(node->statement, secondParentContext);
+
+  visit(node->statement);
+
+  if (contextNeeded)
+    closeContext();
+
+  // Didn't get claimed if it was still set
+  m_secondParentContext = 0;
+}
+
+void DUBuilder::reparentSecondContext()
+{
+  if (m_secondParentContext) {
+    m_secondParentContext->parentContexts().first()->takeChildContext(m_secondParentContext);
+    m_secondParentContext->addChildContext(currentContext());
+    m_secondParentContext = 0;
+  }
+}
+
+void DUBuilder::visitIfStatement(IfStatementAST* node)
+{
+  // Not setting the member var because it gets nuked in visitSimpleDeclaration
+  DUContext* secondParentContext = openContext(node->condition, DUContext::Other);
+
+  visit(node->condition);
+
+  closeContext();
+
+  if (node->statement) {
+    const bool contextNeeded = createContextIfNeeded(node->statement, secondParentContext);
+
+    visit(node->statement);
+
+    if (contextNeeded)
+      closeContext();
+  }
+
+  if (node->else_statement) {
+    const bool contextNeeded = createContextIfNeeded(node->else_statement, secondParentContext);
+
+    visit(node->else_statement);
+
+    if (contextNeeded)
+      closeContext();
+  }
+}
+
+bool DUBuilder::createContextIfNeeded(AST* node, DUContext* secondParentContext)
+{
+  m_secondParentContext = secondParentContext;
+
+  const bool contextNeeded = !ast_cast<CompoundStatementAST*>(node);
+  if (contextNeeded) {
+    openContext(node, DUContext::Other);
+    reparentSecondContext();
+  }
+  return contextNeeded;
 }

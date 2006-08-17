@@ -68,6 +68,11 @@ Range* CppEditorIntegrator::createRange( AST * node, RangeEdge edge )
   return createRange(findPosition(node->start_token, FrontEdge), findPosition(node->end_token, FrontEdge));
 }
 
+KTextEditor::Range* CppEditorIntegrator::createRange(AST* from, AST* to)
+{
+  return createRange(findPosition(from->start_token, FrontEdge), findPosition(to->end_token, FrontEdge));
+}
+
 Range* CppEditorIntegrator::createRange( const Token & token )
 {
   return createRange(findPosition(token, FrontEdge), findPosition(token, FrontEdge));

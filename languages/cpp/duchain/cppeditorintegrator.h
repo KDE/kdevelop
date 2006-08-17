@@ -77,6 +77,18 @@ public:
   KTextEditor::Range* createRange(AST* node, RangeEdge = OuterEdge);
 
   /**
+   * Create a new text range encompassing the given AST nodes.
+   * The returned range will become the new currentRange().
+   *
+   * If the current document is loaded, and it supports creating smart ranges,
+   * this will be a smart range, otherwise it will be a KDevDocumentRange.
+   *
+   * \returns the newly created smart range.
+   * \overload
+   */
+  KTextEditor::Range* createRange(AST* from, AST* to);
+
+  /**
    * Create a new start range encompassing the given AST \a token.
    * The returned range will become the new currentRange().
    *

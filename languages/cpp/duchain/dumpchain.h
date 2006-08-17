@@ -33,7 +33,7 @@ public:
 
   void dump(AST *node, TokenStream* tokenStream = 0);
 
-  void dump(DUContext* context);
+  void dump(DUContext* context, bool recurse = true);
 
 protected:
   virtual void visit(AST *node);

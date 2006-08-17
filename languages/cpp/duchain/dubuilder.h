@@ -76,6 +76,8 @@ protected:
   virtual void visitTypeIdentification(TypeIdentificationAST*);
   virtual void visitUsing(UsingAST*);
   virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST*);
+  virtual void visitForStatement(ForStatementAST*);
+  virtual void visitIfStatement(IfStatementAST*);
 
   inline bool inNamespace (bool f) {
     bool was = in_namespace;
@@ -128,7 +130,11 @@ private:
    * Opens a new context.
    */
   DUContext* openContext(AST* range, DUContext::ContextType type);
+  DUContext* openContext(AST* fromRange, AST* toRange, DUContext::ContextType type);
   DUContext* openContext(KTextEditor::Range* range, DUContext::ContextType type);
+
+  bool createContextIfNeeded(AST* node, DUContext* secondParentContext);
+  void reparentSecondContext();
 
   /**
    * Closes the current context.
@@ -150,6 +156,7 @@ private:
   bool in_parameter_declaration: 1;
 
   QStack<DUContext*> m_contextStack;
+  DUContext* m_secondParentContext;
   TypeEnvironment* m_types;
 };
 
