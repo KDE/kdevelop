@@ -1,26 +1,30 @@
-/* This file is part of kdev-pg
-   Copyright (C) 2005 Roberto Raggi <roberto@kdevelop.org>
+/*
+  This file is part of kdev-pg
+  Copyright 2005, 2006 Roberto Raggi <roberto@kdevelop.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+  Permission to use, copy, modify, distribute, and sell this software and its
+  documentation for any purpose is hereby granted without fee, provided that
+  the above copyright notice appear in all copies and that both that
+  copyright notice and this permission notice appear in supporting
+  documentation.
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+  KDEVELOP TEAM BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+  AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #ifndef KDEV_PG_TOKEN_STREAM_H
 #define KDEV_PG_TOKEN_STREAM_H
 
 #include <cstdlib>
+
+#include "kdev-pg-location-table.h"
 
 class kdev_pg_token_stream
 {
@@ -38,7 +42,8 @@ public:
     : _M_token_buffer(0),
       _M_token_buffer_size(0),
       _M_index(0),
-      _M_token_count(0)
+      _M_token_count(0),
+      _M_line_table(0)
   {
     reset();
   }
@@ -47,6 +52,8 @@ public:
   {
     if (_M_token_buffer)
       ::free(_M_token_buffer);
+    if (_M_line_table)
+      delete _M_line_table;
   }
 
   inline void reset()
@@ -101,11 +108,40 @@ public:
     return _M_token_buffer[_M_token_count++];
   }
 
+  inline kdev_pg_location_table *line_table()
+  {
+    if (!_M_line_table)
+      _M_line_table = new kdev_pg_location_table();
+
+    return _M_line_table;
+  }
+
+  inline void start_position(std::size_t index, int *line, int *column)
+  {
+    if (!_M_line_table)
+      {
+        *line = 0; *column = 0;
+      }
+    else
+      _M_line_table->position_at(token(index).begin, line, column);
+  }
+
+  inline void end_position(std::size_t index, int *line, int *column)
+  {
+    if (!_M_line_table)
+      {
+        *line = 0; *column = 0;
+      }
+    else
+      _M_line_table->position_at(token(index).end, line, column);
+  }
+
 private:
   token_type *_M_token_buffer;
   std::size_t _M_token_buffer_size;
   std::size_t _M_index;
   std::size_t _M_token_count;
+  kdev_pg_location_table *_M_line_table;
 
 private:
   kdev_pg_token_stream(kdev_pg_token_stream const &other);
