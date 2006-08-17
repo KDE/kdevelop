@@ -95,8 +95,7 @@ KDevProjectFolderItem::KDevProjectFolderItem( const KUrl & dir, KDevItemGroup * 
   : KDevProjectItem(dir.directory(), parent)
   , m_url(dir)
 {
-  QStringList dirParts = m_url.path().split('/');
-  setName( dirParts.last() );
+  setName( dir.fileName() );
 }
 
 const KUrl& KDevProjectFolderItem::url( ) const
@@ -107,8 +106,7 @@ const KUrl& KDevProjectFolderItem::url( ) const
 void KDevProjectFolderItem::setUrl( const KUrl& url )
 {
   m_url = url;
-  QStringList dirParts = m_url.path().split('/');
-  setName( dirParts.last() );
+  setName( url.fileName() );
 }
 
 KDevProjectFileItem::KDevProjectFileItem( const KUrl & file, KDevItemGroup * parent )
