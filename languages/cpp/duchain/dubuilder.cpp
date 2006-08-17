@@ -136,14 +136,11 @@ void DUBuilder::visitTypedef (TypedefAST *node)
 
 void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
-  //DUContext* previous = currentContext();
   openContext(node, DUContext::Function);
 
   bool was = inFunctionDefinition (node);
   DefaultVisitor::visitFunctionDefinition (node);
   inFunctionDefinition (was);
-
-  //Q_ASSERT(currentContext()->parentContexts().contains(previous));
 
   closeContext(0, node);
 }
@@ -213,7 +210,28 @@ void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
 
 void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 {
-  DefaultVisitor::visitSimpleDeclaration (node);
+  // We need to detect function declarations
+  // Replaces DefaultVisitor::visitSimpleDeclaration (node);
+
+  visit(node->type_specifier);
+
+  if (node->init_declarators) {
+    const ListNode<InitDeclaratorAST*> *it = node->init_declarators->toFront(), *end = it;
+
+    do {
+      if (it->element && it->element->declarator && it->element->declarator->parameter_declaration_clause) {
+        // This is a forward definition for a function, create a context
+        openContext(it->element->declarator->parameter_declaration_clause, DUContext::Function);
+        visit(it->element);
+        closeContext();
+      } else {
+        visit(it->element);
+      }
+      it = it->next;
+    } while (it != end);
+  }
+
+  visit(node->win_decl_specifiers);
 }
 
 void DUBuilder::visitInitDeclarator(InitDeclaratorAST* node)
@@ -223,7 +241,9 @@ void DUBuilder::visitInitDeclarator(InitDeclaratorAST* node)
 
 void DUBuilder::visitDeclarator (DeclaratorAST* node)
 {
-  newDeclaration(node->id, node);
+  // Don't create a definition for a function
+  if (!node->parameter_declaration_clause)
+    newDeclaration(node->id, node);
 
   DefaultVisitor::visitDeclarator(node);
 }

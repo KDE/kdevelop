@@ -127,6 +127,7 @@ private:
    * Opens a new context.
    */
   DUContext* openContext(AST* range, DUContext::ContextType type);
+  DUContext* openContext(KTextEditor::Range* range, DUContext::ContextType type);
 
   /**
    * Closes the current context.
