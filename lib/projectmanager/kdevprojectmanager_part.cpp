@@ -131,7 +131,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const QStringLis
           m_projectDetails, SLOT(setRootIndex(QModelIndex)));
 #endif
 
-  KDevCore::mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
+  KDevCore::mainWindow()->embedSelectViewRight(m_widget, i18n("Project Manager"), i18n("Project Manager"));
 
   setXMLFile("kdevprojectmanager.rc");
 
