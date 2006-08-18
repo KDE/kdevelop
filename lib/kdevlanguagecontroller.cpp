@@ -45,6 +45,9 @@ KDevLanguageSupport *KDevLanguageController::activeLanguage() const
 
 KDevLanguageSupport *KDevLanguageController::languageSupport( const QString &language )
 {
+    if (language.isEmpty())
+        return 0;
+
     if ( m_languages.contains( language ) )
         return m_languages[ language ];
     else if ( loadLanguageSupport( language ) )
