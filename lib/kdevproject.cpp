@@ -24,13 +24,12 @@
 
 #include <QFileInfo>
 #include <QSet>
-#include <QTimer>
+#include <QtDBus/QtDBus>
 
 #include <kdebug.h>
 #include <kinstance.h>
 
 #include "kdevproject.h"
-#include <QtDBus/QtDBus>
 #include "kdevfilemanager.h"
 #include "kdevprojectmodel.h"
 #include "filetemplate.h"
@@ -62,11 +61,7 @@ bool KDevProject::inProject( const KUrl& url ) const
   KUrl u = top->url();
   if (u.protocol() != url.protocol() || u.host() != url.host())
     return false;
-  QTime time;
-  time.start();
-  bool found = false;
-  bool exit = false;
-  while (top && !found && !exit)
+  while (top)
   {
     u = top->url();
     if (u.isParentOf(url))
@@ -88,42 +83,17 @@ bool KDevProject::inProject( const KUrl& url ) const
         {
           if (file->url() == url)
           {
-            //return true; //we found it -- commented out due to benchmarking
-            found = true;
+            return true; //we found it
             break;
           }
         }
-        exit = true;
-        //return false; //not in the project -- commented out due to benchmarking
+        return false; //not in the project
       }
       top = parent;
     }
   }
-  kDebug(9000) << "Search in model for url: " << time.elapsed() << endl;
 
-  return found;
-
-#if 0
-  /** Benchmark the search using a QHash. */  
-
-//store the items in a QHash
-  QHash<QString, KDevProjectFileItem*> items;
-  QList<KDevProjectFileItem*> files = const_cast<KDevProject*>(this)->allFiles();
-  KDevProjectFileItem *file;
-  foreach (file, files)
-  {
-    items.insert(file->url(), file);
-  }
-  
-  time.restart();
-  if (items.contains(url.url()))
-  {
-    kDebug(9000) << "Search in model for url using QHash: " << time.elapsed() << endl;
-    return true;
-  }
-  kDebug(9000) << "Search in model for url using QHash: " << time.elapsed() << endl;
   return false;
-#endif  
 }
 
 KUrl KDevProject::relativeUrl( const KUrl& absolute ) const
