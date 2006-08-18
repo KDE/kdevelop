@@ -477,7 +477,7 @@ void KDevMainWindow::configureNotifications()
 void KDevMainWindow::settings()
 {
     if ( !d->settingsDialog )
-        d->settingsDialog = new KSettings::Dialog(
+        d->settingsDialog = new KSettings::Dialog(QStringList("kdevelop"),
                                 KSettings::Dialog::Static, this );
     d->settingsDialog->show();
 }
