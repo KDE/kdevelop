@@ -58,15 +58,72 @@ KDevProject::~KDevProject()
 
 bool KDevProject::inProject( const KUrl& url ) const
 {
-  //This is slow, but right now I don't see a better implementation
+  KDevProjectFolderItem *top = d->manager->top();
+  KUrl u = top->url();
+  if (u.protocol() != url.protocol() || u.host() != url.host())
+    return false;
+  QTime time;
+  time.start();
+  bool found = false;
+  bool exit = false;
+  while (top && !found && !exit)
+  {
+    u = top->url();
+    if (u.isParentOf(url))
+    {
+      KDevProjectFolderItem *parent = 0L;
+      QList<KDevProjectFolderItem*> folder_list = top->folderList();
+      foreach (KDevProjectFolderItem *folder, folder_list)
+      {
+        if (folder->url().isParentOf(url))
+        {
+          parent = folder;
+          break;
+        }
+      }
+      if (!parent) //the subfolders are not parent of url
+      {
+        QList<KDevProjectFileItem*> file_list= top->fileList();
+        foreach (KDevProjectFileItem *file, file_list)
+        {
+          if (file->url() == url)
+          {
+            //return true; //we found it -- commented out due to benchmarking
+            found = true;
+            break;
+          }
+        }
+        exit = true;
+        //return false; //not in the project -- commented out due to benchmarking
+      }
+      top = parent;
+    }
+  }
+  kDebug(9000) << "Search in model for url: " << time.elapsed() << endl;
+
+  return found;
+
+#if 0
+  /** Benchmark the search using a QHash. */  
+
+//store the items in a QHash
+  QHash<QString, KDevProjectFileItem*> items;
   QList<KDevProjectFileItem*> files = const_cast<KDevProject*>(this)->allFiles();
   KDevProjectFileItem *file;
   foreach (file, files)
   {
-    if (file->url() == url)
-      return true;
+    items.insert(file->url(), file);
   }
+  
+  time.restart();
+  if (items.contains(url.url()))
+  {
+    kDebug(9000) << "Search in model for url using QHash: " << time.elapsed() << endl;
+    return true;
+  }
+  kDebug(9000) << "Search in model for url using QHash: " << time.elapsed() << endl;
   return false;
+#endif  
 }
 
 KUrl KDevProject::relativeUrl( const KUrl& absolute ) const
