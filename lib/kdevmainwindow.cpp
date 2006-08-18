@@ -477,8 +477,12 @@ void KDevMainWindow::configureNotifications()
 void KDevMainWindow::settings()
 {
     if ( !d->settingsDialog )
-        d->settingsDialog = new KSettings::Dialog(QStringList("kdevelop"),
-                                KSettings::Dialog::Static, this );
+        if (instance()->instanceName() == "kdevelop") 
+            d->settingsDialog = new KSettings::Dialog(
+                                    KSettings::Dialog::Static, this );
+        else
+            d->settingsDialog = new KSettings::Dialog(QStringList("kdevelop"),
+                                    KSettings::Dialog::Static, this );
     d->settingsDialog->show();
 }
 
