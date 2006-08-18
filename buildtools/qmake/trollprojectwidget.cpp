@@ -1338,6 +1338,8 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
       configList.append( "assistant" );
     if ( item->configuration.m_requirements & QD_DBUS )
       configList.append( "dbus" );
+    if ( item->configuration.m_requirements & QD_DESIGNER )
+      configList.append( "designer" );
   }
 
   if (item->configuration.m_requirements & QD_LIBTOOL )
@@ -3133,6 +3135,9 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
           item->configuration.m_requirements += QD_DBUS;
         if ( lst.find( "build_all" )!=lst.end() )
           item->configuration.m_requirements += QD_BUILDALL ;
+        if ( lst.find( "designer" )!=lst.end() )
+          item->configuration.m_requirements += QD_DESIGNER ;
+
       }
     }
     
