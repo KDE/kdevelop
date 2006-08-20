@@ -1166,6 +1166,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     int idRebuild = -2;
     int idClean = -2;
     int idQmake = -2;
+    int idQmakeRecursive = -2;
     int idProjectConfiguration = -2;
     int idAddSubproject = -2;
     int idRemoveSubproject = -2;
@@ -1190,6 +1191,10 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
       idQmake = popup.insertItem(SmallIcon("qmakerun"),i18n("Run qmake"));
       popup.setWhatsThis(idQmake, i18n("<b>Run qmake</b><p>Runs <b>qmake</b> from the selected subproject directory. "
                                        "This creates or regenerates Makefile."));
+      idQmakeRecursive = popup.insertItem(SmallIcon("qmakerun"),i18n("Run qmake recursively"));
+      popup.setWhatsThis(idQmakeRecursive, i18n("<b>Run qmake recursively</b><p>Runs <b>qmake</b> from the selected"
+                                                "subproject directory and recurses into all subproject directories. "
+                                                "This creates or regenerates Makefile."));
       popup.insertSeparator();
       idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
       popup.setWhatsThis(idAddSubproject, i18n("<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to a currently selected subproject. "
@@ -1252,6 +1257,10 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     else if (r == idQmake)
     {
         m_part->startQMakeCommand(projectDirectory() + relpath);
+    }
+    else if( r == idQmakeRecursive )
+    {
+        runQMakeRecursive(spitem);
     }
     else if (r == idProjectConfiguration)
     {
@@ -3620,5 +3629,18 @@ void TrollProjectWidget::setLastFocusedView( TrollProjectView view )
     m_lastFocusedView = view;
 }
 
+void TrollProjectWidget::runQMakeRecursive( SubqmakeprojectItem* proj)
+{
+    m_part->startQMakeCommand(proj->path);
+    qProjectItem* item = static_cast<qProjectItem*>(proj->firstChild());
+    while( item )
+    {
+      if( item->type() == qProjectItem::Subproject )
+      {
+          runQMakeRecursive( static_cast<SubqmakeprojectItem*>(item));
+      }
+      item = static_cast<qProjectItem*>(item->nextSibling());
+    }
+}
 
 #include "trollprojectwidget.moc"

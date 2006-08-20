@@ -348,6 +348,8 @@ private:
     void startMakeCommand(const QString &dir, const QString &target);
     void createMakefileIfMissing(const QString &dir, SubqmakeprojectItem *item);
 
+    void runQMakeRecursive( SubqmakeprojectItem* proj);
+
     /*fileName: full base file name like QFileInfo::baseName ( true )*/
     QPtrList<SubqmakeprojectItem> findSubprojectForFile( QFileInfo fi );
     void findSubprojectForFile( QPtrList<SubqmakeprojectItem> &list, SubqmakeprojectItem * item, QString absFilePath );
