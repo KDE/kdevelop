@@ -938,7 +938,7 @@ void TrollProjectWidget::slotConfigureProject()
 {
 //  ProjectOptionsDlg *d = new ProjectOptionsDlg(m_part,this);
 //  d->exec();
-  
+
   ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(m_shownSubproject,overview,m_part->isQt4Project());
   if (dlg->exec() == QDialog::Accepted)
   {
@@ -1163,6 +1163,8 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     popup.insertTitle(i18n("Subproject %1").arg(item->text(0)));
 
     int idBuild = -2;
+    int idRebuild = -2;
+    int idClean = -2;
     int idQmake = -2;
     int idProjectConfiguration = -2;
     int idAddSubproject = -2;
@@ -1177,8 +1179,17 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
       popup.setWhatsThis(idBuild, i18n("<b>Build</b><p>Runs <b>make</b> from the selected subproject directory.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
+      idClean = popup.insertItem(i18n("Clean"));
+      popup.setWhatsThis(idBuild, i18n("<b>Clean project</b><p>Runs <b>make clean</b> command from the project "
+                                       "directory.<br> Environment variables and make arguments can be specified "
+                                       "in the project settings dialog, <b>Make Options</b> tab."));
+      idRebuild = popup.insertItem(SmallIcon("rebuild"), i18n("Rebuild"));
+      popup.setWhatsThis(idRebuild, i18n("<b>Rebuild project</b><p>Runs <b>make clean</b> and then <b>make</b> from "
+                                         "the project directory.<br>Environment variables and make arguments can be "
+                                         "specified in the project settings dialog, <b>Make Options</b> tab."));
       idQmake = popup.insertItem(SmallIcon("qmakerun"),i18n("Run qmake"));
-      popup.setWhatsThis(idQmake, i18n("<b>Run qmake</b><p>Runs <b>qmake</b> from the selected subproject directory. This creates or regenerates Makefile."));
+      popup.setWhatsThis(idQmake, i18n("<b>Run qmake</b><p>Runs <b>qmake</b> from the selected subproject directory. "
+                                       "This creates or regenerates Makefile."));
       popup.insertSeparator();
       idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
       popup.setWhatsThis(idAddSubproject, i18n("<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to a currently selected subproject. "
@@ -1229,6 +1240,14 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     {
         slotBuildTarget();
 //        m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
+    }
+    else if (r == idRebuild)
+    {
+        slotRebuildTarget();
+    }
+    else if (r == idClean)
+    {
+        slotCleanTarget();
     }
     else if (r == idQmake)
     {
@@ -1324,7 +1343,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
     configList.append("rtti");
   if (item->configuration.m_requirements & QD_ORDERED)
     configList.append("ordered");
-  
+
   //Qt4 specific
   if ( m_part->isQt4Project() )
   {
@@ -1354,7 +1373,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
   }
   if (item->configuration.m_requirements & QD_CONSOLE )
     configList.append("console");
-  
+
   if (item->configuration.m_requirements & QD_PCH )
     configList.append("precompile_header");
 
@@ -1385,7 +1404,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
       qt4libs.append( "network" );
     if (  item->configuration.m_qt4libs & Q4L_QT3 )
       qt4libs.append( "qt3support" );
-    
+
     if (item->configuration.m_inheritconfig == true)
     {
         if ( !qt4libs.isEmpty() )
@@ -1461,7 +1480,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
   QStringList::Iterator remVars = item->configuration.m_removed_variables.begin();
   for( ; remVars != item->configuration.m_removed_variables.end(); ++remVars)
     Buffer->removeValues( *remVars );
-  
+
   // save custom vars first
   QMap<QString,QString>::Iterator custVars = item->configuration.m_variables.begin();
   for( ; custVars != item->configuration.m_variables.end(); ++custVars )
@@ -3140,7 +3159,7 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
 
       }
     }
-    
+
     //QT from Qt4
     if ( m_part->isQt4Project() )
     {
