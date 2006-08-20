@@ -172,7 +172,7 @@ ELSE(KDEVCMG_EXECUTABLE)
     MESSAGE("--- Assuming existence of the generated csharp codemodel files")
     SET(kdevcsharpparser_STAT_SRCS
         ${kdevcsharpparser_STAT_SRCS}
-        "${CMAKE_CURRENT_SOURCE_DIR}/csharp_codemodel.cpp")
+        "${CMAKE_CURRENT_SOURCE_DIR}/csharp_codemodel.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/csharp_codemodel_chameleon.cpp")
 ENDIF(KDEVCMG_EXECUTABLE)
 
 
