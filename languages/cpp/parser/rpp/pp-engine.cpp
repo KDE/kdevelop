@@ -274,7 +274,7 @@ void pp::operator () (Stream& input, Stream& output)
 {
 #ifndef PP_NO_SMART_HEADER_PROTECTION
   QString headerDefine = find_header_protection(input);
-  if (m_environment.contains(headerDefine))
+  if (m_environment.contains(headerDefine) && m_environment[headerDefine]->defined)
   {
     kDebug() << k_funcinfo << "found header protection: " << headerDefine << endl;
     return;
@@ -416,7 +416,9 @@ void pp::handle_define (Stream& input)
   macro->definition = definition;
 
   if (m_environment.contains(macro_name)) {
-    // FIXME redefinition error
+    // if (m_environment[macro_name]->defined)
+      // FIXME redefinition error
+
     delete m_environment.take(macro_name);
   }
 
@@ -499,7 +501,7 @@ long pp::eval_primary(Stream& input)
         break;
       }
 
-      result = m_environment.contains(token_text);
+      result = m_environment.contains(token_text) && m_environment[token_text]->defined;
 
       token = next_token(input); // skip '('
 
@@ -892,7 +894,7 @@ void pp::handle_ifdef (bool check_undefined, Stream& input)
   if (test_if_level())
   {
     QString macro_name = skip_identifier(input);
-    bool value = m_environment.contains(macro_name);
+    bool value = m_environment.contains(macro_name) && m_environment[macro_name]->defined;
 
     if (check_undefined)
       value = !value;
