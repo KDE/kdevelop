@@ -218,7 +218,7 @@ void KDevBackgroundParser::parseComplete( Job *job )
 
         //FIXME Stub for now, but eventually save persistent parser info
         //whatever that may entail.
-        m_persistentHash->insert( parseJob->document(), parseJob->AST() );
+        m_persistentHash->insertAST( parseJob->document(), parseJob->AST() );
 
         // FIXME hack, threadweaver doesn't let us know when we can delete, so just pick an arbitrary time...
         // (awaiting reply from Mirko on this one)

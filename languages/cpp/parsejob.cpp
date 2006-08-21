@@ -194,7 +194,7 @@ void ParseJob::run()
     QByteArray preprocessed = parentJob()->preprocessed().toUtf8();
 
     Parser parser( new Control() );
-    ParseSession* session = new ParseSession(preprocessed, preprocessed.length() + 1, new pool);
+    ParseSession* session = new ParseSession(preprocessed, new pool);
 
     TranslationUnitAST* ast = parser.parse( session );
     ast->session = session;
@@ -209,7 +209,7 @@ void ParseJob::run()
 
         parentJob()->setCodeModel(model);
 
-        /*KTextEditor::SmartInterface* smart = 0;
+        KTextEditor::SmartInterface* smart = 0;
         if ( parentJob()->openDocument() && parentJob()->openDocument()->textDocument() )
             smart = dynamic_cast<KTextEditor::SmartInterface*>(parentJob()->openDocument()->textDocument());
 
@@ -222,7 +222,7 @@ void ParseJob::run()
         parentJob()->setDUChain(topContext);
 
         if ( parentJob()->cpp()->codeHighlighting() )
-            parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );*/
+            parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );
 
         // Debug output...
         /*if (topContext->smartRange()) {

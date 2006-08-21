@@ -58,7 +58,7 @@ void Lexer::tokenize(ParseSession* _session)
 
   index = 1;
 
-  cursor = session->contents;
+  cursor = session->contents();
 
   session->location_table->resize(1024);
   (*session->location_table)[0] = 0;
@@ -73,16 +73,16 @@ void Lexer::tokenize(ParseSession* _session)
       session->token_stream->resize(session->token_stream->size() * 2);
 
     Token *current_token = &(*session->token_stream)[index];
-    current_token->text = session->contents;
-    current_token->position = cursor - session->contents;
+    current_token->text = session->contents();
+    current_token->position = cursor - session->contents();
     (this->*s_scan_table[*cursor])();
-    current_token->size = cursor - session->contents - current_token->position;
-  } while (cursor < session->contents + session->size-1);
+    current_token->size = cursor - session->contents() - current_token->position;
+  } while (cursor < session->contents() + session->size()-1);
 
     if (index == session->token_stream->size())
       session->token_stream->resize(session->token_stream->size() * 2);
 
-  (*session->token_stream)[index].position = cursor - session->contents;
+  (*session->token_stream)[index].position = cursor - session->contents();
   (*session->token_stream)[index].kind = Token_EOF;
 }
 
@@ -143,7 +143,7 @@ void Lexer::scan_preprocessor()
   if (session->line_table->current_line == session->line_table->size())
     session->line_table->resize(session->line_table->current_line * 2);
 
-  (*session->line_table)[session->line_table->current_line++] = (cursor - session->contents);
+  (*session->line_table)[session->line_table->current_line++] = (cursor - session->contents());
 
   while (*cursor && *cursor != '\n')
     ++cursor;
@@ -237,7 +237,7 @@ void Lexer::scan_newline()
   if (session->location_table->current_line == session->location_table->size())
     session->location_table->resize(session->location_table->current_line * 2);
 
-  (*session->location_table)[session->location_table->current_line++] = (cursor - session->contents);
+  (*session->location_table)[session->location_table->current_line++] = (cursor - session->contents());
   ++cursor;
 }
 

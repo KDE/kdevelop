@@ -22,6 +22,7 @@
 #include <cstdlib>
 
 #include <QtCore/QString>
+#include <QtCore/QByteArray>
 
 class pool;
 class TokenStream;
@@ -32,7 +33,7 @@ class LocationTable;
 class ParseSession
 {
 public:
-  ParseSession(const char *contents, std::size_t size, pool* mempool);
+  ParseSession(QByteArray contents, pool* mempool);
   ~ParseSession();
 
   /**
@@ -43,8 +44,8 @@ public:
   void positionAt(std::size_t offset, int *line, int *column,
                   QString *filename) const;
 
-  const char *contents;
-  std::size_t size;
+  const char *contents() const;
+  std::size_t size() const;
   pool* mempool;
   TokenStream* token_stream;
   LocationTable* location_table;
@@ -52,6 +53,7 @@ public:
 
 private:
   void extract_line(int offset, int *line, QString *filename) const;
+  QByteArray m_contents;
 };
 
 #endif

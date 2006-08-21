@@ -89,6 +89,17 @@ void KDevParseJob::setErrorMessage(const QString& message)
     m_errorMessage = message;
 }
 
+int KDevParseJob::priority() const
+{
+    if (m_openDocument)
+        if (m_openDocument->isActive())
+            return 2;
+        else
+            return 1;
+    else
+        return 0;
+}
+
 #include "kdevparsejob.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

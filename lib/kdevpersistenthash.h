@@ -29,21 +29,30 @@ Boston, MA 02110-1301, USA.
 
 /** This class is a stub at the moment.  It works when you have google sparsehash installed.*/
 
-// #include <google/sparse_hash_map>
-
-// using google::sparse_hash_map;
-
 struct KDevAST;
 
-// struct QStrHash
-// {
-//     size_t operator() ( const QString& s ) const
-//     {
-//         return HASH_NAMESPACE::hash<const char*>() ( s.toLatin1().constData() );
-//     }
-// };
+#define NO_GOOGLE_SPARSEHASH
 
-// typedef sparse_hash_map<QString, KDevAST*, QStrHash> PHASH;
+#ifndef NO_GOOGLE_SPARSEHASH
+
+#include <google/sparse_hash_map>
+
+using google::sparse_hash_map;
+
+struct QStrHash
+{
+    size_t operator() ( const QString& s ) const
+    {
+        return HASH_NAMESPACE::hash<const char*>() ( s.toLatin1().constData() );
+    }
+};
+
+typedef sparse_hash_map<QString, KDevAST*, QStrHash> PHASH;
+#else
+
+#include <QHash>
+
+#endif
 
 class KDEVINTERFACES_EXPORT KDevPersistentHash: public QObject
 {
@@ -52,12 +61,17 @@ public:
     KDevPersistentHash( QObject *parent = 0 );
     virtual ~KDevPersistentHash();
 
-    void insert( const KUrl &url, KDevAST* ast );
+    void insertAST( const KUrl &url, KDevAST* ast );
+    KDevAST* retrieveAST( const KUrl &url );
     void load();
     void save();
 
-// private:
-//     PHASH m_hash;
+private:
+#ifndef NO_GOOGLE_SPARSEHASH
+    PHASH m_astHash;
+#else
+    QHash<KUrl, KDevAST*> m_astHash;
+#endif
 };
 
 #endif

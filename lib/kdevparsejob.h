@@ -49,6 +49,9 @@ public:
 
     virtual ~KDevParseJob();
 
+    void setActiveDocument();
+    virtual int priority() const;
+
     QString contentsFromEditor() const;
 
     KUrl document() const;

@@ -21,9 +21,8 @@
 #include "lexer.h"
 #include "memorypool.h"
 
-ParseSession::ParseSession(const char *_contents, std::size_t _size, pool* _mempool)
-  : contents(_contents)
-  , size(_size)
+ParseSession::ParseSession(QByteArray contents, pool* _mempool)
+  : m_contents(contents)
   , mempool(_mempool)
   , token_stream(0)
   , location_table(0)
@@ -33,7 +32,6 @@ ParseSession::ParseSession(const char *_contents, std::size_t _size, pool* _memp
 
 ParseSession::~ParseSession()
 {
-  delete contents;
   delete mempool;
   delete token_stream;
   delete location_table;
@@ -74,7 +72,7 @@ void ParseSession::positionAt(std::size_t offset, int *line, int *column,
 
 void ParseSession::extract_line(int offset, int *line, QString *filename) const
 {
-  const char *cursor = contents + offset;
+  const char *cursor = contents() + offset;
 
   if (*cursor != '#')
     {
@@ -137,4 +135,14 @@ skip_line:
   // skip the line
   while (*cursor && *cursor != '\n')
     ++cursor;
+}
+
+std::size_t ParseSession::size() const
+{
+  return m_contents.size() + 1;
+}
+
+const char * ParseSession::contents() const
+{
+  return m_contents.constData();
 }

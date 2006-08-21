@@ -32,91 +32,117 @@ Boston, MA 02110-1301, USA.
 KDevPersistentHash::KDevPersistentHash( QObject *parent )
         : QObject( parent )
 {
-//     m_hash.set_deleted_key( NULL );
+#ifndef NO_GOOGLE_SPARSEHASH
+    m_astHash.set_deleted_key( NULL );
+#endif
 }
 
 KDevPersistentHash::~KDevPersistentHash()
-{}
-
-void KDevPersistentHash::insert( const KUrl &url, KDevAST *ast )
 {
-    Q_UNUSED( url );
-    Q_UNUSED( ast );
-//     if ( !url.isValid() )
-//         return ;
+#ifndef NO_GOOGLE_SPARSEHASH
+#else
+    /*QHashIterator<KUrl, KDevAST*> it = m_astHash;
+    while (it.hasNext()) {
+        it.next();
+        it.value()->release();
+    }*/
+#endif
+}
 
-//     m_hash[ url.url() ] = ast;
+void KDevPersistentHash::insertAST( const KUrl &url, KDevAST *ast )
+{
+#ifndef NO_GOOGLE_SPARSEHASH
+    m_astHash[ url.url() ] = ast;
+#else
+    /*if (m_astHash.contains(url))
+        a->release();*/
+
+    m_astHash.insert(url, ast);
+#endif
+}
+
+KDevAST * KDevPersistentHash::retrieveAST(const KUrl & url)
+{
+#ifndef NO_GOOGLE_SPARSEHASH
+    return m_astHash[ url.url() ];
+#else
+    return m_astHash[ url ];
+#endif
 }
 
 void KDevPersistentHash::load()
 {
-//     kDebug() << k_funcinfo << endl;
-//     QString fileName = "/home/kde/trunk/KDE/kdevelop/.kdev4/pcstest";
-//     FILE *f = fopen( fileName.toLatin1().data(), "r" );
-//     if ( f )
-//     {
-//         m_hash.read_metadata( f );
-//     }
-//
-//     fpos_t pos;
-//     if ( fgetpos( f, &pos ) )
-//     {
-//         kDebug() << "WARNING couldn't skip metadata!! ABORT" << endl;
-//         return;
-//     }
-//
-//     QFile file;
-//     if ( file.open( f, QIODevice::ReadOnly ) )
-//     {
-//         file.seek( pos.__pos );
-//
-//         QDataStream in( &file );
-//
-//         PHASH::iterator it = m_hash.begin();
-//         for ( ; it != m_hash.end(); ++it )
-//         {
-//             QString str;
-//             qint32 ast;
-//             in >> str >> ast;
-//             new (const_cast<QString*>(&it->first)) QString(str);
-//             new (&it->second) int(ast);
-//         }
-//
-//         file.close();
-//     }
-//
-//     PHASH::iterator it = m_hash.begin();
-//     for ( ; it != m_hash.end(); ++it )
-//     {
-//         kDebug() << "key = " << it->first << " value = " << it->second << endl;
-//     }
+#ifndef NO_GOOGLE_SPARSEHASH
+    kDebug() << k_funcinfo << endl;
+    QString fileName = "/home/kde/trunk/KDE/kdevelop/.kdev4/pcstest";
+    FILE *f = fopen( fileName.toLatin1().data(), "r" );
+    if ( f )
+    {
+        m_astHash.read_metadata( f );
+    }
+
+    fpos_t pos;
+    if ( fgetpos( f, &pos ) )
+    {
+        kDebug() << "WARNING couldn't skip metadata!! ABORT" << endl;
+        return;
+    }
+
+    QFile file;
+    if ( file.open( f, QIODevice::ReadOnly ) )
+    {
+        file.seek( pos.__pos );
+
+        QDataStream in( &file );
+
+        PHASH::iterator it = m_astHash.begin();
+        for ( ; it != m_astHash.end(); ++it )
+        {
+            QString str;
+            qint32 ast;
+            in >> str >> ast;
+            new (const_cast<QString*>(&it->first)) QString(str);
+            new (&it->second) int(ast);
+        }
+
+        file.close();
+    }
+
+    PHASH::iterator it = m_astHash.begin();
+    for ( ; it != m_astHash.end(); ++it )
+    {
+        kDebug() << "key = " << it->first << " value = " << it->second << endl;
+    }
+#endif
 }
 
 void KDevPersistentHash::save()
 {
-//     kDebug() << k_funcinfo << endl;
-//     QString fileName = "/home/kde/trunk/KDE/kdevelop/.kdev4/pcstest";
-//     FILE *f = fopen( fileName.toLatin1().data(), "w" );
-//     if ( f )
-//     {
-//         m_hash.write_metadata( f );
-//     }
-//     fclose(f);
-//
-//     std::ofstream out( fileName.toLatin1().data(), std::ios::binary | std::ios::app );
-//     if (out.is_open())
-//     {
-//         PHASH::iterator it = m_hash.begin();
-//         for ( ; it != m_hash.end(); ++it )
-//         {
-//             char *s = it->first.toLatin1().data();
-//             out.write( reinterpret_cast<char*>(s), sizeof(s) );
-//             KDevCore::activeLanguage()->write( it->second, out );
-//         }
-//
-//         out.flush();
-//         out.close();
-//     }
+#ifndef NO_GOOGLE_SPARSEHASH
+    kDebug() << k_funcinfo << endl;
+    QString fileName = "/home/kde/trunk/KDE/kdevelop/.kdev4/pcstest";
+    FILE *f = fopen( fileName.toLatin1().data(), "w" );
+    if ( f )
+    {
+        m_astHash.write_metadata( f );
+    }
+    fclose(f);
+
+    std::ofstream out( fileName.toLatin1().data(), std::ios::binary | std::ios::app );
+    if (out.is_open())
+    {
+        PHASH::iterator it = m_astHash.begin();
+        for ( ; it != m_astHash.end(); ++it )
+        {
+            char *s = it->first.toLatin1().data();
+            out.write( reinterpret_cast<char*>(s), sizeof(s) );
+            KDevCore::activeLanguage()->write( it->second, out );
+        }
+
+        out.flush();
+        out.close();
+    }
+#endif
 }
 
 #include "kdevpersistenthash.moc"

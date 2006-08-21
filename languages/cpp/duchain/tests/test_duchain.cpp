@@ -510,19 +510,18 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
   if (dump)
     kDebug() << "==== Beginning new test case...:" << endl << unit << endl << endl;
 
-  pool mem_pool;
-
-  ParseSession session(unit.constData(), unit.size() + 1, &mem_pool);
+  ParseSession* session = new ParseSession(unit, new pool);
 
   Parser parser(&control);
-  TranslationUnitAST* ast = parser.parse(&session);
+  TranslationUnitAST* ast = parser.parse(session);
+  ast->session = session;
 
   if (dump & DumpAST) {
     kDebug() << "===== AST:" << endl;
-    dumper.dump(ast, &session);
+    dumper.dump(ast, session);
   }
 
-  DUBuilder dubuilder(&session);
+  DUBuilder dubuilder(session);
   static int testNumber = 0;
   DUContext* top = dubuilder.build(KUrl(QString("file:///internal/%1").arg(testNumber++)), ast);
 
@@ -534,10 +533,7 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
   if (dump)
     kDebug() << "===== Finished test case." << endl;
 
-  // Don't delete these...
-  session.contents = 0;
-  session.size = 0;
-  session.mempool = 0;
+  delete session;
 
   return top;
 }
