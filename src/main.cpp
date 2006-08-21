@@ -108,8 +108,8 @@ int main( int argc, char *argv[] )
     KDevCore::setPartController( new KDevPartController );
     KDevCore::setDocumentController( new KDevDocumentController );
     KDevCore::setLanguageController( new KDevLanguageController );
-    KDevCore::setBackgroundParser( new KDevBackgroundParser );
     KDevCore::setProjectController( new KDevProjectController );
+    KDevCore::setBackgroundParser( new KDevBackgroundParser );
     KDevCore::setEnvironment( new KDevEnvironment );
 
     if ( splash )
