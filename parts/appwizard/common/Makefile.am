@@ -40,7 +40,7 @@ commondata_DATA = admin.tar.gz gnu.tar.gz incadmin.tar.gz gnome.tar.gz gnome2.ta
 	gnome-app.lsm gnome-Makefile.am gnome-Makefile.cvs \
 	gnome-pixmaps-Makefile.am gnome-app.png \
 	wx-configure.in wx-Makefile.am wx-Makefile.cvs \
-	COPYING COPYING.LIB LICENSE.QPL LICENSE.BSD Artistic \
+	COPYING COPYING-DOCS COPYING.LIB LICENSE.QPL LICENSE.BSD Artistic \
 	admin.kdevtemplate gnu.kdevtemplate dockbook.kdevtemplate\
 	incadmin.kdevtemplate gnome2.kdevtemplate scons.kdevtemplate scons.tar.gz
 
