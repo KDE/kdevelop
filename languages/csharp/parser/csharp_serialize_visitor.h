@@ -1066,6 +1066,7 @@ namespace csharp
 
       virtual void visit_namespace_name(namespace_name_ast *node)
       {
+        handle_ast_node(node->namespace_name);
         default_visitor::visit_namespace_name(node);
       }
 
@@ -1501,11 +1502,13 @@ namespace csharp
 
                                                         virtual void visit_type_name(type_name_ast *node)
                                                         {
+                                                          handle_ast_node(node->type_name);
                                                           default_visitor::visit_type_name(node);
                                                         }
 
                                                         virtual void visit_type_name_safe(type_name_safe_ast *node)
                                                         {
+                                                          handle_ast_node(node->type_name);
                                                           default_visitor::visit_type_name_safe(node);
                                                         }
 

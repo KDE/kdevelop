@@ -2700,10 +2700,10 @@ namespace csharp_pp
 -- TYPE NAMES and NAMESPACE NAMES are the same thing,
 -- essentially qualified identifiers with optional type arguments.
 
-   namespace_or_type_name
+   namespace_name=namespace_or_type_name
 -> namespace_name ;;
 
-   namespace_or_type_name
+   type_name=namespace_or_type_name
 -> type_name ;;
 
    (  ?[: LA(2).kind == Token_SCOPE :] qualified_alias_label=identifier SCOPE
@@ -2720,7 +2720,7 @@ namespace csharp_pp
    ) catch(0)
 -> namespace_or_type_name_part ;;
 
-   namespace_or_type_name_safe
+   type_name=namespace_or_type_name_safe
 -> type_name_safe ;;
 
    (  ?[: LA(2).kind == Token_SCOPE :] qualified_alias_label=identifier SCOPE

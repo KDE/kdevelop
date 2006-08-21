@@ -142,9 +142,14 @@ namespace csharp
             return  Nullable<QString >(model_static_cast<ConstructorConstraintModelItem>(_M_item)->name());
           }
 
-        case _CodeModelItem::Kind_AttributeSection:
+        case _CodeModelItem::Kind_TypePart:
           {
-            return  Nullable<QString >(model_static_cast<AttributeSectionModelItem>(_M_item)->name());
+            return  Nullable<QString >(model_static_cast<TypePartModelItem>(_M_item)->name());
+          }
+
+        case _CodeModelItem::Kind_Type:
+          {
+            return  Nullable<QString >(model_static_cast<TypeModelItem>(_M_item)->name());
           }
 
         default:
@@ -315,9 +320,15 @@ namespace csharp
           return ;
         }
 
-      case _CodeModelItem::Kind_AttributeSection:
+      case _CodeModelItem::Kind_TypePart:
         {
-          model_static_cast<AttributeSectionModelItem>(_M_item)->setName(name);
+          model_static_cast<TypePartModelItem>(_M_item)->setName(name);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_Type:
+        {
+          model_static_cast<TypeModelItem>(_M_item)->setName(name);
           return ;
         }
 
@@ -464,9 +475,14 @@ namespace csharp
             return  Nullable<QStringList >(model_static_cast<ConstructorConstraintModelItem>(_M_item)->scope());
           }
 
-        case _CodeModelItem::Kind_AttributeSection:
+        case _CodeModelItem::Kind_TypePart:
           {
-            return  Nullable<QStringList >(model_static_cast<AttributeSectionModelItem>(_M_item)->scope());
+            return  Nullable<QStringList >(model_static_cast<TypePartModelItem>(_M_item)->scope());
+          }
+
+        case _CodeModelItem::Kind_Type:
+          {
+            return  Nullable<QStringList >(model_static_cast<TypeModelItem>(_M_item)->scope());
           }
 
         default:
@@ -637,9 +653,15 @@ namespace csharp
           return ;
         }
 
-      case _CodeModelItem::Kind_AttributeSection:
+      case _CodeModelItem::Kind_TypePart:
         {
-          model_static_cast<AttributeSectionModelItem>(_M_item)->setScope(scope);
+          model_static_cast<TypePartModelItem>(_M_item)->setScope(scope);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_Type:
+        {
+          model_static_cast<TypeModelItem>(_M_item)->setScope(scope);
           return ;
         }
 
@@ -786,9 +808,14 @@ namespace csharp
             return  Nullable<QString >(model_static_cast<ConstructorConstraintModelItem>(_M_item)->fileName());
           }
 
-        case _CodeModelItem::Kind_AttributeSection:
+        case _CodeModelItem::Kind_TypePart:
           {
-            return  Nullable<QString >(model_static_cast<AttributeSectionModelItem>(_M_item)->fileName());
+            return  Nullable<QString >(model_static_cast<TypePartModelItem>(_M_item)->fileName());
+          }
+
+        case _CodeModelItem::Kind_Type:
+          {
+            return  Nullable<QString >(model_static_cast<TypeModelItem>(_M_item)->fileName());
           }
 
         default:
@@ -959,9 +986,15 @@ namespace csharp
           return ;
         }
 
-      case _CodeModelItem::Kind_AttributeSection:
+      case _CodeModelItem::Kind_TypePart:
         {
-          model_static_cast<AttributeSectionModelItem>(_M_item)->setFileName(fileName);
+          model_static_cast<TypePartModelItem>(_M_item)->setFileName(fileName);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_Type:
+        {
+          model_static_cast<TypeModelItem>(_M_item)->setFileName(fileName);
           return ;
         }
 
@@ -2228,78 +2261,24 @@ namespace csharp
     }
 
 
-  Nullable<AttributeSectionList > _ModelItemChameleon::globalAttributes( ) const
-    {
-      switch  (_M_item->kind())
-        {
-
-        case _CodeModelItem::Kind_GlobalNamespaceDeclaration:
-          {
-            return  Nullable<AttributeSectionList >(model_static_cast<GlobalNamespaceDeclarationModelItem>(_M_item)->globalAttributes());
-          }
-
-        default:
-          break;
-        }
-
-      return  Nullable<AttributeSectionList>();
-    }
-
-  void _ModelItemChameleon::addGlobalAttribute(AttributeSectionModelItem item)
-  {
-    switch  (_M_item->kind())
-      {
-
-      case _CodeModelItem::Kind_GlobalNamespaceDeclaration:
-        {
-          model_static_cast<GlobalNamespaceDeclarationModelItem>(_M_item)->addGlobalAttribute(item);
-          return ;
-        }
-
-      default:
-        break;
-      }
-
-    return ;
-  }
-
-  void _ModelItemChameleon::removeGlobalAttribute(AttributeSectionModelItem item)
-  {
-    switch  (_M_item->kind())
-      {
-
-      case _CodeModelItem::Kind_GlobalNamespaceDeclaration:
-        {
-          model_static_cast<GlobalNamespaceDeclarationModelItem>(_M_item)->removeGlobalAttribute(item);
-          return ;
-        }
-
-      default:
-        break;
-      }
-
-    return ;
-  }
-
-
-  Nullable<TypeInfo > _ModelItemChameleon::namespaceOrType( ) const
+  Nullable<TypeModelItem > _ModelItemChameleon::namespaceOrType( ) const
     {
       switch  (_M_item->kind())
         {
 
         case _CodeModelItem::Kind_UsingAliasDirective:
           {
-            return  Nullable<TypeInfo >(model_static_cast<UsingAliasDirectiveModelItem>(_M_item)->namespaceOrType());
+            return  Nullable<TypeModelItem >(model_static_cast<UsingAliasDirectiveModelItem>(_M_item)->namespaceOrType());
           }
 
         default:
           break;
         }
 
-      return  Nullable<TypeInfo>();
+      return  Nullable<TypeModelItem>();
     }
 
-  void _ModelItemChameleon::setNamespaceOrType(TypeInfo namespaceOrType)
+  void _ModelItemChameleon::setNamespaceOrType(TypeModelItem namespaceOrType)
   {
     switch  (_M_item->kind())
       {
@@ -2679,39 +2658,39 @@ namespace csharp
   }
 
 
-  Nullable<TypeInfo > _ModelItemChameleon::baseType( ) const
+  Nullable<TypeModelItem > _ModelItemChameleon::baseType( ) const
     {
       switch  (_M_item->kind())
         {
 
         case _CodeModelItem::Kind_ClassLikeDeclaration:
           {
-            return  Nullable<TypeInfo >(model_static_cast<ClassLikeDeclarationModelItem>(_M_item)->baseType());
+            return  Nullable<TypeModelItem >(model_static_cast<ClassLikeDeclarationModelItem>(_M_item)->baseType());
           }
 
         case _CodeModelItem::Kind_ClassDeclaration:
           {
-            return  Nullable<TypeInfo >(model_static_cast<ClassDeclarationModelItem>(_M_item)->baseType());
+            return  Nullable<TypeModelItem >(model_static_cast<ClassDeclarationModelItem>(_M_item)->baseType());
           }
 
         case _CodeModelItem::Kind_StructDeclaration:
           {
-            return  Nullable<TypeInfo >(model_static_cast<StructDeclarationModelItem>(_M_item)->baseType());
+            return  Nullable<TypeModelItem >(model_static_cast<StructDeclarationModelItem>(_M_item)->baseType());
           }
 
         case _CodeModelItem::Kind_InterfaceDeclaration:
           {
-            return  Nullable<TypeInfo >(model_static_cast<InterfaceDeclarationModelItem>(_M_item)->baseType());
+            return  Nullable<TypeModelItem >(model_static_cast<InterfaceDeclarationModelItem>(_M_item)->baseType());
           }
 
         default:
           break;
         }
 
-      return  Nullable<TypeInfo>();
+      return  Nullable<TypeModelItem>();
     }
 
-  void _ModelItemChameleon::setBaseType(TypeInfo baseType)
+  void _ModelItemChameleon::setBaseType(TypeModelItem baseType)
   {
     switch  (_M_item->kind())
       {
@@ -4054,253 +4033,29 @@ namespace csharp
   }
 
 
-  Nullable<AttributeSectionList > _ModelItemChameleon::attributes( ) const
-    {
-      switch  (_M_item->kind())
-        {
-
-        case _CodeModelItem::Kind_DelegateDeclaration:
-          {
-            return  Nullable<AttributeSectionList >(model_static_cast<DelegateDeclarationModelItem>(_M_item)->attributes());
-          }
-
-        case _CodeModelItem::Kind_EnumValue:
-          {
-            return  Nullable<AttributeSectionList >(model_static_cast<EnumValueModelItem>(_M_item)->attributes());
-          }
-
-        case _CodeModelItem::Kind_EventDeclaration:
-          {
-            return  Nullable<AttributeSectionList >(model_static_cast<EventDeclarationModelItem>(_M_item)->attributes());
-          }
-
-        case _CodeModelItem::Kind_EventAccessorDeclaration:
-          {
-            return  Nullable<AttributeSectionList >(model_static_cast<EventAccessorDeclarationModelItem>(_M_item)->attributes());
-          }
-
-        case _CodeModelItem::Kind_IndexerDeclaration:
-          {
-            return  Nullable<AttributeSectionList >(model_static_cast<IndexerDeclarationModelItem>(_M_item)->attributes());
-          }
-
-        case _CodeModelItem::Kind_PropertyDeclaration:
-          {
-            return  Nullable<AttributeSectionList >(model_static_cast<PropertyDeclarationModelItem>(_M_item)->attributes());
-          }
-
-        case _CodeModelItem::Kind_AccessorDeclaration:
-          {
-            return  Nullable<AttributeSectionList >(model_static_cast<AccessorDeclarationModelItem>(_M_item)->attributes());
-          }
-
-        case _CodeModelItem::Kind_MethodDeclaration:
-          {
-            return  Nullable<AttributeSectionList >(model_static_cast<MethodDeclarationModelItem>(_M_item)->attributes());
-          }
-
-        case _CodeModelItem::Kind_VariableDeclaration:
-          {
-            return  Nullable<AttributeSectionList >(model_static_cast<VariableDeclarationModelItem>(_M_item)->attributes());
-          }
-
-        case _CodeModelItem::Kind_Parameter:
-          {
-            return  Nullable<AttributeSectionList >(model_static_cast<ParameterModelItem>(_M_item)->attributes());
-          }
-
-        case _CodeModelItem::Kind_TypeParameter:
-          {
-            return  Nullable<AttributeSectionList >(model_static_cast<TypeParameterModelItem>(_M_item)->attributes());
-          }
-
-        default:
-          break;
-        }
-
-      return  Nullable<AttributeSectionList>();
-    }
-
-  void _ModelItemChameleon::addAttribute(AttributeSectionModelItem item)
-  {
-    switch  (_M_item->kind())
-      {
-
-      case _CodeModelItem::Kind_DelegateDeclaration:
-        {
-          model_static_cast<DelegateDeclarationModelItem>(_M_item)->addAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_EnumValue:
-        {
-          model_static_cast<EnumValueModelItem>(_M_item)->addAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_EventDeclaration:
-        {
-          model_static_cast<EventDeclarationModelItem>(_M_item)->addAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_EventAccessorDeclaration:
-        {
-          model_static_cast<EventAccessorDeclarationModelItem>(_M_item)->addAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_IndexerDeclaration:
-        {
-          model_static_cast<IndexerDeclarationModelItem>(_M_item)->addAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_PropertyDeclaration:
-        {
-          model_static_cast<PropertyDeclarationModelItem>(_M_item)->addAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_AccessorDeclaration:
-        {
-          model_static_cast<AccessorDeclarationModelItem>(_M_item)->addAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_MethodDeclaration:
-        {
-          model_static_cast<MethodDeclarationModelItem>(_M_item)->addAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_VariableDeclaration:
-        {
-          model_static_cast<VariableDeclarationModelItem>(_M_item)->addAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_Parameter:
-        {
-          model_static_cast<ParameterModelItem>(_M_item)->addAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_TypeParameter:
-        {
-          model_static_cast<TypeParameterModelItem>(_M_item)->addAttribute(item);
-          return ;
-        }
-
-      default:
-        break;
-      }
-
-    return ;
-  }
-
-  void _ModelItemChameleon::removeAttribute(AttributeSectionModelItem item)
-  {
-    switch  (_M_item->kind())
-      {
-
-      case _CodeModelItem::Kind_DelegateDeclaration:
-        {
-          model_static_cast<DelegateDeclarationModelItem>(_M_item)->removeAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_EnumValue:
-        {
-          model_static_cast<EnumValueModelItem>(_M_item)->removeAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_EventDeclaration:
-        {
-          model_static_cast<EventDeclarationModelItem>(_M_item)->removeAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_EventAccessorDeclaration:
-        {
-          model_static_cast<EventAccessorDeclarationModelItem>(_M_item)->removeAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_IndexerDeclaration:
-        {
-          model_static_cast<IndexerDeclarationModelItem>(_M_item)->removeAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_PropertyDeclaration:
-        {
-          model_static_cast<PropertyDeclarationModelItem>(_M_item)->removeAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_AccessorDeclaration:
-        {
-          model_static_cast<AccessorDeclarationModelItem>(_M_item)->removeAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_MethodDeclaration:
-        {
-          model_static_cast<MethodDeclarationModelItem>(_M_item)->removeAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_VariableDeclaration:
-        {
-          model_static_cast<VariableDeclarationModelItem>(_M_item)->removeAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_Parameter:
-        {
-          model_static_cast<ParameterModelItem>(_M_item)->removeAttribute(item);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_TypeParameter:
-        {
-          model_static_cast<TypeParameterModelItem>(_M_item)->removeAttribute(item);
-          return ;
-        }
-
-      default:
-        break;
-      }
-
-    return ;
-  }
-
-
-  Nullable<TypeInfo > _ModelItemChameleon::returnType( ) const
+  Nullable<TypeModelItem > _ModelItemChameleon::returnType( ) const
         {
           switch  (_M_item->kind())
             {
 
             case _CodeModelItem::Kind_DelegateDeclaration:
               {
-                return  Nullable<TypeInfo >(model_static_cast<DelegateDeclarationModelItem>(_M_item)->returnType());
+                return  Nullable<TypeModelItem >(model_static_cast<DelegateDeclarationModelItem>(_M_item)->returnType());
               }
 
             case _CodeModelItem::Kind_MethodDeclaration:
               {
-                return  Nullable<TypeInfo >(model_static_cast<MethodDeclarationModelItem>(_M_item)->returnType());
+                return  Nullable<TypeModelItem >(model_static_cast<MethodDeclarationModelItem>(_M_item)->returnType());
               }
 
             default:
               break;
             }
 
-          return  Nullable<TypeInfo>();
+          return  Nullable<TypeModelItem>();
         }
 
-      void _ModelItemChameleon::setReturnType(TypeInfo returnType)
+      void _ModelItemChameleon::setReturnType(TypeModelItem returnType)
       {
         switch  (_M_item->kind())
           {
@@ -4467,24 +4222,24 @@ namespace csharp
       }
 
 
-      Nullable<TypeInfo > _ModelItemChameleon::baseIntegralType( ) const
+      Nullable<TypeModelItem > _ModelItemChameleon::baseIntegralType( ) const
         {
           switch  (_M_item->kind())
             {
 
             case _CodeModelItem::Kind_EnumDeclaration:
               {
-                return  Nullable<TypeInfo >(model_static_cast<EnumDeclarationModelItem>(_M_item)->baseIntegralType());
+                return  Nullable<TypeModelItem >(model_static_cast<EnumDeclarationModelItem>(_M_item)->baseIntegralType());
               }
 
             default:
               break;
             }
 
-          return  Nullable<TypeInfo>();
+          return  Nullable<TypeModelItem>();
         }
 
-      void _ModelItemChameleon::setBaseIntegralType(TypeInfo baseIntegralType)
+      void _ModelItemChameleon::setBaseIntegralType(TypeModelItem baseIntegralType)
       {
         switch  (_M_item->kind())
           {
@@ -4539,44 +4294,44 @@ namespace csharp
       }
 
 
-      Nullable<TypeInfo > _ModelItemChameleon::type( ) const
+      Nullable<TypeModelItem > _ModelItemChameleon::type( ) const
         {
           switch  (_M_item->kind())
             {
 
             case _CodeModelItem::Kind_EventDeclaration:
               {
-                return  Nullable<TypeInfo >(model_static_cast<EventDeclarationModelItem>(_M_item)->type());
+                return  Nullable<TypeModelItem >(model_static_cast<EventDeclarationModelItem>(_M_item)->type());
               }
 
             case _CodeModelItem::Kind_IndexerDeclaration:
               {
-                return  Nullable<TypeInfo >(model_static_cast<IndexerDeclarationModelItem>(_M_item)->type());
+                return  Nullable<TypeModelItem >(model_static_cast<IndexerDeclarationModelItem>(_M_item)->type());
               }
 
             case _CodeModelItem::Kind_PropertyDeclaration:
               {
-                return  Nullable<TypeInfo >(model_static_cast<PropertyDeclarationModelItem>(_M_item)->type());
+                return  Nullable<TypeModelItem >(model_static_cast<PropertyDeclarationModelItem>(_M_item)->type());
               }
 
             case _CodeModelItem::Kind_VariableDeclaration:
               {
-                return  Nullable<TypeInfo >(model_static_cast<VariableDeclarationModelItem>(_M_item)->type());
+                return  Nullable<TypeModelItem >(model_static_cast<VariableDeclarationModelItem>(_M_item)->type());
               }
 
             case _CodeModelItem::Kind_Parameter:
               {
-                return  Nullable<TypeInfo >(model_static_cast<ParameterModelItem>(_M_item)->type());
+                return  Nullable<TypeModelItem >(model_static_cast<ParameterModelItem>(_M_item)->type());
               }
 
             default:
               break;
             }
 
-          return  Nullable<TypeInfo>();
+          return  Nullable<TypeModelItem>();
         }
 
-      void _ModelItemChameleon::setType(TypeInfo type)
+      void _ModelItemChameleon::setType(TypeModelItem type)
       {
         switch  (_M_item->kind())
           {
@@ -4619,39 +4374,39 @@ namespace csharp
       }
 
 
-      Nullable<TypeInfo > _ModelItemChameleon::fromInterface( ) const
+      Nullable<TypeModelItem > _ModelItemChameleon::fromInterface( ) const
         {
           switch  (_M_item->kind())
             {
 
             case _CodeModelItem::Kind_EventDeclaration:
               {
-                return  Nullable<TypeInfo >(model_static_cast<EventDeclarationModelItem>(_M_item)->fromInterface());
+                return  Nullable<TypeModelItem >(model_static_cast<EventDeclarationModelItem>(_M_item)->fromInterface());
               }
 
             case _CodeModelItem::Kind_IndexerDeclaration:
               {
-                return  Nullable<TypeInfo >(model_static_cast<IndexerDeclarationModelItem>(_M_item)->fromInterface());
+                return  Nullable<TypeModelItem >(model_static_cast<IndexerDeclarationModelItem>(_M_item)->fromInterface());
               }
 
             case _CodeModelItem::Kind_PropertyDeclaration:
               {
-                return  Nullable<TypeInfo >(model_static_cast<PropertyDeclarationModelItem>(_M_item)->fromInterface());
+                return  Nullable<TypeModelItem >(model_static_cast<PropertyDeclarationModelItem>(_M_item)->fromInterface());
               }
 
             case _CodeModelItem::Kind_MethodDeclaration:
               {
-                return  Nullable<TypeInfo >(model_static_cast<MethodDeclarationModelItem>(_M_item)->fromInterface());
+                return  Nullable<TypeModelItem >(model_static_cast<MethodDeclarationModelItem>(_M_item)->fromInterface());
               }
 
             default:
               break;
             }
 
-          return  Nullable<TypeInfo>();
+          return  Nullable<TypeModelItem>();
         }
 
-      void _ModelItemChameleon::setFromInterface(TypeInfo fromInterface)
+      void _ModelItemChameleon::setFromInterface(TypeModelItem fromInterface)
       {
         switch  (_M_item->kind())
           {
@@ -5345,24 +5100,24 @@ namespace csharp
       }
 
 
-      Nullable<TypeInfo > _ModelItemChameleon::typeOrParameterName( ) const
+      Nullable<TypeModelItem > _ModelItemChameleon::typeOrParameterName( ) const
         {
           switch  (_M_item->kind())
             {
 
             case _CodeModelItem::Kind_PrimaryOrSecondaryConstraint:
               {
-                return  Nullable<TypeInfo >(model_static_cast<PrimaryOrSecondaryConstraintModelItem>(_M_item)->typeOrParameterName());
+                return  Nullable<TypeModelItem >(model_static_cast<PrimaryOrSecondaryConstraintModelItem>(_M_item)->typeOrParameterName());
               }
 
             default:
               break;
             }
 
-          return  Nullable<TypeInfo>();
+          return  Nullable<TypeModelItem>();
         }
 
-      void _ModelItemChameleon::setTypeOrParameterName(TypeInfo typeOrParameterName)
+      void _ModelItemChameleon::setTypeOrParameterName(TypeModelItem typeOrParameterName)
       {
         switch  (_M_item->kind())
           {
@@ -5417,31 +5172,49 @@ namespace csharp
       }
 
 
-      Nullable<QString > _ModelItemChameleon::target( ) const
+      Nullable<TypeList > _ModelItemChameleon::typeArguments( ) const
         {
           switch  (_M_item->kind())
             {
 
-            case _CodeModelItem::Kind_AttributeSection:
+            case _CodeModelItem::Kind_TypePart:
               {
-                return  Nullable<QString >(model_static_cast<AttributeSectionModelItem>(_M_item)->target());
+                return  Nullable<TypeList >(model_static_cast<TypePartModelItem>(_M_item)->typeArguments());
               }
 
             default:
               break;
             }
 
-          return  Nullable<QString>();
+          return  Nullable<TypeList>();
         }
 
-      void _ModelItemChameleon::setTarget(QString target)
+      void _ModelItemChameleon::addTypeArgument(TypeModelItem item)
       {
         switch  (_M_item->kind())
           {
 
-          case _CodeModelItem::Kind_AttributeSection:
+          case _CodeModelItem::Kind_TypePart:
             {
-              model_static_cast<AttributeSectionModelItem>(_M_item)->setTarget(target);
+              model_static_cast<TypePartModelItem>(_M_item)->addTypeArgument(item);
+              return ;
+            }
+
+          default:
+            break;
+          }
+
+        return ;
+      }
+
+      void _ModelItemChameleon::removeTypeArgument(TypeModelItem item)
+      {
+        switch  (_M_item->kind())
+          {
+
+          case _CodeModelItem::Kind_TypePart:
+            {
+              model_static_cast<TypePartModelItem>(_M_item)->removeTypeArgument(item);
               return ;
             }
 
@@ -5453,14 +5226,14 @@ namespace csharp
       }
 
 
-      Nullable<QString > _ModelItemChameleon::attribute( ) const
+      Nullable<QString > _ModelItemChameleon::qualifiedAliasLabel( ) const
         {
           switch  (_M_item->kind())
             {
 
-            case _CodeModelItem::Kind_AttributeSection:
+            case _CodeModelItem::Kind_Type:
               {
-                return  Nullable<QString >(model_static_cast<AttributeSectionModelItem>(_M_item)->attribute());
+                return  Nullable<QString >(model_static_cast<TypeModelItem>(_M_item)->qualifiedAliasLabel());
               }
 
             default:
@@ -5470,14 +5243,68 @@ namespace csharp
           return  Nullable<QString>();
         }
 
-      void _ModelItemChameleon::setAttribute(QString attribute)
+      void _ModelItemChameleon::setQualifiedAliasLabel(QString qualifiedAliasLabel)
       {
         switch  (_M_item->kind())
           {
 
-          case _CodeModelItem::Kind_AttributeSection:
+          case _CodeModelItem::Kind_Type:
             {
-              model_static_cast<AttributeSectionModelItem>(_M_item)->setAttribute(attribute);
+              model_static_cast<TypeModelItem>(_M_item)->setQualifiedAliasLabel(qualifiedAliasLabel);
+              return ;
+            }
+
+          default:
+            break;
+          }
+
+        return ;
+      }
+
+
+      Nullable<TypePartList > _ModelItemChameleon::typeParts( ) const
+        {
+          switch  (_M_item->kind())
+            {
+
+            case _CodeModelItem::Kind_Type:
+              {
+                return  Nullable<TypePartList >(model_static_cast<TypeModelItem>(_M_item)->typeParts());
+              }
+
+            default:
+              break;
+            }
+
+          return  Nullable<TypePartList>();
+        }
+
+      void _ModelItemChameleon::addTypePart(TypePartModelItem item)
+      {
+        switch  (_M_item->kind())
+          {
+
+          case _CodeModelItem::Kind_Type:
+            {
+              model_static_cast<TypeModelItem>(_M_item)->addTypePart(item);
+              return ;
+            }
+
+          default:
+            break;
+          }
+
+        return ;
+      }
+
+      void _ModelItemChameleon::removeTypePart(TypePartModelItem item)
+      {
+        switch  (_M_item->kind())
+          {
+
+          case _CodeModelItem::Kind_Type:
+            {
+              model_static_cast<TypeModelItem>(_M_item)->removeTypePart(item);
               return ;
             }
 

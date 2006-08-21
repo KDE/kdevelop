@@ -1052,8 +1052,10 @@ namespace csharp
     visit_node(node->type_declaration);
   }
 
-  void default_visitor::visit_namespace_name(namespace_name_ast *)
-  {}
+  void default_visitor::visit_namespace_name(namespace_name_ast *node)
+  {
+    visit_node(node->namespace_name);
+  }
 
   void default_visitor::visit_namespace_or_type_name(namespace_or_type_name_ast *node)
   {
@@ -1514,11 +1516,15 @@ namespace csharp
                                                                         visit_node(node->delegate_declaration);
                                                                       }
 
-                                                                      void default_visitor::visit_type_name(type_name_ast *)
-                                                                      {}
+                                                                      void default_visitor::visit_type_name(type_name_ast *node)
+                                                                      {
+                                                                        visit_node(node->type_name);
+                                                                      }
 
-                                                                      void default_visitor::visit_type_name_safe(type_name_safe_ast *)
-                                                                      {}
+                                                                      void default_visitor::visit_type_name_safe(type_name_safe_ast *node)
+                                                                      {
+                                                                        visit_node(node->type_name);
+                                                                      }
 
                                                                       void default_visitor::visit_type_parameter(type_parameter_ast *node)
                                                                       {

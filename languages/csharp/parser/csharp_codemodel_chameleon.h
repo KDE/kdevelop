@@ -99,12 +99,8 @@ namespace csharp
       void removeDelegate(DelegateDeclarationModelItem item);
       Nullable<DelegateDeclarationModelItem > findDelegate(const QString & name) const;
 
-      Nullable<AttributeSectionList > globalAttributes( ) const;
-      void addGlobalAttribute(AttributeSectionModelItem item);
-      void removeGlobalAttribute(AttributeSectionModelItem item);
-
-      Nullable<TypeInfo > namespaceOrType( ) const;
-      void setNamespaceOrType(TypeInfo namespaceOrType);
+      Nullable<TypeModelItem > namespaceOrType( ) const;
+      void setNamespaceOrType(TypeModelItem namespaceOrType);
 
       Nullable<QStringList > namespaceUsed( ) const;
       void setNamespaceUsed(QStringList namespaceUsed);
@@ -115,8 +111,8 @@ namespace csharp
       Nullable<bool > isNew( ) const;
       void setNew(bool isNew);
 
-      Nullable<TypeInfo > baseType( ) const;
-      void setBaseType(TypeInfo baseType);
+      Nullable<TypeModelItem > baseType( ) const;
+      void setBaseType(TypeModelItem baseType);
 
       Nullable<EventDeclarationList > events( ) const;
       void addEvent(EventDeclarationModelItem item);
@@ -162,12 +158,8 @@ namespace csharp
       Nullable<bool > isStatic( ) const;
       void setStatic(bool isStatic);
 
-      Nullable<AttributeSectionList > attributes( ) const;
-      void addAttribute(AttributeSectionModelItem item);
-      void removeAttribute(AttributeSectionModelItem item);
-
-      Nullable<TypeInfo > returnType( ) const;
-      void setReturnType(TypeInfo returnType);
+      Nullable<TypeModelItem > returnType( ) const;
+      void setReturnType(TypeModelItem returnType);
 
       Nullable<ParameterList > parameters( ) const;
       void addParameter(ParameterModelItem item);
@@ -177,17 +169,17 @@ namespace csharp
       void addEnumValue(EnumValueModelItem item);
       void removeEnumValue(EnumValueModelItem item);
 
-      Nullable<TypeInfo > baseIntegralType( ) const;
-      void setBaseIntegralType(TypeInfo baseIntegralType);
+      Nullable<TypeModelItem > baseIntegralType( ) const;
+      void setBaseIntegralType(TypeModelItem baseIntegralType);
 
       Nullable<QString > value( ) const;
       void setValue(QString value);
 
-      Nullable<TypeInfo > type( ) const;
-      void setType(TypeInfo type);
+      Nullable<TypeModelItem > type( ) const;
+      void setType(TypeModelItem type);
 
-      Nullable<TypeInfo > fromInterface( ) const;
-      void setFromInterface(TypeInfo fromInterface);
+      Nullable<TypeModelItem > fromInterface( ) const;
+      void setFromInterface(TypeModelItem fromInterface);
 
       Nullable<EventAccessorDeclarationModelItem > addAccessor( ) const;
       void setAddAccessor(EventAccessorDeclarationModelItem addAccessor);
@@ -234,17 +226,22 @@ namespace csharp
       Nullable<parameter::parameter_type_enum > parameterType( ) const;
       void setParameterType(parameter::parameter_type_enum parameterType);
 
-      Nullable<TypeInfo > typeOrParameterName( ) const;
-      void setTypeOrParameterName(TypeInfo typeOrParameterName);
+      Nullable<TypeModelItem > typeOrParameterName( ) const;
+      void setTypeOrParameterName(TypeModelItem typeOrParameterName);
 
       Nullable<primary_or_secondary_constraint::primary_or_secondary_constraint_enum > constraint_type( ) const;
       void setConstraint_type(primary_or_secondary_constraint::primary_or_secondary_constraint_enum constraint_type);
 
-      Nullable<QString > target( ) const;
-      void setTarget(QString target);
+      Nullable<TypeList > typeArguments( ) const;
+      void addTypeArgument(TypeModelItem item);
+      void removeTypeArgument(TypeModelItem item);
 
-      Nullable<QString > attribute( ) const;
-      void setAttribute(QString attribute);
+      Nullable<QString > qualifiedAliasLabel( ) const;
+      void setQualifiedAliasLabel(QString qualifiedAliasLabel);
+
+      Nullable<TypePartList > typeParts( ) const;
+      void addTypePart(TypePartModelItem item);
+      void removeTypePart(TypePartModelItem item);
 
     private:
       _ModelItemChameleon(const _ModelItemChameleon &other);
@@ -389,7 +386,12 @@ namespace csharp
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
-      ModelItemChameleon(AttributeSectionModelItem item)
+      ModelItemChameleon(TypePartModelItem item)
+          :  KDevSharedPtr<_ModelItemChameleon>(
+            new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
+      {}
+
+      ModelItemChameleon(TypeModelItem item)
           :  KDevSharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}

@@ -53,34 +53,6 @@ namespace csharp
 #undef BASECLASS
 
   // ---------------------------------------------------------------------------
-#define CLASS TypeInfo
-#define BASECLASS has_no_base_class!
-
-  QStringList TypeInfo::qualifiedName() const
-    {
-      return  _M_qualifiedName;
-    }
-
-  void TypeInfo::setQualifiedName(QStringList qualifiedName)
-  {
-    _M_qualifiedName =  qualifiedName;
-  }
-
-
-  QString CLASS::toString() const
-    {
-      return  qualifiedName().join(".");
-    }
-
-  bool CLASS::operator==(const CLASS &other)
-  {
-    return  qualifiedName() ==  other.qualifiedName();
-  }
-
-#undef CLASS
-#undef BASECLASS
-
-  // ---------------------------------------------------------------------------
 #define CLASS _CodeModelItem
 #define BASECLASS KDevCodeItem
 
@@ -486,7 +458,7 @@ namespace csharp
   _GlobalNamespaceDeclarationModelItem::_GlobalNamespaceDeclarationModelItem(CodeModel *model,  int kind)
       :  _NamespaceDeclarationModelItem(model,  kind)
   {
-    setName(QString::null);
+    setName( QString::null );
   }
 
   _GlobalNamespaceDeclarationModelItem::~_GlobalNamespaceDeclarationModelItem()
@@ -496,25 +468,6 @@ namespace csharp
   {
     GlobalNamespaceDeclarationModelItem item(new _GlobalNamespaceDeclarationModelItem(model));
     return  item;
-  }
-
-  AttributeSectionList _GlobalNamespaceDeclarationModelItem::globalAttributes() const
-    {
-      return  _M_globalAttributes;
-    }
-
-  void _GlobalNamespaceDeclarationModelItem::addGlobalAttribute(AttributeSectionModelItem item)
-  {
-    model()->beginAppendItem(item,  this);
-    _M_globalAttributes.append(item);
-    model()->endAppendItem();
-  }
-
-  void _GlobalNamespaceDeclarationModelItem::removeGlobalAttribute(AttributeSectionModelItem item)
-  {
-    model()->beginRemoveItem(item);
-    _M_globalAttributes.removeAt(_M_globalAttributes.indexOf(item));
-    model()->endRemoveItem();
   }
 
 #undef CLASS
@@ -557,12 +510,12 @@ namespace csharp
     return  item;
   }
 
-  TypeInfo _UsingAliasDirectiveModelItem::namespaceOrType() const
+  TypeModelItem _UsingAliasDirectiveModelItem::namespaceOrType() const
     {
       return  _M_namespaceOrType;
     }
 
-  void _UsingAliasDirectiveModelItem::setNamespaceOrType(TypeInfo namespaceOrType)
+  void _UsingAliasDirectiveModelItem::setNamespaceOrType(TypeModelItem namespaceOrType)
   {
     _M_namespaceOrType =  namespaceOrType;
   }
@@ -577,7 +530,7 @@ namespace csharp
   _UsingNamespaceDirectiveModelItem::_UsingNamespaceDirectiveModelItem(CodeModel *model,  int kind)
       :  _CodeModelItem(model,  kind)
   {
-    setName(QString::null);
+    setName( QString::null );
   }
 
   _UsingNamespaceDirectiveModelItem::~_UsingNamespaceDirectiveModelItem()
@@ -662,12 +615,12 @@ namespace csharp
     return  item;
   }
 
-  TypeInfo _ClassLikeDeclarationModelItem::baseType() const
+  TypeModelItem _ClassLikeDeclarationModelItem::baseType() const
     {
       return  _M_baseType;
     }
 
-  void _ClassLikeDeclarationModelItem::setBaseType(TypeInfo baseType)
+  void _ClassLikeDeclarationModelItem::setBaseType(TypeModelItem baseType)
   {
     _M_baseType =  baseType;
   }
@@ -1121,31 +1074,12 @@ namespace csharp
     return  item;
   }
 
-  AttributeSectionList _DelegateDeclarationModelItem::attributes() const
-    {
-      return  _M_attributes;
-    }
-
-  void _DelegateDeclarationModelItem::addAttribute(AttributeSectionModelItem item)
-  {
-    model()->beginAppendItem(item,  this);
-    _M_attributes.append(item);
-    model()->endAppendItem();
-  }
-
-  void _DelegateDeclarationModelItem::removeAttribute(AttributeSectionModelItem item)
-  {
-    model()->beginRemoveItem(item);
-    _M_attributes.removeAt(_M_attributes.indexOf(item));
-    model()->endRemoveItem();
-  }
-
-  TypeInfo _DelegateDeclarationModelItem::returnType() const
+  TypeModelItem _DelegateDeclarationModelItem::returnType() const
         {
           return  _M_returnType;
         }
 
-      void _DelegateDeclarationModelItem::setReturnType(TypeInfo returnType)
+      void _DelegateDeclarationModelItem::setReturnType(TypeModelItem returnType)
       {
         _M_returnType =  returnType;
       }
@@ -1256,12 +1190,12 @@ namespace csharp
         model()->endRemoveItem();
       }
 
-      TypeInfo _EnumDeclarationModelItem::baseIntegralType() const
+      TypeModelItem _EnumDeclarationModelItem::baseIntegralType() const
         {
           return  _M_baseIntegralType;
         }
 
-      void _EnumDeclarationModelItem::setBaseIntegralType(TypeInfo baseIntegralType)
+      void _EnumDeclarationModelItem::setBaseIntegralType(TypeModelItem baseIntegralType)
       {
         _M_baseIntegralType =  baseIntegralType;
       }
@@ -1284,25 +1218,6 @@ namespace csharp
       {
         EnumValueModelItem item(new _EnumValueModelItem(model));
         return  item;
-      }
-
-      AttributeSectionList _EnumValueModelItem::attributes() const
-        {
-          return  _M_attributes;
-        }
-
-      void _EnumValueModelItem::addAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginAppendItem(item,  this);
-        _M_attributes.append(item);
-        model()->endAppendItem();
-      }
-
-      void _EnumValueModelItem::removeAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginRemoveItem(item);
-        _M_attributes.removeAt(_M_attributes.indexOf(item));
-        model()->endRemoveItem();
       }
 
       QString _EnumValueModelItem::value() const
@@ -1344,41 +1259,22 @@ namespace csharp
         return  item;
       }
 
-      AttributeSectionList _EventDeclarationModelItem::attributes() const
-        {
-          return  _M_attributes;
-        }
-
-      void _EventDeclarationModelItem::addAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginAppendItem(item,  this);
-        _M_attributes.append(item);
-        model()->endAppendItem();
-      }
-
-      void _EventDeclarationModelItem::removeAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginRemoveItem(item);
-        _M_attributes.removeAt(_M_attributes.indexOf(item));
-        model()->endRemoveItem();
-      }
-
-      TypeInfo _EventDeclarationModelItem::type() const
+      TypeModelItem _EventDeclarationModelItem::type() const
         {
           return  _M_type;
         }
 
-      void _EventDeclarationModelItem::setType(TypeInfo type)
+      void _EventDeclarationModelItem::setType(TypeModelItem type)
       {
         _M_type =  type;
       }
 
-      TypeInfo _EventDeclarationModelItem::fromInterface() const
+      TypeModelItem _EventDeclarationModelItem::fromInterface() const
         {
           return  _M_fromInterface;
         }
 
-      void _EventDeclarationModelItem::setFromInterface(TypeInfo fromInterface)
+      void _EventDeclarationModelItem::setFromInterface(TypeModelItem fromInterface)
       {
         _M_fromInterface =  fromInterface;
       }
@@ -1513,25 +1409,6 @@ namespace csharp
         return  item;
       }
 
-      AttributeSectionList _EventAccessorDeclarationModelItem::attributes() const
-        {
-          return  _M_attributes;
-        }
-
-      void _EventAccessorDeclarationModelItem::addAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginAppendItem(item,  this);
-        _M_attributes.append(item);
-        model()->endAppendItem();
-      }
-
-      void _EventAccessorDeclarationModelItem::removeAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginRemoveItem(item);
-        _M_attributes.removeAt(_M_attributes.indexOf(item));
-        model()->endRemoveItem();
-      }
-
 #undef CLASS
 #undef BASECLASS
 
@@ -1550,7 +1427,7 @@ namespace csharp
           ,  _M_isExtern( false )
           ,  _M_isUnsafe( false )
       {
-        setName(QString::null);
+        setName( QString::null );
       }
 
       _IndexerDeclarationModelItem::~_IndexerDeclarationModelItem()
@@ -1562,41 +1439,22 @@ namespace csharp
         return  item;
       }
 
-      AttributeSectionList _IndexerDeclarationModelItem::attributes() const
-        {
-          return  _M_attributes;
-        }
-
-      void _IndexerDeclarationModelItem::addAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginAppendItem(item,  this);
-        _M_attributes.append(item);
-        model()->endAppendItem();
-      }
-
-      void _IndexerDeclarationModelItem::removeAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginRemoveItem(item);
-        _M_attributes.removeAt(_M_attributes.indexOf(item));
-        model()->endRemoveItem();
-      }
-
-      TypeInfo _IndexerDeclarationModelItem::type() const
+      TypeModelItem _IndexerDeclarationModelItem::type() const
         {
           return  _M_type;
         }
 
-      void _IndexerDeclarationModelItem::setType(TypeInfo type)
+      void _IndexerDeclarationModelItem::setType(TypeModelItem type)
       {
         _M_type =  type;
       }
 
-      TypeInfo _IndexerDeclarationModelItem::fromInterface() const
+      TypeModelItem _IndexerDeclarationModelItem::fromInterface() const
         {
           return  _M_fromInterface;
         }
 
-      void _IndexerDeclarationModelItem::setFromInterface(TypeInfo fromInterface)
+      void _IndexerDeclarationModelItem::setFromInterface(TypeModelItem fromInterface)
       {
         _M_fromInterface =  fromInterface;
       }
@@ -1748,41 +1606,22 @@ namespace csharp
         return  item;
       }
 
-      AttributeSectionList _PropertyDeclarationModelItem::attributes() const
-        {
-          return  _M_attributes;
-        }
-
-      void _PropertyDeclarationModelItem::addAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginAppendItem(item,  this);
-        _M_attributes.append(item);
-        model()->endAppendItem();
-      }
-
-      void _PropertyDeclarationModelItem::removeAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginRemoveItem(item);
-        _M_attributes.removeAt(_M_attributes.indexOf(item));
-        model()->endRemoveItem();
-      }
-
-      TypeInfo _PropertyDeclarationModelItem::type() const
+      TypeModelItem _PropertyDeclarationModelItem::type() const
         {
           return  _M_type;
         }
 
-      void _PropertyDeclarationModelItem::setType(TypeInfo type)
+      void _PropertyDeclarationModelItem::setType(TypeModelItem type)
       {
         _M_type =  type;
       }
 
-      TypeInfo _PropertyDeclarationModelItem::fromInterface() const
+      TypeModelItem _PropertyDeclarationModelItem::fromInterface() const
         {
           return  _M_fromInterface;
         }
 
-      void _PropertyDeclarationModelItem::setFromInterface(TypeInfo fromInterface)
+      void _PropertyDeclarationModelItem::setFromInterface(TypeModelItem fromInterface)
       {
         _M_fromInterface =  fromInterface;
       }
@@ -1918,25 +1757,6 @@ namespace csharp
         return  item;
       }
 
-      AttributeSectionList _AccessorDeclarationModelItem::attributes() const
-        {
-          return  _M_attributes;
-        }
-
-      void _AccessorDeclarationModelItem::addAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginAppendItem(item,  this);
-        _M_attributes.append(item);
-        model()->endAppendItem();
-      }
-
-      void _AccessorDeclarationModelItem::removeAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginRemoveItem(item);
-        _M_attributes.removeAt(_M_attributes.indexOf(item));
-        model()->endRemoveItem();
-      }
-
       accessor_declarations::accessor_type_enum _AccessorDeclarationModelItem::type() const
         {
           return  _M_type;
@@ -1998,41 +1818,22 @@ namespace csharp
         return  item;
       }
 
-      AttributeSectionList _MethodDeclarationModelItem::attributes() const
-        {
-          return  _M_attributes;
-        }
-
-      void _MethodDeclarationModelItem::addAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginAppendItem(item,  this);
-        _M_attributes.append(item);
-        model()->endAppendItem();
-      }
-
-      void _MethodDeclarationModelItem::removeAttribute(AttributeSectionModelItem item)
-      {
-        model()->beginRemoveItem(item);
-        _M_attributes.removeAt(_M_attributes.indexOf(item));
-        model()->endRemoveItem();
-      }
-
-      TypeInfo _MethodDeclarationModelItem::returnType() const
+      TypeModelItem _MethodDeclarationModelItem::returnType() const
             {
               return  _M_returnType;
             }
 
-          void _MethodDeclarationModelItem::setReturnType(TypeInfo returnType)
+          void _MethodDeclarationModelItem::setReturnType(TypeModelItem returnType)
           {
             _M_returnType =  returnType;
           }
 
-          TypeInfo _MethodDeclarationModelItem::fromInterface() const
+          TypeModelItem _MethodDeclarationModelItem::fromInterface() const
             {
               return  _M_fromInterface;
             }
 
-          void _MethodDeclarationModelItem::setFromInterface(TypeInfo fromInterface)
+          void _MethodDeclarationModelItem::setFromInterface(TypeModelItem fromInterface)
           {
             _M_fromInterface =  fromInterface;
           }
@@ -2231,31 +2032,12 @@ namespace csharp
             return  item;
           }
 
-          AttributeSectionList _VariableDeclarationModelItem::attributes() const
-            {
-              return  _M_attributes;
-            }
-
-          void _VariableDeclarationModelItem::addAttribute(AttributeSectionModelItem item)
-          {
-            model()->beginAppendItem(item,  this);
-            _M_attributes.append(item);
-            model()->endAppendItem();
-          }
-
-          void _VariableDeclarationModelItem::removeAttribute(AttributeSectionModelItem item)
-          {
-            model()->beginRemoveItem(item);
-            _M_attributes.removeAt(_M_attributes.indexOf(item));
-            model()->endRemoveItem();
-          }
-
-          TypeInfo _VariableDeclarationModelItem::type() const
+          TypeModelItem _VariableDeclarationModelItem::type() const
             {
               return  _M_type;
             }
 
-          void _VariableDeclarationModelItem::setType(TypeInfo type)
+          void _VariableDeclarationModelItem::setType(TypeModelItem type)
           {
             _M_type =  type;
           }
@@ -2352,31 +2134,12 @@ namespace csharp
             return  item;
           }
 
-          AttributeSectionList _ParameterModelItem::attributes() const
-            {
-              return  _M_attributes;
-            }
-
-          void _ParameterModelItem::addAttribute(AttributeSectionModelItem item)
-          {
-            model()->beginAppendItem(item,  this);
-            _M_attributes.append(item);
-            model()->endAppendItem();
-          }
-
-          void _ParameterModelItem::removeAttribute(AttributeSectionModelItem item)
-          {
-            model()->beginRemoveItem(item);
-            _M_attributes.removeAt(_M_attributes.indexOf(item));
-            model()->endRemoveItem();
-          }
-
-          TypeInfo _ParameterModelItem::type() const
+          TypeModelItem _ParameterModelItem::type() const
             {
               return  _M_type;
             }
 
-          void _ParameterModelItem::setType(TypeInfo type)
+          void _ParameterModelItem::setType(TypeModelItem type)
           {
             _M_type =  type;
           }
@@ -2421,25 +2184,6 @@ namespace csharp
             return  item;
           }
 
-          AttributeSectionList _TypeParameterModelItem::attributes() const
-            {
-              return  _M_attributes;
-            }
-
-          void _TypeParameterModelItem::addAttribute(AttributeSectionModelItem item)
-          {
-            model()->beginAppendItem(item,  this);
-            _M_attributes.append(item);
-            model()->endAppendItem();
-          }
-
-          void _TypeParameterModelItem::removeAttribute(AttributeSectionModelItem item)
-          {
-            model()->beginRemoveItem(item);
-            _M_attributes.removeAt(_M_attributes.indexOf(item));
-            model()->endRemoveItem();
-          }
-
 #undef CLASS
 #undef BASECLASS
 
@@ -2481,12 +2225,12 @@ namespace csharp
             return  item;
           }
 
-          TypeInfo _PrimaryOrSecondaryConstraintModelItem::typeOrParameterName() const
+          TypeModelItem _PrimaryOrSecondaryConstraintModelItem::typeOrParameterName() const
             {
               return  _M_typeOrParameterName;
             }
 
-          void _PrimaryOrSecondaryConstraintModelItem::setTypeOrParameterName(TypeInfo typeOrParameterName)
+          void _PrimaryOrSecondaryConstraintModelItem::setTypeOrParameterName(TypeModelItem typeOrParameterName)
           {
             _M_typeOrParameterName =  typeOrParameterName;
           }
@@ -2525,42 +2269,176 @@ namespace csharp
 #undef BASECLASS
 
           // ---------------------------------------------------------------------------
-#define CLASS _AttributeSectionModelItem
+#define CLASS _TypePartModelItem
 #define BASECLASS _CodeModelItem
 
-          _AttributeSectionModelItem::_AttributeSectionModelItem(CodeModel *model,  int kind)
+          _TypePartModelItem::_TypePartModelItem(CodeModel *model,  int kind)
               :  _CodeModelItem(model,  kind)
-          {
-            setName(QString::null);
-          }
-
-          _AttributeSectionModelItem::~_AttributeSectionModelItem()
           {}
 
-          AttributeSectionModelItem _AttributeSectionModelItem::create(CodeModel *model)
+          _TypePartModelItem::~_TypePartModelItem()
+          {}
+
+          TypePartModelItem _TypePartModelItem::create(CodeModel *model)
           {
-            AttributeSectionModelItem item(new _AttributeSectionModelItem(model));
+            TypePartModelItem item(new _TypePartModelItem(model));
             return  item;
           }
 
-          QString _AttributeSectionModelItem::target() const
+          TypeList _TypePartModelItem::typeArguments() const
             {
-              return  _M_target;
+              return  _M_typeArguments;
             }
 
-          void _AttributeSectionModelItem::setTarget(QString target)
+          void _TypePartModelItem::addTypeArgument(TypeModelItem item)
           {
-            _M_target =  target;
+            model()->beginAppendItem(item,  this);
+            _M_typeArguments.append(item);
+            model()->endAppendItem();
           }
 
-          QString _AttributeSectionModelItem::attribute() const
+          void _TypePartModelItem::removeTypeArgument(TypeModelItem item)
+          {
+            model()->beginRemoveItem(item);
+            _M_typeArguments.removeAt(_M_typeArguments.indexOf(item));
+            model()->endRemoveItem();
+          }
+
+          QString CLASS::toString() const
             {
-              return  _M_attribute;
+              //QString typeString = typeDeclaration()->name();
+              QString typeString =  name();
+
+              if  ( !typeArguments().empty() )
+                {
+                  typeString +=  "<";
+                  bool initial =  true;
+
+                  foreach ( ITEM(Type) argument,  typeArguments() )
+                  {
+                    if  ( !initial )
+                      typeString +=  ", ";
+
+                    typeString +=  argument->toString();
+                    initial =  false;
+                  }
+
+                  typeString +=  ">";
+                }
+
+              return  typeString;
             }
 
-          void _AttributeSectionModelItem::setAttribute(QString attribute)
+          bool CLASS::operator==(const CLASS &other)
           {
-            _M_attribute =  attribute;
+            //if ( typeDeclaration() != other.typeDeclaration() ) // not yet possible
+
+            if  ( name() !=  other.name() )
+              return  false;
+
+            if  ( typeArguments().count() !=  other.typeArguments().count() )
+              return  false;
+
+            LIST(Type)::const_iterator argument =  typeArguments().begin();
+            LIST(Type)::const_iterator otherArgument =  other.typeArguments().begin();
+
+            for  ( ; argument ==  typeArguments().end(); argument++,  otherArgument++ )
+              {
+                if  ( *argument !=  *otherArgument )
+                  return  false;
+              }
+
+            return  true;
+          }
+
+#undef CLASS
+#undef BASECLASS
+
+          // ---------------------------------------------------------------------------
+#define CLASS _TypeModelItem
+#define BASECLASS _CodeModelItem
+
+          _TypeModelItem::_TypeModelItem(CodeModel *model,  int kind)
+              :  _CodeModelItem(model,  kind)
+          {
+
+            setName( QString::null );
+            setQualifiedAliasLabel( QString::null );
+          }
+
+          _TypeModelItem::~_TypeModelItem()
+          {}
+
+          TypeModelItem _TypeModelItem::create(CodeModel *model)
+          {
+            TypeModelItem item(new _TypeModelItem(model));
+            return  item;
+          }
+
+          QString _TypeModelItem::qualifiedAliasLabel() const
+            {
+              return  _M_qualifiedAliasLabel;
+            }
+
+          void _TypeModelItem::setQualifiedAliasLabel(QString qualifiedAliasLabel)
+          {
+            _M_qualifiedAliasLabel =  qualifiedAliasLabel;
+          }
+
+          TypePartList _TypeModelItem::typeParts() const
+            {
+              return  _M_typeParts;
+            }
+
+          void _TypeModelItem::addTypePart(TypePartModelItem item)
+          {
+            model()->beginAppendItem(item,  this);
+            _M_typeParts.append(item);
+            model()->endAppendItem();
+          }
+
+          void _TypeModelItem::removeTypePart(TypePartModelItem item)
+          {
+            model()->beginRemoveItem(item);
+            _M_typeParts.removeAt(_M_typeParts.indexOf(item));
+            model()->endRemoveItem();
+          }
+
+          QString CLASS::toString() const
+            {
+              QString typeString;
+              bool initial =  true;
+
+              if  ( !qualifiedAliasLabel().isNull() )
+                typeString =  qualifiedAliasLabel() +  "::";
+
+              foreach ( ITEM(TypePart) part,  typeParts() )
+              {
+                if  ( !initial )
+                  typeString +=  ".";
+
+                typeString +=  part->toString();
+                initial =  false;
+              }
+
+              return  typeString;
+            }
+
+          bool CLASS::operator==(const CLASS &other)
+          {
+            if  ( typeParts().count() !=  other.typeParts().count() )
+              return  false;
+
+            LIST(TypePart)::const_iterator part =  typeParts().begin();
+            LIST(TypePart)::const_iterator otherPart =  other.typeParts().begin();
+
+            for  ( ; part ==  typeParts().end(); part++,  otherPart++ )
+              {
+                if  ( *part !=  *otherPart )
+                  return  false;
+              }
+
+            return  true;
           }
 
 #undef CLASS

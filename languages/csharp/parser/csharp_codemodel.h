@@ -74,28 +74,6 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void operator=(const CodeModel &other);
     };
 
-  class TypeInfo
-    {
-
-    public:
-      bool operator==(const TypeInfo &other);
-      bool operator!=(const TypeInfo &other)
-      {
-        return  !(*this == other);
-      }
-
-      // ### arrays and templates??
-
-      QString toString() const;
-
-    public:
-      QStringList qualifiedName() const;
-      void setQualifiedName(QStringList qualifiedName);
-
-    private:
-      QStringList _M_qualifiedName;
-    };
-
   class _CodeModelItem :  public KDevCodeItem
     {
 
@@ -133,7 +111,8 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
         Kind_TypeParameter =  1 << 24,
         Kind_PrimaryOrSecondaryConstraint =  1 << 25 /*| Kind_TypeParameterConstraint*/,
         Kind_ConstructorConstraint =  1 << 26 /*| Kind_TypeParameterConstraint*/,
-        Kind_AttributeSection =  1 << 27,
+        Kind_TypePart =  1 << 27,
+        Kind_Type =  1 << 28,
       };
 
     public:
@@ -355,12 +334,8 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_GlobalNamespaceDeclarationModelItem();
 
     public:
-      AttributeSectionList globalAttributes() const;
-      void addGlobalAttribute(AttributeSectionModelItem item);
-      void removeGlobalAttribute(AttributeSectionModelItem item);
 
     private:
-      AttributeSectionList _M_globalAttributes;
 
     protected:
       _GlobalNamespaceDeclarationModelItem(CodeModel *model,  int kind =  __node_kind);
@@ -401,11 +376,11 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_UsingAliasDirectiveModelItem();
 
     public:
-      TypeInfo namespaceOrType() const;
-      void setNamespaceOrType(TypeInfo namespaceOrType);
+      TypeModelItem namespaceOrType() const;
+      void setNamespaceOrType(TypeModelItem namespaceOrType);
 
     private:
-      TypeInfo _M_namespaceOrType;
+      TypeModelItem _M_namespaceOrType;
 
     protected:
       _UsingAliasDirectiveModelItem(CodeModel *model,  int kind =  __node_kind);
@@ -480,8 +455,8 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       ITEM(MethodDeclaration) declaredMethod(ITEM(MethodDeclaration) item);
 
     public:
-      TypeInfo baseType() const;
-      void setBaseType(TypeInfo baseType);
+      TypeModelItem baseType() const;
+      void setBaseType(TypeModelItem baseType);
 
       EventDeclarationList events() const;
       void addEvent(EventDeclarationModelItem item);
@@ -589,7 +564,7 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
         }
 
     private:
-      TypeInfo _M_baseType;
+      TypeModelItem _M_baseType;
       QHash<QString,  EventDeclarationModelItem> _M_events;
       IndexerDeclarationList _M_indexers;
       QHash<QString,  PropertyDeclarationModelItem> _M_propertys;
@@ -696,12 +671,8 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_DelegateDeclarationModelItem();
 
     public:
-      AttributeSectionList attributes() const;
-      void addAttribute(AttributeSectionModelItem item);
-      void removeAttribute(AttributeSectionModelItem item);
-
-      TypeInfo returnType() const;
-      void setReturnType(TypeInfo returnType);
+      TypeModelItem returnType() const;
+      void setReturnType(TypeModelItem returnType);
 
       ParameterList parameters() const;
       void addParameter(ParameterModelItem item);
@@ -719,8 +690,7 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void setUnsafe(bool isUnsafe);
 
     private:
-      AttributeSectionList _M_attributes;
-      TypeInfo _M_returnType;
+      TypeModelItem _M_returnType;
       ParameterList _M_parameters;
       TypeParameterList _M_typeParameters;
       TypeParameterConstraintList _M_typeParameterConstraints;
@@ -748,12 +718,12 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void addEnumValue(EnumValueModelItem item);
       void removeEnumValue(EnumValueModelItem item);
 
-      TypeInfo baseIntegralType() const;
-      void setBaseIntegralType(TypeInfo baseIntegralType);
+      TypeModelItem baseIntegralType() const;
+      void setBaseIntegralType(TypeModelItem baseIntegralType);
 
     private:
       EnumValueList _M_enumValues;
-      TypeInfo _M_baseIntegralType;
+      TypeModelItem _M_baseIntegralType;
 
     protected:
       _EnumDeclarationModelItem(CodeModel *model,  int kind =  __node_kind);
@@ -773,15 +743,10 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_EnumValueModelItem();
 
     public:
-      AttributeSectionList attributes() const;
-      void addAttribute(AttributeSectionModelItem item);
-      void removeAttribute(AttributeSectionModelItem item);
-
       QString value() const;
       void setValue(QString value);
 
     private:
-      AttributeSectionList _M_attributes;
       QString _M_value;
 
     protected:
@@ -802,15 +767,11 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_EventDeclarationModelItem();
 
     public:
-      AttributeSectionList attributes() const;
-      void addAttribute(AttributeSectionModelItem item);
-      void removeAttribute(AttributeSectionModelItem item);
+      TypeModelItem type() const;
+      void setType(TypeModelItem type);
 
-      TypeInfo type() const;
-      void setType(TypeInfo type);
-
-      TypeInfo fromInterface() const;
-      void setFromInterface(TypeInfo fromInterface);
+      TypeModelItem fromInterface() const;
+      void setFromInterface(TypeModelItem fromInterface);
 
       EventAccessorDeclarationModelItem addAccessor() const;
       void setAddAccessor(EventAccessorDeclarationModelItem addAccessor);
@@ -846,9 +807,8 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void setUnsafe(bool isUnsafe);
 
     private:
-      AttributeSectionList _M_attributes;
-      TypeInfo _M_type;
-      TypeInfo _M_fromInterface;
+      TypeModelItem _M_type;
+      TypeModelItem _M_fromInterface;
       EventAccessorDeclarationModelItem _M_addAccessor;
       EventAccessorDeclarationModelItem _M_removeAccessor;
       access_policy::access_policy_enum _M_accessPolicy;
@@ -879,12 +839,8 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_EventAccessorDeclarationModelItem();
 
     public:
-      AttributeSectionList attributes() const;
-      void addAttribute(AttributeSectionModelItem item);
-      void removeAttribute(AttributeSectionModelItem item);
 
     private:
-      AttributeSectionList _M_attributes;
 
     protected:
       _EventAccessorDeclarationModelItem(CodeModel *model,  int kind =  __node_kind);
@@ -904,15 +860,11 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_IndexerDeclarationModelItem();
 
     public:
-      AttributeSectionList attributes() const;
-      void addAttribute(AttributeSectionModelItem item);
-      void removeAttribute(AttributeSectionModelItem item);
+      TypeModelItem type() const;
+      void setType(TypeModelItem type);
 
-      TypeInfo type() const;
-      void setType(TypeInfo type);
-
-      TypeInfo fromInterface() const;
-      void setFromInterface(TypeInfo fromInterface);
+      TypeModelItem fromInterface() const;
+      void setFromInterface(TypeModelItem fromInterface);
 
       ParameterList parameters() const;
       void addParameter(ParameterModelItem item);
@@ -947,9 +899,8 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void setUnsafe(bool isUnsafe);
 
     private:
-      AttributeSectionList _M_attributes;
-      TypeInfo _M_type;
-      TypeInfo _M_fromInterface;
+      TypeModelItem _M_type;
+      TypeModelItem _M_fromInterface;
       ParameterList _M_parameters;
       AccessorDeclarationList _M_accessors;
       access_policy::access_policy_enum _M_accessPolicy;
@@ -979,15 +930,11 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_PropertyDeclarationModelItem();
 
     public:
-      AttributeSectionList attributes() const;
-      void addAttribute(AttributeSectionModelItem item);
-      void removeAttribute(AttributeSectionModelItem item);
+      TypeModelItem type() const;
+      void setType(TypeModelItem type);
 
-      TypeInfo type() const;
-      void setType(TypeInfo type);
-
-      TypeInfo fromInterface() const;
-      void setFromInterface(TypeInfo fromInterface);
+      TypeModelItem fromInterface() const;
+      void setFromInterface(TypeModelItem fromInterface);
 
       AccessorDeclarationList accessors() const;
       void addAccessor(AccessorDeclarationModelItem item);
@@ -1021,9 +968,8 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void setUnsafe(bool isUnsafe);
 
     private:
-      AttributeSectionList _M_attributes;
-      TypeInfo _M_type;
-      TypeInfo _M_fromInterface;
+      TypeModelItem _M_type;
+      TypeModelItem _M_fromInterface;
       AccessorDeclarationList _M_accessors;
       access_policy::access_policy_enum _M_accessPolicy;
       bool _M_isNew;
@@ -1053,10 +999,6 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_AccessorDeclarationModelItem();
 
     public:
-      AttributeSectionList attributes() const;
-      void addAttribute(AttributeSectionModelItem item);
-      void removeAttribute(AttributeSectionModelItem item);
-
       accessor_declarations::accessor_type_enum type() const;
       void setType(accessor_declarations::accessor_type_enum type);
 
@@ -1067,7 +1009,6 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void setHasAccessPolicy(bool hasAccessPolicy);
 
     private:
-      AttributeSectionList _M_attributes;
       accessor_declarations::accessor_type_enum _M_type;
       access_policy::access_policy_enum _M_accessPolicy;
       bool _M_hasAccessPolicy;
@@ -1090,15 +1031,11 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_MethodDeclarationModelItem();
 
     public:
-      AttributeSectionList attributes() const;
-      void addAttribute(AttributeSectionModelItem item);
-      void removeAttribute(AttributeSectionModelItem item);
+      TypeModelItem returnType() const;
+      void setReturnType(TypeModelItem returnType);
 
-      TypeInfo returnType() const;
-      void setReturnType(TypeInfo returnType);
-
-      TypeInfo fromInterface() const;
-      void setFromInterface(TypeInfo fromInterface);
+      TypeModelItem fromInterface() const;
+      void setFromInterface(TypeModelItem fromInterface);
 
       TypeParameterList typeParameters() const;
       void addTypeParameter(TypeParameterModelItem item);
@@ -1146,9 +1083,8 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void setUnsafe(bool isUnsafe);
 
     private:
-      AttributeSectionList _M_attributes;
-      TypeInfo _M_returnType;
-      TypeInfo _M_fromInterface;
+      TypeModelItem _M_returnType;
+      TypeModelItem _M_fromInterface;
       TypeParameterList _M_typeParameters;
       TypeParameterConstraintList _M_typeParameterConstraints;
       ParameterList _M_parameters;
@@ -1182,12 +1118,8 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_VariableDeclarationModelItem();
 
     public:
-      AttributeSectionList attributes() const;
-      void addAttribute(AttributeSectionModelItem item);
-      void removeAttribute(AttributeSectionModelItem item);
-
-      TypeInfo type() const;
-      void setType(TypeInfo type);
+      TypeModelItem type() const;
+      void setType(TypeModelItem type);
 
       access_policy::access_policy_enum accessPolicy() const;
       void setAccessPolicy(access_policy::access_policy_enum accessPolicy);
@@ -1211,8 +1143,7 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void setUnsafe(bool isUnsafe);
 
     private:
-      AttributeSectionList _M_attributes;
-      TypeInfo _M_type;
+      TypeModelItem _M_type;
       access_policy::access_policy_enum _M_accessPolicy;
       bool _M_isConstant;
       bool _M_isNew;
@@ -1239,12 +1170,8 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_ParameterModelItem();
 
     public:
-      AttributeSectionList attributes() const;
-      void addAttribute(AttributeSectionModelItem item);
-      void removeAttribute(AttributeSectionModelItem item);
-
-      TypeInfo type() const;
-      void setType(TypeInfo type);
+      TypeModelItem type() const;
+      void setType(TypeModelItem type);
 
       bool isArray() const;
       void setArray(bool isArray);
@@ -1253,8 +1180,7 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void setParameterType(parameter::parameter_type_enum parameterType);
 
     private:
-      AttributeSectionList _M_attributes;
-      TypeInfo _M_type;
+      TypeModelItem _M_type;
       bool _M_isArray;
       parameter::parameter_type_enum _M_parameterType;
 
@@ -1276,12 +1202,8 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_TypeParameterModelItem();
 
     public:
-      AttributeSectionList attributes() const;
-      void addAttribute(AttributeSectionModelItem item);
-      void removeAttribute(AttributeSectionModelItem item);
 
     private:
-      AttributeSectionList _M_attributes;
 
     protected:
       _TypeParameterModelItem(CodeModel *model,  int kind =  __node_kind);
@@ -1322,14 +1244,14 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       virtual ~_PrimaryOrSecondaryConstraintModelItem();
 
     public:
-      TypeInfo typeOrParameterName() const;
-      void setTypeOrParameterName(TypeInfo typeOrParameterName);
+      TypeModelItem typeOrParameterName() const;
+      void setTypeOrParameterName(TypeModelItem typeOrParameterName);
 
       primary_or_secondary_constraint::primary_or_secondary_constraint_enum constraint_type() const;
       void setConstraint_type(primary_or_secondary_constraint::primary_or_secondary_constraint_enum constraint_type);
 
     private:
-      TypeInfo _M_typeOrParameterName;
+      TypeModelItem _M_typeOrParameterName;
       primary_or_secondary_constraint::primary_or_secondary_constraint_enum _M_constraint_type;
 
     protected:
@@ -1361,32 +1283,76 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void operator=(const _ConstructorConstraintModelItem &other);
     };
 
-  class _AttributeSectionModelItem :  public _CodeModelItem
+  class _TypePartModelItem :  public _CodeModelItem
     {
 
     public:
-      DECLARE_MODEL_NODE(AttributeSection)
+      DECLARE_MODEL_NODE(TypePart)
 
-      static AttributeSectionModelItem create(CodeModel *model);
-      virtual ~_AttributeSectionModelItem();
+      static TypePartModelItem create(CodeModel *model);
+      virtual ~_TypePartModelItem();
 
     public:
-      QString target() const;
-      void setTarget(QString target);
+      bool operator==( const _TypePartModelItem &other );
+      bool operator!=( const _TypePartModelItem &other )
+      {
+        return  !(*this ==  other);
+      }
 
-      QString attribute() const;
-      void setAttribute(QString attribute);
+      QString toString() const;
+
+    public:
+      TypeList typeArguments() const;
+      void addTypeArgument(TypeModelItem item);
+      void removeTypeArgument(TypeModelItem item);
 
     private:
-      QString _M_target;
-      QString _M_attribute;
+      TypeList _M_typeArguments;
 
     protected:
-      _AttributeSectionModelItem(CodeModel *model,  int kind =  __node_kind);
+      _TypePartModelItem(CodeModel *model,  int kind =  __node_kind);
 
     private:
-      _AttributeSectionModelItem(const _AttributeSectionModelItem &other);
-      void operator=(const _AttributeSectionModelItem &other);
+      _TypePartModelItem(const _TypePartModelItem &other);
+      void operator=(const _TypePartModelItem &other);
+    };
+
+  class _TypeModelItem :  public _CodeModelItem
+    {
+
+    public:
+      DECLARE_MODEL_NODE(Type)
+
+      static TypeModelItem create(CodeModel *model);
+      virtual ~_TypeModelItem();
+
+    public:
+      bool operator==( const _TypeModelItem &other );
+      bool operator!=( const _TypeModelItem &other )
+      {
+        return  !(*this ==  other);
+      }
+
+      QString toString() const;
+
+    public:
+      QString qualifiedAliasLabel() const;
+      void setQualifiedAliasLabel(QString qualifiedAliasLabel);
+
+      TypePartList typeParts() const;
+      void addTypePart(TypePartModelItem item);
+      void removeTypePart(TypePartModelItem item);
+
+    private:
+      QString _M_qualifiedAliasLabel;
+      TypePartList _M_typeParts;
+
+    protected:
+      _TypeModelItem(CodeModel *model,  int kind =  __node_kind);
+
+    private:
+      _TypeModelItem(const _TypeModelItem &other);
+      void operator=(const _TypeModelItem &other);
     };
 
   template  <class _Target,  class _Source>

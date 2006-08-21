@@ -15,8 +15,6 @@ namespace csharp
 
   class CodeModel;
 
-  class TypeInfo;
-
   class _CodeModelItem;
 
   class _ScopeModelItem;
@@ -71,7 +69,9 @@ namespace csharp
 
   class _ConstructorConstraintModelItem;
 
-  class _AttributeSectionModelItem;
+  class _TypePartModelItem;
+
+  class _TypeModelItem;
 
   typedef KDevSharedPtr<_CodeModelItem> CodeModelItem;
   typedef KDevSharedPtr<_ScopeModelItem> ScopeModelItem;
@@ -100,7 +100,8 @@ namespace csharp
   typedef KDevSharedPtr<_TypeParameterConstraintModelItem> TypeParameterConstraintModelItem;
   typedef KDevSharedPtr<_PrimaryOrSecondaryConstraintModelItem> PrimaryOrSecondaryConstraintModelItem;
   typedef KDevSharedPtr<_ConstructorConstraintModelItem> ConstructorConstraintModelItem;
-  typedef KDevSharedPtr<_AttributeSectionModelItem> AttributeSectionModelItem;
+  typedef KDevSharedPtr<_TypePartModelItem> TypePartModelItem;
+  typedef KDevSharedPtr<_TypeModelItem> TypeModelItem;
 
   typedef QList<CodeModelItem> CodeList;
   typedef QList<CodeModelItem> ItemList;
@@ -130,7 +131,8 @@ namespace csharp
   typedef QList<TypeParameterConstraintModelItem> TypeParameterConstraintList;
   typedef QList<PrimaryOrSecondaryConstraintModelItem> PrimaryOrSecondaryConstraintList;
   typedef QList<ConstructorConstraintModelItem> ConstructorConstraintList;
-  typedef QList<AttributeSectionModelItem> AttributeSectionList;
+  typedef QList<TypePartModelItem> TypePartList;
+  typedef QList<TypeModelItem> TypeList;
 
 
 

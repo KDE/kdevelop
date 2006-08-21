@@ -23,13 +23,16 @@
 namespace csharp
 {
 
-Binder::Binder( CodeModel *model, parser::token_stream_type *token_stream )
-    : _M_model( model ), _M_token_stream(token_stream), _M_decoder(_M_token_stream)
+Binder::Binder( CodeModel *model, parser::token_stream_type *tokenStream )
+    : _M_model( model ), _M_tokenStream( tokenStream ),
+      _M_typeBinder( new TypeBinder(_M_model, _M_tokenStream) ),
+      _M_decoder( _M_tokenStream )
 {
 }
 
 Binder::~Binder()
 {
+    delete _M_typeBinder;
 }
 
 void Binder::run( const KUrl &url, compilation_unit_ast *node )
@@ -48,21 +51,6 @@ ScopeModelItem Binder::changeCurrentScope( ScopeModelItem item )
 {
     ScopeModelItem old = _M_currentScope;
     _M_currentScope = item;
-    return old;
-}
-
-access_policy::access_policy_enum Binder::changeCurrentAccessPolicy(
-         access_policy::access_policy_enum accessPolicy )
-{
-    access_policy::access_policy_enum old = accessPolicy;
-    _M_currentAccessPolicy = accessPolicy;
-    return old;
-}
-
-uint Binder::changeCurrentModifiers( uint modifiers )
-{
-    uint old = modifiers;
-    _M_currentModifiers = modifiers;
     return old;
 }
 
@@ -133,15 +121,10 @@ void Binder::visit_class_declaration(class_declaration_ast *node)
     newClassDeclaration->setScope( _M_currentScope->context() );
     setPositionAt( newClassDeclaration, node );
 
-    _M_currentAttributes.clear();
     visit_node( node->attributes );
-
     visit_node( node->modifiers );
-
     visit_node( node->class_name );
-
     visit_node( node->type_parameters );
-
     visit_node( node->class_base );
 
     if (node->type_parameter_constraints_sequence)
@@ -172,7 +155,6 @@ void Binder::visit_class_declaration(class_declaration_ast *node)
     ModelItemChameleon itemChameleon( newClassDeclaration );
     setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
     setModifiers( itemChameleon, _M_currentModifiers );
-    // TODO: attributes
     // TODO: class_base
     // TODO: type parameters and constraints
 
@@ -191,11 +173,8 @@ void Binder::visit_struct_declaration(struct_declaration_ast *node)
     newStructDeclaration->setScope( _M_currentScope->context() );
     setPositionAt( newStructDeclaration, node );
 
-    _M_currentAttributes.clear();
     visit_node( node->attributes );
-
     visit_node( node->modifiers );
-
     visit_node( node->struct_name );
     visit_node( node->type_parameters );
     visit_node( node->struct_interfaces );
@@ -227,7 +206,6 @@ void Binder::visit_struct_declaration(struct_declaration_ast *node)
     ModelItemChameleon itemChameleon( newStructDeclaration );
     setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
     setModifiers( itemChameleon, _M_currentModifiers );
-    // TODO: attributes
     // TODO: struct_interfaces
     // TODO: type parameters and constraints
 
@@ -246,11 +224,8 @@ void Binder::visit_interface_declaration(interface_declaration_ast *node)
     newInterfaceDeclaration->setScope( _M_currentScope->context() );
     setPositionAt( newInterfaceDeclaration, node );
 
-    _M_currentAttributes.clear();
     visit_node( node->attributes );
-
     visit_node( node->modifiers );
-
     visit_node( node->interface_name );
     visit_node( node->type_parameters );
     visit_node( node->interface_base );
@@ -282,7 +257,6 @@ void Binder::visit_interface_declaration(interface_declaration_ast *node)
     ModelItemChameleon itemChameleon( newInterfaceDeclaration );
     setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
     setModifiers( itemChameleon, _M_currentModifiers );
-    // TODO: attributes
     // TODO: interface_base
     // TODO: type parameters and constraints
 
@@ -301,11 +275,8 @@ void Binder::visit_delegate_declaration(delegate_declaration_ast *node)
     newDelegateDeclaration->setScope( _M_currentScope->context() );
     setPositionAt( newDelegateDeclaration, node );
 
-    _M_currentAttributes.clear();
     visit_node(node->attributes);
-
     visit_node(node->modifiers);
-
     visit_node(node->return_type);
     visit_node(node->delegate_name);
     visit_node(node->type_parameters);
@@ -327,8 +298,7 @@ void Binder::visit_delegate_declaration(delegate_declaration_ast *node)
     ModelItemChameleon itemChameleon( newDelegateDeclaration );
     setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
     setModifiers( itemChameleon, _M_currentModifiers );
-    // TODO: attributes
-    // TODO: return_type
+    newDelegateDeclaration->setReturnType( createType(node->return_type) );
     // TODO: formal_parameters
     // TODO: type parameters and constraints
 
@@ -343,11 +313,8 @@ void Binder::visit_enum_declaration(enum_declaration_ast *node)
     newEnumDeclaration->setScope( _M_currentScope->context() );
     setPositionAt( newEnumDeclaration, node );
 
-    _M_currentAttributes.clear();
     visit_node(node->attributes);
-
     visit_node(node->modifiers);
-
     visit_node(node->enum_name);
     visit_node(node->enum_base);
 
@@ -356,7 +323,6 @@ void Binder::visit_enum_declaration(enum_declaration_ast *node)
     ModelItemChameleon itemChameleon( newEnumDeclaration );
     setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
     setModifiers( itemChameleon, _M_currentModifiers );
-    // TODO: attributes
     // TODO: enum_base
 
     ModelItemChameleon scopeChameleon( _M_currentScope );
@@ -401,6 +367,11 @@ void Binder::setModifiers( ModelItemChameleon item, uint mods )
     item->setUnsafe( mods & modifiers::mod_unsafe );
 }
 
+TypeModelItem Binder::createType( ast_node *node )
+{
+    return typeBinder()->createType( _M_currentFile, _M_currentScope, node );
+}
+
 std::string Binder::decode_string( std::size_t index ) const
 {
     return _M_decoder.decode_string( index );
@@ -411,8 +382,8 @@ void Binder::setPositionAt( _CodeModelItem *item, ast_node *node )
     int startLine, startColumn;
     int endLine, endColumn;
 
-    _M_token_stream->start_position( node->start_token, &startLine, &startColumn );
-    _M_token_stream->end_position( node->end_token, &endLine, &endColumn );
+    _M_tokenStream->start_position( node->start_token, &startLine, &startColumn );
+    _M_tokenStream->end_position( node->end_token, &endLine, &endColumn );
 
     item->setFileName( _M_currentFile );
     item->setStartPosition( KTextEditor::Cursor(startLine, startColumn) );

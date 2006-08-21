@@ -14360,6 +14360,8 @@ namespace csharp
               }
             return false;
           }
+        (*yynode)->namespace_name = __node_282;
+
       }
     else
       {
@@ -20770,6 +20772,8 @@ namespace csharp
                                                                 }
                                                               return false;
                                                             }
+                                                          (*yynode)->type_name = __node_394;
+
                                                         }
                                                       else
                                                         {
@@ -20809,6 +20813,8 @@ namespace csharp
                                                                 }
                                                               return false;
                                                             }
+                                                          (*yynode)->type_name = __node_395;
+
                                                         }
                                                       else
                                                         {

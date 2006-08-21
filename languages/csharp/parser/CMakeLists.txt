@@ -11,6 +11,7 @@ set(kdevcsharpparser_STAT_SRCS
     csharp_pp_scope.cpp
     csharp_pp_handler_visitor.cpp
     csharp_binder.cpp
+    csharp_typebinder.cpp
     codedisplay.cpp
 )
 

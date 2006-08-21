@@ -22,6 +22,7 @@
 #include "codedisplay.h"
 
 #include "csharp_codemodel.h"
+#include "csharp_codemodel_chameleon.h"
 
 #include <kurl.h>
 #include <kicon.h>
@@ -70,6 +71,9 @@ QIcon CodeDisplay::decoration( const _CodeModelItem *item )
 QString CodeDisplay::toolTip( const _CodeModelItem *item )
 {
     QString tooltip;
+    CodeModelItem sharedItem( const_cast<_CodeModelItem*>(item) );
+    ModelItemChameleon chameleon( sharedItem );
+
     switch ( item->kind() )
     {
         case _CodeModelItem::Kind_NamespaceDeclaration:
@@ -83,7 +87,9 @@ QString CodeDisplay::toolTip( const _CodeModelItem *item )
         case _CodeModelItem::Kind_EnumDeclaration:
             tooltip = "enum "; break;
         case _CodeModelItem::Kind_DelegateDeclaration:
-            tooltip = "delegate "; break;
+            tooltip = "delegate ";
+            tooltip += chameleon->returnType().item->toString() + " ";
+            break;
         default:
             break;
     }

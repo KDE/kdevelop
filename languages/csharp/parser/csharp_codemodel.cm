@@ -48,34 +48,6 @@ CodeModel
   -- TODO: provide findItem() method
 }
 
-TypeInfo
-{
-  qualifiedName: QStringList;
-
-  public declaration
-  [:
-    bool operator==(const TypeInfo &other);
-    bool operator!=(const TypeInfo &other) { return !(*this==other); }
-
-    // ### arrays and templates??
-
-    QString toString() const;
-  :]
-
-  implementation
-  [:
-    QString CLASS::toString() const
-    {
-      return qualifiedName().join(".");
-    }
-
-    bool CLASS::operator==(const CLASS &other)
-    {
-      return qualifiedName() == other.qualifiedName();
-    }
-  :]
-}
-
 Code
 {
   name:     QString;
@@ -97,12 +69,12 @@ Code
   [:
     QStringList CLASS::qualifiedName() const
     {
-      QStringList q = scope();
+        QStringList q = scope();
 
-      if (!name().isEmpty())
-        q += name();
+        if (!name().isEmpty())
+            q += name();
 
-      return q;
+        return q;
     }
 
     // TODO: These methods should be cached upon initialization
@@ -131,10 +103,10 @@ Scope: Code
   [:
     QStringList context()
     {
-      if (name().isNull())
-        return scope();
-      else
-        return scope() << name();
+        if (name().isNull())
+            return scope();
+        else
+            return scope() << name();
     }
   :]
 }
@@ -155,8 +127,7 @@ NamespaceDeclaration: Scope
 
 GlobalNamespaceDeclaration: NamespaceDeclaration
 {
-  constructor       [: setName(QString::null); :]
-  #globalAttribute: AttributeSection;
+  constructor       [: setName( QString::null ); :]
 }
 
 ExternAliasDirective: Code
@@ -165,12 +136,12 @@ ExternAliasDirective: Code
 
 UsingAliasDirective: Code
 {
-  namespaceOrType:  TypeInfo;
+  namespaceOrType:  Type;
 }
 
 UsingNamespaceDirective: Code
 {
-  constructor       [: setName(QString::null); :]
+  constructor       [: setName( QString::null ); :]
   namespaceUsed:    QStringList; -- namespaces may not have type arguments
 }
 
@@ -183,7 +154,7 @@ TypeDeclaration: Scope
 
 ClassLikeDeclaration: TypeDeclaration  -- a class, struct or interface type
 {
-  baseType:         TypeInfo;
+  baseType:         Type;
 
   #event:           EventDeclaration     { hashed(name) };
   #indexer:         IndexerDeclaration;
@@ -214,12 +185,12 @@ ClassLikeDeclaration: TypeDeclaration  -- a class, struct or interface type
   [:
     ITEM(MethodDeclaration) CLASS::declaredMethod(ITEM(MethodDeclaration) item)
     {
-      LIST(MethodDeclaration) methodList = findMethods(item->name());
+        LIST(MethodDeclaration) methodList = findMethods(item->name());
 
-      foreach (ITEM(MethodDeclaration) method, methodList)
+        foreach (ITEM(MethodDeclaration) method, methodList)
         {
-          if (method->isSimilar(model_static_cast<ITEM(Code)>(item),false))
-            return method;
+            if (method->isSimilar(model_static_cast<ITEM(Code)>(item),false))
+                return method;
         }
 
       return ITEM(MethodDeclaration)();
@@ -244,8 +215,7 @@ InterfaceDeclaration: ClassLikeDeclaration
 
 DelegateDeclaration: TypeDeclaration
 {
-  #attribute:       AttributeSection;
-  returnType:       TypeInfo;
+  returnType:       Type;
   #parameter:       Parameter;
   #typeParameter:   TypeParameter;
   #typeParameterConstraint: TypeParameterConstraint;
@@ -256,20 +226,18 @@ DelegateDeclaration: TypeDeclaration
 EnumDeclaration: TypeDeclaration
 {
   #enumValue:       EnumValue;
-  baseIntegralType: TypeInfo;
+  baseIntegralType: Type;
 }
 
 EnumValue: Code
 {
-  #attribute:       AttributeSection;
   value:            QString;
 }
 
 EventDeclaration: Scope
 {
-  #attribute:       AttributeSection;
-  type:             TypeInfo;
-  fromInterface:    TypeInfo;
+  type:             Type;
+  fromInterface:    Type;
   addAccessor:      EventAccessorDeclaration;
   removeAccessor:   EventAccessorDeclaration;
 
@@ -287,16 +255,14 @@ EventDeclaration: Scope
 
 EventAccessorDeclaration: Code
 {
-  #attribute:       AttributeSection;
 }
 
 IndexerDeclaration: Scope
 {
-  constructor       [: setName(QString::null); :] -- indexers don't have names
+  constructor       [: setName( QString::null ); :] -- indexers don't have names
 
-  #attribute:       AttributeSection;
-  type:             TypeInfo;
-  fromInterface:    TypeInfo;
+  type:             Type;
+  fromInterface:    Type;
   #parameter:       Parameter;
   #accessor:        AccessorDeclaration;
 
@@ -313,9 +279,8 @@ IndexerDeclaration: Scope
 
 PropertyDeclaration: Scope
 {
-  #attribute:       AttributeSection;
-  type:             TypeInfo;
-  fromInterface:    TypeInfo;
+  type:             Type;
+  fromInterface:    Type;
   #accessor:        AccessorDeclaration;
 
   accessPolicy:     access_policy::access_policy_enum
@@ -332,7 +297,6 @@ PropertyDeclaration: Scope
 
 AccessorDeclaration: Code
 {
-  #attribute:       AttributeSection;
   type:             accessor_declarations::accessor_type_enum;
   accessPolicy:     access_policy::access_policy_enum
                          { init[: access_policy::access_private :] };
@@ -341,9 +305,8 @@ AccessorDeclaration: Code
 
 MethodDeclaration: Scope
 {
-  #attribute:       AttributeSection;
-  returnType:       TypeInfo;
-  fromInterface:    TypeInfo;
+  returnType:       Type;
+  fromInterface:    Type;
   #typeParameter:   TypeParameter;
   #typeParameterConstraint: TypeParameterConstraint;
   #parameter:       Parameter;
@@ -365,8 +328,7 @@ MethodDeclaration: Scope
 
 VariableDeclaration: Code
 {
-  #attribute:       AttributeSection;
-  type:             TypeInfo;
+  type:             Type;
 
   accessPolicy:     access_policy::access_policy_enum
                          { init[: access_policy::access_private :] };
@@ -380,8 +342,7 @@ VariableDeclaration: Code
 
 Parameter: Code
 {
-  #attribute:       AttributeSection;
-  type:             TypeInfo;
+  type:             Type;
   isArray:          bool { init[: false :] };
   parameterType:    parameter::parameter_type_enum
                          { init[: parameter::value_parameter :] };
@@ -389,7 +350,6 @@ Parameter: Code
 
 TypeParameter: Code
 {
-  #attribute:       AttributeSection;
 }
 
 TypeParameterConstraint: Code
@@ -398,7 +358,7 @@ TypeParameterConstraint: Code
 
 PrimaryOrSecondaryConstraint: TypeParameterConstraint
 {
-  typeOrParameterName: TypeInfo;
+  typeOrParameterName: Type;
   constraint_type:  primary_or_secondary_constraint::primary_or_secondary_constraint_enum
                       { init[: primary_or_secondary_constraint::type_type :] };
 }
@@ -407,9 +367,130 @@ ConstructorConstraint: TypeParameterConstraint
 {
 }
 
-AttributeSection: Code
+TypePart: Code
 {
-  constructor       [: setName(QString::null); :] -- attributes don't have names
-  target:           QString;
-  attribute:        QString;
+  -- unfortunately, we can't bind the type to its declaration currently,
+  -- because there's no way to have another pass after parsing all documents
+  -- (which would be needed to know all the existing type declarations)
+  -- typeDeclaration:  TypeDeclaration;
+
+  #typeArgument:    Type;
+
+  public declaration
+  [:
+    bool operator==( const _TypePartModelItem &other );
+    bool operator!=( const _TypePartModelItem &other ) { return !(*this == other); }
+
+    QString toString() const;
+  :]
+
+  implementation
+  [:
+    QString CLASS::toString() const
+    {
+        //QString typeString = typeDeclaration()->name();
+        QString typeString = name();
+
+        if ( !typeArguments().empty() )
+        {
+            typeString += "<";
+            bool initial = true;
+
+            foreach ( ITEM(Type) argument, typeArguments() )
+            {
+                if ( !initial )
+                    typeString += ", ";
+
+                typeString += argument->toString();
+                initial = false;
+            }
+
+            typeString += ">";
+        }
+
+        return typeString;
+    }
+
+    bool CLASS::operator==(const CLASS &other)
+    {
+        //if ( typeDeclaration() != other.typeDeclaration() ) // not yet possible
+        if ( name() != other.name() )
+            return false;
+
+        if ( typeArguments().count() != other.typeArguments().count() )
+            return false;
+
+        LIST(Type)::const_iterator argument = typeArguments().begin();
+        LIST(Type)::const_iterator otherArgument = other.typeArguments().begin();
+
+        for ( ; argument == typeArguments().end(); argument++, otherArgument++ )
+        {
+            if ( *argument != *otherArgument )
+                return false;
+        }
+
+        return true;
+    }
+  :]
+}
+
+Type: Code
+{
+  -- types consist of multiple type parts, but don't have a single name
+  constructor
+  [:
+    setName( QString::null );
+    setQualifiedAliasLabel( QString::null );
+  :]
+
+  qualifiedAliasLabel: QString;
+  #typePart:        TypePart;
+
+  public declaration
+  [:
+    bool operator==( const _TypeModelItem &other );
+    bool operator!=( const _TypeModelItem &other ) { return !(*this == other); }
+
+    QString toString() const;
+  :]
+
+  implementation
+  [:
+    QString CLASS::toString() const
+    {
+        QString typeString;
+        bool initial = true;
+
+        if ( !qualifiedAliasLabel().isNull() )
+            typeString = qualifiedAliasLabel() + "::";
+
+        foreach ( ITEM(TypePart) part, typeParts() )
+        {
+            if ( !initial )
+                typeString += ".";
+
+            typeString += part->toString();
+            initial = false;
+        }
+
+        return typeString;
+    }
+
+    bool CLASS::operator==(const CLASS &other)
+    {
+        if ( typeParts().count() != other.typeParts().count() )
+            return false;
+
+        LIST(TypePart)::const_iterator part = typeParts().begin();
+        LIST(TypePart)::const_iterator otherPart = other.typeParts().begin();
+
+        for ( ; part == typeParts().end(); part++, otherPart++ )
+        {
+            if ( *part != *otherPart )
+                return false;
+        }
+
+        return true;
+    }
+  :]
 }

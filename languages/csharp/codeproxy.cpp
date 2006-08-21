@@ -70,7 +70,8 @@ CodeProxy::CodeProxy( QObject* parent )
     m_sortKind.append( _CodeModelItem::Kind_TypeParameterConstraint );
     m_sortKind.append( _CodeModelItem::Kind_PrimaryOrSecondaryConstraint );
     m_sortKind.append( _CodeModelItem::Kind_ConstructorConstraint );
-    m_sortKind.append( _CodeModelItem::Kind_AttributeSection );
+    m_sortKind.append( _CodeModelItem::Kind_TypePart );
+    m_sortKind.append( _CodeModelItem::Kind_Type );
     m_sortKind.append( _CodeModelItem::FirstKind );
     m_sortKind.append( _CodeModelItem::KindMask );
 }
