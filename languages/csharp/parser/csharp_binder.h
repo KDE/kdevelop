@@ -65,6 +65,8 @@ protected:
     virtual void visit_formal_parameter( formal_parameter_ast *node );
     virtual void visit_method_declaration( method_declaration_ast *node );
     virtual void visit_interface_method_declaration( interface_method_declaration_ast *node );
+    virtual void visit_variable_declaration_data( variable_declaration_data_ast *node );
+    virtual void visit_variable_declarator( variable_declarator_ast *node );
 
     /*
     virtual void visit_accessor_declarations( accessor_declarations_ast *node );
@@ -93,7 +95,6 @@ protected:
     virtual void visit_interface_event_declaration( interface_event_declaration_ast *node );
     virtual void visit_interface_indexer_declaration( interface_indexer_declaration_ast *node );
     virtual void visit_interface_member_declaration( interface_member_declaration_ast *node );
-    virtual void visit_interface_method_declaration( interface_method_declaration_ast *node );
     virtual void visit_interface_property_declaration( interface_property_declaration_ast *node );
     virtual void visit_namespace_or_type_name_part( namespace_or_type_name_part_ast *node );
     virtual void visit_optional_parameter_modifier( optional_parameter_modifier_ast *node );
@@ -109,8 +110,6 @@ protected:
     virtual void visit_unary_or_binary_operator_declaration( unary_or_binary_operator_declaration_ast *node );
     virtual void visit_using_alias_directive_data( using_alias_directive_data_ast *node );
     virtual void visit_using_namespace_directive_data( using_namespace_directive_data_ast *node );
-    virtual void visit_variable_declaration_data( variable_declaration_data_ast *node );
-    virtual void visit_variable_declarator( variable_declarator_ast *node );
     */
 
 private:
@@ -137,6 +136,7 @@ private:
     access_policy::access_policy_enum _M_currentAccessPolicy;
     uint _M_currentModifiers;
     ParameterList _M_currentParameters;
+    TypeModelItem _M_currentType;
     QStringList _M_additionalContext;
 };
 

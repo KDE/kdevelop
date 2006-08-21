@@ -1744,10 +1744,7 @@ namespace csharp_pp
       LBRACKET array_size=expression RBRACKET
     |
       ?[: !fixed_size_buffer :]
-      ASSIGN variable_initializer=variable_initializer
-    |
-      ?[: !fixed_size_buffer :]
-      0
+      (ASSIGN variable_initializer=variable_initializer | 0)
    )
 -> variable_declarator [
      argument temporary variable fixed_size_buffer: bool;

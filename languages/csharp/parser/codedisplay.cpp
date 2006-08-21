@@ -113,6 +113,9 @@ QString CodeDisplay::toolTip( const _CodeModelItem *item )
             tooltip += ")";
             return tooltip;
         }
+    case _CodeModelItem::Kind_VariableDeclaration:
+        tooltip += chameleon->type().item->toString() + " ";
+        break;
     default:
         break;
     }
