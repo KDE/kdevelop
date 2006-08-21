@@ -22,12 +22,10 @@
 #ifndef PARSEJOB_H
 #define PARSEJOB_H
 
+#include "kdevparsejob.h"
+
 #include <QStringList>
 
-#include <kurl.h>
-#include <kdevparsejob.h>
-
-class pool;
 class CodeModel;
 class TranslationUnitAST;
 class DUContext;
@@ -68,18 +66,6 @@ private:
     CodeModel *m_model;
     QStringList m_includedFiles;
     DUContext* m_duContext;
-};
-
-class PreprocessJob : public ThreadWeaver::Job
-{
-    Q_OBJECT
-public:
-    PreprocessJob(CPPParseJob* parent);
-
-    CPPParseJob* parentJob() const;
-
-protected:
-    virtual void run();
 };
 
 class ParseJob : public ThreadWeaver::Job

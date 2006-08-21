@@ -21,11 +21,6 @@
 
 #include "parsejob.h"
 
-#include <cassert>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
-
 #include <QFile>
 #include <QByteArray>
 
@@ -45,10 +40,10 @@
 #include "parser/parser.h"
 #include "parser/control.h"
 #include "duchain/dumpchain.h"
-#include "parser/rpp/preprocessor.h"
 #include "duchain/cppeditorintegrator.h"
 #include "duchain/dubuilder.h"
 #include "duchain/ducontext.h"
+#include "preprocessjob.h"
 
 CPPParseJob::CPPParseJob( const KUrl &url,
                     CppLanguageSupport *parent )
@@ -99,19 +94,9 @@ CppLanguageSupport * CPPParseJob::cpp() const
     return static_cast<CppLanguageSupport*>(const_cast<QObject*>(parent()));
 }
 
-CPPParseJob * PreprocessJob::parentJob() const
-{
-    return static_cast<CPPParseJob*>(const_cast<QObject*>(parent()));
-}
-
 CPPParseJob * ParseJob::parentJob() const
 {
     return static_cast<CPPParseJob*>(const_cast<QObject*>(parent()));
-}
-
-PreprocessJob::PreprocessJob(CPPParseJob * parent)
-    : ThreadWeaver::Job(parent)
-{
 }
 
 void CPPParseJob::setAST(TranslationUnitAST * ast)
@@ -132,54 +117,6 @@ void CPPParseJob::setDUChain(DUContext * duChain)
 ParseJob::ParseJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
 {
-}
-
-void PreprocessJob::run()
-{
-    bool readFromDisk = !parentJob()->openDocument();
-
-    QString contents;
-
-    if ( readFromDisk )
-    {
-        QFile file( parentJob()->document().path() );
-        if ( !file.open( QIODevice::ReadOnly ) )
-        {
-            parentJob()->setErrorMessage(i18n( "Could not open file '%1'", parentJob()->document().path() ));
-            kWarning( 9007 ) << k_funcinfo << "Could not open file " << parentJob()->document() << " (path " << parentJob()->document().path() << ")" << endl;
-            return ;
-        }
-
-        QByteArray fileData = file.readAll();
-        contents = QString::fromUtf8( fileData.constData() );
-        assert( !contents.isEmpty() );
-        file.close();
-    }
-    else
-    {
-        contents = parentJob()->contentsFromEditor();
-    }
-
-    kDebug( 9007 ) << "===-- PARSING --===> "
-    << parentJob()->document().fileName()
-    << " <== readFromDisk: " << readFromDisk
-    << " size: " << contents.length()
-    << endl;
-
-    Preprocessor preprocessor;
-    QStringList includes;
-    //     if ( true )
-    //     {
-    //         includes.append ("/usr/include");
-    //         includes.append ("/usr/lib/gcc/i586-suse-linux/4.0.2/include");
-    //         includes.append ("/usr/include/c++/4.0.2");
-    //         includes.append ("/usr/include/c++/4.0.2/i586-suse-linux");
-    //     }
-    includes.append ( "." );
-    preprocessor.addIncludePaths( includes );
-
-    parentJob()->parseSession()->setContents( preprocessor.processString( contents ).toUtf8() );
-    parentJob()->parseSession()->macros = preprocessor.macros();
 }
 
 void ParseJob::run()

@@ -21,6 +21,7 @@ set(kdevcppduchain_SRCS
 set(kdevcpplanguagesupport_PART_SRCS
     cpplanguagesupport.cpp
     parsejob.cpp
+    preprocessjob.cpp
     codedelegate.cpp
     codeproxy.cpp
     cpphighlighting.cpp
