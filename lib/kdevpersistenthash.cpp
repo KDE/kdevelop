@@ -66,7 +66,23 @@ KDevAST * KDevPersistentHash::retrieveAST(const KUrl & url)
 #ifndef NO_GOOGLE_SPARSEHASH
     return m_astHash[ url.url() ];
 #else
-    return m_astHash[ url ];
+    if (m_astHash.contains(url))
+        return m_astHash[ url ];
+    return 0;
+#endif
+}
+
+KDevAST* KDevPersistentHash::retrieveAST( const QString &filename )
+{
+#ifndef NO_GOOGLE_SPARSEHASH
+    return m_astHash[ url.url() ];
+#else
+    QHashIterator<KUrl, KDevAST*> it = m_astHash;
+    while (it.hasNext())
+        if (it.next().key().fileName() == filename)
+            return it.value();
+
+    return 0;
 #endif
 }
 

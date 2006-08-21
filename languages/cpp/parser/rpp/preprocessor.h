@@ -75,9 +75,7 @@ public:
         QString definition;
         bool isFunctionLike;
         bool variadics;
-#ifdef PP_WITH_MACRO_POSITION
         QString fileName;
-#endif
     };
     QList<MacroItem> macros() const;
 

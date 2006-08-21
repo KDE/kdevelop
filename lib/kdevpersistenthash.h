@@ -63,6 +63,11 @@ public:
 
     void insertAST( const KUrl &url, KDevAST* ast );
     KDevAST* retrieveAST( const KUrl &url );
+
+    // FIXME hack, returns the first AST with a matching filename...
+    // remove when no longer needed
+    KDevAST* retrieveAST( const QString &filename );
+
     void load();
     void save();
 

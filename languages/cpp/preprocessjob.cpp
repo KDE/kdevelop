@@ -27,10 +27,14 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kdevdocument.h"
+#include "kdevcore.h"
+#include "kdevproject.h"
+#include "kdevpersistenthash.h"
 
 #include "parser/parsesession.h"
 #include "parsejob.h"
+#include "parser/ast.h"
+#include "parser/parsesession.h"
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
@@ -84,7 +88,13 @@ Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type)
 
     // FIXME need build system support to determine the full URL of the file
 
+    Q_ASSERT(KDevCore::activeProject());
 
+    KDevAST* ast = KDevCore::activeProject()->persistentHash()->retrieveAST(fileName);
+    if (ast) {
+        TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
+        addMacros(t->session->macros);
+    }
 
     return 0;
 }
