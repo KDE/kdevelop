@@ -150,7 +150,7 @@ public:
    *
    * \returns the requested definition if one was found, otherwise null.
    */
-  Definition* findDefinition(const QualifiedIdentifier& identifier, const KDevDocumentCursor& position, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
+  Definition* findDefinition(const QualifiedIdentifier& identifier, const KDevDocumentCursor& position, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>(), bool inImportedContext = false) const;
 
   /**
    * Searches for and returns a definition with a given \a identifier in this context, which
@@ -239,7 +239,7 @@ public:
    *
    * \returns the requested context if one was found, otherwise null.
    */
-  DUContext* findContext(ContextType contextType, const QualifiedIdentifier& identifier, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
+  DUContext* findContext(ContextType contextType, const QualifiedIdentifier& identifier, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>(), bool inImportedContext = false) const;
 
   /**
    * Return a list of definitions for a given cursor \a position in a given \a url.

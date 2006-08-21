@@ -255,7 +255,8 @@ void CppHighlighting::highlightDUChain(DUContext* context) const
   }
 
   foreach (Range* use, context->orphanUses())
-    use->toSmartRange()->setAttribute(attributeForType(ErrorVariableType, ReferenceContext));
+    if (use->isSmartRange())
+      use->toSmartRange()->setAttribute(attributeForType(ErrorVariableType, ReferenceContext));
 
   foreach (DUContext* context, context->importedParentContexts())
     highlightDUChain(context);

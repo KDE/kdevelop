@@ -183,7 +183,7 @@ Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifi
   return 0;
 }
 
-Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, const KDevDocumentCursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNS ) const
+Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, const KDevDocumentCursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNS, bool inImportedContext ) const
 {
   // TODO we're missing ambiguous references by not checking every resolution before returning...
   // but is that such a bad thing? (might be good performance-wise)
@@ -211,11 +211,13 @@ Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, 
   while (it.hasPrevious()) {
     DUContext* parent = it.previous();
 
-    if (Definition* definition = parent->findDefinition(identifier, position, this))
+    // FIXME should have the current namespace list??
+    if (Definition* definition = parent->findDefinition(identifier, position, this, QList<UsingNS*>(), true))
       return definition;
   }
 
-  if (parentContext())
+  if (!inImportedContext && parentContext())
+    // FIXME should have the current namespace list??
     if (Definition* definition = parentContext()->findDefinition(identifier, position, this))
       return definition;
 
@@ -486,7 +488,7 @@ const QList<DUContext*>& DUContext::importedParentContexts() const
   return m_importedParentContexts;
 }
 
-DUContext* DUContext::findContext(ContextType contextType, const QualifiedIdentifier& identifier, const DUContext* sourceChild, const QList<UsingNS*>& usingNS) const
+DUContext* DUContext::findContext(ContextType contextType, const QualifiedIdentifier& identifier, const DUContext* sourceChild, const QList<UsingNS*>& usingNS, bool inImportedContext) const
 {
   QList<UsingNS*> currentUsingNS = usingNS;
 
@@ -539,10 +541,10 @@ DUContext* DUContext::findContext(ContextType contextType, const QualifiedIdenti
   QListIterator<DUContext*> it = m_importedParentContexts;
   it.toBack();
   while (it.hasPrevious())
-    if (DUContext* context = it.previous()->findContext(contextType, identifier, this, currentUsingNS))
+    if (DUContext* context = it.previous()->findContext(contextType, identifier, this, currentUsingNS, true))
       return context;
 
-  if (parentContext())
+  if (!inImportedContext && parentContext())
     if (DUContext* context = parentContext()->findContext(contextType, identifier, this, currentUsingNS))
       return context;
 

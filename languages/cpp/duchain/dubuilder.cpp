@@ -541,9 +541,9 @@ void DUBuilder::visitForStatement(ForStatementAST *node)
 void DUBuilder::addImportedContexts()
 {
   if (m_compilingDefinitions && !m_importedParentContexts.isEmpty()) {
-    foreach (DUContext* imported, m_importedParentContexts)
+    /*foreach (DUContext* imported, m_importedParentContexts)
       if (imported->parentContext() && imported->url() == currentContext()->url())
-        imported->parentContext()->takeChildContext(imported);
+        imported->parentContext()->takeChildContext(imported);*/
 
     foreach (DUContext* imported, m_importedParentContexts)
       currentContext()->addImportedParentContext(imported);
