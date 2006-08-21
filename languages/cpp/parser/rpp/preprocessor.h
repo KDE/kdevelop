@@ -74,6 +74,7 @@ public:
         QStringList parameters;
         QString definition;
         bool isFunctionLike;
+        bool variadics;
 #ifdef PP_WITH_MACRO_POSITION
         QString fileName;
 #endif
@@ -84,7 +85,7 @@ public:
      * Define (or undefine if MacroItem::definied is false) a list of
      * macros.
      */
-    void addMacros(const QList<MacroItem>& macros) const;
+    void addMacros(const QList<MacroItem>& macros);
 
 private:
     Q_DISABLE_COPY(Preprocessor)

@@ -104,6 +104,29 @@ QList<Preprocessor::MacroItem> Preprocessor::macros() const
     return items;
 }
 
+void Preprocessor::addMacros(const QList<MacroItem>& macros)
+{
+  foreach (const MacroItem& mi, macros) {
+    pp_macro* macro;
+    if (d->env.contains(mi.name)) {
+      macro = d->env[mi.name];
+    } else {
+      macro = new pp_macro;
+      d->env.insert(mi.name, macro);
+    }
+
+    macro->defined = mi.isDefined;
+    macro->definition = mi.definition;
+    macro->formals = mi.parameters;
+    macro->function_like = mi.isFunctionLike;
+    macro->variadics = mi.variadics;
+
+#ifdef PP_WITH_MACRO_POSITION
+    macro->file = mi.fileName;
+#endif
+  }
+}
+
 Stream * Preprocessor::sourceNeeded( QString & fileName, IncludeType type )
 {
   Q_UNUSED(type)
