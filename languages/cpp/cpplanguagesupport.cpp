@@ -37,6 +37,8 @@
 #include "cpphighlighting.h"
 
 #include "parser/codemodel.h"
+#include "parser/ast.h"
+#include "parser/parsesession.h"
 
 #include "parsejob.h"
 #include "codeproxy.h"
@@ -159,12 +161,19 @@ void CppLanguageSupport::projectOpened()
                 documentList.append( file->url() );
         }
     }
-    //KDevCore::backgroundParser() ->addDocumentList( documentList );
+    KDevCore::backgroundParser() ->addDocumentList( documentList );
 }
 
 void CppLanguageSupport::projectClosed()
 {
     // FIXME This should remove the project files from the backgroundparser
+}
+
+void CppLanguageSupport::releaseAST( KDevAST *ast)
+{
+    TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
+    delete t->session;
+    // The ast is in the memory pool which has been deleted as part of the session.
 }
 
 #include "cpplanguagesupport.moc"

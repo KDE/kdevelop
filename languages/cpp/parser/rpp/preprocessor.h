@@ -60,7 +60,7 @@ public:
      * \param type the way that the file was requested
      *
      * \return a Stream with the appropriate contents to allow
-     * the file to be #included.  Ownership of the Stream is yielded to 
+     * the file to be #included.  Ownership of the Stream is yielded to
      * class pp at this point.
      */
     virtual Stream* sourceNeeded(QString& fileName, IncludeType type);
@@ -70,6 +70,7 @@ public:
     struct MacroItem
     {
         QString name;
+        bool isDefined;
         QStringList parameters;
         QString definition;
         bool isFunctionLike;
@@ -78,6 +79,12 @@ public:
 #endif
     };
     QList<MacroItem> macros() const;
+
+    /**
+     * Define (or undefine if MacroItem::definied is false) a list of
+     * macros.
+     */
+    void addMacros(const QList<MacroItem>& macros) const;
 
 private:
     Q_DISABLE_COPY(Preprocessor)

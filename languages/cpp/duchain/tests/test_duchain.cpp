@@ -510,7 +510,8 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
   if (dump)
     kDebug() << "==== Beginning new test case...:" << endl << unit << endl << endl;
 
-  ParseSession* session = new ParseSession(unit, new pool);
+  ParseSession* session = new ParseSession();
+  session->setContents(unit);
 
   Parser parser(&control);
   TranslationUnitAST* ast = parser.parse(session);

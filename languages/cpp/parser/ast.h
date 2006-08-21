@@ -107,7 +107,7 @@ struct UsingDirectiveAST;
 struct WhileStatementAST;
 struct WinDeclSpecAST;
 
-struct AST: public KDevAST
+struct AST : public KDevAST
 {
   enum NODE_KIND
     {

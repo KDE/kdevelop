@@ -46,7 +46,9 @@ public:
     virtual KDevParseJob *createParseJob( KDevDocument *document );
     virtual QStringList mimeTypes() const;
 
-    KDevCodeHighlighting *codeHighlighting() const;
+    virtual KDevCodeHighlighting *codeHighlighting() const;
+
+    virtual void releaseAST( KDevAST *ast);
 
 private slots:
     void documentLoaded( KDevDocument *document );

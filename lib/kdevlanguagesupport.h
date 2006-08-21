@@ -111,6 +111,9 @@ public:
     virtual void read( KDevAST *ast, std::ifstream &in );
     virtual void write( KDevAST *ast, std::ofstream &out );
 
+    // FIXME make pure
+    virtual void releaseAST( KDevAST *ast);
+
     /**@return A typical mimetype list for the support language, this list
     should be configurable in the languagesupport dialog.*/
     virtual QStringList mimeTypes() const = 0;

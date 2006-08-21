@@ -335,6 +335,7 @@ void pp::checkMarkNeeded(Stream& input, Stream& output)
 void pp::handle_define (Stream& input)
 {
   pp_macro* macro = new pp_macro();
+  macro->defined = true;
 #if defined (PP_WITH_MACRO_POSITION)
   macro->file = m_files.top();
 #endif
@@ -398,7 +399,6 @@ void pp::handle_define (Stream& input)
 
       if (!input.atEnd() && input == '\n')
       {
-        ++macro->lines;
         skip_blanks(++input, PPInternal::devnull());
         definition += ' ';
         continue;
@@ -414,6 +414,11 @@ void pp::handle_define (Stream& input)
   }
 
   macro->definition = definition;
+
+  if (m_environment.contains(macro_name)) {
+    // FIXME redefinition error
+    delete m_environment.take(macro_name);
+  }
 
   m_environment.insert(macro_name, macro);
 }
@@ -905,7 +910,14 @@ void pp::handle_undef(Stream& input)
   QString macro_name = skip_identifier(input);
   Q_ASSERT(!macro_name.isEmpty());
 
-  delete m_environment.take(macro_name);
+  if (m_environment.contains(macro_name)) {
+    m_environment[macro_name]->defined = false;
+
+  } else {
+    pp_macro* undef = new pp_macro;
+    undef->defined = false;
+    m_environment.insert(macro_name, undef);
+  }
 }
 
 int pp::next_token (Stream& input)

@@ -22,12 +22,18 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevexport.h"
 
-/*The KDevAST is a simple base struct for the various Abstract Syntax Trees of the parsers.*/
+class KDevLanguageSupport;
 
+/**The KDevAST is a simple base struct for the various Abstract Syntax Trees of the parsers.*/
 struct KDEVINTERFACES_EXPORT KDevAST
 {
 public:
-    void *pool; //provide a place to store the memorypool
+    /// Language support part which generated the AST
+    KDevLanguageSupport* language;
+
+    /// Convenience function to request that the language support part delete this AST.
+    /// \sa KDevLanguageSupport::releaseAST()
+    void release();
 };
 
 #endif

@@ -41,11 +41,11 @@ KDevPersistentHash::~KDevPersistentHash()
 {
 #ifndef NO_GOOGLE_SPARSEHASH
 #else
-    /*QHashIterator<KUrl, KDevAST*> it = m_astHash;
+    QHashIterator<KUrl, KDevAST*> it = m_astHash;
     while (it.hasNext()) {
         it.next();
         it.value()->release();
-    }*/
+    }
 #endif
 }
 
@@ -54,8 +54,8 @@ void KDevPersistentHash::insertAST( const KUrl &url, KDevAST *ast )
 #ifndef NO_GOOGLE_SPARSEHASH
     m_astHash[ url.url() ] = ast;
 #else
-    /*if (m_astHash.contains(url))
-        a->release();*/
+    if (m_astHash.contains(url))
+        m_astHash[url]->release();
 
     m_astHash.insert(url, ast);
 #endif

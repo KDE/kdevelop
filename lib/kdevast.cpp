@@ -19,4 +19,11 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevast.h"
 
+#include "kdevlanguagesupport.h"
+
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+
+void KDevAST::release()
+{
+    language->releaseAST(this);
+}

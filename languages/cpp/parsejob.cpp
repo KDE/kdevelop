@@ -53,6 +53,7 @@
 CPPParseJob::CPPParseJob( const KUrl &url,
                     CppLanguageSupport *parent )
         : KDevParseJob( url, parent ),
+        m_session( new ParseSession ),
         m_AST( 0 ),
         m_model( 0 ),
         m_duContext( 0 )
@@ -64,6 +65,7 @@ CPPParseJob::CPPParseJob( const KUrl &url,
 CPPParseJob::CPPParseJob( KDevDocument *document,
                     CppLanguageSupport *parent )
         : KDevParseJob( document, parent ),
+        m_session( new ParseSession ),
         m_AST( 0 ),
         m_model( 0 ),
         m_duContext( 0 )
@@ -176,35 +178,24 @@ void PreprocessJob::run()
     includes.append ( "." );
     preprocessor.addIncludePaths( includes );
 
-    parentJob()->setPreprocessed( preprocessor.processString( contents ) );
-}
-
-void CPPParseJob::setPreprocessed(QString preprocessed)
-{
-    m_preprocessed = preprocessed;
-}
-
-QString CPPParseJob::preprocessed() const
-{
-    return m_preprocessed;
+    parentJob()->parseSession()->setContents( preprocessor.processString( contents ).toUtf8() );
+    parentJob()->parseSession()->macros = preprocessor.macros();
 }
 
 void ParseJob::run()
 {
-    QByteArray preprocessed = parentJob()->preprocessed().toUtf8();
-
     Parser parser( new Control() );
-    ParseSession* session = new ParseSession(preprocessed, new pool);
 
-    TranslationUnitAST* ast = parser.parse( session );
-    ast->session = session;
+    TranslationUnitAST* ast = parser.parse( parentJob()->parseSession() );
+    ast->language = parentJob()->cpp();
+    ast->session = parentJob()->parseSession();
 
     parentJob()->setAST(ast);
 
     if ( ast )
     {
         CodeModel* model = new CodeModel;
-        Binder binder( model, session );
+        Binder binder( model, parentJob()->parseSession() );
         binder.run( parentJob()->document(), ast );
 
         parentJob()->setCodeModel(model);
@@ -217,7 +208,7 @@ void ParseJob::run()
         // Locking the interface here allows all of the highlighting to update before a redraw happens, thus no flicker
         QMutexLocker lock(smart ? smart->smartMutex() : 0);
 
-        DUBuilder dubuilder(session);
+        DUBuilder dubuilder(parentJob()->parseSession());
         DUContext* topContext = dubuilder.build(parentJob()->document(), ast);
         parentJob()->setDUChain(topContext);
 
@@ -227,7 +218,7 @@ void ParseJob::run()
         // Debug output...
         /*if (topContext->smartRange()) {
             DumpChain dump;
-            dump.dump(ast, session);
+            dump.dump(ast, parentJob()->parseSession());
             dump.dump(topContext);
         }*/
     }
@@ -243,6 +234,11 @@ void CPPParseJob::addIncludedFile(const QString & filename)
 
 void CPPParseJob::requestDependancies()
 {
+}
+
+ParseSession * CPPParseJob::parseSession() const
+{
+    return m_session;
 }
 
 #include "parsejob.moc"

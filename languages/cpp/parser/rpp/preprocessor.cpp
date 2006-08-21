@@ -85,6 +85,12 @@ QList<Preprocessor::MacroItem> Preprocessor::macros() const
 
         MacroItem item;
         item.name = it.key();
+        if (!it.value()) {
+          kWarning() << k_funcinfo << "Null macro " << it.key() << " encountered!" << endl;
+          continue;
+        }
+
+        item.isDefined = it.value()->defined;
         item.definition = it.value()->definition;
         item.parameters = it.value()->formals;
         item.isFunctionLike = it.value()->function_like;

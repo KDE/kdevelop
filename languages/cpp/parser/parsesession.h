@@ -24,6 +24,8 @@
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
 
+#include "rpp/preprocessor.h"
+
 class pool;
 class TokenStream;
 class LocationTable;
@@ -33,7 +35,7 @@ class LocationTable;
 class ParseSession
 {
 public:
-  ParseSession(QByteArray contents, pool* mempool);
+  ParseSession();
   ~ParseSession();
 
   /**
@@ -44,12 +46,15 @@ public:
   void positionAt(std::size_t offset, int *line, int *column,
                   QString *filename) const;
 
+  void setContents(const QByteArray& contents);
+
   const char *contents() const;
   std::size_t size() const;
   pool* mempool;
   TokenStream* token_stream;
   LocationTable* location_table;
   LocationTable* line_table;
+  QList<Preprocessor::MacroItem> macros;
 
 private:
   void extract_line(int offset, int *line, QString *filename) const;

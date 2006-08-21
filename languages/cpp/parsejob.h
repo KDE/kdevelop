@@ -32,6 +32,7 @@ class CodeModel;
 class TranslationUnitAST;
 class DUContext;
 class CppLanguageSupport;
+class ParseSession;
 
 class CPPParseJob : public KDevParseJob
 {
@@ -47,8 +48,7 @@ public:
 
     CppLanguageSupport* cpp() const;
 
-    QString preprocessed() const;
-    void setPreprocessed(QString preprocessed);
+    ParseSession* parseSession() const;
 
     void setAST(TranslationUnitAST* ast);
     virtual KDevAST *AST() const;
@@ -63,11 +63,11 @@ public:
     void requestDependancies();
 
 private:
+    ParseSession* m_session;
     TranslationUnitAST *m_AST;
     CodeModel *m_model;
-    DUContext* m_duContext;
-    QString m_preprocessed;
     QStringList m_includedFiles;
+    DUContext* m_duContext;
 };
 
 class PreprocessJob : public ThreadWeaver::Job

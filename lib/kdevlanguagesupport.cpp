@@ -79,4 +79,9 @@ KDevCodeHighlighting *KDevLanguageSupport::codeHighlighting() const
   return 0L;
 }
 
+void KDevLanguageSupport::releaseAST( KDevAST *)
+{
+  // FIXME make pure + implement in the kdev-pg parsers
+}
+
 #include "kdevlanguagesupport.moc"

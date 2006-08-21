@@ -21,9 +21,8 @@
 #include "lexer.h"
 #include "memorypool.h"
 
-ParseSession::ParseSession(QByteArray contents, pool* _mempool)
-  : m_contents(contents)
-  , mempool(_mempool)
+ParseSession::ParseSession()
+  : mempool(new pool)
   , token_stream(0)
   , location_table(0)
   , line_table(0)
@@ -145,4 +144,9 @@ std::size_t ParseSession::size() const
 const char * ParseSession::contents() const
 {
   return m_contents.constData();
+}
+
+void ParseSession::setContents(const QByteArray & contents)
+{
+  m_contents = contents;
 }

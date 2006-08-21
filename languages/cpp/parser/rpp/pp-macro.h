@@ -34,8 +34,7 @@ public:
 #endif
   QStringList formals;
 
-  int lines;
-
+  bool defined: 1;
   bool hidden: 1;
   bool function_like: 1;
   bool variadics: 1;
