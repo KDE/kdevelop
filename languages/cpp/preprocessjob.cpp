@@ -74,27 +74,17 @@ void PreprocessJob::run()
     << " size: " << contents.length()
     << endl;
 
-    Preprocessor preprocessor;
-    QStringList includes;
-    //     if ( true )
-    //     {
-    //         includes.append ("/usr/include");
-    //         includes.append ("/usr/lib/gcc/i586-suse-linux/4.0.2/include");
-    //         includes.append ("/usr/include/c++/4.0.2");
-    //         includes.append ("/usr/include/c++/4.0.2/i586-suse-linux");
-    //     }
-    includes.append ( "." );
-    preprocessor.addIncludePaths( includes );
-
-    parentJob()->parseSession()->setContents( preprocessor.processString( contents ).toUtf8() );
-    parentJob()->parseSession()->macros = preprocessor.macros();
+    parentJob()->parseSession()->setContents( processString( contents ).toUtf8() );
+    parentJob()->parseSession()->macros = macros();
 }
 
 Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type)
 {
     Q_UNUSED(type);
 
-    // need build system support now.
+    // FIXME need build system support to determine the full URL of the file
+
+
 
     return 0;
 }

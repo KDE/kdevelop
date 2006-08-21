@@ -42,6 +42,7 @@ class KInstance;
 class KDevFileManager;
 class KDevProjectFileItem;
 class KDevProjectFolderItem;
+class KDevPersistentHash;
 
 /**
  * \short Object which represents a KDevelop project
@@ -139,6 +140,11 @@ public Q_SLOTS:
      * @return true if the url @a url is a part of the project.
      */
     bool inProject(const KUrl &url) const;
+
+    /**
+     * The persistent AST storage for this project.
+     */
+    KDevPersistentHash *persistentHash() const;
 
 private:
     class KDevProjectPrivate* const d;

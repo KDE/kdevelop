@@ -33,11 +33,13 @@
 #include "kdevfilemanager.h"
 #include "kdevprojectmodel.h"
 #include "filetemplate.h"
+#include "kdevpersistenthash.h"
 
 class KDevProjectPrivate
 {
 public:
     KDevFileManager* manager;
+    KDevPersistentHash persistentHash;
 };
 
 KDevProject::KDevProject(KInstance* instance, QObject *parent)
@@ -117,6 +119,11 @@ KDevFileManager* KDevProject::fileManager() const
 void KDevProject::setFileManager( KDevFileManager* newManager )
 {
 	d->manager = newManager;
+}
+
+KDevPersistentHash * KDevProject::persistentHash() const
+{
+    return &d->persistentHash;
 }
 
 #include "kdevproject.moc"

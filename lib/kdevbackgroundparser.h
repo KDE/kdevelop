@@ -93,9 +93,6 @@ private:
 
     QProgressBar *m_progressBar;
 
-    // The persistent AST storage
-    KDevPersistentHash *m_persistentHash;
-
     mutable QMutex m_mutex;
     ThreadWeaver::Weaver* m_weaver;
 };

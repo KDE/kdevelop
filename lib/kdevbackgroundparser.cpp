@@ -54,13 +54,9 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         m_suspend( false ),
         m_modelsToCache( 0 ),
         m_progressBar( new QProgressBar ),
-        m_persistentHash( new KDevPersistentHash ),
         m_weaver( new Weaver( this, 1 ) ) //C++ parser can't multi-thread at the moment
 {
     //ThreadWeaver::setDebugLevel(true, 5);
-    //FIXME Stub for now, but eventually load persistent parser info
-    //whatever that may entail.
-    m_persistentHash->load();
 
     m_timer = new QTimer( this );
     m_timer->setSingleShot( true );
@@ -205,7 +201,9 @@ void KDevBackgroundParser::parseComplete( Job *job )
 
                 //FIXME Stub for now, but eventually save persistent parser info
                 //whatever that may entail.
-                m_persistentHash->save();
+                if (KDevCore::activeProject())
+                    KDevCore::activeProject()->persistentHash()->save();
+
                 m_progressBar->hide();
             }
         }
@@ -218,7 +216,10 @@ void KDevBackgroundParser::parseComplete( Job *job )
 
         //FIXME Stub for now, but eventually save persistent parser info
         //whatever that may entail.
-        m_persistentHash->insertAST( parseJob->document(), parseJob->AST() );
+        if (KDevCore::activeProject())
+            KDevCore::activeProject()->persistentHash()->insertAST( parseJob->document(), parseJob->AST() );
+        else
+            parseJob->AST()->release();
 
         // FIXME hack, threadweaver doesn't let us know when we can delete, so just pick an arbitrary time...
         // (awaiting reply from Mirko on this one)
