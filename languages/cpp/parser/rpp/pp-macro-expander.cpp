@@ -151,7 +151,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       }
 
       pp_macro* macro = m_engine->environment()[name];
-      if (macro->hidden || m_engine->hideNextMacro())
+      if (!macro->defined || macro->hidden || m_engine->hideNextMacro())
       {
         m_engine->setHideNextMacro(name == "defined");
         output << name;
