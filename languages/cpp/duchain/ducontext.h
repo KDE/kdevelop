@@ -63,7 +63,7 @@ public:
   ContextType type() const;
   void setType(ContextType type);
 
-  inline int depth() const { if (parentContexts().isEmpty()) return 0; return parentContexts().first()->depth() + 1; }
+  inline int depth() const { if (!parentContext()) return 0; return parentContext()->depth() + 1; }
 
   /**
    * Calculate the fully qualified scope identifier
@@ -81,9 +81,27 @@ public:
   void setLocalScopeIdentifier(const QualifiedIdentifier& identifier);
 
   /**
-   * Returns the list of immediate parent contexts for this context.
+   * Returns the immediate parent context of this context.
    */
-  const QList<DUContext*>& parentContexts() const;
+  DUContext* parentContext() const;
+
+  /**
+   * Returns the list of imported parent contexts for this context.
+   */
+  const QList<DUContext*>& importedParentContexts() const;
+
+  /**
+   * Adds an imported child context.
+   *
+   * \note Be sure to have set the text location first, so that
+   * the chain is sorted correctly.
+   */
+  void addImportedParentContext(DUContext* context);
+
+  /**
+   * Removes a child context.
+   */
+  void removeImportedParentContext(DUContext* context);
 
   /**
    * Returns the list of immediate child contexts for this context.
@@ -241,24 +259,15 @@ public:
 
 private:
   /**
-   * \internal
-   * Adds a parent context.
-   */
-  void addParentContext(DUContext* context);
-
-  /**
-   * \internal
-   * Removes a parent context.
-   */
-  void removeParentContext(DUContext* context);
-
-  /**
    * Merges definitions up all branches of the definition-use chain into one hash.
    */
   void mergeDefinitions(DUContext* context, QHash<QualifiedIdentifier, Definition*>& definitions) const;
 
   /// Deletion function which respects file boundaries.
   void deleteChildContextsRecursively(const KUrl& url);
+
+  /// Deletion function which respects file boundaries.
+  void deleteImportedParentContextsRecursively(const KUrl& url);
 
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
@@ -270,8 +279,10 @@ private:
 
   QualifiedIdentifier m_scopeIdentifier;
 
-  QList<DUContext*> m_parentContexts;
+  DUContext* m_parentContext;
+  QList<DUContext*> m_importedParentContexts;
   QList<DUContext*> m_childContexts;
+  QList<DUContext*> m_importedChildContexts;
 
   QList<Definition*> m_localDefinitions;
 

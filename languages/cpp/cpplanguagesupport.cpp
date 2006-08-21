@@ -161,7 +161,7 @@ void CppLanguageSupport::projectOpened()
                 documentList.append( file->url() );
         }
     }
-    KDevCore::backgroundParser() ->addDocumentList( documentList );
+    //KDevCore::backgroundParser() ->addDocumentList( documentList );
 }
 
 void CppLanguageSupport::projectClosed()

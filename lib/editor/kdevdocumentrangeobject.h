@@ -40,7 +40,6 @@ public:
   KTextEditor::Range& textRange();
   const KTextEditor::Range& textRange() const;
   KTextEditor::Range* textRangePtr() const;
-  KTextEditor::Range* takeTextRange();
   KTextEditor::SmartRange* smartRange() const;
 
   KUrl url() const;

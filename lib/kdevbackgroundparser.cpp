@@ -32,6 +32,7 @@
 #include "kdevast.h"
 #include "kdevparsejob.h"
 #include "kdevpersistenthash.h"
+#include "kdevprojectcontroller.h"
 
 #include <QList>
 #include <QFile>
@@ -51,17 +52,21 @@
 
 KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         : QObject( parent ),
-        m_suspend( false ),
+        m_suspend( true ),
         m_modelsToCache( 0 ),
         m_progressBar( new QProgressBar ),
         m_weaver( new Weaver( this, 1 ) ) //C++ parser can't multi-thread at the moment
 {
     //ThreadWeaver::setDebugLevel(true, 5);
+    m_weaver->suspend();
 
     m_timer = new QTimer( this );
     m_timer->setSingleShot( true );
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
     m_timer->start( 500 );
+
+    connect(KDevCore::projectController(), SIGNAL(projectOpened()), SLOT(resume()));
+    connect(KDevCore::projectController(), SIGNAL(projectClosed()), SLOT(suspend()));
 }
 
 KDevBackgroundParser::~KDevBackgroundParser()
@@ -239,12 +244,16 @@ void KDevBackgroundParser::suspend()
 {
     m_suspend = true;
     m_timer->stop();
+
+    m_weaver->suspend();
 }
 
 void KDevBackgroundParser::resume()
 {
     m_suspend = false;
     m_timer->start( 500 );
+
+    m_weaver->resume();
 }
 
 #include "kdevbackgroundparser.moc"

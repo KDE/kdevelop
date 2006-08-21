@@ -24,11 +24,14 @@
 #include "definition.h"
 #include "duchain.h"
 
+#include "dumpchain.h"
+
 using namespace KTextEditor;
 
 DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
   : KDevDocumentRangeObject(range)
   , m_contextType(Other)
+  , m_parentContext(0)
 {
   if (parent)
     parent->addChildContext(this);
@@ -36,6 +39,16 @@ DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
 
 DUContext::~DUContext( )
 {
+  KUrl thisUrl = url();
+
+  if (m_parentContext)
+    m_parentContext->m_childContexts.removeAll(this);
+
+  foreach (DUContext* context, m_importedChildContexts)
+    context->removeImportedParentContext(this);
+
+  deleteImportedParentContextsRecursively(url());
+
   deleteChildContextsRecursively(url());
 
   qDeleteAll(m_localDefinitions);
@@ -53,9 +66,9 @@ const QList< DUContext * > & DUContext::childContexts( ) const
   return m_childContexts;
 }
 
-const QList< DUContext * > & DUContext::parentContexts( ) const
+DUContext* DUContext::parentContext( ) const
 {
-  return m_parentContexts;
+  return m_parentContext;
 }
 
 Definition * DUContext::addDefinition( Definition * newDefinition )
@@ -193,7 +206,7 @@ Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, 
         return definition;
   }
 
-  QListIterator<DUContext*> it = parentContexts();
+  QListIterator<DUContext*> it = importedParentContexts();
   it.toBack();
   while (it.hasPrevious()) {
     DUContext* parent = it.previous();
@@ -201,6 +214,10 @@ Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, 
     if (Definition* definition = parent->findDefinition(identifier, position, this))
       return definition;
   }
+
+  if (parentContext())
+    if (Definition* definition = parentContext()->findDefinition(identifier, position, this))
+      return definition;
 
   return 0;
 }
@@ -233,40 +250,47 @@ Definition * DUContext::findDefinition( const QualifiedIdentifier& identifier ) 
 
 void DUContext::addChildContext( DUContext * context )
 {
+  Q_ASSERT(!context->m_importedChildContexts.contains(context));
+
   for (int i = 0; i < m_childContexts.count(); ++i) {
     DUContext* child = m_childContexts.at(i);
     if (context->textRange().start() < child->textRange().start()) {
       m_childContexts.insert(i, context);
-      context->addParentContext(this);
+      context->m_parentContext = this;
       return;
     }
   }
   m_childContexts.append(context);
-  context->addParentContext(this);
+  context->m_parentContext = this;
 }
 
 DUContext* DUContext::takeChildContext( DUContext * context )
 {
+  Q_ASSERT(m_childContexts.contains(context));
   m_childContexts.removeAll(context);
-  context->removeParentContext(this);
+  context->m_parentContext = 0;
   return context;
 }
 
-void DUContext::removeParentContext( DUContext * context )
+void DUContext::addImportedParentContext( DUContext * context )
 {
-  m_parentContexts.removeAll(context);
-}
+  Q_ASSERT(!context->childContexts().contains(context));
+  context->m_importedChildContexts.append(this);
 
-void DUContext::addParentContext( DUContext * context )
-{
-  for (int i = 0; i < m_parentContexts.count(); ++i) {
-    DUContext* parent = m_parentContexts.at(i);
+  for (int i = 0; i < m_importedParentContexts.count(); ++i) {
+    DUContext* parent = m_importedParentContexts.at(i);
     if (context->textRange().start() < parent->textRange().start()) {
-      m_parentContexts.insert(i, context);
+      m_importedParentContexts.insert(i, context);
       return;
     }
   }
-  m_parentContexts.append(context);
+  m_importedParentContexts.append(context);
+}
+
+void DUContext::removeImportedParentContext( DUContext * context )
+{
+  m_importedParentContexts.removeAll(context);
+  context->m_importedChildContexts.removeAll(this);
 }
 
 DUContext * DUContext::findContext( const KDevDocumentCursor& position, DUContext* parent) const
@@ -309,11 +333,14 @@ void DUContext::mergeDefinitions(DUContext* context, QHash<QualifiedIdentifier, 
     if (!definitions.contains(definition->qualifiedIdentifier()))
       definitions.insert(definition->qualifiedIdentifier(), definition);
 
-  QListIterator<DUContext*> it = context->parentContexts();
+  QListIterator<DUContext*> it = context->importedParentContexts();
   it.toBack();
   while (it.hasPrevious()) {
     mergeDefinitions(it.previous(), definitions);
   }
+
+  if (parentContext())
+    mergeDefinitions(parentContext(), definitions);
 }
 
 void DUContext::deleteLocalDefinitions()
@@ -339,15 +366,23 @@ void DUContext::deleteChildContextsRecursively()
   deleteChildContextsRecursively(url());
 }
 
+void DUContext::deleteImportedParentContextsRecursively(const KUrl& url)
+{
+  QList<DUContext*> importedParentContexts = m_importedParentContexts;
+  foreach (DUContext* importedParent, importedParentContexts) {
+    if (importedParent->url() == url)
+      delete importedParent;
+  }
+
+  Q_ASSERT(m_importedParentContexts.isEmpty());
+}
+
 void DUContext::deleteChildContextsRecursively(const KUrl& url)
 {
   QList<DUContext*> childContexts = m_childContexts;
-  foreach (DUContext* context, m_childContexts) {
-    takeChildContext(context);
-    context->deleteChildContextsRecursively(url);
-  }
-
-  qDeleteAll(childContexts);
+  foreach (DUContext* context, childContexts)
+    if (context->url() == url)
+      delete context;
 
   Q_ASSERT(m_childContexts.isEmpty());
 }
@@ -369,10 +404,8 @@ QualifiedIdentifier DUContext::scopeIdentifier() const
 {
   QualifiedIdentifier ret = localScopeIdentifier();
 
-  QListIterator<DUContext*> it = parentContexts();
-  it.toBack();
-  while (it.hasPrevious())
-    ret.merge(it.previous()->scopeIdentifier());
+  if (parentContext())
+    ret.merge(parentContext()->scopeIdentifier());
 
   return ret;
 }
@@ -445,5 +478,9 @@ const QList<KTextEditor::Range*>& DUContext::orphanUses() const
   return m_orphanUses;
 }
 
+const QList<DUContext*>& DUContext::importedParentContexts() const
+{
+  return m_importedParentContexts;
+}
 
 // kate: indent-width 2;

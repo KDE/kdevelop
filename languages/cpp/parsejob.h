@@ -58,6 +58,7 @@ public:
     virtual DUContext *duChain() const;
 
     void addIncludedFile(const QString& filename);
+    const QStringList& includedFiles() const;
     void requestDependancies();
 
 private:

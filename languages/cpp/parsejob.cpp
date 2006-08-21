@@ -28,6 +28,8 @@
 #include <klocale.h>
 
 #include "kdevdocument.h"
+#include "kdevproject.h"
+#include "kdevpersistenthash.h"
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
@@ -145,8 +147,20 @@ void ParseJob::run()
         // Locking the interface here allows all of the highlighting to update before a redraw happens, thus no flicker
         QMutexLocker lock(smart ? smart->smartMutex() : 0);
 
+        Q_ASSERT(KDevCore::activeProject());
+
+        QList<DUContext*> chains;
+        /*foreach (const QString& include, parentJob()->includedFiles()) {
+            KDevAST* ast = KDevCore::activeProject()->persistentHash()->retrieveAST(include);
+            if (ast) {
+                TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
+                if (t->ducontext)
+                    chains.append(t->ducontext);
+            }
+        }*/
+
         DUBuilder dubuilder(parentJob()->parseSession());
-        DUContext* topContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileDefinitions);
+        DUContext* topContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileDefinitions, &chains);
         DUContext* repeatTopContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileUses);
         Q_ASSERT(repeatTopContext == topContext);
 
@@ -158,7 +172,7 @@ void ParseJob::run()
         // Debug output...
         /*if (topContext->smartRange()) {
             DumpChain dump;
-            dump.dump(ast, parentJob()->parseSession());
+            //dump.dump(ast, parentJob()->parseSession());
             dump.dump(topContext);
         }*/
     }
@@ -179,6 +193,11 @@ void CPPParseJob::requestDependancies()
 ParseSession * CPPParseJob::parseSession() const
 {
     return m_session;
+}
+
+const QStringList & CPPParseJob::includedFiles() const
+{
+    return m_includedFiles;
 }
 
 #include "parsejob.moc"

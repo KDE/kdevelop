@@ -52,7 +52,7 @@ DUBuilder::~DUBuilder ()
   delete m_nameCompiler;
 }
 
-DUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse definition)
+DUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse definition, QList<DUContext*>* includes)
 {
   m_compilingDefinitions = definition == CompileDefinitions;
 
@@ -84,6 +84,19 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse definiti
     topLevelContext = openContextInternal(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain), DUContext::Global);
 
     DUChain::self()->addDocumentChain(url, topLevelContext);
+  }
+
+  node->ducontext = topLevelContext;
+
+  if (includes) {
+    foreach (DUContext* parent, topLevelContext->importedParentContexts())
+      if (includes->contains(parent))
+        includes->removeAll(parent);
+      else
+        topLevelContext->removeImportedParentContext(parent);
+
+    foreach (DUContext* included, *includes)
+      topLevelContext->addImportedParentContext(included);
   }
 
   m_editor->setCurrentRange(currentContext()->textRangePtr());
@@ -511,9 +524,10 @@ void DUBuilder::visitForStatement(ForStatementAST *node)
 void DUBuilder::reparentSecondContext()
 {
   if (m_compilingDefinitions && m_secondParentContext) {
-    if (m_secondParentContext->parentContexts().count())
-      m_secondParentContext->parentContexts().first()->takeChildContext(m_secondParentContext);
-    m_secondParentContext->addChildContext(currentContext());
+    if (m_secondParentContext->parentContext())
+      m_secondParentContext->parentContext()->takeChildContext(m_secondParentContext);
+
+    currentContext()->addImportedParentContext(m_secondParentContext);
     m_secondParentContext = 0;
   }
 }

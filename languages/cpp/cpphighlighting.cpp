@@ -225,11 +225,6 @@ void CppHighlighting::outputRange( KTextEditor::SmartRange * range ) const
 
 void CppHighlighting::highlightDUChain(DUContext* context) const
 {
-  highlightDUChain(context, true);
-}
-
-void CppHighlighting::highlightDUChain(DUContext* context, bool iterate) const
-{
   if (!context->smartRange())
     return;
 
@@ -264,13 +259,11 @@ void CppHighlighting::highlightDUChain(DUContext* context, bool iterate) const
   foreach (Range* use, context->orphanUses())
     use->toSmartRange()->setAttribute(attributeForType(ErrorVariableType, ReferenceContext));
 
-  if (iterate) {
-    for (int i = context->parentContexts().count() - 1; i > 0; --i)
-      highlightDUChain(context->parentContexts()[i], false);
+  foreach (DUContext* context, context->importedParentContexts())
+    highlightDUChain(context);
 
-    foreach (DUContext* child, context->childContexts())
-      highlightDUChain(child, true);
-  }
+  foreach (DUContext* child, context->childContexts())
+    highlightDUChain(child);
 
   /*if (context->parentContexts().isEmpty())
     outputRange(context->smartRange());*/

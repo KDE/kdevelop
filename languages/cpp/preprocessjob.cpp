@@ -96,6 +96,8 @@ Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type)
         addMacros(t->session->macros);
     }
 
+    parentJob()->addIncludedFile(fileName);
+
     return 0;
 }
 

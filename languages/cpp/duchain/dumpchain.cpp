@@ -151,7 +151,7 @@ DumpChain::~ DumpChain( )
   delete m_editor;
 }
 
-void DumpChain::dump( DUContext * context, bool recurse )
+void DumpChain::dump( DUContext * context )
 {
   kDebug() << QString(indent * 2, ' ') << "New Context \"" << context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "] " << context->textRange() << endl;
   foreach (Definition* def, context->localDefinitions()) {
@@ -161,16 +161,14 @@ void DumpChain::dump( DUContext * context, bool recurse )
   }
 
   --indent;
-  for (int i = context->parentContexts().count() - 1; i > 0; --i)
-    dump(context->parentContexts()[i], false);
+  foreach (DUContext* parent, context->importedParentContexts())
+    dump(parent);
   ++indent;
 
-  if (recurse) {
-    ++indent;
-    foreach (DUContext* child, context->childContexts())
-      dump(child);
-    --indent;
-  }
+  ++indent;
+  foreach (DUContext* child, context->childContexts())
+    dump(child);
+  --indent;
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
