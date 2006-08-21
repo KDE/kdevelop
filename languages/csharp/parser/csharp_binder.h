@@ -67,6 +67,8 @@ protected:
     virtual void visit_interface_method_declaration( interface_method_declaration_ast *node );
     virtual void visit_variable_declaration_data( variable_declaration_data_ast *node );
     virtual void visit_variable_declarator( variable_declarator_ast *node );
+    virtual void visit_constant_declaration_data( constant_declaration_data_ast *node );
+    virtual void visit_constant_declarator( constant_declarator_ast *node );
 
     /*
     virtual void visit_accessor_declarations( accessor_declarations_ast *node );
@@ -77,8 +79,6 @@ protected:
     virtual void visit_attribute_target( attribute_target_ast *node );
     virtual void visit_block( block_ast *node );
     virtual void visit_class_base( class_base_ast *node );
-    virtual void visit_constant_declaration_data( constant_declaration_data_ast *node );
-    virtual void visit_constant_declarator( constant_declarator_ast *node );
     virtual void visit_constructor_constraint( constructor_constraint_ast *node );
     virtual void visit_constructor_declaration( constructor_declaration_ast *node );
     virtual void visit_conversion_operator_declaration( conversion_operator_declaration_ast *node );

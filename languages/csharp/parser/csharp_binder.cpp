@@ -506,6 +506,35 @@ void Binder::visit_variable_declarator( variable_declarator_ast *node )
     scopeChameleon->addLocalVariable( newVariableDeclaration ); // for local variables
 }
 
+void Binder::visit_constant_declaration_data( constant_declaration_data_ast *node )
+{
+    _M_currentType = createType( node->type );
+
+    default_visitor::visit_constant_declaration_data( node );
+}
+
+void Binder::visit_constant_declarator( constant_declarator_ast *node )
+{
+    VariableDeclarationModelItem newVariableDeclaration =
+            model()->create<VariableDeclarationModelItem>();
+    newVariableDeclaration->setScope( _M_currentScope->context() );
+    setPositionAt( newVariableDeclaration, node );
+
+    default_visitor::visit_constant_declarator( node );
+
+    newVariableDeclaration->setName( decode_string(node->constant_name->ident).c_str() );
+
+    ModelItemChameleon itemChameleon( newVariableDeclaration );
+    setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
+    setModifiers( itemChameleon, _M_currentModifiers );
+    newVariableDeclaration->setType( _M_currentType );
+    newVariableDeclaration->setConstant( true );
+
+    ModelItemChameleon scopeChameleon( _M_currentScope );
+    scopeChameleon->addVariable( newVariableDeclaration ); // for member variables
+    scopeChameleon->addLocalVariable( newVariableDeclaration ); // for local variables
+}
+
 void Binder::visit_optional_modifiers(optional_modifiers_ast *node)
 {
     _M_currentAccessPolicy = node->access_policy;

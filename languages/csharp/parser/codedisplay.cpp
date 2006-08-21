@@ -72,6 +72,66 @@ QString CodeDisplay::toolTip( const _CodeModelItem *item )
     QString tooltip;
     ModelItemChameleon chameleon( item->toItem() );
 
+    Nullable<access_policy::access_policy_enum> policy =
+            chameleon->accessPolicy();
+
+    if ( !policy.isNull )
+    {
+        bool showAccessPolicy = true;
+
+        if ( MethodDeclarationModelItem modelItem =
+                model_dynamic_cast<MethodDeclarationModelItem>(item->toItem()) )
+        {
+            if ( modelItem->isConstructor() || modelItem->isFinalizer()
+                || modelItem->isInterfaceMethodDeclaration() )
+            {
+                showAccessPolicy = false;
+            }
+        }
+
+        if ( showAccessPolicy )
+        {
+            switch ( policy.item )
+            {
+            case access_policy::access_private:
+                tooltip += "[private] "; break;
+            case access_policy::access_protected:
+                tooltip += "[protected] "; break;
+            case access_policy::access_protected_internal:
+                tooltip += "[protected internal] "; break;
+            case access_policy::access_public:
+                tooltip += "[public] "; break;
+            default:
+                Q_ASSERT( false );
+            }
+        }
+    }
+
+    Nullable<bool> is;
+
+    if ( is = chameleon->isStatic(), is.isNull == false && is.item == true )
+        tooltip += "static ";
+    if ( is = chameleon->isConstant(), is.isNull == false && is.item == true )
+        tooltip += "const ";
+    if ( is = chameleon->isNew(), is.isNull == false && is.item == true )
+        tooltip += "new ";
+    if ( is = chameleon->isAbstract(), is.isNull == false && is.item == true )
+        tooltip += "abstract ";
+    if ( is = chameleon->isSealed(), is.isNull == false && is.item == true )
+        tooltip += "sealed ";
+    if ( is = chameleon->isReadonly(), is.isNull == false && is.item == true )
+        tooltip += "readonly ";
+    if ( is = chameleon->isVolatile(), is.isNull == false && is.item == true )
+        tooltip += "volatile ";
+    if ( is = chameleon->isVirtual(), is.isNull == false && is.item == true )
+        tooltip += "virtual ";
+    if ( is = chameleon->isOverride(), is.isNull == false && is.item == true )
+        tooltip += "override ";
+    if ( is = chameleon->isExtern(), is.isNull == false && is.item == true )
+        tooltip += "extern ";
+    if ( is = chameleon->isUnsafe(), is.isNull == false && is.item == true )
+        tooltip += "unsafe ";
+
     switch ( item->kind() )
     {
     case _CodeModelItem::Kind_NamespaceDeclaration:
