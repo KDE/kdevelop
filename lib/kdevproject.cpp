@@ -46,8 +46,7 @@ KDevProject::KDevProject(KInstance* instance, QObject *parent)
     : KDevPlugin(instance, parent)
     , d(new KDevProjectPrivate())
 {
-    QDBus::sessionBus().registerObject("/org/kdevelop/Project",
-                                       this, QDBusConnection::ExportSlots);
+    QDBusConnection::sessionBus().registerObject("/org/kdevelop/Project", this, QDBusConnection::ExportScriptableSlots);
 
     d->manager = 0;
 }

@@ -84,8 +84,7 @@ using namespace MainWindowUtils;
 KDevDocumentController::KDevDocumentController( QObject *parent )
         : QObject( parent )
 {
-    QDBus::sessionBus().registerObject( "/org/kdevelop/DocumentController",
-                                        this, QDBusConnection::ExportSlots );
+    QDBusConnection::sessionBus().registerObject( "/org/kdevelop/DocumentController", this, QDBusConnection::ExportScriptableSlots );
     m_isJumping = false;
 
     m_openNextAsText = false;

@@ -13,7 +13,7 @@ kde4_automoc(${kdevguibuilder_PART_SRCS})
 
 kde4_add_plugin(kdevguibuilder ${kdevguibuilder_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevguibuilder  ${KDE4_KDECORE_LIBS} kdevplatform QtDesigner_debug QtDesignerComponents_debug)
+TARGET_LINK_LIBRARIES(kdevguibuilder  ${KDE4_KDECORE_LIBS} kdevplatform QtDesigner QtDesignerComponents )
 
 install(TARGETS kdevguibuilder DESTINATION ${PLUGIN_INSTALL_DIR})
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kdevguibuilder )
