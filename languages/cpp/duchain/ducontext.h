@@ -68,7 +68,7 @@ public:
   /**
    * Calculate the fully qualified scope identifier
    */
-  QualifiedIdentifier scopeIdentifier() const;
+  QualifiedIdentifier scopeIdentifier(bool includeClasses = false) const;
 
   /**
    * Scope identifier, used to qualify the identifiers occurring in each context
@@ -229,6 +229,17 @@ public:
    * \returns the requested context if one was found, otherwise null.
    */
   DUContext* findContext(const KDevDocumentCursor& position, DUContext* parent = 0) const;
+
+  /**
+   * Searches for the most specific context for the given cursor \a position in the given \a url.
+   *
+   * \param location the text position to search for
+   * \param parent the parent context to search from (this is mostly an internal detail, but if you only
+   *               want to search in a subbranch of the chain, you may specify the parent here)
+   *
+   * \returns the requested context if one was found, otherwise null.
+   */
+  DUContext* findContext(ContextType contextType, const QualifiedIdentifier& identifier, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
 
   /**
    * Return a list of definitions for a given cursor \a position in a given \a url.

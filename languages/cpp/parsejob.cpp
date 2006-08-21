@@ -150,14 +150,14 @@ void ParseJob::run()
         Q_ASSERT(KDevCore::activeProject());
 
         QList<DUContext*> chains;
-        /*foreach (const QString& include, parentJob()->includedFiles()) {
+        foreach (const QString& include, parentJob()->includedFiles()) {
             KDevAST* ast = KDevCore::activeProject()->persistentHash()->retrieveAST(include);
             if (ast) {
                 TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
                 if (t->ducontext)
                     chains.append(t->ducontext);
             }
-        }*/
+        }
 
         DUBuilder dubuilder(parentJob()->parseSession());
         DUContext* topContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileDefinitions, &chains);

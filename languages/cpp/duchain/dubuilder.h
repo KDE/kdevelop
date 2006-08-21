@@ -139,12 +139,13 @@ private:
   /**
    * Opens a new context.
    */
-  DUContext* openContext(AST* range, DUContext::ContextType type);
-  DUContext* openContext(AST* fromRange, AST* toRange, DUContext::ContextType type);
-  DUContext* openContextInternal(KTextEditor::Range* range, DUContext::ContextType type);
+  DUContext* openContext(AST* range, DUContext::ContextType type, NameAST* identifier = 0);
+  DUContext* openContext(AST* fromRange, AST* toRange, DUContext::ContextType type, NameAST* identifier = 0);
+  DUContext* openContextInternal(KTextEditor::Range* range, DUContext::ContextType type, NameAST* identifier = 0);
 
-  bool createContextIfNeeded(AST* node, DUContext* secondParentContext);
-  void reparentSecondContext();
+  bool createContextIfNeeded(AST* node, const QList<DUContext*>& importedParentContexts);
+  bool createContextIfNeeded(AST* node, DUContext* importedParentContext);
+  void addImportedContexts();
 
   /**
    * Closes the current context.
@@ -166,7 +167,7 @@ private:
   bool m_compilingDefinitions: 1;
 
   QStack<DUContext*> m_contextStack;
-  DUContext* m_secondParentContext;
+  QList<DUContext*> m_importedParentContexts;
 };
 
 #endif // DUBUILDER_H

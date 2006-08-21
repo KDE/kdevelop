@@ -98,23 +98,23 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         break;
 
       case MemberVariableType:
-        a->setForeground(QColor(Qt::green).light());
+        a->setForeground(QColor(0xFF800D));
         break;
 
       case LocalVariableType:
-        a->setForeground(QColor(Qt::blue).light());
+        a->setForeground(QColor(0xA04F2C));
         break;
 
       case FunctionVariableType:
-        a->setForeground(QColor(Qt::red).light());
+        a->setForeground(QColor(0x1F88A7));
         break;
 
       case NamespaceVariableType:
-        a->setForeground(QColor(0xa48323));
+        a->setForeground(QColor(0xF70000));
         break;
 
       case GlobalVariableType:
-        a->setForeground(QColor(0x9379e8));
+        a->setForeground(QColor(0x1FCB4A));
         break;
 
       case NamespaceType:
@@ -142,12 +142,10 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         break;
 
       case DeclarationContext:
-        a = m_declarationAttributes[type];
+        a->setFontUnderline(true);
         break;
 
       case ReferenceContext:
-        a->setFontUnderline(true);
-
         KTextEditor::Attribute::Ptr d(new KTextEditor::Attribute());
         d->setBackground(QColor(Qt::blue).light(190));
         d->setEffects(Attribute::EffectFadeIn | Attribute::EffectFadeOut);

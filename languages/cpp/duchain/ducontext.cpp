@@ -400,9 +400,12 @@ void DUContext::deleteDefinition(Definition* definition)
   delete definition;
 }
 
-QualifiedIdentifier DUContext::scopeIdentifier() const
+QualifiedIdentifier DUContext::scopeIdentifier(bool includeClasses) const
 {
-  QualifiedIdentifier ret = localScopeIdentifier();
+  QualifiedIdentifier ret;
+
+  if (includeClasses || type() == Namespace)
+    ret = localScopeIdentifier();
 
   if (parentContext())
     ret.merge(parentContext()->scopeIdentifier());
@@ -481,6 +484,69 @@ const QList<KTextEditor::Range*>& DUContext::orphanUses() const
 const QList<DUContext*>& DUContext::importedParentContexts() const
 {
   return m_importedParentContexts;
+}
+
+DUContext* DUContext::findContext(ContextType contextType, const QualifiedIdentifier& identifier, const DUContext* sourceChild, const QList<UsingNS*>& usingNS) const
+{
+  QList<UsingNS*> currentUsingNS = usingNS;
+
+  if (!identifier.explicitlyGlobal()) {
+    foreach (UsingNS* use, usingNamespaces())
+      if (!sourceChild || sourceChild->textRange().start() >= *use->origin)
+        currentUsingNS.append(use);
+  }
+
+  if (contextType == type())
+    if (identifier == scopeIdentifier(true))
+      return const_cast<DUContext*>(this);
+
+  foreach (DUContext* child, m_childContexts) {
+    if (child == sourceChild)
+      break;
+
+    if (contextType == child->type())
+      if (identifier == child->scopeIdentifier(true))
+        return child;
+
+    if (child->type() == Namespace) {
+      QualifiedIdentifier nsIdentifier = identifier;
+      nsIdentifier.pop();
+      foreach (UsingNS* use, currentUsingNS) {
+        switch (use->nsIdentifier.match(nsIdentifier)) {
+          case QualifiedIdentifier::ContainedBy:
+          case QualifiedIdentifier::ExactMatch:
+          case QualifiedIdentifier::Contains:
+            if (DUContext* context = child->findContext(contextType, identifier, 0L, currentUsingNS))
+              return context;
+            continue;
+
+          default:
+            continue;
+        }
+      }
+    }
+  }
+
+  // FIXME currentUsingNS is not exactly correct
+  foreach (UsingNS* use, currentUsingNS) {
+    QualifiedIdentifier id = identifier.merge(use->nsIdentifier);
+
+    if (contextType == type())
+      if (id == scopeIdentifier(true))
+        return const_cast<DUContext*>(this);
+  }
+
+  QListIterator<DUContext*> it = m_importedParentContexts;
+  it.toBack();
+  while (it.hasPrevious())
+    if (DUContext* context = it.previous()->findContext(contextType, identifier, this, currentUsingNS))
+      return context;
+
+  if (parentContext())
+    if (DUContext* context = parentContext()->findContext(contextType, identifier, this, currentUsingNS))
+      return context;
+
+  return 0;
 }
 
 // kate: indent-width 2;
