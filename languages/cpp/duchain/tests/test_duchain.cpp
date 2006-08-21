@@ -524,7 +524,9 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
 
   DUBuilder dubuilder(session);
   static int testNumber = 0;
-  DUContext* top = dubuilder.build(KUrl(QString("file:///internal/%1").arg(testNumber++)), ast);
+  KUrl url(QString("file:///internal/%1").arg(testNumber++));
+  DUContext* top = dubuilder.build(url, ast, DUBuilder::CompileDefinitions);
+  dubuilder.build(url, ast, DUBuilder::CompileUses);
 
   if (dump & DumpDUChain) {
     kDebug() << "===== DUChain:" << endl;

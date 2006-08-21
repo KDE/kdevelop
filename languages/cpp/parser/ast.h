@@ -28,6 +28,7 @@
     enum { __node_kind = Kind_##k };
 
 class ParseSession;
+class DUContext;
 
 struct AccessSpecifierAST;
 struct AsmDefinitionAST;
@@ -194,6 +195,8 @@ struct AST : public KDevAST
 
   std::size_t start_token;
   std::size_t end_token;
+
+  DUContext* ducontext;
 };
 
 struct TypeSpecifierAST: public AST

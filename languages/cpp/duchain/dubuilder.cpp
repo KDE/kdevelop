@@ -52,8 +52,10 @@ DUBuilder::~DUBuilder ()
   delete m_nameCompiler;
 }
 
-DUContext* DUBuilder::build(const KUrl& url, AST *node)
+DUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse definition)
 {
+  m_compilingDefinitions = definition == CompileDefinitions;
+
   m_editor->setCurrentUrl(url);
 
   DUContext* topLevelContext = DUChain::self()->chainForDocument(url);
@@ -62,19 +64,24 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node)
     m_contextStack.push(topLevelContext);
 
     Q_ASSERT(topLevelContext->textRangePtr());
-    // FIXME for now, just clear the chain... later, need to implement incremental parsing
-    topLevelContext->deleteChildContextsRecursively();
-    topLevelContext->deleteLocalDefinitions();
 
-    Q_ASSERT(topLevelContext->textRangePtr());
+    if (m_compilingDefinitions) {
+      // FIXME for now, just clear the chain... later, need to implement incremental parsing
+      topLevelContext->deleteChildContextsRecursively();
+      topLevelContext->deleteLocalDefinitions();
 
-    // FIXME remove once conversion works
-    if (!topLevelContext->smartRange() && m_editor->smart())
-      topLevelContext->setTextRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
+      Q_ASSERT(topLevelContext->textRangePtr());
+
+      // FIXME remove once conversion works
+      if (!topLevelContext->smartRange() && m_editor->smart())
+        topLevelContext->setTextRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
+    }
 
   } else {
+    Q_ASSERT(m_compilingDefinitions);
+
     // FIXME the top range will probably get deleted without the editor integrator knowing...?
-    topLevelContext = openContext(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain), DUContext::Global);
+    topLevelContext = openContextInternal(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain), DUContext::Global);
 
     DUChain::self()->addDocumentChain(url, topLevelContext);
   }
@@ -98,13 +105,19 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node)
 
 void DUBuilder::visitNamespace (NamespaceAST *node)
 {
-  QualifiedIdentifier identifier = currentContext()->scopeIdentifier();
-  if (node->namespace_name)
-    identifier << QualifiedIdentifier(m_editor->tokenToString(node->namespace_name));
-  else
-    identifier << Identifier::unique(0);
+  QualifiedIdentifier identifier;
+  if (m_compilingDefinitions) {
+    identifier = currentContext()->scopeIdentifier();
+    if (node->namespace_name)
+      identifier << QualifiedIdentifier(m_editor->tokenToString(node->namespace_name));
+    else
+      identifier << Identifier::unique(0);
+  }
 
-  openContext(node, DUContext::Namespace)->setLocalScopeIdentifier(identifier);
+  DUContext* nsCtx = openContext(node, DUContext::Namespace);
+
+  if (m_compilingDefinitions)
+    nsCtx->setLocalScopeIdentifier(identifier);
 
   bool was = inNamespace (true);
   DefaultVisitor::visitNamespace (node);
@@ -116,8 +129,6 @@ void DUBuilder::visitNamespace (NamespaceAST *node)
 void DUBuilder::visitClassSpecifier (ClassSpecifierAST *node)
 {
   openContext(node, DUContext::Class);
-
-  //newDeclaration(node->name, previousContext);
 
   bool was = inClass (true);
   DefaultVisitor::visitClassSpecifier (node);
@@ -157,18 +168,38 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 
 DUContext* DUBuilder::openContext(AST* rangeNode, DUContext::ContextType type)
 {
-  Range* range = m_editor->createRange(rangeNode);
-  return openContext(range, type);
+  if (m_compilingDefinitions) {
+    Range* range = m_editor->createRange(rangeNode);
+    DUContext* ret = openContextInternal(range, type);
+    rangeNode->ducontext = ret;
+    return ret;
+
+  } else {
+    m_contextStack.push(rangeNode->ducontext);
+    m_editor->setCurrentRange(currentContext()->textRangePtr());
+    return currentContext();
+  }
 }
 
 DUContext* DUBuilder::openContext(AST* fromRange, AST* toRange, DUContext::ContextType type)
 {
-  Range* range = m_editor->createRange(fromRange, toRange);
-  return openContext(range, type);
+  if (m_compilingDefinitions) {
+    Range* range = m_editor->createRange(fromRange, toRange);
+    DUContext* ret = openContextInternal(range, type);
+    fromRange->ducontext = ret;
+    return ret;
+
+  } else {
+    m_contextStack.push(fromRange->ducontext);
+    m_editor->setCurrentRange(currentContext()->textRangePtr());
+    return currentContext();
+  }
 }
 
-DUContext* DUBuilder::openContext(Range* range, DUContext::ContextType type)
+DUContext* DUBuilder::openContextInternal(Range* range, DUContext::ContextType type)
 {
+  Q_ASSERT(m_compilingDefinitions);
+
   DUContext* ret = new DUContext(range, m_contextStack.isEmpty() ? 0 : currentContext());
   ret->setType(type);
 
@@ -179,23 +210,21 @@ DUContext* DUBuilder::openContext(Range* range, DUContext::ContextType type)
 
 void DUBuilder::closeContext(NameAST* name, AST* node)
 {
-  /* FIXME hrm... not sure why this doesn't pass
-  if (currentContext()->smartRange() && parent->smartRange())
-    Q_ASSERT(currentContext()->smartRange()->parentRange() == parent->smartRange());*/
+  if (m_compilingDefinitions) {
+    if (node) {
+      // Find the end position of this function definition (just inside the bracket)
+      KDevDocumentCursor endPosition = m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge);
 
-  if (node) {
-    // Find the end position of this function definition (just inside the bracket)
-    KDevDocumentCursor endPosition = m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge);
+      // Set the correct end point of the current context finishing here
+      if (currentContext()->textRange().end() != endPosition)
+        currentContext()->textRange().end() = endPosition;
+    }
 
-    // Set the correct end point of the current context finishing here
-    if (currentContext()->textRange().end() != endPosition)
-      currentContext()->textRange().end() = endPosition;
-  }
-
-  // Set context identifier
-  if (name) {
-    m_nameCompiler->run(name);
-    currentContext()->setLocalScopeIdentifier(m_nameCompiler->identifier());
+    // Set context identifier
+    if (name) {
+      m_nameCompiler->run(name);
+      currentContext()->setLocalScopeIdentifier(m_nameCompiler->identifier());
+    }
   }
 
   // Go back to the context prior to this function definition
@@ -307,6 +336,9 @@ void DUBuilder::visitMemInitializer(MemInitializerAST * node)
 
 void DUBuilder::newUse(NameAST* name)
 {
+  if (m_compilingDefinitions)
+    return;
+
   Range* current = m_editor->currentRange();
   Range* use = m_editor->createRange(name);
   m_editor->exitCurrentRange();
@@ -343,6 +375,9 @@ void DUBuilder::visitName (NameAST *)
 
 Definition* DUBuilder::newDeclaration(NameAST* name, AST* rangeNode)
 {
+  if (!m_compilingDefinitions)
+    return 0;
+
   Definition::Scope scope = Definition::GlobalScope;
   if (in_function_definition)
     scope = Definition::LocalScope;
@@ -377,9 +412,11 @@ void DUBuilder::visitUsingDirective(UsingDirectiveAST * node)
 {
   DefaultVisitor::visitUsingDirective(node);
 
-  m_nameCompiler->run(node->name);
+  if (m_compilingDefinitions) {
+    m_nameCompiler->run(node->name);
 
-  currentContext()->addUsingNamespace(m_editor->createCursor(node->end_token, CppEditorIntegrator::FrontEdge), m_nameCompiler->identifier());
+    currentContext()->addUsingNamespace(m_editor->createCursor(node->end_token, CppEditorIntegrator::FrontEdge), m_nameCompiler->identifier());
+  }
 }
 
 void DUBuilder::visitClassMemberAccess(ClassMemberAccessAST * node)
@@ -473,7 +510,7 @@ void DUBuilder::visitForStatement(ForStatementAST *node)
 
 void DUBuilder::reparentSecondContext()
 {
-  if (m_secondParentContext) {
+  if (m_compilingDefinitions && m_secondParentContext) {
     if (m_secondParentContext->parentContexts().count())
       m_secondParentContext->parentContexts().first()->takeChildContext(m_secondParentContext);
     m_secondParentContext->addChildContext(currentContext());

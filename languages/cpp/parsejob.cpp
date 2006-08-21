@@ -146,7 +146,10 @@ void ParseJob::run()
         QMutexLocker lock(smart ? smart->smartMutex() : 0);
 
         DUBuilder dubuilder(parentJob()->parseSession());
-        DUContext* topContext = dubuilder.build(parentJob()->document(), ast);
+        DUContext* topContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileDefinitions);
+        DUContext* repeatTopContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileUses);
+        Q_ASSERT(repeatTopContext == topContext);
+
         parentJob()->setDUChain(topContext);
 
         if ( parentJob()->cpp()->codeHighlighting() )

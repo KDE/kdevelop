@@ -47,7 +47,12 @@ public:
   DUBuilder(ParseSession* session);
   virtual ~DUBuilder ();
 
-  DUContext* build(const KUrl& url, AST *node);
+  enum DefinitionOrUse {
+    CompileDefinitions,
+    CompileUses
+  };
+
+  DUContext* build(const KUrl& url, AST *node, DefinitionOrUse definition);
 
 protected:
   virtual void visitNamespace (NamespaceAST *);
@@ -130,7 +135,7 @@ private:
    */
   DUContext* openContext(AST* range, DUContext::ContextType type);
   DUContext* openContext(AST* fromRange, AST* toRange, DUContext::ContextType type);
-  DUContext* openContext(KTextEditor::Range* range, DUContext::ContextType type);
+  DUContext* openContextInternal(KTextEditor::Range* range, DUContext::ContextType type);
 
   bool createContextIfNeeded(AST* node, DUContext* secondParentContext);
   void reparentSecondContext();
@@ -152,6 +157,7 @@ private:
   bool in_typedef: 1;
   bool in_function_definition: 1;
   bool in_parameter_declaration: 1;
+  bool m_compilingDefinitions: 1;
 
   QStack<DUContext*> m_contextStack;
   DUContext* m_secondParentContext;
