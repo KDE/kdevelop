@@ -1,7 +1,7 @@
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util \
 	-I$(top_srcdir)/parts/documentation/interfaces $(all_includes)
 METASOURCES = AUTO
-lib_LTLIBRARIES =  libdocdevhelpplugin.la
+kde_module_LTLIBRARIES =  libdocdevhelpplugin.la
 libdocdevhelpplugin_la_LDFLAGS = $(all_libraries)
 kde_services_DATA =  docdevhelpplugin.desktop
 noinst_HEADERS =  docdevhelpplugin.h

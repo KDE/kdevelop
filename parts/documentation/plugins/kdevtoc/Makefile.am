@@ -1,7 +1,7 @@
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util \
 	-I$(top_srcdir)/parts/documentation/interfaces $(all_includes)
 METASOURCES = AUTO
-lib_LTLIBRARIES =  libdockdevtocplugin.la
+kde_module_LTLIBRARIES =  libdockdevtocplugin.la
 libdockdevtocplugin_la_LDFLAGS = $(all_libraries)
 kde_services_DATA =  dockdevtocplugin.desktop
 noinst_HEADERS =  dockdevtocplugin.h

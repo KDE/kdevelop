@@ -1,7 +1,7 @@
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util \
 	-I$(top_srcdir)/parts/documentation/interfaces $(all_includes)
 METASOURCES = AUTO
-lib_LTLIBRARIES = libdocdoxygenplugin.la
+kde_module_LTLIBRARIES = libdocdoxygenplugin.la
 
 kde_services_DATA =  docdoxygenplugin.desktop
 libdocdoxygenplugin_la_SOURCES = docdoxygenplugin.cpp
