@@ -59,6 +59,10 @@ namespace csharp
 
   class _VariableDeclarationModelItem;
 
+  class _TypePartModelItem;
+
+  class _TypeModelItem;
+
   class _ParameterModelItem;
 
   class _TypeParameterModelItem;
@@ -68,10 +72,6 @@ namespace csharp
   class _PrimaryOrSecondaryConstraintModelItem;
 
   class _ConstructorConstraintModelItem;
-
-  class _TypePartModelItem;
-
-  class _TypeModelItem;
 
   typedef KDevSharedPtr<_CodeModelItem> CodeModelItem;
   typedef KDevSharedPtr<_ScopeModelItem> ScopeModelItem;
@@ -95,13 +95,13 @@ namespace csharp
   typedef KDevSharedPtr<_AccessorDeclarationModelItem> AccessorDeclarationModelItem;
   typedef KDevSharedPtr<_MethodDeclarationModelItem> MethodDeclarationModelItem;
   typedef KDevSharedPtr<_VariableDeclarationModelItem> VariableDeclarationModelItem;
+  typedef KDevSharedPtr<_TypePartModelItem> TypePartModelItem;
+  typedef KDevSharedPtr<_TypeModelItem> TypeModelItem;
   typedef KDevSharedPtr<_ParameterModelItem> ParameterModelItem;
   typedef KDevSharedPtr<_TypeParameterModelItem> TypeParameterModelItem;
   typedef KDevSharedPtr<_TypeParameterConstraintModelItem> TypeParameterConstraintModelItem;
   typedef KDevSharedPtr<_PrimaryOrSecondaryConstraintModelItem> PrimaryOrSecondaryConstraintModelItem;
   typedef KDevSharedPtr<_ConstructorConstraintModelItem> ConstructorConstraintModelItem;
-  typedef KDevSharedPtr<_TypePartModelItem> TypePartModelItem;
-  typedef KDevSharedPtr<_TypeModelItem> TypeModelItem;
 
   typedef QList<CodeModelItem> CodeList;
   typedef QList<CodeModelItem> ItemList;
@@ -126,13 +126,13 @@ namespace csharp
   typedef QList<AccessorDeclarationModelItem> AccessorDeclarationList;
   typedef QList<MethodDeclarationModelItem> MethodDeclarationList;
   typedef QList<VariableDeclarationModelItem> VariableDeclarationList;
+  typedef QList<TypePartModelItem> TypePartList;
+  typedef QList<TypeModelItem> TypeList;
   typedef QList<ParameterModelItem> ParameterList;
   typedef QList<TypeParameterModelItem> TypeParameterList;
   typedef QList<TypeParameterConstraintModelItem> TypeParameterConstraintList;
   typedef QList<PrimaryOrSecondaryConstraintModelItem> PrimaryOrSecondaryConstraintList;
   typedef QList<ConstructorConstraintModelItem> ConstructorConstraintList;
-  typedef QList<TypePartModelItem> TypePartList;
-  typedef QList<TypeModelItem> TypeList;
 
 
 

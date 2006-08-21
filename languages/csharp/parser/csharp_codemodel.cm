@@ -113,16 +113,16 @@ Scope: Code
 
 NamespaceDeclaration: Scope
 {
-  #namespace:       NamespaceDeclaration { hashed(name) };
+  #namespace:       NamespaceDeclaration { childitem, hashed(name) };
   #externAlias:     ExternAliasDirective { hashed(name) };
   #usingAlias:      UsingAliasDirective  { hashed(name) };
   #usingNamespace:  UsingNamespaceDirective;
 
-  #class:           ClassDeclaration     { hashed(name) };
-  #struct:          StructDeclaration    { hashed(name) };
-  #interface:       InterfaceDeclaration { hashed(name) };
-  #enum:            EnumDeclaration      { hashed(name) };
-  #delegate:        DelegateDeclaration  { hashed(name) };
+  #class:           ClassDeclaration     { childitem, hashed(name) };
+  #struct:          StructDeclaration    { childitem, hashed(name) };
+  #interface:       InterfaceDeclaration { childitem, hashed(name) };
+  #enum:            EnumDeclaration      { childitem, hashed(name) };
+  #delegate:        DelegateDeclaration  { childitem, hashed(name) };
 }
 
 GlobalNamespaceDeclaration: NamespaceDeclaration
@@ -156,11 +156,11 @@ ClassLikeDeclaration: TypeDeclaration  -- a class, struct or interface type
 {
   baseType:         Type;
 
-  #event:           EventDeclaration     { hashed(name) };
-  #indexer:         IndexerDeclaration;
-  #property:        PropertyDeclaration  { hashed(name) };
-  #method:          MethodDeclaration    { multihashed(name) };
-    -- { multihashed(name),
+  #event:           EventDeclaration     { childitem, hashed(name) };
+  #indexer:         IndexerDeclaration   { childitem };
+  #property:        PropertyDeclaration  { childitem, hashed(name) };
+  #method:          MethodDeclaration    { childitem, multihashed(name) };
+    -- { childitem, multihashed(name),
     --   unique [: !existingItem->isSimilar( model_static_cast<ITEM(Code)>(item) ) :]
     -- };
   #typeParameter:   TypeParameter;
@@ -169,12 +169,12 @@ ClassLikeDeclaration: TypeDeclaration  -- a class, struct or interface type
   isUnsafe:         bool { init[: false :] };
 
   -- only inside class or struct declarations, not interfaces:
-  #class:           ClassDeclaration     { hashed(name) };
-  #struct:          StructDeclaration    { hashed(name) };
-  #interface:       InterfaceDeclaration { hashed(name) };
-  #enum:            EnumDeclaration      { hashed(name) };
-  #delegate:        DelegateDeclaration  { hashed(name) };
-  #variable:        VariableDeclaration  { hashed(name) };
+  #class:           ClassDeclaration     { childitem, hashed(name) };
+  #struct:          StructDeclaration    { childitem, hashed(name) };
+  #interface:       InterfaceDeclaration { childitem, hashed(name) };
+  #enum:            EnumDeclaration      { childitem, hashed(name) };
+  #delegate:        DelegateDeclaration  { childitem, hashed(name) };
+  #variable:        VariableDeclaration  { childitem, hashed(name) };
 
   public declaration
   [:
@@ -225,7 +225,7 @@ DelegateDeclaration: TypeDeclaration
 
 EnumDeclaration: TypeDeclaration
 {
-  #enumValue:       EnumValue;
+  #enumValue:       EnumValue { childitem };
   baseIntegralType: Type;
 }
 
@@ -264,7 +264,7 @@ IndexerDeclaration: Scope
   type:             Type;
   fromInterface:    Type;
   #parameter:       Parameter;
-  #accessor:        AccessorDeclaration;
+  #accessor:        AccessorDeclaration { childitem };
 
   accessPolicy:     access_policy::access_policy_enum
                          { init[: access_policy::access_private :] };
@@ -281,7 +281,7 @@ PropertyDeclaration: Scope
 {
   type:             Type;
   fromInterface:    Type;
-  #accessor:        AccessorDeclaration;
+  #accessor:        AccessorDeclaration { childitem };
 
   accessPolicy:     access_policy::access_policy_enum
                          { init[: access_policy::access_private :] };
@@ -313,6 +313,7 @@ MethodDeclaration: Scope
 
   isConstructor:    bool { init[: false :] };
   isFinalizer:      bool { init[: false :] };
+  isInterfaceMethodDeclaration: bool { init[: false :] };
 
   accessPolicy:     access_policy::access_policy_enum
                          { init[: access_policy::access_private :] };
@@ -324,6 +325,8 @@ MethodDeclaration: Scope
   isAbstract:       bool { init[: false :] };
   isExtern:         bool { init[: false :] };
   isUnsafe:         bool { init[: false :] };
+
+  #localVariable:   VariableDeclaration;
 }
 
 VariableDeclaration: Code
@@ -338,33 +341,6 @@ VariableDeclaration: Code
   isReadonly:       bool { init[: false :] };
   isVolatile:       bool { init[: false :] };
   isUnsafe:         bool { init[: false :] };
-}
-
-Parameter: Code
-{
-  type:             Type;
-  isArray:          bool { init[: false :] };
-  parameterType:    parameter::parameter_type_enum
-                         { init[: parameter::value_parameter :] };
-}
-
-TypeParameter: Code
-{
-}
-
-TypeParameterConstraint: Code
-{
-}
-
-PrimaryOrSecondaryConstraint: TypeParameterConstraint
-{
-  typeOrParameterName: Type;
-  constraint_type:  primary_or_secondary_constraint::primary_or_secondary_constraint_enum
-                      { init[: primary_or_secondary_constraint::type_type :] };
-}
-
-ConstructorConstraint: TypeParameterConstraint
-{
 }
 
 TypePart: Code
@@ -493,4 +469,40 @@ Type: Code
         return true;
     }
   :]
+}
+
+Parameter: Code
+{
+  type:             Type;
+  isArray:          bool { init[: false :] };
+  parameterType:    parameter::parameter_type_enum
+                         { init[: parameter::value_parameter :] };
+
+  public declaration
+  [:
+    QString toString() const
+    {
+        Q_ASSERT( type() );
+        return type()->toString() + " " + name();
+    }
+  :]
+}
+
+TypeParameter: Code
+{
+}
+
+TypeParameterConstraint: Code
+{
+}
+
+PrimaryOrSecondaryConstraint: TypeParameterConstraint
+{
+  typeOrParameterName: Type;
+  constraint_type:  primary_or_secondary_constraint::primary_or_secondary_constraint_enum
+                      { init[: primary_or_secondary_constraint::type_type :] };
+}
+
+ConstructorConstraint: TypeParameterConstraint
+{
 }

@@ -107,12 +107,12 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
         Kind_AccessorDeclaration =  1 << 20,
         Kind_MethodDeclaration =  1 << 21 /*| Kind_Scope*/,
         Kind_VariableDeclaration =  1 << 22,
-        Kind_Parameter =  1 << 23,
-        Kind_TypeParameter =  1 << 24,
-        Kind_PrimaryOrSecondaryConstraint =  1 << 25 /*| Kind_TypeParameterConstraint*/,
-        Kind_ConstructorConstraint =  1 << 26 /*| Kind_TypeParameterConstraint*/,
-        Kind_TypePart =  1 << 27,
-        Kind_Type =  1 << 28,
+        Kind_TypePart =  1 << 23,
+        Kind_Type =  1 << 24,
+        Kind_Parameter =  1 << 25,
+        Kind_TypeParameter =  1 << 26,
+        Kind_PrimaryOrSecondaryConstraint =  1 << 27 /*| Kind_TypeParameterConstraint*/,
+        Kind_ConstructorConstraint =  1 << 28 /*| Kind_TypeParameterConstraint*/,
       };
 
     public:
@@ -1055,6 +1055,9 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       bool isFinalizer() const;
       void setFinalizer(bool isFinalizer);
 
+      bool isInterfaceMethodDeclaration() const;
+      void setInterfaceMethodDeclaration(bool isInterfaceMethodDeclaration);
+
       access_policy::access_policy_enum accessPolicy() const;
       void setAccessPolicy(access_policy::access_policy_enum accessPolicy);
 
@@ -1082,6 +1085,10 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       bool isUnsafe() const;
       void setUnsafe(bool isUnsafe);
 
+      VariableDeclarationList localVariables() const;
+      void addLocalVariable(VariableDeclarationModelItem item);
+      void removeLocalVariable(VariableDeclarationModelItem item);
+
     private:
       TypeModelItem _M_returnType;
       TypeModelItem _M_fromInterface;
@@ -1090,6 +1097,7 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       ParameterList _M_parameters;
       bool _M_isConstructor;
       bool _M_isFinalizer;
+      bool _M_isInterfaceMethodDeclaration;
       access_policy::access_policy_enum _M_accessPolicy;
       bool _M_isNew;
       bool _M_isStatic;
@@ -1099,6 +1107,7 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       bool _M_isAbstract;
       bool _M_isExtern;
       bool _M_isUnsafe;
+      VariableDeclarationList _M_localVariables;
 
     protected:
       _MethodDeclarationModelItem(CodeModel *model,  int kind =  __node_kind);
@@ -1160,6 +1169,78 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void operator=(const _VariableDeclarationModelItem &other);
     };
 
+  class _TypePartModelItem :  public _CodeModelItem
+    {
+
+    public:
+      DECLARE_MODEL_NODE(TypePart)
+
+      static TypePartModelItem create(CodeModel *model);
+      virtual ~_TypePartModelItem();
+
+    public:
+      bool operator==( const _TypePartModelItem &other );
+      bool operator!=( const _TypePartModelItem &other )
+      {
+        return  !(*this ==  other);
+      }
+
+      QString toString() const;
+
+    public:
+      TypeList typeArguments() const;
+      void addTypeArgument(TypeModelItem item);
+      void removeTypeArgument(TypeModelItem item);
+
+    private:
+      TypeList _M_typeArguments;
+
+    protected:
+      _TypePartModelItem(CodeModel *model,  int kind =  __node_kind);
+
+    private:
+      _TypePartModelItem(const _TypePartModelItem &other);
+      void operator=(const _TypePartModelItem &other);
+    };
+
+  class _TypeModelItem :  public _CodeModelItem
+    {
+
+    public:
+      DECLARE_MODEL_NODE(Type)
+
+      static TypeModelItem create(CodeModel *model);
+      virtual ~_TypeModelItem();
+
+    public:
+      bool operator==( const _TypeModelItem &other );
+      bool operator!=( const _TypeModelItem &other )
+      {
+        return  !(*this ==  other);
+      }
+
+      QString toString() const;
+
+    public:
+      QString qualifiedAliasLabel() const;
+      void setQualifiedAliasLabel(QString qualifiedAliasLabel);
+
+      TypePartList typeParts() const;
+      void addTypePart(TypePartModelItem item);
+      void removeTypePart(TypePartModelItem item);
+
+    private:
+      QString _M_qualifiedAliasLabel;
+      TypePartList _M_typeParts;
+
+    protected:
+      _TypeModelItem(CodeModel *model,  int kind =  __node_kind);
+
+    private:
+      _TypeModelItem(const _TypeModelItem &other);
+      void operator=(const _TypeModelItem &other);
+    };
+
   class _ParameterModelItem :  public _CodeModelItem
     {
 
@@ -1168,6 +1249,13 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
 
       static ParameterModelItem create(CodeModel *model);
       virtual ~_ParameterModelItem();
+
+    public:
+      QString toString() const
+        {
+          Q_ASSERT( type() );
+          return  type()->toString() +  " " +  name();
+        }
 
     public:
       TypeModelItem type() const;
@@ -1281,78 +1369,6 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
     private:
       _ConstructorConstraintModelItem(const _ConstructorConstraintModelItem &other);
       void operator=(const _ConstructorConstraintModelItem &other);
-    };
-
-  class _TypePartModelItem :  public _CodeModelItem
-    {
-
-    public:
-      DECLARE_MODEL_NODE(TypePart)
-
-      static TypePartModelItem create(CodeModel *model);
-      virtual ~_TypePartModelItem();
-
-    public:
-      bool operator==( const _TypePartModelItem &other );
-      bool operator!=( const _TypePartModelItem &other )
-      {
-        return  !(*this ==  other);
-      }
-
-      QString toString() const;
-
-    public:
-      TypeList typeArguments() const;
-      void addTypeArgument(TypeModelItem item);
-      void removeTypeArgument(TypeModelItem item);
-
-    private:
-      TypeList _M_typeArguments;
-
-    protected:
-      _TypePartModelItem(CodeModel *model,  int kind =  __node_kind);
-
-    private:
-      _TypePartModelItem(const _TypePartModelItem &other);
-      void operator=(const _TypePartModelItem &other);
-    };
-
-  class _TypeModelItem :  public _CodeModelItem
-    {
-
-    public:
-      DECLARE_MODEL_NODE(Type)
-
-      static TypeModelItem create(CodeModel *model);
-      virtual ~_TypeModelItem();
-
-    public:
-      bool operator==( const _TypeModelItem &other );
-      bool operator!=( const _TypeModelItem &other )
-      {
-        return  !(*this ==  other);
-      }
-
-      QString toString() const;
-
-    public:
-      QString qualifiedAliasLabel() const;
-      void setQualifiedAliasLabel(QString qualifiedAliasLabel);
-
-      TypePartList typeParts() const;
-      void addTypePart(TypePartModelItem item);
-      void removeTypePart(TypePartModelItem item);
-
-    private:
-      QString _M_qualifiedAliasLabel;
-      TypePartList _M_typeParts;
-
-    protected:
-      _TypeModelItem(CodeModel *model,  int kind =  __node_kind);
-
-    private:
-      _TypeModelItem(const _TypeModelItem &other);
-      void operator=(const _TypeModelItem &other);
     };
 
   template  <class _Target,  class _Source>

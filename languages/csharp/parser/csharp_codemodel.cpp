@@ -250,16 +250,12 @@ namespace csharp
     if  ( _M_externAliases.contains(item->name()) )
       removeExternAlias(_M_externAliases[item->name()]);
 
-    model()->beginAppendItem(item,  this);
     _M_externAliases.insertMulti(item->name(),  item);
-    model()->endAppendItem();
   }
 
   void _NamespaceDeclarationModelItem::removeExternAlias(ExternAliasDirectiveModelItem item)
   {
-    model()->beginRemoveItem(item);
     _M_externAliases.remove(item->name());
-    model()->endRemoveItem();
   }
 
   ExternAliasDirectiveModelItem _NamespaceDeclarationModelItem::findExternAlias(const QString &name) const
@@ -277,16 +273,12 @@ namespace csharp
     if  ( _M_usingAliases.contains(item->name()) )
       removeUsingAlias(_M_usingAliases[item->name()]);
 
-    model()->beginAppendItem(item,  this);
     _M_usingAliases.insertMulti(item->name(),  item);
-    model()->endAppendItem();
   }
 
   void _NamespaceDeclarationModelItem::removeUsingAlias(UsingAliasDirectiveModelItem item)
   {
-    model()->beginRemoveItem(item);
     _M_usingAliases.remove(item->name());
-    model()->endRemoveItem();
   }
 
   UsingAliasDirectiveModelItem _NamespaceDeclarationModelItem::findUsingAlias(const QString &name) const
@@ -301,16 +293,12 @@ namespace csharp
 
   void _NamespaceDeclarationModelItem::addUsingNamespace(UsingNamespaceDirectiveModelItem item)
   {
-    model()->beginAppendItem(item,  this);
     _M_usingNamespaces.append(item);
-    model()->endAppendItem();
   }
 
   void _NamespaceDeclarationModelItem::removeUsingNamespace(UsingNamespaceDirectiveModelItem item)
   {
-    model()->beginRemoveItem(item);
     _M_usingNamespaces.removeAt(_M_usingNamespaces.indexOf(item));
-    model()->endRemoveItem();
   }
 
   ClassDeclarationList _NamespaceDeclarationModelItem::classes() const
@@ -743,16 +731,12 @@ namespace csharp
 
   void _ClassLikeDeclarationModelItem::addTypeParameter(TypeParameterModelItem item)
   {
-    model()->beginAppendItem(item,  this);
     _M_typeParameters.append(item);
-    model()->endAppendItem();
   }
 
   void _ClassLikeDeclarationModelItem::removeTypeParameter(TypeParameterModelItem item)
   {
-    model()->beginRemoveItem(item);
     _M_typeParameters.removeAt(_M_typeParameters.indexOf(item));
-    model()->endRemoveItem();
   }
 
   TypeParameterConstraintList _ClassLikeDeclarationModelItem::typeParameterConstraints() const
@@ -762,16 +746,12 @@ namespace csharp
 
   void _ClassLikeDeclarationModelItem::addTypeParameterConstraint(TypeParameterConstraintModelItem item)
   {
-    model()->beginAppendItem(item,  this);
     _M_typeParameterConstraints.append(item);
-    model()->endAppendItem();
   }
 
   void _ClassLikeDeclarationModelItem::removeTypeParameterConstraint(TypeParameterConstraintModelItem item)
   {
-    model()->beginRemoveItem(item);
     _M_typeParameterConstraints.removeAt(_M_typeParameterConstraints.indexOf(item));
-    model()->endRemoveItem();
   }
 
   bool _ClassLikeDeclarationModelItem::isUnsafe() const
@@ -1091,16 +1071,12 @@ namespace csharp
 
       void _DelegateDeclarationModelItem::addParameter(ParameterModelItem item)
       {
-        model()->beginAppendItem(item,  this);
         _M_parameters.append(item);
-        model()->endAppendItem();
       }
 
       void _DelegateDeclarationModelItem::removeParameter(ParameterModelItem item)
       {
-        model()->beginRemoveItem(item);
         _M_parameters.removeAt(_M_parameters.indexOf(item));
-        model()->endRemoveItem();
       }
 
       TypeParameterList _DelegateDeclarationModelItem::typeParameters() const
@@ -1110,16 +1086,12 @@ namespace csharp
 
       void _DelegateDeclarationModelItem::addTypeParameter(TypeParameterModelItem item)
       {
-        model()->beginAppendItem(item,  this);
         _M_typeParameters.append(item);
-        model()->endAppendItem();
       }
 
       void _DelegateDeclarationModelItem::removeTypeParameter(TypeParameterModelItem item)
       {
-        model()->beginRemoveItem(item);
         _M_typeParameters.removeAt(_M_typeParameters.indexOf(item));
-        model()->endRemoveItem();
       }
 
       TypeParameterConstraintList _DelegateDeclarationModelItem::typeParameterConstraints() const
@@ -1129,16 +1101,12 @@ namespace csharp
 
       void _DelegateDeclarationModelItem::addTypeParameterConstraint(TypeParameterConstraintModelItem item)
       {
-        model()->beginAppendItem(item,  this);
         _M_typeParameterConstraints.append(item);
-        model()->endAppendItem();
       }
 
       void _DelegateDeclarationModelItem::removeTypeParameterConstraint(TypeParameterConstraintModelItem item)
       {
-        model()->beginRemoveItem(item);
         _M_typeParameterConstraints.removeAt(_M_typeParameterConstraints.indexOf(item));
-        model()->endRemoveItem();
       }
 
       bool _DelegateDeclarationModelItem::isUnsafe() const
@@ -1466,16 +1434,12 @@ namespace csharp
 
       void _IndexerDeclarationModelItem::addParameter(ParameterModelItem item)
       {
-        model()->beginAppendItem(item,  this);
         _M_parameters.append(item);
-        model()->endAppendItem();
       }
 
       void _IndexerDeclarationModelItem::removeParameter(ParameterModelItem item)
       {
-        model()->beginRemoveItem(item);
         _M_parameters.removeAt(_M_parameters.indexOf(item));
-        model()->endRemoveItem();
       }
 
       AccessorDeclarationList _IndexerDeclarationModelItem::accessors() const
@@ -1798,6 +1762,7 @@ namespace csharp
           :  _ScopeModelItem(model,  kind)
           ,  _M_isConstructor( false )
           ,  _M_isFinalizer( false )
+          ,  _M_isInterfaceMethodDeclaration( false )
           ,  _M_accessPolicy( access_policy::access_private )
           ,  _M_isNew( false )
           ,  _M_isStatic( false )
@@ -1845,16 +1810,12 @@ namespace csharp
 
           void _MethodDeclarationModelItem::addTypeParameter(TypeParameterModelItem item)
           {
-            model()->beginAppendItem(item,  this);
             _M_typeParameters.append(item);
-            model()->endAppendItem();
           }
 
           void _MethodDeclarationModelItem::removeTypeParameter(TypeParameterModelItem item)
           {
-            model()->beginRemoveItem(item);
             _M_typeParameters.removeAt(_M_typeParameters.indexOf(item));
-            model()->endRemoveItem();
           }
 
           TypeParameterConstraintList _MethodDeclarationModelItem::typeParameterConstraints() const
@@ -1864,16 +1825,12 @@ namespace csharp
 
           void _MethodDeclarationModelItem::addTypeParameterConstraint(TypeParameterConstraintModelItem item)
           {
-            model()->beginAppendItem(item,  this);
             _M_typeParameterConstraints.append(item);
-            model()->endAppendItem();
           }
 
           void _MethodDeclarationModelItem::removeTypeParameterConstraint(TypeParameterConstraintModelItem item)
           {
-            model()->beginRemoveItem(item);
             _M_typeParameterConstraints.removeAt(_M_typeParameterConstraints.indexOf(item));
-            model()->endRemoveItem();
           }
 
           ParameterList _MethodDeclarationModelItem::parameters() const
@@ -1883,16 +1840,12 @@ namespace csharp
 
           void _MethodDeclarationModelItem::addParameter(ParameterModelItem item)
           {
-            model()->beginAppendItem(item,  this);
             _M_parameters.append(item);
-            model()->endAppendItem();
           }
 
           void _MethodDeclarationModelItem::removeParameter(ParameterModelItem item)
           {
-            model()->beginRemoveItem(item);
             _M_parameters.removeAt(_M_parameters.indexOf(item));
-            model()->endRemoveItem();
           }
 
           bool _MethodDeclarationModelItem::isConstructor() const
@@ -1913,6 +1866,16 @@ namespace csharp
           void _MethodDeclarationModelItem::setFinalizer(bool isFinalizer)
           {
             _M_isFinalizer =  isFinalizer;
+          }
+
+          bool _MethodDeclarationModelItem::isInterfaceMethodDeclaration() const
+            {
+              return  _M_isInterfaceMethodDeclaration;
+            }
+
+          void _MethodDeclarationModelItem::setInterfaceMethodDeclaration(bool isInterfaceMethodDeclaration)
+          {
+            _M_isInterfaceMethodDeclaration =  isInterfaceMethodDeclaration;
           }
 
           access_policy::access_policy_enum _MethodDeclarationModelItem::accessPolicy() const
@@ -2003,6 +1966,21 @@ namespace csharp
           void _MethodDeclarationModelItem::setUnsafe(bool isUnsafe)
           {
             _M_isUnsafe =  isUnsafe;
+          }
+
+          VariableDeclarationList _MethodDeclarationModelItem::localVariables() const
+            {
+              return  _M_localVariables;
+            }
+
+          void _MethodDeclarationModelItem::addLocalVariable(VariableDeclarationModelItem item)
+          {
+            _M_localVariables.append(item);
+          }
+
+          void _MethodDeclarationModelItem::removeLocalVariable(VariableDeclarationModelItem item)
+          {
+            _M_localVariables.removeAt(_M_localVariables.indexOf(item));
           }
 
 #undef CLASS
@@ -2116,6 +2094,174 @@ namespace csharp
 #undef BASECLASS
 
           // ---------------------------------------------------------------------------
+#define CLASS _TypePartModelItem
+#define BASECLASS _CodeModelItem
+
+          _TypePartModelItem::_TypePartModelItem(CodeModel *model,  int kind)
+              :  _CodeModelItem(model,  kind)
+          {}
+
+          _TypePartModelItem::~_TypePartModelItem()
+          {}
+
+          TypePartModelItem _TypePartModelItem::create(CodeModel *model)
+          {
+            TypePartModelItem item(new _TypePartModelItem(model));
+            return  item;
+          }
+
+          TypeList _TypePartModelItem::typeArguments() const
+            {
+              return  _M_typeArguments;
+            }
+
+          void _TypePartModelItem::addTypeArgument(TypeModelItem item)
+          {
+            _M_typeArguments.append(item);
+          }
+
+          void _TypePartModelItem::removeTypeArgument(TypeModelItem item)
+          {
+            _M_typeArguments.removeAt(_M_typeArguments.indexOf(item));
+          }
+
+          QString CLASS::toString() const
+            {
+              //QString typeString = typeDeclaration()->name();
+              QString typeString =  name();
+
+              if  ( !typeArguments().empty() )
+                {
+                  typeString +=  "<";
+                  bool initial =  true;
+
+                  foreach ( ITEM(Type) argument,  typeArguments() )
+                  {
+                    if  ( !initial )
+                      typeString +=  ", ";
+
+                    typeString +=  argument->toString();
+                    initial =  false;
+                  }
+
+                  typeString +=  ">";
+                }
+
+              return  typeString;
+            }
+
+          bool CLASS::operator==(const CLASS &other)
+          {
+            //if ( typeDeclaration() != other.typeDeclaration() ) // not yet possible
+
+            if  ( name() !=  other.name() )
+              return  false;
+
+            if  ( typeArguments().count() !=  other.typeArguments().count() )
+              return  false;
+
+            LIST(Type)::const_iterator argument =  typeArguments().begin();
+            LIST(Type)::const_iterator otherArgument =  other.typeArguments().begin();
+
+            for  ( ; argument ==  typeArguments().end(); argument++,  otherArgument++ )
+              {
+                if  ( *argument !=  *otherArgument )
+                  return  false;
+              }
+
+            return  true;
+          }
+
+#undef CLASS
+#undef BASECLASS
+
+          // ---------------------------------------------------------------------------
+#define CLASS _TypeModelItem
+#define BASECLASS _CodeModelItem
+
+          _TypeModelItem::_TypeModelItem(CodeModel *model,  int kind)
+              :  _CodeModelItem(model,  kind)
+          {
+
+            setName( QString::null );
+            setQualifiedAliasLabel( QString::null );
+          }
+
+          _TypeModelItem::~_TypeModelItem()
+          {}
+
+          TypeModelItem _TypeModelItem::create(CodeModel *model)
+          {
+            TypeModelItem item(new _TypeModelItem(model));
+            return  item;
+          }
+
+          QString _TypeModelItem::qualifiedAliasLabel() const
+            {
+              return  _M_qualifiedAliasLabel;
+            }
+
+          void _TypeModelItem::setQualifiedAliasLabel(QString qualifiedAliasLabel)
+          {
+            _M_qualifiedAliasLabel =  qualifiedAliasLabel;
+          }
+
+          TypePartList _TypeModelItem::typeParts() const
+            {
+              return  _M_typeParts;
+            }
+
+          void _TypeModelItem::addTypePart(TypePartModelItem item)
+          {
+            _M_typeParts.append(item);
+          }
+
+          void _TypeModelItem::removeTypePart(TypePartModelItem item)
+          {
+            _M_typeParts.removeAt(_M_typeParts.indexOf(item));
+          }
+
+          QString CLASS::toString() const
+            {
+              QString typeString;
+              bool initial =  true;
+
+              if  ( !qualifiedAliasLabel().isNull() )
+                typeString =  qualifiedAliasLabel() +  "::";
+
+              foreach ( ITEM(TypePart) part,  typeParts() )
+              {
+                if  ( !initial )
+                  typeString +=  ".";
+
+                typeString +=  part->toString();
+                initial =  false;
+              }
+
+              return  typeString;
+            }
+
+          bool CLASS::operator==(const CLASS &other)
+          {
+            if  ( typeParts().count() !=  other.typeParts().count() )
+              return  false;
+
+            LIST(TypePart)::const_iterator part =  typeParts().begin();
+            LIST(TypePart)::const_iterator otherPart =  other.typeParts().begin();
+
+            for  ( ; part ==  typeParts().end(); part++,  otherPart++ )
+              {
+                if  ( *part !=  *otherPart )
+                  return  false;
+              }
+
+            return  true;
+          }
+
+#undef CLASS
+#undef BASECLASS
+
+          // ---------------------------------------------------------------------------
 #define CLASS _ParameterModelItem
 #define BASECLASS _CodeModelItem
 
@@ -2123,7 +2269,7 @@ namespace csharp
               :  _CodeModelItem(model,  kind)
               ,  _M_isArray( false )
               ,  _M_parameterType( parameter::value_parameter )
-          {}
+        {}
 
           _ParameterModelItem::~_ParameterModelItem()
           {}
@@ -2263,182 +2409,6 @@ namespace csharp
           {
             ConstructorConstraintModelItem item(new _ConstructorConstraintModelItem(model));
             return  item;
-          }
-
-#undef CLASS
-#undef BASECLASS
-
-          // ---------------------------------------------------------------------------
-#define CLASS _TypePartModelItem
-#define BASECLASS _CodeModelItem
-
-          _TypePartModelItem::_TypePartModelItem(CodeModel *model,  int kind)
-              :  _CodeModelItem(model,  kind)
-          {}
-
-          _TypePartModelItem::~_TypePartModelItem()
-          {}
-
-          TypePartModelItem _TypePartModelItem::create(CodeModel *model)
-          {
-            TypePartModelItem item(new _TypePartModelItem(model));
-            return  item;
-          }
-
-          TypeList _TypePartModelItem::typeArguments() const
-            {
-              return  _M_typeArguments;
-            }
-
-          void _TypePartModelItem::addTypeArgument(TypeModelItem item)
-          {
-            model()->beginAppendItem(item,  this);
-            _M_typeArguments.append(item);
-            model()->endAppendItem();
-          }
-
-          void _TypePartModelItem::removeTypeArgument(TypeModelItem item)
-          {
-            model()->beginRemoveItem(item);
-            _M_typeArguments.removeAt(_M_typeArguments.indexOf(item));
-            model()->endRemoveItem();
-          }
-
-          QString CLASS::toString() const
-            {
-              //QString typeString = typeDeclaration()->name();
-              QString typeString =  name();
-
-              if  ( !typeArguments().empty() )
-                {
-                  typeString +=  "<";
-                  bool initial =  true;
-
-                  foreach ( ITEM(Type) argument,  typeArguments() )
-                  {
-                    if  ( !initial )
-                      typeString +=  ", ";
-
-                    typeString +=  argument->toString();
-                    initial =  false;
-                  }
-
-                  typeString +=  ">";
-                }
-
-              return  typeString;
-            }
-
-          bool CLASS::operator==(const CLASS &other)
-          {
-            //if ( typeDeclaration() != other.typeDeclaration() ) // not yet possible
-
-            if  ( name() !=  other.name() )
-              return  false;
-
-            if  ( typeArguments().count() !=  other.typeArguments().count() )
-              return  false;
-
-            LIST(Type)::const_iterator argument =  typeArguments().begin();
-            LIST(Type)::const_iterator otherArgument =  other.typeArguments().begin();
-
-            for  ( ; argument ==  typeArguments().end(); argument++,  otherArgument++ )
-              {
-                if  ( *argument !=  *otherArgument )
-                  return  false;
-              }
-
-            return  true;
-          }
-
-#undef CLASS
-#undef BASECLASS
-
-          // ---------------------------------------------------------------------------
-#define CLASS _TypeModelItem
-#define BASECLASS _CodeModelItem
-
-          _TypeModelItem::_TypeModelItem(CodeModel *model,  int kind)
-              :  _CodeModelItem(model,  kind)
-          {
-
-            setName( QString::null );
-            setQualifiedAliasLabel( QString::null );
-          }
-
-          _TypeModelItem::~_TypeModelItem()
-          {}
-
-          TypeModelItem _TypeModelItem::create(CodeModel *model)
-          {
-            TypeModelItem item(new _TypeModelItem(model));
-            return  item;
-          }
-
-          QString _TypeModelItem::qualifiedAliasLabel() const
-            {
-              return  _M_qualifiedAliasLabel;
-            }
-
-          void _TypeModelItem::setQualifiedAliasLabel(QString qualifiedAliasLabel)
-          {
-            _M_qualifiedAliasLabel =  qualifiedAliasLabel;
-          }
-
-          TypePartList _TypeModelItem::typeParts() const
-            {
-              return  _M_typeParts;
-            }
-
-          void _TypeModelItem::addTypePart(TypePartModelItem item)
-          {
-            model()->beginAppendItem(item,  this);
-            _M_typeParts.append(item);
-            model()->endAppendItem();
-          }
-
-          void _TypeModelItem::removeTypePart(TypePartModelItem item)
-          {
-            model()->beginRemoveItem(item);
-            _M_typeParts.removeAt(_M_typeParts.indexOf(item));
-            model()->endRemoveItem();
-          }
-
-          QString CLASS::toString() const
-            {
-              QString typeString;
-              bool initial =  true;
-
-              if  ( !qualifiedAliasLabel().isNull() )
-                typeString =  qualifiedAliasLabel() +  "::";
-
-              foreach ( ITEM(TypePart) part,  typeParts() )
-              {
-                if  ( !initial )
-                  typeString +=  ".";
-
-                typeString +=  part->toString();
-                initial =  false;
-              }
-
-              return  typeString;
-            }
-
-          bool CLASS::operator==(const CLASS &other)
-          {
-            if  ( typeParts().count() !=  other.typeParts().count() )
-              return  false;
-
-            LIST(TypePart)::const_iterator part =  typeParts().begin();
-            LIST(TypePart)::const_iterator otherPart =  other.typeParts().begin();
-
-            for  ( ; part ==  typeParts().end(); part++,  otherPart++ )
-              {
-                if  ( *part !=  *otherPart )
-                  return  false;
-              }
-
-            return  true;
           }
 
 #undef CLASS

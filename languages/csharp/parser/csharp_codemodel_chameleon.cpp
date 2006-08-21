@@ -117,6 +117,16 @@ namespace csharp
             return  Nullable<QString >(model_static_cast<VariableDeclarationModelItem>(_M_item)->name());
           }
 
+        case _CodeModelItem::Kind_TypePart:
+          {
+            return  Nullable<QString >(model_static_cast<TypePartModelItem>(_M_item)->name());
+          }
+
+        case _CodeModelItem::Kind_Type:
+          {
+            return  Nullable<QString >(model_static_cast<TypeModelItem>(_M_item)->name());
+          }
+
         case _CodeModelItem::Kind_Parameter:
           {
             return  Nullable<QString >(model_static_cast<ParameterModelItem>(_M_item)->name());
@@ -140,16 +150,6 @@ namespace csharp
         case _CodeModelItem::Kind_ConstructorConstraint:
           {
             return  Nullable<QString >(model_static_cast<ConstructorConstraintModelItem>(_M_item)->name());
-          }
-
-        case _CodeModelItem::Kind_TypePart:
-          {
-            return  Nullable<QString >(model_static_cast<TypePartModelItem>(_M_item)->name());
-          }
-
-        case _CodeModelItem::Kind_Type:
-          {
-            return  Nullable<QString >(model_static_cast<TypeModelItem>(_M_item)->name());
           }
 
         default:
@@ -290,6 +290,18 @@ namespace csharp
           return ;
         }
 
+      case _CodeModelItem::Kind_TypePart:
+        {
+          model_static_cast<TypePartModelItem>(_M_item)->setName(name);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_Type:
+        {
+          model_static_cast<TypeModelItem>(_M_item)->setName(name);
+          return ;
+        }
+
       case _CodeModelItem::Kind_Parameter:
         {
           model_static_cast<ParameterModelItem>(_M_item)->setName(name);
@@ -317,18 +329,6 @@ namespace csharp
       case _CodeModelItem::Kind_ConstructorConstraint:
         {
           model_static_cast<ConstructorConstraintModelItem>(_M_item)->setName(name);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_TypePart:
-        {
-          model_static_cast<TypePartModelItem>(_M_item)->setName(name);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_Type:
-        {
-          model_static_cast<TypeModelItem>(_M_item)->setName(name);
           return ;
         }
 
@@ -450,6 +450,16 @@ namespace csharp
             return  Nullable<QStringList >(model_static_cast<VariableDeclarationModelItem>(_M_item)->scope());
           }
 
+        case _CodeModelItem::Kind_TypePart:
+          {
+            return  Nullable<QStringList >(model_static_cast<TypePartModelItem>(_M_item)->scope());
+          }
+
+        case _CodeModelItem::Kind_Type:
+          {
+            return  Nullable<QStringList >(model_static_cast<TypeModelItem>(_M_item)->scope());
+          }
+
         case _CodeModelItem::Kind_Parameter:
           {
             return  Nullable<QStringList >(model_static_cast<ParameterModelItem>(_M_item)->scope());
@@ -473,16 +483,6 @@ namespace csharp
         case _CodeModelItem::Kind_ConstructorConstraint:
           {
             return  Nullable<QStringList >(model_static_cast<ConstructorConstraintModelItem>(_M_item)->scope());
-          }
-
-        case _CodeModelItem::Kind_TypePart:
-          {
-            return  Nullable<QStringList >(model_static_cast<TypePartModelItem>(_M_item)->scope());
-          }
-
-        case _CodeModelItem::Kind_Type:
-          {
-            return  Nullable<QStringList >(model_static_cast<TypeModelItem>(_M_item)->scope());
           }
 
         default:
@@ -623,6 +623,18 @@ namespace csharp
           return ;
         }
 
+      case _CodeModelItem::Kind_TypePart:
+        {
+          model_static_cast<TypePartModelItem>(_M_item)->setScope(scope);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_Type:
+        {
+          model_static_cast<TypeModelItem>(_M_item)->setScope(scope);
+          return ;
+        }
+
       case _CodeModelItem::Kind_Parameter:
         {
           model_static_cast<ParameterModelItem>(_M_item)->setScope(scope);
@@ -650,18 +662,6 @@ namespace csharp
       case _CodeModelItem::Kind_ConstructorConstraint:
         {
           model_static_cast<ConstructorConstraintModelItem>(_M_item)->setScope(scope);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_TypePart:
-        {
-          model_static_cast<TypePartModelItem>(_M_item)->setScope(scope);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_Type:
-        {
-          model_static_cast<TypeModelItem>(_M_item)->setScope(scope);
           return ;
         }
 
@@ -783,6 +783,16 @@ namespace csharp
             return  Nullable<QString >(model_static_cast<VariableDeclarationModelItem>(_M_item)->fileName());
           }
 
+        case _CodeModelItem::Kind_TypePart:
+          {
+            return  Nullable<QString >(model_static_cast<TypePartModelItem>(_M_item)->fileName());
+          }
+
+        case _CodeModelItem::Kind_Type:
+          {
+            return  Nullable<QString >(model_static_cast<TypeModelItem>(_M_item)->fileName());
+          }
+
         case _CodeModelItem::Kind_Parameter:
           {
             return  Nullable<QString >(model_static_cast<ParameterModelItem>(_M_item)->fileName());
@@ -806,16 +816,6 @@ namespace csharp
         case _CodeModelItem::Kind_ConstructorConstraint:
           {
             return  Nullable<QString >(model_static_cast<ConstructorConstraintModelItem>(_M_item)->fileName());
-          }
-
-        case _CodeModelItem::Kind_TypePart:
-          {
-            return  Nullable<QString >(model_static_cast<TypePartModelItem>(_M_item)->fileName());
-          }
-
-        case _CodeModelItem::Kind_Type:
-          {
-            return  Nullable<QString >(model_static_cast<TypeModelItem>(_M_item)->fileName());
           }
 
         default:
@@ -956,6 +956,18 @@ namespace csharp
           return ;
         }
 
+      case _CodeModelItem::Kind_TypePart:
+        {
+          model_static_cast<TypePartModelItem>(_M_item)->setFileName(fileName);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_Type:
+        {
+          model_static_cast<TypeModelItem>(_M_item)->setFileName(fileName);
+          return ;
+        }
+
       case _CodeModelItem::Kind_Parameter:
         {
           model_static_cast<ParameterModelItem>(_M_item)->setFileName(fileName);
@@ -983,18 +995,6 @@ namespace csharp
       case _CodeModelItem::Kind_ConstructorConstraint:
         {
           model_static_cast<ConstructorConstraintModelItem>(_M_item)->setFileName(fileName);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_TypePart:
-        {
-          model_static_cast<TypePartModelItem>(_M_item)->setFileName(fileName);
-          return ;
-        }
-
-      case _CodeModelItem::Kind_Type:
-        {
-          model_static_cast<TypeModelItem>(_M_item)->setFileName(fileName);
           return ;
         }
 
@@ -4920,6 +4920,96 @@ namespace csharp
       }
 
 
+      Nullable<bool > _ModelItemChameleon::isInterfaceMethodDeclaration( ) const
+        {
+          switch  (_M_item->kind())
+            {
+
+            case _CodeModelItem::Kind_MethodDeclaration:
+              {
+                return  Nullable<bool >(model_static_cast<MethodDeclarationModelItem>(_M_item)->isInterfaceMethodDeclaration());
+              }
+
+            default:
+              break;
+            }
+
+          return  Nullable<bool>();
+        }
+
+      void _ModelItemChameleon::setInterfaceMethodDeclaration(bool isInterfaceMethodDeclaration)
+      {
+        switch  (_M_item->kind())
+          {
+
+          case _CodeModelItem::Kind_MethodDeclaration:
+            {
+              model_static_cast<MethodDeclarationModelItem>(_M_item)->setInterfaceMethodDeclaration(isInterfaceMethodDeclaration);
+              return ;
+            }
+
+          default:
+            break;
+          }
+
+        return ;
+      }
+
+
+      Nullable<VariableDeclarationList > _ModelItemChameleon::localVariables( ) const
+        {
+          switch  (_M_item->kind())
+            {
+
+            case _CodeModelItem::Kind_MethodDeclaration:
+              {
+                return  Nullable<VariableDeclarationList >(model_static_cast<MethodDeclarationModelItem>(_M_item)->localVariables());
+              }
+
+            default:
+              break;
+            }
+
+          return  Nullable<VariableDeclarationList>();
+        }
+
+      void _ModelItemChameleon::addLocalVariable(VariableDeclarationModelItem item)
+      {
+        switch  (_M_item->kind())
+          {
+
+          case _CodeModelItem::Kind_MethodDeclaration:
+            {
+              model_static_cast<MethodDeclarationModelItem>(_M_item)->addLocalVariable(item);
+              return ;
+            }
+
+          default:
+            break;
+          }
+
+        return ;
+      }
+
+      void _ModelItemChameleon::removeLocalVariable(VariableDeclarationModelItem item)
+      {
+        switch  (_M_item->kind())
+          {
+
+          case _CodeModelItem::Kind_MethodDeclaration:
+            {
+              model_static_cast<MethodDeclarationModelItem>(_M_item)->removeLocalVariable(item);
+              return ;
+            }
+
+          default:
+            break;
+          }
+
+        return ;
+      }
+
+
       Nullable<bool > _ModelItemChameleon::isConstant( ) const
         {
           switch  (_M_item->kind())
@@ -5017,150 +5107,6 @@ namespace csharp
           case _CodeModelItem::Kind_VariableDeclaration:
             {
               model_static_cast<VariableDeclarationModelItem>(_M_item)->setVolatile(isVolatile);
-              return ;
-            }
-
-          default:
-            break;
-          }
-
-        return ;
-      }
-
-
-      Nullable<bool > _ModelItemChameleon::isArray( ) const
-        {
-          switch  (_M_item->kind())
-            {
-
-            case _CodeModelItem::Kind_Parameter:
-              {
-                return  Nullable<bool >(model_static_cast<ParameterModelItem>(_M_item)->isArray());
-              }
-
-            default:
-              break;
-            }
-
-          return  Nullable<bool>();
-        }
-
-      void _ModelItemChameleon::setArray(bool isArray)
-      {
-        switch  (_M_item->kind())
-          {
-
-          case _CodeModelItem::Kind_Parameter:
-            {
-              model_static_cast<ParameterModelItem>(_M_item)->setArray(isArray);
-              return ;
-            }
-
-          default:
-            break;
-          }
-
-        return ;
-      }
-
-
-      Nullable<parameter::parameter_type_enum > _ModelItemChameleon::parameterType( ) const
-        {
-          switch  (_M_item->kind())
-            {
-
-            case _CodeModelItem::Kind_Parameter:
-              {
-                return  Nullable<parameter::parameter_type_enum >(model_static_cast<ParameterModelItem>(_M_item)->parameterType());
-              }
-
-            default:
-              break;
-            }
-
-          return  Nullable<parameter::parameter_type_enum>();
-        }
-
-      void _ModelItemChameleon::setParameterType(parameter::parameter_type_enum parameterType)
-      {
-        switch  (_M_item->kind())
-          {
-
-          case _CodeModelItem::Kind_Parameter:
-            {
-              model_static_cast<ParameterModelItem>(_M_item)->setParameterType(parameterType);
-              return ;
-            }
-
-          default:
-            break;
-          }
-
-        return ;
-      }
-
-
-      Nullable<TypeModelItem > _ModelItemChameleon::typeOrParameterName( ) const
-        {
-          switch  (_M_item->kind())
-            {
-
-            case _CodeModelItem::Kind_PrimaryOrSecondaryConstraint:
-              {
-                return  Nullable<TypeModelItem >(model_static_cast<PrimaryOrSecondaryConstraintModelItem>(_M_item)->typeOrParameterName());
-              }
-
-            default:
-              break;
-            }
-
-          return  Nullable<TypeModelItem>();
-        }
-
-      void _ModelItemChameleon::setTypeOrParameterName(TypeModelItem typeOrParameterName)
-      {
-        switch  (_M_item->kind())
-          {
-
-          case _CodeModelItem::Kind_PrimaryOrSecondaryConstraint:
-            {
-              model_static_cast<PrimaryOrSecondaryConstraintModelItem>(_M_item)->setTypeOrParameterName(typeOrParameterName);
-              return ;
-            }
-
-          default:
-            break;
-          }
-
-        return ;
-      }
-
-
-      Nullable<primary_or_secondary_constraint::primary_or_secondary_constraint_enum > _ModelItemChameleon::constraint_type( ) const
-        {
-          switch  (_M_item->kind())
-            {
-
-            case _CodeModelItem::Kind_PrimaryOrSecondaryConstraint:
-              {
-                return  Nullable<primary_or_secondary_constraint::primary_or_secondary_constraint_enum >(model_static_cast<PrimaryOrSecondaryConstraintModelItem>(_M_item)->constraint_type());
-              }
-
-            default:
-              break;
-            }
-
-          return  Nullable<primary_or_secondary_constraint::primary_or_secondary_constraint_enum>();
-        }
-
-      void _ModelItemChameleon::setConstraint_type(primary_or_secondary_constraint::primary_or_secondary_constraint_enum constraint_type)
-      {
-        switch  (_M_item->kind())
-          {
-
-          case _CodeModelItem::Kind_PrimaryOrSecondaryConstraint:
-            {
-              model_static_cast<PrimaryOrSecondaryConstraintModelItem>(_M_item)->setConstraint_type(constraint_type);
               return ;
             }
 
@@ -5305,6 +5251,150 @@ namespace csharp
           case _CodeModelItem::Kind_Type:
             {
               model_static_cast<TypeModelItem>(_M_item)->removeTypePart(item);
+              return ;
+            }
+
+          default:
+            break;
+          }
+
+        return ;
+      }
+
+
+      Nullable<bool > _ModelItemChameleon::isArray( ) const
+        {
+          switch  (_M_item->kind())
+            {
+
+            case _CodeModelItem::Kind_Parameter:
+              {
+                return  Nullable<bool >(model_static_cast<ParameterModelItem>(_M_item)->isArray());
+              }
+
+            default:
+              break;
+            }
+
+          return  Nullable<bool>();
+        }
+
+      void _ModelItemChameleon::setArray(bool isArray)
+      {
+        switch  (_M_item->kind())
+          {
+
+          case _CodeModelItem::Kind_Parameter:
+            {
+              model_static_cast<ParameterModelItem>(_M_item)->setArray(isArray);
+              return ;
+            }
+
+          default:
+            break;
+          }
+
+        return ;
+      }
+
+
+      Nullable<parameter::parameter_type_enum > _ModelItemChameleon::parameterType( ) const
+        {
+          switch  (_M_item->kind())
+            {
+
+            case _CodeModelItem::Kind_Parameter:
+              {
+                return  Nullable<parameter::parameter_type_enum >(model_static_cast<ParameterModelItem>(_M_item)->parameterType());
+              }
+
+            default:
+              break;
+            }
+
+          return  Nullable<parameter::parameter_type_enum>();
+        }
+
+      void _ModelItemChameleon::setParameterType(parameter::parameter_type_enum parameterType)
+      {
+        switch  (_M_item->kind())
+          {
+
+          case _CodeModelItem::Kind_Parameter:
+            {
+              model_static_cast<ParameterModelItem>(_M_item)->setParameterType(parameterType);
+              return ;
+            }
+
+          default:
+            break;
+          }
+
+        return ;
+      }
+
+
+      Nullable<TypeModelItem > _ModelItemChameleon::typeOrParameterName( ) const
+        {
+          switch  (_M_item->kind())
+            {
+
+            case _CodeModelItem::Kind_PrimaryOrSecondaryConstraint:
+              {
+                return  Nullable<TypeModelItem >(model_static_cast<PrimaryOrSecondaryConstraintModelItem>(_M_item)->typeOrParameterName());
+              }
+
+            default:
+              break;
+            }
+
+          return  Nullable<TypeModelItem>();
+        }
+
+      void _ModelItemChameleon::setTypeOrParameterName(TypeModelItem typeOrParameterName)
+      {
+        switch  (_M_item->kind())
+          {
+
+          case _CodeModelItem::Kind_PrimaryOrSecondaryConstraint:
+            {
+              model_static_cast<PrimaryOrSecondaryConstraintModelItem>(_M_item)->setTypeOrParameterName(typeOrParameterName);
+              return ;
+            }
+
+          default:
+            break;
+          }
+
+        return ;
+      }
+
+
+      Nullable<primary_or_secondary_constraint::primary_or_secondary_constraint_enum > _ModelItemChameleon::constraint_type( ) const
+        {
+          switch  (_M_item->kind())
+            {
+
+            case _CodeModelItem::Kind_PrimaryOrSecondaryConstraint:
+              {
+                return  Nullable<primary_or_secondary_constraint::primary_or_secondary_constraint_enum >(model_static_cast<PrimaryOrSecondaryConstraintModelItem>(_M_item)->constraint_type());
+              }
+
+            default:
+              break;
+            }
+
+          return  Nullable<primary_or_secondary_constraint::primary_or_secondary_constraint_enum>();
+        }
+
+      void _ModelItemChameleon::setConstraint_type(primary_or_secondary_constraint::primary_or_secondary_constraint_enum constraint_type)
+      {
+        switch  (_M_item->kind())
+          {
+
+          case _CodeModelItem::Kind_PrimaryOrSecondaryConstraint:
+            {
+              model_static_cast<PrimaryOrSecondaryConstraintModelItem>(_M_item)->setConstraint_type(constraint_type);
               return ;
             }
 

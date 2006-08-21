@@ -211,6 +211,13 @@ namespace csharp
       Nullable<bool > isFinalizer( ) const;
       void setFinalizer(bool isFinalizer);
 
+      Nullable<bool > isInterfaceMethodDeclaration( ) const;
+      void setInterfaceMethodDeclaration(bool isInterfaceMethodDeclaration);
+
+      Nullable<VariableDeclarationList > localVariables( ) const;
+      void addLocalVariable(VariableDeclarationModelItem item);
+      void removeLocalVariable(VariableDeclarationModelItem item);
+
       Nullable<bool > isConstant( ) const;
       void setConstant(bool isConstant);
 
@@ -219,6 +226,17 @@ namespace csharp
 
       Nullable<bool > isVolatile( ) const;
       void setVolatile(bool isVolatile);
+
+      Nullable<TypeList > typeArguments( ) const;
+      void addTypeArgument(TypeModelItem item);
+      void removeTypeArgument(TypeModelItem item);
+
+      Nullable<QString > qualifiedAliasLabel( ) const;
+      void setQualifiedAliasLabel(QString qualifiedAliasLabel);
+
+      Nullable<TypePartList > typeParts( ) const;
+      void addTypePart(TypePartModelItem item);
+      void removeTypePart(TypePartModelItem item);
 
       Nullable<bool > isArray( ) const;
       void setArray(bool isArray);
@@ -231,17 +249,6 @@ namespace csharp
 
       Nullable<primary_or_secondary_constraint::primary_or_secondary_constraint_enum > constraint_type( ) const;
       void setConstraint_type(primary_or_secondary_constraint::primary_or_secondary_constraint_enum constraint_type);
-
-      Nullable<TypeList > typeArguments( ) const;
-      void addTypeArgument(TypeModelItem item);
-      void removeTypeArgument(TypeModelItem item);
-
-      Nullable<QString > qualifiedAliasLabel( ) const;
-      void setQualifiedAliasLabel(QString qualifiedAliasLabel);
-
-      Nullable<TypePartList > typeParts( ) const;
-      void addTypePart(TypePartModelItem item);
-      void removeTypePart(TypePartModelItem item);
 
     private:
       _ModelItemChameleon(const _ModelItemChameleon &other);
@@ -361,6 +368,16 @@ namespace csharp
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
+      ModelItemChameleon(TypePartModelItem item)
+          :  KDevSharedPtr<_ModelItemChameleon>(
+            new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
+      {}
+
+      ModelItemChameleon(TypeModelItem item)
+          :  KDevSharedPtr<_ModelItemChameleon>(
+            new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
+      {}
+
       ModelItemChameleon(ParameterModelItem item)
           :  KDevSharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
@@ -382,16 +399,6 @@ namespace csharp
       {}
 
       ModelItemChameleon(ConstructorConstraintModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
-            new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
-      {}
-
-      ModelItemChameleon(TypePartModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
-            new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
-      {}
-
-      ModelItemChameleon(TypeModelItem item)
           :  KDevSharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}

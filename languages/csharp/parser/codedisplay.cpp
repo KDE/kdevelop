@@ -39,7 +39,86 @@ CodeDisplay::~CodeDisplay()
 
 QString CodeDisplay::display( const _CodeModelItem *item )
 {
-    return item->name();
+    QString display = item->name();
+    ModelItemChameleon chameleon( item->toItem() );
+
+    switch ( item->kind() )
+    {
+    case _CodeModelItem::Kind_DelegateDeclaration:
+    case _CodeModelItem::Kind_MethodDeclaration:
+        {
+            bool initial = true;
+            display += "(";
+            foreach ( ParameterModelItem param, chameleon->parameters().item )
+            {
+                if ( !initial )
+                    display += ", ";
+                else
+                    initial = false;
+
+                display += param->type()->toString();
+            }
+            display += ")";
+        }
+    default:
+        break;
+    }
+
+    return display;
+}
+
+QString CodeDisplay::toolTip( const _CodeModelItem *item )
+{
+    QString tooltip;
+    ModelItemChameleon chameleon( item->toItem() );
+
+    switch ( item->kind() )
+    {
+    case _CodeModelItem::Kind_NamespaceDeclaration:
+        tooltip += "namespace ";
+        break;
+    case _CodeModelItem::Kind_ClassDeclaration:
+        tooltip += "class ";
+        break;
+    case _CodeModelItem::Kind_StructDeclaration:
+        tooltip += "struct ";
+        break;
+    case _CodeModelItem::Kind_InterfaceDeclaration:
+        tooltip += "interface ";
+        break;
+    case _CodeModelItem::Kind_EnumDeclaration:
+        tooltip += "enum ";
+        break;
+    case _CodeModelItem::Kind_DelegateDeclaration:
+    case _CodeModelItem::Kind_MethodDeclaration:
+        {
+            bool initial = true;
+
+            if ( item->kind() == _CodeModelItem::Kind_DelegateDeclaration )
+                tooltip += "delegate ";
+
+            tooltip += chameleon->returnType().item->toString() + " "
+                       + item->name() + " (";
+
+            foreach ( ParameterModelItem param, chameleon->parameters().item )
+            {
+                if ( !initial )
+                    tooltip += ", ";
+                else
+                    initial = false;
+
+                tooltip += param->toString();
+            }
+
+            tooltip += ")";
+            return tooltip;
+        }
+    default:
+        break;
+    }
+
+    tooltip += item->qualifiedName().join( "." );
+    return tooltip;
 }
 
 QIcon CodeDisplay::decoration( const _CodeModelItem *item )
@@ -57,54 +136,25 @@ QIcon CodeDisplay::decoration( const _CodeModelItem *item )
     case _CodeModelItem::Kind_EnumDeclaration:
         return loadIcon( "enum" );
     case _CodeModelItem::Kind_DelegateDeclaration:
-        return loadIcon( "function" );
-    case _CodeModelItem::Kind_VariableDeclaration:
-        return loadIcon( "field" );
     case _CodeModelItem::Kind_MethodDeclaration:
         return loadIcon( "function" );
+    case _CodeModelItem::Kind_VariableDeclaration:
+    case _CodeModelItem::Kind_EnumValue:
+        return loadIcon( "field" );
     default:
         break;
     }
     return QIcon();
 }
 
-QString CodeDisplay::toolTip( const _CodeModelItem *item )
-{
-    QString tooltip;
-    CodeModelItem sharedItem( const_cast<_CodeModelItem*>(item) );
-    ModelItemChameleon chameleon( sharedItem );
-
-    switch ( item->kind() )
-    {
-        case _CodeModelItem::Kind_NamespaceDeclaration:
-            tooltip = "namespace "; break;
-        case _CodeModelItem::Kind_ClassDeclaration:
-            tooltip = "class "; break;
-        case _CodeModelItem::Kind_StructDeclaration:
-            tooltip = "struct "; break;
-        case _CodeModelItem::Kind_InterfaceDeclaration:
-            tooltip = "interface "; break;
-        case _CodeModelItem::Kind_EnumDeclaration:
-            tooltip = "enum "; break;
-        case _CodeModelItem::Kind_DelegateDeclaration:
-            tooltip = "delegate ";
-            tooltip += chameleon->returnType().item->toString() + " ";
-            break;
-        default:
-            break;
-    }
-    tooltip += item->qualifiedName().join( "." );
-    return tooltip;
-}
-
 QString CodeDisplay::whatsThis( const _CodeModelItem *item )
 {
-    return item->name();
+    return toolTip( item );
 }
 
 QIcon CodeDisplay::loadIcon( const QString & name )
 {
-    return QIcon(KStandardDirs::locate("appdata", QString("pics/%1.png").arg(name)));
+    return QIcon( KStandardDirs::locate("appdata", QString("pics/%1.png").arg(name)) );
 }
 
 } // end of namespace csharp
