@@ -47,7 +47,11 @@ DUContext::~DUContext( )
   foreach (DUContext* context, m_importedChildContexts)
     context->removeImportedParentContext(this);
 
-  deleteImportedParentContextsRecursively(url());
+  QList<DUContext*> importedParentContexts = m_importedParentContexts;
+  foreach (DUContext* context, importedParentContexts)
+    removeImportedParentContext(context);
+
+  //deleteImportedParentContextsRecursively(url());
 
   deleteChildContextsRecursively(url());
 
