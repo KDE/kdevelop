@@ -34,6 +34,7 @@
 
 #include <ktexteditor/document.h>
 
+#include "editor/kdeveditorintegrator.h"
 #include <kdevdocumentcontroller.h>
 
 KDevParseJob::KDevParseJob( const KUrl &url,
@@ -77,6 +78,11 @@ DUContext * KDevParseJob::duChain() const
 {
     // No definition-use chain available by default
     return 0L;
+}
+
+bool KDevParseJob::contentsAvailableFromEditor() const
+{
+    return m_openDocument && m_openDocument->textDocument() && KDevEditorIntegrator::documentLoaded(m_openDocument->textDocument());
 }
 
 QString KDevParseJob::contentsFromEditor() const

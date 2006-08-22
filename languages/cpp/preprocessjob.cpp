@@ -48,7 +48,7 @@ CPPParseJob * PreprocessJob::parentJob() const
 
 void PreprocessJob::run()
 {
-    bool readFromDisk = !parentJob()->openDocument();
+    bool readFromDisk = !parentJob()->contentsAvailableFromEditor();
 
     QString contents;
 

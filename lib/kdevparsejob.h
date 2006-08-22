@@ -52,6 +52,11 @@ public:
     void setActiveDocument();
     virtual int priority() const;
 
+    /// Returns whether the editor can provide the contents of the document or not.
+    bool contentsAvailableFromEditor() const;
+
+    /// Retrieve the contents of the file from the currently open editor.
+    /// Ensure it is loaded by calling editorLoaded() first.
     QString contentsFromEditor() const;
 
     KUrl document() const;

@@ -154,7 +154,6 @@ void KDevBackgroundParser::parseDocuments()
     if ( !langSupport )
         return ;
 
-    JobCollection* collection = new JobCollection( this );
     for ( QMap<KUrl, bool>::Iterator it = m_documents.begin();
             it != m_documents.end(); ++it )
     {
@@ -178,10 +177,9 @@ void KDevBackgroundParser::parseDocuments()
 
             p = false; //Don't parse for next time
 
-            collection->addJob( parse );
+            m_weaver ->enqueue( parse );
         }
     }
-    m_weaver ->enqueue( collection );
 }
 
 void KDevBackgroundParser::parseComplete( Job *job )

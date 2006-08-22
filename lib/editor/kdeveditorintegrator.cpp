@@ -85,6 +85,11 @@ Document * KDevEditorIntegrator::documentForUrl(const KUrl& url)
   return 0;
 }
 
+bool KDevEditorIntegrator::documentLoaded(KTextEditor::Document* document)
+{
+  return data()->documents.values().contains(document);
+}
+
 void KDevEditorIntegratorPrivate::removeDocument( Document* document )
 {
   // TODO save smart stuff to non-smart cursors and ranges

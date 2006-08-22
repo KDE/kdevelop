@@ -70,7 +70,7 @@ KDevCodeModel *ParseJob::codeModel() const
 
 void ParseJob::run()
 {
-    bool readFromDisk = !openDocument();
+    bool readFromDisk = !contentsAvailableFromEditor();
 
     char *contents;
     QByteArray fileData;
