@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <kgenericfactory.h>
 
+#include <kdevcore.h>
 #include <kdevmainwindow.h>
 
 typedef KGenericFactory<KDevCodeViewPart> KDevCodeViewFactory;
@@ -36,10 +37,6 @@ KDevCodeViewPart::KDevCodeViewPart( QObject *parent,
 {
     m_codeView = new KDevCodeView;
 
-    KDevCore::mainWindow() ->embedSelectViewRight( m_codeView,
-                                         i18n( "Code View" ),
-                                         i18n( "Code View" ) );
-
     setXMLFile( "kdevcodeview.rc" );
 }
 
@@ -47,13 +44,19 @@ KDevCodeViewPart::~KDevCodeViewPart()
 {
     if ( m_codeView )
     {
-        KDevCore::mainWindow() ->removeView( m_codeView );
         delete m_codeView;
     }
 }
 
-void KDevCodeViewPart::import( RefreshPolicy /*policy*/ )
-{}
+QWidget *KDevCodeViewPart::pluginView() const
+{
+    return m_codeView;
+}
+
+Qt::DockWidgetArea KDevCodeViewPart::dockWidgetAreaHint() const
+{
+    return Qt::RightDockWidgetArea;
+}
 
 #include "kdevcodeview_part.moc"
 

@@ -25,10 +25,11 @@ Boston, MA 02110-1301, USA.
 #include <QHeaderView>
 #include <QContextMenuEvent>
 
+#include <kurl.h>
 #include <kmenu.h>
 #include <kdebug.h>
-#include <kurl.h>
 #include <klocale.h>
+#include <kiconloader.h>
 
 #include <kdevcore.h>
 #include <kdevcontext.h>
@@ -39,6 +40,12 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPart *part, QWidget *parent 
         : KDevTreeView( parent ),
         m_part( part )
 {
+    setObjectName( i18n( "Documents" ) );
+
+    setWindowIcon( SmallIcon( "kmultiple" ) );
+    setWindowTitle( i18n( "Documents" ) );
+    setWhatsThis( i18n( "Document View" ) );
+
     setFocusPolicy( Qt::NoFocus );
 
     setRootIsDecorated( false );

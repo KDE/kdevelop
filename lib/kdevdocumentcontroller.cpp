@@ -405,24 +405,12 @@ void KDevDocumentController::activateDocument( KDevDocument * document )
     if ( document->isActive() )
         return ;
 
-    QWidget * widget = document->part() ->widget();
-    if ( widget )
+    if ( !KDevCore::mainWindow() ->containsDocument( document ) )
     {
-        if ( !KDevCore::mainWindow() ->containsWidget( widget ) )
-        {
-            KParts::ReadOnlyPart * ro = readOnly( document->part() );
-            if ( !ro )
-                return ;
-
-            KDevCore::mainWindow() ->embedPartView( widget,
-                                                    ro->url().fileName(),
-                                                    ro->url().url() );
-        }
-
-        KDevCore::mainWindow() ->setCurrentWidget( widget );
-        widget->show();
-        widget->setFocus();
+        KDevCore::mainWindow() ->addDocument( document );
     }
+
+    KDevCore::mainWindow() ->setCurrentDocument( document );
 
     setActiveDocument( document );
 }
@@ -1056,22 +1044,18 @@ KDevDocument* KDevDocumentController::integratePart( KParts::Part *part, bool ac
         return 0L;
     }
 
+    KDevDocument* doc = addDocument( part, activate );
+
     if ( activate )
     {
-        QWidget * widget = part->widget();
-
-        if ( !widget )
+        if ( !part->widget() )
         {
             kDebug( 9000 ) << k_funcinfo << "no widget for this part!!" << endl;
             return 0L; // to avoid later crash
         }
 
-        KDevCore::mainWindow() ->embedPartView( widget,
-                                                ro->url().fileName(),
-                                                ro->url().url() );
+        KDevCore::mainWindow() ->addDocument( doc );
     }
-
-    KDevDocument* doc = addDocument( part, activate );
 
     KTextEditor::ModificationInterface* iface =
         qobject_cast<KTextEditor::ModificationInterface*>( part );

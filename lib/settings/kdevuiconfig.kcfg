@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg> 
+  <kcfgfile name="kdeveloprc"/>
+  <group name="UI">
+    <entry name="docked" key="Docked Window" type="Bool">
+    <default>true</default>
+    </entry>
+    <entry name="toplevel" key="Multiple Top-Level Windows" type="Bool">
+    <default>false</default>
+    </entry>
+  </group>
+</kcfg>

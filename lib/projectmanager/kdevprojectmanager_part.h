@@ -72,6 +72,10 @@ public:
 
     void import(RefreshPolicy policy = Refresh);
 
+    // KDevPlugin methods
+    virtual QWidget *pluginView() const;
+    virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
+
 signals:
     void refresh();
     void addedProjectItem(KDevProjectItem *dom);

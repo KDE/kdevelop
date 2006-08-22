@@ -19,6 +19,7 @@
 #include <ktexteditor/editor.h>
 #include <ktexteditor/document.h>
 
+#include "kdevcore.h"
 #include "kdevmainwindow.h"
 #include "kdevconfig.h"
 #include "kdeveditorintegrator.h"

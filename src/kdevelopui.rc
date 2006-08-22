@@ -40,6 +40,7 @@
   </Menu>
   <Menu name="view">
     <text>&amp;View</text>
+    <Action name="user_interface"/>
     <DefineGroup name="history_operations"/>
     <Action name="history_back"/>
     <Action name="history_forward"/>

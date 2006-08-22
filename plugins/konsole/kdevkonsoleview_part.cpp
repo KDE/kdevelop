@@ -11,8 +11,6 @@
 
 #include "kdevkonsoleview_part.h"
 
-#include <kicon.h>
-#include <klocale.h>
 #include <kgenericfactory.h>
 
 #include "kdevcore.h"
@@ -27,26 +25,24 @@ KDevKonsoleViewPart::KDevKonsoleViewPart( QObject *parent, const QStringList & )
     : KDevPlugin( KonsoleViewFactory::instance(), parent )
 {
     m_konsoleView = new KDevKonsoleView;
-
-    m_konsoleView->setWhatsThis( i18n( "<b>Konsole</b><p>"
-                                       "This window contains an embedded console." ) );
-
-    m_konsoleView->setWindowIcon( KIcon( "konsole" ) );
-    m_konsoleView->setWindowTitle( i18n( "Konsole" ) );
-
-    KDevCore::mainWindow() ->embedOutputView(
-        m_konsoleView,
-        i18n( "Konsole" ),
-        i18n( "Embedded console window" ) );
 }
 
 KDevKonsoleViewPart::~KDevKonsoleViewPart()
 {
     if ( m_konsoleView )
     {
-        KDevCore::mainWindow() ->removeView( m_konsoleView );
         delete m_konsoleView;
     }
+}
+
+QWidget *KDevKonsoleViewPart::pluginView() const
+{
+    return m_konsoleView;
+}
+
+Qt::DockWidgetArea KDevKonsoleViewPart::dockWidgetAreaHint() const
+{
+    return Qt::BottomDockWidgetArea;
 }
 
 #include "kdevkonsoleview_part.moc"

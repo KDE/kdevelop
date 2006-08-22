@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1999-2001 Bernd Gehrmann <bernd@kdevelop.org>
    Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
+   Copyright (C) 2006 Adam Treat <treat@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,17 +23,14 @@
 
 #include <QObject>
 #include <kxmlguiclient.h>
-#include "kdevcore.h"
+
+#include <QList>
+#include <QPointer>
+
 #include "kdevexport.h"
 
-class KDevCore;
-class KDevProject;
-class KDevVersionControl;
-class KDevLanguageSupport;
-class KDevDocumentController;
-class KDevMainWindow;
-class KDevPluginInfo;
-class QDomElement;
+class QWidget;
+class KInstance;
 
 /**
 @file kdevplugin.h
@@ -91,11 +89,11 @@ Plugin scope can be either:
 - Global
 - Project
 .
-Global plugins are plugins which require only shell to be loaded and do not operate on @ref KDevProject interface and/or do not use project wide information.\n
+Global plugins are plugins which require only the shell to be loaded and do not operate on the @ref KDevProject interface and/or do not use project wide information.\n
 Core plugins are global plugins which offer some important "core" functionality and thus
 are not selectable by user in plugin configuration pages.\n
-Project plugins require a project to be loaded and are usually loaded/unloaded among with the project.
-If your plugin use @ref KDevProject interface and/or operate on project-related information then this is the project plugin.
+Project plugins require a project to be loaded and are usually loaded/unloaded along with the project.
+If your plugin uses the @ref KDevProject interface and/or operates on project-related information then this is a project plugin.
 
 @sa KDevGenericFactory class documentation for an information about plugin instantiation
 and writing factories for plugins.
@@ -109,11 +107,7 @@ class KDEVINTERFACES_EXPORT KDevPlugin: public QObject, public KXMLGUIClient
 
 public:
     /**Constructs a plugin.
-     * @param info Important information about the plugin - plugin internal and generic
-     * (GUI) name, description, a list of authors, etc. That information is used to show
-     * plugin information in various places like "about application" dialog, plugin selector
-     * dialog, etc. Plugin does not take ownership on info object, also its lifetime should
-     * be equal to the lifetime of the plugin.
+     * @param instance The instance for this plugin.
      * @param parent The parent object for the plugin.
      */
     KDevPlugin(KInstance *instance, QObject *parent);
@@ -121,6 +115,29 @@ public:
     /**Destructs a plugin.*/
     virtual ~KDevPlugin();
 
+    /**
+     * The display widget for this plugin. The widget _must_ specify
+     * a non-empty @see QObject::objectName() and @see QWidget::windowTitle().
+     * The default implementation returns 0.
+     * @return the @ref QWidget view
+     */
+    virtual QWidget *pluginView() const;
+
+    /**
+     * Specifies the DockWidgetArea for this plugin to use when in docked UI mode.
+     * The default implementation returns Qt::NoDockWidgetArea.
+     * @return the DockWidgetArea for this plugin
+     */
+    virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
+
+    /**
+     * Tells @ref KDevMainWindow whether to display this plugin as the central widget when
+     * in top-level UI mode. The default implementation returns false.
+     * @return true if this plugin should be the central widget, false if it should not.
+     */
+    virtual bool isCentralPlugin() const;
+
+    //FIXME Is this used for anything?
     /**Queries for the plugin which supports given service type (such plugins are called extensions in KDevelop).
     All already loaded plugins will be queried and the <b>first loaded one</b> to support
     the service type will be returned. Any plugin can be an extension, only "ServiceTypes=..."
@@ -138,28 +155,8 @@ public:
        return static_cast<Extension*>(extension_internal(serviceType, constraint));
     }
 
-    /**Override this base class method to restore any settings which differs from project to project.
-    Data can be read from a certain subtree of the project session file.
-    During project loading, respectively project session (.kdevses) loading,
-    this method will be called to give a chance to adapt the plugin to
-    the newly loaded project. For instance, the debugger plugin might restore the
-    list of breakpoints from the previous debug session for the certain project.
-    @note Take attention to the difference to common not-project-related session stuff.
-          They belong to the application rc file (kdeveloprc)
-    @note Project session file is useful for settings which cannot be shared between
-          developers. If a setting should be shared, modify projectDom instead.
-    @param el The parent DOM element for plugins session settings.*/
-    virtual void restorePartialProjectSession(const QDomElement* el);
-
-    /**Saves session settings.
-    @sa restorePartialProjectSession - this is the other way round, the same just for saving.*/
-    virtual void savePartialProjectSession(QDomElement* el);
-
 private:
     KDevPlugin *extension_internal(const QString &serviceType, const QString &constraint = "");
-
-    class Private;
-    Private* const d;
 };
 
 #endif

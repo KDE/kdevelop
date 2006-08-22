@@ -19,6 +19,7 @@
 #include "kdevgenericimporter.h"
 #include <kdevprojectmodel.h>
 
+#include <kdevcore.h>
 #include <kdevproject.h>
 #include <domutil.h>
 

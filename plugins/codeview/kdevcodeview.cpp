@@ -32,9 +32,10 @@
 
 #include <kicon.h>
 #include <kmenu.h>
-#include <kdebug.h>
 #include <kfile.h>
+#include <kdebug.h>
 #include <klocale.h>
+#include <kiconloader.h>
 
 #include <kdevcore.h>
 #include <kdevcodeproxy.h>
@@ -44,6 +45,12 @@
 KDevCodeView::KDevCodeView( QWidget *parent )
         : QWidget( parent )
 {
+    setObjectName( i18n( "Code View" ) );
+
+    setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
+    setWindowTitle( i18n( "Code View" ) );
+    setWhatsThis( i18n( "Code View" ) );
+
     QVBoxLayout * vbox = new QVBoxLayout( this );
     vbox->setMargin( 0 );
     vbox->setSpacing( 0 );

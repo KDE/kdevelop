@@ -103,6 +103,8 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
         mainwin(mainWindow),
         partController(partController)
 {
+    setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
+
     mActionCollection = new KActionCollection( this );
 
     QVBoxLayout* lo = new QVBoxLayout(this);
@@ -117,7 +119,7 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
     qInstallMsgHandler( oldHandler );
 
     cmbPath = new KUrlComboBox( KUrlComboBox::Directories, true, this );
-    cmbPath->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ));
+//     cmbPath->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ));
     KUrlCompletion* cmpl = new KUrlCompletion(KUrlCompletion::DirCompletion);
     cmbPath->setCompletionObject( cmpl );
     lo->addWidget(cmbPath);
@@ -149,7 +151,7 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
     btnFilter->setIcon( KIcon("filter" ) );
     btnFilter->setToggleButton( true );
     filter = new KHistoryCombo( true, this);
-    filter->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ));
+//     filter->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ));
     connect( btnFilter, SIGNAL( clicked() ), this, SLOT( btnFilterClick() ) );
 
     QHBoxLayout* filterLayout = new QHBoxLayout(lo);

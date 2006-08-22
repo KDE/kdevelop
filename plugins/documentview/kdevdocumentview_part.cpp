@@ -31,7 +31,6 @@
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <kparts/componentfactory.h>
 
@@ -50,8 +49,6 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
     setInstance( KDevDocumentViewFactory::instance() );
 
     m_documentView = new KDevDocumentView( this, 0 );
-    m_documentView->setWindowIcon( SmallIcon( "kmultiple" ) );
-    m_documentView->setWindowTitle( i18n( "Documents" ) );
 
     m_documentView->setModel( m_documentModel );
 
@@ -62,10 +59,6 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
         new KDevDocumentViewDelegate( m_documentView, this );
 
     m_documentView->setItemDelegate( delegate );
-    m_documentView->setWhatsThis( i18n( "Document View" ) );
-
-    KDevCore::mainWindow() ->embedSelectView( m_documentView,
-            i18n( "Documents" ), i18n( "Documents" ) );
 
     KDevDocumentController* docController = KDevCore::documentController();
 
@@ -94,13 +87,24 @@ KDevDocumentViewPart::~KDevDocumentViewPart()
 {
     if ( m_documentView )
     {
-        KDevCore::mainWindow() ->removeView( m_documentView );
         delete m_documentView;
     }
 }
 
-void KDevDocumentViewPart::import( RefreshPolicy /*policy*/ )
-{}
+QWidget *KDevDocumentViewPart::pluginView() const
+{
+    return m_documentView;
+}
+
+Qt::DockWidgetArea KDevDocumentViewPart::dockWidgetAreaHint() const
+{
+    return Qt::LeftDockWidgetArea;
+}
+
+bool KDevDocumentViewPart::isCentralPlugin() const
+{
+    return true;
+}
 
 void KDevDocumentViewPart::activated( KDevDocument* document )
 {

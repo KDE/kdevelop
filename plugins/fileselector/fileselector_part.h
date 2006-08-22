@@ -18,6 +18,10 @@ public:
     FileSelectorPart(QObject *parent, const QStringList&);
     virtual ~FileSelectorPart();
 
+    // KDevPlugin methods
+    virtual QWidget *pluginView() const;
+    virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
+
 public slots:
 //  void showTip();
 //  void showOnStart();

@@ -328,6 +328,8 @@ bool KDevProjectController::loadProjectPart( const QString &projectManager )
     m_project->openProject( m_globalFile.directory(), m_globalFile.fileName() );
     KDevCore::pluginController() ->integratePart( m_project );
 
+    KDevCore::mainWindow()->addPlugin( m_project );
+
     return true;
 }
 
@@ -335,6 +337,7 @@ void KDevProjectController::unloadProjectPart()
 {
     if ( m_project )
     {
+        KDevCore::mainWindow()->removePlugin( m_project );
         KDevCore::pluginController() ->removePart( m_project );
         m_project->closeProject();
         delete m_project;

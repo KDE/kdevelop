@@ -18,6 +18,7 @@
 #include <QVBoxLayout>
 
 #include <kurl.h>
+#include <kicon.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <klibloader.h>
@@ -32,6 +33,13 @@ KDevKonsoleView::KDevKonsoleView( QWidget *parent )
         : QWidget( parent ),
         m_part( 0 )
 {
+    setObjectName( i18n( "Konsole" ) );
+
+    setWhatsThis( i18n( "<b>Konsole</b><p>"
+            "This window contains an embedded console." ) );
+    setWindowIcon( KIcon( "konsole" ) );
+    setWindowTitle( i18n( "Konsole" ) );
+
     m_vbox = new QVBoxLayout( this );
     m_vbox->setMargin( 0 );
     m_vbox->setSpacing( 0 );

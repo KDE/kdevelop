@@ -24,6 +24,10 @@ public:
     KDevKonsoleViewPart( QObject *parent, const QStringList & );
     virtual ~KDevKonsoleViewPart();
 
+    // KDevPlugin methods
+    virtual QWidget *pluginView() const;
+    virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
+
 private:
     QPointer<KDevKonsoleView> m_konsoleView;
 };

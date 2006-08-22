@@ -47,10 +47,10 @@ public:
     KDevDocumentViewPart( QObject *parent, const QStringList & );
     virtual ~KDevDocumentViewPart();
 
-    void import( RefreshPolicy policy = Refresh );
-
-signals:
-    void refresh();
+    // KDevPlugin methods
+    virtual QWidget *pluginView() const;
+    virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
+    virtual bool isCentralPlugin() const;
 
 private slots:
     void activated( KDevDocument* document );

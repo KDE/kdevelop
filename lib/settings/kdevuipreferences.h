@@ -1,4 +1,4 @@
-/* KDevelop General Settings
+/* KDevelop Project Settings
  *
  * Copyright 2006  Matt Rogers <mattr@kde.org>
  *
@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KDEVELOPPREFERENCES_H
-#define KDEVELOPPREFERENCES_H
+#ifndef KDEVUIPREFERENCES_H
+#define KDEVUIPREFERENCES_H
 
 #include <kdevcmodule.h>
 
@@ -28,19 +28,17 @@
 
 namespace Ui
 {
-class SettingsWidget;
+class UISettings;
 }
 
-class KDevelopPreferences : public KDevCModule
+class KDevUIPreferences : public KDevCModule
 {
     Q_OBJECT
 public:
-    KDevelopPreferences( QWidget *parent, const QStringList &args );
-    virtual ~KDevelopPreferences();
+    KDevUIPreferences( QWidget *parent, const QStringList &args );
+    virtual ~KDevUIPreferences();
 
     virtual void save();
-    virtual void load();
-    virtual void defaults();
 
     virtual KUrl localNonShareableFile() const
     {
@@ -48,11 +46,8 @@ public:
                    KStandardDirs::locate( "data", "kdevelop/data.kdev4" ) );
     }
 
-private slots:
-    void slotSettingsChanged();
-
 private:
-    Ui::SettingsWidget *preferencesDialog;
+    Ui::UISettings *preferencesDialog;
 
 };
 

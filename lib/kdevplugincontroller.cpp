@@ -139,6 +139,7 @@ void KDevPluginController::unloadPlugins( ProfileEngine::OfferType offer )
         if ( KDevPlugin * plugin = m_parts.value( name ) )
         {
             removeAndForgetPart( name, plugin );
+            KDevCore::mainWindow()->removePlugin( plugin );
             delete plugin;
         }
     }
@@ -172,6 +173,7 @@ bool KDevPluginController::unloadPlugins()
     {
         KDevPlugin * part = it.value();
         removePart( part );
+        KDevCore::mainWindow()->removePlugin( part );
         delete part;
         it = m_parts.erase( it );
     }
@@ -188,6 +190,7 @@ void KDevPluginController::unloadPlugins( QStringList const & unloadParts )
         {
             removePart( part );
             m_parts.remove( *it );
+            KDevCore::mainWindow()->removePlugin( part );
             delete part;
         }
         ++it;
@@ -199,6 +202,8 @@ KDevPlugin *KDevPluginController::loadPlugin( const KService::Ptr &service )
     int err = 0;
     KDevPlugin * pl = KService::createInstance<KDevPlugin>( service, 0,
                       argumentsFromService( service ), &err );
+
+    KDevCore::mainWindow()->addPlugin( pl );
     return pl;
 }
 

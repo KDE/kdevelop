@@ -54,8 +54,8 @@ GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
 
   (void) new qdesigner_internal::QDesignerIntegration(m_designer, this);
 
-  KDevCore::mainWindow()->embedSelectView(m_designer->widgetBox(), i18n("Widget Box"), i18n("Widget Box"));
-  KDevCore::mainWindow()->embedSelectViewRight(m_designer->propertyEditor(), i18n("Property Editor"), i18n("Property Editor"));
+  m_designer->widgetBox()->setObjectName( i18n("Widget Box") );
+  m_designer->propertyEditor()->setObjectName( i18n("Property Editor") );
 
   setupActions();
 
@@ -73,8 +73,6 @@ GuiBuilderPart::~GuiBuilderPart()
             delete m_window;
         }
 
-        KDevCore::mainWindow()->removeView( m_designer->widgetBox() );
-        KDevCore::mainWindow()->removeView( m_designer->propertyEditor() );
         delete m_designer;
     }
     if (m_workspace)
@@ -83,21 +81,22 @@ GuiBuilderPart::~GuiBuilderPart()
 
 void GuiBuilderPart::activated( KDevDocument *document )
 {
-    if ( document->url() == url() )
-    {
-        KDevCore::mainWindow()->raiseView(
-                m_designer->widgetBox(),
-                Qt::LeftDockWidgetArea);
-        KDevCore::mainWindow()->raiseView(
-                m_designer->propertyEditor(),
-                Qt::RightDockWidgetArea);
-    }
-    KMimeType::Ptr mimeType = KMimeType::findByURL( document->url() );
-    if (!mimeType->is( "application/x-designer" ))
-    {
-        KDevCore::mainWindow()->lowerView( m_designer->widgetBox() );
-        KDevCore::mainWindow()->lowerView( m_designer->propertyEditor() );
-    }
+    //FIXME
+//     if ( document->url() == url() )
+//     {
+//         KDevCore::mainWindow()->raiseView(
+//                 m_designer->widgetBox(),
+//                 Qt::LeftDockWidgetArea);
+//         KDevCore::mainWindow()->raiseView(
+//                 m_designer->propertyEditor(),
+//                 Qt::RightDockWidgetArea);
+//     }
+//     KMimeType::Ptr mimeType = KMimeType::findByURL( document->url() );
+//     if (!mimeType->is( "application/x-designer" ))
+//     {
+//         KDevCore::mainWindow()->lowerView( m_designer->widgetBox() );
+//         KDevCore::mainWindow()->lowerView( m_designer->propertyEditor() );
+//     }
 }
 
 KAboutData* GuiBuilderPart::createAboutData()

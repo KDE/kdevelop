@@ -1,5 +1,5 @@
-File=kdevelopconfig.kcfg
-ClassName=KDevGeneralSettings
+File=kdevprojectconfig.kcfg
+ClassName=KDevProjectSettings
 Singleton=true
 Inherits=KDevConfigSkeleton
 IncludeFiles="kdevconfigskeleton.h"

@@ -1,0 +1,5 @@
+File=kdevuiconfig.kcfg
+ClassName=KDevUISettings
+Singleton=true
+Inherits=KDevConfigSkeleton
+IncludeFiles="kdevconfigskeleton.h"

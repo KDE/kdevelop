@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <QDialog>
 
 #include "kdevenvironment.h"
-#include "ui_kdevenvsettings.h"
+#include "ui_envsettings.h"
 
 class KDevConfigSkeleton;
 

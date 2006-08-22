@@ -29,58 +29,64 @@
 #include "fileselector_widget.h"
 
 typedef KGenericFactory<FileSelectorPart> KDevFileSelectorFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevfileselector, KDevFileSelectorFactory("kdevfileselector") )
+K_EXPORT_COMPONENT_FACTORY( kdevfileselector, KDevFileSelectorFactory( "kdevfileselector" ) )
 
-FileSelectorPart::FileSelectorPart(QObject *parent, const QStringList&)
-    : KDevPlugin(KDevFileSelectorFactory::instance(), parent)
+FileSelectorPart::FileSelectorPart( QObject *parent, const QStringList& )
+        : KDevPlugin( KDevFileSelectorFactory::instance(), parent )
 {
     m_filetree = new KDevFileSelector( this, KDevCore::mainWindow(), KDevCore::documentController(), 0 );
 
-    connect( m_filetree->dirOperator(), SIGNAL(fileSelected(const KFileItem*)),
-	     this, SLOT(fileSelected(const KFileItem*)));
+    connect( m_filetree->dirOperator(), SIGNAL( fileSelected( const KFileItem* ) ),
+             this, SLOT( fileSelected( const KFileItem* ) ) );
 
-//     FIXME find replacement
-//     connect( KDevApi::self()->core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
-//
-//     connect( KDevApi::self()->core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(slotConfigWidget(KDialogBase*)) );
+    //     FIXME find replacement
+    //     connect( KDevApi::self()->core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
+    //
+    //     connect( KDevApi::self()->core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(slotConfigWidget(KDialogBase*)) );
 
-    m_filetree->setWindowTitle( i18n("File Selector") );
+    m_filetree->setObjectName( i18n( "File Selector" ) );
+    m_filetree->setWindowTitle( i18n( "File Selector" ) );
     //m_filetree->setWindowIcon( KIcon(info()->icon()) ); FIXME port
-    KDevCore::mainWindow()->embedSelectView( m_filetree, i18n("File Selector"), i18n("File selector") );
-    m_filetree->setWhatsThis( i18n("<b>File selector</b><p>This file selector lists directory contents and provides some file management functions."));
+    m_filetree->setWhatsThis( i18n( "<b>File selector</b><p>This file selector lists directory contents and provides some file management functions." ) );
 
-    m_filetree->readConfig( instance()->config(), "fileselector" );
+    m_filetree->readConfig( instance() ->config(), "fileselector" );
 }
 
 FileSelectorPart::~FileSelectorPart()
 {
-    if (m_filetree){
-        KDevCore::mainWindow()->removeView( m_filetree );
-    }
+    delete ( KDevFileSelector* ) m_filetree;
+}
 
-    delete (KDevFileSelector*) m_filetree;
+QWidget *FileSelectorPart::pluginView() const
+{
+    return m_filetree;
+}
+
+Qt::DockWidgetArea FileSelectorPart::dockWidgetAreaHint() const
+{
+    return Qt::LeftDockWidgetArea;
 }
 
 void FileSelectorPart::fileSelected( const KFileItem * file )
 {
-    KUrl u(file->url());
+    KUrl u( file->url() );
 
-    KDevCore::documentController()->editDocument( u );
+    KDevCore::documentController() ->editDocument( u );
 }
 
 void FileSelectorPart::slotProjectOpened()
 {
     KUrl u;
-    u.setPath( KDevCore::activeProject()->projectDirectory() );
+    u.setPath( KDevCore::activeProject() ->projectDirectory() );
     m_filetree->setDir( u );
 }
 
 void FileSelectorPart::slotConfigWidget( KDialog * dlg )
 {
     //FIXME PORT!
-/*    KVBox* vbox = dlg->addVBoxPage( i18n("File Selector"), i18n("File Selector"), BarIcon( info()->icon(), K3Icon::SizeMedium) );
-    KFSConfigPage* page = new KFSConfigPage( vbox, 0, m_filetree );
-    connect( dlg, SIGNAL( okClicked( ) ), page, SLOT( apply( ) ) );*/
+    /*    KVBox* vbox = dlg->addVBoxPage( i18n("File Selector"), i18n("File Selector"), BarIcon( info()->icon(), K3Icon::SizeMedium) );
+        KFSConfigPage* page = new KFSConfigPage( vbox, 0, m_filetree );
+        connect( dlg, SIGNAL( okClicked( ) ), page, SLOT( apply( ) ) );*/ 
     // ### implement reload
 }
 

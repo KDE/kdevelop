@@ -45,6 +45,7 @@ class Dialog;
 
 class Context;
 
+class KDevPlugin;
 class KDevDocument;
 
 namespace KParts
@@ -67,67 +68,46 @@ class KDEVINTERFACES_EXPORT KDevMainWindow : public KMainWindow
 {
     friend class KDevCore;
     Q_OBJECT
+
+public:
+    enum UIMode
+    {
+        NeutralMode,
+        TopLevelMode,
+        DockedMode
+    };
+
 public:
     KDevMainWindow( QWidget *parent = 0, Qt::WFlags flags = 0 );
     virtual ~KDevMainWindow();
 
+    UIMode mode() const;
+
     //FIXME document this
     virtual void fillContextMenu( KMenu *menu, const Context *context );
 
-    /**Embeds a view of a part into the main window.
-    @param view The view to embed. Must be a KPart.
-    @param title The title of a view.
-    @param toolTip The tooltip of a view.*/
-    virtual void embedPartView( QWidget *view, const QString &title, const QString& toolTip = QString() );
+    virtual void addDocument( KDevDocument *document );
 
-    /**Embeds a toolview at the left of the main window.
-    @param view The view to embed. Must be a KPart.
-    @param title The title of a view.
-    @param toolTip The tooltip of a view.*/
-    virtual void embedSelectView( QWidget *view, const QString &title, const QString &toolTip );
+    virtual void removeDocument( KDevDocument *document );
 
-    /**Embeds a toolview at the bottom of the main window.
-    @param view The view to embed. Must be a KPart.
-    @param title The title of a view.
-    @param toolTip The tooltip of a view.*/
-    virtual void embedOutputView( QWidget *view, const QString &title, const QString &toolTip );
+    virtual bool containsDocument( KDevDocument *document ) const;
 
-    /**Embeds a toolview at the right of the main window.
-    @param view The view to embed. Must be a KPart.
-    @param title The title of a view.
-    @param toolTip The tooltip of a view.*/
-    virtual void embedSelectViewRight( QWidget* view, const QString& title, const QString &toolTip );
+    virtual void setCurrentDocument( KDevDocument *document );
 
-    /**Removes a view from the main window.
-    @param view The view to remove.*/
-    virtual void removeView( QWidget *view );
+    virtual void addPlugin( KDevPlugin *plugin );
 
-    /**Shows or hides a view.
-    @param pView The view to show or hide.
-    @param bEnabled true if view should be shown, false it it is not.*/
-    virtual void setViewAvailable( QWidget *pView, bool bEnabled );
-
-    virtual bool containsWidget( QWidget *widget ) const;
-
-    /**Brings the widget to the front of the stack.
-    @param widget The widget to give focus.*/
-    virtual void setCurrentWidget( QWidget *widget );
-
-    /**Raises a view (shows it if it was minimized).
-    @param view The view to be raised.*/
-    virtual void raiseView( QWidget *view, Qt::DockWidgetArea = Qt::AllDockWidgetAreas );
-
-    /**Minimize a view.
-    @param view The view to be lowered.*/
-    virtual void lowerView( QWidget *view );
+    virtual void removePlugin( KDevPlugin *plugin );
 
 public Q_SLOTS:
     /**Loads main window settings.*/
     virtual void loadSettings();
     virtual void saveSettings(); //FIXME Document
+
     virtual void setVisible( bool visible );
+    void setUIMode( UIMode mode );
 
 Q_SIGNALS:
+    void modeChanged( UIMode mode );
     void finishedLoading();
     void contextMenu( KMenu *menu, const Context *context );
 
@@ -161,7 +141,16 @@ private Q_SLOTS:
 
     void toggleStatusbar();
 
+    void switchToNeutralMode();
+    void switchToDockedMode();
+    void switchToTopLevelMode();
+
 private:
+    QWidget *magicalParent() const;
+    QWidget *magicalWidget( QDockWidget *dockWidget ) const;
+    QDockWidget *magicalDockWidget( QWidget *widget ) const;
+    Qt::WindowFlags magicalWindowFlags( const QWidget *widgetForFlags ) const;
+
     void setupActions();
     void setupWindowMenu();
     void init();

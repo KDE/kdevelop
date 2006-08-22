@@ -20,6 +20,7 @@ Boston, MA 02110-1301, USA.
 */
 #include "kdevmainwindow.h"
 
+#include <QHash>
 #include <QDockWidget>
 #include <QStackedWidget>
 
@@ -32,6 +33,7 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/editor.h>
 
 #include <kstdaction.h>
+#include <kselectaction.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <ktoolbarpopupaction.h>
@@ -39,14 +41,14 @@ Boston, MA 02110-1301, USA.
 #include <knotifydialog.h>
 #include <ksettings/dialog.h>
 
-#include "kdevconfig.h"
-#include "kdevprofile.h"
-#include "kdevprofileengine.h"
-
 #include "kdevcore.h"
-#include "kdevmainwindow.h"
+#include "kdevconfig.h"
+#include "kdevplugin.h"
+#include "kdevprofile.h"
+#include "kdevdocument.h"
 #include "kdevstatusbar.h"
 #include "shellextension.h"
+#include "kdevprofileengine.h"
 #include "kdevplugincontroller.h"
 #include "kdevprojectcontroller.h"
 #include "kdevdocumentcontroller.h"
@@ -55,14 +57,18 @@ class KDevMainWindowPrivate
 {
 public:
     KDevMainWindowPrivate()
-            : center( 0 ),
+            : mode( KDevMainWindow::DockedMode ),
+            center( 0 ),
             settingsDialog( 0 )
     {}
 
+    KDevMainWindow::UIMode mode;
+
     QStackedWidget *center;
+    QPointer<QWidget> centralPlugin;
+
     KSettings::Dialog *settingsDialog;
 
-    QList<QDockWidget*> dockList;
     QList<KDevPlugin*> activeProcesses;
 };
 
@@ -82,6 +88,26 @@ KDevMainWindow::KDevMainWindow( QWidget *parent, Qt::WFlags flags )
 
 KDevMainWindow::~ KDevMainWindow()
 {}
+
+KDevMainWindow::UIMode KDevMainWindow::mode() const
+{
+    return d->mode;
+}
+
+void KDevMainWindow::setUIMode( UIMode mode )
+{
+    switch ( mode )
+    {
+    case TopLevelMode:
+        switchToTopLevelMode();
+        break;
+    case DockedMode:
+        switchToDockedMode();
+        break;
+
+    default: Q_ASSERT( 0 );
+    }
+}
 
 void KDevMainWindow::setupActions()
 {
@@ -208,128 +234,221 @@ void KDevMainWindow::fillContextMenu( KMenu *menu, const Context *context )
     menu->addAction( action );
 }
 
-void KDevMainWindow::embedPartView( QWidget *view, const QString &title,
-                                    const QString & /*toolTip*/ )
+void KDevMainWindow::addDocument( KDevDocument *document )
 {
-    if ( !view || title.isEmpty() )
-        return ;
+    Q_ASSERT( document );
+    Q_ASSERT( document->part() );
+    Q_ASSERT( document->part() ->widget() );
 
-    d->center->addWidget( view );
-}
+    QWidget *widget = document->part() ->widget();
+    widget->setWindowTitle( document->url().fileName() );
 
-void KDevMainWindow::embedSelectView( QWidget *view, const QString &title,
-                                      const QString & /*toolTip*/ )
-{
-    if ( !view || title.isEmpty() )
-        return ;
-
-    QDockWidget * dock = new QDockWidget( title, this );
-    dock->setObjectName( title );
-    dock->setWidget( view );
-    d->dockList.append( dock );
-    addDockWidget( Qt::LeftDockWidgetArea, dock );
-}
-
-void KDevMainWindow::embedOutputView( QWidget *view, const QString &title,
-                                      const QString & /*toolTip*/ )
-{
-    if ( !view || title.isEmpty() )
-        return ;
-
-    QDockWidget * dock = new QDockWidget( title, this );
-    dock->setObjectName( title );
-    dock->setWidget( view );
-    d->dockList.append( dock );
-    addDockWidget( Qt::BottomDockWidgetArea, dock );
-}
-
-void KDevMainWindow::embedSelectViewRight( QWidget *view,
-        const QString &title,
-        const QString & /*toolTip*/ )
-{
-    if ( !view || title.isEmpty() )
-        return ;
-
-    QDockWidget * dock = new QDockWidget( title, this );
-    dock->setObjectName( title );
-    dock->setWidget( view );
-    d->dockList.append( dock );
-    addDockWidget( Qt::RightDockWidgetArea, dock );
-}
-
-void KDevMainWindow::removeView( QWidget *view )
-{
-    if ( !view )
-        return ;
-
-    foreach( QDockWidget * dock, d->dockList )
+    switch ( d->mode )
     {
-        if ( dock->widget() == view )
+    case TopLevelMode:
         {
-            removeDockWidget( dock );
-            d->dockList.removeAll( dock );
-            delete dock;
-            break;
+            widget->setParent( magicalParent(), magicalWindowFlags( widget ) );
+            widget->setMinimumSize( 640, 480 );
+            widget->raise();
+            widget->show();
+            widget->activateWindow();
         }
-    }
-
-    d->center->removeWidget( view );
-}
-
-void KDevMainWindow::setViewAvailable( QWidget *pView, bool bEnabled )
-{
-    Q_UNUSED( pView );
-    Q_UNUSED( bEnabled );
-    //TODO hide docs
-}
-
-bool KDevMainWindow::containsWidget( QWidget *widget ) const
-{
-    return ( d->center->indexOf( widget ) != -1 );
-}
-
-void KDevMainWindow::setCurrentWidget( QWidget *widget )
-{
-    if ( !widget )
-        return ;
-
-    d->center->setCurrentWidget( widget );
-}
-
-void KDevMainWindow::raiseView( QWidget *view, Qt::DockWidgetArea area )
-{
-    if ( !view )
-        return ;
-
-    foreach( QDockWidget * dock, d->dockList )
-    {
-        if ( dock->widget() == view )
-        {
-            addDockWidget( area, dock );
-            dock->show();
-            break;
-        }
+        break;
+    case DockedMode:
+        d->center->addWidget( widget );
+        widget->show();
+        widget->setFocus();
+        break;
+    case NeutralMode:
+        break;
+    default:
+        break;
     }
 }
 
-void KDevMainWindow::lowerView( QWidget * view )
+bool KDevMainWindow::containsDocument( KDevDocument *document ) const
 {
-    if ( !view )
+    Q_ASSERT( document );
+    Q_ASSERT( document->part() );
+    Q_ASSERT( document->part() ->widget() );
+
+    switch ( d->mode )
+    {
+    case TopLevelMode:
+        return true; //FIXME
+    case DockedMode:
+        return ( d->center->indexOf( document->part() ->widget() ) != -1 );
+    case NeutralMode:
+        return true; //FIXME
+    default:
+        return false;
+    }
+}
+
+void KDevMainWindow::setCurrentDocument( KDevDocument *document )
+{
+    Q_ASSERT( document );
+    Q_ASSERT( document->part() );
+    Q_ASSERT( document->part() ->widget() );
+
+    QWidget *widget = document->part() ->widget();
+    widget->setWindowTitle( document->url().fileName() );
+
+    switch ( d->mode )
+    {
+    case TopLevelMode:
+        widget->setMinimumSize( 640, 480 );
+        widget->raise();
+        widget->show();
+        widget->activateWindow();
+        break;
+    case DockedMode:
+        d->center->setCurrentWidget( widget );
+        widget->show();
+        widget->setFocus();
+        break;
+    case NeutralMode:
+        break;
+    default:
+        break;
+    }
+}
+
+void KDevMainWindow::removeDocument( KDevDocument *document )
+{
+    Q_ASSERT( document );
+    Q_ASSERT( document->part() );
+    Q_ASSERT( document->part() ->widget() );
+
+    switch ( d->mode )
+    {
+    case TopLevelMode:            //FIXME
+        break;
+    case DockedMode:
+        d->center->removeWidget( document->part() ->widget() );
+        break;
+    case NeutralMode:
+        break;
+    default:
+        break;
+    }
+}
+
+void KDevMainWindow::addPlugin( KDevPlugin *plugin )
+{
+    Q_ASSERT( plugin );
+
+    QWidget *view = plugin->pluginView();
+
+    //Plugin has no view. Ignore.
+    if ( !plugin->pluginView()
+            || plugin->dockWidgetAreaHint() == Qt::NoDockWidgetArea )
         return ;
 
-    foreach( QDockWidget * dock, d->dockList )
+    // This is required as documented in KDevPlugin
+    Q_ASSERT( !view->objectName().isEmpty() );
+    // This is required as documented in KDevPlugin
+    Q_ASSERT( !view->windowTitle().isEmpty() );
+
+    switch ( d->mode )
     {
-        if ( dock->widget() == view )
+    case TopLevelMode:
         {
-            removeDockWidget( dock );
+            QDockWidget * dockWidget = magicalDockWidget( view );
+            if ( dockWidget == 0 )
+            {
+                dockWidget = new QDockWidget( this );
+                dockWidget->setObjectName( view->objectName() + QLatin1String( "_dock" ) );
+                dockWidget->setWindowTitle( view->windowTitle() );
+                addDockWidget( plugin->dockWidgetAreaHint(), dockWidget );
+                dockWidget->hide();
+            }
+
+            if ( plugin->isCentralPlugin() )
+            {
+                d->centralPlugin = view;
+                QRect g = d->centralPlugin->geometry();
+                d->center->addWidget( d->centralPlugin );
+                d->centralPlugin->show();
+                setGeometry( g );
+                break;
+            }
+
+            view->setParent( magicalParent(), magicalWindowFlags( view ) );
+            view->setMinimumSize( 200, 200 ); //FIXME do better geometry and move the windows
+            view->show();
             break;
         }
+    case DockedMode:
+        {
+            QDockWidget *dockWidget = magicalDockWidget( view );
+            if ( dockWidget == 0 )
+            {
+                dockWidget = new QDockWidget( this );
+                dockWidget->setObjectName( view->objectName() + QLatin1String( "_dock" ) );
+                dockWidget->setWindowTitle( view->windowTitle() );
+                addDockWidget( plugin->dockWidgetAreaHint(), dockWidget );
+            }
+            dockWidget->setWidget( view );
+
+            if ( plugin->isCentralPlugin() )
+            {
+                d->centralPlugin = view;
+            }
+            break;
+        }
+    case NeutralMode:
+        break;
+    default:
+        break;
+    }
+}
+
+void KDevMainWindow::removePlugin( KDevPlugin *plugin )
+{
+    Q_ASSERT( plugin );
+
+    QWidget *view = plugin->pluginView();
+
+    //Plugin has no view. Ignore.
+    if ( !plugin->pluginView()
+            || plugin->dockWidgetAreaHint() == Qt::NoDockWidgetArea )
+        return ;
+
+    switch ( d->mode )
+    {
+    case TopLevelMode:
+        break;
+    case DockedMode:
+        {
+            QDockWidget *dockWidget = magicalDockWidget( view );
+            if ( dockWidget != 0 )
+            {
+                removeDockWidget( dockWidget );
+                delete dockWidget;
+            }
+            break;
+        }
+    case NeutralMode:
+        break;
+    default:
+        break;
     }
 }
 
 void KDevMainWindow::loadSettings()
 {
     KConfig * config = KDevConfig::standard();
+
+    config->setGroup( "UI" );
+    bool docked = config->readBoolEntry( "Docked Window", true );
+    bool toplevel = config->readBoolEntry( "Multiple Top-Level Windows", false );
+
+    //FIXME this needs to be an enum value from kconfigxt
+    if ( docked )
+        setUIMode( DockedMode );
+    if ( toplevel )
+        setUIMode( TopLevelMode );
 
     applyMainWindowSettings( config, QLatin1String( "KDevMainWindow" ) );
 }
@@ -445,7 +564,7 @@ void KDevMainWindow::reportBug()
 void KDevMainWindow::toggleStatusbar()
 {
     KToggleAction * action =
-            qobject_cast< KToggleAction*>( actionCollection() ->action( "settings_show_statusbar" ) );
+        qobject_cast< KToggleAction*>( actionCollection() ->action( "settings_show_statusbar" ) );
     statusBar() ->setHidden( !action->isChecked() );
 }
 
@@ -514,6 +633,219 @@ void KDevMainWindow::documentActivated( KDevDocument *document )
 {
     KAction * action = actionCollection() ->action( "settings_configure_editors" );
     action->setEnabled( document->textDocument() );
+}
+
+QWidget *KDevMainWindow::magicalParent() const
+{
+    switch ( d->mode )
+    {
+    case TopLevelMode:
+        return 0;
+    case DockedMode:
+        return const_cast<KDevMainWindow*>( this );
+    case NeutralMode:
+        return 0;
+    default:
+        return 0;
+    }
+}
+
+QWidget *KDevMainWindow::magicalWidget( QDockWidget *dockWidget ) const
+{
+    QString name = dockWidget->objectName();
+    name.chop( 5 ); //remove the "_dock"
+
+    switch ( d->mode )
+    {
+    case TopLevelMode:
+        {
+            QWidget * widget = qFindChild<QWidget*>( this, name );
+
+            if ( widget )
+                return widget;
+            else
+                return 0;
+        }
+    case DockedMode:
+        {
+            foreach ( QWidget * widget, QApplication::topLevelWidgets() )
+            {
+                if ( widget->objectName() == name )
+                    return widget;
+            }
+
+            //Must be ...
+            return d->centralPlugin;
+        }
+    case NeutralMode:
+        return 0;
+    default:
+        return 0;
+    }
+}
+
+QDockWidget *KDevMainWindow::magicalDockWidget( QWidget *widget ) const
+{
+    QDockWidget * dockWidget = qFindChild<QDockWidget*>( this,
+                               widget->objectName() + QLatin1String( "_dock" ) );
+
+    if ( dockWidget )
+        return dockWidget;
+    else
+        return 0;
+}
+
+Qt::WindowFlags KDevMainWindow::magicalWindowFlags( const QWidget *widgetForFlags ) const
+{
+    switch ( d->mode )
+    {
+    case TopLevelMode:
+        {
+#ifdef Q_WS_MAC
+            if ( qobject_cast<const QDockWidget *>( widgetForFlags ) )
+                return Qt::Tool;
+#else
+            Q_UNUSED( widgetForFlags );
+#endif
+            return Qt::Window;
+        }
+    case DockedMode:
+        return Qt::Window | Qt::WindowShadeButtonHint | Qt::WindowSystemMenuHint | Qt::WindowTitleHint;
+    case NeutralMode:
+        return Qt::Window;
+    default:
+        return 0;
+    }
+}
+
+void KDevMainWindow::switchToNeutralMode()
+{
+    if ( d->mode == NeutralMode )
+        return ;
+
+    d->mode = NeutralMode;
+
+    //FIXME hide everything...
+}
+
+void KDevMainWindow::switchToDockedMode()
+{
+    if ( d->mode == DockedMode )
+        return ;
+
+//     setUpdatesEnabled( false );
+
+    switchToNeutralMode();
+
+    d->mode = DockedMode;
+
+    QList<KDevDocument* > openDocs = KDevCore::documentController() ->openDocuments();
+    QList<KDevDocument* >::const_iterator it = openDocs.begin();
+    for ( ; it != openDocs.end(); ++it )
+    {
+        if ( !( *it ) ->isInitialized() )
+            continue;
+
+        if ( QWidget * widget = ( *it ) ->part() ->widget() )
+        {
+            widget->setParent( magicalParent(), magicalWindowFlags( widget ) );
+            widget->setMinimumSize( 0, 0 );
+            d->center->addWidget( widget );
+            widget->show();
+            widget->setFocus();
+        }
+    }
+
+    QRegExp rx( "*_dock" );
+    rx.setPatternSyntax( QRegExp::Wildcard );
+    QList<QDockWidget*> dockList = qFindChildren<QDockWidget*>( this, rx );
+
+    QList<QDockWidget*>::const_iterator it2 = dockList.constBegin();
+    for ( ; it2 != dockList.constEnd(); ++it2 )
+    {
+        QDockWidget *dock = ( *it2 );
+        QWidget *widget = magicalWidget( dock );
+
+        if ( widget == d->centralPlugin )
+        {
+            d->center->removeWidget( widget );
+            dock->setWidget( widget );
+            widget->show();
+            dock->show();
+            continue;
+        }
+
+        widget->setParent( magicalParent(), magicalWindowFlags( widget ) );
+        widget->setMinimumSize( 0, 0 ); //FIXME do better geometry and move the windows
+        dock->setWidget( widget );
+
+        dock->show();
+    }
+
+//     setUpdatesEnabled( true );
+}
+
+void KDevMainWindow::switchToTopLevelMode()
+{
+    if ( d->mode == TopLevelMode )
+        return ;
+
+//     setUpdatesEnabled( false );
+
+    switchToNeutralMode();
+
+    d->mode = TopLevelMode;
+
+    QList<KDevDocument* > openDocs = KDevCore::documentController() ->openDocuments();
+    QList<KDevDocument* >::const_iterator it = openDocs.begin();
+    for ( ; it != openDocs.end(); ++it )
+    {
+        if ( !( *it ) ->isInitialized() )
+            continue;
+
+        if ( QWidget * widget = ( *it ) ->part() ->widget() )
+        {
+            d->center->removeWidget( widget );
+            widget->setParent( magicalParent(), magicalWindowFlags( widget ) );
+            widget->setMinimumSize( 640, 480 ); //FIXME do better geometry and move the windows
+            widget->raise();
+            widget->show();
+            widget->activateWindow();
+        }
+    }
+
+    QRegExp rx( "*_dock" );
+    rx.setPatternSyntax( QRegExp::Wildcard );
+    QList<QDockWidget*> dockList = qFindChildren<QDockWidget*>( this, rx );
+
+    QList<QDockWidget*>::const_iterator it2 = dockList.constBegin();
+    for ( ; it2 != dockList.constEnd(); ++it2 )
+    {
+        QDockWidget *dock = ( *it2 );
+        QWidget *widget = magicalWidget( dock );
+
+        dock->hide();
+
+        if ( widget == d->centralPlugin )
+        {
+            QRect g = widget->geometry();
+            d->center->addWidget( widget );
+            widget->show();
+            setGeometry( g );
+            continue;
+        }
+
+        widget->setParent( magicalParent(), magicalWindowFlags( widget ) );
+        widget->setMinimumSize( 200, 200 ); //FIXME do better geometry and move the windows
+        widget->show();
+    }
+
+//     setUpdatesEnabled( true );
+
+    //     Qt::WindowFlags flags = windowFlags();
+    //     flags |= Qt::WindowStaysOnTopHint;
+    //     setWindowFlags( flags );
+    //     show();
 }
 
 #include "kdevmainwindow.moc"

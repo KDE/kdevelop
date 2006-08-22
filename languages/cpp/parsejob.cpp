@@ -27,6 +27,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "kdevcore.h"
 #include "kdevdocument.h"
 #include "kdevproject.h"
 #include "kdevpersistenthash.h"
