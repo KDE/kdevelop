@@ -3700,11 +3700,6 @@ void TrollProjectWidget::buildFile(SubqmakeprojectItem* spitem, FileItem* fitem)
 
 }
 
-bool TrollProjectWidget::useNonModalConfigDlg() const
-{
-  return ( DomUtil::readBoolEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/nonmodal", false ) );
-}
-
 TrollProjectWidget::SaveType TrollProjectWidget::dialogSaveBehaviour() const
 {
   switch( DomUtil::readIntEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/savebehaviour", 2 ) )

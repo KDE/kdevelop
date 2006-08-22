@@ -356,7 +356,6 @@ private:
     QPtrList<SubqmakeprojectItem> findSubprojectForFile( QFileInfo fi );
     void findSubprojectForFile( QPtrList<SubqmakeprojectItem> &list, SubqmakeprojectItem * item, QString absFilePath );
 
-    bool useNonModalConfigDlg() const;
     TrollProjectWidget::SaveType dialogSaveBehaviour() const;
 
 //    QString makeEnvironment();
