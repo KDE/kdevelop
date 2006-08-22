@@ -28,43 +28,18 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <spacer row="1" column="0">
-            <property name="name">
-                <cstring>Spacer1_2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>511</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="KPushButton" row="1" column="1">
-            <property name="name">
-                <cstring>buttonOk</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;OK</string>
-            </property>
-            <property name="default">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="KPushButton" row="1" column="2">
+        <widget class="KPushButton" row="1" column="3">
             <property name="name">
                 <cstring>buttonCancel</cstring>
             </property>
             <property name="text">
                 <string>&amp;Cancel</string>
             </property>
+            <property name="accel">
+                <string>Alt+C</string>
+            </property>
         </widget>
-        <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="3">
+        <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>TabBuild</cstring>
             </property>
@@ -163,10 +138,10 @@
                                     <cstring>radioApplication</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Application</string>
+                                    <string>Appli&amp;cation</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+A</string>
+                                    <string>Alt+C</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Create an application</string>
@@ -2049,6 +2024,51 @@
                 </vbox>
             </widget>
         </widget>
+        <spacer row="1" column="0">
+            <property name="name">
+                <cstring>Spacer1_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>270</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="KPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>buttonOk</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;OK</string>
+            </property>
+            <property name="accel">
+                <string>Alt+O</string>
+            </property>
+            <property name="default">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>buttonApply</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="text">
+                <string>&amp;Apply</string>
+            </property>
+            <property name="accel">
+                <string>Alt+A</string>
+            </property>
+        </widget>
     </grid>
 </widget>
 <customwidgets>
@@ -2061,6 +2081,12 @@
         <slot>browseTargetPath()</slot>
     </connection>
     <connection>
+        <sender>buttonApply</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>apply()</slot>
+    </connection>
+    <connection>
         <sender>buttonCancel</sender>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
@@ -2070,7 +2096,7 @@
         <sender>buttonOk</sender>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>updateProjectConfiguration()</slot>
+        <slot>accept()</slot>
     </connection>
     <connection>
         <sender>checkInstallTarget</sender>
@@ -2127,6 +2153,24 @@
         <slot>extRemove_button_clicked()</slot>
     </connection>
     <connection>
+        <sender>groupBuildMode</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(int)</slot>
+    </connection>
+    <connection>
+        <sender>groupRequirements</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(int)</slot>
+    </connection>
+    <connection>
+        <sender>groupTemplate</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(int)</slot>
+    </connection>
+    <connection>
         <sender>insideIncMoveDownBtn</sender>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
@@ -2161,6 +2205,12 @@
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>intMoveUp_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>libGroup</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(int)</slot>
     </connection>
     <connection>
         <sender>outsideIncAddBtn</sender>
@@ -2253,6 +2303,24 @@
         <slot>outsideLibRemoveClicked()</slot>
     </connection>
     <connection>
+        <sender>qt4Group</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(int)</slot>
+    </connection>
+    <connection>
+        <sender>radioApplication</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>checkOrdered</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>radioLibrary</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>checkOrdered</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
         <sender>radioLibrary</sender>
         <signal>stateChanged(int)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
@@ -2260,9 +2328,21 @@
     </connection>
     <connection>
         <sender>radioSubdirs</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>checkOrdered</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>radioSubdirs</sender>
         <signal>stateChanged(int)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>clickSubdirsTemplate()</slot>
+    </connection>
+    <connection>
+        <sender>sharedRadio</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>sharedLibChanged()</slot>
     </connection>
     <connection>
         <sender>staticRadio</sender>
@@ -2301,28 +2381,124 @@
         <slot>removeCustomValueClicked()</slot>
     </connection>
     <connection>
-        <sender>sharedRadio</sender>
+        <sender>m_targetPath</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_targetOutputFile</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>makefile_url</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>makefile_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_InstallTargetPath</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>checkInstallTarget</sender>
         <signal>stateChanged(int)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>sharedLibChanged()</slot>
+        <slot>activateApply(int)</slot>
     </connection>
     <connection>
-        <sender>radioApplication</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>checkOrdered</receiver>
-        <slot>setDisabled(bool)</slot>
+        <sender>checkDontInheritConfig</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(int)</slot>
     </connection>
     <connection>
-        <sender>radioLibrary</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>checkOrdered</receiver>
-        <slot>setDisabled(bool)</slot>
+        <sender>m_targetLibraryVersion</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
     </connection>
     <connection>
-        <sender>radioSubdirs</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>checkOrdered</receiver>
-        <slot>setEnabled(bool)</slot>
+        <sender>m_debugFlags</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_releaseFlags</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_defines</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>mocdir_url</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>mocdir_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>objdir_url</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>objdir_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>uidir_url</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>uidir_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>idlCmdEdit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>idlCmdEdit</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>idlCmdOptionsEdit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
     </connection>
 </connections>
 <tabstops>
@@ -2414,8 +2590,7 @@
 <slots>
     <slot>browseTargetPath()</slot>
     <slot>clickSubdirsTemplate()</slot>
-    <slot>updateProjectConfiguration()</slot>
-    <slot>templateLibraryClicked(int)</slot>
+    <slot>templateLibraryClicked( int )</slot>
     <slot>buildorderMoveUpClicked()</slot>
     <slot>buildorderMoveDownClicked()</slot>
     <slot>outsideIncMoveUpClicked()</slot>
@@ -2439,7 +2614,7 @@
     <slot>outsideIncEditClicked()</slot>
     <slot>prjDepsMoveUpClicked()</slot>
     <slot>prjDepsMoveDownClicked()</slot>
-    <slot>slotStaticLibClicked(int)</slot>
+    <slot>slotStaticLibClicked( int )</slot>
     <slot>slotInstallTargetClicked()</slot>
     <slot>intMoveUp_button_clicked()</slot>
     <slot>intMoveDown_button_clicked()</slot>
@@ -2459,11 +2634,13 @@
     <slot>addCustomValueClicked()</slot>
     <slot>radioSharedLibChanged()</slot>
     <slot>sharedLibChanged()</slot>
+    <slot>apply()</slot>
+    <slot>activateApply(int)</slot>
+    <slot>activateApply(const QString&amp;)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
@@ -2527,6 +2704,7 @@
     <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

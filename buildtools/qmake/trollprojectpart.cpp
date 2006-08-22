@@ -42,6 +42,7 @@
 #include "runoptionswidget.h"
 #include "config.h"
 #include "envvartools.h"
+#include "qmakeoptionswidget.h"
 
 #include <kdevplugininfo.h>
 
@@ -78,7 +79,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
     const QIconSet icon(SmallIcon("compfile"));
     action = new KAction( i18n("Compile &File"), "compfile", 0,
-                          m_widget, SLOT(slotBuildFile()),
+                          m_widget, SLOT(slotBuildOpenFile()),
                           actionCollection(),"build_compilefile"  );
     action->setToolTip(i18n("Compile file"));
     action->setWhatsThis(i18n("<b>Compile file</b><p>Runs <b>make filename.o</b> command from the directory where 'filename' is the name of currently opened file.<br>"
@@ -227,9 +228,13 @@ void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
 
     vbox = dlg->addVBoxPage(i18n("Make Options"), i18n("Make Options"), BarIcon( "make", KIcon::SizeMedium ));
     MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevtrollproject", vbox);
-    connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
 
+    vbox = dlg->addVBoxPage(i18n("QMake Manager Options"), i18n("QMake Manager Options"), BarIcon( "make", KIcon::SizeMedium ));
+    QMakeOptionsWidget *qm = new QMakeOptionsWidget(*projectDom(), "/kdevtrollproject", vbox);
+
+    connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
     connect( dlg, SIGNAL(okClicked()), optdlg, SLOT(accept()) );
+    connect( dlg, SIGNAL(okClicked()), qm, SLOT(accept()) );
 }
 
 
@@ -530,7 +535,7 @@ void TrollProjectPart::slotCommandFinished( const QString& command )
 
 //     if( m_buildCommand != command )
 //         return;
-// 
+//
 //     m_buildCommand = QString::null;
 
     m_timestamp.clear();

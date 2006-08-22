@@ -60,14 +60,15 @@ enum QMakeQt4Libs      {Q4L_CORE=	1<<0,
 struct ProjectConfiguration;
 class SubqmakeprojectItem;
 class qProjectItem;
-
+class TrollProjectWidget;
 
 class ProjectConfigurationDlg : public ProjectConfigurationDlgBase
 {
 public:
-  ProjectConfigurationDlg(SubqmakeprojectItem * _item,QListView *_prjList,bool isQt4Project, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+  ProjectConfigurationDlg(QListView *_prjList,TrollProjectWidget* _prjWidget, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
   ~ProjectConfigurationDlg();
   void updateControls();
+  void updateSubproject(SubqmakeprojectItem* _item);
 
 public slots:
 //  virtual void           radioLibrarytoggled(bool);
@@ -75,6 +76,11 @@ public slots:
   virtual void           browseTargetPath();
   virtual void           clickSubdirsTemplate();
   virtual void           templateLibraryClicked(int);
+  virtual void           accept();
+  virtual void           reject();
+  virtual void           apply();
+  virtual void           activateApply(int);
+  virtual void           activateApply(const QString&);
 
 
 virtual void buildorderMoveUpClicked();
@@ -135,8 +141,8 @@ void sharedLibChanged();
 protected:
   QListView *prjList;
   SubqmakeprojectItem *myProjectItem;
+  TrollProjectWidget* prjWidget;
   QPtrList <qProjectItem> getAllProjects();
-  bool isQt4Project;
   void getAllSubProjects(qProjectItem *item,QPtrList <qProjectItem> *itemList);
 
 

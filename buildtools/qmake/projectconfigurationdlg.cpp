@@ -29,6 +29,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klistview.h>
+#include <kmessagebox.h>
 
 #include <qdialog.h>
 #include <qpushbutton.h>
@@ -44,118 +45,43 @@
 #include <kstdguiitem.h>
 #include <klocale.h>
 
-// in kde 3.4 KStdGuiItem::browse()
-KGuiItem browse()
-{
-	KGuiItem returnItem;
-	returnItem.setText(i18n("Browse"));
-	returnItem.setIconName("browse");
-	returnItem.setToolTip(i18n("Open browser"));
-	returnItem.setWhatsThis(i18n("Opens a file browser for selection of files or directories"));
-	return returnItem;
-}
+#include "trollprojectwidget.h"
+#include "trollprojectpart.h"
 
-// in kde 3.4 KStdGuiItem::up()
-KGuiItem up()
-{
-	KGuiItem returnItem;
-	returnItem.setText(i18n("Up"));
-	returnItem.setIconName("up");
-	returnItem.setToolTip(i18n("Move up"));
-	return returnItem;
-}
-// in kde 3.4 KStdGuiItem::down()
-KGuiItem down()
-{
-KGuiItem returnItem;
-	returnItem.setText(i18n("Down"));
-	returnItem.setIconName("down");
-	returnItem.setToolTip(i18n("Move down"));
-	return returnItem;
-}
-// in kde 3.4 KStdGuiItem::edit()
-KGuiItem edit()
-{
-	KGuiItem returnItem;
-	returnItem.setText(i18n("Edit"));
-	returnItem.setIconName("edit");
-	returnItem.setToolTip(i18n("Edit value"));
-	return returnItem;
-}
-
-// in kde 3.4 KStdGuiItem::remove()
-KGuiItem add()
-{
-	KGuiItem returnItem;
-	returnItem.setText(i18n("Add"));
-	returnItem.setIconName("add");
-	returnItem.setToolTip(i18n("Remove value"));
-	return returnItem;
-}
-
-// in kde 3.4 KStdGuiItem::add()
-KGuiItem remove()
-{
-	KGuiItem returnItem;
-	returnItem.setText(i18n("Remove"));
-	returnItem.setIconName("remove");
-	returnItem.setToolTip(i18n("Remove value"));
-	return returnItem;
-}
-
-ProjectConfigurationDlg::ProjectConfigurationDlg(SubqmakeprojectItem *_item,QListView *_prjList,bool isQt4Project,QWidget* parent, const char* name, bool modal, WFlags fl)
-: ProjectConfigurationDlgBase(parent,name,modal,fl)
+ProjectConfigurationDlg::ProjectConfigurationDlg(QListView *_prjList, TrollProjectWidget* _prjWidget, QWidget* parent, const char* name, bool modal, WFlags fl)
+: ProjectConfigurationDlgBase(parent,name,modal,fl | Qt::WStyle_Tool), prjWidget(_prjWidget), myProjectItem(0)
 //=================================================
 {
-// Remove when we can depend on KDE 3.4
-/*
-    buttonOk->setGuiItem(KStdGuiItem::ok());
-  buttonCancel->setGuiItem(KStdGuiItem::cancel());
-  Browse->setGuiItem(browse());
-  insideIncMoveUpBtn->setGuiItem(up());
-  insideIncMoveDownBtn->setGuiItem(down());
-  outsideIncAddBtn->setGuiItem(add());
-  outsideIncRemoveBtn->setGuiItem(remove());
-  outsideIncEditBtn->setGuiItem(edit());
-  outsideIncMoveUpBtn->setGuiItem(up());
-  outsideIncMoveDownBtn->setGuiItem(down());
-  insideLibMoveUpBtn->setGuiItem(up());
-  insideLibMoveDownBtn->setGuiItem(down());
-  outsideLibAddBtn->setGuiItem(add());
-  outsideLibRemoveBtn->setGuiItem(remove());
-  outsideLibEditBtn->setGuiItem(edit());
-  outsideLibMoveUpBtn->setGuiItem(up());
-  outsideLibMoveDownBtn->setGuiItem(down());
-  outsideLibDirAddBtn->setGuiItem(add());
-  outsideLibDirRemoveBtn->setGuiItem(remove());
-  outsideLibDirEditBtn->setGuiItem(edit());
-  outsideLibDirMoveUpBtn->setGuiItem(up());
-  outsideLibDirMoveDownBtn->setGuiItem(down());
-  intMoveUp_button->setGuiItem(up());
-  intMoveDown_button->setGuiItem(down());
-  extAdd_button->setGuiItem(add());
-  extRemove_button->setGuiItem(remove());
-  extEdit_button->setGuiItem(edit());
-  extMoveUp_button->setGuiItem(up());
-  extMoveDown_button->setGuiItem(down());
-  buildmoveup_button->setGuiItem(up());
-  buildmovedown_button->setGuiItem(down());
-  varAdd_button->setGuiItem(add());
-  varRemove_button->setGuiItem(remove());
-  varEdit_button->setGuiItem(edit());
-  varMoveUp_button->setGuiItem(up());
-  varMoveDown_button->setGuiItem(down());
-  */
-      // End remove in kde 3.4
-
-  this->isQt4Project = isQt4Project;
-  myProjectItem=_item;
   prjList=_prjList;
-//  m_projectConfiguration = conf;
   m_targetLibraryVersion->setValidator(new QRegExpValidator(
     QRegExp("\\d+(\\.\\d+)?(\\.\\d+)"), this));
+}
+
+void ProjectConfigurationDlg::updateSubproject(SubqmakeprojectItem* _item)
+{
+  if( myProjectItem )
+  {
+  kdDebug(9024) << "changing subproject, behave: " << prjWidget->dialogSaveBehaviour() << endl;
+    switch( prjWidget->dialogSaveBehaviour() )
+    {
+      case TrollProjectWidget::AlwaysSave:
+        apply();
+        break;
+      case TrollProjectWidget::NeverSave:
+        break;
+      case TrollProjectWidget::Ask:
+        if( !buttonApply->isEnabled() )
+          break;
+        if( KMessageBox::questionYesNo(0, i18n("Save the current subprojects configuration?"),
+                                i18n("Save Configuration?")) == KMessageBox::Yes )
+          apply();
+        break;
+    }
+  }
+  myProjectItem=_item;
+//  m_projectConfiguration = conf;
   updateControls();
-  if ( isQt4Project )
+  if ( prjWidget->m_part->isQt4Project() )
   {
     radioDebugReleaseMode->setEnabled( true );
     checkBuildAll->setEnabled(true);
@@ -163,7 +89,7 @@ ProjectConfigurationDlg::ProjectConfigurationDlg(SubqmakeprojectItem *_item,QLis
     rccdir_url->setEnabled( true );
     rccdir_label->setEnabled( true );
   }
-
+  buttonApply->setEnabled(false);
 }
 
 
@@ -193,6 +119,7 @@ void ProjectConfigurationDlg::browseTargetPath()
 //==============================================
 {
   m_targetPath->setText(getRelativePath(myProjectItem->path,KFileDialog::getExistingDirectory()));
+  buttonApply->setEnabled(true);
 }
 
 
@@ -236,7 +163,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     myProjectItem->configuration.m_buildMode = QBM_RELEASE;
   if ( radioDebugReleaseMode->isChecked() )
     myProjectItem->configuration.m_buildMode = QBM_DEBUG_AND_RELEASE;
-  
+
   // requirements
   if (exceptionCheck->isChecked())
     myProjectItem->configuration.m_requirements += QD_EXCEPTIONS;
@@ -272,9 +199,9 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   myProjectItem->configuration.m_warnings = QWARN_OFF;
   if (checkWarning->isChecked())
     myProjectItem->configuration.m_warnings = QWARN_ON;
- 
+
   //Qt4 libs
-  if ( isQt4Project )
+  if ( prjWidget->m_part->isQt4Project() )
   {
     if ( checkTestlib->isChecked() )
       myProjectItem->configuration.m_requirements += QD_TESTLIB;
@@ -286,7 +213,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
       myProjectItem->configuration.m_requirements += QD_DBUS;
     if ( checkBuildAll->isChecked() )
       myProjectItem->configuration.m_requirements += QD_BUILDALL;
-  
+
     myProjectItem->configuration.m_qt4libs = 0;
     if ( checkQt4Core->isChecked() )
       myProjectItem->configuration.m_qt4libs += Q4L_CORE;
@@ -466,11 +393,20 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   for( ; item; item = item->nextSibling() )
 	myProjectItem->configuration.m_variables[item->text(0)] = item->text(1);
 
-  QDialog::accept();
-
-
 }
 
+void ProjectConfigurationDlg::accept()
+{
+  apply();
+  myProjectItem=0;
+  QDialog::accept();
+}
+
+void ProjectConfigurationDlg::reject()
+{
+  myProjectItem=0;
+  QDialog::reject();
+}
 
 void ProjectConfigurationDlg::updateControls()
 //============================================
@@ -531,7 +467,7 @@ void ProjectConfigurationDlg::updateControls()
   }
   if (activateRadiobutton)
     activateRadiobutton->setChecked(true);
-  
+
   // Requirements
   if (myProjectItem->configuration.m_requirements & QD_QT)
     checkQt->setChecked(true);
@@ -558,7 +494,7 @@ void ProjectConfigurationDlg::updateControls()
   }
 
   //Qt4 libs
-  if ( isQt4Project )
+  if ( prjWidget->m_part->isQt4Project() )
   {
 
     if ( myProjectItem->configuration.m_requirements & QD_ASSISTANT )
@@ -571,7 +507,7 @@ void ProjectConfigurationDlg::updateControls()
       checkQDBus->setChecked( true );
     if ( myProjectItem->configuration.m_requirements & QD_BUILDALL )
       checkBuildAll->setChecked( true );
-    
+
     if ( myProjectItem->configuration.m_qt4libs & Q4L_CORE )
       checkQt4Core->setChecked( true );
     else
@@ -713,8 +649,8 @@ void ProjectConfigurationDlg::updateIncludeControl()
           for(;it!=incList.end();++it)
           {
              // we need an exact, case sensitive match here
-            if ((*it).contains(tmpInc, true) && ((*it).length() == tmpInc.length())) 
-            {            
+            if ((*it).contains(tmpInc, true) && ((*it).length() == tmpInc.length()))
+            {
               incList.remove(it);
               newItem->setOn(true);
               it=incList.begin();
@@ -1001,6 +937,7 @@ void ProjectConfigurationDlg::slotStaticLibClicked(int)
     checkPlugin->setEnabled( false );
     checkDesigner->setEnabled( false );
   }
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::sharedLibChanged()
@@ -1010,6 +947,7 @@ void ProjectConfigurationDlg::sharedLibChanged()
     checkPlugin->setEnabled( true );
     checkDesigner->setEnabled( checkPlugin->isChecked() );
   }
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::templateLibraryClicked(int)
@@ -1027,6 +965,7 @@ void ProjectConfigurationDlg::templateLibraryClicked(int)
   } else {
     libGroup->setEnabled(false);
   }
+  buttonApply->setEnabled(true);
 }
 void ProjectConfigurationDlg::clickSubdirsTemplate()
 {
@@ -1052,6 +991,7 @@ void ProjectConfigurationDlg::clickSubdirsTemplate()
     else libGroup->setEnabled(false);
     //70corbaTab->setEnabled(true);
   }
+  buttonApply->setEnabled(true);
 }
 
 
@@ -1068,6 +1008,7 @@ void ProjectConfigurationDlg::buildorderMoveUpClicked()
     while (item->nextSibling() != buildorder_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(buildorder_listview->currentItem());
+    buttonApply->setEnabled(true);
 }
 
 
@@ -1079,6 +1020,8 @@ void ProjectConfigurationDlg::buildorderMoveDownClicked()
    }
 
    buildorder_listview->currentItem()->moveItem(buildorder_listview->currentItem()->nextSibling());
+  buttonApply->setEnabled(true);
+
 }
 
 
@@ -1099,6 +1042,8 @@ void ProjectConfigurationDlg::insideIncMoveUpClicked()
     while (item->nextSibling() != insideinc_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(insideinc_listview->currentItem());
+  buttonApply->setEnabled(true);
+
 }
 
 
@@ -1110,6 +1055,8 @@ void ProjectConfigurationDlg::insideIncMoveDownClicked()
    }
 
    insideinc_listview->currentItem()->moveItem(insideinc_listview->currentItem()->nextSibling());
+  buttonApply->setEnabled(true);
+
 }
 
 
@@ -1124,6 +1071,8 @@ void ProjectConfigurationDlg::outsideIncMoveUpClicked()
     while (item->nextSibling() != outsideinc_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(outsideinc_listview->currentItem());
+  buttonApply->setEnabled(true);
+
 }
 
 
@@ -1135,6 +1084,8 @@ void ProjectConfigurationDlg::outsideIncMoveDownClicked()
    }
 
    outsideinc_listview->currentItem()->moveItem(outsideinc_listview->currentItem()->nextSibling());
+  buttonApply->setEnabled(true);
+
 }
 
 
@@ -1147,12 +1098,16 @@ void ProjectConfigurationDlg::outsideIncAddClicked()
     QString dir = dialog.urlRequester()->url();
     if (!dir.isEmpty())
         new QListViewItem(outsideinc_listview, dir);
+  buttonApply->setEnabled(true);
+
 }
 
 
 void ProjectConfigurationDlg::outsideIncRemoveClicked()
 {
     delete outsideinc_listview->currentItem();
+  buttonApply->setEnabled(true);
+
 }
 
 
@@ -1176,6 +1131,8 @@ void ProjectConfigurationDlg::insideLibMoveUpClicked()
     while (item->nextSibling() != insidelib_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(insidelib_listview->currentItem());
+  buttonApply->setEnabled(true);
+
 }
 
 
@@ -1187,6 +1144,8 @@ void ProjectConfigurationDlg::insideLibMoveDownClicked()
    }
 
    insidelib_listview->currentItem()->moveItem(insidelib_listview->currentItem()->nextSibling());
+  buttonApply->setEnabled(true);
+
 }
 
 
@@ -1201,6 +1160,8 @@ void ProjectConfigurationDlg::outsideLibMoveUpClicked()
     while (item->nextSibling() != outsidelib_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(outsidelib_listview->currentItem());
+  buttonApply->setEnabled(true);
+
 }
 
 
@@ -1212,6 +1173,8 @@ void ProjectConfigurationDlg::outsideLibMoveDownClicked()
    }
 
    outsidelib_listview->currentItem()->moveItem(outsidelib_listview->currentItem()->nextSibling());
+  buttonApply->setEnabled(true);
+
 }
 
 
@@ -1221,12 +1184,15 @@ void ProjectConfigurationDlg::outsideLibAddClicked()
     QString dir = KInputDialog::getText(i18n("Add Library"), i18n("Add library to link:"), "-l", &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-I")
         new QListViewItem(outsidelib_listview, dir);
+  buttonApply->setEnabled(true);
+
 }
 
 
 void ProjectConfigurationDlg::outsideLibRemoveClicked()
 {
     delete outsidelib_listview->currentItem();
+  buttonApply->setEnabled(true);
 }
 
 
@@ -1245,6 +1211,7 @@ void ProjectConfigurationDlg::outsideLibDirMoveUpClicked()
     while (item->nextSibling() != outsidelibdir_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(outsidelibdir_listview->currentItem());
+  buttonApply->setEnabled(true);
 }
 
 
@@ -1256,6 +1223,7 @@ void ProjectConfigurationDlg::outsideLibDirMoveDownClicked()
    }
 
    outsidelibdir_listview->currentItem()->moveItem(outsidelibdir_listview->currentItem()->nextSibling());
+  buttonApply->setEnabled(true);
 }
 
 
@@ -1268,12 +1236,14 @@ void ProjectConfigurationDlg::outsideLibDirAddClicked()
     QString dir = dialog.urlRequester()->url();
     if (!dir.isEmpty())
         new QListViewItem(outsidelibdir_listview, dir);
+  buttonApply->setEnabled(true);
 }
 
 
 void ProjectConfigurationDlg::outsideLibDirRemoveClicked()
 {
     delete outsidelibdir_listview->currentItem();
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::outsideIncEditClicked()
@@ -1289,6 +1259,7 @@ void ProjectConfigurationDlg::outsideIncEditClicked()
     QString dir = dialog.urlRequester()->url();
     if (!dir.isEmpty())
         item->setText(0,dir);
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::outsideLibEditClicked()
@@ -1302,6 +1273,7 @@ void ProjectConfigurationDlg::outsideLibEditClicked()
     if (ok && !dir.isEmpty() && dir != "-l")
         item->setText(0,dir);
 
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::outsideLibDirEditClicked()
@@ -1317,6 +1289,7 @@ void ProjectConfigurationDlg::outsideLibDirEditClicked()
     QString dir = dialog.urlRequester()->url();
     if (!dir.isEmpty())
         item->setText(0,dir);
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::slotInstallTargetClicked()
@@ -1325,6 +1298,7 @@ void ProjectConfigurationDlg::slotInstallTargetClicked()
     m_InstallTargetPath->setEnabled(true);
   else
     m_InstallTargetPath->setEnabled(false);
+  buttonApply->setEnabled(true);
 }
 
 
@@ -1337,6 +1311,7 @@ void ProjectConfigurationDlg::extAdd_button_clicked( )
     QString path = dialog.urlRequester()->url();
     if (!path.isEmpty())
         new QListViewItem(extDeps_view, path);
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::extEdit_button_clicked( )
@@ -1352,6 +1327,7 @@ void ProjectConfigurationDlg::extEdit_button_clicked( )
     QString path = dialog.urlRequester()->url();
     if (!path.isEmpty())
         item->setText(0, path);
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::extMoveDown_button_clicked( )
@@ -1362,6 +1338,7 @@ void ProjectConfigurationDlg::extMoveDown_button_clicked( )
    }
 
    extDeps_view->currentItem()->moveItem(extDeps_view->currentItem()->nextSibling());
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::extMoveUp_button_clicked( )
@@ -1375,11 +1352,13 @@ void ProjectConfigurationDlg::extMoveUp_button_clicked( )
     while (item->nextSibling() != extDeps_view->currentItem())
         item = item->nextSibling();
     item->moveItem(extDeps_view->currentItem());
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::extRemove_button_clicked( )
 {
     delete extDeps_view->currentItem();
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::intMoveDown_button_clicked( )
@@ -1390,6 +1369,7 @@ void ProjectConfigurationDlg::intMoveDown_button_clicked( )
    }
 
    intDeps_view->currentItem()->moveItem(intDeps_view->currentItem()->nextSibling());
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::intMoveUp_button_clicked( )
@@ -1403,6 +1383,7 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
     while (item->nextSibling() != intDeps_view->currentItem())
         item = item->nextSibling();
     item->moveItem(intDeps_view->currentItem());
+  buttonApply->setEnabled(true);
 }
 
  void ProjectConfigurationDlg::addCustomValueClicked()
@@ -1411,6 +1392,7 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
   customVariables->setSelected(item,true);
   newCustomVariableActive();
   customVariableName->setEnabled(true);
+  buttonApply->setEnabled(true);
 }
  void ProjectConfigurationDlg::removeCustomValueClicked()
 {
@@ -1421,6 +1403,7 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
     myProjectItem->configuration.m_removed_variables.append(item->text(0));
     delete item;
   }
+  buttonApply->setEnabled(true);
 }
  void ProjectConfigurationDlg::editCustomValueClicked()
 {
@@ -1429,10 +1412,11 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
   {
      item->setText(0,customVariableName->text());
      item->setText(1,customVariableData->text());
-     
+
      if(myProjectItem->configuration.m_removed_variables.contains(customVariableName->text()) != 0)
 	myProjectItem->configuration.m_removed_variables.remove(customVariableName->text());
   }
+  buttonApply->setEnabled(true);
 }
  void ProjectConfigurationDlg::upCustomValueClicked()
 {
@@ -1445,6 +1429,7 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
   while (item->nextSibling() != customVariables->currentItem())
     item = item->nextSibling();
   item->moveItem(customVariables->currentItem());
+  buttonApply->setEnabled(true);
 }
 
  void ProjectConfigurationDlg::downCustomValueClicked()
@@ -1454,6 +1439,7 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
     return;
   }
   customVariables->currentItem()->moveItem(customVariables->currentItem()->nextSibling());
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::newCustomVariableActive( )
@@ -1470,22 +1456,41 @@ void ProjectConfigurationDlg::newCustomVariableActive( )
 
 void ProjectConfigurationDlg::checkPluginChanged( )
 {
-  if ( checkPlugin->isChecked() && isQt4Project )
+  if ( checkPlugin->isChecked() && prjWidget->m_part->isQt4Project() )
   {
     checkDesigner->setEnabled( true );
   }else
   {
     checkDesigner->setEnabled( false );
   }
+  buttonApply->setEnabled(true);
 }
 
 void ProjectConfigurationDlg::qtRequirementChanged()
 {
-  if ( checkQt->isChecked() && isQt4Project)
+  if ( checkQt->isChecked() && prjWidget->m_part->isQt4Project() )
   {
     qt4Group->setEnabled( true );
   }else
   {
     qt4Group->setEnabled( false );
   }
+  buttonApply->setEnabled(true);
+}
+
+void ProjectConfigurationDlg::apply()
+{
+  updateProjectConfiguration();
+  prjWidget->updateProjectConfiguration(myProjectItem);
+  prjWidget->setupContext();
+  buttonApply->setEnabled(false);
+}
+
+void ProjectConfigurationDlg::activateApply(int)
+{
+  buttonApply->setEnabled(true);
+}
+void ProjectConfigurationDlg::activateApply(const QString&)
+{
+  buttonApply->setEnabled(true);
 }

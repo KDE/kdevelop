@@ -273,7 +273,7 @@ public:
     QString projectDirectory();
     /**
      * The directory of the currently active subproject.
-     */
+      */
     QString subprojectDirectory();
     /**
      * The directory of the currently active subproject.
@@ -298,6 +298,7 @@ public:
     void emitRemovedFile(const QString &name);
 
     enum TrollProjectView { SubprojectView, DetailsView };
+    enum SaveType { AlwaysSave, NeverSave, Ask };
     void setLastFocusedView(TrollProjectView view);
 
 public slots:
@@ -311,7 +312,8 @@ public slots:
     void slotCleanProject();
     void slotExecuteProject();
 
-    void slotBuildFile();
+    void slotBuildOpenFile();
+    void slotBuildSelectedFile();
 
     void slotConfigureProject();
     void slotAddFiles();
@@ -349,10 +351,14 @@ private:
     void createMakefileIfMissing(const QString &dir, SubqmakeprojectItem *item);
 
     void runQMakeRecursive( SubqmakeprojectItem* proj);
-
+    void buildFile( SubqmakeprojectItem* spitem, FileItem* fitem );
     /*fileName: full base file name like QFileInfo::baseName ( true )*/
     QPtrList<SubqmakeprojectItem> findSubprojectForFile( QFileInfo fi );
     void findSubprojectForFile( QPtrList<SubqmakeprojectItem> &list, SubqmakeprojectItem * item, QString absFilePath );
+
+    bool useNonModalConfigDlg() const;
+    TrollProjectWidget::SaveType dialogSaveBehaviour() const;
+
 //    QString makeEnvironment();
 
     SubqmakeprojectItem *findSubprojectForScope(SubqmakeprojectItem *scope);
@@ -389,7 +395,10 @@ private:
 
     TrollProjectView m_lastFocusedView;
 
+    ProjectConfigurationDlg* m_configDlg;
+
     friend class ChooseSubprojectDlg;
+    friend class ProjectConfigurationDlg;
 };
 
 #endif

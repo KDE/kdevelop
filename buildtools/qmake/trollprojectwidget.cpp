@@ -385,7 +385,7 @@ FileItem::FileItem(QListView *lv, const QString &text, bool exclude/*=false*/)
 
 
 TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
-    : QVBox(0, "troll project widget")
+    : QVBox(0, "troll project widget"), m_configDlg(0)
 {
     QSplitter *splitter = new QSplitter(Vertical, this);
 
@@ -418,15 +418,6 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     createScopeButton->setEnabled ( true );
     QToolTip::add( createScopeButton, i18n( "Create scope" ) );
     QWhatsThis::add(createScopeButton, i18n("<b>Create scope</b><p>Creates QMake scope in the project file in case the subproject is selected or creates nested scope in case the scope is selected."));
-    // build selected file
-    buildFileButton = new QToolButton ( projectTools, "Make file button" );
-    buildFileButton->setPixmap ( SmallIcon ( "compfile" ) );
-    buildFileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildFileButton->sizePolicy().hasHeightForWidth() ) );
-    buildFileButton->setEnabled ( true );
-    QToolTip::add( buildFileButton, i18n( "Compile file" ) );
-    QWhatsThis::add(buildFileButton, i18n("<b>Compile file</b><p>Runs <b>make filename.o</b> command from the directory where 'filename' is the name of currently opened file.<br>"
-                              "Environment variables and make arguments can be specified "
-                              "in the project settings dialog, <b>Make Options</b> tab."));
     // build
     buildProjectButton = new QToolButton ( projectTools, "Make button" );
     buildProjectButton->setPixmap ( SmallIcon ( "make_kdevelop" ) );
@@ -468,7 +459,6 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     // Project button connections
     connect ( addSubdirButton, SIGNAL ( clicked () ), this, SLOT ( slotAddSubdir () ) );
     connect ( createScopeButton, SIGNAL ( clicked () ), this, SLOT ( slotCreateScope () ) );
-    connect ( buildFileButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildFile () ) );
 
     connect ( buildProjectButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildProject () ) );
     connect ( rebuildProjectButton, SIGNAL ( clicked () ), this, SLOT ( slotRebuildProject () ) );
@@ -533,6 +523,16 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     QToolTip::add( removefileButton, i18n( "Remove file" ) );
     QWhatsThis::add(removefileButton, i18n("<b>Remove file</b><p>Removes file from a current group. Does not remove file from disk."));
 
+    // build selected file
+    buildFileButton = new QToolButton ( fileTools, "Make file button" );
+    buildFileButton->setPixmap ( SmallIcon ( "compfile" ) );
+    buildFileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildFileButton->sizePolicy().hasHeightForWidth() ) );
+    buildFileButton->setEnabled ( true );
+    QToolTip::add( buildFileButton, i18n( "Compile file" ) );
+    QWhatsThis::add(buildFileButton, i18n("<b>Compile file</b><p>Runs <b>make filename.o</b> command from the directory where 'filename' is the name of currently opened file.<br>"
+                                          "Environment variables and make arguments can be specified "
+                                        "in the project settings dialog, <b>Make Options</b> tab."));
+
     // build
     buildTargetButton = new QToolButton ( fileTools, "Make sp button" );
     buildTargetButton->setPixmap ( SmallIcon ( "make_kdevelop" ) );
@@ -587,6 +587,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     connect ( addfilesButton, SIGNAL ( clicked () ), this, SLOT ( slotAddFiles () ) );
     connect ( newfileButton, SIGNAL ( clicked () ), this, SLOT ( slotNewFile () ) );
     connect ( removefileButton, SIGNAL ( clicked () ), this, SLOT ( slotRemoveFile () ) );
+    connect ( buildFileButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildSelectedFile () ) );
     connect ( configurefileButton, SIGNAL ( clicked () ), this, SLOT ( slotConfigureFile () ) );
 
     // Detail tree connections
@@ -604,7 +605,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     rebuildTargetButton->setEnabled(false);
     executeTargetButton->setEnabled(false);
 
-
+    m_configDlg = new ProjectConfigurationDlg(overview,this, this);
 
     m_part = part;
     m_shownSubproject = 0;
@@ -613,7 +614,9 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
 
 
 TrollProjectWidget::~TrollProjectWidget()
-{}
+{
+  delete m_configDlg;
+}
 
 
 void TrollProjectWidget::openProject(const QString &dirName)
@@ -782,6 +785,11 @@ void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
     QDomDocument &dom = *(m_part->projectDom());
     DomUtil::writeEntry(dom, "/kdevtrollproject/general/activedir",relpath);
 
+  if( m_configDlg->isShown() )
+  {
+    m_configDlg->updateSubproject(m_shownSubproject);
+//     m_configDlg->setActiveWindow();
+  }
 }
 
 QString TrollProjectWidget::getCurrentTarget()
@@ -939,12 +947,8 @@ void TrollProjectWidget::slotConfigureProject()
 //  ProjectOptionsDlg *d = new ProjectOptionsDlg(m_part,this);
 //  d->exec();
 
-  ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(m_shownSubproject,overview,m_part->isQt4Project());
-  if (dlg->exec() == QDialog::Accepted)
-  {
-    updateProjectConfiguration(m_shownSubproject);
-    setupContext();
-  }
+  m_configDlg->updateSubproject(m_shownSubproject);
+  m_configDlg->show();
 }
 
 void TrollProjectWidget::slotExecuteTarget()
@@ -1264,9 +1268,8 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     }
     else if (r == idProjectConfiguration)
     {
-      ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(spitem,overview,m_part->isQt4Project());
-      if (dlg->exec() == QDialog::Accepted)
-        updateProjectConfiguration(spitem);
+      m_configDlg->updateSubproject(spitem);
+      m_configDlg->show();
     }
 }
 
@@ -2506,6 +2509,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         int idRemoveFile = -2;
     int idSubclassWidget = -2;
     int idUpdateWidgetclass = -2;
+    int idBuildFile = -2;
     int idUISubclasses = -2;
     int idViewUIH = -2;
     int idFileProperties = -2;
@@ -2553,6 +2557,11 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         FileContext context(urls);
         m_part->core()->fillContextMenu(&popup, &context);
     }
+      if( gtype == GroupItem::Sources)
+      {
+        idBuildFile = popup.insertItem(SmallIconSet("make_kdevelop"), i18n("Build File"));
+        popup.setWhatsThis(idBuildFile, i18n("<b>Build File</b><p>Builds the object file for this source file."));
+      }
 
         int r = popup.exec(p);
         if (r == idRemoveFile)
@@ -2662,6 +2671,9 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             updateProjectFile(titem->owner);
             slotOverviewSelectionChanged(m_shownSubproject);
           }
+        }else if ( r == idBuildFile )
+        {
+          buildFile(m_shownSubproject, fitem);
         }
     }
 }
@@ -3280,7 +3292,7 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
     }
 
 }
-void TrollProjectWidget::slotBuildFile()
+void TrollProjectWidget::slotBuildOpenFile()
 {
     KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(m_part->partController()->activePart());
     if (!part || !part->url().isLocalFile())
@@ -3642,5 +3654,73 @@ void TrollProjectWidget::runQMakeRecursive( SubqmakeprojectItem* proj)
       item = static_cast<qProjectItem*>(item->nextSibling());
     }
 }
+
+void TrollProjectWidget::slotBuildSelectedFile()
+{
+  QListViewItem *selectedItem = details->currentItem();
+  if (!selectedItem)
+    return;
+  qProjectItem *pvitem = static_cast<qProjectItem*>(selectedItem);
+  // Check that it is a file (just in case)
+  if (pvitem->type() != qProjectItem::File)
+    return;
+  FileItem *fitem = static_cast<FileItem*>(pvitem);
+  buildFile(m_shownSubproject, fitem);
+}
+
+void TrollProjectWidget::buildFile(SubqmakeprojectItem* spitem, FileItem* fitem)
+{
+  QFileInfo fi(spitem->path+"/"+fitem->name);
+  QString sourceDir = fi.dirPath();
+  QString baseName = fi.baseName(true);
+  kdDebug(9020) << "Compiling " << fitem->name
+    << "in dir " << sourceDir
+    << " with baseName " << baseName << endl;
+
+  QString projectDir = projectDirectory();
+  if (!sourceDir.startsWith(projectDir)) {
+    KMessageBox::sorry(this, i18n("Can only compile files in directories which belong to the project."));
+    return;
+  }
+
+  QString buildDir = sourceDir;
+  QString target = baseName + ".o";
+  kdDebug(9020) << "builddir " << buildDir << ", target " << target << endl;
+
+  m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
+//    m_part->startMakeCommand(buildDir, target);
+
+  QString buildcmd = constructMakeCommandLine(spitem->configuration.m_makefile);
+  QString dircmd = "cd " + KProcess::quote(spitem->path) + " && " ;
+  kdDebug(9020) << "builddir " << spitem->path << ", cmd " << dircmd + buildcmd + " " + target << endl;
+  m_part->queueCmd(spitem->path, dircmd + buildcmd + " " + target);
+
+
+//    startMakeCommand(buildDir, target);
+
+}
+
+bool TrollProjectWidget::useNonModalConfigDlg() const
+{
+  return ( DomUtil::readBoolEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/nonmodal", false ) );
+}
+
+TrollProjectWidget::SaveType TrollProjectWidget::dialogSaveBehaviour() const
+{
+  switch( DomUtil::readIntEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/savebehaviour", 2 ) )
+  {
+  case 0:
+    return AlwaysSave;
+    break;
+  case 1:
+    return NeverSave;
+    break;
+  case 2:
+  default:
+    return Ask;
+    break;
+  }
+}
+
 
 #include "trollprojectwidget.moc"

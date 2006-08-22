@@ -17,7 +17,8 @@ libkdevtrollproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 libkdevtrollproject_la_SOURCES = caret.cpp filebuffer.cpp \
 	projectconfigurationdlgbase.ui filepropertybase.ui newwidgetdlgbase.ui newwidgetdlg.cpp \
 	filepropertydlg.cpp projectconfigurationdlg.cpp trollprojectpart.cpp trollprojectwidget.cpp \
-	choosesubprojectdlgbase.ui choosesubprojectdlg.cpp trolllistview.cpp pathutil.cpp
+	choosesubprojectdlgbase.ui choosesubprojectdlg.cpp trolllistview.cpp pathutil.cpp \
+	qmakeoptionswidgetbase.ui qmakeoptionswidget.cpp
 
 
 METASOURCES = AUTO
@@ -27,4 +28,4 @@ service_DATA = kdevtrollproject.desktop kdevtmakeproject.desktop
 
 rcdir = $(kde_datadir)/kdevtrollproject
 rc_DATA = kdevtrollproject.rc
-noinst_HEADERS = trolllistview.h
+noinst_HEADERS = trolllistview.h qmakeoptionswidget.h
