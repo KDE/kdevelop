@@ -19,6 +19,8 @@
 
 #include "QueuePolicy.h"
 
+#include <QtCore/QList>
+
 namespace ThreadWeaver {
 
     /** DependencyPolicy implements the way dependencies between Jobs are handled.

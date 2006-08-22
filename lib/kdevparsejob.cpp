@@ -37,18 +37,23 @@
 #include "editor/kdeveditorintegrator.h"
 #include <kdevdocumentcontroller.h>
 
+#include "kdevbackgroundparser.h"
+#include "kdevparserdependencypolicy.h"
+
 KDevParseJob::KDevParseJob( const KUrl &url,
                             QObject *parent )
         : ThreadWeaver::JobSequence( parent ),
         m_document( url ),
-        m_openDocument( 0 )
+        m_openDocument( 0 ),
+        m_backgroundParser( 0 )
 {}
 
 KDevParseJob::KDevParseJob( KDevDocument *document,
                             QObject *parent )
         : ThreadWeaver::JobSequence( parent ),
         m_document( document->url() ),
-        m_openDocument( document )
+        m_openDocument( document ),
+        m_backgroundParser( 0 )
 {}
 
 KDevParseJob::~KDevParseJob()
@@ -104,6 +109,38 @@ int KDevParseJob::priority() const
             return 1;
     else
         return 0;
+}
+
+void KDevParseJob::addJob(Job* job)
+{
+    if (backgroundParser())
+        job->assignQueuePolicy(backgroundParser()->dependencyPolicy());
+
+    JobSequence::addJob(job);
+}
+
+KDevBackgroundParser* KDevParseJob::backgroundParser() const
+{
+    return m_backgroundParser;
+}
+
+void KDevParseJob::setBackgroundParser(KDevBackgroundParser* parser)
+{
+    m_backgroundParser = parser;
+    Q_ASSERT(m_backgroundParser);
+
+    assignQueuePolicy(backgroundParser()->dependencyPolicy());
+
+    for (int i = 0; i < jobListLength(); ++i)
+        jobAt(i)->assignQueuePolicy(backgroundParser()->dependencyPolicy());
+}
+
+bool KDevParseJob::addDependency(KDevParseJob* dependency, ThreadWeaver::Job* actualDependee)
+{
+    if (!backgroundParser())
+        return false;
+
+    return backgroundParser()->dependencyPolicy()->addDependency(dependency, this, actualDependee);
 }
 
 #include "kdevparsejob.moc"

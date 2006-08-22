@@ -6,7 +6,7 @@ add_subdirectory(debugger)
 add_subdirectory(projectmanager)
 add_subdirectory(settings)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/lib/weaver ${CMAKE_SOURCE_DIR}/lib/editor )
+include_directories( ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/lib/weaver ${CMAKE_SOURCE_DIR}/lib/editor ${CMAKE_SOURCE_DIR}/lib/backgroundparser )
 
 ########### next target ###############
 
@@ -57,6 +57,7 @@ set(kdevplatform_LIB_SRCS
     editor/kdevdocumentrangeobject.cpp
     editor/kdevdocumentcursor.cpp
     editor/kdevdocumentrange.cpp
+    backgroundparser/kdevparserdependencypolicy.cpp
 )
 
 set(kdevplatform_UI3

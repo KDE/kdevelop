@@ -50,6 +50,7 @@ class KDevCodeModel;
 class KDevLanguageSupport;
 class KDevPersistentHash;
 class KDevParseJob;
+class KDevParserDependencyPolicy;
 
 typedef QList< QPair<KUrl, KDevCodeModel* > > CodeModelCache;
 
@@ -74,6 +75,12 @@ public:
      * function.
      */
     KDevParseJob* parseJobForDocument(const KUrl& document);
+
+    /**
+     * The dependency policy which applies to all jobs (it is
+     * applied automatically).
+     */
+    KDevParserDependencyPolicy* dependencyPolicy() const;
 
 public slots:
     void suspend();
@@ -109,6 +116,8 @@ private:
 
     mutable QMutex m_mutex;
     ThreadWeaver::Weaver* m_weaver;
+
+    KDevParserDependencyPolicy* m_dependencyPolicy;
 };
 
 #endif

@@ -50,12 +50,15 @@
 #include <weaver/JobCollection.h>
 #include <weaver/DebuggingAids.h>
 
+#include "kdevparserdependencypolicy.h"
+
 KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         : QObject( parent ),
         m_suspend( true ),
         m_modelsToCache( 0 ),
         m_progressBar( new QProgressBar ),
-        m_weaver( new Weaver( this, 2 ) )
+        m_weaver( new Weaver( this, 2 ) ),
+        m_dependencyPolicy( new KDevParserDependencyPolicy )
 {
     //ThreadWeaver::setDebugLevel(true, 5);
     m_weaver->suspend();
@@ -72,6 +75,7 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
 KDevBackgroundParser::~KDevBackgroundParser()
 {
     m_weaver->finish();
+    delete m_dependencyPolicy;
 }
 
 void KDevBackgroundParser::init()
@@ -176,6 +180,8 @@ void KDevBackgroundParser::parseDocuments()
             if ( !parse )
                 return ; //Language part did not produce a valid KDevParseJob
 
+            parse->setBackgroundParser(this);
+
             connect( parse, SIGNAL( done( Job* ) ),
                      this, SLOT( parseComplete( Job* ) ), Qt::QueuedConnection );
 
@@ -267,6 +273,11 @@ void KDevBackgroundParser::resume()
     m_timer->start( 500 );
 
     m_weaver->resume();
+}
+
+KDevParserDependencyPolicy* KDevBackgroundParser::dependencyPolicy() const
+{
+    return m_dependencyPolicy;
 }
 
 #include "kdevbackgroundparser.moc"

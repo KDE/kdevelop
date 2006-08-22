@@ -37,6 +37,7 @@ class SmartRange;
 class KDevAST;
 class KDevCodeModel;
 class DUContext;
+class KDevBackgroundParser;
 
 class KDevParseJob : public ThreadWeaver::JobSequence
 {
@@ -48,6 +49,9 @@ public:
                   QObject* parent );
 
     virtual ~KDevParseJob();
+
+    KDevBackgroundParser* backgroundParser() const;
+    void setBackgroundParser(KDevBackgroundParser* parser);
 
     void setActiveDocument();
     virtual int priority() const;
@@ -70,10 +74,22 @@ public:
     virtual KDevCodeModel *codeModel() const = 0;
     virtual DUContext *duChain() const;
 
+    /// Overridden to set the DependencyPolicy on subjobs.
+    virtual void addJob(Job* job);
+
+    /**
+     * Attempt to add \a dependency as a dependency of \a actualDependee, which must
+     * be a subjob of this job, or null (in which case, the dependency is added
+     * to this job).  If a circular dependency is detected, the dependency will
+     * not be added and the method will return false.
+     */
+    bool addDependency(KDevParseJob* dependency, ThreadWeaver::Job* actualDependee = 0);
+
 protected:
     KUrl m_document;
     KDevDocument* m_openDocument;
     QString m_errorMessage;
+    KDevBackgroundParser* m_backgroundParser;
 };
 
 #endif
