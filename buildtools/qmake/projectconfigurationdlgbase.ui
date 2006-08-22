@@ -2500,6 +2500,18 @@
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>activateApply(const QString&amp;)</slot>
     </connection>
+    <connection>
+        <sender>rccdir_url</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>rccdir_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>radioApplication</tabstop>
