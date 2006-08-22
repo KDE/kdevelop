@@ -164,6 +164,7 @@ QString pp::find_header_protection(Stream& input)
 
 pp::PP_DIRECTIVE_TYPE pp::find_directive (const QString& directive) const
 {
+  // multithread safe
   static QHash<QString, PP_DIRECTIVE_TYPE> directiveHash;
   if (directiveHash.isEmpty()) {
     directiveHash.insert("if", PP_IF);

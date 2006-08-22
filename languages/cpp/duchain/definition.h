@@ -61,6 +61,8 @@ public:
   void addUse(KTextEditor::Range* range);
   void removeUse(KTextEditor::Range* range);
 
+  bool operator==(const Definition& other) const;
+
 private:
   DUContext* m_context;
   Scope m_scope;

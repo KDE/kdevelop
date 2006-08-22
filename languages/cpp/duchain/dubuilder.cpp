@@ -183,10 +183,27 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   }
 
   bool was = inFunctionDefinition (node);
-  DefaultVisitor::visitFunctionDefinition (node);
+
+  visit(node->type_specifier);
+  visit(node->init_declarator);
+
+  if (node->constructor_initializers && node->function_body) {
+    openContext(node->constructor_initializers, node->function_body, DUContext::Other);
+    addImportedContexts();
+  }
+  // Otherwise, the context is created in the function body visit
+
+  visit(node->constructor_initializers);
+  visit(node->function_body);
+
+  if (node->constructor_initializers)
+    closeContext();
+
+  visit(node->win_decl_specifiers);
+
   inFunctionDefinition (was);
 
-  // Didn't get claimed if it was set
+  // If still defined, not needed
   m_importedParentContexts.clear();
 }
 

@@ -170,9 +170,10 @@ void ParseJob::run()
             parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );
 
         // Debug output...
+
         /*if (topContext->smartRange()) {
             DumpChain dump;
-            //dump.dump(ast, parentJob()->parseSession());
+            dump.dump(ast, parentJob()->parseSession());
             dump.dump(topContext);
         }*/
     }

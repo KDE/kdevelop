@@ -31,6 +31,7 @@ bool PPInternal::isComment(Stream& input)
 
 Stream& PPInternal::devnull()
 {
+  // Multithread safe
   static Stream null;
   return null;
 }

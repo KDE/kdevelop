@@ -23,6 +23,7 @@
 #include <ktexteditor/rangefeedback.h>
 
 #include "kdevdocumentcursor.h"
+#include "kdevdocumentrange.h"
 
 /**
  * Base class for any object which has an associated range of text.
@@ -39,6 +40,7 @@ public:
 
   KTextEditor::Range& textRange();
   const KTextEditor::Range& textRange() const;
+  const KDevDocumentRange& textDocRange() const;
   KTextEditor::Range* textRangePtr() const;
   KTextEditor::SmartRange* smartRange() const;
 

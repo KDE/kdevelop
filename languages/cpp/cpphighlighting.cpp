@@ -110,7 +110,7 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         break;
 
       case NamespaceVariableType:
-        a->setForeground(QColor(0xF70000));
+        a->setForeground(QColor(0xD568FD));
         break;
 
       case GlobalVariableType:
@@ -264,7 +264,7 @@ void CppHighlighting::highlightDUChain(DUContext* context) const
   foreach (DUContext* child, context->childContexts())
     highlightDUChain(child);
 
-  /*if (context->parentContexts().isEmpty())
+  /*if (!context->parentContext())
     outputRange(context->smartRange());*/
 }
 

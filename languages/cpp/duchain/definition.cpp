@@ -91,3 +91,8 @@ void Definition::setContext(DUContext* context)
 }
 
 // kate: indent-width 2;
+
+bool Definition::operator ==(const Definition & other) const
+{
+  return this == &other;
+}

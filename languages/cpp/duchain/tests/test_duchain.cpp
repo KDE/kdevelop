@@ -53,6 +53,12 @@ namespace QTest {
     QByteArray arr = id.toString().toLatin1();
     return qstrdup(arr.data());
   }
+  template<>
+  char* toString(const Definition& def)
+  {
+    QString s = QString("Definition %1 (%2): %3").arg(def.identifier().toString()).arg(def.qualifiedIdentifier().toString()).arg(reinterpret_cast<long>(&def));
+    return qstrdup(s.toLatin1().constData());
+  }
 }
 
 class TestDUChain : public QObject
@@ -210,16 +216,17 @@ private slots:
     KDevDocumentCursor insideContext1(file1, Cursor(5,9));
 
     QCOMPARE(topContext->findContext(insideContext1), context1);
-    QCOMPARE(topContext->findDefinition(definition1->identifier(), insideContext1), definition1);
-    QCOMPARE(context1->findDefinition(definition1->identifier(), insideContext1), definition1);
+    QCOMPARE(*topContext->findDefinition(definition1->identifier(), insideContext1), *definition1);
+    QCOMPARE(*context1->findDefinition(definition1->identifier(), insideContext1), *definition1);
 
     context1->addDefinition(definition3);
-    QCOMPARE(topContext->findDefinition(definition1->identifier(), insideContext1), definition1);
-    QCOMPARE(context1->findDefinition(definition1->identifier(), insideContext1), definition3);
+    QCOMPARE(*topContext->findDefinition(definition1->identifier(), insideContext1), *definition1);
+    QCOMPARE(*context1->findDefinition(definition1->identifier(), insideContext1), *definition1);
+    QCOMPARE(*context1->findDefinition(definition1->identifier(), KDevDocumentCursor(definition3->textRangePtr(), KDevDocumentCursor::Start)), *definition3);
 
     context1->takeDefinition(definition3);
-    QCOMPARE(topContext->findDefinition(definition1->identifier(), insideContext1), definition1);
-    QCOMPARE(context1->findDefinition(definition1->identifier(), insideContext1), definition1);
+    QCOMPARE(*topContext->findDefinition(definition1->identifier(), insideContext1), *definition1);
+    QCOMPARE(*context1->findDefinition(definition1->identifier(), insideContext1), *definition1);
 
     DUContext* subContext1 = new DUContext(new KDevDocumentRange(file1, Range(5,4, 7,3)));
     topContext->addChildContext(subContext1);
@@ -266,30 +273,30 @@ private slots:
     DUContext* top = parse(method, DumpNone);
 
     QVERIFY(!top->parentContext());
-    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->childContexts().count(), 2);
     QCOMPARE(top->localDefinitions().count(), 0);
     QVERIFY(top->localScopeIdentifier().isEmpty());
 
     QCOMPARE(top->findDefinition(Identifier("i")), noDef);
 
-    DUContext* main = top->childContexts().first();
+    DUContext* main = top->childContexts()[1];
     QVERIFY(main->parentContext());
     QCOMPARE(main->importedParentContexts().count(), 1);
-    QCOMPARE(main->childContexts().count(), 1);
+    QCOMPARE(main->childContexts().count(), 2);
     QCOMPARE(main->localDefinitions().count(), 0);
     QVERIFY(main->localScopeIdentifier().isEmpty());
 
     QCOMPARE(main->findDefinition(Identifier("i")), noDef);
 
-    DUContext* forCtx = main->childContexts().first();
+    DUContext* forCtx = main->childContexts()[1];
     QVERIFY(forCtx->parentContext());
     QCOMPARE(forCtx->importedParentContexts().count(), 1);
-    QCOMPARE(forCtx->childContexts().count(), 1);
+    QCOMPARE(forCtx->childContexts().count(), 2);
     QCOMPARE(forCtx->localDefinitions().count(), 0);
     QVERIFY(forCtx->localScopeIdentifier().isEmpty());
 
     DUContext* forParamCtx = forCtx->importedParentContexts().first();
-    QVERIFY(!forParamCtx->parentContext());
+    QVERIFY(forParamCtx->parentContext());
     QCOMPARE(forParamCtx->importedParentContexts().count(), 0);
     QCOMPARE(forParamCtx->childContexts().count(), 0);
     QCOMPARE(forParamCtx->localDefinitions().count(), 1);
@@ -301,7 +308,7 @@ private slots:
 
     QCOMPARE(forCtx->findDefinition(defI->identifier()), defI);
 
-    DUContext* ifCtx = forCtx->childContexts().first();
+    DUContext* ifCtx = forCtx->childContexts()[1];
     QVERIFY(ifCtx->parentContext());
     QCOMPARE(ifCtx->importedParentContexts().count(), 1);
     QCOMPARE(ifCtx->childContexts().count(), 0);
@@ -329,7 +336,7 @@ private slots:
     DUContext* structA = top->childContexts().first();
     QVERIFY(structA->parentContext());
     QCOMPARE(structA->importedParentContexts().count(), 0);
-    QCOMPARE(structA->childContexts().count(), 2);
+    QCOMPARE(structA->childContexts().count(), 3);
     QCOMPARE(structA->localDefinitions().count(), 1);
     QCOMPARE(structA->localScopeIdentifier(), QualifiedIdentifier("A"));
 
@@ -341,7 +348,7 @@ private slots:
     QCOMPARE(structA->findDefinition(Identifier("b")), noDef);
     QCOMPARE(structA->findDefinition(Identifier("c")), noDef);
 
-    DUContext* ctorImplCtx = structA->childContexts().first();
+    DUContext* ctorImplCtx = structA->childContexts()[1];
     QVERIFY(ctorImplCtx->parentContext());
     QCOMPARE(ctorImplCtx->importedParentContexts().count(), 1);
     QCOMPARE(ctorImplCtx->childContexts().count(), 0);
@@ -349,7 +356,7 @@ private slots:
     QVERIFY(ctorImplCtx->localScopeIdentifier().isEmpty());
 
     DUContext* ctorCtx = ctorImplCtx->importedParentContexts().first();
-    QVERIFY(!ctorCtx->parentContext());
+    QVERIFY(ctorCtx->parentContext());
     QCOMPARE(ctorCtx->childContexts().count(), 0);
     QCOMPARE(ctorCtx->localDefinitions().count(), 2);
     QVERIFY(ctorCtx->localScopeIdentifier().isEmpty());
@@ -362,8 +369,7 @@ private slots:
     QCOMPARE(defC->identifier(), Identifier("c"));
     QCOMPARE(defC->uses().count(), 1);
 
-    // FIXME is this correct? or is it a bug...
-    QCOMPARE(ctorCtx->findDefinition(Identifier("i")), noDef);
+    QCOMPARE(ctorCtx->findDefinition(Identifier("i")), defI);
     QCOMPARE(ctorCtx->findDefinition(Identifier("b")), defB);
     QCOMPARE(ctorCtx->findDefinition(Identifier("c")), defC);
 
@@ -393,7 +399,7 @@ private slots:
     DUContext* top = parse(method, DumpNone);
 
     QVERIFY(!top->parentContext());
-    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts().count(), 3);
     QCOMPARE(top->localDefinitions().count(), 1);
     QVERIFY(top->localScopeIdentifier().isEmpty());
     QCOMPARE(top->findDefinition(Identifier("foo")), noDef);
@@ -406,6 +412,12 @@ private slots:
     QCOMPARE(fooCtx->localScopeIdentifier(), QualifiedIdentifier("foo"));
     QCOMPARE(fooCtx->scopeIdentifier(), QualifiedIdentifier("foo"));
 
+    DUContext* testCtx = top->childContexts()[2];
+    QCOMPARE(testCtx->childContexts().count(), 0);
+    QCOMPARE(testCtx->localDefinitions().count(), 0);
+    QCOMPARE(testCtx->localScopeIdentifier(), QualifiedIdentifier());
+    QCOMPARE(testCtx->scopeIdentifier(), QualifiedIdentifier());
+
     Definition* bar2 = top->localDefinitions().first();
     QCOMPARE(bar2->identifier(), Identifier("bar"));
     QCOMPARE(bar2->qualifiedIdentifier(), QualifiedIdentifier("bar"));
@@ -414,6 +426,7 @@ private slots:
     Definition* bar = fooCtx->localDefinitions().first();
     QCOMPARE(bar->identifier(), Identifier("bar"));
     QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
+    QCOMPARE(testCtx->findDefinition(QualifiedIdentifier("foo::bar")), bar);
     QCOMPARE(bar->uses().count(), 1);
     QCOMPARE(top->findDefinition(bar->identifier()), bar2);
     QCOMPARE(top->findDefinition(bar->qualifiedIdentifier()), bar);
@@ -435,7 +448,7 @@ private slots:
     DUContext* top = parse(method, DumpNone);
 
     QVERIFY(!top->parentContext());
-    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts().count(), 3);
     QCOMPARE(top->localDefinitions().count(), 0);
     QVERIFY(top->localScopeIdentifier().isEmpty());
     QCOMPARE(top->findDefinition(Identifier("foo")), noDef);
@@ -455,15 +468,15 @@ private slots:
     QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
     QCOMPARE(bar->uses().count(), 1);
     QCOMPARE(top->findDefinition(bar->identifier(), KDevDocumentCursor(top->textRangePtr(), KDevDocumentCursor::Start)), noDef);
-    QCOMPARE(top->findDefinition(bar->identifier()), noDef);
+    QCOMPARE(top->findDefinition(bar->identifier()), bar);
     QCOMPARE(top->findDefinition(bar->qualifiedIdentifier()), bar);
 
-    QCOMPARE(top->findDefinition(QualifiedIdentifier("bar")), noDef);
+    QCOMPARE(top->findDefinition(QualifiedIdentifier("bar")), bar);
     QCOMPARE(top->findDefinition(QualifiedIdentifier("::bar")), noDef);
     QCOMPARE(top->findDefinition(QualifiedIdentifier("foo::bar")), bar);
     QCOMPARE(top->findDefinition(QualifiedIdentifier("::foo::bar")), bar);
 
-    DUContext* testCtx = top->childContexts()[1];
+    DUContext* testCtx = top->childContexts()[2];
     QVERIFY(testCtx->parentContext());
     QCOMPARE(testCtx->importedParentContexts().count(), 1);
     QCOMPARE(testCtx->childContexts().count(), 0);

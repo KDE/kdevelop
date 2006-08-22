@@ -90,23 +90,51 @@ Definition* DUContext::takeDefinition(Definition* definition)
 Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifier, const KDevDocumentCursor & position, bool allowUnqualifiedMatch, const QList<UsingNS*>& usingNamespaces ) const
 {
   QLinkedList<Definition*> tryToResolve;
+  QLinkedList<Definition*> ensureResolution;
   QSet<Definition*> resolved;
 
+  //kDebug() << k_funcinfo << "Searching for " << identifier << endl;
+
   foreach (Definition* definition, m_localDefinitions) {
-    if (identifier.top() == definition->identifier()) {
-      if (identifier.explicitlyGlobal() || identifier.count() > 1) {
-        tryToResolve.append(definition);
-      } else if (!allowUnqualifiedMatch) {
-        tryToResolve.append(definition);
-      } else {
-        resolved.insert(definition);
-      }
+    QualifiedIdentifier::MatchTypes m = identifier.match(QualifiedIdentifier(definition->identifier()));
+    switch (m) {
+      case QualifiedIdentifier::NoMatch:
+        //kDebug() << "Identifier does not match " << definition->identifier() << endl;
+        continue;
+
+      case QualifiedIdentifier::Contains:
+        // identifier is a more complete specification...
+        // Try again with a qualified definition identifier
+        //kDebug() << "Identifier contains " << definition->identifier() << ", plan to confirm that it is contained by " << definition->qualifiedIdentifier() << endl;
+        ensureResolution.append(definition);
+        continue;
+
+      case QualifiedIdentifier::ContainedBy:
+        // definition is a more complete specification...
+        if (!allowUnqualifiedMatch) {
+          //kDebug() << "Identifier contained by " << definition->identifier() << ", plan to try again with " << definition->qualifiedIdentifier() << endl;
+          tryToResolve.append(definition);
+        } else {
+          //kDebug() << "Identifier contained by " << definition->identifier() << " (" << definition->qualifiedIdentifier() << "), accepted match." << endl;
+          resolved.insert(definition);
+        }
+        continue;
+        //kDebug() << k_funcinfo << identifier << " contained by " << it.value()->qualifiedIdentifier() << endl;
+
+      case QualifiedIdentifier::ExactMatch:
+        //kDebug() << "Identifier " << definition->identifier() << " (" << definition->qualifiedIdentifier() << ") matched, accepted match." << endl;
+        if (!allowUnqualifiedMatch) {
+          ensureResolution.append(definition);
+        } else {
+          resolved.insert(definition);
+        }
+        continue;
     }
   }
 
   if (resolved.count() == 1) {
     Definition* definition  = *resolved.constBegin();
-    if (position >= definition->textRange().start())
+    if (type() == Class || position >= definition->textRange().start())
       return definition;
 
     return 0;
@@ -121,13 +149,40 @@ Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifi
 
     return 0;
 
-  } else if (tryToResolve.isEmpty()) {
+  } else if (tryToResolve.isEmpty() && ensureResolution.isEmpty()) {
     return 0;
   }
 
-  QualifiedIdentifier scope = scopeIdentifier();
+  QMutableLinkedListIterator<Definition*> it = ensureResolution;
+  while (it.hasNext()) {
+    QualifiedIdentifier::MatchTypes m = identifier.match(it.next()->qualifiedIdentifier());
+    switch (m) {
+      case QualifiedIdentifier::NoMatch:
+      case QualifiedIdentifier::Contains:
+        //kDebug() << k_funcinfo << identifier << " mismatched " << m << ": " << it.value()->qualifiedIdentifier() << endl;
+        break;
 
-  QMutableLinkedListIterator<Definition*> it = tryToResolve;
+      case QualifiedIdentifier::ContainedBy:
+        //kDebug() << k_funcinfo << identifier << " contained by " << it.value()->qualifiedIdentifier() << endl;
+      case QualifiedIdentifier::ExactMatch:
+        resolved.insert(it.value());
+        break;
+    }
+  }
+
+  if (resolved.count() == 1) {
+    Definition* definition  = *resolved.constBegin();
+    if (position >= definition->textRange().start())
+      return definition;
+
+    return 0;
+
+  } else if (resolved.count() > 1) {
+    return 0;
+  }
+
+
+  it = tryToResolve;
   while (it.hasNext()) {
     QualifiedIdentifier::MatchTypes m = identifier.match(it.next()->qualifiedIdentifier());
     switch (m) {
@@ -187,7 +242,7 @@ Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, 
 {
   // TODO we're missing ambiguous references by not checking every resolution before returning...
   // but is that such a bad thing? (might be good performance-wise)
-  if (Definition* definition = findLocalDefinition(identifier, position, sourceChild, usingNS))
+  if (Definition* definition = findLocalDefinition(identifier, position, sourceChild || inImportedContext, usingNS))
     return definition;
 
   if (identifier.isQualified()) {
@@ -228,26 +283,56 @@ Definition * DUContext::findDefinitionInChildren(const QualifiedIdentifier & ide
 {
   foreach (DUContext* context, childContexts()) {
     if (context == sourceChild)
-      continue;
+      break;
 
     if (context->type() != DUContext::Namespace)
       continue;
 
-    if (Definition* match = context->findLocalDefinition(identifier, position, false, usingNamespaces))
-      return match;
+    QualifiedIdentifier nsId = context->scopeIdentifier();
+    QualifiedIdentifier::MatchTypes bestMatch = QualifiedIdentifier::NoMatch;
+
+    if (identifier.beginsWith(nsId))
+      goto found;
+
+    foreach (UsingNS* usingNS, usingNamespaces) {
+      QualifiedIdentifier::MatchTypes m = usingNS->nsIdentifier.match(nsId);
+      switch (m) {
+        case QualifiedIdentifier::Contains:
+          // using namespace is a more complete specification...
+          bestMatch = m;
+          continue;
+
+        case QualifiedIdentifier::ContainedBy:
+          // namespace is a more complete specification...
+        case QualifiedIdentifier::NoMatch:
+          continue;
+
+        case QualifiedIdentifier::ExactMatch:
+          goto found;
+      }
+    }
+
+    if (bestMatch == QualifiedIdentifier::NoMatch)
+      continue;
+
+    if (false) {
+      found:
+      if (Definition* match = context->findLocalDefinition(identifier, position, false, usingNamespaces))
+        return match;
+    }
 
     if (Definition* match = context->findDefinitionInChildren(identifier, position, false, usingNamespaces))
       return match;
-  }
 
-  // todo nested using definitions
+    // FIXME nested using definitions
+  }
 
   return 0;
 }
 
 Definition * DUContext::findDefinition( const QualifiedIdentifier& identifier ) const
 {
-  return findDefinition(identifier, KDevDocumentCursor(textRangePtr(), KDevDocumentCursor::Start));
+  return findDefinition(identifier, KDevDocumentCursor(textRangePtr(), KDevDocumentCursor::End));
 }
 
 void DUContext::addChildContext( DUContext * context )

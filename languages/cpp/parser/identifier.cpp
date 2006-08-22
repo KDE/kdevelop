@@ -187,6 +187,32 @@ QualifiedIdentifier QualifiedIdentifier::merge(const QualifiedIdentifier& base) 
   return ret;
 }
 
+QualifiedIdentifier QualifiedIdentifier::mergeWhereDifferent(const QualifiedIdentifier& base) const
+{
+  if (explicitlyGlobal())
+    return *this;
+
+  QualifiedIdentifier id;
+
+  int i = 0, j = 0;
+  if (base.explicitlyGlobal())
+    id.append(base.at(j++));
+
+  for (; j < base.count(); ++j) {
+    id.append(base.at(j));
+    if (i >= count() || at(i) == base.at(j)) {
+      i++;
+    } else {
+      break;
+    }
+  }
+
+  for (; i < count(); ++i)
+    id.append(at(i));
+
+  return id;
+}
+
 bool QualifiedIdentifier::explicitlyGlobal() const
 {
   // True if starts with "::"
@@ -241,6 +267,29 @@ QualifiedIdentifier::MatchTypes QualifiedIdentifier::match(const QualifiedIdenti
     return ContainedBy;
   else
     return NoMatch;
+}
+
+bool QualifiedIdentifier::beginsWith(const QualifiedIdentifier& other) const
+{
+  int i = 0, j = 0;
+
+  if (explicitlyGlobal())
+    i = 1;
+
+  if (other.explicitlyGlobal())
+    j = 1;
+
+  bool ret = true;
+
+  for (; i < count() && j < other.count(); ++i, ++j)
+    if (at(i) == other.at(j)) {
+      continue;
+    } else {
+      ret = false;
+      break;
+    }
+
+  return ret;
 }
 
 uint qHash(const QualifiedIdentifier& id)

@@ -93,6 +93,7 @@ public:
   QStringList toStringList() const;
 
   QualifiedIdentifier merge(const QualifiedIdentifier& base) const;
+  QualifiedIdentifier mergeWhereDifferent(const QualifiedIdentifier& base) const;
 
   bool operator==(const QualifiedIdentifier& rhs) const;
   bool operator!=(const QualifiedIdentifier& rhs) const;
@@ -105,6 +106,7 @@ public:
   };
 
   MatchTypes match(const QualifiedIdentifier& other) const;
+  bool beginsWith(const QualifiedIdentifier& other) const;
 
   /**
     * kDebug() stream operator.  Writes this identifier to the debug output in a nicely formatted way.

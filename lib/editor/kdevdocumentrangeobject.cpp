@@ -70,6 +70,11 @@ Range& KDevDocumentRangeObject::textRange( )
   return *m_range;
 }
 
+const KDevDocumentRange& KDevDocumentRangeObject::textDocRange() const
+{
+  return *static_cast<KDevDocumentRange*>(m_range);
+}
+
 KUrl KDevDocumentRangeObject::url() const
 {
   return url(m_range);

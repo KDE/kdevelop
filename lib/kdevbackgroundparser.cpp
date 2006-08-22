@@ -131,7 +131,10 @@ void KDevBackgroundParser::addDocumentList( const KUrl::List &urls )
 
 void KDevBackgroundParser::removeDocument( const KUrl &url )
 {
-    Q_ASSERT( url.isValid() );
+    if ( !url.isValid() ) {
+        kWarning() << k_funcinfo << "Invalid url " << url << endl;
+        return;
+    }
 
     m_documents.remove( url );
     if ( m_openDocuments.contains( url ) )
