@@ -87,7 +87,7 @@ void CreateGetterSetterDialog::accept( )
 		}
 		else
 		{
-			QRegExp basicTypes( "(unsigned?\\s*(char|byte|short|int|long))|double|float|bool" );
+			QRegExp basicTypes( "((unsigned)?\\s*(char|byte|short|int|long))|double|float|bool" );
 			if ( basicTypes.exactMatch( m_var->type() ) )
 				parameterStr = m_var->type() + " " + config->parameterName();
 			else
