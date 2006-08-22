@@ -192,6 +192,9 @@ QModelIndex KDevCodeAggregate::parent( const QModelIndex &child ) const
 
 QVariant KDevCodeAggregate::data( const QModelIndex &index, int role ) const
 {
+    if (!index.isValid())
+        return QVariant();
+
     if ( !index.parent().isValid() )
     {
         if ( m_mode == KDevCodeProxy::Normalize )

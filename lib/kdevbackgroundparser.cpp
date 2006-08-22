@@ -55,7 +55,7 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         m_suspend( true ),
         m_modelsToCache( 0 ),
         m_progressBar( new QProgressBar ),
-        m_weaver( new Weaver( this, 1 ) ) //C++ parser can't multi-thread at the moment
+        m_weaver( new Weaver( this, 2 ) )
 {
     //ThreadWeaver::setDebugLevel(true, 5);
     m_weaver->suspend();
