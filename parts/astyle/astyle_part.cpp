@@ -47,6 +47,9 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
   connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 
   connect(partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
+
+  // maybe there is a file open already
+  activePartChanged( partController()->activePart() );
 }
 
 
