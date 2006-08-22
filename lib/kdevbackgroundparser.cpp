@@ -154,6 +154,10 @@ void KDevBackgroundParser::parseDocuments()
     if ( !langSupport )
         return ;
 
+    // First create the jobs, then enqueue them, because they may
+    // need to access each other for generating dependencies.
+    QList<KDevParseJob*> jobs;
+
     for ( QMap<KUrl, bool>::Iterator it = m_documents.begin();
             it != m_documents.end(); ++it )
     {
@@ -177,9 +181,15 @@ void KDevBackgroundParser::parseDocuments()
 
             p = false; //Don't parse for next time
 
-            m_weaver ->enqueue( parse );
+            m_parseJobs.insert(url, parse);
+            jobs.append(parse);
         }
     }
+
+    // Ok, enqueueing is fine because m_parseJobs contains all of the jobs now
+
+    foreach (KDevParseJob* parse, jobs)
+        m_weaver ->enqueue( parse );
 }
 
 void KDevBackgroundParser::parseComplete( Job *job )
@@ -190,6 +200,8 @@ void KDevBackgroundParser::parseComplete( Job *job )
 
     if ( KDevParseJob * parseJob = qobject_cast<KDevParseJob*>( job ) )
     {
+        m_parseJobs.remove(parseJob->document());
+
         if ( m_modelsToCache )
         {
             if ( parseJob->codeModel() )

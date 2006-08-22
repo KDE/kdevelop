@@ -54,7 +54,7 @@ KDevParseJob::KDevParseJob( KDevDocument *document,
 KDevParseJob::~KDevParseJob()
 {}
 
-KUrl KDevParseJob::document() const
+const KUrl& KDevParseJob::document() const
 {
     return m_document;
 }

@@ -59,7 +59,7 @@ public:
     /// Ensure it is loaded by calling editorLoaded() first.
     QString contentsFromEditor() const;
 
-    KUrl document() const;
+    const KUrl& document() const;
     KDevDocument* openDocument() const;
     bool wasSuccessful() const;
 

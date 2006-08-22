@@ -28,6 +28,7 @@
 #include <QMap>
 #include <QPair>
 #include <QMutex>
+#include <QHash>
 
 namespace ThreadWeaver
 {
@@ -48,6 +49,7 @@ class KDevDocument;
 class KDevCodeModel;
 class KDevLanguageSupport;
 class KDevPersistentHash;
+class KDevParseJob;
 
 typedef QList< QPair<KUrl, KDevCodeModel* > > CodeModelCache;
 
@@ -62,6 +64,16 @@ public:
 
     void init();
     void cacheModels( uint modelsToCache );
+
+    /**
+     * Queries the background parser as to whether there is currently
+     * a parse job for \a document, and if so, returns it.
+     *
+     * This may not contain all of the parse jobs that are intended
+     * unless you call in from your job's ThreadWeaver::Job::aboutToBeQueued()
+     * function.
+     */
+    KDevParseJob* parseJobForDocument(const KUrl& document);
 
 public slots:
     void suspend();
@@ -88,6 +100,8 @@ private:
     QMap<KUrl, bool> m_documents;
     // A list of open documents
     QMap<KUrl, KDevDocument*> m_openDocuments;
+    // Current parse jobs
+    QHash<KUrl, KDevParseJob*> m_parseJobs;
     // A list of cached models when parsing a large amount of files.
     CodeModelCache m_modelCache;
 
