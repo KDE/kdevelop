@@ -448,7 +448,7 @@ void CCConfigWidget::saveQtTab()
 		c->setIncludeStyle( 4 );
 	}else
 	{
-		c->setIncludeStyle( 4 );
+		c->setIncludeStyle( 3 );
 	}
 	c->setRoot( m_qtDir->url() );
 	if( m_kdevembedded->isChecked() )
