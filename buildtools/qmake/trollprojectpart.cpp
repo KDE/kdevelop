@@ -65,7 +65,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
     m_executeAfterBuild = false;
 
     m_widget = new TrollProjectWidget(this);
-    m_widget->setIcon(SmallIcon("make"));
+    m_widget->setIcon(SmallIcon("qmakerun"));
     m_widget->setCaption(i18n("QMake Manager"));
     QWhatsThis::add(m_widget, i18n("<b>QMake manager</b><p>"
                                    "The QMake manager project tree consists of two parts. The 'overview' "
