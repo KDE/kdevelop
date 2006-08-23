@@ -171,13 +171,17 @@ void CppLanguageSupport::projectClosing()
 {
     KDevCore::backgroundParser()->clear(this);
 
-    KUrl::List documentList;
-    QList<KDevProjectFileItem*> files = KDevCore::activeProject()->allFiles();
-    foreach ( KDevProjectFileItem * file, files )
-    {
-        if ( supportsDocument( file->url() ) )
+    // FIXME I think this only happens on kdevelop close, but it would be good to figure it out
+    // and fix it
+    if (KDevCore::activeProject()) {
+        KUrl::List documentList;
+        QList<KDevProjectFileItem*> files = KDevCore::activeProject()->allFiles();
+        foreach ( KDevProjectFileItem * file, files )
         {
-            KDevCore::backgroundParser() ->removeDocument( file->url() );
+            if ( supportsDocument( file->url() ) )
+            {
+                KDevCore::backgroundParser() ->removeDocument( file->url() );
+            }
         }
     }
 
