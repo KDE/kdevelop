@@ -31,6 +31,7 @@
 #include "name_compiler.h"
 #include "definition.h"
 #include "definitionuse.h"
+#include "topducontext.h"
 
 using namespace KTextEditor;
 
@@ -52,13 +53,13 @@ DUBuilder::~DUBuilder ()
   delete m_nameCompiler;
 }
 
-DUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse definition, QList<DUContext*>* includes)
+TopDUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse definition, QList<DUContext*>* includes)
 {
   m_compilingDefinitions = definition == CompileDefinitions;
 
   m_editor->setCurrentUrl(url);
 
-  DUContext* topLevelContext = DUChain::self()->chainForDocument(url);
+  TopDUContext* topLevelContext = DUChain::self()->chainForDocument(url);
 
   if (topLevelContext) {
     m_contextStack.push(topLevelContext);
@@ -81,7 +82,10 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse definiti
   } else {
     Q_ASSERT(m_compilingDefinitions);
 
-    topLevelContext = openContextInternal(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain), DUContext::Global);
+    Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
+    topLevelContext = new TopDUContext(range);
+    topLevelContext->setType(DUContext::Global);
+    m_contextStack.push(topLevelContext);
 
     DUChain::self()->addDocumentChain(url, topLevelContext);
   }

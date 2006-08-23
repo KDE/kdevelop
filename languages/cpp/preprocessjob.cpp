@@ -23,6 +23,7 @@
 
 #include <QFile>
 #include <QByteArray>
+#include <QMutexLocker>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -31,6 +32,7 @@
 #include "kdevproject.h"
 #include "kdevpersistenthash.h"
 
+#include "cpplanguagesupport.h"
 #include "parser/parsesession.h"
 #include "parsejob.h"
 #include "parser/ast.h"
@@ -48,6 +50,11 @@ CPPParseJob * PreprocessJob::parentJob() const
 
 void PreprocessJob::run()
 {
+    if (parentJob()->abortRequested())
+        return parentJob()->abortJob();
+
+    QMutexLocker lock(parentJob()->cpp()->parseMutex());
+
     bool readFromDisk = !parentJob()->contentsAvailableFromEditor();
 
     QString contents;
@@ -78,6 +85,9 @@ void PreprocessJob::run()
     << " size: " << contents.length()
     << endl;
 
+    if (parentJob()->abortRequested())
+        return parentJob()->abortJob();
+
     parentJob()->parseSession()->setContents( processString( contents ).toUtf8() );
     parentJob()->parseSession()->macros = macros();
 }
@@ -88,12 +98,12 @@ Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type)
 
     // FIXME need build system support to determine the full URL of the file
 
-    Q_ASSERT(KDevCore::activeProject());
-
-    KDevAST* ast = KDevCore::activeProject()->persistentHash()->retrieveAST(fileName);
-    if (ast) {
-        TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
-        addMacros(t->session->macros);
+    if (KDevCore::activeProject()) {
+        KDevAST* ast = KDevCore::activeProject()->persistentHash()->retrieveAST(fileName);
+        if (ast) {
+            TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
+            addMacros(t->session->macros);
+        }
     }
 
     parentJob()->addIncludedFile(fileName);

@@ -52,6 +52,7 @@ int main( int argc, char *argv[] )
     aboutData.addAuthor( "Victor Roeder", I18N_NOOP( "Help with Automake manager and persistant class store" ), "victor_roeder@gmx.de" );
     aboutData.addAuthor( "Harald Fernengel", I18N_NOOP( "Ported to Qt 3, patches, valgrind, diff and perforce support" ), "harry@kdevelop.org" );
     aboutData.addAuthor( "Roberto Raggi", I18N_NOOP( "QEditor component, code completion, Abbrev component, C++ support, Java support" ), "roberto@kdevelop.org" );
+    aboutData.addAuthor( "Hamish Rodda", I18N_NOOP( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
     aboutData.addAuthor( "Simon Hausmann", I18N_NOOP( "Help with KParts infrastructure" ), "hausmann@kde.org" );
     aboutData.addAuthor( "Oliver Kellogg", I18N_NOOP( "Ada support" ), "okellogg@users.sourceforge.net" );
     aboutData.addAuthor( "Jakob Simon-Gaarde", I18N_NOOP( "QMake projectmanager" ), "jsgaarde@tdcspace.dk" );

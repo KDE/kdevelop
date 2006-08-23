@@ -1,4 +1,4 @@
-/* This  is part of KDevelop
+/* This file is part of KDevelop
     Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -16,49 +16,26 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "duchain.h"
+#ifndef TOPDUCONTEXT_H
+#define TOPDUCONTEXT_H
 
-#include <QMutexLocker>
+#include "ducontext.h"
 
-#include "kdeveditorintegrator.h"
-
-#include "topducontext.h"
-
-void DUChain::removeDocumentChain( const KUrl & document )
+/**
+ * The top context in a definition-use chain for one source file.
+ *
+ * Will be used later to manage a few things.
+ *
+ * \todo move the registration with DUChain here
+ */
+class TopDUContext : public DUContext
 {
-  m_chains.remove(document);
-}
+public:
+  TopDUContext(KTextEditor::Range* range);
 
-void DUChain::addDocumentChain( const KUrl & document, TopDUContext * chain )
-{
-  m_chains.insert(document, chain);
-}
+  virtual ~TopDUContext();
+};
 
-TopDUContext * DUChain::chainForDocument( const KUrl & document )
-{
-  return m_chains[document];
-}
-
-DUChain* DUChain::s_chain = 0;
-
-DUChain * DUChain::self( )
-{
-  if (!s_chain)
-    s_chain = new DUChain();
-
-  return s_chain;
-}
-
-void DUChain::clear()
-{
-  foreach (TopDUContext* context, m_chains) {
-    KDevEditorIntegrator::releaseTopRange(context->textRangePtr());
-    delete context;
-  }
-
-  m_chains.clear();
-}
-
-#include "duchain.moc"
+#endif // TOPDUCONTEXT_H
 
 // kate: indent-width 2;

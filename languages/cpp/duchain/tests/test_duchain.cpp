@@ -20,7 +20,7 @@
 #include <QFlags>
 
 #include "duchain.h"
-#include "ducontext.h"
+#include "topducontext.h"
 #include "dubuilder.h"
 #include "typesystem.h"
 #include "definition.h"
@@ -80,7 +80,7 @@ class TestDUChain : public QObject
   Definition* definition4;
   Definition* noDef;
   KUrl file1, file2;
-  DUContext* topContext;
+  TopDUContext* topContext;
 
 public:
   TestDUChain()
@@ -116,7 +116,7 @@ private slots:
     file1 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/duchain.cpp";
     file2 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/dubuilder.cpp";
 
-    topContext = new DUContext(new KDevDocumentRange(file1, Range(0,0,25,0)));
+    topContext = new TopDUContext(new KDevDocumentRange(file1, Range(0,0,25,0)));
     DUChain::self()->addDocumentChain(file1, topContext);
   }
 
@@ -545,7 +545,7 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
   DUBuilder dubuilder(session);
   static int testNumber = 0;
   KUrl url(QString("file:///internal/%1").arg(testNumber++));
-  DUContext* top = dubuilder.build(url, ast, DUBuilder::CompileDefinitions);
+  TopDUContext* top = dubuilder.build(url, ast, DUBuilder::CompileDefinitions);
   dubuilder.build(url, ast, DUBuilder::CompileUses);
 
   if (dump & DumpDUChain) {

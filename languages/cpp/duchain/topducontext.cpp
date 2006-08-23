@@ -16,49 +16,17 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "duchain.h"
-
-#include <QMutexLocker>
-
-#include "kdeveditorintegrator.h"
-
 #include "topducontext.h"
 
-void DUChain::removeDocumentChain( const KUrl & document )
+using namespace KTextEditor;
+
+TopDUContext::TopDUContext(KTextEditor::Range* range)
+  : DUContext(range)
 {
-  m_chains.remove(document);
 }
 
-void DUChain::addDocumentChain( const KUrl & document, TopDUContext * chain )
+TopDUContext::~TopDUContext( )
 {
-  m_chains.insert(document, chain);
 }
-
-TopDUContext * DUChain::chainForDocument( const KUrl & document )
-{
-  return m_chains[document];
-}
-
-DUChain* DUChain::s_chain = 0;
-
-DUChain * DUChain::self( )
-{
-  if (!s_chain)
-    s_chain = new DUChain();
-
-  return s_chain;
-}
-
-void DUChain::clear()
-{
-  foreach (TopDUContext* context, m_chains) {
-    KDevEditorIntegrator::releaseTopRange(context->textRangePtr());
-    delete context;
-  }
-
-  m_chains.clear();
-}
-
-#include "duchain.moc"
 
 // kate: indent-width 2;

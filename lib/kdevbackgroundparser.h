@@ -67,6 +67,11 @@ public:
     void cacheModels( uint modelsToCache );
 
     /**
+     * Abort or dequeue all current running jobs with the specified \a parent.
+     */
+    void clear(QObject* parent);
+
+    /**
      * Queries the background parser as to whether there is currently
      * a parse job for \a document, and if so, returns it.
      *
@@ -114,7 +119,6 @@ private:
 
     QProgressBar *m_progressBar;
 
-    mutable QMutex m_mutex;
     ThreadWeaver::Weaver* m_weaver;
 
     KDevParserDependencyPolicy* m_dependencyPolicy;

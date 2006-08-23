@@ -40,6 +40,8 @@ int Foo::test(int input)
   if (result = f.test())
     return;
 
+  Foo* f2 = new Foo();
+
   for (int j = 0; j < 4; ++j) {
     if (j ^ input > 200)
       return -1;

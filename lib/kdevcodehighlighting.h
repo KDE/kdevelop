@@ -26,7 +26,7 @@
 Interface to text editor highlighting of parsed code.
 */
 
-class DUContext;
+class TopDUContext;
 
 /**
 KDevelop text highlighting support interface - the base class for
@@ -39,7 +39,7 @@ public:
     virtual ~KDevCodeHighlighting();
 
     /**@return Whether the given url is supported by the language part.*/
-    virtual void highlightDUChain(DUContext* context) const = 0;
+    virtual void highlightDUChain(TopDUContext* context) const = 0;
 };
 
 #endif

@@ -61,22 +61,29 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         m_dependencyPolicy( new KDevParserDependencyPolicy )
 {
     //ThreadWeaver::setDebugLevel(true, 5);
-    m_weaver->suspend();
 
     m_timer = new QTimer( this );
     m_timer->setSingleShot( true );
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
     m_timer->start( 500 );
-
-    connect(KDevCore::projectController(), SIGNAL(projectOpened()), SLOT(resume()));
-    connect(KDevCore::projectController(), SIGNAL(projectClosed()), SLOT(suspend()));
 }
 
 KDevBackgroundParser::~KDevBackgroundParser()
 {
-    m_weaver->dequeue();
+    m_weaver->requestAbort();
     m_weaver->finish();
     delete m_dependencyPolicy;
+}
+
+void KDevBackgroundParser::clear(QObject* parent)
+{
+    QHashIterator<KUrl, KDevParseJob*> it = m_parseJobs;
+    while (it.hasNext()) {
+        it.next();
+        if (it.value()->parent() == parent) {
+            it.value()->requestAbort();
+        }
+    }
 }
 
 void KDevBackgroundParser::init()
@@ -209,42 +216,46 @@ void KDevBackgroundParser::parseComplete( Job *job )
     {
         m_parseJobs.remove(parseJob->document());
 
-        if ( m_modelsToCache )
+        // Ensure success, otherwise nothing to do
+        if (parseJob->success())
         {
-            if ( parseJob->codeModel() )
-            m_modelCache.append( qMakePair( parseJob->document(),
-                                            parseJob->codeModel() ) );
-
-            m_modelsToCache--; //decrement
-            m_progressBar->setValue( m_progressBar->value() + 1 );
-
-            if ( !m_modelsToCache /*&& !m_modelCache.isEmpty()*/ )
+            if ( m_modelsToCache )
             {
                 if ( parseJob->codeModel() )
-                langSupport->codeProxy() ->insertModelCache( m_modelCache );
-                m_modelCache.clear();
+                m_modelCache.append( qMakePair( parseJob->document(),
+                                                parseJob->codeModel() ) );
 
-                //FIXME Stub for now, but eventually save persistent parser info
-                //whatever that may entail.
-                if (KDevCore::activeProject())
-                    KDevCore::activeProject()->persistentHash()->save();
+                m_modelsToCache--; //decrement
+                m_progressBar->setValue( m_progressBar->value() + 1 );
 
-                m_progressBar->hide();
+                if ( !m_modelsToCache /*&& !m_modelCache.isEmpty()*/ )
+                {
+                    if ( parseJob->codeModel() )
+                    langSupport->codeProxy() ->insertModelCache( m_modelCache );
+                    m_modelCache.clear();
+
+                    //FIXME Stub for now, but eventually save persistent parser info
+                    //whatever that may entail.
+                    if (KDevCore::activeProject())
+                        KDevCore::activeProject()->persistentHash()->save();
+
+                    m_progressBar->hide();
+                }
             }
-        }
-        else
-        {
-            if ( parseJob->codeModel() )
-            langSupport->codeProxy() ->insertModel( parseJob->document(),
-                                                    parseJob->codeModel() );
-        }
+            else
+            {
+                if ( parseJob->codeModel() )
+                langSupport->codeProxy() ->insertModel( parseJob->document(),
+                                                        parseJob->codeModel() );
+            }
 
-        //FIXME Stub for now, but eventually save persistent parser info
-        //whatever that may entail.
-        if (KDevCore::activeProject())
-            KDevCore::activeProject()->persistentHash()->insertAST( parseJob->document(), parseJob->AST() );
-        else
-            parseJob->AST()->release();
+            //FIXME Stub for now, but eventually save persistent parser info
+            //whatever that may entail.
+            if (KDevCore::activeProject())
+                KDevCore::activeProject()->persistentHash()->insertAST( parseJob->document(), parseJob->AST() );
+            else
+                parseJob->AST()->release();
+        }
 
         // FIXME hack, threadweaver doesn't let us know when we can delete, so just pick an arbitrary time...
         // (awaiting reply from Mirko on this one)
@@ -266,6 +277,8 @@ void KDevBackgroundParser::suspend()
     m_timer->stop();
 
     m_weaver->suspend();
+
+    m_progressBar->hide();
 }
 
 void KDevBackgroundParser::resume()
@@ -274,6 +287,9 @@ void KDevBackgroundParser::resume()
     m_timer->start( 500 );
 
     m_weaver->resume();
+
+    if (m_weaver->queueLength())
+        m_progressBar->show();
 }
 
 KDevParserDependencyPolicy* KDevBackgroundParser::dependencyPolicy() const

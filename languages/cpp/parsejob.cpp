@@ -87,7 +87,7 @@ KDevCodeModel *CPPParseJob::codeModel() const
     return m_model;
 }
 
-DUContext * CPPParseJob::duChain() const
+TopDUContext* CPPParseJob::duChain() const
 {
     return m_duContext;
 }
@@ -112,7 +112,7 @@ void CPPParseJob::setCodeModel(CodeModel * model)
     m_model = model;
 }
 
-void CPPParseJob::setDUChain(DUContext * duChain)
+void CPPParseJob::setDUChain(TopDUContext * duChain)
 {
     m_duContext = duChain;
 }
@@ -124,9 +124,18 @@ ParseJob::ParseJob(CPPParseJob * parent)
 
 void ParseJob::run()
 {
+    if (parentJob()->abortRequested())
+        return parentJob()->abortJob();
+
+    QMutexLocker lock(parentJob()->cpp()->parseMutex());
+
     Parser parser( new Control() );
 
     TranslationUnitAST* ast = parser.parse( parentJob()->parseSession() );
+
+    if (parentJob()->abortRequested())
+        return parentJob()->abortJob();
+
     ast->language = parentJob()->cpp();
     ast->session = parentJob()->parseSession();
 
@@ -138,6 +147,9 @@ void ParseJob::run()
         Binder binder( model, parentJob()->parseSession() );
         binder.run( parentJob()->document(), ast );
 
+        if (parentJob()->abortRequested())
+            return parentJob()->abortJob();
+
         parentJob()->setCodeModel(model);
 
         KTextEditor::SmartInterface* smart = 0;
@@ -148,21 +160,30 @@ void ParseJob::run()
         // Locking the interface here allows all of the highlighting to update before a redraw happens, thus no flicker
         QMutexLocker lock(smart ? smart->smartMutex() : 0);
 
-        Q_ASSERT(KDevCore::activeProject());
-
         QList<DUContext*> chains;
-        foreach (const QString& include, parentJob()->includedFiles()) {
-            KDevAST* ast = KDevCore::activeProject()->persistentHash()->retrieveAST(include);
-            if (ast) {
-                TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
-                if (t->ducontext)
-                    chains.append(t->ducontext);
+
+        if (KDevCore::activeProject()) {
+            foreach (const QString& include, parentJob()->includedFiles()) {
+                KDevAST* ast = KDevCore::activeProject()->persistentHash()->retrieveAST(include);
+                if (ast) {
+                    TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
+                    if (t->ducontext)
+                        chains.append(t->ducontext);
+                }
             }
         }
 
         DUBuilder dubuilder(parentJob()->parseSession());
-        DUContext* topContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileDefinitions, &chains);
-        DUContext* repeatTopContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileUses);
+        TopDUContext* topContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileDefinitions, &chains);
+
+        if (parentJob()->abortRequested())
+            return parentJob()->abortJob();
+
+        TopDUContext* repeatTopContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileUses);
+
+        if (parentJob()->abortRequested())
+            return parentJob()->abortJob();
+
         Q_ASSERT(repeatTopContext == topContext);
 
         parentJob()->setDUChain(topContext);

@@ -36,9 +36,12 @@ class SmartRange;
 
 class KDevAST;
 class KDevCodeModel;
-class DUContext;
+class TopDUContext;
 class KDevBackgroundParser;
 
+/**
+ * The base class for background parser jobs.
+ */
 class KDevParseJob : public ThreadWeaver::JobSequence
 {
     Q_OBJECT
@@ -65,14 +68,23 @@ public:
 
     const KUrl& document() const;
     KDevDocument* openDocument() const;
-    bool wasSuccessful() const;
 
     void setErrorMessage(const QString& message);
     const QString& errorMessage() const;
 
     virtual KDevAST *AST() const = 0;
     virtual KDevCodeModel *codeModel() const = 0;
-    virtual DUContext *duChain() const;
+    virtual TopDUContext *duChain() const;
+
+    /// Overriden to allow jobs to determine if they've been requested to abort
+    virtual void requestAbort();
+    /// Determine if the job has been requested to abort
+    bool abortRequested() const;
+    /// Sets success to false, causing failed() to be emitted
+    void abortJob();
+
+    /// Overridden to convey whether the job succeeded or not.
+    virtual bool success() const;
 
     /// Overridden to set the DependencyPolicy on subjobs.
     virtual void addJob(Job* job);
@@ -90,6 +102,10 @@ protected:
     KDevDocument* m_openDocument;
     QString m_errorMessage;
     KDevBackgroundParser* m_backgroundParser;
+
+    // Doesn't need to be locked, as missing an abort request isn't the end of the world
+    bool m_abortRequested : 1;
+    bool m_aborted : 1;
 };
 
 #endif

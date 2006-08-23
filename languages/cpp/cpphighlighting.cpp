@@ -24,7 +24,7 @@
 #include <ktexteditor/smartrange.h>
 
 #include "parser/codemodel.h"
-#include "duchain/ducontext.h"
+#include "duchain/topducontext.h"
 #include "duchain/definition.h"
 #include "duchain/definitionuse.h"
 
@@ -220,6 +220,11 @@ void CppHighlighting::outputRange( KTextEditor::SmartRange * range ) const
   Q_ASSERT(range->start() <= range->end());
   foreach (SmartRange* child, range->childRanges())
     outputRange(child);
+}
+
+void CppHighlighting::highlightDUChain(TopDUContext* context) const
+{
+  highlightDUChain(static_cast<DUContext*>(context));
 }
 
 void CppHighlighting::highlightDUChain(DUContext* context) const

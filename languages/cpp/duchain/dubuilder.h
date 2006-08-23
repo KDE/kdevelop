@@ -28,6 +28,7 @@
 class ParseSession;
 class DUChain;
 class DUContext;
+class TopDUContext;
 class CppEditorIntegrator;
 class NameCompiler;
 class Definition;
@@ -58,7 +59,7 @@ public:
    *
    * \param includes contexts to reference from the top context.  The list may be changed by this function.
    */
-  DUContext* build(const KUrl& url, AST *node, DefinitionOrUse definition, QList<DUContext*>* includes = 0);
+  TopDUContext* build(const KUrl& url, AST *node, DefinitionOrUse definition, QList<DUContext*>* includes = 0);
 
 protected:
   virtual void visitNamespace (NamespaceAST *);

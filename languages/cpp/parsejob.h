@@ -28,7 +28,6 @@
 
 class CodeModel;
 class TranslationUnitAST;
-class DUContext;
 class CppLanguageSupport;
 class ParseSession;
 
@@ -54,8 +53,8 @@ public:
     void setCodeModel(CodeModel* model);
     virtual KDevCodeModel *codeModel() const;
 
-    void setDUChain(DUContext* duChain);
-    virtual DUContext *duChain() const;
+    void setDUChain(TopDUContext* duChain);
+    virtual TopDUContext* duChain() const;
 
     void addIncludedFile(const QString& filename);
     const QStringList& includedFiles() const;
@@ -66,7 +65,7 @@ private:
     TranslationUnitAST *m_AST;
     CodeModel *m_model;
     QStringList m_includedFiles;
-    DUContext* m_duContext;
+    TopDUContext* m_duContext;
 };
 
 class ParseJob : public ThreadWeaver::Job

@@ -45,7 +45,9 @@ KDevParseJob::KDevParseJob( const KUrl &url,
         : ThreadWeaver::JobSequence( parent ),
         m_document( url ),
         m_openDocument( 0 ),
-        m_backgroundParser( 0 )
+        m_backgroundParser( 0 ),
+        m_abortRequested( false ),
+        m_aborted( false )
 {}
 
 KDevParseJob::KDevParseJob( KDevDocument *document,
@@ -53,7 +55,9 @@ KDevParseJob::KDevParseJob( KDevDocument *document,
         : ThreadWeaver::JobSequence( parent ),
         m_document( document->url() ),
         m_openDocument( document ),
-        m_backgroundParser( 0 )
+        m_backgroundParser( 0 ),
+        m_abortRequested( false ),
+        m_aborted( false )
 {}
 
 KDevParseJob::~KDevParseJob()
@@ -69,9 +73,9 @@ KDevDocument* KDevParseJob::openDocument() const
     return m_openDocument;
 }
 
-bool KDevParseJob::wasSuccessful() const
+bool KDevParseJob::success() const
 {
-    return codeModel();
+    return !m_aborted;
 }
 
 const QString & KDevParseJob::errorMessage() const
@@ -79,7 +83,7 @@ const QString & KDevParseJob::errorMessage() const
     return m_errorMessage;
 }
 
-DUContext * KDevParseJob::duChain() const
+TopDUContext* KDevParseJob::duChain() const
 {
     // No definition-use chain available by default
     return 0L;
@@ -141,6 +145,22 @@ bool KDevParseJob::addDependency(KDevParseJob* dependency, ThreadWeaver::Job* ac
         return false;
 
     return backgroundParser()->dependencyPolicy()->addDependency(dependency, this, actualDependee);
+}
+
+bool KDevParseJob::abortRequested() const
+{
+    return m_abortRequested;
+}
+
+void KDevParseJob::requestAbort()
+{
+    m_abortRequested = true;
+}
+
+void KDevParseJob::abortJob()
+{
+    m_aborted = true;
+    setFinished(false);
 }
 
 #include "kdevparsejob.moc"

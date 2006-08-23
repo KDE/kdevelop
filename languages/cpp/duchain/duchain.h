@@ -23,7 +23,7 @@
 
 #include <kurl.h>
 
-class DUContext;
+class TopDUContext;
 
 /**
  * Holds references to all top level source file contexts.
@@ -40,8 +40,8 @@ class DUChain : public QObject
   Q_OBJECT
 
 public:
-  DUContext* chainForDocument(const KUrl& document);
-  void addDocumentChain(const KUrl& document, DUContext* chain);
+  TopDUContext* chainForDocument(const KUrl& document);
+  void addDocumentChain(const KUrl& document, TopDUContext* chain);
 
   void clear();
 
@@ -52,7 +52,7 @@ public slots:
 
 private:
   static DUChain* s_chain;
-  QMap<KUrl, DUContext*> m_chains;
+  QMap<KUrl, TopDUContext*> m_chains;
 };
 
 #endif // DUCHAIN_H

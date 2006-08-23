@@ -20,6 +20,9 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
+#include <QMutex>
+#include <QMutexLocker>
+
 #include <kdebug.h>
 #include <kinstance.h>
 #include <kstandarddirs.h>
@@ -54,6 +57,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdev
 CppLanguageSupport::CppLanguageSupport( QObject* parent,
                                         const QStringList& /*args*/ )
         : KDevLanguageSupport( KDevCppSupportFactory::instance(), parent )
+        , m_parseMutex(new QMutex(QMutex::Recursive))
 {
     QString types =
         QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
@@ -168,6 +172,10 @@ void CppLanguageSupport::projectOpened()
 
 void CppLanguageSupport::projectClosed()
 {
+    KDevCore::backgroundParser()->clear(this);
+
+    QMutexLocker lock(parseMutex());
+
     // FIXME This should remove the project files from the backgroundparser
 
     DUChain::self()->clear();
