@@ -56,8 +56,6 @@ private:
     KParts::Factory *findPartFactory( const QString &mimeType,
                                       const QString &partType,
                                       const QString &preferredName = QString::null );
-
-    QHash< QString, KParts::Factory* > m_factoryCache;
     QString m_editor;
     QStringList m_textTypes;
 
