@@ -74,6 +74,7 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
 
 KDevBackgroundParser::~KDevBackgroundParser()
 {
+    m_weaver->dequeue();
     m_weaver->finish();
     delete m_dependencyPolicy;
 }

@@ -28,9 +28,6 @@ class DUContext;
 /**
  * Holds references to all top level source file contexts.
  *
- * Decision was made to have a top-level context for each file, even though
- * it may not be strictly necessary, for simplicity reasons.
- *
  * \todo to pull the sorting off properly, will need to know the location of
  *       the defines used to pull in URLs other than the source file URL.
  *
@@ -45,6 +42,8 @@ class DUChain : public QObject
 public:
   DUContext* chainForDocument(const KUrl& document);
   void addDocumentChain(const KUrl& document, DUContext* chain);
+
+  void clear();
 
   static DUChain* self();
 

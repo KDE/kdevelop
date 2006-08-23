@@ -18,6 +18,8 @@
 
 #include "duchain.h"
 
+#include "kdeveditorintegrator.h"
+
 #include "ducontext.h"
 
 // kate: indent-width 2;
@@ -45,6 +47,15 @@ DUChain * DUChain::self( )
     s_chain = new DUChain();
 
   return s_chain;
+}
+
+void DUChain::clear()
+{
+  foreach (DUContext* context, m_chains)
+    KDevEditorIntegrator::releaseTopRange(context->textRangePtr());
+
+  qDeleteAll(m_chains);
+  m_chains.clear();
 }
 
 #include "duchain.moc"

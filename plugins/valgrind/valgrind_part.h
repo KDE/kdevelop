@@ -10,8 +10,9 @@
 #include <qstringlist.h>
 #include <kdevplugin.h>
 
-class ValgrindWidget;
-class KProcess;
+class QTreeView;
+class ValgrindModel;
+class ValgrindControl;
 
 class ValgrindPart : public KDevPlugin
 {
@@ -38,24 +39,21 @@ private slots:
   void projectOpened();
 
 private:
-  void getActiveFiles();
-  void appendMessage( const QString& message );
-  void appendMessages( const QStringList& lines );
-  void receivedString( const QString& str );
   void clear();
+
   QString _lastExec, _lastParams, _lastValExec, _lastValParams,
       _lastCtExec, _lastCtParams, _lastKcExec;
   KProcess* proc;
-  QString currentMessage;
-  QString lastPiece;
-  QStringList activeFiles;
   int currentPid;
-  QPointer<ValgrindWidget> m_widget;
+  QPointer<QTreeView> m_treeView;
   struct {
       bool runKc;
       QString kcPath;
 //      QString kcWorkDir;
   } kcInfo;
+
+  ValgrindModel* m_model;
+  ValgrindControl* m_control;
 };
 
 

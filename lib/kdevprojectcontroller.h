@@ -27,6 +27,7 @@ Boston, MA 02110-1301, USA.
 #include <kurl.h>
 
 class KDevProject;
+class KRecentFilesAction;
 
 class KDEVINTERFACES_EXPORT KDevProjectController : public QObject
 {
@@ -79,6 +80,7 @@ private:
     KUrl m_projectsDir;
     bool m_isLoaded;
     KDevProject* m_project;
+    KRecentFilesAction *m_recentAction;
 };
 
 #endif

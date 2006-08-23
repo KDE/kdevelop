@@ -49,7 +49,8 @@ KDevProjectController::KDevProjectController( QObject *parent )
         m_globalFile( KUrl() ),
         m_projectsDir( KUrl() ),
         m_isLoaded( false ),
-        m_project( 0 )
+        m_project( 0 ),
+        m_recentAction( 0 )
 {}
 
 KDevProjectController::~KDevProjectController()
@@ -81,14 +82,13 @@ void KDevProjectController::init()
     KConfig * config = KDevConfig::standard();
     config->setGroup( "General Options" );
 
-    KRecentFilesAction *recentAction;
-    recentAction =
+    m_recentAction =
         KStdAction::openRecent( this, SLOT( openProject( const KUrl& ) ),
                                 ac, "project_open_recent" );
-    recentAction->setToolTip( i18n( "Open recent project" ) );
-    recentAction->setWhatsThis(
+    m_recentAction->setToolTip( i18n( "Open recent project" ) );
+    m_recentAction->setWhatsThis(
         i18n( "<b>Open recent project</b><p>Opens recently opened project." ) );
-    recentAction->loadEntries( config, "RecentProjects" );
+    m_recentAction->loadEntries( config, "RecentProjects" );
 }
 
 bool KDevProjectController::isLoaded() const
@@ -183,10 +183,10 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
     action = ac->action( "project_close" );
     action->setEnabled( true );
 
-    KRecentFilesAction *recentAction;
-    recentAction = qobject_cast<KRecentFilesAction *>( ac->action( "project_open_recent" ) );
-    recentAction->addUrl( url );
-    recentAction->saveEntries( KDevConfig::standard(), "RecentProjects" );
+    KRecentFilesAction *m_recentAction;
+    m_recentAction = qobject_cast<KRecentFilesAction *>( ac->action( "project_open_recent" ) );
+    m_recentAction->addUrl( url );
+    m_recentAction->saveEntries( KDevConfig::standard(), "RecentProjects" );
 
     m_globalFile = url;
 
@@ -255,6 +255,8 @@ bool KDevProjectController::closeProject()
     //     KDevCore::pluginController() ->changeProfile( m_oldProfileName );
 
     unloadProjectPart();
+
+    m_recentAction->setCurrentAction(0);
 
     return true;
 }

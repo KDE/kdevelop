@@ -38,6 +38,8 @@ namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterfac
  * Uses a disguised singleton + stateful design.
  *
  * \todo introduce stacks for the state?
+ *
+ * \todo non-loaded documents don't trigger the removeDocument call...
  */
 class KDEVINTERFACES_EXPORT KDevEditorIntegrator
 {
@@ -95,9 +97,9 @@ public:
   KTextEditor::Range* topRange(TopRangeType type);
 
   /**
-   * Deletes a toplevel \a range.
+   * Releases a toplevel \a range.  The range should be deleted by the caller.
    */
-  static void deleteTopRange(KTextEditor::Range* range);
+  static void releaseTopRange(KTextEditor::Range* range);
 
   enum Edge {
     FrontEdge,

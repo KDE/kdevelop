@@ -40,6 +40,8 @@
 #include "parser/ast.h"
 #include "parser/parsesession.h"
 
+#include "duchain/duchain.h"
+
 #include "parsejob.h"
 #include "codeproxy.h"
 #include "codedelegate.h"
@@ -167,6 +169,8 @@ void CppLanguageSupport::projectOpened()
 void CppLanguageSupport::projectClosed()
 {
     // FIXME This should remove the project files from the backgroundparser
+
+    DUChain::self()->clear();
 }
 
 void CppLanguageSupport::releaseAST( KDevAST *ast)

@@ -351,7 +351,7 @@ private slots:
     DUContext* ctorImplCtx = structA->childContexts()[1];
     QVERIFY(ctorImplCtx->parentContext());
     QCOMPARE(ctorImplCtx->importedParentContexts().count(), 1);
-    QCOMPARE(ctorImplCtx->childContexts().count(), 0);
+    QCOMPARE(ctorImplCtx->childContexts().count(), 1);
     QCOMPARE(ctorImplCtx->localDefinitions().count(), 0);
     QVERIFY(ctorImplCtx->localScopeIdentifier().isEmpty());
 
@@ -455,7 +455,7 @@ private slots:
 
     QCOMPARE(top->usingNamespaces().count(), 1);
     QCOMPARE(top->usingNamespaces().first()->nsIdentifier, QualifiedIdentifier("foo"));
-    QCOMPARE(*top->usingNamespaces().first()->origin, Cursor(0, 47));
+    QCOMPARE(top->usingNamespaces().first()->textCursor(), Cursor(0, 47));
 
     DUContext* fooCtx = top->childContexts().first();
     QCOMPARE(fooCtx->childContexts().count(), 0);

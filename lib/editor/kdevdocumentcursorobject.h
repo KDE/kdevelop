@@ -16,46 +16,43 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVDOCUMENTRANGEOBJECT_H
-#define KDEVDOCUMENTRANGEOBJECT_H
+#ifndef KDEVDOCUMENTCURSOROBJECT_H
+#define KDEVDOCUMENTCURSOROBJECT_H
 
-#include <ktexteditor/range.h>
-#include <ktexteditor/rangefeedback.h>
+#include <ktexteditor/cursor.h>
+#include <ktexteditor/cursorfeedback.h>
 
 #include "kdevdocumentcursor.h"
-#include "kdevdocumentrange.h"
 
 /**
  * Base class for any object which has an associated range of text.
  *
  * This allows text without a currently loaded text editor to be represented.
  */
-class KDEVINTERFACES_EXPORT KDevDocumentRangeObject : public KTextEditor::SmartRangeWatcher
+class KDEVINTERFACES_EXPORT KDevDocumentCursorObject : public KTextEditor::SmartCursorWatcher
 {
 public:
-  KDevDocumentRangeObject(KTextEditor::Range* range);
-  virtual ~KDevDocumentRangeObject();
+  KDevDocumentCursorObject(KTextEditor::Cursor* cursor);
+  virtual ~KDevDocumentCursorObject();
 
-  void setTextRange(KTextEditor::Range* range);
+  void setTextCursor(KTextEditor::Cursor* cursor);
 
-  KTextEditor::Range& textRange();
-  const KTextEditor::Range& textRange() const;
-  const KDevDocumentRange& textDocRange() const;
-  KTextEditor::Range* textRangePtr() const;
-  KTextEditor::SmartRange* smartRange() const;
+  KTextEditor::Cursor& textCursor();
+  const KTextEditor::Cursor& textCursor() const;
+  const KDevDocumentCursor& textDocCursor() const;
+  KTextEditor::Cursor* textCursorPtr() const;
+  KTextEditor::SmartCursor* smartCursor() const;
 
   KUrl url() const;
-  static KUrl url(const KTextEditor::Range* range);
+  static KUrl url(const KTextEditor::Cursor* range);
 
-  bool contains(const KDevDocumentCursor& cursor) const;
-
-  virtual void rangeDeleted(KTextEditor::SmartRange* range);
+  virtual void deleted(KTextEditor::SmartCursor* cursor);
 
 private:
-  KTextEditor::Range* m_range;
+  KTextEditor::Cursor* m_cursor;
   KUrl m_url;
 };
 
-#endif // RANGEOBJECT_H
+#endif // KDEVDOCUMENTCURSOROBJECT_H
 
 // kate: indent-width 2;

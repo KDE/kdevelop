@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>480</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" >
@@ -45,7 +45,11 @@
        </widget>
       </item>
       <item row="0" column="1" >
-       <widget class="KUrlRequester" name="executableEdit" />
+       <widget class="KUrlRequester" name="executableEdit" >
+        <property name="focusPolicy" >
+         <enum>Qt::TabFocus</enum>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0" >
        <widget class="QLabel" name="textLabel3" >
@@ -109,7 +113,11 @@
            </widget>
           </item>
           <item row="1" column="1" >
-           <widget class="KUrlRequester" name="ctExecutableEdit" />
+           <widget class="KUrlRequester" name="ctExecutableEdit" >
+            <property name="focusPolicy" >
+             <enum>Qt::TabFocus</enum>
+            </property>
+           </widget>
           </item>
           <item row="2" column="1" >
            <widget class="KLineEdit" name="ctParamEdit" />
@@ -143,7 +151,11 @@
            <number>6</number>
           </property>
           <item row="0" column="1" >
-           <widget class="KUrlRequester" name="kcExecutableEdit" />
+           <widget class="KUrlRequester" name="kcExecutableEdit" >
+            <property name="focusPolicy" >
+             <enum>Qt::TabFocus</enum>
+            </property>
+           </widget>
           </item>
           <item row="0" column="0" >
            <widget class="QLabel" name="textLabel4_2_2" >
@@ -268,7 +280,11 @@
              <widget class="KLineEdit" name="valParamEdit" />
             </item>
             <item row="0" column="1" >
-             <widget class="KUrlRequester" name="valExecutableEdit" />
+             <widget class="KUrlRequester" name="valExecutableEdit" >
+              <property name="focusPolicy" >
+               <enum>Qt::TabFocus</enum>
+              </property>
+             </widget>
             </item>
             <item row="0" column="0" >
              <widget class="QLabel" name="textLabel4" >
@@ -309,16 +325,16 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

@@ -19,6 +19,8 @@
 
 #include "valgrindmodel.h"
 
+#include <kdebug.h>
+
 ValgrindError::~ ValgrindError( )
 {
   delete stack;
@@ -26,14 +28,14 @@ ValgrindError::~ ValgrindError( )
 }
 
 ValgrindError::ValgrindError(ValgrindModel* parent)
-  : ValgrindItem(parent)
-  , uniqueId(-1)
+  : uniqueId(-1)
   , threadId(-1)
   , kind(Unknown)
   , leakedBytes(0L)
   , leakedBlocks(0L)
   , stack(0L)
   , auxStack(0L)
+  , m_parent(parent)
 {
 }
 
@@ -76,12 +78,12 @@ void ValgrindError::setKind(const QString& s)
 }
 
 ValgrindFrame::ValgrindFrame(ValgrindStack* parent)
-  : ValgrindItem(parent)
+  : m_parent(parent)
 {
 }
 
 ValgrindStack::ValgrindStack(ValgrindError* parent)
-  : ValgrindItem(parent)
+  : m_parent(parent)
 {
 }
 
@@ -97,6 +99,8 @@ ValgrindModel::~ ValgrindModel( )
 
 bool ValgrindModel::startElement( const QString &, const QString & localName, const QString &, const QXmlAttributes &)
 {
+  kDebug() << k_funcinfo << localName << endl;
+
   m_buffer.clear();
 
   State newState = Unknown;
@@ -139,17 +143,13 @@ bool ValgrindModel::startElement( const QString &, const QString & localName, co
   m_stateStack.push(newState);
   m_state = newState;
   ++m_depth;
+  return true;
 }
 
 bool ValgrindModel::startDocument( )
 {
-  m_state = Root;
-  m_depth = 0;
-  m_currentError = 0L;
-  m_currentStack = 0L;
-  m_currentFrame = 0L;
-
-  reset();
+  clear();
+  return true;
   return true;
 }
 
@@ -170,7 +170,9 @@ bool ValgrindModel::endElement( const QString & namespaceURI, const QString & lo
       else if (localName == "usercomment")
         userComment = m_buffer;
       else if (localName == "error") {
+        beginInsertRows(QModelIndex(), errors.count(), errors.count());
         errors.append(m_currentError);
+        endInsertRows();
         m_currentError = 0L;
       }
       break;
@@ -196,17 +198,23 @@ bool ValgrindModel::endElement( const QString & namespaceURI, const QString & lo
       else if (localName == "auxwhat")
         m_currentError->auxWhat = m_buffer;
       else if (localName == "stack") {
+        beginInsertRows(indexForItem(m_currentError), 0, 0);
         m_currentError->stack = m_currentStack;
+        endInsertRows();
         m_currentStack = 0L;
       } else if (localName == "auxstack") {
+        beginInsertRows(indexForItem(m_currentError), m_currentError->stack ? 1 : 0, m_currentError->stack ? 1 : 0);
         m_currentError->auxStack = m_currentStack;
+        endInsertRows();
         m_currentStack = 0L;
       }
       break;
 
     case Stack:
       if (localName == "frame") {
+        beginInsertRows(indexForItem(m_currentStack), m_currentStack->frames.count(), m_currentStack->frames.count());
         m_currentStack->frames.append(m_currentFrame);
+        endInsertRows();
         m_currentFrame = 0L;
       }
       break;
@@ -231,6 +239,7 @@ bool ValgrindModel::endElement( const QString & namespaceURI, const QString & lo
   }
 
   --m_depth;
+  return true;
 }
 
 bool ValgrindModel::characters( const QString & ch )
@@ -241,32 +250,140 @@ bool ValgrindModel::characters( const QString & ch )
 
 int ValgrindModel::columnCount ( const QModelIndex & parent ) const
 {
+  return numColumns;
 }
 
 QVariant ValgrindModel::data ( const QModelIndex & index, int role ) const
 {
+  ValgrindItem* item = itemForIndex(index);
+
+  switch (role) {
+    case Qt::DisplayRole:
+      switch (index.column()) {
+        case Index:
+          if (ValgrindError* e = dynamic_cast<ValgrindError*>(item))
+            return e->uniqueId;
+          else if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item))
+            return f->line;
+          break;
+        case Function:
+          if (ValgrindError* e = dynamic_cast<ValgrindError*>(item))
+            return e->what;
+          else if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item))
+            return f->fn;
+          break;
+        case Source:
+          if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item))
+            return f->url();
+          break;
+        case Object:
+          if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item))
+            return f->obj;
+          break;
+      }
+      break;
+  }
+
+  return QVariant();
 }
 
-QModelIndex ValgrindModel::index ( int row, int column, const QModelIndex & parent ) const
+QModelIndex ValgrindModel::index ( int row, int column, const QModelIndex & p ) const
 {
+  if (row < 0 || column < 0 || column >= numColumns)
+    return QModelIndex();
+
+  ValgrindItem* parent = itemForIndex(p);
+
+  if (ValgrindError* e = dynamic_cast<ValgrindError*>(parent)) {
+    if (row < 2)
+      return createIndex(row, column, row ? e->auxStack : e->stack);
+
+  } else if (ValgrindStack* s = dynamic_cast<ValgrindStack*>(parent)) {
+    if (row < s->frames.count())
+      return createIndex(row, column, s->frames[row]);
+  }
+
+  return QModelIndex();
 }
 
 QModelIndex ValgrindModel::parent ( const QModelIndex & index ) const
 {
+  ValgrindItem* item = itemForIndex(index);
+  if (!item)
+    return QModelIndex();
+
+  return indexForItem(item->parent(), 0);
 }
 
-int ValgrindModel::rowCount ( const QModelIndex & parent ) const
+int ValgrindModel::rowCount ( const QModelIndex & p ) const
 {
+  ValgrindItem* parent = itemForIndex(p);
+
+  if (!parent)
+    return errors.count();
+
+  else if (ValgrindError* e = dynamic_cast<ValgrindError*>(parent))
+    if (e->stack && e->auxStack)
+      return 2;
+    else if (e->stack)
+      return 1;
+    else
+      return 0;
+
+  else if (ValgrindStack* s = dynamic_cast<ValgrindStack*>(parent))
+    return s->frames.count();
+
+  return 0;
 }
 
-ValgrindItem::ValgrindItem(ValgrindItem* parent)
-  : m_parent(parent)
+void ValgrindModel::clear( )
 {
+  m_state = Root;
+  m_depth = 0;
+  m_currentError = 0L;
+  m_currentStack = 0L;
+  m_currentFrame = 0L;
+  m_stateStack.clear();
+  m_buffer.clear();
+  m_protocolVersion = pid = ppid = -1;
+  tool.clear();
+  userComment.clear();
+  preamble.clear();
+  valgrindArgs.clear();
+  programArgs.clear();
+
+  qDeleteAll(errors);
+  reset();
 }
 
-ValgrindItem* ValgrindItem::parent() const
+QModelIndex ValgrindModel::indexForItem( ValgrindItem* item, int column ) const
 {
-  return m_parent;
+  int index = -1;
+
+  if (ValgrindError* e = dynamic_cast<ValgrindError*>(item))
+    index = e->parent()->errors.indexOf(e);
+  else if (ValgrindStack* s = dynamic_cast<ValgrindStack*>(item))
+    index = (s == s->parent()->stack) ? 0 : 1;
+  else if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item))
+    index = f->parent()->frames.indexOf(f);
+
+  if (index != -1)
+    return createIndex(index, column, item);
+
+  return QModelIndex();
+}
+
+ValgrindItem* ValgrindModel::itemForIndex(const QModelIndex& index) const
+{
+  if (index.internalPointer())
+    return static_cast<ValgrindItem*>(index.internalPointer());
+
+  return 0L;
+}
+
+KUrl ValgrindFrame::url() const
+{
+  return KUrl(KUrl::fromPath(dir), file);
 }
 
 #include "valgrindmodel.moc"

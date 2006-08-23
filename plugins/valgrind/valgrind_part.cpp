@@ -1,7 +1,12 @@
+#include <unistd.h>
+
 #include <QRegExp>
 #include <QFile>
-//Added by qt3to4:
-#include <QTextStream>
+#include <QTreeView>
+#include <QXmlInputSource>
+#include <QXmlSimpleReader>
+#include <QTcpSocket>
+#include <QTcpServer>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -18,16 +23,20 @@
 #include "kdevplugininfo.h"
 #include "kdevgenericfactory.h"
 
-#include "valgrind_widget.h"
 #include "valgrind_part.h"
 #include "valgrind_dialog.h"
-#include "valgrinditem.h"
+#include "valgrindmodel.h"
 
 typedef KGenericFactory<ValgrindPart> ValgrindFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevvalgrind, ValgrindFactory( "kdevvalgrind" ) )
 
 ValgrindPart::ValgrindPart( QObject *parent, const QStringList& )
     : KDevPlugin( ValgrindFactory::instance(), parent)
+  , m_inputSource(0L)
+  , m_xmlReader(new QXmlSimpleReader())
+  , m_model(new ValgrindModel())
+  , m_valgrindServer(0L)
+  , m_valgrindConnection(0L)
 {
   setXMLFile( "kdevpart_valgrind.rc" );
 
@@ -44,11 +53,12 @@ ValgrindPart::ValgrindPart( QObject *parent, const QStringList& )
 //   connect( KDevApi::self()->core(), SIGNAL(projectOpened()),
 //            this, SLOT(projectOpened()) );
 
-  m_widget = new ValgrindWidget( this );
-  m_widget->setIcon( SmallIcon("fork") );
-  m_widget->setCaption( i18n("Valgrind Output"));
+  m_treeView = new QTreeView();
+  m_treeView->setWindowIcon(KIcon("fork"));
+  m_treeView->setWindowTitle(i18n("Valgrind Output"));
+  m_treeView->setModel(m_model);
 
-  m_widget->setWhatsThis( i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br>"
+  m_treeView->setWhatsThis( i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br>"
     "use of uninitialized memory<br>"
     "reading/writing memory after it has been free'd<br>"
     "reading/writing off the end of malloc'd blocks<br>"
@@ -99,56 +109,13 @@ void ValgrindPart::loadOutput()
   }
 
   clear();
-  getActiveFiles();
 
+  /*FIXME
   QTextStream stream( &f );
   while ( !stream.atEnd() ) {
     receivedString( stream.readLine() + "\n" );
-  }
+  }*/
   f.close();
-}
-
-void ValgrindPart::getActiveFiles()
-{
-  activeFiles.clear();
-  /* FIXME port when replacement for allFiles()
-  if ( KDevApi::self()->project() ) {
-    QStringList projectFiles = KDevApi::self()->project()->allFiles();
-    QString projectDirectory = KDevApi::self()->project()->projectDirectory();
-    KUrl url;
-    for ( QStringList::Iterator it = projectFiles.begin(); it != projectFiles.end(); ++it ) {
-      KUrl url( projectDirectory + "/" + (*it) );
-      url.cleanPath();
-      activeFiles += url.path();
-      kDebug() << "set project file: " << url.path().latin1() << endl;
-    }
-  }
-  */
-}
-
-static void guessActiveItem( ValgrindItem& item, const QStringList activeFiles )
-{
-  if ( activeFiles.isEmpty() && item.backtrace().isEmpty() )
-    return;
-  for ( ValgrindItem::BacktraceList::Iterator it = item.backtrace().begin(); it != item.backtrace().end(); ++it ) {
-    // active: first line of backtrace that lies in project source file
-    for ( QStringList::ConstIterator it2 = activeFiles.begin(); it2 != activeFiles.end(); ++it2 ) {
-      if ( (*it).url() == (*it2) ) {
-        (*it).setHighlighted( true );
-        return;
-      }
-    }
-  }
-}
-
-void ValgrindPart::appendMessage( const QString& message )
-{
-  if ( message.isEmpty() )
-    return;
-
-  ValgrindItem item( message );
-  guessActiveItem( item, activeFiles );
-  m_widget->addMessage( item );
 }
 
 void ValgrindPart::slotExecValgrind()
@@ -212,33 +179,8 @@ void ValgrindPart::slotStopButtonClicked( KDevPlugin* which )
 
 void ValgrindPart::clear()
 {
-  m_widget->clear();
-  currentMessage = QString();
+  m_model->clear();
   currentPid = -1;
-  lastPiece = QString();
-}
-
-void ValgrindPart::runValgrind( const QString& exec, const QString& params, const QString& valExec, const QString& valParams )
-{
-  if ( proc->isRunning() ) {
-    KMessageBox::sorry( 0, i18n( "There is already an instance of valgrind running." ) );
-    return;
-    /// @todo - ask for forced kill
-  }
-
-  clear();
-
-  getActiveFiles();
-
-//  proc->setWorkingDirectory(KUrl(exec).directory());
-  proc->clearArguments();
-  *proc << valExec << /*"--tool=memcheck" << */valParams << exec << params;
-  proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
-  KDevCore::mainWindow()->raiseView( m_widget );
-//   KDevApi::self()->core()->running( this, true ); FIXME find replacement
-
-  _lastExec = exec;
-  _lastParams = params;
 }
 
 void ValgrindPart::receivedStdout( KProcess*, char* /* msg */, int /* len */ )
@@ -248,69 +190,13 @@ void ValgrindPart::receivedStdout( KProcess*, char* /* msg */, int /* len */ )
 
 void ValgrindPart::receivedStderr( KProcess*, char* msg, int len )
 {
-  receivedString( QString::fromLocal8Bit( msg, len ) );
+  //receivedString( QString::fromLocal8Bit( msg, len ) );
 }
 
-void ValgrindPart::receivedString( const QString& str )
+void ValgrindPart::slotReadFromValgrind( )
 {
-  QString rmsg = lastPiece + str;
-  QStringList lines = rmsg.split( "\n" );
-
-//  kDebug() << "got: " << QString::fromLocal8Bit( msg, len ) << endl;
-
-  if ( !rmsg.endsWith( "\n" ) ) {
-    // the last message is trucated, we'll receive
-    // the rest in the next call
-    lastPiece = lines.back();
-    lines.pop_back();
-  } else {
-    lastPiece = QString();
-  }
-  appendMessages( lines );
-}
-
-void ValgrindPart::appendMessages( const QStringList& lines )
-{
-  QRegExp valRe( "==(\\d+)== (.*)" );
-
-  for ( QStringList::ConstIterator it = lines.begin(); it != lines.end(); ++it ) {
-    if ( valRe.indexIn( *it ) < 0 )
-      continue;
-
-    int cPid = valRe.cap( 1 ).toInt();
-
-    if ( valRe.cap( 2 ).isEmpty() ) {
-      appendMessage( currentMessage );
-      currentMessage = QString();
-    } else if ( cPid != currentPid ) {
-      appendMessage( currentMessage );
-      currentMessage = *it;
-      currentPid = cPid;
-    } else {
-      if ( !currentMessage.isEmpty() )
-        currentMessage += "\n";
-      currentMessage += *it;
-    }
-  }
-}
-
-void ValgrindPart::processExited( KProcess* p )
-{
-  if ( p == proc ) {
-    appendMessage( currentMessage + lastPiece );
-    currentMessage = QString();
-    lastPiece = QString();
-//     KDevApi::self()->core()->running( this, false ); FIXME find replacement
-
-    if (kcInfo.runKc)
-    {
-        KProcess *kcProc = new KProcess;
-//        kcProc->setWorkingDirectory(kcInfo.kcWorkDir);
-        *kcProc << kcInfo.kcPath;
-        *kcProc << QString("cachegrind.out.%1").arg(p->pid());
-        kcProc->start(KProcess::DontCare);
-    }
-  }
+  kDebug() << k_funcinfo << endl;
+  m_xmlReader->parseContinue();
 }
 
 void ValgrindPart::restorePartialProjectSession( const QDomElement* el )
@@ -356,6 +242,19 @@ void ValgrindPart::savePartialProjectSession( QDomElement* el )
   el->appendChild( valElem );
   el->appendChild( ctElem );
   el->appendChild( kcElem );
+}
+
+void ValgrindPart::newValgrindConnection( )
+{
+  QTcpSocket* sock = m_valgrindServer->nextPendingConnection();
+  kDebug() << k_funcinfo << sock << endl;
+  if (sock && !m_valgrindConnection) {
+    m_valgrindConnection = sock;
+    delete m_inputSource;
+    m_inputSource = new QXmlInputSource(sock);
+    m_xmlReader->parse(m_inputSource, true);
+    connect(sock, SIGNAL(readyRead()), SLOT(slotReadFromValgrind()));
+  }
 }
 
 #include "valgrind_part.moc"

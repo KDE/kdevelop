@@ -22,12 +22,13 @@
 #include <QHash>
 
 #include "kdevdocumentrangeobject.h"
-#include "kdevdocumentcursor.h"
+#include "kdevdocumentcursorobject.h"
 #include "identifier.h"
 
 class AbstractType;
 class Definition;
 class DUChain;
+class DefinitionUse;
 
 /**
  * A single context in source code, represented as a node in a
@@ -134,8 +135,11 @@ public:
    */
   void deleteChildContextsRecursively();
 
-  struct UsingNS {
-    KTextEditor::Cursor* origin;
+  class UsingNS : public KDevDocumentCursorObject
+  {
+  public:
+    UsingNS(KTextEditor::Cursor* cursor);
+
     QualifiedIdentifier nsIdentifier;
   };
   void addUsingNamespace(KTextEditor::Cursor* cursor, const QualifiedIdentifier& nsIdentifier);
@@ -255,13 +259,13 @@ public:
   /**
    * Return a list of uses which don't have a corresponding definition.
    */
-  const QList<KTextEditor::Range*>& orphanUses() const;
+  const QList<DefinitionUse*>& orphanUses() const;
 
   /**
    * Add an orphan use (a use which doesn't have a corresponding definition)
    * to this context.
    */
-  void addOrphanUse(KTextEditor::Range* orphan);
+  void addOrphanUse(DefinitionUse* orphan);
 
   /**
    * Clear and delete all orphan uses.
@@ -298,7 +302,7 @@ private:
   QList<Definition*> m_localDefinitions;
 
   QList<UsingNS*> m_usingNamespaces;
-  QList<KTextEditor::Range*> m_orphanUses;
+  QList<DefinitionUse*> m_orphanUses;
 };
 
 #endif // DUCONTEXT_H

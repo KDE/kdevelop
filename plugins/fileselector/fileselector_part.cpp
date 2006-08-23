@@ -4,7 +4,6 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <qslider.h>
-#include <q3vbox.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -86,7 +85,7 @@ void FileSelectorPart::slotConfigWidget( KDialog * dlg )
     //FIXME PORT!
     /*    KVBox* vbox = dlg->addVBoxPage( i18n("File Selector"), i18n("File Selector"), BarIcon( info()->icon(), K3Icon::SizeMedium) );
         KFSConfigPage* page = new KFSConfigPage( vbox, 0, m_filetree );
-        connect( dlg, SIGNAL( okClicked( ) ), page, SLOT( apply( ) ) );*/ 
+        connect( dlg, SIGNAL( okClicked( ) ), page, SLOT( apply( ) ) );*/
     // ### implement reload
 }
 

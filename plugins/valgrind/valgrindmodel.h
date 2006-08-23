@@ -17,13 +17,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEV_VALGRIND_MODEL
-#define KDEV_VALGRIND_MODEL
+#ifndef KDEV_VALGRIND_MODEL_H
+#define KDEV_VALGRIND_MODEL_H
 
 #include <QHash>
 #include <QStack>
 #include <QXmlDefaultHandler>
 #include <QAbstractItemModel>
+
+#include <kurl.h>
 
 class ValgrindError;
 class ValgrindFrame;
@@ -32,12 +34,8 @@ class ValgrindStack;
 class ValgrindItem
 {
 public:
-  ValgrindItem(ValgrindItem* parent = 0L);
-
-  ValgrindItem* parent() const;
-
-private:
-  ValgrindItem* m_parent;
+  virtual ~ValgrindItem() {}
+  virtual ValgrindItem* parent() const = 0;
 };
 
 /**
@@ -53,7 +51,21 @@ class ValgrindModel : public QAbstractItemModel, public QXmlDefaultHandler, publ
 public:
   virtual ~ValgrindModel();
 
+  enum Columns {
+    Index = 0,
+    Function,
+    Source,
+    Object
+  };
+  static const int numColumns = 4;
+
+  // Item
+  virtual ValgrindItem* parent() const { return 0L; }
+
   // Model
+  QModelIndex indexForItem(ValgrindItem* item, int column = 0) const;
+  ValgrindItem* itemForIndex(const QModelIndex& index) const;
+
   virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const;
   virtual QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
   virtual QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
@@ -65,6 +77,9 @@ public:
   virtual bool endElement( const QString & namespaceURI, const QString & localName, const QString & qName );
   virtual bool startDocument();
   virtual bool startElement( const QString & namespaceURI, const QString & localName, const QString & qName, const QXmlAttributes & atts );
+
+  // Manipulation
+  void clear();
 
 private:
   enum State {
@@ -102,29 +117,13 @@ private:
   ValgrindFrame* m_currentFrame;
 };
 
-class ValgrindFrame : public ValgrindItem
-{
-public:
-  ValgrindFrame(ValgrindStack* parent);
-
-  int instructionPointer, line;
-  QString obj, fn, dir, file;
-};
-
-class ValgrindStack : public ValgrindItem
-{
-public:
-  ValgrindStack(ValgrindError* parent);
-  virtual ~ValgrindStack();
-
-  QList<ValgrindFrame*> frames;
-};
-
 class ValgrindError : public ValgrindItem
 {
 public:
   ValgrindError(ValgrindModel* parent);
   virtual ~ValgrindError();
+
+  virtual ValgrindModel* parent() const { return m_parent; }
 
   void setKind(const QString& s);
 
@@ -155,6 +154,33 @@ public:
 
   ValgrindStack* stack;
   ValgrindStack* auxStack;
+  ValgrindModel* m_parent;
+};
+
+class ValgrindStack : public ValgrindItem
+{
+public:
+  ValgrindStack(ValgrindError* parent);
+  virtual ~ValgrindStack();
+
+  virtual ValgrindError* parent() const { return m_parent; }
+
+  QList<ValgrindFrame*> frames;
+  ValgrindError* m_parent;
+};
+
+class ValgrindFrame : public ValgrindItem
+{
+public:
+  ValgrindFrame(ValgrindStack* parent);
+
+  virtual ValgrindStack* parent() const { return m_parent; }
+
+  KUrl url() const;
+
+  int instructionPointer, line;
+  QString obj, fn, dir, file;
+  ValgrindStack* m_parent;
 };
 
 #endif

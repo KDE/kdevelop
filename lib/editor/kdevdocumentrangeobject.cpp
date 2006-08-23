@@ -21,8 +21,6 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 
-#include "kdevdocumentrange.h"
-
 using namespace KTextEditor;
 
 KDevDocumentRangeObject::KDevDocumentRangeObject(Range* range)
@@ -56,8 +54,10 @@ void KDevDocumentRangeObject::setTextRange( Range * range )
 
   m_range = range;
 
-  if (m_range->isSmartRange())
+  if (m_range->isSmartRange()) {
     m_range->toSmartRange()->addWatcher(this);
+    m_url = url(m_range);
+  }
 }
 
 const Range& KDevDocumentRangeObject::textRange( ) const
@@ -112,5 +112,5 @@ void KDevDocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
 {
   Q_ASSERT(range == m_range);
   //Q_ASSERT(false);
-  m_range = new KDevDocumentRange(url(), *m_range);
+  m_range = new KDevDocumentRange(m_url, *m_range);
 }

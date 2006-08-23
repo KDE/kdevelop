@@ -55,6 +55,7 @@ set(kdevplatform_LIB_SRCS
     kdevcodehighlighting.cpp
     editor/kdeveditorintegrator.cpp
     editor/kdevdocumentrangeobject.cpp
+    editor/kdevdocumentcursorobject.cpp
     editor/kdevdocumentcursor.cpp
     editor/kdevdocumentrange.cpp
     backgroundparser/kdevparserdependencypolicy.cpp
@@ -120,6 +121,7 @@ install(FILES
     kdevcodehighlighting.h
     editor/kdeveditorintegrator.h
     editor/kdevdocumentrangeobject.h
+    editor/kdevdocumentcursorobject.h
     editor/kdevdocumentcursor.h
     editor/kdevdocumentrange.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/

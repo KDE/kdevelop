@@ -25,6 +25,7 @@
 #include <kurl.h>
 
 #include <ktexteditor/range.h>
+#include <ktexteditor/rangefeedback.h>
 
 #include "kdevdocumentcursor.h"
 
@@ -33,9 +34,14 @@ class KDevDocumentCursor;
 
 namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterface; }
 
-class KDevEditorIntegratorPrivate : public QObject
+class KDevEditorIntegratorPrivate : public QObject, public KTextEditor::SmartRangeWatcher
 {
   Q_OBJECT
+
+public:
+  virtual ~KDevEditorIntegratorPrivate();
+
+  virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
 public Q_SLOTS:
   /**

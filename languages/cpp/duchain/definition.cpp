@@ -22,6 +22,7 @@
 #include <ktexteditor/document.h>
 
 #include "ducontext.h"
+#include "definitionuse.h"
 
 using namespace KTextEditor;
 
@@ -33,17 +34,24 @@ Definition::Definition(KTextEditor::Range* range, Scope scope )
 {
 }
 
-void Definition::removeUse( Range* range )
+Definition::~Definition()
 {
+  qDeleteAll(m_uses);
+}
+
+void Definition::removeUse( DefinitionUse* range )
+{
+  range->setDefinition(0L);
   m_uses.removeAll(range);
 }
 
-void Definition::addUse( Range* range )
+void Definition::addUse( DefinitionUse* range )
 {
+  range->setDefinition(this);
   m_uses.append(range);
 }
 
-const QList< Range* > & Definition::uses( ) const
+const QList< DefinitionUse* > & Definition::uses( ) const
 {
   return m_uses;
 }

@@ -9,6 +9,7 @@ include_directories(${CMAKE_SOURCE_DIR}/languages/cpp/parser ${CMAKE_SOURCE_DIR}
 set(kdevplatform_editor_LIB_SRCS
     ../../../../lib/editor/kdeveditorintegrator.cpp
     ../../../../lib/editor/kdevdocumentrangeobject.cpp
+    ../../../../lib/editor/kdevdocumentcursorobject.cpp
     ../../../../lib/editor/kdevdocumentcursor.cpp
     ../../../../lib/editor/kdevdocumentrange.cpp
 )
@@ -19,6 +20,7 @@ set(kdevcppduchain_SRCS
     ../../duchain/dubuilder.cpp
     ../../duchain/ducontext.cpp
     ../../duchain/definition.cpp
+    ../../duchain/definitionuse.cpp
     ../../duchain/dumpchain.cpp
 )
 

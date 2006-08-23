@@ -23,6 +23,7 @@
 #include "typesystem.h"
 #include "definition.h"
 #include "duchain.h"
+#include "definitionuse.h"
 
 #include "dumpchain.h"
 
@@ -59,10 +60,7 @@ DUContext::~DUContext( )
 
   deleteOrphanUses();
 
-  foreach (UsingNS* use, m_usingNamespaces) {
-    delete use->origin;
-    delete use;
-  }
+  qDeleteAll(m_usingNamespaces);
 }
 
 const QList< DUContext * > & DUContext::childContexts( ) const
@@ -257,7 +255,7 @@ Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, 
     QList<UsingNS*> currentUsingNS = usingNS;
 
     foreach (UsingNS* use, usingNamespaces())
-      if (position >= *use->origin)
+      if (position >= use->textCursor())
         currentUsingNS.append(use);
 
     if (!currentUsingNS.isEmpty())
@@ -514,15 +512,19 @@ const QualifiedIdentifier & DUContext::localScopeIdentifier() const
   return m_scopeIdentifier;
 }
 
+DUContext::UsingNS::UsingNS(KTextEditor::Cursor* cursor)
+  : KDevDocumentCursorObject(cursor)
+{
+}
+
 void DUContext::addUsingNamespace(KTextEditor::Cursor* cursor, const QualifiedIdentifier& id)
 {
-  UsingNS* use = new UsingNS;
-  use->origin = cursor;
+  UsingNS* use = new UsingNS(cursor);
   use->nsIdentifier = id;
 
   QMutableListIterator<UsingNS*> it = m_usingNamespaces;
   while (it.hasPrevious())
-    if (*use->origin > *it.previous()->origin) {
+    if (use->textCursor() > it.previous()->textCursor()) {
       it.next();
       it.insert(use);
       return;
@@ -556,7 +558,7 @@ Definition* DUContext::findDefinition(const Identifier& identifier, const KDevDo
   return findDefinition(QualifiedIdentifier(identifier), position);
 }
 
-void DUContext::addOrphanUse(KTextEditor::Range* orphan)
+void DUContext::addOrphanUse(DefinitionUse* orphan)
 {
   m_orphanUses.append(orphan);
 }
@@ -567,7 +569,7 @@ void DUContext::deleteOrphanUses()
   m_orphanUses.clear();
 }
 
-const QList<KTextEditor::Range*>& DUContext::orphanUses() const
+const QList<DefinitionUse*>& DUContext::orphanUses() const
 {
   return m_orphanUses;
 }
@@ -583,7 +585,7 @@ DUContext* DUContext::findContext(ContextType contextType, const QualifiedIdenti
 
   if (!identifier.explicitlyGlobal()) {
     foreach (UsingNS* use, usingNamespaces())
-      if (!sourceChild || sourceChild->textRange().start() >= *use->origin)
+      if (!sourceChild || sourceChild->textRange().start() >= use->textCursor())
         currentUsingNS.append(use);
   }
 

@@ -30,6 +30,7 @@
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include "definition.h"
+#include "definitionuse.h"
 
 using namespace KTextEditor;
 
@@ -68,6 +69,7 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse definiti
       // FIXME for now, just clear the chain... later, need to implement incremental parsing
       topLevelContext->deleteChildContextsRecursively();
       topLevelContext->deleteLocalDefinitions();
+      topLevelContext->deleteOrphanUses();
 
       Q_ASSERT(topLevelContext->textRangePtr());
 
@@ -79,7 +81,6 @@ DUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse definiti
   } else {
     Q_ASSERT(m_compilingDefinitions);
 
-    // FIXME the top range will probably get deleted without the editor integrator knowing...?
     topLevelContext = openContextInternal(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain), DUContext::Global);
 
     DUChain::self()->addDocumentChain(url, topLevelContext);
@@ -398,15 +399,15 @@ void DUBuilder::newUse(NameAST* name)
 
   foreach (DUContext* imported, m_importedParentContexts) {
     if (Definition* definition = imported->findDefinition(m_nameCompiler->identifier(), KDevDocumentCursor(use, KDevDocumentCursor::Start))) {
-      definition->addUse(use);
+      definition->addUse(new DefinitionUse(use));
       return;
     }
   }
 
   if (Definition* definition = currentContext()->findDefinition(m_nameCompiler->identifier(), KDevDocumentCursor(use, KDevDocumentCursor::Start)))
-    definition->addUse(use);
+    definition->addUse(new DefinitionUse(use));
   else
-    currentContext()->addOrphanUse(use);
+    currentContext()->addOrphanUse(new DefinitionUse(use));
     //kWarning() << k_funcinfo << "Could not find definition for identifier " << id << " at " << *use << endl;
 }
 

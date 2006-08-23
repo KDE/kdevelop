@@ -173,8 +173,8 @@ KParts::Factory *KDevPartController::findPartFactory(
 {
     //Cache the factories as it is too expensive to use KLibLoader for
     //every part.
-    if ( m_factoryCache.contains( mimeType + partType + preferredName ) )
-        return m_factoryCache.value( mimeType + partType + preferredName );
+    //if ( m_factoryCache.contains( mimeType + partType + preferredName ) )
+        //return m_factoryCache.value( mimeType + partType + preferredName );
 
     KService::List offers = KMimeTypeTrader::self() ->query(
                                 mimeType,

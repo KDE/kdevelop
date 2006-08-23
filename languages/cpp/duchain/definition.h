@@ -20,13 +20,13 @@
 #define DEFINITION_H
 
 #include <QList>
-#include <QPair>
 
 #include "identifier.h"
 #include "kdevdocumentrangeobject.h"
 
 class AbstractType;
 class DUContext;
+class DefinitionUse;
 
 /**
  * Represents a single variable definition in a definition-use chain.
@@ -43,6 +43,7 @@ public:
   };
 
   Definition(KTextEditor::Range* range, Scope scope);
+  virtual ~Definition();
 
   DUContext* context() const;
   void setContext(DUContext* context);
@@ -57,9 +58,9 @@ public:
 
   QualifiedIdentifier qualifiedIdentifier() const;
 
-  const QList<KTextEditor::Range*>& uses() const;
-  void addUse(KTextEditor::Range* range);
-  void removeUse(KTextEditor::Range* range);
+  const QList<DefinitionUse*>& uses() const;
+  void addUse(DefinitionUse* range);
+  void removeUse(DefinitionUse* range);
 
   bool operator==(const Definition& other) const;
 
@@ -69,7 +70,7 @@ private:
   const AbstractType* m_type;
   Identifier m_identifier;
 
-  QList<KTextEditor::Range*> m_uses;
+  QList<DefinitionUse*> m_uses;
 };
 
 #endif // DEFINITION_H

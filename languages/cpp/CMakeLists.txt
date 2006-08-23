@@ -15,6 +15,7 @@ set(kdevcppduchain_SRCS
     duchain/dubuilder.cpp
     duchain/ducontext.cpp
     duchain/definition.cpp
+    duchain/definitionuse.cpp
     duchain/dumpchain.cpp
 )
 

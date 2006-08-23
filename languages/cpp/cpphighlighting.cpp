@@ -26,6 +26,7 @@
 #include "parser/codemodel.h"
 #include "duchain/ducontext.h"
 #include "duchain/definition.h"
+#include "duchain/definitionuse.h"
 
 using namespace KTextEditor;
 
@@ -249,14 +250,14 @@ void CppHighlighting::highlightDUChain(DUContext* context) const
     if (def->smartRange())
       def->smartRange()->setAttribute(attributeForType(type, DefinitionContext));
 
-    foreach (Range* use, def->uses())
-      if (use->isSmartRange())
-        use->toSmartRange()->setAttribute(attributeForType(type, ReferenceContext));
+    foreach (DefinitionUse* use, def->uses())
+      if (SmartRange* range = use->smartRange())
+        range->setAttribute(attributeForType(type, ReferenceContext));
   }
 
-  foreach (Range* use, context->orphanUses())
-    if (use->isSmartRange())
-      use->toSmartRange()->setAttribute(attributeForType(ErrorVariableType, ReferenceContext));
+  foreach (DefinitionUse* use, context->orphanUses())
+    if (SmartRange* range = use->smartRange())
+      range->setAttribute(attributeForType(ErrorVariableType, ReferenceContext));
 
   foreach (DUContext* context, context->importedParentContexts())
     highlightDUChain(context);
