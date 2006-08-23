@@ -56,6 +56,9 @@ public:
     void setDUChain(TopDUContext* duChain);
     virtual TopDUContext* duChain() const;
 
+    void setReadFromDisk(bool readFromDisk);
+    bool wasReadFromDisk() const;
+
     void addIncludedFile(const QString& filename);
     const QStringList& includedFiles() const;
     void requestDependancies();
@@ -66,6 +69,7 @@ private:
     CodeModel *m_model;
     QStringList m_includedFiles;
     TopDUContext* m_duContext;
+    bool m_readFromDisk;
 };
 
 class ParseJob : public ThreadWeaver::Job

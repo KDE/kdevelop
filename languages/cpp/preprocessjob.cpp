@@ -58,6 +58,7 @@ void PreprocessJob::run()
     QMutexLocker lock(parentJob()->cpp()->parseMutex(thread()));
 
     bool readFromDisk = !parentJob()->contentsAvailableFromEditor();
+    parentJob()->setReadFromDisk(readFromDisk);
 
     QString contents;
 

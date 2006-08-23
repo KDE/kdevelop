@@ -56,7 +56,8 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         m_session( new ParseSession ),
         m_AST( 0 ),
         m_model( 0 ),
-        m_duContext( 0 )
+        m_duContext( 0 ),
+        m_readFromDisk( false )
 {
     addJob(new PreprocessJob(this));
     addJob(new ParseJob(this));
@@ -68,7 +69,8 @@ CPPParseJob::CPPParseJob( KDevDocument *document,
         m_session( new ParseSession ),
         m_AST( 0 ),
         m_model( 0 ),
-        m_duContext( 0 )
+        m_duContext( 0 ),
+        m_readFromDisk( false )
 {
     addJob(new PreprocessJob(this));
     addJob(new ParseJob(this));
@@ -181,12 +183,15 @@ void ParseJob::run()
         if (parentJob()->abortRequested())
             return parentJob()->abortJob();
 
-        TopDUContext* repeatTopContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileUses);
+        // We save some time here by not running the use compiler if the file is not loaded... (it's only needed
+        // for navigation in that case)
+        // FIXME make configurable
+        if (!parentJob()->wasReadFromDisk()) {
+            TopDUContext* repeatTopContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileUses);
 
-        if (parentJob()->abortRequested())
-            return parentJob()->abortJob();
-
-        Q_ASSERT(repeatTopContext == topContext);
+            if (parentJob()->abortRequested())
+                return parentJob()->abortJob();
+        }
 
         parentJob()->setDUChain(topContext);
 
@@ -223,6 +228,16 @@ ParseSession * CPPParseJob::parseSession() const
 const QStringList & CPPParseJob::includedFiles() const
 {
     return m_includedFiles;
+}
+
+void CPPParseJob::setReadFromDisk(bool readFromDisk)
+{
+    m_readFromDisk = readFromDisk;
+}
+
+bool CPPParseJob::wasReadFromDisk() const
+{
+    return m_readFromDisk;
 }
 
 #include "parsejob.moc"
