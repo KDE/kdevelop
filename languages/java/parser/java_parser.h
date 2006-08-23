@@ -198,7 +198,7 @@ namespace java
       enum java_compatibility_mode {
         java13_compatibility = 130,
         java14_compatibility = 140,
-        java15_compatibility = 150,
+        java15_compatibility = 150
       };
 
       parser::java_compatibility_mode compatibility_mode();
@@ -207,7 +207,7 @@ namespace java
       enum problem_type {
         error,
         warning,
-        info,
+        info
       };
       void report_problem( parser::problem_type type, const char* message );
       void report_problem( parser::problem_type type, std::string message );

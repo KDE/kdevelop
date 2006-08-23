@@ -231,7 +231,7 @@ namespace csharp
        */
       enum csharp_compatibility_mode {
         csharp10_compatibility = 100,
-        csharp20_compatibility = 200,
+        csharp20_compatibility = 200
       };
       parser::csharp_compatibility_mode compatibility_mode();
       void set_compatibility_mode( parser::csharp_compatibility_mode mode );

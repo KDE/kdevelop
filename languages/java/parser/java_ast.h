@@ -147,7 +147,7 @@ namespace java
     {
     enum additive_operator_enum {
       op_plus,
-      op_minus,
+      op_minus
     };
   }
 
@@ -162,7 +162,7 @@ namespace java
       type_int,
       type_float,
       type_long,
-      type_double,
+      type_double
     };
   }
 
@@ -170,7 +170,7 @@ namespace java
     {
     enum equality_operator_enum {
       op_equal,
-      op_not_equal,
+      op_not_equal
     };
   }
 
@@ -189,7 +189,7 @@ namespace java
       op_remainder_assign,
       op_lshift_assign,
       op_signed_rshift_assign,
-      op_unsigned_rshift_assign,
+      op_unsigned_rshift_assign
     };
   }
 
@@ -202,7 +202,7 @@ namespace java
       type_integer,
       type_floating_point,
       type_character,
-      type_string,
+      type_string
     };
   }
 
@@ -219,7 +219,7 @@ namespace java
       mod_native       = 1 << 7,
       mod_synchronized = 1 << 8,
       mod_volatile     = 1 << 9,
-      mod_strictfp     = 1 << 10,
+      mod_strictfp     = 1 << 10
     };
   }
 
@@ -228,7 +228,7 @@ namespace java
     enum multiplicative_operator_enum {
       op_star,
       op_slash,
-      op_remainder,
+      op_remainder
     };
   }
 
@@ -236,7 +236,7 @@ namespace java
     {
     enum postfix_operator_enum {
       op_increment,
-      op_decrement,
+      op_decrement
     };
   }
 
@@ -246,7 +246,7 @@ namespace java
       op_less_than,
       op_greater_than,
       op_less_equal,
-      op_greater_equal,
+      op_greater_equal
     };
   }
 
@@ -255,7 +255,7 @@ namespace java
     enum shift_operator_enum {
       op_lshift,
       op_signed_rshift,
-      op_unsigned_rshift,
+      op_unsigned_rshift
     };
   }
 
@@ -263,7 +263,7 @@ namespace java
     {
     enum branch_type_enum {
       case_branch,
-      default_branch,
+      default_branch
     };
   }
 
@@ -274,7 +274,7 @@ namespace java
       type_decremented_expression,
       type_unary_minus_expression,
       type_unary_plus_expression,
-      type_unary_expression_not_plusminus,
+      type_unary_expression_not_plusminus
     };
   }
 
@@ -284,7 +284,7 @@ namespace java
       type_bitwise_not_expression,
       type_logical_not_expression,
       type_cast_expression,
-      type_primary_expression,
+      type_primary_expression
     };
   }
 
@@ -292,7 +292,7 @@ namespace java
     {
     enum extends_or_super_enum {
       extends,
-      super,
+      super
     };
   }
 

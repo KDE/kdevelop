@@ -73,7 +73,7 @@ public:
         None,              ///< This project supports nothing
         Folders  = 0x0001, ///< Folders are supported by the project
         Targets  = 0x0002, ///< Targets are supported by the project
-        Files    = 0x0003, ///< Files are supported by the project
+        Files    = 0x0003 ///< Files are supported by the project
     };
     Q_DECLARE_FLAGS( Features, Feature )
 
