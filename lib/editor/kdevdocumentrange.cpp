@@ -70,9 +70,10 @@ void KDevDocumentRange::setParentRange(Range* parent)
 
   if (m_parentRange && !m_parentRange->isSmartRange()) {
     QMutableListIterator<KDevDocumentRange*> it = static_cast<KDevDocumentRange*>(m_parentRange)->m_childRanges;
-    while (it.hasNext()) {
-      if (start() < it.next()->start()) {
-        it.previous();
+    it.toBack();
+    while (it.hasPrevious()) {
+      if (start() >= it.previous()->end()) {
+        it.next();
         it.insert(this);
         return;
       }
