@@ -473,7 +473,7 @@ void DUContext::deleteChildContextsRecursively(const KUrl& url)
     if (context->url() == url)
       delete context;
 
-  Q_ASSERT(m_childContexts.isEmpty());
+  //Q_ASSERT(m_childContexts.isEmpty());
 }
 
 QList< Definition * > DUContext::clearLocalDefinitions( )
