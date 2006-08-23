@@ -1,10 +1,4 @@
 /***************************************************************************
-*   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
-*   jsgaarde@tdcspace.dk                                                  *
-*   Copyright (C) 2002-2003 by Alexander Dymo                             *
-*   cloudtemple@mksat.net                                                 *
-*   Copyright (C) 2003 by Thomas Hasart                                   *
-*   thasart@gmx.de                                                        *
 *   Copyright (C) 2006 by Andreas Pakulat                                 *
 *   apaku@gmx.de                                                          *
 *                                                                         *
