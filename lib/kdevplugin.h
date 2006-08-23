@@ -116,7 +116,7 @@ public:
     virtual ~KDevPlugin();
 
     /**
-     * The display widget for this plugin. The widget _must_ specify
+     * The display widget for this plugin. The widget <b>must</b> specify
      * a non-empty QObject::objectName() and QWidget::windowTitle().
      * The default implementation returns 0.
      * @see QObject::objectName() and @see QWidget::windowTitle()
