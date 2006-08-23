@@ -143,9 +143,9 @@ CodeModel::ClassType Binder::decode_class_type(std::size_t index) const
     return CodeModel::Class;
 }
 
-const NameSymbol *Binder::decode_symbol(std::size_t index) const
+QString Binder::decode_symbol(std::size_t index) const
 {
-  return m_session->token_stream->symbol(index);
+  return m_session->token_stream->token(index).symbol();
 }
 
 void Binder::visitAccessSpecifier(AccessSpecifierAST *node)
@@ -380,7 +380,7 @@ void Binder::visitNamespace(NamespaceAST *node)
   NamespaceModelItem old /*= changeCurrentNamespace(_M_global_namespace)*/;
   if (! anonymous)
     {
-      QString name = decode_symbol(node->namespace_name)->as_string();
+      QString name = decode_symbol(node->namespace_name);
 
       QStringList qualified_name = scope->qualifiedName();
       qualified_name += name;
@@ -503,7 +503,7 @@ void Binder::visitEnumerator(EnumeratorAST *node)
 {
   Q_ASSERT(_M_current_enum != 0);
   EnumeratorModelItem e = model()->create<EnumeratorModelItem>();
-  e->setName(decode_symbol(node->id)->as_string());
+  e->setName(decode_symbol(node->id));
 
   if (ExpressionAST *expr = node->expression)
     {

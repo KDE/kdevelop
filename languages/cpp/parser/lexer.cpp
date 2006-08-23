@@ -188,8 +188,8 @@ void Lexer::scan_char_constant()
       ++cursor;
     }
 
-  (*session->token_stream)[index].extra.symbol =
-    control->findOrInsertName((const char*) begin, cursor - begin);
+  //(*session->token_stream)[index].extra.symbol =
+    //control->findOrInsertName((const char*) begin, cursor - begin);
 
   (*session->token_stream)[index++].kind = Token_char_literal;
 }
@@ -226,8 +226,8 @@ void Lexer::scan_string_constant()
       ++cursor;
     }
 
-  (*session->token_stream)[index].extra.symbol =
-    control->findOrInsertName((const char*) begin, cursor - begin);
+  //(*session->token_stream)[index].extra.symbol =
+    //control->findOrInsertName((const char*) begin, cursor - begin);
 
   (*session->token_stream)[index++].kind = Token_string_literal;
 }
@@ -282,11 +282,11 @@ void Lexer::scan_identifier_or_keyword()
   Token *current_token = &(*session->token_stream)[index];
   (this->*s_scan_keyword_table[n < 17 ? n : 0])();
 
-  if (current_token->kind == Token_identifier)
+  /*if (current_token->kind == Token_identifier)
     {
       current_token->extra.symbol =
 	control->findOrInsertName((const char*) cursor, n);
-    }
+    }*/
 
   cursor = skip;
 }
@@ -304,8 +304,8 @@ void Lexer::scan_int_constant()
   while (isalnum(*cursor) || *cursor == '.')
     ++cursor;
 
-  (*session->token_stream)[index].extra.symbol =
-    control->findOrInsertName((const char*) begin, cursor - begin);
+  //(*session->token_stream)[index].extra.symbol =
+    //control->findOrInsertName((const char*) begin, cursor - begin);
 
   (*session->token_stream)[index++].kind = Token_number_literal;
 }

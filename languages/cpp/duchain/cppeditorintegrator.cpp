@@ -76,7 +76,7 @@ Cursor * CppEditorIntegrator::createCursor( std::size_t token, Edge edge )
 
 QString CppEditorIntegrator::tokenToString(std::size_t token) const
 {
-  return m_session->token_stream->symbol(token)->as_string();
+  return m_session->token_stream->token(token).symbol();
 }
 
 // kate: indent-width 2;

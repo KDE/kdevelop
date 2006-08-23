@@ -103,8 +103,7 @@ bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
 
   std::size_t start = session->token_stream->cursor();
 
-  const NameSymbol *name_symbol = session->token_stream->symbol(session->token_stream->cursor());
-  QString name = name_symbol->as_string();
+  QString name = session->token_stream->token(session->token_stream->cursor()).symbol();
   if (name != QLatin1String("__declspec"))
     return false;
   std::size_t specifier = session->token_stream->cursor();

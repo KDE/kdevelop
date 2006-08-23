@@ -71,7 +71,7 @@ private:
   TypeInfo qualifyType(const TypeInfo &type, const QStringList &context) const;
 
   int decode_token(std::size_t index) const;
-  const NameSymbol *decode_symbol(std::size_t index) const;
+  QString decode_symbol(std::size_t index) const;
   CodeModel::AccessPolicy decode_access_policy(std::size_t index) const;
   CodeModel::ClassType decode_class_type(std::size_t index) const;
 

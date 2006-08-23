@@ -45,10 +45,12 @@ public:
   ///pointer to the text in the c++ source buffer (not valid when buffer is destroyed).
   char const *text;
 
+  QString symbol() const { return QString::fromUtf8(&text[position], size); }
+
   ///@todo adymo: find out what @p right_brace is
   union
   {
-    const NameSymbol *symbol;
+    //const NameSymbol *symbol;
     std::size_t right_brace;
   } extra;
 };
@@ -175,8 +177,8 @@ public:
   { return tokens[i].position; }
 
   /**@return the name symbol of the current token.*/
-  inline const NameSymbol *symbol(std::size_t i) const
-  { return tokens[i].extra.symbol; }
+  //inline const NameSymbol *symbol(std::size_t i) const
+  //{ return tokens[i].extra.symbol; }
 
   /**@return the position of the matching right brace in the
   c++ source buffer.

@@ -32,7 +32,7 @@ NameCompiler::NameCompiler(ParseSession* session)
 QString NameCompiler::decode_operator(std::size_t index) const
 {
   const Token &tk = m_session->token_stream->token(index);
-  return QString::fromUtf8(&tk.text[tk.position], tk.size);
+  return tk.symbol();
 }
 
 void NameCompiler::internal_run(AST *node)
@@ -49,7 +49,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
     tmp_name += QLatin1String("~");
 
   if (node->id)
-    tmp_name += m_session->token_stream->symbol(node->id)->as_string();
+    tmp_name += m_session->token_stream->token(node->id).symbol();
 
   if (OperatorFunctionIdAST *op_id = node->operator_id)
     {
