@@ -25,6 +25,8 @@
 
 #include "kdevdocumentcursor.h"
 
+class QMutex;
+
 class KDevDocumentRange;
 class KDevDocumentCursor;
 class KDevEditorIntegratorPrivate;
@@ -52,6 +54,12 @@ public:
   static void addDocument(KTextEditor::Document* document);
 
   /**
+   * Retrieve the mutex which allows background parsers to lock a document
+   * in place while they make their changes.
+   *
+  static QMutex* mutexForDocument(KTextEditor::Document* document);*/
+
+  /**
    * Removes the text editor \a document from the integrator.
    */
   static void removeDocument(KTextEditor::Document* document);
@@ -75,7 +83,7 @@ public:
   KTextEditor::Document* currentDocument() const;
 
   /// Convenience function to return the SmartInterface for the current document.
-  KTextEditor::SmartInterface* smart(KTextEditor::Document* document = 0) const;
+  KTextEditor::SmartInterface* smart() const;
 
   enum TopRangeType {
     Highlighting,
@@ -133,7 +141,7 @@ public:
    *
    * \returns the newly created text range.
    */
-  KTextEditor::Range* createRange(const KTextEditor::Range& range, KTextEditor::Document* document = 0);
+  KTextEditor::Range* createRange(const KTextEditor::Range& range);
 
   /**
    * Create a text range from \a start to \a end as a child range of the current range.
@@ -191,6 +199,7 @@ protected:
 
   KUrl m_currentUrl;
   KTextEditor::Document* m_currentDocument;
+  KTextEditor::SmartInterface* m_smart;
   KTextEditor::Range* m_currentRange;
   KTextEditor::Range m_newRangeMarker;
 };

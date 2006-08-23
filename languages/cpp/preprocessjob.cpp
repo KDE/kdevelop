@@ -32,6 +32,8 @@
 #include "kdevproject.h"
 #include "kdevpersistenthash.h"
 
+#include "Thread.h"
+
 #include "cpplanguagesupport.h"
 #include "parser/parsesession.h"
 #include "parsejob.h"
@@ -53,7 +55,7 @@ void PreprocessJob::run()
     if (parentJob()->abortRequested())
         return parentJob()->abortJob();
 
-    QMutexLocker lock(parentJob()->cpp()->parseMutex());
+    QMutexLocker lock(parentJob()->cpp()->parseMutex(thread()));
 
     bool readFromDisk = !parentJob()->contentsAvailableFromEditor();
 

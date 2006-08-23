@@ -88,6 +88,7 @@ public:
 
     /// Overridden to set the DependencyPolicy on subjobs.
     virtual void addJob(Job* job);
+    virtual void removeJob(Job* job);
 
     /**
      * Attempt to add \a dependency as a dependency of \a actualDependee, which must

@@ -56,6 +56,15 @@ public Q_SLOTS:
 public:
   QHash<KUrl, KTextEditor::Document*> documents;
   QHash<KUrl, QVector<KTextEditor::Range*> > topRanges;
+
+  /* FIXME port to this?
+
+  struct URLData {
+    KTextEditor::Document* document;
+    QVector<KTextEditor::Range*> topRanges;
+  }
+
+  QHash<KUrl, URLData*> urls;*/
 };
 
 #endif // EDITORINTEGRATOR_H

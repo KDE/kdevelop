@@ -31,18 +31,21 @@
 using namespace java;
 
 class KDevCodeModel;
+class JavaLanguageSupport;
 
 class ParseJob : public KDevParseJob
 {
     Q_OBJECT
 public:
     ParseJob( const KUrl &url,
-              QObject* parent );
+              JavaLanguageSupport* parent );
 
     ParseJob( KDevDocument* document,
-              QObject* parent );
+              JavaLanguageSupport* parent );
 
     virtual ~ParseJob();
+
+    JavaLanguageSupport* java() const;
 
     virtual KDevAST *AST() const;
     virtual KDevCodeModel *codeModel() const;

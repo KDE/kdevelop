@@ -32,6 +32,8 @@
 #include "kdevproject.h"
 #include "kdevpersistenthash.h"
 
+#include "Thread.h"
+
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
 
@@ -127,7 +129,7 @@ void ParseJob::run()
     if (parentJob()->abortRequested())
         return parentJob()->abortJob();
 
-    QMutexLocker lock(parentJob()->cpp()->parseMutex());
+    QMutexLocker lock(parentJob()->cpp()->parseMutex(thread()));
 
     Parser parser( new Control() );
 

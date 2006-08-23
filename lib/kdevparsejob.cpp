@@ -123,6 +123,14 @@ void KDevParseJob::addJob(Job* job)
     JobSequence::addJob(job);
 }
 
+void KDevParseJob::removeJob(Job* job)
+{
+    if (backgroundParser())
+        job->removeQueuePolicy(backgroundParser()->dependencyPolicy());
+
+    JobSequence::addJob(job);
+}
+
 KDevBackgroundParser* KDevParseJob::backgroundParser() const
 {
     return m_backgroundParser;
@@ -130,13 +138,21 @@ KDevBackgroundParser* KDevParseJob::backgroundParser() const
 
 void KDevParseJob::setBackgroundParser(KDevBackgroundParser* parser)
 {
+    if (parser) {
+        assignQueuePolicy(parser->dependencyPolicy());
+
+        for (int i = 0; i < jobListLength(); ++i)
+            jobAt(i)->assignQueuePolicy(parser->dependencyPolicy());
+
+    } else if (m_backgroundParser) {
+
+        removeQueuePolicy(m_backgroundParser->dependencyPolicy());
+
+        for (int i = 0; i < jobListLength(); ++i)
+            jobAt(i)->removeQueuePolicy(m_backgroundParser->dependencyPolicy());
+    }
+
     m_backgroundParser = parser;
-    Q_ASSERT(m_backgroundParser);
-
-    assignQueuePolicy(backgroundParser()->dependencyPolicy());
-
-    for (int i = 0; i < jobListLength(); ++i)
-        jobAt(i)->assignQueuePolicy(backgroundParser()->dependencyPolicy());
 }
 
 bool KDevParseJob::addDependency(KDevParseJob* dependency, ThreadWeaver::Job* actualDependee)

@@ -28,6 +28,8 @@
 
 #include <kdevcodemodel.h>
 
+#include "Thread.h"
+
 #include <QFile>
 #include <QByteArray>
 
@@ -37,17 +39,19 @@
 #include "parser/csharp_parser.h"
 #include "parser/csharp_binder.h"
 
+#include "csharplanguagesupport.h"
+
 using namespace csharp;
 
 ParseJob::ParseJob( const KUrl &url,
-                    QObject *parent )
+                    CSharpLanguageSupport *parent )
         : KDevParseJob( url, parent ),
         m_AST( 0 ),
         m_model( 0 )
 {}
 
 ParseJob::ParseJob( KDevDocument *document,
-                    QObject *parent )
+                    CSharpLanguageSupport *parent )
         : KDevParseJob( document, parent ),
         m_AST( 0 ),
         m_model( 0 )
@@ -55,6 +59,11 @@ ParseJob::ParseJob( KDevDocument *document,
 
 ParseJob::~ParseJob()
 {}
+
+CSharpLanguageSupport* ParseJob::csharp() const
+{
+    return static_cast<CSharpLanguageSupport*>(const_cast<QObject*>(parent()));
+}
 
 KDevAST *ParseJob::AST() const
 {
@@ -70,6 +79,11 @@ KDevCodeModel *ParseJob::codeModel() const
 
 void ParseJob::run()
 {
+    if (abortRequested())
+        return abortJob();
+
+    QMutexLocker lock(csharp()->parseMutex(thread()));
+
     bool readFromDisk = !contentsAvailableFromEditor();
 
     char *contents;
@@ -104,6 +118,9 @@ void ParseJob::run()
     << " size: " << fileData.length()
     << endl;
 
+    if (abortRequested())
+        return abortJob();
+
     parser::csharp_compatibility_mode compatibility_mode = parser::csharp20_compatibility;
 
     parser::token_stream_type token_stream;
@@ -118,9 +135,15 @@ void ParseJob::run()
     // 1) tokenize
     csharp_parser.tokenize( contents );
 
+    if (abortRequested())
+        return abortJob();
+
     // 2) parse
     bool matched = csharp_parser.parse_compilation_unit( &m_AST );
     m_model = new CodeModel;
+
+    if (abortRequested())
+        return abortJob();
 
     if (matched)
     {

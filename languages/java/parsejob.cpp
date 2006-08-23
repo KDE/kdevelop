@@ -28,24 +28,28 @@
 
 #include <kdevcodemodel.h>
 
+#include "Thread.h"
+
 #include <QFile>
 #include <QByteArray>
 
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "javalanguagesupport.h"
+
 #include "parser/java_parser.h"
 #include "parser/java_default_visitor.h"
 
 ParseJob::ParseJob( const KUrl &url,
-                    QObject *parent )
+                    JavaLanguageSupport *parent )
         : KDevParseJob( url, parent ),
         m_AST( 0 ),
         m_model( 0 )
 {}
 
 ParseJob::ParseJob( KDevDocument *document,
-                    QObject *parent )
+                    JavaLanguageSupport *parent )
         : KDevParseJob( document, parent ),
         m_AST( 0 ),
         m_model( 0 )
@@ -53,6 +57,11 @@ ParseJob::ParseJob( KDevDocument *document,
 
 ParseJob::~ParseJob()
 {}
+
+JavaLanguageSupport* ParseJob::java() const
+{
+    return static_cast<JavaLanguageSupport*>(const_cast<QObject*>(parent()));
+}
 
 KDevAST *ParseJob::AST() const
 {
@@ -70,6 +79,12 @@ KDevCodeModel *ParseJob::codeModel() const
 
 void ParseJob::run()
 {
+    if (abortRequested())
+        return abortJob();
+
+    QMutexLocker lock(java()->parseMutex(thread()));
+
+
     bool readFromDisk = !contentsAvailableFromEditor();
 
     char *contents;
@@ -104,6 +119,9 @@ void ParseJob::run()
     << " size: " << fileData.length()
     << endl;
 
+    if (abortRequested())
+        return abortJob();
+
     parser::java_compatibility_mode compatibility_mode = parser::java15_compatibility;
 
     parser::token_stream_type token_stream;
@@ -118,9 +136,16 @@ void ParseJob::run()
   // 1) tokenize
     java_parser.tokenize(contents);
 
+    if (abortRequested())
+        return abortJob();
+
   // 2) parse
     compilation_unit_ast *ast = 0;
     bool matched = java_parser.parse_compilation_unit(&ast);
+
+    if (abortRequested())
+        return abortJob();
+
     if (matched)
     {
         default_visitor v;

@@ -54,7 +54,7 @@
 
 KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         : QObject( parent ),
-        m_suspend( true ),
+        m_suspend( false ),
         m_modelsToCache( 0 ),
         m_progressBar( new QProgressBar ),
         m_weaver( new Weaver( this, 2 ) ),
@@ -72,7 +72,9 @@ KDevBackgroundParser::~KDevBackgroundParser()
 {
     m_weaver->requestAbort();
     m_weaver->finish();
-    delete m_dependencyPolicy;
+
+    //FIXME for some reason the dependency policy doesn't get unset from all jobs... :(
+    //delete m_dependencyPolicy;
 }
 
 void KDevBackgroundParser::clear(QObject* parent)
@@ -193,6 +195,9 @@ void KDevBackgroundParser::parseDocuments()
             connect( parse, SIGNAL( done( Job* ) ),
                      this, SLOT( parseComplete( Job* ) ), Qt::QueuedConnection );
 
+            connect( parse, SIGNAL( failed( Job* ) ),
+                     this, SLOT( parseComplete( Job* ) ), Qt::QueuedConnection );
+
             p = false; //Don't parse for next time
 
             m_parseJobs.insert(url, parse);
@@ -208,16 +213,14 @@ void KDevBackgroundParser::parseDocuments()
 
 void KDevBackgroundParser::parseComplete( Job *job )
 {
-    KDevLanguageSupport * langSupport = KDevCore::activeLanguage();
-    if ( !langSupport )
-        return ;
-
     if ( KDevParseJob * parseJob = qobject_cast<KDevParseJob*>( job ) )
     {
         m_parseJobs.remove(parseJob->document());
 
+        KDevLanguageSupport * langSupport = KDevCore::activeLanguage();
+
         // Ensure success, otherwise nothing to do
-        if (parseJob->success())
+        if (parseJob->success() && langSupport)
         {
             if ( m_modelsToCache )
             {
@@ -259,6 +262,7 @@ void KDevBackgroundParser::parseComplete( Job *job )
 
         // FIXME hack, threadweaver doesn't let us know when we can delete, so just pick an arbitrary time...
         // (awaiting reply from Mirko on this one)
+        parseJob->setBackgroundParser(0);
         QTimer::singleShot(500, parseJob, SLOT(deleteLater()));
     }
 }

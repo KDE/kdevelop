@@ -50,24 +50,18 @@ public:
 
     virtual void releaseAST( KDevAST *ast);
 
-    /**
-     * This mutex must be held when doing any background parsing.
-     */
-    inline QMutex* parseMutex() const { return m_parseMutex; }
-
 private slots:
     void documentLoaded( KDevDocument *document );
     void documentClosed( KDevDocument *document );
     void documentActivated( KDevDocument *document );
     void projectOpened();
-    void projectClosed();
+    void projectClosing();
 
 private:
     QStringList m_mimetypes;
     CodeProxy *m_codeProxy;
     CodeDelegate *m_codeDelegate;
     CppHighlighting *m_highlights;
-    QMutex *m_parseMutex;
 };
 
 #endif

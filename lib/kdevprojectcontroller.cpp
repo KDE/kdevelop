@@ -209,6 +209,8 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
 
 bool KDevProjectController::closeProject()
 {
+    emit projectClosing();
+
     QStringList paths;
     QList<KDevDocument* > openDocs = KDevCore::documentController() ->openDocuments();
     QList<KDevDocument* >::const_iterator it = openDocs.begin();

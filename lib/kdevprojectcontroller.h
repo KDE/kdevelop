@@ -63,6 +63,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void projectOpened();
+    void projectClosing();
     void projectClosed();
 
 private:

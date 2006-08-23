@@ -24,17 +24,21 @@
 */
 #include "kdevlanguagesupport.h"
 
+#include <QThread>
+
 #include <kdevast.h>
 #include <kdevdocument.h>
 
 KDevLanguageSupport::KDevLanguageSupport(KInstance *instance,
                                          QObject *parent)
     : KDevPlugin(instance, parent)
+    , m_mutexMutex(new QMutex)
 {
 }
 
 KDevLanguageSupport::~KDevLanguageSupport()
 {
+    delete m_mutexMutex;
 }
 
 bool KDevLanguageSupport::supportsDocument( KDevDocument *document )
@@ -82,6 +86,64 @@ KDevCodeHighlighting *KDevLanguageSupport::codeHighlighting() const
 void KDevLanguageSupport::releaseAST( KDevAST *)
 {
   // FIXME make pure + implement in the kdev-pg parsers
+}
+
+QMutex * KDevLanguageSupport::parseMutex(QThread * thread) const
+{
+  QMutexLocker lock(m_mutexMutex);
+
+  if (!m_parseMutexes.contains(thread)) {
+    connect(thread, SIGNAL(finished()), SLOT(threadFinished()));
+    m_parseMutexes.insert(thread, new QMutex);
+  }
+
+  return m_parseMutexes[thread];
+}
+
+void KDevLanguageSupport::lockAllParseMutexes()
+{
+  m_mutexMutex->lock();
+
+  QList<QMutex*> waitForLock;
+
+  // Grab the easy pickings first
+  QHashIterator<QThread*, QMutex*> it = m_parseMutexes;
+  while (it.hasNext()) {
+    it.next();
+    if (!it.value()->tryLock())
+      waitForLock.append(it.value());
+  }
+
+  // Work through the stragglers
+  foreach (QMutex* mutex, waitForLock)
+    mutex->lock();
+}
+
+void KDevLanguageSupport::unlockAllParseMutexes()
+{
+  QHashIterator<QThread*, QMutex*> it = m_parseMutexes;
+  while (it.hasNext()) {
+    it.next();
+    it.value()->unlock();
+  }
+
+  m_mutexMutex->unlock();
+}
+
+void KDevLanguageSupport::threadFinished()
+{
+  Q_ASSERT(sender());
+
+  QMutexLocker lock(m_mutexMutex);
+
+  QThread* thread = static_cast<QThread*>(sender());
+
+  Q_ASSERT(m_parseMutexes.contains(thread));
+
+  QMutex* mutex = m_parseMutexes[thread];
+  mutex->unlock();
+  delete mutex;
+  m_parseMutexes.remove(thread);
 }
 
 #include "kdevlanguagesupport.moc"

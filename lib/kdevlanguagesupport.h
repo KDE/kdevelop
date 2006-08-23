@@ -123,6 +123,28 @@ public:
 
     /**@return Whether the given url is supported by the language part.*/
     virtual bool supportsDocument( const KUrl &url );
+
+    /**
+     * The mutex for the specified \a thread must be held when doing any background parsing.
+     */
+    QMutex* parseMutex(QThread* thread) const;
+
+    /**
+     * Lock all background parser mutexes.
+     */
+    void lockAllParseMutexes();
+
+    /**
+     * Unlock all background parser mutexes.
+     */
+    void unlockAllParseMutexes();
+
+public Q_SLOTS:
+    void threadFinished();
+
+private:
+    mutable QHash<QThread*, QMutex*> m_parseMutexes;
+    QMutex* m_mutexMutex;
 };
 
 #endif

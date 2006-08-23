@@ -4,6 +4,7 @@
 
 #include <QFile>
 #include <QTimer>
+#include <QMutexLocker>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -18,6 +19,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/smartinterface.h>
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
@@ -100,6 +102,22 @@ KTextEditor::Document* KDevPartController::createTextPart(
     }
 
     return doc;
+}
+
+void KDevPartController::removePart( KParts::Part *part)
+{
+    if (KTextEditor::Document* doc = qobject_cast<KTextEditor::Document *>(part)) {
+        if (KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(doc)) {
+            // FIXME not supposed to delete locked mutexes...
+            QMutexLocker lock(smart->smartMutex());
+            KParts::PartManager::removePart(part);
+            return;
+        }
+
+        kWarning() << k_funcinfo << "Deleting text editor " << doc << " which does not have a smart interface." << endl;
+    }
+
+    KParts::PartManager::removePart(part);
 }
 
 KParts::Part* KDevPartController::createPart( const QString & mimeType,

@@ -57,7 +57,6 @@ K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdev
 CppLanguageSupport::CppLanguageSupport( QObject* parent,
                                         const QStringList& /*args*/ )
         : KDevLanguageSupport( KDevCppSupportFactory::instance(), parent )
-        , m_parseMutex(new QMutex(QMutex::Recursive))
 {
     QString types =
         QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
@@ -80,8 +79,8 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
              SIGNAL( projectOpened() ),
              this, SLOT( projectOpened() ) );
     connect( KDevCore::projectController(),
-             SIGNAL( projectClosed() ),
-             this, SLOT( projectClosed() ) );
+             SIGNAL( projectClosing() ),
+             this, SLOT( projectClosing() ) );
 }
 
 CppLanguageSupport::~CppLanguageSupport()
@@ -155,30 +154,40 @@ void CppLanguageSupport::projectOpened()
     //       2. filesRemovedFromProject
     //       3. filesChangedInProject
 
+    // FIXME this should be moved to the project itself
     KUrl::List documentList;
     QList<KDevProjectFileItem*> files = KDevCore::activeProject()->allFiles();
     foreach ( KDevProjectFileItem * file, files )
     {
-        if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith( ".h" )*/ )
+        if ( supportsDocument( file->url() ) )
         {
-            /*if ( KDevDocument* openDocument = KDevCore::documentController()->documentForUrl( file->url() ) )
-                KDevCore::backgroundParser() ->addDocument( openDocument );
-            else*/
-                documentList.append( file->url() );
+            documentList.append( file->url() );
         }
     }
     KDevCore::backgroundParser() ->addDocumentList( documentList );
 }
 
-void CppLanguageSupport::projectClosed()
+void CppLanguageSupport::projectClosing()
 {
     KDevCore::backgroundParser()->clear(this);
 
-    QMutexLocker lock(parseMutex());
+    KUrl::List documentList;
+    QList<KDevProjectFileItem*> files = KDevCore::activeProject()->allFiles();
+    foreach ( KDevProjectFileItem * file, files )
+    {
+        if ( supportsDocument( file->url() ) )
+        {
+            KDevCore::backgroundParser() ->removeDocument( file->url() );
+        }
+    }
 
-    // FIXME This should remove the project files from the backgroundparser
+    lockAllParseMutexes();
+
+    // Now we can do destructive stuff
 
     DUChain::self()->clear();
+
+    unlockAllParseMutexes();
 }
 
 void CppLanguageSupport::releaseAST( KDevAST *ast)

@@ -29,18 +29,21 @@
 #include "parser/csharp_codemodel.h"
 
 class KDevCodeModel;
+class CSharpLanguageSupport;
 
 class ParseJob : public KDevParseJob
 {
     Q_OBJECT
 public:
     ParseJob( const KUrl &url,
-              QObject* parent );
+              CSharpLanguageSupport* parent );
 
     ParseJob( KDevDocument* document,
-              QObject* parent );
+              CSharpLanguageSupport* parent );
 
     virtual ~ParseJob();
+
+    CSharpLanguageSupport* csharp() const;
 
     virtual KDevAST *AST() const;
     virtual KDevCodeModel *codeModel() const;

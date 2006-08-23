@@ -116,9 +116,9 @@ void KDevEditorIntegratorPrivate::removeDocument( Document* document )
   topRanges.remove(document->url());
 }
 
-SmartInterface* KDevEditorIntegrator::smart(KTextEditor::Document* document) const
+SmartInterface* KDevEditorIntegrator::smart() const
 {
-  return dynamic_cast<SmartInterface*>(document ? document : currentDocument());
+  return m_smart;
 }
 
 Cursor* KDevEditorIntegrator::createCursor(const KDevDocumentCursor& position)
@@ -127,10 +127,6 @@ Cursor* KDevEditorIntegrator::createCursor(const KDevDocumentCursor& position)
 
   if (position.document() == m_currentUrl) {
     if (SmartInterface* iface = smart())
-      ret = iface->newSmartCursor(position);
-  } else {
-    KTextEditor::Document* document = data()->documents[position.document()];
-    if (SmartInterface* iface = smart(document))
       ret = iface->newSmartCursor(position);
   }
 
@@ -191,11 +187,11 @@ void KDevEditorIntegratorPrivate::rangeDeleted(KTextEditor::SmartRange * range)
   kWarning() << k_funcinfo << "Could not find record of top level range " << range << "!" << endl;
 }
 
-Range* KDevEditorIntegrator::createRange( const Range & range, KTextEditor::Document* document )
+Range* KDevEditorIntegrator::createRange( const Range & range )
 {
   Range* ret;
 
-  if (SmartInterface* iface = smart(document))
+  if (SmartInterface* iface = smart())
     if (m_currentRange && m_currentRange->isSmartRange())
       ret = iface->newSmartRange(range, m_currentRange->toSmartRange());
     else
@@ -213,10 +209,10 @@ Range* KDevEditorIntegrator::createRange( const KDevDocumentCursor& start, const
   if (start.document() != end.document()) {
     kWarning() << k_funcinfo << "Start: " << start << ", End: " << end << ", documents " << start.document() << " != " << end.document() << endl;
     // FIXME difficult problem
-    createRange(Range(start, start), documentForUrl(start.document()));
+    createRange(Range(start, start));
   }
 
-  return createRange(Range(start, end), documentForUrl(start.document()));
+  return createRange(Range(start, end));
 }
 
 Range* KDevEditorIntegrator::createRange()
@@ -258,6 +254,7 @@ void KDevEditorIntegrator::setCurrentUrl(const KUrl& url)
 {
   m_currentUrl = url;
   m_currentDocument = documentForUrl(url);
+  m_smart = dynamic_cast<KTextEditor::SmartInterface*>(m_currentDocument);
 }
 
 void KDevEditorIntegrator::releaseTopRange(KTextEditor::Range * range)
