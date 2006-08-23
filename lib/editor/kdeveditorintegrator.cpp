@@ -121,17 +121,15 @@ SmartInterface* KDevEditorIntegrator::smart() const
   return m_smart;
 }
 
-Cursor* KDevEditorIntegrator::createCursor(const KDevDocumentCursor& position)
+Cursor* KDevEditorIntegrator::createCursor(const Cursor& position)
 {
   Cursor* ret = 0;
 
-  if (position.document() == m_currentUrl) {
-    if (SmartInterface* iface = smart())
-      ret = iface->newSmartCursor(position);
-  }
+  if (SmartInterface* iface = smart())
+    ret = iface->newSmartCursor(position);
 
   if (!ret)
-    ret = new KDevDocumentCursor(position);
+    ret = new KDevDocumentCursor(m_currentUrl, position);
 
   return ret;
 }

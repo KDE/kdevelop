@@ -35,13 +35,13 @@ CppEditorIntegrator::CppEditorIntegrator( ParseSession* session )
 {
 }
 
-KDevDocumentCursor CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) const
+Cursor CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) const
 {
   const Token& t = m_session->token_stream->token(token);
   return findPosition(t, edge);
 }
 
-KDevDocumentCursor CppEditorIntegrator::findPosition( const Token & token, Edge edge ) const
+Cursor CppEditorIntegrator::findPosition( const Token & token, Edge edge ) const
 {
   int line, column;
   QString fileName;
@@ -49,27 +49,23 @@ KDevDocumentCursor CppEditorIntegrator::findPosition( const Token & token, Edge 
   m_session->positionAt((edge == BackEdge) ? token.position + token.size : token.position,
                        &line, &column, &fileName);
 
-  if (fileName.isEmpty())
-    // FIXME assumption wrong? Best to fix in the parser I think, always return a filename.
-    return KDevDocumentCursor(m_currentUrl, Cursor(line, column));
-  else
-    return KDevDocumentCursor(KUrl(fileName), Cursor(line, column));
+  return Cursor(line, column);
 }
 
 Range* CppEditorIntegrator::createRange( AST * node, RangeEdge edge )
 {
   Q_UNUSED(edge);
-  return createRange(findPosition(node->start_token, FrontEdge), findPosition(node->end_token, FrontEdge));
+  return createRange(Range(findPosition(node->start_token, FrontEdge), findPosition(node->end_token, FrontEdge)));
 }
 
 KTextEditor::Range* CppEditorIntegrator::createRange(AST* from, AST* to)
 {
-  return createRange(findPosition(from->start_token, FrontEdge), findPosition(to->end_token, FrontEdge));
+  return createRange(Range(findPosition(from->start_token, FrontEdge), findPosition(to->end_token, FrontEdge)));
 }
 
 Range* CppEditorIntegrator::createRange( const Token & token )
 {
-  return createRange(findPosition(token, FrontEdge), findPosition(token, FrontEdge));
+  return createRange(Range(findPosition(token, FrontEdge), findPosition(token, BackEdge)));
 }
 
 Cursor * CppEditorIntegrator::createCursor( std::size_t token, Edge edge )

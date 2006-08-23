@@ -47,7 +47,7 @@ public:
    *
    * \returns the requested cursor relating to the start or end of the given token.
    */
-  KDevDocumentCursor findPosition(const Token& token, Edge edge = BackEdge) const;
+  KTextEditor::Cursor findPosition(const Token& token, Edge edge = BackEdge) const;
 
   /**
    * Finds the location and \a file where the given \a token was parsed from.  This function
@@ -58,7 +58,7 @@ public:
    *
    * \returns the requested cursor relating to the start or end of the given token.
    */
-  KDevDocumentCursor findPosition(std::size_t token, Edge edge = BackEdge) const;
+  KTextEditor::Cursor findPosition(std::size_t token, Edge edge = BackEdge) const;
 
   using KDevEditorIntegrator::createRange;
 

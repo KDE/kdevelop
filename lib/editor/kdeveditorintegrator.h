@@ -117,7 +117,7 @@ public:
   /**
    * Create a new persistant cursor from the given \a position.
    */
-  KTextEditor::Cursor* createCursor(const KDevDocumentCursor& position);
+  KTextEditor::Cursor* createCursor(const KTextEditor::Cursor& position);
 
   /**
    * Create a new persistant cursor from the given \a token on the given \a edge.

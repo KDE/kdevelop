@@ -264,7 +264,7 @@ void DUBuilder::closeContext(NameAST* name, AST* node)
   if (m_compilingDefinitions) {
     if (node) {
       // Find the end position of this function definition (just inside the bracket)
-      KDevDocumentCursor endPosition = m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge);
+      Cursor endPosition = m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge);
 
       // Set the correct end point of the current context finishing here
       if (currentContext()->textRange().end() != endPosition)
