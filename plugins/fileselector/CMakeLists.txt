@@ -1,6 +1,6 @@
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/util 
-    ${KDE3_INCLUDE_DIRS} )
+    ${KDE4_INCLUDE_DIRS} )
 
 
 ########### next target ###############
