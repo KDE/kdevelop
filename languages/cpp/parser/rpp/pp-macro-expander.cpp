@@ -121,7 +121,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       QString name = skip_identifier (input);
 
       // search for the paste token
-      qint64 blankStart = input.pos();
+      int blankStart = input.pos();
       skip_blanks (input, PPInternal::devnull());
       if (!input.atEnd() && input == '#') {
         ++input;
@@ -180,7 +180,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
       pp_macro_expander expand_actual(m_engine, m_frame);
 
-      qint64 before = input.pos();
+      int before = input.pos();
       {
         actual.clear();
 
@@ -248,7 +248,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
 void pp_macro_expander::skip_argument_variadics (const QList<QString>& __actuals, pp_macro *__macro, Stream& input, Stream& output)
 {
-  qint64 first;
+  int first;
 
   do {
     first = input.pos();

@@ -22,16 +22,11 @@
 
 #include <kdebug.h>
 
-class DevNullDevice : public QIODevice
-{
-protected:
-  virtual qint64 readData ( char *, qint64 ) { return 0; }
-  virtual qint64 writeData ( const char *, qint64 maxSize ) { return maxSize; }
-};
+static const QChar newline('\n');
+static const QChar nullchar;
 
 Stream::Stream()
-  : QTextStream(new DevNullDevice)
-  , m_atEnd(false)
+  : m_string(new QString())
   , m_isNull(true)
   , m_pos(0)
   , m_inputLine(0)
@@ -39,151 +34,90 @@ Stream::Stream()
 {
 }
 
-Stream::Stream( const QByteArray & array, QIODevice::OpenMode openMode )
-  : QTextStream(array, openMode)
-  , m_atEnd(false)
-  , m_isNull(false)
-  , m_pos(0)
-  , m_inputLine(0)
-  , m_outputLine(0)
-{
-  operator>>(c);
-  //kDebug() << "'" << c << "' " << c.cell() << endl;
-}
-
-Stream::Stream( QByteArray * array, QIODevice::OpenMode openMode )
-  : QTextStream(array, openMode)
-  , m_atEnd(false)
-  , m_isNull(false)
-  , m_pos(0)
-  , m_inputLine(0)
-  , m_outputLine(0)
-{
-  operator>>(c);
-  //kDebug() << "'" << c << "' " << c.cell() << endl;
-}
-
 Stream::Stream( QString * string, QIODevice::OpenMode openMode )
-  : QTextStream(string, openMode)
-  , m_atEnd(false)
+  : m_string(string)
   , m_isNull(false)
   , m_pos(0)
   , m_inputLine(0)
   , m_outputLine(0)
 {
-  operator>>(c);
-  //if (!string->isEmpty())
-    //kDebug() << "'" << c << "' " << c.cell() << endl;
-}
-
-Stream::Stream( FILE * fileHandle, QIODevice::OpenMode openMode )
-  : QTextStream(fileHandle, openMode)
-  , m_atEnd(false)
-  , m_isNull(false)
-  , m_pos(0)
-  , m_inputLine(0)
-  , m_outputLine(0)
-{
-  operator>>(c);
-  //kDebug() << "'" << c << "' " << c.cell() << endl;
-}
-
-Stream::Stream( QIODevice * device )
-  : QTextStream(device)
-  , m_atEnd(false)
-  , m_isNull(false)
-  , m_pos(0)
-  , m_inputLine(0)
-  , m_outputLine(0)
-{
-  operator>>(c);
-  //kDebug() << "'" << c << "' " << c.cell() << endl;
+  Q_UNUSED(openMode);
+  c = m_string->constData();
+  end = m_string->constData() + m_string->length();
 }
 
 Stream::~Stream()
 {
-  if (isNull())
-    delete device();
+  if (m_isNull)
+    delete m_string;
 }
 
 Stream & Stream::operator ++( )
 {
-  if (m_atEnd)
+  if (c == end)
     return *this;
 
-  if (c == '\n')
+  if (*c == newline)
      ++m_inputLine;
 
-  if (QTextStream::atEnd()) {
-    m_atEnd = true;
-    ++m_pos;
-    c = QChar();
+  ++c;
+  //kDebug() << "'" << c << "' " << c.cell() << endl;
+  ++m_pos;
 
-  } else {
-    operator>>(c);
-    //kDebug() << "'" << c << "' " << c.cell() << endl;
-    ++m_pos;
-  }
   return *this;
 }
 
 Stream& Stream::operator--()
 {
-  seek(pos() - 2);
-  operator>>(c);
+  if (c == m_string->constData())
+    return *this;
+
+  --c;
   --m_pos;
+
   return *this;
 }
 
-void Stream::rewind(qint64 offset)
+void Stream::rewind(int offset)
 {
-  seek(pos() - offset);
+  c -= offset;
+  if (c < m_string->constData())
+    c = m_string->constData();
 }
 
 bool Stream::atEnd() const
 {
-  return m_atEnd;
+  return c == end;
 }
 
-QChar Stream::peek() const
+const QChar& Stream::peek(int offset) const
 {
-  Stream* s = const_cast<Stream*>(this);
-  int inputLine = m_inputLine;
-  ++(*s);
-  QChar ret = s->current();
-  s->rewind();
-  inputLine = m_inputLine;
-  return ret;
+  if (c + offset > end)
+    return nullchar;
+
+  return *(c + offset);
 }
 
-qint64 Stream::pos( ) const
+int Stream::pos( ) const
 {
   return m_pos;
 }
 
-void Stream::seek(qint64 offset)
+void Stream::seek(int offset)
 {
-  if (QTextStream::seek(offset)) {
-    m_pos = offset;
-    if (QTextStream::atEnd()) {
-      m_atEnd = true;
-    } else {
-      operator>>(c);
-      m_atEnd = false;
-    }
-  }
+  c = m_string->constData() + offset;
+  if (c > end)
+    c = end;
 }
 
 Stream& Stream::operator<< ( QChar c )
 {
   if (!isNull()) {
-    if (c == '\n') {
+    if (c == newline)
       ++m_outputLine;
-      //output.clear();
-    } else {
-      //output += c;
-    }
-    QTextStream::operator<<(c);
+
+    m_string->append(c);
+    ++m_pos;
   }
   return *this;
 }
@@ -191,9 +125,9 @@ Stream& Stream::operator<< ( QChar c )
 Stream& Stream::operator<< ( const QString & string )
 {
   if (!isNull()) {
-    m_outputLine += string.count('\n');
-    //output += c;
-    QTextStream::operator<<(string);
+    m_outputLine += string.count(newline);
+    m_string->append(string);
+    m_pos += string.length();
   }
   return *this;
 }
@@ -220,15 +154,12 @@ void Stream::setOutputLineNumber(int line)
 
 void Stream::mark(const QString& filename, int inputLineNumber)
 {
-  QTextStream::operator<<(QString("# %1 \"%2\"\n").arg(inputLineNumber).arg(filename.isEmpty() ? QString("<internal>") : filename));
+  m_string->append(QString("# %1 \"%2\"\n").arg(inputLineNumber).arg(filename.isEmpty() ? QString("<internal>") : filename));
   setOutputLineNumber(inputLineNumber);
 }
 
 void Stream::reset( )
 {
-  QTextStream::seek(0);
+  c = m_string->constData();
   m_inputLine = m_outputLine = m_pos = 0;
-  //output.clear();
-  m_atEnd = false;
-  operator>>(c);
 }

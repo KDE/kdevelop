@@ -71,7 +71,10 @@ QString pp::processFile(const QString& input, StringType type)
     {
       m_files.push(input);
 
-      Stream is(&file);
+      QByteArray contents = file.readAll();
+      QString contentsDecoded = QString::fromUtf8(contents);
+
+      Stream is(&contentsDecoded);
       QString result;
 
       {
@@ -110,7 +113,9 @@ QString pp::processFile(QIODevice* device)
   m_files.push("<internal>");
 
   {
-    Stream is(device);
+    QTextStream input(device);
+    QString contents = input.readAll();
+    Stream is(&contents);
     Stream rs(&result);
     operator () (is, rs);
   }
@@ -395,7 +400,7 @@ void pp::handle_define (Stream& input)
   {
     if (input == '\\')
     {
-      qint64 pos = input.pos();
+      int pos = input.pos();
       skip_blanks (++input, PPInternal::devnull());
 
       if (!input.atEnd() && input == '\n')

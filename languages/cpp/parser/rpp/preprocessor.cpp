@@ -35,6 +35,7 @@ public:
     QString result;
     QHash<QString, pp_macro*> env;
     QStringList includePaths;
+    QStringList includedFileContents;
 };
 
 QHash<QString, QStringList> includedFiles;
@@ -55,14 +56,22 @@ QString Preprocessor::processFile(const QString& fileName)
 {
     pp proc(this, d->env);
 
-    return proc.processFile(fileName, pp::File);
+    QString ret = proc.processFile(fileName, pp::File);
+
+    d->includedFileContents.clear();
+
+    return ret;
 }
 
 QString Preprocessor::processString(const QString &bytearray)
 {
     pp proc(this, d->env);
 
-    return proc.processFile(bytearray, pp::Data);
+    QString ret = proc.processFile(bytearray, pp::Data);
+
+    d->includedFileContents.clear();
+
+    return ret;
 }
 
 void Preprocessor::addIncludePaths(const QStringList &includePaths)
@@ -151,5 +160,10 @@ Stream * Preprocessor::sourceNeeded( QString & fileName, IncludeType type )
   // Hrm, hazardous?
   f->deleteLater();
 
-  return new Stream(f);
+  QTextStream ts(f);
+
+  QString content = ts.readAll();
+  d->includedFileContents.append(content);
+
+  return new Stream(&d->includedFileContents.last());
 }

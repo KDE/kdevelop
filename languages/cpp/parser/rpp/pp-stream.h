@@ -28,38 +28,34 @@
  *
  * @author Hamish Rodda <rodda@kde.org>
  */
-class Stream : private QTextStream
+class Stream
 {
   public:
     Stream();
-    Stream( QIODevice * device );
-    Stream( FILE * fileHandle, QIODevice::OpenMode openMode = QIODevice::ReadWrite );
     Stream( QString * string, QIODevice::OpenMode openMode = QIODevice::ReadWrite );
-    Stream( QByteArray * array, QIODevice::OpenMode openMode = QIODevice::ReadWrite );
-    Stream( const QByteArray & array, QIODevice::OpenMode openMode = QIODevice::ReadOnly );
     ~Stream();
 
     bool isNull() const;
 
     bool atEnd() const;
 
-    qint64 pos() const;
+    int pos() const;
 
-    QChar peek() const;
+    const QChar& peek(int offset = 1) const;
 
     /// Move back \a offset chars in the stream
-    void rewind(qint64 offset = 1);
+    void rewind(int offset = 1);
 
     /// \warning the input and output lines are not updated when calling this function.
     ///          if you're seek()ing over a line boundary, you'll need to fix the line
     ///          numbers.
-    void seek(qint64 offset);
+    void seek(int offset);
 
     /// Start from the beginning again
     void reset();
 
-    inline const QChar& current() const { return c; }
-    inline operator const QChar&() const { return c; }
+    inline const QChar& current() const { return *c; }
+    inline operator const QChar&() const { return *c; }
     Stream& operator++();
     Stream& operator--();
 
@@ -75,10 +71,11 @@ class Stream : private QTextStream
   private:
     Q_DISABLE_COPY(Stream)
 
-    QChar c;
-    bool m_atEnd;
+    QString* m_string;
+    const QChar* c;
+    const QChar* end;
     bool m_isNull;
-    qint64 m_pos;
+    int m_pos;
     int m_inputLine, m_outputLine;
     //QString output;
 };
