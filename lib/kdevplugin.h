@@ -117,8 +117,9 @@ public:
 
     /**
      * The display widget for this plugin. The widget _must_ specify
-     * a non-empty @see QObject::objectName() and @see QWidget::windowTitle().
+     * a non-empty QObject::objectName() and QWidget::windowTitle().
      * The default implementation returns 0.
+     * @see QObject::objectName() and @see QWidget::windowTitle()
      * @return the @ref QWidget view
      */
     virtual QWidget *pluginView() const;
