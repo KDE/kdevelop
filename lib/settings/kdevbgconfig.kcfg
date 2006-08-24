@@ -9,5 +9,8 @@
     <entry name="delay" key="Delay" type="Int">
     <default>500</default>
     </entry>
+    <entry name="threads" key="Number of Threads" type="Int">
+    <default>1</default>
+    </entry>
   </group>
 </kcfg>
