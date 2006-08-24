@@ -47,7 +47,7 @@
 #include "duchain/dumpchain.h"
 #include "duchain/cppeditorintegrator.h"
 #include "duchain/dubuilder.h"
-#include "duchain/ducontext.h"
+#include "duchain/topducontext.h"
 #include "preprocessjob.h"
 
 CPPParseJob::CPPParseJob( const KUrl &url,
@@ -156,14 +156,6 @@ void ParseJob::run()
 
         parentJob()->setCodeModel(model);
 
-        KTextEditor::SmartInterface* smart = 0;
-        if ( parentJob()->openDocument() && parentJob()->openDocument()->textDocument() )
-            smart = dynamic_cast<KTextEditor::SmartInterface*>(parentJob()->openDocument()->textDocument());
-
-        // Lock the smart interface, if one exists
-        // Locking the interface here allows all of the highlighting to update before a redraw happens, thus no flicker
-        QMutexLocker lock(smart ? smart->smartMutex() : 0);
-
         QList<DUContext*> chains;
 
         if (KDevCore::activeProject()) {
@@ -177,26 +169,33 @@ void ParseJob::run()
             }
         }
 
-        DUBuilder dubuilder(parentJob()->parseSession());
-        TopDUContext* topContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileDefinitions, &chains);
+        TopDUContext* topContext;
 
-        if (parentJob()->abortRequested())
-            return parentJob()->abortJob();
-
-        // We save some time here by not running the use compiler if the file is not loaded... (it's only needed
-        // for navigation in that case)
-        // FIXME make configurable
-        if (!parentJob()->wasReadFromDisk()) {
-            TopDUContext* repeatTopContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileUses);
+        // Control the lifetime of the editor integrator (so that locking works)
+        {
+            CppEditorIntegrator editor(parentJob()->parseSession());
+            DUBuilder dubuilder(&editor);
+            topContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileDefinitions, &chains);
 
             if (parentJob()->abortRequested())
                 return parentJob()->abortJob();
+
+            // We save some time here by not running the use compiler if the file is not loaded... (it's only needed
+            // for navigation in that case)
+            // FIXME make configurable
+            if (!parentJob()->wasReadFromDisk()) {
+                TopDUContext* repeatTopContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileUses);
+                Q_ASSERT(repeatTopContext == topContext);
+
+                if (parentJob()->abortRequested())
+                    return parentJob()->abortJob();
+            }
+
+            parentJob()->setDUChain(topContext);
+
+            if ( parentJob()->cpp()->codeHighlighting() )
+                parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );
         }
-
-        parentJob()->setDUChain(topContext);
-
-        if ( parentJob()->cpp()->codeHighlighting() )
-            parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );
 
         // Debug output...
 

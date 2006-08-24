@@ -21,6 +21,8 @@
 
 #include <limits.h>
 
+#include <QMutex>
+
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
@@ -35,8 +37,17 @@ KDevEditorIntegratorPrivate* KDevEditorIntegrator::s_data = 0;
 
 KDevEditorIntegrator::KDevEditorIntegrator()
   : m_currentDocument(0)
+  , m_smart(0)
   , m_currentRange(0)
 {
+}
+
+KDevEditorIntegrator::~ KDevEditorIntegrator()
+{
+  if (m_smart) {
+    // Unlock the smart interface, if one exists
+    m_smart->smartMutex()->unlock();
+  }
 }
 
 KDevEditorIntegratorPrivate::~KDevEditorIntegratorPrivate()
@@ -250,9 +261,19 @@ const KUrl& KDevEditorIntegrator::currentUrl() const
 
 void KDevEditorIntegrator::setCurrentUrl(const KUrl& url)
 {
+  if (m_smart) {
+    // Unlock the smart interface, if one exists
+    m_smart->smartMutex()->unlock();
+  }
+
   m_currentUrl = url;
   m_currentDocument = documentForUrl(url);
   m_smart = dynamic_cast<KTextEditor::SmartInterface*>(m_currentDocument);
+
+  if (m_smart) {
+    // Lock the smart interface, if one exists
+    m_smart->smartMutex()->lock();
+  }
 }
 
 void KDevEditorIntegrator::releaseTopRange(KTextEditor::Range * range)

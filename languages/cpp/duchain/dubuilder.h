@@ -46,6 +46,7 @@ class DUBuilder: protected DefaultVisitor
 {
 public:
   DUBuilder(ParseSession* session);
+  DUBuilder(CppEditorIntegrator* editor);
   virtual ~DUBuilder ();
 
   enum DefinitionOrUse {
@@ -166,6 +167,7 @@ private:
   bool in_function_definition: 1;
   bool in_parameter_declaration: 1;
   bool m_compilingDefinitions: 1;
+  bool m_ownsEditorIntegrator: 1;
 
   QStack<DUContext*> m_contextStack;
   QList<DUContext*> m_importedParentContexts;

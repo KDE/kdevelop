@@ -45,12 +45,28 @@ DUBuilder::DUBuilder (ParseSession* session)
   , in_typedef(false)
   , in_function_definition(false)
   , in_parameter_declaration(false)
+  , m_ownsEditorIntegrator(true)
+{
+}
+
+DUBuilder::DUBuilder (CppEditorIntegrator* editor)
+  : m_editor(editor)
+  , m_nameCompiler(new NameCompiler(editor->parseSession()))
+  , in_namespace(false)
+  , in_class(false)
+  , in_template_declaration(false)
+  , in_typedef(false)
+  , in_function_definition(false)
+  , in_parameter_declaration(false)
+  , m_ownsEditorIntegrator(false)
 {
 }
 
 DUBuilder::~DUBuilder ()
 {
-  delete m_editor;
+  if (m_ownsEditorIntegrator)
+    delete m_editor;
+
   delete m_nameCompiler;
 }
 

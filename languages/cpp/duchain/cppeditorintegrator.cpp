@@ -80,3 +80,8 @@ QString CppEditorIntegrator::tokenToString(std::size_t token) const
 }
 
 // kate: indent-width 2;
+
+ParseSession * CppEditorIntegrator::parseSession() const
+{
+  return m_session;
+}

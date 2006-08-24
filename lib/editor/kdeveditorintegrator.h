@@ -47,6 +47,7 @@ class KDEVINTERFACES_EXPORT KDevEditorIntegrator
 {
 public:
   KDevEditorIntegrator();
+  virtual ~KDevEditorIntegrator();
 
   /**
    * Adds a text editor \a document to the integrator.

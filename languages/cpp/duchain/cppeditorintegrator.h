@@ -38,6 +38,8 @@ class CppEditorIntegrator : public KDevEditorIntegrator
 public:
   CppEditorIntegrator(ParseSession* session);
 
+  ParseSession* parseSession() const;
+
   /**
    * Finds the location and \a file where the given \a token was parsed from.  This function
    * does not change any of the CppEditorIntegrator's state.
