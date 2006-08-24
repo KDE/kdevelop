@@ -106,8 +106,11 @@ int Stream::pos( ) const
 void Stream::seek(int offset)
 {
   c = m_string->constData() + offset;
-  if (c > end)
+  m_pos = offset;
+  if (c > end) {
     c = end;
+    m_pos = m_string->length();
+  }
 }
 
 Stream& Stream::operator<< ( QChar c )

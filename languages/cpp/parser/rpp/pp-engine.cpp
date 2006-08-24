@@ -90,12 +90,11 @@ QString pp::processFile(const QString& input, StringType type)
   }
   else
   {
-    QString realInput = input;
     QString result;
     m_files.push("<internal>");
 
     {
-      Stream is(&realInput);
+      Stream is(&const_cast<QString&>(input));
       Stream rs(&result);
       operator () (is, rs);
     }
