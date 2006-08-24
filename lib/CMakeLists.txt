@@ -6,16 +6,14 @@ add_subdirectory(debugger)
 add_subdirectory(projectmanager)
 add_subdirectory(settings)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/lib/weaver ${CMAKE_SOURCE_DIR}/lib/editor ${CMAKE_SOURCE_DIR}/lib/backgroundparser )
+include_directories( ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/lib/weaver ${CMAKE_SOURCE_DIR}/lib/editor ${CMAKE_SOURCE_DIR}/lib/backgroundparser ${CMAKE_SOURCE_DIR}/lib/interfaces )
 
 ########### next target ###############
 
 set(kdevplatform_LIB_SRCS
     kdevlanguagesupport.cpp
-    kdevappfrontend.cpp
     kdevmainwindow.cpp
     kdevprojectbuilder.cpp
-    kdevmakefrontend.cpp
     kdevproject.cpp
     kdevcodemodel.cpp
     kdevdocumentcontroller.cpp
@@ -24,7 +22,6 @@ set(kdevplatform_LIB_SRCS
     kdevpcsimporter.cpp
     kdevplugincontroller.cpp
     kdevprojectmodel.cpp
-    kdevdifffrontend.cpp
     kdevplugin.cpp
     domutil.cpp
     kdevitemmodel.cpp
@@ -59,6 +56,9 @@ set(kdevplatform_LIB_SRCS
     editor/kdevdocumentcursor.cpp
     editor/kdevdocumentrange.cpp
     backgroundparser/kdevparserdependencypolicy.cpp
+    interfaces/kdevapplicationinterface.cpp
+    interfaces/kdevdiffinterface.cpp
+    interfaces/kdevmakeinterface.cpp
 )
 
 set(kdevplatform_UI3
@@ -78,7 +78,6 @@ install(TARGETS kdevplatform DESTINATION ${LIB_INSTALL_DIR} )
 install(FILES
     kdevdocument.h
     kdevdocumentcontroller.h
-    kdevappfrontend.h
     kdevpcsimporter.h
     kdevplugincontroller.h
     kdevcodemodel.h
@@ -88,12 +87,10 @@ install(FILES
     kdevprojectbuilder.h
     kdevcreatefile.h
     kdevproject.h
-    kdevdifffrontend.h
     domutil.h
     kdevlanguagesupport.h
     kdevprojectmodel.h
     kdevmainwindow.h
-    kdevmakefrontend.h
     kdevitemmodel.h
     filetemplate.h
     kdevcodedelegate.h
@@ -124,22 +121,25 @@ install(FILES
     editor/kdevdocumentcursorobject.h
     editor/kdevdocumentcursor.h
     editor/kdevdocumentrange.h
+    interfaces/kdevapplicationinterface.h
+    interfaces/kdevdiffinterface.h
+    interafces/kdevmakeinterface.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/
 )
 
 install(FILES
-    kdevelopappfrontend.desktop
     kdeveloppcsimporter.desktop
     kdevelopcreatefile.desktop
     kdevelopplugin.desktop
-    kdevelopdifffrontend.desktop
     kdevelopprojectbuilder.desktop
     kdeveloplanguagesupport.desktop
     kdevelopproject.desktop
-    kdevelopmakefrontend.desktop
     kdevelopprojectfilemanager.desktop
     kdevelop_part.desktop
     kdevelop_rwpart.desktop
+    interfaces/kdevappinterface.desktop
+    interfaces/kdevdiffinterface.desktop
+    interfaces/kdevmakeinterface.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR}
 )
 

@@ -8,7 +8,7 @@
 
 #include <kdevproject.h>
 #include <kdevcore.h>
-#include <kdevmakefrontend.h>
+#include <kdevmakeinterface.h>
 #include <domutil.h>
 
 #if 0 // ### port me

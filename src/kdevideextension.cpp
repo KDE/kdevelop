@@ -34,7 +34,6 @@
 #include <kicon.h>
 
 #include <kdevplugin.h>
-#include <kdevmakefrontend.h>
 #include <kdevplugincontroller.h>
 #include <kglobal.h>
 

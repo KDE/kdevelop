@@ -43,10 +43,10 @@ Boston, MA 02110-1301, USA.
 #include "kdevcore.h"
 #include "kdevconfig.h"
 #include "kdevplugin.h"
-#include "kdevmakefrontend.h"
-#include "kdevappfrontend.h"
+#include "kdevmakeinterface.h"
+#include "kdevapplicationinterface.h"
 #include "kdevprojectcontroller.h"
-#include "kdevdifffrontend.h"
+#include "kdevdiffinterface.h"
 #include "kdevcreatefile.h"
 #include "kdevmainwindow.h"
 

@@ -18,7 +18,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "kdevdifffrontend.h"
+#include "kdevdiffinterface.h"
 
 KDevDiffFrontend::KDevDiffFrontend(KInstance *instance, QObject *parent)
     : KDevPlugin(instance, parent)
@@ -29,5 +29,5 @@ KDevDiffFrontend::~KDevDiffFrontend()
 {
 }
 
-#include "kdevdifffrontend.moc"
+#include "kdevdiffinterface.moc"
 
