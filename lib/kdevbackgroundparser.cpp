@@ -30,6 +30,7 @@
 #include "kdevcodehighlighting.h"
 
 #include "kdevast.h"
+#include "kdevconfig.h"
 #include "kdevparsejob.h"
 #include "kdevpersistenthash.h"
 #include "kdevprojectcontroller.h"
@@ -46,6 +47,7 @@
 #include <ktexteditor/smartinterface.h>
 #include <ktexteditor/document.h>
 
+#include <weaver/State.h>
 #include <weaver/ThreadWeaver.h>
 #include <weaver/JobCollection.h>
 #include <weaver/DebuggingAids.h>
@@ -54,8 +56,8 @@
 
 KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         : QObject( parent ),
-        m_suspend( false ),
         m_modelsToCache( 0 ),
+        m_delay( 500 ),
         m_progressBar( new QProgressBar ),
         m_weaver( new Weaver( this, 2 ) ),
         m_dependencyPolicy( new KDevParserDependencyPolicy )
@@ -65,7 +67,7 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
     m_timer = new QTimer( this );
     m_timer->setSingleShot( true );
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
-    m_timer->start( 500 );
+    m_timer->start( m_delay );
 }
 
 KDevBackgroundParser::~KDevBackgroundParser()
@@ -93,6 +95,16 @@ void KDevBackgroundParser::init()
     m_progressBar->setMinimumWidth( 150 );
     KDevCore::mainWindow()->statusBar()->addPermanentWidget( m_progressBar );
     m_progressBar->hide();
+
+    KConfig * config = KDevConfig::standard();
+    config->setGroup( "Background Parser" );
+    bool enabled = config->readBoolEntry( "Enabled", true );
+    m_delay = config->readNumEntry( "Delay", 500 );
+
+    if ( enabled )
+        resume();
+    else
+        suspend();
 }
 
 void KDevBackgroundParser::cacheModels( uint modelsToCache )
@@ -271,13 +283,22 @@ void KDevBackgroundParser::documentChanged( KTextEditor::Document * document )
 {
     Q_ASSERT( m_documents.contains( document->url() ) );
     m_documents.insert( document->url(), true );
-    if ( !m_timer->isActive() && !m_suspend )
-        m_timer->start( 500 );
+
+    bool s = m_weaver->state().stateId() == ThreadWeaver::Suspended
+            || m_weaver->state().stateId() ==  ThreadWeaver::Suspending;
+
+    if ( !m_timer->isActive() && !s )
+        m_timer->start( m_delay );
 }
 
 void KDevBackgroundParser::suspend()
 {
-    m_suspend = true;
+    bool s = m_weaver->state().stateId() == ThreadWeaver::Suspended
+            || m_weaver->state().stateId() ==  ThreadWeaver::Suspending;
+
+    if ( s ) //Already suspending
+        return;
+
     m_timer->stop();
 
     m_weaver->suspend();
@@ -287,13 +308,23 @@ void KDevBackgroundParser::suspend()
 
 void KDevBackgroundParser::resume()
 {
-    m_suspend = false;
-    m_timer->start( 500 );
+    bool s = m_weaver->state().stateId() == ThreadWeaver::Suspended
+            || m_weaver->state().stateId() ==  ThreadWeaver::Suspending;
+
+    if ( m_timer->isActive() && !s ) //Not suspending
+        return;
+
+    m_timer->start( m_delay );
 
     m_weaver->resume();
 
     if (m_weaver->queueLength())
         m_progressBar->show();
+}
+
+void KDevBackgroundParser::setDelay( int msec )
+{
+    m_delay = msec;
 }
 
 KDevParserDependencyPolicy* KDevBackgroundParser::dependencyPolicy() const

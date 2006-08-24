@@ -9,19 +9,32 @@ set( kdev_config_SRC
     kdevuipreferences.cpp
     kdevenvpreferences.cpp
     kdevenvwidget.cpp
+    kdevbgpreferences.cpp
 )
 set( kdevelop_UI
     projectsettings.ui
     uisettings.ui
     envsettings.ui
+    bgsettings.ui
+)
+set( kdevelop_KCFGC
+    kdevprojectconfig.kcfgc
+    kdevbgconfig.kcfgc
+    kdevuiconfig.kcfgc
+)
+set( kdevelop_DESKTOP
+    kcm_kdevproject_settings.desktop
+    kcm_kdevui_settings.desktop
+    kcm_kdevenv_settings.desktop
+    kcm_kdevbg_settings.desktop
 )
 
 kde4_automoc( ${kdev_config_SRC} )
 kde4_add_ui_files( kdev_config_SRC ${kdevelop_UI} )
-kde4_add_kcfg_files(kdev_config_SRC kdevprojectconfig.kcfgc kdevuiconfig.kcfgc )
+kde4_add_kcfg_files(kdev_config_SRC ${kdevelop_KCFGC} )
 kde4_add_plugin(kcm_kdevelop_settings ${kdev_config_SRC})
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kdevelop_settings )
 target_link_libraries(kcm_kdevelop_settings ${KDE4_KUTILS_LIBS} kdevplatform )
 install(TARGETS kcm_kdevelop_settings  DESTINATION ${PLUGIN_INSTALL_DIR})
-install( FILES kcm_kdevproject_settings.desktop kcm_kdevui_settings.desktop kcm_kdevenv_settings.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES ${kdevelop_DESKTOP} DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES data.kdev4 kdevelop.setdlg DESTINATION ${DATA_INSTALL_DIR}/kdevelop )

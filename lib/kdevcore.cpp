@@ -217,8 +217,10 @@ void KDevCore::initialize()
     d->documentController->init();
     d->projectController->init();
     d->mainWindow->init();
-    d->backgroundParser->init();
+
     d->pluginController->init();
+
+    d->backgroundParser->init(); //Load this after plugin as it uses project settings
 
     d->mainWindow->setVisible( true ); //Done initializing
 }

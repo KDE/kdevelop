@@ -2,12 +2,12 @@
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg>
   <kcfgfile name="kdeveloprc"/>
-  <group name="UI">
-    <entry name="docked" key="Docked Window" type="Bool">
+  <group name="Background Parser">
+    <entry name="enable" key="Enabled" type="Bool">
     <default>true</default>
     </entry>
-    <entry name="toplevel" key="Multiple Top-Level Windows" type="Bool">
-    <default>false</default>
+    <entry name="delay" key="Delay" type="Int">
+    <default>500</default>
     </entry>
   </group>
 </kcfg>

@@ -1,0 +1,5 @@
+File=kdevbgconfig.kcfg
+ClassName=KDevBGSettings
+Singleton=true
+Inherits=KDevConfigSkeleton
+IncludeFiles="kdevconfigskeleton.h"
