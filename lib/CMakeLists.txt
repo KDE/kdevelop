@@ -123,7 +123,7 @@ install(FILES
     editor/kdevdocumentrange.h
     interfaces/kdevapplicationinterface.h
     interfaces/kdevdiffinterface.h
-    interafces/kdevmakeinterface.h
+    interfaces/kdevmakeinterface.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/
 )
 
@@ -137,7 +137,7 @@ install(FILES
     kdevelopprojectfilemanager.desktop
     kdevelop_part.desktop
     kdevelop_rwpart.desktop
-    interfaces/kdevappinterface.desktop
+    interfaces/kdevapplicationinterface.desktop
     interfaces/kdevdiffinterface.desktop
     interfaces/kdevmakeinterface.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR}
