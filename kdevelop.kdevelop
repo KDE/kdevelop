@@ -15,24 +15,9 @@
     <description/>
     <ignoreparts>
       <part>kdevbookmarks</part>
-      <part>kdevclassview</part>
-      <part>kdevsnippet</part>
-      <part>kdevctags2</part>
-      <part>kdevdocumentation</part>
-      <part>kdevdoxygen</part>
-      <part>kdevfilegroups</part>
+      <part>kdevfilelist</part>
       <part>kdevdistpart</part>
-      <part>kdevopenwith</part>
-      <part>kdevpartexplorer</part>
-      <part>kdevquickopen</part>
-      <part>kdevregexptest</part>
-      <part>kdevscripting</part>
-      <part>kdevsecurity</part>
-      <part>kdevfilter</part>
-      <part>kdevtexttools</part>
-      <part>kdevtools</part>
     </ignoreparts>
-    <versioncontrol>kdevsubversion</versioncontrol>
     <defaultencoding/>
   </general>
   <kdevfileview>
@@ -46,7 +31,7 @@
       <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
-      <hidepatterns>*.o,*.lo,CVS</hidepatterns>
+      <hidepatterns>*.o,*.lo,*~</hidepatterns>
       <hidenonprojectfiles>false</hidenonprojectfiles>
       <showvcsfields>false</showvcsfields>
     </tree>
@@ -200,6 +185,14 @@
       <codeCompletionDelay>250</codeCompletionDelay>
       <argumentsHintDelay>400</argumentsHintDelay>
       <headerCompletionDelay>250</headerCompletionDelay>
+      <showOnlyAccessibleItems>false</showOnlyAccessibleItems>
+      <completionBoxItemOrder>0</completionBoxItemOrder>
+      <howEvaluationContextMenu>true</howEvaluationContextMenu>
+      <showCommentWithArgumentHint>true</showCommentWithArgumentHint>
+      <statusBarTypeEvaluation>false</statusBarTypeEvaluation>
+      <namespaceAliases>std=_GLIBCXX_STD</namespaceAliases>
+      <processPrimaryTypes>true</processPrimaryTypes>
+      <processFunctionArguments>false</processFunctionArguments>
     </codecompletion>
     <creategettersetter>
       <prefixGet/>
@@ -214,6 +207,8 @@
       <used>true</used>
       <version>4</version>
       <root>/home/qt/4.1</root>
+      <includestyle>4</includestyle>
+      <designerintegration>ExternalDesigner</designerintegration>
     </qt>
     <splitheadersource>
       <enabled>false</enabled>
@@ -237,33 +232,43 @@
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars>
-        <envvar value="unix:abstract=/tmp/dbus-5c1qUTESsp,guid=fa749744e8e025172e8bc5b855da4b00" name="DBUS_SESSION_BUS_ADDRESS" />
-        <envvar value="28575" name="DBUS_SESSION_BUS_PID" />
         <envvar value="$HOME/.kde4" name="KDEHOME" />
         <envvar value="/tmp/$USER-kde4" name="KDETMP" />
         <envvar value="/var/tmp/$USER-kde4" name="KDEVARTMP" />
         <envvar value="$LD_LIBRARY_PATH:$QTDIR/lib" name="LD_LIBRARY_PATH" />
-        <envvar value="/home/kde/installs/4.0/bin:/home/qt/4.1/bin:$PATH" name="PATH" />
-        <envvar value="/home/qt/4.1" name="QTDIR" />
+        <envvar value="/home/kde/installs/4.0/bin:/home/qt/4.2/bin:$PATH" name="PATH" />
+        <envvar value="/home/qt/4.2" name="QTDIR" />
       </envvars>
     </run>
     <build>
       <buildtool>make</buildtool>
-      <builddir>/home/kde/build/home/kde/trunk/KDE/kdevelop</builddir>
+      <builddir>/home/kde/trunk/KDE/kdevelop</builddir>
     </build>
     <make>
       <abortonerror>false</abortonerror>
-      <numberofjobs>1</numberofjobs>
+      <numberofjobs>4</numberofjobs>
       <prio>0</prio>
       <dontact>false</dontact>
-      <makebin>make install</makebin>
+      <makebin>makeobj</makebin>
       <defaulttarget/>
       <makeoptions/>
       <selectedenvironment>default</selectedenvironment>
       <environments>
-        <default/>
+        <default>
+          <envvar value="/home/kde/installs/4.0" name="KDEDIR" />
+          <envvar value="$HOME/.kde4" name="KDEHOME" />
+          <envvar value="/tmp/$USER-kde4" name="KDETMP" />
+          <envvar value="/var/tmp/$USER-kde4" name="KDEVARTMP" />
+          <envvar value="s:/home/kde/trunk/:/home/kde/trunk/build/:" name="OBJ_REPLACEMENT" />
+          <envvar value="/opt/icecream/bin:/home/kde/installs/4.0/bin:/home/qt/4.2/bin:$PATH" name="PATH" />
+          <envvar value="/home/qt/4.2/lib:/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH" name="PKG_CONFIG_PATH" />
+          <envvar value="/home/qt/4.2" name="QTDIR" />
+        </default>
       </environments>
     </make>
+    <general>
+      <activedir/>
+    </general>
   </kdevcustomproject>
   <ctagspart>
     <customArguments/>

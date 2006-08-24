@@ -104,7 +104,11 @@ public:
      * constraint is a usual KTrader constraint statement (like "[X-KDevelop-Foo]=='MyFoo'").
      * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
      */
-    KDevPlugin *extension( const QString &serviceType, const QString &constraint = "" );
+    template <class Extension>
+    Extension *extension(const QString &serviceType, const QString &constraint = "")
+    {
+        return static_cast<Extension*>(getExtension( serviceType, constraint ) );
+    }
 
     /**
      * Queries KDevelop services. Version is checked automatically
@@ -187,6 +191,7 @@ public Q_SLOTS:
 
 private:
     static KDevPlugin *loadPlugin( const KService::Ptr &service );
+    KDevPlugin* getExtension( const QString&, const QString& );
 
     QHash<QString, KDevPlugin *> m_parts;
     QString m_profile;

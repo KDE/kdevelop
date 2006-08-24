@@ -63,9 +63,4 @@ bool KDevPlugin::isCentralPlugin() const
     return false;
 }
 
-KDevPlugin * KDevPlugin::extension_internal( const QString &serviceType, const QString &constraint )
-{
-    return KDevCore::pluginController() ->extension( serviceType, constraint );
-}
-
 #include "kdevplugin.moc"

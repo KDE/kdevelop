@@ -138,26 +138,6 @@ public:
      */
     virtual bool isCentralPlugin() const;
 
-    //FIXME Is this used for anything?
-    /**Queries for the plugin which supports given service type (such plugins are called extensions in KDevelop).
-    All already loaded plugins will be queried and the <b>first loaded one</b> to support
-    the service type will be returned. Any plugin can be an extension, only "ServiceTypes=..."
-    entry is required in .desktop file for that plugin.
-
-    Template argument is used as a type to cast the result to. This is done because extension
-    is usually derived from a certain base class and not directly from KDevPlugin.
-    @param serviceType The service type of an extension (like "KDevelop/SourceFormatter").
-    @param constraint The constraint which is applied when quering for the service. This
-    constraint is a usual KTrader constraint statement (like "[X-KDevelop-Foo]=='MyFoo'").
-    @return A KDevelop extension plugin for given service type or 0 if no plugin supports it*/
-    template <class Extension>
-    Extension *extension(const QString &serviceType, const QString &constraint = "")
-    {
-       return static_cast<Extension*>(extension_internal(serviceType, constraint));
-    }
-
-private:
-    KDevPlugin *extension_internal(const QString &serviceType, const QString &constraint = "");
 };
 
 #endif

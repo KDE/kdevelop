@@ -8,6 +8,7 @@
 
 #include <kdevproject.h>
 #include <kdevcore.h>
+#include <kdevplugincontroller.h>
 #include <kdevmakeinterface.h>
 #include <domutil.h>
 
@@ -33,7 +34,10 @@ KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const QStringList &)
     m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
 
-    if (KDevMakeFrontend *make = project()->extension<KDevMakeFrontend>("KDevelop/MakeFrontend")) {
+    KDevPluginController* kdpc = KDevCore::pluginController();
+    KDevMakeFrontend* make = kdpc->extension<KDevMakeFrontend>("KDevelop/MakeFrontend");
+    if ( make )
+    {
         connect(make, SIGNAL(commandFinished(const QString &)),
             this, SLOT(commandFinished(const QString &)));
 
@@ -75,7 +79,8 @@ bool KDevMakeBuilder::configure(KDevProjectItem *dom)
 
 bool KDevMakeBuilder::build(KDevProjectItem *dom)
 {
-    if (KDevMakeFrontend *make = project()->extension<KDevMakeFrontend>("KDevelop/MakeFrontend")) {
+    KDevPluginController* kdpc = KDevCore::pluginController();
+    if (KDevMakeFrontend *make = kdpc->extension<KDevMakeFrontend>("KDevelop/MakeFrontend")) {
         if (KDevProjectFolderItem *folder = dom->folder()) {
             // ### compile the folder
             QString command = buildCommand(dom);

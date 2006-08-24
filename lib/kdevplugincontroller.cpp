@@ -253,7 +253,7 @@ const QList<KDevPlugin *> KDevPluginController::loadedPlugins( const QString& )
     return m_parts.values();
 }
 
-KDevPlugin * KDevPluginController::extension( const QString & serviceType, const QString & constraint )
+KDevPlugin * KDevPluginController::getExtension( const QString & serviceType, const QString & constraint )
 {
     KService::List offers = KDevPluginController::query( serviceType, constraint );
     for ( KService::List::const_iterator it = offers.constBegin(); it != offers.constEnd(); ++it )

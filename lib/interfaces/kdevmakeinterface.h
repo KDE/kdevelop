@@ -57,13 +57,9 @@ class KDEVINTERFACES_EXPORT KDevMakeFrontend : public KDevPlugin
 public:
 
     /**Constructor.
-    @param info Important information about the plugin - plugin internal and generic
-    (GUI) name, description, a list of authors, etc. That information is used to show
-    plugin information in various places like "about application" dialog, plugin selector
-    dialog, etc. Plugin does not take ownership on info object, also its lifetime should
-    be equal to the lifetime of the plugin.
-    @param parent The parent object for the plugin.
-    */
+     * @param instance The instance object created by the plugin factory
+     * @param parent The parent object for the plugin.
+     */
     KDevMakeFrontend(KInstance *instance, QObject *parent=0)
         :KDevPlugin(instance, parent) {}
 
