@@ -682,6 +682,8 @@ void ProjectConfigurationDlg::updateLibaddControl()
 
   insidelib_listview->setSorting(-1,false);
   outsidelib_listview->setSorting(-1,false);
+  insidelib_listview->clear();
+  outsidelib_listview->clear();
 
   //update librarys
   //temp strlist
@@ -757,6 +759,8 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
 
   intDeps_view->setSorting(-1,false);
   extDeps_view->setSorting(-1,false);
+  intDeps_view->clear();
+  extDeps_view->clear();
 
   QStringList depsList=myProjectItem->configuration.m_prjdeps;
 
@@ -846,6 +850,7 @@ void ProjectConfigurationDlg::updateBuildOrderControl()
 
     incaddTab->setEnabled(false);
     buildorder_listview->setSorting(-1,false);
+    buildorder_listview->clear();
     QStringList buildList=myProjectItem->subdirs;
     QStringList::Iterator it1=buildList.begin();
     for(;it1!=buildList.end();++it1){
@@ -883,6 +888,7 @@ void ProjectConfigurationDlg::updateLibDirAddControl()
 
   QPtrList <qProjectItem> itemList=getAllProjects();
   outsidelibdir_listview->setSorting(-1,false);
+  outsidelibdir_listview->clear();
 
   qProjectItem *item=itemList.first();
 
