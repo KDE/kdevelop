@@ -86,6 +86,7 @@ struct ProjectConfiguration
   QMap<QString,QString> m_variables;
   QStringList    m_removed_variables;
   QStringList    m_projectInclude;
+  QStringList    m_customConfigOptions;
 
 };
 

@@ -231,6 +231,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
       myProjectItem->configuration.m_qt4libs += Q4L_QT3;
     if ( checkQt4OpenGL->isChecked() )
       myProjectItem->configuration.m_qt4libs += Q4L_OPENGL;
+    myProjectItem->configuration.m_customConfigOptions = QStringList::split( " ", editConfigExtra->text() );
   }
 
   myProjectItem->configuration.m_target = "";
@@ -528,6 +529,7 @@ void ProjectConfigurationDlg::updateControls()
       checkQt4OpenGL->setChecked( true );
     if ( myProjectItem->configuration.m_qt4libs & Q4L_QT3 )
       checkQt3Support->setChecked( true );
+    editConfigExtra->setText( myProjectItem->configuration.m_customConfigOptions.join(" ") );
   }
 
   //makefile
@@ -622,6 +624,8 @@ void ProjectConfigurationDlg::updateIncludeControl()
 {
   insideinc_listview->setSorting(-1,false);
   outsideinc_listview->setSorting(-1,false);
+  insideinc_listview->clear();
+  outsideinc_listview->clear();
 
 
   QStringList incList=myProjectItem->configuration.m_incadd;

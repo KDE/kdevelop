@@ -521,6 +521,25 @@
                                     <string>Precompiled headers</string>
                                 </property>
                             </widget>
+                            <widget class="QCheckBox" row="0" column="2">
+                                <property name="name">
+                                    <cstring>exceptionCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>E&amp;xceptions </string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+X</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="3" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1_4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Custom configuration:</string>
+                                </property>
+                            </widget>
                             <widget class="QCheckBox" row="1" column="2">
                                 <property name="name">
                                     <cstring>checkConsole</cstring>
@@ -538,15 +557,12 @@
                                     <string>Check to build a win32 console app</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="0" column="2">
+                            <widget class="QLineEdit" row="3" column="1" rowspan="1" colspan="2">
                                 <property name="name">
-                                    <cstring>exceptionCheck</cstring>
+                                    <cstring>editConfigExtra</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>E&amp;xceptions </string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+X</string>
+                                <property name="readOnly">
+                                    <bool>false</bool>
                                 </property>
                             </widget>
                         </grid>
@@ -855,7 +871,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>20</height>
+                                <height>80</height>
                             </size>
                         </property>
                     </spacer>
@@ -2071,8 +2087,6 @@
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>Browse</sender>

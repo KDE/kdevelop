@@ -1355,7 +1355,6 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
     configList.append("rtti");
   if (item->configuration.m_requirements & QD_ORDERED)
     configList.append("ordered");
-
   //Qt4 specific
   if ( m_part->isQt4Project() )
   {
@@ -1371,6 +1370,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
       configList.append( "dbus" );
     if ( item->configuration.m_requirements & QD_DESIGNER )
       configList.append( "designer" );
+    configList += item->configuration.m_customConfigOptions;
   }
 
   if (item->configuration.m_requirements & QD_LIBTOOL )
@@ -3116,68 +3116,143 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
     {
       // config debug/release
       if (lst.find("debug")!=lst.end())
+      {
         item->configuration.m_buildMode = QBM_DEBUG;
+        lst.remove("debug");
+      }
       if (lst.find("release")!=lst.end())
+      {
         item->configuration.m_buildMode = QBM_RELEASE;
+        lst.remove("release");
+      }
       if (m_part->isQt4Project() && lst.find("debug_and_release" )!=lst.end())
       {
         item->configuration.m_buildMode = QBM_DEBUG_AND_RELEASE;
+        lst.remove("debug_and_release");
       }
       // config warnings on/off
       if (lst.find("warn_on")!=lst.end())
+      {
         item->configuration.m_warnings = QWARN_ON;
+        lst.remove("warn_on");
+      }
       if (lst.find("warn_off")!=lst.end())
+      {
         item->configuration.m_warnings = QWARN_OFF;
+        lst.remove("warn_off");
+      }
       // config requerments
       if (lst.find("qt")!=lst.end())
+      {
         item->configuration.m_requirements += QD_QT;
+        lst.remove("qt");
+      }
       if (lst.find("x11")!=lst.end())
+      {
         item->configuration.m_requirements += QD_X11;
+        lst.remove("x11");
+      }
       if (lst.find("thread")!=lst.end())
+      {
         item->configuration.m_requirements += QD_THREAD;
+        lst.remove("thread");
+      }
       if (lst.find("opengl")!=lst.end())
+      {
         item->configuration.m_requirements += QD_OPENGL;
+        lst.remove("opengl");
+      }
       // config lib mode
       if (lst.find("staticlib")!=lst.end())
+      {
         item->configuration.m_requirements += QD_STATIC;
+        lst.remove("staticlib");
+      }
       if (lst.find("dll")!=lst.end())
+      {
         item->configuration.m_requirements += QD_SHARED;
+        lst.remove("dll");
+      }
       if (lst.find("plugin")!=lst.end())
       {
         item->configuration.m_requirements += QD_PLUGIN;
         item->configuration.m_requirements += QD_SHARED;
+        lst.remove("plugin");
       }
       if (lst.find("exceptions")!=lst.end())
+      {
         item->configuration.m_requirements += QD_EXCEPTIONS;
+        lst.remove("exceptions");
+      }
       if (lst.find("stl")!=lst.end())
+      {
         item->configuration.m_requirements += QD_STL;
+        lst.remove("stl");
+      }
       if (lst.find("rtti")!=lst.end())
+      {
         item->configuration.m_requirements += QD_RTTI;
+        lst.remove("rtti");
+      }
       if (lst.find("ordered")!=lst.end())
+      {
         item->configuration.m_requirements += QD_ORDERED;
+        lst.remove("ordered");
+      }
       if (lst.find("console")!=lst.end())
+      {
         item->configuration.m_requirements += QD_CONSOLE;
+        lst.remove("console");
+      }
       if (lst.find("create_libtool")!=lst.end())
+      {
         item->configuration.m_requirements += QD_LIBTOOL;
+        lst.remove("create_libtool");
+      }
       if (lst.find("create_pkgconf")!=lst.end())
+      {
         item->configuration.m_requirements += QD_PKGCONF;
+        lst.remove("create_pkgconf");
+      }
       if (lst.find("precompile_header")!=lst.end())
-	item->configuration.m_requirements += QD_PCH;
+      {
+        item->configuration.m_requirements += QD_PCH;
+        lst.remove("precompile_header");
+      }
       if ( m_part->isQt4Project() )
       {
         if (lst.find( "uitools" )!=lst.end())
+        {
           item->configuration.m_requirements += QD_UITOOLS;
+          lst.remove("uitools");
+        }
         if (lst.find( "assistant" )!=lst.end())
+        {
           item->configuration.m_requirements += QD_ASSISTANT;
+          lst.remove("assistant");
+        }
         if (lst.find( "qtestlib" )!=lst.end())
+        {
           item->configuration.m_requirements += QD_TESTLIB;
+          lst.remove("qttestlib");
+        }
         if (lst.find( "dbus" )!=lst.end())
+        {
           item->configuration.m_requirements += QD_DBUS;
+          lst.remove("dbus");
+        }
         if ( lst.find( "build_all" )!=lst.end() )
+        {
           item->configuration.m_requirements += QD_BUILDALL ;
+          lst.remove("build_all");
+        }
         if ( lst.find( "designer" )!=lst.end() )
+        {
           item->configuration.m_requirements += QD_DESIGNER ;
-
+          lst.remove("designer");
+        }
+        // The rest are custom variables
+        item->configuration.m_customConfigOptions = lst;
       }
     }
 
@@ -3201,6 +3276,7 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
         item->configuration.m_qt4libs += Q4L_OPENGL;
       if ( lst.find( "qt3support" )!=lst.end() )
         item->configuration.m_qt4libs += Q4L_QT3;
+      
     }
 
     item->m_FileBuffer.getValues("DESTDIR",lst,minusListDummy);
