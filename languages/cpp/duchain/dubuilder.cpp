@@ -32,6 +32,7 @@
 #include "definition.h"
 #include "definitionuse.h"
 #include "topducontext.h"
+#include "dumpchain.h"
 
 using namespace KTextEditor;
 
@@ -113,7 +114,9 @@ TopDUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse defin
 
   // FIXME Hrm, didn't get used..??
   if (!m_importedParentContexts.isEmpty()) {
-    kWarning() << k_funcinfo << "Previous parameter declaration context didn't get used??" << endl;
+    kWarning() << k_funcinfo << url << " Previous parameter declaration context didn't get used??" << endl;
+    DumpChain dump;
+    dump.dump(topLevelContext);
     m_importedParentContexts.clear();
   }
 
@@ -171,6 +174,9 @@ void DUBuilder::visitTypedef (TypedefAST *node)
   bool was = inTypedef (node);
   DefaultVisitor::visitTypedef (node);
   inTypedef (was);
+
+  // Didn't get claimed if it was still set
+  m_importedParentContexts.clear();
 }
 
 void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)

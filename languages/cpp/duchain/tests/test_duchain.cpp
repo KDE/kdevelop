@@ -491,7 +491,7 @@ private slots:
   {
     //QSKIP("Unwanted", SkipSingle);
 
-    QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
+    QFile file("/opt/kde4/src/kdevelop/languages/cpp/parser/default_visitor.h");
     QVERIFY( file.open( QIODevice::ReadOnly ) );
 
     QByteArray fileData = file.readAll();
