@@ -27,28 +27,6 @@
 
 K_EXPORT_COMPONENT_FACTORY(kdevmakebuilder, KGenericFactory<KDevMakeBuilder>("kdevmakebuilder"))
 
-
-const QString &KDevMakeBuilder::builder =
-    KGlobal::staticQString("/kdevprojectmanager/builder");
-
-const QString &KDevMakeBuilder::makeTool =
-    KGlobal::staticQString("/kdevprojectmanager/builder/make/makebin");
-
-const QString &KDevMakeBuilder::priority =
-    KGlobal::staticQString("/kdevprojectmanager/builder/make/prio");
-
-const QString &KDevMakeBuilder::abortOnError =
-    KGlobal::staticQString("/kdevprojectmanager/builder/make/abortonerror");
-
-const QString &KDevMakeBuilder::numberOfJobs =
-    KGlobal::staticQString("/kdevprojectmanager/builder/make/numberofjobsfile:///usr/share/doc/HTML/index.html");
-
-const QString &KDevMakeBuilder::dontAct =
-    KGlobal::staticQString("/kdevprojectmanager/builder/make/dontact");
-
-const QString &KDevMakeBuilder::environment =
-    KGlobal::staticQString("/kdevprojectmanager/builder/make/envvars");
-
 KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const QStringList &)
     : KDevProjectBuilder(parent)
 {
