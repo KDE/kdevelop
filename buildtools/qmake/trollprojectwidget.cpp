@@ -3048,8 +3048,11 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
 //    QString proname = item->path + "/" + fi.baseName() + ".pro";
     QDir dir(item->path);
     QStringList l = dir.entryList("*.pro");
-
-    item->pro_file = l.count()?l[0]:(fi.baseName() + ".pro");
+    if( QFile::exists( dir.absPath () + "/" + (dir.dirName() + ".pro") ) )
+      item->pro_file = dir.dirName() + ".pro";
+    else
+      item->pro_file = l.count()?l[0]:(fi.baseName() + ".pro");
+        
     QString proname = item->path + "/" + item->pro_file;
 
     kdDebug(9024) << "Parsing " << proname << endl;
