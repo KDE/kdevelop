@@ -8,5 +8,6 @@ DocPath=kdevelop/index.html
 Terminal=false
 Name=KDevelop 4
 GenericName=IDE
+GenericName[x-test]=xxIDExx
 Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
 
