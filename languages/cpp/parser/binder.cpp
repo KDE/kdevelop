@@ -33,7 +33,6 @@
 Binder::Binder(CodeModel *model, ParseSession* session)
   : _M_model(model),
     m_session(session),
-    type_cc(session),
     name_cc(session),
     decl_cc(session)
 {

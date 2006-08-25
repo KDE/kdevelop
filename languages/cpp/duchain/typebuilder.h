@@ -16,38 +16,48 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLASS_COMPILER_H
-#define CLASS_COMPILER_H
-
-#include <QtCore/qglobal.h>
-#include <QtCore/QStringList>
+#ifndef TYPE_COMPILER_H
+#define TYPE_COMPILER_H
 
 #include "default_visitor.h"
-#include "name_compiler.h"
+#include "identifier.h"
+
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QList>
 
 class ParseSession;
 
-class ClassCompiler: protected DefaultVisitor
+class TypeCompiler: protected DefaultVisitor
 {
 public:
-  ClassCompiler(ParseSession* session);
-  virtual ~ClassCompiler();
+  TypeCompiler(ParseSession* session);
 
-  inline QString name() const { return _M_name; }
-  inline QStringList baseClasses() const { return _M_base_classes; }
+  QualifiedIdentifier identifier() const;
+  inline QStringList qualifiedName() const { return _M_type.toStringList(); }
+  inline QList<int> cv() const { return _M_cv; }
 
-  void run(ClassSpecifierAST *node);
+  bool isConstant() const;
+  bool isVolatile() const;
+
+  QStringList cvString() const;
+
+  void run(TypeSpecifierAST *node);
 
 protected:
   virtual void visitClassSpecifier(ClassSpecifierAST *node);
-  virtual void visitBaseSpecifier(BaseSpecifierAST *node);
+  virtual void visitEnumSpecifier(EnumSpecifierAST *node);
+  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node);
+  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node);
+
+  virtual void visitName(NameAST *node);
 
 private:
-  QString _M_name;
-  QStringList _M_base_classes;
-  NameCompiler name_cc;
+  ParseSession* m_session;
+  QualifiedIdentifier _M_type;
+  QList<int> _M_cv;
 };
 
-#endif // CLASS_COMPILER_H
+#endif // TYPE_COMPILER_H
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

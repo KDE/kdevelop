@@ -13,7 +13,6 @@ set(kdevcppparser_STAT_SRCS
     codemodel_finder.cpp
     default_visitor.cpp
     memorypool.cpp
-    type_compiler.cpp
     binder.cpp
     compiler_utils.cpp
     name_compiler.cpp
@@ -28,10 +27,10 @@ set(kdevcppparser_STAT_SRCS
     tokens.cpp
     problem.cpp
     codedisplay.cpp
-    typesystem.cpp
     identifier.cpp
     dumptree.cpp
     parsesession.cpp
+    type_compiler.cpp
 )
 
 kde4_automoc(${kdevcppparser_STAT_SRCS})

@@ -23,7 +23,6 @@
 #include "topducontext.h"
 #include "definitionbuilder.h"
 #include "usebuilder.h"
-#include "typesystem.h"
 #include "definition.h"
 #include "kdevdocumentrange.h"
 #include "cppeditorintegrator.h"
@@ -70,10 +69,6 @@ class TestDUChain : public QObject
   DumpChain dumper;
 
   // Definition - use chain
-  TypeEnvironment types;
-  const AbstractType* type1;
-  const AbstractType* type2;
-  const AbstractType* type3;
   Definition* definition1;
   Definition* definition2;
   Definition* definition3;
@@ -91,24 +86,16 @@ private slots:
 
   void initTestCase()
   {
-    type1 = types.integralType(types.intern("definitionChain"));
-    type2 = types.referenceType(type1);
-    type3 = types.pointerType(type1);
-
     definition1 = new Definition(new KDevDocumentRange(file1, Range(4,4,4,16)), Definition::LocalScope);
-    definition1->setType(type1);
     definition1->setIdentifier(Identifier("lazy"));
 
     definition2 = new Definition(new KDevDocumentRange(file1, Range(5,4,5,16)), Definition::ClassScope);
-    definition2->setType(type2);
     definition2->setIdentifier(Identifier("m_errorCode"));
 
     definition3 = new Definition(new KDevDocumentRange(file1, Range(6,4,6,16)), Definition::GlobalScope);
-    definition3->setType(type3);
     definition3->setIdentifier(Identifier("lazy"));
 
     definition4 = new Definition(new KDevDocumentRange(file1, Range(7,4,7,16)), Definition::ClassScope);
-    definition4->setType(type2);
     definition4->setIdentifier(Identifier("m_errorCode2"));
 
     noDef = 0;
@@ -185,7 +172,6 @@ private slots:
 
   void testLocalDefinitions()
   {
-    QCOMPARE(definition1->type(), type1);
     QCOMPARE(definition1->identifier(), Identifier("lazy"));
     QCOMPARE(definition1->scope(), Definition::LocalScope);
     QCOMPARE(topContext->localDefinitions().count(), 0);

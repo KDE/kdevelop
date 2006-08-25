@@ -31,7 +31,6 @@ class FunctionType;
 class StructureType;
 class ArrayType;
 
-
 class TypeVisitor
 {
 public:
@@ -241,48 +240,6 @@ public:
 private:
   QVector<int> _M_dimensions;
   const AbstractType* _M_elementType;
-};
-
-/**
- * A class which creates types and holds a reference to those types.
- *
- * \todo there's something wrong with memory management here (not surprising given the magic in use)
- */
-class TypeEnvironment
-{
-public:
-  typedef QSet<QString> NameTable;
-  typedef QSet<IntegralType> IntegralTypeTable;
-  typedef QSet<PointerType> PointerTypeTable;
-  typedef QSet<ReferenceType> ReferenceTypeTable;
-  typedef QSet<FunctionType> FunctionTypeTable;
-
-public:
-  TypeEnvironment ();
-
-  const QString *intern (const QString &name);
-
-  const IntegralType *integralType (const QString *name);
-  const PointerType *pointerType (const AbstractType *baseType);
-  const ReferenceType *referenceType (const AbstractType *baseType);
-
-  const FunctionType *functionType (const AbstractType *returnType, const QVector<const AbstractType *> &arguments);
-  const FunctionType *functionType (const AbstractType *returnType);
-  const FunctionType *functionType (const AbstractType *returnType, const AbstractType *arg_1);
-  const FunctionType *functionType (const AbstractType *returnType, const AbstractType *arg_1,
-                                    const AbstractType *arg_2);
-  const FunctionType *functionType (const AbstractType *returnType, const AbstractType *arg_1,
-                                    const AbstractType *arg_2, const AbstractType *arg_3);
-  const FunctionType *functionType (const AbstractType *returnType, const AbstractType *arg_1,
-                                    const AbstractType *arg_2, const AbstractType *arg_3,
-                                    const AbstractType *arg_4);
-
-private:
-  NameTable _M_name_table;
-  IntegralTypeTable _M_integral_type_table;
-  PointerTypeTable _M_pointer_type_table;
-  ReferenceTypeTable _M_reference_type_table;
-  FunctionTypeTable _M_function_type_table;
 };
 
 uint qHash (const IntegralType &t);

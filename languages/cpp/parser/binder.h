@@ -21,7 +21,6 @@
 
 #include "default_visitor.h"
 #include "codemodel.h"
-#include "type_compiler.h"
 #include "name_compiler.h"
 #include "declarator_compiler.h"
 #include "lexer.h"
@@ -110,7 +109,6 @@ private:
   QSet<QString> _M_qualified_types;
 
 protected:
-  TypeCompiler type_cc;
   NameCompiler name_cc;
   DeclaratorCompiler decl_cc;
 };

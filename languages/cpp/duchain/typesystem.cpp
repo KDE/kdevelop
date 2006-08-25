@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright (C) 2002-2005 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2006 Roberto Raggi <roberto@kdevelop.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,40 +16,31 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "class_compiler.h"
-#include "lexer.h"
 
-ClassCompiler::ClassCompiler(ParseSession* session)
-  : name_cc(session)
+#include "typesystem.h"
+
+uint qHash (const IntegralType &t)
 {
+  return qHash (t.name ());
 }
 
-ClassCompiler::~ClassCompiler()
+uint qHash (const PointerType &t)
 {
+  return qHash (t.baseType ());
 }
 
-void ClassCompiler::run(ClassSpecifierAST *node)
+uint qHash (const ReferenceType &t)
 {
-  name_cc.run(node->name);
-  _M_name = name_cc.name();
-  _M_base_classes.clear();
-
-  visit(node);
+  return qHash (t.baseType ());
 }
 
-void ClassCompiler::visitClassSpecifier(ClassSpecifierAST *node)
+uint qHash (const FunctionType &t)
 {
-  visit(node->base_clause);
+  QVector<const AbstractType *> arguments (t.arguments ());
+  uint hash_value = qHash (t.returnType ());
+
+  for (int i = 0; i < arguments.count (); ++i)
+    hash_value = (hash_value << 5) - hash_value + qHash (arguments.at (i));
+
+  return hash_value;
 }
-
-void ClassCompiler::visitBaseSpecifier(BaseSpecifierAST *node)
-{
-  name_cc.run(node->name);
-  QString name = name_cc.name();
-
-  if (! name.isEmpty())
-    _M_base_classes.append(name);
-}
-
-
-// kate: space-indent on; indent-width 2; replace-tabs on;
