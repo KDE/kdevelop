@@ -20,11 +20,7 @@
 
 #include "definitionbuilder.h"
 
-#include <QMutexLocker>
-
 #include <ktexteditor/smartrange.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/smartinterface.h>
 
 #include "duchain.h"
 #include "cppeditorintegrator.h"
@@ -178,8 +174,7 @@ void ContextBuilder::visitTypedef (TypedefAST *node)
 void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
   if (node && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
-    m_nameCompiler->run(node->init_declarator->declarator->id);
-    QualifiedIdentifier functionName = m_nameCompiler->identifier();
+    QualifiedIdentifier functionName = identifierForName(node->init_declarator->declarator->id);
     if (functionName.count() >= 2) {
       // This is a class function
       functionName.pop();
@@ -247,10 +242,8 @@ DUContext* ContextBuilder::openContextInternal(Range* range, DUContext::ContextT
   DUContext* ret = new DUContext(range, m_contextStack.isEmpty() ? 0 : currentContext());
   ret->setType(type);
 
-  if (identifier) {
-    m_nameCompiler->run(identifier);
-    ret->setLocalScopeIdentifier(m_nameCompiler->identifier());
-  }
+  if (identifier)
+    ret->setLocalScopeIdentifier(identifierForName(identifier));
 
   m_contextStack.push(ret);
 
@@ -270,10 +263,8 @@ void ContextBuilder::closeContext(NameAST* name, AST* node)
     }
 
     // Set context identifier
-    if (name) {
-      m_nameCompiler->run(name);
-      currentContext()->setLocalScopeIdentifier(m_nameCompiler->identifier());
-    }
+    if (name)
+      currentContext()->setLocalScopeIdentifier(identifierForName(name));
   }
 
   // Go back to the context prior to this function definition
@@ -320,11 +311,8 @@ void ContextBuilder::visitUsingDirective(UsingDirectiveAST * node)
 {
   DefaultVisitor::visitUsingDirective(node);
 
-  if (m_compilingContexts) {
-    m_nameCompiler->run(node->name);
-
-    currentContext()->addUsingNamespace(m_editor->createCursor(node->end_token, CppEditorIntegrator::FrontEdge), m_nameCompiler->identifier());
-  }
+  if (m_compilingContexts && node->name)
+    currentContext()->addUsingNamespace(m_editor->createCursor(node->end_token, CppEditorIntegrator::FrontEdge), identifierForName(node->name));
 }
 
 void ContextBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)
@@ -449,4 +437,11 @@ bool ContextBuilder::createContextIfNeeded(AST* node, const QList<DUContext*>& i
     addImportedContexts();
   }
   return contextNeeded;
+}
+
+const QualifiedIdentifier& ContextBuilder::identifierForName(NameAST* id) const
+{
+  Q_ASSERT(id);
+  m_nameCompiler->run(id);
+  return m_nameCompiler->identifier();
 }

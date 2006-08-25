@@ -64,8 +64,15 @@ public:
 protected:
   inline DUContext* currentContext() { return m_contextStack.top(); }
 
+  /**
+   * Compile an identifier for the specifed NameAST \a id.
+   *
+   * \note this reference will only be valid until the next time the function
+   * is called, so you need to create a copy (store as non-reference).
+   */
+  const QualifiedIdentifier& identifierForName(NameAST* id) const;
+
   CppEditorIntegrator* m_editor;
-  NameCompiler* m_nameCompiler;
 
   virtual void visitNamespace (NamespaceAST *);
   virtual void visitClassSpecifier (ClassSpecifierAST *);
@@ -83,21 +90,18 @@ protected:
   virtual void visitIfStatement(IfStatementAST*);
 
 private:
-  /**
-   * Opens a new context.
-   */
   DUContext* openContext(AST* range, DUContext::ContextType type, NameAST* identifier = 0);
   DUContext* openContext(AST* fromRange, AST* toRange, DUContext::ContextType type, NameAST* identifier = 0);
   DUContext* openContextInternal(KTextEditor::Range* range, DUContext::ContextType type, NameAST* identifier = 0);
+
+  void closeContext(NameAST* name = 0, AST* node = 0);
 
   bool createContextIfNeeded(AST* node, const QList<DUContext*>& importedParentContexts);
   bool createContextIfNeeded(AST* node, DUContext* importedParentContext);
   void addImportedContexts();
 
-  /**
-   * Closes the current context.
-   */
-  void closeContext(NameAST* name = 0, AST* node = 0);
+  // Variables
+  NameCompiler* m_nameCompiler;
 
   bool m_ownsEditorIntegrator: 1;
   bool m_compilingContexts: 1;

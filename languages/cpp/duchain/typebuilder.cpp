@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2002-2005 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,90 +17,52 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "type_compiler.h"
+#include "typebuilder.h"
+
+#include <ktexteditor/smartrange.h>
+
+#include "cppeditorintegrator.h"
 #include "name_compiler.h"
-#include "lexer.h"
-#include "symbol.h"
-#include "tokens.h"
-#include "parsesession.h"
+#include "ducontext.h"
 
-#include <QtCore/QString>
-
-TypeCompiler::TypeCompiler(ParseSession* session)
-  : m_session(session)
+TypeBuilder::TypeBuilder(ParseSession* session)
+  : TypeBuilderBase(session)
+  , m_currentType(0)
 {
 }
 
-void TypeCompiler::run(TypeSpecifierAST *node)
+TypeBuilder::TypeBuilder(CppEditorIntegrator * editor)
+  : TypeBuilderBase(editor)
+  , m_currentType(0)
 {
-  _M_type.clear();
-  _M_cv.clear();
-
-  visit(node);
-
-  if (node && node->cv)
-    {
-      const ListNode<std::size_t> *it = node->cv->toFront();
-      const ListNode<std::size_t> *end = it;
-      do
-        {
-          int kind = m_session->token_stream->kind(it->element);
-          if (! _M_cv.contains(kind))
-            _M_cv.append(kind);
-
-          it = it->next;
-        }
-      while (it != end);
-    }
 }
 
-void TypeCompiler::visitClassSpecifier(ClassSpecifierAST *node)
+void TypeBuilder::buildTypes(AST *node)
 {
-  visit(node->name);
+  supportBuild(node);
 }
 
-void TypeCompiler::visitEnumSpecifier(EnumSpecifierAST *node)
+void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
-  visit(node->name);
+  TypeBuilderBase::visitClassSpecifier(node);
 }
 
-void TypeCompiler::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
+void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 {
-  visit(node->name);
+  TypeBuilderBase::visitEnumSpecifier(node);
 }
 
-void TypeCompiler::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
+void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 {
-  if (const ListNode<std::size_t> *it = node->integrals)
-    {
-      it = it->toFront();
-      const ListNode<std::size_t> *end = it;
-      do
-        {
-          std::size_t token = it->element;
-          // FIXME
-          _M_type += Identifier(token_name(m_session->token_stream->kind(token)));
-          it = it->next;
-        }
-      while (it != end);
-    }
-  else if (node->type_of)
-    {
-      // ### implement me
-      _M_type += Identifier("typeof<...>");
-    }
-
-  visit(node->name);
+  TypeBuilderBase::visitElaboratedTypeSpecifier(node);
 }
 
-void TypeCompiler::visitName(NameAST *node)
+void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
-  NameCompiler name_cc(m_session);
-  name_cc.run(node);
-  _M_type = name_cc.identifier();
+  TypeBuilderBase::visitSimpleTypeSpecifier(node);
 }
 
-QStringList TypeCompiler::cvString() const
+/*QStringList TypeBuilder::cvString() const
 {
   QStringList lst;
 
@@ -112,21 +75,6 @@ QStringList TypeCompiler::cvString() const
     }
 
   return lst;
-}
-
-bool TypeCompiler::isConstant() const
-{
-    return _M_cv.contains(Token_const);
-}
-
-bool TypeCompiler::isVolatile() const
-{
-    return _M_cv.contains(Token_volatile);
-}
-
-QualifiedIdentifier TypeCompiler::identifier() const
-{
-  return _M_type;
-}
+}*/
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

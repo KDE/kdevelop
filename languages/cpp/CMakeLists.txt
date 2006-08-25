@@ -20,6 +20,8 @@ set(kdevcppduchain_SRCS
     duchain/definition.cpp
     duchain/definitionuse.cpp
     duchain/dumpchain.cpp
+    duchain/typesystem.cpp
+    duchain/typebuilder.cpp
 )
 
 set(kdevcpplanguagesupport_PART_SRCS

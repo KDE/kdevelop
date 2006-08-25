@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2006 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,6 +19,8 @@
 
 #ifndef TYPESYSTEM_H
 #define TYPESYSTEM_H
+
+#include "identifier.h"
 
 #include <QSet>
 #include <QString>
@@ -85,161 +88,160 @@ protected:
 class IntegralType: public AbstractType
 {
 public:
-  IntegralType (const QString *name):
-    _M_name (name) {}
+  IntegralType(const Identifier& identifier);
 
-  inline const QString *name () const
-  { return _M_name; }
+  inline const Identifier& identifier() const
+  { return m_identifier; }
 
-  inline bool operator == (const IntegralType &__other) const
-  { return _M_name == __other._M_name; }
+  inline bool operator == (const IntegralType &other) const
+  { return m_identifier == other.m_identifier; }
 
-  inline bool operator != (const IntegralType &__other) const
-  { return _M_name != __other._M_name; }
+  inline bool operator != (const IntegralType &other) const
+  { return m_identifier != other.m_identifier; }
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
   { v->visit (this); }
 
 private:
-  const QString *_M_name;
+  Identifier m_identifier;
 };
 
 class PointerType: public AbstractType
 {
 public:
   PointerType (const AbstractType *baseType):
-    _M_baseType (baseType) {}
+    m_baseType (baseType) {}
 
   inline const AbstractType *baseType () const
-  { return _M_baseType; }
+  { return m_baseType; }
 
-  inline bool operator == (const PointerType &__other) const
-  { return _M_baseType == __other._M_baseType; }
+  inline bool operator == (const PointerType &other) const
+  { return m_baseType == other.m_baseType; }
 
-  inline bool operator != (const PointerType &__other) const
-  { return _M_baseType != __other._M_baseType; }
+  inline bool operator != (const PointerType &other) const
+  { return m_baseType != other.m_baseType; }
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
   {
     if (v->visit (this))
-      acceptType (_M_baseType, v);
+      acceptType (m_baseType, v);
 
     v->endVisit (this);
   }
 
 private:
-  const AbstractType *_M_baseType;
+  const AbstractType *m_baseType;
 };
 
 class ReferenceType: public AbstractType
 {
 public:
   ReferenceType (const AbstractType *baseType):
-    _M_baseType (baseType) {}
+    m_baseType (baseType) {}
 
   inline const AbstractType *baseType () const
-  { return _M_baseType; }
+  { return m_baseType; }
 
-  inline bool operator == (const ReferenceType &__other) const
-  { return _M_baseType == __other._M_baseType; }
+  inline bool operator == (const ReferenceType &other) const
+  { return m_baseType == other.m_baseType; }
 
-  inline bool operator != (const ReferenceType &__other) const
-  { return _M_baseType != __other._M_baseType; }
+  inline bool operator != (const ReferenceType &other) const
+  { return m_baseType != other.m_baseType; }
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
   {
     if (v->visit (this))
-      acceptType (_M_baseType, v);
+      acceptType (m_baseType, v);
 
     v->endVisit (this);
   }
 
 private:
-  const AbstractType *_M_baseType;
+  const AbstractType *m_baseType;
 };
 
 class FunctionType: public AbstractType
 {
 public:
   FunctionType (const AbstractType *returnType, const QVector<const AbstractType *> &arguments):
-    _M_returnType (returnType),
-    _M_arguments (arguments) {}
+    m_returnType (returnType),
+    m_arguments (arguments) {}
 
   inline const AbstractType *returnType () const
-  { return _M_returnType; }
+  { return m_returnType; }
 
   inline const QVector<const AbstractType *>& arguments () const
-  { return _M_arguments; }
+  { return m_arguments; }
 
-  inline bool operator == (const FunctionType &__other) const
-  { return _M_returnType == __other._M_returnType && _M_arguments == __other._M_arguments; }
+  inline bool operator == (const FunctionType &other) const
+  { return m_returnType == other.m_returnType && m_arguments == other.m_arguments; }
 
-  inline bool operator != (const FunctionType &__other) const
-  { return _M_returnType != __other._M_returnType || _M_arguments != __other._M_arguments; }
+  inline bool operator != (const FunctionType &other) const
+  { return m_returnType != other.m_returnType || m_arguments != other.m_arguments; }
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
   {
     if (v->visit (this))
       {
-        acceptType (_M_returnType, v);
+        acceptType (m_returnType, v);
 
-        for (int i = 0; i < _M_arguments.count (); ++i)
-          acceptType (_M_arguments.at (i), v);
+        for (int i = 0; i < m_arguments.count (); ++i)
+          acceptType (m_arguments.at (i), v);
       }
 
     v->endVisit (this);
   }
 
 private:
-  const AbstractType *_M_returnType;
-  QVector<const AbstractType *> _M_arguments;
+  const AbstractType *m_returnType;
+  QVector<const AbstractType *> m_arguments;
 };
 
 class StructureType : public AbstractType
 {
 public:
   StructureType (const QVector<const AbstractType *> &elements):
-    _M_elements (elements) {}
+    m_elements (elements) {}
 
   inline const QVector<const AbstractType *>& elements () const
-  { return _M_elements; }
+  { return m_elements; }
 
-  inline bool operator == (const StructureType &__other) const
-  { return _M_elements == __other._M_elements; }
+  inline bool operator == (const StructureType &other) const
+  { return m_elements == other.m_elements; }
 
-  inline bool operator != (const StructureType &__other) const
-  { return _M_elements != __other._M_elements; }
+  inline bool operator != (const StructureType &other) const
+  { return m_elements != other.m_elements; }
 
 private:
-  QVector<const AbstractType *> _M_elements;
+  QVector<const AbstractType *> m_elements;
 };
 
 class ArrayType : public AbstractType
 {
 public:
   ArrayType (const QVector<int> &dimensions, const AbstractType* elementType):
-    _M_dimensions (dimensions),
-    _M_elementType (elementType) {}
+    m_dimensions (dimensions),
+    m_elementType (elementType) {}
 
   inline const QVector<int>& dimensions () const
-  { return _M_dimensions; }
+  { return m_dimensions; }
 
   inline const AbstractType *elementType () const
-  { return _M_elementType; }
+  { return m_elementType; }
 
-  inline bool operator == (const ArrayType &__other) const
-  { return _M_elementType == __other._M_elementType && _M_dimensions == __other._M_dimensions; }
+  inline bool operator == (const ArrayType &other) const
+  { return m_elementType == other.m_elementType && m_dimensions == other.m_dimensions; }
 
-  inline bool operator != (const ArrayType &__other) const
-  { return _M_elementType != __other._M_elementType || _M_dimensions != __other._M_dimensions; }
+  inline bool operator != (const ArrayType &other) const
+  { return m_elementType != other.m_elementType || m_dimensions != other.m_dimensions; }
 
 private:
-  QVector<int> _M_dimensions;
-  const AbstractType* _M_elementType;
+  QVector<int> m_dimensions;
+  const AbstractType* m_elementType;
 };
 
 uint qHash (const IntegralType &t);

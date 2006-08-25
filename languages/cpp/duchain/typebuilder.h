@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2002-2005 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,33 +17,23 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TYPE_COMPILER_H
-#define TYPE_COMPILER_H
+#ifndef TYPEBUILDER_H
+#define TYPEBUILDER_H
 
-#include "default_visitor.h"
-#include "identifier.h"
+#include "contextbuilder.h"
 
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QList>
+typedef ContextBuilder TypeBuilderBase;
 
-class ParseSession;
-
-class TypeCompiler: protected DefaultVisitor
+class TypeBuilder: public TypeBuilderBase
 {
 public:
-  TypeCompiler(ParseSession* session);
+  TypeBuilder(ParseSession* session);
+  TypeBuilder(CppEditorIntegrator* editor);
 
-  QualifiedIdentifier identifier() const;
-  inline QStringList qualifiedName() const { return _M_type.toStringList(); }
-  inline QList<int> cv() const { return _M_cv; }
-
-  bool isConstant() const;
-  bool isVolatile() const;
-
-  QStringList cvString() const;
-
-  void run(TypeSpecifierAST *node);
+  /**
+   * Build types by iterating the given \a node.
+   */
+  void buildTypes(AST *node);
 
 protected:
   virtual void visitClassSpecifier(ClassSpecifierAST *node);
@@ -50,14 +41,10 @@ protected:
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node);
   virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node);
 
-  virtual void visitName(NameAST *node);
-
 private:
-  ParseSession* m_session;
-  QualifiedIdentifier _M_type;
-  QList<int> _M_cv;
+  AbstractType* m_currentType;
 };
 
-#endif // TYPE_COMPILER_H
+#endif // TYPEBUILDER_H
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

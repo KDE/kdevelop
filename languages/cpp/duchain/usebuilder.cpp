@@ -70,9 +70,9 @@ void UseBuilder::newUse(NameAST* name)
     if (use->toSmartRange()->parentRange() != currentContext()->smartRange())
       kWarning() << k_funcinfo << "Use " << *use << " parent " << *use->toSmartRange()->parentRange() << " " << use->toSmartRange()->parentRange() << " != current context " << *currentContext()->smartRange() << " " << currentContext()->smartRange() << " id " << currentContext()->scopeIdentifier() << endl;
 
-  m_nameCompiler->run(name);
+  QualifiedIdentifier id = identifierForName(name);
 
-  if (Definition* definition = currentContext()->findDefinition(m_nameCompiler->identifier(), KDevDocumentCursor(use, KDevDocumentCursor::Start)))
+  if (Definition* definition = currentContext()->findDefinition(id, KDevDocumentCursor(use, KDevDocumentCursor::Start)))
     definition->addUse(new DefinitionUse(use));
   else
     currentContext()->addOrphanUse(new DefinitionUse(use));

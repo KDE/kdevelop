@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2006 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +22,7 @@
 
 uint qHash (const IntegralType &t)
 {
-  return qHash (t.name ());
+  return qHash (t.identifier().toString());
 }
 
 uint qHash (const PointerType &t)
@@ -43,4 +44,9 @@ uint qHash (const FunctionType &t)
     hash_value = (hash_value << 5) - hash_value + qHash (arguments.at (i));
 
   return hash_value;
+}
+
+IntegralType::IntegralType(const Identifier & identifier)
+  : m_identifier(identifier)
+{
 }
