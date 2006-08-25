@@ -27,6 +27,8 @@
 #include "parsesession.h"
 #include "tokens.h"
 
+using namespace CppCodeModel;
+
 TypeBuilder::TypeBuilder(ParseSession* session)
   : TypeBuilderBase(session)
 {
@@ -137,16 +139,13 @@ void TypeBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
         case Token_k_dcop_signals:
           break;
         case Token_public:
-          // FIXME WTF... why won't it build??
-          //setAccessPolicy(CppAccessPolicy::Public);
+          setAccessPolicy(Public);
           break;
         case Token_protected:
-          // FIXME WTF... why won't it build??
-          //setAccessPolicy(CppAccessPolicy::Protected);
+          setAccessPolicy(Protected);
           break;
         case Token_private:
-          // FIXME WTF... why won't it build??
-          //setAccessPolicy(CppAccessPolicy::Private);
+          setAccessPolicy(Private);
           break;
       }
 

@@ -61,10 +61,10 @@ private:
   template <class T>
   T* currentType() { return dynamic_cast<T*>(m_typeStack.top()); }
 
-  inline void setAccessPolicy(CppAccessPolicy policy) { m_accessPolicyStack.top() = policy; }
+  inline void setAccessPolicy(CppCodeModel::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
   QStack<AbstractType*> m_typeStack;
-  QStack<CppAccessPolicy> m_accessPolicyStack;
+  QStack<CppCodeModel::AccessPolicy> m_accessPolicyStack;
 };
 
 #endif // TYPEBUILDER_H
