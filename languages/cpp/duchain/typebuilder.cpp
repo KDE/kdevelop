@@ -162,7 +162,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
   TypeBuilderBase::visitElaboratedTypeSpecifier(node);
 
-  if (node->name)
+  if (node->abstractType)
     closeType();
 }
 
