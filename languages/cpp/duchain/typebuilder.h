@@ -61,6 +61,7 @@ private:
   template <class T>
   T* currentType() { return dynamic_cast<T*>(m_typeStack.top()); }
 
+  inline CppCodeModel::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
   inline void setAccessPolicy(CppCodeModel::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
   QStack<AbstractType*> m_typeStack;

@@ -258,10 +258,14 @@ void TypeBuilder::visitTypedef(TypedefAST* node)
 
 void TypeBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
 {
-  if (CppClassType* classType = currentType<CppClassType>())
-    openType(new CppClassFunctionType(classType), node);
-  else
+  if (CppClassType* classType = currentType<CppClassType>()) {
+    CppClassFunctionType* functionType = new CppClassFunctionType(classType);
+    functionType->setAccessPolicy(currentAccessPolicy());
+    openType(functionType, node);
+
+  } else {
     openType(new FunctionType(), node);
+  }
 
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
