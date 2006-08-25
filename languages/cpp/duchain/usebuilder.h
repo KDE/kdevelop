@@ -20,14 +20,14 @@
 #ifndef USEBUILDER_H
 #define USEBUILDER_H
 
-#include "definitionbuilder.h"
+#include "contextbuilder.h"
 
-typedef DefinitionBuilder BaseVisitor;
+typedef ContextBuilder UseBuilderBase;
 
 /**
  * A class which iterates the AST to extract uses of definitions.
  */
-class UseBuilder: public BaseVisitor
+class UseBuilder: public UseBuilderBase
 {
 public:
   UseBuilder(ParseSession* session);

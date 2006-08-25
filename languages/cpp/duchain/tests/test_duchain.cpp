@@ -21,6 +21,7 @@
 
 #include "duchain.h"
 #include "topducontext.h"
+#include "definitionbuilder.h"
 #include "usebuilder.h"
 #include "typesystem.h"
 #include "definition.h"

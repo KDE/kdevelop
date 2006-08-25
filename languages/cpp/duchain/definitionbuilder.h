@@ -17,37 +17,23 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DUBUILDER_H
-#define DUBUILDER_H
+#ifndef DEFINITIONBUILDER_H
+#define DEFINITIONBUILDER_H
 
-#include "default_visitor.h"
+#include "contextbuilder.h"
 
-#include "identifier.h"
-#include "ducontext.h"
-
-class ParseSession;
-class DUChain;
-class DUContext;
-class TopDUContext;
-class CppEditorIntegrator;
-class NameCompiler;
 class Definition;
 
-namespace KTextEditor { class Range; }
+typedef ContextBuilder DefinitionBuilderBase;
 
 /**
- * A class which iterates the AST to extract definitions of types and their uses.
- *
- * This is the second pass of processing an AST.  The first is the type binder.
- *
- * \sa Binder
+ * A class which iterates the AST to extract definitions of types.
  */
-class DefinitionBuilder: protected DefaultVisitor
+class DefinitionBuilder: public DefinitionBuilderBase
 {
 public:
   DefinitionBuilder(ParseSession* session);
   DefinitionBuilder(CppEditorIntegrator* editor);
-  virtual ~DefinitionBuilder ();
 
   /**
    * Compile either a context-definition chain, or add uses to an existing
@@ -57,42 +43,8 @@ public:
    */
   TopDUContext* buildDefinitions(const KUrl& url, AST *node, QList<DUContext*>* includes = 0);
 
-  /**
-   * Support another builder by tracking the current context.
-   */
-  void supportBuild(AST *node);
-
 protected:
-  inline DUContext* currentContext() { return m_contextStack.top(); }
-
-  CppEditorIntegrator* m_editor;
-  NameCompiler* m_nameCompiler;
-
-  virtual void visitNamespace (NamespaceAST *);
-  virtual void visitClassSpecifier (ClassSpecifierAST *);
-  virtual void visitBaseSpecifier(BaseSpecifierAST*);
-  virtual void visitTemplateDeclaration (TemplateDeclarationAST *);
-  virtual void visitTypedef (TypedefAST *);
-  virtual void visitFunctionDefinition (FunctionDefinitionAST *);
-  virtual void visitParameterDeclarationClause (ParameterDeclarationClauseAST *);
-  virtual void visitParameterDeclaration (ParameterDeclarationAST *);
-  virtual void visitCompoundStatement (CompoundStatementAST *);
-  virtual void visitSimpleDeclaration (SimpleDeclarationAST *);
   virtual void visitDeclarator (DeclaratorAST*);
-  virtual void visitName (NameAST *);
-  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST*);
-  virtual void visitUsingDirective(UsingDirectiveAST *);
-  virtual void visitClassMemberAccess(ClassMemberAccessAST *);
-  virtual void visitInitDeclarator(InitDeclaratorAST*);
-  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
-  virtual void visitEnumSpecifier(EnumSpecifierAST*);
-  virtual void visitTypeParameter(TypeParameterAST*);
-  virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST*);
-  virtual void visitTypeIdentification(TypeIdentificationAST*);
-  virtual void visitUsing(UsingAST*);
-  virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST*);
-  virtual void visitForStatement(ForStatementAST*);
-  virtual void visitIfStatement(IfStatementAST*);
 
 private:
   /**
@@ -101,30 +53,8 @@ private:
    * \param range provide a valid AST here if name is null
    */
   Definition* newDeclaration(NameAST* name, AST* range = 0);
-
-  /**
-   * Opens a new context.
-   */
-  DUContext* openContext(AST* range, DUContext::ContextType type, NameAST* identifier = 0);
-  DUContext* openContext(AST* fromRange, AST* toRange, DUContext::ContextType type, NameAST* identifier = 0);
-  DUContext* openContextInternal(KTextEditor::Range* range, DUContext::ContextType type, NameAST* identifier = 0);
-
-  bool createContextIfNeeded(AST* node, const QList<DUContext*>& importedParentContexts);
-  bool createContextIfNeeded(AST* node, DUContext* importedParentContext);
-  void addImportedContexts();
-
-  /**
-   * Closes the current context.
-   */
-  void closeContext(NameAST* name = 0, AST* node = 0);
-
-  bool m_ownsEditorIntegrator: 1;
-  bool m_compilingDefinitions: 1;
-
-  QStack<DUContext*> m_contextStack;
-  QList<DUContext*> m_importedParentContexts;
 };
 
-#endif // DUBUILDER_H
+#endif // DEFINITIONBUILDER_H
 
 // kate: indent-width 2;

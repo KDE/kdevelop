@@ -46,6 +46,7 @@
 #include "parser/control.h"
 #include "duchain/dumpchain.h"
 #include "duchain/cppeditorintegrator.h"
+#include "duchain/definitionbuilder.h"
 #include "duchain/usebuilder.h"
 #include "duchain/topducontext.h"
 #include "preprocessjob.h"

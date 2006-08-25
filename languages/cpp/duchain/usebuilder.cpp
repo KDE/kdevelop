@@ -31,12 +31,12 @@
 using namespace KTextEditor;
 
 UseBuilder::UseBuilder (ParseSession* session)
-  : DefinitionBuilder(session)
+  : UseBuilderBase(session)
 {
 }
 
 UseBuilder::UseBuilder (CppEditorIntegrator* editor)
-  : DefinitionBuilder(editor)
+  : UseBuilderBase(editor)
 {
 }
 
@@ -47,7 +47,7 @@ void UseBuilder::buildUses(AST *node)
 
 void UseBuilder::visitPrimaryExpression (PrimaryExpressionAST* node)
 {
-  BaseVisitor::visitPrimaryExpression(node);
+  UseBuilderBase::visitPrimaryExpression(node);
 
   if (node->name)
     newUse(node->name);
@@ -55,7 +55,7 @@ void UseBuilder::visitPrimaryExpression (PrimaryExpressionAST* node)
 
 void UseBuilder::visitMemInitializer(MemInitializerAST * node)
 {
-  BaseVisitor::visitMemInitializer(node);
+  UseBuilderBase::visitMemInitializer(node);
 
   if (node->initializer_id)
     newUse(node->initializer_id);
