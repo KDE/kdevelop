@@ -105,12 +105,6 @@ bool KDevMakeBuilder::clean(KDevProjectItem *dom)
     return false;
 }
 
-bool KDevMakeBuilder::execute(KDevProjectItem *dom)
-{
-    Q_UNUSED(dom);
-    return false;
-}
-
 void KDevMakeBuilder::commandFinished(const QString &command)
 {
     if (!m_commands.isEmpty()) {

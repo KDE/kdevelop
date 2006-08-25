@@ -48,7 +48,6 @@ public:
     virtual bool configure(KDevProjectItem *dom) = 0;
     virtual bool build(KDevProjectItem *dom) = 0;
     virtual bool clean(KDevProjectItem *dom) = 0;
-    virtual bool execute(KDevProjectItem *dom) = 0;
 
 signals:
     void built(KDevProjectItem *dom);

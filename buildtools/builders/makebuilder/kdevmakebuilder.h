@@ -46,7 +46,6 @@ public:
     virtual bool configure(KDevProjectItem *dom);
     virtual bool build(KDevProjectItem *dom);
     virtual bool clean(KDevProjectItem *dom);
-    virtual bool execute(KDevProjectItem *dom);
 
 private slots:
     void commandFinished(const QString &command);
