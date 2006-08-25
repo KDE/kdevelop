@@ -40,14 +40,14 @@ private:
   AbstractType* m_type;
 };
 
-/*template <class T>
-class SpecificTypeInstance : public TypeInstance
+class FunctionTypeInstance : public TypeInstance
 {
 public:
-  SpecificTypeInstance(KTextEditor::Cursor* definitionPoint)
-    : TypeInstance(definitionPoint)
-  {
-  }
-};*/
+  FunctionTypeInstance(KTextEditor::Cursor* definitionPoint);
+  virtual ~FunctionTypeInstance();
+
+  const QList<TypeInstance*>& argumentInstances() const;
+  void addArgumentInstance(TypeInstance* instance);
+};
 
 #endif // TYPEINSTANCE_H

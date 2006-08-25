@@ -48,7 +48,10 @@ void TypeBuilder::buildTypes(AST *node)
 void TypeBuilder::openType(AbstractType* type, AST* node, NameAST* id)
 {
   if (FunctionType* function = currentType<FunctionType>()) {
-    function->addArgument(type);
+    if (!function->returnType())
+      function->setReturnType(type);
+    else
+      function->addArgument(type);
 
   } else if (StructureType* structure = currentType<StructureType>()) {
     return structure->addElement(type);
@@ -86,7 +89,14 @@ void TypeBuilder::closeType()
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
-  openType(new CppClassType(currentContext()), node, node->name);
+  CppClassType* classType = new CppClassType(currentContext());
+  openType(classType, node, node->name);
+
+  int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
+  if (kind == Token_struct)
+    classType->setClassType(CppClassType::Struct);
+  else if (kind == Token_union)
+    classType->setClassType(CppClassType::Union);
 
   TypeBuilderBase::visitClassSpecifier(node);
 
@@ -133,14 +143,39 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
 void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
-  if (CppClassType* classType = currentType<CppClassType>())
-    openType(new CppSpecificClassMemberType<CppIntegralType>(classType), node);
-  else
-    openType(new CppIntegralType(), node);
+  if (node->integrals) {
+    if (CppClassType* classType = currentType<CppClassType>())
+      openType(new CppSpecificClassMemberType<CppIntegralType>(classType), node);
+    else
+      openType(new CppIntegralType(), node);
+
+    const ListNode<std::size_t> *it = node->integrals->toFront();
+    const ListNode<std::size_t> *end = it;
+    do {
+      int kind = m_editor->parseSession()->token_stream->kind(it->element);
+      switch (kind) {
+        case Token_char:
+        case Token_wchar_t:
+        case Token_bool:
+        case Token_short:
+        case Token_int:
+        case Token_long:
+        case Token_signed:
+        case Token_unsigned:
+        case Token_float:
+        case Token_double:
+        case Token_void:
+          break;
+      }
+
+      it = it->next;
+    } while (it != end);
+  }
 
   TypeBuilderBase::visitSimpleTypeSpecifier(node);
 
-  closeType();
+  if (node->integrals)
+    closeType();
 }
 
 void TypeBuilder::visitTypedef(TypedefAST* node)
@@ -159,7 +194,25 @@ void TypeBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
   else
     openType(new FunctionType(), node);
 
+  parseStorageSpecifiers(node->storage_specifiers);
+  parseFunctionSpecifiers(node->function_specifiers);
+
   TypeBuilderBase::visitFunctionDefinition(node);
+
+  closeType();
+}
+
+void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
+{
+  if (CppClassType* classType = currentType<CppClassType>())
+    openType(new CppClassFunctionType(classType), node);
+  else
+    openType(new FunctionType(), node);
+
+  parseStorageSpecifiers(node->storage_specifiers);
+  parseFunctionSpecifiers(node->function_specifiers);
+
+  TypeBuilderBase::visitSimpleDeclaration(node);
 
   closeType();
 }
@@ -196,6 +249,63 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 
   closeType();
   closeType();
+}
+
+void TypeBuilder::parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers)
+{
+  if (CppClassMemberType* memberType = currentType<CppClassMemberType>()) {
+    const ListNode<std::size_t> *it = storage_specifiers->toFront();
+    const ListNode<std::size_t> *end = it;
+    do {
+      int kind = m_editor->parseSession()->token_stream->kind(it->element);
+      switch (kind) {
+        case Token_friend:
+          memberType->setFriend(true);
+          break;
+        case Token_auto:
+          memberType->setAuto(true);
+          break;
+        case Token_register:
+          memberType->setRegister(true);
+          break;
+        case Token_static:
+          memberType->setStatic(true);
+          break;
+        case Token_extern:
+          memberType->setExtern(true);
+          break;
+        case Token_mutable:
+          memberType->setMutable(true);
+          break;
+      }
+
+      it = it->next;
+    } while (it != end);
+  }
+}
+
+void TypeBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers)
+{
+  if (CppClassFunctionType* functionType = currentType<CppClassFunctionType>()) {
+    const ListNode<std::size_t> *it = function_specifiers->toFront();
+    const ListNode<std::size_t> *end = it;
+    do {
+      int kind = m_editor->parseSession()->token_stream->kind(it->element);
+      switch (kind) {
+        case Token_inline:
+          functionType->setInline(true);
+          break;
+        case Token_virtual:
+          functionType->setVirtual(true);
+          break;
+        case Token_explicit:
+          functionType->setExplicit(true);
+          break;
+      }
+
+      it = it->next;
+    } while (it != end);
+  }
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

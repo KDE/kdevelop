@@ -42,6 +42,7 @@ protected:
   virtual void visitEnumerator(EnumeratorAST*);
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
   virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST*);
+  virtual void visitSimpleDeclaration(SimpleDeclarationAST*);
   virtual void visitTypedef(TypedefAST*);
   virtual void visitFunctionDefinition(FunctionDefinitionAST*);
   virtual void visitTypeSpecifierAST(TypeSpecifierAST*);
@@ -50,6 +51,9 @@ protected:
 private:
   void openType(AbstractType* type, AST* node, NameAST* id = 0);
   void closeType();
+
+  void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);
+  void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);
 
   inline AbstractType* currentAbstractType() { return m_typeStack.top(); }
 
