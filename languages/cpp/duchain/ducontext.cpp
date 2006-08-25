@@ -56,6 +56,8 @@ DUContext::~DUContext( )
 
   deleteChildContextsRecursively(url());
 
+  deleteAllTypes();
+
   qDeleteAll(m_localDefinitions);
 
   deleteOrphanUses();
@@ -643,3 +645,18 @@ DUContext* DUContext::findContext(ContextType contextType, const QualifiedIdenti
 }
 
 // kate: indent-width 2;
+
+const QList<AbstractType*>& DUContext::types() const
+{
+  return m_types;
+}
+
+void DUContext::addType(AbstractType* type)
+{
+  m_types.append(type);
+}
+
+void DUContext::deleteAllTypes()
+{
+  qDeleteAll(m_types);
+}

@@ -22,6 +22,7 @@ set(kdevcppduchain_SRCS
     duchain/dumpchain.cpp
     duchain/typesystem.cpp
     duchain/typebuilder.cpp
+    duchain/cpptypes.cpp
 )
 
 set(kdevcpplanguagesupport_PART_SRCS

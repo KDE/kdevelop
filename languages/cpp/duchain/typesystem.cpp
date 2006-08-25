@@ -20,33 +20,42 @@
 
 #include "typesystem.h"
 
-uint qHash (const IntegralType &t)
+FunctionType::FunctionType()
+  : m_returnType (0)
 {
-  return qHash (t.identifier().toString());
 }
 
-uint qHash (const PointerType &t)
+void FunctionType::setReturnType(AbstractType *returnType)
 {
-  return qHash (t.baseType ());
+  m_returnType = returnType;
 }
 
-uint qHash (const ReferenceType &t)
+void FunctionType::addArgument(AbstractType *argument)
 {
-  return qHash (t.baseType ());
+  m_arguments.append(argument);
 }
 
-uint qHash (const FunctionType &t)
+void FunctionType::removeArgument(AbstractType *argument)
 {
-  QVector<const AbstractType *> arguments (t.arguments ());
-  uint hash_value = qHash (t.returnType ());
-
-  for (int i = 0; i < arguments.count (); ++i)
-    hash_value = (hash_value << 5) - hash_value + qHash (arguments.at (i));
-
-  return hash_value;
+  m_arguments.removeAll(argument);
 }
 
-IntegralType::IntegralType(const Identifier & identifier)
-  : m_identifier(identifier)
+void StructureType::addElement(AbstractType *element)
+{
+  m_elements.append(element);
+}
+
+void StructureType::removeElement(AbstractType *element)
+{
+  m_elements.removeAll(element);
+}
+
+PointerType::PointerType()
+  : m_baseType(0)
+{
+}
+
+ReferenceType::ReferenceType()
+  : m_baseType (0)
 {
 }

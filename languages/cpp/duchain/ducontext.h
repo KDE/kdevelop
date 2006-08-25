@@ -146,6 +146,21 @@ public:
   const QList<UsingNS*>& usingNamespaces() const;
 
   /**
+   * Returns the list of types defined in this context.
+   */
+  const QList<AbstractType*>& types() const;
+
+  /**
+   * Adds a type defined in this context.
+   */
+  void addType(AbstractType* type);
+
+  /**
+   * Deletes all types defined in this context.
+   */
+  void deleteAllTypes();
+
+  /**
    * Searches for and returns a definition with a given \a identifier in this context, which
    * is currently active at the given text \a position.
    *
@@ -298,6 +313,8 @@ private:
   QList<DUContext*> m_importedParentContexts;
   QList<DUContext*> m_childContexts;
   QList<DUContext*> m_importedChildContexts;
+
+  QList<AbstractType*> m_types;
 
   QList<Definition*> m_localDefinitions;
 

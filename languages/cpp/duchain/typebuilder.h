@@ -36,13 +36,26 @@ public:
   void buildTypes(AST *node);
 
 protected:
-  virtual void visitClassSpecifier(ClassSpecifierAST *node);
-  virtual void visitEnumSpecifier(EnumSpecifierAST *node);
-  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node);
-  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node);
+  virtual void visitClassSpecifier(ClassSpecifierAST*);
+  virtual void visitEnumSpecifier(EnumSpecifierAST*);
+  virtual void visitEnumerator(EnumeratorAST*);
+  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
+  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST*);
+  virtual void visitTypedef(TypedefAST*);
+  virtual void visitFunctionDefinition(FunctionDefinitionAST*);
+  virtual void visitTypeSpecifierAST(TypeSpecifierAST*);
+  virtual void visitPtrOperator(PtrOperatorAST*);
 
 private:
-  AbstractType* m_currentType;
+  void openType(AbstractType* type, AST* node);
+  void closeType();
+
+  inline AbstractType* currentAbstractType() { return m_typeStack.top(); }
+
+  template <class T>
+  T* currentType() { return dynamic_cast<T*>(m_typeStack.top()); }
+
+  QStack<AbstractType*> m_typeStack;
 };
 
 #endif // TYPEBUILDER_H

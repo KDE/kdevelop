@@ -29,6 +29,7 @@
 
 class ParseSession;
 class DUContext;
+class AbstractType;
 
 struct AccessSpecifierAST;
 struct AsmDefinitionAST;
@@ -196,7 +197,10 @@ struct AST : public KDevAST
   std::size_t start_token;
   std::size_t end_token;
 
+  // External references
   DUContext* ducontext;
+  // FIXME - move to just those nodes which define types..?
+  AbstractType* type;
 };
 
 struct TypeSpecifierAST: public AST

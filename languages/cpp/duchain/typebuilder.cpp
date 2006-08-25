@@ -24,32 +24,89 @@
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include "ducontext.h"
+#include "cpptypes.h"
+#include "parsesession.h"
+#include "tokens.h"
 
 TypeBuilder::TypeBuilder(ParseSession* session)
   : TypeBuilderBase(session)
-  , m_currentType(0)
 {
 }
 
 TypeBuilder::TypeBuilder(CppEditorIntegrator * editor)
   : TypeBuilderBase(editor)
-  , m_currentType(0)
 {
 }
 
 void TypeBuilder::buildTypes(AST *node)
 {
   supportBuild(node);
+
+  Q_ASSERT(m_typeStack.isEmpty());
+}
+
+void TypeBuilder::openType(AbstractType* type, AST* node)
+{
+  if (FunctionType* function = currentType<FunctionType>()) {
+    function->addArgument(type);
+
+  } else if (StructureType* structure = currentType<StructureType>()) {
+    return structure->addElement(type);
+
+  } else if (PointerType* pointer = currentType<PointerType>()) {
+    pointer->setBaseType(type);
+
+  } else if (ReferenceType* reference = currentType<ReferenceType>()) {
+    reference->setBaseType(type);
+
+  } else if (ArrayType* array = currentType<ArrayType>()) {
+    array->setElementType(type);
+
+  } else {
+    currentContext()->addType(type);
+  }
+
+  node->type = type;
+
+  m_typeStack.append(type);
+}
+
+void TypeBuilder::closeType()
+{
+  m_typeStack.pop();
 }
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
+  openType(new CppClassType(currentContext()), node);
+
   TypeBuilderBase::visitClassSpecifier(node);
+
+  closeType();
 }
 
 void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 {
+  openType(new CppEnumerationType(), node);
+
   TypeBuilderBase::visitEnumSpecifier(node);
+
+  closeType();
+}
+
+void TypeBuilder::visitEnumerator(EnumeratorAST* node)
+{
+  bool ok = false;
+  if (CppEnumerationType* parent = currentType<CppEnumerationType>()) {
+    CppEnumeratorType* enumerator = new CppEnumeratorType(parent);
+    openType(enumerator, node);
+    ok = true;
+  }
+
+  TypeBuilderBase::visitEnumerator(node);
+
+  if (ok)
+    closeType();
 }
 
 void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
@@ -59,22 +116,69 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
 void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
+  if (CppClassType* classType = currentType<CppClassType>())
+    openType(new CppSpecificClassMemberType<CppIntegralType>(classType), node);
+  else
+    openType(new CppIntegralType(), node);
+
   TypeBuilderBase::visitSimpleTypeSpecifier(node);
+
+  closeType();
 }
 
-/*QStringList TypeBuilder::cvString() const
+void TypeBuilder::visitTypedef(TypedefAST* node)
 {
-  QStringList lst;
+  openType(new CppTypeAliasType(currentContext()), node);
 
-  foreach (int q, cv())
-    {
-      if (q == Token_const)
-        lst.append(QLatin1String("const"));
-      else if (q == Token_volatile)
-        lst.append(QLatin1String("volatile"));
+  TypeBuilderBase::visitTypedef(node);
+
+  closeType();
+}
+
+void TypeBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
+{
+  if (CppClassType* classType = currentType<CppClassType>())
+    openType(new CppClassFunctionType(classType), node);
+  else
+    openType(new FunctionType(), node);
+
+  TypeBuilderBase::visitFunctionDefinition(node);
+
+  closeType();
+}
+
+void TypeBuilder::visitTypeSpecifierAST(TypeSpecifierAST* node)
+{
+  if (node->cv) {
+    if (CppTypeInfo* typeInfo = currentType<CppTypeInfo>()) {
+      const ListNode<std::size_t> *it = node->cv->toFront();
+      const ListNode<std::size_t> *end = it;
+      do {
+        int kind = m_editor->parseSession()->token_stream->kind(it->element);
+        if (kind == Token_const)
+          typeInfo->setConstant(true);
+        else if (kind == Token_volatile)
+          typeInfo->setVolatile(true);
+
+        it = it->next;
+      } while (it != end);
     }
+  }
+}
 
-  return lst;
-}*/
+void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
+{
+  openType(new PointerType(), node);
+
+  if (CppClassType* classType = currentType<CppClassType>())
+    openType(new CppSpecificClassMemberType<CppIntegralType>(classType), node);
+  else
+    openType(new CppIntegralType(), node);
+
+  TypeBuilderBase::visitPtrOperator(node);
+
+  closeType();
+  closeType();
+}
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
