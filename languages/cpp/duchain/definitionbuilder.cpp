@@ -1,5 +1,4 @@
 /* This file is part of KDevelop
-    Copyright (C) 2006 Roberto Raggi <roberto@kdevelop.org>
     Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -20,19 +19,11 @@
 
 #include "definitionbuilder.h"
 
-#include <QMutexLocker>
-
 #include <ktexteditor/smartrange.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/smartinterface.h>
 
-#include "duchain.h"
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include "definition.h"
-#include "definitionuse.h"
-#include "topducontext.h"
-#include "dumpchain.h"
 
 using namespace KTextEditor;
 

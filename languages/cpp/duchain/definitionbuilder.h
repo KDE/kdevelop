@@ -1,5 +1,4 @@
 /* This file is part of KDevelop
-    Copyright (C) 2006 Roberto Raggi <roberto@kdevelop.org>
     Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
