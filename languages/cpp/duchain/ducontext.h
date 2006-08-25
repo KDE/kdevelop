@@ -29,6 +29,7 @@ class TypeInstance;
 class Definition;
 class DUChain;
 class DefinitionUse;
+class AbstractType;
 
 /**
  * A single context in source code, represented as a node in a
@@ -159,6 +160,14 @@ public:
    * Deletes all types defined in this context.
    */
   void deleteAllTypes();
+
+  /// Search for a type with the matching \a id, and matching type.
+  template <class T>
+  T* findType(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position) const
+  { return dynamic_cast<T*>(findAbstractType(identifier, position)); }
+
+  /// Search for a type with the matching \a id, and matching type.
+  AbstractType* findAbstractType(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>(), bool inImportedContext = false) const;
 
   /**
    * Searches for and returns a definition with a given \a identifier in this context, which

@@ -661,3 +661,8 @@ void DUContext::deleteAllTypes()
 {
   qDeleteAll(m_types);
 }
+
+AbstractType* DUContext::findAbstractType(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const DUContext* sourceChild, const QList<UsingNS*>& usingNamespaces, bool inImportedContext) const
+{
+  return 0;
+}

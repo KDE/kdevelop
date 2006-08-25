@@ -200,7 +200,7 @@ struct AST : public KDevAST
   // External references
   DUContext* ducontext;
   // FIXME - move to just those nodes which define types..?
-  AbstractType* type;
+  AbstractType* abstractType;
 };
 
 struct TypeSpecifierAST: public AST

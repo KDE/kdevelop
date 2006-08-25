@@ -77,7 +77,7 @@ void TypeBuilder::openType(AbstractType* type, AST* node, NameAST* id)
     currentContext()->addType(instance);
   }
 
-  node->type = type;
+  node->abstractType = type;
 
   m_typeStack.append(type);
 }
@@ -138,16 +138,41 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 
 void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 {
+  if (node->name) {
+    QualifiedIdentifier id = identifierForName(node->name);
+    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge);
+    int kind = m_editor->parseSession()->token_stream->kind(node->type);
+    switch (kind) {
+      case Token_class:
+      case Token_struct:
+      case Token_union:
+        node->abstractType = currentContext()->findType<CppClassType>(id, pos);
+        break;
+      case Token_enum:
+        node->abstractType = currentContext()->findType<CppEnumerationType>(id, pos);
+        break;
+      case Token_typename:
+        node->abstractType = currentContext()->findAbstractType(id, pos);
+        break;
+    }
+
+    if (node->abstractType)
+      openType(node->abstractType, node, node->name);
+  }
+
   TypeBuilderBase::visitElaboratedTypeSpecifier(node);
+
+  if (node->name)
+    closeType();
 }
 
 void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
   if (node->integrals) {
     if (CppClassType* classType = currentType<CppClassType>())
-      openType(new CppSpecificClassMemberType<CppIntegralType>(classType), node);
+      openType(new CppSpecificClassMemberType<CppIntegralType>(classType), node, node->name);
     else
-      openType(new CppIntegralType(), node);
+      openType(new CppIntegralType(), node, node->name);
 
     const ListNode<std::size_t> *it = node->integrals->toFront();
     const ListNode<std::size_t> *end = it;
