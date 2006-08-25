@@ -6,11 +6,7 @@ MimeType=application/x-kdevelop;
 Icon=kdevelop
 DocPath=kdevelop/index.html
 Terminal=false
-Name=KDevelop: Multilanguage
-Name[fr]=KDevelop : Multi-langage
-Name[x-test]=xxKDevelop: Multilanguagexx
+Name=KDevelop 4
 GenericName=IDE
-GenericName[x-test]=xxIDExx
-X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
 

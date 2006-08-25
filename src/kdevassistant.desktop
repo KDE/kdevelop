@@ -11,6 +11,5 @@ Name[x-test]=xxKDevelop Assistantxx
 GenericName=Documentation Viewer
 GenericName[fr]=Afficheur de documentation
 GenericName[x-test]=xxDocumentation Viewerxx
-X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Development;Documentation;X-KDE-KDevelopIDE;
 
