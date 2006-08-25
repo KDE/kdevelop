@@ -60,14 +60,6 @@ private:
     KDevProject *m_project;
     KDevProjectItem *m_defaultExecutable;
     QList< QPair<QString, KDevProjectItem *> > m_commands;
-
-    static const QString &builder;
-    static const QString &makeTool;
-    static const QString &priority;
-    static const QString &abortOnError;
-    static const QString &numberOfJobs;
-    static const QString &dontAct;
-    static const QString &environment;
 };
 
 #endif // KDEVMAKEBUILDER_H
