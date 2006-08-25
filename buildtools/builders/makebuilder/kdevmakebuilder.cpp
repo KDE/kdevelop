@@ -55,22 +55,6 @@ KDevProject *KDevMakeBuilder::project() const
     return m_project;
 }
 
-bool KDevMakeBuilder::isExecutable(KDevProjectItem *dom) const
-{
-    Q_UNUSED(dom);
-    return false;
-}
-
-KDevProjectItem *KDevMakeBuilder::defaultExecutable() const
-{
-    return m_defaultExecutable;
-}
-
-void KDevMakeBuilder::setDefaultExecutable(KDevProjectItem *dom)
-{
-    m_defaultExecutable = dom;
-}
-
 bool KDevMakeBuilder::configure(KDevProjectItem *dom)
 {
     Q_UNUSED(dom);

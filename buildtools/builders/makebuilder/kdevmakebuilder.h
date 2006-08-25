@@ -38,11 +38,6 @@ public:
 
     virtual KDevProject *project() const;
 
-    virtual bool isExecutable(KDevProjectItem *dom) const;
-
-    virtual KDevProjectItem *defaultExecutable() const;
-    virtual void setDefaultExecutable(KDevProjectItem *dom);
-
     virtual bool configure(KDevProjectItem *dom);
     virtual bool build(KDevProjectItem *dom);
     virtual bool clean(KDevProjectItem *dom);
