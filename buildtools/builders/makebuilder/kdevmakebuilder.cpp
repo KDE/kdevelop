@@ -55,12 +55,6 @@ KDevProject *KDevMakeBuilder::project() const
     return m_project;
 }
 
-bool KDevMakeBuilder::configure(KDevProjectItem *dom)
-{
-    Q_UNUSED(dom);
-    return false;
-}
-
 bool KDevMakeBuilder::build(KDevProjectItem *dom)
 {
     KDevPluginController* kdpc = KDevCore::pluginController();

@@ -38,7 +38,6 @@ public:
 
     virtual KDevProject *project() const;
 
-    virtual bool configure(KDevProjectItem *dom);
     virtual bool build(KDevProjectItem *dom);
     virtual bool clean(KDevProjectItem *dom);
 
@@ -52,7 +51,6 @@ private:
 
 private:
     KDevProject *m_project;
-    KDevProjectItem *m_defaultExecutable;
     QList< QPair<QString, KDevProjectItem *> > m_commands;
 };
 

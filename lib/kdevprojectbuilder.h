@@ -40,7 +40,6 @@ public:
 
     virtual KDevProject *project() const = 0;
 
-    virtual bool configure(KDevProjectItem *dom) = 0;
     virtual bool build(KDevProjectItem *dom) = 0;
     virtual bool clean(KDevProjectItem *dom) = 0;
 
