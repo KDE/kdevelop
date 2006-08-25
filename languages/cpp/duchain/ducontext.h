@@ -25,7 +25,7 @@
 #include "kdevdocumentcursorobject.h"
 #include "identifier.h"
 
-class AbstractType;
+class TypeInstance;
 class Definition;
 class DUChain;
 class DefinitionUse;
@@ -148,12 +148,12 @@ public:
   /**
    * Returns the list of types defined in this context.
    */
-  const QList<AbstractType*>& types() const;
+  const QList<TypeInstance*>& types() const;
 
   /**
    * Adds a type defined in this context.
    */
-  void addType(AbstractType* type);
+  void addType(TypeInstance* type);
 
   /**
    * Deletes all types defined in this context.
@@ -314,7 +314,7 @@ private:
   QList<DUContext*> m_childContexts;
   QList<DUContext*> m_importedChildContexts;
 
-  QList<AbstractType*> m_types;
+  QList<TypeInstance*> m_types;
 
   QList<Definition*> m_localDefinitions;
 

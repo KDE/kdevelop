@@ -26,6 +26,7 @@
 #include <QtCore/QPair>
 
 #include "typesystem.h"
+#include "typeinstance.h"
 
 class DUContext;
 
@@ -59,14 +60,23 @@ class CppIntegralType : public IntegralType, public CppTypeInfo
 {
 };
 
+class CppClassType;
+
+struct CppBaseClassInstance
+{
+  CppClassType* baseClass;
+  CppCodeModel::AccessPolicy access;
+  bool virtualInheritance;
+};
+
 class CppClassType : public StructureType, public CppTypeInfo
 {
 public:
   CppClassType(DUContext* context);
 
-  const QList< QPair<CppClassType*, CppCodeModel::AccessPolicy> >& baseClasses() const;
+  const QList<CppBaseClassInstance>& baseClasses() const;
 
-  void addBaseClass(CppClassType* baseClass, CppCodeModel::AccessPolicy policy);
+  void addBaseClass(const CppBaseClassInstance& baseClass);
   void removeBaseClass(CppClassType* baseClass);
 
   const QList<CppClassType*>& subClasses() const;
@@ -84,7 +94,7 @@ public:
   ClassType classType() const;
 
 private:
-  QList< QPair<CppClassType*, CppCodeModel::AccessPolicy> > m_baseClasses;
+  QList<CppBaseClassInstance> m_baseClasses;
   ClassType m_classType;
 };
 

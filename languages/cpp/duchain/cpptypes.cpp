@@ -27,20 +27,20 @@ bool CppTypeInfo::operator==(const CppTypeInfo& other)
 }
 
 // ---------------------------------------------------------------------------
-const QList< QPair<CppClassType*, CppCodeModel::AccessPolicy> >& CppClassType::baseClasses() const
+const QList<CppBaseClassInstance>& CppClassType::baseClasses() const
 {
   return m_baseClasses;
 }
 
-void CppClassType::addBaseClass(CppClassType* baseClass, CppCodeModel::AccessPolicy policy)
+void CppClassType::addBaseClass(const CppBaseClassInstance& baseClass)
 {
-  m_baseClasses.append(qMakePair(baseClass, policy));
+  m_baseClasses.append(baseClass);
 }
 
 void CppClassType::removeBaseClass(CppClassType* baseClass)
 {
   for (int i = 0; i < m_baseClasses.count(); ++i)
-    if (m_baseClasses[i].first == baseClass) {
+    if (m_baseClasses[i].baseClass == baseClass) {
       m_baseClasses.removeAt(i);
       return;
     }

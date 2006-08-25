@@ -19,8 +19,9 @@
 #include "ducontext.h"
 
 #include <QMutableLinkedListIterator>
+#include <QSet>
 
-#include "typesystem.h"
+#include "typeinstance.h"
 #include "definition.h"
 #include "duchain.h"
 #include "definitionuse.h"
@@ -646,12 +647,12 @@ DUContext* DUContext::findContext(ContextType contextType, const QualifiedIdenti
 
 // kate: indent-width 2;
 
-const QList<AbstractType*>& DUContext::types() const
+const QList<TypeInstance*>& DUContext::types() const
 {
   return m_types;
 }
 
-void DUContext::addType(AbstractType* type)
+void DUContext::addType(TypeInstance* type)
 {
   m_types.append(type);
 }

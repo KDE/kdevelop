@@ -45,7 +45,7 @@ void TypeBuilder::buildTypes(AST *node)
   Q_ASSERT(m_typeStack.isEmpty());
 }
 
-void TypeBuilder::openType(AbstractType* type, AST* node)
+void TypeBuilder::openType(AbstractType* type, AST* node, NameAST* id)
 {
   if (FunctionType* function = currentType<FunctionType>()) {
     function->addArgument(type);
@@ -63,7 +63,15 @@ void TypeBuilder::openType(AbstractType* type, AST* node)
     array->setElementType(type);
 
   } else {
-    currentContext()->addType(type);
+    TypeInstance* instance = new TypeInstance(m_editor->createCursor(node->start_token));
+    instance->setType(type);
+    if (id) {
+      QualifiedIdentifier qid = identifierForName(id);
+      Q_ASSERT(qid.count() == 1);
+      instance->setIdentifier(qid.first());
+    }
+
+    currentContext()->addType(instance);
   }
 
   node->type = type;
@@ -78,11 +86,20 @@ void TypeBuilder::closeType()
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
-  openType(new CppClassType(currentContext()), node);
+  openType(new CppClassType(currentContext()), node, node->name);
 
   TypeBuilderBase::visitClassSpecifier(node);
 
   closeType();
+}
+
+void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
+{
+  if (node->name) {
+    QualifiedIdentifier baseClassIdentifier = identifierForName(node->name);
+  }
+
+  TypeBuilderBase::visitBaseSpecifier(node);
 }
 
 void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)

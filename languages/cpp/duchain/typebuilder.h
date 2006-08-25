@@ -37,6 +37,7 @@ public:
 
 protected:
   virtual void visitClassSpecifier(ClassSpecifierAST*);
+  virtual void visitBaseSpecifier(BaseSpecifierAST*);
   virtual void visitEnumSpecifier(EnumSpecifierAST*);
   virtual void visitEnumerator(EnumeratorAST*);
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
@@ -47,7 +48,7 @@ protected:
   virtual void visitPtrOperator(PtrOperatorAST*);
 
 private:
-  void openType(AbstractType* type, AST* node);
+  void openType(AbstractType* type, AST* node, NameAST* id = 0);
   void closeType();
 
   inline AbstractType* currentAbstractType() { return m_typeStack.top(); }

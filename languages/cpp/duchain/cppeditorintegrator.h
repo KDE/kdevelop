@@ -117,7 +117,7 @@ public:
   /**
    * Create a new persistant cursor from the given \a token on the given \a edge.
    */
-  KTextEditor::Cursor* createCursor(std::size_t token, Edge edge);
+  KTextEditor::Cursor* createCursor(std::size_t token, Edge edge = FrontEdge);
 
   /**
    * Retrieve the string represented by a token.
