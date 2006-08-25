@@ -12,7 +12,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/weaver ${CM
 set(kdevcppduchain_SRCS
     duchain/cppeditorintegrator.cpp
     duchain/duchain.cpp
-    duchain/dubuilder.cpp
+    duchain/definitionbuilder.cpp
+    duchain/usebuilder.cpp
     duchain/ducontext.cpp
     duchain/topducontext.cpp
     duchain/definition.cpp

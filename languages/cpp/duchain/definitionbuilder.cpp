@@ -18,7 +18,7 @@
 */
 // kate: indent-width 2;
 
-#include "dubuilder.h"
+#include "definitionbuilder.h"
 
 #include <QMutexLocker>
 
@@ -36,33 +36,22 @@
 
 using namespace KTextEditor;
 
-DUBuilder::DUBuilder (ParseSession* session)
+DefinitionBuilder::DefinitionBuilder (ParseSession* session)
   : m_editor(new CppEditorIntegrator(session))
   , m_nameCompiler(new NameCompiler(session))
-  , in_namespace(false)
-  , in_class(false)
-  , in_template_declaration(false)
-  , in_typedef(false)
-  , in_function_definition(false)
-  , in_parameter_declaration(false)
   , m_ownsEditorIntegrator(true)
+  , m_compilingDefinitions(false)
 {
 }
 
-DUBuilder::DUBuilder (CppEditorIntegrator* editor)
+DefinitionBuilder::DefinitionBuilder (CppEditorIntegrator* editor)
   : m_editor(editor)
   , m_nameCompiler(new NameCompiler(editor->parseSession()))
-  , in_namespace(false)
-  , in_class(false)
-  , in_template_declaration(false)
-  , in_typedef(false)
-  , in_function_definition(false)
-  , in_parameter_declaration(false)
   , m_ownsEditorIntegrator(false)
 {
 }
 
-DUBuilder::~DUBuilder ()
+DefinitionBuilder::~DefinitionBuilder ()
 {
   if (m_ownsEditorIntegrator)
     delete m_editor;
@@ -70,17 +59,15 @@ DUBuilder::~DUBuilder ()
   delete m_nameCompiler;
 }
 
-TopDUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse definition, QList<DUContext*>* includes)
+TopDUContext* DefinitionBuilder::buildDefinitions(const KUrl& url, AST *node, QList<DUContext*>* includes)
 {
-  m_compilingDefinitions = definition == CompileDefinitions;
+  m_compilingDefinitions = true;
 
   m_editor->setCurrentUrl(url);
 
   TopDUContext* topLevelContext = DUChain::self()->chainForDocument(url);
 
   if (topLevelContext) {
-    m_contextStack.push(topLevelContext);
-
     Q_ASSERT(topLevelContext->textRangePtr());
 
     if (m_compilingDefinitions) {
@@ -102,7 +89,6 @@ TopDUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse defin
     Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
     topLevelContext = new TopDUContext(range);
     topLevelContext->setType(DUContext::Global);
-    m_contextStack.push(topLevelContext);
 
     DUChain::self()->addDocumentChain(url, topLevelContext);
   }
@@ -120,13 +106,9 @@ TopDUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse defin
       topLevelContext->addImportedParentContext(included);
   }
 
-  m_editor->setCurrentRange(currentContext()->textRangePtr());
+  supportBuild(node);
 
-  visit (node);
-
-  closeContext();
-
-  Q_ASSERT(m_contextStack.isEmpty());
+  m_compilingDefinitions = false;
 
   // FIXME Hrm, didn't get used..??
   if (!m_importedParentContexts.isEmpty()) {
@@ -139,7 +121,21 @@ TopDUContext* DUBuilder::build(const KUrl& url, AST *node, DefinitionOrUse defin
   return topLevelContext;
 }
 
-void DUBuilder::visitNamespace (NamespaceAST *node)
+void DefinitionBuilder::supportBuild(AST *node)
+{
+  Q_ASSERT(node->ducontext);
+  m_contextStack.push(node->ducontext);
+
+  m_editor->setCurrentRange(currentContext()->textRangePtr());
+
+  visit (node);
+
+  closeContext();
+
+  Q_ASSERT(m_contextStack.isEmpty());
+}
+
+void DefinitionBuilder::visitNamespace (NamespaceAST *node)
 {
   QualifiedIdentifier identifier;
   if (m_compilingDefinitions) {
@@ -155,47 +151,39 @@ void DUBuilder::visitNamespace (NamespaceAST *node)
   if (m_compilingDefinitions)
     nsCtx->setLocalScopeIdentifier(identifier);
 
-  bool was = inNamespace (true);
   DefaultVisitor::visitNamespace (node);
-  inNamespace (was);
 
   closeContext();
 }
 
-void DUBuilder::visitClassSpecifier (ClassSpecifierAST *node)
+void DefinitionBuilder::visitClassSpecifier (ClassSpecifierAST *node)
 {
   openContext(node, DUContext::Class, node->name);
 
-  bool was = inClass (true);
   DefaultVisitor::visitClassSpecifier (node);
-  inClass (was);
 
   closeContext(node->name);
 }
 
-void DUBuilder::visitBaseSpecifier(BaseSpecifierAST* node)
+void DefinitionBuilder::visitBaseSpecifier(BaseSpecifierAST* node)
 {
   DefaultVisitor::visitBaseSpecifier(node);
 }
 
-void DUBuilder::visitTemplateDeclaration (TemplateDeclarationAST *node)
+void DefinitionBuilder::visitTemplateDeclaration (TemplateDeclarationAST *node)
 {
-  bool was = inTemplateDeclaration (true);
   DefaultVisitor::visitTemplateDeclaration (node);
-  inTemplateDeclaration (was);
 }
 
-void DUBuilder::visitTypedef (TypedefAST *node)
+void DefinitionBuilder::visitTypedef (TypedefAST *node)
 {
-  bool was = inTypedef (node);
   DefaultVisitor::visitTypedef (node);
-  inTypedef (was);
 
   // Didn't get claimed if it was still set
   m_importedParentContexts.clear();
 }
 
-void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
+void DefinitionBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
   if (node && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
     m_nameCompiler->run(node->init_declarator->declarator->id);
@@ -208,8 +196,6 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
         m_importedParentContexts.append(classContext);
     }
   }
-
-  bool was = inFunctionDefinition (node);
 
   visit(node->type_specifier);
   visit(node->init_declarator);
@@ -228,13 +214,11 @@ void DUBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 
   visit(node->win_decl_specifiers);
 
-  inFunctionDefinition (was);
-
   // If still defined, not needed
   m_importedParentContexts.clear();
 }
 
-DUContext* DUBuilder::openContext(AST* rangeNode, DUContext::ContextType type, NameAST* identifier)
+DUContext* DefinitionBuilder::openContext(AST* rangeNode, DUContext::ContextType type, NameAST* identifier)
 {
   if (m_compilingDefinitions) {
     Range* range = m_editor->createRange(rangeNode);
@@ -249,7 +233,7 @@ DUContext* DUBuilder::openContext(AST* rangeNode, DUContext::ContextType type, N
   }
 }
 
-DUContext* DUBuilder::openContext(AST* fromRange, AST* toRange, DUContext::ContextType type, NameAST* identifier)
+DUContext* DefinitionBuilder::openContext(AST* fromRange, AST* toRange, DUContext::ContextType type, NameAST* identifier)
 {
   if (m_compilingDefinitions) {
     Range* range = m_editor->createRange(fromRange, toRange);
@@ -264,7 +248,7 @@ DUContext* DUBuilder::openContext(AST* fromRange, AST* toRange, DUContext::Conte
   }
 }
 
-DUContext* DUBuilder::openContextInternal(Range* range, DUContext::ContextType type, NameAST* identifier)
+DUContext* DefinitionBuilder::openContextInternal(Range* range, DUContext::ContextType type, NameAST* identifier)
 {
   Q_ASSERT(m_compilingDefinitions);
 
@@ -281,7 +265,7 @@ DUContext* DUBuilder::openContextInternal(Range* range, DUContext::ContextType t
   return ret;
 }
 
-void DUBuilder::closeContext(NameAST* name, AST* node)
+void DefinitionBuilder::closeContext(NameAST* name, AST* node)
 {
   if (m_compilingDefinitions) {
     if (node) {
@@ -307,23 +291,21 @@ void DUBuilder::closeContext(NameAST* name, AST* node)
   m_editor->exitCurrentRange();
 }
 
-void DUBuilder::visitParameterDeclarationClause (ParameterDeclarationClauseAST * node)
+void DefinitionBuilder::visitParameterDeclarationClause (ParameterDeclarationClauseAST * node)
 {
   m_importedParentContexts.append(openContext(node, DUContext::Function));
 
-  bool was = inParameterDeclaration (node);
   DefaultVisitor::visitParameterDeclarationClause (node);
-  inParameterDeclaration (was);
 
   closeContext();
 }
 
-void DUBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
+void DefinitionBuilder::visitParameterDeclaration (ParameterDeclarationAST * node)
 {
   DefaultVisitor::visitParameterDeclaration (node);
 }
 
-void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
+void DefinitionBuilder::visitCompoundStatement (CompoundStatementAST * node)
 {
   openContext(node, DUContext::Other);
 
@@ -334,7 +316,7 @@ void DUBuilder::visitCompoundStatement (CompoundStatementAST * node)
   closeContext();
 }
 
-void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
+void DefinitionBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 {
   DefaultVisitor::visitSimpleDeclaration (node);
 
@@ -363,12 +345,12 @@ void DUBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
   visit(node->win_decl_specifiers);*/
 }
 
-void DUBuilder::visitInitDeclarator(InitDeclaratorAST* node)
+void DefinitionBuilder::visitInitDeclarator(InitDeclaratorAST* node)
 {
   DefaultVisitor::visitInitDeclarator(node);
 }
 
-void DUBuilder::visitDeclarator (DeclaratorAST* node)
+void DefinitionBuilder::visitDeclarator (DeclaratorAST* node)
 {
   // Don't create a definition for a function
   if (node->parameter_declaration_clause) {
@@ -391,76 +373,35 @@ void DUBuilder::visitDeclarator (DeclaratorAST* node)
   DefaultVisitor::visitDeclarator(node);
 }
 
-void DUBuilder::visitPrimaryExpression (PrimaryExpressionAST* node)
-{
-  DefaultVisitor::visitPrimaryExpression(node);
-
-  if (node->name)
-    newUse(node->name);
-}
-
-void DUBuilder::visitMemInitializer(MemInitializerAST * node)
-{
-  DefaultVisitor::visitMemInitializer(node);
-
-  if (node->initializer_id)
-    newUse(node->initializer_id);
-}
-
-void DUBuilder::newUse(NameAST* name)
-{
-  if (m_compilingDefinitions)
-    return;
-
-  Range* current = m_editor->currentRange();
-  Range* use = m_editor->createRange(name);
-  m_editor->exitCurrentRange();
-  Q_ASSERT(m_editor->currentRange() == current);
-
-  if (use->isSmartRange())
-    if (use->toSmartRange()->parentRange() != currentContext()->smartRange())
-      kWarning() << k_funcinfo << "Use " << *use << " parent " << *use->toSmartRange()->parentRange() << " " << use->toSmartRange()->parentRange() << " != current context " << *currentContext()->smartRange() << " " << currentContext()->smartRange() << " id " << currentContext()->scopeIdentifier() << endl;
-
-  m_nameCompiler->run(name);
-
-  foreach (DUContext* imported, m_importedParentContexts) {
-    if (Definition* definition = imported->findDefinition(m_nameCompiler->identifier(), KDevDocumentCursor(use, KDevDocumentCursor::Start))) {
-      definition->addUse(new DefinitionUse(use));
-      return;
-    }
-  }
-
-  if (Definition* definition = currentContext()->findDefinition(m_nameCompiler->identifier(), KDevDocumentCursor(use, KDevDocumentCursor::Start)))
-    definition->addUse(new DefinitionUse(use));
-  else
-    currentContext()->addOrphanUse(new DefinitionUse(use));
-    //kWarning() << k_funcinfo << "Could not find definition for identifier " << id << " at " << *use << endl;
-}
-
-void DUBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
+void DefinitionBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
 {
   DefaultVisitor::visitSimpleTypeSpecifier(node);
 }
 
-void DUBuilder::visitName (NameAST *)
+void DefinitionBuilder::visitName (NameAST *)
 {
   // Note: we don't want to visit the name node, the name compiler does that for us (only when we need it)
 }
 
-Definition* DUBuilder::newDeclaration(NameAST* name, AST* rangeNode)
+Definition* DefinitionBuilder::newDeclaration(NameAST* name, AST* rangeNode)
 {
   if (!m_compilingDefinitions)
     return 0;
 
   Definition::Scope scope = Definition::GlobalScope;
-  if (in_function_definition)
-    scope = Definition::LocalScope;
-  else if (in_class)
-    scope = Definition::ClassScope;
-  else if (in_namespace)
-    scope = Definition::NamespaceScope;
-
-  //kDebug() << "Visit declaration: " << identifier << " range " << *range << endl;
+  switch (currentContext()->type()) {
+    case DUContext::Namespace:
+      scope = Definition::NamespaceScope;
+      break;
+    case DUContext::Class:
+      scope = Definition::ClassScope;
+      break;
+    case DUContext::Function:
+      scope = Definition::LocalScope;
+      break;
+    default:
+      break;
+  }
 
   Range* prior = m_editor->currentRange();
   Range* range = m_editor->createRange(name ? static_cast<AST*>(name) : rangeNode);
@@ -482,7 +423,7 @@ Definition* DUBuilder::newDeclaration(NameAST* name, AST* rangeNode)
   return definition;
 }
 
-void DUBuilder::visitUsingDirective(UsingDirectiveAST * node)
+void DefinitionBuilder::visitUsingDirective(UsingDirectiveAST * node)
 {
   DefaultVisitor::visitUsingDirective(node);
 
@@ -493,44 +434,44 @@ void DUBuilder::visitUsingDirective(UsingDirectiveAST * node)
   }
 }
 
-void DUBuilder::visitClassMemberAccess(ClassMemberAccessAST * node)
+void DefinitionBuilder::visitClassMemberAccess(ClassMemberAccessAST * node)
 {
   DefaultVisitor::visitClassMemberAccess(node);
 }
 
-void DUBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
+void DefinitionBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
 {
   DefaultVisitor::visitElaboratedTypeSpecifier(node);
 }
 
-void DUBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
+void DefinitionBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
 {
   DefaultVisitor::visitEnumSpecifier(node);
 }
 
-void DUBuilder::visitTypeParameter(TypeParameterAST* node)
+void DefinitionBuilder::visitTypeParameter(TypeParameterAST* node)
 {
   DefaultVisitor::visitTypeParameter(node);
 }
 
-void DUBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)
+void DefinitionBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)
 {
   // TODO store the alias
   DefaultVisitor::visitNamespaceAliasDefinition(node);
 }
 
-void DUBuilder::visitTypeIdentification(TypeIdentificationAST* node)
+void DefinitionBuilder::visitTypeIdentification(TypeIdentificationAST* node)
 {
   DefaultVisitor::visitTypeIdentification(node);
 }
 
-void DUBuilder::visitUsing(UsingAST* node)
+void DefinitionBuilder::visitUsing(UsingAST* node)
 {
   // TODO store the using
   DefaultVisitor::visitUsing(node);
 }
 
-void DUBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST* node)
+void DefinitionBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST* node)
 {
   switch (currentContext()->type()) {
     case DUContext::Global:
@@ -546,7 +487,7 @@ void DUBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationSta
   }
 }
 
-void DUBuilder::visitForStatement(ForStatementAST *node)
+void DefinitionBuilder::visitForStatement(ForStatementAST *node)
 {
   // Not setting the member var because it gets nuked in visitSimpleDeclaration
   AST* first = node->init_statement;
@@ -582,7 +523,7 @@ void DUBuilder::visitForStatement(ForStatementAST *node)
   m_importedParentContexts.clear();
 }
 
-void DUBuilder::addImportedContexts()
+void DefinitionBuilder::addImportedContexts()
 {
   if (m_compilingDefinitions && !m_importedParentContexts.isEmpty()) {
     /*foreach (DUContext* imported, m_importedParentContexts)
@@ -596,7 +537,7 @@ void DUBuilder::addImportedContexts()
   }
 }
 
-void DUBuilder::visitIfStatement(IfStatementAST* node)
+void DefinitionBuilder::visitIfStatement(IfStatementAST* node)
 {
   // Not setting the member var because it gets nuked in visitSimpleDeclaration
   DUContext* secondParentContext = openContext(node->condition, DUContext::Other);
@@ -624,12 +565,12 @@ void DUBuilder::visitIfStatement(IfStatementAST* node)
   }
 }
 
-bool DUBuilder::createContextIfNeeded(AST* node, DUContext* importedParentContext)
+bool DefinitionBuilder::createContextIfNeeded(AST* node, DUContext* importedParentContext)
 {
   return createContextIfNeeded(node, QList<DUContext*>() << importedParentContext);
 }
 
-bool DUBuilder::createContextIfNeeded(AST* node, const QList<DUContext*>& importedParentContexts)
+bool DefinitionBuilder::createContextIfNeeded(AST* node, const QList<DUContext*>& importedParentContexts)
 {
   m_importedParentContexts = importedParentContexts;
 

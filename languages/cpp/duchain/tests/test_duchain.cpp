@@ -21,12 +21,11 @@
 
 #include "duchain.h"
 #include "topducontext.h"
-#include "dubuilder.h"
+#include "usebuilder.h"
 #include "typesystem.h"
 #include "definition.h"
 #include "kdevdocumentrange.h"
 #include "cppeditorintegrator.h"
-#include "dubuilder.h"
 
 #include "parser.h"
 #include "control.h"
@@ -542,11 +541,14 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
     dumper.dump(ast, session);
   }
 
-  DUBuilder dubuilder(session);
   static int testNumber = 0;
   KUrl url(QString("file:///internal/%1").arg(testNumber++));
-  TopDUContext* top = dubuilder.build(url, ast, DUBuilder::CompileDefinitions);
-  dubuilder.build(url, ast, DUBuilder::CompileUses);
+
+  DefinitionBuilder definitionBuilder(session);
+  TopDUContext* top = definitionBuilder.buildDefinitions(url, ast);
+
+  UseBuilder useBuilder(session);
+  useBuilder.buildUses(ast);
 
   if (dump & DumpDUChain) {
     kDebug() << "===== DUChain:" << endl;

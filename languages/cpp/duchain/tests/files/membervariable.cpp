@@ -3,13 +3,13 @@ namespace Blah {
     int m_test;
     static int s_test2;
 
-    void test();
+    void test(int input);
   };
 
   int nsTest;
 }
 
-Blah::Foo::s_test2 = 0;
+int Blah::Foo::s_test2 = 0;
 
 int test3()
 {
@@ -38,9 +38,10 @@ int Foo::test(int input)
 
   Foo f;
   if (result = f.test())
-    return;
+    return 1;
 
-  Foo* f2 = new Foo();
+  Foo2* f2;
+  f2 = new Foo();
 
   for (int j = 0; j < 4; ++j) {
     if (j ^ input > 200)
@@ -49,9 +50,9 @@ int Foo::test(int input)
 
   // Use of j outside of scope - error
   if (j == 4)
-    return;
+    return 4;
 
   result *= input;
 
   return m_test;
-} 
+}

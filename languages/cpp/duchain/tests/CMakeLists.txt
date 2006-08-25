@@ -17,7 +17,8 @@ set(kdevplatform_editor_LIB_SRCS
 set(kdevcppduchain_SRCS
     ../../duchain/cppeditorintegrator.cpp
     ../../duchain/duchain.cpp
-    ../../duchain/dubuilder.cpp
+    ../../duchain/definitionbuilder.cpp
+    ../../duchain/usebuilder.cpp
     ../../duchain/ducontext.cpp
     ../../duchain/topducontext.cpp
     ../../duchain/definition.cpp

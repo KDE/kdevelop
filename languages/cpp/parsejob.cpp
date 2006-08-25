@@ -46,7 +46,7 @@
 #include "parser/control.h"
 #include "duchain/dumpchain.h"
 #include "duchain/cppeditorintegrator.h"
-#include "duchain/dubuilder.h"
+#include "duchain/usebuilder.h"
 #include "duchain/topducontext.h"
 #include "preprocessjob.h"
 
@@ -174,8 +174,8 @@ void ParseJob::run()
         // Control the lifetime of the editor integrator (so that locking works)
         {
             CppEditorIntegrator editor(parentJob()->parseSession());
-            DUBuilder dubuilder(&editor);
-            topContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileDefinitions, &chains);
+            DefinitionBuilder definitionBuilder(&editor);
+            topContext = definitionBuilder.buildDefinitions(parentJob()->document(), ast, &chains);
 
             if (parentJob()->abortRequested())
                 return parentJob()->abortJob();
@@ -184,8 +184,8 @@ void ParseJob::run()
             // for navigation in that case)
             // FIXME make configurable
             if (!parentJob()->wasReadFromDisk()) {
-                TopDUContext* repeatTopContext = dubuilder.build(parentJob()->document(), ast, DUBuilder::CompileUses);
-                Q_ASSERT(repeatTopContext == topContext);
+                UseBuilder useBuilder(&editor);
+                useBuilder.buildUses(ast);
 
                 if (parentJob()->abortRequested())
                     return parentJob()->abortJob();
