@@ -30,14 +30,12 @@
 
 class DUContext;
 
-namespace CppCodeModel {
-  enum AccessPolicy
-  {
-    Public,
-    Protected,
-    Private
-  };
-}
+enum CppAccessPolicy
+{
+  Public,
+  Protected,
+  Private
+};
 
 class CppTypeInfo
 {
@@ -65,7 +63,7 @@ class CppClassType;
 struct CppBaseClassInstance
 {
   CppClassType* baseClass;
-  CppCodeModel::AccessPolicy access;
+  CppAccessPolicy access;
   bool virtualInheritance;
 };
 
@@ -121,8 +119,8 @@ public:
   bool isMutable() const;
   void setMutable(bool isMutable);
 
-  CppCodeModel::AccessPolicy accessPolicy() const;
-  void setAccessPolicy(CppCodeModel::AccessPolicy accessPolicy);
+  CppAccessPolicy accessPolicy() const;
+  void setAccessPolicy(CppAccessPolicy accessPolicy);
 
 private:
   uint m_isStatic: 1;
@@ -131,7 +129,7 @@ private:
   uint m_isRegister: 1;
   uint m_isExtern: 1;
   uint m_isMutable: 1;
-  CppCodeModel::AccessPolicy m_accessPolicy;
+  CppAccessPolicy m_accessPolicy;
 };
 
 template <class T>
@@ -149,7 +147,7 @@ class CppClassFunctionType : public FunctionType, public CppClassMemberType
 public:
   CppClassFunctionType(CppClassType* owner);
 
-  void addArgument(AbstractType* type, CppCodeModel::AccessPolicy policy);
+  void addArgument(AbstractType* type, CppAccessPolicy policy);
   void removeArgument(AbstractType* type);
 
   enum QtFunctionType
@@ -182,7 +180,7 @@ public:
 private:
   bool m_constructor;
   bool m_destructor;
-  QList<CppCodeModel::AccessPolicy> m_argumentAccessPolicies;
+  QList<CppAccessPolicy> m_argumentAccessPolicies;
   QtFunctionType m_functionType;
   bool m_isVirtual: 1;
   bool m_isInline: 1;
@@ -209,15 +207,15 @@ class CppEnumeratorType;
 class CppEnumerationType : public StructureType
 {
 public:
-  CppCodeModel::AccessPolicy accessPolicy() const;
-  void setAccessPolicy(CppCodeModel::AccessPolicy accessPolicy);
+  CppAccessPolicy accessPolicy() const;
+  void setAccessPolicy(CppAccessPolicy accessPolicy);
 
   const QList<CppEnumeratorType*>& enumerators() const;
   void addEnumerator(CppEnumeratorType* item);
   void removeEnumerator(CppEnumeratorType* item);
 
 private:
-  CppCodeModel::AccessPolicy m_accessPolicy;
+  CppAccessPolicy m_accessPolicy;
   QList<CppEnumeratorType*> m_enumerators;
 };
 

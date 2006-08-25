@@ -42,6 +42,7 @@ void TypeBuilder::buildTypes(AST *node)
   supportBuild(node);
 
   Q_ASSERT(m_typeStack.isEmpty());
+  Q_ASSERT(m_accessPolicyStack.isEmpty());
 }
 
 void TypeBuilder::openType(AbstractType* type, AST* node, NameAST* id)
@@ -53,7 +54,7 @@ void TypeBuilder::openType(AbstractType* type, AST* node, NameAST* id)
       function->addArgument(type);
 
   } else if (StructureType* structure = currentType<StructureType>()) {
-    return structure->addElement(type);
+    structure->addElement(type);
 
   } else if (PointerType* pointer = currentType<PointerType>()) {
     pointer->setBaseType(type);
@@ -97,7 +98,18 @@ void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   else if (kind == Token_union)
     classType->setClassType(CppClassType::Union);
 
+  switch (classType->classType()) {
+    case CppClassType::Class:
+      m_accessPolicyStack.push(Private);
+      break;
+    default:
+      m_accessPolicyStack.push(Public);
+      break;
+  }
+
   TypeBuilderBase::visitClassSpecifier(node);
+
+  m_accessPolicyStack.pop();
 
   closeType();
 }
@@ -109,6 +121,40 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
   }
 
   TypeBuilderBase::visitBaseSpecifier(node);
+}
+
+void TypeBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
+{
+  if (node->specs) {
+    const ListNode<std::size_t> *it = node->specs->toFront();
+    const ListNode<std::size_t> *end = it;
+    do {
+      int kind = m_editor->parseSession()->token_stream->kind(it->element);
+      switch (kind) {
+        case Token_signals:
+        case Token_slots:
+        case Token_k_dcop:
+        case Token_k_dcop_signals:
+          break;
+        case Token_public:
+          // FIXME WTF... why won't it build??
+          //setAccessPolicy(CppAccessPolicy::Public);
+          break;
+        case Token_protected:
+          // FIXME WTF... why won't it build??
+          //setAccessPolicy(CppAccessPolicy::Protected);
+          break;
+        case Token_private:
+          // FIXME WTF... why won't it build??
+          //setAccessPolicy(CppAccessPolicy::Private);
+          break;
+      }
+
+      it = it->next;
+    } while (it != end);
+  }
+
+  TypeBuilderBase::visitAccessSpecifier(node);
 }
 
 void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)

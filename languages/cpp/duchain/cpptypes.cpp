@@ -19,8 +19,6 @@
 
 #include "cpptypes.h"
 
-using namespace CppCodeModel;
-
 bool CppTypeInfo::operator==(const CppTypeInfo& other)
 {
   return m_constant == other.m_constant && m_volatile == other.m_volatile;
@@ -82,7 +80,7 @@ CppClassType::ClassType CppClassType::classType() const
   return true;
 }*/
 
-void CppClassFunctionType::addArgument(AbstractType* type, CppCodeModel::AccessPolicy policy)
+void CppClassFunctionType::addArgument(AbstractType* type, CppAccessPolicy policy)
 {
   FunctionType::addArgument(type);
   m_argumentAccessPolicies.append(policy);
@@ -169,12 +167,12 @@ void CppTypeAliasType::setType(AbstractType* type)
 }
 
 // ---------------------------------------------------------------------------
-CppCodeModel::AccessPolicy CppEnumerationType::accessPolicy() const
+CppAccessPolicy CppEnumerationType::accessPolicy() const
 {
   return m_accessPolicy;
 }
 
-void CppEnumerationType::setAccessPolicy(CppCodeModel::AccessPolicy accessPolicy)
+void CppEnumerationType::setAccessPolicy(CppAccessPolicy accessPolicy)
 {
   m_accessPolicy = accessPolicy;
 }
@@ -206,12 +204,12 @@ void CppEnumeratorType::setValue(const QString &value)
 }
 
 // ---------------------------------------------------------------------------
-CppCodeModel::AccessPolicy CppClassMemberType::accessPolicy() const
+CppAccessPolicy CppClassMemberType::accessPolicy() const
 {
   return m_accessPolicy;
 }
 
-void CppClassMemberType::setAccessPolicy(CppCodeModel::AccessPolicy accessPolicy)
+void CppClassMemberType::setAccessPolicy(CppAccessPolicy accessPolicy)
 {
   m_accessPolicy = accessPolicy;
 }
