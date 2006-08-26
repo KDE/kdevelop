@@ -23,6 +23,7 @@
 
 #include "identifier.h"
 #include "kdevdocumentrangeobject.h"
+#include "cppnamespace.h"
 
 class AbstractType;
 class DUContext;
@@ -50,8 +51,11 @@ public:
 
   Scope scope() const;
 
-  const AbstractType* type() const;
-  void setType(const AbstractType* type);
+  AbstractType* type() const;
+  void setType(AbstractType* type);
+
+  Cpp::AccessPolicy accessPolicy() const;
+  void setAccessPolicy(Cpp::AccessPolicy accessPolicy);
 
   void setIdentifier(const Identifier& identifier);
   const Identifier& identifier() const;
@@ -67,7 +71,8 @@ public:
 private:
   DUContext* m_context;
   Scope m_scope;
-  const AbstractType* m_type;
+  AbstractType* m_type;
+  Cpp::AccessPolicy m_accessPolicy;
   Identifier m_identifier;
 
   QList<DefinitionUse*> m_uses;

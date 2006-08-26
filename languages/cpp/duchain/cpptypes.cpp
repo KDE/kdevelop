@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
     Copyright (C) 2002-2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright (C) 2006 Adam Treat <treat@kde.org>
+    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,8 +19,6 @@
 */
 
 #include "cpptypes.h"
-
-using namespace CppCodeModel;
 
 bool CppTypeInfo::operator==(const CppTypeInfo& other)
 {
@@ -81,21 +80,6 @@ CppClassType::ClassType CppClassType::classType() const
 
   return true;
 }*/
-
-void CppClassFunctionType::addArgument(AbstractType* type, AccessPolicy policy)
-{
-  FunctionType::addArgument(type);
-  m_argumentAccessPolicies.append(policy);
-}
-
-void CppClassFunctionType::removeArgument(AbstractType* type)
-{
-  int index = arguments().indexOf(type);
-  if (index != -1) {
-    FunctionType::removeArgument(type);
-    m_argumentAccessPolicies.removeAt(index);
-  }
-}
 
 CppClassFunctionType::QtFunctionType CppClassFunctionType::functionType() const
 {
@@ -169,16 +153,6 @@ void CppTypeAliasType::setType(AbstractType* type)
 }
 
 // ---------------------------------------------------------------------------
-AccessPolicy CppEnumerationType::accessPolicy() const
-{
-  return m_accessPolicy;
-}
-
-void CppEnumerationType::setAccessPolicy(AccessPolicy accessPolicy)
-{
-  m_accessPolicy = accessPolicy;
-}
-
 const QList<CppEnumeratorType*>& CppEnumerationType::enumerators() const
 {
   return m_enumerators;
@@ -206,16 +180,6 @@ void CppEnumeratorType::setValue(const QString &value)
 }
 
 // ---------------------------------------------------------------------------
-AccessPolicy CppClassMemberType::accessPolicy() const
-{
-  return m_accessPolicy;
-}
-
-void CppClassMemberType::setAccessPolicy(AccessPolicy accessPolicy)
-{
-  m_accessPolicy = accessPolicy;
-}
-
 bool CppClassMemberType::isStatic() const
 {
   return m_isStatic;
@@ -283,7 +247,6 @@ CppClassMemberType::CppClassMemberType(CppClassType* owner)
   , m_isRegister(0)
   , m_isExtern(0)
   , m_isMutable(0)
-  , m_accessPolicy(Public)
 {
   Q_UNUSED(owner);
 }

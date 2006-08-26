@@ -27,8 +27,6 @@
 #include "parsesession.h"
 #include "tokens.h"
 
-using namespace CppCodeModel;
-
 TypeBuilder::TypeBuilder(ParseSession* session)
   : TypeBuilderBase(session)
 {
@@ -44,7 +42,6 @@ void TypeBuilder::buildTypes(AST *node)
   supportBuild(node);
 
   Q_ASSERT(m_typeStack.isEmpty());
-  Q_ASSERT(m_accessPolicyStack.isEmpty());
 }
 
 void TypeBuilder::openType(AbstractType* type, AST* node, NameAST* id)
@@ -100,18 +97,7 @@ void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   else if (kind == Token_union)
     classType->setClassType(CppClassType::Union);
 
-  switch (classType->classType()) {
-    case CppClassType::Class:
-      m_accessPolicyStack.push(Private);
-      break;
-    default:
-      m_accessPolicyStack.push(Public);
-      break;
-  }
-
   TypeBuilderBase::visitClassSpecifier(node);
-
-  m_accessPolicyStack.pop();
 
   closeType();
 }
@@ -123,37 +109,6 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
   }
 
   TypeBuilderBase::visitBaseSpecifier(node);
-}
-
-void TypeBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
-{
-  if (node->specs) {
-    const ListNode<std::size_t> *it = node->specs->toFront();
-    const ListNode<std::size_t> *end = it;
-    do {
-      int kind = m_editor->parseSession()->token_stream->kind(it->element);
-      switch (kind) {
-        case Token_signals:
-        case Token_slots:
-        case Token_k_dcop:
-        case Token_k_dcop_signals:
-          break;
-        case Token_public:
-          setAccessPolicy(Public);
-          break;
-        case Token_protected:
-          setAccessPolicy(Protected);
-          break;
-        case Token_private:
-          setAccessPolicy(Private);
-          break;
-      }
-
-      it = it->next;
-    } while (it != end);
-  }
-
-  TypeBuilderBase::visitAccessSpecifier(node);
 }
 
 void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
@@ -259,9 +214,7 @@ void TypeBuilder::visitTypedef(TypedefAST* node)
 void TypeBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
 {
   if (CppClassType* classType = currentType<CppClassType>()) {
-    CppClassFunctionType* functionType = new CppClassFunctionType(classType);
-    functionType->setAccessPolicy(currentAccessPolicy());
-    openType(functionType, node);
+    openType(new CppClassFunctionType(classType), node);
 
   } else {
     openType(new FunctionType(), node);

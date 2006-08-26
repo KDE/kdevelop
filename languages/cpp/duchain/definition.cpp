@@ -31,6 +31,7 @@ Definition::Definition(KTextEditor::Range* range, Scope scope )
   , m_context(0)
   , m_scope(scope)
   , m_type(0)
+  , m_accessPolicy(Cpp::Public)
 {
 }
 
@@ -66,12 +67,12 @@ void Definition::setIdentifier(const Identifier& identifier)
   m_identifier = identifier;
 }
 
-const AbstractType * Definition::type( ) const
+AbstractType * Definition::type( ) const
 {
   return m_type;
 }
 
-void Definition::setType(const AbstractType* type)
+void Definition::setType(AbstractType* type)
 {
   m_type = type;
 }
@@ -103,4 +104,14 @@ void Definition::setContext(DUContext* context)
 bool Definition::operator ==(const Definition & other) const
 {
   return this == &other;
+}
+
+Cpp::AccessPolicy Definition::accessPolicy() const
+{
+  return m_accessPolicy;
+}
+
+void Definition::setAccessPolicy(Cpp::AccessPolicy accessPolicy)
+{
+  m_accessPolicy = accessPolicy;
 }

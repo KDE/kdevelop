@@ -20,6 +20,7 @@
 #define DEFINITIONBUILDER_H
 
 #include "contextbuilder.h"
+#include "cppnamespace.h"
 
 class Definition;
 
@@ -44,6 +45,8 @@ public:
 
 protected:
   virtual void visitDeclarator (DeclaratorAST*);
+  virtual void visitClassSpecifier(ClassSpecifierAST*);
+  virtual void visitAccessSpecifier(AccessSpecifierAST*);
 
 private:
   /**
@@ -52,6 +55,11 @@ private:
    * \param range provide a valid AST here if name is null
    */
   Definition* newDeclaration(NameAST* name, AST* range = 0);
+
+  inline Cpp::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
+  inline void setAccessPolicy(Cpp::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
+
+  QStack<Cpp::AccessPolicy> m_accessPolicyStack;
 };
 
 #endif // DEFINITIONBUILDER_H

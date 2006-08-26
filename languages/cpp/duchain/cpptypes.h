@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
     Copyright (C) 2002-2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright (C) 2006 Adam Treat <treat@kde.org>
+    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,17 +28,9 @@
 
 #include "typesystem.h"
 #include "typeinstance.h"
+#include "cppnamespace.h"
 
 class DUContext;
-
-namespace CppCodeModel {
-  enum AccessPolicy
-  {
-    Public,
-    Protected,
-    Private
-  };
-}
 
 class CppTypeInfo
 {
@@ -65,7 +58,7 @@ class CppClassType;
 struct CppBaseClassInstance
 {
   CppClassType* baseClass;
-  CppCodeModel::AccessPolicy access;
+  Cpp::AccessPolicy access;
   bool virtualInheritance;
 };
 
@@ -121,9 +114,6 @@ public:
   bool isMutable() const;
   void setMutable(bool isMutable);
 
-  CppCodeModel::AccessPolicy accessPolicy() const;
-  void setAccessPolicy(CppCodeModel::AccessPolicy accessPolicy);
-
 private:
   uint m_isStatic: 1;
   uint m_isAuto: 1;
@@ -131,7 +121,6 @@ private:
   uint m_isRegister: 1;
   uint m_isExtern: 1;
   uint m_isMutable: 1;
-  CppCodeModel::AccessPolicy m_accessPolicy;
 };
 
 template <class T>
@@ -148,9 +137,6 @@ class CppClassFunctionType : public FunctionType, public CppClassMemberType
 {
 public:
   CppClassFunctionType(CppClassType* owner);
-
-  void addArgument(AbstractType* type, CppCodeModel::AccessPolicy policy);
-  void removeArgument(AbstractType* type);
 
   enum QtFunctionType
   {
@@ -182,7 +168,6 @@ public:
 private:
   bool m_constructor;
   bool m_destructor;
-  QList<CppCodeModel::AccessPolicy> m_argumentAccessPolicies;
   QtFunctionType m_functionType;
   bool m_isVirtual: 1;
   bool m_isInline: 1;
@@ -209,15 +194,11 @@ class CppEnumeratorType;
 class CppEnumerationType : public StructureType
 {
 public:
-  CppCodeModel::AccessPolicy accessPolicy() const;
-  void setAccessPolicy(CppCodeModel::AccessPolicy accessPolicy);
-
   const QList<CppEnumeratorType*>& enumerators() const;
   void addEnumerator(CppEnumeratorType* item);
   void removeEnumerator(CppEnumeratorType* item);
 
 private:
-  CppCodeModel::AccessPolicy m_accessPolicy;
   QList<CppEnumeratorType*> m_enumerators;
 };
 

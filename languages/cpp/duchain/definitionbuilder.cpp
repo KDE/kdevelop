@@ -24,6 +24,8 @@
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include "definition.h"
+#include "tokens.h"
+#include "parsesession.h"
 
 using namespace KTextEditor;
 
@@ -39,7 +41,11 @@ DefinitionBuilder::DefinitionBuilder (CppEditorIntegrator* editor)
 
 TopDUContext* DefinitionBuilder::buildDefinitions(const KUrl& url, AST *node, QList<DUContext*>* includes)
 {
-  return buildContexts(url, node, includes);
+  TopDUContext* top = buildContexts(url, node, includes);
+
+  Q_ASSERT(m_accessPolicyStack.isEmpty());
+
+  return top;
 }
 
 void DefinitionBuilder::visitDeclarator (DeclaratorAST* node)
@@ -99,5 +105,52 @@ Definition* DefinitionBuilder::newDeclaration(NameAST* name, AST* rangeNode)
     definition->setIdentifier(id.first());
   }
 
+  if (currentContext()->type() == DUContext::Class)
+    definition->setAccessPolicy(currentAccessPolicy());
+
   return definition;
+}
+
+void DefinitionBuilder::visitClassSpecifier(ClassSpecifierAST *node)
+{
+  int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
+  if (kind == Token_struct || kind == Token_union)
+    m_accessPolicyStack.push(Cpp::Public);
+  else
+    m_accessPolicyStack.push(Cpp::Private);
+
+  DefinitionBuilderBase::visitClassSpecifier(node);
+
+  m_accessPolicyStack.pop();
+}
+
+void DefinitionBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
+{
+  if (node->specs) {
+    const ListNode<std::size_t> *it = node->specs->toFront();
+    const ListNode<std::size_t> *end = it;
+    do {
+      int kind = m_editor->parseSession()->token_stream->kind(it->element);
+      switch (kind) {
+        case Token_signals:
+        case Token_slots:
+        case Token_k_dcop:
+        case Token_k_dcop_signals:
+          break;
+        case Token_public:
+          setAccessPolicy(Cpp::Public);
+          break;
+        case Token_protected:
+          setAccessPolicy(Cpp::Protected);
+          break;
+        case Token_private:
+          setAccessPolicy(Cpp::Private);
+          break;
+      }
+
+      it = it->next;
+    } while (it != end);
+  }
+
+  DefinitionBuilderBase::visitAccessSpecifier(node);
 }

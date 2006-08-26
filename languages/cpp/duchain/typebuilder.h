@@ -20,7 +20,6 @@
 #define TYPEBUILDER_H
 
 #include "contextbuilder.h"
-#include "cpptypes.h"
 
 typedef ContextBuilder TypeBuilderBase;
 
@@ -36,9 +35,10 @@ public:
   void buildTypes(AST *node);
 
 protected:
+  AbstractType* lastType() const;
+
   virtual void visitClassSpecifier(ClassSpecifierAST*);
   virtual void visitBaseSpecifier(BaseSpecifierAST*);
-  virtual void visitAccessSpecifier(AccessSpecifierAST*);
   virtual void visitEnumSpecifier(EnumSpecifierAST*);
   virtual void visitEnumerator(EnumeratorAST*);
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
@@ -61,11 +61,7 @@ private:
   template <class T>
   T* currentType() { return dynamic_cast<T*>(m_typeStack.top()); }
 
-  inline CppCodeModel::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
-  inline void setAccessPolicy(CppCodeModel::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
-
   QStack<AbstractType*> m_typeStack;
-  QStack<CppCodeModel::AccessPolicy> m_accessPolicyStack;
 };
 
 #endif // TYPEBUILDER_H
