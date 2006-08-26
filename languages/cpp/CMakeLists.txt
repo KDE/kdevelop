@@ -24,6 +24,7 @@ set(kdevcppduchain_SRCS
     duchain/typebuilder.cpp
     duchain/cpptypes.cpp
     duchain/typeinstance.cpp
+    duchain/dumptypes.cpp
 )
 
 set(kdevcpplanguagesupport_PART_SRCS
