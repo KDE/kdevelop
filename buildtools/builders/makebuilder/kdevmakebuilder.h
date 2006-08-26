@@ -47,7 +47,6 @@ private slots:
 
 private:
     QString buildCommand(KDevProjectItem *dom, const QString &target = QString::null);
-    QString makeEnvironment() const;
 
 private:
     KDevProject *m_project;

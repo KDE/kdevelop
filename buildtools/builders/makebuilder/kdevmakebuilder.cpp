@@ -147,21 +147,4 @@ QString KDevMakeBuilder::buildCommand(KDevProjectItem *item, const QString &targ
     return dircmd + cmdline;
 }
 
-QString KDevMakeBuilder::makeEnvironment() const
-{
-    //FIXME use the new KDevEnv class
-//     DomUtil::PairList envvars =
-//         DomUtil::readPairListEntry(*KDevApi::self()->projectDom(), environment, "envvar", "name", "value");
-// 
-//     QString env;
-//     DomUtil::PairList::ConstIterator it;
-//     for (it = envvars.begin(); it != envvars.end(); ++it) {
-//         env += (*it).first;
-//         env += "=";
-//         env += KProcess::quote((*it).second);
-//         env += " ";
-//     }
-//     return env;
-}
-
 #include "kdevmakebuilder.moc"
