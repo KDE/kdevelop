@@ -36,8 +36,6 @@ Q_OBJECT
 public:
     KDevBuildableProject(KInstance *instance, QObject *parent = 0);
     virtual ~KDevBuildableProject();
-    
-    virtual bool isBuildable() const { return true; }
 
     /**
      * Get the buildable file manager for the project.

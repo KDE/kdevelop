@@ -74,8 +74,6 @@ public:
     /// Destructor.
     virtual ~KDevProject();
 
-    virtual bool isBuildable() const { return true; }
-
 
 public Q_SLOTS:
     /**
