@@ -76,25 +76,29 @@ public:
 
 
 public Q_SLOTS:
-    /**This method is invoked when the project is opened
-    (i.e. actually just after this class has been
-    instantiated).
-    @param dirName The project directory, which should afterwards be returned by
-    the projectDirectory() method.
-    @param projectName The project name, which is equivalent
-    to the project file name without the suffix.*/
+    /**
+     * This method is invoked when the project is opened
+     * (i.e. actually just after this class has been instantiated).
+     * @param dirName The project directory, which should afterwards be returned by
+     * the projectDirectory() method.
+     * @param projectName The project name, which is equivalent
+     * to the project file name without the suffix.
+     */
     virtual Q_SCRIPTABLE void openProject(const KUrl &dirName, const QString &projectName) = 0;
 
-    /**This method is invoked when the project is about to be closed.*/
+    /** This method is invoked when the project is about to be closed. */
     virtual Q_SCRIPTABLE void closeProject() = 0;
 
-    /**@return The canonical absolute directory of the project. Canonical means that
-    a path does not contain symbolic links or redundant "." or ".." elements.*/
+    /**
+     * @brief Get the project directory
+     * @return The canonical absolute directory of the project. 
+     */
     virtual Q_SCRIPTABLE KUrl projectDirectory() const = 0;
 
-    /**Returns the name of the project.*/
+    /** Returns the name of the project. */
     virtual Q_SCRIPTABLE QString projectName() const = 0;
 
+    /** Get a list of all files in the project */
     virtual QList<KDevProjectFileItem*> allFiles() = 0;
 
     /**
