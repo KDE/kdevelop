@@ -79,6 +79,7 @@ KDevProjectManagerPart::KDevProjectManagerPart( QObject *parent, const QStringLi
         {
             m_manager = KService::createInstance<KDevFileManager>( ( *it ) ->service(),
                         this, QStringList(), 0 );
+            break;
         }
 
     }
