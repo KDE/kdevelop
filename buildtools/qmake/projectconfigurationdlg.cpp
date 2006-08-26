@@ -423,6 +423,8 @@ void ProjectConfigurationDlg::updateControls()
 	activateRadiobutton = radioApplication;
 	if (myProjectItem->configuration.m_requirements & QD_CONSOLE )
 		checkConsole->setChecked(true);
+	else
+		checkConsole->setChecked(false);
 	break;
 	case QTMP_LIBRARY:
 	libGroup->setEnabled(true);
@@ -431,20 +433,33 @@ void ProjectConfigurationDlg::updateControls()
 	staticRadio->setChecked(true); //default
 	if (myProjectItem->configuration.m_requirements & QD_STATIC){
 		staticRadio->setChecked(true);
-	}
+	}else 
+		staticRadio->setChecked(false);
 	if (myProjectItem->configuration.m_requirements & QD_SHARED){
 		sharedRadio->setChecked(true);
 		m_targetLibraryVersion->setText(myProjectItem->configuration.m_libraryversion);
+	}else
+	{
+		sharedRadio->setChecked(true);
+		m_targetLibraryVersion->setText("");
 	}
 
 	if (myProjectItem->configuration.m_requirements & QD_PLUGIN)
 		checkPlugin->setChecked(true);
+	else
+		checkPlugin->setChecked(false);
 	if ( myProjectItem->configuration.m_requirements & QD_DESIGNER )
 		checkDesigner->setChecked( true );
+	else
+		checkDesigner->setChecked(false);
 	if (myProjectItem->configuration.m_requirements & QD_LIBTOOL )
 		checkLibtool->setChecked(true);
+	else
+		checkLibtool->setChecked(false);
 	if (myProjectItem->configuration.m_requirements & QD_PKGCONF )
 		checkPkgconf->setChecked(true);
+	else
+		checkPkgconf->setChecked(false);
 	break;
 	case QTMP_SUBDIRS:
 	activateRadiobutton = radioSubdirs;
@@ -472,27 +487,46 @@ void ProjectConfigurationDlg::updateControls()
   // Requirements
   if (myProjectItem->configuration.m_requirements & QD_QT)
     checkQt->setChecked(true);
+  else
+    checkQt->setChecked(false);
   if (myProjectItem->configuration.m_requirements & QD_OPENGL)
     checkOpenGL->setChecked(true);
+  else
+    checkOpenGL->setChecked(false);
   if (myProjectItem->configuration.m_requirements & QD_THREAD)
     checkThread->setChecked(true);
+  else
+    checkThread->setChecked(false);
   if (myProjectItem->configuration.m_requirements & QD_X11)
     checkX11->setChecked(true);
+  else
+    checkX11->setChecked(false);
   if (myProjectItem->configuration.m_requirements & QD_ORDERED)
     checkOrdered->setChecked(true);
+  else
+    checkOrdered->setChecked(false);
   if (myProjectItem->configuration.m_requirements & QD_EXCEPTIONS)
     exceptionCheck->setChecked(true);
+  else
+    exceptionCheck->setChecked(false);
   if (myProjectItem->configuration.m_requirements & QD_STL)
     stlCheck->setChecked(true);
+  else
+    stlCheck->setChecked(false);
   if (myProjectItem->configuration.m_requirements & QD_RTTI)
     rttiCheck->setChecked(true);
+  else
+    rttiCheck->setChecked(false);
   if (myProjectItem->configuration.m_requirements & QD_PCH)
     checkPCH->setChecked(true);
+  else
+    checkPCH->setChecked(false);
   // Warnings
   if (myProjectItem->configuration.m_warnings == QWARN_ON)
   {
     checkWarning->setChecked(true);
-  }
+  }else
+    checkWarning->setChecked(false);
 
   //Qt4 libs
   if ( prjWidget->m_part->isQt4Project() )
@@ -500,14 +534,24 @@ void ProjectConfigurationDlg::updateControls()
 
     if ( myProjectItem->configuration.m_requirements & QD_ASSISTANT )
       checkAssistant->setChecked( true );
+    else
+      checkAssistant->setChecked( false );
     if ( myProjectItem->configuration.m_requirements & QD_TESTLIB )
       checkTestlib->setChecked( true );
+    else
+      checkTestlib->setChecked( false );
     if ( myProjectItem->configuration.m_requirements & QD_UITOOLS )
       checkUiTools->setChecked( true );
+    else
+      checkUiTools->setChecked( false );
     if ( myProjectItem->configuration.m_requirements & QD_DBUS )
       checkQDBus->setChecked( true );
+    else
+      checkQDBus->setChecked( false );
     if ( myProjectItem->configuration.m_requirements & QD_BUILDALL )
       checkBuildAll->setChecked( true );
+    else
+      checkBuildAll->setChecked( false );
 
     if ( myProjectItem->configuration.m_qt4libs & Q4L_CORE )
       checkQt4Core->setChecked( true );
@@ -519,16 +563,28 @@ void ProjectConfigurationDlg::updateControls()
       checkQt4Gui->setChecked( false );
     if ( myProjectItem->configuration.m_qt4libs & Q4L_SQL )
       checkQt4SQL->setChecked( true );
+    else
+      checkQt4SQL->setChecked( false );
     if ( myProjectItem->configuration.m_qt4libs & Q4L_XML )
       checkQt4XML->setChecked( true );
+    else
+      checkQt4XML->setChecked( false );
     if ( myProjectItem->configuration.m_qt4libs & Q4L_NETWORK )
       checkQt4Network->setChecked( true );
+    else
+      checkQt4Network->setChecked( false );
     if ( myProjectItem->configuration.m_qt4libs & Q4L_SVG )
       checkQt4SVG->setChecked( true );
+    else
+      checkQt4SVG->setChecked( false );
     if ( myProjectItem->configuration.m_qt4libs & Q4L_OPENGL )
       checkQt4OpenGL->setChecked( true );
+    else
+      checkQt4OpenGL->setChecked( false );
     if ( myProjectItem->configuration.m_qt4libs & Q4L_QT3 )
       checkQt3Support->setChecked( true );
+    else
+      checkQt3Support->setChecked( false );
     editConfigExtra->setText( myProjectItem->configuration.m_customConfigOptions.join(" ") );
   }
 
