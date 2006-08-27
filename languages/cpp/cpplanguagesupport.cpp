@@ -149,7 +149,6 @@ KDevCodeHighlighting *CppLanguageSupport::codeHighlighting() const
 
 void CppLanguageSupport::projectOpened()
 {
-    return;
     // FIXME Add signals slots from the filemanager for:
     //       1. filesAddedToProject
     //       2. filesRemovedFromProject

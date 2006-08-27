@@ -169,6 +169,8 @@ void DefinitionBuilder::closeDefinition()
 
 void DefinitionBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
+  openDefinition(node->name, node);
+
   int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
   if (kind == Token_struct || kind == Token_union)
     m_accessPolicyStack.push(Cpp::Public);
@@ -176,6 +178,8 @@ void DefinitionBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     m_accessPolicyStack.push(Cpp::Private);
 
   DefinitionBuilderBase::visitClassSpecifier(node);
+
+  closeDefinition();
 
   m_accessPolicyStack.pop();
 }

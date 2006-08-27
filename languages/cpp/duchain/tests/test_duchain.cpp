@@ -299,7 +299,7 @@ private slots:
     //                 012345678901234567890123456789012345678901234567890123456789
     QByteArray method("int main() { for (int i = 0; i < 10; i++) { if (i == 4) return; } }");
 
-    DUContext* top = parse(method);//, DumpNone);
+    DUContext* top = parse(method, DumpNone);
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 2);
@@ -364,12 +364,21 @@ private slots:
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("struct A { int i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; };");
 
-    DUContext* top = parse(method, DumpNone);
+    DUContext* top = parse(method);//, DumpNone);
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 1);
-    QCOMPARE(top->localDefinitions().count(), 0);
+    QCOMPARE(top->localDefinitions().count(), 1);
     QVERIFY(top->localScopeIdentifier().isEmpty());
+
+    Definition* defStructA = top->localDefinitions().first();
+    QCOMPARE(defStructA->identifier(), Identifier("A"));
+    QCOMPARE(defStructA->uses().count(), 0);
+    QVERIFY(defStructA->type<CppClassType>());
+    QCOMPARE(defStructA->type<CppClassType>()->elements().count(), 3);
+    QCOMPARE(defStructA->type<CppClassType>()->elements().first(), AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeInt)));
+    QVERIFY(CppFunctionType::Ptr::dynamicCast(defStructA->type<CppClassType>()->elements()[1]));
+    QCOMPARE(defStructA->type<CppClassType>()->classType(), CppClassType::Struct);
 
     DUContext* structA = top->childContexts().first();
     QVERIFY(structA->parentContext());

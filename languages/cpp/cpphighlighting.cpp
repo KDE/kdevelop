@@ -27,6 +27,7 @@
 #include "duchain/topducontext.h"
 #include "duchain/definition.h"
 #include "duchain/definitionuse.h"
+#include "duchain/cpptypes.h"
 
 using namespace KTextEditor;
 
@@ -83,6 +84,8 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         break;
 
       case ClassType: {
+        a->setForeground(Qt::blue);
+
         KTextEditor::Attribute::Ptr e(new KTextEditor::Attribute());
         e->setForeground(QColor(0x005500));
         a->setDynamicAttribute(Attribute::ActivateCaretIn, e);
@@ -238,19 +241,24 @@ void CppHighlighting::highlightDUChain(DUContext* context) const
     Types type = LocalVariableType;
     if (context->scopeIdentifier().isEmpty())
       type = GlobalVariableType;
-    switch (context->type()) {
-      case DUContext::Namespace:
-        type = NamespaceVariableType;
-        break;
-      case DUContext::Class:
-        type = MemberVariableType;
-        break;
-      case DUContext::Function:
-        type = FunctionVariableType;
-        break;
-      default:
-        break;
-     }
+    if (def->type<CppClassType>())
+      type = ClassType;
+    else if (def->type<CppFunctionType>())
+      type = FunctionType;
+    else
+      switch (context->type()) {
+        case DUContext::Namespace:
+          type = NamespaceVariableType;
+          break;
+        case DUContext::Class:
+          type = MemberVariableType;
+          break;
+        case DUContext::Function:
+          type = FunctionVariableType;
+          break;
+        default:
+          break;
+      }
 
     if (def->smartRange())
       def->smartRange()->setAttribute(attributeForType(type, DefinitionContext));
