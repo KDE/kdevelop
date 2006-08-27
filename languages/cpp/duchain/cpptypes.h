@@ -50,9 +50,43 @@ private:
 
 class CppIntegralType : public IntegralType, public CppTypeInfo
 {
+  friend class TypeRepository;
+
 public:
   typedef KSharedPtr<CppIntegralType> Ptr;
+
+  enum IntegralTypes {
+    TypeNone,
+    TypeChar,
+    TypeWchar_t,  // C++ only
+    TypeBool, // C++ only
+    TypeInt,
+    TypeFloat,
+    TypeDouble,
+    TypeVoid
+  };
+
+  IntegralTypes integralType() const;
+
+  enum TypeModifier {
+    ModifierNone      = 0x0,
+    ModifierShort     = 0x1,
+    ModifierLong      = 0x2,
+    ModifierSigned    = 0x4,
+    ModifierUnsigned  = 0x8
+  };
+  Q_DECLARE_FLAGS(TypeModifiers, TypeModifier)
+
+  TypeModifiers typeModifiers() const;
+
+private:
+  CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers = ModifierNone);
+
+  IntegralTypes m_type;
+  CppIntegralType::TypeModifiers m_modifiers;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(CppIntegralType::TypeModifiers)
 
 class CppClassType;
 

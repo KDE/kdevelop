@@ -52,10 +52,10 @@ protected:
 
 private:
   template <class T>
-  void openType(KSharedPtr<T> type, AST* node, NameAST* id = 0)
-  { openAbstractType(AbstractType::Ptr::staticCast(type), node, id); }
+  void openType(KSharedPtr<T> type, AST* node)
+  { openAbstractType(AbstractType::Ptr::staticCast(type), node); }
 
-  void openAbstractType(AbstractType::Ptr type, AST* node, NameAST* id = 0);
+  void openAbstractType(AbstractType::Ptr type, AST* node);
   void closeType();
 
   void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);

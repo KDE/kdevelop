@@ -275,3 +275,19 @@ CppClassType::CppClassType()
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
+
+CppIntegralType::CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers)
+  : m_type(type)
+  , m_modifiers(modifiers)
+{
+}
+
+CppIntegralType::TypeModifiers CppIntegralType::typeModifiers() const
+{
+  return m_modifiers;
+}
+
+CppIntegralType::IntegralTypes CppIntegralType::integralType() const
+{
+  return m_type;
+}

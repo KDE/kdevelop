@@ -27,6 +27,7 @@
 #include "parsesession.h"
 #include "tokens.h"
 #include "definition.h"
+#include "typerepository.h"
 
 TypeBuilder::TypeBuilder(ParseSession* session)
   : TypeBuilderBase(session)
@@ -45,7 +46,7 @@ void TypeBuilder::buildTypes(AST *node)
   Q_ASSERT(m_typeStack.isEmpty());
 }
 
-void TypeBuilder::openAbstractType(AbstractType::Ptr type, AST* node, NameAST* id)
+void TypeBuilder::openAbstractType(AbstractType::Ptr type, AST* node)
 {
   if (FunctionType::Ptr function = currentType<FunctionType>()) {
     if (!function->returnType())
@@ -77,7 +78,7 @@ void TypeBuilder::closeType()
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
   CppClassType::Ptr classType(new CppClassType());
-  openType(classType, node, node->name);
+  openType(classType, node);
 
   int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
   if (kind == Token_struct)
@@ -152,7 +153,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
       }
 
       if (type)
-        openType(type, node, node->name);
+        openType(type, node);
     }
   }
 
@@ -164,11 +165,11 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
 void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
+  IntegralType::Ptr integral;
+
   if (node->integrals) {
-    if (CppClassType::Ptr classType = currentType<CppClassType>())
-      openType(CppSpecificClassMemberType<CppIntegralType>::Ptr(new CppSpecificClassMemberType<CppIntegralType>(classType)), node, node->name);
-    else
-      openType(CppIntegralType::Ptr(new CppIntegralType()), node, node->name);
+    CppIntegralType::IntegralTypes type = CppIntegralType::TypeNone;
+    CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone;
 
     const ListNode<std::size_t> *it = node->integrals->toFront();
     const ListNode<std::size_t> *end = it;
@@ -176,26 +177,51 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       int kind = m_editor->parseSession()->token_stream->kind(it->element);
       switch (kind) {
         case Token_char:
+          type = CppIntegralType::TypeChar;
+          break;
         case Token_wchar_t:
+          type = CppIntegralType::TypeWchar_t;
+          break;
         case Token_bool:
+          type = CppIntegralType::TypeBool;
+          break;
         case Token_short:
+          modifiers |= CppIntegralType::ModifierShort;
+          break;
         case Token_int:
+          type = CppIntegralType::TypeInt;
+          break;
         case Token_long:
+          modifiers |= CppIntegralType::ModifierLong;
+          break;
         case Token_signed:
+          modifiers |= CppIntegralType::ModifierSigned;
+          break;
         case Token_unsigned:
+          modifiers |= CppIntegralType::ModifierUnsigned;
+          break;
         case Token_float:
+          type = CppIntegralType::TypeFloat;
+          break;
         case Token_double:
+          type = CppIntegralType::TypeDouble;
+          break;
         case Token_void:
+          type = CppIntegralType::TypeVoid;
           break;
       }
 
       it = it->next;
     } while (it != end);
+
+    integral = TypeRepository::self()->integral(type, modifiers);
+    if (integral)
+      openType(integral, node);
   }
 
   TypeBuilderBase::visitSimpleTypeSpecifier(node);
 
-  if (node->integrals)
+  if (integral)
     closeType();
 }
 
@@ -263,14 +289,8 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 {
   openType(PointerType::Ptr(new PointerType()), node);
 
-  if (CppClassType::Ptr classType = currentType<CppClassType>())
-    openType(CppSpecificClassMemberType<CppIntegralType>::Ptr(new CppSpecificClassMemberType<CppIntegralType>(classType)), node);
-  else
-    openType(CppIntegralType::Ptr(new CppIntegralType()), node);
-
   TypeBuilderBase::visitPtrOperator(node);
 
-  closeType();
   closeType();
 }
 
