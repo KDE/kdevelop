@@ -47,6 +47,9 @@ protected:
   virtual void visitDeclarator (DeclaratorAST*);
   virtual void visitClassSpecifier(ClassSpecifierAST*);
   virtual void visitAccessSpecifier(AccessSpecifierAST*);
+  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
+  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST*);
+  virtual void visitPtrOperator(PtrOperatorAST*);
 
 private:
   /**
@@ -54,11 +57,17 @@ private:
    * Returns the new context created by this definition.
    * \param range provide a valid AST here if name is null
    */
-  Definition* newDeclaration(NameAST* name, AST* range = 0);
+  Definition* openDefinition(NameAST* name, AST* range = 0);
+  void closeDefinition();
+
+  void parseConstVolatile(const ListNode<std::size_t> *cv);
+
+  inline Definition* currentDefinition() const { return m_definitionStack.top(); }
 
   inline Cpp::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
   inline void setAccessPolicy(Cpp::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
+  QStack<Definition*> m_definitionStack;
   QStack<Cpp::AccessPolicy> m_accessPolicyStack;
 };
 

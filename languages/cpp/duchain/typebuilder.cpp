@@ -266,25 +266,6 @@ void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
   closeType();
 }
 
-void TypeBuilder::visitTypeSpecifierAST(TypeSpecifierAST* node)
-{
-  if (node->cv) {
-    if (CppTypeInfo* typeInfo = dynamic_cast<CppTypeInfo*>(currentAbstractType().data())) {
-      const ListNode<std::size_t> *it = node->cv->toFront();
-      const ListNode<std::size_t> *end = it;
-      do {
-        int kind = m_editor->parseSession()->token_stream->kind(it->element);
-        if (kind == Token_const)
-          typeInfo->setConstant(true);
-        else if (kind == Token_volatile)
-          typeInfo->setVolatile(true);
-
-        it = it->next;
-      } while (it != end);
-    }
-  }
-}
-
 void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 {
   openType(PointerType::Ptr(new PointerType()), node);

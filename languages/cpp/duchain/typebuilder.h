@@ -47,7 +47,6 @@ protected:
   virtual void visitSimpleDeclaration(SimpleDeclarationAST*);
   virtual void visitTypedef(TypedefAST*);
   virtual void visitFunctionDefinition(FunctionDefinitionAST*);
-  virtual void visitTypeSpecifierAST(TypeSpecifierAST*);
   virtual void visitPtrOperator(PtrOperatorAST*);
 
 private:

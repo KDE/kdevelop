@@ -55,6 +55,12 @@ public:
   AbstractType::Ptr type() const;
   void setType(AbstractType::Ptr type);
 
+  bool isConstant() const { return m_constant; }
+  void setConstant(bool is) { m_constant = is; }
+
+  bool isVolatile() const { return m_volatile; }
+  void setVolatile(bool is) { m_volatile = is; }
+
   Cpp::AccessPolicy accessPolicy() const;
   void setAccessPolicy(Cpp::AccessPolicy accessPolicy);
 
@@ -75,6 +81,8 @@ private:
   AbstractType::Ptr m_type;
   Cpp::AccessPolicy m_accessPolicy;
   Identifier m_identifier;
+  bool m_constant : 1;
+  bool m_volatile : 1;
 
   QList<DefinitionUse*> m_uses;
 };

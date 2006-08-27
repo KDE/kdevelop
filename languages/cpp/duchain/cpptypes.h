@@ -31,24 +31,7 @@
 
 class DUContext;
 
-class CppTypeInfo
-{
-public:
-    bool isConstant() const { return m_constant; }
-    void setConstant(bool is) { m_constant = is; }
-
-    bool isVolatile() const { return m_volatile; }
-    void setVolatile(bool is) { m_volatile = is; }
-
-    bool operator==(const CppTypeInfo &other);
-    bool operator!=(const CppTypeInfo &other) { return !(*this==other); }
-
-private:
-    uint m_constant : 1;
-    uint m_volatile : 1;
-};
-
-class CppIntegralType : public IntegralType, public CppTypeInfo
+class CppIntegralType : public IntegralType
 {
   friend class TypeRepository;
 
@@ -90,7 +73,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CppIntegralType::TypeModifiers)
 
 class CppClassType;
 
-class CppClassType : public StructureType, public CppTypeInfo
+class CppClassType : public StructureType
 {
 public:
   typedef KSharedPtr<CppClassType> Ptr;
@@ -127,7 +110,7 @@ private:
   ClassType m_classType;
 };
 
-class CppClassMemberType : public CppTypeInfo
+class CppClassMemberType
 {
 public:
   CppClassMemberType(CppClassType::Ptr owner);
@@ -216,7 +199,7 @@ private:
 };
 
 // FIXME is IntegralType correct?
-class CppTypeAliasType : public IntegralType, public CppTypeInfo
+class CppTypeAliasType : public IntegralType
 {
 public:
   typedef KSharedPtr<CppTypeAliasType> Ptr;

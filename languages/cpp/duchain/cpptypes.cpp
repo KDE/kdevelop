@@ -20,11 +20,6 @@
 
 #include "cpptypes.h"
 
-bool CppTypeInfo::operator==(const CppTypeInfo& other)
-{
-  return m_constant == other.m_constant && m_volatile == other.m_volatile;
-}
-
 // ---------------------------------------------------------------------------
 const QList<CppClassType::BaseClassInstance>& CppClassType::baseClasses() const
 {
