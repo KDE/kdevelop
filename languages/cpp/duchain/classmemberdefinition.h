@@ -31,6 +31,9 @@ class ClassMemberDefinition : public Definition
 public:
   ClassMemberDefinition(KTextEditor::Range* range);
 
+  Cpp::AccessPolicy accessPolicy() const;
+  void setAccessPolicy(Cpp::AccessPolicy accessPolicy);
+
   bool isStatic() const;
   void setStatic(bool isStatic);
 
@@ -50,6 +53,7 @@ public:
   void setMutable(bool isMutable);
 
 private:
+  Cpp::AccessPolicy m_accessPolicy;
   bool m_isStatic: 1;
   bool m_isAuto: 1;
   bool m_isFriend: 1;

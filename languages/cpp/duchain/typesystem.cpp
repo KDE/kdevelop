@@ -68,3 +68,42 @@ IntegralType::IntegralType(const QString & name)
 IntegralType::IntegralType()
 {
 }
+
+QString PointerType::toString() const
+{
+  return baseType() ? QString("%1*").arg(baseType()->toString()) : QString("<notype>*");
+}
+
+QString ReferenceType::toString() const
+{
+  return baseType() ? QString("%1&").arg(baseType()->toString()) : QString("<notype>&");
+}
+
+QString FunctionType::toString() const
+{
+  QString args;
+  bool first = true;
+  foreach (const AbstractType::Ptr& type, m_arguments) {
+    if (first)
+      first = false;
+    else
+      args.append(", ");
+    args.append(type->toString());
+  }
+
+  return QString("%1 (%2)").arg(returnType() ? returnType()->toString() : QString("<notype>")).arg(args);
+}
+
+QString StructureType::toString() const
+{
+  return "<structure>";
+}
+
+QString ArrayType::toString() const
+{
+  QString dimensions;
+  foreach (int i, m_dimensions)
+    dimensions.append(QString("[%1]").arg(i));
+
+  return QString("%1%2").arg(elementType() ? elementType()->toString() : QString("<notype>")).arg(dimensions);
+}

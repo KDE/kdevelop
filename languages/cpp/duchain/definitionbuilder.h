@@ -19,12 +19,12 @@
 #ifndef DEFINITIONBUILDER_H
 #define DEFINITIONBUILDER_H
 
-#include "contextbuilder.h"
+#include "typebuilder.h"
 #include "cppnamespace.h"
 
 class Definition;
 
-typedef ContextBuilder DefinitionBuilderBase;
+typedef TypeBuilder DefinitionBuilderBase;
 
 /**
  * A class which iterates the AST to extract definitions of types.
@@ -47,10 +47,7 @@ protected:
   virtual void visitDeclarator (DeclaratorAST*);
   virtual void visitClassSpecifier(ClassSpecifierAST*);
   virtual void visitAccessSpecifier(AccessSpecifierAST*);
-  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
-  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST*);
-  virtual void visitPtrOperator(PtrOperatorAST*);
-  virtual void visitFunctionDefinition(FunctionDefinitionAST*);
+  virtual void visitFunctionDeclaration(FunctionDefinitionAST*);
   virtual void visitSimpleDeclaration(SimpleDeclarationAST*);
 
 private:
@@ -62,10 +59,10 @@ private:
   Definition* openDefinition(NameAST* name, AST* range, bool isFunction = false);
   void closeDefinition();
 
-  void parseConstVolatile(const ListNode<std::size_t>* cv);
   void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);
   void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);
 
+  inline bool hasCurrentDefinition() const { return !m_definitionStack.isEmpty(); }
   inline Definition* currentDefinition() const { return m_definitionStack.top(); }
 
   inline Cpp::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }

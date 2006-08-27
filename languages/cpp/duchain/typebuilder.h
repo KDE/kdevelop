@@ -21,6 +21,7 @@
 
 #include "contextbuilder.h"
 #include "typesystem.h"
+#include "cppnamespace.h"
 
 typedef ContextBuilder TypeBuilderBase;
 
@@ -46,7 +47,7 @@ protected:
   virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST*);
   virtual void visitSimpleDeclaration(SimpleDeclarationAST*);
   virtual void visitTypedef(TypedefAST*);
-  virtual void visitFunctionDefinition(FunctionDefinitionAST*);
+  virtual void visitFunctionDeclaration(FunctionDefinitionAST*);
   virtual void visitPtrOperator(PtrOperatorAST*);
 
 private:
@@ -57,12 +58,16 @@ private:
   void openAbstractType(AbstractType::Ptr type, AST* node);
   void closeType();
 
+  Cpp::CVSpecs parseConstVolatile(const ListNode<std::size_t>* cv);
+
+  bool hasCurrentType() { return !m_typeStack.isEmpty(); }
   inline AbstractType::Ptr currentAbstractType() { return m_typeStack.top(); }
 
   template <class T>
   KSharedPtr<T> currentType() { return KSharedPtr<T>::dynamicCast(m_typeStack.top()); }
 
   QStack<AbstractType::Ptr> m_typeStack;
+  AbstractType::Ptr m_lastType;
 };
 
 #endif // TYPEBUILDER_H

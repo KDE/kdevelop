@@ -48,7 +48,7 @@ TopDUContext* DefinitionBuilder::buildDefinitions(const KUrl& url, AST *node, QL
   return top;
 }
 
-void DefinitionBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
+void DefinitionBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
   bool functionOpened = false;
 
@@ -60,7 +60,7 @@ void DefinitionBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
     parseFunctionSpecifiers(node->function_specifiers);
   }
 
-  DefinitionBuilderBase::visitFunctionDefinition(node);
+  DefinitionBuilderBase::visitFunctionDeclaration(node);
 
   if (functionOpened)
     closeDefinition();
@@ -104,18 +104,9 @@ void DefinitionBuilder::visitDeclarator (DeclaratorAST* node)
     openDefinition(node->id, node);
   }
 
-  parseConstVolatile(node->fun_cv);
-
   DefinitionBuilderBase::visitDeclarator(node);
 
   closeDefinition();
-}
-
-void DefinitionBuilder::visitPtrOperator(PtrOperatorAST* node)
-{
-  parseConstVolatile(node->cv);
-
-  DefinitionBuilderBase::visitPtrOperator(node);
 }
 
 Definition* DefinitionBuilder::openDefinition(NameAST* name, AST* rangeNode, bool isFunction)
@@ -161,7 +152,7 @@ Definition* DefinitionBuilder::openDefinition(NameAST* name, AST* rangeNode, boo
   }
 
   if (currentContext()->type() == DUContext::Class)
-    definition->setAccessPolicy(currentAccessPolicy());
+    static_cast<ClassMemberDefinition*>(definition)->setAccessPolicy(currentAccessPolicy());
 
   m_definitionStack.push(definition);
 
@@ -170,6 +161,9 @@ Definition* DefinitionBuilder::openDefinition(NameAST* name, AST* rangeNode, boo
 
 void DefinitionBuilder::closeDefinition()
 {
+  if (AbstractType::Ptr type = lastType())
+    currentDefinition()->setType(type);
+
   m_definitionStack.pop();
 }
 
@@ -215,37 +209,6 @@ void DefinitionBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
   }
 
   DefinitionBuilderBase::visitAccessSpecifier(node);
-}
-
-void DefinitionBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
-{
-  parseConstVolatile(node->cv);
-
-  DefinitionBuilderBase::visitElaboratedTypeSpecifier(node);
-}
-
-void DefinitionBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
-{
-  parseConstVolatile(node->cv);
-
-  DefinitionBuilderBase::visitSimpleTypeSpecifier(node);
-}
-
-void DefinitionBuilder::parseConstVolatile(const ListNode<std::size_t> *cv)
-{
-  if (cv && currentDefinition()) {
-    const ListNode<std::size_t> *it = cv->toFront();
-    const ListNode<std::size_t> *end = it;
-    do {
-      int kind = m_editor->parseSession()->token_stream->kind(it->element);
-      if (kind == Token_const)
-        currentDefinition()->setConstant(true);
-      else if (kind == Token_volatile)
-        currentDefinition()->setVolatile(true);
-
-      it = it->next;
-    } while (it != end);
-  }
 }
 
 void DefinitionBuilder::parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers)

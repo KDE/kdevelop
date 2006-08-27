@@ -26,15 +26,16 @@ class TypeRepository
 public:
   static TypeRepository* self();
 
-  IntegralType::Ptr integral(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers) const;
+  CppIntegralType::Ptr integral(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone, Cpp::CVSpecs cv = Cpp::CVNone) const;
 
 private:
   TypeRepository();
-  void newIntegralType(IntegralType* type);
+  void newIntegralType(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone);
+  CppIntegralType::Ptr getIntegral(int index, int cv) const;
 
   static TypeRepository* s_instance;
 
-  QVector<IntegralType::Ptr> m_integrals;
+  QVector<CppIntegralType::Ptr> m_integrals;
 };
 
 #endif // TYPEREPOSITORY_H

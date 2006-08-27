@@ -31,7 +31,30 @@
 
 class DUContext;
 
-class CppIntegralType : public IntegralType
+class CppCVType
+{
+  friend class TypeRepository;
+  friend class TypeBuilder;
+
+public:
+  CppCVType(Cpp::CVSpecs spec = Cpp::CVNone);
+
+  bool isConstant() const { return m_constant; }
+
+  bool isVolatile() const { return m_volatile; }
+
+  QString cvString() const;
+
+private:
+  void setCV(Cpp::CVSpecs spec) { m_constant = spec & Cpp::Const; m_volatile = spec & Cpp::Volatile; }
+  void setConstant(bool is) { m_constant = is; }
+  void setVolatile(bool is) { m_volatile = is; }
+
+  bool m_constant : 1;
+  bool m_volatile : 1;
+};
+
+class CppIntegralType : public IntegralType, public CppCVType
 {
   friend class TypeRepository;
 
@@ -62,6 +85,8 @@ public:
 
   TypeModifiers typeModifiers() const;
 
+  virtual QString toString() const;
+
 private:
   CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers = ModifierNone);
 
@@ -71,9 +96,27 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CppIntegralType::TypeModifiers)
 
+class CppFunctionType : public FunctionType, public CppCVType
+{
+public:
+  typedef KSharedPtr<CppFunctionType> Ptr;
+
+  virtual QString toString() const;
+};
+
+class CppPointerType : public PointerType, public CppCVType
+{
+public:
+  typedef KSharedPtr<CppPointerType> Ptr;
+
+  CppPointerType(Cpp::CVSpecs spec = Cpp::CVNone);
+
+  virtual QString toString() const;
+};
+
 class CppClassType;
 
-class CppClassType : public StructureType
+class CppClassType : public StructureType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppClassType> Ptr;
@@ -111,7 +154,7 @@ private:
 };
 
 // FIXME is IntegralType correct?
-class CppTypeAliasType : public IntegralType
+class CppTypeAliasType : public IntegralType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppTypeAliasType> Ptr;

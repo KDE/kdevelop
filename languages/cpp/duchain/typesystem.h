@@ -85,6 +85,8 @@ public:
     type->accept (v);
   }
 
+  virtual QString toString() const = 0;
+
 protected:
   virtual void accept0 (TypeVisitor *v) const = 0;
 };
@@ -108,6 +110,8 @@ public:
 
   inline bool operator != (const IntegralType &other) const
   { return m_name != other.m_name; }
+
+  virtual QString toString() const { return m_name; }
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
@@ -135,6 +139,8 @@ public:
 
   inline bool operator != (const PointerType &other) const
   { return m_baseType != other.m_baseType; }
+
+  virtual QString toString() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
@@ -167,6 +173,8 @@ public:
 
   inline bool operator != (const ReferenceType &other) const
   { return m_baseType != other.m_baseType; }
+
+  virtual QString toString() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
@@ -205,6 +213,8 @@ public:
   inline bool operator != (const FunctionType &other) const
   { return m_returnType != other.m_returnType || m_arguments != other.m_arguments; }
 
+  virtual QString toString() const;
+
 protected:
   virtual void accept0 (TypeVisitor *v) const
   {
@@ -240,6 +250,8 @@ public:
 
   inline bool operator != (const StructureType &other) const
   { return m_elements != other.m_elements; }
+
+  virtual QString toString() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
@@ -279,6 +291,8 @@ public:
 
   inline bool operator != (const ArrayType &other) const
   { return m_elementType != other.m_elementType || m_dimensions != other.m_dimensions; }
+
+  virtual QString toString() const;
 
 private:
   QList<int> m_dimensions;

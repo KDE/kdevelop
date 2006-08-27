@@ -156,7 +156,7 @@ void DumpChain::dump( DUContext * context )
 {
   kDebug() << QString(indent * 2, ' ') << "New Context \"" << context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "] " << context->textRange() << endl;
   foreach (Definition* def, context->localDefinitions()) {
-    kDebug() << QString((indent+1) * 2, ' ') << "Definition: \"" << def->identifier() << "\" [" << def->qualifiedIdentifier() << "]  " << def->textRange() << ", " << def->uses().count() << " use(s)." << endl;
+    kDebug() << QString((indent+1) * 2, ' ') << def->toString() << " [" << def->qualifiedIdentifier() << "]  " << def->textRange() << ", " << def->uses().count() << " use(s)." << endl;
     foreach (DefinitionUse* use, def->uses())
       kDebug() << QString((indent+2) * 2, ' ') << "Use: " << use->textRange() << endl;
   }

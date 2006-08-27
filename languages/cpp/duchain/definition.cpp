@@ -30,7 +30,6 @@ Definition::Definition(KTextEditor::Range* range, Scope scope )
   : KDevDocumentRangeObject(range)
   , m_context(0)
   , m_scope(scope)
-  , m_accessPolicy(Cpp::Public)
 {
 }
 
@@ -66,12 +65,12 @@ void Definition::setIdentifier(const Identifier& identifier)
   m_identifier = identifier;
 }
 
-AbstractType::Ptr Definition::type( ) const
+AbstractType::Ptr Definition::abstractType( ) const
 {
   return m_type;
 }
 
-void Definition::setType(AbstractType::Ptr type)
+void Definition::setAbstractType(AbstractType::Ptr type)
 {
   m_type = type;
 }
@@ -98,19 +97,14 @@ void Definition::setContext(DUContext* context)
   m_context = context;
 }
 
-// kate: indent-width 2;
-
 bool Definition::operator ==(const Definition & other) const
 {
   return this == &other;
 }
 
-Cpp::AccessPolicy Definition::accessPolicy() const
+QString Definition::toString() const
 {
-  return m_accessPolicy;
+  return QString("Definition: %3 %4").arg(abstractType() ? abstractType()->toString() : QString("<notype>")).arg(identifier().toString());
 }
 
-void Definition::setAccessPolicy(Cpp::AccessPolicy accessPolicy)
-{
-  m_accessPolicy = accessPolicy;
-}
+// kate: indent-width 2;

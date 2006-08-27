@@ -109,6 +109,46 @@ CppIntegralType::CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifi
   : m_type(type)
   , m_modifiers(modifiers)
 {
+  QString name;
+
+  switch (type) {
+    case TypeChar:
+      name = "char";
+      break;
+    case TypeWchar_t:
+      name = "wchar_t";
+      break;
+    case TypeBool:
+      name = "bool";
+      break;
+    case TypeInt:
+      name = "int";
+      break;
+    case TypeFloat:
+      name = "float";
+      break;
+    case TypeDouble:
+      name = "double";
+      break;
+    case TypeVoid:
+      name = "void";
+      break;
+    default:
+      name = "<notype>";
+      break;
+  }
+
+  if (modifiers & ModifierUnsigned)
+    name.prepend("unsigned ");
+  else if (modifiers & ModifierSigned)
+    name.prepend("signed ");
+
+  if (modifiers & ModifierShort)
+    name.prepend("short ");
+  else if (modifiers & ModifierLong)
+    name.prepend("long ");
+
+  setName(name);
 }
 
 CppIntegralType::TypeModifiers CppIntegralType::typeModifiers() const
@@ -119,4 +159,35 @@ CppIntegralType::TypeModifiers CppIntegralType::typeModifiers() const
 CppIntegralType::IntegralTypes CppIntegralType::integralType() const
 {
   return m_type;
+}
+
+QString CppIntegralType::toString() const
+{
+  return QString("%1%2").arg(cvString()).arg(IntegralType::toString());
+}
+
+CppCVType::CppCVType(Cpp::CVSpecs spec)
+  : m_constant(spec & Cpp::Const)
+  , m_volatile(spec & Cpp::Volatile)
+{
+}
+
+QString CppCVType::cvString() const
+{
+  return QString("%1%2").arg(isConstant() ? "const " : "").arg(isVolatile() ? "volatile " : "");
+}
+
+QString CppFunctionType::toString() const
+{
+  return QString("%1 %2").arg(FunctionType::toString()).arg(cvString());
+}
+
+CppPointerType::CppPointerType(Cpp::CVSpecs spec)
+  : CppCVType(spec)
+{
+}
+
+QString CppPointerType::toString() const
+{
+  return QString("%1%2").arg(cvString()).arg(PointerType::toString());
 }

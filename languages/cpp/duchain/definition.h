@@ -52,17 +52,14 @@ public:
 
   Scope scope() const;
 
-  AbstractType::Ptr type() const;
-  void setType(AbstractType::Ptr type);
+  template <class T>
+  KSharedPtr<T> type() const { return KSharedPtr<T>::dynamicCast(abstractType()); }
 
-  bool isConstant() const { return m_constant; }
-  void setConstant(bool is) { m_constant = is; }
+  template <class T>
+  void setType(KSharedPtr<T> type) { setAbstractType(AbstractType::Ptr::staticCast(type)); }
 
-  bool isVolatile() const { return m_volatile; }
-  void setVolatile(bool is) { m_volatile = is; }
-
-  Cpp::AccessPolicy accessPolicy() const;
-  void setAccessPolicy(Cpp::AccessPolicy accessPolicy);
+  AbstractType::Ptr abstractType() const;
+  void setAbstractType(AbstractType::Ptr type);
 
   void setIdentifier(const Identifier& identifier);
   const Identifier& identifier() const;
@@ -75,14 +72,13 @@ public:
 
   bool operator==(const Definition& other) const;
 
+  virtual QString toString() const;
+
 private:
   DUContext* m_context;
   Scope m_scope;
   AbstractType::Ptr m_type;
-  Cpp::AccessPolicy m_accessPolicy;
   Identifier m_identifier;
-  bool m_constant : 1;
-  bool m_volatile : 1;
 
   QList<DefinitionUse*> m_uses;
 };

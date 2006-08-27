@@ -22,116 +22,131 @@ TypeRepository* TypeRepository::s_instance = 0;
 
 TypeRepository::TypeRepository()
 {
-  m_integrals.reserve(18);
+  m_integrals.reserve(18 * 4);
 
   // void - 0
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeVoid));
+  newIntegralType(CppIntegralType::TypeVoid);
 
   // bool - 1
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeBool));
+  newIntegralType(CppIntegralType::TypeBool);
 
   // char - 2
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeChar));
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeChar, CppIntegralType::ModifierUnsigned));
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeChar, CppIntegralType::ModifierSigned));
+  newIntegralType(CppIntegralType::TypeChar);
+  newIntegralType(CppIntegralType::TypeChar, CppIntegralType::ModifierUnsigned);
+  newIntegralType(CppIntegralType::TypeChar, CppIntegralType::ModifierSigned);
 
   // int - 5
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeInt));
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierUnsigned));
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierSigned));
+  newIntegralType(CppIntegralType::TypeInt);
+  newIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierUnsigned);
+  newIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierSigned);
 
   // short int - 8
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierShort));
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierShort | CppIntegralType::ModifierUnsigned));
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierShort | CppIntegralType::ModifierSigned));
+  newIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierShort);
+  newIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierShort | CppIntegralType::ModifierUnsigned);
+  newIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierShort | CppIntegralType::ModifierSigned);
 
   // long int - 11
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierLong));
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierLong | CppIntegralType::ModifierUnsigned));
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierLong | CppIntegralType::ModifierSigned));
+  newIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierLong);
+  newIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierLong | CppIntegralType::ModifierUnsigned);
+  newIntegralType(CppIntegralType::TypeInt, CppIntegralType::ModifierLong | CppIntegralType::ModifierSigned);
 
   // float - 14
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeFloat));
+  newIntegralType(CppIntegralType::TypeFloat);
 
   // double - 15
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeDouble));
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeDouble, CppIntegralType::ModifierLong));
+  newIntegralType(CppIntegralType::TypeDouble);
+  newIntegralType(CppIntegralType::TypeDouble, CppIntegralType::ModifierLong);
 
   // wchar_t - 17
-  newIntegralType(new CppIntegralType(CppIntegralType::TypeWchar_t));
+  newIntegralType(CppIntegralType::TypeWchar_t);
 }
 
-IntegralType::Ptr TypeRepository::integral(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers) const
+CppIntegralType::Ptr TypeRepository::integral(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers, Cpp::CVSpecs cv) const
 {
   switch (type) {
     case CppIntegralType::TypeVoid:
       if (!modifiers)
-        return m_integrals.at(0);
+        return getIntegral(0, cv);
       break;
 
     case CppIntegralType::TypeBool:
       if (!modifiers)
-        return m_integrals.at(1);
+        return getIntegral(1, cv);
       break;
 
     case CppIntegralType::TypeChar:
       if (!modifiers)
-        return m_integrals.at(2);
+        return getIntegral(2, cv);
       if (modifiers == CppIntegralType::ModifierUnsigned)
-        return m_integrals.at(3);
+        return getIntegral(3, cv);
       if (modifiers == CppIntegralType::ModifierSigned)
-        return m_integrals.at(4);
+        return getIntegral(4, cv);
       break;
 
     case CppIntegralType::TypeInt:
       if (!modifiers)
-        return m_integrals.at(5);
+        return getIntegral(5, cv);
       if (modifiers == CppIntegralType::ModifierUnsigned)
-        return m_integrals.at(6);
+        return getIntegral(6, cv);
       if (modifiers == CppIntegralType::ModifierSigned)
-        return m_integrals.at(7);
+        return getIntegral(7, cv);
 
       if (modifiers == CppIntegralType::ModifierShort)
-        return m_integrals.at(8);
+        return getIntegral(8, cv);
       if (modifiers == CppIntegralType::ModifierShort | CppIntegralType::ModifierUnsigned)
-        return m_integrals.at(9);
+        return getIntegral(9, cv);
       if (modifiers == CppIntegralType::ModifierShort | CppIntegralType::ModifierSigned)
-        return m_integrals.at(10);
+        return getIntegral(10, cv);
 
       if (!modifiers == CppIntegralType::ModifierLong)
-        return m_integrals.at(11);
+        return getIntegral(11, cv);
       if (modifiers == CppIntegralType::ModifierLong | CppIntegralType::ModifierUnsigned)
-        return m_integrals.at(12);
+        return getIntegral(12, cv);
       if (modifiers == CppIntegralType::ModifierLong | CppIntegralType::ModifierSigned)
-        return m_integrals.at(13);
+        return getIntegral(13, cv);
       break;
 
     case CppIntegralType::TypeFloat:
       if (!modifiers)
-        return m_integrals.at(14);
+        return getIntegral(14, cv);
       break;
 
     case CppIntegralType::TypeDouble:
       if (!modifiers)
-        return m_integrals.at(15);
+        return getIntegral(15, cv);
       if (modifiers == CppIntegralType::ModifierLong)
-        return m_integrals.at(16);
+        return getIntegral(16, cv);
 
     case CppIntegralType::TypeWchar_t:
       if (!modifiers)
-        return m_integrals.at(17);
+        return getIntegral(17, cv);
       break;
 
     default:
       break;
   }
 
-  return IntegralType::Ptr();
+  return CppIntegralType::Ptr();
 }
 
-void TypeRepository::newIntegralType(IntegralType * type)
+void TypeRepository::newIntegralType(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers)
 {
-  m_integrals.append(IntegralType::Ptr(type));
+  CppIntegralType* plainType = new CppIntegralType(type, modifiers);
+
+  CppIntegralType* constVersion = new CppIntegralType(type, modifiers);
+  constVersion->setConstant(true);
+
+  CppIntegralType* volatileVersion = new CppIntegralType(type, modifiers);
+  volatileVersion->setVolatile(true);
+
+  CppIntegralType* constVolatileVersion = new CppIntegralType(type, modifiers);
+  constVolatileVersion->setVolatile(true);
+  constVolatileVersion->setConstant(true);
+
+  m_integrals.append(CppIntegralType::Ptr(plainType));
+  m_integrals.append(CppIntegralType::Ptr(constVersion));
+  m_integrals.append(CppIntegralType::Ptr(volatileVersion));
+  m_integrals.append(CppIntegralType::Ptr(constVolatileVersion));
 }
 
 TypeRepository* TypeRepository::self()
@@ -140,4 +155,9 @@ TypeRepository* TypeRepository::self()
     s_instance = new TypeRepository();
 
   return s_instance;
+}
+
+CppIntegralType::Ptr TypeRepository::getIntegral(int index, int cv) const
+{
+  return m_integrals.at((index * 4) + cv);
 }

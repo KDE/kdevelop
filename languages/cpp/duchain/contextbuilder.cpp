@@ -173,6 +173,8 @@ void ContextBuilder::visitTypedef (TypedefAST *node)
 
 void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
+  visitFunctionDeclaration(node);
+
   if (node && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
     QualifiedIdentifier functionName = identifierForName(node->init_declarator->declarator->id);
     if (functionName.count() >= 2) {
@@ -183,9 +185,6 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
         m_importedParentContexts.append(classContext);
     }
   }
-
-  visit(node->type_specifier);
-  visit(node->init_declarator);
 
   if (node->constructor_initializers && node->function_body) {
     openContext(node->constructor_initializers, node->function_body, DUContext::Other);
@@ -203,6 +202,12 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 
   // If still defined, not needed
   m_importedParentContexts.clear();
+}
+
+void ContextBuilder::visitFunctionDeclaration (FunctionDefinitionAST* node)
+{
+  visit(node->type_specifier);
+  visit(node->init_declarator);
 }
 
 DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType type, NameAST* identifier)

@@ -74,6 +74,11 @@ protected:
 
   CppEditorIntegrator* m_editor;
 
+  // Split up visitors created for subclasses to use
+  /// Visits the type specifier and init declarator for a function.
+  virtual void visitFunctionDeclaration (FunctionDefinitionAST *);
+
+  // Normal overridden visitors
   virtual void visitNamespace (NamespaceAST *);
   virtual void visitClassSpecifier (ClassSpecifierAST *);
   virtual void visitTypedef (TypedefAST *);

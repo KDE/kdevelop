@@ -48,23 +48,27 @@ void TypeBuilder::buildTypes(AST *node)
 
 void TypeBuilder::openAbstractType(AbstractType::Ptr type, AST* node)
 {
-  if (FunctionType::Ptr function = currentType<FunctionType>()) {
-    if (!function->returnType())
-      function->setReturnType(type);
-    else
-      function->addArgument(type);
+  Q_UNUSED(node);
 
-  } else if (StructureType::Ptr structure = currentType<StructureType>()) {
-    structure->addElement(type);
+  if (hasCurrentType()) {
+    if (FunctionType::Ptr function = currentType<FunctionType>()) {
+      if (!function->returnType())
+        function->setReturnType(type);
+      else
+        function->addArgument(type);
 
-  } else if (PointerType::Ptr pointer = currentType<PointerType>()) {
-    pointer->setBaseType(type);
+    } else if (StructureType::Ptr structure = currentType<StructureType>()) {
+      structure->addElement(type);
 
-  } else if (ReferenceType::Ptr reference = currentType<ReferenceType>()) {
-    reference->setBaseType(type);
+    } else if (PointerType::Ptr pointer = currentType<PointerType>()) {
+      pointer->setBaseType(type);
 
-  } else if (ArrayType::Ptr array = currentType<ArrayType>()) {
-    array->setElementType(type);
+    } else if (ReferenceType::Ptr reference = currentType<ReferenceType>()) {
+      reference->setBaseType(type);
+
+    } else if (ArrayType::Ptr array = currentType<ArrayType>()) {
+      array->setElementType(type);
+    }
   }
 
   m_typeStack.append(type);
@@ -72,6 +76,8 @@ void TypeBuilder::openAbstractType(AbstractType::Ptr type, AST* node)
 
 void TypeBuilder::closeType()
 {
+  m_lastType = currentAbstractType();
+
   m_typeStack.pop();
 }
 
@@ -134,21 +140,21 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
     Definition * def = currentContext()->findDefinition(id, pos);
 
-    if (def && def->type()) {
+    if (def && def->abstractType()) {
       int kind = m_editor->parseSession()->token_stream->kind(node->type);
       switch (kind) {
         case Token_class:
         case Token_struct:
         case Token_union:
-          if (CppClassType::Ptr::dynamicCast(def->type()))
-            type = def->type();
+          if (def->type<CppClassType>())
+            type = def->abstractType();
           break;
         case Token_enum:
-          if (CppEnumeratorType::Ptr::dynamicCast(def->type()))
-            type = def->type();
+          if (def->type<CppEnumeratorType>())
+            type = def->abstractType();
           break;
         case Token_typename:
-          type = def->type();
+          type = def->abstractType();
           break;
       }
 
@@ -156,6 +162,8 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
         openType(type, node);
     }
   }
+
+  // TODO.. figure out what to do with this now... parseConstVolatile(node->cv);
 
   TypeBuilderBase::visitElaboratedTypeSpecifier(node);
 
@@ -165,7 +173,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
 void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
-  IntegralType::Ptr integral;
+  CppIntegralType::Ptr integral;
 
   if (node->integrals) {
     CppIntegralType::IntegralTypes type = CppIntegralType::TypeNone;
@@ -214,7 +222,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       it = it->next;
     } while (it != end);
 
-    integral = TypeRepository::self()->integral(type, modifiers);
+    integral = TypeRepository::self()->integral(type, modifiers, parseConstVolatile(node->cv));
     if (integral)
       openType(integral, node);
   }
@@ -234,11 +242,14 @@ void TypeBuilder::visitTypedef(TypedefAST* node)
   closeType();
 }
 
-void TypeBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
+void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
-  openType(FunctionType::Ptr(new FunctionType()), node);
+  openType(CppFunctionType::Ptr(new CppFunctionType()), node);
 
-  TypeBuilderBase::visitFunctionDefinition(node);
+  if (node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->fun_cv)
+    currentType<CppFunctionType>()->setCV(parseConstVolatile(node->init_declarator->declarator->fun_cv));
+
+  TypeBuilderBase::visitFunctionDeclaration(node);
 
   closeType();
 }
@@ -254,11 +265,37 @@ void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 
 void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 {
-  openType(PointerType::Ptr(new PointerType()), node);
+  openType(CppPointerType::Ptr(new CppPointerType(parseConstVolatile(node->cv))), node);
 
   TypeBuilderBase::visitPtrOperator(node);
 
   closeType();
+}
+
+AbstractType::Ptr TypeBuilder::lastType() const
+{
+  return m_lastType;
+}
+
+Cpp::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t> *cv)
+{
+  Cpp::CVSpecs ret = Cpp::CVNone;
+
+  if (cv) {
+    const ListNode<std::size_t> *it = cv->toFront();
+    const ListNode<std::size_t> *end = it;
+    do {
+      int kind = m_editor->parseSession()->token_stream->kind(it->element);
+      if (kind == Token_const)
+        ret |= Cpp::Const;
+      else if (kind == Token_volatile)
+        ret |= Cpp::Volatile;
+
+      it = it->next;
+    } while (it != end);
+  }
+
+  return ret;
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

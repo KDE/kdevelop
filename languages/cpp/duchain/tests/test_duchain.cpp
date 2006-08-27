@@ -26,6 +26,7 @@
 #include "definition.h"
 #include "kdevdocumentrange.h"
 #include "cppeditorintegrator.h"
+#include "typerepository.h"
 
 #include "parser.h"
 #include "control.h"
@@ -56,6 +57,12 @@ namespace QTest {
   char* toString(const Definition& def)
   {
     QString s = QString("Definition %1 (%2): %3").arg(def.identifier().toString()).arg(def.qualifiedIdentifier().toString()).arg(reinterpret_cast<long>(&def));
+    return qstrdup(s.toLatin1().constData());
+  }
+  template<>
+  char* toString(const KSharedPtr<AbstractType>& type)
+  {
+    QString s = QString("Type: %1").arg(type ? type->toString() : QString("<null>"));
     return qstrdup(s.toLatin1().constData());
   }
 }
@@ -250,18 +257,63 @@ private slots:
     release(top);
   }
 
+  void testIntegralTypes()
+  {
+    QByteArray method("const unsigned int i, k; volatile long double j;");
+
+    DUContext* top = parse(method, DumpNone);
+
+    QVERIFY(!top->parentContext());
+    QCOMPARE(top->childContexts().count(), 0);
+    QCOMPARE(top->localDefinitions().count(), 3);
+    QVERIFY(top->localScopeIdentifier().isEmpty());
+
+    Definition* defI = top->localDefinitions().first();
+    QCOMPARE(defI->identifier(), Identifier("i"));
+    QCOMPARE(top->findDefinition(defI->identifier()), defI);
+    QVERIFY(defI->type<CppIntegralType>());
+    QCOMPARE(defI->type<CppIntegralType>()->integralType(), CppIntegralType::TypeInt);
+    QCOMPARE(defI->type<CppIntegralType>()->typeModifiers(), CppIntegralType::ModifierUnsigned);
+    QVERIFY(defI->type<CppIntegralType>()->isConstant());
+    QVERIFY(!defI->type<CppIntegralType>()->isVolatile());
+
+    Definition* defK = top->localDefinitions()[1];
+    QCOMPARE(defK->identifier(), Identifier("k"));
+    QCOMPARE(defK->type<CppIntegralType>(), defI->type<CppIntegralType>());
+
+    Definition* defJ = top->localDefinitions()[2];
+    QCOMPARE(defJ->identifier(), Identifier("j"));
+    QCOMPARE(top->findDefinition(defJ->identifier()), defJ);
+    QVERIFY(defJ->type<CppIntegralType>());
+    QCOMPARE(defJ->type<CppIntegralType>()->integralType(), CppIntegralType::TypeDouble);
+    QCOMPARE(defJ->type<CppIntegralType>()->typeModifiers(), CppIntegralType::ModifierLong);
+    QVERIFY(!defJ->type<CppIntegralType>()->isConstant());
+    QVERIFY(defJ->type<CppIntegralType>()->isVolatile());
+
+    release(top);
+  }
+
   void testDeclareFor()
   {
     //                 0         1         2         3         4         5
     //                 012345678901234567890123456789012345678901234567890123456789
     QByteArray method("int main() { for (int i = 0; i < 10; i++) { if (i == 4) return; } }");
 
-    DUContext* top = parse(method, DumpNone);
+    DUContext* top = parse(method);//, DumpNone);
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 2);
-    QCOMPARE(top->localDefinitions().count(), 0);
+    QCOMPARE(top->localDefinitions().count(), 1);
     QVERIFY(top->localScopeIdentifier().isEmpty());
+
+    Definition* defMain = top->localDefinitions().first();
+    QCOMPARE(defMain->identifier(), Identifier("main"));
+    QCOMPARE(top->findDefinition(defMain->identifier()), defMain);
+    QVERIFY(defMain->type<CppFunctionType>());
+    QCOMPARE(CppIntegralType::Ptr::dynamicCast(defMain->type<CppFunctionType>()->returnType()), TypeRepository::self()->integral(CppIntegralType::TypeInt));
+    QCOMPARE(defMain->type<CppFunctionType>()->arguments().count(), 0);
+    QVERIFY(!defMain->type<CppFunctionType>()->isConstant());
+    QVERIFY(!defMain->type<CppFunctionType>()->isVolatile());
 
     QCOMPARE(top->findDefinition(Identifier("i")), noDef);
 
@@ -475,9 +527,9 @@ private slots:
 
   void testFileParse()
   {
-    //QSKIP("Unwanted", SkipSingle);
+    QSKIP("Unwanted", SkipSingle);
 
-    QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
+    QFile file("/opt/kde4/src/kdevelop/languages/cpp/duchain/tests/files/membervariable.cpp");
     QVERIFY( file.open( QIODevice::ReadOnly ) );
 
     QByteArray fileData = file.readAll();
@@ -487,7 +539,7 @@ private slots:
     QString ppd = preprocessor.processString( contents );
     QByteArray preprocessed = ppd.toUtf8();
 
-    DUContext* top = parse(preprocessed, DumpNone);
+    DUContext* top = parse(preprocessed);//, DumpNone);
 
     release(top);
   }

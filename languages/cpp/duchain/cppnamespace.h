@@ -19,6 +19,8 @@
 #ifndef CPPNAMESPACE_H
 #define CPPNAMESPACE_H
 
+#include <QFlags>
+
 namespace Cpp {
   enum AccessPolicy
   {
@@ -26,7 +28,16 @@ namespace Cpp {
     Protected,
     Private
   };
+
+  enum CVSpec {
+    CVNone = 0,
+    Const = 0x1,
+    Volatile = 0x2
+  };
+  Q_DECLARE_FLAGS(CVSpecs, CVSpec);
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Cpp::CVSpecs);
 
 #endif // CPPNAMESPACE_H
 

@@ -22,6 +22,7 @@
 
 ClassMemberDefinition::ClassMemberDefinition(KTextEditor::Range * range)
   : Definition(range, ClassScope)
+  , m_accessPolicy(Cpp::Public)
   , m_isStatic(false)
   , m_isAuto(false)
   , m_isFriend(false)
@@ -91,5 +92,14 @@ void ClassMemberDefinition::setMutable(bool isMutable)
   m_isMutable = isMutable;
 }
 
+Cpp::AccessPolicy ClassMemberDefinition::accessPolicy() const
+{
+  return m_accessPolicy;
+}
+
+void ClassMemberDefinition::setAccessPolicy(Cpp::AccessPolicy accessPolicy)
+{
+  m_accessPolicy = accessPolicy;
+}
 
 // kate: indent-width 2;
