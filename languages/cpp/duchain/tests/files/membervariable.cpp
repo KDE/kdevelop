@@ -4,6 +4,8 @@ namespace Blah {
     static int s_test2;
 
     void test(int input);
+
+    void test5() {}
   };
 
   int nsTest;
@@ -29,6 +31,8 @@ int test2()
   return Blah::nsTest;
 }
 
+class Foo2 {};
+
 int Foo::test(int input)
 {
   // Use before definition - error
@@ -40,8 +44,12 @@ int Foo::test(int input)
   if (result = f.test())
     return 1;
 
+  // Declaration, because f2 is not defined prior
   Foo2* f2;
-  f2 = new Foo();
+  f2 = new Foo2();
+
+  // Expression, because both are defined
+  f * f2;
 
   for (int j = 0; j < 4; ++j) {
     if (j ^ input > 200)

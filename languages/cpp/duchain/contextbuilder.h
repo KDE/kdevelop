@@ -43,6 +43,8 @@ namespace KTextEditor { class Range; }
  */
 class ContextBuilder: protected DefaultVisitor
 {
+  friend class IdentifierVerifier;
+
 public:
   ContextBuilder(ParseSession* session);
   ContextBuilder(CppEditorIntegrator* editor);

@@ -332,20 +332,54 @@ void ContextBuilder::visitUsing(UsingAST* node)
   DefaultVisitor::visitUsing(node);
 }
 
+class IdentifierVerifier : public DefaultVisitor
+{
+public:
+  ContextBuilder* builder;
+  bool result;
+
+  virtual void visitName (NameAST * node)
+  {
+    QualifiedIdentifier id = builder->identifierForName(node);
+    if (Definition* def = builder->currentContext()->findDefinition(id, KDevDocumentCursor(builder->m_editor->currentUrl(), builder->m_editor->findPosition(node->start_token)))) {
+      //kDebug() << k_funcinfo << "Found definition for " << def->toString() << " at " << def->textRange() << endl;
+    } else {
+      //kDebug() << k_funcinfo << "Could not find definition for " << id.toString() << endl;
+      result = false;
+    }
+  }
+};
+
 void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST* node)
 {
-  // FIXME ... needs type support
   switch (currentContext()->type()) {
     case DUContext::Global:
     case DUContext::Namespace:
     case DUContext::Class:
-        visit(node->declaration);
-        break;
+      visit(node->declaration);
+      break;
 
     case DUContext::Function:
     case DUContext::Other:
-        visit(node->expression);
+      if (m_compilingContexts) {
+        IdentifierVerifier iv;
+        iv.builder = this;
+        iv.result = true;
+        iv.visit(node->expression);
+        //kDebug() << k_funcinfo << m_editor->findPosition(node->start_token) << " IdentifierVerifier returned " << iv.result << endl;
+        node->expressionChosen = iv.result;
+        if (iv.result)
+          visit(node->expression);
+        else
+          visit(node->declaration);
         break;
+
+      } else {
+        if (node->expressionChosen)
+          visit(node->expression);
+        else
+          visit(node->declaration);
+      }
   }
 }
 

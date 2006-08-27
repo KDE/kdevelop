@@ -404,6 +404,9 @@ struct ExpressionOrDeclarationStatementAST: public StatementAST
 
   StatementAST *expression;
   StatementAST *declaration;
+
+  // This was not originally part of the AST - added by the context visitor
+  bool expressionChosen;
 };
 
 struct ExpressionStatementAST: public StatementAST

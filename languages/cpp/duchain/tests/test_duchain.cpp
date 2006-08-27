@@ -364,7 +364,7 @@ private slots:
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("struct A { int i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; };");
 
-    DUContext* top = parse(method);//, DumpNone);
+    DUContext* top = parse(method, DumpNone);
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 1);
@@ -536,7 +536,7 @@ private slots:
 
   void testFileParse()
   {
-    QSKIP("Unwanted", SkipSingle);
+    //QSKIP("Unwanted", SkipSingle);
 
     QFile file("/opt/kde4/src/kdevelop/languages/cpp/duchain/tests/files/membervariable.cpp");
     QVERIFY( file.open( QIODevice::ReadOnly ) );
