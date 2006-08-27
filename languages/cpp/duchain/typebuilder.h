@@ -20,6 +20,7 @@
 #define TYPEBUILDER_H
 
 #include "contextbuilder.h"
+#include "typesystem.h"
 
 typedef ContextBuilder TypeBuilderBase;
 
@@ -35,7 +36,7 @@ public:
   void buildTypes(AST *node);
 
 protected:
-  AbstractType* lastType() const;
+  AbstractType::Ptr lastType() const;
 
   virtual void visitClassSpecifier(ClassSpecifierAST*);
   virtual void visitBaseSpecifier(BaseSpecifierAST*);
@@ -50,18 +51,22 @@ protected:
   virtual void visitPtrOperator(PtrOperatorAST*);
 
 private:
-  void openType(AbstractType* type, AST* node, NameAST* id = 0);
+  template <class T>
+  void openType(KSharedPtr<T> type, AST* node, NameAST* id = 0)
+  { openAbstractType(AbstractType::Ptr::staticCast(type), node, id); }
+
+  void openAbstractType(AbstractType::Ptr type, AST* node, NameAST* id = 0);
   void closeType();
 
   void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);
   void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);
 
-  inline AbstractType* currentAbstractType() { return m_typeStack.top(); }
+  inline AbstractType::Ptr currentAbstractType() { return m_typeStack.top(); }
 
   template <class T>
-  T* currentType() { return dynamic_cast<T*>(m_typeStack.top()); }
+  KSharedPtr<T> currentType() { return KSharedPtr<T>::dynamicCast(m_typeStack.top()); }
 
-  QStack<AbstractType*> m_typeStack;
+  QStack<AbstractType::Ptr> m_typeStack;
 };
 
 #endif // TYPEBUILDER_H

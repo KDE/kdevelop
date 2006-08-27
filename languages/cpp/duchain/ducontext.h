@@ -25,7 +25,6 @@
 #include "kdevdocumentcursorobject.h"
 #include "identifier.h"
 
-class TypeInstance;
 class Definition;
 class DUChain;
 class DefinitionUse;
@@ -145,29 +144,6 @@ public:
   };
   void addUsingNamespace(KTextEditor::Cursor* cursor, const QualifiedIdentifier& nsIdentifier);
   const QList<UsingNS*>& usingNamespaces() const;
-
-  /**
-   * Returns the list of types defined in this context.
-   */
-  const QList<TypeInstance*>& types() const;
-
-  /**
-   * Adds a type defined in this context.
-   */
-  void addType(TypeInstance* type);
-
-  /**
-   * Deletes all types defined in this context.
-   */
-  void deleteAllTypes();
-
-  /// Search for a type with the matching \a id, and matching type.
-  template <class T>
-  T* findType(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position) const
-  { return dynamic_cast<T*>(findAbstractType(identifier, position)); }
-
-  /// Search for a type with the matching \a id, and matching type.
-  AbstractType* findAbstractType(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>(), bool inImportedContext = false) const;
 
   /**
    * Searches for and returns a definition with a given \a identifier in this context, which
@@ -322,8 +298,6 @@ private:
   QList<DUContext*> m_importedParentContexts;
   QList<DUContext*> m_childContexts;
   QList<DUContext*> m_importedChildContexts;
-
-  QList<TypeInstance*> m_types;
 
   QList<Definition*> m_localDefinitions;
 

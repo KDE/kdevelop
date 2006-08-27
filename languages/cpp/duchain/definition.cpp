@@ -30,7 +30,6 @@ Definition::Definition(KTextEditor::Range* range, Scope scope )
   : KDevDocumentRangeObject(range)
   , m_context(0)
   , m_scope(scope)
-  , m_type(0)
   , m_accessPolicy(Cpp::Public)
 {
 }
@@ -67,12 +66,12 @@ void Definition::setIdentifier(const Identifier& identifier)
   m_identifier = identifier;
 }
 
-AbstractType * Definition::type( ) const
+AbstractType::Ptr Definition::type( ) const
 {
   return m_type;
 }
 
-void Definition::setType(AbstractType* type)
+void Definition::setType(AbstractType::Ptr type)
 {
   m_type = type;
 }

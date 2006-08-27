@@ -21,7 +21,6 @@
 #include <QMutableLinkedListIterator>
 #include <QSet>
 
-#include "typeinstance.h"
 #include "definition.h"
 #include "duchain.h"
 #include "definitionuse.h"
@@ -56,8 +55,6 @@ DUContext::~DUContext( )
   //deleteImportedParentContextsRecursively(url());
 
   deleteChildContextsRecursively(url());
-
-  deleteAllTypes();
 
   qDeleteAll(m_localDefinitions);
 
@@ -646,23 +643,3 @@ DUContext* DUContext::findContext(ContextType contextType, const QualifiedIdenti
 }
 
 // kate: indent-width 2;
-
-const QList<TypeInstance*>& DUContext::types() const
-{
-  return m_types;
-}
-
-void DUContext::addType(TypeInstance* type)
-{
-  m_types.append(type);
-}
-
-void DUContext::deleteAllTypes()
-{
-  qDeleteAll(m_types);
-}
-
-AbstractType* DUContext::findAbstractType(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const DUContext* sourceChild, const QList<UsingNS*>& usingNamespaces, bool inImportedContext) const
-{
-  return 0;
-}

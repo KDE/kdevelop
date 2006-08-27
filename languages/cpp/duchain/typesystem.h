@@ -26,6 +26,8 @@
 #include <QString>
 #include <QList>
 
+#include <ksharedptr.h>
+
 class AbstractType;
 class IntegralType;
 class PointerType;
@@ -60,9 +62,11 @@ public:
   virtual void endVisit (const ArrayType *) {}
 };
 
-class AbstractType
+class AbstractType : public KShared
 {
 public:
+  typedef KSharedPtr<AbstractType> Ptr;
+
   virtual ~AbstractType () {}
 
   inline void accept (TypeVisitor *v) const
@@ -73,7 +77,7 @@ public:
     v->postVisit (this);
   }
 
-  static void acceptType (const AbstractType *type, TypeVisitor *v)
+  static void acceptType (AbstractType::Ptr type, TypeVisitor *v)
   {
     if (! type)
       return;
@@ -88,6 +92,11 @@ protected:
 class IntegralType: public AbstractType
 {
 public:
+  typedef KSharedPtr<IntegralType> Ptr;
+
+  IntegralType();
+  IntegralType(const QString& name);
+
   inline const QString& name() const
   { return m_name; }
 
@@ -111,12 +120,14 @@ private:
 class PointerType: public AbstractType
 {
 public:
+  typedef KSharedPtr<PointerType> Ptr;
+
   PointerType ();
 
-  inline AbstractType *baseType () const
+  inline AbstractType::Ptr baseType () const
   { return m_baseType; }
 
-  inline void setBaseType(AbstractType* type)
+  inline void setBaseType(AbstractType::Ptr type)
   { m_baseType = type; }
 
   inline bool operator == (const PointerType &other) const
@@ -135,18 +146,20 @@ protected:
   }
 
 private:
-  AbstractType *m_baseType;
+  AbstractType::Ptr m_baseType;
 };
 
 class ReferenceType: public AbstractType
 {
 public:
+  typedef KSharedPtr<ReferenceType> Ptr;
+
   ReferenceType ();
 
-  inline const AbstractType *baseType () const
+  inline const AbstractType::Ptr baseType () const
   { return m_baseType; }
 
-  inline void setBaseType(AbstractType *baseType)
+  inline void setBaseType(AbstractType::Ptr baseType)
   { m_baseType = baseType; }
 
   inline bool operator == (const ReferenceType &other) const
@@ -165,24 +178,26 @@ protected:
   }
 
 private:
-  AbstractType *m_baseType;
+  AbstractType::Ptr m_baseType;
 };
 
 class FunctionType : public AbstractType
 {
 public:
+  typedef KSharedPtr<FunctionType> Ptr;
+
   FunctionType();
 
-  inline const AbstractType *returnType () const
+  inline const AbstractType::Ptr returnType () const
   { return m_returnType; }
 
-  void setReturnType(AbstractType *returnType);
+  void setReturnType(AbstractType::Ptr returnType);
 
-  inline const QList<AbstractType *>& arguments () const
+  inline const QList<AbstractType::Ptr>& arguments () const
   { return m_arguments; }
 
-  void addArgument(AbstractType *argument);
-  void removeArgument(AbstractType *argument);
+  void addArgument(AbstractType::Ptr argument);
+  void removeArgument(AbstractType::Ptr argument);
 
   inline bool operator == (const FunctionType &other) const
   { return m_returnType == other.m_returnType && m_arguments == other.m_arguments; }
@@ -205,18 +220,20 @@ protected:
   }
 
 private:
-  AbstractType *m_returnType;
-  QList<AbstractType *> m_arguments;
+  AbstractType::Ptr m_returnType;
+  QList<AbstractType::Ptr> m_arguments;
 };
 
 class StructureType : public AbstractType
 {
 public:
-  inline const QList<AbstractType *>& elements () const
+  typedef KSharedPtr<StructureType> Ptr;
+
+  inline const QList<AbstractType::Ptr>& elements () const
   { return m_elements; }
 
-  void addElement(AbstractType *element);
-  void removeElement(AbstractType *element);
+  void addElement(AbstractType::Ptr element);
+  void removeElement(AbstractType::Ptr element);
 
   inline bool operator == (const StructureType &other) const
   { return m_elements == other.m_elements; }
@@ -237,22 +254,24 @@ protected:
   }
 
 private:
-  QList<AbstractType *> m_elements;
+  QList<AbstractType::Ptr> m_elements;
 };
 
 class ArrayType : public AbstractType
 {
 public:
+  typedef KSharedPtr<ArrayType> Ptr;
+
   inline const QList<int>& dimensions () const
   { return m_dimensions; }
 
   inline void setDimensions (const QList<int>& dimensions)
   { m_dimensions = dimensions; }
 
-  inline AbstractType *elementType () const
+  inline AbstractType::Ptr elementType () const
   { return m_elementType; }
 
-  inline void setElementType(AbstractType * type)
+  inline void setElementType(AbstractType::Ptr type)
   { m_elementType = type; }
 
   inline bool operator == (const ArrayType &other) const
@@ -263,7 +282,7 @@ public:
 
 private:
   QList<int> m_dimensions;
-  AbstractType* m_elementType;
+  AbstractType::Ptr m_elementType;
 };
 
 #endif // TYPESYSTEM_H

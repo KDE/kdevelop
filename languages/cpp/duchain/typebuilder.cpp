@@ -26,6 +26,7 @@
 #include "cpptypes.h"
 #include "parsesession.h"
 #include "tokens.h"
+#include "definition.h"
 
 TypeBuilder::TypeBuilder(ParseSession* session)
   : TypeBuilderBase(session)
@@ -44,39 +45,26 @@ void TypeBuilder::buildTypes(AST *node)
   Q_ASSERT(m_typeStack.isEmpty());
 }
 
-void TypeBuilder::openType(AbstractType* type, AST* node, NameAST* id)
+void TypeBuilder::openAbstractType(AbstractType::Ptr type, AST* node, NameAST* id)
 {
-  if (FunctionType* function = currentType<FunctionType>()) {
+  if (FunctionType::Ptr function = currentType<FunctionType>()) {
     if (!function->returnType())
       function->setReturnType(type);
     else
       function->addArgument(type);
 
-  } else if (StructureType* structure = currentType<StructureType>()) {
+  } else if (StructureType::Ptr structure = currentType<StructureType>()) {
     structure->addElement(type);
 
-  } else if (PointerType* pointer = currentType<PointerType>()) {
+  } else if (PointerType::Ptr pointer = currentType<PointerType>()) {
     pointer->setBaseType(type);
 
-  } else if (ReferenceType* reference = currentType<ReferenceType>()) {
+  } else if (ReferenceType::Ptr reference = currentType<ReferenceType>()) {
     reference->setBaseType(type);
 
-  } else if (ArrayType* array = currentType<ArrayType>()) {
+  } else if (ArrayType::Ptr array = currentType<ArrayType>()) {
     array->setElementType(type);
-
-  } else {
-    TypeInstance* instance = new TypeInstance(m_editor->createCursor(node->start_token));
-    instance->setType(type);
-    if (id) {
-      QualifiedIdentifier qid = identifierForName(id);
-      Q_ASSERT(qid.count() == 1);
-      instance->setIdentifier(qid.first());
-    }
-
-    currentContext()->addType(instance);
   }
-
-  node->abstractType = type;
 
   m_typeStack.append(type);
 }
@@ -88,7 +76,7 @@ void TypeBuilder::closeType()
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
-  CppClassType* classType = new CppClassType(currentContext());
+  CppClassType::Ptr classType(new CppClassType());
   openType(classType, node, node->name);
 
   int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
@@ -113,7 +101,7 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
 
 void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 {
-  openType(new CppEnumerationType(), node);
+  openType(CppEnumerationType::Ptr(new CppEnumerationType()), node);
 
   TypeBuilderBase::visitEnumSpecifier(node);
 
@@ -123,8 +111,8 @@ void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 {
   bool ok = false;
-  if (CppEnumerationType* parent = currentType<CppEnumerationType>()) {
-    CppEnumeratorType* enumerator = new CppEnumeratorType(parent);
+  if (CppEnumerationType::Ptr parent = currentType<CppEnumerationType>()) {
+    CppEnumeratorType::Ptr enumerator(new CppEnumeratorType());
     openType(enumerator, node);
     ok = true;
   }
@@ -137,41 +125,50 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 
 void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 {
+  AbstractType::Ptr type;
+
   if (node->name) {
     QualifiedIdentifier id = identifierForName(node->name);
-    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge);
-    int kind = m_editor->parseSession()->token_stream->kind(node->type);
-    switch (kind) {
-      case Token_class:
-      case Token_struct:
-      case Token_union:
-        node->abstractType = currentContext()->findType<CppClassType>(id, pos);
-        break;
-      case Token_enum:
-        node->abstractType = currentContext()->findType<CppEnumerationType>(id, pos);
-        break;
-      case Token_typename:
-        node->abstractType = currentContext()->findAbstractType(id, pos);
-        break;
-    }
+    KDevDocumentCursor pos(m_editor->currentUrl(), m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge));
 
-    if (node->abstractType)
-      openType(node->abstractType, node, node->name);
+    Definition * def = currentContext()->findDefinition(id, pos);
+
+    if (def && def->type()) {
+      int kind = m_editor->parseSession()->token_stream->kind(node->type);
+      switch (kind) {
+        case Token_class:
+        case Token_struct:
+        case Token_union:
+          if (CppClassType::Ptr::dynamicCast(def->type()))
+            type = def->type();
+          break;
+        case Token_enum:
+          if (CppEnumeratorType::Ptr::dynamicCast(def->type()))
+            type = def->type();
+          break;
+        case Token_typename:
+          type = def->type();
+          break;
+      }
+
+      if (type)
+        openType(type, node, node->name);
+    }
   }
 
   TypeBuilderBase::visitElaboratedTypeSpecifier(node);
 
-  if (node->abstractType)
+  if (type)
     closeType();
 }
 
 void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
   if (node->integrals) {
-    if (CppClassType* classType = currentType<CppClassType>())
-      openType(new CppSpecificClassMemberType<CppIntegralType>(classType), node, node->name);
+    if (CppClassType::Ptr classType = currentType<CppClassType>())
+      openType(CppSpecificClassMemberType<CppIntegralType>::Ptr(new CppSpecificClassMemberType<CppIntegralType>(classType)), node, node->name);
     else
-      openType(new CppIntegralType(), node, node->name);
+      openType(CppIntegralType::Ptr(new CppIntegralType()), node, node->name);
 
     const ListNode<std::size_t> *it = node->integrals->toFront();
     const ListNode<std::size_t> *end = it;
@@ -204,7 +201,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 
 void TypeBuilder::visitTypedef(TypedefAST* node)
 {
-  openType(new CppTypeAliasType(currentContext()), node);
+  openType(CppTypeAliasType::Ptr(new CppTypeAliasType()), node);
 
   TypeBuilderBase::visitTypedef(node);
 
@@ -213,11 +210,11 @@ void TypeBuilder::visitTypedef(TypedefAST* node)
 
 void TypeBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
 {
-  if (CppClassType* classType = currentType<CppClassType>()) {
-    openType(new CppClassFunctionType(classType), node);
+  if (CppClassType::Ptr classType = currentType<CppClassType>()) {
+    openType(CppClassFunctionType::Ptr(new CppClassFunctionType(classType)), node);
 
   } else {
-    openType(new FunctionType(), node);
+    openType(FunctionType::Ptr(new FunctionType()), node);
   }
 
   parseStorageSpecifiers(node->storage_specifiers);
@@ -230,10 +227,10 @@ void TypeBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
 
 void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
-  if (CppClassType* classType = currentType<CppClassType>())
-    openType(new CppClassFunctionType(classType), node);
+  if (CppClassType::Ptr classType = currentType<CppClassType>())
+    openType(CppClassFunctionType::Ptr(new CppClassFunctionType(classType)), node);
   else
-    openType(new FunctionType(), node);
+    openType(FunctionType::Ptr(new FunctionType()), node);
 
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
@@ -246,7 +243,7 @@ void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 void TypeBuilder::visitTypeSpecifierAST(TypeSpecifierAST* node)
 {
   if (node->cv) {
-    if (CppTypeInfo* typeInfo = currentType<CppTypeInfo>()) {
+    if (CppTypeInfo* typeInfo = dynamic_cast<CppTypeInfo*>(currentAbstractType().data())) {
       const ListNode<std::size_t> *it = node->cv->toFront();
       const ListNode<std::size_t> *end = it;
       do {
@@ -264,12 +261,12 @@ void TypeBuilder::visitTypeSpecifierAST(TypeSpecifierAST* node)
 
 void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 {
-  openType(new PointerType(), node);
+  openType(PointerType::Ptr(new PointerType()), node);
 
-  if (CppClassType* classType = currentType<CppClassType>())
-    openType(new CppSpecificClassMemberType<CppIntegralType>(classType), node);
+  if (CppClassType::Ptr classType = currentType<CppClassType>())
+    openType(CppSpecificClassMemberType<CppIntegralType>::Ptr(new CppSpecificClassMemberType<CppIntegralType>(classType)), node);
   else
-    openType(new CppIntegralType(), node);
+    openType(CppIntegralType::Ptr(new CppIntegralType()), node);
 
   TypeBuilderBase::visitPtrOperator(node);
 
@@ -279,7 +276,7 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 
 void TypeBuilder::parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers)
 {
-  if (CppClassMemberType* memberType = currentType<CppClassMemberType>()) {
+  if (CppClassMemberType* memberType = dynamic_cast<CppClassMemberType*>(currentAbstractType().data())) {
     const ListNode<std::size_t> *it = storage_specifiers->toFront();
     const ListNode<std::size_t> *end = it;
     do {
@@ -312,7 +309,7 @@ void TypeBuilder::parseStorageSpecifiers(const ListNode<std::size_t>* storage_sp
 
 void TypeBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers)
 {
-  if (CppClassFunctionType* functionType = currentType<CppClassFunctionType>()) {
+  if (CppClassFunctionType::Ptr functionType = currentType<CppClassFunctionType>()) {
     const ListNode<std::size_t> *it = function_specifiers->toFront();
     const ListNode<std::size_t> *end = it;
     do {

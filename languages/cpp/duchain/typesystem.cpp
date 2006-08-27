@@ -25,27 +25,27 @@ FunctionType::FunctionType()
 {
 }
 
-void FunctionType::setReturnType(AbstractType *returnType)
+void FunctionType::setReturnType(AbstractType::Ptr returnType)
 {
   m_returnType = returnType;
 }
 
-void FunctionType::addArgument(AbstractType *argument)
+void FunctionType::addArgument(AbstractType::Ptr argument)
 {
   m_arguments.append(argument);
 }
 
-void FunctionType::removeArgument(AbstractType *argument)
+void FunctionType::removeArgument(AbstractType::Ptr argument)
 {
   m_arguments.removeAll(argument);
 }
 
-void StructureType::addElement(AbstractType *element)
+void StructureType::addElement(AbstractType::Ptr element)
 {
   m_elements.append(element);
 }
 
-void StructureType::removeElement(AbstractType *element)
+void StructureType::removeElement(AbstractType::Ptr element)
 {
   m_elements.removeAll(element);
 }
@@ -57,5 +57,14 @@ PointerType::PointerType()
 
 ReferenceType::ReferenceType()
   : m_baseType (0)
+{
+}
+
+IntegralType::IntegralType(const QString & name)
+  : m_name(name)
+{
+}
+
+IntegralType::IntegralType()
 {
 }

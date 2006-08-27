@@ -27,7 +27,6 @@
 #include <QtCore/QPair>
 
 #include "typesystem.h"
-#include "typeinstance.h"
 #include "cppnamespace.h"
 
 class DUContext;
@@ -51,30 +50,33 @@ private:
 
 class CppIntegralType : public IntegralType, public CppTypeInfo
 {
+public:
+  typedef KSharedPtr<CppIntegralType> Ptr;
 };
 
 class CppClassType;
 
-struct CppBaseClassInstance
-{
-  CppClassType* baseClass;
-  Cpp::AccessPolicy access;
-  bool virtualInheritance;
-};
-
 class CppClassType : public StructureType, public CppTypeInfo
 {
 public:
-  CppClassType(DUContext* context);
+  typedef KSharedPtr<CppClassType> Ptr;
 
-  const QList<CppBaseClassInstance>& baseClasses() const;
+  CppClassType();
 
-  void addBaseClass(const CppBaseClassInstance& baseClass);
-  void removeBaseClass(CppClassType* baseClass);
+  struct BaseClassInstance
+  {
+    CppClassType::Ptr baseClass;
+    Cpp::AccessPolicy access;
+    bool virtualInheritance;
+  };
 
-  const QList<CppClassType*>& subClasses() const;
-  void addSubClass(CppClassType* subClass);
-  void removeSubClass(CppClassType* subClass);
+  const QList<BaseClassInstance>& baseClasses() const;
+  void addBaseClass(const BaseClassInstance& baseClass);
+  void removeBaseClass(CppClassType::Ptr baseClass);
+
+  const QList<CppClassType::Ptr>& subClasses() const;
+  void addSubClass(CppClassType::Ptr subClass);
+  void removeSubClass(CppClassType::Ptr subClass);
 
   enum ClassType
   {
@@ -87,14 +89,14 @@ public:
   ClassType classType() const;
 
 private:
-  QList<CppBaseClassInstance> m_baseClasses;
+  QList<BaseClassInstance> m_baseClasses;
   ClassType m_classType;
 };
 
 class CppClassMemberType : public CppTypeInfo
 {
 public:
-  CppClassMemberType(CppClassType* owner);
+  CppClassMemberType(CppClassType::Ptr owner);
 
   bool isStatic() const;
   void setStatic(bool isStatic);
@@ -127,7 +129,9 @@ template <class T>
 class CppSpecificClassMemberType : public T, public CppClassMemberType
 {
 public:
-  CppSpecificClassMemberType(CppClassType* owner)
+  typedef KSharedPtr<CppSpecificClassMemberType> Ptr;
+
+  CppSpecificClassMemberType(CppClassType::Ptr owner)
     : CppClassMemberType(owner)
   {
   }
@@ -136,7 +140,9 @@ public:
 class CppClassFunctionType : public FunctionType, public CppClassMemberType
 {
 public:
-  CppClassFunctionType(CppClassType* owner);
+  typedef KSharedPtr<CppClassFunctionType> Ptr;
+
+  CppClassFunctionType(CppClassType::Ptr owner);
 
   enum QtFunctionType
   {
@@ -166,9 +172,9 @@ public:
   //bool isSimilar(KDevCodeItem *other, bool strict = true) const;
 
 private:
-  bool m_constructor;
-  bool m_destructor;
   QtFunctionType m_functionType;
+  bool m_constructor: 1;
+  bool m_destructor: 1;
   bool m_isVirtual: 1;
   bool m_isInline: 1;
   bool m_isAbstract: 1;
@@ -179,39 +185,43 @@ private:
 class CppTypeAliasType : public IntegralType, public CppTypeInfo
 {
 public:
-  CppTypeAliasType(DUContext* context);
+  typedef KSharedPtr<CppTypeAliasType> Ptr;
 
-  AbstractType* type() const;
-  void setType(AbstractType* type);
+  CppTypeAliasType();
 
-private:
-  AbstractType* m_type;
-};
-
-class CppEnumeratorType;
-
-// TODO is this the correct base type?
-class CppEnumerationType : public StructureType
-{
-public:
-  const QList<CppEnumeratorType*>& enumerators() const;
-  void addEnumerator(CppEnumeratorType* item);
-  void removeEnumerator(CppEnumeratorType* item);
+  AbstractType::Ptr type() const;
+  void setType(AbstractType::Ptr type);
 
 private:
-  QList<CppEnumeratorType*> m_enumerators;
+  AbstractType::Ptr m_type;
 };
 
 class CppEnumeratorType : public IntegralType
 {
 public:
-  CppEnumeratorType(CppEnumerationType* enumeration);
+  typedef KSharedPtr<CppEnumeratorType> Ptr;
+
+  CppEnumeratorType();
 
   QString value() const;
   void setValue(const QString &value);
 
 private:
   QString m_value;
+};
+
+// TODO is this the correct base type?
+class CppEnumerationType : public StructureType
+{
+public:
+  typedef KSharedPtr<CppEnumerationType> Ptr;
+
+  const QList<CppEnumeratorType::Ptr>& enumerators() const;
+  void addEnumerator(CppEnumeratorType::Ptr item);
+  void removeEnumerator(CppEnumeratorType::Ptr item);
+
+private:
+  QList<CppEnumeratorType::Ptr> m_enumerators;
 };
 
 /*class CppTemplateParameterType : public

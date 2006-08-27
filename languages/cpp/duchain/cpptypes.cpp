@@ -26,17 +26,17 @@ bool CppTypeInfo::operator==(const CppTypeInfo& other)
 }
 
 // ---------------------------------------------------------------------------
-const QList<CppBaseClassInstance>& CppClassType::baseClasses() const
+const QList<CppClassType::BaseClassInstance>& CppClassType::baseClasses() const
 {
   return m_baseClasses;
 }
 
-void CppClassType::addBaseClass(const CppBaseClassInstance& baseClass)
+void CppClassType::addBaseClass(const BaseClassInstance& baseClass)
 {
   m_baseClasses.append(baseClass);
 }
 
-void CppClassType::removeBaseClass(CppClassType* baseClass)
+void CppClassType::removeBaseClass(CppClassType::Ptr baseClass)
 {
   for (int i = 0; i < m_baseClasses.count(); ++i)
     if (m_baseClasses[i].baseClass == baseClass) {
@@ -142,28 +142,28 @@ void CppClassFunctionType::setAbstract(bool isAbstract)
 }
 
 // ---------------------------------------------------------------------------
-AbstractType* CppTypeAliasType::type() const
+AbstractType::Ptr CppTypeAliasType::type() const
 {
   return m_type;
 }
 
-void CppTypeAliasType::setType(AbstractType* type)
+void CppTypeAliasType::setType(AbstractType::Ptr type)
 {
   m_type = type;
 }
 
 // ---------------------------------------------------------------------------
-const QList<CppEnumeratorType*>& CppEnumerationType::enumerators() const
+const QList<CppEnumeratorType::Ptr>& CppEnumerationType::enumerators() const
 {
   return m_enumerators;
 }
 
-void CppEnumerationType::addEnumerator(CppEnumeratorType* item)
+void CppEnumerationType::addEnumerator(CppEnumeratorType::Ptr item)
 {
   m_enumerators.append(item);
 }
 
-void CppEnumerationType::removeEnumerator(CppEnumeratorType* item)
+void CppEnumerationType::removeEnumerator(CppEnumeratorType::Ptr item)
 {
   m_enumerators.removeAll(item);
 }
@@ -240,7 +240,7 @@ void CppClassMemberType::setMutable(bool isMutable)
   m_isMutable = isMutable;
 }
 
-CppClassMemberType::CppClassMemberType(CppClassType* owner)
+CppClassMemberType::CppClassMemberType(CppClassType::Ptr owner)
   : m_isStatic(0)
   , m_isAuto(0)
   , m_isFriend(0)
@@ -251,7 +251,7 @@ CppClassMemberType::CppClassMemberType(CppClassType* owner)
   Q_UNUSED(owner);
 }
 
-CppClassFunctionType::CppClassFunctionType(CppClassType* owner)
+CppClassFunctionType::CppClassFunctionType(CppClassType::Ptr owner)
   : CppClassMemberType(owner)
   , m_functionType(Normal)
   , m_isVirtual(false)
@@ -261,20 +261,17 @@ CppClassFunctionType::CppClassFunctionType(CppClassType* owner)
 {
 }
 
-CppTypeAliasType::CppTypeAliasType(DUContext* context)
+CppTypeAliasType::CppTypeAliasType()
 {
-  Q_UNUSED(context);
 }
 
-CppEnumeratorType::CppEnumeratorType(CppEnumerationType* enumeration)
+CppEnumeratorType::CppEnumeratorType()
 {
-  Q_UNUSED(enumeration);
 }
 
-CppClassType::CppClassType(DUContext* context)
+CppClassType::CppClassType()
   : m_classType(Class)
 {
-  Q_UNUSED(context);
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

@@ -29,7 +29,6 @@
 
 class ParseSession;
 class DUContext;
-class AbstractType;
 
 struct AccessSpecifierAST;
 struct AsmDefinitionAST;
@@ -199,8 +198,6 @@ struct AST : public KDevAST
 
   // External references
   DUContext* ducontext;
-  // FIXME - move to just those nodes which define types..?
-  AbstractType* abstractType;
 };
 
 struct TypeSpecifierAST: public AST
