@@ -40,6 +40,13 @@ int Foo::test(int input)
 
   int result = m_test;
 
+  try {
+    int Z = 4;
+    test(Z);
+  } catch (Foo2 error) {
+    return z;
+  }
+
   Foo f;
   if (result = f.test())
     return 1;

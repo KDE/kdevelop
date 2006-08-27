@@ -1955,7 +1955,6 @@ bool Parser::parseElaboratedTypeSpecifier(TypeSpecifierAST *&node)
 
           UPDATE_POS(ast, start, session->token_stream->cursor());
           node = ast;
-          // FIXME memory loss? or is it ok with the pool just going to be deleted...
 
           return true;
         }

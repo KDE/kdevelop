@@ -538,7 +538,8 @@ private slots:
   {
     //QSKIP("Unwanted", SkipSingle);
 
-    QFile file("/opt/kde4/src/kdevelop/languages/cpp/duchain/tests/files/membervariable.cpp");
+    //QFile file("/opt/kde4/src/kdevelop/languages/cpp/duchain/tests/files/membervariable.cpp");
+    QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
     QVERIFY( file.open( QIODevice::ReadOnly ) );
 
     QByteArray fileData = file.readAll();
@@ -548,7 +549,7 @@ private slots:
     QString ppd = preprocessor.processString( contents );
     QByteArray preprocessed = ppd.toUtf8();
 
-    DUContext* top = parse(preprocessed);//, DumpNone);
+    DUContext* top = parse(preprocessed, DumpNone);
 
     release(top);
   }

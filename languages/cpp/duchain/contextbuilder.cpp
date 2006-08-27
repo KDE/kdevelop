@@ -106,7 +106,6 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
 
   m_compilingContexts = false;
 
-  // FIXME Hrm, didn't get used..??
   if (!m_importedParentContexts.isEmpty()) {
     kWarning() << k_funcinfo << url << " Previous parameter declaration context didn't get used??" << endl;
     DumpChain dump;
