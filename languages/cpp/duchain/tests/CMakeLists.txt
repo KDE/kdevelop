@@ -23,8 +23,15 @@ set(kdevcppduchain_SRCS
     ../../duchain/ducontext.cpp
     ../../duchain/topducontext.cpp
     ../../duchain/definition.cpp
+    ../../duchain/classmemberdefinition.cpp
+    ../../duchain/classfunctiondefinition.cpp
     ../../duchain/definitionuse.cpp
     ../../duchain/dumpchain.cpp
+    ../../duchain/typesystem.cpp
+    ../../duchain/typebuilder.cpp
+    ../../duchain/cpptypes.cpp
+    ../../duchain/dumptypes.cpp
+    ../../duchain/typerepository.cpp
 )
 
 set(duchaintest_SRCS ${kdevplatform_editor_LIB_SRCS} ${kdevcppduchain_SRCS} test_duchain.cpp)

@@ -57,9 +57,6 @@ private:
   void openAbstractType(AbstractType::Ptr type, AST* node);
   void closeType();
 
-  void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);
-  void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);
-
   inline AbstractType::Ptr currentAbstractType() { return m_typeStack.top(); }
 
   template <class T>

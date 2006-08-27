@@ -18,6 +18,8 @@ set(kdevcppduchain_SRCS
     duchain/ducontext.cpp
     duchain/topducontext.cpp
     duchain/definition.cpp
+    duchain/classmemberdefinition.cpp
+    duchain/classfunctiondefinition.cpp
     duchain/definitionuse.cpp
     duchain/dumpchain.cpp
     duchain/typesystem.cpp

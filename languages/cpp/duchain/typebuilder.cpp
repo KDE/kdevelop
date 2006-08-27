@@ -236,15 +236,7 @@ void TypeBuilder::visitTypedef(TypedefAST* node)
 
 void TypeBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
 {
-  if (CppClassType::Ptr classType = currentType<CppClassType>()) {
-    openType(CppClassFunctionType::Ptr(new CppClassFunctionType(classType)), node);
-
-  } else {
-    openType(FunctionType::Ptr(new FunctionType()), node);
-  }
-
-  parseStorageSpecifiers(node->storage_specifiers);
-  parseFunctionSpecifiers(node->function_specifiers);
+  openType(FunctionType::Ptr(new FunctionType()), node);
 
   TypeBuilderBase::visitFunctionDefinition(node);
 
@@ -253,13 +245,7 @@ void TypeBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
 
 void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
-  if (CppClassType::Ptr classType = currentType<CppClassType>())
-    openType(CppClassFunctionType::Ptr(new CppClassFunctionType(classType)), node);
-  else
-    openType(FunctionType::Ptr(new FunctionType()), node);
-
-  parseStorageSpecifiers(node->storage_specifiers);
-  parseFunctionSpecifiers(node->function_specifiers);
+  openType(FunctionType::Ptr(new FunctionType()), node);
 
   TypeBuilderBase::visitSimpleDeclaration(node);
 
@@ -273,63 +259,6 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
   TypeBuilderBase::visitPtrOperator(node);
 
   closeType();
-}
-
-void TypeBuilder::parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers)
-{
-  if (CppClassMemberType* memberType = dynamic_cast<CppClassMemberType*>(currentAbstractType().data())) {
-    const ListNode<std::size_t> *it = storage_specifiers->toFront();
-    const ListNode<std::size_t> *end = it;
-    do {
-      int kind = m_editor->parseSession()->token_stream->kind(it->element);
-      switch (kind) {
-        case Token_friend:
-          memberType->setFriend(true);
-          break;
-        case Token_auto:
-          memberType->setAuto(true);
-          break;
-        case Token_register:
-          memberType->setRegister(true);
-          break;
-        case Token_static:
-          memberType->setStatic(true);
-          break;
-        case Token_extern:
-          memberType->setExtern(true);
-          break;
-        case Token_mutable:
-          memberType->setMutable(true);
-          break;
-      }
-
-      it = it->next;
-    } while (it != end);
-  }
-}
-
-void TypeBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers)
-{
-  if (CppClassFunctionType::Ptr functionType = currentType<CppClassFunctionType>()) {
-    const ListNode<std::size_t> *it = function_specifiers->toFront();
-    const ListNode<std::size_t> *end = it;
-    do {
-      int kind = m_editor->parseSession()->token_stream->kind(it->element);
-      switch (kind) {
-        case Token_inline:
-          functionType->setInline(true);
-          break;
-        case Token_virtual:
-          functionType->setVirtual(true);
-          break;
-        case Token_explicit:
-          functionType->setExplicit(true);
-          break;
-      }
-
-      it = it->next;
-    } while (it != end);
-  }
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

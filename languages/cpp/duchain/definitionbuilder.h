@@ -50,6 +50,8 @@ protected:
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
   virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST*);
   virtual void visitPtrOperator(PtrOperatorAST*);
+  virtual void visitFunctionDefinition(FunctionDefinitionAST*);
+  virtual void visitSimpleDeclaration(SimpleDeclarationAST*);
 
 private:
   /**
@@ -57,10 +59,12 @@ private:
    * Returns the new context created by this definition.
    * \param range provide a valid AST here if name is null
    */
-  Definition* openDefinition(NameAST* name, AST* range = 0);
+  Definition* openDefinition(NameAST* name, AST* range, bool isFunction = false);
   void closeDefinition();
 
-  void parseConstVolatile(const ListNode<std::size_t> *cv);
+  void parseConstVolatile(const ListNode<std::size_t>* cv);
+  void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);
+  void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);
 
   inline Definition* currentDefinition() const { return m_definitionStack.top(); }
 
