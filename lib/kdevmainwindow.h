@@ -38,11 +38,6 @@ namespace KParts
 class MainWindow;
 }
 
-namespace KSettings
-{
-class Dialog;
-}
-
 class Context;
 
 class KDevPlugin;
@@ -131,7 +126,7 @@ private Q_SLOTS:
     void keyBindings();
     void configureNotifications();
     void configureEditors();
-    void settings();
+    void settingsDialog();
     void activeProcessChanged( KDevPlugin *plugin, bool b );
     void documentActivated( KDevDocument *document );
     void stopPopupActivated( int );

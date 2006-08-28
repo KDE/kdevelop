@@ -39,7 +39,6 @@ Boston, MA 02110-1301, USA.
 #include <ktoolbarpopupaction.h>
 
 #include <knotifydialog.h>
-#include <ksettings/dialog.h>
 
 #include "kdevcore.h"
 #include "kdevconfig.h"
@@ -58,16 +57,13 @@ class KDevMainWindowPrivate
 public:
     KDevMainWindowPrivate()
             : mode( KDevMainWindow::DockedMode ),
-            center( 0 ),
-            settingsDialog( 0 )
+            center( 0 )
     {}
 
     KDevMainWindow::UIMode mode;
 
     QStackedWidget *center;
     QPointer<QWidget> centralPlugin;
-
-    KSettings::Dialog *settingsDialog;
 
     QList<KDevPlugin*> activeProcesses;
 };
@@ -117,7 +113,7 @@ void KDevMainWindow::setupActions()
 
     QString app = qApp->applicationName();
     QString text = i18n( "Configure %1" ).arg( app );
-    action = KStdAction::preferences( this, SLOT( settings() ),
+    action = KStdAction::preferences( this, SLOT( settingsDialog() ),
                                       actionCollection(), "settings_configure" );
     action->setToolTip( text );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
@@ -322,7 +318,7 @@ void KDevMainWindow::removeDocument( KDevDocument *document )
 
     switch ( d->mode )
     {
-    case TopLevelMode:            //FIXME
+    case TopLevelMode:             //FIXME
         break;
     case DockedMode:
         d->center->removeWidget( document->part() ->widget() );
@@ -593,16 +589,10 @@ void KDevMainWindow::configureNotifications()
     KNotifyDialog::configure( this, "Notification Configuration Dialog" );
 }
 
-void KDevMainWindow::settings()
+
+void KDevMainWindow::settingsDialog()
 {
-    if ( !d->settingsDialog )
-        if (instance()->instanceName() == "kdevelop") 
-            d->settingsDialog = new KSettings::Dialog(
-                                    KSettings::Dialog::Static, this );
-        else
-            d->settingsDialog = new KSettings::Dialog(QStringList("kdevelop"),
-                                    KSettings::Dialog::Static, this );
-    d->settingsDialog->show();
+    KDevConfig::settingsDialog();
 }
 
 void KDevMainWindow::configureEditors()
@@ -733,7 +723,7 @@ void KDevMainWindow::switchToDockedMode()
     if ( d->mode == DockedMode )
         return ;
 
-//     setUpdatesEnabled( false );
+    //     setUpdatesEnabled( false );
 
     switchToNeutralMode();
 
@@ -782,7 +772,7 @@ void KDevMainWindow::switchToDockedMode()
         dock->show();
     }
 
-//     setUpdatesEnabled( true );
+    //     setUpdatesEnabled( true );
 }
 
 void KDevMainWindow::switchToTopLevelMode()
@@ -790,7 +780,7 @@ void KDevMainWindow::switchToTopLevelMode()
     if ( d->mode == TopLevelMode )
         return ;
 
-//     setUpdatesEnabled( false );
+    //     setUpdatesEnabled( false );
 
     switchToNeutralMode();
 
@@ -840,7 +830,7 @@ void KDevMainWindow::switchToTopLevelMode()
         widget->show();
     }
 
-//     setUpdatesEnabled( true );
+    //     setUpdatesEnabled( true );
 
     //     Qt::WindowFlags flags = windowFlags();
     //     flags |= Qt::WindowStaysOnTopHint;

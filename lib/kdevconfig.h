@@ -21,7 +21,11 @@ Boston, MA 02110-1301, USA.
 #define KDEVCONFIG_H
 
 #include <QObject>
+
 #include <kconfig.h>
+#include <kstaticdeleter.h>
+#include <kcmultidialog.h>
+#include <ksettings/dialog.h>
 
 #include "kdevexport.h"
 
@@ -31,12 +35,26 @@ Developers using the KDevelop API should use these config objects instead of
 the standard KGlobal::config object.  Again, DO NOT USE KGlobal::config() as
 it can cause unexpected syncing issues.
 */
-class KDEVINTERFACES_EXPORT KDevConfig: public QObject
+class KDEVINTERFACES_EXPORT KDevConfig
 {
-    Q_OBJECT
 public:
-    KDevConfig( QObject *parent = 0 );
+    enum Mode
+    {
+        Standard,
+        LocalProject,
+        GlobalProject
+    };
+
+    KDevConfig();
     virtual ~KDevConfig();
+
+    /**
+     * Used by KCM dialogs to determine which file to save settings to.
+     * @return the Mode describing the file to save settings to.
+     */
+    static Mode mode();
+
+    static void settingsDialog();
 
     /**
      * @return A pointer to the standard config object.  This object will point
@@ -91,6 +109,28 @@ public:
      * @return A shared pointer to the global project config object.
      */
     static KSharedConfig::Ptr sharedGlobalProject();
+};
+
+class KDevConfigPrivate: public QObject
+{
+    Q_OBJECT
+    friend class KStaticDeleter<KDevConfigPrivate>;
+public:
+    static KDevConfigPrivate *self();
+    static KDevConfigPrivate *s_private;
+    KDevConfig::Mode mode;
+    KSettings::Dialog *settingsDialog;
+
+    void setMode( KDevConfig::Mode m );
+
+public Q_SLOTS:
+    void local();
+    void shared();
+    void global();
+
+private:
+    KDevConfigPrivate();
+    ~KDevConfigPrivate();
 };
 
 #endif

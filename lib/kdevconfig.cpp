@@ -19,18 +19,125 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevconfig.h"
 
+#include <kmenu.h>
+#include <klocale.h>
 #include <kglobal.h>
 #include <kinstance.h>
 
+#include <kcmultidialog.h>
+#include <ksettings/dialog.h>
+
 #include "kdevcore.h"
+#include "kdevmainwindow.h"
 #include "kdevprojectcontroller.h"
 
-KDevConfig::KDevConfig( QObject *parent )
-        : QObject( parent )
+static KStaticDeleter<KDevConfigPrivate> s_deleter;
+
+KDevConfigPrivate *KDevConfigPrivate::s_private = 0;
+
+KDevConfigPrivate::KDevConfigPrivate()
+        : QObject( 0 ),
+        mode( KDevConfig::Standard ),
+        settingsDialog( 0 )
+{}
+
+KDevConfigPrivate::~KDevConfigPrivate()
+{
+    delete settingsDialog;
+}
+
+KDevConfigPrivate *KDevConfigPrivate::self()
+{
+    if ( !s_private )
+        s_deleter.setObject( s_private, new KDevConfigPrivate );
+    return s_private;
+}
+
+void KDevConfigPrivate::local()
+{
+    setMode( KDevConfig::LocalProject );
+}
+
+void KDevConfigPrivate::shared()
+{
+    setMode( KDevConfig::GlobalProject );
+}
+
+void KDevConfigPrivate::global()
+{
+    setMode( KDevConfig::Standard );
+}
+
+void KDevConfigPrivate::setMode( KDevConfig::Mode m )
+{
+    mode = m;
+    switch ( mode )
+    {
+    case KDevConfig::Standard:
+        settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Standard" ) );
+        break;
+    case KDevConfig::LocalProject:
+        settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Local Project" ) );
+        break;
+    case KDevConfig::GlobalProject:
+        settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Global Project" ) );
+        break;
+    default:
+        break;
+    }
+}
+
+#define d (KDevConfigPrivate::self())
+
+KDevConfig::KDevConfig()
 {}
 
 KDevConfig::~KDevConfig()
 {}
+
+KDevConfig::Mode KDevConfig::mode()
+{
+    return d->mode;
+}
+
+// void KDevConfig::setMode( KDevConfig::Mode m )
+// {
+//     d->setMode( m );
+// }
+
+// void KDevConfig::setAllowedModes( KDevConfig::Mode m )
+// {
+// }
+
+void KDevConfig::settingsDialog()
+{
+    if ( !d->settingsDialog )
+    {
+        if ( KDevCore::mainWindow() ->instance() ->instanceName() == "kdevelop" )
+            d->settingsDialog = new KSettings::Dialog(
+                                    KSettings::Dialog::Static, KDevCore::mainWindow() );
+        else
+            d->settingsDialog = new KSettings::Dialog( QStringList( "kdevelop" ),
+                                KSettings::Dialog::Static, KDevCore::mainWindow() );
+
+        KCMultiDialog *dialog = d->settingsDialog->dialog();
+        dialog->setButtons( KDialog::Help | KDialog::Default | KDialog::Cancel
+                            | KDialog::Apply | KDialog::Ok | KDialog::User2 );
+
+        KMenu *m = new KMenu;
+        QAction *action;
+        action = m->addAction( i18n( "Local Project" ) );
+        QObject::connect( action, SIGNAL( triggered() ), d, SLOT( local() ) );
+        action = m->addAction( i18n( "Global Project" ) );
+        QObject::connect( action, SIGNAL( triggered() ), d, SLOT( shared() ) );
+        action = m->addAction( i18n( "Standard" ) );
+        QObject::connect( action, SIGNAL( triggered() ), d, SLOT( global() ) );
+        dialog->setButtonText( KDialog::User2, i18n( "Standard" ) );
+        dialog->setButtonMenu( KDialog::User2, m );
+    }
+
+    d->settingsDialog->show();
+}
 
 KConfig *KDevConfig::standard()
 {

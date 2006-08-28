@@ -10,6 +10,7 @@ set( kdev_config_SRC
     kdevenvpreferences.cpp
     kdevenvwidget.cpp
     kdevbgpreferences.cpp
+#     kdevpluginpreferences.cpp
 )
 set( kdevelop_UI
     projectsettings.ui
@@ -27,6 +28,7 @@ set( kdevelop_DESKTOP
     kcm_kdevui_settings.desktop
     kcm_kdevenv_settings.desktop
     kcm_kdevbg_settings.desktop
+#     kcm_kdevplugin_settings.desktop
 )
 
 kde4_automoc( ${kdev_config_SRC} )
