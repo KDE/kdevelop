@@ -147,6 +147,12 @@ JobCollection::~JobCollection()
     delete d; d = 0;
 }
 
+void JobCollection::requestAbort()
+{
+    for (int i = 0; i < jobListLength(); ++i)
+        jobAt(i)->requestAbort();
+}
+
 void JobCollection::addJob ( Job *job )
 {
     REQUIRE( d->weaver == 0 );

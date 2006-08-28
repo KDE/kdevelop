@@ -355,7 +355,7 @@ void WeaverImpl::finish()
     const int MaxWaitMilliSeconds = 2000;
 #endif
 
-    while ( !isIdle() )
+    while ( !isEmpty() )
     {
         debug (2, "WeaverImpl::finish: not done, waiting.\n" );
         QMutexLocker l( m_finishMutex );

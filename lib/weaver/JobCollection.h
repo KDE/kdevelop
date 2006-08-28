@@ -50,6 +50,8 @@ namespace ThreadWeaver {
         /** Overload to manage recursive sets. */
         bool canBeExecuted();
 
+        virtual void requestAbort();
+
     public slots:
         /** Stop processing, dequeue all remaining Jobs.
             job is supposed to be an element of the collection.
@@ -91,7 +93,7 @@ namespace ThreadWeaver {
             Note: This will not dequeue the collection itself.
         */
         void dequeueElements();
-      
+
       class Private;
       Private* d;
 
