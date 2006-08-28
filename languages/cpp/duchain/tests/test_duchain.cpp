@@ -260,13 +260,13 @@ private slots:
 
   void testIntegralTypes()
   {
-    QByteArray method("const unsigned int i, k; volatile long double j;");
+    QByteArray method("const unsigned int i, k; volatile long double j; int* l; double * const * m; const int& n = l;");
 
     DUContext* top = parse(method, DumpNone);
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 0);
-    QCOMPARE(top->localDefinitions().count(), 3);
+    QCOMPARE(top->localDefinitions().count(), 6);
     QVERIFY(top->localScopeIdentifier().isEmpty());
 
     Definition* defI = top->localDefinitions().first();
@@ -290,6 +290,38 @@ private slots:
     QCOMPARE(defJ->type<CppIntegralType>()->typeModifiers(), CppIntegralType::ModifierLong);
     QVERIFY(!defJ->type<CppIntegralType>()->isConstant());
     QVERIFY(defJ->type<CppIntegralType>()->isVolatile());
+
+    Definition* defL = top->localDefinitions()[3];
+    QCOMPARE(defL->identifier(), Identifier("l"));
+    QVERIFY(defL->type<CppPointerType>());
+    QCOMPARE(CppIntegralType::Ptr::dynamicCast(defL->type<CppPointerType>()->baseType()), TypeRepository::self()->integral(CppIntegralType::TypeInt));
+    QVERIFY(!defL->type<CppPointerType>()->isConstant());
+    QVERIFY(!defL->type<CppPointerType>()->isVolatile());
+
+    Definition* defM = top->localDefinitions()[4];
+    QCOMPARE(defM->identifier(), Identifier("m"));
+    CppPointerType::Ptr firstpointer = defM->type<CppPointerType>();
+    QVERIFY(firstpointer);
+    QVERIFY(!firstpointer->isConstant());
+    QVERIFY(!firstpointer->isVolatile());
+    CppPointerType::Ptr secondpointer = CppPointerType::Ptr::dynamicCast(firstpointer->baseType());
+    QVERIFY(secondpointer);
+    QVERIFY(secondpointer->isConstant());
+    QVERIFY(!secondpointer->isVolatile());
+    CppIntegralType::Ptr base = CppIntegralType::Ptr::dynamicCast(secondpointer->baseType());
+    QVERIFY(base);
+    QCOMPARE(base->integralType(), CppIntegralType::TypeDouble);
+    QVERIFY(!base->isConstant());
+    QVERIFY(!base->isVolatile());
+
+    Definition* defN = top->localDefinitions()[5];
+    QCOMPARE(defN->identifier(), Identifier("n"));
+    QVERIFY(defN->type<CppReferenceType>());
+    base = CppIntegralType::Ptr::dynamicCast(defN->type<CppReferenceType>()->baseType());
+    QVERIFY(base);
+    QCOMPARE(base->integralType(), CppIntegralType::TypeInt);
+    QVERIFY(base->isConstant());
+    QVERIFY(!base->isVolatile());
 
     release(top);
   }
@@ -365,7 +397,7 @@ private slots:
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("struct A { int i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; };");
 
-    DUContext* top = parse(method);//, DumpNone);
+    DUContext* top = parse(method, DumpNone);
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 1);

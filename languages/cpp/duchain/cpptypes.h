@@ -114,6 +114,16 @@ public:
   virtual QString toString() const;
 };
 
+class CppReferenceType : public ReferenceType, public CppCVType
+{
+public:
+  typedef KSharedPtr<CppReferenceType> Ptr;
+
+  CppReferenceType(Cpp::CVSpecs spec = Cpp::CVNone);
+
+  virtual QString toString() const;
+};
+
 class CppClassType;
 
 class CppClassType : public StructureType, public CppCVType

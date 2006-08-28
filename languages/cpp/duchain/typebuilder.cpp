@@ -283,11 +283,26 @@ void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 
 void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 {
-  openType(CppPointerType::Ptr(new CppPointerType(parseConstVolatile(node->cv))), node);
+  bool typeOpened = false;
+  QString op = m_editor->tokenToString(node->op);
+  if (!op.isEmpty())
+    if (op[0] == '&') {
+      CppReferenceType::Ptr pointer(new CppReferenceType(parseConstVolatile(node->cv)));
+      pointer->setBaseType(lastType());
+      openType(pointer, node);
+      typeOpened = true;
+
+    } else if (op[0] == '*') {
+      CppPointerType::Ptr pointer(new CppPointerType(parseConstVolatile(node->cv)));
+      pointer->setBaseType(lastType());
+      openType(pointer, node);
+      typeOpened = true;
+    }
 
   TypeBuilderBase::visitPtrOperator(node);
 
-  closeType();
+  if (typeOpened)
+    closeType();
 }
 
 AbstractType::Ptr TypeBuilder::lastType() const

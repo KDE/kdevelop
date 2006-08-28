@@ -191,3 +191,13 @@ QString CppPointerType::toString() const
 {
   return QString("%1%2").arg(cvString()).arg(PointerType::toString());
 }
+
+CppReferenceType::CppReferenceType(Cpp::CVSpecs spec)
+  : CppCVType(spec)
+{
+}
+
+QString CppReferenceType::toString() const
+{
+  return QString("%1%2").arg(cvString()).arg(ReferenceType::toString());
+}
