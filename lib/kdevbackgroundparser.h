@@ -29,6 +29,7 @@
 #include <QPair>
 #include <QMutex>
 #include <QHash>
+#include <QPointer>
 
 namespace ThreadWeaver
 {
@@ -118,7 +119,7 @@ private:
     // A list of cached models when parsing a large amount of files.
     CodeModelCache m_modelCache;
 
-    QProgressBar *m_progressBar;
+    QPointer<QProgressBar> m_progressBar;
 
     ThreadWeaver::Weaver* m_weaver;
 

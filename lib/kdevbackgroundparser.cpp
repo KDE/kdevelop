@@ -56,8 +56,8 @@
 
 KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         : QObject( parent ),
-        m_modelsToCache( 0 ),
         m_delay( 500 ),
+        m_modelsToCache( 0 ),
         m_progressBar( new QProgressBar ),
         m_weaver( new Weaver( this, 2 ) ),
         m_dependencyPolicy( new KDevParserDependencyPolicy )
@@ -72,11 +72,19 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
 
 KDevBackgroundParser::~KDevBackgroundParser()
 {
+    m_weaver->dequeue();
     m_weaver->requestAbort();
     m_weaver->finish();
 
-    //FIXME for some reason the dependency policy doesn't get unset from all jobs... :(
-    //delete m_dependencyPolicy;
+    // Release dequeued jobs
+    QHashIterator<KUrl, KDevParseJob*> it = m_parseJobs;
+    while (it.hasNext()) {
+        it.next();
+        it.value()->setBackgroundParser(0);
+        delete it.value();
+    }
+
+    delete m_dependencyPolicy;
 }
 
 void KDevBackgroundParser::clear(QObject* parent)
@@ -98,8 +106,8 @@ void KDevBackgroundParser::init()
 
     KConfig * config = KDevConfig::standard();
     config->setGroup( "Background Parser" );
-    bool enabled = config->readBoolEntry( "Enabled", true );
-    m_delay = config->readNumEntry( "Delay", 500 );
+    bool enabled = config->readEntry( "Enabled", true );
+    m_delay = config->readEntry( "Delay", 500 );
 
     if ( enabled )
         resume();
@@ -159,6 +167,7 @@ void KDevBackgroundParser::removeDocument( const KUrl &url )
 {
     if ( !url.isValid() ) {
         kWarning() << k_funcinfo << "Invalid url " << url << endl;
+        url.isValid();
         return;
     }
 
@@ -219,12 +228,16 @@ void KDevBackgroundParser::parseDocuments()
 
     // Ok, enqueueing is fine because m_parseJobs contains all of the jobs now
 
-    foreach (KDevParseJob* parse, jobs)
+    foreach (KDevParseJob* parse, jobs) {
+        //kDebug() << k_funcinfo << "Enqueue " << parse << endl;
         m_weaver ->enqueue( parse );
+    }
 }
 
 void KDevBackgroundParser::parseComplete( Job *job )
 {
+    //kDebug() << k_funcinfo << "Complete " << job << " success? " << job->success() << endl;
+
     if ( KDevParseJob * parseJob = qobject_cast<KDevParseJob*>( job ) )
     {
         m_parseJobs.remove(parseJob->document());
@@ -303,7 +316,8 @@ void KDevBackgroundParser::suspend()
 
     m_weaver->suspend();
 
-    m_progressBar->hide();
+    if (m_progressBar)
+        m_progressBar->hide();
 }
 
 void KDevBackgroundParser::resume()
@@ -318,7 +332,7 @@ void KDevBackgroundParser::resume()
 
     m_weaver->resume();
 
-    if (m_weaver->queueLength())
+    if (m_weaver->queueLength() && m_progressBar)
         m_progressBar->show();
 }
 

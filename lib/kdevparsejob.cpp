@@ -123,14 +123,6 @@ void KDevParseJob::addJob(Job* job)
     JobSequence::addJob(job);
 }
 
-void KDevParseJob::removeJob(Job* job)
-{
-    if (backgroundParser())
-        job->removeQueuePolicy(backgroundParser()->dependencyPolicy());
-
-    JobSequence::addJob(job);
-}
-
 KDevBackgroundParser* KDevParseJob::backgroundParser() const
 {
     return m_backgroundParser;

@@ -88,7 +88,6 @@ public:
 
     /// Overridden to set the DependencyPolicy on subjobs.
     virtual void addJob(Job* job);
-    virtual void removeJob(Job* job);
 
     /**
      * Attempt to add \a dependency as a dependency of \a actualDependee, which must
@@ -104,8 +103,7 @@ protected:
     QString m_errorMessage;
     KDevBackgroundParser* m_backgroundParser;
 
-    // Doesn't need to be locked, as missing an abort request isn't the end of the world
-    bool m_abortRequested : 1;
+    volatile bool m_abortRequested : 1;
     bool m_aborted : 1;
 };
 

@@ -30,6 +30,7 @@ Boston, MA 02110-1301, USA.
 /** This class is a stub at the moment.  It works when you have google sparsehash installed.*/
 
 struct KDevAST;
+class QMutex;
 
 #define NO_GOOGLE_SPARSEHASH
 
@@ -77,6 +78,8 @@ private:
 #else
     QHash<KUrl, KDevAST*> m_astHash;
 #endif
+
+    QMutex* m_mutex;
 };
 
 #endif
