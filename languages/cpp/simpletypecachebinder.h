@@ -15,7 +15,6 @@
 #ifndef __SIMPLETYPECACHEBINDER_H__
 #define __SIMPLETYPECACHEBINDER_H__
 
-
 #include "simpletypenamespace.h"
 
 template <class Base>
@@ -167,7 +166,6 @@ public:
     }
   }
   
-  
   virtual SimpleTypeImpl::LocateResult locateType( TypeDesc name , SimpleTypeImpl::LocateMode mode, int dir,  SimpleTypeImpl::MemberInfo::MemberType typeMask )
   {
     if( !secondaryActive ) return  Base::locateType( name, mode, dir, typeMask );
@@ -234,7 +232,6 @@ protected:
     invalidatePrimaryCache();
     invalidateSecondaryCache();
   };
-
 
   /*  
 private:

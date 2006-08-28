@@ -19,7 +19,6 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #include "cppevaluation.h"
 #include "simplecontext.h"
 #include "safetycounter.h"
@@ -32,6 +31,7 @@ OperatorSet AllOperators;
 
 ///These lines register the operators to the list of all operators
 RegisterOperator< DotOperator > DotReg( AllOperators );
+RegisterOperator< NestedTypeOperator > NestedReg( AllOperators );
 RegisterOperator< ArrowOperator > ArrowReg( AllOperators );
 RegisterOperator< StarOperator > StarReg( AllOperators );
 RegisterOperator< AddressOperator > AddressReg( AllOperators );
@@ -96,8 +96,6 @@ OperatorIdentification UnaryOperator::identify( QString& str ) {
   return ret;
 }
 
-
-
 EvaluationResult UnaryOperator::apply( QValueList<EvaluationResult> params, QValueList<EvaluationResult> innerParams ) {
   if( !checkParams( params ) ) {
   log( QString("parameter-check failed: %1 params: ").arg( params.size() ) + printTypeList( params ) );
@@ -112,6 +110,10 @@ EvaluationResult UnaryOperator::apply( QValueList<EvaluationResult> params, QVal
     }
     return t;
   }
+}
+
+EvaluationResult NestedTypeOperator::unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) {
+  return param;
 }
 
 EvaluationResult ArrowOperator::unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) {
@@ -142,12 +144,10 @@ EvaluationResult StarOperator::unaryApply( EvaluationResult param, const QValueL
   };
 }
 
-
 EvaluationResult AddressOperator::unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) {
   param->setPointerDepth( param->pointerDepth() + 1 );
   return param;
 }
-
 
 OperatorIdentification UnaryParenOperator::identify( QString& str ) {
   OperatorIdentification ret;
@@ -222,7 +222,6 @@ ExpressionEvaluation::ExpressionEvaluation( CppCodeCompletion* data, ExpressionI
           //m_expr = m_data->splitExpression( expr.expr() ).join("");
 }
 
-
 EvaluationResult ExpressionEvaluation::evaluate() {
   EvaluationResult res;
   res = evaluateExpressionInternal( m_expr.expr(), m_ctx->global(), m_ctx, m_ctx, m_expr.canBeTypeExpression() );
@@ -247,7 +246,6 @@ EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr,
   }
   
   ifVerboseMajor( dbgMajor() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl );
-  
   
   expr = expr.stripWhiteSpace();
   
@@ -333,35 +331,32 @@ EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr,
       return applied;
     } else {
       ifVerboseMajor( dbgMajor() << " could not find an operator in " << expr << endl );
-      QStringList lst; lst << expr;
       return evaluateAtomicExpression( expr, scope, ctx );
     }
   }
   
         //dbgMajor() << " could not evaluate " << expr << endl;
   ifVerboseMajor( dbgMajor() << "evaluating \"" << expr << "\" as atomic expression" << endl );
-  QStringList lst = m_data->splitExpression( expr );
-  EvaluationResult res = evaluateAtomicExpression( lst, scope, ctx, canBeTypeExpression );
+  EvaluationResult res = evaluateAtomicExpression( expr, scope, ctx, canBeTypeExpression );
   return res;
 }
 
-///This function needs a clean workover.
-EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exprList, EvaluationResult scope, SimpleContext * ctx, bool canBeTypeExpression ) {
+/**This function needs a clean workover.
+ * An atomic expression is one that only consists of a type-name, or a function- vor variable-name(may include '::')
+ */
+EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QString expr, EvaluationResult scope, SimpleContext * ctx, bool canBeTypeExpression ) {
   LogDebug d( "#evt#");
   if( !safetyCounter || !d ) return SimpleType();
 	bool canBeItemExpression = true; ///To be implemented
 	canBeTypeExpression = true; ///Shut this always on for now
 
-  ifVerboseMajor( dbgMajor() << "evaluateAtomicExpression(\"" << exprList.join(" ") << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl );
+  ifVerboseMajor( dbgMajor() << "evaluateAtomicExpression(\"" << expr << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl );
 
-	EvaluationResult bestRet; ///This helps to get at least a trace of unresolved types
+	EvaluationResult bestRet;
+  int bestDepth = 0;
 	
-  if( exprList.isEmpty() )
+  if( expr.isEmpty() )
     return scope;
-  
-  QString currentExpr = exprList.front().stripWhiteSpace();
-  
-	exprList.pop_front();
   
   TypePointer searchIn = scope->resolved();
   if( !searchIn ) {
@@ -369,87 +364,84 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QStringList exp
     return EvaluationResult();
   }
 
-  QStringList split = splitType( currentExpr );
-	currentExpr = split.front();
-	
 	if( ctx )
 		searchIn = ctx->container().get();
-
-	///@todo correctly handle shadowing of variables etc.
-                                                                                                           
-	///Local variables have the highest priority
-	if( ctx && split.count() == 1 && exprList.count() == 0 && canBeItemExpression ) {
-			// find the variable in the current context
-		SimpleVariable var = ctx->findVariable( currentExpr );
 	
-		if ( var.type ) {
-			EvaluationResult res = evaluateAtomicExpression(  exprList, EvaluationResult( ctx->container()->locateDecType( var.type ), var.toDeclarationInfo( "current_file" )) );
-			return res;
+	if( ctx && canBeItemExpression ) {
+		///Search for variables and functions, first in the current context, and then through the container-classes upwards.
+			// find the variable in the current context
+		SimpleVariable var = ctx->findVariable( expr );
+	
+    if ( var.type ) {
+			EvaluationResult ret = EvaluationResult( ctx->container()->locateDecType( var.type ), var.toDeclarationInfo( "current_file" ));
+      ret.expr.t = ExpressionInfo::NormalExpression;
+      return ret;
+    }
+	
+		SimpleType current = ctx->container();
+	
+		SimpleTypeImpl::TypeOfResult type;
+	
+		SafetyCounter s( 20 );
+		bool ready = false;
+    int depth = 0; 
+    
+		while( !ready && s )
+		{
+			if( !current ) ready = true;
+	
+			type = current->typeOf( expr );
+      if ( type) {
+				bestRet = EvaluationResult( type.type, type.decl );
+        bestDepth = depth;
+        bestRet.expr = expr;
+        bestRet.expr.t = ExpressionInfo::NormalExpression;
+      }
+
+      depth++;
+			if( !ready ) current = current->parent();
 		}
 	}
-
 	/*
   if( scope.expr.t & ExpressionInfo::TypeExpression )
     canBeTypeExpression = true;*/
-  
-  
-	if( canBeTypeExpression || split.count() > 1 || exprList.count() > 0 ) {
-		///Search for Types
-		SimpleTypeImpl::LocateResult type = searchIn->locateDecType( currentExpr );
 
-		if ( type && type->resolved() )
-		{
-			if( !split.isEmpty() ) split.pop_front();
-			EvaluationResult ret = evaluateAtomicExpression( split + exprList, type, 0, true );
-			ret.expr.t = ExpressionInfo::TypeExpression;
-			return ret;
-		} else {
+  if( canBeItemExpression && (!bestRet || bestDepth > 0 ) ) {
+  ///Since it's the last element of a scope-chain, also search for functions and variables.
+    SimpleTypeImpl::TypeOfResult res = searchIn->typeOf( expr );
+    
+    if( res ) {
+      bestRet = EvaluationResult( res.type, res.decl );
+      bestDepth = 0;
+    }
+  }
+	if( canBeTypeExpression ) {
+		///Search for Types
+		SimpleTypeImpl::LocateResult type = searchIn->locateDecType( expr );
+
+    if( !bestRet || type.depth() < bestRet.resultType.depth() ) {
+    /*if ( type && type->resolved() )
+    {*/
+      EvaluationResult ret = type;
+      ret.expr = expr;
+      ret.expr.t = ExpressionInfo::TypeExpression;
+      bestRet = ret;
+    }
+    /*} else {
 			bestRet = EvaluationResult( type );
 			QStringList s = split+exprList;
 			s.pop_front();
 			if( !s.isEmpty() )
 				bestRet->append( new TypeDescShared( s.join("::") ) );
-		}
+    }*/
 	}
 
-		///Search for variables and functions, upwards from the current context
-	if( ctx && split.count() == 1 && exprList.count() == 0 && canBeItemExpression ) {
-		SimpleType current = ctx->container();
-		
-		SimpleTypeImpl::TypeOfResult type;
-		
-		SafetyCounter s( 20 );
-		bool ready = false;
-		while( !ready && s )
-		{
-			if( !current ) ready = true;
-			
-			type = current->typeOf( currentExpr );
-			if ( type)
-				return EvaluationResult( type.type, type.decl );
-			
-			if( !ready ) current = current->parent();
-		}
-	}
+  if( bestRet )
+    return bestRet;
 	
-
-	if( split.count() == 1 && exprList.count() == 0 && canBeItemExpression ) {
-	///Since it's the last element of a scope-chain, also search for functions and variables.
-		SimpleTypeImpl::TypeOfResult res = searchIn->typeOf( currentExpr );
-		
-		if( res )
-			return EvaluationResult( res.type, res.decl );
-	}
-
-	if( !canBeTypeExpression && !scope ) {
-		return evaluateAtomicExpression( split + exprList, scope, ctx, true );
-	} else {
-		ifVerboseMajor( dbgMajor() << "\"" << scope.resultType->fullNameChain() << "\"could not locate " << currentExpr << endl );
-		return bestRet;
-	}
+  ifVerboseMajor( dbgMajor() << "evaluateAtomicExpression: \"" << scope.resultType->fullNameChain() << "\"could not locate " << expr << endl );
+  return  bestRet;
 }
-
-
 }
 
 // kate: indent-mode csands; tab-width 2;

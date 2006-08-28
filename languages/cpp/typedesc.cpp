@@ -28,19 +28,19 @@ const char* TypeDesc::functionMark = "[function] ";
 
 using namespace StringHelpers;
 
-LocateResult::LocateResult()  : m_desc( 0 ), m_resolutionCount(0), m_flags( NoFlag), m_trace( 0 ) {
+LocateResult::LocateResult()  : m_desc( 0 ), m_resolutionCount(0), m_flags( NoFlag), m_trace( 0 ), m_locateDepth( 0 ) {
 }
 
-LocateResult::LocateResult( const TypeDesc& desc ) : m_desc( new TypeDescShared( desc ) ), m_resolutionCount(0), m_flags( NoFlag), m_trace( 0 ) {
+LocateResult::LocateResult( const TypeDesc& desc ) : m_desc( new TypeDescShared( desc ) ), m_resolutionCount(0), m_flags( NoFlag), m_trace( 0 ), m_locateDepth( 0 ) {
 }
 
-LocateResult::LocateResult( const TypeDescPointer& desc ) : m_desc( desc ), m_resolutionCount(0), m_flags( NoFlag), m_trace( 0 ) {
+LocateResult::LocateResult( const TypeDescPointer& desc ) : m_desc( desc ), m_resolutionCount(0), m_flags( NoFlag), m_trace( 0 ), m_locateDepth( 0 ) {
 }
 
-LocateResult::LocateResult( TypeDescShared* desc ) : m_desc( desc ), m_resolutionCount(0), m_flags( NoFlag), m_trace( 0 ) {
+LocateResult::LocateResult( TypeDescShared* desc ) : m_desc( desc ), m_resolutionCount(0), m_flags( NoFlag), m_trace( 0 ), m_locateDepth( 0 ) {
 }
 
-LocateResult::LocateResult( const LocateResult& rhs ) : m_desc( rhs.m_desc ), m_resolutionCount( rhs.m_resolutionCount ), m_flags( rhs.m_flags ), m_trace( 0 ) {
+LocateResult::LocateResult( const LocateResult& rhs ) : m_desc( rhs.m_desc ), m_resolutionCount( rhs.m_resolutionCount ), m_flags( rhs.m_flags ), m_trace( 0 ), m_locateDepth( rhs.m_locateDepth ) {
 	if( rhs.m_trace ) m_trace = new TypeTrace( *rhs.m_trace );
 }
 

@@ -40,6 +40,7 @@ class LocateResult {
 	TypeDescPointer m_desc;
 	int m_resolutionCount;
 	ResolutionFlags m_flags;
+    int m_locateDepth; ///How far away from the beginning the type was found(counting steps upwards and steps into base-classes. Counter is stopped on the first typedef.)
 	TypeTrace* m_trace; ///pointer to the previous type in the trace-chain
 
 public:
@@ -62,6 +63,22 @@ public:
 	
 	TypeDesc& desc();
 
+    int depth() const {
+      return m_locateDepth;
+    }
+
+    ///This may be used to simply increase the depth while returning a LocateResult
+    LocateResult& increaseDepth() {
+      m_locateDepth++;
+      return *this;
+    }
+
+    ///This may be used to simply reset the depth while returning a LocateResult
+    LocateResult& resetDepth() {
+      m_locateDepth = 0;
+      return *this;
+    }
+  
 	LocateResult& operator * () {
 		return *this;
 	}

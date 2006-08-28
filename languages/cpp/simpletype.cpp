@@ -398,11 +398,11 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
 		    ret = sub->locateType( resolveTemplateParams( *name.next(), Normal ), addFlag( mode, ExcludeTemplates ), 1 ); ///since template-names cannot be referenced from outside, exclude them for the first cycle
 		    ret.increaseResolutionCount();
 		  if( ret->resolved() )
-            return ret;
+            return ret.resetDepth();
         } else {
             ifVerbose( dbg() << "\"" << str() << "\": successfully located searched type \"" << name.fullNameChain() << "\"\n" );
 	        ret->setResolved( sub.get() );
-          	return ret;
+            return ret.resetDepth();
         }
         break;
       }
@@ -446,22 +446,22 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
 	          }
 	          
 	          if( ret->resolved() )
-				return ret;
+                return ret.resetDepth();
           } else {
             ifVerbose( dbg() << "\"" << str() << "\"recursive typedef/template found: \"" << name.fullNameChain() << "\" -> \"" << mem.type.fullNameChain() << "\"" << endl );
           }
         }
         break;
       }
-	    ///A Function is treated similar as a type
+	    ///A Function is treated similar to a type
     case MemberInfo::Function:
 	{
 		if( !name.next() ) {
 			TypePointer t = mem.build();
 			if( t ) {
-				return t->desc();
+              return t->desc();
 			} else {
-				ifVerbose( dbg() <<  "\"" << str() << "\"" << ": could not build function: \"" << name.fullNameChain() << "\"" );
+			  ifVerbose( dbg() <<  "\"" << str() << "\"" << ": could not build function: \"" << name.fullNameChain() << "\"" );
 			}
 		} else {
 			ifVerbose( dbg() <<  "\"" << str() << "\"" << ": name-conflict: searched for \"" << name.fullNameChain() << "\" and found function \"" << mem.name << "\"" );
@@ -471,7 +471,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
 	    ///Currently there is no representation of a Variable as a SimpleType, so only the type of the variable is used.
     case MemberInfo::Variable:
 	{
-		return locateDecType( mem.type, remFlag( mode, ExcludeTemplates ) );
+      return locateDecType( mem.type, remFlag( mode, ExcludeTemplates ) ).resetDepth();
 	}
     }
     
@@ -486,7 +486,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
 	        if( !(*it)->resolved() ) continue;
 	        SimpleTypeImpl::LocateResult t = (*it)->resolved()->locateType( nameInBase, addFlag( addFlag( mode, ExcludeTemplates ), ExcludeParents ), dir ); ///The searched Type cannot directly be a template-param in the base-class, so ExcludeTemplates. It's forgotten early enough.
 		if( t->resolved() )
-            return t;
+          return t.increaseDepth();
           else
             if( t > ret )
               ret = t;
@@ -498,7 +498,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
     if( !scope().isEmpty() && dir != 1 && ! ( mode & ExcludeParents ) ) {
     SimpleTypeImpl::LocateResult rett = parent()->locateType( resolveTemplateParams( name, mode & ExcludeBases ? ExcludeBases : mode ), mode & ForgetModeUpwards ? Normal : mode );
 	if( rett->resolved() ) 
-        return rett;
+    return rett.increaseDepth();
       else
         if( rett > ret )
           ret = rett;
@@ -513,10 +513,10 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
 	        if( !(*it)->resolved() ) continue;
 	        SimpleTypeImpl::LocateResult t = (*it)->resolved()->locateType( baseName, addFlag( mode, ExcludeTemplates ), dir ); ///The searched Type cannot directly be a template-param in the base-class, so ExcludeTemplates. It's forgotten early enough.
 		if( t->resolved() )
-            return t;
-          else
-            if( t > ret )
-              ret = t;
+          return t.increaseDepth();
+        else
+          if( t > ret )
+            ret = t;
         }
       }
     }

@@ -226,9 +226,7 @@ public:
   NestedTypeOperator() : UnaryOperator( 18, "::", "nested-type-operator", Operator::Left ) {
   }
   
-  virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) {
-    return param;
-  }
+  virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ );
 };
 
 //RegisterOperator< NestedTypeOperator > NestedTypeReg( AllOperators ); ///This registers the operator to the list of all operators
@@ -324,7 +322,7 @@ private:
   virtual EvaluationResult evaluateExpressionInternal( QString expr, EvaluationResult scope, SimpleContext * ctx, SimpleContext* innerCtx , bool canBeTypeExpression = false );
   
     ///This does the simplest work
-  EvaluationResult evaluateAtomicExpression( QStringList exprList, EvaluationResult scope, SimpleContext * ctx  = 0, bool canBeTypeExpression = false );
+  EvaluationResult evaluateAtomicExpression( QString expr, EvaluationResult scope, SimpleContext * ctx  = 0, bool canBeTypeExpression = false );
 };
 
 
