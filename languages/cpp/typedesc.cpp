@@ -111,6 +111,8 @@ TypeTrace* LocateResult::trace() {
 	return m_trace;
 }
 
+TypeDesc::TypeDesc()  {
+}
 
 TypeDesc::TypeDesc( const QString& name )  {
  init( name );
@@ -121,94 +123,92 @@ TypeDesc::TypeDesc( const TypeDesc& rhs )  {
 }
 
 bool TypeDesc::isValidType() const {
- if( m_cleanName.find("->") != -1 || m_cleanName.contains('.') || m_cleanName.contains(' ') || m_cleanName.isEmpty() ) return false;
+	if( !m_data ) return false;
+ if( m_data->m_cleanName.find("->") != -1 || m_data->m_cleanName.contains('.') || m_data->m_cleanName.contains(' ') || m_data->m_cleanName.isEmpty() ) return false;
  
- for( TemplateParams::const_iterator it = m_templateParams.begin(); it != m_templateParams.end(); ++it ) {
+ for( TemplateParams::const_iterator it = m_data->m_templateParams.begin(); it != m_data->m_templateParams.end(); ++it ) {
   if( !(*it)->isValidType() ) return false;
  }
  
- if( m_nextType ) if( !m_nextType->isValidType() ) return false;
+ if( m_data->m_nextType ) if( !m_data->m_nextType->isValidType() ) return false;
  return true;
 }
 
 TypeDesc& TypeDesc::operator = ( const TypeDesc& rhs ) {
- m_cleanName = rhs.m_cleanName;
- m_dec = rhs.m_dec;
- m_functionDepth = rhs.m_functionDepth;
- m_nextType = rhs.m_nextType;
- m_resolved = rhs.m_resolved;
- m_pointerDepth = rhs.m_pointerDepth;
- m_templateParams = rhs.m_templateParams;
- m_flags = rhs.m_flags;
+	m_data = rhs.m_data;
  return *this;
 }
 
 int TypeDesc::depth() const {
+	if( !m_data ) return 0;
  int ret = 1;
- for( TemplateParams::const_iterator it = m_templateParams.begin(); it != m_templateParams.end(); ++it ) {
+ for( TemplateParams::const_iterator it = m_data->m_templateParams.begin(); it != m_data->m_templateParams.end(); ++it ) {
   ret = kMax( (*it)->depth() + 1, ret );
  }
  
- if( m_nextType ){
-  ret = kMax( m_nextType->depth(), ret );
+ if( m_data->m_nextType ){
+  ret = kMax( m_data->m_nextType->depth(), ret );
  }
  
  return ret;
 }
 
 int TypeDesc::length() const {
- if( !m_nextType && m_cleanName.isEmpty() ) return 0;
-return m_nextType ? 1 + m_nextType->length() : 1;
+	if( !m_data ) return 0;
+ if( !m_data->m_nextType && m_data->m_cleanName.isEmpty() ) return 0;
+return m_data->m_nextType ? 1 + m_data->m_nextType->length() : 1;
 }
 
  ///Something is wrong with this function.. so i use the string-comparison
 int TypeDesc::compare ( const TypeDesc& rhs ) const {
- 
- 
- if( m_functionDepth != rhs.m_functionDepth ) {
-  if( m_functionDepth < rhs.m_functionDepth )
+	if( m_data == rhs.m_data ) return 0;
+	if( !m_data ) return -1;
+	if( !rhs.m_data ) return 1;
+	
+ if( m_data->m_functionDepth != rhs.m_data->m_functionDepth ) {
+  if( m_data->m_functionDepth < rhs.m_data->m_functionDepth )
    return -1;
   else
    return 1;
  }
  
- if( m_pointerDepth != rhs.m_pointerDepth ) {
-  if( m_pointerDepth < rhs.m_pointerDepth )
+ if( m_data->m_pointerDepth != rhs.m_data->m_pointerDepth ) {
+  if( m_data->m_pointerDepth < rhs.m_data->m_pointerDepth )
    return -1;
   else
    return 1;
  }
  
- if( m_cleanName != rhs.m_cleanName ) {
-  if( m_cleanName < rhs.m_cleanName )
+ if( m_data->m_cleanName != rhs.m_data->m_cleanName ) {
+  if( m_data->m_cleanName < rhs.m_data->m_cleanName )
    return -1;
   else
    return 1;
  }
- if( m_templateParams.size() != rhs.m_templateParams.size() ) {
-  if( m_templateParams.size() < rhs.m_templateParams.size() )
+ if( m_data->m_templateParams.size() != rhs.m_data->m_templateParams.size() ) {
+  if( m_data->m_templateParams.size() < rhs.m_data->m_templateParams.size() )
    return -1;
   else
    return 1;
  }
  
- TemplateParams::const_iterator it2 = rhs.m_templateParams.begin();
- for( TemplateParams::const_iterator it = m_templateParams.begin(); it != m_templateParams.end() && it2 != rhs.m_templateParams.end(); ) {
+ TemplateParams::const_iterator it2 = rhs.m_data->m_templateParams.begin();
+ for( TemplateParams::const_iterator it = m_data->m_templateParams.begin(); it != m_data->m_templateParams.end() && it2 != rhs.m_data->m_templateParams.end(); ) {
   if( int cmp =  (*it)->compare(**it2) != 0 ) {
    return cmp;
   }
   ++it2; ++it;
  }
  
- if( !((bool)m_nextType) != ((bool)rhs.m_nextType) ) {
-  if( m_nextType ) 
+ if( !((bool)m_data->m_nextType) != ((bool)rhs.m_data->m_nextType) ) {
+  if( m_data->m_nextType )
    return 1;
   else
    return -1;
  }
  
- if( m_nextType && rhs.m_nextType ) {
-  if( int cmp = m_nextType->compare( *rhs.m_nextType ) != 0 )
+ if( m_data->m_nextType && rhs.m_data->m_nextType ) {
+  if( int cmp = m_data->m_nextType->compare( *rhs.m_data->m_nextType ) != 0 )
    return cmp;
  }
  
@@ -216,10 +216,12 @@ int TypeDesc::compare ( const TypeDesc& rhs ) const {
 }
 
 QString TypeDesc::nameWithParams() const {
- QString ret = m_cleanName;
- if( !m_templateParams.isEmpty() ) {
+	if( !m_data ) return "";
+
+ QString ret = m_data->m_cleanName;
+ if( !m_data->m_templateParams.isEmpty() ) {
   ret += "<";
-  for( TemplateParams::const_iterator it = m_templateParams.begin(); it != m_templateParams.end(); ++it ) {
+  for( TemplateParams::const_iterator it = m_data->m_templateParams.begin(); it != m_data->m_templateParams.end(); ++it ) {
    ret += (*it)->fullNameChain();
    ret += ", ";
   }
@@ -230,25 +232,30 @@ QString TypeDesc::nameWithParams() const {
 }
 
 QString TypeDesc::fullName( ) const {
+	if( !m_data ) return "";
+
  QString ret = nameWithParams();
- for( int a=0; a < m_functionDepth; ++a) ret = QString( functionMark ) + ret;
- for( int a=0; a < m_pointerDepth; ++a) ret += "*";
- return m_dec.apply( ret );
+ for( int a=0; a < m_data->m_functionDepth; ++a) ret = QString( functionMark ) + ret;
+ for( int a=0; a < m_data->m_pointerDepth; ++a) ret += "*";
+ return m_data->m_dec.apply( ret );
 }
 
 QString TypeDesc::fullNameChain( ) const {
+	if( !m_data ) return "";
  QString ret = fullName();
- if( m_nextType ) {
-  ret += "::" + m_nextType->fullNameChain();
+ if( m_data->m_nextType ) {
+  ret += "::" + m_data->m_nextType->fullNameChain();
  }
- return m_dec.apply( ret );
+ return m_data->m_dec.apply( ret );
 }
 
 QString TypeDesc::fullTypeStructure() const {
-	QString ret = m_cleanName;
-	if( !m_templateParams.isEmpty() ) {
+	if( !m_data ) return "";
+	
+	QString ret = m_data->m_cleanName;
+	if( !m_data->m_templateParams.isEmpty() ) {
 		ret += "<";
-		for( TemplateParams::const_iterator it = m_templateParams.begin(); it != m_templateParams.end(); ++it ) {
+		for( TemplateParams::const_iterator it = m_data->m_templateParams.begin(); it != m_data->m_templateParams.end(); ++it ) {
 			ret += (*it)->fullTypeStructure();
 			ret += ", ";
 		}
@@ -260,10 +267,11 @@ QString TypeDesc::fullTypeStructure() const {
 
 
 QStringList TypeDesc::fullNameList( ) const {
+ if( !m_data ) return "";
  QStringList ret;
  ret << fullName();
- if( m_nextType ) {
-  ret += m_nextType->fullNameList();
+ if( m_data->m_nextType ) {
+  ret += m_data->m_nextType->fullNameList();
  }
  return ret;
 };
@@ -272,117 +280,146 @@ QStringList TypeDesc::fullNameList( ) const {
  /// The template-params may be changed in-place
  /// this list is local, but the params pointed by them not
 TypeDesc::TemplateParams& TypeDesc::templateParams() {
- return m_templateParams;
+	makeDataPrivate();
+ return m_data->m_templateParams;
 }
 
 const TypeDesc::TemplateParams& TypeDesc::templateParams() const {
- return m_templateParams;
+	const_cast<TypeDesc*>( this ) ->maybeInit();
+ return m_data->m_templateParams;
 }
 
 TypeDescPointer TypeDesc::next() {
- return m_nextType;
+	if( !m_data ) return 0;
+ return m_data->m_nextType;
 }
 
 bool TypeDesc::hasTemplateParams() const {
- return !m_templateParams.isEmpty();
+	if( !m_data ) return false;
+ return !m_data->m_templateParams.isEmpty();
 }
 
 void TypeDesc::setNext( TypeDescPointer type ) {
- m_nextType = type;
+	makeDataPrivate();
+ m_data->m_nextType = type;
 }
 
 void TypeDesc::append( TypeDescPointer type ) {
  if( type ) {
-  if( m_nextType )
-   m_nextType->append( type );
+	 makeDataPrivate();
+  if( m_data->m_nextType )
+   m_data->m_nextType->append( type );
   else
-   m_nextType = type;
+   m_data->m_nextType = type;
  }
 }
 
 TypePointer TypeDesc::resolved() const {
- return m_resolved;
+	if( !m_data ) return 0;
+ return m_data->m_resolved;
 }
 
 void TypeDesc::setResolved( TypePointer resolved ) {
- m_resolved = resolved;
+	makeDataPrivate();
+ m_data->m_resolved = resolved;
 }
 
 void TypeDesc::resetResolved() {
- m_resolved = 0;
- if( m_nextType ) m_nextType->resetResolved();
+	if( !m_data ) return;
+	makeDataPrivate();
+ m_data->m_resolved = 0;
+ if( m_data->m_nextType ) m_data->m_nextType->resetResolved();
 }
 
  ///Resets the resolved-pointers of this type, and all template-types
 void TypeDesc::resetResolvedComplete() {
+	if( !m_data ) return;
+	makeDataPrivate();
  resetResolved();
- for( TemplateParams::iterator it = m_templateParams.begin(); it != m_templateParams.end(); ++it )
+ for( TemplateParams::iterator it = m_data->m_templateParams.begin(); it != m_data->m_templateParams.end(); ++it )
   (*it)->resetResolvedComplete();
 }
 
  ///these might be changed in future to an own data-member
 void TypeDesc::increaseFunctionDepth() {
- m_functionDepth++;
+	makeDataPrivate();
+ m_data->m_functionDepth++;
 }
 
 void TypeDesc::decreaseFunctionDepth() {
- if( m_functionDepth > 0 ) m_functionDepth--;
+	makeDataPrivate();
+ if( m_data->m_functionDepth > 0 ) m_data->m_functionDepth--;
 }
 
 int TypeDesc::functionDepth() const {
- return m_functionDepth;
+	if( !m_data ) return 0;
+ return m_data->m_functionDepth;
 }
 
 void TypeDesc::takeInstanceInfo( const TypeDesc& rhs ) {
- m_pointerDepth += rhs.m_pointerDepth;
- m_dec += rhs.m_dec;
+	makeDataPrivate();
+ m_data->m_pointerDepth += rhs.m_data->m_pointerDepth;
+ m_data->m_dec += rhs.m_data->m_dec;
 }
 
 void TypeDesc::clearInstanceInfo() {
- m_pointerDepth = 0;
- m_dec = "";
+	if( !m_data ) return;
+	makeDataPrivate();
+ m_data->m_pointerDepth = 0;
+ m_data->m_dec = "";
 }
 
 void TypeDesc::takeTemplateParams( const QString& string ) {
- m_templateParams.clear();
+	makeDataPrivate();
+ m_data->m_templateParams.clear();
  for( ParamIterator it( "<>", string ); it; ++it )
-  m_templateParams.append( new TypeDescShared( *it ));
+  m_data->m_templateParams.append( new TypeDescShared( *it ));
 }
 
+void TypeDesc::makeDataPrivate() {
+	if( !m_data ) { maybeInit(); return; }
+	if( m_data.count() > 1 ) {
+		m_data = new TypeDescData( *m_data );
+	}
+}
 
 TypeDesc& TypeDesc::makePrivate() {
+	makeDataPrivate();
  TemplateParams nList;
- for( TemplateParams::const_iterator it = m_templateParams.begin(); it != m_templateParams.end(); ++it ) {
+ for( TemplateParams::const_iterator it = m_data->m_templateParams.begin(); it != m_data->m_templateParams.end(); ++it ) {
   TypeDescPointer tp( new TypeDescShared( ) );
   *tp = **it;
   tp->makePrivate();
   nList.append( tp );
  }
- m_templateParams = nList;
+ m_data->m_templateParams = nList;
  
- if( m_nextType ) {
-  TypeDescPointer tmp = m_nextType;
-  m_nextType = new TypeDescShared();
-  *m_nextType = *tmp;
-  m_nextType->makePrivate();
+ if( m_data->m_nextType ) {
+  TypeDescPointer tmp = m_data->m_nextType;
+  m_data->m_nextType = new TypeDescShared();
+  *m_data->m_nextType = *tmp;
+  m_data->m_nextType->makePrivate();
  }
  return *this;
 }
 
+void  TypeDesc::maybeInit() {
+	if( m_data ) return;
+	m_data = new TypeDescData();
+	m_data->m_pointerDepth = 0;
+	m_data->m_functionDepth = 0;
+	m_data->m_nextType = 0;
+	m_data->m_flags = Standard;
+}
 
 void TypeDesc::init( QString stri ) {
- m_templateParams.clear();
- m_cleanName = "";
- m_pointerDepth = 0;
- m_functionDepth = 0;
- m_nextType = 0;
- m_dec = "";
- m_flags = Standard;
- 
+	m_data = 0;
+	maybeInit();
+
  if ( stri.isEmpty() )
   return;
  
- m_dec = stri; ///Store the decoration
+ m_data->m_dec = stri; ///Store the decoration
  
  QStringList ls = splitType( stri );
  QString str = ls.front();
@@ -391,7 +428,7 @@ void TypeDesc::init( QString stri ) {
  if( !ls.isEmpty() ) {
   ls.pop_front();
   if( !ls.isEmpty() ) {
-   m_nextType = TypeDescPointer( new TypeDescShared( ls.join("::") ) );
+   m_data->m_nextType = TypeDescPointer( new TypeDescShared( ls.join("::") ) );
   }
  }
  
@@ -399,7 +436,7 @@ void TypeDesc::init( QString stri ) {
   str = str.right( str.length() - strlen( "typename " ) );
  }
  while( str.startsWith( QString( functionMark ) ) ) {
-  m_functionDepth++;
+  m_data->m_functionDepth++;
   str = str.mid( strlen( functionMark ) ).stripWhiteSpace();
  }
  
@@ -432,9 +469,9 @@ void TypeDesc::init( QString stri ) {
    type += name->unqualifiedName() ->name() ->text();
   }
   
-  m_cleanName = type.stripWhiteSpace();
+  m_data->m_cleanName = type.stripWhiteSpace();
   takeTemplateParams( str );
-  m_pointerDepth = countExtract( '*', str );
+  m_data->m_pointerDepth = countExtract( '*', str );
  }
  
 } 

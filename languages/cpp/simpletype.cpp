@@ -327,9 +327,9 @@ TypeDesc SimpleTypeImpl::resolveTemplateParams( TypeDesc desc, LocateMode mode )
     if( ret.hasTemplateParams() ) {
       TypeDesc::TemplateParams& params = ret.templateParams();
       for( TypeDesc::TemplateParams::iterator it = params.begin(); it != params.end(); ++it ) {
-	      if( !(*it)->resolved() && !(*it)->hasFlag( TypeDesc::ResolutionTried ) ) {
+	      if( !(*it)->resolved() && !(*it)->hasFlag( ResolutionTried ) ) {
 	        *it = locateDecType( **it, mode );
-		      (*it)->setFlag( TypeDesc::ResolutionTried );
+		      (*it)->setFlag( ResolutionTried );
         }
       }
     }

@@ -148,7 +148,7 @@ public:
   typedef QMap<LocateDesc, SimpleTypeImpl::LocateResult> LocateMap;
   typedef QMap<MemberFindDesc, SimpleTypeImpl::MemberInfo > MemberMap;
   
-  virtual SimpleTypeImpl::MemberInfo findMember( TypeDesc name , SimpleTypeImpl::MemberInfo::MemberType type )  {
+  virtual SimpleTypeImpl::MemberInfo findMember( TypeDesc name, SimpleTypeImpl::MemberInfo::MemberType type )  {
     if( !primaryActive ) return Base::findMember( name, type );
     MemberFindDesc key( name, type );
     typename MemberMap::iterator it = m_memberCache.find( key );
@@ -166,7 +166,7 @@ public:
     }
   }
   
-  virtual SimpleTypeImpl::LocateResult locateType( TypeDesc name , SimpleTypeImpl::LocateMode mode, int dir,  SimpleTypeImpl::MemberInfo::MemberType typeMask )
+  virtual SimpleTypeImpl::LocateResult locateType( const TypeDesc& name , SimpleTypeImpl::LocateMode mode, int dir,  SimpleTypeImpl::MemberInfo::MemberType typeMask )
   {
     if( !secondaryActive ) return  Base::locateType( name, mode, dir, typeMask );
     LocateDesc desc( name, mode, dir, typeMask );
