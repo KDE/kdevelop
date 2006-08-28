@@ -144,6 +144,8 @@ public:
 			addMacro( Macro( lst[ 1 ], lst[ 2 ] ) );
 		}
 		addMacro( Macro( "__cplusplus", "1" ) );
+		addMacro( Macro( "Q_SIGNALS", "signals" ) );
+		addMacro( Macro( "Q_SLOTS", "slots" ) );
 	}
 
 private:
