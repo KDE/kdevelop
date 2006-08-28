@@ -183,8 +183,6 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
     action = ac->action( "project_close" );
     action->setEnabled( true );
 
-    KRecentFilesAction *m_recentAction;
-    m_recentAction = qobject_cast<KRecentFilesAction *>( ac->action( "project_open_recent" ) );
     m_recentAction->addUrl( url );
     m_recentAction->saveEntries( KDevConfig::standard(), "RecentProjects" );
 
