@@ -163,6 +163,16 @@ private:
   ClassType m_classType;
 };
 
+/*class CppArrayType : public ArrayType, public CppCVType
+{
+public:
+  typedef KSharedPtr<CppArrayType> Ptr;
+
+  CppArrayType(Cpp::CVSpecs spec = Cpp::CVNone);
+
+  virtual QString toString() const;
+};*/
+
 // FIXME is IntegralType correct?
 class CppTypeAliasType : public IntegralType, public CppCVType
 {

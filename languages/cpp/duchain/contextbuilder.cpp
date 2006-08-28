@@ -334,18 +334,22 @@ void ContextBuilder::visitUsing(UsingAST* node)
 class IdentifierVerifier : public DefaultVisitor
 {
 public:
+  IdentifierVerifier(ContextBuilder* _builder, const KDevDocumentCursor& _cursor)
+    : builder(_builder)
+    , result(true)
+    , cursor(_cursor)
+  {
+  }
+
   ContextBuilder* builder;
   bool result;
+  KDevDocumentCursor cursor;
 
   virtual void visitName (NameAST * node)
   {
-    QualifiedIdentifier id = builder->identifierForName(node);
-    if (Definition* def = builder->currentContext()->findDefinition(id, KDevDocumentCursor(builder->m_editor->currentUrl(), builder->m_editor->findPosition(node->start_token)))) {
-      //kDebug() << k_funcinfo << "Found definition for " << def->toString() << " at " << def->textRange() << endl;
-    } else {
-      //kDebug() << k_funcinfo << "Could not find definition for " << id.toString() << endl;
-      result = false;
-    }
+    if (result)
+      if (!builder->currentContext()->findDefinition(builder->identifierForName(node), cursor))
+        result = false;
   }
 };
 
@@ -361,24 +365,17 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
     case DUContext::Function:
     case DUContext::Other:
       if (m_compilingContexts) {
-        IdentifierVerifier iv;
-        iv.builder = this;
-        iv.result = true;
+        IdentifierVerifier iv(this, KDevDocumentCursor(m_editor->currentUrl(), m_editor->findPosition(node->start_token)));
         iv.visit(node->expression);
         //kDebug() << k_funcinfo << m_editor->findPosition(node->start_token) << " IdentifierVerifier returned " << iv.result << endl;
         node->expressionChosen = iv.result;
-        if (iv.result)
-          visit(node->expression);
-        else
-          visit(node->declaration);
-        break;
-
-      } else {
-        if (node->expressionChosen)
-          visit(node->expression);
-        else
-          visit(node->declaration);
       }
+
+      if (node->expressionChosen)
+        visit(node->expression);
+      else
+        visit(node->declaration);
+      break;
   }
 }
 

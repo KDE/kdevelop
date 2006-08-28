@@ -25,6 +25,13 @@
 
 typedef ContextBuilder TypeBuilderBase;
 
+/**
+ * Create types from an AST tree.
+ *
+ * \note This builder overrides visitDeclarator, in order to support
+ * array types; parent classes will not have
+ * their visitDeclarator function called.
+ */
 class TypeBuilder: public TypeBuilderBase
 {
 public:
@@ -41,6 +48,10 @@ public:
 protected:
   AbstractType::Ptr lastType() const;
 
+  // Created visitor
+  virtual void visitArrayExpression(ExpressionAST*);
+
+  // Regular visitors
   virtual void visitClassSpecifier(ClassSpecifierAST*);
   virtual void visitBaseSpecifier(BaseSpecifierAST*);
   virtual void visitEnumSpecifier(EnumSpecifierAST*);
@@ -51,6 +62,7 @@ protected:
   virtual void visitTypedef(TypedefAST*);
   virtual void visitFunctionDeclaration(FunctionDefinitionAST*);
   virtual void visitPtrOperator(PtrOperatorAST*);
+  virtual void visitDeclarator(DeclaratorAST*);
 
 private:
   template <class T>

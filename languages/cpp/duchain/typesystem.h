@@ -274,11 +274,11 @@ class ArrayType : public AbstractType
 public:
   typedef KSharedPtr<ArrayType> Ptr;
 
-  inline const QList<int>& dimensions () const
-  { return m_dimensions; }
+  inline int dimension () const
+  { return m_dimension; }
 
-  inline void setDimensions (const QList<int>& dimensions)
-  { m_dimensions = dimensions; }
+  inline void setDimension(int dimension)
+  { m_dimension = dimension; }
 
   inline AbstractType::Ptr elementType () const
   { return m_elementType; }
@@ -287,15 +287,26 @@ public:
   { m_elementType = type; }
 
   inline bool operator == (const ArrayType &other) const
-  { return m_elementType == other.m_elementType && m_dimensions == other.m_dimensions; }
+  { return m_elementType == other.m_elementType && m_dimension == other.m_dimension; }
 
   inline bool operator != (const ArrayType &other) const
-  { return m_elementType != other.m_elementType || m_dimensions != other.m_dimensions; }
+  { return m_elementType != other.m_elementType || m_dimension != other.m_dimension; }
 
   virtual QString toString() const;
 
+protected:
+  virtual void accept0 (TypeVisitor *v) const
+  {
+    if (v->visit (this))
+      {
+        acceptType (m_elementType, v);
+      }
+
+    v->endVisit (this);
+  }
+
 private:
-  QList<int> m_dimensions;
+  int m_dimension;
   AbstractType::Ptr m_elementType;
 };
 

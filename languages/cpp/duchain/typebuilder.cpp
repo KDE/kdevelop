@@ -305,6 +305,61 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
     closeType();
 }
 
+void TypeBuilder::visitDeclarator(DeclaratorAST *node)
+{
+  // Copied from default visitor
+  visit(node->sub_declarator);
+  visitNodes(this, node->ptr_ops);
+  visit(node->id);
+  visit(node->bit_expression);
+
+  // Custom code
+  if (node->array_dimensions) {
+    const ListNode<ExpressionAST*> *it = node->array_dimensions->toFront(), *end = it;
+
+    do {
+      if (it->element)
+        visitArrayExpression(it->element);
+      it = it->next;
+    } while (it != end);
+  }
+
+  visitNodes(this, node->array_dimensions);
+  visit(node->parameter_declaration_clause);
+  visit(node->exception_spec);
+}
+
+void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
+{
+  bool typeOpened = false;
+
+  // TODO need generic expression evaluator...
+  switch (expression->kind) {
+    case AST::Kind_PrimaryExpression: {
+      PrimaryExpressionAST* primary = static_cast<PrimaryExpressionAST*>(expression);
+      if (primary->token) {
+        QString token = m_editor->tokenToString(primary->token);
+        bool ok;
+        int arrayDimension = token.toInt(&ok);
+        if (ok) {
+          // Phew...
+          ArrayType::Ptr array(new ArrayType());
+          array->setElementType(lastType());
+          array->setDimension(arrayDimension);
+          openType(array, expression);
+          typeOpened = true;
+        }
+        break;
+      }
+    }
+  }
+
+  visit(expression);
+
+  if (typeOpened)
+    closeType();
+}
+
 AbstractType::Ptr TypeBuilder::lastType() const
 {
   return m_lastType;

@@ -326,6 +326,31 @@ private slots:
     release(top);
   }
 
+  void testArrayType()
+  {
+    QByteArray method("int i[3];");
+
+    DUContext* top = parse(method, DumpNone);
+
+    QVERIFY(!top->parentContext());
+    QCOMPARE(top->childContexts().count(), 0);
+    QCOMPARE(top->localDefinitions().count(), 1);
+    QVERIFY(top->localScopeIdentifier().isEmpty());
+
+    Definition* defI = top->localDefinitions().first();
+    QCOMPARE(defI->identifier(), Identifier("i"));
+    QCOMPARE(top->findDefinition(defI->identifier()), defI);
+
+    ArrayType::Ptr array = defI->type<ArrayType>();
+    QVERIFY(array);
+    CppIntegralType::Ptr element = CppIntegralType::Ptr::dynamicCast(array->elementType());
+    QVERIFY(element);
+    QCOMPARE(element->integralType(), CppIntegralType::TypeInt);
+    QCOMPARE(array->dimension(), 3);
+
+    release(top);
+  }
+
   void testDeclareFor()
   {
     //                 0         1         2         3         4         5

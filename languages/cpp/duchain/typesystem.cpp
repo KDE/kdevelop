@@ -101,9 +101,5 @@ QString StructureType::toString() const
 
 QString ArrayType::toString() const
 {
-  QString dimensions;
-  foreach (int i, m_dimensions)
-    dimensions.append(QString("[%1]").arg(i));
-
-  return QString("%1%2").arg(elementType() ? elementType()->toString() : QString("<notype>")).arg(dimensions);
+  return QString("%1[%2]").arg(elementType() ? elementType()->toString() : QString("<notype>")).arg(m_dimension);
 }

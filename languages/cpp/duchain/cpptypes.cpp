@@ -201,3 +201,13 @@ QString CppReferenceType::toString() const
 {
   return QString("%1%2").arg(cvString()).arg(ReferenceType::toString());
 }
+
+/*CppArrayType::CppArrayType(Cpp::CVSpecs spec)
+  : CppCVType(spec)
+{
+}
+
+QString CppArrayType::toString() const
+{
+  return QString("%1%2").arg(cvString()).arg(ArrayType::toString());
+}*/
