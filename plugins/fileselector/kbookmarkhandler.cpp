@@ -72,7 +72,7 @@ void KBookmarkHandler::slotNewBookmark( const QString& text,
                                             const QString& additionalInfo )
 {
     Q_UNUSED( text );
-    *m_importStream << "<bookmark icon=\"" << KMimeType::iconForURL( KUrl(  url ) );
+    *m_importStream << "<bookmark icon=\"" << KMimeType::iconForUrl( KUrl(  url ) );
     *m_importStream << "\" href=\"" << QString::fromUtf8(url) << "\">\n";
     *m_importStream << "<title>" << (additionalInfo.isEmpty() ? QString::fromUtf8(url) : additionalInfo) << "</title>\n</bookmark>\n";
 }

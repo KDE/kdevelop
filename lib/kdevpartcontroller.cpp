@@ -92,13 +92,13 @@ KTextEditor::Document* KDevPartController::createTextPart(
             KParts::URLArgs args;
             args.serviceType = QString( "text/plain;" )
                     + encoding;
-            extension->setURLArgs( args );
+            extension->setUrlArgs( args );
         }
     }
 
     if ( activate )
     {
-        doc->openURL( url );
+        doc->openUrl( url );
     }
 
     return doc;
@@ -146,7 +146,7 @@ KParts::Part* KDevPartController::createPart( const KUrl & url )
     if ( !url.isValid() )
         return 0;
 
-    KMimeType::Ptr mimeType = KMimeType::findByURL( url );
+    KMimeType::Ptr mimeType = KMimeType::findByUrl( url );
 
     QString className;
     QString services[] =
@@ -177,7 +177,7 @@ KParts::Part* KDevPartController::createPart( const KUrl & url )
                                   KDevCore::mainWindow() ->centralWidget(),
                                   KDevCore::mainWindow() ->centralWidget(),
                                   className.toLatin1() );
-        readOnly( part ) ->openURL( url );
+        readOnly( part ) ->openUrl( url );
         return part;
     }
 

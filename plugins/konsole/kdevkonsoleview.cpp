@@ -122,7 +122,7 @@ void KDevKonsoleView::setDirectory( const KUrl &url )
         return ;
 
     if ( m_part && url != m_part->url() )
-        m_part->openURL( url );
+        m_part->openUrl( url );
 }
 
 #include "kdevkonsoleview.moc"

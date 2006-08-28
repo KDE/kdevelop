@@ -228,7 +228,7 @@ void KDevFileSelector::readConfig(KConfig *config, const QString & name)
     setupToolbar( config );
 
     cmbPath->setMaxItems( config->readEntry( "pathcombo history len", 9 ) );
-    cmbPath->setURLs( config->readEntry("dir history", QStringList()) );
+    cmbPath->setUrls( config->readEntry("dir history", QStringList()) );
     // if we restore history
     if ( config->readEntry( "restore location", true ) || qApp->isSessionRestored() )
     {
@@ -349,7 +349,7 @@ void KDevFileSelector::slotFilterChange( const QString & nf )
 }
 void KDevFileSelector::setDir( KUrl u )
 {
-    dir->setURL(u, true);
+    dir->setUrl(u, true);
 }
 
 //END Public Slots
@@ -366,14 +366,14 @@ void KDevFileSelector::cmbPathReturnPressed( const QString& u )
     QStringList urls = cmbPath->urls();
     urls.removeAll( u );
     urls.prepend( u );
-    cmbPath->setURLs( urls, KUrlComboBox::RemoveBottom );
+    cmbPath->setUrls( urls, KUrlComboBox::RemoveBottom );
     dir->setFocus();
-    dir->setURL( KUrl(u), true );
+    dir->setUrl( KUrl(u), true );
 }
 
 void KDevFileSelector::dirUrlEntered( const KUrl& u )
 {
-    cmbPath->setURL( u );
+    cmbPath->setUrl( u );
 }
 
 void KDevFileSelector::dirFinishedLoading()

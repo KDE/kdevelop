@@ -119,7 +119,7 @@ KDevDocument* KDevDocumentController::editDocument( const KUrl & inputUrl,
         if ( !existingDoc->isInitialized() )
         {
             KParts::ReadWritePart * rw = readWrite( existingDoc->part() );
-            rw->openURL( url );
+            rw->openUrl( url );
         }
 
         addHistoryEntry();
@@ -148,7 +148,7 @@ KDevDocument* KDevDocumentController::editDocument( const KUrl & inputUrl,
             url.setPath( path );
     }
 
-    KMimeType::Ptr mimeType = KMimeType::findByURL( url );
+    KMimeType::Ptr mimeType = KMimeType::findByUrl( url );
     // kDebug( 9000 ) << "mimeType = " << mimeType->name() << endl;
 
     // is the URL pointing to a directory?
@@ -328,7 +328,7 @@ void KDevDocumentController::reloadDocument( KDevDocument* document )
         foreach ( KTextEditor::View * view, document->textDocument() ->textViews() )
         cursors << view->cursorPosition();
 
-        part->openURL( part->url() );
+        part->openUrl( part->url() );
 
         emit documentStateChanged( document );
 
@@ -355,7 +355,7 @@ bool KDevDocumentController::closeDocument( KDevDocument* document )
 
     if ( KParts::ReadWritePart * rw = readWrite( document->part() ) )
     {
-        if ( ! rw->closeURL() )
+        if ( ! rw->closeUrl() )
             return false;
     }
 
@@ -533,7 +533,7 @@ void KDevDocumentController::contextMenu( KMenu *menu, const Context *context )
 void KDevDocumentController::slotOpenDocument()
 {
     KEncodingFileDialog::Result result =
-        KEncodingFileDialog::getOpenURLsAndEncoding(
+        KEncodingFileDialog::getOpenUrlsAndEncoding(
             QString::null, QString::null, QString::null,
             KDevCore::mainWindow(), QString::null );
 

@@ -54,7 +54,7 @@ bool KDevLanguageSupport::supportsDocument( KDevDocument *document )
 
 bool KDevLanguageSupport::supportsDocument( const KUrl &url )
 {
-    KMimeType::Ptr mimetype = KMimeType::findByURL( url );
+    KMimeType::Ptr mimetype = KMimeType::findByUrl( url );
     QStringList mimeList = mimeTypes();
     QStringList::const_iterator it = mimeList.begin();
     for ( ; it != mimeList.end(); it++ )

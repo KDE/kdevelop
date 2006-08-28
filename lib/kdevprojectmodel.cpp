@@ -25,12 +25,12 @@
 
 QIcon KDevProjectFolderItem::icon() const
 {
-    return KIO::pixmapForURL(url(), 0, K3Icon::Small);
+    return KIO::pixmapForUrl(url(), 0, K3Icon::Small);
 }
 
 QIcon KDevProjectFileItem::icon() const
 {
-    return KIO::pixmapForURL(url(), 0, K3Icon::Small);
+    return KIO::pixmapForUrl(url(), 0, K3Icon::Small);
 }
 
 QList<KDevProjectFolderItem*> KDevProjectItem::folderList() const
