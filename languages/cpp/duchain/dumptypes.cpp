@@ -19,6 +19,7 @@
 #include "dumptypes.h"
 
 DumpTypes::DumpTypes()
+  : indent(0)
 {
 }
 
@@ -26,18 +27,21 @@ DumpTypes::~ DumpTypes()
 {
 }
 
-void DumpTypes::visit(AbstractType * type)
+void DumpTypes::dump(const AbstractType * type)
 {
   type->accept(this);
 }
 
 bool DumpTypes::preVisit(const AbstractType * type)
 {
+  ++indent;
+  kDebug() << QString(indent*2, ' ') << type->toString() << endl;
   return true;
 }
 
 void DumpTypes::postVisit(const AbstractType * type)
 {
+  --indent;
 }
 
 void DumpTypes::visit(const IntegralType * type)

@@ -27,6 +27,7 @@
 #include "kdevdocumentrange.h"
 #include "cppeditorintegrator.h"
 #include "typerepository.h"
+#include "dumptypes.h"
 
 #include "parser.h"
 #include "control.h"
@@ -364,7 +365,7 @@ private slots:
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("struct A { int i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; };");
 
-    DUContext* top = parse(method, DumpNone);
+    DUContext* top = parse(method);//, DumpNone);
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 1);
@@ -384,7 +385,7 @@ private slots:
     QVERIFY(structA->parentContext());
     QCOMPARE(structA->importedParentContexts().count(), 0);
     QCOMPARE(structA->childContexts().count(), 3);
-    QCOMPARE(structA->localDefinitions().count(), 1);
+    QCOMPARE(structA->localDefinitions().count(), 3);
     QCOMPARE(structA->localScopeIdentifier(), QualifiedIdentifier("A"));
 
     Definition* defI = structA->localDefinitions().first();
@@ -447,7 +448,7 @@ private slots:
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 3);
-    QCOMPARE(top->localDefinitions().count(), 1);
+    QCOMPARE(top->localDefinitions().count(), 2);
     QVERIFY(top->localScopeIdentifier().isEmpty());
     QCOMPARE(top->findDefinition(Identifier("foo")), noDef);
 
@@ -496,7 +497,7 @@ private slots:
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 3);
-    QCOMPARE(top->localDefinitions().count(), 0);
+    QCOMPARE(top->localDefinitions().count(), 1);
     QVERIFY(top->localScopeIdentifier().isEmpty());
     QCOMPARE(top->findDefinition(Identifier("foo")), noDef);
 
@@ -555,15 +556,16 @@ private slots:
   }
 
 public:
-  enum DumpType {
+  enum DumpArea {
     DumpNone = 0,
     DumpAST = 1,
-    DumpDUChain = 2
+    DumpDUChain = 2,
+    DumpType = 4
   };
-  Q_DECLARE_FLAGS(DumpTypes, DumpType)
+  Q_DECLARE_FLAGS(DumpAreas, DumpArea)
 
 private:
-  DUContext* parse(const QByteArray& unit, DumpTypes dump = static_cast<DumpTypes>(DumpAST | DumpDUChain));
+  DUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType));
 
   void release(DUContext* top)
   {
@@ -571,9 +573,9 @@ private:
   }
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(TestDUChain::DumpTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(TestDUChain::DumpAreas)
 
-DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
+DUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
 {
   if (dump)
     kDebug() << "==== Beginning new test case...:" << endl << unit << endl << endl;
@@ -602,6 +604,13 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpTypes dump)
   if (dump & DumpDUChain) {
     kDebug() << "===== DUChain:" << endl;
     dumper.dump(top);
+  }
+
+  if (dump & DumpType) {
+    kDebug() << "===== Types:" << endl;
+    DumpTypes dt;
+    foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
+      dt.dump(type.data());
   }
 
   if (dump)

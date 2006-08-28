@@ -34,7 +34,9 @@ public:
   /**
    * Build types by iterating the given \a node.
    */
-  void buildTypes(AST *node);
+  virtual void supportBuild(AST *node);
+
+  const QList< AbstractType::Ptr >& topTypes() const;
 
 protected:
   AbstractType::Ptr lastType() const;
@@ -67,6 +69,7 @@ private:
   KSharedPtr<T> currentType() { return KSharedPtr<T>::dynamicCast(m_typeStack.top()); }
 
   QStack<AbstractType::Ptr> m_typeStack;
+  QList<AbstractType::Ptr> m_topTypes;
   AbstractType::Ptr m_lastType;
 };
 

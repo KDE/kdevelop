@@ -61,7 +61,7 @@ public:
   /**
    * Support another builder by tracking the current context.
    */
-  void supportBuild(AST *node);
+  virtual void supportBuild(AST *node);
 
 protected:
   inline DUContext* currentContext() { return m_contextStack.top(); }

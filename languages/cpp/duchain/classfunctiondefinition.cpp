@@ -116,3 +116,13 @@ void ClassFunctionDefinition::setAbstract(bool isAbstract)
 {
   m_isAbstract = isAbstract;
 }
+
+void ClassFunctionDefinition::setConstructor(bool isConstructor)
+{
+  m_constructor = isConstructor;
+}
+
+void ClassFunctionDefinition::setDestructor(bool isDestructor)
+{
+  m_destructor = isDestructor;
+}

@@ -42,7 +42,10 @@ public:
   void setFunctionType(QtFunctionType functionType);
 
   bool isConstructor() const;
+  void setConstructor(bool isConstructor);
+
   bool isDestructor() const;
+  void setDestructor(bool isDestructor);
 
   bool isVirtual() const;
   void setVirtual(bool isVirtual);

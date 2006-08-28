@@ -27,7 +27,7 @@ public:
   DumpTypes();
   virtual ~DumpTypes();
 
-  void visit(AbstractType* type);
+  void dump(const AbstractType* type);
 
 protected:
   virtual bool preVisit (const AbstractType * type);

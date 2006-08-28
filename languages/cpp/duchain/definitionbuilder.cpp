@@ -56,6 +56,14 @@ void DefinitionBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
     functionOpened = true;
     openDefinition(node->init_declarator->declarator->id, node, true);
 
+    if (!node->type_specifier) {
+      // TODO detect identifiers not equal to classname
+      if (currentDefinition()->identifier().toString().startsWith('~'))
+        static_cast<ClassFunctionDefinition*>(currentDefinition())->setDestructor(true);
+      else
+        static_cast<ClassFunctionDefinition*>(currentDefinition())->setConstructor(true);
+    }
+
     parseStorageSpecifiers(node->storage_specifiers);
     parseFunctionSpecifiers(node->function_specifiers);
   }
@@ -70,13 +78,19 @@ void DefinitionBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
   bool functionOpened = false;
 
-  /*if (node && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
-    functionOpened = true;
-    openDefinition(node->init_declarator->declarator->id, node, true);
+  if (node->function_specifiers && node->init_declarators) {
+    const ListNode<InitDeclaratorAST*> *it = node->init_declarators->toFront();
+    const ListNode<InitDeclaratorAST*> *end = it;
+    InitDeclaratorAST* init = it->element;
+    it = it->next;
+    if (it == end && init->declarator && init->declarator->id) {
+      functionOpened = true;
+      openDefinition(init->declarator->id, node, true);
 
-    parseStorageSpecifiers(node->storage_specifiers);
-    parseFunctionSpecifiers(node->function_specifiers);
-  }*/
+      parseStorageSpecifiers(node->storage_specifiers);
+      parseFunctionSpecifiers(node->function_specifiers);
+    }
+  }
 
   DefinitionBuilderBase::visitSimpleDeclaration(node);
 
@@ -132,11 +146,10 @@ Definition* DefinitionBuilder::openDefinition(NameAST* name, AST* rangeNode, boo
   Q_ASSERT(m_editor->currentRange() == prior);
 
   Definition* definition;
-  if (scope == Definition::ClassScope)
-    if (isFunction)
-      definition = new ClassFunctionDefinition(range);
-    else
-      definition = new ClassMemberDefinition(range);
+  if (isFunction)
+    definition = new ClassFunctionDefinition(range);
+  else if (scope == Definition::ClassScope)
+    definition = new ClassMemberDefinition(range);
   else
     definition = new Definition(range, scope);
 

@@ -39,9 +39,11 @@ TypeBuilder::TypeBuilder(CppEditorIntegrator * editor)
 {
 }
 
-void TypeBuilder::buildTypes(AST *node)
+void TypeBuilder::supportBuild(AST *node)
 {
-  supportBuild(node);
+  m_topTypes.clear();
+
+  TypeBuilderBase::supportBuild(node);
 
   Q_ASSERT(m_typeStack.isEmpty());
 }
@@ -68,7 +70,13 @@ void TypeBuilder::openAbstractType(AbstractType::Ptr type, AST* node)
 
     } else if (ArrayType::Ptr array = currentType<ArrayType>()) {
       array->setElementType(type);
+
+    } else {
+      m_topTypes.append(type);
     }
+
+  } else {
+    m_topTypes.append(type);
   }
 
   m_typeStack.append(type);
@@ -244,10 +252,15 @@ void TypeBuilder::visitTypedef(TypedefAST* node)
 
 void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
-  openType(CppFunctionType::Ptr(new CppFunctionType()), node);
+  CppFunctionType::Ptr newFunction(new CppFunctionType());
 
   if (node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->fun_cv)
-    currentType<CppFunctionType>()->setCV(parseConstVolatile(node->init_declarator->declarator->fun_cv));
+    newFunction->setCV(parseConstVolatile(node->init_declarator->declarator->fun_cv));
+
+  if (!node->type_specifier)
+    newFunction->setReturnType(AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid)));
+
+  openType(newFunction, node);
 
   TypeBuilderBase::visitFunctionDeclaration(node);
 
@@ -256,11 +269,16 @@ void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 
 void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
-  openType(FunctionType::Ptr(new FunctionType()), node);
+  bool functionOpened = false;
+  if (node->function_specifiers) {
+    functionOpened = true;
+    openType(CppFunctionType::Ptr(new CppFunctionType()), node);
+  }
 
   TypeBuilderBase::visitSimpleDeclaration(node);
 
-  closeType();
+  if (functionOpened)
+    closeType();
 }
 
 void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
@@ -299,3 +317,8 @@ Cpp::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t> *cv)
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
+
+const QList< AbstractType::Ptr > & TypeBuilder::topTypes() const
+{
+  return m_topTypes;
+}
