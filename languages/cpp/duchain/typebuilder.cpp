@@ -252,52 +252,41 @@ void TypeBuilder::visitTypedef(TypedefAST* node)
 
 void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
-  CppFunctionType::Ptr newFunction(new CppFunctionType());
-
-  if (node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->fun_cv)
-    newFunction->setCV(parseConstVolatile(node->init_declarator->declarator->fun_cv));
-
-  if (!node->type_specifier)
-    newFunction->setReturnType(AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid)));
-
-  openType(newFunction, node);
+  m_lastType = 0;
 
   TypeBuilderBase::visitFunctionDeclaration(node);
 
-  closeType();
+  m_lastType = 0;
 }
 
 void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
-  bool functionOpened = false;
-  if (node->function_specifiers) {
-    functionOpened = true;
-    openType(CppFunctionType::Ptr(new CppFunctionType()), node);
-  }
+  m_lastType = 0;
 
   TypeBuilderBase::visitSimpleDeclaration(node);
 
-  if (functionOpened)
-    closeType();
+  m_lastType = 0;
 }
 
 void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 {
   bool typeOpened = false;
-  QString op = m_editor->tokenToString(node->op);
-  if (!op.isEmpty())
-    if (op[0] == '&') {
-      CppReferenceType::Ptr pointer(new CppReferenceType(parseConstVolatile(node->cv)));
-      pointer->setBaseType(lastType());
-      openType(pointer, node);
-      typeOpened = true;
+  if (node->op) {
+    QString op = m_editor->tokenToString(node->op);
+    if (!op.isEmpty())
+      if (op[0] == '&') {
+        CppReferenceType::Ptr pointer(new CppReferenceType(parseConstVolatile(node->cv)));
+        pointer->setBaseType(lastType());
+        openType(pointer, node);
+        typeOpened = true;
 
-    } else if (op[0] == '*') {
-      CppPointerType::Ptr pointer(new CppPointerType(parseConstVolatile(node->cv)));
-      pointer->setBaseType(lastType());
-      openType(pointer, node);
-      typeOpened = true;
-    }
+      } else if (op[0] == '*') {
+        CppPointerType::Ptr pointer(new CppPointerType(parseConstVolatile(node->cv)));
+        pointer->setBaseType(lastType());
+        openType(pointer, node);
+        typeOpened = true;
+      }
+  }
 
   TypeBuilderBase::visitPtrOperator(node);
 
@@ -307,13 +296,29 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 
 void TypeBuilder::visitDeclarator(DeclaratorAST *node)
 {
-  // Copied from default visitor
+  if (node->parameter_declaration_clause) {
+    // New function type
+    CppFunctionType::Ptr newFunction(new CppFunctionType());
+
+    if (node->fun_cv)
+      newFunction->setCV(parseConstVolatile(node->fun_cv));
+
+    if (lastType())
+      newFunction->setReturnType(lastType());
+    else
+      newFunction->setReturnType(AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid)));
+
+    openType(newFunction, node);
+  }
+
+  //BEGIN Copied from default visitor
   visit(node->sub_declarator);
   visitNodes(this, node->ptr_ops);
   visit(node->id);
   visit(node->bit_expression);
+  //END Finished with first part of default visitor
 
-  // Custom code
+  // Custom code - create array types
   if (node->array_dimensions) {
     const ListNode<ExpressionAST*> *it = node->array_dimensions->toFront(), *end = it;
 
@@ -324,9 +329,14 @@ void TypeBuilder::visitDeclarator(DeclaratorAST *node)
     } while (it != end);
   }
 
+  //BEGIN Copied from default visitor
   visitNodes(this, node->array_dimensions);
   visit(node->parameter_declaration_clause);
   visit(node->exception_spec);
+  //END Finished with default visitor
+
+  if (node->parameter_declaration_clause)
+    closeType();
 }
 
 void TypeBuilder::visitArrayExpression(ExpressionAST* expression)

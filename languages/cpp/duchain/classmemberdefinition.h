@@ -34,6 +34,18 @@ public:
   Cpp::AccessPolicy accessPolicy() const;
   void setAccessPolicy(Cpp::AccessPolicy accessPolicy);
 
+  enum StorageSpecifier {
+    StaticSpecifier   = 0x1,
+    AutoSpecifier     = 0x2,
+    FriendSpecifier   = 0x4,
+    ExternSpecifier   = 0x8,
+    RegisterSpecifier = 0x10,
+    MutableSpecifier  = 0x20
+  };
+  Q_DECLARE_FLAGS(StorageSpecifiers, StorageSpecifier);
+
+  void setStorageSpecifiers(StorageSpecifiers specifiers);
+
   bool isStatic() const;
   void setStatic(bool isStatic);
 
@@ -61,6 +73,8 @@ private:
   bool m_isExtern: 1;
   bool m_isMutable: 1;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(ClassMemberDefinition::StorageSpecifiers);
 
 #endif // CLASSMEMBERDEFINITION_H
 

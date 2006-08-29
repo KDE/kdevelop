@@ -21,6 +21,7 @@
 
 #include "typebuilder.h"
 #include "cppnamespace.h"
+#include "classfunctiondefinition.h"
 
 class Definition;
 
@@ -68,8 +69,15 @@ private:
   inline Cpp::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
   inline void setAccessPolicy(Cpp::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
+  void applyStorageSpecifiers();
+  void applyFunctionSpecifiers();
+  void popSpecifiers();
+
   QStack<Definition*> m_definitionStack;
   QStack<Cpp::AccessPolicy> m_accessPolicyStack;
+
+  QStack<ClassFunctionDefinition::FunctionSpecifiers> m_functionSpecifiers;
+  QStack<ClassMemberDefinition::StorageSpecifiers> m_storageSpecifiers;
 };
 
 #endif // DEFINITIONBUILDER_H

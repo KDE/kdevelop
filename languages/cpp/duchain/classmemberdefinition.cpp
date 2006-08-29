@@ -102,4 +102,14 @@ void ClassMemberDefinition::setAccessPolicy(Cpp::AccessPolicy accessPolicy)
   m_accessPolicy = accessPolicy;
 }
 
+void ClassMemberDefinition::setStorageSpecifiers(StorageSpecifiers specifiers)
+{
+  m_isStatic = specifiers & StaticSpecifier;
+  m_isAuto = specifiers & AutoSpecifier;
+  m_isFriend = specifiers & FriendSpecifier;
+  m_isRegister = specifiers & RegisterSpecifier;
+  m_isExtern = specifiers & ExternSpecifier;
+  m_isMutable = specifiers & MutableSpecifier;
+}
+
 // kate: indent-width 2;

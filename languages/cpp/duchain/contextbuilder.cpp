@@ -44,6 +44,7 @@ ContextBuilder::ContextBuilder (CppEditorIntegrator* editor)
   : m_editor(editor)
   , m_nameCompiler(new NameCompiler(editor->parseSession()))
   , m_ownsEditorIntegrator(false)
+  , m_compilingContexts(false)
 {
 }
 
@@ -302,6 +303,12 @@ void ContextBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
 {
   DefaultVisitor::visitSimpleDeclaration (node);
 
+  // Didn't get claimed if it was still set
+  m_importedParentContexts.clear();
+}
+
+void ContextBuilder::visitPostSimpleDeclaration(SimpleDeclarationAST*)
+{
   // Didn't get claimed if it was still set
   m_importedParentContexts.clear();
 }

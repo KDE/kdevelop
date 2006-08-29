@@ -23,7 +23,6 @@
 
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
-#include "classfunctiondefinition.h"
 #include "tokens.h"
 #include "parsesession.h"
 
@@ -50,73 +49,44 @@ TopDUContext* DefinitionBuilder::buildDefinitions(const KUrl& url, AST *node, QL
 
 void DefinitionBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
-  bool functionOpened = false;
-
-  if (node && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
-    functionOpened = true;
-    openDefinition(node->init_declarator->declarator->id, node, true);
-
-    if (!node->type_specifier) {
-      // TODO detect identifiers not equal to classname
-      if (currentDefinition()->identifier().toString().startsWith('~'))
-        static_cast<ClassFunctionDefinition*>(currentDefinition())->setDestructor(true);
-      else
-        static_cast<ClassFunctionDefinition*>(currentDefinition())->setConstructor(true);
-    }
-
-    parseStorageSpecifiers(node->storage_specifiers);
-    parseFunctionSpecifiers(node->function_specifiers);
-  }
+  parseStorageSpecifiers(node->storage_specifiers);
+  parseFunctionSpecifiers(node->function_specifiers);
 
   DefinitionBuilderBase::visitFunctionDeclaration(node);
 
-  if (functionOpened)
-    closeDefinition();
+  popSpecifiers();
 }
 
 void DefinitionBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
-  bool functionOpened = false;
-
-  if (node->function_specifiers && node->init_declarators) {
-    const ListNode<InitDeclaratorAST*> *it = node->init_declarators->toFront();
-    const ListNode<InitDeclaratorAST*> *end = it;
-    InitDeclaratorAST* init = it->element;
-    it = it->next;
-    if (it == end && init->declarator && init->declarator->id) {
-      functionOpened = true;
-      openDefinition(init->declarator->id, node, true);
-
-      parseStorageSpecifiers(node->storage_specifiers);
-      parseFunctionSpecifiers(node->function_specifiers);
-    }
-  }
+  parseStorageSpecifiers(node->storage_specifiers);
+  parseFunctionSpecifiers(node->function_specifiers);
 
   DefinitionBuilderBase::visitSimpleDeclaration(node);
 
-  if (functionOpened)
-    closeDefinition();
+  popSpecifiers();
 }
 
 void DefinitionBuilder::visitDeclarator (DeclaratorAST* node)
 {
   if (node->parameter_declaration_clause) {
-    switch (currentContext()->type()) {
-      case DUContext::Global:
-      case DUContext::Namespace:
-      case DUContext::Class:
-      case DUContext::Function:
-          DefinitionBuilderBase::visitDeclarator(node);
-          return;
+    openDefinition(node->id, node, true);
 
-      default:
-          openDefinition(node->id, node);
-          break;
-    }
+    /*if (!node->type_specifier) {
+      // TODO detect identifiers not equal to classname
+      if (currentDefinition()->identifier().toString().startsWith('~'))
+        static_cast<ClassFunctionDefinition*>(currentDefinition())->setDestructor(true);
+      else
+        static_cast<ClassFunctionDefinition*>(currentDefinition())->setConstructor(true);
+    }*/
+
+    applyFunctionSpecifiers();
 
   } else {
     openDefinition(node->id, node);
   }
+
+  applyStorageSpecifiers();
 
   DefinitionBuilderBase::visitDeclarator(node);
 
@@ -230,63 +200,87 @@ void DefinitionBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
 
 void DefinitionBuilder::parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers)
 {
-  if (!storage_specifiers)
-    return;
+  ClassMemberDefinition::StorageSpecifiers specs = 0;
 
-  if (ClassMemberDefinition* member = dynamic_cast<ClassMemberDefinition*>(currentDefinition())) {
+  if (storage_specifiers) {
     const ListNode<std::size_t> *it = storage_specifiers->toFront();
     const ListNode<std::size_t> *end = it;
     do {
       int kind = m_editor->parseSession()->token_stream->kind(it->element);
       switch (kind) {
         case Token_friend:
-          member->setFriend(true);
+          specs |= ClassMemberDefinition::FriendSpecifier;
           break;
         case Token_auto:
-          member->setAuto(true);
+          specs |= ClassMemberDefinition::AutoSpecifier;
           break;
         case Token_register:
-          member->setRegister(true);
+          specs |= ClassMemberDefinition::RegisterSpecifier;
           break;
         case Token_static:
-          member->setStatic(true);
+          specs |= ClassMemberDefinition::StaticSpecifier;
           break;
         case Token_extern:
-          member->setExtern(true);
+          specs |= ClassMemberDefinition::ExternSpecifier;
           break;
         case Token_mutable:
-          member->setMutable(true);
+          specs |= ClassMemberDefinition::MutableSpecifier;
           break;
       }
 
       it = it->next;
     } while (it != end);
   }
+
+  m_storageSpecifiers.push(specs);
 }
 
 void DefinitionBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers)
 {
-  if (!function_specifiers)
-    return;
+  ClassFunctionDefinition::FunctionSpecifiers specs = 0;
 
-  if (ClassFunctionDefinition* function = dynamic_cast<ClassFunctionDefinition*>(currentDefinition())) {
+  if (function_specifiers) {
     const ListNode<std::size_t> *it = function_specifiers->toFront();
     const ListNode<std::size_t> *end = it;
     do {
       int kind = m_editor->parseSession()->token_stream->kind(it->element);
       switch (kind) {
         case Token_inline:
-          function->setInline(true);
+          specs |= ClassFunctionDefinition::InlineSpecifier;
           break;
         case Token_virtual:
-          function->setVirtual(true);
+          specs |= ClassFunctionDefinition::VirtualSpecifier;
           break;
         case Token_explicit:
-          function->setExplicit(true);
+          specs |= ClassFunctionDefinition::ExplicitSpecifier;
           break;
       }
 
       it = it->next;
     } while (it != end);
+  }
+
+  m_functionSpecifiers.push(specs);
+}
+
+void DefinitionBuilder::popSpecifiers()
+{
+  m_functionSpecifiers.pop();
+  m_storageSpecifiers.pop();
+}
+
+void DefinitionBuilder::applyStorageSpecifiers()
+{
+  if (!m_storageSpecifiers.isEmpty())
+    if (ClassMemberDefinition* member = dynamic_cast<ClassMemberDefinition*>(currentDefinition()))
+      member->setStorageSpecifiers(m_storageSpecifiers.top());
+}
+
+void DefinitionBuilder::applyFunctionSpecifiers()
+{
+  if (!m_functionSpecifiers.isEmpty()) {
+    Q_ASSERT(dynamic_cast<ClassFunctionDefinition*>(currentDefinition()));
+    ClassFunctionDefinition* function = static_cast<ClassFunctionDefinition*>(currentDefinition());
+    function->setFunctionSpecifiers(m_functionSpecifiers.top());
   }
 }

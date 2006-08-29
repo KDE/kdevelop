@@ -79,6 +79,7 @@ protected:
   // Split up visitors created for subclasses to use
   /// Visits the type specifier and init declarator for a function.
   virtual void visitFunctionDeclaration (FunctionDefinitionAST *);
+  virtual void visitPostSimpleDeclaration(SimpleDeclarationAST*);
 
   // Normal overridden visitors
   virtual void visitNamespace (NamespaceAST *);

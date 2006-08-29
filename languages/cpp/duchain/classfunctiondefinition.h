@@ -47,6 +47,15 @@ public:
   bool isDestructor() const;
   void setDestructor(bool isDestructor);
 
+  enum FunctionSpecifier {
+    VirtualSpecifier  = 0x1,
+    InlineSpecifier   = 0x2,
+    ExplicitSpecifier = 0x4
+  };
+  Q_DECLARE_FLAGS(FunctionSpecifiers, FunctionSpecifier);
+
+  void setFunctionSpecifiers(FunctionSpecifiers specifiers);
+
   bool isVirtual() const;
   void setVirtual(bool isVirtual);
 
@@ -56,9 +65,6 @@ public:
   bool isExplicit() const;
   void setExplicit(bool isExplicit);
 
-  bool isAbstract() const;
-  void setAbstract(bool isAbstract);
-
   //bool isSimilar(KDevCodeItem *other, bool strict = true) const;
 
 private:
@@ -67,9 +73,10 @@ private:
   bool m_destructor: 1;
   bool m_isVirtual: 1;
   bool m_isInline: 1;
-  bool m_isAbstract: 1;
   bool m_isExplicit: 1;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(ClassFunctionDefinition::FunctionSpecifiers);
 
 #endif // CLASSFUNCTIONDEFINITION_H
 

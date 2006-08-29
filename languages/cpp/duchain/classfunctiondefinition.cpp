@@ -20,14 +20,11 @@
 
 #include "classfunctiondefinition.h"
 
-// kate: indent-width 2;
-
 ClassFunctionDefinition::ClassFunctionDefinition(KTextEditor::Range * range)
   : ClassMemberDefinition(range)
   , m_functionType(Normal)
   , m_isVirtual(false)
   , m_isInline(false)
-  , m_isAbstract(false)
   , m_isExplicit(false)
 {
 }
@@ -107,16 +104,6 @@ void ClassFunctionDefinition::setExplicit(bool isExplicit)
   m_isExplicit = isExplicit;
 }
 
-bool ClassFunctionDefinition::isAbstract() const
-{
-  return m_isAbstract;
-}
-
-void ClassFunctionDefinition::setAbstract(bool isAbstract)
-{
-  m_isAbstract = isAbstract;
-}
-
 void ClassFunctionDefinition::setConstructor(bool isConstructor)
 {
   m_constructor = isConstructor;
@@ -126,3 +113,12 @@ void ClassFunctionDefinition::setDestructor(bool isDestructor)
 {
   m_destructor = isDestructor;
 }
+
+void ClassFunctionDefinition::setFunctionSpecifiers(FunctionSpecifiers specifiers)
+{
+  m_isInline = specifiers & InlineSpecifier;
+  m_isExplicit = specifiers & ExplicitSpecifier;
+  m_isVirtual = specifiers & VirtualSpecifier;
+}
+
+// kate: indent-width 2;

@@ -45,10 +45,13 @@ public:
 
   const QList< AbstractType::Ptr >& topTypes() const;
 
+  // Visitor for every node
+  //virtual void visit(AST *node);
+
 protected:
   AbstractType::Ptr lastType() const;
 
-  // Created visitor
+  // Created visitors
   virtual void visitArrayExpression(ExpressionAST*);
 
   // Regular visitors
