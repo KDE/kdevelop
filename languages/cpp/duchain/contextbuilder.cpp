@@ -18,15 +18,15 @@
 */
 // kate: indent-width 2;
 
-#include "definitionbuilder.h"
+#include "contextbuilder.h"
 
 #include <ktexteditor/smartrange.h>
 
 #include "duchain.h"
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
-#include "definition.h"
-#include "definitionuse.h"
+#include "declaration.h"
+#include "use.h"
 #include "topducontext.h"
 #include "dumpchain.h"
 
@@ -70,7 +70,7 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
     if (m_compilingContexts) {
       // FIXME for now, just clear the chain... later, need to implement incremental parsing
       topLevelContext->deleteChildContextsRecursively();
-      topLevelContext->deleteLocalDefinitions();
+      topLevelContext->deleteLocalDeclarations();
       topLevelContext->deleteOrphanUses();
 
       Q_ASSERT(topLevelContext->textRangePtr());
@@ -332,7 +332,7 @@ void ContextBuilder::visitUsing(UsingAST* node)
 class IdentifierVerifier : public DefaultVisitor
 {
 public:
-  IdentifierVerifier(ContextBuilder* _builder, const KDevDocumentCursor& _cursor)
+  IdentifierVerifier(ContextBuilder* _builder, const Cursor& _cursor)
     : builder(_builder)
     , result(true)
     , cursor(_cursor)
@@ -341,12 +341,12 @@ public:
 
   ContextBuilder* builder;
   bool result;
-  KDevDocumentCursor cursor;
+  Cursor cursor;
 
   virtual void visitName (NameAST * node)
   {
     if (result)
-      if (!builder->currentContext()->findDefinition(builder->identifierForName(node), cursor))
+      if (!builder->currentContext()->findDeclaration(builder->identifierForName(node), cursor))
         result = false;
   }
 };
@@ -363,7 +363,7 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
     case DUContext::Function:
     case DUContext::Other:
       if (m_compilingContexts) {
-        IdentifierVerifier iv(this, KDevDocumentCursor(m_editor->currentUrl(), m_editor->findPosition(node->start_token)));
+        IdentifierVerifier iv(this, m_editor->findPosition(node->start_token));
         iv.visit(node->expression);
         //kDebug() << k_funcinfo << m_editor->findPosition(node->start_token) << " IdentifierVerifier returned " << iv.result << endl;
         node->expressionChosen = iv.result;

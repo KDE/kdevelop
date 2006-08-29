@@ -51,8 +51,11 @@ protected:
   virtual void endVisit (const ArrayType * type);
 
 private:
+  bool seen(const AbstractType* type);
+
   class CppEditorIntegrator* m_editor;
   int indent;
+  QSet<const AbstractType*> m_encountered;
 };
 
 #endif // DUMPTYPES_H

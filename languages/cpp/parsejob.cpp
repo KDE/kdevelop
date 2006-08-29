@@ -46,7 +46,7 @@
 #include "parser/control.h"
 #include "duchain/dumpchain.h"
 #include "duchain/cppeditorintegrator.h"
-#include "duchain/definitionbuilder.h"
+#include "duchain/declarationbuilder.h"
 #include "duchain/usebuilder.h"
 #include "duchain/topducontext.h"
 #include "preprocessjob.h"
@@ -175,8 +175,8 @@ void ParseJob::run()
         // Control the lifetime of the editor integrator (so that locking works)
         {
             CppEditorIntegrator editor(parentJob()->parseSession());
-            DefinitionBuilder definitionBuilder(&editor);
-            topContext = definitionBuilder.buildDefinitions(parentJob()->document(), ast, &chains);
+            DeclarationBuilder definitionBuilder(&editor);
+            topContext = definitionBuilder.buildDeclarations(parentJob()->document(), ast, &chains);
 
             if (parentJob()->abortRequested())
                 return parentJob()->abortJob();

@@ -1,4 +1,4 @@
-/* This  is part of KDevelop
+/* This file is part of KDevelop
     Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -16,95 +16,95 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "definition.h"
+#include "declaration.h"
 
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 
 #include "ducontext.h"
-#include "definitionuse.h"
+#include "use.h"
 
 using namespace KTextEditor;
 
-Definition::Definition(KTextEditor::Range* range, Scope scope )
+Declaration::Declaration(KTextEditor::Range* range, Scope scope )
   : KDevDocumentRangeObject(range)
   , m_context(0)
   , m_scope(scope)
 {
 }
 
-Definition::~Definition()
+Declaration::~Declaration()
 {
   qDeleteAll(m_uses);
 }
 
-void Definition::removeUse( DefinitionUse* range )
+void Declaration::removeUse( Use* range )
 {
-  range->setDefinition(0L);
+  range->setDeclaration(0L);
   m_uses.removeAll(range);
 }
 
-void Definition::addUse( DefinitionUse* range )
+void Declaration::addUse( Use* range )
 {
-  range->setDefinition(this);
+  range->setDeclaration(this);
   m_uses.append(range);
 }
 
-const QList< DefinitionUse* > & Definition::uses( ) const
+const QList< Use* > & Declaration::uses( ) const
 {
   return m_uses;
 }
 
-const Identifier& Definition::identifier( ) const
+const Identifier& Declaration::identifier( ) const
 {
   return m_identifier;
 }
 
-void Definition::setIdentifier(const Identifier& identifier)
+void Declaration::setIdentifier(const Identifier& identifier)
 {
   m_identifier = identifier;
 }
 
-AbstractType::Ptr Definition::abstractType( ) const
+AbstractType::Ptr Declaration::abstractType( ) const
 {
   return m_type;
 }
 
-void Definition::setAbstractType(AbstractType::Ptr type)
+void Declaration::setAbstractType(AbstractType::Ptr type)
 {
   m_type = type;
 }
 
-Definition::Scope Definition::scope( ) const
+Declaration::Scope Declaration::scope( ) const
 {
   return m_scope;
 }
 
-QualifiedIdentifier Definition::qualifiedIdentifier() const
+QualifiedIdentifier Declaration::qualifiedIdentifier() const
 {
   QualifiedIdentifier ret = context()->scopeIdentifier();
   ret.push(identifier());
   return ret;
 }
 
-DUContext * Definition::context() const
+DUContext * Declaration::context() const
 {
   return m_context;
 }
 
-void Definition::setContext(DUContext* context)
+void Declaration::setContext(DUContext* context)
 {
   m_context = context;
 }
 
-bool Definition::operator ==(const Definition & other) const
+bool Declaration::operator ==(const Declaration & other) const
 {
   return this == &other;
 }
 
-QString Definition::toString() const
+QString Declaration::toString() const
 {
-  return QString("Definition: %3 %4").arg(abstractType() ? abstractType()->toString() : QString("<notype>")).arg(identifier().toString());
+  return QString("Declaration: %3 %4").arg(abstractType() ? abstractType()->toString() : QString("<notype>")).arg(identifier().toString());
 }
 
 // kate: indent-width 2;

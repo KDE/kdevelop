@@ -45,9 +45,6 @@ public:
 
   const QList< AbstractType::Ptr >& topTypes() const;
 
-  // Visitor for every node
-  //virtual void visit(AST *node);
-
 protected:
   AbstractType::Ptr lastType() const;
 
@@ -84,8 +81,10 @@ private:
   KSharedPtr<T> currentType() { return KSharedPtr<T>::dynamicCast(m_typeStack.top()); }
 
   QStack<AbstractType::Ptr> m_typeStack;
-  QList<AbstractType::Ptr> m_topTypes;
+
   AbstractType::Ptr m_lastType;
+
+  QList<AbstractType::Ptr> m_topTypes;
 };
 
 #endif // TYPEBUILDER_H

@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DEFINITION_H
-#define DEFINITION_H
+#ifndef DECLARATION_H
+#define DECLARATION_H
 
 #include <QList>
 
@@ -28,12 +28,12 @@
 
 class AbstractType;
 class DUContext;
-class DefinitionUse;
+class Use;
 
 /**
- * Represents a single variable definition in a definition-use chain.
+ * Represents a single declaration in a definition-use chain.
  */
-class Definition : public KDevDocumentRangeObject
+class Declaration : public KDevDocumentRangeObject
 {
 public:
   enum Scope {
@@ -44,8 +44,8 @@ public:
     LocalScope
   };
 
-  Definition(KTextEditor::Range* range, Scope scope);
-  virtual ~Definition();
+  Declaration(KTextEditor::Range* range, Scope scope);
+  virtual ~Declaration();
 
   DUContext* context() const;
   void setContext(DUContext* context);
@@ -66,11 +66,11 @@ public:
 
   QualifiedIdentifier qualifiedIdentifier() const;
 
-  const QList<DefinitionUse*>& uses() const;
-  void addUse(DefinitionUse* range);
-  void removeUse(DefinitionUse* range);
+  const QList<Use*>& uses() const;
+  void addUse(Use* range);
+  void removeUse(Use* range);
 
-  bool operator==(const Definition& other) const;
+  bool operator==(const Declaration& other) const;
 
   virtual QString toString() const;
 
@@ -80,9 +80,9 @@ private:
   AbstractType::Ptr m_type;
   Identifier m_identifier;
 
-  QList<DefinitionUse*> m_uses;
+  QList<Use*> m_uses;
 };
 
-#endif // DEFINITION_H
+#endif // DECLARATION_H
 
 // kate: indent-width 2;

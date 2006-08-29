@@ -16,25 +16,25 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DEFINITIONBUILDER_H
-#define DEFINITIONBUILDER_H
+#ifndef DECLARATIONBUILDER_H
+#define DECLARATIONBUILDER_H
 
 #include "typebuilder.h"
 #include "cppnamespace.h"
-#include "classfunctiondefinition.h"
+#include "classfunctiondeclaration.h"
 
-class Definition;
+class Declaration;
 
-typedef TypeBuilder DefinitionBuilderBase;
+typedef TypeBuilder DeclarationBuilderBase;
 
 /**
  * A class which iterates the AST to extract definitions of types.
  */
-class DefinitionBuilder: public DefinitionBuilderBase
+class DeclarationBuilder: public DeclarationBuilderBase
 {
 public:
-  DefinitionBuilder(ParseSession* session);
-  DefinitionBuilder(CppEditorIntegrator* editor);
+  DeclarationBuilder(ParseSession* session);
+  DeclarationBuilder(CppEditorIntegrator* editor);
 
   /**
    * Compile either a context-definition chain, or add uses to an existing
@@ -42,7 +42,7 @@ public:
    *
    * \param includes contexts to reference from the top context.  The list may be changed by this function.
    */
-  TopDUContext* buildDefinitions(const KUrl& url, AST *node, QList<DUContext*>* includes = 0);
+  TopDUContext* buildDeclarations(const KUrl& url, AST *node, QList<DUContext*>* includes = 0);
 
 protected:
   virtual void visitDeclarator (DeclaratorAST*);
@@ -57,14 +57,14 @@ private:
    * Returns the new context created by this definition.
    * \param range provide a valid AST here if name is null
    */
-  Definition* openDefinition(NameAST* name, AST* range, bool isFunction = false);
-  void closeDefinition();
+  Declaration* openDeclaration(NameAST* name, AST* range, bool isFunction = false);
+  void closeDeclaration();
 
   void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);
   void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);
 
-  inline bool hasCurrentDefinition() const { return !m_definitionStack.isEmpty(); }
-  inline Definition* currentDefinition() const { return m_definitionStack.top(); }
+  inline bool hasCurrentDeclaration() const { return !m_declarationStack.isEmpty(); }
+  inline Declaration* currentDeclaration() const { return m_declarationStack.top(); }
 
   inline Cpp::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
   inline void setAccessPolicy(Cpp::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
@@ -73,13 +73,13 @@ private:
   void applyFunctionSpecifiers();
   void popSpecifiers();
 
-  QStack<Definition*> m_definitionStack;
+  QStack<Declaration*> m_declarationStack;
   QStack<Cpp::AccessPolicy> m_accessPolicyStack;
 
-  QStack<ClassFunctionDefinition::FunctionSpecifiers> m_functionSpecifiers;
-  QStack<ClassMemberDefinition::StorageSpecifiers> m_storageSpecifiers;
+  QStack<ClassFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
+  QStack<ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
 };
 
-#endif // DEFINITIONBUILDER_H
+#endif // DECLARATIONBUILDER_H
 
 // kate: indent-width 2;

@@ -175,7 +175,7 @@ CppCVType::CppCVType(Cpp::CVSpecs spec)
 
 QString CppCVType::cvString() const
 {
-  return QString("%1%2").arg(isConstant() ? "const " : "").arg(isVolatile() ? "volatile " : "");
+  return QString("%1%2").arg(isConstant() ? " const " : "").arg(isVolatile() ? " volatile " : "");
 }
 
 QString CppFunctionType::toString() const
@@ -190,7 +190,7 @@ CppPointerType::CppPointerType(Cpp::CVSpecs spec)
 
 QString CppPointerType::toString() const
 {
-  return QString("%1%2").arg(cvString()).arg(PointerType::toString());
+  return QString("%1%2").arg(PointerType::toString()).arg(cvString());
 }
 
 CppReferenceType::CppReferenceType(Cpp::CVSpecs spec)
@@ -200,7 +200,7 @@ CppReferenceType::CppReferenceType(Cpp::CVSpecs spec)
 
 QString CppReferenceType::toString() const
 {
-  return QString("%1%2").arg(cvString()).arg(ReferenceType::toString());
+  return QString("%1%2").arg(ReferenceType::toString()).arg(cvString());
 }
 
 /*CppArrayType::CppArrayType(Cpp::CVSpecs spec)

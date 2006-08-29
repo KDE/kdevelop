@@ -18,14 +18,14 @@ set(kdevcppduchain_SRCS
     ../../duchain/cppeditorintegrator.cpp
     ../../duchain/duchain.cpp
     ../../duchain/contextbuilder.cpp
-    ../../duchain/definitionbuilder.cpp
+    ../../duchain/declarationbuilder.cpp
     ../../duchain/usebuilder.cpp
     ../../duchain/ducontext.cpp
     ../../duchain/topducontext.cpp
-    ../../duchain/definition.cpp
-    ../../duchain/classmemberdefinition.cpp
-    ../../duchain/classfunctiondefinition.cpp
-    ../../duchain/definitionuse.cpp
+    ../../duchain/declaration.cpp
+    ../../duchain/classmemberdeclaration.cpp
+    ../../duchain/classfunctiondeclaration.cpp
+    ../../duchain/use.cpp
     ../../duchain/dumpchain.cpp
     ../../duchain/typesystem.cpp
     ../../duchain/typebuilder.cpp

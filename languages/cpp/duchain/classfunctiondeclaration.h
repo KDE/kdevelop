@@ -18,18 +18,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLASSFUNCTIONDEFINITION_H
-#define CLASSFUNCTIONDEFINITION_H
+#ifndef CLASSFUNCTIONDECLARATION_H
+#define CLASSFUNCTIONDECLARATION_H
 
-#include "classmemberdefinition.h"
+#include "classmemberdeclaration.h"
 
 /**
  * Represents a single variable definition in a definition-use chain.
  */
-class ClassFunctionDefinition : public ClassMemberDefinition
+class ClassFunctionDeclaration : public ClassMemberDeclaration
 {
 public:
-  ClassFunctionDefinition(KTextEditor::Range* range);
+  ClassFunctionDeclaration(KTextEditor::Range* range);
 
   enum QtFunctionType
   {
@@ -76,8 +76,8 @@ private:
   bool m_isExplicit: 1;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(ClassFunctionDefinition::FunctionSpecifiers);
+Q_DECLARE_OPERATORS_FOR_FLAGS(ClassFunctionDeclaration::FunctionSpecifiers);
 
-#endif // CLASSFUNCTIONDEFINITION_H
+#endif // CLASSFUNCTIONDECLARATION_H
 
 // kate: indent-width 2;

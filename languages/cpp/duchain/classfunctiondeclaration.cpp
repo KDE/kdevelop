@@ -18,10 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "classfunctiondefinition.h"
+#include "classfunctiondeclaration.h"
 
-ClassFunctionDefinition::ClassFunctionDefinition(KTextEditor::Range * range)
-  : ClassMemberDefinition(range)
+ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range)
+  : ClassMemberDeclaration(range)
   , m_functionType(Normal)
   , m_isVirtual(false)
   , m_isInline(false)
@@ -29,12 +29,12 @@ ClassFunctionDefinition::ClassFunctionDefinition(KTextEditor::Range * range)
 {
 }
 
-/*bool ClassFunctionDefinition::isSimilar(KDevCodeItem *other, bool strict ) const
+/*bool ClassFunctionDeclaration::isSimilar(KDevCodeItem *other, bool strict ) const
 {
   if (!CppClassMemberType::isSimilar(other,strict))
     return false;
 
-  FunctionModelItem func = dynamic_cast<ClassFunctionDefinition*>(other);
+  FunctionModelItem func = dynamic_cast<ClassFunctionDeclaration*>(other);
 
   if (isConstant() != func->isConstant())
     return false;
@@ -54,67 +54,67 @@ ClassFunctionDefinition::ClassFunctionDefinition(KTextEditor::Range * range)
   return true;
 }*/
 
-ClassFunctionDefinition::QtFunctionType ClassFunctionDefinition::functionType() const
+ClassFunctionDeclaration::QtFunctionType ClassFunctionDeclaration::functionType() const
 {
   return m_functionType;
 }
 
-void ClassFunctionDefinition::setFunctionType(QtFunctionType functionType)
+void ClassFunctionDeclaration::setFunctionType(QtFunctionType functionType)
 {
   m_functionType = functionType;
 }
 
-bool ClassFunctionDefinition::isConstructor() const
+bool ClassFunctionDeclaration::isConstructor() const
 {
   return m_constructor;
 }
 
-bool ClassFunctionDefinition::isDestructor() const
+bool ClassFunctionDeclaration::isDestructor() const
 {
   return m_destructor;
 }
 
-bool ClassFunctionDefinition::isVirtual() const
+bool ClassFunctionDeclaration::isVirtual() const
 {
   return m_isVirtual;
 }
 
-void ClassFunctionDefinition::setVirtual(bool isVirtual)
+void ClassFunctionDeclaration::setVirtual(bool isVirtual)
 {
   m_isVirtual = isVirtual;
 }
 
-bool ClassFunctionDefinition::isInline() const
+bool ClassFunctionDeclaration::isInline() const
 {
   return m_isInline;
 }
 
-void ClassFunctionDefinition::setInline(bool isInline)
+void ClassFunctionDeclaration::setInline(bool isInline)
 {
   m_isInline = isInline;
 }
 
-bool ClassFunctionDefinition::isExplicit() const
+bool ClassFunctionDeclaration::isExplicit() const
 {
   return m_isExplicit;
 }
 
-void ClassFunctionDefinition::setExplicit(bool isExplicit)
+void ClassFunctionDeclaration::setExplicit(bool isExplicit)
 {
   m_isExplicit = isExplicit;
 }
 
-void ClassFunctionDefinition::setConstructor(bool isConstructor)
+void ClassFunctionDeclaration::setConstructor(bool isConstructor)
 {
   m_constructor = isConstructor;
 }
 
-void ClassFunctionDefinition::setDestructor(bool isDestructor)
+void ClassFunctionDeclaration::setDestructor(bool isDestructor)
 {
   m_destructor = isDestructor;
 }
 
-void ClassFunctionDefinition::setFunctionSpecifiers(FunctionSpecifiers specifiers)
+void ClassFunctionDeclaration::setFunctionSpecifiers(FunctionSpecifiers specifiers)
 {
   m_isInline = specifiers & InlineSpecifier;
   m_isExplicit = specifiers & ExplicitSpecifier;

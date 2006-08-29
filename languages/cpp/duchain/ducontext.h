@@ -25,9 +25,9 @@
 #include "kdevdocumentcursorobject.h"
 #include "identifier.h"
 
-class Definition;
+class Declaration;
 class DUChain;
-class DefinitionUse;
+class Use;
 class AbstractType;
 
 /**
@@ -154,7 +154,7 @@ public:
    *
    * \returns the requested definition if one was found, otherwise null.
    */
-  Definition* findDefinition(const QualifiedIdentifier& identifier, const KDevDocumentCursor& position, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>(), bool inImportedContext = false) const;
+  Declaration* findDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>(), bool inImportedContext = false) const;
 
   /**
    * Searches for and returns a definition with a given \a identifier in this context, which
@@ -167,7 +167,7 @@ public:
    *
    * \overload
    */
-  Definition* findDefinition(const Identifier& identifier, const KDevDocumentCursor& position) const;
+  Declaration* findDeclaration(const Identifier& identifier, const KTextEditor::Cursor& position) const;
 
   /**
    * Returns the type of any existing valid \a identifier anywhere this context, or
@@ -175,7 +175,7 @@ public:
    *
    * \overload
    */
-  Definition* findDefinition(const QualifiedIdentifier& identifier) const;
+  Declaration* findDeclaration(const QualifiedIdentifier& identifier) const;
 
   /**
    * Returns the type of any existing valid \a identifier anywhere this context, or
@@ -183,45 +183,45 @@ public:
    *
    * \overload
    */
-  Definition* findDefinition(const Identifier& identifier) const;
+  Declaration* findDeclaration(const Identifier& identifier) const;
 
   /**
    * Returns the type of any \a identifier defined in this context, or
    * null if one is not found.
    */
-  Definition* findLocalDefinition(const QualifiedIdentifier& identifier, const KDevDocumentCursor & position, bool allowUnqualifiedMatch = false, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
+  Declaration* findLocalDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, bool allowUnqualifiedMatch = false, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
 
   /**
    * Clears all local definitions. Does not delete the definitions; the caller
    * assumes ownership.
    */
-  QList<Definition*> clearLocalDefinitions();
+  QList<Declaration*> clearLocalDeclarations();
 
   /**
    * Clears all local definitions. Deletes these definitions, as the context has
    * ownership.
    */
-  void deleteLocalDefinitions();
+  void deleteLocalDeclarations();
 
   /**
    * Returns all local definitions
    */
-  const QList<Definition*>& localDefinitions() const;
+  const QList<Declaration*>& localDeclarations() const;
 
   /**
    * Adds a new definition to this context. Passes back that definition for convenience.
    */
-  Definition* addDefinition(Definition* definition);
+  Declaration* addDeclaration(Declaration* definition);
 
   /**
    * Take a specified \a definition from this context and pass ownership to the caller.
    */
-  Definition* takeDefinition(Definition* definition);
+  Declaration* takeDeclaration(Declaration* definition);
 
   /**
    * Remove the specified \a definition from this context and delete it.
    */
-  void deleteDefinition(Definition* definition);
+  void deleteDeclaration(Declaration* definition);
 
   /**
    * Searches for the most specific context for the given cursor \a position in the given \a url.
@@ -232,7 +232,7 @@ public:
    *
    * \returns the requested context if one was found, otherwise null.
    */
-  DUContext* findContext(const KDevDocumentCursor& position, DUContext* parent = 0) const;
+  DUContext* findContext(const KTextEditor::Cursor& position, DUContext* parent = 0) const;
 
   /**
    * Searches for the most specific context for the given cursor \a position in the given \a url.
@@ -254,18 +254,18 @@ public:
    *
    * \returns the requested definitions, if any were active at that location.
    */
-  QHash<QualifiedIdentifier, Definition*> allDefinitions(const KDevDocumentCursor& position) const;
+  QHash<QualifiedIdentifier, Declaration*> allDeclarations(const KTextEditor::Cursor& position) const;
 
   /**
    * Return a list of uses which don't have a corresponding definition.
    */
-  const QList<DefinitionUse*>& orphanUses() const;
+  const QList<Use*>& orphanUses() const;
 
   /**
    * Add an orphan use (a use which doesn't have a corresponding definition)
    * to this context.
    */
-  void addOrphanUse(DefinitionUse* orphan);
+  void addOrphanUse(Use* orphan);
 
   /**
    * Clear and delete all orphan uses.
@@ -276,7 +276,7 @@ private:
   /**
    * Merges definitions up all branches of the definition-use chain into one hash.
    */
-  void mergeDefinitions(DUContext* context, QHash<QualifiedIdentifier, Definition*>& definitions) const;
+  void mergeDeclarations(DUContext* context, QHash<QualifiedIdentifier, Declaration*>& definitions) const;
 
   /// Deletion function which respects file boundaries.
   void deleteChildContextsRecursively(const KUrl& url);
@@ -288,7 +288,7 @@ private:
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
   /// Search closed contexts which have not necessarily lost scope
-  Definition* findDefinitionInChildren(const QualifiedIdentifier& identifier, const KDevDocumentCursor& position, const DUContext* sourceChild, const QList<UsingNS*>& usingNamespaces) const;
+  Declaration* findDeclarationInChildren(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const DUContext* sourceChild, const QList<UsingNS*>& usingNamespaces) const;
 
   ContextType m_contextType;
 
@@ -299,10 +299,10 @@ private:
   QList<DUContext*> m_childContexts;
   QList<DUContext*> m_importedChildContexts;
 
-  QList<Definition*> m_localDefinitions;
+  QList<Declaration*> m_localDeclarations;
 
   QList<UsingNS*> m_usingNamespaces;
-  QList<DefinitionUse*> m_orphanUses;
+  QList<Use*> m_orphanUses;
 };
 
 #endif // DUCONTEXT_H

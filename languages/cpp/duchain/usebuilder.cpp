@@ -23,8 +23,8 @@
 
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
-#include "definition.h"
-#include "definitionuse.h"
+#include "declaration.h"
+#include "use.h"
 
 using namespace KTextEditor;
 
@@ -72,9 +72,9 @@ void UseBuilder::newUse(NameAST* name)
 
   QualifiedIdentifier id = identifierForName(name);
 
-  if (Definition* definition = currentContext()->findDefinition(id, KDevDocumentCursor(use, KDevDocumentCursor::Start)))
-    definition->addUse(new DefinitionUse(use));
+  if (Declaration* definition = currentContext()->findDeclaration(id, use->start()))
+    definition->addUse(new Use(use));
   else
-    currentContext()->addOrphanUse(new DefinitionUse(use));
+    currentContext()->addOrphanUse(new Use(use));
     //kWarning() << k_funcinfo << "Could not find definition for identifier " << id << " at " << *use << endl;
 }

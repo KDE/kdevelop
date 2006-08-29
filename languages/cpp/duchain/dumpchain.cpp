@@ -25,13 +25,13 @@
 
 #include "cppeditorintegrator.h"
 #include "ducontext.h"
-#include "definition.h"
-#include "definitionuse.h"
+#include "declaration.h"
+#include "use.h"
 
 static char const * const names[] = {
   0,
   "AccessSpecifier",
-  "AsmDefinition",
+  "AsmDeclaration",
   "BaseClause",
   "BaseSpecifier",
   "BinaryExpression",
@@ -55,7 +55,7 @@ static char const * const names[] = {
   "ExpressionStatement",
   "ForStatement",
   "FunctionCall",
-  "FunctionDefinition",
+  "FunctionDeclaration",
   "IfStatement",
   "IncrDecrExpression",
   "InitDeclarator",
@@ -67,7 +67,7 @@ static char const * const names[] = {
   "MemInitializer",
   "Name",
   "Namespace",
-  "NamespaceAliasDefinition",
+  "NamespaceAliasDeclaration",
   "NewDeclarator",
   "NewExpression",
   "NewInitializer",
@@ -155,9 +155,9 @@ DumpChain::~ DumpChain( )
 void DumpChain::dump( DUContext * context )
 {
   kDebug() << QString(indent * 2, ' ') << "New Context \"" << context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "] " << context->textRange() << endl;
-  foreach (Definition* def, context->localDefinitions()) {
+  foreach (Declaration* def, context->localDeclarations()) {
     kDebug() << QString((indent+1) * 2, ' ') << def->toString() << " [" << def->qualifiedIdentifier() << "]  " << def->textRange() << ", " << def->uses().count() << " use(s)." << endl;
-    foreach (DefinitionUse* use, def->uses())
+    foreach (Use* use, def->uses())
       kDebug() << QString((indent+2) * 2, ' ') << "Use: " << use->textRange() << endl;
   }
 

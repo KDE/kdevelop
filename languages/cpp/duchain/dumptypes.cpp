@@ -30,6 +30,7 @@ DumpTypes::~ DumpTypes()
 void DumpTypes::dump(const AbstractType * type)
 {
   type->accept(this);
+  m_encountered.clear();
 }
 
 bool DumpTypes::preVisit(const AbstractType * type)
@@ -50,7 +51,7 @@ void DumpTypes::visit(const IntegralType * type)
 
 bool DumpTypes::visit(const PointerType * type)
 {
-  return true;
+  return !seen(type);
 }
 
 void DumpTypes::endVisit(const PointerType * type)
@@ -59,7 +60,7 @@ void DumpTypes::endVisit(const PointerType * type)
 
 bool DumpTypes::visit(const ReferenceType * type)
 {
-  return true;
+  return !seen(type);
 }
 
 void DumpTypes::endVisit(const ReferenceType * type)
@@ -68,7 +69,7 @@ void DumpTypes::endVisit(const ReferenceType * type)
 
 bool DumpTypes::visit(const FunctionType * type)
 {
-  return true;
+  return !seen(type);
 }
 
 void DumpTypes::endVisit(const FunctionType * type)
@@ -77,7 +78,7 @@ void DumpTypes::endVisit(const FunctionType * type)
 
 bool DumpTypes::visit(const StructureType * type)
 {
-  return true;
+  return !seen(type);
 }
 
 void DumpTypes::endVisit(const StructureType * type)
@@ -86,7 +87,7 @@ void DumpTypes::endVisit(const StructureType * type)
 
 bool DumpTypes::visit(const ArrayType * type)
 {
-  return true;
+  return !seen(type);
 }
 
 void DumpTypes::endVisit(const ArrayType * type)
@@ -94,3 +95,12 @@ void DumpTypes::endVisit(const ArrayType * type)
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
+
+bool DumpTypes::seen(const AbstractType * type)
+{
+  if (m_encountered.contains(type))
+    return true;
+
+  m_encountered.insert(type);
+  return false;
+}

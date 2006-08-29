@@ -25,8 +25,8 @@
 
 #include "parser/codemodel.h"
 #include "duchain/topducontext.h"
-#include "duchain/definition.h"
-#include "duchain/definitionuse.h"
+#include "duchain/declaration.h"
+#include "duchain/use.h"
 #include "duchain/cpptypes.h"
 
 using namespace KTextEditor;
@@ -201,7 +201,7 @@ void CppHighlighting::highlightModel(CodeModel* model, const QModelIndex & paren
     foreach (KTextEditor::SmartRange* sr, c->references())
       sr->setAttribute(attributeForType(type, ReferenceContext));
     if (c->definition())
-      c->definition()->setAttribute(attributeForType(type, DefinitionContext));
+      c->definition()->setAttribute(attributeForType(type, DeclarationContext));
     if (c->declaration())
       c->declaration()->setAttribute(attributeForType(type, DeclarationContext));
 
@@ -237,7 +237,7 @@ void CppHighlighting::highlightDUChain(DUContext* context) const
 
   //context->smartRange()->setAttribute(attributeForDepth(context->depth()));
 
-  foreach (Definition* def, context->localDefinitions()) {
+  foreach (Declaration* def, context->localDeclarations()) {
     Types type = LocalVariableType;
     if (context->scopeIdentifier().isEmpty())
       type = GlobalVariableType;
@@ -261,14 +261,14 @@ void CppHighlighting::highlightDUChain(DUContext* context) const
       }
 
     if (def->smartRange())
-      def->smartRange()->setAttribute(attributeForType(type, DefinitionContext));
+      def->smartRange()->setAttribute(attributeForType(type, DeclarationContext));
 
-    foreach (DefinitionUse* use, def->uses())
+    foreach (Use* use, def->uses())
       if (SmartRange* range = use->smartRange())
         range->setAttribute(attributeForType(type, ReferenceContext));
   }
 
-  foreach (DefinitionUse* use, context->orphanUses())
+  foreach (Use* use, context->orphanUses())
     if (SmartRange* range = use->smartRange())
       range->setAttribute(attributeForType(ErrorVariableType, ReferenceContext));
 

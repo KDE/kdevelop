@@ -21,9 +21,9 @@
 #include <QMutableLinkedListIterator>
 #include <QSet>
 
-#include "definition.h"
+#include "declaration.h"
 #include "duchain.h"
-#include "definitionuse.h"
+#include "use.h"
 
 #include "dumpchain.h"
 
@@ -56,7 +56,7 @@ DUContext::~DUContext( )
 
   deleteChildContextsRecursively(url());
 
-  qDeleteAll(m_localDefinitions);
+  qDeleteAll(m_localDeclarations);
 
   deleteOrphanUses();
 
@@ -73,31 +73,31 @@ DUContext* DUContext::parentContext( ) const
   return m_parentContext;
 }
 
-Definition * DUContext::addDefinition( Definition * newDefinition )
+Declaration * DUContext::addDeclaration( Declaration * newDeclaration )
 {
   // The definition may not have its identifier set when it's assigned... allow dupes here, TODO catch the error elsewhere
 
-  newDefinition->setContext(this);
-  m_localDefinitions.append(newDefinition);
-  return newDefinition;
+  newDeclaration->setContext(this);
+  m_localDeclarations.append(newDeclaration);
+  return newDeclaration;
 }
 
-Definition* DUContext::takeDefinition(Definition* definition)
+Declaration* DUContext::takeDeclaration(Declaration* definition)
 {
   definition->setContext(0);
-  m_localDefinitions.removeAll(definition);
+  m_localDeclarations.removeAll(definition);
   return definition;
 }
 
-Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifier, const KDevDocumentCursor & position, bool allowUnqualifiedMatch, const QList<UsingNS*>& usingNamespaces ) const
+Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, bool allowUnqualifiedMatch, const QList<UsingNS*>& usingNamespaces ) const
 {
-  QLinkedList<Definition*> tryToResolve;
-  QLinkedList<Definition*> ensureResolution;
-  QSet<Definition*> resolved;
+  QLinkedList<Declaration*> tryToResolve;
+  QLinkedList<Declaration*> ensureResolution;
+  QSet<Declaration*> resolved;
 
   //kDebug() << k_funcinfo << "Searching for " << identifier << endl;
 
-  foreach (Definition* definition, m_localDefinitions) {
+  foreach (Declaration* definition, m_localDeclarations) {
     QualifiedIdentifier::MatchTypes m = identifier.match(QualifiedIdentifier(definition->identifier()));
     switch (m) {
       case QualifiedIdentifier::NoMatch:
@@ -135,7 +135,7 @@ Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifi
   }
 
   if (resolved.count() == 1) {
-    Definition* definition  = *resolved.constBegin();
+    Declaration* definition  = *resolved.constBegin();
     if (type() == Class || position >= definition->textRange().start())
       return definition;
 
@@ -143,10 +143,10 @@ Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifi
 
   } else if (resolved.count() > 1) {
     /*kWarning() << k_funcinfo << "Multiple matching definitions (shouldn't happen, code error)" << endl;
-    QSetIterator<Definition*> it = resolved;
+    QSetIterator<Declaration*> it = resolved;
     while (it.hasNext()) {
-      Definition* def = it.next();
-      kDebug() << " Definition: " << def->qualifiedIdentifier() << " range " << def->textRange() << endl;
+      Declaration* def = it.next();
+      kDebug() << " Declaration: " << def->qualifiedIdentifier() << " range " << def->textRange() << endl;
     }*/
 
     return 0;
@@ -155,7 +155,7 @@ Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifi
     return 0;
   }
 
-  QMutableLinkedListIterator<Definition*> it = ensureResolution;
+  QMutableLinkedListIterator<Declaration*> it = ensureResolution;
   while (it.hasNext()) {
     QualifiedIdentifier::MatchTypes m = identifier.match(it.next()->qualifiedIdentifier());
     switch (m) {
@@ -173,7 +173,7 @@ Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifi
   }
 
   if (resolved.count() == 1) {
-    Definition* definition  = *resolved.constBegin();
+    Declaration* definition  = *resolved.constBegin();
     if (position >= definition->textRange().start())
       return definition;
 
@@ -204,7 +204,7 @@ Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifi
   foreach (UsingNS* use, usingNamespaces) {
     QualifiedIdentifier id = identifier.merge(use->nsIdentifier);
 
-    QMutableLinkedListIterator<Definition*> it = tryToResolve;
+    QMutableLinkedListIterator<Declaration*> it = tryToResolve;
     while (it.hasNext()) {
       QualifiedIdentifier::MatchTypes m = id.match(it.next()->qualifiedIdentifier());
       switch (m) {
@@ -226,10 +226,10 @@ Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifi
     return *resolved.constBegin();
   } else if (resolved.count() > 1) {
     /*kWarning() << k_funcinfo << "Multiple matching definitions (shouldn't happen, code error)" << endl;
-    QSetIterator<Definition*> it = resolved;
+    QSetIterator<Declaration*> it = resolved;
     while (it.hasNext()) {
-      Definition* def = it.next();
-      kDebug() << " Definition: " << def->qualifiedIdentifier() << " range " << def->textRange() << endl;
+      Declaration* def = it.next();
+      kDebug() << " Declaration: " << def->qualifiedIdentifier() << " range " << def->textRange() << endl;
     }*/
 
     return 0;
@@ -240,15 +240,15 @@ Definition * DUContext::findLocalDefinition( const QualifiedIdentifier& identifi
   return 0;
 }
 
-Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, const KDevDocumentCursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNS, bool inImportedContext ) const
+Declaration * DUContext::findDeclaration( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNS, bool inImportedContext ) const
 {
   // TODO we're missing ambiguous references by not checking every resolution before returning...
   // but is that such a bad thing? (might be good performance-wise)
-  if (Definition* definition = findLocalDefinition(identifier, position, sourceChild || inImportedContext, usingNS))
+  if (Declaration* definition = findLocalDeclaration(identifier, position, sourceChild || inImportedContext, usingNS))
     return definition;
 
   if (identifier.isQualified()) {
-    if (Definition* definition = findDefinitionInChildren(identifier, position, sourceChild, usingNS))
+    if (Declaration* definition = findDeclarationInChildren(identifier, position, sourceChild, usingNS))
       return definition;
 
   } else if (!usingNamespaces().isEmpty() && !identifier.explicitlyGlobal()) {
@@ -259,7 +259,7 @@ Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, 
         currentUsingNS.append(use);
 
     if (!currentUsingNS.isEmpty())
-      if (Definition* definition = findDefinitionInChildren(identifier, position, sourceChild, currentUsingNS))
+      if (Declaration* definition = findDeclarationInChildren(identifier, position, sourceChild, currentUsingNS))
         return definition;
   }
 
@@ -269,19 +269,19 @@ Definition * DUContext::findDefinition( const QualifiedIdentifier & identifier, 
     DUContext* parent = it.previous();
 
     // FIXME should have the current namespace list??
-    if (Definition* definition = parent->findDefinition(identifier, position, this, QList<UsingNS*>(), true))
+    if (Declaration* definition = parent->findDeclaration(identifier, position, this, QList<UsingNS*>(), true))
       return definition;
   }
 
   if (!inImportedContext && parentContext())
     // FIXME should have the current namespace list??
-    if (Definition* definition = parentContext()->findDefinition(identifier, position, this))
+    if (Declaration* definition = parentContext()->findDeclaration(identifier, position, this))
       return definition;
 
   return 0;
 }
 
-Definition * DUContext::findDefinitionInChildren(const QualifiedIdentifier & identifier, const KDevDocumentCursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNamespaces) const
+Declaration * DUContext::findDeclarationInChildren(const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNamespaces) const
 {
   foreach (DUContext* context, childContexts()) {
     if (context == sourceChild)
@@ -319,11 +319,11 @@ Definition * DUContext::findDefinitionInChildren(const QualifiedIdentifier & ide
 
     if (false) {
       found:
-      if (Definition* match = context->findLocalDefinition(identifier, position, false, usingNamespaces))
+      if (Declaration* match = context->findLocalDeclaration(identifier, position, false, usingNamespaces))
         return match;
     }
 
-    if (Definition* match = context->findDefinitionInChildren(identifier, position, false, usingNamespaces))
+    if (Declaration* match = context->findDeclarationInChildren(identifier, position, false, usingNamespaces))
       return match;
 
     // FIXME nested using definitions
@@ -332,9 +332,9 @@ Definition * DUContext::findDefinitionInChildren(const QualifiedIdentifier & ide
   return 0;
 }
 
-Definition * DUContext::findDefinition( const QualifiedIdentifier& identifier ) const
+Declaration * DUContext::findDeclaration( const QualifiedIdentifier& identifier ) const
 {
-  return findDefinition(identifier, KDevDocumentCursor(textRangePtr(), KDevDocumentCursor::End));
+  return findDeclaration(identifier, textRangePtr()->end());
 }
 
 void DUContext::addChildContext( DUContext * context )
@@ -382,13 +382,13 @@ void DUContext::removeImportedParentContext( DUContext * context )
   context->m_importedChildContexts.removeAll(this);
 }
 
-DUContext * DUContext::findContext( const KDevDocumentCursor& position, DUContext* parent) const
+DUContext * DUContext::findContext( const KTextEditor::Cursor& position, DUContext* parent) const
 {
   if (!parent)
     parent = const_cast<DUContext*>(this);
 
   foreach (DUContext* context, parent->childContexts())
-    if (context->contains(position)) {
+    if (context->textRange().contains(position)) {
       DUContext* ret = findContext(position, context);
       if (!ret)
         ret = context;
@@ -399,43 +399,43 @@ DUContext * DUContext::findContext( const KDevDocumentCursor& position, DUContex
   return 0;
 }
 
-QHash<QualifiedIdentifier, Definition*> DUContext::allDefinitions(const KDevDocumentCursor& position) const
+QHash<QualifiedIdentifier, Declaration*> DUContext::allDeclarations(const KTextEditor::Cursor& position) const
 {
-  QHash<QualifiedIdentifier, Definition*> ret;
+  QHash<QualifiedIdentifier, Declaration*> ret;
 
   DUContext* context = findContext(position, const_cast<DUContext*>(this));
 
   // Iterate back up the chain
-  mergeDefinitions(context, ret);
+  mergeDeclarations(context, ret);
 
   return ret;
 }
 
-const QList<Definition*>& DUContext::localDefinitions() const
+const QList<Declaration*>& DUContext::localDeclarations() const
 {
-  return m_localDefinitions;
+  return m_localDeclarations;
 }
 
-void DUContext::mergeDefinitions(DUContext* context, QHash<QualifiedIdentifier, Definition*>& definitions) const
+void DUContext::mergeDeclarations(DUContext* context, QHash<QualifiedIdentifier, Declaration*>& definitions) const
 {
-  foreach (Definition* definition, context->localDefinitions())
+  foreach (Declaration* definition, context->localDeclarations())
     if (!definitions.contains(definition->qualifiedIdentifier()))
       definitions.insert(definition->qualifiedIdentifier(), definition);
 
   QListIterator<DUContext*> it = context->importedParentContexts();
   it.toBack();
   while (it.hasPrevious()) {
-    mergeDefinitions(it.previous(), definitions);
+    mergeDeclarations(it.previous(), definitions);
   }
 
   if (parentContext())
-    mergeDefinitions(parentContext(), definitions);
+    mergeDeclarations(parentContext(), definitions);
 }
 
-void DUContext::deleteLocalDefinitions()
+void DUContext::deleteLocalDeclarations()
 {
-  qDeleteAll(m_localDefinitions);
-  m_localDefinitions.clear();
+  qDeleteAll(m_localDeclarations);
+  m_localDeclarations.clear();
 }
 
 QList<DUContext*> DUContext::takeChildContexts()
@@ -476,16 +476,16 @@ void DUContext::deleteChildContextsRecursively(const KUrl& url)
   //Q_ASSERT(m_childContexts.isEmpty());
 }
 
-QList< Definition * > DUContext::clearLocalDefinitions( )
+QList< Declaration * > DUContext::clearLocalDeclarations( )
 {
-  QList< Definition * > ret = m_localDefinitions;
-  m_localDefinitions.clear();
+  QList< Declaration * > ret = m_localDeclarations;
+  m_localDeclarations.clear();
   return ret;
 }
 
-void DUContext::deleteDefinition(Definition* definition)
+void DUContext::deleteDeclaration(Declaration* definition)
 {
-  m_localDefinitions.removeAll(definition);
+  m_localDeclarations.removeAll(definition);
   delete definition;
 }
 
@@ -548,17 +548,17 @@ void DUContext::setType(ContextType type)
   m_contextType = type;
 }
 
-Definition * DUContext::findDefinition(const Identifier & identifier) const
+Declaration * DUContext::findDeclaration(const Identifier & identifier) const
 {
-  return findDefinition(QualifiedIdentifier(identifier));
+  return findDeclaration(QualifiedIdentifier(identifier));
 }
 
-Definition* DUContext::findDefinition(const Identifier& identifier, const KDevDocumentCursor& position) const
+Declaration* DUContext::findDeclaration(const Identifier& identifier, const KTextEditor::Cursor& position) const
 {
-  return findDefinition(QualifiedIdentifier(identifier), position);
+  return findDeclaration(QualifiedIdentifier(identifier), position);
 }
 
-void DUContext::addOrphanUse(DefinitionUse* orphan)
+void DUContext::addOrphanUse(Use* orphan)
 {
   m_orphanUses.append(orphan);
 }
@@ -569,7 +569,7 @@ void DUContext::deleteOrphanUses()
   m_orphanUses.clear();
 }
 
-const QList<DefinitionUse*>& DUContext::orphanUses() const
+const QList<Use*>& DUContext::orphanUses() const
 {
   return m_orphanUses;
 }

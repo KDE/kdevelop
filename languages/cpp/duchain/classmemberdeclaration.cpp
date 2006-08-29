@@ -18,10 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "classmemberdefinition.h"
+#include "classmemberdeclaration.h"
 
-ClassMemberDefinition::ClassMemberDefinition(KTextEditor::Range * range)
-  : Definition(range, ClassScope)
+ClassMemberDeclaration::ClassMemberDeclaration(KTextEditor::Range * range)
+  : Declaration(range, ClassScope)
   , m_accessPolicy(Cpp::Public)
   , m_isStatic(false)
   , m_isAuto(false)
@@ -32,77 +32,77 @@ ClassMemberDefinition::ClassMemberDefinition(KTextEditor::Range * range)
 {
 }
 
-bool ClassMemberDefinition::isStatic() const
+bool ClassMemberDeclaration::isStatic() const
 {
   return m_isStatic;
 }
 
-void ClassMemberDefinition::setStatic(bool isStatic)
+void ClassMemberDeclaration::setStatic(bool isStatic)
 {
   m_isStatic = isStatic;
 }
 
-bool ClassMemberDefinition::isAuto() const
+bool ClassMemberDeclaration::isAuto() const
 {
   return m_isAuto;
 }
 
-void ClassMemberDefinition::setAuto(bool isAuto)
+void ClassMemberDeclaration::setAuto(bool isAuto)
 {
   m_isAuto = isAuto;
 }
 
-bool ClassMemberDefinition::isFriend() const
+bool ClassMemberDeclaration::isFriend() const
 {
   return m_isFriend;
 }
 
-void ClassMemberDefinition::setFriend(bool isFriend)
+void ClassMemberDeclaration::setFriend(bool isFriend)
 {
   m_isFriend = isFriend;
 }
 
-bool ClassMemberDefinition::isRegister() const
+bool ClassMemberDeclaration::isRegister() const
 {
   return m_isRegister;
 }
 
-void ClassMemberDefinition::setRegister(bool isRegister)
+void ClassMemberDeclaration::setRegister(bool isRegister)
 {
   m_isRegister = isRegister;
 }
 
-bool ClassMemberDefinition::isExtern() const
+bool ClassMemberDeclaration::isExtern() const
 {
   return m_isExtern;
 }
 
-void ClassMemberDefinition::setExtern(bool isExtern)
+void ClassMemberDeclaration::setExtern(bool isExtern)
 {
   m_isExtern = isExtern;
 }
 
-bool ClassMemberDefinition::isMutable() const
+bool ClassMemberDeclaration::isMutable() const
 {
   return m_isMutable;
 }
 
-void ClassMemberDefinition::setMutable(bool isMutable)
+void ClassMemberDeclaration::setMutable(bool isMutable)
 {
   m_isMutable = isMutable;
 }
 
-Cpp::AccessPolicy ClassMemberDefinition::accessPolicy() const
+Cpp::AccessPolicy ClassMemberDeclaration::accessPolicy() const
 {
   return m_accessPolicy;
 }
 
-void ClassMemberDefinition::setAccessPolicy(Cpp::AccessPolicy accessPolicy)
+void ClassMemberDeclaration::setAccessPolicy(Cpp::AccessPolicy accessPolicy)
 {
   m_accessPolicy = accessPolicy;
 }
 
-void ClassMemberDefinition::setStorageSpecifiers(StorageSpecifiers specifiers)
+void ClassMemberDeclaration::setStorageSpecifiers(StorageSpecifiers specifiers)
 {
   m_isStatic = specifiers & StaticSpecifier;
   m_isAuto = specifiers & AutoSpecifier;

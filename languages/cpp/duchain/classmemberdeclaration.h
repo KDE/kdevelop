@@ -18,18 +18,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLASSMEMBERDEFINITION_H
-#define CLASSMEMBERDEFINITION_H
+#ifndef CLASSMEMBERDECLARATION_H
+#define CLASSMEMBERDECLARATION_H
 
-#include "definition.h"
+#include "declaration.h"
 
 /**
  * Represents a single class member definition in a definition-use chain.
  */
-class ClassMemberDefinition : public Definition
+class ClassMemberDeclaration : public Declaration
 {
 public:
-  ClassMemberDefinition(KTextEditor::Range* range);
+  ClassMemberDeclaration(KTextEditor::Range* range);
 
   Cpp::AccessPolicy accessPolicy() const;
   void setAccessPolicy(Cpp::AccessPolicy accessPolicy);
@@ -74,8 +74,8 @@ private:
   bool m_isMutable: 1;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(ClassMemberDefinition::StorageSpecifiers);
+Q_DECLARE_OPERATORS_FOR_FLAGS(ClassMemberDeclaration::StorageSpecifiers);
 
-#endif // CLASSMEMBERDEFINITION_H
+#endif // CLASSMEMBERDECLARATION_H
 
 // kate: indent-width 2;

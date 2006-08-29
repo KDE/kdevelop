@@ -1,4 +1,4 @@
-/* This  is part of KDevelop
+/* This file is part of KDevelop
     Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -16,26 +16,28 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "definitionuse.h"
+#ifndef DEFINITIONUSE_H
+#define DEFINITIONUSE_H
 
-#include "definition.h"
+#include "kdevdocumentrangeobject.h"
 
-using namespace KTextEditor;
+class Declaration;
 
-DefinitionUse::DefinitionUse(KTextEditor::Range* range)
-  : KDevDocumentRangeObject(range)
-  , m_definition(0)
+/**
+ * Represents a single variable definition in a definition-use chain.
+ */
+class Use : public KDevDocumentRangeObject
 {
-}
+public:
+  Use(KTextEditor::Range* range);
 
-Definition* DefinitionUse::definition() const
-{
-  return m_definition;
-}
+  Declaration* declaration() const;
+  void setDeclaration(Declaration* definition);
 
-void DefinitionUse::setDefinition(Definition* definition)
-{
-  m_definition = definition;
-}
+private:
+  Declaration* m_definition;
+};
+
+#endif // DEFINITIONUSE_H
 
 // kate: indent-width 2;

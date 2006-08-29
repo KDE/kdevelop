@@ -26,7 +26,7 @@
 #include "cpptypes.h"
 #include "parsesession.h"
 #include "tokens.h"
-#include "definition.h"
+#include "declaration.h"
 #include "typerepository.h"
 
 TypeBuilder::TypeBuilder(ParseSession* session)
@@ -54,22 +54,20 @@ void TypeBuilder::openAbstractType(AbstractType::Ptr type, AST* node)
 
   if (hasCurrentType()) {
     if (FunctionType::Ptr function = currentType<FunctionType>()) {
-      if (!function->returnType())
-        function->setReturnType(type);
-      else
-        function->addArgument(type);
-
-    } else if (StructureType::Ptr structure = currentType<StructureType>()) {
-      structure->addElement(type);
+      function->addArgument(type);
 
     } else if (PointerType::Ptr pointer = currentType<PointerType>()) {
-      pointer->setBaseType(type);
+      // FIXME ? Don't add to top types
 
     } else if (ReferenceType::Ptr reference = currentType<ReferenceType>()) {
-      reference->setBaseType(type);
+      // FIXME ? Don't add to top types
 
     } else if (ArrayType::Ptr array = currentType<ArrayType>()) {
-      array->setElementType(type);
+      // FIXME ? Don't add to top types
+
+    } else if (currentType<StructureType>()) {
+      // Don't add to top types
+      // Adding to the structure is done manually, else return types get added as individual elements :(
 
     } else {
       m_topTypes.append(type);
@@ -144,9 +142,9 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
   if (node->name) {
     QualifiedIdentifier id = identifierForName(node->name);
-    KDevDocumentCursor pos(m_editor->currentUrl(), m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge));
+    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge);
 
-    Definition * def = currentContext()->findDefinition(id, pos);
+    Declaration * def = currentContext()->findDeclaration(id, pos);
 
     if (def && def->abstractType()) {
       int kind = m_editor->parseSession()->token_stream->kind(node->type);
@@ -233,6 +231,10 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     integral = TypeRepository::self()->integral(type, modifiers, parseConstVolatile(node->cv));
     if (integral)
       openType(integral, node);
+
+  } else if (node->name) {
+    QualifiedIdentifier id = identifierForName(node->name);
+    currentContext()->findDeclaration(id);
   }
 
   TypeBuilderBase::visitSimpleTypeSpecifier(node);
@@ -255,8 +257,6 @@ void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
   m_lastType = 0;
 
   TypeBuilderBase::visitFunctionDeclaration(node);
-
-  m_lastType = 0;
 }
 
 void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
@@ -264,9 +264,7 @@ void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
   m_lastType = 0;
 
   TypeBuilderBase::visitSimpleDeclaration(node);
-
-  m_lastType = 0;
-}
+ }
 
 void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 {
@@ -305,8 +303,6 @@ void TypeBuilder::visitDeclarator(DeclaratorAST *node)
 
     if (lastType())
       newFunction->setReturnType(lastType());
-    else
-      newFunction->setReturnType(AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid)));
 
     openType(newFunction, node);
   }
@@ -337,6 +333,10 @@ void TypeBuilder::visitDeclarator(DeclaratorAST *node)
 
   if (node->parameter_declaration_clause)
     closeType();
+
+  if (lastType() && hasCurrentType())
+    if (StructureType::Ptr structure = currentType<StructureType>())
+      structure->addElement(lastType());
 }
 
 void TypeBuilder::visitArrayExpression(ExpressionAST* expression)

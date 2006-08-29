@@ -17,7 +17,7 @@
 */
 // kate: indent-width 2;
 
-#include "definitionbuilder.h"
+#include "declarationbuilder.h"
 
 #include <ktexteditor/smartrange.h>
 
@@ -28,17 +28,17 @@
 
 using namespace KTextEditor;
 
-DefinitionBuilder::DefinitionBuilder (ParseSession* session)
-  : DefinitionBuilderBase(session)
+DeclarationBuilder::DeclarationBuilder (ParseSession* session)
+  : DeclarationBuilderBase(session)
 {
 }
 
-DefinitionBuilder::DefinitionBuilder (CppEditorIntegrator* editor)
-  : DefinitionBuilderBase(editor)
+DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
+  : DeclarationBuilderBase(editor)
 {
 }
 
-TopDUContext* DefinitionBuilder::buildDefinitions(const KUrl& url, AST *node, QList<DUContext*>* includes)
+TopDUContext* DeclarationBuilder::buildDeclarations(const KUrl& url, AST *node, QList<DUContext*>* includes)
 {
   TopDUContext* top = buildContexts(url, node, includes);
 
@@ -47,64 +47,64 @@ TopDUContext* DefinitionBuilder::buildDefinitions(const KUrl& url, AST *node, QL
   return top;
 }
 
-void DefinitionBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
+void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
-  DefinitionBuilderBase::visitFunctionDeclaration(node);
+  DeclarationBuilderBase::visitFunctionDeclaration(node);
 
   popSpecifiers();
 }
 
-void DefinitionBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
+void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
-  DefinitionBuilderBase::visitSimpleDeclaration(node);
+  DeclarationBuilderBase::visitSimpleDeclaration(node);
 
   popSpecifiers();
 }
 
-void DefinitionBuilder::visitDeclarator (DeclaratorAST* node)
+void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 {
   if (node->parameter_declaration_clause) {
-    openDefinition(node->id, node, true);
+    openDeclaration(node->id, node, true);
 
     /*if (!node->type_specifier) {
       // TODO detect identifiers not equal to classname
-      if (currentDefinition()->identifier().toString().startsWith('~'))
-        static_cast<ClassFunctionDefinition*>(currentDefinition())->setDestructor(true);
+      if (currentDeclaration()->identifier().toString().startsWith('~'))
+        static_cast<ClassFunctionDeclaration*>(currentDeclaration())->setDestructor(true);
       else
-        static_cast<ClassFunctionDefinition*>(currentDefinition())->setConstructor(true);
+        static_cast<ClassFunctionDeclaration*>(currentDeclaration())->setConstructor(true);
     }*/
 
     applyFunctionSpecifiers();
 
   } else {
-    openDefinition(node->id, node);
+    openDeclaration(node->id, node);
   }
 
   applyStorageSpecifiers();
 
-  DefinitionBuilderBase::visitDeclarator(node);
+  DeclarationBuilderBase::visitDeclarator(node);
 
-  closeDefinition();
+  closeDeclaration();
 }
 
-Definition* DefinitionBuilder::openDefinition(NameAST* name, AST* rangeNode, bool isFunction)
+Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction)
 {
-  Definition::Scope scope = Definition::GlobalScope;
+  Declaration::Scope scope = Declaration::GlobalScope;
   switch (currentContext()->type()) {
     case DUContext::Namespace:
-      scope = Definition::NamespaceScope;
+      scope = Declaration::NamespaceScope;
       break;
     case DUContext::Class:
-      scope = Definition::ClassScope;
+      scope = Declaration::ClassScope;
       break;
     case DUContext::Function:
-      scope = Definition::LocalScope;
+      scope = Declaration::LocalScope;
       break;
     default:
       break;
@@ -115,15 +115,15 @@ Definition* DefinitionBuilder::openDefinition(NameAST* name, AST* rangeNode, boo
   m_editor->exitCurrentRange();
   Q_ASSERT(m_editor->currentRange() == prior);
 
-  Definition* definition;
+  Declaration* definition;
   if (isFunction)
-    definition = new ClassFunctionDefinition(range);
-  else if (scope == Definition::ClassScope)
-    definition = new ClassMemberDefinition(range);
+    definition = new ClassFunctionDeclaration(range);
+  else if (scope == Declaration::ClassScope)
+    definition = new ClassMemberDeclaration(range);
   else
-    definition = new Definition(range, scope);
+    definition = new Declaration(range, scope);
 
-  currentContext()->addDefinition(definition);
+  currentContext()->addDeclaration(definition);
 
   if (name) {
     QualifiedIdentifier id = identifierForName(name);
@@ -135,24 +135,24 @@ Definition* DefinitionBuilder::openDefinition(NameAST* name, AST* rangeNode, boo
   }
 
   if (currentContext()->type() == DUContext::Class)
-    static_cast<ClassMemberDefinition*>(definition)->setAccessPolicy(currentAccessPolicy());
+    static_cast<ClassMemberDeclaration*>(definition)->setAccessPolicy(currentAccessPolicy());
 
-  m_definitionStack.push(definition);
+  m_declarationStack.push(definition);
 
   return definition;
 }
 
-void DefinitionBuilder::closeDefinition()
+void DeclarationBuilder::closeDeclaration()
 {
-  if (AbstractType::Ptr type = lastType())
-    currentDefinition()->setType(type);
+  if (lastType())
+    currentDeclaration()->setType(lastType());
 
-  m_definitionStack.pop();
+  m_declarationStack.pop();
 }
 
-void DefinitionBuilder::visitClassSpecifier(ClassSpecifierAST *node)
+void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
-  openDefinition(node->name, node);
+  openDeclaration(node->name, node);
 
   int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
   if (kind == Token_struct || kind == Token_union)
@@ -160,14 +160,14 @@ void DefinitionBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   else
     m_accessPolicyStack.push(Cpp::Private);
 
-  DefinitionBuilderBase::visitClassSpecifier(node);
+  DeclarationBuilderBase::visitClassSpecifier(node);
 
-  closeDefinition();
+  closeDeclaration();
 
   m_accessPolicyStack.pop();
 }
 
-void DefinitionBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
+void DeclarationBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
 {
   if (node->specs) {
     const ListNode<std::size_t> *it = node->specs->toFront();
@@ -195,12 +195,12 @@ void DefinitionBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
     } while (it != end);
   }
 
-  DefinitionBuilderBase::visitAccessSpecifier(node);
+  DeclarationBuilderBase::visitAccessSpecifier(node);
 }
 
-void DefinitionBuilder::parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers)
+void DeclarationBuilder::parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers)
 {
-  ClassMemberDefinition::StorageSpecifiers specs = 0;
+  ClassMemberDeclaration::StorageSpecifiers specs = 0;
 
   if (storage_specifiers) {
     const ListNode<std::size_t> *it = storage_specifiers->toFront();
@@ -209,22 +209,22 @@ void DefinitionBuilder::parseStorageSpecifiers(const ListNode<std::size_t>* stor
       int kind = m_editor->parseSession()->token_stream->kind(it->element);
       switch (kind) {
         case Token_friend:
-          specs |= ClassMemberDefinition::FriendSpecifier;
+          specs |= ClassMemberDeclaration::FriendSpecifier;
           break;
         case Token_auto:
-          specs |= ClassMemberDefinition::AutoSpecifier;
+          specs |= ClassMemberDeclaration::AutoSpecifier;
           break;
         case Token_register:
-          specs |= ClassMemberDefinition::RegisterSpecifier;
+          specs |= ClassMemberDeclaration::RegisterSpecifier;
           break;
         case Token_static:
-          specs |= ClassMemberDefinition::StaticSpecifier;
+          specs |= ClassMemberDeclaration::StaticSpecifier;
           break;
         case Token_extern:
-          specs |= ClassMemberDefinition::ExternSpecifier;
+          specs |= ClassMemberDeclaration::ExternSpecifier;
           break;
         case Token_mutable:
-          specs |= ClassMemberDefinition::MutableSpecifier;
+          specs |= ClassMemberDeclaration::MutableSpecifier;
           break;
       }
 
@@ -235,9 +235,9 @@ void DefinitionBuilder::parseStorageSpecifiers(const ListNode<std::size_t>* stor
   m_storageSpecifiers.push(specs);
 }
 
-void DefinitionBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers)
+void DeclarationBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers)
 {
-  ClassFunctionDefinition::FunctionSpecifiers specs = 0;
+  ClassFunctionDeclaration::FunctionSpecifiers specs = 0;
 
   if (function_specifiers) {
     const ListNode<std::size_t> *it = function_specifiers->toFront();
@@ -246,13 +246,13 @@ void DefinitionBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* fun
       int kind = m_editor->parseSession()->token_stream->kind(it->element);
       switch (kind) {
         case Token_inline:
-          specs |= ClassFunctionDefinition::InlineSpecifier;
+          specs |= ClassFunctionDeclaration::InlineSpecifier;
           break;
         case Token_virtual:
-          specs |= ClassFunctionDefinition::VirtualSpecifier;
+          specs |= ClassFunctionDeclaration::VirtualSpecifier;
           break;
         case Token_explicit:
-          specs |= ClassFunctionDefinition::ExplicitSpecifier;
+          specs |= ClassFunctionDeclaration::ExplicitSpecifier;
           break;
       }
 
@@ -263,24 +263,24 @@ void DefinitionBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* fun
   m_functionSpecifiers.push(specs);
 }
 
-void DefinitionBuilder::popSpecifiers()
+void DeclarationBuilder::popSpecifiers()
 {
   m_functionSpecifiers.pop();
   m_storageSpecifiers.pop();
 }
 
-void DefinitionBuilder::applyStorageSpecifiers()
+void DeclarationBuilder::applyStorageSpecifiers()
 {
   if (!m_storageSpecifiers.isEmpty())
-    if (ClassMemberDefinition* member = dynamic_cast<ClassMemberDefinition*>(currentDefinition()))
+    if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(currentDeclaration()))
       member->setStorageSpecifiers(m_storageSpecifiers.top());
 }
 
-void DefinitionBuilder::applyFunctionSpecifiers()
+void DeclarationBuilder::applyFunctionSpecifiers()
 {
   if (!m_functionSpecifiers.isEmpty()) {
-    Q_ASSERT(dynamic_cast<ClassFunctionDefinition*>(currentDefinition()));
-    ClassFunctionDefinition* function = static_cast<ClassFunctionDefinition*>(currentDefinition());
+    Q_ASSERT(dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()));
+    ClassFunctionDeclaration* function = static_cast<ClassFunctionDeclaration*>(currentDeclaration());
     function->setFunctionSpecifiers(m_functionSpecifiers.top());
   }
 }
