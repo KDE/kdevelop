@@ -13,7 +13,7 @@ namespace Blah {
 
 int Blah::Foo::s_test2 = 0;
 
-int test3()
+int test3()   
 {
   // Unqualified + before using statement - error
   nsTest = 2;
@@ -44,7 +44,7 @@ int Foo::test(int input)
     int Z = 4;
     test(Z);
   } catch (Foo2 error) {
-    return z;
+    return Z;
   }
 
   Foo f;

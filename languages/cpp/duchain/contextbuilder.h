@@ -102,7 +102,7 @@ private:
   DUContext* openContext(AST* fromRange, AST* toRange, DUContext::ContextType type, NameAST* identifier = 0);
   DUContext* openContextInternal(KTextEditor::Range* range, DUContext::ContextType type, NameAST* identifier = 0);
 
-  void closeContext(NameAST* name = 0, AST* node = 0);
+  void closeContext(NameAST* name = 0);
 
   bool createContextIfNeeded(AST* node, const QList<DUContext*>& importedParentContexts);
   bool createContextIfNeeded(AST* node, DUContext* importedParentContext);

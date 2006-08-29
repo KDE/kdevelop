@@ -255,18 +255,9 @@ DUContext* ContextBuilder::openContextInternal(Range* range, DUContext::ContextT
   return ret;
 }
 
-void ContextBuilder::closeContext(NameAST* name, AST* node)
+void ContextBuilder::closeContext(NameAST* name)
 {
   if (m_compilingContexts) {
-    if (node) {
-      // Find the end position of this function definition (just inside the bracket)
-      Cursor endPosition = m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge);
-
-      // Set the correct end point of the current context finishing here
-      if (currentContext()->textRange().end() != endPosition)
-        currentContext()->textRange().end() = endPosition;
-    }
-
     // Set context identifier
     if (name)
       currentContext()->setLocalScopeIdentifier(identifierForName(name));
