@@ -193,21 +193,20 @@ public:
     static void setBackgroundParser( KDevBackgroundParser *backgroundParser );
 
     static void initialize();
+    static void cleanup();
 };
 
 class KDEVINTERFACES_EXPORT KDevCoreInterface
 {
-    friend class KDevCore;
-
-public:
-    KDevCoreInterface(){}
-    virtual ~KDevCoreInterface(){}
-
+ public:
     virtual void loadSettings() = 0;
     //virtual void saveSettings() = 0;
 
 protected:
-    virtual void init() = 0;
+    KDevCoreInterface(){}
+    virtual ~KDevCoreInterface(){}
+
+    virtual void initialize() = 0;
     virtual void cleanup() = 0;
 };
 

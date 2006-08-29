@@ -202,7 +202,7 @@ void KDevMainWindow::setupActions()
     action->setWhatsThis( i18n( "<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key)." ) );
 }
 
-void KDevMainWindow::init()
+void KDevMainWindow::initialize()
 {
     setStandardToolBarMenuEnabled( true );
     setupActions();
@@ -528,9 +528,7 @@ bool KDevMainWindow::queryClose()
 {
     //All KDevCore API objects must release all resources which
     //depend upon one another.
-    KDevCore::projectController() ->cleanUp();
-    KDevCore::documentController() ->cleanUp();
-    KDevCore::pluginController() ->cleanUp();
+    KDevCore::cleanup();
 
     saveSettings();
     return true;

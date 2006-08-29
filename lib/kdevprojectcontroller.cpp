@@ -56,12 +56,7 @@ KDevProjectController::KDevProjectController( QObject *parent )
 KDevProjectController::~KDevProjectController()
 {}
 
-void KDevProjectController::cleanUp()
-{
-    closeProject();
-}
-
-void KDevProjectController::init()
+void KDevProjectController::initialize()
 {
     KActionCollection * ac =
         KDevCore::mainWindow() ->actionCollection();
@@ -89,6 +84,11 @@ void KDevProjectController::init()
     m_recentAction->setWhatsThis(
         i18n( "<b>Open recent project</b><p>Opens recently opened project." ) );
     m_recentAction->loadEntries( config, "RecentProjects" );
+}
+
+void KDevProjectController::cleanup()
+{
+    closeProject();
 }
 
 bool KDevProjectController::isLoaded() const
@@ -144,6 +144,10 @@ void KDevProjectController::setProjectsDirectory( const KUrl &projectsDir )
 KDevProject* KDevProjectController::activeProject() const
 {
     return m_project;
+}
+
+void KDevProjectController::loadSettings()
+{
 }
 
 bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )

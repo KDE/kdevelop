@@ -20,6 +20,8 @@ Boston, MA 02110-1301, USA.
 #define KDEVPLUGINCONTROLLER_H
 
 #include <QObject>
+#include "kdevcore.h"
+
 #include <QHash>
 #include <QList>
 
@@ -45,18 +47,15 @@ KDevelop plugin controller interface.
 The base class for KDevelop plugin controller.
 Plugin controller is responsible for quering, loading and unloading available plugins.
 */
-class KDEVINTERFACES_EXPORT KDevPluginController: public QObject
+class KDEVINTERFACES_EXPORT KDevPluginController: public QObject, protected KDevCoreInterface
 {
+    friend class KDevCore;
+
     Q_OBJECT
 public:
     /**Constructor.*/
     KDevPluginController();
     virtual ~KDevPluginController();
-
-    void init();
-
-    /** Release all resources that depend on other KDevCore objects */
-    void cleanUp();
 
     /**
      * Returns a uniquely specified plugin. If it isn't already loaded, it will be.
@@ -185,9 +184,14 @@ Q_SIGNALS:
     void loadingPlugin( const QString &plugin );
 
 public Q_SLOTS:
+    virtual void loadSettings();
     void loadPlugins( KService::List offers,
                       const QStringList & ignorePlugins = QStringList() );
     bool unloadPlugins();
+
+protected:
+    virtual void initialize();
+    virtual void cleanup();
 
 private:
     static KDevPlugin *loadPlugin( const KService::Ptr &service );

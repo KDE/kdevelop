@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #define KDEVPROJECTCONTROLLER_H
 
 #include <QObject>
+#include "kdevcore.h"
 
 #include "kdevexport.h"
 
@@ -29,16 +30,13 @@ Boston, MA 02110-1301, USA.
 class KDevProject;
 class KRecentFilesAction;
 
-class KDEVINTERFACES_EXPORT KDevProjectController : public QObject
+class KDEVINTERFACES_EXPORT KDevProjectController : public QObject, protected KDevCoreInterface
 {
     friend class KDevCore;
     Q_OBJECT
 public:
     KDevProjectController( QObject *parent = 0 );
     virtual ~KDevProjectController();
-
-    /** Release all resources that depend on other KDevCore objects */
-    void cleanUp();
 
     QString name() const;
     void setName( const QString &name );
@@ -58,6 +56,7 @@ public:
     KDevProject* activeProject() const;
 
 public Q_SLOTS:
+    virtual void loadSettings();
     bool openProject( const KUrl &KDev4ProjectFile = KUrl() );
     bool closeProject();
 
@@ -66,9 +65,11 @@ Q_SIGNALS:
     void projectClosing();
     void projectClosed();
 
-private:
-    void init();
+protected:
+    virtual void initialize();
+    virtual void cleanup();
 
+private:
     //FIXME Do not load all of this just for the project being opened...
     void legacyLoading();
     bool loadProjectPart( const QString &projectManager );

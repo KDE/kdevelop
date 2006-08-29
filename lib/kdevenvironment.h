@@ -21,6 +21,8 @@ Boston, MA 02110-1301, USA.
 #define KDEVENVIRONMENT_H
 
 #include <QObject>
+#include "kdevcore.h"
+
 #include <QMap>
 #include "kdevexport.h"
 
@@ -42,7 +44,7 @@ KCM module.  All plugins should respect the environment variables set by the use
 and sync any spawned QProcess/KProcess with the environment variables found in
 this class.
 */
-class KDEVINTERFACES_EXPORT KDevEnvironment: public QObject
+class KDEVINTERFACES_EXPORT KDevEnvironment: public QObject, protected KDevCoreInterface
 {
     friend class KDevEnvWidget;
     Q_OBJECT
@@ -98,12 +100,18 @@ public:
      */
     void syncProcess( KProcess *process );
 
-public slots:
+public Q_SLOTS:
     /**
      * Populate the enviroment with the process defaults and the settigs specified
      * in the configuration/project files.
      */
     void populate();
+
+    virtual void loadSettings();
+
+protected:
+    virtual void initialize();
+    virtual void cleanup();
 
 private:
     void saveSettings( EnvironmentMap overrides );

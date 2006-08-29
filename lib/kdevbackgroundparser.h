@@ -23,6 +23,7 @@
 #define KDEVBACKGROUNDPARSER_H
 
 #include <QObject>
+#include "kdevcore.h"
 
 #include <kurl.h>
 #include <QMap>
@@ -57,14 +58,15 @@ typedef QList< QPair<KUrl, KDevCodeModel* > > CodeModelCache;
 
 using namespace ThreadWeaver;
 
-class KDevBackgroundParser : public QObject
+class KDevBackgroundParser : public QObject, protected KDevCoreInterface
 {
+    friend class KDevCore;
+
     Q_OBJECT
 public:
     KDevBackgroundParser( QObject* parent = 0 );
     virtual ~KDevBackgroundParser();
 
-    void init();
     void cacheModels( uint modelsToCache );
 
     /**
@@ -88,7 +90,9 @@ public:
      */
     KDevParserDependencyPolicy* dependencyPolicy() const;
 
-public slots:
+public Q_SLOTS:
+    virtual void loadSettings();
+
     void suspend();
     void resume();
     void setDelay( int msecs );
@@ -101,9 +105,13 @@ public slots:
 
     void parseDocuments();
 
-private slots:
+private Q_SLOTS:
     void parseComplete( Job *job );
     void documentChanged( KTextEditor::Document *document );
+
+protected:
+    virtual void initialize();
+    virtual void cleanup();
 
 private:
     QTimer *m_timer;

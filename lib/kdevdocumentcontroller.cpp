@@ -93,16 +93,13 @@ KDevDocumentController::KDevDocumentController( QObject *parent )
 KDevDocumentController::~KDevDocumentController()
 {}
 
-void KDevDocumentController::cleanUp()
-{
-    querySaveDocuments();
-    blockSignals( true ); //No more signals as we're ready to close
-    closeAllDocuments();
-}
-
 void KDevDocumentController::setEncoding( const QString &encoding )
 {
     m_presetEncoding = encoding;
+}
+
+void KDevDocumentController::loadSettings()
+{
 }
 
 KDevDocument* KDevDocumentController::editDocument( const KUrl & inputUrl,
@@ -907,7 +904,7 @@ void KDevDocumentController::setActiveDocument( KDevDocument *document, QWidget 
         emit documentActivated( activeDocument() );
 }
 
-void KDevDocumentController::init()
+void KDevDocumentController::initialize()
 {
     connect( KDevCore::mainWindow(), SIGNAL( contextMenu( KMenu *, const Context * ) ),
              this, SLOT( contextMenu( KMenu *, const Context * ) ) );
@@ -999,6 +996,13 @@ void KDevDocumentController::init()
     connect( m_forwardAction->menu(), SIGNAL( activated( int ) ),
              this, SLOT( slotForwardPopupActivated( int ) ) );
 
+}
+
+void KDevDocumentController::cleanup()
+{
+    querySaveDocuments();
+    blockSignals( true ); //No more signals as we're ready to close
+    closeAllDocuments();
 }
 
 KParts::Factory *KDevDocumentController::findPartFactory( const QString &mimeType,

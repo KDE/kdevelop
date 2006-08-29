@@ -125,6 +125,10 @@ private Q_SLOTS:
     void switchToDockedMode();
     void switchToTopLevelMode();
 
+protected:
+    virtual void initialize();
+    virtual void cleanup();
+
 private:
     QWidget *magicalParent() const;
     QWidget *magicalWidget( QDockWidget *dockWidget ) const;
@@ -133,8 +137,7 @@ private:
 
     void setupActions();
     void setupWindowMenu();
-    void init();
-    void cleanup();
+
     QString beautifyToolTip( const QString& text ) const;
     KDevMainWindowPrivate *d;
 };

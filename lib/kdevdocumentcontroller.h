@@ -26,6 +26,9 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEV_DOCUMENTCONTROLLER_H
 #define KDEV_DOCUMENTCONTROLLER_H
 
+#include <QObject>
+#include "kdevcore.h"
+
 #include <QMap>
 #include <QWidget>
 #include <QPointer>
@@ -74,7 +77,7 @@ class Context;
  * The document controller manages open documents in the IDE.
  * Open documents are usually editors, GUI designers, html documentation etc.
 */
-class KDEVINTERFACES_EXPORT KDevDocumentController: public QObject
+class KDEVINTERFACES_EXPORT KDevDocumentController: public QObject, protected KDevCoreInterface
 {
     friend class KDevCore;
     Q_OBJECT
@@ -84,9 +87,6 @@ public:
     @param parent The parent object.*/
     KDevDocumentController( QObject *parent = 0 );
     virtual ~KDevDocumentController();
-
-    /** Release all resources that depend on other KDevCore objects */
-    void cleanUp();
 
     /**Call this before a call to @ref editDocument to set the encoding of the
     document to be opened.
@@ -149,6 +149,8 @@ public:
     KUrl activeDocumentUrl() const;
 
 public Q_SLOTS:
+    virtual void loadSettings();
+
     /**Opens a new or existing document.
     @param url The full Url of the document to open.
     @param range The location information, if applicable.
@@ -223,6 +225,10 @@ private Q_SLOTS:
                          KTextEditor::ModificationInterface::ModifiedOnDiskReason reason );
     void newDocumentStatus( KTextEditor::Document * doc );
 
+protected:
+    virtual void initialize();
+    virtual void cleanup();
+
 private:
     bool querySaveDocuments();
     void setCursorPosition( KParts::Part *part,
@@ -233,8 +239,6 @@ private:
     void replaceDocument( KDevDocument* newDocument,
                           KDevDocument* oldDocument, bool setActive = true );
     void setActiveDocument( KDevDocument* document, QWidget *widget = 0L );
-
-    void init();
 
     KParts::Factory *findPartFactory( const QString &mimeType,
                                       const QString &partType,

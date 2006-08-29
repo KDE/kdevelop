@@ -38,6 +38,18 @@ KDevLanguageController::KDevLanguageController( QObject *parent )
 KDevLanguageController::~KDevLanguageController()
 {}
 
+void KDevLanguageController::loadSettings()
+{
+}
+
+void KDevLanguageController::initialize()
+{
+}
+
+void KDevLanguageController::cleanup()
+{
+}
+
 KDevLanguageSupport *KDevLanguageController::activeLanguage() const
 {
     return m_activeLanguage;

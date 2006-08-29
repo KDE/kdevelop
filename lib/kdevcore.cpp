@@ -208,21 +208,34 @@ void KDevCore::initialize()
 
     //WARNING! the order is important
 
-    //FIXME standardize on 'initialize' method name.
     Q_ASSERT( d->documentController );
     Q_ASSERT( d->projectController );
     Q_ASSERT( d->mainWindow );
     Q_ASSERT( d->backgroundParser );
     Q_ASSERT( d->pluginController );
-    d->documentController->init();
-    d->projectController->init();
-    d->mainWindow->init();
+    d->documentController->initialize();
+    d->projectController->initialize();
+    d->mainWindow->initialize();
 
-    d->pluginController->init();
+    d->pluginController->initialize();
 
-    /*d->backgroundParser->init();*/ //Load this after plugin as it uses project settings
+    /*d->backgroundParser->initialize();*/ //Load this after plugin as it uses project settings
 
     d->mainWindow->setVisible( true ); //Done initializing
+}
+
+void KDevCore::cleanup()
+{
+    Q_ASSERT( d->documentController );
+    Q_ASSERT( d->projectController );
+    Q_ASSERT( d->mainWindow );
+    Q_ASSERT( d->backgroundParser );
+    Q_ASSERT( d->pluginController );
+    d->projectController->cleanup();
+    d->documentController->cleanup();
+    d->mainWindow->cleanup();
+    d->pluginController->cleanup();
+    d->backgroundParser->cleanup();
 }
 
 //FIXME

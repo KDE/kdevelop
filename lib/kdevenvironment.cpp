@@ -53,6 +53,18 @@ KDevEnvironment::KDevEnvironment( QObject *parent )
 KDevEnvironment::~KDevEnvironment()
 {}
 
+void KDevEnvironment::loadSettings()
+{
+}
+
+void KDevEnvironment::initialize()
+{
+}
+
+void KDevEnvironment::cleanup()
+{
+}
+
 QString KDevEnvironment::variable( const QString &name ) const
 {
     Q_ASSERT( !name.isEmpty() );

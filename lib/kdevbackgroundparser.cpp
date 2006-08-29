@@ -98,7 +98,7 @@ void KDevBackgroundParser::clear(QObject* parent)
     }
 }
 
-void KDevBackgroundParser::init()
+void KDevBackgroundParser::initialize()
 {
     m_progressBar->setMinimumWidth( 150 );
     KDevCore::mainWindow()->statusBar()->addPermanentWidget( m_progressBar );
@@ -115,13 +115,21 @@ void KDevBackgroundParser::init()
         suspend();
 }
 
+void KDevBackgroundParser::cleanup()
+{
+}
+
+void KDevBackgroundParser::loadSettings()
+{
+}
+
 void KDevBackgroundParser::cacheModels( uint modelsToCache )
 {
     m_modelsToCache = modelsToCache;
     m_progressBar->reset();
     m_progressBar->setMinimum( 0 );
     m_progressBar->setMaximum( modelsToCache );
-    m_progressBar->show();
+//     m_progressBar->show();
 }
 
 void KDevBackgroundParser::addDocument( const KUrl &url )
@@ -332,8 +340,8 @@ void KDevBackgroundParser::resume()
 
     m_weaver->resume();
 
-    if (m_weaver->queueLength() && m_progressBar)
-        m_progressBar->show();
+//     if (m_weaver->queueLength() && m_progressBar)
+//         m_progressBar->show();
 }
 
 void KDevBackgroundParser::setDelay( int msec )

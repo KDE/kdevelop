@@ -40,10 +40,11 @@ class KDEVINTERFACES_EXPORT KDevConfig
 public:
     enum Mode
     {
-        Standard,
-        LocalProject,
-        GlobalProject
+        Standard= 0x0,
+        LocalProject = 0x1,
+        GlobalProject = 0x2
     };
+    Q_DECLARE_FLAGS(Modes, Mode)
 
     KDevConfig();
     virtual ~KDevConfig();

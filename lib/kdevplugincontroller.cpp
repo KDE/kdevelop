@@ -79,7 +79,7 @@ KDevPluginController::~KDevPluginController()
     unloadPlugins();
 }
 
-void KDevPluginController::init()
+void KDevPluginController::initialize()
 {
     loadPlugins( ProfileEngine::Core );
     loadPlugins( ProfileEngine::Global );
@@ -104,7 +104,7 @@ void KDevPluginController::init()
     }
 }
 
-void KDevPluginController::cleanUp()
+void KDevPluginController::cleanup()
 {
     unloadPlugins();
 }
@@ -120,6 +120,9 @@ KService::List KDevPluginController::queryPlugins( const QString &constraint )
 {
     return query( "KDevelop/Plugin", constraint );
 }
+
+
+    void loadSettings();
 
 void KDevPluginController::loadPlugins( ProfileEngine::OfferType offer,
                                         const QStringList & ignorePlugins )
@@ -143,6 +146,10 @@ void KDevPluginController::unloadPlugins( ProfileEngine::OfferType offer )
             delete plugin;
         }
     }
+}
+
+void KDevPluginController::loadSettings()
+{
 }
 
 void KDevPluginController::loadPlugins( KService::List offers, const QStringList & ignorePlugins )

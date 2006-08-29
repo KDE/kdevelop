@@ -70,11 +70,11 @@ KDevProjectManagerPart::KDevProjectManagerPart( QObject *parent, const QStringLi
     KPluginInfo::List pluginList = KPluginInfo::fromServices( managerList );
 
     QString importer = config->readPathEntry( "Importer", "KDevGenericImporter" );
-    kDebug( 9000 ) << k_funcinfo << "looking for the " << importer << " importer" << endl;
+    //kDebug( 9000 ) << k_funcinfo << "looking for the " << importer << " importer" << endl;
     KPluginInfo::List::Iterator it, itEnd = pluginList.end();
     for ( it = pluginList.begin(); it != itEnd; ++it )
     {
-        kDebug( 9000 ) << k_funcinfo << "checking " << ( *it ) ->pluginName() << endl;
+        //kDebug( 9000 ) << k_funcinfo << "checking " << ( *it ) ->pluginName() << endl;
         if ( ( *it ) ->pluginName() == importer )
         {
             m_manager = KService::createInstance<KDevFileManager>( ( *it ) ->service(),

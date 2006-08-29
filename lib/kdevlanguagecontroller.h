@@ -20,14 +20,16 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVLANGUAGECONTROLLER_H
 #define KDEVLANGUAGECONTROLLER_H
 
-#include <QHash>
 #include <QObject>
+#include "kdevcore.h"
+
+#include <QHash>
 
 #include "kdevexport.h"
 
 #include "kdevlanguagesupport.h"
 
-class KDEVINTERFACES_EXPORT KDevLanguageController: public QObject
+class KDEVINTERFACES_EXPORT KDevLanguageController: public QObject, protected KDevCoreInterface
 {
     Q_OBJECT
 public:
@@ -36,6 +38,13 @@ public:
 
     KDevLanguageSupport *activeLanguage() const;
     KDevLanguageSupport *languageSupport( const QString &language );
+
+public Q_SLOTS:
+    virtual void loadSettings();
+
+protected:
+    virtual void initialize();
+    virtual void cleanup();
 
 private:
     bool loadLanguageSupport( const QString &language );
