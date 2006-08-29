@@ -19,8 +19,6 @@
 #ifndef DEFINITION_H
 #define DEFINITION_H
 
-#include <QList>
-
 #include "kdevdocumentrangeobject.h"
 
 class Declaration;

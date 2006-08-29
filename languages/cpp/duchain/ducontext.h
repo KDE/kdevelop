@@ -81,6 +81,11 @@ public:
   void setLocalScopeIdentifier(const QualifiedIdentifier& identifier);
 
   /**
+   * Provides a mangled version of the context's identifier, for use in a symbol table.
+   */
+  QString mangledIdentifier() const;
+
+  /**
    * Returns the immediate parent context of this context.
    */
   DUContext* parentContext() const;
