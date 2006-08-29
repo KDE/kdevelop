@@ -108,7 +108,7 @@ class SimpleTypeCacheBinder : public Base {
 
 	  MemberFindDesc() : m_hashKey( 0 ) {}
 
-	  MemberFindDesc( TypeDesc d, SimpleTypeImpl::MemberInfo::MemberType ft ) : m_desc( d ), findType( ft ), m_hashKey( d.hashKey() ), m_hashKey2( d.hashKey2() ) {
+	  MemberFindDesc( TypeDesc d, SimpleTypeImpl::MemberInfo::MemberType ft ) : m_desc( d ), findType( ft ), m_hashKey( d.hashKey() + findType ), m_hashKey2( d.hashKey2() + findType ) {
         //m_desc.makePrivate();
 #ifndef USE_HASH_MAP
 		  fullName = m_desc.fullNameChain();
@@ -148,8 +148,15 @@ class SimpleTypeCacheBinder : public Base {
       bool operator == ( const MemberFindDesc& rhs ) const {
 	      //return m_hashKey == rhs.m_hashKey;
 	      //return m_desc == rhs.m_desc; //compare( rhs ) == 0;
-	      return m_hashKey2 == m_hashKey2;
-	      //return compare( rhs ) == 0;
+	      bool ret = m_hashKey2 == rhs.m_hashKey2 && findType == rhs.findType;
+	      //bool ret = compare( rhs ) == 0;
+	      /*if( ret ) {
+		      if( compare( rhs ) != 0 ) {
+		      kdDebug( 9007 ) << "mismatched keys " << m_hashKey2 << " " << rhs.m_hashKey2 << ": " << m_desc.fullNameChain() << " " << rhs.m_desc.fullNameChain() << "(" << fullName << ", " << rhs.fullName << ")" << endl;
+			      ret = false;
+		      }
+	      }*/
+	      return ret;
       }
       /*
        bool operator > ( const MemberFindDesc& rhs ) const {
@@ -177,7 +184,7 @@ class SimpleTypeCacheBinder : public Base {
       typename MemberMap::iterator it = m_memberCache.find( key );
 
       if ( it != m_memberCache.end() ) {
-        ifVerbose( dbg() << "\"" << Base::str() << "\" took member-info for \"" << name.fullNameChain() << "\" from the cache" << endl );
+      ifVerbose( dbg() << "\"" << Base::str() << "\" took member-info for \"" << name.fullNameChain() << "\" from the cache: " << (*it).second.name << endl );
 #ifdef USE_HASH_MAP
 	      return (*it).second;
 #else

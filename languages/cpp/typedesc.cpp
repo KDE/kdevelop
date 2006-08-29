@@ -186,7 +186,7 @@ size_t TypeDescData::hashKey() {
 
     int len = m_cleanName.length();
     for ( int a = 0; a < len; a++ )
-			ret += m_cleanName[ a ].unicode() * 3 * (a+1);
+			ret += m_cleanName[ a ].unicode() * 3 * (11*(a+1));
 
 
     int n = 1;
@@ -196,7 +196,7 @@ size_t TypeDescData::hashKey() {
     }
 
     m_hashKey = ret;
-    m_hashValid = true;
+    //m_hashValid = true;
 	}
 
   if ( m_nextType )
@@ -214,7 +214,7 @@ size_t TypeDescData::hashKey2() {
 	
 		int len = m_cleanName.length();
 		for ( int a = 0; a < len; a++ )
-			ret += m_cleanName[ a ].unicode() * 19 * (a+2);
+			ret += m_cleanName[ a ].unicode() * 19 * (7*(a+1));
 	
 	
 		int n = 1;
@@ -223,7 +223,7 @@ size_t TypeDescData::hashKey2() {
 			n++;
 		}
 		m_hashKey2 = ret;
-		m_hash2Valid = true;
+		//m_hash2Valid = true;
 	}
 
 	if ( m_nextType )

@@ -59,7 +59,9 @@ template <class StreamType>
   }
  
   StreamType& dbg() {
+#ifndef VERBOSE
     if( !m_enabled ) return m_nstream;
+#endif
     m_stream << "(" << m_counter << ")";
     for( QStringList::iterator it = m_prefixStack.begin(); it != m_prefixStack.end() ; ++it )
       m_stream << *it;
