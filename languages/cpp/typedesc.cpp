@@ -588,9 +588,11 @@ void TypeDesc::init( QString stri ) {
     m_data->m_functionDepth++;
     str = str.mid( strlen( functionMark ) ).stripWhiteSpace();
   }
+	bool isFunction = false;
 
+	if( str.startsWith( "operator " ) ) isFunction = true;
 	///Since function-names are also processed by this function, this check has to be done
-	if( !str.contains( "operator" ) ) {
+	if( !isFunction ) {
   ///Remove any prefixes like const or typename(very limited algorithm)
 		int len = str.find( "<" );
 		if ( len == -1 )
@@ -641,8 +643,12 @@ void TypeDesc::init( QString stri ) {
     m_data->m_pointerDepth = countExtract( '*', str );
   }
 #else
-  takeData( str );
-  m_data->m_pointerDepth = countExtract( '*', str );
+	if( !isFunction ) {
+  	takeData( str );
+  	m_data->m_pointerDepth = countExtract( '*', str );
+	} else {
+		m_data->m_cleanName = str;
+	}
 
 #endif
 
