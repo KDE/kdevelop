@@ -60,46 +60,52 @@ QString templateParamFromString( int num, QString str );
 
 QStringList splitType( QString str ) ;
 
-class ParamIterator{
-public:
-  ParamIterator( QString parens, QString source ) : m_source( source ), m_parens( parens ), m_cur( 0 ), m_curEnd ( 0 ) {
-  int begin = m_source.find(m_parens[0]);
-  int end = m_source.findRev(m_parens[1]);
-  
-  if(begin == -1 || end == -1 && end - begin > 1)
-    m_cur = m_source.length();
-  else {
-    m_source = source.mid( begin+1, end - begin );
-    m_curEnd = next();
-  }
-  }
- 
- ParamIterator& operator ++() {
-  m_cur = m_curEnd + 1;
-  if( m_cur < (int)m_source.length() ) {
-   m_curEnd = next();
-  }
-  return *this;
- }
- 
- QString operator *() {
-  return m_source.mid( m_cur, m_curEnd - m_cur ).stripWhiteSpace();
- }
- 
- operator bool() {
-  return m_cur < (int)m_source.length();
- }
+class ParamIterator {
+  public:
+    ParamIterator( QString parens, QString source ) : m_source( source ), m_parens( parens ), m_cur( 0 ), m_curEnd ( 0 ) {
+      int begin = m_source.find( m_parens[ 0 ] );
+      int end = m_source.findRev( m_parens[ 1 ] );
+	    m_prefix = m_source.left( begin );
+	    
+      if ( begin == -1 || end == -1 && end - begin > 1 )
+        m_cur = m_source.length();
+      else {
+        m_source = source.mid( begin + 1, end - begin );
+        m_curEnd = next();
+      }
+    }
 
-private:
-  QString m_source;
-  QString m_parens;
-  int m_cur;
-  int m_curEnd;
-  
-  int next() {
-    return findCommaOrEnd( m_source, m_cur,  m_parens[1] );
-  }
-  
+    ParamIterator& operator ++() {
+      m_cur = m_curEnd + 1;
+      if ( m_cur < ( int ) m_source.length() ) {
+        m_curEnd = next();
+      }
+      return *this;
+    }
+
+    QString operator *() {
+      return m_source.mid( m_cur, m_curEnd - m_cur ).stripWhiteSpace();
+    }
+
+    operator bool() const {
+      return m_cur < ( int ) m_source.length();
+    }
+
+    QString prefix() const {
+	    return m_prefix;
+    }
+
+  private:
+		QString m_prefix;
+    QString m_source;
+    QString m_parens;
+    int m_cur;
+    int m_curEnd;
+
+    int next() {
+      return findCommaOrEnd( m_source, m_cur, m_parens[ 1 ] );
+    }
+
 };
 
 QString stringMult( int count, QString str );
@@ -107,4 +113,4 @@ QString stringMult( int count, QString str );
 
 
 #endif 
-// kate: indent-mode csands; tab-width 4;
+// kate: tab-width 2;

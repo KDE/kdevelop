@@ -133,6 +133,21 @@ struct TypeDescData : public KShared {
     TypePointer m_resolved;
     TypeDecoration m_dec;
     TypeDescFlags m_flags;
+
+	TypeDescData() : m_hashValid( false ), m_hash2Valid( false ) {
+	}
+	void invalidateKey() {
+		m_hashValid = false;
+		m_hash2Valid = false;
+	}
+
+	size_t hashKey();
+	size_t hashKey2(); 
+private:
+	bool m_hashValid;
+	uint m_hashKey;
+	bool m_hash2Valid;
+	uint m_hashKey2;
 };
 
 class TypeDesc {
@@ -166,7 +181,14 @@ class TypeDesc {
       return ret;
     }
 
-    ///this function must be remade
+	uint hashKey() const;
+
+	/**Returns a hash-key that is computed in a different way than the first.
+	 * If both keys match, it is pretty sure that it is the same type.
+	 * */
+	uint hashKey2() const;
+
+///this function must be remade
     bool isValidType() const ;
 
     int depth() const;
@@ -294,6 +316,7 @@ class TypeDesc {
 
 
   private:
+	void takeData( const QString& string );
     void makeDataPrivate();
     KSharedPtr<TypeDescData> m_data;
 
