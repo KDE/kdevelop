@@ -55,12 +55,12 @@ Cursor CppEditorIntegrator::findPosition( const Token & token, Edge edge ) const
 Range* CppEditorIntegrator::createRange( AST * node, RangeEdge edge )
 {
   Q_UNUSED(edge);
-  return createRange(Range(findPosition(node->start_token, FrontEdge), findPosition(node->end_token, FrontEdge)));
+  return createRange(Range(findPosition(node->start_token, FrontEdge), findPosition(node->end_token - 1, BackEdge)));
 }
 
 KTextEditor::Range* CppEditorIntegrator::createRange(AST* from, AST* to)
 {
-  return createRange(Range(findPosition(from->start_token, FrontEdge), findPosition(to->end_token, FrontEdge)));
+  return createRange(Range(findPosition(from->start_token, FrontEdge), findPosition(to->end_token - 1, BackEdge)));
 }
 
 Range* CppEditorIntegrator::createRange( const Token & token )
@@ -79,9 +79,9 @@ QString CppEditorIntegrator::tokenToString(std::size_t token) const
   return m_session->token_stream->token(token).symbol();
 }
 
-// kate: indent-width 2;
-
 ParseSession * CppEditorIntegrator::parseSession() const
 {
   return m_session;
 }
+
+// kate: indent-width 2;
