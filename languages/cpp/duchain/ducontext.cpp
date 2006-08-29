@@ -52,11 +52,11 @@ DUContext::~DUContext( )
   foreach (DUContext* context, importedParentContexts)
     removeImportedParentContext(context);
 
-  //deleteImportedParentContextsRecursively(url());
-
   deleteChildContextsRecursively(url());
 
-  qDeleteAll(m_localDeclarations);
+  deleteLocalDefinitions();
+
+  deleteLocalDeclarations();
 
   deleteOrphanUses();
 
@@ -640,6 +640,28 @@ DUContext* DUContext::findContext(ContextType contextType, const QualifiedIdenti
       return context;
 
   return 0;
+}
+
+const QList<Definition*>& DUContext::localDefinitions() const
+{
+  return m_localDefinitions;
+}
+
+Definition* DUContext::addDefinition(Definition* definition)
+{
+  m_localDefinitions.append(definition);
+}
+
+Definition* DUContext::takeDefinition(Definition* definition)
+{
+  m_localDefinitions.removeAll(definition);
+}
+
+void DUContext::deleteLocalDefinitions()
+{
+  QList<Definition*> localDefinitions = m_localDefinitions;
+  qDeleteAll(localDefinitions);
+  Q_ASSERT(m_localDefinitions.isEmpty());
 }
 
 // kate: indent-width 2;

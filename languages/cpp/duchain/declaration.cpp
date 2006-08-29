@@ -120,9 +120,8 @@ bool Declaration::isDefinition() const
 void Declaration::setDeclarationIsDefinition(bool dd)
 {
   m_isDefinition = dd;
-  if (m_isDefinition) {
-    delete m_definition;
-    m_definition = 0;
+  if (m_isDefinition && m_definition) {
+    setDefinition(0);
   }
 }
 
@@ -134,6 +133,7 @@ Definition* Declaration::definition() const
 void Declaration::setDefinition(Definition* definition)
 {
   if (m_definition) {
+    m_definition->setDeclaration(0);
     delete m_definition;
     m_definition = 0;
   }

@@ -24,6 +24,7 @@
 #include "kdevdocumentrangeobject.h"
 
 class Declaration;
+class DUContext;
 
 /**
  * Represents a definition of a previously encountered declaration in a definition-use chain.
@@ -31,11 +32,16 @@ class Declaration;
 class Definition : public KDevDocumentRangeObject
 {
 public:
-  Definition(KTextEditor::Range* range, Declaration* declaration);
+  Definition(KTextEditor::Range* range, Declaration* declaration, DUContext* context);
+
+  DUContext* context() const;
+  void setContext(DUContext* context);
 
   Declaration* declaration() const;
+  void setDeclaration(Declaration* declaration);
 
 private:
+  DUContext* m_context;
   Declaration* m_declaration;
 };
 

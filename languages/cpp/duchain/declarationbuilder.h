@@ -78,6 +78,7 @@ private:
 
   QStack<ClassFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
   QStack<ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
+  QStack<bool> m_functionDefinedStack;
 };
 
 #endif // DECLARATIONBUILDER_H

@@ -43,6 +43,7 @@ TopDUContext* DeclarationBuilder::buildDeclarations(const KUrl& url, AST *node, 
   TopDUContext* top = buildContexts(url, node, includes);
 
   Q_ASSERT(m_accessPolicyStack.isEmpty());
+  Q_ASSERT(m_functionDefinedStack.isEmpty());
 
   return top;
 }
@@ -52,7 +53,11 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
+  m_functionDefinedStack.push(true);
+
   DeclarationBuilderBase::visitFunctionDeclaration(node);
+
+  m_functionDefinedStack.pop();
 
   popSpecifiers();
 }
@@ -62,7 +67,11 @@ void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
+  m_functionDefinedStack.push(false);
+
   DeclarationBuilderBase::visitSimpleDeclaration(node);
+
+  m_functionDefinedStack.pop();
 
   popSpecifiers();
 }
@@ -115,15 +124,19 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   m_editor->exitCurrentRange();
   Q_ASSERT(m_editor->currentRange() == prior);
 
-  Declaration* definition;
-  if (isFunction)
-    definition = new ClassFunctionDeclaration(range);
-  else if (scope == Declaration::ClassScope)
-    definition = new ClassMemberDeclaration(range);
-  else
-    definition = new Declaration(range, scope);
+  Declaration* declaration;
+  if (isFunction) {
+    declaration = new ClassFunctionDeclaration(range);
+    declaration->setDeclarationIsDefinition(m_functionDefinedStack.top());
 
-  currentContext()->addDeclaration(definition);
+  } else if (scope == Declaration::ClassScope) {
+    declaration = new ClassMemberDeclaration(range);
+
+  } else {
+    declaration = new Declaration(range, scope);
+  }
+
+  currentContext()->addDeclaration(declaration);
 
   if (name) {
     QualifiedIdentifier id = identifierForName(name);
@@ -131,15 +144,15 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     // FIXME this can happen if we're defining a staticly declared variable
     //Q_ASSERT(m_nameCompiler->identifier().count() == 1);
     Q_ASSERT(!id.isEmpty());
-    definition->setIdentifier(id.first());
+    declaration->setIdentifier(id.first());
   }
 
   if (currentContext()->type() == DUContext::Class)
-    static_cast<ClassMemberDeclaration*>(definition)->setAccessPolicy(currentAccessPolicy());
+    static_cast<ClassMemberDeclaration*>(declaration)->setAccessPolicy(currentAccessPolicy());
 
-  m_declarationStack.push(definition);
+  m_declarationStack.push(declaration);
 
-  return definition;
+  return declaration;
 }
 
 void DeclarationBuilder::closeDeclaration()

@@ -26,6 +26,7 @@
 #include "cppeditorintegrator.h"
 #include "ducontext.h"
 #include "declaration.h"
+#include "definition.h"
 #include "use.h"
 
 static char const * const names[] = {
@@ -155,9 +156,11 @@ DumpChain::~ DumpChain( )
 void DumpChain::dump( DUContext * context )
 {
   kDebug() << QString(indent * 2, ' ') << "New Context \"" << context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "] " << context->textRange() << endl;
-  foreach (Declaration* def, context->localDeclarations()) {
-    kDebug() << QString((indent+1) * 2, ' ') << def->toString() << " [" << def->qualifiedIdentifier() << "]  " << def->textRange() << ", " << def->uses().count() << " use(s)." << endl;
-    foreach (Use* use, def->uses())
+  foreach (Declaration* dec, context->localDeclarations()) {
+    kDebug() << QString((indent+1) * 2, ' ') << dec->toString() << " [" << dec->qualifiedIdentifier() << "]  " << dec->textRange() << ", " << (dec->isDefinition() ? "defined, " : (dec->definition() ? "" : "no definition, ")) << dec->uses().count() << " use(s)." << endl;
+    if (dec->definition())
+      kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition: " << dec->definition()->textRange() << endl;
+    foreach (Use* use, dec->uses())
       kDebug() << QString((indent+2) * 2, ' ') << "Use: " << use->textRange() << endl;
   }
 

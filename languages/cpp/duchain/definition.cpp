@@ -18,17 +18,44 @@
 
 #include "definition.h"
 
+#include "ducontext.h"
+
 using namespace KTextEditor;
 
-Definition::Definition(KTextEditor::Range* range, Declaration* declaration)
+Definition::Definition(KTextEditor::Range* range, Declaration* declaration, DUContext* context)
   : KDevDocumentRangeObject(range)
-  , m_declaration(declaration)
+  , m_context(0)
+  , m_declaration(0)
 {
+  setContext(context);
+  setDeclaration(declaration);
+}
+
+DUContext* Definition::context() const
+{
+  return m_context;
+}
+
+void Definition::setContext(DUContext* context)
+{
+  if (m_context)
+    m_context->takeDefinition(this);
+
+  m_context = context;
+
+  if (m_context)
+    m_context->addDefinition(this);
 }
 
 Declaration* Definition::declaration() const
 {
   return m_declaration;
+}
+
+void Definition::setDeclaration(Declaration* declaration)
+{
+  // TODO if declaration is 0, highlight as definition without declaration
+  m_declaration = declaration;
 }
 
 // kate: indent-width 2;

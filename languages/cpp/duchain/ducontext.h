@@ -26,6 +26,7 @@
 #include "identifier.h"
 
 class Declaration;
+class Definition;
 class DUChain;
 class Use;
 class AbstractType;
@@ -144,31 +145,31 @@ public:
   const QList<UsingNS*>& usingNamespaces() const;
 
   /**
-   * Searches for and returns a definition with a given \a identifier in this context, which
+   * Searches for and returns a declaration with a given \a identifier in this context, which
    * is currently active at the given text \a position.
    *
    * \param identifier the identifier of the definition to search for
    * \param location the text position to search for
    *
-   * \returns the requested definition if one was found, otherwise null.
+   * \returns the requested declaration if one was found, otherwise null.
    */
   Declaration* findDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>(), bool inImportedContext = false) const;
 
   /**
-   * Searches for and returns a definition with a given \a identifier in this context, which
+   * Searches for and returns a declaration with a given \a identifier in this context, which
    * is currently active at the given text \a position.
    *
    * \param identifier the identifier of the definition to search for
    * \param location the text position to search for
    *
-   * \returns the requested definition if one was found, otherwise null.
+   * \returns the requested declaration if one was found, otherwise null.
    *
    * \overload
    */
   Declaration* findDeclaration(const Identifier& identifier, const KTextEditor::Cursor& position) const;
 
   /**
-   * Returns the type of any existing valid \a identifier anywhere this context, or
+   * Returns the declaration of any existing valid \a identifier anywhere this context, or
    * null if one is not found.
    *
    * \overload
@@ -176,7 +177,7 @@ public:
   Declaration* findDeclaration(const QualifiedIdentifier& identifier) const;
 
   /**
-   * Returns the type of any existing valid \a identifier anywhere this context, or
+   * Returns the declaration of any existing valid \a identifier anywhere this context, or
    * null if one is not found.
    *
    * \overload
@@ -190,36 +191,57 @@ public:
   Declaration* findLocalDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, bool allowUnqualifiedMatch = false, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
 
   /**
-   * Clears all local definitions. Does not delete the definitions; the caller
+   * Clears all local declarations. Does not delete the declaration; the caller
    * assumes ownership.
    */
   QList<Declaration*> clearLocalDeclarations();
 
   /**
-   * Clears all local definitions. Deletes these definitions, as the context has
+   * Clears all local declarations. Deletes these declarations, as the context has
    * ownership.
    */
   void deleteLocalDeclarations();
 
   /**
-   * Returns all local definitions
+   * Returns all local declarations
    */
   const QList<Declaration*>& localDeclarations() const;
 
   /**
+   * Adds a new declaration to this context. Passes back that definition for convenience.
+   */
+  Declaration* addDeclaration(Declaration* declaration);
+
+  /**
+   * Take a specified \a declaration from this context and pass ownership to the caller.
+   */
+  Declaration* takeDeclaration(Declaration* declaration);
+
+  /**
+   * Remove the specified \a declaration from this context and delete it.
+   */
+  void deleteDeclaration(Declaration* declaration);
+
+  /**
+   * Returns all local definitions
+   */
+  const QList<Definition*>& localDefinitions() const;
+
+  /**
    * Adds a new definition to this context. Passes back that definition for convenience.
    */
-  Declaration* addDeclaration(Declaration* definition);
+  Definition* addDefinition(Definition* definition);
 
   /**
    * Take a specified \a definition from this context and pass ownership to the caller.
    */
-  Declaration* takeDeclaration(Declaration* definition);
+  Definition* takeDefinition(Definition* definition);
 
   /**
-   * Remove the specified \a definition from this context and delete it.
+   * Clears all local definitions. Deletes these definitions, as the context has
+   * ownership.
    */
-  void deleteDeclaration(Declaration* definition);
+  void deleteLocalDefinitions();
 
   /**
    * Searches for the most specific context for the given cursor \a position in the given \a url.
@@ -298,6 +320,7 @@ private:
   QList<DUContext*> m_importedChildContexts;
 
   QList<Declaration*> m_localDeclarations;
+  QList<Definition*> m_localDefinitions;
 
   QList<UsingNS*> m_usingNamespaces;
   QList<Use*> m_orphanUses;
