@@ -35,8 +35,6 @@ class AbstractType;
  * directed acyclic graph.
  *
  * \todo change child relationships to a linked list within the context?
- * \todo check that redefinition of local variables within a base function context
- *       is supported by the current code.
  */
 class DUContext : public KDevDocumentRangeObject
 {

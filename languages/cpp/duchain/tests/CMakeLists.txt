@@ -23,6 +23,7 @@ set(kdevcppduchain_SRCS
     ../../duchain/ducontext.cpp
     ../../duchain/topducontext.cpp
     ../../duchain/declaration.cpp
+    ../../duchain/definition.cpp
     ../../duchain/classmemberdeclaration.cpp
     ../../duchain/classfunctiondeclaration.cpp
     ../../duchain/use.cpp

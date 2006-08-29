@@ -29,6 +29,7 @@
 class AbstractType;
 class DUContext;
 class Use;
+class Definition;
 
 /**
  * Represents a single declaration in a definition-use chain.
@@ -46,6 +47,12 @@ public:
 
   Declaration(KTextEditor::Range* range, Scope scope);
   virtual ~Declaration();
+
+  bool isDefinition() const;
+  void setDeclarationIsDefinition(bool dd);
+
+  Definition* definition() const;
+  void setDefinition(Definition* definition);
 
   DUContext* context() const;
   void setContext(DUContext* context);
