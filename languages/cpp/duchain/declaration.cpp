@@ -23,6 +23,7 @@
 
 #include "ducontext.h"
 #include "use.h"
+#include "definition.h"
 
 using namespace KTextEditor;
 
@@ -30,6 +31,8 @@ Declaration::Declaration(KTextEditor::Range* range, Scope scope )
   : KDevDocumentRangeObject(range)
   , m_context(0)
   , m_scope(scope)
+  , m_definition(0)
+  , m_isDefinition(false)
 {
 }
 
@@ -108,3 +111,36 @@ QString Declaration::toString() const
 }
 
 // kate: indent-width 2;
+
+bool Declaration::isDefinition() const
+{
+  return m_isDefinition;
+}
+
+void Declaration::setDeclarationIsDefinition(bool dd)
+{
+  m_isDefinition = dd;
+  if (m_isDefinition) {
+    delete m_definition;
+    m_definition = 0;
+  }
+}
+
+Definition* Declaration::definition() const
+{
+  return m_definition;
+}
+
+void Declaration::setDefinition(Definition* definition)
+{
+  if (m_definition) {
+    delete m_definition;
+    m_definition = 0;
+  }
+
+  m_definition = definition;
+
+  if (m_definition) {
+    m_isDefinition = false;
+  }
+}

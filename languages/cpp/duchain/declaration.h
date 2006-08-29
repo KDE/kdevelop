@@ -87,7 +87,10 @@ private:
   AbstractType::Ptr m_type;
   Identifier m_identifier;
 
+  Definition* m_definition;
   QList<Use*> m_uses;
+
+  bool m_isDefinition : 1;
 };
 
 #endif // DECLARATION_H
