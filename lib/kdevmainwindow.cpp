@@ -218,6 +218,10 @@ void KDevMainWindow::init()
              this, SLOT( projectClosed() ) );
 }
 
+void KDevMainWindow::cleanup()
+{
+}
+
 void KDevMainWindow::fillContextMenu( KMenu *menu, const Context *context )
 {
     //Perhaps we get rid of this framework and instead have every Context contains

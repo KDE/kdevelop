@@ -195,4 +195,20 @@ public:
     static void initialize();
 };
 
+class KDEVINTERFACES_EXPORT KDevCoreInterface
+{
+    friend class KDevCore;
+
+public:
+    KDevCoreInterface(){}
+    virtual ~KDevCoreInterface(){}
+
+    virtual void loadSettings() = 0;
+    //virtual void saveSettings() = 0;
+
+protected:
+    virtual void init() = 0;
+    virtual void cleanup() = 0;
+};
+
 #endif

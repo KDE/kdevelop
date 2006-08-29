@@ -23,30 +23,15 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEV_MAINWINDOW_H
 #define KDEV_MAINWINDOW_H
 
-#include <QPair>
-#include <kdevplugin.h>
 #include <kmainwindow.h>
+#include "kdevcore.h"
 
 #include "kdevexport.h"
-
-class KAction;
-class KToggleAction;
-class KToolBarPopupAction;
-
-namespace KParts
-{
-class MainWindow;
-}
 
 class Context;
 
 class KDevPlugin;
 class KDevDocument;
-
-namespace KParts
-{
-class Part;
-}
 
 class KDevMainWindowPrivate;
 
@@ -59,7 +44,7 @@ KDevelop main window interface.
 KDevelop main window interface.
 Provides methods to control the main window of an application.
 */
-class KDEVINTERFACES_EXPORT KDevMainWindow : public KMainWindow
+class KDEVINTERFACES_EXPORT KDevMainWindow : public KMainWindow, protected KDevCoreInterface
 {
     friend class KDevCore;
     Q_OBJECT
@@ -149,6 +134,7 @@ private:
     void setupActions();
     void setupWindowMenu();
     void init();
+    void cleanup();
     QString beautifyToolTip( const QString& text ) const;
     KDevMainWindowPrivate *d;
 };
