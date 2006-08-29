@@ -63,6 +63,7 @@ protected:
   virtual void visitFunctionDeclaration(FunctionDefinitionAST*);
   virtual void visitPtrOperator(PtrOperatorAST*);
   virtual void visitDeclarator(DeclaratorAST*);
+  virtual void visitParameterDeclaration(ParameterDeclarationAST*);
 
 private:
   template <class T>

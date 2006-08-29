@@ -52,16 +52,8 @@ void TypeBuilder::openAbstractType(AbstractType::Ptr type, AST* node)
 {
   Q_UNUSED(node);
 
-  if (hasCurrentType()) {
-    if (FunctionType::Ptr function = currentType<FunctionType>()) {
-      function->addArgument(type);
-
-      // Adding to structures is done manually, else return types get added as individual elements :(
-    }
-
-  } else {
+  if (!hasCurrentType())
     m_topTypes.append(type);
-  }
 
   m_typeStack.append(type);
 }
@@ -426,4 +418,17 @@ Cpp::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t> *cv)
 const QList< AbstractType::Ptr > & TypeBuilder::topTypes() const
 {
   return m_topTypes;
+}
+
+void TypeBuilder::visitParameterDeclaration(ParameterDeclarationAST* node)
+{
+  TypeBuilderBase::visitParameterDeclaration(node);
+
+  CppFunctionType::Ptr function = currentType<CppFunctionType>();
+  Q_ASSERT(function);
+
+  if (lastType())
+    function->addArgument(lastType());
+  else
+    kWarning() << k_funcinfo << "Parameter declaration did not generate a type. " << node->type_specifier << endl;
 }

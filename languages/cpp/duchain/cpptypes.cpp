@@ -240,6 +240,8 @@ uint CppClassType::hash() const
 
   foreach (const BaseClassInstance& base, m_baseClasses)
     hash_value = (hash_value << 5) - hash_value + base.baseClass->hash() + (base.access + base.virtualInheritance) * 281;
+
+  return hash_value;
 }
 
 uint CppTypeAliasType::hash() const
@@ -258,4 +260,21 @@ void CppClassType::addElement(AbstractType::Ptr element)
     kWarning() << k_funcinfo << "Tried to add type " << element->toString() << " to closed class!" << endl;
   else
     StructureType::addElement(element);
+}
+
+QString CppClassType::toString() const
+{
+  QString type;
+  switch (classType()) {
+    case Class:
+      type = "class";
+      break;
+    case Struct:
+      type = "struct";
+      break;
+    case Union:
+      type = "union";
+      break;
+  }
+  return QString("<%1>%2").arg(type).arg(cvString());
 }

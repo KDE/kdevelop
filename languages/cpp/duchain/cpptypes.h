@@ -177,6 +177,8 @@ public:
 
   virtual uint hash() const;
 
+  virtual QString toString() const;
+
 private:
   QList<BaseClassInstance> m_baseClasses;
   ClassType m_classType;
