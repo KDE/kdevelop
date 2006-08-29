@@ -67,7 +67,8 @@ class AbstractType : public KShared
 public:
   typedef KSharedPtr<AbstractType> Ptr;
 
-  virtual ~AbstractType () {}
+  AbstractType();
+  virtual ~AbstractType ();
 
   inline void accept (TypeVisitor *v) const
   {
@@ -87,8 +88,16 @@ public:
 
   virtual QString toString() const = 0;
 
+  virtual uint hash() const = 0;
+
 protected:
   virtual void accept0 (TypeVisitor *v) const = 0;
+
+//  template <class T>
+//  void deregister(T* that) { TypeSystem::self()->deregisterType(that); }
+
+private:
+  bool m_registered;
 };
 
 class IntegralType: public AbstractType
@@ -112,6 +121,8 @@ public:
   { return m_name != other.m_name; }
 
   virtual QString toString() const { return m_name; }
+
+  virtual uint hash() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
@@ -141,6 +152,8 @@ public:
   { return m_baseType != other.m_baseType; }
 
   virtual QString toString() const;
+
+  virtual uint hash() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
@@ -175,6 +188,8 @@ public:
   { return m_baseType != other.m_baseType; }
 
   virtual QString toString() const;
+
+  virtual uint hash() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
@@ -215,6 +230,8 @@ public:
 
   virtual QString toString() const;
 
+  virtual uint hash() const;
+
 protected:
   virtual void accept0 (TypeVisitor *v) const
   {
@@ -252,6 +269,8 @@ public:
   { return m_elements != other.m_elements; }
 
   virtual QString toString() const;
+
+  virtual uint hash() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
@@ -294,6 +313,8 @@ public:
 
   virtual QString toString() const;
 
+  virtual uint hash() const;
+
 protected:
   virtual void accept0 (TypeVisitor *v) const
   {
@@ -309,5 +330,8 @@ private:
   int m_dimension;
   AbstractType::Ptr m_elementType;
 };
+
+template <class T>
+uint qHash(const KSharedPtr<T>& type) { return type->hash(); }
 
 #endif // TYPESYSTEM_H

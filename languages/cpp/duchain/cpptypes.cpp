@@ -64,7 +64,7 @@ void CppTypeAliasType::setType(AbstractType::Ptr type)
 }
 
 // ---------------------------------------------------------------------------
-const QList<CppEnumeratorType::Ptr>& CppEnumerationType::enumerators() const
+/*const QList<CppEnumeratorType::Ptr>& CppEnumerationType::enumerators() const
 {
   return m_enumerators;
 }
@@ -88,18 +88,19 @@ QString CppEnumeratorType::value() const
 void CppEnumeratorType::setValue(const QString &value)
 {
   m_value = value;
-}
+}*/
 
 CppTypeAliasType::CppTypeAliasType()
 {
 }
 
-CppEnumeratorType::CppEnumeratorType()
+/*CppEnumeratorType::CppEnumeratorType()
 {
-}
+}*/
 
-CppClassType::CppClassType()
-  : m_classType(Class)
+CppClassType::CppClassType(Cpp::CVSpecs spec)
+  : CppCVType(spec)
+  , m_classType(Class)
 {
 }
 
@@ -211,3 +212,41 @@ QString CppArrayType::toString() const
 {
   return QString("%1%2").arg(cvString()).arg(ArrayType::toString());
 }*/
+
+uint CppIntegralType::hash() const
+{
+  return cvHash(IntegralType::hash());
+}
+
+uint CppPointerType::hash() const
+{
+  return cvHash(PointerType::hash());
+}
+
+uint CppReferenceType::hash() const
+{
+  return cvHash(ReferenceType::hash());
+}
+
+uint CppFunctionType::hash() const
+{
+  return cvHash(FunctionType::hash());
+}
+
+uint CppClassType::hash() const
+{
+  uint hash_value = cvHash(StructureType::hash());
+
+  foreach (const BaseClassInstance& base, m_baseClasses)
+    hash_value = (hash_value << 5) - hash_value + base.baseClass->hash() + (base.access + base.virtualInheritance) * 281;
+}
+
+uint CppTypeAliasType::hash() const
+{
+  return type() ? type()->hash() + 83 : 0;
+}
+
+QString CppTypeAliasType::toString() const
+{
+  return "Typedef - FIXME";
+}

@@ -21,12 +21,22 @@
 
 #include "cpptypes.h"
 
+#include <QSet>
+
 class TypeRepository
 {
 public:
   static TypeRepository* self();
 
   CppIntegralType::Ptr integral(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone, Cpp::CVSpecs cv = Cpp::CVNone) const;
+
+  /**
+   * Registers the given \a input type, and returns a pointer to the
+   * type, or the previously registered type if it has been encountered
+   * before.
+   */
+  CppPointerType::Ptr registerType(CppPointerType* input);
+  CppReferenceType::Ptr registerType(CppReferenceType* input);
 
 private:
   TypeRepository();
@@ -36,6 +46,13 @@ private:
   static TypeRepository* s_instance;
 
   QVector<CppIntegralType::Ptr> m_integrals;
+
+  QSet<PointerType::Ptr> m_pointers;
+  QSet<ReferenceType::Ptr> m_references;
+  QSet<FunctionType::Ptr> m_functions;
+  QSet<StructureType::Ptr> m_structures;
+  QSet<ArrayType::Ptr> m_arrays;
+  QSet<AbstractType::Ptr> m_others;
 };
 
 #endif // TYPEREPOSITORY_H

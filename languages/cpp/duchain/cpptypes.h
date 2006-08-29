@@ -39,16 +39,18 @@ class CppCVType
 public:
   CppCVType(Cpp::CVSpecs spec = Cpp::CVNone);
 
-  bool isConstant() const { return m_constant; }
+  inline bool isConstant() const { return m_constant; }
 
-  bool isVolatile() const { return m_volatile; }
+  inline bool isVolatile() const { return m_volatile; }
 
   QString cvString() const;
 
+  uint cvHash(uint input) const { return input; }
+
 private:
-  void setCV(Cpp::CVSpecs spec) { m_constant = spec & Cpp::Const; m_volatile = spec & Cpp::Volatile; }
-  void setConstant(bool is) { m_constant = is; }
-  void setVolatile(bool is) { m_volatile = is; }
+  inline void setCV(Cpp::CVSpecs spec) { m_constant = spec & Cpp::Const; m_volatile = spec & Cpp::Volatile; }
+  inline void setConstant(bool is) { m_constant = is; }
+  inline void setVolatile(bool is) { m_volatile = is; }
 
   bool m_constant : 1;
   bool m_volatile : 1;
@@ -87,6 +89,8 @@ public:
 
   virtual QString toString() const;
 
+  virtual uint hash() const;
+
 private:
   CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers = ModifierNone);
 
@@ -102,6 +106,8 @@ public:
   typedef KSharedPtr<CppFunctionType> Ptr;
 
   virtual QString toString() const;
+
+  virtual uint hash() const;
 };
 
 class CppPointerType : public PointerType, public CppCVType
@@ -112,6 +118,8 @@ public:
   CppPointerType(Cpp::CVSpecs spec = Cpp::CVNone);
 
   virtual QString toString() const;
+
+  virtual uint hash() const;
 };
 
 class CppReferenceType : public ReferenceType, public CppCVType
@@ -122,6 +130,8 @@ public:
   CppReferenceType(Cpp::CVSpecs spec = Cpp::CVNone);
 
   virtual QString toString() const;
+
+  virtual uint hash() const;
 };
 
 class CppClassType;
@@ -131,7 +141,7 @@ class CppClassType : public StructureType, public CppCVType
 public:
   typedef KSharedPtr<CppClassType> Ptr;
 
-  CppClassType();
+  CppClassType(Cpp::CVSpecs spec = Cpp::CVNone);
 
   struct BaseClassInstance
   {
@@ -158,6 +168,8 @@ public:
   void setClassType(ClassType type);
   ClassType classType() const;
 
+  virtual uint hash() const;
+
 private:
   QList<BaseClassInstance> m_baseClasses;
   ClassType m_classType;
@@ -173,8 +185,7 @@ public:
   virtual QString toString() const;
 };*/
 
-// FIXME is IntegralType correct?
-class CppTypeAliasType : public IntegralType, public CppCVType
+class CppTypeAliasType : public AbstractType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppTypeAliasType> Ptr;
@@ -184,11 +195,24 @@ public:
   AbstractType::Ptr type() const;
   void setType(AbstractType::Ptr type);
 
+  virtual uint hash() const;
+
+  virtual QString toString() const;
+
+protected:
+  virtual void accept0 (TypeVisitor *v) const
+  {
+    //if (v->visit (this))
+      acceptType (m_type, v);
+
+    //v->endVisit (this);
+  }
+
 private:
   AbstractType::Ptr m_type;
 };
 
-class CppEnumeratorType : public IntegralType
+/*class CppEnumeratorType : public IntegralType
 {
 public:
   typedef KSharedPtr<CppEnumeratorType> Ptr;
@@ -197,6 +221,8 @@ public:
 
   QString value() const;
   void setValue(const QString &value);
+
+  virtual uint hash() const;
 
 private:
   QString m_value;
@@ -212,9 +238,11 @@ public:
   void addEnumerator(CppEnumeratorType::Ptr item);
   void removeEnumerator(CppEnumeratorType::Ptr item);
 
+  virtual uint hash() const;
+
 private:
   QList<CppEnumeratorType::Ptr> m_enumerators;
-};
+};*/
 
 /*class CppTemplateParameterType : public
 {

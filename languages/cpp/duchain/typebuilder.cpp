@@ -116,26 +116,26 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
 
 void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 {
-  openType(CppEnumerationType::Ptr(new CppEnumerationType()), node);
+  //openType(CppEnumerationType::Ptr(new CppEnumerationType()), node);
 
   TypeBuilderBase::visitEnumSpecifier(node);
 
-  closeType();
+  //closeType();
 }
 
 void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 {
-  bool ok = false;
+  /*bool ok = false;
   if (CppEnumerationType::Ptr parent = currentType<CppEnumerationType>()) {
     CppEnumeratorType::Ptr enumerator(new CppEnumeratorType());
     openType(enumerator, node);
     ok = true;
-  }
+  }*/
 
   TypeBuilderBase::visitEnumerator(node);
 
-  if (ok)
-    closeType();
+  //if (ok)
+    //closeType();
 }
 
 void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
@@ -157,10 +157,10 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
           if (def->type<CppClassType>())
             type = def->abstractType();
           break;
-        case Token_enum:
+/*        case Token_enum:
           if (def->type<CppEnumeratorType>())
             type = def->abstractType();
-          break;
+          break;*/
         case Token_typename:
           type = def->abstractType();
           break;

@@ -103,3 +103,53 @@ QString ArrayType::toString() const
 {
   return QString("%1[%2]").arg(elementType() ? elementType()->toString() : QString("<notype>")).arg(m_dimension);
 }
+
+uint IntegralType::hash() const
+{
+  return qHash (name ());
+}
+
+uint PointerType::hash() const
+{
+  return baseType()->hash() * 13;
+}
+
+uint ReferenceType::hash() const
+{
+  return baseType()->hash() * 29;
+}
+
+uint FunctionType::hash() const
+{
+  uint hash_value = returnType()->hash();
+
+  foreach (const AbstractType::Ptr& t, m_arguments)
+    hash_value = (hash_value << 5) - hash_value + t->hash();
+
+  return hash_value;
+}
+
+uint StructureType::hash() const
+{
+  uint hash_value = 101;
+
+  foreach (const AbstractType::Ptr& t, m_elements)
+    hash_value = (hash_value << 3) - hash_value + t->hash();
+
+  return hash_value;
+}
+
+uint ArrayType::hash() const
+{
+  return elementType()->hash() * 47 * dimension();
+}
+
+AbstractType::AbstractType()
+  : m_registered(false)
+{
+}
+
+AbstractType::~AbstractType()
+{
+//  Q_ASSERT(!m_registered);
+}
