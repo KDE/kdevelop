@@ -101,6 +101,7 @@ CppTypeAliasType::CppTypeAliasType()
 CppClassType::CppClassType(Cpp::CVSpecs spec)
   : CppCVType(spec)
   , m_classType(Class)
+  , m_closed(false)
 {
 }
 
@@ -249,4 +250,12 @@ uint CppTypeAliasType::hash() const
 QString CppTypeAliasType::toString() const
 {
   return "Typedef - FIXME";
+}
+
+void CppClassType::addElement(AbstractType::Ptr element)
+{
+  if (isClosed())
+    kWarning() << k_funcinfo << "Tried to add type " << element->toString() << " to closed class!" << endl;
+  else
+    StructureType::addElement(element);
 }

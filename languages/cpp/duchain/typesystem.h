@@ -259,7 +259,7 @@ public:
   inline const QList<AbstractType::Ptr>& elements () const
   { return m_elements; }
 
-  void addElement(AbstractType::Ptr element);
+  virtual void addElement(AbstractType::Ptr element);
   void removeElement(AbstractType::Ptr element);
 
   inline bool operator == (const StructureType &other) const

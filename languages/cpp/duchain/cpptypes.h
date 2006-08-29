@@ -168,11 +168,19 @@ public:
   void setClassType(ClassType type);
   ClassType classType() const;
 
+  /// C++ classes are closed types, once they are defined, they can't be changed.
+  bool isClosed() const { return m_closed; }
+  void close() { m_closed = true; }
+
+  /// Error if the type is closed.
+  virtual void addElement(AbstractType::Ptr element);
+
   virtual uint hash() const;
 
 private:
   QList<BaseClassInstance> m_baseClasses;
   ClassType m_classType;
+  bool m_closed;
 };
 
 /*class CppArrayType : public ArrayType, public CppCVType

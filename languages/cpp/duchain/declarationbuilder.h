@@ -50,6 +50,7 @@ protected:
   virtual void visitAccessSpecifier(AccessSpecifierAST*);
   virtual void visitFunctionDeclaration(FunctionDefinitionAST*);
   virtual void visitSimpleDeclaration(SimpleDeclarationAST*);
+  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
 
 private:
   /**
@@ -58,6 +59,8 @@ private:
    * \param range provide a valid AST here if name is null
    */
   Declaration* openDeclaration(NameAST* name, AST* range, bool isFunction = false);
+  /// Same as the above, but sets it as the definition too
+  Declaration* openDefinition(NameAST* name, AST* range, bool isFunction = false);
   void closeDeclaration();
 
   void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);

@@ -102,6 +102,34 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   closeDeclaration();
 }
 
+Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, bool isFunction)
+{
+  /* FIXME... need forward declaration storing capability... or should it be looked up as needed?
+
+  if (name) {
+    QualifiedIdentifier id = identifierForName(node->name);
+    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge);
+
+    Declaration * dec = currentContext()->findDeclaration(id, pos);
+
+    if (dec) {
+      // Just need to create the definition
+      Range* prior = m_editor->currentRange();
+      Range* range = m_editor->createRange(name ? static_cast<AST*>(name) : rangeNode);
+      m_editor->exitCurrentRange();
+      Q_ASSERT(m_editor->currentRange() == prior);
+
+      Definition* def = new Definition(range, dec, currentContext());
+      dec->setDefinition(def);
+      return dec;
+    }
+  }*/
+
+  Declaration* dec = openDeclaration(name, rangeNode, isFunction);
+  dec->setDeclarationIsDefinition(true);
+  return dec;
+}
+
 Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction)
 {
   Declaration::Scope scope = Declaration::GlobalScope;
@@ -165,7 +193,7 @@ void DeclarationBuilder::closeDeclaration()
 
 void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
-  openDeclaration(node->name, node);
+  openDefinition(node->name, node);
 
   int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
   if (kind == Token_struct || kind == Token_union)
@@ -179,6 +207,41 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
   m_accessPolicyStack.pop();
 }
+
+void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
+{
+  bool openedDeclaration = false;
+
+  if (node->name) {
+    QualifiedIdentifier id = identifierForName(node->name);
+    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge);
+
+    Declaration * def = currentContext()->findDeclaration(id, pos);
+
+    if (!def) {
+      int kind = m_editor->parseSession()->token_stream->kind(node->type);
+      // Create forward declaration
+      switch (kind) {
+        case Token_class:
+        case Token_struct:
+        case Token_union:
+          openDeclaration(node->name, node);
+          openedDeclaration = true;
+          break;
+        case Token_enum:
+        case Token_typename:
+          // TODO what goes here...?
+          break;
+      }
+    }
+  }
+
+  DeclarationBuilderBase::visitElaboratedTypeSpecifier(node);
+
+  if (openedDeclaration)
+    closeDeclaration();
+}
+
 
 void DeclarationBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
 {

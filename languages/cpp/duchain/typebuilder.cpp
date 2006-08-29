@@ -56,21 +56,7 @@ void TypeBuilder::openAbstractType(AbstractType::Ptr type, AST* node)
     if (FunctionType::Ptr function = currentType<FunctionType>()) {
       function->addArgument(type);
 
-    } else if (PointerType::Ptr pointer = currentType<PointerType>()) {
-      // FIXME ? Don't add to top types
-
-    } else if (ReferenceType::Ptr reference = currentType<ReferenceType>()) {
-      // FIXME ? Don't add to top types
-
-    } else if (ArrayType::Ptr array = currentType<ArrayType>()) {
-      // FIXME ? Don't add to top types
-
-    } else if (currentType<StructureType>()) {
-      // Don't add to top types
-      // Adding to the structure is done manually, else return types get added as individual elements :(
-
-    } else {
-      m_topTypes.append(type);
+      // Adding to structures is done manually, else return types get added as individual elements :(
     }
 
   } else {
@@ -87,18 +73,27 @@ void TypeBuilder::closeType()
   m_typeStack.pop();
 }
 
-void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
+static CppClassType::Ptr openClass(int kind)
 {
   CppClassType::Ptr classType(new CppClassType());
-  openType(classType, node);
 
-  int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
   if (kind == Token_struct)
     classType->setClassType(CppClassType::Struct);
   else if (kind == Token_union)
     classType->setClassType(CppClassType::Union);
 
+  return classType;
+}
+
+void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
+{
+  CppClassType::Ptr classType = openClass(m_editor->parseSession()->token_stream->kind(node->class_key));
+  openType(classType, node);
+
   TypeBuilderBase::visitClassSpecifier(node);
+
+  // Prevent additional elements being added if this becomes the current type again
+  classType->close();
 
   closeType();
 }
@@ -146,14 +141,19 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
     Declaration * def = currentContext()->findDeclaration(id, pos);
 
+    int kind = m_editor->parseSession()->token_stream->kind(node->type);
     if (def && def->abstractType()) {
-      int kind = m_editor->parseSession()->token_stream->kind(node->type);
       switch (kind) {
         case Token_class:
         case Token_struct:
         case Token_union:
-          if (def->type<CppClassType>())
+          if (def->type<CppClassType>()) {
             type = def->abstractType();
+
+          } else if (def->abstractType()) {
+            // TODO: error, wrong type
+
+          }
           break;
 /*        case Token_enum:
           if (def->type<CppEnumeratorType>())
@@ -164,9 +164,27 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
           break;
       }
 
-      if (type)
-        openType(type, node);
+    } else if (!def) {
+      // Create forward declaration
+      switch (kind) {
+        case Token_class:
+        case Token_struct:
+        case Token_union:
+          type = AbstractType::Ptr::staticCast(openClass(kind));
+          break;
+/*        case Token_enum:
+          if (def->type<CppEnumeratorType>())
+            type = def->abstractType();
+          break;*/
+        case Token_typename:
+          // TODO what goes here...?
+          //type = def->abstractType();
+          break;
+      }
     }
+
+    if (type)
+      openType(type, node);
   }
 
   // TODO.. figure out what to do with this now... parseConstVolatile(node->cv);
@@ -179,7 +197,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
 void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
-  CppIntegralType::Ptr integral;
+  bool openedType = false;
 
   if (node->integrals) {
     CppIntegralType::IntegralTypes type = CppIntegralType::TypeNone;
@@ -228,18 +246,25 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       it = it->next;
     } while (it != end);
 
-    integral = TypeRepository::self()->integral(type, modifiers, parseConstVolatile(node->cv));
-    if (integral)
+    CppIntegralType::Ptr integral = TypeRepository::self()->integral(type, modifiers, parseConstVolatile(node->cv));
+    if (integral) {
+      openedType = true;
       openType(integral, node);
+    }
 
   } else if (node->name) {
     QualifiedIdentifier id = identifierForName(node->name);
-    currentContext()->findDeclaration(id);
+    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge);
+    Declaration* dec = currentContext()->findDeclaration(id, pos);
+    if (dec && dec->abstractType()) {
+      openedType = true;
+      openType(dec->abstractType(), node);
+    }
   }
 
   TypeBuilderBase::visitSimpleTypeSpecifier(node);
 
-  if (integral)
+  if (openedType)
     closeType();
 }
 
