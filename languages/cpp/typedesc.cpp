@@ -589,23 +589,26 @@ void TypeDesc::init( QString stri ) {
     str = str.mid( strlen( functionMark ) ).stripWhiteSpace();
   }
 
+	///Since function-names are also processed by this function, this check has to be done
+	if( !str.contains( "operator" ) ) {
   ///Remove any prefixes like const or typename(very limited algorithm)
-  int len = str.find( "<" );
-  if ( len == -1 )
-    len = str.length();
-  int currentStart = 0;
-  bool wasEmpty = false;
-  for ( int a = 0; a < len; a++ ) {
-    if ( str[ a ] == ' ' ) {
-      wasEmpty = true;
-    } else {
-      if ( wasEmpty ) {
-        currentStart = a;
-        wasEmpty = false;
-      }
-    }
-  }
-  str = str.mid( currentStart );
+		int len = str.find( "<" );
+		if ( len == -1 )
+			len = str.length();
+		int currentStart = 0;
+		bool wasEmpty = false;
+		for ( int a = 0; a < len; a++ ) {
+			if ( str[ a ] == ' ' ) {
+				wasEmpty = true;
+			} else {
+				if ( wasEmpty ) {
+					currentStart = a;
+					wasEmpty = false;
+				}
+			}
+		}
+		str = str.mid( currentStart );
+	}
 
 #ifdef USELEXER
 

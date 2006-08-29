@@ -184,7 +184,7 @@ class TypeDesc {
 	uint hashKey() const;
 
 	/**Returns a hash-key that is computed in a different way than the first.
-	 * If both keys match, it is pretty sure that it is the same type.
+	 * If both keys match, it is pretty sure that typedescs are same.
 	 * */
 	uint hashKey2() const;
 
