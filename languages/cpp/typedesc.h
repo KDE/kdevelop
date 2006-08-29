@@ -181,12 +181,12 @@ class TypeDesc {
       return ret;
     }
 
-	uint hashKey() const;
+	size_t hashKey() const;
 
 	/**Returns a hash-key that is computed in a different way than the first.
 	 * If both keys match, it is pretty sure that typedescs are same.
 	 * */
-	uint hashKey2() const;
+	size_t hashKey2() const;
 
 ///this function must be remade
     bool isValidType() const ;
