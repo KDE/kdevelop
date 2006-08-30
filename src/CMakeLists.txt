@@ -1,6 +1,6 @@
 
 add_subdirectory(profiles)
-add_subdirectory(profileengine)
+# add_subdirectory(profileengine)
 # add_subdirectory(newui)
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets
@@ -44,15 +44,15 @@ install(TARGETS kdevelop DESTINATION ${BIN_INSTALL_DIR} )
 
 ########### next target ###############
 
-set(kdevassistant_SRCS
-    main_assistant.cpp
-    kdevassistantextension.cpp
-)
-
-kde4_automoc(${kdevassistant_SRCS})
-kde4_add_executable(kdevassistant ${kdevassistant_SRCS})
-target_link_libraries(kdevassistant ${KDE4_KDECORE_LIBS} kdevshell)
-install(TARGETS kdevassistant DESTINATION ${BIN_INSTALL_DIR} )
+# set(kdevassistant_SRCS
+#     main_assistant.cpp
+#     kdevassistantextension.cpp
+# )
+# 
+# kde4_automoc(${kdevassistant_SRCS})
+# kde4_add_executable(kdevassistant ${kdevassistant_SRCS})
+# target_link_libraries(kdevassistant ${KDE4_KDECORE_LIBS} kdevshell)
+# install(TARGETS kdevassistant DESTINATION ${BIN_INSTALL_DIR} )
 
 
 ########### install files ###############
@@ -68,6 +68,6 @@ install(FILES
 install( FILES kdeveloprc kdevassistantrc DESTINATION ${CONFIG_INSTALL_DIR} )
 install( FILES kdevelopui.rc kdevelop.notifyrc DESTINATION ${DATA_INSTALL_DIR}/kdevelop )
 install( FILES projectprofiles DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles )
-install( FILES kdevassistantui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevassistant )
+# install( FILES kdevassistantui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevassistant )
 
 
