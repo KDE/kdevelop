@@ -280,7 +280,6 @@ AbstractType::Ptr TypeRepository::registerFunction(CppFunctionType::Ptr input)
   }
 
   // No match
-  kDebug() << k_funcinfo << "Register function " << input.data() << " type " << input->toString() << endl;
   m_functions.insert(input->arguments().count(), input);
   return AbstractType::Ptr::staticCast(input);
 }

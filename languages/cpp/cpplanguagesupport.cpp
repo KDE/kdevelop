@@ -94,8 +94,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
 
 CppLanguageSupport::~CppLanguageSupport()
 {
-    kDebug() << k_funcinfo << endl;
-
     // Ensure all parse jobs have finished before this object goes away
     lockAllParseMutexes();
     unlockAllParseMutexes();

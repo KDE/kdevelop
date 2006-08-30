@@ -101,12 +101,12 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   DeclarationBuilderBase::visitDeclarator(node);
 
   if (node->parameter_declaration_clause) {
-    if (!m_functionDefinedStack.isEmpty() && m_functionDefinedStack.top()) {
+    if (!m_functionDefinedStack.isEmpty() && m_functionDefinedStack.top() && node->id) {
       QualifiedIdentifier id = identifierForName(node->id);
       if (id.count() > 1) {
         KTextEditor::Cursor pos = m_editor->findPosition(m_functionDefinedStack.top(), KDevEditorIntegrator::FrontEdge);
 
-        kDebug() << k_funcinfo << "Searching for declaration of " << id << endl;
+        //kDebug() << k_funcinfo << "Searching for declaration of " << id << endl;
 
         if (Declaration* dec = currentContext()->findDeclaration(id, pos, lastType())) {
           Declaration* oldDec = currentDeclaration();
