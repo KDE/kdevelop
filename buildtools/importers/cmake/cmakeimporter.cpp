@@ -32,6 +32,7 @@
 
 #include "cmTarget.h"
 #include "cmMakefile.h"
+#include "cmSourceFile.h"
 #include "cmLocalGenerator.h"
 #include "cmGlobalGenerator.h"
 
@@ -155,8 +156,14 @@ void CMakeImporter::createProjectItems( cmLocalGenerator* generator, KDevProject
         std::vector<std::string>::iterator sit, sitEnd = sourceLists.end();
         for ( sit = sourceLists.begin(); sit != sitEnd; ++sit )
         {
-
             QString sourceName = QLatin1String( ( *sit ).c_str() );
+            cmSourceFile* sf = makefile->GetSourceFileWithOutput( (*sit).c_str() );
+            if ( sf )
+            {
+                sourceName = QLatin1String( sf->GetSourceName().c_str() );
+                sourceName += QLatin1String( sf->GetSourceExtension().c_str() );
+            }
+
             QString fullPath = folderName + QDir::separator() + sourceName;
             targetItem->add( new KDevProjectFileItem( KUrl( fullPath ) ) );
         }
