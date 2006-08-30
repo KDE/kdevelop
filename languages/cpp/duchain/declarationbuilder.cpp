@@ -92,7 +92,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
     applyFunctionSpecifiers();
 
   } else {
-    openDeclaration(node->id, node);
+    openDefinition(node->id, node);
   }
 
   applyStorageSpecifiers();
