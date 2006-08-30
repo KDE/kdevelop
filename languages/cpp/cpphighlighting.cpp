@@ -237,40 +237,13 @@ void CppHighlighting::highlightDUChain(DUContext* context) const
 
   //context->smartRange()->setAttribute(attributeForDepth(context->depth()));
 
-  foreach (Declaration* def, context->localDeclarations()) {
-    Types type = LocalVariableType;
-    if (context->scopeIdentifier().isEmpty())
-      type = GlobalVariableType;
-    if (def->type<CppClassType>())
-      type = ClassType;
-    else if (def->type<CppFunctionType>())
-      type = FunctionType;
-    else
-      switch (context->type()) {
-        case DUContext::Namespace:
-          type = NamespaceVariableType;
-          break;
-        case DUContext::Class:
-          type = MemberVariableType;
-          break;
-        case DUContext::Function:
-          type = FunctionVariableType;
-          break;
-        default:
-          break;
-      }
+  foreach (Declaration* dec, context->localDeclarations())
+    if (dec->smartRange())
+      dec->smartRange()->setAttribute(attributeForType(typeForDeclaration(dec), DeclarationContext));
 
-    if (def->smartRange())
-      def->smartRange()->setAttribute(attributeForType(type, DeclarationContext));
-
-    foreach (Use* use, def->uses())
-      if (SmartRange* range = use->smartRange())
-        range->setAttribute(attributeForType(type, ReferenceContext));
-  }
-
-  foreach (Use* use, context->orphanUses())
+  foreach (Use* use, context->uses())
     if (SmartRange* range = use->smartRange())
-      range->setAttribute(attributeForType(ErrorVariableType, ReferenceContext));
+      range->setAttribute(attributeForType(use->declaration() ? typeForDeclaration(use->declaration()) : ErrorVariableType, ReferenceContext));
 
   foreach (DUContext* context, context->importedParentContexts())
     highlightDUChain(context);
@@ -299,3 +272,30 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForDepth(int depth) const
 #include "cpphighlighting.moc"
 
 // kate: space-indent on; indent-width 2; replace-tabs on
+
+CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec) const
+{
+  Types type = LocalVariableType;
+  if (dec->context()->scopeIdentifier().isEmpty())
+    type = GlobalVariableType;
+  if (dec->type<CppClassType>())
+    type = ClassType;
+  else if (dec->type<CppFunctionType>())
+    type = FunctionType;
+  else
+    switch (dec->context()->type()) {
+      case DUContext::Namespace:
+        type = NamespaceVariableType;
+        break;
+      case DUContext::Class:
+        type = MemberVariableType;
+        break;
+      case DUContext::Function:
+        type = FunctionVariableType;
+        break;
+      default:
+        break;
+    }
+
+  return type;
+}

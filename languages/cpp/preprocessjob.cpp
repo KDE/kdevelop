@@ -21,6 +21,8 @@
 
 #include "preprocessjob.h"
 
+//#include <valgrind/memcheck.h>
+
 #include <QFile>
 #include <QByteArray>
 #include <QMutexLocker>
@@ -43,6 +45,7 @@
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
+    , m_success(true)
 {
 }
 
@@ -55,8 +58,8 @@ void PreprocessJob::run()
 {
     //kDebug() << k_funcinfo << "Started pp job " << this << " parse " << parentJob()->parseJob() << " parent " << parentJob() << endl;
 
-    if (parentJob()->abortRequested())
-        return parentJob()->abortJob();
+    if (checkAbort())
+        return;
 
     QMutexLocker lock(parentJob()->cpp()->parseMutex(thread()));
 
@@ -91,8 +94,8 @@ void PreprocessJob::run()
     << " size: " << contents.length()
     << endl;
 
-    if (parentJob()->abortRequested())
-        return parentJob()->abortJob();
+    if (checkAbort())
+        return;
 
     parentJob()->parseSession()->setContents( processString( contents ).toUtf8() );
     parentJob()->parseSession()->macros = macros();
@@ -104,15 +107,22 @@ Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type)
 
     // FIXME change to interruptable preprocessor
 
-    if (parentJob()->abortRequested()) {
-        parentJob()->abortJob();
+    if (checkAbort())
         return 0;
-    }
 
     bool dependencyAdded = false;
     bool dependencyAllowed = true;
 
-    KUrl includedFile = parentJob()->cpp()->findInclude(fileName);
+    KUrl includedFile;
+
+/*    if (CPPParseJob* parent = parentJob()) {
+        VALGRIND_CHECK_MEM_IS_DEFINED(parent, sizeof(CPPParseJob));
+
+        if (CppLanguageSupport* lang = parent->cpp()) {
+            VALGRIND_CHECK_MEM_IS_DEFINED(lang, sizeof(CppLanguageSupport)); */
+
+
+    includedFile = parentJob()->cpp()->findInclude(fileName);
     if (includedFile.isValid()) {
         if (KDevParseJob* job = parentJob()->backgroundParser()->parseJobForDocument(includedFile)) {
             /*if (job == parentJob())
@@ -128,6 +138,13 @@ Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type)
             dependencyAdded = true;*/
         }
     }
+
+        /*} else {
+            kWarning() << k_funcinfo << "Language support disappeared!!" << endl;
+        }
+    } else {
+        kWarning() << k_funcinfo << "Parent job disappeared!!" << endl;
+    }*/
 
     if (KDevCore::activeProject()) {
         KDevAST* ast = 0;
@@ -159,6 +176,32 @@ Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type)
     parentJob()->addIncludedFile(fileName);
 
     return 0;
+}
+
+bool PreprocessJob::checkAbort()
+{
+    if (CPPParseJob* parent = parentJob()) {
+        if (parent->abortRequested()) {
+            parent->abortJob();
+            m_success = false;
+            setFinished(true);
+            return true;
+        }
+
+    } else {
+        // What... the parent job got deleted??
+        kWarning() << k_funcinfo << "Parent job disappeared!!" << endl;
+        m_success = false;
+        setFinished(true);
+        return true;
+    }
+
+    return false;
+}
+
+bool PreprocessJob::success() const
+{
+    return m_success;
 }
 
 #include "preprocessjob.moc"

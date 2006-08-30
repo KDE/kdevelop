@@ -19,23 +19,53 @@
 #include "use.h"
 
 #include "declaration.h"
+#include "ducontext.h"
 
 using namespace KTextEditor;
 
-Use::Use(KTextEditor::Range* range)
+Use::Use(KTextEditor::Range* range, DUContext* context)
   : KDevDocumentRangeObject(range)
-  , m_definition(0)
+  , m_context(0)
+  , m_declaration(0)
 {
+  if (context)
+    setContext(context);
+}
+
+Use::~Use()
+{
+  setContext(0);
 }
 
 Declaration* Use::declaration() const
 {
-  return m_definition;
+  return m_declaration;
 }
 
-void Use::setDeclaration(Declaration* definition)
+void Use::setDeclaration(Declaration* declaration)
 {
-  m_definition = definition;
+  m_declaration = declaration;
 }
 
 // kate: indent-width 2;
+
+void Use::setContext(DUContext * context)
+{
+  if (m_context)
+    m_context->m_uses.removeAll(this);
+
+  m_context = context;
+
+  if (m_context)
+    m_context->m_uses.append(this);
+}
+
+DUContext * Use::context() const
+{
+  return m_context;
+}
+
+bool Use::isOrphan() const
+{
+  return !m_declaration;
+}

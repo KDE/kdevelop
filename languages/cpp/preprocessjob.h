@@ -38,8 +38,15 @@ public:
 
     virtual Stream* sourceNeeded(QString& fileName, IncludeType type);
 
+    virtual bool success() const;
+
 protected:
     virtual void run();
+
+private:
+    bool checkAbort();
+
+    bool m_success;
 };
 
 #endif

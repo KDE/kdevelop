@@ -21,6 +21,7 @@
 
 #include "kdevdocumentrangeobject.h"
 
+class DUContext;
 class Declaration;
 
 /**
@@ -29,13 +30,20 @@ class Declaration;
 class Use : public KDevDocumentRangeObject
 {
 public:
-  Use(KTextEditor::Range* range);
+  Use(KTextEditor::Range* range, DUContext* context = 0);
+  virtual ~Use();
+
+  DUContext* context() const;
+  void setContext(DUContext* context);
 
   Declaration* declaration() const;
   void setDeclaration(Declaration* definition);
 
+  bool isOrphan() const;
+
 private:
-  Declaration* m_definition;
+  DUContext* m_context;
+  Declaration* m_declaration;
 };
 
 #endif // DEFINITIONUSE_H

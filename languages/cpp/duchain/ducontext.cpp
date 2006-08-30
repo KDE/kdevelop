@@ -61,6 +61,9 @@ DUContext::~DUContext( )
 
   deleteOrphanUses();
 
+  foreach (Use* use, m_uses)
+    use->setContext(0);
+
   qDeleteAll(m_usingNamespaces);
 }
 
@@ -651,11 +654,13 @@ const QList<Definition*>& DUContext::localDefinitions() const
 Definition* DUContext::addDefinition(Definition* definition)
 {
   m_localDefinitions.append(definition);
+  return definition;
 }
 
 Definition* DUContext::takeDefinition(Definition* definition)
 {
   m_localDefinitions.removeAll(definition);
+  return definition;
 }
 
 void DUContext::deleteLocalDefinitions()
@@ -694,3 +699,8 @@ QString DUContext::mangledIdentifier() const
 }
 
 // kate: indent-width 2;
+
+const QList< Use * > & DUContext::uses() const
+{
+  return m_uses;
+}

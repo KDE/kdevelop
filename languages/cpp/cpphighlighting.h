@@ -34,6 +34,7 @@ namespace KTextEditor { class SmartRange; }
 
 class CodeModel;
 class DUContext;
+class Declaration;
 
 class CppHighlighting : public QObject, public KDevCodeHighlighting
 {
@@ -83,6 +84,8 @@ class CppHighlighting : public QObject, public KDevCodeHighlighting
 
   private:
     void outputRange( KTextEditor::SmartRange * range ) const;
+
+    Types typeForDeclaration(Declaration* dec) const;
 
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_definitionAttributes;
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_declarationAttributes;

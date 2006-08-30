@@ -39,6 +39,8 @@ class AbstractType;
  */
 class DUContext : public KDevDocumentRangeObject
 {
+  friend class Use;
+
 public:
   /**
    * Constructor. No convenience methods, as the initialisation order is important,
@@ -282,6 +284,11 @@ public:
   QHash<QualifiedIdentifier, Declaration*> allDeclarations(const KTextEditor::Cursor& position) const;
 
   /**
+   * Return a list of all uses which occur in this context.
+   */
+  const QList<Use*>& uses() const;
+
+  /**
    * Return a list of uses which don't have a corresponding definition.
    */
   const QList<Use*>& orphanUses() const;
@@ -328,6 +335,7 @@ private:
   QList<Definition*> m_localDefinitions;
 
   QList<UsingNS*> m_usingNamespaces;
+  QList<Use*> m_uses;
   QList<Use*> m_orphanUses;
 };
 

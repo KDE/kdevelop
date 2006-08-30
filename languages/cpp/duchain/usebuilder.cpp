@@ -73,8 +73,8 @@ void UseBuilder::newUse(NameAST* name)
   QualifiedIdentifier id = identifierForName(name);
 
   if (Declaration* definition = currentContext()->findDeclaration(id, use->start()))
-    definition->addUse(new Use(use));
+    definition->addUse(new Use(use, currentContext()));
   else
-    currentContext()->addOrphanUse(new Use(use));
+    currentContext()->addOrphanUse(new Use(use, currentContext()));
     //kWarning() << k_funcinfo << "Could not find definition for identifier " << id << " at " << *use << endl;
 }

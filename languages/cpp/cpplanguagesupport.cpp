@@ -20,6 +20,12 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
+#include "config.h"
+
+#ifdef HAVE_VALGRIND_H
+#include <valgrind/valgrind.h>
+#endif
+
 #include <QMutex>
 #include <QMutexLocker>
 #include <QApplication>
@@ -88,6 +94,11 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
 
 CppLanguageSupport::~CppLanguageSupport()
 {
+    kDebug() << k_funcinfo << endl;
+
+    // Ensure all parse jobs have finished before this object goes away
+    lockAllParseMutexes();
+    unlockAllParseMutexes();
 }
 
 KDevCodeModel *CppLanguageSupport::codeModel( const KUrl &url ) const
@@ -152,6 +163,12 @@ KDevCodeHighlighting *CppLanguageSupport::codeHighlighting() const
 
 void CppLanguageSupport::projectOpened()
 {
+#ifdef HAVE_VALGRIND_H
+    // If running on valgrind, don't background parse all project files...!!
+    if (RUNNING_ON_VALGRIND > 0)
+        return;
+#endif
+
     // FIXME Add signals slots from the filemanager for:
     //       1. filesAddedToProject
     //       2. filesRemovedFromProject
@@ -211,7 +228,7 @@ KUrl CppLanguageSupport::findInclude( const QString& fileName )
     KUrl ret;
 
     if (KDevProject* project = KDevCore::activeProject()) {
-        if (KDevBuildManager* buildManager = static_cast<KDevBuildManager*>( project->fileManager() )) {
+        if (KDevBuildManager* buildManager = dynamic_cast<KDevBuildManager*>( project->fileManager() )) {
             foreach (KUrl u, buildManager->includeDirectories()) {
                 u.adjustPath( KUrl::AddTrailingSlash );
 

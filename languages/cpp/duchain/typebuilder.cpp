@@ -441,11 +441,11 @@ void TypeBuilder::visitParameterDeclaration(ParameterDeclarationAST* node)
 {
   TypeBuilderBase::visitParameterDeclaration(node);
 
-  CppFunctionType::Ptr function = currentType<CppFunctionType>();
-  Q_ASSERT(function);
+  if (hasCurrentType()) {
+    if (CppFunctionType::Ptr function = currentType<CppFunctionType>()) {
 
-  //if (lastType())
-    function->addArgument(lastType());
-  //else
-    //kWarning() << k_funcinfo << "Parameter declaration did not generate a type. " << node->type_specifier << endl;
+      function->addArgument(lastType());
+    }
+    // else may be a template argument
+  }
 }

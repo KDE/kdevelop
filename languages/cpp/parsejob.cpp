@@ -214,6 +214,8 @@ void ParseJob::run()
     }
     //     DumpTree dumpTree;
     //     dumpTree.dump( m_AST );
+
+    //kDebug( 9007 ) << "===-- Parsing finished --===> " << parentJob()->document().fileName() << endl;
 }
 
 
