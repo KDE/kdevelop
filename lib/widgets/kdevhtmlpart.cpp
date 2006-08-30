@@ -27,7 +27,7 @@ KDevHTMLPart::KDevHTMLPart()
 {
   setXMLFile(KStandardDirs::locate("data", "kdevelop/kdevhtml_partui.rc"), true);
 
-  connect(browserExtension(), SIGNAL(openURLRequestDelayed(const KUrl &,const KParts::URLArgs &)),
+  connect(browserExtension(), SIGNAL(openUrlRequestDelayed(const KUrl &,const KParts::URLArgs &)),
           this, SLOT(openURLRequest(const KUrl &)) );
 
   connect(this, SIGNAL(started(KIO::Job *)), this, SLOT(slotStarted(KIO::Job* )));

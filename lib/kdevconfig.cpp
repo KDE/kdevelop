@@ -43,7 +43,6 @@ KDevConfigPrivate::KDevConfigPrivate()
 
 KDevConfigPrivate::~KDevConfigPrivate()
 {
-    delete settingsDialog;
 }
 
 KDevConfigPrivate *KDevConfigPrivate::self()
