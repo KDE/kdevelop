@@ -31,7 +31,7 @@ KDevDocumentRangeObject::KDevDocumentRangeObject(Range* range)
 
 KDevDocumentRangeObject::~ KDevDocumentRangeObject( )
 {
-  if (m_range->isSmartRange())
+  if (m_range && m_range->isSmartRange())
     m_range->toSmartRange()->removeWatcher(this);
 
   delete m_range;
@@ -113,4 +113,19 @@ void KDevDocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
   Q_ASSERT(range == m_range);
   //Q_ASSERT(false);
   m_range = new KDevDocumentRange(m_url, *m_range);
+}
+
+KTextEditor::Range* KDevDocumentRangeObject::takeRange()
+{
+  KTextEditor::Range* ret = m_range;
+
+  if (m_range) {
+    // TODO.. overkill???
+    if (m_range->isSmartRange())
+      m_range->toSmartRange()->removeWatcher(this);
+
+    m_range = 0;
+  }
+
+  return ret;
 }

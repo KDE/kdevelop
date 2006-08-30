@@ -51,6 +51,10 @@ public:
 
   virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
+  /// Take the range from this object. USE WITH CARE!! You must be willing to
+  /// immediately delete this range object if you take its range.
+  KTextEditor::Range* takeRange();
+
 private:
   KTextEditor::Range* m_range;
   KUrl m_url;
