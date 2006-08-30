@@ -63,7 +63,7 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         m_delay( 500 ),
         m_modelsToCache( 0 ),
         m_progressBar( new QProgressBar ),
-        m_weaver( new Weaver( this, 1 ) ),
+        m_weaver( new Weaver( this, 2 ) ),
         m_dependencyPolicy( new KDevParserDependencyPolicy ),
         m_mutex(new QMutex()),
         m_waitForJobCreation(new QWaitCondition)

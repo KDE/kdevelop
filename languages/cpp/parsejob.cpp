@@ -135,6 +135,10 @@ ParseJob::ParseJob(CPPParseJob * parent)
 
 void ParseJob::run()
 {
+    kDebug( 9007 ) << "===-- PARSING --===> "
+    << parentJob()->document().fileName()
+    << endl;
+
     if (parentJob()->abortRequested())
         return parentJob()->abortJob();
 

@@ -88,7 +88,7 @@ void PreprocessJob::run()
         contents = parentJob()->contentsFromEditor();
     }
 
-    kDebug( 9007 ) << "===-- PARSING --===> "
+    kDebug( 9007 ) << "===-- PREPROCESSING --===> "
     << parentJob()->document().fileName()
     << " <== readFromDisk: " << readFromDisk
     << " size: " << contents.length()
