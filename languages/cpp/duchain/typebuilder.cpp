@@ -280,8 +280,27 @@ void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
   m_lastType = 0;
 
-  TypeBuilderBase::visitSimpleDeclaration(node);
- }
+  // Reimplement default visitor
+  visit(node->type_specifier);
+
+  AbstractType::Ptr baseType = m_lastType;
+
+  if (node->init_declarators) {
+    const ListNode<InitDeclaratorAST*> *it = node->init_declarators->toFront(), *end = it;
+
+    do {
+      visit(it->element);
+      // Reset last type to be the base type
+      m_lastType = baseType;
+
+      it = it->next;
+    } while (it != end);
+  }
+
+  visit(node->win_decl_specifiers);
+
+  visitPostSimpleDeclaration(node);
+}
 
 void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 {
