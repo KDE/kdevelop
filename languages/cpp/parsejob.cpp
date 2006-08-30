@@ -60,8 +60,11 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         m_duContext( 0 ),
         m_readFromDisk( false )
 {
-    addJob(new PreprocessJob(this));
-    addJob(new ParseJob(this));
+    PreprocessJob* ppj;
+    addJob(ppj = new PreprocessJob(this));
+    addJob(m_parseJob = new ParseJob(this));
+
+    //kDebug() << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
 }
 
 CPPParseJob::CPPParseJob( KDevDocument *document,
@@ -73,8 +76,11 @@ CPPParseJob::CPPParseJob( KDevDocument *document,
         m_duContext( 0 ),
         m_readFromDisk( false )
 {
-    addJob(new PreprocessJob(this));
-    addJob(new ParseJob(this));
+    PreprocessJob* ppj;
+    addJob(ppj = new PreprocessJob(this));
+    addJob(m_parseJob = new ParseJob(this));
+
+    //kDebug() << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
 }
 
 CPPParseJob::~CPPParseJob()
@@ -243,3 +249,8 @@ bool CPPParseJob::wasReadFromDisk() const
 #include "parsejob.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+
+ParseJob * CPPParseJob::parseJob() const
+{
+    return m_parseJob;
+}

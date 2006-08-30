@@ -30,6 +30,7 @@ class CodeModel;
 class TranslationUnitAST;
 class CppLanguageSupport;
 class ParseSession;
+class ParseJob;
 
 class CPPParseJob : public KDevParseJob
 {
@@ -63,6 +64,8 @@ public:
     const QStringList& includedFiles() const;
     void requestDependancies();
 
+    ParseJob* parseJob() const;
+
 private:
     ParseSession* m_session;
     TranslationUnitAST *m_AST;
@@ -70,6 +73,7 @@ private:
     QStringList m_includedFiles;
     TopDUContext* m_duContext;
     bool m_readFromDisk;
+    ParseJob* m_parseJob;
 };
 
 class ParseJob : public ThreadWeaver::Job

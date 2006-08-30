@@ -22,11 +22,13 @@
 
 #include <QMutex>
 #include <QMutexLocker>
+#include <QApplication>
 
 #include <kdebug.h>
 #include <kinstance.h>
 #include <kstandarddirs.h>
 #include <kgenericfactory.h>
+#include <kio/netaccess.h>
 
 #include <kdevcore.h>
 #include <kdevproject.h>
@@ -202,29 +204,31 @@ void CppLanguageSupport::releaseAST( KDevAST *ast)
     // The ast is in the memory pool which has been deleted as part of the session.
 }
 
-KUrl CppLanguageSupport::findIncludePath( const QString& fileName )
+KUrl CppLanguageSupport::findInclude( const QString& fileName )
 {
-    KUrl realPath;
-    KDevProject* project = KDevCore::activeProject();
-    KDevBuildManager* buildManager = static_cast<KDevBuildManager*>( project->fileManager() );
-    KUrl::List includeDirList = buildManager->includeDirectories();
-    KUrl::List::iterator it, itEnd = includeDirList.end();
-    for ( it = includeDirList.begin(); it != itEnd; ++it )
-    {
-        KUrl u = (*it);
-        u.adjustPath( KUrl::AddTrailingSlash );
+    // TODO: require that the target which specified the original file be passed, so that the correct set of includes can be retrieved rather than all of them
 
-        QString fullPath = u.path() + fileName;
-        kDebug(9007) << k_funcinfo << "checking for existance of " << fullPath << endl;
-        if ( QFile::exists( fullPath ) )
-        {
-            realPath = KUrl( fullPath );
-            break;
+    KUrl ret;
+
+    if (KDevProject* project = KDevCore::activeProject()) {
+        if (KDevBuildManager* buildManager = static_cast<KDevBuildManager*>( project->fileManager() )) {
+            foreach (KUrl u, buildManager->includeDirectories()) {
+                u.adjustPath( KUrl::AddTrailingSlash );
+
+                KUrl newUrl (u, fileName);
+                //kDebug(9007) << k_funcinfo << "checking for existance of " << newUrl << endl;
+                if ( KIO::NetAccess::exists( newUrl, true, qApp->activeWindow() ) ) {
+                    ret = newUrl;
+                    break;
+                }
+            }
+
+            //if (!ret.isValid())
+                //kWarning(7009) << k_funcinfo << "Could not find include " << fileName << " in  " << buildManager->includeDirectories() << endl;
         }
     }
 
-    return realPath;
-    
+    return ret;
 }
 
 #include "cpplanguagesupport.moc"

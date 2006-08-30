@@ -45,6 +45,8 @@ class Document;
 
 class QTimer;
 class QProgressBar;
+class QMutex;
+class QWaitCondition;
 
 class KDevAST;
 class KDevDocument;
@@ -113,7 +115,17 @@ protected:
     virtual void initialize();
     virtual void cleanup();
 
+private Q_SLOTS:
+    void acceptAddDocument(const QUrl& url);
+
+Q_SIGNALS:
+    void requestAddDocument(const QUrl& url);
+
 private:
+    // Non-mutex guarded functions, only call with m_mutex acquired.
+    void parseDocumentsInternal();
+    void cacheModelsInternal( uint modelsToCache );
+
     QTimer *m_timer;
     int m_delay;
     uint m_modelsToCache;
@@ -132,6 +144,9 @@ private:
     ThreadWeaver::Weaver* m_weaver;
 
     KDevParserDependencyPolicy* m_dependencyPolicy;
+
+    QMutex* m_mutex;
+    QWaitCondition* m_waitForJobCreation;
 };
 
 #endif

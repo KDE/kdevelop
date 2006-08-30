@@ -39,6 +39,10 @@
 #include <QFile>
 #include <QTimer>
 #include <QProgressBar>
+#include <QMutex>
+#include <QWaitCondition>
+#include <QMutexLocker>
+#include <QThread>
 
 #include <kdebug.h>
 #include <kstatusbar.h>
@@ -59,8 +63,10 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         m_delay( 500 ),
         m_modelsToCache( 0 ),
         m_progressBar( new QProgressBar ),
-        m_weaver( new Weaver( this, 2 ) ),
-        m_dependencyPolicy( new KDevParserDependencyPolicy )
+        m_weaver( new Weaver( this, 1 ) ),
+        m_dependencyPolicy( new KDevParserDependencyPolicy ),
+        m_mutex(new QMutex()),
+        m_waitForJobCreation(new QWaitCondition)
 {
     //ThreadWeaver::setDebugLevel(true, 5);
 
@@ -68,6 +74,9 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
     m_timer->setSingleShot( true );
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
     m_timer->start( m_delay );
+
+    // Signal to allow other threads to request document addition.
+    connect(this, SIGNAL(requestAddDocument(const QUrl&)), this, SLOT(acceptAddDocument(const QUrl&)), Qt::QueuedConnection);
 }
 
 KDevBackgroundParser::~KDevBackgroundParser()
@@ -85,10 +94,13 @@ KDevBackgroundParser::~KDevBackgroundParser()
     }
 
     delete m_dependencyPolicy;
+    delete m_waitForJobCreation;
 }
 
 void KDevBackgroundParser::clear(QObject* parent)
 {
+    QMutexLocker lock(m_mutex);
+
     QHashIterator<KUrl, KDevParseJob*> it = m_parseJobs;
     while (it.hasNext()) {
         it.next();
@@ -100,6 +112,8 @@ void KDevBackgroundParser::clear(QObject* parent)
 
 void KDevBackgroundParser::initialize()
 {
+    QMutexLocker lock(m_mutex);
+
     m_progressBar->setMinimumWidth( 150 );
     KDevCore::mainWindow()->statusBar()->addPermanentWidget( m_progressBar );
     m_progressBar->hide();
@@ -125,6 +139,13 @@ void KDevBackgroundParser::loadSettings()
 
 void KDevBackgroundParser::cacheModels( uint modelsToCache )
 {
+    QMutexLocker lock(m_mutex);
+
+    cacheModelsInternal(modelsToCache);
+}
+
+void KDevBackgroundParser::cacheModelsInternal( uint modelsToCache )
+{
     m_modelsToCache = modelsToCache;
     m_progressBar->reset();
     m_progressBar->setMinimum( 0 );
@@ -132,19 +153,51 @@ void KDevBackgroundParser::cacheModels( uint modelsToCache )
 //     m_progressBar->show();
 }
 
+void KDevBackgroundParser::acceptAddDocument(const QUrl& url)
+{
+    addDocument(KUrl(url));
+}
+
 void KDevBackgroundParser::addDocument( const KUrl &url )
 {
+    QMutexLocker lock(m_mutex);
+    {
+
+    if (thread() != QThread::currentThread()) {
+        // We're being called from a worker thread... transfer this request to the main thread
+        // and wait for the result ( it will want to be able to retrieve the job)
+        emit requestAddDocument(url);
+
+        bool foundParseJob = false;
+
+        do {
+            m_waitForJobCreation->wait(m_mutex);
+
+            foundParseJob = m_parseJobs.contains(url);
+
+        } while (!foundParseJob);
+
+        return;
+    }
+
     Q_ASSERT( url.isValid() );
 
     if ( !m_documents.contains( url ) )
     {
         m_documents.insert( url, true );
-        parseDocuments();
+        parseDocumentsInternal();
     }
+
+    }
+
+    // Wake up waiting threads
+    m_waitForJobCreation->wakeAll();
 }
 
 void KDevBackgroundParser::addDocument( KDevDocument* document )
 {
+    Q_ASSERT(thread() == QThread::currentThread());
+
     Q_ASSERT( document && document->textDocument() );
 
     m_openDocuments.insert( document->url(), document );
@@ -157,6 +210,8 @@ void KDevBackgroundParser::addDocument( KDevDocument* document )
 
 void KDevBackgroundParser::addDocumentList( const KUrl::List &urls )
 {
+    QMutexLocker lock(m_mutex);
+
     uint i = 0;
     foreach( KUrl url, urls )
     {
@@ -167,12 +222,14 @@ void KDevBackgroundParser::addDocumentList( const KUrl::List &urls )
         }
     }
 
-    cacheModels( i );
-    parseDocuments();
+    cacheModelsInternal( i );
+    parseDocumentsInternal();
 }
 
 void KDevBackgroundParser::removeDocument( const KUrl &url )
 {
+    QMutexLocker lock(m_mutex);
+
     if ( !url.isValid() ) {
         kWarning() << k_funcinfo << "Invalid url " << url << endl;
         url.isValid();
@@ -186,12 +243,21 @@ void KDevBackgroundParser::removeDocument( const KUrl &url )
 
 void KDevBackgroundParser::removeDocument( KDevDocument* document )
 {
+    Q_ASSERT(thread() == QThread::currentThread());
+
     Q_ASSERT( document && document->textDocument() );
 
     removeDocument( document->url() );
 }
 
 void KDevBackgroundParser::parseDocuments()
+{
+    QMutexLocker lock(m_mutex);
+
+    parseDocumentsInternal();
+}
+
+void KDevBackgroundParser::parseDocumentsInternal()
 {
     KDevLanguageSupport * langSupport = KDevCore::activeLanguage();
     if ( !langSupport )
@@ -244,6 +310,8 @@ void KDevBackgroundParser::parseDocuments()
 
 void KDevBackgroundParser::parseComplete( Job *job )
 {
+    QMutexLocker lock(m_mutex);
+
     //kDebug() << k_funcinfo << "Complete " << job << " success? " << job->success() << endl;
 
     if ( KDevParseJob * parseJob = qobject_cast<KDevParseJob*>( job ) )
@@ -302,6 +370,8 @@ void KDevBackgroundParser::parseComplete( Job *job )
 
 void KDevBackgroundParser::documentChanged( KTextEditor::Document * document )
 {
+    QMutexLocker lock(m_mutex);
+
     Q_ASSERT( m_documents.contains( document->url() ) );
     m_documents.insert( document->url(), true );
 
@@ -346,6 +416,8 @@ void KDevBackgroundParser::resume()
 
 void KDevBackgroundParser::setDelay( int msec )
 {
+    QMutexLocker lock(m_mutex);
+
     m_delay = msec;
 }
 
@@ -356,8 +428,11 @@ KDevParserDependencyPolicy* KDevBackgroundParser::dependencyPolicy() const
 
 KDevParseJob* KDevBackgroundParser::parseJobForDocument(const KUrl& document) const
 {
+    QMutexLocker lock(m_mutex);
+
     if (m_parseJobs.contains(document))
         return m_parseJobs[document];
+
     return 0;
 }
 

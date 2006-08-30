@@ -52,7 +52,7 @@ public:
 
     /// Get the full path for a file based on a search through the project's
     /// include directories
-    KUrl findIncludePath( const QString& fileName );
+    KUrl findInclude( const QString& fileName );
 
 private slots:
     void documentLoaded( KDevDocument *document );

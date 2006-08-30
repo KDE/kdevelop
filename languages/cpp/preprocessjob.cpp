@@ -28,9 +28,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kdevcore.h"
-#include "kdevproject.h"
-#include "kdevpersistenthash.h"
+#include <kdevcore.h>
+#include <kdevproject.h>
+#include <kdevpersistenthash.h>
+#include <kdevbackgroundparser.h>
 
 #include "Thread.h"
 
@@ -52,6 +53,8 @@ CPPParseJob * PreprocessJob::parentJob() const
 
 void PreprocessJob::run()
 {
+    //kDebug() << k_funcinfo << "Started pp job " << this << " parse " << parentJob()->parseJob() << " parent " << parentJob() << endl;
+
     if (parentJob()->abortRequested())
         return parentJob()->abortJob();
 
@@ -99,15 +102,59 @@ Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type)
 {
     Q_UNUSED(type);
 
-    // FIXME need build system support to determine the full URL of the file
+    // FIXME change to interruptable preprocessor
+
+    if (parentJob()->abortRequested()) {
+        parentJob()->abortJob();
+        return 0;
+    }
+
+    bool dependencyAdded = false;
+    bool dependencyAllowed = true;
+
+    KUrl includedFile = parentJob()->cpp()->findInclude(fileName);
+    if (includedFile.isValid()) {
+        if (KDevParseJob* job = parentJob()->backgroundParser()->parseJobForDocument(includedFile)) {
+            /*if (job == parentJob())
+                // Trying to include self
+                goto done;
+
+            if (!job->isFinished()) {
+                dependencyAllowed = parentJob()->addDependency(job, parentJob()->parseJob());
+
+                kDebug() << k_funcinfo << "Added dependency on job " << job << " to " << parentJob() << " pp " << this << " parse " << parentJob()->parseJob() << " success " << dependencyAllowed << endl;
+            }
+
+            dependencyAdded = true;*/
+        }
+    }
 
     if (KDevCore::activeProject()) {
-        KDevAST* ast = KDevCore::activeProject()->persistentHash()->retrieveAST(fileName);
+        KDevAST* ast = 0;
+        if (includedFile.isValid())
+            ast = KDevCore::activeProject()->persistentHash()->retrieveAST(includedFile);
+        if (!ast)
+            ast = KDevCore::activeProject()->persistentHash()->retrieveAST(fileName);
+
         if (ast) {
             TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
             addMacros(t->session->macros);
+
+        } else if (!dependencyAdded && dependencyAllowed && includedFile.isValid()) {
+            parentJob()->backgroundParser()->addDocument(includedFile);
+            KDevParseJob* job = parentJob()->backgroundParser()->parseJobForDocument(includedFile);
+            /*if (job == parentJob())
+                // Trying to include self
+                goto done;
+
+            if (job && !job->isFinished()) {
+                dependencyAllowed = parentJob()->addDependency(job, parentJob()->parseJob());
+                kDebug() << k_funcinfo << "Added dependency on job " << job << " to " << parentJob() << " pp " << this << " parse " << parentJob()->parseJob() << " success " << dependencyAllowed << endl;
+            }*/
         }
     }
+
+    done:
 
     parentJob()->addIncludedFile(fileName);
 
