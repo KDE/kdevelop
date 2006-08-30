@@ -328,7 +328,7 @@ bool KDevHTMLPart::openURL(const KUrl &url)
   KUrl newUrl(path);
   KUrl oldUrl = KDevHTMLPart::url();
 
-  bool retval = KHTMLPart::openURL(newUrl);
+  bool retval = KHTMLPart::openUrl(newUrl);
   if ( retval )
   {
     emit documentURLChanged( oldUrl, newUrl );
@@ -361,7 +361,7 @@ void KDevHTMLPart::slotReload( )
 
 void KDevHTMLPart::slotStop( )
 {
-    closeURL();
+    closeUrl();
 }
 
 void KDevHTMLPart::slotStarted( KIO::Job * )
