@@ -28,6 +28,8 @@
 
 #include <QFile>
 #include <QByteArray>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -46,6 +48,7 @@ KDevParseJob::KDevParseJob( const KUrl &url,
         m_document( url ),
         m_openDocument( 0 ),
         m_backgroundParser( 0 ),
+        m_abortMutex(new QMutex),
         m_abortRequested( false ),
         m_aborted( false )
 {}
@@ -56,6 +59,7 @@ KDevParseJob::KDevParseJob( KDevDocument *document,
         m_document( document->url() ),
         m_openDocument( document ),
         m_backgroundParser( 0 ),
+        m_abortMutex(new QMutex),
         m_abortRequested( false ),
         m_aborted( false )
 {}
@@ -157,18 +161,22 @@ bool KDevParseJob::addDependency(KDevParseJob* dependency, ThreadWeaver::Job* ac
 
 bool KDevParseJob::abortRequested() const
 {
+    QMutexLocker lock(m_abortMutex);
+
     return m_abortRequested;
 }
 
 void KDevParseJob::requestAbort()
 {
+    QMutexLocker lock(m_abortMutex);
+
     m_abortRequested = true;
 }
 
 void KDevParseJob::abortJob()
 {
     m_aborted = true;
-    setFinished(false);
+    setFinished(true);
 }
 
 #include "kdevparsejob.moc"

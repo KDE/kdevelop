@@ -169,13 +169,17 @@ void KDevBackgroundParser::addDocument( const KUrl &url )
         emit requestAddDocument(url);
 
         bool foundParseJob = false;
+        int count = 0;
 
         do {
-            m_waitForJobCreation->wait(m_mutex);
+            // Only wait for one second, or five wakeups, as this can deadlock when closing the project
+            // FIXME: detect when project is closing
+            m_waitForJobCreation->wait(m_mutex, 200);
 
             foundParseJob = m_parseJobs.contains(url);
+            ++count;
 
-        } while (!foundParseJob);
+        } while (!foundParseJob && count < 5);
 
         return;
     }

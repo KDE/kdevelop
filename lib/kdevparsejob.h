@@ -103,6 +103,7 @@ protected:
     QString m_errorMessage;
     KDevBackgroundParser* m_backgroundParser;
 
+    QMutex* m_abortMutex;
     volatile bool m_abortRequested : 1;
     bool m_aborted : 1;
 };

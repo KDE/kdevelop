@@ -47,6 +47,9 @@ KDevDocumentRange::KDevDocumentRange(const KDevDocumentRange& copy)
 KDevDocumentRange::~KDevDocumentRange()
 {
   setParentRange(0);
+
+  foreach (KDevDocumentRange* child, m_childRanges)
+    child->setParentRange(0);
 }
 
 const KUrl& KDevDocumentRange::document() const

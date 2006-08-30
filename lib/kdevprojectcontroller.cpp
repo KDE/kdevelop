@@ -249,7 +249,7 @@ bool KDevProjectController::closeProject()
     KAction * action;
 
     action = ac->action( "project_close" );
-    action->setEnabled( true );
+    action->setEnabled( false );
 
     emit projectClosed();
 
