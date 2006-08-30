@@ -46,7 +46,7 @@ public:
 
 	virtual KDevProject* project() const;
     virtual KDevProjectBuilder* builder() const { return 0; }
-    virtual QStringList includeDirectories() const { return QStringList(); }
+    virtual KUrl::List includeDirectories() const { return KUrl::List(); }
     virtual KUrl::List preprocessorDefines() const { return KUrl::List(); }
 
 	virtual KDevProjectFolderItem* addFolder( const KUrl& /*folder */,

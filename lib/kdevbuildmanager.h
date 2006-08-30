@@ -55,7 +55,7 @@ public:
     /**
      * Provide a list of include directories.
      */
-    virtual QStringList includeDirectories() const;
+    virtual KUrl::List includeDirectories() const;
 
     /**
      * Provide a list of files that contain the preprocessor defines for the

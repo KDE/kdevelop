@@ -30,9 +30,9 @@ KDevBuildManager::~KDevBuildManager()
 {
 }
 
-QStringList KDevBuildManager::includeDirectories() const
+KUrl::List KDevBuildManager::includeDirectories() const
 {
-  return QStringList();
+  return KUrl::List();
 }
 
 KUrl::List KDevBuildManager::preprocessorDefines() const

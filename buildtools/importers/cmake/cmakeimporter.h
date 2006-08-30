@@ -49,7 +49,7 @@ public:
 
     virtual KDevProject* project() const;
     virtual KDevProjectBuilder* builder() const { return 0; }
-    virtual QStringList includeDirectories() const { return QStringList(); }
+    virtual KUrl::List includeDirectories() const;
     virtual KUrl::List preprocessorDefines() const { return KUrl::List(); }
 
     virtual KDevProjectFolderItem* addFolder( const KUrl& /*folder */,
@@ -93,6 +93,7 @@ private:
     KDevProjectBuilder* m_builder;
     cmake m_cmakeEngine;
 
+    KUrl::List m_includeDirList;
 
 };
 

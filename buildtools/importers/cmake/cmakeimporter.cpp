@@ -167,10 +167,23 @@ void CMakeImporter::createProjectItems( cmLocalGenerator* generator, KDevProject
     for ( git = generatorVector.begin(); git != generatorVector.end(); ++git )
     {
         KUrl url( ( *git )->GetMakefile()->GetStartDirectory() );
-        KDevProjectFolderItem* item = new KDevProjectFolderItem( url, 0 );
+        KDevProjectBuildFolderItem* item = new KDevProjectBuildFolderItem( url, 0 );
+        std::vector<std::string> includeList = makefile->GetIncludeDirectories();
+        std::vector<std::string>::iterator it, itEnd = includeList.end();
+        for ( it = includeList.begin(); it != itEnd; ++it )
+        {
+            KUrl urlCandidate = KUrl( QLatin1String( ( *it ).c_str() ) );
+            if ( m_includeDirList.indexOf( urlCandidate ) == -1 )
+                m_includeDirList.append( urlCandidate );
+        }
         createProjectItems( ( *git ), item );
         rootItem->add( item );
     }
+}
+
+KUrl::List CMakeImporter::includeDirectories() const
+{
+    return m_includeDirList;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;

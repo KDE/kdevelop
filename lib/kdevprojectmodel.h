@@ -89,8 +89,11 @@ private:
 class KDEVINTERFACES_EXPORT KDevProjectBuildFolderItem: public KDevProjectFolderItem
 {
 public:
-  KDevProjectBuildFolderItem(const KUrl &dir, KDevItemGroup *parent = 0);
+  KDevProjectBuildFolderItem(const KUrl &dir, KDevItemGroup *parent = 0)
+  : KDevProjectFolderItem(dir, parent) {}
 
+  void setIncludeDirectories( const KUrl::List& includeList );
+  
   /**
    * Return a list of directories that are used as include directories
    * for all targets in this directory.
@@ -104,7 +107,7 @@ public:
   const QHash<QString, QString>& environment() const;
 
 private:
-  KUrl m_url;
+  KUrl::List m_includeDirs; ///include directories
 };
 
 /**

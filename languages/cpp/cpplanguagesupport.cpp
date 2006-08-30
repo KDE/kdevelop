@@ -31,6 +31,7 @@
 #include <kdevcore.h>
 #include <kdevproject.h>
 #include <kdevfilemanager.h>
+#include <kdevbuildmanager.h>
 #include <kdevprojectmodel.h>
 #include <kdevprojectcontroller.h>
 #include <kdevdocumentcontroller.h>
@@ -199,6 +200,31 @@ void CppLanguageSupport::releaseAST( KDevAST *ast)
     TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
     delete t->session;
     // The ast is in the memory pool which has been deleted as part of the session.
+}
+
+KUrl CppLanguageSupport::findIncludePath( const QString& fileName )
+{
+    KUrl realPath;
+    KDevProject* project = KDevCore::activeProject();
+    KDevBuildManager* buildManager = static_cast<KDevBuildManager*>( project->fileManager() );
+    KUrl::List includeDirList = buildManager->includeDirectories();
+    KUrl::List::iterator it, itEnd = includeDirList.end();
+    for ( it = includeDirList.begin(); it != itEnd; ++it )
+    {
+        KUrl u = (*it);
+        u.adjustPath( KUrl::AddTrailingSlash );
+
+        QString fullPath = u.path() + fileName;
+        kDebug(9007) << k_funcinfo << "checking for existance of " << fullPath << endl;
+        if ( QFile::exists( fullPath ) )
+        {
+            realPath = KUrl( fullPath );
+            break;
+        }
+    }
+
+    return realPath;
+    
 }
 
 #include "cpplanguagesupport.moc"

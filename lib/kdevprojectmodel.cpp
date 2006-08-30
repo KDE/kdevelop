@@ -91,6 +91,23 @@ KDevProjectItem *KDevProjectModel::item(const QModelIndex &index) const
   return reinterpret_cast<KDevProjectItem*>(index.internalPointer());
 }
 
+void KDevProjectBuildFolderItem::setIncludeDirectories( const KUrl::List& dirList )
+{
+  m_includeDirs = dirList;
+}
+
+const KUrl::List& KDevProjectBuildFolderItem::includeDirectories() const
+{
+  return m_includeDirs;
+}
+
+const QHash<QString, QString>& KDevProjectBuildFolderItem::environment() const
+{
+  QHash<QString, QString> hash;
+  return hash;
+}
+
+
 KDevProjectFolderItem::KDevProjectFolderItem( const KUrl & dir, KDevItemGroup * parent )
   : KDevProjectItem(dir.directory(), parent)
   , m_url(dir)
