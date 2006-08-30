@@ -311,19 +311,6 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 
 void TypeBuilder::visitDeclarator(DeclaratorAST *node)
 {
-  if (node->parameter_declaration_clause) {
-    // New function type
-    CppFunctionType::Ptr newFunction(new CppFunctionType());
-
-    if (node->fun_cv)
-      newFunction->setCV(parseConstVolatile(node->fun_cv));
-
-    if (lastType())
-      newFunction->setReturnType(lastType());
-
-    openType(newFunction, node);
-  }
-
   //BEGIN Copied from default visitor
   visit(node->sub_declarator);
   visitNodes(this, node->ptr_ops);
@@ -342,8 +329,20 @@ void TypeBuilder::visitDeclarator(DeclaratorAST *node)
     } while (it != end);
   }
 
+  if (node->parameter_declaration_clause) {
+    // New function type
+    CppFunctionType::Ptr newFunction(new CppFunctionType());
+
+    if (node->fun_cv)
+      newFunction->setCV(parseConstVolatile(node->fun_cv));
+
+    if (lastType())
+      newFunction->setReturnType(lastType());
+
+    openType(newFunction, node);
+  }
+
   //BEGIN Copied from default visitor
-  visitNodes(this, node->array_dimensions);
   visit(node->parameter_declaration_clause);
   visit(node->exception_spec);
   //END Finished with default visitor
