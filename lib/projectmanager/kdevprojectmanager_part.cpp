@@ -79,6 +79,7 @@ KDevProjectManagerPart::KDevProjectManagerPart( QObject *parent, const QStringLi
         {
             m_manager = KService::createInstance<KDevFileManager>( ( *it ) ->service(),
                         this, QStringList(), 0 );
+            setFileManager(m_manager);
             break;
         }
 
@@ -363,7 +364,7 @@ bool KDevProjectManagerPart::computeChanges( const QStringList &oldFileList, con
     /* FIXME port me!
       if (!newFiles.isEmpty())
         emit addedFilesToProject(newFiles.keys());
-     
+
       if (!oldFiles.isEmpty())
         emit removedFilesFromProject(oldFiles.keys());
     */

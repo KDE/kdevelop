@@ -354,6 +354,13 @@ KDevParserDependencyPolicy* KDevBackgroundParser::dependencyPolicy() const
     return m_dependencyPolicy;
 }
 
+KDevParseJob* KDevBackgroundParser::parseJobForDocument(const KUrl& document) const
+{
+    if (m_parseJobs.contains(document))
+        return m_parseJobs[document];
+    return 0;
+}
+
 #include "kdevbackgroundparser.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

@@ -82,7 +82,7 @@ public:
      * unless you call in from your job's ThreadWeaver::Job::aboutToBeQueued()
      * function.
      */
-    KDevParseJob* parseJobForDocument(const KUrl& document);
+    KDevParseJob* parseJobForDocument(const KUrl& document) const;
 
     /**
      * The dependency policy which applies to all jobs (it is
