@@ -96,8 +96,6 @@ Declaration* DUContext::takeDeclaration(Declaration* definition)
 
 Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, const QList<UsingNS*>& usingNamespaces ) const
 {
-  Q_UNUSED(dataType);
-
   QLinkedList<Declaration*> tryToResolve;
   QLinkedList<Declaration*> ensureResolution;
   QList<Declaration*> resolved;
