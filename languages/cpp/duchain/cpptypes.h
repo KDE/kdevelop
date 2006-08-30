@@ -47,11 +47,12 @@ public:
 
   uint cvHash(uint input) const { return input; }
 
-private:
+protected:
   inline void setCV(Cpp::CVSpecs spec) { m_constant = spec & Cpp::Const; m_volatile = spec & Cpp::Volatile; }
   inline void setConstant(bool is) { m_constant = is; }
   inline void setVolatile(bool is) { m_volatile = is; }
 
+private:
   bool m_constant : 1;
   bool m_volatile : 1;
 };
@@ -91,9 +92,10 @@ public:
 
   virtual uint hash() const;
 
-private:
+protected:
   CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers = ModifierNone);
 
+private:
   IntegralTypes m_type;
   CppIntegralType::TypeModifiers m_modifiers;
 };
@@ -236,23 +238,17 @@ public:
 
 private:
   QString m_value;
-};
+};*/
 
-// TODO is this the correct base type?
-class CppEnumerationType : public StructureType
+class CppEnumerationType : public CppIntegralType
 {
 public:
   typedef KSharedPtr<CppEnumerationType> Ptr;
 
-  const QList<CppEnumeratorType::Ptr>& enumerators() const;
-  void addEnumerator(CppEnumeratorType::Ptr item);
-  void removeEnumerator(CppEnumeratorType::Ptr item);
+  CppEnumerationType(Cpp::CVSpecs spec = Cpp::CVNone);
 
   virtual uint hash() const;
-
-private:
-  QList<CppEnumeratorType::Ptr> m_enumerators;
-};*/
+};
 
 /*class CppTemplateParameterType : public
 {
@@ -266,35 +262,20 @@ public:
 private:
   TypeInfo m_type;
   bool m_defaultValue;
-};
+};*/
 
-class _TemplateModelItem: public _CodeModelItem
+class CppTemplateType : public AbstractType
 {
 public:
-  DECLARE_MODEL_NODE(Template)
+  typedef KSharedPtr<CppTemplateType> Ptr;
 
-  static TemplateModelItem create(CodeModel *model);
-
-public:
-  TemplateParameterList parameters() const;
-  void addParameter(TemplateParameterModelItem item);
-  void removeParameter(TemplateParameterModelItem item);
-
-  CodeModelItem declaration() const;
-  void setDeclaration(CodeModelItem declaration);
-
-protected:
-  _TemplateModelItem(CodeModel *model, int kind = __node_kind)
-    : _CodeModelItem(model, kind) {}
+  const QList<AbstractType::Ptr>& parameters() const;
+  void addParameter(AbstractType::Ptr parameter);
+  void removeParameter(AbstractType::Ptr parameter);
 
 private:
-  TemplateParameterList m_parameters;
-  CodeModelItem m_declaration;
-
-private:
-  _TemplateModelItem(const _TemplateModelItem &other);
-  void operator = (const _TemplateModelItem &other);
-};*/
+  QList<AbstractType::Ptr> m_parameters;
+};
 
 /*template <class _Target, class _Source>
 _Target model_static_cast(_Source item)

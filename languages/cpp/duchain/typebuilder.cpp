@@ -101,11 +101,11 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
 
 void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 {
-  //openType(CppEnumerationType::Ptr(new CppEnumerationType()), node);
+  openType(CppEnumerationType::Ptr(new CppEnumerationType()), node);
 
   TypeBuilderBase::visitEnumSpecifier(node);
 
-  //closeType();
+  closeType();
 }
 
 void TypeBuilder::visitEnumerator(EnumeratorAST* node)
@@ -147,10 +147,10 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
           }
           break;
-/*        case Token_enum:
-          if (def->type<CppEnumeratorType>())
+        case Token_enum:
+          if (def->type<CppEnumerationType>())
             type = def->abstractType();
-          break;*/
+          break;
         case Token_typename:
           type = def->abstractType();
           break;
@@ -164,10 +164,9 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
         case Token_union:
           type = AbstractType::Ptr::staticCast(openClass(kind));
           break;
-/*        case Token_enum:
-          if (def->type<CppEnumeratorType>())
-            type = def->abstractType();
-          break;*/
+        case Token_enum:
+          type = AbstractType::Ptr(new CppEnumerationType());
+          break;
         case Token_typename:
           // TODO what goes here...?
           //type = def->abstractType();
@@ -445,8 +444,8 @@ void TypeBuilder::visitParameterDeclaration(ParameterDeclarationAST* node)
   CppFunctionType::Ptr function = currentType<CppFunctionType>();
   Q_ASSERT(function);
 
-  if (lastType())
+  //if (lastType())
     function->addArgument(lastType());
-  else
-    kWarning() << k_funcinfo << "Parameter declaration did not generate a type. " << node->type_specifier << endl;
+  //else
+    //kWarning() << k_funcinfo << "Parameter declaration did not generate a type. " << node->type_specifier << endl;
 }

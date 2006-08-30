@@ -64,23 +64,7 @@ void CppTypeAliasType::setType(AbstractType::Ptr type)
 }
 
 // ---------------------------------------------------------------------------
-/*const QList<CppEnumeratorType::Ptr>& CppEnumerationType::enumerators() const
-{
-  return m_enumerators;
-}
-
-void CppEnumerationType::addEnumerator(CppEnumeratorType::Ptr item)
-{
-  m_enumerators.append(item);
-}
-
-void CppEnumerationType::removeEnumerator(CppEnumeratorType::Ptr item)
-{
-  m_enumerators.removeAll(item);
-}
-
-// ---------------------------------------------------------------------------
-QString CppEnumeratorType::value() const
+/*QString CppEnumeratorType::value() const
 {
   return m_value;
 }
@@ -277,4 +261,15 @@ QString CppClassType::toString() const
       break;
   }
   return QString("<%1>%2").arg(type).arg(cvString());
+}
+
+CppEnumerationType::CppEnumerationType(Cpp::CVSpecs spec)
+  : CppIntegralType(TypeInt)
+{
+  setCV(spec);
+}
+
+uint CppEnumerationType::hash() const
+{
+  return reinterpret_cast<long>(this);
 }

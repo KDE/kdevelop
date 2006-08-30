@@ -88,7 +88,7 @@ QString FunctionType::toString() const
       first = false;
     else
       args.append(", ");
-    args.append(type->toString());
+    args.append(type ? type->toString() : QString("<notype>"));
   }
 
   return QString("%1 (%2)").arg(returnType() ? returnType()->toString() : QString("<notype>")).arg(args);

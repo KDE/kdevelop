@@ -155,7 +155,8 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   Declaration* declaration;
   if (isFunction) {
     declaration = new ClassFunctionDeclaration(range);
-    declaration->setDeclarationIsDefinition(m_functionDefinedStack.top());
+    if (!m_functionDefinedStack.isEmpty())
+      declaration->setDeclarationIsDefinition(m_functionDefinedStack.top());
 
   } else if (scope == Declaration::ClassScope) {
     declaration = new ClassMemberDeclaration(range);
