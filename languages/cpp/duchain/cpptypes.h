@@ -45,7 +45,7 @@ public:
 
   QString cvString() const;
 
-  uint cvHash(uint input) const { return input; }
+  //uint cvHash(uint input) const { return input; }
 
   Cpp::CVSpecs cv() const { return static_cast<Cpp::CVSpecs>((m_constant & Cpp::Const) | (m_volatile & Cpp::Volatile)); }
 
@@ -92,7 +92,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual uint hash() const;
+  //virtual uint hash() const;
 
 protected:
   CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers = ModifierNone);
@@ -111,7 +111,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual uint hash() const;
+  //virtual uint hash() const;
 };
 
 class CppPointerType : public PointerType, public CppCVType
@@ -123,7 +123,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual uint hash() const;
+  //virtual uint hash() const;
 };
 
 class CppReferenceType : public ReferenceType, public CppCVType
@@ -135,7 +135,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual uint hash() const;
+  //virtual uint hash() const;
 };
 
 class CppClassType;
@@ -179,7 +179,7 @@ public:
   /// Error if the type is closed.
   virtual void addElement(AbstractType::Ptr element);
 
-  virtual uint hash() const;
+  //virtual uint hash() const;
 
   virtual QString toString() const;
 
@@ -209,7 +209,7 @@ public:
   AbstractType::Ptr type() const;
   void setType(AbstractType::Ptr type);
 
-  virtual uint hash() const;
+  //virtual uint hash() const;
 
   virtual QString toString() const;
 
@@ -249,7 +249,7 @@ public:
 
   CppEnumerationType(Cpp::CVSpecs spec = Cpp::CVNone);
 
-  virtual uint hash() const;
+  //virtual uint hash() const;
 };
 
 /*class CppTemplateParameterType : public

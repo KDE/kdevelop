@@ -198,7 +198,7 @@ QString CppArrayType::toString() const
   return QString("%1%2").arg(cvString()).arg(ArrayType::toString());
 }*/
 
-uint CppIntegralType::hash() const
+/*uint CppIntegralType::hash() const
 {
   return cvHash(IntegralType::hash());
 }
@@ -231,7 +231,7 @@ uint CppClassType::hash() const
 uint CppTypeAliasType::hash() const
 {
   return type() ? type()->hash() + 83 : 0;
-}
+}*/
 
 QString CppTypeAliasType::toString() const
 {
@@ -269,7 +269,7 @@ CppEnumerationType::CppEnumerationType(Cpp::CVSpecs spec)
   setCV(spec);
 }
 
-uint CppEnumerationType::hash() const
+/*uint CppEnumerationType::hash() const
 {
   return reinterpret_cast<long>(this);
-}
+}*/

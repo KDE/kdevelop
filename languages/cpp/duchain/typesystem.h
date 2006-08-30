@@ -88,7 +88,7 @@ public:
 
   virtual QString toString() const = 0;
 
-  virtual uint hash() const = 0;
+  uint hash() const;
 
   enum WhichType {
     TypeAbstract,
@@ -134,7 +134,7 @@ public:
 
   virtual QString toString() const { return m_name; }
 
-  virtual uint hash() const;
+  //virtual uint hash() const;
 
   virtual WhichType whichType() const { return TypeIntegral; }
 
@@ -167,7 +167,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual uint hash() const;
+  //virtual uint hash() const;
 
   virtual WhichType whichType() const { return TypePointer; }
 
@@ -205,7 +205,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual uint hash() const;
+  //virtual uint hash() const;
 
   virtual WhichType whichType() const { return TypeReference; }
 
@@ -248,7 +248,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual uint hash() const;
+  //virtual uint hash() const;
 
   virtual WhichType whichType() const { return TypeFunction; }
 
@@ -290,7 +290,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual uint hash() const;
+  //virtual uint hash() const;
 
   virtual WhichType whichType() const { return TypeStructure; }
 
@@ -335,7 +335,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual uint hash() const;
+  //virtual uint hash() const;
 
   virtual WhichType whichType() const { return TypeArray; }
 

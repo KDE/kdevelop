@@ -104,12 +104,12 @@ QString ArrayType::toString() const
   return QString("%1[%2]").arg(elementType() ? elementType()->toString() : QString("<notype>")).arg(m_dimension);
 }
 
-uint IntegralType::hash() const
+uint AbstractType::hash() const
 {
-  return qHash (name ());
+  return static_cast<uint>(reinterpret_cast<long>(this));
 }
 
-uint PointerType::hash() const
+/*uint PointerType::hash() const
 {
   return baseType()->hash() * 13;
 }
@@ -142,7 +142,7 @@ uint StructureType::hash() const
 uint ArrayType::hash() const
 {
   return elementType()->hash() * 47 * dimension();
-}
+}*/
 
 AbstractType::AbstractType()
   : m_registered(false)
