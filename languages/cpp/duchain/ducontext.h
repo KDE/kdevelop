@@ -24,12 +24,12 @@
 #include "kdevdocumentrangeobject.h"
 #include "kdevdocumentcursorobject.h"
 #include "identifier.h"
+#include "typesystem.h"
 
 class Declaration;
 class Definition;
 class DUChain;
 class Use;
-class AbstractType;
 
 /**
  * A single context in source code, represented as a node in a
@@ -157,10 +157,11 @@ public:
    *
    * \param identifier the identifier of the definition to search for
    * \param location the text position to search for
+   * \param type the type to match, or null for no type matching.
    *
    * \returns the requested declaration if one was found, otherwise null.
    */
-  Declaration* findDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>(), bool inImportedContext = false) const;
+  Declaration* findDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType = AbstractType::Ptr(), const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>(), bool inImportedContext = false) const;
 
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
@@ -195,7 +196,7 @@ public:
    * Returns the type of any \a identifier defined in this context, or
    * null if one is not found.
    */
-  Declaration* findLocalDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, bool allowUnqualifiedMatch = false, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
+  Declaration* findLocalDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType = AbstractType::Ptr(), bool allowUnqualifiedMatch = false, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
 
   /**
    * Clears all local declarations. Does not delete the declaration; the caller
@@ -320,7 +321,7 @@ private:
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
   /// Search closed contexts which have not necessarily lost scope
-  Declaration* findDeclarationInChildren(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const DUContext* sourceChild, const QList<UsingNS*>& usingNamespaces) const;
+  Declaration* findDeclarationInChildren(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, const DUContext* sourceChild, const QList<UsingNS*>& usingNamespaces) const;
 
   ContextType m_contextType;
 

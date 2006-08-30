@@ -25,6 +25,7 @@
 #include "name_compiler.h"
 #include "tokens.h"
 #include "parsesession.h"
+#include "definition.h"
 
 using namespace KTextEditor;
 
@@ -53,7 +54,7 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
-  m_functionDefinedStack.push(true);
+  m_functionDefinedStack.push(node->start_token);
 
   DeclarationBuilderBase::visitFunctionDeclaration(node);
 
@@ -67,7 +68,7 @@ void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
-  m_functionDefinedStack.push(false);
+  m_functionDefinedStack.push(0);
 
   DeclarationBuilderBase::visitSimpleDeclaration(node);
 
@@ -98,6 +99,26 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   applyStorageSpecifiers();
 
   DeclarationBuilderBase::visitDeclarator(node);
+
+  if (node->parameter_declaration_clause) {
+    if (!m_functionDefinedStack.isEmpty() && m_functionDefinedStack.top()) {
+      QualifiedIdentifier id = identifierForName(node->id);
+      if (id.count() > 1) {
+        KTextEditor::Cursor pos = m_editor->findPosition(m_functionDefinedStack.top(), KDevEditorIntegrator::FrontEdge);
+
+        kDebug() << k_funcinfo << "Searching for declaration of " << id << endl;
+
+        if (Declaration* dec = currentContext()->findDeclaration(id, pos, lastType())) {
+          Declaration* oldDec = currentDeclaration();
+          abortDeclaration();
+          Definition* def = new Definition(oldDec->takeRange(), dec, currentContext());
+          delete oldDec;
+          dec->setDefinition(def);
+          return;
+        }
+      }
+    }
+  }
 
   closeDeclaration();
 }
@@ -189,6 +210,11 @@ void DeclarationBuilder::closeDeclaration()
   if (lastType())
     currentDeclaration()->setType(lastType());
 
+  m_declarationStack.pop();
+}
+
+void DeclarationBuilder::abortDeclaration()
+{
   m_declarationStack.pop();
 }
 

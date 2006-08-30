@@ -62,6 +62,7 @@ private:
   /// Same as the above, but sets it as the definition too
   Declaration* openDefinition(NameAST* name, AST* range, bool isFunction = false);
   void closeDeclaration();
+  void abortDeclaration();
 
   void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);
   void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);
@@ -81,7 +82,7 @@ private:
 
   QStack<ClassFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
   QStack<ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
-  QStack<bool> m_functionDefinedStack;
+  QStack<std::size_t> m_functionDefinedStack;
 };
 
 #endif // DECLARATIONBUILDER_H

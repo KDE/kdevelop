@@ -25,6 +25,7 @@
 #include "definition.h"
 #include "duchain.h"
 #include "use.h"
+#include "typesystem.h"
 
 #include "dumpchain.h"
 
@@ -93,11 +94,13 @@ Declaration* DUContext::takeDeclaration(Declaration* definition)
   return definition;
 }
 
-Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, bool allowUnqualifiedMatch, const QList<UsingNS*>& usingNamespaces ) const
+Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, const QList<UsingNS*>& usingNamespaces ) const
 {
+  Q_UNUSED(dataType);
+
   QLinkedList<Declaration*> tryToResolve;
   QLinkedList<Declaration*> ensureResolution;
-  QSet<Declaration*> resolved;
+  QList<Declaration*> resolved;
 
   //kDebug() << k_funcinfo << "Searching for " << identifier << endl;
 
@@ -122,7 +125,7 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
           tryToResolve.append(definition);
         } else {
           //kDebug() << "Identifier contained by " << definition->identifier() << " (" << definition->qualifiedIdentifier() << "), accepted match." << endl;
-          resolved.insert(definition);
+          resolved.append(definition);
         }
         continue;
         //kDebug() << k_funcinfo << identifier << " contained by " << it.value()->qualifiedIdentifier() << endl;
@@ -132,20 +135,37 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
         if (!allowUnqualifiedMatch) {
           ensureResolution.append(definition);
         } else {
-          resolved.insert(definition);
+          resolved.append(definition);
         }
         continue;
     }
   }
 
   if (resolved.count() == 1) {
-    Declaration* definition  = *resolved.constBegin();
+    Declaration* definition  = resolved.first();
+    if (dataType && dataType != definition->abstractType())
+      return 0;
+
     if (type() == Class || position >= definition->textRange().start())
       return definition;
 
     return 0;
 
   } else if (resolved.count() > 1) {
+    if (dataType) {
+      QList<Declaration*> resolved2;
+
+      foreach (Declaration* declaration, resolved)
+        if (dataType == declaration->abstractType())
+          resolved2.append(declaration);
+
+      if (resolved2.count() == 1) {
+        Declaration* definition  = resolved2.first();
+        if (type() == Class || position >= definition->textRange().start())
+          return definition;
+      }
+    }
+
     /*kWarning() << k_funcinfo << "Multiple matching definitions (shouldn't happen, code error)" << endl;
     QSetIterator<Declaration*> it = resolved;
     while (it.hasNext()) {
@@ -171,7 +191,7 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
       case QualifiedIdentifier::ContainedBy:
         //kDebug() << k_funcinfo << identifier << " contained by " << it.value()->qualifiedIdentifier() << endl;
       case QualifiedIdentifier::ExactMatch:
-        resolved.insert(it.value());
+        resolved.append(it.value());
         break;
     }
   }
@@ -200,7 +220,7 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
       case QualifiedIdentifier::ContainedBy:
         //kDebug() << k_funcinfo << identifier << " contained by " << it.value()->qualifiedIdentifier() << endl;
       case QualifiedIdentifier::ExactMatch:
-        resolved.insert(it.value());
+        resolved.append(it.value());
         break;
     }
   }
@@ -220,7 +240,7 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
         case QualifiedIdentifier::ContainedBy:
           //kDebug() << k_funcinfo << identifier << " contained by " << it.value()->qualifiedIdentifier() << endl;
         case QualifiedIdentifier::ExactMatch:
-          resolved.insert(it.value());
+          resolved.append(it.value());
           break;
       }
     }
@@ -244,15 +264,15 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
   return 0;
 }
 
-Declaration * DUContext::findDeclaration( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNS, bool inImportedContext ) const
+Declaration * DUContext::findDeclaration( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, const DUContext * sourceChild, const QList<UsingNS*>& usingNS, bool inImportedContext ) const
 {
   // TODO we're missing ambiguous references by not checking every resolution before returning...
   // but is that such a bad thing? (might be good performance-wise)
-  if (Declaration* definition = findLocalDeclaration(identifier, position, sourceChild || inImportedContext, usingNS))
+  if (Declaration* definition = findLocalDeclaration(identifier, position, dataType, sourceChild || inImportedContext, usingNS))
     return definition;
 
   if (identifier.isQualified()) {
-    if (Declaration* definition = findDeclarationInChildren(identifier, position, sourceChild, usingNS))
+    if (Declaration* definition = findDeclarationInChildren(identifier, position, dataType, sourceChild, usingNS))
       return definition;
 
   } else if (!usingNamespaces().isEmpty() && !identifier.explicitlyGlobal()) {
@@ -263,7 +283,7 @@ Declaration * DUContext::findDeclaration( const QualifiedIdentifier & identifier
         currentUsingNS.append(use);
 
     if (!currentUsingNS.isEmpty())
-      if (Declaration* definition = findDeclarationInChildren(identifier, position, sourceChild, currentUsingNS))
+      if (Declaration* definition = findDeclarationInChildren(identifier, position, dataType, sourceChild, currentUsingNS))
         return definition;
   }
 
@@ -273,19 +293,19 @@ Declaration * DUContext::findDeclaration( const QualifiedIdentifier & identifier
     DUContext* parent = it.previous();
 
     // FIXME should have the current namespace list??
-    if (Declaration* definition = parent->findDeclaration(identifier, position, this, QList<UsingNS*>(), true))
+    if (Declaration* definition = parent->findDeclaration(identifier, position, dataType, this, QList<UsingNS*>(), true))
       return definition;
   }
 
   if (!inImportedContext && parentContext())
     // FIXME should have the current namespace list??
-    if (Declaration* definition = parentContext()->findDeclaration(identifier, position, this))
+    if (Declaration* definition = parentContext()->findDeclaration(identifier, position, dataType, this))
       return definition;
 
   return 0;
 }
 
-Declaration * DUContext::findDeclarationInChildren(const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const DUContext * sourceChild, const QList<UsingNS*>& usingNamespaces) const
+Declaration * DUContext::findDeclarationInChildren(const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, const DUContext * sourceChild, const QList<UsingNS*>& usingNamespaces) const
 {
   foreach (DUContext* context, childContexts()) {
     if (context == sourceChild)
@@ -323,11 +343,11 @@ Declaration * DUContext::findDeclarationInChildren(const QualifiedIdentifier & i
 
     if (false) {
       found:
-      if (Declaration* match = context->findLocalDeclaration(identifier, position, false, usingNamespaces))
+      if (Declaration* match = context->findLocalDeclaration(identifier, position, dataType, false, usingNamespaces))
         return match;
     }
 
-    if (Declaration* match = context->findDeclarationInChildren(identifier, position, false, usingNamespaces))
+    if (Declaration* match = context->findDeclarationInChildren(identifier, position, dataType, false, usingNamespaces))
       return match;
 
     // FIXME nested using definitions

@@ -85,6 +85,9 @@ class TestDUChain : public QObject
   KUrl file1, file2;
   TopDUContext* topContext;
 
+  AbstractType::Ptr typeVoid;
+  AbstractType::Ptr typeInt;
+
 public:
   TestDUChain()
   {
@@ -113,6 +116,9 @@ private slots:
 
     topContext = new TopDUContext(new KDevDocumentRange(file1, Range(0,0,25,0)));
     DUChain::self()->addDocumentChain(file1, topContext);
+
+    typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid));
+    typeInt = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeInt));
   }
 
   void cleanupTestCase()
@@ -294,7 +300,7 @@ private slots:
     Declaration* defL = top->localDeclarations()[3];
     QCOMPARE(defL->identifier(), Identifier("l"));
     QVERIFY(defL->type<CppPointerType>());
-    QCOMPARE(CppIntegralType::Ptr::dynamicCast(defL->type<CppPointerType>()->baseType()), TypeRepository::self()->integral(CppIntegralType::TypeInt));
+    QCOMPARE(defL->type<CppPointerType>()->baseType(), typeInt);
     QVERIFY(!defL->type<CppPointerType>()->isConstant());
     QVERIFY(!defL->type<CppPointerType>()->isVolatile());
 
@@ -368,7 +374,7 @@ private slots:
     QCOMPARE(defMain->identifier(), Identifier("main"));
     QCOMPARE(top->findDeclaration(defMain->identifier()), defMain);
     QVERIFY(defMain->type<CppFunctionType>());
-    QCOMPARE(CppIntegralType::Ptr::dynamicCast(defMain->type<CppFunctionType>()->returnType()), TypeRepository::self()->integral(CppIntegralType::TypeInt));
+    QCOMPARE(defMain->type<CppFunctionType>()->returnType(), typeInt);
     QCOMPARE(defMain->type<CppFunctionType>()->arguments().count(), 0);
     QVERIFY(!defMain->type<CppFunctionType>()->isConstant());
     QVERIFY(!defMain->type<CppFunctionType>()->isVolatile());
@@ -434,7 +440,7 @@ private slots:
     QCOMPARE(defStructA->uses().count(), 0);
     QVERIFY(defStructA->type<CppClassType>());
     QCOMPARE(defStructA->type<CppClassType>()->elements().count(), 3);
-    QCOMPARE(defStructA->type<CppClassType>()->elements().first(), AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeInt)));
+    QCOMPARE(defStructA->type<CppClassType>()->elements().first(), typeInt);
     QVERIFY(CppFunctionType::Ptr::dynamicCast(defStructA->type<CppClassType>()->elements()[1]));
     QCOMPARE(defStructA->type<CppClassType>()->classType(), CppClassType::Struct);
 
@@ -493,6 +499,40 @@ private slots:
     QVERIFY(insideCtorCtx->localScopeIdentifier().isEmpty());*/
 
     release(top);
+  }
+
+  void testDeclareClass()
+  {
+    //                 0         1         2         3         4         5         6         7
+    //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("class A { void test(int); }; void A::test(int j) {}");
+
+    DUContext* top = parse(method);//, DumpNone);
+
+    QVERIFY(!top->parentContext());
+    QCOMPARE(top->childContexts().count(), 3);
+    QCOMPARE(top->localDeclarations().count(), 1);
+    QVERIFY(top->localScopeIdentifier().isEmpty());
+
+    Declaration* defClassA = top->localDeclarations().first();
+    QCOMPARE(defClassA->identifier(), Identifier("A"));
+    QCOMPARE(defClassA->uses().count(), 0);
+    QVERIFY(defClassA->type<CppClassType>());
+    QCOMPARE(defClassA->type<CppClassType>()->elements().count(), 1);
+    CppFunctionType::Ptr function = CppFunctionType::Ptr::dynamicCast(defClassA->type<CppClassType>()->elements().first());
+    QVERIFY(function);
+    QCOMPARE(function->returnType(), typeVoid);
+    QCOMPARE(function->arguments().count(), 1);
+    QCOMPARE(function->arguments().first(), typeInt);
+
+    DUContext* classA = top->childContexts().first();
+    QVERIFY(classA->parentContext());
+    QCOMPARE(classA->importedParentContexts().count(), 0);
+    QCOMPARE(classA->childContexts().count(), 1);
+    QCOMPARE(classA->localDeclarations().count(), 3);
+    QCOMPARE(classA->localScopeIdentifier(), QualifiedIdentifier("A"));
+
+    Declaration* defTest = classA->localDeclarations().first();
   }
 
   void testDeclareNamespace()
@@ -594,7 +634,7 @@ private slots:
 
   void testFileParse()
   {
-    //QSKIP("Unwanted", SkipSingle);
+    QSKIP("Unwanted", SkipSingle);
 
     QFile file("/opt/kde4/src/kdevelop/languages/cpp/duchain/tests/files/membervariable.cpp");
     //QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
