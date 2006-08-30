@@ -236,7 +236,6 @@ void KDevBackgroundParser::removeDocument( const KUrl &url )
 
     if ( !url.isValid() ) {
         kWarning() << k_funcinfo << "Invalid url " << url << endl;
-        url.isValid();
         return;
     }
 

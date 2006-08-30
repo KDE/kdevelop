@@ -63,6 +63,7 @@ KDevEditorIntegratorPrivate::~KDevEditorIntegratorPrivate()
 
 void KDevEditorIntegrator::addDocument( Document * document )
 {
+  kDebug() << k_funcinfo << "Loading document " << document->url() << " " << document << endl;
   QObject::connect(document, SIGNAL(completed()), data(), SLOT(documentLoaded()));
   QObject::connect(document, SIGNAL(aboutToClose(KTextEditor::Document*)), data(), SLOT(removeDocument(KTextEditor::Document*)));
   QObject::connect(document, SIGNAL(documentUrlChanged(KTextEditor::Document*)), data(), SLOT(documentUrlChanged(KTextEditor::Document*)));
@@ -76,7 +77,7 @@ void KDevEditorIntegratorPrivate::documentLoaded()
     return;
   }
 
-  //kDebug() << k_funcinfo << "Loaded document " << doc->url() << " with text range " << doc->documentRange() << endl;
+  kDebug() << k_funcinfo << "Loaded document " << doc->url() << " with text range " << doc->documentRange() << endl;
   documents.insert(doc->url(), doc);
 }
 
@@ -111,7 +112,9 @@ Document * KDevEditorIntegrator::documentForUrl(const KUrl& url)
 
 bool KDevEditorIntegrator::documentLoaded(KTextEditor::Document* document)
 {
-  return data()->documents.values().contains(document);
+  bool ret = data()->documents.values().contains(document);
+  kDebug() << k_funcinfo << document << " result " << ret << endl;
+  return ret;
 }
 
 void KDevEditorIntegratorPrivate::removeDocument( Document* document )

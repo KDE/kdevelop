@@ -72,8 +72,6 @@ KTextEditor::Document* KDevPartController::createTextPart(
     const QString &encoding,
     bool activate )
 {
-    Q_UNUSED( activate );
-
     KTextEditor::Document* doc =
         qobject_cast<KTextEditor::Document *>( createPart(
                                                    "text/plain",
