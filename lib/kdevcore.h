@@ -192,6 +192,9 @@ public:
      */
     static void setBackgroundParser( KDevBackgroundParser *backgroundParser );
 
+    //Calls the relevant method for all KDevCoreInterface objects...
+    static void loadSettings();
+    static void saveSettings();
     static void initialize();
     static void cleanup();
 };

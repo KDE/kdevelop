@@ -199,6 +199,9 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
 
     KDevConfig::standard() ->sync();
 
+    //The project file has been opened.  Now we can load settings for all of the KDevCore objects
+    KDevCore::loadSettings();
+
     //FIXME LAME LAME LAME LAME LAME
     legacyLoading();
 

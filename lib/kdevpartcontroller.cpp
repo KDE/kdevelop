@@ -81,17 +81,17 @@ KTextEditor::Document* KDevPartController::createTextPart(
                                                    "KTextEditor::Editor",
                                                    m_editor ) );
 
-    KDevEditorIntegrator::addDocument(doc);
+    KDevEditorIntegrator::addDocument( doc );
 
     if ( !encoding.isNull() )
     {
         KParts::BrowserExtension * extension =
-                KParts::BrowserExtension::childObject( doc );
+            KParts::BrowserExtension::childObject( doc );
         if ( extension )
         {
             KParts::URLArgs args;
             args.serviceType = QString( "text/plain;" )
-                    + encoding;
+                               + encoding;
             extension->setUrlArgs( args );
         }
     }
@@ -104,20 +104,22 @@ KTextEditor::Document* KDevPartController::createTextPart(
     return doc;
 }
 
-void KDevPartController::removePart( KParts::Part *part)
+void KDevPartController::removePart( KParts::Part *part )
 {
-    if (KTextEditor::Document* doc = qobject_cast<KTextEditor::Document *>(part)) {
-        if (KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(doc)) {
+    if ( KTextEditor::Document * doc = qobject_cast<KTextEditor::Document *>( part ) )
+    {
+        if ( KTextEditor::SmartInterface * smart = dynamic_cast<KTextEditor::SmartInterface*>( doc ) )
+        {
             // FIXME not supposed to delete locked mutexes...
-            QMutexLocker lock(smart->smartMutex());
-            KParts::PartManager::removePart(part);
-            return;
+            QMutexLocker lock ( smart->smartMutex() );
+            KParts::PartManager::removePart( part );
+            return ;
         }
 
         kWarning() << k_funcinfo << "Deleting text editor " << doc << " which does not have a smart interface." << endl;
     }
 
-    KParts::PartManager::removePart(part);
+    KParts::PartManager::removePart( part );
 }
 
 KParts::Part* KDevPartController::createPart( const QString & mimeType,
@@ -242,6 +244,15 @@ KParts::ReadWritePart* KDevPartController::readWrite( KParts::Part * part ) cons
 {
     return qobject_cast<KParts::ReadWritePart*>( part );
 }
+
+void KDevPartController::loadSettings()
+{}
+
+void KDevPartController::initialize()
+{}
+
+void KDevPartController::cleanup()
+{}
 
 #include "kdevpartcontroller.moc"
 

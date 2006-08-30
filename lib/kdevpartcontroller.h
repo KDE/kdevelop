@@ -1,13 +1,15 @@
 #ifndef __KDEVPARTCONTROLLER_H__
 #define __KDEVPARTCONTROLLER_H__
 
+#include <kparts/partmanager.h>
+#include "kdevcore.h"
+
 #include <QMap>
 #include <QHash>
 #include <QWidget>
 #include <QPointer>
 
 #include <kurl.h>
-#include <kparts/partmanager.h>
 
 #include "kdevdocument.h"
 
@@ -26,8 +28,9 @@ class Document;
 class Editor;
 }
 
-class KDevPartController : public KParts::PartManager
+class KDevPartController : public KParts::PartManager, protected KDevCoreInterface
 {
+    friend class KDevCore;
     Q_OBJECT
 public:
     KDevPartController();
@@ -51,6 +54,13 @@ public:
     KParts::ReadWritePart* readWrite( KParts::Part *part ) const;
 
     bool isTextType( KMimeType::Ptr mimeType );
+
+public Q_SLOTS:
+    virtual void loadSettings();
+
+protected:
+    virtual void initialize();
+    virtual void cleanup();
 
 private:
     KParts::Factory *findPartFactory( const QString &mimeType,

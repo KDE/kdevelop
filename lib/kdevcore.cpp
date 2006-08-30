@@ -208,34 +208,96 @@ void KDevCore::initialize()
 
     //WARNING! the order is important
 
+    Q_ASSERT( d->environment );
+    Q_ASSERT( d->partController );
+    Q_ASSERT( d->languageController );
     Q_ASSERT( d->documentController );
     Q_ASSERT( d->projectController );
     Q_ASSERT( d->mainWindow );
     Q_ASSERT( d->backgroundParser );
     Q_ASSERT( d->pluginController );
+
+    d->environment->initialize();
+    d->partController->initialize();
+    d->languageController->initialize();
     d->documentController->initialize();
     d->projectController->initialize();
+
     d->mainWindow->initialize();
 
+    d->backgroundParser->initialize();
     d->pluginController->initialize();
-
-    /*d->backgroundParser->initialize();*/ //Load this after plugin as it uses project settings
 
     d->mainWindow->setVisible( true ); //Done initializing
 }
 
 void KDevCore::cleanup()
 {
+    Q_ASSERT( d->environment );
+    Q_ASSERT( d->partController );
+    Q_ASSERT( d->languageController );
     Q_ASSERT( d->documentController );
     Q_ASSERT( d->projectController );
     Q_ASSERT( d->mainWindow );
     Q_ASSERT( d->backgroundParser );
     Q_ASSERT( d->pluginController );
-    d->projectController->cleanup();
+
+    d->environment->cleanup();
+    d->partController->cleanup();
+    d->languageController->cleanup();
     d->documentController->cleanup();
+    d->projectController->cleanup();
+
     d->mainWindow->cleanup();
-    d->pluginController->cleanup();
+
     d->backgroundParser->cleanup();
+    d->pluginController->cleanup();
+}
+
+void KDevCore::loadSettings()
+{
+    Q_ASSERT( d->environment );
+    Q_ASSERT( d->partController );
+    Q_ASSERT( d->languageController );
+    Q_ASSERT( d->documentController );
+    Q_ASSERT( d->projectController );
+    Q_ASSERT( d->mainWindow );
+    Q_ASSERT( d->backgroundParser );
+    Q_ASSERT( d->pluginController );
+
+    d->environment->loadSettings();
+    d->partController->loadSettings();
+    d->languageController->loadSettings();
+    d->documentController->loadSettings();
+    d->projectController->loadSettings();
+
+    d->mainWindow->loadSettings();
+
+    d->backgroundParser->loadSettings();
+    d->pluginController->loadSettings();
+}
+
+void KDevCore::saveSettings()
+{
+    Q_ASSERT( d->environment );
+    Q_ASSERT( d->partController );
+    Q_ASSERT( d->languageController );
+    Q_ASSERT( d->documentController );
+    Q_ASSERT( d->projectController );
+    Q_ASSERT( d->mainWindow );
+    Q_ASSERT( d->backgroundParser );
+    Q_ASSERT( d->pluginController );
+
+//     d->environment->saveSettings();
+//     d->partController->saveSettings();
+//     d->languageController->saveSettings();
+//     d->documentController->saveSettings();
+//     d->projectController->saveSettings();
+// 
+//     d->mainWindow->saveSettings();
+// 
+//     d->backgroundParser->saveSettings();
+//     d->pluginController->saveSettings();
 }
 
 //FIXME

@@ -73,7 +73,8 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
     m_timer = new QTimer( this );
     m_timer->setSingleShot( true );
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
-    m_timer->start( m_delay );
+
+    suspend(); //Don't start the weaver until after project file has been read
 
     // Signal to allow other threads to request document addition.
     connect(this, SIGNAL(requestAddDocument(const QUrl&)), this, SLOT(acceptAddDocument(const QUrl&)), Qt::QueuedConnection);
@@ -117,7 +118,14 @@ void KDevBackgroundParser::initialize()
     m_progressBar->setMinimumWidth( 150 );
     KDevCore::mainWindow()->statusBar()->addPermanentWidget( m_progressBar );
     m_progressBar->hide();
+}
 
+void KDevBackgroundParser::cleanup()
+{
+}
+
+void KDevBackgroundParser::loadSettings()
+{
     KConfig * config = KDevConfig::standard();
     config->setGroup( "Background Parser" );
     bool enabled = config->readEntry( "Enabled", true );
@@ -127,14 +135,6 @@ void KDevBackgroundParser::initialize()
         resume();
     else
         suspend();
-}
-
-void KDevBackgroundParser::cleanup()
-{
-}
-
-void KDevBackgroundParser::loadSettings()
-{
 }
 
 void KDevBackgroundParser::cacheModels( uint modelsToCache )
@@ -150,7 +150,7 @@ void KDevBackgroundParser::cacheModelsInternal( uint modelsToCache )
     m_progressBar->reset();
     m_progressBar->setMinimum( 0 );
     m_progressBar->setMaximum( modelsToCache );
-//     m_progressBar->show();
+    m_progressBar->show();
 }
 
 void KDevBackgroundParser::acceptAddDocument(const QUrl& url)
@@ -414,8 +414,8 @@ void KDevBackgroundParser::resume()
 
     m_weaver->resume();
 
-//     if (m_weaver->queueLength() && m_progressBar)
-//         m_progressBar->show();
+    if (m_weaver->queueLength() && m_progressBar)
+        m_progressBar->show();
 }
 
 void KDevBackgroundParser::setDelay( int msec )

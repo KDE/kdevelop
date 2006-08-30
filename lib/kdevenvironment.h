@@ -46,6 +46,7 @@ this class.
 */
 class KDEVINTERFACES_EXPORT KDevEnvironment: public QObject, protected KDevCoreInterface
 {
+    friend class KDevCore;
     friend class KDevEnvWidget;
     Q_OBJECT
 public:

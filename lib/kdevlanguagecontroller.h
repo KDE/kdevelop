@@ -31,6 +31,7 @@ Boston, MA 02110-1301, USA.
 
 class KDEVINTERFACES_EXPORT KDevLanguageController: public QObject, protected KDevCoreInterface
 {
+    friend class KDevCore;
     Q_OBJECT
 public:
     KDevLanguageController( QObject *parent = 0 );
