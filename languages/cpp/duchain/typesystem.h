@@ -90,6 +90,18 @@ public:
 
   virtual uint hash() const = 0;
 
+  enum WhichType {
+    TypeAbstract,
+    TypeIntegral,
+    TypePointer,
+    TypeReference,
+    TypeFunction,
+    TypeStructure,
+    TypeArray
+  };
+
+  virtual WhichType whichType() const { return TypeAbstract; }
+
 protected:
   virtual void accept0 (TypeVisitor *v) const = 0;
 
@@ -124,6 +136,8 @@ public:
 
   virtual uint hash() const;
 
+  virtual WhichType whichType() const { return TypeIntegral; }
+
 protected:
   virtual void accept0 (TypeVisitor *v) const
   { v->visit (this); }
@@ -154,6 +168,8 @@ public:
   virtual QString toString() const;
 
   virtual uint hash() const;
+
+  virtual WhichType whichType() const { return TypePointer; }
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
@@ -190,6 +206,8 @@ public:
   virtual QString toString() const;
 
   virtual uint hash() const;
+
+  virtual WhichType whichType() const { return TypeReference; }
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
@@ -232,6 +250,8 @@ public:
 
   virtual uint hash() const;
 
+  virtual WhichType whichType() const { return TypeFunction; }
+
 protected:
   virtual void accept0 (TypeVisitor *v) const
   {
@@ -271,6 +291,8 @@ public:
   virtual QString toString() const;
 
   virtual uint hash() const;
+
+  virtual WhichType whichType() const { return TypeStructure; }
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
@@ -314,6 +336,8 @@ public:
   virtual QString toString() const;
 
   virtual uint hash() const;
+
+  virtual WhichType whichType() const { return TypeArray; }
 
 protected:
   virtual void accept0 (TypeVisitor *v) const

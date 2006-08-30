@@ -76,8 +76,11 @@ private:
   Cpp::CVSpecs parseConstVolatile(const ListNode<std::size_t>* cv);
 
   bool hasCurrentType() { return !m_typeStack.isEmpty(); }
+
+  // You must not use this in creating another type definition, as it may not be the registered type.
   inline AbstractType::Ptr currentAbstractType() { return m_typeStack.top(); }
 
+  // You must not use this in creating another type definition, as it may not be the registered type.
   template <class T>
   KSharedPtr<T> currentType() { return KSharedPtr<T>::dynamicCast(m_typeStack.top()); }
 

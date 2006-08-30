@@ -47,6 +47,8 @@ public:
 
   uint cvHash(uint input) const { return input; }
 
+  Cpp::CVSpecs cv() const { return static_cast<Cpp::CVSpecs>((m_constant & Cpp::Const) | (m_volatile & Cpp::Volatile)); }
+
 protected:
   inline void setCV(Cpp::CVSpecs spec) { m_constant = spec & Cpp::Const; m_volatile = spec & Cpp::Volatile; }
   inline void setConstant(bool is) { m_constant = is; }

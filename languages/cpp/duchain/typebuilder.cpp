@@ -52,17 +52,22 @@ void TypeBuilder::openAbstractType(AbstractType::Ptr type, AST* node)
 {
   Q_UNUSED(node);
 
-  if (!hasCurrentType())
-    m_topTypes.append(type);
-
   m_typeStack.append(type);
 }
 
 void TypeBuilder::closeType()
 {
-  m_lastType = currentAbstractType();
+  // Check that this isn't the same as a previously existing type
+  // If it is, it will get replaced
+  m_lastType = TypeRepository::self()->registerType(currentAbstractType());
 
+  bool replaced = m_lastType != currentAbstractType();
+
+  // And the reference will be lost...
   m_typeStack.pop();
+
+  if (!hasCurrentType() && !replaced)
+    m_topTypes.append(m_lastType);
 }
 
 static CppClassType::Ptr openClass(int kind)
@@ -443,7 +448,6 @@ void TypeBuilder::visitParameterDeclaration(ParameterDeclarationAST* node)
 
   if (hasCurrentType()) {
     if (CppFunctionType::Ptr function = currentType<CppFunctionType>()) {
-
       function->addArgument(lastType());
     }
     // else may be a template argument

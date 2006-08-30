@@ -22,6 +22,7 @@
 #include "cpptypes.h"
 
 #include <QSet>
+#include <QMultiHash>
 
 class TypeRepository
 {
@@ -35,24 +36,29 @@ public:
    * type, or the previously registered type if it has been encountered
    * before.
    */
-  CppPointerType::Ptr registerType(CppPointerType* input);
-  CppReferenceType::Ptr registerType(CppReferenceType* input);
+  AbstractType::Ptr registerType(AbstractType::Ptr input);
 
 private:
   TypeRepository();
   void newIntegralType(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone);
   CppIntegralType::Ptr getIntegral(int index, int cv) const;
 
+  AbstractType::Ptr registerPointer(CppPointerType::Ptr input);
+  AbstractType::Ptr registerReference(CppReferenceType::Ptr input);
+  AbstractType::Ptr registerFunction(CppFunctionType::Ptr input);
+  AbstractType::Ptr registerArray(ArrayType::Ptr input);
+
   static TypeRepository* s_instance;
 
+  // Inbuilt integral types
   QVector<CppIntegralType::Ptr> m_integrals;
 
-  QSet<PointerType::Ptr> m_pointers;
-  QSet<ReferenceType::Ptr> m_references;
-  QSet<FunctionType::Ptr> m_functions;
-  QSet<StructureType::Ptr> m_structures;
-  QSet<ArrayType::Ptr> m_arrays;
-  QSet<AbstractType::Ptr> m_others;
+  QMultiHash<AbstractType::Ptr, CppPointerType::Ptr> m_pointers;
+  QMultiHash<AbstractType::Ptr, CppReferenceType::Ptr> m_references;
+  QMultiHash<int, CppFunctionType::Ptr> m_functions;
+  //QSet<CppClassType::Ptr> m_structures;
+  QMultiHash<AbstractType::Ptr, ArrayType::Ptr> m_arrays;
+  //QSet<AbstractType::Ptr> m_others;
 };
 
 #endif // TYPEREPOSITORY_H

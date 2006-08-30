@@ -161,3 +161,147 @@ CppIntegralType::Ptr TypeRepository::getIntegral(int index, int cv) const
 {
   return m_integrals.at((index * 4) + cv);
 }
+
+AbstractType::Ptr TypeRepository::registerType(AbstractType::Ptr input)
+{
+  if (!input) {
+    kWarning() << k_funcinfo << "Asked to register a null type." << endl;
+    return input;
+  }
+
+  switch (input->whichType()) {
+    case AbstractType::TypeAbstract:
+      return input;
+
+    case AbstractType::TypeIntegral:
+      return input;
+
+    case AbstractType::TypePointer:
+      return registerPointer(CppPointerType::Ptr::dynamicCast(input));
+
+    case AbstractType::TypeReference:
+      return registerReference(CppReferenceType::Ptr::dynamicCast(input));
+
+    case AbstractType::TypeFunction:
+      return registerFunction(CppFunctionType::Ptr::dynamicCast(input));
+
+    case AbstractType::TypeStructure:
+      return input;
+
+    case AbstractType::TypeArray:
+      return registerArray(ArrayType::Ptr::dynamicCast(input));
+
+    default:
+      return input;
+  }
+}
+
+AbstractType::Ptr TypeRepository::registerPointer(CppPointerType::Ptr input)
+{
+  Q_ASSERT(input);
+
+  if (!input->baseType())
+    // Invalid
+    return AbstractType::Ptr::staticCast(input);
+
+  const Cpp::CVSpecs cv = input->cv();
+
+  if (m_pointers.contains(input->baseType())) {
+    QMultiHash<AbstractType::Ptr, CppPointerType::Ptr>::ConstIterator it(m_pointers.constFind(input->baseType()));
+    if (it != m_pointers.constEnd())
+      for (; it.key() == input->baseType(); ++it)
+        if (it.value()->cv() == cv)
+          // Match
+          return AbstractType::Ptr::staticCast(it.value());
+  }
+
+  // No match
+  m_pointers.insert(input->baseType(), input);
+  return AbstractType::Ptr::staticCast(input);
+}
+
+AbstractType::Ptr TypeRepository::registerReference(CppReferenceType::Ptr input)
+{
+  Q_ASSERT(input);
+
+  if (!input->baseType())
+    // Invalid
+    return AbstractType::Ptr::staticCast(input);
+
+  const Cpp::CVSpecs cv = input->cv();
+
+  if (m_references.contains(input->baseType())) {
+    QMultiHash<AbstractType::Ptr, CppReferenceType::Ptr>::ConstIterator it = m_references.constFind(input->baseType());
+    if (it != m_references.constEnd())
+      for (; it.key() == input->baseType(); ++it)
+        if (it.value()->cv() == cv)
+          // Match
+          return AbstractType::Ptr::staticCast(it.value());
+  }
+
+  // No match
+  m_references.insert(input->baseType(), input);
+  return AbstractType::Ptr::staticCast(input);
+}
+
+AbstractType::Ptr TypeRepository::registerFunction(CppFunctionType::Ptr input)
+{
+  Q_ASSERT(input);
+
+  if (!input->returnType())
+    // Invalid
+    return AbstractType::Ptr::staticCast(input);
+
+  foreach (const AbstractType::Ptr& argument, input->arguments())
+    if (!argument)
+      // Invalid
+      return AbstractType::Ptr::staticCast(input);
+
+  const int numElements = input->arguments().count();
+  const Cpp::CVSpecs cv = input->cv();
+
+  QMultiHash<int, CppFunctionType::Ptr>::ConstIterator it = m_functions.constFind(numElements);
+  if (it != m_functions.constEnd()) {
+    for (; it.key() == numElements; ++it) {
+      if (it.value()->cv() == cv) {
+        if (it.value()->returnType() != input->returnType())
+          goto nomatch;
+
+        for (int i = 0; i < numElements; ++i)
+          if (it.value()->arguments()[i] != input->arguments()[i])
+            goto nomatch;
+
+        // Match
+        return AbstractType::Ptr::staticCast(it.value());
+      }
+      nomatch:
+      continue;
+    }
+  }
+
+  // No match
+  kDebug() << k_funcinfo << "Register function " << input.data() << " type " << input->toString() << endl;
+  m_functions.insert(input->arguments().count(), input);
+  return AbstractType::Ptr::staticCast(input);
+}
+
+AbstractType::Ptr TypeRepository::registerArray(ArrayType::Ptr input)
+{
+  Q_ASSERT(input);
+
+  if (!input->elementType())
+    // Invalid
+    return AbstractType::Ptr::staticCast(input);
+
+  if (m_arrays.contains(input->elementType())) {
+    QMultiHash<AbstractType::Ptr, ArrayType::Ptr>::ConstIterator it = m_arrays.constFind(input->elementType());
+    if (it != m_arrays.constEnd())
+      for (; it.key() == input->elementType(); ++it)
+        // Match
+        return AbstractType::Ptr::staticCast(it.value());
+  }
+
+  // No match
+  m_arrays.insert(input->elementType(), input);
+  return AbstractType::Ptr::staticCast(input);
+}
