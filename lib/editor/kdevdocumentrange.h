@@ -37,6 +37,7 @@ public:
   KDevDocumentRange(const KUrl& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KTextEditor::Range* parent = 0);
   KDevDocumentRange(const KUrl& document, const KTextEditor::Range& range = KTextEditor::Range::invalid(), KTextEditor::Range* parent = 0);
   KDevDocumentRange(const KDevDocumentRange& copy);
+  virtual ~KDevDocumentRange();
 
   /// Returns the associated document.
   const KUrl& document() const;

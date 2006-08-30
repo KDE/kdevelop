@@ -44,6 +44,11 @@ KDevDocumentRange::KDevDocumentRange(const KDevDocumentRange& copy)
   setParentRange(copy.parentRange());
 }
 
+KDevDocumentRange::~KDevDocumentRange()
+{
+  setParentRange(0);
+}
+
 const KUrl& KDevDocumentRange::document() const
 {
   return m_document;
@@ -72,7 +77,8 @@ void KDevDocumentRange::setParentRange(Range* parent)
     QMutableListIterator<KDevDocumentRange*> it = static_cast<KDevDocumentRange*>(m_parentRange)->m_childRanges;
     it.toBack();
     while (it.hasPrevious()) {
-      if (start() >= it.previous()->end()) {
+      it.previous();
+      if (start() >= it.value()->end()) {
         it.next();
         it.insert(this);
         return;
