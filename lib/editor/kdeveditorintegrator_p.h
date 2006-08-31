@@ -29,6 +29,8 @@
 
 #include "kdevdocumentcursor.h"
 
+class QReadWriteLock;
+
 class KDevDocumentRange;
 class KDevDocumentCursor;
 
@@ -39,6 +41,7 @@ class KDevEditorIntegratorPrivate : public QObject, public KTextEditor::SmartRan
   Q_OBJECT
 
 public:
+  KDevEditorIntegratorPrivate();
   virtual ~KDevEditorIntegratorPrivate();
 
   virtual void rangeDeleted(KTextEditor::SmartRange* range);
@@ -54,6 +57,8 @@ public Q_SLOTS:
   void documentUrlChanged(KTextEditor::Document* document);
 
 public:
+  QMutex* mutex;
+
   QHash<KUrl, KTextEditor::Document*> documents;
   QHash<KUrl, QVector<KTextEditor::Range*> > topRanges;
 

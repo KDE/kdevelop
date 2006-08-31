@@ -22,6 +22,7 @@
 #include <limits.h>
 
 #include <QMutex>
+#include <QMutexLocker>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartrange.h>
@@ -56,6 +57,11 @@ KDevEditorIntegrator::~ KDevEditorIntegrator()
   }
 }
 
+KDevEditorIntegratorPrivate::KDevEditorIntegratorPrivate()
+  : mutex(new QMutex)
+{
+}
+
 KDevEditorIntegratorPrivate::~KDevEditorIntegratorPrivate()
 {
   kDebug() << k_funcinfo << endl;
@@ -66,6 +72,8 @@ KDevEditorIntegratorPrivate::~KDevEditorIntegratorPrivate()
       if (range && range->isSmartRange())
         range->toSmartRange()->removeWatcher(this);
   }
+
+  delete mutex;
 }
 
 void KDevEditorIntegrator::addDocument( Document * document )
@@ -84,7 +92,11 @@ void KDevEditorIntegratorPrivate::documentLoaded()
     return;
   }
 
-  documents.insert(doc->url(), doc);
+  {
+    QMutexLocker lock(mutex);
+
+    documents.insert(doc->url(), doc);
+  }
 
 #ifndef DUCHAINTEST
   if (KDevProject* project = KDevCore::activeProject())
@@ -96,6 +108,8 @@ void KDevEditorIntegratorPrivate::documentLoaded()
 
 void KDevEditorIntegratorPrivate::documentUrlChanged(Document* document)
 {
+  QMutexLocker lock(mutex);
+
   QMutableHashIterator<KUrl, Document*>  it = documents;
   while (it.hasNext()) {
     it.next();
@@ -117,6 +131,8 @@ void KDevEditorIntegratorPrivate::documentUrlChanged(Document* document)
 
 Document * KDevEditorIntegrator::documentForUrl(const KUrl& url)
 {
+  QMutexLocker lock(data()->mutex);
+
   if (data()->documents.contains(url))
     return data()->documents[url];
 
@@ -130,6 +146,8 @@ bool KDevEditorIntegrator::documentLoaded(KTextEditor::Document* document)
 
 void KDevEditorIntegratorPrivate::removeDocument( Document* document )
 {
+  QMutexLocker lock(mutex);
+
   // TODO save smart stuff to non-smart cursors and ranges
 
   documents.remove(document->url());
@@ -166,6 +184,8 @@ Document* KDevEditorIntegrator::currentDocument() const
 
 Range* KDevEditorIntegrator::topRange( TopRangeType type )
 {
+  QMutexLocker lock(data()->mutex);
+
   if (!data()->topRanges.contains(currentUrl()))
     data()->topRanges.insert(currentUrl(), QVector<Range*>(TopRangeCount));
 
@@ -195,6 +215,8 @@ Range* KDevEditorIntegrator::topRange( TopRangeType type )
 
 void KDevEditorIntegratorPrivate::rangeDeleted(KTextEditor::SmartRange * range)
 {
+  QMutexLocker lock(mutex);
+
   QMutableHashIterator<KUrl, QVector<KTextEditor::Range*> > it = topRanges;
   while (it.hasNext()) {
     it.next();
@@ -286,6 +308,8 @@ void KDevEditorIntegrator::setCurrentUrl(const KUrl& url)
 
 void KDevEditorIntegrator::releaseTopRange(KTextEditor::Range * range)
 {
+  QMutexLocker lock(data()->mutex);
+
   KUrl url = KDevDocumentRangeObject::url(range);
 
   if (range->isSmartRange())
