@@ -29,6 +29,7 @@ class CodeProxy;
 class CodeDelegate;
 class CodeAggregate;
 class CppHighlighting;
+class CppCodeCompletion;
 
 class CppLanguageSupport : public KDevLanguageSupport
 {
@@ -68,6 +69,7 @@ private:
     CodeProxy *m_codeProxy;
     CodeDelegate *m_codeDelegate;
     CppHighlighting *m_highlights;
+    CppCodeCompletion* m_cc;
 };
 
 #endif

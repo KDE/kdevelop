@@ -62,6 +62,7 @@
 #include "parsejob.h"
 #include "codeproxy.h"
 #include "codedelegate.h"
+#include "cppcodecompletion.h"
 
 #include <kdebug.h>
 
@@ -79,6 +80,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
     m_codeProxy = new CodeProxy( this );
     m_codeDelegate = new CodeDelegate( this );
     m_highlights = new CppHighlighting( this );
+    m_cc = new CppCodeCompletion( this );
 
     connect( KDevCore::documentController(),
              SIGNAL( documentLoaded( KDevDocument* ) ),

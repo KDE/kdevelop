@@ -322,7 +322,7 @@ private:
   /**
    * Merges definitions up all branches of the definition-use chain into one hash.
    */
-  void mergeDeclarations(DUContext* context, QHash<QualifiedIdentifier, Declaration*>& definitions) const;
+  void mergeDeclarations(QHash<QualifiedIdentifier, Declaration*>& definitions, bool inImportedContext = false) const;
 
   /// Deletion function which respects file boundaries.
   void deleteChildContextsRecursively(const KUrl& url);

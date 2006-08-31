@@ -425,10 +425,10 @@ QHash<QualifiedIdentifier, Declaration*> DUContext::allDeclarations(const KTextE
 {
   QHash<QualifiedIdentifier, Declaration*> ret;
 
-  DUContext* context = findContext(position, const_cast<DUContext*>(this));
+  //DUContext* context = findContext(position, const_cast<DUContext*>(this));
 
   // Iterate back up the chain
-  mergeDeclarations(context, ret);
+  mergeDeclarations(ret);
 
   return ret;
 }
@@ -438,20 +438,20 @@ const QList<Declaration*>& DUContext::localDeclarations() const
   return m_localDeclarations;
 }
 
-void DUContext::mergeDeclarations(DUContext* context, QHash<QualifiedIdentifier, Declaration*>& definitions) const
+void DUContext::mergeDeclarations(QHash<QualifiedIdentifier, Declaration*>& definitions, bool inImportedContext) const
 {
-  foreach (Declaration* definition, context->localDeclarations())
+  foreach (Declaration* definition, localDeclarations())
     if (!definitions.contains(definition->qualifiedIdentifier()))
       definitions.insert(definition->qualifiedIdentifier(), definition);
 
-  QListIterator<DUContext*> it = context->importedParentContexts();
+  QListIterator<DUContext*> it = importedParentContexts();
   it.toBack();
   while (it.hasPrevious()) {
-    mergeDeclarations(it.previous(), definitions);
+    it.previous()->mergeDeclarations(definitions);
   }
 
-  if (parentContext())
-    mergeDeclarations(parentContext(), definitions);
+  if (!inImportedContext && parentContext())
+    parentContext()->mergeDeclarations(definitions);
 }
 
 void DUContext::deleteLocalDeclarations()
