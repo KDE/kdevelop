@@ -33,7 +33,6 @@ Boston, MA 02110-1301, USA.
 #include <assert.h>
 #include <kdebug.h>
 #include <kdialog.h>
-#include <kcmdlineargs.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kaction.h>
@@ -41,7 +40,6 @@ Boston, MA 02110-1301, USA.
 #include <kxmlguifactory.h>
 
 #include "kdevcore.h"
-#include "kdevconfig.h"
 #include "kdevplugin.h"
 #include "kdevmakeinterface.h"
 #include "kdevapplicationinterface.h"
@@ -93,34 +91,6 @@ void KDevPluginController::initialize()
 {
     loadPlugins( ProfileEngine::Core );
     loadPlugins( ProfileEngine::Global );
-
-    bool success = false;
-
-    KCmdLineArgs * args = KCmdLineArgs::parsedArgs();
-    if ( args->isSet( "project" ) )
-    {
-        QString project = QString::fromLocal8Bit( args->getOption( "project" ) );
-        success = KDevCore::projectController() ->openProject( KUrl( project ) );
-    }
-    else
-    {
-        KConfig * config = KDevConfig::standard();
-        config->setGroup( "General Options" );
-        QString project = config->readPathEntry( "Last Project" );
-        bool readProject = config->readEntry( "Read Last Project On Startup", true );
-
-        if ( !project.isEmpty() && readProject )
-        {
-            success = KDevCore::projectController() ->openProject( KUrl( project ) );
-        }
-    }
-
-    //If the project opened successfully then projectController will call KDevCore::loadSettings
-    //once the project file has been loaded.  Else we will do it here.
-    if ( !success )
-    {
-        KDevCore::loadSettings();
-    }
 }
 
 void KDevPluginController::cleanup()

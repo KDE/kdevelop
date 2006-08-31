@@ -115,8 +115,6 @@ void KDevProjectController::initialize()
 
 void KDevProjectController::cleanup()
 {
-    if ( !closeProject() )
-        KDevCore::saveSettings();
 }
 
 bool KDevProjectController::isLoaded() const

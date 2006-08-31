@@ -30,8 +30,10 @@ Boston, MA 02110-1301, USA.
 #include "kdevcore.h"
 
 #include <QPointer>
+#include <kcmdlineargs.h>
 #include <kstaticdeleter.h>
 
+#include "kdevconfig.h"
 #include "kdevproject.h"
 #include "kdevmainwindow.h"
 #include "kdevenvironment.h"
@@ -206,8 +208,6 @@ void KDevCore::initialize()
     //depend upon one another.  Can not do this in the constructor
     //as they might depend upon one another.
 
-    //WARNING! the order is important
-
     Q_ASSERT( d->environment );
     Q_ASSERT( d->partController );
     Q_ASSERT( d->languageController );
@@ -222,13 +222,35 @@ void KDevCore::initialize()
     d->languageController->initialize();
     d->documentController->initialize();
     d->projectController->initialize();
-
-    d->mainWindow->initialize(); //createGUI before anything touches the xmlgui...
-
+    d->mainWindow->initialize();
     d->backgroundParser->initialize();
-
-    //The pluginController will call loadSettings either directly or through the projectController
     d->pluginController->initialize();
+
+    bool success = false;
+
+    KCmdLineArgs * args = KCmdLineArgs::parsedArgs();
+    if ( args->isSet( "project" ) )
+    {
+        QString project = QString::fromLocal8Bit( args->getOption( "project" ) );
+        success = d->projectController->openProject( KUrl( project ) );
+    }
+    else
+    {
+        KConfig * config = KDevConfig::standard();
+        config->setGroup( "General Options" );
+        QString project = config->readPathEntry( "Last Project" );
+        bool readProject = config->readEntry( "Read Last Project On Startup", true );
+
+        if ( !project.isEmpty() && readProject )
+        {
+            success = d->projectController->openProject( KUrl( project ) );
+        }
+    }
+
+    //If the project opened successfully then projectController will call KDevCore::loadSettings
+    //once the project file has been loaded.  Else we will do it here.
+    if ( !success )
+        loadSettings();
 
     d->mainWindow->setVisible( true ); //Done initializing
 }
@@ -239,8 +261,6 @@ void KDevCore::cleanup()
     //depend upon one another.  Can not do this in the destructor
     //as they might depend upon one another.
 
-    //WARNING! the order is important
-
     Q_ASSERT( d->environment );
     Q_ASSERT( d->partController );
     Q_ASSERT( d->languageController );
@@ -250,21 +270,22 @@ void KDevCore::cleanup()
     Q_ASSERT( d->backgroundParser );
     Q_ASSERT( d->pluginController );
 
-    //The projectController will call saveSettings either directly or through closeProject
-    d->projectController->cleanup();
+    //If a project is open then projectController will call KDevCore::saveSettings
+    //both before the project is closed and then once after.  Else we will do it here.
+    if ( !d->projectController->closeProject() )
+        saveSettings();
 
     d->environment->cleanup();
     d->partController->cleanup();
     d->languageController->cleanup();
     d->documentController->cleanup();
-
+    d->projectController->cleanup();
     d->mainWindow->cleanup();
-
     d->backgroundParser->cleanup();
     d->pluginController->cleanup();
 }
 
-/* This function should be called right after initialization of the objects and a project has a
+/* This function should be called right after initialization of the objects and a project has
    been opened, or if no project is opened it should be called before the mainWindow is shown. */
 void KDevCore::loadSettings()
 {
@@ -284,15 +305,13 @@ void KDevCore::loadSettings()
     d->languageController->loadSettings( projectIsLoaded );
     d->documentController->loadSettings( projectIsLoaded );
     d->projectController->loadSettings( projectIsLoaded );
-
     d->mainWindow->loadSettings( projectIsLoaded );
-
     d->backgroundParser->loadSettings( projectIsLoaded );
     d->pluginController->loadSettings( projectIsLoaded );
 }
 
-/* This function should be called right before closing of the project, right after closing the 
-   project, or if no project is opened it should be called upon close. */
+/* This function should be called right before closing of the project and right after closing the
+   project, or if no project is opened it should be called right before cleanup. */
 void KDevCore::saveSettings()
 {
     Q_ASSERT( d->environment );
@@ -311,9 +330,7 @@ void KDevCore::saveSettings()
     d->languageController->saveSettings( projectIsLoaded );
     d->documentController->saveSettings( projectIsLoaded );
     d->projectController->saveSettings( projectIsLoaded );
-
     d->mainWindow->saveSettings( projectIsLoaded );
-
     d->backgroundParser->saveSettings( projectIsLoaded );
     d->pluginController->saveSettings( projectIsLoaded );
 }

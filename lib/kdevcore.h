@@ -106,8 +106,8 @@ public:
     static void setProjectController( KDevProjectController *projectController );
 
     /**
-     *
-     * @return
+     * @brief Get the active project
+     * @return a KDevProject object representing the currently active project
      */
     static KDevProject* activeProject();
 
@@ -180,38 +180,83 @@ public:
      */
     static KDevLanguageSupport *activeLanguage();
 
-        /**
-     *
-     * @return
-         */
+    /**
+     * @brief Get the background parser
+     * @return a KDevBackgroundParser object which controls the parser jobs
+     */
     static KDevBackgroundParser *backgroundParser();
 
     /**
-     *
+     * @brief Set the background parser
      * @param backgroundParser
      */
     static void setBackgroundParser( KDevBackgroundParser *backgroundParser );
 
-    //Calls the relevant method for all KDevCoreInterface objects...
+    /**
+     * @brief Load the settings for the KDevCore objects
+     */
     static void loadSettings();
+
+    /**
+     * @brief Save the settings of the KDevCore objects
+     */
     static void saveSettings();
+
+    /**
+     * @brief Initialize the KDevCore objects
+     */
     static void initialize();
+
+   /**
+     * @brief Cleanup the KDevCore objects
+    */
     static void cleanup();
 };
 
+
+/**
+ * KDevCoreInterface is a virtual base class for all objects which are provided by KDevCore.
+ * These objects need to inherit the various pure virtual functions which facilitate things like
+ * project loading and inter-object initialization.
+ */
 class KDEVINTERFACES_EXPORT KDevCoreInterface
 {
 public:
+   /**
+    * @brief Load the settings for this KDevCore object
+    */
     void load();
+
+   /**
+    * @brief Save the settings of this KDevCore object
+    */
     void save();
 
 protected:
+    /** Constructor */
     KDevCoreInterface(){}
+
+    /** Destructor */
     virtual ~KDevCoreInterface(){}
 
+   /**
+    * @brief Load the settings for this KDevCore object
+    */
     virtual void loadSettings( bool projectIsLoaded ) = 0;
+
+   /**
+    * @brief Save the settings of this KDevCore object
+    */
     virtual void saveSettings( bool projectIsLoaded ) = 0;
+
+   /**
+    * @brief Initialize this KDevCore object
+    */
     virtual void initialize() = 0;
+
+   /**
+    * @brief Cleanup this KDevCore object
+    */
     virtual void cleanup() = 0;
 };
 
