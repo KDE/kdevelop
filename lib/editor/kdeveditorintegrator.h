@@ -50,6 +50,12 @@ public:
   virtual ~KDevEditorIntegrator();
 
   /**
+   * Initialise the editor integrator.
+   * Only needs to be called once from the main thread.
+   */
+  static void initialise();
+
+  /**
    * Adds a text editor \a document to the integrator.
    */
   static void addDocument(KTextEditor::Document* document);
@@ -159,7 +165,7 @@ public:
    * \returns the newly created text range.
    * \overload
    */
-  KTextEditor::Range* createRange(const KDevDocumentCursor& start, const KDevDocumentCursor& end);
+  KTextEditor::Range* createRange(const KTextEditor::Cursor& start, const KTextEditor::Cursor& end);
 
   /**
    * Create a text range over the marked range as a child range of the current range.

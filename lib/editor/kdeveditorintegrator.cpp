@@ -52,6 +52,7 @@ KDevEditorIntegrator::~ KDevEditorIntegrator()
 
 KDevEditorIntegratorPrivate::~KDevEditorIntegratorPrivate()
 {
+  kDebug() << k_funcinfo << endl;
   QHashIterator<KUrl, QVector<KTextEditor::Range*> > it = topRanges;
   while (it.hasNext()) {
     it.next();
@@ -63,7 +64,7 @@ KDevEditorIntegratorPrivate::~KDevEditorIntegratorPrivate()
 
 void KDevEditorIntegrator::addDocument( Document * document )
 {
-  kDebug() << k_funcinfo << "Loading document " << document->url() << " " << document << endl;
+  Q_ASSERT(data()->thread() == document->thread());
   QObject::connect(document, SIGNAL(completed()), data(), SLOT(documentLoaded()));
   QObject::connect(document, SIGNAL(aboutToClose(KTextEditor::Document*)), data(), SLOT(removeDocument(KTextEditor::Document*)));
   QObject::connect(document, SIGNAL(documentUrlChanged(KTextEditor::Document*)), data(), SLOT(documentUrlChanged(KTextEditor::Document*)));
@@ -77,7 +78,6 @@ void KDevEditorIntegratorPrivate::documentLoaded()
     return;
   }
 
-  kDebug() << k_funcinfo << "Loaded document " << doc->url() << " with text range " << doc->documentRange() << endl;
   documents.insert(doc->url(), doc);
 }
 
@@ -112,9 +112,7 @@ Document * KDevEditorIntegrator::documentForUrl(const KUrl& url)
 
 bool KDevEditorIntegrator::documentLoaded(KTextEditor::Document* document)
 {
-  bool ret = data()->documents.values().contains(document);
-  kDebug() << k_funcinfo << document << " result " << ret << endl;
-  return ret;
+  return data()->documents.values().contains(document);
 }
 
 void KDevEditorIntegratorPrivate::removeDocument( Document* document )
@@ -216,14 +214,8 @@ Range* KDevEditorIntegrator::createRange( const Range & range )
 }
 
 
-Range* KDevEditorIntegrator::createRange( const KDevDocumentCursor& start, const KDevDocumentCursor& end )
+Range* KDevEditorIntegrator::createRange( const KTextEditor::Cursor& start, const KTextEditor::Cursor& end )
 {
-  if (start.document() != end.document()) {
-    kWarning() << k_funcinfo << "Start: " << start << ", End: " << end << ", documents " << start.document() << " != " << end.document() << endl;
-    // FIXME difficult problem
-    createRange(Range(start, start));
-  }
-
   return createRange(Range(start, end));
 }
 
@@ -315,6 +307,11 @@ void KDevEditorIntegrator::exitCurrentRange()
     m_currentRange = m_currentRange->toSmartRange()->parentRange();
   else
     m_currentRange = static_cast<KDevDocumentRange*>(m_currentRange)->parentRange();
+}
+
+void KDevEditorIntegrator::initialise()
+{
+  data();
 }
 
 #include "kdeveditorintegrator_p.moc"

@@ -22,6 +22,7 @@
 #include "kdevprojectcontroller.h"
 #include "kdevdocumentcontroller.h"
 #include "kdevbackgroundparser.h"
+#include "kdeveditorintegrator.h"
 
 #include "kdevideextension.h"
 
@@ -101,6 +102,9 @@ int main( int argc, char *argv[] )
         splash->show();
         splash->repaint();
     }
+
+    // initialize the editor integrator - it needs a qobject on the main thread
+    KDevEditorIntegrator::initialise();
 
     //initialize the api object
     //WARNING! the order is important
