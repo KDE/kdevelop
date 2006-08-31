@@ -27,7 +27,7 @@
 class DUContext;
 class Declaration;
 
-class CppCodeCompletionModel : public CodeCompletionModel
+class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
 {
   Q_OBJECT
 
@@ -39,6 +39,7 @@ class CppCodeCompletionModel : public CodeCompletionModel
 
     virtual QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
 
   private:
     DUContext* m_context;

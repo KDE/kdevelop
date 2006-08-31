@@ -23,19 +23,21 @@
 
 #include "declaration.h"
 #include "cpptypes.h"
+#include "classfunctiondeclaration.h"
+#include "ducontext.h"
 
 using namespace KTextEditor;
 
-CppHighlighting::CppHighlighting( QObject * parent )
+CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
   : CodeCompletionModel(parent)
 {
 }
 
-CppHighlighting::~CppHighlighting()
+CppCodeCompletionModel::~CppCodeCompletionModel()
 {
 }
 
-QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role = Qt::DisplayRole) const
+QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 {
   Declaration* dec = static_cast<Declaration*>(index.internalPointer());
 
@@ -103,7 +105,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role = Qt::D
     case CompletionRole: {
       CompletionProperties p;
       if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(dec)) {
-        switch (member->accessType()) {
+        switch (member->accessPolicy()) {
           case Cpp::Public:
             p |= Public;
             break;
@@ -147,22 +149,22 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role = Qt::D
           }
 
         switch (dec->abstractType()->whichType()) {
-          case TypeIntegral:
+          case AbstractType::TypeIntegral:
             if (dec->type<CppEnumerationType>())
               p |= Enum;
             else
               p |= Variable;
             break;
-          case TypePointer:
+          case AbstractType::TypePointer:
             p |= Variable;
             break;
-          case TypeReference:
+          case AbstractType::TypeReference:
             p |= Variable;
             break;
-          case TypeFunction:
+          case AbstractType::TypeFunction:
             p |= Function;
             break;
-          case TypeStructure:
+          case AbstractType::TypeStructure:
             if (CppClassType::Ptr classType =  dec->type<CppClassType>())
               switch (classType->classType()) {
                 case CppClassType::Class:
@@ -175,10 +177,10 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role = Qt::D
                   p |= Union;
                   break;
               }
-          case TypeArray:
+          case AbstractType::TypeArray:
             p |= Variable;
             break;
-          case TypeAbstract:
+          case AbstractType::TypeAbstract:
             // TODO
             break;
         }
@@ -194,14 +196,16 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role = Qt::D
     }
 
     case ScopeIndex:
-      return reintepret_cast<long>(dec->context());
+      return static_cast<int>(reinterpret_cast<long>(dec->context()));
   }
+
+  return QVariant();
 }
 
 QModelIndex CppCodeCompletionModel::index(int row, int column, const QModelIndex& parent) const
 {
-  if (row < 0 || row >= m_declarations.count() || column < 0 || column >= ColumnCount)
-    return;
+  if (row < 0 || row >= m_declarations.count() || column < 0 || column >= ColumnCount || parent.isValid())
+    return QModelIndex();
 
   return createIndex(row, column, m_declarations.at(row));
 }
@@ -222,6 +226,6 @@ void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::
   m_declarations = m_context->allDeclarations(position).values();
 }
 
-#include "cppcodecompletion.moc"
+#include "cppcodecompletionmodel.moc"
 
 // kate: space-indent on; indent-width 2; replace-tabs on

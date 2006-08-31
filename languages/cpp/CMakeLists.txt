@@ -38,6 +38,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codedelegate.cpp
     codeproxy.cpp
     cpphighlighting.cpp
+    cppcodecompletionmodel.cpp
     ${kdevcppduchain_SRCS}
 )
 
