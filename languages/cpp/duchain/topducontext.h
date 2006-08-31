@@ -32,8 +32,13 @@ class TopDUContext : public DUContext
 {
 public:
   TopDUContext(KTextEditor::Range* range);
-
   virtual ~TopDUContext();
+
+  bool hasUses() const;
+  void setHasUses(bool hasUses);
+
+private:
+  bool m_hasUses;
 };
 
 #endif // TOPDUCONTEXT_H

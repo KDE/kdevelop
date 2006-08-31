@@ -22,6 +22,7 @@ using namespace KTextEditor;
 
 TopDUContext::TopDUContext(KTextEditor::Range* range)
   : DUContext(range)
+  , m_hasUses(false)
 {
 }
 
@@ -30,3 +31,13 @@ TopDUContext::~TopDUContext( )
 }
 
 // kate: indent-width 2;
+
+void TopDUContext::setHasUses(bool hasUses)
+{
+  m_hasUses = hasUses;
+}
+
+bool TopDUContext::hasUses() const
+{
+  return m_hasUses;
+}

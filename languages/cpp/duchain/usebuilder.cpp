@@ -25,6 +25,7 @@
 #include "name_compiler.h"
 #include "declaration.h"
 #include "use.h"
+#include "topducontext.h"
 
 using namespace KTextEditor;
 
@@ -41,6 +42,9 @@ UseBuilder::UseBuilder (CppEditorIntegrator* editor)
 void UseBuilder::buildUses(AST *node)
 {
   supportBuild(node);
+
+  if (TopDUContext* top = dynamic_cast<TopDUContext*>(node->ducontext))
+    top->setHasUses(true);
 }
 
 void UseBuilder::visitPrimaryExpression (PrimaryExpressionAST* node)

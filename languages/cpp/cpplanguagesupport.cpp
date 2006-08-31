@@ -44,7 +44,7 @@
 #include <kdevprojectcontroller.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevbackgroundparser.h>
-#include <kdeveditorintegrator.h>
+
 
 #include "cpplanguagesupport.h"
 #include "cpphighlighting.h"
@@ -56,6 +56,8 @@
 #include "duchain/duchain.h"
 #include "duchain/topducontext.h"
 #include "duchain/smartconverter.h"
+#include "duchain/cppeditorintegrator.h"
+#include "duchain/usebuilder.h"
 
 #include "parsejob.h"
 #include "codeproxy.h"
@@ -254,12 +256,19 @@ void CppLanguageSupport::documentLoaded(KDevAST * ast, const KUrl & document)
     // Pretty heavy handed - find another way?
     lockAllParseMutexes();
 
-    DUContext* context = DUChain::self()->chainForDocument(document);
+    TopDUContext* context = DUChain::self()->chainForDocument(document);
     if (context) {
-        KDevEditorIntegrator editor;
+        TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
+        CppEditorIntegrator editor(t->session);
         {
             SmartConverter sc(&editor);
             sc.convertDUChain(context);
+
+            if (!context->hasUses()) {
+                UseBuilder ub(&editor);
+                ub.buildUses(t);
+            }
+
             m_highlights->highlightDUChain(context);
         }
     }
