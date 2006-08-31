@@ -29,8 +29,6 @@
 
 #include "kdevdocumentcursor.h"
 
-class QReadWriteLock;
-
 class KDevDocumentRange;
 class KDevDocumentCursor;
 
