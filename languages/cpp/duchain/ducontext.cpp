@@ -722,3 +722,27 @@ const QList< Use * > & DUContext::uses() const
 {
   return m_uses;
 }
+
+DUContext * DUContext::findContextAt(const KTextEditor::Cursor & position) const
+{
+  if (!textRange().contains(position))
+    return 0;
+
+  foreach (DUContext* child, m_childContexts)
+    if (DUContext* specific = child->findContextAt(position))
+      return specific;
+
+  return const_cast<DUContext*>(this);
+}
+
+Use* DUContext::findUseAt(const KTextEditor::Cursor & position) const
+{
+  if (!textRange().contains(position))
+    return 0;
+
+  foreach (Use* use, m_uses)
+    if (use->textRange().contains(position))
+      return use;
+
+  return 0;
+}

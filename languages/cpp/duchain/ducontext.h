@@ -65,7 +65,20 @@ public:
   ContextType type() const;
   void setType(ContextType type);
 
+  /**
+   * Calculate the depth of this context, from the top level context in the file.
+   */
   inline int depth() const { if (!parentContext()) return 0; return parentContext()->depth() + 1; }
+
+  /**
+   * Find the context which most specifically covers \a position.
+   */
+  DUContext* findContextAt(const KTextEditor::Cursor& position) const;
+
+  /**
+   * Find the use which encompasses \a position, if one exists.
+   */
+  Use* findUseAt(const KTextEditor::Cursor& position) const;
 
   /**
    * Calculate the fully qualified scope identifier
