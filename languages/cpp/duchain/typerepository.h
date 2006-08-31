@@ -24,6 +24,8 @@
 #include <QSet>
 #include <QMultiHash>
 
+class QMutex;
+
 class TypeRepository
 {
 public:
@@ -59,6 +61,8 @@ private:
   //QSet<CppClassType::Ptr> m_structures;
   QMultiHash<AbstractType::Ptr, ArrayType::Ptr> m_arrays;
   //QSet<AbstractType::Ptr> m_others;
+
+  QMutex* m_mutex;
 };
 
 #endif // TYPEREPOSITORY_H
