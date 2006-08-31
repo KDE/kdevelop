@@ -27,6 +27,7 @@ Boston, MA 02110-1301, USA.
 #include <kservicetypetrader.h>
 
 #include "kdevcore.h"
+#include "kdevconfig.h"
 #include "kdevmainwindow.h"
 #include "kdevplugincontroller.h"
 
@@ -38,17 +39,23 @@ KDevLanguageController::KDevLanguageController( QObject *parent )
 KDevLanguageController::~KDevLanguageController()
 {}
 
-void KDevLanguageController::loadSettings()
+void KDevLanguageController::loadSettings( bool projectIsLoaded )
 {
+    KConfig * config = KDevConfig::standard();
+    config->setGroup( "General Options" );
+
+    QString language = config->readPathEntry( "PrimaryLanguage", "C++" );
+    KDevCore::languageController() ->languageSupport( language );
 }
+
+void KDevLanguageController::saveSettings( bool projectIsLoaded )
+{}
 
 void KDevLanguageController::initialize()
-{
-}
+{}
 
 void KDevLanguageController::cleanup()
-{
-}
+{}
 
 KDevLanguageSupport *KDevLanguageController::activeLanguage() const
 {
@@ -57,7 +64,7 @@ KDevLanguageSupport *KDevLanguageController::activeLanguage() const
 
 KDevLanguageSupport *KDevLanguageController::languageSupport( const QString &language )
 {
-    if (language.isEmpty())
+    if ( language.isEmpty() )
         return 0;
 
     if ( m_languages.contains( language ) )

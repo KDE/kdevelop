@@ -108,9 +108,9 @@ public Q_SLOTS:
      */
     void populate();
 
-    virtual void loadSettings();
-
 protected:
+    virtual void loadSettings( bool projectIsLoaded );
+    virtual void saveSettings( bool projectIsLoaded );
     virtual void initialize();
     virtual void cleanup();
 

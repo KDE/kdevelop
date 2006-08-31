@@ -243,8 +243,15 @@ KParts::ReadWritePart* KDevPartController::readWrite( KParts::Part * part ) cons
     return qobject_cast<KParts::ReadWritePart*>( part );
 }
 
-void KDevPartController::loadSettings()
-{}
+void KDevPartController::loadSettings( bool projectIsLoaded )
+{
+    Q_UNUSED( projectIsLoaded );
+}
+
+void KDevPartController::saveSettings( bool projectIsLoaded )
+{
+    Q_UNUSED( projectIsLoaded );
+}
 
 void KDevPartController::initialize()
 {}

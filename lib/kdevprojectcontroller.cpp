@@ -39,7 +39,6 @@ Boston, MA 02110-1301, USA.
 #include "kdevmainwindow.h"
 #include "kdevlanguagecontroller.h"
 #include "kdevplugincontroller.h"
-#include "kdevbackgroundparser.h"
 #include "kdevdocumentcontroller.h"
 
 KDevProjectController::KDevProjectController( QObject *parent )
@@ -48,6 +47,7 @@ KDevProjectController::KDevProjectController( QObject *parent )
         m_localFile( KUrl() ),
         m_globalFile( KUrl() ),
         m_projectsDir( KUrl() ),
+        m_lastProject( KUrl() ),
         m_isLoaded( false ),
         m_project( 0 ),
         m_recentAction( 0 )
@@ -55,6 +55,33 @@ KDevProjectController::KDevProjectController( QObject *parent )
 
 KDevProjectController::~KDevProjectController()
 {}
+
+void KDevProjectController::loadSettings( bool projectIsLoaded )
+{
+    if ( projectIsLoaded )
+    {
+        KConfig * config = KDevConfig::standard();
+        config->setGroup( "General Options" );
+
+        QString projectManagement =
+            config->readPathEntry( "Project Management", "KDevProjectManager" );
+
+        loadProjectPart( projectManagement );
+
+        KDevCore::pluginController() ->loadPlugins( ProfileEngine::Project );
+    }
+}
+
+void KDevProjectController::saveSettings( bool projectIsLoaded )
+{
+    // Do not save if a project is loaded as this doesn't make sense inside a project file...
+    if ( !projectIsLoaded )
+    {
+        KConfig* standard = KDevConfig::standard();
+        standard->setGroup( "General Options" );
+        standard->writePathEntry( "Last Project", m_lastProject.path() );
+    }
+}
 
 void KDevProjectController::initialize()
 {
@@ -88,7 +115,8 @@ void KDevProjectController::initialize()
 
 void KDevProjectController::cleanup()
 {
-    closeProject();
+    if ( !closeProject() )
+        KDevCore::saveSettings();
 }
 
 bool KDevProjectController::isLoaded() const
@@ -146,10 +174,6 @@ KDevProject* KDevProjectController::activeProject() const
     return m_project;
 }
 
-void KDevProjectController::loadSettings()
-{
-}
-
 bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
 {
     KUrl url = KDev4ProjectFile;
@@ -198,14 +222,11 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
                                   + m_globalFile.fileName() );
 
     KDevConfig::standard() ->sync();
-
-    //The project file has been opened.  Now we can load settings for all of the KDevCore objects
-    KDevCore::loadSettings();
-
-    //FIXME LAME LAME LAME LAME LAME
-    legacyLoading();
-
     m_isLoaded = true;
+
+    //The project file has been opened.
+    //Now we can load settings for all of the KDevCore objects including this one!!
+    KDevCore::loadSettings();
 
     emit projectOpened();
 
@@ -214,29 +235,19 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
 
 bool KDevProjectController::closeProject()
 {
+    if ( !m_isLoaded )
+        return false;
+
     emit projectClosing();
 
-    QStringList paths;
-    QList<KDevDocument* > openDocs = KDevCore::documentController() ->openDocuments();
-    QList<KDevDocument* >::const_iterator it = openDocs.begin();
-    for ( ; it != openDocs.end(); ++it )
-    {
-        paths.append( ( *it ) ->url().path() );
-    }
+    //The project file is being closed.
+    //Now we can save settings for all of the KDevCore objects including this one!!
+    KDevCore::saveSettings();
 
-    KConfig * local = KDevConfig::localProject();
-    local->setGroup( "General Options" );
-    if ( !paths.empty() )
-        local->writePathEntry( "OpenDocuments", paths );
-    else
-        local->deleteEntry( "OpenDocuments" );
-
-    local ->sync();
-
-    KDevCore::documentController()->closeAllDocuments();
+    KDevCore::documentController() ->closeAllDocuments();
 
     // save the the project to open it automaticly on startup if needed
-    KUrl lastProject = m_globalFile;
+    m_lastProject = m_globalFile;
 
     m_name = QString::null;
     m_localFile.clear();
@@ -244,9 +255,9 @@ bool KDevProjectController::closeProject()
     m_projectsDir.clear();
     m_isLoaded = false;
 
-    KConfig* standard = KDevConfig::standard();
-    standard->setGroup( "General Options" );
-    standard->writePathEntry( "Last Project", lastProject.path() );
+    //The project file has been closed.
+    //Now we can save settings for all of the KDevCore objects including this one!!
+    KDevCore::saveSettings();
 
     KActionCollection * ac = KDevCore::mainWindow() ->actionCollection();
     KAction * action;
@@ -263,52 +274,9 @@ bool KDevProjectController::closeProject()
 
     unloadProjectPart();
 
-    m_recentAction->setCurrentAction(0);
+    m_recentAction->setCurrentAction( 0 );
 
     return true;
-}
-
-void KDevProjectController::legacyLoading()
-{
-    //FIXME GET RID OF THIS!!!
-    KConfig * config = KDevConfig::standard();
-    config->setGroup( "General Options" );
-
-    QString language = config->readPathEntry( "PrimaryLanguage", "C++" );
-    KDevCore::languageController() ->languageSupport( language );
-
-    QStringList paths = config->readPathListEntry( "OpenDocuments" );
-
-    //kDebug() << "Open documents count = " << paths.count() << endl;
-
-    //Put the backgroundParser in caching mode until all documents are opened
-    KDevCore::backgroundParser() ->cacheModels( paths.count() );
-
-    //Use this iterator for speed on large projects
-    QStringList::const_iterator it = paths.begin();
-    for ( ; it != paths.end(); it++ )
-    {
-        KDevCore::documentController() ->editDocument(
-            KUrl::fromPath( *it ),
-            KTextEditor::Cursor::invalid(),
-            false );
-    }
-
-    //Activate the first doc in the list
-    if ( !paths.isEmpty() )
-    {
-        KDevCore::documentController() ->editDocument(
-            KUrl::fromPath( paths.first() ),
-            KTextEditor::Cursor::invalid(),
-            true );
-    }
-
-    QString projectManagement =
-        config->readPathEntry( "Project Management", "KDevProjectManager" );
-
-    loadProjectPart( projectManagement );
-
-    KDevCore::pluginController() ->loadPlugins( ProfileEngine::Project );
 }
 
 bool KDevProjectController::loadProjectPart( const QString &projectManager )
@@ -337,7 +305,7 @@ bool KDevProjectController::loadProjectPart( const QString &projectManager )
     m_project->openProject( m_globalFile.directory(), m_globalFile.fileName() );
     KDevCore::pluginController() ->integratePart( m_project );
 
-    KDevCore::mainWindow()->addPlugin( m_project );
+    KDevCore::mainWindow() ->addPlugin( m_project );
 
     return true;
 }
@@ -346,7 +314,7 @@ void KDevProjectController::unloadProjectPart()
 {
     if ( m_project )
     {
-        KDevCore::mainWindow()->removePlugin( m_project );
+        KDevCore::mainWindow() ->removePlugin( m_project );
         KDevCore::pluginController() ->removePart( m_project );
         m_project->closeProject();
         delete m_project;

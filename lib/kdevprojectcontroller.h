@@ -56,7 +56,6 @@ public:
     KDevProject* activeProject() const;
 
 public Q_SLOTS:
-    virtual void loadSettings();
     bool openProject( const KUrl &KDev4ProjectFile = KUrl() );
     bool closeProject();
 
@@ -66,6 +65,8 @@ Q_SIGNALS:
     void projectClosed();
 
 protected:
+    virtual void loadSettings( bool projectIsLoaded );
+    virtual void saveSettings( bool projectIsLoaded );
     virtual void initialize();
     virtual void cleanup();
 
@@ -80,6 +81,7 @@ private:
     KUrl m_localFile;
     KUrl m_globalFile;
     KUrl m_projectsDir;
+    KUrl m_lastProject;
     bool m_isLoaded;
     KDevProject* m_project;
     KRecentFilesAction *m_recentAction;

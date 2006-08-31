@@ -40,10 +40,9 @@ public:
     KDevLanguageSupport *activeLanguage() const;
     KDevLanguageSupport *languageSupport( const QString &language );
 
-public Q_SLOTS:
-    virtual void loadSettings();
-
 protected:
+    virtual void loadSettings( bool projectIsLoaded );
+    virtual void saveSettings( bool projectIsLoaded );
     virtual void initialize();
     virtual void cleanup();
 

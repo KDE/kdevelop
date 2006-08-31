@@ -188,7 +188,6 @@ void KDevProjectManagerPart::openProject( const KUrl &dirName, const QString &pr
 
 void KDevProjectManagerPart::import( RefreshPolicy policy )
 {
-
     QStringList oldFileList = fileList();
 
     if ( m_workspace )

@@ -79,16 +79,28 @@ KDevPluginController::~KDevPluginController()
     unloadPlugins();
 }
 
+void KDevPluginController::loadSettings( bool projectIsLoaded )
+{
+    Q_UNUSED( projectIsLoaded );
+}
+
+void KDevPluginController::saveSettings( bool projectIsLoaded )
+{
+    Q_UNUSED( projectIsLoaded );
+}
+
 void KDevPluginController::initialize()
 {
     loadPlugins( ProfileEngine::Core );
     loadPlugins( ProfileEngine::Global );
 
+    bool success = false;
+
     KCmdLineArgs * args = KCmdLineArgs::parsedArgs();
     if ( args->isSet( "project" ) )
     {
         QString project = QString::fromLocal8Bit( args->getOption( "project" ) );
-        KDevCore::projectController() ->openProject( KUrl( project ) );
+        success = KDevCore::projectController() ->openProject( KUrl( project ) );
     }
     else
     {
@@ -99,8 +111,15 @@ void KDevPluginController::initialize()
 
         if ( !project.isEmpty() && readProject )
         {
-            KDevCore::projectController() ->openProject( KUrl( project ) );
+            success = KDevCore::projectController() ->openProject( KUrl( project ) );
         }
+    }
+
+    //If the project opened successfully then projectController will call KDevCore::loadSettings
+    //once the project file has been loaded.  Else we will do it here.
+    if ( !success )
+    {
+        KDevCore::loadSettings();
     }
 }
 
@@ -120,9 +139,6 @@ KService::List KDevPluginController::queryPlugins( const QString &constraint )
 {
     return query( "KDevelop/Plugin", constraint );
 }
-
-
-    void loadSettings();
 
 void KDevPluginController::loadPlugins( ProfileEngine::OfferType offer,
                                         const QStringList & ignorePlugins )
@@ -146,10 +162,6 @@ void KDevPluginController::unloadPlugins( ProfileEngine::OfferType offer )
             delete plugin;
         }
     }
-}
-
-void KDevPluginController::loadSettings()
-{
 }
 
 void KDevPluginController::loadPlugins( KService::List offers, const QStringList & ignorePlugins )

@@ -202,7 +202,7 @@ void KDevCore::setBackgroundParser( KDevBackgroundParser* backgroundParser )
 
 void KDevCore::initialize()
 {
-    //All KDevCore API objects can utilize all resources which
+    //All KDevCore API objects can utilize resources which
     //depend upon one another.  Can not do this in the constructor
     //as they might depend upon one another.
 
@@ -223,9 +223,11 @@ void KDevCore::initialize()
     d->documentController->initialize();
     d->projectController->initialize();
 
-    d->mainWindow->initialize();
+    d->mainWindow->initialize(); //createGUI before anything touches the xmlgui...
 
     d->backgroundParser->initialize();
+
+    //The pluginController will call loadSettings either directly or through the projectController
     d->pluginController->initialize();
 
     d->mainWindow->setVisible( true ); //Done initializing
@@ -233,6 +235,12 @@ void KDevCore::initialize()
 
 void KDevCore::cleanup()
 {
+    //All KDevCore API objects can utilize resources which
+    //depend upon one another.  Can not do this in the destructor
+    //as they might depend upon one another.
+
+    //WARNING! the order is important
+
     Q_ASSERT( d->environment );
     Q_ASSERT( d->partController );
     Q_ASSERT( d->languageController );
@@ -242,11 +250,13 @@ void KDevCore::cleanup()
     Q_ASSERT( d->backgroundParser );
     Q_ASSERT( d->pluginController );
 
+    //The projectController will call saveSettings either directly or through closeProject
+    d->projectController->cleanup();
+
     d->environment->cleanup();
     d->partController->cleanup();
     d->languageController->cleanup();
     d->documentController->cleanup();
-    d->projectController->cleanup();
 
     d->mainWindow->cleanup();
 
@@ -254,6 +264,8 @@ void KDevCore::cleanup()
     d->pluginController->cleanup();
 }
 
+/* This function should be called right after initialization of the objects and a project has a
+   been opened, or if no project is opened it should be called before the mainWindow is shown. */
 void KDevCore::loadSettings()
 {
     Q_ASSERT( d->environment );
@@ -265,18 +277,22 @@ void KDevCore::loadSettings()
     Q_ASSERT( d->backgroundParser );
     Q_ASSERT( d->pluginController );
 
-    d->environment->loadSettings();
-    d->partController->loadSettings();
-    d->languageController->loadSettings();
-    d->documentController->loadSettings();
-    d->projectController->loadSettings();
+    bool projectIsLoaded = KDevCore::projectController()->isLoaded();
 
-    d->mainWindow->loadSettings();
+    d->environment->loadSettings( projectIsLoaded );
+    d->partController->loadSettings( projectIsLoaded );
+    d->languageController->loadSettings( projectIsLoaded );
+    d->documentController->loadSettings( projectIsLoaded );
+    d->projectController->loadSettings( projectIsLoaded );
 
-    d->backgroundParser->loadSettings();
-    d->pluginController->loadSettings();
+    d->mainWindow->loadSettings( projectIsLoaded );
+
+    d->backgroundParser->loadSettings( projectIsLoaded );
+    d->pluginController->loadSettings( projectIsLoaded );
 }
 
+/* This function should be called right before closing of the project, right after closing the 
+   project, or if no project is opened it should be called upon close. */
 void KDevCore::saveSettings()
 {
     Q_ASSERT( d->environment );
@@ -288,16 +304,30 @@ void KDevCore::saveSettings()
     Q_ASSERT( d->backgroundParser );
     Q_ASSERT( d->pluginController );
 
-//     d->environment->saveSettings();
-//     d->partController->saveSettings();
-//     d->languageController->saveSettings();
-//     d->documentController->saveSettings();
-//     d->projectController->saveSettings();
-// 
-//     d->mainWindow->saveSettings();
-// 
-//     d->backgroundParser->saveSettings();
-//     d->pluginController->saveSettings();
+    bool projectIsLoaded = KDevCore::projectController()->isLoaded();
+
+    d->environment->saveSettings( projectIsLoaded );
+    d->partController->saveSettings( projectIsLoaded );
+    d->languageController->saveSettings( projectIsLoaded );
+    d->documentController->saveSettings( projectIsLoaded );
+    d->projectController->saveSettings( projectIsLoaded );
+
+    d->mainWindow->saveSettings( projectIsLoaded );
+
+    d->backgroundParser->saveSettings( projectIsLoaded );
+    d->pluginController->saveSettings( projectIsLoaded );
+}
+
+void KDevCoreInterface::load()
+{
+    Q_ASSERT( KDevCore::projectController() );
+    loadSettings( KDevCore::projectController()->isLoaded() );
+}
+
+void KDevCoreInterface::save()
+{
+    Q_ASSERT( KDevCore::projectController() );
+    saveSettings( KDevCore::projectController()->isLoaded() );
 }
 
 //FIXME

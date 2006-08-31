@@ -111,6 +111,23 @@ void KDevBackgroundParser::clear(QObject* parent)
     }
 }
 
+void KDevBackgroundParser::loadSettings( bool projectIsLoaded )
+{
+    KConfig * config = KDevConfig::standard();
+    config->setGroup( "Background Parser" );
+    bool enabled = config->readEntry( "Enabled", true );
+    m_delay = config->readEntry( "Delay", 500 );
+
+    if ( enabled )
+        resume();
+    else
+        suspend();
+}
+
+void KDevBackgroundParser::saveSettings( bool projectIsLoaded )
+{
+}
+
 void KDevBackgroundParser::initialize()
 {
     QMutexLocker lock(m_mutex);
@@ -122,19 +139,6 @@ void KDevBackgroundParser::initialize()
 
 void KDevBackgroundParser::cleanup()
 {
-}
-
-void KDevBackgroundParser::loadSettings()
-{
-    KConfig * config = KDevConfig::standard();
-    config->setGroup( "Background Parser" );
-    bool enabled = config->readEntry( "Enabled", true );
-    m_delay = config->readEntry( "Delay", 500 );
-
-    if ( enabled )
-        resume();
-    else
-        suspend();
 }
 
 void KDevBackgroundParser::cacheModels( uint modelsToCache )

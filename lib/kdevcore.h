@@ -201,14 +201,16 @@ public:
 
 class KDEVINTERFACES_EXPORT KDevCoreInterface
 {
- public:
-    virtual void loadSettings() = 0;
-    //virtual void saveSettings() = 0;
+public:
+    void load();
+    void save();
 
 protected:
     KDevCoreInterface(){}
     virtual ~KDevCoreInterface(){}
 
+    virtual void loadSettings( bool projectIsLoaded ) = 0;
+    virtual void saveSettings( bool projectIsLoaded ) = 0;
     virtual void initialize() = 0;
     virtual void cleanup() = 0;
 };

@@ -202,6 +202,31 @@ void KDevMainWindow::setupActions()
     action->setWhatsThis( i18n( "<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key)." ) );
 }
 
+void KDevMainWindow::loadSettings( bool projectIsLoaded )
+{
+    Q_UNUSED( projectIsLoaded );
+    KConfig * config = KDevConfig::standard();
+
+    config->setGroup( "UI" );
+    bool docked = config->readEntry( "Docked Window", true );
+    bool toplevel = config->readEntry( "Multiple Top-Level Windows", false );
+
+    //FIXME this needs to be an enum value from kconfigxt
+    if ( docked )
+        setUIMode( DockedMode );
+    if ( toplevel )
+        setUIMode( TopLevelMode );
+
+    applyMainWindowSettings( config, QLatin1String( "KDevMainWindow" ) );
+}
+
+void KDevMainWindow::saveSettings( bool projectIsLoaded )
+{
+    KConfig * config = KDevConfig::standard();
+
+    saveMainWindowSettings( config, QLatin1String( "KDevMainWindow" ) );
+}
+
 void KDevMainWindow::initialize()
 {
     setStandardToolBarMenuEnabled( true );
@@ -436,34 +461,8 @@ void KDevMainWindow::removePlugin( KDevPlugin *plugin )
     }
 }
 
-void KDevMainWindow::loadSettings()
-{
-    KConfig * config = KDevConfig::standard();
-
-    config->setGroup( "UI" );
-    bool docked = config->readBoolEntry( "Docked Window", true );
-    bool toplevel = config->readBoolEntry( "Multiple Top-Level Windows", false );
-
-    //FIXME this needs to be an enum value from kconfigxt
-    if ( docked )
-        setUIMode( DockedMode );
-    if ( toplevel )
-        setUIMode( TopLevelMode );
-
-    applyMainWindowSettings( config, QLatin1String( "KDevMainWindow" ) );
-}
-
-void KDevMainWindow::saveSettings()
-{
-    KConfig * config = KDevConfig::standard();
-
-    saveMainWindowSettings( config, QLatin1String( "KDevMainWindow" ) );
-}
-
 void KDevMainWindow::setVisible( bool visible )
 {
-    loadSettings();
-
     KMainWindow::setVisible( visible );
 
     emit finishedLoading();
@@ -530,7 +529,6 @@ bool KDevMainWindow::queryClose()
     //depend upon one another.
     KDevCore::cleanup();
 
-    saveSettings();
     return true;
 }
 

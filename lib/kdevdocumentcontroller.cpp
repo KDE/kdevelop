@@ -74,10 +74,11 @@ Boston, MA 02110-1301, USA.
 #include "kdevconfig.h"
 #include "kdevcontext.h"
 #include "kdevproject.h"
-#include "kdevpartcontroller.h"
 #include "kdevmainwindow.h"
 #include "mimewarningdialog.h"
+#include "kdevpartcontroller.h"
 #include "kdevlanguagesupport.h"
+#include "kdevbackgroundparser.h"
 
 using namespace MainWindowUtils;
 
@@ -96,10 +97,6 @@ KDevDocumentController::~KDevDocumentController()
 void KDevDocumentController::setEncoding( const QString &encoding )
 {
     m_presetEncoding = encoding;
-}
-
-void KDevDocumentController::loadSettings()
-{
 }
 
 KDevDocument* KDevDocumentController::editDocument( const KUrl & inputUrl,
@@ -902,6 +899,55 @@ void KDevDocumentController::setActiveDocument( KDevDocument *document, QWidget 
 
     if ( activeDocument() )
         emit documentActivated( activeDocument() );
+}
+
+void KDevDocumentController::loadSettings( bool projectIsLoaded )
+{
+    Q_UNUSED( projectIsLoaded );
+    KConfig * config = KDevConfig::standard();
+    config->setGroup( "General Options" );
+
+    QStringList paths = config->readPathListEntry( "OpenDocuments" );
+
+    //kDebug() << "Open documents count = " << paths.count() << endl;
+
+    //Put the backgroundParser in caching mode until all documents are opened
+    KDevCore::backgroundParser() ->cacheModels( paths.count() );
+
+    //Use this iterator for speed
+    QStringList::const_iterator it = paths.begin();
+    for ( ; it != paths.end(); it++ )
+    {
+        editDocument( KUrl::fromPath( *it ), KTextEditor::Cursor::invalid(), false );
+    }
+
+    //Activate the first doc in the list
+    if ( !paths.isEmpty() )
+    {
+        editDocument( KUrl::fromPath( paths.first() ), KTextEditor::Cursor::invalid(), true );
+    }
+}
+
+void KDevDocumentController::saveSettings( bool projectIsLoaded )
+{
+    kDebug() << k_funcinfo << endl;
+    Q_UNUSED( projectIsLoaded );
+    QStringList paths;
+    QList<KDevDocument* > openDocs = openDocuments();
+    QList<KDevDocument* >::const_iterator it = openDocs.begin();
+    for ( ; it != openDocs.end(); ++it )
+    {
+        paths.append( ( *it ) ->url().path() );
+    }
+
+    KConfig * local = KDevConfig::localProject();
+    local->setGroup( "General Options" );
+    if ( !paths.empty() )
+        local->writePathEntry( "OpenDocuments", paths );
+    else
+        local->deleteEntry( "OpenDocuments" );
+
+    local ->sync();
 }
 
 void KDevDocumentController::initialize()

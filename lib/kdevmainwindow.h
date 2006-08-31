@@ -79,10 +79,6 @@ public:
     virtual void removePlugin( KDevPlugin *plugin );
 
 public Q_SLOTS:
-    /**Loads main window settings.*/
-    virtual void loadSettings();
-    virtual void saveSettings(); //FIXME Document
-
     virtual void setVisible( bool visible );
     void setUIMode( UIMode mode );
 
@@ -126,6 +122,8 @@ private Q_SLOTS:
     void switchToTopLevelMode();
 
 protected:
+    virtual void loadSettings( bool projectIsLoaded );
+    virtual void saveSettings( bool projectIsLoaded );
     virtual void initialize();
     virtual void cleanup();
 

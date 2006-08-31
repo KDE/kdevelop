@@ -184,12 +184,13 @@ Q_SIGNALS:
     void loadingPlugin( const QString &plugin );
 
 public Q_SLOTS:
-    virtual void loadSettings();
     void loadPlugins( KService::List offers,
                       const QStringList & ignorePlugins = QStringList() );
     bool unloadPlugins();
 
 protected:
+    virtual void loadSettings( bool projectIsLoaded );
+    virtual void saveSettings( bool projectIsLoaded );
     virtual void initialize();
     virtual void cleanup();
 

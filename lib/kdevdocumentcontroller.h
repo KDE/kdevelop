@@ -77,7 +77,7 @@ class Context;
  * The document controller manages open documents in the IDE.
  * Open documents are usually editors, GUI designers, html documentation etc.
 */
-class KDEVINTERFACES_EXPORT KDevDocumentController: public QObject, protected KDevCoreInterface
+class KDEVINTERFACES_EXPORT KDevDocumentController: public QObject, public KDevCoreInterface
 {
     friend class KDevCore;
     Q_OBJECT
@@ -149,8 +149,6 @@ public:
     KUrl activeDocumentUrl() const;
 
 public Q_SLOTS:
-    virtual void loadSettings();
-
     /**Opens a new or existing document.
     @param url The full Url of the document to open.
     @param range The location information, if applicable.
@@ -226,6 +224,8 @@ private Q_SLOTS:
     void newDocumentStatus( KTextEditor::Document * doc );
 
 protected:
+    virtual void loadSettings( bool projectIsLoaded );
+    virtual void saveSettings( bool projectIsLoaded );
     virtual void initialize();
     virtual void cleanup();
 

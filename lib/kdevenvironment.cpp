@@ -53,8 +53,14 @@ KDevEnvironment::KDevEnvironment( QObject *parent )
 KDevEnvironment::~KDevEnvironment()
 {}
 
-void KDevEnvironment::loadSettings()
+void KDevEnvironment::loadSettings( bool projectIsLoaded )
 {
+    Q_UNUSED( projectIsLoaded );
+}
+
+void KDevEnvironment::saveSettings( bool projectIsLoaded )
+{
+    Q_UNUSED( projectIsLoaded );
 }
 
 void KDevEnvironment::initialize()
