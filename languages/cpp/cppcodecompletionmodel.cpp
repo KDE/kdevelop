@@ -177,6 +177,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
                   p |= Union;
                   break;
               }
+            break;
           case AbstractType::TypeArray:
             p |= Variable;
             break;
