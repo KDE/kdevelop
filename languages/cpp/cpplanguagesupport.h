@@ -50,6 +50,8 @@ public:
 
     virtual void releaseAST( KDevAST *ast);
 
+    virtual void documentLoaded( KDevAST *ast, const KUrl& document );
+
     /// Get the full path for a file based on a search through the project's
     /// include directories
     KUrl findInclude( const QString& fileName );

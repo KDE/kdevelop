@@ -114,6 +114,9 @@ public:
     // FIXME make pure
     virtual void releaseAST( KDevAST *ast);
 
+    /// A document which had an AST has just completed loading into an editor.
+    virtual void documentLoaded( KDevAST *ast, const KUrl& document );
+
     /**@return A typical mimetype list for the support language, this list
     should be configurable in the languagesupport dialog.*/
     virtual QStringList mimeTypes() const = 0;

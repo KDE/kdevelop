@@ -27,3 +27,8 @@ void KDevAST::release()
 {
     language->releaseAST(this);
 }
+
+void KDevAST::documentLoaded(const KUrl& document)
+{
+    language->documentLoaded(this, document);
+}

@@ -146,4 +146,10 @@ void KDevLanguageSupport::threadFinished()
   m_parseMutexes.remove(thread);
 }
 
+void KDevLanguageSupport::documentLoaded( KDevAST *ast, const KUrl& document )
+{
+  Q_UNUSED(ast);
+  Q_UNUSED(document);
+}
+
 #include "kdevlanguagesupport.moc"

@@ -3,6 +3,7 @@ if(KDE4_BUILD_TESTS)
 
 include_directories(${CMAKE_SOURCE_DIR}/languages/cpp/parser ${CMAKE_SOURCE_DIR}/languages/cpp/duchain ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/editor)
 
+add_definitions(-DDUCHAINTEST)
 
 ########### next target ###############
 

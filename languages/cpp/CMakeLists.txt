@@ -28,6 +28,7 @@ set(kdevcppduchain_SRCS
     duchain/cpptypes.cpp
     duchain/dumptypes.cpp
     duchain/typerepository.cpp
+    duchain/smartconverter.cpp
 )
 
 set(kdevcpplanguagesupport_PART_SRCS

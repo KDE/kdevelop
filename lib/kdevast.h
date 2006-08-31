@@ -20,6 +20,8 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVAST_H
 #define KDEVAST_H
 
+#include <kurl.h>
+
 #include "kdevexport.h"
 
 class KDevLanguageSupport;
@@ -34,6 +36,10 @@ public:
     /// Convenience function to request that the language support part delete this AST.
     /// \sa KDevLanguageSupport::releaseAST()
     void release();
+
+    /// Convenience function to tell the language support part that the document corresponding
+    /// to this AST has just been loaded into an editor
+    void documentLoaded(const KUrl& document);
 };
 
 #endif

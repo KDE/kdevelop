@@ -31,6 +31,12 @@
 #include "kdevdocumentrange.h"
 #include "kdevdocumentrangeobject.h"
 
+#ifndef DUCHAINTEST
+#include "kdevproject.h"
+#include "kdevcore.h"
+#include "kdevpersistenthash.h"
+#endif
+
 using namespace KTextEditor;
 
 KDevEditorIntegratorPrivate* KDevEditorIntegrator::s_data = 0;
@@ -79,6 +85,13 @@ void KDevEditorIntegratorPrivate::documentLoaded()
   }
 
   documents.insert(doc->url(), doc);
+
+#ifndef DUCHAINTEST
+  if (KDevProject* project = KDevCore::activeProject())
+    if (KDevPersistentHash* hash = project->persistentHash())
+      if (KDevAST* ast = hash->retrieveAST(doc->url()))
+        ast->documentLoaded(doc->url());
+#endif
 }
 
 void KDevEditorIntegratorPrivate::documentUrlChanged(Document* document)

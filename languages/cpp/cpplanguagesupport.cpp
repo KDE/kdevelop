@@ -44,6 +44,7 @@
 #include <kdevprojectcontroller.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevbackgroundparser.h>
+#include <kdeveditorintegrator.h>
 
 #include "cpplanguagesupport.h"
 #include "cpphighlighting.h"
@@ -53,6 +54,8 @@
 #include "parser/parsesession.h"
 
 #include "duchain/duchain.h"
+#include "duchain/topducontext.h"
+#include "duchain/smartconverter.h"
 
 #include "parsejob.h"
 #include "codeproxy.h"
@@ -244,6 +247,24 @@ KUrl CppLanguageSupport::findInclude( const QString& fileName )
     }
 
     return ret;
+}
+
+void CppLanguageSupport::documentLoaded(KDevAST * ast, const KUrl & document)
+{
+    // Pretty heavy handed - find another way?
+    lockAllParseMutexes();
+
+    DUContext* context = DUChain::self()->chainForDocument(document);
+    if (context) {
+        KDevEditorIntegrator editor;
+        {
+            SmartConverter sc(&editor);
+            sc.convertDUChain(context);
+            m_highlights->highlightDUChain(context);
+        }
+    }
+
+    unlockAllParseMutexes();
 }
 
 #include "cpplanguagesupport.moc"
