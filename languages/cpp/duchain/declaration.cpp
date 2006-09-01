@@ -45,6 +45,8 @@ Declaration::~Declaration()
   if (m_inSymbolTable)
     SymbolTable::self()->removeDeclaration(this);
 
+  setAbstractType(AbstractType::Ptr());
+
   qDeleteAll(m_uses);
 }
 
