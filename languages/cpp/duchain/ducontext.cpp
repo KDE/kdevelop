@@ -102,8 +102,9 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
 
   //kDebug() << k_funcinfo << "Searching for " << identifier << endl;
 
-  foreach (Declaration* definition, m_localDeclarations) {
-    QualifiedIdentifier::MatchTypes m = identifier.match(QualifiedIdentifier(definition->identifier()));
+  for (QList<Declaration*>::ConstIterator it = m_localDeclarations.constBegin(); it != m_localDeclarations.constEnd(); ++it) {
+    Declaration* declaration = *it;
+    QualifiedIdentifier::MatchTypes m = identifier.match(declaration->identifier());
     switch (m) {
       case QualifiedIdentifier::NoMatch:
         //kDebug() << "Identifier does not match " << definition->identifier() << endl;
@@ -113,17 +114,17 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
         // identifier is a more complete specification...
         // Try again with a qualified definition identifier
         //kDebug() << "Identifier contains " << definition->identifier() << ", plan to confirm that it is contained by " << definition->qualifiedIdentifier() << endl;
-        ensureResolution.append(definition);
+        ensureResolution.append(declaration);
         continue;
 
       case QualifiedIdentifier::ContainedBy:
         // definition is a more complete specification...
         if (!allowUnqualifiedMatch) {
           //kDebug() << "Identifier contained by " << definition->identifier() << ", plan to try again with " << definition->qualifiedIdentifier() << endl;
-          tryToResolve.append(definition);
+          tryToResolve.append(declaration);
         } else {
           //kDebug() << "Identifier contained by " << definition->identifier() << " (" << definition->qualifiedIdentifier() << "), accepted match." << endl;
-          resolved.append(definition);
+          resolved.append(declaration);
         }
         continue;
         //kDebug() << k_funcinfo << identifier << " contained by " << it.value()->qualifiedIdentifier() << endl;
@@ -131,9 +132,9 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
       case QualifiedIdentifier::ExactMatch:
         //kDebug() << "Identifier " << definition->identifier() << " (" << definition->qualifiedIdentifier() << ") matched, accepted match." << endl;
         if (!allowUnqualifiedMatch) {
-          ensureResolution.append(definition);
+          ensureResolution.append(declaration);
         } else {
-          resolved.append(definition);
+          resolved.append(declaration);
         }
         continue;
     }
@@ -276,7 +277,7 @@ Declaration* DUContext::findDeclarationInternal( const QualifiedIdentifier & ide
 Declaration * DUContext::findDeclaration( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType) const
 {
   QList<UsingNS*> usingStatements;
-  return findDeclarationInternal(identifier, textRange().end(), dataType, &usingStatements);
+  return findDeclarationInternal(identifier, position, dataType, &usingStatements);
 }
 
 Declaration * DUContext::findDeclaration( const QualifiedIdentifier& identifier ) const

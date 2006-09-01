@@ -22,6 +22,7 @@
 #include <QList>
 #include <QStack>
 #include <QStringList>
+#include <QVarLengthArray>
 
 #include <kdebug.h>
 
@@ -30,6 +31,8 @@ class QualifiedIdentifier;
 /// Represents a single unqualified identifier
 class Identifier
 {
+  friend class QualifiedIdentifier;
+
 public:
   explicit Identifier(const QString id);
   Identifier();
@@ -78,17 +81,29 @@ private:
 };
 
 /// Represents a qualified identifier
-class QualifiedIdentifier : public QStack<Identifier>
+class QualifiedIdentifier
 {
 public:
   explicit QualifiedIdentifier(const QString id);
   explicit QualifiedIdentifier(const Identifier& id);
-  explicit QualifiedIdentifier(const QVector<Identifier>& idStack);
+  QualifiedIdentifier(const QualifiedIdentifier& id, int reserve = 0);
   QualifiedIdentifier();
+
+  void push(const Identifier& id);
+  void push(const QualifiedIdentifier& id);
+  void pop();
+  void clear();
+  inline bool isEmpty() const { return m_idSplits.isEmpty(); }
+  inline int count() const { return m_idSplits.count(); }
+  Identifier at(int i) const;
+  inline Identifier first() const { return at(0); }
+  inline Identifier last() const { return at(count() - 1); }
+  inline Identifier top() const { return at(count() - 1); }
 
   static QualifiedIdentifier merge(const QStack<QualifiedIdentifier>& idStack);
 
   bool explicitlyGlobal() const;
+  void setExplicitlyGlobal(bool eg);
   bool isQualified() const;
 
   QString toString(bool ignoreExplicitlyGlobal = false) const;
@@ -109,6 +124,7 @@ public:
     ExactMatch
   };
 
+  MatchTypes match(const Identifier& other) const;
   MatchTypes match(const QualifiedIdentifier& other) const;
   bool beginsWith(const QualifiedIdentifier& other) const;
 
@@ -124,6 +140,11 @@ public:
     * Non-debug stream operator; does nothing.
     */
   inline friend kndbgstream& operator<< (kndbgstream& s, const QualifiedIdentifier&) { return s; }
+
+private:
+  QString m_qid;
+  QVarLengthArray<int, 8> m_idSplits;
+  bool m_explicitlyGlobal;
 };
 
 uint qHash(const QualifiedIdentifier& id);

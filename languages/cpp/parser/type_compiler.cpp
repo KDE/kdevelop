@@ -78,7 +78,7 @@ void TypeCompiler::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
         {
           std::size_t token = it->element;
           // FIXME
-          _M_type += Identifier(token_name(m_session->token_stream->kind(token)));
+          _M_type.push(Identifier(token_name(m_session->token_stream->kind(token))));
           it = it->next;
         }
       while (it != end);
@@ -86,7 +86,7 @@ void TypeCompiler::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   else if (node->type_of)
     {
       // ### implement me
-      _M_type += Identifier("typeof<...>");
+      _M_type.push(Identifier("typeof<...>"));
     }
 
   visit(node->name);

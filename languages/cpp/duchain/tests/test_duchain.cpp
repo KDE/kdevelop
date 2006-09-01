@@ -56,6 +56,33 @@ namespace QTest {
     return qstrdup(arr.data());
   }
   template<>
+  char* toString(const Identifier& id)
+  {
+    QByteArray arr = id.toString().toLatin1();
+    return qstrdup(arr.data());
+  }
+  /*template<>
+  char* toString(QualifiedIdentifier::MatchTypes t)
+  {
+    QString ret;
+    switch (t) {
+      case QualifiedIdentifier::NoMatch:
+        ret = "No Match";
+        break;
+      case QualifiedIdentifier::Contains:
+        ret = "Contains";
+        break;
+      case QualifiedIdentifier::ContainedBy:
+        ret = "Contained By";
+        break;
+      case QualifiedIdentifier::ExactMatch:
+        ret = "Exact Match";
+        break;
+    }
+    QByteArray arr = ret.toString().toLatin1();
+    return qstrdup(arr.data());
+  }*/
+  template<>
   char* toString(const Declaration& def)
   {
     QString s = QString("Declaration %1 (%2): %3").arg(def.identifier().toString()).arg(def.qualifiedIdentifier().toString()).arg(reinterpret_cast<long>(&def));
@@ -113,6 +140,37 @@ private slots:
     delete type3;*/
 
     delete topContext;
+  }
+
+  void testIdentifiers()
+  {
+    QualifiedIdentifier aj("::Area::jump");
+    QCOMPARE(aj.count(), 2);
+    QCOMPARE(aj.explicitlyGlobal(), true);
+    QCOMPARE(aj.at(0), Identifier("Area"));
+    QCOMPARE(aj.at(1), Identifier("jump"));
+
+    QualifiedIdentifier aj2 = QualifiedIdentifier("Area::jump");
+    QCOMPARE(aj2.count(), 2);
+    QCOMPARE(aj2.explicitlyGlobal(), false);
+    QCOMPARE(aj2.at(0), Identifier("Area"));
+    QCOMPARE(aj2.at(1), Identifier("jump"));
+
+    QCOMPARE(aj == aj2, true);
+
+    QCOMPARE(aj.match(aj2), QualifiedIdentifier::ExactMatch);
+
+    QualifiedIdentifier ajt("Area::jump::test");
+    QualifiedIdentifier jt("jump::test");
+    QualifiedIdentifier ajt2("Area::jump::tes");
+
+    QCOMPARE(aj2.match(ajt), QualifiedIdentifier::NoMatch);
+    QCOMPARE(ajt.match(aj2), QualifiedIdentifier::NoMatch);
+    QCOMPARE(jt.match(aj2), QualifiedIdentifier::ContainedBy);
+    QCOMPARE(ajt.match(jt), QualifiedIdentifier::Contains);
+
+    QCOMPARE(aj2.match(ajt2), QualifiedIdentifier::NoMatch);
+    QCOMPARE(ajt2.match(aj2), QualifiedIdentifier::NoMatch);
   }
 
   void testContextRelationships()
@@ -541,7 +599,7 @@ private slots:
     //QFile file("/opt/kde4/src/kdevelop/languages/cpp/duchain/tests/files/membervariable.cpp");
     QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
     //QFile file("/opt/kde4/src/kdelibs/kate/part/katecompletionmodel.h");
-    //QFile file("/opt/kde4/src/kdelibs/kate/tests/katetest.cpp");
+    //QFile file("/opt/kde4/src/kdevelop/lib/kdevbackgroundparser.cpp");
     QVERIFY( file.open( QIODevice::ReadOnly ) );
 
     QByteArray fileData = file.readAll();

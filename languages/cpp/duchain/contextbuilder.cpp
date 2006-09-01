@@ -139,9 +139,9 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
   if (m_compilingContexts) {
     identifier = currentContext()->scopeIdentifier();
     if (node->namespace_name)
-      identifier << QualifiedIdentifier(m_editor->tokenToString(node->namespace_name));
+      identifier.push(QualifiedIdentifier(m_editor->tokenToString(node->namespace_name)));
     else
-      identifier << Identifier::unique(0);
+      identifier.push(Identifier::unique(0));
   }
 
   DUContext* nsCtx = openContext(node, DUContext::Namespace);

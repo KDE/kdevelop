@@ -45,6 +45,8 @@ bool TopDUContext::hasUses() const
 
 Declaration* TopDUContext::findDeclarationInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>* usingNS, bool inImportedContext) const
 {
+  Q_UNUSED(inImportedContext);
+
   QList<Declaration*> found = checkDeclarations(SymbolTable::self()->findDeclarations(identifier), position, dataType);
 
   if (found.count() == 1)

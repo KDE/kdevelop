@@ -81,7 +81,7 @@ void NameCompiler::visitTemplateArgument(TemplateArgumentAST *node)
     {
       TypeCompiler type_cc(m_session);
       type_cc.run(node->type_id->type_specifier);
-      m_currentIdentifier.appendTemplateIdentifier(type_cc.identifier());
+      m_currentIdentifier.appendTemplateIdentifier(QualifiedIdentifier(type_cc.identifier()));
     }
 }
 
