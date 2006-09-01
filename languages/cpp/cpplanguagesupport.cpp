@@ -58,6 +58,7 @@
 #include "duchain/smartconverter.h"
 #include "duchain/cppeditorintegrator.h"
 #include "duchain/usebuilder.h"
+#include "duchain/symboltable.h"
 
 #include "parsejob.h"
 #include "codeproxy.h"
@@ -81,6 +82,8 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
     m_codeDelegate = new CodeDelegate( this );
     m_highlights = new CppHighlighting( this );
     m_cc = new CppCodeCompletion( this );
+
+    SymbolTable::self();
 
     connect( KDevCore::documentController(),
              SIGNAL( documentLoaded( KDevDocument* ) ),

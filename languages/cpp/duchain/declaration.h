@@ -78,6 +78,9 @@ public:
    */
   QString mangledIdentifier() const;
 
+  bool inSymbolTable() const;
+  void setInSymbolTable(bool inSymbolTable);
+
   const QList<Use*>& uses() const;
   void addUse(Use* range);
   void removeUse(Use* range);
@@ -95,7 +98,8 @@ private:
   Definition* m_definition;
   QList<Use*> m_uses;
 
-  bool m_isDefinition : 1;
+  bool m_isDefinition  : 1;
+  bool m_inSymbolTable : 1;
 };
 
 #endif // DECLARATION_H

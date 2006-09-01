@@ -26,6 +26,7 @@
 #include "tokens.h"
 #include "parsesession.h"
 #include "definition.h"
+#include "symboltable.h"
 
 using namespace KTextEditor;
 
@@ -211,6 +212,16 @@ void DeclarationBuilder::closeDeclaration()
     currentDeclaration()->setType(lastType());
 
   //kDebug() << k_funcinfo << "Mangled declaration: " << currentDeclaration()->mangledIdentifier() << endl;
+
+  switch (currentContext()->type()) {
+    case DUContext::Global:
+    case DUContext::Namespace:
+    case DUContext::Class:
+      SymbolTable::self()->addDeclaration(currentDeclaration());
+      break;
+    default:
+      break;
+  }
 
   m_declarationStack.pop();
 }

@@ -25,6 +25,7 @@
 #include "use.h"
 #include "definition.h"
 #include "cpptypes.h"
+#include "symboltable.h"
 
 using namespace KTextEditor;
 
@@ -34,11 +35,16 @@ Declaration::Declaration(KTextEditor::Range* range, Scope scope )
   , m_scope(scope)
   , m_definition(0)
   , m_isDefinition(false)
+  , m_inSymbolTable(false)
 {
 }
 
 Declaration::~Declaration()
 {
+  // Inserted by the builder after construction has finished.
+  if (m_inSymbolTable)
+    SymbolTable::self()->removeDeclaration(this);
+
   qDeleteAll(m_uses);
 }
 
@@ -219,4 +225,14 @@ void Declaration::setDefinition(Definition* definition)
   if (m_definition) {
     m_isDefinition = false;
   }
+}
+
+bool Declaration::inSymbolTable() const
+{
+  return m_inSymbolTable;
+}
+
+void Declaration::setInSymbolTable(bool inSymbolTable)
+{
+  m_inSymbolTable = inSymbolTable;
 }

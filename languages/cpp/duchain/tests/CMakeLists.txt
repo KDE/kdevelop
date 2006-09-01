@@ -34,6 +34,7 @@ set(kdevcppduchain_SRCS
     ../../duchain/cpptypes.cpp
     ../../duchain/dumptypes.cpp
     ../../duchain/typerepository.cpp
+    ../../duchain/symboltable.cpp
 )
 
 set(duchaintest_SRCS ${kdevplatform_editor_LIB_SRCS} ${kdevcppduchain_SRCS} test_duchain.cpp)
