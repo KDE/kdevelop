@@ -31,12 +31,15 @@ void DUChain::removeDocumentChain( const KUrl & document )
 
 void DUChain::addDocumentChain( const KUrl & document, TopDUContext * chain )
 {
+  Q_ASSERT(chain);
   m_chains.insert(document, chain);
 }
 
 TopDUContext * DUChain::chainForDocument( const KUrl & document )
 {
-  return m_chains[document];
+  if (m_chains.contains(document))
+    return m_chains[document];
+  return 0;
 }
 
 DUChain* DUChain::s_chain = 0;

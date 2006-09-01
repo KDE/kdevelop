@@ -49,8 +49,6 @@ CppCodeCompletion::~CppCodeCompletion()
 
 void CppCodeCompletion::cursorPositionChanged()
 {
-  return;
-
   View* view = dynamic_cast<KTextEditor::View*>(sender());
   if (!view) {
     kWarning() << k_funcinfo << "Non-view caller" << endl;
@@ -85,12 +83,13 @@ void CppCodeCompletion::cursorPositionChanged()
   //m_startText = text.mid(start.column(), end.column() - start.column());
 
   KUrl url = view->document()->url();
-  TopDUContext* top = DUChain::self()->chainForDocument(url);
-  DUContext* thisContext = top->findContextAt(end);
+  if (TopDUContext* top = DUChain::self()->chainForDocument(url)) {
+    DUContext* thisContext = top->findContextAt(end);
 
-  m_model->setContext(thisContext, end);
+    m_model->setContext(thisContext, end);
 
-  cc->startCompletion(KTextEditor::Range(start, end), m_model);
+    cc->startCompletion(KTextEditor::Range(start, end), m_model);
+  }
 }
 
 void CppCodeCompletion::viewCreated(KTextEditor::Document * document, KTextEditor::View * view)

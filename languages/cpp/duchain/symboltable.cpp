@@ -80,3 +80,12 @@ QList<Declaration*> SymbolTable::findDeclarations(const QualifiedIdentifier& id)
 }
 
 // kate: indent-width 2;
+
+void SymbolTable::dumpStatistics() const
+{
+  QReadLocker lock(m_mutex);
+
+  kDebug() << k_funcinfo << "Contains " << m_declarations.count() << endl;
+
+  // TODO: more data
+}

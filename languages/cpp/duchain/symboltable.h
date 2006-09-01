@@ -35,6 +35,8 @@ class SymbolTable
 public:
   static SymbolTable* self();
 
+  void dumpStatistics() const;
+
   void addDeclaration(Declaration* declaration);
   void removeDeclaration(Declaration* declaration);
 
