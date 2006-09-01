@@ -81,17 +81,11 @@ KDevAST * KDevPersistentHash::retrieveAST(const KUrl & url)
 
 KDevAST* KDevPersistentHash::retrieveAST( const QString &filename )
 {
-    QMutexLocker lock(m_mutex);
-
 #ifndef NO_GOOGLE_SPARSEHASH
     return m_astHash[ url.url() ];
 #else
-    QHashIterator<KUrl, KDevAST*> it = m_astHash;
-    while (it.hasNext())
-        if (it.next().key().fileName() == filename)
-            return it.value();
-
-    return 0;
+    KUrl url( filename );
+    return retrieveAST( url );
 #endif
 }
 
