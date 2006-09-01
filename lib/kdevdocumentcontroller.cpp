@@ -930,7 +930,6 @@ void KDevDocumentController::loadSettings( bool projectIsLoaded )
 
 void KDevDocumentController::saveSettings( bool projectIsLoaded )
 {
-    kDebug() << k_funcinfo << endl;
     Q_UNUSED( projectIsLoaded );
     QStringList paths;
     QList<KDevDocument* > openDocs = openDocuments();
