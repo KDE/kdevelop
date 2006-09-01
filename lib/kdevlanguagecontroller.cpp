@@ -41,6 +41,7 @@ KDevLanguageController::~KDevLanguageController()
 
 void KDevLanguageController::loadSettings( bool projectIsLoaded )
 {
+    Q_UNUSED( projectIsLoaded );
     KConfig * config = KDevConfig::standard();
     config->setGroup( "General Options" );
 
@@ -49,7 +50,9 @@ void KDevLanguageController::loadSettings( bool projectIsLoaded )
 }
 
 void KDevLanguageController::saveSettings( bool projectIsLoaded )
-{}
+{
+    Q_UNUSED( projectIsLoaded );
+}
 
 void KDevLanguageController::initialize()
 {}

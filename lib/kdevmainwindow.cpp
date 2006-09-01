@@ -228,6 +228,10 @@ void KDevMainWindow::loadSettings( bool projectIsLoaded )
 
 void KDevMainWindow::saveSettings( bool projectIsLoaded )
 {
+    if ( projectIsLoaded )
+        return;
+
+    kDebug() << k_funcinfo << endl;
     KConfig * config = KDevConfig::standard();
 
     saveMainWindowSettings( config, QLatin1String( "KDevMainWindow" ) );
