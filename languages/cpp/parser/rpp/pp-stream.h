@@ -30,6 +30,8 @@
  */
 class Stream
 {
+    static const QChar newline;
+
   public:
     Stream();
     Stream( QString * string, QIODevice::OpenMode openMode = QIODevice::ReadWrite );
@@ -56,7 +58,20 @@ class Stream
 
     inline const QChar& current() const { return *c; }
     inline operator const QChar&() const { return *c; }
-    Stream& operator++();
+    inline Stream& operator++()
+    {
+      if (c == end)
+        return *this;
+
+      if (*c == newline)
+        ++m_inputLine;
+
+      ++c;
+      ++m_pos;
+
+      return *this;
+    }
+
     Stream& operator--();
 
     int inputLineNumber() const;

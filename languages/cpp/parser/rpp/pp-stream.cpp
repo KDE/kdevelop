@@ -22,7 +22,7 @@
 
 #include <kdebug.h>
 
-static const QChar newline('\n');
+const QChar Stream::newline('\n');
 static const QChar nullchar;
 
 Stream::Stream()
@@ -50,21 +50,6 @@ Stream::~Stream()
 {
   if (m_isNull)
     delete m_string;
-}
-
-Stream & Stream::operator ++( )
-{
-  if (c == end)
-    return *this;
-
-  if (*c == newline)
-     ++m_inputLine;
-
-  ++c;
-  //kDebug() << "'" << c << "' " << c.cell() << endl;
-  ++m_pos;
-
-  return *this;
 }
 
 Stream& Stream::operator--()
