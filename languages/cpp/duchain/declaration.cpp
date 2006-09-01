@@ -45,6 +45,10 @@ Declaration::~Declaration()
   if (m_inSymbolTable)
     SymbolTable::self()->removeDeclaration(this);
 
+  // context is only null in the test cases
+  if (context())
+    context()->takeDeclaration(this);
+
   setAbstractType(AbstractType::Ptr());
 
   qDeleteAll(m_uses);

@@ -31,6 +31,11 @@ Definition::Definition(KTextEditor::Range* range, Declaration* declaration, DUCo
   setDeclaration(declaration);
 }
 
+Definition::~Definition()
+{
+  setContext(0);
+}
+
 DUContext* Definition::context() const
 {
   return m_context;

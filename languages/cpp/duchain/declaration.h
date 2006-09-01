@@ -36,6 +36,8 @@ class Definition;
  */
 class Declaration : public KDevDocumentRangeObject
 {
+  friend class DUContext;
+
 public:
   enum Scope {
     GlobalScope,
@@ -55,7 +57,6 @@ public:
   void setDefinition(Definition* definition);
 
   DUContext* context() const;
-  void setContext(DUContext* context);
 
   Scope scope() const;
 
@@ -90,6 +91,8 @@ public:
   virtual QString toString() const;
 
 private:
+  void setContext(DUContext* context);
+
   DUContext* m_context;
   Scope m_scope;
   AbstractType::Ptr m_type;

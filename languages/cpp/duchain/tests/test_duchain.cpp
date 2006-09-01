@@ -34,6 +34,7 @@
 #include "dumpchain.h"
 #include "tokens.h"
 #include "parsesession.h"
+#include "symboltable.h"
 
 #include "rpp/preprocessor.h"
 
@@ -77,10 +78,6 @@ class TestDUChain : public QObject
   DumpChain dumper;
 
   // Declaration - use chain
-  Declaration* definition1;
-  Declaration* definition2;
-  Declaration* definition3;
-  Declaration* definition4;
   Declaration* noDef;
   KUrl file1, file2;
   TopDUContext* topContext;
@@ -97,18 +94,6 @@ private slots:
 
   void initTestCase()
   {
-    definition1 = new Declaration(new KDevDocumentRange(file1, Range(4,4,4,16)), Declaration::LocalScope);
-    definition1->setIdentifier(Identifier("lazy"));
-
-    definition2 = new Declaration(new KDevDocumentRange(file1, Range(5,4,5,16)), Declaration::ClassScope);
-    definition2->setIdentifier(Identifier("m_errorCode"));
-
-    definition3 = new Declaration(new KDevDocumentRange(file1, Range(6,4,6,16)), Declaration::GlobalScope);
-    definition3->setIdentifier(Identifier("lazy"));
-
-    definition4 = new Declaration(new KDevDocumentRange(file1, Range(7,4,7,16)), Declaration::ClassScope);
-    definition4->setIdentifier(Identifier("m_errorCode2"));
-
     noDef = 0;
 
     file1 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/duchain.cpp";
@@ -127,29 +112,7 @@ private slots:
     delete type2;
     delete type3;*/
 
-    delete definition1;
-    delete definition2;
-    delete definition3;
-    delete definition4;
-
     delete topContext;
-  }
-
-  void testIdentifiers()
-  {
-    QualifiedIdentifier at("A::t");
-    QualifiedIdentifier at2;
-    at2.push(Identifier("A"));
-    at2.push(Identifier("t"));
-    QCOMPARE(at, at2);
-    QVERIFY(at.isQualified());
-
-    QualifiedIdentifier global("::test::foo()");
-    QVERIFY(global.explicitlyGlobal());
-    QVERIFY(global.isQualified());
-
-    QualifiedIdentifier unqualified("unqualified");
-    QVERIFY(!unqualified.isQualified());
   }
 
   void testContextRelationships()
@@ -182,68 +145,6 @@ private slots:
 
     topContext->deleteChildContextsRecursively();
     QVERIFY(topContext->childContexts().isEmpty());
-  }
-
-  void testLocalDeclarations()
-  {
-    QCOMPARE(definition1->identifier(), Identifier("lazy"));
-    QCOMPARE(definition1->scope(), Declaration::LocalScope);
-    QCOMPARE(topContext->localDeclarations().count(), 0);
-
-    topContext->addDeclaration(definition1);
-    QCOMPARE(topContext->localDeclarations().count(), 1);
-    QCOMPARE(topContext->localDeclarations()[0], definition1);
-
-    topContext->addDeclaration(definition2);
-    QCOMPARE(topContext->localDeclarations().count(), 2);
-    QCOMPARE(topContext->localDeclarations()[1], definition2);
-
-    //kDebug() << k_funcinfo << "Warning expected here (bug if not present)." << endl;
-    //topContext->addDeclaration(definition2);
-    //QCOMPARE(topContext->localDeclarations().count(), 2);
-
-    topContext->clearLocalDeclarations();
-    QVERIFY(topContext->localDeclarations().isEmpty());
-  }
-
-  void testDeclarationChain()
-  {
-    topContext->addDeclaration(definition1);
-    topContext->addDeclaration(definition2);
-
-    DUContext* context1 = new DUContext(new KDevDocumentRange(file1, Range(4,4, 14,3)));
-    topContext->addChildContext(context1);
-    Cursor insideContext1(5,9);
-
-    QCOMPARE(topContext->findContext(insideContext1), context1);
-    QCOMPARE(*topContext->findDeclaration(definition1->identifier(), insideContext1), *definition1);
-    QCOMPARE(*context1->findDeclaration(definition1->identifier(), insideContext1), *definition1);
-
-    context1->addDeclaration(definition3);
-    QCOMPARE(*topContext->findDeclaration(definition1->identifier(), insideContext1), *definition1);
-    QCOMPARE(*context1->findDeclaration(definition1->identifier(), insideContext1), *definition1);
-    QCOMPARE(*context1->findDeclaration(definition1->identifier(), definition3->textRange().start()), *definition3);
-
-    context1->takeDeclaration(definition3);
-    QCOMPARE(*topContext->findDeclaration(definition1->identifier(), insideContext1), *definition1);
-    QCOMPARE(*context1->findDeclaration(definition1->identifier(), insideContext1), *definition1);
-
-    DUContext* subContext1 = new DUContext(new KDevDocumentRange(file1, Range(5,4, 7,3)));
-    topContext->addChildContext(subContext1);
-
-    DUContext* subContext2 = new DUContext(new KDevDocumentRange(file1, Range(9,4, 12,3)));
-    topContext->addChildContext(subContext2);
-
-    subContext1->addDeclaration(definition3);
-
-    subContext2->addDeclaration(definition4);
-
-    subContext1->takeDeclaration(definition3);
-    subContext2->takeDeclaration(definition4);
-    topContext->takeDeclaration(definition1);
-    topContext->takeDeclaration(definition2);
-
-    topContext->deleteChildContextsRecursively();
   }
 
   void testDeclareInt()
@@ -507,7 +408,7 @@ private slots:
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("class A { void test(int); }; void A::test(int j) {}");
 
-    DUContext* top = parse(method);//, DumpNone);
+    DUContext* top = parse(method, DumpNone);
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 3);
@@ -529,10 +430,11 @@ private slots:
     QVERIFY(classA->parentContext());
     QCOMPARE(classA->importedParentContexts().count(), 0);
     QCOMPARE(classA->childContexts().count(), 1);
-    QCOMPARE(classA->localDeclarations().count(), 3);
+    QCOMPARE(classA->localDeclarations().count(), 1);
     QCOMPARE(classA->localScopeIdentifier(), QualifiedIdentifier("A"));
 
     Declaration* defTest = classA->localDeclarations().first();
+    Q_UNUSED(defTest);
   }
 
   void testDeclareNamespace()
@@ -638,7 +540,8 @@ private slots:
 
     //QFile file("/opt/kde4/src/kdevelop/languages/cpp/duchain/tests/files/membervariable.cpp");
     //QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
-    QFile file("/opt/kde4/src/kdelibs/kate/part/katecompletionmodel.h");
+    //QFile file("/opt/kde4/src/kdelibs/kate/part/katecompletionmodel.h");
+    QFile file("/opt/kde4/src/kdelibs/kate/tests/katetest.cpp");
     QVERIFY( file.open( QIODevice::ReadOnly ) );
 
     QByteArray fileData = file.readAll();
@@ -648,7 +551,7 @@ private slots:
     QString ppd = preprocessor.processString( contents );
     QByteArray preprocessed = ppd.toUtf8();
 
-    DUContext* top = parse(preprocessed);//, DumpNone);
+    DUContext* top = parse(preprocessed, DumpNone);
 
     release(top);
   }

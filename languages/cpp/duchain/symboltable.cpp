@@ -48,7 +48,9 @@ void SymbolTable::addDeclaration(Declaration* declaration)
 {
   QWriteLocker lock(m_mutex);
 
-  m_declarations.insert(declaration->qualifiedIdentifier().toString(), declaration);
+  //kDebug() << k_funcinfo << "Adding declaration " << declaration->qualifiedIdentifier().toString(true) << " from " << declaration->textRange() << endl;
+
+  m_declarations.insert(declaration->qualifiedIdentifier().toString(true), declaration);
 
   declaration->setInSymbolTable(true);
 }
@@ -57,7 +59,7 @@ void SymbolTable::removeDeclaration(Declaration* declaration)
 {
   QWriteLocker lock(m_mutex);
 
-  QString id = declaration->qualifiedIdentifier().toString();
+  QString id = declaration->qualifiedIdentifier().toString(true);
   QMultiHash<QString, Declaration*>::Iterator it = m_declarations.find(id);
   if (it != m_declarations.end())
     for (; it.key() == id; ++it)
@@ -70,11 +72,11 @@ void SymbolTable::removeDeclaration(Declaration* declaration)
   kWarning() << k_funcinfo << "Could not find declaration matching " << id << endl;
 }
 
-QList<Declaration*> SymbolTable::declarationsForIdentifier(const QualifiedIdentifier& id) const
+QList<Declaration*> SymbolTable::findDeclarations(const QualifiedIdentifier& id) const
 {
   QReadLocker lock(m_mutex);
 
-  return m_declarations.values(id.toString());
+  return m_declarations.values(id.toString(true));
 }
 
 // kate: indent-width 2;

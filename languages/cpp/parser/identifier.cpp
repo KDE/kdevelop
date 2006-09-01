@@ -148,7 +148,7 @@ QStringList QualifiedIdentifier::toStringList() const
   return ret;
 }
 
-QString QualifiedIdentifier::toString() const
+QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
 {
   if (!this) {
     return "(null qualified identifier)";
@@ -160,9 +160,15 @@ QString QualifiedIdentifier::toString() const
     return "<anonymous>";
 
   } else for (int i = 0; i < count(); ++i) {
+    if ((i == 0) && ignoreExplicitlyGlobal)
+      if (at(i).identifier().isEmpty())
+        continue;
+      else
+        ignoreExplicitlyGlobal = false;
+
     const QString& id = at(i).toString();
     if (id.isEmpty()) {
-      if (i == 0)
+      if (i == ignoreExplicitlyGlobal ? 1 : 0)
         ret.append("::");
 
     } else {

@@ -31,6 +31,7 @@ class Definition : public KDevDocumentRangeObject
 {
 public:
   Definition(KTextEditor::Range* range, Declaration* declaration, DUContext* context);
+  virtual ~Definition();
 
   DUContext* context() const;
   void setContext(DUContext* context);

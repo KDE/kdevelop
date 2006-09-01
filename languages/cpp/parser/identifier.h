@@ -91,7 +91,7 @@ public:
   bool explicitlyGlobal() const;
   bool isQualified() const;
 
-  QString toString() const;
+  QString toString(bool ignoreExplicitlyGlobal = false) const;
   QStringList toStringList() const;
 
   QString mangled() const;

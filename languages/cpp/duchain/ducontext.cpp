@@ -19,13 +19,13 @@
 #include "ducontext.h"
 
 #include <QMutableLinkedListIterator>
-#include <QSet>
 
 #include "declaration.h"
 #include "definition.h"
 #include "duchain.h"
 #include "use.h"
 #include "typesystem.h"
+#include "topducontext.h"
 
 #include "dumpchain.h"
 
@@ -87,14 +87,14 @@ Declaration * DUContext::addDeclaration( Declaration * newDeclaration )
   return newDeclaration;
 }
 
-Declaration* DUContext::takeDeclaration(Declaration* definition)
+Declaration* DUContext::takeDeclaration(Declaration* declaration)
 {
-  definition->setContext(0);
-  m_localDeclarations.removeAll(definition);
-  return definition;
+  declaration->setContext(0);
+  m_localDeclarations.removeAll(declaration);
+  return declaration;
 }
 
-Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, const QList<UsingNS*>& usingNamespaces ) const
+Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch ) const
 {
   QLinkedList<Declaration*> tryToResolve;
   QLinkedList<Declaration*> ensureResolution;
@@ -223,27 +223,6 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
     }
   }
 
-  foreach (UsingNS* use, usingNamespaces) {
-    QualifiedIdentifier id = identifier.merge(use->nsIdentifier);
-
-    QMutableLinkedListIterator<Declaration*> it = tryToResolve;
-    while (it.hasNext()) {
-      QualifiedIdentifier::MatchTypes m = id.match(it.next()->qualifiedIdentifier());
-      switch (m) {
-        case QualifiedIdentifier::NoMatch:
-        case QualifiedIdentifier::Contains:
-          //kDebug() << k_funcinfo << identifier << " mismatched " << m << ": " << it.value()->qualifiedIdentifier() << endl;
-          break;
-
-        case QualifiedIdentifier::ContainedBy:
-          //kDebug() << k_funcinfo << identifier << " contained by " << it.value()->qualifiedIdentifier() << endl;
-        case QualifiedIdentifier::ExactMatch:
-          resolved.append(it.value());
-          break;
-      }
-    }
-  }
-
   if (resolved.count() == 1) {
     return *resolved.constBegin();
   } else if (resolved.count() > 1) {
@@ -262,101 +241,48 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
   return 0;
 }
 
-Declaration * DUContext::findDeclaration( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, const DUContext * sourceChild, const QList<UsingNS*>& usingNS, bool inImportedContext ) const
+Declaration* DUContext::findDeclarationInternal( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, QList<UsingNS*>* usingNS, bool inImportedContext ) const
 {
+  Q_ASSERT(usingNS);
+
   // TODO we're missing ambiguous references by not checking every resolution before returning...
   // but is that such a bad thing? (might be good performance-wise)
-  if (Declaration* definition = findLocalDeclaration(identifier, position, dataType, sourceChild || inImportedContext, usingNS))
+  if (Declaration* definition = findLocalDeclaration(identifier, position, dataType, inImportedContext))
     return definition;
 
-  if (identifier.isQualified()) {
-    if (Declaration* definition = findDeclarationInChildren(identifier, position, dataType, sourceChild, usingNS))
-      return definition;
+  foreach (UsingNS* ns, usingNamespaces())
+    if (ns->textCursor() <= position)
+      usingNS->append(ns);
 
-  } else if (!usingNamespaces().isEmpty() && !identifier.explicitlyGlobal()) {
-    QList<UsingNS*> currentUsingNS = usingNS;
-
-    foreach (UsingNS* use, usingNamespaces())
-      if (position >= use->textCursor())
-        currentUsingNS.append(use);
-
-    if (!currentUsingNS.isEmpty())
-      if (Declaration* definition = findDeclarationInChildren(identifier, position, dataType, sourceChild, currentUsingNS))
-        return definition;
-  }
+  Declaration* ret = 0;
 
   QListIterator<DUContext*> it = importedParentContexts();
   it.toBack();
   while (it.hasPrevious()) {
     DUContext* parent = it.previous();
 
-    // FIXME should have the current namespace list??
-    if (Declaration* definition = parent->findDeclaration(identifier, position, dataType, this, QList<UsingNS*>(), true))
-      return definition;
+    ret = parent->findDeclarationInternal(identifier, position, dataType, usingNS, true);
+    if (ret)
+      break;
   }
 
-  if (!inImportedContext && parentContext())
-    // FIXME should have the current namespace list??
-    if (Declaration* definition = parentContext()->findDeclaration(identifier, position, dataType, this))
-      return definition;
+  if (!ret && !inImportedContext && parentContext())
+    if (Declaration* definition = parentContext()->findDeclarationInternal(identifier, position, dataType, usingNS))
+      ret = definition;
 
-  return 0;
+  return ret;
 }
 
-Declaration * DUContext::findDeclarationInChildren(const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, const DUContext * sourceChild, const QList<UsingNS*>& usingNamespaces) const
+Declaration * DUContext::findDeclaration( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType) const
 {
-  foreach (DUContext* context, childContexts()) {
-    if (context == sourceChild)
-      break;
-
-    if (context->type() != DUContext::Namespace)
-      continue;
-
-    QualifiedIdentifier nsId = context->scopeIdentifier();
-    QualifiedIdentifier::MatchTypes bestMatch = QualifiedIdentifier::NoMatch;
-
-    if (identifier.beginsWith(nsId))
-      goto found;
-
-    foreach (UsingNS* usingNS, usingNamespaces) {
-      QualifiedIdentifier::MatchTypes m = usingNS->nsIdentifier.match(nsId);
-      switch (m) {
-        case QualifiedIdentifier::Contains:
-          // using namespace is a more complete specification...
-          bestMatch = m;
-          continue;
-
-        case QualifiedIdentifier::ContainedBy:
-          // namespace is a more complete specification...
-        case QualifiedIdentifier::NoMatch:
-          continue;
-
-        case QualifiedIdentifier::ExactMatch:
-          goto found;
-      }
-    }
-
-    if (bestMatch == QualifiedIdentifier::NoMatch)
-      continue;
-
-    if (false) {
-      found:
-      if (Declaration* match = context->findLocalDeclaration(identifier, position, dataType, false, usingNamespaces))
-        return match;
-    }
-
-    if (Declaration* match = context->findDeclarationInChildren(identifier, position, dataType, false, usingNamespaces))
-      return match;
-
-    // FIXME nested using definitions
-  }
-
-  return 0;
+  QList<UsingNS*> usingStatements;
+  return findDeclarationInternal(identifier, textRange().end(), dataType, &usingStatements);
 }
 
 Declaration * DUContext::findDeclaration( const QualifiedIdentifier& identifier ) const
 {
-  return findDeclaration(identifier, textRangePtr()->end());
+  QList<UsingNS*> usingStatements;
+  return findDeclarationInternal(identifier, textRange().end(), AbstractType::Ptr(), &usingStatements);
 }
 
 void DUContext::addChildContext( DUContext * context )
@@ -425,10 +351,8 @@ QHash<QualifiedIdentifier, Declaration*> DUContext::allDeclarations(const KTextE
 {
   QHash<QualifiedIdentifier, Declaration*> ret;
 
-  //DUContext* context = findContext(position, const_cast<DUContext*>(this));
-
   // Iterate back up the chain
-  mergeDeclarations(ret);
+  mergeDeclarations(ret, position);
 
   return ret;
 }
@@ -438,26 +362,29 @@ const QList<Declaration*>& DUContext::localDeclarations() const
   return m_localDeclarations;
 }
 
-void DUContext::mergeDeclarations(QHash<QualifiedIdentifier, Declaration*>& definitions, bool inImportedContext) const
+void DUContext::mergeDeclarations(QHash<QualifiedIdentifier, Declaration*>& definitions, const KTextEditor::Cursor& position, bool inImportedContext) const
 {
   foreach (Declaration* definition, localDeclarations())
-    if (!definitions.contains(definition->qualifiedIdentifier()))
+    if (!definitions.contains(definition->qualifiedIdentifier()) && (inImportedContext || definition->textRange().start() <= position))
       definitions.insert(definition->qualifiedIdentifier(), definition);
 
   QListIterator<DUContext*> it = importedParentContexts();
   it.toBack();
   while (it.hasPrevious()) {
-    it.previous()->mergeDeclarations(definitions);
+    it.previous()->mergeDeclarations(definitions, position, true);
   }
 
   if (!inImportedContext && parentContext())
-    parentContext()->mergeDeclarations(definitions);
+    parentContext()->mergeDeclarations(definitions, position);
 }
 
 void DUContext::deleteLocalDeclarations()
 {
-  qDeleteAll(m_localDeclarations);
-  m_localDeclarations.clear();
+  QList<Declaration*> declarations = m_localDeclarations;
+
+  qDeleteAll(declarations);
+
+  Q_ASSERT(m_localDeclarations.isEmpty());
 }
 
 QList<DUContext*> DUContext::takeChildContexts()
@@ -572,12 +499,14 @@ void DUContext::setType(ContextType type)
 
 Declaration * DUContext::findDeclaration(const Identifier & identifier) const
 {
-  return findDeclaration(QualifiedIdentifier(identifier));
+  QList<UsingNS*> usingStatements;
+  return findDeclarationInternal(QualifiedIdentifier(identifier), textRange().end(), AbstractType::Ptr(), &usingStatements);
 }
 
 Declaration* DUContext::findDeclaration(const Identifier& identifier, const KTextEditor::Cursor& position) const
 {
-  return findDeclaration(QualifiedIdentifier(identifier), position);
+  QList<UsingNS*> usingStatements;
+  return findDeclarationInternal(QualifiedIdentifier(identifier), position, AbstractType::Ptr(), &usingStatements);
 }
 
 void DUContext::addOrphanUse(Use* orphan)
@@ -688,8 +617,6 @@ void DUContext::deleteLocalDefinitions()
   Q_ASSERT(m_localDefinitions.isEmpty());
 }
 
-// kate: indent-width 2;
-
 const QList< Use * > & DUContext::uses() const
 {
   return m_uses;
@@ -718,3 +645,16 @@ Use* DUContext::findUseAt(const KTextEditor::Cursor & position) const
 
   return 0;
 }
+
+TopDUContext* DUContext::topContext() const
+{
+  if (parentContext())
+    return parentContext()->topContext();
+
+  // This must be the top level context
+  Q_ASSERT(dynamic_cast<TopDUContext*>(const_cast<DUContext*>(this)));
+
+  return static_cast<TopDUContext*>(const_cast<DUContext*>(this));
+}
+
+// kate: indent-width 2;

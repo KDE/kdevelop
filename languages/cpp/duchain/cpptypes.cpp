@@ -237,7 +237,14 @@ uint CppTypeAliasType::hash() const
 
 QString CppTypeAliasType::toString() const
 {
-  return "Typedef - FIXME";
+  QualifiedIdentifier id = identifier();
+  if (!id.isEmpty())
+    return id.top().toString();
+
+  if (type())
+    return type()->toString();
+
+  return "typedef <notype>";
 }
 
 void CppClassType::addElement(AbstractType::Ptr element)
@@ -250,6 +257,10 @@ void CppClassType::addElement(AbstractType::Ptr element)
 
 QString CppClassType::toString() const
 {
+  QualifiedIdentifier id = identifier();
+  if (!id.isEmpty())
+    return id.top().toString();
+
   QString type;
   switch (classType()) {
     case Class:

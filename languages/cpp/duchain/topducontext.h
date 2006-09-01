@@ -37,7 +37,13 @@ public:
   bool hasUses() const;
   void setHasUses(bool hasUses);
 
+  bool imports(TopDUContext* origin, int depth = 0) const;
+
 private:
+  virtual Declaration* findDeclarationInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>* usingNamespaces, bool inImportedContext) const;
+
+  QList<Declaration*> checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType) const;
+
   bool m_hasUses;
 };
 

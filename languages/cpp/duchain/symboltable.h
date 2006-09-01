@@ -38,7 +38,7 @@ public:
   void addDeclaration(Declaration* declaration);
   void removeDeclaration(Declaration* declaration);
 
-  QList<Declaration*> declarationsForIdentifier(const QualifiedIdentifier& id) const;
+  QList<Declaration*> findDeclarations(const QualifiedIdentifier& id) const;
 
 private:
   SymbolTable();

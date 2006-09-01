@@ -30,6 +30,7 @@ class Declaration;
 class Definition;
 class DUChain;
 class Use;
+class TopDUContext;
 
 /**
  * A single context in source code, represented as a node in a
@@ -69,6 +70,11 @@ public:
    * Calculate the depth of this context, from the top level context in the file.
    */
   inline int depth() const { if (!parentContext()) return 0; return parentContext()->depth() + 1; }
+
+  /**
+   * Retrieve the top level context for this context.
+   */
+  TopDUContext* topContext() const;
 
   /**
    * Find the context which most specifically covers \a position.
@@ -161,7 +167,7 @@ public:
 
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
-   * is currently active at the given text \a position.
+   * is currently active at the given text \a position, with the given type \a dataType.
    *
    * \param identifier the identifier of the definition to search for
    * \param location the text position to search for
@@ -169,7 +175,7 @@ public:
    *
    * \returns the requested declaration if one was found, otherwise null.
    */
-  Declaration* findDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType = AbstractType::Ptr(), const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>(), bool inImportedContext = false) const;
+  Declaration* findDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType = AbstractType::Ptr()) const;
 
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
@@ -204,7 +210,7 @@ public:
    * Returns the type of any \a identifier defined in this context, or
    * null if one is not found.
    */
-  Declaration* findLocalDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType = AbstractType::Ptr(), bool allowUnqualifiedMatch = false, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>()) const;
+  Declaration* findLocalDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType = AbstractType::Ptr(), bool allowUnqualifiedMatch = false) const;
 
   /**
    * Clears all local declarations. Does not delete the declaration; the caller
@@ -317,7 +323,7 @@ private:
   /**
    * Merges definitions up all branches of the definition-use chain into one hash.
    */
-  void mergeDeclarations(QHash<QualifiedIdentifier, Declaration*>& definitions, bool inImportedContext = false) const;
+  void mergeDeclarations(QHash<QualifiedIdentifier, Declaration*>& definitions, const KTextEditor::Cursor& position, bool inImportedContext = false) const;
 
   /// Deletion function which respects file boundaries.
   void deleteChildContextsRecursively(const KUrl& url);
@@ -328,8 +334,8 @@ private:
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
-  /// Search closed contexts which have not necessarily lost scope
-  Declaration* findDeclarationInChildren(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, const DUContext* sourceChild, const QList<UsingNS*>& usingNamespaces) const;
+  /// Declaration search implementation
+  virtual Declaration* findDeclarationInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>* usingNamespaces, bool inImportedContext = false) const;
 
   ContextType m_contextType;
 
