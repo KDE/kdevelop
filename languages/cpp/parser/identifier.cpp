@@ -321,3 +321,36 @@ bool QualifiedIdentifier::isQualified() const
 {
   return count() > 1 || explicitlyGlobal();
 }
+
+QString Identifier::mangled() const
+{
+  static QRegExp simpleIdentifier("[a-zA-Z0-9_]*");
+  if (simpleIdentifier.exactMatch(m_identifier))
+    return QString("%1%2").arg(m_identifier.length()).arg(m_identifier);
+
+  // Get the encoded utf form
+  QString utf = QString::fromLatin1(m_identifier.toUtf8());
+
+  return QString("U%1%2").arg(utf.length()).arg(utf);
+}
+
+QString QualifiedIdentifier::mangled() const
+{
+  if (isEmpty())
+    return QString();
+
+  if (count() == 1)
+    return first().mangled();
+
+  QString ret('Q');
+
+  if (count() > 9)
+    ret += QString(",%1,").arg(count());
+  else
+    ret += count();
+
+  foreach (const Identifier& id, *this)
+    ret += id.mangled();
+
+  return ret;
+}

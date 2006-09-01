@@ -24,6 +24,7 @@
 #include "ducontext.h"
 #include "use.h"
 #include "definition.h"
+#include "cpptypes.h"
 
 using namespace KTextEditor;
 
@@ -75,7 +76,13 @@ AbstractType::Ptr Declaration::abstractType( ) const
 
 void Declaration::setAbstractType(AbstractType::Ptr type)
 {
+  if (CppIdentifiedType* idType = dynamic_cast<CppIdentifiedType*>(m_type.data()))
+    idType->setDeclaration(0);
+
   m_type = type;
+
+  if (CppIdentifiedType* idType = dynamic_cast<CppIdentifiedType*>(m_type.data()))
+    idType->setDeclaration(this);
 }
 
 Declaration::Scope Declaration::scope( ) const
@@ -88,6 +95,75 @@ QualifiedIdentifier Declaration::qualifiedIdentifier() const
   QualifiedIdentifier ret = context()->scopeIdentifier(true);
   ret.push(identifier());
   return ret;
+}
+
+QString Declaration::mangledIdentifier() const
+{
+/*
+GNU mangling specs from http://theory.uwinnipeg.ca/gnu/gcc/gxxint_15.html
+
+`A'
+ Indicates a C++ array type.
+`b'
+ Encodes the C++ bool type, and the Java boolean type.
+`c'
+ Encodes the C++ char type, and the Java byte type.
+`C'
+ A modifier to indicate a const type. Also used to indicate a const member function (in which cases it precedes the encoding of the method's class).
+`d'
+ Encodes the C++ and Java double types.
+`e'
+ Indicates extra unknown arguments ....
+`f'
+ Encodes the C++ and Java float types.
+`F'
+ Used to indicate a function type.
+`H'
+ Used to indicate a template function.
+`i'
+ Encodes the C++ and Java int types.
+`J'
+ Indicates a complex type.
+`l'
+ Encodes the C++ long type.
+`P'
+ Indicates a pointer type. Followed by the type pointed to.
+`Q'
+ Used to mangle qualified names, which arise from nested classes. Should also be used for namespaces (?). In Java used to mangle package-qualified names, and inner classes.
+`r'
+ Encodes the GNU C++ long double type.
+`R'
+ Indicates a reference type. Followed by the referenced type.
+`s'
+ Encodes the C++ and java short types.
+`S'
+ A modifier that indicates that the following integer type is signed. Only used with char. Also used as a modifier to indicate a static member function.
+`t'
+ Indicates a template instantiation.
+`T'
+ A back reference to a previously seen type.
+`U'
+ A modifier that indicates that the following integer type is unsigned. Also used to indicate that the following class or namespace name is encoded using Unicode-mangling.
+`v'
+ Encodes the C++ and Java void types.
+`V'
+ A modified for a const type or method.
+`w'
+ Encodes the C++ wchar_t type, and the Java char types.
+`x'
+ Encodes the GNU C++ long long type, and the Java long type.
+`X'
+ Encodes a template type parameter, when part of a function type.
+`Y'
+ Encodes a template constant parameter, when part of a function type.
+`Z'
+ Used for template type parameters.
+*/
+  if (abstractType())
+    return abstractType()->mangled();
+
+  // Error...
+  return qualifiedIdentifier().mangled();
 }
 
 DUContext * Declaration::context() const

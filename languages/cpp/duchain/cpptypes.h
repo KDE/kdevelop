@@ -30,6 +30,8 @@
 #include "cppnamespace.h"
 
 class DUContext;
+class Declaration;
+class ClassFunctionDeclaration;
 
 class CppCVType
 {
@@ -44,6 +46,7 @@ public:
   inline bool isVolatile() const { return m_volatile; }
 
   QString cvString() const;
+  QString cvMangled() const;
 
   //uint cvHash(uint input) const { return input; }
 
@@ -57,6 +60,22 @@ protected:
 private:
   bool m_constant : 1;
   bool m_volatile : 1;
+};
+
+class CppIdentifiedType
+{
+public:
+  CppIdentifiedType();
+
+  QualifiedIdentifier identifier() const;
+
+  Declaration* declaration() const;
+  void setDeclaration(Declaration* declaration);
+
+  QString idMangled() const;
+
+private:
+  Declaration* m_declaration;
 };
 
 class CppIntegralType : public IntegralType, public CppCVType
@@ -83,14 +102,17 @@ public:
     ModifierNone      = 0x0,
     ModifierShort     = 0x1,
     ModifierLong      = 0x2,
-    ModifierSigned    = 0x4,
-    ModifierUnsigned  = 0x8
+    ModifierLongLong  = 0x4,
+    ModifierSigned    = 0x8,
+    ModifierUnsigned  = 0x10
   };
   Q_DECLARE_FLAGS(TypeModifiers, TypeModifier)
 
   TypeModifiers typeModifiers() const;
 
   virtual QString toString() const;
+
+  virtual QString mangled() const;
 
   //virtual uint hash() const;
 
@@ -104,14 +126,19 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CppIntegralType::TypeModifiers)
 
-class CppFunctionType : public FunctionType, public CppCVType
+class CppFunctionType : public FunctionType, public CppIdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppFunctionType> Ptr;
 
+  ClassFunctionDeclaration* declaration() const;
+  void setDeclaration(ClassFunctionDeclaration* declaration);
+
   virtual QString toString() const;
 
   //virtual uint hash() const;
+
+  virtual QString mangled() const;
 };
 
 class CppPointerType : public PointerType, public CppCVType
@@ -122,6 +149,8 @@ public:
   CppPointerType(Cpp::CVSpecs spec = Cpp::CVNone);
 
   virtual QString toString() const;
+
+  virtual QString mangled() const;
 
   //virtual uint hash() const;
 };
@@ -135,12 +164,14 @@ public:
 
   virtual QString toString() const;
 
+  virtual QString mangled() const;
+
   //virtual uint hash() const;
 };
 
 class CppClassType;
 
-class CppClassType : public StructureType, public CppCVType
+class CppClassType : public StructureType, public CppIdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppClassType> Ptr;
@@ -183,6 +214,8 @@ public:
 
   virtual QString toString() const;
 
+  virtual QString mangled() const;
+
 private:
   QList<BaseClassInstance> m_baseClasses;
   ClassType m_classType;
@@ -199,7 +232,7 @@ public:
   virtual QString toString() const;
 };*/
 
-class CppTypeAliasType : public AbstractType, public CppCVType
+class CppTypeAliasType : public AbstractType, public CppIdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppTypeAliasType> Ptr;
@@ -212,6 +245,8 @@ public:
   //virtual uint hash() const;
 
   virtual QString toString() const;
+
+  virtual QString mangled() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
@@ -242,15 +277,25 @@ private:
   QString m_value;
 };*/
 
-class CppEnumerationType : public CppIntegralType
+class CppEnumerationType : public CppIntegralType, public CppIdentifiedType
 {
 public:
   typedef KSharedPtr<CppEnumerationType> Ptr;
 
   CppEnumerationType(Cpp::CVSpecs spec = Cpp::CVNone);
-
   //virtual uint hash() const;
+
+  virtual QString mangled() const;
 };
+
+class CppArrayType : public ArrayType
+{
+public:
+  typedef KSharedPtr<CppArrayType> Ptr;
+
+  virtual QString mangled() const;
+};
+
 
 /*class CppTemplateParameterType : public
 {
@@ -266,7 +311,7 @@ private:
   bool m_defaultValue;
 };*/
 
-class CppTemplateType : public AbstractType
+class CppTemplateType : public AbstractType, public CppIdentifiedType
 {
 public:
   typedef KSharedPtr<CppTemplateType> Ptr;

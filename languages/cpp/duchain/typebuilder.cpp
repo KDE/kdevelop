@@ -220,7 +220,10 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
           type = CppIntegralType::TypeInt;
           break;
         case Token_long:
-          modifiers |= CppIntegralType::ModifierLong;
+          if (modifiers & CppIntegralType::ModifierLong)
+            modifiers |= CppIntegralType::ModifierLongLong;
+          else
+            modifiers |= CppIntegralType::ModifierLong;
           break;
         case Token_signed:
           modifiers |= CppIntegralType::ModifierSigned;

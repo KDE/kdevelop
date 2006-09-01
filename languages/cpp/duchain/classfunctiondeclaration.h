@@ -42,10 +42,7 @@ public:
   void setFunctionType(QtFunctionType functionType);
 
   bool isConstructor() const;
-  void setConstructor(bool isConstructor);
-
   bool isDestructor() const;
-  void setDestructor(bool isDestructor);
 
   enum FunctionSpecifier {
     VirtualSpecifier  = 0x1,
@@ -69,8 +66,6 @@ public:
 
 private:
   QtFunctionType m_functionType;
-  bool m_constructor: 1;
-  bool m_destructor: 1;
   bool m_isVirtual: 1;
   bool m_isInline: 1;
   bool m_isExplicit: 1;

@@ -46,6 +46,8 @@ public:
   const QString& identifier() const;
   void setIdentifier(const QString& identifier);
 
+  QString mangled() const;
+
   const QList<QualifiedIdentifier>& templateIdentifiers() const;
   void appendTemplateIdentifier(const QualifiedIdentifier& identifier);
   void clearTemplateIdentifiers();
@@ -91,6 +93,8 @@ public:
 
   QString toString() const;
   QStringList toStringList() const;
+
+  QString mangled() const;
 
   QualifiedIdentifier merge(const QualifiedIdentifier& base) const;
   QualifiedIdentifier mergeWhereDifferent(const QualifiedIdentifier& base) const;

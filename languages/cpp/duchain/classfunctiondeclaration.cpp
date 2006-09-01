@@ -20,6 +20,8 @@
 
 #include "classfunctiondeclaration.h"
 
+#include "ducontext.h"
+
 ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range)
   : ClassMemberDeclaration(range)
   , m_functionType(Normal)
@@ -66,12 +68,15 @@ void ClassFunctionDeclaration::setFunctionType(QtFunctionType functionType)
 
 bool ClassFunctionDeclaration::isConstructor() const
 {
-  return m_constructor;
+  if (context()->type() == DUContext::Class && context()->localScopeIdentifier().top() == identifier())
+    return true;
+  return false;
 }
 
 bool ClassFunctionDeclaration::isDestructor() const
 {
-  return m_destructor;
+  QString id = identifier().toString();
+  return context()->type() == DUContext::Class && id.startsWith('~') && id.mid(1) == context()->localScopeIdentifier().top().toString();
 }
 
 bool ClassFunctionDeclaration::isVirtual() const
@@ -102,16 +107,6 @@ bool ClassFunctionDeclaration::isExplicit() const
 void ClassFunctionDeclaration::setExplicit(bool isExplicit)
 {
   m_isExplicit = isExplicit;
-}
-
-void ClassFunctionDeclaration::setConstructor(bool isConstructor)
-{
-  m_constructor = isConstructor;
-}
-
-void ClassFunctionDeclaration::setDestructor(bool isDestructor)
-{
-  m_destructor = isDestructor;
 }
 
 void ClassFunctionDeclaration::setFunctionSpecifiers(FunctionSpecifiers specifiers)

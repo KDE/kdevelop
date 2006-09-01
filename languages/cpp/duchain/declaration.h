@@ -73,6 +73,11 @@ public:
 
   QualifiedIdentifier qualifiedIdentifier() const;
 
+  /**
+   * Provides a mangled version of this definition's identifier, for use in a symbol table.
+   */
+  QString mangledIdentifier() const;
+
   const QList<Use*>& uses() const;
   void addUse(Use* range);
   void removeUse(Use* range);

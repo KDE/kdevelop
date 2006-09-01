@@ -688,34 +688,6 @@ void DUContext::deleteLocalDefinitions()
   Q_ASSERT(m_localDefinitions.isEmpty());
 }
 
-QString DUContext::mangledIdentifier() const
-{
-  QString ret;
-  if (parentContext())
-    ret = parentContext()->mangledIdentifier();
-
-  if (type() != Other)
-    foreach (const Identifier& id, localScopeIdentifier()) {
-      switch (type()) {
-        case Namespace:
-          ret += "N";
-          break;
-        case Class:
-          ret += "C";
-          break;
-        case Function:
-          ret += "F";
-          break;
-        default:
-          Q_ASSERT(false);
-      }
-      ret += id.toString();
-      ret += "::";
-    }
-
-  return ret;
-}
-
 // kate: indent-width 2;
 
 const QList< Use * > & DUContext::uses() const

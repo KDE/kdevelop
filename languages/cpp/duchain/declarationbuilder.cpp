@@ -210,6 +210,8 @@ void DeclarationBuilder::closeDeclaration()
   if (lastType())
     currentDeclaration()->setType(lastType());
 
+  //kDebug() << k_funcinfo << "Mangled declaration: " << currentDeclaration()->mangledIdentifier() << endl;
+
   m_declarationStack.pop();
 }
 

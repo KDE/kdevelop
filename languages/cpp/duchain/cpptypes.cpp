@@ -20,6 +20,8 @@
 
 #include "cpptypes.h"
 
+#include "classfunctiondeclaration.h"
+
 // ---------------------------------------------------------------------------
 const QList<CppClassType::BaseClassInstance>& CppClassType::baseClasses() const
 {
@@ -273,3 +275,151 @@ CppEnumerationType::CppEnumerationType(Cpp::CVSpecs spec)
 {
   return reinterpret_cast<long>(this);
 }*/
+
+QString CppIntegralType::mangled() const
+{
+  QString ret;
+  if (typeModifiers() & ModifierUnsigned)
+    ret = "U";
+
+  switch (integralType()) {
+    case TypeChar:
+      if (typeModifiers() & ModifierSigned)
+        ret += 'S';
+      ret += 'c';
+      break;
+    case TypeWchar_t:
+      ret += 'w';
+      break;
+    case TypeBool:
+      ret += 'b';
+      break;
+    case TypeInt:
+      if (typeModifiers() & ModifierLong)
+        if (typeModifiers() & ModifierLongLong)
+          ret += 'x';
+        else
+          ret += 'l';
+      else
+        ret += 'i';
+      break;
+    case TypeFloat:
+      ret += 'f';
+      break;
+    case TypeDouble:
+      if (typeModifiers() & ModifierLong)
+        ret += 'r';
+      else
+        ret += 'd';
+      break;
+    case TypeVoid:
+      ret += 'v';
+      break;
+    default:
+      ret += '?';
+      break;
+  }
+  return ret;
+}
+
+QString CppCVType::cvMangled() const
+{
+  QString ret;
+  if (m_constant)
+    ret += 'C';
+  if (m_volatile)
+    ret += 'V';
+  return ret;
+}
+
+QString CppPointerType::mangled() const
+{
+  QString ret = "P";
+  if (baseType())
+    ret += baseType()->mangled();
+  return ret;
+}
+
+QString CppReferenceType::mangled() const
+{
+  QString ret = "R";
+  if (baseType())
+    ret += baseType()->mangled();
+  return ret;
+}
+
+CppIdentifiedType::CppIdentifiedType()
+  : m_declaration(0)
+{
+}
+
+QualifiedIdentifier CppIdentifiedType::identifier() const
+{
+  return m_declaration ? m_declaration->qualifiedIdentifier() : QualifiedIdentifier();
+}
+
+Declaration* CppIdentifiedType::declaration() const
+{
+  return m_declaration;
+}
+
+void CppIdentifiedType::setDeclaration(Declaration* declaration)
+{
+  m_declaration = declaration;
+}
+
+QString CppIdentifiedType::idMangled() const
+{
+  return identifier().mangled();
+}
+
+QString CppClassType::mangled() const
+{
+  return idMangled();
+}
+
+QString CppTypeAliasType::mangled() const
+{
+  return type()->mangled();
+}
+
+QString CppFunctionType::mangled() const
+{
+  bool constructor = declaration() && declaration()->isConstructor();
+
+  QualifiedIdentifier id = identifier();
+
+  Identifier function = id.top();
+  if (!id.isEmpty())
+    id.pop();
+
+  QString ret = QString("%1__%2%3").arg(constructor ? QString() : function.mangled()).arg(cvMangled()).arg(id.mangled());
+
+  foreach (const AbstractType::Ptr& argument, arguments())
+    if (argument)
+      ret += argument->mangled();
+    else
+      ret += "?";
+
+  return ret;
+}
+
+ClassFunctionDeclaration* CppFunctionType::declaration() const
+{
+  return static_cast<ClassFunctionDeclaration*>(CppIdentifiedType::declaration());
+}
+
+void CppFunctionType::setDeclaration(ClassFunctionDeclaration* declaration)
+{
+  CppIdentifiedType::setDeclaration(declaration);
+}
+
+QString CppArrayType::mangled() const
+{
+  return QString("A%1%2").arg(dimension()).arg(elementType() ? elementType()->mangled() : QString());
+}
+
+QString CppEnumerationType::mangled() const
+{
+  return idMangled();
+}

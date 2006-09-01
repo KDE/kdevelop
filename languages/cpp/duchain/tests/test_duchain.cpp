@@ -634,11 +634,11 @@ private slots:
 
   void testFileParse()
   {
-    QSKIP("Unwanted", SkipSingle);
+    //QSKIP("Unwanted", SkipSingle);
 
-    QFile file("/opt/kde4/src/kdevelop/languages/cpp/duchain/tests/files/membervariable.cpp");
+    //QFile file("/opt/kde4/src/kdevelop/languages/cpp/duchain/tests/files/membervariable.cpp");
     //QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
-    //QFile file("/opt/kde4/src/kdelibs/kate/part/katecompletionmodel.h");
+    QFile file("/opt/kde4/src/kdelibs/kate/part/katecompletionmodel.h");
     QVERIFY( file.open( QIODevice::ReadOnly ) );
 
     QByteArray fileData = file.readAll();

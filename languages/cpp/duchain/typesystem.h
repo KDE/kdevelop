@@ -88,6 +88,8 @@ public:
 
   virtual QString toString() const = 0;
 
+  virtual QString mangled() const { return QString(); }
+
   uint hash() const;
 
   enum WhichType {
