@@ -597,9 +597,10 @@ private slots:
     //QSKIP("Unwanted", SkipSingle);
 
     //QFile file("/opt/kde4/src/kdevelop/languages/cpp/duchain/tests/files/membervariable.cpp");
-    QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
+    //QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
     //QFile file("/opt/kde4/src/kdelibs/kate/part/katecompletionmodel.h");
     //QFile file("/opt/kde4/src/kdevelop/lib/kdevbackgroundparser.cpp");
+    QFile file("/opt/qt-copy/src/gui/kernel/qwidget.cpp");
     QVERIFY( file.open( QIODevice::ReadOnly ) );
 
     QByteArray fileData = file.readAll();

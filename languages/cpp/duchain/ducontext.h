@@ -325,12 +325,6 @@ private:
    */
   void mergeDeclarations(QHash<QualifiedIdentifier, Declaration*>& definitions, const KTextEditor::Cursor& position, bool inImportedContext = false) const;
 
-  /// Deletion function which respects file boundaries.
-  void deleteChildContextsRecursively(const KUrl& url);
-
-  /// Deletion function which respects file boundaries.
-  void deleteImportedParentContextsRecursively(const KUrl& url);
-
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 

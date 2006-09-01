@@ -54,7 +54,7 @@ DUContext::~DUContext( )
   foreach (DUContext* context, importedParentContexts)
     removeImportedParentContext(context);
 
-  deleteChildContextsRecursively(url());
+  deleteChildContextsRecursively();
 
   deleteLocalDefinitions();
 
@@ -402,26 +402,9 @@ QList<DUContext*> DUContext::takeChildContexts()
 
 void DUContext::deleteChildContextsRecursively()
 {
-  deleteChildContextsRecursively(url());
-}
-
-void DUContext::deleteImportedParentContextsRecursively(const KUrl& url)
-{
-  QList<DUContext*> importedParentContexts = m_importedParentContexts;
-  foreach (DUContext* importedParent, importedParentContexts) {
-    if (importedParent->url() == url)
-      delete importedParent;
-  }
-
-  Q_ASSERT(m_importedParentContexts.isEmpty());
-}
-
-void DUContext::deleteChildContextsRecursively(const KUrl& url)
-{
   QList<DUContext*> childContexts = m_childContexts;
   foreach (DUContext* context, childContexts)
-    if (context->url() == url)
-      delete context;
+    delete context;
 
   //Q_ASSERT(m_childContexts.isEmpty());
 }
