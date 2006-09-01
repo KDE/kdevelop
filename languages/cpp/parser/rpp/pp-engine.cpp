@@ -76,12 +76,15 @@ QString pp::processFile(const QString& input, StringType type)
 
       Stream is(&contentsDecoded);
       QString result;
+      // Guestimate as to how much expansion will occur
+      result.reserve(contents.length() * 1.2);
 
       {
         Stream rs(&result);
         operator () (is, rs);
       }
 
+      result.squeeze();
       return result;
     }
 
@@ -91,6 +94,8 @@ QString pp::processFile(const QString& input, StringType type)
   else
   {
     QString result;
+    // Guestimate as to how much expansion will occur
+    result.reserve(input.length() * 1.2);
     m_files.push("<internal>");
 
     {
@@ -99,6 +104,7 @@ QString pp::processFile(const QString& input, StringType type)
       operator () (is, rs);
     }
 
+    result.squeeze();
     return result;
   }
 
@@ -109,6 +115,7 @@ QString pp::processFile(QIODevice* device)
   Q_ASSERT(device);
 
   QString result;
+
   m_files.push("<internal>");
 
   {
