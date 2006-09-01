@@ -85,7 +85,7 @@ Declaration::Scope Declaration::scope( ) const
 
 QualifiedIdentifier Declaration::qualifiedIdentifier() const
 {
-  QualifiedIdentifier ret = context()->scopeIdentifier();
+  QualifiedIdentifier ret = context()->scopeIdentifier(true);
   ret.push(identifier());
   return ret;
 }
