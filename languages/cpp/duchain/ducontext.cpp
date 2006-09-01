@@ -102,7 +102,8 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
 
   //kDebug() << k_funcinfo << "Searching for " << identifier << endl;
 
-  for (QList<Declaration*>::ConstIterator it = m_localDeclarations.constBegin(); it != m_localDeclarations.constEnd(); ++it) {
+  QList<Declaration*>::ConstIterator end = m_localDeclarations.constEnd();
+  for (QList<Declaration*>::ConstIterator it = m_localDeclarations.constBegin(); it != end; ++it) {
     Declaration* declaration = *it;
     QualifiedIdentifier::MatchTypes m = identifier.match(declaration->identifier());
     switch (m) {
