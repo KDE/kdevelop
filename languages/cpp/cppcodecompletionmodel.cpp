@@ -65,6 +65,8 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           if (id.isEmpty())
             return QVariant();
           id.pop();
+          if (id.isEmpty())
+            return QVariant();
           return id.toString() + "::";
         }
 
