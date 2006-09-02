@@ -46,9 +46,6 @@ KDevBGPreferences::KDevBGPreferences( QWidget *parent, const QStringList &args )
     preferencesDialog->kcfg_delay->setRange( 0, 5000, true );
     preferencesDialog->kcfg_threads->setRange( 1, 32, true );
 
-    //FIXME Wait for ThreadWeaver to provide a method to specify number of threads...
-    preferencesDialog->kcfg_threads->setEnabled( false );
-
     l->addWidget( w );
 
     addConfig( KDevBGSettings::self(), w );
@@ -71,6 +68,7 @@ void KDevBGPreferences::save()
         KDevCore::backgroundParser()->suspend();
 
     KDevCore::backgroundParser()->setDelay( preferencesDialog->kcfg_delay->value() );
+    KDevCore::backgroundParser()->setThreads( preferencesDialog->kcfg_threads->value() );
 }
 
 #include "kdevbgpreferences.moc"

@@ -62,6 +62,7 @@
 KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         : QObject( parent ),
         m_delay( 500 ),
+        m_threads( 1 ),
         m_modelsToCache( 0 ),
         m_progressBar( new QProgressBar ),
         m_weaver( new Weaver( this ) ),
@@ -118,6 +119,7 @@ void KDevBackgroundParser::loadSettings( bool projectIsLoaded )
     config->setGroup( "Background Parser" );
     bool enabled = config->readEntry( "Enabled", true );
     m_delay = config->readEntry( "Delay", 500 );
+    m_threads = config->readEntry( "Number of Threads", 1 );
 
     if ( enabled )
         resume();
@@ -416,6 +418,8 @@ void KDevBackgroundParser::resume()
 
     m_timer->start( m_delay );
 
+    //Crashes right now...
+    //m_weaver->setMaximumNumberOfThreads( m_threads );
     m_weaver->resume();
 
     if (m_weaver->queueLength() && m_progressBar)
@@ -427,6 +431,13 @@ void KDevBackgroundParser::setDelay( int msec )
     QMutexLocker lock(m_mutex);
 
     m_delay = msec;
+}
+
+void KDevBackgroundParser::setThreads( int threads )
+{
+    QMutexLocker lock(m_mutex);
+
+    m_threads = threads;
 }
 
 KDevParserDependencyPolicy* KDevBackgroundParser::dependencyPolicy() const

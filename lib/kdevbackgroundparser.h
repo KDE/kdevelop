@@ -96,6 +96,7 @@ public Q_SLOTS:
     void suspend();
     void resume();
     void setDelay( int msecs );
+    void setThreads( int threads );
 
     void addDocument( const KUrl &url );
     void addDocument( KDevDocument *document );
@@ -128,6 +129,7 @@ private:
 
     QTimer *m_timer;
     int m_delay;
+    int m_threads;
     uint m_modelsToCache;
 
     // A list of known documents, and whether they are due to be parsed or not
