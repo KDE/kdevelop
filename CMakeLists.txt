@@ -7,6 +7,7 @@ include (KDE4Defaults)
 include (MacroLibrary)
 
 find_package(BerkeleyDB REQUIRED)
+find_package(ThreadWeaver REQUIRED)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 link_directories (${KDE4_LIB_DIR})

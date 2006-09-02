@@ -51,10 +51,11 @@
 #include <ktexteditor/smartinterface.h>
 #include <ktexteditor/document.h>
 
-#include <weaver/State.h>
-#include <weaver/ThreadWeaver.h>
-#include <weaver/JobCollection.h>
-#include <weaver/DebuggingAids.h>
+//ThreadWeaver includes
+#include <State.h>
+#include <ThreadWeaver.h>
+#include <JobCollection.h>
+#include <DebuggingAids.h>
 
 #include "kdevparserdependencypolicy.h"
 
@@ -63,7 +64,7 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         m_delay( 500 ),
         m_modelsToCache( 0 ),
         m_progressBar( new QProgressBar ),
-        m_weaver( new Weaver( this, 2 ) ),
+        m_weaver( new Weaver( this ) ),
         m_dependencyPolicy( new KDevParserDependencyPolicy ),
         m_mutex(new QMutex()),
         m_waitForJobCreation(new QWaitCondition)

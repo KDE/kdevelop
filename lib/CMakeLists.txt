@@ -1,12 +1,11 @@
 
-add_subdirectory(weaver)
 add_subdirectory(util)
 add_subdirectory(widgets)
 add_subdirectory(debugger)
 add_subdirectory(projectmanager)
 add_subdirectory(settings)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/lib/weaver ${CMAKE_SOURCE_DIR}/lib/editor ${CMAKE_SOURCE_DIR}/lib/backgroundparser ${CMAKE_SOURCE_DIR}/lib/interfaces )
+include_directories( ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${THREADWEAVER_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/lib/editor ${CMAKE_SOURCE_DIR}/lib/backgroundparser ${CMAKE_SOURCE_DIR}/lib/interfaces )
 
 ########### next target ###############
 
