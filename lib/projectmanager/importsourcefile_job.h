@@ -20,7 +20,7 @@
 #ifndef IMPORTSOURCEFILE_JOB_H
 #define IMPORTSOURCEFILE_JOB_H
 
-#include <weaver/Job.h>
+#include <Job.h>
 #include "kdevexport.h"
 
 class KDEVPROJECTMANAGER_EXPORT ImportSourceFileJob: public ThreadWeaver::Job
