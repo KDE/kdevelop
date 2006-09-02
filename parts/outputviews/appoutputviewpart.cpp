@@ -99,7 +99,7 @@ void AppOutputViewPart::startAppCommand(const QString &directory, const QString 
         cmd = Settings::terminalEmulatorName( *kapp->config() );
         if ( cmd == "konsole" && !directory.isNull() ) {  // isn't setting the working directory below enough?
           // If a directory was specified, use it
-          cmd += QString(" --workdir '$1'").arg(directory);
+          cmd += QString(" --workdir '%1'").arg(directory);
         }
         cmd += " -e /bin/sh -c '";
         cmd += program;
