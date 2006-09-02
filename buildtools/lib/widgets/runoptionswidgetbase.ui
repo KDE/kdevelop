@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>RunOptionsWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>679</width>
-            <height>449</height>
+            <height>480</height>
         </rect>
     </property>
     <property name="caption">
@@ -60,7 +60,7 @@
                                 <string>Run from the &amp;BUILD directory:</string>
                             </property>
                             <property name="buttonGroupId">
-                                <number>1</number>
+                                <number>-1</number>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>The build directory depends on the currenty selected configuration (in Configure Options page)</string>
@@ -197,23 +197,12 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout1</cstring>
+                <cstring>layout3</cstring>
             </property>
-            <hbox>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>startinterminal_box</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Start in external &amp;terminal</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Start the main program in an external terminal (konsole)</string>
-                    </property>
-                </widget>
                 <widget class="QCheckBox">
                     <property name="name">
                         <cstring>autocompile_box</cstring>
@@ -221,14 +210,61 @@
                     <property name="text">
                         <string>Automatically com&amp;pile before execution</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+P</string>
+                    </property>
                     <property name="toolTip" stdset="0">
                         <string>If the program is not up-to-date with the source code, compile it before starting its execution</string>
                     </property>
                 </widget>
-            </hbox>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>autoinstall_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Automatically in&amp;stall before execution</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+S</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>If the program is not up-to-date with the source code, compile it before starting its execution</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>autokdesu_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Use kdesu when installing</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>If the program is not up-to-date with the source code, compile it before starting its execution</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>startinterminal_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Start in external &amp;terminal</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+T</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Start the main program in an external terminal (konsole)</string>
+                    </property>
+                </widget>
+            </vbox>
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>directoryButtonGroup</sender>
@@ -272,4 +308,10 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>ksqueezedtextlabel.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+</includehints>
 </UI>

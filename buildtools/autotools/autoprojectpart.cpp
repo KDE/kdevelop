@@ -1002,6 +1002,7 @@ void AutoProjectPart::slotExecute()
     partController()->saveAllFiles();
     QDomDocument &dom = *projectDom();
 
+    bool _auto = false;
     if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/autocompile", true) && isDirty() ){
         m_executeAfterBuild = true;
         if ( DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram").isEmpty() )
@@ -1010,8 +1011,22 @@ void AutoProjectPart::slotExecute()
         else
         // A Main Program was specified, build all targets because we don't know which is it
             slotBuild();
-        return;
+        _auto = true;
     }
+
+    if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/autoinstall", false) && isDirty() ){
+        m_executeAfterBuild = true;
+        // Use kdesu??
+        if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/autokdesu", false) )
+            //slotInstallWithKdesu assumes that it hasn't just been build...
+            _auto ? slotInstallWithKdesu() : startMakeCommand(buildDirectory(), QString::fromLatin1("install"), true);
+        else
+            slotInstall();
+        _auto = true;
+    }
+
+    if ( _auto )
+        return;
 
     if (appFrontend()->isRunning()) {
         if (KMessageBox::questionYesNo(m_widget, i18n("Your application is currently running. Do you want to restart it?"), i18n("Application Already Running"), i18n("&Restart Application"), i18n("Do &Nothing")) == KMessageBox::No)

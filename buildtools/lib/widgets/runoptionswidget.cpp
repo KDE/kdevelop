@@ -93,6 +93,8 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
 
     startinterminal_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/terminal"));
     autocompile_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/autocompile", true));
+    autoinstall_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/autoinstall", false));
+    autokdesu_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/autokdsu", false));
 }
 
 
@@ -109,7 +111,7 @@ void RunOptionsWidget::accept()
         DomUtil::writeEntry(m_dom, m_configGroup + "/run/directoryradio", "custom");
       else
         DomUtil::writeEntry(m_dom, m_configGroup + "/run/directoryradio", "executable");
-    
+
     QString customDir = customRunDirectory_edit->text();
     if (customDir.right(1) != "/")
         customDir += "/";
@@ -118,6 +120,8 @@ void RunOptionsWidget::accept()
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/programargs", progargs_edit->text());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/terminal", startinterminal_box->isChecked());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/autocompile", autocompile_box->isChecked());
+    DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/autoinstall", autoinstall_box->isChecked());
+    DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/autokdesu", autokdesu_box->isChecked());
 
     m_environmentVariablesWidget->accept();
 }
@@ -135,7 +139,7 @@ void RunOptionsWidget::directoryRadioChanged()
         browseCustomButton->setEnabled(false);
         mainProgram_relativeness_label->setText("( relative to BUILD directory )");
         mainprogram_edit->setText( URLUtil::relativePath(m_buildDirectory.directory(false, false), m_mainProgramAbsolutePath.path(), false) );
-    }  
+    }
 }
 
 
@@ -204,7 +208,7 @@ void RunOptionsWidget::browseMainProgram()
     // if after the dialog execution the OK button was selected:
         path = dlg->selectedFile().stripWhiteSpace();
         if (!path.isEmpty()) {
-          
+
             m_mainProgramAbsolutePath = path;
 
             if ( customDirectory_radio->isChecked() ) {
@@ -214,14 +218,14 @@ void RunOptionsWidget::browseMainProgram()
 
             } else {
             // Store the path relative to BUILD directory
-            
+
                 QString relative = URLUtil::relativePath(m_buildDirectory.directory(false, false), path, false);
 
                 if (relative.isEmpty() == false) {
                     mainprogram_edit->setText(relative);
                 }
             }
-            
+
         }
     }
     delete dlg;

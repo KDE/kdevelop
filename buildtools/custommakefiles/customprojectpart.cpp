@@ -83,6 +83,23 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Build Options</b> tab."));
 
+    action = new KAction( i18n("Install"), 0,
+                          this, SLOT(slotInstall()),
+                          actionCollection(), "build_install" );
+    action->setToolTip(i18n("Install"));
+    action->setWhatsThis(i18n("<b>Install</b><p>Runs <b>make install</b> command from the project directory.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
+
+    action = new KAction( i18n("Install (as root user)"), 0,
+                          this, SLOT(slotInstallWithKdesu()),
+                          actionCollection(), "build_install_kdesu" );
+    action->setToolTip(i18n("Install as root user"));
+    action->setWhatsThis(i18n("<b>Install</b><p>Runs <b>make install</b> command from the project directory with root privileges.<br>"
+                              "It is executed via kdesu command.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
+
     action = new KAction( i18n("&Clean Project"), 0,
                           this, SLOT(slotClean()),
                           actionCollection(), "build_clean" );
@@ -191,7 +208,7 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
       QString canContextFileName =URLUtil::canonicalPath(fcontext->urls().first().path());
       QString relContextFileName =URLUtil::extractPathNameRelative(URLUtil::canonicalPath(project()->projectDirectory()), canContextFileName);
       QString popupstr =fcontext->urls().first().fileName();
-    
+
         bool inProject = project()->isProjectFile(canContextFileName);
 
         popup->insertSeparator();
@@ -506,7 +523,7 @@ void CustomProjectPart::addFiles ( const QStringList& fileList )
    {
       m_sourceFiles.append (*it);
 	}
-	
+
 	saveProject();
 
 	kdDebug(9025) << "Emitting addedFilesToProject" << endl;
@@ -532,7 +549,7 @@ void CustomProjectPart::removeFiles ( const QStringList& fileList )
 	{
 		m_sourceFiles.remove ( *it );
 	}
-	
+
 	saveProject();
 }
 
@@ -564,7 +581,7 @@ QString CustomProjectPart::makeEnvironment() const
 }
 
 
-void CustomProjectPart::startMakeCommand(const QString &dir, const QString &target)
+void CustomProjectPart::startMakeCommand(const QString &dir, const QString &target, bool withKdesu )
 {
     if (partController()->saveAllFiles()==false)
        return; //user cancelled
@@ -607,7 +624,12 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
 
     cmdline.prepend(nice);
     cmdline.prepend(makeEnvironment());
+
+    if (withKdesu)
+        cmdline = "kdesu -t -c '" + cmdline + "'";
+
     m_buildCommand = dircmd + cmdline;
+
     makeFrontend()->queueCommand(dir, dircmd + cmdline);
 }
 
@@ -654,6 +676,21 @@ void CustomProjectPart::slotCompileFile()
     startMakeCommand(buildDir, target);
 }
 
+void CustomProjectPart::slotInstall()
+{
+    startMakeCommand(buildDirectory(), QString::fromLatin1("install"));
+}
+
+
+void CustomProjectPart::slotInstallWithKdesu()
+{
+    // First issue "make" to build the entire project with the current user
+    // This way we make sure all files are up to date before we do the "make install"
+    slotBuild();
+
+    // After that issue "make install" with the root user
+    startMakeCommand(buildDirectory(), QString::fromLatin1("install"), true);
+}
 
 void CustomProjectPart::slotClean()
 {
@@ -665,11 +702,26 @@ void CustomProjectPart::slotExecute()
 {
     partController()->saveAllFiles();
 
+    bool _auto = false;
     if( DomUtil::readBoolEntry(*projectDom(), "/kdevcustomproject/run/autocompile", true) && isDirty() ){
         m_executeAfterBuild = true;
         slotBuild();
-        return;
+        _auto = true;
     }
+
+    if( DomUtil::readBoolEntry(*projectDom(), "/kdevcustomproject/run/autoinstall", false) && isDirty() ){
+        m_executeAfterBuild = true;
+        // Use kdesu??
+        if( DomUtil::readBoolEntry(*projectDom(), "/kdevcustomproject/run/autokdesu", false) )
+            //slotInstallWithKdesu assumes that it hasn't just been build...
+            _auto ? slotInstallWithKdesu() : startMakeCommand(buildDirectory(), QString::fromLatin1("install"), true);
+        else
+            slotInstall();
+        _auto = true;
+    }
+
+    if ( _auto )
+        return;
 
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE"
@@ -804,7 +856,7 @@ void CustomProjectPart::parseMakefile(const QString& filename)
    }
    QRegExp targetRe("^ *([^\\t$.#]\\S+) *:.*$");
    targetRe.setMinimal(true);
-   
+
    QRegExp variablesRe("\\$\\(\\s*([^\\)\\s]+)\\s*\\)");
    QRegExp assignmentRe("^\\s*(\\S+)\\s*[:\\?]?=\\s*(\\S+)\\s*(#.*)?$");
 

@@ -69,6 +69,8 @@ private slots:
     void slotChooseActiveDirectory();
     void slotBuild();
     void slotCompileFile();
+    void slotInstall();
+    void slotInstallWithKdesu();
     void slotClean();
     void slotExecute();
     void updateTargetMenu();
@@ -83,7 +85,7 @@ private slots:
 private:
     void populateProject();
     void saveProject();
-    void startMakeCommand(const QString &dir, const QString &target);
+    void startMakeCommand( const QString &dir, const QString &target, bool withKdesu = false );
     void parseMakefile(const QString& file);
     QString makeEnvironment() const;
     void putEnvVarsInVarMap();
