@@ -238,6 +238,33 @@ QualifiedIdentifier QualifiedIdentifier::mergeWhereDifferent(const QualifiedIden
   return id;
 }
 
+QualifiedIdentifier QualifiedIdentifier::strip(const QualifiedIdentifier & unwantedBase) const
+{
+  // Don't strip the top identifier
+  if (count() <= unwantedBase.count())
+    return *this;
+
+  if (m_qid.startsWith(unwantedBase.m_qid)) {
+    const int offset = unwantedBase.m_qid.length() + 2;
+
+    for (int index = 0; index < m_idSplits.count(); ++index) {
+      if (m_idSplits[index] != offset)
+        continue;
+
+      // Match
+      QualifiedIdentifier id;
+      // Don't convey explicitly global...
+      id.m_qid = m_qid.mid(m_idSplits[index]);
+      for (; index < m_idSplits.count(); ++index)
+        id.m_idSplits.append(m_idSplits[index] - offset);
+
+      return id;
+    }
+  }
+
+  return *this;
+}
+
 bool QualifiedIdentifier::explicitlyGlobal() const
 {
   // True if started with "::"

@@ -113,6 +113,7 @@ public:
 
   QualifiedIdentifier merge(const QualifiedIdentifier& base) const;
   QualifiedIdentifier mergeWhereDifferent(const QualifiedIdentifier& base) const;
+  QualifiedIdentifier strip(const QualifiedIdentifier& unwantedBase) const;
 
   bool operator==(const QualifiedIdentifier& rhs) const;
   bool operator!=(const QualifiedIdentifier& rhs) const;
