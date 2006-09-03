@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Ruby Language Support
+Comment[x-test]=xxRuby Language Supportxx
+Name=KDevRubySupport
+Name[x-test]=xxKDevRubySupportxx
+GenericName=Ruby Support
+GenericName[x-test]=xxRuby Supportxx
+ServiceTypes=KDevelop/LanguageSupport
+Icon=source
+X-KDE-Library=kdevrubylanguagesupport
+X-KDevelop-Version=4
+X-KDevelop-Language=Ruby
+X-KDevelop-Args=RUBY
