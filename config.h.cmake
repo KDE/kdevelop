@@ -5,9 +5,6 @@
 
 #define VERSION "3.9.0"
 
-/* Define to 1 if you have the Berkeley DB installed. */
-#cmakedefine HAVE_BDB 1
-
 /* Valgrind presence */
 #cmakedefine HAVE_VALGRIND_H 1
 
