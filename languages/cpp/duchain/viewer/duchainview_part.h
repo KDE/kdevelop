@@ -25,6 +25,8 @@
 
 #include <kdevplugin.h>
 
+#include <QPointer>
+
 class DUChainModel;
 class QTreeView;
 
@@ -42,7 +44,7 @@ public:
 
 private:
     DUChainModel* m_model;
-    QTreeView* m_view;
+    QPointer<QTreeView> m_view;
 };
 
 #endif // DUCHAINVIEW_PART_H
