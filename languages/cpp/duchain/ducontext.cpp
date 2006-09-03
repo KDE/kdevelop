@@ -68,7 +68,7 @@ DUContext::~DUContext( )
   foreach (Use* use, m_uses)
     use->setContext(0);
 
-  qDeleteAll(m_usingNamespaces);
+  clearUsingNamespaces();
 }
 
 const QList< DUContext * > & DUContext::childContexts( ) const
@@ -254,9 +254,7 @@ Declaration* DUContext::findDeclarationInternal( const QualifiedIdentifier & ide
     return definition;
 
   if (!identifier.explicitlyGlobal())
-    foreach (UsingNS* ns, usingNamespaces())
-      if (ns->textCursor() <= position)
-        usingNS.append(ns);
+    acceptUsingNamespaces(position, usingNS);
 
   Declaration* ret = 0;
 
@@ -535,9 +533,7 @@ void DUContext::findContextsInternal(ContextType contextType, const QualifiedIde
       ret.append(const_cast<DUContext*>(this));
 
   if (!identifier.explicitlyGlobal())
-    foreach (UsingNS* ns, usingNamespaces())
-      if (ns->textCursor() <= position)
-        usingNS.append(ns);
+    acceptUsingNamespaces(position, usingNS);
 
   QListIterator<DUContext*> it = m_importedParentContexts;
   it.toBack();
@@ -620,6 +616,41 @@ bool DUContext::inSymbolTable() const
 void DUContext::setInSymbolTable(bool inSymbolTable)
 {
   m_inSymbolTable = inSymbolTable;
+}
+
+void DUContext::acceptUsingNamespaces(const KTextEditor::Cursor & position, QList< UsingNS * > & usingNS) const
+{
+  foreach (UsingNS* ns, usingNamespaces())
+    if (ns->textCursor() <= position) {
+      // TODO: inefficient... needs a hash??
+      foreach (UsingNS* ns2, usingNS)
+        if (ns2->nsIdentifier == ns->nsIdentifier)
+          goto duplicate;
+
+      usingNS.append(ns);
+
+      duplicate:
+      continue;
+
+    } else {
+      break;
+    }
+}
+
+void DUContext::acceptUsingNamespace(UsingNS* ns, QList<UsingNS*>& usingNS) const
+{
+  // TODO: inefficient... needs a hash??
+  foreach (UsingNS* ns2, usingNS)
+    if (ns2->nsIdentifier == ns->nsIdentifier)
+      return;
+
+  usingNS.append(ns);
+}
+
+void DUContext::clearUsingNamespaces()
+{
+  qDeleteAll(m_usingNamespaces);
+  m_usingNamespaces.clear();
 }
 
 // kate: indent-width 2;

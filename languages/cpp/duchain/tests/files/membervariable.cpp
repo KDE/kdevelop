@@ -1,3 +1,7 @@
+namespace Blah2 {
+  int nsTest2;
+}
+
 namespace Blah {
   class Foo {
     int m_test;
@@ -9,6 +13,8 @@ namespace Blah {
   };
 
   int nsTest;
+
+  using namespace Blah2;
 }
 
 int Blah::Foo::s_test2 = 0;
@@ -17,8 +23,9 @@ int test3()
 {
   // Unqualified + before using statement - error
   nsTest = 2;
+  nsTest2 = 2;
 
-  return Blah::nsTest;
+  return Blah2::nsTest2;
 }
 
 using namespace Blah;
@@ -27,6 +34,10 @@ int test2()
 {
   // Success - using statement applies
   nsTest = 4;
+  // Success - found in nested using statement.
+  nsTest2 = 5;
+  // Success - uses nested statement
+  Blah::nsTest2 = 7;
 
   return Blah::nsTest;
 }

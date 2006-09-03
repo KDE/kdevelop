@@ -61,31 +61,80 @@ Declaration* TopDUContext::findDeclarationInternal(const QualifiedIdentifier& id
   }
 
   if (!identifier.explicitlyGlobal()) {
-    foreach (UsingNS* ns, usingNamespaces())
-      if (ns->textCursor() <= position)
-        usingNS.append(ns);
+    acceptUsingNamespaces(position, usingNS);
 
-    foreach (UsingNS* ns, usingNS) {
-      QualifiedIdentifier id = identifier.merge(ns->nsIdentifier);
+    if (!usingNS.isEmpty())
+      return findDeclarationInNamespaces(identifier, position, dataType, usingNS);
+  }
 
-      // FIXME nested using definitions
+  return 0;
+}
 
-      found = checkDeclarations(SymbolTable::self()->findDeclarations(id), position, dataType);
+Declaration* TopDUContext::findDeclarationInNamespaces(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNS, int depth) const
+{
+  foreach (UsingNS* ns, usingNS) {
+    QualifiedIdentifier id = identifier.merge(ns->nsIdentifier);
 
-      if (found.count() == 1)
-        return found.first();
+    // FIXME nested using definitions
 
-      if (found.count() > 1) {
-        /*kWarning() << k_funcinfo << "Multiple definitions for " << identifier.toString() << endl;
-        foreach (Declaration* dec, found)
-          kDebug() << "Found at " << dec->textRange() << " in document " << dec->url() << endl;*/
+    QList<Declaration*> found = checkDeclarations(SymbolTable::self()->findDeclarations(id), position, dataType);
 
-        return found.first();
+    if (found.count() == 1)
+      return found.first();
+
+    if (found.count() > 1) {
+      /*kWarning() << k_funcinfo << "Multiple definitions for " << identifier.toString() << endl;
+      foreach (Declaration* dec, found)
+        kDebug() << "Found at " << dec->textRange() << " in document " << dec->url() << endl;*/
+
+      return found.first();
+    }
+  }
+
+  if (depth < 10) {
+    QList<UsingNS*> newUsingNS = findNestedNamespaces(position, usingNS);
+    if (!newUsingNS.isEmpty())
+      return findDeclarationInNamespaces(identifier, position, dataType, newUsingNS, depth + 1);
+  }
+
+  return 0;
+}
+
+QList<DUContext::UsingNS*> TopDUContext::findNestedNamespaces(const KTextEditor::Cursor & position, QList< UsingNS * > & usingNS) const
+{
+  QList<UsingNS*> nestedUsingNS;
+
+  // Retrieve nested namespaces
+  foreach (UsingNS* ns, usingNS) {
+    QList<DUContext*> contexts;
+    checkContexts(DUContext::Namespace, SymbolTable::self()->findContexts(ns->nsIdentifier), position, contexts);
+
+    foreach (DUContext* nsContext, contexts) {
+      TopDUContext* origin = nsContext->topContext();
+      bool doesImport = false;
+      bool importEvaluated = false;
+      bool sameDocument = nsContext->topContext() == this;
+
+      foreach (UsingNS* nested, nsContext->usingNamespaces()) {
+        if (sameDocument && position >= nested->textCursor()) {
+          acceptUsingNamespace(nested, nestedUsingNS);
+
+        } else {
+          if (!importEvaluated) {
+            doesImport = imports(origin);
+            importEvaluated = true;
+          }
+
+          if (doesImport)
+            acceptUsingNamespace(nested, nestedUsingNS);
+          else
+            break;
+        }
       }
     }
   }
 
-  return 0;
+  return nestedUsingNS;
 }
 
 bool TopDUContext::imports(TopDUContext * origin, int depth) const
@@ -137,32 +186,31 @@ void TopDUContext::findContextsInternal(ContextType contextType, const Qualified
 {
   Q_UNUSED(inImportedContext);
 
-  if (contextType == type())
-    if (identifier == scopeIdentifier(true))
-      ret.append(const_cast<TopDUContext*>(this));
+  checkContexts(contextType, SymbolTable::self()->findContexts(identifier), position, ret);
 
   // Don't search using definitions if we already found a match
   if (!ret.isEmpty())
     return;
 
   if (!identifier.explicitlyGlobal()) {
-    foreach (UsingNS* ns, usingNamespaces())
-      if (ns->textCursor() <= position)
-        usingNS.append(ns);
+    acceptUsingNamespaces(position, usingNS);
 
     foreach (UsingNS* ns, usingNS) {
       QualifiedIdentifier id = identifier.merge(ns->nsIdentifier);
 
       // FIXME nested using definitions
 
-      checkContexts(SymbolTable::self()->findContexts(id), position, ret);
+      checkContexts(contextType, SymbolTable::self()->findContexts(id), position, ret);
     }
   }
 }
 
-void TopDUContext::checkContexts(const QList<DUContext*>& contexts, const KTextEditor::Cursor& position, QList<DUContext*>& ret) const
+void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const KTextEditor::Cursor& position, QList<DUContext*>& ret) const
 {
   foreach (DUContext* context, contexts) {
+    //if (context->type() != contextType)
+      //continue;
+
     TopDUContext* top = context->topContext();
     if (top != this) {
       // Make sure that this declaration is accessible

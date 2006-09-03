@@ -73,6 +73,7 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
       topLevelContext->deleteChildContextsRecursively();
       topLevelContext->deleteLocalDeclarations();
       topLevelContext->deleteOrphanUses();
+      topLevelContext->clearUsingNamespaces();
 
       Q_ASSERT(topLevelContext->textRangePtr());
 
@@ -187,8 +188,12 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       QList<DUContext*> classContexts = currentContext()->findContexts(DUContext::Class, functionName);
       if (classContexts.count() == 1)
         m_importedParentContexts.append(classContexts.first());
-      else if (classContexts.count() > 1)
+      else if (classContexts.count() > 1) {
         kWarning() << k_funcinfo << "Muliple class contexts for " << functionName.toString() << " - shouldn't happen!" << endl;
+        foreach (DUContext* classContext, classContexts) {
+          kDebug() << "Context " << classContext->scopeIdentifier(true) << " range " << classContext->textRange() << " in " << classContext->url() << endl;
+        }
+      }
     }
   }
 

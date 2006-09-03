@@ -174,6 +174,7 @@ public:
   };
   void addUsingNamespace(KTextEditor::Cursor* cursor, const QualifiedIdentifier& nsIdentifier);
   const QList<UsingNS*>& usingNamespaces() const;
+  void clearUsingNamespaces();
 
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
@@ -329,7 +330,7 @@ public:
    */
   void deleteOrphanUses();
 
-private:
+protected:
   /**
    * Merges definitions up all branches of the definition-use chain into one hash.
    */
@@ -344,7 +345,10 @@ private:
   /// Context search implementation
   virtual void findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<UsingNS*>& usingNS, QList<DUContext*>& ret, bool inImportedContext = false) const;
 
+  void acceptUsingNamespaces(const KTextEditor::Cursor& position, QList<UsingNS*>& usingNS) const;
+  void acceptUsingNamespace(UsingNS* ns, QList<UsingNS*>& usingNS) const;
 
+private:
   ContextType m_contextType;
 
   QualifiedIdentifier m_scopeIdentifier;
