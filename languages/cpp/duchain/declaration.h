@@ -25,6 +25,7 @@
 #include "kdevdocumentrangeobject.h"
 #include "cppnamespace.h"
 #include "typesystem.h"
+#include "duchainmodelbase.h"
 
 class AbstractType;
 class DUContext;
@@ -35,10 +36,11 @@ class ForwardDeclaration;
 /**
  * Represents a single declaration in a definition-use chain.
  */
-class Declaration : public KDevDocumentRangeObject
+class Declaration : public KDevDocumentRangeObject, protected DUChainModelBase
 {
   friend class DUContext;
   friend class ForwardDeclaration;
+  friend class DUChainModel;
 
 public:
   enum Scope {

@@ -25,6 +25,7 @@
 #include "kdevdocumentcursorobject.h"
 #include "identifier.h"
 #include "typesystem.h"
+#include "duchainmodelbase.h"
 
 class Declaration;
 class Definition;
@@ -38,9 +39,10 @@ class TopDUContext;
  *
  * \todo change child relationships to a linked list within the context?
  */
-class DUContext : public KDevDocumentRangeObject
+class DUContext : public KDevDocumentRangeObject, protected DUChainModelBase
 {
   friend class Use;
+  friend class DUChainModel;
 
 public:
   /**

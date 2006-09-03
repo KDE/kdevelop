@@ -16,39 +16,21 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DEFINITIONUSE_H
-#define DEFINITIONUSE_H
-
-#include "kdevdocumentrangeobject.h"
-#include "duchainmodelbase.h"
-
-class DUContext;
-class Declaration;
+#ifndef DUCHAINMODELBASE_H
+#define DUCHAINMODELBASE_H
 
 /**
- * Represents a single variable definition in a definition-use chain.
+ * Base class to enable the DUChain to be viewed as a model.
  */
-class Use : public KDevDocumentRangeObject, protected DUChainModelBase
+class DUChainModelBase
 {
-  friend class DUChainModel;
-
 public:
-  Use(KTextEditor::Range* range, DUContext* context = 0);
-  virtual ~Use();
+  DUChainModelBase();
+  virtual ~DUChainModelBase();
 
-  DUContext* context() const;
-  void setContext(DUContext* context);
-
-  Declaration* declaration() const;
-  void setDeclaration(Declaration* definition);
-
-  bool isOrphan() const;
-
-private:
-  DUContext* m_context;
-  Declaration* m_declaration;
+  int modelRow;
 };
 
-#endif // DEFINITIONUSE_H
+#endif // DUCHAINMODELBASE_H
 
 // kate: indent-width 2;

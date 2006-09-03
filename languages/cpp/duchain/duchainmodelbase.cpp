@@ -1,4 +1,4 @@
-/* This file is part of KDevelop
+/* This  is part of KDevelop
     Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -16,39 +16,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DEFINITIONUSE_H
-#define DEFINITIONUSE_H
-
-#include "kdevdocumentrangeobject.h"
 #include "duchainmodelbase.h"
 
-class DUContext;
-class Declaration;
-
-/**
- * Represents a single variable definition in a definition-use chain.
- */
-class Use : public KDevDocumentRangeObject, protected DUChainModelBase
+DUChainModelBase::DUChainModelBase()
+  : modelRow(0)
 {
-  friend class DUChainModel;
+}
 
-public:
-  Use(KTextEditor::Range* range, DUContext* context = 0);
-  virtual ~Use();
-
-  DUContext* context() const;
-  void setContext(DUContext* context);
-
-  Declaration* declaration() const;
-  void setDeclaration(Declaration* definition);
-
-  bool isOrphan() const;
-
-private:
-  DUContext* m_context;
-  Declaration* m_declaration;
-};
-
-#endif // DEFINITIONUSE_H
+DUChainModelBase::~DUChainModelBase()
+{
+}
 
 // kate: indent-width 2;

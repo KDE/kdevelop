@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=This plugin displays a graphical view of the definition-use chain produced by the c++ language part.
+Comment[x-test]=xxThis plugin displays a graphical view of the definition-use chain produced by the c++ language part.xx
+Name=KDevDUChainView
+Name[x-test]=xxKDevDUChainViewxx
+GenericName=DUChain View
+GenericName[x-test]=xxDUChain Viewxx
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevduchainview
+X-KDevelop-Version=4
+X-KDevelop-Category=Project
+X-KDevelop-Properties=DUChainNavigation
