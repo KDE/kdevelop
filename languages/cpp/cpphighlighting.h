@@ -61,7 +61,8 @@ class CppHighlighting : public QObject, public KDevCodeHighlighting
       MemberVariableType,
       NamespaceVariableType,
       GlobalVariableType,
-      ErrorVariableType
+      ErrorVariableType,
+      ForwardDeclarationType
     };
 
     enum Contexts {

@@ -129,6 +129,10 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         a->setForeground(Qt::red);
         break;
 
+      case ForwardDeclarationType:
+        a->setForeground(QColor(0x5C005C));
+        break;
+
       case ScopeType:
       case TemplateType:
       case TemplateParameterType:
@@ -278,7 +282,9 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec) co
   Types type = LocalVariableType;
   if (dec->context()->scopeIdentifier().isEmpty())
     type = GlobalVariableType;
-  if (dec->type<CppClassType>())
+  if (dec->isForwardDeclaration())
+    type = ForwardDeclarationType;
+  else if (dec->type<CppClassType>())
     type = ClassType;
   else if (dec->type<CppFunctionType>())
     type = FunctionType;
