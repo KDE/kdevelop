@@ -92,44 +92,44 @@ Declaration* TopDUContext::findDeclarationInNamespaces(const QualifiedIdentifier
   }
 
   if (depth < 10) {
-    QList<UsingNS*> newUsingNS = findNestedNamespaces(position, usingNS);
-    if (!newUsingNS.isEmpty())
-      return findDeclarationInNamespaces(identifier, position, dataType, newUsingNS, depth + 1);
+    foreach (UsingNS* ns, usingNS) {
+      QList<UsingNS*> newUsingNS = findNestedNamespaces(position, ns);
+      if (!newUsingNS.isEmpty())
+        return findDeclarationInNamespaces(identifier.strip(ns->nsIdentifier), position, dataType, newUsingNS, depth + 1);
+    }
   }
 
   return 0;
 }
 
-QList<DUContext::UsingNS*> TopDUContext::findNestedNamespaces(const KTextEditor::Cursor & position, QList< UsingNS * > & usingNS) const
+QList<DUContext::UsingNS*> TopDUContext::findNestedNamespaces(const KTextEditor::Cursor & position, UsingNS* ns) const
 {
   QList<UsingNS*> nestedUsingNS;
 
   // Retrieve nested namespaces
-  foreach (UsingNS* ns, usingNS) {
-    QList<DUContext*> contexts;
-    checkContexts(DUContext::Namespace, SymbolTable::self()->findContexts(ns->nsIdentifier), position, contexts);
+  QList<DUContext*> contexts;
+  checkContexts(DUContext::Namespace, SymbolTable::self()->findContexts(ns->nsIdentifier), position, contexts);
 
-    foreach (DUContext* nsContext, contexts) {
-      TopDUContext* origin = nsContext->topContext();
-      bool doesImport = false;
-      bool importEvaluated = false;
-      bool sameDocument = nsContext->topContext() == this;
+  foreach (DUContext* nsContext, contexts) {
+    TopDUContext* origin = nsContext->topContext();
+    bool doesImport = false;
+    bool importEvaluated = false;
+    bool sameDocument = nsContext->topContext() == this;
 
-      foreach (UsingNS* nested, nsContext->usingNamespaces()) {
-        if (sameDocument && position >= nested->textCursor()) {
-          acceptUsingNamespace(nested, nestedUsingNS);
+    foreach (UsingNS* nested, nsContext->usingNamespaces()) {
+      if (sameDocument && position >= nested->textCursor()) {
+        acceptUsingNamespace(nested, nestedUsingNS);
 
-        } else {
-          if (!importEvaluated) {
-            doesImport = imports(origin);
-            importEvaluated = true;
-          }
-
-          if (doesImport)
-            acceptUsingNamespace(nested, nestedUsingNS);
-          else
-            break;
+      } else {
+        if (!importEvaluated) {
+          doesImport = imports(origin);
+          importEvaluated = true;
         }
+
+        if (doesImport)
+          acceptUsingNamespace(nested, nestedUsingNS);
+        else
+          break;
       }
     }
   }

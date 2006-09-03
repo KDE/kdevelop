@@ -44,7 +44,7 @@ protected:
 
   Declaration* findDeclarationInNamespaces(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNamespaces, int depth = 0) const;
 
-  QList<UsingNS*> findNestedNamespaces(const KTextEditor::Cursor& position, QList<UsingNS*>& usingNamespaces) const;
+  QList<UsingNS*> findNestedNamespaces(const KTextEditor::Cursor& position, UsingNS* ns) const;
 
   QList<Declaration*> checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType) const;
 
