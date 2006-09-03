@@ -30,6 +30,7 @@ class AbstractType;
 class DUContext;
 class Use;
 class Definition;
+class ForwardDeclaration;
 
 /**
  * Represents a single declaration in a definition-use chain.
@@ -37,6 +38,7 @@ class Definition;
 class Declaration : public KDevDocumentRangeObject
 {
   friend class DUContext;
+  friend class ForwardDeclaration;
 
 public:
   enum Scope {
@@ -49,6 +51,8 @@ public:
 
   Declaration(KTextEditor::Range* range, Scope scope);
   virtual ~Declaration();
+
+  const QList<ForwardDeclaration*>& forwardDeclarations() const;
 
   bool isDefinition() const;
   void setDeclarationIsDefinition(bool dd);
@@ -98,6 +102,7 @@ private:
   AbstractType::Ptr m_type;
   Identifier m_identifier;
 
+  QList<ForwardDeclaration*> m_forwardDeclarations;
   Definition* m_definition;
   QList<Use*> m_uses;
 

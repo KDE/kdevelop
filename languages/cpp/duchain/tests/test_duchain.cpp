@@ -621,8 +621,8 @@ private slots:
   {
     //QSKIP("Unwanted", SkipSingle);
 
-    QFile file("/opt/kde4/src/kdevelop/languages/cpp/duchain/tests/files/membervariable.cpp");
-    //QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
+    //QFile file("/opt/kde4/src/kdevelop/languages/cpp/duchain/tests/files/membervariable.cpp");
+    QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
     //QFile file("/opt/kde4/src/kdevelop/plugins/outputviews/makewidget.cpp");
     //QFile file("/opt/kde4/src/kdelibs/kate/part/katecompletionmodel.h");
     //QFile file("/opt/kde4/src/kdevelop/lib/kdevbackgroundparser.cpp");
@@ -636,7 +636,7 @@ private slots:
     QString ppd = preprocessor.processString( contents );
     QByteArray preprocessed = ppd.toUtf8();
 
-    DUContext* top = parse(preprocessed, DumpDUChain);
+    DUContext* top = parse(preprocessed, DumpNone);
 
     SymbolTable::self()->dumpStatistics();
 

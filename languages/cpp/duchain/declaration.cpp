@@ -26,6 +26,7 @@
 #include "definition.h"
 #include "cpptypes.h"
 #include "symboltable.h"
+#include "forwarddeclaration.h"
 
 using namespace KTextEditor;
 
@@ -44,6 +45,10 @@ Declaration::~Declaration()
   // Inserted by the builder after construction has finished.
   if (m_inSymbolTable)
     SymbolTable::self()->removeDeclaration(this);
+
+  foreach (ForwardDeclaration* forward, m_forwardDeclarations)
+    forward->setResolved(0);
+  Q_ASSERT(m_forwardDeclarations.isEmpty());
 
   // context is only null in the test cases
   if (context())
@@ -241,4 +246,9 @@ bool Declaration::inSymbolTable() const
 void Declaration::setInSymbolTable(bool inSymbolTable)
 {
   m_inSymbolTable = inSymbolTable;
+}
+
+const QList< ForwardDeclaration * > & Declaration::forwardDeclarations() const
+{
+  return m_forwardDeclarations;
 }

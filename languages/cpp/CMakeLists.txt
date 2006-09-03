@@ -30,6 +30,7 @@ set(kdevcppduchain_SRCS
     duchain/typerepository.cpp
     duchain/smartconverter.cpp
     duchain/symboltable.cpp
+    duchain/forwarddeclaration.cpp
 )
 
 set(kdevcpplanguagesupport_PART_SRCS
