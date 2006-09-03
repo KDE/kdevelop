@@ -246,10 +246,8 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
   return 0;
 }
 
-Declaration* DUContext::findDeclarationInternal( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, QList<UsingNS*>* usingNS, bool inImportedContext ) const
+Declaration* DUContext::findDeclarationInternal( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNS, bool inImportedContext ) const
 {
-  Q_ASSERT(usingNS);
-
   // TODO we're missing ambiguous references by not checking every resolution before returning...
   // but is that such a bad thing? (might be good performance-wise)
   if (Declaration* definition = findLocalDeclaration(identifier, position, dataType, inImportedContext))
@@ -258,7 +256,7 @@ Declaration* DUContext::findDeclarationInternal( const QualifiedIdentifier & ide
   if (!identifier.explicitlyGlobal())
     foreach (UsingNS* ns, usingNamespaces())
       if (ns->textCursor() <= position)
-        usingNS->append(ns);
+        usingNS.append(ns);
 
   Declaration* ret = 0;
 
@@ -282,13 +280,13 @@ Declaration* DUContext::findDeclarationInternal( const QualifiedIdentifier & ide
 Declaration * DUContext::findDeclaration( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType) const
 {
   QList<UsingNS*> usingStatements;
-  return findDeclarationInternal(identifier, position, dataType, &usingStatements);
+  return findDeclarationInternal(identifier, position, dataType, usingStatements);
 }
 
 Declaration * DUContext::findDeclaration( const QualifiedIdentifier& identifier ) const
 {
   QList<UsingNS*> usingStatements;
-  return findDeclarationInternal(identifier, textRange().end(), AbstractType::Ptr(), &usingStatements);
+  return findDeclarationInternal(identifier, textRange().end(), AbstractType::Ptr(), usingStatements);
 }
 
 void DUContext::addChildContext( DUContext * context )
@@ -489,13 +487,13 @@ void DUContext::setType(ContextType type)
 Declaration * DUContext::findDeclaration(const Identifier & identifier) const
 {
   QList<UsingNS*> usingStatements;
-  return findDeclarationInternal(QualifiedIdentifier(identifier), textRange().end(), AbstractType::Ptr(), &usingStatements);
+  return findDeclarationInternal(QualifiedIdentifier(identifier), textRange().end(), AbstractType::Ptr(), usingStatements);
 }
 
 Declaration* DUContext::findDeclaration(const Identifier& identifier, const KTextEditor::Cursor& position) const
 {
   QList<UsingNS*> usingStatements;
-  return findDeclarationInternal(QualifiedIdentifier(identifier), position, AbstractType::Ptr(), &usingStatements);
+  return findDeclarationInternal(QualifiedIdentifier(identifier), position, AbstractType::Ptr(), usingStatements);
 }
 
 void DUContext::addOrphanUse(Use* orphan)

@@ -43,7 +43,7 @@ bool TopDUContext::hasUses() const
   return m_hasUses;
 }
 
-Declaration* TopDUContext::findDeclarationInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>* usingNS, bool inImportedContext) const
+Declaration* TopDUContext::findDeclarationInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNS, bool inImportedContext) const
 {
   Q_UNUSED(inImportedContext);
 
@@ -63,9 +63,9 @@ Declaration* TopDUContext::findDeclarationInternal(const QualifiedIdentifier& id
   if (!identifier.explicitlyGlobal()) {
     foreach (UsingNS* ns, usingNamespaces())
       if (ns->textCursor() <= position)
-        usingNS->append(ns);
+        usingNS.append(ns);
 
-    foreach (UsingNS* ns, *usingNS) {
+    foreach (UsingNS* ns, usingNS) {
       QualifiedIdentifier id = identifier.merge(ns->nsIdentifier);
 
       // FIXME nested using definitions

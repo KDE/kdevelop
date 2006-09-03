@@ -119,7 +119,7 @@ class TestDUChain : public QObject
 public:
   TestDUChain()
   {
-    testFileParseOnly = true;
+    testFileParseOnly = false;
   }
 
 private slots:
