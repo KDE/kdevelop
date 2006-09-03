@@ -44,8 +44,9 @@ DUChainModel::ProxyObject::ProxyObject(DUChainModelBase* _parent, DUChainModelBa
 
 DUChainModel::DUChainModel(DUChainViewPart* parent)
   : QAbstractItemModel(parent)
+  , m_chain(0)
 {
-  connect (KDevCore::documentController(), SIGNAL(documentActivated(KDevDocument*)), SLOT(documentActivated(KDevDocument*)));
+  //connect (KDevCore::documentController(), SIGNAL(documentActivated(KDevDocument*)), SLOT(documentActivated(KDevDocument*)));
 }
 
 DUChainModel::~DUChainModel()
@@ -63,6 +64,8 @@ void DUChainModel::documentActivated( KDevDocument* document )
 
 void DUChainModel::setTopContext(TopDUContext* context)
 {
+  kDebug() << k_funcinfo << context << endl;
+
   if (m_chain != context)
     m_chain = context;
 
@@ -84,8 +87,9 @@ int DUChainModel::columnCount ( const QModelIndex & parent ) const
 QModelIndex DUChainModel::index ( int row, int column, const QModelIndex & parent ) const
 {
   if (row < 0 || column < 0 || column > 0 || !m_chain)
+    return QModelIndex();
 
-  if (parent.isValid()) {
+  if (!parent.isValid()) {
     if (row > 0)
       return QModelIndex();
 
@@ -113,10 +117,10 @@ QModelIndex DUChainModel::parent ( const QModelIndex & index ) const
   DUChainModelBase* base = static_cast<DUChainModelBase*>(index.internalPointer());
 
   if (ProxyObject* proxy = dynamic_cast<ProxyObject*>(base))
-    return createIndex(proxy->parent->modelRow, 0, proxy->parent);
+    return createParentIndex(proxy->parent);
 
   if (DUContext* context = dynamic_cast<DUContext*>(base))
-    if (context)
+    if (context && context->parentContext())
       return createParentIndex(context->parentContext());
     else
       return QModelIndex();
@@ -131,25 +135,27 @@ QModelIndex DUChainModel::parent ( const QModelIndex & index ) const
     return createParentIndex(use->declaration());
 
   // Shouldn't really hit this
-  Q_ASSERT(false);
+  //Q_ASSERT(false);
   return QModelIndex();
 }
 
 QVariant DUChainModel::data(const QModelIndex& index, int role ) const
 {
-  if (index.isValid())
+  if (!index.isValid())
     return QVariant();
 
   DUChainModelBase* base = static_cast<DUChainModelBase*>(index.internalPointer());
   ProxyObject* proxy = dynamic_cast<ProxyObject*>(base);
   if (proxy)
-    base = proxy->parent;
+    base = proxy->object;
 
   if (DUContext* context = dynamic_cast<DUContext*>(base)) {
     switch (role) {
       case Qt::DisplayRole:
         if (proxy)
           return i18n("Imported Context: %1", context->localScopeIdentifier().toString());
+        else if (context == m_chain)
+          return i18n("Top level context");
         else
           return i18n("Context: %1", context->localScopeIdentifier().toString());
     }
@@ -171,6 +177,12 @@ QVariant DUChainModel::data(const QModelIndex& index, int role ) const
       case Qt::DisplayRole:
         return i18n("Use: %1", use->declaration()->identifier().toString());
     }
+
+  } else {
+    switch (role) {
+      case Qt::DisplayRole:
+        return i18n("Unknown object!");
+    }
   }
 
   return QVariant();
@@ -189,24 +201,30 @@ int DUChainModel::rowCount ( const QModelIndex & parent ) const
   return items->count();
 }
 
-#define TEST_NEXT(iterator)\
+#define TEST_NEXT(iterator, index)\
       current = nextItem(iterator, firstInit); \
-      if (current.isValid() && current < first) { \
+      if (current.isValid() && (current < first || !first.isValid())) { \
         first = current; \
-        currentItem = item(iterator); \
+        found = index; \
       }
 
-#define TEST_PROXY_NEXT(iterator)\
+#define TEST_PROXY_NEXT(iterator, index)\
       current = nextItem(iterator, firstInit); \
-      if (current.isValid() && current < first) { \
+      if (current.isValid() && (current < first || !first.isValid())) { \
         first = current; \
-        currentItem = proxyItem(parent, iterator); \
+        found = index; \
       }
 
 QList< DUChainModelBase * >* DUChainModel::childItems(DUChainModelBase * parent) const
 {
+  kDebug() << k_funcinfo << parent << endl;
+
   if (m_objectCache.contains(parent))
     return m_objectCache[parent];
+
+  ProxyObject* proxy = dynamic_cast<ProxyObject*>(parent);
+  if (proxy)
+    parent = proxy->object;
 
   QList<DUChainModelBase*>* list = 0;
 
@@ -220,19 +238,42 @@ QList< DUChainModelBase * >* DUChainModel::childItems(DUChainModelBase * parent)
     QListIterator<Use*> uses = context->uses();
 
     bool firstInit = true;
+    int count = 20;
     forever {
+      --count;
+      if (!count)
+        break;
+
       DUChainModelBase* currentItem = 0;
       Cursor first, current;
+      int found = 1;
 
-      currentItem = nextItem(contexts);
       first = current = nextItem(contexts, firstInit);
 
-      TEST_PROXY_NEXT(importedParentContexts)
-      TEST_NEXT(declarations)
-      TEST_PROXY_NEXT(definitions)
-      TEST_PROXY_NEXT(uses)
+      TEST_NEXT(importedParentContexts, 2)
+      TEST_NEXT(declarations, 3)
+      TEST_NEXT(definitions, 4)
+      TEST_NEXT(uses, 5)
 
-      if (currentItem) {
+      if (first.isValid()) {
+        switch (found) {
+          case 1:
+            currentItem = item(contexts);
+            break;
+          case 2:
+            currentItem = proxyItem(context, importedParentContexts);
+            break;
+          case 3:
+            currentItem = item(declarations);
+            break;
+          case 4:
+            currentItem = proxyItem(context, definitions);
+            break;
+          case 5:
+            currentItem = proxyItem(context, uses);
+            break;
+        }
+
         currentItem->modelRow = list->count();
         list->append(currentItem);
 
@@ -243,6 +284,8 @@ QList< DUChainModelBase * >* DUChainModel::childItems(DUChainModelBase * parent)
       firstInit = false;
     }
 
+    kDebug() << k_funcinfo << parent << " count " << list->count() << endl;
+
   } else if (Declaration* dec = dynamic_cast<Declaration*>(parent)) {
     if (dec->definition())
       list->append(static_cast<DUChainModelBase*>(dec->definition()));
@@ -252,6 +295,7 @@ QList< DUChainModelBase * >* DUChainModel::childItems(DUChainModelBase * parent)
 
   } else {
     // No child items for definitions or uses
+    kDebug() << k_funcinfo << "No child items for definitions or uses" << endl;
   }
 
   if (list)

@@ -28,7 +28,7 @@ class Declaration;
 /**
  * Represents a single variable definition in a definition-use chain.
  */
-class Use : public KDevDocumentRangeObject, protected DUChainModelBase
+class Use : public DUChainModelBase, public KDevDocumentRangeObject
 {
   friend class DUChainModel;
 

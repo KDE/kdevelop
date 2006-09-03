@@ -68,7 +68,7 @@ class DUChainModel : public QAbstractItemModel
     template <typename T>
     QModelIndex createParentIndex(T* type) const
     {
-      return createIndex(static_cast<DUChainModelBase*>(type)->modelRow, 0, type);
+      return createIndex(type->modelRow, 0, type);
     }
 
     template <typename T>
@@ -110,6 +110,7 @@ class DUChainModel : public QAbstractItemModel
       Q_ASSERT(it.hasPrevious());
 
       DUChainModelBase* item = new ProxyObject(parent, it.peekPrevious());
+      m_proxyObjects.insert(item);
       if (it.hasNext())
         it.next();
 

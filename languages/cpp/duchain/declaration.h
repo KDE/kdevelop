@@ -36,7 +36,7 @@ class ForwardDeclaration;
 /**
  * Represents a single declaration in a definition-use chain.
  */
-class Declaration : public KDevDocumentRangeObject, protected DUChainModelBase
+class Declaration : public DUChainModelBase, public KDevDocumentRangeObject
 {
   friend class DUContext;
   friend class ForwardDeclaration;

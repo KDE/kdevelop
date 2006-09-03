@@ -39,7 +39,7 @@ class TopDUContext;
  *
  * \todo change child relationships to a linked list within the context?
  */
-class DUContext : public KDevDocumentRangeObject, protected DUChainModelBase
+class DUContext : public DUChainModelBase, public KDevDocumentRangeObject
 {
   friend class Use;
   friend class DUChainModel;

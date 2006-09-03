@@ -28,7 +28,7 @@ class DUContext;
 /**
  * Represents a definition of a previously encountered declaration in a definition-use chain.
  */
-class Definition : public KDevDocumentRangeObject, protected DUChainModelBase
+class Definition : public DUChainModelBase, public KDevDocumentRangeObject
 {
 public:
   Definition(KTextEditor::Range* range, Declaration* declaration, DUContext* context);
