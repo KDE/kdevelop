@@ -98,11 +98,12 @@ protected:
   virtual void visitIfStatement(IfStatementAST*);
 
 private:
+  DUContext* openContext(AST* range, DUContext::ContextType type, const QualifiedIdentifier& identifier);
   DUContext* openContext(AST* range, DUContext::ContextType type, NameAST* identifier = 0);
   DUContext* openContext(AST* fromRange, AST* toRange, DUContext::ContextType type, NameAST* identifier = 0);
   DUContext* openContextInternal(KTextEditor::Range* range, DUContext::ContextType type, NameAST* identifier = 0);
 
-  void closeContext(NameAST* name = 0);
+  void closeContext();
 
   bool createContextIfNeeded(AST* node, const QList<DUContext*>& importedParentContexts);
   bool createContextIfNeeded(AST* node, DUContext* importedParentContext);

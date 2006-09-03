@@ -112,9 +112,14 @@ class TestDUChain : public QObject
   AbstractType::Ptr typeVoid;
   AbstractType::Ptr typeInt;
 
+#define TEST_FILE_PARSE_ONLY if (testFileParseOnly) QSKIP("Skip", SkipSingle);
+
+  bool testFileParseOnly;
+
 public:
   TestDUChain()
   {
+    testFileParseOnly = true;
   }
 
 private slots:
@@ -144,6 +149,8 @@ private slots:
 
   void testIdentifiers()
   {
+    TEST_FILE_PARSE_ONLY
+
     QualifiedIdentifier aj("::Area::jump");
     QCOMPARE(aj.count(), 2);
     QCOMPARE(aj.explicitlyGlobal(), true);
@@ -175,6 +182,8 @@ private slots:
 
   void testContextRelationships()
   {
+    TEST_FILE_PARSE_ONLY
+
     QCOMPARE(DUChain::self()->chainForDocument(file1), topContext);
 
     DUContext* firstChild = new DUContext(new KDevDocumentRange(file1, Range(4,4, 10,3)));
@@ -207,6 +216,8 @@ private slots:
 
   void testDeclareInt()
   {
+    TEST_FILE_PARSE_ONLY
+
     QByteArray method("int i;");
 
     DUContext* top = parse(method, DumpNone);
@@ -225,6 +236,8 @@ private slots:
 
   void testIntegralTypes()
   {
+    TEST_FILE_PARSE_ONLY
+
     QByteArray method("const unsigned int i, k; volatile long double j; int* l; double * const * m; const int& n = l;");
 
     DUContext* top = parse(method, DumpNone);
@@ -293,6 +306,8 @@ private slots:
 
   void testArrayType()
   {
+    TEST_FILE_PARSE_ONLY
+
     QByteArray method("int i[3];");
 
     DUContext* top = parse(method, DumpNone);
@@ -318,6 +333,8 @@ private slots:
 
   void testDeclareFor()
   {
+    TEST_FILE_PARSE_ONLY
+
     //                 0         1         2         3         4         5
     //                 012345678901234567890123456789012345678901234567890123456789
     QByteArray method("int main() { for (int i = 0; i < 10; i++) { if (i == 4) return; } }");
@@ -383,6 +400,8 @@ private slots:
 
   void testDeclareStruct()
   {
+    TEST_FILE_PARSE_ONLY
+
     //                 0         1         2         3         4         5         6         7
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("struct A { int i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; };");
@@ -462,6 +481,8 @@ private slots:
 
   void testDeclareClass()
   {
+    TEST_FILE_PARSE_ONLY
+
     //                 0         1         2         3         4         5         6         7
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("class A { void test(int); }; void A::test(int j) {}");
@@ -497,6 +518,8 @@ private slots:
 
   void testDeclareNamespace()
   {
+    TEST_FILE_PARSE_ONLY
+
     //                 0         1         2         3         4         5         6         7
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("namespace foo { int bar; } int bar; int test() { return foo::bar; }");
@@ -546,6 +569,8 @@ private slots:
 
   void testDeclareUsingNamespace()
   {
+    TEST_FILE_PARSE_ONLY
+
     //                 0         1         2         3         4         5         6         7
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("namespace foo { int bar; } using namespace foo; int test() { return bar; }");

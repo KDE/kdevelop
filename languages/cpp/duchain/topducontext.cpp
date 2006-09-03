@@ -133,4 +133,50 @@ QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& d
   return found;
 }
 
+void TopDUContext::findContextsInternal(ContextType contextType, const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, QList< UsingNS * >& usingNS, QList<DUContext*>& ret, bool inImportedContext) const
+{
+  Q_UNUSED(inImportedContext);
+
+  if (contextType == type())
+    if (identifier == scopeIdentifier(true))
+      ret.append(const_cast<TopDUContext*>(this));
+
+  // Don't search using definitions if we already found a match
+  if (!ret.isEmpty())
+    return;
+
+  if (!identifier.explicitlyGlobal()) {
+    foreach (UsingNS* ns, usingNamespaces())
+      if (ns->textCursor() <= position)
+        usingNS.append(ns);
+
+    foreach (UsingNS* ns, usingNS) {
+      QualifiedIdentifier id = identifier.merge(ns->nsIdentifier);
+
+      // FIXME nested using definitions
+
+      checkContexts(SymbolTable::self()->findContexts(id), position, ret);
+    }
+  }
+}
+
+void TopDUContext::checkContexts(const QList<DUContext*>& contexts, const KTextEditor::Cursor& position, QList<DUContext*>& ret) const
+{
+  foreach (DUContext* context, contexts) {
+    TopDUContext* top = context->topContext();
+    if (top != this) {
+      // Make sure that this declaration is accessible
+      // TODO when import location available, use that too
+      if (!imports(top))
+        continue;
+
+    } else {
+      if (context->textRange().start() > position)
+        continue;
+    }
+
+    ret.append(context);
+  }
+}
+
 // kate: indent-width 2;

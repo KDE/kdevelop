@@ -20,15 +20,19 @@
 #define SYMBOLTABLE_H
 
 #include <QMultiHash>
+#include <QMultiMap>
 
 #include "identifier.h"
 
 class QReadWriteLock;
 
 class Declaration;
+class DUContext;
 
 /**
  * A global symbol table, which stores mangled identifiers for quick lookup.
+ *
+ * \todo profiling, map vs hash etc...
  */
 class SymbolTable
 {
@@ -37,10 +41,18 @@ public:
 
   void dumpStatistics() const;
 
+  // Declarations
   void addDeclaration(Declaration* declaration);
   void removeDeclaration(Declaration* declaration);
 
   QList<Declaration*> findDeclarations(const QualifiedIdentifier& id) const;
+  QList<Declaration*> findDeclarationsBeginningWith(const QualifiedIdentifier& id) const;
+
+  // Named Contexts (classes and namespaces)
+  void addContext(DUContext* namedContext);
+  void removeContext(DUContext* namedContext);
+
+  QList<DUContext*> findContexts(const QualifiedIdentifier& id) const;
 
 private:
   SymbolTable();
@@ -48,9 +60,11 @@ private:
 
   static SymbolTable* s_instance;
 
-  QReadWriteLock *m_mutex;
+  QReadWriteLock* m_declarationMutex;
+  QMultiMap<QString, Declaration*> m_declarations;
 
-  QMultiHash<QString, Declaration*> m_declarations;
+  QReadWriteLock* m_contextMutex;
+  QMultiHash<QString, DUContext*> m_contexts;
 };
 
 #endif // SYMBOLTABLE_H

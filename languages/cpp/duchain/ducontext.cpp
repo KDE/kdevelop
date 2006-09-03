@@ -26,6 +26,7 @@
 #include "use.h"
 #include "typesystem.h"
 #include "topducontext.h"
+#include "symboltable.h"
 
 #include "dumpchain.h"
 
@@ -35,6 +36,7 @@ DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
   : KDevDocumentRangeObject(range)
   , m_contextType(Other)
   , m_parentContext(0)
+  , m_inSymbolTable(false)
 {
   if (parent)
     parent->addChildContext(this);
@@ -42,7 +44,8 @@ DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
 
 DUContext::~DUContext( )
 {
-  KUrl thisUrl = url();
+  if (inSymbolTable())
+    SymbolTable::self()->removeContext(this);
 
   if (m_parentContext)
     m_parentContext->m_childContexts.removeAll(this);
@@ -432,7 +435,7 @@ QualifiedIdentifier DUContext::scopeIdentifier(bool includeClasses) const
     ret = localScopeIdentifier();
 
   if (parentContext())
-    ret.merge(parentContext()->scopeIdentifier());
+    ret = ret.merge(parentContext()->scopeIdentifier());
 
   return ret;
 }
@@ -516,67 +519,35 @@ const QList<DUContext*>& DUContext::importedParentContexts() const
   return m_importedParentContexts;
 }
 
-DUContext* DUContext::findContext(ContextType contextType, const QualifiedIdentifier& identifier, const DUContext* sourceChild, const QList<UsingNS*>& usingNS, bool inImportedContext) const
+QList<DUContext*> DUContext::findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position) const
 {
-  QList<UsingNS*> currentUsingNS = usingNS;
+  QList<UsingNS*> usingStatements;
+  QList<DUContext*> ret;
+  if (position.isValid())
+    findContextsInternal(contextType, identifier, position, usingStatements, ret);
+  else
+    findContextsInternal(contextType, identifier, textRange().end(), usingStatements, ret);
+  return ret;
+}
 
-  if (!identifier.explicitlyGlobal()) {
-    foreach (UsingNS* use, usingNamespaces())
-      if (!sourceChild || sourceChild->textRange().start() >= use->textCursor())
-        currentUsingNS.append(use);
-  }
-
+void DUContext::findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<UsingNS*>& usingNS, QList<DUContext*>& ret, bool inImportedContext) const
+{
   if (contextType == type())
     if (identifier == scopeIdentifier(true))
-      return const_cast<DUContext*>(this);
+      ret.append(const_cast<DUContext*>(this));
 
-  foreach (DUContext* child, m_childContexts) {
-    if (child == sourceChild)
-      break;
-
-    if (contextType == child->type())
-      if (identifier == child->scopeIdentifier(true))
-        return child;
-
-    if (child->type() == Namespace) {
-      QualifiedIdentifier nsIdentifier = identifier;
-      nsIdentifier.pop();
-      foreach (UsingNS* use, currentUsingNS) {
-        switch (use->nsIdentifier.match(nsIdentifier)) {
-          case QualifiedIdentifier::ContainedBy:
-          case QualifiedIdentifier::ExactMatch:
-          case QualifiedIdentifier::Contains:
-            if (DUContext* context = child->findContext(contextType, identifier, 0L, currentUsingNS))
-              return context;
-            continue;
-
-          default:
-            continue;
-        }
-      }
-    }
-  }
-
-  // FIXME currentUsingNS is not exactly correct
-  foreach (UsingNS* use, currentUsingNS) {
-    QualifiedIdentifier id = identifier.merge(use->nsIdentifier);
-
-    if (contextType == type())
-      if (id == scopeIdentifier(true))
-        return const_cast<DUContext*>(this);
-  }
+  if (!identifier.explicitlyGlobal())
+    foreach (UsingNS* ns, usingNamespaces())
+      if (ns->textCursor() <= position)
+        usingNS.append(ns);
 
   QListIterator<DUContext*> it = m_importedParentContexts;
   it.toBack();
   while (it.hasPrevious())
-    if (DUContext* context = it.previous()->findContext(contextType, identifier, this, currentUsingNS, true))
-      return context;
+    it.previous()->findContextsInternal(contextType, identifier, position, usingNS, ret, true);
 
   if (!inImportedContext && parentContext())
-    if (DUContext* context = parentContext()->findContext(contextType, identifier, this, currentUsingNS))
-      return context;
-
-  return 0;
+    parentContext()->findContextsInternal(contextType, identifier, position, usingNS, ret);
 }
 
 const QList<Definition*>& DUContext::localDefinitions() const
@@ -641,6 +612,16 @@ TopDUContext* DUContext::topContext() const
   Q_ASSERT(dynamic_cast<TopDUContext*>(const_cast<DUContext*>(this)));
 
   return static_cast<TopDUContext*>(const_cast<DUContext*>(this));
+}
+
+bool DUContext::inSymbolTable() const
+{
+  return m_inSymbolTable;
+}
+
+void DUContext::setInSymbolTable(bool inSymbolTable)
+{
+  m_inSymbolTable = inSymbolTable;
 }
 
 // kate: indent-width 2;

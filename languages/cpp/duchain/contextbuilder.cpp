@@ -29,6 +29,7 @@
 #include "use.h"
 #include "topducontext.h"
 #include "dumpchain.h"
+#include "symboltable.h"
 
 using namespace KTextEditor;
 
@@ -146,8 +147,10 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
 
   DUContext* nsCtx = openContext(node, DUContext::Namespace);
 
-  if (m_compilingContexts)
+  if (m_compilingContexts) {
     nsCtx->setLocalScopeIdentifier(identifier);
+    SymbolTable::self()->addContext(nsCtx);
+  }
 
   DefaultVisitor::visitNamespace (node);
 
@@ -160,7 +163,7 @@ void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
 
   DefaultVisitor::visitClassSpecifier (node);
 
-  closeContext(node->name);
+  closeContext();
 }
 
 void ContextBuilder::visitTypedef (TypedefAST *node)
@@ -181,8 +184,11 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       // This is a class function
       functionName.pop();
 
-      if (DUContext* classContext = currentContext()->findContext(DUContext::Class, functionName))
-        m_importedParentContexts.append(classContext);
+      QList<DUContext*> classContexts = currentContext()->findContexts(DUContext::Class, functionName);
+      if (classContexts.count() == 1)
+        m_importedParentContexts.append(classContexts.first());
+      else if (classContexts.count() > 1)
+        kWarning() << k_funcinfo << "Muliple class contexts for " << functionName.toString() << " - shouldn't happen!" << endl;
     }
   }
 
@@ -247,22 +253,20 @@ DUContext* ContextBuilder::openContextInternal(Range* range, DUContext::ContextT
   DUContext* ret = new DUContext(range, m_contextStack.isEmpty() ? 0 : currentContext());
   ret->setType(type);
 
-  if (identifier)
+  if (identifier) {
     ret->setLocalScopeIdentifier(identifierForName(identifier));
+
+    if (type == DUContext::Class)
+      SymbolTable::self()->addContext(ret);
+  }
 
   m_contextStack.push(ret);
 
   return ret;
 }
 
-void ContextBuilder::closeContext(NameAST* name)
+void ContextBuilder::closeContext()
 {
-  if (m_compilingContexts) {
-    // Set context identifier
-    if (name)
-      currentContext()->setLocalScopeIdentifier(identifierForName(name));
-  }
-
   // Go back to the context prior to this function definition
   m_contextStack.pop();
 

@@ -102,6 +102,16 @@ public:
   void setLocalScopeIdentifier(const QualifiedIdentifier& identifier);
 
   /**
+   * Returns whether this context is listed in the symbol table (Namespaces and classes)
+   */
+  bool inSymbolTable() const;
+
+  /**
+   * Tell this object when it is in the symbol table, so it can deregister itself
+   */
+  void setInSymbolTable(bool inSymbolTable);
+
+  /**
    * Returns the immediate parent context of this context.
    */
   DUContext* parentContext() const;
@@ -277,15 +287,15 @@ public:
   DUContext* findContext(const KTextEditor::Cursor& position, DUContext* parent = 0) const;
 
   /**
-   * Searches for the most specific context for the given cursor \a position in the given \a url.
+   * Searches for the context with the given \a type and \a identifier.
    *
-   * \param location the text position to search for
-   * \param parent the parent context to search from (this is mostly an internal detail, but if you only
-   *               want to search in a subbranch of the chain, you may specify the parent here)
+   * \param contextType type of context to locate; usually Namespace or Class.
+   * \param identifier identifier of the context which is being searched for.
+   * \param position cursor position to search from, or invalid to search the whole context.
    *
    * \returns the requested context if one was found, otherwise null.
    */
-  DUContext* findContext(ContextType contextType, const QualifiedIdentifier& identifier, const DUContext* sourceChild = 0, const QList<UsingNS*>& usingNamespaces = QList<UsingNS*>(), bool inImportedContext = false) const;
+  QList<DUContext*> findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid()) const;
 
   /**
    * Return a list of definitions for a given cursor \a position in a given \a url.
@@ -331,6 +341,10 @@ private:
   /// Declaration search implementation
   virtual Declaration* findDeclarationInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>* usingNamespaces, bool inImportedContext = false) const;
 
+  /// Context search implementation
+  virtual void findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<UsingNS*>& usingNS, QList<DUContext*>& ret, bool inImportedContext = false) const;
+
+
   ContextType m_contextType;
 
   QualifiedIdentifier m_scopeIdentifier;
@@ -346,6 +360,8 @@ private:
   QList<UsingNS*> m_usingNamespaces;
   QList<Use*> m_uses;
   QList<Use*> m_orphanUses;
+
+  bool m_inSymbolTable : 1;
 };
 
 #endif // DUCONTEXT_H
