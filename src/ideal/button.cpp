@@ -55,6 +55,7 @@ Button::Button(QWidget *parent, Ideal::Place place, const QString text, const QI
     setFlat(true);
     setCheckable(true);
     setFocusPolicy(Qt::NoFocus);
+    setContextMenuPolicy(Qt::CustomContextMenu);
     setDescription(d->description);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     resize(sizeHint());

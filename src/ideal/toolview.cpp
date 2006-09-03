@@ -20,7 +20,10 @@
 #include "toolview.h"
 
 #include <QTimer>
+#include <QInputDialog>
 
+#include <kmenu.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 #include "button.h"
@@ -41,6 +44,8 @@ struct ToolViewPrivate {
     {
         button = toolView->createToolViewButton(place, contents->windowTitle(), contents->windowIcon());
         toolView->connect(button, SIGNAL(toggled(bool)), toolView, SLOT(setViewVisible(bool)));
+        toolView->connect(button, SIGNAL(customContextMenuRequested(const QPoint&)),
+            toolView, SLOT(buttonContextMenu(const QPoint&)));
 
         mainWindow->buttonBar(place)->addToolViewButton(button);
 
@@ -276,6 +281,28 @@ void ToolView::setDockPlace()
 {
     kDebug() << "TEST: dock area is: " << d->mainWindow->dockWidgetArea(d->dockWidget) << endl;
     setDockPlace(d->mainWindow->dockWidgetArea(d->dockWidget));
+}
+
+void ToolView::buttonContextMenu(const QPoint &p)
+{
+    kDebug() << k_funcinfo << endl;
+
+    Button *button = qobject_cast<Ideal::Button*>(sender());
+    if (!button)
+        return;
+
+    KMenu menu;
+    QAction *renumber = menu.addAction("Assign Number...");
+    QAction *result = menu.exec(button->mapToGlobal(p));
+
+    if (result == renumber)
+    {
+        bool ok;
+        int newNumber = QInputDialog::getInteger(d->mainWindow, i18n("Toolview renumbering"),
+            i18n("Enter toolview number to be used as accelerator:"), 0, 0, 1000, 1, &ok);
+        if (ok)
+            d->mainWindow->renumberToolViews(this, newNumber);
+    }
 }
 
 }

@@ -147,4 +147,9 @@ ButtonBar *MainWindow::createButtonBar(Ideal::Place place)
     return new ButtonBar(place, this);
 }
 
+void MainWindow::renumberToolViews(ToolView *view, int newNumber)
+{
+    //TODO: implement me
+}
+
 }

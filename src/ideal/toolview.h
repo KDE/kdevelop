@@ -109,6 +109,8 @@ protected slots:
     virtual void adjustPlacement(bool toplevel);
     /**Sets the dock place according to mainwindow's dockWidgetPlace().*/
     virtual void setDockPlace();
+    /**Shows the toolview button context menu.*/
+    virtual void buttonContextMenu(const QPoint &p);
 
 private:
     struct ToolViewPrivate *d;

@@ -63,7 +63,7 @@ public:
 protected:
     ButtonMode mode();
 
-    void paintEvent(QPaintEvent *);
+    virtual void paintEvent(QPaintEvent *);
 
 private:
     virtual ~Button();

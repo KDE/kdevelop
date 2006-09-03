@@ -85,7 +85,7 @@ void ButtonBar::addToolViewButton(Button *button)
 void ButtonBar::removeToolViewButton(Button *button)
 {
     d->container->removeButton(button);
-    if (d->container->isEmpty())
+    if (d->container->isVisuallyEmpty())
         hide();
 }
 

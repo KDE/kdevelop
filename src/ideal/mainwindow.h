@@ -68,6 +68,9 @@ public:
     /** @return the button bar for given @p place.*/
     ButtonBar *buttonBar(Ideal::Place place);
 
+    /**Sets the new accelerator number for the toolview and resolves any number clashes.*/
+    void renumberToolViews(ToolView *view, int newNumber);
+
 protected:
     /**Factory method to create the toolview. Reimplement this to return
     ToolView subclasses here.*/
