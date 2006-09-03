@@ -153,25 +153,27 @@ DumpChain::~ DumpChain( )
   delete m_editor;
 }
 
-void DumpChain::dump( DUContext * context )
+void DumpChain::dump( DUContext * context, bool imported )
 {
-  kDebug() << QString(indent * 2, ' ') << "New Context \"" << context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "] " << context->textRange() << endl;
-  foreach (Declaration* dec, context->localDeclarations()) {
-    kDebug() << QString((indent+1) * 2, ' ') << dec->toString() << " [" << dec->qualifiedIdentifier() << "]  " << dec->textRange() << ", " << (dec->isDefinition() ? "defined, " : (dec->definition() ? "" : "no definition, ")) << dec->uses().count() << " use(s)." << endl;
-    if (dec->definition())
-      kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition: " << dec->definition()->textRange() << endl;
-    foreach (Use* use, dec->uses())
-      kDebug() << QString((indent+2) * 2, ' ') << "Use: " << use->textRange() << endl;
+  kDebug() << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context \"") << context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "] " << context->textRange() << endl;
+  if (!imported) {
+    foreach (Declaration* dec, context->localDeclarations()) {
+      kDebug() << QString((indent+1) * 2, ' ') << dec->toString() << " [" << dec->qualifiedIdentifier() << "]  " << dec->textRange() << ", " << (dec->isDefinition() ? "defined, " : (dec->definition() ? "" : "no definition, ")) << dec->uses().count() << " use(s)." << endl;
+      if (dec->definition())
+        kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition: " << dec->definition()->textRange() << endl;
+      foreach (Use* use, dec->uses())
+        kDebug() << QString((indent+2) * 2, ' ') << "Use: " << use->textRange() << endl;
+    }
   }
 
-  --indent;
-  foreach (DUContext* parent, context->importedParentContexts())
-    dump(parent);
   ++indent;
+  if (!imported) {
+    foreach (DUContext* parent, context->importedParentContexts())
+      dump(parent, true);
 
-  ++indent;
-  foreach (DUContext* child, context->childContexts())
-    dump(child);
+    foreach (DUContext* child, context->childContexts())
+      dump(child);
+  }
   --indent;
 }
 

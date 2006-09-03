@@ -29,6 +29,7 @@ SymbolTable* SymbolTable::s_instance = 0;
 SymbolTable::SymbolTable()
   : m_mutex(new QReadWriteLock)
 {
+  m_declarations.reserve(2000);
 }
 
 SymbolTable::~ SymbolTable()

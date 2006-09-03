@@ -33,7 +33,7 @@ public:
 
   void dump(AST *node, ParseSession* session = 0);
 
-  void dump(DUContext* context);
+  void dump(DUContext* context, bool imported = false);
 
 protected:
   virtual void visit(AST *node);
