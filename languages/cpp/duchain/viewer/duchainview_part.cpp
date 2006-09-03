@@ -40,8 +40,10 @@ DUChainViewPart::DUChainViewPart( QObject *parent,
     , m_model(new DUChainModel(this))
     , m_view(new QTreeView())
 {
+    m_view->setObjectName("DUChain Viewer Tree");
+    m_view->setWindowTitle(i18n("Definition-Use Chain"));
     m_view->setModel(m_model);
-    setXMLFile( "kdevcodeview.rc" );
+    setXMLFile( "kdevduchainview.rc" );
 }
 
 DUChainViewPart::~DUChainViewPart()
