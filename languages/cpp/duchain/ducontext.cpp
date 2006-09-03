@@ -252,9 +252,10 @@ Declaration* DUContext::findDeclarationInternal( const QualifiedIdentifier & ide
   if (Declaration* definition = findLocalDeclaration(identifier, position, dataType, inImportedContext))
     return definition;
 
-  foreach (UsingNS* ns, usingNamespaces())
-    if (ns->textCursor() <= position)
-      usingNS->append(ns);
+  if (!identifier.explicitlyGlobal())
+    foreach (UsingNS* ns, usingNamespaces())
+      if (ns->textCursor() <= position)
+        usingNS->append(ns);
 
   Declaration* ret = 0;
 

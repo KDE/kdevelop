@@ -60,26 +60,28 @@ Declaration* TopDUContext::findDeclarationInternal(const QualifiedIdentifier& id
     return found.first();
   }
 
-  foreach (UsingNS* ns, usingNamespaces())
-    if (ns->textCursor() <= position)
-      usingNS->append(ns);
+  if (!identifier.explicitlyGlobal()) {
+    foreach (UsingNS* ns, usingNamespaces())
+      if (ns->textCursor() <= position)
+        usingNS->append(ns);
 
-  foreach (UsingNS* ns, *usingNS) {
-    QualifiedIdentifier id = identifier.merge(ns->nsIdentifier);
+    foreach (UsingNS* ns, *usingNS) {
+      QualifiedIdentifier id = identifier.merge(ns->nsIdentifier);
 
-    // FIXME nested using definitions
+      // FIXME nested using definitions
 
-    found = checkDeclarations(SymbolTable::self()->findDeclarations(id), position, dataType);
+      found = checkDeclarations(SymbolTable::self()->findDeclarations(id), position, dataType);
 
-    if (found.count() == 1)
-      return found.first();
+      if (found.count() == 1)
+        return found.first();
 
-    if (found.count() > 1) {
-      /*kWarning() << k_funcinfo << "Multiple definitions for " << identifier.toString() << endl;
-      foreach (Declaration* dec, found)
-        kDebug() << "Found at " << dec->textRange() << " in document " << dec->url() << endl;*/
+      if (found.count() > 1) {
+        /*kWarning() << k_funcinfo << "Multiple definitions for " << identifier.toString() << endl;
+        foreach (Declaration* dec, found)
+          kDebug() << "Found at " << dec->textRange() << " in document " << dec->url() << endl;*/
 
-      return found.first();
+        return found.first();
+      }
     }
   }
 
