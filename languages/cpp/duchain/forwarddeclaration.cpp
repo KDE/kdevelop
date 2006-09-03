@@ -63,3 +63,8 @@ void ForwardDeclaration::setResolved(Declaration * declaration)
       use->setDeclaration(m_resolvedDeclaration);
   }
 }
+
+bool ForwardDeclaration::isForwardDeclaration() const
+{
+  return true;
+}

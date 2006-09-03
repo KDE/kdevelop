@@ -147,6 +147,22 @@ private slots:
     delete topContext;
   }
 
+  Declaration* findDeclaration(DUContext* context, const Identifier& id, const Cursor& position = Cursor::invalid())
+  {
+    QList<Declaration*> ret = context->findDeclarations(id, position);
+    if (ret.count())
+      return ret.first();
+    return 0;
+  }
+
+  Declaration* findDeclaration(DUContext* context, const QualifiedIdentifier& id, const Cursor& position = Cursor::invalid())
+  {
+    QList<Declaration*> ret = context->findDeclarations(id, position);
+    if (ret.count())
+      return ret.first();
+    return 0;
+  }
+
   void testIdentifiers()
   {
     TEST_FILE_PARSE_ONLY
@@ -229,7 +245,7 @@ private slots:
 
     Declaration* def = top->localDeclarations().first();
     QCOMPARE(def->identifier(), Identifier("i"));
-    QCOMPARE(top->findDeclaration(def->identifier()), def);
+    QCOMPARE(findDeclaration(top, def->identifier()), def);
 
     release(top);
   }
@@ -249,7 +265,7 @@ private slots:
 
     Declaration* defI = top->localDeclarations().first();
     QCOMPARE(defI->identifier(), Identifier("i"));
-    QCOMPARE(top->findDeclaration(defI->identifier()), defI);
+    QCOMPARE(findDeclaration(top, defI->identifier()), defI);
     QVERIFY(defI->type<CppIntegralType>());
     QCOMPARE(defI->type<CppIntegralType>()->integralType(), CppIntegralType::TypeInt);
     QCOMPARE(defI->type<CppIntegralType>()->typeModifiers(), CppIntegralType::ModifierUnsigned);
@@ -262,7 +278,7 @@ private slots:
 
     Declaration* defJ = top->localDeclarations()[2];
     QCOMPARE(defJ->identifier(), Identifier("j"));
-    QCOMPARE(top->findDeclaration(defJ->identifier()), defJ);
+    QCOMPARE(findDeclaration(top, defJ->identifier()), defJ);
     QVERIFY(defJ->type<CppIntegralType>());
     QCOMPARE(defJ->type<CppIntegralType>()->integralType(), CppIntegralType::TypeDouble);
     QCOMPARE(defJ->type<CppIntegralType>()->typeModifiers(), CppIntegralType::ModifierLong);
@@ -319,7 +335,7 @@ private slots:
 
     Declaration* defI = top->localDeclarations().first();
     QCOMPARE(defI->identifier(), Identifier("i"));
-    QCOMPARE(top->findDeclaration(defI->identifier()), defI);
+    QCOMPARE(findDeclaration(top, defI->identifier()), defI);
 
     ArrayType::Ptr array = defI->type<ArrayType>();
     QVERIFY(array);
@@ -339,7 +355,7 @@ private slots:
     //                 012345678901234567890123456789012345678901234567890123456789
     QByteArray method("int main() { for (int i = 0; i < 10; i++) { if (i == 4) return; } }");
 
-    DUContext* top = parse(method, DumpNone);
+    DUContext* top = parse(method);//, DumpNone);
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 2);
@@ -348,14 +364,14 @@ private slots:
 
     Declaration* defMain = top->localDeclarations().first();
     QCOMPARE(defMain->identifier(), Identifier("main"));
-    QCOMPARE(top->findDeclaration(defMain->identifier()), defMain);
+    QCOMPARE(findDeclaration(top, defMain->identifier()), defMain);
     QVERIFY(defMain->type<CppFunctionType>());
     QCOMPARE(defMain->type<CppFunctionType>()->returnType(), typeInt);
     QCOMPARE(defMain->type<CppFunctionType>()->arguments().count(), 0);
     QVERIFY(!defMain->type<CppFunctionType>()->isConstant());
     QVERIFY(!defMain->type<CppFunctionType>()->isVolatile());
 
-    QCOMPARE(top->findDeclaration(Identifier("i")), noDef);
+    QCOMPARE(findDeclaration(top, Identifier("i")), noDef);
 
     DUContext* main = top->childContexts()[1];
     QVERIFY(main->parentContext());
@@ -364,7 +380,7 @@ private slots:
     QCOMPARE(main->localDeclarations().count(), 0);
     QVERIFY(main->localScopeIdentifier().isEmpty());
 
-    QCOMPARE(main->findDeclaration(Identifier("i")), noDef);
+    QCOMPARE(findDeclaration(main, Identifier("i")), noDef);
 
     DUContext* forCtx = main->childContexts()[1];
     QVERIFY(forCtx->parentContext());
@@ -384,7 +400,7 @@ private slots:
     QCOMPARE(defI->identifier(), Identifier("i"));
     QCOMPARE(defI->uses().count(), 3);
 
-    QCOMPARE(forCtx->findDeclaration(defI->identifier()), defI);
+    QCOMPARE(findDeclaration(forCtx, defI->identifier()), defI);
 
     DUContext* ifCtx = forCtx->childContexts()[1];
     QVERIFY(ifCtx->parentContext());
@@ -393,7 +409,7 @@ private slots:
     QCOMPARE(ifCtx->localDeclarations().count(), 0);
     QVERIFY(ifCtx->localScopeIdentifier().isEmpty());
 
-    QCOMPARE(ifCtx->findDeclaration(defI->identifier()), defI);
+    QCOMPARE(findDeclaration(ifCtx,  defI->identifier()), defI);
 
     release(top);
   }
@@ -433,9 +449,9 @@ private slots:
     QCOMPARE(defI->identifier(), Identifier("i"));
     QCOMPARE(defI->uses().count(), 1);
 
-    QCOMPARE(structA->findDeclaration(Identifier("i")), defI);
-    QCOMPARE(structA->findDeclaration(Identifier("b")), noDef);
-    QCOMPARE(structA->findDeclaration(Identifier("c")), noDef);
+    QCOMPARE(findDeclaration(structA,  Identifier("i")), defI);
+    QCOMPARE(findDeclaration(structA,  Identifier("b")), noDef);
+    QCOMPARE(findDeclaration(structA,  Identifier("c")), noDef);
 
     DUContext* ctorImplCtx = structA->childContexts()[1];
     QVERIFY(ctorImplCtx->parentContext());
@@ -458,9 +474,9 @@ private slots:
     QCOMPARE(defC->identifier(), Identifier("c"));
     QCOMPARE(defC->uses().count(), 1);
 
-    QCOMPARE(ctorCtx->findDeclaration(Identifier("i")), defI);
-    QCOMPARE(ctorCtx->findDeclaration(Identifier("b")), defB);
-    QCOMPARE(ctorCtx->findDeclaration(Identifier("c")), defC);
+    QCOMPARE(findDeclaration(ctorCtx,  Identifier("i")), defI);
+    QCOMPARE(findDeclaration(ctorCtx,  Identifier("b")), defB);
+    QCOMPARE(findDeclaration(ctorCtx,  Identifier("c")), defC);
 
     DUContext* testCtx = structA->childContexts().last();
     QCOMPARE(testCtx->childContexts().count(), 0);
@@ -530,7 +546,7 @@ private slots:
     QCOMPARE(top->childContexts().count(), 3);
     QCOMPARE(top->localDeclarations().count(), 2);
     QVERIFY(top->localScopeIdentifier().isEmpty());
-    QCOMPARE(top->findDeclaration(Identifier("foo")), noDef);
+    QCOMPARE(findDeclaration(top, Identifier("foo")), noDef);
 
     QCOMPARE(top->usingNamespaces().count(), 0);
 
@@ -554,15 +570,15 @@ private slots:
     Declaration* bar = fooCtx->localDeclarations().first();
     QCOMPARE(bar->identifier(), Identifier("bar"));
     QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
-    QCOMPARE(testCtx->findDeclaration(QualifiedIdentifier("foo::bar")), bar);
+    QCOMPARE(findDeclaration(testCtx,  QualifiedIdentifier("foo::bar")), bar);
     QCOMPARE(bar->uses().count(), 1);
-    QCOMPARE(top->findDeclaration(bar->identifier()), bar2);
-    QCOMPARE(top->findDeclaration(bar->qualifiedIdentifier()), bar);
+    QCOMPARE(findDeclaration(top, bar->identifier()), bar2);
+    QCOMPARE(findDeclaration(top, bar->qualifiedIdentifier()), bar);
 
-    QCOMPARE(top->findDeclaration(QualifiedIdentifier("bar")), bar2);
-    QCOMPARE(top->findDeclaration(QualifiedIdentifier("::bar")), bar2);
-    QCOMPARE(top->findDeclaration(QualifiedIdentifier("foo::bar")), bar);
-    QCOMPARE(top->findDeclaration(QualifiedIdentifier("::foo::bar")), bar);
+    QCOMPARE(findDeclaration(top, QualifiedIdentifier("bar")), bar2);
+    QCOMPARE(findDeclaration(top, QualifiedIdentifier("::bar")), bar2);
+    QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo::bar")), bar);
+    QCOMPARE(findDeclaration(top, QualifiedIdentifier("::foo::bar")), bar);
 
     release(top);
   }
@@ -581,7 +597,7 @@ private slots:
     QCOMPARE(top->childContexts().count(), 3);
     QCOMPARE(top->localDeclarations().count(), 1);
     QVERIFY(top->localScopeIdentifier().isEmpty());
-    QCOMPARE(top->findDeclaration(Identifier("foo")), noDef);
+    QCOMPARE(findDeclaration(top, Identifier("foo")), noDef);
 
     QCOMPARE(top->usingNamespaces().count(), 1);
     QCOMPARE(top->usingNamespaces().first()->nsIdentifier, QualifiedIdentifier("foo"));
@@ -597,14 +613,14 @@ private slots:
     QCOMPARE(bar->identifier(), Identifier("bar"));
     QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
     QCOMPARE(bar->uses().count(), 1);
-    QCOMPARE(top->findDeclaration(bar->identifier(), top->textRange().start()), noDef);
-    QCOMPARE(top->findDeclaration(bar->identifier()), bar);
-    QCOMPARE(top->findDeclaration(bar->qualifiedIdentifier()), bar);
+    QCOMPARE(findDeclaration(top, bar->identifier(), top->textRange().start()), noDef);
+    QCOMPARE(findDeclaration(top, bar->identifier()), bar);
+    QCOMPARE(findDeclaration(top, bar->qualifiedIdentifier()), bar);
 
-    QCOMPARE(top->findDeclaration(QualifiedIdentifier("bar")), bar);
-    QCOMPARE(top->findDeclaration(QualifiedIdentifier("::bar")), noDef);
-    QCOMPARE(top->findDeclaration(QualifiedIdentifier("foo::bar")), bar);
-    QCOMPARE(top->findDeclaration(QualifiedIdentifier("::foo::bar")), bar);
+    QCOMPARE(findDeclaration(top, QualifiedIdentifier("bar")), bar);
+    QCOMPARE(findDeclaration(top, QualifiedIdentifier("::bar")), noDef);
+    QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo::bar")), bar);
+    QCOMPARE(findDeclaration(top, QualifiedIdentifier("::foo::bar")), bar);
 
     DUContext* testCtx = top->childContexts()[2];
     QVERIFY(testCtx->parentContext());

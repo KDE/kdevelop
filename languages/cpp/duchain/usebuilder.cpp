@@ -76,9 +76,17 @@ void UseBuilder::newUse(NameAST* name)
 
   QualifiedIdentifier id = identifierForName(name);
 
-  if (Declaration* definition = currentContext()->findDeclaration(id, use->start()))
-    definition->addUse(new Use(use, currentContext()));
+  Use* newUse = new Use(use, currentContext());
+
+  QList<Declaration*> declarations = currentContext()->findDeclarations(id, use->start());
+  foreach (Declaration* declaration, declarations)
+    if (!declaration->isForwardDeclaration())
+      return declaration->addUse(newUse);
+
+  // No non-forward declaration - add it to the first forward declaration
+  if (declarations.count())
+    declarations.first()->addUse(newUse);
   else
-    currentContext()->addOrphanUse(new Use(use, currentContext()));
+    currentContext()->addOrphanUse(newUse);
     //kWarning() << k_funcinfo << "Could not find definition for identifier " << id << " at " << *use << endl;
 }

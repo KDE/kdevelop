@@ -133,50 +133,20 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
   AbstractType::Ptr type;
 
   if (node->name) {
-    QualifiedIdentifier id = identifierForName(node->name);
-    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge);
-
-    Declaration * def = currentContext()->findDeclaration(id, pos);
-
     int kind = m_editor->parseSession()->token_stream->kind(node->type);
-    if (def && def->abstractType()) {
-      switch (kind) {
-        case Token_class:
-        case Token_struct:
-        case Token_union:
-          if (def->type<CppClassType>()) {
-            type = def->abstractType();
-
-          } else if (def->abstractType()) {
-            // TODO: error, wrong type
-
-          }
-          break;
-        case Token_enum:
-          if (def->type<CppEnumerationType>())
-            type = def->abstractType();
-          break;
-        case Token_typename:
-          type = def->abstractType();
-          break;
-      }
-
-    } else if (!def) {
-      // Create forward declaration
-      switch (kind) {
-        case Token_class:
-        case Token_struct:
-        case Token_union:
-          type = AbstractType::Ptr::staticCast(openClass(kind));
-          break;
-        case Token_enum:
-          type = AbstractType::Ptr(new CppEnumerationType());
-          break;
-        case Token_typename:
-          // TODO what goes here...?
-          //type = def->abstractType();
-          break;
-      }
+    switch (kind) {
+      case Token_class:
+      case Token_struct:
+      case Token_union:
+        type = AbstractType::Ptr::staticCast(openClass(kind));
+        break;
+      case Token_enum:
+        type = AbstractType::Ptr(new CppEnumerationType());
+        break;
+      case Token_typename:
+        // TODO what goes here...?
+        //type = def->abstractType();
+        break;
     }
 
     if (type)
@@ -252,13 +222,13 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     }
 
   } else if (node->name) {
-    QualifiedIdentifier id = identifierForName(node->name);
+    /*QualifiedIdentifier id = identifierForName(node->name);
     KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge);
-    Declaration* dec = currentContext()->findDeclaration(id, pos);
+    Declaration* dec = currentContext()->findDeclarations(id, pos);
     if (dec && dec->abstractType()) {
       openedType = true;
       openType(dec->abstractType(), node);
-    }
+    }*/
   }
 
   TypeBuilderBase::visitSimpleTypeSpecifier(node);

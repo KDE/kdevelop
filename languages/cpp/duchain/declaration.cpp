@@ -252,3 +252,18 @@ const QList< ForwardDeclaration * > & Declaration::forwardDeclarations() const
 {
   return m_forwardDeclarations;
 }
+
+bool Declaration::isForwardDeclaration() const
+{
+  return false;
+}
+
+ForwardDeclaration* Declaration::forwardDeclaration()
+{
+  return static_cast<ForwardDeclaration*>(this);
+}
+
+const ForwardDeclaration* Declaration::forwardDeclaration() const
+{
+  return static_cast<const ForwardDeclaration*>(this);
+}

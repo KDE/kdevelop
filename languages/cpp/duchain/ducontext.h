@@ -186,7 +186,7 @@ public:
    *
    * \returns the requested declaration if one was found, otherwise null.
    */
-  Declaration* findDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType = AbstractType::Ptr()) const;
+  QList<Declaration*> findDeclarations(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr()) const;
 
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
@@ -199,29 +199,13 @@ public:
    *
    * \overload
    */
-  Declaration* findDeclaration(const Identifier& identifier, const KTextEditor::Cursor& position) const;
-
-  /**
-   * Returns the declaration of any existing valid \a identifier anywhere this context, or
-   * null if one is not found.
-   *
-   * \overload
-   */
-  Declaration* findDeclaration(const QualifiedIdentifier& identifier) const;
-
-  /**
-   * Returns the declaration of any existing valid \a identifier anywhere this context, or
-   * null if one is not found.
-   *
-   * \overload
-   */
-  Declaration* findDeclaration(const Identifier& identifier) const;
+  QList<Declaration*> findDeclarations(const Identifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid()) const;
 
   /**
    * Returns the type of any \a identifier defined in this context, or
    * null if one is not found.
    */
-  Declaration* findLocalDeclaration(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType = AbstractType::Ptr(), bool allowUnqualifiedMatch = false) const;
+  QList<Declaration*> findLocalDeclarations(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), bool allowUnqualifiedMatch = false) const;
 
   /**
    * Clears all local declarations. Does not delete the declaration; the caller
@@ -339,8 +323,10 @@ protected:
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
+  void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret ) const;
+
   /// Declaration search implementation
-  virtual Declaration* findDeclarationInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNamespaces, bool inImportedContext = false) const;
+  virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNamespaces, QList<Declaration*>& ret, bool inImportedContext = false) const;
 
   /// Context search implementation
   virtual void findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<UsingNS*>& usingNS, QList<DUContext*>& ret, bool inImportedContext = false) const;

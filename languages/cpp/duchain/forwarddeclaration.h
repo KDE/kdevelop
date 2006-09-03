@@ -30,6 +30,8 @@ public:
   ForwardDeclaration(KTextEditor::Range* range, Scope scope);
   virtual ~ForwardDeclaration();
 
+  virtual bool isForwardDeclaration() const;
+
   Declaration* resolved() const;
   void setResolved(Declaration* declaration);
 

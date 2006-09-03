@@ -53,6 +53,9 @@ public:
   virtual ~Declaration();
 
   const QList<ForwardDeclaration*>& forwardDeclarations() const;
+  virtual bool isForwardDeclaration() const;
+  ForwardDeclaration* forwardDeclaration();
+  const ForwardDeclaration* forwardDeclaration() const;
 
   bool isDefinition() const;
   void setDeclarationIsDefinition(bool dd);

@@ -27,6 +27,7 @@
 #include "parsesession.h"
 #include "definition.h"
 #include "symboltable.h"
+#include "forwarddeclaration.h"
 
 using namespace KTextEditor;
 
@@ -109,12 +110,22 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
         //kDebug() << k_funcinfo << "Searching for declaration of " << id << endl;
 
-        if (Declaration* dec = currentContext()->findDeclaration(id, pos, lastType())) {
+        QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, lastType());
+        foreach (Declaration* dec, declarations) {
+          if (dec->isForwardDeclaration())
+            continue;
+
           Declaration* oldDec = currentDeclaration();
           abortDeclaration();
           Definition* def = new Definition(oldDec->takeRange(), dec, currentContext());
           delete oldDec;
           dec->setDefinition(def);
+
+          // Resolve forward declarations
+          foreach (Declaration* forward, declarations) {
+            if (forward->isForwardDeclaration())
+              forward->forwardDeclaration()->setResolved(dec);
+          }
           return;
         }
       }
@@ -124,35 +135,21 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   closeDeclaration();
 }
 
+
+
+ForwardDeclaration * DeclarationBuilder::openForwardDeclaration(NameAST * name, AST * range)
+{
+  return static_cast<ForwardDeclaration*>(openDeclaration(name, range, false, true));
+}
+
 Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, bool isFunction)
 {
-  /* FIXME... need forward declaration storing capability... or should it be looked up as needed?
-
-  if (name) {
-    QualifiedIdentifier id = identifierForName(node->name);
-    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge);
-
-    Declaration * dec = currentContext()->findDeclaration(id, pos);
-
-    if (dec) {
-      // Just need to create the definition
-      Range* prior = m_editor->currentRange();
-      Range* range = m_editor->createRange(name ? static_cast<AST*>(name) : rangeNode);
-      m_editor->exitCurrentRange();
-      Q_ASSERT(m_editor->currentRange() == prior);
-
-      Definition* def = new Definition(range, dec, currentContext());
-      dec->setDefinition(def);
-      return dec;
-    }
-  }*/
-
   Declaration* dec = openDeclaration(name, rangeNode, isFunction);
   dec->setDeclarationIsDefinition(true);
   return dec;
 }
 
-Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction)
+Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward)
 {
   Declaration::Scope scope = Declaration::GlobalScope;
   switch (currentContext()->type()) {
@@ -175,7 +172,10 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   Q_ASSERT(m_editor->currentRange() == prior);
 
   Declaration* declaration;
-  if (isFunction) {
+  if (isForward) {
+    declaration = new ForwardDeclaration(range, scope);
+
+  } else if (isFunction) {
     declaration = new ClassFunctionDeclaration(range);
     if (!m_functionDefinedStack.isEmpty())
       declaration->setDeclarationIsDefinition(m_functionDefinedStack.top());
@@ -252,20 +252,26 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
 {
   bool openedDeclaration = false;
 
-  /*if (node->name) {
+  if (node->name) {
     QualifiedIdentifier id = identifierForName(node->name);
     KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge);
 
-    Declaration * def = currentContext()->findDeclaration(id, pos);
+    QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos);
+    Declaration* actual = 0;
+    foreach (Declaration* declaration, declarations)
+      if (!declaration->isForwardDeclaration()) {
+        actual = declaration;
+        break;
+      }
 
-    if (!def) {
+    if (!actual) {
       int kind = m_editor->parseSession()->token_stream->kind(node->type);
       // Create forward declaration
       switch (kind) {
         case Token_class:
         case Token_struct:
         case Token_union:
-          openDeclaration(node->name, node);
+          openForwardDeclaration(node->name, node);
           openedDeclaration = true;
           break;
         case Token_enum:
@@ -274,7 +280,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
           break;
       }
     }
-  }*/
+  }
 
   DeclarationBuilderBase::visitElaboratedTypeSpecifier(node);
 

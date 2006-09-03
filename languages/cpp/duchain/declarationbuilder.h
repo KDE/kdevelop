@@ -53,12 +53,13 @@ protected:
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
 
 private:
+  ForwardDeclaration* openForwardDeclaration(NameAST* name, AST* range);
   /**
    * Register a new declaration with the definition-use chain.
    * Returns the new context created by this definition.
    * \param range provide a valid AST here if name is null
    */
-  Declaration* openDeclaration(NameAST* name, AST* range, bool isFunction = false);
+  Declaration* openDeclaration(NameAST* name, AST* range, bool isFunction = false, bool isForward = false);
   /// Same as the above, but sets it as the definition too
   Declaration* openDefinition(NameAST* name, AST* range, bool isFunction = false);
   void closeDeclaration();

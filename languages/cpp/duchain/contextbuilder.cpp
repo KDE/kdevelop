@@ -355,7 +355,7 @@ public:
   virtual void visitName (NameAST * node)
   {
     if (result)
-      if (!builder->currentContext()->findDeclaration(builder->identifierForName(node), cursor))
+      if (!builder->currentContext()->findDeclarations(builder->identifierForName(node), cursor).isEmpty())
         result = false;
   }
 };

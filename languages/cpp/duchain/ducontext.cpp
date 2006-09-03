@@ -97,7 +97,14 @@ Declaration* DUContext::takeDeclaration(Declaration* declaration)
   return declaration;
 }
 
-Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch ) const
+QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch ) const
+{
+  QList<Declaration*> ret;
+  findLocalDeclarationsInternal(identifier, position.isValid() ? position : textRange().end(), dataType, allowUnqualifiedMatch, ret);
+  return ret;
+}
+
+void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret ) const
 {
   QLinkedList<Declaration*> tryToResolve;
   QLinkedList<Declaration*> ensureResolution;
@@ -144,43 +151,17 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
     }
   }
 
-  if (resolved.count() == 1) {
-    Declaration* definition  = resolved.first();
-    if (dataType && dataType != definition->abstractType())
-      return 0;
+  foreach (Declaration* declaration, resolved)
+    if (!dataType || dataType == declaration->abstractType())
+      if (type() == Class || position >= declaration->textRange().start())
+        ret.append(declaration);
 
-    if (type() == Class || position >= definition->textRange().start())
-      return definition;
+  if (!ret.isEmpty())
+    // Match(es)
+    return;
 
-    return 0;
-
-  } else if (resolved.count() > 1) {
-    if (dataType) {
-      QList<Declaration*> resolved2;
-
-      foreach (Declaration* declaration, resolved)
-        if (dataType == declaration->abstractType())
-          resolved2.append(declaration);
-
-      if (resolved2.count() == 1) {
-        Declaration* definition  = resolved2.first();
-        if (type() == Class || position >= definition->textRange().start())
-          return definition;
-      }
-    }
-
-    /*kWarning() << k_funcinfo << "Multiple matching definitions (shouldn't happen, code error)" << endl;
-    QSetIterator<Declaration*> it = resolved;
-    while (it.hasNext()) {
-      Declaration* def = it.next();
-      kDebug() << " Declaration: " << def->qualifiedIdentifier() << " range " << def->textRange() << endl;
-    }*/
-
-    return 0;
-
-  } else if (tryToResolve.isEmpty() && ensureResolution.isEmpty()) {
-    return 0;
-  }
+  if (tryToResolve.isEmpty() && ensureResolution.isEmpty())
+    return;
 
   QMutableLinkedListIterator<Declaration*> it = ensureResolution;
   while (it.hasNext()) {
@@ -199,17 +180,14 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
     }
   }
 
-  if (resolved.count() == 1) {
-    Declaration* definition  = *resolved.constBegin();
-    if (position >= definition->textRange().start())
-      return definition;
+  foreach (Declaration* declaration, resolved)
+    if (!dataType || dataType == declaration->abstractType())
+      if (type() == Class || position >= declaration->textRange().start())
+        ret.append(declaration);
 
-    return 0;
-
-  } else if (resolved.count() > 1) {
-    return 0;
-  }
-
+  if (!ret.isEmpty())
+    // Match(es)
+    return;
 
   it = tryToResolve;
   while (it.hasNext()) {
@@ -228,63 +206,51 @@ Declaration * DUContext::findLocalDeclaration( const QualifiedIdentifier& identi
     }
   }
 
-  if (resolved.count() == 1) {
-    return *resolved.constBegin();
-  } else if (resolved.count() > 1) {
-    /*kWarning() << k_funcinfo << "Multiple matching definitions (shouldn't happen, code error)" << endl;
-    QSetIterator<Declaration*> it = resolved;
-    while (it.hasNext()) {
-      Declaration* def = it.next();
-      kDebug() << " Declaration: " << def->qualifiedIdentifier() << " range " << def->textRange() << endl;
-    }*/
+  foreach (Declaration* declaration, resolved)
+    if (!dataType || dataType == declaration->abstractType())
+      if (type() == Class || position >= declaration->textRange().start())
+        ret.append(declaration);
 
-    return 0;
-  }
+  //if (!ret.isEmpty())
+    // Match(es)... don't need to check, returning anyway
 
-  // todo: namespace abbreviations
 
-  return 0;
+  // TODO: namespace abbreviations
+
+  return;
 }
 
-Declaration* DUContext::findDeclarationInternal( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNS, bool inImportedContext ) const
+void DUContext::findDeclarationsInternal( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNS, QList<Declaration*>& ret, bool inImportedContext ) const
 {
   // TODO we're missing ambiguous references by not checking every resolution before returning...
   // but is that such a bad thing? (might be good performance-wise)
-  if (Declaration* definition = findLocalDeclaration(identifier, position, dataType, inImportedContext))
-    return definition;
+  findLocalDeclarationsInternal(identifier, position, dataType, inImportedContext, ret);
+  if (ret.count())
+    return;
 
   if (!identifier.explicitlyGlobal())
     acceptUsingNamespaces(position, usingNS);
-
-  Declaration* ret = 0;
 
   QListIterator<DUContext*> it = importedParentContexts();
   it.toBack();
   while (it.hasPrevious()) {
     DUContext* parent = it.previous();
 
-    ret = parent->findDeclarationInternal(identifier, position, dataType, usingNS, true);
-    if (ret)
-      break;
+    parent->findDeclarationsInternal(identifier, position, dataType, usingNS, ret, true);
+    if (!ret.isEmpty())
+      return;
   }
 
-  if (!ret && !inImportedContext && parentContext())
-    if (Declaration* definition = parentContext()->findDeclarationInternal(identifier, position, dataType, usingNS))
-      ret = definition;
+  if (!inImportedContext && parentContext())
+    parentContext()->findDeclarationsInternal(identifier, position, dataType, usingNS, ret);
+}
 
+QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType) const
+{
+  QList<UsingNS*> usingStatements;
+  QList<Declaration*> ret;
+  findDeclarationsInternal(identifier, position.isValid() ? position : textRange().end(), dataType, usingStatements, ret);
   return ret;
-}
-
-Declaration * DUContext::findDeclaration( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType) const
-{
-  QList<UsingNS*> usingStatements;
-  return findDeclarationInternal(identifier, position, dataType, usingStatements);
-}
-
-Declaration * DUContext::findDeclaration( const QualifiedIdentifier& identifier ) const
-{
-  QList<UsingNS*> usingStatements;
-  return findDeclarationInternal(identifier, textRange().end(), AbstractType::Ptr(), usingStatements);
 }
 
 void DUContext::addChildContext( DUContext * context )
@@ -482,16 +448,12 @@ void DUContext::setType(ContextType type)
   m_contextType = type;
 }
 
-Declaration * DUContext::findDeclaration(const Identifier & identifier) const
+QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const KTextEditor::Cursor& position) const
 {
   QList<UsingNS*> usingStatements;
-  return findDeclarationInternal(QualifiedIdentifier(identifier), textRange().end(), AbstractType::Ptr(), usingStatements);
-}
-
-Declaration* DUContext::findDeclaration(const Identifier& identifier, const KTextEditor::Cursor& position) const
-{
-  QList<UsingNS*> usingStatements;
-  return findDeclarationInternal(QualifiedIdentifier(identifier), position, AbstractType::Ptr(), usingStatements);
+  QList<Declaration*> ret;
+  findDeclarationsInternal(QualifiedIdentifier(identifier), position.isValid() ? position : textRange().end(), AbstractType::Ptr(), usingStatements, ret);
+  return ret;
 }
 
 void DUContext::addOrphanUse(Use* orphan)
@@ -519,10 +481,7 @@ QList<DUContext*> DUContext::findContexts(ContextType contextType, const Qualifi
 {
   QList<UsingNS*> usingStatements;
   QList<DUContext*> ret;
-  if (position.isValid())
-    findContextsInternal(contextType, identifier, position, usingStatements, ret);
-  else
-    findContextsInternal(contextType, identifier, textRange().end(), usingStatements, ret);
+  findContextsInternal(contextType, identifier, position.isValid() ? position : textRange().end(), usingStatements, ret);
   return ret;
 }
 
