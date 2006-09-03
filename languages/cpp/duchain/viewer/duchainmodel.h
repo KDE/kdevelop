@@ -32,6 +32,7 @@
 
 class TopDUContext;
 class DUChainViewPart;
+class KDevDocument;
 
 class DUChainModel : public QAbstractItemModel
 {
@@ -41,8 +42,10 @@ class DUChainModel : public QAbstractItemModel
     DUChainModel(DUChainViewPart* parent);
     virtual ~DUChainModel();
 
-  public slots:
     void setTopContext(TopDUContext* context);
+
+  public slots:
+    void documentActivated( KDevDocument* document );
 
   public:
     virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const;

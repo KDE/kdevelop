@@ -23,11 +23,16 @@
 
 #include <klocale.h>
 
+#include <kdevdocument.h>
+#include <kdevcore.h>
+#include <kdevdocumentcontroller.h>
+
 #include "duchainview_part.h"
 #include "topducontext.h"
 #include "declaration.h"
 #include "definition.h"
 #include "use.h"
+#include "duchain.h"
 
 using namespace KTextEditor;
 
@@ -40,10 +45,20 @@ DUChainModel::ProxyObject::ProxyObject(DUChainModelBase* _parent, DUChainModelBa
 DUChainModel::DUChainModel(DUChainViewPart* parent)
   : QAbstractItemModel(parent)
 {
+  connect (KDevCore::documentController(), SIGNAL(documentActivated(KDevDocument*)), SLOT(documentActivated(KDevDocument*)));
 }
 
 DUChainModel::~DUChainModel()
 {
+}
+
+void DUChainModel::documentActivated( KDevDocument* document )
+{
+  if (document) {
+    TopDUContext* chain = DUChain::self()->chainForDocument(document->url());
+    if (chain)
+      setTopContext(chain);
+  }
 }
 
 void DUChainModel::setTopContext(TopDUContext* context)
@@ -80,6 +95,9 @@ QModelIndex DUChainModel::index ( int row, int column, const QModelIndex & paren
   DUChainModelBase* base = static_cast<DUChainModelBase*>(parent.internalPointer());
 
   QList<DUChainModelBase*>* items = childItems(base);
+
+  if (!items)
+    return QModelIndex();
 
   if (row >= items->count())
     return QModelIndex();
@@ -123,32 +141,35 @@ QVariant DUChainModel::data(const QModelIndex& index, int role ) const
     return QVariant();
 
   DUChainModelBase* base = static_cast<DUChainModelBase*>(index.internalPointer());
-  if (ProxyObject* proxy = dynamic_cast<ProxyObject*>(base)) {
+  ProxyObject* proxy = dynamic_cast<ProxyObject*>(base);
+  if (proxy)
     base = proxy->parent;
-  }
 
   if (DUContext* context = dynamic_cast<DUContext*>(base)) {
     switch (role) {
       case Qt::DisplayRole:
-        return context->localScopeIdentifier().toString();
+        if (proxy)
+          return i18n("Imported Context: %1", context->localScopeIdentifier().toString());
+        else
+          return i18n("Context: %1", context->localScopeIdentifier().toString());
     }
 
   } else if (Declaration* dec = dynamic_cast<Declaration*>(base)) {
     switch (role) {
       case Qt::DisplayRole:
-        return dec->identifier().toString();
+        return i18n("Declaration: %1", dec->identifier().toString());
     }
 
   } else if (Definition* def = dynamic_cast<Definition*>(base)) {
     switch (role) {
       case Qt::DisplayRole:
-        return i18n("Definition of %1", def->declaration()->identifier().toString());
+        return i18n("Definition: %1", def->declaration()->identifier().toString());
     }
 
   } else if (Use* use = dynamic_cast<Use*>(base)) {
     switch (role) {
       case Qt::DisplayRole:
-        return i18n("Use of %1", use->declaration()->identifier().toString());
+        return i18n("Use: %1", use->declaration()->identifier().toString());
     }
   }
 
@@ -206,7 +227,7 @@ QList< DUChainModelBase * >* DUChainModel::childItems(DUChainModelBase * parent)
       currentItem = nextItem(contexts);
       first = current = nextItem(contexts, firstInit);
 
-      TEST_NEXT(importedParentContexts)
+      TEST_PROXY_NEXT(importedParentContexts)
       TEST_NEXT(declarations)
       TEST_PROXY_NEXT(definitions)
       TEST_PROXY_NEXT(uses)
