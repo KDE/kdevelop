@@ -103,7 +103,10 @@ const KUrl::List& KDevProjectBuildFolderItem::includeDirectories() const
 
 const QHash<QString, QString>& KDevProjectBuildFolderItem::environment() const
 {
-  QHash<QString, QString> hash;
+#ifdef __GNUC__
+#warning PURE HORROR - used to return reference to local variable - FIXME!!
+#endif
+  static QHash<QString, QString> hash;
   return hash;
 }
 
