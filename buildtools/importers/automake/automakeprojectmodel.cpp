@@ -40,7 +40,7 @@ AutoMakeFileItem::~AutoMakeFileItem()
 }
 
 AutoMakeTargetItem::AutoMakeTargetItem( const TargetInfo& target, KDevItemGroup* parent )
-    : KDevProjectTargetItem( target.url, parent )
+    : KDevProjectTargetItem( target.url.pathOrUrl(), parent )
 {
     m_target = target;
     setName( target.name );
