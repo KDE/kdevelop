@@ -64,8 +64,6 @@ void DUChainModel::documentActivated( KDevDocument* document )
 
 void DUChainModel::setTopContext(TopDUContext* context)
 {
-  kDebug() << k_funcinfo << context << endl;
-
   if (m_chain != context)
     m_chain = context;
 
@@ -217,8 +215,6 @@ int DUChainModel::rowCount ( const QModelIndex & parent ) const
 
 QList< DUChainModelBase * >* DUChainModel::childItems(DUChainModelBase * parent) const
 {
-  kDebug() << k_funcinfo << parent << endl;
-
   if (m_objectCache.contains(parent))
     return m_objectCache[parent];
 
@@ -238,12 +234,7 @@ QList< DUChainModelBase * >* DUChainModel::childItems(DUChainModelBase * parent)
     QListIterator<Use*> uses = context->uses();
 
     bool firstInit = true;
-    int count = 20;
     forever {
-      --count;
-      if (!count)
-        break;
-
       DUChainModelBase* currentItem = 0;
       Cursor first, current;
       int found = 1;
@@ -283,8 +274,6 @@ QList< DUChainModelBase * >* DUChainModel::childItems(DUChainModelBase * parent)
 
       firstInit = false;
     }
-
-    kDebug() << k_funcinfo << parent << " count " << list->count() << endl;
 
   } else if (Declaration* dec = dynamic_cast<Declaration*>(parent)) {
     if (dec->definition())

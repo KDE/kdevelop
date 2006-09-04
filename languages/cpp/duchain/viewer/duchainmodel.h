@@ -100,6 +100,9 @@ class DUChainModel : public QAbstractItemModel
       DUChainModelBase* item = it.peekPrevious();
       if (it.hasNext())
         it.next();
+      else
+        // Make hasPrevious return false
+        it.toFront();
 
       return item;
     }
@@ -113,6 +116,9 @@ class DUChainModel : public QAbstractItemModel
       m_proxyObjects.insert(item);
       if (it.hasNext())
         it.next();
+      else
+        // Make hasPrevious return false
+        it.toFront();
 
       return item;
     }
