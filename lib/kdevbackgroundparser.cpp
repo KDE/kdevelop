@@ -84,6 +84,7 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
 
 KDevBackgroundParser::~KDevBackgroundParser()
 {
+    suspend();
     m_weaver->dequeue();
     m_weaver->requestAbort();
     m_weaver->finish();
@@ -419,7 +420,7 @@ void KDevBackgroundParser::resume()
     m_timer->start( m_delay );
 
     //Crashes right now...
-    //m_weaver->setMaximumNumberOfThreads( m_threads );
+    m_weaver->setMaximumNumberOfThreads( m_threads );
     m_weaver->resume();
 
     if (m_weaver->queueLength() && m_progressBar)
