@@ -151,8 +151,11 @@ void ParseJob::run()
     if (parentJob()->abortRequested())
         return parentJob()->abortJob();
 
-    ast->language = parentJob()->cpp();
-    ast->session = parentJob()->parseSession();
+    if ( ast )
+    {
+        ast->language = parentJob()->cpp();
+        ast->session = parentJob()->parseSession();
+    }
 
     parentJob()->setAST(ast);
 
