@@ -281,7 +281,7 @@ void KWrite::changeEditor()
 
 void KWrite::slotFlush ()
 {
-   m_view->document()->closeURL();
+   m_view->document()->closeUrl();
 }
 
 void KWrite::slotNew()

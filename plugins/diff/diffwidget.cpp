@@ -243,7 +243,7 @@ void DiffWidget::slotClear()
   rawDiff = QString();
   te->clear();
   if ( extPart )
-    extPart->closeURL();
+    extPart->closeUrl();
 }
 
 // internally for the TextEdit only!
