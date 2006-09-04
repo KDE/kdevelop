@@ -179,7 +179,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
   visitFunctionDeclaration(node);
 
-  if (node && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
+  if (node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
     QualifiedIdentifier functionName = identifierForName(node->init_declarator->declarator->id);
     if (functionName.count() >= 2) {
       // This is a class function
