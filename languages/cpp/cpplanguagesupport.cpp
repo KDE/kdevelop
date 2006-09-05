@@ -259,6 +259,7 @@ KUrl CppLanguageSupport::findInclude( const QString& fileName )
 void CppLanguageSupport::documentLoaded(KDevAST * ast, const KUrl & document)
 {
     // Pretty heavy handed - find another way?
+    // TODO: use the definition-use chain locking here, rather than in the builders?
     lockAllParseMutexes();
 
     TopDUContext* context = DUChain::self()->chainForDocument(document);

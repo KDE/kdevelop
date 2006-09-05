@@ -36,7 +36,7 @@
 
 using namespace KTextEditor;
 
-DUChainModel::ProxyObject::ProxyObject(DUChainModelBase* _parent, DUChainModelBase* _object)
+DUChainModel::ProxyObject::ProxyObject(DUChainBase* _parent, DUChainBase* _object)
   : parent(_parent)
   , object(_object)
 {
@@ -94,9 +94,9 @@ QModelIndex DUChainModel::index ( int row, int column, const QModelIndex & paren
     return createIndex(row, column, m_chain);
   }
 
-  DUChainModelBase* base = static_cast<DUChainModelBase*>(parent.internalPointer());
+  DUChainBase* base = static_cast<DUChainBase*>(parent.internalPointer());
 
-  QList<DUChainModelBase*>* items = childItems(base);
+  QList<DUChainBase*>* items = childItems(base);
 
   if (!items)
     return QModelIndex();
@@ -112,7 +112,7 @@ QModelIndex DUChainModel::parent ( const QModelIndex & index ) const
   if (!index.isValid())
     return QModelIndex();
 
-  DUChainModelBase* base = static_cast<DUChainModelBase*>(index.internalPointer());
+  DUChainBase* base = static_cast<DUChainBase*>(index.internalPointer());
 
   if (ProxyObject* proxy = dynamic_cast<ProxyObject*>(base))
     return createParentIndex(proxy->parent);
@@ -142,7 +142,7 @@ QVariant DUChainModel::data(const QModelIndex& index, int role ) const
   if (!index.isValid())
     return QVariant();
 
-  DUChainModelBase* base = static_cast<DUChainModelBase*>(index.internalPointer());
+  DUChainBase* base = static_cast<DUChainBase*>(index.internalPointer());
   ProxyObject* proxy = dynamic_cast<ProxyObject*>(base);
   if (proxy)
     base = proxy->object;
@@ -191,8 +191,8 @@ int DUChainModel::rowCount ( const QModelIndex & parent ) const
   if (!parent.isValid())
     return 1;
 
-  DUChainModelBase* base = static_cast<DUChainModelBase*>(parent.internalPointer());
-  QList<DUChainModelBase*>* items = childItems(base);
+  DUChainBase* base = static_cast<DUChainBase*>(parent.internalPointer());
+  QList<DUChainBase*>* items = childItems(base);
   if (!items)
     return 0;
 
@@ -213,7 +213,7 @@ int DUChainModel::rowCount ( const QModelIndex & parent ) const
         found = index; \
       }
 
-QList< DUChainModelBase * >* DUChainModel::childItems(DUChainModelBase * parent) const
+QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
 {
   if (m_objectCache.contains(parent))
     return m_objectCache[parent];
@@ -222,20 +222,21 @@ QList< DUChainModelBase * >* DUChainModel::childItems(DUChainModelBase * parent)
   if (proxy)
     parent = proxy->object;
 
-  QList<DUChainModelBase*>* list = 0;
+  QList<DUChainBase*>* list = 0;
 
   if (DUContext* context = dynamic_cast<DUContext*>(parent)) {
-    list = new QList<DUChainModelBase*>();
+    list = new QList<DUChainBase*>();
 
     QListIterator<DUContext*> contexts = context->childContexts();
     QListIterator<DUContext*> importedParentContexts = context->importedParentContexts();
     QListIterator<Declaration*> declarations = context->localDeclarations();
     QListIterator<Definition*> definitions = context->localDefinitions();
-    QListIterator<Use*> uses = context->uses();
+    QListIterator<Use*> uses = context->internalUses();
+    QListIterator<Use*> uses = context->externalUses();
 
     bool firstInit = true;
     forever {
-      DUChainModelBase* currentItem = 0;
+      DUChainBase* currentItem = 0;
       Cursor first, current;
       int found = 1;
 
@@ -277,10 +278,10 @@ QList< DUChainModelBase * >* DUChainModel::childItems(DUChainModelBase * parent)
 
   } else if (Declaration* dec = dynamic_cast<Declaration*>(parent)) {
     if (dec->definition())
-      list->append(static_cast<DUChainModelBase*>(dec->definition()));
+      list->append(static_cast<DUChainBase*>(dec->definition()));
 
     foreach (Use* use, dec->uses())
-      list->append(static_cast<DUChainModelBase*>(use));
+      list->append(static_cast<DUChainBase*>(use));
 
   } else {
     // No child items for definitions or uses

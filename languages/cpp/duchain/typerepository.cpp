@@ -18,13 +18,14 @@
 
 #include "typerepository.h"
 
-#include <QMutex>
 #include <QMutexLocker>
 
+#include <kstaticdeleter.h>
+
+static KStaticDeleter<TypeRepository> sd;
 TypeRepository* TypeRepository::s_instance = 0;
 
 TypeRepository::TypeRepository()
-  : m_mutex(new QMutex)
 {
   m_integrals.reserve(18 * 4);
 
@@ -156,7 +157,7 @@ void TypeRepository::newIntegralType(CppIntegralType::IntegralTypes type, CppInt
 TypeRepository* TypeRepository::self()
 {
   if (!s_instance)
-    s_instance = new TypeRepository();
+    sd.setObject(s_instance, new TypeRepository());
 
   return s_instance;
 }
@@ -202,7 +203,7 @@ AbstractType::Ptr TypeRepository::registerType(AbstractType::Ptr input)
 
 AbstractType::Ptr TypeRepository::registerPointer(CppPointerType::Ptr input)
 {
-  QMutexLocker lock(m_mutex);
+  QMutexLocker lock(&m_mutex);
 
   Q_ASSERT(input);
 
@@ -228,7 +229,7 @@ AbstractType::Ptr TypeRepository::registerPointer(CppPointerType::Ptr input)
 
 AbstractType::Ptr TypeRepository::registerReference(CppReferenceType::Ptr input)
 {
-  QMutexLocker lock(m_mutex);
+  QMutexLocker lock(&m_mutex);
 
   Q_ASSERT(input);
 
@@ -254,7 +255,7 @@ AbstractType::Ptr TypeRepository::registerReference(CppReferenceType::Ptr input)
 
 AbstractType::Ptr TypeRepository::registerFunction(CppFunctionType::Ptr input)
 {
-  QMutexLocker lock(m_mutex);
+  QMutexLocker lock(&m_mutex);
 
   Q_ASSERT(input);
 
@@ -296,7 +297,7 @@ AbstractType::Ptr TypeRepository::registerFunction(CppFunctionType::Ptr input)
 
 AbstractType::Ptr TypeRepository::registerArray(ArrayType::Ptr input)
 {
-  QMutexLocker lock(m_mutex);
+  QMutexLocker lock(&m_mutex);
 
   Q_ASSERT(input);
 

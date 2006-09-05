@@ -1,4 +1,4 @@
-/* This  is part of KDevelop
+/* This file is part of KDevelop
     Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -16,15 +16,39 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "duchainmodelbase.h"
+#ifndef DUCHAINBASE_H
+#define DUCHAINBASE_H
 
-DUChainModelBase::DUChainModelBase()
-  : modelRow(0)
-{
-}
+class TopDUContext;
+class QReadWriteLock;
 
-DUChainModelBase::~DUChainModelBase()
+/**
+ * Base class to enable the DUChain to be viewed as a model.
+ */
+class DUChainBase
 {
-}
+  friend class ProxyObject;
+
+public:
+  DUChainBase(TopDUContext* top);
+  virtual ~DUChainBase();
+
+  /// \threadsafe
+  TopDUContext* topContext() const;
+
+  /// \threadsafe
+  QReadWriteLock* chainLock() const;
+
+  int modelRow;
+
+private:
+  // For proxy object
+  DUChainBase();
+
+private:
+  TopDUContext* m_topContext;
+};
+
+#endif // DUCHAINBASE_H
 
 // kate: indent-width 2;

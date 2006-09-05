@@ -21,10 +21,12 @@
 
 #include "ducontext.h"
 
+class QReadWriteLock;
+
 /**
  * The top context in a definition-use chain for one source file.
  *
- * Will be used later to manage a few things.
+ * Implements SymbolTable lookups and locking for the chain.
  *
  * \todo move the registration with DUChain here
  */
@@ -33,6 +35,19 @@ class TopDUContext : public DUContext
 public:
   TopDUContext(KTextEditor::Range* range);
   virtual ~TopDUContext();
+
+  /**
+   * Used to control read and write access to the entire definition-use chain
+   * from the top context down though all child contexts and declarations.
+   *
+   * The exceptions are noted in the documentation, but involve access to uses
+   * and definitions, as they may occur in a context tree other than their
+   * parent object's tree.
+   */
+  inline QReadWriteLock* chainLock() const { return &m_lock; }
+
+  /// Returns true if this object is being deleted, otherwise false.
+  inline bool deleting() const { return m_deleting; }
 
   bool hasUses() const;
   void setHasUses(bool hasUses);
@@ -54,7 +69,10 @@ protected:
 
   void checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const KTextEditor::Cursor& position, QList<DUContext*>& ret) const;
 
-  bool m_hasUses;
+private:
+  mutable QReadWriteLock m_lock;
+  bool m_hasUses  : 1;
+  bool m_deleting : 1;
 };
 
 #endif // TOPDUCONTEXT_H

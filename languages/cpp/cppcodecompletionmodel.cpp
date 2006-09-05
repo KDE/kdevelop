@@ -40,6 +40,7 @@ CppCodeCompletionModel::~CppCodeCompletionModel()
 QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 {
   Declaration* dec = static_cast<Declaration*>(index.internalPointer());
+  QReadLocker lock(dec->chainLock());
 
   switch (role) {
     case Qt::DisplayRole:
@@ -226,6 +227,7 @@ void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::
   m_context = context;
   Q_ASSERT(m_context);
 
+  QReadLocker lock(m_context->chainLock());
   m_declarations = m_context->allDeclarations(position).values();
 }
 

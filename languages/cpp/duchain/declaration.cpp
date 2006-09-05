@@ -30,14 +30,17 @@
 
 using namespace KTextEditor;
 
-Declaration::Declaration(KTextEditor::Range* range, Scope scope )
-  : KDevDocumentRangeObject(range)
+Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* context )
+  : DUChainBase(context->topContext())
+  , KDevDocumentRangeObject(range)
   , m_context(0)
   , m_scope(scope)
   , m_definition(0)
   , m_isDefinition(false)
   , m_inSymbolTable(false)
 {
+  Q_ASSERT(context);
+  setContext(context);
 }
 
 Declaration::~Declaration()
@@ -52,7 +55,9 @@ Declaration::~Declaration()
 
   // context is only null in the test cases
   if (context())
-    context()->takeDeclaration(this);
+    context()->removeDeclaration(this);
+
+  setContext(0);
 
   setAbstractType(AbstractType::Ptr());
 
@@ -190,7 +195,16 @@ DUContext * Declaration::context() const
 
 void Declaration::setContext(DUContext* context)
 {
+  if (m_context && context)
+    Q_ASSERT(m_context->topContext() == context->topContext());
+
+  if (m_context)
+    m_context->removeDeclaration(this);
+
   m_context = context;
+
+  if (m_context)
+    m_context->addDeclaration(this);
 }
 
 bool Declaration::operator ==(const Declaration & other) const

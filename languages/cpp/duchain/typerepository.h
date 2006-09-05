@@ -23,8 +23,7 @@
 
 #include <QSet>
 #include <QMultiHash>
-
-class QMutex;
+#include <QMutex>
 
 class TypeRepository
 {
@@ -42,6 +41,7 @@ public:
 
 private:
   TypeRepository();
+
   void newIntegralType(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone);
   CppIntegralType::Ptr getIntegral(int index, int cv) const;
 
@@ -62,7 +62,7 @@ private:
   QMultiHash<AbstractType::Ptr, ArrayType::Ptr> m_arrays;
   //QSet<AbstractType::Ptr> m_others;
 
-  QMutex* m_mutex;
+  mutable QMutex m_mutex;
 };
 
 #endif // TYPEREPOSITORY_H

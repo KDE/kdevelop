@@ -29,7 +29,7 @@
 class ClassMemberDeclaration : public Declaration
 {
 public:
-  ClassMemberDeclaration(KTextEditor::Range* range);
+  ClassMemberDeclaration(KTextEditor::Range* range, DUContext* context);
 
   Cpp::AccessPolicy accessPolicy() const;
   void setAccessPolicy(Cpp::AccessPolicy accessPolicy);

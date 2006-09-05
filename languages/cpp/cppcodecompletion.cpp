@@ -84,6 +84,7 @@ void CppCodeCompletion::cursorPositionChanged()
 
   KUrl url = view->document()->url();
   if (TopDUContext* top = DUChain::self()->chainForDocument(url)) {
+    QReadLocker lock(top->chainLock());
     DUContext* thisContext = top->findContextAt(end);
 
     m_model->setContext(thisContext, end);

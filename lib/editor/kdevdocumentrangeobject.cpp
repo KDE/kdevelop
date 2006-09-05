@@ -25,6 +25,7 @@ using namespace KTextEditor;
 
 KDevDocumentRangeObject::KDevDocumentRangeObject(Range* range)
   : m_range(0)
+  , m_url(0)
 {
   setTextRange(range);
 }
@@ -35,6 +36,7 @@ KDevDocumentRangeObject::~ KDevDocumentRangeObject( )
     m_range->toSmartRange()->removeWatcher(this);
 
   delete m_range;
+  delete m_url;
 }
 
 void KDevDocumentRangeObject::setTextRange( Range * range )
@@ -46,8 +48,12 @@ void KDevDocumentRangeObject::setTextRange( Range * range )
 
   if (m_range) {
     // TODO.. overkill???
-    if (m_range->isSmartRange())
+    if (m_range->isSmartRange()) {
       m_range->toSmartRange()->removeWatcher(this);
+      Q_ASSERT(m_url);
+      delete m_url;
+      m_url = 0;
+    }
 
     delete m_range;
   }
@@ -56,7 +62,7 @@ void KDevDocumentRangeObject::setTextRange( Range * range )
 
   if (m_range->isSmartRange()) {
     m_range->toSmartRange()->addWatcher(this);
-    m_url = url(m_range);
+    m_url = new KUrl(url(m_range));
   }
 }
 
@@ -111,8 +117,9 @@ Range* KDevDocumentRangeObject::textRangePtr() const
 void KDevDocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
 {
   Q_ASSERT(range == m_range);
+  Q_ASSERT(m_url);
   //Q_ASSERT(false);
-  m_range = new KDevDocumentRange(m_url, *m_range);
+  m_range = new KDevDocumentRange(*m_url, *m_range);
 }
 
 KTextEditor::Range* KDevDocumentRangeObject::takeRange()

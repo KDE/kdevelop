@@ -20,7 +20,7 @@
 #define DEFINITION_H
 
 #include "kdevdocumentrangeobject.h"
-#include "duchainmodelbase.h"
+#include "duchainbase.h"
 
 class Declaration;
 class DUContext;
@@ -28,7 +28,7 @@ class DUContext;
 /**
  * Represents a definition of a previously encountered declaration in a definition-use chain.
  */
-class Definition : public DUChainModelBase, public KDevDocumentRangeObject
+class Definition : public DUChainBase, public KDevDocumentRangeObject
 {
 public:
   Definition(KTextEditor::Range* range, Declaration* declaration, DUContext* context);

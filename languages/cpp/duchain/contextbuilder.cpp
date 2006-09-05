@@ -63,9 +63,12 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
 
   m_editor->setCurrentUrl(url);
 
+  // FIXME ? race here...
   TopDUContext* topLevelContext = DUChain::self()->chainForDocument(url);
 
   if (topLevelContext) {
+    // To here...
+    topLevelContext->chainLock()->lockForWrite();
     Q_ASSERT(topLevelContext->textRangePtr());
 
     if (m_compilingContexts) {
@@ -87,6 +90,7 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
 
     Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
     topLevelContext = new TopDUContext(range);
+    topLevelContext->chainLock()->lockForWrite();
     topLevelContext->setType(DUContext::Global);
 
     DUChain::self()->addDocumentChain(url, topLevelContext);
@@ -105,7 +109,7 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
       topLevelContext->addImportedParentContext(included);
   }
 
-  supportBuild(node);
+  supportBuild(node, true);
 
   m_compilingContexts = false;
 
@@ -119,9 +123,18 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
   return topLevelContext;
 }
 
-void ContextBuilder::supportBuild(AST *node)
+void ContextBuilder::supportBuild(AST *node, bool alreadyLocked)
 {
-  Q_ASSERT(node->ducontext);
+  Q_ASSERT(dynamic_cast<TopDUContext*>(node->ducontext));
+
+  TopDUContext* top = static_cast<TopDUContext*>(node->ducontext);
+
+  if (!alreadyLocked)
+    if (m_compilingContexts)
+      top->chainLock()->lockForWrite();
+    else
+      top->chainLock()->lockForRead();
+
   m_contextStack.push(node->ducontext);
 
   m_editor->setCurrentUrl(node->ducontext->url());
@@ -131,6 +144,8 @@ void ContextBuilder::supportBuild(AST *node)
   visit (node);
 
   closeContext();
+
+  static_cast<TopDUContext*>(node->ducontext)->chainLock()->unlock();
 
   Q_ASSERT(m_contextStack.isEmpty());
 }
@@ -425,10 +440,6 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
 void ContextBuilder::addImportedContexts()
 {
   if (m_compilingContexts && !m_importedParentContexts.isEmpty()) {
-    /*foreach (DUContext* imported, m_importedParentContexts)
-      if (imported->parentContext() && imported->url() == currentContext()->url())
-        imported->parentContext()->takeChildContext(imported);*/
-
     foreach (DUContext* imported, m_importedParentContexts)
       currentContext()->addImportedParentContext(imported);
 

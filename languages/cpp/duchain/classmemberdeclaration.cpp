@@ -20,8 +20,8 @@
 
 #include "classmemberdeclaration.h"
 
-ClassMemberDeclaration::ClassMemberDeclaration(KTextEditor::Range * range)
-  : Declaration(range, ClassScope)
+ClassMemberDeclaration::ClassMemberDeclaration(KTextEditor::Range * range, DUContext* context)
+  : Declaration(range, ClassScope, context)
   , m_accessPolicy(Cpp::Public)
   , m_isStatic(false)
   , m_isAuto(false)

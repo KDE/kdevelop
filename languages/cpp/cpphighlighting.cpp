@@ -21,6 +21,8 @@
 
 #include "cpphighlighting.h"
 
+#include <QReadLocker>
+
 #include <ktexteditor/smartrange.h>
 
 #include "parser/codemodel.h"
@@ -231,6 +233,8 @@ void CppHighlighting::outputRange( KTextEditor::SmartRange * range ) const
 
 void CppHighlighting::highlightDUChain(TopDUContext* context) const
 {
+  QReadLocker lock(context->chainLock());
+  Q_ASSERT(context->topContext() == context);
   highlightDUChain(static_cast<DUContext*>(context));
 }
 
@@ -245,9 +249,15 @@ void CppHighlighting::highlightDUChain(DUContext* context) const
     if (dec->smartRange())
       dec->smartRange()->setAttribute(attributeForType(typeForDeclaration(dec), DeclarationContext));
 
-  foreach (Use* use, context->uses())
+  foreach (Use* use, context->internalUses())
     if (SmartRange* range = use->smartRange())
       range->setAttribute(attributeForType(use->declaration() ? typeForDeclaration(use->declaration()) : ErrorVariableType, ReferenceContext));
+
+  foreach (Use* use, context->externalUses()) {
+    QReadLocker lock(use->chainLock());
+    if (SmartRange* range = use->smartRange())
+      range->setAttribute(attributeForType(use->declaration() ? typeForDeclaration(use->declaration()) : ErrorVariableType, ReferenceContext));
+  }
 
   foreach (DUContext* context, context->importedParentContexts())
     highlightDUChain(context);

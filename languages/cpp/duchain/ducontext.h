@@ -20,12 +20,13 @@
 #define DUCONTEXT_H
 
 #include <QHash>
+#include <QReadWriteLock>
 
 #include "kdevdocumentrangeobject.h"
 #include "kdevdocumentcursorobject.h"
 #include "identifier.h"
 #include "typesystem.h"
-#include "duchainmodelbase.h"
+#include "duchainbase.h"
 
 class Declaration;
 class Definition;
@@ -37,19 +38,30 @@ class TopDUContext;
  * A single context in source code, represented as a node in a
  * directed acyclic graph.
  *
+ * Access to context objects must be serialised by holding the top level
+ * chain's lock, accessible from any object by calling chainLock(),
+ * unless otherwise specified.
+ *
  * \todo change child relationships to a linked list within the context?
  */
-class DUContext : public DUChainModelBase, public KDevDocumentRangeObject
+class DUContext : public DUChainBase, public KDevDocumentRangeObject
 {
   friend class Use;
-  friend class DUChainModel;
+  friend class Declaration;
+  friend class Definition;
 
 public:
   /**
    * Constructor. No convenience methods, as the initialisation order is important,
    * and providing all permutations would be overkill.
    */
-  DUContext(KTextEditor::Range* range, DUContext* parent = 0);
+  DUContext(KTextEditor::Range* range, DUContext* parent);
+
+  /**
+   * Constructor. No convenience methods, as the initialisation order is important,
+   * and providing all permutations would be overkill.
+   */
+  DUContext(KTextEditor::Range* range, TopDUContext* top);
 
   /**
    * Destructor. Will delete all child contexts which are defined within
@@ -74,19 +86,9 @@ public:
   inline int depth() const { if (!parentContext()) return 0; return parentContext()->depth() + 1; }
 
   /**
-   * Retrieve the top level context for this context.
-   */
-  TopDUContext* topContext() const;
-
-  /**
    * Find the context which most specifically covers \a position.
    */
   DUContext* findContextAt(const KTextEditor::Cursor& position) const;
-
-  /**
-   * Find the use which encompasses \a position, if one exists.
-   */
-  Use* findUseAt(const KTextEditor::Cursor& position) const;
 
   /**
    * Calculate the fully qualified scope identifier
@@ -105,11 +107,15 @@ public:
 
   /**
    * Returns whether this context is listed in the symbol table (Namespaces and classes)
+   *
+   * \note You do not have to lock the chain in order to access this function.
    */
   bool inSymbolTable() const;
 
   /**
    * Tell this object when it is in the symbol table, so it can deregister itself
+   *
+   * \note You do not have to lock the chain in order to access this function.
    */
   void setInSymbolTable(bool inSymbolTable);
 
@@ -142,26 +148,6 @@ public:
   const QList<DUContext*>& childContexts() const;
 
   /**
-   * Adds a child context.
-   *
-   * \note Be sure to have set the text location first, so that
-   * the chain is sorted correctly.
-   */
-  void addChildContext(DUContext* context);
-
-  /**
-   * Removes a child context.  Ownership is transferred to the caller, so if you don't
-   * want it, delete it.
-   */
-  DUContext* takeChildContext(DUContext* context);
-
-  /**
-   * Clears but does not delete the child contexts.  The caller has the responsibility
-   * of using or deleting them.
-   */
-  QList<DUContext*> takeChildContexts();
-
-  /**
    * Clears and deletes all child contexts recursively.
    * This will not cross file boundaries.
    */
@@ -187,6 +173,8 @@ public:
    * \param type the type to match, or null for no type matching.
    *
    * \returns the requested declaration if one was found, otherwise null.
+   *
+   * \warning this may return declarations which are not in this tree, you may need to lock them too...
    */
   QList<Declaration*> findDeclarations(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr()) const;
 
@@ -198,6 +186,8 @@ public:
    * \param location the text position to search for
    *
    * \returns the requested declaration if one was found, otherwise null.
+   *
+   * \warning this may return declarations which are not in this tree, you may need to lock them too...
    *
    * \overload
    */
@@ -226,41 +216,36 @@ public:
    */
   const QList<Declaration*>& localDeclarations() const;
 
-  /**
-   * Adds a new declaration to this context. Passes back that definition for convenience.
-   */
-  Declaration* addDeclaration(Declaration* declaration);
-
-  /**
-   * Take a specified \a declaration from this context and pass ownership to the caller.
-   */
-  Declaration* takeDeclaration(Declaration* declaration);
-
-  /**
-   * Remove the specified \a declaration from this context and delete it.
-   */
-  void deleteDeclaration(Declaration* declaration);
-
+//BEGIN Definition handling - you do not need to hold the chain lock for these functions.
   /**
    * Returns all local definitions
+   *
+   * \note You do not have to lock the chain in order to access this function.
    */
   const QList<Definition*>& localDefinitions() const;
 
   /**
    * Adds a new definition to this context. Passes back that definition for convenience.
+   *
+   * \note You do not have to lock the chain in order to access this function.
    */
   Definition* addDefinition(Definition* definition);
 
   /**
    * Take a specified \a definition from this context and pass ownership to the caller.
+   *
+   * \note You do not have to lock the chain in order to access this function.
    */
   Definition* takeDefinition(Definition* definition);
 
   /**
    * Clears all local definitions. Deletes these definitions, as the context has
    * ownership.
+   *
+   * \note You do not have to lock the chain in order to access this function.
    */
   void deleteLocalDefinitions();
+//END
 
   /**
    * Searches for the most specific context for the given cursor \a position in the given \a url.
@@ -281,6 +266,8 @@ public:
    * \param position cursor position to search from, or invalid to search the whole context.
    *
    * \returns the requested context if one was found, otherwise null.
+   *
+   * \warning this may return contexts which are not in this tree, you may need to lock them too...
    */
   QList<DUContext*> findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid()) const;
 
@@ -292,35 +279,61 @@ public:
    *               want to search in a subbranch of the chain, you may specify the parent here)
    *
    * \returns the requested definitions, if any were active at that location.
+   *
+   * \warning this may return declarations which are not in this tree, you may need to lock them too...
    */
   QHash<QualifiedIdentifier, Declaration*> allDeclarations(const KTextEditor::Cursor& position) const;
 
   /**
-   * Return a list of all uses which occur in this context.
+   * Find the use which encompasses \a position, if one exists.
    */
-  const QList<Use*>& uses() const;
+  Use* findUseAt(const KTextEditor::Cursor& position) const;
+
+  /**
+   * Return a list of all uses which occur in this context, and whose declarations
+   * are within this chain (thus, no need to lock the uses' chains to use them)
+   */
+  const QList<Use*>& internalUses() const;
+
+  /**
+   * Return a list of all uses which occur in this context, and whose declarations
+   * lie outside of this chain (thus, you need to lock the uses' chains to use them)
+   *
+   * \note You do not have to lock the chain in order to access this function.
+   */
+  const QList<Use*>& externalUses() const;
 
   /**
    * Return a list of uses which don't have a corresponding definition.
+   *
+   * \note This function requires the top lock to be held, rather than
+   * the use lock.
    */
   const QList<Use*>& orphanUses() const;
 
   /**
    * Add an orphan use (a use which doesn't have a corresponding definition)
    * to this context.
+   *
+   * \note This function requires the top lock to be held, rather than
+   * the use lock.
    */
   void addOrphanUse(Use* orphan);
 
   /**
    * Clear and delete all orphan uses.
+   *
+   * \note This function requires the top lock to be held, rather than
+   * the use lock.
    */
   void deleteOrphanUses();
+
 
 protected:
   /**
    * Merges definitions up all branches of the definition-use chain into one hash.
    */
-  void mergeDeclarations(QHash<QualifiedIdentifier, Declaration*>& definitions, const KTextEditor::Cursor& position, bool inImportedContext = false) const;
+  void mergeDeclarationsInternal(QHash<QualifiedIdentifier, Declaration*>& definitions, const KTextEditor::Cursor& position, bool inImportedContext = false) const;
 
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
@@ -341,16 +354,37 @@ private:
 
   QualifiedIdentifier m_scopeIdentifier;
 
+  /**
+   * Adds a child context.
+   *
+   * \note Be sure to have set the text location first, so that
+   * the chain is sorted correctly.
+   */
+  void addChildContext(DUContext* context);
+
   DUContext* m_parentContext;
   QList<DUContext*> m_importedParentContexts;
   QList<DUContext*> m_childContexts;
   QList<DUContext*> m_importedChildContexts;
 
+  void addDeclaration(Declaration* declaration);
+  void removeDeclaration(Declaration* declaration);
   QList<Declaration*> m_localDeclarations;
-  QList<Definition*> m_localDefinitions;
+
+  QList<Definition*> m_localDefinitions; // Protected by m_definitionLock
+  mutable QReadWriteLock m_definitionLock;
 
   QList<UsingNS*> m_usingNamespaces;
-  QList<Use*> m_uses;
+
+  void addInternalUse(Use* use);
+  void removeInternalUse(Use* use);
+  void addExternalUse(Use* use);
+  void removeExternalUse(Use* use);
+
+  QList<Use*> m_internalUses;
+  QList<Use*> m_externalUses; // Protected by m_externalUseLock
+  mutable QReadWriteLock m_externalUseLock;
+
   QList<Use*> m_orphanUses;
 
   bool m_inSymbolTable : 1;

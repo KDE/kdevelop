@@ -31,7 +31,7 @@ set(kdevcpplanguage_LIB_SRCS
     duchain/smartconverter.cpp
     duchain/symboltable.cpp
     duchain/forwarddeclaration.cpp
-    duchain/duchainmodelbase.cpp
+    duchain/duchainbase.cpp
 )
 
 set(kdevcpplanguagesupport_PART_SRCS

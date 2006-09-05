@@ -57,7 +57,7 @@ public:
 
 private:
   KTextEditor::Range* m_range;
-  KUrl m_url;
+  KUrl* m_url;
 };
 
 #endif // RANGEOBJECT_H

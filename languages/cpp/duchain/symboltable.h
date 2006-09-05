@@ -21,6 +21,7 @@
 
 #include <QMultiHash>
 #include <QMultiMap>
+#include <QReadWriteLock>
 
 #include "identifier.h"
 
@@ -56,14 +57,13 @@ public:
 
 private:
   SymbolTable();
-  virtual ~SymbolTable();
 
   static SymbolTable* s_instance;
 
-  QReadWriteLock* m_declarationMutex;
+  mutable QReadWriteLock m_declarationMutex;
   QMultiMap<QString, Declaration*> m_declarations;
 
-  QReadWriteLock* m_contextMutex;
+  mutable QReadWriteLock m_contextMutex;
   QMultiHash<QString, DUContext*> m_contexts;
 };
 

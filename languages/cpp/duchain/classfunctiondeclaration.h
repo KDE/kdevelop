@@ -29,7 +29,7 @@
 class ClassFunctionDeclaration : public ClassMemberDeclaration
 {
 public:
-  ClassFunctionDeclaration(KTextEditor::Range* range);
+  ClassFunctionDeclaration(KTextEditor::Range* range, DUContext* context);
 
   enum QtFunctionType
   {

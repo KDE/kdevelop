@@ -19,6 +19,8 @@
 
 #include "smartconverter.h"
 
+#include <QWriteLocker>
+
 #include <ktexteditor/smartrange.h>
 
 #include <kdeveditorintegrator.h>
@@ -27,6 +29,7 @@
 #include "declaration.h"
 #include "definition.h"
 #include "use.h"
+#include "topducontext.h"
 
 using namespace KTextEditor;
 
@@ -37,6 +40,8 @@ SmartConverter::SmartConverter(KDevEditorIntegrator* editor)
 
 void SmartConverter::convertDUChain(DUContext* context) const
 {
+  QWriteLocker lock(context->chainLock());
+
   m_editor->setCurrentUrl(context->url());
 
   if (m_editor->smart()) {
@@ -61,7 +66,13 @@ void SmartConverter::convertDUChainInternal(DUContext* context, bool first) cons
     m_editor->exitCurrentRange();
   }
 
-  foreach (Use* use, context->uses()) {
+  foreach (Use* use, context->internalUses()) {
+    use->setTextRange(m_editor->createRange(use->textRange()));
+    m_editor->exitCurrentRange();
+  }
+
+  foreach (Use* use, context->externalUses()) {
+    QWriteLocker lock(use->chainLock());
     use->setTextRange(m_editor->createRange(use->textRange()));
     m_editor->exitCurrentRange();
   }

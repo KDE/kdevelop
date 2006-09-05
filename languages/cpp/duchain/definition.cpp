@@ -23,7 +23,8 @@
 using namespace KTextEditor;
 
 Definition::Definition(KTextEditor::Range* range, Declaration* declaration, DUContext* context)
-  : KDevDocumentRangeObject(range)
+  : DUChainBase(context->topContext())
+  , KDevDocumentRangeObject(range)
   , m_context(0)
   , m_declaration(0)
 {

@@ -28,7 +28,7 @@
 
 #include <ktexteditor/cursor.h>
 
-#include "duchainmodelbase.h"
+#include "duchainbase.h"
 
 class TopDUContext;
 class DUChainViewPart;
@@ -55,13 +55,13 @@ class DUChainModel : public QAbstractItemModel
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
 
   private:
-    class ProxyObject : public DUChainModelBase
+    class ProxyObject : public DUChainBase
     {
     public:
-      ProxyObject(DUChainModelBase* _parent, DUChainModelBase* _object);
+      ProxyObject(DUChainBase* _parent, DUChainBase* _object);
 
-      DUChainModelBase* parent;
-      DUChainModelBase* object;
+      DUChainBase* parent;
+      DUChainBase* object;
     };
 
 
@@ -72,7 +72,7 @@ class DUChainModel : public QAbstractItemModel
     }
 
     template <typename T>
-    DUChainModelBase* nextItem(QListIterator<T*>& it) const
+    DUChainBase* nextItem(QListIterator<T*>& it) const
     {
       if (it.hasPrevious())
         return it.peekPrevious();
@@ -94,10 +94,10 @@ class DUChainModel : public QAbstractItemModel
     }
 
     template <typename T>
-    DUChainModelBase* item(QListIterator<T*>& it) const
+    DUChainBase* item(QListIterator<T*>& it) const
     {
       Q_ASSERT(it.hasPrevious());
-      DUChainModelBase* item = it.peekPrevious();
+      DUChainBase* item = it.peekPrevious();
       if (it.hasNext())
         it.next();
       else
@@ -108,11 +108,11 @@ class DUChainModel : public QAbstractItemModel
     }
 
     template <typename T>
-    DUChainModelBase* proxyItem(DUChainModelBase* parent, QListIterator<T*> it) const
+    DUChainBase* proxyItem(DUChainBase* parent, QListIterator<T*> it) const
     {
       Q_ASSERT(it.hasPrevious());
 
-      DUChainModelBase* item = new ProxyObject(parent, it.peekPrevious());
+      DUChainBase* item = new ProxyObject(parent, it.peekPrevious());
       m_proxyObjects.insert(item);
       if (it.hasNext())
         it.next();
@@ -123,11 +123,11 @@ class DUChainModel : public QAbstractItemModel
       return item;
     }
 
-    QList<DUChainModelBase*>* childItems(DUChainModelBase* parent) const;
+    QList<DUChainBase*>* childItems(DUChainBase* parent) const;
 
     TopDUContext* m_chain;
-    mutable QCache<DUChainModelBase*, QList<DUChainModelBase*> > m_objectCache;
-    mutable QSet<DUChainModelBase*> m_proxyObjects;
+    mutable QCache<DUChainBase*, QList<DUChainBase*> > m_objectCache;
+    mutable QSet<DUChainBase*> m_proxyObjects;
 };
 
 #endif

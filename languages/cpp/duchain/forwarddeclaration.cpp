@@ -29,8 +29,8 @@
 
 using namespace KTextEditor;
 
-ForwardDeclaration::ForwardDeclaration(KTextEditor::Range* range, Scope scope )
-  : Declaration(range, scope)
+ForwardDeclaration::ForwardDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context )
+  : Declaration(range, scope, context)
   , m_resolvedDeclaration(0)
 {
 }

@@ -20,9 +20,13 @@
 
 #include <QMutexLocker>
 
+#include <kstaticdeleter.h>
+
 #include "kdeveditorintegrator.h"
 
 #include "topducontext.h"
+
+static KStaticDeleter<DUChain> sd;
 
 void DUChain::removeDocumentChain( const KUrl & document )
 {
@@ -47,7 +51,7 @@ DUChain* DUChain::s_chain = 0;
 DUChain * DUChain::self( )
 {
   if (!s_chain)
-    s_chain = new DUChain();
+    sd.setObject(s_chain, new DUChain());
 
   return s_chain;
 }

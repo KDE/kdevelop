@@ -24,13 +24,15 @@
 using namespace KTextEditor;
 
 TopDUContext::TopDUContext(KTextEditor::Range* range)
-  : DUContext(range)
+  : DUContext(range, this)
   , m_hasUses(false)
+  , m_deleting(false)
 {
 }
 
 TopDUContext::~TopDUContext( )
 {
+  m_deleting = true;
 }
 
 void TopDUContext::setHasUses(bool hasUses)
@@ -141,17 +143,31 @@ QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& d
   QList<Declaration*> found;
 
   foreach (Declaration* dec, declarations) {
-    if (dataType && dec->abstractType() != dataType)
-      continue;
-
     TopDUContext* top = dec->context()->topContext();
     if (top != this) {
-      // Make sure that this declaration is accessible
-      // TODO when import location available, use that too
-      if (!imports(top))
+      // Accept failure vs. deadlocking...
+      // TODO: unwind locks and re-lock... first, need client uses to accept that their lock may be lost first
+      if (!top->chainLock()->tryLockForRead())
         continue;
 
+      if (dataType && dec->abstractType() != dataType) {
+        top->chainLock()->unlock();
+        continue;
+      }
+
+      // Make sure that this declaration is accessible
+      // TODO when import location available, use that too
+      if (!imports(top)) {
+        top->chainLock()->unlock();
+        continue;
+      }
+
+      top->chainLock()->unlock();
+
     } else {
+      if (dataType && dec->abstractType() != dataType)
+        continue;
+
       if (dec->textRange().start() > position)
         continue;
     }
@@ -206,17 +222,31 @@ void TopDUContext::findContextsInNamespaces(ContextType contextType, const Quali
 void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const KTextEditor::Cursor& position, QList<DUContext*>& ret) const
 {
   foreach (DUContext* context, contexts) {
-    if (context->type() != contextType)
-      continue;
-
     TopDUContext* top = context->topContext();
     if (top != this) {
-      // Make sure that this declaration is accessible
-      // TODO when import location available, use that too
-      if (!imports(top))
+      // Avoid deadlock... accept failure :(
+      // TODO: unwind locks and re-lock... first, need client uses to accept that their lock may be lost first
+      if (!top->chainLock()->tryLockForRead())
         continue;
 
+      if (context->type() != contextType) {
+        top->chainLock()->unlock();
+        continue;
+      }
+
+      // Make sure that this declaration is accessible
+      // TODO when import location available, use that too
+      if (!imports(top)) {
+        top->chainLock()->unlock();
+        continue;
+      }
+
+      top->chainLock()->unlock();
+
     } else {
+      if (context->type() != contextType)
+        continue;
+
       if (context->textRange().start() > position)
         continue;
     }

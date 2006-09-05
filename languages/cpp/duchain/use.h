@@ -20,7 +20,7 @@
 #define DEFINITIONUSE_H
 
 #include "kdevdocumentrangeobject.h"
-#include "duchainmodelbase.h"
+#include "duchainbase.h"
 
 class DUContext;
 class Declaration;
@@ -28,12 +28,10 @@ class Declaration;
 /**
  * Represents a single variable definition in a definition-use chain.
  */
-class Use : public DUChainModelBase, public KDevDocumentRangeObject
+class Use : public DUChainBase, public KDevDocumentRangeObject
 {
-  friend class DUChainModel;
-
 public:
-  Use(KTextEditor::Range* range, DUContext* context = 0);
+  Use(KTextEditor::Range* range, DUContext* context);
   virtual ~Use();
 
   DUContext* context() const;
@@ -47,6 +45,7 @@ public:
 private:
   DUContext* m_context;
   Declaration* m_declaration;
+  bool m_isInternal : 1;
 };
 
 #endif // DEFINITIONUSE_H

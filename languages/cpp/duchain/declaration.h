@@ -25,7 +25,7 @@
 #include "kdevdocumentrangeobject.h"
 #include "cppnamespace.h"
 #include "typesystem.h"
-#include "duchainmodelbase.h"
+#include "duchainbase.h"
 
 class AbstractType;
 class DUContext;
@@ -36,11 +36,10 @@ class ForwardDeclaration;
 /**
  * Represents a single declaration in a definition-use chain.
  */
-class Declaration : public DUChainModelBase, public KDevDocumentRangeObject
+class Declaration : public DUChainBase, public KDevDocumentRangeObject
 {
   friend class DUContext;
   friend class ForwardDeclaration;
-  friend class DUChainModel;
 
 public:
   enum Scope {
@@ -51,7 +50,7 @@ public:
     LocalScope
   };
 
-  Declaration(KTextEditor::Range* range, Scope scope);
+  Declaration(KTextEditor::Range* range, Scope scope, DUContext* context);
   virtual ~Declaration();
 
   const QList<ForwardDeclaration*>& forwardDeclarations() const;
@@ -66,6 +65,7 @@ public:
   void setDefinition(Definition* definition);
 
   DUContext* context() const;
+  void setContext(DUContext* context);
 
   Scope scope() const;
 
@@ -100,8 +100,6 @@ public:
   virtual QString toString() const;
 
 private:
-  void setContext(DUContext* context);
-
   DUContext* m_context;
   Scope m_scope;
   AbstractType::Ptr m_type;

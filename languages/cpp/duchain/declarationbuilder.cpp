@@ -173,21 +173,19 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
   Declaration* declaration;
   if (isForward) {
-    declaration = new ForwardDeclaration(range, scope);
+    declaration = new ForwardDeclaration(range, scope, currentContext());
 
   } else if (isFunction) {
-    declaration = new ClassFunctionDeclaration(range);
+    declaration = new ClassFunctionDeclaration(range, currentContext());
     if (!m_functionDefinedStack.isEmpty())
       declaration->setDeclarationIsDefinition(m_functionDefinedStack.top());
 
   } else if (scope == Declaration::ClassScope) {
-    declaration = new ClassMemberDeclaration(range);
+    declaration = new ClassMemberDeclaration(range, currentContext());
 
   } else {
-    declaration = new Declaration(range, scope);
+    declaration = new Declaration(range, scope, currentContext());
   }
-
-  currentContext()->addDeclaration(declaration);
 
   if (name) {
     QualifiedIdentifier id = identifierForName(name);

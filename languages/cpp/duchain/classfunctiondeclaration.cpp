@@ -22,8 +22,8 @@
 
 #include "ducontext.h"
 
-ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range)
-  : ClassMemberDeclaration(range)
+ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range, DUContext* context)
+  : ClassMemberDeclaration(range, context)
   , m_functionType(Normal)
   , m_isVirtual(false)
   , m_isInline(false)

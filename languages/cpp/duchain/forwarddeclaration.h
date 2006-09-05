@@ -27,7 +27,7 @@
 class ForwardDeclaration : public Declaration
 {
 public:
-  ForwardDeclaration(KTextEditor::Range* range, Scope scope);
+  ForwardDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context);
   virtual ~ForwardDeclaration();
 
   virtual bool isForwardDeclaration() const;

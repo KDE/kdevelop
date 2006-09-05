@@ -144,6 +144,7 @@ private slots:
     delete type2;
     delete type3;*/
 
+    KDevEditorIntegrator::releaseTopRange(topContext->textRangePtr());
     delete topContext;
   }
 
@@ -202,29 +203,24 @@ private slots:
 
     QCOMPARE(DUChain::self()->chainForDocument(file1), topContext);
 
-    DUContext* firstChild = new DUContext(new KDevDocumentRange(file1, Range(4,4, 10,3)));
-    topContext->addChildContext(firstChild);
+    QWriteLocker lock(topContext->chainLock());
+
+    DUContext* firstChild = new DUContext(new KDevDocumentRange(file1, Range(4,4, 10,3)), topContext);
 
     QCOMPARE(firstChild->parentContext(), topContext);
     QCOMPARE(firstChild->childContexts().count(), 0);
     QCOMPARE(topContext->childContexts().count(), 1);
     QCOMPARE(topContext->childContexts().last(), firstChild);
 
-    DUContext* secondChild = new DUContext(new KDevDocumentRange(file1, Range(14,4, 19,3)));
-    topContext->addChildContext(secondChild);
+    DUContext* secondChild = new DUContext(new KDevDocumentRange(file1, Range(14,4, 19,3)), topContext);
 
     QCOMPARE(topContext->childContexts().count(), 2);
     QCOMPARE(topContext->childContexts()[1], secondChild);
 
-    DUContext* thirdChild = new DUContext(new KDevDocumentRange(file1, Range(10,4, 14,3)));
-    topContext->addChildContext(thirdChild);
+    DUContext* thirdChild = new DUContext(new KDevDocumentRange(file1, Range(10,4, 14,3)), topContext);
 
     QCOMPARE(topContext->childContexts().count(), 3);
     QCOMPARE(topContext->childContexts()[1], thirdChild);
-
-    delete topContext->takeChildContext(firstChild);
-    QCOMPARE(topContext->childContexts().count(), 2);
-    QCOMPARE(topContext->childContexts(), QList<DUContext*>() << thirdChild << secondChild);
 
     topContext->deleteChildContextsRecursively();
     QVERIFY(topContext->childContexts().isEmpty());
@@ -238,6 +234,8 @@ private slots:
 
     DUContext* top = parse(method, DumpNone);
 
+    { QReadLocker lock(top->chainLock());
+
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 0);
     QCOMPARE(top->localDeclarations().count(), 1);
@@ -247,7 +245,7 @@ private slots:
     QCOMPARE(def->identifier(), Identifier("i"));
     QCOMPARE(findDeclaration(top, def->identifier()), def);
 
-    release(top);
+    } release(top);
   }
 
   void testIntegralTypes()
@@ -257,6 +255,8 @@ private slots:
     QByteArray method("const unsigned int i, k; volatile long double j; int* l; double * const * m; const int& n = l;");
 
     DUContext* top = parse(method, DumpNone);
+
+    { QReadLocker lock(top->chainLock());
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 0);
@@ -317,7 +317,7 @@ private slots:
     QVERIFY(base->isConstant());
     QVERIFY(!base->isVolatile());
 
-    release(top);
+    } release(top);
   }
 
   void testArrayType()
@@ -327,6 +327,8 @@ private slots:
     QByteArray method("int i[3];");
 
     DUContext* top = parse(method, DumpNone);
+
+    { QReadLocker lock(top->chainLock());
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 0);
@@ -344,7 +346,7 @@ private slots:
     QCOMPARE(element->integralType(), CppIntegralType::TypeInt);
     QCOMPARE(array->dimension(), 3);
 
-    release(top);
+    } release(top);
   }
 
   void testDeclareFor()
@@ -355,7 +357,9 @@ private slots:
     //                 012345678901234567890123456789012345678901234567890123456789
     QByteArray method("int main() { for (int i = 0; i < 10; i++) { if (i == 4) return; } }");
 
-    DUContext* top = parse(method);//, DumpNone);
+    DUContext* top = parse(method, DumpNone);
+
+    { QReadLocker lock(top->chainLock());
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 2);
@@ -411,7 +415,7 @@ private slots:
 
     QCOMPARE(findDeclaration(ifCtx,  defI->identifier()), defI);
 
-    release(top);
+    } release(top);
   }
 
   void testDeclareStruct()
@@ -423,6 +427,8 @@ private slots:
     QByteArray method("struct A { int i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; };");
 
     DUContext* top = parse(method, DumpNone);
+
+    { QReadLocker lock(top->chainLock());
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 1);
@@ -492,7 +498,7 @@ private slots:
     QCOMPARE(insideCtorCtx->localDeclarations().count(), 0);
     QVERIFY(insideCtorCtx->localScopeIdentifier().isEmpty());*/
 
-    release(top);
+    } release(top);
   }
 
   void testDeclareClass()
@@ -504,6 +510,8 @@ private slots:
     QByteArray method("class A { void test(int); }; void A::test(int j) {}");
 
     DUContext* top = parse(method, DumpNone);
+
+    { QReadLocker lock(top->chainLock());
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 3);
@@ -530,6 +538,8 @@ private slots:
 
     Declaration* defTest = classA->localDeclarations().first();
     Q_UNUSED(defTest);
+
+    } release(top);
   }
 
   void testDeclareNamespace()
@@ -541,6 +551,8 @@ private slots:
     QByteArray method("namespace foo { int bar; } int bar; int test() { return foo::bar; }");
 
     DUContext* top = parse(method, DumpNone);
+
+    { QReadLocker lock(top->chainLock());
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 3);
@@ -580,7 +592,7 @@ private slots:
     QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo::bar")), bar);
     QCOMPARE(findDeclaration(top, QualifiedIdentifier("::foo::bar")), bar);
 
-    release(top);
+    } release(top);
   }
 
   void testDeclareUsingNamespace()
@@ -592,6 +604,8 @@ private slots:
     QByteArray method("namespace foo { int bar; } using namespace foo; int test() { return bar; }");
 
     DUContext* top = parse(method, DumpNone);
+
+    { QReadLocker lock(top->chainLock());
 
     QVERIFY(!top->parentContext());
     QCOMPARE(top->childContexts().count(), 3);
@@ -630,7 +644,7 @@ private slots:
     QCOMPARE(testCtx->localScopeIdentifier(), QualifiedIdentifier());
     QCOMPARE(testCtx->scopeIdentifier(), QualifiedIdentifier());
 
-    release(top);
+    } release(top);
   }
 
   void testFileParse()
@@ -654,9 +668,11 @@ private slots:
 
     DUContext* top = parse(preprocessed, DumpNone);
 
+    { QReadLocker lock(top->chainLock());
+
     SymbolTable::self()->dumpStatistics();
 
-    release(top);
+    } release(top);
   }
 
 public:
@@ -673,6 +689,7 @@ private:
 
   void release(DUContext* top)
   {
+    KDevEditorIntegrator::releaseTopRange(top->textRangePtr());
     delete top;
   }
 };
@@ -707,6 +724,8 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
 
   if (dump & DumpDUChain) {
     kDebug() << "===== DUChain:" << endl;
+
+    QReadLocker lock(top->chainLock());
     dumper.dump(top);
   }
 
