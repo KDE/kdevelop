@@ -635,7 +635,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 			
 			unsigned int curLine = 0, curCol = 0;
 			if ( m_activeViewCursor != 0 )
-				m_activeViewCursor->cursorPosition( &curLine, &curCol );
+				m_activeViewCursor->cursorPositionReal( &curLine, &curCol );
 			
 			//kdDebug() << "CppSupportPart::contextMenu 2: candidate: " << candidate << endl;
 			
@@ -1028,7 +1028,7 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 		
 		
 		unsigned int currentline, column;
-		m_activeViewCursor->cursorPosition( &currentline, &column );
+		m_activeViewCursor->cursorPositionReal( &currentline, &column );
 		
 		CodeModelUtils::CodeModelHelper h( codeModel(), activeFile );
 		FunctionDom d = h.functionAt( currentline, column );
@@ -2457,8 +2457,16 @@ void CppSupportPart::addMethod( ClassDom aClass, const QString& name, const QStr
 	if ( isInline || isPureVirtual )
 		return ;
 
-	QString definitionString = "\n" + declarationString + "\n{\n" + implementation + "\n}\n";
-
+	// construct fully qualified name for method definition
+	QString fullyQualifiedName = aClass->scope().join("::");
+	if (! fullyQualifiedName.isEmpty()) 
+	{
+		fullyQualifiedName += "::";
+	}
+	fullyQualifiedName += aClass->name() + "::" + name;
+	
+	QString definitionString = "\n" + type + " " + fullyQualifiedName + "(" + parameters + ")" + ( isConst ? " const" : "" ) + "\n{\n" + implementation + "\n}\n";
+	
 	if ( sourceFormatter != 0 )
 		definitionString = sourceFormatter->formatSource( definitionString );
 
@@ -2486,7 +2494,7 @@ ClassDom CppSupportPart::currentClass( ) const
 		return 0;
 
 	unsigned int curLine, curCol;
-	m_activeViewCursor->cursorPosition( &curLine, &curCol );
+	m_activeViewCursor->cursorPositionReal( &curLine, &curCol );
 
 	CodeModelUtils::CodeModelHelper h( codeModel(), file );
 	
@@ -2499,7 +2507,7 @@ VariableDom CppSupportPart::currentAttribute( ClassDom curClass ) const
 		return 0;
 	
 	unsigned int line, col;
-	m_activeViewCursor->cursorPosition( &line, &col );
+	m_activeViewCursor->cursorPositionReal( &line, &col );
 	
 	VariableList vars = curClass->variableList();
 	
