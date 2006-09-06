@@ -58,9 +58,11 @@ CreateGetterSetterDialog::CreateGetterSetterDialog( CppSupportPart* part, ClassD
 	if ( ! config->prefixSet().isEmpty() )
 		setName[ 0 ] = setName[ 0 ].upper();
 
-	m_chkInlineGet->setChecked( config->isInlineGet() );
-	m_chkInlineSet->setChecked( config->isInlineSet() );
-
+	bool getIsChecked = config->isInlineGet();
+	bool setIsChecked = config->isInlineSet();
+	m_chkInlineGet->setChecked( getIsChecked );
+	m_chkInlineSet->setChecked( setIsChecked );
+	
 	m_edtGet->setText( config->prefixGet() + getName );
 	m_edtSet->setText( config->prefixSet() + setName );
 }
