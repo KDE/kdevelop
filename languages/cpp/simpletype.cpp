@@ -489,7 +489,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
           return t.increaseDepth();
           else
             if( t > ret )
-              ret = t;
+			  ret = t.increaseDepth();
         }
       }
     }
@@ -501,7 +501,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
     return rett.increaseDepth();
       else
         if( rett > ret )
-          ret = rett;
+	        ret = rett.increaseDepth();
     }
     
         ///Ask the bases and allow them to search in their parents.
@@ -516,7 +516,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateM
           return t.increaseDepth();
         else
           if( t > ret )
-            ret = t;
+            ret = t.increaseDepth();
         }
       }
     }

@@ -490,13 +490,13 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
     
     TypeDesc::TemplateParams p = d->templateParams();
     for( TypeDesc::TemplateParams::iterator it = p.begin(); it != p.end(); ++it ){
-      if( (*it)->resolved() ) {
+	    //if( (*it)->resolved() ) {
         QPopupMenu * m = new QPopupMenu( parent );
         int gid = parent->insertItem( i18n( "Template-param \"%1\"" ).arg( cleanForMenu( (*it)->fullNameChain() ) ), m );
         fill( m, **it );
-      } else {
+	    /*} else {
         fill( parent, **it, prefix + depthAdd );
-      }
+      }*/
     }
     
 	if( d->resolved() ) {
@@ -1723,7 +1723,6 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 							ret.resultType = ctx->container()->locateDecType( exp.expr() );
 							ret.expr = exp;
 						}
-						
 					}
 				}
 				if( /*exp.canBeNormalExpression() &&*/ !ret.resultType->resolved() ) { ///It is not cleary possible to recognize the kind of an expression from the syntax as long as it's not written completely

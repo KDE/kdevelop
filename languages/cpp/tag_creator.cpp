@@ -735,24 +735,12 @@ void TagCreator::parseBaseClause( const QString& className, BaseClauseAST * base
 			access = baseSpecifier->access() ->text();
 		bool isVirtual = baseSpecifier->isVirtual() != 0;
 		
-		QString baseName;
 		if( baseSpecifier->name() == 0 ) return; ///Workaround for some bug elsewhere
-		
-		QPtrList<ClassOrNamespaceNameAST> l = baseSpecifier->name() ->classOrNamespaceNameList();
-		QPtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
-		while ( nameIt.current() )
-		{
-			if ( nameIt.current() ->name() )
-			{
-				baseName += nameIt.current() ->name() ->text() + "::";
-			}
-			++nameIt;
-		}
-		
-		if ( baseSpecifier->name() ->unqualifiedName() && baseSpecifier->name() ->unqualifiedName() ->name() )
-			baseName += baseSpecifier->name() ->text(); ///I changed this because I need the template-information. I hope it has no bad side-effects.
-			//baseSpecifier->name() ->unqualifiedName() ->name() ->text();
-		
+
+		QString baseName;
+		if ( baseSpecifier->name() )
+			baseName = baseSpecifier->name() ->text();
+
 		Tag tag;
 		CppBaseClass<Tag> tagBuilder( tag );
 		
