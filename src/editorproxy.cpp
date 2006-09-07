@@ -72,10 +72,12 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
     return;
 
   KURL url = dynamic_cast<KParts::ReadOnlyPart*>( part )->url();
-
   ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>(part->widget());
   if (iface)
-    iface->setCursorPositionReal(lineNum, col == -1 ? 0 : col);
+  {
+    if (part->widget()->hasFocus())
+        iface->setCursorPositionReal(lineNum, col == -1 ? 0 : col);
+  }
   else {
     // Save the position for a rainy day (or when the view gets activated and wants its position)
     for (QValueList<MultiBuffer*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
