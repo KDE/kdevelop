@@ -406,8 +406,8 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QString expr, E
   if( scope.expr.t & ExpressionInfo::TypeExpression )
     canBeTypeExpression = true;*/
 
-  if( canBeItemExpression && (!bestRet || bestDepth > 0 ) ) {
-  ///Since it's the last element of a scope-chain, also search for functions and variables.
+	if( canBeItemExpression && (!bestRet || bestDepth > 0 ) ) {
+  
     SimpleTypeImpl::TypeOfResult res = searchIn->typeOf( expr );
     
     if( res ) {
@@ -419,7 +419,7 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QString expr, E
 		///Search for Types
 		SimpleTypeImpl::LocateResult type = searchIn->locateDecType( expr );
 
-    if( !bestRet || type.depth() <= bestRet.resultType.depth() ) {
+		if( !bestRet || (type->resolved() && ( type.depth() <= bestRet->depth()) ) ) {
     /*if ( type && type->resolved() )
     {*/
       EvaluationResult ret = type;
