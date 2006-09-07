@@ -23,6 +23,12 @@ void clearStr( QString& str, int start, int end ) {
   for( int a = start; a < end; a++) str[a] = ' ';
 }
 
+bool isValidIdentifierSign( const QChar& c ) {
+	if( c.isLetter() || c.isDigit() || c == '_' ) return true;
+	else return false;
+}
+
+
 QString clearComments( QString str ) {
   if( str.isEmpty() ) return "";
   

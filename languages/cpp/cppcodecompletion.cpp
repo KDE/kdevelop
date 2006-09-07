@@ -179,11 +179,6 @@ QStringList formatComment( const QString& comment, int maxCols = 120 ) {
   return ret;
 }
 
-bool isValidIdentifierSign( const QChar& c ) {
-  if( c.isLetter() || c.isDigit() || c == '_' ) return true;
-  else return false;
-}
-
 bool operator < ( const CodeCompletionEntry& e1, const CodeCompletionEntry& e2 )
 {
   return e1.text < e2.text;

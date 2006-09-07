@@ -602,11 +602,11 @@ void TypeDesc::init( QString stri ) {
 		for ( int a = 0; a < len; a++ ) {
 			if ( str[ a ] == ' ' ) {
 				wasEmpty = true;
-			} else {
-				if ( wasEmpty ) {
+			} else if( wasEmpty && isValidIdentifierSign( str[a] ) ){
+				//if ( wasEmpty ) {
 					currentStart = a;
 					wasEmpty = false;
-				}
+				//}
 			}
 		}
 		str = str.mid( currentStart );
