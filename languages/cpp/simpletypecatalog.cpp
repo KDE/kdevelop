@@ -13,7 +13,9 @@
  ***************************************************************************/
 #include "simpletypecatalog.h"
 #include "simpletypefunction.h"
+#include "safetycounter.h"
 
+extern SafetyCounter safetyCounter;
 extern CppCodeCompletion* cppCompletionInstance;
 
 //SimpleTypeCatalog implementation
@@ -174,8 +176,8 @@ DeclarationInfo SimpleTypeCatalog::getDeclarationInfo() {
 
 QValueList<SimpleTypeImpl::LocateResult> SimpleTypeCatalog::getBases() {
   Debug d( "#getbases#" );
-  if( !d ) {
-    ifVerbose( dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl );
+  if( !d || !safetyCounter ) {
+	  //ifVerbose( dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl );
     return QValueList<SimpleTypeImpl::LocateResult>();
   }
   

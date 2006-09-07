@@ -13,7 +13,9 @@
  ***************************************************************************/
 
 #include "simpletypefunction.h"
+#include "safetycounter.h"
 
+extern SafetyCounter safetyCounter;
 extern CppCodeCompletion* cppCompletionInstance;
 
 //SimpleTypeFunctionInterface implementation
@@ -389,8 +391,8 @@ const TypeDesc SimpleTypeCodeModel::findTemplateParam( const QString& name ) {
 
 QValueList<SimpleTypeImpl::LocateResult> SimpleTypeCodeModel::getBases() {
   Debug d( "#getbases#" );
-  if( !d ) {
-    ifVerbose( dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl );
+  if( !d || !safetyCounter ) {
+	  //ifVerbose( dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl );
     return QValueList<SimpleTypeImpl::LocateResult>();
   }
   

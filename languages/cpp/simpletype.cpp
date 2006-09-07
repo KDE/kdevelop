@@ -289,7 +289,7 @@ SimpleTypeImpl::LocateResult SimpleTypeImpl::applyOperator( Operator op , QValue
  
 TypeDesc SimpleTypeImpl::replaceTemplateParams( TypeDesc desc, TemplateParamInfo& paramInfo ) {
     Debug d("#repl#");
-    if( !d ) 
+    if( !d || !safetyCounter ) 
       return desc;
     
     TypeDesc ret = desc;
@@ -320,7 +320,7 @@ TypeDesc SimpleTypeImpl::replaceTemplateParams( TypeDesc desc, TemplateParamInfo
   
 TypeDesc SimpleTypeImpl::resolveTemplateParams( TypeDesc desc, LocateMode mode ) {
     Debug d("#resd#");
-    if( !d )
+    if( !d || !safetyCounter )
       return desc;
     
     TypeDesc ret = desc;

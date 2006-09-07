@@ -92,7 +92,6 @@ const bool contextMenuEntriesAtTop = false;
 
 /**
 -- TODO: The parser and code-models currently do not correctly collect all the data necessary to handle namespace-imports etc. precisely
--- TODO: Does not yet use most of the code-completion-options. Maybe some should be removed, and new ones added.
 -- TODO: Does not yet correctly search for overloaded functions and select the right one
 -- TODO: The documentation shown in the calltips looks very bad, a better solution must be found(maybe an additional tooltip)
 */
