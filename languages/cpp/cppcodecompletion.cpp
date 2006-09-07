@@ -1639,7 +1639,6 @@ bool CppCodeCompletion::functionContains( FunctionDom f , int line, int col ) {
 	return (line > sl || (line == sl && col >= sc ) ) && (line < el || ( line == el && col < ec ) );
 }
 
-///Warning: yet check how to preserve the SimpleTypeConfiguration.. 
 EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column, SimpleTypeConfiguration& conf, EvaluateExpressionOptions opt ) {
 	EvaluationResult ret;
 	
@@ -1780,6 +1779,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 		SimpleType container( scope );
 		
 		SimpleType global = getGlobal( container );
+		
 		conf.setGlobalNamespace( &(*global) );
 		
 		if( recoveryPoint )
@@ -1962,7 +1962,8 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 	TypeSpecifierAST::Node recoveredTypeSpec;
 
 	SimpleContext* ctx = 0;
-    SimpleTypeConfiguration conf( m_activeFileName );
+	SimpleTypeConfiguration conf( m_activeFileName );
+	SimpleType::setGlobalNamespace( 0 ); ///hmm
 	
 	m_pSupport->backgroundParser() ->lock ();
 	
@@ -2118,7 +2119,8 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 						
 						SimpleTypeNamespace* n = dynamic_cast<SimpleTypeNamespace*>( &(*global) );
 						if( !n ) {
-							kdDebug( 9007 ) << "the global namespace was not resolved correctly " << endl;
+						kdDebug( 9007 ) << "the global namespace was not resolved correctly , real type: " << typeid(&(*global)).name() << endl;
+							return;
 						} else {
 						
 							if( recoveryPoint ) {

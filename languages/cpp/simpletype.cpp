@@ -555,7 +555,7 @@ SimpleType SimpleTypeImpl::parent() {
         sc.pop_back();
         SimpleType r = SimpleType( sc );
 	      if( &(*r.get()) == this ) {
-	      	kdDebug( 9007 ) << "error: self set as parent" << kdBacktrace() << endl;
+	      kdDebug( 9007 ) << "error: self set as parent: " << m_scope.join("::") << "(" << m_scope.count() << ")" << ", " << sc.join("::") << "(" << sc.count() << ")"/* << kdBacktrace()*/ << endl;
 		  	return SimpleType( new SimpleTypeImpl("") );
 	      }
         m_parent = r.get();
@@ -653,6 +653,10 @@ void SimpleTypeImpl::checkTemplateParams () {
 void SimpleTypeImpl::setScope( const QStringList& scope ) {
     invalidateCache();
     m_scope = scope;
+	if( m_scope.count() == 1 && m_scope.front().isEmpty() ) {
+		kdDebug() << "bad scope set " << kdBacktrace() << endl;
+		m_scope = QStringList();
+	}
 }
 
 SimpleTypeImpl::TypeOfResult SimpleTypeImpl::searchBases ( const TypeDesc& name /*option!!*/) {
