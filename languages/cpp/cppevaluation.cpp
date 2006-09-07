@@ -419,7 +419,7 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QString expr, E
 		///Search for Types
 		SimpleTypeImpl::LocateResult type = searchIn->locateDecType( expr );
 
-    if( !bestRet || type.depth() < bestRet.resultType.depth() ) {
+    if( !bestRet || type.depth() <= bestRet.resultType.depth() ) {
     /*if ( type && type->resolved() )
     {*/
       EvaluationResult ret = type;
