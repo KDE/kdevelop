@@ -49,7 +49,7 @@ void ValgrindDialog::valgrindTextChanged()
 
 QString ValgrindDialog::executableName() const
 {
-  return w->executableEdit->url();
+  return w->executableEdit->url().path();
 }
 
 void ValgrindDialog::setExecutable( const QString& url )
@@ -59,7 +59,7 @@ void ValgrindDialog::setExecutable( const QString& url )
 
 QString ValgrindDialog::valExecutable() const
 {
-  return w->valExecutableEdit->url();
+  return w->valExecutableEdit->url().path();
 }
 
 QString ValgrindDialog::parameters() const
@@ -128,7 +128,7 @@ void ValgrindDialog::setValParams( const QString& params )
 
 QString ValgrindDialog::ctExecutable() const
 {
-  return w->ctExecutableEdit->url();
+  return w->ctExecutableEdit->url().path();
 }
 
 void ValgrindDialog::setCtExecutable( const QString& ce )
@@ -169,7 +169,7 @@ void ValgrindDialog::setCtParams( const QString& params )
 
 QString ValgrindDialog::kcExecutable( ) const
 {
-  return w->kcExecutableEdit->url();
+  return w->kcExecutableEdit->url().path();
 }
 
 void ValgrindDialog::setKcExecutable( const QString& ke )

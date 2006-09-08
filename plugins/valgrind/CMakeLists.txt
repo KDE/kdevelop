@@ -8,6 +8,7 @@ set(kdevvalgrind_PART_SRCS
     valgrind_dialog.cpp
     valgrind_part.cpp
     valgrindmodel.cpp
+    valgrindcontrol.cpp
 )
 
 kde4_automoc(${kdevvalgrind_PART_SRCS})

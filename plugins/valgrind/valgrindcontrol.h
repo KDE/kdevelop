@@ -21,6 +21,8 @@
 #ifndef KDEV_VALGRIND_CONTROL_H
 #define KDEV_VALGRIND_CONTROL_H
 
+#include <QObject>
+
 class KProcess;
 class QXmlInputSource;
 class QXmlSimpleReader;
@@ -36,10 +38,14 @@ public:
   ValgrindControl(QObject* parent);
 
   void run(ValgrindModel* model, const QString& executable, const QString& parameters, const QString& valgrindExecutable, const QString& valgrindParameters);
+  void stop();
 
 private slots:
   void newValgrindConnection();
   void readFromValgrind();
+  void processExited(KProcess* p);
+  void receivedStdout( KProcess*, char*, int );
+  void receivedStderr( KProcess*, char*, int );
 
 private:
   KProcess* m_process;
@@ -47,7 +53,6 @@ private:
 
   QXmlInputSource* m_inputSource;
   QXmlSimpleReader* m_xmlReader;
-  ValgrindModel* m_model;
 
   QTcpServer* m_server;
   QTcpSocket* m_connection;

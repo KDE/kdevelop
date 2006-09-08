@@ -27,30 +27,24 @@ public:
   void savePartialProjectSession( QDomElement* el );
   void restorePartialProjectSession( const QDomElement* el );
 
+  QWidget* pluginView() const;
+  Qt::DockWidgetArea dockWidgetAreaHint() const;
+
 private slots:
   void slotExecValgrind();
   void slotExecCalltree();
   void slotKillValgrind();
   void slotStopButtonClicked( KDevPlugin* which );
-  void receivedStdout( KProcess*, char*, int );
-  void receivedStderr( KProcess*, char*, int );
-  void processExited( KProcess* );
   void loadOutput();
   void projectOpened();
 
 private:
   void clear();
 
-  QString _lastExec, _lastParams, _lastValExec, _lastValParams,
-      _lastCtExec, _lastCtParams, _lastKcExec;
-  KProcess* proc;
-  int currentPid;
+  QString m_lastExec, m_lastParams, m_lastValExec, m_lastValParams,
+      m_lastCtExec, m_lastCtParams, m_lastKcExec;
+
   QPointer<QTreeView> m_treeView;
-  struct {
-      bool runKc;
-      QString kcPath;
-//      QString kcWorkDir;
-  } kcInfo;
 
   ValgrindModel* m_model;
   ValgrindControl* m_control;
