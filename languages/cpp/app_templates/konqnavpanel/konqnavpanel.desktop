@@ -28,6 +28,7 @@ Comment[sr@Latn]=Konqueror-ov priključak za navigacioni panel po imenu $NAME$
 Comment[sv]=Ett insticksprogram i Konquerors navigeringspanel som heter $NAME$
 Comment[tr]=$NAME$ adında bir konqueror gezinme paneli eklentisi
 Comment[zh_CN]=一个称作 $NAME$ 的 konqueror 导航面板插件
+Comment[zh_TW]=名稱為 $NAME$ 的 Konqueror 導覽面板外掛程式
 Name=%{APPNAMELC}
 
 Open=false

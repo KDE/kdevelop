@@ -31,6 +31,7 @@ Comment[ta]=KDevelop திட்டக்கோப்பு
 Comment[tg]=Файли лоиҳаи KDevelop 
 Comment[tr]=KDevelop Proje Dosyası
 Comment[zh_CN]=KDevelop 工程文件
+Comment[zh_TW]=KDevelop 專案檔
 DefaultApp=kdevelop
 Icon=kdevelop_project
 Type=MimeType

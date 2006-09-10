@@ -26,6 +26,7 @@ Name[sv]=%{APPNAME} information
 Name[ta]=%{APPNAME} தகவல்
 Name[tg]=Маълумот дар бораи %{APPNAME} 
 Name[zh_CN]=%{APPNAME}的信息
+Name[zh_TW]=%{APPNAME} 資訊
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_%{APPNAMELC}
 # change MimeType here! (example: inode/directory)

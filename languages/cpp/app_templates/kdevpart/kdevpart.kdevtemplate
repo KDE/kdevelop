@@ -23,6 +23,7 @@ Name[sr@Latn]=Priključak za KDevelop (gradnja u izvornom stablu KDevelop-a)
 Name[sv]=KDevelop-insticksprogram (att bygga i KDevelops källkodsträd)
 Name[tr]=KDevelop Eklentisi (KDevelop kaynak ağacı kurulumu)
 Name[zh_CN]=KDevelop 插件(KDevelop 源代码树编译)
+Name[zh_TW]=KDevelop 外掛程式（KDevelop 程式源碼樹內建立）
 Category=C++/KDevelop/
 Comment=This generates a plugin for KDevelop, for building within the KDevelop source tree
 Comment[ca]=Genera un connector per a KDevelop, per a que es construeixi en l'arbre de fonts de KDevelop
@@ -46,6 +47,7 @@ Comment[sr@Latn]=Ovo pravi priključak za KDevelop, za gradnju u okviru KDevelop
 Comment[sv]=Det här skapar ett insticksprogram för KDevelop, att byggas inne i KDevelops källkodsträd.
 Comment[tr]=Bu KDevelop için, KDevelop kaynak ağacınında olacak, bir eklenti yaratır.
 Comment[zh_CN]=这将生成 KDevelop 的插件，该插件需要与 KDevelop 源代码树一起编译
+Comment[zh_TW]=產生一個 KDevelop 外掛程式，建立於 KDevelop 程式源碼樹內。
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}part.cpp
 Archive=kdevpart.tar.gz
@@ -76,6 +78,7 @@ Comment[sr@Latn]=Opseg priključka (globalni, projekat, jezgro)
 Comment[sv]=Insticksprogrammets omfattning (Global, Projekt, Kärna)
 Comment[tr]=Bir eklentinin alanı (Genel, Proje, İç)
 Comment[zh_CN]=插件的范围(全局、工程、核心)
+Comment[zh_TW]=外掛程式的範圍（全域、專案、核心）
 Default= Global
 
 [PROPS]
@@ -105,6 +108,7 @@ Comment[sr@Latn]=Lista podržanih KDevelop-ovih svojstava
 Comment[sv]=Listan med egenskaper i KDevelop som stöds
 Comment[tr]=Desteklenen KDevelop özellikleri
 Comment[zh_CN]=列出支持的 KDevelop 属性
+Comment[zh_TW]=支援的 KDevelop 屬性列表
 Default=
 
 [FILE1]
@@ -212,3 +216,4 @@ Comment[sr@Latn]=Priključak za KDevelop napravljen je u %{dest}
 Comment[sv]=Ett insticksprogram för KDevelop skapades i %{dest}
 Comment[tr]=Bir KDevelop eklentisi %{dest} içinde yaratıldı.
 Comment[zh_CN]=在 %{dest} 中创建了 KDevelop 插件
+Comment[zh_TW]=一個 KDevelop 外掛程式已建立於 %{dest}

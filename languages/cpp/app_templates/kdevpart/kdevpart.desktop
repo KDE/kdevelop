@@ -32,6 +32,7 @@ GenericName[sr@Latn]=%{APPNAME} priključak
 GenericName[sv]=%{APPNAME} insticksprogram
 GenericName[tr]=%{APPNAME} Eklentisi
 GenericName[zh_CN]=%{APPNAME} 插件
+GenericName[zh_TW]=%{APPNAME} 外掛程式
 Comment=%{APPNAME} Description
 Comment[br]=Deskrivadur %{APPNAME}
 Comment[ca]=Descripció per a %{APPNAME}
@@ -59,6 +60,7 @@ Comment[sr@Latn]=Opis za %{APPNAME}
 Comment[sv]=%{APPNAME} beskrivning
 Comment[tr]=%{APPNAME} Tanımı
 Comment[zh_CN]=%{APPNAME} 描述
+Comment[zh_TW]=%{APPNAME} 描述
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 

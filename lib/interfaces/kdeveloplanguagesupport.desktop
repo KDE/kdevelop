@@ -32,6 +32,7 @@ Name[ta]=KDevelop  மொழி ஆதரவான இடைவிளிம்�
 Name[tg]=Интерфейс ёрӣ расони забонӣ
 Name[tr]=KDevelop Dil Desteği Arayüzü
 Name[zh_CN]=KDevelop 语言支持接口
+Name[zh_TW]=KDevelop 語言支援介面
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

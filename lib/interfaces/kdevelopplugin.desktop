@@ -32,6 +32,7 @@ Name[ta]=KDevelop  சொருகு
 Name[tg]=Модули KDevelop
 Name[tr]=KDevelop Eklentisi
 Name[zh_CN]=KDevelop 插件
+Name[zh_TW]=KDevelop 外掛程式
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

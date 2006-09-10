@@ -39,6 +39,7 @@ Name[sr@Latn]=Postavljanje...
 Name[sv]=Inställning...
 Name[tr]=Kurulum...
 Name[zh_CN]=设置...
+Name[zh_TW]=設定...
 Icon=kscreensaver
 
 [Desktop Action InWindow]
@@ -73,6 +74,7 @@ Name[sr@Latn]=Prikaži u navedenom prozoru
 Name[sv]=Visa i angivet fönster
 Name[tr]=Belirtilen Pencerede Göster
 Name[zh_CN]=在指定窗口中显示
+Name[zh_TW]=顯示在指定視窗
 NoDisplay=true
 
 [Desktop Action Root]
@@ -107,4 +109,5 @@ Name[sr@Latn]=Prikaži u korenom prozoru
 Name[sv]=Visa i rotfönster
 Name[tr]=Kök Pencerede Göster
 Name[zh_CN]=在根窗口中显示
+Name[zh_TW]=顯示在根視窗
 NoDisplay=true

@@ -31,6 +31,7 @@ Name[sv]=KDevelop assistent
 Name[ta]=Kஉருவாக்கு உதவி 
 Name[tg]=KDevelop Ассистент
 Name[zh_CN]=KDevelop 助手
+Name[zh_TW]=KDevelop 助理
 GenericName=Documentation Viewer
 GenericName[br]=Gweler an teuliadur
 GenericName[ca]=Visor de documentació
@@ -60,6 +61,7 @@ GenericName[ta]=ஆவணமாக்கல் காட்சியமைப்
 GenericName[tg]=Аз назар бо ҳуҷҷатнок гузарондан 
 GenericName[tr]=Belge Gösterici
 GenericName[zh_CN]=文档查看器
+GenericName[zh_TW]=文件檢視器
 X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Development;Documentation;X-KDE-KDevelopIDE;
 

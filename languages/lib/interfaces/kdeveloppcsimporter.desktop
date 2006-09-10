@@ -32,6 +32,7 @@ Name[ta]=KDevelop  pcs ஏற்றுமதியாளர்
 Name[tg]=Пурборкунанда дар анбори синфӣ
 Name[tr]=KDevelop PCS Aktarıcısı
 Name[zh_CN]=KDevelop PCS导入器
+Name[zh_TW]=KDevelop PCS 匯入器
 
 [PropertyDef::X-KDevelop-PCSImporter]
 Type=QString

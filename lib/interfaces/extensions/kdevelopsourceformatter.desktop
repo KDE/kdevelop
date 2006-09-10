@@ -29,6 +29,7 @@ Name[ta]=வடிவமைப்பவரின் இடை விளிம்
 Name[tg]=Интерфейс қолабгузори коди берунӣ
 Name[tr]=Kaynak Biçimleyici Arayüzü
 Name[zh_CN]=源代码格式化接口
+Name[zh_TW]=程式碼格式化介面
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

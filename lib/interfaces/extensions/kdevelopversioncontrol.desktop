@@ -31,6 +31,7 @@ Name[ta]=KDevelop  பதிப்பு கட்டுப்பாட்டு
 Name[tg]=Интерфейс барномаи идоракунии тафсирҳо
 Name[tr]=KDevelop Sürüm Kontrol Arayüzü
 Name[zh_CN]=KDevelop 版本控制接口
+Name[zh_TW]=KDevelop 版本控制介面
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

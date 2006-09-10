@@ -32,6 +32,7 @@ Name[ta]=முன்பகுதி இடை விளிம்பை அம�
 Name[tg]=Интерфейс пӯсти Make 
 Name[tr]=Make Önuç Arayüzü
 Name[zh_CN]=Make 前端接口
+Name[zh_TW]=Make 前端介面
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

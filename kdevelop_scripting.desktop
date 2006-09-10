@@ -30,6 +30,7 @@ Name[sr@Latn]=KDevelop: Skriptovanje
 Name[sv]=KDevelop: skript
 Name[tr]=KDevelop: Betik
 Name[zh_CN]=KDevelop：脚本
+Name[zh_TW]=KDevelop：文稿
 GenericName=IDE for Scripting Language
 GenericName[ca]=IDE per al llenguatge d'scripts
 GenericName[cs]=IDE pro skriptovací jazyky
@@ -56,6 +57,7 @@ GenericName[sr@Latn]=IDE za skriptne jezike
 GenericName[sv]=Utvecklingsmiljö för skriptspråk
 GenericName[tr]=Betik Dili için Bütünleşik Geliştirme Ortamı
 GenericName[zh_CN]=脚本语言的 IDE
+GenericName[zh_TW]=文稿語言的整合開發環境
 X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
 

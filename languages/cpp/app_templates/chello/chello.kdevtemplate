@@ -24,6 +24,7 @@ Name[sr@Latn]=Jednostavan „Zdravo svete“ program
 Name[sv]=Enkelt Hello world-program
 Name[tr]=Basit Merhaba dünya programı
 Name[zh_CN]=简单的 Hello world 程序
+Name[zh_TW]=簡單的 Hello world 程式
 Icon=chello.png
 Category=C
 Comment=Generates a simple Hello world program in C
@@ -51,6 +52,7 @@ Comment[sr@Latn]=Pravi jednostavan „Zdravo svete“ program u C-u
 Comment[sv]=Skapar ett enkelt Hello world-program i C
 Comment[tr]=C'de basit bir Merhaba Dünya programı yaratır.
 Comment[zh_CN]=生成 C 语言的 Hello world 程序
+Comment[zh_TW]=產生 C 語言的 Hello world 程式
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.c
 Archive=chello.tar.gz
@@ -83,6 +85,7 @@ Comment[sr@Latn]=Opcione biblioteke za povezivanje.
 Comment[sv]= Valfria bibliotek att länka till.
 Comment[tr]=Bağlanılacak isteğe bağlı kütüphaneler.
 Comment[zh_CN]=可选的链接库。
+Comment[zh_TW]=要連結的函式庫
 Default= -lm
 
 [INCLUDES]
@@ -112,6 +115,7 @@ Comment[sr@Latn]=Opciona putanja za uključivanja.
 Comment[sv]= Valfri sökväg till deklarationsfiler.
 Comment[tr]=İsteğe bağlı include yolu.
 Comment[zh_CN]=可选的包含路径。
+Comment[zh_TW]=引入檔路徑
 Default= -I/usr/include
 
 [CFLAGS]
@@ -142,6 +146,7 @@ Comment[sr@Latn]=Opciona CFLAGS definisana u spravifajlu.
 Comment[sv]= Valfria CFLAGS att definiera i byggfilen.
 Comment[tr]=Makefile'da tanımlanacak isteğe bağlı CFLAGS değerleri
 Comment[zh_CN]=在 Makefile 中定义的可选 CFLAGS。
+Comment[zh_TW]=makefile 中定義的 CFLAGS
 Default=
 
 [MGS]
@@ -171,6 +176,7 @@ Comment[sr@Latn]=Jednostavan projekat u C-u napravljen je u %{dest}.
 Comment[sv]=Ett enkelt C-projekt skapades i %{dest}.
 Comment[tr]=Basit bir C projesi %{dest} içinde oluşturuldu.
 Comment[zh_CN]=在 %{dest} 中创建了简单的 C 工程。
+Comment[zh_TW]=一個簡單的 C 專案已建立在 %{dest}。
 Archive=chello.tar.gz
 
 [INCADMIN]

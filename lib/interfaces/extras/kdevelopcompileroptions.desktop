@@ -33,6 +33,7 @@ Name[ta]=கெடெவலப் தொகுப்பித் தேர்வ
 Name[tg]=Гуфтугуи интерфейси талфифгари интихоб
 Name[tr]=KDevelop Derleyici Seçenekleri Pencere Arayüzü
 Name[zh_CN]=KDevelop编译器选项对话框接口
+Name[zh_TW]=KDevelop 編譯器選項對話框介面
 
 [PropertyDef::X-KDevelop-Language]
 Type=QString

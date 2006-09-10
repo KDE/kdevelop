@@ -32,6 +32,7 @@ Name[ta]=டிப் முன்நிறுத்த இடைமுகம்
 Name[tg]=Барномаи интерфейс барои ёфтани тағирпазирӣ
 Name[tr]=Diff Önuç Arayüzü
 Name[zh_CN]=Diff 前端接口
+Name[zh_TW]=Diff 前端介面
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

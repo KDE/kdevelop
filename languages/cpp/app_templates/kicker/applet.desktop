@@ -33,6 +33,7 @@ Comment[ta]=ஒரு பானல் ஆப்லெட்  $NAME$ என்ற
 Comment[tg]=Пайраҳаи апплети $NAME$
 Comment[tr]=$NAME$ adında bir panel küçük uygulaması
 Comment[zh_CN]=一个称作 $NAME$ 的面板小程序
+Comment[zh_TW]=一個名稱為 $NAME$ 的面板小程式
 Name=%{APPNAMELC}
 X-KDE-Library=%{APPNAMELC}_panelapplet
 X-KDE-UniqueApplet = false

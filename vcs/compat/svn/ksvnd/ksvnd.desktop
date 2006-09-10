@@ -26,6 +26,7 @@ Name[sr@Latn]=KDED modul za Subversion
 Name[sv]=KDevelop Subversion-modul
 Name[tr]=KDED Subversion Birimi
 Name[zh_CN]=KDED Subversion 模块
+Name[zh_TW]=KDED Subversion 模組
 ServiceTypes=KDEDModule
 X-KDE-ModuleType=Library
 X-KDE-Library=ksvnd

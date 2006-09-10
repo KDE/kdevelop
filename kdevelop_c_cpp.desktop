@@ -10,6 +10,7 @@ Name=KDevelop: C/C++
 Name[br]=KDevelop : C/C++
 Name[fr]=KDevelop : C / C++
 Name[zh_CN]=KDevelop：C/C++
+Name[zh_TW]=KDevelop：C/C++
 GenericName=IDE for C/C++
 GenericName[ca]=IDE per a C/C++
 GenericName[cs]=IDE pro C/C++
@@ -37,6 +38,7 @@ GenericName[sv]=Utvecklingsmiljö för C/C++
 GenericName[tg]=IDE барои C/C++
 GenericName[tr]=C/C++ için Bütünleşik Geliştirme Ortamı
 GenericName[zh_CN]=C/C++ 的 IDE
+GenericName[zh_TW]=C/C++ 整合開發環境
 X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
 

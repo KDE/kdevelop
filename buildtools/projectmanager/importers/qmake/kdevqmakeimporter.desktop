@@ -2,6 +2,7 @@
 Type=Service
 Name=KDevQMakeEditor
 Name[sv]=KDevelop Qmake-editor
+Name[zh_TW]=KDevelop QMake 編輯器
 Comment=Imports and edits qmake projects
 Comment[ca]=Importa i edita els projectes de qmake
 Comment[da]=Importerer og redigere qmake-projekter
@@ -27,6 +28,7 @@ Comment[sr@Latn]=Uvozi i uređuje qmake projekte
 Comment[sv]=Importerar och redigerar Qmake-projekt
 Comment[tr]=qmake projelerini aktarır ve düzenler
 Comment[zh_CN]=导入并编辑 qmake 工程
+Comment[zh_TW]=匯入並編輯 qmake 專案
 Icon=gear
 X-KDevelop-Version=3
 ServiceTypes=KDevelop/ProjectImporter

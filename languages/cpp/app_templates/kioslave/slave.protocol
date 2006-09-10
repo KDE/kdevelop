@@ -31,3 +31,4 @@ Description[sr@Latn]=KIOSlave za %{APPNAMELC}
 Description[sv]=En I/O-slav för %{APPNAMELC}
 Description[tr]=%{APPNAMELC} için bir kioslave
 Description[zh_CN]=%{APPNAMELC} 的 kioslave
+Description[zh_TW]=%{APPNAMELC} 的 kioslave

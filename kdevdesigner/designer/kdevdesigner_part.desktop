@@ -6,6 +6,7 @@ Name[el]=ΤμήμαKDevDesigner
 Name[sv]=KDevelop designerdel
 Name[ta]=கேமேம்பாட்டு வடிவமைப்பாளர் பகுதி
 Name[tg]=KDevҚисми дизайнгар
+Name[zh_TW]=KDevelop 設計元件
 MimeType=application/x-designer
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-Library=libkdevdesignerpart

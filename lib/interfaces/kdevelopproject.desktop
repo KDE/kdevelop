@@ -32,6 +32,7 @@ Name[ta]=KDevelop திட்ட இடைஇணைப்பு
 Name[tg]=Лоиҳаи интерфейс
 Name[tr]=KDevelop Proje Arayüzü
 Name[zh_CN]=KDevelop 工程接口
+Name[zh_TW]=KDevelop 專案介面
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]
