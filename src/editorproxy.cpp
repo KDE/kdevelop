@@ -75,7 +75,7 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
   ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>(part->widget());
   if (iface)
   {
-    if (part->widget()->hasFocus())
+    if (part->widget()->hasFocus()) //workaround for QXIMInputContext crashes. Keep for KDE <=3.5.4!
         iface->setCursorPositionReal(lineNum, col == -1 ? 0 : col);
   }
   else {
