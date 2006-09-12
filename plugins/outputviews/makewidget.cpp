@@ -245,9 +245,9 @@ void MakeWidget::startNextJob()
     currentCommand = *it;
     commandList.remove( it );
 
-    int i = currentCommand.findRev( " gmake" );
+    int i = currentCommand.lastIndexOf( " gmake" );
     if ( i == -1 )
-        i = currentCommand.findRev( " make" );
+        i = currentCommand.lastIndexOf( " make" );
     if ( i == -1 )
         m_bCompiling = false;
     else

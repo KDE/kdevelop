@@ -627,7 +627,7 @@ void AppWizardDialog::loadLicenses()
     {
         QString licPath( dirs->findResource( "licenses", fileName ) );
         kDebug(9010) << "Loading license file: " << licPath << endl;
-        QString licName = licPath.mid( licPath.findRev('/') + 1 );
+        QString licName = licPath.mid( licPath.lastIndexOf('/') + 1 );
         KDevLicense* lic = new KDevLicense( licName, licPath );
         m_licenses.insert( licName, lic );
         license_combo->insertItem( licName, ++idx );

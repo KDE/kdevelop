@@ -1,5 +1,7 @@
 
-include_directories(${CMAKE_SOURCE_DIR}/lib/ ${CMAKE_SOURCE_DIR}/lib/util 
+add_definitions ( -DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
+include_directories(${CMAKE_SOURCE_DIR}/lib/ ${CMAKE_SOURCE_DIR}/lib/util
     ${CMAKE_SOURCE_DIR}/buildtools/importers/automake
     )
 
