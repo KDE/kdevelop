@@ -919,9 +919,11 @@ bool SnippetWidget::acceptDrag (QDropEvent *event) const
  */
 void SnippetWidget::slotDropped(QDropEvent *e, QListViewItem *item)
 {
-  SnippetGroup *group = dynamic_cast<SnippetGroup *>(item);
+  QListViewItem * item2 = itemAt(e->pos());
+  
+  SnippetGroup *group = dynamic_cast<SnippetGroup *>(item2);
   if (!group)
-    group = dynamic_cast<SnippetGroup *>(item->parent());
+    group = dynamic_cast<SnippetGroup *>(item2->parent());
 
   QCString dropped;
   QByteArray data = e->encodedData("text/plain");
