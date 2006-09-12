@@ -34,6 +34,15 @@ class TopDUContext;
 class DUChainViewPart;
 class KDevDocument;
 
+class ProxyObject : public DUChainBase
+{
+public:
+  ProxyObject(DUChainBase* _parent, DUChainBase* _object);
+
+  DUChainBase* parent;
+  DUChainBase* object;
+};
+
 class DUChainModel : public QAbstractItemModel
 {
   Q_OBJECT
@@ -53,31 +62,13 @@ class DUChainModel : public QAbstractItemModel
     virtual QModelIndex parent ( const QModelIndex & index ) const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
+    virtual bool hasChildren ( const QModelIndex & parent = QModelIndex() ) const;
 
   private:
-    class ProxyObject : public DUChainBase
-    {
-    public:
-      ProxyObject(DUChainBase* _parent, DUChainBase* _object);
-
-      DUChainBase* parent;
-      DUChainBase* object;
-    };
-
-
     template <typename T>
     QModelIndex createParentIndex(T* type) const
     {
       return createIndex(type->modelRow, 0, type);
-    }
-
-    template <typename T>
-    DUChainBase* nextItem(QListIterator<T*>& it) const
-    {
-      if (it.hasPrevious())
-        return it.peekPrevious();
-      else
-        return 0L;
     }
 
     template <typename T>
@@ -108,19 +99,11 @@ class DUChainModel : public QAbstractItemModel
     }
 
     template <typename T>
-    DUChainBase* proxyItem(DUChainBase* parent, QListIterator<T*> it) const
+    DUChainBase* proxyItem(DUChainBase* parent, QListIterator<T*>& it) const
     {
-      Q_ASSERT(it.hasPrevious());
-
-      DUChainBase* item = new ProxyObject(parent, it.peekPrevious());
-      m_proxyObjects.insert(item);
-      if (it.hasNext())
-        it.next();
-      else
-        // Make hasPrevious return false
-        it.toFront();
-
-      return item;
+      DUChainBase* proxy = new ProxyObject(parent, item(it));
+      m_proxyObjects.insert(proxy);
+      return proxy;
     }
 
     QList<DUChainBase*>* childItems(DUChainBase* parent) const;

@@ -21,6 +21,8 @@
 
 #include "duchainmodel.h"
 
+#include <QReadLocker>
+
 #include <klocale.h>
 
 #include <kdevdocument.h>
@@ -36,7 +38,7 @@
 
 using namespace KTextEditor;
 
-DUChainModel::ProxyObject::ProxyObject(DUChainBase* _parent, DUChainBase* _object)
+ProxyObject::ProxyObject(DUChainBase* _parent, DUChainBase* _object)
   : parent(_parent)
   , object(_object)
 {
@@ -46,7 +48,7 @@ DUChainModel::DUChainModel(DUChainViewPart* parent)
   : QAbstractItemModel(parent)
   , m_chain(0)
 {
-  //connect (KDevCore::documentController(), SIGNAL(documentActivated(KDevDocument*)), SLOT(documentActivated(KDevDocument*)));
+  connect (KDevCore::documentController(), SIGNAL(documentActivated(KDevDocument*)), SLOT(documentActivated(KDevDocument*)));
 }
 
 DUChainModel::~DUChainModel()
@@ -64,6 +66,8 @@ void DUChainModel::documentActivated( KDevDocument* document )
 
 void DUChainModel::setTopContext(TopDUContext* context)
 {
+  QReadLocker readLock(DUChain::lock());
+
   if (m_chain != context)
     m_chain = context;
 
@@ -94,6 +98,8 @@ QModelIndex DUChainModel::index ( int row, int column, const QModelIndex & paren
     return createIndex(row, column, m_chain);
   }
 
+  QReadLocker readLock(DUChain::lock());
+
   DUChainBase* base = static_cast<DUChainBase*>(parent.internalPointer());
 
   QList<DUChainBase*>* items = childItems(base);
@@ -111,6 +117,8 @@ QModelIndex DUChainModel::parent ( const QModelIndex & index ) const
 {
   if (!index.isValid())
     return QModelIndex();
+
+  QReadLocker readLock(DUChain::lock());
 
   DUChainBase* base = static_cast<DUChainBase*>(index.internalPointer());
 
@@ -141,6 +149,8 @@ QVariant DUChainModel::data(const QModelIndex& index, int role ) const
 {
   if (!index.isValid())
     return QVariant();
+
+  QReadLocker readLock(DUChain::lock());
 
   DUChainBase* base = static_cast<DUChainBase*>(index.internalPointer());
   ProxyObject* proxy = dynamic_cast<ProxyObject*>(base);
@@ -173,7 +183,7 @@ QVariant DUChainModel::data(const QModelIndex& index, int role ) const
   } else if (Use* use = dynamic_cast<Use*>(base)) {
     switch (role) {
       case Qt::DisplayRole:
-        return i18n("Use: %1", use->declaration()->identifier().toString());
+        return i18n("Use: %1", use->declaration() ? use->declaration()->identifier().toString() : i18n("[No definition found]"));
     }
 
   } else {
@@ -190,6 +200,8 @@ int DUChainModel::rowCount ( const QModelIndex & parent ) const
 {
   if (!parent.isValid())
     return 1;
+
+  QReadLocker readLock(DUChain::lock());
 
   DUChainBase* base = static_cast<DUChainBase*>(parent.internalPointer());
   QList<DUChainBase*>* items = childItems(base);
@@ -231,17 +243,15 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
     QListIterator<DUContext*> importedParentContexts = context->importedParentContexts();
     QListIterator<Declaration*> declarations = context->localDeclarations();
     QListIterator<Definition*> definitions = context->localDefinitions();
-    QListIterator<Use*> uses = context->internalUses();
-    QListIterator<Use*> uses = context->externalUses();
+    QListIterator<Use*> uses = context->uses();
 
     bool firstInit = true;
     forever {
       DUChainBase* currentItem = 0;
-      Cursor first, current;
-      int found = 1;
+      Cursor first = Cursor::invalid(), current;
+      int found = 0;
 
-      first = current = nextItem(contexts, firstInit);
-
+      TEST_NEXT(contexts, 1)
       TEST_NEXT(importedParentContexts, 2)
       TEST_NEXT(declarations, 3)
       TEST_NEXT(definitions, 4)
@@ -264,6 +274,9 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
           case 5:
             currentItem = proxyItem(context, uses);
             break;
+          default:
+            Q_ASSERT(false);
+            break;
         }
 
         currentItem->modelRow = list->count();
@@ -277,6 +290,8 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
     }
 
   } else if (Declaration* dec = dynamic_cast<Declaration*>(parent)) {
+    list = new QList<DUChainBase*>();
+
     if (dec->definition())
       list->append(static_cast<DUChainBase*>(dec->definition()));
 
@@ -285,13 +300,40 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
 
   } else {
     // No child items for definitions or uses
-    kDebug() << k_funcinfo << "No child items for definitions or uses" << endl;
+    //kDebug() << k_funcinfo << "No child items for definitions or uses" << endl;
   }
 
   if (list)
     m_objectCache.insert(parent, list);
 
   return list;
+}
+
+bool DUChainModel::hasChildren( const QModelIndex & parent ) const
+{
+  if (!parent.isValid())
+    return m_chain;
+
+  QReadLocker readLock(DUChain::lock());
+
+  DUChainBase* base = static_cast<DUChainBase*>(parent.internalPointer());
+
+  if (m_objectCache.contains(base))
+    return !m_objectCache[base]->isEmpty();
+
+  ProxyObject* proxy = dynamic_cast<ProxyObject*>(base);
+  if (proxy)
+    base = proxy->object;
+
+  QList<DUChainBase*>* list = 0;
+
+  if (DUContext* context = dynamic_cast<DUContext*>(base))
+    return !context->childContexts().isEmpty() || !context->importedParentContexts().isEmpty() || !context->localDeclarations().isEmpty() || !context->localDefinitions().isEmpty() || !context->uses().isEmpty();
+
+  else if (Declaration* dec = dynamic_cast<Declaration*>(base))
+    return dec->definition() || !dec->uses().isEmpty();
+
+  return false;
 }
 
 #include "duchainmodel.moc"
