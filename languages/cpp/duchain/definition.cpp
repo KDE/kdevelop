@@ -55,13 +55,17 @@ void Definition::setContext(DUContext* context)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  if (m_context)
+  if (m_context) {
     m_context->takeDefinition(this);
+    DUChain::definitionChanged(this, DUChainObserver::Removal, DUChainObserver::Context, m_context);
+  }
 
   m_context = context;
 
-  if (m_context)
+  if (m_context) {
     m_context->addDefinition(this);
+    DUChain::definitionChanged(this, DUChainObserver::Addition, DUChainObserver::Context, m_context);
+  }
 }
 
 Declaration* Definition::declaration() const
@@ -75,8 +79,14 @@ void Definition::setDeclaration(Declaration* declaration)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
+  if (m_declaration)
+    DUChain::definitionChanged(this, DUChainObserver::Removal, DUChainObserver::DefinitionRelationship, m_declaration);
+
   // TODO if declaration is 0, highlight as definition without declaration
   m_declaration = declaration;
+
+  if (m_declaration)
+    DUChain::definitionChanged(this, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, m_declaration);
 }
 
 // kate: indent-width 2;

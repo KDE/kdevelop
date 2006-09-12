@@ -278,6 +278,8 @@ void DUContext::addChildContext( DUContext * context )
   }
   m_childContexts.append(context);
   context->m_parentContext = this;
+
+  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ChildContexts, context);
 }
 
 void DUContext::addImportedParentContext( DUContext * context )
@@ -297,6 +299,8 @@ void DUContext::addImportedParentContext( DUContext * context )
     }
   }
   m_importedParentContexts.append(context);
+
+  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ImportedParentContexts, context);
 }
 
 void DUContext::removeImportedParentContext( DUContext * context )
@@ -306,6 +310,8 @@ void DUContext::removeImportedParentContext( DUContext * context )
   m_importedParentContexts.removeAll(context);
 
   context->removeImportedChildContext(this);
+
+  DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::ImportedParentContexts, context);
 }
 
 void DUContext::addImportedChildContext( DUContext * context )
@@ -315,6 +321,8 @@ void DUContext::addImportedChildContext( DUContext * context )
   Q_ASSERT(!m_importedChildContexts.contains(context));
 
   m_importedChildContexts.append(context);
+
+  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ImportedChildContexts, context);
 }
 
 void DUContext::removeImportedChildContext( DUContext * context )
@@ -324,6 +332,8 @@ void DUContext::removeImportedChildContext( DUContext * context )
   Q_ASSERT(m_importedChildContexts.contains(context));
 
   m_importedChildContexts.removeAll(context);
+
+  DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::ImportedChildContexts, context);
 }
 
 const QList<DUContext*>& DUContext::importedChildContexts() const
@@ -393,10 +403,7 @@ void DUContext::deleteLocalDeclarations()
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  QList<Declaration*> declarations = m_localDeclarations;
-
-  qDeleteAll(declarations);
-
+  qDeleteAll(m_localDeclarations);
   Q_ASSERT(m_localDeclarations.isEmpty());
 }
 
@@ -404,11 +411,9 @@ void DUContext::deleteChildContextsRecursively()
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  QList<DUContext*> childContexts = m_childContexts;
-  foreach (DUContext* context, childContexts)
-    delete context;
+  qDeleteAll(m_childContexts);
 
-  //Q_ASSERT(m_childContexts.isEmpty());
+  Q_ASSERT(m_childContexts.isEmpty());
 }
 
 QList< Declaration * > DUContext::clearLocalDeclarations( )
@@ -439,6 +444,8 @@ void DUContext::setLocalScopeIdentifier(const QualifiedIdentifier & identifier)
   ENSURE_CHAIN_WRITE_LOCKED
 
   m_scopeIdentifier = identifier;
+
+  DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
 }
 
 const QualifiedIdentifier & DUContext::localScopeIdentifier() const
@@ -469,6 +476,8 @@ void DUContext::addUsingNamespace(KTextEditor::Cursor* cursor, const QualifiedId
     }
 
   m_usingNamespaces.prepend(use);
+
+  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::UsingNamespaces);
 }
 
 const QList<DUContext::UsingNS*>& DUContext::usingNamespaces() const
@@ -490,6 +499,8 @@ void DUContext::setType(ContextType type)
   ENSURE_CHAIN_WRITE_LOCKED
 
   m_contextType = type;
+
+  DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::ContextType);
 }
 
 QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const KTextEditor::Cursor& position) const
@@ -574,6 +585,9 @@ Definition* DUContext::addDefinition(Definition* definition)
   ENSURE_CHAIN_WRITE_LOCKED
 
   m_localDefinitions.append(definition);
+
+  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::LocalDefinitions, definition);
+
   return definition;
 }
 
@@ -582,6 +596,9 @@ Definition* DUContext::takeDefinition(Definition* definition)
   ENSURE_CHAIN_WRITE_LOCKED
 
   m_localDefinitions.removeAll(definition);
+
+  DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::LocalDefinitions, definition);
+
   return definition;
 }
 
@@ -607,6 +624,8 @@ void DUContext::addUse(Use* use)
   ENSURE_CHAIN_WRITE_LOCKED
 
   m_uses.append(use);
+
+  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::Uses, use);
 }
 
 void DUContext::removeUse(Use* use)
@@ -615,6 +634,8 @@ void DUContext::removeUse(Use* use)
 
   Q_ASSERT(m_uses.contains(use));
   m_uses.removeAll(use);
+
+  DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::Uses, use);
 }
 
 DUContext * DUContext::findContextAt(const KTextEditor::Cursor & position) const
@@ -694,6 +715,8 @@ void DUContext::clearUsingNamespaces()
 
   qDeleteAll(m_usingNamespaces);
   m_usingNamespaces.clear();
+
+  DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::UsingNamespaces);
 }
 
 // kate: indent-width 2;

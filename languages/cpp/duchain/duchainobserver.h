@@ -49,6 +49,7 @@ public:
     LocalDeclarations,
     LocalDefinitions,
     UsingNamespaces,
+    ContextType,
 
     // Context + Declaration
     Uses,

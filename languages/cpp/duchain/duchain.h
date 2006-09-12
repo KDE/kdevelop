@@ -33,10 +33,6 @@ class QReadWriteLock;
  *
  * \todo to pull the sorting off properly, will need to know the location of
  *       the defines used to pull in URLs other than the source file URL.
- *
- * \todo need to do some tricky reference counting; need to know the file include tree.
- *       will probably have to assume an acyclic structure for this (ie. header guards)
- *       otherwise the code wouldn't compile anyway.
  */
 class DUChain : public QObject
 {

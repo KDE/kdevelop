@@ -56,7 +56,13 @@ void Use::setDeclaration(Declaration* declaration)
 {
   QWriteLocker lock(&m_declarationLock);
 
+  if (m_declaration)
+    DUChain::useChanged(this, DUChainObserver::Removal, DUChainObserver::DeclarationRelationship, m_declaration);
+
   m_declaration = declaration;
+
+  if (m_declaration)
+    DUChain::useChanged(this, DUChainObserver::Addition, DUChainObserver::DeclarationRelationship, m_declaration);
 }
 
 void Use::setContext(DUContext * context)
@@ -65,6 +71,8 @@ void Use::setContext(DUContext * context)
     ENSURE_CHAIN_WRITE_LOCKED
 
     m_context->removeUse(this);
+
+    DUChain::useChanged(this, DUChainObserver::Removal, DUChainObserver::Context, m_context);
   }
 
   m_context = context;
@@ -73,6 +81,8 @@ void Use::setContext(DUContext * context)
     ENSURE_CHAIN_WRITE_LOCKED
 
     m_context->addUse(this);
+
+    DUChain::useChanged(this, DUChainObserver::Addition, DUChainObserver::Context, m_context);
   }
 }
 
