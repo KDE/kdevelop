@@ -19,6 +19,7 @@
 #include "duchain.h"
 
 #include <QMutexLocker>
+#include <QWriteLocker>
 
 #include <kstaticdeleter.h>
 
@@ -26,7 +27,50 @@
 
 #include "topducontext.h"
 
+#undef ENSURE_CHAIN_READ_LOCKED
+#undef ENSURE_CHAIN_WRITE_LOCKED
+
+#ifdef NDEBUG
+
+#define ENSURE_CHAIN_READ_LOCKED
+#define ENSURE_CHAIN_WRITE_LOCKED
+
+#else
+
+// Unfortunately, impossible to check this exactly as we could be in a write lock
+#define ENSURE_CHAIN_READ_LOCKED \
+bool _ensure_chain_locked = DUChain::lock()->tryLockForWrite(); \
+Q_ASSERT(!_ensure_chain_locked); \
+
+#define ENSURE_CHAIN_WRITE_LOCKED \
+bool _ensure_chain_locked = DUChain::lock()->tryLockForWrite(); \
+Q_ASSERT(!_ensure_chain_locked); \
+
+#endif
+
 static KStaticDeleter<DUChain> sd;
+
+DUChain* DUChain::s_chain = 0;
+
+QReadWriteLock* DUChain::s_lock = 0;
+
+DUChain * DUChain::self( )
+{
+  if (!s_chain)
+    sd.setObject(s_chain, new DUChain());
+
+  return s_chain;
+}
+
+DUChain::DUChain()
+{
+  s_lock = new QReadWriteLock();
+}
+
+DUChain::~DUChain()
+{
+  delete s_lock;
+}
 
 void DUChain::removeDocumentChain( const KUrl & document )
 {
@@ -46,18 +90,9 @@ TopDUContext * DUChain::chainForDocument( const KUrl & document )
   return 0;
 }
 
-DUChain* DUChain::s_chain = 0;
-
-DUChain * DUChain::self( )
-{
-  if (!s_chain)
-    sd.setObject(s_chain, new DUChain());
-
-  return s_chain;
-}
-
 void DUChain::clear()
 {
+  QWriteLocker writeLock(lock());
   foreach (TopDUContext* context, m_chains) {
     KDevEditorIntegrator::releaseTopRange(context->textRangePtr());
     delete context;
@@ -69,3 +104,49 @@ void DUChain::clear()
 #include "duchain.moc"
 
 // kate: indent-width 2;
+
+const QList< DUChainObserver * > & DUChain::observers() const
+{
+  ENSURE_CHAIN_READ_LOCKED
+
+  return m_observers;
+}
+
+void DUChain::addObserver(DUChainObserver * observer)
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  Q_ASSERT(!m_observers.contains(observer));
+  m_observers.append(observer);
+}
+
+void DUChain::removeObserver(DUChainObserver * observer)
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  m_observers.removeAll(observer);
+}
+
+void DUChain::contextChanged(DUContext* context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
+{
+  foreach (DUChainObserver* observer, self()->observers())
+    observer->contextChanged(context, change, relationship, relatedObject);
+}
+
+void DUChain::declarationChanged(Declaration* declaration, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
+{
+  foreach (DUChainObserver* observer, self()->observers())
+    observer->declarationChanged(declaration, change, relationship, relatedObject);
+}
+
+void DUChain::definitionChanged(Definition* definition, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
+{
+  foreach (DUChainObserver* observer, self()->observers())
+    observer->definitionChanged(definition, change, relationship, relatedObject);
+}
+
+void DUChain::useChanged(Use* use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
+{
+  foreach (DUChainObserver* observer, self()->observers())
+    observer->useChanged(use, change, relationship, relatedObject);
+}

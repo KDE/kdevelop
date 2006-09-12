@@ -28,8 +28,10 @@
 #include "parser/codemodel.h"
 #include "duchain/topducontext.h"
 #include "duchain/declaration.h"
+#include "duchain/definition.h"
 #include "duchain/use.h"
 #include "duchain/cpptypes.h"
+#include "duchain/duchain.h"
 
 using namespace KTextEditor;
 
@@ -233,7 +235,7 @@ void CppHighlighting::outputRange( KTextEditor::SmartRange * range ) const
 
 void CppHighlighting::highlightDUChain(TopDUContext* context) const
 {
-  QReadLocker lock(context->chainLock());
+  QReadLocker lock(DUChain::lock());
   Q_ASSERT(context->topContext() == context);
   highlightDUChain(static_cast<DUContext*>(context));
 }
@@ -243,30 +245,17 @@ void CppHighlighting::highlightDUChain(DUContext* context) const
   if (!context->smartRange())
     return;
 
-  //context->smartRange()->setAttribute(attributeForDepth(context->depth()));
-
   foreach (Declaration* dec, context->localDeclarations())
-    if (dec->smartRange())
-      dec->smartRange()->setAttribute(attributeForType(typeForDeclaration(dec), DeclarationContext));
+    highlightDeclaration(dec);
 
-  foreach (Use* use, context->internalUses())
-    if (SmartRange* range = use->smartRange())
-      range->setAttribute(attributeForType(use->declaration() ? typeForDeclaration(use->declaration()) : ErrorVariableType, ReferenceContext));
+  foreach (Definition* def, context->localDefinitions())
+    highlightDefinition(def);
 
-  foreach (Use* use, context->externalUses()) {
-    QReadLocker lock(use->chainLock());
-    if (SmartRange* range = use->smartRange())
-      range->setAttribute(attributeForType(use->declaration() ? typeForDeclaration(use->declaration()) : ErrorVariableType, ReferenceContext));
-  }
-
-  foreach (DUContext* context, context->importedParentContexts())
-    highlightDUChain(context);
+  foreach (Use* use, context->uses())
+    highlightUse(use);
 
   foreach (DUContext* child, context->childContexts())
     highlightDUChain(child);
-
-  /*if (!context->parentContext())
-    outputRange(context->smartRange());*/
 }
 
 KTextEditor::Attribute::Ptr CppHighlighting::attributeForDepth(int depth) const
@@ -314,4 +303,28 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec) co
     }
 
   return type;
+}
+
+void CppHighlighting::highlightDefinition(Definition * definition) const
+{
+  if (Declaration* declaration = definition->declaration())
+    if (SmartRange* range = definition->smartRange())
+      range->setAttribute(attributeForType(typeForDeclaration(declaration), DeclarationContext));
+}
+
+void CppHighlighting::highlightDeclaration(Declaration * declaration) const
+{
+  if (SmartRange* range = declaration->smartRange())
+    range->setAttribute(attributeForType(typeForDeclaration(declaration), DeclarationContext));
+}
+
+void CppHighlighting::highlightUse(Use * use) const
+{
+  if (SmartRange* range = use->smartRange()) {
+    Types type = ErrorVariableType;
+    if (use->declaration())
+      type = typeForDeclaration(use->declaration());
+
+    range->setAttribute(attributeForType(type, ReferenceContext));
+  }
 }

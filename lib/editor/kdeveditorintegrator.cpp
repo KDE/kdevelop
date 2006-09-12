@@ -52,10 +52,6 @@ KDevEditorIntegrator::KDevEditorIntegrator()
 
 KDevEditorIntegrator::~ KDevEditorIntegrator()
 {
-  if (m_smart) {
-    // Unlock the smart interface, if one exists
-    m_smart->smartMutex()->unlock();
-  }
 }
 
 KDevEditorIntegratorPrivate::KDevEditorIntegratorPrivate()
@@ -65,7 +61,6 @@ KDevEditorIntegratorPrivate::KDevEditorIntegratorPrivate()
 
 KDevEditorIntegratorPrivate::~KDevEditorIntegratorPrivate()
 {
-  kDebug() << k_funcinfo << endl;
   QHashIterator<KUrl, QVector<KTextEditor::Range*> > it = topRanges;
   while (it.hasNext()) {
     it.next();
@@ -167,8 +162,10 @@ Cursor* KDevEditorIntegrator::createCursor(const Cursor& position)
 {
   Cursor* ret = 0;
 
-  if (SmartInterface* iface = smart())
+  if (SmartInterface* iface = smart()) {
+    QMutexLocker lock(iface->smartMutex());
     ret = iface->newSmartCursor(position);
+  }
 
   if (!ret)
     ret = new KDevDocumentCursor(m_currentUrl, position);
@@ -198,6 +195,7 @@ Range* KDevEditorIntegrator::topRange( TopRangeType type )
     if (currentDocument()) {
       Range* newRange = data()->topRanges[currentUrl()][type] = createRange(currentDocument()->documentRange());
       if (SmartInterface* iface = smart()) {
+        QMutexLocker lock(iface->smartMutex());
         Q_ASSERT(newRange->isSmartRange());
         iface->addHighlightToDocument( newRange->toSmartRange(), false );
         newRange->toSmartRange()->addWatcher(data());
@@ -235,13 +233,17 @@ Range* KDevEditorIntegrator::createRange( const Range & range )
 {
   Range* ret;
 
-  if (SmartInterface* iface = smart())
+  if (SmartInterface* iface = smart()) {
+    QMutexLocker lock(iface->smartMutex());
+
     if (m_currentRange && m_currentRange->isSmartRange())
       ret = iface->newSmartRange(range, m_currentRange->toSmartRange());
     else
       ret = iface->newSmartRange(range);
-  else
+
+  } else {
     ret = new KDevDocumentRange(m_currentUrl, range, m_currentRange);
+  }
 
   m_currentRange = ret;
   return m_currentRange;
@@ -290,19 +292,9 @@ const KUrl& KDevEditorIntegrator::currentUrl() const
 
 void KDevEditorIntegrator::setCurrentUrl(const KUrl& url)
 {
-  if (m_smart) {
-    // Unlock the smart interface, if one exists
-    m_smart->smartMutex()->unlock();
-  }
-
   m_currentUrl = url;
   m_currentDocument = documentForUrl(url);
   m_smart = dynamic_cast<KTextEditor::SmartInterface*>(m_currentDocument);
-
-  if (m_smart) {
-    // Lock the smart interface, if one exists
-    m_smart->smartMutex()->lock();
-  }
 }
 
 void KDevEditorIntegrator::releaseTopRange(KTextEditor::Range * range)
@@ -324,6 +316,22 @@ void KDevEditorIntegrator::releaseTopRange(KTextEditor::Range * range)
   }
 
   //kWarning() << k_funcinfo << "Could not find top range to delete." << endl;
+}
+
+void KDevEditorIntegrator::releaseRange(KTextEditor::Range* range)
+{
+  if (range) {
+    if (range->isSmartRange()) {
+      if (SmartInterface* iface = dynamic_cast<SmartInterface*>(range->toSmartRange()->document())) {
+        QMutexLocker lock(iface->smartMutex());
+        delete range;
+      } else {
+        delete range;
+      }
+    } else {
+      delete range;
+    }
+  }
 }
 
 KDevEditorIntegratorPrivate * KDevEditorIntegrator::data()

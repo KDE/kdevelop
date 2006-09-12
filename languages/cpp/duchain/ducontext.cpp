@@ -31,19 +31,6 @@
 
 #include "dumpchain.h"
 
-// Unfortunately, impossible to check this exactly as we could be in a write lock
-#define ENSURE_CHAIN_READ_LOCKED \
-if (!topContext()->deleting()) { \
-  bool _ensure_chain_locked = chainLock()->tryLockForWrite(); \
-  Q_ASSERT(!_ensure_chain_locked); \
-}
-
-#define ENSURE_CHAIN_WRITE_LOCKED \
-if (!topContext()->deleting()) { \
-  bool _ensure_chain_locked = chainLock()->tryLockForWrite(); \
-  Q_ASSERT(!_ensure_chain_locked); \
-}
-
 using namespace KTextEditor;
 
 DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
@@ -76,7 +63,7 @@ DUContext::~DUContext( )
   if (m_parentContext)
     m_parentContext->m_childContexts.removeAll(this);
 
-  foreach (DUContext* context, m_importedChildContexts)
+  foreach (DUContext* context, importedChildContexts())
     context->removeImportedParentContext(this);
 
   QList<DUContext*> importedParentContexts = m_importedParentContexts;
@@ -85,17 +72,13 @@ DUContext::~DUContext( )
 
   deleteChildContextsRecursively();
 
+  deleteUses();
+
   deleteLocalDefinitions();
 
   deleteLocalDeclarations();
 
-  deleteOrphanUses();
-
-  // Hmm, a lot of lock/unlock here, maybe fix?
-  QList<Use*> useList = internalUses();
-  foreach (Use* use, useList)
-    use->setContext(0);
-  useList = externalUses();
+  QList<Use*> useList = uses();
   foreach (Use* use, useList)
     use->setContext(0);
 
@@ -123,6 +106,8 @@ void DUContext::addDeclaration( Declaration * newDeclaration )
   // The definition may not have its identifier set when it's assigned... allow dupes here, TODO catch the error elsewhere
 
   m_localDeclarations.append(newDeclaration);
+
+  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::LocalDeclarations, newDeclaration);
 }
 
 void DUContext::removeDeclaration(Declaration* declaration)
@@ -130,6 +115,8 @@ void DUContext::removeDeclaration(Declaration* declaration)
   ENSURE_CHAIN_WRITE_LOCKED
 
   m_localDeclarations.removeAll(declaration);
+
+  DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::LocalDeclarations, declaration);
 }
 
 QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch ) const
@@ -257,9 +244,8 @@ void DUContext::findDeclarationsInternal( const QualifiedIdentifier & identifier
   QListIterator<DUContext*> it = importedParentContexts();
   it.toBack();
   while (it.hasPrevious()) {
-    DUContext* parent = it.previous();
-
-    parent->findDeclarationsInternal(identifier, position, dataType, usingNS, ret, true);
+    DUContext* context = it.previous();
+    context->findDeclarationsInternal(identifier, position, dataType, usingNS, ret, true);
     if (!ret.isEmpty())
       return;
   }
@@ -282,8 +268,6 @@ void DUContext::addChildContext( DUContext * context )
 {
   // Internal, don't need to assert a lock
 
-  Q_ASSERT(!context->m_importedChildContexts.contains(context));
-
   for (int i = 0; i < m_childContexts.count(); ++i) {
     DUContext* child = m_childContexts.at(i);
     if (context->textRange().start() < child->textRange().start()) {
@@ -300,8 +284,10 @@ void DUContext::addImportedParentContext( DUContext * context )
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  Q_ASSERT(!context->childContexts().contains(context));
-  context->m_importedChildContexts.append(this);
+  if (m_importedParentContexts.contains(context))
+    return;
+
+  context->addImportedChildContext(this);
 
   for (int i = 0; i < m_importedParentContexts.count(); ++i) {
     DUContext* parent = m_importedParentContexts.at(i);
@@ -318,7 +304,33 @@ void DUContext::removeImportedParentContext( DUContext * context )
   ENSURE_CHAIN_WRITE_LOCKED
 
   m_importedParentContexts.removeAll(context);
-  context->m_importedChildContexts.removeAll(this);
+
+  context->removeImportedChildContext(this);
+}
+
+void DUContext::addImportedChildContext( DUContext * context )
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  Q_ASSERT(!m_importedChildContexts.contains(context));
+
+  m_importedChildContexts.append(context);
+}
+
+void DUContext::removeImportedChildContext( DUContext * context )
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  Q_ASSERT(m_importedChildContexts.contains(context));
+
+  m_importedChildContexts.removeAll(context);
+}
+
+const QList<DUContext*>& DUContext::importedChildContexts() const
+{
+  ENSURE_CHAIN_READ_LOCKED
+
+  return m_importedChildContexts;
 }
 
 DUContext * DUContext::findContext( const KTextEditor::Cursor& position, DUContext* parent) const
@@ -368,7 +380,9 @@ void DUContext::mergeDeclarationsInternal(QHash<QualifiedIdentifier, Declaration
   QListIterator<DUContext*> it = importedParentContexts();
   it.toBack();
   while (it.hasPrevious()) {
-    it.previous()->mergeDeclarationsInternal(definitions, position, true);
+    DUContext* context = it.previous();
+
+    context->mergeDeclarationsInternal(definitions, position, true);
   }
 
   if (!inImportedContext && parentContext())
@@ -495,12 +509,12 @@ void DUContext::addOrphanUse(Use* orphan)
   m_orphanUses.append(orphan);
 }
 
-void DUContext::deleteOrphanUses()
+void DUContext::deleteUses()
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  qDeleteAll(m_orphanUses);
-  m_orphanUses.clear();
+  qDeleteAll(m_uses);
+  Q_ASSERT(m_uses.isEmpty());
 }
 
 const QList<Use*>& DUContext::orphanUses() const
@@ -538,8 +552,11 @@ void DUContext::findContextsInternal(ContextType contextType, const QualifiedIde
 
   QListIterator<DUContext*> it = m_importedParentContexts;
   it.toBack();
-  while (it.hasPrevious())
-    it.previous()->findContextsInternal(contextType, identifier, position, usingNS, ret, true);
+  while (it.hasPrevious()) {
+    DUContext* context = it.previous();
+
+    context->findContextsInternal(contextType, identifier, position, usingNS, ret, true);
+  }
 
   if (!inImportedContext && parentContext())
     parentContext()->findContextsInternal(contextType, identifier, position, usingNS, ret);
@@ -547,14 +564,14 @@ void DUContext::findContextsInternal(ContextType contextType, const QualifiedIde
 
 const QList<Definition*>& DUContext::localDefinitions() const
 {
-  QReadLocker lock(&m_definitionLock);
+  ENSURE_CHAIN_READ_LOCKED
 
   return m_localDefinitions;
 }
 
 Definition* DUContext::addDefinition(Definition* definition)
 {
-  QWriteLocker lock(&m_definitionLock);
+  ENSURE_CHAIN_WRITE_LOCKED
 
   m_localDefinitions.append(definition);
   return definition;
@@ -562,7 +579,7 @@ Definition* DUContext::addDefinition(Definition* definition)
 
 Definition* DUContext::takeDefinition(Definition* definition)
 {
-  QWriteLocker lock(&m_definitionLock);
+  ENSURE_CHAIN_WRITE_LOCKED
 
   m_localDefinitions.removeAll(definition);
   return definition;
@@ -578,48 +595,26 @@ void DUContext::deleteLocalDefinitions()
   Q_ASSERT(localDefinitions().isEmpty());
 }
 
-const QList< Use * > & DUContext::internalUses() const
+const QList< Use * > & DUContext::uses() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  return m_internalUses;
+  return m_uses;
 }
 
-void DUContext::addInternalUse(Use* use)
+void DUContext::addUse(Use* use)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  m_internalUses.append(use);
+  m_uses.append(use);
 }
 
-void DUContext::removeInternalUse(Use* use)
+void DUContext::removeUse(Use* use)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  Q_ASSERT(m_internalUses.contains(use));
-  m_internalUses.removeAll(use);
-}
-
-const QList< Use * > & DUContext::externalUses() const
-{
-  QWriteLocker lock(&m_externalUseLock);
-
-  return m_externalUses;
-}
-
-void DUContext::addExternalUse(Use* use)
-{
-  QWriteLocker lock(&m_externalUseLock);
-
-  m_externalUses.append(use);
-}
-
-void DUContext::removeExternalUse(Use* use)
-{
-  QWriteLocker lock(&m_externalUseLock);
-
-  Q_ASSERT(m_externalUses.contains(use));
-  m_externalUses.removeAll(use);
+  Q_ASSERT(m_uses.contains(use));
+  m_uses.removeAll(use);
 }
 
 DUContext * DUContext::findContextAt(const KTextEditor::Cursor & position) const
@@ -643,13 +638,7 @@ Use* DUContext::findUseAt(const KTextEditor::Cursor & position) const
   if (!textRange().contains(position))
     return 0;
 
-  foreach (Use* use, m_internalUses)
-    if (use->textRange().contains(position))
-      return use;
-
-  QReadLocker lock(&m_externalUseLock);
-
-  foreach (Use* use, m_externalUses)
+  foreach (Use* use, m_uses)
     if (use->textRange().contains(position))
       return use;
 
@@ -708,3 +697,37 @@ void DUContext::clearUsingNamespaces()
 }
 
 // kate: indent-width 2;
+
+void DUContext::clearImportedParentContexts()
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  foreach (DUContext* parent, m_importedParentContexts)
+    removeImportedParentContext(parent);
+
+  Q_ASSERT(m_importedParentContexts.isEmpty());
+}
+
+void DUContext::cleanIfNotEncountered(uint encountered, bool firstPass)
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  if (firstPass) {
+    foreach (DUContext* childContext, childContexts())
+      if (childContext->lastEncountered() != encountered)
+        delete childContext;
+
+    foreach (Declaration* dec, localDeclarations())
+      if (dec->lastEncountered() != encountered)
+        delete dec;
+
+    foreach (Definition* def, localDefinitions())
+      if (def->lastEncountered() != encountered)
+        delete def;
+
+  } else {
+    foreach (Use* use, uses())
+      if (use->lastEncountered() != encountered)
+        delete use;
+  }
+}

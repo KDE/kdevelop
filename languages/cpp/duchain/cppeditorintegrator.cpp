@@ -52,26 +52,20 @@ Cursor CppEditorIntegrator::findPosition( const Token & token, Edge edge ) const
   return Cursor(line, column);
 }
 
-Range* CppEditorIntegrator::createRange( AST * node, RangeEdge edge )
+Range CppEditorIntegrator::findRange( AST * node, RangeEdge edge )
 {
   Q_UNUSED(edge);
-  return createRange(Range(findPosition(node->start_token, FrontEdge), findPosition(node->end_token - 1, BackEdge)));
+  return Range(findPosition(node->start_token, FrontEdge), findPosition(node->end_token - 1, BackEdge));
 }
 
-KTextEditor::Range* CppEditorIntegrator::createRange(AST* from, AST* to)
+Range CppEditorIntegrator::findRange(AST* from, AST* to)
 {
-  return createRange(Range(findPosition(from->start_token, FrontEdge), findPosition(to->end_token - 1, BackEdge)));
+  return Range(findPosition(from->start_token, FrontEdge), findPosition(to->end_token - 1, BackEdge));
 }
 
-Range* CppEditorIntegrator::createRange( const Token & token )
+Range CppEditorIntegrator::findRange( const Token & token )
 {
-  return createRange(Range(findPosition(token, FrontEdge), findPosition(token, BackEdge)));
-}
-
-Cursor * CppEditorIntegrator::createCursor( std::size_t token, Edge edge )
-{
-  const Token& t = m_session->token_stream->token(token);
-  return createCursor(findPosition(t, edge));
+  return Range(findPosition(token, FrontEdge), findPosition(token, BackEdge));
 }
 
 QString CppEditorIntegrator::tokenToString(std::size_t token) const

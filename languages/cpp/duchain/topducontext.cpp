@@ -20,6 +20,7 @@
 
 #include "symboltable.h"
 #include "declaration.h"
+#include "duchain.h"
 
 using namespace KTextEditor;
 
@@ -48,6 +49,8 @@ bool TopDUContext::hasUses() const
 void TopDUContext::findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNS, QList<Declaration*>& ret, bool inImportedContext) const
 {
   Q_UNUSED(inImportedContext);
+
+  ENSURE_CHAIN_READ_LOCKED
 
   ret = checkDeclarations(SymbolTable::self()->findDeclarations(identifier), position, dataType);
   if (!ret.isEmpty())
@@ -94,6 +97,7 @@ QList<DUContext::UsingNS*> TopDUContext::findNestedNamespaces(const KTextEditor:
 
   foreach (DUContext* nsContext, contexts) {
     TopDUContext* origin = nsContext->topContext();
+
     bool doesImport = false;
     bool importEvaluated = false;
     bool sameDocument = nsContext->topContext() == this;
@@ -104,7 +108,7 @@ QList<DUContext::UsingNS*> TopDUContext::findNestedNamespaces(const KTextEditor:
 
       } else {
         if (!importEvaluated) {
-          doesImport = imports(origin);
+          doesImport = imports(origin, nested->textCursor());
           importEvaluated = true;
         }
 
@@ -119,10 +123,20 @@ QList<DUContext::UsingNS*> TopDUContext::findNestedNamespaces(const KTextEditor:
   return nestedUsingNS;
 }
 
+bool TopDUContext::imports(TopDUContext * origin, const KTextEditor::Cursor& position) const
+{
+  ENSURE_CHAIN_READ_LOCKED
+
+  Q_UNUSED(position);
+  // TODO use position
+
+  return imports(origin, 0);
+}
+
 bool TopDUContext::imports(TopDUContext * origin, int depth) const
 {
   if (depth == 100) {
-    kWarning() << k_funcinfo << "Imported context list too deep!" << endl;
+    kWarning() << k_funcinfo << "Imported context list too deep! Infinite recursion?" << endl;
     return false;
   }
 
@@ -131,6 +145,7 @@ bool TopDUContext::imports(TopDUContext * origin, int depth) const
     TopDUContext* top = static_cast<TopDUContext*>(context);
     if (top == origin)
       return true;
+
     if (top->imports(origin, depth + 1))
       return true;
   }
@@ -140,29 +155,19 @@ bool TopDUContext::imports(TopDUContext * origin, int depth) const
 
 QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   QList<Declaration*> found;
 
   foreach (Declaration* dec, declarations) {
-    TopDUContext* top = dec->context()->topContext();
+    TopDUContext* top = dec->topContext();
     if (top != this) {
-      // Accept failure vs. deadlocking...
-      // TODO: unwind locks and re-lock... first, need client uses to accept that their lock may be lost first
-      if (!top->chainLock()->tryLockForRead())
+      if (dataType && dec->abstractType() != dataType)
         continue;
-
-      if (dataType && dec->abstractType() != dataType) {
-        top->chainLock()->unlock();
-        continue;
-      }
 
       // Make sure that this declaration is accessible
-      // TODO when import location available, use that too
-      if (!imports(top)) {
-        top->chainLock()->unlock();
+      if (!imports(top, position))
         continue;
-      }
-
-      top->chainLock()->unlock();
 
     } else {
       if (dataType && dec->abstractType() != dataType)
@@ -221,27 +226,18 @@ void TopDUContext::findContextsInNamespaces(ContextType contextType, const Quali
 
 void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const KTextEditor::Cursor& position, QList<DUContext*>& ret) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   foreach (DUContext* context, contexts) {
     TopDUContext* top = context->topContext();
-    if (top != this) {
-      // Avoid deadlock... accept failure :(
-      // TODO: unwind locks and re-lock... first, need client uses to accept that their lock may be lost first
-      if (!top->chainLock()->tryLockForRead())
-        continue;
 
-      if (context->type() != contextType) {
-        top->chainLock()->unlock();
+    if (top != this) {
+      if (context->type() != contextType)
         continue;
-      }
 
       // Make sure that this declaration is accessible
-      // TODO when import location available, use that too
-      if (!imports(top)) {
-        top->chainLock()->unlock();
+      if (!imports(top, position))
         continue;
-      }
-
-      top->chainLock()->unlock();
 
     } else {
       if (context->type() != contextType)

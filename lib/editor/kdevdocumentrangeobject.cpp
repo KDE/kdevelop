@@ -18,8 +18,12 @@
 
 #include "kdevdocumentrangeobject.h"
 
+#include <QMutexLocker>
+
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
+
+#include "kdeveditorintegrator.h"
 
 using namespace KTextEditor;
 
@@ -35,13 +39,15 @@ KDevDocumentRangeObject::~ KDevDocumentRangeObject( )
   if (m_range && m_range->isSmartRange())
     m_range->toSmartRange()->removeWatcher(this);
 
-  delete m_range;
+  KDevEditorIntegrator::releaseRange(m_range);
   delete m_url;
 }
 
 void KDevDocumentRangeObject::setTextRange( Range * range )
 {
   Q_ASSERT(range);
+
+  QMutexLocker lock(&m_rangeMutex);
 
   if (m_range == range)
     return;
@@ -66,23 +72,27 @@ void KDevDocumentRangeObject::setTextRange( Range * range )
   }
 }
 
-const Range& KDevDocumentRangeObject::textRange( ) const
+const Range KDevDocumentRangeObject::textRange( ) const
 {
+  QMutexLocker lock(&m_rangeMutex);
   return *m_range;
 }
 
-Range& KDevDocumentRangeObject::textRange( )
+void KDevDocumentRangeObject::setRange(const Range& range)
 {
-  return *m_range;
+  QMutexLocker lock(&m_rangeMutex);
+  *m_range = range;
 }
 
-const KDevDocumentRange& KDevDocumentRangeObject::textDocRange() const
+const KDevDocumentRange KDevDocumentRangeObject::textDocRange() const
 {
+  QMutexLocker lock(&m_rangeMutex);
   return *static_cast<KDevDocumentRange*>(m_range);
 }
 
 KUrl KDevDocumentRangeObject::url() const
 {
+  QMutexLocker lock(&m_rangeMutex);
   return url(m_range);
 }
 
@@ -96,6 +106,8 @@ KUrl KDevDocumentRangeObject::url( const Range * range )
 
 SmartRange* KDevDocumentRangeObject::smartRange() const
 {
+  QMutexLocker lock(&m_rangeMutex);
+
   if (m_range->isSmartRange())
     return static_cast<SmartRange*>(m_range);
 
@@ -104,11 +116,13 @@ SmartRange* KDevDocumentRangeObject::smartRange() const
 
 bool KDevDocumentRangeObject::contains(const KDevDocumentCursor& cursor) const
 {
-  return url() == cursor.document() && m_range->contains(cursor);
+  QMutexLocker lock(&m_rangeMutex);
+  return url(m_range) == cursor.document() && m_range->contains(cursor);
 }
 
 Range* KDevDocumentRangeObject::textRangePtr() const
 {
+  QMutexLocker lock(&m_rangeMutex);
   return m_range;
 }
 
@@ -116,6 +130,7 @@ Range* KDevDocumentRangeObject::textRangePtr() const
 
 void KDevDocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
 {
+  QMutexLocker lock(&m_rangeMutex);
   Q_ASSERT(range == m_range);
   Q_ASSERT(m_url);
   //Q_ASSERT(false);
@@ -124,6 +139,8 @@ void KDevDocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
 
 KTextEditor::Range* KDevDocumentRangeObject::takeRange()
 {
+  QMutexLocker lock(&m_rangeMutex);
+
   KTextEditor::Range* ret = m_range;
 
   if (m_range) {

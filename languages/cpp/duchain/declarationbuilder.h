@@ -45,6 +45,9 @@ public:
   TopDUContext* buildDeclarations(const KUrl& url, AST *node, QList<DUContext*>* includes = 0);
 
 protected:
+  virtual void openContext(DUContext* newContext);
+  virtual void closeContext();
+
   virtual void visitDeclarator (DeclaratorAST*);
   virtual void visitClassSpecifier(ClassSpecifierAST*);
   virtual void visitAccessSpecifier(AccessSpecifierAST*);
@@ -59,7 +62,7 @@ private:
    * Returns the new context created by this definition.
    * \param range provide a valid AST here if name is null
    */
-  Declaration* openDeclaration(NameAST* name, AST* range, bool isFunction = false, bool isForward = false);
+  Declaration* openDeclaration(NameAST* name, AST* range, bool isFunction = false, bool isForward = false, bool isDefinition = false);
   /// Same as the above, but sets it as the definition too
   Declaration* openDefinition(NameAST* name, AST* range, bool isFunction = false);
   void closeDeclaration();
@@ -74,12 +77,15 @@ private:
   inline Cpp::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
   inline void setAccessPolicy(Cpp::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
+  inline int& nextDeclaration() { return m_nextDeclarationStack.top(); }
+
   void applyStorageSpecifiers();
   void applyFunctionSpecifiers();
   void popSpecifiers();
 
   QStack<Declaration*> m_declarationStack;
   QStack<Cpp::AccessPolicy> m_accessPolicyStack;
+  QStack<int> m_nextDeclarationStack;
 
   QStack<ClassFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
   QStack<ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;

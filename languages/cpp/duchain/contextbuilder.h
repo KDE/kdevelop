@@ -61,7 +61,7 @@ public:
   /**
    * Support another builder by tracking the current context.
    */
-  void supportBuild(AST *node, bool alreadyLocked = false);
+  void supportBuild(AST *node);
 
 protected:
   inline DUContext* currentContext() { return m_contextStack.top(); }
@@ -75,6 +75,18 @@ protected:
   const QualifiedIdentifier& identifierForName(NameAST* id) const;
 
   CppEditorIntegrator* m_editor;
+
+  // Notifications for subclasses
+  /// Returns true if we are recompiling a definition-use chain
+  inline bool recompiling() const { return m_recompiling; }
+
+  /// The current encountered token that objects have to have to avoid being cleaned
+  inline uint encounteredToken() const { return m_encounteredToken; }
+
+  // Write lock is already held here...
+  virtual void openContext(DUContext* newContext);
+  // Write lock is already held here...
+  virtual void closeContext();
 
   // Split up visitors created for subclasses to use
   /// Visits the type specifier and init declarator for a function.
@@ -101,9 +113,7 @@ private:
   DUContext* openContext(AST* range, DUContext::ContextType type, const QualifiedIdentifier& identifier);
   DUContext* openContext(AST* range, DUContext::ContextType type, NameAST* identifier = 0);
   DUContext* openContext(AST* fromRange, AST* toRange, DUContext::ContextType type, NameAST* identifier = 0);
-  DUContext* openContextInternal(KTextEditor::Range* range, DUContext::ContextType type, NameAST* identifier = 0);
-
-  void closeContext();
+  DUContext* openContextInternal(const KTextEditor::Range& range, DUContext::ContextType type, const QualifiedIdentifier& identifier);
 
   bool createContextIfNeeded(AST* node, const QList<DUContext*>& importedParentContexts);
   bool createContextIfNeeded(AST* node, DUContext* importedParentContext);
@@ -114,8 +124,17 @@ private:
 
   bool m_ownsEditorIntegrator: 1;
   bool m_compilingContexts: 1;
+  bool m_recompiling : 1;
+
+  uint m_encounteredToken;
 
   QStack<DUContext*> m_contextStack;
+  int m_nextContextIndex;
+
+  inline int& nextContextIndex() { return m_nextContextStack.top(); }
+
+  QStack<int> m_nextContextStack;
+
   QList<DUContext*> m_importedParentContexts;
 };
 

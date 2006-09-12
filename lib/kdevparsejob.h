@@ -64,7 +64,11 @@ public:
 
     /// Retrieve the contents of the file from the currently open editor.
     /// Ensure it is loaded by calling editorLoaded() first.
-    QString contentsFromEditor() const;
+    QString contentsFromEditor(bool saveRevisionToken = false);
+
+    /// Returns the revision token issued by the document's smart interface,
+    /// or -1 if there was a problem.
+    int revisionToken() const;
 
     const KUrl& document() const;
     KDevDocument* openDocument() const;
@@ -106,6 +110,7 @@ protected:
     QMutex* m_abortMutex;
     volatile bool m_abortRequested : 1;
     bool m_aborted : 1;
+    int m_revisionToken;
 };
 
 #endif

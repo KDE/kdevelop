@@ -19,6 +19,8 @@
 #ifndef KDEVDOCUMENTRANGEOBJECT_H
 #define KDEVDOCUMENTRANGEOBJECT_H
 
+#include <QMutex>
+
 #include <ktexteditor/range.h>
 #include <ktexteditor/rangefeedback.h>
 
@@ -38,9 +40,9 @@ public:
 
   void setTextRange(KTextEditor::Range* range);
 
-  KTextEditor::Range& textRange();
-  const KTextEditor::Range& textRange() const;
-  const KDevDocumentRange& textDocRange() const;
+  void setRange(const KTextEditor::Range& range);
+  const KTextEditor::Range textRange() const;
+  const KDevDocumentRange textDocRange() const;
   KTextEditor::Range* textRangePtr() const;
   KTextEditor::SmartRange* smartRange() const;
 
@@ -56,6 +58,7 @@ public:
   KTextEditor::Range* takeRange();
 
 private:
+  mutable QMutex m_rangeMutex;
   KTextEditor::Range* m_range;
   KUrl* m_url;
 };

@@ -74,7 +74,7 @@ public:
    * \returns the newly created smart range.
    * \overload
    */
-  KTextEditor::Range* createRange(AST* node, RangeEdge = OuterEdge);
+  KTextEditor::Range findRange(AST* node, RangeEdge = OuterEdge);
 
   /**
    * Create a new text range encompassing the given AST nodes.
@@ -86,7 +86,7 @@ public:
    * \returns the newly created smart range.
    * \overload
    */
-  KTextEditor::Range* createRange(AST* from, AST* to);
+  KTextEditor::Range findRange(AST* from, AST* to);
 
   /**
    * Create a new start range encompassing the given AST \a token.
@@ -98,7 +98,7 @@ public:
    * \returns the newly created smart range.
    * \overload
    */
-  KTextEditor::Range* createRange(const Token& token);
+  KTextEditor::Range findRange(const Token& token);
 
   /**
    * Create a new start range encompassing the given AST \a token.
@@ -110,14 +110,7 @@ public:
    * \returns the newly created smart range.
    * \overload
    */
-  KTextEditor::Range* createRange(std::size_t token);
-
-  using KDevEditorIntegrator::createCursor;
-
-  /**
-   * Create a new persistant cursor from the given \a token on the given \a edge.
-   */
-  KTextEditor::Cursor* createCursor(std::size_t token, Edge edge = FrontEdge);
+  KTextEditor::Range findRange(std::size_t token);
 
   /**
    * Retrieve the string represented by a token.

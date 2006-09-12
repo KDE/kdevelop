@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #define KDEVPERSISTENTHASH_H
 
 #include <QObject>
+#include <QReadWriteLock>
 
 #include <kurl.h>
 #include <kdebug.h>
@@ -30,7 +31,6 @@ Boston, MA 02110-1301, USA.
 /** This class is a stub at the moment.  It works when you have google sparsehash installed.*/
 
 struct KDevAST;
-class QMutex;
 
 #define NO_GOOGLE_SPARSEHASH
 
@@ -77,9 +77,10 @@ private:
     PHASH m_astHash;
 #else
     QHash<KUrl, KDevAST*> m_astHash;
+    QMultiHash<QString, KDevAST*> m_filenameAstHash;
 #endif
 
-    QMutex* m_mutex;
+    mutable QReadWriteLock m_mutex;
 };
 
 #endif

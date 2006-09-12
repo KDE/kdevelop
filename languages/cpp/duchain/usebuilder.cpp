@@ -20,12 +20,14 @@
 #include "usebuilder.h"
 
 #include <ktexteditor/smartrange.h>
+#include <ktexteditor/smartinterface.h>
 
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include "declaration.h"
 #include "use.h"
 #include "topducontext.h"
+#include "duchain.h"
 
 using namespace KTextEditor;
 
@@ -65,28 +67,77 @@ void UseBuilder::visitMemInitializer(MemInitializerAST * node)
 
 void UseBuilder::newUse(NameAST* name)
 {
-  Range* current = m_editor->currentRange();
-  Range* use = m_editor->createRange(name);
-  m_editor->exitCurrentRange();
-  Q_ASSERT(m_editor->currentRange() == current);
-
-  if (use->isSmartRange())
-    if (use->toSmartRange()->parentRange() != currentContext()->smartRange())
-      kWarning() << k_funcinfo << "Use " << *use << " parent " << *use->toSmartRange()->parentRange() << " " << use->toSmartRange()->parentRange() << " != current context " << *currentContext()->smartRange() << " " << currentContext()->smartRange() << " id " << currentContext()->scopeIdentifier() << endl;
+  Range newRange = m_editor->findRange(name);
 
   QualifiedIdentifier id = identifierForName(name);
 
-  Use* newUse = new Use(use, currentContext());
-
-  QList<Declaration*> declarations = currentContext()->findDeclarations(id, use->start());
+  QReadLocker readLock(DUChain::lock());
+  QList<Declaration*> declarations = currentContext()->findDeclarations(id, newRange.start());
   foreach (Declaration* declaration, declarations)
-    if (!declaration->isForwardDeclaration())
-      return declaration->addUse(newUse);
+    if (!declaration->isForwardDeclaration()) {
+      declarations.clear();
+      declarations.append(declaration);
+      break;
+    }
+  // If we don't break, there's no non-forward declaration
 
-  // No non-forward declaration - add it to the first forward declaration
-  if (declarations.count())
-    declarations.first()->addUse(newUse);
-  else
-    currentContext()->addOrphanUse(newUse);
-    //kWarning() << k_funcinfo << "Could not find definition for identifier " << id << " at " << *use << endl;
+  Use* ret = 0;
+
+  if (recompiling()) {
+    const QList<Use*>& uses = currentContext()->uses();
+
+    QMutexLocker smartLock(m_editor->smart() ? m_editor->smart()->smartMutex() : 0);
+    // Translate cursor to take into account any changes the user may have made since the text was retrieved
+    Range translated = newRange;
+    if (m_editor->smart())
+      translated = m_editor->smart()->translateFromRevision(translated);
+
+    for (; nextUseIndex() < uses.count(); ++nextUseIndex()) {
+      Use* use = uses.at(nextUseIndex());
+
+      if (use->textRange().start() > translated.end())
+        break;
+
+      if (use->textRange() == translated &&
+          ((!use->declaration() && declarations.isEmpty()) ||
+           (declarations.count() == 1 && use->declaration() == declarations.first())))
+      {
+        // Match
+        ret = use;
+        break;
+      }
+    }
+  }
+
+  if (!ret) {
+    readLock.unlock();
+    QWriteLocker lock(DUChain::lock());
+
+    Range* prior = m_editor->currentRange();
+    Range* use = m_editor->createRange(newRange);
+    m_editor->exitCurrentRange();
+    Q_ASSERT(m_editor->currentRange() == prior);
+
+    Use* newUse = new Use(use, currentContext());
+
+    if (declarations.count())
+      declarations.first()->addUse(newUse);
+    else
+      currentContext()->addOrphanUse(newUse);
+      //kWarning() << k_funcinfo << "Could not find definition for identifier " << id << " at " << *use << endl;
+  }
+}
+
+void UseBuilder::openContext(DUContext * newContext)
+{
+  UseBuilderBase::openContext(newContext);
+
+  m_nextUseStack.push(0);
+}
+
+void UseBuilder::closeContext()
+{
+  UseBuilderBase::closeContext();
+
+  m_nextUseStack.pop();
 }

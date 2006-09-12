@@ -24,8 +24,8 @@ Boston, MA 02110-1301, USA.
 
 #include <QFile>
 #include <QDataStream>
-#include <QMutex>
-#include <QMutexLocker>
+#include <QReadLocker>
+#include <QWriteLocker>
 
 #include "kdevast.h"
 #include "kdevcore.h"
@@ -33,7 +33,6 @@ Boston, MA 02110-1301, USA.
 
 KDevPersistentHash::KDevPersistentHash( QObject *parent )
         : QObject( parent )
-        , m_mutex(new QMutex)
 {
 #ifndef NO_GOOGLE_SPARSEHASH
     m_astHash.set_deleted_key( NULL );
@@ -54,21 +53,28 @@ KDevPersistentHash::~KDevPersistentHash()
 
 void KDevPersistentHash::insertAST( const KUrl &url, KDevAST *ast )
 {
-    QMutexLocker lock(m_mutex);
+    QWriteLocker lock(&m_mutex);
 
 #ifndef NO_GOOGLE_SPARSEHASH
     m_astHash[ url.url() ] = ast;
 #else
-    if (m_astHash.contains(url))
+    if (m_astHash.contains(url)) {
         m_astHash[url]->release();
+        for (QMultiHash<QString, KDevAST*>::Iterator it = m_filenameAstHash.find(url.fileName()); it != m_filenameAstHash.end() && it.key() == url.fileName(); ++it)
+            if (it.value() == ast) {
+                m_filenameAstHash.erase(it);
+                break;
+            }
+    }
 
     m_astHash.insert(url, ast);
+    m_filenameAstHash.insert(url.fileName(), ast);
 #endif
 }
 
 KDevAST * KDevPersistentHash::retrieveAST(const KUrl & url)
 {
-    QMutexLocker lock(m_mutex);
+    QReadLocker lock(&m_mutex);
 
 #ifndef NO_GOOGLE_SPARSEHASH
     return m_astHash[ url.url() ];
@@ -81,17 +87,21 @@ KDevAST * KDevPersistentHash::retrieveAST(const KUrl & url)
 
 KDevAST* KDevPersistentHash::retrieveAST( const QString &filename )
 {
+    QReadLocker lock(&m_mutex);
+
 #ifndef NO_GOOGLE_SPARSEHASH
     return m_astHash[ url.url() ];
 #else
-    KUrl url( filename );
-    return retrieveAST( url );
+    if (m_filenameAstHash.contains(filename))
+        return m_filenameAstHash.values(filename).first();
+
+    return 0;
 #endif
 }
 
 void KDevPersistentHash::load()
 {
-    QMutexLocker lock(m_mutex);
+    QWriteLocker lock(&m_mutex);
 
 #ifndef NO_GOOGLE_SPARSEHASH
     kDebug() << k_funcinfo << endl;
@@ -139,7 +149,7 @@ void KDevPersistentHash::load()
 
 void KDevPersistentHash::save()
 {
-    QMutexLocker lock(m_mutex);
+    QReadLocker lock(&m_mutex);
 
 #ifndef NO_GOOGLE_SPARSEHASH
     kDebug() << k_funcinfo << endl;

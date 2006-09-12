@@ -75,7 +75,7 @@ Boston, MA 02110-1301, USA.
 #include "kdevcontext.h"
 #include "kdevproject.h"
 #include "kdevmainwindow.h"
-#include "mimewarningdialog.h"
+#include "ui_mimewarningdialog.h"
 #include "kdevpartcontroller.h"
 #include "kdevlanguagesupport.h"
 #include "kdevbackgroundparser.h"
@@ -590,9 +590,9 @@ void KDevDocumentController::slotBackAboutToShow()
     QList<HistoryEntry>::ConstIterator it = m_backHistory.begin();
     while ( i < 10 && it != m_backHistory.end() )
     {
-        popup->insertItem( ( *it ).url.fileName()
-                           + QString( " (%1)" ).arg( ( *it ).cursor.line() + 1 ),
-                           ( *it ).id );
+        QAction* action = popup->addAction( ( *it ).url.fileName()
+                           + QString( " (%1)" ).arg( ( *it ).cursor.line() + 1 ));
+        action->setData(( *it ).id);
         ++i;
         ++it;
     }
@@ -609,15 +609,16 @@ void KDevDocumentController::slotForwardAboutToShow( )
     for ( int i = 0; i < 10 || i < m_forwardHistory.count(); ++i )
     {
         HistoryEntry entry = m_forwardHistory.at( i );
-        popup->insertItem( entry.url.fileName()
-                           + QString( " (%1)" ).arg( entry.cursor.line() + 1 ),
-                           entry.id );
+        QAction* action = popup->addAction( entry.url.fileName()
+                           + QString( " (%1)" ).arg( entry.cursor.line() + 1 ) );
+        action->setData(entry.id);
     }
 }
 
-void KDevDocumentController::slotBackPopupActivated( int id )
+void KDevDocumentController::slotBackMenuTriggered( QAction* action )
 {
     QList<HistoryEntry>::iterator it = m_backHistory.begin();
+    int id = action->data().toInt();
     while ( it != m_backHistory.end() )
     {
         if ( ( *it ).id == id )
@@ -640,9 +641,10 @@ void KDevDocumentController::slotBackPopupActivated( int id )
     }
 }
 
-void KDevDocumentController::slotForwardPopupActivated( int id )
+void KDevDocumentController::slotForwardMenuTriggered( QAction* action )
 {
     QList<HistoryEntry>::iterator it = m_forwardHistory.begin();
+    int id = action->data().toInt();
     while ( it != m_forwardHistory.end() )
     {
         if ( ( *it ).id == id )
@@ -809,11 +811,13 @@ void KDevDocumentController::setCursorPosition( KParts::Part *part,
 
 bool KDevDocumentController::openAsDialog( const KUrl &url, KMimeType::Ptr mimeType )
 {
-    MimeWarningDialog dialog;
+    QDialog qdialog;
+    Ui::MimeWarningDialog dialog;
+    dialog.setupUi(&qdialog);
     dialog.text2->setText( QString( "<qt><b>%1</b></qt>" ).arg( url.path() ) );
     dialog.text3->setText( dialog.text3->text().arg( mimeType->name() ) );
 
-    if ( dialog.exec() == QDialog::Accepted )
+    if ( qdialog.exec() == QDialog::Accepted )
     {
         if ( dialog.open_with_kde->isChecked() )
         {
@@ -1017,29 +1021,29 @@ void KDevDocumentController::initialize()
 
     new KSeparatorAction( ac, "dummy_separator" );
 
-    m_backAction = new KToolBarPopupAction( i18n( "Back" ), "back", 0, this,
-                                            SLOT( slotBack() ), ac,
+    m_backAction = new KToolBarPopupAction( KIcon("back"), i18n( "Back" ), ac,
                                             "history_back" );
     m_backAction->setEnabled( false );
     m_backAction->setToolTip( i18n( "Back" ) );
     m_backAction->setWhatsThis( i18n( "<b>Back</b><p>Moves backwards one step "
                                       "in the navigation history." ) );
+    connect( m_backAction, SIGNAL(triggered(bool)), this, SLOT(slotBack()) );
     connect( m_backAction->menu(), SIGNAL( aboutToShow() ),
              this, SLOT( slotBackAboutToShow() ) );
-    connect( m_backAction->menu(), SIGNAL( activated( int ) ),
-             this, SLOT( slotBackPopupActivated( int ) ) );
+    connect( m_backAction->menu(), SIGNAL( triggered( QAction* ) ),
+             this, SLOT( slotBackMenuTriggered( QAction* ) ) );
 
-    m_forwardAction = new KToolBarPopupAction( i18n( "Forward" ), "forward", 0,
-                      this, SLOT( slotForward() ), ac,
+    m_forwardAction = new KToolBarPopupAction( KIcon("forward"), i18n( "Forward" ), ac,
                       "history_forward" );
     m_forwardAction->setEnabled( false );
     m_forwardAction->setToolTip( i18n( "Forward" ) );
     m_forwardAction->setWhatsThis( i18n( "<b>Forward</b><p>Moves forward one "
                                          "step in the navigation history." ) );
+    connect( m_forwardAction, SIGNAL(triggered(bool)), this,  SLOT(slotForward()) );
     connect( m_forwardAction->menu(), SIGNAL( aboutToShow() ),
              this, SLOT( slotForwardAboutToShow() ) );
-    connect( m_forwardAction->menu(), SIGNAL( activated( int ) ),
-             this, SLOT( slotForwardPopupActivated( int ) ) );
+    connect( m_forwardAction->menu(), SIGNAL( triggered( QAction* ) ),
+             this, SLOT( slotForwardMenuTriggered( QAction* ) ) );
 
 }
 

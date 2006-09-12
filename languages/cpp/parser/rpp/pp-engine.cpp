@@ -175,22 +175,44 @@ QString pp::find_header_protection(Stream& input)
 
 pp::PP_DIRECTIVE_TYPE pp::find_directive (const QString& directive) const
 {
-  // multithread safe
-  static QHash<QString, PP_DIRECTIVE_TYPE> directiveHash;
-  if (directiveHash.isEmpty()) {
-    directiveHash.insert("if", PP_IF);
-    directiveHash.insert("elif", PP_ELIF);
-    directiveHash.insert("else", PP_ELSE);
-    directiveHash.insert("ifdef", PP_IFDEF);
-    directiveHash.insert("undef", PP_UNDEF);
-    directiveHash.insert("endif", PP_ENDIF);
-    directiveHash.insert("ifndef", PP_IFNDEF);
-    directiveHash.insert("define", PP_DEFINE);
-    directiveHash.insert("include", PP_INCLUDE);
-  }
+  // TODO profile - had to be switched away from a static hash
+  switch (directive.length()) {
+    case 2:
+      if (directive == "if")
+        return PP_IF;
+      break;
 
-  if (directiveHash.contains(directive))
-    return directiveHash[directive];
+    case 4:
+      if (directive == "elif")
+        return PP_ELIF;
+      if (directive == "else")
+        return PP_ELSE;
+      break;
+
+    case 5:
+      if (directive == "ifdef")
+        return PP_IFDEF;
+      if (directive == "undef")
+        return PP_UNDEF;
+      if (directive == "endif")
+        return PP_ENDIF;
+      break;
+
+    case 6:
+      if (directive == "ifndef")
+        return PP_IFNDEF;
+      if (directive == "define")
+        return PP_DEFINE;
+      break;
+
+    case 7:
+      if (directive == "include")
+        return PP_INCLUDE;
+      break;
+
+    default:
+      break;
+  }
 
   return PP_UNKNOWN_DIRECTIVE;
 }

@@ -22,11 +22,12 @@
 
 class DUContext;
 class KDevEditorIntegrator;
+class KDevCodeHighlighting;
 
 class SmartConverter
 {
 public:
-  SmartConverter(KDevEditorIntegrator* editor);
+  SmartConverter(KDevEditorIntegrator* editor, KDevCodeHighlighting* hl);
 
   void convertDUChain(DUContext* context) const;
 
@@ -34,6 +35,7 @@ private:
   void convertDUChainInternal(DUContext* context, bool first = false) const;
 
   KDevEditorIntegrator* m_editor;
+  KDevCodeHighlighting* m_hl;
 };
 
 #endif

@@ -41,12 +41,18 @@ public:
   void buildUses(AST *node);
 
 protected:
+  virtual void openContext(DUContext* newContext);
+  virtual void closeContext();
+
   virtual void visitPrimaryExpression (PrimaryExpressionAST*);
   virtual void visitMemInitializer(MemInitializerAST *);
 
 private:
   /// Register a new use
   void newUse(NameAST* name);
+
+  inline int& nextUseIndex() { return m_nextUseStack.top(); }
+  QStack<int> m_nextUseStack;
 };
 
 #endif // USEBUILDER_H

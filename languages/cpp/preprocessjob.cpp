@@ -85,7 +85,7 @@ void PreprocessJob::run()
     }
     else
     {
-        contents = parentJob()->contentsFromEditor();
+        contents = parentJob()->contentsFromEditor(true);
     }
 
     kDebug( 9007 ) << "===-- PREPROCESSING --===> "

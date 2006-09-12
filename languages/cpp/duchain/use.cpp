@@ -18,23 +18,12 @@
 
 #include "use.h"
 
+#include <QReadLocker>
 #include <QWriteLocker>
 
 #include "declaration.h"
-#include "ducontext.h"
-
-
 #include "topducontext.h"
-#define ENSURE_CHAIN_READ_LOCKED \
-if (!topContext()->deleting()) { \
-  bool _ensure_chain_locked = chainLock()->tryLockForWrite(); \
-  Q_ASSERT(!_ensure_chain_locked); \
-}
-#define ENSURE_CHAIN_WRITE_LOCKED \
-if (!topContext()->deleting()) { \
-  bool _ensure_chain_locked = chainLock()->tryLockForWrite(); \
-  Q_ASSERT(!_ensure_chain_locked); \
-}
+#include "duchain.h"
 
 using namespace KTextEditor;
 
@@ -43,7 +32,6 @@ Use::Use(KTextEditor::Range* range, DUContext* context)
   , KDevDocumentRangeObject(range)
   , m_context(0)
   , m_declaration(0)
-  , m_isInternal(true)
 {
   if (context)
     setContext(context);
@@ -52,22 +40,21 @@ Use::Use(KTextEditor::Range* range, DUContext* context)
 Use::~Use()
 {
   setContext(0);
+
+  if (m_declaration)
+    m_declaration->removeUse(this);
 }
 
 Declaration* Use::declaration() const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  QReadLocker lock(&m_declarationLock);
 
   return m_declaration;
 }
 
 void Use::setDeclaration(Declaration* declaration)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
-
-  if (m_declaration)
-    // Or otherwise, you could implement internal <--> external use switching :)
-    Q_ASSERT(declaration->context()->topContext() == m_declaration->context()->topContext());
+  QWriteLocker lock(&m_declarationLock);
 
   m_declaration = declaration;
 }
@@ -77,10 +64,7 @@ void Use::setContext(DUContext * context)
   if (m_context) {
     ENSURE_CHAIN_WRITE_LOCKED
 
-    if (m_isInternal)
-      m_context->removeInternalUse(this);
-    else
-      m_context->removeExternalUse(this);
+    m_context->removeUse(this);
   }
 
   m_context = context;
@@ -88,26 +72,20 @@ void Use::setContext(DUContext * context)
   if (m_context) {
     ENSURE_CHAIN_WRITE_LOCKED
 
-    m_isInternal = !m_declaration || m_context->topContext() == m_declaration->context()->topContext();
-    if (m_isInternal)
-      m_context->addInternalUse(this);
-    else
-      m_context->addExternalUse(this);
+    m_context->addUse(this);
   }
 }
 
 DUContext * Use::context() const
 {
-  // don't check lock or we recurse
+  ENSURE_CHAIN_READ_LOCKED
 
   return m_context;
 }
 
 bool Use::isOrphan() const
 {
-  ENSURE_CHAIN_READ_LOCKED
-
-  return !m_declaration;
+  return !declaration();
 }
 
 // kate: indent-width 2;

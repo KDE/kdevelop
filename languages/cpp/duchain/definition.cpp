@@ -18,32 +18,43 @@
 
 #include "definition.h"
 
-#include "ducontext.h"
+#include <QReadLocker>
+#include <QWriteLocker>
+
+#include "topducontext.h"
+#include "declaration.h"
+#include "duchain.h"
 
 using namespace KTextEditor;
 
-Definition::Definition(KTextEditor::Range* range, Declaration* declaration, DUContext* context)
+Definition::Definition(KTextEditor::Range* range, DUContext* context)
   : DUChainBase(context->topContext())
   , KDevDocumentRangeObject(range)
   , m_context(0)
   , m_declaration(0)
 {
   setContext(context);
-  setDeclaration(declaration);
 }
 
 Definition::~Definition()
 {
   setContext(0);
+
+  if (Declaration* dec = declaration())
+    dec->setDefinition(0);
 }
 
 DUContext* Definition::context() const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   return m_context;
 }
 
 void Definition::setContext(DUContext* context)
 {
+  ENSURE_CHAIN_WRITE_LOCKED
+
   if (m_context)
     m_context->takeDefinition(this);
 
@@ -55,11 +66,15 @@ void Definition::setContext(DUContext* context)
 
 Declaration* Definition::declaration() const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   return m_declaration;
 }
 
 void Definition::setDeclaration(Declaration* declaration)
 {
+  ENSURE_CHAIN_WRITE_LOCKED
+
   // TODO if declaration is 0, highlight as definition without declaration
   m_declaration = declaration;
 }

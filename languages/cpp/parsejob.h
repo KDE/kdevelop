@@ -84,8 +84,14 @@ public:
 
     CPPParseJob* parentJob() const;
 
+    virtual int   priority () const;
+    void setPriority(int priority);
+
 protected:
     virtual void run();
+
+private:
+    int m_priority;
 };
 
 #endif

@@ -210,8 +210,8 @@ private Q_SLOTS:
     void slotForward();
     void slotBackAboutToShow();
     void slotForwardAboutToShow();
-    void slotBackPopupActivated( int id );
-    void slotForwardPopupActivated( int id );
+    void slotBackMenuTriggered( QAction* action );
+    void slotForwardMenuTriggered( QAction* action );
 
     void slotSwitchTo();
 

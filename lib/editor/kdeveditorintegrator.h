@@ -116,6 +116,11 @@ public:
    */
   static void releaseTopRange(KTextEditor::Range* range);
 
+  /**
+   * Releases + safely deletes a text editor range.
+   */
+  static void releaseRange(KTextEditor::Range* range);
+
   enum Edge {
     FrontEdge,
     BackEdge

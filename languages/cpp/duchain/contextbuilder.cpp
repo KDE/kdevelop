@@ -21,6 +21,7 @@
 #include "contextbuilder.h"
 
 #include <ktexteditor/smartrange.h>
+#include <ktexteditor/smartinterface.h>
 
 #include "duchain.h"
 #include "cppeditorintegrator.h"
@@ -38,6 +39,7 @@ ContextBuilder::ContextBuilder (ParseSession* session)
   , m_nameCompiler(new NameCompiler(session))
   , m_ownsEditorIntegrator(true)
   , m_compilingContexts(false)
+  , m_recompiling(false)
 {
 }
 
@@ -46,6 +48,7 @@ ContextBuilder::ContextBuilder (CppEditorIntegrator* editor)
   , m_nameCompiler(new NameCompiler(editor->parseSession()))
   , m_ownsEditorIntegrator(false)
   , m_compilingContexts(false)
+  , m_recompiling(false)
 {
 }
 
@@ -67,17 +70,12 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
   TopDUContext* topLevelContext = DUChain::self()->chainForDocument(url);
 
   if (topLevelContext) {
-    // To here...
-    topLevelContext->chainLock()->lockForWrite();
+    m_recompiling = true;
+
     Q_ASSERT(topLevelContext->textRangePtr());
 
     if (m_compilingContexts) {
-      // FIXME for now, just clear the chain... later, need to implement incremental parsing
-      topLevelContext->deleteChildContextsRecursively();
-      topLevelContext->deleteLocalDeclarations();
-      topLevelContext->deleteOrphanUses();
-      topLevelContext->clearUsingNamespaces();
-
+      // To here...
       Q_ASSERT(topLevelContext->textRangePtr());
 
       // FIXME remove once conversion works
@@ -86,19 +84,26 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
     }
 
   } else {
+    m_recompiling = false;
+
     Q_ASSERT(m_compilingContexts);
 
     Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
     topLevelContext = new TopDUContext(range);
-    topLevelContext->chainLock()->lockForWrite();
+    QWriteLocker lock(DUChain::lock());
     topLevelContext->setType(DUContext::Global);
 
     DUChain::self()->addDocumentChain(url, topLevelContext);
   }
 
+  m_encounteredToken = topLevelContext->lastEncountered() + 1;
+  topLevelContext->setEncountered(m_encounteredToken);
+
   node->ducontext = topLevelContext;
 
   if (includes) {
+    QWriteLocker lock(DUChain::lock());
+
     foreach (DUContext* parent, topLevelContext->importedParentContexts())
       if (includes->contains(parent))
         includes->removeAll(parent);
@@ -109,7 +114,7 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
       topLevelContext->addImportedParentContext(included);
   }
 
-  supportBuild(node, true);
+  supportBuild(node);
 
   m_compilingContexts = false;
 
@@ -123,19 +128,11 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
   return topLevelContext;
 }
 
-void ContextBuilder::supportBuild(AST *node, bool alreadyLocked)
+void ContextBuilder::supportBuild(AST *node)
 {
   Q_ASSERT(dynamic_cast<TopDUContext*>(node->ducontext));
 
-  TopDUContext* top = static_cast<TopDUContext*>(node->ducontext);
-
-  if (!alreadyLocked)
-    if (m_compilingContexts)
-      top->chainLock()->lockForWrite();
-    else
-      top->chainLock()->lockForRead();
-
-  m_contextStack.push(node->ducontext);
+  openContext(node->ducontext);
 
   m_editor->setCurrentUrl(node->ducontext->url());
 
@@ -145,8 +142,6 @@ void ContextBuilder::supportBuild(AST *node, bool alreadyLocked)
 
   closeContext();
 
-  static_cast<TopDUContext*>(node->ducontext)->chainLock()->unlock();
-
   Q_ASSERT(m_contextStack.isEmpty());
 }
 
@@ -154,6 +149,8 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
 {
   QualifiedIdentifier identifier;
   if (m_compilingContexts) {
+    QReadLocker lock(DUChain::lock());
+
     identifier = currentContext()->scopeIdentifier();
     if (node->namespace_name)
       identifier.push(QualifiedIdentifier(m_editor->tokenToString(node->namespace_name)));
@@ -161,12 +158,7 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
       identifier.push(Identifier::unique(0));
   }
 
-  DUContext* nsCtx = openContext(node, DUContext::Namespace);
-
-  if (m_compilingContexts) {
-    nsCtx->setLocalScopeIdentifier(identifier);
-    SymbolTable::self()->addContext(nsCtx);
-  }
+  openContext(node, DUContext::Namespace, identifier);
 
   DefaultVisitor::visitNamespace (node);
 
@@ -194,11 +186,13 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
   visitFunctionDeclaration(node);
 
-  if (node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
+  if (m_compilingContexts && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
     QualifiedIdentifier functionName = identifierForName(node->init_declarator->declarator->id);
     if (functionName.count() >= 2) {
       // This is a class function
       functionName.pop();
+
+      QReadLocker lock(DUChain::lock());
 
       QList<DUContext*> classContexts = currentContext()->findContexts(DUContext::Class, functionName);
       if (classContexts.count() == 1)
@@ -239,13 +233,26 @@ void ContextBuilder::visitFunctionDeclaration (FunctionDefinitionAST* node)
 DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType type, NameAST* identifier)
 {
   if (m_compilingContexts) {
-    Range* range = m_editor->createRange(rangeNode);
-    DUContext* ret = openContextInternal(range, type, identifier);
+    DUContext* ret = openContextInternal(m_editor->findRange(rangeNode), type, identifier ? identifierForName(identifier) : QualifiedIdentifier());
     rangeNode->ducontext = ret;
     return ret;
 
   } else {
-    m_contextStack.push(rangeNode->ducontext);
+    openContext(rangeNode->ducontext);
+    m_editor->setCurrentRange(currentContext()->textRangePtr());
+    return currentContext();
+  }
+}
+
+DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType type, const QualifiedIdentifier& identifier)
+{
+  if (m_compilingContexts) {
+    DUContext* ret = openContextInternal(m_editor->findRange(rangeNode), type, identifier);
+    rangeNode->ducontext = ret;
+    return ret;
+
+  } else {
+    openContext(rangeNode->ducontext);
     m_editor->setCurrentRange(currentContext()->textRangePtr());
     return currentContext();
   }
@@ -254,41 +261,97 @@ DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType ty
 DUContext* ContextBuilder::openContext(AST* fromRange, AST* toRange, DUContext::ContextType type, NameAST* identifier)
 {
   if (m_compilingContexts) {
-    Range* range = m_editor->createRange(fromRange, toRange);
-    DUContext* ret = openContextInternal(range, type, identifier);
+    DUContext* ret = openContextInternal(m_editor->findRange(fromRange, toRange), type, identifier ? identifierForName(identifier) : QualifiedIdentifier());
     fromRange->ducontext = ret;
     return ret;
 
   } else {
-    m_contextStack.push(fromRange->ducontext);
+    openContext(fromRange->ducontext);
     m_editor->setCurrentRange(currentContext()->textRangePtr());
     return currentContext();
   }
 }
 
-DUContext* ContextBuilder::openContextInternal(Range* range, DUContext::ContextType type, NameAST* identifier)
+DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::ContextType type, const QualifiedIdentifier& identifier)
 {
   Q_ASSERT(m_compilingContexts);
 
-  DUContext* ret = new DUContext(range, m_contextStack.isEmpty() ? 0 : currentContext());
-  ret->setType(type);
+  DUContext* ret = 0L;
 
-  if (identifier) {
-    ret->setLocalScopeIdentifier(identifierForName(identifier));
+  {
+    QReadLocker readLock(DUChain::lock());
 
-    if (type == DUContext::Class)
-      SymbolTable::self()->addContext(ret);
+    if (recompiling()) {
+      const QList<DUContext*>& childContexts = currentContext()->childContexts();
+
+      QMutexLocker lock(m_editor->smart() ? m_editor->smart()->smartMutex() : 0);
+      // Translate cursor to take into account any changes the user may have made since the text was retrieved
+      Range translated = range;
+      if (m_editor->smart())
+        translated = m_editor->smart()->translateFromRevision(translated);
+
+      for (; nextContextIndex() < childContexts.count(); ++nextContextIndex()) {
+        DUContext* child = childContexts.at(nextContextIndex());
+
+        if (child->textRange().start() > translated.end())
+          break;
+
+        if (child->type() == type && child->localScopeIdentifier() == identifier && child->textRange() == translated) {
+          // Match
+          ret = child;
+          readLock.unlock();
+          QWriteLocker writeLock(DUChain::lock());
+          ret->clearUsingNamespaces();
+          ret->clearImportedParentContexts();
+          m_editor->setCurrentRange(ret->textRangePtr());
+          break;
+        }
+      }
+    }
+
+    if (!ret) {
+      readLock.unlock();
+      QWriteLocker writeLock(DUChain::lock());
+
+      ret = new DUContext(m_editor->createRange(range), m_contextStack.isEmpty() ? 0 : currentContext());
+      ret->setType(type);
+
+      if (!identifier.isEmpty()) {
+        ret->setLocalScopeIdentifier(identifier);
+
+        if (type == DUContext::Class || type == DUContext::Namespace)
+          SymbolTable::self()->addContext(ret);
+      }
+    }
   }
 
-  m_contextStack.push(ret);
+  ret->setEncountered(m_encounteredToken);
+
+  openContext(ret);
 
   return ret;
 }
 
+void ContextBuilder::openContext(DUContext* newContext)
+{
+  m_contextStack.push(newContext);
+  m_nextContextStack.push(0);
+}
+
 void ContextBuilder::closeContext()
 {
+  // Don't need to clean if it's new (encountered will be current if so)
+  if (currentContext()->lastEncountered() != m_encounteredToken)
+  {
+    QWriteLocker lock(DUChain::lock());
+    currentContext()->cleanIfNotEncountered(m_encounteredToken, m_compilingContexts);
+    currentContext()->setEncountered(m_encounteredToken);
+  }
+
   // Go back to the context prior to this function definition
   m_contextStack.pop();
+
+  m_nextContextStack.pop();
 
   // Go back to the previous range
   m_editor->exitCurrentRange();
@@ -337,8 +400,10 @@ void ContextBuilder::visitUsingDirective(UsingDirectiveAST * node)
 {
   DefaultVisitor::visitUsingDirective(node);
 
-  if (m_compilingContexts && node->name)
-    currentContext()->addUsingNamespace(m_editor->createCursor(node->end_token, CppEditorIntegrator::FrontEdge), identifierForName(node->name));
+  if (m_compilingContexts && node->name) {
+    QWriteLocker lock(DUChain::lock());
+    currentContext()->addUsingNamespace(m_editor->createCursor(m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge)), identifierForName(node->name));
+  }
 }
 
 void ContextBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)
@@ -377,7 +442,13 @@ public:
 
 void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST* node)
 {
-  switch (currentContext()->type()) {
+  DUContext::ContextType type;
+  {
+    QReadLocker lock(DUChain::lock());
+    type = currentContext()->type();
+  }
+
+  switch (type) {
     case DUContext::Global:
     case DUContext::Namespace:
     case DUContext::Class:
@@ -387,6 +458,7 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
     case DUContext::Function:
     case DUContext::Other:
       if (m_compilingContexts) {
+        QReadLocker lock(DUChain::lock());
         IdentifierVerifier iv(this, m_editor->findPosition(node->start_token));
         iv.visit(node->expression);
         //kDebug() << k_funcinfo << m_editor->findPosition(node->start_token) << " IdentifierVerifier returned " << iv.result << endl;
@@ -440,6 +512,8 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
 void ContextBuilder::addImportedContexts()
 {
   if (m_compilingContexts && !m_importedParentContexts.isEmpty()) {
+    QWriteLocker lock(DUChain::lock());
+
     foreach (DUContext* imported, m_importedParentContexts)
       currentContext()->addImportedParentContext(imported);
 

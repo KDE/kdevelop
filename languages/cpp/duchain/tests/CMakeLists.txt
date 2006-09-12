@@ -6,7 +6,7 @@ include_directories(${CMAKE_SOURCE_DIR}/languages/cpp/parser ${CMAKE_SOURCE_DIR}
 ########### next target ###############
 
 set(duchaintest_SRCS test_duchain.cpp)
-kde4_automoc(${kdevplatform_editor_LIB_SRCS} ${kdevcppduchain_SRCS})
+kde4_automoc(${duchaintest_SRCS})
 
 kdevelop_add_test(${duchaintest_SRCS})
 kde4_add_executable(duchaintest ${duchaintest_SRCS})

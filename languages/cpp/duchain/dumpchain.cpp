@@ -168,8 +168,9 @@ void DumpChain::dump( DUContext * context, bool imported )
 
   ++indent;
   if (!imported) {
-    foreach (DUContext* parent, context->importedParentContexts())
+    foreach (DUContext* parent, context->importedParentContexts()) {
       dump(parent, true);
+    }
 
     foreach (DUContext* child, context->childContexts())
       dump(child);

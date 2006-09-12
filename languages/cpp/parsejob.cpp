@@ -64,6 +64,9 @@ CPPParseJob::CPPParseJob( const KUrl &url,
     addJob(ppj = new PreprocessJob(this));
     addJob(m_parseJob = new ParseJob(this));
 
+    // Higher priority means it will be preferred over other waiting preprocess jobs
+    m_parseJob->setPriority(1);
+
     //kDebug() << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
 }
 
@@ -110,6 +113,7 @@ CppLanguageSupport * CPPParseJob::cpp() const
 
 CPPParseJob * ParseJob::parentJob() const
 {
+    Q_ASSERT(parent());
     return static_cast<CPPParseJob*>(const_cast<QObject*>(parent()));
 }
 
@@ -130,6 +134,7 @@ void CPPParseJob::setDUChain(TopDUContext * duChain)
 
 ParseJob::ParseJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
+    , m_priority(0)
 {
 }
 
@@ -188,6 +193,11 @@ void ParseJob::run()
         // Control the lifetime of the editor integrator (so that locking works)
         {
             CppEditorIntegrator editor(parentJob()->parseSession());
+
+            // Translate the cursors we generate with edits that have happened since retrieval of the document source.
+            if (editor.smart())
+              editor.smart()->useRevision(parentJob()->revisionToken() == -1 ? 0 : parentJob()->revisionToken());
+
             DeclarationBuilder definitionBuilder(&editor);
             topContext = definitionBuilder.buildDeclarations(parentJob()->document(), ast, &chains);
 
@@ -209,6 +219,9 @@ void ParseJob::run()
 
             if ( parentJob()->cpp()->codeHighlighting() )
                 parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );
+
+            if (editor.smart())
+              editor.smart()->clearRevision();
         }
 
         // Debug output...
@@ -262,4 +275,14 @@ bool CPPParseJob::wasReadFromDisk() const
 ParseJob * CPPParseJob::parseJob() const
 {
     return m_parseJob;
+}
+
+int ParseJob::priority() const
+{
+    return m_priority;
+}
+
+void ParseJob::setPriority(int priority)
+{
+    m_priority = priority;
 }

@@ -20,6 +20,7 @@
 #include "declarationbuilder.h"
 
 #include <ktexteditor/smartrange.h>
+#include <ktexteditor/smartinterface.h>
 
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
@@ -28,6 +29,7 @@
 #include "definition.h"
 #include "symboltable.h"
 #include "forwarddeclaration.h"
+#include "duchain.h"
 
 using namespace KTextEditor;
 
@@ -104,29 +106,40 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
   if (node->parameter_declaration_clause) {
     if (!m_functionDefinedStack.isEmpty() && m_functionDefinedStack.top() && node->id) {
-      QualifiedIdentifier id = identifierForName(node->id);
-      if (id.count() > 1) {
-        KTextEditor::Cursor pos = m_editor->findPosition(m_functionDefinedStack.top(), KDevEditorIntegrator::FrontEdge);
+      // TODO: make correct for incremental parsing; at the moment just skips if there is a definition
+      Definition* def = 0;
+      {
+        QReadLocker lock(DUChain::lock());
+        def = currentDeclaration()->definition();
+      }
 
-        //kDebug() << k_funcinfo << "Searching for declaration of " << id << endl;
+      if (!def) {
+        QualifiedIdentifier id = identifierForName(node->id);
+        if (id.count() > 1) {
+          KTextEditor::Cursor pos = m_editor->findPosition(m_functionDefinedStack.top(), KDevEditorIntegrator::FrontEdge);
 
-        QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, lastType());
-        foreach (Declaration* dec, declarations) {
-          if (dec->isForwardDeclaration())
-            continue;
+          //kDebug() << k_funcinfo << "Searching for declaration of " << id << endl;
 
-          Declaration* oldDec = currentDeclaration();
-          abortDeclaration();
-          Definition* def = new Definition(oldDec->takeRange(), dec, currentContext());
-          delete oldDec;
-          dec->setDefinition(def);
+          // TODO: potentially excessive locking
+          QWriteLocker lock(DUChain::lock());
+          QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, lastType());
+          foreach (Declaration* dec, declarations) {
+            if (dec->isForwardDeclaration())
+              continue;
 
-          // Resolve forward declarations
-          foreach (Declaration* forward, declarations) {
-            if (forward->isForwardDeclaration())
-              forward->forwardDeclaration()->setResolved(dec);
+            Declaration* oldDec = currentDeclaration();
+            abortDeclaration();
+            Definition* def = new Definition(oldDec->takeRange(), currentContext());
+            delete oldDec;
+            dec->setDefinition(def);
+
+            // Resolve forward declarations
+            foreach (Declaration* forward, declarations) {
+              if (forward->isForwardDeclaration())
+                forward->toForwardDeclaration()->setResolved(dec);
+            }
+            return;
           }
-          return;
         }
       }
     }
@@ -135,8 +148,6 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   closeDeclaration();
 }
 
-
-
 ForwardDeclaration * DeclarationBuilder::openForwardDeclaration(NameAST * name, AST * range)
 {
   return static_cast<ForwardDeclaration*>(openDeclaration(name, range, false, true));
@@ -144,13 +155,13 @@ ForwardDeclaration * DeclarationBuilder::openForwardDeclaration(NameAST * name, 
 
 Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, bool isFunction)
 {
-  Declaration* dec = openDeclaration(name, rangeNode, isFunction);
-  dec->setDeclarationIsDefinition(true);
-  return dec;
+  return openDeclaration(name, rangeNode, isFunction, false, true);
 }
 
-Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward)
+Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward, bool isDefinition)
 {
+  QReadLocker readLock(DUChain::lock());
+
   Declaration::Scope scope = Declaration::GlobalScope;
   switch (currentContext()->type()) {
     case DUContext::Namespace:
@@ -166,38 +177,118 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       break;
   }
 
-  Range* prior = m_editor->currentRange();
-  Range* range = m_editor->createRange(name ? static_cast<AST*>(name) : rangeNode);
-  m_editor->exitCurrentRange();
-  Q_ASSERT(m_editor->currentRange() == prior);
+  Range newRange = m_editor->findRange(name ? static_cast<AST*>(name) : rangeNode);
 
-  Declaration* declaration;
-  if (isForward) {
-    declaration = new ForwardDeclaration(range, scope, currentContext());
-
-  } else if (isFunction) {
-    declaration = new ClassFunctionDeclaration(range, currentContext());
-    if (!m_functionDefinedStack.isEmpty())
-      declaration->setDeclarationIsDefinition(m_functionDefinedStack.top());
-
-  } else if (scope == Declaration::ClassScope) {
-    declaration = new ClassMemberDeclaration(range, currentContext());
-
-  } else {
-    declaration = new Declaration(range, scope, currentContext());
-  }
+  QualifiedIdentifier id;
 
   if (name) {
-    QualifiedIdentifier id = identifierForName(name);
-
-    // FIXME this can happen if we're defining a staticly declared variable
-    //Q_ASSERT(m_nameCompiler->identifier().count() == 1);
-    Q_ASSERT(!id.isEmpty());
-    declaration->setIdentifier(id.last());
+    id = identifierForName(name);
   }
 
-  if (currentContext()->type() == DUContext::Class)
-    static_cast<ClassMemberDeclaration*>(declaration)->setAccessPolicy(currentAccessPolicy());
+  Declaration* declaration = 0;
+
+  if (recompiling()) {
+    // Seek a matching declaration
+    QMutexLocker lock(m_editor->smart() ? m_editor->smart()->smartMutex() : 0);
+
+    // Translate cursor to take into account any changes the user may have made since the text was retrieved
+    Range translated = newRange;
+    if (m_editor->smart())
+      translated = m_editor->smart()->translateFromRevision(translated);
+
+    for (; nextDeclaration() < currentContext()->localDeclarations().count(); ++nextDeclaration()) {
+      Declaration* dec = currentContext()->localDeclarations().at(nextDeclaration());
+
+      if (dec->textRange().start() > translated.end())
+        break;
+
+      if (dec->textRange() == translated &&
+          dec->scope() == scope &&
+          (id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && id.last() == dec->identifier()) &&
+          dec->isDefinition() == isDefinition)
+      {
+        if (isForward) {
+          if (!dynamic_cast<ForwardDeclaration*>(dec))
+            break;
+
+        } else if (isFunction) {
+          if (!dynamic_cast<ClassFunctionDeclaration*>(dec))
+            break;
+
+        } else if (scope == Declaration::ClassScope) {
+          if (!dynamic_cast<ClassMemberDeclaration*>(dec))
+            break;
+        }
+
+        // Match
+        declaration = dec;
+
+        // Update access policy if needed
+        if (currentContext()->type() == DUContext::Class) {
+          ClassMemberDeclaration* classDeclaration = static_cast<ClassMemberDeclaration*>(declaration);
+          if (classDeclaration->accessPolicy() != currentAccessPolicy()) {
+            readLock.unlock();
+            QWriteLocker writeLock(declaration ? DUChain::lock() : 0);
+            classDeclaration->setAccessPolicy(currentAccessPolicy());
+          }
+        }
+
+        // Warning: lock may not be held here...
+
+        break;
+      }
+    }
+  }
+
+  if (!declaration) {
+    readLock.unlock();
+    QWriteLocker writeLock(DUChain::lock());
+
+    Range* prior = m_editor->currentRange();
+    Range* range = m_editor->createRange(newRange);
+    m_editor->exitCurrentRange();
+    Q_ASSERT(m_editor->currentRange() == prior);
+
+    if (isForward) {
+      declaration = new ForwardDeclaration(range, scope, currentContext());
+
+    } else if (isFunction) {
+      declaration = new ClassFunctionDeclaration(range, currentContext());
+      if (!m_functionDefinedStack.isEmpty())
+        declaration->setDeclarationIsDefinition(m_functionDefinedStack.top());
+
+    } else if (scope == Declaration::ClassScope) {
+      declaration = new ClassMemberDeclaration(range, currentContext());
+
+    } else {
+      declaration = new Declaration(range, scope, currentContext());
+    }
+
+    if (name) {
+      // FIXME this can happen if we're defining a staticly declared variable
+      //Q_ASSERT(m_nameCompiler->identifier().count() == 1);
+      Q_ASSERT(!id.isEmpty());
+      declaration->setIdentifier(id.last());
+    }
+
+    if (isDefinition)
+      declaration->setDeclarationIsDefinition(true);
+
+    if (currentContext()->type() == DUContext::Class)
+      static_cast<ClassMemberDeclaration*>(declaration)->setAccessPolicy(currentAccessPolicy());
+
+    switch (currentContext()->type()) {
+      case DUContext::Global:
+      case DUContext::Namespace:
+      case DUContext::Class:
+        SymbolTable::self()->addDeclaration(declaration);
+        break;
+      default:
+        break;
+    }
+  }
+
+  declaration->setEncountered(encounteredToken());
 
   m_declarationStack.push(declaration);
 
@@ -206,20 +297,12 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
 void DeclarationBuilder::closeDeclaration()
 {
-  if (lastType())
+  if (lastType()) {
+    QWriteLocker lock(DUChain::lock());
     currentDeclaration()->setType(lastType());
+  }
 
   //kDebug() << k_funcinfo << "Mangled declaration: " << currentDeclaration()->mangledIdentifier() << endl;
-
-  switch (currentContext()->type()) {
-    case DUContext::Global:
-    case DUContext::Namespace:
-    case DUContext::Class:
-      SymbolTable::self()->addDeclaration(currentDeclaration());
-      break;
-    default:
-      break;
-  }
 
   m_declarationStack.pop();
 }
@@ -254,13 +337,16 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
     QualifiedIdentifier id = identifierForName(node->name);
     KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge);
 
-    QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos);
     Declaration* actual = 0;
-    foreach (Declaration* declaration, declarations)
-      if (!declaration->isForwardDeclaration()) {
-        actual = declaration;
-        break;
-      }
+    {
+      QReadLocker lock(DUChain::lock());
+      QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos);
+      foreach (Declaration* declaration, declarations)
+        if (!declaration->isForwardDeclaration()) {
+          actual = declaration;
+          break;
+        }
+    }
 
     if (!actual) {
       int kind = m_editor->parseSession()->token_stream->kind(node->type);
@@ -392,8 +478,11 @@ void DeclarationBuilder::popSpecifiers()
 void DeclarationBuilder::applyStorageSpecifiers()
 {
   if (!m_storageSpecifiers.isEmpty())
-    if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(currentDeclaration()))
+    if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(currentDeclaration())) {
+      QWriteLocker lock(DUChain::lock());
+
       member->setStorageSpecifiers(m_storageSpecifiers.top());
+    }
 }
 
 void DeclarationBuilder::applyFunctionSpecifiers()
@@ -401,6 +490,23 @@ void DeclarationBuilder::applyFunctionSpecifiers()
   if (!m_functionSpecifiers.isEmpty()) {
     Q_ASSERT(dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()));
     ClassFunctionDeclaration* function = static_cast<ClassFunctionDeclaration*>(currentDeclaration());
+
+    QWriteLocker lock(DUChain::lock());
+
     function->setFunctionSpecifiers(m_functionSpecifiers.top());
   }
+}
+
+void DeclarationBuilder::openContext(DUContext * newContext)
+{
+  DeclarationBuilderBase::openContext(newContext);
+
+  m_nextDeclarationStack.push(0);
+}
+
+void DeclarationBuilder::closeContext()
+{
+  DeclarationBuilderBase::closeContext();
+
+  m_nextDeclarationStack.pop();
 }

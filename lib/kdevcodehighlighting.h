@@ -27,6 +27,9 @@ Interface to text editor highlighting of parsed code.
 */
 
 class TopDUContext;
+class Definition;
+class Declaration;
+class Use;
 
 /**
 KDevelop text highlighting support interface - the base class for
@@ -40,6 +43,10 @@ public:
 
     /**@return Whether the given url is supported by the language part.*/
     virtual void highlightDUChain(TopDUContext* context) const = 0;
+
+    virtual void highlightDefinition(Definition* definition) const = 0;
+    virtual void highlightDeclaration(Declaration* declaration) const = 0;
+    virtual void highlightUse(Use* use) const = 0;
 };
 
 #endif

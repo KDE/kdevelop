@@ -22,6 +22,8 @@
 #include "kdevdocumentrangeobject.h"
 #include "duchainbase.h"
 
+#include <QReadWriteLock>
+
 class Declaration;
 class DUContext;
 
@@ -30,17 +32,26 @@ class DUContext;
  */
 class Definition : public DUChainBase, public KDevDocumentRangeObject
 {
+  friend class Declaration;
+
 public:
-  Definition(KTextEditor::Range* range, Declaration* declaration, DUContext* context);
+  Definition(KTextEditor::Range* range, DUContext* context);
   virtual ~Definition();
 
   DUContext* context() const;
   void setContext(DUContext* context);
 
+  /**
+   * Retrieve the declaration for this use.
+   */
   Declaration* declaration() const;
-  void setDeclaration(Declaration* declaration);
 
 private:
+  /**
+   * Set the declaration for this use.
+   */
+  void setDeclaration(Declaration* declaration);
+
   DUContext* m_context;
   Declaration* m_declaration;
 };

@@ -34,13 +34,34 @@ class DUChain;
 class Use;
 class TopDUContext;
 
+#ifdef NDEBUG
+
+#define ENSURE_CHAIN_READ_LOCKED
+#define ENSURE_CHAIN_WRITE_LOCKED
+
+#else
+
+// Unfortunately, impossible to check this exactly as we could be in a write lock
+#define ENSURE_CHAIN_READ_LOCKED \
+if (!topContext()->deleting()) { \
+  bool _ensure_chain_locked = DUChain::lock()->tryLockForWrite(); \
+  Q_ASSERT(!_ensure_chain_locked); \
+}
+
+#define ENSURE_CHAIN_WRITE_LOCKED \
+if (!topContext()->deleting()) { \
+  bool _ensure_chain_locked = DUChain::lock()->tryLockForWrite(); \
+  Q_ASSERT(!_ensure_chain_locked); \
+}
+
+#endif
+
 /**
  * A single context in source code, represented as a node in a
  * directed acyclic graph.
  *
- * Access to context objects must be serialised by holding the top level
- * chain's lock, accessible from any object by calling chainLock(),
- * unless otherwise specified.
+ * Access to context objects must be serialised by holding the
+ * chain lock, ie. DUChain::lock().
  *
  * \todo change child relationships to a linked list within the context?
  */
@@ -107,15 +128,11 @@ public:
 
   /**
    * Returns whether this context is listed in the symbol table (Namespaces and classes)
-   *
-   * \note You do not have to lock the chain in order to access this function.
    */
   bool inSymbolTable() const;
 
   /**
    * Tell this object when it is in the symbol table, so it can deregister itself
-   *
-   * \note You do not have to lock the chain in order to access this function.
    */
   void setInSymbolTable(bool inSymbolTable);
 
@@ -135,12 +152,22 @@ public:
    * \note Be sure to have set the text location first, so that
    * the chain is sorted correctly.
    */
-  void addImportedParentContext(DUContext* context);
+  virtual void addImportedParentContext(DUContext* context);
 
   /**
    * Removes a child context.
    */
-  void removeImportedParentContext(DUContext* context);
+  virtual void removeImportedParentContext(DUContext* context);
+
+  /**
+   * Clear all imported parent contexts.
+   */
+  void clearImportedParentContexts();
+
+  /**
+   * Returns the list of imported parent contexts for this context.
+   */
+  const QList<DUContext*>& importedChildContexts() const;
 
   /**
    * Returns the list of immediate child contexts for this context.
@@ -216,36 +243,26 @@ public:
    */
   const QList<Declaration*>& localDeclarations() const;
 
-//BEGIN Definition handling - you do not need to hold the chain lock for these functions.
   /**
    * Returns all local definitions
-   *
-   * \note You do not have to lock the chain in order to access this function.
    */
   const QList<Definition*>& localDefinitions() const;
 
   /**
    * Adds a new definition to this context. Passes back that definition for convenience.
-   *
-   * \note You do not have to lock the chain in order to access this function.
    */
   Definition* addDefinition(Definition* definition);
 
   /**
    * Take a specified \a definition from this context and pass ownership to the caller.
-   *
-   * \note You do not have to lock the chain in order to access this function.
    */
   Definition* takeDefinition(Definition* definition);
 
   /**
    * Clears all local definitions. Deletes these definitions, as the context has
    * ownership.
-   *
-   * \note You do not have to lock the chain in order to access this function.
    */
   void deleteLocalDefinitions();
-//END
 
   /**
    * Searches for the most specific context for the given cursor \a position in the given \a url.
@@ -290,44 +307,30 @@ public:
   Use* findUseAt(const KTextEditor::Cursor& position) const;
 
   /**
-   * Return a list of all uses which occur in this context, and whose declarations
-   * are within this chain (thus, no need to lock the uses' chains to use them)
+   * Return a list of all uses which occur in this context.
    */
-  const QList<Use*>& internalUses() const;
-
-  /**
-   * Return a list of all uses which occur in this context, and whose declarations
-   * lie outside of this chain (thus, you need to lock the uses' chains to use them)
-   *
-   * \note You do not have to lock the chain in order to access this function.
-   */
-  const QList<Use*>& externalUses() const;
+  const QList<Use*>& uses() const;
 
   /**
    * Return a list of uses which don't have a corresponding definition.
-   *
-   * \note This function requires the top lock to be held, rather than
-   * the use lock.
    */
   const QList<Use*>& orphanUses() const;
 
   /**
    * Add an orphan use (a use which doesn't have a corresponding definition)
    * to this context.
-   *
-   * \note This function requires the top lock to be held, rather than
-   * the use lock.
    */
   void addOrphanUse(Use* orphan);
 
   /**
-   * Clear and delete all orphan uses.
-   *
-   * \note This function requires the top lock to be held, rather than
-   * the use lock.
+   * Clear and delete all uses in this context.
    */
-  void deleteOrphanUses();
+  void deleteUses();
 
+  /**
+   * Delete and remove all non-encountered properties in a parsing run.
+   */
+  void cleanIfNotEncountered(uint encountered, bool firstPass);
 
 protected:
   /**
@@ -365,25 +368,23 @@ private:
   DUContext* m_parentContext;
   QList<DUContext*> m_importedParentContexts;
   QList<DUContext*> m_childContexts;
+
+  void addImportedChildContext( DUContext * context );
+  void removeImportedChildContext( DUContext * context );
   QList<DUContext*> m_importedChildContexts;
 
   void addDeclaration(Declaration* declaration);
   void removeDeclaration(Declaration* declaration);
   QList<Declaration*> m_localDeclarations;
 
-  QList<Definition*> m_localDefinitions; // Protected by m_definitionLock
-  mutable QReadWriteLock m_definitionLock;
+  QList<Definition*> m_localDefinitions;
 
   QList<UsingNS*> m_usingNamespaces;
 
-  void addInternalUse(Use* use);
-  void removeInternalUse(Use* use);
-  void addExternalUse(Use* use);
-  void removeExternalUse(Use* use);
+  void addUse(Use* use);
+  void removeUse(Use* use);
 
-  QList<Use*> m_internalUses;
-  QList<Use*> m_externalUses; // Protected by m_externalUseLock
-  mutable QReadWriteLock m_externalUseLock;
+  QList<Use*> m_uses;
 
   QList<Use*> m_orphanUses;
 

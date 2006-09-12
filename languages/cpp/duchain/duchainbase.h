@@ -23,7 +23,7 @@ class TopDUContext;
 class QReadWriteLock;
 
 /**
- * Base class to enable the DUChain to be viewed as a model.
+ * Base class for definition-use chain objects.
  */
 class DUChainBase
 {
@@ -36,17 +36,19 @@ public:
   /// \threadsafe
   TopDUContext* topContext() const;
 
-  /// \threadsafe
-  QReadWriteLock* chainLock() const;
-
   int modelRow;
+
+  inline unsigned int lastEncountered() const { return m_encountered; }
+  /// TODO atomic set? or assert locked?
+  void setEncountered(unsigned int encountered) { m_encountered = encountered; }
 
 private:
   // For proxy object
   DUChainBase();
 
-private:
   TopDUContext* m_topContext;
+
+  unsigned int m_encountered;
 };
 
 #endif // DUCHAINBASE_H

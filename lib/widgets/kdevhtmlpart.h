@@ -88,7 +88,7 @@ protected slots:
     void slotBackAboutToShow();
     void slotForwardAboutToShow();
 
-    void slotPopupActivated( int id );
+    void slotForwardMenuTriggered(QAction* action);
     void addHistoryEntry();
 
     QLinkedList<DocumentationHistoryEntry>::Iterator lastElement();

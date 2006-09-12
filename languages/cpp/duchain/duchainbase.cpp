@@ -23,6 +23,7 @@
 DUChainBase::DUChainBase(TopDUContext* top)
   : modelRow(0)
   , m_topContext(top)
+  , m_encountered(0)
 {
   Q_ASSERT(m_topContext);
 }
@@ -30,6 +31,7 @@ DUChainBase::DUChainBase(TopDUContext* top)
 DUChainBase::DUChainBase()
   : modelRow(0)
   , m_topContext(0)
+  , m_encountered(0)
 {
 }
 
@@ -40,12 +42,6 @@ DUChainBase::~DUChainBase()
 TopDUContext* DUChainBase::topContext() const
 {
   return m_topContext;
-}
-
-QReadWriteLock* DUChainBase::chainLock() const
-{
-  Q_ASSERT(m_topContext);
-  return m_topContext->chainLock();
 }
 
 // kate: indent-width 2;

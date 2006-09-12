@@ -70,7 +70,7 @@ KDevBackgroundParser::KDevBackgroundParser( QObject* parent )
         m_mutex(new QMutex()),
         m_waitForJobCreation(new QWaitCondition)
 {
-    //ThreadWeaver::setDebugLevel(true, 5);
+    ThreadWeaver::setDebugLevel(true, 1);
 
     m_timer = new QTimer( this );
     m_timer->setSingleShot( true );
@@ -299,10 +299,10 @@ void KDevBackgroundParser::parseDocumentsInternal()
             parse->setBackgroundParser(this);
 
             connect( parse, SIGNAL( done( Job* ) ),
-                     this, SLOT( parseComplete( Job* ) ), Qt::QueuedConnection );
+                     this, SLOT( parseComplete( Job* ) ) );
 
             connect( parse, SIGNAL( failed( Job* ) ),
-                     this, SLOT( parseComplete( Job* ) ), Qt::QueuedConnection );
+                     this, SLOT( parseComplete( Job* ) ) );
 
             p = false; //Don't parse for next time
 
@@ -376,6 +376,7 @@ void KDevBackgroundParser::parseComplete( Job *job )
         // (awaiting reply from Mirko on this one)
         parseJob->setBackgroundParser(0);
         QTimer::singleShot(500, parseJob, SLOT(deleteLater()));
+        //delete parseJob;
     }
 }
 
@@ -419,7 +420,6 @@ void KDevBackgroundParser::resume()
 
     m_timer->start( m_delay );
 
-    //Crashes right now...
     m_weaver->setMaximumNumberOfThreads( m_threads );
     m_weaver->resume();
 

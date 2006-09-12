@@ -23,7 +23,10 @@
 
 #include <kurl.h>
 
+#include "duchainobserver.h"
+
 class TopDUContext;
+class QReadWriteLock;
 
 /**
  * Holds references to all top level source file contexts.
@@ -39,6 +42,9 @@ class DUChain : public QObject
 {
   Q_OBJECT
 
+  template <typename T>
+  friend class KStaticDeleter;
+
 public:
   TopDUContext* chainForDocument(const KUrl& document);
   void addDocumentChain(const KUrl& document, TopDUContext* chain);
@@ -47,12 +53,40 @@ public:
 
   static DUChain* self();
 
+  /**
+   * Retrieve the read write lock for the entire definition-use chain.
+   * To call non-const methods, you must be holding a write lock.
+   *
+   * Evaluations made prior to holding a lock (including which objects
+   * exist) must be verified once the lock is held, as they may have changed
+   * or been deleted.
+   *
+   * \threadsafe
+   */
+  inline static QReadWriteLock* lock() { return s_lock; }
+
+  const QList<DUChainObserver*>& observers() const;
+  void addObserver(DUChainObserver* observer);
+  void removeObserver(DUChainObserver* observer);
+
+  // Distribute the notifications
+  static void contextChanged(DUContext* context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
+  static void declarationChanged(Declaration* declaration, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
+  static void definitionChanged(Definition* definition, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
+  static void useChanged(Use* use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
+
 public slots:
   void removeDocumentChain(const KUrl& document);
 
 private:
+  DUChain();
+  ~DUChain();
+
   static DUChain* s_chain;
+  static QReadWriteLock* s_lock;
   QMap<KUrl, TopDUContext*> m_chains;
+
+  QList<DUChainObserver*> m_observers;
 };
 
 #endif // DUCHAIN_H

@@ -21,7 +21,7 @@
 
 #include "ducontext.h"
 
-class QReadWriteLock;
+#include <QMutex>
 
 /**
  * The top context in a definition-use chain for one source file.
@@ -36,23 +36,18 @@ public:
   TopDUContext(KTextEditor::Range* range);
   virtual ~TopDUContext();
 
-  /**
-   * Used to control read and write access to the entire definition-use chain
-   * from the top context down though all child contexts and declarations.
-   *
-   * The exceptions are noted in the documentation, but involve access to uses
-   * and definitions, as they may occur in a context tree other than their
-   * parent object's tree.
-   */
-  inline QReadWriteLock* chainLock() const { return &m_lock; }
-
   /// Returns true if this object is being deleted, otherwise false.
   inline bool deleting() const { return m_deleting; }
 
   bool hasUses() const;
   void setHasUses(bool hasUses);
 
-  bool imports(TopDUContext* origin, int depth = 0) const;
+  /**
+   * Determine if this chain imports another chain.
+   *
+   * \note you must be holding a read but not a write chain lock when you access this function.
+   */
+  bool imports(TopDUContext* origin, const KTextEditor::Cursor& position) const;
 
 protected:
   virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNamespaces, QList<Declaration*>& ret, bool inImportedContext) const;
@@ -70,7 +65,9 @@ protected:
   void checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const KTextEditor::Cursor& position, QList<DUContext*>& ret) const;
 
 private:
-  mutable QReadWriteLock m_lock;
+  bool imports(TopDUContext* origin, int depth) const;
+
+  mutable QReadWriteLock m_chainLock;
   bool m_hasUses  : 1;
   bool m_deleting : 1;
 };

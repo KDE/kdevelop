@@ -35,12 +35,15 @@
 #include <klocale.h>
 
 #include <ktexteditor/document.h>
+#include <ktexteditor/smartinterface.h>
 
 #include "editor/kdeveditorintegrator.h"
 #include <kdevdocumentcontroller.h>
 
 #include "kdevbackgroundparser.h"
 #include "kdevparserdependencypolicy.h"
+
+using namespace KTextEditor;
 
 KDevParseJob::KDevParseJob( const KUrl &url,
                             QObject *parent )
@@ -50,7 +53,8 @@ KDevParseJob::KDevParseJob( const KUrl &url,
         m_backgroundParser( 0 ),
         m_abortMutex(new QMutex),
         m_abortRequested( false ),
-        m_aborted( false )
+        m_aborted( false ),
+        m_revisionToken(-1)
 {}
 
 KDevParseJob::KDevParseJob( KDevDocument *document,
@@ -61,11 +65,19 @@ KDevParseJob::KDevParseJob( KDevDocument *document,
         m_backgroundParser( 0 ),
         m_abortMutex(new QMutex),
         m_abortRequested( false ),
-        m_aborted( false )
+        m_aborted( false ),
+        m_revisionToken(-1)
 {}
 
 KDevParseJob::~KDevParseJob()
-{}
+{
+    if (m_revisionToken != -1) {
+        Q_ASSERT(m_openDocument);
+        SmartInterface* smart = dynamic_cast<SmartInterface*>(m_openDocument->textDocument());
+        Q_ASSERT(smart);
+        smart->releaseRevision(m_revisionToken);
+    }
+}
 
 const KUrl& KDevParseJob::document() const
 {
@@ -98,8 +110,21 @@ bool KDevParseJob::contentsAvailableFromEditor() const
     return m_openDocument && m_openDocument->textDocument() && KDevEditorIntegrator::documentLoaded(m_openDocument->textDocument());
 }
 
-QString KDevParseJob::contentsFromEditor() const
+int KDevParseJob::revisionToken() const
 {
+    return m_revisionToken;
+}
+
+QString KDevParseJob::contentsFromEditor(bool saveRevisionToken)
+{
+    SmartInterface* smart = dynamic_cast<SmartInterface*>(m_openDocument->textDocument());
+
+    QMutexLocker lock(smart ? smart->smartMutex() : 0);
+
+    if (smart && saveRevisionToken) {
+        m_revisionToken = smart->currentRevision();
+    }
+
     return m_openDocument->textDocument()->text();
 }
 

@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <QHash>
 #include <QDockWidget>
 #include <QStackedWidget>
+#include <QApplication>
 
 #include <kmenu.h>
 #include <klocale.h>
@@ -38,7 +39,7 @@ Boston, MA 02110-1301, USA.
 #include <kactioncollection.h>
 #include <ktoolbarpopupaction.h>
 
-#include <knotifydialog.h>
+#include <knotifyconfigwidget.h>
 
 #include "kdevcore.h"
 #include "kdevconfig.h"
@@ -590,7 +591,7 @@ void KDevMainWindow::showMenuBar()
 
 void KDevMainWindow::configureNotifications()
 {
-    KNotifyDialog::configure( this, "Notification Configuration Dialog" );
+    KNotifyConfigWidget::configure( this, "Notification Configuration Dialog" );
 }
 
 

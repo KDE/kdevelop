@@ -59,6 +59,7 @@
 #include "duchain/cppeditorintegrator.h"
 #include "duchain/usebuilder.h"
 #include "duchain/symboltable.h"
+#include "duchain/typerepository.h"
 
 #include "parsejob.h"
 #include "codeproxy.h"
@@ -100,6 +101,10 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
     connect( KDevCore::projectController(),
              SIGNAL( projectClosing() ),
              this, SLOT( projectClosing() ) );
+
+    // Initialise singletons, to prevent needing a mutex in their self() methods
+    TypeRepository::self();
+    SymbolTable::self();
 }
 
 CppLanguageSupport::~CppLanguageSupport()
@@ -267,15 +272,13 @@ void CppLanguageSupport::documentLoaded(KDevAST * ast, const KUrl & document)
         TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
         CppEditorIntegrator editor(t->session);
         {
-            SmartConverter sc(&editor);
+            SmartConverter sc(&editor, m_highlights);
             sc.convertDUChain(context);
 
             if (!context->hasUses()) {
                 UseBuilder ub(&editor);
                 ub.buildUses(t);
             }
-
-            m_highlights->highlightDUChain(context);
         }
     }
 

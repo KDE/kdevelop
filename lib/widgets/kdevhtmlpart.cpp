@@ -74,8 +74,8 @@ KDevHTMLPart::KDevHTMLPart()
 
   connect(m_forwardAction->menu(), SIGNAL(aboutToShow()),
          this, SLOT(slotForwardAboutToShow()));
-  connect(m_forwardAction->menu(), SIGNAL(activated(int)),
-         this, SLOT(slotPopupActivated(int)));
+  connect(m_forwardAction->menu(), SIGNAL(triggered(QAction*)),
+         this, SLOT(slotForwardMenuTriggered(QAction*)));
 
   m_restoring = false;
   m_Current = m_history.end();
@@ -426,11 +426,13 @@ void KDevHTMLPart::slotBackAboutToShow()
     {
         if ( it == m_history.begin() )
         {
-            popup->insertItem( (*it).url.url(), (*it).id );
+            QAction* action = popup->addAction( (*it).url.url() );
+            action->setData((*it).id);
             return;
         }
 
-        popup->insertItem( (*it).url.url(), (*it).id );
+        QAction* action = popup->addAction( (*it).url.url());
+        action->setData((*it).id);
         ++i;
         --it;
     }
@@ -451,18 +453,20 @@ void KDevHTMLPart::slotForwardAboutToShow()
     {
         if ( it == lastElement() )
         {
-            popup->insertItem( (*it).url.url(), (*it).id );
+            popup->addAction( (*it).url.url() )->setData( (*it).id );
             return;
         }
 
-        popup->insertItem( (*it).url.url(), (*it).id );
+        popup->addAction( (*it).url.url() )->setData( (*it).id );
         ++i;
         ++it;
     }
 }
 
-void KDevHTMLPart::slotPopupActivated( int id )
+void KDevHTMLPart::slotForwardMenuTriggered(QAction* action)
 {
+    int id = action->data().toInt();
+
     kDebug(9000) << "id: " << id << endl;
 
     QLinkedList<DocumentationHistoryEntry>::Iterator it = m_history.begin();

@@ -79,6 +79,10 @@ class CppHighlighting : public QObject, public KDevCodeHighlighting
     void highlightTree(KTextEditor::SmartRange* topRange) const;
     void highlightDUChain(TopDUContext* context) const;
 
+    virtual void highlightDefinition(Definition* definition) const;
+    virtual void highlightDeclaration(Declaration* declaration) const;
+    virtual void highlightUse(Use* use) const;
+
     KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context) const;
     KTextEditor::Attribute::Ptr attributeForDepth(int depth) const;
 

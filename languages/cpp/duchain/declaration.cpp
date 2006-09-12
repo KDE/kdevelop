@@ -18,15 +18,19 @@
 
 #include "declaration.h"
 
+#include <QReadLocker>
+#include <QWriteLocker>
+
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 
-#include "ducontext.h"
+#include "topducontext.h"
 #include "use.h"
 #include "definition.h"
 #include "cpptypes.h"
 #include "symboltable.h"
 #include "forwarddeclaration.h"
+#include "duchain.h"
 
 using namespace KTextEditor;
 
@@ -53,6 +57,13 @@ Declaration::~Declaration()
     forward->setResolved(0);
   Q_ASSERT(m_forwardDeclarations.isEmpty());
 
+  QList<Use*> _uses = uses();
+  foreach (Use* use, _uses)
+    use->setDeclaration(0);
+
+  if (Definition* def = definition())
+    def->setDeclaration(0);
+
   // context is only null in the test cases
   if (context())
     context()->removeDeclaration(this);
@@ -60,44 +71,56 @@ Declaration::~Declaration()
   setContext(0);
 
   setAbstractType(AbstractType::Ptr());
-
-  qDeleteAll(m_uses);
 }
 
-void Declaration::removeUse( Use* range )
+void Declaration::removeUse( Use* use )
 {
-  range->setDeclaration(0L);
-  m_uses.removeAll(range);
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  use->setDeclaration(0L);
+  m_uses.removeAll(use);
 }
 
-void Declaration::addUse( Use* range )
+void Declaration::addUse( Use* use )
 {
-  range->setDeclaration(this);
-  m_uses.append(range);
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  use->setDeclaration(this);
+  m_uses.append(use);
 }
 
 const QList< Use* > & Declaration::uses( ) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   return m_uses;
 }
 
 const Identifier& Declaration::identifier( ) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   return m_identifier;
 }
 
 void Declaration::setIdentifier(const Identifier& identifier)
 {
+  ENSURE_CHAIN_WRITE_LOCKED
+
   m_identifier = identifier;
 }
 
 AbstractType::Ptr Declaration::abstractType( ) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   return m_type;
 }
 
 void Declaration::setAbstractType(AbstractType::Ptr type)
 {
+  ENSURE_CHAIN_WRITE_LOCKED
+
   if (CppIdentifiedType* idType = dynamic_cast<CppIdentifiedType*>(m_type.data()))
     idType->setDeclaration(0);
 
@@ -109,11 +132,15 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
 
 Declaration::Scope Declaration::scope( ) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   return m_scope;
 }
 
 QualifiedIdentifier Declaration::qualifiedIdentifier() const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   QualifiedIdentifier ret = context()->scopeIdentifier(true);
   ret.push(identifier());
   return ret;
@@ -190,11 +217,15 @@ GNU mangling specs from http://theory.uwinnipeg.ca/gnu/gcc/gxxint_15.html
 
 DUContext * Declaration::context() const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   return m_context;
 }
 
 void Declaration::setContext(DUContext* context)
 {
+  ENSURE_CHAIN_WRITE_LOCKED
+
   if (m_context && context)
     Q_ASSERT(m_context->topContext() == context->topContext());
 
@@ -209,6 +240,8 @@ void Declaration::setContext(DUContext* context)
 
 bool Declaration::operator ==(const Declaration & other) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   return this == &other;
 }
 
@@ -221,33 +254,40 @@ QString Declaration::toString() const
 
 bool Declaration::isDefinition() const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   return m_isDefinition;
 }
 
 void Declaration::setDeclarationIsDefinition(bool dd)
 {
+  ENSURE_CHAIN_WRITE_LOCKED
+
   m_isDefinition = dd;
-  if (m_isDefinition && m_definition) {
+  if (m_isDefinition && definition()) {
     setDefinition(0);
   }
 }
 
 Definition* Declaration::definition() const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   return m_definition;
 }
 
 void Declaration::setDefinition(Definition* definition)
 {
+  ENSURE_CHAIN_WRITE_LOCKED
+
   if (m_definition) {
     m_definition->setDeclaration(0);
-    delete m_definition;
-    m_definition = 0;
   }
 
   m_definition = definition;
 
   if (m_definition) {
+    m_definition->setDeclaration(this);
     m_isDefinition = false;
   }
 }
@@ -264,6 +304,8 @@ void Declaration::setInSymbolTable(bool inSymbolTable)
 
 const QList< ForwardDeclaration * > & Declaration::forwardDeclarations() const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   return m_forwardDeclarations;
 }
 
@@ -272,12 +314,12 @@ bool Declaration::isForwardDeclaration() const
   return false;
 }
 
-ForwardDeclaration* Declaration::forwardDeclaration()
+ForwardDeclaration* Declaration::toForwardDeclaration()
 {
   return static_cast<ForwardDeclaration*>(this);
 }
 
-const ForwardDeclaration* Declaration::forwardDeclaration() const
+const ForwardDeclaration* Declaration::toForwardDeclaration() const
 {
   return static_cast<const ForwardDeclaration*>(this);
 }

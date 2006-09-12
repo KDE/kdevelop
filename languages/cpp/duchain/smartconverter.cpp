@@ -24,23 +24,26 @@
 #include <ktexteditor/smartrange.h>
 
 #include <kdeveditorintegrator.h>
+#include <kdevcodehighlighting.h>
 
 #include "ducontext.h"
 #include "declaration.h"
 #include "definition.h"
 #include "use.h"
 #include "topducontext.h"
+#include "duchain.h"
 
 using namespace KTextEditor;
 
-SmartConverter::SmartConverter(KDevEditorIntegrator* editor)
+SmartConverter::SmartConverter(KDevEditorIntegrator* editor, KDevCodeHighlighting* hl)
   : m_editor(editor)
+  , m_hl(hl)
 {
 }
 
 void SmartConverter::convertDUChain(DUContext* context) const
 {
-  QWriteLocker lock(context->chainLock());
+  QWriteLocker lock(DUChain::lock());
 
   m_editor->setCurrentUrl(context->url());
 
@@ -58,22 +61,19 @@ void SmartConverter::convertDUChainInternal(DUContext* context, bool first) cons
 
   foreach (Declaration* dec, context->localDeclarations()) {
     dec->setTextRange(m_editor->createRange(dec->textRange()));
+    m_hl->highlightDeclaration(dec);
     m_editor->exitCurrentRange();
   }
 
   foreach (Definition* def, context->localDefinitions()) {
     def->setTextRange(m_editor->createRange(def->textRange()));
+    m_hl->highlightDefinition(def);
     m_editor->exitCurrentRange();
   }
 
-  foreach (Use* use, context->internalUses()) {
+  foreach (Use* use, context->uses()) {
     use->setTextRange(m_editor->createRange(use->textRange()));
-    m_editor->exitCurrentRange();
-  }
-
-  foreach (Use* use, context->externalUses()) {
-    QWriteLocker lock(use->chainLock());
-    use->setTextRange(m_editor->createRange(use->textRange()));
+    m_hl->highlightUse(use);
     m_editor->exitCurrentRange();
   }
 

@@ -20,6 +20,7 @@
 #define DECLARATION_H
 
 #include <QList>
+#include <QReadWriteLock>
 
 #include "identifier.h"
 #include "kdevdocumentrangeobject.h"
@@ -55,13 +56,20 @@ public:
 
   const QList<ForwardDeclaration*>& forwardDeclarations() const;
   virtual bool isForwardDeclaration() const;
-  ForwardDeclaration* forwardDeclaration();
-  const ForwardDeclaration* forwardDeclaration() const;
+  ForwardDeclaration* toForwardDeclaration();
+  const ForwardDeclaration* toForwardDeclaration() const;
 
   bool isDefinition() const;
   void setDeclarationIsDefinition(bool dd);
 
+  /**
+   * Retrieve the definition for this use.
+   */
   Definition* definition() const;
+
+  /**
+   * Set the definition for this use.
+   */
   void setDefinition(Definition* definition);
 
   DUContext* context() const;
@@ -106,7 +114,9 @@ private:
   Identifier m_identifier;
 
   QList<ForwardDeclaration*> m_forwardDeclarations;
+
   Definition* m_definition;
+
   QList<Use*> m_uses;
 
   bool m_isDefinition  : 1;
