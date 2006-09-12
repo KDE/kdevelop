@@ -38,7 +38,7 @@ SimpleTypeNamespace::SimpleTypeNamespace( SimpleTypeNamespace* ns ) : SimpleType
   m_activeSlaves = ns->m_activeSlaves;
 }
 
-SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, MemberInfo::MemberType type)
+SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, MemberInfo::MemberType type )
 {
   MemberInfo mem;
   mem.name = "";
@@ -49,6 +49,10 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
     mem = (*it)->findMember( name , type );
     if( mem ) {
       if( mem.memberType != MemberInfo::Namespace ) {
+	      if( mem.type.resolved() ) {
+		      mem.type.setResolved( mem.type.resolved()->clone() );
+		      mem.type.resolved()->setParent( this );
+	      }
         return mem;
       } else {
                     ///verify that the namespace is built as this class..

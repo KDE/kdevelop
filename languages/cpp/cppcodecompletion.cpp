@@ -2129,7 +2129,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 						SimpleTypeNamespace* n = dynamic_cast<SimpleTypeNamespace*>( &(*global) );
 						if( !n ) {
-						QString str = QString("the global namespace was not resolved correctly , real type: ") + typeid(&(*global)).name();
+						QString str = QString("the global namespace was not resolved correctly , real type: ") + typeid(&(*global)).name() + QString(" name: ") + global->scope().join("::") + " scope-size: " + global->scope().count();
 							kdDebug( 9007 ) << str << endl;
 							m_pSupport->mainWindow() ->statusBar() ->message( str , 1000 );
 						} else {

@@ -158,7 +158,7 @@ There can be multiple namespaces aliased to the same one
 class SimpleTypeCodeModel : public SimpleTypeImpl {
 public:
   
-  SimpleTypeCodeModel( SimpleTypeCodeModel* rhs ) : SimpleTypeImpl( rhs ), m_item( rhs->m_item) {
+  SimpleTypeCodeModel( SimpleTypeCodeModel* rhs ) : SimpleTypeImpl( rhs ), m_item( rhs->m_item ) {
   }
   
   SimpleTypeCodeModel( SimpleTypeImpl* rhs  ) : SimpleTypeImpl( rhs ) {
