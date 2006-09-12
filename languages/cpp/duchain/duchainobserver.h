@@ -37,7 +37,8 @@ public:
   enum Modification {
     Addition,
     Removal,
-    Change
+    Change,
+    Deletion
   };
 
   enum Relationship {
@@ -66,7 +67,10 @@ public:
     DefinitionRelationship,
 
     // Use
-    DeclarationRelationship
+    DeclarationRelationship,
+
+    // All
+    NotApplicable
   };
 
   virtual void contextChanged(DUContext* context, Modification change, Relationship relationship, DUChainBase* relatedObject = 0) = 0;

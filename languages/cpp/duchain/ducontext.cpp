@@ -83,6 +83,8 @@ DUContext::~DUContext( )
     use->setContext(0);
 
   clearUsingNamespaces();
+
+  DUChain::contextChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
 }
 
 const QList< DUContext * > & DUContext::childContexts( ) const

@@ -71,6 +71,8 @@ Declaration::~Declaration()
   setContext(0);
 
   setAbstractType(AbstractType::Ptr());
+
+  DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
 }
 
 void Declaration::removeUse( Use* use )

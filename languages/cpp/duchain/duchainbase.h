@@ -21,6 +21,7 @@
 
 class TopDUContext;
 class QReadWriteLock;
+class DUChainModel;
 
 /**
  * Base class for definition-use chain objects.

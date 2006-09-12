@@ -43,6 +43,8 @@ Use::~Use()
 
   if (m_declaration)
     m_declaration->removeUse(this);
+
+  DUChain::useChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
 }
 
 Declaration* Use::declaration() const
