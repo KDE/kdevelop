@@ -65,7 +65,7 @@
 #include <codemodel.h>
 #include <codebrowserfrontend.h>
 
-///This can be used to toggle the complete tracing of the resolution-functions, which costs a lot of performance, but gives very nice and useful output 
+///This can be used to toggle the complete tracing of the resolution-functions, which costs a lot of performance, but gives very nice and useful output
 
 
 #include "codecompletionentry.h"
@@ -87,7 +87,7 @@ const bool disableVerboseForCompletionList = false;
 const bool disableVerboseForContextMenu = false;
 const bool contextMenuEntriesAtTop = false;
 
-///This enables-disables the automatic processing of the expression under the mouse-cursor 
+///This enables-disables the automatic processing of the expression under the mouse-cursor
 //#define DISABLETOOLTIPS
 
 /**
@@ -95,6 +95,19 @@ const bool contextMenuEntriesAtTop = false;
 -- TODO: Does not yet correctly search for overloaded functions and select the right one
 -- TODO: The documentation shown in the calltips looks very bad, a better solution must be found(maybe an additional tooltip)
 */
+
+template<class Item>
+class ItemLocker {
+public:
+ItemLocker( Item& it ) : item( it ) {
+	it.lock();
+}
+	~ItemLocker() {
+		item.unlock();
+	}
+private:
+	Item& item;
+};
 
 SafetyCounter safetyCounter;
 CppCodeCompletion* cppCompletionInstance = 0;
@@ -151,14 +164,14 @@ QStringList prepareTextForMenu( const QString& comment, int maxLines, int maxLen
 			break;
 		}
 	}
-	
+
 	return maximumLength( out, maxLength );
 }
 
 QStringList formatComment( const QString& comment, int maxCols = 120 ) {
   QStringList ret;
   SafetyCounter s( 14 );  ///maximum of 14 lines
-  
+
   QStringList lines = QStringList::split( "\n", comment );
   for( QStringList::iterator it = lines.begin(); it != lines.end(); ++it ) {
     QStringList words = QStringList::split( " ", *it );
@@ -174,7 +187,7 @@ QStringList formatComment( const QString& comment, int maxCols = 120 ) {
     }
   }
   if( !s ) ret << "? comment has too many lines";
-  
+
   return ret;
 }
 
@@ -186,7 +199,7 @@ bool operator < ( const CodeCompletionEntry& e1, const CodeCompletionEntry& e2 )
 template <class ItemType>
 static QValueList<ItemType> unique( const QValueList<ItemType>& entryList )
 {
-  
+
   QValueList< ItemType > l;
   QMap<QString, bool> map;
   typename QValueList< ItemType >::ConstIterator it = entryList.begin();
@@ -208,7 +221,7 @@ static QValueList<ItemType> unique( const QValueList<ItemType>& entryList )
 
 static QStringList unique( const QStringList& entryList )
 {
-  
+
   QStringList l;
   QMap<QString, bool> map;
   QStringList::ConstIterator it = entryList.begin();
@@ -226,7 +239,7 @@ static QStringList unique( const QStringList& entryList )
 
 static QStringList unique( const QValueList<QStringList>& entryList )
 {
-  
+
   QStringList l;
   QMap<QString, bool> map;
   QValueList<QStringList>::ConstIterator it = entryList.begin();
@@ -240,22 +253,22 @@ static QStringList unique( const QValueList<QStringList>& entryList )
       l += li;
     }
   }
-  
+
   return l;
 }
 
 
 bool tokenAt( const QString& text, const QString& token, int textPos ) {
   if( text.isEmpty() ) return false;
-  
+
   int tokenPos = token.length() - 1;
   if( tokenPos <= 0 || textPos <= 0 ) return false;
-  
+
   while( text[textPos] == token[tokenPos] ) {
-    
+
     --tokenPos;
     --textPos;
-    
+
     if( tokenPos == 0 || textPos == 0 ) {
       if( tokenPos == 0 ) {
         if( textPos >= 1 && text[textPos] == token[tokenPos] ) {
@@ -290,31 +303,31 @@ struct PopupFillerHelpStruct {
 
 	  if( d.memberType == SimpleTypeImpl::MemberInfo::Typedef && d.type.fullName() == "const int" )
 		  memType = "enum";
-	  
+
     QString txt = i18n("Jump to %1 %2").arg( memType ).arg( cleanForMenu( d.name ) );
     int id = parent->insertItem( txt, receiver, SLOT( popupAction( int ) ) );
-    
+
     receiver->m_popupActions.insert( id, d.decl );
   }
-  
+
   void insertItem ( QPopupMenu* parent, TypeDesc d , QString prefix )
   {
     QString txt;
-    
+
     if( d.resolved() && d.resolved()->isNamespace() ) return;
-    
+
     if( d.resolved() && d.resolved()->hasNode() ) {
 	  QString n = d.resolved()->scope().join("::");
       if( d.resolved()->asFunction() )
         n = receiver->buildSignature( d.resolved() );
-      
+
       txt = prefix + i18n("Jump to %1").arg( cleanForMenu( n ) );
     } else {
       txt = prefix + d.name() + i18n(" is unresolved");
     }
-    
+
     int id = parent->insertItem( txt, receiver, SLOT( popupAction( int ) ) );
-    
+
     if( d.resolved() ) receiver->m_popupActions.insert( id, d.resolved()->getDeclarationInfo() );
   }
 };
@@ -323,19 +336,19 @@ struct PopupFillerHelpStruct {
 ItemDom itemFromScope(const QStringList& scope, NamespaceDom startNamespace)
 {
 	if(scope.isEmpty())return ItemDom();
-	
+
 	NamespaceDom glob = startNamespace;
 	if( !glob ) return ItemDom();
-	
+
 	ClassModel* curr =  glob ;
-	
+
 	QStringList::const_iterator mit = scope.begin();
-	
+
 	while(curr->isNamespace() && mit != scope.end() && ((NamespaceModel*)curr)->hasNamespace( *mit )) {
 		curr = &(*( ((NamespaceModel*)curr)->namespaceByName( *mit ) ));
 		++mit;
 	}
-	
+
 	while((curr->isNamespace() || curr->isClass()) && mit != scope.end() && curr->hasClass( *mit )) {
 		ClassList cl = curr->classByName( *mit );
 		curr = &(**cl.begin() );
@@ -361,7 +374,7 @@ ItemDom itemFromScope(const QStringList& scope, NamespaceDom startNamespace)
 
 	FunctionDefinitionList fd  = curr->functionDefinitionByName( *mit );
 	if( !fd.isEmpty() ) return model_cast<ItemDom>( fd.front() );
-	
+
 	return ItemDom();
 }
 
@@ -382,25 +395,25 @@ struct PopupClassViewFillerHelpStruct {
 
 	  if( d.memberType == SimpleTypeImpl::MemberInfo::Typedef && d.type.fullName() == "const int" )
 		  memType = "enum";
-	  
+
 	  QString txt = i18n("Show %1 %2").arg( memType ).arg( cleanForMenu( d.name ) );
     int id = parent->insertItem( txt, receiver, SLOT( popupClassViewAction( int ) ) );
-    
+
 	receiver->m_popupClassViewActions.insert( id, dom );
   }
-	
+
   void insertItem ( QPopupMenu* parent, TypeDesc d , QString prefix ) {
     QString txt;
 	if( !d.resolved() ) return;
-    
+
     ItemDom dom;
-    
+
     if( d.resolved() ) {
       SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( d.resolved().data() );
       if( cm ) dom = cm->item();
     }
-    
-    
+
+
     if( d.resolved() && d.resolved()->hasNode() ) {
       if( !dom && d.resolved()->isNamespace() ) {
         SimpleTypeCachedNamespace* ns = dynamic_cast<SimpleTypeCachedNamespace*>( d.resolved().data() );
@@ -415,8 +428,8 @@ struct PopupClassViewFillerHelpStruct {
 			}
         }
       }
-      
-      
+
+
       if( dom ) {
 	    QString n = d.resolved()->scope().join("::");
 		//QString n = d.fullNameChain();
@@ -430,9 +443,9 @@ struct PopupClassViewFillerHelpStruct {
     } else {
       txt = prefix + d.name() + i18n(" is unresolved");
     }
-    
+
     int id = parent->insertItem( txt, receiver, SLOT( popupClassViewAction( int ) ) );
-    
+
     if( dom ) receiver->m_popupClassViewActions.insert( id, dom );
   }
 };
@@ -460,12 +473,12 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
 		  f.name = sourceVariable.name;
 		  f.type = d.desc();
 		  f.memberType = SimpleTypeImpl::MemberInfo::Variable;
-		  
+
 		  /*int id = m->insertItem( i18n("jump to variable-declaration \"%1\"").arg( type.sourceVariable.name ) , this, SLOT( popupAction( int ) ) );
-		  
+
 		  m_popupActions.insert( id, type.sourceVariable );*/
 		  struk.insertItem( parent, f, prefix );
-		  
+
 		  parent->insertSeparator();
 
 		  if( !sourceVariable.comment.isEmpty() ) {
@@ -477,11 +490,11 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
 			  }
 			  parent->insertSeparator();
 		  }
-		  
+
 	  }
-	  
+
     struk.insertItem( parent, d, prefix );
-    
+
     TypeDesc::TemplateParams p = d->templateParams();
     for( TypeDesc::TemplateParams::iterator it = p.begin(); it != p.end(); ++it ){
 	    //if( (*it)->resolved() ) {
@@ -492,7 +505,7 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
         fill( parent, **it, prefix + depthAdd );
       }*/
     }
-    
+
 	if( d->resolved() ) {
 		if( d->resolved()->asFunction() ) {
 			SimpleTypeImpl::LocateResult rt = d->resolved()->locateDecType( d->resolved()->asFunction()->getReturnType() );
@@ -501,7 +514,7 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
           int gid = parent->insertItem( i18n( "Return-type \"%1\"" ).arg( cleanForMenu( rt->fullNameChain() ) ), m );
           fill( m, rt );
         }
-        
+
 			QValueList<TypeDesc> args = d->resolved()->asFunction()->getArgumentTypes();
 			QStringList argNames = d->resolved()->asFunction()->getArgumentNames();
         if( !args.isEmpty() ) {
@@ -519,7 +532,7 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
             QPopupMenu * mo = new QPopupMenu( m );
             int gid = m->insertItem( i18n( "Argument \"%1\"" ).arg( cleanForMenu( at->fullNameChain() + " " + name ) ), mo );
             fill( mo, at );
-            
+
           }
         }
       }
@@ -530,7 +543,7 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
 	  if( !trace.isEmpty() ) {
 		  QPopupMenu * m = new QPopupMenu( parent );
 		  int gid = parent->insertItem( i18n( "Trace" ), m );
-		  
+
 		  for( QValueList<QPair<SimpleTypeImpl::MemberInfo, TypeDesc> >::iterator it = trace.begin(); it != trace.end(); ++it ) {
 			  QPopupMenu * mo = new QPopupMenu( m );
 			  QString tail = (*it).second.fullNameChain();
@@ -538,7 +551,7 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
 			  int gid = m->insertItem( i18n( "%1 -> %2" ).arg( cleanForMenu( (*it).first.name + tail ) ).arg( cleanForMenu( (*it).first.type.fullNameChain() + tail ) ), mo );
 
 			  struk.insertItem( mo, (*it).first, prefix );
-			  
+
 			  if( !(*it).first.decl.comment.isEmpty() ) {
 				  mo->insertSeparator();
 				  QPopupMenu * m = new QPopupMenu( mo );
@@ -552,7 +565,7 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
 	  }
 	  }
 #endif
-	
+
 	if( d->resolved() ) {
 		QValueList<SimpleTypeImpl::LocateResult> bases = d->resolved()->getBases();
       for( QValueList<SimpleTypeImpl::LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
@@ -560,7 +573,7 @@ PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ),
         int gid = parent->insertItem( i18n( "Base-class \"%1\"" ).arg( cleanForMenu( (*it)->fullNameChain() ) ), m );
         fill( m, *it );
       }
-      
+
 		if( d->resolved()->parent() && d->resolved()->parent()->desc() ) {
         QPopupMenu * m = new QPopupMenu( parent );
 			int gid = parent->insertItem( i18n( "Nested in \"%1\"" ).arg( cleanForMenu( d->resolved()->parent()->fullTypeResolved() ) ), m );
@@ -587,11 +600,11 @@ struct CompTypeProcessor : public TypeProcessor
 
   CompTypeProcessor( SimpleType scope, bool processArguments)  : m_scope(scope), m_processArguments( processArguments ) {
   }
-  
+
   virtual QString parentType() {
     return m_scope->fullType();
   }
-  
+
   virtual QString processType( const QString& type )
   {
     if( !m_processArguments ) return type;
@@ -657,7 +670,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 {
 	cppCompletionInstance = this;
 	m_cppCodeCommentsRx.setMinimal( true );
-		
+
 	m_pSupport = part;
 
 	m_activeCursor = 0;
@@ -667,18 +680,18 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 	m_activeView = 0;
 	m_ccTimer = new QTimer( this );
 	m_showStatusTextTimer = new QTimer( this );
-	
+
 	m_ccLine = 0;
 	m_ccColumn = 0;
 	connect( m_ccTimer, SIGNAL( timeout() ), this, SLOT( slotTimeout() ) );
 	connect( m_showStatusTextTimer, SIGNAL( timeout() ), this, SLOT( slotStatusTextTimeout() ) );
-	
+
 	computeFileEntryList();
 
 	CppSupportPart* cppSupport = m_pSupport;
-	connect( cppSupport->project(), SIGNAL( addedFilesToProject( const QStringList& ) ), 
+	connect( cppSupport->project(), SIGNAL( addedFilesToProject( const QStringList& ) ),
 	         this, SLOT( computeFileEntryList() ) );
-	connect( cppSupport->project(), SIGNAL( removedFilesFromProject( const QStringList& ) ), 
+	connect( cppSupport->project(), SIGNAL( removedFilesFromProject( const QStringList& ) ),
 	         this, SLOT( computeFileEntryList() ) );
 
 	m_bArgHintShow = false;
@@ -708,7 +721,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 	connect( part->partController( ), SIGNAL( activePartChanged( KParts::Part* ) ),
 	         this, SLOT( slotActivePartChanged( KParts::Part* ) ) );
 
-	connect( part, SIGNAL( fileParsed( const QString& ) ), 
+	connect( part, SIGNAL( fileParsed( const QString& ) ),
 	         this, SLOT( slotFileParsed( const QString& ) ) );
 }
 
@@ -802,7 +815,7 @@ void CppCodeCompletion::slotActivePartChanged( KParts::Part *part )
 {
 	if( m_activeHintInterface && m_activeView ) {
 		disconnect(m_activeView , SIGNAL( needTextHint(int, int, QString &) ), this, SLOT( slotTextHint(int, int, QString&) ) );
-		
+
 		m_activeHintInterface = 0;
 	}
 	if ( !part )
@@ -844,11 +857,11 @@ void CppCodeCompletion::slotActivePartChanged( KParts::Part *part )
 
 	if( m_activeView )
 		m_activeHintInterface = dynamic_cast<KTextEditor::TextHintInterface*>( m_activeView );
-	
+
 	char* q = 0;
 	kdDebug() << q << endl;
-	
-	if( m_activeHintInterface ) 
+
+	if( m_activeHintInterface )
 	{
 #ifndef DISABLETOOLTIPS
 		m_activeHintInterface->enableTextHints( 500 );
@@ -857,7 +870,7 @@ void CppCodeCompletion::slotActivePartChanged( KParts::Part *part )
 	} else {
 		kdDebug( 9007 ) << "editor has no text-hint-interface" << endl;
 	}
-	
+
 	kdDebug( 9007 ) << k_funcinfo << "-- end" << endl;
 }
 
@@ -874,12 +887,12 @@ void CppCodeCompletion::slotTextChanged()
 	QString strCurLine = m_activeEditor->textLine( nLine );
 	QString ch = strCurLine.mid( nCol - 1, 1 );
 	QString ch2 = strCurLine.mid( nCol - 2, 2 );
-	
+
 	// Tell the completion box to _go_away_ when the completion char
 	// becomes empty or whitespace and the box is already showing.
 	// !!WARNING!! This is very hackish, but KTE doesn't offer a way
 	// to tell the completion box to _go_away_
-	if ( ch.simplifyWhiteSpace().isEmpty() && 
+	if ( ch.simplifyWhiteSpace().isEmpty() &&
 	     !strCurLine.simplifyWhiteSpace().contains("virtual") &&
 	     m_bCompletionBoxShow )
 	{
@@ -887,20 +900,20 @@ void CppCodeCompletion::slotTextChanged()
 		m_bCompletionBoxShow = true;
 		m_activeCompletion->showCompletionBox( entryList, 0 );
 	}
-	
+
 	m_ccLine = 0;
 	m_ccColumn = 0;
-	
+
 	bool argsHint = m_pSupport->codeCompletionConfig() ->automaticArgumentsHint();
 	bool codeComplete = m_pSupport->codeCompletionConfig() ->automaticCodeCompletion();
 	bool headComplete = m_pSupport->codeCompletionConfig() ->automaticHeaderCompletion();
-	
+
 	// m_codeCompleteChRx completes on alpha chars and '.'
 	// m_codeCompleteCh2Rx completes on "->" and "::"
 
 	if ( ( argsHint && ch == "(" ) ||
 	     ( strCurLine.simplifyWhiteSpace().contains("virtual") ) ||
-	     ( codeComplete && ( m_codeCompleteChRx.search( ch ) != -1 || 
+	     ( codeComplete && ( m_codeCompleteChRx.search( ch ) != -1 ||
 	                         m_codeCompleteCh2Rx.search( ch2 ) != -1 ) ) ||
 	     ( headComplete && ( ch == "\"" || ch == "<" ) && m_includeRx.search( strCurLine ) != -1 ) )
 	{
@@ -920,11 +933,11 @@ enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN, T_TEMP };
 
 QString CppCodeCompletion::replaceCppComments( const QString& contents ) {
 	QString text = contents;
-	
+
 	int pos = 0;
-	while ( (pos = m_cppCodeCommentsRx.search( text, pos )) != -1 ) 
+	while ( (pos = m_cppCodeCommentsRx.search( text, pos )) != -1 )
 	{
-		if ( m_cppCodeCommentsRx.cap( 1 ).startsWith( "//" ) ) 
+		if ( m_cppCodeCommentsRx.cap( 1 ).startsWith( "//" ) )
 		{
 			QString before = m_cppCodeCommentsRx.cap( 1 );
 			QString after;
@@ -951,8 +964,8 @@ int CppCodeCompletion::expressionAt( const QString& contents, int index )
 		of the same length for purposes of finding the expr. */
 
 	QString text = clearComments( contents );
-	
-	
+
+
 
 	int last = T_UNKNOWN;
 	int start = index;
@@ -1018,7 +1031,7 @@ int CppCodeCompletion::expressionAt( const QString& contents, int index )
 				}
 				--index;
 			}
-		}		
+		}
 		else if ( ch == ']' )
 		{
 			int count = 0;
@@ -1158,8 +1171,8 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
 bool CppCodeCompletion::correctAccessOpAccurate( QStringList ptrList, MemberAccessOp accessOp )
 {
 	//Remove the vars that don't correspond to the member access operator
-	//that we are using.  
-	
+	//that we are using.
+
 	///@todo: Take into account the de-reference operator...
 	bool arrowOp = accessOp == ArrowOp && ptrList.count() && ptrList[0] == "*";
 	bool dotOp =  accessOp == DotOp && ( !ptrList.count() || ptrList[0] == "&" );
@@ -1171,7 +1184,7 @@ bool CppCodeCompletion::correctAccessOp( QStringList ptrList, MemberAccessOp acc
 {
 	if ( m_demandCompletion || accessOp == NoOp )
 		return true;
-	
+
 	return correctAccessOpAccurate( ptrList, accessOp );
 }
 
@@ -1180,31 +1193,31 @@ EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column ,
 	kdDebug( 9007 ) << "CppCodeCompletion::evaluateExpressionAt( " << line << ", " << column << " )" << endl;
 
     if( line < 0 || line >= (int)m_activeEditor->numLines()  ) return EvaluationResult();
-    if( column < 0 || column >= m_activeEditor->lineLength( line ) ) return EvaluationResult(); 
-  
+    if( column < 0 || column >= m_activeEditor->lineLength( line ) ) return EvaluationResult();
+
 	if ( !m_pSupport || !m_activeEditor )
 		return EvaluationResult();
-	
+
 	{
 		QString curLine = m_activeEditor->textLine( line );
-		
+
 	///move column to the last letter of the pointed word
 		while( column+1 < (int)curLine.length() && isValidIdentifierSign( curLine[column] ) && isValidIdentifierSign( curLine[column+1] ) )
 			column++;
-		
+
 	//if( column > 0 ) column--;
-		
+
 		if( column >= (int)curLine.length() || curLine[ column ].isSpace() ) return EvaluationResult();
-			
+
 		QString expr = curLine.left( column +1 );
 		kdDebug( 9007 ) << "evaluating line \"" << expr.stripWhiteSpace() << "\"" << endl;
-		
+
 		if( curLine[column] == '-' || curLine[column] == ';' ) --column;
-		
-        EvaluationResult type = evaluateExpressionType( line, column + 1, conf, ifUnknownSetType ? addFlag( DefaultEvaluationOptions, DefaultAsTypeExpression ) : DefaultEvaluationOptions ); 
-    
+
+        EvaluationResult type = evaluateExpressionType( line, column + 1, conf, ifUnknownSetType ? addFlag( DefaultEvaluationOptions, DefaultAsTypeExpression ) : DefaultEvaluationOptions );
+
 		kdDebug( 9007 ) << "type: " << type->fullNameChain() << endl;
-		
+
 		return type;
 	}
 }
@@ -1226,7 +1239,7 @@ void CppCodeCompletion::popupAction( int number ) {
 void CppCodeCompletion::selectItem( ItemDom item )
 {
 	Extensions::KDevCodeBrowserFrontend* f = m_pSupport->extension< Extensions::KDevCodeBrowserFrontend > ( "KDevelop/CodeBrowserFrontend" );
-	
+
 	if(f != 0) {
 		ItemDom itemDom( &(*item) );
 		f->jumpedToItem( itemDom );
@@ -1247,11 +1260,11 @@ void CppCodeCompletion::popupClassViewAction( int number ) {
 void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int column )
 {
 	if( !m_pSupport->codeCompletionConfig()->showEvaluationContextMenu() ) return;
-	
+
 	kdDebug( 9007 ) << "CppCodeCompletion::contextEvaluationMenu()" << endl;
 	m_popupActions.clear();
 	m_popupClassViewActions.clear();
-	
+
 	if ( !m_pSupport || !m_activeEditor )
 		return ;
 
@@ -1268,41 +1281,41 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 	};
 
 	int cpos = 0;
-	
+
 	SetDbgState stt( dbgState, disableVerboseForContextMenu );
 
     SimpleTypeConfiguration conf( m_activeFileName );
-	
+
 	EvaluationResult type = evaluateExpressionAt( line, column, conf );
 
 	if( !type->resolved() && !type.sourceVariable && (!type.resultType.trace() || type.resultType.trace()->trace().isEmpty()) ) return;
-	
+
 	QString name = type->fullNameChain();
 	if( type.sourceVariable )
 		name += " " + type.sourceVariable.name;
 	if( type.resultType->resolved() && type.resultType->resolved()->asFunction() )
 		name = buildSignature( type.resultType->resolved() );
-	
+
 	///Fill the jump-menu
 	{
 		PopupFillerHelpStruct h(this);
 		PopupFiller<PopupFillerHelpStruct> filler( h, "" );
-		
+
 		QPopupMenu * m = new QPopupMenu( popup );
 		int gid;
 		if( contextMenuEntriesAtTop )
 			gid = popup->insertItem( i18n( "Navigate by \"%1\"" ).arg( cleanForMenu( name ) ), m, 5, cpos++ );
 		else
 			gid = popup->insertItem( i18n( "Navigate by \"%1\"" ).arg( cleanForMenu( name ) ), m );
-		
+
 		popup->setWhatsThis( gid, i18n( "<b>Navigation</b><p>Provides a menu to navigate to positions of items that are involved in this expression" ) );
-		
+
 		/*if( type.sourceVariable && type.sourceVariable.name != "this" ) {
 			int id = m->insertItem( i18n("jump to variable-declaration \"%1\"").arg( type.sourceVariable.name ) , this, SLOT( popupAction( int ) ) );
-			
+
 			m_popupActions.insert( id, type.sourceVariable );
 		}*/
-		
+
 		filler.fill( m, type, "", type.sourceVariable );
 	}
 	if( type->resolved() ) {
@@ -1316,10 +1329,10 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 				gid = popup->insertItem( i18n( "Navigate Class-View by \"%1\"" ).arg( cleanForMenu( name ) ), m );
 
 			popup->setWhatsThis( gid, i18n( "<b>Navigation</b><p>Provides a menu to show involved items in the class-view " ) );
-			
+
 			PopupClassViewFillerHelpStruct h(this);
 			PopupFiller<PopupClassViewFillerHelpStruct> filler( h, "" );
-			
+
 			filler.fill( m, type );
 		}
 	}
@@ -1331,33 +1344,33 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 void CppCodeCompletion::slotTextHint(int line, int column, QString &text)
 {
 	if( ! m_pSupport->codeCompletionConfig()->statusBarTypeEvaluation() ) return;
-	
+
 	kdDebug( 9007 ) << "CppCodeCompletion::slotTextHint()" << endl;
-	
+
 	clearStatusText();
-	
+
 	if( m_lastHintTime.msecsTo( QTime::currentTime() ) < 300 ) {
 		kdDebug( 9007 ) << "slotNeedTextHint called too often" << endl;
 		return;
 	}
-	
+
 	m_lastHintTime = QTime::currentTime();
-	
+
 	clearStatusText();
 	text = "";
 	if ( !m_pSupport || !m_activeEditor )
 		return ;
-	
+
     SimpleTypeConfiguration conf( m_activeFileName );
-	
+
 	EvaluationResult type = evaluateExpressionAt( line, column, conf );
-	
+
 	if( type.expr.expr().stripWhiteSpace().isEmpty() ) return; ///Expression could not be found
-	
+
 	if( type.sourceVariable ) {
 		text += type.sourceVariable.toText() + "\n";
 	}
-	
+
 	if( type->resolved() ) {
 		/*SimpleTypeFunctionInterface* f = type->resolved()->asFunction();
 		if( f ) {
@@ -1375,15 +1388,15 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text)
 		if( type.resultType->parent()) text += "\nnested in: \"" + type.resultType->parent()->fullTypeResolvedWithScope() + "\"";
 		DeclarationInfo i = type.resultType->getDeclarationInfo();
 		if( i ) text += "\n" + i.locationToText();
-		
+
 		if( !type.resultType->comment().isEmpty() ) text +=  "\n\n" + type.resultType->comment() + "";*/
-		
+
 	} else {
 	}
-	
+
 	kdDebug( 9007 ) << "showing: \n" << text << endl;
 	const int timeout = 2000;
-		
+
 	if( type->resolved() ) {
 		addStatusText( i18n( "Type of \"%1\" is \"%2\"" ).arg( type.expr.expr() ).arg( type->fullNameChain() ), timeout );
 		if( type.sourceVariable && !type.sourceVariable.comment.isEmpty() ) {
@@ -1391,7 +1404,7 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text)
 		}
 		if( !type->resolved()->comment().isEmpty() ) {
 			addStatusText( i18n( "Comment on %1: \"%1\"").arg( type->name() ).arg( type->resolved()->comment() ) , 10000 );
-		} 
+		}
 		if( type->resolved()->comment().isEmpty() ) {
 			addStatusText( i18n( "%1 has no comment").arg( type->name() ) , timeout );
 		}
@@ -1402,7 +1415,7 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text)
 			addStatusText( i18n( "Type of \"%1\" could not be evaluated! Tried to evaluate expression as \"%2\"" ).arg( type.expr.expr() ).arg( type.expr.typeAsString() ), 2*timeout );
 		}
 	}
-	
+
 	text = ""; ///Don't really use tooltips since those are not implemented in katepart, and don't work right in the qt-designer based part
 };
 
@@ -1410,7 +1423,7 @@ void CppCodeCompletion::slotTextHint(int line, int column, QString &text)
 bool CppCodeCompletion::isTypeExpression( const QString& expr ) {
 	TypeDesc d( expr );
 	if( !d.isValidType() ) return false;
-	
+
 	QString ex = d.fullNameChain();
 	QStringList lex = QStringList::split( " ", ex );
 	QStringList lexpr = QStringList::split( " ", expr );
@@ -1447,22 +1460,22 @@ QString tail = clearComments( m_activeEditor->text( line, column+1, line+10 > (i
 				break;
 			}
 		}
-	
+
 	return false;
 }
 
 bool CppCodeCompletion::canBeTypePrefix( const QString& prefix, bool inFunction ) {
-	
+
 	bool hadSpace = false;
 	for( int p = prefix.length() - 1 ; p >= 0; --p ) {
 		if( prefix[p].isSpace() ) {
 			continue;
 		}
-		
+
 		if( prefix[p] == ';' || prefix[p] == '<' || prefix[p] == ':' || ( !inFunction && (prefix[p] == '(' || prefix[p] == ',') ) || prefix[p] == '}' || prefix[p] == '{' ) {
 			return true;
 		}
-		
+
 		///@todo: make this a simple regex
 		if( prefix[p].isLetterOrNumber() && ( tokenAt( prefix, "class", p ) || tokenAt( prefix, "struct", p ) || tokenAt( prefix, "const", p ) || tokenAt( prefix, "typedef", p ) || tokenAt( prefix, "public", p ) || tokenAt( prefix, "protected", p ) || tokenAt( prefix, "private", p )|| tokenAt( prefix, "virtual", p ) || tokenAt( prefix, "static", p ) || tokenAt( prefix, "virtual", p ) ) )
 			return true;
@@ -1470,19 +1483,19 @@ bool CppCodeCompletion::canBeTypePrefix( const QString& prefix, bool inFunction 
 			return false;
 		}
 	}
-	
+
 	return true;
 }
 
 ///This function is just a litte hack und should be remade, it doesn't work for all cases
 ExpressionInfo CppCodeCompletion::findExpressionAt( int line, int column, int startLine, int startCol, bool inFunction )  {
 	ExpressionInfo ret;
-	
+
 	QString contents = clearComments( getText( startLine, startCol, line, column ) );
-	
-	
+
+
 	int start_expr = expressionAt(  contents, contents.length() - 1 );
-	
+
 	if ( start_expr != int( contents.length() ) - 1 ) {
 		QString str = contents.mid( start_expr, contents.length() - start_expr ).stripWhiteSpace();
 		if( str.startsWith( "new " ) ) {
@@ -1491,7 +1504,7 @@ ExpressionInfo CppCodeCompletion::findExpressionAt( int line, int column, int st
 		ret.setExpr( str );
 		if( !ret.expr().isEmpty() ) ret.t = ExpressionInfo::NormalExpression;
 	}
-	
+
 	if( ret ) {
 		///Check whether it may be a type-expression
 		bool mayBeType = true;
@@ -1502,17 +1515,17 @@ ExpressionInfo CppCodeCompletion::findExpressionAt( int line, int column, int st
 			if( !canBeTypePrefix( contents.left( start_expr ), inFunction ) )
 				mayBeType = false;
 		}
-		
+
 		//make this a regexp
 		QString e = ret.expr();
 		if( e.contains(".") || e.contains("->") || e.contains("(") || e.contains(")") || e.contains("=") || e.contains("-") ) mayBeType = false;
-		
+
 		if( mayBeType ) {
 			ret.setExpr( ret.expr() +  append );
 			ret.t = ExpressionInfo::TypeExpression;
 		}
 	}
-	
+
 	return ret;
 }
 
@@ -1520,65 +1533,65 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 	if( !f ) return 0;
 	int modelStartLine, modelStartColumn;
 	int modelEndLine, modelEndColumn;
-	
+
 	f->getStartPosition( &modelStartLine, &modelStartColumn );
 	f->getEndPosition( &modelEndLine, &modelEndColumn );
-	
+
 	QString textLine = m_activeEditor->textLine( modelStartLine );
 	kdDebug( 9007 ) << "startLine = " << textLine << endl;
-	
+
 	QString contents = getText( modelStartLine, modelStartColumn, line, col );
-		
+
 	Driver d;
 	Lexer lexer( &d );
 		/// @todo setup the lexer(i.e. adds macro, special words, ...
-		
+
 	lexer.setSource( contents );
 	Parser parser( &d, &lexer );
-	
+
 	DeclarationAST::Node recoveredDecl;
 	RecoveryPoint* recoveryPoint = this->d->findRecoveryPoint( line, col );
-	
+
 	parser.parseDeclaration( recoveredDecl );
 	if ( recoveredDecl.get() )
 	{
 		bool isFunDef = recoveredDecl->nodeType() == NodeType_FunctionDefinition;
 		kdDebug( 9007 ) << "is function definition= " << isFunDef << endl;
-		
+
 		int startLine, startColumn;
 		int endLine, endColumn;
 		recoveredDecl->getStartPosition( &startLine, &startColumn );
 		recoveredDecl->getEndPosition( &endLine, &endColumn );
 		/*if( startLine != modelStartLine || endLine != modelEndLine || startColumn != modelStartColumn || endColumn != modelEndColumn ) {
 		kdDebug( 9007 ) << "code-model and real file are out of sync \nfunction-bounds in code-model: " << endl;
-			kdDebug( 9007 ) << "(l " << modelStartLine << ", c " << modelStartColumn << ") - (l " << modelEndLine  << ", c " << modelEndColumn << ") " << "parsed function-bounds: " << endl; 
+			kdDebug( 9007 ) << "(l " << modelStartLine << ", c " << modelStartColumn << ") - (l " << modelEndLine  << ", c " << modelEndColumn << ") " << "parsed function-bounds: " << endl;
 			kdDebug( 9007 ) << "(l " << startLine << ", c " << startColumn << ") - (l " << endLine << ", c " << endColumn << ") " << endl;
 		}*/
-		
+
 		if ( isFunDef )
 		{
 			FunctionDefinitionAST * def = static_cast<FunctionDefinitionAST*>( recoveredDecl.get() );
-			
+
 			SimpleContext* ctx = computeContext( def, endLine, endColumn, modelStartLine, modelStartColumn );
 			if( !ctx ) return 0;
-			
+
 			QStringList scope = f->scope();
-			
+
 			if ( !scope.isEmpty() )
 			{
 				SimpleType parentType = SimpleType( scope.join("::") );
 				parentType->setPointerDepth( 1 );
 				ctx->setContainer( parentType );
 			}
-			
+
 			SimpleType global = ctx->global();
-			
+
 			if( recoveryPoint ) {
 				recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig()->namespaceAliases() );
 			} else {
 				kdDebug( 9007 ) << "no recovery-point, cannot use imports" << endl;
 			}
-			
+
 			///Insert the "this"-type(container) and correctly resolve it using imported namespaces
 			if ( ctx->container() )
 			{
@@ -1593,7 +1606,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 				}
 
 				SimpleType this_type = ctx->container();
-				
+
 				this_type->setPointerDepth( 1 );
 
 				SimpleVariable var;
@@ -1603,7 +1616,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 				ctx->add( var );
 				ctx->setContainer( this_type );
 			}
-			
+
 			return ctx;
 		} else {
 			kdDebug( 9007 ) << "computeFunctionContext: context is no function-definition" << endl;
@@ -1621,7 +1634,7 @@ bool CppCodeCompletion::functionContains( FunctionDom f , int line, int col ) {
 	f->getEndPosition( &el, &ec );
 	QString t = clearComments( getText(sl, sc, el, ec ) );
 	if( t.isEmpty() ) return false;
-	
+
 	int i = t.find('{');
 	if( i == -1 ) return false;
 	int lineCols = 0;
@@ -1633,50 +1646,50 @@ bool CppCodeCompletion::functionContains( FunctionDom f , int line, int col ) {
 			lineCols++;
 		}
 	}
-	
+
 	sc += lineCols;
-	
+
 	return (line > sl || (line == sl && col >= sc ) ) && (line < el || ( line == el && col < ec ) );
 }
 
 EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column, SimpleTypeConfiguration& conf, EvaluateExpressionOptions opt ) {
 	EvaluationResult ret;
-	
+
 	FileDom file = m_pSupport->codeModel()->fileByName( m_activeFileName );
-	
+
 	if( !file ) {
 		m_pSupport->mainWindow() ->statusBar() ->message( i18n( "File %1 does not exist in the code-model" ).arg( m_activeFileName ), 1000 );
 	kdDebug( 9007 ) << "Error: file " << m_activeFileName << " could not be located in the code-model, code-completion stopped\n";
 		return SimpleType();
 	}
-	
+
 	CodeModelUtils::CodeModelHelper fileModel( m_pSupport->codeModel(), file );
-	
+
 	int nLine = line, nCol = column;
-	
+
 	QString strCurLine = m_activeEditor->textLine( nLine );
-	
+
 	QString ch = strCurLine.mid( nCol - 1, 1 );
 	QString ch2 = strCurLine.mid( nCol - 2, 2 );
-	
+
 	while( ch[0].isSpace() && nCol >= 3 ) {
 		nCol -= 1;
 		ch = strCurLine.mid( nCol - 1, 1 );
 		ch2 = strCurLine.mid( nCol - 2, 2 );
 	}
-	
+
 	if ( ch2 == "->" || ch == "." || ch == "(" )
 	{
 		int pos = ch2 == "->" ? nCol - 3 : nCol - 2;
 		QChar c = strCurLine[ pos ];
 		while ( pos > 0 && c.isSpace() )
 			c = strCurLine[ --pos ];
-		
+
 		if ( !( c.isLetterOrNumber() || c == '_' || c == ')' || c == ']' || c == '>' ) )
 			return SimpleType();
 	}
 	bool showArguments = false;
-	
+
 	if ( ch == "(" )
 	{
 		--nCol;
@@ -1684,21 +1697,20 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 			--nCol;
 		showArguments = true;
 	}
-	
+
 	QString word;
-	
-	
-	
-	m_pSupport->backgroundParser() ->lock ();
-	
+
+
+	ItemLocker<BackgroundParser> block( *m_pSupport->backgroundParser() );
+
 	FunctionDom currentFunction = fileModel.functionAt( line, column );
-	
+
 	if( opt & SearchInFunctions ) {
 		//currentFunction = fileModel.functionAt( line, column );
-		
+
 		if( currentFunction && functionContains( currentFunction, line, column ) ) {
 			SimpleContext* ctx = computeFunctionContext( currentFunction, line, column );
-			
+
 			if( ctx ) {
 				opt = remFlag( opt, SearchInClasses );
 				conf.setGlobalNamespace( &(*ctx->global()) );
@@ -1706,8 +1718,8 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 				currentFunction->getStartPosition( &startLine, &endLine );
 				ExpressionInfo exp = findExpressionAt( line, column , startLine, endLine, true );
 				if( (opt & DefaultAsTypeExpression) && ( !exp.canBeNormalExpression() && !exp.canBeTypeExpression() ) && !exp.expr().isEmpty() ) exp.t = ExpressionInfo::TypeExpression;
-				
-				
+
+
 				if( exp.canBeTypeExpression() ) {
 					{
 						if( ! (opt & IncludeTypeExpression) ) {
@@ -1729,7 +1741,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 								int idx = e.length() - 1;
 								while ( e[ idx ].isLetterOrNumber() || e[ idx ] == '_' )
 									--idx;
-								
+
 								if ( idx != int( e.length() ) - 1 )
 								{
 									++idx;
@@ -1737,7 +1749,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 									exp.setExpr( e.left( idx ).stripWhiteSpace() );
 								}
 							}
-							
+
 							ret = evaluateExpression( exp, ctx );
 						}
 					}
@@ -1751,16 +1763,16 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 			kdDebug( 9007 ) << "could not find context-function in code-model" << endl;
 		}
 	}
-					
+
 	if( (opt & SearchInClasses ) && !ret->resolved() && (!currentFunction || !functionContains( currentFunction, line, column ) ) )
 	{
 		ClassDom currentClass = fileModel.classAt( line, column );
 		int startLine = 0, startCol = 0;
-		
+
 		RecoveryPoint* recoveryPoint = this->d->findRecoveryPoint( line, column );
-		
+
 		QStringList scope;
-		
+
 		if( !currentClass ) {
 			kdDebug( 9007 ) << "no container-class found" << endl;
 			if( !recoveryPoint ) {
@@ -1775,20 +1787,20 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 			scope << currentClass->name();
 			currentClass->getStartPosition( &startLine, &startCol );
 		}
-		
+
 		SimpleType container( scope );
-		
+
 		SimpleType global = getGlobal( container );
-		
+
 		conf.setGlobalNamespace( &(*global) );
-		
+
 		if( recoveryPoint )
 			recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig()->namespaceAliases() );
-		
+
 		ExpressionInfo exp = findExpressionAt( line, column , startLine, startCol );
 		exp.t = ExpressionInfo::TypeExpression;	///Outside of functions, we can only handle type-expressions
 		ret.expr = exp;
-		
+
 		if( exp && (exp.t & ExpressionInfo::TypeExpression) ) {
 			kdDebug( 9007 ) << "locating \"" << exp.expr() << "\" in " << container->fullTypeResolvedWithScope() << endl;
 			ret.resultType = container->locateDecType( exp.expr() );
@@ -1801,17 +1813,15 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 		}
 	}
 
-	m_pSupport->backgroundParser() ->unlock();
-
 	return ret;
 }
 
 
-QString CppCodeCompletion::buildSignature( TypePointer currType ) 
+QString CppCodeCompletion::buildSignature( TypePointer currType )
 {
 	SimpleTypeFunctionInterface* f = currType->asFunction();
 	if( !f ) return "";
-	
+
 	QString ret;
 	SimpleTypeImpl::LocateResult rtt = currType->locateDecType( f->getReturnType() );
 	if( rtt->resolved() || rtt.resolutionCount() > 1 )
@@ -1819,10 +1829,10 @@ QString CppCodeCompletion::buildSignature( TypePointer currType )
 	else
 		ret = f->getReturnType().fullNameChain();
 
-	
+
 	TypeDesc desc = currType->desc();
 	desc.decreaseFunctionDepth();
-	
+
 	QString sig = ret + " " + desc.fullNameChain() + f->signature();
 	if( f->isConst() ) sig += " const";
 	return sig;
@@ -1850,17 +1860,17 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		return ;
 
 	m_demandCompletion = invokedOnDemand;
-	
+
 	FileDom file = m_pSupport->codeModel()->fileByName( m_activeFileName );
-	
+
 	if( !file ) {
 		m_pSupport->mainWindow() ->statusBar() ->message( i18n( "File %1 does not exist in the code-model" ).arg( m_activeFileName ), 1000 );
 		kdDebug( 9007 ) << "Error: file " << m_activeFileName << " could not be located in the code-model, code-completion stopped\n";
 		return;
 	}
-	
+
 	CodeModelUtils::CodeModelHelper fileModel( m_pSupport->codeModel(), file );
-	
+
 	unsigned int line, column;
 	m_activeCursor->cursorPositionReal( &line, &column );
 
@@ -1879,16 +1889,16 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		return;
 	}
 
-	
 
-	
+
+
 	int nLine = line, nCol = column;
 
 	QString strCurLine = clearComments( m_activeEditor->textLine( nLine ) );
 
 	QString ch = strCurLine.mid( nCol - 1, 1 );
 	QString ch2 = strCurLine.mid( nCol - 2, 2 );
-	
+
 	while( ch[0].isSpace() && nCol >= 3 ) {
 		nCol -= 1;
 		ch = strCurLine.mid( nCol - 1, 1 );
@@ -1908,7 +1918,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 	bool showArguments = false;
 	bool isInstance = true;
 	m_completionMode = NormalCompletion;
-		
+
 	if ( ch2 == "->" || ch == "." || ch == "(" )
 	{
 		int pos = ch2 == "->" ? nCol - 3 : nCol - 2;
@@ -1950,10 +1960,10 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		}
 
 
-		
+
 		showArguments = TRUE;
 	}
-	
+
 	EvaluationResult type;
 	SimpleType this_type;
 	QString expr, word;
@@ -1964,15 +1974,15 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 	SimpleContext* ctx = 0;
 	SimpleTypeConfiguration conf( m_activeFileName );
 	SimpleType::setGlobalNamespace( 0 ); ///hmm
-	
-	m_pSupport->backgroundParser() ->lock ();
-	
+
+	ItemLocker<BackgroundParser> block( *m_pSupport->backgroundParser() );
+
 	FunctionDom currentFunction = fileModel.functionAt( line, column );
 	RecoveryPoint * recoveryPoint = d->findRecoveryPoint( line, column );
 	if ( recoveryPoint || currentFunction )
 	{
 		QStringList scope;
-		
+
 		int startLine, startColumn;
 		if( currentFunction ) { ///maybe change the priority of these
 			kdDebug( 9007 ) << "using code-model for completion" << endl;
@@ -1984,7 +1994,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 			startColumn = recoveryPoint->startColumn;
 			scope = recoveryPoint->scope;
 		}
-		
+
 		QString textLine = m_activeEditor->textLine( startLine );
 		kdDebug( 9007 ) << "startLine = " << textLine << endl;
 
@@ -1992,7 +2002,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		{
 
 			QString textToReparse = clearComments( getText( startLine, startColumn, line, showArguments ? nCol : column ) );
-			
+
  			kdDebug(9007) << "-------------> reparse text" << endl << textToReparse << endl
  			             << "--------------------------------------------" << endl;
 
@@ -2056,7 +2066,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 							int idx = expr.length() - 1;
 							while ( expr[ idx ].isLetterOrNumber() || expr[ idx ] == '_' )
 								--idx;
-	
+
 							if ( idx != int( expr.length() ) - 1 )
 							{
 								++idx;
@@ -2091,14 +2101,14 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 					if( currentFunction ) {
 						scope = currentFunction->scope();
 						if( !scope.isEmpty() ) {
-							//scope.pop_back(); 
+							//scope.pop_back();
 						} else {
 							kdDebug( 9007 ) << "scope is empty" << endl;
 						}
 					} else {
 						scope += nested;
 					}
-					
+
 					if ( !scope.isEmpty() )
 					{
 						SimpleType parentType = SimpleType( scope.join("::") );
@@ -2106,71 +2116,68 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 						this_type->setPointerDepth( 1 );
 						ctx->setContainer( this_type );
 					}
-					
+
 					* ctx->container(); ///this is necessary, to make sure that the SimpleType is physically instatiated. Copying a not instatiated type will make changes made to the copy lost.
-					
+
 					SimpleType global = ctx->container();
-					
+
 					while( global.scope().size() != 0 ) {
 						if( !safetyCounter ) break;
 						global = global->parent();
 					}
-					
-						
+
+
 						SimpleTypeNamespace* n = dynamic_cast<SimpleTypeNamespace*>( &(*global) );
 						if( !n ) {
-						kdDebug( 9007 ) << "the global namespace was not resolved correctly , real type: " << typeid(&(*global)).name() << endl;
-							return;
+						QString str = QString("the global namespace was not resolved correctly , real type: ") + typeid(&(*global)).name();
+							kdDebug( 9007 ) << str << endl;
+							m_pSupport->mainWindow() ->statusBar() ->message( str , 1000 );
 						} else {
-						
 							if( recoveryPoint ) {
 						///put the imports into the global namespace
 								for( QValueList<QStringList>::iterator it = recoveryPoint->imports.begin(); it != recoveryPoint->imports.end(); ++it ) {
 									kdDebug( 9007 ) << "inserting import " << *it << " into the global scole" << endl;
 									n->addAliasMap( "", (*it).join("::") );
 								}
-							
+
 							} else {
 								kdDebug( 9007 ) << "WARNING: no recovery-point, cannot use imports" << endl;
 							}
-							
+
 							n->addAliases(  m_pSupport->codeCompletionConfig()->namespaceAliases() );
-						}
-						
-					
-					conf.setGlobalNamespace( &(*global) );
-					
+							conf.setGlobalNamespace( &(*global) );
+
 					///Now locate the local type using the imported namespaces
-					if ( !scope.isEmpty() )
-					{
-						TypeDesc td = ctx->container()->desc();
-						td.makePrivate();
-						td.resetResolved( );
-						TypePointer tt = ctx->container()->locateDecType( td, SimpleTypeImpl::LocateBase )->resolved();
-						if( tt ) {
-							ctx->setContainer( SimpleType( tt ) );
-						} else {
-							kdDebug( 9007 ) << "could not resolve local this-type \"" << td.fullNameChain() << "\"" << endl;
+							if ( !scope.isEmpty() )
+							{
+								TypeDesc td = ctx->container()->desc();
+								td.makePrivate();
+								td.resetResolved( );
+								TypePointer tt = ctx->container()->locateDecType( td, SimpleTypeImpl::LocateBase )->resolved();
+								if( tt ) {
+									ctx->setContainer( SimpleType( tt ) );
+								} else {
+									kdDebug( 9007 ) << "could not resolve local this-type \"" << td.fullNameChain() << "\"" << endl;
+								}
+
+								SimpleType this_type = ctx->container();
+
+								this_type->setPointerDepth( 1 );
+
+								SimpleVariable var;
+								var.type = this_type->desc();
+								var.name = "this";
+								var.comment = this_type->comment();
+								ctx->add( var );
+								ctx->setContainer( this_type );
+							} else {
+								this_type = global;
+							}
+
+							ExpressionInfo exp( expr );
+							exp.t = (ExpressionInfo::Type) (ExpressionInfo::NormalExpression | ExpressionInfo::TypeExpression);
+							type = evaluateExpression( exp, ctx );
 						}
-						
-						SimpleType this_type = ctx->container();
-						
-						this_type->setPointerDepth( 1 );
-						
-						SimpleVariable var;
-						var.type = this_type->desc();
-						var.name = "this";
-						var.comment = this_type->comment();
-						ctx->add( var );
-						ctx->setContainer( this_type );
-					} else {
-						this_type = global;
-					}
-					
-					
-					ExpressionInfo exp( expr );
-					exp.t = (ExpressionInfo::Type) (ExpressionInfo::NormalExpression | ExpressionInfo::TypeExpression);
-					type = evaluateExpression( exp, ctx );
 				}
 			}
 			else
@@ -2200,9 +2207,9 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 				ClassSpecifierAST * clazz = static_cast<ClassSpecifierAST*>( recoveredTypeSpec.get() );
 
 				QString keyword = getText( line, 0, line, column ).simplifyWhiteSpace();
-	
+
 				kdDebug(9007) << "===========================> keyword is: " << keyword << endl;
-	
+
 				if ( keyword == "virtual" )
 				{/*
 					BaseClauseAST *baseClause = clazz->baseClause();
@@ -2210,16 +2217,16 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 					{
 						QPtrList<BaseSpecifierAST> baseList = baseClause->baseSpecifierList();
 						QPtrList<BaseSpecifierAST>::iterator it = baseList.begin();
-	
+
 						for ( ; it != baseList.end(); ++it )
 							type.append( ( *it )->name()->text() );
-						
+
 						ctx = new SimpleContext();
-						
+
 						showArguments = false;
 						m_completionMode = VirtualDeclCompletion;
-	
-						kdDebug(9007) << "------> found virtual keyword for class specifier '" 
+
+						kdDebug(9007) << "------> found virtual keyword for class specifier '"
 									<< clazz->text() << "'" << endl;
 					}*/
 				}
@@ -2311,7 +2318,6 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 			}
 		}
 	}
-	m_pSupport->backgroundParser() ->unlock();
 
 	if ( !ctx )
 		return ;
@@ -2327,9 +2333,9 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 	if ( !showArguments )
 	{
 		QValueList<CodeCompletionEntry> entryList;
-		
+
 		if( !type && invokedOnDemand && this_type && ( expr.isEmpty() || expr.endsWith(";")) ) {
-			
+
 			QValueList<SimpleType> tstack;
 			SimpleType t = this_type;
 			bool ready = false;
@@ -2353,16 +2359,16 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 			kdDebug( 9007 ) << "listing members of local class " << this_type->fullType() << endl;
 			computeCompletionEntryList( entryList, ctx, isInstance );
 			computeCompletionEntryList( this_type, entryList, this_type->scope(), isInstance );*/
-			
+
 		} else if ( type->resolved() && expr.isEmpty() )
 		{
 			computeCompletionEntryList( entryList, ctx, isInstance );
-			
+
 // 			if ( m_pSupport->codeCompletionConfig() ->includeGlobalFunctions() )
 // 				computeCompletionEntryList( type, entryList, QStringList(), false );
 
 			computeCompletionEntryList( type, entryList, QStringList(), false );
-			
+
 			if ( this_type.scope().size() )
 				computeCompletionEntryList( this_type, entryList, this_type.scope(), isInstance );
 			computeCompletionEntryList( type, entryList,  type->resolved()->scope() , isInstance );
@@ -2406,7 +2412,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		{
 			entryList = unique( entryList );
 			qHeapSort( entryList );
-			
+
 			m_bCompletionBoxShow = true;
 			///Warning: the conversion is only possible because CodeCompletionEntry is binary compatible with KTextEditor::CompletionEntry,
 			///never change that!
@@ -2418,9 +2424,9 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		QValueList<QStringList> signatureList;
 
 		signatureList = computeSignatureList( type );
-		
+
 		QString methodName = type->name();
-		
+
 		///Search for variables with ()-operator in the context
 		if( ctx ) {
 			SimpleVariable var = ctx->findVariable( methodName );
@@ -2436,11 +2442,11 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		do {
 			if( !t ) ready = true;
 			SimpleType method = t->typeOf( methodName );
-			if( method ) 
+			if( method )
 				signatureList += computeSignatureList( method );
 			if( t ) t = t->parent();
 		} while( !ready && s );
-		
+
 		if ( !signatureList.isEmpty() )
 		{
 			//signatureList = unique( signatureList );
@@ -2457,30 +2463,30 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 QValueList<QStringList> CppCodeCompletion::computeSignatureList( EvaluationResult result ) {
 	SimpleType type = result;
-	
+
 	if( result.expr.t == ExpressionInfo::TypeExpression )
 		type = type->typeOf( result->name(), SimpleTypeImpl::MemberInfo::Function ); ///Compute the signature of the constructor
-	
+
 	QValueList<QStringList> retList;
 	SimpleTypeFunctionInterface* f = type->asFunction();
 	SimpleType currType = type;
-	
+
 	if( !f && !type->isNamespace() ) {
 		SimpleType t = type->typeOf( "operator ( )", SimpleTypeImpl::MemberInfo::Function );
-		
+
 		if( t ) {
 			f = t->asFunction();
 			currType = t;
 		}
 	}
-	
+
 	while( f ) {
 		QStringList lst;
 		QString sig = buildSignature( currType.get() );
 		QString comment = currType->comment();
 		QStringList commentList;
 		if( m_pSupport->codeCompletionConfig()->showCommentWithArgumentHint() ) {
-		    	
+
 			if( !comment.isEmpty() ) {
 				if( sig.length() + comment.length() < 130 ) {
 				sig += ":  \"" + currType->comment() + "\"";
@@ -2489,14 +2495,14 @@ QValueList<QStringList> CppCodeCompletion::computeSignatureList( EvaluationResul
 				}
 			}
 		}
-		
+
 		lst << sig;
 		lst += commentList;
-		
+
 		currType = f->nextFunction();
-		
+
 			///Maybe try to apply implicit template-params in this place
-		
+
 		retList << lst;
 		f = currType->asFunction();
 	}
@@ -2524,14 +2530,14 @@ SimpleType CppCodeCompletion::typeName( QString str )
 	if ( str.isEmpty() )
 		return QStringList();
 	/*
-	
+
 	if( str.contains("::" ) ) {
 		///Build a chain with corrent parents
 		QStringList l = splitType( str );
 		if( l.count() > 1 ) {
 			SimpleType current;
 			QStringList cScope;
-			
+
 			for( QStringList::iterator it = l.begin(); it != l.end(); ++it ) {
 				SimpleType old = current;
 				current = typeName( *it );
@@ -2543,16 +2549,16 @@ SimpleType CppCodeCompletion::typeName( QString str )
 			return current;
 		}
 	}*/
-	
+
 	if( str.startsWith( "typename " ) ) {
 		str = str.right( str.length() - strlen( "typename " ) );
 	}
-	
+
 	Driver d;
 	Lexer lex( &d );
 	lex.setSource( str );
 	Parser parser( &d, &lex );
-	
+
 	TypeSpecifierAST::Node typeSpec;
 	if ( parser.parseTypeSpecifier( typeSpec ) )
 	{
@@ -2605,7 +2611,7 @@ SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, i
 					++it;
 
 					SimpleVariable var;
-					
+
 					QStringList ptrList;
 					QPtrList<AST> ptrOpList = param->declarator()->ptrOpList();
 					QPtrList<AST>::iterator it = ptrOpList.begin();
@@ -2613,14 +2619,14 @@ SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, i
 					{
 						ptrList.append( ( *it )->text() );
 					}
-					
+
 					var.ptrList = ptrList;
 					var.type = param->typeSpec() ->text() + ptrList.join("");
 					var.name = declaratorToString( param->declarator(), QString::null, true );
 					var.comment = param->comment();
 					param->getStartPosition( &var.startLine, &var.startCol );
 					param->getEndPosition( &var.endLine, &var.endCol );
-					
+
 					if ( var.type )
 					{
 						ctx->add( var );
@@ -2631,14 +2637,14 @@ SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, i
 		}
 	}
 
-	
+
 	if ( ast )
 		computeContext( ctx, ast->functionBody(), line, col );
-	
+
 	if( ctx ) {
 		ctx->offset( lineOffset, colOffset );
 	}
-	
+
 	return ctx;
 }
 
@@ -2682,7 +2688,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, StatementListAST* a
 {
 	if ( !inContextScope( ast, line, col, false, true ) )
 		return;
-	
+
 	QPtrList<StatementAST> l( ast->statementList() );
 	QPtrListIterator<StatementAST> it( l );
 	while ( it.current() )
@@ -2698,7 +2704,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, IfStatementAST* ast
 {
 	if ( !inContextScope( ast, line, col ) )
 		return;
-	
+
 	computeContext( ctx, ast->condition(), line, col );
 	computeContext( ctx, ast->statement(), line, col );
 	computeContext( ctx, ast->elseStatement(), line, col );
@@ -2708,7 +2714,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, ForStatementAST* as
 {
 	if ( !inContextScope( ast, line, col ) )
 		return;
-	
+
 	computeContext( ctx, ast->initStatement(), line, col );
 	computeContext( ctx, ast->condition(), line, col );
 	computeContext( ctx, ast->statement(), line, col );
@@ -2718,7 +2724,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DoStatementAST* ast
 {
 	if ( !inContextScope( ast, line, col ) )
 		return;
-	
+
 	//computeContext( ctx, ast->condition(), line, col );
 	computeContext( ctx, ast->statement(), line, col );
 }
@@ -2727,7 +2733,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, WhileStatementAST* 
 {
 	if ( !inContextScope( ast, line, col ) )
 		return;
-	
+
 	computeContext( ctx, ast->condition(), line, col );
 	computeContext( ctx, ast->statement(), line, col );
 }
@@ -2736,7 +2742,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, SwitchStatementAST*
 {
 	if ( !inContextScope( ast, line, col ) )
 		return;
-	
+
 	computeContext( ctx, ast->condition(), line, col );
 	computeContext( ctx, ast->statement(), line, col );
 }
@@ -2745,7 +2751,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, TryBlockStatementAS
 {
 	if ( !inContextScope( ast, line, col ) )
 		return;
-	
+
 	computeContext( ctx, ast->statement(), line, col );
 	computeContext( ctx, ast->catchStatementList(), line, col );
 }
@@ -2754,14 +2760,14 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, CatchStatementListA
 {
 	/*if ( !inContextScope( ast, line, col, false, true ) )
 		return;*/
-	
+
 	QPtrList<CatchStatementAST> l( ast->statementList() );
 	QPtrListIterator<CatchStatementAST> it( l );
 	while ( it.current() )
 	{
 		CatchStatementAST * stmt = it.current();
 		++it;
-		
+
 		computeContext( ctx, stmt, line, col );
 	}
 }
@@ -2771,7 +2777,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, CatchStatementAST* 
 	if( !ast->statement() ) return;
 	if ( !inContextScope( ast->statement(), line, col ) )
 		return;
-	
+
 	computeContext( ctx, ast->condition(), line, col );
 	computeContext( ctx, ast->statement(), line, col );
 }
@@ -2783,7 +2789,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
 
 	if ( !inContextScope( ast, line, col, true, false ) )
 		return;
-	
+
 	SimpleDeclarationAST* simpleDecl = static_cast<SimpleDeclarationAST*>( ast->declaration() );
 	TypeSpecifierAST* typeSpec = simpleDecl->typeSpec();
 
@@ -2801,7 +2807,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
 		if ( d->declaratorId() )
 		{
 			SimpleVariable var;
-			
+
 			QStringList ptrList;
 			QPtrList<AST> ptrOpList = d->ptrOpList();
 			QPtrList<AST>::iterator it = ptrOpList.begin();
@@ -2809,14 +2815,14 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
 			{
 				ptrList.append( ( *it )->text() );
 			}
-			
+
 			var.ptrList = ptrList;
 			var.type = typeSpec->text() + ptrList.join("");
 			var.name = toSimpleName( d->declaratorId() );
 			var.comment = d->comment();
 			d->getStartPosition( &var.startLine, &var.startCol );
 			d->getEndPosition( &var.endLine, &var.endCol );
-			
+
 			ctx->add( var );
 			//kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
 		}
@@ -2830,9 +2836,9 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, ConditionAST* ast, 
 
 	if ( !inContextScope( ast, line, col, true, false ) )
 		return;
-	
+
 	SimpleVariable var;
-	
+
 	QStringList ptrList;
 	QPtrList<AST> ptrOpList = ast->declarator()->ptrOpList();
 	QPtrList<AST>::iterator it = ptrOpList.begin();
@@ -2840,7 +2846,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, ConditionAST* ast, 
 	{
 		ptrList.append( ( *it )->text() );
 	}
-	
+
 	var.ptrList = ptrList;
 	var.type = ast->typeSpec() ->text() + ptrList.join("");
 	var.name = toSimpleName( ast->declarator() ->declaratorId() );
@@ -2857,33 +2863,33 @@ bool CppCodeCompletion::inContextScope( AST* ast, int line, int col, bool checkS
 	int endLine, endColumn;
 	ast->getStartPosition( &startLine, &startColumn );
 	ast->getEndPosition( &endLine, &endColumn );
-	
+
 // 	kdDebug(9007) << k_funcinfo << endl;
 // 	kdDebug(9007) << "current char line: " << line << " col: " << col << endl;
-// 	
+//
 // 	kdDebug(9007) << nodeTypeToString( ast->nodeType() )
 // 		<< " start line: " << startLine
 // 		<< " col: " << startColumn << endl;
 // 	kdDebug(9007) << nodeTypeToString( ast->nodeType() )
 // 		<< " end line: " << endLine
 // 		<< " col: " << endColumn << endl;
-	
+
 	bool start = line > startLine || ( line == startLine && col >= startColumn );
 	bool end = line < endLine || ( line == endLine && col <= endColumn );
-	
+
 	if ( checkStart && checkEnd  )
 		return start && end;
 	else if ( checkStart )
 		return start;
 	else if ( checkEnd )
 		return end;
-	
+
 	return false;
 }
 
 FunctionDefinitionAST * CppCodeCompletion::functionDefinition( AST* node )
 {
-	
+
 	while ( node )
 	{
 		if ( node->nodeType() == NodeType_FunctionDefinition )
@@ -2988,7 +2994,7 @@ QString commentFromItem( const SimpleType& parent, const ItemDom& item )
 		}
 
 	}
-	
+
 	if( item->isFunction() || item->isFunctionDefinition() ) {
 		const FunctionModel* f = dynamic_cast<const FunctionModel*>( item.data() );
 		ret += "\nKind: Function";
@@ -3004,7 +3010,7 @@ QString commentFromItem( const SimpleType& parent, const ItemDom& item )
 
 			if( !state.isEmpty() )
 				ret += "\nModifiers: " + state;
-			
+
 			ret += "\nAccess: " + codeModelAccessToString( (CodeModelItem::Access)f->access() );
 		}
 	}
@@ -3015,7 +3021,7 @@ QString commentFromItem( const SimpleType& parent, const ItemDom& item )
 		if( f ) {
 			if( !f->value().isEmpty() )
 				ret += "\nValue: " + f->value();
-			
+
 			//ret += "\nAccess: " + codeModelAccessToString( f->() );
 		}
 	} else {
@@ -3043,7 +3049,7 @@ QString commentFromItem( const SimpleType& parent, const ItemDom& item )
 			ret += "\nType: " + t->type();
 		}
 	}
-		
+
 	ret += QString( "\nFile: %1\nLine: %2 Column: %3").arg( prepareTextForMenu( item->fileName(), 3, MAXCOMMENTCOLUMNS ).join("\n") ).arg( line ).arg( col );
 	if( !item->comment().isEmpty() )
 		ret += "\n\n" + prepareTextForMenu( item->comment(), 3, MAXCOMMENTCOLUMNS ).join("\n");
@@ -3072,15 +3078,15 @@ QString commentFromTag( const SimpleType& parent, Tag& tag ) {
 					ret + " = " + (*it)->value();
 				}
 		}
-			
+
 		ret += "\n\nAccess: " + codeModelAccessToString( (CodeModelItem::Access)en->access() );
 		} else {
 		}
 	}*/
-	
+
 	if( tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_FunctionDeclaration ) {
 		CppFunction<Tag> function( tag );
-		
+
 		ret += "\nKind: Function";
 
 		QString state;
@@ -3092,17 +3098,17 @@ QString commentFromTag( const SimpleType& parent, Tag& tag ) {
 		if( function.isSignal() ) state += "signal ";
 		if( !state.isEmpty() )
 			ret += "\nModifiers: " + state;
-	
+
 		ret += "\nAccess: " + TagUtils::accessToString( function.access() );
 	}
-	
+
 	/*if( item->isEnumerator() ) {
 		EnumeratorModel* f = dynamic_cast<EnumeratorModel*>( item.data() );
 	ret += "\nKind: Enumerator";
 		if( f ) {
 			if( !f->value().isEmpty() )
 				ret += "\nValue: " + f->value();
-			
+
 			//ret += "\nAccess: " + codeModelAccessToString( f->() );
 		}
 	} else {
@@ -3117,21 +3123,21 @@ QString commentFromTag( const SimpleType& parent, Tag& tag ) {
 
 	if( tag.kind() == Tag::Kind_Enum ) {
 		CppVariable<Tag> var( tag );
-		
+
 		ret += "\nKind: Enum";
 	}
 
 	if( tag.kind() == Tag::Kind_Enumerator ) {
 		CppVariable<Tag> var( tag );
-		
+
 		ret += "\nKind: Enumerator";
 		if( tag.hasAttribute( "enum" ) && tag.attribute( "enum" ).asString() != "int" )
 			ret += "\nEnum: " + tag.attribute( "enum" ).asString();
 	}
-	
+
 	if( tag.kind() == Tag::Kind_Variable ) {
 		CppVariable<Tag> var( tag );
-		
+
 		ret += "\nKind: Variable";
 		if( var.isStatic() ) ret += "\nModifiers: static";
 		ret += "\nAccess: " + TagUtils::accessToString( var.access() );
@@ -3141,7 +3147,7 @@ QString commentFromTag( const SimpleType& parent, Tag& tag ) {
 		ret += "\nKind: Typedef";
 	ret += "\nType: " + tagType( tag );
 	}
-	
+
 	ret += QString( "\nFile: %1\nLine: %2 Column: %3").arg( prepareTextForMenu( tag.fileName(), 3, MAXCOMMENTCOLUMNS ).join("\n") ).arg( line ).arg( col );
 	if( !tag.comment().isEmpty() ) {
 		ret += "\n\n" + prepareTextForMenu( tag.comment(), 20, MAXCOMMENTCOLUMNS ).join("\n");
@@ -3153,12 +3159,12 @@ QString commentFromTag( const SimpleType& parent, Tag& tag ) {
 void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList< CodeCompletionEntry > & entryList, const QStringList & type, bool isInstance, int depth  )
 {
 	dbgState.setState( disableVerboseForCompletionList );
-	
+
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
 	CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
 	SimpleTypeImpl* m = &(*typeR) ;
-	
+
 	if ( dynamic_cast<SimpleTypeCodeModel*>(m) )
 	{
 		ItemDom item = ( dynamic_cast<SimpleTypeCodeModel*>(m) )->item();
@@ -3206,7 +3212,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 		            args << Catalog::QueryArgument( "prefix", fullname.left(2) );*/
 		args << Catalog::QueryArgument( "name", fullname );
 
-		
+
 		QValueList<SimpleTypeImpl::LocateResult> parents = typeR->getBases();
 		for ( QValueList<SimpleTypeImpl::LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it )
 		{
@@ -3224,10 +3230,10 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
 	QString className = type->desc().name();
-	
+
 	CompTypeProcessor proc( type, m_pSupport->codeCompletionConfig()->processFunctionArguments() && type->usingTemplates() );
 	bool resolve =  m_pSupport->codeCompletionConfig()->processPrimaryTypes() && type->usingTemplates();
-	
+
 	QValueList<Tag>::Iterator it = tags.begin();
 	while ( it != tags.end() )
 	{
@@ -3235,7 +3241,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		++it;
 
 		int subSorting = 0;
-		
+
 		if ( tag.name().isEmpty() )
 		{
 			continue;
@@ -3260,13 +3266,13 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			if( info.isVirtual() ) subSorting = 4;
 			if( info.isStatic() ) subSorting = 5;
 		}
-		
+
 		CodeCompletionEntry e = CodeInformationRepository::toEntry( tag, m_completionMode, &proc );
-			
+
 		TagFlags fl;
 		fl.flags = tag.flags();
 		int num = fl.data.access;
-		
+
 		QString str = "public";
 		if( num != 0 ) {
 			str = TagUtils::accessToString( num );
@@ -3274,7 +3280,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			num = 0;
 		}
 		// 0 = protected, 1 = public, 2 = private
-		
+
 		if( str == "public" )
 			num = 0;
 		else if( str == "protected" )
@@ -3314,14 +3320,14 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 
 		if( m_completionMode != SignalCompletion ) {
 			if( !type->isNamespace() ) {
-				if( num == 1 ) 
+				if( num == 1 )
 					e.postfix += ";   (protected)";// in " + proc.parentType() + ")";
-				if( num == 2 ) 
+				if( num == 2 )
 					e.postfix += ";   (private)";// in " + proc.parentType() + ")";
 			}
 		}
-		
-		
+
+
 		QString prefix = tagType( tag ).stripWhiteSpace();
 
 		if( tag.kind() == Tag::Kind_Enumerator && tag.hasAttribute( "enum" ) ) {
@@ -3330,12 +3336,12 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		} else if( tag.kind() == Tag::Kind_Enum ) {
 			prefix = "enum";
 		} else {
-		
+
 		if((tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_Variable || tag.kind() == Tag::Kind_Typedef))
 		{
 			if( !prefix.isEmpty() && resolve ) {
 				SimpleTypeImpl::LocateResult et =  type->locateDecType( prefix );
-				
+
 				if( et )
 					prefix = et->fullNameChain();
 			}
@@ -3343,7 +3349,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		}
 
 		e.comment = commentFromTag( type, tag );
-		
+
 		if( e.prefix.isEmpty() )
 			e.prefix = prefix;
 		else
@@ -3351,7 +3357,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 				e.prefix+= " " + prefix;
 
 		e.prefix = stringMult( depth, "  " ) + e.prefix.stripWhiteSpace();
-		
+
 		if( str != "private" )
 			entryList << e;
 	}
@@ -3361,7 +3367,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
-	
+
 	computeCompletionEntryList( type, entryList, klass->functionList(), isInstance, depth );
 	if ( m_completionMode == NormalCompletion )
 		computeCompletionEntryList( type, entryList, klass->variableList(), isInstance, depth );
@@ -3370,7 +3376,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	for ( QValueList<SimpleTypeImpl::LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it )
 	{
 		if( !(*it)->resolved() ) continue;
-		
+
 		SimpleTypeImpl* i = (*it)->resolved();;
 		SimpleTypeCodeModel* m = dynamic_cast<SimpleTypeCodeModel*> ( i );
 		if( m ) {
@@ -3387,7 +3393,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
-	
+
 	CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
 
 // 	if ( cfg->includeGlobalFunctions() )
@@ -3410,7 +3416,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
-	
+
 	CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
 
 	ClassList::ConstIterator it = lst.begin();
@@ -3426,7 +3432,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		entry.comment = klass->comment();
 		entry.userdata = QString("000");
 		entryList << entry;
-		
+
 
 // 		if ( cfg->includeTypes() )
 		{
@@ -3439,7 +3445,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
-	
+
 	NamespaceList::ConstIterator it = lst.begin();
 	while ( it != lst.end() )
 	{
@@ -3460,11 +3466,11 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
 	QString className = type->desc().name();
-	
+
 	bool resolve = type->usingTemplates() && m_pSupport->codeCompletionConfig()->processPrimaryTypes();
-	
+
 	CompTypeProcessor proc( type, m_pSupport->codeCompletionConfig()->processFunctionArguments() && type->usingTemplates() );
-	
+
 	FunctionList::ConstIterator it = methods.begin();
 	while ( it != methods.end() )
 	{
@@ -3481,9 +3487,9 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			continue;
 
 		CodeCompletionEntry entry;
-		
+
 		entry.comment = commentFromItem( type, model_cast<ItemDom>(meth) );
-		
+
 		if( ! resolve ) {
 			entry.prefix = meth->resultType();
 		}else{
@@ -3512,9 +3518,9 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		}
 		else*/
 			entry.text = meth->name();
-		
+
 		entry.text += formattedOpeningParenthesis(args.size() == 0);
-		
+
 		while ( argIt != args.end() )
 		{
 			ArgumentDom arg = *argIt;
@@ -3541,9 +3547,9 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		if( meth->isSignal() ) subSorting = 3;
 		if( meth->isVirtual() ) subSorting = 4;
 		if( meth->isStatic() ) subSorting = 5;
-		
+
 		entry.userdata += QString("%1%2%3%4%5").arg( meth->access() ).arg( depth ).arg( className ).arg( 1 ).arg( subSorting );
-		
+
 		if ( m_completionMode == VirtualDeclCompletion )
 			entry.text += text + ";";
 		if ( m_completionMode != NormalCompletion )
@@ -3555,13 +3561,13 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			entry.postfix += " const";
 		if( m_completionMode != SignalCompletion ) {
 			if( !type->isNamespace() ) {
-				if( meth->access() == CodeModelItem::Protected ) 
+				if( meth->access() == CodeModelItem::Protected )
 					entry.postfix += "; (protected)"; // in " + type->fullType() + ")";
-				if( meth->access() == CodeModelItem::Private ) 
+				if( meth->access() == CodeModelItem::Private )
 					entry.postfix += "; (private)"; // in " + type->fullType() + ")";
 			}
 		}
-		
+
 		entryList << entry;
 	}
 }
@@ -3570,13 +3576,13 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 {
 	Debug d("#cel#");
 	QString className = type->desc().name();
-	
+
 	if( !safetyCounter || !d ) return;
-	
+
 	if ( m_completionMode != NormalCompletion )
 		return ;
 	bool resolve = type->usingTemplates() && m_pSupport->codeCompletionConfig()->processPrimaryTypes();
-	
+
 	VariableList::ConstIterator it = attributes.begin();
 	while ( it != attributes.end() )
 	{
@@ -3590,7 +3596,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		entry.text = attr->name();
 		entry.comment = commentFromItem( type, model_cast<ItemDom>(attr) );
 		entry.userdata += QString("%1%2%3%4").arg( attr->access() ).arg( depth ).arg( className ).arg( 2 );
-		
+
 
 		if( !attr->isEnumeratorVariable() ) {
 			if( ! resolve ) {
@@ -3599,7 +3605,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 				QString tt = attr->type();
 				SimpleTypeImpl::LocateResult t = type->locateDecType( tt );
 				//SimpleType t = type->typeOf( attr->name() );
-				if( t ) 
+				if( t )
 					entry.prefix = t->fullNameChain();
 				else
 					entry.prefix = attr->type();
@@ -3608,11 +3614,11 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			entry.prefix = attr->type();
 			entry.userdata += attr->type(); ///Sort enumerators by their enum
 		}
-		if( attr->access() == CodeModelItem::Protected ) 
+		if( attr->access() == CodeModelItem::Protected )
 			entry.postfix += "; (protected)";// in " + type->fullType() + ")";
-		if( attr->access() == CodeModelItem::Private ) 
+		if( attr->access() == CodeModelItem::Private )
 			entry.postfix += "; (private)";// in " + type->fullType() + ")";
-		
+
 		entry.prefix = stringMult( depth, "  " ) + entry.prefix.stripWhiteSpace();
 
 		entryList << entry;
@@ -3623,7 +3629,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< CodeCompletionEn
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
-	
+
 	while ( ctx )
 	{
 		QValueList<SimpleVariable> vars = ctx->vars();
@@ -3637,11 +3643,11 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< CodeCompletionEn
 			entry.text = var.name;
 			entry.userdata = "000";
 			entryList << entry;
-			
+
 		}
 		ctx = ctx->prev();
 	}
-	
+
 }
 
 EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, SimpleContext* ctx )
@@ -3649,14 +3655,14 @@ EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, Sim
 	safetyCounter.init();
 
 	d->classNameList = typeNameList( m_pSupport->codeModel() );
-	
+
 	CppEvaluation::ExpressionEvaluation obj( this, expr, AllOperators, ctx );
-	
+
 	EvaluationResult res;
 	res = obj.evaluate();
-	
+
 	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Type of %1 is %2" ).arg( expr.expr() ).arg( res->fullNameChain() ), 1000 );
-	
+
 	return res;
 }
 
