@@ -14,7 +14,7 @@ email                : david.nolden.kdevelop@art-master.de
 #define __COMPLETIONDEBUG_H__
 
 ///With verbose shut on, the whole type-resolution-process is nicely traced for easy debugging(at cost of speed).
-#define VERBOSE
+//#define VERBOSE
 #define VERBOSEMAJOR
 
 ///When defined, a backtrace is printed the first time the maximum depth is reached for the first time.
