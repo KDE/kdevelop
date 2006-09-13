@@ -635,7 +635,7 @@ QString SimpleTypeImpl::fullTypeUnresolvedWithScope( ) {
 	
 QString SimpleTypeImpl::fullTypeResolvedWithScope( int depth ) {
     Q_UNUSED(depth);
-    if( parent() ) {
+	if( !m_scope.isEmpty() && parent() ) {
       return parent()->fullTypeResolvedWithScope() + "::" + fullTypeResolved();
     } else {
       return fullTypeResolved();

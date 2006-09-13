@@ -93,11 +93,6 @@ void StoreWalker::parseNamespace( NamespaceAST* ast )
 	
 	NamespaceDom ns = findOrInsertNamespace( ast, nsName );
 
-	ns->setStartPosition( startLine, startColumn ); ///What would be nice: Store all appearances of a namespace in the NamespaceModel and allow browsing it through the context-menu
-	ns->setEndPosition( endLine, endColumn );
-	ns->setFileName( m_fileName );
-	ns->setComment( ast->comment() );
-	
 	m_currentScope.push_back( nsName );
 	m_currentNamespace.push( ns );
 	
@@ -726,6 +721,7 @@ NamespaceDom StoreWalker::findOrInsertNamespace( NamespaceAST* ast, const QStrin
 	ns->setName( name );
 	ns->setStartPosition( startLine, startColumn );
 	ns->setEndPosition( endLine, endColumn );
+	ns->setComment( ast->comment() );
 	
 	ns->setScope( m_currentScope );
 	
