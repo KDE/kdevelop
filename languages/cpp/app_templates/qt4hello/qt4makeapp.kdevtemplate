@@ -1,0 +1,41 @@
+# KDE Config File
+[General]
+Name=Basic Qt4 Application
+Icon=qt4hello.png
+Category=C++/QMake project
+Comment=Generate a very simple QMake/Qt4 based application (crossplatform compatible) - Needs Qt4
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/src/main.cpp,%{dest}/src/ReadMe
+Archive=qt4hello.tar.gz
+
+[FILE1]
+Type=install
+Source=%{src}/qt4hello.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/qt4hello.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE3]
+Type=install
+Source=%{src}/src.pro
+Dest=%{dest}/src/src.pro
+
+[FILE4]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/src/main.cpp
+
+Type=install
+Source=%{src}/ReadMe
+Dest=%{dest}/src/ReadMe
+
+[MSG]
+Type=message
+Comment=A Qt4/Qmake based application was created in %{dest}
