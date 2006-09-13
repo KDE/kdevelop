@@ -39,7 +39,7 @@ struct SafetyCounter {
     bool ret = safetyCounter < maxSafetyCounter;
 	  if( !ret ) {
 			if( safetyCounter == maxSafetyCounter ) {
-      	kdDebug( 9007) << "WARNING: Safety-depth-counter reached count > " << maxSafetyCounter << ", operation stopped" << endl;
+      	kdDebug( 9007) << "WARNING: Safety-counter reached count > " << maxSafetyCounter << ", operation stopped" << endl;
 		  	kdDebug( 9007 ) << endl << kdBacktrace() << endl;
 			}
 	  }

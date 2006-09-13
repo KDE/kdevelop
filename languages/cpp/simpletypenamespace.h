@@ -34,7 +34,7 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
     }
   
     ///empty name means an import
-    void addAliasMap( QString name, QString alias , bool recurse = true );
+    void addAliasMap( QString name, QString alias , bool recurse = true, bool symmetric = false );
   
     ///Takes a map of multiple aliases in form "A=B;C=D;....;" similar to the C++ "namespace A=B;" statement
     void addAliases( QString map );
@@ -46,8 +46,10 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
     AliasMap m_aliases;
   
   
-    void addScope( const QStringList& scope );
-  
+	void addScope( const QStringList& scope );
+
+	void addScope( const TypePointer& t );
+	
     friend class NamespaceBuildInfo;
   
     struct NamespaceBuildInfo : public TypeBuildInfo {
@@ -66,7 +68,9 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
     };
   
   protected:
-  
+
+	SimpleTypeImpl::MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type, std::set <QString>& ignore );
+		
     virtual bool hasNode() const;
   
     virtual bool isNamespace() const {
@@ -77,8 +81,10 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
   
     MemberInfo setupMemberInfo( TypeDesc& subName, QStringList tscope, QValueList<QStringList> imports = QValueList<QStringList>() );
   
-    QStringList locateNamespace( QString alias );
-  
+	QStringList locateNamespaceScope( QString alias );
+
+	TypePointer locateNamespace( QString alias );
+	
     void recurseAliasMap() ;
 };
 

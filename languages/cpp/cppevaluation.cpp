@@ -180,6 +180,7 @@ OperatorIdentification UnaryParenOperator::identify( QString& str ) {
   return ret;
 }
 
+
 EvaluationResult IndexOperator::unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) {
   if( param->pointerDepth() > 0 ) {
     param->decreasePointerDepth();
@@ -224,7 +225,7 @@ ExpressionEvaluation::ExpressionEvaluation( CppCodeCompletion* data, ExpressionI
 
 EvaluationResult ExpressionEvaluation::evaluate() {
   EvaluationResult res;
-  res = evaluateExpressionInternal( m_expr.expr(), m_ctx->global(), m_ctx, m_ctx, m_expr.canBeTypeExpression() );
+  res = evaluateExpressionInternal( m_expr.expr(), m_ctx->global(), m_ctx, m_ctx, /*m_expr.canBeTypeExpression() cannot be safely determined*/true );
   
   ExpressionInfo ex = res.expr; ///backup and set the type which was chosen while the evaluation-process
   res.expr = m_expr;
@@ -287,7 +288,7 @@ EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr,
       
       EvaluationResult left, right;
       if( !leftSide.isEmpty() ) {
-        left = evaluateExpressionInternal( leftSide, scope, ctx, innerCtx );
+	      left = evaluateExpressionInternal( leftSide, scope, ctx, innerCtx, lowest.op->canBeType( Operator::Left ) );
       } else {
         left = scope;
       }
@@ -297,7 +298,7 @@ EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr,
       }
       
       if( !rightSide.isEmpty() && (lowest.op->binding() & Operator::Right) )
-        right = evaluateExpressionInternal( rightSide, SimpleType(), ctx, innerCtx );
+	      right = evaluateExpressionInternal( rightSide, SimpleType(), ctx, innerCtx, lowest.op->canBeType( Operator::Right ) );
       
       if( !right && (lowest.op->binding() & Operator::Right) ) {
         ifVerboseMajor( dbgMajor() << "problem while evaluating expression \"" << expr << "\", the operator \"" << lowest.op->name() << "\" has a binding to the right side, but no right side could be evaluated: \"" << rightSide << "\"" << endl );
@@ -310,7 +311,7 @@ EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr,
       
       for( QValueList<QString>::iterator it = lowest.innerParams.begin(); it != lowest.innerParams.end(); ++it ) {
         ifVerboseMajor( dbgMajor() << "evaluating inner parameter \"" << *it << "\"" << endl );
-        innerParams << evaluateExpressionInternal( (*it), SimpleType(), innerCtx, innerCtx );
+	      innerParams << evaluateExpressionInternal( (*it), SimpleType(), innerCtx, innerCtx, lowest.op->canBeType( Operator::Neutral ) );
       }
       
       EvaluationResult applied = lowest.op->apply( params, innerParams );
@@ -324,8 +325,9 @@ EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr,
       }
       
       if( ! (lowest.op->binding() & Operator::Right) && !rightSide.isEmpty() ) {
-                    ///When the operator has no binding to the right, we should continue evaluating the right side, using the left type as scope.
-        return evaluateExpressionInternal( rightSide, applied, 0, innerCtx );
+				///When the operator has no binding to the right, we should continue evaluating the right side, using the left type as scope.
+	      ///Think about this.
+	      return evaluateExpressionInternal( rightSide, applied, 0, innerCtx, lowest.op->canBeType( Operator::Right ) );
       }
       
       return applied;
@@ -342,13 +344,12 @@ EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr,
 }
 
 /**This function needs a clean workover.
- * An atomic expression is one that only consists of a type-name, or a function- vor variable-name(may include '::')
+ * An atomic expression is one that only consists of a type-, function- or variable-name(may include '::')
  */
 EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QString expr, EvaluationResult scope, SimpleContext * ctx, bool canBeTypeExpression ) {
   LogDebug d( "#evt#");
   if( !safetyCounter || !d ) return SimpleType();
 	bool canBeItemExpression = true; ///To be implemented
-	canBeTypeExpression = true; ///Shut this always on for now
 
   ifVerboseMajor( dbgMajor() << "evaluateAtomicExpression(\"" << expr << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl );
 
