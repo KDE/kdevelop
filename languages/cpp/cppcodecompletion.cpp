@@ -314,7 +314,7 @@ struct PopupFillerHelpStruct {
   {
     QString txt;
 
-    if( d.resolved() && d.resolved()->isNamespace() ) return;
+	  if( d.resolved() && d.resolved()->isNamespace() ) return;
 
     if( d.resolved() && d.resolved()->hasNode() ) {
 	  QString n = d.resolved()->scope().join("::");
@@ -1713,7 +1713,6 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 
 			if( ctx ) {
 				opt = remFlag( opt, SearchInClasses );
-				conf.setGlobalNamespace( &(*ctx->global()) );
 				int startLine, endLine;
 				currentFunction->getStartPosition( &startLine, &endLine );
 				ExpressionInfo exp = findExpressionAt( line, column , startLine, endLine, true );
@@ -2322,12 +2321,14 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 	if ( !ctx )
 		return ;
 
-	if ( ch2 == "::" || expr.isEmpty() )
+	if ( ch2 == "::" )
 	{
-		isInstance = false;
+		QString str = clearComments( expr );
+		if( !str.contains( '.' ) && !str.contains( "->" ) ) ///Necessary, because the expression may also be like user->BaseUser::
+			isInstance = false;
 	}
 
-	kdDebug( 9007 ) << "===========================> type is: " << type->fullNameChain() << endl;
+	kdDebug( 9007 ) << "===========================> type is: " << type->fullNameChain() << ( type->resolved() ? " (resolved)" : " (unresolved)" ) << endl;
 	kdDebug( 9007 ) << "===========================> word is: " << word << endl;
 
 	if ( !showArguments )
@@ -2336,30 +2337,40 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 		if( !type && invokedOnDemand && this_type && ( expr.isEmpty() || expr.endsWith(";")) ) {
 
-			QValueList<SimpleType> tstack;
 			SimpleType t = this_type;
-			bool ready = false;
-			SafetyCounter cnt( 20 );
-			int depth = 0;
-			while( !ready & cnt ) {
-				if( t->scope().isEmpty() ) {
-					ready = true;
-				} else {
-					//	tstack.push_front( t );
-					computeCompletionEntryList( t, entryList, t->scope(), isInstance, depth );
-					t = t->parent();
-					depth++;
+			{
+				///First, all static data.
+				bool ready = false;
+				SafetyCounter cnt( 20 );
+				int depth = 0;
+				while( !ready & cnt ) {
+					if( t->scope().isEmpty() ) {
+						ready = true;
+					} else {
+						computeCompletionEntryList( t, entryList, t->scope(), false, depth );
+						t = t->parent();
+						depth++;
+					}
 				}
 			}
-			/*
-			while( !tstack.isEmpty() && cnt ){
-				computeCompletionEntryList( tstack.front(), entryList, tstack.front()->scope(), isInstance );
-				tstack.pop_front();
-			}//*//*
-			kdDebug( 9007 ) << "listing members of local class " << this_type->fullType() << endl;
-			computeCompletionEntryList( entryList, ctx, isInstance );
-			computeCompletionEntryList( this_type, entryList, this_type->scope(), isInstance );*/
-
+			{
+				///Now find non-static(if we have an instance) and global data
+				bool ready = false;
+				SafetyCounter cnt( 20 );
+				int depth = 0;
+				bool first = true;
+				while( !ready & cnt ) {
+					if( t->scope().isEmpty() ) {
+						ready = true;
+					} else {
+						if( t->isNamespace() || (first && isInstance ) )
+							computeCompletionEntryList( t, entryList, t->scope(), t->isNamespace() ? true : isInstance, depth );
+						t = t->parent();
+						depth++;
+						first = false;
+					}
+				}
+			}
 		} else if ( type->resolved() && expr.isEmpty() )
 		{
 			computeCompletionEntryList( entryList, ctx, isInstance );
@@ -3031,7 +3042,7 @@ QString commentFromItem( const SimpleType& parent, const ItemDom& item )
 				if( !f->isEnumeratorVariable() ) {
 					ret += "\nKind: Variable";
 					if( f->isStatic() )
-						ret += "Modifiers: static";
+						ret += "\nModifiers: static";
 				} else {
 					ret += "\nKind: Enumerator";
 					ret += "\nEnum: " + f->type();
@@ -3047,7 +3058,16 @@ QString commentFromItem( const SimpleType& parent, const ItemDom& item )
 		ret += "\nKind: Typedef";
 		if( t ) {
 			ret += "\nType: " + t->type();
+			LocateResult r = parent->locateDecType( t->type() );
+			if( r.desc().resolved() )
+				ret += "\nResolved type: " + r.desc().resolved()->fullTypeResolvedWithScope();
+			else
+				ret += "\nPartially resolved type: " + r.desc().fullNameChain();
 		}
+	}
+
+	if( item->isClass() ) {
+	ret += "\nKind: Class";
 	}
 
 	ret += QString( "\nFile: %1\nLine: %2 Column: %3").arg( prepareTextForMenu( item->fileName(), 3, MAXCOMMENTCOLUMNS ).join("\n") ).arg( line ).arg( col );
@@ -3145,9 +3165,21 @@ QString commentFromTag( const SimpleType& parent, Tag& tag ) {
 
 	if( tag.kind() == Tag::Kind_Typedef ) {
 		ret += "\nKind: Typedef";
-	ret += "\nType: " + tagType( tag );
+		ret += "\nType: " + tagType( tag );
+		LocateResult r = parent->locateDecType( tagType( tag ) );
+		if( r.desc().resolved() )
+			ret += "\nResolved type: " + r.desc().resolved()->fullTypeResolvedWithScope();
+		else
+			ret += "\nPartially resolved type: " + r.desc().fullNameChain();
 	}
 
+	if( tag.kind() == Tag::Kind_Class ) {
+		ret += "\nKind: Class";
+	}
+	if( tag.kind() == Tag::Kind_Struct ) {
+		ret += "\nKind: Struct";
+	}
+	
 	ret += QString( "\nFile: %1\nLine: %2 Column: %3").arg( prepareTextForMenu( tag.fileName(), 3, MAXCOMMENTCOLUMNS ).join("\n") ).arg( line ).arg( col );
 	if( !tag.comment().isEmpty() ) {
 		ret += "\n\n" + prepareTextForMenu( tag.comment(), 20, MAXCOMMENTCOLUMNS ).join("\n");
@@ -3155,6 +3187,18 @@ QString commentFromTag( const SimpleType& parent, Tag& tag ) {
 	return ret;
 };
 
+void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList<CodeCompletionEntry>& entryList, const QStringList& type, SimpleTypeNamespace* ns, std::set<SimpleTypeNamespace*>& ignore, bool isInstance, int depth  ) {
+	if( ignore.find( ns ) != ignore.end() ) return;
+	ignore.insert( ns  );
+	QValueList<SimpleType> slaves = ns->getSlaves();
+	for( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
+		SimpleTypeNamespace* nns = dynamic_cast<SimpleTypeNamespace*>( &(**it) );
+		if( !nns )
+			computeCompletionEntryList( *it, entryList, (*it)->scope(), isInstance, depth );
+		else
+			computeCompletionEntryList( (*it), entryList, (*it)->scope(), nns, ignore, isInstance, depth );
+	}
+}
 
 void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList< CodeCompletionEntry > & entryList, const QStringList & type, bool isInstance, int depth  )
 {
@@ -3165,13 +3209,16 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 	CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
 	SimpleTypeImpl* m = &(*typeR) ;
 
-	if ( dynamic_cast<SimpleTypeCodeModel*>(m) )
+	if ( SimpleTypeNamespace* ns = dynamic_cast<SimpleTypeNamespace*>(m) ) {
+		std::set<SimpleTypeNamespace*> ignore;
+		computeCompletionEntryList( type, entryList, type, ns, ignore, isInstance, depth );
+	} else if ( dynamic_cast<SimpleTypeCodeModel*>(m) )
 	{
 		ItemDom item = ( dynamic_cast<SimpleTypeCodeModel*>(m) )->item();
 		if( item)
 			if( ClassModel* mod = dynamic_cast<ClassModel*> (&(*item)) )
 				computeCompletionEntryList( typeR, entryList, ClassDom( mod ) , isInstance, depth );
-	} /*else*/ {
+	} else {
 		QValueList<Catalog::QueryArgument> args;
 		QValueList<Tag> tags;
 
@@ -3187,20 +3234,35 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 		tags = m_repository->query( args );
 		computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
 
-// 		if ( !isInstance && cfg->includeEnums() )
+ 		if ( !isInstance )
 		{
 			args.clear();
 			args << Catalog::QueryArgument( "kind", Tag::Kind_Enumerator )
 			<< Catalog::QueryArgument( "scope", type );
 			tags = m_repository->query( args );
 			computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
-		}
+			
+			args.clear();
+			args << Catalog::QueryArgument( "kind", Tag::Kind_Enum )
+				<< Catalog::QueryArgument( "scope", type );
+			tags = m_repository->query( args );
+			computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
 
-// 		if ( !isInstance && cfg->includeTypedefs() )
-		{
 			args.clear();
 			args << Catalog::QueryArgument( "kind", Tag::Kind_Typedef )
 			<< Catalog::QueryArgument( "scope", type );
+			tags = m_repository->query( args );
+			computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
+			
+			args.clear();
+			args << Catalog::QueryArgument( "kind", Tag::Kind_Class )
+				<< Catalog::QueryArgument( "scope", type );
+			tags = m_repository->query( args );
+			computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
+			
+			args.clear();
+			args << Catalog::QueryArgument( "kind", Tag::Kind_Struct )
+				<< Catalog::QueryArgument( "scope", type );
 			tags = m_repository->query( args );
 			computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
 		}
@@ -3225,7 +3287,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 }
 
 
-void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, QValueList< Tag > & tags, bool /*isInstance*/, int depth  )
+void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, QValueList< Tag > & tags, bool isInstance, int depth  )
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
@@ -3246,27 +3308,30 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		{
 			continue;
 		}
+
 		else if ( m_completionMode != NormalCompletion )
 		{
 			if ( tag.kind() != Tag::Kind_FunctionDeclaration )
 				continue;
+		}
 
+		if( tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_FunctionDeclaration ) {
 			CppFunction<Tag> info( tag );
-
+			
 			if ( m_completionMode == SlotCompletion && !info.isSlot() )
 				continue;
 			else if ( m_completionMode == SignalCompletion && !info.isSignal() )
 				continue;
 			else if ( m_completionMode == VirtualDeclCompletion && !info.isVirtual() )
 				continue;
-
+			
 			if( info.isConst() ) subSorting = 1;
 			if( info.isSlot() ) subSorting = 2;
 			if( info.isSignal() ) subSorting = 3;
 			if( info.isVirtual() ) subSorting = 4;
 			if( info.isStatic() ) subSorting = 5;
 		}
-
+		
 		CodeCompletionEntry e = CodeInformationRepository::toEntry( tag, m_completionMode, &proc );
 
 		TagFlags fl;
@@ -3294,25 +3359,31 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		{
 		case Tag::Kind_Enum:
 			sortPosition = 3;
+			if( isInstance ) continue;
 			break;
 		case Tag::Kind_Enumerator:
 			sortPosition = 4;
+			if( isInstance ) continue;
 			break;
 		case Tag::Kind_Struct:
 		case Tag::Kind_Union:
 		case Tag::Kind_Class:
 			sortPosition = 5;
+			if( isInstance ) continue;
 			break;
 		case Tag::Kind_VariableDeclaration:
 		case Tag::Kind_Variable:
 			sortPosition = 2;
+			if( !isInstance && !CppVariable<Tag>( tag ).isStatic() ) continue;
 			break;
 		case Tag::Kind_FunctionDeclaration:
 		case Tag::Kind_Function:
 			sortPosition = 1;
+			if( !isInstance && !CppFunction<Tag>( tag ).isStatic() ) continue;
 			break;
 		case Tag::Kind_Typedef:
 			sortPosition = 6;
+			if( isInstance ) continue;
 			break;
 		}
 
@@ -3337,15 +3408,24 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			prefix = "enum";
 		} else {
 
-		if((tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_Variable || tag.kind() == Tag::Kind_Typedef))
-		{
-			if( !prefix.isEmpty() && resolve ) {
-				SimpleTypeImpl::LocateResult et =  type->locateDecType( prefix );
-
-				if( et )
-					prefix = et->fullNameChain();
+			if((tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_Variable ))
+			{
+				if( !prefix.isEmpty() && resolve ) {
+					SimpleTypeImpl::LocateResult et =  type->locateDecType( prefix );
+	
+					if( et )
+						prefix = et->fullNameChain();
+				}
 			}
-		}
+			
+			if( tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function ) {
+				if( prefix.isEmpty() && tag.name() == className ) {
+					prefix = "constructor";
+				}
+			}
+
+			if( tag.kind() == Tag::Kind_Class || tag.kind() == Tag::Kind_Function )
+				prefix = "";
 		}
 
 		e.comment = commentFromTag( type, tag );
@@ -3353,11 +3433,13 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		if( e.prefix.isEmpty() )
 			e.prefix = prefix;
 		else
-			if( !prefix.isEmpty() )
-				e.prefix+= " " + prefix;
+			e.prefix+= " " + prefix;
 
+		e.prefix = e.prefix.stripWhiteSpace();
 		e.prefix = stringMult( depth, "  " ) + e.prefix.stripWhiteSpace();
 
+		e.text = e.text.stripWhiteSpace();
+		
 		if( str != "private" )
 			entryList << e;
 	}
@@ -3411,6 +3493,12 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	if ( m_completionMode == NormalCompletion )
 		computeCompletionEntryList( type, entryList, klass->variableList(), isInstance, depth );
 
+	if ( !isInstance )
+	{
+		computeCompletionEntryList( klass->name(), type, entryList, klass->classList(), isInstance, depth );
+		computeCompletionEntryList( klass->name(), type, entryList, klass->typeAliasList(), isInstance, depth );
+	}
+	
 	QValueList<SimpleTypeImpl::LocateResult> parents = type->getBases();
 	for ( QValueList<SimpleTypeImpl::LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it )
 	{
@@ -3435,23 +3523,12 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 
 	CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
 
-// 	if ( cfg->includeGlobalFunctions() )
-	{
-		computeCompletionEntryList( type, entryList, scope->functionList(), isInstance, depth );
-
-		if ( m_completionMode == NormalCompletion )
-			computeCompletionEntryList( type, entryList, scope->variableList(), isInstance, depth );
-	}
-
-// 	if ( !isInstance && cfg->includeTypes() )
-	if ( !isInstance )
-	{
-		computeCompletionEntryList( type, entryList, scope->classList(), isInstance, depth );
+	computeCompletionEntryList( type, entryList, ClassDom(scope.data()), isInstance, depth );
+	if( !isInstance )
 		computeCompletionEntryList( type, entryList, scope->namespaceList(), isInstance, depth );
-	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, const ClassList & lst, bool isInstance, int depth )
+void CppCodeCompletion::computeCompletionEntryList( QString parent, SimpleType type, QValueList< CodeCompletionEntry > & entryList, const ClassList & lst, bool isInstance, int depth )
 {
 	Debug d("#cel#");
 	if( !safetyCounter || !d ) return;
@@ -3468,18 +3545,43 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		entry.prefix = "class";
 		entry.prefix = stringMult( depth, "  " ) + entry.prefix.stripWhiteSpace();
 		entry.text = klass->name();
-		entry.comment = klass->comment();
-		entry.userdata = QString("000");
+		entry.comment = commentFromItem( type, klass.data() );
+		if( isInstance ) continue;
+
+		entry.userdata = QString("%1%2%3%4%5").arg( CodeModelItem::Public ).arg( depth ).arg( parent ).arg( 6 );
+	
 		entryList << entry;
 
 
 // 		if ( cfg->includeTypes() )
-		{
+		/*{
 			computeCompletionEntryList( type, entryList, klass->classList(), isInstance, depth );
-		}
+		}*/
 	}
 }
 
+void CppCodeCompletion::computeCompletionEntryList( QString parent, SimpleType type, QValueList< CodeCompletionEntry > & entryList, const TypeAliasList & lst, bool isInstance, int depth )
+{
+	Debug d("#cel#");
+	if( !safetyCounter || !d ) return;
+	
+	CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
+	
+	TypeAliasList::ConstIterator it = lst.begin();
+	while ( it != lst.end() )
+	{
+		TypeAliasDom klass = *it;
+		++it;
+		
+		CodeCompletionEntry entry;
+		entry.prefix = "typedef " + klass->type();
+		entry.prefix = stringMult( depth, "  " ) + entry.prefix.stripWhiteSpace();
+		entry.text = klass->name();
+		entry.comment = commentFromItem( type, klass.data() );
+		entry.userdata = QString("%1%2%3%4%5").arg( CodeModelItem::Public ).arg( depth ).arg( parent ).arg( 5 );
+		entryList << entry;
+	}
+}
 void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, const NamespaceList & lst, bool /*isInstance*/, int depth )
 {
 	Debug d("#cel#");
@@ -3495,7 +3597,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		entry.prefix = "namespace";
 		entry.prefix = stringMult( depth, "  " ) + entry.prefix.stripWhiteSpace();
 		entry.text = scope->name();
-		entry.comment = scope->comment();
+		entry.comment = commentFromItem( type, scope.data() );
 		entryList << entry;
 	}
 }
@@ -3525,6 +3627,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		else if ( m_completionMode == VirtualDeclCompletion && !meth->isVirtual() )
 			continue;
 
+		if( !isInstance && !meth->isStatic() ) continue;
+		
 		CodeCompletionEntry entry;
 
 		entry.comment = commentFromItem( type, model_cast<ItemDom>(meth) );
@@ -3607,6 +3711,10 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			}
 		}
 
+		if( entry.prefix.isEmpty() && meth->name() == className ) entry.prefix = "constructor";
+
+		entry.text = entry.text.stripWhiteSpace();
+		
 		entryList << entry;
 	}
 }
@@ -3629,6 +3737,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 		++it;
 
 		if ( isInstance && attr->isStatic() )
+			continue;
+		if ( !isInstance && !attr->isStatic() )
 			continue;
 
 		CodeCompletionEntry entry;
@@ -3700,7 +3810,7 @@ EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, Sim
 	EvaluationResult res;
 	res = obj.evaluate();
 
-	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Type of %1 is %2" ).arg( expr.expr() ).arg( res->fullNameChain() ), 1000 );
+	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Type of %1 is %2 (%3)" ).arg( expr.expr() ).arg( res->fullNameChain() ).arg( res->resolved() ? "resolved" : "unresolved" ), 1000 );
 
 	return res;
 }

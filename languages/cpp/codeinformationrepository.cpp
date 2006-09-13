@@ -218,7 +218,12 @@ KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag, CppC
 		entry.text = tag.name();
 		break;
 
-        case Tag::Kind_Namespace:
+	case Tag::Kind_Struct:
+		entry.prefix = "struct";
+		entry.text = tag.name();
+		break;
+
+		case Tag::Kind_Namespace:
 		entry.prefix = "namespace";
 		entry.text = tag.name();
 		break;

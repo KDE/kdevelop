@@ -56,6 +56,7 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
       QStringList m_fakeScope;
       QStringList m_realScope;
       QValueList<QStringList> m_imports;
+	  TypePointer m_built;
     
     
       NamespaceBuildInfo( QStringList fakeScope, QStringList realScope, const QValueList<QStringList>& imports ) {
@@ -69,7 +70,7 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
   
   protected:
 
-	SimpleTypeImpl::MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type, std::set <QString>& ignore );
+	SimpleTypeImpl::MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type, std::set<SimpleTypeNamespace*>& ignore );
 		
     virtual bool hasNode() const;
   

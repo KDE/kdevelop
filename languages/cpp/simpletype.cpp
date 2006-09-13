@@ -30,8 +30,9 @@ void SimpleType::resolve( Repository rep )  const {
   if( m_globalNamespace ) {
    if( (rep == Undefined || rep == Both) ) {
     m_resolved = true;
-    if( scope().isEmpty() ) {
+   if( scope().isEmpty() || str().isEmpty() ) {
      m_type = m_globalNamespace;
+	 return;
     } else {
 	    SimpleTypeImpl::SimpleTypeImpl::LocateResult t = m_globalNamespace->locateDecType( scope().join("::") );
 	if( t && t->resolved() ) {
@@ -210,10 +211,11 @@ SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const QString& name, Member
  }
  
  TypeOfResult ret = searchBases( td );
- if( !ret )
-  ifVerbose( dbg() << "\"" << str() << "\"------------>: failed to resolve the type of member \"" << name << "\"" << endl );
- else
-  ifVerbose( dbg() << "\"" << str() << "\"------------>: successfully resolved the type of the member \"" << name << "\"" << endl );
+  if( !ret ) {
+  	ifVerbose( dbg() << "\"" << str() << "\"------------>: failed to resolve the type of member \"" << name << "\"" << endl );
+  }else{
+  	ifVerbose( dbg() << "\"" << str() << "\"------------>: successfully resolved the type of the member \"" << name << "\"" << endl );
+  }
  return ret;
 } 
 
@@ -645,8 +647,12 @@ void SimpleTypeImpl::checkTemplateParams () {
     if( ! m_scope.isEmpty() ) {
       QString str = m_scope.back();
       m_desc = str;
-      m_scope.pop_back();
-      m_scope << m_desc.name();
+		if( !m_desc.name().isEmpty() ) {
+		  m_scope.pop_back();
+		  m_scope << m_desc.name();
+		} else {
+		  kdDebug() << "checkTemplateParams() produced bad scope-tail: \"" << m_desc.name() << "\", \"" << m_scope.join("::") << "\"" << endl;
+		}
     }
 }
 

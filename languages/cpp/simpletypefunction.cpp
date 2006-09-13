@@ -263,7 +263,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
   } else if( klass->hasEnum( name.name() ) && ( type & MemberInfo::Typedef ) ) {
     ret.memberType = MemberInfo::Typedef;
     EnumDom e = klass->enumByName( name.name() );
-      ret.type = "int";
+      ret.type = "const int";
 	  ret.decl.name = e->name();
 	  ret.decl.file = e->fileName();
 	  ret.decl.comment = e->comment();

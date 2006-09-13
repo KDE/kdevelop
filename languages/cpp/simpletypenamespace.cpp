@@ -39,31 +39,30 @@ SimpleTypeNamespace::SimpleTypeNamespace( SimpleTypeNamespace* ns ) : SimpleType
 }
 
 SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, MemberInfo::MemberType type ) {
-  std::set
-    <QString> ignore;
+  std::set<SimpleTypeNamespace*> ignore;
   return findMember( name, type, ignore );
 }
 
-SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, MemberInfo::MemberType type, std::set <QString>& ignore ) {
+SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, MemberInfo::MemberType type, std::set<SimpleTypeNamespace*>& ignore ) {
 	MemberInfo mem;
   mem.name = "";
   mem.memberType = MemberInfo::NotFound;
-	QString nm = scope().join( "::");
-	if ( ignore.find( nm ) != ignore.end() )
+	if ( ignore.find( this ) != ignore.end() )
 		return mem;
+	ignore.insert( this );
 	
   for ( QValueList<SimpleType>::iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
     ifVerbose( dbg() << "\"" << str() << "\": redirecting search for \"" << name.name() << "\" to \"" << ( *it ) ->fullType() << "\"" << endl );
     mem = ( *it ) ->findMember( name , type );
     if ( mem ) {
       if ( mem.memberType != MemberInfo::Namespace ) {
-        if ( mem.type.resolved() ) {
+	  	if ( mem.type.resolved() && !(mem.type.resolved()->parent().get().data() == this) ) {
           mem.type.setResolved( mem.type.resolved() ->clone() );
           mem.type.resolved() ->setParent( this );
         }
         return mem;
       } else {
-        ///verify that the namespace is built as this class..
+        ///make sure that the namespace is built as this class..
         QValueList<QStringList> allAliases;
 
         if ( m_aliases.contains( name.name() ) ) {
@@ -129,7 +128,12 @@ QStringList SimpleTypeNamespace::locateNamespaceScope( QString alias ) {
 
 TypePointer SimpleTypeNamespace::locateNamespace( QString alias ) {
   ifVerbose( dbg() << "\"" << str() << "\": locating namespace \"" << alias << "\"" << endl );
-  SimpleTypeImpl::LocateResult res = locateDecType( alias, addFlag( ExcludeNestedTypes, ExcludeTemplates ), 0, MemberInfo::Namespace );
+	
+	TypePointer locateIn = this;
+	if( !scope().isEmpty() ) locateIn = parent().get();
+	SimpleTypeImpl::LocateResult res;
+	if( locateIn )
+		res = locateIn->locateDecType( alias, addFlag( ExcludeNestedTypes, ExcludeTemplates ), 0, MemberInfo::Namespace );
   if ( !res->resolved() )
     return 0;
   if ( isANamespace( res->resolved() ) ) {
@@ -259,10 +263,11 @@ bool SimpleTypeNamespace::hasNode() const {
 //SimpleTypeNamespace::NamespaceBuildInfo implementation
 
 TypePointer SimpleTypeNamespace::NamespaceBuildInfo::build() {
-  SimpleTypeNamespace * ns = new SimpleTypeCachedNamespace( m_fakeScope, m_realScope );
+  if( m_built ) return m_built;
+  m_built = new SimpleTypeCachedNamespace( m_fakeScope, m_realScope );
   for ( QValueList<QStringList>::iterator it = m_imports.begin(); it != m_imports.end(); ++it )
-    ns->addAliasMap( "", ( *it ).join( "::" ) );
-  return ns;
+  	( (SimpleTypeCachedNamespace*)m_built.data() )->addAliasMap( "", ( *it ).join( "::" ) );
+  return m_built;
 }
 
 // kate: indent-mode csands; tab-width 4;

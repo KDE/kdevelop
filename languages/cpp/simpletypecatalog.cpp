@@ -156,7 +156,7 @@ void SimpleTypeCatalog::init() {
     setScope( cp );
     m_tag = findSubTag( l.back() );
     setScope( l );
-    initFromTag( );
+	  //initFromTag( ); ///must not be done, because it may initialize to wrong namespaces etc.
   }
 }
 

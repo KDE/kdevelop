@@ -207,7 +207,7 @@ bool dbgActive();
 
 typedef LogDebug Debug;
 DBGStreamType::KStreamType& dbg();
-#define ifVerbose( x) if( dbgActive() ) {x;}
+#define ifVerbose( x) {if( dbgActive() ) {x;}}
 #else
 
 DBGStreamType::KStreamType& dbg();
