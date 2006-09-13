@@ -32,6 +32,7 @@ Type=install
 Source=%{src}/main.cpp
 Dest=%{dest}/src/main.cpp
 
+[FILE5]
 Type=install
 Source=%{src}/ReadMe
 Dest=%{dest}/src/ReadMe

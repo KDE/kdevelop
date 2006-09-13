@@ -1,11 +1,11 @@
 %{CPP_TEMPLATE}
 
 #include <QCoreApplication>
-#include "%{APPNAMELC}.h"
 
 int main(int argc, char *argv[])
 {
       QCoreApplication app(argc, argv);
-      return app.exec();
+      qDebug("Hello from Qt 4!");
+      return 0;
 }
 
