@@ -86,16 +86,16 @@ void ValgrindDialog::setValExecutable( const QString& ve )
   }
 }
 
+static const QString memCheckParam( "--tool=memcheck" ); 
 static const QString leakCheckParam( "--leak-check=yes" );
 static const QString reachableParam( "--show-reachable=yes" );
 static const QString childrenParam( "--trace-children=yes" );
 
 QString ValgrindDialog::valParams() const
 {
-  QString params;
+  QString params = w->valParamEdit->text();
   if (isNewValgrindVersion())
-    params = QString::fromLatin1( "--tool=memcheck " );
-  params += w->valParamEdit->text();
+    params += " " + memCheckParam;
   if ( w->memleakBox->isChecked() )
     params += " " + leakCheckParam;
   if ( w->reachableBox->isChecked() )
@@ -117,6 +117,7 @@ void ValgrindDialog::setValParams( const QString& params )
     w->childrenBox->setChecked( true );
   w->init();
 
+  myParams = myParams.replace( QRegExp( memCheckParam ), "" );
   myParams = myParams.replace( QRegExp( leakCheckParam ), "" );
   myParams = myParams.replace( QRegExp( reachableParam ), "" );
   myParams = myParams.replace( QRegExp( childrenParam ), "" );
