@@ -3369,6 +3369,45 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 	if( !safetyCounter || !d ) return;
 
 	computeCompletionEntryList( type, entryList, klass->functionList(), isInstance, depth );
+
+	///Find all function-definitions that have no functions. Those may be inlined functions and need to be treated too.
+	FunctionDefinitionList definitions = klass->functionDefinitionList();
+	FunctionList l;
+	for( FunctionDefinitionList::iterator it = definitions.begin(); it != definitions.end(); ++it ) {
+		FunctionList fl = klass->functionByName((*it)->name());
+
+		ArgumentList args = (*it)->argumentList();
+		
+		if( !l.isEmpty() ) {
+			bool matched = false;
+			for( FunctionList::iterator it = fl.begin(); it != fl.end(); ++it ) {
+				ArgumentList fArgs = (*it)->argumentList();
+				if( fArgs.count() != args.count() ) continue;
+				ArgumentList::iterator it = args.begin();
+				ArgumentList::iterator it2 = fArgs.begin();
+				bool hit = true;
+				while( it != args.end() ) {
+					if( (*it)->type() != (*it2)->type() ) {
+						hit = false;
+						break;
+					}
+					++it; ++it2;
+				}
+				if( hit ) {
+					matched = true;
+					break;
+				}
+				
+			}
+			
+			if( matched ) continue;
+		}
+
+		l << (FunctionModel*) (*it).data();
+	}
+
+	if( !l.isEmpty() ) computeCompletionEntryList( type, entryList, l, isInstance, depth );
+	
 	if ( m_completionMode == NormalCompletion )
 		computeCompletionEntryList( type, entryList, klass->variableList(), isInstance, depth );
 

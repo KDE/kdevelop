@@ -25,6 +25,10 @@ DBGStreamType::KStreamType& dbg() {
  return dbgState.dbg();
 }
 
+bool dbgActive() {
+	return true;
+}
+
 #ifndef NDEBUG
 kdbgstream dbgMajor() {
  kdbgstream ret = kdDebug( 9007 );

@@ -201,12 +201,13 @@ class DepthDebug {
 #define ifVerboseMajor(x) x
 #endif
 
+bool dbgActive();
 
 #ifdef VERBOSE
 
 typedef LogDebug Debug;
 DBGStreamType::KStreamType& dbg();
-#define ifVerbose(x) x
+#define ifVerbose( x) if( dbgActive() ) {x;}
 #else
 
 DBGStreamType::KStreamType& dbg();
