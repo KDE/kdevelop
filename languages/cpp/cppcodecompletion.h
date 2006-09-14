@@ -52,6 +52,7 @@ class TypeDesc;
 struct PopupFillerHelpStruct;
 struct PopupClassViewFillerHelpStruct;
 class SimpleTypeImpl;
+class TranslationUnitAST;
 namespace CppEvaluation
 {
   class EvaluationResult;
@@ -129,6 +130,7 @@ private slots:
 	void slotTextHint( int line, int col, QString &text );
     void popupAction( int number );
     void popupClassViewAction( int number );
+	void synchronousParseReady( const QString& file, TranslationUnitAST* unit );
 private:
     bool functionContains( FunctionDom f , int line, int col );
     void selectItem( ItemDom item );
@@ -138,7 +140,7 @@ private:
 	void integratePart( KParts::Part* part );
 	void setupCodeInformationRepository();
 	FunctionDefinitionAST* functionDefinition( AST* node );
-	void computeRecoveryPoints();
+	void computeRecoveryPoints( TranslationUnitAST* unit );
 	void computeRecoveryPointsLocked();
 	
     enum EvaluateExpressionOptions {
@@ -211,7 +213,8 @@ private:
     QTimer* m_showStatusTextTimer;
     QValueList<QPair<int, QString> > m_statusTextList;
     
-    void addStatusText( QString text, int timeout );
+	void needRecoveryPoints();
+	void addStatusText( QString text, int timeout );
     void clearStatusText();
     
 	QString m_activeFileName;

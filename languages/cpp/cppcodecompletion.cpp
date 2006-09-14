@@ -693,6 +693,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 	         this, SLOT( computeFileEntryList() ) );
 	connect( cppSupport->project(), SIGNAL( removedFilesFromProject( const QStringList& ) ),
 	         this, SLOT( computeFileEntryList() ) );
+	connect( cppSupport, SIGNAL( synchronousParseReady( const QString&, TranslationUnitAST* ) ), this, SLOT( synchronousParseReady( const QString&, TranslationUnitAST* ) ) );
 
 	m_bArgHintShow = false;
 	m_bCompletionBoxShow = false;
@@ -1652,6 +1653,27 @@ bool CppCodeCompletion::functionContains( FunctionDom f , int line, int col ) {
 	return (line > sl || (line == sl && col >= sc ) ) && (line < el || ( line == el && col < ec ) );
 }
 
+void  CppCodeCompletion::needRecoveryPoints() {
+	if( this->d->recoveryPoints.isEmpty() ) {
+		kdDebug( 9007 ) << "missing recovery-points for file " << m_activeFileName << " they have to be computed now" << endl;
+		ItemLocker<BackgroundParser> block( *m_pSupport->backgroundParser() );
+
+		TranslationUnitAST * ast = m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
+		if( !ast ) {
+			kdDebug( 9007 ) << "background-parser is missing the translation-unit. The file needs to be reparsed." << endl;
+			m_pSupport->parseFileAndDependencies( m_activeFileName, false );
+		} else {
+			computeRecoveryPointsLocked();
+		}
+	}
+	if( this->d->recoveryPoints.isEmpty() ) {
+		kdDebug( 9007 ) << "Failed to compute recovery-points for " << m_activeFileName << endl;
+		m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Failed to compute recovery-points for %1" ).arg( m_activeFileName ), 1000 );
+	} else {
+		kdDebug( 9007 ) << "successfully computed recovery-points for " << m_activeFileName << endl;
+	}
+}
+
 EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column, SimpleTypeConfiguration& conf, EvaluateExpressionOptions opt ) {
 	EvaluationResult ret;
 
@@ -1662,6 +1684,8 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 	kdDebug( 9007 ) << "Error: file " << m_activeFileName << " could not be located in the code-model, code-completion stopped\n";
 		return SimpleType();
 	}
+
+	needRecoveryPoints();
 
 	CodeModelUtils::CodeModelHelper fileModel( m_pSupport->codeModel(), file );
 
@@ -1858,6 +1882,8 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 	if ( !m_pSupport || !m_activeCursor || !m_activeEditor || !m_activeCompletion )
 		return ;
 
+	needRecoveryPoints();
+	
 	m_demandCompletion = invokedOnDemand;
 
 	FileDom file = m_pSupport->codeModel()->fileByName( m_activeFileName );
@@ -2520,6 +2546,11 @@ QValueList<QStringList> CppCodeCompletion::computeSignatureList( EvaluationResul
 	return retList;
 }
 
+void CppCodeCompletion::synchronousParseReady( const QString& file, TranslationUnitAST* unit ) {
+	if( file == m_activeFileName ) {
+		computeRecoveryPoints( unit );
+	}
+}
 
 void CppCodeCompletion::slotFileParsed( const QString& fileName )
 {
@@ -2939,11 +2970,12 @@ QString CppCodeCompletion::getText( int startLine, int startColumn, int endLine,
 
 void CppCodeCompletion::computeRecoveryPointsLocked() {
 	m_pSupport->backgroundParser() ->lock ();
-	computeRecoveryPoints();
+	TranslationUnitAST* unit = m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
+	computeRecoveryPoints( unit );
 	m_pSupport->backgroundParser() ->unlock();
 }
 
-void CppCodeCompletion::computeRecoveryPoints( )
+void CppCodeCompletion::computeRecoveryPoints( TranslationUnitAST* unit )
 {
 	if ( m_blockForKeyword )
 		return;
@@ -2951,7 +2983,6 @@ void CppCodeCompletion::computeRecoveryPoints( )
 	kdDebug( 9007 ) << "CppCodeCompletion::computeRecoveryPoints" << endl;
 
 	d->recoveryPoints.clear();
-	TranslationUnitAST* unit = m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
 	if ( !unit )
 		return ;
 

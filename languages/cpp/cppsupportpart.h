@@ -43,6 +43,7 @@ class QLabel;
 class QProgressBar;
 class QStringList;
 class QListViewItem;
+class TranslationUnitAST;
 class QTimer;
 class KListView;
 class Driver;
@@ -174,6 +175,8 @@ public:
     
 signals:
 	void fileParsed( const QString& fileName );
+	///Emitted whenever a translation-unit was parsed in the main thread
+	void synchronousParseReady( const QString& file, TranslationUnitAST* unit );
 
 protected:
 	virtual KDevLanguageSupport::Features features();
@@ -467,6 +470,7 @@ private:
 	friend class KDevCppSupportIface;
 	friend class CppDriver;
 
+	void emitSynchronousParseReady( const QString& file, TranslationUnitAST* unit );
 
 	struct JobData
 	{

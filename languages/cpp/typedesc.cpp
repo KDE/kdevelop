@@ -57,7 +57,7 @@ LocateResult& LocateResult::operator = ( const LocateResult& rhs ) {
 	m_locateDepth = rhs.m_locateDepth;
 	m_flags = rhs.m_flags;
 	m_resolutionCount = rhs.m_resolutionCount;
-	
+ 
   if ( m_trace )
     delete m_trace;
   if ( !rhs.m_trace ) {

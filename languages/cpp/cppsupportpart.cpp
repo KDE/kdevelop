@@ -160,6 +160,8 @@ public:
 		QString path = URLUtil::canonicalPath( fileName );
 		
 		cppSupport()->m_timestamp[ path ] = fileInfo.lastModified();
+
+		cppSupport()->emitSynchronousParseReady( fileName, ast.get() );
 	}
 };
 
@@ -2215,6 +2217,10 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 {*/
 	
 //}
+
+void CppSupportPart::emitSynchronousParseReady( const QString& file, TranslationUnitAST* unit ) {
+	emit synchronousParseReady( file, unit );
+}
 
 void CppSupportPart::emitFileParsed( QStringList l )
 {
