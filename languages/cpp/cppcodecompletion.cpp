@@ -87,6 +87,8 @@ const bool disableVerboseForCompletionList = false;
 const bool disableVerboseForContextMenu = false;
 const bool contextMenuEntriesAtTop = false;
 
+const char* constructorPrefix = "<constructor>";
+const char* destructorPrefix = "<destructor>";
 ///This enables-disables the automatic processing of the expression under the mouse-cursor
 //#define DISABLETOOLTIPS
 
@@ -2368,8 +2370,8 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 		if( !type && invokedOnDemand && this_type && ( expr.isEmpty() || expr.endsWith(";")) ) {
 
-			SimpleType t = this_type;
 			{
+				SimpleType t = this_type;
 				///First, all static data.
 				bool ready = false;
 				SafetyCounter cnt( 20 );
@@ -2385,6 +2387,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 				}
 			}
 			{
+				SimpleType t = this_type;
 				///Now find non-static(if we have an instance) and global data
 				bool ready = false;
 				SafetyCounter cnt( 20 );
@@ -3455,8 +3458,11 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			}
 			
 			if( tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function ) {
-				if( prefix.isEmpty() && tag.name() == className ) {
-					prefix = "constructor";
+				if( prefix.isEmpty()) {
+					if( tag.name() == className )
+						prefix = constructorPrefix;
+					else if( tag.name().startsWith( "~" ) )
+						prefix = destructorPrefix;
 				}
 			}
 
@@ -3747,8 +3753,9 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			}
 		}
 
-		if( entry.prefix.isEmpty() && meth->name() == className ) entry.prefix = "constructor";
-
+		if( entry.prefix.isEmpty() && meth->name() == className ) entry.prefix = constructorPrefix;
+		if( entry.prefix.isEmpty() && meth->name().startsWith( "~" ) ) entry.prefix = destructorPrefix;
+		
 		entry.text = entry.text.stripWhiteSpace();
 		
 		entryList << entry;
