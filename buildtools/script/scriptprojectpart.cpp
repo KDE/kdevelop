@@ -147,6 +147,13 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
                    continue;
                 QString path = it.current()->absFilePath();
                 if (it.current()->isDir()) {
+                    //do not follow symlinks which point to the themselves
+                    if (it.current()->isSymLink())
+                    {
+                        QString symLink = it.current()->readLink();
+                        if ((symLink == path) || (symLink == "./"))
+                            continue;
+                    }
                     kdDebug(9015) << "Pushing: " << path << endl;
                     s.push(path);
                 }
