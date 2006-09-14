@@ -1656,10 +1656,11 @@ bool CppCodeCompletion::functionContains( FunctionDom f , int line, int col ) {
 void  CppCodeCompletion::needRecoveryPoints() {
 	if( this->d->recoveryPoints.isEmpty() ) {
 		kdDebug( 9007 ) << "missing recovery-points for file " << m_activeFileName << " they have to be computed now" << endl;
-		ItemLocker<BackgroundParser> block( *m_pSupport->backgroundParser() );
+    m_pSupport->backgroundParser()->lock();
 
 		TranslationUnitAST * ast = m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
-		if( !ast ) {
+    m_pSupport->backgroundParser()->unlock();
+    if( !ast ) {
 			kdDebug( 9007 ) << "background-parser is missing the translation-unit. The file needs to be reparsed." << endl;
 			m_pSupport->parseFileAndDependencies( m_activeFileName, false );
 		} else {
