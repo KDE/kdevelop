@@ -36,6 +36,9 @@ public:
 
   QWidget * findPartWidget( KParts::Part * part );
 
+public slots:
+  void setLineNumberDelayed();
+
 private slots:
 
   void popupAboutToShow();
@@ -53,6 +56,9 @@ private:
   QValueList< MultiBuffer* > m_editorParts;
 
   bool m_delayedViewCreationCompatibleUI;
+  KParts::Part *m_delayedPart;
+  int m_delayedLine;
+  int m_delayedCol;
 };
 
 

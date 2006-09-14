@@ -62,6 +62,11 @@ EditorProxy *EditorProxy::getInstance()
   return s_instance;
 }
 
+void EditorProxy::setLineNumberDelayed()
+{
+  setLineNumber(m_delayedPart, m_delayedLine, m_delayedCol);
+}
+
 
 void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
 {
@@ -75,8 +80,14 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
   ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>(part->widget());
   if (iface)
   {
-    if (part->widget()->hasFocus()) //workaround for QXIMInputContext crashes. Keep for KDE <=3.5.4!
-        iface->setCursorPositionReal(lineNum, col == -1 ? 0 : col);
+    if (!part->widget()->hasFocus()) //workaround for QXIMInputContext crashes. Keep for KDE <=3.5.4!
+    {
+      m_delayedPart = part; 
+      m_delayedLine = lineNum;
+      m_delayedCol = col;
+      QTimer::singleShot(0, this, SLOT(setLineNumberDelayed()));
+    } else
+     iface->setCursorPositionReal(lineNum, col == -1 ? 0 : col);
   }
   else {
     // Save the position for a rainy day (or when the view gets activated and wants its position)

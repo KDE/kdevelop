@@ -134,6 +134,8 @@ void PluginController::loadProjectPlugins( const QStringList & ignorePlugins )
 
 void PluginController::loadPlugins( KTrader::OfferList offers, const QStringList & ignorePlugins )
 {
+
+  TopLevel::getInstance()->main()->setFocus();
   for (KTrader::OfferList::ConstIterator it = offers.begin(); it != offers.end(); ++it)
   {
     QString name = (*it)->desktopEntryName();

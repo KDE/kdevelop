@@ -201,7 +201,7 @@ void NewMainWindow::init() {
 
 void NewMainWindow::configureToolbars( )
 {
-	saveMainWindowSettings( KGlobal::config(), "MainWindow" );
+	saveMainWindowSettings( KGlobal::config(), autoSaveGroup());
 	KEditToolbar dlg( factory() );
 	connect( &dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()) );
 	dlg.exec();
@@ -211,7 +211,7 @@ void NewMainWindow::slotNewToolbarConfig( )
 {
 	setupWindowMenu();
 	m_pMainWindowShare->slotGUICreated( PartController::getInstance()->activePart() );
-	applyMainWindowSettings( KGlobal::config(), "MainWindow" );
+	applyMainWindowSettings( KGlobal::config(), autoSaveGroup() );
 }
 
 void NewMainWindow::tabContext(QWidget* widget,const QPoint & pos)
@@ -716,7 +716,7 @@ void NewMainWindow::loadSettings() {
     KConfig *config = kapp->config();
 
     ProjectManager::getInstance()->loadSettings();
-    applyMainWindowSettings(config, "Mainwindow");
+    applyMainWindowSettings(config);
 }
 
 void NewMainWindow::setCurrentDocumentCaption( const QString &caption )
@@ -753,7 +753,7 @@ void NewMainWindow::saveSettings()
     KConfig *config = kapp->config();
 
     ProjectManager::getInstance()->saveSettings();
-    saveMainWindowSettings(config, "Mainwindow");
+    saveMainWindowSettings(config);
 
     QString appstr = "kdev";
     if (KGlobal::instance()->aboutData())
