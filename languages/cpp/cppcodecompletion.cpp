@@ -966,10 +966,10 @@ int CppCodeCompletion::expressionAt( const QString& contents, int index )
 
 	QString text = clearComments( contents );
 
-
-
 	int last = T_UNKNOWN;
 	int start = index;
+	--index;
+
 	while ( index > 0 )
 	{
 		while ( index > 0 && text[ index ].isSpace() )
@@ -1080,6 +1080,12 @@ int CppCodeCompletion::expressionAt( const QString& contents, int index )
 			last = T_UNKNOWN;
 			break;
 		}
+	}
+
+	///If we're at the first item, the above algorithm cannot be used safely,
+	///so just determine whether the sign is valid for the beginning of an expression, if it isn't reject it.
+	if( start > index && !(text[index].isLetterOrNumber() || text[index] == '_' || text[index] == ':') ) {
+		++index;
 	}
 
 	return index;
@@ -1495,9 +1501,9 @@ ExpressionInfo CppCodeCompletion::findExpressionAt( int line, int column, int st
 	QString contents = clearComments( getText( startLine, startCol, line, column ) );
 
 
-	int start_expr = expressionAt(  contents, contents.length() - 1 );
+	int start_expr = expressionAt(  contents, contents.length() );
 
-	if ( start_expr != int( contents.length() ) - 1 ) {
+	if ( start_expr != int( contents.length() ) ) {
 		QString str = contents.mid( start_expr, contents.length() - start_expr ).stripWhiteSpace();
 		if( str.startsWith( "new " ) ) {
 			str = str.mid( 4 ).stripWhiteSpace();
@@ -2060,10 +2066,10 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 					/// @todo remove code duplication
 
 					QString contents = textToReparse;
-					int start_expr = expressionAt( contents, contents.length() - 1 );
+					int start_expr = expressionAt( contents, contents.length() );
 
 					// kdDebug(9007) << "start_expr = " << start_expr << endl;
-					if ( start_expr != int( contents.length() ) - 1 )
+					if ( start_expr != int( contents.length() ) )
 						expr = contents.mid( start_expr, contents.length() - start_expr ).stripWhiteSpace();
 
 					if ( expr.startsWith( "SIGNAL" ) || expr.startsWith( "SLOT" ) )
@@ -2081,9 +2087,8 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 						}
 						else
 						{
-							--end_expr;
 							start_expr = expressionAt( contents, end_expr );
-							expr = contents.mid( start_expr, end_expr - start_expr + 1 ).stripWhiteSpace();
+							expr = contents.mid( start_expr, end_expr - start_expr ).stripWhiteSpace();
 						}
 					}
 					else
@@ -2283,10 +2288,10 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 
 				/// @todo remove code duplication
-				int start_expr = expressionAt( contents, contents.length() - 1 );
+				int start_expr = expressionAt( contents, contents.length() );
 
 				// kdDebug(9007) << "start_expr = " << start_expr << endl;
-				if ( start_expr != int( contents.length() ) - 1 )
+				if ( start_expr != int( contents.length() ) )
 					expr = contents.mid( start_expr, contents.length() - start_expr ).stripWhiteSpace();
 
 				if ( expr.startsWith( "SIGNAL" ) || expr.startsWith( "SLOT" ) )
@@ -2304,9 +2309,8 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 					}
 					else
 					{
-						--end_expr;
 						start_expr = expressionAt( contents, end_expr );
-						expr = contents.mid( start_expr, end_expr - start_expr + 1 ).stripWhiteSpace();
+						expr = contents.mid( start_expr, end_expr - start_expr ).stripWhiteSpace();
 					}
 				}
 				else
