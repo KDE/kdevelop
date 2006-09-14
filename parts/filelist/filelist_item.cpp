@@ -11,7 +11,8 @@
 
 #include <kiconloader.h>
 #include <qfontmetrics.h>
-		 
+#include <qfileinfo.h>
+
 #include "filelist_item.h"
 
 #include <kiconloader.h>
@@ -28,7 +29,7 @@ FileListItem::FileListItem( QListView * parent, KURL const & url, DocumentState 
     _icon = fileItem.pixmap(KIcon::SizeSmall);
     setState( state );
 }
-	
+
 KURL FileListItem::url()
 {
 	return _url;
@@ -42,11 +43,11 @@ DocumentState FileListItem::state( )
 void FileListItem::setState( DocumentState state )
 {
 	_state = state;
-    	
+
 	switch( state )
 	{
 		case Clean:
-            setPixmap( 0, _icon);   
+            setPixmap( 0, _icon);
 // 			setPixmap( 0, 0L );
 			break;
 		case Modified:
@@ -57,7 +58,7 @@ void FileListItem::setState( DocumentState state )
 			break;
 		case DirtyAndModified:
 			setPixmap( 0, SmallIcon("stop") );
-			break;					
+			break;
 	}
 }
 
@@ -69,12 +70,12 @@ void FileListItem::setHeight( int )
 void FileListItem::paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align )
 {
 	QColorGroup mcg = cg;
-	
+
 	if ( isActive() )
 	{
 		mcg.setColor( QColorGroup::Base, Qt::yellow );
 	}
-	
+
 	QListViewItem::paintCell( p, mcg, column, width, align );
 }
 
@@ -89,5 +90,15 @@ void FileListItem::setActive( FileListItem * item )
 	s_activeItem = item;
 }
 
+int FileListItem::compare( QListViewItem * i, int col, bool ascending ) const
+{
+	QFileInfo info1( key( col, ascending ) ); //this
+	QFileInfo info2( i->key( col, ascending ) ); //that
+    int fileComp = info1.fileName().compare( info2.fileName() );
+	if ( fileComp != 0 )
+		return fileComp;
+	else
+		return info1.extension().compare( info2.extension() );
+}
 
 // kate: space-indent off; indent-width 4; tab-width 4; show-tabs off;

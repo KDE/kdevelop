@@ -17,32 +17,33 @@
 #include <qpixmap.h>
 
 #include <kurl.h>
- 
+
 #include <kdevpartcontroller.h>
-		 
+
 class FileListItem : public QListViewItem
 {
 public:
 	FileListItem( QListView * parent, KURL const & url, DocumentState = Clean );
-	
+
 	KURL url();
-	
+
 	DocumentState state();
 	void setState( DocumentState );
-	
+
 	bool isActive();
 	static void setActive( FileListItem * item );
-	
+
+	virtual int compare( QListViewItem * i, int col, bool ascending ) const;
 private:
 	virtual void setHeight( int );	// override of QListViewItem::setHeight()
     virtual void paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align ); 	// override of QListViewItem::paintCell()
-	
+
 	KURL _url;
 	DocumentState _state;
     QPixmap _icon;
-    
+
 	static FileListItem * s_activeItem;
-	
+
 };
 
 
