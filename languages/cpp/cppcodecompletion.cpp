@@ -329,10 +329,10 @@ struct PopupFillerHelpStruct {
 	          QString scope = cm->scope().join("::");
 	          QMap< QString, QPopupMenu* >::iterator it = m_namespacePopupCache.find( scope );
 	          if( it != m_namespacePopupCache.end() ) {
-		          parent->insertItem( "Sub-Namespace " +  scope, *it );
+		          parent->insertItem( "Imported Namespace " +  scope, *it );
 		          
 	          } else {
-							parent->insertItem( "Sub-Namespace " +  scope, m );
+		          parent->insertItem( "Imported Namespace " +  scope, m );
  						
 							insertItem( m, ( new SimpleTypeCachedCodeModel( cm->item() ) ) ->desc(), prefix );
 	          }
@@ -1770,7 +1770,8 @@ void CppCodeCompletion::needRecoveryPoints() {
 
 EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column, SimpleTypeConfiguration& conf, EvaluateExpressionOptions opt ) {
   EvaluationResult ret;
-
+	safetyCounter.init();
+	
   FileDom file = m_pSupport->codeModel() ->fileByName( m_activeFileName );
 
   if ( !file ) {
@@ -3922,7 +3923,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< CodeCompletionEn
 EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, SimpleContext* ctx ) {
   safetyCounter.init();
 
-  d->classNameList = typeNameList( m_pSupport->codeModel() );
+	//d->classNameList = typeNameList( m_pSupport->codeModel() );
 
   CppEvaluation::ExpressionEvaluation obj( this, expr, AllOperators, ctx );
 
