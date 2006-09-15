@@ -67,6 +67,8 @@ public:
       return true;
     }
 
+	bool showNamespaceAppearances() const;
+
 	bool showOnlyAccessibleItems() const {
 		///not yet used
 		return m_showOnlyAccessibleItems;

@@ -106,7 +106,9 @@ public:
     CppEvaluation::EvaluationResult evaluateExpressionAt( int line, int column, SimpleTypeConfiguration& conf, bool ifUnknownSetType = false );
     
     void contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int col );
-    
+
+	CppSupportPart* cppSupport() const;
+	
 public slots:
 	/**
 	 * @param invokedOnDemand if true and there is exactly one matching entry

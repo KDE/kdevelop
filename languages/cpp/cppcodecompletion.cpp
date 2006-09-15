@@ -1,15 +1,15 @@
 /***************************************************************************
-                        cppcodecompletion.cpp  -  description
-                           -------------------
-  begin                : Sat Jul 21 2001
-  copyright            : (C) 2001 by Victor R�er
-  email                : victor_roeder@gmx.de
-  copyright            : (C) 2002,2003 by Roberto Raggi
-  email                : roberto@kdevelop.org
-  copyright            : (C) 2005 by Adam Treat
-  email                : manyoso@yahoo.com
-  copyright            : (C) 2006 by David Nolden
-  email                : david.nolden.kdevelop@art-master.de
+                  cppcodecompletion.cpp  -  description
+                     -------------------
+begin                : Sat Jul 21 2001
+copyright            : (C) 2001 by Victor R�er
+email                : victor_roeder@gmx.de
+copyright            : (C) 2002,2003 by Roberto Raggi
+email                : roberto@kdevelop.org
+copyright            : (C) 2005 by Adam Treat
+email                : manyoso@yahoo.com
+copyright            : (C) 2006 by David Nolden
+email                : david.nolden.kdevelop@art-master.de
 ***************************************************************************/
 
 /***************************************************************************
@@ -86,6 +86,7 @@
 const bool disableVerboseForCompletionList = false;
 const bool disableVerboseForContextMenu = false;
 const bool contextMenuEntriesAtTop = false;
+bool showNamespaceAppearances = true;
 
 const char* constructorPrefix = "<constructor>";
 const char* destructorPrefix = "<destructor>";
@@ -282,6 +283,10 @@ bool tokenAt( const QString& text, const QString& token, int textPos ) {
   return false;
 }
 
+CppSupportPart* CppCodeCompletion::cppSupport() const {
+  return m_pSupport;
+}
+
 using namespace CompletionDebug;
 using namespace StringHelpers;
 using namespace BitHelpers;
@@ -293,6 +298,8 @@ struct PopupFillerHelpStruct {
   PopupFillerHelpStruct( CppCodeCompletion* rec ) {
     receiver = rec;
   }
+
+	QMap<QString, QPopupMenu*> m_namespacePopupCache;
 
   void insertItem( QPopupMenu* parent, SimpleTypeImpl::MemberInfo d , QString prefix ) {
     QString memType = d.memberTypeToString();
@@ -307,10 +314,66 @@ struct PopupFillerHelpStruct {
   }
 
   void insertItem ( QPopupMenu* parent, TypeDesc d , QString prefix ) {
+    Debug dbg( "#insert# ", 10 );
+
     QString txt;
 
-    if ( d.resolved() && d.resolved() ->isNamespace() )
-      return ;
+    if ( d.resolved() && d.resolved() ->isNamespace() ) {
+      SimpleTypeCachedNamespace * ns = dynamic_cast<SimpleTypeCachedNamespace*>( d.resolved().data() );
+      if ( ns ) {
+        QValueList<SimpleType> slaves = ns->getSlaves();
+        for ( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
+          SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).get().data() );
+          if ( cm ) {
+	          QPopupMenu * m = new QPopupMenu( parent );
+	          QString scope = cm->scope().join("::");
+	          QMap< QString, QPopupMenu* >::iterator it = m_namespacePopupCache.find( scope );
+	          if( it != m_namespacePopupCache.end() ) {
+		          parent->insertItem( "Sub-Namespace " +  scope, *it );
+		          
+	          } else {
+							parent->insertItem( "Sub-Namespace " +  scope, m );
+ 						
+							insertItem( m, ( new SimpleTypeCachedCodeModel( cm->item() ) ) ->desc(), prefix );
+	          }
+          }
+        }
+	      return ;
+      }
+    }
+
+    if ( d.resolved() && receiver->cppSupport() ->codeCompletionConfig() ->showNamespaceAppearances() ) {
+	    if ( SimpleTypeCachedCodeModel * item = dynamic_cast<SimpleTypeCachedCodeModel*>( d.resolved().data() ) ) {  ///(1)
+        if ( item->item() && item->item() ->isNamespace() ) {
+	        NamespaceModel* ns = dynamic_cast<NamespaceModel*>( item->item().data() );
+	        FileList files = receiver->cppSupport()->codeModel()->fileList();
+	        QStringList wholeScope = ns->scope();
+	        wholeScope << ns->name();
+	        for( FileList::iterator it = files.begin(); it != files.end(); ++it ) {
+		        if( !safetyCounter ) break;
+		        NamespaceModel* ns = (*it).data();
+
+		        for( QStringList::iterator it2 = wholeScope.begin(); it2 != wholeScope.end(); ++it2 ) {
+			        if( ns->hasNamespace( (*it2) ) ) {
+				        ns =  ns->namespaceByName( *it2 );
+				        if( !ns ) break;
+			        } else {
+				        ns = 0;
+				        break;
+			        }
+		        }
+
+		        if( ns ) {
+			        ItemDom i(ns);
+		        	insertItem( parent, (new SimpleTypeCodeModel( i ))->desc(), prefix + " " + (*it)->name() + ": " ); ///Not cached, so the detection at (1) does not trigger.
+		        }
+
+	        }
+        }
+      }
+	    return;
+    }
+
 
     if ( d.resolved() && d.resolved() ->hasNode() ) {
       QString n = d.resolved() ->scope().join( "::" );
@@ -408,6 +471,8 @@ struct PopupClassViewFillerHelpStruct {
   }
 
   void insertItem ( QPopupMenu* parent, TypeDesc d , QString prefix ) {
+    Debug dbg( "#insert# ", 10 );
+
     QString txt;
     if ( !d.resolved() )
       return ;
@@ -429,23 +494,22 @@ struct PopupClassViewFillerHelpStruct {
           for ( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
             SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).get().data() );
             if ( cm ) {
-              dom = cm->item();
-              break;
+              insertItem( parent, ( new SimpleTypeCachedCodeModel( cm->item() ) ) ->desc(), prefix );
             }
           }
+	        return ;
         }
-      }
-
-
-      if ( dom ) {
-        QString n = d.resolved() ->scope().join( "::" );
-        //QString n = d.fullNameChain();
-        if ( d.resolved() ->asFunction() ) {
-          n = receiver->buildSignature( d.resolved() );
-        }
-        txt = prefix + i18n( "Show %1" ).arg( cleanForMenu( n ) );
       } else {
-        txt = prefix + d.name() + " not in code-model";
+        if ( dom ) {
+          QString n = d.resolved() ->scope().join( "::" );
+          //QString n = d.fullNameChain();
+          if ( d.resolved() ->asFunction() ) {
+            n = receiver->buildSignature( d.resolved() );
+          }
+          txt = prefix + i18n( "Show %1" ).arg( cleanForMenu( n ) );
+        } else {
+          txt = prefix + d.name() + " not in code-model";
+        }
       }
     } else {
       txt = prefix + d.name() + i18n( " is unresolved" );
@@ -467,8 +531,9 @@ class PopupFiller {
   public:
     PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ), depthAdd( dAdd ), s( maxCount ) {}
 
-    void fill( QPopupMenu* parent, SimpleTypeImpl::LocateResult d, QString prefix = "", const DeclarationInfo& sourceVariable = DeclarationInfo() ) {
-      Debug dbg( "#fl# ", 10 );
+    void fill( QPopupMenu * parent, SimpleTypeImpl::LocateResult d, QString prefix = "", const DeclarationInfo & sourceVariable = DeclarationInfo() ) {
+      Debug dbg( "#fl# ", 10 )
+      ;
       if ( !s || !dbg ) {
         //dbgMajor() << "safety-counter triggered while filling \"" << d.fullNameChain() << "\"" << endl;
         return ;
@@ -666,8 +731,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
     //Matches on alpha chars and '.'
     m_codeCompleteChRx( "([A-Z])|([a-z])|(\\.)" ),
     //Matches on "->" and "::"
-    m_codeCompleteCh2Rx( "(->)|(\\:\\:)" )
-{
+m_codeCompleteCh2Rx( "(->)|(\\:\\:)" ) {
   cppCompletionInstance = this;
   m_cppCodeCommentsRx.setMinimal( true );
 
@@ -780,7 +844,7 @@ void CppCodeCompletion::slotCompletionBoxHidden() {
 }
 
 
-void CppCodeCompletion::integratePart( KParts::Part* part ) {
+void CppCodeCompletion::integratePart( KParts::Part * part ) {
   if ( !part || !part->widget() )
     return ;
 
@@ -801,11 +865,11 @@ void CppCodeCompletion::integratePart( KParts::Part* part ) {
   }
 }
 
-void CppCodeCompletion::slotPartAdded( KParts::Part *part ) {
+void CppCodeCompletion::slotPartAdded( KParts::Part * part ) {
   integratePart( part );
 }
 
-void CppCodeCompletion::slotActivePartChanged( KParts::Part *part ) {
+void CppCodeCompletion::slotActivePartChanged( KParts::Part * part ) {
   emptyCache();
   if ( m_activeHintInterface && m_activeView ) {
     disconnect( m_activeView , SIGNAL( needTextHint( int, int, QString & ) ), this, SLOT( slotTextHint( int, int, QString& ) ) );
@@ -1153,11 +1217,11 @@ QStringList CppCodeCompletion::splitExpression( const QString& text ) {
       ADD_CURRENT();
       index += 2;
     } /*else if ( ch2 == "::" )
-    		{
-    			current += ch2;
-    			ADD_CURRENT();
-    			index += 2;
-    		}*/
+                            		{
+                            			current += ch2;
+                            			ADD_CURRENT();
+                            			index += 2;
+                            		}*/
     else {
       current += text[ index ];
       ++index;
@@ -1788,7 +1852,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
             }
           }
         }
-        if (  /*exp.canBeNormalExpression() &&*/ !ret.resultType->resolved() ) { ///It is not cleary possible to recognize the kind of an expression from the syntax as long as it's not written completely
+        if (        /*exp.canBeNormalExpression() &&*/ !ret.resultType->resolved() ) { ///It is not cleary possible to recognize the kind of an expression from the syntax as long as it's not written completely
           {
             if ( ! ( opt & IncludeStandardExpressions ) ) {
               kdDebug( 9007 ) << "recognized a standard-expression, but another expression-type is desired" << endl;
@@ -2288,23 +2352,23 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
         kdDebug( 9007 ) << "===========================> keyword is: " << keyword << endl;
 
         if ( keyword == "virtual" ) { /*
-          					BaseClauseAST *baseClause = clazz->baseClause();
-          					if ( baseClause )
-          					{
-          						QPtrList<BaseSpecifierAST> baseList = baseClause->baseSpecifierList();
-          						QPtrList<BaseSpecifierAST>::iterator it = baseList.begin();
-           
-          						for ( ; it != baseList.end(); ++it )
-          							type.append( ( *it )->name()->text() );
-           
-          						ctx = new SimpleContext();
-           
-          						showArguments = false;
-          						m_completionMode = VirtualDeclCompletion;
-           
-          						kdDebug(9007) << "------> found virtual keyword for class specifier '"
-          									<< clazz->text() << "'" << endl;
-          					}*/
+                                                                      					BaseClauseAST *baseClause = clazz->baseClause();
+                                                                      					if ( baseClause )
+                                                                      					{
+                                                                      						QPtrList<BaseSpecifierAST> baseList = baseClause->baseSpecifierList();
+                                                                      						QPtrList<BaseSpecifierAST>::iterator it = baseList.begin();
+                                                                       
+                                                                      						for ( ; it != baseList.end(); ++it )
+                                                                      							type.append( ( *it )->name()->text() );
+                                                                       
+                                                                      						ctx = new SimpleContext();
+                                                                       
+                                                                      						showArguments = false;
+                                                                      						m_completionMode = VirtualDeclCompletion;
+                                                                       
+                                                                      						kdDebug(9007) << "------> found virtual keyword for class specifier '"
+                                                                      									<< clazz->text() << "'" << endl;
+                                                                      					}*/
         } else if ( QString( "virtual" ).find( keyword ) != -1 )
           m_blockForKeyword = true;
         else
@@ -2368,10 +2432,10 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
         this_type = scope;
 
         if ( scope.size() ) { /*
-          					SimpleVariable var;
-          					var.type = scope;
-          					var.name = "this";
-          					ctx->add( var );*/ 
+                                                                      					SimpleVariable var;
+                                                                      					var.type = scope;
+                                                                      					var.name = "this";
+                                                                      					ctx->add( var );*/ 
           //kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
         }
 
@@ -2387,7 +2451,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 
   if ( ch2 == "::" ) {
     QString str = clearComments( expr );
-    if ( !str.contains( '.' ) && !str.contains( "->" ) )  ///Necessary, because the expression may also be like user->BaseUser::
+    if ( !str.contains( '.' ) && !str.contains( "->" ) )        ///Necessary, because the expression may also be like user->BaseUser::
       isInstance = false;
   }
 
@@ -3343,8 +3407,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 
     if ( tag.name().isEmpty() ) {
       continue;
-    }
-    else if ( m_completionMode != NormalCompletion ) {
+    } else if ( m_completionMode != NormalCompletion ) {
       if ( tag.kind() != Tag::Kind_FunctionDeclaration )
         continue;
     }

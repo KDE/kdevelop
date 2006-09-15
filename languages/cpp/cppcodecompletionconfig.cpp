@@ -128,4 +128,8 @@ void CppCodeCompletionConfig::setAutomaticHeaderCompletion( bool b )
 	m_automaticHeaderCompletion = b;
 }
 
+bool CppCodeCompletionConfig::showNamespaceAppearances() const {
+	return true;
+}
+
 #include "cppcodecompletionconfig.moc"
