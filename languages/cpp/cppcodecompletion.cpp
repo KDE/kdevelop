@@ -3837,6 +3837,9 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			else
 				entry.prefix = meth->resultType();
 		}
+		
+		if( entry.prefix.isEmpty() && meth->name() == className ) entry.prefix = constructorPrefix;
+		if( entry.prefix.isEmpty() && meth->name().startsWith( "~" ) ) entry.prefix = destructorPrefix;
 
 		entry.prefix = stringMult( depth, "  " ) + entry.prefix.stripWhiteSpace();
 		QString text;
@@ -3903,9 +3906,6 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 					entry.postfix += "; (private)"; // in " + type->fullType() + ")";
 			}
 		}
-
-		if( entry.prefix.isEmpty() && meth->name() == className ) entry.prefix = constructorPrefix;
-		if( entry.prefix.isEmpty() && meth->name().startsWith( "~" ) ) entry.prefix = destructorPrefix;
 		
 		entry.text = entry.text.stripWhiteSpace();
 		
