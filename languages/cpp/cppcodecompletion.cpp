@@ -369,8 +369,8 @@ struct PopupFillerHelpStruct {
 		        }
 
 	        }
+	        return;
         }
-		    return;
 	    }
     }
 
