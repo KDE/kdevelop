@@ -350,7 +350,7 @@ class ExpressionEvaluation {
     virtual EvaluationResult evaluateExpressionInternal( QString expr, EvaluationResult scope, SimpleContext * ctx, SimpleContext* innerCtx , bool canBeTypeExpression = true );
 
 	///Locates types or members
-    EvaluationResult evaluateAtomicExpression( QString expr, EvaluationResult scope, SimpleContext * ctx = 0, bool canBeTypeExpression = true );
+    EvaluationResult evaluateAtomicExpression( TypeDesc expr, EvaluationResult scope, SimpleContext * ctx = 0, bool canBeTypeExpression = true );
 };
 
 

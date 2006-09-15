@@ -339,24 +339,29 @@ EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr,
   
         //dbgMajor() << " could not evaluate " << expr << endl;
   ifVerboseMajor( dbgMajor() << "evaluating \"" << expr << "\" as atomic expression" << endl );
-  EvaluationResult res = evaluateAtomicExpression( expr, scope, ctx, canBeTypeExpression );
+
+	TypeDesc exp = m_ctx->container()->resolveTemplateParams( expr );
+
+	ifVerboseMajor( dbgMajor() << "after template-parameter resolution: \"" << exp << "\"" << endl );
+	
+	EvaluationResult res = evaluateAtomicExpression( exp, scope, ctx, canBeTypeExpression );
   return res;
 }
 
 /**This function needs a clean workover.
  * An atomic expression is one that only consists of a type-, function- or variable-name(may include '::')
  */
-EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QString expr, EvaluationResult scope, SimpleContext * ctx, bool canBeTypeExpression ) {
+EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( TypeDesc expr, EvaluationResult scope, SimpleContext * ctx, bool canBeTypeExpression ) {
   LogDebug d( "#evt#");
   if( !safetyCounter || !d ) return SimpleType();
 	bool canBeItemExpression = true; ///To be implemented
 
-  ifVerboseMajor( dbgMajor() << "evaluateAtomicExpression(\"" << expr << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl );
+  ifVerboseMajor( dbgMajor() << "evaluateAtomicExpression(\"" << expr.name() << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl );
 
 	EvaluationResult bestRet;
   int bestDepth = 0;
 	
-  if( expr.isEmpty() )
+  if( expr.name().isEmpty() )
     return scope;
   
   TypePointer searchIn = scope->resolved();
@@ -371,7 +376,7 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QString expr, E
 	if( ctx && canBeItemExpression ) {
 		///Search for variables and functions, first in the current context, and then through the container-classes upwards.
 			// find the variable in the current context
-		SimpleVariable var = ctx->findVariable( expr );
+		SimpleVariable var = ctx->findVariable( expr.name() );
 	
     if ( var.type ) {
 			EvaluationResult ret = EvaluationResult( ctx->container()->locateDecType( var.type ), var.toDeclarationInfo( "current_file" ));
@@ -391,11 +396,11 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QString expr, E
 		{
 			if( !current ) ready = true;
 	
-			type = current->typeOf( expr );
+			type = current->typeOf( expr.name() );
       if ( type) {
 				bestRet = EvaluationResult( type.type, type.decl );
         bestDepth = depth;
-        bestRet.expr = expr;
+        bestRet.expr = expr.fullNameChain();
         bestRet.expr.t = ExpressionInfo::NormalExpression;
       }
 
@@ -408,8 +413,8 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QString expr, E
     canBeTypeExpression = true;*/
 
 	if( canBeItemExpression && (!bestRet || bestDepth > 0 ) ) {
-		SimpleTypeImpl::
-    SimpleTypeImpl::TypeOfResult res = searchIn->typeOf( expr );
+		//SimpleTypeImpl::
+		SimpleTypeImpl::TypeOfResult res = searchIn->typeOf( expr.name() );
     
     if( res ) {
       bestRet = EvaluationResult( res.type, res.decl );
@@ -429,7 +434,7 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QString expr, E
     /*if ( type && type->resolved() )
     {*/
       EvaluationResult ret = type;
-      ret.expr = expr;
+      ret.expr = expr.fullNameChain();
       ret.expr.t = ExpressionInfo::TypeExpression;
       bestRet = ret;
     }
@@ -445,7 +450,7 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( QString expr, E
   if( bestRet )
     return bestRet;
 	
-  ifVerboseMajor( dbgMajor() << "evaluateAtomicExpression: \"" << scope.resultType->fullNameChain() << "\"could not locate " << expr << endl );
+  ifVerboseMajor( dbgMajor() << "evaluateAtomicExpression: \"" << scope.resultType->fullNameChain() << "\"could not locate " << expr.fullNameChain() << endl );
   return  bestRet;
 }
 }

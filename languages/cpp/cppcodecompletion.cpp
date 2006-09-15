@@ -324,7 +324,7 @@ struct PopupFillerHelpStruct {
         QValueList<SimpleType> slaves = ns->getSlaves();
         for ( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
           SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).get().data() );
-          if ( cm ) {
+	        if ( cm && cm->item() ) {
 	          QPopupMenu * m = new QPopupMenu( parent );
 	          QString scope = cm->scope().join("::");
 	          QMap< QString, QPopupMenu* >::iterator it = m_namespacePopupCache.find( scope );
@@ -493,7 +493,7 @@ struct PopupClassViewFillerHelpStruct {
           QValueList<SimpleType> slaves = ns->getSlaves();
           for ( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
             SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).get().data() );
-            if ( cm ) {
+	          if ( cm && cm->item() ) {
               insertItem( parent, ( new SimpleTypeCachedCodeModel( cm->item() ) ) ->desc(), prefix );
             }
           }
