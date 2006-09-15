@@ -35,6 +35,10 @@ struct LocateResult::D {
   TypeDesc m_desc;
 };
 
+LocateResult& LocateResult::operator = ( const TypeDesc& rhs ) {
+	*this = LocateResult( rhs );
+}
+
 LocateResult::LocateResult() : d( new D() ), m_resolutionCount( 0 ), m_flags( NoFlag ), m_trace( 0 ), m_locateDepth( 0 ) {}
 
 LocateResult::LocateResult( const TypeDesc& desc ) : d( new D() ), m_resolutionCount( 0 ), m_flags( NoFlag ), m_trace( 0 ), m_locateDepth( 0 ) {

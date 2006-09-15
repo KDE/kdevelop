@@ -55,7 +55,7 @@ class SimpleTypeFunctionInterface {
   
 ///TODO: This function should locate the correct overloaded method in the chain, fitting the parameters
     ///should also moved into another class then
-    SimpleTypeImpl* match( const QValueList<SimpleTypeImpl::LocateResult>& /*params*/ ) {
+    SimpleTypeImpl* match( const QValueList<LocateResult>& /*params*/ ) {
         //      QValueList<TypeDesc> args = getArgumentTypes();
       return dynamic_cast<SimpleTypeImpl*>( this );
     }
@@ -112,10 +112,10 @@ public:
   }
   
   
-  virtual SimpleTypeImpl::LocateResult applyOperator( typename Base::Operator op , QValueList<SimpleTypeImpl::LocateResult> params ) {
+  virtual LocateResult applyOperator( typename Base::Operator op , QValueList<LocateResult> params ) {
     Debug d("#apply#");
     if( !d )
-      return SimpleTypeImpl::LocateResult();
+      return LocateResult();
     
     if( op == SimpleTypeImpl::ParenOp ) {
             ///First, try to find an overloaded function matching the parameter-types.
@@ -131,7 +131,7 @@ public:
                     */
           QValueList<TypeDesc> args = getArgumentTypes();
           QValueList<TypeDesc> paramDescs;
-          for( QValueList<SimpleTypeImpl::LocateResult>::iterator it = params.begin(); it != params.end(); ++it )
+          for( QValueList<LocateResult>::iterator it = params.begin(); it != params.end(); ++it )
             paramDescs << (TypeDesc)(*it);
           resolveImplicitTypes( args, paramDescs, paramInfo );
                     ///paramInfo now contains the information for all implicit types
@@ -207,7 +207,7 @@ public:
   
   virtual TemplateParamInfo getTemplateParamInfo();
   
-  virtual const TypeDesc findTemplateParam( const QString& name );
+  virtual const LocateResult findTemplateParam( const QString& name );
   
     /** In case of a class, returns all base-types */
   virtual QValueList<LocateResult> getBases();

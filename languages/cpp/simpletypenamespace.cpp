@@ -56,9 +56,9 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
     mem = ( *it ) ->findMember( name , type );
     if ( mem ) {
       if ( mem.memberType != MemberInfo::Namespace ) {
-	  	if ( mem.type.resolved() && !(mem.type.resolved()->parent().get().data() == this) ) {
-          mem.type.setResolved( mem.type.resolved() ->clone() );
-          mem.type.resolved() ->setParent( this );
+	  	if ( mem.type->resolved() && !(mem.type->resolved()->parent().get().data() == this) ) {
+          mem.type->setResolved( mem.type->resolved() ->clone() );
+          mem.type->resolved() ->setParent( this );
         }
         return mem;
       } else {
@@ -71,7 +71,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
             allAliases << splitType( *it );
         }
 
-        return setupMemberInfo( name, mem.type.fullNameList(), allAliases );
+        return setupMemberInfo( name, mem.type->fullNameList(), allAliases );
       }
     }
   }
@@ -131,7 +131,7 @@ TypePointer SimpleTypeNamespace::locateNamespace( QString alias ) {
 	
 	TypePointer locateIn = this;
 	if( !scope().isEmpty() ) locateIn = parent().get();
-	SimpleTypeImpl::LocateResult res;
+	LocateResult res;
 	if( locateIn )
 		res = locateIn->locateDecType( alias, addFlag( ExcludeNestedTypes, ExcludeTemplates ), 0, MemberInfo::Namespace );
   if ( !res->resolved() )

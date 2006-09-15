@@ -304,7 +304,7 @@ struct PopupFillerHelpStruct {
   void insertItem( QPopupMenu* parent, SimpleTypeImpl::MemberInfo d , QString prefix ) {
     QString memType = d.memberTypeToString();
 
-    if ( d.memberType == SimpleTypeImpl::MemberInfo::Typedef && d.type.fullName() == "const int" )
+    if ( d.memberType == SimpleTypeImpl::MemberInfo::Typedef && d.type->fullName() == "const int" )
       memType = "enum";
 
     QString txt = i18n( "Jump to %1 %2" ).arg( memType ).arg( cleanForMenu( d.name ) );
@@ -461,7 +461,7 @@ struct PopupClassViewFillerHelpStruct {
 
     QString memType = d.memberTypeToString();
 
-    if ( d.memberType == SimpleTypeImpl::MemberInfo::Typedef && d.type.fullName() == "const int" )
+    if ( d.memberType == SimpleTypeImpl::MemberInfo::Typedef && d.type->fullName() == "const int" )
       memType = "enum";
 
     QString txt = i18n( "Show %1 %2" ).arg( memType ).arg( cleanForMenu( d.name ) );
@@ -531,7 +531,7 @@ class PopupFiller {
   public:
     PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ), depthAdd( dAdd ), s( maxCount ) {}
 
-    void fill( QPopupMenu * parent, SimpleTypeImpl::LocateResult d, QString prefix = "", const DeclarationInfo & sourceVariable = DeclarationInfo() ) {
+    void fill( QPopupMenu * parent, LocateResult d, QString prefix = "", const DeclarationInfo & sourceVariable = DeclarationInfo() ) {
       Debug dbg( "#fl# ", 10 )
       ;
       if ( !s || !dbg ) {
@@ -580,7 +580,7 @@ class PopupFiller {
 
       if ( d->resolved() ) {
         if ( d->resolved() ->asFunction() ) {
-          SimpleTypeImpl::LocateResult rt = d->resolved() ->locateDecType( d->resolved() ->asFunction() ->getReturnType() );
+          LocateResult rt = d->resolved() ->locateDecType( d->resolved() ->asFunction() ->getReturnType() );
           if ( rt ) {
             QPopupMenu * m = new QPopupMenu( parent );
             int gid = parent->insertItem( i18n( "Return-type \"%1\"" ).arg( cleanForMenu( rt->fullNameChain() ) ), m );
@@ -594,7 +594,7 @@ class PopupFiller {
             int gid = parent->insertItem( i18n( "Argument-types" ), m );
             QStringList::iterator it2 = argNames.begin();
             for ( QValueList<TypeDesc>::iterator it = args.begin(); it != args.end(); ++it ) {
-              SimpleTypeImpl::LocateResult at = d->resolved() ->locateDecType( *it );
+              LocateResult at = d->resolved() ->locateDecType( *it );
               QString name = "";
               if ( it2 != argNames.end() ) {
                 name = *it2;
@@ -620,7 +620,7 @@ class PopupFiller {
             QString tail = ( *it ).second.fullNameChain();
             if ( !tail.isEmpty() )
               tail = "::" + tail;
-            int gid = m->insertItem( i18n( "%1 -> %2" ).arg( cleanForMenu( ( *it ).first.name + tail ) ).arg( cleanForMenu( ( *it ).first.type.fullNameChain() + tail ) ), mo );
+            int gid = m->insertItem( i18n( "%1 -> %2" ).arg( cleanForMenu( ( *it ).first.name + tail ) ).arg( cleanForMenu( ( *it ).first.type->fullNameChain() + tail ) ), mo );
 
             struk.insertItem( mo, ( *it ).first, prefix );
 
@@ -639,8 +639,8 @@ class PopupFiller {
 #endif
 
       if ( d->resolved() ) {
-        QValueList<SimpleTypeImpl::LocateResult> bases = d->resolved() ->getBases();
-        for ( QValueList<SimpleTypeImpl::LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
+        QValueList<LocateResult> bases = d->resolved() ->getBases();
+        for ( QValueList<LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
           QPopupMenu * m = new QPopupMenu( parent );
           int gid = parent->insertItem( i18n( "Base-class \"%1\"" ).arg( cleanForMenu( ( *it ) ->fullNameChain() ) ), m );
           fill( m, *it );
@@ -678,7 +678,7 @@ struct CompTypeProcessor : public TypeProcessor {
   virtual QString processType( const QString& type ) {
     if ( !m_processArguments )
       return type;
-    SimpleTypeImpl::LocateResult t = m_scope->locateDecType( type );
+    LocateResult t = m_scope->locateDecType( type );
     if ( t )
       return t->fullNameChain();
     else
@@ -1963,7 +1963,7 @@ QString CppCodeCompletion::buildSignature( TypePointer currType ) {
     return "";
 
   QString ret;
-  SimpleTypeImpl::LocateResult rtt = currType->locateDecType( f->getReturnType() );
+  LocateResult rtt = currType->locateDecType( f->getReturnType() );
   if ( rtt->resolved() || rtt.resolutionCount() > 1 )
     ret = rtt->fullNameChain();
   else
@@ -3378,8 +3378,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
     args << Catalog::QueryArgument( "name", fullname );
 
 
-    QValueList<SimpleTypeImpl::LocateResult> parents = typeR->getBases();
-    for ( QValueList<SimpleTypeImpl::LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it ) {
+    QValueList<LocateResult> parents = typeR->getBases();
+    for ( QValueList<LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it ) {
       if ( !( *it ) ->resolved() )
         continue;
       SimpleType tp = SimpleType( ( *it ) ->resolved() );
@@ -3519,7 +3519,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 
       if ( tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_Variable || tag.kind() == Tag::Kind_Typedef ) {
         if ( !prefix.isEmpty() && resolve ) {
-          SimpleTypeImpl::LocateResult et = type->locateDecType( prefix );
+          LocateResult et = type->locateDecType( prefix );
 
           if ( et )
             prefix = et->fullNameChain();
@@ -3613,8 +3613,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
     computeCompletionEntryList( klass->name(), type, entryList, klass->typeAliasList(), isInstance, depth );
   }
 
-  QValueList<SimpleTypeImpl::LocateResult> parents = type->getBases();
-  for ( QValueList<SimpleTypeImpl::LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it ) {
+  QValueList<LocateResult> parents = type->getBases();
+  for ( QValueList<LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it ) {
     if ( !( *it ) ->resolved() )
       continue;
 
@@ -3689,7 +3689,7 @@ void CppCodeCompletion::computeCompletionEntryList( QString parent, SimpleType t
 
     CodeCompletionEntry entry;
 
-    SimpleTypeImpl::LocateResult et = type->locateDecType( klass->type() );
+    LocateResult et = type->locateDecType( klass->type() );
     if ( et )
       entry.prefix = "typedef " + et->fullNameChain();
     else
@@ -3756,7 +3756,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
       entry.prefix = meth->resultType();
     } else {
       QString tt = meth->resultType();
-      SimpleTypeImpl::LocateResult t = type->locateDecType( tt );
+      LocateResult t = type->locateDecType( tt );
       if ( t ) {
         entry.prefix = t->fullNameChain();
       } else
@@ -3876,7 +3876,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
         entry.prefix = attr->type();
       } else {
         QString tt = attr->type();
-        SimpleTypeImpl::LocateResult t = type->locateDecType( tt );
+        LocateResult t = type->locateDecType( tt );
         //SimpleType t = type->typeOf( attr->name() );
         if ( t )
           entry.prefix = t->fullNameChain();

@@ -122,7 +122,7 @@ EvaluationResult ArrowOperator::unaryApply( EvaluationResult param, const QValue
     return param;
   } else {
     if( param->resolved() ) {
-      return param->resolved()->applyOperator( SimpleTypeImpl::ArrowOp , convertList<SimpleTypeImpl::LocateResult, EvaluationResult>(innerParams) );
+      return param->resolved()->applyOperator( SimpleTypeImpl::ArrowOp , convertList<LocateResult, EvaluationResult>(innerParams) );
     } else {
       ifVerboseMajor( dbgMajor() << "failed to apply arrow-operator to unresolved type" << endl );
       return EvaluationResult();
@@ -187,7 +187,7 @@ EvaluationResult IndexOperator::unaryApply( EvaluationResult param, const QValue
     return param;
   } else {
     if( param->resolved() ) {
-      return param->resolved()->applyOperator( SimpleTypeImpl::IndexOp, convertList<SimpleTypeImpl::LocateResult>( innerParams ) );
+      return param->resolved()->applyOperator( SimpleTypeImpl::IndexOp, convertList<LocateResult>( innerParams ) );
     } else {
       ifVerboseMajor( dbgMajor() << "failed to apply index-operator to unresolved type" << endl );
       return EvaluationResult();
@@ -198,7 +198,7 @@ EvaluationResult IndexOperator::unaryApply( EvaluationResult param, const QValue
 EvaluationResult ParenOperator::unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) {
   if( param ) {
     if( param->resolved() ) {
-      return param->resolved()->applyOperator( SimpleTypeImpl::ParenOp, convertList<SimpleTypeImpl::LocateResult>(innerParams) );
+      return param->resolved()->applyOperator( SimpleTypeImpl::ParenOp, convertList<LocateResult>(innerParams) );
     } else {
       ifVerboseMajor( dbgMajor() << "failed to apply paren-operator to unresolved type" << endl );
       return EvaluationResult();
@@ -423,7 +423,7 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( TypeDesc expr, 
   }
 	if( canBeTypeExpression ) {
 		///Search for Types
-		SimpleTypeImpl::LocateResult type = searchIn->locateDecType( expr );
+		LocateResult type = searchIn->locateDecType( expr );
 
 		///Somewhere it seems to happen that constructor-definitions are placed into the same namespace as the classes themselves, so they may shadow them. This hackish code tries to deal with that, it would be better to find the position where that's done and maybe eliminate the behavior.
 		if( !bestRet ||

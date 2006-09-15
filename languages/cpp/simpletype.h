@@ -301,8 +301,8 @@ class SimpleTypeImpl : public KShared {
     }
 
     ///@todo remove this and use getTemplateParamInfo instead
-    virtual const TypeDesc findTemplateParam( const QString& /*name*/ ) {
-      return TypeDesc();
+    virtual const LocateResult findTemplateParam( const QString& /*name*/ ) {
+		return LocateResult();
     }
 
     virtual TemplateParamInfo getTemplateParamInfo() {
@@ -545,7 +545,7 @@ class SimpleTypeImpl : public KShared {
         }
 
         QString name;
-        TypeDesc type;
+        LocateResult type;
 
         ///This member is only filles for variables, typedefs and template-params!
         DeclarationInfo decl;
@@ -572,7 +572,7 @@ class SimpleTypeImpl : public KShared {
     TypeDesc replaceTemplateParams( TypeDesc desc, TemplateParamInfo& paramInfo );
     TypeDesc resolveTemplateParams( TypeDesc desc, LocateMode mode = Normal );
 
-    typedef ::LocateResult LocateResult;
+	//typedef ::LocateResult LocateResult;
 
 
     /**By default templates are included while the resolution, so when the type should be addressed from
@@ -715,6 +715,10 @@ class TypeTrace {
     void prepend( const SimpleTypeImpl::MemberInfo& t, const TypeDesc& tail = TypeDesc() ) {
       m_trace.push_front( QPair< SimpleTypeImpl::MemberInfo, TypeDesc>( t, tail ) );
     }
+
+	void prepend( const TypeTrace& trace ) {
+		m_trace = trace.m_trace + m_trace;
+	}
 };
 
 

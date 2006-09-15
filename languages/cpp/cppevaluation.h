@@ -64,7 +64,7 @@ class EvaluationResult {
 
     EvaluationResult( const EvaluationResult& rhs ) : resultType( rhs.resultType ), expr( rhs.expr ), sourceVariable( rhs.sourceVariable ) {}
 
-    SimpleTypeImpl::SimpleTypeImpl::LocateResult resultType; ///The resulting type
+    LocateResult resultType; ///The resulting type
 
     ExpressionInfo expr; ///Information about the expression that was processed
 
@@ -76,7 +76,7 @@ class EvaluationResult {
         resultType = rhs->desc();
     }
 
-  EvaluationResult( SimpleTypeImpl::LocateResult tp = TypeDesc(), DeclarationInfo var = DeclarationInfo() ) : resultType( tp ), sourceVariable( var ) {}
+  EvaluationResult( LocateResult tp = TypeDesc(), DeclarationInfo var = DeclarationInfo() ) : resultType( tp ), sourceVariable( var ) {}
 
     /*operator TypeDesc () const {
        return (TypeDesc)resultType;
@@ -95,7 +95,7 @@ class EvaluationResult {
       return & resultType.desc();
     }
 
-    operator SimpleTypeImpl::LocateResult () const {
+    operator LocateResult () const {
       return resultType;
     }
 

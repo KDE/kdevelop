@@ -66,7 +66,7 @@ public:
   
   virtual TemplateParamInfo getTemplateParamInfo();
   
-  virtual const TypeDesc findTemplateParam( const QString& name );
+  virtual const LocateResult findTemplateParam( const QString& name );
   
 private:
   Tag m_tag;

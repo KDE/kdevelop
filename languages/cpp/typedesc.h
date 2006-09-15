@@ -58,6 +58,8 @@ class LocateResult {
     	return *this;
     }*/
 
+	LocateResult& operator = ( const TypeDesc& rhs );
+
     operator const TypeDesc&() const;
 
     operator TypeDesc&() ;

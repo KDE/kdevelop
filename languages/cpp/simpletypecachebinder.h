@@ -170,7 +170,7 @@ class SimpleTypeCacheBinder : public Base {
     };
 
 
-    typedef QMap<LocateDesc, SimpleTypeImpl::LocateResult> LocateMap;
+    typedef QMap<LocateDesc, LocateResult> LocateMap;
 #ifdef USE_HASH_MAP
 	typedef __gnu_cxx::hash_map<MemberFindDesc, SimpleTypeImpl::MemberInfo, typename MemberFindDesc::hash > MemberMap;
 #else
@@ -206,7 +206,7 @@ class SimpleTypeCacheBinder : public Base {
       }
     }
 
-    virtual SimpleTypeImpl::LocateResult locateType( TypeDesc name , SimpleTypeImpl::LocateMode mode, int dir, SimpleTypeImpl::MemberInfo::MemberType typeMask ) {
+    virtual LocateResult locateType( TypeDesc name , SimpleTypeImpl::LocateMode mode, int dir, SimpleTypeImpl::MemberInfo::MemberType typeMask ) {
       if ( !secondaryActive )
         return Base::locateType( name, mode, dir, typeMask );
       LocateDesc desc( name, mode, dir, typeMask );
@@ -218,7 +218,7 @@ class SimpleTypeCacheBinder : public Base {
         ifVerbose( dbg() << "\"" << Base::str() << "\" located \"" << name.fullNameChain() << "\" from the cache" << endl );
         return *it;
       } else {
-        SimpleTypeImpl::LocateResult t = Base::locateType( name, mode, dir, typeMask );
+        LocateResult t = Base::locateType( name, mode, dir, typeMask );
         m_locateCache.insert( desc, t );
 #ifdef TEST_REMAP
         typename LocateMap::iterator it = m_locateCache.find( desc );
@@ -228,7 +228,7 @@ class SimpleTypeCacheBinder : public Base {
       }
     }
 
-    virtual QValueList<SimpleTypeImpl::LocateResult> getBases() {
+    virtual QValueList<LocateResult> getBases() {
       if ( m_haveBasesCache ) {
         ifVerbose( dbg() << "\"" << Base::str() << "\" took base-info from the cache" << endl );
         return m_basesCache;
@@ -242,7 +242,7 @@ class SimpleTypeCacheBinder : public Base {
   private:
     LocateMap m_locateCache;
     MemberMap m_memberCache;
-    QValueList<SimpleTypeImpl::LocateResult> m_basesCache;
+    QValueList<LocateResult> m_basesCache;
     bool m_haveBasesCache;
     bool secondaryActive, primaryActive;
 

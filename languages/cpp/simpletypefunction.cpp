@@ -28,7 +28,7 @@ QString SimpleTypeFunctionInterface::signature()
   QStringList argDefaults = getArgumentDefaults();
   QStringList argNames = getArgumentNames();
   QValueList<TypeDesc> argTypes = getArgumentTypes();
-  QValueList<SimpleTypeImpl::LocateResult> argRealTypes;
+  QValueList<LocateResult> argRealTypes;
     
   if( asType ) {
     for( QValueList<TypeDesc>::iterator it = argTypes.begin(); it != argTypes.end(); ++it ) {
@@ -38,7 +38,7 @@ QString SimpleTypeFunctionInterface::signature()
     
   QStringList::iterator def = argDefaults.begin();
   QStringList::iterator name = argNames.begin();
-  QValueList<SimpleTypeImpl::LocateResult>::iterator realType = argRealTypes.begin();
+  QValueList<LocateResult>::iterator realType = argRealTypes.begin();
     
   while( realType != argRealTypes.end() ) {
     if( sig != "( " )
@@ -263,7 +263,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
   } else if( klass->hasEnum( name.name() ) && ( type & MemberInfo::Typedef ) ) {
     ret.memberType = MemberInfo::Typedef;
     EnumDom e = klass->enumByName( name.name() );
-      ret.type = "const int";
+	  ret.type = TypeDesc( "const int" );
 	  ret.decl.name = e->name();
 	  ret.decl.file = e->fileName();
 	  ret.decl.comment = e->comment();
@@ -287,7 +287,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
     if( !l.isEmpty() && l.front() ) {
       ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name , TypePointer(this) ) );
       ret.type = l.front()->resultType();
-      ret.type.increaseFunctionDepth();
+      ret.type->increaseFunctionDepth();
     }
   } else if( klass->hasFunctionDefinition( name.name() )  && ( type & MemberInfo::Function ) ) {
     ret.memberType = MemberInfo::Function;
@@ -295,7 +295,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
     if( !l.isEmpty() && l.front() ) {
       ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name, TypePointer(this) ) );
       ret.type = l.front()->resultType();
-      ret.type.increaseFunctionDepth();
+      ret.type->increaseFunctionDepth();
     }
   } else if ( ns && ns->hasNamespace( name.name() )  && ( type & MemberInfo::Namespace ) ) {
     ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( ns->namespaceByName( name.name() )), name, TypePointer( this ) ) );
@@ -303,7 +303,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
     ret.type = name;
   } else {
     if( type & MemberInfo::Template ) {
-      TypeDesc s = findTemplateParam( name.name() );
+      LocateResult s = findTemplateParam( name.name() );
       if( s ) {
         ret.memberType = MemberInfo::Template;
         ret.type = s;
@@ -369,7 +369,7 @@ SimpleTypeImpl::TemplateParamInfo SimpleTypeCodeModel::getTemplateParamInfo() {
   return ret;
 }
 
-const TypeDesc SimpleTypeCodeModel::findTemplateParam( const QString& name ) {
+const LocateResult SimpleTypeCodeModel::findTemplateParam( const QString& name ) {
   if(m_item) {
     TemplateModelItem* ti = dynamic_cast<TemplateModelItem*> ( &( *m_item ) );
     TypeDesc::TemplateParams& templateParams = m_desc.templateParams();
@@ -380,23 +380,23 @@ const TypeDesc SimpleTypeCodeModel::findTemplateParam( const QString& name ) {
       if( pi != -1 && !ti->getParam( pi ).second.isEmpty() ) {
         QString def = ti->getParam( pi ).second;
         ifVerbose( dbg() << "\"" << str() << "\": using default-template-parameter \"" << def << "\" for " << name << endl );
-        return def;
+	  	return TypeDesc( def );
       } else if( pi != -1 ) {
         ifVerbose( dbg() << "\"" << str() << "\": template-type \"" << name << "\" has no pameter! " << endl );
       }
     }
   }
-  return TypeDesc();
+  return LocateResult();
 };
 
-QValueList<SimpleTypeImpl::LocateResult> SimpleTypeCodeModel::getBases() {
+QValueList<LocateResult> SimpleTypeCodeModel::getBases() {
   Debug d( "#getbases#" );
   if( !d || !safetyCounter ) {
 	  //ifVerbose( dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl );
-    return QValueList<SimpleTypeImpl::LocateResult>();
+    return QValueList<LocateResult>();
   }
   
-  QValueList<SimpleTypeImpl::LocateResult> ret;
+  QValueList<LocateResult> ret;
   
   ClassModel* klass;
   

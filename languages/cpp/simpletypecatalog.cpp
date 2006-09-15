@@ -32,7 +32,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
   if( !name ) return ret;
   
   if(  ( type & MemberInfo::Template) ) {
-    TypeDesc s = findTemplateParam( name.name() );
+    LocateResult s = findTemplateParam( name.name() );
     if( s ) {
       ret.memberType = MemberInfo::Template;
       ret.type = s;
@@ -67,11 +67,11 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
   }  if( tag.kind() == Tag::Kind_Enumerator && (type & MemberInfo::Variable) ) {
     ret.memberType = MemberInfo::Variable;
 	if( !tag.hasAttribute( "enum" ) ) {
-	  ret.type = "const int";
+	  ret.type = TypeDesc( "const int" );
 	} else {
 	  ret.type = tag.attribute( "enum" ).asString();
-	  if( ret.type.name().isEmpty() )
-		ret.type = "const int";
+	  if( ret.type->name().isEmpty() )
+		ret.type = TypeDesc( "const int" );
 	}
     ret.decl.name = tag.name();
     ret.decl.comment = tag.comment();
@@ -92,7 +92,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
 	ret.decl.file = tag.fileName();
   } else if( tag.kind() == Tag::Kind_Enum && ( type & MemberInfo::Typedef ) ) {
     ret.memberType = MemberInfo::Typedef;
-    ret.type = "const int";
+    ret.type = TypeDesc( "const int" );
 	ret.decl.name = tag.name();
 	ret.decl.comment = tag.comment();
 	tag.getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
@@ -101,7 +101,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
   } else if( (tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function)  && ( type & MemberInfo::Function ) ) {
     ret.memberType = MemberInfo::Function;
     ret.type = tagType( tag );
-    ret.type.increaseFunctionDepth();
+    ret.type->increaseFunctionDepth();
     ret.setBuildInfo( new SimpleTypeCatalogFunction::CatalogFunctionBuildInfo( tags, name, TypePointer( this ) ) );
   } else if ( tag.kind() == Tag::Kind_Namespace && ( type & MemberInfo::Namespace ) ){
     ret.setBuildInfo( new CatalogBuildInfo( tag , name, TypePointer( this ) ) );
@@ -174,14 +174,14 @@ DeclarationInfo SimpleTypeCatalog::getDeclarationInfo() {
   return ret;
 }
 
-QValueList<SimpleTypeImpl::LocateResult> SimpleTypeCatalog::getBases() {
+QValueList<LocateResult> SimpleTypeCatalog::getBases() {
   Debug d( "#getbases#" );
   if( !d || !safetyCounter ) {
 	  //ifVerbose( dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl );
-    return QValueList<SimpleTypeImpl::LocateResult>();
+    return QValueList<LocateResult>();
   }
   
-  QValueList<SimpleTypeImpl::LocateResult> ret;
+  QValueList<LocateResult> ret;
                 // try with parentsc
   QTime t;
   t.restart();
@@ -230,7 +230,7 @@ SimpleTypeImpl::TemplateParamInfo SimpleTypeCatalog::getTemplateParamInfo() {
 	return ret;
 }
 
-const TypeDesc SimpleTypeCatalog::findTemplateParam( const QString& name ) {
+const LocateResult SimpleTypeCatalog::findTemplateParam( const QString& name ) {
 	if( m_tag ) {
 		if( m_tag.hasAttribute( "tpl" ) ) {
 			QStringList l = m_tag.attribute( "tpl" ).asStringList();
@@ -253,13 +253,13 @@ const TypeDesc SimpleTypeCatalog::findTemplateParam( const QString& name ) {
 					++it;
 					if( it != l.end() && !(*it).isEmpty() ) {
                         ifVerbose( dbg() << "using default-template-type " << *it << " for " << name << endl );
-						return *it;     ///return default-parameter
+						return TypeDesc( *it );     ///return default-parameter
 					}
 				}
 			}
 		}
 	}
-	return TypeDesc();
+	return LocateResult();
 };
 
 //SimpleTypeCatalog::CatalogBuildInfo implementation
