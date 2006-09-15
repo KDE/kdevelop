@@ -1292,8 +1292,12 @@ void PartController::slotActivePartChanged( KParts::Part *part )
 {
     kdDebug(9000) << k_funcinfo << endl;
 
+    if (part) {
+        KXMLGUIClient* client = dynamic_cast<KXMLGUIClient*>(part->widget());
+        if (client) Core::setupShourtcutTips(client);
+    }
+    
     updateMenuItems();
-
     QTimer::singleShot( 100, this, SLOT(slotWaitForFactoryHack()) );
 }
 

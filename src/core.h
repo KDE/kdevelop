@@ -2,6 +2,7 @@
 #define _CORE_H_
 
 #include <qregexp.h>
+#include <kxmlguiclient.h>
 
 #include <kparts/partmanager.h>
 
@@ -23,6 +24,16 @@ class Core : public KDevCore
 public:
 
   static Core *getInstance();
+  
+  /**
+   * Setup shourtcut tips.
+   *
+   * @param client
+   *   Pointer to KXMLGUIClient object, which contain an collection
+   *   of actions (KActionCollection). If the parameter is null,
+   *   function is applied to the all available KXMLGUIClient objects.
+   */
+  static void setupShourtcutTips(KXMLGUIClient * client = 0);
 
   ~Core();
 

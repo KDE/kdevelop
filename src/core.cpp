@@ -9,6 +9,7 @@
 #include <kdeversion.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
+#include <kactioncollection.h>
 
 #include "toplevel.h"
 #include "partcontroller.h"
@@ -28,6 +29,34 @@ Core *Core::getInstance()
   return s_instance;
 }
 
+void Core::setupShourtcutTips(KXMLGUIClient * client)
+{
+  QPtrList<KXMLGUIClient> clients;
+  if (client != 0)
+    clients.append(client);
+  else
+    clients = TopLevel::getInstance()->main()->guiFactory()->clients();
+  
+  for( QPtrListIterator<KXMLGUIClient> it(clients); it.current(); ++it ) {
+    KActionCollection *actionCollection = (*it)->actionCollection();
+    for (int i = 0; i < actionCollection->count(); i++) {
+      KAction *action = actionCollection->action(i);
+            
+      QString tooltip = action->toolTip();
+      if (tooltip.isEmpty())
+        tooltip = action->text().remove('&');
+      else {
+        int i = tooltip.findRev('(');
+        if (i > 0) tooltip = tooltip.left(i).stripWhiteSpace();
+      }
+
+      QString shortcut = action->shortcutText();
+      if (!shortcut.isEmpty())
+        tooltip += " (" + shortcut + ")";
+        action->setToolTip(tooltip);
+      }
+  }
+}
 
 Core::Core()
   : KDevCore()

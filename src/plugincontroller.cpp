@@ -233,9 +233,9 @@ QStringList PluginController::argumentsFromService( const KService::Ptr &service
 void PluginController::integratePart(KXMLGUIClient *part)
 {
     if ( ! part ) return;
-
+    Core::setupShourtcutTips(part);
+    
     TopLevel::getInstance()->main()->guiFactory()->addClient(part);
-
     connect( part->actionCollection(), SIGNAL( actionStatusText( const QString & ) ),
         TopLevel::getInstance()->main()->actionCollection(), SIGNAL( actionStatusText( const QString & ) ) );
 }

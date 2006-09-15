@@ -717,6 +717,8 @@ void NewMainWindow::loadSettings() {
 
     ProjectManager::getInstance()->loadSettings();
     applyMainWindowSettings(config);
+
+    Core::setupShourtcutTips();
 }
 
 void NewMainWindow::setCurrentDocumentCaption( const QString &caption )

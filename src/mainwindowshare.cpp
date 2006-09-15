@@ -444,6 +444,7 @@ void MainWindowShare::slotKeyBindings()
             ++it;
         }
     }
+    Core::setupShourtcutTips();
   }
 }
 

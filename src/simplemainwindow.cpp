@@ -251,6 +251,8 @@ void SimpleMainWindow::loadSettings()
 
     ProjectManager::getInstance()->loadSettings();
     applyMainWindowSettings(config, "SimpleMainWindow");
+
+    Core::setupShourtcutTips();
 }
 
 void SimpleMainWindow::saveSettings( )
