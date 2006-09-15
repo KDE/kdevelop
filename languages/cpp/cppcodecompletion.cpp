@@ -1661,15 +1661,15 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 			if ( !scope.isEmpty() )
 			{
         SimpleType parentType;
-        if( !m_cachedFromContext ) {
+        /* if( !m_cachedFromContext ) {
           TypePointer t = SimpleType(QStringList())->locateDecType( scope.join("") ).desc().resolved();;
           if( t ) 
             parentType = SimpleType( t.data() );
           else
             parentType = SimpleType( scope );
-        } else {
+        } else {*/
           parentType = SimpleType( scope );
-        }
+        //}
 				parentType->setPointerDepth( 1 );
 				ctx->setContainer( parentType );
 			}
@@ -1955,12 +1955,12 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 			}
 		}
 	}
-
+  /*
   CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
   if( cfg->useLongCaching() && contextItem ) {
     conf.invalidate();
     m_cachedFromContext = contextItem;
-  }
+  }*/
   
 	return ret;
 }
