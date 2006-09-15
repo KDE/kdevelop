@@ -107,7 +107,7 @@
                             </widget>
                             <widget class="QCheckBox">
                                 <property name="name">
-                                    <cstring>checkBox5</cstring>
+                                    <cstring>tagfileCustomBox</cstring>
                                 </property>
                                 <property name="text">
                                     <string>&amp;Use custom tagfile generation arguments</string>
@@ -281,6 +281,8 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>addButton</sender>
@@ -301,10 +303,16 @@
         <slot>createNewTagSlot()</slot>
     </connection>
     <connection>
-        <sender>checkBox5</sender>
+        <sender>tagfileCustomBox</sender>
         <signal>toggled(bool)</signal>
         <receiver>tagfileCustomEdit</receiver>
         <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>tagfileCustomBox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>tagfileCustomEdit</receiver>
+        <slot>clear()</slot>
     </connection>
 </connections>
 <slots>
@@ -316,6 +324,7 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

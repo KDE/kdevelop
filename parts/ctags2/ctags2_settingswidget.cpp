@@ -56,7 +56,14 @@ CTags2SettingsWidget::~CTags2SettingsWidget()
 void CTags2SettingsWidget::loadSettings()
 {
 	QDomDocument & dom = *m_part->projectDom();
-	tagfileCustomEdit->setText( DomUtil::readEntry( dom, "/ctagspart/customArguments" ) );
+
+	QString customArgs = DomUtil::readEntry( dom, "/ctagspart/customArguments" );
+	if ( !customArgs.isEmpty() )
+	{
+		tagfileCustomBox->setChecked( true );
+		tagfileCustomEdit->setText( customArgs );
+	}
+
 	QString customTagfile = DomUtil::readEntry( dom, "/ctagspart/customTagfilePath" );
 	if (customTagfile.isEmpty())
 	{
