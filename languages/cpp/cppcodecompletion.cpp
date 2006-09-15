@@ -370,8 +370,8 @@ struct PopupFillerHelpStruct {
 
 	        }
         }
-      }
-	    return;
+		    return;
+	    }
     }
 
 
