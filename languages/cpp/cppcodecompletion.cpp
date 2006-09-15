@@ -688,7 +688,7 @@ struct CompTypeProcessor : public TypeProcessor {
 
 struct CppCodeCompletionData {
   QPtrList<RecoveryPoint> recoveryPoints;
-  QStringList classNameList;
+	//QStringList classNameList;
 
   CppCodeCompletionData() {
     recoveryPoints.setAutoDelete( true );
@@ -871,6 +871,7 @@ void CppCodeCompletion::slotPartAdded( KParts::Part * part ) {
 
 void CppCodeCompletion::slotActivePartChanged( KParts::Part * part ) {
   emptyCache();
+	this->d->recoveryPoints.clear();
   if ( m_activeHintInterface && m_activeView ) {
     disconnect( m_activeView , SIGNAL( needTextHint( int, int, QString & ) ), this, SLOT( slotTextHint( int, int, QString& ) ) );
 
@@ -1759,12 +1760,12 @@ void CppCodeCompletion::needRecoveryPoints() {
     } else {
       computeRecoveryPointsLocked();
     }
-  }
-  if ( this->d->recoveryPoints.isEmpty() ) {
-    kdDebug( 9007 ) << "Failed to compute recovery-points for " << m_activeFileName << endl;
-    m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Failed to compute recovery-points for %1" ).arg( m_activeFileName ), 1000 );
-  } else {
-    kdDebug( 9007 ) << "successfully computed recovery-points for " << m_activeFileName << endl;
+	  if ( this->d->recoveryPoints.isEmpty() ) {
+		  kdDebug( 9007 ) << "Failed to compute recovery-points for " << m_activeFileName << endl;
+		  m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Failed to compute recovery-points for %1" ).arg( m_activeFileName ), 1000 );
+	  } else {
+		  kdDebug( 9007 ) << "successfully computed recovery-points for " << m_activeFileName << endl;
+	  }
   }
 }
 
