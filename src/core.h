@@ -26,7 +26,10 @@ public:
   static Core *getInstance();
   
   /**
-   * Setup shourtcut tips.
+   * Setup shourtcut tips. For every KAction with a shortcut,
+   * appends the shortcut string, in parenthesis, to the
+   * actions's tooltip. If tooltip already has any text in
+   * parens, it's removed and shortcut is added instead.
    *
    * @param client
    *   Pointer to KXMLGUIClient object, which contain an collection
