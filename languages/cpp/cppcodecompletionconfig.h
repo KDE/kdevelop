@@ -62,6 +62,10 @@ public:
 		ByAlphabet
 	};
 
+    ///Whether the completion-cache should be kept alive as long as the context does not change
+    bool useLongCaching() const {
+      return true;
+    }
 
 	bool showOnlyAccessibleItems() const {
 		///not yet used

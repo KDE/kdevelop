@@ -37,7 +37,8 @@ enum ResolutionFlags {
 };
 
 class LocateResult {
-    TypeDescPointer m_desc;
+    struct D;
+    D* d;
     int m_resolutionCount;
     ResolutionFlags m_flags;
     int m_locateDepth; ///How far away from the beginning the type was found(counting steps upwards and steps into base-classes. Counter is stopped on the first typedef.)
@@ -87,7 +88,7 @@ class LocateResult {
       return * this;
     }
 
-    operator TypeDescPointer();
+  //operator TypeDescPointer();
 
     operator bool() const;
 

@@ -117,6 +117,7 @@ public slots:
 	void completeText( bool invokedOnDemand = false );
 
 private slots:
+    void emptyCache();
 	void slotPartAdded( KParts::Part *part );
 	void slotActivePartChanged( KParts::Part *part );
 	void slotArgHintHidden();
@@ -212,7 +213,8 @@ private:
 	QTimer* m_ccTimer;
     QTimer* m_showStatusTextTimer;
     QValueList<QPair<int, QString> > m_statusTextList;
-    
+
+    void fitContextItem( int nLine, int nColumn );
 	void needRecoveryPoints();
 	void addStatusText( QString text, int timeout );
     void clearStatusText();
@@ -237,6 +239,8 @@ private:
 	CompletionMode m_completionMode;
 
 	QTime m_lastHintTime;
+
+    ItemDom m_cachedFromContext;  ///Can be a function or a class, representing the position from where the last completion was started. Necessary as long as all imports are put into the global namespace.
 	
 	QRegExp m_includeRx;
 	QRegExp m_cppCodeCommentsRx;

@@ -129,7 +129,7 @@ class LogDebug {
     DBGStreamType& m_state;
     int m_max;
   public:
-    LogDebug( const QString& prefix = "#", int max = completionMaxDepth, DBGStreamType& st = dbgState ) : m_state( st ), m_max( max ) {
+    LogDebug( const char* prefix = "#", int max = completionMaxDepth, DBGStreamType& st = dbgState ) : m_state( st ), m_max( max ) {
       m_state.push( prefix );
     };
     ~LogDebug() {
@@ -164,7 +164,7 @@ class DepthDebug {
     DBGStreamType& m_state;
     int m_max;
   public:
-    DepthDebug( const QString& prefix = "#", int max = completionMaxDepth, DBGStreamType& st = dbgState ) : m_state( st ), m_max( max ) {
+    DepthDebug( const char* prefix = "#", int max = completionMaxDepth, DBGStreamType& st = dbgState ) : m_state( st ), m_max( max ) {
       Q_UNUSED( prefix );
       m_state.pushDepth();
     };

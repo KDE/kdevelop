@@ -672,9 +672,11 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 {
 	cppCompletionInstance = this;
 	m_cppCodeCommentsRx.setMinimal( true );
-
+  
 	m_pSupport = part;
 
+  connect( m_pSupport->codeCompletionConfig(), SIGNAL( stored() ), this, SLOT( emptyCache() ) );
+           
 	m_activeCursor = 0;
 	m_activeEditor = 0;
 	m_activeCompletion = 0;
@@ -816,6 +818,7 @@ void CppCodeCompletion::slotPartAdded( KParts::Part *part )
 
 void CppCodeCompletion::slotActivePartChanged( KParts::Part *part )
 {
+  emptyCache();
 	if( m_activeHintInterface && m_activeView ) {
 		disconnect(m_activeView , SIGNAL( needTextHint(int, int, QString &) ), this, SLOT( slotTextHint(int, int, QString&) ) );
 
@@ -929,6 +932,75 @@ void CppCodeCompletion::slotTextChanged()
 			time = m_pSupport->codeCompletionConfig() ->codeCompletionDelay();
 		m_ccTimer->start( time, true );
 	}
+
+  fitContextItem( nLine, nCol );
+}
+
+void CppCodeCompletion::fitContextItem( int nLine, int nCol ) {
+///Find out whether the cache may be used on, or has to be cleared.
+  if( m_cachedFromContext ) {
+    int sLine, sCol, eLine, eCol;
+    m_cachedFromContext->getStartPosition( &sLine, &sCol );
+    m_cachedFromContext->getEndPosition( &eLine, &eCol );
+    
+    if( ( nLine < sLine || (nLine == sLine && nCol < sCol) ) ||( nLine > eLine || (nLine == eLine && nCol >= eCol) )) {
+      ///The stored item was left. First check whether the item was expanded.
+      FileDom file = m_pSupport->codeModel()->fileByName( m_activeFileName );
+      
+      if( file ) {
+        CodeModelUtils::CodeModelHelper fileModel( m_pSupport->codeModel(), file );
+        if( m_cachedFromContext->isClass() ) {
+          ClassDom klass = fileModel.classAt( nLine, nCol );
+          if( klass ) {
+            ClassDom oldClass = dynamic_cast<ClassModel*>( m_cachedFromContext.data() );
+            if( oldClass && oldClass->name() == klass->name() && oldClass->scope() == klass->scope() ) {
+              m_cachedFromContext = klass.data();
+            } else {
+              emptyCache();
+            }
+          } else {
+            emptyCache();
+          }
+        } else if( m_cachedFromContext->isFunction() ) {
+          FunctionDom function = fileModel.functionAt( nLine, nCol );
+          if( function ) {
+            FunctionDom oldFunction = dynamic_cast<FunctionModel*>( m_cachedFromContext.data() );
+            if( oldFunction && oldFunction->name() == function->name() && function->scope() == oldFunction->scope() && oldFunction->argumentList().count() == function->argumentList().count() ) {
+              ArgumentList l1 = oldFunction->argumentList();
+              ArgumentList l2 = function->argumentList();
+              ArgumentList::iterator it = l1.begin();
+              ArgumentList::iterator it2 = l2.begin();
+              bool match = true;
+              while( it != l1.end() ) {
+                if( (*it)->type() != (*it2)->type() ) {
+                  match = false;
+                  break;
+                }
+                ++it;
+                ++it2;
+              }
+              if( match ) {
+                m_cachedFromContext = function.data();
+              } else {
+                emptyCache();
+              }
+              
+            } else {
+              emptyCache();
+            }
+          } else {
+            emptyCache();
+          }
+        } else {
+          emptyCache();
+        }
+      } else {
+        emptyCache();
+      }
+      
+      
+    }
+  }
 }
 
 enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN, T_TEMP };
@@ -1588,31 +1660,44 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 
 			if ( !scope.isEmpty() )
 			{
-				SimpleType parentType = SimpleType( scope.join("::") );
+        SimpleType parentType;
+        if( !m_cachedFromContext ) {
+          TypePointer t = SimpleType(QStringList())->locateDecType( scope.join("") ).desc().resolved();;
+          if( t ) 
+            parentType = SimpleType( t.data() );
+          else
+            parentType = SimpleType( scope );
+        } else {
+          parentType = SimpleType( scope );
+        }
 				parentType->setPointerDepth( 1 );
 				ctx->setContainer( parentType );
 			}
 
 			SimpleType global = ctx->global();
 
-			if( recoveryPoint ) {
-				recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig()->namespaceAliases() );
-			} else {
-				kdDebug( 9007 ) << "no recovery-point, cannot use imports" << endl;
-			}
+      if( !m_cachedFromContext ) {
+			 if( recoveryPoint ) {
+				  recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig()->namespaceAliases() );
+			 } else {
+				  kdDebug( 9007 ) << "no recovery-point, cannot use imports" << endl;
+			 }
+      }
 
 			///Insert the "this"-type(container) and correctly resolve it using imported namespaces
 			if ( ctx->container() )
 			{
-				TypeDesc td = ctx->container()->desc();
-				td.makePrivate();
-				td.resetResolved( );
-				TypePointer tt = ctx->container()->locateDecType( td, SimpleTypeImpl::LocateBase )->resolved();
-				if( tt ) {
-					ctx->setContainer( SimpleType( tt ) );
-				} else {
-					kdDebug( 9007 ) << "could not resolve local this-type \"" << td.fullNameChain() << "\"" << endl;
-				}
+        if( !m_cachedFromContext ) {   
+				  TypeDesc td = ctx->container()->desc();
+				  td.makePrivate();
+				  td.resetResolved( );
+				  TypePointer tt = ctx->container()->locateDecType( td, SimpleTypeImpl::LocateBase )->resolved();
+				  if( tt ) {
+					 ctx->setContainer( SimpleType( tt ) );
+				  } else {
+					 kdDebug( 9007 ) << "could not resolve local this-type \"" << td.fullNameChain() << "\"" << endl;
+				  }
+        }
 
 				SimpleType this_type = ctx->container();
 
@@ -1661,11 +1746,20 @@ bool CppCodeCompletion::functionContains( FunctionDom f , int line, int col ) {
 	return (line > sl || (line == sl && col >= sc ) ) && (line < el || ( line == el && col < ec ) );
 }
 
+void CppCodeCompletion::emptyCache() {
+  m_cachedFromContext = 0;
+  SimpleTypeConfiguration c; ///Will automatically destroy the type-store when the function is closed
+  kdDebug( 9007 ) << "completion-cache emptied" << endl;
+}
+
 void  CppCodeCompletion::needRecoveryPoints() {
+  
 	if( this->d->recoveryPoints.isEmpty() ) {
 		kdDebug( 9007 ) << "missing recovery-points for file " << m_activeFileName << " they have to be computed now" << endl;
     m_pSupport->backgroundParser()->lock();
-
+      
+    std::vector<CppCodeCompletion> vec;
+    //this->
 		TranslationUnitAST * ast = m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
     m_pSupport->backgroundParser()->unlock();
     if( !ast ) {
@@ -1697,9 +1791,12 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 	needRecoveryPoints();
 
 	CodeModelUtils::CodeModelHelper fileModel( m_pSupport->codeModel(), file );
-
+  ItemDom contextItem;
+  
 	int nLine = line, nCol = column;
 
+  fitContextItem( line, column );
+  
 	QString strCurLine = m_activeEditor->textLine( nLine );
 
 	QString ch = strCurLine.mid( nCol - 1, 1 );
@@ -1718,8 +1815,10 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 		while ( pos > 0 && c.isSpace() )
 			c = strCurLine[ --pos ];
 
-		if ( !( c.isLetterOrNumber() || c == '_' || c == ')' || c == ']' || c == '>' ) )
+    if ( !( c.isLetterOrNumber() || c == '_' || c == ')' || c == ']' || c == '>' ) ) {
+      conf.invalidate();
 			return SimpleType();
+    }
 	}
 	bool showArguments = false;
 
@@ -1733,7 +1832,6 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 
 	QString word;
 
-
 	ItemLocker<BackgroundParser> block( *m_pSupport->backgroundParser() );
 
 	FunctionDom currentFunction = fileModel.functionAt( line, column );
@@ -1743,7 +1841,8 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 
 		if( currentFunction && functionContains( currentFunction, line, column ) ) {
 			SimpleContext* ctx = computeFunctionContext( currentFunction, line, column );
-
+      contextItem = currentFunction.data();
+      
 			if( ctx ) {
 				opt = remFlag( opt, SearchInClasses );
 				int startLine, endLine;
@@ -1815,19 +1914,31 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 				scope = recoveryPoint->scope;
 			}
 		} else {
+      contextItem = currentClass.data();
 			scope = currentClass->scope();
 			scope << currentClass->name();
 			currentClass->getStartPosition( &startLine, &startCol );
 		}
 
-		SimpleType container( scope );
+    SimpleType container;
+    if( m_cachedFromContext ) {
+      SimpleTypeImpl* i = SimpleType(QStringList())->locateDecType( scope.join("::") ).desc().resolved().data();
+      if( i )
+        container = i;
+      else
+        container = SimpleType( scope );
+    } else {
+      container = SimpleType( scope );
+    }
 
 		SimpleType global = getGlobal( container );
 
-		conf.setGlobalNamespace( &(*global) );
-
-		if( recoveryPoint )
-			recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig()->namespaceAliases() );
+    if( !m_cachedFromContext ) {
+		  conf.setGlobalNamespace( &(*global) );
+  
+		  if( recoveryPoint )
+			 recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig()->namespaceAliases() );
+    }
 
 		ExpressionInfo exp = findExpressionAt( line, column , startLine, startCol );
 		exp.t = ExpressionInfo::TypeExpression;	///Outside of functions, we can only handle type-expressions
@@ -1845,6 +1956,12 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 		}
 	}
 
+  CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
+  if( cfg->useLongCaching() && contextItem ) {
+    conf.invalidate();
+    m_cachedFromContext = contextItem;
+  }
+  
 	return ret;
 }
 
@@ -1893,7 +2010,8 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 	needRecoveryPoints();
 	
-	m_demandCompletion = invokedOnDemand;
+  CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
+  m_demandCompletion = invokedOnDemand;
 
 	FileDom file = m_pSupport->codeModel()->fileByName( m_activeFileName );
 
@@ -1905,9 +2023,13 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 	CodeModelUtils::CodeModelHelper fileModel( m_pSupport->codeModel(), file );
 
+  ItemDom contextItem;
+  
 	unsigned int line, column;
 	m_activeCursor->cursorPositionReal( &line, &column );
 
+  fitContextItem( line, column );
+  
 	///Check whether the cursor is within a comment
 	int surroundingStartLine = line - 10, surroundingEndLine = line + 10;
 	if( surroundingStartLine < 0 ) surroundingStartLine = 0;
@@ -1923,11 +2045,8 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		return;
 	}
 
-
-
-
 	int nLine = line, nCol = column;
-
+  
 	QString strCurLine = clearComments( m_activeEditor->textLine( nLine ) );
 
 	QString ch = strCurLine.mid( nCol - 1, 1 );
@@ -2007,15 +2126,18 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 	SimpleContext* ctx = 0;
 	SimpleTypeConfiguration conf( m_activeFileName );
-	SimpleType::setGlobalNamespace( 0 ); ///hmm
+  if( ! m_cachedFromContext )
+    SimpleType::setGlobalNamespace( 0 ); ///hmm
 
 	ItemLocker<BackgroundParser> block( *m_pSupport->backgroundParser() );
 
 	FunctionDom currentFunction = fileModel.functionAt( line, column );
+  
 	RecoveryPoint * recoveryPoint = d->findRecoveryPoint( line, column );
 	if ( recoveryPoint || currentFunction )
 	{
-		QStringList scope;
+    contextItem = currentFunction.data();
+    QStringList scope;
 
 		int startLine, startColumn;
 		if( currentFunction ) { ///maybe change the priority of these
@@ -2144,11 +2266,23 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 					if ( !scope.isEmpty() )
 					{
-						SimpleType parentType = SimpleType( scope.join("::") );
-						this_type = parentType;
-						this_type->setPointerDepth( 1 );
-						ctx->setContainer( this_type );
-					}
+            SimpleType parentType;
+            
+
+            if( m_cachedFromContext ) {
+              SimpleTypeImpl* i = SimpleType(QStringList())->locateDecType( scope.join("::") ).desc().resolved().data();
+              if( i ) {
+                parentType = i;
+              } else {
+                parentType = SimpleType( scope );
+              }
+            } else {
+						  parentType = SimpleType( scope );
+            }
+            this_type = parentType;
+            this_type->setPointerDepth( 1 );
+            ctx->setContainer( this_type );
+          }
 
 					* ctx->container(); ///this is necessary, to make sure that the SimpleType is physically instatiated. Copying a not instatiated type will make changes made to the copy lost.
 
@@ -2160,7 +2294,8 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 					}
 
 
-						SimpleTypeNamespace* n = dynamic_cast<SimpleTypeNamespace*>( &(*global) );
+          if( ! m_cachedFromContext ) {
+            SimpleTypeNamespace* n = dynamic_cast<SimpleTypeNamespace*>( &(*global) );
 						if( !n ) {
 						QString str = QString("the global namespace was not resolved correctly , real type: ") + typeid(&(*global)).name() + QString(" name: ") + global->scope().join("::") + " scope-size: " + global->scope().count();
 							kdDebug( 9007 ) << str << endl;
@@ -2177,21 +2312,25 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 								kdDebug( 9007 ) << "WARNING: no recovery-point, cannot use imports" << endl;
 							}
 
-							n->addAliases(  m_pSupport->codeCompletionConfig()->namespaceAliases() );
-							conf.setGlobalNamespace( &(*global) );
+               n->addAliases(  m_pSupport->codeCompletionConfig()->namespaceAliases() );
+							 conf.setGlobalNamespace( &(*global) );
+              }
+          }
 
 					///Now locate the local type using the imported namespaces
 							if ( !scope.isEmpty() )
 							{
-								TypeDesc td = ctx->container()->desc();
-								td.makePrivate();
-								td.resetResolved( );
-								TypePointer tt = ctx->container()->locateDecType( td, SimpleTypeImpl::LocateBase )->resolved();
-								if( tt ) {
-									ctx->setContainer( SimpleType( tt ) );
-								} else {
-									kdDebug( 9007 ) << "could not resolve local this-type \"" << td.fullNameChain() << "\"" << endl;
-								}
+                if( !m_cachedFromContext ) {
+								  TypeDesc td = ctx->container()->desc();
+								  td.makePrivate();
+								  td.resetResolved( );
+								  TypePointer tt = ctx->container()->locateDecType( td, SimpleTypeImpl::LocateBase )->resolved();
+								  if( tt ) {
+									 ctx->setContainer( SimpleType( tt ) );
+								  } else {
+									 kdDebug( 9007 ) << "could not resolve local this-type \"" << td.fullNameChain() << "\"" << endl;
+								  }
+                }
 
 								SimpleType this_type = ctx->container();
 
@@ -2211,7 +2350,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 							exp.t = (ExpressionInfo::Type) (ExpressionInfo::NormalExpression | ExpressionInfo::TypeExpression);
 							type = evaluateExpression( exp, ctx );
 						}
-				}
+				
 			}
 			else
 			{
@@ -2503,6 +2642,11 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 	delete( ctx );
 	ctx = 0;
+
+  if( cfg->useLongCaching() ) {
+    conf.invalidate();
+    m_cachedFromContext = contextItem;
+  }
 }
 
 
@@ -3447,7 +3591,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 			prefix = "enum";
 		} else {
 
-			if((tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_Variable ))
+      if( tag.kind() == Tag::Kind_FunctionDeclaration || tag.kind() == Tag::Kind_Function || tag.kind() == Tag::Kind_Variable || tag.kind() == Tag::Kind_Typedef )
 			{
 				if( !prefix.isEmpty() && resolve ) {
 					SimpleTypeImpl::LocateResult et =  type->locateDecType( prefix );
@@ -3616,7 +3760,13 @@ void CppCodeCompletion::computeCompletionEntryList( QString parent, SimpleType t
 		++it;
 		
 		CodeCompletionEntry entry;
-		entry.prefix = "typedef " + klass->type();
+    
+    SimpleTypeImpl::LocateResult et =  type->locateDecType( klass->type() );
+    if( et )
+      entry.prefix = "typedef " + et->fullNameChain();
+   else 
+  		entry.prefix = "typedef " + klass->type();
+    
 		entry.prefix = stringMult( depth, "  " ) + entry.prefix.stripWhiteSpace();
 		entry.text = klass->name();
 		entry.comment = commentFromItem( type, klass.data() );

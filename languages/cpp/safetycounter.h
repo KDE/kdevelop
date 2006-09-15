@@ -22,7 +22,7 @@ struct SafetyCounter {
   int safetyCounter;
   const int maxSafetyCounter;
   
-  SafetyCounter( int max = 20000 ) : safetyCounter(0), maxSafetyCounter(max) {
+  SafetyCounter( int max = 40000 ) : safetyCounter(0), maxSafetyCounter(max) {
   }
   
   void init() {

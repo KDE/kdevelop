@@ -52,7 +52,7 @@ class SimpleTypeCacheBinder : public Base {
       LocateDesc() {}
 
       LocateDesc( TypeDesc name, SimpleTypeImpl::LocateMode mode, int dir, SimpleTypeImpl::MemberInfo::MemberType typeMask ) : mname( name ), mmode( mode ) , mdir( dir ) , mtypeMask( typeMask ) {
-        fullName = mname.fullTypeStructure();
+        fullName = mname.fullNameChain();//fullTypeStructure();
       }
 
       int compare( const LocateDesc& rhs ) const {
@@ -206,7 +206,7 @@ class SimpleTypeCacheBinder : public Base {
       }
     }
 
-    virtual SimpleTypeImpl::LocateResult locateType( const TypeDesc& name , SimpleTypeImpl::LocateMode mode, int dir, SimpleTypeImpl::MemberInfo::MemberType typeMask ) {
+    virtual SimpleTypeImpl::LocateResult locateType( TypeDesc name , SimpleTypeImpl::LocateMode mode, int dir, SimpleTypeImpl::MemberInfo::MemberType typeMask ) {
       if ( !secondaryActive )
         return Base::locateType( name, mode, dir, typeMask );
       LocateDesc desc( name, mode, dir, typeMask );

@@ -31,15 +31,26 @@ const char* TypeDesc::functionMark = "[function] ";
 
 using namespace StringHelpers;
 
-LocateResult::LocateResult() : m_desc( 0 ), m_resolutionCount( 0 ), m_flags( NoFlag ), m_trace( 0 ), m_locateDepth( 0 ) {}
+struct LocateResult::D {
+  TypeDesc m_desc;
+};
 
-LocateResult::LocateResult( const TypeDesc& desc ) : m_desc( new TypeDescShared( desc ) ), m_resolutionCount( 0 ), m_flags( NoFlag ), m_trace( 0 ), m_locateDepth( 0 ) {}
+LocateResult::LocateResult() : d( new D() ), m_resolutionCount( 0 ), m_flags( NoFlag ), m_trace( 0 ), m_locateDepth( 0 ) {}
 
-LocateResult::LocateResult( const TypeDescPointer& desc ) : m_desc( desc ), m_resolutionCount( 0 ), m_flags( NoFlag ), m_trace( 0 ), m_locateDepth( 0 ) {}
+LocateResult::LocateResult( const TypeDesc& desc ) : d( new D() ), m_resolutionCount( 0 ), m_flags( NoFlag ), m_trace( 0 ), m_locateDepth( 0 ) {
+  d->m_desc = desc;
+}
 
-LocateResult::LocateResult( TypeDescShared* desc ) : m_desc( desc ), m_resolutionCount( 0 ), m_flags( NoFlag ), m_trace( 0 ), m_locateDepth( 0 ) {}
+LocateResult::LocateResult( const TypeDescPointer& desc ) : d( new D() ), m_resolutionCount( 0 ), m_flags( NoFlag ), m_trace( 0 ), m_locateDepth( 0 ) {
+  d->m_desc = *desc;
+}
 
-LocateResult::LocateResult( const LocateResult& rhs ) : m_desc( rhs.m_desc ), m_resolutionCount( rhs.m_resolutionCount ), m_flags( rhs.m_flags ), m_trace( 0 ), m_locateDepth( rhs.m_locateDepth ) {
+LocateResult::LocateResult( TypeDescShared* desc ) : d( new D() ), m_resolutionCount( 0 ), m_flags( NoFlag ), m_trace( 0 ), m_locateDepth( 0 ) {
+  d->m_desc = *desc;
+}
+
+LocateResult::LocateResult( const LocateResult& rhs ) : d( new D() ), m_resolutionCount( rhs.m_resolutionCount ), m_flags( rhs.m_flags ), m_trace( 0 ), m_locateDepth( rhs.m_locateDepth ) {
+  d->m_desc = rhs.d->m_desc;
   if ( rhs.m_trace )
     m_trace = new TypeTrace( *rhs.m_trace );
 }
@@ -48,12 +59,13 @@ LocateResult::LocateResult( const LocateResult& rhs ) : m_desc( rhs.m_desc ), m_
 LocateResult::~LocateResult() {
   if ( m_trace )
     delete m_trace;
+  delete d;
 }
 
 LocateResult& LocateResult::operator = ( const LocateResult& rhs ) {
   if ( &rhs == this )
     return * this;
-  m_desc = rhs.m_desc;
+  d->m_desc = rhs.d->m_desc;
 	m_locateDepth = rhs.m_locateDepth;
 	m_flags = rhs.m_flags;
 	m_resolutionCount = rhs.m_resolutionCount;
@@ -70,45 +82,35 @@ LocateResult& LocateResult::operator = ( const LocateResult& rhs ) {
 
 
 LocateResult::operator const TypeDesc&() const {
-  if ( !m_desc )
-    const_cast<TypeDescPointer&>( m_desc ) = new TypeDescShared();
-  return *m_desc;
+  return d->m_desc;
 }
 
 LocateResult::operator TypeDesc&() {
-  if ( !m_desc )
-    m_desc = new TypeDescShared();
-  return *m_desc;
+  return d->m_desc;
 }
 
 TypeDesc& LocateResult::desc() {
-  if ( !m_desc )
-    m_desc = new TypeDescShared();
-  return *m_desc;
+  return d->m_desc;
 }
 
 const TypeDesc* LocateResult::operator ->() const {
-  if ( !m_desc )
-    const_cast<TypeDescPointer&>( m_desc ) = new TypeDescShared();
-  return m_desc;
+  return &d->m_desc;
 }
 
 TypeDesc* LocateResult::operator ->() {
-  if ( !m_desc )
-    m_desc = new TypeDescShared();
-  return m_desc;
+  return &d->m_desc;
 }
 
 LocateResult::operator bool() const {
-  return m_desc && *m_desc;
+  return d->m_desc;
 }
 
-
+/*
 LocateResult::operator TypeDescPointer() {
   if ( !m_desc )
     m_desc = new TypeDescShared();
   return m_desc;
-}
+}*/
 
 
 void LocateResult::addResolutionFlag( ResolutionFlags flag ) {

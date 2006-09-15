@@ -176,8 +176,9 @@ class SimpleType {
 
 
 class SimpleTypeConfiguration {
+  bool m_invalid;
   public:
-    SimpleTypeConfiguration( QString currentFileName = "" ) {
+    SimpleTypeConfiguration( QString currentFileName = "" ) : m_invalid( false ) {
       globalCurrentFile = currentFileName;
       dbgState.clearCounter();
     }
@@ -185,8 +186,13 @@ class SimpleTypeConfiguration {
     void setGlobalNamespace( TypePointer globalNamespace );
 
     virtual ~SimpleTypeConfiguration() {
-      SimpleType::resetGlobalNamespace();
-      SimpleType::destroyStore();
+      if( !m_invalid ) {
+        SimpleType::resetGlobalNamespace();
+        SimpleType::destroyStore();
+      }
+    }
+    void invalidate() {
+      m_invalid = true;
     }
 };
 
@@ -432,6 +438,7 @@ class SimpleTypeImpl : public KShared {
 
     ///sets the parent-type(type this one is nested in)
     void setParent( TypePointer parent ) {
+      if( parent == m_parent ) return;
       invalidateSecondaryCache();
       if ( &( *parent ) == this ) {
         kdDebug( 9007 ) << "setSlaveParent error\n" << kdBacktrace() << endl;
@@ -577,12 +584,13 @@ class SimpleTypeImpl : public KShared {
       LocateResult r = locateType( td, mode, dir, typeMask );
       r.desc() = resolveTemplateParams( r.desc() );
       r->takeInstanceInfo( desc );
+      //  r.desc().setPointerDepth( r.desc().pointerDepth() + td.pointerDepth() );
       return r;
     }
 
     //protected:
 
-    LocateResult locateType( TypeDesc name , LocateMode mode = Normal, int dir = 0 , MemberInfo::MemberType typeMask = bitInvert( addFlag( MemberInfo::Variable, MemberInfo::Function ) ) ) ;
+    virtual LocateResult locateType( TypeDesc name , LocateMode mode = Normal, int dir = 0 , MemberInfo::MemberType typeMask = bitInvert( addFlag( MemberInfo::Variable, MemberInfo::Function ) ) ) ;
   public:
 
     LocateResult getFunctionReturnType( QString functionName, QValueList<LocateResult> params = QValueList<LocateResult>() );
