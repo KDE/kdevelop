@@ -27,7 +27,8 @@
 
 const char* TypeDesc::functionMark = "[function] ";
 
-//#define USELEXER
+///Activated because of expressions like "const char* const"(the other algorithm chooses the const)
+#define USELEXER
 
 using namespace StringHelpers;
 

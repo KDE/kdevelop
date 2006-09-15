@@ -330,11 +330,12 @@ struct PopupFillerHelpStruct {
 	          QMap< QString, QPopupMenu* >::iterator it = m_namespacePopupCache.find( scope );
 	          if( it != m_namespacePopupCache.end() ) {
 		          parent->insertItem( "Imported Namespace " +  scope, *it );
-		          
+		          delete m;
 	          } else {
 		          parent->insertItem( "Imported Namespace " +  scope, m );
  						
 							insertItem( m, ( new SimpleTypeCachedCodeModel( cm->item() ) ) ->desc(), prefix );
+		          m_namespacePopupCache.insert( scope, m );
 	          }
           }
         }
