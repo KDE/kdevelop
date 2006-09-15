@@ -1787,7 +1787,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 	kdDebug( 9007 ) << "Error: file " << m_activeFileName << " could not be located in the code-model, code-completion stopped\n";
 		return SimpleType();
 	}
-
+	
 	needRecoveryPoints();
 
 	CodeModelUtils::CodeModelHelper fileModel( m_pSupport->codeModel(), file );
@@ -1795,6 +1795,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
   
 	int nLine = line, nCol = column;
 
+	emptyCache();
   fitContextItem( line, column );
   
 	QString strCurLine = m_activeEditor->textLine( nLine );
