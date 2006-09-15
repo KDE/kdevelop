@@ -19,13 +19,19 @@
 class TypeDecoration {
 
   public:
-    TypeDecoration( const QString& str = "" ) {
+	TypeDecoration() {
+	}
+
+	///Removes the decoration from the given string
+	TypeDecoration( QString& str ) {
       init( str );
     }
 
     ~TypeDecoration() {}
 
-    TypeDecoration& operator = ( QString str ) {
+	///Removes the decoration from the assigned
+	TypeDecoration& operator = ( QString& str ) {
+	  clear();
       init( str );
       return *this;
     }
@@ -53,21 +59,45 @@ class TypeDecoration {
     }
 
   private:
-    void init( QString str ) {
+    void init( QString& str ) {
       str = str.stripWhiteSpace();
 
-      static QString cnst = "const ";
-      static QString ref = "&";
-      if ( str.startsWith( cnst ) )
-        m_decoration_front = cnst;
-      else
-        m_decoration_front = QString();
+      static const QString cnst = "const";
+      static const QString ref = "&";
+	    if ( str.startsWith( cnst ) ) {
+		    str.remove( 0, cnst.length() );
+		    if( str.isEmpty() || ( !str[0].isLetterOrNumber() && str[0] != '_' ) ) {
+				m_decoration_front += cnst + " ";
+			    str = str.stripWhiteSpace();
+		    } else {
+			    str = cnst + str; ///The const was not alone
+		    }
+	    }
 
-      if ( str.endsWith( ref ) )
-        m_decoration_back = ref;
-      else
-        m_decoration_back = QString();
-
+	  if( str.endsWith( cnst ) ) {
+		  str.remove( str.length() - cnst.length(), cnst.length() );
+		  if( str.isEmpty() || ( !str[str.length()-1].isLetterOrNumber() && str[str.length()-1] != '_' ) ) {
+			  m_decoration_back = (m_decoration_back + " " + cnst);
+			  str = str.stripWhiteSpace();
+		  } else {
+			  str = str + cnst; ///The const was not alone
+		  }
+	  }
+	    
+	  if ( str.endsWith( ref ) ) {
+	      m_decoration_back = ref + m_decoration_back;
+		  str = str.remove( str.length() - ref.length(), ref.length() ).stripWhiteSpace();
+		  
+		  if( str.endsWith( cnst ) ) {
+			  str.remove( str.length() - cnst.length(), cnst.length() );
+			  if( str.isEmpty() || ( !str[str.length()-1].isLetterOrNumber() && str[str.length()-1] != '_' ) ) {
+				  m_decoration_back = m_decoration_back + " " + cnst;
+				  str = str.stripWhiteSpace();
+			  } else {
+				  str = str + cnst; ///The const was not alone
+			  }
+		  }
+	  }
     }
 
     QString m_decoration_front, m_decoration_back;
