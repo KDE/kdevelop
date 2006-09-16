@@ -55,6 +55,8 @@ typedef sparse_hash_map<QString, KDevAST*, QStrHash> PHASH;
 
 #endif
 
+class KDevLanguageSupport;
+
 class KDEVINTERFACES_EXPORT KDevPersistentHash: public QObject
 {
     Q_OBJECT
@@ -68,6 +70,8 @@ public:
     // FIXME hack, returns the first AST with a matching filename...
     // remove when no longer needed
     KDevAST* retrieveAST( const QString &filename );
+
+    void clearASTs(KDevLanguageSupport* language);
 
     void load();
     void save();

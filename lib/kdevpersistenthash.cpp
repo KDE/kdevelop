@@ -85,6 +85,21 @@ KDevAST * KDevPersistentHash::retrieveAST(const KUrl & url)
 #endif
 }
 
+void KDevPersistentHash::clearASTs(KDevLanguageSupport* language)
+{
+#ifndef NO_GOOGLE_SPARSEHASH
+#else
+    QMutableHashIterator<KUrl, KDevAST*> it = m_astHash;
+    while (it.hasNext()) {
+        it.next();
+        if (it.value()->language == language) {
+            it.value()->release();
+            it.remove();
+        }
+    }
+#endif
+}
+
 KDevAST* KDevPersistentHash::retrieveAST( const QString &filename )
 {
     QReadLocker lock(&m_mutex);

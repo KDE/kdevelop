@@ -44,7 +44,7 @@
 #include <kdevprojectcontroller.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevbackgroundparser.h>
-
+#include <kdevpersistenthash.h>
 
 #include "cpplanguagesupport.h"
 #include "cpphighlighting.h"
@@ -223,6 +223,8 @@ void CppLanguageSupport::projectClosing()
     // Now we can do destructive stuff
 
     DUChain::self()->clear();
+
+    KDevCore::activeProject()->persistentHash()->clearASTs(this);
 
     unlockAllParseMutexes();
 }
