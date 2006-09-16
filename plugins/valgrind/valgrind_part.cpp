@@ -7,6 +7,7 @@
 #include <QXmlSimpleReader>
 #include <QTcpSocket>
 #include <QTcpServer>
+#include <QDomElement>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -20,7 +21,6 @@
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
-#include "kdevproject.h"
 
 #include "valgrind_part.h"
 #include "valgrind_dialog.h"
