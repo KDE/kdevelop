@@ -14,3 +14,6 @@ X-KDE-Library=kdevvalgrind
 X-KDevelop-Version=4
 X-KDevelop-Category=Project
 X-KDevelop-Properties=CodeNavigation
+X-KDE-PluginInfo-Name=kdevvalgrind
+X-KDE-PluginInfo-Author=Harald Fernengel, Hamish Rodda
+X-KDE-PluginInfo-License=GPL
