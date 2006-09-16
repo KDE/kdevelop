@@ -126,12 +126,12 @@ int main( int argc, char *argv[] )
 
         splash->showMessage( i18n( "Starting GUI" ) );
     }
-    KDevPluginController::self()->loadPlugins( KDevPluginController::Global );
 
     QObject::connect( KDevCore::mainWindow(), SIGNAL( finishedLoading() ),
                       splash, SLOT( deleteLater() ) );
 
     KDevCore::initialize();
+    KDevPluginController::self()->loadPlugins( KDevPluginController::Global );
 
     for ( int a = 0; a < args->count(); ++a )
     {
