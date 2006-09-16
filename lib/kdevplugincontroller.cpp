@@ -330,6 +330,7 @@ KDevPlugin *KDevPluginController::loadPluginInternal( const QString &pluginId )
     if ( d->loadedPlugins.contains( info ) )
         return d->loadedPlugins[ info ];
 
+    kDebug(9000) << k_funcinfo << "Attempting to load '" << pluginId << "'" << endl;
     emit loadingPlugin( info->name() );
     int error = 0;
     KDevPlugin *plugin = KServiceTypeTrader::createInstanceFromQuery<KDevPlugin>( QLatin1String( "KDevelop/Plugin" ),
@@ -419,7 +420,7 @@ void KDevPluginController::pluginDestroyed( QObject* deletedPlugin )
 void KDevPluginController::pluginReadyForUnload( KDevPlugin* plugin ) 
 {
     kDebug(9000) << k_funcinfo << pluginInfo( plugin )->pluginName() << " ready for unload" << endl;
-    plugin->deleteLater();
+    delete plugin;
 }
 
 void KDevPluginController::shutdownTimeout()
