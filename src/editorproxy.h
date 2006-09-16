@@ -8,6 +8,7 @@
 
 class QPopupMenu;
 class MultiBuffer;
+class QTimer;
 
 #include <kparts/part.h>
 #include <ktexteditor/markinterface.h>
@@ -55,7 +56,8 @@ private:
   // This list is used to save line/col information for not yet activated editor views.
   QValueList< MultiBuffer* > m_editorParts;
 
-  bool m_delayedViewCreationCompatibleUI;
+	QTimer* m_delayedLineTimer;
+	bool m_delayedViewCreationCompatibleUI;
   KParts::Part *m_delayedPart;
   int m_delayedLine;
   int m_delayedCol;

@@ -40,6 +40,8 @@ EditorProxy *EditorProxy::s_instance = 0;
 EditorProxy::EditorProxy()
   : QObject()
 {
+	m_delayedLineTimer = new QTimer( this );
+	connect( m_delayedLineTimer,  SIGNAL( timeout() ), this, SLOT(setLineNumberDelayed()) );
 	KConfig *config = kapp->config();
 	config->setGroup("UI");
 	int mdimode = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
@@ -80,13 +82,13 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
   ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>(part->widget());
   if (iface)
   {
-    /*if (!part->widget()->hasFocus()) //workaround for QXIMInputContext crashes. Keep for KDE <=3.5.4!
+    if (!part->widget()->hasFocus()) //workaround for QXIMInputContext crashes. Keep for KDE <=3.5.4!
     {
       m_delayedPart = part; 
       m_delayedLine = lineNum;
       m_delayedCol = col;
-      QTimer::singleShot(0, this, SLOT(setLineNumberDelayed()));
-		} else*/
+			m_delayedLineTimer->start( 1, true );
+		} else
      iface->setCursorPositionReal(lineNum, col == -1 ? 0 : col);
   }
   else {
