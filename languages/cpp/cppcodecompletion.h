@@ -40,6 +40,34 @@
 #include <qguardedptr.h>
 #include <qregexp.h>
 
+///A little debugging class
+#include <qpopupmenu.h>
+class PopupTracker : public QObject {
+	Q_OBJECT;
+public:
+	static PopupTracker* pt;
+	
+	static uint pendingPopups;
+	
+	static QPopupMenu* createPopup( QWidget* parent ) {
+		if( !pt ) pt = new PopupTracker();
+		QPopupMenu* m = new QPopupMenu( parent );
+		++pendingPopups;
+		connect( m, SIGNAL(destroyed()), pt, SLOT(destroyedPopup()) );
+		return m;
+	}
+	
+	static void print() {
+		if( pendingPopups )
+			kdDebug( 9007 ) << "PopupTracker: " << pendingPopups << " popups are still alive" << endl;
+	}
+	
+public slots:
+	void destroyedPopup() {
+		--pendingPopups;
+	}
+};
+
 
 class CodeCompletionEntry;
 class CodeInformationRepository;

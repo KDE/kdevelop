@@ -121,6 +121,9 @@ QString cleanForMenu( QString txt ) {
   return txt.replace( "&", "$" ).replace( "	", "    " );
 }
 
+uint PopupTracker::pendingPopups = 0;
+PopupTracker* PopupTracker::pt = 0;
+
 /** Multiple empty lines are reduced to one, too long lines wrapped over, and the beginnings of the lines are normalized
 */
 QStringList maximumLength( const QStringList& in, int length ) {
@@ -325,7 +328,7 @@ struct PopupFillerHelpStruct {
         for ( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
           SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).get().data() );
 	        if ( cm && cm->item() ) {
-	          QPopupMenu * m = new QPopupMenu( parent );
+	          QPopupMenu * m = PopupTracker::createPopup( parent );
 	          QString scope = cm->scope().join("::");
 	          QMap< QString, QPopupMenu* >::iterator it = m_namespacePopupCache.find( scope );
 	          if( it != m_namespacePopupCache.end() ) {
@@ -366,7 +369,10 @@ struct PopupFillerHelpStruct {
 
 		        if( ns ) {
 			        ItemDom i(ns);
-		        	insertItem( parent, (new SimpleTypeCodeModel( i ))->desc(), prefix + " " + (*it)->name() + ": " ); ///Not cached, so the detection at (1) does not trigger.
+			        int sLine, sCol, eLine, eCol;
+			        i->getStartPosition( &sLine, &sCol );
+			        i->getEndPosition( &eLine, &eCol );
+		        	insertItem( parent, (new SimpleTypeCodeModel( i ))->desc(), prefix + " " + (*it)->name() + QString(" (%1 Lines): ").arg( eLine - sLine ) ); ///Not cached, so the detection at (1) does not trigger.
 		        }
 
 	        }
@@ -555,7 +561,7 @@ class PopupFiller {
         parent->insertSeparator();
 
         if ( !sourceVariable.comment.isEmpty() ) {
-          QPopupMenu * m = new QPopupMenu( parent );
+          QPopupMenu * m = PopupTracker::createPopup( parent );
           int gid = parent->insertItem( i18n( "Comment on %1" ).arg( sourceVariable.name ), m );
           QStringList ls = prepareTextForMenu( sourceVariable.comment, 15, 100 );
           for ( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
@@ -571,7 +577,7 @@ class PopupFiller {
       TypeDesc::TemplateParams p = d->templateParams();
       for ( TypeDesc::TemplateParams::iterator it = p.begin(); it != p.end(); ++it ) {
         //if( (*it)->resolved() ) {
-        QPopupMenu * m = new QPopupMenu( parent );
+        QPopupMenu * m = PopupTracker::createPopup( parent );
         int gid = parent->insertItem( i18n( "Template-param \"%1\"" ).arg( cleanForMenu( ( *it ) ->fullNameChain() ) ), m );
         fill( m, **it );
         /*} else {
@@ -583,7 +589,7 @@ class PopupFiller {
         if ( d->resolved() ->asFunction() ) {
           LocateResult rt = d->resolved() ->locateDecType( d->resolved() ->asFunction() ->getReturnType() );
           if ( rt ) {
-            QPopupMenu * m = new QPopupMenu( parent );
+            QPopupMenu * m = PopupTracker::createPopup( parent );
             int gid = parent->insertItem( i18n( "Return-type \"%1\"" ).arg( cleanForMenu( rt->fullNameChain() ) ), m );
             fill( m, rt );
           }
@@ -591,7 +597,7 @@ class PopupFiller {
           QValueList<TypeDesc> args = d->resolved() ->asFunction() ->getArgumentTypes();
           QStringList argNames = d->resolved() ->asFunction() ->getArgumentNames();
           if ( !args.isEmpty() ) {
-            QPopupMenu * m = new QPopupMenu( parent );
+            QPopupMenu * m = PopupTracker::createPopup( parent );
             int gid = parent->insertItem( i18n( "Argument-types" ), m );
             QStringList::iterator it2 = argNames.begin();
             for ( QValueList<TypeDesc>::iterator it = args.begin(); it != args.end(); ++it ) {
@@ -601,7 +607,7 @@ class PopupFiller {
                 name = *it2;
                 ++it2;
               }
-              QPopupMenu * mo = new QPopupMenu( m );
+              QPopupMenu * mo = PopupTracker::createPopup( m );
               int gid = m->insertItem( i18n( "Argument \"%1\"" ).arg( cleanForMenu( at->fullNameChain() + " " + name ) ), mo );
               fill( mo, at );
 
@@ -613,11 +619,11 @@ class PopupFiller {
       if ( d.trace() ) {
         QValueList<QPair<SimpleTypeImpl::MemberInfo, TypeDesc> > trace = d.trace() ->trace();
         if ( !trace.isEmpty() ) {
-          QPopupMenu * m = new QPopupMenu( parent );
+          QPopupMenu * m = PopupTracker::createPopup( parent );
           int gid = parent->insertItem( i18n( "Trace" ), m );
 
           for ( QValueList<QPair<SimpleTypeImpl::MemberInfo, TypeDesc> >::iterator it = trace.begin(); it != trace.end(); ++it ) {
-            QPopupMenu * mo = new QPopupMenu( m );
+            QPopupMenu * mo = PopupTracker::createPopup( m );
             QString tail = ( *it ).second.fullNameChain();
             if ( !tail.isEmpty() )
               tail = "::" + tail;
@@ -627,7 +633,7 @@ class PopupFiller {
 
             if ( !( *it ).first.decl.comment.isEmpty() ) {
               mo->insertSeparator();
-              QPopupMenu * m = new QPopupMenu( mo );
+              QPopupMenu * m = PopupTracker::createPopup( mo );
               int gid = mo->insertItem( i18n( "Comment" ), m );
               QStringList ls = prepareTextForMenu( ( *it ).first.decl.comment, 15, 100 );
               for ( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
@@ -642,20 +648,20 @@ class PopupFiller {
       if ( d->resolved() ) {
         QValueList<LocateResult> bases = d->resolved() ->getBases();
         for ( QValueList<LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
-          QPopupMenu * m = new QPopupMenu( parent );
+          QPopupMenu * m = PopupTracker::createPopup( parent );
           int gid = parent->insertItem( i18n( "Base-class \"%1\"" ).arg( cleanForMenu( ( *it ) ->fullNameChain() ) ), m );
           fill( m, *it );
         }
 
         if ( d->resolved() ->parent() && d->resolved() ->parent() ->desc() ) {
-          QPopupMenu * m = new QPopupMenu( parent );
+          QPopupMenu * m = PopupTracker::createPopup( parent );
           int gid = parent->insertItem( i18n( "Nested in \"%1\"" ).arg( cleanForMenu( d->resolved() ->parent() ->fullTypeResolved() ) ), m );
           fill( m, d->resolved() ->parent() ->desc() );
         }
 
         if ( !d->resolved() ->comment().isEmpty() ) {
           parent->insertSeparator();
-          QPopupMenu * m = new QPopupMenu( parent );
+          QPopupMenu * m = PopupTracker::createPopup( parent );
           int gid = parent->insertItem( i18n( "Comment on %1" ).arg( cleanForMenu( d->name() ) ), m );
           QStringList ls = prepareTextForMenu( d->resolved() ->comment(), 15, 100 );
           for ( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
@@ -1053,7 +1059,6 @@ void CppCodeCompletion::fitContextItem( int nLine, int nCol ) {
 
 enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN, T_TEMP };
 
-
 QString CppCodeCompletion::replaceCppComments( const QString& contents ) {
   QString text = contents;
 
@@ -1329,6 +1334,9 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
     return ;
 
   kdDebug( 9007 ) << "CppCodeCompletion::contextEvaluationMenu()" << endl;
+
+	PopupTracker::print();
+	
   m_popupActions.clear();
   m_popupClassViewActions.clear();
 
@@ -1369,7 +1377,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
     PopupFillerHelpStruct h( this );
     PopupFiller<PopupFillerHelpStruct> filler( h, "" );
 
-    QPopupMenu * m = new QPopupMenu( popup );
+    QPopupMenu * m = PopupTracker::createPopup( popup );
     int gid;
     if ( contextMenuEntriesAtTop )
       gid = popup->insertItem( i18n( "Navigate by \"%1\"" ).arg( cleanForMenu( name ) ), m, 5, cpos++ );
@@ -1389,7 +1397,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
   if ( type->resolved() ) {
     ///Now fill the class-view-browsing-stuff
     {
-      QPopupMenu * m = new QPopupMenu( popup );
+      QPopupMenu * m = PopupTracker::createPopup( popup );
       int gid;
       if ( contextMenuEntriesAtTop )
         gid = popup->insertItem( i18n( "Navigate Class-View by \"%1\"" ).arg( cleanForMenu( name ) ), m, 6, cpos++ );
@@ -3567,6 +3575,10 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
   ///Find all function-definitions that have no functions. Those may be inlined functions and need to be treated too.
   FunctionDefinitionList definitions = klass->functionDefinitionList();
   FunctionList l;
+
+	QStringList classScope = klass->scope();
+	classScope << klass->name();
+	
   for ( FunctionDefinitionList::iterator it = definitions.begin(); it != definitions.end(); ++it ) {
     FunctionList fl = klass->functionByName( ( *it ) ->name() );
 
@@ -3600,6 +3612,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
         continue;
     }
 
+	  ///The function-definition belongs to some sub-class
+	  if( (*it)->scope() != classScope && !(*it)->scope().isEmpty() ) continue;
     l << ( FunctionModel* ) ( *it ).data();
   }
 

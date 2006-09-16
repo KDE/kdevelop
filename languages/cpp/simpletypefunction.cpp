@@ -289,19 +289,23 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
       ret.type = l.front()->resultType();
       ret.type->increaseFunctionDepth();
     }
-  } else if( klass->hasFunctionDefinition( name.name() )  && ( type & MemberInfo::Function ) ) {
-    ret.memberType = MemberInfo::Function;
-    FunctionDefinitionList l = klass->functionDefinitionByName( name.name() );
-    if( !l.isEmpty() && l.front() ) {
-      ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name, TypePointer(this) ) );
-      ret.type = l.front()->resultType();
-      ret.type->increaseFunctionDepth();
-    }
   } else if ( ns && ns->hasNamespace( name.name() )  && ( type & MemberInfo::Namespace ) ) {
     ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( ns->namespaceByName( name.name() )), name, TypePointer( this ) ) );
     ret.memberType = MemberInfo::Namespace;
     ret.type = name;
-  } else {
+  } else if( klass->hasFunctionDefinition( name.name() )  && ( type & MemberInfo::Function ) ) {
+	  ret.memberType = MemberInfo::Function;
+	  FunctionDefinitionList l = klass->functionDefinitionByName( name.name() );
+	  for( FunctionDefinitionList::iterator it = l.begin(); it != l.end(); ++it ) {
+		  if( !(*it)->scope().isEmpty() && (*it)->scope() != scope() ) continue; ///Only use definitions with empty scope or that are within this class
+		  ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name, TypePointer(this) ) );
+		  ret.type = l.front()->resultType();
+		  ret.type->increaseFunctionDepth();
+		  break;
+	  }
+  }
+
+  if( ret.memberType == MemberInfo::NotFound ) {
     if( type & MemberInfo::Template ) {
       LocateResult s = findTemplateParam( name.name() );
       if( s ) {

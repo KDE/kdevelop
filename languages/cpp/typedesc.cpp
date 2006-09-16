@@ -515,6 +515,7 @@ int TypeDesc::functionDepth() const {
 
 void TypeDesc::takeInstanceInfo( const TypeDesc& rhs ) {
   makeDataPrivate();
+	if( !rhs.m_data ) return;
   m_data->m_pointerDepth += rhs.m_data->m_pointerDepth;
   m_data->m_dec += rhs.m_data->m_dec;
 }
