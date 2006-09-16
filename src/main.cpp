@@ -111,11 +111,12 @@ int main( int argc, char *argv[] )
     KDevCore::setMainWindow( new KDevMainWindow );
     KDevCore::setPartController( new KDevPartController );
     KDevCore::setDocumentController( new KDevDocumentController );
+    KDevPluginController::self()->loadPlugins( KDevPluginController::Global );
     KDevCore::setLanguageController( new KDevLanguageController );
     KDevCore::setProjectController( new KDevProjectController );
     KDevCore::setBackgroundParser( new KDevBackgroundParser );
     KDevCore::setEnvironment( new KDevEnvironment );
-    KDevPluginController::self()->loadPlugins( KDevPluginController::Global );
+
     if ( splash )
     {
         QObject::connect(KDevPluginController::self(), SIGNAL(loadingPlugin(const QString&)),
