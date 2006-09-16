@@ -33,10 +33,16 @@
 
 #include <kdebug.h>
 #include <kconfig.h>
+#include <klocale.h>
+#include <kio/job.h>
 #include <kinstance.h>
+#include <kio/global.h>
+#include <kmessagebox.h>
+#include <kio/jobclasses.h>
 
 #include "kdevcore.h"
 #include "filetemplate.h"
+#include "kdevmainwindow.h"
 #include "kdevfilemanager.h"
 #include "importprojectjob.h"
 #include "kdevprojectmodel.h"
@@ -85,14 +91,22 @@ KUrl KDevProject::folder() const
     return d->folder;
 }
 
-void KDevProject::open( const KUrl& projectFileUrl )
+bool KDevProject::open( const KUrl& projectFileUrl )
 {
+    KIO::StatJob* statJob = KIO::stat( projectFileUrl );
+    if ( !statJob->exec() ) //be sync for right now
+    {
+        KMessageBox::sorry( KDevCore::mainWindow(),
+                            i18n( "Unable to load the project file %1",
+                                  projectFileUrl.pathOrUrl() ) );
+        return false;
+    }
+
     KSimpleConfig projectConfig( projectFileUrl.pathOrUrl(), true /*read only*/);
     KConfigGroup projectGroup( &projectConfig, "General Options");
 
     d->name = projectGroup.readEntry("Name", projectFileUrl.fileName());
     d->folder = projectFileUrl.directory();
-    
     QString importerSetting = projectGroup.readEntry("Importer", "KDevGenericImporter");
 
     //Get our importer
@@ -105,7 +119,7 @@ void KDevProject::open( const KUrl& projectFileUrl )
     ImportProjectJob* importJob = new ImportProjectJob( d->model->item(0,0), d->manager );
     connect( importJob, SIGNAL(result(KJob*)), this, SLOT(importDone(KJob*)));
     importJob->start(); //be asynchronous
-
+    return true;
 }
 
 void KDevProject::close()
@@ -206,6 +220,7 @@ KDevPersistentHash * KDevProject::persistentHash() const
 void KDevProject::importDone( KJob* job )
 {
     job->deleteLater();
+    d->model->resetModel();
 }
 
 QList<KDevProjectFileItem*> KDevProject::recurseFiles(KDevProjectItem * projectItem)

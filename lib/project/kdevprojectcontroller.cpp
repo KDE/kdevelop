@@ -184,6 +184,22 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
     if ( m_isLoaded )
         closeProject();
 
+    KConfig * config = KDevConfig::standard();
+    config->setGroup( "General Options" );
+
+    QString projectManagement =
+            config->readPathEntry( "Project Management", "KDevProjectManager" );
+    if ( loadProjectPart( projectManagement ) )
+    {
+        m_isLoaded = true;
+        //The project file has been opened.
+        //Now we can load settings for all of the KDevCore objects including this one!!
+        KDevCore::loadSettings();
+        KDevPluginController::self() ->loadPlugins( KDevPluginController::Project );
+    }
+    else
+        return false;
+
     KActionCollection * ac = KDevCore::mainWindow() ->actionCollection();
     KAction * action;
 
@@ -201,21 +217,8 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
                                   + m_globalFile.fileName() );
 
     KDevConfig::standard() ->sync();
-    m_isLoaded = true;
 
-    //The project file has been opened.
-    //Now we can load settings for all of the KDevCore objects including this one!!
-    KConfig * config = KDevConfig::standard();
-    config->setGroup( "General Options" );
 
-    QString projectManagement =
-    config->readPathEntry( "Project Management", "KDevProjectManager" );
-    if ( loadProjectPart( projectManagement ) )
-    {
-        KDevCore::loadSettings();
-        KDevPluginController::self() ->loadPlugins( KDevPluginController::Project );
-    }
-    
     emit projectOpened();
 
     return true;
@@ -284,7 +287,12 @@ bool KDevProjectController::loadProjectPart( const QString &projectManager )
     }
 
     m_project = new KDevProject();
-    m_project->open( m_globalFile );
+    if ( !m_project->open( m_globalFile ) )
+    {
+        delete m_project;
+        m_project = 0;
+        return false;
+    }
 
     KPluginInfo* projectPluginInfo = *projectList.begin();
     KDevPluginController *pc = KDevPluginController::self();

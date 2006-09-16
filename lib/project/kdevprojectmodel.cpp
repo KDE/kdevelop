@@ -90,6 +90,11 @@ KDevProjectItem *KDevProjectModel::item(const QModelIndex &index) const
   return reinterpret_cast<KDevProjectItem*>(itemFromIndex(index));
 }
 
+void KDevProjectModel::resetModel()
+{
+  reset();
+}
+
 void KDevProjectBuildFolderItem::setIncludeDirectories( const KUrl::List& dirList )
 {
   m_includeDirs = dirList;

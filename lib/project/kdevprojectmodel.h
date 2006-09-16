@@ -201,6 +201,8 @@ public:
   using QStandardItemModel::item;
   KDevProjectItem *item(const QModelIndex &index) const;
 
+  void resetModel();
+
 };
 
 #endif // KDEVPROJECTMODEL_H
