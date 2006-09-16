@@ -109,26 +109,24 @@ int main( int argc, char *argv[] )
     //initialize the api object
     //WARNING! the order is important
     KDevCore::setMainWindow( new KDevMainWindow );
-    KDevCore::setPluginController( new KDevPluginController );
     KDevCore::setPartController( new KDevPartController );
     KDevCore::setDocumentController( new KDevDocumentController );
     KDevCore::setLanguageController( new KDevLanguageController );
     KDevCore::setProjectController( new KDevProjectController );
     KDevCore::setBackgroundParser( new KDevBackgroundParser );
     KDevCore::setEnvironment( new KDevEnvironment );
-
+    
     if ( splash )
     {
-        QObject::connect( KDevCore::pluginController(),
-                          SIGNAL( loadingPlugin( const QString & ) ),
-                          splash, SLOT( showMessage( const QString & ) ) );
-
+        QObject::connect(KDevPluginController::self(), SIGNAL(loadingPlugin(const QString&)),
+                         splash, SLOT(showMessage(const QString&)));
         QObject::connect( KDevCore::documentController(),
                           SIGNAL( openingDocument( const QString & ) ),
                           splash, SLOT( showMessage( const QString & ) ) );
 
         splash->showMessage( i18n( "Starting GUI" ) );
     }
+    KDevPluginController::self()->loadPlugins( KDevPluginController::Global );
 
     QObject::connect( KDevCore::mainWindow(), SIGNAL( finishedLoading() ),
                       splash, SLOT( deleteLater() ) );

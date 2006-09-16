@@ -3,7 +3,7 @@ add_subdirectory(parser)
 add_subdirectory(duchain)
 #add_subdirectory(app_templates)
 
-include_directories( ${CMAKE_TOP_BUILD_DIR}/ ${CMAKE_SOURCE_DIR}/lib ${THREADWEAVER_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/lib/editor ${CMAKE_SOURCE_DIR}/languages/cpp/duchain ${CMAKE_SOURCE_DIR}/languages/cpp/parser ${CMAKE_SOURCE_DIR}/languages/cpp/duchain/viewer
+include_directories( ${CMAKE_TOP_BUILD_DIR}/ ${CMAKE_SOURCE_DIR}/lib ${THREADWEAVER_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/lib/editor ${CMAKE_SOURCE_DIR}/languages/cpp/duchain ${CMAKE_SOURCE_DIR}/languages/cpp/parser ${CMAKE_SOURCE_DIR}/languages/cpp/duchain/viewer ${CMAKE_SOURCE_DIR}/lib/project
     )
 
 

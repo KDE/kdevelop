@@ -19,22 +19,27 @@
 #ifndef __KDEVPART_KDEVPROJECTMANAGER_H__
 #define __KDEVPART_KDEVPROJECTMANAGER_H__
 
-#include "kdevprojectmodel.h"
-
 #include <QtCore/QPointer>
-#include "kdevproject.h"
+#include "kdevplugin.h"
 
-class KDevProjectManager;
-class KDevProjectImporter;
-class KDevProjectBuilder;
-class KDevProjectModel;
 class QTimer;
+class QModelIndex;
+
 class KUrl;
+
+class KDevProjectItem;
+class KDevProjectModel;
+class KDevProjectManager;
+class KDevProjectBuilder;
+class KDevProjectImporter;
+class KDevProjectFileItem;
+class KDevProjectFolderItem;
+class KDevProjectTargetItem;
 
 /*
  Please read the README.dox file for more info about this part
  */
-class KDevProjectManagerPart: public KDevProject
+class KDevProjectManagerPart: public KDevPlugin
 {
     Q_OBJECT
 public:
@@ -49,28 +54,9 @@ public:
     KDevProjectManagerPart(QObject *parent, const QStringList &);
     virtual ~KDevProjectManagerPart();
 
-    inline KDevProjectModel *projectModel() const
-    { return m_projectModel; }
-
-    inline bool isDirty() const
-    { return m_dirty; }
-
     KDevProjectFolderItem *activeFolder();
     KDevProjectTargetItem *activeTarget();
     KDevProjectFileItem *activeFile();
-
-    KDevFileManager *defaultImporter() const;
-
-    //
-    // KDevProject interface
-    //
-    virtual void openProject(const KUrl &dirName, const QString &projectName);
-    virtual void closeProject();
-    virtual KUrl projectDirectory() const;
-    virtual QString projectName() const;
-    virtual QList<KDevProjectFileItem*> allFiles();
-
-    void import(RefreshPolicy policy = Refresh);
 
     // KDevPlugin methods
     virtual QWidget *pluginView() const;
@@ -89,30 +75,16 @@ private slots:
     void fileDirty(const QString &fileName);
     void fileCreated(const QString &fileName);
     void fileDeleted(const QString &fileName);
-    void updateProjectTimeout();
     void pressed( const QModelIndex & index );
 
 protected:
     bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);
-    QStringList fileList(KDevProjectItem *item);
-    QStringList fileList();
-    QList<KDevProjectFileItem*> recurseFiles(KDevProjectItem *item);
 
 private:
-    KDevProjectModel *m_projectModel;
-    KDevProjectFolderItem *m_workspace;
     QPointer<QWidget> m_widget;
     KDevProjectManager *m_projectOverview;
     KDevProjectManager *m_projectDetails;
-    KDevFileManager* m_manager;
     QStringList m_cachedFileList;
-
-    KUrl m_projectDirectory;
-    QString m_projectName;
-
-    bool m_dirty;
-
-    QTimer *m_updateProjectTimer;
 };
 
 #endif

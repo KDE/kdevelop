@@ -21,7 +21,8 @@
 #include "kdevprojectmodel.h"
 
 #include <QtGui/QPainter>
-#include <QtCore/qdebug.h>
+
+#include <kdebug.h>
 
 KDevProjectManagerDelegate::KDevProjectManagerDelegate(QObject *parent)
   : QItemDelegate(parent)
@@ -36,21 +37,24 @@ void KDevProjectManagerDelegate::paint(QPainter *painter, const QStyleOptionView
 {
   QStyleOptionViewItem opt = option;
 
-  if (const KDevProjectModel *projectModel = qobject_cast<const KDevProjectModel*>(index.model()))
+  const KDevProjectModel *projectModel = qobject_cast<const KDevProjectModel*>(index.model());
+  if ( projectModel )
+  {
+    KDevProjectItem *item = projectModel->item(index);
+    if ( item )
     {
-      KDevProjectItem *item = projectModel->item(index);
-
-      if (item && item->folder())
-        {
-          opt.font.setBold(true);
-          opt.palette.setColor(QPalette::Text, Qt::blue);
-        }
-      else if (item && item->target())
-        {
-          opt.font.setBold(true);
-          opt.palette.setColor(QPalette::Text, Qt::red);
-        }
+      if ( item->folder() )
+      {
+        opt.font.setBold(true);
+        opt.palette.setColor(QPalette::Text, Qt::blue);
+      }
+      else if ( item->target() )
+      {
+        opt.font.setBold(true);
+        opt.palette.setColor(QPalette::Text, Qt::red);
+      }
     }
+  }
 
   QItemDelegate::paint(painter, opt, index);
 }

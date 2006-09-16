@@ -20,10 +20,10 @@
 #ifndef KDEVPROJECTMODEL_H
 #define KDEVPROJECTMODEL_H
 
-#include "kdevitemmodel.h"
-
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
+#include <QtGui/QStandardItem>
+#include <QtGui/QStandardItemModel>
 
 #include <kurl.h>
 
@@ -42,16 +42,32 @@ class KDevProjectTargetItem;
  * \li Build Target
  * \li File
  */
-class KDEVINTERFACES_EXPORT KDevProjectItem: public KDevItemCollection
+class KDEVINTERFACES_EXPORT KDevProjectItem: public QStandardItem
 {
 public:
-  KDevProjectItem(const QString &name, KDevItemGroup *parent = 0)
-    : KDevItemCollection(name, parent) {}
+  KDevProjectItem(const QString &name, QStandardItem *parent = 0)
+    : QStandardItem(name)
+  {
+    if ( parent )
+      parent->setChild( parent->rowCount(), this );
+  }
+  
+  /**
+   * add the item @p item to the list of children for this item
+   * do not use this function if you gave the item a parent when you
+   * created it
+   */
+  void add( KDevProjectItem* item ) { setChild( rowCount(), item ); }
+
+  enum ProjectItemType {
+    Folder = QStandardItem::UserType,
+    File,
+    Target,
+    BuildFolder
+  };
 
   // Convenience function to return the current project
   KDevProject* project() const;
-
-  virtual KDevProjectItem *itemAt(int index) const;
 
   virtual KDevProjectFolderItem *folder() const { return 0; }
   virtual KDevProjectTargetItem *target() const { return 0; }
@@ -69,16 +85,20 @@ public:
 class KDEVINTERFACES_EXPORT KDevProjectFolderItem: public KDevProjectItem
 {
 public:
-  KDevProjectFolderItem(const KUrl &dir, KDevItemGroup *parent = 0);
+  KDevProjectFolderItem(const KUrl &dir, QStandardItem *parent = 0);
 
   virtual KDevProjectFolderItem *folder() const
   { return const_cast<KDevProjectFolderItem*>(this); }
 
+  ///Reimplemented from QStandardItem
+  virtual int type() const { return KDevProjectItem::Folder; }
+
   /** Get the url of this folder */
   const KUrl& url() const;
-  virtual QIcon icon() const;
 
+  /** Set the url of this folder */
   void setUrl( const KUrl& );
+
 private:
   KUrl m_url;
 };
@@ -89,9 +109,12 @@ private:
 class KDEVINTERFACES_EXPORT KDevProjectBuildFolderItem: public KDevProjectFolderItem
 {
 public:
-  KDevProjectBuildFolderItem(const KUrl &dir, KDevItemGroup *parent = 0)
+  KDevProjectBuildFolderItem(const KUrl &dir, QStandardItem *parent = 0)
   : KDevProjectFolderItem(dir, parent) {}
 
+  ///Reimplemented from QStandardItem
+  virtual int type() const { return KDevProjectItem::BuildFolder; }
+  
   void setIncludeDirectories( const KUrl::List& includeList );
   
   /**
@@ -108,6 +131,7 @@ public:
 
 private:
   KUrl::List m_includeDirs; ///include directories
+  QHash<QString, QString> m_env;
 };
 
 /**
@@ -118,9 +142,12 @@ private:
 class KDEVINTERFACES_EXPORT KDevProjectTargetItem: public KDevProjectItem
 {
 public:
-  KDevProjectTargetItem(const QString &name, KDevItemGroup *parent = 0)
+  KDevProjectTargetItem(const QString &name, QStandardItem *parent = 0)
     : KDevProjectItem(name, parent) {}
 
+  ///Reimplemented from QStandardItem
+  virtual int type() const { return KDevProjectItem::Target; }
+  
   virtual KDevProjectTargetItem *target() const
   { return const_cast<KDevProjectTargetItem*>(this); }
 
@@ -148,7 +175,10 @@ public:
 class KDEVINTERFACES_EXPORT KDevProjectFileItem: public KDevProjectItem
 {
 public:
-  KDevProjectFileItem(const KUrl& file, KDevItemGroup *parent = 0);
+  KDevProjectFileItem(const KUrl& file, QStandardItem *parent = 0);
+
+  ///Reimplemented from QStandardItem
+  virtual int type() const { return KDevProjectItem::File; }
 
   virtual KDevProjectFileItem *file() const
   { return const_cast<KDevProjectFileItem*>(this); }
@@ -156,21 +186,21 @@ public:
   /** Get the url of this file. */
   const KUrl& url() const;
   void setUrl( const KUrl& );
-  virtual QIcon icon() const;
-
 
 private:
   KUrl m_url;
 };
 
-class KDEVINTERFACES_EXPORT KDevProjectModel: public KDevItemModel
+class KDEVINTERFACES_EXPORT KDevProjectModel: public QStandardItemModel
 {
   Q_OBJECT
 public:
   KDevProjectModel(QObject *parent = 0);
   virtual ~KDevProjectModel();
 
-  virtual KDevProjectItem *item(const QModelIndex &index) const;
+  using QStandardItemModel::item;
+  KDevProjectItem *item(const QModelIndex &index) const;
+
 };
 
 #endif // KDEVPROJECTMODEL_H

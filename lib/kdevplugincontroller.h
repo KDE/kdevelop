@@ -1,5 +1,9 @@
 /* This file is part of the KDE project
 Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
+Copyright     2006 Matt Rogers <mattr@kde.org
+
+Based on code from Kopete
+Copyright (c) 2002-2003 by Martijn Klingens <klingens@kde.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -27,16 +31,16 @@ Boston, MA 02110-1301, USA.
 
 #include <kurl.h>
 #include <kservice.h>
+#include <kplugininfo.h>
 #include <kservicetypetrader.h>
 
 #include "kdevexport.h"
-#include "kdevprofileengine.h"
-#include "kdevplugincontroller.h"
 
 class KDialog;
 class KXMLGUIClient;
 class KDevPlugin;
 class ProjectInfo;
+class ProfileEngine;
 
 /**
 @file kdevplugincontroller.h
@@ -44,54 +48,51 @@ KDevelop plugin controller interface.
 */
 
 /**
-The base class for KDevelop plugin controller.
-Plugin controller is responsible for quering, loading and unloading available plugins.
+ *The KDevelop plugin controller.
+* The Plugin controller is responsible for querying, loading and unloading available plugins.
 */
-class KDEVINTERFACES_EXPORT KDevPluginController: public QObject, protected KDevCoreInterface
+class KDEVINTERFACES_EXPORT KDevPluginController: public QObject
 {
-    friend class KDevCore;
-
+    
     Q_OBJECT
+
 public:
-    /**Constructor.*/
-    KDevPluginController();
+    enum PluginType {
+        Global = 0,
+        Project
+    };
+
+    static KDevPluginController* self();
     virtual ~KDevPluginController();
 
     /**
-     * Returns a uniquely specified plugin. If it isn't already loaded, it will be.
-     * Use with caution! See extension for parameter details.
+     * Get the plugin instance based on the ID. The ID should be whatever is
+     * in X-KDE-PluginInfo-Name
      */
-    KDevPlugin * loadPlugin( const QString & serviceType, const QString & constraint );
+    KDevPlugin* plugin( const QString& );
 
     /**
-     * Unloads the plugin specified by @p plugin
-     * @param plugin The desktopEntryName of the plugin to unload
+     * Get the plugin info for a loaded plugin
+     */
+    KPluginInfo* pluginInfo( KDevPlugin* ) const;
+
+    /**
+     * Get a list of currently loaded plugins
+     */
+    QList<KDevPlugin*> loadedPlugins() const;
+
+    /**
+     * Returns a uniquely specified plugin. If it isn't already loaded, it will be.
+     */
+    KDevPlugin * loadPlugin( const QString & _pluginId );
+
+    /**
+     * @brief Unloads the plugin specified by @p plugin
+     * 
+     * @param plugin The name of the plugin as specified by the 
+     * X-KDE-PluginInfo-Name key of the .desktop file for the plugin
      */
     void unloadPlugin( const QString & plugin );
-
-    /**
-     * Unloads plugins specified by @p list.
-     * @param list The list of plugin names to unload. plugin name corresponds
-     * to the "Name" property in plugin .desktop file.
-     */
-    void unloadPlugins( QStringList const &list );
-
-    /**
-     * Get the list of all currently loaded plugins in a certain category.
-     * Currently, there are three supported types of categories:
-     * - <pre>project</pre> for project specific plugins
-     * - <pre>global</pre> for global plugins that don't require a project to operate
-     * - <pre>core</pre> 
-     *
-     * The category for a plugin is controlled by the X-KDevelop-Category item in the
-     * .desktop file for the plugin
-     *
-     * If no category given, then all currently loaded plugins are returned
-     *
-     * @param category the category to search for when getting the list of loaded plugins
-     * @return The list of currently loaded plugins.
-     */
-    const QList<KDevPlugin*> loadedPlugins( const QString& category = QString::null );
 
     /**
      * Queries for the plugin which supports given service type.
@@ -104,7 +105,7 @@ public:
      * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
      */
     template <class Extension>
-    Extension *extension(const QString &serviceType, const QString &constraint = "")
+    Extension *extension(const QString &serviceType, const QString &constraint = QString() )
     {
         return static_cast<Extension*>(getExtension( serviceType, constraint ) );
     }
@@ -118,7 +119,7 @@ public:
      * is done automatically.
      * @return The list of plugin offers.
      */
-    static KService::List query( const QString &serviceType, const QString &constraint );
+    static KPluginInfo::List query( const QString &serviceType, const QString &constraint );
 
     /**
      * Queries KDevelop plugins. Works like KDevPluginController::query
@@ -127,7 +128,7 @@ public:
      * is done automatically.
      * @return The list of plugin offers.
      */
-    static KService::List queryPlugins( const QString &constraint );
+    static KPluginInfo::List queryPlugins( const QString &constraint );
 
     /**
      * Reimplement this function only if your shell supports plugin profiles.
@@ -147,62 +148,77 @@ public:
      */
     KUrl::List profileResourcesRecursive( const QString &nameFilter );
 
-signals:
+    static QStringList argumentsFromService( const KService::Ptr &service );
+
+    QString currentProfile() const;
+
+    void loadPlugins( PluginType offer );
+    void unloadPlugins( PluginType offer );
+
+    ProfileEngine &engine() const;
+
+    //returns the name of an old profile that was unloaded
+    QString changeProfile( const QString &newProfile );
+    
+    void shutdown();
+
+Q_SIGNALS:
+    void loadingPlugin( const QString& );
+    void pluginLoaded( KDevPlugin* );
+
     /**
      * Emitted when a plugin profile was changed (reloaded, other profile opened, etc.).
      * Should work only on shells with plugin profiles support.
      */
     void profileChanged();
 
-public:
-    static QStringList argumentsFromService( const KService::Ptr &service );
+private Q_SLOTS:
+    ///A plugin has been destroyed. Cleanup our data structures
+    void pluginDestroyed( QObject* );
 
-    QString currentProfile() const
-    {
-        return m_profile;
-    }
+    ///A plugin is ready to unload. Unload it
+    void pluginReadyForUnload( KDevPlugin* );
 
-    void loadPlugins( ProfileEngine::OfferType offer,
-                      const QStringList & ignorePlugins = QStringList() );
-    void unloadPlugins( ProfileEngine::OfferType offer );
+    ///Our timeout timer has expired
+    void shutdownTimeout();
 
-    void integratePart( KXMLGUIClient *part );
-    void integrateAndRememberPart( const QString &name, KDevPlugin *part );
-    void removePart( KXMLGUIClient* part );
-    void removeAndForgetPart( const QString &name, KDevPlugin* part );
-
-    ProfileEngine &engine()
-    {
-        return m_engine;
-    }
-
-    //returns the name of an old profile that was unloaded
-    QString changeProfile( const QString &newProfile );
-
-Q_SIGNALS:
-    void pluginsLoaded();
-    void loadingPlugin( const QString &plugin );
-
-public Q_SLOTS:
-    void loadPlugins( KService::List offers,
-                      const QStringList & ignorePlugins = QStringList() );
-    bool unloadPlugins();
-
-protected:
-    virtual void loadSettings( bool projectIsLoaded );
-    virtual void saveSettings( bool projectIsLoaded );
-    virtual void initialize();
-    virtual void cleanup();
+    void shutdownDone();
 
 private:
-    static KDevPlugin *loadPlugin( const KService::Ptr &service );
+
+    /**
+     * @internal
+     *
+     * The internal method for loading plugins.
+     * Called by @ref loadPlugin directly or through the queue for async plugin
+     * loading.
+     */
+    KDevPlugin* loadPluginInternal( const QString &pluginId );
+
+    /**
+     * @internal
+     *
+     * Find the KPluginInfo structure by key. Reduces some code duplication.
+     *
+     * Returns a null pointer when no plugin info is found.
+     */
+    KPluginInfo * infoForPluginId( const QString &pluginId ) const;
+
+    /**
+     * @internal
+     * 
+     * Used for the extension template function
+     */
     KDevPlugin* getExtension( const QString&, const QString& );
 
-    QHash<QString, KDevPlugin *> m_parts;
-    QString m_profile;
+private:
+    class Private;
+    Private* d;
 
-    ProfileEngine m_engine;
-
+    KDevPluginController();
+    static KDevPluginController *s_self;
 };
 
 #endif
+
+//kate: auto-insert-doxygen on;

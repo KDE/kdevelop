@@ -20,8 +20,8 @@
 
 #include "kdevbuildmanager.h"
 
-KDevBuildManager::KDevBuildManager(QObject* parent)
-: KDevFileManager(parent)
+KDevBuildManager::KDevBuildManager(KInstance* instance, QObject* parent)
+: KDevFileManager(instance, parent)
 {
 }
 

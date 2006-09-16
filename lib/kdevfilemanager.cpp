@@ -31,8 +31,8 @@ public:
 	KDevProject* parent;
 };
 
-KDevFileManager::KDevFileManager(QObject *parent)
-    : QObject(parent), d(new Private)
+KDevFileManager::KDevFileManager(KInstance* instance, QObject *parent)
+    : KDevPlugin(instance, parent), d(new Private)
 {
     KDevProject* project = qobject_cast<KDevProject*>( parent );
     d->parent = project;

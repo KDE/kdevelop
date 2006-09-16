@@ -4,12 +4,15 @@ Type=Service
 Exec=blubb
 Comment=KDevProjectManager
 Comment[x-test]=xxKDevProjectManagerxx
-Name=KDevProjectManager
+Name=Project Manager
 Name[x-test]=xxKDevProjectManagerxx
-GenericName=KDevProjectManager
+GenericName=Project Manager
 GenericName[x-test]=xxKDevProjectManagerxx
 Icon=kdevelop
 ServiceTypes=KDevelop/Project
 X-KDE-Library=kdevprojectmanager
+X-KDE-PluginInfo-Name=KDevProjectManager
+X-KDE-PluginInfo-Author=Roberto Raggi
+X-KDE-PluginInfo-License=LGPL
 X-KDevelop-Version=4
 

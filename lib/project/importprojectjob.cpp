@@ -25,11 +25,15 @@
 #include <kapplication.h>
 #include <kdebug.h>
 
-ImportProjectJob::ImportProjectJob(KDevProjectFolderItem *folder, KDevFileManager *importer)
-    : KIO::Job(false),
-      m_folder(folder),
+ImportProjectJob::ImportProjectJob(QStandardItem *folder, KDevFileManager *importer)
+    : KJob(0),
       m_importer(importer)
 {
+    if ( folder->type() == KDevProjectItem::Folder || 
+         folder->type() == KDevProjectItem::BuildFolder )
+    {
+        m_folder = dynamic_cast<KDevProjectFolderItem*>( folder );
+    }
 }
 
 ImportProjectJob::~ImportProjectJob()
@@ -38,37 +42,26 @@ ImportProjectJob::~ImportProjectJob()
 
 void ImportProjectJob::start()
 {
-    startNextJob(m_folder);
-}
+    if ( m_folder )
+        startNextJob(m_folder);
 
-ImportProjectJob *ImportProjectJob::importProjectJob(KDevProjectFolderItem *folder, KDevFileManager *importer)
-{
-    return new ImportProjectJob(folder, importer);
+    emitResult();
 }
 
 void ImportProjectJob::startNextJob(KDevProjectFolderItem *dom)
 {
-    m_workingList += m_importer->parse(dom);
-    processList();
+  m_workingList += m_importer->parse(dom);
+    while ( !m_workingList.isEmpty() )
+    {
+      KDevProjectFolderItem *folder = m_workingList.first();
+      m_workingList.pop_front();
+      
+      startNextJob(folder);
+    }
 }
 
 void ImportProjectJob::processList()
 {
-    if (!m_workingList.isEmpty()) {
-        KDevProjectFolderItem *folder = m_workingList.first();
-        m_workingList.pop_front();
-
-        startNextJob(folder);
-    } else
-        emitResult();
-}
-
-void ImportProjectJob::slotResult(KIO::Job *job)
-{
-    if (m_workingList.isEmpty())
-        KIO::Job::slotResult(job);
-    else
-        processList();
 }
 
 #include "importprojectjob.moc"

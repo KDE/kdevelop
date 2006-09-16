@@ -20,7 +20,7 @@
 
 #include "automakeprojectmodel.h"
 
-AutoMakeDirItem::AutoMakeDirItem( const KUrl& url, KDevItemGroup* parent )
+AutoMakeDirItem::AutoMakeDirItem( const KUrl& url, QStandardItem* parent )
     : KDevProjectFolderItem( url, parent )
 {
 }
@@ -30,7 +30,7 @@ AutoMakeDirItem::~AutoMakeDirItem()
 }
 
 
-AutoMakeFileItem::AutoMakeFileItem( const KUrl& url, KDevItemGroup* parent )
+AutoMakeFileItem::AutoMakeFileItem( const KUrl& url, QStandardItem* parent )
     : KDevProjectFileItem( url, parent )
 {
 }
@@ -39,11 +39,11 @@ AutoMakeFileItem::~AutoMakeFileItem()
 {
 }
 
-AutoMakeTargetItem::AutoMakeTargetItem( const TargetInfo& target, KDevItemGroup* parent )
+AutoMakeTargetItem::AutoMakeTargetItem( const TargetInfo& target, QStandardItem* parent )
     : KDevProjectTargetItem( target.url.pathOrUrl(), parent )
 {
     m_target = target;
-    setName( target.name );
+    setText( target.name );
 }
 
 AutoMakeTargetItem::~AutoMakeTargetItem()

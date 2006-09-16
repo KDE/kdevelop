@@ -146,7 +146,7 @@ void KDevProjectManager::popupContextMenu(const QPoint &pos)
         }
       else if (KDevProjectTargetItem *target = item->target())
         {
-          menu.addTitle(i18n("Target: %1", target->name()));
+          menu.addTitle(i18n("Target: %1", target->text()));
         }
 
       ProjectItemContext context(item);

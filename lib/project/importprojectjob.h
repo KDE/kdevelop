@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright (C) 2005 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,23 +16,36 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
+#ifndef IMPORTPROJECTJOB_H
+#define IMPORTPROJECTJOB_H
 
-#ifndef IMPORTSOURCEFILE_JOB_H
-#define IMPORTSOURCEFILE_JOB_H
-
-#include <Job.h>
+#include <kjob.h>
+#include "kdevprojectmodel.h"
 #include "kdevexport.h"
 
-class KDEVPROJECTMANAGER_EXPORT ImportSourceFileJob: public ThreadWeaver::Job
-{
-  Q_OBJECT
-public:
-  ImportSourceFileJob(QObject *parent = 0);
-  virtual ~ImportSourceFileJob();
+class KDevFileManager;
 
-  virtual void run();
+class KDEVPROJECTMANAGER_EXPORT ImportProjectJob: public KJob
+{
+    Q_OBJECT
+public:
+    ImportProjectJob(QStandardItem *folder, KDevFileManager *importer);
+    virtual ~ImportProjectJob();
+
+public:
+    void start();
+
+protected:
+    void startNextJob(KDevProjectFolderItem *folder);
+    void slotResult(KJob *job);
+    void processList();
+
+private:
+    KDevProjectFolderItem *m_folder;
+    KDevFileManager *m_importer;
+    QList<KDevProjectFolderItem*> m_workingList;
 };
 
-#endif // IMPORTSOURCEFILE_JOB_H
+#endif // IMPORTPROJECTJOB_H
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

@@ -5,22 +5,28 @@ add_subdirectory(debugger)
 add_subdirectory(projectmanager)
 add_subdirectory(settings)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${THREADWEAVER_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/lib/editor ${CMAKE_SOURCE_DIR}/lib/backgroundparser ${CMAKE_SOURCE_DIR}/lib/interfaces )
+include_directories(
+ ${CMAKE_SOURCE_DIR}/lib/util
+ ${CMAKE_SOURCE_DIR}/lib/widgets 
+ ${THREADWEAVER_INCLUDE_DIR} 
+ ${CMAKE_SOURCE_DIR}/lib/editor
+ ${CMAKE_SOURCE_DIR}/lib/backgroundparser
+ ${CMAKE_SOURCE_DIR}/lib/interfaces
+ ${CMAKE_SOURCE_DIR}/lib/project
+ )
+
 
 ########### next target ###############
 
 set(kdevplatform_LIB_SRCS
     kdevlanguagesupport.cpp
     kdevmainwindow.cpp
-    kdevprojectbuilder.cpp
-    kdevproject.cpp
     kdevcodemodel.cpp
     kdevdocumentcontroller.cpp
     kdevcoderepository.cpp
     kdevcore.cpp
     kdevpcsimporter.cpp
     kdevplugincontroller.cpp
-    kdevprojectmodel.cpp
     kdevplugin.cpp
     domutil.cpp
     kdevitemmodel.cpp
@@ -29,7 +35,6 @@ set(kdevplatform_LIB_SRCS
     kdevcodeproxy.cpp
     kdevcodeaggregate.cpp
     kdevdocument.cpp
-    kdevbuildableproject.cpp
     kdevfilemanager.cpp
     kdevbuildmanager.cpp
     kdevprofile.cpp
@@ -38,7 +43,6 @@ set(kdevplatform_LIB_SRCS
     kdevconfigskeleton.cpp
     kdevenvironment.cpp
     kdevconfig.cpp
-    kdevprojectcontroller.cpp
     kdevpartcontroller.cpp
     kdevlanguagecontroller.cpp
     kdevstatusbar.cpp
@@ -58,6 +62,11 @@ set(kdevplatform_LIB_SRCS
     interfaces/kdevapplicationinterface.cpp
     interfaces/kdevdiffinterface.cpp
     interfaces/kdevmakeinterface.cpp
+    project/kdevprojectbuilder.cpp
+    project/kdevproject.cpp
+    project/kdevprojectmodel.cpp
+    project/kdevprojectcontroller.cpp
+    project/importprojectjob.cpp
 )
 
 set(kdevplatform_UI
@@ -83,19 +92,15 @@ install(FILES
     kdevplugin.h
     kdevcoderepository.h
     kdevcore.h
-    kdevprojectbuilder.h
     kdevcreatefile.h
-    kdevproject.h
     domutil.h
     kdevlanguagesupport.h
-    kdevprojectmodel.h
     kdevmainwindow.h
     kdevitemmodel.h
     filetemplate.h
     kdevcodedelegate.h
     kdevcodeproxy.h
     kdevfilemanager.h
-    kdevbuildableproject.h
     kdevbuildmanager.h
     kdevprofile.h
     kdevprofileengine.h
@@ -104,7 +109,6 @@ install(FILES
     kdevenvironment.h
     kdevconfig.h
     kdevsharedptr.h
-    kdevprojectcontroller.h
     kdevpartcontroller.h
     kdevlanguagecontroller.h
     kdevstatusbar.h
@@ -123,6 +127,10 @@ install(FILES
     interfaces/kdevapplicationinterface.h
     interfaces/kdevdiffinterface.h
     interfaces/kdevmakeinterface.h
+    project/kdevprojectbuilder.h
+    project/kdevproject.h
+    project/kdevprojectmodel.h
+    project/kdevprojectcontroller.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/
 )
 

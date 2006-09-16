@@ -93,14 +93,13 @@ int main(int argc, char *argv[])
 
   app.processEvents(); //FIXME UGLY BEYOND WORDS!
 
-  KDevCore::setPluginController( new KDevPluginController );
-  QObject::connect(KDevCore::pluginController(), SIGNAL(loadingPlugin(const QString &)),
+  QObject::connect(KDevPluginController::self(), SIGNAL(loadingPlugin(const QString &)),
            splash, SLOT(showMessage(const QString &)));
 
   if (splash) splash->showMessage( i18n( "Loading Settings" ) );
   KDevCore::mainWindow()->loadSettings();
 
-//   KDevPluginController::getInstance()->loadInitialPlugins();
+  KDevPluginController::self()->loadPlugins( Global );
 
   if (splash) splash->showMessage( i18n( "Starting GUI" ) );
 

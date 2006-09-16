@@ -1,6 +1,6 @@
 
 include_directories(${CMAKE_SOURCE_DIR}/buildtools/lib/parsers/qmake 
-    ${CMAKE_SOURCE_DIR}/lib/util 
+    ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/project
     )
 
 

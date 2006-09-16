@@ -23,6 +23,7 @@
 #include <QList>
 #include <kservicetypetrader.h>
 #include "kdevprofile.h"
+#include "kdevplugincontroller.h"
 
 /**
 Profile listing operation.
@@ -89,20 +90,11 @@ public:
     ProfileEngine();
     ~ProfileEngine();
 
-    /**Type of the plugin offer. Engine will usually find profiles and return offers
-    of selected type.
-    @sa KDevPlugin class documentation for more information of plugin types.*/
-    enum OfferType {
-        Global    /**<Global plugins.*/,
-        Project   /**<Project plugins.*/,
-        Core      /**<Core plugins.*/
-    };
-
     /** @return The list of plugin offers for given profile and type.*/
-    KService::List offers(const QString &profileName, OfferType offerType);
+    KPluginInfo::List offers(const QString &profileName, KDevPluginController::PluginType offerType);
 
     /** @return The list of all plugin offers for given type.*/
-    KService::List allOffers(OfferType offerType);
+    KPluginInfo::List allOffers(KDevPluginController::PluginType offerType);
 
     /**@return The list of URLs to the resources (files) with given @p extension.
     @param profileName A name of a profile to find resources in.
@@ -134,8 +126,8 @@ public:
     @param load Will be filled with a list of plugins to load.
     @note Resulting lists are not cleared. Pass only clean lists in the
     common case.*/
-    void diffProfiles(OfferType offerType, const QString &profile1, const QString &profile2,
-        QStringList &unload, KService::List &load);
+    void diffProfiles(KDevPluginController::PluginType offerType, const QString &profile1, const QString &profile2,
+        QStringList &unload, KPluginInfo::List &load);
 
     /**@return The root profile. Root profile is always named "KDevelop" and it
     defines an empty list of plugins. Applications built on KDevelop platform

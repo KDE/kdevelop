@@ -6,6 +6,7 @@
    Copyright (C) 2003 Jens Dagerbo <jens.dagerbo@swipnet.se>
    Copyright (C) 2003 Mario Scalas <mario.scalas@libero.it>
    Copyright (C) 2003-2004 Alexander Dymo <adymo@kdevelop.org>
+   Copyright     2006 Matt Rogers <mattr@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,36 +26,29 @@
 #ifndef KDEVPROJECT_H
 #define KDEVPROJECT_H
 
-#include "kdevplugin.h"
-#include "domutil.h"
-
-#include <qstringlist.h>
-#include <QMap>
+#include <QObject>
 
 #include <kurl.h>
-/**
-@file kdevproject.h
-KDevelop project interface.
-*/
 
-class QTimer;
+#include "kdevexport.h"
+
+template<typename T> class QList;
+
+class KJob;
 class KInstance;
 class KDevFileManager;
+class KDevProjectModel;
+class KDevProjectItem;
 class KDevProjectFileItem;
 class KDevProjectFolderItem;
 class KDevPersistentHash;
 
 /**
- * \short Object which represents a KDevelop project
+ * \brief Object which represents a KDevelop project
  *
- * KDevProject is a container for everything which relates to the files
- * within a development project.  It maintains a list of files contained
- * in it.
- *
- * Unless otherwise specified, all returned URLs are absolute urls.  Provided
- * URLs may be relative to the project directory or absolute.
+ * Provide better descriptions
  */
-class KDEVINTERFACES_EXPORT KDevProject: public KDevPlugin
+class KDEVINTERFACES_EXPORT KDevProject : public QObject
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kdevelop.Project")
@@ -62,44 +56,43 @@ public:
     /**
      * Constructs a project.
      *
-     * @param info information about the plugin - plugin internal and generic
-     * (GUI) name, description, a list of authors, etc. That information is used to show
-     * plugin information in various places like "about application" dialog, plugin selector
-     * dialog, etc. Plugin does not take ownership on info object, also its lifetime should
-     * be equal to the lifetime of the plugin.
      * @param parent The parent object for the plugin.
      */
-    KDevProject(KInstance *instance, QObject *parent = 0);
+    KDevProject(QObject *parent = 0);
 
     /// Destructor.
     virtual ~KDevProject();
 
+    /** Project model accessor */
+    KDevProjectModel* model() const;
+
 
 public Q_SLOTS:
     /**
-     * This method is invoked when the project is opened
-     * (i.e. actually just after this class has been instantiated).
-     * @param dirName The project directory, which should afterwards be returned by
-     * the projectDirectory() method.
-     * @param projectName The project name, which is equivalent
-     * to the project file name without the suffix.
+     * @brief Open a project
+     * This method opens a project and starts the process of loading the
+     * data for the project from disk.
+     * @param projectFileUrl The url pointing to the location of the project
+     * file to load
+     * The project name is taken from the Name key in the project file in
+     * the 'General' group
      */
-    virtual Q_SCRIPTABLE void openProject(const KUrl &dirName, const QString &projectName) = 0;
+    virtual Q_SCRIPTABLE void open(const KUrl &projectFileUrl);
 
-    /** This method is invoked when the project is about to be closed. */
-    virtual Q_SCRIPTABLE void closeProject() = 0;
+    /** This method is invoked when the project needs to be closed. */
+    virtual Q_SCRIPTABLE void close();
 
     /**
-     * @brief Get the project directory
+     * @brief Get the project folder
      * @return The canonical absolute directory of the project. 
      */
-    virtual Q_SCRIPTABLE KUrl projectDirectory() const = 0;
+    virtual Q_SCRIPTABLE KUrl folder() const;
 
     /** Returns the name of the project. */
-    virtual Q_SCRIPTABLE QString projectName() const = 0;
+    virtual Q_SCRIPTABLE QString name() const;
 
     /** Get a list of all files in the project */
-    virtual QList<KDevProjectFileItem*> allFiles() = 0;
+    virtual QList<KDevProjectFileItem*> allFiles();
 
     /**
      * Get the file manager for the project
@@ -119,7 +112,7 @@ public Q_SLOTS:
      * project; for that, use inProject().
      *
      * @param absoluteUrl Absolute url to convert
-     *
+     * @deprecated use KUrl::relativeUrl instead
      * @returns absoluteUrl relative to projectDirectory()
      **/
     KUrl relativeUrl(const KUrl& absoluteUrl) const;
@@ -132,7 +125,7 @@ public Q_SLOTS:
      *
      * @returns the absolute URL relative to projectDirectory()
      **/
-    KUrl absoluteUrl(const KUrl& relativeUrl) const;
+    KUrl urlRelativeToProject(const KUrl& relativeUrl) const;
 
     /**
      * Check if the url specified by @a url is part of the project.
@@ -150,8 +143,15 @@ public Q_SLOTS:
      */
     KDevPersistentHash *persistentHash() const;
 
+private Q_SLOTS:
+    void importDone(KJob*);
+
 private:
-    class KDevProjectPrivate* const d;
+    QList<KDevProjectFileItem*> recurseFiles( KDevProjectItem* projectItem );
+
+private:
+    class Private;
+    Private* const d;
 };
 
 #endif

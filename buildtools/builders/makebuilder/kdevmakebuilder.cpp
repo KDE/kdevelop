@@ -34,7 +34,7 @@ KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const QStringList &)
     m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
 
-    KDevPluginController* kdpc = KDevCore::pluginController();
+    KDevPluginController* kdpc = KDevPluginController::self();
     KDevMakeFrontend* make = kdpc->extension<KDevMakeFrontend>("KDevelop/MakeFrontend");
     if ( make )
     {
@@ -57,12 +57,12 @@ KDevProject *KDevMakeBuilder::project() const
 
 bool KDevMakeBuilder::build(KDevProjectItem *dom)
 {
-    KDevPluginController* kdpc = KDevCore::pluginController();
+    KDevPluginController* kdpc = KDevPluginController::self();
     if (KDevMakeFrontend *make = kdpc->extension<KDevMakeFrontend>("KDevelop/MakeFrontend")) {
         if (KDevProjectFolderItem *folder = dom->folder()) {
             // ### compile the folder
             QString command = buildCommand(dom);
-            make->queueCommand(folder->name(), command);
+            make->queueCommand(folder->text(), command);
             m_commands.append(qMakePair(command, dom));
             return true;
         } else if (KDevProjectTargetItem *target = dom->target()) {
@@ -140,7 +140,7 @@ QString KDevMakeBuilder::buildCommand(KDevProjectItem *item, const QString &targ
     Q_ASSERT(item->folder());
 
     QString dircmd = "cd ";
-    QString dir = item->folder()->name();
+    QString dir = item->folder()->text();
     dircmd += KProcess::quote(dir);
     dircmd += " && ";
 

@@ -26,7 +26,7 @@ CMakeTargetItem::CMakeTargetItem( cmTarget target, KDevProjectItem* item)
 {
     m_target = target;
     QString targetName = QLatin1String( target.GetFullName().c_str() );
-    setName( targetName );
+    setText( targetName );
 
     std::vector<std::string> includes = m_target.GetMakefile()->GetIncludeDirectories();
     std::vector<std::string>::iterator it = includes.begin(), itEnd = includes.end();

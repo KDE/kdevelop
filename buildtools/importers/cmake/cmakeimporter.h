@@ -49,6 +49,7 @@ public:
 
     virtual KDevProject* project() const;
     virtual KDevProjectBuilder* builder() const { return 0; }
+    virtual KUrl buildDirectory() const;
     virtual KUrl::List includeDirectories() const;
     virtual KUrl::List preprocessorDefines() const { return KUrl::List(); }
 

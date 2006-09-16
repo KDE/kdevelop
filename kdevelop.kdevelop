@@ -15,7 +15,6 @@
     <description/>
     <ignoreparts>
       <part>kdevbookmarks</part>
-      <part>kdevfilelist</part>
       <part>kdevdistpart</part>
     </ignoreparts>
     <defaultencoding/>
@@ -242,7 +241,7 @@
     </run>
     <build>
       <buildtool>make</buildtool>
-      <builddir>/home/kde/trunk/KDE/kdevelop</builddir>
+      <builddir>/home/kde/branches/work/kdev-model-and-api-experiments</builddir>
     </build>
     <make>
       <abortonerror>false</abortonerror>

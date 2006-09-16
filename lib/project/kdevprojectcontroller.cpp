@@ -43,14 +43,15 @@ Boston, MA 02110-1301, USA.
 
 KDevProjectController::KDevProjectController( QObject *parent )
         : QObject( parent ),
-        m_name( QString::null ),
         m_localFile( KUrl() ),
         m_globalFile( KUrl() ),
         m_projectsDir( KUrl() ),
         m_lastProject( KUrl() ),
         m_isLoaded( false ),
         m_project( 0 ),
+        m_projectPart( 0 ),
         m_recentAction( 0 )
+
 {}
 
 KDevProjectController::~KDevProjectController()
@@ -58,18 +59,7 @@ KDevProjectController::~KDevProjectController()
 
 void KDevProjectController::loadSettings( bool projectIsLoaded )
 {
-    if ( projectIsLoaded )
-    {
-        KConfig * config = KDevConfig::standard();
-        config->setGroup( "General Options" );
-
-        QString projectManagement =
-            config->readPathEntry( "Project Management", "KDevProjectManager" );
-
-        loadProjectPart( projectManagement );
-
-        KDevCore::pluginController() ->loadPlugins( ProfileEngine::Project );
-    }
+    Q_UNUSED( projectIsLoaded );
 }
 
 void KDevProjectController::saveSettings( bool projectIsLoaded )
@@ -115,21 +105,12 @@ void KDevProjectController::initialize()
 
 void KDevProjectController::cleanup()
 {
+    closeProject();
 }
 
 bool KDevProjectController::isLoaded() const
 {
     return m_isLoaded;
-}
-
-QString KDevProjectController::name() const
-{
-    return m_name;
-}
-
-void KDevProjectController::setName( const QString &name )
-{
-    m_name = name;
 }
 
 KUrl KDevProjectController::localFile() const
@@ -224,8 +205,17 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
 
     //The project file has been opened.
     //Now we can load settings for all of the KDevCore objects including this one!!
-    KDevCore::loadSettings();
+    KConfig * config = KDevConfig::standard();
+    config->setGroup( "General Options" );
 
+    QString projectManagement =
+    config->readPathEntry( "Project Management", "KDevProjectManager" );
+    if ( loadProjectPart( projectManagement ) )
+    {
+        KDevCore::loadSettings();
+        KDevPluginController::self() ->loadPlugins( KDevPluginController::Project );
+    }
+    
     emit projectOpened();
 
     return true;
@@ -265,13 +255,14 @@ bool KDevProjectController::closeProject()
 
     emit projectClosed();
 
-    KDevCore::pluginController() ->unloadPlugins( ProfileEngine::Project );
+    KDevPluginController::self() ->unloadPlugins( KDevPluginController::Project );
 
     //FIXME
-    //     KDevCore::pluginController() ->changeProfile( m_oldProfileName );
+    //     KDevPluginController::self() ->changeProfile( m_oldProfileName );
 
-    unloadProjectPart();
-
+    m_project->close();
+    m_project->deleteLater(); //be safe when deleting
+    m_project = 0;
     m_recentAction->setCurrentAction( 0 );
 
     return true;
@@ -279,8 +270,12 @@ bool KDevProjectController::closeProject()
 
 bool KDevProjectController::loadProjectPart( const QString &projectManager )
 {
-    KService::Ptr projectService = KService::serviceByDesktopName( projectManager );
-    if ( !projectService )
+    QString constraint = 
+            QString::fromLatin1("[X-KDE-PluginInfo-Name] == '%1'")
+            .arg(projectManager);
+
+    KPluginInfo::List projectList = KDevPluginController::query("KDevelop/Project", constraint);
+    if ( projectList.isEmpty() )
     {
         KMessageBox::sorry( KDevCore::mainWindow(),
                             i18n( "No project management plugin %1 found.",
@@ -288,35 +283,34 @@ bool KDevProjectController::loadProjectPart( const QString &projectManager )
         return false;
     }
 
-    m_project = KService::createInstance< KDevProject >(
-                    projectService, 0,
-                    KDevPluginController::argumentsFromService( projectService ) );
+    m_project = new KDevProject();
+    m_project->open( m_globalFile );
 
-    if ( !m_project )
+    KPluginInfo* projectPluginInfo = *projectList.begin();
+    KDevPluginController *pc = KDevPluginController::self();
+    m_projectPart = pc->loadPlugin( projectPluginInfo->pluginName() );
+    if ( !m_projectPart )
     {
         KMessageBox::sorry( KDevCore::mainWindow(),
                             i18n( "Could not create project management plugin %1.",
                                   projectManager ) );
+        m_project->close();
+        delete m_project;
+        m_project = 0;
         return false;
     }
-
-    m_project->openProject( m_globalFile.directory(), m_globalFile.fileName() );
-    KDevCore::pluginController() ->integratePart( m_project );
-
-    KDevCore::mainWindow() ->addPlugin( m_project );
 
     return true;
 }
 
 void KDevProjectController::unloadProjectPart()
 {
-    if ( m_project )
+    if ( m_isLoaded )
     {
-        KDevCore::mainWindow() ->removePlugin( m_project );
-        KDevCore::pluginController() ->removePart( m_project );
-        m_project->closeProject();
-        delete m_project;
-        m_project = 0;
+        KDevPluginController* pc = KDevPluginController::self();
+        KPluginInfo* projectPluginInfo = pc->pluginInfo( m_projectPart );
+        KDevPluginController::self()->unloadPlugin( projectPluginInfo->pluginName() );
+        m_isLoaded = false;
     }
 }
 

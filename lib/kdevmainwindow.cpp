@@ -36,6 +36,8 @@ Boston, MA 02110-1301, USA.
 #include <kstdaction.h>
 #include <kselectaction.h>
 #include <ktoggleaction.h>
+#include <kxmlguiclient.h>
+#include <kxmlguifactory.h>
 #include <kactioncollection.h>
 #include <ktoolbarpopupaction.h>
 
@@ -240,6 +242,8 @@ void KDevMainWindow::saveSettings( bool projectIsLoaded )
 void KDevMainWindow::initialize()
 {
     createGUI( ShellExtension::getInstance() ->xmlFile() );
+    connect( KDevPluginController::self(), SIGNAL(pluginLoaded(KDevPlugin*)),
+             this, SLOT(addPlugin(KDevPlugin*)));
     connect( KDevCore::documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
              this, SLOT( documentActivated( KDevDocument* ) ) );
     connect( KDevCore::projectController(), SIGNAL( projectOpened() ),
@@ -368,6 +372,7 @@ void KDevMainWindow::addPlugin( KDevPlugin *plugin )
 {
     Q_ASSERT( plugin );
 
+    guiFactory()->addClient( plugin );
     QWidget *view = plugin->pluginView();
 
     //Plugin has no view. Ignore.
@@ -438,6 +443,7 @@ void KDevMainWindow::removePlugin( KDevPlugin *plugin )
 {
     Q_ASSERT( plugin );
 
+    guiFactory()->removeClient( plugin );
     QWidget *view = plugin->pluginView();
 
     //Plugin has no view. Ignore.
@@ -530,6 +536,7 @@ void KDevMainWindow::newToolbarConfig()
 
 bool KDevMainWindow::queryClose()
 {
+    KDevPluginController::self()->shutdown();
     //All KDevCore API objects must release all resources which
     //depend upon one another.
     KDevCore::cleanup();

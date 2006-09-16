@@ -63,4 +63,10 @@ bool KDevPlugin::isCentralPlugin() const
     return false;
 }
 
+void KDevPlugin::prepareForUnload()
+{
+    KDevCore::mainWindow()->removePlugin( this );
+    emit readyToUnload( this );
+}
+
 #include "kdevplugin.moc"

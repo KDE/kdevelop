@@ -39,7 +39,6 @@ Boston, MA 02110-1301, USA.
 #include "kdevenvironment.h"
 #include "kdevpartcontroller.h"
 #include "kdevlanguagesupport.h"
-#include "kdevplugincontroller.h"
 #include "kdevprojectcontroller.h"
 #include "kdevdocumentcontroller.h"
 #include "kdevlanguagecontroller.h"
@@ -68,7 +67,6 @@ public:
     QPointer<KDevPartController> partController;
     QPointer<KDevProjectController> projectController;
     QPointer<KDevLanguageController> languageController;
-    QPointer<KDevPluginController> pluginController;
     QPointer<KDevDocumentController> documentController;
     QPointer<KDevBackgroundParser> backgroundParser;
 
@@ -89,8 +87,6 @@ private:
         */
         if ( environment )
             delete environment;
-        if ( pluginController )
-            delete pluginController;
         if ( projectController )
             delete projectController;
         if ( documentController )
@@ -144,16 +140,6 @@ KDevMainWindow *KDevCore::mainWindow()
 void KDevCore::setMainWindow( KDevMainWindow *mainWindow )
 {
     d->mainWindow = mainWindow;
-}
-
-KDevPluginController* KDevCore::pluginController()
-{
-    return d->pluginController;
-}
-
-void KDevCore::setPluginController( KDevPluginController* pluginController )
-{
-    d->pluginController = pluginController;
 }
 
 KDevDocumentController* KDevCore::documentController()
@@ -215,7 +201,6 @@ void KDevCore::initialize()
     Q_ASSERT( d->projectController );
     Q_ASSERT( d->mainWindow );
     Q_ASSERT( d->backgroundParser );
-    Q_ASSERT( d->pluginController );
 
     d->environment->initialize();
     d->partController->initialize();
@@ -224,7 +209,6 @@ void KDevCore::initialize()
     d->projectController->initialize();
     d->mainWindow->initialize();
     d->backgroundParser->initialize();
-    d->pluginController->initialize();
 
     bool success = false;
 
@@ -268,7 +252,8 @@ void KDevCore::cleanup()
     Q_ASSERT( d->projectController );
     Q_ASSERT( d->mainWindow );
     Q_ASSERT( d->backgroundParser );
-    Q_ASSERT( d->pluginController );
+
+    d->mainWindow->setVisible( false );
 
     //If a project is open then projectController will call KDevCore::saveSettings
     //both before the project is closed and then once after.  Else we will do it here.
@@ -282,7 +267,6 @@ void KDevCore::cleanup()
     d->projectController->cleanup();
     d->mainWindow->cleanup();
     d->backgroundParser->cleanup();
-    d->pluginController->cleanup();
 }
 
 /* This function should be called right after initialization of the objects and a project has
@@ -296,7 +280,6 @@ void KDevCore::loadSettings()
     Q_ASSERT( d->projectController );
     Q_ASSERT( d->mainWindow );
     Q_ASSERT( d->backgroundParser );
-    Q_ASSERT( d->pluginController );
 
     bool projectIsLoaded = KDevCore::projectController()->isLoaded();
 
@@ -307,7 +290,6 @@ void KDevCore::loadSettings()
     d->projectController->loadSettings( projectIsLoaded );
     d->mainWindow->loadSettings( projectIsLoaded );
     d->backgroundParser->loadSettings( projectIsLoaded );
-    d->pluginController->loadSettings( projectIsLoaded );
 }
 
 /* This function should be called right before closing of the project and right after closing the
@@ -321,7 +303,6 @@ void KDevCore::saveSettings()
     Q_ASSERT( d->projectController );
     Q_ASSERT( d->mainWindow );
     Q_ASSERT( d->backgroundParser );
-    Q_ASSERT( d->pluginController );
 
     bool projectIsLoaded = KDevCore::projectController()->isLoaded();
 
@@ -332,7 +313,6 @@ void KDevCore::saveSettings()
     d->projectController->saveSettings( projectIsLoaded );
     d->mainWindow->saveSettings( projectIsLoaded );
     d->backgroundParser->saveSettings( projectIsLoaded );
-    d->pluginController->saveSettings( projectIsLoaded );
 }
 
 void KDevCoreInterface::load()

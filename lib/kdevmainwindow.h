@@ -74,12 +74,13 @@ public:
 
     virtual void setCurrentDocument( KDevDocument *document );
 
+public Q_SLOTS:
     virtual void addPlugin( KDevPlugin *plugin );
 
     virtual void removePlugin( KDevPlugin *plugin );
 
-public Q_SLOTS:
     virtual void setVisible( bool visible );
+
     void setUIMode( UIMode mode );
 
 Q_SIGNALS:

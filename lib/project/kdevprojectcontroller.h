@@ -27,6 +27,7 @@ Boston, MA 02110-1301, USA.
 
 #include <kurl.h>
 
+class KDevPlugin;
 class KDevProject;
 class KRecentFilesAction;
 
@@ -37,9 +38,6 @@ class KDEVINTERFACES_EXPORT KDevProjectController : public QObject, protected KD
 public:
     KDevProjectController( QObject *parent = 0 );
     virtual ~KDevProjectController();
-
-    QString name() const;
-    void setName( const QString &name );
 
     KUrl localFile() const;
     void setLocalFile( const KUrl &localFile );
@@ -72,7 +70,7 @@ protected:
 
 private:
     //FIXME Do not load all of this just for the project being opened...
-    void legacyLoading();
+    //void legacyLoading();
     bool loadProjectPart( const QString &projectManager );
     void unloadProjectPart();
 
@@ -84,6 +82,7 @@ private:
     KUrl m_lastProject;
     bool m_isLoaded;
     KDevProject* m_project;
+    KDevPlugin* m_projectPart;
     KRecentFilesAction *m_recentAction;
 };
 

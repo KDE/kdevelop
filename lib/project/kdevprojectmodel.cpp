@@ -23,24 +23,18 @@
 #include <kiconloader.h>
 #include <kio/global.h>
 
-QIcon KDevProjectFolderItem::icon() const
-{
-    return KIO::pixmapForUrl(url(), 0, K3Icon::Small);
-}
-
-QIcon KDevProjectFileItem::icon() const
-{
-    return KIO::pixmapForUrl(url(), 0, K3Icon::Small);
-}
-
 QList<KDevProjectFolderItem*> KDevProjectItem::folderList() const
 {
   QList<KDevProjectFolderItem*> lst;
-  for (int i=0; i<itemCount(); ++i)
+  for (int i = 0; i < rowCount(); ++i)
   {
-    KDevProjectFolderItem *item = itemAt(i)->folder();
-    if ( item )
-        lst.append(item);
+    QStandardItem* item = child(i);
+    if ( item->type() == Folder || item->type() == BuildFolder )
+    {
+      KDevProjectFolderItem *kdevitem = dynamic_cast<KDevProjectFolderItem*>( item );
+      if ( kdevitem )
+        lst.append(kdevitem);
+    }
   }
 
   return lst;
@@ -49,11 +43,15 @@ QList<KDevProjectFolderItem*> KDevProjectItem::folderList() const
 QList<KDevProjectTargetItem*> KDevProjectItem::targetList() const
 {
   QList<KDevProjectTargetItem*> lst;
-  for (int i=0; i<itemCount(); ++i)
+  for (int i = 0; i < rowCount(); ++i)
   {
-    KDevProjectTargetItem *item = itemAt( i )->target();
-    if ( item )
-      lst.append(item);
+    QStandardItem* item = child(i);
+    if ( item->type() == Target )
+    {
+      KDevProjectTargetItem *kdevitem = dynamic_cast<KDevProjectTargetItem*>( item );
+      if ( kdevitem )
+        lst.append(kdevitem);
+    }
   }
 
   return lst;
@@ -62,23 +60,23 @@ QList<KDevProjectTargetItem*> KDevProjectItem::targetList() const
 QList<KDevProjectFileItem*> KDevProjectItem::fileList() const
 {
   QList<KDevProjectFileItem*> lst;
-  for (int i=0; i<itemCount(); ++i)
+  for (int i = 0; i < rowCount(); ++i)
   {
-    KDevProjectFileItem* item = itemAt( i )->file();
-    if ( item )
-      lst.append(item);
+    QStandardItem* item = child(i);
+    if ( item->type() == File )
+    {
+      KDevProjectFileItem *kdevitem = dynamic_cast<KDevProjectFileItem*>( item );
+      if ( kdevitem )
+        lst.append(kdevitem);
+    }
+
   }
 
   return lst;
 }
 
-KDevProjectItem *KDevProjectItem::itemAt(int index) const
-{
-  return dynamic_cast<KDevProjectItem*>(KDevItemCollection::itemAt(index)); // ### no dynamic_cast
-}
-
 KDevProjectModel::KDevProjectModel(QObject *parent)
-  : KDevItemModel(parent)
+  : QStandardItemModel(parent)
 {
 }
 
@@ -86,9 +84,10 @@ KDevProjectModel::~KDevProjectModel()
 {
 }
 
+
 KDevProjectItem *KDevProjectModel::item(const QModelIndex &index) const
 {
-  return reinterpret_cast<KDevProjectItem*>(index.internalPointer());
+  return reinterpret_cast<KDevProjectItem*>(itemFromIndex(index));
 }
 
 void KDevProjectBuildFolderItem::setIncludeDirectories( const KUrl::List& dirList )
@@ -103,19 +102,16 @@ const KUrl::List& KDevProjectBuildFolderItem::includeDirectories() const
 
 const QHash<QString, QString>& KDevProjectBuildFolderItem::environment() const
 {
-#ifdef __GNUC__
-#warning PURE HORROR - used to return reference to local variable - FIXME!!
-#endif
-  static QHash<QString, QString> hash;
-  return hash;
+  return m_env;
 }
 
 
-KDevProjectFolderItem::KDevProjectFolderItem( const KUrl & dir, KDevItemGroup * parent )
+KDevProjectFolderItem::KDevProjectFolderItem( const KUrl & dir, QStandardItem * parent )
   : KDevProjectItem(dir.directory(), parent)
   , m_url(dir)
 {
-  setName( dir.fileName() );
+  setText( dir.fileName() );
+  setIcon( KIO::pixmapForUrl(url(), 0, K3Icon::Small) );
 }
 
 const KUrl& KDevProjectFolderItem::url( ) const
@@ -126,13 +122,14 @@ const KUrl& KDevProjectFolderItem::url( ) const
 void KDevProjectFolderItem::setUrl( const KUrl& url )
 {
   m_url = url;
-  setName( url.fileName() );
+  setText( url.fileName() );
 }
 
-KDevProjectFileItem::KDevProjectFileItem( const KUrl & file, KDevItemGroup * parent )
+KDevProjectFileItem::KDevProjectFileItem( const KUrl & file, QStandardItem * parent )
   : KDevProjectItem(file.fileName(), parent)
   , m_url(file)
 {
+  setIcon( KIO::pixmapForUrl(url(), 0, K3Icon::Small) );
 }
 
 const KUrl & KDevProjectFileItem::url( ) const

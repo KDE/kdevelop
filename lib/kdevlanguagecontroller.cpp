@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <kservice.h>
 #include <kmessagebox.h>
 #include <kmainwindow.h>
+#include <kplugininfo.h>
 #include <kservicetypetrader.h>
 
 #include "kdevcore.h"
@@ -80,13 +81,10 @@ KDevLanguageSupport *KDevLanguageController::languageSupport( const QString &lan
 
 bool KDevLanguageController::loadLanguageSupport( const QString &language )
 {
-    const QString constraint =
-        "[X-KDevelop-Language] == '%1' and [X-KDevelop-Version] == %2";
+    const QString constraint = QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg( language );
 
-    KService::List languageSupportOffers =
-        KServiceTypeTrader::self() ->query(
-            QLatin1String( "KDevelop/LanguageSupport" ),
-            constraint.arg( language ).arg( KDEVELOP_PLUGIN_VERSION ) );
+    KPluginInfo::List languageSupportOffers = KDevPluginController::query( "KDevelop/LanguageSupport",
+                                                                           constraint );
 
     if ( languageSupportOffers.isEmpty() )
     {
@@ -95,12 +93,11 @@ bool KDevLanguageController::loadLanguageSupport( const QString &language )
         return false;
     }
 
-    KService::Ptr languageSupportService = *languageSupportOffers.begin();
+    KPluginInfo* languageSupportService = *languageSupportOffers.begin();
 
-    KDevLanguageSupport *langSupport =
-        KService::createInstance<KDevLanguageSupport>(
-            languageSupportService, 0,
-            KDevPluginController::argumentsFromService( languageSupportService ) );
+    KDevPluginController *pc = KDevPluginController::self();
+    KDevPlugin* plugin = pc->loadPlugin( languageSupportService->pluginName() );
+    KDevLanguageSupport *langSupport = dynamic_cast<KDevLanguageSupport*>( plugin );
 
     if ( !langSupport )
     {
@@ -110,8 +107,6 @@ bool KDevLanguageController::loadLanguageSupport( const QString &language )
     }
 
     m_activeLanguage = langSupport;
-    KDevCore::pluginController() ->integratePart( langSupport );
-
     m_languages.insert( language, langSupport );
 
     return true;

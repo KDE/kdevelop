@@ -113,7 +113,7 @@ KUrl FileTemplate::fullPathForName(const QString &name, Policy p)
     // first try project-specific
     if (KDevCore::activeProject())
     {
-        QString projectDir = KDevCore::activeProject()->projectDirectory().path();
+        QString projectDir = KDevCore::activeProject()->folder().path();
         projectDir += "/templates/" + name;
         url = KUrl(projectDir);
         if (KIO::NetAccess::exists(url, true, KDevCore::mainWindow()))

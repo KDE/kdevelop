@@ -32,10 +32,11 @@
 #include <qfileinfo.h>
 #include <QRegExp>
 
-K_EXPORT_COMPONENT_FACTORY(kdevgenericimporter, KGenericFactory<KDevGenericImporter>("kdevgenericimporter"))
+typedef KGenericFactory<KDevGenericImporter> GenericSupportFactory;
+K_EXPORT_COMPONENT_FACTORY(kdevgenericimporter, GenericSupportFactory("kdevgenericimporter"))
 
 KDevGenericImporter::KDevGenericImporter(QObject *parent, const QStringList &)
-    : KDevFileManager(parent)
+    : KDevFileManager( GenericSupportFactory::instance(), parent)
 {
     if (includes.isEmpty())
         includes << "*.h" << "*.cpp" << "*.c" << "*.ui" << "*.cs" << "*.java";   // ### remove me
@@ -97,11 +98,9 @@ QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *
         } else if (fileInfo.isDir() && fileInfo.fileName() != QLatin1String(".")
                    && fileInfo.fileName() != QLatin1String("..")) {
             KDevProjectFolderItem *folder = new KDevProjectFolderItem(KUrl(fileInfo.absoluteFilePath()), item);
-            item->add(folder);
             folder_list.append(folder);
         } else if (fileInfo.isFile()) {
             KDevProjectFileItem *file = new KDevProjectFileItem(KUrl( fileInfo.absoluteFilePath() ), item);
-            item->add(file);
         }
     }
 

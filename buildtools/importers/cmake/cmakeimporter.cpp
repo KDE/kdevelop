@@ -39,9 +39,9 @@
 #include "config.h"
 #include "cmaketargetitem.h"
 
-
+typedef KGenericFactory<CMakeImporter> CMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevcmakeimporter,
-                            KGenericFactory<CMakeImporter>( "kdevcmakeimporter" ) )
+                            CMakeSupportFactory( "kdevcmakeimporter" ) )
 
 void updateProgress( const char* text, float percent )
 {
@@ -50,7 +50,7 @@ void updateProgress( const char* text, float percent )
 
 CMakeImporter::CMakeImporter( QObject* parent,
                               const QStringList& )
-: KDevBuildManager( parent ), m_rootItem(0L)
+    : KDevBuildManager( CMakeSupportFactory::instance(), parent ), m_rootItem(0L)
 {
     m_project = qobject_cast<KDevProject*>( parent );
     Q_ASSERT( m_project );
@@ -75,6 +75,11 @@ KDevProject* CMakeImporter::project() const
     return m_project;
 }
 
+KUrl CMakeImporter::buildDirectory() const
+{
+     return project()->folder();
+}
+
 QList<KDevProjectFolderItem*> CMakeImporter::parse( KDevProjectFolderItem* dom )
 {
     Q_UNUSED( dom );
@@ -84,7 +89,7 @@ QList<KDevProjectFolderItem*> CMakeImporter::parse( KDevProjectFolderItem* dom )
 KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
                                            const KUrl& fileName )
 {
-    QString projectPath = m_project->projectDirectory().path();
+    QString projectPath = m_project->folder().path();
     kDebug( 9025 ) << k_funcinfo << "project path is " << projectPath << endl;
     QString buildDir = CMakeSettings::self()->buildFolder();
     kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
@@ -116,9 +121,8 @@ KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
     for ( git = generatorVector.begin(); git != generatorVector.end(); ++git )
     {
         KUrl url( ( *git )->GetMakefile()->GetStartDirectory() );
-        KDevProjectFolderItem* item = new KDevProjectFolderItem( url, 0 );
+        KDevProjectFolderItem* item = new KDevProjectFolderItem( url, m_rootItem );
         createProjectItems( ( *git ), item );
-        m_rootItem->add( item );
     }
     return m_rootItem;
 }
@@ -151,7 +155,7 @@ void CMakeImporter::createProjectItems( cmLocalGenerator* generator, KDevProject
     {
         cmTarget target = ( *it ).second;
         CMakeTargetItem* targetItem = new CMakeTargetItem( target, rootItem );
-        rootItem->add( targetItem );
+
         std::vector<std::string> sourceLists = target.GetSourceLists();
         std::vector<std::string>::iterator sit, sitEnd = sourceLists.end();
         for ( sit = sourceLists.begin(); sit != sitEnd; ++sit )
@@ -174,7 +178,7 @@ void CMakeImporter::createProjectItems( cmLocalGenerator* generator, KDevProject
     for ( git = generatorVector.begin(); git != generatorVector.end(); ++git )
     {
         KUrl url( ( *git )->GetMakefile()->GetStartDirectory() );
-        KDevProjectBuildFolderItem* item = new KDevProjectBuildFolderItem( url, 0 );
+        KDevProjectBuildFolderItem* item = new KDevProjectBuildFolderItem( url, rootItem );
         std::vector<std::string> includeList = makefile->GetIncludeDirectories();
         std::vector<std::string>::iterator it, itEnd = includeList.end();
         for ( it = includeList.begin(); it != itEnd; ++it )
@@ -184,7 +188,6 @@ void CMakeImporter::createProjectItems( cmLocalGenerator* generator, KDevProject
                 m_includeDirList.append( urlCandidate );
         }
         createProjectItems( ( *git ), item );
-        rootItem->add( item );
     }
 }
 

@@ -127,18 +127,6 @@ public:
      *
      * @return
      */
-    static KDevPluginController *pluginController();
-
-    /**
-     *
-     * @param pluginController
-     */
-    static void setPluginController( KDevPluginController *pluginController );
-
-    /**
-     *
-     * @return
-     */
     static KDevDocumentController *documentController();
 
     /**

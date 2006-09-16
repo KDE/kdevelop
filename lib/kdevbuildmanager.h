@@ -35,7 +35,7 @@ class KDEVINTERFACES_EXPORT KDevBuildManager : public KDevFileManager
     Q_OBJECT
 
 public:
-    KDevBuildManager(QObject* parent);
+    KDevBuildManager(KInstance*, QObject* parent);
     ~KDevBuildManager();
 
     enum BuildFeature
@@ -111,6 +111,11 @@ public:
     virtual bool removeFileFromTarget(KDevProjectFileItem *file, KDevProjectTargetItem *parent) = 0;
 
     /**
+     * Get the toplevel build directory for the project
+     */
+    virtual KUrl buildDirectory() const = 0;
+    
+    /**
      * Get a list of all the targets in this project
      *
      * The list returned by this function should be checked to verify it is not
@@ -120,6 +125,8 @@ public:
      * @todo implement
      */
     //QList<KDevProjectTargetItem*> targets() const;
+
+
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( KDevBuildManager::BuildFeatures )

@@ -12,6 +12,7 @@ GenericName[x-test]=xxEmbedded Konsolexx
 Icon=konsole
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevkonsoleview
+X-KDE-KPluginInfo-Name=kdevkonsoleview
 X-KDevelop-Version=4
 X-KDevelop-Category=Global
 X-KDevelop-Properties=Console

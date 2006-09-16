@@ -1,5 +1,9 @@
 /* This file is part of the KDE project
 Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
+Copyright     2006 Matt Rogers <mattr@kde.org
+
+Based on code from Kopete
+Copyright (c) 2002-2003 by Martijn Klingens <klingens@kde.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -19,6 +23,7 @@ Boston, MA 02110-1301, USA.
 #include "kdevplugincontroller.h"
 
 #include <QFile>
+#include <QTimer>
 
 #include <kcmdlineargs.h>
 #include <kapplication.h>
@@ -38,162 +43,188 @@ Boston, MA 02110-1301, USA.
 #include <kaction.h>
 #include <kaction.h>
 #include <kxmlguifactory.h>
+#include <kstaticdeleter.h>
 
 #include "kdevcore.h"
 #include "kdevplugin.h"
 #include "kdevmakeinterface.h"
+#include "kdevprofileengine.h"
 #include "kdevapplicationinterface.h"
 #include "kdevprojectcontroller.h"
 #include "kdevdiffinterface.h"
 #include "kdevcreatefile.h"
 #include "kdevmainwindow.h"
 
+
 #include "kdevcore.h" 
 /*#include "partselectwidget.h"*/
 #include "shellextension.h"
 
 
-KDevPluginController::KDevPluginController()
+class KDevPluginController::Private
 {
-    /*  m_defaultProfile = QLatin1String( "FullIDE" );
-    m_defaultProfilePath = kapp->dirs()->localkdedir() + "/" +
-    KStandardDirs::kde_default( "data" ) +
-    QLatin1String("/kdevelop/profiles/FullIDE");*/
+public:
+    QList<KPluginInfo*> plugins;
 
-    KCmdLineArgs * args = KCmdLineArgs::parsedArgs();
-    if ( args->isSet( "profile" ) )
-    {
-        m_profile = QString::fromLocal8Bit( args->getOption( "profile" ) );
-    }
-    else
-    {
-        m_profile = ShellExtension::getInstance() ->defaultProfile();
-    }
+    //map plugin infos to currently loaded plugins
+    typedef QMap<KPluginInfo*, KDevPlugin*> InfoToPluginMap;
+    InfoToPluginMap loadedPlugins;
 
+    // The plugin manager's mode. The mode is StartingUp until loadAllPlugins()
+    // has finished loading the plugins, after which it is set to Running.
+    // ShuttingDown and DoneShutdown are used during Kopete shutdown by the
+    // async unloading of plugins.
+    enum ShutdownMode { Running, ShuttingDown, DoneShutdown };
+    ShutdownMode shutdownMode;
+
+    QString profile;
+    ProfileEngine engine;
+
+    static KStaticDeleter<KDevPluginController> deleter;
+};
+
+KStaticDeleter<KDevPluginController> KDevPluginController::Private::deleter;
+KDevPluginController* KDevPluginController::s_self = 0L;
+
+KDevPluginController* KDevPluginController::self()
+{
+    if ( !s_self )
+        Private::deleter.setObject( s_self, new KDevPluginController() );
+
+    return s_self;
+}
+
+KDevPluginController::KDevPluginController()
+    : QObject( qApp )
+{
+    d = new Private;
+    d->profile = ShellExtension::getInstance() ->defaultProfile();
+    d->plugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QLatin1String( "KDevelop/Plugin" ),
+        QLatin1String( "[X-KDevelop-Version] == 4" ) ) );
+    d->shutdownMode = Private::Running;
+    KGlobal::ref();
 }
 
 KDevPluginController::~KDevPluginController()
 {
-    unloadPlugins();
+    if ( d->shutdownMode != Private::DoneShutdown )
+        kWarning(9000) << k_funcinfo << "Destructing plugin controller without going through the shutdown process! Backtrace is: " << endl << kBacktrace() << endl;
+
+    // Quick cleanup of the remaining plugins, hope it helps
+    // Note that deleting it.value() causes slotPluginDestroyed to be called, which
+    // removes the plugin from the list of loaded plugins.
+    while ( !d->loadedPlugins.empty() )
+    {
+        Private::InfoToPluginMap::ConstIterator it = d->loadedPlugins.begin();
+        kWarning(9000) << k_funcinfo << "Deleting stale plugin '" << it.key()->pluginName()
+                << "'" << endl;
+        delete it.value();
+    }
+
+    delete d;
 }
 
-void KDevPluginController::loadSettings( bool projectIsLoaded )
+QString KDevPluginController::currentProfile() const
 {
-    Q_UNUSED( projectIsLoaded );
+    return d->profile;
 }
 
-void KDevPluginController::saveSettings( bool projectIsLoaded )
+ProfileEngine& KDevPluginController::engine() const
 {
-    Q_UNUSED( projectIsLoaded );
+    return d->engine;
 }
 
-void KDevPluginController::initialize()
+KPluginInfo* KDevPluginController::pluginInfo( KDevPlugin* plugin ) const
 {
-    loadPlugins( ProfileEngine::Core );
-    loadPlugins( ProfileEngine::Global );
+    for ( Private::InfoToPluginMap::ConstIterator it = d->loadedPlugins.begin();
+          it != d->loadedPlugins.end(); ++it )
+    {
+        if ( it.value() == plugin )
+            return it.key();
+    }
+    return 0;
 }
 
-void KDevPluginController::cleanup()
+void KDevPluginController::shutdown()
 {
-    unloadPlugins();
+    if(d->shutdownMode != Private::Running)
+    {
+        kDebug(9000) << k_funcinfo << "called when not running. state = " << d->shutdownMode << endl;
+        return;
+    }
+
+    d->shutdownMode = Private::ShuttingDown;
+    
+
+    // Ask all plugins to unload
+    for ( Private::InfoToPluginMap::ConstIterator it = d->loadedPlugins.begin();
+          it != d->loadedPlugins.end(); /* EMPTY */ )
+    {
+        // Plugins could emit their ready for unload signal directly in response to this,
+        // which would invalidate the current iterator. Therefore, we copy the iterator
+        // and increment it beforehand.
+        Private::InfoToPluginMap::ConstIterator current( it );
+        ++it;
+
+        //Let the plugin do some stuff before unloading
+        current.value()->prepareForUnload();
+    }
+
+    // When running under valgrind, don't enable the timer because it will almost
+    // certainly fire due to valgrind's much slower processing
+#if defined(HAVE_VALGRIND_H) && !defined(NDEBUG)
+        if ( RUNNING_ON_VALGRIND )
+            kDebug(9000) << k_funcinfo << "Running under valgrind, disabling plugin unload timeout guard" << endl;
+        else
+#endif
+    
+    QTimer::singleShot( 3000, this, SLOT( shutdownTimeout() ) );
 }
 
-KService::List KDevPluginController::query( const QString &serviceType,
+KPluginInfo::List KDevPluginController::query( const QString &serviceType,
         const QString &constraint )
 {
-    return KServiceTypeTrader::self() ->query( serviceType,
+    
+    KPluginInfo::List infoList;
+    KService::List serviceList = KServiceTypeTrader::self() ->query( serviceType,
             QString( "%1 and [X-KDevelop-Version] == %2" ).arg( constraint ).arg( KDEVELOP_PLUGIN_VERSION ) );
+    
+    infoList = KPluginInfo::fromServices( serviceList );
+    return infoList;
 }
 
-KService::List KDevPluginController::queryPlugins( const QString &constraint )
+KPluginInfo::List KDevPluginController::queryPlugins( const QString &constraint )
 {
     return query( "KDevelop/Plugin", constraint );
 }
 
-void KDevPluginController::loadPlugins( ProfileEngine::OfferType offer,
-                                        const QStringList & ignorePlugins )
+KDevPlugin* KDevPluginController::loadPlugin( const QString& pluginId )
 {
-    KService::List offers = m_engine.offers( m_profile, offer );
-    loadPlugins( offers, ignorePlugins );
+    return loadPluginInternal( pluginId );
 }
 
-void KDevPluginController::unloadPlugins( ProfileEngine::OfferType offer )
+void KDevPluginController::loadPlugins( PluginType type )
 {
-    KService::List offers = m_engine.offers( m_profile, offer );
-    KService::List::ConstIterator it = offers.begin();
+    KPluginInfo::List offers = d->engine.offers( d->profile, type );
+    foreach( KPluginInfo* pi, offers )
+    {
+        loadPluginInternal( pi->pluginName() );
+    }
+}
+
+void KDevPluginController::unloadPlugins( PluginType offer )
+{
+    //TODO see if this can be optimized so it's not something like O(n^2)
+    KPluginInfo::List offers = d->engine.offers( d->profile, offer );
+    KPluginInfo::List::ConstIterator it = offers.begin();
     for ( ; it != offers.end(); ++it )
     {
-        QString name = ( *it ) ->desktopEntryName();
-
-        if ( KDevPlugin * plugin = m_parts.value( name ) )
+        if ( d->loadedPlugins.contains( (*it ) ) )
         {
-            removeAndForgetPart( name, plugin );
-            KDevCore::mainWindow()->removePlugin( plugin );
-            delete plugin;
+            QString name = ( *it )->pluginName();
+            unloadPlugin( name );
         }
     }
-}
-
-void KDevPluginController::loadPlugins( KService::List offers, const QStringList & ignorePlugins )
-{
-    for ( KService::List::ConstIterator it = offers.begin(); it != offers.end(); ++it )
-    {
-        QString name = ( *it ) ->desktopEntryName();
-
-        // Check if it is already loaded or shouldn't be
-        if ( m_parts.value( name ) != 0 || ignorePlugins.contains( name ) )
-            continue;
-
-        emit loadingPlugin( i18n( "Loading: %1", ( *it ) ->genericName() ) );
-
-        KDevPlugin *plugin = loadPlugin( *it );
-        if ( plugin )
-        {
-            m_parts[ name ] = plugin;
-            integratePart( plugin );
-        }
-    }
-}
-
-bool KDevPluginController::unloadPlugins()
-{
-    QHash<QString, KDevPlugin *>::iterator it = m_parts.begin();
-    while ( it != m_parts.end() )
-    {
-        KDevPlugin * part = it.value();
-        removePart( part );
-        KDevCore::mainWindow()->removePlugin( part );
-        delete part;
-        it = m_parts.erase( it );
-    }
-    return true;
-}
-
-void KDevPluginController::unloadPlugins( QStringList const & unloadParts )
-{
-    QStringList::ConstIterator it = unloadParts.begin();
-    while ( it != unloadParts.end() )
-    {
-        KDevPlugin * part = m_parts.value( *it );
-        if ( part )
-        {
-            removePart( part );
-            m_parts.remove( *it );
-            KDevCore::mainWindow()->removePlugin( part );
-            delete part;
-        }
-        ++it;
-    }
-}
-
-KDevPlugin *KDevPluginController::loadPlugin( const KService::Ptr &service )
-{
-    int err = 0;
-    KDevPlugin * pl = KService::createInstance<KDevPlugin>( service, 0,
-                      argumentsFromService( service ), &err );
-
-    KDevCore::mainWindow()->addPlugin( pl );
-    return pl;
 }
 
 QStringList KDevPluginController::argumentsFromService( const KService::Ptr &service )
@@ -208,119 +239,214 @@ QStringList KDevPluginController::argumentsFromService( const KService::Ptr &ser
     return args;
 }
 
-void KDevPluginController::integratePart( KXMLGUIClient *part )
+QList<KDevPlugin *> KDevPluginController::loadedPlugins() const
 {
-    Q_ASSERT( KDevCore::mainWindow() );
-    if ( ! part || !KDevCore::mainWindow() ->guiFactory() )
-        return ;
-
-    KDevCore::mainWindow() ->guiFactory() ->addClient( part );
-}
-
-void KDevPluginController::integrateAndRememberPart( const QString &name, KDevPlugin *part )
-{
-    m_parts.insert( name, part );
-    integratePart( part );
-}
-
-void KDevPluginController::removePart( KXMLGUIClient *part )
-{
-    Q_ASSERT( KDevCore::mainWindow() );
-    if ( ! part || !KDevCore::mainWindow() ->guiFactory() )
-        return ;
-    KDevCore::mainWindow() ->guiFactory() ->removeClient( part );
-}
-
-void KDevPluginController::removeAndForgetPart( const QString &name, KDevPlugin *part )
-{
-    m_parts.remove( name );
-    removePart( part );
-}
-
-const QList<KDevPlugin *> KDevPluginController::loadedPlugins( const QString& )
-{
-    return m_parts.values();
+    return d->loadedPlugins.values();
 }
 
 KDevPlugin * KDevPluginController::getExtension( const QString & serviceType, const QString & constraint )
 {
-    KService::List offers = KDevPluginController::query( serviceType, constraint );
-    for ( KService::List::const_iterator it = offers.constBegin(); it != offers.constEnd(); ++it )
+    KPluginInfo::List offers = KDevPluginController::query( serviceType, constraint );
+    KDevPlugin* ext = 0;
+    for ( KPluginInfo::List::const_iterator it = offers.constBegin(); it != offers.constEnd(); ++it )
     {
-        KDevPlugin *ext = m_parts.value( ( *it ) ->desktopEntryName() );
-        if ( ext )
-            return ext;
+        if  ( d->loadedPlugins.contains( (*it) ) )
+        {
+            ext = d->loadedPlugins[(*it)];
+            break;
+        }
     }
-    return 0;
+    return ext;
 }
 
-KDevPlugin * KDevPluginController::loadPlugin( const QString & serviceType, const QString & constraint )
+
+void KDevPluginController::unloadPlugin( const QString & pluginId )
 {
-    KService::List offers = KDevPluginController::query( serviceType, constraint );
-    if ( !offers.size() == 1 )
-        return 0;
-
-    KService::List::const_iterator it = offers.constBegin();
-    QString name = ( *it ) ->desktopEntryName();
-
-    KDevPlugin * plugin = 0;
-    plugin = m_parts.value( name );
-    if ( plugin )
+    if( KDevPlugin *thePlugin = plugin( pluginId ) )
     {
-        return plugin;
+        thePlugin->prepareForUnload();
     }
-
-    plugin = loadPlugin( *it );
-    if ( plugin )
-    {
-        m_parts.insert( name, plugin );
-        integratePart( plugin );
-    }
-
-    return plugin;
-}
-
-void KDevPluginController::unloadPlugin( const QString & plugin )
-{
-    QStringList pluginList;
-    pluginList << plugin;
-    unloadPlugins( pluginList );
 }
 
 KUrl::List KDevPluginController::profileResources( const QString &nameFilter )
 {
-    return m_engine.resources( currentProfile(), nameFilter );
+    return d->engine.resources( currentProfile(), nameFilter );
 }
 
 KUrl::List KDevPluginController::profileResourcesRecursive( const QString &nameFilter )
 {
-    return m_engine.resourcesRecursive( currentProfile(), nameFilter );
+    return d->engine.resourcesRecursive( currentProfile(), nameFilter );
 }
 
 QString KDevPluginController::changeProfile( const QString &newProfile )
 {
+    /* FIXME disabled for now
     QStringList unload;
     KService::List coreLoad;
     KService::List globalLoad;
-    m_engine.diffProfiles( ProfileEngine::Core,
+    d->engine.diffProfiles( ProfileEngine::Core,
                            currentProfile(),
                            newProfile,
                            unload,
                            coreLoad );
-    m_engine.diffProfiles( ProfileEngine::Global,
+    d->engine.diffProfiles( ProfileEngine::Global,
                            currentProfile(),
                            newProfile,
                            unload,
                            globalLoad );
 
-    QString oldProfile = m_profile;
-    m_profile = newProfile;
+    QString oldProfile = d->profile;
+    d->profile = newProfile;
 
     unloadPlugins( unload );
     loadPlugins( coreLoad );
     loadPlugins( globalLoad );
 
     return oldProfile;
+    */
+}
+
+KPluginInfo * KDevPluginController::infoForPluginId( const QString &pluginId ) const
+{
+    QList<KPluginInfo *>::ConstIterator it;
+    for ( it = d->plugins.begin(); it != d->plugins.end(); ++it )
+    {
+        if ( ( *it )->pluginName() == pluginId )
+            return *it;
+    }
+
+    return 0L;
+}
+
+KDevPlugin *KDevPluginController::loadPluginInternal( const QString &pluginId )
+{
+    KPluginInfo *info = infoForPluginId( pluginId );
+    if ( !info )
+    {
+        kWarning(9000) << k_funcinfo << "Unable to find a plugin named '" << pluginId << "'!" << endl;
+        return 0L;
+    }
+
+    if ( d->loadedPlugins.contains( info ) )
+        return d->loadedPlugins[ info ];
+
+    emit loadingPlugin( info->name() );
+    int error = 0;
+    KDevPlugin *plugin = KServiceTypeTrader::createInstanceFromQuery<KDevPlugin>( QLatin1String( "KDevelop/Plugin" ),
+            QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='%1'" ).arg( pluginId ), this, QStringList(), &error );
+
+    if ( plugin )
+    {
+        d->loadedPlugins.insert( info, plugin );
+        info->setPluginEnabled( true );
+
+        connect( plugin, SIGNAL( destroyed( QObject * ) ), 
+                 this, SLOT( pluginDestroyed( QObject * ) ) );
+        connect( plugin, SIGNAL( readyToUnload( KDevPlugin*) ), 
+                 this, SLOT( pluginReadyForUnload( KDevPlugin* ) ) );
+
+        kDebug(9000) << k_funcinfo << "Successfully loaded plugin '" << pluginId << "'" << endl;
+
+        emit pluginLoaded( plugin );
+    }
+    else
+    {
+        switch( error )
+        {
+            case KLibLoader::ErrNoServiceFound:
+                kDebug(9000) << k_funcinfo << "No service implementing the given mimetype "
+                        << "and fullfilling the given constraint expression can be found." << endl;
+                break;
+
+            case KLibLoader::ErrServiceProvidesNoLibrary:
+                kDebug(9000) << "the specified service provides no shared library." << endl;
+                break;
+
+            case KLibLoader::ErrNoLibrary:
+                kDebug(9000) << "the specified library could not be loaded." << endl;
+                break;
+
+            case KLibLoader::ErrNoFactory:
+                kDebug(9000) << "the library does not export a factory for creating components." << endl;
+                break;
+
+            case KLibLoader::ErrNoComponent:
+                kDebug(9000) << "the factory does not support creating components of the specified type." << endl;
+                break;
+        }
+
+        kDebug(9000) << k_funcinfo << "Loading plugin '" << pluginId 
+                << "' failed, KLibLoader reported error: '" << endl <<
+                KLibLoader::self()->lastErrorMessage() << "'" << endl;
+    }
+
+    return plugin;
+}
+
+
+KDevPlugin* KDevPluginController::plugin( const QString& pluginId )
+{
+    KPluginInfo *info = infoForPluginId( pluginId );
+    if ( !info )
+        return 0L;
+
+    if ( d->loadedPlugins.contains( info ) )
+        return d->loadedPlugins[ info ];
+    else
+        return 0L;
+}
+
+void KDevPluginController::pluginDestroyed( QObject* deletedPlugin )
+{
+    for ( Private::InfoToPluginMap::Iterator it = d->loadedPlugins.begin();
+          it != d->loadedPlugins.end(); ++it )
+    {
+        if ( it.value() == deletedPlugin )
+        {
+            d->loadedPlugins.erase( it );
+            break;
+        }
+    }
+
+    if ( d->shutdownMode == Private::ShuttingDown && d->loadedPlugins.isEmpty() )
+    {
+        // Use a timer to make sure any pending deleteLater() calls have
+        // been handled first
+        QTimer::singleShot( 0, this, SLOT( shutdownDone() ) );
+    }
+}
+
+void KDevPluginController::pluginReadyForUnload( KDevPlugin* plugin ) 
+{
+    kDebug(9000) << k_funcinfo << pluginInfo( plugin )->pluginName() << " ready for unload" << endl;
+    plugin->deleteLater();
+}
+
+void KDevPluginController::shutdownTimeout()
+{
+    // When we were already done the timer might still fire.
+    // Do nothing in that case.
+    if ( d->shutdownMode == Private::DoneShutdown )
+        return;
+
+    QStringList remaining;
+    Private::InfoToPluginMap::ConstIterator it, itEnd;
+    it = d->loadedPlugins.begin();
+    itEnd = d->loadedPlugins.end();
+    for ( ; it != itEnd; ++it )
+        remaining.append( it.key()->pluginName() );
+
+    kWarning(9000) << k_funcinfo << "Some plugins didn't shutdown in time!" << endl
+            << "Remaining plugins: " << remaining << endl
+            << "Forcing shutdown now." << endl;
+
+    shutdownDone();
+}
+
+void KDevPluginController::shutdownDone()
+{
+    d->shutdownMode = Private::DoneShutdown;
+    KGlobal::deref();
 }
 
 #include "kdevplugincontroller.moc"

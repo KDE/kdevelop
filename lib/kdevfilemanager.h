@@ -21,11 +21,12 @@
 #ifndef KDEVFILEMANAGER_H
 #define KDEVFILEMANAGER_H
 
+#include "kdevplugin.h"
+
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
 #include <kurl.h>
-#include "kdevitemmodel.h"
 
 class KDevProjectEditor;
 class KDevProjectModel;
@@ -49,7 +50,7 @@ class KDialogBase;
  *
  * @author Roberto Raggi, Matt Rogers, Hamish Rodda
  */
-class KDEVINTERFACES_EXPORT KDevFileManager: public QObject
+class KDEVINTERFACES_EXPORT KDevFileManager: public KDevPlugin
 {
     Q_OBJECT
 
@@ -64,7 +65,7 @@ public:
      * @todo should forced refresh function exist?
      * @todo add error reporting mechanism
      */
-    KDevFileManager(QObject *parent = 0);
+    KDevFileManager(KInstance* instance, QObject *parent = 0);
     virtual ~KDevFileManager();
 
     /** Features the file manager supports */

@@ -29,13 +29,13 @@
 #include "automakeprojectmodel.h"
 #include "makefileinterface.h"
 
-
+typedef KGenericFactory<AutoMakeImporter> AutotoolsSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevautomakeimporter,
-                            KGenericFactory<AutoMakeImporter>( "kdevautomakeimporter" ) )
+                            AutotoolsSupportFactory( "kdevautomakeimporter" ) )
 
 AutoMakeImporter::AutoMakeImporter( QObject* parent,
                                     const QStringList& )
-: KDevBuildManager( parent ), m_rootItem(0L)
+: KDevBuildManager( AutotoolsSupportFactory::instance(), parent ), m_rootItem(0L)
 {
     m_project = qobject_cast<KDevProject*>( parent );
     Q_ASSERT( m_project );
@@ -50,6 +50,11 @@ AutoMakeImporter::~AutoMakeImporter()
 KDevProject* AutoMakeImporter::project() const
 {
     return m_project;
+}
+
+KUrl AutoMakeImporter::buildDirectory() const
+{
+     return project()->folder();
 }
 
 QList<KDevProjectFolderItem*> AutoMakeImporter::parse( KDevProjectFolderItem* dom )

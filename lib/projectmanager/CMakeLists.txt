@@ -1,5 +1,9 @@
 
-include_directories(${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib ${THREADWEAVER_INCLUDE_DIR}
+include_directories(
+    ${CMAKE_SOURCE_DIR}/lib/util
+    ${CMAKE_SOURCE_DIR}/lib 
+    ${THREADWEAVER_INCLUDE_DIR}
+    ${CMAKE_SOURCE_DIR}/lib/project
     )
 
 
@@ -10,8 +14,6 @@ set(kdevprojectmanager_PART_SRCS
     kdevprojectmanager.cpp
     kdevprojectfilter.cpp
     kdevprojectmanagerdelegate.cpp
-    importprojectjob.cpp
-    importsourcefile_job.cpp
 )
 
 kde4_automoc(${kdevprojectmanager_PART_SRCS})

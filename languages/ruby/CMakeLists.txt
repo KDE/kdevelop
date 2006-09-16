@@ -1,6 +1,6 @@
 add_subdirectory(parser)
 
-include_directories(${CMAKE_SOURCE_DIR}/lib ${THREADWEAVER_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/lib ${THREADWEAVER_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/lib/project )
 
 
 ########### next target ###############

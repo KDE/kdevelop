@@ -138,6 +138,17 @@ public:
      */
     virtual bool isCentralPlugin() const;
 
+    /**
+     * Signal the plugin that it should cleanup since it will be unloaded soon.
+     */
+    virtual void prepareForUnload();
+
+Q_SIGNALS:
+    /**
+     * emitted when the plugin is ready to be unloaded by the plugin controller
+     * @param me The KDevPlugin to unload. It should always be the this pointer
+     */
+    void readyToUnload( KDevPlugin* me );
 };
 
 #endif

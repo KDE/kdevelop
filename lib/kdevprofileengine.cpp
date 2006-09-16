@@ -25,7 +25,8 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-#include <kdevplugin.h>
+#include "kdevplugin.h"
+#include "kdevplugincontroller.h"
 
 ProfileEngine::ProfileEngine()
 {
@@ -69,25 +70,23 @@ void ProfileEngine::processDir(const QString &dir, const QString &currPath, QMap
     }
 }
 
-KService::List ProfileEngine::offers(const QString &profileName, OfferType offerType)
+KPluginInfo::List ProfileEngine::offers(const QString &profileName, KDevPluginController::PluginType offerType)
 {
     ProfileListing listing;
     Profile *profile = 0;
     getProfileWithListing(listing, &profile, profileName);
 
     if (!profile)
-        return KService::List();
+        return KPluginInfo::List();
 
     QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
     switch (offerType) {
-        case Global:
-            constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Global'");
+        case KDevPluginController::Global:
+            constraint += QString::fromLatin1(" and ( [X-KDevelop-Category] == 'Global'");
+            constraint += QString::fromLatin1(" or [X-KDevelop-Category] == 'Core')");
             break;
-        case Project:
+        case KDevPluginController::Project:
             constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Project'");
-            break;
-        case Core:
-            constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Core'");
             break;
     }
     QString constraint_add = "";
@@ -128,7 +127,7 @@ KService::List ProfileEngine::offers(const QString &profileName, OfferType offer
         if (names.contains((*it).name))
             continue;
         QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
-        constraint += QString::fromLatin1("and [Name] == '%1'").arg((*it).name);
+        constraint += QString::fromLatin1("and [X-KDE-PluginInfo-Name] == '%1'").arg((*it).name);
         KService::List enable = KServiceTypeTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
         list += enable;
     }
@@ -141,25 +140,25 @@ KService::List ProfileEngine::offers(const QString &profileName, OfferType offer
         kDebug() << "        " << (*it)->name() << endl;
     kDebug() << endl << endl;
 //END debug*/
-
-    return list;
+    KPluginInfo::List pluginList = KPluginInfo::fromServices( list );
+    return pluginList;
 }
 
-KService::List ProfileEngine::allOffers(OfferType offerType)
+KPluginInfo::List ProfileEngine::allOffers(KDevPluginController::PluginType offerType)
 {
     QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
     switch (offerType) {
-        case Global:
-            constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Global'");
+        case KDevPluginController::Global: //core and global have been combined
+            constraint += QLatin1String(" and ( [X-KDevelop-Category] == 'Global'");
+            constraint += QLatin1String(" or [X-KDevelop-Category] == 'Core' )");
             break;
-        case Project:
+        case KDevPluginController::Project:
             constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Project'");
             break;
-        case Core:
-            constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Core'");
-            break;
     }
-    return KServiceTypeTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
+    KService::List list = KServiceTypeTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
+    KPluginInfo::List pluginList = KPluginInfo::fromServices( list );
+    return pluginList;
 }
 
 void ProfileEngine::getProfileWithListing(ProfileListing &listing, Profile **profile,
@@ -205,21 +204,21 @@ KUrl::List ProfileEngine::resourcesRecursive(const QString &profileName, const Q
     return resources;
 }
 
-void ProfileEngine::diffProfiles(OfferType offerType, const QString &profile1,
-    const QString &profile2, QStringList &unload, KService::List &load)
+void ProfileEngine::diffProfiles(KDevPluginController::PluginType offerType, const QString &profile1,
+    const QString &profile2, QStringList &unload, KPluginInfo::List &load)
 {
-    KService::List offers1 = offers(profile1, offerType);
-    KService::List offers2 = offers(profile2, offerType);
+    KPluginInfo::List offers1 = offers(profile1, offerType);
+    KPluginInfo::List offers2 = offers(profile2, offerType);
 
     QStringList offers1List;
-    for (KService::List::const_iterator it = offers1.constBegin();
+    for (KPluginInfo::List::const_iterator it = offers1.constBegin();
         it != offers1.constEnd(); ++it)
-        offers1List.append((*it)->desktopEntryName());
-    QMap<QString, KService::Ptr> offers2List;
+        offers1List.append((*it)->specfile());
+    QMap<QString, KPluginInfo*> offers2List;
 
-    for (KService::List::const_iterator it = offers2.constBegin();
+    for (KPluginInfo::List::const_iterator it = offers2.constBegin();
         it != offers2.constEnd(); ++it)
-        offers2List[(*it)->desktopEntryName()] = *it;
+        offers2List[(*it)->specfile()] = *it;
 
 //    kDebug() << "OLD PROFILE: " << offers1List << endl;
 //    kDebug() << "NEW PROFILE: " << offers2List << endl;
