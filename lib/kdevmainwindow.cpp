@@ -88,6 +88,9 @@ KDevMainWindow::KDevMainWindow( QWidget *parent, Qt::WFlags flags )
     setupActions();
     setStatusBar( new KDevStatusBar( this ) );
 
+    connect( KDevPluginController::self(), SIGNAL(pluginLoaded(KDevPlugin*)),
+             this, SLOT(addPlugin(KDevPlugin*)));
+
 /*    createGUI( ShellExtension::getInstance() ->xmlFile() );*/
 }
 
@@ -242,8 +245,6 @@ void KDevMainWindow::saveSettings( bool projectIsLoaded )
 void KDevMainWindow::initialize()
 {
     createGUI( ShellExtension::getInstance() ->xmlFile() );
-    connect( KDevPluginController::self(), SIGNAL(pluginLoaded(KDevPlugin*)),
-             this, SLOT(addPlugin(KDevPlugin*)));
     connect( KDevCore::documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
              this, SLOT( documentActivated( KDevDocument* ) ) );
     connect( KDevCore::projectController(), SIGNAL( projectOpened() ),

@@ -115,7 +115,7 @@ int main( int argc, char *argv[] )
     KDevCore::setProjectController( new KDevProjectController );
     KDevCore::setBackgroundParser( new KDevBackgroundParser );
     KDevCore::setEnvironment( new KDevEnvironment );
-    
+    KDevPluginController::self()->loadPlugins( KDevPluginController::Global );
     if ( splash )
     {
         QObject::connect(KDevPluginController::self(), SIGNAL(loadingPlugin(const QString&)),
@@ -131,7 +131,7 @@ int main( int argc, char *argv[] )
                       splash, SLOT( deleteLater() ) );
 
     KDevCore::initialize();
-    KDevPluginController::self()->loadPlugins( KDevPluginController::Global );
+    
 
     for ( int a = 0; a < args->count(); ++a )
     {
