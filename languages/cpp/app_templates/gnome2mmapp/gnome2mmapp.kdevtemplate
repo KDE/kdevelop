@@ -12,6 +12,7 @@ Name[fr]=Infrastructure d'application GNOME--
 Name[ga]=Creatlach feidhmchláir GNOME--
 Name[hu]=GNOME - Alkalmazás-keretrendszer
 Name[it]=GNOME-- Infrastruttura di applicazione
+Name[ja]=GNOME-- アプリケーションフレームワーク
 Name[nds]=Programmrahmenwark för "GNOME--"
 Name[nl]=GNOME-- Applicationframework
 Name[pl]=GNOME-- Szablon programu
@@ -40,6 +41,7 @@ Comment[fr]=Génère une application GNOME-- simple. Gnomemm et Gtkmm >= 1.2.8 e
 Comment[ga]=Cruthaíonn sé seo feidhmchlár simplí GNOME--. Ba chóir Gnomemm, Gtkmm >= 1.2.8 agus < 1.3.0 a bheith suiteáilte. Chun comhad glade a chur in eagar, tá glade-- (http://home.wtal.de/petig/Gtk/) de dhíth ort.
 Comment[hu]=Létrehoz egy egyszerű GNOME--os -alkalmazást. A Gnomemm, a Gtkmm (>= 1.2.8 és < 1.3.0) szükséges hozzá. Glade-fájl szerkesztéséhez a glade-- (http://home.wtal.de/petig/Gtk/) is szükséges.
 Comment[it]=Genera una semplice applicazione GNOME. Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0 dovrebbero essere installati. Si richiede glade per modificare i file di glade -- (http://home.wtal.de/petig/Gtk/).
+Comment[ja]=簡単なGNOME--アプリケーションを作製します。Gnomemm, Gtkmm >= 1.2.8 かつ < 1.3.0 が必要です。gladeファイルを編集するには glade-- (http://home.wtal.de/petig/Gtk/) が必要です。
 Comment[nds]=Stellt en eenfach "GNOME--"-Programm op. "Gnomemm", "Gtkmm" >= 1.2.8 un < 1.3.0 schöölt installeert wesen. För't Bewerken vun de glade-Datei deit "glade--" (http://home.wtal.de/petig/Gtk/) noot.
 Comment[nl]=Genereert een eenvoudige GNOME-- toepassing. Gnomemm, Gtkmm >= 1.2.8 en < 1.3.0 dienen te zijn geïnstalleerd. Voor het bewerken van glade file is glade-- (http://home.wtal.de/petig/Gtk/) nodig.
 Comment[pl]=Generuje prosty program dla środowiska GNOME--. Gnomemm i Gtkmm w wersji >= 1.2.8 i < 1.3.0 powinny być zainstalowane. Do edycji pliku glade konieczny jest program glade-- (http://home.wtal.de/petig/Gtk/).
@@ -158,6 +160,7 @@ Comment[fr]=Une infrastructure d'application GNOME-- a été créée dans %{dest
 Comment[ga]=Cruthaíodh creatlach feidhmchláir GNOME-- i %{dest}
 Comment[hu]=Létrejött egy GNOME-s alkalmazás-keretrendszer itt: %{dest}
 Comment[it]=È stato creata una infrastruttura applicativa GNOME in %{dest}
+Comment[ja]=GNOME-- アプリケーションフレームワークを%{dest}に作成しました
 Comment[nds]=In %{dest} wöör en Programmrahmenwark för "GNOME--" opstellt
 Comment[nl]=Een GNOME-- applicationframework is aangemaakt in %{dest}
 Comment[pl]=Szablon programu dla GNOME-- został utworzony w %{dest}

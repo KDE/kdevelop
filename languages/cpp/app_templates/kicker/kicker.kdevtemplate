@@ -164,6 +164,7 @@ Comment[eu]=Kicker Applet bat sortu da hemen: %{dest}
 Comment[fr]=Une applet Kicker a été créée dans %{dest}
 Comment[hu]=Létrejött egy panel-kisalkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applet per kicker in %{dest}
+Comment[ja]=Kickerアプレットを%{dest}に作製しました
 Comment[nds]=In %{dest} wöör en Kicker-Lüttprogramm opstellt
 Comment[nl]=Een Kicker-applet is aangemaakt in %{dest}
 Comment[pl]=Aplet panelu został utworzony w %{dest}

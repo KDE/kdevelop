@@ -37,6 +37,7 @@ Comment[eu]="Kaixo mundua" programa sinple bat sortzen du C lengoaian. CMake tre
 Comment[fr]=Génère un programme « Hello World » simple en C en utilisant l'outil de construction CMake, à la place de la combinaison automake / autoconf / libtool. Requiert cmake 2.1 (disponible depuis le CVS de CMake) ou le futur cmake 2.2.
 Comment[hu]=Létrehoz egy egyszerű Hello world programot C nyelven a CMake fordítóeszköz segítségével (az automake/autoconf/libtool kombináció helyett). CMake 2.1 (a CMake CVS-ben elérhető) vagy a rövidesen megjelenő CMake 2.2 szükséges hozzá.
 Comment[it]=Genera un semplice programma di "Hello world" in C che usa CMake invece della combinazione automake/autoconf/libtool. Si richiede cmake 2.1 (disponibile dal CVS di cmake) o la versione a venire cmake 2.2.
+Comment[ja]=ビルドにautomake/autoconf/libtoolではなくCMakeを使った簡単なHello WorldプログラムをCで作製します。CMakeは2.1か2.2を必要とします。
 Comment[nds]=Stellt en eenfach "Moin Welt"-Programm in C op mit "CMake" in de Verschoon 2.1 (ut dat cmake-CVS) oder 2.2 (de tokamen Utgaav) ansteed vun de "automake/autoconf/libtool"-Kombinatschoon.
 Comment[nl]=Genereert een eenvoudig Hello World-programma in C met behulp van de CMake build tool in plaats van de combinatie automake/autoconf/libtool. Het vereist cmake 2.1 (uit het cvs van cmake) of de aankomende cmake 2.2-uitgave.
 Comment[pl]=Generuje prosty program 'Witaj świecie' w języku C. Kompilacja odbywa sie za pomocą narzędzia CMake zamiast kombinacji automake/autoconf/libtool. Wymaga cmake 2.1 (dostępnego z cvs-u cmake) lub nadchodzącej wersji 2.2.

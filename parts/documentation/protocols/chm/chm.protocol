@@ -16,6 +16,7 @@ Description[eu]=WinHelp fitxategiak bistaratzeko kioslave bat
 Description[fr]=Un module d'entrée / sortie pour l'affichage des fichiers WinHelp
 Description[hu]=KDE-protokoll WinHelp-fájlok megjelenítéséhez
 Description[it]=Un kioslave per mostrare i file WinHelp
+Description[ja]=WinHelpを表示するためのkioslave
 Description[nds]=En In-/Utgaavmoduul för't Wiesen vun "WinHelp"-Dateien
 Description[nl]=Een kioslave voor het weergeven van WinHelp-bestanden
 Description[pl]=kioslave do pokazywania plików WinHelp

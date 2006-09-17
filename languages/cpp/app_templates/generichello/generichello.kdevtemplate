@@ -38,6 +38,7 @@ Comment[eu]="Kaixo mundua" programa sinple bat sortzen du C++ lengoaian
 Comment[fr]=Génère un simple programme « Hello world » en C++
 Comment[hu]=Létrehoz egy egyszerű Hello world programot C++-ban
 Comment[it]=Genera un semplice programma di "Hello world" in C++
+Comment[ja]=簡単なHello WorldプログラムをC++で作製します
 Comment[nds]=Stellt en eenfach "Moin Welt"-Programm in C++ op
 Comment[nl]=Genereert een eenvoudig Hello World-programma in C++
 Comment[pl]=Generuje prosty program 'Witaj świecie' w języku C++
