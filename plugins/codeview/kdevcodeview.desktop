@@ -5,7 +5,6 @@ Exec=blubb
 Comment=This plugin displays a graphical view of the codemodel produced by the language part.
 Comment[x-test]=xxThis plugin displays a graphical view of the codemodel produced by the language part.xx
 Name=Code View
-Name[x-test]=xxKDevCodeViewxx
 GenericName=Code View
 GenericName[x-test]=xxCode Viewxx
 ServiceTypes=KDevelop/Plugin
