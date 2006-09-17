@@ -111,7 +111,7 @@
   enum java_compatibility_mode {
       java13_compatibility = 130,
       java14_compatibility = 140,
-      java15_compatibility = 150,
+      java15_compatibility = 150
   };
 
   parser::java_compatibility_mode compatibility_mode();
@@ -120,7 +120,7 @@
   enum problem_type {
       error,
       warning,
-      info,
+      info
   };
   void report_problem( parser::problem_type type, const char* message );
   void report_problem( parser::problem_type type, std::string message );
@@ -153,7 +153,7 @@
 [:
   enum extends_or_super_enum {
     extends,
-    super,
+    super
   };
 :]
 
@@ -168,7 +168,7 @@
     type_int,
     type_float,
     type_long,
-    type_double,
+    type_double
   };
 :]
 
@@ -176,7 +176,7 @@
 [:
   enum branch_type_enum {
     case_branch,
-    default_branch,
+    default_branch
   };
 :]
 
@@ -195,7 +195,7 @@
     op_remainder_assign,
     op_lshift_assign,
     op_signed_rshift_assign,
-    op_unsigned_rshift_assign,
+    op_unsigned_rshift_assign
   };
 :]
 
@@ -203,7 +203,7 @@
 [:
   enum equality_operator_enum {
     op_equal,
-    op_not_equal,
+    op_not_equal
   };
 :]
 
@@ -213,7 +213,7 @@
     op_less_than,
     op_greater_than,
     op_less_equal,
-    op_greater_equal,
+    op_greater_equal
   };
 :]
 
@@ -222,7 +222,7 @@
   enum shift_operator_enum {
     op_lshift,
     op_signed_rshift,
-    op_unsigned_rshift,
+    op_unsigned_rshift
   };
 :]
 
@@ -230,7 +230,7 @@
 [:
   enum additive_operator_enum {
     op_plus,
-    op_minus,
+    op_minus
   };
 :]
 
@@ -239,7 +239,7 @@
   enum multiplicative_operator_enum {
     op_star,
     op_slash,
-    op_remainder,
+    op_remainder
   };
 :]
 
@@ -250,7 +250,7 @@
     type_decremented_expression,
     type_unary_minus_expression,
     type_unary_plus_expression,
-    type_unary_expression_not_plusminus,
+    type_unary_expression_not_plusminus
   };
 :]
 
@@ -260,7 +260,7 @@
     type_bitwise_not_expression,
     type_logical_not_expression,
     type_cast_expression,
-    type_primary_expression,
+    type_primary_expression
   };
 :]
 
@@ -268,7 +268,7 @@
 [:
   enum postfix_operator_enum {
     op_increment,
-    op_decrement,
+    op_decrement
   };
 :]
 
@@ -285,7 +285,7 @@
     mod_native       = 1 << 7,
     mod_synchronized = 1 << 8,
     mod_volatile     = 1 << 9,
-    mod_strictfp     = 1 << 10,
+    mod_strictfp     = 1 << 10
   };
 :]
 
@@ -298,7 +298,7 @@
     type_integer,
     type_floating_point,
     type_character,
-    type_string,
+    type_string
   };
 :]
 
