@@ -77,7 +77,7 @@ kde4_automoc(${kdevplatform_LIB_SRCS})
 
 kde4_add_ui_files(kdevplatform_LIB_SRCS ${kdevplatform_UI})
 kde4_add_library(kdevplatform SHARED ${kdevplatform_LIB_SRCS})
-target_link_libraries(kdevplatform ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} knotifyconfig ktexteditor ThreadWeaver )
+target_link_libraries(kdevplatform ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} knotifyconfig ktexteditor threadweaver )
 set_target_properties(kdevplatform PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevplatform DESTINATION ${LIB_INSTALL_DIR} )
 
