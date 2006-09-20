@@ -25,6 +25,7 @@ public:
 		: QCheckListItem( parent, name, QCheckListItem::CheckBox ), m_name( name ), m_tagsfilePath( tagsfilePath )
 	{
 		setOn( active );
+		setText( 1, tagsfilePath );
 	}
 	QString name() { return m_name; }
 	QString tagsfilePath() { return m_tagsfilePath; }

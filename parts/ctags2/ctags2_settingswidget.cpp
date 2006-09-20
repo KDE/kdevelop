@@ -11,10 +11,10 @@
 
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-#include <qlistview.h>
 #include <qheader.h>
 
 #include <klineedit.h>
+#include <klistview.h>
 #include <kdevproject.h>
 #include <kapplication.h>
 #include <kurlcompletion.h>
@@ -42,9 +42,9 @@ CTags2SettingsWidget::CTags2SettingsWidget( CTags2Part * part, QWidget* parent, 
 	tagfilePath->setShowLocalProtocol( false );
 
 	otherTagFiles->setSorting( -1 );
-	otherTagFiles->addColumn( "" );
-	otherTagFiles->header()->hide();
-//    otherTagFiles->setFullWidth( true );
+// 	otherTagFiles->addColumn( "" );
+// 	otherTagFiles->header()->hide();
+   otherTagFiles->setFullWidth( true );
 
 	loadSettings();
 }
