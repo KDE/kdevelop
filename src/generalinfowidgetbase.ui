@@ -167,7 +167,6 @@
             </property>
             <property name="font">
                 <font>
-                    <pointsize>10</pointsize>
                 </font>
             </property>
             <property name="text">
@@ -197,6 +196,8 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <images>
     <image name="image0">
         <data format="PNG" length="532">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000001db49444154388da593316853511486bf276f78810a195fc0218a83e91688c3bb9b42974c925570509cc4cd3116445dd4ba889b0a82e8225dac6b07b1b74ba18b1887428796e64183efa2c1dc21f03bdc247d4dede48103971ffefffce7dc73226b2dff13f13c907dfa2c1612889363f8c8392e3c7dccea171b95f168ea20cb32f1e419341a90542099088c3df811148ef50fef591914749faf442705dc4f31f4503870c591b731e05c1002bebb82fb7b39f796bb11c01980acd3117b39f47af0a307692d90060ef677a15a0d2dedf7591c7a6ee67d3ac66826c0b95aa8fa6d1beae7e1c675586ac34e0fe20adcbd03b76fc1c8c3619fc541410330c628181d14b0b50987057c5d0f7358ba0a833eb44c1079f112f23e3847e1f2a3295a6b519a4a17ebd242225d6a84f7db779224fdfa235deb48691a32461b31ba0202145af03ef43cf46106de4366e0f708ce56e07213f23ce4183cc99c8318294924905a4de9e020546e35a5070f8393d7afa41809b49624330731c0680c95c937e10ad8d985e52e6c6d874c6b302c8e2d962f3b48411f09ea8259a57fe5469ca833a90e086b2dd65aaaa0b55348a7924151f998dac6e8510cf5b93b986ee49bb167b504596ba368fe1adbc6a879928e0736e7c850ba857298c99a9e165332c05fc9532863e03dd50a0000000049454e44ae426082</data>
@@ -209,6 +210,10 @@
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>ksqueezedtextlabel.h</includehint>
 </includehints>
 </UI>
