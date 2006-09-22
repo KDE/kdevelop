@@ -21,18 +21,9 @@
 #include <QString>
 #include "cmaketargetitem.h"
 
-CMakeTargetItem::CMakeTargetItem( cmTarget target, KDevProjectItem* item)
-    : KDevProjectTargetItem( QString::null, item )
+CMakeTargetItem::CMakeTargetItem( const QString& target, KDevProjectItem* item)
+    : KDevProjectTargetItem( target, item )
 {
-    m_target = target;
-    QString targetName = QLatin1String( target.GetFullName().c_str() );
-    setText( targetName );
-
-    std::vector<std::string> includes = m_target.GetMakefile()->GetIncludeDirectories();
-    std::vector<std::string>::iterator it = includes.begin(), itEnd = includes.end();
-    for ( ; it != itEnd; ++it )
-        m_includeList.append( KUrl( QLatin1String( ( *it ).c_str() ) ) );
-
 }
 
 

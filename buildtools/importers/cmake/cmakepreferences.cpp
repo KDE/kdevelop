@@ -27,12 +27,8 @@
 #include <kurl.h>
 #include <kgenericfactory.h>
 
-#include "cmake.h"
-
 #include "ui_cmakebuildsettings.h"
 #include "config.h"
-
-typedef std::vector<std::string> StringVector;
 
 typedef KGenericFactory<CMakePreferences> CMakePreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kdevcmake_settings, CMakePreferencesFactory( "kcm_kdevcmake_settings" )  )
@@ -45,19 +41,6 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QStringList& args)
     m_prefsUi = new Ui::CMakeBuildSettings;
     m_prefsUi->setupUi( w );
     l->addWidget( w );
-
-    cmake cmakeEngine;
-    StringVector generatorVector;
-    cmakeEngine.GetRegisteredGenerators( generatorVector );
-
-    StringVector::iterator it = generatorVector.begin();
-    StringVector::iterator itEnd = generatorVector.end();
-    for ( ; it != itEnd; ++it )
-    {
-        QString generator = QString::fromStdString( ( *it ) );
-        if ( generator.contains( "Makefiles" ) )
-            m_prefsUi->kcfg_generator->addItem( QString::fromStdString( ( *it ) ) );
-    }
 
     addConfig( CMakeSettings::self(), w );
 

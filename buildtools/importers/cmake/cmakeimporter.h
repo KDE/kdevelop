@@ -27,7 +27,6 @@
 #include "domutil.h"
 #include "kdevprojectmodel.h"
 #include "kdevbuildmanager.h"
-#include "cmake.h"
 
 class QObject;
 class KDevProject;
@@ -81,18 +80,11 @@ public:
     virtual KUrl findMakefile( KDevProjectFolderItem* dom ) const;
     virtual KUrl::List findMakefiles( KDevProjectFolderItem* dom ) const;
 
-    void createProjectItems( cmLocalGenerator*, KDevProjectItem* );
-
-    //cmake progress callback
-    static void updateProgress( const char*, float, void* );
-
-
 private:
 
     KDevProject* m_project;
     KDevProjectItem* m_rootItem;
     KDevProjectBuilder* m_builder;
-    cmake m_cmakeEngine;
 
     KUrl::List m_includeDirList;
 

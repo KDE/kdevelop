@@ -22,9 +22,6 @@
 #define CMAKETARGETITEM_H
 
 #include <kdevprojectmodel.h>
-
-#include "cmTarget.h"
-#include "cmMakefile.h"
 /**
  * The project model item for CMake targets.
  *
@@ -33,7 +30,7 @@
 class CMakeTargetItem : public KDevProjectTargetItem
 {
 public:
-    CMakeTargetItem( cmTarget target, KDevProjectItem* item );
+    CMakeTargetItem( const QString& target, KDevProjectItem* item );
     ~CMakeTargetItem();
 
     virtual const DomUtil::PairList& defines() const;
@@ -41,7 +38,6 @@ public:
     virtual const QHash< QString, QString >& environment() const;
 
 private:
-    cmTarget m_target;
     KUrl::List m_includeList;
     DomUtil::PairList m_defines;
     QHash<QString, QString> m_environment;
