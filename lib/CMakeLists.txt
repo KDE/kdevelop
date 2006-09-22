@@ -8,7 +8,6 @@ add_subdirectory(settings)
 include_directories(
  ${CMAKE_SOURCE_DIR}/lib/util
  ${CMAKE_SOURCE_DIR}/lib/widgets 
- ${THREADWEAVER_INCLUDE_DIR} 
  ${CMAKE_SOURCE_DIR}/lib/editor
  ${CMAKE_SOURCE_DIR}/lib/backgroundparser
  ${CMAKE_SOURCE_DIR}/lib/interfaces
