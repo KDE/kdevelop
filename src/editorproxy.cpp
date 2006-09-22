@@ -66,6 +66,7 @@ EditorProxy *EditorProxy::getInstance()
 
 void EditorProxy::setLineNumberDelayed()
 {
+	if( !this ) return; ///This should fix a strange crash I use to encounter, where setLineNumberDelayed is called with this == NULL
   setLineNumber(m_delayedPart, m_delayedLine, m_delayedCol);
 }
 
