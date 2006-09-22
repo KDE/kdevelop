@@ -3629,7 +3629,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
   }
 
   QValueList<LocateResult> parents = type->getBases();
-  for ( QValueList<LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it ) {
+  
+	for ( QValueList<LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it ) {
     if ( !( *it ) ->resolved() )
       continue;
 

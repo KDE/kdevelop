@@ -294,13 +294,13 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
     ret.memberType = MemberInfo::Namespace;
     ret.type = name;
   } else if( klass->hasFunctionDefinition( name.name() )  && ( type & MemberInfo::Function ) ) {
-	  ret.memberType = MemberInfo::Function;
 	  FunctionDefinitionList l = klass->functionDefinitionByName( name.name() );
 	  for( FunctionDefinitionList::iterator it = l.begin(); it != l.end(); ++it ) {
 		  if( !(*it)->scope().isEmpty() && (*it)->scope() != scope() ) continue; ///Only use definitions with empty scope or that are within this class
 		  ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name, TypePointer(this) ) );
 		  ret.type = l.front()->resultType();
 		  ret.type->increaseFunctionDepth();
+		  ret.memberType = MemberInfo::Function;
 		  break;
 	  }
   }
