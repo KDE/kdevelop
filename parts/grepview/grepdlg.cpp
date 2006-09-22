@@ -168,7 +168,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
 	QToolTip::add( synch_button, i18n("Set directory to that of the current file") );
 	dir_layout->addWidget( synch_button );
 
-    QBoxLayout *dir_checks_layout = new QHBoxLayout(4);
+    QBoxLayout *dir_checks_layout = new QHBoxLayout(5);
     layout->addLayout(dir_checks_layout, 5, 1);
 
     regexp_box = new QCheckBox(i18n("Regular &Expression"), this);
@@ -190,11 +190,6 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     keep_output_box->setChecked(config->readBoolEntry("new_view", true));
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(keep_output_box);
-
-    ignore_scm_box = new QCheckBox(i18n("S&kip VCS dirs"), this);
-    ignore_scm_box->setChecked(config->readBoolEntry("vcs_dirs", true));
-    dir_checks_layout->addSpacing(10);
-    dir_checks_layout->addWidget(ignore_scm_box);
 
     no_find_err_box = new QCheckBox(i18n("&Suppress find errors"), this);
     no_find_err_box->setChecked(config->readBoolEntry("no_find_errs", true));

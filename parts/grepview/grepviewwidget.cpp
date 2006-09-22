@@ -234,16 +234,9 @@ void GrepViewWidget::searchActivated()
 	if (!excludelist.isEmpty())
 	{
 		QStringList::Iterator it(excludelist.begin());
+		command += "| grep -v ";
 		for (; it != excludelist.end(); ++it)
-			command += "| grep -v " + KShellProcess::quote(*it) + " ";
-	}
-
-	if (grepdlg->ignoreSCMDirsFlag())
-	{
-		command += "| grep -v -e \"SCCS/\" ";
-		command += "-e \"CVS/\" ";
-		command += "-e \"\\.svn/\" ";
-		command += "-e \"_darcs/\" ";
+			command += "-e " + KShellProcess::quote(*it) + " ";
 	}
 
 	// quote spaces in filenames going to xargs

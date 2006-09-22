@@ -53,8 +53,6 @@ public:
 		{ return regexp_box->isChecked(); }
 	bool recursiveFlag() const
 		{ return recursive_box->isChecked(); }
-	bool ignoreSCMDirsFlag() const
-		{ return ignore_scm_box->isChecked(); }
 	bool noFindErrorsFlag() const
 		{ return no_find_err_box->isChecked(); }
 	bool caseSensitiveFlag() const
@@ -81,7 +79,6 @@ private:
 
     QCheckBox *regexp_box;
     QCheckBox *recursive_box;
-    QCheckBox *ignore_scm_box;
     QCheckBox *no_find_err_box;
     QCheckBox *case_sens_box;
     QCheckBox *keep_output_box;
