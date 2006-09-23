@@ -111,7 +111,6 @@ public:
     return ret;
   }
   
-  
   virtual LocateResult applyOperator( typename Base::Operator op , QValueList<LocateResult> params ) {
     Debug d("#apply#");
     if( !d )
@@ -214,6 +213,8 @@ public:
   
   ItemDom locateModelContainer( class CodeModel* m, TypeDesc t, ClassDom cnt = ClassDom() );
 
+  virtual QString specialization() const;
+		
 private:
   ItemDom m_item;
   
@@ -233,13 +234,15 @@ protected:
     TypeDesc m_desc;
     TypePointer m_parent;
     
-    CodeModelBuildInfo( ItemDom item, TypeDesc& desc, TypePointer parent ) : m_item( item ), m_desc( desc ), m_parent( parent ) {
+    CodeModelBuildInfo( ItemDom item, const TypeDesc& desc, TypePointer parent ) : m_item( item ), m_desc( desc ), m_parent( parent ) {
     }
     
     virtual TypePointer build();
   };
   
   virtual MemberInfo findMember( TypeDesc name , MemberInfo::MemberType type = MemberInfo::AllTypes) ;
+
+  virtual QValueList<TypePointer> getMemberClasses( const TypeDesc& name ) ;
 };
 
 

@@ -198,6 +198,7 @@ ClassDom SimpleTypeCodeModel::pickMostRelated( ClassList lst, QString fn ) {
     //kdDebug() << "searching most related to " << fn << endl;
   
   for( ClassList::iterator it = lst.begin(); it != lst.end(); ++it ) {
+    if( !(*it)->getSpecializationDeclaration().isEmpty() ) continue; ///Don't consider specialized classes
         //kdDebug() << "comparing " << (*it)->fileName() << endl;
     QString str = (*it)->fileName();
     uint len = str.length();
@@ -219,10 +220,55 @@ ClassDom SimpleTypeCodeModel::pickMostRelated( ClassList lst, QString fn ) {
   }
   
     //kdDebug() << "picked " << best->fileName() << endl;
-  
+  if( !best->getSpecializationDeclaration().isEmpty() ) best = 0; ///only accept non-specialized classes
   return best;
 }
 
+/*QValueList<TypePointer> SimpleTypeCodeModel::findSpecializations( const QString& name ) {
+	ClassModel* klass = dynamic_cast<ClassModel*> ( & (*m_item) );
+	if( !klass ) {
+		ifVerbose( dbg() << "\"" << str() << "\": search for member " << name.name() << " unsuccessful because the own type is invalid" << endl );
+		return QValueList<TypePointer>();
+	}
+	
+	ClassList l = klass->classByName( name.name() );
+	
+	if( !l.isEmpty() ) {
+		ClassDom i = pickMostRelated( l, globalCurrentFile );
+		if( i ) {
+			ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( i ), name, TypePointer( this ) ) );
+			
+			ret.memberType = MemberInfo::NestedType;
+			ret.type = name;
+		}
+	}
+	
+	return QValueList<TypePointer>();
+}*/
+
+
+QValueList<TypePointer> SimpleTypeCodeModel::getMemberClasses( const TypeDesc& name ) {
+	QValueList<TypePointer> ret;
+
+	if( !m_item ) return ret;
+	
+	ClassModel* klass = dynamic_cast<ClassModel*> ( & (*m_item) );
+	if( !klass ) {
+	ifVerbose( dbg() << "\"" << str() << "\": search for member " << name.name() << " unsuccessful because the own type is invalid" << endl );
+		return ret;
+	}
+
+	ClassList l = klass->classByName( name.name() );
+	
+	if( !l.isEmpty() ) {
+		for( ClassList::iterator it = l.begin(); it != l.end(); ++it ) {
+			CodeModelBuildInfo b( model_cast<ItemDom>( *it ), name, TypePointer( this ) );
+			TypePointer r = b.build();
+			if( r )
+				ret << r;
+		}
+	}
+}
 
 SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , MemberInfo::MemberType type )
 {
@@ -320,7 +366,9 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
       }
     }
   }
-    //if( !ret.type ) ret.memberType = MemberInfo::NotFound; //commented out because of constructurs
+
+  chooseSpecialization( ret );
+	
   return ret;
 }
 
@@ -349,6 +397,12 @@ DeclarationInfo SimpleTypeCodeModel::getDeclarationInfo() {
     ret.comment = i->comment();
   }
   return ret;
+}
+
+QString SimpleTypeCodeModel::specialization() const {
+	const ClassModel* klass = dynamic_cast<const ClassModel*>( m_item.data() );
+	if( !klass ) return QString::null;
+	return klass->getSpecializationDeclaration();
 }
 
 SimpleTypeImpl::TemplateParamInfo SimpleTypeCodeModel::getTemplateParamInfo() {
@@ -566,4 +620,5 @@ TypePointer SimpleTypeCatalogFunction::CatalogFunctionBuildInfo::build() {
   }
   return ret.front();
 }
- // kate: indent-mode csands; tab-width 4;
+ 
+// kate: indent-mode csands; tab-width 4;

@@ -30,7 +30,7 @@ template <class Base>
 class SimpleTypeCacheBinder : public Base {
   public:
 
-    SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), m_locateCache( b->m_locateCache ), m_memberCache( b->m_memberCache ), m_basesCache( b->m_basesCache ), secondaryActive( b->secondaryActive ), primaryActive( b->primaryActive ) {}
+SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), m_locateCache( b->m_locateCache ), m_memberCache( b->m_memberCache ), m_basesCache( b->m_basesCache ), secondaryActive( b->secondaryActive ), primaryActive( b->primaryActive ), m_classListCache( b->m_classListCache ) {}
 
     SimpleTypeCacheBinder() : Base(), m_haveBasesCache( false ), secondaryActive( true ), primaryActive( true ) {}
 
@@ -173,8 +173,10 @@ class SimpleTypeCacheBinder : public Base {
     typedef QMap<LocateDesc, LocateResult> LocateMap;
 #ifdef USE_HASH_MAP
 	typedef __gnu_cxx::hash_map<MemberFindDesc, SimpleTypeImpl::MemberInfo, typename MemberFindDesc::hash > MemberMap;
+	typedef __gnu_cxx::hash_map<MemberFindDesc, QValueList<TypePointer>, typename MemberFindDesc::hash > ClassListMap;
 #else
 	typedef QMap<MemberFindDesc, SimpleTypeImpl::MemberInfo> MemberMap;
+	typedef QMap<MemberFindDesc, QValueList<TypePointer> > ClassListMap;
 #endif
 
     virtual SimpleTypeImpl::MemberInfo findMember( TypeDesc name, SimpleTypeImpl::MemberInfo::MemberType type ) {
@@ -206,6 +208,35 @@ class SimpleTypeCacheBinder : public Base {
       }
     }
 
+	virtual QValueList<TypePointer> getMemberClasses( const TypeDesc& name ) {
+		if ( !primaryActive )
+			return Base::getMemberClasses( name );
+		MemberFindDesc key( name, Base::MemberInfo::NestedType );
+		typename ClassListMap::iterator it = m_classListCache.find( key );
+		
+		if ( it != m_classListCache.end() ) {
+		/*ifVerbose( dbg() << "\"" << Base::str() << "\" took member-info for \"" << name.fullNameChain() << "\" from the cache: " << (*it).second. << endl );*/
+#ifdef USE_HASH_MAP
+			return (*it).second;
+#else
+			return *it;
+#endif
+		} else {
+			QValueList<TypePointer> mem = Base::getMemberClasses( name );
+#ifdef USE_HASH_MAP
+			m_classListCache.insert( std::make_pair( key, mem ) );
+#else
+			m_classListCache.insert( key, mem );
+#endif
+#ifdef TEST_REMAP
+			typename ClassListMap::iterator it = m_classListCache.find( key );
+			if( it == m_classListCache.end() ) dbgMajor() << "\"" << Base::str() << "\"remap failed with \""<< name.fullNameChain() << "\"" << endl;
+#endif
+			
+			return mem;
+		}
+	}
+		
     virtual LocateResult locateType( TypeDesc name , SimpleTypeImpl::LocateMode mode, int dir, SimpleTypeImpl::MemberInfo::MemberType typeMask ) {
       if ( !secondaryActive )
         return Base::locateType( name, mode, dir, typeMask );
@@ -242,6 +273,7 @@ class SimpleTypeCacheBinder : public Base {
   private:
     LocateMap m_locateCache;
     MemberMap m_memberCache;
+	ClassListMap m_classListCache;
     QValueList<LocateResult> m_basesCache;
     bool m_haveBasesCache;
     bool secondaryActive, primaryActive;
@@ -255,6 +287,7 @@ class SimpleTypeCacheBinder : public Base {
     virtual void invalidatePrimaryCache() {
       //if( !m_memberCache.isEmpty() ) dbg() << "\"" << Base::str() << "\" primary caches cleared" << endl;
       m_memberCache.clear();
+	  m_classListCache.clear();
     }
     virtual void invalidateSecondaryCache() {
       //if( !m_locateCache.isEmpty() ) dbg() << "\"" << Base::str() << "\" secondary caches cleared" << endl;

@@ -67,7 +67,9 @@ public:
   virtual TemplateParamInfo getTemplateParamInfo();
   
   virtual const LocateResult findTemplateParam( const QString& name );
-  
+
+  virtual QString specialization() const;
+		
 private:
   Tag m_tag;
   
@@ -96,13 +98,15 @@ protected:
     TypeDesc m_desc;
     TypePointer m_parent;
     
-    CatalogBuildInfo( Tag tag , TypeDesc& desc, TypePointer parent ) : m_tag( tag ) , m_desc( desc ), m_parent( parent )   {
+    CatalogBuildInfo( Tag tag , const TypeDesc& desc, TypePointer parent ) : m_tag( tag ) , m_desc( desc ), m_parent( parent )   {
     }
     
     virtual TypePointer build();
   };
   
   virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type = MemberInfo::AllTypes);
+
+  virtual QValueList<TypePointer> getMemberClasses( const TypeDesc& name ) ;
 };
 
 

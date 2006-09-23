@@ -64,8 +64,10 @@ class LocateResult {
 
     operator TypeDesc&() ;
 
-    TypeDesc& desc();
+	TypeDesc& desc();
 
+	const TypeDesc& desc() const;
+	
     int depth() const {
       return m_locateDepth;
     }
@@ -248,6 +250,14 @@ class TypeDesc {
     ///returns a list include the full name of this type, and all subtypes
     QStringList fullNameList( ) const;
 
+	QString decoratedName() const {
+		if( !m_data ) return "";
+		QString ret = m_data->m_dec.apply( name() );
+		for( int a = 0; a < pointerDepth(); a++ )
+			ret += "*";
+		return ret;
+	}
+	
     QString name() const {
 	    if( !m_data ) return "";
       return m_data->m_cleanName;
@@ -315,6 +325,10 @@ class TypeDesc {
     ///instance-information consists of things like the pointer-depth and the decoration
     void takeInstanceInfo( const TypeDesc& rhs );
 
+	/*bool decorationSmaller( const TypeDesc& rhs );
+
+	int decorationDepth();*/
+	
     void clearInstanceInfo();
 
 

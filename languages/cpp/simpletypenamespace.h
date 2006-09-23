@@ -78,8 +78,10 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
       return true;
     }
     
-    virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type =  MemberInfo::AllTypes);
-  
+    virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type =  MemberInfo::AllTypes );
+
+	virtual QValueList<TypePointer> getMemberClasses( const TypeDesc& name ) ;
+
     MemberInfo setupMemberInfo( TypeDesc& subName, QStringList tscope, QValueList<QStringList> imports = QValueList<QStringList>() );
   
 	QStringList locateNamespaceScope( QString alias );

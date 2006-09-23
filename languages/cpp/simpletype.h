@@ -226,6 +226,10 @@ class SimpleTypeImpl : public KShared {
       reg();
     };
 
+	///Returns the template-specialization-string for classes
+	virtual QString specialization() const {
+		return QString::null;
+	}
 
     class TemplateParamInfo {
       public:
@@ -239,7 +243,7 @@ class SimpleTypeImpl : public KShared {
         ;
 
         TemplateParamInfo( ) {}
-
+	    
         bool getParam( TemplateParam& target, QString name ) const;
 
         bool getParam( TemplateParam& target, int number ) const;
@@ -248,6 +252,8 @@ class SimpleTypeImpl : public KShared {
 
         void addParam( const TemplateParam& param );
 
+	    int count() const;
+	    
       private:
         QMap<int, TemplateParam> m_paramsByNumber;
         QMap<QString, TemplateParam> m_paramsByName;
@@ -436,6 +442,17 @@ class SimpleTypeImpl : public KShared {
       return m_scope;
     }
 
+	///Returns the scope including template-specialization
+	QStringList specializedScope() const {
+		QStringList ts = m_scope;
+		if( !ts.isEmpty() ) {
+			QString s = ts.back() + specialization();
+			ts.pop_back();
+			ts.push_back( s );
+		}
+		return ts;
+	}
+
     ///sets the parent-type(type this one is nested in)
     void setParent( TypePointer parent ) {
       if( parent == m_parent ) return;
@@ -464,6 +481,10 @@ class SimpleTypeImpl : public KShared {
           return m_cache;
         }
       }
+
+	  void setCache( const TypePointer& type ) {
+		  m_cache = type;
+	  }
 
       virtual TypePointer build() = 0;
 
@@ -530,13 +551,17 @@ class SimpleTypeImpl : public KShared {
           m_build = build;
         }
 
+	    void setBuilt( const TypePointer& item ) {
+		    m_built = item;
+	    }
+	    
         TypePointer build() {
-          if ( !m_build )
+		  if( m_built ) return m_built;
+	      if ( !m_build ) {
             return TypePointer();
-          else {
-            TypePointer r = m_build->buildCached();
-            m_build = 0;
-            return r;
+		  } else {
+            m_built = m_build->buildCached();
+            return m_built;
           }
         }
 
@@ -549,6 +574,8 @@ class SimpleTypeImpl : public KShared {
 
         ///This member is only filles for variables, typedefs and template-params!
         DeclarationInfo decl;
+    private:
+	    TypePointer m_built;
     };
 
 
@@ -591,6 +618,7 @@ class SimpleTypeImpl : public KShared {
     //protected:
 
     virtual LocateResult locateType( TypeDesc name , LocateMode mode = Normal, int dir = 0 , MemberInfo::MemberType typeMask = bitInvert( addFlag( MemberInfo::Variable, MemberInfo::Function ) ) ) ;
+
   public:
 
     LocateResult getFunctionReturnType( QString functionName, QValueList<LocateResult> params = QValueList<LocateResult>() );
@@ -646,6 +674,10 @@ class SimpleTypeImpl : public KShared {
       return mem;
     };
 
+	///Should return all specializations of a specific class-name
+	virtual QValueList<TypePointer> findSpecializations( const QString& name ) {
+		return QValueList<TypePointer>();
+	}
 
     /**TypeDescs and SimpleTypeImpls usually have a cross-reference, which creates a circular dependency so that they are never freed using KShared. This function breaks the loop, and also breaks all other possible dependency-loops. After this function was called, the type still contains its private information, but can not not be used to resolve anything anymore. This function is called automatically while the destruction of SimpleTypeConfiguration */
     virtual void breakReferences();
@@ -684,6 +716,10 @@ class SimpleTypeImpl : public KShared {
 
     QString fullTypeUnresolvedWithScope();
 
+	virtual QValueList<TypePointer> getMemberClasses( const TypeDesc& name ) {
+		return QValueList<TypePointer>();
+	}
+	
   private:
     QStringList m_scope;
     TypePointer m_parent;
@@ -701,6 +737,10 @@ class SimpleTypeImpl : public KShared {
     void setScope( const QStringList& scope );
 
     TypeOfResult searchBases ( const TypeDesc& name );
+
+		///Should be called within the parent-namespace/class
+	virtual void chooseSpecialization( MemberInfo& member );
+	
 };
 
 
@@ -716,8 +756,19 @@ class TypeTrace {
       m_trace.push_front( QPair< SimpleTypeImpl::MemberInfo, TypeDesc>( t, tail ) );
     }
 
-	void prepend( const TypeTrace& trace ) {
-		m_trace = trace.m_trace + m_trace;
+	void prepend( const TypeTrace& trace, int indent = 0 ) {
+		//if( indent != 0 ) {
+			QString ind;
+			for( int a = 0; a < indent; a++ ) ind += " ";
+			for( QValueList<QPair< SimpleTypeImpl::MemberInfo, TypeDesc> >::const_iterator it = trace.m_trace.end(); it != trace.m_trace.begin(); ) {
+				--it;
+				QPair< SimpleTypeImpl::MemberInfo, TypeDesc> item = *it;
+				item.second.setName( ind + item.second.name() );
+				m_trace.push_front( item );
+			}
+// 		} else {
+// 		m_trace = trace.m_trace + m_trace;
+// 		}
 	}
 };
 

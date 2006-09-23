@@ -40,11 +40,23 @@ SimpleTypeNamespace::SimpleTypeNamespace( SimpleTypeNamespace* ns ) : SimpleType
 
 SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, MemberInfo::MemberType type ) {
   std::set<SimpleTypeNamespace*> ignore;
-  return findMember( name, type, ignore );
+  SimpleTypeImpl::MemberInfo ret = findMember( name, type, ignore );
+	///chooseSpecialization( ret ); should not be necessary
+  return ret;
+}
+
+QValueList<TypePointer> SimpleTypeNamespace::getMemberClasses( const TypeDesc& name ) {
+	QValueList<TypePointer> ret;
+	
+	for ( QValueList<SimpleType>::iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
+		ret += (*it)->getMemberClasses( name );
+	}
+	
+	return ret;
 }
 
 SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, MemberInfo::MemberType type, std::set<SimpleTypeNamespace*>& ignore ) {
-	MemberInfo mem;
+  MemberInfo mem;
   mem.name = "";
   mem.memberType = MemberInfo::NotFound;
 	if ( ignore.find( this ) != ignore.end() )

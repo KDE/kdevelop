@@ -58,6 +58,13 @@ class TypeDecoration {
       m_decoration_back = QString();
     }
 
+	/*bool smaller( const TypeDecoration& rhs ) const {
+	}
+
+	int depth() const {
+		
+	}*/
+
   private:
     void init( QString& str ) {
       str = str.stripWhiteSpace();

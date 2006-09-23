@@ -460,6 +460,13 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 	klass->setStartPosition( startLine, startColumn );
 	klass->setEndPosition( endLine, endColumn );
 	klass->setFileName( m_fileName );
+	
+	int i = className.find( '<' );
+	if( i != -1 ) {
+		klass->setSpecializationDeclaration( className.mid( i ) );
+		className = className.left( i );
+	}
+	
 	klass->setName( className );
 	klass->setComment( ast->comment() );
 	

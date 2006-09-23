@@ -3335,53 +3335,60 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
     QValueList<Catalog::QueryArgument> args;
     QValueList<Tag> tags;
 
+	  QStringList ts = type;
+	  if( !ts.isEmpty() ) {
+		  QString s = ts.back() + typeR->specialization();
+		  ts.pop_back();
+		  ts.push_back( s );
+	  }
+	  
     args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
-    << Catalog::QueryArgument( "scope", type );
+    << Catalog::QueryArgument( "scope", ts );
     tags = m_repository->query( args );
     computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
 
     args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_Variable )
-    << Catalog::QueryArgument( "scope", type );
+		  << Catalog::QueryArgument( "scope", ts );
     tags = m_repository->query( args );
     computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
 
     if ( !isInstance ) {
       args.clear();
       args << Catalog::QueryArgument( "kind", Tag::Kind_Enumerator )
-      << Catalog::QueryArgument( "scope", type );
+		    << Catalog::QueryArgument( "scope", ts );
       tags = m_repository->query( args );
       computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
 
       args.clear();
       args << Catalog::QueryArgument( "kind", Tag::Kind_Enum )
-      << Catalog::QueryArgument( "scope", type );
+		    << Catalog::QueryArgument( "scope", ts );
       tags = m_repository->query( args );
       computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
 
       args.clear();
       args << Catalog::QueryArgument( "kind", Tag::Kind_Typedef )
-      << Catalog::QueryArgument( "scope", type );
+		    << Catalog::QueryArgument( "scope", ts );
       tags = m_repository->query( args );
       computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
 
       args.clear();
       args << Catalog::QueryArgument( "kind", Tag::Kind_Class )
-      << Catalog::QueryArgument( "scope", type );
+		    << Catalog::QueryArgument( "scope", ts );
       tags = m_repository->query( args );
       computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
 
       args.clear();
       args << Catalog::QueryArgument( "kind", Tag::Kind_Struct )
-      << Catalog::QueryArgument( "scope", type );
+		    << Catalog::QueryArgument( "scope", ts );
       tags = m_repository->query( args );
       computeCompletionEntryList( typeR, entryList, tags, isInstance, depth );
     }
 
     args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class );
-    QString fullname = type.join( "::" );
+    QString fullname = type.join( "::" )+typeR->specialization();
     /*    	if( fullname.length() >=2 )
                 args << Catalog::QueryArgument( "prefix", fullname.left(2) );*/
     args << Catalog::QueryArgument( "name", fullname );

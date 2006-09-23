@@ -411,6 +411,16 @@ void TagCreator::parseClassSpecifier( ClassSpecifierAST* ast )
 	tag.setKind( Tag::Kind_Class );
 	
 	tag.setFileName( m_fileName );
+
+	int i = className.find( '<' );
+	QString specialization;
+	
+	if( i != -1 ) {
+		specialization = className.mid( i );
+		tag.setSpecializationDeclaration( specialization );
+		className = className.left( i );
+	}
+		
 	tag.setName( className );
 	tag.setScope( m_currentScope );
 	
@@ -421,16 +431,14 @@ void TagCreator::parseClassSpecifier( ClassSpecifierAST* ast )
 	ast->getEndPosition( &line, &col );
 	tag.setEndPosition( line, col );
 	
-	
 	checkTemplateDeclarator( tag );
-	
-	
+
 	m_catalog->addItem( tag );
 	
 	if ( ast->baseClause() )
-		parseBaseClause( tag.path(), ast->baseClause() );
+		parseBaseClause( tag.path()+specialization, ast->baseClause() );
 	
-	m_currentScope.push_back( className );
+	m_currentScope.push_back( className + specialization );
 	int oldInClass = m_inClass;
 	m_inClass = true;
 	TreeParser::parseClassSpecifier( ast );

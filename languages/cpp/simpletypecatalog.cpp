@@ -24,6 +24,32 @@ TypePointer SimpleTypeCatalog::clone() {
   return new SimpleTypeCachedCatalog( this );
 }
 
+QString SimpleTypeCatalog::specialization() const {
+	return m_tag.getSpecializationDeclaration();
+}
+
+QValueList<TypePointer> SimpleTypeCatalog::getMemberClasses( const TypeDesc& name ) {
+	QValueList<TypePointer> ret;
+
+	QValueList<Catalog::QueryArgument> args;
+
+	args << Catalog::QueryArgument( "scope", specializedScope() );
+	args << Catalog::QueryArgument( "name", name.name() );
+	
+	QValueList<Tag> tags( cppCompletionInstance->m_repository->query( args ) );
+
+	for( QValueList<Tag>::iterator it = tags.begin(); it != tags.end(); ++it ) {
+		if( (*it).kind() == Tag::Kind_Class ) {
+			///It would be better to return all matched class-names from within findMember and use them from there so all this will be cached too.
+			CatalogBuildInfo b( *it, name, TypePointer( this ) );
+			TypePointer t = b.buildCached();
+			if( t ) ret << t;
+		}
+	}
+	
+	return ret;
+}
+
 SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleTypeImpl::MemberInfo::MemberType type )
 {
   MemberInfo ret;
@@ -44,10 +70,8 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
   }
   
   QValueList<Catalog::QueryArgument> args;
-  QTime t;
   
-  t.start();
-  args << Catalog::QueryArgument( "scope", scope() );
+  args << Catalog::QueryArgument( "scope", specializedScope() );
   args << Catalog::QueryArgument( "name", name.name() );
   
   QValueList<Tag> tags( cppCompletionInstance->m_repository->query( args ) );
@@ -79,9 +103,21 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
     tag.getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
     ret.decl.file = tag.fileName();
   } else if ( tag.kind() == Tag::Kind_Class && ( type & MemberInfo::NestedType ) ){
-  	ret.setBuildInfo( new CatalogBuildInfo( tag, name, TypePointer( this ) ) );
-  	ret.memberType = MemberInfo::NestedType;
-  	ret.type = name;
+    if( tag.hasSpecializationDeclaration() ) {
+	    //Choose another tag(the main class, not a specialization).
+	    for( QValueList<Tag>::const_iterator it = tags.begin(); it != tags.end(); ++it ) {
+		    if( (*it).kind() == Tag::Kind_Class && !(*it).hasSpecializationDeclaration() ) {
+			    tag = *it;
+			    break;
+		    }
+	    }
+  	}
+	  //only accept non-specialized classes
+	if( !tag.hasSpecializationDeclaration() ) {
+		ret.setBuildInfo( new CatalogBuildInfo( tag, name, TypePointer( this ) ) );
+		ret.memberType = MemberInfo::NestedType;
+		ret.type = name;
+	}
   } else if( tag.kind() == Tag::Kind_Typedef && ( type & MemberInfo::Typedef ) ) {
     ret.memberType = MemberInfo::Typedef;
     ret.type = tagType( tag );
@@ -110,8 +146,10 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
   }
   
 ///Check if it is a template-name
-  
+
     //if( !ret.type) ret.memberType = MemberInfo::NotFound; //constructor..
+
+	chooseSpecialization( ret );
   return ret;
 }
 
@@ -122,7 +160,7 @@ Tag SimpleTypeCatalog::findSubTag( const QString& name ) {
   QTime t;
   
   t.start();
-  args << Catalog::QueryArgument( "scope", scope() );
+  args << Catalog::QueryArgument( "scope", specializedScope() );
   args << Catalog::QueryArgument( "name", name );
   
   QValueList<Tag> tags( cppCompletionInstance->m_repository->query( args ) );
@@ -139,7 +177,7 @@ QValueList<Tag> SimpleTypeCatalog::getBaseClassList( )
 {
   if ( scope().isEmpty() )
     return QValueList<Tag>();
-  return cppCompletionInstance->m_repository->getBaseClassList( scope().join("::"));
+  return cppCompletionInstance->m_repository->getBaseClassList( scope().join("::") + specialization() );
 }
 
 void SimpleTypeCatalog::initFromTag() {

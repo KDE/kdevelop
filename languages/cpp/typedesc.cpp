@@ -98,6 +98,10 @@ TypeDesc& LocateResult::desc() {
   return d->m_desc;
 }
 
+const TypeDesc& LocateResult::desc() const {
+	return d->m_desc;
+}
+
 const TypeDesc* LocateResult::operator ->() const {
   return &d->m_desc;
 }
@@ -207,7 +211,7 @@ size_t TypeDescData::hashKey() {
     }
 
     m_hashKey = ret;
-    //m_hashValid = true;
+    m_hashValid = true;
 	}
 
   if ( m_nextType )
@@ -234,7 +238,7 @@ size_t TypeDescData::hashKey2() {
 			n++;
 		}
 		m_hashKey2 = ret;
-		//m_hash2Valid = true;
+		m_hash2Valid = true;
 	}
 
 	if ( m_nextType )
@@ -575,6 +579,18 @@ void TypeDesc::maybeInit() {
   m_data->m_nextType = 0;
   m_data->m_flags = Standard;
 }
+/*
+bool TypeDesc::decorationSmaller( const TypeDesc& rhs ) {
+	maybeInit();
+	rhs.maybeInit();
+	return m_data->m_dec.smaller( rhs.m_data.m_dec );
+
+}
+
+int TypeDesc::decorationDepth() {
+	if( !m_data ) return 0;
+	return m_data->m_dec.depth();
+}*/
 
 void TypeDesc::init( QString stri ) {
   m_data = 0;
