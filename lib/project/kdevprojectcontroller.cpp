@@ -184,6 +184,7 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
     if ( m_isLoaded )
         closeProject();
 
+    m_globalFile = url;
     KConfig * config = KDevConfig::standard();
     config->setGroup( "General Options" );
 
