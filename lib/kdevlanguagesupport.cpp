@@ -44,20 +44,22 @@ KDevLanguageSupport::~KDevLanguageSupport()
 bool KDevLanguageSupport::supportsDocument( KDevDocument *document )
 {
     KMimeType::Ptr mimetype = document->mimeType();
-    QStringList mimeList = mimeTypes();
-    QStringList::const_iterator it = mimeList.begin();
-    for ( ; it != mimeList.end(); it++ )
-        if ( mimetype->is( *it ) )
-            return true;
-    return false;
+    return supportsDocumentInternal( mimetype );
 }
 
 bool KDevLanguageSupport::supportsDocument( const KUrl &url )
 {
     KMimeType::Ptr mimetype = KMimeType::findByUrl( url );
+    return supportsDocumentInternal( mimetype );
+}
+
+bool KDevLanguageSupport::supportsDocumentInternal( KMimeType::Ptr mimetype )
+{
     QStringList mimeList = mimeTypes();
     QStringList::const_iterator it = mimeList.begin();
-    for ( ; it != mimeList.end(); it++ )
+    //cache end(). it's faster when dealing with large lists
+    QStringList::const_iterator itEnd = mimeList.end();
+    for ( ; it != itEnd; it++ )
         if ( mimetype->is( *it ) )
             return true;
     return false;

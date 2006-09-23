@@ -146,6 +146,9 @@ public Q_SLOTS:
     void threadFinished();
 
 private:
+    bool supportsDocumentInternal( KMimeType::Ptr );
+
+private:
     mutable QHash<QThread*, QMutex*> m_parseMutexes;
     QMutex* m_mutexMutex;
 };
