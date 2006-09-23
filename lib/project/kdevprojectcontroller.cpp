@@ -185,12 +185,7 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
         closeProject();
 
     m_globalFile = url;
-    KConfig * config = KDevConfig::standard();
-    config->setGroup( "General Options" );
-
-    QString projectManagement =
-            config->readPathEntry( "Project Management", "KDevProjectManager" );
-    if ( loadProjectPart( projectManagement ) )
+    if ( loadProjectPart() )
     {
         m_isLoaded = true;
         //The project file has been opened.
@@ -272,13 +267,19 @@ bool KDevProjectController::closeProject()
     return true;
 }
 
-bool KDevProjectController::loadProjectPart( const QString &projectManager )
+bool KDevProjectController::loadProjectPart()
 {
+    KConfig * config = KDevConfig::standard();
+    config->setGroup( "General Options" );
+
+    QString projectManager =
+            config->readPathEntry( "Project Management", "KDevProjectManager" );
+    
     QString constraint = 
             QString::fromLatin1("[X-KDE-PluginInfo-Name] == '%1'")
             .arg(projectManager);
 
-    KPluginInfo::List projectList = KDevPluginController::query("KDevelop/Project", constraint);
+    KPluginInfo::List projectList = KDevPluginController::query("KDevelop/Plugin", constraint);
     if ( projectList.isEmpty() )
     {
         KMessageBox::sorry( KDevCore::mainWindow(),
