@@ -28,7 +28,7 @@
 #include <kgenericfactory.h>
 
 #include "ui_cmakebuildsettings.h"
-#include "config.h"
+#include "cmakeconfig.h"
 
 typedef KGenericFactory<CMakePreferences> CMakePreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kdevcmake_settings, CMakePreferencesFactory( "kcm_kdevcmake_settings" )  )

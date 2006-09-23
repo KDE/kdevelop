@@ -1,4 +1,4 @@
-File=config.kcfg
+File=cmakeconfig.kcfg
 ClassName=CMakeSettings
 Singleton=true
 Inherits=KDevConfigSkeleton

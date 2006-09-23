@@ -22,15 +22,19 @@
 
 #include <QList>
 #include <QVector>
+#include <QDomDocument>
 #include <QCoreApplication>
 
-#include <kurl.h>
 
+#include <kurl.h>
+#include <kio/job.h>
+
+#include "kdevcore.h"
 #include "kdevproject.h"
 #include "kgenericfactory.h"
 #include "kdevprojectmodel.h"
 
-#include "config.h"
+#include "cmakeconfig.h"
 #include "cmaketargetitem.h"
 
 typedef KGenericFactory<CMakeImporter> CMakeSupportFactory ;
@@ -41,8 +45,7 @@ CMakeImporter::CMakeImporter( QObject* parent,
                               const QStringList& )
     : KDevBuildManager( CMakeSupportFactory::instance(), parent ), m_rootItem(0L)
 {
-    m_project = qobject_cast<KDevProject*>( parent );
-    Q_ASSERT( m_project );
+    m_project = 0;
 /*    CMakeSettings* settings = CMakeSettings::self();
 
     //what do the settings say about our generator?
@@ -75,11 +78,36 @@ QList<KDevProjectFolderItem*> CMakeImporter::parse( KDevProjectFolderItem* dom )
 KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
                                            const KUrl& fileName )
 {
-    QString projectPath = m_project->folder().path();
-    kDebug( 9025 ) << k_funcinfo << "project path is " << projectPath << endl;
     QString buildDir = CMakeSettings::self()->buildFolder();
     kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
     m_rootItem = new KDevProjectFolderItem( fileName, 0 );
+    KUrl cmakeInfoFile(buildDir);
+    cmakeInfoFile.addPath("/cmakeinfo.xml");
+    if ( !cmakeInfoFile.isLocalFile() )
+    {
+        //FIXME turn this into a real warning
+        kWarning(9025) << "not a local file. CMake support doesn't handle remote projects" << endl;
+    }
+    else
+    {
+        QFile cmakeFile(cmakeInfoFile.path());
+        if ( cmakeFile.open(QIODevice::ReadOnly) )
+        {
+            QDomDocument cmakeInfo;
+            if ( cmakeInfo.setContent( &cmakeFile ) )
+            {   //start processing
+                QDomElement docElem = cmakeInfo.documentElement();
+                QDomNode n = docElem.firstChild();
+                while(!n.isNull()) {
+                    QDomElement e = n.toElement(); // try to convert the node to an element.
+                    if(!e.isNull()) {
+                        kDebug(9025) << e.tagName() << endl; // the node really is an element.
+                    }
+                    n = n.nextSibling();
+                }
+            }
+        }
+    }
     return m_rootItem;
 }
 
