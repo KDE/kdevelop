@@ -191,7 +191,6 @@ ItemDom SimpleTypeCodeModel::locateModelContainer( class CodeModel* m, TypeDesc 
 ///Until header-parsing is implemented, this tries to find the class that is most related to this item
 ClassDom SimpleTypeCodeModel::pickMostRelated( ClassList lst, QString fn ) {
   if( lst.isEmpty() ) return ClassDom();
-  if( fn.isEmpty() ) return lst.front();
   
   ClassDom best = lst.front();
   uint bestMatch = 0;

@@ -372,7 +372,7 @@ struct PopupFillerHelpStruct {
 			        int sLine, sCol, eLine, eCol;
 			        i->getStartPosition( &sLine, &sCol );
 			        i->getEndPosition( &eLine, &eCol );
-		        	insertItem( parent, (new SimpleTypeCodeModel( i ))->desc(), prefix + " " + (*it)->name() + QString(" (%1 Lines): ").arg( eLine - sLine ) ); ///Not cached, so the detection at (1) does not trigger.
+		        	insertItem( parent, (new SimpleTypeCodeModel( i ))->desc(), prefix + " " + (*it)->name() + QString(" (%1 Lines): ").arg( eLine - sLine ) ); ///SimpleTypeCodeModel is used instead of SimpleTypeCachedNodeModel, so the detection at (1) does not trigger, this avoids endless recursion.
 		        }
 
 	        }
@@ -573,6 +573,16 @@ class PopupFiller {
       }
 
       struk.insertItem( parent, d, prefix );
+
+	    if( d->resolved() && !d->resolved()->specialization().isEmpty() ) {
+		    SimpleType p = d->resolved()->parent();
+		    LocateResult r = p->locateDecType( d->name() );
+		    if( p ) {
+			    QPopupMenu * m = PopupTracker::createPopup( parent );
+			    int gid = parent->insertItem( i18n( "Specialized from \"%1\"" ).arg( cleanForMenu( r->fullNameChain() ) ), m );
+					fill( m, r );
+		    }
+	    }
 
       TypeDesc::TemplateParams p = d->templateParams();
       for ( TypeDesc::TemplateParams::iterator it = p.begin(); it != p.end(); ++it ) {
