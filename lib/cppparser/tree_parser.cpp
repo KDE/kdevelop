@@ -35,6 +35,10 @@ void TreeParser::parseTranslationUnit( TranslationUnitAST* translationUnit )
     QPtrList<DeclarationAST> declarations = translationUnit->declarationList();
     QPtrListIterator<DeclarationAST> it( declarations );
     while( it.current() ){
+			if( (it.current() == 0 ) ) {
+				kdDebug( 9007 ) << "declaration is zero" << endl;
+				continue;
+			}
 	parseDeclaration( it.current() );
 	++it;
     }

@@ -548,6 +548,18 @@ class TemplateModelItem {
         virtual void clearTemplateParams() {
             m_params.clear();
         }
+
+				bool hasSpecializationDeclaration() const {
+					return !m_specialization.isEmpty();
+				}
+
+				virtual QString getSpecializationDeclaration() const {
+					return m_specialization;
+				}
+
+				void setSpecializationDeclaration( const QString& str ) {
+					m_specialization = str;
+				}
         
         ///returns -1 if the parameter does not exist
         virtual int findTemplateParam( const QString& name ) const {
@@ -563,6 +575,7 @@ class TemplateModelItem {
        virtual bool isTemplateable() const  { return true; }
     
        void write(  QDataStream & stream ) const {
+			 		 stream << m_specialization;
            stream << (int)m_params.size();
            for( ParamMap::const_iterator it = m_params.begin(); it != m_params.end(); ++it ) {
                stream << (*it).first;
@@ -572,6 +585,7 @@ class TemplateModelItem {
        
        void read(  QDataStream & stream )  {
            int count;
+					 stream >> m_specialization;
            stream >> count;
            for( int a = 0; a < count; a++ ) {
                ParamPair tmp;
@@ -583,6 +597,7 @@ class TemplateModelItem {
     
     protected:
         ParamMap m_params;
+				QString m_specialization;
 };
 
 
@@ -903,6 +918,7 @@ public:
     
 private:
     QMap<QString, NamespaceDom> m_namespaces;
+		QMap<QString, int> m_appearances;
 
 private:
     NamespaceModel( const NamespaceModel& source );

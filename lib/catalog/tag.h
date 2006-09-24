@@ -47,8 +47,8 @@ public:
 	Kind_Unknown,
 
 	Kind_Typedef = 1000,
-        Kind_Namespace,
-        Kind_UsingDirective,
+	Kind_Namespace,
+	Kind_UsingDirective,
 	Kind_Base_class,
 	Kind_Enum,
 	Kind_Enumerator,
@@ -187,7 +187,22 @@ public:
 	data->endColumn = column;
     }
 
-    bool hasAttribute( const QCString& name ) const
+		QString getSpecializationDeclaration() const {
+			if( hasAttribute( "spc" ) )
+				return data->attributes["spc"].asString();
+			else
+				return QString::null;
+		}
+
+		bool hasSpecializationDeclaration() const {
+			return data->attributes.contains( "spc" );
+		}
+
+		void setSpecializationDeclaration( const QString& str ) {
+			data->attributes["spc"] = str;
+		}
+
+	bool hasAttribute( const QCString& name ) const
     {
 	if( name == "kind" ||
 	    name == "name" ||
