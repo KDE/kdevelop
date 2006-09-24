@@ -61,7 +61,7 @@ KBookmarkHandler::~KBookmarkHandler()
     //     delete m_bookmarkMenu; ###
 }
 
-QString KBookmarkHandler::currentURL() const
+QString KBookmarkHandler::currentUrl() const
 {
     return mParent->dirOperator()->url().url();
 }

@@ -40,7 +40,7 @@ public:
 
     // KBookmarkOwner interface:
     virtual void openBookmarkURL( const QString& url ) { emit openURL( url ); }
-    virtual QString currentURL() const;
+    virtual QString currentUrl() const;
 
     KMenu *menu() const { return m_menu; }
 
