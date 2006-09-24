@@ -227,6 +227,8 @@ class TypeDesc {
     ///Returns the type-structure(full name-chain without any instance-info)
     QString fullTypeStructure() const;
 
+	void prependDecoration( const QString& str );
+	
     int pointerDepth() const {
 	    if( !m_data ) return 0;
 	    

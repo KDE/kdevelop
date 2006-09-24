@@ -577,7 +577,7 @@ class PopupFiller {
 	    if( d->resolved() && !d->resolved()->specialization().isEmpty() ) {
 		    SimpleType p = d->resolved()->parent();
 		    LocateResult r = p->locateDecType( d->name() );
-		    if( p ) {
+		    if( r ) {
 			    QPopupMenu * m = PopupTracker::createPopup( parent );
 			    int gid = parent->insertItem( i18n( "Specialized from \"%1\"" ).arg( cleanForMenu( r->fullNameChain() ) ), m );
 					fill( m, r );

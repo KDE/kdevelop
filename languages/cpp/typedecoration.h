@@ -58,6 +58,10 @@ class TypeDecoration {
       m_decoration_back = QString();
     }
 
+	void  prepend( const QString& str ) {
+		m_decoration_front = str + m_decoration_front;
+	}
+	
 	/*bool smaller( const TypeDecoration& rhs ) const {
 	}
 

@@ -168,6 +168,11 @@ TypeDesc& TypeDesc::operator = ( const TypeDesc& rhs ) {
   return *this;
 }
 
+void TypeDesc::prependDecoration( const QString& str ) {
+	makePrivate();
+	m_data->m_dec.prepend( str );
+}
+
 int TypeDesc::depth() const {
   if ( !m_data )
     return 0;
