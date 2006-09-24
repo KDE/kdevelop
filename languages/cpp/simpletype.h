@@ -758,16 +758,16 @@ class TypeTrace {
 
 	void prepend( const TypeTrace& trace, int indent = 0 ) {
 		//if( indent != 0 ) {
-			QString ind;
+		/*QString ind;
 			for( int a = 0; a < indent; a++ ) ind += " ";
 			for( QValueList<QPair< SimpleTypeImpl::MemberInfo, TypeDesc> >::const_iterator it = trace.m_trace.end(); it != trace.m_trace.begin(); ) {
 				--it;
 				QPair< SimpleTypeImpl::MemberInfo, TypeDesc> item = *it;
 				item.second.setName( ind + item.second.name() );
 				m_trace.push_front( item );
-			}
+			}*/
 // 		} else {
-// 		m_trace = trace.m_trace + m_trace;
+ 		m_trace = trace.m_trace + m_trace;
 // 		}
 	}
 };
