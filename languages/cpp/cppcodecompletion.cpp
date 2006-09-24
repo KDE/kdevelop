@@ -3644,15 +3644,16 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
     computeCompletionEntryList( klass->name(), type, entryList, klass->classList(), isInstance, depth );
     computeCompletionEntryList( klass->name(), type, entryList, klass->typeAliasList(), isInstance, depth );
   }
-
+	
   QValueList<LocateResult> parents = type->getBases();
-  
+	
 	for ( QValueList<LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it ) {
     if ( !( *it ) ->resolved() )
       continue;
 
     SimpleTypeImpl* i = ( *it ) ->resolved();
-    ;
+		computeCompletionEntryList( i, entryList, i->scope(), isInstance, depth + 1 );
+		/*
     SimpleTypeCodeModel* m = dynamic_cast<SimpleTypeCodeModel*> ( i );
     if ( m ) {
       ItemDom item = m->item();
@@ -3660,7 +3661,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
       if ( kl ) {
         computeCompletionEntryList( SimpleType( ( *it ) ->resolved() ), entryList, ClassDom ( kl ), isInstance, depth + 1 );
       }
-    }
+    }*/
   }
 }
 
