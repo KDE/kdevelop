@@ -163,8 +163,9 @@ private slots:
     void popupClassViewAction( int number );
 	void synchronousParseReady( const QString& file, TranslationUnitAST* unit );
 private:
-    bool functionContains( FunctionDom f , int line, int col );
-    void selectItem( ItemDom item );
+	bool functionContains( FunctionDom f , int line, int col );
+	void getFunctionBody( FunctionDom f , int& line, int& col );
+	void selectItem( ItemDom item );
     void addTypePopups( QPopupMenu* parent, TypeDesc d, QString depthAdd, QString prefix = "" );
     void addTypeClassPopups( QPopupMenu* parent, TypeDesc d, QString depthAdd, QString prefix = "" );
   QValueList<QStringList> computeSignatureList( CppEvaluation::EvaluationResult function );

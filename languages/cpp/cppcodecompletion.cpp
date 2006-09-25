@@ -1738,8 +1738,9 @@ bool CppCodeCompletion::functionContains( FunctionDom f , int line, int col ) {
   if ( t.isEmpty() )
     return false;
 
-  int i = t.find( '{' );
-  if ( i == -1 )
+	//int i = t.find( '{' );
+	int i = t.find( '(' ); //This now includes the argument-list
+	if ( i == -1 )
     return false;
   int lineCols = 0;
   for ( int a = 0; a < i; a++ ) {
@@ -1754,6 +1755,38 @@ bool CppCodeCompletion::functionContains( FunctionDom f , int line, int col ) {
   sc += lineCols;
 
   return ( line > sl || ( line == sl && col >= sc ) ) && ( line < el || ( line == el && col < ec ) );
+}
+
+void CppCodeCompletion::getFunctionBody( FunctionDom f , int& line, int& col ) {
+	if ( !f )
+		return;
+	int sl, sc, el, ec;
+	f->getStartPosition( &sl, &sc );
+	f->getEndPosition( &el, &ec );
+	QString t = clearComments( getText( sl, sc, el, ec ) );
+	if ( t.isEmpty() )
+		return;
+	
+	int i = t.find( '{' );
+	if ( i == -1 )
+		return;
+	i++;
+	if( i >= t.length() )
+		return;
+	int lineCols = 0;
+	for ( int a = 0; a < i; a++ ) {
+		if ( t[ a ] == '\n' ) {
+			sl++;
+			lineCols = 0;
+		} else {
+			lineCols++;
+		}
+	}
+	
+	sc += lineCols;
+
+	line = sl;
+	col = sc;
 }
 
 void CppCodeCompletion::emptyCache() {
@@ -1850,8 +1883,16 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
   if ( opt & SearchInFunctions ) {
     //currentFunction = fileModel.functionAt( line, column );
 
-    if ( currentFunction && functionContains( currentFunction, line, column ) ) {
-      SimpleContext * ctx = computeFunctionContext( currentFunction, line, column );
+	  if ( currentFunction && functionContains( currentFunction, line, column ) ) {
+		  ///Evaluate the context of the function-body if we're in the argument-list
+		  int realLine = line, realColumn = column;
+		  getFunctionBody( currentFunction, realLine, realColumn );
+		  if( realLine < line || ( realLine == line && realColumn < column ) ) {
+			  realLine = line;
+			  realColumn = column;
+		  }
+			  
+      SimpleContext * ctx = computeFunctionContext( currentFunction, realLine, realColumn );
       contextItem = currentFunction.data();
 
       if ( ctx ) {
