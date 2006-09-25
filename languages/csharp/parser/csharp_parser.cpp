@@ -23049,37 +23049,30 @@ namespace csharp
                                                             }
                                                           else if ((yytoken == Token_ASSIGN) && ( !fixed_size_buffer ))
                                                             {
-                                                              if (yytoken == Token_ASSIGN)
+                                                              if (yytoken != Token_ASSIGN)
                                                                 {
-                                                                  if (yytoken != Token_ASSIGN)
+                                                                  if (!yy_block_errors)
                                                                     {
-                                                                      if (!yy_block_errors)
-                                                                        {
-                                                                          yy_expected_token(yytoken, Token_ASSIGN, "=");
-                                                                        }
-                                                                      return false;
+                                                                      yy_expected_token(yytoken, Token_ASSIGN, "=");
                                                                     }
-                                                                  yylex();
-
-                                                                  variable_initializer_ast *__node_458 = 0;
-                                                                  if (!parse_variable_initializer(&__node_458))
-                                                                    {
-                                                                      if (!yy_block_errors)
-                                                                        {
-                                                                          yy_expected_symbol(ast_node::Kind_variable_initializer, "variable_initializer");
-                                                                        }
-                                                                      return false;
-                                                                    }
-                                                                  (*yynode)->variable_initializer = __node_458;
-
-                                                                }
-                                                              else if (true /*epsilon*/)
-                                                              {}
-                                                              else
-                                                                {
                                                                   return false;
                                                                 }
+                                                              yylex();
+
+                                                              variable_initializer_ast *__node_458 = 0;
+                                                              if (!parse_variable_initializer(&__node_458))
+                                                                {
+                                                                  if (!yy_block_errors)
+                                                                    {
+                                                                      yy_expected_symbol(ast_node::Kind_variable_initializer, "variable_initializer");
+                                                                    }
+                                                                  return false;
+                                                                }
+                                                              (*yynode)->variable_initializer = __node_458;
+
                                                             }
+                                                          else if ((true /*epsilon*/) && ( !fixed_size_buffer ))
+                                                          {}
                                                           else
                                                             {
                                                               return false;

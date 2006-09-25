@@ -99,6 +99,8 @@ QString CodeDisplay::toolTip( const _CodeModelItem *item )
                 tooltip += "[protected] "; break;
             case access_policy::access_protected_internal:
                 tooltip += "[protected internal] "; break;
+            case access_policy::access_internal:
+                tooltip += "[internal] "; break;
             case access_policy::access_public:
                 tooltip += "[public] "; break;
             default:

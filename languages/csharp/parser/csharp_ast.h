@@ -216,7 +216,7 @@ namespace csharp
     enum accessor_type_enum {
       type_get,
       type_set,
-      type_none // only possible for the second optional accessor
+      type_none // only possible for the second, optional accessor
     };
   }
 
