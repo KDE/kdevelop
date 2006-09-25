@@ -63,9 +63,15 @@ public:
 	};
 
     ///Whether the completion-cache should be kept alive as long as the context does not change
-    bool useLongCaching() const {
+    bool usePermanentCaching() const {
       return true;
     }
+
+	///Whether higher namespaces(like the global one) should be included while computing the
+	///completion-list when using automatic code-completion. Should get an option in the interface(slows down the completion).
+	bool alwaysIncludeNamespaces() const {
+		return false;
+	}
 
 	bool showNamespaceAppearances() const;
 

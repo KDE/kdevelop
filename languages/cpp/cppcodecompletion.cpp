@@ -2013,7 +2013,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
   }
   
   CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
-  if( cfg->useLongCaching() && contextItem ) {
+  if( cfg->usePermanentCaching() && contextItem ) {
     conf.invalidate();
     m_cachedFromContext = contextItem;
   }
@@ -2529,6 +2529,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 
     if ( !type && this_type && ( expr.isEmpty() || expr.endsWith( ";" ) ) ) {
 
+	    bool alwaysIncludeNamespaces = cfg->alwaysIncludeNamespaces();
       {
         SimpleType t = this_type;
         ///First, all static data.
@@ -2539,7 +2540,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
           if ( t->scope().isEmpty() ) {
             ready = true;
           } else {
-	          if( !t->isNamespace() || !invokedOnDemand )
+	          if( !t->isNamespace() || invokedOnDemand || alwaysIncludeNamespaces )
             	computeCompletionEntryList( t, entryList, t->scope(), false, depth );
             t = t->parent();
             depth++;
@@ -2557,7 +2558,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
           if ( t->scope().isEmpty() ) {
             ready = true;
           } else {
-	          if ( ( t->isNamespace() && invokedOnDemand ) || ( first && isInstance ) )
+	          if ( ( (t->isNamespace() && invokedOnDemand) || alwaysIncludeNamespaces ) || ( first && isInstance ) )
               computeCompletionEntryList( t, entryList, t->scope(), t->isNamespace() ? true : isInstance, depth );
             t = t->parent();
             depth++;
@@ -2655,7 +2656,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
   delete( ctx );
   ctx = 0;
 
-  if ( cfg->useLongCaching() ) {
+  if ( cfg->usePermanentCaching() ) {
     conf.invalidate();
     m_cachedFromContext = contextItem;
   }

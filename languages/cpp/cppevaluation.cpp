@@ -241,10 +241,10 @@ EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr,
     return scope;
   }
   
-  if( !scope->resolved() ) {
+	/*if( !scope->resolved() ) {
     ifVerboseMajor( dbgMajor() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fullTypeStructure() << "\" is unresolved " << endl );
     return EvaluationResult();
-  }
+  }*/
   
   ifVerboseMajor( dbgMajor() << "evaluateExpressionInternal(\"" << expr << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl );
   
