@@ -11,6 +11,7 @@ GenericName[x-test]=xxC# Supportxx
 ServiceTypes=KDevelop/LanguageSupport
 Icon=source
 X-KDE-Library=kdevcsharplanguagesupport
+X-KDE-PluginInfo-Name=kdevcsharpsupport
 X-KDevelop-Version=4
 X-KDevelop-Language=CSharp
 X-KDevelop-Args=CSHARP

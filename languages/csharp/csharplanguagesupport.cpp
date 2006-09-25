@@ -161,7 +161,7 @@ void CSharpLanguageSupport::projectOpened()
     QList<KDevProjectFileItem*> files = KDevCore::activeProject() ->allFiles();
     foreach ( KDevProjectFileItem * file, files )
     {
-        if ( /*supportsDocument( file->url() ) &&*/ file->url().fileName().endsWith( ".cs" ) )
+        if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith( ".cs" )*/ )
         {
             documentList.append( file->url() );
         }
