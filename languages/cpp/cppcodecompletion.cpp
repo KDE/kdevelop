@@ -2334,7 +2334,6 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
             global = global->parent();
           }
 
-
           if ( ! m_cachedFromContext ) {
             SimpleTypeNamespace * n = dynamic_cast<SimpleTypeNamespace*>( &( *global ) );
             if ( !n ) {
@@ -2528,7 +2527,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
   if ( !showArguments ) {
     QValueList<CodeCompletionEntry> entryList;
 
-    if ( !type && invokedOnDemand && this_type && ( expr.isEmpty() || expr.endsWith( ";" ) ) ) {
+    if ( !type && this_type && ( expr.isEmpty() || expr.endsWith( ";" ) ) ) {
 
       {
         SimpleType t = this_type;
@@ -2540,7 +2539,8 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
           if ( t->scope().isEmpty() ) {
             ready = true;
           } else {
-            computeCompletionEntryList( t, entryList, t->scope(), false, depth );
+	          if( !t->isNamespace() || !invokedOnDemand )
+            	computeCompletionEntryList( t, entryList, t->scope(), false, depth );
             t = t->parent();
             depth++;
           }
@@ -2557,7 +2557,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
           if ( t->scope().isEmpty() ) {
             ready = true;
           } else {
-            if ( t->isNamespace() || ( first && isInstance ) )
+	          if ( ( t->isNamespace() && invokedOnDemand ) || ( first && isInstance ) )
               computeCompletionEntryList( t, entryList, t->scope(), t->isNamespace() ? true : isInstance, depth );
             t = t->parent();
             depth++;
@@ -2565,8 +2565,9 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
           }
         }
       }
+	    if( ctx ) computeCompletionEntryList( entryList, ctx, isInstance );
     } else if ( type->resolved() && expr.isEmpty() ) {
-      computeCompletionEntryList( entryList, ctx, isInstance );
+	    if( ctx ) computeCompletionEntryList( entryList, ctx, isInstance );
 
       // 			if ( m_pSupport->codeCompletionConfig() ->includeGlobalFunctions() )
       // 				computeCompletionEntryList( type, entryList, QStringList(), false );
@@ -3991,8 +3992,10 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< CodeCompletionEn
       ++it;
 
       CodeCompletionEntry entry;
+	    entry.prefix = var.type.fullNameChain();
       entry.text = var.name;
       entry.userdata = "000";
+	    entry.comment = "Local variable";
       entryList << entry;
 
     }
