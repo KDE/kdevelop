@@ -134,6 +134,10 @@ class SimpleType {
       return !scope().isEmpty();
     }
 
+	static TypePointer globalNamespace() {
+		return m_globalNamespace;
+	}
+
     static void setGlobalNamespace( TypePointer tp ) {
       m_globalNamespace = tp;
     }

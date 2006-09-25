@@ -1001,6 +1001,10 @@ void CppCodeCompletion::slotTextChanged() {
 }
 
 void CppCodeCompletion::fitContextItem( int nLine, int nCol ) {
+	if( !SimpleType::globalNamespace() ) {
+		kdDebug( 9007 ) << "no global namespace was set, clearing cache" << endl;
+		emptyCache();
+	}
   ///Find out whether the cache may be used on, or has to be cleared.
   if ( m_cachedFromContext ) {
     int sLine, sCol, eLine, eCol;
@@ -1618,7 +1622,7 @@ ExpressionInfo CppCodeCompletion::findExpressionAt( int line, int column, int st
   return ret;
 }
 
-SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int line, int col ) {
+SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int line, int col, SimpleTypeConfiguration& conf ) {
   if ( !f )
     return 0;
   int modelStartLine, modelStartColumn;
@@ -1684,6 +1688,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
       SimpleType global = ctx->global();
 
       if ( !m_cachedFromContext ) {
+	      conf.setGlobalNamespace( &( *global ) );
         if ( recoveryPoint ) {
           recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig() ->namespaceAliases() );
         } else {
@@ -1840,7 +1845,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 
   int nLine = line, nCol = column;
 
-  emptyCache();
+	//  emptyCache();
   fitContextItem( line, column );
 
   QString strCurLine = m_activeEditor->textLine( nLine );
@@ -1892,7 +1897,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 			  realColumn = column;
 		  }
 			  
-      SimpleContext * ctx = computeFunctionContext( currentFunction, realLine, realColumn );
+      SimpleContext * ctx = computeFunctionContext( currentFunction, realLine, realColumn, conf );
       contextItem = currentFunction.data();
 
       if ( ctx ) {
@@ -2006,12 +2011,12 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
       }
     }
   }
-  /*
+  
   CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
   if( cfg->useLongCaching() && contextItem ) {
     conf.invalidate();
     m_cachedFromContext = contextItem;
-  }*/
+  }
 
   return ret;
 }

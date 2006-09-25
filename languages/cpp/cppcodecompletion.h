@@ -191,7 +191,7 @@ private:
     
 
     ExpressionInfo findExpressionAt( int line, int col, int startLine, int startCol, bool inFunction = false );
-    SimpleContext* computeFunctionContext( FunctionDom f, int line, int col );
+	SimpleContext* computeFunctionContext( FunctionDom f, int line, int col, SimpleTypeConfiguration& conf );
     
     CppEvaluation::EvaluationResult evaluateExpressionType( int line, int column, SimpleTypeConfiguration& conf, EvaluateExpressionOptions opt = DefaultCompletionOptions  );
     SimpleType unTypeDef( SimpleType scope , QMap<QString, QString>& typedefs );
