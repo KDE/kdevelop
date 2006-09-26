@@ -103,4 +103,14 @@ void SimpleFolderXmlTest::testFolderWithSubFolders_data()
                              "<folder name=\"bar\"></folder></folder>";
 }
 
+void SimpleFolderXmlTest::testFolderWithIncludes()
+{
+    QVERIFY(false);
+}
+
+void SimpleFolderXmlTest::testFolderWithDefines()
+{
+    QVERIFY(false);
+}
+
 #include "folderxmltest.moc"
