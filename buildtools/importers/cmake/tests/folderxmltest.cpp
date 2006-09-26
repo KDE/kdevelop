@@ -24,7 +24,13 @@ QTEST_MAIN(SimpleFolderXmlTest)
 
 void SimpleFolderXmlTest::testEmptyFolder()
 {
-    QVERIFY(false);
+}
+
+void SimpleFolderXmlTest::testEmptyFolder_data()
+{
+    QTest::addColumn<QString>("xml");
+    QTest::newRow("empty folder 1") << "<folder></folder>";
+    QTest::newRow("empty folder 2") << "<folder/>";
 }
 
 void SimpleFolderXmlTest::testNonEmptyFolder()
@@ -32,10 +38,22 @@ void SimpleFolderXmlTest::testNonEmptyFolder()
     QVERIFY(false);
 }
 
+void SimpleFolderXmlTest::testNonEmptyFolder_data()
+{
+    QTest::addColumn<QString>("xml");
+    QTest::newRow("nonempty1") << "<folder name=\"foo\"></folder>"; 
+}
+
 void SimpleFolderXmlTest::testFolderWithSubFolders()
 {
     QVERIFY(false);
 }
 
+void SimpleFolderXmlTest::testFolderWithSubFolders_data()
+{
+    QTest::addColumn<QString>("xml");
+    QTest::newRow("sub1") << "<folder name=\"foo\"><tag1/><tag2/>"
+                             "<folder name=\"bar\"></folder></folder>";
+}
 
 #include "folderxmltest.moc"

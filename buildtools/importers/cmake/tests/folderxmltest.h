@@ -23,9 +23,13 @@
 
 #include <QtTest/QtTest>
 
+
+
 /**
  * Test for all the cmake xml possibilities under
  * @code <folder> @endcode in the cmake information xml
+ * Target definitions are not parsed in this test, but their
+ * presence is acknowledged
  */
 class SimpleFolderXmlTest : public QObject
 {
@@ -35,8 +39,11 @@ public:
 
 private slots:
     void testEmptyFolder();
+    void testEmptyFolder_data();
     void testNonEmptyFolder();
+    void testNonEmptyFolder_data();
     void testFolderWithSubFolders();
+    void testFolderWithSubFolders_data();
 };
 
 #endif
