@@ -82,7 +82,9 @@ KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
     kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
     m_rootItem = new KDevProjectFolderItem( fileName, 0 );
     KUrl cmakeInfoFile(buildDir);
-    cmakeInfoFile.addPath("/cmakeinfo.xml");
+    cmakeInfoFile.adjustPath( KUrl::AddTrailingSlash );
+    cmakeInfoFile.addPath("cmakeinfo.xml");
+    kDebug(9025) << k_funcinfo << "file is " << cmakeInfoFile.path() << endl;
     if ( !cmakeInfoFile.isLocalFile() )
     {
         //FIXME turn this into a real warning
@@ -94,7 +96,7 @@ KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
         if ( cmakeFile.open(QIODevice::ReadOnly) )
         {
             QDomDocument cmakeInfo;
-            if ( cmakeInfo.setContent( &cmakeFile ) )
+            if ( cmakeInfo.setContent( &cmakeFile, false /* no namespaces */ ) )
             {   //start processing
                 QDomElement docElem = cmakeInfo.documentElement();
                 QDomNode n = docElem.firstChild();
