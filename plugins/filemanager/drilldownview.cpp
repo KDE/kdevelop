@@ -23,12 +23,42 @@
 
 #include <kdebug.h>
 
+class DrillDownItemDelegate: public QItemDelegate {
+public:
+    DrillDownItemDelegate(DrillDownView *parent)
+        :QItemDelegate(parent), m_parent(parent)
+    {
+    }
+
+
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
+        const QModelIndex &index) const
+    {
+        QItemDelegate::paint(painter, option, index);
+
+        if (m_parent->model()->hasChildren(index))
+        {
+            QStyleOptionViewItem opt(option);
+            opt.rect.setLeft(opt.rect.width() - 16);
+            m_parent->style()->drawPrimitive(QStyle::PE_IndicatorArrowRight, &opt, painter);
+        }
+    }
+
+private:
+    DrillDownView *m_parent;
+
+};
+
+
+
 DrillDownView::DrillDownView(QWidget *parent)
     :QListView(parent)
 {
     connect(&animation, SIGNAL(frameChanged(int)), this, SLOT(slide(int)));
     connect(&animation, SIGNAL(finished()), this, SLOT(update()));
     animation.setDuration(200);
+
+    setItemDelegate(new DrillDownItemDelegate(this));
 }
 
 void DrillDownView::paintEvent(QPaintEvent *event)
