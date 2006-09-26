@@ -25,6 +25,7 @@
 class KDevDirModel: public KDirModel {
 public:
     KDevDirModel(QObject *parent);
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
 };
 

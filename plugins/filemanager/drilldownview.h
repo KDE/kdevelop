@@ -34,6 +34,9 @@ public slots:
 //     void currentChanged( const QModelIndex &current, const QModelIndex &previous );
     void slide(int x);
 
+signals:
+    void returnPressed(const QModelIndex &index);
+
 protected:
     virtual void paintEvent(QPaintEvent * event);
     virtual void keyPressEvent(QKeyEvent *event);

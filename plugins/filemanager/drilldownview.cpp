@@ -111,6 +111,8 @@ void DrillDownView::keyPressEvent(QKeyEvent *event)
             setUpdatesEnabled(true);
         }
     }
+    if (event->key() == Qt::Key_Return)
+        emit returnPressed(currentIndex());
     QListView::keyPressEvent(event);
 }
 

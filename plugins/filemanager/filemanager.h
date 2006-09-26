@@ -23,6 +23,9 @@
 #include <QtGui/QWidget>
 
 class QTreeView;
+class QModelIndex;
+class KDirModel;
+class KFileItem;
 class DrillDownView;
 class KDevFileManagerPart;
 
@@ -31,9 +34,14 @@ class FileManager: public QWidget {
 public:
     FileManager(KDevFileManagerPart *part);
 
+private slots:
+    void open(const QModelIndex &index);
+    void openFile(KFileItem *fileItem);
+
 private:
     void init();
 
+    KDirModel *m_model;
     DrillDownView *m_view;
     KDevFileManagerPart *m_part;
 

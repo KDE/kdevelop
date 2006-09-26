@@ -30,6 +30,9 @@
 // #include <kdirmodel.h>
 #include <kdirlister.h>
 
+#include "kdevcore.h"
+#include "kdevdocumentcontroller.h"
+
 #include "kdevfilemanagerpart.h"
 #include "drilldownview.h"
 #include "kdevdirmodel.h"
@@ -47,7 +50,6 @@ FileManager::FileManager(KDevFileManagerPart *part)
     l->setSpacing(0);
 
     m_view = new DrillDownView(this);
-//     m_view = new QTreeView(this);
     l->addWidget(m_view);
 
     init();
@@ -55,11 +57,35 @@ FileManager::FileManager(KDevFileManagerPart *part)
 
 void FileManager::init()
 {
-//     QDirModel *model = new QDirModel(this);
-    KDevDirModel *model = new KDevDirModel(this);
-    model->dirLister()->openUrl(KUrl::fromPath("/"));
-    m_view->setModel(model);
-//     m_view->setRootIndex(model->index("/"));
+    m_model = new KDevDirModel(this);
+    m_model->dirLister()->openUrl(KUrl::fromPath("/"));
+    m_view->setModel(m_model);
+
+    connect(m_view, SIGNAL(doubleClicked(const QModelIndex &)),
+        this, SLOT(open(const QModelIndex &)));
+    connect(m_view, SIGNAL(returnPressed(const QModelIndex &)),
+        this, SLOT(open(const QModelIndex &)));
+}
+
+void FileManager::open(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+
+    KFileItem *fileItem = m_model->itemForIndex(index);
+    if (!fileItem)
+        return;
+
+    if (fileItem->isFile())
+        openFile(fileItem);
+}
+
+void FileManager::openFile(KFileItem *fileItem)
+{
+    if (!fileItem)
+        return;
+
+    KDevCore::documentController()->editDocument(fileItem->url());
 }
 
 #include "filemanager.moc"
