@@ -5,4 +5,5 @@ add_subdirectory(codeview)
 add_subdirectory(guibuilder)
 #add_subdirectory(fileselector)
 #add_subdirectory(valgrind)
+add_subdirectory(filemanager)
 
