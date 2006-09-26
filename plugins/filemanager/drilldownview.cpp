@@ -115,7 +115,8 @@ void DrillDownView::keyPressEvent(QKeyEvent *event)
         {
             setUpdatesEnabled(false);
             setRootIndex(current);
-            model()->fetchMore(current);
+            if (model()->canFetchMore(current))
+                model()->fetchMore(current);
             setUpdatesEnabled(true);
         }
         else if (event->key() == Qt::Key_Left)
