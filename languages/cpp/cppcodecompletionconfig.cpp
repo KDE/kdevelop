@@ -47,7 +47,7 @@ void CppCodeCompletionConfig::init( )
 	m_showEvaluationContextMenu = DomUtil::readBoolEntry( *m_dom, defaultPath + "/howEvaluationContextMenu", true );
 	m_showCommentWithArgumentHint = DomUtil::readBoolEntry( *m_dom, defaultPath + "/showCommentWithArgumentHint", true );
 	m_statusBarTypeEvaluation = DomUtil::readBoolEntry( *m_dom, defaultPath + "/statusBarTypeEvaluation", false );
-	m_namespaceAliases = DomUtil::readEntry( *m_dom, defaultPath + "/namespaceAliases", "std=_GLIBCXX_STD;__gnu_cxx<<std" );
+	m_namespaceAliases = DomUtil::readEntry( *m_dom, defaultPath + "/namespaceAliases", "std=_GLIBCXX_STD;__gnu_cxx=std" );
 	m_processPrimaryTypes = DomUtil::readBoolEntry( *m_dom, defaultPath + "/processPrimaryTypes", true );
 	m_processFunctionArguments = DomUtil::readBoolEntry( *m_dom, defaultPath + "/processFunctionArguments", false );
 
