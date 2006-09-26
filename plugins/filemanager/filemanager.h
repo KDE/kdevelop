@@ -23,6 +23,7 @@
 #include <QtGui/QWidget>
 
 class QTreeView;
+class DrillDownView;
 class KDevFileManagerPart;
 
 class FileManager: public QWidget {
@@ -33,7 +34,7 @@ public:
 private:
     void init();
 
-    QTreeView *m_view;
+    DrillDownView *m_view;
     KDevFileManagerPart *m_part;
 
 };

@@ -6,8 +6,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/util ${CMAK
 set(kdevfilemanager_PART_SRCS
     kdevfilemanagerpart.cpp
     filemanager.cpp
-    filelistmodel.cpp
-    filelistmodel_p.cpp
+    drilldownview.cpp
+    kdevdirmodel.cpp
 )
 
 kde4_automoc(${kdevfilemanager_PART_SRCS})

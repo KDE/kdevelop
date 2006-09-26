@@ -27,9 +27,12 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kiconloader.h>
+// #include <kdirmodel.h>
+#include <kdirlister.h>
 
 #include "kdevfilemanagerpart.h"
-#include "filelistmodel.h"
+#include "drilldownview.h"
+#include "kdevdirmodel.h"
 
 FileManager::FileManager(KDevFileManagerPart *part)
     :QWidget(0), m_part(part)
@@ -43,7 +46,8 @@ FileManager::FileManager(KDevFileManagerPart *part)
     l->setMargin(0);
     l->setSpacing(0);
 
-    m_view = new QTreeView(this);
+    m_view = new DrillDownView(this);
+//     m_view = new QTreeView(this);
     l->addWidget(m_view);
 
     init();
@@ -52,9 +56,10 @@ FileManager::FileManager(KDevFileManagerPart *part)
 void FileManager::init()
 {
 //     QDirModel *model = new QDirModel(this);
-    FileListModel *model = new FileListModel(this);
+    KDevDirModel *model = new KDevDirModel(this);
+    model->dirLister()->openUrl(KUrl::fromPath("/"));
     m_view->setModel(model);
-    m_view->setRootIndex(model->index(KUrl::fromPath("/")));
+//     m_view->setRootIndex(model->index("/"));
 }
 
 #include "filemanager.moc"

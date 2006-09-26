@@ -1,4 +1,6 @@
 /***************************************************************************
+ *   Copyright (C) 2005 by Benjamin Meyer                                  *
+ *   ben@meyerhome.net                                                     *
  *   Copyright (C) 2006 by Alexander Dymo                                  *
  *   adymo@kdevelop.org                                                    *
  *                                                                         *
@@ -17,16 +19,31 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef FILELISTMODEL_PRIVATE_H
-#define FILELISTMODEL_PRIVATE_H
+#ifndef DRILLDOWNVIEW_H
+#define DRILLDOWNVIEW_H
 
-#include <kfileitem.h>
+#include <QtGui/QtGui>
 
-#include "kdevstandardtree.h"
+class DrillDownView: public QListView {
+     Q_OBJECT
+public:
+    DrillDownView(QWidget *parent = 0);
+//     QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
 
-typedef KDevStandardTree<const KFileItem*> FileTree;
-typedef KDevStandardNode<const KFileItem*> FileNode;
-typedef KDevStandardTreeVisitor<const KFileItem*> FileTreeVisitor;
-typedef KDevStandardTreeOperator<FileNode> FileTreeOperator;
+public slots:
+//     void currentChanged( const QModelIndex &current, const QModelIndex &previous );
+    void slide(int x);
+
+protected:
+    virtual void paintEvent(QPaintEvent * event);
+    virtual void keyPressEvent(QKeyEvent *event);
+
+private:
+    QTimeLine animation;
+    QPixmap oldView;
+    QPixmap newView;
+    int lastPosition;
+
+};
 
 #endif
