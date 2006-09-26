@@ -38,10 +38,10 @@ public:
     SimpleFolderXmlTest() {}
 
 private slots:
+    void testNonValidFolder();
+    void testNonValidFolder_data();
     void testEmptyFolder();
     void testEmptyFolder_data();
-    void testNonEmptyFolder();
-    void testNonEmptyFolder_data();
     void testFolderWithSubFolders();
     void testFolderWithSubFolders_data();
 };
