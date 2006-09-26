@@ -19,11 +19,6 @@ set(kdevcsharpparser_STAT_SRCS
 # autogenerate the lexer, the two parsers (csharp and csharp_pp)
 # and the KDevelop codemodel
 
-FIND_PROGRAM(FLEX_EXECUTABLE
-    NAMES flex
-    PATHS /usr/bin
-    DOC "Flex executable")
-
 FIND_PROGRAM(KDEVPG_EXECUTABLE
     NAMES kdev-pg
     PATHS /usr/bin
@@ -111,34 +106,29 @@ ELSE(KDEVPG_EXECUTABLE)
         ${kdevcsharpparser_STAT_SRCS})
 ENDIF(KDEVPG_EXECUTABLE)
 
-IF(FLEX_EXECUTABLE)
-    # Add command to generate the lexer.
-    ADD_CUSTOM_COMMAND(
-        OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
-        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.ll"
-                "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/csharp_parser.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp_parser.h"
-        COMMAND ${FLEX_EXECUTABLE}
-        ARGS    -o"csharp_lexer.cpp"
-                "csharp_lexer.ll"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        )
 
-    SET(kdevcsharpparser_STAT_SRCS
-        "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
-        ${kdevcsharpparser_STAT_SRCS})
+# Add command to generate the lexer.
+ADD_CUSTOM_COMMAND(
+    OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.ll"
+            "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/csharp_parser.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp_parser.h"
+    COMMAND ${FLEX_EXECUTABLE}
+    ARGS    -o"csharp_lexer.cpp"
+            "csharp_lexer.ll"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
 
-    SET_SOURCE_FILES_PROPERTIES(
-        "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
-        GENERATED
-        )
-ELSE(FLEX_EXECUTABLE)
-    MESSAGE("--- Assuming existence of the generated lexer file csharp_lexer.cpp")
-    SET(kdevcsharpparser_STAT_SRCS
-        "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
-        ${kdevcsharpparser_STAT_SRCS})
-ENDIF(FLEX_EXECUTABLE)
+SET(kdevcsharpparser_STAT_SRCS
+    "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
+    ${kdevcsharpparser_STAT_SRCS})
+
+SET_SOURCE_FILES_PROPERTIES(
+    "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
+    GENERATED
+    )
+# ...now the lexer has been generated
 
 
 IF(KDEVCMG_EXECUTABLE)

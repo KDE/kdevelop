@@ -11,13 +11,7 @@ set(kdevrubyparser_STAT_SRCS
 )
 
 
-# autogenerate the lexer, the parser
-# and the KDevelop codemodel
-
-find_program(FLEX_EXECUTABLE
-    NAMES flex
-    PATHS /usr/bin
-    DOC "Flex executable")
+# autogenerate the lexer, the parser and the KDevelop codemodel
 
 find_program(KDEVPG_EXECUTABLE
     NAMES kdev-pg
@@ -77,33 +71,28 @@ else(KDEVPG_EXECUTABLE)
         ${kdevrubyparser_STAT_SRCS})
 endif(KDEVPG_EXECUTABLE)
 
-if(FLEX_EXECUTABLE)
-    # Add command to generate the lexer.
-    add_custom_command(
-        OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.cpp"
-        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.ll"
-                "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/ruby_parser.h"
-        COMMAND ${FLEX_EXECUTABLE}
-        ARGS    -o"ruby_lexer.cpp"
-                "ruby_lexer.ll"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        )
 
-    set(kdevrubyparser_STAT_SRCS
-        "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.cpp"
-        ${kdevrubyparser_STAT_SRCS})
+# Add command to generate the lexer.
+add_custom_command(
+    OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.cpp"
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.ll"
+            "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/ruby_parser.h"
+    COMMAND ${FLEX_EXECUTABLE}
+    ARGS    -o"ruby_lexer.cpp"
+            "ruby_lexer.ll"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
 
-    set_source_files_properties(
-        "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.cpp"
-        GENERATED
-        )
-else(FLEX_EXECUTABLE)
-    message("--- Assuming existence of the generated lexer file ruby_lexer.cpp")
-    set(kdevrubyparser_STAT_SRCS
-        "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.cpp"
-        ${kdevrubyparser_STAT_SRCS})
-endif(FLEX_EXECUTABLE)
+set(kdevrubyparser_STAT_SRCS
+    "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.cpp"
+    ${kdevrubyparser_STAT_SRCS})
+
+set_source_files_properties(
+    "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.cpp"
+    GENERATED
+    )
+# ...now the lexer has been generated
 
 
 if(KDEVCMG_EXECUTABLE)

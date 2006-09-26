@@ -13,11 +13,6 @@ set(kdevjavaparser_STAT_SRCS
 
 # autogenerate the lexer and the parser
 
-FIND_PROGRAM(FLEX_EXECUTABLE
-    NAMES flex
-    PATHS /usr/bin
-    DOC "Flex executable")
-
 FIND_PROGRAM(KDEVPG_EXECUTABLE
     NAMES kdev-pg
     PATHS /usr/bin
@@ -70,33 +65,28 @@ ELSE(KDEVPG_EXECUTABLE)
         ${kdevjavaparser_STAT_SRCS})
 ENDIF(KDEVPG_EXECUTABLE)
 
-IF(FLEX_EXECUTABLE)
-    # Add command to generate the lexer.
-    ADD_CUSTOM_COMMAND(
-        OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.cpp"
-        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.ll"
-                "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/java_parser.h"
-        COMMAND ${FLEX_EXECUTABLE}
-        ARGS    -o"java_lexer.cpp"
-                "java_lexer.ll"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        )
 
-    SET(kdevjavaparser_STAT_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.cpp
-        ${kdevjavaparser_STAT_SRCS})
+# Add command to generate the lexer.
+ADD_CUSTOM_COMMAND(
+    OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.cpp"
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.ll"
+            "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/java_parser.h"
+    COMMAND ${FLEX_EXECUTABLE}
+    ARGS    -o"java_lexer.cpp"
+            "java_lexer.ll"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
 
-    SET_SOURCE_FILES_PROPERTIES(
-        ${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.cpp
-        GENERATED
-        )
-ELSE(FLEX_EXECUTABLE)
-    MESSAGE("--- Assuming existence of the generated lexer file java_lexer.cpp")
-    SET(kdevjavaparser_STAT_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.cpp
-        ${kdevjavaparser_STAT_SRCS})
-ENDIF(FLEX_EXECUTABLE)
+SET(kdevjavaparser_STAT_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.cpp
+    ${kdevjavaparser_STAT_SRCS})
+
+SET_SOURCE_FILES_PROPERTIES(
+    ${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.cpp
+    GENERATED
+    )
+# ...now the lexer has been generated
 
 
 kde4_automoc(${kdevjavaparser_STAT_SRCS})
