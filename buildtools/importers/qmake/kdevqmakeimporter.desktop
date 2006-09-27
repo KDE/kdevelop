@@ -1,12 +1,10 @@
 [Desktop Entry]
 Type=Service
-Name=KDevQMakeEditor
-Name[x-test]=xxKDevQMakeEditorxx
+Name=KDevelop QMake Importer
 Comment=Imports and edits qmake projects
-Comment[fr]=Importe et modifie des projets qmake
-Comment[x-test]=xxImports and edits qmake projectsxx
 Icon=gear
-X-KDevelop-Version=4
 ServiceTypes=KDevelop/FileManager
-X-KDevelop-FileManager=
 X-KDE-Library=qmakeimporter
+X-KDE-PluginInfo-Name=KDevQMakeEditor
+X-KDevelop-FileManager=QMake
+X-KDevelop-Version=4

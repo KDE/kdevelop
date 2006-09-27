@@ -1,10 +1,13 @@
 [Desktop Entry]
 Type=Service
 Name=KDevelop Autotools Importer
-Comment=Allows KDevelop to manage projects based on a GNU-based build system
+Comment=Allows KDevelop to manage projects using a GNU-based build system
 Icon=gear
 ServiceTypes=KDevelop/FileManager
 X-KDE-Library=kdevautomakeimporter
+X-KDE-PluginInfo-Author=Matt Rogers
+X-KDE-PluginInfo-Email=mattr@kde.org
+X-KDE-PluginInfo-Version=0.1
 X-KDE-PluginInfo-Name=KDevAutotoolsImporter
-X-KDevelop-FileManager=
+X-KDevelop-FileManager=GNU Autotools
 X-KDevelop-Version=4

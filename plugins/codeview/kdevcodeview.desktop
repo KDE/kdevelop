@@ -12,6 +12,7 @@ X-KDE-Library=kdevcodeview
 X-KDE-PluginInfo-Name=kdevcodeview
 X-KDE-PluginInfo-Author=Adam Treat
 X-KDE-PluginInfo-License=LGPL
+X-KDE-PluginInfo-Version=0.1
 X-KDevelop-Version=4
 X-KDevelop-Category=Project
 X-KDevelop-Properties=CodeNavigation

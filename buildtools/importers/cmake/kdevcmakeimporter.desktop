@@ -9,5 +9,5 @@ X-KDE-PluginInfo-Author=Matt Rogers
 X-KDE-PluginInfo-Email=mattr@kde.org
 X-KDE-PluginInfo-Name=KDevCMakeImporter
 X-KDE-PluginInfo-License=GPL
-X-KDevelop-FileManager=
+X-KDevelop-FileManager=CMake
 X-KDevelop-Version=4

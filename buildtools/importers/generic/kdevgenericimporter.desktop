@@ -6,6 +6,6 @@ Icon=gear
 ServiceTypes=KDevelop/FileManager
 X-KDE-Library=kdevgenericimporter
 X-KDE-PluginInfo-Name=KDevGenericImporter
-X-KDevelop-FileManager=
+X-KDevelop-FileManager=None
 X-KDevelop-Version=4
 
