@@ -101,6 +101,8 @@ void SimpleFolderXmlTest::testFolderWithSubFolders_data()
     QTest::addColumn<QString>("xml");
     QTest::newRow("sub1") << "<folder name=\"foo\"><tag1/><tag2/>"
                              "<folder name=\"bar\"></folder></folder>";
+    QTest::newRow("sub2") << "<folder name=\"foo\"><folder name=\"bar\">"
+                             "</folder></folder>";
 }
 
 void SimpleFolderXmlTest::testFolderWithIncludes()
@@ -108,9 +110,25 @@ void SimpleFolderXmlTest::testFolderWithIncludes()
     QVERIFY(false);
 }
 
+void SimpleFolderXmlTest::testFolderWithIncludes_data()
+{
+    QTest::addColumn<QString>("xml");
+    QTest::newRow("includes1") << "<folder name=\"foo\"><includes>"
+                                  "<include>/path/to/neato/place</include>"
+                                  "</includes></folder>";
+}
+
 void SimpleFolderXmlTest::testFolderWithDefines()
 {
     QVERIFY(false);
+}
+
+void SimpleFolderXmlTest::testFolderWithDefines_data()
+{
+    QTest::addColumn<QString>("xml");
+    QTest::newRow("includes1") << "<folder name=\"foo\"><definitions>"
+                                  "<define>-DQT_NO_STL</define>"
+                                  "</definitions></folder>";
 }
 
 #include "folderxmltest.moc"

@@ -45,9 +45,9 @@ private slots:
     void testFolderWithSubFolders();
     void testFolderWithSubFolders_data();
     void testFolderWithIncludes();
-    //void testFolderWithIncludes_data();
+    void testFolderWithIncludes_data();
     void testFolderWithDefines();
-    //void testFolderWithDefines_data();
+    void testFolderWithDefines_data();
 };
 
 #endif
