@@ -27,6 +27,8 @@ struct FolderInfo
 {
     QString name;
     QList<FolderInfo> subFolders;
+    QStringList includes;
+    QStringList defines;
 };
 
 void SimpleFolderXmlTest::testNonValidFolder()
@@ -107,7 +109,38 @@ void SimpleFolderXmlTest::testFolderWithSubFolders_data()
 
 void SimpleFolderXmlTest::testFolderWithIncludes()
 {
-    QVERIFY(false);
+    QFETCH(QString, xml);
+    QDomDocument doc;
+    QVERIFY( doc.setContent( xml ) );
+    QDomElement docElem = doc.documentElement();
+    FolderInfo mainInfo;
+    mainInfo.name = docElem.attribute( "name" );
+    QDomNode n = docElem.firstChild();
+    while(!n.isNull())
+    {
+        QDomElement e = n.toElement(); // try to convert the node to an element.
+        if(!e.isNull())
+        {
+            if ( e.tagName() == "includes" )
+            {
+                QDomNode in = e.firstChild();
+                while ( !in.isNull() )
+                {
+                    QDomElement ie = in.toElement(); // try to convert the node to an element.
+                    if ( !ie.isNull() )
+                    {
+                        if ( ie.tagName() == "include" )
+                            mainInfo.includes.append( ie.text() );
+                    }
+                    in = in.nextSibling();
+                }
+            }
+        }
+        n = n.nextSibling();
+    }
+    QVERIFY( mainInfo.name.isEmpty() == false );
+    QVERIFY( mainInfo.includes.isEmpty() == false );
+    QVERIFY( mainInfo.includes.count() == 1 );
 }
 
 void SimpleFolderXmlTest::testFolderWithIncludes_data()
@@ -120,15 +153,55 @@ void SimpleFolderXmlTest::testFolderWithIncludes_data()
 
 void SimpleFolderXmlTest::testFolderWithDefines()
 {
-    QVERIFY(false);
+    QFETCH(QString, xml);
+    QDomDocument doc;
+    QVERIFY( doc.setContent( xml ) );
+    QDomElement docElem = doc.documentElement();
+    FolderInfo mainInfo;
+    mainInfo.name = docElem.attribute( "name" );
+    QDomNode n = docElem.firstChild();
+    while( !n.isNull() )
+    {
+        QDomElement e = n.toElement(); // try to convert the node to an element.
+        if( !e.isNull() )
+        {
+            if ( e.tagName() == "definitions" )
+            {
+                QDomNode dn = e.firstChild();
+                while ( !dn.isNull() )
+                {
+                    QDomElement de = dn.toElement(); // try to convert the node to an element.
+                    if ( !de.isNull() )
+                    {
+                        if ( de.tagName() == "define" )
+                            mainInfo.defines.append( de.text() );
+                    }
+                    dn = dn.nextSibling();
+                }
+            }
+        }
+        n = n.nextSibling();
+    }
+    QVERIFY( mainInfo.name.isEmpty() == false );
+    QVERIFY( mainInfo.defines.isEmpty() == false );
+    QVERIFY( mainInfo.defines.count() == 1 );
 }
 
 void SimpleFolderXmlTest::testFolderWithDefines_data()
 {
     QTest::addColumn<QString>("xml");
-    QTest::newRow("includes1") << "<folder name=\"foo\"><definitions>"
+    QTest::newRow("defines1") << "<folder name=\"foo\"><definitions>"
                                   "<define>-DQT_NO_STL</define>"
                                   "</definitions></folder>";
+}
+
+void SimpleFolderXmlTest::fullFolderTest()
+{
+    QVERIFY(false);
+}
+
+void SimpleFolderXmlTest::fullFolderTest_data()
+{
 }
 
 #include "folderxmltest.moc"

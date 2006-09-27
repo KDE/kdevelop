@@ -40,14 +40,22 @@ public:
 private slots:
     void testNonValidFolder();
     void testNonValidFolder_data();
+
     void testEmptyFolder();
     void testEmptyFolder_data();
+
     void testFolderWithSubFolders();
     void testFolderWithSubFolders_data();
+
     void testFolderWithIncludes();
     void testFolderWithIncludes_data();
+
     void testFolderWithDefines();
     void testFolderWithDefines_data();
+
+    void fullFolderTest();
+    void fullFolderTest_data();
 };
+
 
 #endif
