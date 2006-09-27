@@ -1298,7 +1298,7 @@ bool Parser::parseAbstractDeclarator(DeclaratorAST *&node)
 
  label1:
   {
-    bool isVector = true;
+    bool isVector = false;
 
     while (session->token_stream->lookAhead() == '[')
       {
