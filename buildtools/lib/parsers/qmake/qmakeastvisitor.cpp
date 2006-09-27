@@ -29,8 +29,8 @@ void ASTVisitor::processProject(ProjectAST *project)
         enterScope(project);
     else if (project->isFunctionScope())
         enterFunctionScope(project);
-    for (QValueList<QMake::AST*>::const_iterator it = project->statements.constBegin();
-            it != project->statements.constEnd(); ++it)
+    for (QValueList<QMake::AST*>::const_iterator it = project->m_children.constBegin();
+         it != project->m_children.constEnd(); ++it)
     {
         AST *ast = *it;
         if (ast == 0)
@@ -50,10 +50,6 @@ void ASTVisitor::processProject(ProjectAST *project)
 
             case AST::ProjectAST:
                 processProject(static_cast<QMake::ProjectAST*>(ast));
-                break;
-
-            case AST::FunctionCallAST:
-                processFunctionCall(static_cast<QMake::FunctionCallAST*>(ast));
                 break;
 
             case AST::IncludeAST:

@@ -38,7 +38,6 @@ public:
     virtual void processAssignment(AssignmentAST *assignment) {}
     virtual void processNewLine(NewLineAST *newline) {}
     virtual void processComment(CommentAST *comment) {}
-    virtual void processFunctionCall(FunctionCallAST *fcall) {}
     virtual void processInclude(IncludeAST *include) {}
 };
 

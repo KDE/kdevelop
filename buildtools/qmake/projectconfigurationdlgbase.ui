@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>536</width>
-            <height>680</height>
+            <width>557</width>
+            <height>712</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -34,9 +34,6 @@
             </property>
             <property name="text">
                 <string>&amp;Cancel</string>
-            </property>
-            <property name="accel">
-                <string>Alt+C</string>
             </property>
         </widget>
         <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="4">
@@ -138,10 +135,10 @@
                                     <cstring>radioApplication</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Appli&amp;cation</string>
+                                    <string>Applicati&amp;on</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+C</string>
+                                    <string>Alt+O</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Create an application</string>
@@ -207,6 +204,9 @@
                                 <property name="text">
                                     <string>&amp;Browse...</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+B</string>
+                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Browse</string>
                                 </property>
@@ -235,6 +235,9 @@
                                 </property>
                                 <property name="text">
                                     <string>I&amp;nstall</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+N</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="0" column="1">
@@ -298,29 +301,15 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>checkDontInheritConfig</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Do &amp;not inherit the default configuration options</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+N</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Reset the configuration options in the profile</string>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>Checking this option resets the configuration variables in the project file. Unchecking appends the selected options to the variables</string>
-                        </property>
-                    </widget>
                     <widget class="QButtonGroup">
                         <property name="name">
                             <cstring>groupBuildMode</cstring>
                         </property>
                         <property name="title">
                             <string>Build Mode</string>
+                        </property>
+                        <property name="selectedId" stdset="0">
+                            <number>-1</number>
                         </property>
                         <property name="toolTip" stdset="0">
                             <string>Set project to be built in release mode</string>
@@ -379,7 +368,8 @@
                                             <string></string>
                                         </property>
                                         <property name="toolTip" stdset="0">
-                                            <string>Set project to be built in debug_and_release mode</string>
+                                            <string>Set project to be built in debug_and_release mod
+e</string>
                                         </property>
                                     </widget>
                                 </hbox>
@@ -435,17 +425,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QCheckBox" row="2" column="0">
-                                <property name="name">
-                                    <cstring>stlCheck</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;STL</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+S</string>
-                                </property>
-                            </widget>
                             <widget class="QCheckBox" row="1" column="0">
                                 <property name="name">
                                     <cstring>checkOpenGL</cstring>
@@ -460,18 +439,15 @@
                                     <string>Requires the OpenGL (or Mesa) headers/libraries</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="0" column="0">
+                            <widget class="QCheckBox" row="2" column="0">
                                 <property name="name">
-                                    <cstring>checkQt</cstring>
+                                    <cstring>stlCheck</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Qt</string>
+                                    <string>&amp;STL</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+Q</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Requires the Qt header files/library</string>
+                                    <string>Alt+S</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="0" column="1">
@@ -488,6 +464,20 @@
                                     <string>Requires support for multi-threaded application or library.</string>
                                 </property>
                             </widget>
+                            <widget class="QCheckBox" row="0" column="0">
+                                <property name="name">
+                                    <cstring>checkQt</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Qt</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+Q</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Requires the Qt header files/library</string>
+                                </property>
+                            </widget>
                             <widget class="QCheckBox" row="1" column="1">
                                 <property name="name">
                                     <cstring>checkX11</cstring>
@@ -502,6 +492,14 @@
                                     <string>Support required for X11 application or library</string>
                                 </property>
                             </widget>
+                            <widget class="QCheckBox" row="2" column="2">
+                                <property name="name">
+                                    <cstring>checkPCH</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Precompiled headers</string>
+                                </property>
+                            </widget>
                             <widget class="QCheckBox" row="2" column="1">
                                 <property name="name">
                                     <cstring>rttiCheck</cstring>
@@ -513,12 +511,20 @@
                                     <string>Alt+I</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="2" column="2">
+                            <widget class="QCheckBox" row="3" column="0">
                                 <property name="name">
-                                    <cstring>checkPCH</cstring>
+                                    <cstring>checkWindows</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Precompiled headers</string>
+                                    <string>Windows</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="4" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1_4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Custom Configuration</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="0" column="2">
@@ -532,12 +538,9 @@
                                     <string>Alt+X</string>
                                 </property>
                             </widget>
-                            <widget class="QLabel" row="3" column="0">
+                            <widget class="KLineEdit" row="4" column="1" rowspan="1" colspan="2">
                                 <property name="name">
-                                    <cstring>textLabel1_4</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Custom configuration:</string>
+                                    <cstring>editConfigExtra</cstring>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="1" column="2">
@@ -557,19 +560,11 @@
                                     <string>Check to build a win32 console app</string>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit" row="3" column="1" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>editConfigExtra</cstring>
-                                </property>
-                                <property name="readOnly">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
                         </grid>
                     </widget>
                     <widget class="QButtonGroup">
                         <property name="name">
-                            <cstring>qt4Group</cstring>
+                            <cstring>groupQt4Libs</cstring>
                         </property>
                         <property name="enabled">
                             <bool>false</bool>
@@ -687,7 +682,7 @@
                     </widget>
                     <widget class="QButtonGroup">
                         <property name="name">
-                            <cstring>libGroup</cstring>
+                            <cstring>groupLibraries</cstring>
                         </property>
                         <property name="title">
                             <string>Library Options</string>
@@ -871,7 +866,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>80</height>
+                                <height>20</height>
                             </size>
                         </property>
                     </spacer>
@@ -906,6 +901,9 @@
                                 <property name="text">
                                     <string>Move &amp;Up</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
+                                </property>
                             </widget>
                             <widget class="KPushButton">
                                 <property name="name">
@@ -913,6 +911,9 @@
                                 </property>
                                 <property name="text">
                                     <string>Move &amp;Down</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+D</string>
                                 </property>
                             </widget>
                             <spacer>
@@ -987,6 +988,9 @@
                                 <property name="text">
                                     <string>&amp;Add...</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+A</string>
+                                </property>
                             </widget>
                             <widget class="KPushButton">
                                 <property name="name">
@@ -994,6 +998,9 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Remove</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+R</string>
                                 </property>
                             </widget>
                             <widget class="KPushButton">
@@ -1003,6 +1010,9 @@
                                 <property name="text">
                                     <string>&amp;Edit</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+E</string>
+                                </property>
                             </widget>
                             <widget class="KPushButton">
                                 <property name="name">
@@ -1011,6 +1021,9 @@
                                 <property name="text">
                                     <string>Move U&amp;p</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+P</string>
+                                </property>
                             </widget>
                             <widget class="KPushButton">
                                 <property name="name">
@@ -1018,6 +1031,9 @@
                                 </property>
                                 <property name="text">
                                     <string>Move Dow&amp;n</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+N</string>
                                 </property>
                             </widget>
                             <spacer>
@@ -1063,7 +1079,7 @@
                             <widget class="QListView">
                                 <column>
                                     <property name="text">
-                                        <string>External Libraries</string>
+                                        <string>External Library Dirs</string>
                                     </property>
                                     <property name="clickable">
                                         <bool>true</bool>
@@ -1159,7 +1175,7 @@
                             <widget class="QListView">
                                 <column>
                                     <property name="text">
-                                        <string>Internal Libraries</string>
+                                        <string>External Libraries</string>
                                     </property>
                                     <property name="clickable">
                                         <bool>true</bool>
@@ -1374,6 +1390,9 @@
                                         <property name="text">
                                             <string>Move &amp;Up</string>
                                         </property>
+                                        <property name="accel">
+                                            <string>Alt+U</string>
+                                        </property>
                                     </widget>
                                     <widget class="KPushButton">
                                         <property name="name">
@@ -1381,6 +1400,9 @@
                                         </property>
                                         <property name="text">
                                             <string>Move &amp;Down</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+D</string>
                                         </property>
                                     </widget>
                                     <spacer>
@@ -1446,6 +1468,9 @@
                                         <property name="text">
                                             <string>&amp;Add...</string>
                                         </property>
+                                        <property name="accel">
+                                            <string>Alt+A</string>
+                                        </property>
                                     </widget>
                                     <widget class="KPushButton">
                                         <property name="name">
@@ -1453,6 +1478,9 @@
                                         </property>
                                         <property name="text">
                                             <string>&amp;Remove</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+R</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -1884,6 +1912,17 @@
                                 </column>
                                 <column>
                                     <property name="text">
+                                        <string>Operator</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
                                         <string>Value</string>
                                     </property>
                                     <property name="clickable">
@@ -1928,6 +1967,9 @@
                                                 </property>
                                                 <property name="text">
                                                     <string>&amp;New</string>
+                                                </property>
+                                                <property name="accel">
+                                                    <string>Alt+N</string>
                                                 </property>
                                             </widget>
                                             <widget class="KPushButton">
@@ -1979,21 +2021,49 @@
                     </widget>
                     <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>layout25</cstring>
+                            <cstring>layout39</cstring>
                         </property>
-                        <hbox>
+                        <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLabel">
+                            <widget class="KComboBox" row="1" column="1">
+                                <item>
+                                    <property name="text">
+                                        <string>+=</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>=</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>-=</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>customVariableOp</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
                                 <property name="name">
                                     <cstring>textLabel1_3</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
                                 </property>
                                 <property name="text">
                                     <string>Name:</string>
                                 </property>
                             </widget>
-                            <widget class="KLineEdit">
+                            <widget class="KLineEdit" row="1" column="0">
                                 <property name="name">
                                     <cstring>customVariableName</cstring>
                                 </property>
@@ -2001,20 +2071,31 @@
                                     <sizepolicy>
                                         <hsizetype>7</hsizetype>
                                         <vsizetype>0</vsizetype>
-                                        <horstretch>1</horstretch>
+                                        <horstretch>3</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
                             </widget>
-                            <widget class="QLabel">
+                            <widget class="KPushButton" row="0" column="3">
                                 <property name="name">
-                                    <cstring>textLabel2</cstring>
+                                    <cstring>varEdit_button</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>1</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>Value:</string>
+                                    <string>&amp;Update</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
                                 </property>
                             </widget>
-                            <widget class="KLineEdit">
+                            <widget class="KLineEdit" row="1" column="2" rowspan="1" colspan="2">
                                 <property name="name">
                                     <cstring>customVariableData</cstring>
                                 </property>
@@ -2022,41 +2103,32 @@
                                     <sizepolicy>
                                         <hsizetype>7</hsizetype>
                                         <vsizetype>0</vsizetype>
-                                        <horstretch>1</horstretch>
+                                        <horstretch>2</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
                             </widget>
-                            <widget class="KPushButton">
+                            <widget class="QLabel" row="0" column="2">
                                 <property name="name">
-                                    <cstring>varEdit_button</cstring>
+                                    <cstring>textLabel2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Update</string>
+                                    <string>Value:</string>
                                 </property>
                             </widget>
-                        </hbox>
+                        </grid>
                     </widget>
                 </vbox>
             </widget>
         </widget>
-        <spacer row="1" column="0">
-            <property name="name">
-                <cstring>Spacer1_2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>270</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="KPushButton" row="1" column="1">
             <property name="name">
                 <cstring>buttonOk</cstring>
@@ -2071,28 +2143,56 @@
                 <bool>true</bool>
             </property>
         </widget>
-        <widget class="QPushButton" row="1" column="2">
+        <spacer row="1" column="0">
+            <property name="name">
+                <cstring>Spacer1_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>260</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="KPushButton" row="1" column="2">
             <property name="name">
                 <cstring>buttonApply</cstring>
             </property>
-            <property name="enabled">
-                <bool>false</bool>
-            </property>
             <property name="text">
-                <string>&amp;Apply</string>
+                <string>Appl&amp;y</string>
             </property>
             <property name="accel">
-                <string>Alt+A</string>
+                <string>Alt+Y</string>
             </property>
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>Browse</sender>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>browseTargetPath()</slot>
+    </connection>
+    <connection>
+        <sender>buildmovedown_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>buildorderMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>buildmoveup_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>buildorderMoveUpClicked()</slot>
     </connection>
     <connection>
         <sender>buttonApply</sender>
@@ -2114,21 +2214,9 @@
     </connection>
     <connection>
         <sender>checkInstallTarget</sender>
-        <signal>clicked()</signal>
+        <signal>toggled(bool)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>slotInstallTargetClicked()</slot>
-    </connection>
-    <connection>
-        <sender>checkPlugin</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>checkPluginChanged()</slot>
-    </connection>
-    <connection>
-        <sender>checkQt</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>qtRequirementChanged()</slot>
+        <slot>targetInstallChanged(bool)</slot>
     </connection>
     <connection>
         <sender>customVariables</sender>
@@ -2173,16 +2261,46 @@
         <slot>activateApply(int)</slot>
     </connection>
     <connection>
-        <sender>groupRequirements</sender>
+        <sender>groupLibraries</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>groupLibrariesChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>groupQt4Libs</sender>
         <signal>clicked(int)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>activateApply(int)</slot>
     </connection>
     <connection>
+        <sender>groupRequirements</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>groupRequirementsChanged(int)</slot>
+    </connection>
+    <connection>
         <sender>groupTemplate</sender>
         <signal>clicked(int)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(int)</slot>
+        <slot>groupTemplateChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>idlCmdEdit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>idlCmdEdit</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>idlCmdOptionsEdit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
     </connection>
     <connection>
         <sender>insideIncMoveDownBtn</sender>
@@ -2221,10 +2339,82 @@
         <slot>intMoveUp_button_clicked()</slot>
     </connection>
     <connection>
-        <sender>libGroup</sender>
-        <signal>clicked(int)</signal>
+        <sender>makefile_url</sender>
+        <signal>textChanged(const QString&amp;)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(int)</slot>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>makefile_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_debugFlags</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_defines</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_InstallTargetPath</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>mocdir_url</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>mocdir_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_releaseFlags</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_targetLibraryVersion</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_targetOutputFile</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_targetPath</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>objdir_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>objdir_url</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
     </connection>
     <connection>
         <sender>outsideIncAddBtn</sender>
@@ -2284,7 +2474,7 @@
         <sender>outsideLibDirMoveUpBtn</sender>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibMoveUpClicked()</slot>
+        <slot>outsideLibDirMoveUpClicked()</slot>
     </connection>
     <connection>
         <sender>outsideLibDirRemoveBtn</sender>
@@ -2317,52 +2507,28 @@
         <slot>outsideLibRemoveClicked()</slot>
     </connection>
     <connection>
-        <sender>qt4Group</sender>
-        <signal>clicked(int)</signal>
+        <sender>rccdir_url</sender>
+        <signal>textChanged(const QString&amp;)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(int)</slot>
+        <slot>activateApply(const QString&amp;)</slot>
     </connection>
     <connection>
-        <sender>radioApplication</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>checkOrdered</receiver>
-        <slot>setDisabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>radioLibrary</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>checkOrdered</receiver>
-        <slot>setDisabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>radioLibrary</sender>
-        <signal>stateChanged(int)</signal>
+        <sender>rccdir_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>templateLibraryClicked(int)</slot>
+        <slot>activateApply(const QString&amp;)</slot>
     </connection>
     <connection>
-        <sender>radioSubdirs</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>checkOrdered</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>radioSubdirs</sender>
-        <signal>stateChanged(int)</signal>
+        <sender>uidir_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>clickSubdirsTemplate()</slot>
+        <slot>activateApply(const QString&amp;)</slot>
     </connection>
     <connection>
-        <sender>sharedRadio</sender>
-        <signal>stateChanged(int)</signal>
+        <sender>uidir_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>sharedLibChanged()</slot>
-    </connection>
-    <connection>
-        <sender>staticRadio</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>slotStaticLibClicked(int)</slot>
+        <slot>activateApply(const QString&amp;)</slot>
     </connection>
     <connection>
         <sender>varAdd_button</sender>
@@ -2395,136 +2561,40 @@
         <slot>removeCustomValueClicked()</slot>
     </connection>
     <connection>
-        <sender>m_targetPath</sender>
-        <signal>textChanged(const QString&amp;)</signal>
+        <sender>insideinc_listview</sender>
+        <signal>clicked(QListViewItem*)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
+        <slot>activateApply(QListViewItem*)</slot>
     </connection>
     <connection>
-        <sender>m_targetOutputFile</sender>
-        <signal>textChanged(const QString&amp;)</signal>
+        <sender>insidelib_listview</sender>
+        <signal>clicked(QListViewItem*)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
+        <slot>activateApply(QListViewItem*)</slot>
     </connection>
     <connection>
-        <sender>makefile_url</sender>
-        <signal>textChanged(const QString&amp;)</signal>
+        <sender>intDeps_view</sender>
+        <signal>clicked(QListViewItem*)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
+        <slot>activateApply(QListViewItem*)</slot>
     </connection>
     <connection>
-        <sender>makefile_url</sender>
-        <signal>urlSelected(const QString&amp;)</signal>
+        <sender>insideinc_listview</sender>
+        <signal>spacePressed(QListViewItem*)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
+        <slot>activateApply(QListViewItem*)</slot>
     </connection>
     <connection>
-        <sender>m_InstallTargetPath</sender>
-        <signal>textChanged(const QString&amp;)</signal>
+        <sender>intDeps_view</sender>
+        <signal>spacePressed(QListViewItem*)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
+        <slot>activateApply(QListViewItem*)</slot>
     </connection>
     <connection>
-        <sender>checkInstallTarget</sender>
-        <signal>stateChanged(int)</signal>
+        <sender>insidelib_listview</sender>
+        <signal>spacePressed(QListViewItem*)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(int)</slot>
-    </connection>
-    <connection>
-        <sender>checkDontInheritConfig</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(int)</slot>
-    </connection>
-    <connection>
-        <sender>m_targetLibraryVersion</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>m_debugFlags</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>m_releaseFlags</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>m_defines</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>mocdir_url</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>mocdir_url</sender>
-        <signal>urlSelected(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>objdir_url</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>objdir_url</sender>
-        <signal>urlSelected(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>uidir_url</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>uidir_url</sender>
-        <signal>urlSelected(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>idlCmdEdit</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>idlCmdEdit</sender>
-        <signal>urlSelected(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>idlCmdOptionsEdit</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>rccdir_url</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>rccdir_url</sender>
-        <signal>urlSelected(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
+        <slot>activateApply(QListViewItem*)</slot>
     </connection>
 </connections>
 <tabstops>
@@ -2538,7 +2608,6 @@
     <tabstop>m_InstallTargetPath</tabstop>
     <tabstop>makefile_url</tabstop>
     <tabstop>TabBuild</tabstop>
-    <tabstop>checkDontInheritConfig</tabstop>
     <tabstop>radioDebugMode</tabstop>
     <tabstop>radioReleaseMode</tabstop>
     <tabstop>checkWarning</tabstop>
@@ -2615,8 +2684,7 @@
 </includes>
 <slots>
     <slot>browseTargetPath()</slot>
-    <slot>clickSubdirsTemplate()</slot>
-    <slot>templateLibraryClicked( int )</slot>
+    <slot>updateProjectConfiguration()</slot>
     <slot>buildorderMoveUpClicked()</slot>
     <slot>buildorderMoveDownClicked()</slot>
     <slot>outsideIncMoveUpClicked()</slot>
@@ -2638,10 +2706,6 @@
     <slot>outsideLibDirEditClicked()</slot>
     <slot>outsideLibEditClicked()</slot>
     <slot>outsideIncEditClicked()</slot>
-    <slot>prjDepsMoveUpClicked()</slot>
-    <slot>prjDepsMoveDownClicked()</slot>
-    <slot>slotStaticLibClicked( int )</slot>
-    <slot>slotInstallTargetClicked()</slot>
     <slot>intMoveUp_button_clicked()</slot>
     <slot>intMoveDown_button_clicked()</slot>
     <slot>extAdd_button_clicked()</slot>
@@ -2649,20 +2713,20 @@
     <slot>extEdit_button_clicked()</slot>
     <slot>extMoveUp_button_clicked()</slot>
     <slot>extMoveDown_button_clicked()</slot>
-    <slot>qtRequirementChanged()</slot>
     <slot>removeCustomValueClicked()</slot>
     <slot>upCustomValueClicked()</slot>
     <slot>downCustomValueClicked()</slot>
     <slot>newCustomVariableActive()</slot>
-    <slot>customVariables_selectionChanged()</slot>
     <slot>editCustomValueClicked()</slot>
-    <slot>checkPluginChanged()</slot>
     <slot>addCustomValueClicked()</slot>
-    <slot>radioSharedLibChanged()</slot>
-    <slot>sharedLibChanged()</slot>
+    <slot>groupRequirementsChanged(int)</slot>
+    <slot>groupLibrariesChanged(int)</slot>
+    <slot>groupTemplateChanged(int)</slot>
+    <slot>targetInstallChanged(bool)</slot>
     <slot>apply()</slot>
     <slot>activateApply(int)</slot>
     <slot>activateApply(const QString&amp;)</slot>
+    <slot>activateApply(QListViewItem*)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
@@ -2675,6 +2739,7 @@
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
@@ -2728,7 +2793,9 @@
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kcombobox.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>

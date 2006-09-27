@@ -61,8 +61,8 @@ QStringList QMakeFolderModel::readAssignment( const QString& scopeid, QString &m
 	QStringList values;
 	if( ast == 0)
 		return values;
-	QValueList<QMake::AST*>::iterator it = ast->statements.begin();
-	for(; it != ast->statements.end(); ++it)
+	QValueList<QMake::AST*>::iterator it = ast->m_children.begin();
+	for(; it != ast->m_children.end(); ++it)
 	{
 		if( (*it)->nodeType() == AST::AssignmentAST )
 		{
@@ -94,8 +94,8 @@ QStringList QMakeFolderModel::readAssignment( const QString& scopeid, QString &m
 QStringList QMakeFolderModel::config() const
 {
 	QStringList confvars;
-	QValueList<QMake::AST*>::iterator it = ast->statements.begin();
-	for(; it != ast->statements.end(); ++it)
+	QValueList<QMake::AST*>::iterator it = ast->m_children.begin();
+	for(; it != ast->m_children.end(); ++it)
 	{
 		if( (*it)->nodeType() == AST::AssignmentAST )
 		{
@@ -126,8 +126,8 @@ QStringList QMakeFolderModel::config() const
 void QMakeFolderModel::setConfig( const QStringList &conf )
 {
 	QMake::AssignmentAST *assn = 0;
-	QValueList<QMake::AST*>::iterator it = ast->statements.begin();
-	for(; it != ast->statements.end(); ++it)
+	QValueList<QMake::AST*>::iterator it = ast->m_children.begin();
+	for(; it != ast->m_children.end(); ++it)
 	{
 		if( (*it)->nodeType() == AST::AssignmentAST )
 		{
@@ -141,7 +141,7 @@ void QMakeFolderModel::setConfig( const QStringList &conf )
 
 	if( conf.isEmpty() && assn )
 	{
-		ast->statements.remove(assn);
+		ast->m_children.remove(assn);
 		delete assn;
 		return;
 	}
@@ -151,7 +151,7 @@ void QMakeFolderModel::setConfig( const QStringList &conf )
 		assn = new QMake::AssignmentAST();
 		assn->scopedID = "CONFIG";
 		assn->op = "+=";
-		ast->statements += assn;
+		ast->m_children += assn;
 	}
 	
 	assn->values = conf;
@@ -161,8 +161,8 @@ void QMakeFolderModel::setConfig( const QStringList &conf )
 void QMakeFolderModel::writeScopeID( const QString &scopeid, const QString &mode, const QStringList values )
 {	
 	QMake::AssignmentAST *assn = 0;
-	QValueList<QMake::AST*>::iterator it = ast->statements.begin();
-	for(; it != ast->statements.end(); ++it)
+	QValueList<QMake::AST*>::iterator it = ast->m_children.begin();
+	for(; it != ast->m_children.end(); ++it)
 	{
 		if( (*it)->nodeType() == AST::AssignmentAST )
 		{
@@ -176,7 +176,7 @@ void QMakeFolderModel::writeScopeID( const QString &scopeid, const QString &mode
 	
 	if( values.isEmpty() && assn )
 	{
-		ast->statements.remove(assn);
+		ast->m_children.remove(assn);
 		delete assn;
 		return;
     }
@@ -186,7 +186,7 @@ void QMakeFolderModel::writeScopeID( const QString &scopeid, const QString &mode
         assn = new QMake::AssignmentAST();
         assn->scopedID = scopeid;
         assn->op = mode;
-        ast->statements += assn;
+        ast->m_children += assn;
     }
 
     QStringList::ConstIterator value = values.begin();
@@ -197,8 +197,8 @@ QStringList  QMakeFolderModel::assignmentNames( ) const
 {
     QStringList returnList;
     QMake::AssignmentAST *assn = 0;
-    QValueList<QMake::AST*>::iterator it = ast->statements.begin();
-    for(; it != ast->statements.end(); ++it)
+    QValueList<QMake::AST*>::iterator it = ast->m_children.begin();
+    for(; it != ast->m_children.end(); ++it)
     {
         if( (*it)->nodeType() == AST::AssignmentAST )
         {

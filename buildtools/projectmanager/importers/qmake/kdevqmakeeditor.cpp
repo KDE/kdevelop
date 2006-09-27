@@ -147,8 +147,8 @@ ProjectFolderList KDevQMakeEditor::parse(ProjectFolderDom dom)
 
     //-------------
     //adding scopes and function scopes
-    for (QValueList<QMake::AST*>::iterator it = qmakeDom->ast->statements.begin();
-        it != qmakeDom->ast->statements.end(); ++it)
+    for (QValueList<QMake::AST*>::iterator it = qmakeDom->ast->m_children.begin();
+        it != qmakeDom->ast->m_children.end(); ++it)
     {
         if ((*it)->nodeType() == AST::ProjectAST)
             newFolderDom(folderList, dom, *it);

@@ -232,9 +232,10 @@ void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
     vbox = dlg->addVBoxPage(i18n("QMake Manager Options"), i18n("QMake Manager Options"), BarIcon( "make", KIcon::SizeMedium ));
     QMakeOptionsWidget *qm = new QMakeOptionsWidget(*projectDom(), "/kdevtrollproject", vbox);
 
+
     connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
-    connect( dlg, SIGNAL(okClicked()), optdlg, SLOT(accept()) );
     connect( dlg, SIGNAL(okClicked()), qm, SLOT(accept()) );
+    connect( dlg, SIGNAL(okClicked()), optdlg, SLOT(accept()) );
 }
 
 
@@ -325,15 +326,15 @@ QString TrollProjectPart::runDirectory() const
     if ( directoryRadioString == "custom" )
         return DomUtil::readEntry(dom, "/kdevtrollproject/run/customdirectory");
 
-    int pos = DomMainProgram.findRev('/');
+    int pos = DomMainProgram.findRev(QDir::separator());
     if (pos != -1)
-        return buildDirectory() + "/" + DomMainProgram.left(pos);
+        return buildDirectory() + QDir::separator() + DomMainProgram.left(pos);
 
     if ( DomMainProgram.isEmpty() )
     {
         return m_widget->subprojectDirectory();
     }
-    return buildDirectory() + "/" + DomMainProgram;
+    return buildDirectory() + QDir::separator() + DomMainProgram;
 
 }
 
@@ -358,16 +359,16 @@ QString TrollProjectPart::mainProgram(bool relative) const
         return DomMainProgram;
 
     if ( relative == false && !DomMainProgram.isEmpty() )
-        return buildDirectory() + "/" + DomMainProgram;
+        return buildDirectory() + QDir::separator() + DomMainProgram;
 
     if ( directoryRadioString == "executable" ) {
-        int pos = DomMainProgram.findRev('/');
+        int pos = DomMainProgram.findRev(QDir::separator());
         if (pos != -1)
             return DomMainProgram.mid(pos+1);
 
         if ( DomMainProgram.isEmpty() )
         {
-            return runDirectory() + "/" + m_widget->getCurrentOutputFilename();
+            return runDirectory() + QDir::separator() + m_widget->getCurrentOutputFilename();
         }
         return DomMainProgram;
     }
@@ -410,8 +411,8 @@ void TrollProjectPart::addFiles ( const QStringList &fileList )
     QStringList files = fileList;
     for (QStringList::iterator it = files.begin(); it != files.end(); ++it)
 //        if (!(*it).contains(projectDirectory()))
-        if (!isProjectFile(projectDirectory() + "/" + (*it)))
-            *it = projectDirectory() + "/" + (*it);
+        if (!isProjectFile(projectDirectory() + QDir::separator() + (*it)))
+            *it = projectDirectory() + QDir::separator() + (*it);
 
     m_widget->addFiles(files);
 
@@ -503,7 +504,7 @@ void TrollProjectPart::startQMakeCommand(const QString &dir)
     	cmdline = "tmake ";
     }else
     {
-	cmdline = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "")+"/bin/";
+      cmdline = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "")+QDir::separator()+"bin"+QDir::separator();
 	cmdline += "qmake ";
     }
 
@@ -581,16 +582,17 @@ KDevProject::Options TrollProjectPart::options( ) const
 
 bool TrollProjectPart::isValidQtDir( const QString& path ) const
 {
-    return QFile::exists( path + "/include/qt.h" ) || QFile::exists( path + "/include/Qt/qglobal.h" ) ;
+  return QFile::exists( path + QDir::separator()+"include"+QDir::separator()+"qt.h" ) || QFile::exists( path +
+                        QDir::separator()+"include"+QDir::separator()+"Qt"+QDir::separator()+"qglobal.h" ) ;
 }
 
 QStringList TrollProjectPart::availableQtDirList() const
 {
     QStringList qtdirs, lst;
     qtdirs.push_back( ::getenv("QTDIR") );
-    qtdirs.push_back( "/usr/lib/qt3" );
-    qtdirs.push_back( "/usr/lib/qt" );
-    qtdirs.push_back( "/usr/share/qt3" );
+    qtdirs.push_back( QDir::rootDirPath()+"usr"+QDir::separator()+"lib"+QDir::separator()+"qt3" );
+    qtdirs.push_back( QDir::rootDirPath()+"usr"+QDir::separator()+"lib"+QDir::separator()+"qt" );
+    qtdirs.push_back( QDir::rootDirPath()+"usr"+QDir::separator()+"share"+QDir::separator()+"qt3" );
 
     for( QStringList::Iterator it=qtdirs.begin(); it!=qtdirs.end(); ++it )
     {
@@ -606,20 +608,20 @@ QStringList recursiveProFind( const QString &currDir, const QString &baseDir )
 	kdDebug() << "Dir " << currDir << endl;
 	QStringList fileList;
 
-	if( !currDir.contains( "/..") && !currDir.contains("/.") )
+    if( !currDir.contains( QDir::separator()+"..") && !currDir.contains(QDir::separator()+".") )
 	{
 		QDir dir(currDir);
 		QStringList dirList = dir.entryList(QDir::Dirs );
 		QStringList::Iterator idx = dirList.begin();
 		for( ; idx != dirList.end(); ++idx )
 		{
-			fileList += recursiveProFind( currDir + "/" + (*idx),baseDir );
+          fileList += recursiveProFind( currDir + QDir::separator() + (*idx),baseDir );
 		}
 		QStringList newFiles = dir.entryList("*.pro *.PRO");
 		idx = newFiles.begin();
 		for( ; idx != newFiles.end(); ++idx )
 		{
-			QString file = currDir + "/" + (*idx);
+            QString file = currDir + QDir::separator() + (*idx);
 			fileList.append( file.remove( baseDir ) );
 		}
 	}
@@ -636,7 +638,7 @@ QStringList TrollProjectPart::distFiles() const
 	QStringList sourceList = allFiles();
 	// Scan current source directory for any .pro files.
 	QString projectDir = projectDirectory();
-	QStringList files = recursiveProFind( projectDir, projectDir + "/" );
+	QStringList files = recursiveProFind( projectDir, projectDir + QDir::separator() );
 	return sourceList + files;
 }
 

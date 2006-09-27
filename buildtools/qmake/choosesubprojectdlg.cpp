@@ -13,6 +13,7 @@
 #include "trollprojectwidget.h"
 
 #include "choosesubprojectdlg.h"
+#include "scope.h"
 
 ChooseSubprojectDlg::ChooseSubprojectDlg(TrollProjectWidget *widget, QWidget* parent, const char* name, bool modal, WFlags fl)
     : ChooseSubprojectDlgBase(parent,name, modal,fl), m_widget(widget)
@@ -38,23 +39,23 @@ void ChooseSubprojectDlg::accept()
     ChooseItem *item = dynamic_cast<ChooseItem*>(subprojects_view->currentItem());
     if (!item)
         return;
-    if (item->subproject()->configuration.m_template == QTMP_SUBDIRS)
+    if (item->subproject()->scope->variableValues("TEMPLATE").contains("subdirs"))
         return;
 
     QDialog::accept();
 }
 
-ChooseItem::ChooseItem( SubqmakeprojectItem * spitem, QListViewItem * parent, QString text )
+ChooseItem::ChooseItem( QMakeScopeItem * spitem, QListViewItem * parent, QString text )
     :KListViewItem(parent, text), m_spitem(spitem)
 {
 }
 
-ChooseItem::ChooseItem( SubqmakeprojectItem * spitem, QListView * parent, QString text )
+ChooseItem::ChooseItem( QMakeScopeItem * spitem, QListView * parent, QString text )
     :KListViewItem(parent, text), m_spitem(spitem)
 {
 }
 
-SubqmakeprojectItem * ChooseItem::subproject( )
+QMakeScopeItem * ChooseItem::subproject( )
 {
     return m_spitem;
 }
@@ -66,8 +67,8 @@ void ChooseSubprojectDlg::fillSubprojectsView( ChooseItem *item )
 
     QListViewItem * sub_spitem = item->subproject()->firstChild();
     while( sub_spitem ) {
-        SubqmakeprojectItem *spitem = dynamic_cast<SubqmakeprojectItem *>(sub_spitem);
-        if (spitem)
+        QMakeScopeItem *spitem = dynamic_cast<QMakeScopeItem *>(sub_spitem);
+        if ( spitem && spitem->scope->scopeType() == Scope::ProjectScope )
         {
             ChooseItem *child_item = new ChooseItem(spitem, item, spitem->text(0));
             child_item->setPixmap(0, *(spitem->pixmap(0)));
@@ -86,13 +87,13 @@ void ChooseSubprojectDlg::itemSelected( QListViewItem * it )
     ChooseItem *item = dynamic_cast<ChooseItem*>(it);
     if (!item)
         return;
-    if (item->subproject()->configuration.m_template == QTMP_SUBDIRS)
+    if (item->subproject()->scope->variableValues("TEMPLATE").contains("subdirs"))
         buttonOk->setEnabled(false);
     else
         buttonOk->setEnabled(true);
 }
 
-SubqmakeprojectItem * ChooseSubprojectDlg::selectedSubproject( )
+QMakeScopeItem * ChooseSubprojectDlg::selectedSubproject( )
 {
     if (subprojects_view->currentItem())
     {
@@ -106,4 +107,6 @@ SubqmakeprojectItem * ChooseSubprojectDlg::selectedSubproject( )
 
 
 #include "choosesubprojectdlg.moc"
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
 

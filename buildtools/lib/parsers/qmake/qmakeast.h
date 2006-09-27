@@ -48,7 +48,6 @@ public:
         NewLineAST        /**<Line feed.*/,
         CommentAST        /**<Comment.*/,
         IncludeAST        /**<.pri include.*/,
-        FunctionCallAST   /**<Simple function call without scope.*/
     };
 
     /**Constructs AST with given node type.*/
@@ -59,6 +58,10 @@ public:
     reimplementations should call it to make automatic destruction of
     AST tree possible.*/
     virtual void addChildAST(AST *node);
+    /**Removes child AST node from this node. Despite this function is virtual,
+    reimplementations should call it to make automatic destruction of
+    AST tree possible.*/
+    virtual void removeChildAST(AST *node);
     /**Writes information stored in the AST into the @p buffer.
     This is a default implementation which iterates over child nodes
     and calls writeBack for each child node.*/
@@ -74,9 +77,11 @@ public:
     /**@return The indentation string based on node depth.*/
     virtual QString indentation();
 
+    /**The list of child AST nodes.*/
+    QValueList<AST*> m_children;
+
 protected:
     NodeType m_nodeType;
-    QValueList<AST*> m_children;
 
 private:
     int m_depth;
@@ -111,7 +116,6 @@ public:
     ProjectAST(Kind kind = Project): AST(AST::ProjectAST), m_kind(kind) {}
 
     virtual void writeBack(QString &buffer);
-    virtual void addChildAST(AST *node);
 
     /**@return true if this node is a project.*/
     bool isProject() const { return m_kind == Project; }
@@ -121,20 +125,18 @@ public:
     bool isFunctionScope() const { return m_kind == FunctionScope; }
     /**@return true if this node is empty.*/
     bool isEmpty() const { return m_kind == Empty; }
-    
-    void setFileName(const char *fileName) { m_fileName = fileName; }
-    const char *fileName() const { return m_fileName; }
+
+    void setFileName(const QString& fileName) { m_fileName = fileName; }
+    QString fileName() const { return m_fileName; }
 
     /**Scoped identifier (scope name or function name).*/
     QString scopedID;
     /**Function arguments. Empty for other kinds of projects.*/
     QString args;
-    /**List of statements.*/
-    QValueList<QMake::AST*> statements;
 
 private:
     Kind m_kind;
-    const char *m_fileName;
+    QString m_fileName;
 
 };
 
@@ -202,27 +204,6 @@ public:
 
 };
 
-
-/**
-FunctionCall AST node.
-This node represents only function calls with assignments:
-<pre>
-myfunc(args):VAR=foo
-</pre>
-*/
-class FunctionCallAST: public AST {
-public:
-    FunctionCallAST(): AST(AST::FunctionCallAST), assignment(0) {}
-
-    virtual void writeBack(QString &buffer);
-
-    /**Assignment node.*/
-    QMake::AssignmentAST *assignment;
-    /**Function name as scoped identifier.*/
-    QString scopedID;
-    /**Function arguments.*/
-    QString args;
-};
 
 /**
 Include AST node.

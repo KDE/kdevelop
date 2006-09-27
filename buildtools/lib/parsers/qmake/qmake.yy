@@ -108,7 +108,6 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 
 %token ID_SIMPLE
 %token ID_LIST
-%token LBRACE
 %token EQ
 %token PLUSEQ
 %token MINUSQE
@@ -128,7 +127,7 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 %token ID_ARGS
 %token LIST_COMMENT
 %token ID_LIST_SINGLE
-
+%debug
 %%
 
 project :
@@ -187,16 +186,17 @@ scoped_identifier : ID_SIMPLE COLON scoped_identifier
 
 multiline_values : multiline_values line_body
         {
-            $<values>$.append($<value>2);
+            $<values>$ += $<values>2
         }
     |   { $<values>$.clear(); }
     ;
 
-line_body : ID_LIST CONT         { $<value>$ = $<value>1 + " \\\n"; }
-    | ID_LIST_SINGLE NEWLINE     { $<value>$ = $<value>1 + "\n"; }
-    | CONT                       { $<value>$ = "\\\n"; }
+line_body : ID_LIST         { $<values>$ += QStringList::split(" ", $<value>1.stripWhiteSpace()); }
+    | ID_LIST_SINGLE        { $<values>$ += QStringList::split(" ", $<value>1.stripWhiteSpace()); }
+    | NEWLINE               { $<values>$.append("\n"); }
+    | CONT                  { $<values>$.append("\\\n"); }
     | LIST_COMMENT
-    | RBRACE                     { $<value>$ = ""; }
+    | RBRACE
     ;
 
 
@@ -242,11 +242,13 @@ function_call : scoped_identifier LBRACE function_args RBRACE
         }
     | scoped_identifier LBRACE function_args RBRACE COLON variable_assignment
         {
-            FunctionCallAST *node = new FunctionCallAST();
+            ProjectAST *node = new ProjectAST(ProjectAST::FunctionScope);
+	    projects.push(node);
             node->scopedID = $<value>1;
             node->args = $<value>3;
-            node->assignment = static_cast<AssignmentAST*>($<node>6);
-            $<node>$ = node;
+	    depth++;
+
+	    node->addChildAST($<node>6);
 
             if ($<value>1.contains("include"))
             {
@@ -264,7 +266,8 @@ function_call : scoped_identifier LBRACE function_args RBRACE
                 projects.top()->addChildAST(includeAST);
                 includeAST->setDepth(depth);
             }
-
+	    depth--;
+	    $<node>$ = projects.pop();
         }
     ;
 
@@ -291,15 +294,15 @@ else_statement : "else" LCURLY
         }
     | "else" COLON variable_assignment
         {
-            FunctionCallAST *node = new FunctionCallAST();
+            ProjectAST *node = new ProjectAST();
             node->scopedID = "else";
             node->args = "";
-            node->assignment = static_cast<AssignmentAST*>($<node>3);
+            node->addChildAST($<node>3);
             $<node>$ = node;
         }
     |
         {
-            $<node>$ = new FunctionCallAST();
+            $<node>$ = new ProjectAST();
         }
     ;
 

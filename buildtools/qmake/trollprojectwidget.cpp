@@ -1,25 +1,25 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
- *   bernd@kdevelop.org                                                    *
- *   Copyright (C) 2000-2001 by Trolltech AS.                              *
- *   info@trolltech.com                                                    *
- *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
- *   jakob@jsg.dk                                                          *
- *   Copyright (C) 2002-2003 by Alexander Dymo                             *
- *   cloudtemple@mksat.net                                                 *
- *   Copyright (C) 2003 by Thomas Hasart                                   *
- *   thasart@gmx.de                                                        *
- *   Copyright (C) 2006 by Andreas Pakulat                                 *
- *   apaku@gmx.de                                                          *
- *                                                                         *
- *   Part of this file is taken from Qt Designer.                          *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+*   Copyright (C) 2001 by Bernd Gehrmann                                  *
+*   bernd@kdevelop.org                                                    *
+*   Copyright (C) 2000-2001 by Trolltech AS.                              *
+*   info@trolltech.com                                                    *
+*   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
+*   jakob@jsg.dk                                                          *
+*   Copyright (C) 2002-2003 by Alexander Dymo                             *
+*   cloudtemple@mksat.net                                                 *
+*   Copyright (C) 2003 by Thomas Hasart                                   *
+*   thasart@gmx.de                                                        *
+*   Copyright (C) 2006 by Andreas Pakulat                                 *
+*   apaku@gmx.de                                                          *
+*                                                                         *
+*   Part of this file is taken from Qt Designer.                          *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************/
 
 #include "trollprojectwidget.h"
 
@@ -70,395 +70,89 @@
 #include "urlutil.h"
 #include "pathutil.h"
 #include "trolllistview.h"
+#include "projectconfigurationdlg.h"
+#include "qmakescopeitem.h"
+#include "scope.h"
+#include "createscopedlg.h"
+#include "disablesubprojectdlg.h"
 
-#define VALUES_PER_ROW  1
-
-/*
- * Class qProjectItem
- */
-
-qProjectItem::qProjectItem(Type type, QListView *parent, const QString &text)
-    : QListViewItem(parent, text), typ(type)
-{}
-
-
-qProjectItem::qProjectItem(Type type, qProjectItem *parent, const QString &text)
-    : QListViewItem(parent, text), typ(type)
-{}
-
-
-
-
-/*
- * Class SubqmakeprojectItem
- */
-
-SubqmakeprojectItem::SubqmakeprojectItem(QListView *parent, const QString &text, const QString &scopeString)
-    : qProjectItem(Subproject, parent, text)
+TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
+        : QVBox( 0, "troll project widget" ), m_configDlg( 0 )
 {
-    this->scopeString=scopeString;
-    configuration.m_template = QTMP_APPLICATION;
-    init();
-}
-
-
-SubqmakeprojectItem::SubqmakeprojectItem(SubqmakeprojectItem *parent, const QString &text,const QString &scopeString)
-    : qProjectItem(Subproject, parent, text)
-{
-    this->scopeString=scopeString;
-    init();
-}
-
-SubqmakeprojectItem::~SubqmakeprojectItem()
-{
-}
-QString SubqmakeprojectItem::getRelativPath()
-{
-  if(this->parent()==NULL||this->parent()->parent()==NULL) return("/"+configuration.m_subdirName);
-  else return(((SubqmakeprojectItem*)this->parent())->getRelativPath()+"/"+configuration.m_subdirName);
-}
-QString SubqmakeprojectItem::getDownDirs()
-{
-    SubqmakeprojectItem* pItem=this;
-    while (pItem->parent())
-        pItem=(SubqmakeprojectItem*)pItem->parent();
-    return getRelativePath(QDir::cleanDirPath(this->path),QDir::cleanDirPath(pItem->path));
-}
-QString SubqmakeprojectItem::getSharedLibAddObject(QString downDirs)
-{
-  if(configuration.m_requirements & QD_SHARED)
-  {
-    QString tmpPath;
-    if(configuration.m_destdir!="")
-    {
-      if (QDir::isRelativePath(configuration.m_destdir))
-        tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
-      else
-        tmpPath=configuration.m_destdir;
-    }else{
-      tmpPath=downDirs+this->getRelativPath()+"/";
-    }
-
-    tmpPath=QDir::cleanDirPath(tmpPath);
-
-    QString libString;
-    if(configuration.m_target!="")
-    {
-      libString = tmpPath+"/lib"+this->configuration.m_target+".so";
-
-    }else{
-      libString = tmpPath+"/lib"+this->configuration.m_subdirName.section('/',-1,-1,QString::SectionSkipEmpty)+".so";
-
-    }
-    return(libString);
-  }
-  return "";
-}
-QString SubqmakeprojectItem::getApplicationObject( QString downDirs )
-{
-  QString tmpPath;
-  if(configuration.m_destdir!="")
-  {
-      if (QDir::isRelativePath(configuration.m_destdir))
-        tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
-      else
-        tmpPath=configuration.m_destdir;
-  }else{
-    tmpPath=downDirs+this->getRelativPath()+"/";
-  }
-
-  tmpPath=QDir::cleanDirPath(tmpPath);
-
-  if (configuration.m_target.isEmpty())
-    return tmpPath + "/" + configuration.m_subdirName.section('/',-1,-1,QString::SectionSkipEmpty);
-  else
-    return tmpPath + "/" + configuration.m_target;
-}
-QString SubqmakeprojectItem::getLibAddObject(QString downDirs)
-{
-  if(configuration.m_requirements & QD_SHARED)
-  {
-    if(configuration.m_target!="")
-    {
-      return("-l"+configuration.m_target);
-    }else{
-      return("-l"+this->subdir);
-    }
-  }else if(configuration.m_requirements & QD_STATIC)
-  {
-    QString tmpPath;
-    if(configuration.m_destdir!="")
-    {
-      if (QDir::isRelativePath(configuration.m_destdir))
-        tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
-      else
-        tmpPath=configuration.m_destdir;
-    }else{
-      tmpPath=downDirs+this->getRelativPath()+"/";
-    }
-
-    tmpPath=QDir::cleanDirPath(tmpPath);
-
-    QString libString;
-    if(configuration.m_target!="")
-    {
-      libString = tmpPath+"/lib"+this->configuration.m_target+".a";
-
-    }else{
-      libString = tmpPath+"/lib"+this->configuration.m_subdirName.section('/',-1,-1,QString::SectionSkipEmpty)+".a";
-
-    }
-    return(libString);
-  }
-
-  return("");
-}
-QString SubqmakeprojectItem::getLibAddPath(QString downDirs)
-{
-
-  //PATH only add if shared lib
-  if(!(configuration.m_requirements & QD_SHARED))return("");
-
-    QString tmpPath;
-    if(configuration.m_destdir!="")
-    {
-      if (QDir::isRelativePath(configuration.m_destdir))
-        tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
-      else
-        tmpPath=configuration.m_destdir;
-    }else{
-      tmpPath=downDirs+this->getRelativPath()+"/";
-    }
-
-    tmpPath=QDir::cleanDirPath(tmpPath);
-
-  return(tmpPath);
-
-}
-QString SubqmakeprojectItem::getIncAddPath(QString downDirs)
-{
-  QString tmpPath=downDirs+this->getRelativPath();
-  tmpPath=QDir::cleanDirPath(tmpPath);
-
-  return(tmpPath);
-}
-
-void SubqmakeprojectItem::init()
-{
-  configuration.m_template = QTMP_APPLICATION;
-  configuration.m_warnings = QWARN_ON;
-  configuration.m_buildMode = QBM_RELEASE;
-  configuration.m_requirements = QD_QT;
-  configuration.m_qt4libs += Q4L_CORE;
-  configuration.m_qt4libs += Q4L_GUI;
-  groups.setAutoDelete(true);
-  if (scopeString.isEmpty())
-  {
-    isScope = false;
-  }
-  else
-  {
-    isScope = true;
-    setPixmap(0, SmallIcon("qmake_scope"));
-  }
-}
-
-
-/*
- * Class GroupItem
- */
-
-GroupItem::GroupItem(QListView *lv, GroupType type, const QString &text, const QString &scopeString)
-    : qProjectItem(Group, lv, text)
-{
-    this->scopeString = scopeString;
-    groupType = type;
-    files.setAutoDelete(true);
-    setPixmap(0, SmallIcon("tar"));
-}
-
-GroupItem::GroupType GroupItem::groupTypeForExtension(const QString &ext)
-{
-    if (ext == "cpp" || ext == "cc" || ext == "c" || ext == "C" || ext == "c++" || ext == "cxx" || ext == "ocl")
-        return Sources;
-    else if (ext == "hpp" || ext == "h" || ext == "hxx" || ext == "hh" || ext == "h++" || ext == "H")
-        return Headers;
-    else if (ext == "ui")
-        return Forms;
-    else if (ext == "jpg" || ext == "jpeg" || ext == "png" || ext == "xpm" || ext == "gif" || ext == "bmp")
-        return Images;
-    else if (ext == "idl")
-        return IDLs;
-    else if (ext == "l" || ext == "ll" || ext == "lxx" || ext == "l++" )
-        return Lexsources;
-    else if (ext == "y" || ext == "yy" || ext == "yxx" || ext == "y++" )
-        return Yaccsources;
-    else if (ext == "ts")
-        return Translations;
-    else if ( ext == "qrc" )
-        return Resources;
-    else
-        return NoType;
-}
-
-void GroupItem::groupTypeMeanings(GroupItem::GroupType type, QString& title, QString& ext)
-{
-    switch (type) {
-        case GroupItem::Sources:
-            title = i18n("Sources");
-            ext = "*.cpp *.c";
-            break;
-        case GroupItem::Headers:
-            title = i18n("Headers");
-            ext = "*.h *.hpp";
-            break;
-        case GroupItem::Forms:
-            title = i18n("Forms");
-            ext = "*.ui";
-            break;
-        case GroupItem::IDLs:
-            title = i18n("Corba IDLs");
-            ext = "*.idl *.kidl";
-            break;
-        case GroupItem::Lexsources:
-            title = i18n("Lexsources");
-            ext = "*.l *.ll *.lxx *.l++";
-            break;
-        case GroupItem::Yaccsources:
-            title = i18n("Yaccsources");
-            ext = "*.y *.yy *.yxx *.y++";
-            break;
-        case GroupItem::Images:
-            title = i18n("Images");
-            ext = "*.jpg *.jpeg *.png *.xpm *.gif *.bmp";
-            break;
-	case GroupItem::Resources:
-	    title = i18n("Resources");
-	    ext = "*.qrc";
-	    break;
-        case GroupItem::Distfiles:
-            title = i18n("Distfiles");
-            ext = "*";
-            break;
-        case GroupItem::Translations:
-            title = i18n("Translations");
-            ext = "*.ts";
-            break;
-        case GroupItem::InstallRoot:
-            title = i18n("Installs");
-            ext = "*";
-            break;
-        case GroupItem::InstallObject:
-            title = i18n("Install object");
-            ext = "*";
-            break;
-
-        default: // just give back source files, et all
-            title = i18n("Source Files");
-            ext = "*.cpp *.cc *.ocl *.c *.hpp *.h *.ui";
-    }
-}
-
-void GroupItem::paintCell(QPainter* p, const QColorGroup& c, int column, int width, int align)
-{
-    QColorGroup cg(c);
-    if (!firstChild())
-    {
-        cg.setColor(QColorGroup::Text, cg.mid());
-    }
-
-    qProjectItem::paintCell(p, cg, column, width, align);
-}
-
-/*
- * Class FileItem
- */
-
-FileItem::FileItem(QListView *lv, const QString &text, bool exclude/*=false*/)
-    : qProjectItem(File, lv, text)
-{
-    // if excluded is set the file is excluded in the subproject/project.
-    // by default excluded is set to false, thus file is included
-    excluded = exclude;
-    setPixmap(0, SmallIcon("document"));
-}
-
-
-TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
-    : QVBox(0, "troll project widget"), m_configDlg(0)
-{
-    QSplitter *splitter = new QSplitter(Vertical, this);
+    QSplitter * splitter = new QSplitter( Vertical, this );
 
     //////////////////
     // PROJECT VIEW //
     //////////////////
 
-    overviewContainer = new QVBox(splitter,"Projects");
+    overviewContainer = new QVBox( splitter, "Projects" );
     overviewContainer->setMargin ( 2 );
     overviewContainer->setSpacing ( 2 );
-//    overviewContainer->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-//    splitter->setResizeMode(overviewContainer, QSplitter::FollowSizeHint);
+    //    overviewContainer->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    //    splitter->setResizeMode(overviewContainer, QSplitter::FollowSizeHint);
 
-    projectTools = new QHBox(overviewContainer,"Project buttons");
+    projectTools = new QHBox( overviewContainer, "Project buttons" );
     projectTools->setMargin ( 2 );
     projectTools->setSpacing ( 2 );
     // Add subdir
     addSubdirButton = new QToolButton ( projectTools, "Add subproject button" );
     addSubdirButton->setPixmap ( SmallIcon ( "folder_new" ) );
-    addSubdirButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addSubdirButton->sizePolicy().hasHeightForWidth() ) );
+    addSubdirButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, addSubdirButton->sizePolicy().hasHeightForWidth() ) );
     addSubdirButton->setEnabled ( true );
     QToolTip::add( addSubdirButton, i18n( "Add subproject" ) );
-    QWhatsThis::add(addSubdirButton, i18n("<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to a currently selected subproject. "
-        "This action is allowed only if a type of the subproject is 'subdirectories'. The type of the subproject can be "
-        "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)."));
+    QWhatsThis::add( addSubdirButton, i18n( "<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to a currently selected subproject. "
+                                                "This action is allowed only if a type of the subproject is 'subdirectories'. The type of the subproject can be "
+                                                "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)." ) );
     // Create scope
     createScopeButton = new QToolButton ( projectTools, "Create scope button" );
     createScopeButton->setPixmap ( SmallIcon ( "qmake_scopenew" ) );
-    createScopeButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, createScopeButton->sizePolicy().hasHeightForWidth() ) );
+    createScopeButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, createScopeButton->sizePolicy().hasHeightForWidth() ) );
     createScopeButton->setEnabled ( true );
     QToolTip::add( createScopeButton, i18n( "Create scope" ) );
-    QWhatsThis::add(createScopeButton, i18n("<b>Create scope</b><p>Creates QMake scope in the project file in case the subproject is selected or creates nested scope in case the scope is selected."));
+    QWhatsThis::add( createScopeButton, i18n( "<b>Create scope</b><p>Creates QMake scope in the project file in case the subproject is selected or creates nested scope in case the scope is selected." ) );
+
     // build
     buildProjectButton = new QToolButton ( projectTools, "Make button" );
     buildProjectButton->setPixmap ( SmallIcon ( "make_kdevelop" ) );
-    buildProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildProjectButton->sizePolicy().hasHeightForWidth() ) );
+    buildProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, buildProjectButton->sizePolicy().hasHeightForWidth() ) );
     buildProjectButton->setEnabled ( true );
     QToolTip::add( buildProjectButton, i18n( "Build project" ) );
-    QWhatsThis::add(buildProjectButton, i18n("<b>Build project</b><p>Runs <b>make</b> from the project directory.<br>"
-                              "Environment variables and make arguments can be specified "
-                              "in the project settings dialog, <b>Make Options</b> tab."));
+    QWhatsThis::add( buildProjectButton, i18n( "<b>Build project</b><p>Runs <b>make</b> from the project directory.<br>"
+                         "Environment variables and make arguments can be specified "
+                         "in the project settings dialog, <b>Make Options</b> tab." ) );
     // rebuild
     rebuildProjectButton = new QToolButton ( projectTools, "Rebuild button" );
     rebuildProjectButton->setPixmap ( SmallIcon ( "rebuild" ) );
-    rebuildProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, rebuildProjectButton->sizePolicy().hasHeightForWidth() ) );
+    rebuildProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, rebuildProjectButton->sizePolicy().hasHeightForWidth() ) );
     rebuildProjectButton->setEnabled ( true );
     QToolTip::add( rebuildProjectButton, i18n( "Rebuild project" ) );
-    QWhatsThis::add(rebuildProjectButton, i18n("<b>Rebuild project</b><p>Runs <b>make clean</b> and then <b>make</b> from the project directory.<br>"
-                              "Environment variables and make arguments can be specified "
-                              "in the project settings dialog, <b>Make Options</b> tab."));
+    QWhatsThis::add( rebuildProjectButton, i18n( "<b>Rebuild project</b><p>Runs <b>make clean</b> and then <b>make</b> from the project directory.<br>"
+                         "Environment variables and make arguments can be specified "
+                         "in the project settings dialog, <b>Make Options</b> tab." ) );
     // run
     executeProjectButton = new QToolButton ( projectTools, "Run button" );
     executeProjectButton->setPixmap ( SmallIcon ( "exec" ) );
-    executeProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, executeProjectButton->sizePolicy().hasHeightForWidth() ) );
+    executeProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, executeProjectButton->sizePolicy().hasHeightForWidth() ) );
     executeProjectButton->setEnabled ( true );
     QToolTip::add( executeProjectButton, i18n( "Execute main program" ) );
-    QWhatsThis::add(executeProjectButton, i18n("<b>Execute main program</b><p>Executes the main program specified in project settings, <b>Run Options</b> tab."));
+    QWhatsThis::add( executeProjectButton, i18n( "<b>Execute main program</b><p>Executes the main program specified in project settings, <b>Run Options</b> tab." ) );
     // spacer
-    QWidget *spacer = new QWidget(projectTools);
-    projectTools->setStretchFactor(spacer, 1);
+    QWidget *spacer = new QWidget( projectTools );
+    projectTools->setStretchFactor( spacer, 1 );
     // Project configuration
     projectconfButton = new QToolButton ( projectTools, "Project configuration button" );
     projectconfButton->setPixmap ( SmallIcon ( "configure" ) );
-    projectconfButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, projectconfButton->sizePolicy().hasHeightForWidth() ) );
+    projectconfButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, projectconfButton->sizePolicy().hasHeightForWidth() ) );
     projectconfButton->setEnabled ( true );
     QToolTip::add( projectconfButton, i18n( "Subproject settings" ) );
-    QWhatsThis::add(projectconfButton, i18n("<b>Subproject settings</b><p>Opens <b>QMake Subproject Configuration</b> dialog for the currently selected subproject. "
-        "It provides settings for:<br>subproject type and configuration,<br>include and library paths,<br>lists of dependencies and "
-        "external libraries,<br>build order,<br>intermediate files locations,<br>compiler options."));
+    QWhatsThis::add( projectconfButton, i18n( "<b>Subproject settings</b><p>Opens <b>QMake Subproject Configuration</b> dialog for the currently selected subproject. "
+                         "It provides settings for:<br>subproject type and configuration,<br>include and library paths,<br>lists of dependencies and "
+                         "external libraries,<br>build order,<br>intermediate files locations,<br>compiler options." ) );
 
     // Project button connections
     connect ( addSubdirButton, SIGNAL ( clicked () ), this, SLOT ( slotAddSubdir () ) );
     connect ( createScopeButton, SIGNAL ( clicked () ), this, SLOT ( slotCreateScope () ) );
+
 
     connect ( buildProjectButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildProject () ) );
     connect ( rebuildProjectButton, SIGNAL ( clicked () ), this, SLOT ( slotRebuildProject () ) );
@@ -469,17 +163,17 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     connect ( projectconfButton, SIGNAL ( clicked () ), this, SLOT ( slotConfigureProject () ) );
 
     // Project tree
-    overview = new TrollListView(this, overviewContainer, SubprojectView, "project overview widget");
-    overview->setResizeMode(QListView::LastColumn);
-    overview->setSorting(-1);
-    overview->header()->hide();
-    overview->addColumn(QString::null);
+    overview = new TrollListView( this, overviewContainer, SubprojectView, "project overview widget" );
+    overview->setResizeMode( QListView::LastColumn );
+    overview->setSorting( -1 );
+    overview->header() ->hide();
+    overview->addColumn( QString::null );
 
     // Project tree connections
-    connect( overview, SIGNAL(selectionChanged(QListViewItem*)),
-             this, SLOT(slotOverviewSelectionChanged(QListViewItem*)) );
-    connect( overview, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-             this, SLOT(slotOverviewContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+    connect( overview, SIGNAL( selectionChanged( QListViewItem* ) ),
+             this, SLOT( slotOverviewSelectionChanged( QListViewItem* ) ) );
+    connect( overview, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
+             this, SLOT( slotOverviewContextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 
 
     /////////////////
@@ -487,157 +181,169 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     /////////////////
 
     // Details tree
-    detailContainer = new QVBox(splitter,"Details");
+    detailContainer = new QVBox( splitter, "Details" );
     detailContainer->setMargin ( 2 );
     detailContainer->setSpacing ( 2 );
-//    detailContainer->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    //    detailContainer->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 
     // Details Toolbar
-    fileTools = new QHBox(detailContainer,"Detail buttons");
+    fileTools = new QHBox( detailContainer, "Detail buttons" );
     fileTools->setMargin ( 2 );
     fileTools->setSpacing ( 2 );
 
     // Add new file button
     newfileButton = new QToolButton ( fileTools, "Create new file" );
     newfileButton->setPixmap ( SmallIcon ( "filenew" ) );
-    newfileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, newfileButton->sizePolicy().hasHeightForWidth() ) );
+    newfileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, newfileButton->sizePolicy().hasHeightForWidth() ) );
     newfileButton->setEnabled ( true );
     QToolTip::add( newfileButton, i18n( "Create new file" ) );
-    QWhatsThis::add(newfileButton, i18n("<b>Create new file</b><p>Creates a new file and adds it to a currently selected group."));
+    QWhatsThis::add( newfileButton, i18n( "<b>Create new file</b><p>Creates a new file and adds it to a currently selected group." ) );
 
     // Add existing files button
     addfilesButton = new QToolButton ( fileTools, "Add existing files" );
     addfilesButton->setPixmap ( SmallIcon ( "fileimport" ) );
-    addfilesButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addfilesButton->sizePolicy().hasHeightForWidth() ) );
+    addfilesButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, addfilesButton->sizePolicy().hasHeightForWidth() ) );
     addfilesButton->setEnabled ( true );
     QToolTip::add( addfilesButton, i18n( "Add existing files" ) );
-    QWhatsThis::add(addfilesButton, i18n("<b>Add existing files</b><p>Adds existing files to a currently selected group. It is "
-            "possible to copy files to a current subproject directory, create symbolic links or "
-            "add them with the relative path."));
+    QWhatsThis::add( addfilesButton, i18n( "<b>Add existing files</b><p>Adds existing files to a currently selected group. It is "
+                                               "possible to copy files to a current subproject directory, create symbolic links or "
+                                               "add them with the relative path." ) );
 
     // remove file button
     removefileButton = new QToolButton ( fileTools, "Remove file" );
     removefileButton->setPixmap ( SmallIcon ( "button_cancel" ) );
-    removefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, removefileButton->sizePolicy().hasHeightForWidth() ) );
+    removefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, removefileButton->sizePolicy().hasHeightForWidth() ) );
     removefileButton->setEnabled ( true );
     QToolTip::add( removefileButton, i18n( "Remove file" ) );
-    QWhatsThis::add(removefileButton, i18n("<b>Remove file</b><p>Removes file from a current group. Does not remove file from disk."));
+    QWhatsThis::add( removefileButton, i18n( "<b>Remove file</b><p>Removes file from a current group. Does not remove file from disk." ) );
 
     // build selected file
     buildFileButton = new QToolButton ( fileTools, "Make file button" );
     buildFileButton->setPixmap ( SmallIcon ( "compfile" ) );
-    buildFileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildFileButton->sizePolicy().hasHeightForWidth() ) );
+    buildFileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, buildFileButton->sizePolicy().hasHeightForWidth() ) );
     buildFileButton->setEnabled ( true );
     QToolTip::add( buildFileButton, i18n( "Compile file" ) );
-    QWhatsThis::add(buildFileButton, i18n("<b>Compile file</b><p>Runs <b>make filename.o</b> command from the directory where 'filename' is the name of currently opened file.<br>"
-                                          "Environment variables and make arguments can be specified "
-                                        "in the project settings dialog, <b>Make Options</b> tab."));
+    QWhatsThis::add( buildFileButton, i18n( "<b>Compile file</b><p>Runs <b>make filename.o</b> command from the directory where 'filename' is the name of currently opened file.<br>"
+                                                "Environment variables and make arguments can be specified "
+                                                "in the project settings dialog, <b>Make Options</b> tab." ) );
 
     // build
     buildTargetButton = new QToolButton ( fileTools, "Make sp button" );
     buildTargetButton->setPixmap ( SmallIcon ( "make_kdevelop" ) );
-    buildTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildTargetButton->sizePolicy().hasHeightForWidth() ) );
+    buildTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, buildTargetButton->sizePolicy().hasHeightForWidth() ) );
     buildTargetButton->setEnabled ( true );
     QToolTip::add( buildTargetButton, i18n( "Build subproject" ) );
-    QWhatsThis::add(buildTargetButton, i18n("<b>Build subproject</b><p>Runs <b>make</b> from the current subproject directory. "
-                              "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
-                              "Environment variables and make arguments can be specified "
-                              "in the project settings dialog, <b>Make Options</b> tab."));
+    QWhatsThis::add( buildTargetButton, i18n( "<b>Build subproject</b><p>Runs <b>make</b> from the current subproject directory. "
+                         "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
+                         "Environment variables and make arguments can be specified "
+                         "in the project settings dialog, <b>Make Options</b> tab." ) );
     // rebuild
     rebuildTargetButton = new QToolButton ( fileTools, "Rebuild sp button" );
     rebuildTargetButton->setPixmap ( SmallIcon ( "rebuild" ) );
-    rebuildTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, rebuildTargetButton->sizePolicy().hasHeightForWidth() ) );
+    rebuildTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, rebuildTargetButton->sizePolicy().hasHeightForWidth() ) );
     rebuildTargetButton->setEnabled ( true );
     QToolTip::add( rebuildTargetButton, i18n( "Rebuild subproject" ) );
-    QWhatsThis::add(rebuildTargetButton, i18n("<b>Rebuild subproject</b><p>Runs <b>make clean</b> and then <b>make</b> from the current subproject directory. "
-                              "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
-                              "Environment variables and make arguments can be specified "
-                              "in the project settings dialog, <b>Make Options</b> tab."));
+    QWhatsThis::add( rebuildTargetButton, i18n( "<b>Rebuild subproject</b><p>Runs <b>make clean</b> and then <b>make</b> from the current subproject directory. "
+                         "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
+                         "Environment variables and make arguments can be specified "
+                         "in the project settings dialog, <b>Make Options</b> tab." ) );
     // run
     executeTargetButton = new QToolButton ( fileTools, "Run sp button" );
     executeTargetButton->setPixmap ( SmallIcon ( "exec" ) );
-    executeTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, executeTargetButton->sizePolicy().hasHeightForWidth() ) );
+    executeTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, executeTargetButton->sizePolicy().hasHeightForWidth() ) );
     executeTargetButton->setEnabled ( true );
     QToolTip::add( executeTargetButton, i18n( "Execute subproject" ) );
-    QWhatsThis::add(executeTargetButton, i18n("<b>Execute subproject</b><p>Executes the target program for the currently selected subproject. "
-        "This action is allowed only if a type of the subproject is 'application'. The type of the subproject can be "
-        "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)."));
+    QWhatsThis::add( executeTargetButton, i18n( "<b>Execute subproject</b><p>Executes the target program for the currently selected subproject. "
+                         "This action is allowed only if a type of the subproject is 'application'. The type of the subproject can be "
+                         "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)." ) );
 
 
     // spacer
-    spacer = new QWidget(fileTools);
-    projectTools->setStretchFactor(spacer, 1);
+    spacer = new QWidget( fileTools );
+    projectTools->setStretchFactor( spacer, 1 );
 
     // Configure file button
-    configurefileButton = new QToolButton ( fileTools, "Configure file" );
-    configurefileButton->setPixmap ( SmallIcon ( "configure_file" ) );
-    configurefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, configurefileButton->sizePolicy().hasHeightForWidth() ) );
-    configurefileButton->setEnabled ( true );
-    QToolTip::add( configurefileButton, i18n( "Configure file" ) );
-    QWhatsThis::add(configurefileButton, i18n("<b>Configure file</b><p>Opens <b>File Properties</b> dialog that allows a file to be excluded from specified scopes."));
+    excludeFileFromScopeButton = new QToolButton ( fileTools, "Exclude file" );
+    excludeFileFromScopeButton->setPixmap ( SmallIcon ( "configure_file" ) );
+    excludeFileFromScopeButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, excludeFileFromScopeButton->sizePolicy().hasHeightForWidth() ) );
+    excludeFileFromScopeButton->setEnabled ( true );
+    QToolTip::add( excludeFileFromScopeButton , i18n( "Exclude file" ) );
+    QWhatsThis::add( excludeFileFromScopeButton , i18n( "<b>Exclude file</b><p>Exclude the selected file from this scope." ) );
 
     // detail tree
-    details = new TrollListView(this, detailContainer, DetailsView, "details widget");
-    details->setRootIsDecorated(true);
-    details->setResizeMode(QListView::LastColumn);
-    details->setSorting(-1);
-    details->header()->hide();
-    details->addColumn(QString::null);
+    details = new TrollListView( this, detailContainer, DetailsView, "details widget" );
+    details->setRootIsDecorated( true );
+    details->setResizeMode( QListView::LastColumn );
+    details->setSorting( -1 );
+    details->header() ->hide();
+    details->addColumn( QString::null );
     // Detail button connections
     connect ( addfilesButton, SIGNAL ( clicked () ), this, SLOT ( slotAddFiles () ) );
     connect ( newfileButton, SIGNAL ( clicked () ), this, SLOT ( slotNewFile () ) );
     connect ( removefileButton, SIGNAL ( clicked () ), this, SLOT ( slotRemoveFile () ) );
     connect ( buildFileButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildSelectedFile () ) );
-    connect ( configurefileButton, SIGNAL ( clicked () ), this, SLOT ( slotConfigureFile () ) );
+    connect ( excludeFileFromScopeButton, SIGNAL ( clicked () ), this, SLOT ( slotExcludeFileFromScopeButton() ) );
 
     // Detail tree connections
-    connect( details, SIGNAL(selectionChanged(QListViewItem*)),
-             this, SLOT(slotDetailsSelectionChanged(QListViewItem*)) );
-    connect( details, SIGNAL(executed(QListViewItem*)),
-             this, SLOT(slotDetailsExecuted(QListViewItem*)) );
-    connect( details, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-             this, SLOT(slotDetailsContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+    connect( details, SIGNAL( selectionChanged( QListViewItem* ) ),
+             this, SLOT( slotDetailsSelectionChanged( QListViewItem* ) ) );
+    connect( details, SIGNAL( executed( QListViewItem* ) ),
+             this, SLOT( slotDetailsExecuted( QListViewItem* ) ) );
+    connect( details, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
+             this, SLOT( slotDetailsContextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 
     connect ( buildTargetButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildTarget () ) );
     connect ( rebuildTargetButton, SIGNAL ( clicked () ), this, SLOT ( slotRebuildTarget () ) );
     connect ( executeTargetButton, SIGNAL ( clicked () ), this, SLOT ( slotExecuteTarget () ) );
-    buildTargetButton->setEnabled(false);
-    rebuildTargetButton->setEnabled(false);
-    executeTargetButton->setEnabled(false);
+    buildTargetButton->setEnabled( false );
+    rebuildTargetButton->setEnabled( false );
+    executeTargetButton->setEnabled( false );
 
-    m_configDlg = new ProjectConfigurationDlg(overview,this, this);
 
+    m_configDlg = new ProjectConfigurationDlg( overview, this, this );
     m_part = part;
     m_shownSubproject = 0;
     m_rootSubproject = 0;
+    m_rootScope = 0;
 }
 
 
 TrollProjectWidget::~TrollProjectWidget()
 {
-  delete m_configDlg;
+    delete m_configDlg;
 }
 
 
-void TrollProjectWidget::openProject(const QString &dirName)
+void TrollProjectWidget::openProject( const QString &dirName )
 {
-    QDomDocument &dom = *(m_part->projectDom());
-    m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
-                                                    "subclass","sourcefile", "uifile");
-    SubqmakeprojectItem *item = new SubqmakeprojectItem(overview, i18n("Subprojects"),"");
-    item->subdir = dirName.right(dirName.length()-dirName.findRev('/')-1);
-    item->path = dirName;
-    item->m_RootBuffer = &(item->m_FileBuffer);
-    parse(item);
-    item->setOpen(true);
-    m_rootSubproject = item;
-    if (m_rootSubproject->firstChild())
+    QDomDocument & dom = *( m_part->projectDom() );
+    m_subclasslist = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,
+                     "subclass", "sourcefile", "uifile" );
+    QFileInfo fi( dirName );
+    QDir dir( dirName );
+    //    QString proname = item->path + "/" + fi.baseName() + ".pro";
+
+    QStringList l = dir.entryList( "*.pro" );
+
+    QString profile = l.count() ? l[ 0 ] : ( fi.baseName() + ".pro" );
+    QString proname = dirName + QDir::separator() + profile;
+
+    kdDebug( 9024 ) << "Parsing " << proname << endl;
+
+    m_rootScope = new Scope( proname, m_part->isQt4Project() );
+    m_rootSubproject = new QMakeScopeItem( overview, i18n( "Subprojects" ), m_rootScope, this );
+    //item->path = dirName;
+    //item->m_scope = m_rootScope;
+    //buildTree(item);
+    //parse(dirName.right(dirName.length()-dirName.findRev('/')-1), item);
+    m_rootSubproject->setOpen( true );
+    if ( m_rootSubproject->firstChild() )
     {
-        overview->setSelected(m_rootSubproject->firstChild(), true);
+        overview->setSelected( m_rootSubproject->firstChild(), true );
     }
     else
     {
-        overview->setSelected(m_rootSubproject, true);
+        overview->setSelected( m_rootSubproject, true );
     }
 }
 
@@ -647,52 +353,46 @@ void TrollProjectWidget::closeProject()
     m_rootSubproject = 0;
     overview->clear();
     details->clear();
+    delete m_rootScope;
 }
-
-
-QStringList TrollProjectWidget::allSubprojects()
-{
-    int prefixlen = projectDirectory().length()+1;
-    QStringList res;
-
-    QListViewItemIterator it(overview);
-    for (; it.current(); ++it) {
-        if (it.current() == overview->firstChild())
-            continue;
-        QString path = static_cast<SubqmakeprojectItem*>(it.current())->path;
-        res.append(path.mid(prefixlen));
-    }
-
-    return res;
-}
-
 
 QStringList TrollProjectWidget::allFiles()
 {
     QPtrStack<QListViewItem> s;
     QStringList res;
 
-    for ( QListViewItem *item = overview->firstChild(); item;
-          item = item->nextSibling()? item->nextSibling() : s.pop() ) {
-        if (item->firstChild())
-            s.push(item->firstChild());
+    for ( QListViewItem * item = overview->firstChild(); item;
+            item = item->nextSibling() ? item->nextSibling() : s.pop() )
+    {
+        if ( item->firstChild() )
+            s.push( item->firstChild() );
 
-        SubqmakeprojectItem *spitem = static_cast<SubqmakeprojectItem*>(item);
-        QString path = spitem->path;
+        QMakeScopeItem *spitem = static_cast<QMakeScopeItem*>( item );
+        QString path = spitem->relativePath();
 
-        for (QPtrListIterator<GroupItem> tit(spitem->groups); tit.current(); ++tit) {
-            GroupItem::GroupType type = (*tit)->groupType;
+        for ( QMapIterator<GroupItem::GroupType, GroupItem*> tit = spitem->groups.begin(); tit != spitem->groups.end(); ++tit )
+        {
+            GroupItem::GroupType type = tit.key();
 
-            if (type == GroupItem::Sources || type == GroupItem::Headers || type == GroupItem::Forms || type == GroupItem::Images || type == GroupItem::Resources ||
-            type ==  GroupItem::Lexsources || type ==  GroupItem::Yaccsources || type == GroupItem::Distfiles ||
-        type ==  GroupItem::Translations || type ==  GroupItem::IDLs || type ==  GroupItem::InstallObject  ) {
-        for (QPtrListIterator<FileItem> fit(tit.current()->files); fit.current(); ++fit){
-            QString filePath = path.mid( projectDirectory().length() + 1 );
-
-            if( !filePath.isEmpty() && !filePath.endsWith("/") )
-            filePath += "/";
-                    res.append( filePath + (*fit)->name);
-        }
+            if ( type == GroupItem::Sources || type == GroupItem::Headers || type == GroupItem::Forms || type == GroupItem::Images
+                    || type == GroupItem::Resources || type == GroupItem::Lexsources || type == GroupItem::Yaccsources
+                    || type == GroupItem::Distfiles || type == GroupItem::Translations || type == GroupItem::IDLs
+                    || type == GroupItem::InstallObject )
+            {
+                for ( QPtrListIterator<FileItem> fit( tit.data() ->files ); fit.current(); ++fit )
+                {
+                    res.append( path + QDir::separator() + ( *fit ) ->text( 0 ) );
+                }
+            }
+            else if ( type == GroupItem::InstallRoot )
+            {
+                for ( QPtrListIterator<GroupItem> tit2( tit.data() ->installs ); tit2.current(); ++tit2 )
+                {
+                    for ( QPtrListIterator<FileItem> fit( tit2.current() ->files ); fit.current(); ++fit )
+                    {
+                        res.append( path + QDir::separator() + ( *fit ) ->text( 0 ) );
+                    }
+                }
             }
         }
     }
@@ -702,469 +402,423 @@ QStringList TrollProjectWidget::allFiles()
 
 QString TrollProjectWidget::projectDirectory()
 {
-    if (!overview->firstChild())
+    if ( !overview->firstChild() )
         return QString::null; //confused
 
-    return static_cast<SubqmakeprojectItem*>(overview->firstChild())->path;
+    return static_cast<QMakeScopeItem*>( overview->firstChild() ) ->scope->projectDir();
 }
 
 
 QString TrollProjectWidget::subprojectDirectory()
 {
-    if (!m_shownSubproject)
+    if ( !m_shownSubproject )
         return QString::null;
 
-    return m_shownSubproject->path;
+    return m_shownSubproject->scope->projectDir();
 }
 
 void TrollProjectWidget::setupContext()
 {
-    if (!m_shownSubproject)
-      return;
+    if ( !m_shownSubproject )
+        return ;
     bool buildable = true;
     bool runable = true;
-    bool projectconfigurable = true;
     bool fileconfigurable = true;
     bool hasSourceFiles = true;
     bool hasSubdirs = false;
 
+    QStringList tmpl = m_shownSubproject->scope->variableValues( "TEMPLATE" );
 
-    if (m_shownSubproject->configuration.m_template==QTMP_LIBRARY)
+    if ( tmpl.contains( "lib" ) )
     {
-      runable = false;
+        runable = false;
     }
-    else if (m_shownSubproject->configuration.m_template==QTMP_SUBDIRS)
+    else if ( tmpl.contains( "subdirs" ) )
     {
-      hasSubdirs = true;
-      addSubdirButton->setEnabled(true);
-      runable = false;
-      hasSourceFiles = false;
-      fileconfigurable = false;
+        hasSubdirs = true;
+        addSubdirButton->setEnabled( true );
+        runable = false;
+        hasSourceFiles = false;
+        fileconfigurable = false;
     }
-    if (m_shownSubproject->isScope)
+    if ( m_shownSubproject->scope->scopeType() != Scope::ProjectScope )
     {
-      runable = false;
-      projectconfigurable = true;
-      buildable = false;
+        runable = false;
+        buildable = false;
     }
 
 
     // Setup toolbars according to context
-    addSubdirButton->setEnabled(hasSubdirs);
-    buildTargetButton->setEnabled(buildable);
-    m_part->actionCollection()->action("build_build_target")->setEnabled(buildable);
+    addSubdirButton->setEnabled( hasSubdirs );
+    buildTargetButton->setEnabled( buildable );
+    m_part->actionCollection() ->action( "build_build_target" ) ->setEnabled( buildable );
 
-    rebuildTargetButton->setEnabled(buildable);
-    m_part->actionCollection()->action("build_rebuild_target")->setEnabled(buildable);
+    rebuildTargetButton->setEnabled( buildable );
+    m_part->actionCollection() ->action( "build_rebuild_target" ) ->setEnabled( buildable );
 
-    executeTargetButton->setEnabled(runable);
-    m_part->actionCollection()->action("build_execute_target")->setEnabled(runable);
+    executeTargetButton->setEnabled( runable );
+    m_part->actionCollection() ->action( "build_execute_target" ) ->setEnabled( runable );
 
+    excludeFileFromScopeButton->setEnabled( false );
+    newfileButton->setEnabled( true );
+    removefileButton->setEnabled( false );
+    addfilesButton->setEnabled( true );
 
-    projectconfButton->setEnabled(projectconfigurable);
-
-    configurefileButton->setEnabled(false);
-    newfileButton->setEnabled(true);
-    removefileButton->setEnabled(false);
-    addfilesButton->setEnabled(true);
-
-    details->setEnabled(hasSourceFiles);
+    details->setEnabled( hasSourceFiles );
 }
 
-void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
+void TrollProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
 {
-    if (!item)
-        return;
-    cleanDetailView(m_shownSubproject);
-    m_shownSubproject = static_cast<SubqmakeprojectItem*>(item);
+    if ( !item )
+        return ;
+    cleanDetailView( m_shownSubproject );
+    m_shownSubproject = static_cast<QMakeScopeItem*>( item );
     setupContext();
-    buildProjectDetailTree(m_shownSubproject,details);
+    buildProjectDetailTree( m_shownSubproject, details );
 
-    QString subProjPath = m_shownSubproject->path;
-    QString relpath = subProjPath.remove(0,projectDirectory().length()+1);
-    QDomDocument &dom = *(m_part->projectDom());
-    DomUtil::writeEntry(dom, "/kdevtrollproject/general/activedir",relpath);
-
-  if( m_configDlg->isShown() )
-  {
-    m_configDlg->updateSubproject(m_shownSubproject);
-//     m_configDlg->setActiveWindow();
-  }
+    QDomDocument &dom = *( m_part->projectDom() );
+    DomUtil::writeEntry( dom, "/kdevtrollproject/general/activedir", m_shownSubproject->relativePath() );
+    if ( m_configDlg && m_configDlg->isShown() )
+    {
+        m_configDlg->updateSubproject( m_shownSubproject );
+    }
 }
 
 QString TrollProjectWidget::getCurrentTarget()
 {
-  if (!m_shownSubproject)
-    return "";
-  if (m_shownSubproject->configuration.m_destdir.isEmpty() ||
-      m_shownSubproject->configuration.m_destdir[ m_shownSubproject->configuration.m_destdir.length()-1 ] == '/' )
-    return m_shownSubproject->configuration.m_destdir+m_shownSubproject->configuration.m_target;
-  else
-    return m_shownSubproject->configuration.m_destdir+'/'+m_shownSubproject->configuration.m_target;
+    if ( !m_shownSubproject )
+        return "";
+    QString destdir = m_shownSubproject->scope->variableValues( "DESTDIR" ).front();
+    if ( destdir.isEmpty() )
+        return destdir + m_shownSubproject->scope->variableValues( "TARGET" ).front();
+    else
+        return destdir + QDir::separator() + m_shownSubproject->scope->variableValues( "TARGET" ).front();
 }
 
 QString TrollProjectWidget::getCurrentDestDir()
 {
-  if (!m_shownSubproject)
-    return "";
-  return m_shownSubproject->configuration.m_destdir;
+    if ( !m_shownSubproject )
+        return "";
+    return m_shownSubproject->scope->variableValues( "DESTDIR" ).front();
 }
 
 QString TrollProjectWidget::getCurrentOutputFilename()
 {
-  if (!m_shownSubproject)
-    return "";
-  if (m_shownSubproject->configuration.m_target.isEmpty())
-  {
-    QString exe = m_shownSubproject->pro_file;
-    return exe.replace(QRegExp("\\.pro$"), "");
-  }
-  else
-    return m_shownSubproject->configuration.m_target;
-}
-
-void TrollProjectWidget::cleanDetailView(SubqmakeprojectItem *item)
-{
-  // If no children in detailview
-  // it is a subdir template
-  if (item && details->childCount())
-  {
-//    if (item->configuration.m_template == QTMP_SUBDIRS)
-//      return;
-    // Remove all GroupItems and all of their children from the view
-//    QPtrListIterator<SubqmakeprojectItem> it(item->scopes);
-//    for (; it.current(); ++it)
-//    {
-//      cleanDetailView(*it);
-//      details->takeItem(*it);
-//    }
-    QPtrListIterator<GroupItem> it1(item->groups);
-    for (; it1.current(); ++it1) {
-      // After AddTargetDialog, it can happen that an
-      // item is not yet in the list view, so better check...
-      if (it1.current()->parent())
-        while ((*it1)->firstChild())
-          (*it1)->takeItem((*it1)->firstChild());
-      details->takeItem(*it1);
-    }
-  }
-}
-
-void TrollProjectWidget::buildProjectDetailTree(SubqmakeprojectItem *item,KListView *listviewControl)
-{
-//  if (item->configuration.m_template == QTMP_SUBDIRS)
-//    return;
-
-  // Insert all GroupItems and all of their children into the view
-  if (listviewControl)
-  {
-//    QPtrListIterator<SubqmakeprojectItem> it1(item->scopes);
-//    for (; it1.current(); ++it1)
-//    {
-//      listviewControl->insertItem(*it1);
-//      buildProjectDetailTree(*it1,NULL);
-//    }
-    QPtrListIterator<GroupItem> it2(item->groups);
-    for (; it2.current(); ++it2)
+    if ( !m_shownSubproject )
+        return "";
+    if ( m_shownSubproject->scope->variableValues( "TARGET" ).isEmpty() )
     {
-        listviewControl->insertItem(*it2);
-        if ((*it2)->groupType==GroupItem::InstallRoot)
+        QString exe = m_shownSubproject->scope->fileName();
+        return exe.replace( QRegExp( "\\.pro$" ), "" );
+    }
+    else
+        return m_shownSubproject->scope->variableValues( "TARGET" ).front();
+}
+
+void TrollProjectWidget::cleanDetailView( QMakeScopeItem *item )
+{
+    // If no children in detailview
+    // it is a subdir template
+    if ( item && details->childCount() )
+    {
+        QMapIterator<GroupItem::GroupType, GroupItem*> it1 = item->groups.begin() ;
+        for ( ; it1 != item->groups.end(); ++it1 )
         {
-          QPtrListIterator<GroupItem> it3((*it2)->installs);
-          for (; it3.current(); ++it3)
-          {
-              (*it2)->insertItem(*it3);
-              QPtrListIterator<FileItem> it4((*it3)->files);
-              for (; it4.current(); ++it4)
-                  (*it3)->insertItem(*it4);
-              (*it3)->setOpen(true);
-              (*it3)->sortChildItems(0,true);
-          }
-          (*it2)->setOpen(true);
-          (*it2)->sortChildItems(0,true);
+            // After AddTargetDialog, it can happen that an
+            // item is not yet in the list view, so better check...
+            if ( it1.data() ->parent() )
+                while ( it1.data() ->firstChild() )
+                    it1.data() ->takeItem( it1.data() ->firstChild() );
+            details->takeItem( it1.data() );
+        }
+    }
+}
+
+void TrollProjectWidget::buildProjectDetailTree( QMakeScopeItem *item, KListView *listviewControl )
+{
+
+    // Insert all GroupItems and all of their children into the view
+    if ( !listviewControl || item->scope->variableValues( "TEMPLATE" ).contains("subdirs") )
+        return ;
+
+    QMapIterator<GroupItem::GroupType, GroupItem*> it2 = item->groups.begin();
+    QListViewItem* lastItem = 0;
+    for ( ; it2 != item->groups.end(); ++it2 )
+    {
+        listviewControl->insertItem( it2.data() );
+        if(lastItem)
+            it2.data()->moveItem(lastItem);
+        lastItem = it2.data();
+        if ( it2.key() == GroupItem::InstallRoot )
+        {
+            QListViewItem* lastinstallitem = 0;
+            QPtrListIterator<GroupItem> it3( it2.data() ->installs );
+            for ( ; it3.current(); ++it3 )
+            {
+                it2.data() ->insertItem( *it3 );
+                if ( lastinstallitem )
+                    it3.current()->moveItem(lastinstallitem);
+                lastinstallitem = it3.current();
+                QPtrListIterator<FileItem> it4( ( *it3 ) ->files );
+                QListViewItem* lastfileitem = 0;
+                for ( ; it4.current(); ++it4 )
+                {
+                    ( *it3 ) ->insertItem( *it4 );
+                    if ( lastfileitem )
+                        it4.current()->moveItem(lastfileitem);
+                    lastfileitem = it4.current();
+                }
+                ( *it3 ) ->setOpen( true );
+                ( *it3 ) ->sortChildItems( 0, true );
+            }
+            it2.data() ->setOpen( true );
+            it2.data() ->sortChildItems( 0, true );
         }
         else
         {
-          QPtrListIterator<FileItem> it3((*it2)->files);
-          for (; it3.current(); ++it3)
-              (*it2)->insertItem(*it3);
-          (*it2)->setOpen(true);
-          (*it2)->sortChildItems(0,true);
+            QPtrListIterator<FileItem> it3( it2.data() ->files );
+            QListViewItem* lastfileitem = 0;
+            for ( ; it3.current(); ++it3 )
+            {
+                it2.data() ->insertItem( *it3 );
+                if ( lastfileitem )
+                    it3.current()->moveItem(lastfileitem);
+                lastfileitem = it3.current();
+            }
+            it2.data() ->setOpen( true );
+            it2.data() ->sortChildItems( 0, true );
         }
     }
-    listviewControl->setSelected(listviewControl->selectedItem(), false);
-    listviewControl->setCurrentItem(0);
-  }
-  else
-  {
-//    QPtrListIterator<SubqmakeprojectItem> it1(item->scopes);
-//    for (; it1.current(); ++it1)
-//    {
-//      item->insertItem(*it1);
-//      buildProjectDetailTree(*it1,NULL);
-//    }
-    QPtrListIterator<GroupItem> it2(item->groups);
-    for (; it2.current(); ++it2)
-    {
-        item->insertItem(*it2);
-        QPtrListIterator<FileItem> it3((*it2)->files);
-        for (; it3.current(); ++it3)
-            (*it2)->insertItem(*it3);
-        (*it2)->setOpen(true);
-        (*it2)->sortChildItems(0,true);
-    }
-  }
+    listviewControl->setSelected( listviewControl->selectedItem(), false );
+    listviewControl->setCurrentItem( 0 );
 }
 
-void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
+void TrollProjectWidget::slotDetailsExecuted( QListViewItem *item )
 {
-    if (!item)
-        return;
+    if ( !item )
+        return ;
 
     // We assume here that ALL items in both list views
     // are qProjectItem's
-    qProjectItem *pvitem = static_cast<qProjectItem*>(item);
-    if (pvitem->type() != qProjectItem::File)
-        return;
+    qProjectItem *pvitem = static_cast<qProjectItem*>( item );
+    if ( pvitem->type() != qProjectItem::File )
+        return ;
 
-    QString dirName = m_shownSubproject->path;
-    FileItem *fitem = static_cast<FileItem*>(pvitem);
+    QString dirName = m_shownSubproject->scope->projectDir();
+    FileItem *fitem = static_cast<FileItem*>( pvitem );
 
-    bool isUiFile = QFileInfo(fitem->name).extension() == "ui";
-    if( m_part->isTMakeProject() && isUiFile ){
-    // start designer in your PATH
-    KShellProcess proc;
-        proc << "designer" << (dirName + "/" + QString(fitem->name));
+    bool isUiFile = QFileInfo( fitem->text( 0 ) ).extension() == "ui";
+    if ( isTMakeProject() && isUiFile )
+    {
+        // start designer in your PATH
+        KShellProcess proc;
+        proc << "designer" << ( dirName + QDir::separator() + QString( fitem->text( 0 ) ) );
         proc.start( KProcess::DontCare, KProcess::NoCommunication );
 
-    } else
-    m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
+    }
+    else
+        m_part->partController() ->editDocument( KURL( dirName + QDir::separator() + QString( fitem->text( 0 ) ) ) );
 }
 
 
 void TrollProjectWidget::slotConfigureProject()
 {
-//  ProjectOptionsDlg *d = new ProjectOptionsDlg(m_part,this);
-//  d->exec();
-
-  m_configDlg->updateSubproject(m_shownSubproject);
-  m_configDlg->show();
+    m_configDlg->updateSubproject( m_shownSubproject );
+    m_configDlg->show();
 }
 
 void TrollProjectWidget::slotExecuteTarget()
 {
-  //m_part->slotExecute();
+    //m_part->slotExecute();
 
-  // no subproject selected
-  if (!m_shownSubproject)
-    return;
+    // no subproject selected
+    if ( !m_shownSubproject )
+        return ;
 
-  // can't build from scope
-  if (m_shownSubproject->isScope)
-    return;
+    // can't build from scope
+    if ( m_shownSubproject->scope->scopeType() != Scope::ProjectScope )
+        return ;
 
 
-  // Only run application projects
-  if (m_shownSubproject->configuration.m_template!=QTMP_APPLICATION)
-    return;
+    // Only run application projects
+    if ( !m_shownSubproject->scope->variableValues( "TEMPLATE" ).contains( "app" ) )
+        return ;
 
-  QString dircmd = "cd "+KProcess::quote(subprojectDirectory() + "/" + getCurrentDestDir()) + " && ";
-  QString program = KProcess::quote("./" + getCurrentOutputFilename());
+    QString dircmd = "cd " + KProcess::quote( subprojectDirectory() + QDir::separator() + getCurrentDestDir() ) + " && ";
+    QString program = KProcess::quote( "." + QDir::separator() + getCurrentOutputFilename() );
 
     // Build environment variables to prepend to the executable path
     QString runEnvVars = QString::null;
     DomUtil::PairList list =
-        DomUtil::readPairListEntry( *(m_part->projectDom()), "/kdevtrollproject/run/envvars", "envvar", "name", "value" );
+        DomUtil::readPairListEntry( *( m_part->projectDom() ), "/kdevtrollproject/run/envvars", "envvar", "name", "value" );
 
     DomUtil::PairList::ConstIterator it;
-    for (it = list.begin(); it != list.end(); ++it) {
-        const DomUtil::Pair &pair = (*it);
-        if ( (!pair.first.isEmpty()) && (!pair.second.isEmpty()) )
+    for ( it = list.begin(); it != list.end(); ++it )
+    {
+        const DomUtil::Pair &pair = ( *it );
+        if ( ( !pair.first.isEmpty() ) && ( !pair.second.isEmpty() ) )
             runEnvVars += pair.first + "=" + pair.second + " ";
     }
-    program.prepend(runEnvVars);
+    program.prepend( runEnvVars );
 
-    program.append(" " + DomUtil::readEntry( *(m_part->projectDom()), "/kdevtrollproject/run/programargs" ) + " ");
-//  std::cerr<<dircmd + "./"+program<<std::endl;
-//  m_part->execute(dircmd + "./"+program);
-//  m_part->appFrontend()->startAppCommand(dircmd +"./"+program,true);
+    program.append( " " + DomUtil::readEntry( *( m_part->projectDom() ), "/kdevtrollproject/run/programargs" ) + " " );
+    //  std::cerr<<dircmd + "./"+program<<std::endl;
+    //  m_part->execute(dircmd + "./"+program);
+    //  m_part->appFrontend()->startAppCommand(dircmd +"./"+program,true);
 
-  bool inTerminal = DomUtil::readBoolEntry(*m_part->projectDom(), "/kdevtrollproject/run/terminal");
-  m_part->appFrontend()->startAppCommand(subprojectDirectory() + "/" + getCurrentDestDir(), program, inTerminal );
+    bool inTerminal = DomUtil::readBoolEntry( *m_part->projectDom(), "/kdevtrollproject/run/terminal" );
+    m_part->appFrontend() ->startAppCommand( subprojectDirectory() + QDir::separator() + getCurrentDestDir(), program, inTerminal );
 
 }
 
 void TrollProjectWidget::slotBuildProject()
 {
-  if (m_part->partController()->saveAllFiles()==false)
-       return; //user cancelled
+    if ( m_part->partController() ->saveAllFiles() == false )
+        return ; //user cancelled
 
-  QString dir = projectDirectory();
+    QString dir = projectDirectory();
 
-  if (!m_rootSubproject)
-    return;
+    if ( !m_rootSubproject )
+        return ;
 
-  createMakefileIfMissing(dir, m_rootSubproject);
+    createMakefileIfMissing( dir, m_rootSubproject );
 
-  m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-  QString dircmd = "cd "+KProcess::quote(dir) + " && " ;
-  QString buildcmd = constructMakeCommandLine(m_rootSubproject->configuration.m_makefile);
-  m_part->queueCmd(dir,dircmd + buildcmd);
+    m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
+    QString dircmd = "cd " + KProcess::quote( dir ) + " && " ;
+    QString buildcmd = constructMakeCommandLine( m_rootSubproject->scope );
+    m_part->queueCmd( dir, dircmd + buildcmd );
 }
 void TrollProjectWidget::slotBuildTarget()
 {
-  // no subproject selected
-  m_part->partController()->saveAllFiles();
-  if (!m_shownSubproject)
-    return;
-  // can't build from scope
-  if (m_shownSubproject->isScope)
-    return;
-  QString dir = subprojectDirectory();
-  createMakefileIfMissing(dir, m_shownSubproject);
+    // no subproject selected
+    m_part->partController() ->saveAllFiles();
+    if ( !m_shownSubproject )
+        return ;
+    // can't build from scope
+    if ( m_shownSubproject->scope->scopeType() != Scope::ProjectScope )
+        return ;
+    QString dir = subprojectDirectory();
+    createMakefileIfMissing( dir, m_shownSubproject );
 
-  m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-  QString dircmd = "cd "+KProcess::quote(dir) + " && " ;
-  QString buildcmd = constructMakeCommandLine(m_shownSubproject->configuration.m_makefile);
-  m_part->queueCmd(dir,dircmd + buildcmd);
+    m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
+    QString dircmd = "cd " + KProcess::quote( dir ) + " && " ;
+    QString buildcmd = constructMakeCommandLine( m_shownSubproject->scope );
+    m_part->queueCmd( dir, dircmd + buildcmd );
 }
 
 void TrollProjectWidget::slotRebuildProject()
 {
-  m_part->partController()->saveAllFiles();
-  QString dir = this->  projectDirectory();
+    m_part->partController() ->saveAllFiles();
+    QString dir = this-> projectDirectory();
 
-  if (!m_rootSubproject)
-    return;
+    if ( !m_rootSubproject )
+        return ;
 
-  createMakefileIfMissing(dir, m_rootSubproject);
+    createMakefileIfMissing( dir, m_rootSubproject );
 
-  m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-  QString dircmd = "cd "+KProcess::quote(dir) + " && " ;
-  QString rebuildcmd = constructMakeCommandLine(m_rootSubproject->configuration.m_makefile) + " clean && " + constructMakeCommandLine(m_rootSubproject->configuration.m_makefile);
-  m_part->queueCmd(dir,dircmd + rebuildcmd);
+    m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
+    QString dircmd = "cd " + KProcess::quote( dir ) + " && " ;
+    QString rebuildcmd = constructMakeCommandLine( m_rootSubproject->scope ) + " clean && " + constructMakeCommandLine( m_rootSubproject->scope );
+    m_part->queueCmd( dir, dircmd + rebuildcmd );
 }
 
 void TrollProjectWidget::slotRebuildTarget()
 {
-  // no subproject selected
-  m_part->partController()->saveAllFiles();
-  if (!m_shownSubproject)
-    return;
-  // can't build from scope
-  if (m_shownSubproject->isScope)
-    return;
+    // no subproject selected
+    m_part->partController() ->saveAllFiles();
+    if ( !m_shownSubproject )
+        return ;
+    // can't build from scope
+    if ( m_shownSubproject->scope->scopeType() != Scope::ProjectScope )
+        return ;
 
-  QString dir = subprojectDirectory();
-  createMakefileIfMissing(dir, m_shownSubproject);
+    QString dir = subprojectDirectory();
+    createMakefileIfMissing( dir, m_shownSubproject );
 
-  m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-  QString dircmd = "cd "+KProcess::quote(dir) + " && " ;
-  QString rebuildcmd = constructMakeCommandLine(m_shownSubproject->configuration.m_makefile) + " clean && " + constructMakeCommandLine(m_shownSubproject->configuration.m_makefile);
-  m_part->queueCmd(dir,dircmd + rebuildcmd);
+    m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
+    QString dircmd = "cd " + KProcess::quote( dir ) + " && " ;
+    QString rebuildcmd = constructMakeCommandLine( m_shownSubproject->scope ) + " clean && " + constructMakeCommandLine( m_shownSubproject->scope );
+    m_part->queueCmd( dir, dircmd + rebuildcmd );
 }
 
-void TrollProjectWidget::slotCreateScope(SubqmakeprojectItem *spitem)
+void TrollProjectWidget::slotCreateScope( QMakeScopeItem *spitem )
 {
-  if (spitem==0 && m_shownSubproject==0)
-    return;
-  else
-    spitem = m_shownSubproject;
-  bool ok = FALSE;
-  QString scopename = KInputDialog::getText(
-                      i18n( "Create Scope" ),
-                      i18n( "Please enter a name for the new scope:" ),
-                      QString::null, &ok, this );
-  if ( ok && !scopename.isEmpty() )
-  {
-    QString newScopeString;
-    if (!spitem->scopeString.isEmpty())
-      newScopeString = spitem->scopeString + ":" + scopename;
+    if ( spitem == 0 && m_shownSubproject == 0 )
+        return ;
     else
-      newScopeString = scopename;
-
-    spitem->m_RootBuffer->makeScope(newScopeString);
-    parseScope(spitem,newScopeString,spitem->m_RootBuffer);
-    updateProjectFile(spitem);
-  }
-  else
-    return;
+        spitem = m_shownSubproject;
+    CreateScopeDlg dlg( spitem, this );
+    if ( dlg.exec() == QDialog::Accepted )
+    {
+        spitem->scope->saveToFile( );
+    }
+    return ;
 }
 
-void TrollProjectWidget::slotAddSubdir(SubqmakeprojectItem *spitem)
+void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
 {
-  if (spitem==0 && m_shownSubproject==0)
-    return;
-  else
-    spitem = m_shownSubproject;
-  QString relpath = spitem->path.mid(projectDirectory().length());
-
-  KURLRequesterDlg dialog(i18n( "Add Subdirectory" ), i18n( "Please enter a name for the subdirectory: " ), this, 0);
-  dialog.urlRequester()->setMode(KFile::Directory);
-  dialog.urlRequester()->setURL(QString::null);
-
-  if ( dialog.exec() == QDialog::Accepted && !dialog.urlRequester()->url().isEmpty() )
-  {
-    QString subdirname;
-    if ( !QDir::isRelativePath(dialog.urlRequester()->url()) )
-    subdirname = getRelativePath( m_shownSubproject->path, dialog.urlRequester()->url() );
+    if ( spitem == 0 && m_shownSubproject == 0 )
+        return ;
     else
-    subdirname = dialog.urlRequester()->url();
+        spitem = m_shownSubproject;
+    QString relpath = spitem->relativePath();
 
-    QDir dir(projectDirectory()+relpath);
-    if (!dir.exists(subdirname))
+    KURLRequesterDlg dialog( i18n( "Add Subdirectory" ), i18n( "Please enter a name for the subdirectory: " ), this, 0 );
+    dialog.urlRequester() ->setMode( KFile::Directory );
+    dialog.urlRequester() ->setURL( QString::null );
+
+    if ( dialog.exec() == QDialog::Accepted && !dialog.urlRequester() ->url().isEmpty() )
     {
-     if (!dir.mkdir(subdirname))
-     {
-       KMessageBox::error(this,i18n("Failed to create subdirectory. "
-                                    "Do you have write permission "
-                                    "in the project folder?" ));
-       return;
-     }
-    }
-    spitem->subdirs.append(subdirname);
-    updateProjectFile(spitem);
-    SubqmakeprojectItem *newitem = new SubqmakeprojectItem(spitem, subdirname,"");
-    newitem->subdir = subdirname;
-    newitem->m_RootBuffer = &(newitem->m_FileBuffer);
-    newitem->path = spitem->path + "/" + subdirname;
-    newitem->relpath = newitem->path;
-    newitem->relpath.remove(0,projectDirectory().length());
+        QString subdirname;
+        if ( !QDir::isRelativePath( dialog.urlRequester() ->url() ) )
+            subdirname = getRelativePath( m_shownSubproject->scope->projectDir(), dialog.urlRequester() ->url() );
+        else
+            subdirname = dialog.urlRequester() ->url();
 
-    parse(newitem);
-  }
-  else
-    return;
+        QDir dir( projectDirectory() + relpath );
+        if ( !dir.exists( subdirname ) )
+        {
+            if ( !dir.mkdir( subdirname ) )
+            {
+                KMessageBox::error( this, i18n( "Failed to create subdirectory. "
+                                                "Do you have write permission "
+                                                "in the project folder?" ) );
+                return ;
+            }
+        }
+        Scope* subproject = spitem->scope->createSubProject( subdirname );
+        new QMakeScopeItem( spitem, subproject->scopeName(), subproject );
+    }
 }
 
-void TrollProjectWidget::slotRemoveSubproject(SubqmakeprojectItem *spitem)
+void TrollProjectWidget::slotRemoveSubproject( QMakeScopeItem *spitem )
 {
-  if (spitem==0 && m_shownSubproject==0)
-    return;
-  else
-  {
-    if ( ( spitem = dynamic_cast<SubqmakeprojectItem *>(m_shownSubproject->parent()) ) != NULL  )
+    if ( spitem == 0 && m_shownSubproject == 0 )
+        return ;
+    else if ( ( spitem = dynamic_cast<QMakeScopeItem *>( m_shownSubproject->parent() ) ) != NULL )
     {
-    QString subdirname = m_shownSubproject->subdir;
-    spitem->subdirs.remove(subdirname);
-    delete m_shownSubproject;
-    m_shownSubproject = spitem;
-    updateProjectFile(spitem);
-    overview->setCurrentItem(m_shownSubproject);
-    overview->setSelected(m_shownSubproject, true);
+        QString subdirname = m_shownSubproject->scope->scopeName();
+        bool delsubdir = false;
+        if ( KMessageBox::questionYesNo( this, i18n( "Delete the directory of the subproject?" ), i18n( "Delete subdir?" ) ) == KMessageBox::Yes )
+            delsubdir = true;
+        spitem->scope->deleteSubProject( m_shownSubproject->scope->scopeName(), delsubdir );
+        delete m_shownSubproject;
+        m_shownSubproject = spitem;
+        spitem->scope->saveToFile( );
+        overview->setCurrentItem( m_shownSubproject );
+        overview->setSelected( m_shownSubproject, true );
     }
-  }
 }
 
-void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p)
+void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *item, const QPoint &p )
 {
-    if (!item)
-        return;
+    if ( !item )
+        return ;
 
-    SubqmakeprojectItem *spitem = static_cast<SubqmakeprojectItem*>(item);
+    QMakeScopeItem *spitem = static_cast<QMakeScopeItem*>( item );
 
-    KPopupMenu popup(this);
-    popup.insertTitle(i18n("Subproject %1").arg(item->text(0)));
+    KPopupMenu popup( this );
+    popup.insertTitle( i18n( "Subproject %1" ).arg( item->text( 0 ) ) );
 
     int idBuild = -2;
     int idRebuild = -2;
@@ -1174,1078 +828,555 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     int idProjectConfiguration = -2;
     int idAddSubproject = -2;
     int idRemoveSubproject = -2;
+    int idDisableSubproject = -2;
     int idRemoveScope = -2;
     int idAddScope = -2;
 
 
-    if (!spitem->isScope)
+    if ( spitem->scope->scopeType() == Scope::ProjectScope )
     {
-      idBuild = popup.insertItem(SmallIcon("make_kdevelop"),i18n("Build"));
-      popup.setWhatsThis(idBuild, i18n("<b>Build</b><p>Runs <b>make</b> from the selected subproject directory.<br>"
-                              "Environment variables and make arguments can be specified "
-                              "in the project settings dialog, <b>Make Options</b> tab."));
-      idClean = popup.insertItem(i18n("Clean"));
-      popup.setWhatsThis(idBuild, i18n("<b>Clean project</b><p>Runs <b>make clean</b> command from the project "
-                                       "directory.<br> Environment variables and make arguments can be specified "
-                                       "in the project settings dialog, <b>Make Options</b> tab."));
-      idRebuild = popup.insertItem(SmallIcon("rebuild"), i18n("Rebuild"));
-      popup.setWhatsThis(idRebuild, i18n("<b>Rebuild project</b><p>Runs <b>make clean</b> and then <b>make</b> from "
-                                         "the project directory.<br>Environment variables and make arguments can be "
-                                         "specified in the project settings dialog, <b>Make Options</b> tab."));
-      idQmake = popup.insertItem(SmallIcon("qmakerun"),i18n("Run qmake"));
-      popup.setWhatsThis(idQmake, i18n("<b>Run qmake</b><p>Runs <b>qmake</b> from the selected subproject directory. "
-                                       "This creates or regenerates Makefile."));
-      idQmakeRecursive = popup.insertItem(SmallIcon("qmakerun"),i18n("Run qmake recursively"));
-      popup.setWhatsThis(idQmakeRecursive, i18n("<b>Run qmake recursively</b><p>Runs <b>qmake</b> from the selected"
-                                                "subproject directory and recurses into all subproject directories. "
-                                                "This creates or regenerates Makefile."));
-      popup.insertSeparator();
-      idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
-      popup.setWhatsThis(idAddSubproject, i18n("<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to a currently selected subproject. "
-        "This action is allowed only if a type of the subproject is 'subdirectories'. The type of the subproject can be "
-        "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)."));
-      if (spitem->configuration.m_template != QTMP_SUBDIRS)
-        popup.setItemEnabled(idAddSubproject, false);
-      idRemoveSubproject = popup.insertItem(SmallIcon("remove_subdir"),i18n("Remove Subproject..."));
-      popup.setWhatsThis(idRemoveSubproject, i18n("<b>Remove subproject</b><p>Removes currently selected subproject. Does not delete any file from disk. Deleted subproject can be later added by calling 'Add Subproject' action."));
-      if (spitem->parent() == NULL)
-        popup.setItemEnabled(idRemoveSubproject, false);
-      idAddScope = popup.insertItem(SmallIcon("qmake_scopenew"),i18n("Create Scope..."));
-      popup.setWhatsThis(idAddScope, i18n("<b>Create scope</b><p>Creates QMake scope in the project file of the currently selected subproject."));
-      popup.insertSeparator();
-      idProjectConfiguration = popup.insertItem(SmallIcon("configure"),i18n("Subproject Settings"));
-      popup.setWhatsThis(idProjectConfiguration, i18n("<b>Subproject settings</b><p>Opens <b>QMake Subproject Configuration</b> dialog. "
-        "It provides settings for:<br>subproject type and configuration,<br>include and library paths,<br>lists of dependencies and "
-        "external libraries,<br>build order,<br>intermediate files locations,<br>compiler options."));
+        idBuild = popup.insertItem( SmallIcon( "make_kdevelop" ), i18n( "Build" ) );
+        popup.setWhatsThis( idBuild, i18n( "<b>Build</b><p>Runs <b>make</b> from the selected subproject directory.<br>"
+                                           "Environment variables and make arguments can be specified "
+                                           "in the project settings dialog, <b>Make Options</b> tab." ) );
+        idClean = popup.insertItem( i18n( "Clean" ) );
+        popup.setWhatsThis( idBuild, i18n( "<b>Clean project</b><p>Runs <b>make clean</b> command from the project "
+                                           "directory.<br> Environment variables and make arguments can be specified "
+                                           "in the project settings dialog, <b>Make Options</b> tab." ) );
+        idRebuild = popup.insertItem( SmallIcon( "rebuild" ), i18n( "Rebuild" ) );
+        popup.setWhatsThis( idRebuild, i18n( "<b>Rebuild project</b><p>Runs <b>make clean</b> and then <b>make</b> from "
+                                             "the project directory.<br>Environment variables and make arguments can be "
+                                             "specified in the project settings dialog, <b>Make Options</b> tab." ) );
+        idQmake = popup.insertItem( SmallIcon( "qmakerun" ), i18n( "Run qmake" ) );
+        popup.setWhatsThis( idQmake, i18n( "<b>Run qmake</b><p>Runs <b>qmake</b> from the selected subproject directory. This creates or regenerates Makefile." ) );
+        idQmakeRecursive = popup.insertItem( SmallIcon( "qmakerun" ), i18n( "Run qmake recursively" ) );
+        popup.setWhatsThis( idQmakeRecursive, i18n( "<b>Run qmake recursively</b><p>Runs <b>qmake</b> from the selected"
+                            "subproject directory and recurses into all subproject directories. "
+                            "This creates or regenerates Makefile." ) );
+
+        popup.insertSeparator();
+        idAddSubproject = popup.insertItem( SmallIcon( "folder_new" ), i18n( "Add Subproject..." ) );
+        popup.setWhatsThis( idAddSubproject, i18n( "<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to a currently selected subproject. "
+                            "This action is allowed only if a type of the subproject is 'subdirectories'. The type of the subproject can be "
+                            "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)." ) );
+        if ( !spitem->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
+            popup.setItemEnabled( idAddSubproject, false );
+        idRemoveSubproject = popup.insertItem( SmallIcon( "remove_subdir" ), i18n( "Remove Subproject..." ) );
+        popup.setWhatsThis( idRemoveSubproject, i18n( "<b>Remove subproject</b><p>Removes currently selected subproject. Does not delete any file from disk. Deleted subproject can be later added by calling 'Add Subproject' action." ) );
+        if ( spitem->parent() == NULL )
+            popup.setItemEnabled( idRemoveSubproject, false );
+        idAddScope = popup.insertItem( SmallIcon( "qmake_scopenew" ), i18n( "Create Scope..." ) );
+        popup.setWhatsThis( idAddScope, i18n( "<b>Create scope</b><p>Creates QMake scope in the project file of the currently selected subproject." ) );
+        popup.insertSeparator();
+        idProjectConfiguration = popup.insertItem( SmallIcon( "configure" ), i18n( "Subproject Settings" ) );
+        popup.setWhatsThis( idProjectConfiguration, i18n( "<b>Subproject settings</b><p>Opens <b>QMake Subproject Configuration</b> dialog. "
+                            "It provides settings for:<br>subproject type and configuration,<br>include and library paths,<br>lists of dependencies and "
+                            "external libraries,<br>build order,<br>intermediate files locations,<br>compiler options." ) );
     }
     else
     {
-      idAddScope = popup.insertItem(SmallIcon("qmake_scopenew"),i18n("Create Scope..."));
-      popup.setWhatsThis(idAddScope, i18n("<b>Create Scope</b><p>Creates QMake scope in the currently selected scope."));
-      idRemoveScope = popup.insertItem(SmallIcon("editdelete"),i18n("Remove Scope"));
-      popup.setWhatsThis(idRemoveScope, i18n("<b>Remove Scope</b><p>Removes currently selected scope."));
+        idAddScope = popup.insertItem( SmallIcon( "qmake_scopenew" ), i18n( "Create Scope..." ) );
+        popup.setWhatsThis( idAddScope, i18n( "<b>Create Scope</b><p>Creates QMake scope in the currently selected scope." ) );
+        idRemoveScope = popup.insertItem( SmallIcon( "editdelete" ), i18n( "Remove Scope" ) );
+        popup.setWhatsThis( idRemoveScope, i18n( "<b>Remove Scope</b><p>Removes currently selected scope." ) );
+        popup.insertSeparator();
+        idAddSubproject = popup.insertItem( SmallIcon( "folder_new" ), i18n( "Add Subproject..." ) );
+        popup.setWhatsThis( idAddSubproject, i18n( "<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to the currently selected scope. "
+                            "This action is allowed only if a type of the subproject is 'subdirectories'. The type of the subproject can be "
+                            "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)." ) );
+        if ( !spitem->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
+            popup.setItemEnabled( idAddSubproject, false );
+        idDisableSubproject = popup.insertItem( SmallIcon( "remove_subdir" ), i18n( "Disable Subproject..." ) );
+        popup.setWhatsThis( idRemoveSubproject, i18n( "<b>Disable subproject</b><p>Disables the currently selected subproject when this scope is active. Does not delete the directory from disk. Deleted subproject can be later added by calling 'Add Subproject' action." ) );
+        if( !spitem->projectFileItem()->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
+            popup.setItemEnabled( idDisableSubproject, false );
+        popup.insertSeparator();
+        idProjectConfiguration = popup.insertItem( SmallIcon( "configure" ), i18n( "Scope Settings" ) );
+        popup.setWhatsThis( idProjectConfiguration, i18n( "<b>Scope settings</b><p>Opens <b>QMake Subproject Configuration</b> dialog. "
+                            "It provides settings for:<br>subproject type and configuration,<br>include and library paths,<br>lists of dependencies and "
+                            "external libraries,<br>build order,<br>intermediate files locations,<br>compiler options." ) );
     }
 
-    int r = popup.exec(p);
+    int r = popup.exec( p );
 
-    QString relpath = spitem->path.mid(projectDirectory().length());
-    if (r == idAddSubproject)
+    QString relpath = spitem->relativePath();
+    if ( r == idAddSubproject )
     {
-      slotAddSubdir(spitem);
+        slotAddSubdir( spitem );
     }
-    if (r == idRemoveSubproject)
+    if ( r == idRemoveSubproject )
     {
-      slotRemoveSubproject(spitem);
+        slotRemoveSubproject( spitem );
     }
-    if (r == idAddScope)
+    if ( r == idDisableSubproject )
     {
-      slotCreateScope(spitem);
+        slotDisableSubproject( spitem );
     }
-    else if (r == idRemoveScope)
+    if ( r == idAddScope )
     {
-      slotRemoveScope(spitem);
+        slotCreateScope( spitem );
     }
-    else if (r == idBuild)
+    else if ( r == idRemoveScope )
+    {
+        slotRemoveScope( spitem );
+    }
+    else if ( r == idBuild )
     {
         slotBuildTarget();
-//        m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
+        //        m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
     }
-    else if (r == idRebuild)
+    else if ( r == idRebuild )
     {
         slotRebuildTarget();
     }
-    else if (r == idClean)
+    else if ( r == idClean )
     {
         slotCleanTarget();
     }
-    else if (r == idQmake)
+
+    else if ( r == idQmake )
     {
-        m_part->startQMakeCommand(projectDirectory() + relpath);
+        m_part->startQMakeCommand( projectDirectory() + relpath );
     }
-    else if( r == idQmakeRecursive )
+    else if ( r == idQmakeRecursive )
     {
-        runQMakeRecursive(spitem);
+        runQMakeRecursive( spitem );
     }
-    else if (r == idProjectConfiguration)
+
+    else if ( r == idProjectConfiguration )
     {
-      m_configDlg->updateSubproject(spitem);
-      m_configDlg->show();
+        m_configDlg->updateSubproject( spitem );
+        m_configDlg->show();
     }
 }
 
-void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
-//=======================================================================
+void TrollProjectWidget::addFileToCurrentSubProject( GroupItem *titem, const QString &filename )
 {
-  FileBuffer *Buffer = &(item->m_FileBuffer);
-  QString relpath = item->path.mid(projectDirectory().length());
-
-  updateProjectFile(item); //for update buildorder
-
-  // Template variable
-  Buffer->removeValues("TEMPLATE");
-  if (item->configuration.m_template == QTMP_APPLICATION)
-    Buffer->setValues("TEMPLATE",QString("app"),FileBuffer::VSM_RESET);
-  if (item->configuration.m_template == QTMP_LIBRARY) {
-    Buffer->setValues("TEMPLATE",QString("lib"),FileBuffer::VSM_RESET);
-    Buffer->removeValues("VERSION");
-    Buffer->setValues("VERSION",item->configuration.m_libraryversion,FileBuffer::VSM_RESET);
-  }
-  if (item->configuration.m_template == QTMP_SUBDIRS)
-    Buffer->setValues("TEMPLATE",QString("subdirs"),FileBuffer::VSM_RESET);
-
-  Buffer->removeValues("IDL_COMPILER");
-  Buffer->setValues("IDL_COMPILER",item->configuration.idl_compiler,FileBuffer::VSM_RESET);
-
-  Buffer->removeValues("IDL_OPTIONS");
-  Buffer->setValues("IDL_OPTIONS",item->configuration.idl_options,FileBuffer::VSM_RESET);
-
-
-  //building idl targets
-  QStringList::Iterator it=item->idls.begin();
-  for(;it!=item->idls.end();++it){
-    QString target=(*it)+".target";
-    QString command=(*it)+".commands";
-    QString commandStr="$$IDL_COMPILER $$IDL_OPTIONS $$"+target;
-
-    Buffer->removeValues(target);
-    Buffer->setValues(target,*it,FileBuffer::VSM_RESET);
-
-    Buffer->removeValues(command);
-    Buffer->setValues(command,commandStr,FileBuffer::VSM_RESET);
-
-  }
-
-
-
-
-
-  // Config variable
-  Buffer->removeValues("CONFIG");
-  QStringList configList;
-  if (item->configuration.m_buildMode == QBM_RELEASE)
-    configList.append("release");
-  else if (item->configuration.m_buildMode == QBM_DEBUG)
-    configList.append("debug");
-  else if (item->configuration.m_buildMode == QBM_DEBUG_AND_RELEASE)
-    configList.append("debug_and_release");
-
-  if (item->configuration.m_warnings == QWARN_ON)
-    configList.append("warn_on");
-  else if (item->configuration.m_warnings == QWARN_OFF)
-    configList.append("warn_off");
-  if (item->configuration.m_requirements & QD_QT)
-    configList.append("qt");
-  if (item->configuration.m_requirements & QD_OPENGL)
-    configList.append("opengl");
-  if (item->configuration.m_requirements & QD_THREAD)
-    configList.append("thread");
-  if (item->configuration.m_requirements & QD_X11)
-    configList.append("x11");
-  if (item->configuration.m_requirements & QD_STATIC)
-    configList.append("staticlib");
-  if (item->configuration.m_requirements & QD_SHARED)
-    configList.append("dll");
-  if (item->configuration.m_requirements & QD_PLUGIN)
-    configList.append("plugin");
-  if (item->configuration.m_requirements & QD_EXCEPTIONS)
-    configList.append("exceptions");
-  if (item->configuration.m_requirements & QD_STL)
-    configList.append("stl");
-  if (item->configuration.m_requirements & QD_RTTI)
-    configList.append("rtti");
-  if (item->configuration.m_requirements & QD_ORDERED)
-    configList.append("ordered");
-  //Qt4 specific
-  if ( m_part->isQt4Project() )
-  {
-    if ( item->configuration.m_requirements & QD_BUILDALL )
-      configList.append( "build_all" );
-    if ( item->configuration.m_requirements & QD_TESTLIB )
-      configList.append( "qtestlib" );
-    if ( item->configuration.m_requirements & QD_UITOOLS )
-      configList.append( "uitools" );
-    if ( item->configuration.m_requirements & QD_ASSISTANT )
-      configList.append( "assistant" );
-    if ( item->configuration.m_requirements & QD_DBUS )
-      configList.append( "dbus" );
-    if ( item->configuration.m_requirements & QD_DESIGNER )
-      configList.append( "designer" );
-    configList += item->configuration.m_customConfigOptions;
-  }
-
-  if (item->configuration.m_requirements & QD_LIBTOOL )
-  {
-    configList.append("create_libtool");
-    configList.append("create_prl");
-  }
-  if (item->configuration.m_requirements & QD_PKGCONF )
-  {
-    configList.append("create_pkgconf");
-    configList.append("create_prl");
-  }
-  if (item->configuration.m_requirements & QD_CONSOLE )
-    configList.append("console");
-
-  if (item->configuration.m_requirements & QD_PCH )
-    configList.append("precompile_header");
-
-  if (item->configuration.m_inheritconfig == true)
-    Buffer->setValues("CONFIG",configList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  else
-    Buffer->setValues("CONFIG",configList,FileBuffer::VSM_RESET,VALUES_PER_ROW);
-
-  //Qt4 libs, if a qt4 project
-  if ( m_part->isQt4Project() )
-  {
-    QStringList removeList;
-    QStringList qt4libs;
-    Buffer->removeValues( "QT" );
-    if ( !(  item->configuration.m_qt4libs & Q4L_CORE ) )
-      removeList.append( "core" );
-    if ( !(  item->configuration.m_qt4libs & Q4L_GUI ) )
-      removeList.append( "gui" );
-    if (  item->configuration.m_qt4libs & Q4L_SVG )
-      qt4libs.append( "svg" );
-    if (  item->configuration.m_qt4libs & Q4L_XML )
-      qt4libs.append( "xml" );
-    if (  item->configuration.m_qt4libs & Q4L_SQL )
-      qt4libs.append( "sql" );
-    if (  item->configuration.m_qt4libs & Q4L_OPENGL )
-      qt4libs.append( "opengl" );
-    if (  item->configuration.m_qt4libs & Q4L_NETWORK )
-      qt4libs.append( "network" );
-    if (  item->configuration.m_qt4libs & Q4L_QT3 )
-      qt4libs.append( "qt3support" );
-
-    if (item->configuration.m_inheritconfig == true)
-    {
-        if ( !qt4libs.isEmpty() )
-            Buffer->setValues( "QT", qt4libs, FileBuffer::VSM_APPEND, VALUES_PER_ROW );
-        if ( !removeList.isEmpty() )
-            Buffer->setValues( "QT", removeList, FileBuffer::VSM_EXCLUDE, VALUES_PER_ROW );
-    }else
-    {
-        Buffer->setValues( "QT", qt4libs, FileBuffer::VSM_RESET, VALUES_PER_ROW );
-    }
-
-
-  }
-
-  // Config strings
-  Buffer->removeValues("DESTDIR");
-  if (!item->configuration.m_destdir.simplifyWhiteSpace().isEmpty())
-    Buffer->setValues("DESTDIR",QString(item->configuration.m_destdir),FileBuffer::VSM_RESET,VALUES_PER_ROW);
-  Buffer->removeValues("TARGET");
-  if (!item->configuration.m_target.simplifyWhiteSpace().isEmpty())
-    Buffer->setValues("TARGET",QString(item->configuration.m_target),FileBuffer::VSM_RESET,VALUES_PER_ROW);
-  Buffer->removeValues("INCLUDEPATH");
-  if (item->configuration.m_includepath.count())
-      Buffer->setValues("INCLUDEPATH",item->configuration.m_includepath,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  Buffer->removeValues("DEFINES");
-  if (item->configuration.m_defines.count())
-    Buffer->setValues("DEFINES",item->configuration.m_defines,FileBuffer::VSM_RESET,VALUES_PER_ROW);
-  Buffer->removeValues("QMAKE_CXXFLAGS_DEBUG");
-  if (item->configuration.m_cxxflags_debug.count())
-    Buffer->setValues("QMAKE_CXXFLAGS_DEBUG",item->configuration.m_cxxflags_debug,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  Buffer->removeValues("QMAKE_CXXFLAGS_RELEASE");
-  if (item->configuration.m_cxxflags_release.count())
-    Buffer->setValues("QMAKE_CXXFLAGS_RELEASE",item->configuration.m_cxxflags_release,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  Buffer->removeValues("QMAKE_LFLAGS_DEBUG");
-  if (item->configuration.m_lflags_debug.count())
-    Buffer->setValues("QMAKE_LFLAGS_DEBUG",item->configuration.m_lflags_debug,FileBuffer::VSM_RESET,VALUES_PER_ROW);
-  Buffer->removeValues("QMAKE_LFLAGS_RELEASE");
-  if (item->configuration.m_lflags_release.count())
-    Buffer->setValues("QMAKE_LFLAGS_RELEASE",item->configuration.m_lflags_release,FileBuffer::VSM_RESET,VALUES_PER_ROW);
-  Buffer->removeValues("QMAKE_LIBDIR");
-  if (item->configuration.m_librarypath.count())
-    Buffer->setValues("QMAKE_LIBDIR",item->configuration.m_librarypath,FileBuffer::VSM_RESET,VALUES_PER_ROW);
-  Buffer->removeValues("OBJECTS_DIR");
-  if (!item->configuration.m_objectpath.simplifyWhiteSpace().isEmpty())
-    Buffer->setValues("OBJECTS_DIR",QString(item->configuration.m_objectpath),FileBuffer::VSM_RESET,VALUES_PER_ROW);
-  Buffer->removeValues("UI_DIR");
-  if (!item->configuration.m_uipath.simplifyWhiteSpace().isEmpty())
-    Buffer->setValues("UI_DIR",QString(item->configuration.m_uipath),FileBuffer::VSM_RESET,VALUES_PER_ROW);
-  Buffer->removeValues("MOC_DIR");
-  if (!item->configuration.m_mocpath.simplifyWhiteSpace().isEmpty())
-    Buffer->setValues("MOC_DIR",QString(item->configuration.m_mocpath),FileBuffer::VSM_RESET,VALUES_PER_ROW);
-  Buffer->removeValues("MAKEFILE");
-  if (!item->configuration.m_makefile.simplifyWhiteSpace().isEmpty())
-    Buffer->setValues("MAKEFILE", item->configuration.m_makefile,FileBuffer::VSM_RESET,VALUES_PER_ROW);
-
-
-
-  Buffer->removeValues("INCLUDEPATH");
-  if (item->configuration.m_incadd.count()>0)
-    Buffer->setValues("INCLUDEPATH",item->configuration.m_incadd,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-
-  Buffer->removeValues("LIBS");
-  if (item->configuration.m_libadd.count()>0)
-    Buffer->setValues("LIBS",item->configuration.m_libadd,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-
-  Buffer->removeValues("TARGETDEPS");
-//  if (item->configuration.m_libadd.count()>0)
-  Buffer->setValues("TARGETDEPS",item->configuration.m_prjdeps,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-
-  updateInstallObjects(item,Buffer);
-
-  // Remove vars no longer kept
-  QStringList::Iterator remVars = item->configuration.m_removed_variables.begin();
-  for( ; remVars != item->configuration.m_removed_variables.end(); ++remVars)
-    Buffer->removeValues( *remVars );
-
-  // save custom vars first
-  QMap<QString,QString>::Iterator custVars = item->configuration.m_variables.begin();
-  for( ; custVars != item->configuration.m_variables.end(); ++custVars )
-  {
-    Buffer->removeValues( custVars.key() );
-    Buffer->setValues( custVars.key(), QStringList(custVars.data()), FileBuffer::VSM_RESET);
-  }
-
-  // Write to .pro file
-//  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
-  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->pro_file,getHeader());
+    titem->addFileToScope( filename );
 }
 
-SubqmakeprojectItem* TrollProjectWidget::getScope(SubqmakeprojectItem *baseItem,const QString &scopeString)
-//===============================================================================================
+void TrollProjectWidget::addFileToCurrentSubProject( GroupItem::GroupType gtype, const QString &filename )
 {
-  QStringList baseScopeParts = QStringList::split(':',baseItem->scopeString);
-  QStringList subScopeParts = QStringList::split(':',scopeString);
-  kdDebug(9024) << "baseitem" << baseItem->scopeString << endl;
-  // Stop if baseItem not an ansister
-  if (baseScopeParts.count() > subScopeParts.count())
-    return NULL;
-  uint i;
-  for (i=0; i<baseScopeParts.count(); i++)
-  {
-    // Stop if baseItem in wrong treepart
-    kdDebug(9024) << "baseScopeParts[i]" << "!=" << subScopeParts[i] << endl;
-    if (baseScopeParts[i] != subScopeParts[i])
-      return NULL;
-  }
-  // if all scopeparts matched and the amount of parts are equal this must be it
-  if (baseScopeParts.count() == subScopeParts.count())
-    return baseItem;
-  // process next step of recursive function
-  QString nextScopePart = subScopeParts[i];
-  QPtrListIterator<SubqmakeprojectItem> spit(baseItem->scopes);
-  for (; spit.current(); ++spit)
-  {
-    SubqmakeprojectItem *spitem = spit;
-    kdDebug(9024) << spitem->text(0) << "==" << nextScopePart << endl;
-    if (spitem->text(0)==nextScopePart)
-    {
-      return getScope(spit,scopeString);
-      break;
-    }
-  }
-  return NULL;
-}
+    if ( !m_shownSubproject )
+        return ;
+    GroupItem *gitem = 0;
 
-void TrollProjectWidget::updateProjectFile(QListViewItem *item)
-{
+    if ( m_shownSubproject->groups.contains( gtype ) )
+        gitem = m_shownSubproject->groups[ gtype ];
 
-  SubqmakeprojectItem *spitem = static_cast<SubqmakeprojectItem*>(item);
-  QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
-  FileBuffer *subBuffer=m_shownSubproject->m_RootBuffer->getSubBuffer(spitem->scopeString);
-  subBuffer->removeValues("SUBDIRS");
-  subBuffer->setValues("SUBDIRS",spitem->subdirs,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  subBuffer->removeValues("SOURCES");
-  subBuffer->setValues("SOURCES",spitem->sources,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  subBuffer->setValues("SOURCES",spitem->sources_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-  subBuffer->removeValues("HEADERS");
-  subBuffer->setValues("HEADERS",spitem->headers,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  subBuffer->setValues("HEADERS",spitem->headers_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-//  subBuffer->removeValues("FORMS");
-//  subBuffer->setValues("FORMS",spitem->forms,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-//  subBuffer->setValues("FORMS",spitem->forms_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
+    if ( !gitem )
+        return ;
 
-  subBuffer->removeValues("IDLS");
-  subBuffer->setValues("IDLS",spitem->idls,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  subBuffer->setValues("IDLS",spitem->idls_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-
-  if ( m_part->isQt4Project() )
-  {
-    subBuffer->removeValues("RESOURCES");
-    subBuffer->setValues("RESOURCES",spitem->resources,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-    subBuffer->setValues("RESOURCES",spitem->resources_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-  }else
-  {
-    subBuffer->removeValues("IMAGES");
-    subBuffer->setValues("IMAGES",spitem->images,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-    subBuffer->setValues("IMAGES",spitem->images_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-  }
-
-  subBuffer->removeValues("DISTFILES");
-  subBuffer->setValues("DISTFILES",spitem->distfiles,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  subBuffer->setValues("DISTFILES",spitem->distfiles_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-
-  subBuffer->removeValues("LEXSOURCES");
-  subBuffer->setValues("LEXSOURCES",spitem->lexsources,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  subBuffer->setValues("LEXSOURCES",spitem->lexsources_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-
-  subBuffer->removeValues("YACCSOURCES");
-  subBuffer->setValues("YACCSOURCES",spitem->yaccsources,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  subBuffer->setValues("YACCSOURCES",spitem->yaccsources_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-
-
-  subBuffer->removeValues("TRANSLATIONS");
-  subBuffer->setValues("TRANSLATIONS",spitem->translations,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  subBuffer->setValues("TRANSLATIONS",spitem->translations_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-
-
-  if( m_part->isTMakeProject() ) {
-      subBuffer->removeValues("INTERFACES");
-      subBuffer->setValues("INTERFACES",spitem->forms,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-      subBuffer->setValues("INTERFACES",spitem->forms_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-  } else {
-      subBuffer->removeValues("FORMS");
-      subBuffer->setValues("FORMS",spitem->forms,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-      subBuffer->setValues("FORMS",spitem->forms_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-  }
-
-  updateInstallObjects(spitem,subBuffer);
-//  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
-  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->pro_file,getHeader());
-}
-
-void TrollProjectWidget::updateInstallObjects(SubqmakeprojectItem* item, FileBuffer* subBuffer)
-{
-  // Install objects
-  GroupItem* instroot = getInstallRoot(item);
-  QPtrListIterator<GroupItem> it(instroot->installs);
-  QStringList instobjects;
-
-  for (;it.current();++it)
-  {
-    GroupItem* iobj = *it;
-    subBuffer->removeValues(iobj->install_objectname+".path");
-    subBuffer->removeValues(iobj->install_objectname+".files");
-
-    if (!iobj->str_files.isEmpty() ||
-        !iobj->str_files_exclude.isEmpty())
-    {
-      instobjects.append(iobj->install_objectname);
-      subBuffer->setValues(iobj->install_objectname+".path",iobj->install_path,FileBuffer::VSM_RESET,VALUES_PER_ROW);
-      subBuffer->setValues(iobj->install_objectname+".files",iobj->str_files,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-      subBuffer->setValues(iobj->install_objectname+".files",iobj->str_files_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-    }
-  }
-
-  if (!item->configuration.m_target_install_path.isEmpty() &&
-      item->configuration.m_target_install)
-  {
-    instobjects.append("target");
-    subBuffer->removeValues("target.path");
-    subBuffer->setValues("target.path",item->configuration.m_target_install_path,FileBuffer::VSM_RESET,VALUES_PER_ROW);
-    subBuffer->setValues("INSTALLS",QString("target"),FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  }
-
-  subBuffer->removeValues("INSTALLS");
-  subBuffer->setValues("INSTALLS",instobjects,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-
-
-}
-
-QString TrollProjectWidget::getHeader()
-{
-  QString header,templateString,targetString;
-  QString relpath = "."+m_shownSubproject->path.mid(projectDirectory().length());
-  if (m_shownSubproject->configuration.m_template==QTMP_APPLICATION)
-  {
-    templateString = i18n("an application: ");
-    targetString = m_shownSubproject->configuration.m_target;
-  }
-  if (m_shownSubproject->configuration.m_template==QTMP_LIBRARY)
-  {
-    templateString = i18n("a library: ");
-    targetString = m_shownSubproject->configuration.m_target;
-  }
-  if (m_shownSubproject->configuration.m_template==QTMP_SUBDIRS)
-    templateString = i18n("a subdirs project");
-  header.sprintf(m_part->getQMakeHeader().latin1(),
-                 relpath.ascii(),
-                 templateString.ascii(),
-                 targetString.ascii());
-  return header;
-}
-
-
-void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QString &filename)
-{
-  QPtrListIterator<FileItem> it( titem->files );
-  while ( it.current() != 0 )
-  {
-     if(it.current()->name == filename) //File already exists in this subproject
-       return;
-     ++it;
-  }
-
-  FileItem *fitem = createFileItem(filename);
-
-  fitem->uiFileLink = getUiFileLink(titem->owner->relpath+"/",filename);
-  if (titem->groupType != GroupItem::InstallObject)
-    titem->files.append(fitem);
-  switch (titem->groupType)
-  {
-    case GroupItem::Sources:
-      titem->owner->sources.append(filename);
-      break;
-    case GroupItem::Headers:
-      titem->owner->headers.append(filename);
-      break;
-    case GroupItem::Forms:
-      titem->owner->forms.append(filename);
-      break;
-    case GroupItem::IDLs:
-      titem->owner->idls.append(filename);
-      break;
-    case GroupItem::Lexsources:
-      titem->owner->lexsources.append(filename);
-      break;
-    case GroupItem::Yaccsources:
-      titem->owner->yaccsources.append(filename);
-      break;
-    case GroupItem::Images:
-      titem->owner->images.append(filename);
-      break;
-    case GroupItem::Resources:
-      titem->owner->resources.append(filename);
-      break;
-    case GroupItem::Distfiles:
-      titem->owner->distfiles.append(filename);
-      break;
-    case GroupItem::Translations:
-      titem->owner->translations.append(filename);
-      break;
-    case GroupItem::InstallObject:
-      titem->str_files.append(filename);
-      titem->files.append(fitem);
-      break;
-    default:
-      break;
-  }
-}
-
-void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype, const QString &filename)
-{
-  if (!m_shownSubproject)
-    return;
-  FileItem *fitem = createFileItem(filename);
-  GroupItem *gitem = 0;
-
-  QPtrListIterator<GroupItem> it(m_shownSubproject->groups);
-  for (; it.current(); ++it)
-  {
-    if ((*it)->groupType == gtype)
-    {
-      gitem = *it;
-       QPtrListIterator<FileItem> it( gitem->files );
-       while ( it.current() != 0 )
-       {
-        if(it.current()->name == filename) //File already exists in this subproject
-          return;
-        ++it;
-       }
-      break;
-    }
-  }
-  if (!gitem)
-    return;
-  fitem->uiFileLink = getUiFileLink(gitem->owner->relpath+"/",filename);
-  gitem->files.append(fitem);
-  switch (gtype)
-  {
-    case GroupItem::Sources:
-      m_shownSubproject->sources.append(filename);
-      break;
-    case GroupItem::Headers:
-      m_shownSubproject->headers.append(filename);
-      break;
-    case GroupItem::Forms:
-      m_shownSubproject->forms.append(filename);
-      break;
-    case GroupItem::IDLs:
-      m_shownSubproject->idls.append(filename);
-      break;
-    case GroupItem::Lexsources:
-      m_shownSubproject->lexsources.append(filename);
-      break;
-    case GroupItem::Yaccsources:
-      m_shownSubproject->yaccsources.append(filename);
-      break;
-    case GroupItem::Translations:
-      m_shownSubproject->translations.append(filename);
-      break;
-    case GroupItem::Images:
-      m_shownSubproject->images.append(filename);
-      break;
-    case GroupItem::Resources:
-      m_shownSubproject->resources.append(filename);
-      break;
-    case GroupItem::Distfiles:
-      m_shownSubproject->distfiles.append(filename);
-      break;
-    /*
-    case GroupItem::InstallObject:
-      GroupItem *gitem = 0;
-
-      QPtrListIterator<GroupItem> it(m_shownSubproject->groups);
-      for (; it.current(); ++it)
-      {
-        if ((*it)->groupType == GroupItem::InstallRoot)
-        {
-          gitem = *it;
-          break;
-        }
-      }
-      QPtrListIterator<GroupItem> it2(gitem->installs);
-      for (; it2.current(); ++it2)
-      {
-        if ((*it2)->install_objectname == )
-        {
-          if ();
-        }
-      }
-
-      m_shownSubproject->files.append(fitem);
-      break;
-    */
-    default:
-      break;
-  }
+    gitem->addFileToScope( filename );
 }
 
 /**
 * Method adds a file to the current project by grouped
 * by file extension
 */
-void TrollProjectWidget::addFiles( QStringList &files, bool noPathTruncate)
+void TrollProjectWidget::addFiles( QStringList &files, bool noPathTruncate )
 {
-  if (!m_shownSubproject)
-    return;
+    if ( !m_shownSubproject )
+        return ;
 
-  QString newPath;
+    QString newPath;
 
-  for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
-  {
-    QString fileName = *it;
-
-    QString origFileName = noPathTruncate ? fileName : QFileInfo(fileName).fileName();
-    QString origFilePath = noPathTruncate ? QDir::cleanDirPath(m_shownSubproject->path + "/" + fileName) : fileName;
-    if (m_shownSubproject->configuration.m_template == QTMP_SUBDIRS)
+    for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
     {
-        ChooseSubprojectDlg dlg(this);
-        if (dlg.exec() == QDialog::Accepted)
+        QString fileName = *it;
+
+        QString origFileName = noPathTruncate ? fileName : QFileInfo( fileName ).fileName();
+        QString origFilePath = noPathTruncate ? QDir::cleanDirPath( m_shownSubproject->scope->projectDir() + QDir::separator() + fileName ) : fileName;
+        if ( m_shownSubproject->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
         {
-            if (dlg.selectedSubproject())
+            ChooseSubprojectDlg dlg( this, false );
+            if ( dlg.exec() == QDialog::Accepted )
             {
-                overview->setCurrentItem(dlg.selectedSubproject());
-                newPath = dlg.selectedSubproject()->path;
+                if ( dlg.selectedSubproject() )
+                {
+                    overview->setCurrentItem( dlg.selectedSubproject() );
+                    newPath = dlg.selectedSubproject() ->scope->projectDir();
+                }
+            }
+            else
+                return ;
+        }
+
+        if ( !newPath.isEmpty() )
+        {
+            //move file to it's new location
+            KURL source;
+            KURL dest;
+            kdDebug() << "  orig: " << origFilePath << "  dest: " << QDir::cleanDirPath( newPath + QDir::separator() + origFileName ) << endl;
+            source.setPath( origFilePath );
+            dest.setPath( QDir::cleanDirPath( newPath + QDir::separator() + origFileName ) );
+            if ( KIO::NetAccess::copy( source, dest, ( QWidget* ) 0 ) )
+                KIO::NetAccess::del( source, ( QWidget* ) 0 );
+            *it = QDir::cleanDirPath( newPath + QDir::separator() + origFileName );
+            fileName = *it;
+        }
+
+        QFileInfo info( fileName );
+        QString ext = info.extension( false ).simplifyWhiteSpace();
+        QString noPathFileName;
+        if ( noPathTruncate )
+            noPathFileName = fileName;
+        else
+            noPathFileName = info.fileName();
+
+        GroupItem *gitem = 0;
+        GroupItem::GroupType gtype = GroupItem::groupTypeForExtension( ext );
+        if ( m_shownSubproject->groups.contains( gtype ) )
+            gitem = m_shownSubproject->groups[ gtype ];
+
+        if ( gitem && !noPathTruncate )
+        {
+            QString addName;
+            if ( fileName.startsWith( QDir::rootDirPath() ) )
+                addName = URLUtil::relativePath( gitem->owner->scope->projectDir(), fileName );
+            else
+                addName = URLUtil::relativePath( gitem->owner->relativePath(), QDir::separator() + fileName );
+            if ( !addName.isEmpty() )
+            {
+                if ( addName[ 0 ] == '/' )
+                    addName = addName.mid( 1 );
+                noPathFileName = addName;
             }
         }
-        else
-            return;
+
+        addFileToCurrentSubProject( GroupItem::groupTypeForExtension( ext ), noPathFileName );
+        slotOverviewSelectionChanged( m_shownSubproject );
+        emitAddedFile ( fileName.mid( m_part->projectDirectory().length() + 1 ) );
     }
-
-    if (!newPath.isEmpty())
-    {
-        //move file to it's new location
-        KURL source;
-        KURL dest;
-        kdDebug() << "  orig: " << origFilePath << "  dest: " << QDir::cleanDirPath(newPath + "/" + origFileName) << endl;
-        source.setPath(origFilePath);
-        dest.setPath(QDir::cleanDirPath(newPath + "/" + origFileName));
-        if (KIO::NetAccess::copy(source, dest, (QWidget*)0))
-            KIO::NetAccess::del(source, (QWidget*)0);
-        *it = QDir::cleanDirPath(newPath + "/" + origFileName);
-        fileName = *it;
-    }
-
-    QFileInfo info(fileName);
-    QString ext = info.extension(false).simplifyWhiteSpace();
-    QString noPathFileName;
-    if (noPathTruncate)
-        noPathFileName = fileName;
-    else
-        noPathFileName = info.fileName();
-
-    GroupItem *gitem = 0;
-    QPtrListIterator<GroupItem> it(m_shownSubproject->groups);
-    for (; it.current(); ++it)
-    {
-        if ((*it)->groupType == GroupItem::groupTypeForExtension(ext))
-        {
-            gitem = *it;
-            break;
-        }
-    }
-    if (gitem && !noPathTruncate)
-    {
-        QString addName;
-        if (fileName.startsWith("/"))
-            addName = URLUtil::relativePath(gitem->owner->path, fileName);
-        else
-            addName = URLUtil::relativePath(gitem->owner->relpath, "/" + fileName);
-        if (!addName.isEmpty())
-        {
-            if (addName[0] == '/')
-                addName = addName.mid(1);
-            noPathFileName = addName;
-        }
-    }
-
-    addFileToCurrentSubProject(GroupItem::groupTypeForExtension(ext), noPathFileName);
-    updateProjectFile(m_shownSubproject);
-    slotOverviewSelectionChanged(m_shownSubproject);
-    emitAddedFile ( fileName.mid(m_part->projectDirectory().length()+1) );
-  }
-
-
-/*  QStringList splitFile = QStringList::split('.',fileName);
-  QString ext = splitFile[splitFile.count()-1];
-  splitFile = QStringList::split('/',fileName);
-  QString fileWithNoSlash = splitFile[splitFile.count()-1];
-  ext = ext.simplifyWhiteSpace();
-  if (QString("cpp cc c").find(ext)>-1)
-    addFileToCurrentSubProject(GroupItem::Sources,fileWithNoSlash);
-  else if (QString("hpp h").find(ext)>-1)
-    addFileToCurrentSubProject(GroupItem::Headers,fileWithNoSlash);
-  else if (QString("ui").find(ext)>-1)
-    addFileToCurrentSubProject(GroupItem::Forms,fileWithNoSlash);
-  else if (QString("idl").find(ext)>-1)
-    addFileToCurrentSubProject(GroupItem::IDLs,fileWithNoSlash);
-  else if (QString("jpg png xpm").find(ext)>-1)
-    addFileToCurrentSubProject(GroupItem::Images,fileWithNoSlash);
-  else if (QString("ts").find(ext)>-1)
-    addFileToCurrentSubProject(GroupItem::Translations,fileWithNoSlash);
-  else
-    addFileToCurrentSubProject(GroupItem::NoType,fileWithNoSlash);*/
 
 }
 
 
 void TrollProjectWidget::slotAddFiles()
 {
-  static KURL lastVisited;
-  QString cleanSubprojectDir = QDir::cleanDirPath(m_shownSubproject->path);
-  QString title, filter;
-  QString otherTitle, otherFilter;
+    static KURL lastVisited;
+    QString cleanSubprojectDir = QDir::cleanDirPath( m_shownSubproject->scope->projectDir() );
+    QString title, filter;
+    QString otherTitle, otherFilter;
 
-  GroupItem* item = dynamic_cast<GroupItem*>(details->selectedItem());
-  GroupItem::GroupType type = item ? item->groupType : GroupItem::NoType;
-  GroupItem::groupTypeMeanings(type, title, filter);
-  filter += "|" + title;
+    GroupItem* item = dynamic_cast<GroupItem*>( details->selectedItem() );
+    GroupItem::GroupType type = item ? item->groupType : GroupItem::NoType;
+    GroupItem::groupTypeMeanings( type, title, filter );
+    filter += "|" + title;
 
-  for (int i = GroupItem::NoType + 1; i < GroupItem::MaxTypeEnum; ++i)
-  {
-    if (type != i)
+    for ( int i = GroupItem::NoType + 1; i < GroupItem::MaxTypeEnum; ++i )
     {
-        GroupItem::groupTypeMeanings(static_cast<GroupItem::GroupType>(i), otherTitle, otherFilter);
-        filter += "\n" + otherFilter + "|" + otherTitle;
+        if ( type != i )
+        {
+            GroupItem::groupTypeMeanings( static_cast<GroupItem::GroupType>( i ), otherTitle, otherFilter );
+            filter += "\n" + otherFilter + "|" + otherTitle;
+        }
     }
-  }
 
-  filter += "\n*|" + i18n("All Files");
+    filter += "\n*|" + i18n( "All Files" );
 
 #if KDE_VERSION >= 310
-  AddFilesDialog *dialog = new AddFilesDialog(cleanSubprojectDir,
-                                        filter,
-                                        this,
-                                        "Insert existing files",
-                                        true, new QComboBox(false));
+    AddFilesDialog *dialog = new AddFilesDialog( cleanSubprojectDir,
+                             filter,
+                             this,
+                             "Insert existing files",
+                             true, new QComboBox( false ) );
 #else
-  AddFilesDialog *dialog = new AddFilesDialog(cleanSubprojectDir,
-                                        filter,
-                                        this,
-                                        i18n("Insert Existing Files").ascii(),
-                                        true);
+    AddFilesDialog *dialog = new AddFilesDialog( cleanSubprojectDir,
+                             filter,
+                             this,
+                             i18n( "Insert Existing Files" ).ascii(),
+                             true );
 #endif
-  dialog->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
+    dialog->setMode( KFile::Files | KFile::ExistingOnly | KFile::LocalOnly );
 
-  if (!lastVisited.isEmpty())
-  {
-    dialog->setURL(lastVisited);
-  }
-
-  dialog->exec();
-  QStringList files = dialog->selectedFiles();
-  lastVisited = dialog->baseURL();
-
-  for (unsigned int i = 0; i < files.count(); i++)
-  {
-    switch (dialog->mode())
+    if ( !lastVisited.isEmpty() )
     {
-      case AddFilesDialog::Copy:
-      {
-        // Copy selected files to current subproject folder
-        // and add them to the filelist
-        QString filename = KURL(files[i]).fileName();
-        KIO::NetAccess::file_copy(files[i], cleanSubprojectDir + "/" + filename, -1, false, false, this);
-        QFile testExist(cleanSubprojectDir + "/" + filename);
-
-        if (testExist.exists())
-        {
-          QStringList files(filename);
-          addFiles(files);
-        }
-      }
-      break;
-
-      case AddFilesDialog::Link:
-      {
-        // Link selected files to current subproject folder
-        QProcess *proc = new QProcess( this );
-        proc->addArgument( "ln" );
-        proc->addArgument( "-s" );
-        proc->addArgument( files[i] );
-        proc->addArgument( cleanSubprojectDir );
-        proc->start();
-        QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
-        // and add them to the filelist
-        QFile testExist(cleanSubprojectDir+"/"+filename);
-        if (testExist.exists())
-        {
-          QStringList files(filename);
-          addFiles(files);
-        }
-      }
-      break;
-
-      case AddFilesDialog::Relative:
-      {
-        // Form relative path to current subproject folder
-        QString theFile = files[i];
-        QStringList files(URLUtil::relativePathToFile(cleanSubprojectDir , theFile));
-        addFiles(files, true);
-      }
-      break;
+        dialog->setURL( lastVisited );
     }
-  }
+
+    dialog->exec();
+    QStringList files = dialog->selectedFiles();
+    lastVisited = dialog->baseURL();
+
+    for ( unsigned int i = 0; i < files.count(); i++ )
+    {
+        switch ( dialog->mode() )
+        {
+            case AddFilesDialog::Copy:
+                {
+                    // Copy selected files to current subproject folder
+                    // and add them to the filelist
+                    QString filename = KURL( files[ i ] ).fileName();
+                    KIO::NetAccess::file_copy( files[ i ], cleanSubprojectDir + QDir::separator() + filename, -1, false, false, this );
+                    QFile testExist( cleanSubprojectDir + QDir::separator() + filename );
+
+                    if ( testExist.exists() )
+                    {
+                        QStringList files( filename );
+                        addFiles( files );
+                    }
+                }
+                break;
+
+            case AddFilesDialog::Link:
+                {
+                    // Link selected files to current subproject folder
+                    QProcess *proc = new QProcess( this );
+                    proc->addArgument( "ln" );
+                    proc->addArgument( "-s" );
+                    proc->addArgument( files[ i ] );
+                    proc->addArgument( cleanSubprojectDir );
+                    proc->start();
+                    QString filename = files[ i ].right( files[ i ].length() - files[ i ].findRev( '/' ) - 1 );
+                    // and add them to the filelist
+                    QFile testExist( cleanSubprojectDir + QDir::separator() + filename );
+                    if ( testExist.exists() )
+                    {
+                        QStringList files( filename );
+                        addFiles( files );
+                    }
+                }
+                break;
+
+            case AddFilesDialog::Relative:
+                {
+                    // Form relative path to current subproject folder
+                    QString theFile = files[ i ];
+                    QStringList files( URLUtil::relativePathToFile( cleanSubprojectDir , theFile ) );
+                    addFiles( files, true );
+                }
+                break;
+        }
+    }
 }
 
-GroupItem* TrollProjectWidget::getInstallRoot(SubqmakeprojectItem* item)
+GroupItem* TrollProjectWidget::getInstallRoot( QMakeScopeItem* item )
 {
-  QPtrListIterator<GroupItem> it(item->groups);
-  for (;it.current();++it)
-  {
-    if ((*it)->groupType == GroupItem::InstallRoot)
-      return *it;
-  }
-  return 0;
-}
-
-GroupItem* TrollProjectWidget::getInstallObject(SubqmakeprojectItem* item, const QString& objectname)
-{
-  GroupItem* instroot = getInstallRoot(item);
-  if (!instroot)
+    if ( item->groups.contains( GroupItem::InstallRoot ) )
+        return item->groups[ GroupItem::InstallRoot ];
     return 0;
-  QPtrListIterator<GroupItem> it(instroot->installs);
-  for (;it.current();++it)
-  {
-    if ((*it)->groupType == GroupItem::InstallObject &&
-        (*it)->install_objectname == objectname )
-      return *it;
-  }
-  return 0;
+}
+
+GroupItem* TrollProjectWidget::getInstallObject( QMakeScopeItem* item, const QString& objectname )
+{
+    GroupItem * instroot = getInstallRoot( item );
+    if ( !instroot )
+        return 0;
+    QPtrListIterator<GroupItem> it( instroot->installs );
+    for ( ;it.current();++it )
+    {
+        if ( ( *it ) ->groupType == GroupItem::InstallObject &&
+                ( *it ) ->text( 0 ) == objectname )
+            return * it;
+    }
+    return 0;
 
 }
 
 void TrollProjectWidget::slotNewFile()
 {
-    GroupItem *gitem = static_cast<GroupItem*>(details->currentItem());
-    if (gitem)
+    GroupItem * gitem = static_cast<GroupItem*>( details->currentItem() );
+    if ( gitem )
     {
-      if (gitem->groupType == GroupItem::InstallObject)
-      {
-          // QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
-          bool ok = FALSE;
-          QString filepattern = KInputDialog::getText(
-                              i18n( "Insert New Filepattern" ),
-                              i18n( "Please enter a filepattern relative the current "
-                                    "subproject (example docs/*.html):" ),
-                              QString::null, &ok, this );
-          if ( ok && !filepattern.isEmpty() )
-          {
-            addFileToCurrentSubProject(gitem,filepattern);
-            updateProjectFile(gitem->owner);
-            slotOverviewSelectionChanged(m_shownSubproject);
-          }
-          return;
-      }
-      if (gitem->groupType == GroupItem::InstallRoot)
-      {
-//          QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
-          bool ok = FALSE;
-          QString install_obj = KInputDialog::getText(
-                              i18n( "Insert New Install Object" ),
-                              i18n( "Please enter a name for the new object:" ),
-                              QString::null, &ok, this );
-          if ( ok && !install_obj.isEmpty() )
-          {
-            GroupItem* institem = createGroupItem(GroupItem::InstallObject, install_obj ,gitem->scopeString);
-            institem->owner = m_shownSubproject;
-            institem->install_objectname = install_obj;
-            gitem->installs.append(institem);
-            slotOverviewSelectionChanged(m_shownSubproject);
-          }
-          return;
-      }
+        if ( gitem->groupType == GroupItem::InstallObject )
+        {
+            // QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+            bool ok = FALSE;
+            QString filepattern = KInputDialog::getText(
+                                      i18n( "Insert New Filepattern" ),
+                                      i18n( "Please enter a filepattern relative the current "
+                                            "subproject (example docs/*.html):" ),
+                                      QString::null, &ok, this );
+            if ( ok && !filepattern.isEmpty() )
+            {
+                addFileToCurrentSubProject( gitem, filepattern );
+                slotOverviewSelectionChanged( m_shownSubproject );
+            }
+            return ;
+        }
+        if ( gitem->groupType == GroupItem::InstallRoot )
+        {
+            //          QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+            bool ok = FALSE;
+            QString install_obj = KInputDialog::getText(
+                                      i18n( "Insert New Install Object" ),
+                                      i18n( "Please enter a name for the new object:" ),
+                                      QString::null, &ok, this );
+            if ( ok && !install_obj.isEmpty() )
+            {
+                gitem->addInstallObject( install_obj );
+                //GroupItem * institem = createGroupItem( GroupItem::InstallObject, install_obj , m_shownSubproject );
+                //gitem->owner->scope->addToPlusOp("INSTALLS", install_obj);
+                gitem->owner->scope->saveToFile();
+                slotOverviewSelectionChanged( m_shownSubproject );
+            }
+            return ;
+        }
 
     }
-    KDevCreateFile * createFileSupport = m_part->extension<KDevCreateFile>("KDevelop/CreateFile");
-    if (createFileSupport)
+    KDevCreateFile * createFileSupport = m_part->extension<KDevCreateFile>( "KDevelop/CreateFile" );
+    if ( createFileSupport )
     {
         KDevCreateFile::CreatedFile crFile =
-            createFileSupport->createNewFile(QString::null, projectDirectory()+m_shownSubproject->path.mid(projectDirectory().length()));
-    } else {
+            createFileSupport->createNewFile( QString::null, projectDirectory() + m_shownSubproject->relativePath() );
+    }
+    else
+    {
         bool ok = FALSE;
-        QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+        QString relpath = m_shownSubproject->relativePath();
         QString filename = KInputDialog::getText(
-                            i18n( "Insert New File"),
-                            i18n( "Please enter a name for the new file:" ),
-                            QString::null, &ok, this );
+                               i18n( "Insert New File" ),
+                               i18n( "Please enter a name for the new file:" ),
+                               QString::null, &ok, this );
         if ( ok && !filename.isEmpty() )
         {
-            QFile newfile(projectDirectory()+relpath+'/'+filename);
-            if (!newfile.open(IO_WriteOnly))
+            QFile newfile( projectDirectory() + relpath + '/' + filename );
+            if ( !newfile.open( IO_WriteOnly ) )
             {
-            KMessageBox::error(this,i18n("Failed to create new file. "
-                                        "Do you have write permission "
-                                        "in the project folder?" ));
-            return;
+                KMessageBox::error( this, i18n( "Failed to create new file. "
+                                                "Do you have write permission "
+                                                "in the project folder?" ) );
+                return ;
             }
             newfile.close();
-            QStringList files(relpath+'/'+filename);
-            addFiles(files);
+            QStringList files( relpath + '/' + filename );
+            addFiles( files );
         }
     }
 }
 
 void TrollProjectWidget::slotRemoveFile()
 {
-  QListViewItem *selectedItem = details->currentItem();
-  if (!selectedItem)
-    return;
-  qProjectItem *pvitem = static_cast<qProjectItem*>(selectedItem);
-  // Check that it is a file (just in case)
-  if (pvitem->type() != qProjectItem::File)
-    return;
-  FileItem *fitem = static_cast<FileItem*>(pvitem);
-  removeFile(m_shownSubproject, fitem);
+    QListViewItem * selectedItem = details->currentItem();
+    if ( !selectedItem )
+        return ;
+    qProjectItem *pvitem = static_cast<qProjectItem*>( selectedItem );
+    // Check that it is a file (just in case)
+    if ( pvitem->type() != qProjectItem::File )
+        return ;
+    FileItem *fitem = static_cast<FileItem*>( pvitem );
+    removeFile( m_shownSubproject, fitem );
 }
 
-void TrollProjectWidget::slotConfigureFile()
+void TrollProjectWidget::slotExcludeFileFromScopeButton()
 {
-  QListViewItem *selectedItem = details->currentItem();
-  if (!selectedItem)
-    return;
-  qProjectItem *pvitem = static_cast<qProjectItem*>(selectedItem);
-  // Check that it is a file (just in case)
-  if (pvitem->type() != qProjectItem::File)
-    return;
-  FileItem *fitem = static_cast<FileItem*>(pvitem);
+    QListViewItem * selectedItem = details->currentItem();
+    if ( !selectedItem )
+        return ;
+    qProjectItem *pvitem = static_cast<qProjectItem*>( selectedItem );
+    // Check that it is a file (just in case)
+    if ( pvitem->type() != qProjectItem::File )
+        return ;
+    FileItem *fitem = static_cast<FileItem*>( pvitem );
 
-  GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
-  if (!gitem)
-    return;
-  QStringList dirtyScopes;
-  FilePropertyDlg *propdlg = new FilePropertyDlg(m_shownSubproject,gitem->groupType,fitem,dirtyScopes);
-  SubqmakeprojectItem *scope;
-  propdlg->exec();
+    GroupItem *gitem = static_cast<GroupItem*>( fitem->parent() );
 
-  for (uint i=0; i<dirtyScopes.count();i++)
-  {
-    scope = getScope(m_shownSubproject,dirtyScopes[i]);
-    if (gitem->groupType == GroupItem::InstallObject)
+    gitem->removeFileFromScope( fitem->text( 0 ) );
+    /*
+    if ( !gitem )
+        return ;
+    QStringList dirtyScopes;
+    FilePropertyDlg *propdlg = new FilePropertyDlg( m_shownSubproject, gitem->groupType, fitem, dirtyScopes );
+    QMakeScopeItem *scope;
+    propdlg->exec();
+
+    for ( uint i = 0; i < dirtyScopes.count();i++ )
     {
-      GroupItem* instroot = getInstallRoot(scope);
-      GroupItem* instobj = getInstallObject(scope,gitem->install_objectname);
-      if (!instobj)
-      {
-        GroupItem* institem = createGroupItem(GroupItem::InstallObject, gitem->install_objectname ,scope->scopeString);
-        institem->owner = scope;
-        institem->install_objectname = gitem->install_objectname;
-        instroot->installs.append(institem);
-        instobj = institem;
-      }
-      // Using the boolean nature of this operation I can append or remove the file from the excludelist
-      if (instobj->str_files_exclude.join(":").find(fitem->name) >= 0)
-      {
-        instobj->str_files_exclude.remove(fitem->name);
-      }
-      else
-      {
-        instobj->str_files_exclude.append(fitem->name);
-      }
-    }
-    if (scope)
-      updateProjectFile(scope);
-  }
+        scope = getScope( m_shownSubproject, dirtyScopes[ i ] );
+        if ( gitem->groupType == GroupItem::InstallObject )
+        {
+            GroupItem * instroot = getInstallRoot( scope );
+            GroupItem* instobj = getInstallObject( scope, gitem->install_objectname );
+            if ( !instobj )
+            {
+                GroupItem * institem = createGroupItem( GroupItem::InstallObject, gitem->install_objectname , scope->scopeString );
+                institem->owner = scope;
+                institem->install_objectname = gitem->install_objectname;
+                instroot->installs.append( institem );
+                instobj = institem;
+            }
+            // Using the boolean nature of this operation I can append or remove the file from the excludelist
+            if ( instobj->str_files_exclude.join( ":" ).find( fitem->name ) >= 0 )
+            {
+                instobj->str_files_exclude.remove( fitem->name );
+            }
+            else
+            {
+                instobj->str_files_exclude.append( fitem->name );
+            }
+        }
+        if ( scope )
+        {
+            scope->updateProjectFile();
+            scope->saveToFile( );
+        }
+    }*/
 }
 
-void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
+void TrollProjectWidget::slotDetailsSelectionChanged( QListViewItem *item )
 {
-    if (!item)
+    if ( !item )
     {
-//        addfilesButton->setEnabled(false);
-//        newfileButton->setEnabled(false);
-        removefileButton->setEnabled(false);
-        configurefileButton->setEnabled(false);
-        return;
+        //        addfilesButton->setEnabled(false);
+        //        newfileButton->setEnabled(false);
+        removefileButton->setEnabled( false );
+        excludeFileFromScopeButton->setEnabled( false );
+        return ;
     }
-//    addfilesButton->setEnabled(false);
-//    newfileButton->setEnabled(false);
-    removefileButton->setEnabled(false);
-    configurefileButton->setEnabled(false);
-/*    buildTargetButton->setEnabled(false);
-    rebuildTargetButton->setEnabled(false);
-    executeTargetButton->setEnabled(false);*/
+    //    addfilesButton->setEnabled(false);
+    //    newfileButton->setEnabled(false);
+    removefileButton->setEnabled( false );
+    excludeFileFromScopeButton->setEnabled( false );
+    /*    buildTargetButton->setEnabled(false);
+        rebuildTargetButton->setEnabled(false);
+        executeTargetButton->setEnabled(false);*/
 
-    qProjectItem *pvitem = static_cast<qProjectItem*>(item);
-    if (pvitem->type() == qProjectItem::Group)
+    qProjectItem *pvitem = static_cast<qProjectItem*>( item );
+    if ( pvitem->type() == qProjectItem::Group )
     {
-      GroupItem* gitem = static_cast<GroupItem*>(item);
-      if (gitem->groupType == GroupItem::InstallObject)
-      {
-        configurefileButton->setEnabled(true);
-        newfileButton->setEnabled(true);
-      }
-      else if (gitem->groupType == GroupItem::InstallRoot)
-      {
-        newfileButton->setEnabled(true);
-      }
-      else
-      {
-        addfilesButton->setEnabled(true);
-        newfileButton->setEnabled(true);
-      }
+        GroupItem * gitem = static_cast<GroupItem*>( item );
+        if ( gitem->groupType == GroupItem::InstallObject )
+        {
+            excludeFileFromScopeButton->setEnabled( true );
+            newfileButton->setEnabled( true );
+        }
+        else if ( gitem->groupType == GroupItem::InstallRoot )
+        {
+            newfileButton->setEnabled( true );
+        }
+        else
+        {
+            addfilesButton->setEnabled( true );
+            newfileButton->setEnabled( true );
+        }
 
 
     }
-    else if (pvitem->type() == qProjectItem::File)
+    else if ( pvitem->type() == qProjectItem::File )
     {
-        removefileButton->setEnabled(true);
-        configurefileButton->setEnabled(true);
-/*        buildTargetButton->setEnabled(true);
-        rebuildTargetButton->setEnabled(true);
-        executeTargetButton->setEnabled(true);*/
+        removefileButton->setEnabled( true );
+        excludeFileFromScopeButton->setEnabled( true );
+        /*        buildTargetButton->setEnabled(true);
+                rebuildTargetButton->setEnabled(true);
+                executeTargetButton->setEnabled(true);*/
     }
 }
 
-void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p)
+void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *item, const QPoint &p )
 {
-    if (!item)
-        return;
+    if ( !item )
+        return ;
 
-    qProjectItem *pvitem = static_cast<qProjectItem*>(item);
-    if (pvitem->type() == qProjectItem::Group) {
-        GroupItem *titem = static_cast<GroupItem*>(pvitem);
-        QString title,ext;
-        GroupItem::groupTypeMeanings(titem->groupType, title, ext);
+    qProjectItem *pvitem = static_cast<qProjectItem*>( item );
+    if ( pvitem->type() == qProjectItem::Group )
+    {
+        GroupItem * titem = static_cast<GroupItem*>( pvitem );
+        QString title, ext;
+        GroupItem::groupTypeMeanings( titem->groupType, title, ext );
 
-        KPopupMenu popup(this);
-        popup.insertTitle(title);
+        KPopupMenu popup( this );
+        popup.insertTitle( title );
 
         int idInsExistingFile = -2;
         int idInsNewFile = -2;
@@ -2255,1163 +1386,563 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         int idLUpdate = -2;
         int idLRelease = -2;
 
- //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
-        if (titem->groupType == GroupItem::InstallRoot)
+        //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
+        if ( titem->groupType == GroupItem::InstallRoot )
         {
-            idInsInstallObject = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Install Object..."));
-            popup.setWhatsThis(idInsInstallObject, i18n("<b>Add install object</b><p>Creates QMake install object. "
-                "It is possible to define a list of files to install and installation locations for each object. Warning! "
-                "Install objects without path specified will not be saved to a project file."));
+            idInsInstallObject = popup.insertItem( SmallIconSet( "fileopen" ), i18n( "Add Install Object..." ) );
+            popup.setWhatsThis( idInsInstallObject, i18n( "<b>Add install object</b><p>Creates QMake install object. "
+                                "It is possible to define a list of files to install and installation locations for each object. Warning! "
+                                "Install objects without path specified will not be saved to a project file." ) );
         }
-        else if (titem->groupType == GroupItem::InstallObject)
+        else if ( titem->groupType == GroupItem::InstallObject )
         {
-            idSetInstObjPath = popup.insertItem(SmallIconSet("fileopen"),i18n("Install Path..."));
-            popup.setWhatsThis(idSetInstObjPath, i18n("<b>Install path</b><p>Allows to choose the installation path for the current install object."));
-            idInsNewFilepatternItem = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Pattern of Files to Install..."));
-            popup.setWhatsThis(idInsNewFilepatternItem, i18n("<b>Add pattern of files to install</b><p>Defines the pattern to match files which will be installed. "
-                "It is possible to use wildcards and relative paths like <i>docs/*</i>."));
+            idSetInstObjPath = popup.insertItem( SmallIconSet( "fileopen" ), i18n( "Install Path..." ) );
+            popup.setWhatsThis( idSetInstObjPath, i18n( "<b>Install path</b><p>Allows to choose the installation path for the current install object." ) );
+            idInsNewFilepatternItem = popup.insertItem( SmallIconSet( "fileopen" ), i18n( "Add Pattern of Files to Install..." ) );
+            popup.setWhatsThis( idInsNewFilepatternItem, i18n( "<b>Add pattern of files to install</b><p>Defines the pattern to match files which will be installed. "
+                                "It is possible to use wildcards and relative paths like <i>docs/*</i>." ) );
         }
-        else if(titem->groupType == GroupItem::Translations)
+        else if ( titem->groupType == GroupItem::Translations )
         {
-            idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Create New File..."));
-            popup.setWhatsThis(idInsNewFile, i18n("<b>Create new file</b><p>Creates a new translation file and adds it to a currently selected TRANSLATIONS group."));
-            idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Existing Files..."));
-            popup.setWhatsThis(idInsExistingFile, i18n("<b>Add existing files</b><p>Adds existing translation (*.ts) files to a currently selected TRANSLATIONS group. It is "
-            "possible to copy files to a current subproject directory, create symbolic links or "
-            "add them with the relative path."));
-            idLUpdate = popup.insertItem(SmallIconSet("konsole"),i18n("Update Translation Files"));
-            popup.setWhatsThis(idLUpdate, i18n("<b>Update Translation Files</b><p>Runs <b>lupdate</b> command from the current subproject directory. It collects translatable "
-                "messages and saves them into translation files."));
-            idLRelease = popup.insertItem(SmallIconSet("konsole"),i18n("Release Binary Translations"));
-            popup.setWhatsThis(idLRelease, i18n("<b>Release Binary Translations</b><p>Runs <b>lrelease</b> command from the current subproject directory. It creates binary "
-                "translation files that are ready to be loaded at program execution."));
+            idInsNewFile = popup.insertItem( SmallIconSet( "filenew" ), i18n( "Create New File..." ) );
+            popup.setWhatsThis( idInsNewFile, i18n( "<b>Create new file</b><p>Creates a new translation file and adds it to a currently selected TRANSLATIONS group." ) );
+            idInsExistingFile = popup.insertItem( SmallIconSet( "fileopen" ), i18n( "Add Existing Files..." ) );
+            popup.setWhatsThis( idInsExistingFile, i18n( "<b>Add existing files</b><p>Adds existing translation (*.ts) files to a currently selected TRANSLATIONS group. It is "
+                                "possible to copy files to a current subproject directory, create symbolic links or "
+                                "add them with the relative path." ) );
+            idLUpdate = popup.insertItem( SmallIconSet( "konsole" ), i18n( "Update Translation Files" ) );
+            popup.setWhatsThis( idLUpdate, i18n( "<b>Update Translation Files</b><p>Runs <b>lupdate</b> command from the current subproject directory. It collects translatable "
+                                                 "messages and saves them into translation files." ) );
+            idLRelease = popup.insertItem( SmallIconSet( "konsole" ), i18n( "Release Binary Translations" ) );
+            popup.setWhatsThis( idLRelease, i18n( "<b>Release Binary Translations</b><p>Runs <b>lrelease</b> command from the current subproject directory. It creates binary "
+                                                  "translation files that are ready to be loaded at program execution." ) );
         }
         else // File group containing files
         {
-            idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Create New File..."));
-            popup.setWhatsThis(idInsNewFile, i18n("<b>Create new file</b><p>Creates a new file and adds it to a currently selected group."));
-            idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Existing Files..."));
-            popup.setWhatsThis(idInsExistingFile, i18n("<b>Add existing files</b><p>Adds existing files to a currently selected group. It is "
-            "possible to copy files to a current subproject directory, create symbolic links or "
-            "add them with the relative path."));
+            idInsNewFile = popup.insertItem( SmallIconSet( "filenew" ), i18n( "Create New File..." ) );
+            popup.setWhatsThis( idInsNewFile, i18n( "<b>Create new file</b><p>Creates a new file and adds it to a currently selected group." ) );
+            idInsExistingFile = popup.insertItem( SmallIconSet( "fileopen" ), i18n( "Add Existing Files..." ) );
+            popup.setWhatsThis( idInsExistingFile, i18n( "<b>Add existing files</b><p>Adds existing files to a currently selected group. It is "
+                                "possible to copy files to a current subproject directory, create symbolic links or "
+                                "add them with the relative path." ) );
         }
-        int r = popup.exec(p);
-        QString cleanSubprojectPath = QDir::cleanDirPath(m_shownSubproject->path);
+        int r = popup.exec( p );
+        QString cleanSubprojectPath = QDir::cleanDirPath( m_shownSubproject->scope->projectDir() );
 
-        if (r == idSetInstObjPath)
+        if ( r == idSetInstObjPath )
         {
-          KURLRequesterDlg dialog(i18n( "Choose Install Path" ), i18n( "Enter a path "
-                                    "(example /usr/local/share/... ):" ), this, 0);
-          dialog.urlRequester()->setMode(KFile::Directory);
-          dialog.urlRequester()->setURL(titem->install_path);
-          if (dialog.exec() == QDialog::Accepted)
-          {
-            titem->install_path = dialog.urlRequester()->url();
-            updateProjectFile(titem->owner);
-          }
+            KURLRequesterDlg dialog( i18n( "Choose Install Path" ), i18n( "Enter a path "
+                                     "(example /usr/local/share/... ):" ), this, 0 );
+            dialog.urlRequester() ->setMode( KFile::Directory );
+            dialog.urlRequester() ->setURL( titem->owner->scope->variableValues( titem->text( 0 ) + ".path" ).front() );
+            if ( dialog.exec() == QDialog::Accepted )
+            {
+                titem->owner->scope->setEqualOp( titem->text( 0 ) + ".path", dialog.urlRequester() ->url() );
+                titem->owner->scope->saveToFile( );
+            }
         }
-        else if (r == idInsNewFilepatternItem)
+        else if ( r == idInsNewFilepatternItem )
         {
-          bool ok = FALSE;
-          QString filepattern = KInputDialog::getText(
-                              i18n( "Add Pattern of Files to Install" ),
-                              i18n( "Enter a pattern relative to the current "
-                                    "subproject (example docs/*.html):" ),
-                              QString::null, &ok, this );
-          if ( ok && !filepattern.isEmpty() )
-          {
-            addFileToCurrentSubProject(titem,filepattern);
-            updateProjectFile(titem->owner);
-            slotOverviewSelectionChanged(m_shownSubproject);
-          }
+            bool ok = FALSE;
+            QString filepattern = KInputDialog::getText(
+                                      i18n( "Add Pattern of Files to Install" ),
+                                      i18n( "Enter a pattern relative to the current "
+                                            "subproject (example docs/*.html):" ),
+                                      QString::null, &ok, this );
+            if ( ok && !filepattern.isEmpty() )
+            {
+                addFileToCurrentSubProject( titem, filepattern );
+                slotOverviewSelectionChanged( m_shownSubproject );
+            }
         }
-        else if (r == idInsExistingFile)
+        else if ( r == idInsExistingFile )
         {
 #if KDE_VERSION >= 310
-          AddFilesDialog *dialog = new AddFilesDialog(cleanSubprojectPath,
-                                                ext + "|" + title + " (" + ext + ")",
-                                                this,
-                                                "Add existing files",
-                                                true, new QComboBox(false));
+            AddFilesDialog * dialog = new AddFilesDialog( cleanSubprojectPath,
+                                      ext + "|" + title + " (" + ext + ")",
+                                      this,
+                                      "Add existing files",
+                                      true, new QComboBox( false ) );
 #else
-          AddFilesDialog *dialog = new AddFilesDialog(cleanSubprojectPath,
-                                                ext + "|" + title + " (" + ext + ")",
-                                                this,
-                                                "Add existing files",
-                                                true);
+            AddFilesDialog *dialog = new AddFilesDialog( cleanSubprojectPath,
+                                     ext + "|" + title + " (" + ext + ")",
+                                     this,
+                                     "Add existing files",
+                                     true );
 #endif
-          dialog->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
-          if ( dialog->exec() == QDialog::Rejected )
-            return;
-          QStringList files = dialog->selectedFiles();
-          for (unsigned int i=0;i<files.count();++i)
-          {
-            switch (dialog->mode())
+            dialog->setMode( KFile::Files | KFile::ExistingOnly | KFile::LocalOnly );
+            if ( dialog->exec() == QDialog::Rejected )
+                return ;
+            QStringList files = dialog->selectedFiles();
+            for ( unsigned int i = 0;i < files.count();++i )
             {
-            case AddFilesDialog::Copy:
+                switch ( dialog->mode() )
                 {
-                // Copy selected files to current subproject folder
-                QString filename = KURL(files[i]).fileName();
-                KIO::NetAccess::file_copy(files[i], cleanSubprojectPath + "/" + filename, -1, false, false, this);
-                // and add them to the filelist
-                addFileToCurrentSubProject(titem, filename);
+                    case AddFilesDialog::Copy:
+                        {
+                            // Copy selected files to current subproject folder
+                            QString filename = KURL( files[ i ] ).fileName();
+                            KIO::NetAccess::file_copy( files[ i ], cleanSubprojectPath + QDir::separator() + filename, -1, false, false, this );
+                            // and add them to the filelist
+                            addFileToCurrentSubProject( titem, filename );
 
-                QString fileNameToAdd = m_shownSubproject->relpath + "/" + filename;
-                if (fileNameToAdd.startsWith("/"))
-                    fileNameToAdd = fileNameToAdd.mid(1);
-                QStringList fileList(fileNameToAdd);
-                emit m_part->addedFilesToProject(fileList);
+                            QString fileNameToAdd = m_shownSubproject->relativePath() + QDir::separator() + filename;
+                            if ( fileNameToAdd.startsWith( QDir::rootDirPath() ) )
+                                fileNameToAdd = fileNameToAdd.mid( 1 );
+                            QStringList fileList( fileNameToAdd );
+                            emit m_part->addedFilesToProject( fileList );
+                        }
+                        break;
+
+                    case AddFilesDialog::Link:
+                        {
+                            // Link selected files to current subproject folder
+                            QProcess *proc = new QProcess( this );
+                            proc->addArgument( "ln" );
+                            proc->addArgument( "-s" );
+                            proc->addArgument( files[ i ] );
+                            proc->addArgument( cleanSubprojectPath );
+                            proc->start();
+                            QString filename = files[ i ].right( files[ i ].length() - files[ i ].findRev( QDir::separator() ) - 1 );
+                            // and add them to the filelist
+                            addFileToCurrentSubProject( titem, filename );
+
+                            QString fileNameToAdd = m_shownSubproject->relativePath() + QDir::separator() + filename;
+                            if ( fileNameToAdd.startsWith( QDir::rootDirPath() ) )
+                                fileNameToAdd = fileNameToAdd.mid( 1 );
+                            QStringList fileList( fileNameToAdd );
+                            emit m_part->addedFilesToProject( fileList );
+                        }
+                        break;
+
+                    case AddFilesDialog::Relative:
+                        // Form relative path to current subproject folder
+                        addFileToCurrentSubProject( titem, URLUtil::relativePathToFile( cleanSubprojectPath , files[ i ] ) );
+
+                        QString fileNameToAdd = URLUtil::canonicalPath( m_shownSubproject->scope->projectDir() +
+                                                QDir::separator() + URLUtil::relativePathToFile( cleanSubprojectPath , files[ i ] ) );
+                        fileNameToAdd = fileNameToAdd.mid( m_part->projectDirectory().length() + 1 );
+                        if ( fileNameToAdd.startsWith( QDir::rootDirPath() ) )
+                            fileNameToAdd = fileNameToAdd.mid( 1 );
+                        QStringList fileList( fileNameToAdd );
+                        emit m_part->addedFilesToProject( fileList );
+                        break;
                 }
-                break;
-
-            case AddFilesDialog::Link:
-                {
-                // Link selected files to current subproject folder
-                QProcess *proc = new QProcess( this );
-                proc->addArgument( "ln" );
-                proc->addArgument( "-s" );
-                proc->addArgument( files[i] );
-                proc->addArgument( cleanSubprojectPath );
-                proc->start();
-                QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
-                // and add them to the filelist
-                addFileToCurrentSubProject(titem,filename);
-
-                QString fileNameToAdd = m_shownSubproject->relpath + "/" + filename;
-                if (fileNameToAdd.startsWith("/"))
-                    fileNameToAdd = fileNameToAdd.mid(1);
-                QStringList fileList(fileNameToAdd);
-                emit m_part->addedFilesToProject(fileList);
-                }
-                break;
-
-            case AddFilesDialog::Relative:
-                // Form relative path to current subproject folder
-                addFileToCurrentSubProject(titem,URLUtil::relativePathToFile(cleanSubprojectPath , files[i]));
-
-                QString fileNameToAdd = URLUtil::canonicalPath(m_shownSubproject->path + "/" + URLUtil::relativePathToFile(cleanSubprojectPath , files[i]));
-                fileNameToAdd = fileNameToAdd.mid(m_part->projectDirectory().length() + 1);
-                if (fileNameToAdd.startsWith("/"))
-                    fileNameToAdd = fileNameToAdd.mid(1);
-                QStringList fileList(fileNameToAdd);
-                emit m_part->addedFilesToProject(fileList);
-                break;
             }
-          }
-          // Update project file
-          if ( titem && titem->owner )
-            updateProjectFile(titem->owner);
-          // Update subprojectview
-          slotOverviewSelectionChanged(m_shownSubproject);
+            // Update project file
+            if ( titem && titem->owner )
+            {
+                titem->owner->scope->saveToFile( );
+            }
+            // Update subprojectview
+            slotOverviewSelectionChanged( m_shownSubproject );
         }
-        else if (r == idInsNewFile)
+        else if ( r == idInsNewFile )
         {
-            KDevCreateFile * createFileSupport = m_part->extension<KDevCreateFile>("KDevelop/CreateFile");
-            if (createFileSupport)
+            KDevCreateFile * createFileSupport = m_part->extension<KDevCreateFile>( "KDevelop/CreateFile" );
+            if ( createFileSupport )
             {
                 QString fcext;
-                switch (titem->groupType) {
-                case GroupItem::Sources:
-                    fcext = "cpp";
-                    break;
-                case GroupItem::Headers:
-                    fcext = "h";
-                    break;
-                case GroupItem::Forms:
-                    if ( !m_part->isQt4Project() )
-                        fcext = "ui-widget";
-                    else
-                        fcext = "ui-widget-qt4";
-                    break;
-                case GroupItem::Translations:
-                    fcext = "ts";
-                    break;
-                case GroupItem::Lexsources:
-                    fcext = "l";
-                    break;
-                case GroupItem::Yaccsources:
-                    fcext = "y";
-                    break;
-		case GroupItem::Resources:
-		    fcext = "qrc";
-		    break;
-                default:
-                    fcext = QString::null;
+                switch ( titem->groupType )
+                {
+                    case GroupItem::Sources:
+                        fcext = "cpp";
+                        break;
+                    case GroupItem::Headers:
+                        fcext = "h";
+                        break;
+                    case GroupItem::Forms:
+                        if ( !m_part->isQt4Project() )
+                            fcext = "ui-widget";
+                        else
+                            fcext = "ui-widget-qt4";
+                        break;
+                    case GroupItem::Translations:
+                        fcext = "ts";
+                        break;
+                    case GroupItem::Lexsources:
+                        fcext = "l";
+                        break;
+                    case GroupItem::Yaccsources:
+                        fcext = "y";
+                        break;
+                    case GroupItem::Resources:
+                        fcext = "qrc";
+                        break;
+                    default:
+                        fcext = QString::null;
                 }
                 KDevCreateFile::CreatedFile crFile =
-                    createFileSupport->createNewFile(fcext, cleanSubprojectPath);
-            } else {
+                    createFileSupport->createNewFile( fcext, cleanSubprojectPath );
+            }
+            else
+            {
                 bool ok = FALSE;
                 QString filename = KInputDialog::getText(
-                                    i18n( "Create New File"),
-                                    i18n( "Enter a name for the new file:" ),
-                                    QString::null, &ok, this );
+                                       i18n( "Create New File" ),
+                                       i18n( "Enter a name for the new file:" ),
+                                       QString::null, &ok, this );
                 if ( ok && !filename.isEmpty() )
                 {
-                    QFile newfile(cleanSubprojectPath+'/'+filename);
-                    if (!newfile.open(IO_WriteOnly))
+                    QFile newfile( cleanSubprojectPath + QDir::separator() + filename );
+                    if ( !newfile.open( IO_WriteOnly ) )
                     {
-                    KMessageBox::error(this,i18n("Failed to create new file. "
-                                                "Do you have write permission "
-                                                "in the project folder?" ));
-                    return;
+                        KMessageBox::error( this, i18n( "Failed to create new file. "
+                                                        "Do you have write permission "
+                                                        "in the project folder?" ) );
+                        return ;
                     }
                     newfile.close();
-                    addFileToCurrentSubProject(titem,filename);
-                    updateProjectFile(titem->owner);
-                    slotOverviewSelectionChanged(m_shownSubproject);
+                    addFileToCurrentSubProject( titem, filename );
+                    slotOverviewSelectionChanged( m_shownSubproject );
 
-                    QStringList files(m_shownSubproject->path + "/" + filename);
-                    emit m_part->addedFilesToProject(files);
+                    QStringList files( m_shownSubproject->scope->projectDir() + QDir::separator() + filename );
+                    emit m_part->addedFilesToProject( files );
                 }
             }
         }
-        else if (r == idInsInstallObject)
+        else if ( r == idInsInstallObject )
         {
-          bool ok = FALSE;
-          QString install_obj = KInputDialog::getText(
-                              i18n( "Add Install Object" ),
-                              i18n( "Enter a name for the new object:" ),
-                              QString::null, &ok, this );
-          if ( ok && !install_obj.isEmpty() )
-          {
-            GroupItem* institem = createGroupItem(GroupItem::InstallObject, install_obj ,titem->scopeString);
-            institem->owner = m_shownSubproject;
-            institem->install_objectname = install_obj;
-            titem->installs.append(institem);
-            slotOverviewSelectionChanged(m_shownSubproject);
-          }
+            bool ok = FALSE;
+            QString install_obj = KInputDialog::getText(
+                                      i18n( "Add Install Object" ),
+                                      i18n( "Enter a name for the new object:" ),
+                                      QString::null, &ok, this );
+            if ( ok && !install_obj.isEmpty() )
+            {
+                titem->addInstallObject( install_obj );
+                slotOverviewSelectionChanged( m_shownSubproject );
+            }
         }
-    else if (r == idLUpdate)
+        else if ( r == idLUpdate )
         {
-       QString cmd = "lupdate ";
-           cmd += m_shownSubproject->pro_file;
-           m_part->appFrontend()->startAppCommand(m_shownSubproject->path,cmd,false);
+            QString cmd = "lupdate ";
+            cmd += m_shownSubproject->scope->fileName();
+            m_part->appFrontend() ->startAppCommand( m_shownSubproject->scope->projectDir(), cmd, false );
         }
-        else if (r == idLRelease)
+        else if ( r == idLRelease )
         {
-       QString cmd = "lrelease ";
-           cmd += m_shownSubproject->pro_file;
-           m_part->appFrontend()->startAppCommand(m_shownSubproject->path,cmd,false);
+            QString cmd = "lrelease ";
+            cmd += m_shownSubproject->scope->fileName();
+            m_part->appFrontend() ->startAppCommand( m_shownSubproject->scope->projectDir(), cmd, false );
         }
-    } else if (pvitem->type() == qProjectItem::File) {
+    }
+    else if ( pvitem->type() == qProjectItem::File )
+    {
 
-        removefileButton->setEnabled(true);
-        FileItem *fitem = static_cast<FileItem*>(pvitem);
-    GroupItem::GroupType gtype = static_cast<GroupItem*>(item->parent())->groupType;
+        removefileButton->setEnabled( true );
+        FileItem *fitem = static_cast<FileItem*>( pvitem );
+        GroupItem::GroupType gtype = static_cast<GroupItem*>( item->parent() ) ->groupType;
 
-    KPopupMenu popup(this);
-    if (!(gtype == GroupItem::InstallObject))
-        popup.insertTitle(i18n("File: %1").arg(fitem->name));
-    else
-        popup.insertTitle(i18n("Pattern: %1").arg(fitem->name));
+        KPopupMenu popup( this );
+        if ( !( gtype == GroupItem::InstallObject ) )
+            popup.insertTitle( i18n( "File: %1" ).arg( fitem->text( 0 ) ) );
+        else
+            popup.insertTitle( i18n( "Pattern: %1" ).arg( fitem->text( 0 ) ) );
 
         int idRemoveFile = -2;
-    int idSubclassWidget = -2;
-    int idUpdateWidgetclass = -2;
-    int idBuildFile = -2;
-    int idUISubclasses = -2;
-    int idViewUIH = -2;
-    int idFileProperties = -2;
-    int idEditInstallPattern = -2;
+        int idSubclassWidget = -2;
+        int idUpdateWidgetclass = -2;
+        int idBuildFile = -2;
+        int idUISubclasses = -2;
+        int idViewUIH = -2;
+        int idFileProperties = -2;
+        int idEditInstallPattern = -2;
 
-        if (!fitem->uiFileLink.isEmpty())
+        if ( !fitem->uiFileLink.isEmpty() )
         {
-          idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("Edit ui-Subclass..."));
-          popup.setWhatsThis(idUpdateWidgetclass, i18n("<b>Edit ui-subclass</b><p>Launches <b>Subclassing</b> wizard "
-                           "and prompts to implement missing in childclass slots and functions."));
+            idUpdateWidgetclass = popup.insertItem( SmallIconSet( "qmake_subclass" ), i18n( "Edit ui-Subclass..." ) );
+            popup.setWhatsThis( idUpdateWidgetclass, i18n( "<b>Edit ui-subclass</b><p>Launches <b>Subclassing</b> wizard "
+                                "and prompts to implement missing in childclass slots and functions." ) );
         }
-        if(fitem->name.contains(".ui"))
+        if ( fitem->text( 0 ).contains( ".ui" ) )
         {
-      idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("Subclassing Wizard..."));
-          popup.setWhatsThis(idSubclassWidget, i18n("<b>Subclass widget</b><p>Launches <b>Subclassing</b> wizard. "
-                           "It allows to create a subclass from the class defined in .ui file. "
-                           "There is also possibility to implement slots and functions defined in the base class."));
-      if ( !m_part->isQt4Project() )
-      {
-          idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h"),i18n("Open ui.h File"));
-              popup.setWhatsThis(idViewUIH, i18n("<b>Open ui.h file</b><p>Opens .ui.h file associated with the selected .ui."));
-      }
-      idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("List of Subclasses..."));
-          popup.setWhatsThis(idUISubclasses, i18n("<b>List of subclasses</b><p>Shows subclasses list editor. "
-                           "There is possibility to add or remove subclasses from the list."));
+            idSubclassWidget = popup.insertItem( SmallIconSet( "qmake_subclass" ), i18n( "Subclassing Wizard..." ) );
+            popup.setWhatsThis( idSubclassWidget, i18n( "<b>Subclass widget</b><p>Launches <b>Subclassing</b> wizard. "
+                                "It allows to create a subclass from the class defined in .ui file. "
+                                "There is also possibility to implement slots and functions defined in the base class." ) );
+            if ( !m_part->isQt4Project() )
+            {
+                idViewUIH = popup.insertItem( SmallIconSet( "qmake_ui_h" ), i18n( "Open ui.h File" ) );
+                popup.setWhatsThis( idViewUIH, i18n( "<b>Open ui.h file</b><p>Opens .ui.h file associated with the selected .ui." ) );
+            }
+            idUISubclasses = popup.insertItem( SmallIconSet( "qmake_subclass" ), i18n( "List of Subclasses..." ) );
+            popup.setWhatsThis( idUISubclasses, i18n( "<b>List of subclasses</b><p>Shows subclasses list editor. "
+                                "There is possibility to add or remove subclasses from the list." ) );
         }
-    if(!(gtype == GroupItem::InstallObject))
-    {
-      idRemoveFile = popup.insertItem(SmallIconSet("editdelete"),i18n("Remove File"));
-            popup.setWhatsThis(idRemoveFile, i18n("<b>Remove file</b><p>Removes file from a current group. Does not remove file from disk."));
-      idFileProperties = popup.insertItem(SmallIconSet("configure_file"),i18n("Properties..."));
-            popup.setWhatsThis(idFileProperties, i18n("<b>Properties</b><p>Opens <b>File Properties</b> dialog that allows to exclude file from specified scopes."));
-    }
-    else
-    {
-      idEditInstallPattern = popup.insertItem(SmallIconSet("configure_file"),i18n("Edit Pattern"));
-            popup.setWhatsThis(idEditInstallPattern, i18n("<b>Edit pattern</b><p>Allows to edit install files pattern."));
-      idRemoveFile = popup.insertItem(SmallIconSet("editdelete"),i18n("Remove Pattern"));
-            popup.setWhatsThis(idRemoveFile, i18n("<b>Remove pattern</b><p>Removes install files pattern from the current install object."));
-    }
-    if(!(gtype == GroupItem::InstallObject))
-    {
-        KURL::List urls;
-        urls.append(m_shownSubproject->path + "/" + fitem->name);
-        FileContext context(urls);
-        m_part->core()->fillContextMenu(&popup, &context);
-    }
-      if( gtype == GroupItem::Sources)
-      {
-        idBuildFile = popup.insertItem(SmallIconSet("make_kdevelop"), i18n("Build File"));
-        popup.setWhatsThis(idBuildFile, i18n("<b>Build File</b><p>Builds the object file for this source file."));
-      }
+        if ( !( gtype == GroupItem::InstallObject ) )
+        {
+            idRemoveFile = popup.insertItem( SmallIconSet( "editdelete" ), i18n( "Remove File" ) );
+            popup.setWhatsThis( idRemoveFile, i18n( "<b>Remove file</b><p>Removes file from a current group. Does not remove file from disk." ) );
+            idFileProperties = popup.insertItem( SmallIconSet( "configure_file" ), i18n( "Properties..." ) );
+            popup.setWhatsThis( idFileProperties, i18n( "<b>Properties</b><p>Opens <b>File Properties</b> dialog that allows to exclude file from specified scopes." ) );
+        }
+        else
+        {
+            idEditInstallPattern = popup.insertItem( SmallIconSet( "configure_file" ), i18n( "Edit Pattern" ) );
+            popup.setWhatsThis( idEditInstallPattern, i18n( "<b>Edit pattern</b><p>Allows to edit install files pattern." ) );
+            idRemoveFile = popup.insertItem( SmallIconSet( "editdelete" ), i18n( "Remove Pattern" ) );
+            popup.setWhatsThis( idRemoveFile, i18n( "<b>Remove pattern</b><p>Removes install files pattern from the current install object." ) );
+        }
+        if ( !( gtype == GroupItem::InstallObject ) )
+        {
+            KURL::List urls;
+            urls.append( m_shownSubproject->scope->projectDir() + QDir::separator() + fitem->text( 0 ) );
+            FileContext context( urls );
+            m_part->core() ->fillContextMenu( &popup, &context );
+        }
+        if ( gtype == GroupItem::Sources )
+        {
+            idBuildFile = popup.insertItem( SmallIconSet( "make_kdevelop" ), i18n( "Build File" ) );
+            popup.setWhatsThis( idBuildFile, i18n( "<b>Build File</b><p>Builds the object file for this source file." ) );
+        }
 
-        int r = popup.exec(p);
-        if (r == idRemoveFile)
-            removeFile(m_shownSubproject, fitem);
+        int r = popup.exec( p );
+        if ( r == idRemoveFile )
+            removeFile( m_shownSubproject, fitem );
         // Fileproperties
-        else if (r == idFileProperties)
+        else if ( r == idFileProperties )
         {
-        /*
-          GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
-          if (!gitem)
-            return;
-          QStringList dirtyScopes;
-          FilePropertyDlg *propdlg = new FilePropertyDlg(m_shownSubproject,gitem->groupType,fitem,dirtyScopes);
-          SubqmakeprojectItem *scope;
-          propdlg->exec();
-          for (uint i=0; i<dirtyScopes.count();i++)
-          {
-            scope = getScope(m_shownSubproject,dirtyScopes[i]);
-            if (scope)
-               updateProjectFile(scope);
-          }
-        */
-          slotConfigureFile();
+            /*
+              GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
+              if (!gitem)
+                return;
+              QStringList dirtyScopes;
+              FilePropertyDlg *propdlg = new FilePropertyDlg(m_shownSubproject,gitem->groupType,fitem,dirtyScopes);
+              QMakeScopeItem *scope;
+              propdlg->exec();
+              for (uint i=0; i<dirtyScopes.count();i++)
+              {
+                scope = getScope(m_shownSubproject,dirtyScopes[i]);
+                if (scope)
+                   updateProjectFile(scope);
+              }
+            */
+            slotExcludeFileFromScopeButton();
         }
-        else if(r == idViewUIH) {
-          m_part->partController()->editDocument(KURL(m_shownSubproject->path + "/" +
-             QString(fitem->name + ".h")));
+        else if ( r == idViewUIH )
+        {
+            m_part->partController() ->editDocument( KURL( m_shownSubproject->scope->projectDir() + QDir::separator() +
+                    QString( fitem->text( 0 ) + ".h" ) ) );
 
         }
-        else if (r == idSubclassWidget)
+        else if ( r == idSubclassWidget )
         {
             QStringList newFileNames;
-            newFileNames = m_part->languageSupport()->subclassWidget(m_shownSubproject->path + "/" + fitem->name);
-            if (!newFileNames.empty())
+            newFileNames = m_part->languageSupport() ->subclassWidget( m_shownSubproject->scope->projectDir() + QDir::separator() + fitem->text( 0 ) );
+            if ( !newFileNames.empty() )
             {
-                QDomDocument &dom = *(m_part->projectDom());
-                for (uint i=0; i<newFileNames.count(); ++i)
+                QDomDocument & dom = *( m_part->projectDom() );
+                for ( uint i = 0; i < newFileNames.count(); ++i )
                 {
-                    QString srcfile_relpath = newFileNames[i].remove(0,projectDirectory().length());
-                    QString uifile_relpath = QString(m_shownSubproject->path + "/" + fitem->name).remove(0,projectDirectory().length());
-                    DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
-                                                            "subclass","sourcefile", "uifile");
+                    QString srcfile_relpath = newFileNames[ i ].remove( 0, projectDirectory().length() );
+                    QString uifile_relpath = m_shownSubproject->relativePath() + QDir::separator() + fitem->text( 0 );
+                    DomUtil::PairList list = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,
+                                             "subclass", "sourcefile", "uifile" );
 
-                    list << DomUtil::Pair(srcfile_relpath,uifile_relpath);
-                    DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
-//                    newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
-                    newFileNames[i] = projectDirectory() + newFileNames[i];
-                    qWarning("new file: %s", newFileNames[i].latin1());
+                    list << DomUtil::Pair( srcfile_relpath, uifile_relpath );
+                    DomUtil::writePairListEntry( dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list );
+                    //                    newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
+                    newFileNames[ i ] = projectDirectory() + newFileNames[ i ];
+                    qWarning( "new file: %s", newFileNames[ i ].latin1() );
                 }
-                m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
-                                                                "subclass","sourcefile", "uifile");
+                m_subclasslist = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,
+                                 "subclass", "sourcefile", "uifile" );
 
-                m_part->addFiles(newFileNames);
+                m_part->addFiles( newFileNames );
             }
         }
-        else if (r == idUpdateWidgetclass)
+        else if ( r == idUpdateWidgetclass )
         {
-          QString noext = m_shownSubproject->path + "/" + fitem->name;
-          if (noext.findRev('.')>-1)
-            noext = noext.left(noext.findRev('.'));
-          QStringList dummy;
-          QString uifile = fitem->uiFileLink;
-          if (uifile.findRev('/')>-1)
-          {
-            QStringList uisplit = QStringList::split('/',uifile);
-            uifile=uisplit[uisplit.count()-1];
-          }
-          m_part->languageSupport()->updateWidget(m_shownSubproject->path + "/" + uifile, noext);
-        }
-        else if (r == idUISubclasses)
-        {
-            QDomDocument &dom = *(m_part->projectDom());
-            DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
-                                                    "subclass","sourcefile", "uifile");
-            SubclassesDlg *sbdlg = new SubclassesDlg( QString(m_shownSubproject->path + "/" + fitem->name).remove(0,projectDirectory().length()),
-                list, projectDirectory());
-
-            if (sbdlg->exec())
+            QString noext = m_shownSubproject->scope->projectDir() + QDir::separator() + fitem->text( 0 );
+            if ( noext.findRev( '.' ) > -1 )
+                noext = noext.left( noext.findRev( '.' ) );
+            QStringList dummy;
+            QString uifile = fitem->uiFileLink;
+            if ( uifile.findRev( QDir::separator() ) > -1 )
             {
-                QDomElement el = DomUtil::elementByPath( dom,  "/kdevtrollproject");
-                QDomElement el2 = DomUtil::elementByPath( dom,  "/kdevtrollproject/subclassing");
-                if ( (!el.isNull()) && (!el2.isNull()) )
+                QStringList uisplit = QStringList::split( QDir::separator(), uifile );
+                uifile = uisplit[ uisplit.count() - 1 ];
+            }
+            m_part->languageSupport() ->updateWidget( m_shownSubproject->scope->projectDir() + QDir::separator() + uifile, noext );
+        }
+        else if ( r == idUISubclasses )
+        {
+            QDomDocument & dom = *( m_part->projectDom() );
+            DomUtil::PairList list = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,
+                                     "subclass", "sourcefile", "uifile" );
+            SubclassesDlg *sbdlg = new SubclassesDlg( m_shownSubproject->relativePath() + QDir::separator() + fitem->text( 0 ),
+                                   list, projectDirectory() );
+
+            if ( sbdlg->exec() )
+            {
+                QDomElement el = DomUtil::elementByPath( dom, "/kdevtrollproject" );
+                QDomElement el2 = DomUtil::elementByPath( dom, "/kdevtrollproject/subclassing" );
+                if ( ( !el.isNull() ) && ( !el2.isNull() ) )
                 {
-                    el.removeChild(el2);
+                    el.removeChild( el2 );
                 }
 
-                DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
+                DomUtil::writePairListEntry( dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list );
 
-                m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
-                    "subclass","sourcefile", "uifile");
+                m_subclasslist = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,
+                                 "subclass", "sourcefile", "uifile" );
             }
         }
-        else if (r == idEditInstallPattern)
+        else if ( r == idEditInstallPattern )
         {
-    GroupItem *titem = static_cast<GroupItem*>(item->parent());
+            GroupItem * titem = static_cast<GroupItem*>( item->parent() );
 
-          bool ok = FALSE;
-          QString filepattern = KInputDialog::getText(
-                              i18n( "Edit Pattern" ),
-                              i18n( "Enter a pattern relative to the current "
-                                    "subproject (example docs/*.html):" ),
-                              fitem->name , &ok, this );
-          if ( ok && !filepattern.isEmpty() )
-          {
-        removeFile(m_shownSubproject, fitem);
-            addFileToCurrentSubProject(titem,filepattern);
-            updateProjectFile(titem->owner);
-            slotOverviewSelectionChanged(m_shownSubproject);
-          }
-        }else if ( r == idBuildFile )
+            bool ok = FALSE;
+            QString filepattern = KInputDialog::getText(
+                                      i18n( "Edit Pattern" ),
+                                      i18n( "Enter a pattern relative to the current "
+                                            "subproject (example docs/*.html):" ),
+                                      fitem->text( 0 ) , &ok, this );
+            if ( ok && !filepattern.isEmpty() )
+            {
+                removeFile( m_shownSubproject, fitem );
+                addFileToCurrentSubProject( titem, filepattern );
+                slotOverviewSelectionChanged( m_shownSubproject );
+            }
+        }
+        else if ( r == idBuildFile )
         {
-          buildFile(m_shownSubproject, fitem);
+            buildFile( m_shownSubproject, fitem );
         }
     }
 }
 
 
-void TrollProjectWidget::removeFile(SubqmakeprojectItem *spitem, FileItem *fitem)
+void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
 {
-    GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
+    GroupItem * gitem = static_cast<GroupItem*>( fitem->parent() );
 
-    if (KMessageBox::warningYesNo(this,
-                                  "<qt>" +
-                                  i18n("Are you sure you wish to remove <strong>%1</strong> from this project?")
-                                      .arg(fitem->name) +
-                                  "</qt>",
-                                  i18n("Remove File"),
+    if ( KMessageBox::warningYesNo( this,
+                                    "<qt>" +
+                                    i18n( "Are you sure you wish to remove <strong>%1</strong> from this project?" )
+                                    .arg( fitem->text( 0 ) ) +
+                                    "</qt>",
+                                    i18n( "Remove File" ),
 #if KDE_IS_VERSION(3,3,90)
-                                  KStdGuiItem::remove(),
+                                    KStdGuiItem::remove(),
 #else
-                                  i18n("&Remove"),
+                                    i18n( "&Remove" ),
 #endif
-                                  KStdGuiItem::no(),
-                                  "removeFileFromQMakeProject") == KMessageBox::No)
-    {
-        return;
-    }
+                                        KStdGuiItem::no(),
+                                        "removeFileFromQMakeProject" ) == KMessageBox::No )
+        {
+            return ;
+        }
 
-    if(gitem->groupType != GroupItem::InstallObject)
+    if ( gitem->groupType != GroupItem::InstallObject )
     {
-        QString removedFileName = spitem->relpath + "/" + fitem->text(0);
-        if (removedFileName.startsWith("/"))
-            removedFileName = removedFileName.mid(1);
-        emitRemovedFile(removedFileName);
+        QString removedFileName = spitem->relativePath() + QDir::separator() + fitem->text( 0 );
+        if ( removedFileName.startsWith( QDir::rootDirPath() ) )
+            removedFileName = removedFileName.mid( 1 );
+        emitRemovedFile( removedFileName );
     }
 
 
     //remove subclassing info
-    QDomDocument &dom = *(m_part->projectDom());
-    DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
-                                            "subclass","sourcefile", "uifile");
+    QDomDocument &dom = *( m_part->projectDom() );
+    DomUtil::PairList list = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,
+                             "subclass", "sourcefile", "uifile" );
     QPtrList<DomUtil::Pair> pairsToRemove;
     DomUtil::PairList::iterator it;
-    QString file = QString(spitem->path + "/" + fitem->name).remove(0,projectDirectory().length());
+    QString file = QString( spitem->scope->projectDir() + QDir::separator() + fitem->text( 0 ) ).remove( 0, projectDirectory().length() );
     for ( it = list.begin(); it != list.end(); ++it )
     {
-        if ( ((*it).first == file) || ((*it).second == file) )
+        if ( ( ( *it ).first == file ) || ( ( *it ).second == file ) )
         {
-            pairsToRemove.append(&(*it));
+            pairsToRemove.append( &( *it ) );
         }
     }
     DomUtil::Pair *pair;
     for ( pair = pairsToRemove.first(); pair; pair = pairsToRemove.next() )
     {
-        list.remove(*pair);
+        list.remove( *pair );
     }
-    QDomElement el = DomUtil::elementByPath( dom,  "/kdevtrollproject");
-    QDomElement el2 = DomUtil::elementByPath( dom,  "/kdevtrollproject/subclassing");
-    if ( (!el.isNull()) && (!el2.isNull()) )
+    QDomElement el = DomUtil::elementByPath( dom, "/kdevtrollproject" );
+    QDomElement el2 = DomUtil::elementByPath( dom, "/kdevtrollproject/subclassing" );
+    if ( ( !el.isNull() ) && ( !el2.isNull() ) )
     {
-        el.removeChild(el2);
+        el.removeChild( el2 );
     }
-    DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
+    DomUtil::writePairListEntry( dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list );
 
-    switch (gitem->groupType)
-    {
-      case GroupItem::Sources:
-        spitem->sources.remove(fitem->text(0));
-        break;
-      case GroupItem::Headers:
-        spitem->headers.remove(fitem->text(0));
-        break;
-      case GroupItem::Forms:
-        spitem->forms.remove(fitem->text(0));
-        break;
-      case GroupItem::Lexsources:
-        spitem->lexsources.remove(fitem->text(0));
-        break;
-      case GroupItem::Yaccsources:
-        spitem->yaccsources.remove(fitem->text(0));
-        break;
-      case GroupItem::Images:
-        spitem->images.remove(fitem->text(0));
-        break;
-      case GroupItem::Resources:
-        spitem->resources.remove(fitem->text(0));
-        break;
-      case GroupItem::Distfiles:
-        spitem->distfiles.remove(fitem->text(0));
-        break;
-      case GroupItem::Translations:
-        spitem->translations.remove(fitem->text(0));
-        break;
-      case GroupItem::IDLs:
-        spitem->idls.remove(fitem->text(0));
-        break;
-      case GroupItem::InstallObject:
-    gitem->str_files.remove(fitem->text(0));
-    break;
-      default: ;
-    }
-    gitem->files.remove(fitem);
-    updateProjectFile(m_shownSubproject);
+    gitem->removeFileFromScope( fitem->text( 0 ) );
 }
 
-
-GroupItem *TrollProjectWidget::createGroupItem(GroupItem::GroupType groupType, const QString &name,const QString &scopeString)
-{
-    // Workaround because for QListView not being able to create
-    // items without actually inserting them
-    GroupItem *titem = new GroupItem(overview, groupType, name,scopeString);
-    overview->takeItem(titem);
-
-    return titem;
-}
-
-
-FileItem *TrollProjectWidget::createFileItem(const QString &name)
-{
-    FileItem *fitem = new FileItem(overview, name);
-    overview->takeItem(fitem);
-    fitem->name = name;
-
-    return fitem;
-}
-
-void TrollProjectWidget::emitAddedFile(const QString &fileName)
+void TrollProjectWidget::emitAddedFile( const QString &fileName )
 {
     QStringList fileList;
     fileList.append ( fileName );
-    emit m_part->addedFilesToProject(fileList);
+    emit m_part->addedFilesToProject( fileList );
 }
 
 
-void TrollProjectWidget::emitRemovedFile(const QString &fileName)
+void TrollProjectWidget::emitRemovedFile( const QString &fileName )
 {
     QStringList fileList;
     fileList.append ( fileName );
-    emit m_part->removedFilesFromProject(fileList);
+    emit m_part->removedFilesFromProject( fileList );
 }
 
 
-QString TrollProjectWidget::getUiFileLink(const QString &relpath, const QString& filename)
+QString TrollProjectWidget::getUiFileLink( const QString &relpath, const QString& filename )
 {
-  DomUtil::PairList::iterator it;
-  for (it=m_subclasslist.begin();it != m_subclasslist.end(); ++it)
-  {
-    if ((*it).first==relpath+filename)
-      return (*it).second;
-  }
-  return "";
+    DomUtil::PairList::iterator it;
+    for ( it = m_subclasslist.begin();it != m_subclasslist.end(); ++it )
+    {
+        if ( ( *it ).first == relpath + filename )
+            return ( *it ).second;
+    }
+    return "";
 }
 
-void TrollProjectWidget::parseScope(SubqmakeprojectItem *item, QString scopeString, FileBuffer *buffer)
-{
-    if (!scopeString.isEmpty())
-    {
-      QStringList scopeNames = QStringList::split(':',scopeString);
-      SubqmakeprojectItem *sitem;
-      sitem = new SubqmakeprojectItem(item, scopeNames[scopeNames.count()-1],scopeString);
-      sitem->path = item->path;
-      sitem->m_RootBuffer = buffer;
-      sitem->subdir = item->subdir;
-      sitem->pro_file = item->pro_file;
-      item->scopes.append(sitem);
-      item=sitem;
-    }
-
-    item->relpath = item->path;
-    item->relpath.remove(0,projectDirectory().length());
-
-    QStringList minusListDummy;
-    FileBuffer *subBuffer = buffer->getSubBuffer(scopeString);
-    if( m_part->isTMakeProject() )
-    subBuffer->getValues("INTERFACES",item->forms,item->forms_exclude);
-    else
-    subBuffer->getValues("FORMS",item->forms,item->forms_exclude);
-
-    subBuffer->getValues("SOURCES",item->sources,item->sources_exclude);
-    subBuffer->getValues("HEADERS",item->headers,item->headers_exclude);
-    subBuffer->getValues("LEXSOURCES",item->lexsources,item->lexsources_exclude);
-    subBuffer->getValues("YACCSOURCES",item->yaccsources,item->yaccsources_exclude);
-    if ( m_part->isQt4Project() )
-    	subBuffer->getValues("RESOURCES", item->resources, item->resources_exclude);
-    else
-    	subBuffer->getValues("IMAGES",item->images,item->images_exclude);
-    subBuffer->getValues("DISTFILES",item->distfiles,item->distfiles_exclude);
-    subBuffer->getValues("TRANSLATIONS",item->translations,item->translations_exclude);
-    subBuffer->getValues("IDLS",item->idls,item->idls_exclude);
-    QStringList installs,installs_exclude;
-    subBuffer->getValues("INSTALLS",installs,installs_exclude);
-
-    // Create list view items
-
-    GroupItem * titem = createGroupItem(GroupItem::InstallRoot, "INSTALLS",scopeString);
-    titem->owner = item;
-    item->groups.append(titem);
-    if (!installs.isEmpty())
-    {
-      QStringList::iterator it = installs.begin();
-      for (;it!=installs.end();it++)
-      {
-        if ((*it)=="target")
-          continue;
-        QStringList path,path_excl;
-        QString path_str;
-        subBuffer->getValues((*it)+".path",path,path_excl);
-        if (!path.isEmpty())
-          path_str = path[0];
-
-        GroupItem* institem = createGroupItem(GroupItem::InstallObject, (*it)  ,scopeString);
-        subBuffer->getValues((*it)+".files",institem->str_files,institem->str_files_exclude);
-        institem->install_path = path_str;
-        institem->install_objectname = *it;
-        institem->owner = item;
-        titem->installs.append(institem);
-
-        if (!institem->str_files.isEmpty())
-        {
-          QStringList::iterator it2 = institem->str_files.begin();
-          for (;it2!=institem->str_files.end();it2++)
-          {
-            FileItem *fitem = createFileItem(*it2);
-            institem->files.append(fitem);
-          }
-        }
-
-
-      }
-    }
-
-
-    titem = createGroupItem(GroupItem::Lexsources, "LEXSOURCES",scopeString);
-    titem->owner = item;
-    item->groups.append(titem);
-    if (!item->lexsources.isEmpty()) {
-        QStringList l = item->lexsources;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            FileItem *fitem = createFileItem(*it);
-            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
-            titem->files.append(fitem);
-        }
-    }
-    titem = createGroupItem(GroupItem::Yaccsources, "YACCSOURCES",scopeString);
-    titem->owner = item;
-    item->groups.append(titem);
-    if (!item->yaccsources.isEmpty()) {
-        QStringList l = item->yaccsources;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            FileItem *fitem = createFileItem(*it);
-            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
-            titem->files.append(fitem);
-        }
-    }
-    titem = createGroupItem(GroupItem::Distfiles, "DISTFILES",scopeString);
-    titem->owner = item;
-    item->groups.append(titem);
-    if (!item->distfiles.isEmpty()) {
-        QStringList l = item->distfiles;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            FileItem *fitem = createFileItem(*it);
-            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
-            titem->files.append(fitem);
-        }
-    }
-    if ( m_part->isQt4Project() )
-    {
-        titem = createGroupItem(GroupItem::Resources, "RESOURCES",scopeString);
-        titem->owner = item;
-        item->groups.append(titem);
-        if (!item->resources.isEmpty()) {
-            QStringList l = item->resources;
-            QStringList::Iterator it;
-            for (it = l.begin(); it != l.end(); ++it) {
-                FileItem *fitem = createFileItem(*it);
-                fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
-                titem->files.append(fitem);
-            }
-	}
-
-    }
-    else
-    {
-        titem = createGroupItem(GroupItem::Images, "IMAGES",scopeString);
-        titem->owner = item;
-        item->groups.append(titem);
-        if (!item->images.isEmpty()) {
-            QStringList l = item->images;
-            QStringList::Iterator it;
-            for (it = l.begin(); it != l.end(); ++it) {
-                FileItem *fitem = createFileItem(*it);
-                fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
-                titem->files.append(fitem);
-            }
-	}
-    }
-    titem = createGroupItem(GroupItem::Translations, "TRANSLATIONS",scopeString);
-    titem->owner = item;
-    item->groups.append(titem);
-    if (!item->translations.isEmpty()) {
-        QStringList l = item->translations;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            FileItem *fitem = createFileItem(*it);
-            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
-            titem->files.append(fitem);
-        }
-    }
-    titem = createGroupItem(GroupItem::IDLs, "Corba IDL",scopeString);
-    titem->owner = item;
-    item->groups.append(titem);
-    if (!item->idls.isEmpty()) {
-        QStringList l = item->idls;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            FileItem *fitem = createFileItem(*it);
-            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
-            titem->files.append(fitem);
-        }
-    }
-
-
-//    titem = createGroupItem(GroupItem::Forms, "FORMS",scopeString);
-    titem = createGroupItem(GroupItem::Forms,
-                       (m_part->isTMakeProject() ? "INTERFACES" : "FORMS"),
-                       scopeString);
-
-    item->groups.append(titem);
-    titem->owner = item;
-    if (!item->forms.isEmpty()) {
-        QStringList l = item->forms;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            FileItem *fitem = createFileItem(*it);
-            titem->files.append(fitem);
-        }
-    }
-    titem = createGroupItem(GroupItem::Sources, "SOURCES",scopeString);
-    item->groups.append(titem);
-    titem->owner = item;
-    if (!item->sources.isEmpty()) {
-        QStringList l = item->sources;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            getUiFileLink(item->relpath+"/",*it);
-            FileItem *fitem = createFileItem(*it);
-            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
-            titem->files.append(fitem);
-        }
-    }
-    titem = createGroupItem(GroupItem::Headers, "HEADERS",scopeString);
-    titem->owner = item;
-    item->groups.append(titem);
-    if (!item->headers.isEmpty()) {
-        QStringList l = item->headers;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            FileItem *fitem = createFileItem(*it);
-            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
-            titem->files.append(fitem);
-        }
-    }
-    QStringList childScopes = subBuffer->getChildScopeNames();
-    for (unsigned int i=0; i<childScopes.count();i++)
-      parseScope(item,scopeString+(!scopeString.isEmpty() ? ":" : "")+childScopes[i],buffer);
-}
-
-void TrollProjectWidget::parse(SubqmakeprojectItem *item)
-{
-    QFileInfo fi(item->path);
-//    QString proname = item->path + "/" + fi.baseName() + ".pro";
-    QDir dir(item->path);
-    QStringList l = dir.entryList("*.pro");
-    if( QFile::exists( dir.absPath () + "/" + (dir.dirName() + ".pro") ) )
-      item->pro_file = dir.dirName() + ".pro";
-    else
-      item->pro_file = l.count()?l[0]:(fi.baseName() + ".pro");
-        
-    QString proname = item->path + "/" + item->pro_file;
-
-    kdDebug(9024) << "Parsing " << proname << endl;
-
-
-    item->m_FileBuffer.bufferFile(proname);
-    item->m_FileBuffer.handleScopes();
-
-    parseScope(item,"",&(item->m_FileBuffer));
-
-    QStringList minusListDummy;
-    QStringList lst;
-
-    item->configuration.m_subdirName = item->subdir;
-    // set defaults
-    item->configuration.m_template = QTMP_APPLICATION;
-    item->configuration.m_buildMode = QBM_RELEASE;
-    item->configuration.m_warnings = QWARN_ON;
-    item->configuration.m_requirements = 0;
-    item->configuration.m_qt4libs = Q4L_GUI+Q4L_CORE;
-    item->setPixmap(0,SmallIcon("qmake_app"));
-
-    // retrieve the project configuration
-    item->m_FileBuffer.getValues("TEMPLATE",lst,minusListDummy);
-
-    if (lst.count())
-    {
-      if (lst[0] == "app")
-        item->configuration.m_template = QTMP_APPLICATION;
-      if (lst[0] == "lib")
-      {
-        item->setPixmap(0,SmallIcon("qmake_lib"));
-        item->configuration.m_template = QTMP_LIBRARY;
-      }
-      if (lst[0] == "subdirs")
-      {
-        item->setPixmap(0,SmallIcon("qmake_sub"));
-        item->configuration.m_template = QTMP_SUBDIRS;
-      }
-    }
-    item->m_FileBuffer.getValues("VERSION",lst,minusListDummy);
-    if(lst.count())
-      item->configuration.m_libraryversion = lst[0];
-
-    item->configuration.m_inheritconfig = true;
-    QPtrList<FileBuffer::ValueSetMode> configvaluesetmodes;
-    item->m_FileBuffer.getVariableValueSetModes("CONFIG",configvaluesetmodes);
-
-    FileBuffer::ValueSetMode* ConfigSetMode = NULL;
-    for(ConfigSetMode = configvaluesetmodes.first(); ConfigSetMode; ConfigSetMode = configvaluesetmodes.next())
-    {
-      if(ConfigSetMode != NULL)
-      {
-        if(ConfigSetMode[0] == FileBuffer::VSM_RESET)
-        {
-          item->configuration.m_inheritconfig = false;
-      break;
-    }
-      }
-    }
-
-    item->m_FileBuffer.getValues("CONFIG",lst,minusListDummy);
-    if (lst.count())
-    {
-      // config debug/release
-      if (lst.find("debug")!=lst.end())
-      {
-        item->configuration.m_buildMode = QBM_DEBUG;
-        lst.remove("debug");
-      }
-      if (lst.find("release")!=lst.end())
-      {
-        item->configuration.m_buildMode = QBM_RELEASE;
-        lst.remove("release");
-      }
-      if (m_part->isQt4Project() && lst.find("debug_and_release" )!=lst.end())
-      {
-        item->configuration.m_buildMode = QBM_DEBUG_AND_RELEASE;
-        lst.remove("debug_and_release");
-      }
-      // config warnings on/off
-      if (lst.find("warn_on")!=lst.end())
-      {
-        item->configuration.m_warnings = QWARN_ON;
-        lst.remove("warn_on");
-      }
-      if (lst.find("warn_off")!=lst.end())
-      {
-        item->configuration.m_warnings = QWARN_OFF;
-        lst.remove("warn_off");
-      }
-      // config requerments
-      if (lst.find("qt")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_QT;
-        lst.remove("qt");
-      }
-      if (lst.find("x11")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_X11;
-        lst.remove("x11");
-      }
-      if (lst.find("thread")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_THREAD;
-        lst.remove("thread");
-      }
-      if (lst.find("opengl")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_OPENGL;
-        lst.remove("opengl");
-      }
-      // config lib mode
-      if (lst.find("staticlib")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_STATIC;
-        lst.remove("staticlib");
-      }
-      if (lst.find("dll")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_SHARED;
-        lst.remove("dll");
-      }
-      if (lst.find("plugin")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_PLUGIN;
-        item->configuration.m_requirements += QD_SHARED;
-        lst.remove("plugin");
-      }
-      if (lst.find("exceptions")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_EXCEPTIONS;
-        lst.remove("exceptions");
-      }
-      if (lst.find("stl")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_STL;
-        lst.remove("stl");
-      }
-      if (lst.find("rtti")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_RTTI;
-        lst.remove("rtti");
-      }
-      if (lst.find("ordered")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_ORDERED;
-        lst.remove("ordered");
-      }
-      if (lst.find("console")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_CONSOLE;
-        lst.remove("console");
-      }
-      if (lst.find("create_libtool")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_LIBTOOL;
-        lst.remove("create_libtool");
-      }
-      if (lst.find("create_pkgconf")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_PKGCONF;
-        lst.remove("create_pkgconf");
-      }
-      if (lst.find("precompile_header")!=lst.end())
-      {
-        item->configuration.m_requirements += QD_PCH;
-        lst.remove("precompile_header");
-      }
-      if ( m_part->isQt4Project() )
-      {
-        if (lst.find( "uitools" )!=lst.end())
-        {
-          item->configuration.m_requirements += QD_UITOOLS;
-          lst.remove("uitools");
-        }
-        if (lst.find( "assistant" )!=lst.end())
-        {
-          item->configuration.m_requirements += QD_ASSISTANT;
-          lst.remove("assistant");
-        }
-        if (lst.find( "qtestlib" )!=lst.end())
-        {
-          item->configuration.m_requirements += QD_TESTLIB;
-          lst.remove("qttestlib");
-        }
-        if (lst.find( "dbus" )!=lst.end())
-        {
-          item->configuration.m_requirements += QD_DBUS;
-          lst.remove("dbus");
-        }
-        if ( lst.find( "build_all" )!=lst.end() )
-        {
-          item->configuration.m_requirements += QD_BUILDALL ;
-          lst.remove("build_all");
-        }
-        if ( lst.find( "designer" )!=lst.end() )
-        {
-          item->configuration.m_requirements += QD_DESIGNER ;
-          lst.remove("designer");
-        }
-        // The rest are custom variables
-        item->configuration.m_customConfigOptions = lst;
-      }
-    }
-
-    //QT from Qt4
-    if ( m_part->isQt4Project() )
-    {
-      item->m_FileBuffer.getValues("QT",lst,minusListDummy);
-      if ( minusListDummy.find( "gui" )!=minusListDummy.end() )
-        item->configuration.m_qt4libs -= Q4L_GUI;
-      if ( minusListDummy.find( "core" )!=minusListDummy.end() )
-        item->configuration.m_qt4libs -= Q4L_CORE;
-      if ( lst.find( "sql" )!=lst.end() )
-        item->configuration.m_qt4libs += Q4L_SQL;
-      if ( lst.find( "xml" )!=lst.end() )
-        item->configuration.m_qt4libs += Q4L_XML;
-      if ( lst.find( "svg" )!=lst.end() )
-        item->configuration.m_qt4libs += Q4L_SVG;
-      if ( lst.find( "network" )!=lst.end() )
-        item->configuration.m_qt4libs += Q4L_NETWORK;
-      if ( lst.find( "opengl" )!=lst.end() )
-        item->configuration.m_qt4libs += Q4L_OPENGL;
-      if ( lst.find( "qt3support" )!=lst.end() )
-        item->configuration.m_qt4libs += Q4L_QT3;
-      
-    }
-
-    item->m_FileBuffer.getValues("DESTDIR",lst,minusListDummy);
-    if (lst.count())
-      item->configuration.m_destdir = lst[0];
-    item->m_FileBuffer.getValues("INCLUDEPATH",lst,minusListDummy);
-    if (lst.count())
-      item->configuration.m_incadd = lst;
-    item->m_FileBuffer.getValues("LIBS",lst,minusListDummy);
-    if (lst.count())
-      item->configuration.m_libadd = lst;
-
-    item->m_FileBuffer.getValues("TARGET",lst,minusListDummy);
-    if (lst.count())
-      item->configuration.m_target = lst[0];
-
-    item->m_FileBuffer.getValues("TARGETDEPS",lst,minusListDummy);
-    if (lst.count())
-      item->configuration.m_prjdeps = lst;
-    item->m_FileBuffer.getValues("DEFINES",lst,minusListDummy);
-    item->configuration.m_defines = lst;
-    item->m_FileBuffer.getValues("QMAKE_CXXFLAGS_DEBUG",lst,minusListDummy);
-    item->configuration.m_cxxflags_debug = lst;
-    item->m_FileBuffer.getValues("QMAKE_CXXFLAGS_RELEASE",lst,minusListDummy);
-    item->configuration.m_cxxflags_release = lst;
-    item->m_FileBuffer.getValues("QMAKE_LFLAGS_DEBUG",lst,minusListDummy);
-    item->configuration.m_lflags_debug = lst;
-    item->m_FileBuffer.getValues("QMAKE_LFLAGS_RELEASE",lst,minusListDummy);
-    item->configuration.m_lflags_release = lst;
-    item->m_FileBuffer.getValues("QMAKE_LIBDIR",lst,minusListDummy);
-    item->configuration.m_librarypath = lst;
-    item->m_FileBuffer.getValues("OBJECTS_DIR",lst,minusListDummy);
-    if (lst.count())
-      item->configuration.m_objectpath = lst[0];
-    item->m_FileBuffer.getValues("UI_DIR",lst,minusListDummy);
-    if (lst.count())
-      item->configuration.m_uipath = lst[0];
-    item->m_FileBuffer.getValues("MOC_DIR",lst,minusListDummy);
-    if (lst.count())
-      item->configuration.m_mocpath = lst[0];
-    item->m_FileBuffer.getValues("MAKEFILE",lst,minusListDummy);
-    if (lst.count())
-      item->configuration.m_makefile = lst[0];
-
-    // Install path
-    item->m_FileBuffer.getValues("target.path",lst,minusListDummy);
-    if (lst.count())
-      item->configuration.m_target_install_path = lst[0];
-    item->m_FileBuffer.getValues("INSTALLS",lst,minusListDummy);
-    if (lst.count())
-    {
-      QStringList::iterator it = lst.begin();
-      for (;it!=lst.end();it++)
-      {
-        if (*it == "target")
-        {
-          item->configuration.m_target_install = true;
-          break;
-        }
-      }
-    }
-
-    // Handle includes. include( ... )
-
-    // Handle "subdirs" project
-    if (item->configuration.m_template == QTMP_SUBDIRS)
-    {
-      item->m_FileBuffer.getValues("SUBDIRS",lst,minusListDummy);
-      item->subdirs = lst;
-      QStringList::Iterator it;
-      for (it = lst.begin(); it != lst.end(); ++it)
-      {
-        SubqmakeprojectItem *newitem = new SubqmakeprojectItem(item, (*it),"");
-        newitem->subdir = *it;
-        newitem->m_RootBuffer = &(newitem->m_FileBuffer);
-        newitem->path = item->path + "/" + (*it);
-        parse(newitem);
-      }
-    }
-
-    // Handle custom config vars.
-    QStringList allValues = item->m_FileBuffer.getCustomValueNames();
-    QStringList::Iterator it = allValues.begin();
-    for( ; it != allValues.end(); ++it )
-    {
-        item->m_FileBuffer.getValues(*it,lst,minusListDummy);
-    if( lst.count() != 0 )
-        item->configuration.m_variables[*it] = lst[0]; // Only support reading first one...
-    }
-
-}
 void TrollProjectWidget::slotBuildOpenFile()
 {
-    KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(m_part->partController()->activePart());
-    if (!part || !part->url().isLocalFile())
-        return;
+    KParts::ReadWritePart * part = dynamic_cast<KParts::ReadWritePart*>( m_part->partController() ->activePart() );
+    if ( !part || !part->url().isLocalFile() )
+        return ;
 
     QString fileName = part->url().path();
-    QFileInfo fi(fileName);
+    QFileInfo fi( fileName );
     QString sourceDir = fi.dirPath();
-    QString baseName = fi.baseName(true);
-    kdDebug(9020) << "Compiling " << fileName
-                  << "in dir " << sourceDir
-                  << " with baseName " << baseName << endl;
+    QString baseName = fi.baseName( true );
+    kdDebug( 9020 ) << "Compiling " << fileName
+    << "in dir " << sourceDir
+    << " with baseName " << baseName << endl;
 
     QString projectDir = projectDirectory();
-    if (!sourceDir.startsWith(projectDir)) {
-        KMessageBox::sorry(this, i18n("Can only compile files in directories which belong to the project."));
-        return;
+    if ( !sourceDir.startsWith( projectDir ) )
+    {
+        KMessageBox::sorry( this, i18n( "Can only compile files in directories which belong to the project." ) );
+        return ;
     }
 
     QString buildDir = sourceDir;
     QString target = baseName + ".o";
-    kdDebug(9020) << "builddir " << buildDir << ", target " << target << endl;
+    kdDebug( 9020 ) << "builddir " << buildDir << ", target " << target << endl;
 
-    m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-//    m_part->startMakeCommand(buildDir, target);
+    m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
+    //    m_part->startMakeCommand(buildDir, target);
 
-    kdDebug(9020) << "searching for the subproject" << endl;
-    QPtrList<SubqmakeprojectItem> list = findSubprojectForFile(fi);
-    kdDebug(9020) << "searching for the subproject: success" << endl;
+    kdDebug( 9020 ) << "searching for the subproject" << endl;
+    QPtrList<QMakeScopeItem> list = findSubprojectForFile( fi );
+    kdDebug( 9020 ) << "searching for the subproject: success" << endl;
 
-    SubqmakeprojectItem *spitem;
+    QMakeScopeItem *spitem;
     for ( spitem = list.first(); spitem; spitem = list.next() )
     {
-        QString buildcmd = constructMakeCommandLine(spitem->configuration.m_makefile);
-        QString dircmd = "cd " + KProcess::quote(spitem->path) + " && " ;
-        kdDebug(9020) << "builddir " << spitem->path << ", cmd " << dircmd + buildcmd + " " + target << endl;
-        m_part->queueCmd(spitem->path, dircmd + buildcmd + " " + target);
+        QString buildcmd = constructMakeCommandLine( spitem->scope );
+        QString dircmd = "cd " + KProcess::quote( spitem->scope->projectDir() ) + " && " ;
+        kdDebug( 9020 ) << "builddir " << spitem->scope->projectDir() << ", cmd " << dircmd + buildcmd + " " + target << endl;
+        m_part->queueCmd( spitem->scope->projectDir(), dircmd + buildcmd + " " + target );
     }
 
-//    startMakeCommand(buildDir, target);
+    //    startMakeCommand(buildDir, target);
 
 }
 
@@ -3419,94 +1950,101 @@ void TrollProjectWidget::slotBuildOpenFile()
 void TrollProjectWidget::slotExecuteProject()
 {
     QString program = m_part->mainProgram();
-    if (!program.startsWith("/"))
-        program.prepend("./");
+    if ( !program.startsWith( QDir::rootDirPath() ) )
+        program.prepend( "." + QDir::separator() );
 
-    if ( program.isEmpty() ) {
-        KMessageBox::sorry(this, i18n("Please specify the executable name in the "
-            "project options dialog first."), i18n("No Executable Name Given"));
-        return;
+    if ( program.isEmpty() )
+    {
+        KMessageBox::sorry( this, i18n( "Please specify the executable name in the "
+                                        "project options dialog first." ), i18n( "No Executable Name Given" ) );
+        return ;
     }
 
     // Build environment variables to prepend to the executable path
     QString runEnvVars = QString::null;
     DomUtil::PairList list =
-        DomUtil::readPairListEntry( *(m_part->projectDom()), "/kdevtrollproject/run/envvars", "envvar", "name", "value" );
+        DomUtil::readPairListEntry( *( m_part->projectDom() ), "/kdevtrollproject/run/envvars", "envvar", "name", "value" );
 
     DomUtil::PairList::ConstIterator it;
-    for (it = list.begin(); it != list.end(); ++it) {
-        const DomUtil::Pair &pair = (*it);
-        if ( (!pair.first.isEmpty()) && (!pair.second.isEmpty()) )
+    for ( it = list.begin(); it != list.end(); ++it )
+    {
+        const DomUtil::Pair &pair = ( *it );
+        if ( ( !pair.first.isEmpty() ) && ( !pair.second.isEmpty() ) )
             runEnvVars += pair.first + "=" + pair.second + " ";
     }
-    program.prepend(runEnvVars);
-    program.append(" " + DomUtil::readEntry( *(m_part->projectDom()), "/kdevtrollproject/run/programargs" ) + " ");
+    program.prepend( runEnvVars );
+    program.append( " " + DomUtil::readEntry( *( m_part->projectDom() ), "/kdevtrollproject/run/programargs" ) + " " );
 
-    QString dircmd = "cd "+KProcess::quote(this->projectDirectory()) + " && " ;
+    QString dircmd = "cd " + KProcess::quote( this->projectDirectory() ) + " && " ;
 
-    bool inTerminal = DomUtil::readBoolEntry(*(m_part->projectDom()), "/kdevtrollproject/run/terminal");
-//    m_part->appFrontend()->startAppCommand(dircmd + program, inTerminal);
-//    m_part->execute(this->projectDirectory(), "./"+program );
-    m_part->appFrontend()->startAppCommand(this->projectDirectory(), program,inTerminal );
+    bool inTerminal = DomUtil::readBoolEntry( *( m_part->projectDom() ), "/kdevtrollproject/run/terminal" );
+    //    m_part->appFrontend()->startAppCommand(dircmd + program, inTerminal);
+    //    m_part->execute(this->projectDirectory(), "./"+program );
+    m_part->appFrontend() ->startAppCommand( this->projectDirectory(), program, inTerminal );
 }
 
 
 void TrollProjectWidget::slotCleanProject()
 {
-  QString dir = this->  projectDirectory();
-  if (!m_rootSubproject)
-    return;
+    QString dir = this-> projectDirectory();
+    if ( !m_rootSubproject )
+        return ;
 
-  createMakefileIfMissing(dir, m_rootSubproject);
+    createMakefileIfMissing( dir, m_rootSubproject );
 
-  m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-  QString dircmd = "cd "+KProcess::quote(dir) + " && " ;
-  QString rebuildcmd = constructMakeCommandLine(m_rootSubproject->configuration.m_makefile) + " clean";
-  m_part->queueCmd(dir,dircmd + rebuildcmd);
+    m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
+    QString dircmd = "cd " + KProcess::quote( dir ) + " && " ;
+    QString rebuildcmd = constructMakeCommandLine( m_rootSubproject->scope ) + " clean";
+    m_part->queueCmd( dir, dircmd + rebuildcmd );
 }
 
 void TrollProjectWidget::slotCleanTarget()
 {
-  // no subproject selected
-  m_part->partController()->saveAllFiles();
-  if (!m_shownSubproject)
-    return;
-  // can't build from scope
-  if (m_shownSubproject->isScope)
-    return;
+    // no subproject selected
+    m_part->partController() ->saveAllFiles();
+    if ( !m_shownSubproject )
+        return ;
+    // can't build from scope
+    if ( m_shownSubproject->scope->scopeType() != Scope::ProjectScope )
+        return ;
 
-  QString dir = subprojectDirectory();
-  createMakefileIfMissing(dir, m_shownSubproject);
+    QString dir = subprojectDirectory();
+    createMakefileIfMissing( dir, m_shownSubproject );
 
-  m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-  QString dircmd = "cd "+KProcess::quote(dir) + " && " ;
-  QString rebuildcmd = constructMakeCommandLine(m_shownSubproject->configuration.m_makefile) + " clean";
-  m_part->queueCmd(dir,dircmd + rebuildcmd);
+    m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
+    QString dircmd = "cd " + KProcess::quote( dir ) + " && " ;
+    QString rebuildcmd = constructMakeCommandLine( m_shownSubproject->scope ) + " clean";
+    m_part->queueCmd( dir, dircmd + rebuildcmd );
 }
 
-QString TrollProjectWidget::constructMakeCommandLine(const QString makeFileName )
+QString TrollProjectWidget::constructMakeCommandLine( Scope* s )
 {
-    QDomDocument &dom = *(m_part->projectDom());
+    QString makeFileName;
+    if ( s )
+        makeFileName = s->variableValues( "MAKEFILE" ).front();
 
-    QString cmdline = DomUtil::readEntry(dom, "/kdevtrollproject/make/makebin");
-    if (cmdline.isEmpty())
+    QDomDocument & dom = *( m_part->projectDom() );
+
+    QString cmdline = DomUtil::readEntry( dom, "/kdevtrollproject/make/makebin" );
+    if ( cmdline.isEmpty() )
         cmdline = MAKE_COMMAND;
-    if (!makeFileName.isEmpty())
+    if ( !makeFileName.isEmpty() )
     {
         cmdline += " -f " + makeFileName;
     }
-    if (!DomUtil::readBoolEntry(dom, "/kdevtrollproject/make/abortonerror"))
+    if ( !DomUtil::readBoolEntry( dom, "/kdevtrollproject/make/abortonerror" ) )
         cmdline += " -k";
-    int jobs = DomUtil::readIntEntry(dom, "/kdevtrollproject/make/numberofjobs");
-    if (jobs != 0) {
+    int jobs = DomUtil::readIntEntry( dom, "/kdevtrollproject/make/numberofjobs" );
+    if ( jobs != 0 )
+    {
         cmdline += " -j";
-        cmdline += QString::number(jobs);
+        cmdline += QString::number( jobs );
     }
-    if (DomUtil::readBoolEntry(dom, "/kdevtrollproject/make/dontact"))
+    if ( DomUtil::readBoolEntry( dom, "/kdevtrollproject/make/dontact" ) )
         cmdline += " -n";
 
     cmdline += " ";
-    cmdline.prepend(m_part->makeEnvironment());
+    cmdline.prepend( m_part->makeEnvironment() );
 
     return cmdline;
 }
@@ -3537,174 +2075,164 @@ QString TrollProjectWidget::makeEnvironment()
 */
 void TrollProjectWidget::startMakeCommand( const QString & dir, const QString & target )
 {
-    m_part->partController()->saveAllFiles();
+    m_part->partController() ->saveAllFiles();
 
-/*    QFileInfo fi;
-    QFileInfo fi2;
-    if (m_rootSubproject->configuration.m_makefile.isEmpty())
-    {
-        fi.setFile(dir + "/Makefile");
-        fi2.setFile(dir + "/makefile");
-    }
-    else
-    {
-        fi.setFile(m_rootSubproject->configuration.m_makefile);
-        fi2.setFile(dir + "/" + m_rootSubproject->configuration.m_makefile);
-    }
-    if (!fi.exists() && !fi2.exists()) {
-        int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
-        if (r == KMessageBox::No)
-            return;
-        m_part->startQMakeCommand(dir);
-    }
-*/
-    QDomDocument &dom = *(m_part->projectDom());
+    /*    QFileInfo fi;
+        QFileInfo fi2;
+        if (m_rootSubproject->configuration.m_makefile.isEmpty())
+        {
+            fi.setFile(dir + "/Makefile");
+            fi2.setFile(dir + "/makefile");
+        }
+        else
+        {
+            fi.setFile(m_rootSubproject->configuration.m_makefile);
+            fi2.setFile(dir + "/" + m_rootSubproject->configuration.m_makefile);
+        }
+        if (!fi.exists() && !fi2.exists()) {
+            int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
+            if (r == KMessageBox::No)
+                return;
+            m_part->startQMakeCommand(dir);
+        }
+    */
+    QDomDocument &dom = *( m_part->projectDom() );
 
-    if (target=="clean")
+    if ( target == "clean" )
     {
-      QString cmdline = DomUtil::readEntry(dom, "/kdevtrollproject/make/makebin");
-      if (cmdline.isEmpty())
-          cmdline = MAKE_COMMAND;
-      cmdline += " clean";
-      QString dircmd = "cd " + KProcess::quote(dir) + " && ";
-      cmdline.prepend(m_part->makeEnvironment());
-      m_part->makeFrontend()->queueCommand(dir, dircmd + cmdline);
+        QString cmdline = DomUtil::readEntry( dom, "/kdevtrollproject/make/makebin" );
+        if ( cmdline.isEmpty() )
+            cmdline = MAKE_COMMAND;
+        cmdline += " clean";
+        QString dircmd = "cd " + KProcess::quote( dir ) + " && ";
+        cmdline.prepend( m_part->makeEnvironment() );
+        m_part->makeFrontend() ->queueCommand( dir, dircmd + cmdline );
     }
 
     QString cmdline = constructMakeCommandLine() + " " + target;
 
-    QString dircmd = "cd " + KProcess::quote(dir) + " && ";
+    QString dircmd = "cd " + KProcess::quote( dir ) + " && ";
 
-    cmdline.prepend(m_part->makeEnvironment());
-    m_part->makeFrontend()->queueCommand(dir, dircmd + cmdline);
+    cmdline.prepend( m_part->makeEnvironment() );
+    m_part->makeFrontend() ->queueCommand( dir, dircmd + cmdline );
 }
 
-void TrollProjectWidget::createMakefileIfMissing(const QString &dir, SubqmakeprojectItem *item)
+void TrollProjectWidget::createMakefileIfMissing( const QString &dir, QMakeScopeItem *item )
 {
-  QFileInfo fi;
-  QFileInfo fi2;
-  if (item->configuration.m_makefile.isEmpty())
-  {
-    fi.setFile(dir + "/Makefile");
-    fi2.setFile(dir + "/makefile");
-  }
-  else
-  {
-    fi.setFile(item->configuration.m_makefile);
-    fi2.setFile(dir + "/" + item->configuration.m_makefile);
-  }
-  if (!fi.exists() && !fi2.exists()) {
-      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"), QString::null, i18n("Run qmake"), i18n("Do Not Run"));
-      if (r == KMessageBox::No)
-          return;
-      m_part->startQMakeCommand(dir);
-  }
+    QFileInfo fi;
+    QFileInfo fi2;
+    if ( item->scope->variableValues( "MAKEFILE" ).isEmpty() )
+    {
+        fi.setFile( dir + QDir::separator() + "Makefile" );
+        fi2.setFile( dir + QDir::separator() + "makefile" );
+    }
+    else
+    {
+        fi.setFile( item->scope->variableValues( "MAKEFILE" ).front() );
+        fi2.setFile( dir + QDir::separator() + item->scope->variableValues( "MAKEFILE" ).front() );
+    }
+    if ( !fi.exists() && !fi2.exists() )
+    {
+        int r = KMessageBox::questionYesNo( this, i18n( "There is no Makefile in this directory. Run qmake first?" ), QString::null, i18n( "Run qmake" ), i18n( "Do Not Run" ) );
+        if ( r == KMessageBox::No )
+            return ;
+        m_part->startQMakeCommand( dir );
+    }
 }
 
-QPtrList<SubqmakeprojectItem> TrollProjectWidget::findSubprojectForFile( QFileInfo fi )
+QPtrList<QMakeScopeItem> TrollProjectWidget::findSubprojectForFile( QFileInfo fi )
 {
-    QPtrList<SubqmakeprojectItem> list;
-    findSubprojectForFile(list, m_rootSubproject, fi.absFilePath());
+    QPtrList<QMakeScopeItem> list;
+    findSubprojectForFile( list, m_rootSubproject, fi.absFilePath() );
     return list;
 }
 
-void TrollProjectWidget::findSubprojectForFile( QPtrList<SubqmakeprojectItem> &list, SubqmakeprojectItem * item, QString absFilePath )
+void TrollProjectWidget::findSubprojectForFile( QPtrList<QMakeScopeItem> &list, QMakeScopeItem * item, QString absFilePath )
 {
-    QDir d(item->path);
-    kdDebug(9020) << "searching withing subproject: " << item->path << endl;
+    QDir d( item->scope->projectDir() );
+    kdDebug( 9020 ) << "searching withing subproject: " << item->scope->projectDir() << endl;
 
-    for (QStringList::Iterator it = item->sources.begin(); it != item->sources.end(); ++it )
+    for ( QStringList::Iterator it = item->scope->variableValues( "SOURCES" ).begin(); it != item->scope->variableValues( "SOURCES" ).end(); ++it )
     {
-        QFileInfo fi2(d, *it);
-        kdDebug(9020) << "subproject item: key: " << absFilePath << " value:" << fi2.absFilePath() << endl;
-        if (absFilePath == fi2.absFilePath())
-            list.append(item);
+        QFileInfo fi2( d, *it );
+        kdDebug( 9020 ) << "subproject item: key: " << absFilePath << " value:" << fi2.absFilePath() << endl;
+        if ( absFilePath == fi2.absFilePath() )
+            list.append( item );
     }
 
-    for (QStringList::Iterator it = item->headers.begin(); it != item->headers.end(); ++it )
+    for ( QStringList::Iterator it = item->scope->variableValues( "HEADERS" ).begin(); it != item->scope->variableValues( "HEADERS" ).end(); ++it )
     {
-        QFileInfo fi2(d, *it);
-        kdDebug(9020) << "subproject item: key: " << absFilePath << " value:" << fi2.absFilePath() << endl;
-        if (absFilePath == fi2.absFilePath())
-            list.append(item);
+        QFileInfo fi2( d, *it );
+        kdDebug( 9020 ) << "subproject item: key: " << absFilePath << " value:" << fi2.absFilePath() << endl;
+        if ( absFilePath == fi2.absFilePath() )
+            list.append( item );
     }
 
     QListViewItem * child = item->firstChild();
-    while( child )
+    while ( child )
     {
-        SubqmakeprojectItem *spitem = dynamic_cast<SubqmakeprojectItem*>(child);
+        QMakeScopeItem * spitem = dynamic_cast<QMakeScopeItem*>( child );
 
-        if (spitem)
+        if ( spitem )
         {
-            kdDebug(9020) << "next subproject item with profile = " << spitem->pro_file << endl;
-            findSubprojectForFile(list, spitem, absFilePath);
+            kdDebug( 9020 ) << "next subproject item with profile = " << spitem->scope->fileName() << endl;
+            findSubprojectForFile( list, spitem, absFilePath );
         }
 
         child = child->nextSibling();
     }
+}
 
-/*    QListViewItemIterator it( item );
-    while ( it.current() )
+void TrollProjectWidget::slotRemoveScope( QMakeScopeItem * spitem )
+{
+    if ( spitem == 0 && m_shownSubproject == 0 )
+        return ;
+    else
     {
-        SubqmakeprojectItem *spitem = dynamic_cast<SubqmakeprojectItem*>(it.current());
-
-        if (spitem)
+        QMakeScopeItem* pitem = dynamic_cast<QMakeScopeItem *>( spitem->parent() );
+        if ( pitem != 0 )
         {
-            kdDebug(9020) << "next subproject item with profile = " << spitem->pro_file << endl;
-            findSubprojectForFile(list, spitem, absFilePath);
-        }
-
-        ++it;
-    }*/
-}
-
-//check or uncheck dependency to currently checked or unchecked library
-void InsideCheckListItem::stateChange( bool state )
-{
-    if (listView() == m_config->insidelib_listview)
-    {
-        QListViewItemIterator it( m_config->intDeps_view );
-        while ( it.current() ) {
-            InsideCheckListItem *chi = dynamic_cast<InsideCheckListItem*>(it.current());
-            if (chi)
-                if ( chi->prjItem == prjItem )
-                    chi->setOn(state);
-            ++it;
+            switch ( spitem->scope->scopeType() )
+            {
+                case Scope::FunctionScope:
+                    pitem->scope->deleteFunctionScope( spitem->scope->scopeName() );
+                    //                     pitem->scopes.remove( spitem );
+                    break;
+                case Scope::IncludeScope:
+                    pitem->scope->deleteIncludeScope( spitem->scope->scopeName() );
+                    //                     pitem->scopes.remove( spitem );
+                    delete spitem;
+                    spitem = pitem;
+                    pitem = dynamic_cast<QMakeScopeItem *>( pitem->parent() );
+                    //                     pitem->scopes.remove(spitem);
+                    break;
+                case Scope::SimpleScope:
+                    pitem->scope->deleteSimpleScope( spitem->scope->scopeName() );
+                    //                     pitem->scopes.remove( spitem );
+                    break;
+                default:
+                    break;
+            }
+            delete spitem;
+            m_shownSubproject = pitem;
+            overview->setCurrentItem ( m_shownSubproject );
+            overview->setSelected( m_shownSubproject, true );
         }
     }
 }
 
-void TrollProjectWidget::slotRemoveScope( SubqmakeprojectItem * spitem )
+QMakeScopeItem * TrollProjectWidget::findSubprojectForScope( QMakeScopeItem * scope )
 {
-  if (spitem==0 && m_shownSubproject==0)
-    return;
-  else
-  {
-    if ( ( spitem = dynamic_cast<SubqmakeprojectItem *>(m_shownSubproject->parent()) ) != NULL  )
-    {
-    spitem->m_RootBuffer->removeScope(m_shownSubproject->scopeString, m_shownSubproject->scopeString);
-    spitem->scopes.remove(m_shownSubproject);
-    delete m_shownSubproject;
-    m_shownSubproject = spitem;
-    updateProjectFile(spitem);
-    overview->setCurrentItem(m_shownSubproject);
-    overview->setSelected(m_shownSubproject, true);
-    }
-  }
-}
-
-SubqmakeprojectItem * TrollProjectWidget::findSubprojectForScope( SubqmakeprojectItem * scope )
-{
-    if ((scope == 0) || (scope->parent() == 0))
+    if ( ( scope == 0 ) || ( scope->parent() == 0 ) )
         return 0;
-    if (!scope->isScope)
+    if ( scope->scope->scopeType() == Scope::ProjectScope )
         return scope;
-    return findSubprojectForScope(dynamic_cast<SubqmakeprojectItem *>(scope->parent()));
+    return findSubprojectForScope( dynamic_cast<QMakeScopeItem *>( scope->parent() ) );
 }
 
-void TrollProjectWidget::focusInEvent( QFocusEvent */*e*/ )
+void TrollProjectWidget::focusInEvent( QFocusEvent * /*e*/ )
 {
-    switch (m_lastFocusedView)
+    switch ( m_lastFocusedView )
     {
         case DetailsView:
             details->setFocus();
@@ -3720,81 +2248,101 @@ void TrollProjectWidget::setLastFocusedView( TrollProjectView view )
     m_lastFocusedView = view;
 }
 
-void TrollProjectWidget::runQMakeRecursive( SubqmakeprojectItem* proj)
+void TrollProjectWidget::runQMakeRecursive( QMakeScopeItem* proj )
 {
-    m_part->startQMakeCommand(proj->path);
-    qProjectItem* item = static_cast<qProjectItem*>(proj->firstChild());
-    while( item )
+    if ( proj->scope->scopeType() == Scope::ProjectScope )
     {
-      if( item->type() == qProjectItem::Subproject )
-      {
-          runQMakeRecursive( static_cast<SubqmakeprojectItem*>(item));
-      }
-      item = static_cast<qProjectItem*>(item->nextSibling());
+        m_part->startQMakeCommand( proj->scope->projectDir() );
+    }
+    QMakeScopeItem* item = static_cast<QMakeScopeItem*>( proj->firstChild() );
+    while ( item )
+    {
+        runQMakeRecursive( item );
+        item = static_cast<QMakeScopeItem*>( item->nextSibling() );
     }
 }
 
 void TrollProjectWidget::slotBuildSelectedFile()
 {
-  QListViewItem *selectedItem = details->currentItem();
-  if (!selectedItem)
-    return;
-  qProjectItem *pvitem = static_cast<qProjectItem*>(selectedItem);
-  // Check that it is a file (just in case)
-  if (pvitem->type() != qProjectItem::File)
-    return;
-  FileItem *fitem = static_cast<FileItem*>(pvitem);
-  buildFile(m_shownSubproject, fitem);
+    QListViewItem * selectedItem = details->currentItem();
+    if ( !selectedItem )
+        return ;
+    qProjectItem *pvitem = static_cast<qProjectItem*>( selectedItem );
+    // Check that it is a file (just in case)
+    if ( pvitem->type() != qProjectItem::File )
+        return ;
+    FileItem *fitem = static_cast<FileItem*>( pvitem );
+    buildFile( m_shownSubproject, fitem );
 }
 
-void TrollProjectWidget::buildFile(SubqmakeprojectItem* spitem, FileItem* fitem)
+void TrollProjectWidget::buildFile( QMakeScopeItem* spitem, FileItem* fitem )
 {
-  QFileInfo fi(spitem->path+"/"+fitem->name);
-  QString sourceDir = fi.dirPath();
-  QString baseName = fi.baseName(true);
-  kdDebug(9020) << "Compiling " << fitem->name
+    QFileInfo fi( spitem->scope->projectDir() + QDir::separator() + fitem->text( 0 ) );
+    QString sourceDir = fi.dirPath();
+    QString baseName = fi.baseName( true );
+    kdDebug( 9020 ) << "Compiling " << fitem->text( 0 )
     << "in dir " << sourceDir
     << " with baseName " << baseName << endl;
 
-  QString projectDir = projectDirectory();
-  if (!sourceDir.startsWith(projectDir)) {
-    KMessageBox::sorry(this, i18n("Can only compile files in directories which belong to the project."));
-    return;
-  }
+    QString projectDir = projectDirectory();
+    if ( !sourceDir.startsWith( projectDir ) )
+    {
+        KMessageBox::sorry( this, i18n( "Can only compile files in directories which belong to the project." ) );
+        return ;
+    }
 
-  QString buildDir = sourceDir;
-  QString target = baseName + ".o";
-  kdDebug(9020) << "builddir " << buildDir << ", target " << target << endl;
+    QString buildDir = sourceDir;
+    QString target = baseName + ".o";
+    kdDebug( 9020 ) << "builddir " << buildDir << ", target " << target << endl;
 
-  m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-//    m_part->startMakeCommand(buildDir, target);
+    m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
+    //    m_part->startMakeCommand(buildDir, target);
 
-  QString buildcmd = constructMakeCommandLine(spitem->configuration.m_makefile);
-  QString dircmd = "cd " + KProcess::quote(spitem->path) + " && " ;
-  kdDebug(9020) << "builddir " << spitem->path << ", cmd " << dircmd + buildcmd + " " + target << endl;
-  m_part->queueCmd(spitem->path, dircmd + buildcmd + " " + target);
+    QString buildcmd = constructMakeCommandLine( spitem->scope );
+    QString dircmd = "cd " + KProcess::quote( spitem->scope->projectDir() ) + " && " ;
+    kdDebug( 9020 ) << "builddir " << spitem->scope->projectDir() << ", cmd " << dircmd + buildcmd + " " + target << endl;
+    m_part->queueCmd( spitem->scope->projectDir(), dircmd + buildcmd + " " + target );
 
 
-//    startMakeCommand(buildDir, target);
+    //    startMakeCommand(buildDir, target);
 
 }
 
 TrollProjectWidget::SaveType TrollProjectWidget::dialogSaveBehaviour() const
 {
-  switch( DomUtil::readIntEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/savebehaviour", 2 ) )
-  {
-  case 0:
-    return AlwaysSave;
-    break;
-  case 1:
-    return NeverSave;
-    break;
-  case 2:
-  default:
-    return Ask;
-    break;
-  }
+    switch ( DomUtil::readIntEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/savebehaviour", 2 ) )
+    {
+        case 0:
+            return AlwaysSave;
+            break;
+        case 1:
+            return NeverSave;
+            break;
+        case 2:
+        default:
+            return Ask;
+            break;
+    }
 }
 
+bool TrollProjectWidget::isTMakeProject()
+{
+    return m_part->isTMakeProject();
+}
+
+void TrollProjectWidget::slotDisableSubproject( QMakeScopeItem* spitem )
+{
+    QStringList subdirs = spitem->projectFileItem()->scope->variableValues( "SUBDIRS" );
+    DisableSubprojectDlg dlg( subdirs );
+    if( dlg.exec() )
+    {
+        QStringList values = dlg.selectedProjects();
+        spitem->scope->addToMinusOp( "SUBDIRS", values );
+        spitem->scope->saveToFile();
+    }
+}
 
 #include "trollprojectwidget.moc"
+
+//kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+

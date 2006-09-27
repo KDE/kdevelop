@@ -146,7 +146,7 @@ public:
     virtual void processAssignment(AssignmentAST *assignment)
     {
         QListViewItem *item = new QListViewItem(parentProject.top(),
-                assignment->scopedID, assignment->op, assignment->values.join(""),
+                assignment->scopedID, assignment->op, assignment->values.join("|"),
                 "assignment");
         item->setMultiLinesEnabled(true);
 
@@ -161,11 +161,6 @@ public:
     {
         new QListViewItem(parentProject.top(), "<comment>");
         ASTVisitor::processComment(comment);
-    }
-    virtual void processFunctionCall(FunctionCallAST *fcall)
-    {
-        new QListViewItem(parentProject.top(), "<funccall>");
-        ASTVisitor::processFunctionCall(fcall);
     }
     virtual void processInclude(IncludeAST *include)
     {

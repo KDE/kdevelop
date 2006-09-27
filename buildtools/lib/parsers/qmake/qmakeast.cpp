@@ -37,13 +37,20 @@ void AST::addChildAST(AST *node)
     m_children.append(node);
 }
 
+void AST::removeChildAST(AST *node)
+{
+  m_children.remove(node);
+}
+
 void AST::writeBack(QString &buffer)
 {
     for (QValueList<AST*>::const_iterator it = m_children.constBegin();
         it != m_children.constEnd(); ++it)
     {
         if (*it)
+        {
             (*it)->writeBack(buffer);
+        }
     }
 }
 
@@ -60,7 +67,7 @@ QString AST::indentation()
 void ProjectAST::writeBack(QString &buffer)
 {
     bool hasActualStatements = false;
-    for (QValueList<QMake::AST*>::const_iterator it = statements.begin(); it != statements.end(); ++it)
+    for (QValueList<QMake::AST*>::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
     {
         if ((*it)->nodeType() != AST::IncludeAST)
         {
@@ -72,7 +79,7 @@ void ProjectAST::writeBack(QString &buffer)
     if (isScope())
         buffer += indentation() + scopedID + "{";
     else if (isFunctionScope())
-        buffer += indentation() + scopedID + "(" + args + ")" + ((statements.count() > 0 && hasActualStatements) ? "{" : "");
+        buffer += indentation() + scopedID + "(" + args + ")" + ((m_children.count() > 0 && hasActualStatements) ? "{" : "");
     else
         buffer += indentation();
     AST::writeBack(buffer);
@@ -83,18 +90,11 @@ void ProjectAST::writeBack(QString &buffer)
         buffer += indentation() + "}";
 }
 
-void ProjectAST::addChildAST(AST *node)
-{
-    statements.append(node);
-    AST::addChildAST(node);
-}
-
-
 //AssignmentAST
 
 void AssignmentAST::writeBack(QString &buffer)
 {
-    buffer += indentation() + scopedID + " " + op + values.join("");
+    buffer += indentation() + scopedID + " " + op + " " + values.join(" ");
 }
 
 
@@ -113,15 +113,6 @@ void CommentAST::writeBack(QString &buffer)
     buffer += indentation() + comment;
 }
 
-
-//FunctionCallAST
-
-void FunctionCallAST::writeBack(QString &buffer)
-{
-    buffer += indentation() + scopedID + "(" + args + ")" + ":";
-    if (assignment)
-        assignment->writeBack(buffer);
-}
 
 //IncludeAST
 

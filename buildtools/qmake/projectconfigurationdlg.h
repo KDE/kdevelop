@@ -1,152 +1,129 @@
 /***************************************************************************
- *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
- *   jsgaarde@tdcspace.dk                                                  *
- *   Copyright (C) 2002-2003 by Alexander Dymo                             *
- *   cloudtemple@mksat.net                                                 *
- *   Copyright (C) 2003 by Thomas Hasart                                   *
- *   thasart@gmx.de                                                        *
- *   Copyright (C) 2006 by Andreas Pakulat                                 *
- *   apaku@gmx.de                                                          *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+*   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
+*   jsgaarde@tdcspace.dk                                                  *
+*   Copyright (C) 2002-2003 by Alexander Dymo                             *
+*   cloudtemple@mksat.net                                                 *
+*   Copyright (C) 2003 by Thomas Hasart                                   *
+*   thasart@gmx.de                                                        *
+*   Copyright (C) 2006 by Andreas Pakulat                                 *
+*   apaku@gmx.de                                                          *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************/
 
 #ifndef PROJECTCONFIGURATIONDLG_H
 #define PROJECTCONFIGURATIONDLG_H
 
-enum QMakeBuildMode    {QBM_DEBUG,
-			QBM_RELEASE,
-			QBM_DEBUG_AND_RELEASE};
-enum QMakeWarnings     {QWARN_ON,QWARN_OFF};
-enum QMakeDepends      {QD_QT=		1<<0,
-			QD_OPENGL=	1<<1,
-			QD_THREAD=	1<<2,
-			QD_X11=		1<<3,
-			QD_STATIC=	1<<4,
-                        QD_SHARED=	1<<5,
-			QD_PLUGIN=	1<<6,
-			QD_EXCEPTIONS=	1<<7,
-			QD_STL=		1<<8,
-			QD_RTTI=	1<<9,
-			QD_ORDERED=	1<<10,
-			QD_LIBTOOL=	1<<11,
-			QD_PKGCONF=	1<<12,
-			QD_CONSOLE=	1<<13,
-			QD_PCH=		1<<14,
-			QD_DESIGNER=	1<<15,
-			QD_TESTLIB=	1<<16,
-			QD_ASSISTANT=	1<<17,
-			QD_UITOOLS=	1<<18,
-			QD_DBUS=	1<<19,
-			QD_BUILDALL=	1<<20
-			};
-enum QMakeTemplate     {QTMP_APPLICATION,QTMP_LIBRARY,QTMP_SUBDIRS};
-enum QMakeQt4Libs      {Q4L_CORE=	1<<0,
-			Q4L_GUI=	1<<1,
-			Q4L_SQL=	1<<2,
-			Q4L_XML=	1<<3,
-			Q4L_NETWORK=	1<<4,
-			Q4L_OPENGL=	1<<5,
-			Q4L_SVG=	1<<6,
-			Q4L_QT3=	1<<7
-		       };
 #include "projectconfigurationdlgbase.h"
-#include "trollprojectwidget.h"
+//#include "trollprojectwidget.h"
+#include <kdeversion.h>
+#include <qlistview.h>
 
-struct ProjectConfiguration;
-class SubqmakeprojectItem;
+class QMakeScopeItem;
 class qProjectItem;
+class ProjectConfigurationDlg;
 class TrollProjectWidget;
+
+class InsideCheckListItem : public QCheckListItem
+{
+public:
+    InsideCheckListItem( QListView *parent, QMakeScopeItem *item, ProjectConfigurationDlg *config );
+
+    InsideCheckListItem( QListView *parent, QListViewItem *after, QMakeScopeItem *item, ProjectConfigurationDlg *config );
+    QMakeScopeItem *prjItem;
+    ProjectConfigurationDlg *m_config;
+
+protected:
+    virtual void stateChange ( bool state );
+};
+
 
 class ProjectConfigurationDlg : public ProjectConfigurationDlgBase
 {
 public:
-  ProjectConfigurationDlg(QListView *_prjList,TrollProjectWidget* _prjWidget, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
-  ~ProjectConfigurationDlg();
-  void updateControls();
-  void updateSubproject(SubqmakeprojectItem* _item);
+    ProjectConfigurationDlg( QListView *_prjList, TrollProjectWidget* _prjWidget, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    ~ProjectConfigurationDlg();
+    void updateControls();
+    void updateSubproject( QMakeScopeItem* _item );
 
 public slots:
-//  virtual void           radioLibrarytoggled(bool);
-  virtual void           updateProjectConfiguration();
-  virtual void           browseTargetPath();
-  virtual void           clickSubdirsTemplate();
-  virtual void           templateLibraryClicked(int);
-  virtual void           accept();
-  virtual void           reject();
-  virtual void           apply();
-  virtual void           activateApply(int);
-  virtual void           activateApply(const QString&);
+    //  virtual void           radioLibrarytoggled(bool);
+    virtual void updateProjectConfiguration();
+    virtual void browseTargetPath();
 
 
-virtual void buildorderMoveUpClicked();
-virtual void buildorderMoveDownClicked();
+    virtual void buildorderMoveUpClicked();
+    virtual void buildorderMoveDownClicked();
 
-virtual void insideIncMoveUpClicked();
-virtual void insideIncMoveDownClicked();
-virtual void outsideIncMoveUpClicked();
-virtual void outsideIncMoveDownClicked();
-virtual void outsideIncAddClicked();
-virtual void outsideIncRemoveClicked();
-virtual void outsideIncEditClicked();
+    virtual void insideIncMoveUpClicked();
+    virtual void insideIncMoveDownClicked();
+    virtual void outsideIncMoveUpClicked();
+    virtual void outsideIncMoveDownClicked();
+    virtual void outsideIncAddClicked();
+    virtual void outsideIncRemoveClicked();
+    virtual void outsideIncEditClicked();
 
-virtual void insideLibMoveUpClicked();
-virtual void insideLibMoveDownClicked();
-virtual void outsideLibMoveUpClicked();
-virtual void outsideLibMoveDownClicked();
-virtual void outsideLibAddClicked();
-virtual void outsideLibRemoveClicked();
-virtual void outsideLibEditClicked();
+    virtual void insideLibMoveUpClicked();
+    virtual void insideLibMoveDownClicked();
+    virtual void outsideLibMoveUpClicked();
+    virtual void outsideLibMoveDownClicked();
+    virtual void outsideLibAddClicked();
+    virtual void outsideLibRemoveClicked();
+    virtual void outsideLibEditClicked();
 
-virtual void outsideLibDirMoveUpClicked();
-virtual void outsideLibDirMoveDownClicked();
-virtual void outsideLibDirAddClicked();
-virtual void outsideLibDirRemoveClicked();
-virtual void outsideLibDirEditClicked();
+    virtual void outsideLibDirMoveUpClicked();
+    virtual void outsideLibDirMoveDownClicked();
+    virtual void outsideLibDirAddClicked();
+    virtual void outsideLibDirRemoveClicked();
+    virtual void outsideLibDirEditClicked();
 
-virtual void slotStaticLibClicked(int);
-virtual void slotInstallTargetClicked();
+    virtual void extAdd_button_clicked();
+    virtual void extEdit_button_clicked();
+    virtual void extMoveDown_button_clicked();
+    virtual void extMoveUp_button_clicked();
+    virtual void extRemove_button_clicked();
+    virtual void intMoveDown_button_clicked();
+    virtual void intMoveUp_button_clicked();
 
-virtual void extAdd_button_clicked();
-virtual void extEdit_button_clicked();
-virtual void extMoveDown_button_clicked();
-virtual void extMoveUp_button_clicked();
-virtual void extRemove_button_clicked();
-virtual void intMoveDown_button_clicked();
-virtual void intMoveUp_button_clicked();
+    virtual void addCustomValueClicked();
+    virtual void removeCustomValueClicked();
+    virtual void editCustomValueClicked();
+    virtual void upCustomValueClicked();
+    virtual void downCustomValueClicked();
 
-virtual void addCustomValueClicked();
-virtual void removeCustomValueClicked();
-virtual void editCustomValueClicked();
-virtual void upCustomValueClicked();
-virtual void downCustomValueClicked();
+    virtual void newCustomVariableActive();
 
-virtual void newCustomVariableActive();
+    virtual void groupLibrariesChanged( int );
+    virtual void groupRequirementsChanged( int );
+    virtual void groupTemplateChanged( int );
+    virtual void targetInstallChanged( bool );
+    virtual void accept();
+    virtual void reject();
+    virtual void apply();
+    virtual void activateApply( int );
+    virtual void activateApply( const QString& );
 
 
-void updateIncludeControl();
-void updateLibaddControl();
-void updateLibDirAddControl();
-void updateBuildOrderControl();
-void updateDependenciesControl();
-
-void checkPluginChanged();
-void qtRequirementChanged();
-void sharedLibChanged();
+    void updateIncludeControl();
+    void updateLibControls();
+    void updateBuildOrderControl();
+    void updateDependenciesControl();
+    virtual void activateApply(QListViewItem*);
 
 protected:
-  QListView *prjList;
-  SubqmakeprojectItem *myProjectItem;
-  TrollProjectWidget* prjWidget;
-  QPtrList <qProjectItem> getAllProjects();
-  void getAllSubProjects(qProjectItem *item,QPtrList <qProjectItem> *itemList);
+    QListView *prjList;
+    QMakeScopeItem *myProjectItem;
+    QPtrList <QMakeScopeItem> getAllProjects();
+    TrollProjectWidget* prjWidget;
+    void getAllSubProjects( QMakeScopeItem *item, QPtrList<QMakeScopeItem> *itemList );
 
 
 };
 
 #endif
 
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

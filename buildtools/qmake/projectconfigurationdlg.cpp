@@ -1,19 +1,19 @@
 /***************************************************************************
- *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
- *   jsgaarde@tdcspace.dk                                                  *
- *   Copyright (C) 2002-2003 by Alexander Dymo                             *
- *   cloudtemple@mksat.net                                                 *
- *   Copyright (C) 2003 by Thomas Hasart                                   *
- *   thasart@gmx.de                                                        *
- *   Copyright (C) 2006 by Andreas Pakulat                                 *
- *   apaku@gmx.de                                                          *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+*   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
+*   jsgaarde@tdcspace.dk                                                  *
+*   Copyright (C) 2002-2003 by Alexander Dymo                             *
+*   cloudtemple@mksat.net                                                 *
+*   Copyright (C) 2003 by Thomas Hasart                                   *
+*   thasart@gmx.de                                                        *
+*   Copyright (C) 2006 by Andreas Pakulat                                 *
+*   apaku@gmx.de                                                          *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************/
 
 #include "projectconfigurationdlg.h"
 #include <qradiobutton.h>
@@ -29,7 +29,6 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klistview.h>
-#include <kmessagebox.h>
 
 #include <qdialog.h>
 #include <qpushbutton.h>
@@ -42,1521 +41,1502 @@
 #include <qtabwidget.h>
 #include <pathutil.h>
 #include <kpushbutton.h>
-#include <kstdguiitem.h>
+#include <kcombobox.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include "trollprojectwidget.h"
 #include "trollprojectpart.h"
+#include "qmakescopeitem.h"
+#include "scope.h"
 
-ProjectConfigurationDlg::ProjectConfigurationDlg(QListView *_prjList, TrollProjectWidget* _prjWidget, QWidget* parent, const char* name, bool modal, WFlags fl)
-: ProjectConfigurationDlgBase(parent,name,modal,fl | Qt::WStyle_Tool), prjWidget(_prjWidget), myProjectItem(0)
-//=================================================
+InsideCheckListItem::InsideCheckListItem( QListView *parent, QMakeScopeItem *item, ProjectConfigurationDlg *config ) :
+        QCheckListItem( parent, item->relativePath().right( item->relativePath().length() - 1 ), QCheckListItem::CheckBox )
 {
-  prjList=_prjList;
-  m_targetLibraryVersion->setValidator(new QRegExpValidator(
-    QRegExp("\\d+(\\.\\d+)?(\\.\\d+)"), this));
+    prjItem = item;
+    m_config = config;
 }
 
-void ProjectConfigurationDlg::updateSubproject(SubqmakeprojectItem* _item)
+InsideCheckListItem::InsideCheckListItem( QListView *parent, QListViewItem *after, QMakeScopeItem *item, ProjectConfigurationDlg *config ) :
+        QCheckListItem( parent,
+                        after,
+                        item->relativePath().right( item->relativePath().length() - 1 ), QCheckListItem::CheckBox )
 {
-  if( myProjectItem )
-  {
-  kdDebug(9024) << "changing subproject, behave: " << prjWidget->dialogSaveBehaviour() << endl;
-    switch( prjWidget->dialogSaveBehaviour() )
+    prjItem = item;
+    m_config = config;
+}
+
+//check or uncheck dependency to currently checked or unchecked library
+void InsideCheckListItem::stateChange( bool state )
+{
+    if ( listView() == m_config->insidelib_listview )
     {
-      case TrollProjectWidget::AlwaysSave:
-        apply();
-        break;
-      case TrollProjectWidget::NeverSave:
-        break;
-      case TrollProjectWidget::Ask:
-        if( !buttonApply->isEnabled() )
-          break;
-        if( KMessageBox::questionYesNo(0, i18n("Save the current subprojects configuration?"),
-                                i18n("Save Configuration?")) == KMessageBox::Yes )
-          apply();
-        break;
+        QListViewItemIterator it( m_config->intDeps_view );
+        while ( it.current() )
+        {
+            InsideCheckListItem * chi = dynamic_cast<InsideCheckListItem*>( it.current() );
+            if ( chi )
+                if ( chi->prjItem == prjItem )
+                    chi->setOn( state );
+            ++it;
+        }
     }
-  }
-  myProjectItem=_item;
-//  m_projectConfiguration = conf;
-  updateControls();
-  if ( prjWidget->m_part->isQt4Project() )
-  {
-    radioDebugReleaseMode->setEnabled( true );
-    checkBuildAll->setEnabled(true);
-    qt4Group->setEnabled( myProjectItem->configuration.m_requirements & QD_QT );
-    rccdir_url->setEnabled( true );
-    rccdir_label->setEnabled( true );
-  }
-  buttonApply->setEnabled(false);
 }
 
+ProjectConfigurationDlg::ProjectConfigurationDlg( QListView *_prjList, TrollProjectWidget* _prjWidget, QWidget* parent, const char* name, bool modal, WFlags fl )
+        : ProjectConfigurationDlgBase( parent, name, modal, fl | Qt::WStyle_Tool )
+{
+    prjList = _prjList;
+    prjWidget = _prjWidget;
+    //  m_projectConfiguration = conf;
+    m_targetLibraryVersion->setValidator( new QRegExpValidator(
+                                              QRegExp( "\\d+(\\.\\d+)?(\\.\\d+)" ), this ) );
+
+}
+
+void ProjectConfigurationDlg::updateSubproject( QMakeScopeItem* _item )
+{
+    if ( myProjectItem )
+    {
+        kdDebug( 9024 ) << "changing subproject, behave: " << prjWidget->dialogSaveBehaviour() << endl;
+        switch ( prjWidget->dialogSaveBehaviour() )
+        {
+            case TrollProjectWidget::AlwaysSave:
+                apply();
+                break;
+            case TrollProjectWidget::NeverSave:
+                break;
+            case TrollProjectWidget::Ask:
+                if ( !buttonApply->isEnabled() )
+                    break;
+                if ( KMessageBox::questionYesNo( 0, i18n( "Save the current subprojects configuration?" ),
+                                                 i18n( "Save Configuration?" ) ) == KMessageBox::Yes )
+                    apply();
+                break;
+        }
+    }
+    myProjectItem = _item;
+    updateControls();
+    buttonApply->setEnabled( false );
+}
 
 ProjectConfigurationDlg::~ProjectConfigurationDlg()
-//==============================================
-{
-}
+{}
 
-//void ProjectConfigurationDlg::radioLibrarytoggled(bool on)
-////=============================================
-//{
-//	if(!on) checkStatic->setChecked(false);
-//	checkStatic->setEnabled(on);
-//	m_targetLibraryVersion->setEnabled(on);
-//}
-
-/*
-void ProjectConfigurationDlg::radioLibrarytoggled(bool on)
-//=============================================
-{
-	groupLibrary->setEnabled(on);
-	//radioShared->setChecked(true);
-	m_targetLibraryVersion->setEnabled(on);
-}
-*/
 void ProjectConfigurationDlg::browseTargetPath()
-//==============================================
 {
-  m_targetPath->setText(getRelativePath(myProjectItem->path,KFileDialog::getExistingDirectory()));
-  buttonApply->setEnabled(true);
+    m_targetPath->setText( getRelativePath( myProjectItem->scope->projectDir(), KFileDialog::getExistingDirectory() ) );
+    buttonApply->setEnabled( false );
 }
 
 
 void ProjectConfigurationDlg::updateProjectConfiguration()
-//=======================================================
 {
-  // Template
-  myProjectItem->configuration.m_requirements = 0;
-  if( !myProjectItem->isScope )
-  {
-	if (radioApplication->isChecked())
-	{
-		myProjectItem->configuration.m_template = QTMP_APPLICATION;
-		myProjectItem->setPixmap(0,SmallIcon("qmake_app"));
-	}
-	else if (radioLibrary->isChecked())
-	{
-		myProjectItem->configuration.m_template = QTMP_LIBRARY;
-		if (staticRadio->isOn())
-			myProjectItem->configuration.m_requirements += QD_STATIC;
-		else if (sharedRadio->isOn()){
-			myProjectItem->configuration.m_requirements += QD_SHARED;
-			myProjectItem->configuration.m_libraryversion = m_targetLibraryVersion->text();
-		}
-		if (checkPlugin->isOn())
-		myProjectItem->configuration.m_requirements += QD_PLUGIN;
-		if ( checkDesigner->isChecked() )
-			myProjectItem->configuration.m_requirements += QD_DESIGNER;
-		myProjectItem->setPixmap(0,SmallIcon("qmake_lib"));
-	}
-	else if (radioSubdirs->isChecked())
-	{
-	myProjectItem->configuration.m_template = QTMP_SUBDIRS;
-	myProjectItem->setPixmap(0,SmallIcon("qmake_sub"));
-	}
-  }
-  // Buildmode
-  if (radioDebugMode->isChecked())
-    myProjectItem->configuration.m_buildMode = QBM_DEBUG;
-  if (radioReleaseMode->isChecked())
-    myProjectItem->configuration.m_buildMode = QBM_RELEASE;
-  if ( radioDebugReleaseMode->isChecked() )
-    myProjectItem->configuration.m_buildMode = QBM_DEBUG_AND_RELEASE;
-
-  // requirements
-  if (exceptionCheck->isChecked())
-    myProjectItem->configuration.m_requirements += QD_EXCEPTIONS;
-  if (stlCheck->isChecked())
-    myProjectItem->configuration.m_requirements += QD_STL;
-  if (rttiCheck->isChecked())
-    myProjectItem->configuration.m_requirements += QD_RTTI;
-  if (checkQt->isChecked())
-    myProjectItem->configuration.m_requirements += QD_QT;
-  if (checkOpenGL->isChecked())
-    myProjectItem->configuration.m_requirements += QD_OPENGL;
-  if (checkThread->isChecked())
-    myProjectItem->configuration.m_requirements += QD_THREAD;
-  if (checkX11->isChecked())
-    myProjectItem->configuration.m_requirements += QD_X11;
-  if (checkOrdered->isChecked())
-    myProjectItem->configuration.m_requirements += QD_ORDERED;
-  if (checkLibtool->isChecked())
-  {
-    myProjectItem->configuration.m_requirements += QD_LIBTOOL;
-  }
-  if( checkPkgconf->isChecked())
-  {
-    myProjectItem->configuration.m_requirements += QD_PKGCONF;
-  }
-  if (checkConsole->isChecked() )
-  {
-    myProjectItem->configuration.m_requirements += QD_CONSOLE;
-  }
-  if (checkPCH->isChecked() )
-    myProjectItem->configuration.m_requirements += QD_PCH;
-  // Warnings
-  myProjectItem->configuration.m_warnings = QWARN_OFF;
-  if (checkWarning->isChecked())
-    myProjectItem->configuration.m_warnings = QWARN_ON;
-
-  //Qt4 libs
-  if ( prjWidget->m_part->isQt4Project() )
-  {
-    if ( checkTestlib->isChecked() )
-      myProjectItem->configuration.m_requirements += QD_TESTLIB;
-    if ( checkAssistant->isChecked() )
-      myProjectItem->configuration.m_requirements += QD_ASSISTANT;
-    if ( checkUiTools->isChecked() )
-      myProjectItem->configuration.m_requirements += QD_UITOOLS;
-    if ( checkQDBus->isChecked() )
-      myProjectItem->configuration.m_requirements += QD_DBUS;
-    if ( checkBuildAll->isChecked() )
-      myProjectItem->configuration.m_requirements += QD_BUILDALL;
-
-    myProjectItem->configuration.m_qt4libs = 0;
-    if ( checkQt4Core->isChecked() )
-      myProjectItem->configuration.m_qt4libs += Q4L_CORE;
-    if ( checkQt4Gui->isChecked() )
-      myProjectItem->configuration.m_qt4libs += Q4L_GUI;
-    if ( checkQt4SQL->isChecked() )
-      myProjectItem->configuration.m_qt4libs += Q4L_SQL;
-    if ( checkQt4SVG->isChecked() )
-      myProjectItem->configuration.m_qt4libs += Q4L_SVG;
-    if ( checkQt4XML->isChecked() )
-      myProjectItem->configuration.m_qt4libs += Q4L_XML;
-    if ( checkQt4Network->isChecked() )
-      myProjectItem->configuration.m_qt4libs += Q4L_NETWORK;
-    if ( checkQt3Support->isChecked() )
-      myProjectItem->configuration.m_qt4libs += Q4L_QT3;
-    if ( checkQt4OpenGL->isChecked() )
-      myProjectItem->configuration.m_qt4libs += Q4L_OPENGL;
-    myProjectItem->configuration.m_customConfigOptions = QStringList::split( " ", editConfigExtra->text() );
-  }
-
-  myProjectItem->configuration.m_target = "";
-/*  if ((m_targetPath->text().simplifyWhiteSpace()!="" ||
-      m_targetOutputFile->text().simplifyWhiteSpace()!="") &&
-      !radioSubdirs->isChecked())
-  {
-    QString outputFile = m_targetOutputFile->text();
-    if (outputFile.simplifyWhiteSpace() == "")
-      outputFile = myProjectItem->configuration.m_subdirName;
-    myProjectItem->configuration.m_target = m_targetPath->text() + "/" + outputFile;
-  }*/
-  myProjectItem->configuration.m_target = m_targetOutputFile->text();
-  myProjectItem->configuration.m_destdir = m_targetPath->text();
-//  myProjectItem->configuration.m_includepath = m_includePath->text();
-  myProjectItem->configuration.m_defines = QStringList::split(" ",m_defines->text());
-  myProjectItem->configuration.m_cxxflags_debug = QStringList::split(" ",m_debugFlags->text());
-  myProjectItem->configuration.m_cxxflags_release = QStringList::split(" ",m_releaseFlags->text());
-//  myProjectItem->configuration.m_lflags_debug = QStringList::split(" ",m_debugFlagsLink->text());
-// myProjectItem->configuration.m_lflags_release = QStringList::split(" ",m_releaseFlagsLink->text());
-//  myProjectItem->configuration.m_librarypath = QStringList::split(" ",m_libraryPath->text());
-  if (checkDontInheritConfig->isChecked())
-    myProjectItem->configuration.m_inheritconfig = false;
-  else
-    myProjectItem->configuration.m_inheritconfig = true;
-
-  //add selected includes
-  myProjectItem->configuration.m_incadd.clear();
-
-  InsideCheckListItem *insideItem=(InsideCheckListItem *)insideinc_listview->firstChild();
-  while(insideItem)
-  {
-    if(insideItem->isOn()){
-      QString tmpInc=insideItem->prjItem->getIncAddPath(myProjectItem->getDownDirs());
-      tmpInc=QDir::cleanDirPath(tmpInc);
-      myProjectItem->configuration.m_incadd.append(tmpInc);
-
-    }
-    insideItem=(InsideCheckListItem*)insideItem->itemBelow();
-  }
-
-  QCheckListItem *outsideItem=(QCheckListItem *)outsideinc_listview->firstChild();
-  while(outsideItem)
-  {
-    myProjectItem->configuration.m_incadd.append(outsideItem->text(0));
-    outsideItem=(QCheckListItem*)outsideItem->itemBelow();
-  }
-
-  //target.install
-  if (checkInstallTarget->isChecked() == true)
-  {
-    myProjectItem->configuration.m_target_install = true;
-    myProjectItem->configuration.m_target_install_path = m_InstallTargetPath->text();
-  }
-  else
-  {
-    myProjectItem->configuration.m_target_install = false;
-  }
-
-  //makefile
-  myProjectItem->configuration.m_makefile = makefile_url->url();
-
-  //add libs to link
-  myProjectItem->configuration.m_libadd.clear();
-  myProjectItem->configuration.m_librarypath.clear();
-
-  //inside libs to link
-//  myProjectItem->configuration.m_prjdeps.clear();
-  insideItem=(InsideCheckListItem *)insidelib_listview->firstChild();
-  while(insideItem)
-  {
-    if(insideItem->isOn()){
-
-      QString tmpLib=insideItem->prjItem->getLibAddObject(myProjectItem->getDownDirs());
-      if(insideItem->prjItem->configuration.m_requirements & QD_SHARED)
-      {
-        tmpLib=/*"-l"+*/tmpLib;
-
-        //add path if shared lib is linked
-        QString tmpPath=insideItem->prjItem->getLibAddPath(myProjectItem->getDownDirs());
-        if(tmpPath!=""){
-          myProjectItem->configuration.m_librarypath.append(/*"-L"+*/tmpPath);
-        }
-      }
-      myProjectItem->configuration.m_libadd.append(tmpLib);
-
-    }
-    insideItem=(InsideCheckListItem*)insideItem->itemBelow();
-  }
-
-  //outside libs to link
-  outsideItem=(QCheckListItem *)outsidelib_listview->firstChild();
-  while(outsideItem)
-  {
-    myProjectItem->configuration.m_libadd.append(outsideItem->text(0));
-    outsideItem=(QCheckListItem*)outsideItem->itemBelow();
-  }
-
-  //external project dependencies
-  myProjectItem->configuration.m_prjdeps.clear();
-  QListViewItem *depItem=extDeps_view->firstChild();
-  while(depItem)
-  {
-    myProjectItem->configuration.m_prjdeps.append(depItem->text(0));
-    depItem=depItem->itemBelow();
-  }
-  //internal project dependencies
-  insideItem=dynamic_cast<InsideCheckListItem *>(intDeps_view->firstChild());
-  while(insideItem)
-  {
-      if (insideItem->isOn())
-      {
-        if(insideItem->prjItem->configuration.m_requirements & QD_STATIC)
+    // Template
+    if ( myProjectItem->scope->scopeType() == Scope::ProjectScope )
+    {
+        if ( radioApplication->isChecked() )
         {
-            QString tmpLib=insideItem->prjItem->getLibAddObject(myProjectItem->getDownDirs());
-            myProjectItem->configuration.m_prjdeps.append(tmpLib);
+            myProjectItem->scope->setEqualOp( "TEMPLATE", "app" );
+            myProjectItem->setPixmap( 0, SmallIcon( "qmake_app" ) );
         }
-        else if(insideItem->prjItem->configuration.m_requirements & QD_SHARED)
+        else if ( radioLibrary->isChecked() )
         {
-            QString tmpLib=insideItem->prjItem->getSharedLibAddObject(myProjectItem->getDownDirs());
-            myProjectItem->configuration.m_prjdeps.append(tmpLib);
+            myProjectItem->scope->setEqualOp( "TEMPLATE", "lib" );
+            if ( staticRadio->isOn() )
+                myProjectItem->scope->addToPlusOp( "CONFIG", "staticlib" );
+            else if ( myProjectItem->scope->variableValues( "CONFIG" ).contains( "staticlib" ) )
+                myProjectItem->scope->addToMinusOp( "CONFIG", "staticlib" );
+            if ( sharedRadio->isOn() )
+            {
+                myProjectItem->scope->addToPlusOp( "CONFIG", "dll" );
+                myProjectItem->scope->setEqualOp( "VERSION", m_targetLibraryVersion->text() );
+            }
+            else
+            {
+                if ( myProjectItem->scope->variableValues( "CONFIG" ).contains( "dll" ) )
+                    myProjectItem->scope->addToMinusOp( "CONFIG", "dll" );
+                if ( !myProjectItem->scope->listIsEmpty( myProjectItem->scope->variableValues( "VERSION" ) ) )
+                {
+                    myProjectItem->scope->removeVariable( "VERSION", "=" );
+                    myProjectItem->scope->removeVariable( "VERSION", "+=" );
+                    myProjectItem->scope->removeVariable( "VERSION", "-=" );
+                }
+            }
+            if ( checkPlugin->isOn() )
+                myProjectItem->scope->addToPlusOp( "CONFIG", "plugin" );
+            else if ( myProjectItem->scope->variableValues( "CONFIG" ).contains( "plugin" ) )
+                myProjectItem->scope->addToMinusOp( "CONFIG", "plugin" );
+            if ( checkDesigner->isChecked() )
+                myProjectItem->scope->addToMinusOp( "CONFIG", "designer" );
+            else if ( myProjectItem->scope->variableValues( "CONFIG" ).contains( "designer" ) )
+                myProjectItem->scope->addToMinusOp( "CONFIG", "designer" );
+
+            myProjectItem->setPixmap( 0, SmallIcon( "qmake_lib" ) );
+        }
+        else if ( radioSubdirs->isChecked() )
+        {
+            myProjectItem->scope->setEqualOp( "TEMPLATE", "subdirs" );
+            myProjectItem->setPixmap( 0, SmallIcon( "qmake_sub" ) );
+        }
+    }
+
+    QStringList confValues = myProjectItem->scope->variableValues( "CONFIG" );
+
+    // Buildmode
+    if ( radioDebugMode->isChecked() && !confValues.contains( "debug" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "debug" );
+    else if ( !radioDebugMode->isChecked() && confValues.contains( "debug" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "debug" );
+    if ( radioReleaseMode->isChecked() && !confValues.contains( "release" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "release" );
+    else if ( !radioReleaseMode->isChecked() && confValues.contains( "release" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "release" );
+
+    // requirements
+    if ( exceptionCheck->isChecked() && !confValues.contains( "exceptions" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "exceptions" );
+    else if ( !exceptionCheck->isChecked() && confValues.contains( "exceptions" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "exceptions" );
+    if ( stlCheck->isChecked() && !confValues.contains( "stl" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "stl" );
+    else if ( !stlCheck->isChecked() && confValues.contains( "stl" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "stl" );
+    if ( rttiCheck->isChecked() && !confValues.contains( "rtti" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "rtti" );
+    else if ( !rttiCheck->isChecked() && confValues.contains( "rtti" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "rtti" );
+    if ( checkQt->isChecked() && !confValues.contains( "qt" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "qt" );
+    else if ( !checkQt->isChecked() && confValues.contains( "qt" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "qt" );
+    if ( checkOpenGL->isChecked() && !confValues.contains( "opengl" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "opengl" );
+    else if ( !checkOpenGL->isChecked() && confValues.contains( "opengl" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "opengl" );
+    if ( checkThread->isChecked() && !confValues.contains( "thread" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "thread" );
+    else if ( !checkThread->isChecked() && confValues.contains( "thread" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "thread" );
+    if ( checkX11->isChecked() && !confValues.contains( "x11" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "x11" );
+    else if ( !checkX11->isChecked() && confValues.contains( "x11" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "x11" );
+    if ( checkOrdered->isChecked() && !confValues.contains( "ordered" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "ordered" );
+    else if ( !checkOrdered->isChecked() && confValues.contains( "ordered" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "ordered" );
+    if ( checkLibtool->isChecked() && !confValues.contains( "create_libtool" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "create_libtool" );
+    else if ( !checkLibtool->isChecked() && confValues.contains( "create_libtool" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "create_libtool" );
+    if ( checkPkgconf->isChecked() && !confValues.contains( "create_pkgconf" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "create_pkgconf" );
+    else if ( !checkPkgconf->isChecked() && confValues.contains( "create_pkgconf" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "create_pkgconf" );
+    if ( checkConsole->isChecked() && !confValues.contains( "console" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "console" );
+    else if ( !checkConsole->isChecked() && confValues.contains( "console" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "console" );
+    if ( checkPCH->isChecked() && !confValues.contains( "precompile_header" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "precompile_header" );
+    else if ( !checkPCH->isChecked() && confValues.contains( "precompile_header" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "precompile_header" );
+    // Warnings
+    if ( checkWarning->isChecked() && !confValues.contains( "warn_on" ) )
+    {
+        myProjectItem->scope->addToPlusOp( "CONFIG", "warn_on" );
+        myProjectItem->scope->addToMinusOp( "CONFIG", "warn_off" );
+    }
+    else if ( !checkWarning->isChecked() && confValues.contains( "warn_on" ) )
+    {
+        myProjectItem->scope->addToMinusOp( "CONFIG", "warn_on" );
+        myProjectItem->scope->addToPlusOp( "CONFIG", "warn_off" );
+    }
+    if ( checkWindows->isChecked() && !confValues.contains( "windows" ) )
+        myProjectItem->scope->addToPlusOp( "CONFIG", "windows" );
+    else if ( !checkWindows->isChecked() && confValues.contains( "windows" ) )
+        myProjectItem->scope->addToMinusOp( "CONFIG", "windows" );
+
+    //Qt4 libs
+    if ( prjWidget->m_part->isQt4Project() )
+    {
+
+        if ( radioDebugReleaseMode->isChecked() && !confValues.contains( "debug_and_release" ) )
+            myProjectItem->scope->addToPlusOp( "CONFIG", "debug_and_release" );
+        else if ( !radioDebugReleaseMode->isChecked() && confValues.contains( "debug_and_release" ) )
+            myProjectItem->scope->addToMinusOp( "CONFIG", "debug_and_release" );
+
+        if ( checkTestlib->isChecked() && !confValues.contains( "qtestlib" ) )
+            myProjectItem->scope->addToPlusOp( "CONFIG", "qtestlib" );
+        else if ( !checkTestlib->isChecked() && confValues.contains( "qtestlib" ) )
+            myProjectItem->scope->addToMinusOp( "CONFIG", "qtestlib" );
+        if ( checkAssistant->isChecked() && !confValues.contains( "assistant" ) )
+            myProjectItem->scope->addToPlusOp( "CONFIG", "assistant" );
+        else if ( !checkAssistant->isChecked() && confValues.contains( "assistant" ) )
+            myProjectItem->scope->addToMinusOp( "CONFIG", "assistant" );
+        if ( checkUiTools->isChecked() && !confValues.contains( "uitools" ) )
+            myProjectItem->scope->addToPlusOp( "CONFIG", "uitools" );
+        else if ( !checkUiTools->isChecked() && confValues.contains( "uitools" ) )
+            myProjectItem->scope->addToMinusOp( "CONFIG", "uitools" );
+        if ( checkQDBus->isChecked() && !confValues.contains( "dbus" ) )
+            myProjectItem->scope->addToPlusOp( "CONFIG", "dbus" );
+        else if ( !checkQDBus->isChecked() && confValues.contains( "dbus" ) )
+            myProjectItem->scope->addToMinusOp( "CONFIG", "dbus" );
+        if ( checkBuildAll->isChecked() && !confValues.contains( "build_all" ) )
+            myProjectItem->scope->addToPlusOp( "CONFIG", "build_all" );
+        else if ( !checkBuildAll->isChecked() && confValues.contains( "build_all" ) )
+            myProjectItem->scope->addToMinusOp( "CONFIG", "build_all" );
+
+        QStringList qtValues = myProjectItem->scope->variableValues( "QT" );
+        if ( checkQt4Core->isChecked() && !qtValues.contains( "core" ) )
+            myProjectItem->scope->addToPlusOp( "QT", "core" );
+        else if ( !checkQt4Core->isChecked() && qtValues.contains( "core" ) )
+            myProjectItem->scope->addToMinusOp( "QT", "core" );
+        if ( checkQt4Gui->isChecked() && !qtValues.contains( "gui" ) )
+            myProjectItem->scope->addToPlusOp( "QT", "gui" );
+        else if ( !checkQt4Gui->isChecked() && qtValues.contains( "gui" ) )
+            myProjectItem->scope->addToMinusOp( "QT", "gui" );
+        if ( checkQt4SQL->isChecked() && !qtValues.contains( "sql" ) )
+            myProjectItem->scope->addToPlusOp( "QT", "sql" );
+        else if ( !checkQt4SQL->isChecked() && qtValues.contains( "sql" ) )
+            myProjectItem->scope->addToMinusOp( "QT", "sql" );
+        if ( checkQt4SVG->isChecked() && !qtValues.contains( "svg" ) )
+            myProjectItem->scope->addToPlusOp( "QT", "svg" );
+        else if ( !checkQt4SVG->isChecked() && qtValues.contains( "svg" ) )
+            myProjectItem->scope->addToMinusOp( "QT", "svg" );
+        if ( checkQt4XML->isChecked() && !qtValues.contains( "xml" ) )
+            myProjectItem->scope->addToPlusOp( "QT", "xml" );
+        else if ( !checkQt4XML->isChecked() && qtValues.contains( "xml" ) )
+            myProjectItem->scope->addToMinusOp( "QT", "xml" );
+        if ( checkQt4Network->isChecked() && !qtValues.contains( "network" ) )
+            myProjectItem->scope->addToPlusOp( "QT", "network" );
+        else if ( !checkQt4Network->isChecked() && qtValues.contains( "network" ) )
+            myProjectItem->scope->addToMinusOp( "QT", "network" );
+        if ( checkQt3Support->isChecked() && !qtValues.contains( "qt3support" ) )
+            myProjectItem->scope->addToPlusOp( "QT", "qt3support" );
+        else if ( !checkQt3Support->isChecked() && qtValues.contains( "qt3support" ) )
+            myProjectItem->scope->addToMinusOp( "QT", "qt3support" );
+        if ( checkQt4OpenGL->isChecked() && !qtValues.contains( "opengl" ) )
+            myProjectItem->scope->addToPlusOp( "QT", "opengl" );
+        else if ( !checkQt4OpenGL->isChecked() && qtValues.contains( "opengl" ) )
+            myProjectItem->scope->addToMinusOp( "QT", "opengl" );
+    }
+
+    QStringList extraValues = QStringList::split( " ", editConfigExtra->text() );
+    for ( QStringList::iterator it = confValues.begin() ; it != confValues.end() ; ++it )
+    {
+        if ( !Scope::KnownConfigValues.contains( *it ) && !extraValues.contains( *it ) )
+        {
+            myProjectItem->scope->addToMinusOp( "CONFIG", *it );
+        }
+    }
+
+    for ( QStringList::iterator it = extraValues.begin() ; it != extraValues.end() ; ++it )
+    {
+        if ( !confValues.contains( *it ) )
+            myProjectItem->scope->addToPlusOp( "CONFIG", *it );
+    }
+
+    myProjectItem->scope->setEqualOp( "TARGET", QStringList( m_targetOutputFile->text() ) );
+    myProjectItem->scope->setEqualOp( "DESTDIR", QStringList( m_targetPath->text() ) );
+
+    myProjectItem->updateVariableValues( "DEFINES", QStringList::split( " ", m_defines->text() ) );
+    myProjectItem->updateVariableValues( "QMAKE_CXXFLAGS_DEBUG", QStringList::split( " ", m_debugFlags->text() ) );
+    myProjectItem->updateVariableValues( "QMAKE_CXXFLAGS_RELEASE", QStringList::split( " ", m_releaseFlags->text() ) );
+
+    //add selected includes
+    QStringList values;
+    InsideCheckListItem *insideItem = ( InsideCheckListItem * ) insideinc_listview->firstChild();
+    while ( insideItem )
+    {
+        if ( insideItem->isOn() )
+        {
+            QString tmpInc = insideItem->prjItem->getIncAddPath( myProjectItem->getDownDirs() );
+            tmpInc = QDir::cleanDirPath( tmpInc );
+            values << tmpInc;
+
+        }
+        insideItem = ( InsideCheckListItem* ) insideItem->itemBelow();
+    }
+
+    QCheckListItem *outsideItem = ( QCheckListItem * ) outsideinc_listview->firstChild();
+    while ( outsideItem )
+    {
+        values << outsideItem->text( 0 );
+        outsideItem = ( QCheckListItem* ) outsideItem->itemBelow();
+    }
+    myProjectItem->updateVariableValues( "INCLUDEPATH", values );
+
+    //target.install
+    if ( checkInstallTarget->isChecked() == true )
+    {
+        if ( !myProjectItem->scope->variableValues( "INSTALLS" ).contains( "target" ) )
+            myProjectItem->scope->addToPlusOp( "INSTALLS", QStringList( "target" ) );
+        myProjectItem->scope->setEqualOp( "target.path", QStringList( m_InstallTargetPath->text() ) );
+    }
+    else
+    {
+        if ( myProjectItem->scope->variableValues( "INSTALLS" ).contains( "target" ) )
+            myProjectItem->scope->addToMinusOp( "INSTALLS", QStringList( "target" ) );
+    }
+
+    //makefile
+    myProjectItem->scope->setEqualOp( "MAKEFILE", QStringList( makefile_url->url() ) );
+
+    //add libs to link
+
+    values.clear();
+    QStringList libPaths;
+
+    //inside libs to link
+    //  myProjectItem->configuration.m_prjdeps.clear();
+    insideItem = ( InsideCheckListItem * ) insidelib_listview->firstChild();
+    while ( insideItem )
+    {
+        if ( insideItem->isOn() )
+        {
+
+            QString tmpLib = insideItem->prjItem->getLibAddObject( myProjectItem->getDownDirs() );
+            if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).contains( "dll" ) )
+            {
+                //add path if shared lib is linked
+                QString tmpPath = insideItem->prjItem->getLibAddPath( myProjectItem->getDownDirs() );
+                if ( tmpPath != "" )
+                {
+                    values << "-L" << tmpPath ;
+                }
+            }
+            values << tmpLib ;
+
+        }
+        insideItem = ( InsideCheckListItem* ) insideItem->itemBelow();
+    }
+
+    //extra lib paths
+    QListViewItem *lvItem = outsidelibdir_listview->firstChild();
+    while ( lvItem )
+    {
+        values << "-L" << lvItem->text( 0 );
+        lvItem = lvItem->itemBelow();
+    }
+
+
+    //outside libs to link
+    outsideItem = ( QCheckListItem * ) outsidelib_listview->firstChild();
+    while ( outsideItem )
+    {
+        values << outsideItem->text( 0 );
+        outsideItem = ( QCheckListItem* ) outsideItem->itemBelow();
+    }
+
+
+    myProjectItem->updateVariableValues( "LIBS", values );
+
+    values.clear();
+
+    //external project dependencies
+    QListViewItem *depItem = extDeps_view->firstChild();
+    while ( depItem )
+    {
+        values << depItem->text( 0 );
+        depItem = depItem->itemBelow();
+    }
+    //internal project dependencies
+    insideItem = dynamic_cast<InsideCheckListItem *>( intDeps_view->firstChild() );
+    while ( insideItem )
+    {
+        if ( insideItem->isOn() )
+        {
+            if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).contains( "staticlib" ) )
+            {
+                values << insideItem->prjItem->getLibAddObject( myProjectItem->getDownDirs() );
+            }
+            else if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).contains( "dll" ) )
+            {
+                values << insideItem->prjItem->getSharedLibAddObject( myProjectItem->getDownDirs() );
+            }
+            else
+            {
+                values << insideItem->prjItem->getApplicationObject( myProjectItem->getDownDirs() );
+            }
+        }
+        insideItem = dynamic_cast<InsideCheckListItem *>( insideItem->itemBelow() );
+    }
+    myProjectItem->updateVariableValues( "TARGETDEPS", values );
+
+    values.clear();
+    //change build order
+    lvItem = buildorder_listview->firstChild();
+    if ( lvItem && lvItem->itemBelow() )
+    {
+
+        while ( lvItem )
+        {
+            values << lvItem->text( 0 );
+            lvItem = lvItem->itemBelow();
+        }
+
+        if ( myProjectItem->scope->isVariableReset( "SUBDIRS" ) )
+        {
+            myProjectItem->scope->removeVariable( "SUBDIRS", "=" );
+            myProjectItem->scope->setEqualOp( "SUBDIRS", values );
         }
         else
         {
-            QString tmpApp=insideItem->prjItem->getApplicationObject(myProjectItem->getDownDirs());
-            myProjectItem->configuration.m_prjdeps.append(tmpApp);
+            myProjectItem->scope->removeVariable( "SUBDIRS", "+=" );
+            myProjectItem->scope->setPlusOp( "SUBDIRS", values );
         }
-      }
-      insideItem=dynamic_cast<InsideCheckListItem *>(insideItem->itemBelow());
-  }
+    }
 
-  //extra lib paths
-  QListViewItem *lvItem=outsidelibdir_listview->firstChild();
-  while(lvItem)
-  {
-    myProjectItem->configuration.m_librarypath.append(lvItem->text(0));
-    lvItem=lvItem->itemBelow();
-  }
+    // intermediate locations
+    myProjectItem->scope->setEqualOp( "OBJECTS_DIR", QStringList( objdir_url->url() ) );
+    myProjectItem->scope->setEqualOp( "UI_DIR", QStringList( uidir_url->url() ) );
+    myProjectItem->scope->setEqualOp( "MOC_DIR", QStringList( mocdir_url->url() ) );
 
-  //change build order
-  lvItem=buildorder_listview->firstChild();
-  myProjectItem->subdirs.clear();
-  while(lvItem)
-  {
-    myProjectItem->subdirs.append(lvItem->text(0));
-    lvItem=lvItem->itemBelow();
-  }
+    //CORBA
+    myProjectItem->scope->setEqualOp( "IDL_COMPILER", QStringList( idlCmdEdit->url() ) );
+    myProjectItem->updateVariableValues( "IDL_OPTIONS", QStringList::split( " ", idlCmdOptionsEdit->text() ) );
 
-  // intermediate locations
-  myProjectItem->configuration.m_objectpath = objdir_url->url();
-  myProjectItem->configuration.m_uipath = uidir_url->url();
-  myProjectItem->configuration.m_mocpath = mocdir_url->url();
-
-  //CORBA
-  myProjectItem->configuration.idl_compiler=idlCmdEdit->url();
-  myProjectItem->configuration.idl_options=idlCmdOptionsEdit->text();
-
-  // custom vars
-  QListViewItem *item = customVariables->firstChild();
-  for( ; item; item = item->nextSibling() )
-	myProjectItem->configuration.m_variables[item->text(0)] = item->text(1);
-
+    // custom vars
+    QListViewItem *item = customVariables->firstChild();
+    for ( ; item; item = item->nextSibling() )
+    {
+        QString var = item->text( 0 );
+        QString op = item->text( 1 );
+        if ( !myProjectItem->scope->customVariables().keys().contains( qMakePair( var, op ) ) )
+            myProjectItem->scope->removeVariable( var, op );
+        else
+            myProjectItem->scope->updateCustomVariable( var, op, QStringList::split( " ", item->text( 2 ) ) );
+    }
+    myProjectItem->scope->saveToFile();
 }
 
 void ProjectConfigurationDlg::accept()
 {
-  apply();
-  myProjectItem=0;
-  QDialog::accept();
+    apply();
+    myProjectItem = 0;
+    QDialog::accept();
 }
 
 void ProjectConfigurationDlg::reject()
 {
-  myProjectItem=0;
-  QDialog::reject();
+    myProjectItem = 0;
+    QDialog::reject();
 }
+
+
 
 void ProjectConfigurationDlg::updateControls()
-//============================================
 {
-  QRadioButton *activateRadiobutton=NULL;
-  // Project template
-  libGroup->setEnabled(false);
-  if( !myProjectItem->isScope )
-  {
-	switch (myProjectItem->configuration.m_template)
-	{
-	case QTMP_APPLICATION:
-	activateRadiobutton = radioApplication;
-	if (myProjectItem->configuration.m_requirements & QD_CONSOLE )
-		checkConsole->setChecked(true);
-	else
-		checkConsole->setChecked(false);
-	break;
-	case QTMP_LIBRARY:
-	libGroup->setEnabled(true);
+    // Project template
+    groupLibraries->setEnabled( false );
 
-	activateRadiobutton = radioLibrary;
-	staticRadio->setChecked(true); //default
-	if (myProjectItem->configuration.m_requirements & QD_STATIC){
-		staticRadio->setChecked(true);
-	}else 
-		staticRadio->setChecked(false);
-	if (myProjectItem->configuration.m_requirements & QD_SHARED){
-		sharedRadio->setChecked(true);
-		m_targetLibraryVersion->setText(myProjectItem->configuration.m_libraryversion);
-	}else
-	{
-		sharedRadio->setChecked(true);
-		m_targetLibraryVersion->setText("");
-	}
+    //cache the value of the some variables
+    QStringList configValues = myProjectItem->scope->variableValues( "CONFIG" );
+    QStringList templateValues = myProjectItem->scope->variableValues( "TEMPLATE" );
+    //if( !myProjectItem->isScope )
+    //{
+    if ( templateValues.contains( "app" ) )
+    {
+        radioApplication->setChecked( true );
+        if ( configValues.contains( "console" ) )
+        {
+            checkConsole->setChecked( true );
+        }
+    }
+    else if ( templateValues.contains( "lib" ) )
+    {
+        groupLibraries->setEnabled( true );
 
-	if (myProjectItem->configuration.m_requirements & QD_PLUGIN)
-		checkPlugin->setChecked(true);
-	else
-		checkPlugin->setChecked(false);
-	if ( myProjectItem->configuration.m_requirements & QD_DESIGNER )
-		checkDesigner->setChecked( true );
-	else
-		checkDesigner->setChecked(false);
-	if (myProjectItem->configuration.m_requirements & QD_LIBTOOL )
-		checkLibtool->setChecked(true);
-	else
-		checkLibtool->setChecked(false);
-	if (myProjectItem->configuration.m_requirements & QD_PKGCONF )
-		checkPkgconf->setChecked(true);
-	else
-		checkPkgconf->setChecked(false);
-	break;
-	case QTMP_SUBDIRS:
-	activateRadiobutton = radioSubdirs;
-	break;
-	}
-  }
-  // Buildmode
-  if (activateRadiobutton)
-    activateRadiobutton->setChecked(true);
-  switch (myProjectItem->configuration.m_buildMode)
-  {
-    case QBM_DEBUG:
-      activateRadiobutton = radioDebugMode;
-      break;
-    case QBM_RELEASE:
-      activateRadiobutton = radioReleaseMode;
-      break;
-    case QBM_DEBUG_AND_RELEASE:
-      activateRadiobutton = radioDebugReleaseMode;
-      break;
-  }
-  if (activateRadiobutton)
-    activateRadiobutton->setChecked(true);
+        radioLibrary->setChecked( true );
+        staticRadio->setChecked( true ); //default
 
-  // Requirements
-  if (myProjectItem->configuration.m_requirements & QD_QT)
-    checkQt->setChecked(true);
-  else
-    checkQt->setChecked(false);
-  if (myProjectItem->configuration.m_requirements & QD_OPENGL)
-    checkOpenGL->setChecked(true);
-  else
-    checkOpenGL->setChecked(false);
-  if (myProjectItem->configuration.m_requirements & QD_THREAD)
-    checkThread->setChecked(true);
-  else
-    checkThread->setChecked(false);
-  if (myProjectItem->configuration.m_requirements & QD_X11)
-    checkX11->setChecked(true);
-  else
-    checkX11->setChecked(false);
-  if (myProjectItem->configuration.m_requirements & QD_ORDERED)
-    checkOrdered->setChecked(true);
-  else
-    checkOrdered->setChecked(false);
-  if (myProjectItem->configuration.m_requirements & QD_EXCEPTIONS)
-    exceptionCheck->setChecked(true);
-  else
-    exceptionCheck->setChecked(false);
-  if (myProjectItem->configuration.m_requirements & QD_STL)
-    stlCheck->setChecked(true);
-  else
-    stlCheck->setChecked(false);
-  if (myProjectItem->configuration.m_requirements & QD_RTTI)
-    rttiCheck->setChecked(true);
-  else
-    rttiCheck->setChecked(false);
-  if (myProjectItem->configuration.m_requirements & QD_PCH)
-    checkPCH->setChecked(true);
-  else
-    checkPCH->setChecked(false);
-  // Warnings
-  if (myProjectItem->configuration.m_warnings == QWARN_ON)
-  {
-    checkWarning->setChecked(true);
-  }else
-    checkWarning->setChecked(false);
+        if ( configValues.contains( "staticlib" ) )
+        {
+            staticRadio->setChecked( true );
+        }
+        else
+            staticRadio->setChecked( false );
+        if ( configValues.contains( "dll" ) )
+        {
+            sharedRadio->setChecked( true );
+            m_targetLibraryVersion->setText( myProjectItem->scope->variableValues( "VERSION" ).front() );
+        }
+        else
+        {
+            sharedRadio->setChecked( false );
+            m_targetLibraryVersion->setText( "" );
+        }
 
-  //Qt4 libs
-  if ( prjWidget->m_part->isQt4Project() )
-  {
+        if ( configValues.contains( "plugin" ) )
+            checkPlugin->setChecked( true );
+        else
+            checkPlugin->setChecked( false );
+        if ( configValues.contains( "designer" ) )
+            checkDesigner->setChecked( true );
+        else
+            checkDesigner->setChecked( false );
+        if ( configValues.contains( "create_libtool" ) )
+            checkLibtool->setChecked( true );
+        else
+            checkLibtool->setChecked( false );
+        if ( configValues.contains( "create_pkgconf" ) )
+            checkPkgconf->setChecked( true );
+        else
+            checkPkgconf->setChecked( false );
+    }
+    else if ( templateValues.contains( "subdirs" ) )
+    {
+        radioSubdirs->setChecked( true );
+    }
+    // Buildmode
+    if ( configValues.contains( "debug" ) )
+    {
+        radioDebugMode->setChecked( true );
+    }
+    else if ( configValues.contains( "release" ) )
+    {
+        radioReleaseMode->setChecked( true );
+    }
+    else if ( configValues.contains( "debug_and_release" ) )
+    {
+        radioDebugReleaseMode->setChecked( true );
+    }
 
-    if ( myProjectItem->configuration.m_requirements & QD_ASSISTANT )
-      checkAssistant->setChecked( true );
+    // Requirements
+    if ( configValues.contains( "qt" ) )
+        checkQt->setChecked( true );
     else
-      checkAssistant->setChecked( false );
-    if ( myProjectItem->configuration.m_requirements & QD_TESTLIB )
-      checkTestlib->setChecked( true );
+        checkQt->setChecked( false );
+    if ( configValues.contains( "opengl" ) )
+        checkOpenGL->setChecked( true );
     else
-      checkTestlib->setChecked( false );
-    if ( myProjectItem->configuration.m_requirements & QD_UITOOLS )
-      checkUiTools->setChecked( true );
+        checkOpenGL->setChecked( false );
+    if ( configValues.contains( "thread" ) )
+        checkThread->setChecked( true );
     else
-      checkUiTools->setChecked( false );
-    if ( myProjectItem->configuration.m_requirements & QD_DBUS )
-      checkQDBus->setChecked( true );
+        checkThread->setChecked( false );
+    if ( configValues.contains( "x11" ) )
+        checkX11->setChecked( true );
     else
-      checkQDBus->setChecked( false );
-    if ( myProjectItem->configuration.m_requirements & QD_BUILDALL )
-      checkBuildAll->setChecked( true );
+        checkX11->setChecked( false );
+    if ( configValues.contains( "ordered" ) )
+        checkOrdered->setChecked( true );
     else
-      checkBuildAll->setChecked( false );
-
-    if ( myProjectItem->configuration.m_qt4libs & Q4L_CORE )
-      checkQt4Core->setChecked( true );
+        checkOrdered->setChecked( false );
+    if ( configValues.contains( "exceptions" ) )
+        exceptionCheck->setChecked( true );
     else
-      checkQt4Core->setChecked( false );
-    if ( myProjectItem->configuration.m_qt4libs & Q4L_GUI )
-      checkQt4Gui->setChecked( true );
+        exceptionCheck->setChecked( false );
+    if ( configValues.contains( "stl" ) )
+        stlCheck->setChecked( true );
     else
-      checkQt4Gui->setChecked( false );
-    if ( myProjectItem->configuration.m_qt4libs & Q4L_SQL )
-      checkQt4SQL->setChecked( true );
+        stlCheck->setChecked( false );
+    if ( configValues.contains( "rtti" ) )
+        rttiCheck->setChecked( true );
     else
-      checkQt4SQL->setChecked( false );
-    if ( myProjectItem->configuration.m_qt4libs & Q4L_XML )
-      checkQt4XML->setChecked( true );
+        rttiCheck->setChecked( false );
+    if ( configValues.contains( "precompile_header" ) )
+        checkPCH->setChecked( true );
     else
-      checkQt4XML->setChecked( false );
-    if ( myProjectItem->configuration.m_qt4libs & Q4L_NETWORK )
-      checkQt4Network->setChecked( true );
+        checkPCH->setChecked( false );
+    // Warnings
+    if ( configValues.contains( "warn_on" ) )
+    {
+        checkWarning->setChecked( true );
+    }
+    if ( configValues.contains( "warn_off" ) )
+    {
+        checkWarning->setChecked( false );
+    }
+
+    if ( configValues.contains( "windows" ) )
+        checkWindows->setChecked( true );
     else
-      checkQt4Network->setChecked( false );
-    if ( myProjectItem->configuration.m_qt4libs & Q4L_SVG )
-      checkQt4SVG->setChecked( true );
+        checkWindows->setChecked( false );
+
+    //Qt4 libs
+    if ( prjWidget->m_part->isQt4Project() )
+    {
+
+        if ( configValues.contains( "assistant" ) )
+            checkAssistant->setChecked( true );
+        else
+            checkAssistant->setChecked( false );
+        if ( configValues.contains( "qtestlib" ) )
+            checkTestlib->setChecked( true );
+        else
+            checkTestlib->setChecked( false );
+        if ( configValues.contains( "uitools" ) )
+            checkUiTools->setChecked( true );
+        else
+            checkUiTools->setChecked( false );
+        if ( configValues.contains( "dbus" ) )
+            checkQDBus->setChecked( true );
+        else
+            checkQDBus->setChecked( false );
+        if ( configValues.contains( "build_all" ) )
+            checkBuildAll->setChecked( true );
+        else
+            checkBuildAll->setChecked( false );
+
+        QStringList qtLibs = myProjectItem->scope->variableValues( "QT" );
+        if ( qtLibs.contains( "core" ) )
+            checkQt4Core->setChecked( true );
+        else
+            checkQt4Core->setChecked( false );
+        if ( qtLibs.contains( "gui" ) )
+            checkQt4Gui->setChecked( true );
+        else
+            checkQt4Gui->setChecked( false );
+        if ( qtLibs.contains( "sql" ) )
+            checkQt4SQL->setChecked( true );
+        else
+            checkQt4SQL->setChecked( false );
+        if ( qtLibs.contains( "xml" ) )
+            checkQt4XML->setChecked( true );
+        else
+            checkQt4XML->setChecked( false );
+        if ( qtLibs.contains( "network" ) )
+            checkQt4Network->setChecked( true );
+        else
+            checkQt4Network->setChecked( false );
+        if ( qtLibs.contains( "svg" ) )
+            checkQt4SVG->setChecked( true );
+        else
+            checkQt4SVG->setChecked( false );
+        if ( qtLibs.contains( "opengl" ) )
+            checkQt4OpenGL->setChecked( true );
+        else
+            checkQt4OpenGL->setChecked( false );
+        if ( qtLibs.contains( "qt3support" ) )
+            checkQt3Support->setChecked( true );
+        else
+            checkQt3Support->setChecked( false );
+
+        radioDebugReleaseMode->setEnabled( true );
+        checkBuildAll->setEnabled( true );
+        groupQt4Libs->setEnabled( checkQt->isChecked() );
+        rccdir_url->setEnabled( true );
+        rccdir_label->setEnabled( true );
+    }
+
+    //fill the custom config edit
+    QStringList extraValues;
+    for ( QStringList::const_iterator it = configValues.begin() ; it != configValues.end() ; ++it )
+    {
+        if ( !Scope::KnownConfigValues.contains( *it ) )
+        {
+            extraValues << *it;
+        }
+    }
+    editConfigExtra->setText( extraValues.join( " " ) );
+
+    //makefile
+    makefile_url->setURL( myProjectItem->scope->variableValues( "MAKEFILE" ).front() );
+
+    if ( myProjectItem->scope->variableValues( "INSTALL" ).contains( "target" ) )
+    {
+        checkInstallTarget->setChecked( true );
+        m_InstallTargetPath->setEnabled( true );
+    }
     else
-      checkQt4SVG->setChecked( false );
-    if ( myProjectItem->configuration.m_qt4libs & Q4L_OPENGL )
-      checkQt4OpenGL->setChecked( true );
-    else
-      checkQt4OpenGL->setChecked( false );
-    if ( myProjectItem->configuration.m_qt4libs & Q4L_QT3 )
-      checkQt3Support->setChecked( true );
-    else
-      checkQt3Support->setChecked( false );
-    editConfigExtra->setText( myProjectItem->configuration.m_customConfigOptions.join(" ") );
-  }
+    {
+        checkInstallTarget->setChecked( false );
+        m_InstallTargetPath->setEnabled( false );
+    }
+    m_InstallTargetPath->setText( myProjectItem->scope->variableValues( "target.path" ).front() );
 
-  //makefile
-  makefile_url->setURL(myProjectItem->configuration.m_makefile);
+    m_targetOutputFile->setText( myProjectItem->scope->variableValues( "TARGET" ).front() );
+    m_targetPath->setText( myProjectItem->scope->variableValues( "DESTDIR" ).front() );
 
-  // Target
-/*  QString targetString = myProjectItem->configuration.m_target;
-  int slashPos = targetString.findRev('/');
+    m_defines->setText( myProjectItem->scope->variableValues( "DEFINES" ).join( " " ) );
+    m_debugFlags->setText( myProjectItem->scope->variableValues( "QMAKE_CXXFLAGS_DEBUG" ).join( " " ) );
+    m_releaseFlags->setText( myProjectItem->scope->variableValues( "QMAKE_CXXFLAGS_RELEASE" ).join( " " ) );
 
-  if (slashPos>=0)
-  {
-    m_targetPath->setText(targetString.left(slashPos));
-    m_targetOutputFile->setText(targetString.right(targetString.length()-slashPos-1));
-  }
-  else
-    m_targetOutputFile->setText(targetString);
-*/
-  //target.path = path
-  //INSTALLS += target
-  if (myProjectItem->configuration.m_target_install == true)
-  {
-    checkInstallTarget->setChecked(true);
-    m_InstallTargetPath->setEnabled(true);
-  }
-  else
-  {
-    checkInstallTarget->setChecked(false);
-    m_InstallTargetPath->setEnabled(false);
-  }
-  m_InstallTargetPath->setText(myProjectItem->configuration.m_target_install_path);
+    updateIncludeControl();
+    updateLibControls();
+    updateBuildOrderControl();
+    updateDependenciesControl();
 
+    objdir_url->setURL( myProjectItem->scope->variableValues( "OBJECTS_DIR" ).front() );
+    uidir_url->setURL( myProjectItem->scope->variableValues( "UI_DIR" ).front() );
+    mocdir_url->setURL( myProjectItem->scope->variableValues( "MOC_DIR" ).front() );
 
+    idlCmdEdit->setURL( myProjectItem->scope->variableValues( "IDL_COMPILER" ).front() );
+    idlCmdOptionsEdit->setText( myProjectItem->scope->variableValues( "IDL_OPTIONS" ).join( " " ) );
 
-  m_targetOutputFile->setText(myProjectItem->configuration.m_target);
-  m_targetPath->setText(myProjectItem->configuration.m_destdir);
-  clickSubdirsTemplate();
+    customVariables->clear();
+    QMap<QPair<QString, QString>, QStringList > customvars = myProjectItem->scope->customVariables();
+    QMap<QPair<QString, QString>, QStringList >::iterator idx = customvars.begin();
+    for ( ; idx != customvars.end(); ++idx )
+        new KListViewItem( customVariables, idx.key().first, idx.key().second, idx.data().join( " " ) );
 
-  m_defines->setText(myProjectItem->configuration.m_defines.join(" "));
-  m_debugFlags->setText(myProjectItem->configuration.m_cxxflags_debug.join(" "));
-  m_releaseFlags->setText(myProjectItem->configuration.m_cxxflags_release.join(" "));
-
-  if (myProjectItem->configuration.m_inheritconfig == false)
-    checkDontInheritConfig->setChecked(true);
-  else
-    checkDontInheritConfig->setChecked(false);
-
-  updateIncludeControl();
-  updateLibaddControl();
-  updateLibDirAddControl();
-  updateBuildOrderControl();
-  updateDependenciesControl();
-
-  objdir_url->setURL(myProjectItem->configuration.m_objectpath);
-  uidir_url->setURL(myProjectItem->configuration.m_uipath);
-  mocdir_url->setURL(myProjectItem->configuration.m_mocpath);
-
-
-  customVariables->clear();
-  QMap<QString,QString>::Iterator idx = myProjectItem->configuration.m_variables.begin();
-  for( ; idx != myProjectItem->configuration.m_variables.end(); ++idx )
-  	new KListViewItem(customVariables,idx.key(),idx.data());
 }
 
-QPtrList <qProjectItem> ProjectConfigurationDlg::getAllProjects()
+QPtrList<QMakeScopeItem> ProjectConfigurationDlg::getAllProjects()
 {
-  QPtrList <qProjectItem> tmpPrjList;
-  qProjectItem *item=(qProjectItem *)prjList->firstChild();
-  while(item)
-  {
-    tmpPrjList.append(item);
-    getAllSubProjects(item,&tmpPrjList);
-    item=(qProjectItem *)item->nextSibling();
-  }
-  return(tmpPrjList);
+    QPtrList <QMakeScopeItem> tmpPrjList;
+    QMakeScopeItem *item = static_cast<QMakeScopeItem*>( prjList->firstChild() );
+    while ( item )
+    {
+        if ( item->scope->scopeType() == Scope::ProjectScope )
+        {
+            if( item != myProjectItem )
+                tmpPrjList.append( item );
+            getAllSubProjects( item, &tmpPrjList );
+        }
+        item = static_cast<QMakeScopeItem*>( item->nextSibling() );
+    }
+    return ( tmpPrjList );
 }
 
-void ProjectConfigurationDlg::getAllSubProjects(qProjectItem *item, QPtrList <qProjectItem> *itemList)
+void ProjectConfigurationDlg::getAllSubProjects( QMakeScopeItem *item, QPtrList <QMakeScopeItem> *itemList )
 {
 
-  qProjectItem *subItem=(qProjectItem *)item->firstChild();
-  while(subItem)
-  {
-    itemList->append(subItem);
-    getAllSubProjects(subItem,itemList);
-    subItem=(qProjectItem *)subItem->nextSibling();
-  }
+    QMakeScopeItem * subItem = static_cast<QMakeScopeItem*>( item->firstChild() );
+    while ( subItem )
+    {
+        if ( subItem->scope->scopeType() == Scope::ProjectScope )
+        {
+            if ( subItem != myProjectItem )
+                itemList->append( subItem );
+            getAllSubProjects( subItem, itemList );
+        }
+        subItem = static_cast<QMakeScopeItem*>( subItem->nextSibling() );
+    }
 }
-
-
 
 void ProjectConfigurationDlg::updateIncludeControl()
 {
-  insideinc_listview->setSorting(-1,false);
-  outsideinc_listview->setSorting(-1,false);
-  insideinc_listview->clear();
-  outsideinc_listview->clear();
+    insideinc_listview->setSorting( -1, false );
+    outsideinc_listview->setSorting( -1, false );
+    insideinc_listview->clear();
+    outsideinc_listview->clear();
 
+    QStringList incList = myProjectItem->scope->variableValues( "INCLUDEPATH" );
+    QPtrList <QMakeScopeItem> itemList = getAllProjects();
+    QMakeScopeItem *item = itemList.first();
 
-  QStringList incList=myProjectItem->configuration.m_incadd;
-  QPtrList <qProjectItem> itemList=getAllProjects();
-  qProjectItem *item=itemList.first();
-
-
-  while(item){
-    if(item->type() == qProjectItem::Subproject)
+    while ( item )
     {
+        if ( item->scope->variableValues( "TEMPLATE" ).contains( "lib" ) ||
+                item->scope->variableValues( "TEMPLATE" ).contains( "app" ) )
+        {
+            QString tmpInc = item->getIncAddPath( myProjectItem->getDownDirs() );
+            tmpInc = QDir::cleanDirPath( tmpInc );
+            InsideCheckListItem *newItem = new InsideCheckListItem( insideinc_listview,
+                                           insideinc_listview->lastItem(), item, this );
+            QStringList::Iterator it = incList.begin();
 
-      //includes
-      //temp strlist
-      if( ((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_LIBRARY ||
-          ((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_APPLICATION){
-          SubqmakeprojectItem *sItem=(SubqmakeprojectItem*)item;
-         //if(sItem!=myProjectItem) //needed own path for other libs
-         if (!sItem->isScope)
-         {
-              QString tmpInc=sItem->getIncAddPath(myProjectItem->getDownDirs());
-              tmpInc=QDir::cleanDirPath(tmpInc);
-              InsideCheckListItem *newItem=new InsideCheckListItem(insideinc_listview,insideinc_listview->lastItem(),sItem, this);
-              QStringList::Iterator it=incList.begin();
-
-          for(;it!=incList.end();++it)
-          {
-             // we need an exact, case sensitive match here
-            if ((*it).contains(tmpInc, true) && ((*it).length() == tmpInc.length()))
+            if ( incList.contains( tmpInc ) )
             {
-              incList.remove(it);
-              newItem->setOn(true);
-              it=incList.begin();
+                incList.remove( tmpInc );
+                newItem->setOn( true );
             }
-          }
         }
-      }
+        //    item=(ProjectItem*)item->itemBelow();
+        item = itemList.next();
     }
-//    item=(ProjectItem*)item->itemBelow();
-    item=itemList.next();
-  }
 
-  //all other in incList are outside incs
-  QStringList::Iterator it1=incList.begin();
-  for(;it1!=incList.end();++it1)
-  {
-      new QListViewItem(outsideinc_listview,outsideinc_listview->lastItem(),(*it1));
-  }
 
+    //all other in incList are outside incs
+    outsideinc_listview->clear();
+    QStringList::Iterator it1 = incList.begin();
+    for ( ;it1 != incList.end();++it1 )
+    {
+        new QListViewItem( outsideinc_listview, outsideinc_listview->lastItem(), ( *it1 ) );
+    }
 }
-void ProjectConfigurationDlg::updateLibaddControl()
+
+void ProjectConfigurationDlg::updateLibControls()
 {
 
-  QPtrList <qProjectItem> itemList=getAllProjects();
+    QPtrList <QMakeScopeItem> itemList = getAllProjects();
 
-  insidelib_listview->setSorting(-1,false);
-  outsidelib_listview->setSorting(-1,false);
-  insidelib_listview->clear();
-  outsidelib_listview->clear();
-
-  //update librarys
-  //temp strlist
-  QStringList libList=myProjectItem->configuration.m_libadd;
-
-
-  QStringList::Iterator it=libList.begin();
-  for(;it!=libList.end();++it){
-        qProjectItem *item=itemList.first();
-        while(item){
-          if(item->type()==qProjectItem::Subproject)
-          {
-
-            //librarys
-            if( ((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_LIBRARY ){
-              SubqmakeprojectItem *sItem=(SubqmakeprojectItem*)item;
-
-
-              if(sItem!=myProjectItem)
-              {
-                // create lib string
-                  QString tmpLib=sItem->getLibAddObject(myProjectItem->getDownDirs());
-                  if(sItem->configuration.m_requirements & QD_SHARED) tmpLib=/*"-l"+*/tmpLib;
-                  if(tmpLib==(*it)){
-                    InsideCheckListItem *newItem=new InsideCheckListItem(insidelib_listview,insidelib_listview->lastItem(),sItem, this);
-                    libList.remove(it);
-                    it=libList.begin();
-                    newItem->setOn(true);
-                    itemList.remove(item);
-                    item=itemList.first();
-                  }
-
-              }
-            }
-          }
-          item=itemList.next();
-        }
-    }
-
-  //add all other prj in itemList unchecked
-  qProjectItem *item=itemList.first();
-  while(item)
-  {
-    if(item->type()==qProjectItem::Subproject)
+    insidelib_listview->setSorting( -1, false );
+    outsidelib_listview->setSorting( -1, false );
+    insidelib_listview->clear();
+    outsidelib_listview->clear();
+    //update librarys
+    //temp strlist
+    QStringList libList = myProjectItem->scope->variableValues( "LIBS" );
+    QMakeScopeItem* item = itemList.first();
+    while ( item )
     {
-      //librarys
-      if( ((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_LIBRARY ){
-        SubqmakeprojectItem *sItem=(SubqmakeprojectItem*)item;
-        if(sItem!=myProjectItem)
+        if ( item->scope->variableValues( "TEMPLATE" ).contains( "lib" ) )
         {
-          // create lib string
-          QString tmpLib=sItem->getLibAddObject(myProjectItem->getDownDirs());
-          if(sItem->configuration.m_requirements & QD_SHARED) tmpLib=/*"-l"+*/tmpLib;
-          InsideCheckListItem *newItem=new InsideCheckListItem(insidelib_listview,insidelib_listview->lastItem(),sItem,this);
-          newItem->setOn(false);
-        }
-      }
-    }
-    item=itemList.next();
-  }
+            if ( item != myProjectItem )
+            {
+                // create lib string
+                QString tmpLib = item->getLibAddObject( myProjectItem->getDownDirs() );
+                InsideCheckListItem * newItem = new InsideCheckListItem( insidelib_listview,
+                                                insidelib_listview->lastItem(), item, this );
+                QString tmpLibDir = item->getLibAddPath( myProjectItem->getDownDirs() );
 
-  //all other in libList are outside libs
-  QStringList::Iterator it1=libList.begin();
-  for(;it1!=libList.end();++it1)
-  {
-      new QListViewItem(outsidelib_listview,outsidelib_listview->lastItem(),(*it1));
-  }
+                if ( libList.contains( "-L" + tmpLibDir ) )
+                {
+                    libList.remove( "-L" + tmpLibDir );
+                }
+                if ( libList.contains( tmpLib ) )
+                {
+                    libList.remove( tmpLib );
+                    newItem->setOn( true );
+                }
+            }
+        }
+        item = itemList.next();
+    }
+
+    //all other in libList are outside libs
+    outsidelib_listview->clear();
+    outsidelibdir_listview->clear();
+    QStringList::Iterator it1 = libList.begin();
+    for ( ;it1 != libList.end();++it1 )
+    {
+        if ( ( *it1 ).startsWith( "-L" ) )
+            new QListViewItem( outsidelibdir_listview, outsidelibdir_listview->lastItem(), ( *it1 ).mid( 2 ) );
+        else
+        {
+            new QListViewItem( outsidelib_listview, outsidelib_listview->lastItem(), ( *it1 ) );
+        }
+    }
 }
 
 void ProjectConfigurationDlg::updateDependenciesControl( )
 {
-  QPtrList <qProjectItem> itemList=getAllProjects();
+    QPtrList <QMakeScopeItem> itemList = getAllProjects();
 
-  intDeps_view->setSorting(-1,false);
-  extDeps_view->setSorting(-1,false);
-  intDeps_view->clear();
-  extDeps_view->clear();
+    intDeps_view->setSorting( -1, false );
+    extDeps_view->setSorting( -1, false );
+    intDeps_view->clear();
+    extDeps_view->clear();
 
-  QStringList depsList=myProjectItem->configuration.m_prjdeps;
-
-  QStringList::Iterator it=depsList.begin();
-  for(;it!=depsList.end();++it){
-        qProjectItem *item=itemList.first();
-        while(item){
-          if(item->type()==qProjectItem::Subproject)
-          {
-            if( (((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_LIBRARY )
-                || (((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_APPLICATION ) ){
-              SubqmakeprojectItem *sItem=(SubqmakeprojectItem*)item;
-              if ((!sItem->isScope) && (sItem!=myProjectItem))
-              {
-                  QString tmpLib;
-                  if(sItem->configuration.m_requirements & QD_SHARED)
-                    tmpLib = sItem->getSharedLibAddObject(myProjectItem->getDownDirs());
-                  else if(sItem->configuration.m_requirements & QD_STATIC)
-                    tmpLib=sItem->getLibAddObject(myProjectItem->getDownDirs());
-                  else
-                    tmpLib=sItem->getApplicationObject(myProjectItem->getDownDirs());
-                  if(tmpLib==(*it)){
-                    InsideCheckListItem *newItem=new InsideCheckListItem(intDeps_view,intDeps_view->lastItem(),sItem,this);
-                    depsList.remove(it);
-                    it=depsList.begin();
-                    newItem->setOn(true);
-                    itemList.remove(item);
-                    item=itemList.first();
-                  }
-
-              }
-            }
-          }
-          item=itemList.next();
-        }
-    }
-
-  //add all other prj in itemList unchecked
-  qProjectItem *item=itemList.first();
-  while(item)
-  {
-    if(item->type()==qProjectItem::Subproject)
+    QStringList depsList = myProjectItem->scope->variableValues( "TARGETDEPS" );
+    QMakeScopeItem *item = itemList.first();
+    while ( item )
     {
-      if( (((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_LIBRARY )
-        || (((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_APPLICATION ) ){
-        SubqmakeprojectItem *sItem=(SubqmakeprojectItem*)item;
-        if ((!sItem->isScope) && (sItem!=myProjectItem))
+        QStringList templateval = item->scope->variableValues( "TEMPLATE" );
+        if ( templateval.contains( "lib" )
+                || templateval.contains( "app" ) )
         {
-          QString tmpLib;
-          if(sItem->configuration.m_requirements & QD_SHARED)
-            tmpLib = sItem->getSharedLibAddObject(myProjectItem->getDownDirs());
-          else if(sItem->configuration.m_requirements & QD_STATIC)
-            tmpLib=sItem->getLibAddObject(myProjectItem->getDownDirs());
-          else
-            tmpLib=sItem->getApplicationObject(myProjectItem->getDownDirs());
-          InsideCheckListItem *newItem=new InsideCheckListItem(intDeps_view,intDeps_view->lastItem(),sItem,this);
-          newItem->setOn(false);
-        }
-      }
-    }
-    item=itemList.next();
-  }
+            QString tmpLib;
+            QStringList values = item->scope->variableValues( "CONFIG" );
+            if ( templateval.contains( "lib" ) && values.contains( "dll" ) )
+                tmpLib = item->getSharedLibAddObject( myProjectItem->getDownDirs() );
+            else if ( templateval.contains( "lib" ) )
+                tmpLib = item->getLibAddObject( myProjectItem->getDownDirs() );
+            else
+                tmpLib = item->getApplicationObject( myProjectItem->getDownDirs() );
+            InsideCheckListItem * newItem = new InsideCheckListItem( intDeps_view, intDeps_view->lastItem(), item, this );
+            if ( depsList.contains( tmpLib ) )
+            {
+                depsList.remove( tmpLib );
+                newItem->setOn( true );
+            }
 
-  QStringList::Iterator it1=depsList.begin();
-  for(;it1!=depsList.end();++it1)
-  {
-      new QListViewItem(extDeps_view,extDeps_view->lastItem(),(*it1));
-  }
+        }
+        item = itemList.next();
+    }
+
+    //add all other prj in itemList unchecked
+
+    extDeps_view->clear();
+    QStringList::Iterator it1 = depsList.begin();
+    for ( ;it1 != depsList.end();++it1 )
+    {
+        new QListViewItem( extDeps_view, extDeps_view->lastItem(), ( *it1 ) );
+    }
 }
 
 
 void ProjectConfigurationDlg::updateBuildOrderControl()
 {
-  //sort build order only if subdirs
-  if(myProjectItem->configuration.m_template==QTMP_SUBDIRS)
-  {
-
-      QPtrList <qProjectItem> itemList;
-
-      qProjectItem *item=(qProjectItem *)myProjectItem->firstChild();
-      while(item){
-        itemList.append(item);
-        item=(qProjectItem*)item->nextSibling();
-      }
-
-
-
-    incaddTab->setEnabled(false);
-    buildorder_listview->setSorting(-1,false);
-    buildorder_listview->clear();
-    QStringList buildList=myProjectItem->subdirs;
-    QStringList::Iterator it1=buildList.begin();
-    for(;it1!=buildList.end();++it1){
-      item=itemList.first();
-      while(item){
-        if(item->type()==qProjectItem::Subproject)
-        {
-          if(item->text(0)==(*it1)){
-            new QListViewItem(buildorder_listview,buildorder_listview->lastItem(),item->text(0));
-            itemList.take();
-            item=itemList.first();
-          }
-        }
-        item=itemList.next();;
-      }
-    }
-    //add the rest
-      item=itemList.first();
-      while(item){
-        if(item->type()==qProjectItem::Subproject)
-        {
-            new QListViewItem(buildorder_listview,buildorder_listview->lastItem(),item->text(0));
-        }
-        item=itemList.next();;
-      }
-
-  }
-}
-
-void ProjectConfigurationDlg::updateLibDirAddControl()
-{
-  //update librarys
-  //temp strlist
-  QStringList libDirList=myProjectItem->configuration.m_librarypath;
-
-  QPtrList <qProjectItem> itemList=getAllProjects();
-  outsidelibdir_listview->setSorting(-1,false);
-  outsidelibdir_listview->clear();
-
-  qProjectItem *item=itemList.first();
-
-  while(item){
-    if(item->type()==qProjectItem::Subproject)
+    //sort build order only if subdirs
+    if ( myProjectItem->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
     {
 
-      //librarys
-      if( ((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_LIBRARY ){
-        SubqmakeprojectItem *sItem=(SubqmakeprojectItem*)item;
+        QPtrList <QMakeScopeItem> itemList;
 
-        if(sItem!=myProjectItem)
+        QMakeScopeItem *item = static_cast<QMakeScopeItem*>( myProjectItem->firstChild() );
+        while ( item )
         {
-          // create lib string
-          QString tmpLibDir=sItem->getLibAddPath(myProjectItem->getDownDirs());
-
-          QStringList::Iterator it=libDirList.begin();
-          for(;it!=libDirList.end();++it)
-          {
-
-            if((*it).find(tmpLibDir)>=0 && tmpLibDir!="" && !tmpLibDir.isEmpty()){
-              libDirList.remove(it);
-              it=libDirList.begin();
-            }
-          }
+            itemList.append( item );
+            item = static_cast<QMakeScopeItem*>( item->nextSibling() );
         }
-      }
+
+        incaddTab->setEnabled( false );
+        buildorder_listview->setSorting( -1, false );
+        buildorder_listview->clear();
+        QStringList buildList = myProjectItem->scope->variableValues( "SUBDIRS" );
+        QStringList::Iterator it1 = buildList.begin();
+        for ( ;it1 != buildList.end();++it1 )
+        {
+            item = itemList.first();
+            while ( item )
+            {
+                if ( item->scope->scopeType() == Scope::ProjectScope )
+                {
+                    if ( item->text( 0 ) == ( *it1 ) )
+                    {
+                        new QListViewItem( buildorder_listview, buildorder_listview->lastItem(), item->text( 0 ) );
+                        itemList.take();
+                        break;
+                    }
+                }
+                item = itemList.next();;
+            }
+        }
     }
-    item=itemList.next();
-  }
-
-  //all other in libList are outside libs
-  QStringList::Iterator it1=libDirList.begin();
-  for(;it1!=libDirList.end();++it1)
-  {
-      new QListViewItem(outsidelibdir_listview,outsidelibdir_listview->lastItem(),(*it1));
-  }
-
 }
-
-
-void ProjectConfigurationDlg::slotStaticLibClicked(int)
-{
-/*  dymo: static libs can be linked with other libs too
-    so please don't uncomment following*/
-/*if (staticRadio->isChecked())
-  {
-    libAddTab->setEnabled(false);
-    libPathTab->setEnabled(false);
-  } else {
-    libAddTab->setEnabled(true);
-    libPathTab->setEnabled(true);
-  }*/
-  if ( staticRadio->isChecked() )
-  {
-    checkPlugin->setEnabled( false );
-    checkDesigner->setEnabled( false );
-  }
-  buttonApply->setEnabled(true);
-}
-
-void ProjectConfigurationDlg::sharedLibChanged()
-{
-  if ( sharedRadio->isChecked() )
-  {
-    checkPlugin->setEnabled( true );
-    checkDesigner->setEnabled( checkPlugin->isChecked() );
-  }
-  buttonApply->setEnabled(true);
-}
-
-void ProjectConfigurationDlg::templateLibraryClicked(int)
-{
-  if (radioLibrary->isChecked())
-  {
-//    staticRadio->setChecked(true);
-    TabBuild->setTabEnabled(custVarsTab, true);
-    TabBuild->setTabEnabled(depTab,true);
-    TabBuild->setTabEnabled(libAddTab,true);
-    TabBuild->setTabEnabled(incaddTab,true);
-    TabBuild->setTabEnabled(buildOptsTab,true);
-    TabBuild->setTabEnabled(configTab,true);
-    libGroup->setEnabled(true);
-  } else {
-    libGroup->setEnabled(false);
-  }
-  buttonApply->setEnabled(true);
-}
-void ProjectConfigurationDlg::clickSubdirsTemplate()
-{
-  if (radioSubdirs->isChecked())
-  {
-    TabBuild->setTabEnabled(custVarsTab, true);
-    TabBuild->setTabEnabled(depTab,false);
-    TabBuild->setTabEnabled(libAddTab,false);
-    TabBuild->setTabEnabled(incaddTab,false);
-    TabBuild->setTabEnabled(buildOptsTab,false);
-    TabBuild->setTabEnabled(configTab,false);
-  }
-  else
-  {
-    TabBuild->setTabEnabled(custVarsTab, true);
-    TabBuild->setTabEnabled(depTab,true);
-    TabBuild->setTabEnabled(libAddTab,true);
-    TabBuild->setTabEnabled(incaddTab,true);
-    TabBuild->setTabEnabled(buildOptsTab,true);
-    TabBuild->setTabEnabled(configTab,true);
-
-    if (radioLibrary->isChecked()) libGroup->setEnabled(true);
-    else libGroup->setEnabled(false);
-    //70corbaTab->setEnabled(true);
-  }
-  buttonApply->setEnabled(true);
-}
-
-
 
 //build order buttons
 void ProjectConfigurationDlg::buildorderMoveUpClicked()
 {
-    if (buildorder_listview->currentItem() == buildorder_listview->firstChild()) {
+    if ( buildorder_listview->currentItem() == buildorder_listview->firstChild() )
+    {
         KNotifyClient::beep();
-        return;
+        return ;
     }
 
     QListViewItem *item = buildorder_listview->firstChild();
-    while (item->nextSibling() != buildorder_listview->currentItem())
+    while ( item->nextSibling() != buildorder_listview->currentItem() )
         item = item->nextSibling();
-    item->moveItem(buildorder_listview->currentItem());
-    buttonApply->setEnabled(true);
+    item->moveItem( buildorder_listview->currentItem() );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::buildorderMoveDownClicked()
 {
-   if (buildorder_listview->currentItem() == 0 || buildorder_listview->currentItem()->nextSibling() == 0) {
+    if ( buildorder_listview->currentItem() == 0 || buildorder_listview->currentItem() ->nextSibling() == 0 )
+    {
         KNotifyClient::beep();
-        return;
-   }
+        return ;
+    }
 
-   buildorder_listview->currentItem()->moveItem(buildorder_listview->currentItem()->nextSibling());
-  buttonApply->setEnabled(true);
-
+    buildorder_listview->currentItem() ->moveItem( buildorder_listview->currentItem() ->nextSibling() );
+    activateApply( 0 );
 }
-
-
-
-
-
 
 
 //Include dir buttons
 void ProjectConfigurationDlg::insideIncMoveUpClicked()
 {
-    if (insideinc_listview->currentItem() == insideinc_listview->firstChild()) {
+    if ( insideinc_listview->currentItem() == insideinc_listview->firstChild() )
+    {
         KNotifyClient::beep();
-        return;
+        return ;
     }
 
     QListViewItem *item = insideinc_listview->firstChild();
-    while (item->nextSibling() != insideinc_listview->currentItem())
+    while ( item->nextSibling() != insideinc_listview->currentItem() )
         item = item->nextSibling();
-    item->moveItem(insideinc_listview->currentItem());
-  buttonApply->setEnabled(true);
-
+    item->moveItem( insideinc_listview->currentItem() );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::insideIncMoveDownClicked()
 {
-   if (insideinc_listview->currentItem() == 0 || insideinc_listview->currentItem()->nextSibling() == 0) {
+    if ( insideinc_listview->currentItem() == 0 || insideinc_listview->currentItem() ->nextSibling() == 0 )
+    {
         KNotifyClient::beep();
-        return;
-   }
+        return ;
+    }
 
-   insideinc_listview->currentItem()->moveItem(insideinc_listview->currentItem()->nextSibling());
-  buttonApply->setEnabled(true);
-
+    insideinc_listview->currentItem() ->moveItem( insideinc_listview->currentItem() ->nextSibling() );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::outsideIncMoveUpClicked()
 {
-    if (outsideinc_listview->currentItem() == outsideinc_listview->firstChild()) {
+    if ( outsideinc_listview->currentItem() == outsideinc_listview->firstChild() )
+    {
         KNotifyClient::beep();
-        return;
+        return ;
     }
 
     QListViewItem *item = outsideinc_listview->firstChild();
-    while (item->nextSibling() != outsideinc_listview->currentItem())
+    while ( item->nextSibling() != outsideinc_listview->currentItem() )
         item = item->nextSibling();
-    item->moveItem(outsideinc_listview->currentItem());
-  buttonApply->setEnabled(true);
-
+    item->moveItem( outsideinc_listview->currentItem() );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::outsideIncMoveDownClicked()
 {
-   if (outsideinc_listview->currentItem() == 0 || outsideinc_listview->currentItem()->nextSibling() == 0) {
+    if ( outsideinc_listview->currentItem() == 0 || outsideinc_listview->currentItem() ->nextSibling() == 0 )
+    {
         KNotifyClient::beep();
-        return;
-   }
+        return ;
+    }
 
-   outsideinc_listview->currentItem()->moveItem(outsideinc_listview->currentItem()->nextSibling());
-  buttonApply->setEnabled(true);
-
+    outsideinc_listview->currentItem() ->moveItem( outsideinc_listview->currentItem() ->nextSibling() );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::outsideIncAddClicked()
 {
-    KURLRequesterDlg dialog("", i18n("Add include directory:"), 0, 0);
-    dialog.urlRequester()->setMode(KFile::Directory);
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-    QString dir = dialog.urlRequester()->url();
-    if (!dir.isEmpty())
-        new QListViewItem(outsideinc_listview, dir);
-  buttonApply->setEnabled(true);
-
+    KURLRequesterDlg dialog( "", i18n( "Add include directory:" ), 0, 0 );
+    dialog.urlRequester() ->setMode( KFile::Directory );
+    if ( dialog.exec() != QDialog::Accepted )
+        return ;
+    QString dir = dialog.urlRequester() ->url();
+    if ( !dir.isEmpty() )
+        new QListViewItem( outsideinc_listview, dir );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::outsideIncRemoveClicked()
 {
     delete outsideinc_listview->currentItem();
-  buttonApply->setEnabled(true);
-
+    activateApply( 0 );
 }
-
-
-
-
-
-
-
-
-
 
 //libadd buttons
 void ProjectConfigurationDlg::insideLibMoveUpClicked()
 {
-    if (insidelib_listview->currentItem() == insidelib_listview->firstChild()) {
+    if ( insidelib_listview->currentItem() == insidelib_listview->firstChild() )
+    {
         KNotifyClient::beep();
-        return;
+        return ;
     }
 
     QListViewItem *item = insidelib_listview->firstChild();
-    while (item->nextSibling() != insidelib_listview->currentItem())
+    while ( item->nextSibling() != insidelib_listview->currentItem() )
         item = item->nextSibling();
-    item->moveItem(insidelib_listview->currentItem());
-  buttonApply->setEnabled(true);
-
+    item->moveItem( insidelib_listview->currentItem() );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::insideLibMoveDownClicked()
 {
-   if (insidelib_listview->currentItem() == 0 || insidelib_listview->currentItem()->nextSibling() == 0) {
+    if ( insidelib_listview->currentItem() == 0 || insidelib_listview->currentItem() ->nextSibling() == 0 )
+    {
         KNotifyClient::beep();
-        return;
-   }
+        return ;
+    }
 
-   insidelib_listview->currentItem()->moveItem(insidelib_listview->currentItem()->nextSibling());
-  buttonApply->setEnabled(true);
-
+    insidelib_listview->currentItem() ->moveItem( insidelib_listview->currentItem() ->nextSibling() );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::outsideLibMoveUpClicked()
 {
-    if (outsidelib_listview->currentItem() == outsidelib_listview->firstChild()) {
+    if ( outsidelib_listview->currentItem() == outsidelib_listview->firstChild() )
+    {
         KNotifyClient::beep();
-        return;
+        return ;
     }
 
     QListViewItem *item = outsidelib_listview->firstChild();
-    while (item->nextSibling() != outsidelib_listview->currentItem())
+    while ( item->nextSibling() != outsidelib_listview->currentItem() )
         item = item->nextSibling();
-    item->moveItem(outsidelib_listview->currentItem());
-  buttonApply->setEnabled(true);
-
+    item->moveItem( outsidelib_listview->currentItem() );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::outsideLibMoveDownClicked()
 {
-   if (outsidelib_listview->currentItem() == 0 || outsidelib_listview->currentItem()->nextSibling() == 0) {
+    if ( outsidelib_listview->currentItem() == 0 || outsidelib_listview->currentItem() ->nextSibling() == 0 )
+    {
         KNotifyClient::beep();
-        return;
-   }
+        return ;
+    }
 
-   outsidelib_listview->currentItem()->moveItem(outsidelib_listview->currentItem()->nextSibling());
-  buttonApply->setEnabled(true);
-
+    outsidelib_listview->currentItem() ->moveItem( outsidelib_listview->currentItem() ->nextSibling() );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::outsideLibAddClicked()
 {
     bool ok;
-    QString dir = KInputDialog::getText(i18n("Add Library"), i18n("Add library to link:"), "-l", &ok, 0);
-    if (ok && !dir.isEmpty() && dir != "-I")
-        new QListViewItem(outsidelib_listview, dir);
-  buttonApply->setEnabled(true);
-
+    QString dir = KInputDialog::getText( i18n( "Add Library" ), i18n( "Add library to link:" ), "-l", &ok, 0 );
+    if ( ok && !dir.isEmpty() && dir != "-I" )
+        new QListViewItem( outsidelib_listview, dir );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::outsideLibRemoveClicked()
 {
     delete outsidelib_listview->currentItem();
-  buttonApply->setEnabled(true);
+    activateApply( 0 );
 }
 
-
-
 //lib paths buttons
-
-
 void ProjectConfigurationDlg::outsideLibDirMoveUpClicked()
 {
-    if (outsidelibdir_listview->currentItem() == outsidelibdir_listview->firstChild()) {
+    if ( outsidelibdir_listview->currentItem() == outsidelibdir_listview->firstChild() )
+    {
         KNotifyClient::beep();
-        return;
+        return ;
     }
 
     QListViewItem *item = outsidelibdir_listview->firstChild();
-    while (item->nextSibling() != outsidelibdir_listview->currentItem())
+    while ( item->nextSibling() != outsidelibdir_listview->currentItem() )
         item = item->nextSibling();
-    item->moveItem(outsidelibdir_listview->currentItem());
-  buttonApply->setEnabled(true);
+    item->moveItem( outsidelibdir_listview->currentItem() );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::outsideLibDirMoveDownClicked()
 {
-   if (outsidelibdir_listview->currentItem() == 0 || outsidelibdir_listview->currentItem()->nextSibling() == 0) {
+    if ( outsidelibdir_listview->currentItem() == 0 || outsidelibdir_listview->currentItem() ->nextSibling() == 0 )
+    {
         KNotifyClient::beep();
-        return;
-   }
+        return ;
+    }
 
-   outsidelibdir_listview->currentItem()->moveItem(outsidelibdir_listview->currentItem()->nextSibling());
-  buttonApply->setEnabled(true);
+    outsidelibdir_listview->currentItem() ->moveItem( outsidelibdir_listview->currentItem() ->nextSibling() );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::outsideLibDirAddClicked()
 {
-    KURLRequesterDlg dialog("", i18n("Add library directory:"), 0, 0);
-    dialog.urlRequester()->setMode(KFile::Directory);
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-    QString dir = dialog.urlRequester()->url();
-    if (!dir.isEmpty())
-        new QListViewItem(outsidelibdir_listview, dir);
-  buttonApply->setEnabled(true);
+    KURLRequesterDlg dialog( "", i18n( "Add library directory:" ), 0, 0 );
+    dialog.urlRequester() ->setMode( KFile::Directory );
+    if ( dialog.exec() != QDialog::Accepted )
+        return ;
+    QString dir = dialog.urlRequester() ->url();
+    if ( !dir.isEmpty() )
+        new QListViewItem( outsidelibdir_listview, dir );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::outsideLibDirRemoveClicked()
 {
     delete outsidelibdir_listview->currentItem();
-  buttonApply->setEnabled(true);
+    activateApply( 0 );
 }
 
 void ProjectConfigurationDlg::outsideIncEditClicked()
 {
-    QListViewItem *item=outsideinc_listview->currentItem();
-    if(item==NULL)return;
-    QString text=item->text(0);
+    QListViewItem * item = outsideinc_listview->currentItem();
+    if ( item == NULL ) return ;
+    QString text = item->text( 0 );
 
-    KURLRequesterDlg dialog(text, i18n("Change include directory:"), 0, 0);
-    dialog.urlRequester()->setMode(KFile::Directory);
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-    QString dir = dialog.urlRequester()->url();
-    if (!dir.isEmpty())
-        item->setText(0,dir);
-  buttonApply->setEnabled(true);
+    KURLRequesterDlg dialog( text, i18n( "Change include directory:" ), 0, 0 );
+    dialog.urlRequester() ->setMode( KFile::Directory );
+    if ( dialog.exec() != QDialog::Accepted )
+        return ;
+    QString dir = dialog.urlRequester() ->url();
+    if ( !dir.isEmpty() )
+        item->setText( 0, dir );
+    activateApply( 0 );
 }
 
 void ProjectConfigurationDlg::outsideLibEditClicked()
 {
     bool ok;
-    QListViewItem *item=outsidelib_listview->currentItem();
-    if(item==NULL)return;
-    QString text=item->text(0);
+    QListViewItem *item = outsidelib_listview->currentItem();
+    if ( item == NULL ) return ;
+    QString text = item->text( 0 );
 
-    QString dir = KInputDialog::getText(i18n("Change Library"), i18n("Change library to link:"), text, &ok, 0);
-    if (ok && !dir.isEmpty() && dir != "-l")
-        item->setText(0,dir);
-
-  buttonApply->setEnabled(true);
+    QString dir = KInputDialog::getText( i18n( "Change Library" ), i18n( "Change library to link:" ), text, &ok, 0 );
+    if ( ok && !dir.isEmpty() && dir != "-l" )
+        item->setText( 0, dir );
+    activateApply( 0 );
 }
 
 void ProjectConfigurationDlg::outsideLibDirEditClicked()
 {
-    QListViewItem *item=outsidelibdir_listview->currentItem();
-    if(item==NULL)return;
-    QString text=item->text(0);
+    QListViewItem * item = outsidelibdir_listview->currentItem();
+    if ( item == NULL ) return ;
+    QString text = item->text( 0 );
 
-    KURLRequesterDlg dialog(text, i18n("Change library directory:"), 0, 0);
-    dialog.urlRequester()->setMode(KFile::Directory);
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-    QString dir = dialog.urlRequester()->url();
-    if (!dir.isEmpty())
-        item->setText(0,dir);
-  buttonApply->setEnabled(true);
-}
-
-void ProjectConfigurationDlg::slotInstallTargetClicked()
-{
-  if (checkInstallTarget->isChecked() == true)
-    m_InstallTargetPath->setEnabled(true);
-  else
-    m_InstallTargetPath->setEnabled(false);
-  buttonApply->setEnabled(true);
+    KURLRequesterDlg dialog( text, i18n( "Change library directory:" ), 0, 0 );
+    dialog.urlRequester() ->setMode( KFile::Directory );
+    if ( dialog.exec() != QDialog::Accepted )
+        return ;
+    QString dir = dialog.urlRequester() ->url();
+    if ( !dir.isEmpty() )
+        item->setText( 0, dir );
+    activateApply( 0 );
 }
 
 
 void ProjectConfigurationDlg::extAdd_button_clicked( )
 {
-    KURLRequesterDlg dialog("", i18n("Add target:"), 0, 0);
-    dialog.urlRequester()->setMode(KFile::File);
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-    QString path = dialog.urlRequester()->url();
-    if (!path.isEmpty())
-        new QListViewItem(extDeps_view, path);
-  buttonApply->setEnabled(true);
+    KURLRequesterDlg dialog( "", i18n( "Add target:" ), 0, 0 );
+    dialog.urlRequester() ->setMode( KFile::File );
+    if ( dialog.exec() != QDialog::Accepted )
+        return ;
+    QString path = dialog.urlRequester() ->url();
+    if ( !path.isEmpty() )
+        new QListViewItem( extDeps_view, path );
+    activateApply( 0 );
 }
 
 void ProjectConfigurationDlg::extEdit_button_clicked( )
 {
-    QListViewItem *item=extDeps_view->currentItem();
-    if(item==NULL)return;
-    QString text=item->text(0);
+    QListViewItem * item = extDeps_view->currentItem();
+    if ( item == NULL ) return ;
+    QString text = item->text( 0 );
 
-    KURLRequesterDlg dialog(text, i18n("Change target:"), 0, 0);
-    dialog.urlRequester()->setMode(KFile::File);
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-    QString path = dialog.urlRequester()->url();
-    if (!path.isEmpty())
-        item->setText(0, path);
-  buttonApply->setEnabled(true);
+    KURLRequesterDlg dialog( text, i18n( "Change target:" ), 0, 0 );
+    dialog.urlRequester() ->setMode( KFile::File );
+    if ( dialog.exec() != QDialog::Accepted )
+        return ;
+    QString path = dialog.urlRequester() ->url();
+    if ( !path.isEmpty() )
+        item->setText( 0, path );
+    activateApply( 0 );
 }
 
 void ProjectConfigurationDlg::extMoveDown_button_clicked( )
 {
-   if (extDeps_view->currentItem() == 0 || extDeps_view->currentItem()->nextSibling() == 0) {
+    if ( extDeps_view->currentItem() == 0 || extDeps_view->currentItem() ->nextSibling() == 0 )
+    {
         KNotifyClient::beep();
-        return;
-   }
+        return ;
+    }
 
-   extDeps_view->currentItem()->moveItem(extDeps_view->currentItem()->nextSibling());
-  buttonApply->setEnabled(true);
+    extDeps_view->currentItem() ->moveItem( extDeps_view->currentItem() ->nextSibling() );
+    activateApply( 0 );
 }
 
 void ProjectConfigurationDlg::extMoveUp_button_clicked( )
 {
-    if (extDeps_view->currentItem() == extDeps_view->firstChild()) {
+    if ( extDeps_view->currentItem() == extDeps_view->firstChild() )
+    {
         KNotifyClient::beep();
-        return;
+        return ;
     }
 
     QListViewItem *item = extDeps_view->firstChild();
-    while (item->nextSibling() != extDeps_view->currentItem())
+    while ( item->nextSibling() != extDeps_view->currentItem() )
         item = item->nextSibling();
-    item->moveItem(extDeps_view->currentItem());
-  buttonApply->setEnabled(true);
+    item->moveItem( extDeps_view->currentItem() );
+    activateApply( 0 );
 }
 
 void ProjectConfigurationDlg::extRemove_button_clicked( )
 {
     delete extDeps_view->currentItem();
-  buttonApply->setEnabled(true);
+    activateApply( 0 );
 }
 
 void ProjectConfigurationDlg::intMoveDown_button_clicked( )
 {
-   if (intDeps_view->currentItem() == 0 || intDeps_view->currentItem()->nextSibling() == 0) {
+    if ( intDeps_view->currentItem() == 0 || intDeps_view->currentItem() ->nextSibling() == 0 )
+    {
         KNotifyClient::beep();
-        return;
-   }
+        return ;
+    }
 
-   intDeps_view->currentItem()->moveItem(intDeps_view->currentItem()->nextSibling());
-  buttonApply->setEnabled(true);
+    intDeps_view->currentItem() ->moveItem( intDeps_view->currentItem() ->nextSibling() );
+    activateApply( 0 );
 }
 
 void ProjectConfigurationDlg::intMoveUp_button_clicked( )
 {
-    if (intDeps_view->currentItem() == intDeps_view->firstChild()) {
+    if ( intDeps_view->currentItem() == intDeps_view->firstChild() )
+    {
         KNotifyClient::beep();
-        return;
+        return ;
     }
 
     QListViewItem *item = intDeps_view->firstChild();
-    while (item->nextSibling() != intDeps_view->currentItem())
+    while ( item->nextSibling() != intDeps_view->currentItem() )
         item = item->nextSibling();
-    item->moveItem(intDeps_view->currentItem());
-  buttonApply->setEnabled(true);
+    item->moveItem( intDeps_view->currentItem() );
+    activateApply( 0 );
 }
 
- void ProjectConfigurationDlg::addCustomValueClicked()
+void ProjectConfigurationDlg::addCustomValueClicked()
 {
-  QListViewItem *item = new QListViewItem(customVariables, i18n("Name"),i18n("Value"));
-  customVariables->setSelected(item,true);
-  newCustomVariableActive();
-  customVariableName->setEnabled(true);
-  buttonApply->setEnabled(true);
+    QListViewItem * item = new QListViewItem( customVariables, i18n( "Name" ), "=", i18n( "Value" ) );
+    customVariables->setSelected( item, true );
+    newCustomVariableActive();
+    customVariableName->setEnabled( true );
+    customVariableOp->setEnabled( true );
+    activateApply( 0 );
 }
- void ProjectConfigurationDlg::removeCustomValueClicked()
+void ProjectConfigurationDlg::removeCustomValueClicked()
 {
-  QListViewItem *item = customVariables->currentItem();
-  if( item )
-  {
-    myProjectItem->configuration.m_variables.remove(item->text(0));
-    myProjectItem->configuration.m_removed_variables.append(item->text(0));
-    delete item;
-  }
-  buttonApply->setEnabled(true);
+    QListViewItem * item = customVariables->currentItem();
+    if ( item )
+    {
+        delete item;
+    }
+    activateApply( 0 );
 }
- void ProjectConfigurationDlg::editCustomValueClicked()
+void ProjectConfigurationDlg::editCustomValueClicked()
 {
-  QListViewItem *item = customVariables->currentItem();
-  if(item)
-  {
-     item->setText(0,customVariableName->text());
-     item->setText(1,customVariableData->text());
-
-     if(myProjectItem->configuration.m_removed_variables.contains(customVariableName->text()) != 0)
-	myProjectItem->configuration.m_removed_variables.remove(customVariableName->text());
-  }
-  buttonApply->setEnabled(true);
+    QListViewItem * item = customVariables->currentItem();
+    if ( item )
+    {
+        item->setText( 0, customVariableName->text() );
+        item->setText( 1, customVariableOp->currentText() );
+        item->setText( 2, customVariableData->text() );
+    }
+    activateApply( 0 );
 }
- void ProjectConfigurationDlg::upCustomValueClicked()
+void ProjectConfigurationDlg::upCustomValueClicked()
 {
-  // custom vars
-  QListViewItem *item = customVariables->firstChild();
-  if (customVariables->currentItem() == item) {
-    KNotifyClient::beep();
-    return;
-  }
-  while (item->nextSibling() != customVariables->currentItem())
-    item = item->nextSibling();
-  item->moveItem(customVariables->currentItem());
-  buttonApply->setEnabled(true);
+    // custom vars
+    QListViewItem * item = customVariables->firstChild();
+    if ( customVariables->currentItem() == item )
+    {
+        KNotifyClient::beep();
+        return ;
+    }
+    while ( item->nextSibling() != customVariables->currentItem() )
+        item = item->nextSibling();
+    item->moveItem( customVariables->currentItem() );
+    activateApply( 0 );
 }
 
- void ProjectConfigurationDlg::downCustomValueClicked()
+void ProjectConfigurationDlg::downCustomValueClicked()
 {
-  if (customVariables->currentItem() == 0 || customVariables->currentItem()->nextSibling() == 0) {
-    KNotifyClient::beep();
-    return;
-  }
-  customVariables->currentItem()->moveItem(customVariables->currentItem()->nextSibling());
-  buttonApply->setEnabled(true);
+    if ( customVariables->currentItem() == 0 || customVariables->currentItem() ->nextSibling() == 0 )
+    {
+        KNotifyClient::beep();
+        return ;
+    }
+    customVariables->currentItem() ->moveItem( customVariables->currentItem() ->nextSibling() );
+    activateApply( 0 );
 }
 
 void ProjectConfigurationDlg::newCustomVariableActive( )
 {
-  QListViewItem *item = customVariables->currentItem();
-  if(item)
-  {
-	customVariableName->setText(item->text(0));
-	customVariableData->setText(item->text(1));
-	customVariableName->setFocus();
-	customVariableName->setEnabled(false);
-  }
+    QListViewItem * item = customVariables->currentItem();
+    if ( item )
+    {
+        customVariableName->setText( item->text( 0 ) );
+        customVariableData->setText( item->text( 2 ) );
+        customVariableOp->setCurrentText( item->text( 1 ) );
+        customVariableName->setFocus();
+        customVariableName->setEnabled( false );
+        customVariableOp->setEnabled( false );
+    }
 }
 
-void ProjectConfigurationDlg::checkPluginChanged( )
+void ProjectConfigurationDlg::groupLibrariesChanged( int )
 {
-  if ( checkPlugin->isChecked() && prjWidget->m_part->isQt4Project() )
-  {
-    checkDesigner->setEnabled( true );
-  }else
-  {
-    checkDesigner->setEnabled( false );
-  }
-  buttonApply->setEnabled(true);
+    if ( staticRadio->isChecked() )
+    {
+        checkPlugin->setEnabled( false );
+        checkDesigner->setEnabled( false );
+    }
+    else if ( sharedRadio->isChecked() )
+    {
+        checkPlugin->setEnabled( true );
+        checkDesigner->setEnabled( checkPlugin->isChecked() );
+    }
+    else if ( checkPlugin->isChecked() && prjWidget->m_part->isQt4Project() )
+    {
+        checkDesigner->setEnabled( true );
+    }
+    else
+    {
+        checkDesigner->setEnabled( false );
+    }
+    activateApply( 0 );
 }
 
-void ProjectConfigurationDlg::qtRequirementChanged()
+void ProjectConfigurationDlg::groupTemplateChanged( int )
 {
-  if ( checkQt->isChecked() && prjWidget->m_part->isQt4Project() )
-  {
-    qt4Group->setEnabled( true );
-  }else
-  {
-    qt4Group->setEnabled( false );
-  }
-  buttonApply->setEnabled(true);
+
+    if ( radioSubdirs->isChecked() )
+    {
+        TabBuild->setTabEnabled( custVarsTab, true );
+        TabBuild->setTabEnabled( depTab, false );
+        TabBuild->setTabEnabled( libAddTab, false );
+        TabBuild->setTabEnabled( incaddTab, false );
+        TabBuild->setTabEnabled( buildOptsTab, false );
+        TabBuild->setTabEnabled( configTab, false );
+        checkOrdered->setEnabled( true );
+    }
+    else if ( radioLibrary->isChecked() )
+    {
+        //    staticRadio->setChecked(true);
+        TabBuild->setTabEnabled( custVarsTab, true );
+        TabBuild->setTabEnabled( depTab, true );
+        TabBuild->setTabEnabled( libAddTab, true );
+        TabBuild->setTabEnabled( incaddTab, true );
+        TabBuild->setTabEnabled( buildOptsTab, true );
+        TabBuild->setTabEnabled( configTab, true );
+        groupLibraries->setEnabled( true );
+        checkOrdered->setEnabled( false );
+    }
+    else if ( radioApplication->isChecked() )
+    {
+        TabBuild->setTabEnabled( custVarsTab, true );
+        TabBuild->setTabEnabled( depTab, true );
+        TabBuild->setTabEnabled( libAddTab, true );
+        TabBuild->setTabEnabled( incaddTab, true );
+        TabBuild->setTabEnabled( buildOptsTab, true );
+        TabBuild->setTabEnabled( configTab, true );
+        groupLibraries->setEnabled( false );
+        checkConsole->setEnabled( true );
+        checkWindows->setEnabled( true );
+        checkOrdered->setEnabled( false );
+    }
+    activateApply( 0 );
+}
+
+void ProjectConfigurationDlg::groupRequirementsChanged( int )
+{
+    if ( checkQt->isChecked() && prjWidget->m_part->isQt4Project() )
+    {
+        groupQt4Libs->setEnabled( true );
+    }
+    else
+    {
+        groupQt4Libs->setEnabled( false );
+    }
+    activateApply( 0 );
+}
+
+void ProjectConfigurationDlg::targetInstallChanged( bool checked )
+{
+    if ( checked )
+    {
+        m_InstallTargetPath->setEnabled( true );
+    }
+    else
+    {
+        m_InstallTargetPath->setEnabled( false );
+    }
+    activateApply( 0 );
 }
 
 void ProjectConfigurationDlg::apply()
 {
-  updateProjectConfiguration();
-  prjWidget->updateProjectConfiguration(myProjectItem);
-  prjWidget->setupContext();
-  buttonApply->setEnabled(false);
+    updateProjectConfiguration();
+    //     prjWidget->updateProjectConfiguration( myProjectItem );
+    prjWidget->setupContext();
+    buttonApply->setEnabled( false );
 }
 
-void ProjectConfigurationDlg::activateApply(int)
+void ProjectConfigurationDlg::activateApply( int )
 {
-  buttonApply->setEnabled(true);
+    buttonApply->setEnabled( true );
 }
-void ProjectConfigurationDlg::activateApply(const QString&)
+void ProjectConfigurationDlg::activateApply( const QString& )
 {
-  buttonApply->setEnabled(true);
+    buttonApply->setEnabled( true );
 }
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+
+void ProjectConfigurationDlg::activateApply( QListViewItem* )
+{
+    buttonApply->setEnabled( true );
+}
+

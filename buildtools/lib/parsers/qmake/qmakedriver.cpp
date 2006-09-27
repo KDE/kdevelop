@@ -27,6 +27,9 @@
 extern FILE *yyin, *yyout;
 extern int yyparse();
 extern int yydebug;
+typedef struct yy_buffer_state *YY_BUFFER_STATE;
+extern YY_BUFFER_STATE yy_scan_string(const char*);
+extern void yy_delete_buffer(YY_BUFFER_STATE);
 extern QValueStack<QMake::ProjectAST *> projects;
 
 namespace QMake {
@@ -59,6 +62,16 @@ int Driver::parseFile(KURL fileName, ProjectAST **ast)
     if (KIO::NetAccess::download(fileName, tmpFile, 0))
         ret = parseFile(tmpFile, ast);
     KIO::NetAccess::removeTempFile(tmpFile);
+    return ret;
+}
+
+int Driver::parseString( const char* string, ProjectAST **ast )
+{
+    YY_BUFFER_STATE state = yy_scan_string( string );
+    int ret = yyparse();
+    *ast = projects.top();
+    (*ast)->setFileName("");
+    yy_delete_buffer( state );
     return ret;
 }
 

@@ -48,7 +48,8 @@ public:
     static int parseFile(const char *fileName, ProjectAST **ast);
     static int parseFile(QString fileName, ProjectAST **ast);
     static int parseFile(KURL fileName, ProjectAST **ast);
-    
+    static int parseString(const char* string, ProjectAST **ast);
+
 /*    template<class Op>
     static void walkAST(Op &op, const ProjectAST *ast)
     {

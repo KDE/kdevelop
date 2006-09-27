@@ -16,19 +16,19 @@
 
 #include "choosesubprojectdlgbase.h"
 
-class SubqmakeprojectItem;
+class QMakeScopeItem;
 class TrollProjectWidget;
 
 class ChooseItem: public KListViewItem
 {
 public:
-    ChooseItem(SubqmakeprojectItem *spitem, QListViewItem *parent, QString text);
-    ChooseItem(SubqmakeprojectItem *spitem, QListView *parent, QString text);
+    ChooseItem(QMakeScopeItem *spitem, QListViewItem *parent, QString text);
+    ChooseItem(QMakeScopeItem *spitem, QListView *parent, QString text);
 
-    SubqmakeprojectItem *subproject();
+    QMakeScopeItem *subproject();
 
 private:
-    SubqmakeprojectItem *m_spitem;
+    QMakeScopeItem *m_spitem;
 };
 
 class ChooseSubprojectDlg : public ChooseSubprojectDlgBase
@@ -40,7 +40,7 @@ public:
   ~ChooseSubprojectDlg();
   /*$PUBLIC_FUNCTIONS$*/
 
-  SubqmakeprojectItem *selectedSubproject();
+  QMakeScopeItem *selectedSubproject();
 
 public slots:
   /*$PUBLIC_SLOTS$*/
@@ -51,7 +51,7 @@ protected:
 
 protected slots:
   /*$PROTECTED_SLOTS$*/
-  virtual void          accept();
+  virtual void accept();
   virtual void itemSelected(QListViewItem *it);
 
 private:
@@ -61,3 +61,4 @@ private:
 
 #endif
 
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
