@@ -34,8 +34,13 @@ public:
 
 private slots:
     void emptyTargetTest();
+    void emptyTargetTest_data();
+    
     void noSourcesTargetTest();
+    void noSourcesTargetTest_data();
+    
     void fullTargetTest();
+    void fullTargetTest_data();
 };
 
 #endif

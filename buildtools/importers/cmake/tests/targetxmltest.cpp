@@ -18,8 +18,16 @@
  * 02110-1301, USA.
  */
 #include "targetxmltest.h"
+#include <QtXml/QDomDocument>
 
 QTEST_MAIN(TargetXmlTest)
+
+struct TargetInfo
+{
+    QString name;
+    QString type;
+    QStringList sources;
+};
 
 TargetXmlTest::TargetXmlTest(QObject *parent)
   : QObject(parent){
@@ -32,17 +40,125 @@ TargetXmlTest::~TargetXmlTest()
 
 void TargetXmlTest::emptyTargetTest()
 {
-    QVERIFY(false);
+    QFETCH(QString, xml);
+    QDomDocument doc;
+    if ( ! doc.setContent( xml ) )
+        QFAIL("Unable to set XML contents");
+    QDomElement docElem = doc.documentElement();
+    QVERIFY( docElem.tagName() == "target" );
+    TargetInfo ti;
+    ti.name = docElem.attribute( "name" );
+    ti.type = docElem.attribute( "type" );
+    QVERIFY( ti.name.isEmpty() );
+    QVERIFY( ti.type.isEmpty() );
+}
+
+void TargetXmlTest::emptyTargetTest_data()
+{
+    QTest::addColumn<QString>("xml");
+    QTest::newRow("row1") << "<target></target>";
+    QTest::newRow("row2") << "<target/>";
+
 }
 
 void TargetXmlTest::noSourcesTargetTest()
 {
-    QVERIFY(false);
+    QFETCH(QString, xml);
+    QFETCH(QString, name);
+    QFETCH(QString, type);
+    QDomDocument doc;
+    if ( ! doc.setContent( xml ) )
+        QFAIL("Unable to set XML contents");
+    QDomElement docElem = doc.documentElement();
+    QVERIFY( docElem.tagName() == "target" );
+    TargetInfo ti;
+    ti.name = docElem.attribute( "name" );
+    ti.type = docElem.attribute( "type" );
+    QDomNode n = docElem.firstChild();
+    
+    QVERIFY( n.isNull() );
+    QVERIFY( ti.name == name );
+    QVERIFY( ti.type == type );
+}
+
+void TargetXmlTest::noSourcesTargetTest_data()
+{
+    QTest::addColumn<QString>("xml");
+    QTest::addColumn<QString>("name");
+    QTest::addColumn<QString>("type");
+    QTest::newRow("row1") << "<target name=\"foo\" type=\"bar\" />" << "foo" << "bar";
+    QTest::newRow("row2") << "<target name=\"t1\" type=\"mytype\"></target>" << "t1" << "mytype";
 }
 
 void TargetXmlTest::fullTargetTest()
 {
-    QVERIFY(false);
+    QFETCH(QString, xml);
+    QFETCH(QString, name);
+    QFETCH(QString, type);
+    QFETCH(QStringList, sources);
+    QDomDocument doc;
+    if ( ! doc.setContent( xml ) )
+        QFAIL("Unable to set XML contents");
+    
+    QDomElement docElem = doc.documentElement();
+    QVERIFY( docElem.tagName() == "target" );
+    TargetInfo ti;
+    ti.name = docElem.attribute( "name" );
+    ti.type = docElem.attribute( "type" );
+    QDomNode n = docElem.firstChild();
+    while ( !n.isNull() )
+    {
+        QDomElement e = n.toElement();
+        if ( !e.isNull() )
+        {
+            if ( e.tagName() == "sources" )
+            {
+                QDomNode sn = e.firstChild();
+                while ( !sn.isNull() )
+                {
+                    QDomElement se = sn.toElement();
+                    if ( !se.isNull() )
+                    {
+                        if ( se.tagName() == "source" )
+                            ti.sources.append( se.text() );
+                    }
+                    sn = sn.nextSibling();
+                }
+            }
+        }
+        n = n.nextSibling();
+    }
+    QVERIFY( ti.name == name );
+    QVERIFY( ti.type == type );
+    QStringList::iterator checkIt = ti.sources.begin();
+    QStringList::iterator resultIt = sources.begin();
+    for( ; checkIt != ti.sources.end(), resultIt != sources.end();
+         ++checkIt, ++resultIt )
+    {
+        QVERIFY( (*checkIt) == (*resultIt) );
+    }
+}
+
+void TargetXmlTest::fullTargetTest_data()
+{
+    QTest::addColumn<QString>("xml");
+    QTest::addColumn<QString>("name");
+    QTest::addColumn<QString>("type");
+    QTest::addColumn<QStringList>("sources");
+
+    QStringList sources1;
+    sources1.append("foo.h");
+    QTest::newRow("row1") << "<target name=\"t1\" type=\"mytype\">"
+                             "<sources><source>foo.h</source></sources>"
+                             "</target>" << "t1" << "mytype" << sources1;
+
+    QStringList sources2;
+    sources2.append("foo.cxx");
+    sources2.append("bar.c");
+    QTest::newRow("row1") << "<target name=\"t1\" type=\"mytype\">"
+                             "<sources><source>foo.cxx</source>"
+                             "<source>bar.c</source></sources>"
+                             "</target>" << "t1" << "mytype" << sources2;
 }
 
 #include "targetxmltest.moc"
