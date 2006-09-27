@@ -25,9 +25,9 @@
 
 #include <kparts/part.h>
 
-#include "kdevcore.h"
-#include "kdevprojectcontroller.h"
-#include "kdevdocumentcontroller.h"
+#include <kdevcore.h>
+#include <project/kdevprojectcontroller.h>
+#include <kdevdocumentcontroller.h>
 
 KDevKonsoleView::KDevKonsoleView( QWidget *parent )
         : QWidget( parent ),
