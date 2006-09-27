@@ -5,7 +5,7 @@ add_definitions(-fPIC -DPP_WITH_MACRO_POSITION)
 
 ########### next target ###############
 
-set(kdevcpprpp_STAT_SRCS
+set(kdevcpprpp_LIB_SRCS
     pp-stream.cpp
     pp-macro-expander.cpp
     pp-scanner.cpp
@@ -15,8 +15,11 @@ set(kdevcpprpp_STAT_SRCS
     preprocessor.cpp
 )
 
-kde4_automoc(${kdevcpprpp_STAT_SRCS})
-kde4_add_library(kdevcpprpp STATIC ${kdevcpprpp_STAT_SRCS})
+kde4_automoc(${kdevcpprpp_LIB_SRCS})
+kde4_add_library(kdevcpprpp SHARED ${kdevcpprpp_LIB_SRCS})
+target_link_libraries(kdevcpprpp kdevplatform )
+set_target_properties(kdevcpprpp PROPERTIES VERSION 4.0.0 SOVERSION 4)
+install(TARGETS kdevcpprpp DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### next target ###############
 
@@ -35,4 +38,13 @@ endif(KDE4_BUILD_TESTS)
 
 ########### install files ###############
 
-
+install(FILES
+    pp-engine.h
+    pp-internal.h
+    pp-macro-expander.h
+    pp-macro.h
+    pp-scanner.h
+    pp-stream.h
+    preprocessor.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/rpp
+)
