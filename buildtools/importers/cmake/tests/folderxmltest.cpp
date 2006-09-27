@@ -197,11 +197,106 @@ void SimpleFolderXmlTest::testFolderWithDefines_data()
 
 void SimpleFolderXmlTest::fullFolderTest()
 {
-    QVERIFY(false);
+    QFETCH(QString, xml);
+    QDomDocument doc;
+    QVERIFY( doc.setContent( xml ) );
+    QDomElement docElem = doc.documentElement();
+    FolderInfo mainInfo;
+    mainInfo.name = docElem.attribute( "name" );
+    QDomNode n = docElem.firstChild();
+    while( !n.isNull() )
+    {
+        QDomElement e = n.toElement(); // try to convert the node to an element.
+        if( !e.isNull() )
+        {
+            if ( e.tagName() == "definitions" )
+            {
+                QDomNode dn = e.firstChild();
+                while ( !dn.isNull() )
+                {
+                    QDomElement de = dn.toElement(); // try to convert the node to an element.
+                    if ( !de.isNull() )
+                    {
+                        if ( de.tagName() == "define" )
+                            mainInfo.defines.append( de.text() );
+                    }
+                    dn = dn.nextSibling();
+                }
+            }
+
+            if ( e.tagName() == "includes" )
+            {
+                QDomNode in = e.firstChild();
+                while ( !in.isNull() )
+                {
+                    QDomElement ie = in.toElement(); // try to convert the node to an element.
+                    if ( !ie.isNull() )
+                    {
+                        if ( ie.tagName() == "include" )
+                            mainInfo.includes.append( ie.text() );
+                    }
+                    in = in.nextSibling();
+                }
+            }
+
+            if ( e.tagName() == "folder" )
+            {
+                FolderInfo fi;
+                fi.name = e.attribute("name");
+                mainInfo.subFolders.append(fi);
+            }
+
+        }
+        n = n.nextSibling();
+    }
+    QFETCH( QString, folderName );
+    QFETCH( int, numIncludes );
+    QFETCH( int, numDefines );
+    QFETCH( int, numFolders );
+    QFETCH( QStringList, includeValues );
+    QFETCH( QStringList, defineValues );
+
+    QVERIFY( mainInfo.name == folderName );
+    QVERIFY( mainInfo.subFolders.count() == numFolders );
+    QVERIFY( mainInfo.includes.count() == numIncludes );
+    QVERIFY( mainInfo.defines.count() == numDefines );
+    QStringList::iterator checkIt = mainInfo.includes.begin();
+    QStringList::iterator resultIt = includeValues.begin();
+    for( ; checkIt != mainInfo.includes.end(), resultIt != includeValues.end();
+         ++checkIt, ++resultIt )
+    {
+        QVERIFY( (*checkIt) == (*resultIt) );
+    }
+
+    checkIt = mainInfo.defines.begin();
+    resultIt = defineValues.begin();
+    for( ; checkIt != mainInfo.defines.end(), resultIt != defineValues.end();
+         ++checkIt, ++resultIt )
+    {
+        QVERIFY( (*checkIt) == (*resultIt) );
+    }
 }
 
 void SimpleFolderXmlTest::fullFolderTest_data()
 {
+    QTest::addColumn<QString>("xml");
+    QTest::addColumn<QString>("folderName");
+    QTest::addColumn<int>("numIncludes");
+    QTest::addColumn<int>("numDefines");
+    QTest::addColumn<int>("numFolders");
+    QTest::addColumn<QStringList>("includeValues");
+    QTest::addColumn<QStringList>("defineValues");
+
+    QStringList includeList;
+    includeList.append( "/path/to/neato/place" );
+    QStringList defineList;
+    defineList.append( "-DQT_NO_SQL" );
+    QTest::newRow("folder1") << "<folder name=\"foo\"><folder name=\"bar\"></folder>"
+                                "<includes><include>/path/to/neato/place</include></includes>"
+                                "<definitions><define>-DQT_NO_SQL</define></definitions>"
+                                "</folder>"
+                             << "foo" << 1 << 1 << 1 << includeList << defineList ;
+
 }
 
 #include "folderxmltest.moc"
