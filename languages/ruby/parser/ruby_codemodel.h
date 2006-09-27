@@ -30,28 +30,29 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
 #define ITEM(item) item##ModelItem
 #define LIST(item) item##List
 
-  template <class _Target, class _Source>
+  template  <class _Target,  class _Source>
   _Target model_static_cast(_Source item)
   {
     typedef typename _Target::Type * _Target_pointer;
 
-    _Target ptr = static_cast<_Target_pointer>(item.data());
-    return ptr;
+    _Target ptr =  static_cast<_Target_pointer>(item.data());
+    return  ptr;
   }
 
-  class CodeModel : public KDevCodeModel
+  class CodeModel :  public KDevCodeModel
     {
+
     public:
-      CodeModel( QObject *parent = 0 );
+      CodeModel( QObject *parent =  0 );
       virtual ~CodeModel();
 
-      template <class _Target>
+      template  <class _Target>
       _Target create()
       {
         typedef typename _Target::Type _Target_type;
 
-        _Target result = _Target_type::create(this);
-        return result;
+        _Target result =  _Target_type::create(this);
+        return  result;
       }
 
       void addCodeItem(CodeModelItem item);
@@ -64,17 +65,19 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void operator=(const CodeModel &other);
     };
 
-  class _CodeModelItem : public KDevCodeItem
+  class _CodeModelItem :  public KDevCodeItem
     {
+
     public:
       enum Kind
       {
         /* These are bit-flags resembling inheritance */
-        KindMask = (1 <<0) - 1,
+        KindMask =  (1 << 0) -  1,
 
         /* These are for classes that are not inherited from */
-        FirstKind = 1 <<0,
+        FirstKind =  1 << 0,
       };
+
     public:
       virtual ~_CodeModelItem();
 
@@ -90,12 +93,12 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
 
       QTime timestamp() const
         {
-          return QTime();
+          return  QTime();
         }
 
       inline CodeModel *model() const
         {
-          return _M_model;
+          return  _M_model;
         }
 
       CodeModelItem toItem() const;
@@ -109,9 +112,11 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       int _M_endColumn;
 
     public:
+
     private:
+
     protected:
-      _CodeModelItem(CodeModel *model, int kind);
+      _CodeModelItem(CodeModel *model,  int kind);
       void setKind(int kind);
 
     private:
@@ -119,39 +124,41 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void operator=(const _CodeModelItem &other);
     };
 
-  template <class _Target, class _Source>
+  template  <class _Target,  class _Source>
   _Target model_safe_cast(_Source item)
   {
     typedef typename _Target::Type * _Target_pointer;
     typedef typename _Source::Type * _Source_pointer;
 
-    _Source_pointer source = item.data();
-    if (source && source->kind() == _Target_pointer(0)->__node_kind)
+    _Source_pointer source =  item.data();
+
+    if  (source &&  source->kind() ==  _Target_pointer(0)->__node_kind)
       {
         _Target ptr(static_cast<_Target_pointer>(source));
-        return ptr;
+        return  ptr;
       }
 
-    return _Target();
+    return  _Target();
   }
 
-  template <typename _Target, typename _Source>
+  template  <typename _Target,  typename _Source>
   _Target model_dynamic_cast(_Source item)
   {
     typedef typename _Target::Type * _Target_pointer;
     typedef typename _Source::Type * _Source_pointer;
 
-    _Source_pointer source = item.data();
-    if (source && (source->kind() == _Target_pointer(0)->__node_kind
-                   || (_Target_pointer(0)->__node_kind <= int(_CodeModelItem::KindMask)
-                       && ((source->kind() & _Target_pointer(0)->__node_kind)
-                           == _Target_pointer(0)->__node_kind))))
+    _Source_pointer source =  item.data();
+
+    if  (source &&  (source->kind() ==  _Target_pointer(0)->__node_kind
+                     ||  (_Target_pointer(0)->__node_kind <=  int(_CodeModelItem::KindMask)
+                          &&  ((source->kind() & _Target_pointer(0)->__node_kind)
+                               ==  _Target_pointer(0)->__node_kind))))
       {
         _Target ptr(static_cast<_Target_pointer>(source));
-        return ptr;
+        return  ptr;
       }
 
-    return _Target();
+    return  _Target();
   }
 
 

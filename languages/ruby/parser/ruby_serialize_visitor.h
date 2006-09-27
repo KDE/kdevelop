@@ -171,7 +171,6 @@ namespace ruby
 
       virtual void visit_arrayReferenceArgument(arrayReferenceArgument_ast *node)
       {
-        handle_variable(&node->seen_star);
         default_visitor::visit_arrayReferenceArgument(node);
       }
 
@@ -197,7 +196,6 @@ namespace ruby
 
       virtual void visit_block_var(block_var_ast *node)
       {
-        handle_variable(&node->seen_star);
         default_visitor::visit_block_var(node);
       }
 
@@ -393,7 +391,6 @@ namespace ruby
 
       virtual void visit_mrhs(mrhs_ast *node)
       {
-        handle_variable(&node->seen_star);
         default_visitor::visit_mrhs(node);
       }
 
@@ -434,7 +431,6 @@ namespace ruby
 
       virtual void visit_parallelAssignmentLeftOver(parallelAssignmentLeftOver_ast *node)
       {
-        handle_variable(&node->seen_star);
         default_visitor::visit_parallelAssignmentLeftOver(node);
       }
 

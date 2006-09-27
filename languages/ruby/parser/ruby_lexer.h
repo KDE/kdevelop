@@ -44,16 +44,10 @@ public:
     Lexer( ruby::parser *parser, char *contents );
     void restart( ruby::parser *parser, char *contents );
 
-    virtual ~Lexer() { cleanup(); }
-
     int yylex();
     char *contents()         { return m_contents;   }
     std::size_t tokenBegin() { return m_tokenBegin; }
     std::size_t tokenEnd()   { return m_tokenEnd;   }
-
-private:
-    // Takes care of handling and destroying unclosed scopes.
-    void cleanup();
 
 protected:
     // custom input, replacing the Flex default input stdin

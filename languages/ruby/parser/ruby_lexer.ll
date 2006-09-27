@@ -90,13 +90,13 @@ Float           [-]?{DecimalDigit}*\.{DecimalDigit}+
 
 ShortUnicodeEscape  [\\][u]{HexDigit}{HexDigit}{HexDigit}{HexDigit}
 LongUnicodeEscape   [\\][U]{HexDigit}{HexDigit}{HexDigit}{HexDigit}{HexDigit}{HexDigit}{HexDigit}{HexDigit}
-UnicodeEscape   {ShortUnicodeEscape}|{LongUnicodeEscape}
+UnicodeEscape   ({ShortUnicodeEscape}|{LongUnicodeEscape})
 HexEscape       [\\][x]{HexDigit}{HexDigit}?{HexDigit}?{HexDigit}?
 SimpleEscape    [\\]([']|["]|[\\]|[0abfnrtv])
 Escape          ({SimpleEscape}|{UnicodeEscape}|{HexEscape})
 
 Whitespace      [ \t\v\f]+
-Linebreak       [\n\r]+
+Linebreak       [\n]+
 Regexp          \/[^/]*\/
 
 Identifier      [a-z_][a-zA-Z_0-9]*
@@ -110,136 +110,142 @@ ClassName       [A-Z][a-zA-Z_0-9]*
 
  /* keywords */
 
-"end"       { return ruby::parser::Token_END; }
-"else"      { return ruby::parser::Token_ELSE; }
-"elsif"     { return ruby::parser::Token_ELSIF; }
-"rescue"    { return ruby::parser::Token_RESCUE; }
-"ensure"    { return ruby::parser::Token_ENSURE; }
-"when"      { return ruby::parser::Token_WHEN; }
-%"if"       { return ruby::parser::Token_IF_MODIFIER; }
-%"while"    { return ruby::parser::Token_WHILE_MODIFIER; }
-%"unless"   { return ruby::parser::Token_UNLESS_MODIFIER; }
-%"until"    { return ruby::parser::Token_UNTIL_MODIFIER; }
-%"rescue"   { return ruby::parser::Token_RESCUE_MODIFIER; }
-"undef"     { return ruby::parser::Token_UNDEF; }
-"alias"     { return ruby::parser::Token_ALIAS; }
-"begin"     { return ruby::parser::Token_BEGIN; }
-"do"        { return ruby::parser::Token_DO; }
-"return"    { return ruby::parser::Token_RETURN; }
-"break"     { return ruby::parser::Token_BREAK; }
-"next"      { return ruby::parser::Token_NEXT; }
-"nil"       { return ruby::parser::Token_NIL; }
-"true"      { return ruby::parser::Token_TRUE; }
-"false"     { return ruby::parser::Token_FALSE; }
-"__FILE__"  { return ruby::parser::Token_FILE; }
-"__LINE__"  { return ruby::parser::Token_LINE; }
-"self"      { return ruby::parser::Token_SELF; }
-"super"     { return ruby::parser::Token_SUPER; }
-"retry"     { return ruby::parser::Token_RETRY; }
-"yield"     { return ruby::parser::Token_YIELD; }
-"defined?"  { return ruby::parser::Token_DEFINED; }
-"redo"      { return ruby::parser::Token_REDO; }
-"if"        { return ruby::parser::Token_IF; }
-"case"      { return ruby::parser::Token_CASE; }
-"until"     { return ruby::parser::Token_UNTIL; }
-"while"     { return ruby::parser::Token_WHILE; }
-"for"       { return ruby::parser::Token_FOR; }
-"module"    { return ruby::parser::Token_MODULE; }
-"def"       { return ruby::parser::Token_DEF; }
-"then"      { return ruby::parser::Token_THEN; }
-"class"     { return ruby::parser::Token_CLASS; }
-"unless"    { return ruby::parser::Token_UNLESS; }
-"or"        { return ruby::parser::Token_OR; }
-"and"       { return ruby::parser::Token_AND; }
-"in"        { return ruby::parser::Token_IN; }
-"END"       { return ruby::parser::Token_END_UPCASE; }
-"BEGIN"     { return ruby::parser::Token_BEGIN_UPCASE; }
+"end"       { return parser::Token_END; }
+"else"      { return parser::Token_ELSE; }
+"elsif"     { return parser::Token_ELSIF; }
+"rescue"    { return parser::Token_RESCUE; }
+"ensure"    { return parser::Token_ENSURE; }
+"when"      { return parser::Token_WHEN; }
+%"if"       { return parser::Token_IF_MODIFIER; }
+%"while"    { return parser::Token_WHILE_MODIFIER; }
+%"unless"   { return parser::Token_UNLESS_MODIFIER; }
+%"until"    { return parser::Token_UNTIL_MODIFIER; }
+%"rescue"   { return parser::Token_RESCUE_MODIFIER; }
+"undef"     { return parser::Token_UNDEF; }
+"alias"     { return parser::Token_ALIAS; }
+"begin"     { return parser::Token_BEGIN; }
+"do"        { return parser::Token_DO; }
+"return"    { return parser::Token_RETURN; }
+"break"     { return parser::Token_BREAK; }
+"next"      { return parser::Token_NEXT; }
+"nil"       { return parser::Token_NIL; }
+"true"      { return parser::Token_TRUE; }
+"false"     { return parser::Token_FALSE; }
+"__FILE__"  { return parser::Token_FILE; }
+"__LINE__"  { return parser::Token_LINE; }
+"self"      { return parser::Token_SELF; }
+"super"     { return parser::Token_SUPER; }
+"retry"     { return parser::Token_RETRY; }
+"yield"     { return parser::Token_YIELD; }
+"defined?"  { return parser::Token_DEFINED; }
+"redo"      { return parser::Token_REDO; }
+"if"        { return parser::Token_IF; }
+"case"      { return parser::Token_CASE; }
+"until"     { return parser::Token_UNTIL; }
+"while"     { return parser::Token_WHILE; }
+"for"       { return parser::Token_FOR; }
+"module"    { return parser::Token_MODULE; }
+"def"       { return parser::Token_DEF; }
+"then"      { return parser::Token_THEN; }
+"class"     { return parser::Token_CLASS; }
+"unless"    { return parser::Token_UNLESS; }
+"or"        { return parser::Token_OR; }
+"and"       { return parser::Token_AND; }
+"in"        { return parser::Token_IN; }
+"END"       { return parser::Token_END_UPCASE; }
+"BEGIN"     { return parser::Token_BEGIN_UPCASE; }
 
 
  /* strings */
-[']({Escape}|{Multibyte}|[^\\\n\'])[']        { return ruby::parser::Token_SINGLE_QUOTED_STRING; }
-["]({Escape}|{Multibyte}|[^\\\n\"])*["]       { return ruby::parser::Token_DOUBLE_QUOTED_STRING; }
-[<][<][-]?([^{Linebreak}]*)({Escape}|{Multibyte}|[^\\\n\'])[<][<]\1 { return ruby::parser::Token_HERE_DOC_BEGIN; }
+[']({Escape}|{Multibyte}|[^\\\n\'])*[']       { return parser::Token_SINGLE_QUOTED_STRING; }
+["]({Escape}|{Multibyte}|[^\\\n\"])*["]       { return parser::Token_DOUBLE_QUOTED_STRING; }
+[<][<][-]?([^\n]*)({Escape}|{Multibyte}|[^\\\n\'])[<][<]\1 { return parser::Token_HERE_DOC_BEGIN; }
 
 
  /* identifiers, function names, constants */
-{Identifier}[:][:]          { return ruby::parser::Token_FUNCTION; }
-{Identifier}[.]             { return ruby::parser::Token_FUNCTION; }
-{Identifier}[?]             { return ruby::parser::Token_FUNCTION; }
-{Identifier}[!]             { return ruby::parser::Token_FUNCTION; }
-{Identifier}                { return ruby::parser::Token_IDENTIFIER; }
-{Constant}                  { return ruby::parser::Token_CONSTANT; }
-{ClassName}                 { return ruby::parser::Token_CONSTANT; }
+{Identifier}[:][:]          { return parser::Token_FUNCTION; }
+{Identifier}[.]             { return parser::Token_FUNCTION; }
+{Identifier}[?]             { return parser::Token_FUNCTION; }
+{Identifier}[!]             { return parser::Token_FUNCTION; }
+{Identifier}                { return parser::Token_IDENTIFIER; }
+{Constant}                  { return parser::Token_CONSTANT; }
+{ClassName}                 { return parser::Token_CONSTANT; }
 
 
  /* numbers */
-{OctalNumber}               { return ruby::parser::Token_OCTAL; }
-{HexNumber}                 { return ruby::parser::Token_HEX; }
-{BinaryNumber}              { return ruby::parser::Token_BINARY; }
-{Number}                    { return ruby::parser::Token_INTEGER; }
-{Float}                     { return ruby::parser::Token_FLOAT; }
+{OctalNumber}               { return parser::Token_OCTAL; }
+{HexNumber}                 { return parser::Token_HEX; }
+{BinaryNumber}              { return parser::Token_BINARY; }
+{Number}                    { return parser::Token_INTEGER; }
+{Float}                     { return parser::Token_FLOAT; }
 
 
  /* operators and punctuation */
 
-"("                         { return ruby::parser::Token_LPAREN; }
-")"                         { return ruby::parser::Token_RPAREN; }
-<expect_array_access>"["    { return ruby::parser::Token_LBRACK; }
-"["                         { return ruby::parser::Token_LBRACK; }
-"]"                         { return ruby::parser::Token_RBRACK; }
-<expect_hash>"{"            { return ruby::parser::Token_LCURLY_HASH; }
-"{"                         { return ruby::parser::Token_LCURLY_BLOCK; }
-","                         { return ruby::parser::Token_COMMA; }
-<expect_leading_colon2>"::" { return ruby::parser::Token_LEADING_TWO_COLON; }
-"::"                        { return ruby::parser::Token_TWO_COLON; }
-":"                         { return ruby::parser::Token_COLON; }
+"("                         { return parser::Token_LPAREN; }
+")"                         { return parser::Token_RPAREN; }
+<expect_array_access>"["    { return parser::Token_LBRACK; }
+"["                         { return parser::Token_LBRACK; }
+"]"                         { return parser::Token_RBRACK; }
+<expect_hash>"{"            { return parser::Token_LCURLY_HASH; }
+"{"                         { return parser::Token_LCURLY_BLOCK; }
+","                         { return parser::Token_COMMA; }
+<expect_leading_colon2>"::" { return parser::Token_LEADING_TWO_COLON; }
+"::"                        { return parser::Token_TWO_COLON; }
+":"                         { return parser::Token_COLON; }
 
-"!="                        { return ruby::parser::Token_NOT_EQUAL; }
-"!~"                        { return ruby::parser::Token_NOT_MATCH; }
-"!"                         { return ruby::parser::Token_NOT; }
-"~"                         { return ruby::parser::Token_BNOT; }
-"+="                        { return ruby::parser::Token_PLUS_ASSIGN; }
-"-="                        { return ruby::parser::Token_MINUS_ASSIGN; }
-"**="                       { return ruby::parser::Token_POWER_ASSIGN; }
-"*="                        { return ruby::parser::Token_STAR_ASSIGN; }
-"&&="                       { return ruby::parser::Token_LOGICAL_AND_ASSIGN; }
-"||="                       { return ruby::parser::Token_LOGICAL_OR_ASSIGN; }
-"&="                        { return ruby::parser::Token_BAND_ASSIGN; }
-"^="                        { return ruby::parser::Token_BXOR_ASSIGN; }
-"|="                        { return ruby::parser::Token_BOR_ASSIGN; }
-">>="                       { return ruby::parser::Token_RIGHT_SHIFT_ASSIGN; }
-<expect_unary>"+"           { return ruby::parser::Token_UNARY_PLUS; }
-"+"                         { return ruby::parser::Token_PLUS; }
-<expect_unary>"-"           { return ruby::parser::Token_UNARY_MINUS; }
-"-"                         { return ruby::parser::Token_MINUS; }
-"**"                        { return ruby::parser::Token_POWER; }
-"*"                         { return ruby::parser::Token_STAR; }
-"<=>"                       { return ruby::parser::Token_COMPARE; }
-">="                        { return ruby::parser::Token_GREATER_OR_EQUAL; }
-"<="                        { return ruby::parser::Token_LESS_OR_EQUAL; }
-">>"                        { return ruby::parser::Token_RIGHT_SHIFT; }
-<expect_operator>"<<"       { return ruby::parser::Token_LEFT_SHIFT; }
-"<"                         { return ruby::parser::Token_LESS_THAN; }
-">"                         { return ruby::parser::Token_GREATER_THAN; }
-"^"                         { return ruby::parser::Token_BXOR; }
-"||"                        { return ruby::parser::Token_LOGICAL_OR; }
-"|"                         { return ruby::parser::Token_BOR; }
-"&&"                        { return ruby::parser::Token_LOGICAL_AND; }
-<expect_operator>"&"        { return ruby::parser::Token_BAND; }
-"&"                         { return ruby::parser::Token_BLOCK_ARG_PREFIX; }
-"==="                       { return ruby::parser::Token_CASE_EQUAL; }
-"=="                        { return ruby::parser::Token_EQUAL; }
-"=~"                        { return ruby::parser::Token_MATCH; }
-"=>"                        { return ruby::parser::Token_ASSOC; }
-"="                         { return ruby::parser::Token_ASSIGN; }
+"!="                        { return parser::Token_NOT_EQUAL; }
+"!~"                        { return parser::Token_NOT_MATCH; }
+"!"                         { return parser::Token_NOT; }
+"~"                         { return parser::Token_BNOT; }
+"+="                        { return parser::Token_PLUS_ASSIGN; }
+"-="                        { return parser::Token_MINUS_ASSIGN; }
+"**="                       { return parser::Token_POWER_ASSIGN; }
+"*="                        { return parser::Token_STAR_ASSIGN; }
+"&&="                       { return parser::Token_LOGICAL_AND_ASSIGN; }
+"||="                       { return parser::Token_LOGICAL_OR_ASSIGN; }
+"&="                        { return parser::Token_BAND_ASSIGN; }
+"^="                        { return parser::Token_BXOR_ASSIGN; }
+"|="                        { return parser::Token_BOR_ASSIGN; }
+">>="                       { return parser::Token_RIGHT_SHIFT_ASSIGN; }
+"+"                         { return parser::Token_PLUS; }
+"-"                         { return parser::Token_MINUS; }
+"**"                        { return parser::Token_POWER; }
+"*"                         { return parser::Token_STAR; }
+"<=>"                       { return parser::Token_COMPARE; }
+">="                        { return parser::Token_GREATER_OR_EQUAL; }
+"<="                        { return parser::Token_LESS_OR_EQUAL; }
+">>"                        { return parser::Token_RIGHT_SHIFT; }
+"<"                         { return parser::Token_LESS_THAN; }
+">"                         { return parser::Token_GREATER_THAN; }
+"^"                         { return parser::Token_BXOR; }
+"||"                        { return parser::Token_LOGICAL_OR; }
+"|"                         { return parser::Token_BOR; }
+"&&"                        { return parser::Token_LOGICAL_AND; }
+"&"                         { return parser::Token_BLOCK_ARG_PREFIX; }
+"==="                       { return parser::Token_CASE_EQUAL; }
+"=="                        { return parser::Token_EQUAL; }
+"=~"                        { return parser::Token_MATCH; }
+"=>"                        { return parser::Token_ASSOC; }
+"="                         { return parser::Token_ASSIGN; }
 
-";"                         { return ruby::parser::Token_SEMI; }
+";"                         { return parser::Token_SEMI; }
 
-{Linebreak}                 { return ruby::parser::Token_LINE_BREAK; }
+{Linebreak}                 { return parser::Token_LINE_BREAK; }
 
-<expect_operator>"/="       { return ruby::parser::Token_DIV_ASSIGN; }
-<expect_operator>"/"        { return ruby::parser::Token_DIV; }
-{Regexp}                    { return ruby::parser::Token_REGEX; }
+<expect_unary>{
+"+"                         { return parser::Token_UNARY_PLUS; }
+"-"                         { return parser::Token_UNARY_MINUS; }
+}
+
+<expect_operator>{
+"/="                        { return parser::Token_DIV_ASSIGN; }
+"/"                         { return parser::Token_DIV; }
+"&"                         { return parser::Token_BAND; }
+"<<"                        { return parser::Token_LEFT_SHIFT; }
+}
+
+{Regexp}                    { return parser::Token_REGEX; }
 
 
 
@@ -255,8 +261,6 @@ Lexer::Lexer( parser *parser, char *contents )
 
 void Lexer::restart( parser *parser, char *contents )
 {
-    cleanup();
-
     m_parser = parser;
     m_lineTable = parser->token_stream->line_table();
     m_contents = contents;
@@ -301,10 +305,6 @@ int Lexer::LexerInput( char *buf, int /*max_size*/ )
     }
 
     return (c == 0) ? 0 : (buf[0] = c, 1);
-}
-
-void Lexer::cleanup()
-{
 }
 
 } // end of namespace ruby

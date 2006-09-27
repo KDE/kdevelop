@@ -937,7 +937,7 @@ namespace ruby
                   }
                 yylex();
 
-                if (Token_ASSIGN == LA(1).kind||Token_RBRACK == LA(1).kind)
+                if ((yytoken == Token_ASSIGN) || (yytoken == Token_RBRACK))
                   break;
                 if (yytoken == Token_REST_ARG_PREFIX)
                   {
@@ -949,12 +949,14 @@ namespace ruby
                           }
                         return false;
                       }
-                    (*yynode)->seen_star = token_stream->index() - 1;
                     yylex();
 
+                    seen_star = true;
                   }
                 else if (true /*epsilon*/)
-                {}
+                  {
+                    seen_star = false;
+                  }
                 else
                   {
                     return false;
@@ -1785,18 +1787,20 @@ namespace ruby
                 goto __catch_1;
               yylex();
 
-              if (LA(1).kind == Token_RPAREN)
+              if (yytoken == Token_RPAREN)
                 break;
               if (yytoken == Token_REST_ARG_PREFIX)
                 {
                   if (yytoken != Token_REST_ARG_PREFIX)
                     goto __catch_1;
-                  (*yynode)->seen_star = token_stream->index() - 1;
                   yylex();
 
+                  seen_star = true;
                 }
               else if (true /*epsilon*/)
-              {}
+                {
+                  seen_star = false;
+                }
               else
                 {
                   goto __catch_1;
@@ -1820,7 +1824,7 @@ namespace ruby
 
         if (false) // the only way to enter here is using goto
           {
-          __catch_1:
+__catch_1:
             if (try_start_state_1)
               {
                 restore_state(try_start_state_1);
@@ -2066,7 +2070,7 @@ namespace ruby
               }
             yylex();
 
-            if ((LA(1).kind == Token_BOR) || (LA(1).kind == Token_IN))
+            if ((yytoken == Token_BOR) || (yytoken == Token_IN))
               break;
             block_var_ast *__node_22 = 0;
             if (!parse_block_var(&__node_22))
@@ -3019,62 +3023,31 @@ namespace ruby
         || yytoken == Token_CONSTANT
         || yytoken == Token_FUNCTION)
       {
-        if (yytoken == Token_CONSTANT
-            || yytoken == Token_FUNCTION)
+        if (yytoken == Token_CONSTANT)
           {
-            if (yytoken == Token_CONSTANT)
+            if (yytoken != Token_CONSTANT)
               {
-                if (yytoken != Token_CONSTANT)
+                if (!yy_block_errors)
                   {
-                    if (!yy_block_errors)
-                      {
-                        yy_expected_token(yytoken, Token_CONSTANT, "constant");
-                      }
-                    return false;
+                    yy_expected_token(yytoken, Token_CONSTANT, "constant");
                   }
-                yylex();
-
-              }
-            else if (yytoken == Token_FUNCTION)
-              {
-                if (yytoken != Token_FUNCTION)
-                  {
-                    if (!yy_block_errors)
-                      {
-                        yy_expected_token(yytoken, Token_FUNCTION, "function");
-                      }
-                    return false;
-                  }
-                yylex();
-
-              }
-            else
-              {
                 return false;
               }
-            while (yytoken == Token_TWO_COLON)
+            yylex();
+
+          }
+        else if (yytoken == Token_FUNCTION)
+          {
+            if (yytoken != Token_FUNCTION)
               {
-                if (yytoken != Token_TWO_COLON)
+                if (!yy_block_errors)
                   {
-                    if (!yy_block_errors)
-                      {
-                        yy_expected_token(yytoken, Token_TWO_COLON, "::");
-                      }
-                    return false;
+                    yy_expected_token(yytoken, Token_FUNCTION, "function");
                   }
-                yylex();
-
-                if (yytoken != Token_FUNCTION)
-                  {
-                    if (!yy_block_errors)
-                      {
-                        yy_expected_token(yytoken, Token_FUNCTION, "function");
-                      }
-                    return false;
-                  }
-                yylex();
-
+                return false;
               }
+            yylex();
+
           }
         else if (yytoken == Token_LEADING_TWO_COLON)
           {
@@ -3098,33 +3071,33 @@ namespace ruby
               }
             yylex();
 
-            while (yytoken == Token_TWO_COLON)
-              {
-                if (yytoken != Token_TWO_COLON)
-                  {
-                    if (!yy_block_errors)
-                      {
-                        yy_expected_token(yytoken, Token_TWO_COLON, "::");
-                      }
-                    return false;
-                  }
-                yylex();
-
-                if (yytoken != Token_FUNCTION)
-                  {
-                    if (!yy_block_errors)
-                      {
-                        yy_expected_token(yytoken, Token_FUNCTION, "function");
-                      }
-                    return false;
-                  }
-                yylex();
-
-              }
           }
         else
           {
             return false;
+          }
+        while (yytoken == Token_TWO_COLON)
+          {
+            if (yytoken != Token_TWO_COLON)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_TWO_COLON, "::");
+                  }
+                return false;
+              }
+            yylex();
+
+            if (yytoken != Token_FUNCTION)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_FUNCTION, "function");
+                  }
+                return false;
+              }
+            yylex();
+
           }
       }
     else
@@ -6883,7 +6856,7 @@ namespace ruby
                   }
                 yylex();
 
-                if (Token_REST_ARG_PREFIX == LA(1).kind || Token_BLOCK_ARG_PREFIX == LA(1).kind)
+                if (Token_REST_ARG_PREFIX == yytoken || Token_BLOCK_ARG_PREFIX == yytoken)
                   {
                     seen_star_or_band = true;
                     break;
@@ -7241,7 +7214,7 @@ namespace ruby
                   }
                 yylex();
 
-                if ((LA(1).kind == Token_REST_ARG_PREFIX) || (LA(1).kind == Token_BLOCK_ARG_PREFIX))
+                if ((yytoken == Token_REST_ARG_PREFIX) || (yytoken == Token_BLOCK_ARG_PREFIX))
                   break;
                 normalMethodInvocationArgument_ast *__node_105 = 0;
                 if (!parse_normalMethodInvocationArgument(&__node_105))
@@ -8133,7 +8106,7 @@ namespace ruby
 
         if (false) // the only way to enter here is using goto
           {
-          __catch_2:
+__catch_2:
             if (try_start_state_2)
               {
                 restore_state(try_start_state_2);
@@ -8422,7 +8395,7 @@ namespace ruby
                   }
                 yylex();
 
-                if ((LA(1).kind == Token_ASSIGN) || (LA(1).kind == Token_RBRACK))
+                if ((yytoken == Token_ASSIGN) || (yytoken == Token_RBRACK))
                   break;
                 if (yytoken == Token_REST_ARG_PREFIX)
                   {
@@ -8434,12 +8407,14 @@ namespace ruby
                           }
                         return false;
                       }
-                    (*yynode)->seen_star = token_stream->index() - 1;
                     yylex();
 
+                    seen_star = true;
                   }
                 else if (true /*epsilon*/)
-                {}
+                  {
+                    seen_star = false;
+                  }
                 else
                   {
                     return false;
@@ -9655,7 +9630,7 @@ namespace ruby
               }
             yylex();
 
-            if ((LA(1).kind == Token_ASSIGN) || (LA(1).kind == Token_ASSIGN_WITH_NO_LEADING_SPACE))
+            if ((yytoken == Token_ASSIGN) || (yytoken == Token_ASSIGN_WITH_NO_LEADING_SPACE))
               break;
             if (yytoken == Token_REST_ARG_PREFIX)
               {
@@ -9667,12 +9642,14 @@ namespace ruby
                       }
                     return false;
                   }
-                (*yynode)->seen_star = token_stream->index() - 1;
                 yylex();
 
+                seen_star = true;
               }
             else if (true /*epsilon*/)
-            {}
+              {
+                seen_star = false;
+              }
             else
               {
                 return false;
@@ -12003,12 +11980,10 @@ namespace ruby
                 return false;
               }
 
-            int kind = LA(1).kind;
-            if ((kind == Token_EOF) //script end
-                || (kind == Token_LCURLY) || (kind == Token_END) //block end
-                || (kind == Token_RPAREN) || (kind == Token_ELSE)
-                || (kind == Token_ELSIF) || (kind == Token_RESCUE)
-                || (kind == Token_ENSURE) || (kind == Token_WHEN) )
+            if ((yytoken == Token_LCURLY) || (yytoken == Token_END) //block end
+                || (yytoken == Token_RPAREN) || (yytoken == Token_ELSE)
+                || (yytoken == Token_ELSIF) || (yytoken == Token_RESCUE)
+                || (yytoken == Token_ENSURE) || (yytoken == Token_WHEN) )
               break;
             statement_ast *__node_187 = 0;
             if (!parse_statement(&__node_187))

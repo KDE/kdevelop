@@ -12,7 +12,9 @@ namespace ruby
   {
 
   // forward declarations
+
   class CodeModel;
+
   class _CodeModelItem;
 
   typedef KDevSharedPtr<_CodeModelItem> CodeModelItem;

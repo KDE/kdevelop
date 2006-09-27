@@ -160,12 +160,10 @@
     statement (
         terminal
         [:
-            int kind = LA(1).kind;
-            if ((kind == Token_EOF) //script end
-                || (kind == Token_LCURLY) || (kind == Token_END) //block end
-                || (kind == Token_RPAREN) || (kind == Token_ELSE)
-                || (kind == Token_ELSIF) || (kind == Token_RESCUE)
-                || (kind == Token_ENSURE) || (kind == Token_WHEN) )
+            if ((yytoken == Token_LCURLY) || (yytoken == Token_END) //block end
+                || (yytoken == Token_RPAREN) || (yytoken == Token_ELSE)
+                || (yytoken == Token_ELSIF) || (yytoken == Token_RESCUE)
+                || (yytoken == Token_ENSURE) || (yytoken == Token_WHEN) )
                 break;
         :]
         statement
@@ -189,7 +187,7 @@
 
 
     ALIAS aliasParameter (LINE_BREAK | 0) aliasParameter
-    | UNDEF undefParameter (COMMA undefParameter)*
+    | UNDEF (undefParameter @ COMMA)
     | BEGIN_UPCASE LCURLY_BLOCK (compoundStatement | 0) RCURLY
     | END_UPCASE LCURLY_BLOCK (compoundStatement | 0) RCURLY
     | expression (parallelAssignmentLeftOver | 0)
@@ -216,22 +214,24 @@
 -> mlhs_item ;;
 
 
-    ( COMMA [: if ((LA(1).kind == Token_ASSIGN) || (LA(1).kind == Token_ASSIGN_WITH_NO_LEADING_SPACE)) break; :]
-    (seen_star=REST_ARG_PREFIX | 0) (mlhs_item | 0) [: if (seen_star) break; :] )+
+    ( COMMA [: if ((yytoken == Token_ASSIGN) || (yytoken == Token_ASSIGN_WITH_NO_LEADING_SPACE)) break; :]
+        (REST_ARG_PREFIX [: seen_star = true; :] | 0 [: seen_star = false; :])
+        (mlhs_item | 0) [: if (seen_star) break; :] )+
     ( (ASSIGN mrhs) | 0 )
 -> parallelAssignmentLeftOver ;;
 
 
-    expression (COMMA [: if ((LA(1).kind == Token_ASSIGN) || (LA(1).kind == Token_RBRACK)) break; :]
-        (seen_star=REST_ARG_PREFIX | 0) expression [: if (seen_star) break; :] )*
+    expression (COMMA [: if ((yytoken == Token_ASSIGN) || (yytoken == Token_RBRACK)) break; :]
+        (REST_ARG_PREFIX [: seen_star = true; :] | 0 [: seen_star = false; :])
+        expression [: if (seen_star) break; :] )*
     | REST_ARG_PREFIX expression
 -> mrhs ;;
 
 
     try/rollback(
         LPAREN elementReference (
-            COMMA [: if (LA(1).kind == Token_RPAREN) break; :]
-            (seen_star=REST_ARG_PREFIX | 0) elementReference
+            COMMA [: if (yytoken == Token_RPAREN) break; :]
+            (REST_ARG_PREFIX [: seen_star = true; :] | 0 [: seen_star = false; :]) elementReference
             [: if (seen_star) break; :] )*
             RPAREN
     ) catch (
@@ -241,7 +241,7 @@
 -> block_var ;;
 
 
-    block_var (COMMA [: if ((LA(1).kind == Token_BOR) || (LA(1).kind == Token_IN)) break; :] block_var )*
+    block_var (COMMA [: if ((yytoken == Token_BOR) || (yytoken == Token_IN)) break; :] block_var )*
 -> block_vars ;;
 
 
@@ -276,7 +276,7 @@
 
 
 --FIXME: greedy issue
-    notExpression ((AND | OR) notExpression)* --greedy
+    notExpression @ (AND | OR) --greedy
 -> andorExpression ;;
 
 
@@ -291,9 +291,8 @@
 
 
 --FIXME: greedy issue
-    rangeExpression
-    (
-        (ASSIGN
+    rangeExpression @ (
+        ( ASSIGN
         | PLUS_ASSIGN
         | MINUS_ASSIGN
         | STAR_ASSIGN
@@ -306,72 +305,70 @@
         | LEFT_SHIFT_ASSIGN
         | RIGHT_SHIFT_ASSIGN
         | LOGICAL_AND_ASSIGN
-        | LOGICAL_OR_ASSIGN )
+        | LOGICAL_OR_ASSIGN
+        )
         (REST_ARG_PREFIX | 0)
-        rangeExpression
-    )*
+    )
 -> assignmentExpression ;;
 
 
 --FIXME: greedy issue for all expression rules below
 
-    logicalOrExpression ((INCLUSIVE_RANGE | EXCLUSIVE_RANGE) logicalOrExpression)* --greedy
+    logicalOrExpression @ (INCLUSIVE_RANGE | EXCLUSIVE_RANGE) --greedy
 -> rangeExpression ;;
 
 
-    logicalAndExpression (LOGICAL_OR logicalAndExpression)* --greedy
+    logicalAndExpression @ LOGICAL_OR --greedy
 -> logicalOrExpression ;;
 
 
-    equalityExpression (LOGICAL_AND equalityExpression)* --greedy
+    equalityExpression @ LOGICAL_AND --greedy
 -> logicalAndExpression ;;
 
 
-    relationalExpression (
-        (COMPARE
-        |EQUAL
-        |CASE_EQUAL
-        |NOT_EQUAL
-        |MATCH
-        |NOT_MATCH
+    relationalExpression @ (
+        ( COMPARE
+        | EQUAL
+        | CASE_EQUAL
+        | NOT_EQUAL
+        | MATCH
+        | NOT_MATCH
         )
-        relationalExpression
-    )* --greedy
+    ) --greedy
 -> equalityExpression ;;
 
 
-    orExpression (
-        (LESS_THAN
-        |GREATER_THAN
-        |LESS_OR_EQUAL
-        |GREATER_OR_EQUAL
+    orExpression @ (
+        ( LESS_THAN
+        | GREATER_THAN
+        | LESS_OR_EQUAL
+        | GREATER_OR_EQUAL
         )
-        orExpression
-    )* --greedy
+    ) --greedy
 -> relationalExpression ;;
 
 
-    andExpression ((BXOR|BOR) andExpression)* --greedy
+    andExpression @ (BXOR | BOR) --greedy
 -> orExpression ;;
 
 
-    shiftExpression (BAND shiftExpression)* --greedy
+    shiftExpression @ BAND --greedy
 -> andExpression ;;
 
 
-    additiveExpression ((LEFT_SHIFT | RIGHT_SHIFT) additiveExpression)*
+    additiveExpression @ (LEFT_SHIFT | RIGHT_SHIFT)
 -> shiftExpression ;;
 
 
-    multiplicativeExpression ( (PLUS | MINUS) multiplicativeExpression )*
+    multiplicativeExpression @ (PLUS | MINUS)
 -> additiveExpression ;;
 
 
-    powerExpression ( (STAR | DIV | MOD) powerExpression )*
+    powerExpression @ (STAR | DIV | MOD)
 -> multiplicativeExpression ;;
 
 
-    unaryExpression (POWER unaryExpression)*
+    unaryExpression @ POWER
 -> powerExpression ;;
 
     (UNARY_PLUS
@@ -383,7 +380,7 @@
 -> unaryExpression ;;
 
 
-    elementReference (DOT elementReference)*
+    elementReference @ DOT
 -> dotAccess ;;
 
 
@@ -397,7 +394,7 @@
 -> command ;;
 
 
-    methodCall (TWO_COLON methodCall)*
+    methodCall @ TWO_COLON
 -> colonAccess ;;
 
 
@@ -412,7 +409,7 @@
 -- see line break ignore rules in original grammar
 
     normalMethodInvocationArgument (COMMA
-            [: if ((LA(1).kind == Token_REST_ARG_PREFIX) || (LA(1).kind == Token_BLOCK_ARG_PREFIX)) break; :]
+            [: if ((yytoken == Token_REST_ARG_PREFIX) || (yytoken == Token_BLOCK_ARG_PREFIX)) break; :]
             normalMethodInvocationArgument
             )*
         (restMethodInvocationArgument | blockMethodInvocationArgument | 0)
@@ -455,8 +452,8 @@
 
     DOUBLE_QUOTED_STRING
     | SINGLE_QUOTED_STRING
-    | STRING_BEFORE_EXPRESSION_SUBSTITUTION expressionSubstitution
-        (STRING_BETWEEN_EXPRESSION_SUBSTITUTION expressionSubstitution)*
+    | STRING_BEFORE_EXPRESSION_SUBSTITUTION
+        (expressionSubstitution @ STRING_BETWEEN_EXPRESSION_SUBSTITUTION)
         STRING_AFTER_EXPRESSION_SUBSTITUTION
 -> string ;;
 
@@ -470,15 +467,15 @@
 
 
     REGEX
-    | REGEX_BEFORE_EXPRESSION_SUBSTITUTION expressionSubstitution
-        (STRING_BETWEEN_EXPRESSION_SUBSTITUTION expressionSubstitution)*
+    | REGEX_BEFORE_EXPRESSION_SUBSTITUTION
+        (expressionSubstitution @ STRING_BETWEEN_EXPRESSION_SUBSTITUTION)
         STRING_AFTER_EXPRESSION_SUBSTITUTION
 -> regex ;;
 
 
     COMMAND_OUTPUT
-    | COMMAND_OUTPUT_BEFORE_EXPRESSION_SUBSTITUTION expressionSubstitution
-        (STRING_BETWEEN_EXPRESSION_SUBSTITUTION	expressionSubstitution)*
+    | COMMAND_OUTPUT_BEFORE_EXPRESSION_SUBSTITUTION
+        (expressionSubstitution @ STRING_BETWEEN_EXPRESSION_SUBSTITUTION)
         STRING_AFTER_EXPRESSION_SUBSTITUTION
 -> commandOutput ;;
 
@@ -525,8 +522,9 @@
 -> primaryExpression ;;
 
 
-    keyValuePair (COMMA [: if (Token_ASSIGN == LA(1).kind||Token_RBRACK == LA(1).kind) break; :]
-        (seen_star=REST_ARG_PREFIX | 0) keyValuePair [: if (seen_star) break; :] )*
+    keyValuePair (COMMA [: if ((yytoken == Token_ASSIGN) || (yytoken == Token_RBRACK)) break; :]
+        (REST_ARG_PREFIX [: seen_star = true; :] | 0 [: seen_star = false; :])
+        keyValuePair [: if (seen_star) break; :] )*
     | REST_ARG_PREFIX expression (LINE_BREAK | 0)
 -> arrayReferenceArgument ;;
 
@@ -561,7 +559,7 @@
     BEGIN bodyStatement END
 -> exceptionHandlingExpression ;;
 
-    ( ((className|INSTANCE_VARIABLE) (COMMA (className|INSTANCE_VARIABLE))*) | 0) ((ASSOC (IDENTIFIER|FUNCTION)) | 0)
+    ( ((className|INSTANCE_VARIABLE) @ COMMA) | 0) ((ASSOC (IDENTIFIER|FUNCTION)) | 0)
 -> exceptionList ;;
 
 
@@ -613,8 +611,7 @@
 -> classDefinition ;;
 
 
-    (CONSTANT | FUNCTION) (TWO_COLON FUNCTION)*
-    | (LEADING_TWO_COLON FUNCTION) (TWO_COLON FUNCTION)*
+    (CONSTANT | FUNCTION | LEADING_TWO_COLON FUNCTION) (TWO_COLON FUNCTION)*
 -> className ;;
 
 
@@ -720,7 +717,7 @@
 
     normalMethodDefinitionArgument
         (COMMA
-            [: if (Token_REST_ARG_PREFIX == LA(1).kind || Token_BLOCK_ARG_PREFIX == LA(1).kind)
+            [: if (Token_REST_ARG_PREFIX == yytoken || Token_BLOCK_ARG_PREFIX == yytoken)
                 {seen_star_or_band = true; break;} :]
         normalMethodDefinitionArgument)*
         (?[: seen_star_or_band :] restMethodDefinitionArgument

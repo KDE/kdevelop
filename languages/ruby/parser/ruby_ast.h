@@ -252,7 +252,6 @@ namespace ruby
         KIND = Kind_arrayReferenceArgument
       };
 
-      std::size_t seen_star;
     };
 
   struct assignmentExpression_ast: public ast_node
@@ -298,7 +297,6 @@ namespace ruby
         KIND = Kind_block_var
       };
 
-      std::size_t seen_star;
     };
 
   struct block_vars_ast: public ast_node
@@ -650,7 +648,6 @@ namespace ruby
         KIND = Kind_mrhs
       };
 
-      std::size_t seen_star;
     };
 
   struct multiplicativeExpression_ast: public ast_node
@@ -723,7 +720,6 @@ namespace ruby
         KIND = Kind_parallelAssignmentLeftOver
       };
 
-      std::size_t seen_star;
     };
 
   struct powerExpression_ast: public ast_node
