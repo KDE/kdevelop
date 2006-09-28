@@ -31,16 +31,69 @@ struct FolderInfo
     QStringList defines;
 };
 
+static FolderInfo parseFolder( const QDomDocument& doc )
+{
+    FolderInfo mainInfo;
+    QDomElement docElem = doc.documentElement();
+    if ( docElem.tagName() == "folder" )
+    {
+        mainInfo.name = docElem.attribute( "name" );
+        QDomNode n = docElem.firstChild();
+        while( !n.isNull() )
+        {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if( !e.isNull() )
+            {
+                if ( e.tagName() == "definitions" )
+                {
+                    QDomNode dn = e.firstChild();
+                    while ( !dn.isNull() )
+                    {
+                        QDomElement de = dn.toElement(); // try to convert the node to an element.
+                        if ( !de.isNull() )
+                        {
+                            if ( de.tagName() == "define" )
+                                mainInfo.defines.append( de.text() );
+                        }
+                        dn = dn.nextSibling();
+                    }
+                }
+
+                if ( e.tagName() == "includes" )
+                {
+                    QDomNode in = e.firstChild();
+                    while ( !in.isNull() )
+                    {
+                        QDomElement ie = in.toElement(); // try to convert the node to an element.
+                        if ( !ie.isNull() )
+                        {
+                            if ( ie.tagName() == "include" )
+                                mainInfo.includes.append( ie.text() );
+                        }
+                        in = in.nextSibling();
+                    }
+                }
+
+                if ( e.tagName() == "folder" )
+                {
+                    FolderInfo fi;
+                    fi.name = e.attribute("name");
+                    mainInfo.subFolders.append(fi);
+                }
+            }
+            n = n.nextSibling();
+        }
+    }
+    return mainInfo;
+}
+
 void SimpleFolderXmlTest::testNonValidFolder()
 {
     QFETCH(QString, xml);
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    QDomElement docElem = doc.documentElement();
-    QVERIFY( docElem.tagName() == "folder" );
-    FolderInfo fi;
-    fi.name = docElem.attribute( "name" );
+    FolderInfo fi = parseFolder( doc );
     QVERIFY( fi.name.isEmpty() );
 }
 
@@ -58,10 +111,7 @@ void SimpleFolderXmlTest::testEmptyFolder()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    QDomElement docElem = doc.documentElement();
-    QVERIFY( docElem.tagName() == "folder" );
-    FolderInfo fi;
-    fi.name = docElem.attribute( "name" );
+    FolderInfo fi = parseFolder( doc );
     QVERIFY( !fi.name.isEmpty() );
     QVERIFY( fi.name == foldername );
 }
@@ -78,22 +128,7 @@ void SimpleFolderXmlTest::testFolderWithSubFolders()
     QFETCH(QString, xml);
     QDomDocument doc;
     QVERIFY( doc.setContent( xml ) );
-    QDomElement docElem = doc.documentElement();
-    FolderInfo mainInfo;
-    mainInfo.name = docElem.attribute( "name" );
-    QDomNode n = docElem.firstChild();
-    while(!n.isNull()) {
-        QDomElement e = n.toElement(); // try to convert the node to an element.
-        if(!e.isNull()) {
-            if ( e.tagName() == "folder" )
-            {
-                FolderInfo fi;
-                fi.name = e.attribute("name");
-                mainInfo.subFolders.append(fi);
-            }
-        }
-        n = n.nextSibling();
-    }
+    FolderInfo mainInfo = parseFolder( doc );
     QVERIFY( mainInfo.subFolders.isEmpty() == false );
     QVERIFY( mainInfo.subFolders.count() == 1 );
 }
@@ -112,32 +147,7 @@ void SimpleFolderXmlTest::testFolderWithIncludes()
     QFETCH(QString, xml);
     QDomDocument doc;
     QVERIFY( doc.setContent( xml ) );
-    QDomElement docElem = doc.documentElement();
-    FolderInfo mainInfo;
-    mainInfo.name = docElem.attribute( "name" );
-    QDomNode n = docElem.firstChild();
-    while(!n.isNull())
-    {
-        QDomElement e = n.toElement(); // try to convert the node to an element.
-        if(!e.isNull())
-        {
-            if ( e.tagName() == "includes" )
-            {
-                QDomNode in = e.firstChild();
-                while ( !in.isNull() )
-                {
-                    QDomElement ie = in.toElement(); // try to convert the node to an element.
-                    if ( !ie.isNull() )
-                    {
-                        if ( ie.tagName() == "include" )
-                            mainInfo.includes.append( ie.text() );
-                    }
-                    in = in.nextSibling();
-                }
-            }
-        }
-        n = n.nextSibling();
-    }
+    FolderInfo mainInfo = parseFolder( doc );
     QVERIFY( mainInfo.name.isEmpty() == false );
     QVERIFY( mainInfo.includes.isEmpty() == false );
     QVERIFY( mainInfo.includes.count() == 1 );
@@ -156,32 +166,7 @@ void SimpleFolderXmlTest::testFolderWithDefines()
     QFETCH(QString, xml);
     QDomDocument doc;
     QVERIFY( doc.setContent( xml ) );
-    QDomElement docElem = doc.documentElement();
-    FolderInfo mainInfo;
-    mainInfo.name = docElem.attribute( "name" );
-    QDomNode n = docElem.firstChild();
-    while( !n.isNull() )
-    {
-        QDomElement e = n.toElement(); // try to convert the node to an element.
-        if( !e.isNull() )
-        {
-            if ( e.tagName() == "definitions" )
-            {
-                QDomNode dn = e.firstChild();
-                while ( !dn.isNull() )
-                {
-                    QDomElement de = dn.toElement(); // try to convert the node to an element.
-                    if ( !de.isNull() )
-                    {
-                        if ( de.tagName() == "define" )
-                            mainInfo.defines.append( de.text() );
-                    }
-                    dn = dn.nextSibling();
-                }
-            }
-        }
-        n = n.nextSibling();
-    }
+    FolderInfo mainInfo = parseFolder( doc );
     QVERIFY( mainInfo.name.isEmpty() == false );
     QVERIFY( mainInfo.defines.isEmpty() == false );
     QVERIFY( mainInfo.defines.count() == 1 );
@@ -200,55 +185,7 @@ void SimpleFolderXmlTest::fullFolderTest()
     QFETCH(QString, xml);
     QDomDocument doc;
     QVERIFY( doc.setContent( xml ) );
-    QDomElement docElem = doc.documentElement();
-    FolderInfo mainInfo;
-    mainInfo.name = docElem.attribute( "name" );
-    QDomNode n = docElem.firstChild();
-    while( !n.isNull() )
-    {
-        QDomElement e = n.toElement(); // try to convert the node to an element.
-        if( !e.isNull() )
-        {
-            if ( e.tagName() == "definitions" )
-            {
-                QDomNode dn = e.firstChild();
-                while ( !dn.isNull() )
-                {
-                    QDomElement de = dn.toElement(); // try to convert the node to an element.
-                    if ( !de.isNull() )
-                    {
-                        if ( de.tagName() == "define" )
-                            mainInfo.defines.append( de.text() );
-                    }
-                    dn = dn.nextSibling();
-                }
-            }
-
-            if ( e.tagName() == "includes" )
-            {
-                QDomNode in = e.firstChild();
-                while ( !in.isNull() )
-                {
-                    QDomElement ie = in.toElement(); // try to convert the node to an element.
-                    if ( !ie.isNull() )
-                    {
-                        if ( ie.tagName() == "include" )
-                            mainInfo.includes.append( ie.text() );
-                    }
-                    in = in.nextSibling();
-                }
-            }
-
-            if ( e.tagName() == "folder" )
-            {
-                FolderInfo fi;
-                fi.name = e.attribute("name");
-                mainInfo.subFolders.append(fi);
-            }
-
-        }
-        n = n.nextSibling();
-    }
+    FolderInfo mainInfo = parseFolder( doc );
     QFETCH( QString, folderName );
     QFETCH( int, numIncludes );
     QFETCH( int, numDefines );

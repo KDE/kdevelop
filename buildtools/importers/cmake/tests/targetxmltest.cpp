@@ -29,6 +29,43 @@ struct TargetInfo
     QStringList sources;
 };
 
+static TargetInfo parseTarget( const QDomDocument& doc )
+{
+    QDomElement docElem = doc.documentElement();
+    TargetInfo ti;
+    if ( docElem.tagName() == "target" )
+    {
+        ti.name = docElem.attribute( "name" );
+        ti.type = docElem.attribute( "type" );
+        QDomNode n = docElem.firstChild();
+        while ( !n.isNull() )
+        {
+            QDomElement e = n.toElement();
+            if ( !e.isNull() )
+            {
+                if ( e.tagName() == "sources" )
+                {
+                    QDomNode sn = e.firstChild();
+                    while ( !sn.isNull() )
+                    {
+                        QDomElement se = sn.toElement();
+                        if ( !se.isNull() )
+                        {
+                            if ( se.tagName() == "source" )
+                                ti.sources.append( se.text() );
+                        }
+                        sn = sn.nextSibling();
+                    }
+                }
+            }
+            n = n.nextSibling();
+        }
+    }
+
+    return ti;
+}
+
+
 TargetXmlTest::TargetXmlTest(QObject *parent)
   : QObject(parent){
 }
@@ -44,11 +81,7 @@ void TargetXmlTest::emptyTargetTest()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    QDomElement docElem = doc.documentElement();
-    QVERIFY( docElem.tagName() == "target" );
-    TargetInfo ti;
-    ti.name = docElem.attribute( "name" );
-    ti.type = docElem.attribute( "type" );
+    TargetInfo ti = parseTarget( doc );
     QVERIFY( ti.name.isEmpty() );
     QVERIFY( ti.type.isEmpty() );
 }
@@ -69,16 +102,10 @@ void TargetXmlTest::noSourcesTargetTest()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    QDomElement docElem = doc.documentElement();
-    QVERIFY( docElem.tagName() == "target" );
-    TargetInfo ti;
-    ti.name = docElem.attribute( "name" );
-    ti.type = docElem.attribute( "type" );
-    QDomNode n = docElem.firstChild();
-    
-    QVERIFY( n.isNull() );
+    TargetInfo ti = parseTarget( doc );
     QVERIFY( ti.name == name );
     QVERIFY( ti.type == type );
+    QVERIFY( ti.sources.isEmpty() );
 }
 
 void TargetXmlTest::noSourcesTargetTest_data()
@@ -86,8 +113,10 @@ void TargetXmlTest::noSourcesTargetTest_data()
     QTest::addColumn<QString>("xml");
     QTest::addColumn<QString>("name");
     QTest::addColumn<QString>("type");
-    QTest::newRow("row1") << "<target name=\"foo\" type=\"bar\" />" << "foo" << "bar";
-    QTest::newRow("row2") << "<target name=\"t1\" type=\"mytype\"></target>" << "t1" << "mytype";
+    QTest::newRow("row1") << "<target name=\"foo\" type=\"bar\" />" << "foo" <<
+"bar";
+    QTest::newRow("row2") << "<target name=\"t1\" type=\"mytype\"></target>" <<
+"t1" << "mytype";
 }
 
 void TargetXmlTest::fullTargetTest()
@@ -99,35 +128,7 @@ void TargetXmlTest::fullTargetTest()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    
-    QDomElement docElem = doc.documentElement();
-    QVERIFY( docElem.tagName() == "target" );
-    TargetInfo ti;
-    ti.name = docElem.attribute( "name" );
-    ti.type = docElem.attribute( "type" );
-    QDomNode n = docElem.firstChild();
-    while ( !n.isNull() )
-    {
-        QDomElement e = n.toElement();
-        if ( !e.isNull() )
-        {
-            if ( e.tagName() == "sources" )
-            {
-                QDomNode sn = e.firstChild();
-                while ( !sn.isNull() )
-                {
-                    QDomElement se = sn.toElement();
-                    if ( !se.isNull() )
-                    {
-                        if ( se.tagName() == "source" )
-                            ti.sources.append( se.text() );
-                    }
-                    sn = sn.nextSibling();
-                }
-            }
-        }
-        n = n.nextSibling();
-    }
+    TargetInfo ti = parseTarget( doc );
     QVERIFY( ti.name == name );
     QVERIFY( ti.type == type );
     QStringList::iterator checkIt = ti.sources.begin();
