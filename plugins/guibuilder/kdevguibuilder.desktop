@@ -3,7 +3,6 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=KDevelop GUI Builder based on Qt Designer
-Comment[x-test]=xxKDevelop GUI Builder.xx
 Name=KDevGuiBuilder
 Name[x-test]=xxKDevGuiBuilderxx
 GenericName=KDevelop GUI Builder
