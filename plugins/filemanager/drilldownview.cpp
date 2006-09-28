@@ -110,18 +110,30 @@ void DrillDownView::keyPressEvent(QKeyEvent *event)
             setUpdatesEnabled(false);
             if (moveDirection == Qt::Key_Right)
             {
-                setRootIndex(current);
-                if (model()->canFetchMore(current))
+                if (current != rootIndex())
                 {
-                    animate = false;
-                    model()->fetchMore(current);
+                    setRootIndex(current);
+                    if (model()->canFetchMore(current))
+                    {
+                        animate = false;
+                        model()->fetchMore(current);
+                    }
+                    else if (current.child(0, 0).isValid())
+                        setCurrentIndex(current.child(0, 0));
                 }
+                else
+                    animate = false;
             }
             else
             {
                 QModelIndex root = rootIndex();
                 if (root.isValid())
+                {
                     setRootIndex(root.parent());
+                    setCurrentIndex(root);
+                }
+                else
+                    animate = false;
             }
             if (animate)
             {
