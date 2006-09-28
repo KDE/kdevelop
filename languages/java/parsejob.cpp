@@ -63,7 +63,9 @@ ParseJob::ParseJob( KDevDocument *document, JavaLanguageSupport *parent )
 {}
 
 ParseJob::~ParseJob()
-{}
+{
+    delete m_session;
+}
 
 JavaLanguageSupport* ParseJob::java() const
 {
