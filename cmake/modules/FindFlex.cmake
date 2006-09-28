@@ -3,7 +3,7 @@
 #
 #  FLEX_FOUND - system has Flex
 #  FLEX_EXECUTABLE - path of the flex executable
-#  FLEX_VERSION - the output of "flex --version", like "flex 2.5.31\n"
+#  FLEX_VERSION - the version string, like "2.5.31"
 #
 
 
@@ -17,7 +17,7 @@ IF(FLEX_EXECUTABLE)
     EXECUTE_PROCESS(COMMAND ${FLEX_EXECUTABLE} --version
         OUTPUT_VARIABLE _FLEX_VERSION
     )
-    string (REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]" FLEX_VERSION "${_FLEX_VERSION}")
+    STRING(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" FLEX_VERSION "${_FLEX_VERSION}")
 ENDIF(FLEX_EXECUTABLE)
 
 IF(FLEX_FOUND)
