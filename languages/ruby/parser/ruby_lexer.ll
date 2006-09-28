@@ -262,7 +262,7 @@ Lexer::Lexer( parser *parser, char *contents )
 void Lexer::restart( parser *parser, char *contents )
 {
     m_parser = parser;
-    m_locationTable = parser->token_stream->line_table();
+    m_locationTable = parser->token_stream->location_table();
     m_contents = contents;
     m_tokenBegin = m_tokenEnd = 0;
     m_currentOffset = 0;

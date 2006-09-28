@@ -530,7 +530,7 @@ void Lexer::restart( parser *parser, char *contents )
     cleanup();
 
     m_parser = parser;
-    m_locationTable = parser->token_stream->line_table();
+    m_locationTable = parser->token_stream->location_table();
     m_contents = contents;
     m_ppRootScope = 0;
     m_tokenBegin = m_tokenEnd = 0;
