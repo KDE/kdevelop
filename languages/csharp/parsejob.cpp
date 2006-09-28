@@ -2,6 +2,7 @@
  * This file is part of KDevelop
  *
  * Copyright (c) 2006 Adam Treat <treat@kde.org>
+ * Copyright (c) 2006 Jakob Petsovits <jpetso@gmx.at>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -36,29 +37,35 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "parser/parsesession.h"
 #include "parser/csharp_parser.h"
 #include "parser/csharp_binder.h"
 
 #include "csharplanguagesupport.h"
 
-using namespace csharp;
+namespace csharp
+{
 
-ParseJob::ParseJob( const KUrl &url,
-                    CSharpLanguageSupport *parent )
-        : KDevParseJob( url, parent ),
-        m_AST( 0 ),
-        m_model( 0 )
+ParseJob::ParseJob( const KUrl &url, CSharpLanguageSupport *parent )
+        : KDevParseJob( url, parent )
+        , m_session( new ParseSession )
+        , m_AST( 0 )
+        , m_model( 0 )
+        , m_readFromDisk( false )
 {}
 
-ParseJob::ParseJob( KDevDocument *document,
-                    CSharpLanguageSupport *parent )
-        : KDevParseJob( document, parent ),
-        m_AST( 0 ),
-        m_model( 0 )
+ParseJob::ParseJob( KDevDocument *document, CSharpLanguageSupport *parent )
+        : KDevParseJob( document, parent )
+        , m_session( new ParseSession )
+        , m_AST( 0 )
+        , m_model( 0 )
+        , m_readFromDisk( false )
 {}
 
 ParseJob::~ParseJob()
-{}
+{
+    delete m_session;
+}
 
 CSharpLanguageSupport* ParseJob::csharp() const
 {
@@ -77,19 +84,26 @@ KDevCodeModel *ParseJob::codeModel() const
     return m_model;
 }
 
+ParseSession *ParseJob::parseSession() const
+{
+    return m_session;
+}
+
+bool ParseJob::wasReadFromDisk() const
+{
+    return m_readFromDisk;
+}
+
 void ParseJob::run()
 {
-    if (abortRequested())
+    if ( abortRequested() )
         return abortJob();
 
     QMutexLocker lock(csharp()->parseMutex(thread()));
 
-    bool readFromDisk = !contentsAvailableFromEditor();
+    m_readFromDisk = !contentsAvailableFromEditor();
 
-    char *contents;
-    QByteArray fileData;
-
-    if ( readFromDisk )
+    if ( m_readFromDisk )
     {
         QFile file( m_document.path() );
         if ( !file.open( QIODevice::ReadOnly ) )
@@ -100,54 +114,46 @@ void ParseJob::run()
             return ;
         }
 
-        fileData = file.readAll();
-        QString qcontents = QString::fromUtf8( fileData.constData() );
-        contents = fileData.data();
-        Q_ASSERT ( !qcontents.isEmpty() );
+        m_session->setContents( file.readAll() );
+        Q_ASSERT ( m_session->size() > 0 );
         file.close();
     }
     else
     {
-        fileData = contentsFromEditor().toAscii();
-        contents = fileData.data();
+        m_session->setContents( contentsFromEditor().toAscii() );
     }
 
     kDebug() << "===-- PARSING --===> "
-    << m_document.fileName()
-    << " <== readFromDisk: " << readFromDisk
-    << " size: " << fileData.length()
-    << endl;
+             << m_document.fileName()
+             << " <== readFromDisk: " << m_readFromDisk
+             << " size: " << m_session->size()
+             << endl;
 
-    if (abortRequested())
+    if ( abortRequested() )
         return abortJob();
-
-    parser::csharp_compatibility_mode compatibility_mode = parser::csharp20_compatibility;
-
-    parser::token_stream_type token_stream;
-    parser::memory_pool_type memory_pool;
 
     // 0) setup
     parser csharp_parser;
-    csharp_parser.set_compatibility_mode( compatibility_mode );
-    csharp_parser.set_token_stream( &token_stream );
-    csharp_parser.set_memory_pool( &memory_pool );
+    csharp_parser.set_compatibility_mode( m_session->compatibility_mode );
+    csharp_parser.set_token_stream( m_session->token_stream );
+    csharp_parser.set_memory_pool( m_session->memory_pool );
 
     // 1) tokenize
-    csharp_parser.tokenize( contents );
+    csharp_parser.tokenize( (char*) m_session->contents() );
 
-    if (abortRequested())
+    if ( abortRequested() )
         return abortJob();
 
     // 2) parse
     bool matched = csharp_parser.parse_compilation_unit( &m_AST );
     m_model = new CodeModel;
 
-    if (abortRequested())
+    if ( abortRequested() )
         return abortJob();
 
-    if (matched)
+    if ( matched )
     {
-        Binder binder( m_model, csharp_parser.token_stream );
+        Binder binder( m_model, m_session->token_stream );
         binder.run( m_document, m_AST );
     }
     else
@@ -155,6 +161,8 @@ void ParseJob::run()
         csharp_parser.yy_expected_symbol(ast_node::Kind_compilation_unit, "compilation_unit"); // ### remove me
     }
 }
+
+} // end of namespace csharp
 
 #include "parsejob.moc"
 

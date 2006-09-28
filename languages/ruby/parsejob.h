@@ -33,15 +33,27 @@
 class KDevCodeModel;
 class RubyLanguageSupport;
 
-class ParseJob: public KDevParseJob {
+namespace ruby
+{
+
+class ParseSession;
+
+
+class ParseJob : public KDevParseJob
+{
     Q_OBJECT
+
 public:
-    ParseJob(const KUrl &url, RubyLanguageSupport *parent);
-    ParseJob(KDevDocument *document, RubyLanguageSupport *parent);
+    ParseJob( const KUrl &url, RubyLanguageSupport* parent );
+    ParseJob( KDevDocument* document, RubyLanguageSupport* parent );
 
     virtual ~ParseJob();
 
     RubyLanguageSupport* ruby() const;
+
+    ParseSession* parseSession() const;
+
+    bool wasReadFromDisk() const;
 
     virtual KDevAST *AST() const;
     virtual KDevCodeModel *codeModel() const;
@@ -50,9 +62,13 @@ protected:
     virtual void run();
 
 private:
-    ruby::program_ast *m_AST;
-    ruby::CodeModel *m_model;
+    ParseSession *m_session;
+    program_ast *m_AST;
+    CodeModel *m_model;
+    bool m_readFromDisk;
 };
+
+} // end of namespace ruby
 
 #endif
 

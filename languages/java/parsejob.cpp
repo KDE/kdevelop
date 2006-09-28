@@ -1,23 +1,24 @@
 /*
-* This file is part of KDevelop
-*
-* Copyright (c) 2006 Adam Treat <treat@kde.org>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU Library General Public License as
-* published by the Free Software Foundation; either version 2 of the
-* License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public
-* License along with this program; if not, write to the
-* Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
+ * This file is part of KDevelop
+ *
+ * Copyright (c) 2006 Adam Treat <treat@kde.org>
+ * Copyright (c) 2006 Jakob Petsovits <jpetso@gmx.at>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Library General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #include "parsejob.h"
 
@@ -38,21 +39,27 @@
 
 #include "javalanguagesupport.h"
 
+#include "parser/parsesession.h"
 #include "parser/java_parser.h"
 #include "parser/java_default_visitor.h"
 
-ParseJob::ParseJob( const KUrl &url,
-                    JavaLanguageSupport *parent )
-        : KDevParseJob( url, parent ),
-        m_AST( 0 ),
-        m_model( 0 )
+namespace java
+{
+
+ParseJob::ParseJob( const KUrl &url, JavaLanguageSupport *parent )
+        : KDevParseJob( url, parent )
+        , m_session( new ParseSession )
+        , m_AST( 0 )
+        , m_model( 0 )
+        , m_readFromDisk( false )
 {}
 
-ParseJob::ParseJob( KDevDocument *document,
-                    JavaLanguageSupport *parent )
-        : KDevParseJob( document, parent ),
-        m_AST( 0 ),
-        m_model( 0 )
+ParseJob::ParseJob( KDevDocument *document, JavaLanguageSupport *parent )
+        : KDevParseJob( document, parent )
+        , m_session( new ParseSession )
+        , m_AST( 0 )
+        , m_model( 0 )
+        , m_readFromDisk( false )
 {}
 
 ParseJob::~ParseJob()
@@ -77,85 +84,85 @@ KDevCodeModel *ParseJob::codeModel() const
 //     return new KDevCodeModel;
 }
 
+ParseSession *ParseJob::parseSession() const
+{
+    return m_session;
+}
+
+bool ParseJob::wasReadFromDisk() const
+{
+    return m_readFromDisk;
+}
+
 void ParseJob::run()
 {
-    if (abortRequested())
+    if ( abortRequested() )
         return abortJob();
 
     QMutexLocker lock(java()->parseMutex(thread()));
 
+    m_readFromDisk = !contentsAvailableFromEditor();
 
-    bool readFromDisk = !contentsAvailableFromEditor();
-
-    char *contents;
-    QByteArray fileData;
-
-    if ( readFromDisk )
+    if ( m_readFromDisk )
     {
         QFile file( m_document.path() );
         if ( !file.open( QIODevice::ReadOnly ) )
         {
             m_errorMessage = i18n( "Could not open file '%1'", m_document.path() );
             kWarning( 9007 ) << k_funcinfo << "Could not open file " << m_document
-                    << " (path " << m_document.path() << ")" << endl;
+                             << " (path " << m_document.path() << ")" << endl;
             return ;
         }
 
-        fileData = file.readAll();
-        QString qcontents = QString::fromUtf8( fileData.constData() );
-        contents = fileData.data();
-        assert( !qcontents.isEmpty() );
+        m_session->setContents( file.readAll() );
+        Q_ASSERT ( m_session->size() > 0 );
         file.close();
     }
     else
     {
-        fileData = contentsFromEditor().toAscii();
-        contents = fileData.data();
+        m_session->setContents( contentsFromEditor().toAscii() );
     }
 
     kDebug() << "===-- PARSING --===> "
-    << m_document.fileName()
-    << " <== readFromDisk: " << readFromDisk
-    << " size: " << fileData.length()
-    << endl;
+             << m_document.fileName()
+             << " <== readFromDisk: " << m_readFromDisk
+             << " size: " << m_session->size()
+             << endl;
 
-    if (abortRequested())
+    if ( abortRequested() )
         return abortJob();
 
-    parser::java_compatibility_mode compatibility_mode = parser::java15_compatibility;
-
-    parser::token_stream_type token_stream;
-    parser::memory_pool_type memory_pool;
-
-  // 0) setup
+    // 0) setup
     java::parser java_parser;
-    java_parser.set_compatibility_mode(compatibility_mode);
-    java_parser.set_token_stream(&token_stream);
-    java_parser.set_memory_pool(&memory_pool);
+    java_parser.set_compatibility_mode( m_session->compatibility_mode );
+    java_parser.set_token_stream( m_session->token_stream );
+    java_parser.set_memory_pool( m_session->memory_pool );
 
-  // 1) tokenize
-    java_parser.tokenize(contents);
+    // 1) tokenize
+    java_parser.tokenize( (char*) m_session->contents() );
 
-    if (abortRequested())
+    if ( abortRequested() )
         return abortJob();
 
-  // 2) parse
+    // 2) parse
     compilation_unit_ast *ast = 0;
-    bool matched = java_parser.parse_compilation_unit(&ast);
+    bool matched = java_parser.parse_compilation_unit( &ast );
 
-    if (abortRequested())
+    if ( abortRequested() )
         return abortJob();
 
-    if (matched)
+    if ( matched )
     {
         default_visitor v;
-        v.visit_node(ast);
+        v.visit_node( ast );
     }
     else
     {
         java_parser.yy_expected_symbol(ast_node::Kind_compilation_unit, "compilation_unit"); // ### remove me
     }
 }
+
+} // end of namespace java
 
 #include "parsejob.moc"
 

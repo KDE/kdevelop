@@ -7,12 +7,20 @@ add_definitions(-fPIC)
 
 set(kdevcsharpparser_STAT_SRCS
     decoder.cpp
+    decoder.h
     csharp_io.cpp
     csharp_pp_scope.cpp
+    csharp_pp_scope.h
     csharp_pp_handler_visitor.cpp
+    csharp_pp_handler_visitor.h
     csharp_binder.cpp
+    csharp_binder.h
     csharp_typebinder.cpp
+    csharp_typebinder.h
     codedisplay.cpp
+    codedisplay.h
+    parsesession.cpp
+    parsesession.h
 )
 
 

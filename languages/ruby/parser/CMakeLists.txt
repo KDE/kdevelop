@@ -7,7 +7,10 @@ add_definitions(-fPIC)
 
 set(kdevrubyparser_STAT_SRCS
     decoder.cpp
+    decoder.h
     ruby_io.cpp
+    parsesession.cpp
+    parsesession.h
 )
 
 

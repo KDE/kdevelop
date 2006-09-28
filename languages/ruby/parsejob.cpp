@@ -38,24 +38,33 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "parser/parsesession.h"
 #include "parser/ruby_parser.h"
 
 #include "rubylanguagesupport.h"
 
-using namespace ruby;
-
-ParseJob::ParseJob(const KUrl &url, RubyLanguageSupport *parent)
-    :KDevParseJob(url, parent), m_AST(0), m_model(0)
+namespace ruby
 {
-}
 
-ParseJob::ParseJob(KDevDocument *document, RubyLanguageSupport *parent)
-    :KDevParseJob(document, parent), m_AST(0), m_model(0)
-{
-}
+ParseJob::ParseJob( const KUrl &url, RubyLanguageSupport *parent )
+        : KDevParseJob( url, parent )
+        , m_session( new ParseSession )
+        , m_AST( 0 )
+        , m_model( 0 )
+        , m_readFromDisk( false )
+{}
+
+ParseJob::ParseJob( KDevDocument *document, RubyLanguageSupport *parent )
+        : KDevParseJob( document, parent )
+        , m_session( new ParseSession )
+        , m_AST( 0 )
+        , m_model( 0 )
+        , m_readFromDisk( false )
+{}
 
 ParseJob::~ParseJob()
 {
+    delete m_session;
 }
 
 RubyLanguageSupport *ParseJob::ruby() const
@@ -75,72 +84,73 @@ KDevCodeModel *ParseJob::codeModel() const
     return m_model;
 }
 
+ParseSession *ParseJob::parseSession() const
+{
+    return m_session;
+}
+
+bool ParseJob::wasReadFromDisk() const
+{
+    return m_readFromDisk;
+}
+
 void ParseJob::run()
 {
-    if (abortRequested())
+    if ( abortRequested() )
         return abortJob();
 
     QMutexLocker lock(ruby()->parseMutex(thread()));
 
-    bool readFromDisk = !contentsAvailableFromEditor();
+    m_readFromDisk = !contentsAvailableFromEditor();
 
-    char *contents;
-    QByteArray fileData;
-
-    if (readFromDisk)
+    if ( m_readFromDisk )
     {
-        QFile file(m_document.path());
-        if (!file.open(QIODevice::ReadOnly))
+        QFile file( m_document.path() );
+        if ( !file.open( QIODevice::ReadOnly ) )
         {
-            m_errorMessage = i18n("Could not open file '%1'", m_document.path());
+            m_errorMessage = i18n( "Could not open file '%1'", m_document.path() );
             kWarning( 9007 ) << k_funcinfo << "Could not open file " << m_document
                              << " (path " << m_document.path() << ")" << endl;
             return ;
         }
 
-        fileData = file.readAll();
-        QString qcontents = QString::fromUtf8( fileData.constData() );
-        contents = fileData.data();
-        Q_ASSERT (!qcontents.isEmpty());
+        m_session->setContents( file.readAll() );
+        Q_ASSERT ( m_session->size() > 0 );
         file.close();
     }
     else
     {
-        fileData = contentsFromEditor().toAscii();
-        contents = fileData.data();
+        m_session->setContents( contentsFromEditor().toAscii() );
     }
 
     kDebug() << "===-- PARSING --===> "
-    << m_document.fileName()
-    << " <== readFromDisk: " << readFromDisk
-    << " size: " << fileData.length()
-    << endl;
+             << m_document.fileName()
+             << " <== readFromDisk: " << m_readFromDisk
+             << " size: " << m_session->size()
+             << endl;
 
-    if (abortRequested())
+    if ( abortRequested() )
         return abortJob();
-
-    parser::token_stream_type token_stream;
-    parser::memory_pool_type memory_pool;
 
     // 0) setup
     parser ruby_parser;
-    ruby_parser.set_token_stream(&token_stream);
-    ruby_parser.set_memory_pool(&memory_pool);
+    ruby_parser.set_token_stream( m_session->token_stream );
+    ruby_parser.set_memory_pool( m_session->memory_pool );
 
     // 1) tokenize
-    ruby_parser.tokenize(contents);
+    ruby_parser.tokenize( (char*) m_session->contents() );
 
-    if (abortRequested())
+    if ( abortRequested() )
         return abortJob();
 
     // 2) parse
-    bool matched = ruby_parser.parse_program(&m_AST);
+    bool matched = ruby_parser.parse_program( &m_AST );
     m_model = new CodeModel;
 
-    if (abortRequested())
+    if ( abortRequested() )
         return abortJob();
 
-    if (matched)
+    if ( matched )
     {
         //TODO: bind declarations to the code model
     }
@@ -149,6 +159,8 @@ void ParseJob::run()
         ruby_parser.yy_expected_symbol(ast_node::Kind_program, "program");
     }
 }
+
+} // end of namespace ruby
 
 #include "parsejob.moc"
 

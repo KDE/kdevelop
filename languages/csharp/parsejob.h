@@ -2,6 +2,7 @@
  * This file is part of KDevelop
  *
  * Copyright (c) 2006 Adam Treat <treat@kde.org>
+ * Copyright (c) 2006 Jakob Petsovits <jpetso@gmx.at>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -31,19 +32,27 @@
 class KDevCodeModel;
 class CSharpLanguageSupport;
 
+namespace csharp
+{
+
+class ParseSession;
+
+
 class ParseJob : public KDevParseJob
 {
     Q_OBJECT
-public:
-    ParseJob( const KUrl &url,
-              CSharpLanguageSupport* parent );
 
-    ParseJob( KDevDocument* document,
-              CSharpLanguageSupport* parent );
+public:
+    ParseJob( const KUrl &url, CSharpLanguageSupport* parent );
+    ParseJob( KDevDocument* document, CSharpLanguageSupport* parent );
 
     virtual ~ParseJob();
 
     CSharpLanguageSupport* csharp() const;
+
+    ParseSession* parseSession() const;
+
+    bool wasReadFromDisk() const;
 
     virtual KDevAST *AST() const;
     virtual KDevCodeModel *codeModel() const;
@@ -52,9 +61,13 @@ protected:
     virtual void run();
 
 private:
-    csharp::compilation_unit_ast *m_AST;
-    csharp::CodeModel *m_model;
+    ParseSession *m_session;
+    compilation_unit_ast *m_AST;
+    CodeModel *m_model;
+    bool m_readFromDisk;
 };
+
+} // end of namespace csharp
 
 #endif
 

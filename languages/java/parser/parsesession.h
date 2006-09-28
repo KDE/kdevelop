@@ -1,8 +1,7 @@
 /*
  * This file is part of KDevelop
  *
- * Copyright (c) 2006 Adam Treat <treat@kde.org>
- * Copyright (c) 2006 Jakob Petsovits <jpetso@gmx.at>
+ * Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -20,50 +19,42 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef JAVA_PARSEJOB_H
-#define JAVA_PARSEJOB_H
+#ifndef JAVA_PARSESESSION_H
+#define JAVA_PARSESESSION_H
 
-#include <kurl.h>
-#include <kdevparsejob.h>
+#include <QtCore/QByteArray>
 
-#include "parser/java_ast.h"
+#include "java_parser.h"
 
-class KDevCodeModel;
-class JavaLanguageSupport;
 
 namespace java
 {
 
-class ParseSession;
-
-
-class ParseJob : public KDevParseJob
+/// Contains everything needed to keep an AST useful once the rest of the parser
+/// has gone away.
+class ParseSession
 {
-    Q_OBJECT
-
 public:
-    ParseJob( const KUrl &url, JavaLanguageSupport* parent );
-    ParseJob( KDevDocument* document, JavaLanguageSupport* parent );
+  ParseSession();
+  ~ParseSession();
 
-    virtual ~ParseJob();
+  /**
+   * Return the position (\a line%, \a column%) of the \a offset in the file.
+   *
+   * \note the line starts from 0.
+   */
+  void positionAt( std::size_t offset, int *line, int *column ) const;
 
-    JavaLanguageSupport* java() const;
+  void setContents( const QByteArray& contents );
 
-    ParseSession* parseSession() const;
-
-    bool wasReadFromDisk() const;
-
-    virtual KDevAST *AST() const;
-    virtual KDevCodeModel *codeModel() const;
-
-protected:
-    virtual void run();
+  const char *contents() const;
+  std::size_t size() const;
+  parser::memory_pool_type *memory_pool;
+  parser::token_stream_type *token_stream;
+  parser::java_compatibility_mode compatibility_mode;
 
 private:
-    ParseSession *m_session;
-    compilation_unit_ast *m_AST;
-    KDevCodeModel *m_model;
-    bool m_readFromDisk;
+  QByteArray m_contents;
 };
 
 } // end of namespace java

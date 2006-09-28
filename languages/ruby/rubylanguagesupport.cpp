@@ -73,6 +73,7 @@ RubyLanguageSupport::~RubyLanguageSupport()
 
 KDevCodeModel *RubyLanguageSupport::codeModel(const KUrl &url) const
 {
+    Q_UNUSED( url );
     return 0;
 }
 

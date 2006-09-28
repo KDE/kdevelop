@@ -7,7 +7,10 @@ add_definitions(-fPIC)
 
 set(kdevjavaparser_STAT_SRCS
     decoder.cpp
+    decoder.h
     java_io.cpp
+    parsesession.cpp
+    parsesession.h
 )
 
 
