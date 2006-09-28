@@ -28,15 +28,11 @@
 
 
 
--- 10 first/follow conflicts:
+-- 7 first/follow conflicts:
 --  - The AT conflict in compilation_unit
 --    (namely: package_declaration vs. type_declaration).
 --    Needs LL(k), solved by lookahead_is_package_declaration().
 --    (2 conflicts, which is actually only one)
---  - The COMMA conflict in annotation_element_array_initializer.
---    (manually resolved, 1 conflict)
---  - The COMMA conflict in enum_body: greedy is ok.
---    (done right by default, 1 conflict)
 --  - The DOT conflict in class_or_interface_type_name:
 --    Caused by the may-end-with-epsilon type_arguments. It doesn't apply
 --    at all, only kdevelop-pg thinks it does. Code segments...
@@ -47,8 +43,6 @@
 --  - The COMMA conflict in type_arguments:
 --    the approach for catching ">" signs works this way, and the conflict
 --    is resolved by the trailing condition at the end of the rule.
---    (manually resolved, 1 conflict)
---  - The COMMA conflict in variable_array_initializer.
 --    (manually resolved, 1 conflict)
 --  - The LBRACKET conflict in array_creator_rest.
 --    (manually resolved, 1 conflict)
@@ -77,7 +71,7 @@
 --    This is by design and works as expected.
 --    (manually resolved, 1 conflict)
 
--- Total amount of conflicts: 22
+-- Total amount of conflicts: 19
 
 
 
@@ -449,13 +443,11 @@
 
    LBRACE
    (  #element_value=annotation_element_array_value
-      ( 0 [: if (LA(2).kind == Token_RBRACE) { break; } :]
-        COMMA #element_value=annotation_element_array_value
+      ( COMMA [: if (yytoken == Token_RBRACE) { break; } :]
+        #element_value=annotation_element_array_value
       )*
-    |
-      0
+    | 0
    )
-   ( COMMA | 0 )
    RBRACE
 -> annotation_element_array_initializer ;;
 
@@ -524,14 +516,12 @@
 
    LBRACE
    ( try/recover(#enum_constant=enum_constant)
-     @ ( 0 [: if ( LA(2).kind == Token_SEMICOLON
-                || LA(2).kind == Token_RBRACE )
-              { break; } :] -- if the list is over, then exit the loop
-         COMMA
-       )
+     ( COMMA [: if ( yytoken == Token_RBRACE || yytoken == Token_SEMICOLON )
+                  { break; } :] -- if the list is over, then exit the loop
+       try/recover(#enum_constant=enum_constant)
+     )*
    | 0
    )
-   ( COMMA | 0 )
    ( SEMICOLON try/recover(#class_field=class_field)* | 0 )
    RBRACE
 -> enum_body ;;
@@ -1063,10 +1053,9 @@
 
    LBRACE
    (  ( #variable_initializer=variable_initializer
-        ( 0 [: if (LA(2).kind == Token_RBRACE) { break; } :]
-          COMMA #variable_initializer=variable_initializer
+        ( COMMA [: if (yytoken == Token_RBRACE) { break; } :]
+          #variable_initializer=variable_initializer
         )*
-        ( COMMA | 0 )
       )
     | 0
    )

@@ -28,7 +28,7 @@
 -----------------------------------------------------------------------------
 
 
--- 18 first/follow conflicts:
+-- 16 first/follow conflicts:
 --  - The EXTERN conflicts in compilation_unit. They would be gone if
 --    type_declaration used optional_type_modifiers instead of
 --    broader optional_modifiers, but we stick with the latter one in order
@@ -39,10 +39,6 @@
 --    and the following EXTERN, LBRACKET conflict there.
 --    LBRACKET is resolved, EXTERN is just the above harmless conflict again.
 --    (manually resolved, 2 conflicts)
---  - The COMMA conflict in global_attribute_section. Easy.
---    (manually resolved, 1 conflict)
---  - The COMMA conflict in attribute_section, exactly the same one as above.
---    (manually resolved, 1 conflict)
 --  - The COMMA conflict in attribute_arguments: greedy is ok.
 --    (done right by default, 1 conflict)
 --  - The COMMA conflict in enum_body, also similar to the above.
@@ -133,7 +129,7 @@
 --  - The VOID conflict in return_type.
 --    (manually resolved, 1 conflict)
 
--- Total amount of conflicts: 32
+-- Total amount of conflicts: 30
 
 
 
@@ -730,10 +726,9 @@ namespace csharp_pp
 
    LBRACKET ASSEMBLY COLON
    #attribute=attribute
-   ( 0 [: if (LA(2).kind == Token_RBRACKET) { break; } :]
-     COMMA #attribute=attribute
+   ( COMMA [: if (yytoken == Token_RBRACKET) { break; } :]
+     #attribute=attribute
    )*
-   ( COMMA | 0 )
    RBRACKET
 -> global_attribute_section ;;
 
@@ -745,10 +740,9 @@ namespace csharp_pp
     | 0
    )
    #attribute=attribute
-   ( 0 [: if (LA(2).kind == Token_RBRACKET) { break; } :]
-     COMMA #attribute=attribute
+   ( COMMA [: if (yytoken == Token_RBRACKET) { break; } :]
+     #attribute=attribute
    )*
-   ( COMMA | 0 )
    RBRACKET
 -> attribute_section ;;
 

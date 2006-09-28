@@ -69,7 +69,7 @@ private:
     std::size_t m_tokenBegin, m_tokenEnd;
     std::size_t m_currentOffset;
     csharp_pp::scope* m_ppRootScope;
-    kdev_pg_location_table *m_lineTable;
+    kdev_pg_location_table *m_locationTable;
 };
 
 } // end of namespace csharp

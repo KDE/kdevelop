@@ -512,10 +512,6 @@ namespace java
 
             while (yytoken == Token_COMMA)
               {
-                if (LA(2).kind == Token_RBRACE)
-                  {
-                    break;
-                  }
                 if (yytoken != Token_COMMA)
                   {
                     if (!yy_block_errors)
@@ -526,6 +522,10 @@ namespace java
                   }
                 yylex();
 
+                if (yytoken == Token_RBRACE)
+                  {
+                    break;
+                  }
                 annotation_element_array_value_ast *__node_9 = 0;
                 if (!parse_annotation_element_array_value(&__node_9))
                   {
@@ -538,25 +538,6 @@ namespace java
                 (*yynode)->element_value_sequence = snoc((*yynode)->element_value_sequence, __node_9, memory_pool);
 
               }
-          }
-        else if (true /*epsilon*/)
-        {}
-        else
-          {
-            return false;
-          }
-        if (yytoken == Token_COMMA)
-          {
-            if (yytoken != Token_COMMA)
-              {
-                if (!yy_block_errors)
-                  {
-                    yy_expected_token(yytoken, Token_COMMA, ",");
-                  }
-                return false;
-              }
-            yylex();
-
           }
         else if (true /*epsilon*/)
         {}
@@ -4687,11 +4668,6 @@ namespace java
 
             while (yytoken == Token_COMMA)
               {
-                if ( LA(2).kind == Token_SEMICOLON
-                     || LA(2).kind == Token_RBRACE )
-                  {
-                    break;
-                  }
                 if (yytoken != Token_COMMA)
                   {
                     if (!yy_block_errors)
@@ -4702,6 +4678,10 @@ namespace java
                   }
                 yylex();
 
+                if ( yytoken == Token_RBRACE || yytoken == Token_SEMICOLON )
+                  {
+                    break;
+                  }
                 std::size_t try_start_token_9 = token_stream->index() - 1;
                 parser_state *try_start_state_9 = copy_current_state();
                 {
@@ -4737,25 +4717,6 @@ namespace java
                   }
 
               }
-          }
-        else if (true /*epsilon*/)
-        {}
-        else
-          {
-            return false;
-          }
-        if (yytoken == Token_COMMA)
-          {
-            if (yytoken != Token_COMMA)
-              {
-                if (!yy_block_errors)
-                  {
-                    yy_expected_token(yytoken, Token_COMMA, ",");
-                  }
-                return false;
-              }
-            yylex();
-
           }
         else if (true /*epsilon*/)
         {}
@@ -13320,10 +13281,6 @@ namespace java
 
                                      while (yytoken == Token_COMMA)
                                        {
-                                         if (LA(2).kind == Token_RBRACE)
-                                           {
-                                             break;
-                                           }
                                          if (yytoken != Token_COMMA)
                                            {
                                              if (!yy_block_errors)
@@ -13334,6 +13291,10 @@ namespace java
                                            }
                                          yylex();
 
+                                         if (yytoken == Token_RBRACE)
+                                           {
+                                             break;
+                                           }
                                          variable_initializer_ast *__node_336 = 0;
                                          if (!parse_variable_initializer(&__node_336))
                                            {
@@ -13345,25 +13306,6 @@ namespace java
                                            }
                                          (*yynode)->variable_initializer_sequence = snoc((*yynode)->variable_initializer_sequence, __node_336, memory_pool);
 
-                                       }
-                                     if (yytoken == Token_COMMA)
-                                       {
-                                         if (yytoken != Token_COMMA)
-                                           {
-                                             if (!yy_block_errors)
-                                               {
-                                                 yy_expected_token(yytoken, Token_COMMA, ",");
-                                               }
-                                             return false;
-                                           }
-                                         yylex();
-
-                                       }
-                                     else if (true /*epsilon*/)
-                                     {}
-                                     else
-                                       {
-                                         return false;
                                        }
                                    }
                                  else if (true /*epsilon*/)

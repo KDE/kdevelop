@@ -2062,10 +2062,6 @@ namespace csharp
 
         while (yytoken == Token_COMMA)
           {
-            if (LA(2).kind == Token_RBRACKET)
-              {
-                break;
-              }
             if (yytoken != Token_COMMA)
               {
                 if (!yy_block_errors)
@@ -2076,6 +2072,10 @@ namespace csharp
               }
             yylex();
 
+            if (yytoken == Token_RBRACKET)
+              {
+                break;
+              }
             attribute_ast *__node_42 = 0;
             if (!parse_attribute(&__node_42))
               {
@@ -2087,25 +2087,6 @@ namespace csharp
               }
             (*yynode)->attribute_sequence = snoc((*yynode)->attribute_sequence, __node_42, memory_pool);
 
-          }
-        if (yytoken == Token_COMMA)
-          {
-            if (yytoken != Token_COMMA)
-              {
-                if (!yy_block_errors)
-                  {
-                    yy_expected_token(yytoken, Token_COMMA, ",");
-                  }
-                return false;
-              }
-            yylex();
-
-          }
-        else if (true /*epsilon*/)
-        {}
-        else
-          {
-            return false;
           }
         if (yytoken != Token_RBRACKET)
           {
@@ -9548,10 +9529,6 @@ namespace csharp
 
         while (yytoken == Token_COMMA)
           {
-            if (LA(2).kind == Token_RBRACKET)
-              {
-                break;
-              }
             if (yytoken != Token_COMMA)
               {
                 if (!yy_block_errors)
@@ -9562,6 +9539,10 @@ namespace csharp
               }
             yylex();
 
+            if (yytoken == Token_RBRACKET)
+              {
+                break;
+              }
             attribute_ast *__node_213 = 0;
             if (!parse_attribute(&__node_213))
               {
@@ -9573,25 +9554,6 @@ namespace csharp
               }
             (*yynode)->attribute_sequence = snoc((*yynode)->attribute_sequence, __node_213, memory_pool);
 
-          }
-        if (yytoken == Token_COMMA)
-          {
-            if (yytoken != Token_COMMA)
-              {
-                if (!yy_block_errors)
-                  {
-                    yy_expected_token(yytoken, Token_COMMA, ",");
-                  }
-                return false;
-              }
-            yylex();
-
-          }
-        else if (true /*epsilon*/)
-        {}
-        else
-          {
-            return false;
           }
         if (yytoken != Token_RBRACKET)
           {

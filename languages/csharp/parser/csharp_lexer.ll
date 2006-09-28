@@ -530,7 +530,7 @@ void Lexer::restart( parser *parser, char *contents )
     cleanup();
 
     m_parser = parser;
-    m_lineTable = parser->token_stream->line_table();
+    m_locationTable = parser->token_stream->line_table();
     m_contents = contents;
     m_ppRootScope = 0;
     m_tokenBegin = m_tokenEnd = 0;
@@ -566,7 +566,7 @@ int Lexer::LexerInput( char *buf, int /*max_size*/ )
 
         // fall through
     case '\n':
-        m_lineTable->newline( m_currentOffset );
+        m_locationTable->newline( m_currentOffset );
         break;
 
     default:

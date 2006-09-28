@@ -1824,7 +1824,7 @@ namespace ruby
 
         if (false) // the only way to enter here is using goto
           {
-__catch_1:
+          __catch_1:
             if (try_start_state_1)
               {
                 restore_state(try_start_state_1);
@@ -8106,7 +8106,7 @@ __catch_1:
 
         if (false) // the only way to enter here is using goto
           {
-__catch_2:
+          __catch_2:
             if (try_start_state_2)
               {
                 restore_state(try_start_state_2);
