@@ -2,6 +2,8 @@
 Type=Service
 Name=KDevelop QMake Importer
 Comment=Imports and edits qmake projects
+Comment[fr]=Importe et modifie des projets qmake
+Comment[x-test]=xxImports and edits qmake projectsxx
 Icon=gear
 ServiceTypes=KDevelop/FileManager
 X-KDE-Library=qmakeimporter
