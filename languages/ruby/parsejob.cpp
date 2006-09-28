@@ -145,6 +145,7 @@ void ParseJob::run()
 
     // 2) parse
     bool matched = ruby_parser.parse_program( &m_AST );
+    m_AST->language = ruby();
     m_model = new CodeModel;
 
     if ( abortRequested() )

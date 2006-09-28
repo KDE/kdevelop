@@ -96,7 +96,7 @@ bool ParseJob::wasReadFromDisk() const
 
 void ParseJob::run()
 {
-    if ( abortRequested() )
+    if ( abortRequested())
         return abortJob();
 
     QMutexLocker lock(csharp()->parseMutex(thread()));
@@ -111,7 +111,7 @@ void ParseJob::run()
             m_errorMessage = i18n( "Could not open file '%1'", m_document.path() );
             kWarning( 9007 ) << k_funcinfo << "Could not open file " << m_document
                              << " (path " << m_document.path() << ")" << endl;
-            return ;
+            return;
         }
 
         m_session->setContents( file.readAll() );
@@ -146,6 +146,7 @@ void ParseJob::run()
 
     // 2) parse
     bool matched = csharp_parser.parse_compilation_unit( &m_AST );
+    m_AST->language = csharp();
     m_model = new CodeModel;
 
     if ( abortRequested() )
