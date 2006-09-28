@@ -459,6 +459,11 @@ void PHPFile::ParseSource() {
          }
 
          if (ParseFunction(line, lineNo) == TRUE) {
+            if ( inMethod == TRUE ) {
+               CloseFunction( lineNo - 1 );
+               bracketFuncOpen = 0;
+               bracketFuncClose = 0;
+            }
             bracketFuncOpen = line.contains("{");
             bracketFuncClose = line.contains("}");
          }
