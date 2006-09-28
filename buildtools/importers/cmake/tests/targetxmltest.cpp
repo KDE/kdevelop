@@ -22,42 +22,6 @@
 #include "cmakexmlparser.h"
 QTEST_MAIN(TargetXmlTest)
 
-static TargetInfo parseTarget( const QDomElement& docElem )
-{
-    TargetInfo ti;
-    if ( docElem.tagName() == "target" )
-    {
-        ti.name = docElem.attribute( "name" );
-        ti.type = docElem.attribute( "type" );
-        QDomNode n = docElem.firstChild();
-        while ( !n.isNull() )
-        {
-            QDomElement e = n.toElement();
-            if ( !e.isNull() )
-            {
-                if ( e.tagName() == "sources" )
-                {
-                    QDomNode sn = e.firstChild();
-                    while ( !sn.isNull() )
-                    {
-                        QDomElement se = sn.toElement();
-                        if ( !se.isNull() )
-                        {
-                            if ( se.tagName() == "source" )
-                                ti.sources.append( se.text() );
-                        }
-                        sn = sn.nextSibling();
-                    }
-                }
-            }
-            n = n.nextSibling();
-        }
-    }
-
-    return ti;
-}
-
-
 TargetXmlTest::TargetXmlTest(QObject *parent)
   : QObject(parent){
 }
@@ -73,7 +37,7 @@ void TargetXmlTest::emptyTargetTest()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    TargetInfo ti = parseTarget( doc.documentElement() );
+    TargetInfo ti = CMakeXmlParser::parseTarget( doc.documentElement() );
     QVERIFY( ti.name.isEmpty() );
     QVERIFY( ti.type.isEmpty() );
 }
@@ -94,7 +58,7 @@ void TargetXmlTest::noSourcesTargetTest()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    TargetInfo ti = parseTarget( doc.documentElement() );
+    TargetInfo ti = CMakeXmlParser::parseTarget( doc.documentElement() );
     QVERIFY( ti.name == name );
     QVERIFY( ti.type == type );
     QVERIFY( ti.sources.isEmpty() );
@@ -120,7 +84,7 @@ void TargetXmlTest::fullTargetTest()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    TargetInfo ti = parseTarget( doc.documentElement() );
+    TargetInfo ti = CMakeXmlParser::parseTarget( doc.documentElement() );
     QVERIFY( ti.name == name );
     QVERIFY( ti.type == type );
     QStringList::iterator checkIt = ti.sources.begin();

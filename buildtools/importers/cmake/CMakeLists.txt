@@ -9,6 +9,7 @@ include_directories(
 
 set( cmakecommon_SRCS 
   cmaketargetitem.cpp
+  cmakexmlparser.cpp
  )
 
 set( cmakeimporter_SRCS

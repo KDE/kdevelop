@@ -12,6 +12,7 @@ target_link_libraries(cmake-folderxmltest
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     kdevplatform
+    kdevcmakecommon
 )
 
 set( targetxmltest_SRCS targetxmltest.cpp )
@@ -22,6 +23,7 @@ target_link_libraries(cmake-targetxmltest
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     kdevplatform
+    kdevcmakecommon
 )
 
 add_test(cmake-folderxmltest ${EXECUTABLE_OUTPUT_PATH}/cmake-folderxmltest)

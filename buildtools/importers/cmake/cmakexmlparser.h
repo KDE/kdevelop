@@ -21,6 +21,10 @@
 #ifndef CMAKEXMLPARSER_H
 #define CMAKEXMLPARSER_H
 
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtXml/QDomElement>
+
 struct TargetInfo
 {
     QString name;

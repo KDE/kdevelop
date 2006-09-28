@@ -19,7 +19,6 @@
  */
 
 #include "cmakexmlparser.h"
-#include <QtXml/QDomElement>
 
 FolderInfo CMakeXmlParser::parseFolder( const QDomElement& docElem )
 {
