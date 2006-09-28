@@ -87,7 +87,9 @@ CPPParseJob::CPPParseJob( KDevDocument *document,
 }
 
 CPPParseJob::~CPPParseJob()
-{}
+{
+    delete m_session;
+}
 
 KDevAST *CPPParseJob::AST() const
 {
