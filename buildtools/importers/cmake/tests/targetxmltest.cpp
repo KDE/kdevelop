@@ -19,15 +19,8 @@
  */
 #include "targetxmltest.h"
 #include <QtXml/QDomDocument>
-
+#include "cmakexmlparser.h"
 QTEST_MAIN(TargetXmlTest)
-
-struct TargetInfo
-{
-    QString name;
-    QString type;
-    QStringList sources;
-};
 
 static TargetInfo parseTarget( const QDomElement& docElem )
 {

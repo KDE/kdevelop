@@ -21,15 +21,8 @@
 #include "folderxmltest.h"
 #include <QtXml/QDomDocument>
 
+#include "cmakexmlparser.h"
 QTEST_MAIN(SimpleFolderXmlTest)
-
-struct FolderInfo
-{
-    QString name;
-    QList<FolderInfo> subFolders;
-    QStringList includes;
-    QStringList defines;
-};
 
 static FolderInfo parseFolder( const QDomElement& docElem )
 {
