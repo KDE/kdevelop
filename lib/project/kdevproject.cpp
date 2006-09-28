@@ -113,12 +113,15 @@ bool KDevProject::open( const KUrl& projectFileUrl )
     KDevPluginController* pluginManager = KDevPluginController::self();
     d->manager = qobject_cast<KDevFileManager*>( pluginManager->loadPlugin( importerSetting ) );
 
-    QStandardItem* topItem = d->manager->import( d->model, d->folder );
-    d->model->insertRow(0, topItem);
+    if ( d->manager )
+    {
+        QStandardItem* topItem = d->manager->import( d->model, d->folder );
+        d->model->insertRow(0, topItem);
 
-    ImportProjectJob* importJob = new ImportProjectJob( d->model->item(0,0), d->manager );
-    connect( importJob, SIGNAL(result(KJob*)), this, SLOT(importDone(KJob*)));
-    importJob->start(); //be asynchronous
+        ImportProjectJob* importJob = new ImportProjectJob( d->model->item(0,0), d->manager );
+        connect( importJob, SIGNAL(result(KJob*)), this, SLOT(importDone(KJob*)));
+        importJob->start(); //be asynchronous
+    }
     return true;
 }
 
