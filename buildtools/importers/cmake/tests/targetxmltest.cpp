@@ -29,9 +29,8 @@ struct TargetInfo
     QStringList sources;
 };
 
-static TargetInfo parseTarget( const QDomDocument& doc )
+static TargetInfo parseTarget( const QDomElement& docElem )
 {
-    QDomElement docElem = doc.documentElement();
     TargetInfo ti;
     if ( docElem.tagName() == "target" )
     {
@@ -81,7 +80,7 @@ void TargetXmlTest::emptyTargetTest()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    TargetInfo ti = parseTarget( doc );
+    TargetInfo ti = parseTarget( doc.documentElement() );
     QVERIFY( ti.name.isEmpty() );
     QVERIFY( ti.type.isEmpty() );
 }
@@ -102,7 +101,7 @@ void TargetXmlTest::noSourcesTargetTest()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    TargetInfo ti = parseTarget( doc );
+    TargetInfo ti = parseTarget( doc.documentElement() );
     QVERIFY( ti.name == name );
     QVERIFY( ti.type == type );
     QVERIFY( ti.sources.isEmpty() );
@@ -128,7 +127,7 @@ void TargetXmlTest::fullTargetTest()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    TargetInfo ti = parseTarget( doc );
+    TargetInfo ti = parseTarget( doc.documentElement() );
     QVERIFY( ti.name == name );
     QVERIFY( ti.type == type );
     QStringList::iterator checkIt = ti.sources.begin();
