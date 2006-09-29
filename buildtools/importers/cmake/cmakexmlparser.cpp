@@ -20,6 +20,23 @@
 
 #include "cmakexmlparser.h"
 
+#include <QtCore/QFile>
+
+ProjectInfo CMakeXmlParser::parse( const KUrl& file )
+{
+    ProjectInfo pi;
+    QFile cmakeFile(file.path());
+    if ( cmakeFile.open(QIODevice::ReadOnly) )
+    {
+        QDomDocument cmakeInfo;
+        if ( cmakeInfo.setContent( &cmakeFile, false /* no namespaces */ ) )
+        {   //start processing
+            pi = parseProject( cmakeInfo );
+        }
+    }
+    return pi;
+}
+
 ProjectInfo CMakeXmlParser::parseProject( const QDomDocument& doc )
 {
     QDomElement e = doc.documentElement();

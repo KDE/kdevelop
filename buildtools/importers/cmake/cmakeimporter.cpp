@@ -92,23 +92,7 @@ KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
     }
     else
     {
-        QFile cmakeFile(cmakeInfoFile.path());
-        if ( cmakeFile.open(QIODevice::ReadOnly) )
-        {
-            QDomDocument cmakeInfo;
-            if ( cmakeInfo.setContent( &cmakeFile, false /* no namespaces */ ) )
-            {   //start processing
-                QDomElement docElem = cmakeInfo.documentElement();
-                QDomNode n = docElem.firstChild();
-                while(!n.isNull()) {
-                    QDomElement e = n.toElement(); // try to convert the node to an element.
-                    if(!e.isNull()) {
-                        kDebug(9025) << e.tagName() << endl; // the node really is an element.
-                    }
-                    n = n.nextSibling();
-                }
-            }
-        }
+        m_projectInfo = m_xmlParser.parse( cmakeInfoFile );
     }
     return m_rootItem;
 }

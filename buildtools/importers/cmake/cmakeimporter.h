@@ -27,6 +27,7 @@
 #include "domutil.h"
 #include "kdevprojectmodel.h"
 #include "kdevbuildmanager.h"
+#include "cmakexmlparser.h"
 
 class QObject;
 class KDevProject;
@@ -87,6 +88,8 @@ private:
     KDevProjectBuilder* m_builder;
 
     KUrl::List m_includeDirList;
+    CMakeXmlParser m_xmlParser;
+    ProjectInfo m_projectInfo;
 
 };
 

@@ -25,6 +25,8 @@
 #include <QtCore/QStringList>
 #include <QtXml/QDomElement>
 
+#include "kurl.h"
+
 struct TargetInfo
 {
     QString name;
@@ -50,17 +52,14 @@ struct ProjectInfo
 class CMakeXmlParser
 {
 public:
-//     CMakeXmlParser();
-//     ~CMakeXmlParser();
+    CMakeXmlParser() {}
+    ~CMakeXmlParser() {}
 
-//     ProjectInfo parse( const KUrl& file );
+    ProjectInfo parse( const KUrl& file );
 
     ProjectInfo parseProject( const QDomDocument& );
     TargetInfo parseTarget( const QDomElement& );
     FolderInfo parseFolder( const QDomElement& );
-
-private:
-    ProjectInfo m_projectInfo;
 };
 
 #endif

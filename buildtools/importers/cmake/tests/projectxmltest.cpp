@@ -72,7 +72,6 @@ void ProjectXmlTest::testFullProject_data()
             "<includes><include>/path/to/neato/include/</include></includes>"
             "<definitions><define>-DQT_NO_STL</define></definitions>"
             "</folder></project>" << "foo" << 1;
-
 }
 
 
