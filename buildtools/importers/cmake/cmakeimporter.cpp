@@ -23,7 +23,6 @@
 #include <QList>
 #include <QVector>
 #include <QDomDocument>
-#include <QCoreApplication>
 
 
 #include <kurl.h>
@@ -81,6 +80,7 @@ KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
     QString buildDir = CMakeSettings::self()->buildFolder();
     kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
     m_rootItem = new KDevProjectFolderItem( fileName, 0 );
+    m_rootItem->setText( KDevCore::activeProject()->name() );
     KUrl cmakeInfoFile(buildDir);
     cmakeInfoFile.adjustPath( KUrl::AddTrailingSlash );
     cmakeInfoFile.addPath("cmakeinfo.xml");
@@ -93,6 +93,7 @@ KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
     else
     {
         m_projectInfo = m_xmlParser.parse( cmakeInfoFile );
+        createProjectItems();
     }
     return m_rootItem;
 }
@@ -117,6 +118,10 @@ QList<KDevProjectTargetItem*> CMakeImporter::targets() const
 KUrl::List CMakeImporter::includeDirectories() const
 {
     return m_includeDirList;
+}
+
+void CMakeImporter::createProjectItems()
+{
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;

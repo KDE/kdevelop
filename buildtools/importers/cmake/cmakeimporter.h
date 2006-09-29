@@ -81,6 +81,10 @@ public:
     virtual KUrl findMakefile( KDevProjectFolderItem* dom ) const;
     virtual KUrl::List findMakefiles( KDevProjectFolderItem* dom ) const;
 
+
+protected:
+    void createProjectItems();
+
 private:
 
     KDevProject* m_project;
@@ -94,5 +98,5 @@ private:
 };
 
 #endif
-// kate: indent-mode cstyle; space-indent off; tab-width 4; replace-tabs on; auto-insert-doxygen on;
+
 
