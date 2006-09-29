@@ -215,7 +215,7 @@ void KDevPluginController::loadPlugins( PluginType type )
 void KDevPluginController::unloadPlugins( PluginType offer )
 {
     //TODO see if this can be optimized so it's not something like O(n^2)
-    KPluginInfo::List offers = d->engine.offers( d->profile, offer );
+    KPluginInfo::List offers = d->engine.allOffers( offer );
     KPluginInfo::List::ConstIterator it = offers.begin();
     for ( ; it != offers.end(); ++it )
     {

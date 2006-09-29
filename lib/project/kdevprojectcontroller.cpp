@@ -240,7 +240,7 @@ bool KDevProjectController::closeProject()
     m_localFile.clear();
     m_globalFile.clear();
     m_projectsDir.clear();
-    m_isLoaded = false;
+
 
     //The project file has been closed.
     //Now we can save settings for all of the KDevCore objects including this one!!
@@ -253,7 +253,7 @@ bool KDevProjectController::closeProject()
     action->setEnabled( false );
 
     emit projectClosed();
-
+    unloadProjectPart();
     KDevPluginController::self() ->unloadPlugins( KDevPluginController::Project );
 
     //FIXME
@@ -263,7 +263,7 @@ bool KDevProjectController::closeProject()
     m_project->deleteLater(); //be safe when deleting
     m_project = 0;
     m_recentAction->setCurrentAction( 0 );
-
+    m_isLoaded = false;
     return true;
 }
 
