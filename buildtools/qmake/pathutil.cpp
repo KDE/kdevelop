@@ -21,8 +21,8 @@ QString getRelativePath(const QString& basepath, const QString& destpath)
   if (!QFile::exists(basepath) ||
       !QFile::exists(destpath))
     return "";
-  QStringList basedirs = QStringList::split(QDir::separator(),basepath);
-  QStringList destdirs = QStringList::split(QDir::separator(),destpath);
+  QStringList basedirs = QStringList::split(QString( QChar( QDir::separator() ) ),basepath);
+  QStringList destdirs = QStringList::split(QString( QChar( QDir::separator() ) ),destpath);
 
   int maxCompare=0;
   if (basedirs.count()>=destdirs.count())
@@ -37,11 +37,11 @@ QString getRelativePath(const QString& basepath, const QString& destpath)
     lastCommonDir=i;
   }
   for (uint i=0;i<basedirs.count()-(lastCommonDir+1); i++)
-    relpath += QString(QChar(QDir::separator()))+QString("..");
+    relpath += QString( QChar( QDir::separator() ) )+QString("..");
   for (int i=0; i<lastCommonDir+1; i++)
     destdirs.pop_front();
   if (destdirs.count())
-    relpath += QDir::separator()+destdirs.join(QChar(QDir::separator()));
+    relpath += QString( QChar( QDir::separator() ) )+destdirs.join( QChar( QDir::separator() ) );
   return QDir::cleanDirPath(relpath);
 }
 

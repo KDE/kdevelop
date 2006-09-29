@@ -102,10 +102,10 @@ Scope::Scope( bool isQt4Project, Scope* parent, const QString& filename, bool is
 Scope::Scope( bool isQt4Project, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile )
         : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_isQt4Project( isQt4Project ), m_isEnabled( true )
 {
-    if ( !loadFromFile( path + QDir::separator() + incfile ) && !QFileInfo( path + QDir::separator() + incfile ).exists() )
+    if ( !loadFromFile( path + QString( QChar( QDir::separator() ) ) + incfile ) && !QFileInfo( path + QString( QChar( QDir::separator() ) ) + incfile ).exists() )
     {
         m_root = new QMake::ProjectAST();
-        m_root->setFileName( QString( path + QDir::separator() + incfile ) );
+        m_root->setFileName( QString( path + QString( QChar( QDir::separator() ) ) + incfile ) );
     }
 }
 
@@ -135,7 +135,7 @@ void Scope::saveToFile() const
     if ( scopeType() == ProjectScope )
         filename = m_root->fileName() ;
     else if ( scopeType() == IncludeScope )
-        filename = m_parent->projectDir() + QDir::separator() + m_incast->projectName;
+        filename = m_parent->projectDir() + QString( QChar( QDir::separator() ) ) + m_incast->projectName;
     if ( filename.isEmpty() )
         return ;
 
@@ -435,7 +435,7 @@ Scope* Scope::createSubProject( const QString& dir )
 
             if ( !curdir.exists( dir ) )
                 curdir.mkdir( dir );
-            QString filename = curdir.absPath() + QDir::separator() + dir + QDir::separator() + dir + ".pro";
+            QString filename = curdir.absPath() + QString( QChar( QDir::separator() ) ) + dir + QString( QChar( QDir::separator() ) ) + dir + ".pro";
             Scope* s = new Scope( m_isQt4Project, this, filename );
             if ( s->scopeType() != InvalidScope )
             {
@@ -524,7 +524,7 @@ void Scope::deleteSubProject( const QString& dir, bool deleteSubdir )
             if ( deleteSubdir )
             {
                 QDir projdir = QDir( projectDir() );
-                QDir subdir = QDir( projectDir() + QDir::separator() + dir );
+                QDir subdir = QDir( projectDir() + QString( QChar( QDir::separator() ) ) + dir );
                 if ( subdir.exists() )
                 {
                     QStringList entries = subdir.entryList();
@@ -717,7 +717,7 @@ void Scope::init()
                     QString str = *sit;
                     if ( *sit == "\\\n" || *sit == "\n" )
                         continue;
-                    QDir subproject = QDir( projectDir() + QDir::separator() + *sit, "*.pro", QDir::Name | QDir::IgnoreCase, QDir::Files );
+                    QDir subproject = QDir( projectDir() + QString( QChar( QDir::separator() ) ) + *sit, "*.pro", QDir::Name | QDir::IgnoreCase, QDir::Files );
                     QString projectfile;
                     if ( subproject.entryList().contains( *sit + ".pro" ) )
                         projectfile = *subproject.entryList().find( *sit + ".pro" );

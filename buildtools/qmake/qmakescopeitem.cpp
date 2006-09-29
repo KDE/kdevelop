@@ -157,7 +157,7 @@ void GroupItem::addFileToScope( const QString& filename )
 
     FileItem *fitem = owner->createFileItem( filename );
 
-    fitem->uiFileLink = owner->m_widget->getUiFileLink( owner->relativePath() + QDir::separator(), filename );
+    fitem->uiFileLink = owner->m_widget->getUiFileLink( owner->relativePath() + QString( QChar( QDir::separator() ) ), filename );
     files.append( fitem );
     switch ( groupType )
     {
@@ -308,9 +308,9 @@ QMakeScopeItem::~QMakeScopeItem()
 QString QMakeScopeItem::relativePath()
 {
     if ( !scope->parent() || !scope->parent() ->parent() || scope->scopeType() != Scope::ProjectScope )
-        return ( QDir::separator() + scope->scopeName() );
+        return ( QString( QChar( QDir::separator() ) ) + scope->scopeName() );
     else if ( scope->scopeType() == Scope::ProjectScope )
-        return ( ( ( QMakeScopeItem* ) parent() ) ->relativePath() + QDir::separator() + scope->scopeName() );
+        return ( ( ( QMakeScopeItem* ) parent() ) ->relativePath() + QString( QChar( QDir::separator() ) ) + scope->scopeName() );
     else
         return ( ( ( QMakeScopeItem* ) parent() ) ->relativePath() );
 }
@@ -331,13 +331,13 @@ QString QMakeScopeItem::getSharedLibAddObject( QString downDirs )
         if ( scope->variableValues( "DESTDIR" ).front() != "" )
         {
             if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
-                tmpPath = downDirs + relativePath() + QDir::separator() + scope->variableValues( "DESTDIR" ).front();
+                tmpPath = downDirs + relativePath() + QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
             else
                 tmpPath = scope->variableValues( "DESTDIR" ).front();
         }
         else
         {
-            tmpPath = downDirs + this->relativePath() + QDir::separator();
+            tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) );
         }
 
         tmpPath = QDir::cleanDirPath( tmpPath );
@@ -345,12 +345,12 @@ QString QMakeScopeItem::getSharedLibAddObject( QString downDirs )
         QString libString;
         if ( scope->variableValues( "TARGET" ).front() != "" )
         {
-            libString = tmpPath + QDir::separator() + "lib" + scope->variableValues( "TARGET" ).front() + ".so";
+            libString = tmpPath + QString( QChar( QDir::separator() ) ) + "lib" + scope->variableValues( "TARGET" ).front() + ".so";
 
         }
         else
         {
-            libString = tmpPath + QDir::separator() + "lib" + scope->projectName() + ".so";
+            libString = tmpPath + QString( QChar( QDir::separator() ) ) + "lib" + scope->projectName() + ".so";
 
         }
         return ( libString );
@@ -364,21 +364,21 @@ QString QMakeScopeItem::getApplicationObject( QString downDirs )
     if ( scope->variableValues( "DESTDIR" ).front() != "" )
     {
         if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
-            tmpPath = downDirs + this->relativePath() + QDir::separator() + scope->variableValues( "DESTDIR" ).front();
+            tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
         else
             tmpPath = scope->variableValues( "DESTDIR" ).front();
     }
     else
     {
-        tmpPath = downDirs + this->relativePath() + QDir::separator();
+        tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) );
     }
 
     tmpPath = QDir::cleanDirPath( tmpPath );
 
     if ( scope->variableValues( "TARGET" ).front().isEmpty() )
-        return tmpPath + QDir::separator() + scope->projectName();
+        return tmpPath + QString( QChar( QDir::separator() ) ) + scope->projectName();
     else
-        return tmpPath + QDir::separator() + scope->variableValues( "TARGET" ).front();
+        return tmpPath + QString( QChar( QDir::separator() ) ) + scope->variableValues( "TARGET" ).front();
 }
 QString QMakeScopeItem::getLibAddObject( QString downDirs )
 {
@@ -399,13 +399,13 @@ QString QMakeScopeItem::getLibAddObject( QString downDirs )
         if ( scope->variableValues( "DESTDIR" ).front() != "" )
         {
             if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
-                tmpPath = downDirs + this->relativePath() + QDir::separator() + scope->variableValues( "DESTDIR" ).front();
+                tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
             else
                 tmpPath = scope->variableValues( "DESTDIR" ).front();
         }
         else
         {
-            tmpPath = downDirs + this->relativePath() + QDir::separator();
+            tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) );
         }
 
         tmpPath = QDir::cleanDirPath( tmpPath );
@@ -413,12 +413,12 @@ QString QMakeScopeItem::getLibAddObject( QString downDirs )
         QString libString;
         if ( scope->variableValues( "TARGET" ).front() != "" )
         {
-            libString = tmpPath + QDir::separator() + "lib" + scope->variableValues( "TARGET" ).front() + ".a";
+            libString = tmpPath + QString( QChar( QDir::separator() ) ) + "lib" + scope->variableValues( "TARGET" ).front() + ".a";
 
         }
         else
         {
-            libString = tmpPath + QDir::separator() + "lib" + scope->projectName() + ".a";
+            libString = tmpPath + QString( QChar( QDir::separator() ) ) + "lib" + scope->projectName() + ".a";
 
         }
         return ( libString );
@@ -436,13 +436,13 @@ QString QMakeScopeItem::getLibAddPath( QString downDirs )
     if ( scope->variableValues( "DESTDIR" ).front() != "" )
     {
         if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
-            tmpPath = downDirs + this->relativePath() + QDir::separator() + scope->variableValues( "DESTDIR" ).front();
+            tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
         else
             tmpPath = scope->variableValues( "DESTDIR" ).front();
     }
     else
     {
-        tmpPath = downDirs + this->relativePath() + QDir::separator();
+        tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) );
     }
 
     tmpPath = QDir::cleanDirPath( tmpPath );
@@ -647,7 +647,7 @@ void QMakeScopeItem::buildGroups()
     for ( it = values.begin(); it != values.end(); ++it )
     {
         FileItem* fitem = createFileItem( *it );
-        fitem->uiFileLink = m_widget->getUiFileLink( relativePath() + QDir::separator(), *it );
+        fitem->uiFileLink = m_widget->getUiFileLink( relativePath() + QString( QChar( QDir::separator() ) ), *it );
         item->files.append( fitem );
     }
 
@@ -657,7 +657,7 @@ void QMakeScopeItem::buildGroups()
     for ( it = values.begin(); it != values.end(); ++it )
     {
         FileItem* fitem = createFileItem( *it );
-        fitem->uiFileLink = m_widget->getUiFileLink( relativePath() + QDir::separator(), *it );
+        fitem->uiFileLink = m_widget->getUiFileLink( relativePath() + QString( QChar( QDir::separator() ) ), *it );
         item->files.append( fitem );
     }
 
