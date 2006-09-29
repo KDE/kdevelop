@@ -19,7 +19,6 @@
  */
 #include "targetxmltest.h"
 #include <QtXml/QDomDocument>
-#include "cmakexmlparser.h"
 QTEST_MAIN(TargetXmlTest)
 
 TargetXmlTest::TargetXmlTest(QObject *parent)
@@ -37,7 +36,7 @@ void TargetXmlTest::emptyTargetTest()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    TargetInfo ti = CMakeXmlParser::parseTarget( doc.documentElement() );
+    TargetInfo ti = m_parser.parseTarget( doc.documentElement() );
     QVERIFY( ti.name.isEmpty() );
     QVERIFY( ti.type.isEmpty() );
 }
@@ -58,7 +57,7 @@ void TargetXmlTest::noSourcesTargetTest()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    TargetInfo ti = CMakeXmlParser::parseTarget( doc.documentElement() );
+    TargetInfo ti = m_parser.parseTarget( doc.documentElement() );
     QVERIFY( ti.name == name );
     QVERIFY( ti.type == type );
     QVERIFY( ti.sources.isEmpty() );
@@ -84,7 +83,7 @@ void TargetXmlTest::fullTargetTest()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    TargetInfo ti = CMakeXmlParser::parseTarget( doc.documentElement() );
+    TargetInfo ti = m_parser.parseTarget( doc.documentElement() );
     QVERIFY( ti.name == name );
     QVERIFY( ti.type == type );
     QStringList::iterator checkIt = ti.sources.begin();

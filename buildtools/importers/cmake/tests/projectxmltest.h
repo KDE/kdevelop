@@ -22,6 +22,7 @@
 #define PROJECTXMLTEST_H
 
 #include <QtTest/QtTest>
+#include "cmakexmlparser.h"
 
 /**
  * @author Matt Rogers <mattr@kde.org>
@@ -39,6 +40,9 @@ private slots:
     
     void testFullProject();
     void testFullProject_data();
+
+private:
+    CMakeXmlParser m_parser;
 };
 
 #endif

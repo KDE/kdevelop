@@ -21,6 +21,7 @@
 #define TARGETXMLTEST_H
 
 #include <QtTest/QtTest>
+#include "cmakexmlparser.h"
 
 /**
  * @author Matt Rogers <mattr@kde.org>
@@ -41,6 +42,10 @@ private slots:
     
     void fullTargetTest();
     void fullTargetTest_data();
+
+private:
+    CMakeXmlParser m_parser;
 };
 
 #endif
+

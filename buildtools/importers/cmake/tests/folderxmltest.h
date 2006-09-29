@@ -22,6 +22,7 @@
 #define FOLDERXMLTEST_H
 
 #include <QtTest/QtTest>
+#include "cmakexmlparser.h"
 
 
 
@@ -55,6 +56,9 @@ private slots:
 
     void fullFolderTest();
     void fullFolderTest_data();
+
+private:
+    CMakeXmlParser m_parser;
 };
 
 

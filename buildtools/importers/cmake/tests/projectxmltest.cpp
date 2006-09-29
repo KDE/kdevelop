@@ -24,12 +24,6 @@
 #include "cmakexmlparser.h"
 QTEST_MAIN(ProjectXmlTest)
 
-struct ProjectInfo
-{
-    QString name;
-    QList<FolderInfo> folders;
-};
-
 ProjectXmlTest::ProjectXmlTest( QObject* parent )
  : QObject( parent )
 {
@@ -45,14 +39,7 @@ void ProjectXmlTest::testEmptyProject()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    ProjectInfo pi;
-    QDomElement e = doc.documentElement();
-    if ( e.tagName() == "project" )
-    {
-        pi.name = e.attribute("name");
-        QDomNode n = e.firstChild();
-        QVERIFY( n.isNull() );
-    }
+    ProjectInfo pi = m_parser.parseProject( doc );
     QVERIFY( pi.name.isEmpty() );
 }
 
@@ -82,7 +69,7 @@ void ProjectXmlTest::testFullProject()
             QDomElement fe = n.toElement();
             if ( !fe.isNull() && fe.tagName() == "folder" )
             {
-                pi.folders.append( CMakeXmlParser::parseFolder( fe ) );
+                pi.folders.append( m_parser.parseFolder( fe ) );
             }
             n = n.nextSibling();
         }

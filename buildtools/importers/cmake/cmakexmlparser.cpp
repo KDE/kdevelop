@@ -20,6 +20,27 @@
 
 #include "cmakexmlparser.h"
 
+ProjectInfo CMakeXmlParser::parseProject( const QDomDocument& doc )
+{
+    QDomElement e = doc.documentElement();
+    ProjectInfo pi;
+    if ( e.tagName() == "project" )
+    {
+        pi.name = e.attribute("name");
+        QDomNode n = e.firstChild();
+        while ( !n.isNull() )
+        {
+            QDomElement fe = n.toElement();
+            if ( !fe.isNull() && fe.tagName() == "folder" )
+            {
+                pi.folders.append( CMakeXmlParser::parseFolder( fe ) );
+            }
+            n = n.nextSibling();
+        }
+    }
+    return pi;
+}
+
 FolderInfo CMakeXmlParser::parseFolder( const QDomElement& docElem )
 {
     FolderInfo mainInfo;

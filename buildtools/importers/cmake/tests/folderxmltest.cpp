@@ -21,7 +21,6 @@
 #include "folderxmltest.h"
 #include <QtXml/QDomDocument>
 
-#include "cmakexmlparser.h"
 QTEST_MAIN(SimpleFolderXmlTest)
 
 void SimpleFolderXmlTest::testNonValidFolder()
@@ -30,7 +29,7 @@ void SimpleFolderXmlTest::testNonValidFolder()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    FolderInfo fi = CMakeXmlParser::parseFolder( doc.documentElement() );
+    FolderInfo fi = m_parser.parseFolder( doc.documentElement() );
     QVERIFY( fi.name.isEmpty() );
 }
 
@@ -48,7 +47,7 @@ void SimpleFolderXmlTest::testEmptyFolder()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    FolderInfo fi = CMakeXmlParser::parseFolder( doc.documentElement() );
+    FolderInfo fi = m_parser.parseFolder( doc.documentElement() );
     QVERIFY( !fi.name.isEmpty() );
     QVERIFY( fi.name == foldername );
 }
@@ -65,7 +64,7 @@ void SimpleFolderXmlTest::testFolderWithSubFolders()
     QFETCH(QString, xml);
     QDomDocument doc;
     QVERIFY( doc.setContent( xml ) );
-    FolderInfo mainInfo = CMakeXmlParser::parseFolder( doc.documentElement() );
+    FolderInfo mainInfo = m_parser.parseFolder( doc.documentElement() );
     QVERIFY( mainInfo.subFolders.isEmpty() == false );
     QVERIFY( mainInfo.subFolders.count() == 1 );
 }
@@ -84,7 +83,7 @@ void SimpleFolderXmlTest::testFolderWithIncludes()
     QFETCH(QString, xml);
     QDomDocument doc;
     QVERIFY( doc.setContent( xml ) );
-    FolderInfo mainInfo = CMakeXmlParser::parseFolder( doc.documentElement() );
+    FolderInfo mainInfo = m_parser.parseFolder( doc.documentElement() );
     QVERIFY( mainInfo.name.isEmpty() == false );
     QVERIFY( mainInfo.includes.isEmpty() == false );
     QVERIFY( mainInfo.includes.count() == 1 );
@@ -103,7 +102,7 @@ void SimpleFolderXmlTest::testFolderWithDefines()
     QFETCH(QString, xml);
     QDomDocument doc;
     QVERIFY( doc.setContent( xml ) );
-    FolderInfo mainInfo = CMakeXmlParser::parseFolder( doc.documentElement() );
+    FolderInfo mainInfo = m_parser.parseFolder( doc.documentElement() );
     QVERIFY( mainInfo.name.isEmpty() == false );
     QVERIFY( mainInfo.defines.isEmpty() == false );
     QVERIFY( mainInfo.defines.count() == 1 );
@@ -122,7 +121,7 @@ void SimpleFolderXmlTest::fullFolderTest()
     QFETCH(QString, xml);
     QDomDocument doc;
     QVERIFY( doc.setContent( xml ) );
-    FolderInfo mainInfo = CMakeXmlParser::parseFolder( doc.documentElement() );
+    FolderInfo mainInfo = m_parser.parseFolder( doc.documentElement() );
     QFETCH( QString, folderName );
     QFETCH( int, numIncludes );
     QFETCH( int, numDefines );
