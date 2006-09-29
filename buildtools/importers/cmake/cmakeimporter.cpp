@@ -122,6 +122,11 @@ KUrl::List CMakeImporter::includeDirectories() const
 
 void CMakeImporter::createProjectItems()
 {
+    m_rootItem->setText( m_projectInfo.name );
+    foreach( FolderInfo fi, m_projectInfo.folders )
+    {
+        new KDevProjectFolderItem( fi.name, m_rootItem);
+    }
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;
