@@ -123,8 +123,8 @@ ADD_CUSTOM_COMMAND(
             "${CMAKE_CURRENT_SOURCE_DIR}/csharp_parser.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp_parser.h"
     COMMAND ${FLEX_EXECUTABLE}
-    ARGS    -o"csharp_lexer.cpp"
-            "csharp_lexer.ll"
+    ARGS    -ocsharp_lexer.cpp
+            csharp_lexer.ll
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
 

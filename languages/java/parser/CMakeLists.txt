@@ -76,8 +76,8 @@ ADD_CUSTOM_COMMAND(
             "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/java_parser.h"
     COMMAND ${FLEX_EXECUTABLE}
-    ARGS    -o"java_lexer.cpp"
-            "java_lexer.ll"
+    ARGS    -ojava_lexer.cpp
+            java_lexer.ll
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
