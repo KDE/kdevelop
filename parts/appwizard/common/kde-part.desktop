@@ -5,6 +5,7 @@ Name[br]=Perzh%{APPNAME}
 Name[ca]=Part per a %{APPNAME}
 Name[el]=Τμήμα%{APPNAME}
 Name[et]=%{APPNAME} komponent
+Name[fa]=جزء %{APPNAME}
 Name[ja]=%{APPNAME} パート
 Name[pt_BR]=Parte %{APPNAME}
 Name[sv]=%{APPNAME}-del

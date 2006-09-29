@@ -8,6 +8,7 @@ Name[el]=Gtk-- πλαίσιο εφαρμογής
 Name[es]=Infraestructura de aplicación Gtk--
 Name[et]=Gtk-- rakenduse raamistik
 Name[eu]=Gtk-- Applicazioen lan-markoa
+Name[fa]=چارچوب کاربرد Gtk-- 
 Name[fr]=Infrastructure d'application Gtk--
 Name[ga]=Creatlach feidhmchláir Gtk--
 Name[hu]=Gtk-- - alkalmazás-keretrendszer
@@ -37,6 +38,7 @@ Comment[el]=Δημιουργεί μια απλή εφαρμογή Gtk. Τα Gtkm
 Comment[es]=Genera una sencilla aplicación Gtk--. Debe tener instalado Gtkmm >= 1.2.8 y < 1.3.0. Para editar archivos glade se necesita glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[et]=Lihtsa Gtk-- rakenduse loomine. Paigaldatud peab olema Gtkmm >= 1.2.8 ja < 1.3.0. Glade-faili redigeerimiseks on vajalik glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[eu]=Gtk-- applikazio sinple bat sortzen du. Gtkmm >= 1.2.8 and < 1.3.0 instalatu behar dira. Glade fitxategiak editzeko glade-- (http://home.wtal.de/petig/Gtk/) behar da.
+Comment[fa]=یک کاربرد سادۀ  Gtk--تولید می‌کند.  Gtkmm >= 1.2.8 و  < 1.3.0 باید نصب شده باشد. برای ویرایش پروندۀ glade، glade-- (http://home.wtal.de/petig/Gtk/) نیاز است.
 Comment[fr]=Génère une application Gtk-- simple. Gtkmm >= 1.2.8 et < 1.3.0 doit être installé. Pour éditer le fichier glade, glade-- (http://home.wtal.de/petig/Gtk/) est requis.
 Comment[ga]=Cruthaíonn sé seo feidhmchlár simplí Gtk--. Ba chóir Gtkmm >= 1.2.8 agus < 1.3.0 a bheith suiteáilte. Chun comhad glade a chur in eagar, tá glade-- (http://home.wtal.de/petig/Gtk/) de dhíth ort.
 Comment[hu]=Létrehoz egy egyszerű Gtk---os alkalmazást. Gtkmm >= 1.2.8 és < 1.3.0 szükséges hozzá. Glade-fájl szerkesztéséhez glade-- (http://home.wtal.de/petig/Gtk/) is szükséges.
@@ -152,6 +154,7 @@ Comment[el]=Ένα πλαίσιο εφαρμογής Gtk δημιουργήθη�
 Comment[es]=Una infraestructura de aplicación Gtk-- ha sido creada en %{dest}
 Comment[et]=Gtk-- rakenduse raamistik loodi asukohta %{dest}
 Comment[eu]=Gtk-- aplikazioen lan-marko bat sortu da hemen: %{dest}
+Comment[fa]= یک چارچوب کاربرد Gtk-- در %{dest} ایجاد شده بود
 Comment[fr]=Une infrastructure d'application Gtk-- a été créée dans %{dest}
 Comment[ga]=Cruthaíodh creatlach feidhmchláir Gtk-- i %{dest}
 Comment[hu]=Létrejött egy Gtk-s alkalmazás-keretrendszer itt: %{dest}
