@@ -63,9 +63,7 @@ ParseJob::ParseJob( KDevDocument *document, RubyLanguageSupport *parent )
 {}
 
 ParseJob::~ParseJob()
-{
-    delete m_session;
-}
+{}
 
 RubyLanguageSupport *ParseJob::ruby() const
 {

@@ -63,9 +63,7 @@ ParseJob::ParseJob( KDevDocument *document, CSharpLanguageSupport *parent )
 {}
 
 ParseJob::~ParseJob()
-{
-    delete m_session;
-}
+{}
 
 CSharpLanguageSupport* ParseJob::csharp() const
 {
