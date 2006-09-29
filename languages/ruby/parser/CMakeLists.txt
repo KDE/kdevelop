@@ -82,8 +82,8 @@ add_custom_command(
             "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/ruby_parser.h"
     COMMAND ${FLEX_EXECUTABLE}
-    ARGS    -o"ruby_lexer.cpp"
-            "ruby_lexer.ll"
+    ARGS    -oruby_lexer.cpp
+            ruby_lexer.ll
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
