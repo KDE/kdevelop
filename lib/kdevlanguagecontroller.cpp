@@ -42,12 +42,14 @@ KDevLanguageController::~KDevLanguageController()
 
 void KDevLanguageController::loadSettings( bool projectIsLoaded )
 {
-    Q_UNUSED( projectIsLoaded );
-    KConfig * config = KDevConfig::standard();
-    config->setGroup( "General Options" );
-
-    QString language = config->readPathEntry( "PrimaryLanguage", "C++" );
-    KDevCore::languageController() ->languageSupport( language );
+    if ( projectIsLoaded )
+    {
+        KConfig * config = KDevConfig::standard();
+        config->setGroup( "General Options" );
+    
+        QString language = config->readPathEntry( "PrimaryLanguage", "C++" );
+        KDevCore::languageController() ->languageSupport( language );
+    }
 }
 
 void KDevLanguageController::saveSettings( bool projectIsLoaded )
