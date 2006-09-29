@@ -20,7 +20,15 @@
 
 #include "projectxmltest.h"
 
+#include <QtXml/QDomDocument>
+#include "cmakexmlparser.h"
 QTEST_MAIN(ProjectXmlTest)
+
+struct ProjectInfo
+{
+    QString name;
+    QList<FolderInfo> folders;
+};
 
 ProjectXmlTest::ProjectXmlTest( QObject* parent )
  : QObject( parent )
@@ -33,12 +41,67 @@ ProjectXmlTest::~ProjectXmlTest()
 
 void ProjectXmlTest::testEmptyProject()
 {
-    QVERIFY(false);
+    QFETCH(QString, xml);
+    QDomDocument doc;
+    if ( ! doc.setContent( xml ) )
+        QFAIL("Unable to set XML contents");
+    ProjectInfo pi;
+    QDomElement e = doc.documentElement();
+    if ( e.tagName() == "project" )
+    {
+        pi.name = e.attribute("name");
+        QDomNode n = e.firstChild();
+        QVERIFY( n.isNull() );
+    }
+    QVERIFY( pi.name.isEmpty() );
+}
+
+void ProjectXmlTest::testEmptyProject_data()
+{
+    QTest::addColumn<QString>("xml");
+    QTest::newRow("empty project 1") << "<project></project>";
+    QTest::newRow("empty project 2") << "<project/>";
 }
 
 void ProjectXmlTest::testFullProject()
 {
-    QVERIFY(false);
+    QFETCH(QString, xml);
+    QFETCH(QString, projectname);
+    QFETCH(int, foldercount);
+    QDomDocument doc;
+    if ( ! doc.setContent( xml ) )
+        QFAIL("Unable to set XML contents");
+    ProjectInfo pi;
+    QDomElement e = doc.documentElement();
+    if ( e.tagName() == "project" )
+    {
+        pi.name = e.attribute("name");
+        QDomNode n = e.firstChild();
+        while ( !n.isNull() )
+        {
+            QDomElement fe = n.toElement();
+            if ( !fe.isNull() && fe.tagName() == "folder" )
+            {
+                pi.folders.append( CMakeXmlParser::parseFolder( fe ) );
+            }
+            n = n.nextSibling();
+        }
+    }
+    QVERIFY( pi.name == projectname );
+    QVERIFY( pi.folders.count() == foldercount );
 }
+
+void ProjectXmlTest::testFullProject_data()
+{
+    QTest::addColumn<QString>("xml");
+    QTest::addColumn<QString>("projectname");
+    QTest::addColumn<int>("foldercount");
+    QTest::newRow("full project") << "<project name=\"foo\"><folder name=\"foobar\">"
+            "<includes><include>/path/to/neato/include/</include></includes>"
+            "<definitions><define>-DQT_NO_STL</define></definitions>"
+            "</folder></project>" << "foo" << 1;
+
+}
+
 
 #include "projectxmltest.moc"

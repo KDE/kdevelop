@@ -35,7 +35,10 @@ public:
 
 private slots:
     void testEmptyProject();
+    void testEmptyProject_data();
+    
     void testFullProject();
+    void testFullProject_data();
 };
 
 #endif
