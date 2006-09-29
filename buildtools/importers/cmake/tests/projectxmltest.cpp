@@ -58,22 +58,7 @@ void ProjectXmlTest::testFullProject()
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
-    ProjectInfo pi;
-    QDomElement e = doc.documentElement();
-    if ( e.tagName() == "project" )
-    {
-        pi.name = e.attribute("name");
-        QDomNode n = e.firstChild();
-        while ( !n.isNull() )
-        {
-            QDomElement fe = n.toElement();
-            if ( !fe.isNull() && fe.tagName() == "folder" )
-            {
-                pi.folders.append( m_parser.parseFolder( fe ) );
-            }
-            n = n.nextSibling();
-        }
-    }
+    ProjectInfo pi = m_parser.parseProject( doc );
     QVERIFY( pi.name == projectname );
     QVERIFY( pi.folders.count() == foldercount );
 }
