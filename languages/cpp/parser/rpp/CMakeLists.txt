@@ -29,7 +29,7 @@ set(pp_SRCS
     main.cpp
 )
 
-kde4_add_executable(pp ${pp_SRCS})
+kde4_add_executable(pp NOGUI RUN_UNINSTALLED ${pp_SRCS})
 target_link_libraries(pp ${KDE4_KDECORE_LIBS} kdevcpprpp)
 add_test(pp ${EXECUTABLE_OUTPUT_PATH}/pp)
 
