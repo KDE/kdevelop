@@ -17,6 +17,8 @@ set(kdevcsharpparser_STAT_SRCS
     csharp_binder.h
     csharp_typebinder.cpp
     csharp_typebinder.h
+    csharp_lexer.cpp
+    csharp_lexer.h
     codedisplay.cpp
     codedisplay.h
     parsesession.cpp
@@ -113,30 +115,6 @@ ELSE(KDEVPG_EXECUTABLE)
         "${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp_default_visitor.cpp"
         ${kdevcsharpparser_STAT_SRCS})
 ENDIF(KDEVPG_EXECUTABLE)
-
-
-# Add command to generate the lexer.
-ADD_CUSTOM_COMMAND(
-    OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
-    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.ll"
-            "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/csharp_parser.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp_parser.h"
-    COMMAND ${FLEX_EXECUTABLE}
-    ARGS    -ocsharp_lexer.cpp
-            csharp_lexer.ll
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-
-SET(kdevcsharpparser_STAT_SRCS
-    "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
-    ${kdevcsharpparser_STAT_SRCS})
-
-SET_SOURCE_FILES_PROPERTIES(
-    "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.cpp"
-    GENERATED
-    )
-# ...now the lexer has been generated
 
 
 IF(KDEVCMG_EXECUTABLE)

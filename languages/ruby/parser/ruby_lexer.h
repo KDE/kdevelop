@@ -26,7 +26,7 @@
 #include <iostream>
 
 #ifndef DONT_INCLUDE_FLEXLEXER
-#include <FlexLexer.h>
+#include "FlexLexer.h"
 #endif
 
 // The YY_USER_ACTION macro is called whenever a token is found by Flex

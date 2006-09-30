@@ -9,6 +9,8 @@ set(kdevjavaparser_STAT_SRCS
     decoder.cpp
     decoder.h
     java_io.cpp
+    java_lexer.cpp
+    java_lexer.h
     parsesession.cpp
     parsesession.h
 )
@@ -67,29 +69,6 @@ ELSE(KDEVPG_EXECUTABLE)
         "${CMAKE_CURRENT_SOURCE_DIR}/java_default_visitor.cpp"
         ${kdevjavaparser_STAT_SRCS})
 ENDIF(KDEVPG_EXECUTABLE)
-
-
-# Add command to generate the lexer.
-ADD_CUSTOM_COMMAND(
-    OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.cpp"
-    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.ll"
-            "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/java_parser.h"
-    COMMAND ${FLEX_EXECUTABLE}
-    ARGS    -ojava_lexer.cpp
-            java_lexer.ll
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-
-SET(kdevjavaparser_STAT_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.cpp
-    ${kdevjavaparser_STAT_SRCS})
-
-SET_SOURCE_FILES_PROPERTIES(
-    ${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.cpp
-    GENERATED
-    )
-# ...now the lexer has been generated
 
 
 kde4_automoc(${kdevjavaparser_STAT_SRCS})
