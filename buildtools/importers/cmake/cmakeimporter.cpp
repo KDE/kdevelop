@@ -34,7 +34,7 @@
 #include "kdevprojectmodel.h"
 
 #include "cmakeconfig.h"
-#include "cmaketargetitem.h"
+#include "cmakemodelitems.h"
 
 typedef KGenericFactory<CMakeImporter> CMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevcmakeimporter,
@@ -68,10 +68,32 @@ KUrl CMakeImporter::buildDirectory() const
      return project()->folder();
 }
 
-QList<KDevProjectFolderItem*> CMakeImporter::parse( KDevProjectFolderItem* dom )
+QList<KDevProjectFolderItem*> CMakeImporter::parse( KDevProjectFolderItem* item )
 {
-    Q_UNUSED( dom );
-    return QList<KDevProjectFolderItem*>();
+    QList<KDevProjectFolderItem*> folderList;
+    CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
+    if ( !folder )
+        return folderList;
+
+    FolderInfo fi = folder->folderInfo();
+
+    foreach ( FolderInfo sfi, fi.subFolders )
+        folderList.append( new CMakeFolderItem( sfi, folder ) );
+
+    foreach ( TargetInfo ti, fi.targets )
+    {
+        CMakeTargetItem* targetItem = new CMakeTargetItem( ti, folder );
+        foreach( QString sFile, ti.sources )
+        {
+            KUrl sourceFile = folder->url();
+            sourceFile.adjustPath( KUrl::AddTrailingSlash );
+            sourceFile.addPath( sFile );
+            new KDevProjectFileItem( sourceFile, targetItem );
+        }
+    }
+
+
+    return folderList;
 }
 
 KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
@@ -79,8 +101,6 @@ KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
 {
     QString buildDir = CMakeSettings::self()->buildFolder();
     kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
-    m_rootItem = new KDevProjectFolderItem( fileName, 0 );
-    m_rootItem->setText( KDevCore::activeProject()->name() );
     KUrl cmakeInfoFile(buildDir);
     cmakeInfoFile.adjustPath( KUrl::AddTrailingSlash );
     cmakeInfoFile.addPath("cmakeinfo.xml");
@@ -93,7 +113,9 @@ KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
     else
     {
         m_projectInfo = m_xmlParser.parse( cmakeInfoFile );
-        createProjectItems();
+        FolderInfo rootFolder = m_projectInfo.rootFolder;
+        m_rootItem = new CMakeFolderItem( rootFolder, 0 );
+        m_rootItem->setText( KDevCore::activeProject()->name() );
     }
     return m_rootItem;
 }
@@ -120,14 +142,6 @@ KUrl::List CMakeImporter::includeDirectories() const
     return m_includeDirList;
 }
 
-void CMakeImporter::createProjectItems()
-{
-    m_rootItem->setText( m_projectInfo.name );
-    foreach( FolderInfo fi, m_projectInfo.folders )
-    {
-        new KDevProjectFolderItem( fi.name, m_rootItem);
-    }
-}
 
 // kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;
 

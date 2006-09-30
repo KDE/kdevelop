@@ -44,16 +44,10 @@ ProjectInfo CMakeXmlParser::parseProject( const QDomDocument& doc )
     if ( e.tagName() == "project" )
     {
         pi.name = e.attribute("name");
-        QDomNode n = e.firstChild();
-        while ( !n.isNull() )
-        {
-            QDomElement fe = n.toElement();
-            if ( !fe.isNull() && fe.tagName() == "folder" )
-            {
-                pi.folders.append( CMakeXmlParser::parseFolder( fe ) );
-            }
-            n = n.nextSibling();
-        }
+        pi.root = e.attribute( "root" );
+        QDomElement fe = e.firstChildElement();
+        if ( !fe.isNull() && fe.tagName() == "folder" )
+            pi.rootFolder = parseFolder( fe );
     }
     return pi;
 }
@@ -102,10 +96,15 @@ FolderInfo CMakeXmlParser::parseFolder( const QDomElement& docElem )
 
                 if ( e.tagName() == "folder" )
                 {
-                    FolderInfo fi;
-                    fi.name = e.attribute("name");
+                    FolderInfo fi = parseFolder( e );
                     mainInfo.subFolders.append(fi);
                 }
+
+                if ( e.tagName() == "target" )
+                {
+                    mainInfo.targets.append( parseTarget( e ) );
+                }
+
             }
             n = n.nextSibling();
         }

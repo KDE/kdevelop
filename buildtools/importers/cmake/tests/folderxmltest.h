@@ -48,14 +48,21 @@ private slots:
     void testFolderWithSubFolders();
     void testFolderWithSubFolders_data();
 
+    void testFolderWithMultiSubfolders();
+    void testFolderWithMultiSubfolders_data();
+
     void testFolderWithIncludes();
     void testFolderWithIncludes_data();
 
     void testFolderWithDefines();
     void testFolderWithDefines_data();
 
+    void testFolderWithTargets();
+    void testFolderWithTargets_data();
+
     void fullFolderTest();
     void fullFolderTest_data();
+
 
 private:
     CMakeXmlParser m_parser;

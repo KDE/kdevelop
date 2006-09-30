@@ -19,11 +19,34 @@
  */
 
 #include <QString>
-#include "cmaketargetitem.h"
+#include "cmakemodelitems.h"
 
-CMakeTargetItem::CMakeTargetItem( const QString& target, KDevProjectItem* item)
-    : KDevProjectTargetItem( target, item )
+CMakeFolderItem::CMakeFolderItem( const FolderInfo& fi, KDevProjectItem* item )
+    : KDevProjectBuildFolderItem( fi.name, item )
 {
+    m_folderInfo = fi;
+    KUrl::List includeList;
+    foreach( QString inc, fi.includes )
+    {
+        includeList.append( KUrl( inc ) );
+    }
+    setIncludeDirectories( includeList );
+}
+
+CMakeFolderItem::~CMakeFolderItem()
+{
+}
+
+FolderInfo CMakeFolderItem::folderInfo() const
+{
+    return m_folderInfo;
+}
+
+CMakeTargetItem::CMakeTargetItem( const TargetInfo& target, CMakeFolderItem* item)
+    : KDevProjectTargetItem( target.name, item )
+{
+    m_includeList = item->includeDirectories();
+    m_targetInfo = target;
 }
 
 
@@ -31,6 +54,10 @@ CMakeTargetItem::~CMakeTargetItem()
 {
 }
 
+TargetInfo CMakeTargetItem::targetInfo() const
+{
+    return m_targetInfo;
+}
 
 const DomUtil::PairList& CMakeTargetItem::defines() const
 {

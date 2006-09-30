@@ -78,6 +78,31 @@ void SimpleFolderXmlTest::testFolderWithSubFolders_data()
                              "</folder></folder>";
 }
 
+void SimpleFolderXmlTest::testFolderWithMultiSubfolders()
+{
+    QFETCH( QString, xml );
+    QFETCH( QString, subfolderName );
+    QDomDocument doc;
+    QVERIFY( doc.setContent( xml ) );
+    FolderInfo mainInfo = m_parser.parseFolder( doc.documentElement() );
+    QVERIFY( mainInfo.subFolders.isEmpty() == false );
+    FolderInfo subFolder = mainInfo.subFolders.first();
+    QVERIFY( subFolder.subFolders.isEmpty() == false );
+    QVERIFY( subFolder.subFolders.at( 0 ).name == subfolderName );
+}
+
+void SimpleFolderXmlTest::testFolderWithMultiSubfolders_data()
+{
+    QTest::addColumn<QString>("xml");
+    QTest::addColumn<QString>( "subfolderName" );
+    QTest::newRow("sub1") << "<folder name=\"foo\"><tag1/><tag2/>"
+                             "<folder name=\"bar\"><folder name=\"baz\"/></folder></folder>"
+                          << "baz";
+    QTest::newRow("sub2") << "<folder name=\"foo\"><folder name=\"bar\"><folder name=\"baz\" />"
+                             "</folder></folder>" << "baz";
+}
+
+
 void SimpleFolderXmlTest::testFolderWithIncludes()
 {
     QFETCH(QString, xml);
@@ -114,6 +139,25 @@ void SimpleFolderXmlTest::testFolderWithDefines_data()
     QTest::newRow("defines1") << "<folder name=\"foo\"><definitions>"
                                   "<define>-DQT_NO_STL</define>"
                                   "</definitions></folder>";
+}
+
+void SimpleFolderXmlTest::testFolderWithTargets()
+{
+    QFETCH( QString, xml );
+    QDomDocument doc;
+    QVERIFY( doc.setContent( xml ) );
+    FolderInfo mainInfo = m_parser.parseFolder( doc.documentElement() );
+    QVERIFY( mainInfo.name.isEmpty() == false );
+    QVERIFY( mainInfo.targets.isEmpty() == false );
+}
+
+void SimpleFolderXmlTest::testFolderWithTargets_data()
+{
+    QTest::addColumn<QString>( "xml" );
+    QTest::newRow( "targets1" ) << "<folder name=\"foo\"><target name=\"t1\"></target></folder>";
+    QTest::newRow( "targets2" ) << "<folder name=\"bar\"><target name=\"t1\" type=\"mytype\">"
+                                   "<sources><source>foo.h</source></sources>"
+                                   "</target></folder>";
 }
 
 void SimpleFolderXmlTest::fullFolderTest()

@@ -22,6 +22,26 @@
 #define CMAKETARGETITEM_H
 
 #include <kdevprojectmodel.h>
+#include "cmakexmlparser.h"
+
+/**
+ * The project model item for CMake folders.
+ *
+ * @author Matt Rogers <mattr@kde.org>
+ */
+class CMakeFolderItem : public KDevProjectBuildFolderItem
+{
+public:
+    CMakeFolderItem( const FolderInfo& fi,  KDevProjectItem* item = 0 );
+    ~CMakeFolderItem();
+
+    FolderInfo folderInfo() const;
+
+private:
+    FolderInfo m_folderInfo;
+};
+
+
 /**
  * The project model item for CMake targets.
  *
@@ -30,8 +50,10 @@
 class CMakeTargetItem : public KDevProjectTargetItem
 {
 public:
-    CMakeTargetItem( const QString& target, KDevProjectItem* item );
+    CMakeTargetItem( const TargetInfo& target, CMakeFolderItem* item );
     ~CMakeTargetItem();
+
+    TargetInfo targetInfo() const;
 
     virtual const DomUtil::PairList& defines() const;
     virtual const KUrl::List& includeDirectories() const;
@@ -41,7 +63,7 @@ private:
     KUrl::List m_includeList;
     DomUtil::PairList m_defines;
     QHash<QString, QString> m_environment;
-
+    TargetInfo m_targetInfo;
 };
 
 #endif

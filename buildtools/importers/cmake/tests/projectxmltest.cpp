@@ -41,6 +41,8 @@ void ProjectXmlTest::testEmptyProject()
         QFAIL("Unable to set XML contents");
     ProjectInfo pi = m_parser.parseProject( doc );
     QVERIFY( pi.name.isEmpty() );
+    QVERIFY( pi.root.isEmpty() );
+    QVERIFY( pi.rootFolder.name.isEmpty() );
 }
 
 void ProjectXmlTest::testEmptyProject_data()
@@ -54,24 +56,26 @@ void ProjectXmlTest::testFullProject()
 {
     QFETCH(QString, xml);
     QFETCH(QString, projectname);
-    QFETCH(int, foldercount);
+    QFETCH(QString, root);
+    QFETCH(QString, foldername);
     QDomDocument doc;
     if ( ! doc.setContent( xml ) )
         QFAIL("Unable to set XML contents");
     ProjectInfo pi = m_parser.parseProject( doc );
     QVERIFY( pi.name == projectname );
-    QVERIFY( pi.folders.count() == foldercount );
+    QVERIFY( pi.root == root );
+    QVERIFY( pi.rootFolder.name == foldername );
 }
 
 void ProjectXmlTest::testFullProject_data()
 {
     QTest::addColumn<QString>("xml");
     QTest::addColumn<QString>("projectname");
-    QTest::addColumn<int>("foldercount");
-    QTest::newRow("full project") << "<project name=\"foo\"><folder name=\"foobar\">"
-            "<includes><include>/path/to/neato/include/</include></includes>"
-            "<definitions><define>-DQT_NO_STL</define></definitions>"
-            "</folder></project>" << "foo" << 1;
+    QTest::addColumn<QString>( "root" );
+    QTest::addColumn<QString>("foldername");
+    QTest::newRow("full project") << "<project name=\"foo\" root=\"/path/to/root/dir\"><folder name=\"foobar\">"
+            "<folder name=\"foobar/baz\"></folder>"
+            "</folder></project>" << "foo" << "/path/to/root/dir" << "foobar";
 }
 
 

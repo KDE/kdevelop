@@ -82,9 +82,6 @@ public:
     virtual KUrl::List findMakefiles( KDevProjectFolderItem* dom ) const;
 
 
-protected:
-    void createProjectItems();
-
 private:
 
     KDevProject* m_project;
