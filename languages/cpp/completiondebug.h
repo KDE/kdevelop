@@ -1,7 +1,7 @@
 /***************************************************************************
 copyright            : (C) 2006 by David Nolden
 email                : david.nolden.kdevelop@art-master.de
-***************************************************************************/ 
+***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -15,10 +15,10 @@ email                : david.nolden.kdevelop@art-master.de
 
 ///With verbose shut on, the whole type-resolution-process is nicely traced for easy debugging(at cost of speed).
 //#define VERBOSE
-#define VERBOSEMAJOR
+//#define VERBOSEMAJOR
 
 ///When defined, a backtrace is printed the first time the maximum depth is reached for the first time.
-#define DEPTHBACKTRACE 
+//#define DEPTHBACKTRACE
 //#define NOFULLVERBOSE
 
 #include <qstringlist.h>
@@ -120,7 +120,7 @@ typedef KDDebugState<kdbgstream> DBGStreamType;
 #else
 
 typedef KDDebugState<kndbgstream> DBGStreamType;
-#endif 
+#endif
 ///Class to help indent the debug-output correctly
 extern DBGStreamType dbgState;
 extern const int completionMaxDepth;
@@ -220,5 +220,5 @@ kdbgstream dbgMajor();
 kndbgstream dbgMajor();
 #endif
 }
-#endif 
+#endif
 // kate: indent-mode csands; tab-width 2;
