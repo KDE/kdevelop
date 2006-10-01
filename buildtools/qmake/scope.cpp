@@ -802,14 +802,14 @@ const QValueList<Scope*> Scope::scopesInOrder() const
 const QMap<QPair<QString, QString>, QStringList> Scope::customVariables() const
 {
     QMap<QPair<QString, QString>, QStringList> result;
-    kdDebug( 9024 ) << "# of custom vars:" << m_customVariables.keys().size() << endl;
-    QValueList<QPair<QString, QString> >::const_iterator it = m_customVariables.keys().begin();
-    for ( ; it != m_customVariables.keys().end(); ++it )
+    kdDebug( 9024 ) << "# of custom vars:" << m_customVariables.size() << endl;
+    QMap<QPair<QString, QString>, QMake::AssignmentAST*>::const_iterator it = m_customVariables.begin();
+    for ( ; it != m_customVariables.end(); ++it )
     {
-        kdDebug( 9024 ) << "Pair is: " << ( *it ).first << "|" << ( *it ).second << endl;
-        m_customVariables[ *it ] ->values;
+        kdDebug( 9024 ) << "Pair is: " << it.key().first << "|" << it.key().second << endl;
+        it.data()->values;
         kdDebug( 9024 ) << "access test passed, now assign" << endl;
-        result[ *it ] = m_customVariables[ *it ] ->values;
+        result[ it.key() ] = it.data()->values;
     }
     return result;
 }
