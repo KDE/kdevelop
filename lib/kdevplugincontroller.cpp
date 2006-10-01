@@ -212,17 +212,16 @@ void KDevPluginController::loadPlugins( PluginType type )
     }
 }
 
-void KDevPluginController::unloadPlugins( PluginType offer )
+void KDevPluginController::unloadPlugins( PluginType type )
 {
     //TODO see if this can be optimized so it's not something like O(n^2)
-    KPluginInfo::List offers = d->engine.allOffers( offer );
-    KPluginInfo::List::ConstIterator it = offers.begin();
-    for ( ; it != offers.end(); ++it )
+    KPluginInfo::List offers = d->engine.offers( d->profile, type );
+    foreach( KPluginInfo* pi, offers )
     {
-        if ( d->loadedPlugins.contains( (*it ) ) )
+        foreach ( KPluginInfo* lpi, d->loadedPlugins.keys() )
         {
-            QString name = ( *it )->pluginName();
-            unloadPlugin( name );
+            if ( pi->pluginName() == lpi->pluginName() )
+                unloadPlugin( pi->pluginName() );
         }
     }
 }
