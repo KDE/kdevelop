@@ -23,7 +23,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kservice.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
@@ -272,11 +272,12 @@ void DiffWidget::populateExtPart()
   } else {
       // workaround for parts that cannot handle streams
       delete tempFile;
-      tempFile = new KTempFile();
-      tempFile->setAutoDelete( true );
-        *(tempFile->textStream()) << rawDiff.local8Bit() << endl;
-      tempFile->close();
-      ok = extPart->openURL( KUrl::fromPathOrUrl( tempFile->name() ) );
+      tempFile = new KTemporaryFile();
+      tempFile->open();
+      QTextStream ts(tempFile);
+      ts << rawDiff.local8Bit() << endl;
+      ts->flush();
+      ok = extPart->openURL( KUrl::fromPathOrUrl( tempFile->fileName() ) );
   }
   if ( !ok )
     setExtPartVisible( false );

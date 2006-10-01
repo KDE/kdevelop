@@ -51,7 +51,7 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kfile.h>
@@ -169,7 +169,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *appwizardpart, QWidget *parent, 
 
 AppWizardDialog::~AppWizardDialog()
 {
-    KTempFile* tf;
+    KTemporaryFile* tf;
     foreach( tf, m_tempFiles )
         delete tf;
     // calling this, because of the m_fileTemplates
@@ -302,21 +302,20 @@ void AppWizardDialog::accept()
 
     foreach( AppWizardFileTemplate* templ, m_fileTemplates )
     {
-        KTempFile *tempFile = new KTempFile();
+        KTemporaryFile *tempFile = new KTemporaryFile();
+        tempFile->open();
         m_tempFiles.append(tempFile);
 
         QString templateText( FileTemplate::makeSubstitutions( tempProjectDom, templ->edit->text() ) );
-        QFile f;
-        f.open(QIODevice::WriteOnly, tempFile->handle());
-        QTextStream temps(&f);
+        QTextStream temps(tempFile);
         temps << templateText;
-        f.flush();
+        temps.flush();
         QString templateName( QString( "%1_TEMPLATE" ).arg( templ->suffix ).upper() );
         cleanUpSubstMap << templateName;
         m_currentTemplate->addToSubMap( templateName, KMacroExpander::expandMacros(templateText , m_currentTemplate->subMap())  );
 
         KDevAppTemplate::File file;
-        file.source = tempFile->name();
+        file.source = tempFile->fileName();
         file.dest = QString( "%{dest}/templates/" ) + templ->suffix;
         file.process = true;
         file.isXML = false;

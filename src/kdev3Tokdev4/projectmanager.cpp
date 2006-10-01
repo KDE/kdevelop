@@ -29,7 +29,7 @@ class QDomDocument;
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kmenubar.h>
 #include <kstatusbar.h>
 #include <kiconloader.h>
@@ -375,14 +375,13 @@ bool ProjectManager::saveProjectFile()
     QTextStream stream(&fout);
     fout.close();
   } else {
-    KTempFile fout(QLatin1String("kdevelop3"));
-    fout.setAutoDelete(true);
-    if (fout.status() != 0) {
+    KTemporaryFile fout;
+    fout.setPrefix("kdevelop3");
+    if (!fout.open()) {
       KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("Could not write the project file."));
       return false;
     }
-    fout.close();
-    KIO::NetAccess::upload(fout.name(), m_info->m_projectURL, 0);
+    KIO::NetAccess::upload(fout.fileName(), m_info->m_projectURL, 0);
   }
 
   return true;

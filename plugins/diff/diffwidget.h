@@ -21,7 +21,7 @@
 
 #include <kurl.h>
 
-class KTempFile;
+class KTemporaryFile;
 
 namespace KIO {
   class Job;
@@ -100,7 +100,7 @@ private:
     KDiffTextEdit* te;
     KIO::Job* job;
     KParts::ReadOnlyPart* extPart;
-    KTempFile* tempFile;
+    KTemporaryFile* tempFile;
     QString rawDiff;
 };
 

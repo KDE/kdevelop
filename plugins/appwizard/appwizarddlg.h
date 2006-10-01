@@ -19,7 +19,7 @@
 class QTextEdit;
 class QHBoxLayout;
 
-class KTempFile;
+class KTemporaryFile;
 class KMenu;
 
 class ProfileSupport;
@@ -92,7 +92,7 @@ private: //data
     QHBoxLayout *m_custom_options_layout;
     AppWizardPart *m_part;
     QWidget *m_lastPage;
-    QList<KTempFile*> m_tempFiles;
+    QList<KTemporaryFile*> m_tempFiles;
     KDevAppTemplateModel m_templateModel;
     KDevAppTemplate* m_currentTemplate;
     bool m_projectLocationWasChanged;
