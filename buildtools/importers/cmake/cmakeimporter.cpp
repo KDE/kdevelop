@@ -76,6 +76,13 @@ QList<KDevProjectFolderItem*> CMakeImporter::parse( KDevProjectFolderItem* item 
         return folderList;
 
     FolderInfo fi = folder->folderInfo();
+    for ( QStringList::iterator it = fi.includes.begin();
+          it != fi.includes.end(); ++it )
+    {
+        KUrl urlCandidate = KUrl( ( *it ) );
+        if ( m_includeDirList.indexOf( urlCandidate ) == -1 )
+            m_includeDirList.append( urlCandidate );
+    }
 
     foreach ( FolderInfo sfi, fi.subFolders )
         folderList.append( new CMakeFolderItem( sfi, folder ) );
