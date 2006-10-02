@@ -72,7 +72,6 @@ private:
     //FIXME Do not load all of this just for the project being opened...
     //void legacyLoading();
     bool loadProjectPart();
-    void unloadProjectPart();
 
 private:
     QString m_name;

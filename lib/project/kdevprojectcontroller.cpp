@@ -167,7 +167,6 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
         url = KFileDialog::getOpenUrl( dir, i18n( "*.kdev4|KDevelop 4 Project Files\n" ),
                                        KDevCore::mainWindow(),
                                        i18n( "Open Project" ) );
-
     }
 
     if ( !url.isValid() )
@@ -185,6 +184,12 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
         closeProject();
 
     m_globalFile = url;
+
+    //FIXME Create the hidden directory if it doesn't exist
+    m_localFile = KUrl::fromPath( m_globalFile.directory( KUrl::AppendTrailingSlash )
+                                  + ".kdev4/"
+                                  + m_globalFile.fileName() );
+
     if ( loadProjectPart() )
     {
         m_isLoaded = true;
@@ -205,16 +210,7 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
     m_recentAction->addUrl( url );
     m_recentAction->saveEntries( KDevConfig::standard(), "RecentProjects" );
 
-    m_globalFile = url;
-
-    //FIXME Create the hidden directory if it doesn't exist
-    m_localFile = KUrl::fromPath( m_globalFile.directory( KUrl::AppendTrailingSlash )
-                                  + ".kdev4/"
-                                  + m_globalFile.fileName() );
-
     KDevConfig::standard() ->sync();
-
-
     emit projectOpened();
 
     return true;
@@ -253,7 +249,6 @@ bool KDevProjectController::closeProject()
     action->setEnabled( false );
 
     emit projectClosed();
-    unloadProjectPart();
     KDevPluginController::self() ->unloadPlugins( KDevPluginController::Project );
 
     //FIXME
@@ -311,17 +306,6 @@ bool KDevProjectController::loadProjectPart()
     }
 
     return true;
-}
-
-void KDevProjectController::unloadProjectPart()
-{
-    if ( m_isLoaded )
-    {
-        KDevPluginController* pc = KDevPluginController::self();
-        KPluginInfo* projectPluginInfo = pc->pluginInfo( m_projectPart );
-        KDevPluginController::self()->unloadPlugin( projectPluginInfo->pluginName() );
-        m_isLoaded = false;
-    }
 }
 
 #include "kdevprojectcontroller.moc"
