@@ -19,7 +19,6 @@ email                : david.nolden.kdevelop@art-master.de
 
 ///When defined, a backtrace is printed the first time the maximum depth is reached for the first time.
 //#define DEPTHBACKTRACE
-//#define NOFULLVERBOSE
 
 #include <qstringlist.h>
 #include <kdebug.h>
@@ -114,11 +113,9 @@ KDDebugState<kdbgstream>::KDDebugState();
 #endif
 template <>
 KDDebugState<kndbgstream>::KDDebugState();
-#if defined(VERBOSE) && !defined(NDEBUG) && !defined(NOFULLVERBOSE)
-
+#if defined(VERBOSE) && !defined(NDEBUG)
 typedef KDDebugState<kdbgstream> DBGStreamType;
 #else
-
 typedef KDDebugState<kndbgstream> DBGStreamType;
 #endif
 ///Class to help indent the debug-output correctly

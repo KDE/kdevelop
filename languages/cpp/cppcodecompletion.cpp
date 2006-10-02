@@ -65,9 +65,6 @@ email                : david.nolden.kdevelop@art-master.de
 #include <codemodel.h>
 #include <codebrowserfrontend.h>
 
-///This can be used to toggle the complete tracing of the resolution-functions, which costs a lot of performance, but gives very nice and useful output
-
-
 #include "codecompletionentry.h"
 #include "typedesc.h"
 #include "computerecoverypoints.h"
@@ -1885,6 +1882,8 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 
   FunctionDom currentFunction = fileModel.functionAt( line, column );
 
+  bool functionFailed = true;
+
   if ( opt & SearchInFunctions ) {
     //currentFunction = fileModel.functionAt( line, column );
 
@@ -1938,6 +1937,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
                 }
               }
 
+              functionFailed = false;
               ret = evaluateExpression( exp, ctx );
             }
           }
@@ -1952,7 +1952,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
     }
   }
 
-  if ( ( opt & SearchInClasses ) && !ret->resolved() && ( !currentFunction || !functionContains( currentFunction, line, column ) ) ) {
+  if ( ( opt & SearchInClasses ) && !ret->resolved() && functionFailed ) {
     ClassDom currentClass = fileModel.classAt( line, column );
     int startLine = 0, startCol = 0;
 

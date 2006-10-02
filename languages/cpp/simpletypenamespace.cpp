@@ -234,7 +234,7 @@ void SimpleTypeNamespace::addAliases( QString map ) {
     int mid2 = map.find( "<<" );
     int found = mid;
     int len = 1;
-    if ( mid2 != -1 && mid2 < found ) {
+    if ( mid2 != -1 && (mid2 < found || found == -1) ) {
       found = mid2;
       len = 2;
     }
