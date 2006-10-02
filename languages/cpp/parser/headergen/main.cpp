@@ -4,6 +4,8 @@
 #include <QDomElement>
 #include <QDir>
 #include <QTextStream>
+#include <QMultiMap>
+#include <QMapIterator>
 
 #include <kdebug.h>
 #include <kcmdlineargs.h>
@@ -46,12 +48,18 @@ struct HeaderGeneratorVisitor : public DefaultVisitor
     if (!node->win_decl_specifiers)
       return;
 
+    QualifiedIdentifier identifier = m_currentNS;
+
     nc.run(node->name);
     QualifiedIdentifier classIdentifier = nc.identifier().merge(m_currentNS);
 
     m_classes.append(classIdentifier.toString().replace("::", "/"));
 
+    m_currentNS = classIdentifier.merge(m_currentNS);
+
     DefaultVisitor::visitClassSpecifier(node);
+
+    m_currentNS = identifier;
   }
 };
 
@@ -120,11 +128,13 @@ int main( int argc, char *argv[] )
   // Exploit that the c++ parser treats this specially for us :)
   QByteArray exportMacros = "#define KDE_EXPORT __declspec(dllexport)\n" + kdelibsExport.readAll();
 
+  // path, filename
+  QMultiMap<QString, QString> filesToInstall;
+
   for (int i = 0; i < folders.count(); ++i) {
     KUrl folderUrl(folders.at(i).toElement().attribute("name"));
-    QDomElement install = folders.at(i).firstChildElement(installElementName);
 
-    if (!install.isNull()) {
+    for (QDomElement install = folders.at(i).firstChildElement(installElementName); !install.isNull(); install = install.nextSiblingElement(installElementName)) {
       KUrl installDestination(install.attribute("destination"));
       if (!installDestination.path().startsWith(kdeIncludes.path())) {
         //kDebug() << "URL " << installDestination << " is not the kde include dir " << kdeIncludes << endl;
@@ -157,10 +167,14 @@ int main( int argc, char *argv[] )
 
         foreach (const QString& className, hg.m_classes) {
           QString forwardingHeaderPath(outputDirectory.path(KUrl::AddTrailingSlash) + className);
+          QString classDirectory;
+          int index = className.lastIndexOf('/');
+          if (index > 0)
+            classDirectory = className.left(index);
+
           QFile forwardingHeader(forwardingHeaderPath);
           if (!forwardingHeader.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            int index = className.lastIndexOf('/');
-            if (index > 0 && outputDir.mkpath(className.left(index))) {
+            if (!classDirectory.isEmpty() && outputDir.mkpath(classDirectory)) {
               if (forwardingHeader.open(QIODevice::WriteOnly | QIODevice::Truncate))
                 goto success;
             }
@@ -186,9 +200,48 @@ int main( int argc, char *argv[] )
             ts << QString("../");
 
           ts << sourceRelativeUrl << "\"\n";
+
+          filesToInstall.insert(classDirectory, className);
         }
       }
     }
+  }
+
+  QFile cmakelist(outputDirectory.path(KUrl::AddTrailingSlash) + "CMakeLists.txt");
+  if (!cmakelist.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    kWarning() << "Could not open cmake list file for writing." << endl;
+    return -1;
+  }
+
+  QTextStream ts(&cmakelist);
+
+  // Phony starting directory
+  QString directory = "/";
+
+  QMapIterator<QString, QString> it = filesToInstall;
+  while (it.hasNext()) {
+    it.next();
+    if (it.key() != directory) {
+      if (directory != "/") {
+        if (!directory.isEmpty())
+          directory.prepend('/');
+        ts << "DESTINATION ${INCLUDE_INSTALL_DIR}/KDE" << directory << " )" << endl;
+        ts << endl;
+      }
+      ts << endl;
+      ts << "install( FILES " << endl;
+
+      directory = it.key();
+    }
+
+    ts << "  " << it.value() << endl;
+  }
+
+  if (directory != "/") {
+    if (!directory.isEmpty())
+      directory.prepend('/');
+    ts << "DESTINATION ${INCLUDE_INSTALL_DIR}/KDE" << directory << " )" << endl;
+    ts << endl;
   }
 
   kDebug() << "Finished parsing " << fileCount << " files." << endl;
