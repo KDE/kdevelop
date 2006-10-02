@@ -144,10 +144,10 @@
                 <cstring>textLabel5</cstring>
             </property>
             <property name="text">
-                <string>&lt;qt&gt;&lt;h3&gt;UI Designer Integration&lt;/h3&gt;&lt;/qt&gt;</string>
+                <string>&lt;qt&gt;&lt;h3&gt;UI Designer Integration&lt;/h3&gt;This will only be used when no project is opened. For the project specific setting see Project Options/C++ Specific and open the Qt tab.&lt;/qt&gt;</string>
             </property>
             <property name="alignment">
-                <set>AlignTop</set>
+                <set>WordBreak|AlignTop</set>
             </property>
         </widget>
         <spacer row="4" column="0" rowspan="4" colspan="1">
@@ -487,6 +487,8 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>useOtherTerminal</sender>
@@ -497,6 +499,7 @@
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
