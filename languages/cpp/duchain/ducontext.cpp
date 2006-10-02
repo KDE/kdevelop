@@ -34,7 +34,7 @@
 using namespace KTextEditor;
 
 DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
-  : DUChainBase(parent->topContext())
+  : DUChainBase(parent ? parent->topContext() : 0)
   , KDevDocumentRangeObject(range)
   , m_contextType(Other)
   , m_parentContext(0)
