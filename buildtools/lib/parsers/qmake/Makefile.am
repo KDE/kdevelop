@@ -22,6 +22,12 @@ parser:
 	mv -f qmake_yacc.hpp qmake_yacc.h ; \
 	flex -oqmake_lex.cpp qmake.ll
 
+parser_dbg:
+	cd $(srcdir) ; \
+	bison -d qmake.yy -r all -k -t -o qmake_yacc.cpp ; \
+	mv -f qmake_yacc.hpp qmake_yacc.h ; \
+	flex -d -oqmake_lex.cpp qmake.ll
+
 EXTRA_DIST = qmake.yy qmake.ll
 
 DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils

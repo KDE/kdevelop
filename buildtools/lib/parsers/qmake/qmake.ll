@@ -54,15 +54,16 @@ To debug this lexer, put the line below into the next flex file section.
 
 delim             [ \t]
 ws                {delim}+
+quote             "\""
+var_value         [^\n\t ]*
+quoted_var_value  {quote}{var_value}({var_value}|"\t"|" ")*{quote}
 letter            [A-Za-z]
 digit             [0-9]
 id_simple         ({digit}|{letter}|\!|-|_|\*|\$)({letter}|{digit}|\||\!|-|_|\*|\$|\.|\+|\-)*
-id_list           [^\n]*\\{ws}*
 id_args           [^\n]*\)
 number            {digit}+
 comment           #.*
 comment_cont      {ws}*#.*\n
-id_list_single    [^\n]*
 cont              \\{ws}*\n
 
 %%
@@ -71,24 +72,10 @@ cont              \\{ws}*\n
 <list,INITIAL>{cont}   { BEGIN(list); return CONT; }
 {id_simple}            { yylval.value = yytext; return (ID_SIMPLE); }
 
-<list>{id_list} {
-    yylval.value = yytext;
-    yylval.value = yylval.value.mid(0, yylval.value.findRev("\\")-1);
-    unput('\\');
-    BEGIN(INITIAL);
-    return (ID_LIST);
-    }
-
 <list>{comment_cont} {
     yylval.value = yytext;
     BEGIN(list);
     return (LIST_COMMENT);
-    }
-
-<list>{id_list_single} {
-    yylval.value = yytext;
-    BEGIN(INITIAL);
-    return (ID_LIST_SINGLE);
     }
 
 <funcargs>{id_args} {
@@ -98,6 +85,9 @@ cont              \\{ws}*\n
     BEGIN(INITIAL);
     return (ID_ARGS);
     }
+
+<list>{var_value}        { yylval.value = yytext; return VARIABLE_VALUE; }
+<list>{quoted_var_value} { yylval.value = yytext; return QUOTED_VARIABLE_VALUE; }
 
 "="                      { BEGIN(list); yylval.value = yytext; return EQ; }
 "+="                     { BEGIN(list); yylval.value = yytext; return PLUSEQ; }
@@ -111,6 +101,7 @@ cont              \\{ws}*\n
 ":"                      { yylval.value = yytext; return COLON; }
 "."                      { return DOT; }
 <list,INITIAL>"\n"       { BEGIN(INITIAL); return NEWLINE; }
+
 {comment}                { yylval.value = yytext; return (COMMENT); }
 
 %%

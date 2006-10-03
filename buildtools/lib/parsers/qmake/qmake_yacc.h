@@ -40,50 +40,50 @@
       know about them.  */
    enum yytokentype {
      ID_SIMPLE = 258,
-     ID_LIST = 259,
-     EQ = 260,
-     PLUSEQ = 261,
-     MINUSQE = 262,
-     STAREQ = 263,
-     TILDEEQ = 264,
-     LBRACE = 265,
-     RBRACE = 266,
-     COLON = 267,
-     NUMSIGN = 268,
-     NEWLINE = 269,
-     NUMBER = 270,
-     COMMENT = 271,
-     CONT = 272,
-     DOT = 273,
-     RCURLY = 274,
-     LCURLY = 275,
-     ID_ARGS = 276,
-     LIST_COMMENT = 277,
-     ID_LIST_SINGLE = 278
+     EQ = 259,
+     PLUSEQ = 260,
+     MINUSQE = 261,
+     STAREQ = 262,
+     TILDEEQ = 263,
+     LBRACE = 264,
+     RBRACE = 265,
+     COLON = 266,
+     NUMSIGN = 267,
+     NEWLINE = 268,
+     NUMBER = 269,
+     COMMENT = 270,
+     CONT = 271,
+     DOT = 272,
+     RCURLY = 273,
+     LCURLY = 274,
+     ID_ARGS = 275,
+     LIST_COMMENT = 276,
+     QUOTED_VARIABLE_VALUE = 277,
+     VARIABLE_VALUE = 278
    };
 #endif
 /* Tokens.  */
 #define ID_SIMPLE 258
-#define ID_LIST 259
-#define EQ 260
-#define PLUSEQ 261
-#define MINUSQE 262
-#define STAREQ 263
-#define TILDEEQ 264
-#define LBRACE 265
-#define RBRACE 266
-#define COLON 267
-#define NUMSIGN 268
-#define NEWLINE 269
-#define NUMBER 270
-#define COMMENT 271
-#define CONT 272
-#define DOT 273
-#define RCURLY 274
-#define LCURLY 275
-#define ID_ARGS 276
-#define LIST_COMMENT 277
-#define ID_LIST_SINGLE 278
+#define EQ 259
+#define PLUSEQ 260
+#define MINUSQE 261
+#define STAREQ 262
+#define TILDEEQ 263
+#define LBRACE 264
+#define RBRACE 265
+#define COLON 266
+#define NUMSIGN 267
+#define NEWLINE 268
+#define NUMBER 269
+#define COMMENT 270
+#define CONT 271
+#define DOT 272
+#define RCURLY 273
+#define LCURLY 274
+#define ID_ARGS 275
+#define LIST_COMMENT 276
+#define QUOTED_VARIABLE_VALUE 277
+#define VARIABLE_VALUE 278
 
 
 

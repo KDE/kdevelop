@@ -107,7 +107,6 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 %}
 
 %token ID_SIMPLE
-%token ID_LIST
 %token EQ
 %token PLUSEQ
 %token MINUSQE
@@ -126,8 +125,8 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 %token LCURLY
 %token ID_ARGS
 %token LIST_COMMENT
-%token ID_LIST_SINGLE
-%debug
+%token QUOTED_VARIABLE_VALUE
+%token VARIABLE_VALUE
 %%
 
 project :
@@ -191,14 +190,17 @@ multiline_values : multiline_values line_body
     |   { $<values>$.clear(); }
     ;
 
-line_body : ID_LIST         { $<values>$ += QStringList::split(" ", $<value>1.stripWhiteSpace()); }
-    | ID_LIST_SINGLE        { $<values>$ += QStringList::split(" ", $<value>1.stripWhiteSpace()); }
-    | NEWLINE               { $<values>$.append("\n"); }
-    | CONT                  { $<values>$.append("\\\n"); }
+line_body : line_body variable_value { $<values>$.append( $<value>2 ); }
+    | variable_value { $<values>$.append( $<value>1 ); }
+    | CONT                   { $<values>$.append("\\\n"); }
+    | NEWLINE                { $<values>$.append("\n"); }
     | LIST_COMMENT
     | RBRACE
     ;
 
+variable_value : VARIABLE_VALUE     { $<value>$ = $<value>1; }
+    | QUOTED_VARIABLE_VALUE  { $<value>$ = $<value>1; }
+    ;
 
 operator : EQ | PLUSEQ | MINUSQE | STAREQ | TILDEEQ
     ;
