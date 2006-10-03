@@ -77,9 +77,16 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
   QValueList<Tag> tags( cppCompletionInstance->m_repository->query( args ) );
   
   if( tags.isEmpty() )  return ret;
+
+  QValueList<Tag>::iterator it = tags.begin();
+  while( (*it).kind() == Tag::Kind_UsingDirective && it != tags.end() )
+    ++it;
+
+  if( it == tags.end() ) return ret;
   
-  Tag tag = tags.front();
+  Tag tag = *it;
   
+  ///skip all using-directives
   if( tag.kind() == Tag::Kind_Variable && (type & MemberInfo::Variable) ) {
     ret.memberType = MemberInfo::Variable;
     ret.type = tagType( tag );
